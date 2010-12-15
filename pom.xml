@@ -66,9 +66,9 @@
         <url>http://java.net/jira/browse/XSOM</url>
     </issueManagement>
     <scm>
-        <url>http://java.net/projects/jaxb2-sources/sources/svn/show/trunk/xsom</url>
-        <connection>scm:svn:https://svn.java.net/svn/jaxb2-sources~svn/trunk/xsom</connection>        
-        <developerConnection>scm:svn:https://svn.java.net/svn/jaxb2-sources~svn/trunk/xsom</developerConnection>
+        <url>http://java.net/projects/xsom/sources/sources/show/trunk/</url>
+        <connection>scm:svn:https://svn.java.net/svn/xsom~sources/trunk</connection>
+        <developerConnection>scm:svn:https://svn.java.net/svn/xsom~sources/trunk</developerConnection>
     </scm>
     <organization>
         <name>Oracle</name>
