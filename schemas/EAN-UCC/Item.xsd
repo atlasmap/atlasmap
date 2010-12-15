@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+
+    Copyright (c) 2010 Oracle and/or its affiliates. All rights reserved.
+
+    The contents of this file are subject to the terms of either the GNU
+    General Public License Version 2 only ("GPL") or the Common Development
+    and Distribution License("CDDL") (collectively, the "License").  You
+    may not use this file except in compliance with the License.  You can
+    obtain a copy of the License at
+    https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
+    or packager/legal/LICENSE.txt.  See the License for the specific
+    language governing permissions and limitations under the License.
+
+    When distributing the software, include this License Header Notice in each
+    file and include the License file at packager/legal/LICENSE.txt.
+
+    GPL Classpath Exception:
+    Oracle designates this particular file as subject to the "Classpath"
+    exception as provided by Oracle in the GPL Version 2 section of the License
+    file that accompanied this code.
+
+    Modifications:
+    If applicable, add the following below the License Header, with the fields
+    enclosed by brackets [] replaced by your own identifying information:
+    "Portions Copyright [year] [name of copyright owner]"
+
+    Contributor(s):
+    If you wish your version of this file to be governed by only the CDDL or
+    only the GPL Version 2, indicate your decision by adding "[Contributor]
+    elects to include this software in this distribution under the [CDDL or GPL
+    Version 2] license."  If you don't indicate a single choice of license, a
+    recipient has the option to distribute your version of this file under
+    either the CDDL, the GPL Version 2 or to extend the choice of license to
+    its licensees as provided above.  However, if you add GPL Version 2 code
+    and therefore, elected the GPL Version 2 license, then the option applies
+    only if the new code is made subject to such option by the copyright
+    holder.
+
+-->
+
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.uc-council.org/smp/schemas/core" xmlns="http://www.uc-council.org/smp/schemas/core" elementFormDefault="unqualified" attributeFormDefault="unqualified">
+	<xsd:annotation>
+		<xsd:documentation>
+			© Uniform Code Council, Inc. and EAN International, Inc. 2001
+			The Uniform Code Council, Inc. (UCC) is providing this XML Schema Definition file and resultant XML file as a service to interested industries.
+			This XML Schema Definition file and resultant XML file were developed through a consensus process of interested parties.
+
+			Although efforts have been made to assure that the XML Schema Definition file and resultant XML file are correct, reliable, and technically
+			accurate, the UCC makes NO WARRANTY, EXPRESS OR IMPLIED, THAT THIS XML Schema Definition file and resultant XML file ARE 
+			CORRECT, WILL NOT REQUIRE MODIFICATION AS EXPERIENCE AND TECHNOLOGICAL ADVANCES DICTATE, OR WILL BE SUITABLE FOR 
+			ANY PURPOSE OR WORKABLE IN ANY APPLICATION, OR OTHERWISE.  Use of the XML Schema Definition file and resultant XML 
+			file are with the understanding that the UCC has no liability for any claim to the contrary, or for any damage or loss of any kind or nature.
+			
+			Version Information:
+				Version Number: 1.0
+			Date of creation: July, 2001.
+			
+			The schema and subsequent updates will be provided on the EAN and UCC websites.
+			
+		</xsd:documentation>
+	</xsd:annotation>
+	<xsd:complexType name="ItemType" abstract="true">
+		<xsd:complexContent>
+			<xsd:extension base="DocumentType"/>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="ItemInformationType" abstract="true">
+		<xsd:sequence>
+			<xsd:group ref="TermsGroupType"/>
+			<xsd:element name="manufacturer" type="PartyIdentificationType" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="itemDescription" type="ItemDescriptionType" minOccurs="1" maxOccurs="1"/>
+			<xsd:element name="unitOfMeasure" type="UnitOfMeasureType" minOccurs="1" maxOccurs="1"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ItemDescriptionType">
+		<xsd:sequence>
+			<xsd:element name="additionalAttributeDescription" type="TextDescriptionType" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="brandName" type="TextDescriptionType" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="descriptionShort" type="TextDescriptionType" minOccurs="1" maxOccurs="1"/>
+			<xsd:element name="itemDescription" type="TextDescriptionType" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="itemName" type="TextDescriptionType" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="itemClassification" type="ClassificationType" minOccurs="1" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ClassificationType">
+		<xsd:sequence>
+			<xsd:element name="agency" type="String1to35Type" minOccurs="1" maxOccurs="1"/>
+			<xsd:element name="attribute" type="ClassificationAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="category" type="ClassificationCategoryType" minOccurs="1" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ClassificationCategoryType">
+		<xsd:sequence>
+			<xsd:element name="code" type="String1to35Type" minOccurs="1" maxOccurs="1"/>
+			<xsd:element name="classificationName" type="TextDescriptionType" minOccurs="1" maxOccurs="1"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ClassificationAttributeType">
+		<xsd:sequence>
+			<xsd:element name="classificationItemCode" type="String1to35Type" minOccurs="1" maxOccurs="1"/>
+			<xsd:element name="classificationItemName" type="TextDescriptionType" minOccurs="1" maxOccurs="1"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="RelationshipDependentDataType" abstract="true">
+		<xsd:complexContent>
+			<xsd:extension base="ItemInformationType">
+				<xsd:sequence>
+					<xsd:element name="colorCharacteristics" type="ColorCharacteristicsType" minOccurs="0" maxOccurs="1"/>
+					<xsd:element name="tradeItemHandlingInformation" type="TradeItemHandlingInformationType" minOccurs="0" maxOccurs="unbounded"/>
+					<xsd:element name="tradeItemHazardousInformation" type="TradeItemHazardousInformationType" minOccurs="0" maxOccurs="unbounded"/>
+					<xsd:element name="tradeItemDate" type="TradeItemDateType" minOccurs="1" maxOccurs="1"/>
+					<xsd:element name="materialSafetyData" type="MaterialSafetyDataType" minOccurs="1" maxOccurs="1"/>
+					<xsd:element name="packagingCharacteristics" type="PackagingCharacteristicsType" minOccurs="0" maxOccurs="1"/>
+					<xsd:element name="packagingMaterial" type="PackagingMaterialType" minOccurs="0" maxOccurs="1"/>
+					<xsd:element name="sizeCharacteristics" type="SizeCharacteristicsType" minOccurs="0" maxOccurs="1"/>
+					<xsd:element name="tradeItemQuantities" type="TradeItemQuantitiesType" minOccurs="0" maxOccurs="1"/>
+					<xsd:element name="unitIndicator" type="TradeItemUnitIndicatorType" minOccurs="1" maxOccurs="1"/>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="ColorCharacteristicsType">
+		<xsd:sequence>
+			<xsd:element name="color" type="TextDescriptionType" minOccurs="1" maxOccurs="1"/>
+			<xsd:element name="colorCodeListAgency" type="Integer1to3Type" minOccurs="1" maxOccurs="1"/>
+			<xsd:element name="colorCodeValue" type="String1to17Type" minOccurs="1" maxOccurs="1"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="TradeItemHandlingInformationType">
+		<xsd:sequence>
+			<xsd:element name="handlingInstructions" type="TextDescriptionType" minOccurs="1" maxOccurs="1"/>
+			<xsd:element name="palletDataPalletHandlingOnewayReusable" type="String1to35Type" minOccurs="1" maxOccurs="1"/>
+			<xsd:element name="palletDataPalletTypeCode" type="String1to3Type" minOccurs="1" maxOccurs="1"/>
+			<xsd:element name="stackingFactor" type="Integer1to6Type" minOccurs="1" maxOccurs="1"/>
+			<xsd:element name="stackingWeightMaximum" type="MeasurementType" minOccurs="1" maxOccurs="1"/>
+			<xsd:element name="storageHandlingTemperatureMaximum" type="MeasurementType" minOccurs="1" maxOccurs="1"/>
+			<xsd:element name="storageHandlingTemperatureMinimum" type="MeasurementType" minOccurs="1" maxOccurs="1"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="TradeItemHazardousInformationType">
+		<xsd:sequence>
+			<xsd:element name="dangerousGoodsItemNumberLetter" type="String1to6Type" minOccurs="1" maxOccurs="1"/>
+			<xsd:element name="dangerousGoodsSubstanceIdentificationNumber" type="String1to4Type" minOccurs="1" maxOccurs="1"/>
+			<xsd:element name="dangerousGoodsTechnicalName" type="TextDescriptionType" minOccurs="1" maxOccurs="1"/>
+			<xsd:element name="flashPointTemperature" type="MeasurementType" minOccurs="1" maxOccurs="1"/>
+			<xsd:element name="hazardCode" type="String1Type" minOccurs="1" maxOccurs="1"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="TradeItemDateType">
+		<xsd:sequence>
+			<xsd:element name="effectiveChangeDate" type="DateType" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="endAvailabilityDate" type="DateAndTimeType" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="firstSaleDate" type="DateType" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="orderingLeadTimeDays" type="Integer1to12Type" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="startAvailabilityDate" type="DateAndTimeType" minOccurs="1" maxOccurs="1"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="MaterialSafetyDataType">
+		<xsd:sequence>
+			<xsd:element name="materialSafetyDataSheet" type="xsd:boolean" minOccurs="1" maxOccurs="1"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="PackagingCharacteristicsType">
+		<xsd:sequence>
+			<xsd:element name="numberOfCompleteLayersContainedInATradeItem" type="String1to6Type" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="numberOfTradeItemsContainedInACompleteLayer" type="String1to6Type" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="numberOfTradeItemsPerPallet" type="String1to6Type" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="numberOfTradeItemsPerPalletLayer" type="String1to6Type" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="numberOfLayersPerPallet" type="String1to6Type" minOccurs="0" maxOccurs="1"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="PackagingMaterialType">
+		<xsd:sequence>
+			<xsd:element name="code" type="String1to3Type" minOccurs="1" maxOccurs="1"/>
+			<xsd:element name="codeListMaintenanceAgency" type="String1to3Type" minOccurs="1" maxOccurs="1"/>
+			<xsd:element name="composition" type="PercentageType" minOccurs="1" maxOccurs="1"/>
+			<xsd:element name="description" type="TextDescriptionType" minOccurs="1" maxOccurs="1"/>
+			<xsd:element name="type" type="String1to3Type" minOccurs="1" maxOccurs="1"/>
+			<xsd:element name="packagingType" type="String1to3Type" minOccurs="1" maxOccurs="1"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="SizeCharacteristicsType">
+		<xsd:sequence>
+			<xsd:element name="size" type="TextDescriptionType" minOccurs="1" maxOccurs="1"/>
+			<xsd:element name="sizeCodeListAgency" type="String1to3Type" minOccurs="1" maxOccurs="1"/>
+			<xsd:element name="sizeCodeValue" type="String1to3Type" minOccurs="1" maxOccurs="1"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="TradeItemQuantitiesType">
+		<xsd:sequence>
+			<xsd:element name="orderQuantityMaximum" type="QuantityType" minOccurs="1" maxOccurs="1"/>
+			<xsd:element name="orderQuantityMinimum" type="QuantityType" minOccurs="1" maxOccurs="1"/>
+			<xsd:element name="orderQuantityMultiple" type="QuantityType" minOccurs="1" maxOccurs="1"/>
+			<xsd:element name="orderSizingFactor" type="Integer1to15Type" minOccurs="1" maxOccurs="1"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="TradeItemUnitIndicatorType">
+		<xsd:sequence>
+			<xsd:element name="baseUnitIndicator" type="xsd:boolean" minOccurs="1" maxOccurs="1"/>
+			<xsd:element name="despatchUnitIndicator" type="xsd:boolean" minOccurs="1" maxOccurs="1"/>
+			<xsd:element name="invoiceUnitIndicator" type="xsd:boolean" minOccurs="1" maxOccurs="1"/>
+			<xsd:element name="orderingUnitIndicator" type="xsd:boolean" minOccurs="1" maxOccurs="1"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="TradeItemCharacteristicsType">
+		<xsd:sequence>
+			<xsd:element name="countryOfOrigin" type="CountryISOCodeType" minOccurs="1" maxOccurs="1"/>
+			<xsd:element name="nonPublicIndicator" type="xsd:boolean" minOccurs="1" maxOccurs="1"/>
+			<xsd:element name="prePricedAmount" type="MonetaryAmountType" minOccurs="1" maxOccurs="1"/>
+			<xsd:element name="pricingOnTheProduct" type="xsd:boolean" minOccurs="1" maxOccurs="1"/>
+			<xsd:element name="rightOfReturnForNonSoldTradeItems" type="xsd:boolean" minOccurs="1" maxOccurs="1"/>
+			<xsd:element name="tradeItemBarcoded" type="xsd:boolean" minOccurs="1" maxOccurs="1"/>
+			<xsd:element name="variableWeightTradeItem" type="xsd:boolean" minOccurs="1" maxOccurs="1"/>
+			<xsd:element name="targetMarketCode" type="TargetMarketCodeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="TargetMarketCodeType">
+		<xsd:sequence>
+			<xsd:element name="description" type="TextDescriptionType" minOccurs="1" maxOccurs="1"/>
+			<xsd:element name="type" type="String1to35Type" minOccurs="1" maxOccurs="1"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="TradeItemMeasuresType" abstract="true">
+		<xsd:sequence>
+			<xsd:element name="measureCode" type="MeasurementType" minOccurs="1" maxOccurs="1"/>
+			<xsd:element name="measureValue" type="Integer1to6Type" minOccurs="1" maxOccurs="1"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:group name="ItemLinksOrDetailsGroupType">
+		<xsd:sequence/>
+	</xsd:group>
+	<xsd:complexType name="ItemLinkDetailsRecursiveType" abstract="true"/>
+	<xsd:complexType name="ItemLinksType" abstract="true"/>
+	<xsd:complexType name="ChildItemType" abstract="true">
+		<xsd:attribute name="quantity" type="Integer1to6Type" use="required"/>
+	</xsd:complexType>
+	<xsd:complexType name="ChildItemDetailsType">
+		<xsd:attribute name="quantity" type="Integer1to6Type" use="required"/>
+	</xsd:complexType>
+	<xsd:complexType name="UnitOfMeasureType">
+		<xsd:sequence>
+			<xsd:element name="netContent" type="MeasurementType" minOccurs="1" maxOccurs="1"/>
+			<xsd:element name="grossWeight" type="MeasurementType" minOccurs="1" maxOccurs="1"/>
+			<xsd:element name="packagingWeight" type="MeasurementType" minOccurs="1" maxOccurs="1"/>
+			<xsd:element name="depth" type="MeasurementType" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="diameter" type="MeasurementType" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="height" type="MeasurementType" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="pegHorizontal" type="MeasurementType" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="pegVertical" type="MeasurementType" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="width" type="MeasurementType" minOccurs="0" maxOccurs="1"/>
+		</xsd:sequence>
+	</xsd:complexType>
+</xsd:schema>

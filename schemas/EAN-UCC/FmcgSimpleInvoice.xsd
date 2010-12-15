@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+
+    Copyright (c) 2010 Oracle and/or its affiliates. All rights reserved.
+
+    The contents of this file are subject to the terms of either the GNU
+    General Public License Version 2 only ("GPL") or the Common Development
+    and Distribution License("CDDL") (collectively, the "License").  You
+    may not use this file except in compliance with the License.  You can
+    obtain a copy of the License at
+    https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
+    or packager/legal/LICENSE.txt.  See the License for the specific
+    language governing permissions and limitations under the License.
+
+    When distributing the software, include this License Header Notice in each
+    file and include the License file at packager/legal/LICENSE.txt.
+
+    GPL Classpath Exception:
+    Oracle designates this particular file as subject to the "Classpath"
+    exception as provided by Oracle in the GPL Version 2 section of the License
+    file that accompanied this code.
+
+    Modifications:
+    If applicable, add the following below the License Header, with the fields
+    enclosed by brackets [] replaced by your own identifying information:
+    "Portions Copyright [year] [name of copyright owner]"
+
+    Contributor(s):
+    If you wish your version of this file to be governed by only the CDDL or
+    only the GPL Version 2, indicate your decision by adding "[Contributor]
+    elects to include this software in this distribution under the [CDDL or GPL
+    Version 2] license."  If you don't indicate a single choice of license, a
+    recipient has the option to distribute your version of this file under
+    either the CDDL, the GPL Version 2 or to extend the choice of license to
+    its licensees as provided above.  However, if you add GPL Version 2 code
+    and therefore, elected the GPL Version 2 license, then the option applies
+    only if the new code is made subject to such option by the copyright
+    holder.
+
+-->
+
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.uc-council.org/smp/schemas/fmcg" xmlns="http://www.uc-council.org/smp/schemas/fmcg" xmlns:fmcg="http://www.uc-council.org/smp/schemas/fmcg" xmlns:core="http://www.uc-council.org/smp/schemas/core" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xsd:annotation>
+		<xsd:documentation>
+			© Uniform Code Council, Inc. and EAN International, Inc. 2001
+			The Uniform Code Council, Inc. (UCC) is providing this XML Schema Definition file and resultant XML file as a service to interested industries.
+			This XML Schema Definition file and resultant XML file were developed through a consensus process of interested parties.
+
+			Although efforts have been made to assure that the XML Schema Definition file and resultant XML file are correct, reliable, and technically
+			accurate, the UCC makes NO WARRANTY, EXPRESS OR IMPLIED, THAT THIS XML Schema Definition file and resultant XML file ARE 
+			CORRECT, WILL NOT REQUIRE MODIFICATION AS EXPERIENCE AND TECHNOLOGICAL ADVANCES DICTATE, OR WILL BE SUITABLE FOR 
+			ANY PURPOSE OR WORKABLE IN ANY APPLICATION, OR OTHERWISE.  Use of the XML Schema Definition file and resultant XML 
+			file are with the understanding that the UCC has no liability for any claim to the contrary, or for any damage or loss of any kind or nature.
+			
+			Version Information:
+				Version Number: 1.0
+			Date of creation: July, 2001.
+			
+			The schema and subsequent updates will be provided on the EAN and UCC websites.
+			
+		</xsd:documentation>
+	</xsd:annotation>
+	<xsd:complexType name="SimpleInvoiceType">
+		<xsd:complexContent>
+			<xsd:extension base="core:SimpleInvoiceType">
+				<xsd:sequence>
+					<xsd:element name="lineItem" type="SimpleInvoiceLineItemType" minOccurs="1" maxOccurs="unbounded"/>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="SimpleInvoiceLineItemType">
+		<xsd:complexContent>
+			<xsd:extension base="core:SimpleInvoiceLineItemType">
+				<xsd:sequence>
+					<xsd:element name="itemID" type="ItemIdentificationType" minOccurs="1" maxOccurs="1"/>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+</xsd:schema>

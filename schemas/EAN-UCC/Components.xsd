@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+
+    Copyright (c) 2010 Oracle and/or its affiliates. All rights reserved.
+
+    The contents of this file are subject to the terms of either the GNU
+    General Public License Version 2 only ("GPL") or the Common Development
+    and Distribution License("CDDL") (collectively, the "License").  You
+    may not use this file except in compliance with the License.  You can
+    obtain a copy of the License at
+    https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
+    or packager/legal/LICENSE.txt.  See the License for the specific
+    language governing permissions and limitations under the License.
+
+    When distributing the software, include this License Header Notice in each
+    file and include the License file at packager/legal/LICENSE.txt.
+
+    GPL Classpath Exception:
+    Oracle designates this particular file as subject to the "Classpath"
+    exception as provided by Oracle in the GPL Version 2 section of the License
+    file that accompanied this code.
+
+    Modifications:
+    If applicable, add the following below the License Header, with the fields
+    enclosed by brackets [] replaced by your own identifying information:
+    "Portions Copyright [year] [name of copyright owner]"
+
+    Contributor(s):
+    If you wish your version of this file to be governed by only the CDDL or
+    only the GPL Version 2, indicate your decision by adding "[Contributor]
+    elects to include this software in this distribution under the [CDDL or GPL
+    Version 2] license."  If you don't indicate a single choice of license, a
+    recipient has the option to distribute your version of this file under
+    either the CDDL, the GPL Version 2 or to extend the choice of license to
+    its licensees as provided above.  However, if you add GPL Version 2 code
+    and therefore, elected the GPL Version 2 license, then the option applies
+    only if the new code is made subject to such option by the copyright
+    holder.
+
+-->
+
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="unqualified" attributeFormDefault="unqualified" targetNamespace="http://www.uc-council.org/smp/schemas/core" xmlns="http://www.uc-council.org/smp/schemas/core">
+	<xsd:annotation>
+		<xsd:documentation>
+			© Uniform Code Council, Inc. and EAN International, Inc. 2001
+			The Uniform Code Council, Inc. (UCC) is providing this XML Schema Definition file and resultant XML file as a service to interested industries.
+			This XML Schema Definition file and resultant XML file were developed through a consensus process of interested parties.
+
+			Although efforts have been made to assure that the XML Schema Definition file and resultant XML file are correct, reliable, and technically
+			accurate, the UCC makes NO WARRANTY, EXPRESS OR IMPLIED, THAT THIS XML Schema Definition file and resultant XML file ARE 
+			CORRECT, WILL NOT REQUIRE MODIFICATION AS EXPERIENCE AND TECHNOLOGICAL ADVANCES DICTATE, OR WILL BE SUITABLE FOR 
+			ANY PURPOSE OR WORKABLE IN ANY APPLICATION, OR OTHERWISE.  Use of the XML Schema Definition file and resultant XML 
+			file are with the understanding that the UCC has no liability for any claim to the contrary, or for any damage or loss of any kind or nature.
+			
+			Version Information:
+				Version Number: 1.0
+			Date of creation: July, 2001.
+			
+			The schema and subsequent updates will be provided on the EAN and UCC websites.
+			
+		</xsd:documentation>
+	</xsd:annotation>
+	<xsd:complexType name="MonetaryAmountType">
+		<xsd:sequence>
+			<xsd:element name="amount" type="AmountType" minOccurs="1" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="AmountType">
+		<xsd:simpleContent>
+			<xsd:extension base="Float1to18Type">
+				<xsd:attribute name="currencyISOcode" type="CurrencyISOCodeType" use="required"/>
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:complexType name="ReferenceType">
+		<xsd:sequence>
+			<xsd:group ref="DateChoiceGroupType"/>
+		</xsd:sequence>
+		<xsd:attribute name="number" type="String1to35Type" use="required"/>
+	</xsd:complexType>
+	<xsd:complexType name="QuantityType">
+		<xsd:sequence>
+			<xsd:element name="quantity" type="Integer1to15Type" minOccurs="1" maxOccurs="1"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="DateChoiceType">
+		<xsd:sequence>
+			<xsd:group ref="DateChoiceGroupType"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:group name="DateChoiceGroupType">
+		<xsd:choice>
+			<xsd:element name="date" type="xsd:date" minOccurs="1" maxOccurs="1"/>
+			<xsd:element name="dateTime" type="xsd:dateTime" minOccurs="1" maxOccurs="1"/>
+		</xsd:choice>
+	</xsd:group>
+	<xsd:group name="DateAndTimeGroupType">
+		<xsd:sequence>
+			<xsd:element name="dateTime" type="xsd:dateTime" minOccurs="1" maxOccurs="1"/>
+		</xsd:sequence>
+	</xsd:group>
+	<xsd:simpleType name="PercentageType">
+		<xsd:restriction base="SimpleFloat1to10Type"/>
+	</xsd:simpleType>
+	<xsd:complexType name="MeasurementType">
+		<xsd:sequence>
+			<xsd:element name="measurementValue" type="MeasurementValueType" minOccurs="1" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="MeasurementValueType">
+		<xsd:simpleContent>
+			<xsd:extension base="Float1to15Type">
+				<xsd:attribute name="unitOfMeasure" type="String0to3Type" use="required"/>
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:complexType name="DescriptionType">
+		<xsd:sequence>
+			<xsd:element name="text" type="String1to70Type" minOccurs="1" maxOccurs="1"/>
+		</xsd:sequence>
+		<xsd:attribute name="language" type="xsd:language" use="required"/>
+	</xsd:complexType>
+	<xsd:complexType name="TextDescriptionType">
+		<xsd:sequence>
+			<xsd:element name="description" type="DescriptionType" minOccurs="1" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:simpleType name="DaysOfTheWeekListType">
+		<xsd:restriction base="String1to80Type">
+			<xsd:enumeration value="FRIDAY"/>
+			<xsd:enumeration value="MONDAY"/>
+			<xsd:enumeration value="SUNDAY"/>
+			<xsd:enumeration value="SATURDAY"/>
+			<xsd:enumeration value="THURSDAY"/>
+			<xsd:enumeration value="TUESDAY"/>
+			<xsd:enumeration value="WEDNESDAY"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="CurrencyISOCodeType">
+		<xsd:restriction base="String3Type"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="CountryISOCodeType">
+		<xsd:restriction base="String1to2Type"/>
+	</xsd:simpleType>
+	<xsd:complexType name="DateType">
+		<xsd:sequence>
+			<xsd:element name="date" type="xsd:date" minOccurs="1" maxOccurs="1"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="DateAndTimeType">
+		<xsd:sequence>
+			<xsd:group ref="DateAndTimeGroupType"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:attributeGroup name="CreationAttributeGroupType">
+		<xsd:attribute name="creationDate" type="xsd:dateTime" use="required"/>
+	</xsd:attributeGroup>
+	<xsd:simpleType name="TimeZoneType">
+		<xsd:restriction base="String1to3Type"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="VersionType">
+		<xsd:restriction base="String1to35Type"/>
+	</xsd:simpleType>
+</xsd:schema>

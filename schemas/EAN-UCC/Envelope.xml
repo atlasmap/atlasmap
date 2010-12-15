@@ -1,0 +1,892 @@
+<!--
+
+    DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+
+    Copyright (c) 2010 Oracle and/or its affiliates. All rights reserved.
+
+    The contents of this file are subject to the terms of either the GNU
+    General Public License Version 2 only ("GPL") or the Common Development
+    and Distribution License("CDDL") (collectively, the "License").  You
+    may not use this file except in compliance with the License.  You can
+    obtain a copy of the License at
+    https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
+    or packager/legal/LICENSE.txt.  See the License for the specific
+    language governing permissions and limitations under the License.
+
+    When distributing the software, include this License Header Notice in each
+    file and include the License file at packager/legal/LICENSE.txt.
+
+    GPL Classpath Exception:
+    Oracle designates this particular file as subject to the "Classpath"
+    exception as provided by Oracle in the GPL Version 2 section of the License
+    file that accompanied this code.
+
+    Modifications:
+    If applicable, add the following below the License Header, with the fields
+    enclosed by brackets [] replaced by your own identifying information:
+    "Portions Copyright [year] [name of copyright owner]"
+
+    Contributor(s):
+    If you wish your version of this file to be governed by only the CDDL or
+    only the GPL Version 2, indicate your decision by adding "[Contributor]
+    elects to include this software in this distribution under the [CDDL or GPL
+    Version 2] license."  If you don't indicate a single choice of license, a
+    recipient has the option to distribute your version of this file under
+    either the CDDL, the GPL Version 2 or to extend the choice of license to
+    its licensees as provided above.  However, if you add GPL Version 2 code
+    and therefore, elected the GPL Version 2 license, then the option applies
+    only if the new code is made subject to such option by the copyright
+    holder.
+
+-->
+
+<as2:envelope xmlns:as2="http://www.uc-council.org/smp/schemas/as2" xmlns:fmcg="http://www.uc-council.org/smp/schemas/fmcg" xmlns:simpl-eb="http://www.uc-council.org/smp/schemas/simpl-eb" xmlns:msg="http://www.uc-council.org/smp/schemas/msg" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.uc-council.org/smp/schemas/as2 Envelope.xsd" communicationVersion="1.0">
+	<!--  The data in this sample instance document is not real data and is only there for illustration and/or data typing validation. -->
+	<messageHeader creationDate="2001-12-12">
+		<userId>stringdata</userId>
+		<password>stringdata</password>
+		<messageIdentifier>stringdata</messageIdentifier>
+		<to>
+			<gln>1234567890123</gln>
+		</to>
+		<from>
+			<gln>1234567890123</gln>
+		</from>
+		<representingParty>
+			<gln>1234567890123</gln>
+		</representingParty>
+	</messageHeader>
+	<msg:body>
+		<transaction>
+			<entityIdentification>
+				<uniqueCreatorIdentification>entity_identificationstringdata</uniqueCreatorIdentification>
+				<contentOwner>
+					<gln>4134456747002</gln>
+				</contentOwner>
+			</entityIdentification>
+			<command>
+				<documentCommand>
+					<documentCommandHeader type="ADD">
+						<entityIdentification>
+							<uniqueCreatorIdentification>entity_identificationstringdata</uniqueCreatorIdentification>
+							<contentOwner>
+								<gln>4134456747002</gln>
+							</contentOwner>
+						</entityIdentification>
+					</documentCommandHeader>
+					<documentCommandOperand>
+						<fmcg:item creationDate="2001-06-28T12:13:14" documentStatus="ORIGINAL" contentVersion="1.0" documentStructureVersion="1.0" lastUpdateDate="2001-06-28">
+							<fmcg:links>
+								<fmcg:childItem quantity="20">
+									<fmcg:itemIdentification>
+										<fmcg:alternateItemIdentification type="COUPON_FAMILY_CODE">String 1..35</fmcg:alternateItemIdentification>
+										<fmcg:additionalItemIdentification type="test">String 1..35</fmcg:additionalItemIdentification>
+									</fmcg:itemIdentification>
+								</fmcg:childItem>
+							</fmcg:links>
+							<fmcg:itemInformation>
+								<paymentTerms type="BASIC_(NET)" eventType="ANTICIPATED_DELIVERY_DATE">
+									<proximoCutOffDay>23</proximoCutOffDay>
+									<discountPayment discountType="stringdata">
+										<discountDescription>
+											<description language="EN">
+												<text>stringdata</text>
+											</description>
+										</discountDescription>
+										<date>2001-06-28</date>
+									</discountPayment>
+									<installmentDue>
+										<percentageOfPaymentDue>12</percentageOfPaymentDue>
+										<timePeriodDue type="DAYS">8</timePeriodDue>
+									</installmentDue>
+									<netPayment>
+										<dayOfMonthDue>23</dayOfMonthDue>
+									</netPayment>
+								</paymentTerms>
+								<allowanceCharge type="ALLOWANCE_GLOBAL" allowanceOrChargeType="ALLOWANCE" effectiveDateType="EFFECTIVE_DATE" sequenceNumber="1" settlementType="BILL_BACK">
+									<priceBracketList>
+										<bracketIdentifier>
+											<entityID>Here string upto 80 characteres can apper</entityID>
+										</bracketIdentifier>								
+									</priceBracketList>
+									<monetaryAmountOrPercentage>
+										<allowanceOrChargeRatePerUnit>1234</allowanceOrChargeRatePerUnit>
+										<amountPerUnit currencyISOcode="USD">123.12</amountPerUnit>
+										<percentagePerUnit>24</percentagePerUnit>
+										<measurementPerUnit unitOfMeasure="string">4</measurementPerUnit>
+									</monetaryAmountOrPercentage>
+									<baseAmount>
+										<allowanceOrChargeRatePerUnit>98</allowanceOrChargeRatePerUnit>
+										<amountPerUnit currencyISOcode="UK">18.12</amountPerUnit>
+										<percentagePerUnit>54</percentagePerUnit>
+										<measurementPerUnit unitOfMeasure="stringdata">7</measurementPerUnit>
+									</baseAmount>
+									<description>
+										<description language="EN">
+											<text>stringdata</text>
+										</description>
+									</description>
+								</allowanceCharge>
+								<manufacturer>
+									<gln>1313131313131</gln>
+								</manufacturer>
+								<itemDescription>
+									<descriptionShort>
+										<description language="EN">
+											<text>stringdata</text>
+										</description>
+									</descriptionShort>
+									<itemName>
+										<description language="EN">
+											<text>stringdata</text>
+										</description>
+									</itemName>
+									<itemClassification>
+										<agency>stringdata</agency>
+										<attribute>
+											<classificationItemCode>stringdata</classificationItemCode>
+											<classificationItemName>
+												<description language="EN">
+													<text>This is an item</text>
+												</description>
+											</classificationItemName>
+										</attribute>
+										<category>
+											<code>stringdata</code>
+											<classificationName>
+												<description language="EN">
+													<text>stringdata</text>
+												</description>
+											</classificationName>
+										</category>
+									</itemClassification>
+								</itemDescription>
+								<unitOfMeasure>
+									<netContent>
+										<measurementValue unitOfMeasure="lbs">120</measurementValue>
+									</netContent>
+									<grossWeight>
+										<measurementValue unitOfMeasure="lbs">120</measurementValue>
+									</grossWeight>
+									<packagingWeight>
+										<measurementValue unitOfMeasure="lbs">120</measurementValue>
+									</packagingWeight>
+									<depth>
+										<measurementValue unitOfMeasure="lbs">120</measurementValue>
+									</depth>
+									<diameter>
+										<measurementValue unitOfMeasure="lbs">120</measurementValue>
+									</diameter>
+									<height>
+										<measurementValue unitOfMeasure="lbs">120</measurementValue>
+									</height>
+									<pegHorizontal>
+										<measurementValue unitOfMeasure="lbs">120</measurementValue>
+									</pegHorizontal>
+									<pegVertical>
+										<measurementValue unitOfMeasure="lbs">120</measurementValue>
+									</pegVertical>
+									<width>
+										<measurementValue unitOfMeasure="lbs">120</measurementValue>
+									</width>
+								</unitOfMeasure>
+								<colorCharacteristics>
+									<color>
+										<description language="EN">
+											<text>stringdata</text>
+										</description>
+									</color>
+									<colorCodeListAgency>4</colorCodeListAgency>
+									<colorCodeValue>4</colorCodeValue>
+								</colorCharacteristics>
+								<tradeItemHandlingInformation>
+									<handlingInstructions>
+										<description language="EN">
+											<text>stringdata</text>
+										</description>
+									</handlingInstructions>
+									<palletDataPalletHandlingOnewayReusable>A</palletDataPalletHandlingOnewayReusable>
+									<palletDataPalletTypeCode>A</palletDataPalletTypeCode>
+									<stackingFactor>4</stackingFactor>
+									<stackingWeightMaximum>
+										<measurementValue unitOfMeasure="lbs">120</measurementValue>
+									</stackingWeightMaximum>
+									<storageHandlingTemperatureMaximum>
+										<measurementValue unitOfMeasure="lbs">120</measurementValue>
+									</storageHandlingTemperatureMaximum>
+									<storageHandlingTemperatureMinimum>
+										<measurementValue unitOfMeasure="lbs">120</measurementValue>
+									</storageHandlingTemperatureMinimum>
+								</tradeItemHandlingInformation>
+								<tradeItemHazardousInformation>
+									<dangerousGoodsItemNumberLetter>string</dangerousGoodsItemNumberLetter>
+									<dangerousGoodsSubstanceIdentificationNumber>st</dangerousGoodsSubstanceIdentificationNumber>
+									<dangerousGoodsTechnicalName>
+										<description language="EN">
+											<text>stringdata</text>
+										</description>
+									</dangerousGoodsTechnicalName>
+									<flashPointTemperature>
+										<measurementValue unitOfMeasure="lbs">120</measurementValue>
+									</flashPointTemperature>
+									<hazardCode>s</hazardCode>
+								</tradeItemHazardousInformation>
+								<tradeItemDate>
+									<effectiveChangeDate>
+										<date>2001-05-05</date>
+									</effectiveChangeDate>
+									<endAvailabilityDate>
+										<dateTime>2001-06-28T12:13:14</dateTime>
+									</endAvailabilityDate>
+									<firstSaleDate>
+										<date>2001-05-05</date>
+									</firstSaleDate>
+									<orderingLeadTimeDays>12</orderingLeadTimeDays>
+									<startAvailabilityDate>
+										<dateTime>1999-05-31T13:20:00.000</dateTime>
+									</startAvailabilityDate>
+								</tradeItemDate>
+								<materialSafetyData>
+									<materialSafetyDataSheet>true</materialSafetyDataSheet>
+								</materialSafetyData>
+								<packagingCharacteristics>
+									<numberOfCompleteLayersContainedInATradeItem>stringdata</numberOfCompleteLayersContainedInATradeItem>
+									<numberOfTradeItemsContainedInACompleteLayer>stringdata</numberOfTradeItemsContainedInACompleteLayer>
+									<numberOfTradeItemsPerPallet>stringdata</numberOfTradeItemsPerPallet>
+									<numberOfTradeItemsPerPalletLayer>stringdata</numberOfTradeItemsPerPalletLayer>
+									<numberOfLayersPerPallet>stringdata</numberOfLayersPerPallet>
+								</packagingCharacteristics>
+								<packagingMaterial>
+									<code>stringdata</code>
+									<codeListMaintenanceAgency>stringdata</codeListMaintenanceAgency>
+									<composition>4</composition>
+									<description>
+										<description language="EN">
+											<text>stringdata</text>
+										</description>
+									</description>
+									<type>abc</type>
+									<packagingType>stringdata</packagingType>
+								</packagingMaterial>
+								<sizeCharacteristics>
+									<size>
+										<description language="EN">
+											<text>stringdata</text>
+										</description>
+									</size>
+									<sizeCodeListAgency>stringdata</sizeCodeListAgency>
+									<sizeCodeValue>stringdata</sizeCodeValue>
+								</sizeCharacteristics>
+								<tradeItemQuantities>
+									<orderQuantityMaximum>
+										<quantity>12</quantity>
+									</orderQuantityMaximum>
+									<orderQuantityMinimum>
+										<quantity>12</quantity>
+									</orderQuantityMinimum>
+									<orderQuantityMultiple>
+										<quantity>12</quantity>
+									</orderQuantityMultiple>
+									<orderSizingFactor>1</orderSizingFactor>
+								</tradeItemQuantities>
+								<unitIndicator>
+									<baseUnitIndicator>true</baseUnitIndicator>
+									<despatchUnitIndicator>true</despatchUnitIndicator>
+									<invoiceUnitIndicator>true</invoiceUnitIndicator>
+									<orderingUnitIndicator>true</orderingUnitIndicator>
+								</unitIndicator>
+								<fmcg:tradeItemCharacteristics>
+									<countryOfOrigin>USA</countryOfOrigin>
+									<nonPublicIndicator>true</nonPublicIndicator>
+									<prePricedAmount>
+										<amount currencyISOcode="USD">20.00</amount>
+									</prePricedAmount>
+									<pricingOnTheProduct>true</pricingOnTheProduct>
+									<rightOfReturnForNonSoldTradeItems>true</rightOfReturnForNonSoldTradeItems>
+									<tradeItemBarcoded>true</tradeItemBarcoded>
+									<variableWeightTradeItem>true</variableWeightTradeItem>
+									<targetMarketCode>
+										<description>
+											<description language="EN">
+												<text>stringdata</text>
+											</description>
+										</description>
+										<type>string</type>
+									</targetMarketCode>
+									<fmcg:freshnessDateProduct>true</fmcg:freshnessDateProduct>
+									<fmcg:geneticModificationIndicator>true</fmcg:geneticModificationIndicator>
+									<fmcg:organicItemCode>true</fmcg:organicItemCode>
+									<fmcg:form>AAAA</fmcg:form>
+									<fmcg:minimumProductLifespanFromTimeOfProduction>23</fmcg:minimumProductLifespanFromTimeOfProduction>
+								</fmcg:tradeItemCharacteristics>
+								<fmcg:tradeItemMeasures>
+									<measureCode>
+										<measurementValue unitOfMeasure="lbs">120</measurementValue>
+									</measureCode>
+									<measureValue>100006</measureValue>
+									<fmcg:degreeOfOriginalWort>stringdata</fmcg:degreeOfOriginalWort>
+									<fmcg:drainedWeight>
+										<measurementValue unitOfMeasure="lbs">120</measurementValue>
+									</fmcg:drainedWeight>
+									<fmcg:fatContent>
+										<measurementValue unitOfMeasure="lbs">120</measurementValue>
+									</fmcg:fatContent>
+									<fmcg:percentageOfAlcoholByVolume>0</fmcg:percentageOfAlcoholByVolume>
+								</fmcg:tradeItemMeasures>
+								<fmcg:itemIdentification>
+									<fmcg:gtin>12312312312312</fmcg:gtin>
+								</fmcg:itemIdentification>
+								<fmcg:replacedItem>
+									<fmcg:gtin>12312312312312</fmcg:gtin>
+								</fmcg:replacedItem>
+								<fmcg:packagingMarking>
+									<fmcg:markedWithIngredients>true</fmcg:markedWithIngredients>
+									<fmcg:packagingMarkedAsRecyclable>true</fmcg:packagingMarkedAsRecyclable>
+									<fmcg:packagingMarkedReturnable>true</fmcg:packagingMarkedReturnable>
+									<fmcg:productMarkedAsRecyclable>true</fmcg:productMarkedAsRecyclable>
+								</fmcg:packagingMarking>
+								<fmcg:strengthIndicator>
+									<fmcg:strength>
+										<measurementValue unitOfMeasure="lbs">120</measurementValue>
+									</fmcg:strength>
+									<fmcg:strengthBasis>
+										<measurementValue unitOfMeasure="lbs">120</measurementValue>
+									</fmcg:strengthBasis>
+								</fmcg:strengthIndicator>
+							</fmcg:itemInformation>
+						</fmcg:item>
+						<simpl-eb:party creationDate="2001-06-28T12:13:14" documentStatus="ORIGINAL" contentVersion="1.0" documentStructureVersion="1.0" lastUpdateDate="2001-06-28">
+							<simpl-eb:linkDetails>
+								<simpl-eb:party creationDate="2001-06-28T12:13:14" documentStatus="ORIGINAL" contentVersion="1.0" documentStructureVersion="1.0" lastUpdateDate="2001-06-28">
+									<simpl-eb:links>
+										<partyIdentification>
+											<gln>1313131313131</gln>
+											<additionalPartyIdentification type="BUYER_ASSIGNED">String 1..35</additionalPartyIdentification>
+										</partyIdentification>
+									</simpl-eb:links>
+									<simpl-eb:partyInformation partyRole="BILL_TO">
+										<paymentTerms type="BASIC_(NET)" eventType="ANTICIPATED_DELIVERY_DATE">
+											<proximoCutOffDay>23</proximoCutOffDay>
+											<discountPayment discountType="stringdata">
+												<discountDescription>
+													<description language="EN">
+														<text>stringdata</text>
+													</description>
+												</discountDescription>
+												<date>1999-05-31</date>
+											</discountPayment>
+											<installmentDue>
+												<percentageOfPaymentDue>12</percentageOfPaymentDue>
+												<timePeriodDue type="DAYS">8</timePeriodDue>
+											</installmentDue>
+											<netPayment>
+												<dayOfMonthDue>23</dayOfMonthDue>
+											</netPayment>
+										</paymentTerms>
+										<allowanceCharge type="ALLOWANCE_GLOBAL" allowanceOrChargeType="ALLOWANCE" effectiveDateType="EFFECTIVE_DATE" sequenceNumber="1" settlementType="BILL_BACK">
+											<priceBracketList>
+												<bracketIdentifier>
+													<entityID>Here string upto 80 characters can apper</entityID>
+												</bracketIdentifier>
+											</priceBracketList>
+											<monetaryAmountOrPercentage>
+												<allowanceOrChargeRatePerUnit>1234</allowanceOrChargeRatePerUnit>
+												<amountPerUnit currencyISOcode="USD">123.12</amountPerUnit>
+												<percentagePerUnit>24</percentagePerUnit>
+												<measurementPerUnit unitOfMeasure="string">4</measurementPerUnit>
+											</monetaryAmountOrPercentage>
+											<baseAmount>
+												<allowanceOrChargeRatePerUnit>98</allowanceOrChargeRatePerUnit>
+												<amountPerUnit currencyISOcode="UK">18.12</amountPerUnit>
+												<percentagePerUnit>54</percentagePerUnit>
+												<measurementPerUnit unitOfMeasure="string">7</measurementPerUnit>
+											</baseAmount>
+											<description>
+												<description language="EN">
+													<text>stringdata</text>
+												</description>
+											</description>
+										</allowanceCharge>
+										<contact>
+											<communicationChannel type="EMAIL" communicationNumber="1"/>
+											<personOrDepartmentName>
+												<description language="EN">
+													<text>stringdata</text>
+												</description>
+											</personOrDepartmentName>
+										</contact>
+										<facilitySpecification>
+											<appointmentRequired>true</appointmentRequired>
+											<operatingDayFrom>FRIDAY</operatingDayFrom>
+											<operatingDayTo>FRIDAY</operatingDayTo>
+											<operatingTimeFrom>T:10:10:10</operatingTimeFrom>
+											<operatingTimeTo>T:10:10:10</operatingTimeTo>
+										</facilitySpecification>
+										<nameAndAddress>
+											<city>string</city>
+											<countryISOcode>st</countryISOcode>
+											<languageOfTheParty>EN</languageOfTheParty>
+											<name>string</name>
+										</nameAndAddress>
+										<partyDates>
+											<effectiveChangeDate>
+												<date>2001-01-01</date>
+											</effectiveChangeDate>
+											<partyEndDate>
+												<date>2001-01-01</date>
+											</partyEndDate>
+											<partyStartDate>
+												<date>2001-01-01</date>
+											</partyStartDate>
+										</partyDates>
+										<financialInformation>
+											<standardTermsOfPayment>stringdata</standardTermsOfPayment>
+											<taxAuthority>stringdata</taxAuthority>
+											<taxRegistrationNumber>stringdata</taxRegistrationNumber>
+											<transactionCurrency>USD</transactionCurrency>
+											<typeOfTaxRegistration>str</typeOfTaxRegistration>
+										</financialInformation>
+										<partyIdentification>
+											<gln>1313131313131</gln>
+											<additionalPartyIdentification type="BUYER_ASSIGNED">String 1..35</additionalPartyIdentification>
+										</partyIdentification>
+										<simpl-eb:financialInstitutionalInformation>
+											<accountHolderName>stringdata</accountHolderName>
+											<financialInstitutionAccountNumber>stringdata</financialInstitutionAccountNumber>
+											<financialInstitutionCode>stringdata</financialInstitutionCode>
+											<financialInstitutionName>stringdata</financialInstitutionName>
+											<transactionCurrency>DLR</transactionCurrency>
+										</simpl-eb:financialInstitutionalInformation>
+										<simpl-eb:palletSystem>
+											<acceptPallets>true</acceptPallets>
+											<shipPallets>true</shipPallets>
+										</simpl-eb:palletSystem>
+									</simpl-eb:partyInformation>
+								</simpl-eb:party>
+							</simpl-eb:linkDetails>
+							<simpl-eb:partyInformation partyRole="BILL_TO">
+								<paymentTerms type="BASIC_(NET)" eventType="ANTICIPATED_DELIVERY_DATE">
+									<proximoCutOffDay>23</proximoCutOffDay>
+									<discountPayment discountType="stringdata">
+										<discountDescription>
+											<description language="EN">
+												<text>stringdata</text>
+											</description>
+										</discountDescription>
+										<date>1999-05-31</date>
+									</discountPayment>
+									<installmentDue>
+										<percentageOfPaymentDue>12</percentageOfPaymentDue>
+										<timePeriodDue type="DAYS">8</timePeriodDue>
+									</installmentDue>
+									<netPayment>
+										<dayOfMonthDue>23</dayOfMonthDue>
+									</netPayment>
+								</paymentTerms>
+								<allowanceCharge type="ALLOWANCE_GLOBAL" allowanceOrChargeType="ALLOWANCE" effectiveDateType="EFFECTIVE_DATE" sequenceNumber="1" settlementType="BILL_BACK">
+									<priceBracketList>
+										<bracketIdentifier>
+											<entityID>Here string upto 80 characters can apper</entityID>
+										</bracketIdentifier>
+									</priceBracketList>
+									<monetaryAmountOrPercentage>
+										<allowanceOrChargeRatePerUnit>1234</allowanceOrChargeRatePerUnit>
+										<amountPerUnit currencyISOcode="USD">123.12</amountPerUnit>
+										<percentagePerUnit>24</percentagePerUnit>
+										<measurementPerUnit unitOfMeasure="string">4</measurementPerUnit>
+									</monetaryAmountOrPercentage>
+									<baseAmount>
+										<allowanceOrChargeRatePerUnit>98</allowanceOrChargeRatePerUnit>
+										<amountPerUnit currencyISOcode="UK">18.12</amountPerUnit>
+										<percentagePerUnit>54</percentagePerUnit>
+										<measurementPerUnit unitOfMeasure="string">7</measurementPerUnit>
+									</baseAmount>
+									<description>
+										<description language="EN">
+											<text>stringdata</text>
+										</description>
+									</description>
+								</allowanceCharge>
+								<contact>
+									<communicationChannel type="EMAIL" communicationNumber="1"/>
+									<personOrDepartmentName>
+										<description language="EN">
+											<text>stringdata</text>
+										</description>
+									</personOrDepartmentName>
+								</contact>
+								<facilitySpecification>
+									<appointmentRequired>true</appointmentRequired>
+									<operatingDayFrom>FRIDAY</operatingDayFrom>
+									<operatingDayTo>FRIDAY</operatingDayTo>
+									<operatingTimeFrom>T:10:10:10</operatingTimeFrom>
+									<operatingTimeTo>T:10:10:10</operatingTimeTo>
+								</facilitySpecification>
+								<nameAndAddress>
+									<city>string</city>
+									<countryISOcode>st</countryISOcode>
+									<languageOfTheParty>EN</languageOfTheParty>
+									<name>string</name>
+								</nameAndAddress>
+								<partyDates>
+									<effectiveChangeDate>
+										<date>2001-01-01</date>
+									</effectiveChangeDate>
+									<partyEndDate>
+										<date>2001-01-01</date>
+									</partyEndDate>
+									<partyStartDate>
+										<date>2001-01-01</date>
+									</partyStartDate>
+								</partyDates>
+								<financialInformation>
+									<standardTermsOfPayment>stringdata</standardTermsOfPayment>
+									<taxAuthority>stringdata</taxAuthority>
+									<taxRegistrationNumber>stringdata</taxRegistrationNumber>
+									<transactionCurrency>USD</transactionCurrency>
+									<typeOfTaxRegistration>str</typeOfTaxRegistration>
+								</financialInformation>
+								<partyIdentification>
+									<gln>1313131313131</gln>
+									<additionalPartyIdentification type="BUYER_ASSIGNED">String 1..35</additionalPartyIdentification>
+								</partyIdentification>
+								<simpl-eb:financialInstitutionalInformation>
+									<accountHolderName>stringdata</accountHolderName>
+									<financialInstitutionAccountNumber>stringdata</financialInstitutionAccountNumber>
+									<financialInstitutionCode>stringdata</financialInstitutionCode>
+									<financialInstitutionName>stringdata</financialInstitutionName>
+									<transactionCurrency>DLR</transactionCurrency>
+								</simpl-eb:financialInstitutionalInformation>
+								<simpl-eb:palletSystem>
+									<acceptPallets>true</acceptPallets>
+									<shipPallets>true</shipPallets>
+								</simpl-eb:palletSystem>
+							</simpl-eb:partyInformation>
+						</simpl-eb:party>
+						<fmcg:order documentStatus="COPY" creationDate="2001-12-12T12:12:12">
+							<paymentTerms type="BASIC_(NET)" eventType="ANTICIPATED_DELIVERY_DATE">
+								<proximoCutOffDay>23</proximoCutOffDay>
+								<discountPayment discountType="abc">
+									<discountDescription>
+										<description language="EN">
+											<text>stringdata</text>
+										</description>
+									</discountDescription>
+									<date>2001-06-28</date>
+								</discountPayment>
+								<installmentDue>
+									<percentageOfPaymentDue>12</percentageOfPaymentDue>
+									<timePeriodDue type="DAYS">8</timePeriodDue>
+								</installmentDue>
+								<netPayment>
+									<dayOfMonthDue>23</dayOfMonthDue>
+								</netPayment>
+							</paymentTerms>
+							<allowanceCharge type="ALLOWANCE_GLOBAL" allowanceOrChargeType="ALLOWANCE" effectiveDateType="EFFECTIVE_DATE" sequenceNumber="1" settlementType="BILL_BACK">
+								<priceBracketList>
+									<bracketIdentifier>
+										<entityID>Here string upto 80 characters can apper</entityID>
+									</bracketIdentifier>
+								</priceBracketList>
+								<monetaryAmountOrPercentage>
+									<allowanceOrChargeRatePerUnit>1234</allowanceOrChargeRatePerUnit>
+									<amountPerUnit currencyISOcode="USD">123.12</amountPerUnit>
+									<percentagePerUnit>24</percentagePerUnit>
+									<measurementPerUnit unitOfMeasure="string">4</measurementPerUnit>
+								</monetaryAmountOrPercentage>
+								<baseAmount>
+									<allowanceOrChargeRatePerUnit>98</allowanceOrChargeRatePerUnit>
+									<amountPerUnit currencyISOcode="UK">18.12</amountPerUnit>
+									<percentagePerUnit>54</percentagePerUnit>
+									<measurementPerUnit unitOfMeasure="string">7</measurementPerUnit>
+								</baseAmount>
+								<description>
+									<description language="EN">
+										<text>stringdata</text>
+									</description>
+								</description>
+							</allowanceCharge>
+							<movementDate>
+								<date>2001-06-28</date>
+							</movementDate>
+							<movementDateType>REQUESTED_PICKUP</movementDateType>
+							<typedEntityIdentification entityType="ORDER">
+								<entityIdentification>
+									<uniqueCreatorIdentification>stringdata</uniqueCreatorIdentification>
+									<contentOwner>
+										<gln>1234567890123</gln>
+									</contentOwner>
+								</entityIdentification>
+							</typedEntityIdentification>
+							<buyer>
+								<gln>1234567890123</gln>
+							</buyer>
+							<seller>
+								<gln>1234567890123</gln>
+							</seller>
+							<shipParty identificationType="SHIP_FROM">
+								<gln>1234567890123</gln>
+							</shipParty>
+							<fmcg:lineItem number="1">
+								<netPrice>
+									<amount currencyISOcode="USD">123.12</amount>
+								</netPrice>
+								<requested>
+									<quantity>120</quantity>
+								</requested>
+								<allowanceCharge type="ALLOWANCE_GLOBAL" allowanceOrChargeType="ALLOWANCE" effectiveDateType="EFFECTIVE_DATE" sequenceNumber="1" settlementType="BILL_BACK">
+									<priceBracketList>
+										<bracketIdentifier>
+											<entityID>Here string upto 80 characters can apper</entityID>
+										</bracketIdentifier>
+									</priceBracketList>
+									<monetaryAmountOrPercentage>
+										<measurementPerUnit unitOfMeasure="strin">9</measurementPerUnit>
+									</monetaryAmountOrPercentage>
+									<description>
+										<description language="EN">
+											<text>stringdata</text>
+										</description>
+									</description>
+								</allowanceCharge>
+								<fmcg:itemID>
+									<fmcg:gtin>12312312312312</fmcg:gtin>
+								</fmcg:itemID>
+							</fmcg:lineItem>
+						</fmcg:order>
+						<fmcg:despatchAdvice creationDate="2001-06-28T12:13:14" documentStatus="ORIGINAL" contentVersion="1.0" documentStructureVersion="1.0" lastUpdateDate="2001-06-28">
+							<estimatedDeliveryDate>
+								<date>2001-06-28</date>
+							</estimatedDeliveryDate>
+							<typedEntityIdentification entityType="DESPATCH_ADVICE">
+								<entityIdentification>
+									<uniqueCreatorIdentification>FA12</uniqueCreatorIdentification>
+									<contentOwner>
+										<alternatePartyIdentification type="DUNS"/>
+										<additionalPartyIdentification type="DUNS_PLUS_FOUR"/>
+									</contentOwner>
+								</entityIdentification>
+							</typedEntityIdentification>
+							<buyer>
+								<gln>1234567890123</gln>
+								<additionalPartyIdentification type="SCAC"/>
+							</buyer>
+							<seller>
+								<alternatePartyIdentification type="SELLER_ASSIGNED"/>
+								<additionalPartyIdentification type="UN_LOCATION_CODE"/>
+							</seller>
+							<shipTo>
+								<gln>1234567890123</gln>
+								<additionalPartyIdentification type="SCAC"/>
+							</shipTo>
+							<carrier>
+								<gln>1234567890123</gln>
+								<additionalPartyIdentification type="SCAC"/>
+							</carrier>
+							<deliveryNote number="12">
+								<date>2001-06-28</date>
+							</deliveryNote>
+							<orderNumber number="34">
+								<dateTime>2001-06-28T12:13:14</dateTime>
+							</orderNumber>
+							<consignmentNumber number="23">
+								<date>2001-06-28</date>
+							</consignmentNumber>
+							<actualShipDate>
+								<date>2001-06-28</date>
+							</actualShipDate>
+							<fmcg:despatchItem number="123456">
+								<fmcg:tradeItemUnit>
+									<fmcg:itemContained>
+										<contained>
+											<quantity>123</quantity>
+										</contained>
+										<fmcg:itemID>
+											<fmcg:gtin>123456567667</fmcg:gtin>
+											<fmcg:additionalItemIdentification type="SUPPLIER_NUMBER"/>
+											<listForEachItem>
+												<serial>12a</serial>
+											</listForEachItem>
+										</fmcg:itemID>
+									</fmcg:itemContained>
+								</fmcg:tradeItemUnit>
+							</fmcg:despatchItem>
+						</fmcg:despatchAdvice>
+						<fmcg:simpleInvoice creationDate="2001-06-28T12:13:14" documentStatus="ORIGINAL" contentVersion="1.0" documentStructureVersion="1.0" lastUpdateDate="2001-06-28">
+							<paymentTerms type="BASIC_(NET)" eventType="ANTICIPATED_DELIVERY_DATE">
+								<proximoCutOffDay>23</proximoCutOffDay>
+								<discountPayment discountType="abc">
+									<discountDescription>
+										<description language="EN">
+											<text>stringdata</text>
+										</description>
+									</discountDescription>
+									<date>2001-06-28</date>
+								</discountPayment>
+								<installmentDue>
+									<percentageOfPaymentDue>12</percentageOfPaymentDue>
+									<timePeriodDue type="DAYS">8</timePeriodDue>
+								</installmentDue>
+								<netPayment>
+									<dayOfMonthDue>23</dayOfMonthDue>
+								</netPayment>
+							</paymentTerms>
+							<allowanceCharge type="ALLOWANCE_GLOBAL" allowanceOrChargeType="ALLOWANCE" effectiveDateType="EFFECTIVE_DATE" sequenceNumber="1" settlementType="BILL_BACK">
+								<priceBracketList>
+									<bracketIdentifier>
+										<entityID>Here string upto 80 characters can apper</entityID>
+									</bracketIdentifier>
+								</priceBracketList>
+								<monetaryAmountOrPercentage>
+									<allowanceOrChargeRatePerUnit>1234</allowanceOrChargeRatePerUnit>
+									<amountPerUnit currencyISOcode="USD">123.12</amountPerUnit>
+									<percentagePerUnit>24</percentagePerUnit>
+									<measurementPerUnit unitOfMeasure="string">4</measurementPerUnit>
+								</monetaryAmountOrPercentage>
+								<baseAmount>
+									<allowanceOrChargeRatePerUnit>98</allowanceOrChargeRatePerUnit>
+									<amountPerUnit currencyISOcode="UK">18.12</amountPerUnit>
+									<percentagePerUnit>54</percentagePerUnit>
+									<measurementPerUnit unitOfMeasure="string">7</measurementPerUnit>
+								</baseAmount>
+								<description>
+									<description language="EN">
+										<text>stringdata</text>
+									</description>
+								</description>
+							</allowanceCharge>
+							<typedEntityIdentification entityType="ORDER">
+								<entityIdentification>
+									<uniqueCreatorIdentification>stringdata</uniqueCreatorIdentification>
+									<contentOwner>
+										<gln>1234567890123</gln>
+									</contentOwner>
+								</entityIdentification>
+							</typedEntityIdentification>
+							<buyer>
+								<gln>1234567890123</gln>
+							</buyer>
+							<seller>
+								<gln>1234567890123</gln>
+							</seller>
+							<totalAmount>
+								<amount currencyISOcode="USD">121</amount>
+							</totalAmount>
+							<orderNumber number="3">
+								<date>2001-06-28</date>
+							</orderNumber>
+							<deliveryNote number="12">
+								<dateTime>2001-06-28T12:13:14</dateTime>
+							</deliveryNote>
+							<fmcg:lineItem number="123">
+								<invoiced>
+									<quantity>123</quantity>
+								</invoiced>
+								<allowanceCharge type="ALLOWANCE_GLOBAL" allowanceOrChargeType="ALLOWANCE" effectiveDateType="EFFECTIVE_DATE" sequenceNumber="1" settlementType="BILL_BACK">
+									<priceBracketList>
+										<bracketIdentifier>
+											<entityID>Here string upto 80 characters can apper</entityID>
+										</bracketIdentifier>
+									</priceBracketList>
+									<monetaryAmountOrPercentage>
+										<allowanceOrChargeRatePerUnit>1234</allowanceOrChargeRatePerUnit>
+										<amountPerUnit currencyISOcode="USD">123.12</amountPerUnit>
+										<percentagePerUnit>24</percentagePerUnit>
+										<measurementPerUnit unitOfMeasure="integer">2</measurementPerUnit>
+									</monetaryAmountOrPercentage>
+									<baseAmount>
+										<allowanceOrChargeRatePerUnit>98</allowanceOrChargeRatePerUnit>
+										<amountPerUnit currencyISOcode="UK">18.12</amountPerUnit>
+										<percentagePerUnit>54</percentagePerUnit>
+										<measurementPerUnit unitOfMeasure="string">7</measurementPerUnit>
+									</baseAmount>
+									<description>
+										<description language="EN">
+											<text>stringdata</text>
+										</description>
+									</description>
+								</allowanceCharge>
+								<totalLineAmount>
+									<amount currencyISOcode="USD">121</amount>
+								</totalLineAmount>
+								<netPrice>
+									<amount currencyISOcode="USD">121</amount>
+								</netPrice>
+								<fmcg:itemID>
+									<fmcg:gtin>123456567667</fmcg:gtin>
+									<fmcg:additionalItemIdentification type="SUPPLIER_NUMBER"/>
+								</fmcg:itemID>
+							</fmcg:lineItem>
+						</fmcg:simpleInvoice>
+					</documentCommandOperand>
+				</documentCommand>
+			</command>
+			<command>
+				<documentIdentificationCommand type="DELETE">
+					<documentIdentifierList>
+						<documentIdentifier contentVersion="1.0">
+							<partyIdentification>
+								<gln>1234567890123</gln>
+							</partyIdentification>
+						</documentIdentifier>
+						<documentIdentifier contentVersion="1.0">
+							<fmcg:itemIdentification>
+								<fmcg:alternateItemIdentification type="COUPON_FAMILY_CODE">Identification</fmcg:alternateItemIdentification>
+							</fmcg:itemIdentification>
+						</documentIdentifier>
+						<documentIdentifier contentVersion="1.0">
+							<typedEntityIdentification entityType="ORDER">
+								<entityIdentification>
+									<uniqueCreatorIdentification>stringdata</uniqueCreatorIdentification>
+									<contentOwner>
+										<gln>1234567890123</gln>
+									</contentOwner>
+								</entityIdentification>
+							</typedEntityIdentification>
+						</documentIdentifier>
+					</documentIdentifierList>
+				</documentIdentificationCommand>
+			</command>
+			<command>
+				<linkCommand>
+					<linkCommandHeader type="LINK">
+						<entityIdentification>
+							<uniqueCreatorIdentification>stringdata</uniqueCreatorIdentification>
+							<contentOwner>
+								<gln>1234567890123</gln>
+							</contentOwner>
+						</entityIdentification>
+					</linkCommandHeader>
+					<linkCommandOperand>
+						<documentIdentifier contentVersion="1.0">
+							<fmcg:itemIdentification>
+								<fmcg:gtin>12345678901234</fmcg:gtin>
+							</fmcg:itemIdentification>
+						</documentIdentifier>
+						<hierarchyList>
+							<child quantity="25">
+								<documentIdentifier contentVersion="1.0">
+									<typedEntityIdentification entityType="ORDER">
+										<entityIdentification>
+											<uniqueCreatorIdentification>stringdata</uniqueCreatorIdentification>
+											<contentOwner>
+												<gln>1234567890123</gln>
+											</contentOwner>
+										</entityIdentification>
+									</typedEntityIdentification>
+								</documentIdentifier>
+							</child>
+							<child quantity="2">
+								<documentIdentifier contentVersion="1.0">
+									<partyIdentification>
+										<gln>1234567890123</gln>
+									</partyIdentification>
+								</documentIdentifier>
+							</child>
+						</hierarchyList>
+					</linkCommandOperand>
+				</linkCommand>
+			</command>
+		</transaction>
+	</msg:body>
+</as2:envelope>
