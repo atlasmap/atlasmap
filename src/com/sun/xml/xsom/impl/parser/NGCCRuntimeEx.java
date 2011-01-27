@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2010-2011 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -51,6 +51,7 @@ import com.sun.xml.xsom.impl.parser.state.NGCCRuntime;
 import com.sun.xml.xsom.impl.parser.state.Schema;
 import com.sun.xml.xsom.impl.util.Uri;
 import com.sun.xml.xsom.parser.AnnotationParser;
+import java.io.FileNotFoundException;
 import org.relaxng.datatype.ValidationContext;
 import org.xml.sax.Attributes;
 import org.xml.sax.EntityResolver;
@@ -331,17 +332,12 @@ public class NGCCRuntimeEx extends NGCCRuntime implements PatcherManager {
         documentSystemId = source.getSystemId();
         try {
             Schema s = new Schema(this,includeMode,expectedNamespace);
-            setRootHandler(s);
-            
+            setRootHandler(s);           
             try {
-                parser.parser.parse(source,this,
-                    getErrorHandler(),
-                    parser.getEntityResolver());
-            } catch( IOException e ) {
-                SAXParseException se = new SAXParseException(
-                    e.toString(),importLocation,e);
-                parser.errorHandler.fatalError(se);
-                throw se;
+                parser.parser.parse(source,this, getErrorHandler(), parser.getEntityResolver());
+            } catch( IOException fnfe ) {
+                SAXParseException se = new SAXParseException(fnfe.toString(), importLocation, fnfe);
+                parser.errorHandler.warning(se);
             }
         } catch( SAXException e ) {
             parser.setErrorFlag();
