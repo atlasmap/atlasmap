@@ -151,6 +151,12 @@
                         <phase>generate-sources</phase>
                         <configuration>
                             <tasks>
+                                <taskdef name="licence" classname="com.sun.tools.LicenceTask">
+                                  <classpath>
+                                    <pathelement path="lib/lic.jar"/>
+                                  </classpath>
+                                </taskdef>
+                                
                                 <mkdir dir="build/automata"/>
 
                                 <!-- delete old files to avoid corruption -->
@@ -163,6 +169,9 @@
                                     <arg path="build/src/com/sun/xml/xsom/impl/parser/state" />
                                     <arg path="src/xmlschema.rng"/>
                                 </java>
+                                <licence licence="licenceheader.txt">
+                                  <fileset dir="build/src/" includes="com/sun/xml/xsom/impl/parser/state/*.java"/>
+                                </licence>
                             </tasks>
                         </configuration>
                         <goals>
