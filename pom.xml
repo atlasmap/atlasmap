@@ -76,19 +76,14 @@
     </organization>
     <developers>
         <developer>
-            <id>kohsuke</id>
-            <name>Kohsuke Kawaguchi</name>
-            <email>kohsuke.kawaguchi@sun.com</email>
+            <id>snajper</id>
+            <name>Martin Grebac</name>
+            <email>martin.grebac@oracle.com</email>
         </developer>
         <developer>
             <id>lexi</id>
             <name>Aleksei Valikov</name>
             <email>valikov@gmx.net</email>
-        </developer>
-        <developer>
-            <id>snajper</id>
-            <name>Martin Grebac</name>
-            <email>martin.grebac@oracle.com</email>
         </developer>
     </developers>
     <dependencies>
