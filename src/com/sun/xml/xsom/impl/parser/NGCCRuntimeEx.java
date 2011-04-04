@@ -51,7 +51,6 @@ import com.sun.xml.xsom.impl.parser.state.NGCCRuntime;
 import com.sun.xml.xsom.impl.parser.state.Schema;
 import com.sun.xml.xsom.impl.util.Uri;
 import com.sun.xml.xsom.parser.AnnotationParser;
-import java.io.FileNotFoundException;
 import org.relaxng.datatype.ValidationContext;
 import org.xml.sax.Attributes;
 import org.xml.sax.EntityResolver;
@@ -63,6 +62,7 @@ import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.LocatorImpl;
 
 import java.io.IOException;
+import java.net.URI;
 import java.text.MessageFormat;
 import java.util.Stack;
 
@@ -200,18 +200,24 @@ public class NGCCRuntimeEx extends NGCCRuntime implements PatcherManager {
                 // better than nothing.
                 baseUri=documentSystemId;
 
+            EntityResolver er = parser.getEntityResolver();
             String systemId = null;
-            if(relativeUri!=null)
+
+            if (relativeUri!=null)
                 systemId = Uri.resolve(baseUri,relativeUri);
 
-            EntityResolver er = parser.getEntityResolver();
-            if(er!=null) {
+            if (er!=null) {
                 InputSource is = er.resolveEntity(namespaceURI,systemId);
-                if(is!=null)
+                if (is == null) {
+                    String normalizedSystemId = URI.create(systemId).normalize().toASCIIString();
+                    is = er.resolveEntity(namespaceURI,normalizedSystemId);
+                }
+                if (is != null) {
                     return is;
+                }
             }
 
-            if(systemId!=null)
+            if (systemId!=null)
                 return new InputSource(systemId);
             else
                 return null;
@@ -372,12 +378,14 @@ public class NGCCRuntimeEx extends NGCCRuntime implements PatcherManager {
         return parser.errorHandler;
     }
 
+    @Override
     public void onEnterElementConsumed(String uri, String localName, String qname, Attributes atts)
         throws SAXException {
         super.onEnterElementConsumed(uri, localName, qname, atts);
         elementNames.push(localName);
     }
 
+    @Override
     public void onLeaveElementConsumed(String uri, String localName, String qname) throws SAXException {
         super.onLeaveElementConsumed(uri, localName, qname);
         elementNames.pop();
@@ -428,10 +436,12 @@ public class NGCCRuntimeEx extends NGCCRuntime implements PatcherManager {
         else    return new XmlString(value,createValidationContext());
     }
 
+    @Override
     public void startPrefixMapping( String prefix, String uri ) throws SAXException {
         super.startPrefixMapping(prefix,uri);
         currentContext = new Context(prefix,uri,currentContext);
     }
+    @Override
     public void endPrefixMapping( String prefix ) throws SAXException {
         super.endPrefixMapping(prefix);
         currentContext = currentContext.previous;
@@ -480,6 +490,7 @@ public class NGCCRuntimeEx extends NGCCRuntime implements PatcherManager {
     }
 
 
+    @Override
     protected void unexpectedX(String token) throws SAXException {
         SAXParseException e = new SAXParseException(MessageFormat.format(
             "Unexpected {0} appears at line {1} column {2}",
