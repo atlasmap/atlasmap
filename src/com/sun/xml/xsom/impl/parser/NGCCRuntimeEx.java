@@ -209,8 +209,12 @@ public class NGCCRuntimeEx extends NGCCRuntime implements PatcherManager {
             if (er!=null) {
                 InputSource is = er.resolveEntity(namespaceURI,systemId);
                 if (is == null) {
-                    String normalizedSystemId = URI.create(systemId).normalize().toASCIIString();
-                    is = er.resolveEntity(namespaceURI,normalizedSystemId);
+                    try {
+                        String normalizedSystemId = URI.create(systemId).normalize().toASCIIString();
+                        is = er.resolveEntity(namespaceURI,normalizedSystemId);
+                    } catch (Exception e) {
+                        // just ignore, this is a second try, return the fallback if this breaks
+                    }
                 }
                 if (is != null) {
                     return is;
