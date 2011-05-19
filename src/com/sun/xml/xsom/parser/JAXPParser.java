@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2011 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -76,12 +76,6 @@ public class JAXPParser implements XMLParser {
     public JAXPParser() {
         this( SAXParserFactory.newInstance());
     }
-    
-
-
-    
-    
-
 
     public void parse( InputSource source, ContentHandler handler,
         ErrorHandler errorHandler, EntityResolver entityResolver )
@@ -105,8 +99,6 @@ public class JAXPParser implements XMLParser {
             throw spe;
         }
     }
-
-
 
     /**
      * XMLReader with improved error message for entity resolution failure.
@@ -144,6 +136,7 @@ public class JAXPParser implements XMLParser {
          * to let the application handle entity resolution. Here we just catch
          * an IOException and add more information.
          */
+        @Override
         public InputSource resolveEntity(String publicId, String systemId) throws SAXException {
             try {
                 InputSource is=null;
@@ -172,6 +165,7 @@ public class JAXPParser implements XMLParser {
             }
         }
         
+        @Override
         public void setDocumentLocator(Locator locator) {
             super.setDocumentLocator(locator);
             this.locator = locator;

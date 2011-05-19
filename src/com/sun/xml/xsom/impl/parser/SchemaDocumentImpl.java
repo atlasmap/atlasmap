@@ -123,6 +123,7 @@ public final class SchemaDocumentImpl implements SchemaDocument
         return Collections.<SchemaDocument>unmodifiableSet(referers);
     }
 
+    @Override
     public boolean equals(Object o) {
         SchemaDocumentImpl rhs = (SchemaDocumentImpl) o;
 
@@ -132,9 +133,14 @@ public final class SchemaDocumentImpl implements SchemaDocument
             return false;
         return this.schema==rhs.schema;
     }
+    
+    @Override
     public int hashCode() {
-        if(schemaDocumentURI==null)
+        if (schemaDocumentURI==null)
             return super.hashCode();
+        if (schema == null) {
+            return schemaDocumentURI.hashCode();
+        }
         return schemaDocumentURI.hashCode()^this.schema.hashCode();
     }
 }
