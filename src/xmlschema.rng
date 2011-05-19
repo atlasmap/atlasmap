@@ -97,8 +97,7 @@
           $runtime.reportError(
             Messages.format("UnexpectedTargetnamespace.Include", tns, expectedNamespace, tns ) );
         }
-        if(tns==null)
-          $runtime.chameleonMode = true;
+        $runtime.chameleonMode = true;
       }
       
       // multiple inclusion test.
