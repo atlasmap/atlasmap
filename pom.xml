@@ -50,9 +50,9 @@
     <version>20110101-SNAPSHOT</version>
     <packaging>jar</packaging>
     <parent>
-        <groupId>org.sonatype.oss</groupId>
-        <artifactId>oss-parent</artifactId>
-        <version>6</version>
+        <groupId>net.java</groupId>
+        <artifactId>jvnet-parent</artifactId>
+        <version>1</version>
     </parent>
     <licenses>
         <license>
