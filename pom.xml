@@ -47,7 +47,7 @@
     <name>XSOM</name>
     <description>XML Schema Object Model (XSOM) is a Java library that allows applications to easily parse XML Schema documents and inspect information in them. It is expected to be useful for applications that need to take XML Schema as an input.</description>
     <url>http://xsom.java.net/</url>
-    <version>20110809</version>
+    <version>20110809-SNAPSHOT</version>
     <packaging>jar</packaging>
     <parent>
         <groupId>net.java</groupId>
