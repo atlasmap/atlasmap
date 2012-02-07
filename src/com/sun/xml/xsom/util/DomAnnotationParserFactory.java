@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -44,6 +44,7 @@ import com.sun.xml.xsom.XSAnnotation;
 import com.sun.xml.xsom.parser.AnnotationContext;
 import com.sun.xml.xsom.parser.AnnotationParser;
 import com.sun.xml.xsom.parser.AnnotationParserFactory;
+import javax.xml.XMLConstants;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -71,10 +72,15 @@ import javax.xml.transform.sax.TransformerHandler;
  * @author Kohsuke Kawaguchi
  */
 public class DomAnnotationParserFactory implements AnnotationParserFactory {
+    
     public AnnotationParser create() {
         return new AnnotationParserImpl();
     }
 
+    public AnnotationParser create(boolean disableSecureProcessing) {
+        return new AnnotationParserImpl();
+    }
+    
     private static final SAXTransformerFactory stf = (SAXTransformerFactory) SAXTransformerFactory.newInstance();
 
     private static class AnnotationParserImpl extends AnnotationParser {
@@ -86,13 +92,18 @@ public class DomAnnotationParserFactory implements AnnotationParserFactory {
         private DOMResult result;
 
         AnnotationParserImpl() {
+            this(false);
+        }
+
+        AnnotationParserImpl(boolean disableSecureProcessing) {
             try {
                 transformer = stf.newTransformerHandler();
+                stf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, disableSecureProcessing);
             } catch (TransformerConfigurationException e) {
                 throw new Error(e); // impossible
             }
         }
-
+        
         public ContentHandler getContentHandler(AnnotationContext context, String parentElementName, ErrorHandler errorHandler, EntityResolver entityResolver) {
             result = new DOMResult();
             transformer.setResult(result);
