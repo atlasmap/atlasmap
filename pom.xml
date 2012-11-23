@@ -182,6 +182,28 @@
                 <argLine>${proxyArgLine}</argLine>
             </configuration>
           </plugin>            
+		<plugin>
+			<groupId>org.codehaus.mojo</groupId>
+			<artifactId>findbugs-maven-plugin</artifactId>
+			<version>2.5.1</version>
+			<configuration>
+				<skip>${findbugs.skip}</skip>
+				<threshold>${findbugs.threshold}</threshold>
+				<findbugsXmlWithMessages>true</findbugsXmlWithMessages>
+				<excludeFilterFile>
+					${findbugs.exclude}
+				</excludeFilterFile>
+				<fork>true</fork>
+				<jvmArgs>-Xms64m -Xmx256m</jvmArgs>    
+			</configuration>
+			<dependencies>
+				<dependency>
+					<groupId>org.glassfish.findbugs</groupId>
+					<artifactId>findbugs</artifactId>
+					<version>1.0</version>
+				</dependency>
+			</dependencies>
+		</plugin>
       </plugins>
         <pluginManagement>
             <plugins>
@@ -196,4 +218,10 @@
             </plugins>
         </pluginManagement>
     </build>
+    <properties>
+        <findbugs.skip>false</findbugs.skip>
+        <findbugs.threshold>Low</findbugs.threshold>
+        <findbugs.exclude />
+    </properties>
+
 </project>
