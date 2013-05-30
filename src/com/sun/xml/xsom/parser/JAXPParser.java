@@ -42,6 +42,8 @@ package com.sun.xml.xsom.parser;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -62,6 +64,8 @@ public class JAXPParser implements XMLParser {
 
     // not in older JDK, so must be duplicated here, otherwise javax.xml.XMLConstants should be used
     private static final String ACCESS_EXTERNAL_SCHEMA = "http://javax.xml.XMLConstants/property/accessExternalSchema";
+
+    private static final Logger LOGGER = Logger.getLogger(JAXPParser.class.getName());
 
     private final SAXParserFactory factory;
     
@@ -85,7 +89,7 @@ public class JAXPParser implements XMLParser {
         throws SAXException, IOException {
         
         try {
-            SAXParser saxParser = allowFileAccess(factory.newSAXParser());
+            SAXParser saxParser = allowFileAccess(factory.newSAXParser(), false);
             XMLReader reader = new XMLReaderEx(saxParser.getXMLReader());
 
             reader.setContentHandler(handler);
@@ -102,13 +106,20 @@ public class JAXPParser implements XMLParser {
         }
     }
 
-    private static SAXParser allowFileAccess(SAXParser saxParser) {
+    private static SAXParser allowFileAccess(SAXParser saxParser, boolean disableSecureProcessing) throws SAXException {
+
+        // if feature secure processing enabled, nothing to do, file is allowed,
+        // or user is able to control access by standard JAXP mechanisms
+        if (disableSecureProcessing) {
+            return saxParser;
+        }
+
         try {
             saxParser.setProperty(ACCESS_EXTERNAL_SCHEMA, "file");
-        } catch (SAXNotRecognizedException ignored) {
-            // support depends on used JDK or SAX implementation
-        } catch (SAXNotSupportedException ignored) {
-            // support depends on used JDK or SAX implementation
+            LOGGER.log(Level.FINE, Messages.format(Messages.JAXP_SUPPORTED_PROPERTY, ACCESS_EXTERNAL_SCHEMA));
+        } catch (SAXException ignored) {
+            // nothing to do; support depends on version JDK or SAX implementation
+            LOGGER.log(Level.CONFIG, Messages.format(Messages.JAXP_UNSUPPORTED_PROPERTY, ACCESS_EXTERNAL_SCHEMA), ignored);
         }
         return saxParser;
     }
