@@ -44,16 +44,10 @@ import java.io.IOException;
 import java.net.URL;
 
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-import org.xml.sax.ContentHandler;
-import org.xml.sax.EntityResolver;
-import org.xml.sax.ErrorHandler;
-import org.xml.sax.InputSource;
-import org.xml.sax.Locator;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
-import org.xml.sax.XMLReader;
+import org.xml.sax.*;
 import org.xml.sax.helpers.XMLFilterImpl;
 
 import com.sun.xml.xsom.impl.parser.Messages;
@@ -65,7 +59,10 @@ import com.sun.xml.xsom.impl.parser.Messages;
  *     Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
 public class JAXPParser implements XMLParser {
-    
+
+    // not in older JDK, so must be duplicated here, otherwise javax.xml.XMLConstants should be used
+    private static final String ACCESS_EXTERNAL_SCHEMA = "http://javax.xml.XMLConstants/property/accessExternalSchema";
+
     private final SAXParserFactory factory;
     
     public JAXPParser( SAXParserFactory factory ) {
@@ -88,9 +85,9 @@ public class JAXPParser implements XMLParser {
         throws SAXException, IOException {
         
         try {
-            XMLReader reader = factory.newSAXParser().getXMLReader();
-            reader = new XMLReaderEx(reader);
-            
+            SAXParser saxParser = allowFileAccess(factory.newSAXParser());
+            XMLReader reader = new XMLReaderEx(saxParser.getXMLReader());
+
             reader.setContentHandler(handler);
             if(errorHandler!=null)
                 reader.setErrorHandler(errorHandler);
@@ -103,6 +100,17 @@ public class JAXPParser implements XMLParser {
             errorHandler.fatalError(spe);
             throw spe;
         }
+    }
+
+    private static SAXParser allowFileAccess(SAXParser saxParser) {
+        try {
+            saxParser.setProperty(ACCESS_EXTERNAL_SCHEMA, "file");
+        } catch (SAXNotRecognizedException ignored) {
+            // support depends on used JDK or SAX implementation
+        } catch (SAXNotSupportedException ignored) {
+            // support depends on used JDK or SAX implementation
+        }
+        return saxParser;
     }
 
     /**
