@@ -2,14 +2,14 @@
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-    Copyright (c) 2010 Oracle and/or its affiliates. All rights reserved.
+    Copyright (c) 2010-2013 Oracle and/or its affiliates. All rights reserved.
 
     The contents of this file are subject to the terms of either the GNU
     General Public License Version 2 only ("GPL") or the Common Development
     and Distribution License("CDDL") (collectively, the "License").  You
     may not use this file except in compliance with the License.  You can
     obtain a copy of the License at
-    https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
+    http://glassfish.java.net/public/CDDL+GPL_1_1.html
     or packager/legal/LICENSE.txt.  See the License for the specific
     language governing permissions and limitations under the License.
 
@@ -43,7 +43,7 @@
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.uc-council.org/smp/schemas/msg" xmlns:fmcg="http://www.uc-council.org/smp/schemas/fmcg" xmlns:simpl-eb="http://www.uc-council.org/smp/schemas/simpl-eb" xmlns="http://www.uc-council.org/smp/schemas/msg" elementFormDefault="unqualified" attributeFormDefault="unqualified">
 	<xsd:annotation>
 		<xsd:documentation>
-			å© Uniform Code Council, Inc. and EAN International, Inc. 2001
+			ï¿½ Uniform Code Council, Inc. and EAN International, Inc. 2001
 			The Uniform Code Council, Inc. (UCC) is providing this XML Schema Definition file and resultant XML file as a service to interested industries.
 			This XML Schema Definition file and resultant XML file were developed through a consensus process of interested parties.
 

@@ -3,14 +3,14 @@
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-    Copyright (c) 2010-2011 Oracle and/or its affiliates. All rights reserved.
+    Copyright (c) 2010-2013 Oracle and/or its affiliates. All rights reserved.
 
     The contents of this file are subject to the terms of either the GNU
     General Public License Version 2 only ("GPL") or the Common Development
     and Distribution License("CDDL") (collectively, the "License").  You
     may not use this file except in compliance with the License.  You can
     obtain a copy of the License at
-    https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
+    http://glassfish.java.net/public/CDDL+GPL_1_1.html
     or packager/legal/LICENSE.txt.  See the License for the specific
     language governing permissions and limitations under the License.
 
@@ -40,12 +40,16 @@
     holder.
 
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.sun.xsom</groupId>
     <artifactId>xsom</artifactId>
     <name>XSOM</name>
-    <description>XML Schema Object Model (XSOM) is a Java library that allows applications to easily parse XML Schema documents and inspect information in them. It is expected to be useful for applications that need to take XML Schema as an input.</description>
+    <description>XML Schema Object Model (XSOM) is a Java library that allows applications to easily parse XML Schema
+        documents and inspect information in them. It is expected to be useful for applications that need to take XML
+        Schema as an input.
+    </description>
     <url>http://xsom.java.net/</url>
     <version>20130532-SNAPSHOT</version>
     <packaging>jar</packaging>
@@ -60,7 +64,7 @@
             <url>http://glassfish.java.net/public/CDDL+GPL_1_1.html</url>
             <distribution>repo</distribution>
         </license>
-    </licenses>    
+    </licenses>
     <issueManagement>
         <system>JIRA</system>
         <url>http://java.net/jira/browse/XSOM</url>
@@ -147,25 +151,25 @@
                         <configuration>
                             <tasks>
                                 <taskdef name="licence" classname="com.sun.tools.LicenceTask">
-                                  <classpath>
-                                    <pathelement path="lib/lic.jar" />
-                                  </classpath>
+                                    <classpath>
+                                        <pathelement path="lib/lic.jar"/>
+                                    </classpath>
                                 </taskdef>
-                                
-                                <mkdir dir="build/automata" />
+
+                                <mkdir dir="build/automata"/>
 
                                 <!-- delete old files to avoid corruption -->
-                                <delete dir="build/src" />
-                                <mkdir dir="build/src/com/sun/xml/xsom/impl/parser/state" />
+                                <delete dir="build/src"/>
+                                <mkdir dir="build/src/com/sun/xml/xsom/impl/parser/state"/>
 
-                                <property name="relaxngcc-jar" value="lib/relaxngcc.jar" />
+                                <property name="relaxngcc-jar" value="lib/relaxngcc.jar"/>
                                 <java jar="${relaxngcc-jar}" fork="true">
-                                    <arg value="--target" />
-                                    <arg path="build/src/com/sun/xml/xsom/impl/parser/state" />
-                                    <arg path="src/xmlschema.rng" />
+                                    <arg value="--target"/>
+                                    <arg path="build/src/com/sun/xml/xsom/impl/parser/state"/>
+                                    <arg path="src/xmlschema.rng"/>
                                 </java>
                                 <licence licence="licenceheader.txt">
-                                  <fileset dir="build/src/" includes="com/sun/xml/xsom/impl/parser/state/*.java" />
+                                    <fileset dir="build/src/" includes="com/sun/xml/xsom/impl/parser/state/*.java"/>
                                 </licence>
                             </tasks>
                         </configuration>
@@ -175,36 +179,54 @@
                     </execution>
                 </executions>
             </plugin>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-surefire-plugin</artifactId>
-            <configuration>
-                <argLine>${proxyArgLine}</argLine>
-            </configuration>
-          </plugin>            
-		<plugin>
-			<groupId>org.codehaus.mojo</groupId>
-			<artifactId>findbugs-maven-plugin</artifactId>
-			<version>2.5.1</version>
-			<configuration>
-				<skip>${findbugs.skip}</skip>
-				<threshold>${findbugs.threshold}</threshold>
-				<findbugsXmlWithMessages>true</findbugsXmlWithMessages>
-				<excludeFilterFile>
-					${findbugs.exclude}
-				</excludeFilterFile>
-				<fork>true</fork>
-				<jvmArgs>-Xms64m -Xmx256m</jvmArgs>    
-			</configuration>
-			<dependencies>
-				<dependency>
-					<groupId>org.glassfish.findbugs</groupId>
-					<artifactId>findbugs</artifactId>
-					<version>1.0</version>
-				</dependency>
-			</dependencies>
-		</plugin>
-      </plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <argLine>${proxyArgLine}</argLine>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>findbugs-maven-plugin</artifactId>
+                <version>2.5.1</version>
+                <configuration>
+                    <skip>${findbugs.skip}</skip>
+                    <threshold>${findbugs.threshold}</threshold>
+                    <findbugsXmlWithMessages>true</findbugsXmlWithMessages>
+                    <excludeFilterFile>
+                        ${findbugs.exclude}
+                    </excludeFilterFile>
+                    <fork>true</fork>
+                    <jvmArgs>-Xms64m -Xmx256m</jvmArgs>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.glassfish.findbugs</groupId>
+                        <artifactId>findbugs</artifactId>
+                        <version>1.0</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>org.glassfish.copyright</groupId>
+                <artifactId>glassfish-copyright-maven-plugin</artifactId>
+                <version>1.29</version>
+                <configuration>
+                    <templateFile>copyright.txt</templateFile>
+                    <excludeFile>copyright-exclude</excludeFile>
+                    <!-- skip files not under SCM-->
+                    <scmOnly>true</scmOnly>
+                    <!-- turn off warnings -->
+                    <warn>true</warn>
+                    <!-- for use with repair -->
+                    <update>false</update>
+                    <!-- check that year is correct -->
+                    <ignoreYear>false</ignoreYear>
+                </configuration>
+            </plugin>
+
+        </plugins>
         <pluginManagement>
             <plugins>
                 <plugin>
@@ -221,7 +243,7 @@
     <properties>
         <findbugs.skip>false</findbugs.skip>
         <findbugs.threshold>Low</findbugs.threshold>
-        <findbugs.exclude />
+        <findbugs.exclude/>
     </properties>
 
 </project>
