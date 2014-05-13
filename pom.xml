@@ -40,8 +40,7 @@
     holder.
 
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.sun.xsom</groupId>
     <artifactId>xsom</artifactId>
@@ -51,7 +50,7 @@
         Schema as an input.
     </description>
     <url>http://xsom.java.net/</url>
-    <version>20140513-SNAPSHOT</version>
+    <version>20140513</version>
     <packaging>jar</packaging>
     <parent>
         <groupId>net.java</groupId>
@@ -70,9 +69,9 @@
         <url>http://java.net/jira/browse/XSOM</url>
     </issueManagement>
     <scm>
-        <url>http://java.net/projects/xsom/sources/sources/show/trunk</url>
-        <connection>scm:svn:https://svn.java.net/svn/xsom~sources/trunk</connection>
-        <developerConnection>scm:svn:https://svn.java.net/svn/xsom~sources/trunk</developerConnection>
+        <url>http://java.net/projects/xsom/sources/sources/show/tags/xsom-20140513</url>
+        <connection>scm:svn:https://svn.java.net/svn/xsom~sources/tags/xsom-20140513</connection>
+        <developerConnection>scm:svn:https://svn.java.net/svn/xsom~sources/tags/xsom-20140513</developerConnection>
     </scm>
     <organization>
         <name>Oracle</name>
@@ -234,24 +233,24 @@
                                 <tasks>
                                     <taskdef name="licence" classname="com.sun.tools.LicenceTask">
                                         <classpath>
-                                            <pathelement path="lib/lic.jar"/>
+                                            <pathelement path="lib/lic.jar" />
                                         </classpath>
                                     </taskdef>
 
-                                    <!--<mkdir dir="build/automata"/>-->
+                                    <!--<mkdir dir="build/automata" />-->
 
                                     <!-- delete old files to avoid corruption -->
-                                    <delete dir="src/com/sun/xml/xsom/impl/parser/state"/>
-                                    <mkdir dir="src/com/sun/xml/xsom/impl/parser/state"/>
+                                    <delete dir="src/com/sun/xml/xsom/impl/parser/state" />
+                                    <mkdir dir="src/com/sun/xml/xsom/impl/parser/state" />
 
-                                    <property name="relaxngcc-jar" value="lib/relaxngcc.jar"/>
+                                    <property name="relaxngcc-jar" value="lib/relaxngcc.jar" />
                                     <java jar="${relaxngcc-jar}" fork="true">
-                                        <arg value="--target"/>
-                                        <arg path="src/com/sun/xml/xsom/impl/parser/state"/>
-                                        <arg path="src/xmlschema.rng"/>
+                                        <arg value="--target" />
+                                        <arg path="src/com/sun/xml/xsom/impl/parser/state" />
+                                        <arg path="src/xmlschema.rng" />
                                     </java>
                                     <licence licence="licenceheader.txt">
-                                        <fileset dir="src/" includes="com/sun/xml/xsom/impl/parser/state/*.java"/>
+                                        <fileset dir="src/" includes="com/sun/xml/xsom/impl/parser/state/*.java" />
                                     </licence>
                                 </tasks>
                             </configuration>
@@ -268,7 +267,7 @@
     <properties>
         <findbugs.skip>false</findbugs.skip>
         <findbugs.threshold>Low</findbugs.threshold>
-        <findbugs.exclude/>
+        <findbugs.exclude />
     </properties>
 
 </project>
