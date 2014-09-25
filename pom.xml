@@ -50,7 +50,7 @@
         Schema as an input.
     </description>
     <url>http://xsom.java.net/</url>
-    <version>20140514</version>
+    <version>20140924-SNAPSHOT</version>
     <packaging>jar</packaging>
     <parent>
         <groupId>net.java</groupId>
@@ -69,9 +69,9 @@
         <url>http://java.net/jira/browse/XSOM</url>
     </issueManagement>
     <scm>
-        <url>http://java.net/projects/xsom/sources/sources/show/tags/xsom-20140514</url>
-        <connection>scm:svn:https://svn.java.net/svn/xsom~sources/tags/xsom-20140514</connection>
-        <developerConnection>scm:svn:https://svn.java.net/svn/xsom~sources/tags/xsom-20140514</developerConnection>
+        <url>http://java.net/projects/xsom/sources/sources/show/trunk</url>
+        <connection>scm:svn:https://svn.java.net/svn/xsom~sources/trunk</connection>
+        <developerConnection>scm:svn:https://svn.java.net/svn/xsom~sources/trunk</developerConnection>
     </scm>
     <organization>
         <name>Oracle</name>
