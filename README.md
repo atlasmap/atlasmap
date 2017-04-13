@@ -1,2 +1,2 @@
 # camel-atlasmap
-Camel dataformat for AtlasMap
+Camel Component for AtlasMap
