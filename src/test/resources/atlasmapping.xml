@@ -19,7 +19,7 @@
 <AtlasMapping xmlns="http://mediadriver.com/atlas/v2" xmlns:ns2="http://mediadriver.com/atlas/java/v2" 
 	name="twitterStatusToSalesforceContact" 
 	sourceUri="atlas:java?className=twitter4j.Status" 
-	targetUri="atlas:java?className=org.apache.camel.salesforce.dto.Contact">
+	targetUri="atlas:java?className=com.redhat.ipaas.connector.salesforce.Contact">
     <Properties/>
     <FieldMappings>
         <FieldMapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="SeparateFieldMapping">

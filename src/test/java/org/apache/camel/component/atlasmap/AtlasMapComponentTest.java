@@ -18,6 +18,8 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.BootstrapWith;
 import org.springframework.test.context.ContextConfiguration;
 
+import twitter4j.Status;
+
 @RunWith(CamelSpringRunner.class)
 @BootstrapWith(CamelTestContextBootstrapper.class)
 @ContextConfiguration
@@ -32,10 +34,21 @@ public class AtlasMapComponentTest {
     @DirtiesContext
     public void testMocksAreValid() throws Exception {
     	result.setExpectedCount(1);
-    	
+
     	ProducerTemplate producerTemplate = camelContext.createProducerTemplate();    	
-    	producerTemplate.sendBody("direct:start", "Hello World!");
+    	producerTemplate.sendBody("direct:start", generateTwitterStatus());
 
         MockEndpoint.assertIsSatisfied(camelContext);
     }
+    
+    protected Status generateTwitterStatus() {
+		MockStatus status = new MockStatus();
+		MockUser user = new MockUser();
+		user.setName("Bob Vila");
+		user.setScreenName("bobvila1982");
+		status.setUser(user);
+		status.setText("Let's build a house!");
+		return status;
+	}
+
 }
