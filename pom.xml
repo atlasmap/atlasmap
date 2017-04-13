@@ -11,12 +11,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>org.apache.camel</groupId>
-		<artifactId>components</artifactId>
-		<version>2.19.0-SNAPSHOT</version>
-	</parent>
+	<!-- <parent> <groupId>org.apache.camel</groupId> <artifactId>components</artifactId> 
+		<version>2.19.0.fuse-000035</version> </parent> -->
+
+	<groupId>org.apache.camel</groupId>
 	<artifactId>camel-atlasmap</artifactId>
+	<version>2.19.0.fuse-000035</version>
 	<packaging>jar</packaging>
 	<name>Camel :: AtlasMap</name>
 	<description>Camel AtlasMap support</description>
@@ -24,69 +24,91 @@
 		<camel.osgi.import.before.defaults>com.sun.xml.bind.marshaller;resolution:=optional</camel.osgi.import.before.defaults>
 		<camel.osgi.export.pkg>org.apache.camel.converter.atlasmap.*</camel.osgi.export.pkg>
 		<camel.osgi.export.service>org.apache.camel.spi.DataFormatResolver;dataformat=atlasmap</camel.osgi.export.service>
+		<atlas.version>1.10.0-SNAPSHOT</atlas.version>
+		<camel.version>2.19.0.fuse-000035</camel.version>
+		<jaxb.version>2.2.11</jaxb.version>
+		<junit.version>4.12</junit.version>
+		<log4j.version>2.8.1</log4j.version>
+		<mockito.version>1.10.19</mockito.version>
+		<spring.version>4.3.7.RELEASE</spring.version>
+		<woodstox.version>4.4.1</woodstox.version>
 	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-core</artifactId>
+			<version>${camel.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.sun.xml.bind</groupId>
-			<artifactId>jaxb-core</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.sun.xml.bind</groupId>
-			<artifactId>jaxb-impl</artifactId>
+			<groupId>io.atlasmap</groupId>
+			<artifactId>atlas.core</artifactId>
+			<version>${atlas.version}</version>
 		</dependency>
 		<!-- for testing -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-test-spring</artifactId>
+			<version>${camel.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-core-xml</artifactId>
+			<version>${camel.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-spring-javaconfig</artifactId>
+			<version>${camel.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-api</artifactId>
+			<version>${log4j.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-core</artifactId>
+			<version>${log4j.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-slf4j-impl</artifactId>
+			<version>${log4j.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.codehaus.woodstox</groupId>
 			<artifactId>woodstox-core-asl</artifactId>
+			<version>${woodstox.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-core</artifactId>
+			<version>${mockito.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
+			<version>${spring.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.atlasmap</groupId>
+			<artifactId>atlas.java.module</artifactId>
+			<version>${atlas.version}</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
@@ -99,11 +121,33 @@
 				<enabled>true</enabled>
 			</snapshots>
 		</repository>
+		<repository>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<id>ipaas-releases</id>
+			<name>ipaas-releases</name>
+			<url>https://dl.bintray.com/redhat-ipaas/maven/</url>
+		</repository>
+		<repository>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<id>jboss.ea</id>
+			<name>JBoss EA</name>
+			<url>https://repository.jboss.org/nexus/content/groups/ea</url>
+		</repository>
 	</repositories>
-
 
 	<build>
 		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
 			<plugin>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<configuration>
@@ -112,5 +156,43 @@
 				</configuration>
 			</plugin>
 		</plugins>
+		<pluginManagement>
+			<plugins>
+				<!--This plugin's configuration is used to store Eclipse m2e settings 
+					only. It has no influence on the Maven build itself. -->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											org.apache.camel
+										</groupId>
+										<artifactId>
+											camel-package-maven-plugin
+										</artifactId>
+										<versionRange>
+											[2.19.0.fuse-000035,)
+										</versionRange>
+										<goals>
+											<goal>
+												prepare-components
+											</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 	</build>
 </project>
