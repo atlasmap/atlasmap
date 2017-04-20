@@ -174,7 +174,14 @@ public class AtlasEndpoint extends ResourceEndpoint {
             reader = getEncoding() != null ? new InputStreamReader(getResourceAsInputStream(), getEncoding()) : new InputStreamReader(getResourceAsInputStream());
         }
 
-       	AtlasMapping atlasMapping = ((DefaultAtlasContextFactory)getAtlasContextFactory()).getMappingService().loadMapping(reader);
+       	AtlasMapping atlasMapping = null;
+       	        
+       	if(path != null && path.endsWith("json")) {
+       	    atlasMapping = ((DefaultAtlasContextFactory)getAtlasContextFactory()).getMappingService().loadMappingJson(reader);
+       	} else {
+       	    atlasMapping = ((DefaultAtlasContextFactory)getAtlasContextFactory()).getMappingService().loadMapping(reader);
+       	}
+       	
         AtlasContext atlasContext = getAtlasContextFactory().createContext(atlasMapping);
 		AtlasSession atlasSession = atlasContext.createSession();
 		atlasSession.setInput(exchange.getIn().getBody());
