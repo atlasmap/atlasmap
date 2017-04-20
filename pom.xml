@@ -51,6 +51,11 @@
 			<artifactId>atlas.core</artifactId>
 			<version>${atlas.version}</version>
 		</dependency>
+        <dependency>
+            <groupId>io.atlasmap</groupId>
+            <artifactId>atlas.java.module</artifactId>
+            <version>${atlas.version}</version>
+        </dependency>
 		<!-- for testing -->
 		<dependency>
 			<groupId>junit</groupId>
@@ -110,12 +115,6 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
 			<version>${spring.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>io.atlasmap</groupId>
-			<artifactId>atlas.java.module</artifactId>
-			<version>${atlas.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
