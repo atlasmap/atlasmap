@@ -178,6 +178,20 @@
 	</dependencies>
 
 	<repositories>
+                <repository>
+                        <id>osssnap</id>
+                        <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+                        <snapshots>
+                                <enabled>true</enabled>
+                        </snapshots>
+                </repository>
+		<repository>
+			<id>ossrel</id>
+			<url>https://oss.sonatype.org/content/repositories/releases</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
 		<repository>
 			<id>apache-snapshots</id>
 			<url>https://repository.apache.org/content/repositories/snapshots/</url>
