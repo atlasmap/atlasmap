@@ -30,7 +30,7 @@
 		<camel.osgi.import.before.defaults>com.sun.xml.bind.marshaller;resolution:=optional</camel.osgi.import.before.defaults>
 		<camel.osgi.export.pkg>org.apache.camel.converter.atlasmap.*</camel.osgi.export.pkg>
 		<camel.osgi.export.service>org.apache.camel.spi.DataFormatResolver;dataformat=atlasmap</camel.osgi.export.service>
-		<atlas.version>1.10.0-SNAPSHOT</atlas.version>
+		<atlas.version>1.10.0</atlas.version>
 		<camel.version>2.19.0.fuse-000035</camel.version>
 		<ipaas.connector.version>0.3.2</ipaas.connector.version>
 		<jaxb.version>2.2.11</jaxb.version>
@@ -39,7 +39,52 @@
 		<mockito.version>1.10.19</mockito.version>
 		<spring.version>4.3.7.RELEASE</spring.version>
 		<woodstox.version>4.4.1</woodstox.version>
+                <maven-compiler-plugin.version>3.6.1</maven-compiler-plugin.version>
+                <maven-dependency-plugin.version>3.0.0</maven-dependency-plugin.version>
+                <maven-deploy-plugin.version>2.8.2</maven-deploy-plugin.version>
+                <maven-gpg-plugin.version>1.5</maven-gpg-plugin.version>
+                <maven-jar-plugin.version>3.0.2</maven-jar-plugin.version>
+                <maven-javadoc-plugin.version>2.9.1</maven-javadoc-plugin.version>
+                <maven-resources-plugin.version>3.0.2</maven-resources-plugin.version>
+                <maven-release-plugin.version>2.5.3</maven-release-plugin.version>
+                <maven-source-plugin.version>2.2.1</maven-source-plugin.version>
+                <nexus-staging-maven-plugin.version>1.6.7</nexus-staging-maven-plugin.version>
 	</properties>
+        <url>http://www.atlasmap.io</url>
+        <inceptionYear>2017</inceptionYear>
+        <licenses>
+                <license>
+                        <name>The Apache Software License, Version 2.0</name>
+                        <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+                        <distribution>repo</distribution>
+                </license>
+        </licenses>
+        <developers>
+                <developer>
+                        <id>mattrpav</id>
+                        <name>Matt Pavlovich</name>
+                        <email>matt@mediadriver.com</email>
+                        <url>http://mediadriver.com</url>
+                        <timezone>-6</timezone>
+                </developer>
+        </developers>
+        <scm>
+                <url>https://github.com/atlasmap/camel-atlasmap</url>
+                <connection>scm:git:git://github.com/atlasmap/camel-atlasmap.git</connection>
+                <developerConnection>scm:git:git@github.com:atlasmap/camel-atlasmap.git</developerConnection>
+                <tag>1.10.0</tag>
+        </scm>
+
+        <distributionManagement>
+                <snapshotRepository>
+                        <id>ossrh</id>
+                        <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+                </snapshotRepository>
+                <repository>
+                        <id>ossrh</id>
+                        <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+                </repository>
+        </distributionManagement>
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.camel</groupId>
@@ -158,7 +203,127 @@
 		</repository>
 	</repositories>
 
+	<profiles>
+               <profile>
+                        <id>release</id>
+                        <build>
+                                <plugins>
+                                        <plugin>
+                                                <artifactId>maven-source-plugin</artifactId>
+                                                <executions>
+                                                        <execution>
+                                                                <id>attach-sources</id>
+                                                                <goals>
+                                                                        <goal>jar-no-fork</goal>
+                                                                </goals>
+                                                        </execution>
+                                                </executions>
+                                        </plugin>
+                                        <plugin>
+                                                <artifactId>maven-javadoc-plugin</artifactId>
+                                                <executions>
+                                                        <execution>
+                                                                <id>attach-javadocs</id>
+                                                                <goals>
+                                                                        <goal>jar</goal>
+                                                                </goals>
+                                                        </execution>
+                                                </executions>
+                                        </plugin>
+                                        <plugin>
+                                                <artifactId>maven-gpg-plugin</artifactId>
+                                                <executions>
+                                                        <execution>
+                                                                <id>sign-artifacts</id>
+                                                                <phase>verify</phase>
+                                                                <goals>
+                                                                        <goal>sign</goal>
+                                                                </goals>
+                                                        </execution>
+                                                </executions>
+                                        </plugin>                               
+                                </plugins>
+                        </build>
+                </profile>
+	</profiles>
 	<build>
+		<pluginManagement>
+                        <plugins>
+                                <plugin>
+                                        <artifactId>maven-compiler-plugin</artifactId>
+                                        <version>${maven-compiler-plugin.version}</version>
+                                </plugin>
+                                <plugin>
+                                        <artifactId>maven-dependency-plugin</artifactId>
+                                        <version>${maven-dependency-plugin.version}</version>
+                                </plugin>
+                                <plugin>
+                                        <artifactId>maven-deploy-plugin</artifactId>
+                                        <version>${maven-deploy-plugin.version}</version>
+                                </plugin>
+                                <plugin>
+                                        <artifactId>maven-gpg-plugin</artifactId>
+                                        <version>${maven-gpg-plugin.version}</version>
+                                </plugin>
+                                <plugin>
+                                        <artifactId>maven-jar-plugin</artifactId>
+                                        <version>${maven-jar-plugin.version}</version>
+                                </plugin>
+                                <plugin>
+                                        <artifactId>maven-javadoc-plugin</artifactId>
+                                        <version>${maven-javadoc-plugin.version}</version>
+                                </plugin>
+                                <plugin>
+                                        <artifactId>maven-release-plugin</artifactId>
+                                        <version>${maven-release-plugin.version}</version>
+                                </plugin>
+                                <plugin>
+                                        <artifactId>maven-resources-plugin</artifactId>
+                                        <version>${maven-resources-plugin.version}</version>
+                                </plugin>
+                                <plugin>
+                                        <artifactId>maven-source-plugin</artifactId>
+                                        <version>${maven-source-plugin.version}</version>
+                                </plugin>
+                                <plugin>
+                                        <groupId>org.sonatype.plugins</groupId>
+                                        <artifactId>nexus-staging-maven-plugin</artifactId>
+                                        <version>${nexus-staging-maven-plugin.version}</version>
+                                </plugin>
+				<plugin>
+                                        <groupId>org.eclipse.m2e</groupId>
+                                        <artifactId>lifecycle-mapping</artifactId>
+                                        <version>1.0.0</version>
+                                        <configuration>
+                                                <lifecycleMappingMetadata>
+                                                        <pluginExecutions>
+                                                                <pluginExecution>
+                                                                        <pluginExecutionFilter>
+                                                                                <groupId>
+                                                                                        org.apache.camel
+                                                                                </groupId>
+                                                                                <artifactId>
+                                                                                        camel-package-maven-plugin
+                                                                                </artifactId>
+                                                                                <versionRange>
+                                                                                        [2.19.0.fuse-000035,)
+                                                                                </versionRange>
+                                                                                <goals>
+                                                                                        <goal>
+                                                                                                prepare-components
+                                                                                        </goal>
+                                                                                </goals>
+                                                                        </pluginExecutionFilter>
+                                                                        <action>
+                                                                                <ignore></ignore>
+                                                                        </action>
+                                                                </pluginExecution>
+                                                        </pluginExecutions>
+                                                </lifecycleMappingMetadata>
+                                        </configuration>
+                                </plugin>
+			</plugins>
+		</pluginManagement>
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -175,44 +340,32 @@
 					<reuseForks>false</reuseForks>
 				</configuration>
 			</plugin>
-		</plugins>
-		<pluginManagement>
-			<plugins>
-				<!--This plugin's configuration is used to store Eclipse m2e settings 
-					only. It has no influence on the Maven build itself. -->
-				<plugin>
-					<groupId>org.eclipse.m2e</groupId>
-					<artifactId>lifecycle-mapping</artifactId>
-					<version>1.0.0</version>
-					<configuration>
-						<lifecycleMappingMetadata>
-							<pluginExecutions>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>
-											org.apache.camel
-										</groupId>
-										<artifactId>
-											camel-package-maven-plugin
-										</artifactId>
-										<versionRange>
-											[2.19.0.fuse-000035,)
-										</versionRange>
-										<goals>
-											<goal>
-												prepare-components
-											</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<ignore></ignore>
-									</action>
-								</pluginExecution>
-							</pluginExecutions>
-						</lifecycleMappingMetadata>
-					</configuration>
-				</plugin>
-			</plugins>
-		</pluginManagement>
+                        <plugin>
+                                <groupId>org.apache.maven.plugins</groupId>
+                                <artifactId>maven-deploy-plugin</artifactId>
+                                <configuration>
+                                        <skip>false</skip>
+                                </configuration>
+                        </plugin>
+                        <plugin>
+                                <artifactId>maven-release-plugin</artifactId>
+                                <configuration>
+                                        <autoVersionSubmodules>true</autoVersionSubmodules>
+                                        <useReleaseProfile>false</useReleaseProfile>
+                                        <releaseProfiles>release</releaseProfiles>
+                                        <goals>deploy</goals>
+                                </configuration>
+                        </plugin>
+                        <plugin>
+                                <groupId>org.sonatype.plugins</groupId>
+                                <artifactId>nexus-staging-maven-plugin</artifactId>
+                                <extensions>true</extensions>
+                                <configuration>
+                                        <serverId>ossrh</serverId>
+                                        <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                                        <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                                </configuration>
+                        </plugin>
+                </plugins>
 	</build>
 </project>
