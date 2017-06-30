@@ -34,6 +34,7 @@ import { DataMapperAppComponent } from './components/data.mapper.app.component';
 import { DataMapperErrorComponent } from './components/data.mapper.error.component';
 import { ModalWindowComponent, EmptyModalBodyComponent } from './components/modal.window.component';
 import { ToolbarComponent } from './components/toolbar.component';
+import { TemplateEditComponent } from './components/template.edit.component';
 import { LineMachineComponent } from './components/line.machine.component';
 import { CollapsableHeaderComponent } from './components/collapsable.header.component';
 
@@ -63,6 +64,7 @@ export { DocumentDefinition } from './models/document.definition.model';
 export { MappingDefinition } from './models/mapping.definition.model';
 export { ConfigModel } from './models/config.model';
 export { MappingModel } from './models/mapping.model';
+export { MappingSerializer } from './services/mapping.serializer';
 
 export { DataMapperAppComponent } from './components/data.mapper.app.component';
 
@@ -102,7 +104,8 @@ export { DataMapperAppComponent } from './components/data.mapper.app.component';
         CollapsableHeaderComponent,
         MappingListComponent,
         MappingListFieldComponent,
-        NamespaceListComponent
+        NamespaceListComponent,
+        TemplateEditComponent
     ],
     exports: [
         DataMapperAppExampleHostComponent,
@@ -124,7 +127,8 @@ export { DataMapperAppComponent } from './components/data.mapper.app.component';
         FieldEditComponent,
         NamespaceEditComponent,
         PropertyFieldEditComponent,
-        ConstantFieldEditComponent
+        ConstantFieldEditComponent,
+        TemplateEditComponent
     ],
     bootstrap: [ DataMapperAppExampleHostComponent ]
 })

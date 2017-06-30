@@ -28,6 +28,7 @@ export class MappingDefinition {
     public mappings: MappingModel[] = [];
     public activeMapping: MappingModel = null;
     public parsedDocs: DocumentDefinition[] = [];
+    public templateText: string = null;
 
     private tables: LookupTable[] = [];
     private tablesBySourceTargetKey: { [key:string]:LookupTable; } = {};
@@ -35,6 +36,10 @@ export class MappingDefinition {
 
     public constructor() {
         this.name = "UI." + Math.floor((Math.random() * 1000000) + 1).toString();
+    }
+
+    public templateExists(): boolean {
+        return ((this.templateText != null) && (this.templateText != ""));
     }
 
     public addTable(table: LookupTable): void {
@@ -298,7 +303,7 @@ export class MappingDefinition {
                     mappedField.field.isAttribute = (fieldName.indexOf("@") != -1);
                     
                     if (parentPath != null) {
-                        //mappedField.field.parentField = doc.getField(parentPath);
+                        mappedField.field.parentField = doc.getField(parentPath);
                     }
                     if (mappedField.field.parentField == null) {
                         mappedField.field.parentField = DocumentDefinition.getNoneField();
@@ -315,8 +320,8 @@ export class MappingDefinition {
                     return;
                 }
             }
-            if (mappedField.parsedData.actionMethods.length > 0) {
-                for (let actionName of mappedField.parsedData.actionMethods) {
+            if (mappedField.parsedData.actionNames.length > 0) {
+                for (let actionName of mappedField.parsedData.actionNames) {
                     var actionConfig: FieldActionConfig = TransitionModel.getActionConfigForName(actionName);
                     if (actionConfig == null) {
                         console.error("Could not find field action config for action name '" + actionName + "'");

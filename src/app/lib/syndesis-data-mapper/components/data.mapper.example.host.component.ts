@@ -69,14 +69,15 @@ export class DataMapperAppExampleHostComponent {
         //c.addDoc("twitter4j.Status", true);             
            
         c.addJavaDocument("io.atlasmap.java.test.SourceOrder", true);                
-        c.addJavaDocument("io.atlasmap.java.test.SourceContact", true);
+        //c.addJavaDocument("io.atlasmap.java.test.SourceContact", true);
         c.addJavaDocument("io.atlasmap.java.test.SourceAddress", true);
         c.addJavaDocument("io.atlasmap.java.test.TestListOrders", true);
-        c.addJavaDocument("io.atlasmap.java.test.TargetOrderArray", true);
+        //c.addJavaDocument("io.atlasmap.java.test.TestListOrders", false);
+        //c.addJavaDocument("io.atlasmap.java.test.TargetOrderArray", true);
         c.addJavaDocument("io.atlasmap.java.test.SourceFlatPrimitiveClass", true);        
         
-        c.addJavaDocument("io.atlasmap.java.test.TargetTestClass", true);
-        c.addJavaDocument("io.atlasmap.java.test.TargetTestClass", false);
+        //c.addJavaDocument("io.atlasmap.java.test.TargetTestClass", true);
+        //c.addJavaDocument("io.atlasmap.java.test.TargetTestClass", false);
 
         var sampleXML: string = `<data>
                 <intField a='1'>32000</intField><longField>12421</longField>
@@ -85,6 +86,44 @@ export class DataMapperAppExampleHostComponent {
                 <floatField>234.5f</floatField><charField>A</charField>
                 <outer><inner><value>val</value></inner></outer>
             </data>
+        `;
+
+        sampleXML = `
+            <ns:XmlOE xmlns:ns="http://atlasmap.io/xml/test/v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://atlasmap.io/xml/test/v2 atlas-xml-test-model-v2.xsd ">
+              <ns:orderId>ns:orderId</ns:orderId>
+              <ns:Address>
+                <ns:addressLine1>ns:addressLine1</ns:addressLine1>
+                <ns:addressLine2>ns:addressLine2</ns:addressLine2>
+                <ns:city>ns:city</ns:city>
+                <ns:state>ns:state</ns:state>
+                <ns:zipCode>ns:zipCode</ns:zipCode>
+              </ns:Address>
+              <ns:Contact>
+                <ns:firstName>ns:firstName</ns:firstName>
+                <ns:lastName>ns:lastName</ns:lastName>
+                <ns:phoneNumber>ns:phoneNumber</ns:phoneNumber>
+                <ns:zipCode>ns:zipCode</ns:zipCode>
+              </ns:Contact>
+            </ns:XmlOE>
+        `;
+
+        sampleXML = `
+            <XMLOrder>
+              <orderId>orderId</orderId>
+              <Address>
+                <addressLine1>addressLine1</addressLine1>
+                <addressLine2>addressLine2</addressLine2>
+                <city>city</city>
+                <state>state</state>
+                <zipCode>zipCode</zipCode>
+              </Address>
+              <Contact>
+                <firstName>firstName</firstName>
+                <lastName>lastName</lastName>
+                <phoneNumber>phoneNumber</phoneNumber>
+                <zipCode>zipCode</zipCode>
+              </Contact>
+            </XMLOrder>
         `;
 
         c.addXMLDocument("XMLSampleInstanceSource", sampleXML, true, false);
@@ -106,8 +145,25 @@ export class DataMapperAppExampleHostComponent {
                 <order><id y:custId="c">54554555</id></order>
                 <q:order><id y:custId="a">12312</id></q:order>
             </orders>
+        `;        
+
+        sampleXML = `
+            <ns:XmlFPE targetNamespace="http://atlasmap.io/xml/test/v2" 
+                xmlns:ns="http://atlasmap.io/xml/test/v2" 
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+                xsi:schemaLocation="http://atlasmap.io/xml/test/v2 atlas-xml-test-model-v2.xsd ">
+                <booleanField>false</booleanField>
+                <byteField>99</byteField>
+                <charField>a</charField>
+                <doubleField>50000000.0</doubleField>
+                <floatField>40000000.0</floatField>
+                <intField>2</intField>
+                <longField>30000</longField>
+                <shortField>1</shortField>
+            </ns:XmlFPE>
         `;
 
+        //c.addXMLDocument("XMLSampleSchemaSource", sampleXML, true, true);
 
         sampleXML = `
             <xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified"
@@ -194,9 +250,7 @@ export class DataMapperAppExampleHostComponent {
                     </xs:complexType>
                 </xs:element>
             </xs:schema>
-        `;
-
-        c.addXMLDocument("XMLSampleSchemaSource", sampleXML, true, true);        
+        `;        
         
         console.log("Example config.", c);
 

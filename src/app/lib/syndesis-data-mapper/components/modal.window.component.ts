@@ -17,9 +17,13 @@
 import { Component, OnInit, Input, ViewChild, ViewChildren, DoCheck, QueryList,
     ViewContainerRef, Directive, Type, ComponentFactoryResolver, AfterViewInit,
     SimpleChange, Inject, ChangeDetectorRef} from '@angular/core';
+import { ConfigModel } from '../models/config.model';
 
 // source: http://www.w3schools.com/howto/howto_css_modals.asp
 
+export interface ModalWindowValidator {
+    isDataValid(): boolean;
+}
 
 @Component({
     selector: 'empty-modal-body',
@@ -38,7 +42,10 @@ export class EmptyModalBodyComponent { }
                         <a (click)="closeClicked($event)"><span class='close'><i class="fa fa-close"></i></span></a>
                         {{headerText}}
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-error">
+                        <data-mapper-error [isValidation]="true" [errorService]="cfg.errorService"></data-mapper-error>
+                    </div>
+                    <div class="modal-body">                                
                         <div class="modal-message" *ngIf="message">{{message}}</div>
                         <template #dyn_target></template>
                     </div>
@@ -61,6 +68,7 @@ export class ModalWindowComponent implements AfterViewInit {
     @Input() nestedComponentInitializedCallback: Function;
     @Input() okButtonHandler: Function;
     @Input() cancelButtonHandler: Function;
+    @Input() cfg: ConfigModel;
 
     public message: string = null;
     public nestedComponent: Component;
@@ -105,6 +113,13 @@ export class ModalWindowComponent implements AfterViewInit {
 
     private buttonClicked(okClicked: boolean): void {
         if (okClicked) {
+            var anyComponent: any = this.nestedComponent;
+            if ((anyComponent != null) && (anyComponent.isDataValid)) {
+                this.cfg.errorService.clearValidationErrors();
+                if (!(anyComponent.isDataValid())) {
+                    return;
+                }
+            }
             if (this.okButtonHandler) {
                 this.okButtonHandler(this);
             }
@@ -117,6 +132,7 @@ export class ModalWindowComponent implements AfterViewInit {
     }
 
     public reset(): void {
+        this.cfg.errorService.clearValidationErrors();
         this.nestedComponentInitializedCallback = null;
         this.confirmButtonText = "OK";
         this.message = "";

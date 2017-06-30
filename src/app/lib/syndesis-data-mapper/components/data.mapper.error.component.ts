@@ -22,10 +22,13 @@ import { ErrorHandlerService } from '../services/error.handler.service';
 @Component({
     selector: 'data-mapper-error',
     template: `
-        <div class="DataMapperErrorComponent" *ngIf="errorService && errorService.errors.length">
-            <div class="alert alert-danger" *ngFor="let e of errorService.errors">
-                <a class="close" (click)="handleClick($event)"><i class="fa fa-close" attr.errorIdentifier="{{e.identifier}}"></i></a>
-                <span class="pficon pficon-error-circle-o"></span>{{e.message}}
+        <div class="DataMapperErrorComponent" *ngIf="errorService && getErrors().length">
+            <div class="alert alert-danger" *ngFor="let e of getErrors()">
+                <a class="close" (click)="handleClick($event)">
+                    <i class="fa fa-close" attr.errorIdentifier="{{e.identifier}}"></i>
+                </a>
+                <span class="pficon pficon-error-circle-o"></span>
+                {{e.message}}
             </div>
         </div>
     `
@@ -33,6 +36,11 @@ import { ErrorHandlerService } from '../services/error.handler.service';
 
 export class DataMapperErrorComponent {
     @Input() public errorService: ErrorHandlerService;
+    @Input() public isValidation: boolean = false;
+
+    private getErrors(): ErrorInfo[] {
+        return this.isValidation ? this.errorService.validationErrors : this.errorService.errors;
+    }
 
     private handleClick(event: MouseEvent) {
         // need to extract this so typescript doesnt throw compiler error

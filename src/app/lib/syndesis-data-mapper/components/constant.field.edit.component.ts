@@ -17,11 +17,14 @@
 import { Component } from '@angular/core';
 
 import { Field } from '../models/field.model';
+import { ModalWindowValidator } from './modal.window.component';
+import { ConfigModel } from '../models/config.model';
+import { DataMapperUtil } from '../common/data.mapper.util';
 
 @Component({
     selector: 'constant-field-edit',
     template: `
-        <div class="PropertyEditFieldComponent">
+        <div class="DataMapperEditComponent">
             <div class="form-group">
                 <label>Value:</label>
                 <input name="value" type="text" [(ngModel)]="field.value"/>
@@ -57,7 +60,7 @@ import { Field } from '../models/field.model';
     `
 })
 
-export class ConstantFieldEditComponent {
+export class ConstantFieldEditComponent implements ModalWindowValidator {
     public field: Field = new Field();
     public valueType: any = "STRING";
 
@@ -65,7 +68,7 @@ export class ConstantFieldEditComponent {
         if (field != null) {
             this.valueType = field.type;
         }
-        this.field = field == null ? new Field() : field;
+        this.field = field == null ? new Field() : field.copy();
     }
 
     public valueTypeSelectionChanged(event: MouseEvent): void {
@@ -73,12 +76,15 @@ export class ConstantFieldEditComponent {
         this.valueType = eventTarget.selectedOptions.item(0).attributes.getNamedItem("value").value;
     }
 
-
     public getField(): Field {
         this.field.displayName = this.field.value;
         this.field.name = this.field.value;
         this.field.path = this.field.value;
         this.field.type = this.valueType;
         return this.field;
+    }
+
+    isDataValid(): boolean {
+        return DataMapperUtil.isRequiredFieldValid(this.field.value, "Value");
     }
 }

@@ -29,7 +29,7 @@ export class ErrorHandlerService {
     public error(message: string, error: any) { this.addError(message, ErrorLevel.ERROR, error); }
     public validationError(message: string, error: any) { this.addError(message, ErrorLevel.VALIDATION_ERROR, error); }
 
-    private addError(message: string, level: ErrorLevel, error:any ) {
+    private addError(message: string, level: ErrorLevel, error:any): void {
         if (level == ErrorLevel.ERROR) {
             console.error(message, error);
         }
@@ -44,7 +44,7 @@ export class ErrorHandlerService {
         }
     }
 
-    public removeError(identifier: string) {
+    public removeError(identifier: string): void {
         for (var i = 0; i < this.errors.length; i++) {
             if (this.errors[i].identifier == identifier) {
                 this.errors.splice(i, 1);
@@ -57,5 +57,9 @@ export class ErrorHandlerService {
                 return;
             }
         }
+    }
+
+    public clearValidationErrors(): void {
+        this.validationErrors = [];
     }
 }

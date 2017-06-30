@@ -27,7 +27,7 @@
 .DataMapperUI I.selectedIcon { color:#5CBADF; }
 .DataMapperUI LABEL { font-weight:normal; }
 .DataMapperUI A:hover { color:#0088ce; cursor:pointer; text-decoration:none; }
-.DataMapperUI input[disabled] { color:rgb(238,238,238); }
+.DataMapperUI input[disabled] { color:rgb(175,175,175); }
 
 .DataMapperUI .form-group { margin-left:auto; margin-right:auto; margin-bottom:10px; margin-top:10px; }
 .DataMapperUI .form-group LABEL { width:75px; }
@@ -125,7 +125,8 @@ I.docCollapseIcon { width:10px; margin-left:5px; }
 .DocumentFieldDetailComponent .disableSelection LABEL { text-decoration:line-through; color: rgb(220,220,220); }
 .DocumentFieldDetailComponent .propertyFieldIcons I { font-size:12px; vertical-align:middle; text-shadow:none; }
 
-.PropertyEditFieldComponent INPUT, .PropertyEditFieldComponent .form-group SELECT { width:300px; }
+.DataMapperEditComponent INPUT, .DataMapperEditComponent .form-group SELECT { width:300px; }
+.DataMapperEditComponent .form-group TEXTAREA { margin:auto; }
 
 .dataMapperItemList  { border:1px solid black; border:1px solid #CAC9C9; margin-right:10px; height:100%; }
 .dataMapperItemList  LABEL { float:left; margin-bottom:0px; padding-left:5px; }

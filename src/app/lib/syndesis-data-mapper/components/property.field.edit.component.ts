@@ -17,11 +17,15 @@
 import { Component } from '@angular/core';
 
 import { Field } from '../models/field.model';
+import { ModalWindowValidator } from './modal.window.component';
+import { ConfigModel } from '../models/config.model';
+
+import { DataMapperUtil } from '../common/data.mapper.util';
 
 @Component({
     selector: 'property-field-edit',
     template: `
-        <div class="PropertyEditFieldComponent">
+        <div class="DataMapperEditComponent">
             <div class="form-group">
                 <label>Name:</label>
                 <input name="name" type="text" [(ngModel)]="field.name"/>
@@ -61,7 +65,7 @@ import { Field } from '../models/field.model';
     `
 })
 
-export class PropertyFieldEditComponent {
+export class PropertyFieldEditComponent implements ModalWindowValidator {
     public field: Field = new Field();
     public valueType: any = "STRING";
 
@@ -69,7 +73,7 @@ export class PropertyFieldEditComponent {
         if (field != null) {
             this.valueType = field.type;
         }
-        this.field = field == null ? new Field() : field;
+        this.field = field == null ? new Field() : field.copy();
     }
 
     public valueTypeSelectionChanged(event: MouseEvent): void {
@@ -82,5 +86,9 @@ export class PropertyFieldEditComponent {
         this.field.path = this.field.name;
         this.field.type = this.valueType;
         return this.field;
+    }
+
+    isDataValid(): boolean {
+        return DataMapperUtil.isRequiredFieldValid(this.field.name, "Name");
     }
 }

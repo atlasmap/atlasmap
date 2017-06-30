@@ -32,6 +32,16 @@ export class NamespaceModel {
         return (this.isTarget ? "Target" : this.alias)
             + " [" + (this.uri == null ? "NO URI" : this.uri) + "]";
     }
+
+    public copy(): NamespaceModel {
+        var copy: NamespaceModel = new NamespaceModel();
+        Object.assign(copy, this);
+        return copy;
+    }
+
+    public copyFrom(that:NamespaceModel ): void {
+        Object.assign(this, that);
+    }
 }
 
 export enum DocumentTypes { JAVA, XML, JSON, CSV, CONSTANT, PROPERTY}
@@ -165,6 +175,9 @@ export class DocumentDefinition {
         if (fieldPath == DocumentDefinition.getNoneField().path) {
             return DocumentDefinition.getNoneField();
         }
+        if (fieldPath == null) {
+            return null;
+        }
         var field: Field = this.fieldsByPath[fieldPath];
         //if we can't find the field we're looking for, find parent fields and populate their children
         var pathSeparator: string = this.initCfg.pathSeparator;
@@ -218,7 +231,9 @@ export class DocumentDefinition {
     }
 
     public populateFromFields(): void {
-        this.prepareComplexFields();
+        if (this.initCfg.type.isJava()) {
+            this.prepareComplexFields();
+        }
 
         Field.alphabetizeFields(this.fields);
 
@@ -330,7 +345,7 @@ export class DocumentDefinition {
         console.log("Populating complex field's children: " + field.path + " (" + field.classIdentifier + ")");
         var cachedField = this.getComplexField(field.classIdentifier);
         if (cachedField == null) {
-            console.error("ERROR: Couldn't find cached complex field: " + field.classIdentifier);
+            console.error("ERROR: Couldn't find cached complex field: " + field.classIdentifier, this);
             return;
         }
 
@@ -347,25 +362,7 @@ export class DocumentDefinition {
         this.fieldPaths.sort();
     }
 
-    private cachedFieldsExist(fields: Field[]): boolean {
-        for (let f of fields) {
-            if (f.type == "CACHED") {
-                return true;
-            }
-            if (f.children && f.children.length) {
-                if (this.cachedFieldsExist(f.children)) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
     private prepareComplexFields(): void {
-        if (!this.cachedFieldsExist(this.fields)) {
-            return;
-        }
-
         var fields: Field[] = this.fields;
 
         //build complex field cache

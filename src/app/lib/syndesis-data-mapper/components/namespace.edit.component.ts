@@ -18,6 +18,8 @@ import { Component } from '@angular/core';
 
 import { NamespaceModel } from '../models/document.definition.model';
 import { ConfigModel } from '../models/config.model';
+import { ModalWindowValidator } from './modal.window.component';
+import { DataMapperUtil } from '../common/data.mapper.util';
 
 @Component({
     selector: 'namespace-edit',
@@ -35,20 +37,28 @@ import { ConfigModel } from '../models/config.model';
                 <label>Location URI</label>
                 <input type="text" [(ngModel)]="namespace.locationUri"/>
             </div>
+            <!--
             <div class="form-group">
                 <label>Type</label>
                 <input type="checkbox" [(ngModel)]="namespace.isTarget" style="width:20px;" />
                 <label style="width:105px; ">Target Namespace</label>
                 <div class="clear"></div>
-            </div>                
+            </div>
+            -->                
         </div>
     `
 })
 
-export class NamespaceEditComponent {
+export class NamespaceEditComponent implements ModalWindowValidator {
     public namespace: NamespaceModel = new NamespaceModel();
 
     public initialize(namespace: NamespaceModel): void {
-        this.namespace = (namespace == null) ? new NamespaceModel() : namespace;
+        this.namespace = (namespace == null) ? new NamespaceModel() : namespace.copy();
+    }
+
+    isDataValid(): boolean {
+        var dataIsValid: boolean = DataMapperUtil.isRequiredFieldValid(this.namespace.alias, "Alias");
+        dataIsValid = DataMapperUtil.isRequiredFieldValid(this.namespace.uri, "URI") && dataIsValid;
+        return dataIsValid;
     }
 }

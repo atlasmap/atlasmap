@@ -256,7 +256,7 @@ export class MappingManagementService {
             return;
         }
 
-        //FIXME: if selection switches mapping into collection or enum mode we need to show warnings or prevent that when there are multiple targets or incompatible enum fields
+        mapping.brandNewMapping = false;
 
         var latestFieldPair: FieldMappingPair = mapping.getCurrentFieldMapping();
         var lastMappedField: MappedField = latestFieldPair.getLastMappedField(field.isSource());
@@ -271,6 +271,7 @@ export class MappingManagementService {
         console.log("Creating new mapping.")
         this.deselectMapping();
         var mapping: MappingModel = new MappingModel();
+        mapping.brandNewMapping = false;
         if (selectedField != null) {
             var fieldPair: FieldMappingPair = mapping.getFirstFieldMapping();
             fieldPair.getMappedFields(selectedField.isSource())[0].field = selectedField;

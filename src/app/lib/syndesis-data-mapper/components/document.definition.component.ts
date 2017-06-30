@@ -236,7 +236,7 @@ export class DocumentDefinitionComponent {
             } else {
                 var fieldComponent: FieldEditComponent = mw.nestedComponent as FieldEditComponent;
                 fieldComponent.isSource = this.isSource;
-                fieldComponent.initialize(null);
+                fieldComponent.initialize(null, docDef);
             }
         };
         this.modalWindow.nestedComponentType = isProperty ? PropertyFieldEditComponent : (isConstant ? ConstantFieldEditComponent : FieldEditComponent)

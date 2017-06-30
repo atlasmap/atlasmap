@@ -66,6 +66,17 @@ export class Field {
         return this.namespace.alias + ":" + this.name;
     }
 
+    public isParentField(): boolean {
+        if (this.isCollection && !this.isPrimitive) {
+            return true;
+        }
+        return (this.type == "COMPLEX");
+    }
+
+    public isStringField(): boolean {
+        return (this.type == "STRING");
+    }
+
     public isTerminal(): boolean {
         if (this.enumeration) {
             return true;
@@ -79,7 +90,13 @@ export class Field {
     public copy(): Field {
         var copy: Field = new Field();
         Object.assign(copy, this);
+        
+        //make these pointers to the same object, not copies
         copy.serviceObject = this.serviceObject;
+        copy.parentField = this.parentField;
+        copy.docDef = this.docDef;
+        copy.namespace = this.namespace;
+
         copy.children = [];
         for (let childField of this.children) {
             copy.children.push(childField.copy());
@@ -88,9 +105,15 @@ export class Field {
         return copy;
     }
 
-    public copyFrom(that:Field ): void {
+    public copyFrom(that: Field): void {
         Object.assign(this, that);
+
+        //make these pointers to the same object, not copies
         this.serviceObject = that.serviceObject;
+        this.parentField = that.parentField;
+        this.docDef = that.docDef;
+        this.namespace = that.namespace;
+        
         this.children = [];
         for (let childField of that.children) {
             this.children.push(childField.copy());
@@ -98,14 +121,19 @@ export class Field {
         //console.log("Copied: " + that.name, { "src": that, "target": this });
     }
 
-    public isInCollection(): boolean {
+    public getCollectionParentField(): Field {
         var parent: Field = this;
         while (parent != null) {
-            if (parent.isCollection && (!parent.isPrimitive || parent.isArray)) {
-                return true;
+            if (parent.isCollection) {
+                return parent;
             }
             parent = parent.parentField;
         }
+        return null;
+    }
+
+    public isInCollection(): boolean {
+        return (this.getCollectionParentField() != null);
     }
 
     public isSource(): boolean {

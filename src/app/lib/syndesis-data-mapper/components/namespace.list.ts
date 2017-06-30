@@ -136,11 +136,15 @@ export class NamespaceListComponent {
             namespaceComponent.initialize(ns);            
         };
         this.modalWindow.nestedComponentType = NamespaceEditComponent;
-        this.modalWindow.okButtonHandler = (mw: ModalWindowComponent) => {            
-            if (ns == null) {
-                var namespaceComponent: NamespaceEditComponent = mw.nestedComponent as NamespaceEditComponent;
-                namespaceComponent.namespace.createdByUser = true;
-                this.cfg.getFirstXmlDoc(false).namespaces.push(namespaceComponent.namespace);
+        this.modalWindow.okButtonHandler = (mw: ModalWindowComponent) => {
+            var isEditMode = (ns != null);
+            var namespaceComponent: NamespaceEditComponent = mw.nestedComponent as NamespaceEditComponent;            
+            var newNamespace: NamespaceModel = namespaceComponent.namespace;
+            newNamespace.createdByUser = true;
+            if (isEditMode) {
+                ns.copyFrom(newNamespace);
+            } else {            
+                this.cfg.getFirstXmlDoc(false).namespaces.push(newNamespace);
             }
             this.search(this.searchFilter);
             self.cfg.mappingService.saveCurrentMapping();
@@ -216,4 +220,6 @@ export class NamespaceListComponent {
         }
         return false;
     }
+
+
 }

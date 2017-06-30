@@ -278,7 +278,7 @@ export class DocumentManagementService {
 
         var parsedField: Field = new Field();
         parsedField.name = field.name;
-        parsedField.type = field.type;
+        parsedField.type = field.fieldType;
         if ("LIST" == field.collectionType || "ARRAY" == field.collectionType) {
             parsedField.isCollection = true;
             if ("ARRAY" == field.collectionType) {

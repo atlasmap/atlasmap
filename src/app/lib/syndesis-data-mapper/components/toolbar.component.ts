@@ -20,6 +20,8 @@ import { ConfigModel } from '../models/config.model';
 import { MappingModel } from '../models/mapping.model';
 
 import { LineMachineComponent } from './line.machine.component';
+import { ModalWindowComponent } from './modal.window.component';
+import { TemplateEditComponent } from './template.edit.component';
 
 @Component({
 selector: 'dm-toolbar',
@@ -27,6 +29,7 @@ template: `
     <div class="dm-toolbar">
         <div class="dm-toolbar-icons" style="float:right;">
             <i class="fa fa-plus link" (click)="toolbarButtonClicked('addMapping');"></i>
+            <i [attr.class]="getCSSClass('editTemplate')" (click)="toolbarButtonClicked('editTemplate');"></i>
             <i [attr.class]="getCSSClass('showMappingTable')" (click)="toolbarButtonClicked('showMappingTable');"></i>
             <i *ngIf="cfg.getFirstXmlDoc(false)" [attr.class]="getCSSClass('showNamespaceTable')" 
                 (click)="toolbarButtonClicked('showNamespaceTable');"></i>
@@ -82,6 +85,7 @@ template: `
 export class ToolbarComponent {
     @Input() cfg: ConfigModel;
     @Input() lineMachine: LineMachineComponent;
+    @Input() modalWindow: ModalWindowComponent;
 
     private getCSSClass(action: string) {
         if ("showDetails" == action) {
@@ -99,6 +103,8 @@ export class ToolbarComponent {
             return "fa fa-table link" + (this.cfg.showMappingTable ? " selected" : "");
         } else if ("showNamespaceTable" == action) {
             return "fa fa-code link" + (this.cfg.showNamespaceTable ? " selected" : "");
+        } else if ("editTemplate" == action) {
+            return "fa fa-file-text-o link" + (this.cfg.mappings.templateExists() ? " selected" : "");
         }
     }
 
@@ -109,6 +115,8 @@ export class ToolbarComponent {
             } else {
                 this.cfg.mappingService.deselectMapping();
             }
+        } else if ("editTemplate" == action) {
+            this.editTemplate();
         } else if ("showLines" == action) {
             this.cfg.showLinesAlways = !this.cfg.showLinesAlways;
             this.lineMachine.redrawLinesForMappings();
@@ -138,9 +146,26 @@ export class ToolbarComponent {
             } else {
                 this.cfg.showMappingTable = false;
             }
-        }
+        }        
+    }
 
-        
+    private editTemplate(): void {
+        var self: ToolbarComponent = this;
+        this.modalWindow.reset();
+        this.modalWindow.confirmButtonText = "Save";
+        this.modalWindow.parentComponent = this;
+        this.modalWindow.headerText = this.cfg.mappings.templateExists() ? "Edit Template" : "Add Template";
+        this.modalWindow.nestedComponentInitializedCallback = (mw: ModalWindowComponent) => {
+            var templateComponent: TemplateEditComponent = mw.nestedComponent as TemplateEditComponent;
+            templateComponent.templateText = this.cfg.mappings.templateText;
+        };
+        this.modalWindow.nestedComponentType = TemplateEditComponent;
+        this.modalWindow.okButtonHandler = (mw: ModalWindowComponent) => {
+            var templateComponent: TemplateEditComponent = mw.nestedComponent as TemplateEditComponent;
+            this.cfg.mappings.templateText = templateComponent.templateText;
+            self.cfg.mappingService.saveCurrentMapping();
+        };
+        this.modalWindow.show();
     }
 }
 

@@ -27,7 +27,7 @@ import { MappingModel, FieldMappingPair, MappedField } from '../../models/mappin
     template: `
         <!-- our template for type ahead -->
         <template #typeaheadTemplate let-model="item" let-index="index">
-            <h5 style="font-style:italic;">{{ model['field'].docDef.name }}</h5>
+            <h5 style="font-style:italic;">{{ model['field'].docDef == null ? '' : model['field'].docDef.name }}</h5>
             <h5>{{ model['field'].path }}</h5>
         </template>
 
@@ -112,14 +112,15 @@ export class MappingFieldDetailComponent {
         for (let docDef of this.cfg.getDocs(this.isSource)) {
             fields = fields.concat(docDef.getTerminalFields());
         }
-        for (let field of fields) {
-            if (!field.availableForSelection) {
-                continue;
-            }
+        var activeMapping: MappingModel = this.cfg.mappings.activeMapping;
+        for (let field of fields) {            
             var displayName = (field == null) ? "" : field.getFieldLabel(true);
             var formattedField: any = { "field": field, "displayName": displayName };
             if (filter == null || filter == ""
                 || formattedField["displayName"].toLowerCase().indexOf(filter.toLowerCase()) != -1) {
+                if (!activeMapping.isFieldSelectable(field)) {
+                    continue;
+                }
                 formattedFields.push(formattedField);
             }
             if (formattedFields.length > 9) {

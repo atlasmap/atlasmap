@@ -31,7 +31,7 @@ export class MappedFieldParsingData {
     public fieldIsProperty: boolean = false;
     public fieldIsConstant: boolean = false;
     public parsedValueType: string = null;
-    public actionMethods: string[] = [];
+    public actionNames: string[] = [];
     public userCreated: boolean = false;
 }
 
@@ -283,6 +283,7 @@ export class MappingModel {
     public fieldMappings: FieldMappingPair[] = [];
     public currentFieldMapping: FieldMappingPair = null;
     public validationErrors : ErrorInfo[] = [];
+    public brandNewMapping: boolean = true;
 
     public constructor() {
         this.uuid = "mapping." + Math.floor((Math.random() * 1000000) + 1).toString();
@@ -327,13 +328,18 @@ export class MappingModel {
         }
     }
 
-    public isCollectionMode(): boolean {
-        for (let f of this.getAllFields()) {
+    public getFirstCollectionField(isSource: boolean): Field {
+        for (let f of this.getFields(isSource)) {
             if (f.isInCollection()) {
-                return true;
+                return f;
             }
         }
-        return false;
+        return null;
+    }
+
+    public isCollectionMode(): boolean {
+        return (this.getFirstCollectionField(true) != null)
+            || (this.getFirstCollectionField(false) != null);
     }
 
     public isLookupMode(): boolean {
@@ -357,6 +363,74 @@ export class MappingModel {
         return fields;
     }
 
+    public isFieldSelectable(field: Field): boolean {
+        if (this.brandNewMapping) {
+            //if mapping hasnt had a field selected yet, allow it
+            console.log("brand new mapping");            
+            return true;
+        }
+
+        if (!field.isTerminal()) {
+            return false;
+        }
+
+        var repeatedMode: boolean = this.isCollectionMode();
+        var lookupMode: boolean = this.isLookupMode();
+        var mapMode: boolean = false;
+        var separateMode: boolean = false;
+        var combineMode: boolean = false;
+
+        if (!repeatedMode && !lookupMode) {
+            for (let fieldPair of this.fieldMappings) {
+                mapMode = mapMode || fieldPair.transition.isMapMode();
+                separateMode = separateMode || fieldPair.transition.isSeparateMode();
+                combineMode = combineMode || fieldPair.transition.isCombineMode();
+            }
+        }
+        if (mapMode || separateMode || combineMode) {        
+            //repeated fields and enums are not selectable in these modes
+            if (field.isInCollection() || field.enumeration) {
+                return false;
+            }
+            //separate mode sources must be string
+            if (separateMode && !field.isStringField() && field.isSource()) {
+                return false;
+            }
+        } else if (lookupMode) {
+            if (!field.enumeration) {
+                return false;
+            }
+        } else if (repeatedMode) {
+            //if no fields for this isSource has been selected yet, everything is open to selection
+            if (!this.hasMappedFields(field.isSource())) {            
+                console.log("allowing: " + field.path);
+                return true;
+            }
+            if (field.isInCollection()) {
+                console.log("here: " + field.path);
+            }
+            var collectionField: Field = this.getFirstCollectionField(field.isSource());
+            if (collectionField == null) {
+                //only primitive fields (not in collections) are selectable
+                if (field.isInCollection()) {
+                    return false;
+                }
+            } else { //collection field exists in this mapping for isSource
+                //primitive fields are not selectable when collection field is already selected
+                if (!field.isInCollection()) {
+                    return false;
+                }
+
+                //children of collections are only selectable if this field is in the same collection
+                var parentCollectionField: Field = collectionField.getCollectionParentField();       
+                if (field.getCollectionParentField() != parentCollectionField) {
+                    return false;
+                }         
+            }
+        }
+        return true;
+    }
+
     public isFieldMapped(field:Field, isSource:boolean): boolean {
         return this.getFields(isSource).indexOf(field) != -1;
     }
@@ -378,6 +452,11 @@ export class MappingModel {
     }
 
     public hasMappedFields(isSource: boolean): boolean {
-        return this.getMappedFields(isSource).length != 0;
+        for (let mappedField of this.getMappedFields(isSource)) {
+            if (mappedField.field != null && mappedField.field != DocumentDefinition.getNoneField()) {
+                return true;
+            }
+        }
+        return false;
     }
 }

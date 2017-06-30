@@ -203,22 +203,25 @@ export class DocumentFieldDetailComponent {
             } else {
                 var fieldComponent: FieldEditComponent = mw.nestedComponent as FieldEditComponent;
                 fieldComponent.isSource = self.field.isSource();
-                fieldComponent.initialize(self.field);
+                fieldComponent.initialize(self.field, this.field.docDef);
             }
         };
-        this.modalWindow.nestedComponentType = isProperty ? PropertyFieldEditComponent : (isConstant ? ConstantFieldEditComponent : FieldEditComponent)
-        this.modalWindow.okButtonHandler = (mw: ModalWindowComponent) => {            
+        this.modalWindow.nestedComponentType = isProperty ? PropertyFieldEditComponent 
+            : (isConstant ? ConstantFieldEditComponent : FieldEditComponent)
+        this.modalWindow.okButtonHandler = (mw: ModalWindowComponent) => {
+            var newField: Field = null;            
             if (isProperty) {
                 var propertyComponent: PropertyFieldEditComponent = mw.nestedComponent as PropertyFieldEditComponent;
-                self.field = propertyComponent.getField();
+                newField = propertyComponent.getField();
             } else if (isConstant) {
                 var constantComponent: ConstantFieldEditComponent = mw.nestedComponent as ConstantFieldEditComponent;
-                self.field = constantComponent.getField();
+                newField = constantComponent.getField();
             } else {
                 var fieldComponent: FieldEditComponent = mw.nestedComponent as FieldEditComponent;
-                self.field = fieldComponent.getField();
+                newField = fieldComponent.getField();
             }
-
+            self.field.copyFrom(newField);
+            
             self.field.docDef.updateField(self.field, oldPath);
 
             self.cfg.mappingService.saveCurrentMapping();

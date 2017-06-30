@@ -20,6 +20,8 @@ import { DocumentDefinition, NamespaceModel } from '../models/document.definitio
 import { Field } from '../models/field.model';
 import { ConfigModel } from '../models/config.model';
 import { Observable } from 'rxjs/Observable';
+import { ModalWindowValidator } from './modal.window.component';
+import { DataMapperUtil } from '../common/data.mapper.util';
 
 @Component({
     selector: 'field-edit',
@@ -30,12 +32,12 @@ import { Observable } from 'rxjs/Observable';
             <h5>{{ model['field'].path }}</h5>
         </template>
 
-        <div class="PropertyEditFieldComponent">
+        <div class="DataMapperEditComponent">
             <div class="form-group">
                 <label>Parent</label>
-                <input type="text" [ngModel]="parentField.getFieldLabel(false)" [typeahead]="dataSource" 
-                    typeaheadWaitMs="200" (typeaheadOnSelect)="parentSelectionChanged($event)" 
-                    typeaheadOptionField="displayName" [typeaheadItemTemplate]="typeaheadTemplate">
+                <input type="text" [(ngModel)]="parentFieldName" [typeahead]="dataSource" 
+                    typeaheadWaitMs="200" (typeaheadOnSelect)="parentSelectionChanged($event)" (blur)="handleOnBlur($event)" 
+                    typeaheadOptionField="displayName" [typeaheadItemTemplate]="typeaheadTemplate" disabled="{{editMode}}">
             </div>            
             <div class="form-group">
                 <label>Name</label>
@@ -87,14 +89,16 @@ import { Observable } from 'rxjs/Observable';
     `
 })
 
-export class FieldEditComponent {
+export class FieldEditComponent implements ModalWindowValidator {
     public cfg: ConfigModel = ConfigModel.getConfig();
     public field: Field = new Field();
     public parentField: Field = DocumentDefinition.getNoneField();
+    public parentFieldName: String = null;
     public isSource: boolean = false;
     public fieldType: any = "element";
     public valueType: any = "STRING";
     public namespaceAlias: string = null;
+    public editMode: boolean = false;
 
     public dataSource: Observable<any>;
 
@@ -104,8 +108,9 @@ export class FieldEditComponent {
         });
     }
 
-    public initialize(field: Field): void {
-        this.field = field == null ? new Field() : field;
+    public initialize(field: Field, docDef: DocumentDefinition): void {
+        this.editMode = (field != null);
+        this.field = field == null ? new Field() : field.copy();
         if (this.field.namespace) {
             this.namespaceAlias = this.field.namespace.alias;
         }
@@ -114,11 +119,19 @@ export class FieldEditComponent {
         }
         this.fieldType = this.field.isAttribute ? "attribute" : "element";
         this.valueType = (this.field.type == null) ? "STRING" : this.field.type;
-        this.parentField = (this.field.parentField == null) ? DocumentDefinition.getNoneField() : this.field.parentField;
+        this.parentField = (this.field.parentField == null) ? docDef.fields[0] : this.field.parentField;
+        this.parentFieldName = this.parentField.name;
+    }
+
+    public handleOnBlur(event: any): void {
+        this.parentFieldName = this.parentField.name;
     }
 
     public parentSelectionChanged(event: any): void {
+        var oldParentField: Field = this.parentField;
         this.parentField = event.item["field"];
+        this.parentField = (this.parentField == null) ? oldParentField : this.parentField;
+        this.parentFieldName = this.parentField.name;
     }   
 
     public fieldTypeSelectionChanged(event: MouseEvent): void {
@@ -138,12 +151,9 @@ export class FieldEditComponent {
 
     public executeSearch(filter: string): any[] {
         var formattedFields: any[] = [];
-        var fields: Field[] = [DocumentDefinition.getNoneField()];
-        for (let docDef of ConfigModel.getConfig().getDocs(this.isSource)) {
-            fields = fields.concat(docDef.getAllFields());
-        }
+        var fields: Field[] = this.cfg.getFirstXmlDoc(false).getAllFields();
         for (let field of fields) {
-            if (!field.availableForSelection) {
+            if (!field.isParentField()) {
                 continue;
             }
             var displayName = (field == null) ? "" : field.getFieldLabel(true);
@@ -165,8 +175,15 @@ export class FieldEditComponent {
         this.field.parentField = this.parentField;
         this.field.type = this.valueType;
         this.field.userCreated = true;
-        this.field.namespace = this.cfg.targetDocs[0].getNamespaceForAlias(this.namespaceAlias);
+        this.field.namespace = this.cfg.getFirstXmlDoc(false).getNamespaceForAlias(this.namespaceAlias);
+        if (this.field.namespace == null) {
+            console.error("Could not find namespace with alias '" + this.namespaceAlias + "'.");
+        }
         this.field.serviceObject.jsonType = "io.atlasmap.xml.v2.XmlField";
         return this.field;
+    }
+
+    isDataValid(): boolean {
+        return DataMapperUtil.isRequiredFieldValid(this.field.name, "Name");
     }
 }

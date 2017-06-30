@@ -19,6 +19,10 @@
         <link rel="stylesheet" href="app/lib/patternfly-3.19.0/css/patternfly-additions.min.css" >
         <link rel="stylesheet" href="app/lib/font-awesome-4.7.0/css/font-awesome.min.css">
 
+        <script>
+            System.import('main-jit.js').catch(function(err){ console.error(err); });
+        </script>
+
         <style>
             html, body { height:100%; }
             .row { margin:0px; }
@@ -27,12 +31,8 @@
             .toolbar-pf .form-group .btn-link:focus { color:#252525; outline-style:none; }
             .breadcrumb { margin:0px; padding:0px; padding-bottom:10px; padding-left:20px; }
             .breadcrumb A { color:#5CBADF; font-weight:bold; }
+            BODY .DataMapperUI { width:90%; margin-left:auto; margin-right:auto; }
         </style>
-
-        <script>
-            System.import('main-jit.js').catch(function(err){ console.error(err); });
-        </script>
-
     </head>
 
     <body style="height:100%; overflow:hidden;">
