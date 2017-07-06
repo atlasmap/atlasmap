@@ -1,0 +1,1 @@
+REWRITE_SYSTEM "http://atlasmap.io/v2/atlas-model-v2.xsd" "maven:io.atlasmap:atlas.model!/atlas-model-v2.xsd"

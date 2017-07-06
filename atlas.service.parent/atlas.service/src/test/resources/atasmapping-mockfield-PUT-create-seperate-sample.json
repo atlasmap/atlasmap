@@ -1,0 +1,53 @@
+{
+	"AtlasMapping": {
+    	"jsonType": "io.atlasmap.v2.AtlasMapping",
+    	"fieldMappings": {
+    		"fieldMapping": [
+    			{
+					"jsonType": "io.atlasmap.v2.SeparateFieldMapping",
+					"inputField": {
+						"jsonType": "io.atlasmap.v2.MappedField",
+						"field": {
+							"jsonType": "io.atlasmap.v2.MockField",
+							"name": "serialVersionUID",
+							"type": "LONG"
+						}
+					},
+					"outputFields": {
+						"mappedField": [
+							{
+								"jsonType":"io.atlasmap.v2.MappedField",
+								"field": {
+									"jsonType": "io.atlasmap.v2.MockField",
+									"name": "Description",
+									"type": "STRING"
+								},
+								"fieldActions":{
+									"fieldAction":[{
+										"jsonType":"io.atlasmap.v2.MapAction",
+										"index":2
+									}]
+								}
+							},
+							{
+								"jsonType":"io.atlasmap.v2.MappedField",
+								"field": {
+									"jsonType": "io.atlasmap.v2.MockField",
+									"name": "Amount",
+									"type": "DOUBLE"
+								},
+								"fieldActions":{
+									"fieldAction":[{
+										"jsonType":"io.atlasmap.v2.MapAction",
+										"index":2
+									}]
+								}
+							}
+						]						
+					}
+				}
+			]
+		},
+		"name": "UI.50313"
+	}
+}

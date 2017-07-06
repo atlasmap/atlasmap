@@ -1,0 +1,336 @@
+<!--
+
+    Copyright (C) 2017 Red Hat, Inc.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+            http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>io.atlasmap</groupId>
+	<artifactId>atlas</artifactId>
+	<version>1.11.5-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	<name>Atlas :: Project Build</name>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<jdk.version>1.8</jdk.version>
+		<build-helper-maven-plugin.version>3.0.0</build-helper-maven-plugin.version>
+		<license-maven-plugin.version>3.0</license-maven-plugin.version>
+		<maven-bundle-plugin.version>3.2.0</maven-bundle-plugin.version>
+		<maven-compiler-plugin.version>3.6.1</maven-compiler-plugin.version>
+		<maven-dependency-plugin.version>3.0.0</maven-dependency-plugin.version>
+		<maven-deploy-plugin.version>2.8.2</maven-deploy-plugin.version>
+		<maven-gpg-plugin.version>1.5</maven-gpg-plugin.version>
+		<maven-jar-plugin.version>3.0.2</maven-jar-plugin.version>
+		<maven-javadoc-plugin.version>2.9.1</maven-javadoc-plugin.version>
+		<maven-jaxb2-plugin.version>0.13.1</maven-jaxb2-plugin.version>
+		<maven-resources-plugin.version>3.0.2</maven-resources-plugin.version>
+		<maven-release-plugin.version>2.5.3</maven-release-plugin.version>
+		<maven-source-plugin.version>2.2.1</maven-source-plugin.version>
+		<nexus-staging-maven-plugin.version>1.6.7</nexus-staging-maven-plugin.version>
+		<jetty-maven-plugin.version>9.4.2.v20170220</jetty-maven-plugin.version>
+
+		<!-- Atlas specific -->
+		<at.jackson.version>2.8.5</at.jackson.version>
+		<at.jersey.version>2.25.1</at.jersey.version>
+		<at.osgi.symbolic.name>${project.artifactId}</at.osgi.symbolic.name>
+		<at.jaxb2-basics.version>0.11.1</at.jaxb2-basics.version>
+		<at.jaxb2-basics-annotate.version>1.0.2</at.jaxb2-basics-annotate.version>
+		<at.jaxb2-basics-namespace-prefix.version>1.2</at.jaxb2-basics-namespace-prefix.version>
+		<at.jackson-module-jaxb-annotations.version>2.8.6</at.jackson-module-jaxb-annotations.version>
+		<spring-boot.version>1.5.2.RELEASE</spring-boot.version>
+		<resteasy-spring-boot-starter.version>2.3.0-RELEASE</resteasy-spring-boot-starter.version>
+    <fabric8-maven-plugin.version>3.2.30</fabric8-maven-plugin.version>
+
+    <!-- Controls Docker Image Generation -->
+    <from.image>registry.access.redhat.com/jboss-fuse-6/fis-java-openshift:2.0</from.image>
+    <docker.image>atlasmap/syndesis-datamapper:%l</docker.image>
+	</properties>
+
+	<description>The AtlasMap Project</description>
+	<url>http://www.atlasmap.io</url>
+	<inceptionYear>2017</inceptionYear>
+	<licenses>
+		<license>
+			<name>The Apache Software License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+  <developers>
+    <developer>
+      <id>atlasmap</id>
+      <name>Atlasmap Development Team</name>
+      <organizationUrl>https://atlasmap.io/</organizationUrl>
+    </developer>
+  </developers>
+	<scm>
+		<url>https://github.com/atlasmap/atlasmap</url>
+		<connection>scm:git:https://github.com/atlasmap/atlasmap.git</connection>
+		<developerConnection>scm:git:git@github.com:atlasmap/atlasmap.git</developerConnection>
+		<tag>1.11.0</tag>
+	</scm>
+
+	<distributionManagement>
+		<snapshotRepository>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+		</snapshotRepository>
+		<repository>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+		</repository>
+	</distributionManagement>
+
+	<profiles>
+		<profile>
+			<id>parent</id>
+			<modules>
+				<module>atlas.parent</module>
+				<module>atlas.mock.parent</module>
+				<module>atlas.service.parent</module>
+				<module>atlas.java.parent</module>
+			</modules>
+		</profile>
+		<profile>
+			<id>fast</id>
+			<modules>
+				<module>atlas.parent</module>
+				<module>atlas.model</module>
+				<module>atlas.api</module>
+				<module>atlas.core</module>
+				<module>atlas.mock.parent</module>
+				<module>atlas.service.parent</module>
+				<module>atlas.java.parent</module>
+			</modules>
+		</profile>
+		<profile>
+			<id>full</id>
+			<activation><activeByDefault>true</activeByDefault></activation>
+			<modules>
+				<module>atlas.parent</module>
+				<module>atlas.model</module>
+				<module>atlas.api</module>
+				<module>atlas.core</module>
+				<module>atlas.mock.parent</module>
+				<module>atlas.service.parent</module>
+				<module>atlas.java.parent</module>
+				<module>atlas.demo.deps</module>
+				<module>atlas.itests</module>
+				<module>atlas.itests.parent</module>
+				<module>runtime</module>
+			</modules>
+		</profile>
+		<profile>
+			<id>release</id>
+			<build>
+				<plugins>
+					<plugin>
+						<artifactId>maven-source-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>attach-sources</id>
+								<goals>
+									<goal>jar-no-fork</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<artifactId>maven-javadoc-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>attach-javadocs</id>
+								<goals>
+									<goal>jar</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<artifactId>maven-gpg-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>sign-artifacts</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>sign</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>io.fabric8</groupId>
+					<artifactId>fabric8-maven-plugin</artifactId>
+					<version>${fabric8-maven-plugin.version}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-maven-plugin</artifactId>
+					<version>${spring-boot.version}</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>${maven-compiler-plugin.version}</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-dependency-plugin</artifactId>
+					<version>${maven-dependency-plugin.version}</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-deploy-plugin</artifactId>
+					<version>${maven-deploy-plugin.version}</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-gpg-plugin</artifactId>
+					<version>${maven-gpg-plugin.version}</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-jar-plugin</artifactId>
+					<version>${maven-jar-plugin.version}</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-javadoc-plugin</artifactId>
+					<version>${maven-javadoc-plugin.version}</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-release-plugin</artifactId>
+					<version>${maven-release-plugin.version}</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-resources-plugin</artifactId>
+					<version>${maven-resources-plugin.version}</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-source-plugin</artifactId>
+					<version>${maven-source-plugin.version}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.felix</groupId>
+					<artifactId>maven-bundle-plugin</artifactId>
+					<version>${maven-bundle-plugin.version}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>build-helper-maven-plugin</artifactId>
+					<version>${build-helper-maven-plugin.version}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.jvnet.jaxb2.maven2</groupId>
+					<artifactId>maven-jaxb2-plugin</artifactId>
+					<version>${maven-jaxb2-plugin.version}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.eclipse.jetty</groupId>
+					<artifactId>jetty-maven-plugin</artifactId>
+					<version>${jetty-maven-plugin.version}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.sonatype.plugins</groupId>
+					<artifactId>nexus-staging-maven-plugin</artifactId>
+					<version>${nexus-staging-maven-plugin.version}</version>
+				</plugin>
+				<!--This plugin's configuration is used to store Eclipse m2e settings
+					only. It has no influence on the Maven build itself. -->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.apache.maven.plugins</groupId>
+										<artifactId>maven-dependency-plugin</artifactId>
+										<versionRange>[${maven-dependency-plugin.version,)</versionRange>
+										<goals>
+											<goal>copy</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore />
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>com.mycila</groupId>
+					<artifactId>license-maven-plugin</artifactId>
+					<version>${license-maven-plugin.version}</version>
+					<configuration>
+						<aggregate>true</aggregate>
+						<header>header.txt</header>
+						<properties>
+							<owner>Red Hat, Inc.</owner>
+						</properties>
+						<excludes>
+							<exclude>.editorconfig</exclude>
+							<exclude>.mention-bot</exclude>
+							<exclude>license.txt</exclude>
+							<exclude>**/*.adoc</exclude>
+							<exclude>.mvn/wrapper/maven-wrapper.properties</exclude>
+							<exclude>mvnw*</exclude>
+							<exclude>**/resources/**/test-*</exclude>
+							<exclude>**/org/apache/camel/salesforce/dto/**</exclude>
+							<exclude>**/node_modules/**</exclude>
+							<exclude>**/src/main/webapp/angular2/src/lib/**</exclude>
+							<exclude>**/src/main/webapp/angular2/src/app/lib/**</exclude>
+						</excludes>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-deploy-plugin</artifactId>
+				<configuration>
+					<skip>false</skip>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-release-plugin</artifactId>
+				<configuration>
+					<autoVersionSubmodules>true</autoVersionSubmodules>
+					<useReleaseProfile>false</useReleaseProfile>
+					<releaseProfiles>full,release</releaseProfiles>
+					<goals>deploy</goals>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.sonatype.plugins</groupId>
+				<artifactId>nexus-staging-maven-plugin</artifactId>
+				<extensions>true</extensions>
+				<configuration>
+					<serverId>ossrh</serverId>
+					<nexusUrl>https://oss.sonatype.org/</nexusUrl>
+					<autoReleaseAfterClose>true</autoReleaseAfterClose>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>

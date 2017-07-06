@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) 2017 Red Hat, Inc.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+            http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+<schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:atlas="http://atlasmap.io/v2"
+	xmlns:atlasj="http://atlasmap.io/java/v2" targetNamespace="http://atlasmap.io/java/v2"
+	elementFormDefault="qualified" attributeFormDefault="unqualified">
+
+	<import namespace="http://atlasmap.io/v2"	schemaLocation="http://atlasmap.io/v2/atlas-model-v2.xsd" />
+
+	<complexType name="JavaDocument">
+		<complexContent>
+			<extension base="atlas:Document">
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="JavaEnumFields">
+		<sequence>
+			<element name="JavaEnumField" type="atlasj:JavaEnumField" minOccurs="0" maxOccurs="unbounded" />
+		</sequence>
+	</complexType>
+	
+	<complexType name="JavaFields">
+		<sequence>
+			<element name="JavaField" type="atlasj:JavaField" minOccurs="0" maxOccurs="unbounded" />
+		</sequence>
+	</complexType>
+
+	<complexType name="JavaField">
+		<complexContent>
+			<extension base="atlas:Field">
+				<sequence>
+					<element name="Annotations" type="atlas:StringList" minOccurs="1" maxOccurs="1" />
+					<element name="Modifiers" type="atlasj:ModifierList" minOccurs="1" maxOccurs="1" />
+				</sequence>
+				<attribute name="name" type="string" use="required" />
+				<attribute name="path" type="string" use="optional" />
+				<attribute name="className" type="string" use="optional" />
+				<attribute name="type" type="atlas:FieldType" use="optional" />
+				<attribute name="getMethod" type="string" use="optional" />
+				<attribute name="setMethod" type="string" use="optional" />
+				<attribute name="primitive" type="boolean" use="optional" />
+				<attribute name="array" type="boolean" use="optional" />
+				<attribute name="arrayDimensions" type="int" use="optional" />			
+				<attribute name="synthetic" type="boolean" use="optional" />
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="JavaEnumField">
+		<complexContent>
+			<extension base="atlas:Field">
+				<attribute name="name" type="string" use="optional" />
+				<attribute name="ordinal" type="int" use="optional" />
+				<attribute name="className" type="string" use="optional" />
+			</extension>
+		</complexContent>
+	</complexType>
+	
+	<complexType name="JavaClass">
+		<complexContent>
+			<extension base="atlasj:JavaField">
+				<sequence>
+					<element name="JavaEnumFields" type="atlasj:JavaEnumFields" minOccurs="1" maxOccurs="1" />
+					<element name="JavaFields" type="atlasj:JavaFields" minOccurs="1" maxOccurs="1" />
+				</sequence>
+				<attribute name="packageName" type="string" use="optional" />
+				<attribute name="annotation" type="boolean" use="optional" />
+				<attribute name="annonymous" type="boolean" use="optional" />
+				<attribute name="enumeration" type="boolean" use="optional" /> 	
+				<attribute name="interface" type="boolean" use="optional" />
+				<attribute name="localClass" type="boolean" use="optional" />
+				<attribute name="memberClass" type="boolean" use="optional" />
+				<attribute name="uri" type="string" use="optional" />
+			</extension>
+		</complexContent>
+	</complexType>
+	
+	<complexType name="MavenClasspathRequest">
+		<sequence>
+			<element name="pomXmlData" type="string" minOccurs="0" maxOccurs="1" />
+		</sequence>
+		<attribute name="executeTimeout" type="long" use="optional" />
+		<attribute name="workingDirectory" type="string" use="optional" />
+	</complexType>
+	
+	<complexType name="MavenClasspathResponse">
+		<attribute name="classpath" type="string" use="optional" />
+		<attribute name="errorMessage" type="string" use="optional" />
+		<attribute name="executionTime" type="long" use="optional" />
+	</complexType>
+	
+	<complexType name="ClassInspectionRequest">
+		<sequence>
+			<element name="FieldNameBlacklist" type="atlas:StringList" minOccurs="0" maxOcurs="1" />
+			<element name="ClassNameBlacklist" type="atlas:StringList" minOccurs="0" maxOcurs="1" />
+			<element name="classpath" type="string" minOccurs="0" maxOccurs="1" />
+		</sequence>
+		<attribute name="className" type="string" use="optional" />
+		<attribute name="disablePrivateOnlyFields" type="boolean" use="optional" />
+		<attribute name="disableProtectedOnlyFields" type="boolean" use="optional" />
+		<attribute name="disablePublicOnlyFields" type="boolean" use="optional" />
+		<attribute name="disablePublicGetterSetterFields" type="boolean" use="optional" />
+	</complexType>
+	
+	<complexType name="ClassInspectionResponse">
+		<sequence>
+			<element name="JavaClass" type="atlasj:JavaClass" minOccurs="0" maxOccurs="1" />
+		</sequence>
+		<attribute name="errorMessage" type="string" use="optional" />
+		<attribute name="executionTime" type="long" use="optional" />
+	</complexType>
+	
+	<complexType name="ModifierList">
+		<sequence>
+			<element name="Modifier" type="atlasj:Modifier" minOccurs="0" maxOccurs="unbounded" />
+		</sequence>
+	</complexType>
+	
+	<simpleType name="Modifier">
+		<restriction base="string">
+			<enumeration value="All" />
+			<enumeration value="Abstract" />
+			<enumeration value="Final" />
+			<enumeration value="Interface" />
+			<enumeration value="Native" />
+			<enumeration value="Public" />
+			<enumeration value="Protected" />
+			<enumeration value="Private" />
+			<enumeration value="Static" />
+			<enumeration value="Strict" />
+			<enumeration value="Synchronized" />
+			<enumeration value="Transient" />
+			<enumeration value="Volatile" />
+			<enumeration value="None" />
+		</restriction>
+	</simpleType>
+	
+</schema>
