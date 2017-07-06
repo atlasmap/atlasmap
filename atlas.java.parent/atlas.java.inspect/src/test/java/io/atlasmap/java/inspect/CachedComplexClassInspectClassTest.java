@@ -15,9 +15,9 @@
  */
 package io.atlasmap.java.inspect;
 
-import io.atlasmap.java.test.CachedComplexClass;
-
+import io.atlasmap.core.DefaultAtlasConversionService;
 import io.atlasmap.java.inspect.ClassInspectionService;
+import io.atlasmap.java.test.CachedComplexClass;
 import io.atlasmap.java.v2.AtlasJavaModelFactory;
 import io.atlasmap.java.v2.JavaClass;
 import io.atlasmap.java.v2.JavaField;
@@ -37,6 +37,7 @@ public class CachedComplexClassInspectClassTest {
 	@Before
 	public void setUp() {
 		classInspectionService = new ClassInspectionService();
+		classInspectionService.setConversionService(DefaultAtlasConversionService.getRegistry());
 	}
 	
 	@After
@@ -60,7 +61,7 @@ public class CachedComplexClassInspectClassTest {
 		assertNull(c.getName());
 		assertEquals("io.atlasmap.java.test", c.getPackageName());
 		assertNull(c.getSetMethod());
-		assertNull(c.getType());
+		assertNull(c.getFieldType());
 		assertNotNull(c.getUri());
 		assertEquals(String.format(AtlasJavaModelFactory.URI_FORMAT, "io.atlasmap.java.test.CachedComplexClass"), c.getUri());
 		assertNull(c.getValue());
@@ -69,17 +70,17 @@ public class CachedComplexClassInspectClassTest {
 		
 		Integer validated = 0;
 		for(JavaField f : c.getJavaFields().getJavaField()) {
-			if("io.atlasmap.java.test.TestOrder".equals(f.getClassName())) {
+			if("io.atlasmap.java.test.BaseOrder".equals(f.getClassName())) {
 				//ClassValidationUtil.validateSimpleTestContact((JavaClass)f);
 				validated++;
 			}
-			if("io.atlasmap.java.test.TestContact".equals(f.getClassName())) {
+			if("io.atlasmap.java.test.BaseContact".equals(f.getClassName())) {
 				if(!FieldStatus.CACHED.equals(f.getStatus())) {
 					ClassValidationUtil.validateSimpleTestContact((JavaClass)f);
 				}
 				validated++;
 			}
-			if("io.atlasmap.java.test.TestAddress".equals(f.getClassName())) {
+			if("io.atlasmap.java.test.BaseAddress".equals(f.getClassName())) {
 				if(!FieldStatus.CACHED.equals(f.getStatus())) {
 					ClassValidationUtil.validateSimpleTestAddress((JavaClass)f);
 				}

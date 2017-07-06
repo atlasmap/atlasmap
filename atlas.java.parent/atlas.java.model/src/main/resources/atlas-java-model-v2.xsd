@@ -20,7 +20,15 @@
 	xmlns:atlasj="http://atlasmap.io/java/v2" targetNamespace="http://atlasmap.io/java/v2"
 	elementFormDefault="qualified" attributeFormDefault="unqualified">
 
-	<import namespace="http://atlasmap.io/v2"	schemaLocation="http://atlasmap.io/v2/atlas-model-v2.xsd" />
+	<import namespace="http://atlasmap.io/v2" schemaLocation="http://atlasmap.io/v2/atlas-model-v2.xsd" />
+
+    <complexType name="JavaCollection">
+        <complexContent>
+            <extension base="atlas:Collection">
+                <attribute name="collectionClassName" type="string" use="optional" />
+            </extension>
+        </complexContent>
+    </complexType>
 
 	<complexType name="JavaDocument">
 		<complexContent>
@@ -45,18 +53,16 @@
 		<complexContent>
 			<extension base="atlas:Field">
 				<sequence>
-					<element name="Annotations" type="atlas:StringList" minOccurs="1" maxOccurs="1" />
+					<element name="Annotations" type="atlas:StringList" minOccurs="0" maxOccurs="1" />
 					<element name="Modifiers" type="atlasj:ModifierList" minOccurs="1" maxOccurs="1" />
+					<element name="ParameterizedTypes" type="atlas:StringList" minOccurs="0" maxOccurs="1" />
 				</sequence>
 				<attribute name="name" type="string" use="required" />
-				<attribute name="path" type="string" use="optional" />
 				<attribute name="className" type="string" use="optional" />
-				<attribute name="type" type="atlas:FieldType" use="optional" />
+				<attribute name="collectionClassName" type="string" use="optional" />
 				<attribute name="getMethod" type="string" use="optional" />
 				<attribute name="setMethod" type="string" use="optional" />
 				<attribute name="primitive" type="boolean" use="optional" />
-				<attribute name="array" type="boolean" use="optional" />
-				<attribute name="arrayDimensions" type="int" use="optional" />			
 				<attribute name="synthetic" type="boolean" use="optional" />
 			</extension>
 		</complexContent>

@@ -20,19 +20,33 @@
 	targetNamespace="http://atlasmap.io/v2" elementFormDefault="qualified"
 	attributeFormDefault="unqualified">
 
+    <include schemaLocation="atlas-actions-v2.xsd" />
+
 	<element name="AtlasMapping" type="atlas:AtlasMapping" />
 	<element name="Document" type="atlas:Document" />
 
 	<complexType name="AtlasMapping">
 		<sequence>
-			<element name="Properties" type="atlas:Properties" minOccurs="0" maxOccurs="1" />
-			<element name="FieldMappings" type="atlas:FieldMappings" minOccurs="1" maxOccurs="1" />
+            <element name="DataSource" type="atlas:DataSource" minOccurs="1" maxOccurs="unbounded" />
+			<element name="Mappings" type="atlas:Mappings" minOccurs="1" maxOccurs="1" />
 			<element name="LookupTables" type="atlas:LookupTables" minOccurs="0" maxOccurs="1" />
+            <element name="Properties" type="atlas:Properties" minOccurs="0" maxOccurs="1" />
 		</sequence>
 		<attribute name="name" type="string" use="required" />
-		<attribute name="sourceUri" type="string" use="optional" />
-		<attribute name="targetUri" type="string" use="optional" />
 	</complexType>
+
+    <complexType name="DataSource">
+        <attribute name="id" type="string" use="optional" />
+        <attribute name="uri" type="string" use="required" />
+        <attribute name="dataSourceType" type="atlas:DataSourceType" use="required" />
+    </complexType>
+    
+    <simpleType name="DataSourceType">
+        <restriction base="string">
+            <enumeration value="Source" />
+            <enumeration value="Target" />
+        </restriction>
+    </simpleType>
 
 	<complexType name="Properties">
 		<sequence>
@@ -43,92 +57,60 @@
 	<complexType name="Property">
 		<attribute name="name" type="string" use="required" />
 		<attribute name="value" type="string" use="optional" />
-		<attribute name="type" type="atlas:FieldType" use="optional" />
+		<attribute name="fieldType" type="atlas:FieldType" use="optional" />
 	</complexType>
 
-	<complexType name="FieldMappings">
+	<complexType name="Mappings">
 		<sequence>
-			<element name="FieldMapping" type="atlas:FieldMapping" minOccurs="0" maxOccurs="unbounded" />
+			<element name="Mapping" type="atlas:BaseMapping" minOccurs="0" maxOccurs="unbounded" />
 		</sequence>
 	</complexType>
 
-	<complexType name="FieldMapping" abstract="true">
+	<complexType name="BaseMapping" abstract="true">
 		<attribute name="alias" type="string" use="optional" />
 		<attribute name="description" type="string" use="optional" />
-	</complexType>
-	
-	<complexType name="CombineFieldMapping">
-		<complexContent>
-			<extension base="atlas:FieldMapping">
-				<sequence>
-					<element name="InputFields" type="atlas:MappedFields" minOccurs="0" maxOccurs="1" />
-					<element name="OutputField" type="atlas:MappedField" minOccurs="0" maxOccurs="1" />
-				</sequence>
-				<attribute name="strategy" type="string" use="optional" />
-			</extension>
-		</complexContent>
-	</complexType>
-	
-	<complexType name="LookupFieldMapping">
-		<complexContent>
-			<extension base="atlas:FieldMapping">
-				<sequence>
-					<element name="InputField" type="atlas:MappedField" minOccurs="0" maxOccurs="1" />
-					<element name="OutputField" type="atlas:MappedField" minOccurs="0" maxOccurs="1" />
-				</sequence>
-				<attribute name="lookupTableName" type="string" use="optional" /> 
-			</extension>
-		</complexContent>
-	</complexType>
-	
-	<complexType name="MapFieldMapping">
-		<complexContent>
-			<extension base="atlas:FieldMapping">
-				<sequence>
-					<element name="InputField" type="atlas:MappedField" minOccurs="0" maxOccurs="1" />
-					<element name="OutputField" type="atlas:MappedField" minOccurs="0" maxOccurs="1" />
-				</sequence>
-			</extension>
-		</complexContent>
-	</complexType>
-	
-	<complexType name="SeparateFieldMapping">
-		<complexContent>
-			<extension base="atlas:FieldMapping">
-				<sequence>
-					<element name="InputField" type="atlas:MappedField" minOccurs="0" maxOccurs="1" />
-					<element name="OutputFields" type="atlas:MappedFields" minOccurs="0" maxOccurs="1" />
-				</sequence>
-				<attribute name="strategy" type="string" use="optional" />
-				<attribute name="delimiterName" type="string" use="optional" />
-				<attribute name="delimiterValue" type="string" use="optional" />
-			</extension>
-		</complexContent>
-	</complexType>
-	
-	<complexType name="CollectionFieldMapping">
-		<complexContent>
-			<extension base="atlas:FieldMapping">
-				<sequence>
-					<element name="FieldMappings" type="atlas:FieldMappings" minOccurs="0" maxOccurs="unbounded" />
-				</sequence>
-			</extension>
-		</complexContent>
-	</complexType>
-	
-	<complexType name="MappedFields">
-		<sequence>
-			<element name="MappedField" type="atlas:MappedField" minOccurs="0" maxOccurs="unbounded" />
-		</sequence>
-	</complexType>
+        <attribute name="mappingType" type="atlas:MappingType" use="optional" />
+	</complexType>	
 
-	<complexType name="MappedField">
-		<sequence>
-			<element name="Field" type="atlas:Field" minOccurs="1" maxOccurs="1" />
-			<element name="FieldActions" type="atlas:FieldActions" minOccurs="0" maxOccurs="1" />
-		</sequence>
-	</complexType>
+    <complexType name="Mapping">
+        <complexContent>
+            <extension base="atlas:BaseMapping">
+                <sequence>
+                    <element name="InputField" type="atlas:Field" minOccurs="0" maxOccurs="unbounded" />
+                    <element name="OutputField" type="atlas:Field" minOccurs="0" maxOccurs="unbounded" />
+                </sequence>
+                <attribute name="delimiter" type="string" use="optional" />
+                <attribute name="delimiterString" type="string" use="optional" />
+                <attribute name="lookupTableName" type="string" use="optional" />
+                <attribute name="strategy" type="string" use="optional" />
+                <attribute name="strategyClassName" type="string" use="optional" />
+            </extension>
+        </complexContent>
+    </complexType>
 
+    <simpleType name="MappingType">
+        <restriction base="string">
+            <enumeration value="All" />
+            <enumeration value="Collection" />
+            <enumeration value="Combine" />
+            <enumeration value="Lookup" />
+            <enumeration value="Map" />
+            <enumeration value="Separate" />
+            <enumeration value="None" />
+        </restriction>
+    </simpleType>
+
+    <complexType name="Collection">
+        <complexContent>
+            <extension base="atlas:BaseMapping">
+                <sequence>
+                    <element name="Mappings" type="atlas:Mappings" minOccurs="1" maxOccurs="1" />
+                </sequence>
+                <attribute name="collectionType" type="atlas:CollectionType" use="required" />
+            </extension>
+        </complexContent>
+    </complexType>
+	
 	<complexType name="Document" abstract="true">
 		<sequence>
 			<element name="Fields" type="atlas:Fields" minOccurs="1" maxOccurs="1" />
@@ -143,17 +125,34 @@
 
 	<complexType name="Field" abstract="true">
 		<sequence>
+            <element name="Actions" type="atlas:Actions" minOccurs="0" maxOccurs="1" />
 			<element name="value" type="anySimpleType" minOccurs="0" maxOccurs="1" />
  		</sequence>
-		<attribute name="collection" type="boolean" use="optional" />
+        <attribute name="arrayDimensions" type="int" use="optional" />
+        <attribute name="arraySize" type="int" use="optional" />
+        <attribute name="collectionType" type="atlas:CollectionType" use="optional" />
+        <attribute name="docId" type="string" use="optional" />
+        <attribute name="index" type="int" use="optional" />
+        <attribute name="path" type="string" use="required" />
+        <attribute name="required" type="boolean" use="optional" />
 		<attribute name="status" type="atlas:FieldStatus" use="optional" />
+        <attribute name="fieldType" type="atlas:FieldType" use="optional" />
 	</complexType>
-
-	<complexType name="FieldActions">
-		<sequence>
-			<element name="FieldAction" type="atlas:FieldAction" minOccurs="0" maxOccurs="unbounded" />
-		</sequence>
-	</complexType>
+    
+    <complexType name="PropertyField">
+        <complexContent>
+            <extension base="atlas:Field">
+                <attribute name="name" type="string" use="required" />
+            </extension>
+        </complexContent>
+    </complexType>
+    
+    <complexType name="ConstantField">
+        <complexContent>
+            <extension base="atlas:Field">
+            </extension>
+        </complexContent>
+    </complexType>
 
 	<complexType name="MockDocument">
 		<complexContent>
@@ -165,20 +164,63 @@
 		<complexContent>
 			<extension base="atlas:Field">
 				<attribute name="name" type="string" use="required" />
-				<attribute name="type" type="atlas:FieldType" use="optional" />
+                <attribute name="custom" type="string" use="optional" />
 			</extension>
 		</complexContent>
 	</complexType>
 
-	<complexType name="FieldAction" abstract="true" />
+    <complexType name="Validations">
+        <sequence>
+            <element name="Validation" type="atlas:Validation" minOccurs="0" maxOccurs="unbounded" />
+        </sequence>
+    </complexType>
 
-	<complexType name="MapAction">
-		<complexContent>
-			<extension base="atlas:FieldAction">
-				<attribute name="index" type="int" use="optional" />
-			</extension>
-		</complexContent>
-	</complexType>
+    <complexType name="Validation">
+        <sequence>
+            <element name="message" type="string" minOccurs="0" maxOccurs="1" />
+        </sequence>
+        <attribute name="name" type="string" use="required" />
+        <attribute name="group" type="string" use="optional" />
+        <attribute name="field" type="string" use="optional" />
+        <attribute name="value" type="string" use="optional" /> 
+        <attribute name="status" type="atlas:ValidationStatus" use="required" />
+    </complexType>
+    
+    <simpleType name="ValidationStatus">
+        <restriction base="string">
+            <enumeration value="All" />
+            <enumeration value="Info" />
+            <enumeration value="Warn" />
+            <enumeration value="Error" />
+            <enumeration value="None" />
+        </restriction>
+    </simpleType>
+    
+    <complexType name="Audits">
+        <sequence>
+            <element name="Audit" type="atlas:Audit" minOccurs="0" maxOccurs="unbounded" />
+        </sequence>
+    </complexType>
+
+    <complexType name="Audit">
+        <sequence>
+            <element name="message" type="string" minOccurs="0" maxOccurs="1" />
+        </sequence>
+        <attribute name="docId" type="string" use="optional" />
+        <attribute name="path" type="string" use="optional" />
+        <attribute name="value" type="string" use="optional" /> 
+        <attribute name="status" type="atlas:AuditStatus" use="required" />
+    </complexType>
+    
+    <simpleType name="AuditStatus">
+        <restriction base="string">
+            <enumeration value="All" />
+            <enumeration value="Info" />
+            <enumeration value="Warn" />
+            <enumeration value="Error" />
+            <enumeration value="None" />
+        </restriction>
+    </simpleType>
 
 	<simpleType name="CollectionType">
 		<restriction base="string">
@@ -214,9 +256,9 @@
 			<enumeration value="Float" />
 			<enumeration value="Integer" />
 			<enumeration value="Long" />
+            <enumeration value="Number" />
 			<enumeration value="Short" />
 			<enumeration value="String" />
-			<enumeration value="Short" />
 			<enumeration value="Time" />
 			<enumeration value="Date" />
 			<enumeration value="DateTime" />
@@ -247,13 +289,7 @@
 		<attribute name="name" type="string" use="required" />
 		<attribute name="value" type="string" use="optional" />
 	</complexType>
-	
-	<complexType name="LookupEntryList">
-		<sequence>
-			<element name="LookupEntry" type="atlas:LookupEntry" minOccurs="0" maxOccurs="unbounded" />
-		</sequence>
-	</complexType>
-	
+		
 	<complexType name="LookupEntry">
 		<attribute name="sourceValue" type="string" use="required" />
 		<attribute name="sourceType" type="atlas:FieldType" use="optional" />
@@ -269,10 +305,26 @@
 
 	<complexType name="LookupTable">
 		<sequence>
-			<element name="LookupEntryList" type="atlas:LookupEntryList" minOccurs="1" maxOccurs="1" />
+			<element name="LookupEntry" type="atlas:LookupEntry" minOccurs="0" maxOccurs="unbounded" />
 		</sequence>
 		<attribute name="name" type="string" use="optional" />
 		<attribute name="description" type="string" use="optional" />
 	</complexType>
+
+    <complexType name="ActionDetail">
+        <attribute name="name" type="string" use="required" />
+        <attribute name="className" type="string" use="optional" />
+        <attribute name="method" type="string" use="optional" />
+        <attribute name="sourceType" type="atlas:FieldType" use="optional" />
+        <attribute name="targetType" type="atlas:FieldType" use="optional" />
+        <attribute name="sourceCollectionType" type="atlas:CollectionType" use="optional" />
+        <attribute name="targetCollectionType" type="atlas:CollectionType" use="optional" />
+    </complexType>
+
+    <complexType name="ActionDetails">
+        <sequence>
+            <element name="ActionDetail" type="atlas:ActionDetail" minOccurs="0" maxOccurs="unbounded" />
+        </sequence>
+    </complexType>
 
 </schema>

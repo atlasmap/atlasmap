@@ -1,0 +1,145 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    
+    "title": "BaseFlatPrimitive",
+    "type": "object",
+    "additionalProperties": true,
+    "properties": {
+    
+        "intField": {
+            "type": "integer"
+        },
+        "shortField": {
+            "type": "integer"
+        },
+        "longField": {
+            "type": "number"
+        },
+        "doubleField": {
+            "type": "number"
+        },
+        "floatField": {
+            "type": "number"
+        },
+        "booleanField": {
+            "type": "boolean"
+        },
+        "charField": {
+            "type": "string"
+        },
+        "boxedIntField": {
+            "type": "integer"
+        },
+        "boxedShortField": {
+            "type": "integer"
+        },
+        "boxedLongField": {
+            "type": "number"
+        },
+        "boxedDoubleField": {
+            "type": "number"
+        },
+        "boxedFloatField": {
+            "type": "number"
+        },
+        "boxedBooleanField": {
+            "type": "boolean"
+        },
+        "boxedCharField": {
+            "type": "string"
+        },
+        "boxedStringField": {
+            "type": "string"
+        },
+        "intArrayField": {
+            "type": "array",
+            "items": { 
+                "type": "integer"
+            }
+        },
+        "shortArrayField": {
+            "type": "array",
+            "items": { 
+                "type": "integer"
+            }
+        },
+        "longArrayField": {
+            "type": "array",
+            "items": { 
+                "type": "number"
+            }        
+        },
+        "doubleArrayField": {
+            "type": "array",
+            "items": { 
+                "type": "number"
+            }        
+        },
+        "floatArrayField": {
+            "type": "array",
+            "items": { 
+                "type": "number"
+            } 
+        },
+        "booleanArrayField": {
+            "type": "array",
+            "items": { 
+                "type": "boolean"
+            } 
+        },
+        "charArrayField": {
+            "type": "array",
+            "items": { 
+                "type": "string"
+            }         
+        },
+        "boxedIntArrayField": {
+            "type": "array",
+            "items": { 
+                "type": "integer"
+            } 
+        },
+        "boxedShortArrayField": {
+            "type": "array",
+            "items": { 
+                "type": "integer"
+            }         
+        },
+        "boxedLongArrayField": {
+            "type": "array",
+            "items": { 
+                "type": "number"
+            }         
+        },
+        "boxedDoubleArrayField": {
+            "type": "array",
+            "items": { 
+                "type": "number"
+            } 
+        },
+        "boxedFloatArrayField": {
+            "type": "array",
+            "items": { 
+                "type": "number"
+            }
+        },
+        "boxedBooleanArrayField": {
+            "type": "array",
+            "items": { 
+                "type": "boolean"
+            }
+        },
+        "boxedCharArrayField": {
+            "type": "array",
+            "items": { 
+                "type": "string"
+            } 
+        },
+        "boxedStringArrayField": {
+            "type": "array",
+            "items": { 
+                "type": "string"
+            }
+        }
+    }
+}

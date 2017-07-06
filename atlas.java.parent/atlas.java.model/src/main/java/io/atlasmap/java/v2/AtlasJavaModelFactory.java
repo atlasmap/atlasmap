@@ -15,6 +15,12 @@
  */
 package io.atlasmap.java.v2;
 
+import io.atlasmap.java.v2.JavaClass;
+import io.atlasmap.java.v2.JavaEnumFields;
+import io.atlasmap.java.v2.JavaField;
+import io.atlasmap.java.v2.JavaFields;
+import io.atlasmap.java.v2.ModifierList;
+
 public class AtlasJavaModelFactory {
 	
 	public static final String URI_FORMAT = "atlas:java?className=%s";
@@ -31,4 +37,30 @@ public class AtlasJavaModelFactory {
 		javaField.setModifiers(new ModifierList());
 		return javaField;
 	}
+	
+    public static JavaField cloneJavaField(JavaField javaField) {
+        JavaField cloneField = new JavaField();
+        //cloneField.setActions(javaField.getActions());
+        //cloneField.setAnnotations(javaField.getAnnotations());
+        cloneField.setArrayDimensions(javaField.getArrayDimensions());
+        cloneField.setArraySize(javaField.getArraySize());
+        cloneField.setClassName(javaField.getClassName());
+        cloneField.setCollectionClassName(javaField.getCollectionClassName());
+        cloneField.setCollectionType(javaField.getCollectionType());
+        cloneField.setDocId(javaField.getDocId());
+        cloneField.setGetMethod(javaField.getGetMethod());
+        cloneField.setIndex(javaField.getIndex());
+        //cloneField.setModifiers(javaField.getModifiers());
+        cloneField.setName(javaField.getName());
+        //cloneField.setParameterizedTypes(javaField.getParameterizedTypes());
+        cloneField.setPath(javaField.getPath());
+        cloneField.setPrimitive(javaField.isPrimitive());
+        cloneField.setRequired(javaField.isRequired());
+        cloneField.setSetMethod(javaField.getSetMethod());
+        cloneField.setStatus(javaField.getStatus());
+        cloneField.setSynthetic(javaField.isSynthetic());
+        cloneField.setFieldType(javaField.getFieldType());
+        cloneField.setValue(javaField.getValue());
+        return cloneField;
+    }
 }

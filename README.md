@@ -1,5 +1,6 @@
-# syndesis-datamapper
-Atlas data mapper, design support services and Syndesis UI module
+# AtlasMap Data Mapping 
+
+Design time services and runtime engine
 
 To run:
 

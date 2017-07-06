@@ -15,20 +15,32 @@
  */
 package io.atlasmap.spi;
 
+import io.atlasmap.api.AtlasConversionService;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.api.AtlasSession;
+import io.atlasmap.v2.Collection;
 import io.atlasmap.v2.Field;
-
+import io.atlasmap.v2.Mapping;
 import java.util.List;
 
 public interface AtlasModule {
 
 	void init();
 	void destroy();
-	void processInput(AtlasSession session) throws AtlasException;
-	void processOutput(AtlasSession session) throws AtlasException;
+	void processPreExecution(AtlasSession session) throws AtlasException;
+	void processPreValidation(AtlasSession session) throws AtlasException;
+    void processInputMapping(AtlasSession session, Mapping mapping) throws AtlasException;
+    void processInputCollection(AtlasSession session, Collection mapping) throws AtlasException;
+	void processInputActions(AtlasSession session, Mapping mapping) throws AtlasException;
+    void processOutputMapping(AtlasSession session, Mapping mapping) throws AtlasException;
+    void processOutputCollection(AtlasSession session, Collection mapping) throws AtlasException;
+	void processOutputActions(AtlasSession session, Mapping mapping) throws AtlasException;
+	void processPostValidation(AtlasSession session) throws AtlasException;
+	void processPostExecution(AtlasSession session) throws AtlasException;
 	AtlasModuleMode getMode();
 	void setMode(AtlasModuleMode atlasModuleMode);
+	AtlasConversionService getConversionService();
+	void setConversionService(AtlasConversionService atlasConversionService);
 	List<AtlasModuleMode> listSupportedModes();
 	Boolean isStatisticsSupported();
 	Boolean isStatisticsEnabled();

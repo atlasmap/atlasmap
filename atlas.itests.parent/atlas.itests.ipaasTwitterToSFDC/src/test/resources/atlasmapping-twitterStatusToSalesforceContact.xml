@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+
+    Copyright (C) 2017 Red Hat, Inc.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+            http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+<AtlasMapping xmlns="http://atlasmap.io/v2" xmlns:ns2="http://atlasmap.io/java/v2" 
+	name="twitterStatusToSalesforceContact" 
+	sourceUri="atlas:java?className=twitter4j.Status" 
+	targetUri="atlas:java?className=com.redhat.ipaas.connector.salesforce.Contact">
+    <Properties/>
+    <FieldMappings>
+        <FieldMapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="SeparateFieldMapping">
+            <InputField>
+                <Field xsi:type="ns2:JavaField" name="Name" path="User.name" type="String" getMethod="getName"/>
+                <FieldActions/>
+            </InputField>
+            <OutputFields>
+                <MappedField>
+                    <Field xsi:type="ns2:JavaField" name="FirstName" path="FirstName" type="String" setMethod="setFirstName"/>
+                    <FieldActions>
+                        <FieldAction xsi:type="MapAction" index="0"/>
+                    </FieldActions>
+                </MappedField>
+                <MappedField>
+                    <Field xsi:type="ns2:JavaField" name="LastName" path="LastName" type="String" setMethod="setLastName"/>
+                    <FieldActions>
+                        <FieldAction xsi:type="MapAction" index="1"/>
+                    </FieldActions>
+                </MappedField>
+            </OutputFields>
+        </FieldMapping>
+        <FieldMapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="MapFieldMapping">
+            <InputField>
+                <Field xsi:type="ns2:JavaField" name="Text" path="Text" type="String" getMethod="getText"/>
+                <FieldActions/>
+            </InputField>
+            <OutputField>
+                <Field xsi:type="ns2:JavaField" name="Description" path="description" type="String" setMethod="setDescription"/>
+                <FieldActions/>
+            </OutputField>
+        </FieldMapping>
+        <FieldMapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="MapFieldMapping">
+            <InputField>
+                <Field xsi:type="ns2:JavaField" name="ScreenName" path="User.screenName" type="String" getMethod="getScreenName"/>
+                <FieldActions/>
+            </InputField>
+            <OutputField>
+                <Field xsi:type="ns2:JavaField" name="Title" path="Title" type="String" setMethod="setTitle"/>
+                <FieldActions/>
+            </OutputField>
+        </FieldMapping>
+    </FieldMappings>
+</AtlasMapping>

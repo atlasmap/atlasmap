@@ -16,12 +16,13 @@
     limitations under the License.
 
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>io.atlasmap</groupId>
     <artifactId>atlas</artifactId>
-    <version>1.11.5-SNAPSHOT</version>
+    <version>1.15.0-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
@@ -33,8 +34,8 @@
     <failOnMissingWebXml>false</failOnMissingWebXml>
     <maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
     <java-image.version>1.2</java-image.version>
-    <syndesis.connector.version>0.4.4</syndesis.connector.version>
-    <camel.version>2.19.0</camel.version>
+    <ipaas.connector.version>0.3.5</ipaas.connector.version>
+    <camel.version>2.19.0.fuse-000035</camel.version>
   </properties>
 
   <build>
@@ -154,32 +155,51 @@
 
     <!-- for now adding all connectors -->
     <dependency>
-      <groupId>io.syndesis</groupId>
+      <groupId>com.redhat.ipaas</groupId>
       <artifactId>twitter-mention-connector</artifactId>
-      <version>${syndesis.connector.version}</version>
+      <version>${ipaas.connector.version}</version>
     </dependency>
     <dependency>
-      <groupId>io.syndesis</groupId>
+      <groupId>com.redhat.ipaas</groupId>
       <artifactId>salesforce-upsert-contact-connector</artifactId>
-      <version>${syndesis.connector.version}</version>
+      <version>${ipaas.connector.version}</version>
     </dependency>
     <dependency>
-      <groupId>io.syndesis</groupId>
+      <groupId>com.redhat.ipaas</groupId>
       <artifactId>day-trade-get-connector</artifactId>
-      <version>${syndesis.connector.version}</version>
+      <version>${ipaas.connector.version}</version>
     </dependency>
     <dependency>
-      <groupId>io.syndesis</groupId>
+      <groupId>com.redhat.ipaas</groupId>
       <artifactId>day-trade-place-connector</artifactId>
-      <version>${syndesis.connector.version}</version>
+      <version>${ipaas.connector.version}</version>
     </dependency>
     <dependency>
-      <groupId>io.syndesis</groupId>
+      <groupId>com.redhat.ipaas</groupId>
       <artifactId>trade-insight-buy-connector</artifactId>
-      <version>${syndesis.connector.version}</version>
+      <version>${ipaas.connector.version}</version>
     </dependency>
 
   </dependencies>
+
+  <repositories>
+    <repository>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <id>ipaas-releases</id>
+      <name>ipaas-releases</name>
+      <url>https://dl.bintray.com/redhat-ipaas/maven/</url>
+    </repository>
+    <repository>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <id>jboss.ea</id>
+      <name>JBoss EA</name>
+      <url>https://repository.jboss.org/nexus/content/groups/ea</url>
+    </repository>
+  </repositories>
 
   <profiles>
     <profile>

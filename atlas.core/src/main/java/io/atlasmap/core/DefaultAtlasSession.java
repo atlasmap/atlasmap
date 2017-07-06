@@ -15,43 +15,109 @@
  */
 package io.atlasmap.core;
 
+import io.atlasmap.api.AtlasConstants;
 import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasSession;
 import io.atlasmap.v2.AtlasMapping;
-
-import java.util.ArrayList;
-import java.util.List;
+import io.atlasmap.v2.Audit;
+import io.atlasmap.v2.AuditStatus;
+import io.atlasmap.v2.Audits;
+import io.atlasmap.v2.Validations;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class DefaultAtlasSession implements AtlasSession {
 
 	private AtlasContext atlasContext;
-	private AtlasMapping atlasMapping;
+	private final AtlasMapping mappingDefinition;
+	private final AtlasMapping runtimeMapping;
+	private Audits audits;
+	private Validations validations;
 	private Map<String, Object> properties;
-	private List<Map<String, Object>> data;
-	private Object input;
-	private Object output;
-	
-	public DefaultAtlasSession() { initialize(); }
+	private Map<String, Object> inputMap = new HashMap<String, Object>();
+	private Map<String, Object> outputMap = new HashMap<String, Object>();
+		
+	public DefaultAtlasSession(AtlasMapping mappingDefinition, AtlasMapping runtimeMapping) { 
+	    initialize();
+	    this.mappingDefinition = mappingDefinition;
+	    this.runtimeMapping = runtimeMapping;
+	}
 	
 	protected void initialize() { properties = new ConcurrentHashMap<String, Object>(); 
-								  data = new ArrayList<Map<String, Object>>(); }
+								 validations = new Validations();
+								 audits = new Audits();}
 
     public AtlasContext getAtlasContext() { return atlasContext; }
     public void setAtlasContext(AtlasContext atlasContext) { this.atlasContext = atlasContext; }
-    public AtlasMapping getAtlasMapping() { return atlasMapping; }
-	public void setAtlasMapping(AtlasMapping atlasMapping) { this.atlasMapping = atlasMapping; }
+    public AtlasMapping getRuntimeMapping() { return runtimeMapping; }
+    public AtlasMapping getMapping() { return mappingDefinition; }
 	@Override
-	public Object getInput() { return input; }
+    public Validations getValidations() { return this.validations; }
+    @Override
+    public void setValidations(Validations validations) { this.validations = validations; }
+    @Override
+    public Audits getAudits() { return this.audits; }
+    @Override
+    public void setAudits(Audits audits) { this.audits = audits; }
+    @Override
+	public Object getInput() { return inputMap.get(AtlasConstants.DEFAULT_SOURCE_DOC_ID); }
 	@Override
-	public Object getOutput() { return output; }
+    public Object getInput(String docId) { return inputMap.get(docId); }
+    @Override
+	public Object getOutput() { return outputMap.get(AtlasConstants.DEFAULT_TARGET_DOC_ID); }
 	@Override
-	public void setInput(Object input) { this.input = input; }
+    public Object getOutput(String docId) { return outputMap.get(docId); }
+    @Override
+	public void setInput(Object input) { this.inputMap.put(AtlasConstants.DEFAULT_SOURCE_DOC_ID, input); }
 	@Override
-	public void setOutput(Object output) { this.output = output; }
-	public Map<String, Object> getProperties() { return this.properties; }
-	public List<Map<String, Object>> getData() { return data; }
-	public void setData(List<Map<String, Object>> data) { this.data = data; }
-	
+    public void setInput(String docId, Object inputObject) { this.inputMap.put(docId, inputObject); }
+    @Override
+    public void setOutput(Object output) { this.outputMap.put(AtlasConstants.DEFAULT_TARGET_DOC_ID, output); }
+	@Override
+    public void setOutput(String docId, Object outputObject) { this.outputMap.put(docId, outputObject); }
+    public Map<String, Object> getProperties() { return this.properties; }
+
+    @Override
+    public Integer errorCount() {
+        int e=0;
+        for(Audit audit : getAudits().getAudit()) {
+            if(AuditStatus.ERROR.equals(audit.getStatus())) {
+                e++;
+            }
+        }
+        return e;
+    }
+
+    @Override
+    public boolean hasErrors() {
+        for(Audit audit : getAudits().getAudit()) {
+            if(AuditStatus.ERROR.equals(audit.getStatus())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean hasWarns() {
+        for(Audit audit : getAudits().getAudit()) {
+            if(AuditStatus.WARN.equals(audit.getStatus())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public Integer warnCount() {
+        int w=0;
+        for(Audit audit : getAudits().getAudit()) {
+            if(AuditStatus.WARN.equals(audit.getStatus())) {
+                w++;
+            }
+        }
+        return w;
+    }
+    
 }

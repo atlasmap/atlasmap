@@ -15,6 +15,7 @@
  */
 package io.atlasmap.java.service;
 
+import io.atlasmap.core.DefaultAtlasConversionService;
 import io.atlasmap.java.inspect.ClassInspectionService;
 import io.atlasmap.java.inspect.MavenClasspathHelper;
 import io.atlasmap.java.v2.ClassInspectionRequest;
@@ -51,8 +52,7 @@ public class JavaService extends Application {
 	private static final Logger logger = LoggerFactory.getLogger(JavaService.class);
 	
 	public JavaService() {
-		javaServiceApp = new ResourceConfig()
-		        .register(JacksonFeature.class);
+		javaServiceApp = new ResourceConfig().register(JacksonFeature.class);
 	}
 	
 	//example request: http://localhost:8181/rest/myresource?from=jason%20baker
@@ -80,6 +80,7 @@ public class JavaService extends Application {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getClass(@QueryParam("className") String className) throws Exception {
     	ClassInspectionService classInspectionService = new ClassInspectionService();
+    	classInspectionService.setConversionService(DefaultAtlasConversionService.getRegistry());
     	JavaClass c = classInspectionService.inspectClass(className);
     	classInspectionService = null;
     	return Response.ok()
@@ -143,13 +144,14 @@ public class JavaService extends Application {
     	
     	ClassInspectionResponse response = new ClassInspectionResponse();
     	ClassInspectionService classInspectionService = new ClassInspectionService();
-    	
+        classInspectionService.setConversionService(DefaultAtlasConversionService.getRegistry());
+
     	configureInspectionService(classInspectionService, request);
     	
 		long startTime = System.currentTimeMillis();
     	try {
     		JavaClass c = null;
-    		if(request.getClasspath() == null || request.getClasspath().isEmpty()) {
+		if(request.getClasspath() == null || request.getClasspath().isEmpty()) {
     			c = classInspectionService.inspectClass(request.getClassName());
     		} else {
     			c = classInspectionService.inspectClass(request.getClassName(), request.getClasspath());

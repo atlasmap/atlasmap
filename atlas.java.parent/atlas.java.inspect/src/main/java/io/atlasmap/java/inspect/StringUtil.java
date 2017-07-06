@@ -15,6 +15,9 @@
  */
 package io.atlasmap.java.inspect;
 
+import java.text.SimpleDateFormat;
+import java.util.TimeZone;
+
 public class StringUtil {
 
 	public static boolean isEmpty(String s) {
@@ -70,5 +73,11 @@ public class StringUtil {
 		}
 		
 		return String.valueOf(subSetter.charAt(0)).toLowerCase() + subSetter.substring(1);
+	}
+	
+	public static String formatTimeHMS(long milliseconds) {
+	    SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss.SSS");
+	    sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+	    return sdf.format(milliseconds);
 	}
 }

@@ -20,7 +20,7 @@
 	<parent>
 		<groupId>io.atlasmap</groupId>
 		<artifactId>atlas.itests.parent</artifactId>
-		<version>1.11.5-SNAPSHOT</version>
+		<version>1.15.0-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
@@ -52,6 +52,11 @@
 			<artifactId>atlas.java.module</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+    <dependency>
+      <groupId>io.atlasmap</groupId>
+      <artifactId>atlas.xml.module</artifactId>
+      <version>${project.version}</version>
+    </dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>

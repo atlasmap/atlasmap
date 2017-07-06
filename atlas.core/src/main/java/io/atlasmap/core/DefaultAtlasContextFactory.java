@@ -17,14 +17,14 @@ package io.atlasmap.core;
 
 import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasContextFactory;
+import io.atlasmap.api.AtlasConversionService;
 import io.atlasmap.api.AtlasException;
+import io.atlasmap.api.AtlasFieldActionService;
 import io.atlasmap.mxbean.AtlasContextFactoryMXBean;
 import io.atlasmap.spi.AtlasModule;
 import io.atlasmap.spi.AtlasModuleDetail;
 import io.atlasmap.spi.AtlasModuleInfo;
 import io.atlasmap.spi.AtlasSeparateStrategy;
-import io.atlasmap.v2.AtlasMapping;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,6 +57,9 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
 	private List<AtlasModuleInfo> modules = new ArrayList<AtlasModuleInfo>();
 	private AtlasSeparateStrategy separateStrategy = new DefaultAtlasSeparateStrategy();
 	private AtlasMappingService atlasMappingService = null;
+	private DefaultAtlasConversionService atlasConversionService = null;
+	private DefaultAtlasFieldActionService atlasFieldActionService = null;
+
 	private Map<String, String> properties = null;
 
 	public static DefaultAtlasContextFactory getInstance() {
@@ -97,8 +100,11 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
 	public void init(Map<String, String> properties) {
 		this.uuid = UUID.randomUUID().toString();
 		this.threadName = Thread.currentThread().getName();
+		this.atlasConversionService = DefaultAtlasConversionService.getRegistry();
+		this.atlasFieldActionService = new DefaultAtlasFieldActionService();
+		this.atlasFieldActionService.init();
 		registerFactoryJmx(this);
-		loadModules("moduleClass", AtlasModule.class);		
+		loadModules("moduleClass", AtlasModule.class);
 		setMappingService(new AtlasMappingService(getAllModuleConfigPackages(getModules())));
 	}
 
@@ -119,32 +125,32 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
 		this.objectName = null;
 		this.properties = null;
 		this.atlasMappingService = null;
+	    this.atlasFieldActionService = null;
+		this.atlasConversionService = null;
 		this.threadName = null;
 		factory = null;
 	}
 	
 	public AtlasContext createContext(File atlasMappingFile) throws AtlasException {
-		if(getMappingService() == null) {
-			throw new AtlasException("AtlasMappingService is not set");
+		if(atlasMappingFile == null) {
+			throw new AtlasException("AtlasMappingFile must be specified");
 		}
 		
-		return createContext(getMappingService().loadMapping(atlasMappingFile));
+		return createContext(atlasMappingFile.toURI());
 	}
 	
 	public AtlasContext createContext(URI atlasMappingUri) throws AtlasException {
+	    if(atlasMappingUri == null) {
+            throw new AtlasException("AtlasMappingUri must be specified");
+        }
 		if(getMappingService() == null) {
 			throw new AtlasException("AtlasMappingService is not set");
 		}
-		
-		return createContext(getMappingService().loadMapping(atlasMappingUri));
-	}
-	
-	public AtlasContext createContext(AtlasMapping atlasMapping) throws AtlasException {
-		DefaultAtlasContext context = new DefaultAtlasContext(this, atlasMapping);
+		DefaultAtlasContext context = new DefaultAtlasContext(this, atlasMappingUri);
 		context.init();
-		return context;
+	    return context;
 	}
-		
+			
 	protected void loadModules(String moduleClassProperty, Class<?> moduleInterface) {
         Class<?> moduleClass = null;
         String moduleClassName = null;
@@ -390,5 +396,13 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
 
 	public void setMappingService(AtlasMappingService atlasMappingService) {
 		this.atlasMappingService = atlasMappingService;
+	}
+	
+	public AtlasConversionService getConversionService() {
+	    return this.atlasConversionService;
+	}
+	
+	public AtlasFieldActionService getFieldActionService() {
+	    return this.atlasFieldActionService;
 	}
 }

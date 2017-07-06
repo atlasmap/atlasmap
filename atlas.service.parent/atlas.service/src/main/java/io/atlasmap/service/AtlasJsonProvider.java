@@ -15,11 +15,8 @@
  */
 package io.atlasmap.service;
 
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-
+import io.atlasmap.v2.AtlasJsonMapper;
 import javax.ws.rs.ext.ContextResolver;
 import javax.ws.rs.ext.Provider;
 
@@ -29,11 +26,7 @@ public class AtlasJsonProvider implements ContextResolver<ObjectMapper> {
 	private ObjectMapper objectMapper;
 
 	public AtlasJsonProvider() {		
-		objectMapper = new ObjectMapper();
-		objectMapper.configure(SerializationFeature.WRAP_ROOT_VALUE, true);
-		objectMapper.configure(DeserializationFeature.UNWRAP_ROOT_VALUE, true);
-		objectMapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
-		objectMapper.setSerializationInclusion(Include.NON_NULL);
+		objectMapper = new AtlasJsonMapper();
 	}
 
 	public ObjectMapper getContext(Class<?> objectType) {

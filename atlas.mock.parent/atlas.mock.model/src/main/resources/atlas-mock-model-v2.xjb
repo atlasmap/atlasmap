@@ -13,15 +13,12 @@
  
     <!-- Annotate the following classes with XmlRootElement -->
     <jaxb:bindings schemaLocation="atlas-mock-model-v2.xsd" node="/xs:schema">
-		<jaxb:bindings node="xs:complexType[@name='JavaField']">
+		<jaxb:bindings node="xs:complexType[@name='MockField']">
 			<annox:annotate><annox:annotate annox:class="com.fasterxml.jackson.annotation.JsonTypeInfo" use="CLASS" include="PROPERTY" property="jsonType"></annox:annotate></annox:annotate>		
         </jaxb:bindings>
-        <jaxb:bindings node="xs:complexType[@name='JavaEnumField']">
-			<annox:annotate><annox:annotate annox:class="com.fasterxml.jackson.annotation.JsonTypeInfo" use="CLASS" include="PROPERTY" property="jsonType"></annox:annotate></annox:annotate>		
-        </jaxb:bindings>
-		<jaxb:bindings node="xs:complexType[@name='JavaClass']">
-			<annox:annotate><annox:annotate annox:class="javax.xml.bind.annotation.XmlRootElement" name="JavaClass" /></annox:annotate>
-			<annox:annotate><annox:annotate annox:class="com.fasterxml.jackson.annotation.JsonRootName">JavaClass</annox:annotate></annox:annotate>
+		<jaxb:bindings node="xs:complexType[@name='MockDocument']">
+			<annox:annotate><annox:annotate annox:class="javax.xml.bind.annotation.XmlRootElement" name="MockDocument" /></annox:annotate>
+			<annox:annotate><annox:annotate annox:class="com.fasterxml.jackson.annotation.JsonRootName">MockDocument</annox:annotate></annox:annotate>
 			<annox:annotate><annox:annotate annox:class="com.fasterxml.jackson.annotation.JsonTypeInfo" use="CLASS" include="PROPERTY" property="jsonType"></annox:annotate></annox:annotate>		
         </jaxb:bindings>
     </jaxb:bindings>

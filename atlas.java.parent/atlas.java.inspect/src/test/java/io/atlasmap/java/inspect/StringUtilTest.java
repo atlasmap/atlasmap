@@ -22,6 +22,8 @@ import io.atlasmap.java.inspect.StringUtil;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
+import java.lang.reflect.Array;
+
 public class StringUtilTest {
 
 	@Test
@@ -37,4 +39,11 @@ public class StringUtilTest {
 		assertEquals("abc", StringUtil.removeGetterAndLowercaseFirstLetter("isAbc"));
 	}
 
+	@Test
+	public void testInspectArraySize() {
+	    int[] foo = new int[10];
+	    
+	    int arraySize = Array.getLength(foo);
+	    System.out.println("ArraySize: " + arraySize);
+	}
 }

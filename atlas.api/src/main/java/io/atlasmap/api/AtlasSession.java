@@ -15,23 +15,32 @@
  */
 package io.atlasmap.api;
 
-import java.util.List;
-import java.util.Map;
-
 import io.atlasmap.v2.AtlasMapping;
+import io.atlasmap.v2.Audits;
+import io.atlasmap.v2.Validations;
+import java.util.Map;
 
 public interface AtlasSession {
 
 	Map<String, Object> getProperties();
 	AtlasContext getAtlasContext();
 	void setAtlasContext(AtlasContext atlasContext);
-	AtlasMapping getAtlasMapping();
-	void setAtlasMapping(AtlasMapping atlasMapping);
+	AtlasMapping getRuntimeMapping();
+	AtlasMapping getMapping();
 	Object getInput();
 	void setInput(Object inputObject);
+    Object getInput(String docId);
+    void setInput(String docId, Object inputObject);
 	Object getOutput();
 	void setOutput(Object outputObject);
-	List<Map<String, Object>> getData();
-	void setData(List<Map<String, Object>> data);
-	
+	Object getOutput(String docId);
+	void setOutput(String docId, Object outputObject);
+	Validations getValidations();
+	void setValidations(Validations validations);
+	Audits getAudits();
+	void setAudits(Audits audits);
+	boolean hasErrors();
+	boolean hasWarns();
+	Integer errorCount();
+	Integer warnCount();
 }

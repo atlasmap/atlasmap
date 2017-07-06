@@ -19,6 +19,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import io.atlasmap.core.DefaultAtlasConversionService;
 import io.atlasmap.java.inspect.ClassInspectionService;
 
 import static org.junit.Assert.*;
@@ -34,6 +35,7 @@ public class ClassInspectionServiceTest {
 	@Before
 	public void setUp() {
 		classInspectionService = new ClassInspectionService();
+		classInspectionService.setConversionService(DefaultAtlasConversionService.getRegistry());
 	}
 	
 	@After

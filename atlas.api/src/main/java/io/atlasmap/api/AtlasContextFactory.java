@@ -19,15 +19,14 @@ import java.io.File;
 import java.net.URI;
 import java.util.Map;
 
-import io.atlasmap.v2.AtlasMapping;
-
 public interface AtlasContextFactory {
 
 	void init();
 	void destroy();
 	AtlasContext createContext(File atlasMappingFile) throws AtlasException;
 	AtlasContext createContext(URI atlasMappingUri) throws AtlasException;
-	AtlasContext createContext(AtlasMapping atlasMapping) throws AtlasException;
+	AtlasConversionService getConversionService() throws AtlasException;
+    AtlasFieldActionService getFieldActionService() throws AtlasException;
 	void setProperties(Map<String, String> properties);
 	Map<String, String> getProperties();
 }

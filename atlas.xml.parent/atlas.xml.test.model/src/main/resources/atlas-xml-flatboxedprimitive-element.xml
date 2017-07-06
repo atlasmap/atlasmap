@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ns:XmlFBPE xmlns:ns="http://atlasmap.io/xml/test/v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://atlasmap.io/xml/test/v2 atlas-xml-test-model-v2.xsd ">
+  <ns:boxedBooleanField>true</ns:boxedBooleanField>
+  <ns:boxedByteField>0</ns:boxedByteField>
+  <ns:boxedCharField>ns:boxedCharField</ns:boxedCharField>
+  <ns:boxedDoubleField>0.0</ns:boxedDoubleField>
+  <ns:boxedFloatField>0.0</ns:boxedFloatField>
+  <ns:boxedIntField>0</ns:boxedIntField>
+  <ns:boxedLongField>0</ns:boxedLongField>
+  <ns:boxedShortField>0</ns:boxedShortField>
+  <ns:boxedStringField>ns:boxedStringField</ns:boxedStringField>
+</ns:XmlFBPE>

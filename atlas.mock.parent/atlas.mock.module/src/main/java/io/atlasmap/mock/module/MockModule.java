@@ -15,20 +15,47 @@
  */
 package io.atlasmap.mock.module;
 
+import io.atlasmap.api.AtlasConversionService;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.api.AtlasSession;
-import io.atlasmap.spi.AtlasModule;
+import io.atlasmap.core.BaseAtlasModule;
 import io.atlasmap.spi.AtlasModuleDetail;
 import io.atlasmap.spi.AtlasModuleMode;
+import io.atlasmap.v2.Collection;
 import io.atlasmap.v2.Field;
+import io.atlasmap.v2.Mapping;
 import io.atlasmap.v2.MockField;
 
 import java.util.List;
 
-@AtlasModuleDetail(name="MockModule", uri="atlas:mock", modes={"SOURCE", "TARGET"}, dataFormats={"mock"}, configPackages={"io.atlasmap.mock.v2"})
-public class MockModule implements AtlasModule {
+@AtlasModuleDetail(name="MockModule", uri="atlas:mock", modes={"SOURCE", "TARGET"}, dataFormats={"mock"}, configPackages={"io.atlasmap.v2"})
+public class MockModule extends BaseAtlasModule {
 
 	@Override
+    public void processPostExecution(AtlasSession arg0) throws AtlasException {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void processPostValidation(AtlasSession arg0) throws AtlasException {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void processPreExecution(AtlasSession arg0) throws AtlasException {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void processPreValidation(AtlasSession arg0) throws AtlasException {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
 	public void init() {
 		// TODO Auto-generated method stub
 		
@@ -39,17 +66,25 @@ public class MockModule implements AtlasModule {
 		// TODO Auto-generated method stub
 		
 	}
-
+	
 	@Override
-	public void processInput(AtlasSession session) throws AtlasException {
-		// TODO Auto-generated method stub
-		
+	public void processInputMapping(AtlasSession session, Mapping mapping) throws AtlasException {
+        // TODO Auto-generated method stub
 	}
-
+	
 	@Override
-	public void processOutput(AtlasSession session) throws AtlasException {
-		// TODO Auto-generated method stub
-		
+	public void processInputCollection(AtlasSession session, Collection collection) throws AtlasException {
+	    // TODO Auto-generated method stub
+	}
+	
+	@Override
+	public void processOutputMapping(AtlasSession session, Mapping mapping) throws AtlasException {
+	    // TODO Auto-generated method stub
+	}
+	
+	@Override
+	public void processOutputCollection(AtlasSession session, Collection collection) throws AtlasException {
+	    // TODO Auto-generated method stub
 	}
 
 	@Override
@@ -89,4 +124,16 @@ public class MockModule implements AtlasModule {
 		}
 		return false;
 	}
+
+    @Override
+    public AtlasConversionService getConversionService() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void setConversionService(AtlasConversionService arg0) {
+        // TODO Auto-generated method stub
+        
+    }
 }

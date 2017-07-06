@@ -1,0 +1,9 @@
+{
+  "'booleanField'": false,
+  "\"charField\"": "a",
+  "\\doubleField": -27152745.3422,
+  "floatField\t": -63988281.00,
+  "intField\n": 8281,
+  "shortField": 81,
+  "longField": 3988281
+}

@@ -19,7 +19,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>io.atlasmap</groupId>
 	<artifactId>atlas</artifactId>
-	<version>1.11.5-SNAPSHOT</version>
+	<version>1.15.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>Atlas :: Project Build</name>
 
@@ -28,6 +28,7 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<jdk.version>1.8</jdk.version>
 		<build-helper-maven-plugin.version>3.0.0</build-helper-maven-plugin.version>
+		<jsonschema2pojo-maven-plugin.version>0.4.37</jsonschema2pojo-maven-plugin.version>
 		<license-maven-plugin.version>3.0</license-maven-plugin.version>
 		<maven-bundle-plugin.version>3.2.0</maven-bundle-plugin.version>
 		<maven-compiler-plugin.version>3.6.1</maven-compiler-plugin.version>
@@ -41,7 +42,10 @@
 		<maven-release-plugin.version>2.5.3</maven-release-plugin.version>
 		<maven-source-plugin.version>2.2.1</maven-source-plugin.version>
 		<nexus-staging-maven-plugin.version>1.6.7</nexus-staging-maven-plugin.version>
+		<!-- Does this fix the NPE problem ?? 
 		<jetty-maven-plugin.version>9.4.2.v20170220</jetty-maven-plugin.version>
+		-->
+		<jetty-maven-plugin.version>9.4.5.v20170502</jetty-maven-plugin.version>
 
 		<!-- Atlas specific -->
 		<at.jackson.version>2.8.5</at.jackson.version>
@@ -53,11 +57,11 @@
 		<at.jackson-module-jaxb-annotations.version>2.8.6</at.jackson-module-jaxb-annotations.version>
 		<spring-boot.version>1.5.2.RELEASE</spring-boot.version>
 		<resteasy-spring-boot-starter.version>2.3.0-RELEASE</resteasy-spring-boot-starter.version>
-    <fabric8-maven-plugin.version>3.2.30</fabric8-maven-plugin.version>
+        <fabric8-maven-plugin.version>3.2.30</fabric8-maven-plugin.version>
 
-    <!-- Controls Docker Image Generation -->
-    <from.image>registry.access.redhat.com/jboss-fuse-6/fis-java-openshift:2.0</from.image>
-    <docker.image>atlasmap/syndesis-datamapper:%l</docker.image>
+        <!-- Controls Docker Image Generation -->
+        <from.image>registry.access.redhat.com/jboss-fuse-6/fis-java-openshift:2.0</from.image>
+        <docker.image>atlasmap/ipaas-datamapper:%l</docker.image>
 	</properties>
 
 	<description>The AtlasMap Project</description>
@@ -70,18 +74,26 @@
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
-  <developers>
-    <developer>
-      <id>atlasmap</id>
-      <name>Atlasmap Development Team</name>
-      <organizationUrl>https://atlasmap.io/</organizationUrl>
-    </developer>
-  </developers>
+	<developers>
+                <developer>
+                        <id>mattrpav</id>
+                        <name>Matt Pavlovich</name>
+                        <email>matt@mediadriver.com</email>
+                        <url>http://mediadriver.com</url>
+                        <timezone>-6</timezone>
+                </developer>
+		<developer>
+			<id>chirino</id>
+			<name>Hiram Chirino</name>
+			<email>hiram@hiramchirino.com</email>
+			<url>http://hiramchirino.com</url>
+			<timezone>-5</timezone>
+		</developer>
+	</developers>
 	<scm>
-		<url>https://github.com/atlasmap/atlasmap</url>
-		<connection>scm:git:https://github.com/atlasmap/atlasmap.git</connection>
-		<developerConnection>scm:git:git@github.com:atlasmap/atlasmap.git</developerConnection>
-		<tag>1.11.0</tag>
+		<connection>git:https://github.com/redhat-ipaas/ipaas-datamapper.git</connection>
+		<developerConnection>git:git@github.com:redhat-ipaas/ipaas-datamapper.git</developerConnection>
+		<url>https://github.com/redhat-ipaas/ipaas-datamapper</url>
 	</scm>
 
 	<distributionManagement>
@@ -103,6 +115,8 @@
 				<module>atlas.mock.parent</module>
 				<module>atlas.service.parent</module>
 				<module>atlas.java.parent</module>
+				<module>atlas.json.parent</module>
+				<module>atlas.xml.parent</module>
 			</modules>
 		</profile>
 		<profile>
@@ -115,6 +129,8 @@
 				<module>atlas.mock.parent</module>
 				<module>atlas.service.parent</module>
 				<module>atlas.java.parent</module>
+				<module>atlas.json.parent</module>
+				<module>atlas.xml.parent</module>
 			</modules>
 		</profile>
 		<profile>
@@ -128,6 +144,8 @@
 				<module>atlas.mock.parent</module>
 				<module>atlas.service.parent</module>
 				<module>atlas.java.parent</module>
+				<module>atlas.json.parent</module>
+				<module>atlas.xml.parent</module>
 				<module>atlas.demo.deps</module>
 				<module>atlas.itests</module>
 				<module>atlas.itests.parent</module>
@@ -171,7 +189,7 @@
 								</goals>
 							</execution>
 						</executions>
-					</plugin>
+					</plugin>				
 				</plugins>
 			</build>
 		</profile>
@@ -251,7 +269,7 @@
 					<artifactId>nexus-staging-maven-plugin</artifactId>
 					<version>${nexus-staging-maven-plugin.version}</version>
 				</plugin>
-				<!--This plugin's configuration is used to store Eclipse m2e settings
+				<!--This plugin's configuration is used to store Eclipse m2e settings 
 					only. It has no influence on the Maven build itself. -->
 				<plugin>
 					<groupId>org.eclipse.m2e</groupId>
@@ -302,6 +320,11 @@
 						</excludes>
 					</configuration>
 				</plugin>
+                <plugin>
+                    <groupId>org.jsonschema2pojo</groupId>
+                    <artifactId>jsonschema2pojo-maven-plugin</artifactId>
+                    <version>${jsonschema2pojo-maven-plugin.version}</version>
+                </plugin>
 			</plugins>
 		</pluginManagement>
 		<plugins>
@@ -328,7 +351,7 @@
 				<configuration>
 					<serverId>ossrh</serverId>
 					<nexusUrl>https://oss.sonatype.org/</nexusUrl>
-					<autoReleaseAfterClose>true</autoReleaseAfterClose>
+					<autoReleaseAfterClose>false</autoReleaseAfterClose>
 				</configuration>
 			</plugin>
 		</plugins>

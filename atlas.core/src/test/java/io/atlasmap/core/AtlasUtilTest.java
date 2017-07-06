@@ -99,5 +99,14 @@ public class AtlasUtilTest {
 			assertNull(params.get("blah"));
 		}
 	}
+	
+	@Test
+	public void testFindClassesForPackage() {
+	    List<Class<?>> classes = AtlasUtil.findClassesForPackage("io.atlasmap.v2");
+	    assertNotNull(classes);
+	    for(Class<?> clazz : classes) {
+	        System.out.println("Class: " + clazz.getName());
+	    }
+	}
 
 }

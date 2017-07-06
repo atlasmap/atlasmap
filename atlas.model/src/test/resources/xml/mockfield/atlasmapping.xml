@@ -16,7 +16,7 @@
     limitations under the License.
 
 -->
-<AtlasMapping xmlns="http://io.atlasmap/v2" name="junit">
+<AtlasMapping xmlns="http://atlasmap.io/v2" name="junit">
 	<FieldMappings>
 		<FieldMapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="MapFieldMapping">
 			<InputField>

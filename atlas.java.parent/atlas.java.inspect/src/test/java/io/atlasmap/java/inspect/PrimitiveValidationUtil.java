@@ -15,25 +15,26 @@
  */
 package io.atlasmap.java.inspect;
 
-import static org.junit.Assert.*;
-
 import io.atlasmap.java.v2.AtlasJavaModelFactory;
 import io.atlasmap.java.v2.JavaClass;
+import io.atlasmap.v2.CollectionType;
+
+import static org.junit.Assert.*;
 
 public class PrimitiveValidationUtil {
 
 	public static void validatePrimitive(JavaClass j, String name) {
 		validatePrimitiveCommon(j);
 		assertEquals(name, j.getClassName());
-		assertFalse(j.isArray());
+		assertNull(j.getCollectionType());
 		assertNull(j.getArrayDimensions());
 	}
 	
 	public static void validatePrimitiveArray(JavaClass j, String name, int dim) {
 		validatePrimitiveCommon(j);
 		assertEquals(name, j.getClassName());
-		assertTrue(j.isArray());
 		assertEquals(new Integer(dim), j.getArrayDimensions());
+		assertEquals(CollectionType.ARRAY, j.getCollectionType());
 	}
 	
 	protected static void validatePrimitiveCommon(JavaClass j) {
