@@ -12,6 +12,16 @@
     </jaxb:globalBindings>
  
     <!-- Annotate the following classes with XmlRootElement -->
+    <jaxb:bindings schemaLocation="atlas-actions-v2.xsd" node="/xs:schema">
+        <jaxb:bindings node="xs:complexType[@name='Actions']">
+            <annox:annotate><annox:annotate annox:class="com.fasterxml.jackson.databind.annotation.JsonSerialize" using="ActionsJsonSerializer"></annox:annotate></annox:annotate>
+            <annox:annotate><annox:annotate annox:class="com.fasterxml.jackson.databind.annotation.JsonDeserialize" using="ActionsJsonDeserializer"></annox:annotate></annox:annotate>
+        </jaxb:bindings>
+        <jaxb:bindings node="xs:complexType[@name='Actions']//xs:choice">
+            <jaxb:property name="actions"/>
+        </jaxb:bindings>
+    </jaxb:bindings>
+    
     <jaxb:bindings schemaLocation="atlas-model-v2.xsd" node="/xs:schema">
         <jaxb:bindings node="xs:complexType[@name='AtlasMapping']">
 			<annox:annotate><annox:annotate annox:class="javax.xml.bind.annotation.XmlRootElement" name="AtlasMapping" /></annox:annotate>
@@ -21,30 +31,21 @@
 		<jaxb:bindings node="xs:complexType[@name='Field']">
 			<annox:annotate><annox:annotate annox:class="com.fasterxml.jackson.annotation.JsonTypeInfo" use="CLASS" include="PROPERTY" property="jsonType"></annox:annotate></annox:annotate>		
         </jaxb:bindings>
-		<jaxb:bindings node="xs:complexType[@name='FieldAction']">
+		<jaxb:bindings node="xs:complexType[@name='BaseMapping']">
 			<annox:annotate><annox:annotate annox:class="com.fasterxml.jackson.annotation.JsonTypeInfo" use="CLASS" include="PROPERTY" property="jsonType"></annox:annotate></annox:annotate>		
         </jaxb:bindings>
-		<jaxb:bindings node="xs:complexType[@name='FieldMapping']">
-			<annox:annotate><annox:annotate annox:class="com.fasterxml.jackson.annotation.JsonTypeInfo" use="CLASS" include="PROPERTY" property="jsonType"></annox:annotate></annox:annotate>		
+        <jaxb:bindings node="xs:complexType[@name='DataSource']">
+            <annox:annotate><annox:annotate annox:class="com.fasterxml.jackson.annotation.JsonTypeInfo" use="CLASS" include="PROPERTY" property="jsonType"></annox:annotate></annox:annotate>       
         </jaxb:bindings>
-		<jaxb:bindings node="xs:complexType[@name='LookupFieldMapping']">
-			<annox:annotate><annox:annotate annox:class="com.fasterxml.jackson.annotation.JsonRootName">io.atlasmap.v2.MapFieldMapping</annox:annotate></annox:annotate>
+        <jaxb:bindings node="xs:complexType[@name='Mapping']">
+            <annox:annotate><annox:annotate annox:class="com.fasterxml.jackson.annotation.JsonTypeInfo" use="CLASS" include="PROPERTY" property="jsonType"></annox:annotate></annox:annotate>       
         </jaxb:bindings>
-        <jaxb:bindings node="xs:complexType[@name='MapFieldMapping']">
-			<annox:annotate><annox:annotate annox:class="com.fasterxml.jackson.annotation.JsonRootName">io.atlasmap.v2.MapFieldMapping</annox:annotate></annox:annotate>
-        </jaxb:bindings>
-		<jaxb:bindings node="xs:complexType[@name='CombineFieldMapping']">
-			<annox:annotate><annox:annotate annox:class="com.fasterxml.jackson.annotation.JsonTypeInfo" use="CLASS" include="PROPERTY" property="jsonType"></annox:annotate></annox:annotate>		
-        </jaxb:bindings>
-		<jaxb:bindings node="xs:complexType[@name='SeparateFieldMapping']">
-			<annox:annotate><annox:annotate annox:class="com.fasterxml.jackson.annotation.JsonTypeInfo" use="CLASS" include="PROPERTY" property="jsonType"></annox:annotate></annox:annotate>		
+        <jaxb:bindings node="xs:complexType[@name='Collection']">
+            <annox:annotate><annox:annotate annox:class="com.fasterxml.jackson.annotation.JsonTypeInfo" use="CLASS" include="PROPERTY" property="jsonType"></annox:annotate></annox:annotate>       
         </jaxb:bindings>
         <jaxb:bindings node="xs:complexType[@name='Document']">
 			<annox:annotate><annox:annotate annox:class="javax.xml.bind.annotation.XmlRootElement" name="Document" /></annox:annotate>
 			<annox:annotate><annox:annotate annox:class="com.fasterxml.jackson.annotation.JsonRootName">Document</annox:annotate></annox:annotate>
-			<annox:annotate><annox:annotate annox:class="com.fasterxml.jackson.annotation.JsonTypeInfo" use="CLASS" include="PROPERTY" property="jsonType"></annox:annotate></annox:annotate>		
-        </jaxb:bindings>
-        <jaxb:bindings node="xs:complexType[@name='MappedField']">
 			<annox:annotate><annox:annotate annox:class="com.fasterxml.jackson.annotation.JsonTypeInfo" use="CLASS" include="PROPERTY" property="jsonType"></annox:annotate></annox:annotate>		
         </jaxb:bindings>
 		<jaxb:bindings node="xs:complexType[@name='MockDocument']">
@@ -52,6 +53,12 @@
         </jaxb:bindings>
 		<jaxb:bindings node="xs:complexType[@name='MockField']">
 			<annox:annotate><annox:annotate annox:class="com.fasterxml.jackson.annotation.JsonRootName">io.atlasmap.v2.MockField</annox:annotate></annox:annotate>
+        </jaxb:bindings>
+        <jaxb:bindings node="xs:complexType[@name='PropertyField']">
+            <annox:annotate><annox:annotate annox:class="com.fasterxml.jackson.annotation.JsonRootName">io.atlasmap.v2.PropertyField</annox:annotate></annox:annotate>
+        </jaxb:bindings>
+        <jaxb:bindings node="xs:complexType[@name='ConstantField']">
+            <annox:annotate><annox:annotate annox:class="com.fasterxml.jackson.annotation.JsonRootName">io.atlasmap.v2.ConstantField</annox:annotate></annox:annotate>
         </jaxb:bindings>
 		<jaxb:bindings node="xs:complexType[@name='StringList']">
 			<annox:annotate><annox:annotate annox:class="javax.xml.bind.annotation.XmlRootElement" name="StringList" /></annox:annotate>
@@ -61,5 +68,21 @@
 			<annox:annotate><annox:annotate annox:class="javax.xml.bind.annotation.XmlRootElement" name="StringMap" /></annox:annotate>
 			<annox:annotate><annox:annotate annox:class="com.fasterxml.jackson.annotation.JsonRootName">StringMap</annox:annotate></annox:annotate>
         </jaxb:bindings>
+        <jaxb:bindings node="xs:complexType[@name='Validation']">
+            <annox:annotate><annox:annotate annox:class="javax.xml.bind.annotation.XmlRootElement" name="Validation" /></annox:annotate>
+            <annox:annotate><annox:annotate annox:class="com.fasterxml.jackson.annotation.JsonRootName">Validation</annox:annotate></annox:annotate>
+        </jaxb:bindings>
+        <jaxb:bindings node="xs:complexType[@name='Validations']">
+            <annox:annotate><annox:annotate annox:class="javax.xml.bind.annotation.XmlRootElement" name="Validations" /></annox:annotate>
+            <annox:annotate><annox:annotate annox:class="com.fasterxml.jackson.annotation.JsonRootName">Validations</annox:annotate></annox:annotate>
+        </jaxb:bindings> 
+        <jaxb:bindings node="xs:complexType[@name='ActionDetail']">
+            <annox:annotate><annox:annotate annox:class="javax.xml.bind.annotation.XmlRootElement" name="ActionDetail" /></annox:annotate>
+            <annox:annotate><annox:annotate annox:class="com.fasterxml.jackson.annotation.JsonRootName">ActionDetail</annox:annotate></annox:annotate>
+        </jaxb:bindings>
+        <jaxb:bindings node="xs:complexType[@name='ActionDetails']">
+            <annox:annotate><annox:annotate annox:class="javax.xml.bind.annotation.XmlRootElement" name="ActionDetails" /></annox:annotate>
+            <annox:annotate><annox:annotate annox:class="com.fasterxml.jackson.annotation.JsonRootName">ActionDetails</annox:annotate></annox:annotate>
+        </jaxb:bindings>   
     </jaxb:bindings>
 </jaxb:bindings>

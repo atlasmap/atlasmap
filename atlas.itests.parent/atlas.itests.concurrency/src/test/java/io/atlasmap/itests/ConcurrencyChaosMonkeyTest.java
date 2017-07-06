@@ -7,11 +7,11 @@ import io.atlasmap.core.DefaultAtlasContextFactory;
 import io.atlasmap.java.v2.JavaField;
 import io.atlasmap.v2.AtlasMapping;
 import io.atlasmap.v2.AtlasModelFactory;
+import io.atlasmap.v2.DataSource;
+import io.atlasmap.v2.DataSourceType;
 import io.atlasmap.v2.FieldType;
-import io.atlasmap.v2.MapAction;
-import io.atlasmap.v2.MapFieldMapping;
-import io.atlasmap.v2.MappedField;
-import io.atlasmap.v2.SeparateFieldMapping;
+import io.atlasmap.v2.Mapping;
+import io.atlasmap.v2.MappingType;
 
 import org.junit.After;
 import org.junit.Before;
@@ -21,15 +21,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import twitter4j.Status;
 
+import java.io.File;
+import java.net.URI;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
-/**
- */
 @Ignore(value = "Integration Test")
 public class ConcurrencyChaosMonkeyTest {
 
-    private AtlasContextFactory atlasContextFactory = null;
+    private DefaultAtlasContextFactory atlasContextFactory = null;
     private static final Logger logger = LoggerFactory.getLogger(ConcurrencyChaosMonkeyTest.class);
 
     @Before
@@ -47,7 +47,7 @@ public class ConcurrencyChaosMonkeyTest {
     public void chaosMonkeyTest_ManyContexts() throws Exception {
         long startTime = System.nanoTime();
 
-        AtlasMapping mapping1 = generateMapping();
+        URI mappingURI = generateMappingURI();
         Status twitterStatus = generateTwitterStatus();
         for (int i = 0; i < 256; i++) {
 
@@ -58,7 +58,7 @@ public class ConcurrencyChaosMonkeyTest {
                     for (int j = 0; j < 100000; j++) {
 
                         try {
-                            AtlasContext context = atlasContextFactory.createContext(mapping1);
+                            AtlasContext context = atlasContextFactory.createContext(mappingURI);
                             AtlasSession session = context.createSession();
                             session.setInput(twitterStatus);
                             context.process(session);
@@ -96,9 +96,9 @@ public class ConcurrencyChaosMonkeyTest {
     public void chaosMonkeyTest_ManyThreads() throws Exception {
         long startTime = System.nanoTime();
 
-        AtlasMapping mapping1 = generateMapping();
+        URI mappingURI = generateMappingURI();
         Status twitterStatus = generateTwitterStatus();
-        AtlasContext context = atlasContextFactory.createContext(mapping1);
+        AtlasContext context = atlasContextFactory.createContext(mappingURI);
         for (int i = 0; i < 256; i++) {
             Thread chaosMonkeyThread = new Thread("ChaosMonkeyThread-" + i) {
                 public void run() {
@@ -138,94 +138,86 @@ public class ConcurrencyChaosMonkeyTest {
 
     }
 
-
-    protected AtlasMapping generateMapping() throws Exception {
+    protected URI generateMappingURI() throws Exception {
         AtlasMapping mapping = AtlasModelFactory.createAtlasMapping();
 
         mapping.setName("mockMapping");
-        mapping.setSourceUri("atlas:java?className=twitter4j.Status");
-        mapping.setTargetUri("atlas:java?className=org.apache.camel.salesforce.dto.Contact");
-
-        SeparateFieldMapping sepMapping = AtlasModelFactory.createFieldMapping(SeparateFieldMapping.class);
-        MappedField nameField = AtlasModelFactory.createMappedField();
+        
+        DataSource src = new DataSource();
+        src.setDataSourceType(DataSourceType.SOURCE);
+        src.setUri("atlas:java?className=twitter4j.Status");
+        
+        DataSource tgt = new DataSource();
+        tgt.setDataSourceType(DataSourceType.TARGET);
+        tgt.setUri("atlas:java?className=org.apache.camel.salesforce.dto.Contact");
+        
+        mapping.getDataSource().add(src);
+        mapping.getDataSource().add(tgt);
+        
+        Mapping sepMapping = AtlasModelFactory.createMapping(MappingType.SEPARATE);
         JavaField jNameField = new JavaField();
         jNameField.setName("Name");
         jNameField.setPath("User.name");
         jNameField.setGetMethod("getName");
-        jNameField.setType(FieldType.STRING);
-        nameField.setField(jNameField);
+        jNameField.setFieldType(FieldType.STRING);
 
-        MappedField fnField = AtlasModelFactory.createMappedField();
         JavaField jFirstNameField = new JavaField();
         jFirstNameField.setName("FirstName");
         jFirstNameField.setPath("FirstName");
         jFirstNameField.setSetMethod("setFirstName");
-        jFirstNameField.setType(FieldType.STRING);
-        fnField.setField(jFirstNameField);
-
-        MapAction fnAction = new MapAction();
-        fnAction.setIndex(0);
-        fnField.getFieldActions().getFieldAction().add(fnAction);
-
-        MappedField lnField = AtlasModelFactory.createMappedField();
+        jFirstNameField.setFieldType(FieldType.STRING);
+        jFirstNameField.setIndex(0);
+        
         JavaField jLastNameField = new JavaField();
         jLastNameField.setName("LastName");
         jLastNameField.setPath("LastName");
         jLastNameField.setSetMethod("setLastName");
-        jLastNameField.setType(FieldType.STRING);
-        lnField.setField(jLastNameField);
-        MapAction lnAction = new MapAction();
-        lnAction.setIndex(1);
-        lnField.getFieldActions().getFieldAction().add(lnAction);
+        jLastNameField.setFieldType(FieldType.STRING);
+        jLastNameField.setIndex(1);
 
-        sepMapping.setInputField(nameField);
-        sepMapping.getOutputFields().getMappedField().add(fnField);
-        sepMapping.getOutputFields().getMappedField().add(lnField);
-        mapping.getFieldMappings().getFieldMapping().add(sepMapping);
+        sepMapping.getInputField().add(jNameField);
+        sepMapping.getOutputField().add(jFirstNameField);
+        sepMapping.getOutputField().add(jLastNameField);
+        mapping.getMappings().getMapping().add(sepMapping);
 
-        MapFieldMapping textDescMapping = AtlasModelFactory.createFieldMapping(MapFieldMapping.class);
-        MappedField textField = AtlasModelFactory.createMappedField();
+        Mapping textDescMapping = AtlasModelFactory.createMapping(MappingType.MAP);
         JavaField jTextField = new JavaField();
         jTextField.setName("Text");
         jTextField.setPath("Text");
         jTextField.setGetMethod("getText");
-        jTextField.setType(FieldType.STRING);
-        textField.setField(jTextField);
+        jTextField.setFieldType(FieldType.STRING);
 
-        MappedField descField = AtlasModelFactory.createMappedField();
         JavaField jDescField = new JavaField();
         jDescField.setName("Description");
         jDescField.setPath("description");
         jDescField.setSetMethod("setDescription");
-        jDescField.setType(FieldType.STRING);
-        descField.setField(jDescField);
+        jDescField.setFieldType(FieldType.STRING);
 
-        textDescMapping.setInputField(textField);
-        textDescMapping.setOutputField(descField);
-        mapping.getFieldMappings().getFieldMapping().add(textDescMapping);
+        textDescMapping.getInputField().add(jTextField);
+        textDescMapping.getOutputField().add(jDescField);
+        mapping.getMappings().getMapping().add(textDescMapping);
 
-        MapFieldMapping screenTitleMapping = AtlasModelFactory.createFieldMapping(MapFieldMapping.class);
-        MappedField screenField = AtlasModelFactory.createMappedField();
+        Mapping screenTitleMapping = AtlasModelFactory.createMapping(MappingType.MAP);
         JavaField jScreenField = new JavaField();
         jScreenField.setName("ScreenName");
         jScreenField.setPath("User.screenName");
         jScreenField.setGetMethod("getScreenName");
-        jScreenField.setType(FieldType.STRING);
-        screenField.setField(jScreenField);
+        jScreenField.setFieldType(FieldType.STRING);
 
-        MappedField titleField = AtlasModelFactory.createMappedField();
         JavaField jTitleField = new JavaField();
         jTitleField.setName("Title");
         jTitleField.setPath("Title");
         jTitleField.setSetMethod("setTitle");
-        jTitleField.setType(FieldType.STRING);
-        titleField.setField(jTitleField);
+        jTitleField.setFieldType(FieldType.STRING);
 
-        screenTitleMapping.setInputField(screenField);
-        screenTitleMapping.setOutputField(titleField);
-        mapping.getFieldMappings().getFieldMapping().add(screenTitleMapping);
-
-        return mapping;
+        screenTitleMapping.getInputField().add(jScreenField);
+        screenTitleMapping.getOutputField().add(jTitleField);
+        mapping.getMappings().getMapping().add(screenTitleMapping);
+        
+        File mappingFile = new File("target/junit-atlasmapping.xml"); 
+        atlasContextFactory.getMappingService().saveMappingAsFile(mapping, mappingFile);
+        
+        return mappingFile.toURI();
     }
 
     protected Status generateTwitterStatus() {

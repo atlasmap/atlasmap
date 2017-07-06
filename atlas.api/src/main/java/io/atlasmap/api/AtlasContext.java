@@ -18,7 +18,7 @@ package io.atlasmap.api;
 public interface AtlasContext {
 
 	AtlasContextFactory getContextFactory();
-	AtlasSession createSession();
+	AtlasSession createSession() throws AtlasException;
 	void process(AtlasSession session) throws AtlasException;
-
+    void processValidation(AtlasSession session) throws AtlasException;
 }

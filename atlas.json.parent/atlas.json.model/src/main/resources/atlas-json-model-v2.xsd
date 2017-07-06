@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright (C) 2017 Red Hat, Inc.
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+            http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+<schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:atlas="http://atlasmap.io/v2"
+	xmlns:atlasjs="http://atlasmap.io/json/v2" targetNamespace="http://atlasmap.io/json/v2"
+	elementFormDefault="qualified" attributeFormDefault="unqualified">
+
+	<import namespace="http://atlasmap.io/v2" schemaLocation="http://atlasmap.io/v2/atlas-model-v2.xsd" />
+
+	<complexType name="JsonDocument">
+		<complexContent>
+			<extension base="atlas:Document" />
+		</complexContent>
+	</complexType>
+
+	<complexType name="JsonFields">
+		<sequence>
+			<element name="JsonField" type="atlasjs:JsonField" minOccurs="0" maxOccurs="unbounded" />
+		</sequence>
+	</complexType>
+
+	<complexType name="JsonField">
+		<complexContent>
+			<extension base="atlas:Field">
+				<attribute name="name" type="string" use="required" />
+				<attribute name="primitive" type="boolean" use="optional" />
+                <attribute name="typeName" type="string" use="optional" />
+                <attribute name="userCreated" type="boolean" use="optional" />
+			</extension>
+		</complexContent>
+	</complexType>
+	
+	<complexType name="JsonComplexType">
+		<complexContent>
+			<extension base="atlasjs:JsonField">
+				<sequence>
+					<element name="JsonFields" type="atlasjs:JsonFields" minOccurs="1" maxOccurs="1" />
+				</sequence>
+				<attribute name="uri" type="string" use="optional" />
+			</extension>
+		</complexContent>
+	</complexType>
+	
+    <complexType name="JsonInspectionRequest">
+        <sequence>
+            <element name="FieldNameBlacklist" type="atlas:StringList" minOccurs="0" maxOcurs="1" />
+            <element name="TypeNameBlacklist" type="atlas:StringList" minOccurs="0" maxOcurs="1" />
+            <element name="NamespaceBlacklist" type="atlas:StringList" minOccurs="0" maxOcurs="1" />
+            <element name="JsonData" type="string" minOccurs="0" maxOccurs="1" />
+        </sequence>
+        <attribute name="uri" type="string" use="optional" />
+        <attribute name="type" type="atlasjs:InspectionType" use="required" />
+    </complexType>
+    
+    <complexType name="JsonInspectionResponse">
+        <sequence>
+            <element name="JsonDocument" type="atlasjs:JsonDocument" minOccurs="0" maxOccurs="1" />
+        </sequence>
+        <attribute name="errorMessage" type="string" use="optional" />
+        <attribute name="executionTime" type="long" use="optional" />
+    </complexType>
+    
+    <simpleType name="InspectionType">
+        <restriction base="string">
+            <enumeration value="All" />
+            <enumeration value="Instance" />
+            <enumeration value="Schema" />
+            <enumeration value="None" />
+        </restriction>
+    </simpleType>
+    
+</schema>

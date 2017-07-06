@@ -17,8 +17,9 @@ package io.atlasmap.spi;
 
 public enum AtlasModuleMode {
 	SOURCE("source"),
-	TARGET("target");
-	
+	TARGET("target"),
+	UNSET("unset");
+
 	private final String mode;
 	
 	AtlasModuleMode(String mode) {

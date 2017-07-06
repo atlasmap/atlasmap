@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ns:XmlOE xmlns:ns="http://atlasmap.io/xml/test/v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://atlasmap.io/xml/test/v2 atlas-xml-test-model-v2.xsd ">
+  <ns:orderId>8765309</ns:orderId>
+  <ns:Address>
+    <ns:addressLine1>123 Main St</ns:addressLine1>
+    <ns:addressLine2>Suite 42b</ns:addressLine2>
+    <ns:city>Anytown</ns:city>
+    <ns:state>NY</ns:state>
+    <ns:zipCode>90210</ns:zipCode>
+  </ns:Address>
+  <ns:Contact>
+    <ns:firstName>Ozzie</ns:firstName>
+    <ns:lastName>Smith</ns:lastName>
+    <ns:phoneNumber>5551212</ns:phoneNumber>
+    <ns:zipCode>81111</ns:zipCode>
+  </ns:Contact>
+</ns:XmlOE>

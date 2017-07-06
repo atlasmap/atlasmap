@@ -7,3 +7,5 @@ node_modules
 .idea
 *.iml
 pom.xml.versionsBackup
+
+.DS_Store

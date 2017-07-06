@@ -20,7 +20,7 @@
 	<parent>
 		<groupId>io.atlasmap</groupId>
 		<artifactId>atlas.parent</artifactId>
-		<version>1.11.5-SNAPSHOT</version>
+		<version>1.15.0-SNAPSHOT</version>
 		<relativePath>../atlas.parent/pom.xml</relativePath>
 	</parent>
 
@@ -36,7 +36,6 @@
 		<profile>
 			<id>fast</id>
 			<modules>
-				<module>atlas.javapath</module>
 				<module>atlas.java.model</module>
 				<module>atlas.java.test.model</module>
 				<module>atlas.java.inspect</module>
@@ -49,7 +48,6 @@
 				<activeByDefault>true</activeByDefault>
 			</activation>
 			<modules>
-				<module>atlas.javapath</module>
 				<module>atlas.java.model</module>
 				<module>atlas.java.test.model</module>
 				<module>atlas.java.inspect</module>

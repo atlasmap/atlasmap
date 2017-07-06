@@ -16,56 +16,44 @@
 package io.atlasmap.v2;
 
 import org.junit.Test;
-
 import io.atlasmap.v2.AtlasModelFactory;
-
 import static org.junit.Assert.*;
 
 public class AtlasModelFactoryTest {
 	
 	@Test
-	public void testCreateSeparateFieldMapping() {
-		SeparateFieldMapping fm = AtlasModelFactory.createFieldMapping(SeparateFieldMapping.class);
-		assertNotNull(fm);
-		assertNull(fm.getAlias());
-		assertNull(fm.getDescription());
-		assertNotNull(fm.getOutputFields());
-		assertNotNull(fm.getOutputFields().getMappedField());
-		assertNull(fm.getInputField());
-		assertEquals(new Integer(0), new Integer(fm.getOutputFields().getMappedField().size()));
+	public void testCreateSeparateMapping() {
+		Mapping fm = AtlasModelFactory.createMapping(MappingType.SEPARATE);
+		validateMapping(fm, MappingType.SEPARATE);
 	}
 	
 	@Test
-	public void testCreateMapFieldMapping() {
-		MapFieldMapping fm = AtlasModelFactory.createFieldMapping(MapFieldMapping.class);
-		assertNotNull(fm);
-		assertNull(fm.getAlias());
-		assertNull(fm.getDescription());
-		assertNull(fm.getOutputField());
-		assertNull(fm.getInputField());
+	public void testCreateMapMapping() {
+        Mapping fm = AtlasModelFactory.createMapping(MappingType.MAP);
+        validateMapping(fm, MappingType.MAP);
 	}
 	
 	@Test
-	public void testCreateCombineFieldMapping() {
-		CombineFieldMapping fm = AtlasModelFactory.createFieldMapping(CombineFieldMapping.class);
-		assertNotNull(fm);
-		assertNull(fm.getAlias());
-		assertNull(fm.getDescription());
-		assertNotNull(fm.getInputFields());
-		assertNotNull(fm.getInputFields().getMappedField());
-		assertNull(fm.getOutputField());
-		assertEquals(new Integer(0), new Integer(fm.getInputFields().getMappedField().size()));
+	public void testCreateCombineMapping() {
+        Mapping fm = AtlasModelFactory.createMapping(MappingType.COMBINE);
+        validateMapping(fm, MappingType.COMBINE);
 	}
 	
 	@Test
-	public void testCreateLookupFieldMapping() {
-		LookupFieldMapping fm = AtlasModelFactory.createFieldMapping(LookupFieldMapping.class);
-		assertNotNull(fm);
-		assertNull(fm.getInputField());
-		assertNull(fm.getOutputField());
-		assertNull(fm.getAlias());
-		assertNull(fm.getDescription());
-		assertNull(fm.getLookupTableName());
+	public void testCreateLookupMapping() {
+        Mapping fm = AtlasModelFactory.createMapping(MappingType.LOOKUP);
+        validateMapping(fm, MappingType.LOOKUP);
 	}
-
+	
+	protected void validateMapping(Mapping fm, MappingType type) {
+	    assertNotNull(fm);
+	    assertNotNull(fm.getMappingType());
+	    assertEquals(type, fm.getMappingType());
+	    assertNull(fm.getAlias());
+	    assertNull(fm.getDescription());
+	    assertNotNull(fm.getOutputField());
+	    assertNotNull(fm.getInputField());
+	    assertEquals(new Integer(0), new Integer(fm.getOutputField().size()));
+	    assertEquals(new Integer(0), new Integer(fm.getOutputField().size()));
+	}
 }

@@ -15,12 +15,13 @@
     limitations under the License.
 
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>io.atlasmap</groupId>
 		<artifactId>atlas</artifactId>
-		<version>1.11.5-SNAPSHOT</version>
+		<version>1.15.0-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
@@ -32,7 +33,8 @@
 		<at.slf4j.version>1.7.23</at.slf4j.version>
 		<at.jackson.version>2.8.5</at.jackson.version>
 		<at.jackson.version.range>[2.6,3)</at.jackson.version.range>
-		<at.jaxb.version>2.2.12</at.jaxb.version>
+		<at.jaxb-api.version>2.2.12</at.jaxb-api.version>
+        <at.jaxb-impl.version>2.1</at.jaxb-impl.version>
 		<at.jaxb.version.range>[2.2,3)</at.jaxb.version.range>
 		<at.jcl.version>2.8</at.jcl.version>
 		<at.junit.version>4.11</at.junit.version>
@@ -75,8 +77,13 @@
 			<dependency>
 				<groupId>javax.xml.bind</groupId>
 				<artifactId>jaxb-api</artifactId>
-				<version>${at.jaxb.version}</version>
+				<version>${at.jaxb-api.version}</version>
 			</dependency>
+            <dependency>
+                <groupId>javax.xml</groupId>
+                <artifactId>jaxb-impl</artifactId>
+                <version>${at.jaxb-impl.version}</version>
+            </dependency>
 			<dependency>
 				<groupId>org.xeustechnologies</groupId>
 				<artifactId>jcl-core</artifactId>

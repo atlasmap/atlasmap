@@ -1,0 +1,9 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+
+    "title": "TargetContact",
+    "type": "object",
+    "extends": {
+        "$ref": "BaseContact.jsd"
+    }     
+}

@@ -18,6 +18,7 @@ package io.atlasmap.mxbean;
 public interface AtlasContextMXBean {
 	public String getUuid();
 	public String getMappingName();
+	public String getMappingUri();
 	public String getClassName();
 	public String getThreadName();
 	public String getVersion();

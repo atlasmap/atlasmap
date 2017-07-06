@@ -1,7 +1,0 @@
-{
-	"io.atlasmap.v2.MockField": {
-		"jsonType": "io.atlasmap.v2.MockField",
-		"name": "foo",
-		"value": "bar"
-	}
-}

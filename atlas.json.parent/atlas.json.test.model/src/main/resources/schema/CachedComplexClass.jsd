@@ -1,0 +1,19 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    
+    "title": "CachedComplexClass",
+    "type": "object",
+    "additionalProperties": true,
+    "properties": {
+    
+        "primaryAddress": {
+            "$ref": "BaseAddress.jsd" 
+        },
+        "primaryContact": {
+            "$ref": "BaseContact.jsd"
+        },
+        "testOrder": {
+            "$ref": "BaseOrder.jsd"
+        }
+    }
+}

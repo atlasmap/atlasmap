@@ -1,0 +1,22 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    
+    "title": "BaseContact",
+    "type": "object",
+    "additionalProperties": true,
+    "properties": {
+    
+        "firstName": {
+            "type": "string"
+        },
+        "lastName": {
+            "type": "string"
+        },
+        "phoneNumber": {
+            "type": "string"
+        },
+        "zipCode": {
+            "type": "string"
+        }
+    }
+}

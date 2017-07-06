@@ -20,7 +20,7 @@
 	<parent>
 		<groupId>io.atlasmap</groupId>
 		<artifactId>atlas.mock.parent</artifactId>
-		<version>1.11.5-SNAPSHOT</version>
+		<version>1.15.0-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
@@ -29,22 +29,26 @@
 	<name>Atlas :: Mock Module</name>
 
 	<properties>
-		<at.osgi.export.pkg>io.atlasmap.mock.module</at.osgi.export.pkg>
-		<at.osgi.import.pkg>io.atlasmap.v2;version="${at.atlas.version.range}",io.atlasmap.mock.v2;version="${at.atlas.version.range}",io.atlasmap.api;version="${at.atlas.version.range}"</at.osgi.import.pkg>
+		<at.osgi.export.pkg>io.atlasmap.mock.v2</at.osgi.export.pkg>
+		<at.osgi.import.pkg>io.atlasmap.v2;version="${at.atlas.version.range}",io.atlasmap.api.v2;version="${at.atlas.version.range}"</at.osgi.import.pkg>
 	</properties>
 
 	<dependencies>
 		<dependency>
 			<groupId>io.atlasmap</groupId>
-			<artifactId>atlas.api</artifactId>
+			<artifactId>atlas.model</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>io.atlasmap</groupId>
-			<artifactId>atlas.mock.model</artifactId>
+			<artifactId>atlas.api</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		
+    <dependency>
+      <groupId>io.atlasmap</groupId>
+      <artifactId>atlas.core</artifactId>
+      <version>${project.version}</version>
+    </dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
