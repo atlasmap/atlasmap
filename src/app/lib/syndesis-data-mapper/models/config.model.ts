@@ -22,8 +22,6 @@ import { ErrorHandlerService } from '../services/error.handler.service';
 import { DocumentManagementService } from '../services/document.management.service';
 import { MappingManagementService } from '../services/mapping.management.service';
 import { InitializationService } from '../services/initialization.service';
-import { ValidationService } from '../services/validation.service';
-import { FieldActionService } from '../services/field.action.service';
 
 export class DataMapperInitializationModel {
     public initialized: boolean = false;
@@ -35,7 +33,7 @@ export class DataMapperInitializationModel {
     public baseJSONInspectionServiceUrl: string;    
     public baseMappingServiceUrl: string;
     public baseValidationServiceUrl: string;
-    public baseFieldMappingServiceUrl: string;
+    public baseFieldActionServiceUrl: string;
 
     /* class path fetching configuration */
     public classPathFetchTimeoutInMilliseconds: number = 30000;
@@ -81,8 +79,6 @@ export class ConfigModel {
     public mappingService: MappingManagementService;
     public errorService: ErrorHandlerService;
     public initializationService: InitializationService;
-    public validationService: ValidationService;
-    public fieldActionService: FieldActionService
 
     public sourceDocs: DocumentDefinition[] = [];
     public targetDocs: DocumentDefinition[] = [];
