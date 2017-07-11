@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<x:orders xmlns:y="http://www.example.com/y/"
-          xmlns:x="http://www.example.com/x/"
-          totalCost="12525.00">
-  <order>
-    <y:id custId="a">12312</y:id>
-    <y:id custId="b">4423423</y:id>
-  </order>
-</x:orders>

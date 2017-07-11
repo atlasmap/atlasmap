@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<ns:XmlCE xmlns:ns="http://atlasmap.io/xml/test/v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://atlasmap.io/xml/test/v2 atlas-xml-test-model-v2.xsd ">
-  <ns:firstName>ns:firstName</ns:firstName>
-  <ns:lastName>ns:lastName</ns:lastName>
-  <ns:phoneNumber>ns:phoneNumber</ns:phoneNumber>
-  <ns:zipCode>ns:zipCode</ns:zipCode>
-</ns:XmlCE>

@@ -1,9 +1,0 @@
-{
-    "$schema": "http://json-schema.org/draft-04/schema#",
-
-    "title": "SourceFlatPrimitive",
-    "type": "object",
-    "extends": {
-        "$ref": "BaseFlatPrimitive.jsd"
-    }     
-}
