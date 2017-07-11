@@ -48,3 +48,8 @@ testem.log
 #System Files
 .DS_Store
 Thumbs.db
+
+# don't ignore these
+!/src/systemjs.config.js
+!/src/app/lib/patternfly-3.19.0/**/*.js
+!/src/app/lib/patternfly-3.19.0/*.js
