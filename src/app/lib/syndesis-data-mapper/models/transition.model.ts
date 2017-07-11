@@ -125,7 +125,7 @@ export class FieldActionConfig {
 }
 
 export enum TransitionMode { MAP, SEPARATE, ENUM, COMBINE }
-export enum TransitionDelimiter { COLON, COMMA, DASH, NONE, PERIOD, SEMICOLON, SPACE, UNDERSCORE }
+export enum TransitionDelimiter { NONE, COLON, COMMA, MULTISPACE, SPACE }
 
 export class TransitionDelimiterModel {
     public delimiter: TransitionDelimiter = TransitionDelimiter.SPACE;
@@ -150,15 +150,12 @@ export class TransitionModel {
     public constructor() { 
         if (TransitionModel.delimiterModels.length == 0) {
             var models: TransitionDelimiterModel[] = [];
-            models.push(new TransitionDelimiterModel(TransitionDelimiter.COLON, "COLON", "Colon"));
-            models.push(new TransitionDelimiterModel(TransitionDelimiter.COMMA, "COMMA", "Comma"));
-            models.push(new TransitionDelimiterModel(TransitionDelimiter.DASH, "DASH", "Dash"));
-            models.push(new TransitionDelimiterModel(TransitionDelimiter.NONE, "NONE", "None"));
-            models.push(new TransitionDelimiterModel(TransitionDelimiter.PERIOD, "PERIOD", "Period"));
-            models.push(new TransitionDelimiterModel(TransitionDelimiter.SEMICOLON, "SEMICOLON", "Semicolon"));
-            models.push(new TransitionDelimiterModel(TransitionDelimiter.SPACE, "SPACE", "Space"));
-            models.push(new TransitionDelimiterModel(TransitionDelimiter.UNDERSCORE, "UNDERSCORE", "Underscore"));
-            TransitionModel.delimiterModels = models;
+            models.push(new TransitionDelimiterModel(TransitionDelimiter.NONE, null, "[None]"));
+            models.push(new TransitionDelimiterModel(TransitionDelimiter.COLON, "Colon", "Colon"));
+            models.push(new TransitionDelimiterModel(TransitionDelimiter.COMMA, "Comma", "Comma"));
+            models.push(new TransitionDelimiterModel(TransitionDelimiter.MULTISPACE, "MultiSpace", "Multispace"));
+            models.push(new TransitionDelimiterModel(TransitionDelimiter.SPACE, "Space", "Space"));
+            TransitionModel.delimiterModels = models;    
         }
     }
 
