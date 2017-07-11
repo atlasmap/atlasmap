@@ -18,9 +18,9 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpModule } from '@angular/http';
 import { FormsModule } from '@angular/forms';
-import { TypeaheadModule } from 'ng2-bootstrap';
-import { TooltipModule } from 'ng2-bootstrap';
-import { DropdownModule } from 'ng2-bootstrap';
+import { TypeaheadModule } from 'ngx-bootstrap';
+import { TooltipModule } from 'ngx-bootstrap';
+import { DropdownModule } from 'ngx-bootstrap';
 
 import { DocumentManagementService } from './services/document.management.service';
 import { MappingManagementService } from './services/mapping.management.service';

@@ -27,7 +27,7 @@ export default {
           'node_modules/rxjs/**',
           'node_modules/moment/**',
           'node_modules/ng2-truncate/dist/**',
-          'node_modules/ng2-bootstrap/**',
+          'node_modules/ngx-bootstrap/**',
         ],
         namedExports: {
         }
