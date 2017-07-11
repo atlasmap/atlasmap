@@ -25,7 +25,6 @@ import { ErrorInfo } from '../../models/error.model';
 
 import { MappingManagementService } from '../../services/mapping.management.service';
 import { DocumentManagementService } from '../../services/document.management.service';
-import { ValidationService } from '../../services/validation.service';
 
 import { DataMapperAppComponent } from '../data.mapper.app.component';
 
