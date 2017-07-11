@@ -235,8 +235,10 @@ export class MappingSerializer {
                     var actionJson: any = {};
                     actionJson[action.config.name] = actionArguments;
                     actions.push(actionJson);
-                }               
-                serializedField["actions"] = actions;
+                } 
+                if (actions.length > 0) {              
+                    serializedField["actions"] = actions;
+                }
             }
 
             fieldsJson.push(serializedField);

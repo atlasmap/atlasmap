@@ -50,12 +50,8 @@ import { LookupTableComponent } from './lookup.table.component';
                         [ngModel]="fieldPair.transition.delimiter">
                         <option value="{{delimeters.COLON}}">Colon</option>
                         <option value="{{delimeters.COMMA}}">Comma</option>                                                
-                        <option value="{{delimeters.DASH}}">Dash</option>
-                        <option value="{{delimeters.NONE}}">None</option>
-                        <option value="{{delimeters.PERIOD}}">Period</option>
-                        <option value="{{delimeters.SEMICOLON}}">Semicolon</option>
+                        <option value="{{delimeters.MULTISPACE}}">Multispace</option>                                                
                         <option value="{{delimeters.SPACE}}">Space</option>
-                        <option value="{{delimeters.UNDERSCORE}}">Underscore</option>
                     </select>
                 </div>
             </div>
