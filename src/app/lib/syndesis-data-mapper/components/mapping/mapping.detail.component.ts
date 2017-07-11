@@ -51,7 +51,8 @@ import { MappingSelectionComponent } from './mapping.selection.component';
                 <div class="clear"></div>
 
                 <mapping-field-detail [fieldPair]="fieldPair" [cfg]="cfg" [isSource]="isSource" [mappedField]="mappedField"></mapping-field-detail>
-                <mapping-field-action [mappedField]="mappedField" [cfg]="cfg" [isSource]="isSource" ></mapping-field-action>
+                <mapping-field-action [mappedField]="mappedField" [cfg]="cfg" [isSource]="isSource" 
+                    [fieldPair]="fieldPair"></mapping-field-action>
             </div>
             <!-- add button -->
             <div class="linkContainer" *ngIf="isAddButtonVisible()">

@@ -134,9 +134,6 @@ export class DocumentFieldDetailComponent {
         if (!this.field.isSource()) {
             cssClass += " outputField";
         }
-        if (!this.field.availableForSelection) {
-            cssClass += " disableSelection";
-        }
         return cssClass;
     }
 
@@ -203,7 +200,7 @@ export class DocumentFieldDetailComponent {
             } else {
                 var fieldComponent: FieldEditComponent = mw.nestedComponent as FieldEditComponent;
                 fieldComponent.isSource = self.field.isSource();
-                fieldComponent.initialize(self.field, this.field.docDef);
+                fieldComponent.initialize(self.field, this.field.docDef, false);
             }
         };
         this.modalWindow.nestedComponentType = isProperty ? PropertyFieldEditComponent 

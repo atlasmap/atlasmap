@@ -128,34 +128,22 @@ export class MappingManagementService {
                 observer.complete();
             });
         });
-    }
-
-    
+    }    
 
     public saveCurrentMapping(): void {
-        var m: MappingModel = this.cfg.mappings.activeMapping;
-        if ((m != null) && (this.cfg.mappings.mappings.indexOf(m) == -1)) {
-            var inputFieldExists: boolean = false;
-            for (let mappedField of m.getMappedFields(true)) {
-                if (mappedField.field != DocumentDefinition.getNoneField()) {
-                    inputFieldExists = true;
-                    break;
-                }
-            }
+        var activeMapping: MappingModel = this.cfg.mappings.activeMapping;
+        if ((activeMapping != null) && (this.cfg.mappings.mappings.indexOf(activeMapping) == -1)) {
+            this.cfg.mappings.mappings.push(activeMapping);
+        }
 
-            var outputFieldExists: boolean = false;
-            for (let mappedField of m.getMappedFields(false)) {
-                if (mappedField.field != DocumentDefinition.getNoneField()) {
-                    outputFieldExists = true;
-                    break;
-                }
-            }
-
-            if (outputFieldExists && inputFieldExists) {
-                console.log("Saving current mapping.");
-                this.cfg.mappings.mappings.push(m);
+        var newMappings: MappingModel[] = [];
+        for (let m of this.cfg.mappings.mappings) {
+            if (m.hasFullyMappedPair()) {
+                newMappings.push(m);
             }
         }
+
+        this.cfg.mappings.mappings = newMappings;
 
         this.saveMappingSource.next(null);
     }
@@ -231,28 +219,37 @@ export class MappingManagementService {
             return;
         }
 
-        if (!field.availableForSelection) {
-            this.cfg.errorService.warn("This field cannot be selected, " + field.selectionExclusionReason + ": " + field.displayName, null);
-            return;
-        }
-
         var mapping: MappingModel = this.cfg.mappings.activeMapping;
+        
         if (mapping == null) {
             var mappingsForField: MappingModel[] = this.cfg.mappings.findMappingsForField(field);
             if (mappingsForField && mappingsForField.length > 1) {
                 console.log("Found " + mappingsForField.length + " existing mappings for selected field, prompting for mapping selection.",
                     { "field": field, "mappings": mappingsForField });
-                this.mappingSelectionRequiredSource.next(field);
+                this.mappingSelectionRequiredSource.next(field);                
                 return;
             } else if (mappingsForField && mappingsForField.length == 1) {
                 console.log("Found existing mapping for selected field.", { "field": field, "mappings": mappingsForField });
                 mapping = mappingsForField[0];
-            }
-            if (mapping == null) {
-                this.addNewMapping(field);
-                return;
-            }
-            this.selectMapping(mapping);
+            }            
+        }        
+
+        if (mapping != null && mapping.hasMappedFields(field.isSource()) 
+            && !mapping.isFieldMapped(field, field.isSource())) {
+            var type: string = field.isSource() ? "source" : "target";
+            console.log("Discarding mapping, it already has a " + type + " field mapped.");
+            mapping = null;
+        }
+
+        if (mapping == null) {
+            this.addNewMapping(field);
+            return;
+        }
+
+        //check to see if field is a valid selection for this mapping
+        var exclusionReason: string = mapping.getFieldSelectionExclusionReason(field);
+        if (exclusionReason != null) {
+            this.cfg.errorService.warn("The field '" + field.displayName + "' cannot be selected, " + exclusionReason + ".", null);
             return;
         }
 

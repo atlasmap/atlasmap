@@ -54,6 +54,7 @@ export class DataMapperAppExampleHostComponent {
         //initialize base urls for our service calls
         c.initCfg.baseJavaInspectionServiceUrl = "http://localhost:8585/v2/atlas/java/";
         c.initCfg.baseXMLInspectionServiceUrl = "http://localhost:8585/v2/atlas/xml/";
+        c.initCfg.baseJSONInspectionServiceUrl = "http://localhost:8585/v2/atlas/json/";        
         c.initCfg.baseMappingServiceUrl = "http://localhost:8585/v2/atlas/";
         c.initCfg.baseValidationServiceUrl = "http://localhost:8585/v2/atlas/";
         c.initCfg.baseFieldMappingServiceUrl = "http://localhost:8585/v2/atlas/"
@@ -65,19 +66,20 @@ export class DataMapperAppExampleHostComponent {
         // if classPath is specified, maven call to resolve pom will be skipped
         c.initCfg.classPath = null;
 
-        //specify source/target documents
-        //c.addDoc("twitter4j.Status", true);             
+        //specify source/target documents          
            
         c.addJavaDocument("io.atlasmap.java.test.SourceOrder", true);                
-        //c.addJavaDocument("io.atlasmap.java.test.SourceContact", true);
+        
+        c.addJavaDocument("io.atlasmap.java.test.SourceContact", true);
         c.addJavaDocument("io.atlasmap.java.test.SourceAddress", true);
         c.addJavaDocument("io.atlasmap.java.test.TestListOrders", true);
         //c.addJavaDocument("io.atlasmap.java.test.TestListOrders", false);
-        //c.addJavaDocument("io.atlasmap.java.test.TargetOrderArray", true);
+        c.addJavaDocument("io.atlasmap.java.test.TargetOrderArray", true);
         c.addJavaDocument("io.atlasmap.java.test.SourceFlatPrimitiveClass", true);        
         
-        //c.addJavaDocument("io.atlasmap.java.test.TargetTestClass", true);
-        //c.addJavaDocument("io.atlasmap.java.test.TargetTestClass", false);
+        c.addJavaDocument("io.atlasmap.java.test.TargetTestClass", true);
+        c.addJavaDocument("io.atlasmap.java.test.TargetTestClass", false);
+        
 
         var sampleXML: string = `<data>
                 <intField a='1'>32000</intField><longField>12421</longField>
@@ -107,6 +109,14 @@ export class DataMapperAppExampleHostComponent {
             </ns:XmlOE>
         `;
 
+        //c.addXMLDocument("XMLSampleInstanceTarget", sampleXML, false, false);
+
+        sampleXML = `<?xml version="1.0" encoding="UTF-8" ?>
+            <foo>bar</foo>
+        `;
+
+        sampleXML = "<foo>bar</foo>";        
+
         sampleXML = `
             <XMLOrder>
               <orderId>orderId</orderId>
@@ -127,7 +137,7 @@ export class DataMapperAppExampleHostComponent {
         `;
 
         c.addXMLDocument("XMLSampleInstanceSource", sampleXML, true, false);
-        c.addXMLDocument("XMLSampleInstanceTarget", sampleXML, false, false);
+        
 
         sampleXML = `
             <foo><bar><jason>somevalue</jason></bar></foo>
@@ -161,9 +171,7 @@ export class DataMapperAppExampleHostComponent {
                 <longField>30000</longField>
                 <shortField>1</shortField>
             </ns:XmlFPE>
-        `;
-
-        //c.addXMLDocument("XMLSampleSchemaSource", sampleXML, true, true);
+        `;        
 
         sampleXML = `
             <xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified"
@@ -193,6 +201,8 @@ export class DataMapperAppExampleHostComponent {
                 <simpleType name="aGlobalType"><restriction base="string"/></simpleType>
             </schema>
         `;
+
+        //c.addXMLDocument("XMLSampleSchemaSource1", sampleXML, false, true);
 
         sampleXML = `
             <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
@@ -227,6 +237,8 @@ export class DataMapperAppExampleHostComponent {
             </xs:schema>
         `;
 
+        c.addXMLDocument("XMLSampleSchemaSource", sampleXML, false, true);
+
         sampleXML = `
             <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
                 <xs:element name="shiporder">
@@ -251,6 +263,34 @@ export class DataMapperAppExampleHostComponent {
                 </xs:element>
             </xs:schema>
         `;        
+
+        var sampleJSON: string = `{
+                "id": "0001",
+                "type": "donut",
+                "name": "Cake",
+                "ppu": 0.55,
+                "batters": {
+                    "batter": [
+                        { "id": "1001", "type": "Regular" },
+                        { "id": "1002", "type": "Chocolate" },
+                        { "id": "1003", "type": "Blueberry" },
+                        { "id": "1004", "type": "Devil's Food" }
+                    ]
+                },
+                "topping": [
+                    { "id": "5001", "type": "None" },
+                    { "id": "5002", "type": "Glazed" },
+                    { "id": "5005", "type": "Sugar" },
+                    { "id": "5007", "type": "Powdered Sugar" },
+                    { "id": "5006", "type": "Chocolate with Sprinkles" },
+                    { "id": "5003", "type": "Chocolate" },
+                    { "id": "5004", "type": "Maple" }
+                ]
+            }
+        `;
+
+        c.addJSONDocument("JSONSampleSource", sampleJSON, true);
+        //c.addJSONDocument("JSONSampleTarget", sampleJSON, false);
         
         console.log("Example config.", c);
 
