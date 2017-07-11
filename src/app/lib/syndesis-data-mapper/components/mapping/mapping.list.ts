@@ -38,7 +38,7 @@ import { DocumentDefinition } from '../../models/document.definition.model';
             </div>
         </template>
 
-        <label class="fieldPath" [tooltip]="tolTemplate" placement="right" [isDisabled]="!displayParentObject()">
+        <label class="fieldPath" [tooltip]="tolTemplate" placement="bottom" [isDisabled]="!displayParentObject()">
             {{ getFieldPath() }}
             <i class="fa fa-bolt" *ngIf="mappedField.actions.length != 0"></i>
         </label>

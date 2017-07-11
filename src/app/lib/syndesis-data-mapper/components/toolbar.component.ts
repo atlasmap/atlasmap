@@ -36,10 +36,10 @@ template: `
             <i *ngIf="cfg.getFirstXmlDoc(false)" [attr.class]="getCSSClass('showNamespaceTable')" 
                 (click)="toolbarButtonClicked('showNamespaceTable');"></i>
             <i [attr.class]="getCSSClass('showDetails')" (click)="toolbarButtonClicked('showDetails');"></i>            
-            <div dropdown placement="bottom right" style="display:inline;">
+            <div dropdown placement="bottom right" style="display:inline; position:relative;">
                 <i [attr.class]="getCSSClass('advancedMode')" dropdownToggle (click)="false"></i>
                 <!-- <a href dropdownToggle (click)="false">X</a> -->
-                <ul dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu">
+                <ul *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu">
                     <li role="menuitem" (click)="toolbarButtonClicked('showTypes');">
                         <div style="float:left">
                             <a class="dropdown-item" href="#">
