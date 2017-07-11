@@ -124,7 +124,7 @@ export class NamespaceListComponent {
         return this.searchMode ? this.searchResults : this.cfg.getFirstXmlDoc(false).namespaces;
     }
 
-    private addEditNamespace(ns: NamespaceModel, event: any): void {
+    public addEditNamespace(ns: NamespaceModel, event: any): void {
         event.stopPropagation();
         var isEditMode = (ns != null);
         if (!isEditMode) {

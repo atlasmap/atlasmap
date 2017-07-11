@@ -89,7 +89,7 @@ export class ToolbarComponent {
     @Input() lineMachine: LineMachineComponent;
     @Input() modalWindow: ModalWindowComponent;
 
-    private getCSSClass(action: string) {
+    public getCSSClass(action: string) {
         if ("showDetails" == action) {
             return "fa fa-exchange link" + (this.cfg.mappings.activeMapping ? " selected" : "");
         } else if ("showLines" == action) {

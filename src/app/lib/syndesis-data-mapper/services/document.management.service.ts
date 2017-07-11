@@ -338,7 +338,7 @@ export class DocumentManagementService {
         }
     }
 
-    public static generateMockInstanceXML(): String {
+    public static generateMockInstanceXML(): string {
         // here we have a bunch of examples we can use.
         var sampleXML: string = `<data>
                 <intField a='1'>32000</intField><longField>12421</longField>
