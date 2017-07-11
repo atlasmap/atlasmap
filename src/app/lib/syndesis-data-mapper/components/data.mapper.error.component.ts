@@ -38,11 +38,11 @@ export class DataMapperErrorComponent {
     @Input() public errorService: ErrorHandlerService;
     @Input() public isValidation: boolean = false;
 
-    private getErrors(): ErrorInfo[] {
+    public getErrors(): ErrorInfo[] {
         return this.isValidation ? this.errorService.validationErrors : this.errorService.errors;
     }
 
-    private handleClick(event: MouseEvent) {
+    public handleClick(event: MouseEvent) {
         // need to extract this so typescript doesnt throw compiler error
         var eventTarget: any = event.target;
         var errorIdentifier: string = eventTarget.attributes.getNamedItem("errorIdentifier").value;

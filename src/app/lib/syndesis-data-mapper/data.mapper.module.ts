@@ -26,8 +26,6 @@ import { DocumentManagementService } from './services/document.management.servic
 import { MappingManagementService } from './services/mapping.management.service';
 import { ErrorHandlerService } from './services/error.handler.service';
 import { InitializationService } from './services/initialization.service';
-import { ValidationService } from './services/validation.service';
-import { FieldActionService } from './services/field.action.service';
 
 import { DataMapperAppExampleHostComponent } from './components/data.mapper.example.host.component';
 import { DataMapperAppComponent } from './components/data.mapper.app.component';
@@ -59,7 +57,6 @@ export { ErrorHandlerService } from './services/error.handler.service';
 export { DocumentManagementService } from './services/document.management.service';
 export { MappingManagementService } from './services/mapping.management.service';
 export { InitializationService } from './services/initialization.service';
-export { ValidationService } from './services/validation.service';
 export { DocumentDefinition } from './models/document.definition.model';
 export { MappingDefinition } from './models/mapping.definition.model';
 export { ConfigModel } from './models/config.model';
@@ -116,9 +113,7 @@ export { DataMapperAppComponent } from './components/data.mapper.app.component';
         DocumentManagementService,
         MappingManagementService,
         ErrorHandlerService,
-        InitializationService,
-        ValidationService,
-        FieldActionService
+        InitializationService
     ],
     entryComponents: [
         MappingSelectionComponent,

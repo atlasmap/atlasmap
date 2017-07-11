@@ -83,11 +83,11 @@ export class DocumentFieldDetailComponent {
 
     constructor(private sanitizer: DomSanitizer) {}
 
-    private fieldIsEditable(): boolean {
+    public fieldIsEditable(): boolean {
         return this.field.isPropertyOrConstant() || this.field.userCreated;
     }
 
-    private getFieldTypeIcon(): string {
+    public getFieldTypeIcon(): string {
         if (this.field.enumeration) {
             return "fa fa-file-text-o";
         }
@@ -100,19 +100,19 @@ export class DocumentFieldDetailComponent {
         return "fa fa-file-o";
     }
 
-    private fieldShouldBeVisible(): boolean {
+    public fieldShouldBeVisible(): boolean {
         var partOfMapping: boolean = this.field.partOfMapping;
         return partOfMapping ? this.cfg.showMappedFields : this.cfg.showUnmappedFields;
     }
 
-    private getTransformationClass(): string {
+    public getTransformationClass(): string {
         if (!this.field.partOfMapping || !this.field.partOfTransformation) {
             return "partOfMappingIcon partOfMappingIconHidden";
         }
         return "partOfMappingIcon fa fa-bolt";
     }
 
-    private getMappingClass(): string {
+    public getMappingClass(): string {
         if (!this.field.partOfMapping) {
             return "partOfMappingIcon partOfMappingIconHidden";
         }
@@ -123,7 +123,7 @@ export class DocumentFieldDetailComponent {
         return "partOfMappingIcon " + clz;
     }
 
-    private getCssClass(): string {
+    public getCssClass(): string {
         var cssClass: string = "fieldDetail";
         if (this.field.selected) {
             cssClass += " selectedField";
@@ -180,7 +180,7 @@ export class DocumentFieldDetailComponent {
         return null;
     }
 
-    private editField(event: any): void {
+    public editField(event: any): void {
         event.stopPropagation();
         var self: DocumentFieldDetailComponent = this;
         var oldPath: string = this.field.path;
@@ -226,7 +226,7 @@ export class DocumentFieldDetailComponent {
         this.modalWindow.show();
     }
 
-    private removeField(event: any): void {
+    public removeField(event: any): void {
         event.stopPropagation();
         var self: DocumentFieldDetailComponent = this;
         this.modalWindow.reset();
@@ -246,7 +246,7 @@ export class DocumentFieldDetailComponent {
         this.modalWindow.show();
     }
 
-    private getSpacerWidth(): SafeStyle {
+    public getSpacerWidth(): SafeStyle {
         var width: string = (this.field.fieldDepth * 30).toString();
         return this.sanitizer.bypassSecurityTrustStyle("display:inline; margin-left:" + width + "px");
     }

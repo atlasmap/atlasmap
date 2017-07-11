@@ -30,8 +30,6 @@ import { ErrorHandlerService } from './error.handler.service';
 import { DocumentManagementService } from '../services/document.management.service';
 import { MappingManagementService } from '../services/mapping.management.service';
 import { MappingSerializer } from '../services/mapping.serializer';
-import { ValidationService } from '../services/validation.service';
-import { FieldActionService } from '../services/field.action.service';
 
 import { TransitionModel, FieldAction, FieldActionConfig } from '../models/transition.model';
 
@@ -52,30 +50,28 @@ export class InitializationService {
 
     constructor(private documentService: DocumentManagementService,
         private mappingService: MappingManagementService,
-        private errorService: ErrorHandlerService,
-        private validationService: ValidationService,
-        private fieldActionService: FieldActionService) {
+        private errorService: ErrorHandlerService) {
         console.log("Initialization Service being created.");
         this.cfg.documentService = documentService;
         this.cfg.mappingService = mappingService;
         this.cfg.errorService = errorService;
         this.cfg.initializationService = this;
-        this.cfg.validationService = validationService;
-        this.cfg.fieldActionService = fieldActionService;
 
         this.cfg.documentService.cfg = this.cfg;
         this.cfg.mappingService.cfg = this.cfg;
-        this.cfg.validationService.cfg = this.cfg;
-        this.cfg.fieldActionService.cfg = this.cfg;
 
         this.cfg.documentService.initialize();
         this.cfg.mappingService.initialize();
-        this.cfg.validationService.initialize();
-        this.cfg.fieldActionService.initialize();
     }
 
     public initialize(): void {
         console.log("Data Mapper UI is now initializing.");
+
+        if (this.cfg.mappingService == null) {
+            console.error("Mapping service is not configured, validation service will not be used.")
+        } else if (this.cfg.initCfg.baseValidationServiceUrl == null) {
+            console.error("Validation service URL is not configured, validation service will not be used.")
+        }
 
         if (InitializationService.addMockJSONMappings) {
             var mappingDefinition: MappingDefinition = new MappingDefinition();
@@ -137,6 +133,26 @@ export class InitializationService {
                 docDef.initCfg.initialized = true;
                 continue;
             }
+
+            var docName: string = docDef.initCfg.shortIdentifier;
+
+            if (docDef.initCfg.type.isJava() && this.cfg.initCfg.baseJavaInspectionServiceUrl == null) {
+                console.error("Java inspection service is not configured. Document will not be loaded: " + docName, docDef);
+                docDef.initCfg.initialized = true;
+                this.updateStatus();
+                continue;
+            } else if (docDef.initCfg.type.isXML() && this.cfg.initCfg.baseXMLInspectionServiceUrl == null) {
+                console.error("XML inspection service is not configured. Document will not be loaded: " + docName, docDef);
+                docDef.initCfg.initialized = true;
+                this.updateStatus();
+                continue;
+            } else if (docDef.initCfg.type.isJSON() && this.cfg.initCfg.baseJSONInspectionServiceUrl == null) {
+                console.error("JSON inspection service is not configured. Document will not be loaded: " + docName, docDef);
+                docDef.initCfg.initialized = true;
+                this.updateStatus();
+                continue;
+            }
+
             this.cfg.documentService.fetchDocument(docDef, this.cfg.initCfg.classPath).subscribe(
                 (docDef: DocumentDefinition) => {
                     console.log("Document was loaded: " + docDef.fullyQualifiedName, docDef);
@@ -167,8 +183,19 @@ export class InitializationService {
     }
 
     private fetchFieldActions(): void {
+        if (this.cfg.mappingService == null) {
+            console.error("Mapping service is not provided. Field Actions will not be used.");
+            this.fieldActionsInitialized = true;
+            this.updateStatus();
+            return;
+        } else if (this.cfg.initCfg.baseFieldActionServiceUrl == null) {
+            console.error("Field action service URL is not provided. Field Actions will not be used.");
+            this.fieldActionsInitialized = true;
+            this.updateStatus();
+            return;
+        }        
         console.log("Loading field action configs.");
-        this.cfg.fieldActionService.fetchFieldActions().subscribe(
+        this.cfg.mappingService.fetchFieldActions().subscribe(
             (actionConfigs: FieldActionConfig[]) => {
                 console.log("Field actions were loaded.", actionConfigs);
                 TransitionModel.actionConfigs = actionConfigs;

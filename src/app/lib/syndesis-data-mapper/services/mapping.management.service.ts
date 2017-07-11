@@ -29,11 +29,11 @@ import { Field } from '../models/field.model';
 import { DocumentDefinition } from '../models/document.definition.model';
 import { MappingModel, FieldMappingPair, MappedField } from '../models/mapping.model';
 import { TransitionModel, TransitionMode, TransitionDelimiter } from '../models/transition.model';
+import { FieldActionConfig, FieldActionArgument } from '../models/transition.model';
 import { MappingDefinition } from '../models/mapping.definition.model';
 import { LookupTable } from '../models/lookup.table.model';
 
 import { MappingSerializer } from './mapping.serializer';
-
 import { ErrorHandlerService } from './error.handler.service';
 import { DocumentManagementService } from './document.management.service';
 
@@ -303,7 +303,84 @@ export class MappingManagementService {
         this.notifyMappingUpdated();
     }
 
+    public validateMappings(): void {
+        if (this.cfg.initCfg.baseValidationServiceUrl == null) {
+            //validation service not configured. 
+            return;
+        }
+        var startTime: number = Date.now();
+        var payload: any = MappingSerializer.serializeMappings(this.cfg);
+        var url: string = this.cfg.initCfg.baseValidationServiceUrl + "mapping/validate";
+        DataMapperUtil.debugLogJSON(payload, "Validation Service Request", this.cfg.debugValidationJSON, url);
+        this.http.put(url, payload, { headers: this.headers }).toPromise()
+            .then((res: Response) => {
+                DataMapperUtil.debugLogJSON(res, "Validation Service Response", this.cfg.debugValidationJSON, url);
+                var mapping: MappingModel = this.cfg.mappings.activeMapping;
+                let body: any = res.json();
+                mapping.clearValidationErrors();
+                if (body && body.Validations && body.Validations.validation) {
+                    for (let error of body.Validations.validation) {
+                        mapping.addValidationError(error.message);
+                    }
+                }
+                console.log("Finished fetching and parsing validation errors in " + (Date.now() - startTime) + "ms.");
+            })
+            .catch((error: any) => {
+                console.error("Error fetching validation data.", { "error": error, "url": url, "request": payload});
+            }
+        );
+    }
+
+    public fetchFieldActions(): Observable<FieldActionConfig[]> {
+        return new Observable<FieldActionConfig[]>((observer:any) => {
+            var actionConfigs: FieldActionConfig[] = [];
+            var startTime: number = Date.now();
+            var url: string = this.cfg.initCfg.baseFieldActionServiceUrl + "fieldActions";
+            DataMapperUtil.debugLogJSON(null, "Field Action Config Request", this.cfg.debugFieldActionJSON, url);
+            this.http.get(url, { headers: this.headers }).toPromise()
+                .then((res: Response) => {
+                    let body: any = res.json();
+                    DataMapperUtil.debugLogJSON(body, "Field Action Config Response", this.cfg.debugFieldActionJSON, url);
+                    if (body && body.ActionDetails 
+                        && body.ActionDetails.actionDetail 
+                        && body.ActionDetails.actionDetail.length) {
+                        for (let svcConfig of body.ActionDetails.actionDetail) {
+                            var fieldActionConfig: FieldActionConfig = new FieldActionConfig();
+                            fieldActionConfig.name = svcConfig.name;
+                            fieldActionConfig.sourceType = svcConfig.sourceType;
+                            fieldActionConfig.targetType = svcConfig.targetType;
+                            fieldActionConfig.method = svcConfig.method;
+                            fieldActionConfig.serviceObject = svcConfig;
+
+                            if (svcConfig.parameters && svcConfig.parameters.property 
+                                && svcConfig.parameters.property.length) {
+                                for (let svcProperty of svcConfig.parameters.property) {
+                                    var argumentConfig: FieldActionArgument = new FieldActionArgument();
+                                    argumentConfig.name = svcProperty.name;
+                                    argumentConfig.type = svcProperty.fieldType;
+                                    argumentConfig.serviceObject = svcProperty;
+                                    fieldActionConfig.arguments.push(argumentConfig);
+                                }
+                            }
+                            actionConfigs.push(fieldActionConfig);
+                        }
+                    }
+                    console.log("Finished fetching and parsing " + actionConfigs.length + " field actionConfigs in "
+                        + (Date.now() - startTime) + "ms.");
+                    observer.next(actionConfigs);
+                    observer.complete();
+                })
+                .catch((error: any) => {
+                    observer.error(error);
+                    observer.next(actionConfigs);
+                    observer.complete();
+                }
+            );
+        });
+    }
+
     public notifyMappingUpdated(): void {
+        this.validateMappings();
         this.mappingUpdatedSource.next();
     }
 

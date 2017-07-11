@@ -338,6 +338,218 @@ export class DocumentManagementService {
         }
     }
 
+    public static generateMockInstanceXML(): string {
+        // here we have a bunch of examples we can use.
+        var sampleXML: string = `<data>
+                <intField a='1'>32000</intField><longField>12421</longField>
+                <stringField>abc</stringField><booleanField>true</booleanField>
+                <doubleField b='2'>12.0</doubleField><shortField>1000</shortField>
+                <floatField>234.5f</floatField><charField>A</charField>
+                <outer><inner><value>val</value></inner></outer>
+            </data>
+        `;
+
+        sampleXML = `<?xml version="1.0" encoding="UTF-8" ?>
+            <foo>bar</foo>
+        `;
+
+        sampleXML = "<foo>bar</foo>";        
+
+        sampleXML = `
+            <XMLOrder>
+              <orderId>orderId</orderId>
+              <Address>
+                <addressLine1>addressLine1</addressLine1>
+                <addressLine2>addressLine2</addressLine2>
+                <city>city</city>
+                <state>state</state>
+                <zipCode>zipCode</zipCode>
+              </Address>
+              <Contact>
+                <firstName>firstName</firstName>
+                <lastName>lastName</lastName>
+                <phoneNumber>phoneNumber</phoneNumber>
+                <zipCode>zipCode</zipCode>
+              </Contact>
+            </XMLOrder>
+        `;
+
+        sampleXML = `
+            <foo><bar><jason>somevalue</jason></bar></foo>
+        `;        
+
+        sampleXML = `            
+            <orders totalCost="12525.00" xmlns="http://www.example.com/x/"
+                xmlns:y="http://www.example.com/y/"
+                xmlns:q="http://www.example.com/q/">
+                <order>
+                <id y:custId="a">12312</id>
+                    <id y:custId="b">4423423</id>
+                    </order>
+                <q:order><id y:custId="x">12312</id></q:order>
+                <order><id y:custId="c">54554555</id></order>
+                <q:order><id y:custId="a">12312</id></q:order>
+            </orders>
+        `;        
+
+        sampleXML = `
+            <ns:XmlFPE targetNamespace="http://atlasmap.io/xml/test/v2" 
+                xmlns:ns="http://atlasmap.io/xml/test/v2" 
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+                xsi:schemaLocation="http://atlasmap.io/xml/test/v2 atlas-xml-test-model-v2.xsd ">
+                <booleanField>false</booleanField>
+                <byteField>99</byteField>
+                <charField>a</charField>
+                <doubleField>50000000.0</doubleField>
+                <floatField>40000000.0</floatField>
+                <intField>2</intField>
+                <longField>30000</longField>
+                <shortField>1</shortField>
+            </ns:XmlFPE>
+        `;   
+
+        sampleXML = `
+            <ns:XmlOE xmlns:ns="http://atlasmap.io/xml/test/v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://atlasmap.io/xml/test/v2 atlas-xml-test-model-v2.xsd ">
+              <ns:orderId>ns:orderId</ns:orderId>
+              <ns:Address>
+                <ns:addressLine1>ns:addressLine1</ns:addressLine1>
+                <ns:addressLine2>ns:addressLine2</ns:addressLine2>
+                <ns:city>ns:city</ns:city>
+                <ns:state>ns:state</ns:state>
+                <ns:zipCode>ns:zipCode</ns:zipCode>
+              </ns:Address>
+              <ns:Contact>
+                <ns:firstName>ns:firstName</ns:firstName>
+                <ns:lastName>ns:lastName</ns:lastName>
+                <ns:phoneNumber>ns:phoneNumber</ns:phoneNumber>
+                <ns:zipCode>ns:zipCode</ns:zipCode>
+              </ns:Contact>
+            </ns:XmlOE>
+        `;
+
+        return sampleXML;
+    }
+
+    public static generateMockSchemaXML(): string {
+        var sampleXML: string = `
+            <xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified"
+                       xmlns:xs="http://www.w3.org/2001/XMLSchema">
+                <xs:element name="data">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element type="xs:short" name="intField"/>
+                            <xs:element type="xs:short" name="longField"/>
+                            <xs:element type="xs:string" name="stringField"/>
+                            <xs:element type="xs:string" name="booleanField"/>
+                            <xs:element type="xs:float" name="doubleField"/>
+                            <xs:element type="xs:short" name="shortField"/>
+                            <xs:element type="xs:string" name="floatField"/>
+                            <xs:element type="xs:string" name="charField"/>
+                        </xs:sequence>
+                        <xs:attribute name="intAttr" type="xs:int" use="optional" default="1"/>
+                    </xs:complexType>
+                </xs:element>
+            </xs:schema>
+        `;
+
+        sampleXML = `
+            <schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://example.com/"
+                xmlns:tns="http://example.com/">                
+                <element name="aGlobalElement" type="tns:aGlobalType"/>
+                <simpleType name="aGlobalType"><restriction base="string"/></simpleType>
+            </schema>
+        `;
+
+        sampleXML = `
+            <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+                <xs:element name="shiporder">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="orderperson" type="xs:string"/>
+                            <xs:element name="shipto">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="name" type="xs:string"/>
+                                        <xs:element name="address" type="xs:string"/>
+                                        <xs:element name="city" type="xs:string"/>
+                                        <xs:element name="country" type="xs:string"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="item" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="title" type="xs:string"/>
+                                        <xs:element name="note" type="xs:string" minOccurs="0"/>
+                                        <xs:element name="quantity" type="xs:positiveInteger"/>
+                                        <xs:element name="price" type="xs:decimal"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                        <xs:attribute name="orderid" type="xs:string" use="required" fixed="2"/>
+                    </xs:complexType>
+                </xs:element>
+            </xs:schema>
+        `;
+
+        sampleXML = `
+            <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+                <xs:element name="shiporder">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="shipto">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="name" type="xs:string"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="item" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="title" type="xs:string"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:schema>
+        `; 
+
+        return sampleXML;
+    }
+
+    public static generateMockJSON(): string {
+        var sampleJSON: string = `{
+                "id": "0001",
+                "type": "donut",
+                "name": "Cake",
+                "ppu": 0.55,
+                "batters": {
+                    "batter": [
+                        { "id": "1001", "type": "Regular" },
+                        { "id": "1002", "type": "Chocolate" },
+                        { "id": "1003", "type": "Blueberry" },
+                        { "id": "1004", "type": "Devil's Food" }
+                    ]
+                },
+                "topping": [
+                    { "id": "5001", "type": "None" },
+                    { "id": "5002", "type": "Glazed" },
+                    { "id": "5005", "type": "Sugar" },
+                    { "id": "5007", "type": "Powdered Sugar" },
+                    { "id": "5006", "type": "Chocolate with Sprinkles" },
+                    { "id": "5003", "type": "Chocolate" },
+                    { "id": "5004", "type": "Maple" }
+                ]
+            }
+        `;
+
+        return sampleJSON;
+    }
+
     private handleError(message:string, error: any): void {
         this.cfg.errorService.error(message, error);
     }
