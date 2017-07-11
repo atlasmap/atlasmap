@@ -77,6 +77,10 @@ export class InitializationService {
     public initialize(): void {
         console.log("Data Mapper UI is now initializing.");
 
+        if (this.cfg.initCfg.baseValidationServiceUrl == null) {
+            console.error("Validation service is not configured, validation service will not be used.")
+        }
+
         if (InitializationService.addMockJSONMappings) {
             var mappingDefinition: MappingDefinition = new MappingDefinition();
             var mappingJSON: any = InitializationService.createExampleMappingsJSON();
@@ -137,6 +141,26 @@ export class InitializationService {
                 docDef.initCfg.initialized = true;
                 continue;
             }
+
+            var docName: string = docDef.initCfg.shortIdentifier;
+
+            if (docDef.initCfg.type.isJava() && this.cfg.initCfg.baseJavaInspectionServiceUrl == null) {
+                console.error("Java inspection service is not configured. Document will not be loaded: " + docName, docDef);
+                docDef.initCfg.initialized = true;
+                this.updateStatus();
+                continue;
+            } else if (docDef.initCfg.type.isXML() && this.cfg.initCfg.baseXMLInspectionServiceUrl == null) {
+                console.error("XML inspection service is not configured. Document will not be loaded: " + docName, docDef);
+                docDef.initCfg.initialized = true;
+                this.updateStatus();
+                continue;
+            } else if (docDef.initCfg.type.isJSON() && this.cfg.initCfg.baseJSONInspectionServiceUrl == null) {
+                console.error("JSON inspection service is not configured. Document will not be loaded: " + docName, docDef);
+                docDef.initCfg.initialized = true;
+                this.updateStatus();
+                continue;
+            }
+
             this.cfg.documentService.fetchDocument(docDef, this.cfg.initCfg.classPath).subscribe(
                 (docDef: DocumentDefinition) => {
                     console.log("Document was loaded: " + docDef.fullyQualifiedName, docDef);
@@ -167,6 +191,12 @@ export class InitializationService {
     }
 
     private fetchFieldActions(): void {
+        if (this.cfg.initCfg.baseFieldMappingServiceUrl == null) {
+            console.error("Field action service URL is not provided. Field Actions will not be used.");
+            this.fieldActionsInitialized = true;
+            this.updateStatus();
+            return;
+        }
         console.log("Loading field action configs.");
         this.cfg.fieldActionService.fetchFieldActions().subscribe(
             (actionConfigs: FieldActionConfig[]) => {

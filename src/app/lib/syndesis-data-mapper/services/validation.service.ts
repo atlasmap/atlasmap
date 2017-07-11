@@ -47,6 +47,10 @@ export class ValidationService {
     }
 
     public validateMappings(): void {
+        if (this.cfg.initCfg.baseValidationServiceUrl == null) {
+            //validation service not configured. 
+            return;
+        }
         var startTime: number = Date.now();
         var payload: any = MappingSerializer.serializeMappings(this.cfg);
         var url: string = this.cfg.initCfg.baseValidationServiceUrl + "mapping/validate";

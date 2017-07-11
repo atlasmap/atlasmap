@@ -72,10 +72,10 @@ export class ConfigModel {
     /* debug logging toggles */
     public debugDocumentJSON: boolean = false;
     public debugDocumentParsing: boolean = false;
-    public debugMappingJSON: boolean = true;
+    public debugMappingJSON: boolean = false;
     public debugClassPathJSON: boolean = false;
     public debugValidationJSON: boolean = false;
-    public debugFieldActionJSON: boolean = true;
+    public debugFieldActionJSON: boolean = false;
 
     public documentService: DocumentManagementService;
     public mappingService: MappingManagementService;
