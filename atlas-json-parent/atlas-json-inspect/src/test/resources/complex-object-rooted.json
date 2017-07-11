@@ -1,0 +1,18 @@
+{
+  "order": {
+    "address": {
+      "addressLine1": "123 Main St",
+      "addressLine2": "Suite 42b",
+      "city": "Anytown",
+      "state": "NY",
+      "zipCode": "90210"
+    },
+    "contact": {
+      "firstName": "Ozzie",
+      "lastName": "Smith",
+      "phoneNumber": "5551212",
+      "zipCode": "81111"
+    },
+    "orderId": 0
+  }
+}

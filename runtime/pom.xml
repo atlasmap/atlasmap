@@ -117,12 +117,12 @@
     <!-- === Internal dependencies (don't touch without discussion) ========================== -->
     <dependency>
       <groupId>io.atlasmap</groupId>
-      <artifactId>atlas.java.service</artifactId>
+      <artifactId>atlas-java-service</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>io.atlasmap</groupId>
-      <artifactId>atlas.service</artifactId>
+      <artifactId>atlas-service</artifactId>
       <version>${project.version}</version>
     </dependency>
 

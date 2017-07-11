@@ -111,44 +111,44 @@
 		<profile>
 			<id>parent</id>
 			<modules>
-				<module>atlas.parent</module>
-				<module>atlas.mock.parent</module>
-				<module>atlas.service.parent</module>
-				<module>atlas.java.parent</module>
-				<module>atlas.json.parent</module>
-				<module>atlas.xml.parent</module>
+				<module>atlas-parent</module>
+				<module>atlas-mock-parent</module>
+				<module>atlas-service-parent</module>
+				<module>atlas-java-parent</module>
+				<module>atlas-json-parent</module>
+				<module>atlas-xml-parent</module>
 			</modules>
 		</profile>
 		<profile>
 			<id>fast</id>
 			<modules>
-				<module>atlas.parent</module>
-				<module>atlas.model</module>
-				<module>atlas.api</module>
-				<module>atlas.core</module>
-				<module>atlas.mock.parent</module>
-				<module>atlas.service.parent</module>
-				<module>atlas.java.parent</module>
-				<module>atlas.json.parent</module>
-				<module>atlas.xml.parent</module>
+				<module>atlas-parent</module>
+				<module>atlas-model</module>
+				<module>atlas-api</module>
+				<module>atlas-core</module>
+				<module>atlas-mock-parent</module>
+				<module>atlas-service-parent</module>
+				<module>atlas-java-parent</module>
+				<module>atlas-json-parent</module>
+				<module>atlas-xml-parent</module>
 			</modules>
 		</profile>
 		<profile>
 			<id>full</id>
 			<activation><activeByDefault>true</activeByDefault></activation>
 			<modules>
-				<module>atlas.parent</module>
-				<module>atlas.model</module>
-				<module>atlas.api</module>
-				<module>atlas.core</module>
-				<module>atlas.mock.parent</module>
-				<module>atlas.service.parent</module>
-				<module>atlas.java.parent</module>
-				<module>atlas.json.parent</module>
-				<module>atlas.xml.parent</module>
-				<module>atlas.demo.deps</module>
-				<module>atlas.itests</module>
-				<module>atlas.itests.parent</module>
+				<module>atlas-parent</module>
+				<module>atlas-model</module>
+				<module>atlas-api</module>
+				<module>atlas-core</module>
+				<module>atlas-mock-parent</module>
+				<module>atlas-service-parent</module>
+				<module>atlas-java-parent</module>
+				<module>atlas-json-parent</module>
+				<module>atlas-xml-parent</module>
+				<module>atlas-demo-deps</module>
+				<module>atlas-itests</module>
+				<module>atlas-itests-parent</module>
 				<module>runtime</module>
 			</modules>
 		</profile>

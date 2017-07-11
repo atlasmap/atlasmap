@@ -1,0 +1,35 @@
+{
+	"AtlasMapping": {
+		"jsonType": "io.atlasmap.v2.AtlasMapping",
+		"fieldMappings": {
+			"fieldMapping": [
+				{
+					"jsonType": "io.atlasmap.v2.MapFieldMapping",
+					"inputField": {
+						"jsonType": "io.atlasmap.v2.MappedField",
+						"field": {
+							"jsonType": "io.atlasmap.v2.MockField",
+							"name": "foo",
+							"value": "bar"
+						}
+					},
+					"outputField": {
+						"jsonType": "io.atlasmap.v2.MappedField",
+						"field": {
+							"jsonType": "io.atlasmap.v2.MockField",
+							"name": "woot",
+							"value": "blerg"
+						}
+					}
+				}
+			]
+		},
+		"lookupTables": {
+			"lookupTable": []
+		},
+		"properties": {
+			"property": []
+		},
+		"name": "junit"
+	}
+}
