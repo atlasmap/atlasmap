@@ -48,7 +48,6 @@ export class InitializationService {
     initializationStatusChanged$ = this.initializationStatusChangedSource.asObservable();
 
     /* TEST DATA CONFIG */
-    private static addMockActionConfig: boolean = false;
     private static addMockJSONMappings: boolean = false;
 
     constructor(private documentService: DocumentManagementService,
@@ -86,11 +85,6 @@ export class InitializationService {
             console.log("INIT SERVICE TEST DATA: Loaded mock mapping definition from example JSON",
                 { "mappingDef": mappingDefinition, "JSON": mappingJSON }
             );
-        }
-
-        if (InitializationService.addMockActionConfig) {
-            console.error("INIT SERVICE TEST DATA: Action config mode enabled.");
-            this.addMockActionConfigs();
         }
 
         //load field actions
@@ -214,50 +208,6 @@ export class InitializationService {
             console.log("Loaded mappings.", this.cfg.mappings);
             console.log("Data Mapper UI finished initializing.", this.cfg);
         }
-    }
-
-    private addMockActionConfigs(): void {
-        var actionCfg: FieldActionConfig = new FieldActionConfig();
-        actionCfg.identifier = "lowercase";
-        actionCfg.name = "Lowercase";
-        TransitionModel.actionConfigs.push(actionCfg);
-
-        actionCfg = new FieldActionConfig();
-        actionCfg.identifier = "uppercase";
-        actionCfg.name = "Uppercase";
-        TransitionModel.actionConfigs.push(actionCfg);
-
-        actionCfg = new FieldActionConfig();
-        actionCfg.identifier = "substring";
-        actionCfg.name = "Substring";
-        actionCfg.argumentNames = ["Start Index", "Length"];
-        TransitionModel.actionConfigs.push(actionCfg);
-
-        actionCfg = new FieldActionConfig();
-        actionCfg.identifier = "ceiling";
-        actionCfg.name = "Ceiling";
-        actionCfg.forString = false;
-        TransitionModel.actionConfigs.push(actionCfg);
-
-        actionCfg = new FieldActionConfig();
-        actionCfg.identifier = "floor";
-        actionCfg.name = "Floor";
-        actionCfg.forString = false;
-        TransitionModel.actionConfigs.push(actionCfg);
-
-        actionCfg = new FieldActionConfig();
-        actionCfg.identifier = "min";
-        actionCfg.name = "Min";
-        actionCfg.argumentNames = ["Compare To"];
-        actionCfg.forString = false;
-        TransitionModel.actionConfigs.push(actionCfg);
-
-        actionCfg = new FieldActionConfig();
-        actionCfg.identifier = "max";
-        actionCfg.name = "Max";
-        actionCfg.argumentNames = ["Compare To"];
-        actionCfg.forString = false;
-        TransitionModel.actionConfigs.push(actionCfg);
     }
 
     private handleError(message: string, error:any ) {

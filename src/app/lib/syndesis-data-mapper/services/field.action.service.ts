@@ -23,7 +23,7 @@ import 'rxjs/add/observable/forkJoin';
 import { Subject } from 'rxjs/Subject';
 
 import { ConfigModel } from '../models/config.model';
-import { FieldActionConfig } from '../models/transition.model';
+import { FieldActionConfig, FieldActionArgument } from '../models/transition.model';
 
 import { DataMapperUtil } from '../common/data.mapper.util';
 
@@ -54,11 +54,22 @@ export class FieldActionService {
                         && body.ActionDetails.actionDetail.length) {
                         for (let svcConfig of body.ActionDetails.actionDetail) {
                             var fieldActionConfig: FieldActionConfig = new FieldActionConfig();
-                            fieldActionConfig.identifier = svcConfig.name;
                             fieldActionConfig.name = svcConfig.name;
-                            fieldActionConfig.forString = true;
+                            fieldActionConfig.sourceType = svcConfig.sourceType;
+                            fieldActionConfig.targetType = svcConfig.targetType;
                             fieldActionConfig.method = svcConfig.method;
                             fieldActionConfig.serviceObject = svcConfig;
+
+                            if (svcConfig.parameters && svcConfig.parameters.property 
+                                && svcConfig.parameters.property.length) {
+                                for (let svcProperty of svcConfig.parameters.property) {
+                                    var argumentConfig: FieldActionArgument = new FieldActionArgument();
+                                    argumentConfig.name = svcProperty.name;
+                                    argumentConfig.type = svcProperty.fieldType;
+                                    argumentConfig.serviceObject = svcProperty;
+                                    fieldActionConfig.arguments.push(argumentConfig);
+                                }
+                            }
                             actionConfigs.push(fieldActionConfig);
                         }
                     }

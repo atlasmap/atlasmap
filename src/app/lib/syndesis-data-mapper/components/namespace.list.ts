@@ -60,7 +60,7 @@ import { DataMapperUtil } from '../common/data.mapper.util';
                             <label class="alias">{{namespace.isTarget ? 'Target (tns)' : namespace.alias}}</label>
                             <label class="uri">{{namespace.uri}}</label>
                             <label class="locationUri">{{namespace.locationUri}}</label>
-                            <div class="actions" *ngIf="namespace.createdByUser" style="float:right">
+                            <div class="actions" style="float:right">
                                 <i class="fa fa-edit link" aria-hidden="true" (click)="addEditNamespace(namespace, $event);"></i>
                                 <i class="fa fa-trash link" aria-hidden="true" (click)="removeNamespace(namespace, $event);"></i>
                             </div>
@@ -126,6 +126,11 @@ export class NamespaceListComponent {
 
     private addEditNamespace(ns: NamespaceModel, event: any): void {
         event.stopPropagation();
+        var isEditMode = (ns != null);
+        if (!isEditMode) {
+            ns = new NamespaceModel();
+            ns.createdByUser = true;
+        }
         var self: NamespaceListComponent = this;
         this.modalWindow.reset();
         this.modalWindow.confirmButtonText = "Save";
@@ -133,14 +138,12 @@ export class NamespaceListComponent {
         this.modalWindow.headerText = (ns == null) ? "Add Namespace" : "Edit Namespace";
         this.modalWindow.nestedComponentInitializedCallback = (mw: ModalWindowComponent) => {
             var namespaceComponent: NamespaceEditComponent = mw.nestedComponent as NamespaceEditComponent;
-            namespaceComponent.initialize(ns);            
+            namespaceComponent.initialize(ns, this.cfg.getFirstXmlDoc(false).namespaces);            
         };
         this.modalWindow.nestedComponentType = NamespaceEditComponent;
         this.modalWindow.okButtonHandler = (mw: ModalWindowComponent) => {
-            var isEditMode = (ns != null);
             var namespaceComponent: NamespaceEditComponent = mw.nestedComponent as NamespaceEditComponent;            
             var newNamespace: NamespaceModel = namespaceComponent.namespace;
-            newNamespace.createdByUser = true;
             if (isEditMode) {
                 ns.copyFrom(newNamespace);
             } else {            

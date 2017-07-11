@@ -28,7 +28,7 @@ import { DataMapperUtil } from '../common/data.mapper.util';
     template: `
         <!-- our template for type ahead -->
         <template #typeaheadTemplate let-model="item" let-index="index">
-            <h5 style="font-style:italic;">{{ model['field'].docDef.name }}</h5>
+            <h5 style="font-style:italic;" *ngIf="model['field'].docDef">{{ model['field'].docDef.name }}</h5>
             <h5>{{ model['field'].path }}</h5>
         </template>
 
@@ -43,15 +43,15 @@ import { DataMapperUtil } from '../common/data.mapper.util';
                 <label>Name</label>
                 <input name="value" type="text" [(ngModel)]="field.name"/>
             </div>
-            <div class="form-group">
+            <div class="form-group" *ngIf="docDef.initCfg.type.isXML()">
                 <label>Namespace</label>
                 <select (change)="namespaceSelectionChanged($event);" [ngModel]="namespaceAlias">                        
-                    <option *ngFor="let ns of cfg.getFirstXmlDoc(false).namespaces" value="{{ns.alias}}" [selected]="namespaceAlias == ns.alias">
+                    <option *ngFor="let ns of namespaces" value="{{ns.alias}}" [selected]="namespaceAlias == ns.alias">
                         {{ ns.getPrettyLabel() }}
                     </option>
                 </select>
             </div>
-            <div class="form-group">
+            <div class="form-group" *ngIf="docDef.initCfg.type.isXML()">
                 <label>Field Type</label>
                 <select (change)="fieldTypeSelectionChanged($event);" [ngModel]="fieldType">                        
                     <option value="element">Element</option>
@@ -97,8 +97,10 @@ export class FieldEditComponent implements ModalWindowValidator {
     public isSource: boolean = false;
     public fieldType: any = "element";
     public valueType: any = "STRING";
-    public namespaceAlias: string = null;
+    public namespaceAlias: string = "";
     public editMode: boolean = false;
+    public namespaces: NamespaceModel[] = [];
+    public docDef: DocumentDefinition = null;
 
     public dataSource: Observable<any>;
 
@@ -108,19 +110,43 @@ export class FieldEditComponent implements ModalWindowValidator {
         });
     }
 
-    public initialize(field: Field, docDef: DocumentDefinition): void {
-        this.editMode = (field != null);
+    public initialize(field: Field, docDef: DocumentDefinition, isAdd: boolean): void {
+        this.docDef = docDef;
+        this.editMode = !isAdd;
         this.field = field == null ? new Field() : field.copy();
-        if (this.field.namespace) {
-            this.namespaceAlias = this.field.namespace.alias;
-        }
-        if (this.namespaceAlias == null && this.cfg.getFirstXmlDoc(false).namespaces.length) {
-            this.namespaceAlias = this.cfg.getFirstXmlDoc(false).namespaces[0].alias;
-        }
-        this.fieldType = this.field.isAttribute ? "attribute" : "element";
         this.valueType = (this.field.type == null) ? "STRING" : this.field.type;
-        this.parentField = (this.field.parentField == null) ? docDef.fields[0] : this.field.parentField;
-        this.parentFieldName = this.parentField.name;
+        this.parentField = (this.field.parentField == null) ? DocumentDefinition.getNoneField() : this.field.parentField;        
+
+        if (this.docDef.initCfg.type.isXML()) {
+            this.fieldType = this.field.isAttribute ? "attribute" : "element";
+            this.parentField = (this.field.parentField == null) ? docDef.fields[0] : this.field.parentField;
+            var unqualifiedNS: NamespaceModel = NamespaceModel.getUnqualifiedNamespace();        
+            this.namespaceAlias = unqualifiedNS.alias;
+            if (this.field.namespaceAlias) {
+                this.namespaceAlias = this.field.namespaceAlias;
+            }
+            if (isAdd) { // on add, inherit namespace from parent field           
+                this.namespaceAlias = this.parentField.namespaceAlias == null ? unqualifiedNS.alias : this.parentField.namespaceAlias;
+            }
+
+            this.namespaces = [unqualifiedNS].concat(this.docDef.namespaces);
+
+            // if the field references a namespace that doesn't exist, add a fake namespace option for the 
+            // user to select if they desire to leave that bad namespace alias in place
+            var namespaceFound: boolean = false;
+            for (let ns of this.namespaces) {
+                if (ns.alias == this.namespaceAlias) {
+                    namespaceFound = true;
+                    break;
+                }
+            }
+            if (!namespaceFound) {
+                var fakeNamespace: NamespaceModel = new NamespaceModel();
+                fakeNamespace.alias = this.namespaceAlias;
+                this.namespaces.push(fakeNamespace);
+            }   
+        }   
+        this.parentFieldName = this.parentField.name;                 
     }
 
     public handleOnBlur(event: any): void {
@@ -132,6 +158,10 @@ export class FieldEditComponent implements ModalWindowValidator {
         this.parentField = event.item["field"];
         this.parentField = (this.parentField == null) ? oldParentField : this.parentField;
         this.parentFieldName = this.parentField.name;
+
+        // change namespace dropdown selecte option to match parent fields' namespace automatically 
+        var unqualifiedNS: NamespaceModel = NamespaceModel.getUnqualifiedNamespace();
+        this.namespaceAlias = this.parentField.namespaceAlias == null ? unqualifiedNS.alias : this.parentField.namespaceAlias;        
     }   
 
     public fieldTypeSelectionChanged(event: MouseEvent): void {
@@ -151,8 +181,13 @@ export class FieldEditComponent implements ModalWindowValidator {
 
     public executeSearch(filter: string): any[] {
         var formattedFields: any[] = [];
-        var fields: Field[] = this.cfg.getFirstXmlDoc(false).getAllFields();
-        for (let field of fields) {
+
+        if (this.docDef.initCfg.type.isJSON()) {
+            var noneField: Field = DocumentDefinition.getNoneField();
+            formattedFields.push({ "field": noneField, "displayName": noneField.getFieldLabel(true) });
+        }
+
+        for (let field of this.docDef.getAllFields()) {
             if (!field.isParentField()) {
                 continue;
             }
@@ -171,15 +206,19 @@ export class FieldEditComponent implements ModalWindowValidator {
 
     public getField(): Field {
         this.field.displayName = this.field.name;
-        this.field.isAttribute = (this.fieldType == "attribute");
         this.field.parentField = this.parentField;
         this.field.type = this.valueType;
         this.field.userCreated = true;
-        this.field.namespace = this.cfg.getFirstXmlDoc(false).getNamespaceForAlias(this.namespaceAlias);
-        if (this.field.namespace == null) {
-            console.error("Could not find namespace with alias '" + this.namespaceAlias + "'.");
-        }
-        this.field.serviceObject.jsonType = "io.atlasmap.xml.v2.XmlField";
+        this.field.serviceObject.jsonType = "io.atlasmap.json.v2.JsonField";
+        if (this.docDef.initCfg.type.isXML()) {
+            this.field.isAttribute = (this.fieldType == "attribute");
+            this.field.namespaceAlias = this.namespaceAlias;
+            var unqualifiedNS: NamespaceModel = NamespaceModel.getUnqualifiedNamespace();
+            if (this.namespaceAlias == unqualifiedNS.alias) {
+                this.field.namespaceAlias = null;
+            }        
+            this.field.serviceObject.jsonType = "io.atlasmap.xml.v2.XmlField";
+        } 
         return this.field;
     }
 

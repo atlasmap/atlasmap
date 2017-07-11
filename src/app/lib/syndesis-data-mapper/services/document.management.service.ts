@@ -86,15 +86,23 @@ export class DocumentManagementService {
             if (docDef.initCfg.type.isXML()) {
                 url = this.cfg.initCfg.baseXMLInspectionServiceUrl + "inspect";                
             }
+            if (docDef.initCfg.type.isJSON()) {
+                url = this.cfg.initCfg.baseJSONInspectionServiceUrl + "inspect";                
+            }
             DataMapperUtil.debugLogJSON(payload, "Document Service Request", this.cfg.debugDocumentJSON, url);
             this.http.post(url, payload, { headers: this.headers }).toPromise()
                 .then((res: Response) => {
                     DataMapperUtil.debugLogJSON(res.json(), "Document Service Response", this.cfg.debugDocumentJSON, url);
+                    docDef.name = docDef.initCfg.shortIdentifier;
+                    docDef.fullyQualifiedName = docDef.initCfg.shortIdentifier;    
                     if (docDef.initCfg.type.isJava()) {
                         this.extractJavaDocumentDefinitionData(res, docDef);
+                    } else if (docDef.initCfg.type.isJSON()) {
+                        this.extractJSONDocumentDefinitionData(res, docDef);                        
                     } else {
                         this.extractXMLDocumentDefinitionData(res, docDef);
                     }
+                    docDef.initializeFromFields();
                     console.log("Finished fetching and parsing document '" + docDef.name + "' in "
                         + (Date.now() - startTime) + "ms.");
                     observer.next(docDef);
@@ -115,8 +123,17 @@ export class DocumentManagementService {
             return {
                 "XmlInspectionRequest": {
                     "jsonType": "io.atlasmap.xml.v2.XmlInspectionRequest",
-                    "type": docDef.initCfg.xmlInspectionType, 
-                    "xmlData": docDef.initCfg.xmlData
+                    "type": docDef.initCfg.inspectionType, 
+                    "xmlData": docDef.initCfg.documentContents
+                }
+            };
+        }
+        if (docDef.initCfg.type.isJSON()) {
+            return {
+                "JsonInspectionRequest": {
+                    "jsonType": "io.atlasmap.json.v2.JsonInspectionRequest",
+                    "type": docDef.initCfg.inspectionType, 
+                    "jsonData": docDef.initCfg.documentContents
                 }
             };
         }
@@ -141,22 +158,32 @@ export class DocumentManagementService {
         return payload;
     }
 
-    private extractXMLDocumentDefinitionData(res: Response, docDef: DocumentDefinition): void {
-        var body: any = res.json()
-        if (body.XmlInspectionResponse.errorMessage) {
+    private extractJSONDocumentDefinitionData(res: Response, docDef: DocumentDefinition): void {
+        var body: any = res.json().JsonInspectionResponse;
+        if (body.errorMessage) {
             var docIdentifier: string = docDef.initCfg.documentIdentifier;
-            this.handleError("Could not load XML document. Document is not found: " 
-                + body.XmlInspectionResponse.errorMessage, null);
+            this.handleError("Could not load JSON document, error: " + body.errorMessage, null);
             docDef.initCfg.errorOccurred = true;
             return;
         }
 
-        body = body.XmlInspectionResponse.xmlDocument;
+        body = body.jsonDocument;
 
-        docDef.name = docDef.initCfg.shortIdentifier;
-        docDef.fullyQualifiedName = docDef.initCfg.shortIdentifier;
-        
-        console.log("Loading XML document: " + docDef.name, body);        
+        for (let field of body.fields.field) {
+            this.parseJSONFieldFromDocument(field, null, docDef);            
+        }        
+    }
+
+    private extractXMLDocumentDefinitionData(res: Response, docDef: DocumentDefinition): void {
+        var body: any = res.json().XmlInspectionResponse;
+        if (body.errorMessage) {
+            var docIdentifier: string = docDef.initCfg.documentIdentifier;
+            this.handleError("Could not load XML document, error: " + body.errorMessage, null);
+            docDef.initCfg.errorOccurred = true;
+            return;
+        }
+
+        body = body.xmlDocument;
 
         if (body.xmlNamespaces && body.xmlNamespaces.xmlNamespace 
             && body.xmlNamespaces.xmlNamespace.length) {
@@ -168,104 +195,63 @@ export class DocumentManagementService {
                 ns.isTarget = serviceNS.targetNamespace;
                 docDef.namespaces.push(ns);
             }
-        } else {
-            var ns: NamespaceModel = new NamespaceModel();
-            ns.alias = "tns";
-            ns.isTarget = true;
-            docDef.namespaces.push(ns);
         }
-
-        var firstNS: NamespaceModel = docDef.namespaces[0];
 
         for (let field of body.fields.field) {
-            var parsedField: Field = this.parseXMLFieldFromDocument(field, docDef, firstNS);
-            if (parsedField != null) {
-                docDef.fields.push(parsedField);
-            }
+            this.parseXMLFieldFromDocument(field, null, docDef);
         }
-
-        docDef.populateFromFields();
-        docDef.initCfg.initialized = true;
     }              
 
     private extractJavaDocumentDefinitionData(res: Response, docDef: DocumentDefinition): void {
-        let body: any = res.json().ClassInspectionResponse;
+        var body: any = res.json().ClassInspectionResponse;
 
-        docDef.name = body.javaClass.className;
-        //Make doc name the class name rather than fully qualified name
-        if (docDef.name && docDef.name.indexOf(".") != -1) {
-            docDef.name = docDef.name.substr(docDef.name.lastIndexOf(".") + 1);
+        if (body.errorMessage) {
+            var docIdentifier: string = docDef.initCfg.documentIdentifier;
+            this.handleError("Could not load Java document, error: " + body.errorMessage, null);
+            docDef.initCfg.errorOccurred = true;
+            return;
         }
 
-        docDef.fullyQualifiedName = body.javaClass.className;
-        if (docDef.name == null) {
-            console.error("Document's className is empty.", body.javaClass);
-        }
-        console.log("Loading JAVA document: " + docDef.name, body);
-        docDef.uri = body.javaClass.uri;
+        body = body.javaClass;
 
-        if (body.javaClass.status == "NOT_FOUND") {
+        if (body.status == "NOT_FOUND") {
             var docIdentifier: string = docDef.initCfg.documentIdentifier;
             this.handleError("Could not load JAVA document. Document is not found: " + docIdentifier, null);
             docDef.initCfg.errorOccurred = true;
             return;
         }
 
-        for (let field of body.javaClass.javaFields.javaField) {
-            var parsedField: Field = this.parseJavaFieldFromDocument(field, docDef);
-            if (parsedField != null) {
-                docDef.fields.push(parsedField);
-            }
+        docDef.name = body.className;
+        //Make doc name the class name rather than fully qualified name
+        if (docDef.name && docDef.name.indexOf(".") != -1) {
+            docDef.name = docDef.name.substr(docDef.name.lastIndexOf(".") + 1);
         }
 
-        docDef.populateFromFields();
-        docDef.initCfg.initialized = true;
+        docDef.fullyQualifiedName = body.className;
+        if (docDef.name == null) {
+            console.error("Document's className is empty.", body);
+        }
+        docDef.uri = body.uri;
+
+        for (let field of body.javaFields.javaField) {
+            this.parseJavaFieldFromDocument(field, null, docDef);
+        }
     } 
 
-    private parseXMLFieldFromDocument(field: any, docDef: DocumentDefinition, firstNS: NamespaceModel): Field {
-        if (field != null && field.status == "NOT_FOUND") {
-            console.error("Filtering missing field: " + field.name
-                + " (" + field.className + "), parent class: " + docDef.name);
-            return null;
-        } else if (field != null && field.status == "BLACK_LIST") {
-            console.log("Filtering black listed field: " + field.name
-                + " (" + field.className + "), parent class: " + docDef.name);
-            return null;
-        }
+    private parseJSONFieldFromDocument(field: any, parentField: Field, docDef: DocumentDefinition): void {
+        var parsedField = this.parseFieldFromDocument(field, parentField, docDef);
+        if (parsedField == null) {
+            return;
+        }            
 
-        var parsedField: Field = new Field();
-        parsedField.name = field.name;
-        parsedField.path = field.path;
-        parsedField.isAttribute = (parsedField.path.indexOf("@") != -1);
-        parsedField.type = field.type;
-        parsedField.namespace = firstNS;
-        if (field.collectionType && ("LIST" == field.collectionType || "ARRAY" == field.collectionType)) {
-            parsedField.isCollection = true;
-            if ("ARRAY" == field.collectionType) {
-                parsedField.isArray = true;
-                parsedField.type = "ARRAY[" + parsedField.type + "]";
-            } else {
-                parsedField.type = "LIST<" + parsedField.type + ">";
+        if (field.jsonFields && field.jsonFields.jsonField && field.jsonFields.jsonField.length) {
+            for (let childField of field.jsonFields.jsonField) {
+                this.parseJSONFieldFromDocument(childField, parsedField, docDef);                
             }
         }
-        
-        parsedField.isPrimitive = field.type != "COMPLEX";
-        //TODO: parsedField.classIdentifier = field.className;
-        parsedField.serviceObject = field;        
+    }  
 
-        if (field.xmlFields && field.xmlFields.xmlField && field.xmlFields.xmlField.length) {
-            for (let childField of field.xmlFields.xmlField) {
-                var parsedChild: Field = this.parseXMLFieldFromDocument(childField, docDef, firstNS);
-                if (parsedChild != null) {
-                    parsedField.children.push(parsedChild);
-                }
-            }
-        }
-
-        return parsedField;
-    }                  
-
-    private parseJavaFieldFromDocument(field: any, docDef: DocumentDefinition): Field {
+    private parseFieldFromDocument(field: any, parentField: Field, docDef: DocumentDefinition): Field {
         if (field != null && field.status == "NOT_FOUND") {
             console.error("Filtering missing field: " + field.name
                 + " (" + field.className + "), parent class: " + docDef.name);
@@ -279,6 +265,10 @@ export class DocumentManagementService {
         var parsedField: Field = new Field();
         parsedField.name = field.name;
         parsedField.type = field.fieldType;
+        parsedField.path = field.path;
+        parsedField.isPrimitive = field.fieldType != "COMPLEX";
+        parsedField.serviceObject = field;
+
         if ("LIST" == field.collectionType || "ARRAY" == field.collectionType) {
             parsedField.isCollection = true;
             if ("ARRAY" == field.collectionType) {
@@ -288,11 +278,46 @@ export class DocumentManagementService {
                 parsedField.type = "LIST<" + parsedField.type + ">";
             }
         }
-        
+
+        if (parentField != null) {
+            parentField.children.push(parsedField);
+        } else {
+            docDef.fields.push(parsedField);
+        }
+
+        return parsedField;
+    }
+
+    private parseXMLFieldFromDocument(field: any, parentField: Field, docDef: DocumentDefinition): void {
+        var parsedField = this.parseFieldFromDocument(field, parentField, docDef);
+        if (parsedField == null) {
+            return;
+        }            
+
+        if (field.name.indexOf(":") != -1) {
+            parsedField.namespaceAlias = field.name.split(":")[0];
+            parsedField.name = field.name.split(":")[1];
+        }
+
+        parsedField.isAttribute = (parsedField.path.indexOf("@") != -1);                    
+
+        if (field.xmlFields && field.xmlFields.xmlField && field.xmlFields.xmlField.length) {
+            for (let childField of field.xmlFields.xmlField) {
+                this.parseXMLFieldFromDocument(childField, parsedField, docDef);                
+            }
+        }
+    }                  
+
+    private parseJavaFieldFromDocument(field: any, parentField: Field, docDef: DocumentDefinition): void {
+        var parsedField = this.parseFieldFromDocument(field, parentField, docDef);
+        if (parsedField == null) {
+            return;
+        }
+
+        //java fields have a special primitive property, so override the "!= COMPLEX" math from parseFieldFromDocument()
         parsedField.isPrimitive = field.primitive;
         parsedField.classIdentifier = field.className;
         parsedField.enumeration = field.enumeration;
-        parsedField.serviceObject = field;
 
         if (parsedField.enumeration && field.javaEnumFields && field.javaEnumFields.javaEnumField) {
             for (let enumValue of field.javaEnumFields.javaEnumField) {
@@ -308,14 +333,9 @@ export class DocumentManagementService {
 
         if (field.javaFields && field.javaFields.javaField && field.javaFields.javaField.length) {
             for (let childField of field.javaFields.javaField) {
-                var parsedChild: Field = this.parseJavaFieldFromDocument(childField, docDef);
-                if (parsedChild != null) {
-                    parsedField.children.push(parsedChild);
-                }
+                this.parseJavaFieldFromDocument(childField, parsedField, docDef);
             }
         }
-
-        return parsedField;
     }
 
     private handleError(message:string, error: any): void {

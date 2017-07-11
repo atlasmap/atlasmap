@@ -301,6 +301,7 @@ export class MappingDefinition {
                     mappedField.field.name = fieldName;                    
                     mappedField.field.displayName = fieldName;                    
                     mappedField.field.isAttribute = (fieldName.indexOf("@") != -1);
+                    mappedField.field.namespaceAlias = namespaceAlias;
                     
                     if (parentPath != null) {
                         mappedField.field.parentField = doc.getField(parentPath);
@@ -308,9 +309,6 @@ export class MappingDefinition {
                     if (mappedField.field.parentField == null) {
                         mappedField.field.parentField = DocumentDefinition.getNoneField();
                     }
-                                                        
-                    namespaceAlias = (namespaceAlias == null) ? "tns" : namespaceAlias;
-                    mappedField.field.namespace = doc.getNamespaceForAlias(namespaceAlias);
 
                     doc.addField(mappedField.field);
                 } else {
@@ -320,14 +318,13 @@ export class MappingDefinition {
                     return;
                 }
             }
-            if (mappedField.parsedData.actionNames.length > 0) {
-                for (let actionName of mappedField.parsedData.actionNames) {
-                    var actionConfig: FieldActionConfig = TransitionModel.getActionConfigForName(actionName);
+            if (mappedField.parsedData.parsedActions.length > 0) {
+                for (let action of mappedField.parsedData.parsedActions) {
+                    var actionConfig: FieldActionConfig = TransitionModel.getActionConfigForName(action.name);
                     if (actionConfig == null) {
-                        console.error("Could not find field action config for action name '" + actionName + "'");
+                        console.error("Could not find field action config for action name '" + action.name + "'");
                         continue;
                     }
-                    var action: FieldAction = new FieldAction();
                     actionConfig.populateFieldAction(action);
                     mappedField.actions.push(action);
                 }
@@ -336,7 +333,6 @@ export class MappingDefinition {
             var isSeparate: boolean = fieldPair.transition.isSeparateMode();
             var isCombine: boolean = fieldPair.transition.isCombineMode();            
             var index: string = mappedField.parsedData.parsedIndex;
-
             mappedField.updateSeparateOrCombineIndex(isSeparate, isCombine, index, isSource); 
         }
     }
@@ -360,10 +356,8 @@ export class MappingDefinition {
     public findMappingsForField(field: Field): MappingModel[] {
         var mappingsForField: MappingModel[] = [];
         for (let m of this.mappings) {
-            for (let fieldPair of m.fieldMappings) {
-                if (fieldPair.isFieldMapped(field)) {
-                    mappingsForField.push(m);
-                }
+            if (m.isFieldMapped(field, field.isSource())) {
+                mappingsForField.push(m);            
             }
         }
         return mappingsForField;

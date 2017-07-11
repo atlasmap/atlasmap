@@ -27,7 +27,7 @@ import { DataMapperUtil } from '../common/data.mapper.util';
         <div class="PropertyEditFieldComponent">
             <div class="form-group">
                 <label>Alias</label>
-                <input type="text" [(ngModel)]="namespace.alias" disabled="{{namespace.isTarget}}">
+                <input type="text" [(ngModel)]="namespace.alias" disabled="{{namespace.isTarget || !namespace.createdByUser}}">
             </div>            
             <div class="form-group">
                 <label>URI</label>
@@ -37,23 +37,37 @@ import { DataMapperUtil } from '../common/data.mapper.util';
                 <label>Location URI</label>
                 <input type="text" [(ngModel)]="namespace.locationUri"/>
             </div>
-            <!--
             <div class="form-group">
                 <label>Type</label>
-                <input type="checkbox" [(ngModel)]="namespace.isTarget" style="width:20px;" />
-                <label style="width:105px; ">Target Namespace</label>
+                <input type="checkbox" [ngModel]="namespace.isTarget" style="width:20px; vertical-align:middle;" 
+                    disabled="{{!targetEnabled}}" (click)="targetToggled()" />
+                <label [attr.class]="(targetEnabled ? '' : 'disabled')" style="width:105px; ">Target Namespace</label>
                 <div class="clear"></div>
-            </div>
-            -->                
+            </div>             
         </div>
     `
 })
 
 export class NamespaceEditComponent implements ModalWindowValidator {
     public namespace: NamespaceModel = new NamespaceModel();
+    public targetEnabled: boolean = true;
 
-    public initialize(namespace: NamespaceModel): void {
+    public initialize(namespace: NamespaceModel, namespaces: NamespaceModel[]): void {
         this.namespace = (namespace == null) ? new NamespaceModel() : namespace.copy();
+        if (!namespace.isTarget) {
+            for (let ns of namespaces) {
+                if (ns.isTarget) {
+                    this.targetEnabled = false;
+                    break;
+                }
+            }
+        }        
+        console.log("Namespaces enabled: " + this.targetEnabled);
+    }
+
+    targetToggled(): void {
+        this.namespace.isTarget = !this.namespace.isTarget;
+        this.namespace.alias = this.namespace.isTarget ? "tns" : "";
     }
 
     isDataValid(): boolean {

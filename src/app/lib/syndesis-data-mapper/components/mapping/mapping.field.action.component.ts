@@ -27,24 +27,24 @@ import { TransitionModel, FieldAction, FieldActionConfig } from '../../models/tr
         <div class="mappingFieldAction">
             <div class="actionContainer" *ngFor="let action of getMappedFieldActions(); let actionIndex = index">
                 <div class="form-group">
-                    <label style="float:left;">{{ action.description }}</label>
+                    <label style="float:left;">{{ getActionDescription(action) }}</label>
                     <div style="float:right; margin-right:5px;" *ngIf="!action.isSeparateOrCombineMode">
                         <i class="fa fa-trash link" aria-hidden="true" (click)="removeAction(action)"></i>
                     </div>
                     <div class="clear"></div>
 
                     <select (change)="configSelectionChanged($event);"
-                        [ngModel]="action.identifier" *ngIf="!action.isSeparateOrCombineMode">
+                        [ngModel]="action.name" *ngIf="!action.isSeparateOrCombineMode">
                         <option *ngFor="let actionConfig of getActionConfigs()"
                             [attr.actionIndex]="actionIndex"
-                            [attr.value]="actionConfig.identifier">{{ actionConfig.name }}</option>
+                            [attr.value]="actionConfig.name">{{ actionConfig.name }}</option>
                     </select>
                     
                     <div class="clear"></div>
                 </div>
-                <div class="form-group argument" *ngFor="let name of action.argumentNames; let i = index">
-                    <label style="">{{ name }}</label>
-                    <input type="text" [(ngModel)]="action.argumentValues[i]" (change)="selectionChanged($event)"/>
+                <div class="form-group argument" *ngFor="let argConfig of action.config.arguments; let i = index">
+                    <label style="">{{ argConfig.name }}</label>
+                    <input type="text" [(ngModel)]="action.getArgumentValue(argConfig.name).value" (change)="selectionChanged($event)"/>
                     <div class="clear"></div>
                 </div>
             </div>
@@ -59,9 +59,17 @@ export class MappingFieldActionComponent {
     @Input() cfg: ConfigModel;
     @Input() mappedField: MappedField;
     @Input() isSource: boolean;
+    @Input() fieldPair: FieldMappingPair;
 
     public getMappedFieldActions(): FieldAction[] {
         return this.mappedField.actions;
+    }
+
+    public getActionDescription(fieldAction: FieldAction): string {
+        if (fieldAction.isSeparateOrCombineMode) {
+            return fieldAction.config.name;
+        }
+        return "Transformation";
     }
 
     public actionsExistForField(): boolean {
@@ -71,7 +79,7 @@ export class MappingFieldActionComponent {
     public getActionConfigs(): FieldActionConfig[] {
         var configs: FieldActionConfig[] = [];
         for (let config of TransitionModel.actionConfigs) {
-            if (config.appliesToField(this.mappedField.field)) {
+            if (config.appliesToField(this.mappedField.field, this.fieldPair)) {
                 configs.push(config);
             }
         }
@@ -97,16 +105,12 @@ export class MappingFieldActionComponent {
     configSelectionChanged(event: MouseEvent) {
         var eventTarget: any = event.target; //extract this to avoid compiler error about 'selectedOptions' not existing.
         var attributes: any = eventTarget.selectedOptions.item(0).attributes;
-        var selectedIdentifier: any = attributes.getNamedItem("value").value;
+        var selectedActionName: any = attributes.getNamedItem("value").value;
         var selectedActionIndex: any = attributes.getNamedItem("actionIndex").value;
         var action: FieldAction = this.getMappedFieldActions()[selectedActionIndex];
-        if (action.identifier != selectedIdentifier) {
-            for (let actionConfig of TransitionModel.actionConfigs) {
-                if (actionConfig.identifier == selectedIdentifier) {
-                    actionConfig.populateFieldAction(action);
-                    break;
-                }
-            }
+        if (action.name != selectedActionName) {
+            var fieldActionConfig: FieldActionConfig = TransitionModel.getActionConfigForName(selectedActionName);
+            fieldActionConfig.populateFieldAction(action);
         }
         this.cfg.mappingService.saveCurrentMapping();
     }

@@ -15,7 +15,7 @@
 */
 
 import { Field } from './field.model';
-import { TransitionModel, TransitionMode, FieldAction, FieldActionConfig } from './transition.model';
+import { TransitionModel, TransitionMode, FieldAction, FieldActionConfig, FieldActionArgumentValue } from './transition.model';
 import { DocumentDefinition } from '../models/document.definition.model';
 import { ErrorInfo, ErrorLevel } from '../models/error.model';
 
@@ -31,7 +31,7 @@ export class MappedFieldParsingData {
     public fieldIsProperty: boolean = false;
     public fieldIsConstant: boolean = false;
     public parsedValueType: string = null;
-    public actionNames: string[] = [];
+    public parsedActions: FieldAction[] = [];
     public userCreated: boolean = false;
 }
 
@@ -57,12 +57,7 @@ export class MappedField {
         var firstFieldAction: FieldAction = (this.actions.length > 0) ? this.actions[0] : null;
         if (firstFieldAction == null || !firstFieldAction.isSeparateOrCombineMode) {
             //add new separate/combine field action when there isn't one
-            firstFieldAction = new FieldAction();
-            firstFieldAction.isSeparateOrCombineMode = true;
-            firstFieldAction.name = separateMode ? "Separate" : "Combine";
-            firstFieldAction.description = firstFieldAction.name;
-            firstFieldAction.argumentNames.push("Index");
-            firstFieldAction.argumentValues.push((suggestedValue == null) ? "1" : suggestedValue);
+            firstFieldAction = FieldAction.createSeparateCombineFieldAction(separateMode, suggestedValue);
             this.actions = [firstFieldAction].concat(this.actions);
         }
     }
@@ -77,7 +72,7 @@ export class MappedField {
     public getSeparateOrCombineIndex(): string {
         var firstFieldAction: FieldAction = (this.actions.length > 0) ? this.actions[0] : null;
         if (firstFieldAction != null && firstFieldAction.isSeparateOrCombineMode) {
-            return firstFieldAction.argumentValues[0];
+            return firstFieldAction.argumentValues[0].value;
         }
         return null;
     }
@@ -110,6 +105,10 @@ export class MappedField {
         }
         return result;
     }
+
+    public isMapped(): boolean {
+        return (this.field != null) && (this.field != DocumentDefinition.getNoneField());
+    }
 }
 
 export class FieldMappingPair {
@@ -123,6 +122,20 @@ export class FieldMappingPair {
         var mappedField: MappedField = new MappedField();
         mappedField.field = field;
         this.getMappedFields(isSource).push(mappedField);
+    }
+
+    public hasMappedField(isSource: boolean) {
+        var mappedFields: MappedField[] = isSource ? this.sourceFields : this.targetFields;
+        for (let mappedField of mappedFields) {
+            if (mappedField.isMapped()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public isFullyMapped(): boolean {
+        return this.hasMappedField(true) && this.hasMappedField(false);
     }
 
     public addMappedField(mappedField: MappedField, isSource: boolean): void {
@@ -233,8 +246,8 @@ export class FieldMappingPair {
         for (let mappedField of mappedFields) {
             var actionsToRemove: FieldAction[] = [];
             for (let action of mappedField.actions) {
-                var actionConfig: FieldActionConfig = TransitionModel.getActionConfig(action);
-                if (actionConfig != null && !actionConfig.appliesToField(mappedField.field)) {
+                var actionConfig: FieldActionConfig = TransitionModel.getActionConfigForName(action.name);
+                if (actionConfig != null && !actionConfig.appliesToField(mappedField.field, this)) {
                     actionsToRemove.push(action);
                 }
             }
@@ -364,14 +377,16 @@ export class MappingModel {
     }
 
     public isFieldSelectable(field: Field): boolean {
-        if (this.brandNewMapping) {
-            //if mapping hasnt had a field selected yet, allow it
-            console.log("brand new mapping");            
-            return true;
+        return this.getFieldSelectionExclusionReason(field) == null;
+    }
+
+    public getFieldSelectionExclusionReason(field: Field): string {
+        if (this.brandNewMapping) { // if mapping hasnt had a field selected yet, allow it
+            return null;
         }
 
         if (!field.isTerminal()) {
-            return false;
+            return "field is a parent field";
         }
 
         var repeatedMode: boolean = this.isCollectionMode();
@@ -389,46 +404,53 @@ export class MappingModel {
         }
         if (mapMode || separateMode || combineMode) {        
             //repeated fields and enums are not selectable in these modes
-            if (field.isInCollection() || field.enumeration) {
-                return false;
+            if (field.isInCollection()) {
+                return "Repeated fields are not valid for this mapping";
             }
+            if (field.enumeration) {
+                return "Enumeration fields are not valid for this mapping";
+            }
+
             //separate mode sources must be string
             if (separateMode && !field.isStringField() && field.isSource()) {
-                return false;
+                return "source fields for this mapping must be type String"
             }
         } else if (lookupMode) {
             if (!field.enumeration) {
-                return false;
+                return "only Enumeration fields are valid for this mapping";
             }
         } else if (repeatedMode) {
+            //enumeration fields are not allowed in repeated mappings
+            if (field.enumeration) {
+                return "Enumeration fields are not valid for this mapping";
+            }
+            
             //if no fields for this isSource has been selected yet, everything is open to selection
             if (!this.hasMappedFields(field.isSource())) {            
-                console.log("allowing: " + field.path);
-                return true;
+                return null;
             }
-            if (field.isInCollection()) {
-                console.log("here: " + field.path);
-            }
+
             var collectionField: Field = this.getFirstCollectionField(field.isSource());
             if (collectionField == null) {
                 //only primitive fields (not in collections) are selectable
                 if (field.isInCollection()) {
-                    return false;
+                    var fieldTypeDesc: string = field.isSource ? "source" : "target"
+                    return fieldTypeDesc + " fields cannot be repeated fields for this mapping.";
                 }
             } else { //collection field exists in this mapping for isSource
+                var parentCollectionField: Field = collectionField.getCollectionParentField();
                 //primitive fields are not selectable when collection field is already selected
-                if (!field.isInCollection()) {
-                    return false;
+                if (!field.isInCollection()) {                    
+                    return "field is not selectable, it is not a child of " + parentCollectionField.displayName;
                 }
 
                 //children of collections are only selectable if this field is in the same collection
-                var parentCollectionField: Field = collectionField.getCollectionParentField();       
                 if (field.getCollectionParentField() != parentCollectionField) {
-                    return false;
+                    return "field is not selectable, it is not a child of " + parentCollectionField.displayName;
                 }         
             }
         }
-        return true;
+        return null;
     }
 
     public isFieldMapped(field:Field, isSource:boolean): boolean {
@@ -453,7 +475,16 @@ export class MappingModel {
 
     public hasMappedFields(isSource: boolean): boolean {
         for (let mappedField of this.getMappedFields(isSource)) {
-            if (mappedField.field != null && mappedField.field != DocumentDefinition.getNoneField()) {
+            if (mappedField.isMapped()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public hasFullyMappedPair(): boolean {
+        for (let pair of this.fieldMappings) {
+            if (pair.isFullyMapped()) {
                 return true;
             }
         }

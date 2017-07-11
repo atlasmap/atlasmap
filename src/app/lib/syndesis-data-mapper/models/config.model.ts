@@ -32,6 +32,7 @@ export class DataMapperInitializationModel {
 
     public baseJavaInspectionServiceUrl: string;
     public baseXMLInspectionServiceUrl: string;
+    public baseJSONInspectionServiceUrl: string;    
     public baseMappingServiceUrl: string;
     public baseValidationServiceUrl: string;
     public baseFieldMappingServiceUrl: string;
@@ -104,33 +105,37 @@ export class ConfigModel {
         return ConfigModel.cfg;
     }
 
-    public addJavaDocument(documentIdentifier: string, isSource: boolean) {
-        var docDef: DocumentDefinition = new DocumentDefinition();
-        docDef.isSource = isSource;
-        docDef.initCfg.documentIdentifier = documentIdentifier;
-        docDef.initCfg.type.type = DocumentTypes.JAVA;
-        if (isSource) {
-            this.sourceDocs.push(docDef);
-        } else {
-            this.targetDocs.push(docDef);
-        }
-    }
-
-    public addXMLDocument(identifier: string, documentContents: string, isSource: boolean, schemaInspection: boolean) {
+    private createDocument(documentIdentifier: string, isSource: boolean,
+        docType: DocumentTypes, documentContents: string): DocumentDefinition {
         var docDef: DocumentDefinition = new DocumentDefinition();        
         docDef.isSource = isSource;
-        docDef.initCfg.pathSeparator = "/";
-        docDef.initCfg.shortIdentifier = identifier;
-        docDef.initCfg.documentIdentifier = identifier;
-        docDef.uri = identifier;
-        docDef.initCfg.type.type = DocumentTypes.XML;
-        docDef.initCfg.xmlData = documentContents;
-        docDef.initCfg.xmlInspectionType = schemaInspection ? "SCHEMA" : "INSTANCE";
+        docDef.initCfg.shortIdentifier = documentIdentifier;
+        docDef.initCfg.documentIdentifier = documentIdentifier;
+        docDef.uri = documentIdentifier;
+        docDef.initCfg.type.type = docType;
+        docDef.initCfg.documentContents = documentContents;
+        docDef.initCfg.inspectionType = "INSTANCE";
         if (isSource) {
             this.sourceDocs.push(docDef);
         } else {
             this.targetDocs.push(docDef);
         }
+        return docDef;
+
+    }
+
+    public addJavaDocument(documentIdentifier: string, isSource: boolean): void {
+        var docDef: DocumentDefinition = this.createDocument(documentIdentifier, isSource, DocumentTypes.JAVA, null);
+        docDef.initCfg.pathSeparator = ".";            
+    }
+
+    public addJSONDocument(documentIdentifier: string, documentContents: string, isSource: boolean): void {
+        this.createDocument(documentIdentifier, isSource, DocumentTypes.JSON, documentContents);
+    }
+
+    public addXMLDocument(documentIdentifier: string, documentContents: string, isSource: boolean, schemaInspection: boolean): void {
+        var docDef: DocumentDefinition = this.createDocument(documentIdentifier, isSource, DocumentTypes.XML, documentContents);                
+        docDef.initCfg.inspectionType = schemaInspection ? "SCHEMA" : "INSTANCE";
     }
 
     public getDocsWithoutPropertyDoc(isSource: boolean): DocumentDefinition[] {

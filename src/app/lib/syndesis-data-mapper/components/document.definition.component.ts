@@ -114,6 +114,7 @@ export class DocumentDefinitionComponent {
 
     private isAddFieldAvailable(docDef: DocumentDefinition): boolean {
         return docDef.initCfg.type.isPropertyOrConstant()
+            || (!docDef.isSource && docDef.initCfg.type.isJSON())
             || (!docDef.isSource && docDef.initCfg.type.isXML());
     }
 
@@ -236,7 +237,7 @@ export class DocumentDefinitionComponent {
             } else {
                 var fieldComponent: FieldEditComponent = mw.nestedComponent as FieldEditComponent;
                 fieldComponent.isSource = this.isSource;
-                fieldComponent.initialize(null, docDef);
+                fieldComponent.initialize(null, docDef, true);
             }
         };
         this.modalWindow.nestedComponentType = isProperty ? PropertyFieldEditComponent : (isConstant ? ConstantFieldEditComponent : FieldEditComponent)

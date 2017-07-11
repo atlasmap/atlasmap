@@ -47,10 +47,8 @@ export class Field {
     public isAttribute: boolean = false;
     public isPrimitive: boolean = false;
     public userCreated: boolean = false;
-    public availableForSelection: boolean = true;
-    public selectionExclusionReason: string = null;
     public docDef: DocumentDefinition = null;
-    public namespace: NamespaceModel = null;
+    public namespaceAlias: string = null;
 
     private static uuidCounter: number = 0;
 
@@ -60,10 +58,10 @@ export class Field {
     }
 
     public getNameWithNamespace(): string {
-        if (!this.docDef || !this.namespace || this.namespace.isTarget) {
+        if (!this.docDef || !this.namespaceAlias) {
             return this.name;
         }
-        return this.namespace.alias + ":" + this.name;
+        return this.namespaceAlias + ":" + this.name;
     }
 
     public isParentField(): boolean {
@@ -95,7 +93,6 @@ export class Field {
         copy.serviceObject = this.serviceObject;
         copy.parentField = this.parentField;
         copy.docDef = this.docDef;
-        copy.namespace = this.namespace;
 
         copy.children = [];
         for (let childField of this.children) {
@@ -112,7 +109,6 @@ export class Field {
         this.serviceObject = that.serviceObject;
         this.parentField = that.parentField;
         this.docDef = that.docDef;
-        this.namespace = that.namespace;
         
         this.children = [];
         for (let childField of that.children) {

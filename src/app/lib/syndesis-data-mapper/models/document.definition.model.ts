@@ -28,7 +28,21 @@ export class NamespaceModel {
     public createdByUser: boolean = false;
     public isTarget: boolean = false;
 
+    private static unqualifiedNamespace: NamespaceModel = null;
+
+    public static getUnqualifiedNamespace(): NamespaceModel {
+        if (NamespaceModel.unqualifiedNamespace == null) {
+            var ns: NamespaceModel = new NamespaceModel();
+            ns.alias = "Unqualified";
+            NamespaceModel.unqualifiedNamespace = ns;
+        }
+        return NamespaceModel.unqualifiedNamespace;
+    }
+
     public getPrettyLabel(): string {
+        if (this == NamespaceModel.getUnqualifiedNamespace()) {
+            return this.alias;
+        }
         return (this.isTarget ? "Target" : this.alias)
             + " [" + (this.uri == null ? "NO URI" : this.uri) + "]";
     }
@@ -85,9 +99,9 @@ export class DocumentInitializationConfig {
     public classPath: string;
     public initialized: boolean = false;
     public errorOccurred: boolean = false;    
-    public pathSeparator: string = ".";
-    public xmlData: string = null;
-    public xmlInspectionType: string = null;
+    public pathSeparator: string = "/";
+    public documentContents: string = null;
+    public inspectionType: string = null;
 }
 
 export class DocumentDefinition {
@@ -230,7 +244,7 @@ export class DocumentDefinition {
         }
     }
 
-    public populateFromFields(): void {
+    public initializeFromFields(): void {
         if (this.initCfg.type.isJava()) {
             this.prepareComplexFields();
         }
@@ -255,13 +269,15 @@ export class DocumentDefinition {
             console.log(enumFields);
         }
 
+        this.initCfg.initialized = true;
+
         console.log("Finished populating fields for '" + this.name + "', field count: " 
             + this.allFields.length + ", terminal: " + this.terminalFields.length + ".");
     }
 
     private populateFieldParentPaths(field: Field, parentPath: string, depth: number): void {
         if (parentPath == null) {
-            parentPath = this.initCfg.type.isXML() ? this.initCfg.pathSeparator : "";
+            parentPath = (this.initCfg.type.isXML() || this.initCfg.type.isJSON()) ? this.initCfg.pathSeparator : "";
         }
         field.path = parentPath + field.getNameWithNamespace();
         if (field.isCollection) {
@@ -465,9 +481,6 @@ export class DocumentDefinition {
             field.hasUnmappedChildren = false;
             field.selected = false;
             field.partOfTransformation = false;
-            field.availableForSelection = !collectionMode;
-            //FIXME: (hard coded for demo 2017/06/02)
-            field.availableForSelection = true;
         }
         
         //FIXME: (hard coded for demo 2017/06/02)
@@ -480,42 +493,7 @@ export class DocumentDefinition {
             if (!collectionPrimitiveMode) {
                 parentCollectionPath = fieldsInMapping[0].parentField.path;
                 parentCollectionDisplayName = fieldsInMapping[0].parentField.displayName;
-            }
-            for (let field of this.getTerminalFields()) {
-                if (collectionPrimitiveMode) {
-                    //our document is in primitive mode, only allow primitives not in collection to be mapped
-                    if (field.isInCollection()) {
-                        field.selectionExclusionReason =
-                            "primitive collection mode (cannot select fields within collection)";
-                        continue;
-                    }
-                    var parentField: Field = field;
-                    while (parentField != null) {
-                        parentField.availableForSelection = true;
-                        parentField.selectionExclusionReason = null;
-                        parentField = parentField.parentField;
-                    }
-                } else {
-                    //our document is in collection mode, only allow direct children of the selected collection to be mapped
-                    if (!field.isInCollection()) {
-                        field.selectionExclusionReason =
-                            "collection mode (only children of " + parentCollectionDisplayName + " may be selected)";
-                        continue;
-                    }
-                    //only direct children of the selected collection are selectable
-                    if (!(field.parentField.path == parentCollectionPath)) {
-                        field.selectionExclusionReason =
-                            "collection mode (only children of " + parentCollectionDisplayName + " may be selected)";
-                        continue;
-                    }
-                    var parentField: Field = field;
-                    while (parentField != null) {
-                        parentField.availableForSelection = true;
-                        parentField.selectionExclusionReason = null;
-                        parentField = parentField.parentField;
-                    }
-                }
-            }
+            }            
         }
 
         //FIXME: some of this work is happening N times for N source/target docs, should only happen once.

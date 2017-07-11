@@ -18,6 +18,7 @@ import { Component, Input } from '@angular/core';
 
 import { ConfigModel } from '../models/config.model';
 import { MappingModel } from '../models/mapping.model';
+import { DocumentDefinition, DocumentTypes, DocumentType } from '../models/document.definition.model';
 
 import { LineMachineComponent } from './line.machine.component';
 import { ModalWindowComponent } from './modal.window.component';
@@ -29,7 +30,8 @@ template: `
     <div class="dm-toolbar">
         <div class="dm-toolbar-icons" style="float:right;">
             <i class="fa fa-plus link" (click)="toolbarButtonClicked('addMapping');"></i>
-            <i [attr.class]="getCSSClass('editTemplate')" (click)="toolbarButtonClicked('editTemplate');"></i>
+            <i [attr.class]="getCSSClass('editTemplate')"  *ngIf="targetSupportsTemplate()"
+                (click)="toolbarButtonClicked('editTemplate');"></i>
             <i [attr.class]="getCSSClass('showMappingTable')" (click)="toolbarButtonClicked('showMappingTable');"></i>
             <i *ngIf="cfg.getFirstXmlDoc(false)" [attr.class]="getCSSClass('showNamespaceTable')" 
                 (click)="toolbarButtonClicked('showNamespaceTable');"></i>
@@ -108,10 +110,16 @@ export class ToolbarComponent {
         }
     }
 
+    public targetSupportsTemplate(): boolean {
+        var targetDoc: DocumentDefinition = this.cfg.targetDocs[0];
+        return targetDoc.initCfg.type.isXML() || targetDoc.initCfg.type.isJSON();
+    }
+
     public toolbarButtonClicked(action: string): void {
         if ("showDetails" == action) {
             if (this.cfg.mappings.activeMapping == null) {
                 this.cfg.mappingService.addNewMapping(null);
+                this.cfg.mappings.activeMapping.brandNewMapping = true;
             } else {
                 this.cfg.mappingService.deselectMapping();
             }

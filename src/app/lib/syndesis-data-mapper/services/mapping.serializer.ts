@@ -14,8 +14,8 @@
     limitations under the License.
 */
 
-import { TransitionModel, TransitionMode, TransitionDelimiter,
-    FieldAction, FieldActionConfig } from '../models/transition.model';
+import { TransitionModel, TransitionMode, TransitionDelimiter, FieldActionArgument,
+    FieldAction, FieldActionConfig, FieldActionArgumentValue } from '../models/transition.model';
 import { MappingModel, FieldMappingPair, MappedField, MappedFieldParsingData } from '../models/mapping.model';
 import { Field } from '../models/field.model';
 import { MappingDefinition } from '../models/mapping.definition.model';
@@ -124,7 +124,13 @@ export class MappingSerializer {
                     serializedDoc["template"] = mappingDefinition.templateText;
                 }
                 serializedDoc["xmlNamespaces"] = { "xmlNamespace": namespaces };
+            } else if (doc.initCfg.type.isJSON()) {
+                if (!doc.isSource) {
+                    serializedDoc["template"] = mappingDefinition.templateText;
+                }
+                serializedDoc["jsonType"] = "io.atlasmap.json.v2.JsonDataSource";
             }
+
             serializedDocs.push(serializedDoc);
         }
         return serializedDocs;
@@ -186,7 +192,7 @@ export class MappingSerializer {
                 "value": field.value,
                 "docId": field.docDef.initCfg.shortIdentifier
             };
-            if (field.docDef.initCfg.type.isXML()) {
+            if (field.docDef.initCfg.type.isXML() || field.docDef.initCfg.type.isJSON()) {
                 serializedField["userCreated"] = field.userCreated;
             }
             if (field.isProperty()) {
@@ -213,10 +219,21 @@ export class MappingSerializer {
                 for (let action of mappedField.actions) {
                     if (action.isSeparateOrCombineMode) {
                         continue;
+                    }               
+                         
+                    var actionArguments: any = {};
+                    for (let argValue of action.argumentValues) { 
+                        actionArguments[argValue.name] = argValue.value;
+                        var argumentConfig: FieldActionArgument = action.config.getArgumentForName(argValue.name);                       
+                        if (argumentConfig.type == "INTEGER") {
+                            actionArguments[argValue.name] = parseInt(argValue.value);
+                        }                        
                     }
-                    var actionConfig: FieldActionConfig = TransitionModel.getActionConfig(action);
+
+                    actionArguments = (Object.keys(actionArguments).length == 0) ? null : actionArguments;
+
                     var actionJson: any = {};
-                    actionJson[actionConfig.name] = null;
+                    actionJson[action.config.name] = actionArguments;
                     actions.push(actionJson);
                 }               
                 serializedField["actions"] = actions;
@@ -387,7 +404,6 @@ export class MappingSerializer {
             mappedField.parsedData.parsedDocID = field.docId;
             mappedField.parsedData.parsedDocURI = docRefs[field.docId];
             if (field.userCreated) {
-                console.error(field);
                 mappedField.parsedData.userCreated = true;
             }
             if (mappedField.parsedData.parsedDocURI == null) {
@@ -398,7 +414,20 @@ export class MappingSerializer {
             if (field.actions) {    
                 for (let action of field.actions) {
                     for (let actionName in action) {
-                        mappedField.parsedData.actionNames.push(actionName);
+                        var parsedAction: FieldAction = new FieldAction();
+                        parsedAction.name = actionName;
+                        var actionParams: any = action[actionName];
+                        if (actionParams) {
+                            for (let paramName in actionParams) {
+                                var parsedArgumentValue: FieldActionArgumentValue = new FieldActionArgumentValue();
+                                parsedArgumentValue.name = paramName;
+                                var value = actionParams[paramName];
+                                value = value == null ? null : value.toString()
+                                parsedArgumentValue.value = value;
+                                parsedAction.argumentValues.push(parsedArgumentValue);
+                            }
+                        }
+                        mappedField.parsedData.parsedActions.push(parsedAction);
                     }
                 }
             }
