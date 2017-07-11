@@ -1,0 +1,7 @@
+{
+  "XmlInspectionRequest": {
+    "jsonType": "io.atlasmap.xml.v2.XmlInspectionRequest",
+    "type": "SCHEMA",
+    "xmlData": "<schema xmlns=\"http://www.w3.org/2001/XMLSchema\" targetNamespace=\"http://example.com/\" xmlns:tns=\"http://example.com/\"><element name=\"aGlobalElement\" type=\"tns:aGlobalType\"/><simpleType name=\"aGlobalType\"><restriction base=\"string\"/></simpleType></schema>"
+  }
+}

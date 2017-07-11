@@ -1,0 +1,9 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+
+    "title": "SourceOrder",
+    "type": "object",
+    "extends": {
+        "$ref": "BaseOrder.jsd"
+    }     
+}

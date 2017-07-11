@@ -1,0 +1,17 @@
+{
+    "booleanField": false,
+    "charField": "a",
+    "doubleField": -27152745.3422,
+    "floatField": -63988281.00,
+    "intField": 8281,
+    "shortField": 81,
+    "longField": 3988281,
+    "boxedBooleanField": false,
+    "boxedCharField": "z",
+    "boxedDoubleField": 27152745.3422,
+    "boxedFloatField": 63988281.00,
+    "boxedIntField": -8281,
+    "boxedLongField": -3988281,
+    "boxedShortField": -81,
+    "boxedStringField": "Hello world"
+}

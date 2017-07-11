@@ -1,0 +1,19 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    
+    "title": "BaseAddress",
+    "type": "object",
+    "additionalProperties": true,
+    "properties": {
+    
+        "address": {
+            "$ref": "BaseAddress.jsd" 
+        },
+        "contact": {
+            "$ref": "BaseContact.jsd"
+        },
+        "orderId": {
+            "type": "integer"
+        }
+    }
+}

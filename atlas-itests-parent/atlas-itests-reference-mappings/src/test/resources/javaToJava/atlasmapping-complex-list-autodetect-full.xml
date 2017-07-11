@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AtlasMapping xmlns="http://atlasmap.io/v2" xmlns:ns2="http://atlasmap.io/java/v2"
+	xmlns:ns3="http://atlasmap.io/xml/v2" name="JavaJavaComplexListBase">
+	<DataSource dataSourceType="Source" uri="atlas:java?className=io.atlasmap.java.test.SourceOrderList" />
+	<DataSource dataSourceType="Target" uri="atlas:java?className=io.atlasmap.java.test.TargetOrderList" />
+	<Mappings>
+		<Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			xsi:type="Mapping" mappingType="Map">
+			<InputField xsi:type="ns2:JavaField" path="numberOrders" />
+			<OutputField xsi:type="ns2:JavaField" path="numberOrders" />
+		</Mapping>
+		<Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			xsi:type="Mapping" mappingType="Map">
+			<InputField xsi:type="ns2:JavaField" path="orderBatchNumber" />
+			<OutputField xsi:type="ns2:JavaField" path="orderBatchNumber" />
+		</Mapping>
+		<Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ns2:JavaCollection" collectionType="List" mappingType="Collection">
+			<Mappings>
+                <Mapping xsi:type="Mapping" mappingType="Map">
+                    <InputField xsi:type="ns2:JavaField" path="orders&lt;&gt;" />
+                    <OutputField xsi:type="ns2:JavaField" path="orders&lt;&gt;" className="io.atlasmap.java.test.TargetOrder" />
+                </Mapping>
+				<Mapping xsi:type="Mapping" mappingType="Map">
+					<InputField xsi:type="ns2:JavaField" path="orders&lt;&gt;.orderId" />
+					<OutputField xsi:type="ns2:JavaField" path="orders&lt;&gt;.orderId" />
+				</Mapping>
+				<Mapping xsi:type="Mapping" mappingType="Map">
+					<InputField xsi:type="ns2:JavaField" path="orders&lt;&gt;.contact" />
+					<OutputField xsi:type="ns2:JavaField" path="orders&lt;&gt;.contact" className="io.atlasmap.java.test.TargetContact" />
+				</Mapping>
+				<Mapping xsi:type="Mapping" mappingType="Map">
+					<InputField xsi:type="ns2:JavaField" path="orders&lt;&gt;.contact.firstName" />
+					<OutputField xsi:type="ns2:JavaField" path="orders&lt;&gt;.contact.firstName" />
+				</Mapping>
+				<Mapping xsi:type="Mapping" mappingType="Map">
+					<InputField xsi:type="ns2:JavaField" path="orders&lt;&gt;.contact.lastName" />
+					<OutputField xsi:type="ns2:JavaField" path="orders&lt;&gt;.contact.lastName" />
+				</Mapping>
+				<Mapping xsi:type="Mapping" mappingType="Map">
+					<InputField xsi:type="ns2:JavaField" path="orders&lt;&gt;.contact.phoneNumber" />
+					<OutputField xsi:type="ns2:JavaField" path="orders&lt;&gt;.contact.phoneNumber" />
+				</Mapping>
+				<Mapping xsi:type="Mapping" mappingType="Map">
+					<InputField xsi:type="ns2:JavaField" path="orders&lt;&gt;.contact.zipCode" />
+					<OutputField xsi:type="ns2:JavaField" path="orders&lt;&gt;.contact.zipCode" />
+				</Mapping>
+				<Mapping xsi:type="Mapping" mappingType="Map">
+					<InputField xsi:type="ns2:JavaField" path="orders&lt;&gt;.address" />
+					<OutputField xsi:type="ns2:JavaField" path="orders&lt;&gt;.address" className="io.atlasmap.java.test.TargetAddress" />
+				</Mapping>
+				<Mapping xsi:type="Mapping" mappingType="Map">
+					<InputField xsi:type="ns2:JavaField" path="orders&lt;&gt;.address.addressLine1" />
+					<OutputField xsi:type="ns2:JavaField" path="orders&lt;&gt;.address.addressLine1" />
+				</Mapping>
+				<Mapping xsi:type="Mapping" mappingType="Map">
+					<InputField xsi:type="ns2:JavaField" path="orders&lt;&gt;.address.addressLine2" />
+					<OutputField xsi:type="ns2:JavaField" path="orders&lt;&gt;.address.addressLine2" />
+				</Mapping>
+				<Mapping xsi:type="Mapping" mappingType="Map">
+					<InputField xsi:type="ns2:JavaField" path="orders&lt;&gt;.address.city" />
+					<OutputField xsi:type="ns2:JavaField" path="orders&lt;&gt;.address.city" />
+				</Mapping>
+				<Mapping xsi:type="Mapping" mappingType="Map">
+					<InputField xsi:type="ns2:JavaField" path="orders&lt;&gt;.address.state" />
+					<OutputField xsi:type="ns2:JavaField" path="orders&lt;&gt;.address.state" />
+				</Mapping>
+				<Mapping xsi:type="Mapping" mappingType="Map">
+					<InputField xsi:type="ns2:JavaField" path="orders&lt;&gt;.address.zipCode" />
+					<OutputField xsi:type="ns2:JavaField" path="orders&lt;&gt;.address.zipCode" />
+				</Mapping>
+			</Mappings>
+		</Mapping>
+	</Mappings>
+	<LookupTables />
+	<Properties />
+</AtlasMapping>

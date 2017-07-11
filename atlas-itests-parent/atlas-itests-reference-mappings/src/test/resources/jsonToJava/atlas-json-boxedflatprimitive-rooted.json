@@ -1,0 +1,13 @@
+{
+	"BoxedFlatPrimitive": {
+		"boxedBooleanField": true,
+		"boxedByteField": 87,
+		"boxedCharField": "z",
+		"boxedDoubleField": 90000000.0,
+		"boxedFloatField": 70000000.0,
+		"boxedIntField": 5,
+		"boxedLongField": 20000,
+		"boxedShortField": 5,
+		"boxedStringField": "boxedStringValue"
+	}
+}

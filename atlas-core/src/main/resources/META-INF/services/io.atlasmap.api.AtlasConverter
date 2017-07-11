@@ -1,0 +1,10 @@
+io.atlasmap.converters.BooleanConverter
+io.atlasmap.converters.ByteConverter
+io.atlasmap.converters.CharacterConverter
+io.atlasmap.converters.DateConverter
+io.atlasmap.converters.DoubleConverter
+io.atlasmap.converters.FloatConverter
+io.atlasmap.converters.IntegerConverter
+io.atlasmap.converters.LongConverter
+io.atlasmap.converters.ShortConverter
+io.atlasmap.converters.StringConverter
