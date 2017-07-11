@@ -20,7 +20,7 @@ import { HttpModule } from '@angular/http';
 import { FormsModule } from '@angular/forms';
 import { TypeaheadModule } from 'ngx-bootstrap';
 import { TooltipModule } from 'ngx-bootstrap';
-import { DropdownModule } from 'ngx-bootstrap';
+import { BsDropdownModule } from 'ngx-bootstrap';
 
 import { DocumentManagementService } from './services/document.management.service';
 import { MappingManagementService } from './services/mapping.management.service';
@@ -75,7 +75,7 @@ export { DataMapperAppComponent } from './components/data.mapper.app.component';
         FormsModule,
         TypeaheadModule.forRoot(),
         TooltipModule.forRoot(),
-        DropdownModule.forRoot()
+        BsDropdownModule.forRoot()
     ],
     declarations: [
         DataMapperAppComponent,
