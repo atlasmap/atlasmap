@@ -55,8 +55,6 @@ export class DataMapperAppExampleHostComponent {
         c.initCfg.baseXMLInspectionServiceUrl = "http://localhost:8585/v2/atlas/xml/";
         c.initCfg.baseJSONInspectionServiceUrl = "http://localhost:8585/v2/atlas/json/";        
         c.initCfg.baseMappingServiceUrl = "http://localhost:8585/v2/atlas/";
-        c.initCfg.baseValidationServiceUrl = "http://localhost:8585/v2/atlas/";
-        c.initCfg.baseFieldActionServiceUrl = "http://localhost:8585/v2/atlas/"
 
         //initialize data for our class path service call
         //note that quotes, newlines, and tabs are escaped
@@ -73,14 +71,14 @@ export class DataMapperAppExampleHostComponent {
         c.addJavaDocument("io.atlasmap.java.test.TargetOrderArray", true);
         c.addJavaDocument("io.atlasmap.java.test.SourceFlatPrimitiveClass", true);                
         c.addJavaDocument("io.atlasmap.java.test.TargetTestClass", true);
-        c.addXMLDocument("XMLInstanceSource", DocumentManagementService.generateMockInstanceXML(), true, false);
-        c.addXMLDocument("XMLSchemaSource", DocumentManagementService.generateMockSchemaXML(), true, false);                    
+        c.addXMLInstanceDocument("XMLInstanceSource", DocumentManagementService.generateMockInstanceXML(), true);
+        c.addXMLSchemaDocument("XMLSchemaSource", DocumentManagementService.generateMockSchemaXML(), true);                    
         c.addJSONDocument("JSONSource", DocumentManagementService.generateMockJSON(), true);
 
         //specify target document (only one allowed at a time)
         c.addJavaDocument("io.atlasmap.java.test.TargetTestClass", false);                
-        c.addXMLDocument("XMLInstanceTarget", DocumentManagementService.generateMockInstanceXML(), false, false);                    
-        c.addXMLDocument("XMLSchemaTarget", DocumentManagementService.generateMockSchemaXML(), false, false);   
+        c.addXMLInstanceDocument("XMLInstanceTarget", DocumentManagementService.generateMockInstanceXML(), false);                    
+        c.addXMLSchemaDocument("XMLSchemaTarget", DocumentManagementService.generateMockSchemaXML(), false);   
         c.addJSONDocument("JSONTarget", DocumentManagementService.generateMockJSON(), false);                 
 
         console.log("Example config after host component configuration.", c);

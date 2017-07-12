@@ -522,7 +522,7 @@ export class DocumentManagementService {
     }
 
     public static generateMockJSON(): string {
-        var sampleJSON: string = `{
+        var sampleJSON: string = `   {
                 "id": "0001",
                 "type": "donut",
                 "name": "Cake",

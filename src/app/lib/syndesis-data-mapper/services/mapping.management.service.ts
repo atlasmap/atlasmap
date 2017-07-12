@@ -304,13 +304,13 @@ export class MappingManagementService {
     }
 
     public validateMappings(): void {
-        if (this.cfg.initCfg.baseValidationServiceUrl == null) {
+        if (this.cfg.initCfg.baseMappingServiceUrl == null) {
             //validation service not configured. 
             return;
         }
         var startTime: number = Date.now();
         var payload: any = MappingSerializer.serializeMappings(this.cfg);
-        var url: string = this.cfg.initCfg.baseValidationServiceUrl + "mapping/validate";
+        var url: string = this.cfg.initCfg.baseMappingServiceUrl + "mapping/validate";
         DataMapperUtil.debugLogJSON(payload, "Validation Service Request", this.cfg.debugValidationJSON, url);
         this.http.put(url, payload, { headers: this.headers }).toPromise()
             .then((res: Response) => {
@@ -335,7 +335,7 @@ export class MappingManagementService {
         return new Observable<FieldActionConfig[]>((observer:any) => {
             var actionConfigs: FieldActionConfig[] = [];
             var startTime: number = Date.now();
-            var url: string = this.cfg.initCfg.baseFieldActionServiceUrl + "fieldActions";
+            var url: string = this.cfg.initCfg.baseMappingServiceUrl + "fieldActions";
             DataMapperUtil.debugLogJSON(null, "Field Action Config Request", this.cfg.debugFieldActionJSON, url);
             this.http.get(url, { headers: this.headers }).toPromise()
                 .then((res: Response) => {

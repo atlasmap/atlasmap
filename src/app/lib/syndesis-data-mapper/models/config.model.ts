@@ -32,8 +32,6 @@ export class DataMapperInitializationModel {
     public baseXMLInspectionServiceUrl: string;
     public baseJSONInspectionServiceUrl: string;    
     public baseMappingServiceUrl: string;
-    public baseValidationServiceUrl: string;
-    public baseFieldActionServiceUrl: string;
 
     /* class path fetching configuration */
     public classPathFetchTimeoutInMilliseconds: number = 30000;
@@ -129,9 +127,14 @@ export class ConfigModel {
         this.createDocument(documentIdentifier, isSource, DocumentTypes.JSON, documentContents);
     }
 
-    public addXMLDocument(documentIdentifier: string, documentContents: string, isSource: boolean, schemaInspection: boolean): void {
+    public addXMLInstanceDocument(documentIdentifier: string, documentContents: string, isSource: boolean): void {
         var docDef: DocumentDefinition = this.createDocument(documentIdentifier, isSource, DocumentTypes.XML, documentContents);                
-        docDef.initCfg.inspectionType = schemaInspection ? "SCHEMA" : "INSTANCE";
+        docDef.initCfg.inspectionType = "INSTANCE";
+    }
+
+    public addXMLSchemaDocument(documentIdentifier: string, documentContents: string, isSource: boolean): void {
+        var docDef: DocumentDefinition = this.createDocument(documentIdentifier, isSource, DocumentTypes.XML, documentContents);                
+        docDef.initCfg.inspectionType = "SCHEMA";
     }
 
     public getDocsWithoutPropertyDoc(isSource: boolean): DocumentDefinition[] {

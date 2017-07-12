@@ -69,8 +69,8 @@ export class InitializationService {
 
         if (this.cfg.mappingService == null) {
             console.error("Mapping service is not configured, validation service will not be used.")
-        } else if (this.cfg.initCfg.baseValidationServiceUrl == null) {
-            console.error("Validation service URL is not configured, validation service will not be used.")
+        } else if (this.cfg.initCfg.baseMappingServiceUrl == null) {
+            console.error("Mapping service URL is not configured, validation service will not be used.")
         }
 
         if (InitializationService.addMockJSONMappings) {
@@ -188,8 +188,8 @@ export class InitializationService {
             this.fieldActionsInitialized = true;
             this.updateStatus();
             return;
-        } else if (this.cfg.initCfg.baseFieldActionServiceUrl == null) {
-            console.error("Field action service URL is not provided. Field Actions will not be used.");
+        } else if (this.cfg.initCfg.baseMappingServiceUrl == null) {
+            console.error("Mapping service URL is not provided. Field Actions will not be used.");
             this.fieldActionsInitialized = true;
             this.updateStatus();
             return;
