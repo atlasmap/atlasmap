@@ -408,7 +408,6 @@ export class DocumentDefinition {
         //remove children more than one layer deep in root fields
         for (let field of fields) {
             for (let childField of field.children) {
-                //FIXME: collection field parsing vs complex.
                 if (field.isCollection || childField.isCollection) {
                     continue;
                 }
@@ -465,17 +464,6 @@ export class DocumentDefinition {
         var collectionMode: boolean = (activeMapping != null && activeMapping.isCollectionMode());
         var fieldsInMapping: Field[] = null;
 
-        //don't disable this document's fields if there isn't a selected field from this document yet.
-        if (collectionMode) {
-            fieldsInMapping = activeMapping.getFields(this.isSource);
-            if (fieldsInMapping.length == 0) {
-                collectionMode = false;
-            }
-            if (fieldsInMapping.length == 1 && DocumentDefinition.getNoneField() == fieldsInMapping[0]) {
-                collectionMode = false;
-            }
-        }
-
         for (let field of this.allFields) {
             field.partOfMapping = false;
             field.hasUnmappedChildren = false;
@@ -483,19 +471,6 @@ export class DocumentDefinition {
             field.partOfTransformation = false;
         }
         
-        //FIXME: (hard coded for demo 2017/06/02)
-        collectionMode = false;
-
-        if (collectionMode) {
-            var collectionPrimitiveMode: boolean = !fieldsInMapping[0].isInCollection();
-            var parentCollectionPath: string = null;
-            var parentCollectionDisplayName: string = null;
-            if (!collectionPrimitiveMode) {
-                parentCollectionPath = fieldsInMapping[0].parentField.path;
-                parentCollectionDisplayName = fieldsInMapping[0].parentField.displayName;
-            }            
-        }
-
         //FIXME: some of this work is happening N times for N source/target docs, should only happen once.
         for (let mapping of mappingDefinition.getAllMappings(true)) {
             var mappingIsActive: boolean = (mapping == mappingDefinition.activeMapping);
