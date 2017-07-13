@@ -18,9 +18,7 @@ jobs:
 
       - run:
           name: Maven
-          command: |
-            ./mvnw >/dev/null 2>&1 || true
-            PATH=$(dirname $(find ~/.m2/wrapper/ -name mvn -print -quit)):$PATH ./mvnw --batch-mode -Pfull -Pfabric8 -Dfabric8.mode=kubernetes install
+          command: ./mvnw --batch-mode -Pfull -Pfabric8 install
 
       - save_cache:
           key: atlasmap-m2
