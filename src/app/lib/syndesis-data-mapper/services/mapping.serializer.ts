@@ -225,6 +225,10 @@ export class MappingSerializer {
                     for (let argValue of action.argumentValues) {
                         actionArguments[argValue.name] = argValue.value;
                         var argumentConfig: FieldActionArgument = action.config.getArgumentForName(argValue.name);
+                        if (argumentConfig == null) {
+                            console.error("Cannot find action argument with name: " + argValue.name, action);
+                            continue;
+                        }
                         if (argumentConfig.type == "INTEGER") {
                             actionArguments[argValue.name] = parseInt(argValue.value);
                         }
