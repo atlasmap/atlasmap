@@ -106,7 +106,9 @@ export class ConfigModel {
         var docDef: DocumentDefinition = new DocumentDefinition();        
         docDef.isSource = isSource;
         docDef.initCfg.documentIdentifier = documentIdentifier;
+        docDef.initCfg.shortIdentifier = documentIdentifier;
         docDef.uri = documentIdentifier;
+        docDef.name = documentIdentifier;
         docDef.initCfg.type.type = docType;
         docDef.initCfg.documentContents = documentContents;
         docDef.initCfg.inspectionType = "INSTANCE";
