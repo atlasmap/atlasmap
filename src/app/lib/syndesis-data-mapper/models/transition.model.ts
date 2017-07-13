@@ -49,6 +49,10 @@ export class FieldAction {
         return argValue;
     }
 
+    public setArgumentValue(argumentName: string, value: string): void {
+        this.getArgumentValue(argumentName).value = value;
+    }
+
     public static createSeparateCombineFieldAction(separateMode: boolean, value: string) {
         if (FieldAction.combineActionConfig == null) {
             var argument: FieldActionArgument = new FieldActionArgument();
@@ -69,10 +73,7 @@ export class FieldAction {
         }
         fieldAction.isSeparateOrCombineMode = true;
 
-        var argumentValue: FieldActionArgumentValue = new FieldActionArgumentValue();
-        argumentValue.name = "Index";
-        argumentValue.value = (value == null) ? "1" : value;
-        fieldAction.argumentValues.push(argumentValue);
+        fieldAction.setArgumentValue("Index", (value == null) ? "1" : value);
         return fieldAction;
     }
 }
@@ -112,6 +113,10 @@ export class FieldActionConfig {
     public populateFieldAction(action: FieldAction): void {
         action.name = this.name;
         action.config = this;
+        action.argumentValues = [];
+        for (let arg of this.arguments) {
+            action.setArgumentValue(arg.name, "0");
+        }
     }
 
     public getArgumentForName(name: string): FieldActionArgument {
