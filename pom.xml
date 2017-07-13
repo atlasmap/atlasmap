@@ -42,7 +42,7 @@
 		<maven-release-plugin.version>2.5.3</maven-release-plugin.version>
 		<maven-source-plugin.version>2.2.1</maven-source-plugin.version>
 		<nexus-staging-maven-plugin.version>1.6.7</nexus-staging-maven-plugin.version>
-		<!-- Does this fix the NPE problem ?? 
+		<!-- Does this fix the NPE problem ??
 		<jetty-maven-plugin.version>9.4.2.v20170220</jetty-maven-plugin.version>
 		-->
 		<jetty-maven-plugin.version>9.4.5.v20170502</jetty-maven-plugin.version>
@@ -61,7 +61,7 @@
 
         <!-- Controls Docker Image Generation -->
         <from.image>registry.access.redhat.com/jboss-fuse-6/fis-java-openshift:2.0</from.image>
-        <docker.image>atlasmap/ipaas-datamapper:%l</docker.image>
+        <docker.image>atlasmap/atlasmap:%l</docker.image>
 	</properties>
 
 	<description>The AtlasMap Project</description>
@@ -189,7 +189,7 @@
 								</goals>
 							</execution>
 						</executions>
-					</plugin>				
+					</plugin>
 				</plugins>
 			</build>
 		</profile>
@@ -269,7 +269,7 @@
 					<artifactId>nexus-staging-maven-plugin</artifactId>
 					<version>${nexus-staging-maven-plugin.version}</version>
 				</plugin>
-				<!--This plugin's configuration is used to store Eclipse m2e settings 
+				<!--This plugin's configuration is used to store Eclipse m2e settings
 					only. It has no influence on the Maven build itself. -->
 				<plugin>
 					<groupId>org.eclipse.m2e</groupId>
