@@ -16,7 +16,7 @@
 
 import { Component, ViewChild } from '@angular/core';
 
-import { DocumentDefinition, DocumentTypes } from '../models/document.definition.model';
+import { DocumentDefinition } from '../models/document.definition.model';
 import { MappingDefinition } from '../models/mapping.definition.model';
 import { ConfigModel } from '../models/config.model';
 import { MappingModel } from '../models/mapping.model';
