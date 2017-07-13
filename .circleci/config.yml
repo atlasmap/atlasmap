@@ -6,7 +6,7 @@ jobs:
     - image: openjdk:8-jdk
     environment:
       MAVEN_OPTS: -Xmx1G
-      DOCKER_VERSION: 17.06.0-ce
+      DOCKER_VERSION: 17.04.0-ce
 
     steps:
       - setup_remote_docker
