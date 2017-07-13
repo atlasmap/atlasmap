@@ -62,7 +62,7 @@ export class FieldAction {
             FieldAction.separateActionConfig.arguments.push(argument);
         }
 
-        var fieldAction: FieldAction = new FieldAction(); 
+        var fieldAction: FieldAction = new FieldAction();
         FieldAction.combineActionConfig.populateFieldAction(fieldAction);
         if (separateMode) {
             FieldAction.separateActionConfig.populateFieldAction(fieldAction);
@@ -83,14 +83,14 @@ export class FieldActionConfig {
     public method: string;
     public sourceType: string = "STRING";
     public targetType: string = "STRING";
-    public serviceObject: any = new Object();    
+    public serviceObject: any = new Object();
 
     public appliesToField(field: Field, fieldPair: FieldMappingPair): boolean {
         var type: string = (field == null) ? null : field.type;
         if (type == null) {
             return false;
         }
-        
+
         if (this.sourceType == "STRING" && fieldPair.transition.isMapMode()
             && fieldPair.hasMappedField(true)) {
             var sourceField: Field = fieldPair.getFields(true)[0];
@@ -98,8 +98,8 @@ export class FieldActionConfig {
             if (!sourceFieldIsString) {
                 return false;
             }
-        }        
-        
+        }
+
         if (this.targetType == "STRING") {
             var fieldTypeIsString: boolean = (["STRING", "CHAR"].indexOf(type) != -1);
             return fieldTypeIsString;
@@ -111,7 +111,7 @@ export class FieldActionConfig {
 
     public populateFieldAction(action: FieldAction): void {
         action.name = this.name;
-        action.config = this;        
+        action.config = this;
     }
 
     public getArgumentForName(name: string): FieldActionArgument {
@@ -130,9 +130,9 @@ export enum TransitionDelimiter { NONE, COLON, COMMA, MULTISPACE, SPACE }
 export class TransitionDelimiterModel {
     public delimiter: TransitionDelimiter = TransitionDelimiter.SPACE;
     public serializedValue: string = null;
-    public prettyName: string = null;  
+    public prettyName: string = null;
 
-    public constructor(delimiter: TransitionDelimiter, serializedValue: string, prettyName: string) {   
+    public constructor(delimiter: TransitionDelimiter, serializedValue: string, prettyName: string) {
         this.delimiter = delimiter;
         this.serializedValue = serializedValue;
         this.prettyName = prettyName;
@@ -147,7 +147,7 @@ export class TransitionModel {
     public static delimiterModels: TransitionDelimiterModel[] = [];
     public static actionConfigs: FieldActionConfig[] = [];
 
-    public constructor() { 
+    public constructor() {
         if (TransitionModel.delimiterModels.length == 0) {
             var models: TransitionDelimiterModel[] = [];
             models.push(new TransitionDelimiterModel(TransitionDelimiter.NONE, null, "[None]"));
@@ -155,7 +155,7 @@ export class TransitionModel {
             models.push(new TransitionDelimiterModel(TransitionDelimiter.COMMA, "Comma", "Comma"));
             models.push(new TransitionDelimiterModel(TransitionDelimiter.MULTISPACE, "MultiSpace", "Multispace"));
             models.push(new TransitionDelimiterModel(TransitionDelimiter.SPACE, "Space", "Space"));
-            TransitionModel.delimiterModels = models;    
+            TransitionModel.delimiterModels = models;
         }
     }
 
@@ -176,7 +176,7 @@ export class TransitionModel {
             if (m.delimiter == delimiter) {
                 return m.prettyName;
             }
-        }        
+        }
         return null;
     }
 
@@ -185,7 +185,7 @@ export class TransitionModel {
             if (m.delimiter == this.delimiter) {
                 return m.serializedValue;
             }
-        }        
+        }
         return null;
     }
 
@@ -194,7 +194,7 @@ export class TransitionModel {
             if (m.serializedValue == value) {
                 this.delimiter = m.delimiter;
             }
-        }        
+        }
     }
 
     public getPrettyName() {
@@ -223,5 +223,5 @@ export class TransitionModel {
 
     public isEnumerationMode(): boolean {
         return this.mode == TransitionMode.ENUM;
-    }    
+    }
 }

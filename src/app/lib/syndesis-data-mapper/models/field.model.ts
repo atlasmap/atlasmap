@@ -88,7 +88,7 @@ export class Field {
     public copy(): Field {
         var copy: Field = new Field();
         Object.assign(copy, this);
-        
+
         //make these pointers to the same object, not copies
         copy.serviceObject = this.serviceObject;
         copy.parentField = this.parentField;
@@ -109,7 +109,7 @@ export class Field {
         this.serviceObject = that.serviceObject;
         this.parentField = that.parentField;
         this.docDef = that.docDef;
-        
+
         this.children = [];
         for (let childField of that.children) {
             this.children.push(childField.copy());
@@ -143,7 +143,7 @@ export class Field {
     public getFieldLabel(includePath: boolean): string {
         var fieldPath = includePath ? this.path : this.getNameWithNamespace();
         if (this != DocumentDefinition.getNoneField() && ConfigModel.getConfig().showTypes && this.type && !this.isPropertyOrConstant()) {
-            fieldPath = fieldPath + " (" + this.type + ")";            
+            fieldPath = fieldPath + " (" + this.type + ")";
         }
         if (this.isProperty() && this.value != null) {
             fieldPath += " = " + this.value;
@@ -201,7 +201,7 @@ export class Field {
             }
         }
         return null;
-    }    
+    }
 
     public static alphabetizeFields(fields: Field[]): void {
         var fieldsByName: { [key:string]:Field; } = {};

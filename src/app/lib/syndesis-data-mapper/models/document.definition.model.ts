@@ -98,14 +98,14 @@ export class DocumentInitializationConfig {
     public type: DocumentType = new DocumentType();
     public classPath: string;
     public initialized: boolean = false;
-    public errorOccurred: boolean = false;    
+    public errorOccurred: boolean = false;
     public pathSeparator: string = "/";
     public documentContents: string = null;
     public inspectionType: string = null;
 }
 
 export class DocumentDefinition {
-    public initCfg: DocumentInitializationConfig = new DocumentInitializationConfig();    
+    public initCfg: DocumentInitializationConfig = new DocumentInitializationConfig();
     public name: string;
     public fullyQualifiedName: string;
     public fields: Field[] = [];
@@ -200,7 +200,7 @@ export class DocumentDefinition {
             var currentParentPath: string = null;
             while (originalPath.indexOf(pathSeparator) != -1) {
                 var currentPathSection: string = originalPath.substr(0, originalPath.indexOf(pathSeparator));
-                currentParentPath = (currentParentPath == null) ? currentPathSection 
+                currentParentPath = (currentParentPath == null) ? currentPathSection
                     : (currentParentPath + pathSeparator + currentPathSection);
                 console.log("Populating children for '" + currentParentPath + "' (from: " + fieldPath + ")");
                 var parentField: Field = this.fieldsByPath[currentParentPath];
@@ -271,7 +271,7 @@ export class DocumentDefinition {
 
         this.initCfg.initialized = true;
 
-        console.log("Finished populating fields for '" + this.name + "', field count: " 
+        console.log("Finished populating fields for '" + this.name + "', field count: "
             + this.allFields.length + ", terminal: " + this.terminalFields.length + ".");
     }
 
@@ -299,13 +299,13 @@ export class DocumentDefinition {
 
     public updateField(field: Field, oldPath: string): void {
         Field.alphabetizeFields(this.fields);
-        if (field.parentField == null 
+        if (field.parentField == null
             || field.parentField == DocumentDefinition.getNoneField()
             || this.initCfg.type.isPropertyOrConstant()) {
             this.populateFieldParentPaths(field, null, 0);
         } else {
             var pathSeparator: string = this.initCfg.pathSeparator;
-            this.populateFieldParentPaths(field, field.parentField.path  + pathSeparator, 
+            this.populateFieldParentPaths(field, field.parentField.path  + pathSeparator,
                 field.parentField.fieldDepth + 1);
         }
         if (oldPath != null && this.fieldsByPath[oldPath] != null) {
@@ -313,11 +313,11 @@ export class DocumentDefinition {
         }
         DataMapperUtil.removeItemFromArray(field.path, this.fieldPaths);
         this.populateFieldData(field);
-        this.fieldPaths.sort();        
+        this.fieldPaths.sort();
     }
 
     public addField(field: Field): void {
-        if (field.parentField == null 
+        if (field.parentField == null
             || field.parentField == DocumentDefinition.getNoneField()
             || this.initCfg.type.isPropertyOrConstant()) {
             this.fields.push(field);
@@ -328,9 +328,9 @@ export class DocumentDefinition {
             field.parentField.children.push(field);
             Field.alphabetizeFields(field.parentField.children);
             var pathSeparator: string = this.initCfg.pathSeparator;
-            this.populateFieldParentPaths(field, field.parentField.path  + pathSeparator, 
-                field.parentField.fieldDepth + 1);                    
-        }                
+            this.populateFieldParentPaths(field, field.parentField.path  + pathSeparator,
+                field.parentField.fieldDepth + 1);
+        }
         this.populateFieldData(field);
         this.fieldPaths.sort();
     }
@@ -385,7 +385,7 @@ export class DocumentDefinition {
         this.discoverComplexFields(fields);
 
         for (let key in this.complexFieldsByClassIdentifier) {
-            var cachedField: Field = this.complexFieldsByClassIdentifier[key];            
+            var cachedField: Field = this.complexFieldsByClassIdentifier[key];
             //remove children more than one level deep in cached fields
             for (let childField of cachedField.children) {
                 childField.children = [];
@@ -470,7 +470,7 @@ export class DocumentDefinition {
             field.selected = false;
             field.partOfTransformation = false;
         }
-        
+
         //FIXME: some of this work is happening N times for N source/target docs, should only happen once.
         for (let mapping of mappingDefinition.getAllMappings(true)) {
             var mappingIsActive: boolean = (mapping == mappingDefinition.activeMapping);

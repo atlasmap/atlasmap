@@ -35,17 +35,17 @@ import { DataMapperUtil } from '../common/data.mapper.util';
         <div class="DataMapperEditComponent">
             <div class="form-group">
                 <label>Parent</label>
-                <input type="text" [(ngModel)]="parentFieldName" [typeahead]="dataSource" 
-                    typeaheadWaitMs="200" (typeaheadOnSelect)="parentSelectionChanged($event)" (blur)="handleOnBlur($event)" 
+                <input type="text" [(ngModel)]="parentFieldName" [typeahead]="dataSource"
+                    typeaheadWaitMs="200" (typeaheadOnSelect)="parentSelectionChanged($event)" (blur)="handleOnBlur($event)"
                     typeaheadOptionField="displayName" [typeaheadItemTemplate]="typeaheadTemplate" disabled="{{editMode}}">
-            </div>            
+            </div>
             <div class="form-group">
                 <label>Name</label>
                 <input name="value" type="text" [(ngModel)]="field.name"/>
             </div>
             <div class="form-group" *ngIf="docDef.initCfg.type.isXML()">
                 <label>Namespace</label>
-                <select (change)="namespaceSelectionChanged($event);" [ngModel]="namespaceAlias">                        
+                <select (change)="namespaceSelectionChanged($event);" [ngModel]="namespaceAlias">
                     <option *ngFor="let ns of namespaces" value="{{ns.alias}}" [selected]="namespaceAlias == ns.alias">
                         {{ ns.getPrettyLabel() }}
                     </option>
@@ -53,7 +53,7 @@ import { DataMapperUtil } from '../common/data.mapper.util';
             </div>
             <div class="form-group" *ngIf="docDef.initCfg.type.isXML()">
                 <label>Field Type</label>
-                <select (change)="fieldTypeSelectionChanged($event);" [ngModel]="fieldType">                        
+                <select (change)="fieldTypeSelectionChanged($event);" [ngModel]="fieldType">
                     <option value="element">Element</option>
                     <option value="attribute">Attribute</option>
                 </select>
@@ -84,7 +84,7 @@ import { DataMapperUtil } from '../common/data.mapper.util';
                     <option value="UNSIGNED_LONG">Unsigned Long</option>
                     <option value="UNSIGNED_SHORT">Unsigned Short</option>
                 </select>
-            </div>            
+            </div>
         </div>
     `
 })
@@ -115,23 +115,23 @@ export class FieldEditComponent implements ModalWindowValidator {
         this.editMode = !isAdd;
         this.field = field == null ? new Field() : field.copy();
         this.valueType = (this.field.type == null) ? "STRING" : this.field.type;
-        this.parentField = (this.field.parentField == null) ? DocumentDefinition.getNoneField() : this.field.parentField;        
+        this.parentField = (this.field.parentField == null) ? DocumentDefinition.getNoneField() : this.field.parentField;
 
         if (this.docDef.initCfg.type.isXML()) {
             this.fieldType = this.field.isAttribute ? "attribute" : "element";
             this.parentField = (this.field.parentField == null) ? docDef.fields[0] : this.field.parentField;
-            var unqualifiedNS: NamespaceModel = NamespaceModel.getUnqualifiedNamespace();        
+            var unqualifiedNS: NamespaceModel = NamespaceModel.getUnqualifiedNamespace();
             this.namespaceAlias = unqualifiedNS.alias;
             if (this.field.namespaceAlias) {
                 this.namespaceAlias = this.field.namespaceAlias;
             }
-            if (isAdd) { // on add, inherit namespace from parent field           
+            if (isAdd) { // on add, inherit namespace from parent field
                 this.namespaceAlias = this.parentField.namespaceAlias == null ? unqualifiedNS.alias : this.parentField.namespaceAlias;
             }
 
             this.namespaces = [unqualifiedNS].concat(this.docDef.namespaces);
 
-            // if the field references a namespace that doesn't exist, add a fake namespace option for the 
+            // if the field references a namespace that doesn't exist, add a fake namespace option for the
             // user to select if they desire to leave that bad namespace alias in place
             var namespaceFound: boolean = false;
             for (let ns of this.namespaces) {
@@ -144,9 +144,9 @@ export class FieldEditComponent implements ModalWindowValidator {
                 var fakeNamespace: NamespaceModel = new NamespaceModel();
                 fakeNamespace.alias = this.namespaceAlias;
                 this.namespaces.push(fakeNamespace);
-            }   
-        }   
-        this.parentFieldName = this.parentField.name;                 
+            }
+        }
+        this.parentFieldName = this.parentField.name;
     }
 
     public handleOnBlur(event: any): void {
@@ -159,15 +159,15 @@ export class FieldEditComponent implements ModalWindowValidator {
         this.parentField = (this.parentField == null) ? oldParentField : this.parentField;
         this.parentFieldName = this.parentField.name;
 
-        // change namespace dropdown selecte option to match parent fields' namespace automatically 
+        // change namespace dropdown selecte option to match parent fields' namespace automatically
         var unqualifiedNS: NamespaceModel = NamespaceModel.getUnqualifiedNamespace();
-        this.namespaceAlias = this.parentField.namespaceAlias == null ? unqualifiedNS.alias : this.parentField.namespaceAlias;        
-    }   
+        this.namespaceAlias = this.parentField.namespaceAlias == null ? unqualifiedNS.alias : this.parentField.namespaceAlias;
+    }
 
     public fieldTypeSelectionChanged(event: MouseEvent): void {
         var eventTarget: any = event.target; //extract this to avoid compiler error about 'selectedOptions' not existing.
         this.fieldType = eventTarget.selectedOptions.item(0).attributes.getNamedItem("value").value;
-    } 
+    }
 
     public valueTypeSelectionChanged(event: MouseEvent): void {
         var eventTarget: any = event.target; //extract this to avoid compiler error about 'selectedOptions' not existing.
@@ -216,9 +216,9 @@ export class FieldEditComponent implements ModalWindowValidator {
             var unqualifiedNS: NamespaceModel = NamespaceModel.getUnqualifiedNamespace();
             if (this.namespaceAlias == unqualifiedNS.alias) {
                 this.field.namespaceAlias = null;
-            }        
+            }
             this.field.serviceObject.jsonType = "io.atlasmap.xml.v2.XmlField";
-        } 
+        }
         return this.field;
     }
 

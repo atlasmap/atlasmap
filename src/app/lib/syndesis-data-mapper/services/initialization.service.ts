@@ -193,7 +193,7 @@ export class InitializationService {
             this.fieldActionsInitialized = true;
             this.updateStatus();
             return;
-        }        
+        }
         console.log("Loading field action configs.");
         this.cfg.mappingService.fetchFieldActions().subscribe(
             (actionConfigs: FieldActionConfig[]) => {

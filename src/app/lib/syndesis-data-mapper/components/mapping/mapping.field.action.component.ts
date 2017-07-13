@@ -39,7 +39,7 @@ import { TransitionModel, FieldAction, FieldActionConfig } from '../../models/tr
                             [attr.actionIndex]="actionIndex"
                             [attr.value]="actionConfig.name">{{ actionConfig.name }}</option>
                     </select>
-                    
+
                     <div class="clear"></div>
                 </div>
                 <div class="form-group argument" *ngFor="let argConfig of action.config.arguments; let i = index">

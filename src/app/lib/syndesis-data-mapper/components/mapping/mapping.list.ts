@@ -63,13 +63,13 @@ export class MappingListFieldComponent {
     }
 
     public displayParentObject(): boolean {
-        if (this.mappedField == null || this.mappedField.field == null 
+        if (this.mappedField == null || this.mappedField.field == null
             || this.mappedField.field.docDef == null
             || (this.mappedField.field == DocumentDefinition.getNoneField())) {
             return false;
         }
         return true;
-    }   
+    }
 
     public getParentObjectName() {
         if (this.mappedField == null || this.mappedField.field == null || this.mappedField.field.docDef == null) {
@@ -109,7 +109,7 @@ export class MappingListFieldComponent {
                         <div class="clear"></div>
                     </div>
                 </div>
-                <div [attr.class]="getItemsCSSClass()">                    
+                <div [attr.class]="getItemsCSSClass()">
                     <div [attr.class]="getMappingRowsCSSClass()">
                         <div *ngFor="let mapping of getMappings(); let index=index;"
                             [attr.class]="getMappingCSSClass(mapping, index)" (click)="selectMapping(mapping)">
@@ -139,7 +139,7 @@ export class MappingListFieldComponent {
                     <div class="noSearchResults" *ngIf="searchResultsVisible()">
                         <label>No search results.</label>
                         <div class="clear"></div>
-                    </div>  
+                    </div>
                 </div>
                 <div class="card-pf-heading itemCount">{{ cfg.mappings.mappings.length }} mappings</div>
                 <div class="clear"></div>
@@ -193,7 +193,7 @@ export class MappingListComponent {
 
     public getMappings(): MappingModel[] {
         return this.searchMode ? this.searchResults : [].concat(this.cfg.mappings.getAllMappings(true));
-    }    
+    }
 
     public getMappedFields(fieldPair: FieldMappingPair, isSource: boolean): MappedField[] {
         var fields: MappedField[] = fieldPair.getMappedFields(isSource);
@@ -236,8 +236,8 @@ export class MappingListComponent {
                     this.searchResults.push(mapping);
                     break;
                 }
-            }    
-        }        
+            }
+        }
     }
 
     public fieldPairMatchesSearch(fieldPair: FieldMappingPair): boolean {

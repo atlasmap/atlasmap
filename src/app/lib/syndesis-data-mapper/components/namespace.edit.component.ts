@@ -28,7 +28,7 @@ import { DataMapperUtil } from '../common/data.mapper.util';
             <div class="form-group">
                 <label>Alias</label>
                 <input type="text" [(ngModel)]="namespace.alias" disabled="{{namespace.isTarget || !namespace.createdByUser}}">
-            </div>            
+            </div>
             <div class="form-group">
                 <label>URI</label>
                 <input type="text" [(ngModel)]="namespace.uri"/>
@@ -39,11 +39,11 @@ import { DataMapperUtil } from '../common/data.mapper.util';
             </div>
             <div class="form-group">
                 <label>Type</label>
-                <input type="checkbox" [ngModel]="namespace.isTarget" style="width:20px; vertical-align:middle;" 
+                <input type="checkbox" [ngModel]="namespace.isTarget" style="width:20px; vertical-align:middle;"
                     disabled="{{!targetEnabled}}" (click)="targetToggled()" />
                 <label [attr.class]="(targetEnabled ? '' : 'disabled')" style="width:105px; ">Target Namespace</label>
                 <div class="clear"></div>
-            </div>             
+            </div>
         </div>
     `
 })
@@ -61,7 +61,7 @@ export class NamespaceEditComponent implements ModalWindowValidator {
                     break;
                 }
             }
-        }        
+        }
         console.log("Namespaces enabled: " + this.targetEnabled);
     }
 

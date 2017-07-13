@@ -55,7 +55,7 @@ import { DataMapperUtil } from '../common/data.mapper.util';
                     <option value="UNSIGNED_LONG">Unsigned Long</option>
                     <option value="UNSIGNED_SHORT">Unsigned Short</option>
                 </select>
-            </div> 
+            </div>
         </div>
     `
 })

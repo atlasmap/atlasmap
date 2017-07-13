@@ -37,7 +37,7 @@ import { LookupTableComponent } from './lookup.table.component';
                 <div *ngIf="!modeIsEnum()">
                     <label>Action</label>
                     <select (change)="selectionChanged($event);" selector="mode"
-                        [ngModel]="fieldPair.transition.mode">                        
+                        [ngModel]="fieldPair.transition.mode">
                         <option value="{{modes.COMBINE}}">Combine</option>
                         <option value="{{modes.MAP}}">Map</option>
                         <option value="{{modes.SEPARATE}}">Separate</option>
@@ -49,8 +49,8 @@ import { LookupTableComponent } from './lookup.table.component';
                     <select (change)="selectionChanged($event);" selector="separator"
                         [ngModel]="fieldPair.transition.delimiter">
                         <option value="{{delimeters.COLON}}">Colon</option>
-                        <option value="{{delimeters.COMMA}}">Comma</option>                                                
-                        <option value="{{delimeters.MULTISPACE}}">Multispace</option>                                                
+                        <option value="{{delimeters.COMMA}}">Comma</option>
+                        <option value="{{delimeters.MULTISPACE}}">Multispace</option>
                         <option value="{{delimeters.SPACE}}">Space</option>
                     </select>
                 </div>
