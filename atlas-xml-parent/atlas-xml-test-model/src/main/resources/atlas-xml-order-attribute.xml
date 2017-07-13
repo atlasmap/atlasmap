@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<ns:XmlOA orderId="0" xmlns:ns="http://atlasmap.io/xml/test/v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://atlasmap.io/xml/test/v2 atlas-xml-test-model-v2.xsd ">
-  <ns:Address addressLine1="" addressLine2="" city="" state="" zipCode=""/>
-  <ns:Contact firstName="" lastName="" phoneNumber="" zipCode=""/>
-</ns:XmlOA>
