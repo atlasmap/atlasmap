@@ -57,7 +57,7 @@ import { ModalWindowComponent } from './modal.window.component';
                 <div [attr.class]="searchMode ? 'fieldListSearchOpen' : 'fieldList'" style="overflow:auto;"
                     (scroll)="handleScroll($event)">
                     <div *ngFor="let docDef of cfg.getDocs(isSource)">
-                        <div class="card-pf-title documentHeader" tooltip="{{ docDef.fullyQualifiedName }}" placement="bottom" 
+                        <div class="card-pf-title documentHeader" tooltip="{{ docDef.fullyQualifiedName }}" placement="bottom"
                             *ngIf="isDocNameVisible(docDef)" (click)="toggleFieldVisibility(docDef)">
                             <div style="float:left">
                                 <i class="fa fa-angle-right docCollapseIcon" *ngIf="!docDef.showFields"></i>
@@ -251,9 +251,9 @@ export class DocumentDefinitionComponent {
             } else {
                 var fieldComponent: FieldEditComponent = mw.nestedComponent as FieldEditComponent;
                 docDef.addField(fieldComponent.getField());
-            }                        
+            }
             self.cfg.mappingService.saveCurrentMapping();
         };
         this.modalWindow.show();
-    }   
+    }
 }

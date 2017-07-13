@@ -97,7 +97,7 @@ export { DataMapperAppComponent } from './components/data.mapper.app.component';
         FieldEditComponent,
         NamespaceEditComponent,
         PropertyFieldEditComponent,
-        ConstantFieldEditComponent, 
+        ConstantFieldEditComponent,
         CollapsableHeaderComponent,
         MappingListComponent,
         MappingListFieldComponent,

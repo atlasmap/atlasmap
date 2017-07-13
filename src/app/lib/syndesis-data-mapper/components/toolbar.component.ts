@@ -33,9 +33,9 @@ template: `
             <i [attr.class]="getCSSClass('editTemplate')"  *ngIf="targetSupportsTemplate()"
                 (click)="toolbarButtonClicked('editTemplate');"></i>
             <i [attr.class]="getCSSClass('showMappingTable')" (click)="toolbarButtonClicked('showMappingTable');"></i>
-            <i *ngIf="cfg.getFirstXmlDoc(false)" [attr.class]="getCSSClass('showNamespaceTable')" 
+            <i *ngIf="cfg.getFirstXmlDoc(false)" [attr.class]="getCSSClass('showNamespaceTable')"
                 (click)="toolbarButtonClicked('showNamespaceTable');"></i>
-            <i [attr.class]="getCSSClass('showDetails')" (click)="toolbarButtonClicked('showDetails');"></i>            
+            <i [attr.class]="getCSSClass('showDetails')" (click)="toolbarButtonClicked('showDetails');"></i>
             <div dropdown placement="bottom right" style="display:inline; position:relative;">
                 <i [attr.class]="getCSSClass('advancedMode')" dropdownToggle (click)="false"></i>
                 <!-- <a href dropdownToggle (click)="false">X</a> -->
@@ -45,7 +45,7 @@ template: `
                             <a class="dropdown-item" href="#">
                                 <i class="fa fa-tag"></i>Show Types
                             </a>
-                        </div>                        
+                        </div>
                         <i class="fa fa-check" *ngIf="cfg.showTypes" style="float:right"></i>
                         <div class="clear"></div>
                     </li>
@@ -54,7 +54,7 @@ template: `
                             <a class="dropdown-item" href="#">
                                 <i class="fa fa-share-alt"></i>Show Lines
                             </a>
-                        </div>                        
+                        </div>
                         <i class="fa fa-check" *ngIf="cfg.showLinesAlways" style="float:right"></i>
                         <div class="clear"></div>
                     </li>
@@ -63,7 +63,7 @@ template: `
                             <a class="dropdown-item" href="#">
                                 <i class="fa fa-chain"></i>Show Mapped Fields
                             </a>
-                        </div>                        
+                        </div>
                         <i class="fa fa-check" *ngIf="cfg.showMappedFields" style="float:right"></i>
                         <div class="clear"></div>
                     </li>
@@ -72,7 +72,7 @@ template: `
                             <a class="dropdown-item" href="#">
                                 <i class="fa fa-chain-broken"></i>Show Unmapped Fields
                             </a>
-                        </div>                        
+                        </div>
                         <i class="fa fa-check" *ngIf="cfg.showUnmappedFields" style="float:right"></i>
                         <div class="clear"></div>
                     </li>
@@ -96,7 +96,7 @@ export class ToolbarComponent {
             return  "fa fa-share-alt link" + (this.cfg.showLinesAlways ? " selected" : "");
         } else if ("advancedMode" == action) {
             var clz: string = "fa fa-cog link "
-            if (this.cfg.showLinesAlways || this.cfg.showTypes 
+            if (this.cfg.showLinesAlways || this.cfg.showTypes
                 || !this.cfg.showMappedFields || !this.cfg.showUnmappedFields) {
                 clz += "selected";
             }
@@ -154,7 +154,7 @@ export class ToolbarComponent {
             } else {
                 this.cfg.showMappingTable = false;
             }
-        }        
+        }
     }
 
     private editTemplate(): void {

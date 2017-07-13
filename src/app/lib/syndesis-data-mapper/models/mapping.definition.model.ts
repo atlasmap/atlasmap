@@ -199,22 +199,22 @@ export class MappingDefinition {
         var sourceDocMap: any = {};
         for (let doc of cfg.getDocs(true)) {
             sourceDocMap[doc.uri] = doc;
-        } 
+        }
         var targetDocMap: any = {};
         for (let doc of cfg.getDocs(false)) {
             targetDocMap[doc.uri] = doc;
-        } 
+        }
         for (let mapping of this.mappings) {
             for (let fieldPair of mapping.fieldMappings) {
                 this.updateMappedFieldsFromDocuments(fieldPair, cfg, sourceDocMap, true);
-                this.updateMappedFieldsFromDocuments(fieldPair, cfg, targetDocMap, false);                        
+                this.updateMappedFieldsFromDocuments(fieldPair, cfg, targetDocMap, false);
             }
         }
         for (let doc of cfg.getAllDocs()) {
             if (doc.initCfg.shortIdentifier == null) {
                 doc.initCfg.shortIdentifier = "DOC." + doc.name + "." + Math.floor((Math.random() * 1000000) + 1).toString();
             }
-        }        
+        }
     }
 
     public updateDocumentNamespacesFromMappings(cfg: ConfigModel): void {
@@ -232,13 +232,13 @@ export class MappingDefinition {
 
             var doc = DocumentDefinition.getDocumentByIdentifier(parsedDoc.initCfg.documentIdentifier, docs);
             if (doc == null) {
-                console.error("Could not find document with identifier '" + parsedDoc.initCfg.documentIdentifier 
-                    + "' for namespace override.", 
+                console.error("Could not find document with identifier '" + parsedDoc.initCfg.documentIdentifier
+                    + "' for namespace override.",
                     { "identifier": parsedDoc.initCfg.documentIdentifier, "parsedDoc": parsedDoc, "docs": docs });
                 continue;
             }
 
-            console.log("Updating doc's namespaces.", { "doc": doc, 
+            console.log("Updating doc's namespaces.", { "doc": doc,
                 "oldNamespaces": doc.namespaces, "newNamespaces": parsedDoc.namespaces });
             doc.namespaces = [].concat(parsedDoc.namespaces);
         }
@@ -246,7 +246,7 @@ export class MappingDefinition {
 
     private updateMappedFieldsFromDocuments(fieldPair: FieldMappingPair, cfg: ConfigModel, docMap: any, isSource: boolean): void {
         var mappedFields: MappedField[] = fieldPair.getMappedFields(isSource);
-        for (let mappedField of mappedFields) {        
+        for (let mappedField of mappedFields) {
             var doc: DocumentDefinition = null;
             if (mappedField.parsedData.fieldIsProperty) {
                 doc = cfg.propertyDoc;
@@ -266,7 +266,7 @@ export class MappingDefinition {
                 doc.initCfg.shortIdentifier = mappedField.parsedData.parsedDocID;
             }
             mappedField.field = null;
-            if (!mappedField.parsedData.userCreated) {   
+            if (!mappedField.parsedData.userCreated) {
                 mappedField.field = doc.getField(mappedField.parsedData.parsedPath);
             }
             if (mappedField.field == null) {
@@ -281,13 +281,13 @@ export class MappingDefinition {
                     doc.addField(constantField);
                 } else if (mappedField.parsedData.userCreated) {
                     var path: string = mappedField.parsedData.parsedPath;
-                    
+
                     mappedField.field = new Field();
-                    mappedField.field.serviceObject.jsonType = "io.atlasmap.xml.v2.XmlField";        
+                    mappedField.field.serviceObject.jsonType = "io.atlasmap.xml.v2.XmlField";
                     mappedField.field.path = path;
                     mappedField.field.type = mappedField.parsedData.parsedValueType;
                     mappedField.field.userCreated = true;
-                    
+
                     var lastSeparator: number = path.lastIndexOf("/");
 
                     var parentPath: string = (lastSeparator > 0) ? path.substring(0, lastSeparator) : null;
@@ -298,11 +298,11 @@ export class MappingDefinition {
                         fieldName = fieldName.split(":")[1];
                     }
 
-                    mappedField.field.name = fieldName;                    
-                    mappedField.field.displayName = fieldName;                    
+                    mappedField.field.name = fieldName;
+                    mappedField.field.displayName = fieldName;
                     mappedField.field.isAttribute = (fieldName.indexOf("@") != -1);
                     mappedField.field.namespaceAlias = namespaceAlias;
-                    
+
                     if (parentPath != null) {
                         mappedField.field.parentField = doc.getField(parentPath);
                     }
@@ -312,7 +312,7 @@ export class MappingDefinition {
 
                     doc.addField(mappedField.field);
                 } else {
-                    console.error("Could not find field from doc for mapped field.", 
+                    console.error("Could not find field from doc for mapped field.",
                         { "mappedField": mappedField, "doc": doc });
                     mappedField.field = DocumentDefinition.getNoneField();
                     return;
@@ -329,11 +329,11 @@ export class MappingDefinition {
                     mappedField.actions.push(action);
                 }
             }
-            
+
             var isSeparate: boolean = fieldPair.transition.isSeparateMode();
-            var isCombine: boolean = fieldPair.transition.isCombineMode();            
+            var isCombine: boolean = fieldPair.transition.isCombineMode();
             var index: string = mappedField.parsedData.parsedIndex;
-            mappedField.updateSeparateOrCombineIndex(isSeparate, isCombine, index, isSource); 
+            mappedField.updateSeparateOrCombineIndex(isSeparate, isCombine, index, isSource);
         }
     }
 
@@ -357,7 +357,7 @@ export class MappingDefinition {
         var mappingsForField: MappingModel[] = [];
         for (let m of this.mappings) {
             if (m.isFieldMapped(field, field.isSource())) {
-                mappingsForField.push(m);            
+                mappingsForField.push(m);
             }
         }
         return mappingsForField;

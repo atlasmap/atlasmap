@@ -34,8 +34,8 @@ import { FieldEditComponent } from './field.edit.component';
 @Component({
     selector: 'document-field-detail',
     template: `
-        <div class="DocumentFieldDetailComponent" #fieldDetailElement on-mouseover='handleMouseOver($event)' 
-            *ngIf="fieldShouldBeVisible()" [attr.draggable]="field.isTerminal()" (dragstart)="startDrag($event)" (drop)="endDrag($event)" 
+        <div class="DocumentFieldDetailComponent" #fieldDetailElement on-mouseover='handleMouseOver($event)'
+            *ngIf="fieldShouldBeVisible()" [attr.draggable]="field.isTerminal()" (dragstart)="startDrag($event)" (drop)="endDrag($event)"
             (dragenter)="dragEnterLeave($event, true)" (dragleave)="dragEnterLeave($event, false)" (dragover)="allowDrop($event)">
             <div [attr.class]='getCssClass()' (click)="handleMouseClick($event)" *ngIf="field.visibleInCurrentDocumentSearch">
                 <div style="float:left;">
@@ -50,7 +50,7 @@ import { FieldEditComponent } from './field.edit.component';
                         <i *ngIf="field.isCollection" class="fa fa-list-ul parentFolder"></i>
                     </div>
                     <div *ngIf="field.isTerminal()" style="display:inline-block;">
-                        <i [attr.class]="getFieldTypeIcon()"></i>                        
+                        <i [attr.class]="getFieldTypeIcon()"></i>
                     </div>
                         <label>{{ field.getFieldLabel(false) }}</label>
                     </div>
@@ -77,7 +77,7 @@ export class DocumentFieldDetailComponent {
     @Input() cfg: ConfigModel;
     @Input() field: Field;
     @Input() lineMachine: LineMachineComponent;
-    @Input() modalWindow: ModalWindowComponent;    
+    @Input() modalWindow: ModalWindowComponent;
 
     @ViewChild('fieldDetailElement') fieldDetailElement:ElementRef;
     @ViewChildren('fieldDetail') fieldComponents: QueryList<DocumentFieldDetailComponent>;
@@ -91,9 +91,9 @@ export class DocumentFieldDetailComponent {
             // ignore drag event, it's coming from a child field who's already set on the drag event
             return;
         }
-        
+
         // event's data transfer store isn't available during dragenter/dragleave/dragover, so we need
-        // to store this info in a global somewhere since those methods depend on knowing if the 
+        // to store this info in a global somewhere since those methods depend on knowing if the
         // dragged field is source/target
         this.cfg.currentDraggedField = this.field;
     }
@@ -106,28 +106,28 @@ export class DocumentFieldDetailComponent {
         this.isDragDropTarget = entering;
     }
 
-    public allowDrop(event: any): void { 
+    public allowDrop(event: any): void {
         if (!this.field.isTerminal() || (this.field.isSource() == this.cfg.currentDraggedField.isSource())) {
             this.isDragDropTarget = false;
             return;
-        }       
+        }
         event.preventDefault();
         this.isDragDropTarget = true;
     }
 
     public endDrag(event: any): void {
         this.isDragDropTarget = false;
-        if (!this.field.isTerminal() || (this.field.isSource() == this.cfg.currentDraggedField.isSource())) {           
-            var desc: string = this.field.isSource() ? "source" : "target"; 
+        if (!this.field.isTerminal() || (this.field.isSource() == this.cfg.currentDraggedField.isSource())) {
+            var desc: string = this.field.isSource() ? "source" : "target";
             console.log("Ignoring drop event, this field isn't terminal or it is a " + desc + " like the dropped field.");
             return;
-        }               
+        }
 
         var droppedField: Field = this.cfg.currentDraggedField;
         if (droppedField == null) {
             console.log("Ignoring drop event, can't find dropped field.");
             return;
-        }  
+        }
 
         console.log("Creating new mapping for dropped field '" + droppedField.name + "' and '" + this.field.name + "'.");
         this.cfg.mappingService.addNewMapping(droppedField);
@@ -258,10 +258,10 @@ export class DocumentFieldDetailComponent {
                 fieldComponent.initialize(self.field, this.field.docDef, false);
             }
         };
-        this.modalWindow.nestedComponentType = isProperty ? PropertyFieldEditComponent 
+        this.modalWindow.nestedComponentType = isProperty ? PropertyFieldEditComponent
             : (isConstant ? ConstantFieldEditComponent : FieldEditComponent)
         this.modalWindow.okButtonHandler = (mw: ModalWindowComponent) => {
-            var newField: Field = null;            
+            var newField: Field = null;
             if (isProperty) {
                 var propertyComponent: PropertyFieldEditComponent = mw.nestedComponent as PropertyFieldEditComponent;
                 newField = propertyComponent.getField();
@@ -273,7 +273,7 @@ export class DocumentFieldDetailComponent {
                 newField = fieldComponent.getField();
             }
             self.field.copyFrom(newField);
-            
+
             self.field.docDef.updateField(self.field, oldPath);
 
             self.cfg.mappingService.saveCurrentMapping();
@@ -286,7 +286,7 @@ export class DocumentFieldDetailComponent {
         var self: DocumentFieldDetailComponent = this;
         this.modalWindow.reset();
         this.modalWindow.confirmButtonText = "Remove";
-        this.modalWindow.parentComponent = this;        
+        this.modalWindow.parentComponent = this;
         if (this.field.isPropertyOrConstant()) {
             this.modalWindow.headerText = this.field.isProperty() ? "Remove Property?" : "Remove Constant?";
         } else {

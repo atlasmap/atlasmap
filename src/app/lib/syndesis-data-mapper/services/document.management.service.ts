@@ -84,21 +84,21 @@ export class DocumentManagementService {
             var payload: any = this.createDocumentFetchRequest(docDef, classPath);
             var url: string = this.cfg.initCfg.baseJavaInspectionServiceUrl + "class";
             if (docDef.initCfg.type.isXML()) {
-                url = this.cfg.initCfg.baseXMLInspectionServiceUrl + "inspect";                
+                url = this.cfg.initCfg.baseXMLInspectionServiceUrl + "inspect";
             }
             if (docDef.initCfg.type.isJSON()) {
-                url = this.cfg.initCfg.baseJSONInspectionServiceUrl + "inspect";                
+                url = this.cfg.initCfg.baseJSONInspectionServiceUrl + "inspect";
             }
             DataMapperUtil.debugLogJSON(payload, "Document Service Request", this.cfg.debugDocumentJSON, url);
             this.http.post(url, payload, { headers: this.headers }).toPromise()
                 .then((res: Response) => {
                     DataMapperUtil.debugLogJSON(res.json(), "Document Service Response", this.cfg.debugDocumentJSON, url);
                     docDef.name = docDef.initCfg.shortIdentifier;
-                    docDef.fullyQualifiedName = docDef.initCfg.shortIdentifier;    
+                    docDef.fullyQualifiedName = docDef.initCfg.shortIdentifier;
                     if (docDef.initCfg.type.isJava()) {
                         this.extractJavaDocumentDefinitionData(res, docDef);
                     } else if (docDef.initCfg.type.isJSON()) {
-                        this.extractJSONDocumentDefinitionData(res, docDef);                        
+                        this.extractJSONDocumentDefinitionData(res, docDef);
                     } else {
                         this.extractXMLDocumentDefinitionData(res, docDef);
                     }
@@ -123,7 +123,7 @@ export class DocumentManagementService {
             return {
                 "XmlInspectionRequest": {
                     "jsonType": "io.atlasmap.xml.v2.XmlInspectionRequest",
-                    "type": docDef.initCfg.inspectionType, 
+                    "type": docDef.initCfg.inspectionType,
                     "xmlData": docDef.initCfg.documentContents
                 }
             };
@@ -132,7 +132,7 @@ export class DocumentManagementService {
             return {
                 "JsonInspectionRequest": {
                     "jsonType": "io.atlasmap.json.v2.JsonInspectionRequest",
-                    "type": docDef.initCfg.inspectionType, 
+                    "type": docDef.initCfg.inspectionType,
                     "jsonData": docDef.initCfg.documentContents
                 }
             };
@@ -170,8 +170,8 @@ export class DocumentManagementService {
         body = body.jsonDocument;
 
         for (let field of body.fields.field) {
-            this.parseJSONFieldFromDocument(field, null, docDef);            
-        }        
+            this.parseJSONFieldFromDocument(field, null, docDef);
+        }
     }
 
     private extractXMLDocumentDefinitionData(res: Response, docDef: DocumentDefinition): void {
@@ -185,7 +185,7 @@ export class DocumentManagementService {
 
         body = body.xmlDocument;
 
-        if (body.xmlNamespaces && body.xmlNamespaces.xmlNamespace 
+        if (body.xmlNamespaces && body.xmlNamespaces.xmlNamespace
             && body.xmlNamespaces.xmlNamespace.length) {
             for (let serviceNS of body.xmlNamespaces.xmlNamespace) {
                 var ns: NamespaceModel = new NamespaceModel();
@@ -200,7 +200,7 @@ export class DocumentManagementService {
         for (let field of body.fields.field) {
             this.parseXMLFieldFromDocument(field, null, docDef);
         }
-    }              
+    }
 
     private extractJavaDocumentDefinitionData(res: Response, docDef: DocumentDefinition): void {
         var body: any = res.json().ClassInspectionResponse;
@@ -236,20 +236,20 @@ export class DocumentManagementService {
         for (let field of body.javaFields.javaField) {
             this.parseJavaFieldFromDocument(field, null, docDef);
         }
-    } 
+    }
 
     private parseJSONFieldFromDocument(field: any, parentField: Field, docDef: DocumentDefinition): void {
         var parsedField = this.parseFieldFromDocument(field, parentField, docDef);
         if (parsedField == null) {
             return;
-        }            
+        }
 
         if (field.jsonFields && field.jsonFields.jsonField && field.jsonFields.jsonField.length) {
             for (let childField of field.jsonFields.jsonField) {
-                this.parseJSONFieldFromDocument(childField, parsedField, docDef);                
+                this.parseJSONFieldFromDocument(childField, parsedField, docDef);
             }
         }
-    }  
+    }
 
     private parseFieldFromDocument(field: any, parentField: Field, docDef: DocumentDefinition): Field {
         if (field != null && field.status == "NOT_FOUND") {
@@ -292,21 +292,21 @@ export class DocumentManagementService {
         var parsedField = this.parseFieldFromDocument(field, parentField, docDef);
         if (parsedField == null) {
             return;
-        }            
+        }
 
         if (field.name.indexOf(":") != -1) {
             parsedField.namespaceAlias = field.name.split(":")[0];
             parsedField.name = field.name.split(":")[1];
         }
 
-        parsedField.isAttribute = (parsedField.path.indexOf("@") != -1);                    
+        parsedField.isAttribute = (parsedField.path.indexOf("@") != -1);
 
         if (field.xmlFields && field.xmlFields.xmlField && field.xmlFields.xmlField.length) {
             for (let childField of field.xmlFields.xmlField) {
-                this.parseXMLFieldFromDocument(childField, parsedField, docDef);                
+                this.parseXMLFieldFromDocument(childField, parsedField, docDef);
             }
         }
-    }                  
+    }
 
     private parseJavaFieldFromDocument(field: any, parentField: Field, docDef: DocumentDefinition): void {
         var parsedField = this.parseFieldFromDocument(field, parentField, docDef);
@@ -353,32 +353,32 @@ export class DocumentManagementService {
             <foo>bar</foo>
         `;
 
-        sampleXML = "<foo>bar</foo>";        
+        sampleXML = "<foo>bar</foo>";
 
         sampleXML = `
             <XMLOrder>
-              <orderId>orderId</orderId>
-              <Address>
+            <orderId>orderId</orderId>
+            <Address>
                 <addressLine1>addressLine1</addressLine1>
                 <addressLine2>addressLine2</addressLine2>
                 <city>city</city>
                 <state>state</state>
                 <zipCode>zipCode</zipCode>
-              </Address>
-              <Contact>
+            </Address>
+            <Contact>
                 <firstName>firstName</firstName>
                 <lastName>lastName</lastName>
                 <phoneNumber>phoneNumber</phoneNumber>
                 <zipCode>zipCode</zipCode>
-              </Contact>
+            </Contact>
             </XMLOrder>
         `;
 
         sampleXML = `
             <foo><bar><jason>somevalue</jason></bar></foo>
-        `;        
+        `;
 
-        sampleXML = `            
+        sampleXML = `
             <orders totalCost="12525.00" xmlns="http://www.example.com/x/"
                 xmlns:y="http://www.example.com/y/"
                 xmlns:q="http://www.example.com/q/">
@@ -390,12 +390,12 @@ export class DocumentManagementService {
                 <order><id y:custId="c">54554555</id></order>
                 <q:order><id y:custId="a">12312</id></q:order>
             </orders>
-        `;        
+        `;
 
         sampleXML = `
-            <ns:XmlFPE targetNamespace="http://atlasmap.io/xml/test/v2" 
-                xmlns:ns="http://atlasmap.io/xml/test/v2" 
-                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+            <ns:XmlFPE targetNamespace="http://atlasmap.io/xml/test/v2"
+                xmlns:ns="http://atlasmap.io/xml/test/v2"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                 xsi:schemaLocation="http://atlasmap.io/xml/test/v2 atlas-xml-test-model-v2.xsd ">
                 <booleanField>false</booleanField>
                 <byteField>99</byteField>
@@ -406,24 +406,24 @@ export class DocumentManagementService {
                 <longField>30000</longField>
                 <shortField>1</shortField>
             </ns:XmlFPE>
-        `;   
+        `;
 
         sampleXML = `
             <ns:XmlOE xmlns:ns="http://atlasmap.io/xml/test/v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://atlasmap.io/xml/test/v2 atlas-xml-test-model-v2.xsd ">
-              <ns:orderId>ns:orderId</ns:orderId>
-              <ns:Address>
+            <ns:orderId>ns:orderId</ns:orderId>
+            <ns:Address>
                 <ns:addressLine1>ns:addressLine1</ns:addressLine1>
                 <ns:addressLine2>ns:addressLine2</ns:addressLine2>
                 <ns:city>ns:city</ns:city>
                 <ns:state>ns:state</ns:state>
                 <ns:zipCode>ns:zipCode</ns:zipCode>
-              </ns:Address>
-              <ns:Contact>
+            </ns:Address>
+            <ns:Contact>
                 <ns:firstName>ns:firstName</ns:firstName>
                 <ns:lastName>ns:lastName</ns:lastName>
                 <ns:phoneNumber>ns:phoneNumber</ns:phoneNumber>
                 <ns:zipCode>ns:zipCode</ns:zipCode>
-              </ns:Contact>
+            </ns:Contact>
             </ns:XmlOE>
         `;
 
@@ -433,7 +433,7 @@ export class DocumentManagementService {
     public static generateMockSchemaXML(): string {
         var sampleXML: string = `
             <xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified"
-                       xmlns:xs="http://www.w3.org/2001/XMLSchema">
+                     xmlns:xs="http://www.w3.org/2001/XMLSchema">
                 <xs:element name="data">
                     <xs:complexType>
                         <xs:sequence>
@@ -454,7 +454,7 @@ export class DocumentManagementService {
 
         sampleXML = `
             <schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://example.com/"
-                xmlns:tns="http://example.com/">                
+                xmlns:tns="http://example.com/">
                 <element name="aGlobalElement" type="tns:aGlobalType"/>
                 <simpleType name="aGlobalType"><restriction base="string"/></simpleType>
             </schema>
@@ -516,7 +516,7 @@ export class DocumentManagementService {
                     </xs:complexType>
                 </xs:element>
             </xs:schema>
-        `; 
+        `;
 
         return sampleXML;
     }

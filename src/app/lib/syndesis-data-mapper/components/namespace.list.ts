@@ -53,7 +53,7 @@ import { DataMapperUtil } from '../common/data.mapper.util';
                         <div class="clear"></div>
                     </div>
                 </div>
-                <div [attr.class]="getItemsCSSClass()">                    
+                <div [attr.class]="getItemsCSSClass()">
                     <div [attr.class]="getRowsCSSClass()">
                         <div *ngFor="let namespace of getNamespaces(); let index=index;"
                             [attr.class]="getNamespaceCSSClass(namespace, index)" (click)="selectNamespace(namespace)">
@@ -64,14 +64,14 @@ import { DataMapperUtil } from '../common/data.mapper.util';
                                 <i class="fa fa-edit link" aria-hidden="true" (click)="addEditNamespace(namespace, $event);"></i>
                                 <i class="fa fa-trash link" aria-hidden="true" (click)="removeNamespace(namespace, $event);"></i>
                             </div>
-                            <div class="clear"></div>                                                            
+                            <div class="clear"></div>
                         </div>
                     </div>
                     <div class="noSearchResults" *ngIf="searchResultsVisible()">
                         <label>No search results.</label>
                         <div class="clear"></div>
-                    </div>  
-                </div>                            
+                    </div>
+                </div>
                 <div class="card-pf-heading itemCount">{{ getNamespaces().length }} namespaces</div>
                 <div class="clear"></div>
             </div>
@@ -138,22 +138,22 @@ export class NamespaceListComponent {
         this.modalWindow.headerText = (ns == null) ? "Add Namespace" : "Edit Namespace";
         this.modalWindow.nestedComponentInitializedCallback = (mw: ModalWindowComponent) => {
             var namespaceComponent: NamespaceEditComponent = mw.nestedComponent as NamespaceEditComponent;
-            namespaceComponent.initialize(ns, this.cfg.getFirstXmlDoc(false).namespaces);            
+            namespaceComponent.initialize(ns, this.cfg.getFirstXmlDoc(false).namespaces);
         };
         this.modalWindow.nestedComponentType = NamespaceEditComponent;
         this.modalWindow.okButtonHandler = (mw: ModalWindowComponent) => {
-            var namespaceComponent: NamespaceEditComponent = mw.nestedComponent as NamespaceEditComponent;            
+            var namespaceComponent: NamespaceEditComponent = mw.nestedComponent as NamespaceEditComponent;
             var newNamespace: NamespaceModel = namespaceComponent.namespace;
             if (isEditMode) {
                 ns.copyFrom(newNamespace);
-            } else {            
+            } else {
                 this.cfg.getFirstXmlDoc(false).namespaces.push(newNamespace);
             }
             this.search(this.searchFilter);
             self.cfg.mappingService.saveCurrentMapping();
         };
         this.modalWindow.show();
-    }   
+    }
 
     private removeNamespace(ns: NamespaceModel, event: any): void {
         event.stopPropagation();
@@ -161,7 +161,7 @@ export class NamespaceListComponent {
         var self: NamespaceListComponent = this;
         this.modalWindow.reset();
         this.modalWindow.confirmButtonText = "Remove";
-        this.modalWindow.parentComponent = this;        
+        this.modalWindow.parentComponent = this;
         this.modalWindow.headerText = "Remove Namespace?"
         this.modalWindow.message = "Are you sure you want to remove '" + ns.alias + "' ?";
         this.modalWindow.okButtonHandler = (mw: ModalWindowComponent) => {
@@ -169,8 +169,8 @@ export class NamespaceListComponent {
             this.selectedNamespace = null;
             this.search(this.searchFilter);
         };
-        this.modalWindow.show();        
-    }      
+        this.modalWindow.show();
+    }
 
     public toggleSearch(): void  {
         this.searchMode = !this.searchMode;

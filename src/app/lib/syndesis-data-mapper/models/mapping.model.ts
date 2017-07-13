@@ -40,9 +40,9 @@ export class MappedField {
     public field: Field = DocumentDefinition.getNoneField();
     public actions: FieldAction[] = [];
 
-    public updateSeparateOrCombineIndex(separateMode: boolean, combineMode: boolean, 
+    public updateSeparateOrCombineIndex(separateMode: boolean, combineMode: boolean,
         suggestedValue: string, isSource:boolean): void {
-        
+
         //remove field action when neither combine or separate mode
         var removeField: boolean = (!separateMode && !combineMode);
         //remove field when combine and field is target
@@ -52,7 +52,7 @@ export class MappedField {
         if (removeField) {
             this.removeSeparateOrCombineAction();
             return;
-        }            
+        }
 
         var firstFieldAction: FieldAction = (this.actions.length > 0) ? this.actions[0] : null;
         if (firstFieldAction == null || !firstFieldAction.isSeparateOrCombineMode) {
@@ -225,7 +225,7 @@ export class FieldMappingPair {
     }
 
     public hasTransition(): boolean {
-        var mappedFields: MappedField[] = this.getAllMappedFields();    
+        var mappedFields: MappedField[] = this.getAllMappedFields();
         for (let mappedField of mappedFields) {
             if (mappedField.actions.length > 0) {
                 return true;
@@ -242,7 +242,7 @@ export class FieldMappingPair {
             }
         }
 
-        var mappedFields: MappedField[] = this.getMappedFields(false);    
+        var mappedFields: MappedField[] = this.getMappedFields(false);
         for (let mappedField of mappedFields) {
             var actionsToRemove: FieldAction[] = [];
             for (let action of mappedField.actions) {
@@ -259,9 +259,9 @@ export class FieldMappingPair {
         var separateMode: boolean = (this.transition.mode == TransitionMode.SEPARATE);
         var combineMode: boolean = (this.transition.mode == TransitionMode.COMBINE);
 
-        if (separateMode || combineMode) {    
-            var isSource: boolean = combineMode;            
-            mappedFields = this.getMappedFields(isSource);   
+        if (separateMode || combineMode) {
+            var isSource: boolean = combineMode;
+            mappedFields = this.getMappedFields(isSource);
             //remove indexes from targets in combine mode, from sources in seperate mode
             for (let mappedField of this.getMappedFields(!isSource)) {
                 mappedField.removeSeparateOrCombineAction();
@@ -273,7 +273,7 @@ export class FieldMappingPair {
                 var indexAsNumber = (index == null) ? 0 : parseInt(index);
                 maxIndex = Math.max(maxIndex, indexAsNumber);
             }
-            
+
             maxIndex += 1; //we want our next index to be one larger than previously found indexes
             for (let mappedField of mappedFields) {
                 mappedField.updateSeparateOrCombineIndex(separateMode, combineMode, maxIndex.toString(), isSource);
@@ -402,7 +402,7 @@ export class MappingModel {
                 combineMode = combineMode || fieldPair.transition.isCombineMode();
             }
         }
-        if (mapMode || separateMode || combineMode) {        
+        if (mapMode || separateMode || combineMode) {
             //repeated fields and enums are not selectable in these modes
             if (field.isInCollection()) {
                 return "Repeated fields are not valid for this mapping";
@@ -424,9 +424,9 @@ export class MappingModel {
             if (field.enumeration) {
                 return "Enumeration fields are not valid for this mapping";
             }
-            
+
             //if no fields for this isSource has been selected yet, everything is open to selection
-            if (!this.hasMappedFields(field.isSource())) {            
+            if (!this.hasMappedFields(field.isSource())) {
                 return null;
             }
 
@@ -440,14 +440,14 @@ export class MappingModel {
             } else { //collection field exists in this mapping for isSource
                 var parentCollectionField: Field = collectionField.getCollectionParentField();
                 //primitive fields are not selectable when collection field is already selected
-                if (!field.isInCollection()) {                    
+                if (!field.isInCollection()) {
                     return "field is not selectable, it is not a child of " + parentCollectionField.displayName;
                 }
 
                 //children of collections are only selectable if this field is in the same collection
                 if (field.getCollectionParentField() != parentCollectionField) {
                     return "field is not selectable, it is not a child of " + parentCollectionField.displayName;
-                }         
+                }
             }
         }
         return null;

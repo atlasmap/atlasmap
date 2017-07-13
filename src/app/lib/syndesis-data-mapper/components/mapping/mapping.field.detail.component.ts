@@ -51,8 +51,8 @@ import { MappingModel, FieldMappingPair, MappedField } from '../../models/mappin
                 {{ getParentObjectName() }}
             </label>
             <div style="width:100%;">
-                <input type="text" [ngModel]="mappedField.field.getFieldLabel(false)" [typeahead]="dataSource" 
-                    typeaheadWaitMs="200" (typeaheadOnSelect)="selectionChanged($event)" 
+                <input type="text" [ngModel]="mappedField.field.getFieldLabel(false)" [typeahead]="dataSource"
+                    typeaheadWaitMs="200" (typeaheadOnSelect)="selectionChanged($event)"
                     typeaheadOptionField="displayName" [typeaheadItemTemplate]="typeaheadTemplate">
             </div>
         </div>
@@ -86,13 +86,13 @@ export class MappingFieldDetailComponent {
     }
 
     public displayParentObject(): boolean {
-        if (this.mappedField == null || this.mappedField.field == null 
+        if (this.mappedField == null || this.mappedField.field == null
             || this.mappedField.field.docDef == null
             || (this.mappedField.field == DocumentDefinition.getNoneField())) {
             return false;
         }
         return true;
-    }    
+    }
 
     public getParentObjectName() {
         if (this.mappedField == null || this.mappedField.field == null || this.mappedField.field.docDef == null) {
@@ -104,7 +104,7 @@ export class MappingFieldDetailComponent {
     public selectionChanged(event: any): void {
         this.mappedField.field = event.item["field"];
         this.cfg.mappingService.updateMappedField(this.fieldPair);
-    }    
+    }
 
     public executeSearch(filter: string): any[] {
         var formattedFields: any[] = [];
@@ -113,7 +113,7 @@ export class MappingFieldDetailComponent {
             fields = fields.concat(docDef.getTerminalFields());
         }
         var activeMapping: MappingModel = this.cfg.mappings.activeMapping;
-        for (let field of fields) {            
+        for (let field of fields) {
             var displayName = (field == null) ? "" : field.getFieldLabel(true);
             var formattedField: any = { "field": field, "displayName": displayName };
             if (filter == null || filter == ""

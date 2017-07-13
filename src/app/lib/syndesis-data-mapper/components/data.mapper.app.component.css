@@ -84,7 +84,7 @@
 .dm-toolbar .dropdown-menu { margin-top:5px; }
 .dm-toolbar .dropdown-menu LI { background-color:transparent; width:200px; }
 .dm-toolbar .dropdown-menu LI A { color:rgb(54,54,54); }
-.dm-toolbar .dropdown-menu LI I { color:rgb(54,54,54); font-size:10px; margin-right:10px; 
+.dm-toolbar .dropdown-menu LI I { color:rgb(54,54,54); font-size:10px; margin-right:10px;
         vertical-align:baseline; }
 .dm-toolbar .dropdown-menu LI I.fa-check { margin-top:3px; }
 .dm-toolbar .dropdown-menu LI:hover { background-color:rgba(92, 186, 223, 0.75); }
@@ -133,7 +133,7 @@ I.docCollapseIcon { width:10px; margin-left:5px; }
 
 .dataMapperItemList  { border:1px solid black; border:1px solid #CAC9C9; margin-right:10px; height:100%; }
 .dataMapperItemList  LABEL { float:left; margin-bottom:0px; padding-left:5px; }
-.dataMapperItemList  .items { height:calc(100% - 125px); position:relative; overflow:scroll; overflow-x:hidden; 
+.dataMapperItemList  .items { height:calc(100% - 125px); position:relative; overflow:scroll; overflow-x:hidden;
     float:left; clear:left; width:100%; }
 .dataMapperItemList  .items.searchShown { height:calc(100% - 157px); }
 .dataMapperItemList .item { border-bottom:1px solid #d1d1d1; }

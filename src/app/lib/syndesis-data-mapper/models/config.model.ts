@@ -31,7 +31,7 @@ export class DataMapperInitializationModel {
 
     public baseJavaInspectionServiceUrl: string;
     public baseXMLInspectionServiceUrl: string;
-    public baseJSONInspectionServiceUrl: string;    
+    public baseJSONInspectionServiceUrl: string;
     public baseMappingServiceUrl: string;
 
     /* class path fetching configuration */
@@ -103,7 +103,7 @@ export class ConfigModel {
 
     private createDocument(documentIdentifier: string, isSource: boolean,
         docType: DocumentTypes, documentContents: string): DocumentDefinition {
-        var docDef: DocumentDefinition = new DocumentDefinition();        
+        var docDef: DocumentDefinition = new DocumentDefinition();
         docDef.isSource = isSource;
         docDef.initCfg.documentIdentifier = documentIdentifier;
         docDef.initCfg.shortIdentifier = documentIdentifier;
@@ -123,7 +123,7 @@ export class ConfigModel {
 
     public addJavaDocument(documentIdentifier: string, isSource: boolean): void {
         var docDef: DocumentDefinition = this.createDocument(documentIdentifier, isSource, DocumentTypes.JAVA, null);
-        docDef.initCfg.pathSeparator = ".";            
+        docDef.initCfg.pathSeparator = ".";
     }
 
     public addJSONDocument(documentIdentifier: string, documentContents: string, isSource: boolean): void {
@@ -131,12 +131,12 @@ export class ConfigModel {
     }
 
     public addXMLInstanceDocument(documentIdentifier: string, documentContents: string, isSource: boolean): void {
-        var docDef: DocumentDefinition = this.createDocument(documentIdentifier, isSource, DocumentTypes.XML, documentContents);                
+        var docDef: DocumentDefinition = this.createDocument(documentIdentifier, isSource, DocumentTypes.XML, documentContents);
         docDef.initCfg.inspectionType = "INSTANCE";
     }
 
     public addXMLSchemaDocument(documentIdentifier: string, documentContents: string, isSource: boolean): void {
-        var docDef: DocumentDefinition = this.createDocument(documentIdentifier, isSource, DocumentTypes.XML, documentContents);                
+        var docDef: DocumentDefinition = this.createDocument(documentIdentifier, isSource, DocumentTypes.XML, documentContents);
         docDef.initCfg.inspectionType = "SCHEMA";
     }
 

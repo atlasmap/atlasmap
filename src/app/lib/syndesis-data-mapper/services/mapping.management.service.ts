@@ -128,7 +128,7 @@ export class MappingManagementService {
                 observer.complete();
             });
         });
-    }    
+    }
 
     public saveCurrentMapping(): void {
         var activeMapping: MappingModel = this.cfg.mappings.activeMapping;
@@ -220,21 +220,21 @@ export class MappingManagementService {
         }
 
         var mapping: MappingModel = this.cfg.mappings.activeMapping;
-        
+
         if (mapping == null) {
             var mappingsForField: MappingModel[] = this.cfg.mappings.findMappingsForField(field);
             if (mappingsForField && mappingsForField.length > 1) {
                 console.log("Found " + mappingsForField.length + " existing mappings for selected field, prompting for mapping selection.",
                     { "field": field, "mappings": mappingsForField });
-                this.mappingSelectionRequiredSource.next(field);                
+                this.mappingSelectionRequiredSource.next(field);
                 return;
             } else if (mappingsForField && mappingsForField.length == 1) {
                 console.log("Found existing mapping for selected field.", { "field": field, "mappings": mappingsForField });
                 mapping = mappingsForField[0];
-            }            
-        }        
+            }
+        }
 
-        if (mapping != null && mapping.hasMappedFields(field.isSource()) 
+        if (mapping != null && mapping.hasMappedFields(field.isSource())
             && !mapping.isFieldMapped(field, field.isSource())) {
             var type: string = field.isSource() ? "source" : "target";
             console.log("Discarding mapping, it already has a " + type + " field mapped.");
@@ -305,7 +305,7 @@ export class MappingManagementService {
 
     public validateMappings(): void {
         if (this.cfg.initCfg.baseMappingServiceUrl == null) {
-            //validation service not configured. 
+            //validation service not configured.
             return;
         }
         var startTime: number = Date.now();
@@ -341,8 +341,8 @@ export class MappingManagementService {
                 .then((res: Response) => {
                     let body: any = res.json();
                     DataMapperUtil.debugLogJSON(body, "Field Action Config Response", this.cfg.debugFieldActionJSON, url);
-                    if (body && body.ActionDetails 
-                        && body.ActionDetails.actionDetail 
+                    if (body && body.ActionDetails
+                        && body.ActionDetails.actionDetail
                         && body.ActionDetails.actionDetail.length) {
                         for (let svcConfig of body.ActionDetails.actionDetail) {
                             var fieldActionConfig: FieldActionConfig = new FieldActionConfig();
@@ -352,7 +352,7 @@ export class MappingManagementService {
                             fieldActionConfig.method = svcConfig.method;
                             fieldActionConfig.serviceObject = svcConfig;
 
-                            if (svcConfig.parameters && svcConfig.parameters.property 
+                            if (svcConfig.parameters && svcConfig.parameters.property
                                 && svcConfig.parameters.property.length) {
                                 for (let svcProperty of svcConfig.parameters.property) {
                                     var argumentConfig: FieldActionArgument = new FieldActionArgument();

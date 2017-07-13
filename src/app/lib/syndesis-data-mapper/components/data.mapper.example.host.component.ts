@@ -53,7 +53,7 @@ export class DataMapperAppExampleHostComponent {
         //initialize base urls for our service calls
         c.initCfg.baseJavaInspectionServiceUrl = "http://localhost:8585/v2/atlas/java/";
         c.initCfg.baseXMLInspectionServiceUrl = "http://localhost:8585/v2/atlas/xml/";
-        c.initCfg.baseJSONInspectionServiceUrl = "http://localhost:8585/v2/atlas/json/";        
+        c.initCfg.baseJSONInspectionServiceUrl = "http://localhost:8585/v2/atlas/json/";
         c.initCfg.baseMappingServiceUrl = "http://localhost:8585/v2/atlas/";
 
         //initialize data for our class path service call
@@ -63,23 +63,23 @@ export class DataMapperAppExampleHostComponent {
         // if classPath is specified, maven call to resolve pom will be skipped
         c.initCfg.classPath = null;
 
-        //specify source documents                     
-        c.addJavaDocument("io.atlasmap.java.test.SourceOrder", true);                        
+        //specify source documents
+        c.addJavaDocument("io.atlasmap.java.test.SourceOrder", true);
         c.addJavaDocument("io.atlasmap.java.test.SourceContact", true);
         c.addJavaDocument("io.atlasmap.java.test.SourceAddress", true);
         c.addJavaDocument("io.atlasmap.java.test.TestListOrders", true);
         c.addJavaDocument("io.atlasmap.java.test.TargetOrderArray", true);
-        c.addJavaDocument("io.atlasmap.java.test.SourceFlatPrimitiveClass", true);                
+        c.addJavaDocument("io.atlasmap.java.test.SourceFlatPrimitiveClass", true);
         c.addJavaDocument("io.atlasmap.java.test.TargetTestClass", true);
         c.addXMLInstanceDocument("XMLInstanceSource", DocumentManagementService.generateMockInstanceXML(), true);
-        c.addXMLSchemaDocument("XMLSchemaSource", DocumentManagementService.generateMockSchemaXML(), true);                    
+        c.addXMLSchemaDocument("XMLSchemaSource", DocumentManagementService.generateMockSchemaXML(), true);
         c.addJSONDocument("JSONSource", DocumentManagementService.generateMockJSON(), true);
 
         //specify target document (only one allowed at a time)
-        c.addJavaDocument("io.atlasmap.java.test.TargetTestClass", false);                
-        c.addXMLInstanceDocument("XMLInstanceTarget", DocumentManagementService.generateMockInstanceXML(), false);                    
-        c.addXMLSchemaDocument("XMLSchemaTarget", DocumentManagementService.generateMockSchemaXML(), false);   
-        c.addJSONDocument("JSONTarget", DocumentManagementService.generateMockJSON(), false);                 
+        c.addJavaDocument("io.atlasmap.java.test.TargetTestClass", false);
+        c.addXMLInstanceDocument("XMLInstanceTarget", DocumentManagementService.generateMockInstanceXML(), false);
+        c.addXMLSchemaDocument("XMLSchemaTarget", DocumentManagementService.generateMockSchemaXML(), false);
+        c.addJSONDocument("JSONTarget", DocumentManagementService.generateMockJSON(), false);
 
         console.log("Example config after host component configuration.", c);
 
@@ -109,5 +109,5 @@ export class DataMapperAppExampleHostComponent {
             //After you've sucessfully saved you *MUST* call this (don't call on error)
             c.mappingService.handleMappingSaveSuccess(saveHandler);
         });
-    }    
+    }
 }

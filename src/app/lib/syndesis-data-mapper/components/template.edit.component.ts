@@ -25,7 +25,7 @@ import { DataMapperUtil } from '../common/data.mapper.util';
         <div class="DataMapperEditComponent">
             <div class="form-group">
                 <textarea [(ngModel)]="templateText" rows="16" cols="100"></textarea>
-            </div>            
+            </div>
         </div>
     `
 })

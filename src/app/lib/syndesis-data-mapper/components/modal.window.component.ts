@@ -45,7 +45,7 @@ export class EmptyModalBodyComponent { }
                     <div class="modal-error">
                         <data-mapper-error [isValidation]="true" [errorService]="cfg.errorService"></data-mapper-error>
                     </div>
-                    <div class="modal-body">                                
+                    <div class="modal-body">
                         <div class="modal-message" *ngIf="message">{{message}}</div>
                         <template #dyn_target></template>
                     </div>
