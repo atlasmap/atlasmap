@@ -87,9 +87,14 @@ export class DocumentFieldDetailComponent {
     constructor(private sanitizer: DomSanitizer) {}
 
     public startDrag(event: any): void {
+        if (!this.field.isTerminal()) {
+            // ignore drag event, it's coming from a child field who's already set on the drag event
+            return;
+        }
+        
         // event's data transfer store isn't available during dragenter/dragleave/dragover, so we need
         // to store this info in a global somewhere since those methods depend on knowing if the 
-        // dragged field is 
+        // dragged field is source/target
         this.cfg.currentDraggedField = this.field;
     }
 
