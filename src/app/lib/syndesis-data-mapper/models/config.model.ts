@@ -17,6 +17,7 @@
 import { MappingDefinition } from './mapping.definition.model';
 import { DocumentDefinition, DocumentTypes, DocumentType } from './document.definition.model';
 import { LookupTable } from '../models/lookup.table.model';
+import { Field } from '../models/field.model';
 
 import { ErrorHandlerService } from '../services/error.handler.service';
 import { DocumentManagementService } from '../services/document.management.service';
@@ -64,6 +65,7 @@ export class ConfigModel {
     public showTypes: boolean = false;
     public showMappedFields: boolean = true;
     public showUnmappedFields: boolean = true;
+    public currentDraggedField: Field = null;
 
     /* debug logging toggles */
     public debugDocumentJSON: boolean = false;
@@ -103,7 +105,6 @@ export class ConfigModel {
         docType: DocumentTypes, documentContents: string): DocumentDefinition {
         var docDef: DocumentDefinition = new DocumentDefinition();        
         docDef.isSource = isSource;
-        docDef.initCfg.shortIdentifier = documentIdentifier;
         docDef.initCfg.documentIdentifier = documentIdentifier;
         docDef.uri = documentIdentifier;
         docDef.initCfg.type.type = docType;
@@ -144,6 +145,15 @@ export class ConfigModel {
     public getDocs(isSource: boolean): DocumentDefinition[] {
         var docs: DocumentDefinition[] = this.getDocsWithoutPropertyDoc(isSource);
         return isSource ? docs.concat([this.propertyDoc, this.constantDoc]) : docs;
+    }
+
+    public getDocForShortIdentifier(shortIdentifier: string, isSource: boolean): DocumentDefinition {
+        for (let d of this.getDocs(isSource)) {
+            if (d.initCfg.shortIdentifier == shortIdentifier) {
+                return d;
+            }
+        }
+        return null;
     }
 
     public getFirstXmlDoc(isSource: boolean) {

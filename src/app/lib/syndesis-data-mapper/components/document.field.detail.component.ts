@@ -35,7 +35,8 @@ import { FieldEditComponent } from './field.edit.component';
     selector: 'document-field-detail',
     template: `
         <div class="DocumentFieldDetailComponent" #fieldDetailElement on-mouseover='handleMouseOver($event)' 
-            *ngIf="fieldShouldBeVisible()">
+            *ngIf="fieldShouldBeVisible()" [attr.draggable]="field.isTerminal()" (dragstart)="startDrag($event)" (drop)="endDrag($event)" 
+            (dragenter)="dragEnterLeave($event, true)" (dragleave)="dragEnterLeave($event, false)" (dragover)="allowDrop($event)">
             <div [attr.class]='getCssClass()' (click)="handleMouseClick($event)" *ngIf="field.visibleInCurrentDocumentSearch">
                 <div style="float:left;">
                     <div style="display:inline-block; width:24px;" *ngIf="!field.isSource()">
@@ -76,12 +77,58 @@ export class DocumentFieldDetailComponent {
     @Input() cfg: ConfigModel;
     @Input() field: Field;
     @Input() lineMachine: LineMachineComponent;
-    @Input() modalWindow: ModalWindowComponent;
+    @Input() modalWindow: ModalWindowComponent;    
 
     @ViewChild('fieldDetailElement') fieldDetailElement:ElementRef;
     @ViewChildren('fieldDetail') fieldComponents: QueryList<DocumentFieldDetailComponent>;
 
+    private isDragDropTarget: boolean = false;
+
     constructor(private sanitizer: DomSanitizer) {}
+
+    public startDrag(event: any): void {
+        // event's data transfer store isn't available during dragenter/dragleave/dragover, so we need
+        // to store this info in a global somewhere since those methods depend on knowing if the 
+        // dragged field is 
+        this.cfg.currentDraggedField = this.field;
+    }
+
+    public dragEnterLeave(event: any, entering: boolean): void {
+        if (!this.field.isTerminal() || (this.field.isSource() == this.cfg.currentDraggedField.isSource())) {
+            this.isDragDropTarget = false;
+            return;
+        }
+        this.isDragDropTarget = entering;
+    }
+
+    public allowDrop(event: any): void { 
+        if (!this.field.isTerminal() || (this.field.isSource() == this.cfg.currentDraggedField.isSource())) {
+            this.isDragDropTarget = false;
+            return;
+        }       
+        event.preventDefault();
+        this.isDragDropTarget = true;
+    }
+
+    public endDrag(event: any): void {
+        this.isDragDropTarget = false;
+        if (!this.field.isTerminal() || (this.field.isSource() == this.cfg.currentDraggedField.isSource())) {           
+            var desc: string = this.field.isSource() ? "source" : "target"; 
+            console.log("Ignoring drop event, this field isn't terminal or it is a " + desc + " like the dropped field.");
+            return;
+        }               
+
+        var droppedField: Field = this.cfg.currentDraggedField;
+        if (droppedField == null) {
+            console.log("Ignoring drop event, can't find dropped field.");
+            return;
+        }  
+
+        console.log("Creating new mapping for dropped field '" + droppedField.name + "' and '" + this.field.name + "'.");
+        this.cfg.mappingService.addNewMapping(droppedField);
+        this.cfg.mappingService.fieldSelected(this.field);
+
+    }
 
     public fieldIsEditable(): boolean {
         return this.field.isPropertyOrConstant() || this.field.userCreated;
@@ -133,6 +180,9 @@ export class DocumentFieldDetailComponent {
         }
         if (!this.field.isSource()) {
             cssClass += " outputField";
+        }
+        if (this.isDragDropTarget) {
+            cssClass += " dragHover";
         }
         return cssClass;
     }
