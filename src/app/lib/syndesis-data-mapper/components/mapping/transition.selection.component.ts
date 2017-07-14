@@ -87,7 +87,7 @@ export class TransitionSelectionComponent {
         return table.entries.length;
     }
 
-    selectionChanged(event: MouseEvent): void {
+    selectionChanged(event: any): void {
         var selectorIsMode: boolean = "mode" == event.target.attributes.getNamedItem("selector").value
         var selectedValue: any = event.target.selectedOptions.item(0).attributes.getNamedItem("value").value;
         if (selectorIsMode) {
