@@ -102,9 +102,8 @@ export class MappingFieldActionComponent {
         this.cfg.mappingService.saveCurrentMapping();
     }
 
-    configSelectionChanged(event: MouseEvent) {
-        var eventTarget: any = event.target; //extract this to avoid compiler error about 'selectedOptions' not existing.
-        var attributes: any = eventTarget.selectedOptions.item(0).attributes;
+    configSelectionChanged(event: any) {
+        var attributes: any = event.target.selectedOptions.item(0).attributes;
         var selectedActionName: any = attributes.getNamedItem("value").value;
         var selectedActionIndex: any = attributes.getNamedItem("actionIndex").value;
         var action: FieldAction = this.getMappedFieldActions()[selectedActionIndex];

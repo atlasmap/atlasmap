@@ -76,9 +76,8 @@ export class PropertyFieldEditComponent implements ModalWindowValidator {
         this.field = field == null ? new Field() : field.copy();
     }
 
-    public valueTypeSelectionChanged(event: MouseEvent): void {
-        var eventTarget: any = event.target; //extract this to avoid compiler error about 'selectedOptions' not existing.
-        this.valueType = eventTarget.selectedOptions.item(0).attributes.getNamedItem("value").value;
+    public valueTypeSelectionChanged(event: any): void {
+        this.valueType = event.target.selectedOptions.item(0).attributes.getNamedItem("value").value;
     }
 
     public getField(): Field {

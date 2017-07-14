@@ -42,10 +42,8 @@ export class DataMapperErrorComponent {
         return this.isValidation ? this.errorService.validationErrors : this.errorService.errors;
     }
 
-    public handleClick(event: MouseEvent) {
-        // need to extract this so typescript doesnt throw compiler error
-        var eventTarget: any = event.target;
-        var errorIdentifier: string = eventTarget.attributes.getNamedItem("errorIdentifier").value;
+    public handleClick(event: any) {
+        var errorIdentifier: string = event.target.attributes.getNamedItem("errorIdentifier").value;
         this.errorService.removeError(errorIdentifier);
     }
 }
