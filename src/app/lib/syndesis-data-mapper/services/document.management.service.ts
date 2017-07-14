@@ -59,11 +59,11 @@ export class DocumentManagementService {
                 }
             }
             var url: string = this.cfg.initCfg.baseJavaInspectionServiceUrl + "mavenclasspath";
-            DataMapperUtil.debugLogJSON(requestBody, "Classpath Service Request", this.cfg.debugClassPathJSON, url);
+            DataMapperUtil.debugLogJSON(requestBody, "Classpath Service Request", this.cfg.initCfg.debugClassPathServiceCalls, url);
             this.http.post(url, requestBody, { headers: this.headers }).toPromise()
                 .then((res: Response) => {
                     let body: any = res.json();
-                    DataMapperUtil.debugLogJSON(body, "Classpath Service Response", this.cfg.debugClassPathJSON, url);
+                    DataMapperUtil.debugLogJSON(body, "Classpath Service Response", this.cfg.initCfg.debugClassPathServiceCalls, url);
                     var classPath: string = body.MavenClasspathResponse.classpath;
                     console.log("Finished fetching class path '" + classPath + "' in "
                         + (Date.now() - startTime) + "ms.");
@@ -89,10 +89,10 @@ export class DocumentManagementService {
             if (docDef.initCfg.type.isJSON()) {
                 url = this.cfg.initCfg.baseJSONInspectionServiceUrl + "inspect";
             }
-            DataMapperUtil.debugLogJSON(payload, "Document Service Request", this.cfg.debugDocumentJSON, url);
+            DataMapperUtil.debugLogJSON(payload, "Document Service Request", this.cfg.initCfg.debugDocumentServiceCalls, url);
             this.http.post(url, payload, { headers: this.headers }).toPromise()
                 .then((res: Response) => {
-                    DataMapperUtil.debugLogJSON(res.json(), "Document Service Response", this.cfg.debugDocumentJSON, url);
+                    DataMapperUtil.debugLogJSON(res.json(), "Document Service Response", this.cfg.initCfg.debugDocumentServiceCalls, url);
                     docDef.name = docDef.initCfg.shortIdentifier;
                     docDef.fullyQualifiedName = docDef.initCfg.shortIdentifier;
                     if (docDef.initCfg.type.isJava()) {
@@ -326,7 +326,7 @@ export class DocumentManagementService {
                 parsedEnumValue.ordinal = enumValue.ordinal;
                 parsedField.enumValues.push(parsedEnumValue);
             }
-            if (this.cfg.debugDocumentParsing) {
+            if (this.cfg.initCfg.debugDocumentParsing) {
                 console.log("parsed enums for field " + parsedField.classIdentifier, parsedField);
             }
         }

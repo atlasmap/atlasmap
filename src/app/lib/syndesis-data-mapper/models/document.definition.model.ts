@@ -258,7 +258,7 @@ export class DocumentDefinition {
 
         this.fieldPaths.sort();
 
-        if (ConfigModel.getConfig().debugDocumentParsing) {
+        if (ConfigModel.getConfig().initCfg.debugDocumentParsing) {
             console.log(this.printDocumentFields(this.fields, 0));
             var enumFields: string = "Enum fields:\n";
             for (let field of this.allFields) {
@@ -395,7 +395,7 @@ export class DocumentDefinition {
         }
 
         // print cached complex fields
-        if (ConfigModel.getConfig().debugDocumentParsing) {
+        if (ConfigModel.getConfig().initCfg.debugDocumentParsing) {
             var result: string = "Cached Fields: ";
             for (let key in this.complexFieldsByClassIdentifier) {
                 var cachedField: Field = this.complexFieldsByClassIdentifier[key];
