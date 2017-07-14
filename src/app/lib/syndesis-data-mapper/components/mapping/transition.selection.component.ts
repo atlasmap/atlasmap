@@ -88,9 +88,8 @@ export class TransitionSelectionComponent {
     }
 
     selectionChanged(event: MouseEvent): void {
-        var eventTarget: any = event.target; //extract this to avoid compiler error about 'selectedOptions' not existing.
-        var selectorIsMode: boolean = "mode" == eventTarget.attributes.getNamedItem("selector").value
-        var selectedValue: any = eventTarget.selectedOptions.item(0).attributes.getNamedItem("value").value;
+        var selectorIsMode: boolean = "mode" == event.target.attributes.getNamedItem("selector").value
+        var selectedValue: any = event.target.selectedOptions.item(0).attributes.getNamedItem("value").value;
         if (selectorIsMode) {
             this.fieldPair.transition.mode = parseInt(selectedValue);
         } else {

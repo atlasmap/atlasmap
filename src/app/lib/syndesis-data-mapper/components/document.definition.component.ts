@@ -208,8 +208,7 @@ export class DocumentDefinitionComponent {
     }
 
     private handleScroll(event: MouseEvent) {
-        var target: any = event.target;
-        this.scrollTop = target.scrollTop;
+        this.scrollTop = event.target.scrollTop;
         this.lineMachine.redrawLinesForMappings();
     }
 

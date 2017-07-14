@@ -164,19 +164,16 @@ export class FieldEditComponent implements ModalWindowValidator {
         this.namespaceAlias = this.parentField.namespaceAlias == null ? unqualifiedNS.alias : this.parentField.namespaceAlias;
     }
 
-    public fieldTypeSelectionChanged(event: MouseEvent): void {
-        var eventTarget: any = event.target; //extract this to avoid compiler error about 'selectedOptions' not existing.
-        this.fieldType = eventTarget.selectedOptions.item(0).attributes.getNamedItem("value").value;
+    public fieldTypeSelectionChanged(event: any): void {
+        this.fieldType = event.target.selectedOptions.item(0).attributes.getNamedItem("value").value;
     }
 
-    public valueTypeSelectionChanged(event: MouseEvent): void {
-        var eventTarget: any = event.target; //extract this to avoid compiler error about 'selectedOptions' not existing.
-        this.valueType = eventTarget.selectedOptions.item(0).attributes.getNamedItem("value").value;
+    public valueTypeSelectionChanged(event: any): void {
+        this.valueType = event.target.selectedOptions.item(0).attributes.getNamedItem("value").value;
     }
 
-    public namespaceSelectionChanged(event: MouseEvent): void {
-        var eventTarget: any = event.target; //extract this to avoid compiler error about 'selectedOptions' not existing.
-        this.namespaceAlias = eventTarget.selectedOptions.item(0).attributes.getNamedItem("value").value;
+    public namespaceSelectionChanged(event: any): void {
+        this.namespaceAlias = event.target.selectedOptions.item(0).attributes.getNamedItem("value").value;
     }
 
     public executeSearch(filter: string): any[] {

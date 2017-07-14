@@ -81,6 +81,14 @@ export class DataMapperAppExampleHostComponent {
         c.addXMLSchemaDocument("XMLSchemaTarget", DocumentManagementService.generateMockSchemaXML(), false);
         c.addJSONDocument("JSONTarget", DocumentManagementService.generateMockJSON(), false);
 
+        //turn on debug logging options as needed
+        c.debugDocumentJSON: boolean = false;
+        c.debugDocumentParsing: boolean = false;
+        c.debugMappingJSON: boolean = false;
+        c.debugClassPathJSON: boolean = false;
+        c.debugValidationJSON: boolean = false;
+        c.debugFieldActionJSON: boolean = false;
+
         console.log("Example config after host component configuration.", c);
 
         //initialize system

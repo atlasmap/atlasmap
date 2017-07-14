@@ -29,18 +29,18 @@ selector: 'dm-toolbar',
 template: `
     <div class="dm-toolbar">
         <div class="dm-toolbar-icons" style="float:right;">
-            <i class="fa fa-plus link" (click)="toolbarButtonClicked('addMapping');"></i>
+            <i class="fa fa-plus link" (click)="toolbarButtonClicked('addMapping', $event);"></i>
             <i [attr.class]="getCSSClass('editTemplate')"  *ngIf="targetSupportsTemplate()"
                 (click)="toolbarButtonClicked('editTemplate');"></i>
-            <i [attr.class]="getCSSClass('showMappingTable')" (click)="toolbarButtonClicked('showMappingTable');"></i>
+            <i [attr.class]="getCSSClass('showMappingTable')" (click)="toolbarButtonClicked('showMappingTable', $event);"></i>
             <i *ngIf="cfg.getFirstXmlDoc(false)" [attr.class]="getCSSClass('showNamespaceTable')"
-                (click)="toolbarButtonClicked('showNamespaceTable');"></i>
-            <i [attr.class]="getCSSClass('showDetails')" (click)="toolbarButtonClicked('showDetails');"></i>
+                (click)="toolbarButtonClicked('showNamespaceTable', $event);"></i>
+            <i [attr.class]="getCSSClass('showDetails')" (click)="toolbarButtonClicked('showDetails', $event);"></i>
             <div dropdown placement="bottom right" style="display:inline; position:relative;">
                 <i [attr.class]="getCSSClass('advancedMode')" dropdownToggle (click)="false"></i>
                 <!-- <a href dropdownToggle (click)="false">X</a> -->
                 <ul *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu">
-                    <li role="menuitem" (click)="toolbarButtonClicked('showTypes');">
+                    <li role="menuitem" (click)="toolbarButtonClicked('showTypes', $event);">
                         <div style="float:left">
                             <a class="dropdown-item" href="#">
                                 <i class="fa fa-tag"></i>Show Types
@@ -49,7 +49,7 @@ template: `
                         <i class="fa fa-check" *ngIf="cfg.showTypes" style="float:right"></i>
                         <div class="clear"></div>
                     </li>
-                    <li role="menuitem" (click)="toolbarButtonClicked('showLines');">
+                    <li role="menuitem" (click)="toolbarButtonClicked('showLines', $event);">
                         <div style="float:left">
                             <a class="dropdown-item" href="#">
                                 <i class="fa fa-share-alt"></i>Show Lines
@@ -58,7 +58,7 @@ template: `
                         <i class="fa fa-check" *ngIf="cfg.showLinesAlways" style="float:right"></i>
                         <div class="clear"></div>
                     </li>
-                    <li role="menuitem" (click)="toolbarButtonClicked('showMappedFields');">
+                    <li role="menuitem" (click)="toolbarButtonClicked('showMappedFields', $event);">
                         <div style="float:left">
                             <a class="dropdown-item" href="#">
                                 <i class="fa fa-chain"></i>Show Mapped Fields
@@ -67,7 +67,7 @@ template: `
                         <i class="fa fa-check" *ngIf="cfg.showMappedFields" style="float:right"></i>
                         <div class="clear"></div>
                     </li>
-                    <li role="menuitem" (click)="toolbarButtonClicked('showUnmappedFields');">
+                    <li role="menuitem" (click)="toolbarButtonClicked('showUnmappedFields', $event);">
                         <div style="float:left">
                             <a class="dropdown-item" href="#">
                                 <i class="fa fa-chain-broken"></i>Show Unmapped Fields
@@ -115,7 +115,8 @@ export class ToolbarComponent {
         return targetDoc.initCfg.type.isXML() || targetDoc.initCfg.type.isJSON();
     }
 
-    public toolbarButtonClicked(action: string): void {
+    public toolbarButtonClicked(action: string, event: any): void {
+        event.preventDefault();
         if ("showDetails" == action) {
             if (this.cfg.mappings.activeMapping == null) {
                 this.cfg.mappingService.addNewMapping(null);
