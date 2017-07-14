@@ -1,18 +1,18 @@
 <!--
 
-    Copyright (C) 2017 Red Hat, Inc.
+		Copyright (C) 2017 Red Hat, Inc.
 
-    Licensed under the Apache License, Version 2.0 (the "License");
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
+		Licensed under the Apache License, Version 2.0 (the "License");
+		you may not use this file except in compliance with the License.
+		You may obtain a copy of the License at
 
-            http://www.apache.org/licenses/LICENSE-2.0
+						http://www.apache.org/licenses/LICENSE-2.0
 
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
+		Unless required by applicable law or agreed to in writing, software
+		distributed under the License is distributed on an "AS IS" BASIS,
+		WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+		See the License for the specific language governing permissions and
+		limitations under the License.
 
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -42,6 +42,8 @@
 		<maven-release-plugin.version>2.5.3</maven-release-plugin.version>
 		<maven-source-plugin.version>2.2.1</maven-source-plugin.version>
 		<nexus-staging-maven-plugin.version>1.6.7</nexus-staging-maven-plugin.version>
+		<asciidoctor-maven-plugin.version>1.5.5</asciidoctor-maven-plugin.version>
+
 		<!-- Does this fix the NPE problem ??
 		<jetty-maven-plugin.version>9.4.2.v20170220</jetty-maven-plugin.version>
 		-->
@@ -57,11 +59,11 @@
 		<at.jackson-module-jaxb-annotations.version>2.8.6</at.jackson-module-jaxb-annotations.version>
 		<spring-boot.version>1.5.2.RELEASE</spring-boot.version>
 		<resteasy-spring-boot-starter.version>2.3.0-RELEASE</resteasy-spring-boot-starter.version>
-        <fabric8-maven-plugin.version>3.2.30</fabric8-maven-plugin.version>
+				<fabric8-maven-plugin.version>3.2.30</fabric8-maven-plugin.version>
 
-        <!-- Controls Docker Image Generation -->
-        <from.image>registry.access.redhat.com/jboss-fuse-6/fis-java-openshift:2.0</from.image>
-        <docker.image>atlasmap/atlasmap:%l</docker.image>
+				<!-- Controls Docker Image Generation -->
+				<from.image>registry.access.redhat.com/jboss-fuse-6/fis-java-openshift:2.0</from.image>
+				<docker.image>atlasmap/atlasmap:%l</docker.image>
 	</properties>
 
 	<description>The AtlasMap Project</description>
@@ -75,13 +77,13 @@
 		</license>
 	</licenses>
 	<developers>
-                <developer>
-                        <id>mattrpav</id>
-                        <name>Matt Pavlovich</name>
-                        <email>matt@mediadriver.com</email>
-                        <url>http://mediadriver.com</url>
-                        <timezone>-6</timezone>
-                </developer>
+								<developer>
+												<id>mattrpav</id>
+												<name>Matt Pavlovich</name>
+												<email>matt@mediadriver.com</email>
+												<url>http://mediadriver.com</url>
+												<timezone>-6</timezone>
+								</developer>
 		<developer>
 			<id>chirino</id>
 			<name>Hiram Chirino</name>
@@ -146,6 +148,7 @@
 				<module>atlas-java-parent</module>
 				<module>atlas-json-parent</module>
 				<module>atlas-xml-parent</module>
+				<module>atlas-docs</module>
 				<module>atlas-demo-deps</module>
 				<module>atlas-itests</module>
 				<module>atlas-itests-parent</module>
@@ -320,11 +323,16 @@
 						</excludes>
 					</configuration>
 				</plugin>
-                <plugin>
-                    <groupId>org.jsonschema2pojo</groupId>
-                    <artifactId>jsonschema2pojo-maven-plugin</artifactId>
-                    <version>${jsonschema2pojo-maven-plugin.version}</version>
-                </plugin>
+				<plugin>
+					<groupId>org.jsonschema2pojo</groupId>
+					<artifactId>jsonschema2pojo-maven-plugin</artifactId>
+					<version>${jsonschema2pojo-maven-plugin.version}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.asciidoctor</groupId>
+					<artifactId>asciidoctor-maven-plugin</artifactId>
+					<version>${asciidoctor-maven-plugin.version}</version>
+				</plugin>
 			</plugins>
 		</pluginManagement>
 		<plugins>
