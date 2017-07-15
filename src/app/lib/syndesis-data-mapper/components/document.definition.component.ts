@@ -207,7 +207,7 @@ export class DocumentDefinitionComponent {
         this.search(this.searchFilter);
     }
 
-    private handleScroll(event: MouseEvent) {
+    private handleScroll(event: any) {
         this.scrollTop = event.target.scrollTop;
         this.lineMachine.redrawLinesForMappings();
     }

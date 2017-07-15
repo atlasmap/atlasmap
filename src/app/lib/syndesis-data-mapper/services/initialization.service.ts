@@ -45,9 +45,6 @@ export class InitializationService {
     private initializationStatusChangedSource = new Subject<void>();
     initializationStatusChanged$ = this.initializationStatusChangedSource.asObservable();
 
-    /* TEST DATA CONFIG */
-    private static addMockJSONMappings: boolean = false;
-
     constructor(private documentService: DocumentManagementService,
         private mappingService: MappingManagementService,
         private errorService: ErrorHandlerService) {
@@ -73,15 +70,61 @@ export class InitializationService {
             console.error("Mapping service URL is not configured, validation service will not be used.")
         }
 
-        if (InitializationService.addMockJSONMappings) {
+        if (this.cfg.initCfg.addMockJSONMappings) {
             var mappingDefinition: MappingDefinition = new MappingDefinition();
             var mappingJSON: any = InitializationService.createExampleMappingsJSON();
             MappingSerializer.deserializeMappingServiceJSON(mappingJSON, mappingDefinition, this.cfg);
             this.cfg.mappings = mappingDefinition;
-            console.log("INIT SERVICE TEST DATA: Loaded mock mapping definition from example JSON",
+            console.error("INIT SERVICE MOCK DATA: Loaded mock mapping definition from example JSON",
                 { "mappingDef": mappingDefinition, "JSON": mappingJSON }
             );
         }
+
+        if (this.cfg.initCfg.addMockJavaSources) {
+            console.error("INIT SERVICE MOCK DATA: Adding mock java source documents.");
+            this.cfg.addJavaDocument("io.atlasmap.java.test.SourceOrder", true);
+            this.cfg.addJavaDocument("io.atlasmap.java.test.SourceContact", true);
+            this.cfg.addJavaDocument("io.atlasmap.java.test.SourceAddress", true);
+            this.cfg.addJavaDocument("io.atlasmap.java.test.TestListOrders", true);
+            this.cfg.addJavaDocument("io.atlasmap.java.test.TargetOrderArray", true);
+            this.cfg.addJavaDocument("io.atlasmap.java.test.SourceFlatPrimitiveClass", true);
+            this.cfg.addJavaDocument("io.atlasmap.java.test.TargetTestClass", true);        
+        }
+
+        if (this.cfg.initCfg.addMockXMLInstanceSources) {
+            console.error("INIT SERVICE MOCK DATA: Adding mock XML instance source documents.");
+            this.cfg.addXMLInstanceDocument("XMLInstanceSource", DocumentManagementService.generateMockInstanceXML(), true);
+        }
+
+        if (this.cfg.initCfg.addMockXMLSchemaSources) {
+            console.error("INIT SERVICE MOCK DATA: Adding mock XML scehema source documents.");
+            this.cfg.addXMLSchemaDocument("XMLSchemaSource", DocumentManagementService.generateMockSchemaXML(), true);
+        }
+
+        if (this.cfg.initCfg.addMockJSONSources) {
+            console.error("INIT SERVICE MOCK DATA: Adding mock JSON source documents.");
+            this.cfg.addJSONDocument("JSONSource", DocumentManagementService.generateMockJSON(), true);
+        }
+
+        if (this.cfg.initCfg.addMockJavaTarget) {
+            console.error("INIT SERVICE MOCK DATA: Adding mock java target document.");
+            this.cfg.addJavaDocument("io.atlasmap.java.test.TargetTestClass", false);
+        }
+
+        if (this.cfg.initCfg.addMockXMLInstanceTarget) {
+            console.error("INIT SERVICE MOCK DATA: Adding mock XML instance target document.");
+            this.cfg.addXMLInstanceDocument("XMLInstanceTarget", DocumentManagementService.generateMockInstanceXML(), false);
+        }
+
+        if (this.cfg.initCfg.addMockXMLSchemaTarget) {
+            console.error("INIT SERVICE MOCK DATA: Adding mock XML schema  target document.");
+            this.cfg.addXMLSchemaDocument("XMLSchemaTarget", DocumentManagementService.generateMockSchemaXML(), false);
+        }
+
+        if (this.cfg.initCfg.addMockJSONTarget) {
+            console.error("INIT SERVICE MOCK DATA: Adding mock JSON target document.");
+            this.cfg.addJSONDocument("JSONTarget", DocumentManagementService.generateMockJSON(), false);
+        }                                
 
         //load field actions
         this.fetchFieldActions();

@@ -64,11 +64,11 @@ export class MappingManagementService {
         return new Observable<string[]>((observer:any) => {
             var startTime: number = Date.now();
             var url = this.cfg.initCfg.baseMappingServiceUrl + "mappings" + (filter == null ? "" : "?filter=" + filter);
-            DataMapperUtil.debugLogJSON(null, "Mapping List Response", this.cfg.debugMappingJSON, url);
+            DataMapperUtil.debugLogJSON(null, "Mapping List Response", this.cfg.initCfg.debugMappingServiceCalls, url);
             this.http.get(url, {headers: this.headers}).toPromise()
                 .then((res:Response) => {
                     let body = res.json();
-                    DataMapperUtil.debugLogJSON(body, "Mapping List Response", this.cfg.debugMappingJSON, url);
+                    DataMapperUtil.debugLogJSON(body, "Mapping List Response", this.cfg.initCfg.debugMappingServiceCalls, url);
                     var entries: any[] = body.StringMap.stringMapEntry;
                     var mappingFileNames: string[] = [];
                     for (let entry of entries) {
@@ -100,7 +100,7 @@ export class MappingManagementService {
             var operations: any[] = [];
             for (let mappingName of mappingFileNames) {
                 var url: string = baseURL + mappingName;
-                DataMapperUtil.debugLogJSON(null, "Mapping Service Request", this.cfg.debugMappingJSON, url);
+                DataMapperUtil.debugLogJSON(null, "Mapping Service Request", this.cfg.initCfg.debugMappingServiceCalls, url);
                 let operation = this.http.get(url).map((res:Response) => res.json());
                 operations.push(operation);
             }
@@ -113,7 +113,7 @@ export class MappingManagementService {
                 }
                 console.log("Initializing from " + data.length + " fetched mappings.");
                 for (let d of data) {
-                    DataMapperUtil.debugLogJSON(d, "Mapping Service Response", this.cfg.debugMappingJSON, null);
+                    DataMapperUtil.debugLogJSON(d, "Mapping Service Response", this.cfg.initCfg.debugMappingServiceCalls, null);
                     MappingSerializer.deserializeMappingServiceJSON(d, mappingDefinition, this.cfg);
                 }
 
@@ -156,10 +156,10 @@ export class MappingManagementService {
         var startTime: number = Date.now();
         var payload: any = this.serializeMappingsToJSON();
         var url = this.cfg.initCfg.baseMappingServiceUrl + "mapping";
-        DataMapperUtil.debugLogJSON(payload, "Mapping Service Request", this.cfg.debugMappingJSON, url);
+        DataMapperUtil.debugLogJSON(payload, "Mapping Service Request", this.cfg.initCfg.debugMappingServiceCalls, url);
         this.http.put(url, JSON.stringify(payload), {headers: this.headers}).toPromise()
             .then((res:Response) => {
-                DataMapperUtil.debugLogJSON(res, "Mapping Service Response", this.cfg.debugMappingJSON, url);
+                DataMapperUtil.debugLogJSON(res, "Mapping Service Response", this.cfg.initCfg.debugMappingServiceCalls, url);
                 console.log("Saved mappings to service in " + (Date.now() - startTime) + "ms.", this.cfg.mappings);
             })
             .catch((error: any) => { this.handleError("Error occurred while saving mapping.", error); }
@@ -311,10 +311,10 @@ export class MappingManagementService {
         var startTime: number = Date.now();
         var payload: any = MappingSerializer.serializeMappings(this.cfg);
         var url: string = this.cfg.initCfg.baseMappingServiceUrl + "mapping/validate";
-        DataMapperUtil.debugLogJSON(payload, "Validation Service Request", this.cfg.debugValidationJSON, url);
+        DataMapperUtil.debugLogJSON(payload, "Validation Service Request", this.cfg.initCfg.debugValidationServiceCalls, url);
         this.http.put(url, payload, { headers: this.headers }).toPromise()
             .then((res: Response) => {
-                DataMapperUtil.debugLogJSON(res, "Validation Service Response", this.cfg.debugValidationJSON, url);
+                DataMapperUtil.debugLogJSON(res, "Validation Service Response", this.cfg.initCfg.debugValidationServiceCalls, url);
                 var mapping: MappingModel = this.cfg.mappings.activeMapping;
                 let body: any = res.json();
                 mapping.clearValidationErrors();
@@ -336,11 +336,11 @@ export class MappingManagementService {
             var actionConfigs: FieldActionConfig[] = [];
             var startTime: number = Date.now();
             var url: string = this.cfg.initCfg.baseMappingServiceUrl + "fieldActions";
-            DataMapperUtil.debugLogJSON(null, "Field Action Config Request", this.cfg.debugFieldActionJSON, url);
+            DataMapperUtil.debugLogJSON(null, "Field Action Config Request", this.cfg.initCfg.debugFieldActionServiceCalls, url);
             this.http.get(url, { headers: this.headers }).toPromise()
                 .then((res: Response) => {
                     let body: any = res.json();
-                    DataMapperUtil.debugLogJSON(body, "Field Action Config Response", this.cfg.debugFieldActionJSON, url);
+                    DataMapperUtil.debugLogJSON(body, "Field Action Config Response", this.cfg.initCfg.debugFieldActionServiceCalls, url);
                     if (body && body.ActionDetails
                         && body.ActionDetails.actionDetail
                         && body.ActionDetails.actionDetail.length) {

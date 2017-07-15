@@ -63,31 +63,49 @@ export class DataMapperAppExampleHostComponent {
         // if classPath is specified, maven call to resolve pom will be skipped
         c.initCfg.classPath = null;
 
-        //specify source documents
-        c.addJavaDocument("io.atlasmap.java.test.SourceOrder", true);
-        c.addJavaDocument("io.atlasmap.java.test.SourceContact", true);
-        c.addJavaDocument("io.atlasmap.java.test.SourceAddress", true);
-        c.addJavaDocument("io.atlasmap.java.test.TestListOrders", true);
-        c.addJavaDocument("io.atlasmap.java.test.TargetOrderArray", true);
-        c.addJavaDocument("io.atlasmap.java.test.SourceFlatPrimitiveClass", true);
-        c.addJavaDocument("io.atlasmap.java.test.TargetTestClass", true);
-        c.addXMLInstanceDocument("XMLInstanceSource", DocumentManagementService.generateMockInstanceXML(), true);
-        c.addXMLSchemaDocument("XMLSchemaSource", DocumentManagementService.generateMockSchemaXML(), true);
-        c.addJSONDocument("JSONSource", DocumentManagementService.generateMockJSON(), true);
+        /* 
+         * The following examples demonstrate adding source/target documents to the Data Mapper's configuration. 
+         * Note that multiple source documents are supported, but multiple target documents are not supported.
+         * 
+         * example java source document configuration:
+         * 
+         * var documentIsSourceDocument: boolean = true;
+         * c.addJavaDocument("io.atlasmap.java.test.SourceOrder", documentIsSourceDocument);
+         * 
+         * example xml instance document: 
+         * 
+         * c.addXMLInstanceDocument("XMLInstanceSource", DocumentManagementService.generateMockInstanceXML(), documentIsSourceDocument);
+         * 
+         * example xml schema document:
+         *
+         * c.addXMLSchemaDocument("XMLSchemaSource", DocumentManagementService.generateMockSchemaXML(), documentIsSourceDocument);
+         * 
+         * example json document: 
+         * 
+         * c.addJSONDocument("JSONTarget", DocumentManagementService.generateMockJSON(), documentIsSourceDocument);
+         * 
+         */                
 
-        //specify target document (only one allowed at a time)
-        c.addJavaDocument("io.atlasmap.java.test.TargetTestClass", false);
-        c.addXMLInstanceDocument("XMLInstanceTarget", DocumentManagementService.generateMockInstanceXML(), false);
-        c.addXMLSchemaDocument("XMLSchemaTarget", DocumentManagementService.generateMockSchemaXML(), false);
-        c.addJSONDocument("JSONTarget", DocumentManagementService.generateMockJSON(), false);
+        //enable debug logging options as needed
+        c.initCfg.debugDocumentServiceCalls = false;
+        c.initCfg.debugDocumentParsing = false;
+        c.initCfg.debugMappingServiceCalls = false;
+        c.initCfg.debugClassPathServiceCalls = false;
+        c.initCfg.debugValidationServiceCalls = false;
+        c.initCfg.debugFieldActionServiceCalls = false;
 
-        //turn on debug logging options as needed
-        c.debugDocumentJSON: boolean = false;
-        c.debugDocumentParsing: boolean = false;
-        c.debugMappingJSON: boolean = false;
-        c.debugClassPathJSON: boolean = false;
-        c.debugValidationJSON: boolean = false;
-        c.debugFieldActionJSON: boolean = false;
+        //enable mock mappings loading, example code is shown in the InitializationService for this
+        c.initCfg.addMockJSONMappings = false;
+
+        //enable mock source/target documents as needed
+        c.initCfg.addMockJavaSources = true;
+        c.initCfg.addMockXMLInstanceSources = false;
+        c.initCfg.addMockXMLSchemaSources = false;
+        c.initCfg.addMockJSONSources = false;
+        c.initCfg.addMockJavaTarget = false;
+        c.initCfg.addMockXMLInstanceTarget = true;
+        c.initCfg.addMockXMLSchemaTarget = false;
+        c.initCfg.addMockJSONTarget = false;
 
         console.log("Example config after host component configuration.", c);
 

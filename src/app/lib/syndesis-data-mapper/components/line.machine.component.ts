@@ -130,7 +130,7 @@ export class LineMachineComponent {
         }
     }
 
-    public handleDocumentFieldMouseOver(component: DocumentFieldDetailComponent, event: MouseEvent, isSource: boolean): void {
+    public handleDocumentFieldMouseOver(component: DocumentFieldDetailComponent, event: any, isSource: boolean): void {
         if (!this.drawingLine) {
             return;
         }

@@ -48,6 +48,25 @@ export class DataMapperInitializationModel {
     public disableProtectedOnlyFields: boolean = false;
     public disablePublicOnlyFields: boolean = false;
     public disablePublicGetterSetterFields: boolean = false;
+
+    /* mock data configuration */
+    public addMockJSONMappings: boolean = false;
+    public addMockJavaSources: boolean = false;
+    public addMockXMLInstanceSources: boolean = false;
+    public addMockXMLSchemaSources: boolean = false;
+    public addMockJSONSources: boolean = false;
+    public addMockJavaTarget: boolean = false;
+    public addMockXMLInstanceTarget: boolean = false;
+    public addMockXMLSchemaTarget: boolean = false;
+    public addMockJSONTarget: boolean = false;
+
+    /* debug logging toggles */
+    public debugDocumentServiceCalls: boolean = false;
+    public debugDocumentParsing: boolean = false;
+    public debugMappingServiceCalls: boolean = false;
+    public debugClassPathServiceCalls: boolean = false;
+    public debugValidationServiceCalls: boolean = false;
+    public debugFieldActionServiceCalls: boolean = false;
 }
 
 export class ConfigModel {
@@ -66,14 +85,6 @@ export class ConfigModel {
     public showMappedFields: boolean = true;
     public showUnmappedFields: boolean = true;
     public currentDraggedField: Field = null;
-
-    /* debug logging toggles */
-    public debugDocumentJSON: boolean = false;
-    public debugDocumentParsing: boolean = false;
-    public debugMappingJSON: boolean = false;
-    public debugClassPathJSON: boolean = false;
-    public debugValidationJSON: boolean = false;
-    public debugFieldActionJSON: boolean = false;
 
     public documentService: DocumentManagementService;
     public mappingService: MappingManagementService;
