@@ -7,6 +7,9 @@ jobs:
     environment:
       MAVEN_OPTS: -Xmx1G
       DOCKER_VERSION: 17.04.0-ce
+    branches:
+      ignore:
+        gh-pages
 
     steps:
       - setup_remote_docker
@@ -57,3 +60,5 @@ jobs:
 
             docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
             docker push atlasmap/atlasmap:${DOCKER_IMAGE_TAG} | cat -
+
+            sh atlas-docs/ci-docs.sh

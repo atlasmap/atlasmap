@@ -5,7 +5,7 @@ echo ================================
 
 cd atlas-docs && \
 mvn -Phtml,pdf package && \
-git clone -b gh-pages https://rhuss:${GITHUB_TOKEN}@github.com/atlasmap/atlasmap.git gh-pages && \
+git clone -b gh-pages https://atlasci:${GITHUB_TOKEN}@github.com/atlasmap/atlasmap.git gh-pages && \
 git config --global user.email "travis@atlasmap.io" && \
 git config --global user.name "Travis" && \
 cp -rv target/generated-docs/* gh-pages/ && \
