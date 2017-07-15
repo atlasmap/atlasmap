@@ -4,7 +4,7 @@ echo Deploying AtlasMap documentation
 echo ================================
 
 cd atlas-docs && \
-mvn -Phtml,pdf package && \
+../mvnw -Phtml,pdf package && \
 git clone -b gh-pages https://atlasci:${GITHUB_TOKEN}@github.com/atlasmap/atlasmap.git gh-pages && \
 git config --global user.email "travis@atlasmap.io" && \
 git config --global user.name "Travis" && \
