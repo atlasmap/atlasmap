@@ -130,7 +130,10 @@ export class InitializationService {
         this.fetchFieldActions();
 
         //load documents
-        if (this.cfg.initCfg.classPath) {
+        if (!this.cfg.hasJavaDocuments()) {
+            console.log("No java sources/targets specified, skipping classpath resolution.");
+            this.fetchDocuments();
+        } else if (this.cfg.initCfg.classPath) {
             console.log("Classpath already provided, skipping Maven loading.");
             this.fetchDocuments();
         } else {
