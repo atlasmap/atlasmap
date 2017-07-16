@@ -160,6 +160,15 @@ export class ConfigModel {
         return isSource ? docs.concat([this.propertyDoc, this.constantDoc]) : docs;
     }
 
+    public hasJavaDocuments(): boolean {
+        for (let doc of this.getAllDocs()) {
+            if (doc.initCfg.type.isJava()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public getDocForShortIdentifier(shortIdentifier: string, isSource: boolean): DocumentDefinition {
         for (let d of this.getDocs(isSource)) {
             if (d.initCfg.shortIdentifier == shortIdentifier) {
