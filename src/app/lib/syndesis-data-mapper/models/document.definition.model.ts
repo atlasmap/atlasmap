@@ -457,6 +457,9 @@ export class DocumentDefinition {
         DataMapperUtil.removeItemFromArray(field, this.terminalFields);
         DataMapperUtil.removeItemFromArray(field.path, this.fieldPaths);
         delete(this.fieldsByPath[field.path]);
+        if (field.parentField != null) {
+            DataMapperUtil.removeItemFromArray(field, field.parentField.children);
+        }
     }
 
     public updateFromMappings(mappingDefinition: MappingDefinition, cfg: ConfigModel): void {
