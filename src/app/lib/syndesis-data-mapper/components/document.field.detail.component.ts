@@ -34,7 +34,7 @@ import { FieldEditComponent } from './field.edit.component';
 @Component({
     selector: 'document-field-detail',
     template: `
-        <div class="DocumentFieldDetailComponent" #fieldDetailElement on-mouseover='handleMouseOver($event)'
+        <div class="DocumentFieldDetailComponent" [attr.id]="field.name" #fieldDetailElement on-mouseover='handleMouseOver($event)'
             *ngIf="fieldShouldBeVisible()" [attr.draggable]="field.isTerminal()" (dragstart)="startDrag($event)" (drop)="endDrag($event)"
             (dragenter)="dragEnterLeave($event, true)" (dragleave)="dragEnterLeave($event, false)" (dragover)="allowDrop($event)">
             <div [attr.class]='getCssClass()' (click)="handleMouseClick($event)" *ngIf="field.visibleInCurrentDocumentSearch">

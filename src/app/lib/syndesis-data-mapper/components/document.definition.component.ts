@@ -56,7 +56,7 @@ import { ModalWindowComponent } from './modal.window.component';
                 </div>
                 <div [attr.class]="searchMode ? 'fieldListSearchOpen' : 'fieldList'" style="overflow:auto;"
                     (scroll)="handleScroll($event)">
-                    <div *ngFor="let docDef of cfg.getDocs(isSource)">
+                    <div *ngFor="let docDef of cfg.getDocs(isSource)" class="docIdentifier" [attr.id]='docDef.name'>
                         <div class="card-pf-title documentHeader" tooltip="{{ docDef.fullyQualifiedName }}" placement="bottom"
                             *ngIf="isDocNameVisible(docDef)" (click)="toggleFieldVisibility(docDef)">
                             <div style="float:left">
