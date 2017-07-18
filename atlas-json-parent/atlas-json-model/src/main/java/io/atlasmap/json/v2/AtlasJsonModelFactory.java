@@ -33,4 +33,12 @@ public class AtlasJsonModelFactory {
 	    JsonField jsonField = new JsonField();
 		return jsonField;
 	}
+	
+	public static String toString(JsonField f) {
+		return "JsonField [name=" + f.getName() + ", primitive=" + f.isPrimitive() + ", typeName=" + f.getTypeName() + ", userCreated="
+			+ f.isUserCreated() + ", actions=" + f.getActions() + ", value=" + f.getValue() + ", arrayDimensions=" + f.getArrayDimensions()
+			+ ", arraySize=" + f.getArraySize() + ", collectionType=" + f.getCollectionType() + ", docId=" + f.getDocId() + ", index="
+			+ f.getIndex() + ", path=" + f.getPath() + ", required=" + f.isRequired() + ", status=" + f.getStatus() + ", fieldType="
+			+ f.getFieldType() + "]";
+	}
 }

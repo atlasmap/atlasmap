@@ -161,11 +161,12 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
 		*/
 		
 		logger.warn("NEW PROCESS FLOW ENABLED");
-		getSourceModule().processPreExecution(session);
-		getTargetModule().processPreExecution(session);
-        
-		getSourceModule().processPreValidation(session);
-		getTargetModule().processPreValidation(session);
+		
+	    getSourceModule().processPreValidation(session);
+	    getTargetModule().processPreValidation(session);
+		
+		getSourceModule().processPreInputExecution(session);
+		getTargetModule().processPreOutputExecution(session);
 
 		for(BaseMapping mapping : session.getMapping().getMappings().getMapping()) {
 		    switch(mapping.getMappingType()) {
@@ -200,8 +201,8 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
 		getSourceModule().processPostValidation(session);
 		getTargetModule().processPostValidation(session);
         
-		getSourceModule().processPostExecution(session);
-		getTargetModule().processPostExecution(session);
+		getSourceModule().processPostInputExecution(session);
+		getTargetModule().processPostOutputExecution(session);
 		
 		if(logger.isDebugEnabled()) {
 			logger.debug("End process " + (session == null ? null : session.toString()));
@@ -225,8 +226,6 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
             throw new AtlasException("Unable to marshal, invalid modules. InputModule: " + (getInputModule() == null ? null : getInputModule().toString()) + " OutputModule: " + (getOutputModule() == null ? null : getOutputModule().toString()));
         }
         */
-        getSourceModule().processPreExecution(session);
-        getTargetModule().processPreExecution(session);
         
         getSourceModule().processPreValidation(session);
         getTargetModule().processPreValidation(session);

@@ -67,9 +67,16 @@ public class XmlModule extends BaseAtlasModule {
     }
 
     @Override
-    public void processPreExecution(AtlasSession arg0) throws AtlasException {
+    public void processPreInputExecution(AtlasSession session) throws AtlasException {
         if(logger.isDebugEnabled()) {
-            logger.debug("processPreExcution completed");
+            logger.debug("processPreInputExcution completed");
+        }
+    }
+    
+    @Override
+    public void processPreOutputExecution(AtlasSession session) throws AtlasException {
+        if(logger.isDebugEnabled()) {
+            logger.debug("processPreOutputExcution completed");
         }
     }
 
@@ -172,15 +179,15 @@ public class XmlModule extends BaseAtlasModule {
         }
         
         DocumentXmlFieldReader dxfr = new DocumentXmlFieldReader();
-
+        dxfr.read(document, inputField);
+        
         if(inputField.getFieldType() == null) {
             inputField.setFieldType(FieldType.STRING);
         }
-        dxfr.read(document, inputField);
         
         if(logger.isDebugEnabled()) {
-            logger.debug("Processed p=" + inputField.getPath() + " t=" + inputField.getFieldType().value() + " v=" + inputField.getValue());
-        }
+            logger.debug("Processed input field sPath=" + field.getPath() + " sV=" + field.getValue() + " sT=" + field.getFieldType() + " docId: " + field.getDocId());
+        }   
     }
     
     @Override
@@ -199,9 +206,16 @@ public class XmlModule extends BaseAtlasModule {
     }
 
     @Override
-    public void processPostExecution(AtlasSession arg0) throws AtlasException {
+    public void processPostInputExecution(AtlasSession session) throws AtlasException {
         if(logger.isDebugEnabled()) {
-            logger.debug("processPostExecution completed");
+            logger.debug("processPostInputExecution completed");
+        }
+    }
+    
+    @Override
+    public void processPostOutputExecution(AtlasSession session) throws AtlasException {
+        if(logger.isDebugEnabled()) {
+            logger.debug("processPostOutputExecution completed");
         }
     }
 

@@ -1,21 +1,22 @@
 package io.atlasmap.xml.v2;
 
 import io.atlasmap.api.AtlasException;
+import io.atlasmap.v2.FieldType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-/**
- */
 public class DocumentXmlFieldReader extends XmlFieldTransformer {
 
-    public DocumentXmlFieldReader() {
-    }
+    private static final Logger logger = LoggerFactory.getLogger(DocumentXmlFieldReader.class);
+    
+    public DocumentXmlFieldReader() {}
 
     public DocumentXmlFieldReader(Map<String, String> namespaces) {
         super(namespaces);
@@ -64,7 +65,16 @@ public class DocumentXmlFieldReader extends XmlFieldTransformer {
                 } else {
                     value = e.getTextContent();
                 }
-                xmlField.setValue(value);
+                if(xmlField.getFieldType() == null || FieldType.STRING.equals(xmlField.getFieldType())) {
+                    xmlField.setValue(value);
+                    xmlField.setFieldType(FieldType.STRING);
+                } else {
+                    if(FieldType.CHAR.equals(xmlField.getFieldType())) {
+                        xmlField.setValue(value.charAt(0));
+                    } else {
+                        logger.warn(String.format("Unsupported FieldType for text data t=%s p=%s docId=%s", xmlField.getFieldType().value(), xmlField.getPath(), xmlField.getDocId()));
+                    }
+                }
             }
         }
     }

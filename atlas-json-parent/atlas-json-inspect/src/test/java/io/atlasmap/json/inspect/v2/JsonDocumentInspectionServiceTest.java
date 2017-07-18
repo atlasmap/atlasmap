@@ -93,6 +93,21 @@ public class JsonDocumentInspectionServiceTest {
         Assert.assertNull(jsonField.getPath());
 //        printDocument(document);
     }
+    
+    @Test
+    public void inspectJsonDocument_SimpleArrayStartsWithWhiteSpace() throws Exception {
+        final String instance = "\n\t\r [ 100, 500, 300, 200, 400 ]";
+        JsonDocument document = inspectionService.inspectJsonDocument(instance);
+        Assert.assertNotNull(document);
+        Assert.assertThat(1, Is.is(document.getFields().getField().size()));
+        JsonField jsonField = (JsonField) document.getFields().getField().get(0);
+        Assert.assertTrue(jsonField.getStatus().compareTo(FieldStatus.UNSUPPORTED) == 0);
+        Assert.assertTrue(jsonField.getCollectionType().compareTo(CollectionType.ARRAY) == 0);
+        Assert.assertNull(jsonField.getFieldType());
+        Assert.assertNull(jsonField.getName());
+        Assert.assertNull(jsonField.getPath());
+//        printDocument(document);
+    }
 
     @Test
     public void inspectJsonDocument_SimpleObjectArray() throws Exception {

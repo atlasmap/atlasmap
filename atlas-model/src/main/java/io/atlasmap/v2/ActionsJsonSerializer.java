@@ -34,15 +34,21 @@ public class ActionsJsonSerializer extends JsonSerializer<Actions>{
         }
                 
         for(Action a : actions.getActions()) {
-            writeStringField(gen, a);
+            writeActionField(gen, a);
         }
         
         gen.writeEndArray();
     }
     
-    protected void writeStringField(JsonGenerator gen, Action action) throws IOException {
+    protected void writeActionField(JsonGenerator gen, Action action) throws IOException {
         
         switch(action.getClass().getSimpleName()) {
+        case "CurrentDate": writeCurrentDate(gen, (CurrentDate)action); break;
+        case "CurrentDateTime": writeCurrentDateTime(gen, (CurrentDateTime)action); break;
+        case "CurrentTime": writeCurrentTime(gen, (CurrentTime)action); break;
+        case "CustomAction": writeCustomAction(gen, (CustomAction)action); break;
+        case "PadStringLeft": writePadStringLeft(gen, (PadStringLeft)action); break;
+        case "PadStringRight": writePadStringRight(gen, (PadStringRight)action); break;
         case "SubString": writeSubString(gen, (SubString)action); break;
         case "SubStringAfter": writeSubStringAfter(gen, (SubStringAfter)action); break;
         case "SubStringBefore": writeSubStringBefore(gen, (SubStringBefore)action); break;
@@ -53,13 +59,95 @@ public class ActionsJsonSerializer extends JsonSerializer<Actions>{
             break;
         }
     }
+   
+    protected void writeCustomAction(JsonGenerator gen, CustomAction customAction) throws IOException {
+        gen.writeStartObject();
+        gen.writeFieldName("CustomAction");
+        
+        boolean objectStarted = false;
+        if(customAction.getClassName() != null && customAction.getClassName().trim().length() > 0) { 
+            gen.writeStartObject();
+            gen.writeStringField("className", customAction.getClassName().trim());
+            gen.writeEndObject();
+            objectStarted=true;
+        }
+        
+        if(customAction.getMethodName() != null && customAction.getMethodName().trim().length() > 0) {
+            if(!objectStarted) {
+                gen.writeStartObject();
+            }
+            
+            gen.writeStringField("methodName", customAction.getMethodName().trim());
+            
+            if(!objectStarted) {
+                gen.writeEndObject();
+            }
+        }
+        
+        gen.writeEndObject();   
+    }
+    
+    protected void writeCurrentDate(JsonGenerator gen, CurrentDate currentDate) throws IOException {
+        gen.writeStartObject();
+        gen.writeFieldName("CurrentDate");
+        if(currentDate.getDateFormat() != null && currentDate.getDateFormat().trim().length() > 0) { 
+            gen.writeStartObject();
+            gen.writeStringField("dateFormat", currentDate.getDateFormat().trim());
+            gen.writeEndObject();
+        }
+        gen.writeEndObject();   
+    }
+    
+    protected void writeCurrentDateTime(JsonGenerator gen, CurrentDateTime currentDateTime) throws IOException {
+        gen.writeStartObject();
+        gen.writeFieldName("CurrentDateTime");
+        if(currentDateTime.getDateFormat() != null && currentDateTime.getDateFormat().trim().length() > 0) { 
+            gen.writeStartObject();
+            gen.writeStringField("dateFormat", currentDateTime.getDateFormat().trim());
+            gen.writeEndObject();
+        }
+        gen.writeEndObject();   
+    }
+    
+    protected void writeCurrentTime(JsonGenerator gen, CurrentTime currentTime) throws IOException {
+        gen.writeStartObject();
+        gen.writeFieldName("CurrentTime");
+        if(currentTime.getDateFormat() != null && currentTime.getDateFormat().trim().length() > 0) { 
+            gen.writeStartObject();
+            gen.writeStringField("dateFormat", currentTime.getDateFormat().trim());
+            gen.writeEndObject();
+        }
+        gen.writeEndObject();   
+    }
+
+    protected void writePadStringLeft(JsonGenerator gen, PadStringLeft padStringLeft) throws IOException {
+        gen.writeStartObject();
+        gen.writeFieldName("PadStringLeft");
+        gen.writeStartObject();
+        gen.writeStringField("padCharacter", padStringLeft.getPadCharacter());
+        gen.writeNumberField("padCount", padStringLeft.getPadCount());
+        gen.writeEndObject();
+        gen.writeEndObject();
+    }
+    
+    protected void writePadStringRight(JsonGenerator gen, PadStringRight padStringRight) throws IOException {
+        gen.writeStartObject();
+        gen.writeFieldName("PadStringRight");
+        gen.writeStartObject();
+        gen.writeStringField("padCharacter", padStringRight.getPadCharacter());
+        gen.writeNumberField("padCount", padStringRight.getPadCount());
+        gen.writeEndObject();
+        gen.writeEndObject();
+    }
     
     protected void writeSubString(JsonGenerator gen, SubString subString) throws IOException {
         gen.writeStartObject();
         gen.writeFieldName("SubString");
         gen.writeStartObject();
         gen.writeNumberField("startIndex", subString.getStartIndex());
-        gen.writeNumberField("endIndex", subString.getEndIndex());
+        if(subString.getEndIndex() != null) {
+            gen.writeNumberField("endIndex", subString.getEndIndex());
+        }
         gen.writeEndObject();
         gen.writeEndObject();
     }
@@ -70,7 +158,9 @@ public class ActionsJsonSerializer extends JsonSerializer<Actions>{
         gen.writeStartObject();
         gen.writeStringField("match", subStringAfter.getMatch());
         gen.writeNumberField("startIndex", subStringAfter.getStartIndex());
-        gen.writeNumberField("endIndex", subStringAfter.getEndIndex());
+        if(subStringAfter.getEndIndex() != null) {
+            gen.writeNumberField("endIndex", subStringAfter.getEndIndex());
+        }
         gen.writeEndObject();
         gen.writeEndObject();
     }
@@ -81,7 +171,9 @@ public class ActionsJsonSerializer extends JsonSerializer<Actions>{
         gen.writeStartObject();
         gen.writeStringField("match", subStringBefore.getMatch());
         gen.writeNumberField("startIndex", subStringBefore.getStartIndex());
-        gen.writeNumberField("endIndex", subStringBefore.getEndIndex());
+        if(subStringBefore.getEndIndex() != null) {
+            gen.writeNumberField("endIndex", subStringBefore.getEndIndex());
+        }
         gen.writeEndObject();
         gen.writeEndObject();
     }

@@ -22,6 +22,7 @@ import java.util.Arrays;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import io.atlasmap.api.AtlasContext;
@@ -50,6 +51,7 @@ import io.atlasmap.v2.Mapping;
 import io.atlasmap.v2.MappingType;
 import io.atlasmap.v2.Mappings;
 
+@Ignore
 public class JavaJavaComplexListTest extends AtlasMappingBaseTest {
 
     @Test
