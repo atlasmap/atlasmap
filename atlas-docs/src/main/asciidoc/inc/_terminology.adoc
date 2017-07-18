@@ -1,0 +1,49 @@
+
+[[terminology]]
+= Terminology
+
+AtlasMap terminology 
+
+[cols="1,2,2", options="header"] 
+|===
+|Term
+|Definition
+|Example
+
+|AtlasMapping
+|The top-level mapping file containing the mapping instructions to execute at runtime
+|atlasmapping.xml, atlasmapping.json 
+
+|Collection
+|A data type used in conversion that repeats 0 or more times
+|Used to process Arrays and Lists
+
+|Data Source
+|The definition of an input or output data format within an AtlasMapping file
+|atlas:java, atlas:json, atlas:xml, etc
+
+|Field
+|The base type used to describe a data value used in a Mapping 
+|JavaField, JsonField, XmlField, etc
+
+|Field Action
+|A function to perform on a given value of an input or output field
+|CurrentDate, Trim, SubString, etc
+
+|Field Type
+|Normalized convention to describe the type of data expected within the value of a field
+|String, Integer, Long, Number, Date Time, etc
+
+|Lookup Table
+|A cross reference table used at runtime to define a data conversion that varies based on the value of the input field
+|Used for mapping enumerations
+
+|Mapping
+|A grouping of input Field(s), output Field(s) and optionally Field Action(s) that defines the conversion to be performed at runtime within an AtlasMapping file
+|JavaField -> JsonField, XmlField -> JsonField + Uppercase, etc
+
+|Mapping Type
+|The specific type of conversion that should be performed at runtime
+|Map, Combine, Separate, Collection or Lookup
+
+|===
