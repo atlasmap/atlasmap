@@ -48,6 +48,12 @@
 			<annox:annotate><annox:annotate annox:class="com.fasterxml.jackson.annotation.JsonRootName">Document</annox:annotate></annox:annotate>
 			<annox:annotate><annox:annotate annox:class="com.fasterxml.jackson.annotation.JsonTypeInfo" use="CLASS" include="PROPERTY" property="jsonType"></annox:annotate></annox:annotate>		
         </jaxb:bindings>
+		<jaxb:bindings node="xs:complexType[@name='MockDocument']">
+			<annox:annotate><annox:annotate annox:class="com.fasterxml.jackson.annotation.JsonRootName">io.atlasmap.v2.MockDocument</annox:annotate></annox:annotate>
+        </jaxb:bindings>
+		<jaxb:bindings node="xs:complexType[@name='MockField']">
+			<annox:annotate><annox:annotate annox:class="com.fasterxml.jackson.annotation.JsonRootName">io.atlasmap.v2.MockField</annox:annotate></annox:annotate>
+        </jaxb:bindings>
         <jaxb:bindings node="xs:complexType[@name='PropertyField']">
             <annox:annotate><annox:annotate annox:class="com.fasterxml.jackson.annotation.JsonRootName">io.atlasmap.v2.PropertyField</annox:annotate></annox:annotate>
         </jaxb:bindings>

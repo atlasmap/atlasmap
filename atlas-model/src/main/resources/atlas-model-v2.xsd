@@ -154,6 +154,21 @@
         </complexContent>
     </complexType>
 
+	<complexType name="MockDocument">
+		<complexContent>
+			<extension base="atlas:Document" />
+		</complexContent>
+	</complexType>
+
+	<complexType name="MockField">
+		<complexContent>
+			<extension base="atlas:Field">
+				<attribute name="name" type="string" use="required" />
+                <attribute name="custom" type="string" use="optional" />
+			</extension>
+		</complexContent>
+	</complexType>
+
     <complexType name="Validations">
         <sequence>
             <element name="Validation" type="atlas:Validation" minOccurs="0" maxOccurs="unbounded" />
