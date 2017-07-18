@@ -88,7 +88,11 @@ public class JavaPath {
         }
         return false;
     }
-
+    
+    public Boolean isCollectionRoot() {
+        return isCollectionSegment(getLastSegment());
+    }
+    
     public String getLastSegmentParent() {
         if (segments.size() == 0 || segments.size() == 1) {
             return null;

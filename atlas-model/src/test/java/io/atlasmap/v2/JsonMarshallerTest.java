@@ -129,6 +129,11 @@ public class JsonMarshallerTest extends BaseMarshallerTest {
         subStringBefore.setStartIndex(2);
         ((Mapping) fm).getOutputField().get(0).getActions().getActions().add(subStringBefore);
         
+        PadStringRight psr = new PadStringRight();
+        psr.setPadCharacter("z");
+        psr.setPadCount(25);
+        ((Mapping) fm).getOutputField().get(0).getActions().getActions().add(psr);
+        
         mapper.writeValue(new File("target/junit/" + testName.getMethodName() + "/" + "atlasmapping.json"), atlasMapping);
         
         AtlasMapping rereadMapping = mapper.readValue(new File("target/junit/" + testName.getMethodName() + "/" + "atlasmapping.json"), AtlasMapping.class);

@@ -146,16 +146,25 @@ public class StringConverter implements AtlasPrimitiveConverter<String> {
         if (value == null) {
             return null;
         }
-        //check we can make a int of the String
+        
+        BigDecimal bd = null;
+        Integer i = null;
         try {
-            Integer.parseInt(value);
+            i = Integer.parseInt(value);
         } catch (NumberFormatException nfe) {
-            throw new AtlasConversionException(nfe);
+            try {
+                bd = new BigDecimal(value);
+                i = bd.intValue();
+            } catch (NumberFormatException nfe2) {
+                throw new AtlasConversionException(nfe);
+            }
         }
-        if (Integer.valueOf(value) < Integer.MIN_VALUE || Integer.valueOf(value) > Integer.MAX_VALUE) {
+        
+        if(bd != null && bd.compareTo(BigDecimal.valueOf(i)) != 0) {
             throw new AtlasConversionException("String " + value + " is greater than Integer.MAX_VALUE  or less than Integer.MIN_VALUE");
         }
-        return Integer.valueOf(value);
+         
+        return i;        
     }
 
     /**
@@ -168,16 +177,25 @@ public class StringConverter implements AtlasPrimitiveConverter<String> {
         if (value == null) {
             return null;
         }
-        //check we can make a long of the String
+
+        BigDecimal bd = null;
+        Long l = null;
         try {
-            Long l = Long.parseLong(value);
+            l = Long.parseLong(value);
         } catch (NumberFormatException nfe) {
-            throw new AtlasConversionException(nfe);
+            try {
+                bd = new BigDecimal(value);
+                l = bd.longValue();
+            } catch (NumberFormatException nfe2) {
+                throw new AtlasConversionException(nfe);
+            }
         }
-        if (Long.valueOf(value) < Long.MIN_VALUE || Long.valueOf(value) > Long.MAX_VALUE) {
+        
+        if(bd != null && bd.compareTo(BigDecimal.valueOf(l)) != 0) {
             throw new AtlasConversionException("String " + value + " is greater than Long.MAX_VALUE  or less than Long.MIN_VALUE");
         }
-        return Long.valueOf(value);
+         
+        return l;
     }
 
     /**

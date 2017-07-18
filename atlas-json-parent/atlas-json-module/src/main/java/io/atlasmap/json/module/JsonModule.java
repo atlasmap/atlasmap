@@ -15,6 +15,7 @@
  */
 package io.atlasmap.json.module;
 
+import io.atlasmap.api.AtlasConversionException;
 import io.atlasmap.api.AtlasConversionService;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.api.AtlasSession;
@@ -27,12 +28,16 @@ import io.atlasmap.spi.AtlasModuleMode;
 import io.atlasmap.v2.Audit;
 import io.atlasmap.v2.AuditStatus;
 import io.atlasmap.v2.Collection;
+import io.atlasmap.v2.DataSource;
+import io.atlasmap.v2.DataSourceType;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldType;
 import io.atlasmap.v2.Mapping;
 import io.atlasmap.v2.Validations;
-import io.atlasmap.json.v2.DocumentJsonFieldReader;
+import io.atlasmap.json.core.DocumentJsonFieldReader;
+import io.atlasmap.json.core.DocumentJsonFieldWriter;
 import io.atlasmap.json.v2.JsonField;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import org.slf4j.Logger;
@@ -54,11 +59,21 @@ public class JsonModule extends BaseAtlasModule {
         // TODO Auto-generated method stub
 
     }
+    
+    @Override
+    public void processPreInputExecution(AtlasSession session) throws AtlasException {
+        if(logger.isDebugEnabled()) {
+            logger.debug("processPreInputExcution completed");
+        }
+    }
 
     @Override
-    public void processPreExecution(AtlasSession arg0) throws AtlasException {
+    public void processPreOutputExecution(AtlasSession session) throws AtlasException {
+        DocumentJsonFieldWriter writer = new DocumentJsonFieldWriter();
+        session.setOutput(writer);
+        
         if(logger.isDebugEnabled()) {
-            logger.debug("processPreExcution completed");
+            logger.debug("processPreOutputExcution completed");
         }
     }
 
@@ -135,18 +150,17 @@ public class JsonModule extends BaseAtlasModule {
         Map<String,String> sourceUriParams = AtlasUtil.getUriParameters(session.getMapping().getDataSource().get(0).getUri());
                           
         DocumentJsonFieldReader djfr = new DocumentJsonFieldReader();
-
         djfr.read(document, inputField);
 
         // NOTE: This shouldn't happen
         if(inputField.getFieldType() == null) {
-            logger.warn("FieldType detection was unsuccessful, falling back to type STRING");
-            inputField.setFieldType(FieldType.STRING);
+            logger.warn(String.format("FieldType detection was unsuccessful for p=%s falling back to type UNSUPPORTED", inputField.getPath()));
+            inputField.setFieldType(FieldType.UNSUPPORTED);
         }
         
         if(logger.isDebugEnabled()) {
-            logger.debug("Processed p=" + inputField.getPath() + " t=" + inputField.getFieldType().value() + " v=" + inputField.getValue());
-        }       
+            logger.debug("Processed input field sPath=" + field.getPath() + " sV=" + field.getValue() + " sT=" + field.getFieldType() + " docId: " + field.getDocId());
+        }    
     }
     
     @Override
@@ -155,8 +169,59 @@ public class JsonModule extends BaseAtlasModule {
     }
     
     @Override
-    public void processOutputMapping(AtlasSession session, Mapping mapping) throws AtlasException {
-       
+    public void processOutputMapping(AtlasSession session, Mapping mapping) throws AtlasException {        
+        switch(mapping.getMappingType()) {
+        case MAP: processMapOutputMapping(session, mapping); break;
+        case COMBINE: break;
+        case SEPARATE: break;
+        default: logger.warn(String.format("Unsupported mapping type=%s", mapping.getMappingType())); return;
+        }
+        
+        
+    }
+    
+    protected void processMapOutputMapping(AtlasSession session, Mapping mapping) throws AtlasException {
+        Field inField = mapping.getInputField().get(0);
+        Field outField = mapping.getOutputField().get(0);
+        if(!(outField instanceof JsonField)) {
+            logger.error(String.format("Unsupported field type %s", outField.getClass().getName()));
+            return;
+        }
+        
+        if(inField.getValue() == null) {
+            return;
+        }
+        
+        JsonField outputField = (JsonField)outField;
+        Object outputValue = null;
+        
+        if(outputField.getFieldType() == null) {
+            outputField.setFieldType(getConversionService().fieldTypeFromClass(inField.getValue().getClass()));
+        }
+        
+        if(inField.getFieldType() != null && inField.getFieldType().equals(outputField.getFieldType())) {
+            outputValue = inField.getValue();
+        } else {
+            try {
+                outputValue = getConversionService().convertType(inField.getValue(), inField.getFieldType(), outputField.getFieldType());
+            } catch (AtlasConversionException e) {
+                logger.error(String.format("Unable to auto-convert for iT=%s oT=%s oF=%s msg=%s", inField.getFieldType(),  outputField.getFieldType(), outputField.getPath(), e.getMessage()), e);
+                return;
+            }
+        }
+        
+        outputField.setValue(outputValue);        
+        
+        if(session.getOutput() != null && session.getOutput() instanceof DocumentJsonFieldWriter) {
+        	DocumentJsonFieldWriter writer = (DocumentJsonFieldWriter) session.getOutput();
+            writer.write(outputField);
+        } else {
+        	//TODO: add error handler to detect if the output writer isn't there or is wrong class instance
+        }        
+        
+        if(logger.isDebugEnabled()) {
+            logger.debug(String.format("Processed output field oP=%s oV=%s oT=%s docId: %s", outputField.getPath(), outputField.getValue(), outputField.getFieldType(), outputField.getDocId()));
+        }
     }
     
     @Override
@@ -165,9 +230,42 @@ public class JsonModule extends BaseAtlasModule {
     }
 
     @Override
-    public void processPostExecution(AtlasSession arg0) throws AtlasException {
+    public void processPostInputExecution(AtlasSession session) throws AtlasException {
         if(logger.isDebugEnabled()) {
-            logger.debug("processPostExecution completed");
+            logger.debug("processPostInputExecution completed");
+        }
+    }
+    
+    @Override
+    public void processPostOutputExecution(AtlasSession session) throws AtlasException {
+        
+        List<String> docIds = new ArrayList<String>();
+        for(DataSource ds : session.getMapping().getDataSource()) {
+            if(DataSourceType.TARGET.equals(ds.getDataSourceType()) && ds.getUri().startsWith("atlas:json")) {
+                docIds.add(ds.getId());
+            }
+        }
+        
+//        for(String docId : docIds) {
+            //Object output = session.getOutput(docId);
+            Object output = session.getOutput();
+            if(output instanceof DocumentJsonFieldWriter) {
+            	if (((DocumentJsonFieldWriter)output).getRootNode() != null) {
+	                String outputBody = ((DocumentJsonFieldWriter)output).getRootNode().toString();
+	                session.setOutput(outputBody);
+	                if(logger.isDebugEnabled()) {
+	                    logger.debug(String.format("processPostOutputExecution converting JsonNode to string size=%s", outputBody.length()));
+	                }
+            	} else {
+            		//TODO: handle error where rootnode on DocumentJsonFieldWriter is set to null (which should never happen).
+            	}
+            } else {
+                logger.error("DocumentJsonFieldWriter object expected for Json output data source");
+            }
+  //      }
+        
+        if(logger.isDebugEnabled()) {
+            logger.debug("processPostOutputExecution completed");
         }
     }
 

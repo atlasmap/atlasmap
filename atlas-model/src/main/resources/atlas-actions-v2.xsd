@@ -27,6 +27,19 @@
             </complexContent>
         </complexType>
     </element>
+    
+    <element name="CustomAction">
+        <complexType>
+            <complexContent>
+                <extension base="atlas:Action">
+                    <attribute name="className" type="string" />
+                    <attribute name="methodName" type="string" />
+                    <attribute name="inputFieldType" type="atlas:FieldType" />
+                    <attribute name="outputFieldType" type="atlas:FieldType" />
+                </extension>
+            </complexContent>
+        </complexType>
+    </element>
 
     <element name="Lowercase">
         <complexType>

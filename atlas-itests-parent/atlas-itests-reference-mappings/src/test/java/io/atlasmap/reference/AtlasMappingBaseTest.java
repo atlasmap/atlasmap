@@ -16,11 +16,6 @@ public abstract class AtlasMappingBaseTest {
             "boxedByteField", "boxedCharField", "boxedDoubleField", "boxedFloatField", "boxedIntField",
             "boxedLongField", "boxedStringField");
     
-    public static final List<String> JAVA_FLAT_FIELDS = Arrays.asList("intField", "shortField", "longField",
-            "doubleField", "floatField", "booleanField", "charField", "byteField", "boxedBooleanField",
-            "boxedByteField", "boxedCharField", "boxedDoubleField", "boxedFloatField", "boxedIntField",
-            "boxedLongField", "boxedStringField");
-    
     protected AtlasContextFactory atlasContextFactory = null;
     
     @Before

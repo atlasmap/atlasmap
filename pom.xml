@@ -114,7 +114,6 @@
 			<id>parent</id>
 			<modules>
 				<module>atlas-parent</module>
-				<module>atlas-mock-parent</module>
 				<module>atlas-service-parent</module>
 				<module>atlas-java-parent</module>
 				<module>atlas-json-parent</module>
@@ -128,7 +127,6 @@
 				<module>atlas-model</module>
 				<module>atlas-api</module>
 				<module>atlas-core</module>
-				<module>atlas-mock-parent</module>
 				<module>atlas-service-parent</module>
 				<module>atlas-java-parent</module>
 				<module>atlas-json-parent</module>
@@ -143,7 +141,6 @@
 				<module>atlas-model</module>
 				<module>atlas-api</module>
 				<module>atlas-core</module>
-				<module>atlas-mock-parent</module>
 				<module>atlas-service-parent</module>
 				<module>atlas-java-parent</module>
 				<module>atlas-json-parent</module>
