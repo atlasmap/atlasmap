@@ -17,3 +17,12 @@ ifdef::basebackend-html[toc::[]]
 :numbered:
 
 include::inc/_introduction.adoc[]
+
+<<<
+
+include::inc/_terminology.adoc[]
+
+<<<
+
+include::inc/_userguide.adoc[]
+
