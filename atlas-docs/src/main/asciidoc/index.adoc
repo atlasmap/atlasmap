@@ -26,3 +26,6 @@ include::inc/_terminology.adoc[]
 
 include::inc/_userguide.adoc[]
 
+<<<
+
+include::inc/_releasenotes.adoc[]
