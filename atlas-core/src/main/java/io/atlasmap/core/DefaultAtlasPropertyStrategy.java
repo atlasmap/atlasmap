@@ -70,6 +70,10 @@ public class DefaultAtlasPropertyStrategy implements AtlasPropertyStrategy {
     
     protected void processEnvironmentVariable(PropertyField propertyField) {
         
+        if(!isEnvironmentPropertiesEnabled()) {
+            return;
+        }
+        
         try {
             if(System.getenv(propertyField.getName()) != null) {
                 propertyField.setValue(System.getenv(propertyField.getName()));
@@ -84,6 +88,10 @@ public class DefaultAtlasPropertyStrategy implements AtlasPropertyStrategy {
     
     protected void processJavaSystemProperty(PropertyField propertyField) {
         
+        if(!isSystemPropertiesEnabled()) {
+            return;
+        }
+        
         try {
             if(System.getProperty(propertyField.getName()) != null) { 
                 propertyField.setValue(System.getProperty(propertyField.getName()));
@@ -97,6 +105,11 @@ public class DefaultAtlasPropertyStrategy implements AtlasPropertyStrategy {
     }
     
     protected void processMappingDefinedProperties(PropertyField propertyField, AtlasMapping atlasMapping) throws AtlasConversionException {
+        
+        if(!isMappingDefinedPropertiesEnabled()) {
+            return;
+        }
+        
         if(atlasMapping == null || atlasMapping.getProperties() == null || atlasMapping.getProperties().getProperty() == null || atlasMapping.getProperties().getProperty().isEmpty()) {
             return;
         }
@@ -121,6 +134,11 @@ public class DefaultAtlasPropertyStrategy implements AtlasPropertyStrategy {
     }
     
     protected void processRuntimeProperties(PropertyField propertyField, Map<String, Object> runtimeProperties) throws AtlasConversionException {
+        
+        if(!isRuntimePropertiesEnabled()) {
+            return;
+        }
+        
         if(runtimeProperties == null || runtimeProperties.isEmpty()) {
             return;
         }

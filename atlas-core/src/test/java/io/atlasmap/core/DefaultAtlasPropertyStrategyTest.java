@@ -48,8 +48,6 @@ public class DefaultAtlasPropertyStrategyTest {
         propStrategy = null;
     }
     
- 
-    
     @Test
     public void testProcessPropertyFieldEnvironment() throws Exception {
         PropertyField propField = AtlasModelFactory.createPropertyField();
@@ -61,6 +59,18 @@ public class DefaultAtlasPropertyStrategyTest {
         assertNotNull(propField.getValue());
         assertTrue(propField.getValue() instanceof String);
         assertTrue(((String)propField.getValue()).contains(File.pathSeparator));
+    }
+    
+    @Test
+    public void testProcessPropertyFieldEnvironmentDisabled() throws Exception {
+        PropertyField propField = AtlasModelFactory.createPropertyField();
+        propField.setName("PATH");
+        
+        propStrategy.setEnvironmentPropertiesEnabled(false);
+        propStrategy.processPropertyField(AtlasTestData.generateAtlasMapping(), propField, AtlasTestData.generateRuntimeProperties());
+        
+        assertNotNull(propField);
+        assertNull(propField.getValue());
     }
     
     @Test
@@ -85,6 +95,18 @@ public class DefaultAtlasPropertyStrategyTest {
         assertNotNull(propField.getValue());
         assertTrue(propField.getValue() instanceof String);
         assertEquals("1.8", (String)propField.getValue());
+    }
+    
+    @Test
+    public void testProcessPropertyFieldJavaSystemDisabled() throws Exception {
+        PropertyField propField = AtlasModelFactory.createPropertyField();
+        propField.setName("java.specification.version");
+        
+        propStrategy.setSystemPropertiesEnabled(false);
+        propStrategy.processPropertyField(AtlasTestData.generateAtlasMapping(), propField, AtlasTestData.generateRuntimeProperties());
+        
+        assertNotNull(propField);
+        assertNull(propField.getValue());
     }
     
     @Test
@@ -143,6 +165,18 @@ public class DefaultAtlasPropertyStrategyTest {
         assertNotNull(propField.getValue());
         assertTrue(propField.getValue() instanceof Integer);
         assertEquals(new Integer(Integer.MIN_VALUE), new Integer((Integer)propField.getValue()));
+    }
+    
+    @Test
+    public void testProcessPropertyFieldMappingDefinedDisabled() throws Exception {
+        PropertyField propField = AtlasModelFactory.createPropertyField();
+        propField.setName("prop-int");
+        
+        propStrategy.setMappingDefinedPropertiesEnabled(false);
+        propStrategy.processPropertyField(AtlasTestData.generateAtlasMapping(), propField, AtlasTestData.generateRuntimeProperties());
+        
+        assertNotNull(propField);
+        assertNull(propField.getValue());
     }
     
     @Test
@@ -209,7 +243,7 @@ public class DefaultAtlasPropertyStrategyTest {
         assertTrue(propField.getValue() instanceof Integer);
         assertEquals(new Integer(Integer.MIN_VALUE), new Integer((Integer)propField.getValue()));
     }
-    
+        
     @Test
     public void testProcessPropertyFieldMappingDefinedNoConversionService() throws Exception {
         PropertyField propField = AtlasModelFactory.createPropertyField();
@@ -236,12 +270,24 @@ public class DefaultAtlasPropertyStrategyTest {
         assertTrue(propField.getValue() instanceof Float);
         assertEquals(new Float(Float.MAX_VALUE), new Float((Float)propField.getValue()));
     }
+    
+    @Test
+    public void testProcessPropertyFieldRuntimeDisabled() throws Exception {
+        PropertyField propField = AtlasModelFactory.createPropertyField();
+        propField.setName("key-float");
+        
+        propStrategy.setRuntimePropertiesEnabled(false);
+        propStrategy.processPropertyField(AtlasTestData.generateAtlasMapping(), propField, AtlasTestData.generateRuntimeProperties());
+        
+        assertNotNull(propField);
+        assertNull(propField.getValue());
+    }
 
     @Test
     public void testGetSetPropertyOrderValue() {
         List<AtlasPropertyType> propTypes = propStrategy.getPropertyOrder();
         assertNotNull(propTypes);
-        assertTrue(propTypes.size() == 4);
+        assertEquals(new Integer(4), new Integer(propTypes.size()));
         assertEquals(AtlasPropertyType.ENVIRONMENT_VARIABLES, propTypes.get(0));
         assertEquals(AtlasPropertyType.JAVA_SYSTEM_PROPERTIES, propTypes.get(1));
         assertEquals(AtlasPropertyType.MAPPING_DEFINED_PROPERTIES, propTypes.get(2));
@@ -250,7 +296,7 @@ public class DefaultAtlasPropertyStrategyTest {
         propStrategy.setPropertyOrderValue(Arrays.asList(AtlasPropertyType.RUNTIME_PROPERTIES.value(), AtlasPropertyType.MAPPING_DEFINED_PROPERTIES.value()));
         propTypes = propStrategy.getPropertyOrder();
         assertNotNull(propTypes);
-        assertTrue(propTypes.size() == 2);
+        assertEquals(new Integer(2), new Integer(propTypes.size()));
         assertEquals(AtlasPropertyType.RUNTIME_PROPERTIES, propTypes.get(0));
         assertEquals(AtlasPropertyType.MAPPING_DEFINED_PROPERTIES, propTypes.get(1));        
     }
@@ -268,7 +314,7 @@ public class DefaultAtlasPropertyStrategyTest {
         propStrategy.setPropertyOrderValue(Arrays.asList("foo", AtlasPropertyType.RUNTIME_PROPERTIES.value()));
         propTypes = propStrategy.getPropertyOrder();
         assertNotNull(propTypes);
-        assertTrue(propTypes.size() == 1);
+        assertEquals(new Integer(1), new Integer(propTypes.size()));
         assertEquals(AtlasPropertyType.RUNTIME_PROPERTIES, propTypes.get(0));
     }
 
