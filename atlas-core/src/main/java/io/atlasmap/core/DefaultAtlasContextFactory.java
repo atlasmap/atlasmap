@@ -24,6 +24,7 @@ import io.atlasmap.mxbean.AtlasContextFactoryMXBean;
 import io.atlasmap.spi.AtlasModule;
 import io.atlasmap.spi.AtlasModuleDetail;
 import io.atlasmap.spi.AtlasModuleInfo;
+import io.atlasmap.spi.AtlasPropertyStrategy;
 import io.atlasmap.spi.AtlasSeparateStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,6 +60,7 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
 	private AtlasMappingService atlasMappingService = null;
 	private DefaultAtlasConversionService atlasConversionService = null;
 	private DefaultAtlasFieldActionService atlasFieldActionService = null;
+	private AtlasPropertyStrategy atlasPropertyStrategy = new DefaultAtlasPropertyStrategy();
 
 	private Map<String, String> properties = null;
 
@@ -405,4 +407,13 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
 	public AtlasFieldActionService getFieldActionService() {
 	    return this.atlasFieldActionService;
 	}
+
+    public AtlasPropertyStrategy getPropertyStrategy() {
+        return atlasPropertyStrategy;
+    }
+
+    public void setPropertyStrategy(AtlasPropertyStrategy atlasPropertyStrategy) {
+        this.atlasPropertyStrategy = atlasPropertyStrategy;
+    }
+	
 }

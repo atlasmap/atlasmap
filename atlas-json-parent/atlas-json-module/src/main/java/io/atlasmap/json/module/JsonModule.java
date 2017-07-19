@@ -28,11 +28,13 @@ import io.atlasmap.spi.AtlasModuleMode;
 import io.atlasmap.v2.Audit;
 import io.atlasmap.v2.AuditStatus;
 import io.atlasmap.v2.Collection;
+import io.atlasmap.v2.ConstantField;
 import io.atlasmap.v2.DataSource;
 import io.atlasmap.v2.DataSourceType;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldType;
 import io.atlasmap.v2.Mapping;
+import io.atlasmap.v2.PropertyField;
 import io.atlasmap.v2.Validations;
 import io.atlasmap.json.core.DocumentJsonFieldReader;
 import io.atlasmap.json.core.DocumentJsonFieldWriter;
@@ -116,13 +118,21 @@ public class JsonModule extends BaseAtlasModule {
         
         Field field = mapping.getInputField().get(0);
         
-        if(!(field instanceof JsonField)) {
+        if(!isSupportedField(field)) {
             Audit audit = new Audit();
             audit.setDocId(field.getDocId());
             audit.setPath(field.getPath());
             audit.setStatus(AuditStatus.ERROR);
             audit.setMessage(String.format("Unsupported input field type=%s", field.getClass().getName()));
             session.getAudits().getAudit().add(audit);
+            return;
+        }
+        
+        if(field instanceof PropertyField) {
+            processPropertyField(session, mapping, session.getAtlasContext().getContextFactory().getPropertyStrategy());
+            if(logger.isDebugEnabled()) {
+                logger.debug("Processed input propertyField sPath=" + field.getPath() + " sV=" + field.getValue() + " sT=" + field.getFieldType() + " docId: " + field.getDocId());
+            }
             return;
         }
         
@@ -304,6 +314,10 @@ public class JsonModule extends BaseAtlasModule {
     @Override
     public Boolean isSupportedField(Field field) {
         if (field instanceof JsonField) {
+            return true;
+        } else if (field instanceof PropertyField) {
+            return true;
+        } else if (field instanceof ConstantField) {
             return true;
         }
         return false;

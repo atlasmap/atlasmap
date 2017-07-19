@@ -38,5 +38,5 @@ public class AtlasModuleSupport {
         }
         
         return targetPaths;
-    }    
+    }
 }
