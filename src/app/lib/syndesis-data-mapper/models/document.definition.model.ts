@@ -195,13 +195,16 @@ export class DocumentDefinition {
         var field: Field = this.fieldsByPath[fieldPath];
         //if we can't find the field we're looking for, find parent fields and populate their children
         var pathSeparator: string = this.initCfg.pathSeparator;
-        if (field == null && (fieldPath.indexOf(pathSeparator) != -1)) {
-            var originalPath: string = fieldPath;
-            var currentParentPath: string = null;
+        var originalPath: string = fieldPath;
+        //strip beginning path separator from path
+        if (originalPath != null && originalPath.indexOf(pathSeparator) == 0) {
+            originalPath = originalPath.substring(1);
+        }
+        if (field == null && (originalPath.indexOf(pathSeparator) != -1)) {            
+            var currentParentPath: string = "";
             while (originalPath.indexOf(pathSeparator) != -1) {
                 var currentPathSection: string = originalPath.substr(0, originalPath.indexOf(pathSeparator));
-                currentParentPath = (currentParentPath == null) ? currentPathSection
-                    : (currentParentPath + pathSeparator + currentPathSection);
+                currentParentPath += pathSeparator + currentPathSection;
                 console.log("Populating children for '" + currentParentPath + "' (from: " + fieldPath + ")");
                 var parentField: Field = this.fieldsByPath[currentParentPath];
                 if (parentField == null) {
