@@ -68,6 +68,10 @@ public class AtlasModelFactory {
         return new MockField();
     }
     
+    public static PropertyField createPropertyField() {
+        return new PropertyField();
+    }
+    
     public static Mapping cloneMapping(Mapping mapping) {
         Mapping clone = new Mapping();
         clone.setAlias(mapping.getAlias());
@@ -79,5 +83,41 @@ public class AtlasModelFactory {
         clone.setStrategy(mapping.getStrategy());
         clone.setStrategyClassName(mapping.getStrategyClassName());
         return clone;
+    }
+    
+    protected static String baseFieldToString(Field f) {
+        if(f == null) {
+            return "";
+        }
+        String tmp = new String(); 
+        tmp.concat(" arrayDimensions=" + f.getArrayDimensions());        
+        tmp.concat(" arraySize=" + f.getArraySize());
+        tmp.concat(" collectionType=" + (f.getCollectionType() != null ? f.getCollectionType().value() : null));
+        tmp.concat(" docId=" + f.getDocId());
+        if(f.getActions() != null && f.getActions().getActions() != null) {
+            if(!f.getActions().getActions().isEmpty()) {
+                tmp.concat(" fieldActions#=" + f.getActions().getActions().size());
+            } else {
+                tmp.concat(" fieldActions#=0");
+            }
+        } else {
+            tmp.concat(" fieldActions#=");
+        }
+        tmp.concat(" fieldType=" + (f.getFieldType() != null ? f.getFieldType().value() : null));
+        tmp.concat(" index=" + f.getIndex());
+        tmp.concat(" path=" + f.getPath());
+        tmp.concat(" fieldStatus=" + (f.getStatus() != null ? f.getStatus().value() : null));
+        tmp.concat(" value=" + f.getValue());
+        return tmp;
+    }
+    
+    public static String toString(PropertyField f) {
+        String tmp = new String("PropertyField [name=");
+        if(f != null && f.getName() != null) {
+            tmp.concat(f.getName());
+        }
+        tmp.concat(baseFieldToString(f));
+        tmp.concat("]");
+        return tmp;
     }
 }

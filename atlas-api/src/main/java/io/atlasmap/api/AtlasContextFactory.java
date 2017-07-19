@@ -19,6 +19,8 @@ import java.io.File;
 import java.net.URI;
 import java.util.Map;
 
+import io.atlasmap.spi.AtlasPropertyStrategy;
+
 public interface AtlasContextFactory {
 
 	void init();
@@ -27,6 +29,7 @@ public interface AtlasContextFactory {
 	AtlasContext createContext(URI atlasMappingUri) throws AtlasException;
 	AtlasConversionService getConversionService() throws AtlasException;
     AtlasFieldActionService getFieldActionService() throws AtlasException;
+    AtlasPropertyStrategy getPropertyStrategy() throws AtlasException;
 	void setProperties(Map<String, String> properties);
 	Map<String, String> getProperties();
 }

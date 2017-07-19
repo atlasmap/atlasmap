@@ -64,9 +64,9 @@ public class DefaultAtlasConversionService implements AtlasConversionService {
     @SuppressWarnings("rawtypes")
     public Optional<AtlasConverter> findMatchingConverter(FieldType source, FieldType target) {
 
-        Optional<AtlasConverter> primitiveConverter;
-        Optional<AtlasConverter> customConverter;
-
+        Optional<AtlasConverter> primitiveConverter = Optional.empty();
+        Optional<AtlasConverter> customConverter = Optional.empty();
+        
         List<AtlasPrimitiveConverter> primitiveConverters = converters.values().stream()
                 .filter(p -> p instanceof AtlasPrimitiveConverter)
                 .map(p -> (AtlasPrimitiveConverter) p)
@@ -213,6 +213,10 @@ public class DefaultAtlasConversionService implements AtlasConversionService {
     public Object convertType(Object sourceValue, FieldType sourceType, FieldType targetType) throws AtlasConversionException {
         if(sourceType == null || targetType == null) {
             throw new AtlasConversionException("AutoConversion requires sourceType and targetType be specified");
+        }
+        
+        if(sourceType.equals(targetType)) {
+            return sourceValue;
         }
         
         Optional<AtlasConverter> converter = findMatchingConverter(sourceType, targetType);
