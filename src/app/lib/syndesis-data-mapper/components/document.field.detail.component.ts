@@ -58,7 +58,7 @@ import { FieldEditComponent } from './field.edit.component';
                         <i [attr.class]='getTransformationClass()'></i>
                         <i [attr.class]='getMappingClass()'></i>
                     </div>
-                    <div class="propertyFieldIcons" style="float:right; text-align:right" *ngIf="fieldIsEditable()">
+                    <div class="propertyFieldIcons" style="float:right; text-align:right" *ngIf="field.userCreated">
                         <i class="fa fa-edit link" aria-hidden="true" (click)="editField($event);"></i>
                         <i class="fa fa-trash link" aria-hidden="true" (click)="removeField($event);"></i>
                     </div>
@@ -133,10 +133,6 @@ export class DocumentFieldDetailComponent {
         this.cfg.mappingService.addNewMapping(droppedField);
         this.cfg.mappingService.fieldSelected(this.field);
 
-    }
-
-    public fieldIsEditable(): boolean {
-        return this.field.isPropertyOrConstant() || this.field.userCreated;
     }
 
     public getFieldTypeIcon(): string {

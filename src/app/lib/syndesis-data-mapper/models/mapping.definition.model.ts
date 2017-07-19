@@ -276,6 +276,7 @@ export class MappingDefinition {
                     constantField.displayName = constantField.value;
                     constantField.name = constantField.value;
                     constantField.path = constantField.value;
+                    constantField.userCreated = true;
                     mappedField.field = constantField;
                     doc.addField(constantField);
                 } else if (mappedField.parsedData.userCreated) {

@@ -80,6 +80,7 @@ export class ConstantFieldEditComponent implements ModalWindowValidator {
         this.field.name = this.field.value;
         this.field.path = this.field.value;
         this.field.type = this.valueType;
+        this.field.userCreated = true;
         return this.field;
     }
 
