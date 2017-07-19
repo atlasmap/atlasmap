@@ -259,14 +259,14 @@ export class DocumentDefinition {
         this.fieldPaths.sort();
 
         if (ConfigModel.getConfig().initCfg.debugDocumentParsing) {
-            console.log(this.printDocumentFields(this.fields, 0));
+            console.log(this.printDocumentFields(this.fields, 0)); //log review OK
             var enumFields: string = "Enum fields:\n";
             for (let field of this.allFields) {
                 if (field.enumeration) {
                     enumFields += "\t" + field.path + " (" + field.classIdentifier + ")\n";
                 }
             }
-            console.log(enumFields);
+            console.log(enumFields); //log review OK
         }
 
         this.initCfg.initialized = true;
@@ -402,7 +402,7 @@ export class DocumentDefinition {
                 result +=  cachedField.name + " " + cachedField.type + " " + cachedField.serviceObject.status
                     + " (" + cachedField.classIdentifier + ") children:" + cachedField.children.length + "\n";
             }
-            console.log(result);
+            console.log(result); //log review OK
         }
 
         //remove children more than one layer deep in root fields

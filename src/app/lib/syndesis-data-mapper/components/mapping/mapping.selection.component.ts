@@ -143,8 +143,6 @@ export class MappingSelectionComponent {
 
     selectionChanged(c: MappingSelectionSectionComponent) {
         var self: MappingSelectionComponent = c.parentComponent as MappingSelectionComponent;
-        console.log("c", c);
-        console.log("self", self);
         var oldSelectedItem: MappingSelectionSectionComponent = self.getSelectedMappingComponent();
         oldSelectedItem.selected = false;
         c.selected = true;
