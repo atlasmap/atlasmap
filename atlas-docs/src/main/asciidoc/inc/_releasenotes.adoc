@@ -1,0 +1,17 @@
+
+[[releasenotes]]
+= Release Notes
+ 
+== 2.0.0 Release
+
+ * All new modular runtime
+ * Supported data formats: Java, Json and Xml
+ * Support for auto-type detection
+ * Support for auto-type conversion
+ * Support for Field Actions
+ * Support for design-time and runtime mapping file Validation rules
+ * Design Time: Support service
+ * Design Time: Java class inspection service 
+ * Design Time: Xml Schema and Xml instance inspection service
+ * Design Time: Json instance inspection service
+ 
