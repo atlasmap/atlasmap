@@ -25,16 +25,15 @@ public interface AtlasSession {
 	Map<String, Object> getProperties();
 	AtlasContext getAtlasContext();
 	void setAtlasContext(AtlasContext atlasContext);
-	AtlasMapping getRuntimeMapping();
 	AtlasMapping getMapping();
 	Object getInput();
 	void setInput(Object inputObject);
     Object getInput(String docId);
-    void setInput(String docId, Object inputObject);
+    void setInput(Object inputObject, String docId);
 	Object getOutput();
 	void setOutput(Object outputObject);
 	Object getOutput(String docId);
-	void setOutput(String docId, Object outputObject);
+	void setOutput(Object outputObject, String docId);
 	Validations getValidations();
 	void setValidations(Validations validations);
 	Audits getAudits();
