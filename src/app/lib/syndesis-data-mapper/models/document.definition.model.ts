@@ -277,7 +277,7 @@ export class DocumentDefinition {
 
     private populateFieldParentPaths(field: Field, parentPath: string, depth: number): void {
         if (parentPath == null) {
-            parentPath = (this.initCfg.type.isXML() || this.initCfg.type.isJSON()) ? this.initCfg.pathSeparator : "";
+            parentPath = this.initCfg.pathSeparator;
         }
         field.path = parentPath + field.getNameWithNamespace();
         if (field.isCollection) {

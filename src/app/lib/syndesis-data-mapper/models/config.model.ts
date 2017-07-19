@@ -133,8 +133,7 @@ export class ConfigModel {
     }
 
     public addJavaDocument(documentIdentifier: string, isSource: boolean): void {
-        var docDef: DocumentDefinition = this.createDocument(documentIdentifier, isSource, DocumentTypes.JAVA, null);
-        docDef.initCfg.pathSeparator = ".";
+        this.createDocument(documentIdentifier, isSource, DocumentTypes.JAVA, null);
     }
 
     public addJSONDocument(documentIdentifier: string, documentContents: string, isSource: boolean): void {
