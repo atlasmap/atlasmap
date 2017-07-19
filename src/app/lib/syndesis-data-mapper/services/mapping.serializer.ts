@@ -356,6 +356,7 @@ export class MappingSerializer {
             field.name = f.name;
             field.value = f.value;
             field.type = f.fieldType;
+            field.userCreated = true;
             fields.push(field);
         }
         return fields;

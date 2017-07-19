@@ -84,6 +84,7 @@ export class PropertyFieldEditComponent implements ModalWindowValidator {
         this.field.displayName = this.field.name;
         this.field.path = this.field.name;
         this.field.type = this.valueType;
+        this.field.userCreated = true;
         return this.field;
     }
 
