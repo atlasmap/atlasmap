@@ -247,11 +247,11 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
 	}
 
 	public AtlasSession createSession() throws AtlasValidationException {
-		return createSession(getDefaultAtlasContextFactory().getMappingService().loadMapping(atlasMappingUri), getDefaultAtlasContextFactory().getMappingService().loadMapping(atlasMappingUri));
+		return createSession(getDefaultAtlasContextFactory().getMappingService().loadMapping(atlasMappingUri));
 	}
 	
-	public AtlasSession createSession(AtlasMapping mappingDefinition, AtlasMapping runtimeMapping) {
-		AtlasSession session = new DefaultAtlasSession(mappingDefinition, runtimeMapping);
+	public AtlasSession createSession(AtlasMapping mappingDefinition) {
+		AtlasSession session = new DefaultAtlasSession(mappingDefinition);
 		session.setAtlasContext(this);
 		session.setAudits(new Audits());
 		session.setValidations(new Validations());

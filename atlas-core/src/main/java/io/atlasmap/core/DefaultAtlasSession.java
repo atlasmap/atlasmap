@@ -30,18 +30,16 @@ import java.util.concurrent.ConcurrentHashMap;
 public class DefaultAtlasSession implements AtlasSession {
 
 	private AtlasContext atlasContext;
-	private final AtlasMapping mappingDefinition;
-	private final AtlasMapping runtimeMapping;
+	private final AtlasMapping mapping;
 	private Audits audits;
 	private Validations validations;
 	private Map<String, Object> properties;
 	private Map<String, Object> inputMap = new HashMap<String, Object>();
 	private Map<String, Object> outputMap = new HashMap<String, Object>();
 		
-	public DefaultAtlasSession(AtlasMapping mappingDefinition, AtlasMapping runtimeMapping) { 
+	public DefaultAtlasSession(AtlasMapping mapping) { 
 	    initialize();
-	    this.mappingDefinition = mappingDefinition;
-	    this.runtimeMapping = runtimeMapping;
+	    this.mapping = mapping;
 	}
 	
 	protected void initialize() { properties = new ConcurrentHashMap<String, Object>(); 
@@ -50,8 +48,7 @@ public class DefaultAtlasSession implements AtlasSession {
 
     public AtlasContext getAtlasContext() { return atlasContext; }
     public void setAtlasContext(AtlasContext atlasContext) { this.atlasContext = atlasContext; }
-    public AtlasMapping getRuntimeMapping() { return runtimeMapping; }
-    public AtlasMapping getMapping() { return mappingDefinition; }
+    public AtlasMapping getMapping() { return mapping; }
 	@Override
     public Validations getValidations() { return this.validations; }
     @Override
@@ -71,11 +68,11 @@ public class DefaultAtlasSession implements AtlasSession {
     @Override
 	public void setInput(Object input) { this.inputMap.put(AtlasConstants.DEFAULT_SOURCE_DOC_ID, input); }
 	@Override
-    public void setInput(String docId, Object inputObject) { this.inputMap.put(docId, inputObject); }
+    public void setInput(Object inputObject, String docId) { this.inputMap.put(docId, inputObject); }
     @Override
     public void setOutput(Object output) { this.outputMap.put(AtlasConstants.DEFAULT_TARGET_DOC_ID, output); }
 	@Override
-    public void setOutput(String docId, Object outputObject) { this.outputMap.put(docId, outputObject); }
+    public void setOutput(Object outputObject, String docId) { this.outputMap.put(docId, outputObject); }
     public Map<String, Object> getProperties() { return this.properties; }
 
     @Override
