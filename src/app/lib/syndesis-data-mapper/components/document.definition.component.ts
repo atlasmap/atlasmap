@@ -175,22 +175,25 @@ export class DocumentDefinitionComponent {
 
     private search(searchFilter: string): void {
         this.searchResultsExist = false;
-        for (let docDef of this.cfg.getDocs(this.isSource)) {
-            docDef.visibleInCurrentDocumentSearch = false;
+        var searchIsEmpty: boolean = (searchFilter == null) || ("" == searchFilter);
+        var defaultVisibility: boolean = searchIsEmpty ? true : false;
+        for (let docDef of this.cfg.getDocs(this.isSource)) {        
+            docDef.visibleInCurrentDocumentSearch = defaultVisibility;
             for (let field of docDef.getAllFields()) {
-                field.visibleInCurrentDocumentSearch = false;
+                field.visibleInCurrentDocumentSearch = defaultVisibility;
             }
-            for (let field of docDef.getTerminalFields()) {
-                field.visibleInCurrentDocumentSearch = (searchFilter == null || "" == searchFilter
-                    || field.name.toLowerCase().includes(searchFilter.  toLowerCase()));
-                    this.searchResultsExist = this.searchResultsExist || field.visibleInCurrentDocumentSearch;
-                if (field.visibleInCurrentDocumentSearch) {
-                    docDef.visibleInCurrentDocumentSearch = true;
-                    var parentField = field.parentField;
-                    while (parentField != null) {
-                        parentField.visibleInCurrentDocumentSearch = true;
-                        parentField.collapsed = false;
-                        parentField = parentField.parentField;
+            if (!searchIsEmpty) {
+                for (let field of docDef.getTerminalFields()) {
+                    field.visibleInCurrentDocumentSearch = field.name.toLowerCase().includes(searchFilter.toLowerCase());
+                        this.searchResultsExist = this.searchResultsExist || field.visibleInCurrentDocumentSearch;
+                    if (field.visibleInCurrentDocumentSearch) {
+                        docDef.visibleInCurrentDocumentSearch = true;
+                        var parentField = field.parentField;
+                        while (parentField != null) {
+                            parentField.visibleInCurrentDocumentSearch = true;
+                            parentField.collapsed = false;
+                            parentField = parentField.parentField;
+                        }
                     }
                 }
             }
