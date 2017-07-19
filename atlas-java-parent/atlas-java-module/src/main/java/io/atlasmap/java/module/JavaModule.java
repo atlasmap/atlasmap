@@ -459,7 +459,7 @@ public class JavaModule extends BaseAtlasModule {
         try {
             Object targetObject = null;
             if(session.getOutput() == null) {
-                targetObject = initializeTargetObject(session.getRuntimeMapping());
+                targetObject = initializeTargetObject(session.getMapping());
                 session.setOutput(targetObject);
             } else {
                 targetObject = session.getOutput();
@@ -556,7 +556,7 @@ public class JavaModule extends BaseAtlasModule {
 
         if(session.getOutput() == null) {
             try {
-                targetObject = initializeTargetObject(session.getRuntimeMapping());
+                targetObject = initializeTargetObject(session.getMapping());
             } catch (Exception e) {
                 logger.error(String.format("Error initializing targetObject msg=%s", e.getMessage()), e);
                 Audit audit = new Audit();
