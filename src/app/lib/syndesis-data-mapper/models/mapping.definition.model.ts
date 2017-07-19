@@ -129,7 +129,6 @@ export class MappingDefinition {
             var mapping: MappingModel = this.mappings[index];
             console.log("Checking if mapping is stale: " + mapping.uuid, mapping);
             var mappingIsStale: boolean = this.isMappingStale(mapping, sourceFieldPaths, targetSourcePaths);
-            console.log("stale:" + mappingIsStale);
             if (mappingIsStale) {
                 console.log("Removing stale mapping.", { "mapping": mapping,
                     "sourceDocs": cfg.sourceDocs, "targetDocs": cfg.targetDocs });

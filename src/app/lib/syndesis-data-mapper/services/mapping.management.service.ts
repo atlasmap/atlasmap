@@ -74,7 +74,7 @@ export class MappingManagementService {
                     for (let entry of entries) {
                         mappingFileNames.push(entry.name);
                     }
-                    console.log("Retreived " + mappingFileNames.length + " mapping file names in "
+                    console.log("Retrieved " + mappingFileNames.length + " mapping file names in "
                         + (Date.now() - startTime) + "ms.");
                     observer.next(mappingFileNames);
                     observer.complete();

@@ -62,7 +62,6 @@ export class NamespaceEditComponent implements ModalWindowValidator {
                 }
             }
         }
-        console.log("Namespaces enabled: " + this.targetEnabled);
     }
 
     targetToggled(): void {

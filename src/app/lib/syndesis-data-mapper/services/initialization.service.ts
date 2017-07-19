@@ -139,7 +139,6 @@ export class InitializationService {
         } else {
             console.log("Loading class path from Maven.");
             this.updateLoadingStatus("Loading Maven class path.");
-            console.log(this.cfg.initCfg.loadingStatus);
             //fetch class path
             this.cfg.documentService.fetchClassPath().subscribe(
                 (classPath: string) => {
