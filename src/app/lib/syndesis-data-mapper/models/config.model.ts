@@ -51,6 +51,7 @@ export class DataMapperInitializationModel {
 
     /* mock data configuration */
     public addMockJSONMappings: boolean = false;
+    public addMockJavaSingleSource: boolean = false;
     public addMockJavaSources: boolean = false;
     public addMockXMLInstanceSources: boolean = false;
     public addMockXMLSchemaSources: boolean = false;
