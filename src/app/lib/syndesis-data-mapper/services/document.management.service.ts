@@ -533,26 +533,30 @@ export class DocumentManagementService {
 
     public static generateMockJSON(): string {
         var sampleJSON: string = `   {
-                "id": "0001",
-                "type": "donut",
-                "name": "Cake",
-                "ppu": 0.55,
-                "batters": {
-                    "batter": [
-                        { "id": "1001", "type": "Regular" },
-                        { "id": "1002", "type": "Chocolate" },
-                        { "id": "1003", "type": "Blueberry" },
-                        { "id": "1004", "type": "Devil's Food" }
-                    ]
+                "order": {
+                    "address": {
+                        "street": "123 any st",
+                        "city": "Austin",
+                        "state": "TX",
+                        "zip": "78626"
+                    },
+                    "contact": {
+                        "firstName": "james",
+                        "lastName": "smith",
+                        "phone": "512-123-1234"
+                    },
+                    "orderId": "123"
                 },
-                "topping": [
-                    { "id": "5001", "type": "None" },
-                    { "id": "5002", "type": "Glazed" },
-                    { "id": "5005", "type": "Sugar" },
-                    { "id": "5007", "type": "Powdered Sugar" },
-                    { "id": "5006", "type": "Chocolate with Sprinkles" },
-                    { "id": "5003", "type": "Chocolate" },
-                    { "id": "5004", "type": "Maple" }
+                "primitives": {
+                    "stringPrimitive": "some value",
+                    "booleanPrimitive": true,
+                    "numberPrimitive": 24
+                },
+                "addressList": [
+                    { "street": "123 any st", "city": "Austin", "state": "TX", "zip": "78626" },
+                    { "street": "123 any st", "city": "Austin", "state": "TX", "zip": "78626" },
+                    { "street": "123 any st", "city": "Austin", "state": "TX", "zip": "78626" },
+                    { "street": "123 any st", "city": "Austin", "state": "TX", "zip": "78626" }
                 ]
             }
         `;
