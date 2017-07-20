@@ -70,6 +70,12 @@ export class InitializationService {
             console.error("Mapping service URL is not configured, validation service will not be used.")
         }
 
+        if (this.cfg.initCfg.discardNonMockSources) {
+            console.error("INIT SERVICE DEBUG CONFIG: Discarding previously configured documents.");
+            this.cfg.sourceDocs = [];
+            this.cfg.targetDocs = [];
+        }
+
         if (this.cfg.initCfg.addMockJSONMappings) {
             var mappingDefinition: MappingDefinition = new MappingDefinition();
             var mappingJSON: any = InitializationService.createExampleMappingsJSON();

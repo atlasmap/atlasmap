@@ -51,6 +51,7 @@ export class DataMapperInitializationModel {
     public disablePublicGetterSetterFields: boolean = false;
 
     /* mock data configuration */
+    public discardNonMockSources: boolean = false;
     public addMockJSONMappings: boolean = false;
     public addMockJavaSingleSource: boolean = false;
     public addMockJavaSources: boolean = false;
