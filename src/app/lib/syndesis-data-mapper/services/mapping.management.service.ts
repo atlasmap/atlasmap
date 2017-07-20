@@ -365,6 +365,7 @@ export class MappingManagementService {
                             actionConfigs.push(fieldActionConfig);
                         }
                     }
+                    actionConfigs = this.sortFieldActionConfigs(actionConfigs);
                     console.log("Finished fetching and parsing " + actionConfigs.length + " field actionConfigs in "
                         + (Date.now() - startTime) + "ms.");
                     observer.next(actionConfigs);
@@ -377,6 +378,32 @@ export class MappingManagementService {
                 }
             );
         });
+    }
+
+    public sortFieldActionConfigs(configs: FieldActionConfig[]): FieldActionConfig[] {
+        var sortedActionConfigs: FieldActionConfig[] = [];
+        if (configs == null || configs.length == 0) {
+            return sortedActionConfigs;
+        }
+
+        var configsByName: { [key:string]: FieldActionConfig; } = {};
+        var configNames: string[] = [];
+        for (let fieldActionConfig of configs) {
+            var name: string = fieldActionConfig.name;
+            //if field is a dupe, discard it
+            if (configsByName[name] != null) {
+                continue;
+            }
+            configsByName[name] = fieldActionConfig;
+            configNames.push(name);
+        }
+
+        configNames.sort();
+
+        for (let name of configNames) {
+            sortedActionConfigs.push(configsByName[name]);
+        }
+        return sortedActionConfigs;
     }
 
     public notifyMappingUpdated(): void {
