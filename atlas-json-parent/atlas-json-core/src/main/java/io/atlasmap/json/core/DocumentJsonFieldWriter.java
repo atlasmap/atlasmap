@@ -12,6 +12,7 @@ import com.fasterxml.jackson.databind.node.JsonNodeType;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import io.atlasmap.api.AtlasException;
+import io.atlasmap.core.PathUtil;
 import io.atlasmap.json.v2.AtlasJsonModelFactory;
 import io.atlasmap.json.v2.JsonField;
 import io.atlasmap.v2.FieldType;
@@ -53,7 +54,7 @@ public class DocumentJsonFieldWriter {
     		logger.debug("Field path: " + field.getPath());
     		logger.debug("Field value: " + field.getValue());    		
     	}
-    	JsonPath path = new JsonPath(field.getPath());
+    	PathUtil path = new PathUtil(field.getPath());
     	String lastSegment = path.getLastSegment();
     	ObjectNode parentNode = this.rootNode;
     	String parentSegment = null;
@@ -66,7 +67,7 @@ public class DocumentJsonFieldWriter {
     			if (childNode == null) {
     				childNode = createParentNode(parentNode, parentSegment, segment);
     			} else if (childNode instanceof ArrayNode) {
-    				int index = JsonPath.indexOfSegment(segment);
+    				int index = PathUtil.indexOfSegment(segment);
     				ArrayNode arrayChild = (ArrayNode) childNode;
     				if (arrayChild.size() < (index + 1)) {
     					if (logger.isDebugEnabled()) {
@@ -98,8 +99,8 @@ public class DocumentJsonFieldWriter {
     		logger.debug("Writing field value '" + segment + "' in parent node '" + parentSegment + "', parentNode: " + parentNode);
     	}
     	JsonNode valueNode = createValueNode(field);
-		String cleanedSegment = JsonPath.cleanPathSegment(segment);
-		if (JsonPath.isCollectionSegment(segment)) {
+		String cleanedSegment = PathUtil.cleanPathSegment(segment);
+		if (PathUtil.isCollectionSegment(segment)) {
 			//if this field is a collection, we need to place our value in an array
 			
 			//get or construct the array the value will be placed in
@@ -121,7 +122,7 @@ public class DocumentJsonFieldWriter {
 			}
 						
 			//determine where in the array our value will go
-			int index = JsonPath.indexOfSegment(segment);
+			int index = PathUtil.indexOfSegment(segment);
 			
 			if (arrayChild.size() < (index + 1)) {
 				if (logger.isDebugEnabled()) {
@@ -152,7 +153,7 @@ public class DocumentJsonFieldWriter {
     	if (logger.isDebugEnabled()) {
     		logger.debug("Looking for child node '" + segment + "' in parent '" + parentSegment + "': " + parentNode);
     	}
-    	String cleanedSegment = JsonPath.cleanPathSegment(segment);
+    	String cleanedSegment = PathUtil.cleanPathSegment(segment);
     	JsonNode childNode = parentNode.path(cleanedSegment);
     	if (JsonNodeType.MISSING.equals(childNode.getNodeType())) {
     		childNode = null;
@@ -172,10 +173,10 @@ public class DocumentJsonFieldWriter {
     		logger.debug("Creating parent node '" + segment + "' under previous parent '" + parentSegment + "' (" + parentNode.getClass().getName() + ")");
     	}
     	ObjectNode childNode = null;
-    	String cleanedSegment = JsonPath.cleanPathSegment(segment);
-		if (JsonPath.isCollectionSegment(segment)) {
+    	String cleanedSegment = PathUtil.cleanPathSegment(segment);
+		if (PathUtil.isCollectionSegment(segment)) {
 			ArrayNode arrayChild = parentNode.putArray(cleanedSegment);
-			int index = JsonPath.indexOfSegment(segment);
+			int index = PathUtil.indexOfSegment(segment);
 			
 			if (arrayChild.size() < (index + 1)) {
 				if (logger.isDebugEnabled()) {
