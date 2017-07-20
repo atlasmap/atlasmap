@@ -37,10 +37,4 @@ public class ClassInspectionServiceITest {
 	    JavaClass javaClazz = classInspectionService.inspectClass("io.syndesis.connector.salesforce.Contact", "target/reference-jars/salesforce-upsert-contact-connector-0.4.5.jar:target/reference-jars/camel-salesforce-2.19.0.jar");
 	    assertNotNull(javaClazz);   
 	}
-
-	@Test
-	public void testInpsectClassUnparameterizedList() throws InspectionException {
-	    JavaClass javaClazz = classInspectionService.inspectClass("io.atlasmap.java.inspect.Foo");
-	    assertNotNull(javaClazz);
-	}
 }
