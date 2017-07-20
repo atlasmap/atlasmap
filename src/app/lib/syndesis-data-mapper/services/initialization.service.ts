@@ -62,7 +62,7 @@ export class InitializationService {
     }
 
     public initialize(): void {
-        console.log("Data Mapper UI is now initializing.");
+        console.log("Data Mapper UI is now initializing. (Version: " + this.cfg.initCfg.dataMapperVersion + ")");
 
         if (this.cfg.mappingService == null) {
             console.error("Mapping service is not configured, validation service will not be used.")
