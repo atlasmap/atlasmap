@@ -51,7 +51,7 @@ import { ModalWindowComponent } from './modal.window.component';
                     <input type="text" #searchFilterBox
                         id="search-filter-box" (keyup)="search(searchFilterBox.value)" placeholder="Search"
                         [(ngModel)]="searchFilter" />
-                    <i class="fa fa-close searchBoxCloseIcon link" (click)="clearSearch()"></i>
+                    <i class="fa fa-close searchBoxCloseIcon link" (click)="toggleSearch()"></i>
                     <div class="clear"></div>
                 </div>
                 <div [attr.class]="searchMode ? 'fieldListSearchOpen' : 'fieldList'" style="overflow:auto;"
@@ -203,11 +203,6 @@ export class DocumentDefinitionComponent {
     public getSearchIconCSSClass(): string {
         var cssClass: string = "fa fa-search searchBoxIcon link";
         return this.searchMode ? (cssClass + " selectedIcon") : cssClass;
-    }
-
-    private clearSearch(): void  {
-        this.searchFilter = "";
-        this.search(this.searchFilter);
     }
 
     private handleScroll(event: any) {
