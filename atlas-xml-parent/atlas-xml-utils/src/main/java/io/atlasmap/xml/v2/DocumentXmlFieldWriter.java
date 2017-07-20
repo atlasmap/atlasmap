@@ -1,196 +1,399 @@
 package io.atlasmap.xml.v2;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Text;
-
-import io.atlasmap.api.AtlasException;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import java.util.Collections;
+import java.io.ByteArrayInputStream;
+import java.io.StringWriter;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
+import org.slf4j.LoggerFactory;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+import io.atlasmap.api.AtlasException;
+import io.atlasmap.core.PathUtil;
+import io.atlasmap.v2.FieldType;
 
 /**
  */
 public class DocumentXmlFieldWriter extends XmlFieldTransformer {
+	private static final org.slf4j.Logger logger = LoggerFactory.getLogger(DocumentXmlFieldWriter.class);
 
-    public DocumentXmlFieldWriter() {
+	private Document document = null;
+	private boolean enableElementNamespaces = true;
+	private boolean enableAttributeNamespaces = true;
+	private boolean ignoreMissingNamespaces = true;
+	
+    public DocumentXmlFieldWriter() throws AtlasException {
+    	this(new HashMap<>(), null);
     }
 
-    public DocumentXmlFieldWriter(Map<String, String> namespaces) {
+    public DocumentXmlFieldWriter(Map<String, String> namespaces, String seedDocument) throws AtlasException {
         super(namespaces);
-    }
-
-    public Document write(XmlField xmlField) throws AtlasException {
-        if (xmlField == null) {
-            throw new AtlasException(new IllegalArgumentException("Argument 'xmlField' cannot be null"));
-        }
-
-        Document document = createDocument();
-        write(xmlField, document);
-        return document;
-    }
-
-    public Document write(List<XmlField> xmlFields) throws AtlasException {
-        if (xmlFields == null || xmlFields.isEmpty()) {
-            throw new AtlasException(new IllegalArgumentException("Argument 'xmlFields' cannot be null nor empty"));
-        }
-        Document document = createDocument();
-        write(xmlFields, document);
-        return document;
-    }
-
-    public void write(XmlField xmlField, Document document) throws AtlasException {
-        if (xmlField == null) {
-            throw new AtlasException(new IllegalArgumentException("Argument 'xmlField' cannot be null nor empty"));
-        }
-        if (document == null) {
-            throw new AtlasException(new IllegalArgumentException("Argument 'document' cannot be null nor empty"));
-        }
-
+        this.document = createDocument(namespaces, seedDocument);
         //check to see if the seed document has namespaces
         seedDocumentNamespaces(document);
-        doWrite(xmlField, document);
+    }
+    
+    public void write(List<XmlField> fields) throws AtlasException {
+    	if (fields == null) {
+    		throw new AtlasException(new IllegalArgumentException("Argument 'fields' cannot be null"));
+    	}
+    	for (XmlField f: fields) {
+    		write(f);
+    	}
     }
 
-    public void write(List<XmlField> xmlFields, Document document) throws AtlasException {
-        if (xmlFields == null || xmlFields.isEmpty()) {
-            throw new AtlasException(new IllegalArgumentException("Argument 'xmlFields' cannot be null nor empty"));
+    public void write(XmlField field) throws AtlasException {
+        if (field == null) {
+            throw new AtlasException(new IllegalArgumentException("Argument 'field' cannot be null"));
         }
-        if (document == null) {
-            throw new AtlasException(new IllegalArgumentException("Argument 'document' cannot be null nor empty"));
-        }
-
-        //check to see if the seed document has namespaces
-        seedDocumentNamespaces(document);
-        xmlFields.stream().filter(Objects::nonNull).forEach(xmlField -> doWrite(xmlField, document));
+        
+        if (logger.isDebugEnabled()) {    		
+    		logger.debug("Now processing field: " + field.getName());
+    		logger.debug("Field type: " + field.getFieldType());
+    		logger.debug("Field path: " + field.getPath());
+    		logger.debug("Field value: " + field.getValue());    		
+    	}
+        
+        PathUtil path = new PathUtil(field.getPath());
+    	String lastSegment = path.getLastSegment();
+    	Element parentNode = null;
+    	String parentSegment = null;
+    	for (String segment : path.getSegments()) {
+    		if (logger.isDebugEnabled()) {
+    			logger.debug("Now processing segment: " + segment);
+    			logger.debug("Parent element is currently: " + writeDocumentToString(true, parentNode));
+    		}
+    		if (parentNode == null) {
+    			//processing root node
+    			parentNode = document.getDocumentElement();
+    			String cleanedSegment = PathUtil.cleanPathSegment(segment);
+    			if (parentNode == null) {
+    				if (logger.isDebugEnabled()) {
+    					logger.debug("Creating root element with name: " + cleanedSegment);
+    				}
+    				//no root node exists yet, create root node with this segment name;
+    				Element rootNode = createElement(segment);
+    				addNamespacesToElement(rootNode, namespaces);
+    				document.appendChild(rootNode);
+    				parentNode = rootNode;
+    			} else if (!(parentNode.getNodeName().equals(segment))) {
+        			//make sure root element's name matches.
+    				throw new AtlasException("Root element name '" + parentNode.getNodeName() 
+    					+ "' does not match expected name '" + segment + "' from path: " + field.getPath());
+    			}
+    			parentSegment = segment;
+    		} else {
+    			if (logger.isDebugEnabled()) {
+    				if (segment == lastSegment) {
+    					logger.debug("Now processing field value segment: " + segment);
+    				} else {
+    					logger.debug("Now processing parent segment: " + segment);
+    				}
+    			}
+    			
+    			if (!PathUtil.isAttributeSegment(segment)) {
+    				//if current segment of path isn't attribute, it refers to a child element, find it or create it..
+    				Element childNode = getChildNode(parentNode, parentSegment, segment);
+    				if (childNode == null) {
+    					childNode = createParentNode(parentNode, parentSegment, segment);    			
+    				}
+    				parentNode = childNode;
+    				parentSegment = segment;
+    			}
+    			
+    			if (segment == lastSegment) {
+					writeValue(parentNode, segment, field);
+				}
+    		}      		
+    	}    
     }
-
-    private void doWrite(XmlField xmlField, Document document) {
-        //given the xmlPath find/create the Document Node and update its value.
-        String xmlPath = xmlField.getPath();
-        String attr = null;
-        LinkedList<String> elements = getElementsInXmlPath(xmlPath);
-        XmlPathCoordinate attrXmlPathCoordinate = null;
-        //check the last, is it an attribute?
-        if (elements.getLast().contains("@")) {
-            attr = elements.getLast().replaceAll("@", "");
-            attrXmlPathCoordinate = createXmlPathCoordinates(Collections.singletonList(elements.getLast())).get(0);
-            //we no longer need this reference
-            elements.removeLast();
-        }
-        LinkedList<XmlPathCoordinate> xmlPathCoordinates = (LinkedList<XmlPathCoordinate>) createXmlPathCoordinates(elements);
-        // the first coordinate sets the 'root' node
-        XmlPathCoordinate root = xmlPathCoordinates.getFirst();
-        Node node;
-        NodeList nodes = document.getElementsByTagName(root.getElementName());
-        if (nodes == null || nodes.getLength() == 0) {
-            node = buildRootNode(document, root);
-        } else {
-            //should be the root
-            node = nodes.item(0);
-        }
-
-        for (XmlPathCoordinate xmlPathCoordinate : xmlPathCoordinates.subList(1, xmlPathCoordinates.size())) {
-            Node childNode = getChildNodeForWrite(node, xmlPathCoordinate);
-            if (childNode == null && !xmlPathCoordinate.getElementName().contains("@")) {
-                childNode = createNamespaceAwareElement(xmlPathCoordinate, document);
-                if (node != null) {
-                    node.appendChild(childNode);
-                }
-            }
-            node = childNode;
-        }
-
-        if (node != null) {
-            if (attr != null) {
-                //does the attr have a namespace?
-                if (attrXmlPathCoordinate != null && attrXmlPathCoordinate.getNamespace() != null) {
-                    Map.Entry<String, String> namespace = attrXmlPathCoordinate.getNamespace().entrySet().iterator().next();
-                    //check for default namespace
-                    if (!namespace.getValue().isEmpty()) {
-                        ((Element) node).setAttributeNS(namespace.getKey(), attr, String.valueOf(xmlField.getValue()));
-                    } else {
-                        ((Element) node).setAttribute(attr, String.valueOf(xmlField.getValue()));
-                    }
-                } else {
-                    ((Element) node).setAttribute(attr, String.valueOf(xmlField.getValue()));
-                }
-            } else {
-                Text nodeVal = document.createTextNode(String.valueOf(xmlField.getValue()));
-                node.appendChild(nodeVal);
-            }
-        }
+    
+    public static void addNamespacesToElement(Element node, Map<String,String> namespaces) {
+    	for (String namespaceAlias : namespaces.keySet()) {
+			String namespaceUri = namespaces.get(namespaceAlias);
+			String attributeName = "xmlns";
+			if (namespaceAlias != null && !namespaceAlias.equals("")) {
+				attributeName += ":" + namespaceAlias;
+			}
+			node.setAttributeNS("http://www.w3.org/2000/xmlns/", attributeName, namespaceUri);
+		}
     }
-
-    private Node buildRootNode(Document document, XmlPathCoordinate xmlPathCoordinate) {
-        Node node;
-        if (namespaces != null && !namespaces.isEmpty()) {
-            node = createNamespaceAwareElement(xmlPathCoordinate, document);
-            addRootNodeNamespaces((Element) node);
-        } else {
-            node = document.createElement(xmlPathCoordinate.getElementName());
-        }
-        document.appendChild(node);
-        return node;
+    
+    public void writeValue(Element parentNode, String segment, XmlField field) throws AtlasException {
+    	if (logger.isDebugEnabled()) {
+    		logger.debug("Writing field value in parent node '" + segment + "', parentNode: " + writeDocumentToString(true, parentNode));
+    	}    	    	
+    	String value = convertValue(field);
+    	if (PathUtil.isAttributeSegment(segment)) {
+    		String cleanedSegment = PathUtil.cleanPathSegment(segment);
+    		if (this.enableAttributeNamespaces) {  
+    			if (logger.isDebugEnabled()) {
+    				logger.debug("Attribute namespaces are enabled, determining namespace.");
+    			}
+    	    	String namespaceAlias = null;
+    	    	String namespaceUri = null;
+    	    	if (PathUtil.isNamespaceSegment(segment)) {
+    	    		namespaceAlias = PathUtil.getNamespace(segment);
+    	    		namespaceUri = this.namespaces.get(namespaceAlias);    		
+    	    		logger.debug("Parsed namespace alias '" + namespaceAlias + "', from segment '" + segment + "', namespaceUri: " + namespaceUri);
+    	    	}
+    			if (!this.ignoreMissingNamespaces && namespaceUri == null) {
+    				throw new AtlasException("Cannot find namespace URI for attribute: '" + segment + "', available namespaces: " + this.namespaces);
+    			}        		
+    			if (namespaceUri != null) {
+    				parentNode.setAttributeNS(namespaceUri, namespaceAlias + ":" + cleanedSegment, value);
+    			} else {
+    				parentNode.setAttribute(cleanedSegment, value);
+    			}
+    		} else {
+    			parentNode.setAttribute(cleanedSegment, value);
+    		}
+    	} else { //set element value
+    		parentNode.setTextContent(value);    		    		
+    	}		
+		
+		if (logger.isDebugEnabled()) {
+			logger.debug("Parent node after value written: " + writeDocumentToString(true, parentNode));
+		}
     }
-
-    private void addRootNodeNamespaces(Element element) {
-        for (Map.Entry<String, String> entry : namespaces.entrySet()) {
-            if (!entry.getValue().isEmpty()) {
-                element.setAttributeNS("http://www.w3.org/2000/xmlns/",
-                    "xmlns:".concat(entry.getValue()), entry.getKey());
-            }
-        }
+    
+    public Element getChildNode(Element parentNode, String parentSegment, String segment) throws AtlasException {
+    	if (logger.isDebugEnabled()) {
+    		logger.debug("Looking for child node '" + segment + "' in parent '" + parentSegment + "': " + writeDocumentToString(true, parentNode));
+    	}
+    	if (parentNode == null) {
+    		return null;
+    	}
+    	String cleanedSegment = PathUtil.cleanPathSegment(segment);
+    	String namespaceAlias = PathUtil.getNamespace(segment);
+    	if (namespaceAlias != null && !"".equals(namespaceAlias)) {
+    		cleanedSegment = namespaceAlias + ":" + cleanedSegment;
+    	}
+    	List<Element> children = getChildrenWithName(cleanedSegment, parentNode);
+    	if (logger.isDebugEnabled()) {
+    		logger.debug("Found " + children.size() + " children in '" + parentSegment + "' with the name '" + cleanedSegment + "'.");
+    	}
+    	Element childNode = children.size() > 0 ? children.get(0) : null;
+    	if (children.size() > 0 && PathUtil.isCollectionSegment(segment)) {
+    		int index = PathUtil.indexOfSegment(segment);
+    		childNode = null;
+    		if (children.size() > index) {
+    			childNode = children.get(index);
+    		}
+    	}
+    	if (logger.isDebugEnabled()) {
+    		if (childNode == null) {
+    			logger.debug("Could not find child node '" + segment + "' in parent '" + parentSegment + "'.");	
+    		} else {
+    			logger.debug("Found child node '" + segment + "' in parent '" + parentSegment 
+    					+ "', class: " + childNode.getClass().getName() + ", node: " + writeDocumentToString(true, childNode));
+    		}    		
+    	}
+    	return childNode;
     }
-
-    private Node getChildNodeForWrite(final Node node, final XmlPathCoordinate xmlPathCoordinate) {
-        if (!node.hasChildNodes()) {
-            return null;
-        }
-        NodeList nodeList;
-        if (xmlPathCoordinate.getNamespace() != null) {
-            String namespaceURI = xmlPathCoordinate.getNamespace().entrySet().iterator().next().getKey();
-            String elementName = xmlPathCoordinate.getElementName();
-            elementName = elementName.substring(elementName.indexOf(":") + 1, elementName.length());
-            nodeList = ((Element) node).getElementsByTagNameNS(namespaceURI, elementName);
-        } else {
-            nodeList = ((Element) node).getElementsByTagName(xmlPathCoordinate.getElementName());
-        }
-        if (nodeList != null) {
-            return nodeList.item(xmlPathCoordinate.getIndex());
-        }
-        return null;
+    
+    public Element createParentNode(Element parentNode, String parentSegment, String segment) throws AtlasException {
+    	if (logger.isDebugEnabled()) {
+    		logger.debug("Creating parent node '" + segment + "' under previous parent '" + parentSegment + "'.");
+    	}
+    	Element childNode = null;
+    	String cleanedSegment = PathUtil.cleanPathSegment(segment);
+		if (PathUtil.isCollectionSegment(segment)) {
+			int index = PathUtil.indexOfSegment(segment);
+			String namespaceAlias = PathUtil.getNamespace(segment);
+			if (namespaceAlias != null && !"".equals(namespaceAlias)) {
+	    		cleanedSegment = namespaceAlias + ":" + cleanedSegment;
+	    	}
+			
+			List<Element> children = getChildrenWithName(cleanedSegment, parentNode);
+			
+			if (children.size() < (index + 1)) {
+				if (logger.isDebugEnabled()) {
+					logger.debug("Child Element Array is too small, resizing to accomodate index: " + index + ", current array: " + children);
+				}
+				//if our array doesn't have index + 1 items in it, add objects until we have the index available
+				while (children.size() < (index + 1)) {
+					Element child = (Element) parentNode.appendChild(createElement(segment));
+					children.add(child);
+				}
+				if (logger.isDebugEnabled()) {
+					logger.debug("Child Element Array after resizing: " + children);
+				}
+			}
+			children = getChildrenWithName(cleanedSegment, parentNode);
+			childNode = (Element) children.get(index);			
+		} else {
+			childNode = (Element) parentNode.appendChild(createElement(segment));
+		}
+		if (logger.isDebugEnabled()) {
+			logger.debug("Parent Node '" + parentSegment + "' after adding child parent node '" + segment + "':" + writeDocumentToString(true, parentNode));
+		}
+		return childNode;
     }
+    
+    public Element createElement(String segment) throws AtlasException { 
+    	String cleanedSegment = PathUtil.cleanPathSegment(segment);
+    	if (logger.isDebugEnabled()) {
+			logger.debug("Creating element for segment '" + segment + "'.");
+		}
+    	if (this.enableElementNamespaces) {
+    		if (logger.isDebugEnabled()) {
+				logger.debug("Element namespaces are enabled, determining namespace.");
+			}
+    		String namespaceAlias = null;
+        	String namespaceUri = null;
+        	if (PathUtil.isNamespaceSegment(segment)) {
+        		namespaceAlias = PathUtil.getNamespace(segment);
+        		namespaceUri = this.namespaces.get(namespaceAlias);    		
+        		logger.debug("Parsed namespace alias '" + namespaceAlias + "', from segment '" + segment 
+        				+ "', namespaceUri: " + namespaceUri + ", known namespaces: " + this.namespaces);
+        	}
+			if (!this.ignoreMissingNamespaces && namespaceUri == null) {
+				throw new AtlasException("Cannot find namespace URI for element: '" + segment + "', available namespaces: " + this.namespaces);
+			}
+			if (namespaceUri != null) {
+				return document.createElementNS(namespaceUri, namespaceAlias + ":" + cleanedSegment);
+			}
+		}
+    	return document.createElement(cleanedSegment);
+    }
+    
+    public List<Element> getChildrenWithName(String name, Element parentNode) {
+    	List<Element> children = new LinkedList<>();
+    	if (parentNode == null) {
+    		return children;
+    	}
+    	NodeList nodeChildren = parentNode.getChildNodes();
+		for (int i = 0; i < nodeChildren.getLength(); i++) {
+			Node child = nodeChildren.item(i);
+			if ((child instanceof Element) && child.getNodeName().equals(name)) {
+				children.add((Element)child);
+			}
+		}
+    	return children;
+    }
+    
+    public String convertValue(XmlField field) throws AtlasException {
+    	FieldType type = field.getFieldType();
+    	Object originalValue = field.getValue();
+    	String value = originalValue != null ? String.valueOf(originalValue) : null;            	
+    	if (logger.isDebugEnabled()) {
+    		String valueClass = originalValue == null ? "null" : originalValue.getClass().getName();
+    		logger.debug("Converted field value. Type: " + type 
+    				+ ", originalValue: " + originalValue + "(" + valueClass 
+    				+ "), to: '" + value + "'.");
+    	}
+    	return value;
+    } 
 
-    private Document createDocument() throws AtlasException {
-        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-        if (namespaces != null && !namespaces.isEmpty()) {
-            documentBuilderFactory.setNamespaceAware(true);
-        }
-        Document document;
+    private static Document createDocument(Map<String,String> namespaces, String seedDocument) throws AtlasException {
         try {
+            DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+            if (namespaces != null && !namespaces.isEmpty()) {
+                documentBuilderFactory.setNamespaceAware(true);
+            }
             DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
-            document = documentBuilder.newDocument();
-        } catch (ParserConfigurationException e) {
-            throw new AtlasException(e);
-        }
-        return document;
-    }
+            if (seedDocument != null) {
+            	Document document =  documentBuilder.parse(new ByteArrayInputStream(seedDocument.getBytes("UTF-8")));
+            	            	
+            	Element rootNode = document.getDocumentElement();
 
-    private Node createNamespaceAwareElement(final XmlPathCoordinate xmlPathCoordinate, final Document document) {
-        if (xmlPathCoordinate.getNamespace() == null || xmlPathCoordinate.getNamespace().isEmpty()) {
-            return document.createElement(xmlPathCoordinate.getElementName());
-        }
-        Map<String, String> elementNs = xmlPathCoordinate.getNamespace();
-        Map.Entry<String, String> ns = elementNs.entrySet().iterator().next(); //should really only be one here
-        return document.createElementNS(ns.getKey(), xmlPathCoordinate.getElementName());
+            	//extract namespaces from seed document
+            	NamedNodeMap attributes = rootNode.getAttributes();
+            	if (attributes != null) {
+            		for (int i = 0; i < attributes.getLength(); i++) {
+            			Node n = attributes.item(i);
+            			String nodeName = n.getNodeName();
+            			if (nodeName != null && nodeName.startsWith("xmlns")) {
+            				String namespaceAlias = "";
+            				if (nodeName.contains(":")) {
+            					namespaceAlias = nodeName.substring(nodeName.indexOf(":") + 1);	
+            				}            		
+            				if (!namespaces.containsKey(namespaceAlias)) {
+            					namespaces.put(namespaceAlias, n.getNodeValue());
+            				}
+            			}
+            		}
+            	}
+            	
+        		//rewrite root element to contain user-specified namespaces
+            	if (namespaces.size() > 0) {
+            		Element oldRootNode = rootNode;
+            		rootNode = (Element) oldRootNode.cloneNode(true);
+            		addNamespacesToElement(rootNode, namespaces);
+            		document.removeChild(oldRootNode);
+            		document.appendChild(rootNode);
+            	}
+            	
+            	return document;
+            }
+            return documentBuilder.newDocument();
+        } catch (Exception e) {
+            throw new AtlasException(e);
+        }        
+    }    
+    
+    public static String writeDocumentToString(boolean stripSpaces, Node node) throws AtlasException {
+    	try {
+    		if (node == null) {
+    			return "";
+    		}
+	    	TransformerFactory tf = TransformerFactory.newInstance();
+	    	Transformer transformer = tf.newTransformer();
+	    	transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+	    	StringWriter writer = new StringWriter();
+	    	transformer.transform(new DOMSource(node), new StreamResult(writer));
+	    	
+	    	String result = writer.getBuffer().toString();
+	    	if (stripSpaces) {
+	    		result = result.replaceAll("\n|\r", ""); 
+	    		result = result.replaceAll("> *?<", "><");
+	    	}
+	    	return result;
+    	} catch (Exception e) {
+    		throw new AtlasException(e);
+    	}
     }
+    
+    public Document getDocument() {
+		return document;
+	}
+
+	public boolean isEnableElementNamespaces() {
+		return enableElementNamespaces;
+	}
+
+	public void setEnableElementNamespaces(boolean enableElementNamespaces) {
+		this.enableElementNamespaces = enableElementNamespaces;
+	}
+
+	public boolean isEnableAttributeNamespaces() {
+		return enableAttributeNamespaces;
+	}
+
+	public void setEnableAttributeNamespaces(boolean enableAttributeNamespaces) {
+		this.enableAttributeNamespaces = enableAttributeNamespaces;
+	}
+
+	public boolean isIgnoreMissingNamespaces() {
+		return ignoreMissingNamespaces;
+	}
+
+	public void setIgnoreMissingNamespaces(boolean ignoreMissingNamespaces) {
+		this.ignoreMissingNamespaces = ignoreMissingNamespaces;
+	}        
 }

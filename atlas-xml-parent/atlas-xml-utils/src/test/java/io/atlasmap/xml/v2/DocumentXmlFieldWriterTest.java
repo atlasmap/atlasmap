@@ -1,520 +1,265 @@
 package io.atlasmap.xml.v2;
 
-import io.atlasmap.api.AtlasException;
-import org.junit.Test;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.xmlunit.builder.DiffBuilder;
-import org.xmlunit.builder.Input;
-import org.xmlunit.diff.Diff;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.ByteArrayInputStream;
-import java.io.FileInputStream;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
+import org.junit.Before;
+import org.junit.Test;
+import org.w3c.dom.Document;
+
+import io.atlasmap.api.AtlasException;
 
 /**
  */
 public class DocumentXmlFieldWriterTest {
 
-    private DocumentXmlFieldWriter writer = new DocumentXmlFieldWriter();
+    private DocumentXmlFieldWriter writer = null;
 
-
-    @Test
-    public void testWriteValueToDefaultDocument() throws Exception {
-        final String control = "<orders><order><id>3333333354</id></order></orders>";
-        XmlField xmlField = AtlasXmlModelFactory.createXmlField();
-        xmlField.setPath("/orders/order/id");
-        xmlField.setValue("3333333354");
-        Document document = writer.write(xmlField);
-        assertNotNull(document);
-        Diff diff = DiffBuilder.compare(Input.fromString(control)).withTest(Input.fromDocument(document)).build();
-        assertFalse(diff.toString(), diff.hasDifferences());
+    private Document document = null;
+    private String seedDocument = null;
+    private Map<String,String> namespaces = new HashMap<>();
+    
+    @Before
+    public void setup() throws Exception {
+    	this.writer = null;
+    	this.document = null;
+    	this.seedDocument = null;
+    	this.namespaces = new HashMap<>();    			    	
+    }
+    
+    public void createWriter() throws Exception {
+    	writer = new DocumentXmlFieldWriter(namespaces, seedDocument);
+    	this.document = writer.getDocument();
+    	assertNotNull(document);
+    }
+        
+    public void writeValue(String path, String value) throws Exception {
+    	if (writer == null) {
+    		createWriter();
+    	}
+    	XmlField xmlField = AtlasXmlModelFactory.createXmlField();
+        xmlField.setPath(path);
+        xmlField.setValue(value);
+        writer.write(xmlField);
     }
 
     @Test
-    public void testWriteValueFromListToDefaultDocument() throws Exception {
-        final String control = "<orders><order><id>3333333354</id></order></orders>";
-        XmlField xmlField = AtlasXmlModelFactory.createXmlField();
-        xmlField.setPath("/orders/order/id");
-        xmlField.setValue("3333333354");
-        Document document = writer.write(Collections.singletonList(xmlField));
-        assertNotNull(document);
-        Diff diff = DiffBuilder.compare(Input.fromString(control)).withTest(Input.fromDocument(document)).build();
-        assertFalse(diff.toString(), diff.hasDifferences());
+    public void testWriteValueToDefaultDocument() throws Exception {        
+        writeValue("/orders/order/id", "3333333354");
+        final String expected = "<orders><order><id>3333333354</id></order></orders>";
+        checkResult(expected);
     }
 
     @Test
-    public void testWriteValueToAttributeWithDefaultDocument() throws Exception {
-        final String control = "<orders><order><id custId=\"b\"/></order></orders>";
-        XmlField xmlField = AtlasXmlModelFactory.createXmlField();
-        xmlField.setPath("/orders/order/id/@custId");
-        xmlField.setValue("b");
-        Document document = writer.write(xmlField);
-        assertNotNull(document);
-        Diff diff = DiffBuilder.compare(Input.fromString(control)).withTest(Input.fromDocument(document)).build();
-        assertFalse(diff.toString(), diff.hasDifferences());
-    }
+    public void testWriteValueToAttributeWithDefaultDocument() throws Exception {        
+        writeValue("/orders/order/id/@custId", "b");
+        final String expected = "<orders><order><id custId=\"b\"/></order></orders>";
+        checkResult(expected);
+    }    
 
     @Test
     public void testWriteValueWithSeedDocument() throws Exception {
-        final String control = "<orders><order><id custId=\"b\">3333333354</id></order></orders>";
-        final String seedDocument = "<orders/>";
-        DocumentBuilder b = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-        Document document = b.parse(new ByteArrayInputStream(seedDocument.getBytes("UTF-8")));
-        XmlField xmlField1 = AtlasXmlModelFactory.createXmlField();
-        xmlField1.setPath("/orders/order/id/@custId");
-        xmlField1.setValue("b");
+    	seedDocument = "<orders/>";
+        
+        writeValue("/orders/order/id/@custId", "b");
+        writeValue("/orders/order/id", "3333333354");
 
-        XmlField xmlField2 = AtlasXmlModelFactory.createXmlField();
-        xmlField2.setPath("/orders/order/id");
-        xmlField2.setValue("3333333354");
-
-        writer.write(Arrays.asList(xmlField1, xmlField2), document);
-        assertNotNull(document);
-
-        Diff diff = DiffBuilder.compare(Input.fromString(control)).withTest(Input.fromDocument(document)).build();
-        assertFalse(diff.toString(), diff.hasDifferences());
+        final String expected = "<orders><order><id custId=\"b\">3333333354</id></order></orders>";
+        checkResult(expected);
     }
 
     @Test
-    public void testWriteValueWithSeedDocumentWithNamespaces() throws Exception {
-        final String control = "<orders xmlns:x=\"http://www.example.com/x/\"><order><x:id custId=\"b\">3333333354</x:id></order></orders>";
-        final String seedDocument = "<orders xmlns:x=\"http://www.example.com/x/\"/>";
+    public void testWriteValueWithSeedDocumentWithNamespaces() throws Exception {        
+        seedDocument = "<orders xmlns:x=\"http://www.example.com/x/\"/>";
+        
+        writeValue("/orders/order/x:id/@custId", "b");
+        writeValue("/orders/order/x:id", "3333333354");
 
-        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-        documentBuilderFactory.setNamespaceAware(true);
-        DocumentBuilder b = documentBuilderFactory.newDocumentBuilder();
-        Document document = b.parse(new ByteArrayInputStream(seedDocument.getBytes("UTF-8")));
-
-        XmlField xmlField1 = AtlasXmlModelFactory.createXmlField();
-        xmlField1.setPath("/orders/order/x:id/@custId");
-        xmlField1.setValue("b");
-
-        XmlField xmlField2 = AtlasXmlModelFactory.createXmlField();
-        xmlField2.setPath("/orders/order/x:id");
-        xmlField2.setValue("3333333354");
-
-        writer.write(Arrays.asList(xmlField1, xmlField2), document);
-        assertNotNull(document);
-
-        Diff diff = DiffBuilder.compare(Input.fromString(control)).withTest(Input.fromDocument(document)).build();
-        assertFalse(diff.toString(), diff.hasDifferences());
+        final String expected = "<orders xmlns:x=\"http://www.example.com/x/\"><order><x:id custId=\"b\">3333333354</x:id></order></orders>";
+        checkResult(expected);
     }
 
     @Test
-    public void testWriteValueWithSeedDocumentWithDefaultNamespace() throws Exception {
-        final String control = "<orders xmlns=\"http://www.example.com/x/\"><order><id custId=\"b\">3333333354</id></order></orders>";
-        final String seedDocument = "<orders xmlns=\"http://www.example.com/x/\"/>";
+    public void testWriteValueWithSeedDocumentWithDefaultNamespace() throws Exception {        
+        seedDocument = "<orders xmlns=\"http://www.example.com/x/\"/>";
+        
+        writeValue("/orders/order/id/@custId", "b");
+        writeValue("/orders/order/id", "3333333354");
 
-        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-        documentBuilderFactory.setNamespaceAware(true);
-        DocumentBuilder b = documentBuilderFactory.newDocumentBuilder();
-        Document document = b.parse(new ByteArrayInputStream(seedDocument.getBytes("UTF-8")));
-
-        XmlField xmlField1 = AtlasXmlModelFactory.createXmlField();
-        xmlField1.setPath("/orders/order/id/@custId");
-        xmlField1.setValue("b");
-
-        XmlField xmlField2 = AtlasXmlModelFactory.createXmlField();
-        xmlField2.setPath("/orders/order/id");
-        xmlField2.setValue("3333333354");
-
-        writer.write(Arrays.asList(xmlField1, xmlField2), document);
-        assertNotNull(document);
-
-        Diff diff = DiffBuilder.compare(Input.fromString(control)).withTest(Input.fromDocument(document)).build();
-        assertFalse(diff.toString(), diff.hasDifferences());
+        final String expected = "<orders xmlns=\"http://www.example.com/x/\"><order><id custId=\"b\">3333333354</id></order></orders>";
+        checkResult(expected);
     }
 
     @Test
-    public void testWriteValueWithSeedDocumentWithNamespacesAddNamespace() throws Exception {
-        final String control = "<orders xmlns:x=\"http://www.example.com/x/\" xmlns:y=\"http://www.example.com/y/\"><y:order><x:id custId=\"b\">3333333354</x:id></y:order></orders>";
-        final String seedDocument = "<orders xmlns:x=\"http://www.example.com/x/\"/>";
-
-        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-        documentBuilderFactory.setNamespaceAware(true);
-        DocumentBuilder b = documentBuilderFactory.newDocumentBuilder();
-        Document document = b.parse(new ByteArrayInputStream(seedDocument.getBytes("UTF-8")));
-
-        XmlField xmlField1 = AtlasXmlModelFactory.createXmlField();
-        xmlField1.setPath("/orders/y:order/x:id/@custId");
-        xmlField1.setValue("b");
-
-        XmlField xmlField2 = AtlasXmlModelFactory.createXmlField();
-        xmlField2.setPath("/orders/y:order/x:id");
-        xmlField2.setValue("3333333354");
-
-        Map<String, String> ns = new LinkedHashMap<>();
-        ns.put("http://www.example.com/y/", "y");
-        writer.setNamespaces(ns);
-
-        writer.write(Arrays.asList(xmlField1, xmlField2), document);
-        assertNotNull(document);
-
-        Diff diff = DiffBuilder.compare(Input.fromString(control)).withTest(Input.fromDocument(document)).build();
-        assertFalse(diff.toString(), diff.hasDifferences());
+    public void testWriteValueWithSeedDocumentWithNamespacesAddNamespace() throws Exception {        
+        seedDocument = "<orders xmlns:x=\"http://www.example.com/x/\"><x:order foo=\"bar\">preexisting</x:order></orders>";        
+        namespaces.put("y", "http://www.example.com/y/");
+        
+        writeValue("/orders/y:order/x:id/@custId", "b");
+        writeValue("/orders/y:order/x:id", "3333333354");
+        
+        final String expected = "<orders xmlns:x=\"http://www.example.com/x/\" xmlns:y=\"http://www.example.com/y/\"><x:order foo=\"bar\">preexisting</x:order><y:order><x:id custId=\"b\">3333333354</x:id></y:order></orders>";
+        checkResult(expected);
     }
-
+       
     @Test
     public void testWriteValueToDefaultDocumentComplex() throws Exception {
-        DocumentBuilder b = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-        Document document = b.parse(new FileInputStream("src/test/resources/complex_example_write.xml"));
-        assertNotNull(document);
-
-        XmlField xmlField = AtlasXmlModelFactory.createXmlField();
-        xmlField.setPath("/orders/order[2]/id[2]");
-        xmlField.setValue("54554555");
-        writer.write(xmlField, document);
-
-        Diff diff = DiffBuilder.compare(Input.fromStream(new FileInputStream("src/test/resources/complex_example.xml"))).withTest(Input.fromDocument(document)).build();
-        assertFalse(diff.toString(), diff.hasDifferences());
+    	this.seedDocument = new String(Files.readAllBytes(Paths.get("src/test/resources/complex_example_write.xml")));
+        
+        writeValue("/orders/order[2]/id[2]", "54554555");
+        
+        checkResultFromFile("complex_example.xml");	
     }
 
     @Test
     public void testWriteNewNodeWithAttrToDocumentComplex() throws Exception {
-        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-        documentBuilderFactory.setNamespaceAware(true);
+    	this.seedDocument = new String(Files.readAllBytes(Paths.get("src/test/resources/complex_example_write_attr.xml")));
+        
+        writeValue("/orders/order[2]/id[2]", "54554555");
+        writeValue("/orders/order[2]/id[2]/@custId", "c");
 
-        DocumentBuilder b = documentBuilderFactory.newDocumentBuilder();
-        Document document = b.parse(new FileInputStream("src/test/resources/complex_example_write_attr.xml"));
-        assertNotNull(document);
-
-        XmlField xmlField = AtlasXmlModelFactory.createXmlField();
-        xmlField.setPath("/orders/order[2]/id[2]");
-        xmlField.setValue("54554555");
-        writer.write(xmlField, document);
-        xmlField.setPath("/orders/order[2]/id[2]/@custId");
-        xmlField.setValue("c");
-        writer.write(xmlField, document);
-
-        Diff diff = DiffBuilder.compare(Input.fromStream(new FileInputStream("src/test/resources/complex_example.xml"))).withTest(Input.fromDocument(document)).ignoreWhitespace().build();
-        assertFalse(diff.toString(), diff.hasDifferences());
+        checkResultFromFile("complex_example.xml");
     }
 
     @Test
-    public void testBuildSimpleExampleDocument() throws Exception {
-        List<XmlField> fields = new LinkedList<>();
+    public void testBuildSimpleExampleDocument() throws Exception {        
+        writeValue("/orders/@totalCost", "12525.00");
+        writeValue("/orders/order/id/@custId", "a");
+        writeValue("/orders/order/id", "12312");
+        writeValue("/orders/order/id[1]/@custId", "b");
+        writeValue("/orders/order/id[1]", "4423423");        
 
-        XmlField xmlField = AtlasXmlModelFactory.createXmlField();
-        xmlField.setPath("/orders/@totalCost");
-        xmlField.setValue("12525.00");
-        fields.add(xmlField);
-
-        xmlField = AtlasXmlModelFactory.createXmlField();
-        xmlField.setPath("/orders/order/id/@custId");
-        xmlField.setValue("a");
-        fields.add(xmlField);
-
-        xmlField = AtlasXmlModelFactory.createXmlField();
-        xmlField.setPath("/orders/order/id");
-        xmlField.setValue("12312");
-        fields.add(xmlField);
-
-        xmlField = AtlasXmlModelFactory.createXmlField();
-        xmlField.setPath("/orders/order/id[1]/@custId");
-        xmlField.setValue("b");
-        fields.add(xmlField);
-
-        xmlField = AtlasXmlModelFactory.createXmlField();
-        xmlField.setPath("/orders/order/id[1]");
-        xmlField.setValue("4423423");
-        fields.add(xmlField);
-
-        DocumentBuilder b = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-        Document document = b.newDocument();
-        assertNotNull(document);
-
-        writer.write(fields, document);
-
-        Diff diff = DiffBuilder.compare(Input.fromStream(new FileInputStream("src/test/resources/simple_example.xml"))).withTest(Input.fromDocument(document)).ignoreWhitespace().build();
+        checkResultFromFile("simple_example.xml");
+    }
+    
+    public void checkResultFromFile(String expectedFilename) throws Exception {    	
+    	String filename = "src/test/resources/" + expectedFilename;
+    	String expected = new String(Files.readAllBytes(Paths.get(filename)));
+    	checkResult(expected);
+    }        
+    
+    public void checkResult(String expected) throws Exception {
+    	if (document == null) {
+    		throw new Exception("document is not initialized.");
+    	}
+    	/*
+    	Diff diff = DiffBuilder.compare(Input.fromString(expected)).withTest(Input.fromDocument(document)).ignoreWhitespace().build();
         assertFalse(diff.toString(), diff.hasDifferences());
+        */
+    	String actual = DocumentXmlFieldWriter.writeDocumentToString(true, writer.getDocument());    	
+    	expected = expected.replaceAll("\n|\r", "");
+    	expected = expected.replaceAll("> *?<", "><");
+    	expected = expected.replace("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>", "");
+    	
+    	System.out.println("Expected: " + expected);
+    	System.out.println("Actual:   " + actual);
+    	assertEquals(expected, actual);
     }
 
     @Test
     public void testBuildSimpleExampleDocumentFromSeedWithNamespace() throws Exception {
-        List<XmlField> fields = new LinkedList<>();
-        XmlField xmlField = AtlasXmlModelFactory.createXmlField();
-        xmlField.setPath("/x:orders/@totalCost");
-        xmlField.setValue("12525.00");
-        fields.add(xmlField);
+        namespaces.put("x", "http://www.example.com/x/");
 
-        xmlField = AtlasXmlModelFactory.createXmlField();
-        xmlField.setPath("/x:orders/order/id/@custId");
-        xmlField.setValue("a");
-        fields.add(xmlField);
+        writeValue("/x:orders/@totalCost", "12525.00");
+        writeValue("/x:orders/order/id/@custId", "a");
+        writeValue("/x:orders/order/id", "12312");
+        writeValue("/x:orders/order/id[1]/@custId", "b");
+        writeValue("/x:orders/order/id[1]", "4423423");
 
-        xmlField = AtlasXmlModelFactory.createXmlField();
-        xmlField.setPath("/x:orders/order/id");
-        xmlField.setValue("12312");
-        fields.add(xmlField);
-
-        xmlField = AtlasXmlModelFactory.createXmlField();
-        xmlField.setPath("/x:orders/order/id[1]/@custId");
-        xmlField.setValue("b");
-        fields.add(xmlField);
-
-        xmlField = AtlasXmlModelFactory.createXmlField();
-        xmlField.setPath("/x:orders/order/id[1]");
-        xmlField.setValue("4423423");
-        fields.add(xmlField);
-
-        DocumentBuilder b = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-        Document document = b.newDocument();
-        Node root = document.createElementNS("http://www.example.com/x/", "x:orders");
-        document.appendChild(root);
-        assertNotNull(document);
-
-        writer.write(fields, document);
-
-        Diff diff = DiffBuilder.compare(Input.fromStream(new FileInputStream("src/test/resources/simple_example_single_ns.xml"))).withTest(Input.fromDocument(document)).ignoreWhitespace().build();
-        assertFalse(diff.toString(), diff.hasDifferences());
+        checkResultFromFile("simple_example_single_ns.xml");
     }
 
     @Test
     public void testBuildSimpleExampleDocumentWithMultipleNamespaces() throws Exception {
-        List<XmlField> fields = new LinkedList<>();
-        XmlField xmlField = AtlasXmlModelFactory.createXmlField();
-        xmlField.setPath("/x:orders/@totalCost");
-        xmlField.setValue("12525.00");
-        fields.add(xmlField);
+    	namespaces.put("x", "http://www.example.com/x/");
+    	namespaces.put("y", "http://www.example.com/y/");
+    	
+    	writeValue("/x:orders/@totalCost", "12525.00");
+        writeValue("/x:orders/order/y:id/@custId", "a");
+        writeValue("/x:orders/order/y:id", "12312");
+        writeValue("/x:orders/order/y:id[1]/@custId", "b");
+        writeValue("/x:orders/order/y:id[1]", "4423423");
 
-
-        xmlField = AtlasXmlModelFactory.createXmlField();
-        xmlField.setPath("/x:orders/order/y:id/@custId");
-        xmlField.setValue("a");
-        fields.add(xmlField);
-
-        xmlField = AtlasXmlModelFactory.createXmlField();
-        xmlField.setPath("/x:orders/order/y:id");
-        xmlField.setValue("12312");
-        fields.add(xmlField);
-
-        xmlField = AtlasXmlModelFactory.createXmlField();
-        xmlField.setPath("/x:orders/order/y:id[1]/@custId");
-        xmlField.setValue("b");
-        fields.add(xmlField);
-
-        xmlField = AtlasXmlModelFactory.createXmlField();
-        xmlField.setPath("/x:orders/order/y:id[1]");
-        xmlField.setValue("4423423");
-        fields.add(xmlField);
-
-
-        Map<String, String> ns = new LinkedHashMap<>();
-        ns.put("http://www.example.com/x/", "x");
-        ns.put("http://www.example.com/y/", "y");
-
-        writer.setNamespaces(ns);
-
-        Document document = writer.write(fields);
-
-        Diff diff = DiffBuilder.compare(Input.fromStream(new FileInputStream("src/test/resources/simple_example_multiple_ns.xml"))).withTest(Input.fromDocument(document)).ignoreWhitespace().build();
-        assertFalse(diff.toString(), diff.hasDifferences());
+        checkResultFromFile("simple_example_multiple_ns.xml");
     }
 
     @Test
-    public void testBuildSimpleExampleDocumentWithMultipleNamespacesConstructor() throws Exception {
-        List<XmlField> fields = new LinkedList<>();
-        XmlField xmlField = AtlasXmlModelFactory.createXmlField();
-        xmlField.setPath("/x:orders/@totalCost");
-        xmlField.setValue("12525.00");
-        fields.add(xmlField);
+    public void testBuildSimpleExampleDocumentWithMultipleNamespacesConstructor() throws Exception {   
+    	namespaces.put("x", "http://www.example.com/x/");
+    	namespaces.put("y", "http://www.example.com/y/");
 
-        xmlField = AtlasXmlModelFactory.createXmlField();
-        xmlField.setPath("/x:orders/order/y:id/@custId");
-        xmlField.setValue("a");
-        fields.add(xmlField);
+        writeValue("/x:orders/@totalCost", "12525.00");
+        writeValue("/x:orders/order/y:id/@custId", "a");
+        writeValue("/x:orders/order/y:id", "12312");
+        writeValue("/x:orders/order/y:id[1]/@custId", "b");
+        writeValue("/x:orders/order/y:id[1]", "4423423");
 
-        xmlField = AtlasXmlModelFactory.createXmlField();
-        xmlField.setPath("/x:orders/order/y:id");
-        xmlField.setValue("12312");
-        fields.add(xmlField);
-
-        xmlField = AtlasXmlModelFactory.createXmlField();
-        xmlField.setPath("/x:orders/order/y:id[1]/@custId");
-        xmlField.setValue("b");
-        fields.add(xmlField);
-
-        xmlField = AtlasXmlModelFactory.createXmlField();
-        xmlField.setPath("/x:orders/order/y:id[1]");
-        xmlField.setValue("4423423");
-        fields.add(xmlField);
-
-        Map<String, String> ns = new LinkedHashMap<>();
-        ns.put("http://www.example.com/x/", "x");
-        ns.put("http://www.example.com/y/", "y");
-
-        DocumentXmlFieldWriter writer = new DocumentXmlFieldWriter(ns);
-        Document document = writer.write(fields);
-        assertNotNull(document);
-
-        Diff diff = DiffBuilder.compare(Input.fromStream(new FileInputStream("src/test/resources/simple_example_multiple_ns.xml"))).withTest(Input.fromDocument(document)).ignoreWhitespace().build();
-        assertFalse(diff.toString(), diff.hasDifferences());
+        checkResultFromFile("simple_example_multiple_ns.xml");
     }
 
     @Test
     public void testBuildSimpleExampleDocumentWithNamespaceSingleFieldAndNS() throws Exception {
-        final String control = "<x:orders totalCost=\"12525.00\" xmlns:x=\"http://www.example.com/x/\"/>";
+    	namespaces.put("x", "http://www.example.com/x/");
+    	
+    	writeValue("/x:orders/@totalCost", "12525.00");
 
-        XmlField xmlField = AtlasXmlModelFactory.createXmlField();
-        xmlField.setPath("/x:orders/@totalCost");
-        xmlField.setValue("12525.00");
-        Map<String, String> ns = new LinkedHashMap<>();
-        ns.put("http://www.example.com/x/", "x");
-        writer.setNamespaces(ns);
-
-        Document document = writer.write(xmlField);
-        assertNotNull(document);
-        Diff diff = DiffBuilder.compare(Input.fromString(control)).withTest(Input.fromDocument(document)).build();
-        assertFalse(diff.toString(), diff.hasDifferences());
+    	final String expected = "<x:orders xmlns:x=\"http://www.example.com/x/\" totalCost=\"12525.00\"/>";
+        checkResult(expected);
     }
 
     @Test
     public void testBuildDocumentWithMixedParentAttributeNamespaces() throws Exception {
-        XmlField xmlField = AtlasXmlModelFactory.createXmlField();
-        xmlField.setPath("/orders/order/y:@totalCost");
-        xmlField.setValue("12525.00");
-
-        Map<String, String> ns = new LinkedHashMap<>();
-        ns.put("http://www.example.com/x", "");
-        ns.put("http://www.example.com/y", "y");
-
-        writer.setNamespaces(ns);
-        Document document = writer.write(xmlField);
-        assertNotNull(document);
-        Diff diff = DiffBuilder.compare(Input.fromStream(new FileInputStream("src/test/resources/simple_example_mixed_ns.xml")))
-            .withTest(Input.fromDocument(document)).checkForSimilar().ignoreWhitespace().build();
-
-        assertFalse(diff.toString(), diff.hasDifferences());
+    	namespaces.put("", "http://www.example.com/x/");
+    	namespaces.put("y", "http://www.example.com/y/");
+        
+        writeValue("/orders/order/@y:totalCost", "12525.00");
+        
+        checkResultFromFile("simple_example_mixed_ns.xml");
     }
 
     @Test
     public void testBuildComplexNamespaceDuplicateElements() throws Exception {
-        List<XmlField> fields = new LinkedList<>();
+    	namespaces.put("", "http://www.example.com/x/");
+    	namespaces.put("y", "http://www.example.com/y/");
+    	namespaces.put("q", "http://www.example.com/q/");
+        
+        writeValue("/orders/@totalCost", "12525.00");
+        writeValue("/orders/order/id", "a12312");
+        writeValue("/orders/order/id/@y:custId", "aa");        
+        writeValue("/orders/order/id[1]", "b4423423");
+        writeValue("/orders/order/id[1]/@y:custId", "bb");
+                
+        writeValue("/orders/q:order/id", "c12312");
+        writeValue("/orders/q:order/id/@y:custId", "cx");
+        
+        writeValue("/orders/order[1]/id", "d54554555");
+        writeValue("/orders/order[1]/id/@y:custId", "dc");
+        writeValue("/orders/q:order[1]/id", "e12312");
+        writeValue("/orders/q:order[1]/id/@y:custId", "ea");
 
-        XmlField xmlField = AtlasXmlModelFactory.createXmlField();
-        xmlField.setPath("/orders/@totalCost");
-        xmlField.setValue("12525.00");
-        fields.add(xmlField);
-
-        xmlField = AtlasXmlModelFactory.createXmlField();
-        xmlField.setPath("/orders/order/id");
-        xmlField.setValue("12312");
-        fields.add(xmlField);
-
-        xmlField = AtlasXmlModelFactory.createXmlField();
-        xmlField.setPath("/orders/order/id/y:@custId");
-        xmlField.setValue("a");
-        fields.add(xmlField);
-
-        xmlField = AtlasXmlModelFactory.createXmlField();
-        xmlField.setPath("/orders/order/id[1]");
-        xmlField.setValue("4423423");
-        fields.add(xmlField);
-
-        xmlField = AtlasXmlModelFactory.createXmlField();
-        xmlField.setPath("/orders/order/id[1]/y:@custId");
-        xmlField.setValue("b");
-        fields.add(xmlField);
-
-        xmlField = AtlasXmlModelFactory.createXmlField();
-        xmlField.setPath("/orders/q:order/id");
-        xmlField.setValue("12312");
-        fields.add(xmlField);
-
-        xmlField = AtlasXmlModelFactory.createXmlField();
-        xmlField.setPath("/orders/q:order/id/y:@custId");
-        xmlField.setValue("x");
-        fields.add(xmlField);
-
-        xmlField = AtlasXmlModelFactory.createXmlField();
-        xmlField.setPath("/orders/order[1]/id");
-        xmlField.setValue("54554555");
-        fields.add(xmlField);
-
-        xmlField = AtlasXmlModelFactory.createXmlField();
-        xmlField.setPath("/orders/order[1]/id/y:@custId");
-        xmlField.setValue("c");
-        fields.add(xmlField);
-
-        xmlField = AtlasXmlModelFactory.createXmlField();
-        xmlField.setPath("/orders/q:order[1]/id");
-        xmlField.setValue("12312");
-        fields.add(xmlField);
-
-        xmlField = AtlasXmlModelFactory.createXmlField();
-        xmlField.setPath("/orders/q:order[1]/id/y:@custId");
-        xmlField.setValue("a");
-        fields.add(xmlField);
-
-
-        Map<String, String> ns = new LinkedHashMap<>();
-        ns.put("http://www.example.com/x/", "");
-        ns.put("http://www.example.com/y/", "y");
-        ns.put("http://www.example.com/q/", "q");
-
-        writer.setNamespaces(ns);
-
-        Document document = writer.write(fields);
-        assertNotNull(document);
-
-        Diff diff = DiffBuilder.compare(Input.fromStream(new FileInputStream("src/test/resources/complex_example_multiple_ns.xml")))
-            .withTest(Input.fromDocument(document)).ignoreComments().ignoreWhitespace().build();
-
-        assertFalse(diff.toString(), diff.hasDifferences());
-    }
-
-    @Test(expected = AtlasException.class)
-    public void testThrowExceptionOnNullDocument() throws Exception {
-        writer.write(new XmlField(), null);
+        checkResultFromFile("complex_example_multiple_ns.xml");
     }
 
     @Test(expected = AtlasException.class)
     public void testThrowExceptionOnNullXmlField() throws Exception {
-        XmlField xmlField = null;
-        writer.write(xmlField);
-    }
-
-    @Test(expected = AtlasException.class)
-    public void testThrowExceptionOnNullXmlFieldWithDocument() throws Exception {
-        DocumentBuilder b = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-        Document document = b.newDocument();
-        XmlField xmlField = null;
-        writer.write(xmlField, document);
+    	createWriter();
+    	XmlField field = null;
+        writer.write(field);
     }
 
     @Test(expected = AtlasException.class)
     public void testThrowExceptionOnNullXmlFields() throws Exception {
+    	createWriter();
         List<XmlField> xmlFields = null;
         writer.write(xmlFields);
     }
-
-
-    @Test(expected = AtlasException.class)
-    public void testThrowExceptionWithNullListAndDocument() throws Exception {
-        DocumentBuilder b = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-        Document document = b.newDocument();
-        List<XmlField> xmlFields = null;
-        writer.write(xmlFields, document);
-    }
-
-    @Test(expected = AtlasException.class)
-    public void testThrowExceptionWithListAndNullDocument() throws Exception {
-        List<XmlField> xmlFields = new LinkedList<>();
-        xmlFields.add(new XmlField());
-        writer.write(xmlFields, null);
-    }
-
+    
     // --Commented out by Inspection START (5/3/17, 2:48 PM):
 //    private void writeDocument(Document document, OutputStream out) throws Exception {
 //        DOMSource source = new DOMSource(document.getDocumentElement());

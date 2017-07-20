@@ -38,7 +38,7 @@ public class DocumentXmlFieldReader extends XmlFieldTransformer {
         LinkedList<String> elements = getElementsInXmlPath(xmlPath);
         LinkedList<XmlPathCoordinate> xmlPathCoordinates = (LinkedList<XmlPathCoordinate>) createXmlPathCoordinates(elements);
         //is the last coordinate an attribute?
-        if (xmlPathCoordinates.getLast().getElementName().contains("@")) {
+        if (xmlPathCoordinates.getLast().getElementName().startsWith("@")) {
             attr = xmlPathCoordinates.getLast().getElementName().replace("@", "").trim();
             xmlPathCoordinates.removeLast();
         }
