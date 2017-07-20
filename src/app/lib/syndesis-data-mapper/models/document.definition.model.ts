@@ -120,6 +120,8 @@ export class DocumentDefinition {
     public showFields: boolean = true;
     public visibleInCurrentDocumentSearch: boolean = true;
     public namespaces: NamespaceModel[] = [];
+    public characterEncoding: string = null;
+    public locale: string = null;
 
     private static noneField: Field = null;
 

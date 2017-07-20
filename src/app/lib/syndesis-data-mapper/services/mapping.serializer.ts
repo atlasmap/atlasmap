@@ -109,6 +109,12 @@ export class MappingSerializer {
                 "uri": doc.uri,
                 "dataSourceType": docType
             };
+            if (doc.characterEncoding != null) {
+                serializedDoc["characterEncoding"] = doc.characterEncoding;
+            }
+            if (doc.locale != null) {
+                serializedDoc["locale"] = doc.locale;
+            }
             if (doc.initCfg.type.isXML()) {
                 serializedDoc["jsonType"] = "io.atlasmap.xml.v2.XmlDataSource";
                 var namespaces: any[] = [];
