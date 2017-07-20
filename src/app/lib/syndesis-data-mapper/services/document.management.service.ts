@@ -169,6 +169,9 @@ export class DocumentManagementService {
 
         body = body.jsonDocument;
 
+        docDef.characterEncoding = body.characterEncoding;
+        docDef.locale = body.locale;
+
         for (let field of body.fields.field) {
             this.parseJSONFieldFromDocument(field, null, docDef);
         }
@@ -184,6 +187,10 @@ export class DocumentManagementService {
         }
 
         body = body.xmlDocument;
+
+        docDef.characterEncoding = body.characterEncoding;
+        docDef.locale = body.locale;
+
 
         if (body.xmlNamespaces && body.xmlNamespaces.xmlNamespace
             && body.xmlNamespaces.xmlNamespace.length) {
@@ -232,6 +239,9 @@ export class DocumentManagementService {
             console.error("Document's className is empty.", body);
         }
         docDef.uri = body.uri;
+
+        docDef.characterEncoding = body.characterEncoding;
+        docDef.locale = body.locale;
 
         for (let field of body.javaFields.javaField) {
             this.parseJavaFieldFromDocument(field, null, docDef);

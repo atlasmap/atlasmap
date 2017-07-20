@@ -25,6 +25,7 @@ import { MappingManagementService } from '../services/mapping.management.service
 import { InitializationService } from '../services/initialization.service';
 
 export class DataMapperInitializationModel {
+    public dataMapperVersion: string = "0.9.2017.07.20";
     public initialized: boolean = false;
     public loadingStatus: string = "Loading."
     public initializationErrorOccurred: boolean = false;
