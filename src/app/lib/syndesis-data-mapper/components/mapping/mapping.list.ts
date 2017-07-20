@@ -97,7 +97,7 @@ export class MappingListFieldComponent {
                         <div *ngIf="searchMode" class="searchBox">
                             <input type="text" #searchFilterBox id="search-filter-box" [(ngModel)]="searchFilter"
                                 (keyup)="search(searchFilterBox.value)" placeholder="Search" />
-                            <i class="fa fa-close searchBoxCloseIcon link" (click)="clearSearch()"></i>
+                            <i class="fa fa-close searchBoxCloseIcon link" (click)="toggleSearch()"></i>
                             <div class="clear"></div>
                         </div>
                         <div [attr.class]="getRowTitleCSSClass()">
@@ -214,11 +214,6 @@ export class MappingListComponent {
     public getSearchIconCSSClass(): string {
         var cssClass: string = "fa fa-search searchBoxIcon link";
         return this.searchMode ? (cssClass + " selectedIcon") : cssClass;
-    }
-
-    private clearSearch(): void  {
-        this.searchFilter = "";
-        this.search(this.searchFilter);
     }
 
     private search(searchFilter: string): void {
