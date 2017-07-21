@@ -772,39 +772,42 @@ public class ClassInspectionService implements Serializable {
     protected List<String> detectParameterizedTypes(Field field, boolean onlyClasses) {
         List<String> pTypes = null;
         
-        if(field != null && field.getGenericType() != null) {
-            if(field.getGenericType() instanceof ParameterizedType) {
-                Type[] types = ((ParameterizedType) field.getGenericType()).getActualTypeArguments();
-                for(Type t : types) {
-                    if(pTypes == null) {
-                        pTypes = new ArrayList<String>();
-                    }
+        if (field == null || field.getGenericType() == null || !(field.getGenericType() instanceof ParameterizedType)) {
+            return null;
+         }
+         Type[] types = ((ParameterizedType) field.getGenericType()).getActualTypeArguments();
+         if (types.length == 0) {
+            return null;
+         }
+        
+         for(Type t : types) {
+             if(pTypes == null) {
+                 pTypes = new ArrayList<String>();
+             }
                     
-                    if (!onlyClasses & t instanceof TypeVariable){
-                        TypeVariable<?> tv =  (TypeVariable<?>) t;
-                        // TODOD: no current need, but we may want to have treatment for 'T' tv.getTypeName()
-                        AnnotatedType[] annotatedBounds = tv.getAnnotatedBounds();
-                        GenericDeclaration genericDeclaration = tv.getGenericDeclaration();
-                        pTypes.add(((Class<?>) tv.getAnnotatedBounds()[0].getType()).getCanonicalName());
-                    }
+             if (!onlyClasses && t instanceof TypeVariable){
+                 TypeVariable<?> tv =  (TypeVariable<?>) t;
+                 // TODO: no current need, but we may want to have treatment for 'T' tv.getTypeName()
+                 AnnotatedType[] annotatedBounds = tv.getAnnotatedBounds();
+                 GenericDeclaration genericDeclaration = tv.getGenericDeclaration();
+                 pTypes.add(((Class<?>) tv.getAnnotatedBounds()[0].getType()).getCanonicalName());
+             }
                     
-                    if (!onlyClasses & t instanceof WildcardType) {
-                        WildcardType wc =  (WildcardType) t;
-                        Type[] upperBounds = wc.getUpperBounds();
-                        Type[] lowerBounds = wc.getLowerBounds();
-                        // TODO: No current need, but we may want to have treatment for '?' wc.getTypeName() 
-                        if(upperBounds != null && upperBounds.length > 0) {
-                            pTypes.add(wc.getUpperBounds()[0].getClass().getCanonicalName());
-                        } else if(lowerBounds != null && lowerBounds.length > 0) {
-                            pTypes.add(wc.getLowerBounds()[0].getClass().getCanonicalName());
-                        }
-                    }
+             if (!onlyClasses & t instanceof WildcardType) {
+                 WildcardType wc =  (WildcardType) t;
+                 Type[] upperBounds = wc.getUpperBounds();
+                 Type[] lowerBounds = wc.getLowerBounds();
+                 // TODO: No current need, but we may want to have treatment for '?' wc.getTypeName() 
+                 if(upperBounds != null && upperBounds.length > 0) {
+                     pTypes.add(wc.getUpperBounds()[0].getClass().getCanonicalName());
+                 } else if(lowerBounds != null && lowerBounds.length > 0) {
+                     pTypes.add(wc.getLowerBounds()[0].getClass().getCanonicalName());
+                 }
+             }
                     
-                    if(t instanceof Class) {
-                        pTypes.add(((Class<?>)t).getCanonicalName());
-                    }
-                }
-            }
+             if(t instanceof Class) {
+                 pTypes.add(((Class<?>)t).getCanonicalName());
+             }
         }
         return pTypes;
     }
