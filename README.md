@@ -17,19 +17,19 @@ Running the Data Mapper in stand alone mode will require installing the Data Map
 
 *Installation* 
 
-1. Install and run the [Atlas Map Services](https://github.com/atlasmap/atlasmap) as directed in the services' [installation instructions](https://github.com/atlasmap/atlasmap). Running the services will require installing a Java Development Kit and Maven.
+1. Install and run the [Atlas Map Services](https://github.com/atlasmap/atlasmap) as directed in the services' [installation instructions](https://github.com/atlasmap/atlasmap). Running the services will require installing a [Java Development Kit](http://www.oracle.com/technetwork/java/javase/downloads/index.html) and [Maven](https://maven.apache.org/).
 
 2. [Install NPM](https://docs.npmjs.com/getting-started/installing-node).
 
 3. Create a directory for the Data Mapper UI, we'll refer to this directory as **${atlas.ui.home}** for the remainder of these instructions.
 
-4. Clone the Data Mapper UI in **${atlas.ui.home}** with **git clone https://github.com/atlasmap/atlasmap-ui.git ${atlas.ui.home}**
+4. Clone the Data Mapper UI in **${atlas.ui.home}** with `git clone https://github.com/atlasmap/atlasmap-ui.git ${atlas.ui.home}`.
 
-5. Install the Data Mapper's dependencies by running **npm install** in **${atlas.ui.home}**.
+5. Install the Data Mapper's dependencies by running `npm install` in **${atlas.ui.home}**.
 
 6. Start the [Atlas Map Services](https://github.com/atlasmap/atlasmap) if you have not already done so.
 
-7. Start the Data Mapper UI by running **npm start** in **${atlas.ui.home}**.
+7. Start the Data Mapper UI by running `npm start` in **${atlas.ui.home}**.
 
 8. The **npm start** command will attempt to automatically open your browser window, but if it doesn't, open it directy with this URL: [http://localhost:3000].
 
@@ -61,7 +61,7 @@ You can point your local Syndesis UI's Data Mapper UI reference to your working 
 
 After making this change, restart the Syndesis UI with **yarn start**.
 
-Note that <span style="color:red">running **yarn install** in the Syndesis UI directory **will remove and redownload the ${syndesis.ui.home}/node_modules/syndesis_data_mapper directory**</span>. For this reason, do *not* make changes within the **${syndesis.ui.home}/node_modules/syndesis_data_mapper** directory. Instead, make changes in another directory and use the soft link (**ln -s**) command shown above to point the Syndesis UI dependency to your code. 
+Note that running `yarn install` in the Syndesis UI directory **will remove and redownload the ${syndesis.ui.home}/node_modules/syndesis_data_mapper directory**. For this reason, do *not* make changes within the **${syndesis.ui.home}/node_modules/syndesis_data_mapper** directory. Instead, make changes in another directory and use the soft link (`ln -s`) command shown above to point the Syndesis UI dependency to your code. 
 
 
 ## Debug Configuration ##
