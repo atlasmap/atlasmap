@@ -61,7 +61,7 @@ You can point your local Syndesis UI's Data Mapper UI reference to your working 
 
 After making this change, restart the Syndesis UI with **yarn start**.
 
-Note that **running "yarn install" in the Syndesis UI directory will remove and redownload the ${syndesis.ui.home}/node_modules/syndesis_data_mapper directory**. For this reason, do *not* make changes within the **${syndesis.ui.home}/node_modules/syndesis_data_mapper** directory. Instead, make changes in another directory and use the soft link (**ln -s**) command shown above to point the Syndesis UI dependency to your code. 
+Note that <span style="color:red">running **yarn install** in the Syndesis UI directory **will remove and redownload the ${syndesis.ui.home}/node_modules/syndesis_data_mapper directory**</span>. For this reason, do *not* make changes within the **${syndesis.ui.home}/node_modules/syndesis_data_mapper** directory. Instead, make changes in another directory and use the soft link (**ln -s**) command shown above to point the Syndesis UI dependency to your code. 
 
 
 ## Debug Configuration ##
