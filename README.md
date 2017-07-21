@@ -21,17 +21,17 @@ Running the Data Mapper in stand alone mode will require installing the Data Map
 
 2. [Install NPM](https://docs.npmjs.com/getting-started/installing-node).
 
-3. Create a directory for the Data Mapper UI, we'll refer to this directory as ${atlas.ui.home} for the remainder of these instructions.
+3. Create a directory for the Data Mapper UI, we'll refer to this directory as **${atlas.ui.home}** for the remainder of these instructions.
 
-4. Clone the Data Mapper UI in ${atlas.ui.home} with **git clone https://github.com/atlasmap/atlasmap-ui.git ${atlas.ui.home}**
+4. Clone the Data Mapper UI in **${atlas.ui.home}** with **git clone https://github.com/atlasmap/atlasmap-ui.git ${atlas.ui.home}**
 
-5. Install the Data Mapper's dependencies by running **npm install** in ${atlas.ui.home}.
+5. Install the Data Mapper's dependencies by running **npm install** in **${atlas.ui.home}**.
 
 6. Start the [Atlas Map Services](https://github.com/atlasmap/atlasmap) if you have not already done so.
 
-7. Start the Data Mapper UI by running **npm start** in ${atlas.ui.home}
+7. Start the Data Mapper UI by running **npm start** in **${atlas.ui.home}**.
 
-8. The **npm start** command will attempt to automatically open your browser window, but if it doesn't open it directy: [http://localhost:3000]
+8. The **npm start** command will attempt to automatically open your browser window, but if it doesn't, open it directy with this URL: [http://localhost:3000].
 
 *Troubleshooting Installation*
 
@@ -46,18 +46,18 @@ Running the Data Mapper in stand alone mode will require installing the Data Map
 
 ## Developing Within Syndesis UI ##
 
-The Data Mapper UI is referenced by Syndesis as a dependency [here](). When the Syndesis UI's dependencies are installed during the *yarn install* step, the Data Mapper UI will be cloned from the public github master branch into the *${syndesis.ui.home}/node_modules/syndesis_data_mapper* directory. 
+The Data Mapper UI is referenced by Syndesis as a dependency [here](). When the Syndesis UI's dependencies are installed during the **yarn install** step, the Data Mapper UI will be cloned from the public github master branch into the **${syndesis.ui.home}/node_modules/syndesis_data_mapper** directory. 
 
 You can point your local Syndesis UI's Data Mapper UI reference to your working copy of the Data Mapper by changing the **src** directory in the node_modules folder to point to your code. You'll do something like this:
 
-`
+```
     # save the original data mapper library contents for syndesis in case we want to use that version again later.
     # ${syndesis.ui.home} is your local syndesis ui directory. 
     > mv ${syndesis.ui.home}/node_modules/syndesis_data_mapper/src ${syndesis.ui.home}/node_modules/syndesis_data_mapper/src.old
 
     # ${atlas.ui.home} is your local data mapper ui directory
     > ln -s ${atlas.ui.home}/src ${syndesis.ui.home}/node_modules/syndesis_data_mapper/src
-`
+```
 
 After making this change, restart the Syndesis UI with **yarn start**.
 
