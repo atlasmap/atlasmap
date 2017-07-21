@@ -1,7 +1,7 @@
 ## AtlasMap Data Mapper UI ##
 
 
-The AtlasMap Data Mapper UI is a visual integration configuration tool that simplifies creating integration between Java, XML, and JSON data sources. It is designed to work within the [Syndesis UI](https://github.com/syndesisio/syndesis-ui).
+The AtlasMap Data Mapper UI is a visual integration tool that simplifies configuring integrations between Java, XML, and JSON data sources. It is designed to work within the [Syndesis UI](https://github.com/syndesisio/syndesis-ui).
 
 ![AtlasMap Data Mapper UI Screenshot](https://raw.githubusercontent.com/atlasmap/atlasmap-ui/master/docs/datamapper.png)
 
