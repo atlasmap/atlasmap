@@ -32,11 +32,15 @@ import org.xeustechnologies.jcl.JarClassLoader;
 import org.xeustechnologies.jcl.exception.JclException;
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.AnnotatedType;
 import java.lang.reflect.Field;
+import java.lang.reflect.GenericDeclaration;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
+import java.lang.reflect.WildcardType;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -478,9 +482,14 @@ public class ClassInspectionService implements Serializable {
             s.setCollectionClassName(clazz.getCanonicalName());
             try {
                 clazz = detectListClass(f);
-            } catch (ClassCastException cce) {
+                if(clazz == null) {
+                    s.setStatus(FieldStatus.ERROR);
+                    return s;                    
+                }
+            } catch (ClassCastException | ClassNotFoundException cce) {
                 logger.debug("Error detecting inner listClass: " + cce.getMessage() + " for field: " + f.getName(), cce);
                 s.setStatus(FieldStatus.ERROR);
+                return s;
             }
         }
 
@@ -524,6 +533,9 @@ public class ClassInspectionService implements Serializable {
         Annotation[] annotations = f.getAnnotations();
         if (annotations != null) {
             for (Annotation a : annotations) {
+                if(s.getAnnotations() == null) {
+                    s.setAnnotations(new StringList());
+                }
                 s.getAnnotations().getString().add(a.annotationType().getCanonicalName());
             }
         }
@@ -533,7 +545,7 @@ public class ClassInspectionService implements Serializable {
         }
         s.getModifiers().getModifier().addAll(detectModifiers(f.getModifiers()));
 
-        List<String> pTypes = detectParameterizedTypes(f);
+        List<String> pTypes = detectParameterizedTypes(f, false);
         if(pTypes != null) {
             if(s.getParameterizedTypes() == null) {
                 s.setParameterizedTypes(new StringList());
@@ -729,10 +741,12 @@ public class ClassInspectionService implements Serializable {
         return modifiers;
     }
 
-    protected Class<?> detectListClass(Field field) {
-        ParameterizedType parameterizedType = (ParameterizedType) field.getGenericType();
-        Class<?> actualType = (Class<?>) parameterizedType.getActualTypeArguments()[0];
-        return actualType;
+    protected Class<?> detectListClass(Field field) throws ClassNotFoundException {
+        List<String> types = detectParameterizedTypes(field, true); 
+        if(types != null && !types.isEmpty()) {
+            return Class.forName(types.get(0));
+        }
+        return null;
     }
 
     protected Class<?> detectArrayClass(Class<?> clazz) {
@@ -755,19 +769,45 @@ public class ClassInspectionService implements Serializable {
         return tmpClazz;
     }
     
-    protected List<String> detectParameterizedTypes(Field field) {
+    protected List<String> detectParameterizedTypes(Field field, boolean onlyClasses) {
         List<String> pTypes = null;
         
-        if(field != null && field.getGenericType() != null) {
-            if(field.getGenericType() instanceof ParameterizedType) {
-                Type[] types = ((ParameterizedType) field.getGenericType()).getActualTypeArguments();
-                for(Type t : types) {
-                    if(pTypes == null) {
-                        pTypes = new ArrayList<String>();
-                    }
-                    pTypes.add(((Class<?>)t).getCanonicalName());
-                }
-            }
+        if (field == null || field.getGenericType() == null || !(field.getGenericType() instanceof ParameterizedType)) {
+            return null;
+         }
+         Type[] types = ((ParameterizedType) field.getGenericType()).getActualTypeArguments();
+         if (types.length == 0) {
+            return null;
+         }
+        
+         for(Type t : types) {
+             if(pTypes == null) {
+                 pTypes = new ArrayList<String>();
+             }
+                    
+             if (!onlyClasses && t instanceof TypeVariable){
+                 TypeVariable<?> tv =  (TypeVariable<?>) t;
+                 // TODO: no current need, but we may want to have treatment for 'T' tv.getTypeName()
+                 AnnotatedType[] annotatedBounds = tv.getAnnotatedBounds();
+                 GenericDeclaration genericDeclaration = tv.getGenericDeclaration();
+                 pTypes.add(((Class<?>) tv.getAnnotatedBounds()[0].getType()).getCanonicalName());
+             }
+                    
+             if (!onlyClasses & t instanceof WildcardType) {
+                 WildcardType wc =  (WildcardType) t;
+                 Type[] upperBounds = wc.getUpperBounds();
+                 Type[] lowerBounds = wc.getLowerBounds();
+                 // TODO: No current need, but we may want to have treatment for '?' wc.getTypeName() 
+                 if(upperBounds != null && upperBounds.length > 0) {
+                     pTypes.add(wc.getUpperBounds()[0].getClass().getCanonicalName());
+                 } else if(lowerBounds != null && lowerBounds.length > 0) {
+                     pTypes.add(wc.getLowerBounds()[0].getClass().getCanonicalName());
+                 }
+             }
+                    
+             if(t instanceof Class) {
+                 pTypes.add(((Class<?>)t).getCanonicalName());
+             }
         }
         return pTypes;
     }
