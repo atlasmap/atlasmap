@@ -104,7 +104,7 @@ The code that initializes these mock documents is in the [Initialization Service
 
 Data Mapper Debug Configuration within the Syndesis UI is defined within your **${syndesis.ui.home}/src/config.json** file's data mapper section:
 
-`
+```
 {
   "apiEndpoint": "https://syndesis-staging.b6ff.rh-idev.openshiftapps.com/api/v1",
   "title": "Syndesis",
@@ -140,9 +140,9 @@ Data Mapper Debug Configuration within the Syndesis UI is defined within your **
     "auto-link-github": true
   }
 }
-`
+```
 
-If you're running the Data Mapper UI locally outside of the Syndesis UI, the debug configuration is specified within the (DataMapperAppExampleHostComponent)[https://github.com/atlasmap/atlasmap-ui/blob/master/src/app/lib/syndesis-data-mapper/components/data.mapper.example.host.component.ts].
+If you're running the Data Mapper UI locally outside of the Syndesis UI, the debug configuration is specified within the [DataMapperAppExampleHostComponent](https://github.com/atlasmap/atlasmap-ui/blob/master/src/app/lib/syndesis-data-mapper/components/data.mapper.example.host.component.ts).
 
 ## Code Overview ##
 
