@@ -23,7 +23,8 @@ import io.atlasmap.api.AtlasFieldActionService;
 import io.atlasmap.api.AtlasSession;
 import io.atlasmap.spi.AtlasModule;
 import io.atlasmap.spi.AtlasPropertyStrategy;
-import io.atlasmap.v2.ConstantField;
+import io.atlasmap.v2.Audit;
+import io.atlasmap.v2.AuditStatus;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.LookupEntry;
 import io.atlasmap.v2.LookupTable;
@@ -117,6 +118,16 @@ public abstract class BaseAtlasModule implements AtlasModule {
         
     }
 
+    protected void addAudit(AtlasSession session, String docId, String message, String path, AuditStatus status, String value) {
+        Audit audit = new Audit();
+        audit.setDocId(docId);
+        audit.setMessage(message);
+        audit.setPath(path);
+        audit.setStatus(status);
+        audit.setValue(value);
+        session.getAudits().getAudit().add(audit);
+    }
+    
     protected void processFieldActions(AtlasFieldActionService fieldActionService, Field field) throws AtlasException {
         field.setValue(fieldActionService.processActions(field.getActions(), field.getValue()));
     }

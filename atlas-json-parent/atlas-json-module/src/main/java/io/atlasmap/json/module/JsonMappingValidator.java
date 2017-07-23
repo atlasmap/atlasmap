@@ -133,6 +133,25 @@ public class JsonMappingValidator {
         String rejectedValue;
         Optional<AtlasConverter> atlasConverter;
         //do we have a converter for this?
+        
+        if(inFieldType == null && outFieldType == null) {
+            if(inputField.getActions() == null || inputField.getActions().getActions() == null || inputField.getActions().getActions().isEmpty()) {
+                Validation inVal = new Validation();
+                inVal.setField("inputPath=" + inputField.getPath());
+                inVal.setMessage("Auto-detection required due to unspecified input fieldType and no transformation fieldAction specified");
+                inVal.setStatus(ValidationStatus.WARN);
+                validations.getValidation().add(inVal);
+            }
+            if(outField.getActions() == null || outField.getActions().getActions() == null || outField.getActions().getActions().isEmpty()) {
+                Validation outVal = new Validation();
+                outVal.setField("outputPath=" + outField.getPath());
+                outVal.setMessage("Auto-detection required due to unspecified output fieldType");
+                outVal.setStatus(ValidationStatus.WARN);
+                validations.getValidation().add(outVal);
+            }
+            return;
+        }
+        
         atlasConverter = conversionService.findMatchingConverter(inFieldType, outFieldType);
 
         if (!atlasConverter.isPresent()) {
@@ -141,7 +160,7 @@ public class JsonMappingValidator {
             validation.setField("Field.Input/Output.conversion");
             validation.setMessage("A conversion between the input and output fields is required but no converter is available");
             validation.setStatus(ValidationStatus.ERROR);
-            validation.setValue(rejectedValue.toString());
+            validation.setValue((rejectedValue != null ? rejectedValue.toString() : null));
             validations.getValidation().add(validation);
         } else {
             AtlasConversionInfo conversionInfo;

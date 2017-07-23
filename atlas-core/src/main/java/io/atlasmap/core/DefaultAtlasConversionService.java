@@ -111,7 +111,11 @@ public class DefaultAtlasConversionService implements AtlasConversionService {
 
     @SuppressWarnings("rawtypes")
     private Optional<AtlasConverter> checkCustomConverters(List<AtlasConverter> customConverters, FieldType source, FieldType target) {
-
+        if(source == null || target == null) {
+            // TODO: investigate how we handle when sType -> tType (null -> something and something -> null)
+            return Optional.empty();
+        }
+        
         for (AtlasConverter customConverter : customConverters) {
             if (findConverterByMethodAnnotationSourceType(source, target, customConverter)) {
                 return Optional.of(customConverter);
@@ -123,6 +127,10 @@ public class DefaultAtlasConversionService implements AtlasConversionService {
     
     @SuppressWarnings("rawtypes")
     private Optional<AtlasConverter> checkPrimitiveConverters(List<AtlasPrimitiveConverter> primitiveConverters, FieldType source, FieldType target) {
+        if(source == null || target == null) {
+            // TODO: investigate how we handle when sType -> tType (null -> something and something -> null)
+            return Optional.empty();
+        }
         for (AtlasPrimitiveConverter primitiveConverter : primitiveConverters) {
             //get all the methods --> getAnnotations of Type AtlasConversionInfo
             if (findConverterByMethodAnnotationSourceType(source, target, primitiveConverter)) {

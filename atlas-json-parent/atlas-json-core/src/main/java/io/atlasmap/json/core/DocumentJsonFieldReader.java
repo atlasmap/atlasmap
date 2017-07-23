@@ -45,7 +45,7 @@ public class DocumentJsonFieldReader {
                         index = Integer.parseInt(nodeName.substring(nodeName.indexOf("[") + 1, nodeName.indexOf("]")));
                         nodeName = nodeName.substring(0, nodeName.indexOf("["));
                     }
-                    if (valueNode.isArray() && index > 0) {
+                    if (valueNode != null && valueNode.isArray() && index > 0) {
                         valueNode = valueNode.get(index);
                         //reset for possible indexed child nodes
                         index = 0;
