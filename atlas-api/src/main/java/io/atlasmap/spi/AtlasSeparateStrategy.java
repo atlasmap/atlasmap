@@ -19,8 +19,12 @@ import java.util.List;
 
 public interface AtlasSeparateStrategy {
 
-	String getName();
+	default String getName() { return this.getClass().getSimpleName(); }
 	String getDelimiter();
 	void setDelimiter(String delimiter);
+	Integer getLimit();
+	void setLimit(Integer limit);
+	List<String> separateValue(String value);
+	List<String> separateValue(String value, String delimiter);
 	List<String> separateValue(String value, String delimiter, Integer limit);
 }

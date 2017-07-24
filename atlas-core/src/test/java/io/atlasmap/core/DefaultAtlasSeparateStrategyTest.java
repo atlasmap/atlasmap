@@ -10,79 +10,137 @@ import org.junit.Test;
 
 public class DefaultAtlasSeparateStrategyTest {
 
-    private DefaultAtlasSeparateStrategy sepStrategy = null;
+    private DefaultAtlasSeparateStrategy separate = null;
     
     @Before
     public void setUp() throws Exception {
-        sepStrategy = new DefaultAtlasSeparateStrategy();
+        separate = new DefaultAtlasSeparateStrategy();
     }
 
     @After
     public void tearDown() throws Exception {
-        sepStrategy = null;
-    }
-
-    @Test
-    public void testGetName() {
-        assertNotNull(sepStrategy);
-        assertEquals("DefaultAtlasSeparateStrategy", sepStrategy.getName());
+        separate = null;
     }
 
     @Test
     public void testGetSetDelimiter() {
-        assertNotNull(sepStrategy);
-        assertEquals(StringDelimiter.MULTISPACE.getValue(), sepStrategy.getDelimiter());
-        sepStrategy.setDelimiter(StringDelimiter.COLON.getValue());
-        assertEquals(StringDelimiter.COLON.getValue(), sepStrategy.getDelimiter());
+        assertNotNull(separate);
+        assertNotNull(separate.getDelimiter());
+        assertEquals(DefaultAtlasSeparateStrategy.DEFAULT_SEPARATE_DELIMITER, separate.getDelimiter());
+
+        separate.setDelimiter(":");
+        assertEquals(":", separate.getDelimiter());
+        List<String> values = separate.separateValue("a:b:c:d");
+        assertNotNull(values);
+        assertEquals(new Integer(4), new Integer(values.size()));
+        assertEquals("a", values.get(0));
+        assertEquals("b", values.get(1));
+        assertEquals("c", values.get(2));
+        assertEquals("d", values.get(3));
+    }
+    
+    @Test
+    public void testGetSetLimit() {
+        assertNotNull(separate);
+        assertNotNull(separate.getDelimiter());
+        assertEquals(DefaultAtlasSeparateStrategy.DEFAULT_SEPARATE_LIMIT, separate.getLimit());
+                
+        separate.setLimit(2);
+        List<String> values = separate.separateValue("a b c d");
+        assertNotNull(values);
+        assertEquals(new Integer(2), new Integer(values.size()));
+        assertEquals("a", values.get(0));
+        assertEquals("b c d", values.get(1));
     }
 
     @Test
     public void testSeparateValue() {
-        assertNotNull(sepStrategy);
-        List<String> values = sepStrategy.separateValue("foo bar blah", " ", 128);
+        assertNotNull(separate);
+        List<String> values = separate.separateValue("a b c d e f");
+        assertNotNull(values);
+        assertEquals(new Integer(6), new Integer(values.size()));
+        assertEquals("a", values.get(0));
+        assertEquals("b", values.get(1));
+        assertEquals("c", values.get(2));
+        assertEquals("d", values.get(3));
+        assertEquals("e", values.get(4));
+        assertEquals("f", values.get(5));
+    }
+    
+    @Test
+    public void testSeparateValueDelimiter() {
+        assertNotNull(separate);
+        List<String> values = separate.separateValue("a1b1c1d1e1f", "1");
+        assertNotNull(values);
+        assertEquals(new Integer(6), new Integer(values.size()));
+        assertEquals("a", values.get(0));
+        assertEquals("b", values.get(1));
+        assertEquals("c", values.get(2));
+        assertEquals("d", values.get(3));
+        assertEquals("e", values.get(4));
+        assertEquals("f", values.get(5));
+    }
+    
+    @Test
+    public void testSeparateValueDelimiterLimit() {
+        assertNotNull(separate);
+        List<String> values = separate.separateValue("a1b1c1d1e1f", "1", 3);
         assertNotNull(values);
         assertEquals(new Integer(3), new Integer(values.size()));
-        assertEquals("foo", values.get(0));
-        assertEquals("bar", values.get(1));
-        assertEquals("blah", values.get(2));
-    }
-    
-    @Test
-    public void testSeparateValueNull() {
-        assertNotNull(sepStrategy);
-        List<String> values = sepStrategy.separateValue(null, " ", 128);
-        assertNotNull(values);
-        assertTrue(values.isEmpty());
-    }
-    
-    @Test
-    public void testSeparateValueEmpty() {
-        assertNotNull(sepStrategy);
-        List<String> values = sepStrategy.separateValue("", " ", 128);
-        assertNotNull(values);
-        assertTrue(values.isEmpty());
+        assertEquals("a", values.get(0));
+        assertEquals("b", values.get(1));
+        assertEquals("c1d1e1f", values.get(2));
     }
     
     @Test
     public void testSeparateValueNullDelimiter() {
-        assertNotNull(sepStrategy);
-        List<String> values = sepStrategy.separateValue("foo bar blah", null, 128);
+        assertNotNull(separate);
+        separate.setDelimiter(null);
+        assertNull(separate.getDelimiter());
+        
+        List<String> values = separate.separateValue("a b c d e f");
         assertNotNull(values);
-        assertEquals(new Integer(3), new Integer(values.size()));
-        assertEquals("foo", values.get(0));
-        assertEquals("bar", values.get(1));
-        assertEquals("blah", values.get(2));
+        assertEquals(new Integer(6), new Integer(values.size()));
+        assertEquals("a", values.get(0));
+        assertEquals("b", values.get(1));
+        assertEquals("c", values.get(2));
+        assertEquals("d", values.get(3));
+        assertEquals("e", values.get(4));
+        assertEquals("f", values.get(5));
     }
     
     @Test
     public void testSeparateValueNullLimit() {
-        assertNotNull(sepStrategy);
-        List<String> values = sepStrategy.separateValue("foo bar blah", " ", null);
+        assertNotNull(separate);
+        separate.setLimit(null);
+        assertNull(separate.getLimit());
+        
+        List<String> values = separate.separateValue("a b c d e f");
         assertNotNull(values);
-        assertEquals(new Integer(3), new Integer(values.size()));
-        assertEquals("foo", values.get(0));
-        assertEquals("bar", values.get(1));
-        assertEquals("blah", values.get(2));
+        assertEquals(new Integer(6), new Integer(values.size()));
+        assertEquals("a", values.get(0));
+        assertEquals("b", values.get(1));
+        assertEquals("c", values.get(2));
+        assertEquals("d", values.get(3));
+        assertEquals("e", values.get(4));
+        assertEquals("f", values.get(5));
+    }
+    
+    @Test
+    public void testSeparateValueNullValue() {
+        assertNotNull(separate);
+        
+        List<String> values = separate.separateValue(null);
+        assertNotNull(values);
+        assertTrue(values.isEmpty());
     }
 
+    @Test
+    public void testSeparateValueEmptyValue() {
+        assertNotNull(separate);
+        
+        List<String> values = separate.separateValue("");
+        assertNotNull(values);
+        assertTrue(values.isEmpty());
+    }
 }
