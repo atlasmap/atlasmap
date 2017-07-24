@@ -1,13 +1,10 @@
 package io.atlasmap.xml.v2;
 
-import io.atlasmap.api.AtlasException;
-import org.junit.Test;
-import org.w3c.dom.Document;
-import org.xml.sax.SAXException;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.LinkedHashMap;
@@ -15,8 +12,15 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.*;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.junit.Test;
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
+
+import io.atlasmap.api.AtlasException;
 
 /**
  */
@@ -109,7 +113,7 @@ public class DocumentXmlFieldReaderTest {
     public void testReadDocumentWithMultipleNamespaceComplex() throws Exception {
         Document doc = getDocument("src/test/resources/complex_example_ns.xml", true);
         XmlField xmlField = AtlasXmlModelFactory.createXmlField();
-        xmlField.setPath("/orders/order[2]/id[1]/y:@custId");
+        xmlField.setPath("/orders/order[2]/id[1]/@y:custId");
         assertNull(xmlField.getValue());
         reader.read(doc, xmlField);
         assertNotNull(xmlField.getValue());
@@ -121,7 +125,7 @@ public class DocumentXmlFieldReaderTest {
         Document doc = getDocument("src/test/resources/complex_example_multiple_ns.xml", true);
         //NB: the index is namespace aware, that is, if there are multiple namespaces, each namespace has an index starting at zero regardless of the element's indexed position in the document...
         XmlField xmlField = AtlasXmlModelFactory.createXmlField();
-        xmlField.setPath("/orders/q:order/id/y:@custId");
+        xmlField.setPath("/orders/q:order/id/@y:custId");
         assertNull(xmlField.getValue());
 
         Map<String, String> namespaces = new LinkedHashMap<>();
@@ -132,21 +136,21 @@ public class DocumentXmlFieldReaderTest {
 
         reader.read(doc, xmlField);
         assertNotNull(xmlField.getValue());
-        assertThat(xmlField.getValue(), is("x"));
+        assertThat(xmlField.getValue(), is("cx"));
 
         xmlField = AtlasXmlModelFactory.createXmlField();
-        xmlField.setPath("/orders/order/id/y:@custId");
+        xmlField.setPath("/orders/order/id/@y:custId");
         assertNull(xmlField.getValue());
         reader.read(doc, xmlField);
         assertNotNull(xmlField.getValue());
-        assertThat(xmlField.getValue(), is("a"));
+        assertThat(xmlField.getValue(), is("aa"));
 
         xmlField = AtlasXmlModelFactory.createXmlField();
-        xmlField.setPath("/orders/q:order[1]/id/y:@custId");
+        xmlField.setPath("/orders/q:order[1]/id/@y:custId");
         assertNull(xmlField.getValue());
         reader.read(doc, xmlField);
         assertNotNull(xmlField.getValue());
-        assertThat(xmlField.getValue(), is("a"));
+        assertThat(xmlField.getValue(), is("ea"));
     }
 
 
@@ -155,7 +159,7 @@ public class DocumentXmlFieldReaderTest {
         Document doc = getDocument("src/test/resources/complex_example_multiple_ns.xml", true);
 //NB: the index is namespace aware, that is, if there are multiple namespaces, each namespace has an index starting at zero regardless of the element's indexed position in the document...
         XmlField xmlField = AtlasXmlModelFactory.createXmlField();
-        xmlField.setPath("/orders/q:order/id/y:@custId");
+        xmlField.setPath("/orders/q:order/id/@y:custId");
         assertNull(xmlField.getValue());
 
         Map<String, String> namespaces = new LinkedHashMap<>();
@@ -167,13 +171,13 @@ public class DocumentXmlFieldReaderTest {
 
         reader.read(doc, xmlField);
         assertNotNull(xmlField.getValue());
-        assertThat(xmlField.getValue(), is("x"));
+        assertThat(xmlField.getValue(), is("cx"));
         xmlField = AtlasXmlModelFactory.createXmlField();
-        xmlField.setPath("/orders/order/id/y:@custId");
+        xmlField.setPath("/orders/order/id/@y:custId");
         assertNull(xmlField.getValue());
         reader.read(doc, xmlField);
         assertNotNull(xmlField.getValue());
-        assertThat(xmlField.getValue(), is("a"));
+        assertThat(xmlField.getValue(), is("aa"));
     }
 
     @Test

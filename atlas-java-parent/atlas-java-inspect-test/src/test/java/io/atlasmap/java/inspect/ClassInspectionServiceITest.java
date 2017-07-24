@@ -28,8 +28,13 @@ public class ClassInspectionServiceITest {
 
 	@Test
 	public void testInspectClassClassNameClassPath() throws InspectionException {
-		JavaClass javaClazz = classInspectionService.inspectClass("io.atlasmap.java.test.v2.FlatPrimitiveClass", "target/reference-jars/atlas.java.test.model-1.10.0-SNAPSHOT.jar");
+		JavaClass javaClazz = classInspectionService.inspectClass("io.atlasmap.java.test.v2.FlatPrimitiveClass", "target/reference-jars/atlas-java-test-model-1.15.0-SNAPSHOT.jar");
 		assertNotNull(javaClazz);	
 	}
-
+	
+	@Test
+	public void testInspectClassClassNameClassPath45() throws InspectionException {
+	    JavaClass javaClazz = classInspectionService.inspectClass("io.syndesis.connector.salesforce.Contact", "target/reference-jars/salesforce-upsert-contact-connector-0.4.5.jar:target/reference-jars/camel-salesforce-2.19.0.jar");
+	    assertNotNull(javaClazz);   
+	}
 }
