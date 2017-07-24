@@ -49,10 +49,8 @@ public class DocumentJsonFieldWriter {
             throw new AtlasException(new IllegalArgumentException("Argument 'jsonField' cannot be null"));
         }
     	if (logger.isDebugEnabled()) {    		
-    		logger.debug("Now processing field: " + AtlasJsonModelFactory.toString(field));
-    		logger.debug("Field type: " + field.getFieldType());
-    		logger.debug("Field path: " + field.getPath());
-    		logger.debug("Field value: " + field.getValue());    		
+    		logger.debug("Field: " + AtlasJsonModelFactory.toString(field));
+    		logger.debug("Field type=" + field.getFieldType() + " path=" + field.getPath() + " v=" + field.getValue());    		
     	}
     	PathUtil path = new PathUtil(field.getPath());
     	String lastSegment = path.getLastSegment();
@@ -210,17 +208,17 @@ public class DocumentJsonFieldWriter {
     	if (FieldType.STRING.equals(type)) {
             valueNode = rootNode.textNode((String)value);
         } else if (FieldType.CHAR.equals(type)) {
-        	valueNode = rootNode.textNode(Character.toString((char) value));            
+        	    valueNode = rootNode.textNode(Character.toString((char) value));            
         } else if (FieldType.BOOLEAN.equals(type)) {
-        	valueNode = rootNode.booleanNode((Boolean)value);
+            valueNode = rootNode.booleanNode((Boolean)value);
         } else if (FieldType.INTEGER.equals(type)) {
-        	valueNode = rootNode.numberNode((Integer)value);            
+        	    valueNode = rootNode.numberNode((Integer)value);            
         } else if (FieldType.DOUBLE.equals(type) || FieldType.FLOAT.equals(type)) {
-        	valueNode = rootNode.numberNode(new BigDecimal(String.valueOf(value)));
+            valueNode = rootNode.numberNode(new BigDecimal(String.valueOf(value)));
         } else if (FieldType.SHORT.equals(type)) {
-        	valueNode = rootNode.numberNode(Short.valueOf(String.valueOf(value)));
+            valueNode = rootNode.numberNode(Short.valueOf(String.valueOf(value)));
         } else if (FieldType.LONG.equals(type)) {
-        	valueNode = rootNode.numberNode(Long.valueOf(String.valueOf(value)));
+        	    valueNode = rootNode.numberNode(Long.valueOf(String.valueOf(value)));
         } else {
             throw new AtlasException("Cannot set value for " + jsonField.getPath() + " --> " + value + " for field type " + type);
         }    	

@@ -292,4 +292,29 @@ public class PathUtil {
     public String getOriginalPath() {
 		return originalPath;
 	}
+    
+	public static boolean isArraySegment(String segment) {
+		return isCollectionSegment(segment) && segment.contains(PATH_ARRAY_START); 
+	}
+
+	public static boolean isListSegment(String segment) {
+		return isCollectionSegment(segment) && segment.contains(PATH_LIST_START);
+	}
+
+	public static boolean isMapSegment(String segment) {
+		return isCollectionSegment(segment) && segment.contains(PATH_MAP_START);
+	}
+
+	public static String findNextSegment(String segment, String path) {
+		PathUtil pathUtil = new PathUtil(path);
+		String parentSegment = null;
+		for (String currentSegment : pathUtil.segments) {
+			if (parentSegment == null || !segment.equals(parentSegment)) {
+				parentSegment = currentSegment;
+				continue;
+			}
+			return currentSegment;			
+		}
+		return null;
+	}
 }

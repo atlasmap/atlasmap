@@ -223,10 +223,10 @@ public class JsonModule extends BaseAtlasModule {
         outputField.setValue(outputValue);        
         
         if(session.getOutput() != null && session.getOutput() instanceof DocumentJsonFieldWriter) {
-        	DocumentJsonFieldWriter writer = (DocumentJsonFieldWriter) session.getOutput();
+            DocumentJsonFieldWriter writer = (DocumentJsonFieldWriter) session.getOutput();
             writer.write(outputField);
         } else {
-        	//TODO: add error handler to detect if the output writer isn't there or is wrong class instance
+            //TODO: add error handler to detect if the output writer isn't there or is wrong class instance
         }        
         
         if(logger.isDebugEnabled()) {
