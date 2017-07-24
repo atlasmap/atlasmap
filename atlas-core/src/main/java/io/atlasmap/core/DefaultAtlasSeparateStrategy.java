@@ -23,15 +23,12 @@ import io.atlasmap.spi.AtlasSeparateStrategy;
 
 public class DefaultAtlasSeparateStrategy implements AtlasSeparateStrategy {
 
-	private String delimiter = StringDelimiter.MULTISPACE.getValue();
-	public Integer DEFAULT_SPLIT_LIMIT = new Integer(512);
-	public String DEFAULT_SPLIT_DELIMITER = StringDelimiter.MULTISPACE.getValue();
-	
-	@Override
-	public String getName() {
-		return "DefaultAtlasSeparateStrategy";
-	}
-	
+	public static final Integer DEFAULT_SEPARATE_LIMIT = new Integer(512);
+	public static final String DEFAULT_SEPARATE_DELIMITER = StringDelimiter.MULTISPACE.getValue();
+
+	private String delimiter = DEFAULT_SEPARATE_DELIMITER;
+    private Integer limit = DEFAULT_SEPARATE_LIMIT;
+
 	@Override
 	public String getDelimiter() {
 		return delimiter;
@@ -41,7 +38,27 @@ public class DefaultAtlasSeparateStrategy implements AtlasSeparateStrategy {
 	public void setDelimiter(String delimiter) {
 		this.delimiter = delimiter;
 	}
+	
+	@Override
+    public Integer getLimit() {
+        return limit;
+    }
 
+    @Override
+	public void setLimit(Integer limit) {
+        this.limit = limit;
+    }
+	
+	@Override
+	public List<String> separateValue(String value) {
+	    return separateValue(value, getDelimiter(), getLimit());
+	}
+	
+    @Override
+    public List<String> separateValue(String value, String delimiter) {
+        return separateValue(value, delimiter, getLimit());
+    }
+	
 	@Override
 	public List<String> separateValue(String value, String delimiter, Integer limit) {
 		List<String> values = new ArrayList<String>();
@@ -49,7 +66,7 @@ public class DefaultAtlasSeparateStrategy implements AtlasSeparateStrategy {
 			return values;
 		}
 		
-		values.addAll(Arrays.asList(((String)value).split((delimiter == null ? DEFAULT_SPLIT_DELIMITER : delimiter), (limit == null ? DEFAULT_SPLIT_LIMIT : 512))));
+		values.addAll(Arrays.asList(((String)value).split((delimiter == null ? DEFAULT_SEPARATE_DELIMITER : delimiter), (limit == null ? DEFAULT_SEPARATE_LIMIT : limit))));
 		return values;
 	}
 }

@@ -17,14 +17,14 @@ package io.atlasmap.spi;
 
 import java.util.List;
 
-public interface AtlasSeparateStrategy {
+public interface AtlasCombineStrategy {
 
 	default String getName() { return this.getClass().getSimpleName(); }
 	String getDelimiter();
 	void setDelimiter(String delimiter);
 	Integer getLimit();
 	void setLimit(Integer limit);
-	List<String> separateValue(String value);
-	List<String> separateValue(String value, String delimiter);
-	List<String> separateValue(String value, String delimiter, Integer limit);
+	String combineValues(List<String> values);
+	String combineValues(List<String> values, String delimiter);
+	String combineValues(List<String> values, String delimiter, Integer maxItems);
 }
