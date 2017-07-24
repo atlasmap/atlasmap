@@ -34,7 +34,7 @@
     <failOnMissingWebXml>false</failOnMissingWebXml>
     <maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
     <java-image.version>1.2</java-image.version>
-    <ipaas.connector.version>0.4.5</ipaas.connector.version>
+    <syndesis.connector.version>0.4.5</syndesis.connector.version>
     <camel.version>2.19.0.fuse-000035</camel.version>
   </properties>
 
@@ -158,27 +158,27 @@
     <dependency>
       <groupId>io.syndesis</groupId>
       <artifactId>twitter-mention-connector</artifactId>
-      <version>${ipaas.connector.version}</version>
+      <version>${syndesis.connector.version}</version>
     </dependency>
     <dependency>
       <groupId>io.syndesis</groupId>
       <artifactId>salesforce-upsert-contact-connector</artifactId>
-      <version>${ipaas.connector.version}</version>
+      <version>${syndesis.connector.version}</version>
     </dependency>
     <dependency>
       <groupId>io.syndesis</groupId>
       <artifactId>day-trade-get-connector</artifactId>
-      <version>${ipaas.connector.version}</version>
+      <version>${syndesis.connector.version}</version>
     </dependency>
     <dependency>
       <groupId>io.syndesis</groupId>
       <artifactId>day-trade-place-connector</artifactId>
-      <version>${ipaas.connector.version}</version>
+      <version>${syndesis.connector.version}</version>
     </dependency>
     <dependency>
       <groupId>io.syndesis</groupId>
       <artifactId>trade-insight-buy-connector</artifactId>
-      <version>${ipaas.connector.version}</version>
+      <version>${syndesis.connector.version}</version>
     </dependency>
 
   </dependencies>
