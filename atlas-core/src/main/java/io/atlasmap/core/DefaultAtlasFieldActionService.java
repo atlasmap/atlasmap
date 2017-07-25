@@ -77,7 +77,8 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
         }
     }
 
-    public List<ActionDetail> listActionDetails() {
+    @Override
+	public List<ActionDetail> listActionDetails() {
         return actionDetails.getActionDetail();
     }
     

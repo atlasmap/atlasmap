@@ -24,15 +24,18 @@ public class DefaultAtlasValidationsHelper extends Validations implements AtlasV
 
     private static final long serialVersionUID = -7993298271986178508L;
 
-    public void addValidation(Validation validation) {
+    @Override
+	public void addValidation(Validation validation) {
         getValidation().add(validation);
     }
 
-    public List<Validation> getAllValidations() {
+    @Override
+	public List<Validation> getAllValidations() {
         return validation;
     }
 
-    public boolean hasErrors() {
+    @Override
+	public boolean hasErrors() {
         if (getValidation() != null && !getValidation().isEmpty()) {
             for (Validation validation : getValidation()) {
                 if (ValidationStatus.ERROR.compareTo(validation.getStatus()) == 0) {
@@ -43,7 +46,8 @@ public class DefaultAtlasValidationsHelper extends Validations implements AtlasV
         return false;
     }
 
-    public boolean hasWarnings() {
+    @Override
+	public boolean hasWarnings() {
         if (getValidation() != null && !getValidation().isEmpty()) {
             for (Validation validation : getValidation()) {
                 if (ValidationStatus.WARN.compareTo(validation.getStatus()) == 0) {
@@ -54,7 +58,8 @@ public class DefaultAtlasValidationsHelper extends Validations implements AtlasV
         return false;
     }
 
-    public boolean hasInfos() {
+    @Override
+	public boolean hasInfos() {
         if (getValidation() != null && !getValidation().isEmpty()) {
             for (Validation validation : getValidation()) {
                 if (ValidationStatus.INFO.compareTo(validation.getStatus()) == 0) {
@@ -65,7 +70,8 @@ public class DefaultAtlasValidationsHelper extends Validations implements AtlasV
         return false;
     }
 
-    public int getCount() {
+    @Override
+	public int getCount() {
         if (getValidation() != null && !getValidation().isEmpty()) {
             return getValidation().size();
         }

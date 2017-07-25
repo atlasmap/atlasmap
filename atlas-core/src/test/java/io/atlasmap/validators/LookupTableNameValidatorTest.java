@@ -26,13 +26,15 @@ import org.junit.After;
 
 public class LookupTableNameValidatorTest extends BaseValidatorTest {
     
-    @Before
+    @Override
+	@Before
     public void setUp() {
         super.setUp();
         validator = new LookupTableNameValidator("lookuptables.lookuptable.name", "LookupTables contain duplicated LookupTable names.");
     }
     
-    @After
+    @Override
+	@After
     public void tearDown() {
         super.tearDown();
         validator = null;

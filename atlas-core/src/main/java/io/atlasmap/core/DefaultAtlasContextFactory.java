@@ -89,14 +89,17 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
 		setProperties(tmpProps);
 	}
 	
+	@Override
 	public void init() {
 		init(null);
 	}
 	
+	@Override
 	public void setProperties(Map<String, String> properties) {
 		this.properties = properties;
 	}
 	
+	@Override
 	public Map<String, String> getProperties() {
 		return this.properties;
 	}
@@ -112,6 +115,7 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
 		setMappingService(new AtlasMappingService(getAllModuleConfigPackages(getModules())));
 	}
 
+	@Override
 	public void destroy() {
 		
 		unloadModules();
@@ -135,6 +139,7 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
 		factory = null;
 	}
 	
+	@Override
 	public AtlasContext createContext(File atlasMappingFile) throws AtlasException {
 		if(atlasMappingFile == null) {
 			throw new AtlasException("AtlasMappingFile must be specified");
@@ -143,6 +148,7 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
 		return createContext(atlasMappingFile.toURI());
 	}
 	
+	@Override
 	public AtlasContext createContext(URI atlasMappingUri) throws AtlasException {
 	    if(atlasMappingUri == null) {
             throw new AtlasException("AtlasMappingUri must be specified");
@@ -363,10 +369,13 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
     
 	@Override
 	public String getClassName() { return this.getClass().getName(); }
+	@Override
 	public String getThreadName() { return this.threadName; }	
 	public void setThreadName(String threadName) { this.threadName = threadName; }
+	@Override
 	public String getVersion() { return this.getClass().getPackage().getImplementationVersion(); }
 		
+	@Override
 	public String getUuid() { return this.uuid; }
 	
 	protected void setObjectName(String name) throws MalformedObjectNameException {
@@ -402,15 +411,18 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
 		this.atlasMappingService = atlasMappingService;
 	}
 	
+	@Override
 	public AtlasConversionService getConversionService() {
 	    return this.atlasConversionService;
 	}
 	
+	@Override
 	public AtlasFieldActionService getFieldActionService() {
 	    return this.atlasFieldActionService;
 	}
 
-    public AtlasPropertyStrategy getPropertyStrategy() {
+    @Override
+	public AtlasPropertyStrategy getPropertyStrategy() {
         return atlasPropertyStrategy;
     }
 
@@ -418,7 +430,8 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
         this.atlasPropertyStrategy = atlasPropertyStrategy;
     }
 	
-    public AtlasValidationService getValidationService() {
+    @Override
+	public AtlasValidationService getValidationService() {
         return atlasValidationService;
     }
 

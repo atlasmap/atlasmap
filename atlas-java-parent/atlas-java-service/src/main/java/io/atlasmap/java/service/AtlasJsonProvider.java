@@ -38,6 +38,7 @@ public class AtlasJsonProvider implements ContextResolver<ObjectMapper> {
 		objectMapper.setSerializationInclusion(Include.NON_NULL);	
 	}
 
+	@Override
 	public ObjectMapper getContext(Class<?> objectType) {
 		return objectMapper;
 	}

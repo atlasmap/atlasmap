@@ -36,6 +36,7 @@ public class JsonMarshallerTest extends BaseMarshallerTest {
 
 	public ObjectMapper mapper = null;
 	
+	@Override
 	@Before
 	public void setUp() throws Exception {
 		super.setUp();
@@ -49,6 +50,7 @@ public class JsonMarshallerTest extends BaseMarshallerTest {
 		mapper.setSerializationInclusion(Include.NON_NULL);		
 	}
 	
+	@Override
 	@After
 	public void tearDown() throws Exception {
 		super.tearDown();		

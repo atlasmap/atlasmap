@@ -244,6 +244,7 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
 		return mappingDefinition;
 	}
 
+	@Override
 	public AtlasSession createSession() throws AtlasValidationException {
 		return createSession(getDefaultAtlasContextFactory().getMappingService().loadMapping(atlasMappingUri));
 	}

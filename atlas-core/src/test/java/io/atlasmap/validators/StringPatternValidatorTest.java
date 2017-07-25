@@ -23,7 +23,8 @@ import org.junit.After;
 
 public class StringPatternValidatorTest extends BaseValidatorTest {
 
-    @After
+    @Override
+	@After
     public void tearDown() {
         super.tearDown();
         validator = null;

@@ -61,7 +61,8 @@ public class DefaultAtlasConversionService implements AtlasConversionService {
         return REGISTRY;
     }
 
-    @SuppressWarnings("rawtypes")
+    @Override
+	@SuppressWarnings("rawtypes")
     public Optional<AtlasConverter> findMatchingConverter(FieldType source, FieldType target) {
 
         Optional<AtlasConverter> primitiveConverter = Optional.empty();
@@ -84,7 +85,8 @@ public class DefaultAtlasConversionService implements AtlasConversionService {
         } else return customConverter;
     }
 
-    @SuppressWarnings("rawtypes")
+    @Override
+	@SuppressWarnings("rawtypes")
     public Optional<AtlasConverter> findMatchingConverter(String sourceClassName, String targetClassName) {
         // assuming only custom converters define sourceClassName / targetClassName and must match exactly.
         List<AtlasConverter> customConverters = converters.values().stream()
@@ -98,7 +100,8 @@ public class DefaultAtlasConversionService implements AtlasConversionService {
         return Optional.empty();
     }
 
-    @SuppressWarnings("rawtypes")
+    @Override
+	@SuppressWarnings("rawtypes")
     public Optional<Method> findMatchingMethod(FieldType source, FieldType target, AtlasConverter customConverter) {
         Method[] methods = customConverter.getClass().getMethods();
         //assuming only one

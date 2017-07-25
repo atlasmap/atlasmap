@@ -32,13 +32,15 @@ public class NotEmptyValidatorTest extends BaseValidatorTest {
 
     private NotEmptyValidator validator;
 
-    @Before
+    @Override
+	@Before
     public void setUp() {
         super.setUp();
         validator = new NotEmptyValidator("test.field", "Collection should not be empty");
     }
     
-    @After
+    @Override
+	@After
     public void tearDown() {
         super.setUp();
         validator = null;

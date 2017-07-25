@@ -26,13 +26,15 @@ public class StringLengthValidatorTest extends BaseValidatorTest {
 
     private StringLengthValidator validator;
 
-    @Before
+    @Override
+	@Before
     public void setUp() {
         super.setUp();
         validator = new StringLengthValidator("qwerty", "Must be of this length", 1, 10);
     }
     
-    @After
+    @Override
+	@After
     public void tearDown() {
         super.tearDown();
         validator = null;
