@@ -20,17 +20,13 @@ import static org.junit.Assert.*;
 import java.io.File;
 import java.util.Arrays;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
 import io.atlasmap.api.AtlasContext;
-import io.atlasmap.api.AtlasContextFactory;
 import io.atlasmap.api.AtlasSession;
 import io.atlasmap.core.AtlasMappingService;
 import io.atlasmap.core.DefaultAtlasContext;
-import io.atlasmap.core.DefaultAtlasContextFactory;
 import io.atlasmap.java.test.BaseOrderList;
 import io.atlasmap.java.test.SourceAddress;
 import io.atlasmap.java.test.SourceContact;

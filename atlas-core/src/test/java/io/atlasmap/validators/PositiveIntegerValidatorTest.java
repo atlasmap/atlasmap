@@ -16,10 +16,7 @@
 package io.atlasmap.validators;
 
 import io.atlasmap.v2.ValidationStatus;
-import io.atlasmap.v2.Validations;
 import io.atlasmap.validators.PositiveIntegerValidator;
-import io.atlasmap.validators.AtlasValidationTestHelper;
-
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.After;

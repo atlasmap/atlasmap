@@ -24,7 +24,6 @@ import io.atlasmap.api.AtlasSession;
 import io.atlasmap.core.DefaultAtlasContext;
 import io.atlasmap.java.test.BaseFlatPrimitiveClass;
 import io.atlasmap.java.test.SourceFlatPrimitiveClass;
-import io.atlasmap.json.test.AtlasJsonTestRootedMapper;
 import io.atlasmap.json.test.AtlasJsonTestUnrootedMapper;
 import io.atlasmap.json.test.TargetFlatPrimitive;
 import io.atlasmap.reference.AtlasMappingBaseTest;

@@ -29,7 +29,6 @@ import io.atlasmap.v2.Audits;
 import io.atlasmap.v2.BaseMapping;
 import io.atlasmap.v2.Collection;
 import io.atlasmap.v2.Mapping;
-import io.atlasmap.v2.Mappings;
 import io.atlasmap.v2.Validation;
 import io.atlasmap.v2.Validations;
 

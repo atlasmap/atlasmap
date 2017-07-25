@@ -22,9 +22,7 @@ import io.atlasmap.v2.LookupTable;
 import io.atlasmap.v2.LookupTables;
 import io.atlasmap.v2.Mapping;
 import io.atlasmap.v2.MappingType;
-import io.atlasmap.v2.Validations;
 import io.atlasmap.validators.BaseValidatorTest;
-import io.atlasmap.validators.AtlasValidationTestHelper;
 import io.atlasmap.core.AtlasMappingUtil;
 import io.atlasmap.core.DefaultAtlasValidationService;
 
