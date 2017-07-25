@@ -8,9 +8,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import io.atlasmap.spi.AtlasSeparateStrategy;
+
 public class DefaultAtlasSeparateStrategyTest {
 
-    private DefaultAtlasSeparateStrategy separate = null;
+    private AtlasSeparateStrategy separate = null;
     
     @Before
     public void setUp() throws Exception {
@@ -22,6 +24,12 @@ public class DefaultAtlasSeparateStrategyTest {
         separate = null;
     }
 
+    @Test
+    public void testGetName() {
+        assertNotNull(separate);
+        assertEquals("DefaultAtlasSeparateStrategy", separate.getName());
+    }
+    
     @Test
     public void testGetSetDelimiter() {
         assertNotNull(separate);

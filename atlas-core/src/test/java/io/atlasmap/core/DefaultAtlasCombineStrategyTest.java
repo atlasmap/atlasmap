@@ -8,9 +8,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import io.atlasmap.spi.AtlasCombineStrategy;
+
 public class DefaultAtlasCombineStrategyTest {
 
-    private DefaultAtlasCombineStrategy combine = null;
+    private AtlasCombineStrategy combine = null;
     
     @Before
     public void setUp() throws Exception {
@@ -22,6 +24,12 @@ public class DefaultAtlasCombineStrategyTest {
         combine = null;
     }
 
+    @Test
+    public void testGetName() {
+        assertNotNull(combine);
+        assertEquals("DefaultAtlasCombineStrategy", combine.getName());
+    }
+    
     @Test
     public void testGetSetDelimiter() {
         assertNotNull(combine);
@@ -50,9 +58,9 @@ public class DefaultAtlasCombineStrategyTest {
     @Test
     public void testGetSetAutoTrim() {
         assertNotNull(combine);
-        assertFalse(combine.isDisableAutoTrim());
-        combine.setDisableAutoTrim(true);
-        assertTrue(combine.isDisableAutoTrim());
+        assertFalse(((DefaultAtlasCombineStrategy)combine).isDisableAutoTrim());
+        ((DefaultAtlasCombineStrategy)combine).setDisableAutoTrim(true);
+        assertTrue(((DefaultAtlasCombineStrategy)combine).isDisableAutoTrim());
         
         String value = combine.combineValues(Arrays.asList("a ", "b"));
         assertNotNull(value);
@@ -62,9 +70,9 @@ public class DefaultAtlasCombineStrategyTest {
     @Test
     public void testDisableAutoTrimNullDelimiter() {
         assertNotNull(combine);
-        assertFalse(combine.isDisableAutoTrim());
-        combine.setDisableAutoTrim(true);
-        assertTrue(combine.isDisableAutoTrim());
+        assertFalse(((DefaultAtlasCombineStrategy)combine).isDisableAutoTrim());
+        ((DefaultAtlasCombineStrategy)combine).setDisableAutoTrim(true);
+        assertTrue(((DefaultAtlasCombineStrategy)combine).isDisableAutoTrim());
         
         String value = combine.combineValues(Arrays.asList("a ", "b", "  c"), null);
         assertNotNull(value);
