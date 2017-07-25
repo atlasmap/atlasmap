@@ -216,7 +216,7 @@ public class AtlasUtil {
     }
 
     public static List<Class<?>> findClassesForPackage(String scannedPackage) {
-        String scannedPath = scannedPackage.replace('.', File.separatorChar);
+        String scannedPath = scannedPackage.replace('.', '/');
         URL scannedUrl = getResource(scannedPath);
         
         if (scannedUrl == null) {

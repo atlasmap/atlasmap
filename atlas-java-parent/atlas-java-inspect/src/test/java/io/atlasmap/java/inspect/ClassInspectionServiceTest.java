@@ -109,9 +109,9 @@ public class ClassInspectionServiceTest {
 		String tmpcp = File.separator + "foo.jar:" + File.separator + "bar.jar:" + File.separator + "blah.jar";
 		assertNotNull(cis.classpathStringToList(tmpcp));
 		assertEquals(new Integer(3), new Integer(cis.classpathStringToList(tmpcp).size()));
-		assertEquals("/foo.jar", cis.classpathStringToList(tmpcp).get(0));
-		assertEquals("/bar.jar", cis.classpathStringToList(tmpcp).get(1));
-		assertEquals("/blah.jar", cis.classpathStringToList(tmpcp).get(2));
+		assertEquals(File.separator +"foo.jar", cis.classpathStringToList(tmpcp).get(0));
+		assertEquals(File.separator +"bar.jar", cis.classpathStringToList(tmpcp).get(1));
+		assertEquals(File.separator +"blah.jar", cis.classpathStringToList(tmpcp).get(2));
 	}
 
 }
