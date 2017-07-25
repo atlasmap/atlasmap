@@ -36,14 +36,10 @@ public class AtlasUtil {
     private static final Logger logger = LoggerFactory.getLogger(AtlasUtil.class);
 
     public static Properties loadPropertiesFromURL(URL url) throws Exception {
-        InputStream is = null;
-        try {
-            is = url.openStream();
+        try (InputStream is = url.openStream()){
             Properties prop = new Properties();
             prop.load(is);
             return prop;
-        } finally {
-            is.close();
         }
     }
 

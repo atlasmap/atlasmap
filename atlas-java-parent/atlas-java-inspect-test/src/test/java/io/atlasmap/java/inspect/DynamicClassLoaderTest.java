@@ -43,23 +43,21 @@ public class DynamicClassLoaderTest {
 				if(!entry.toFile().isFile()) {
 					continue;
 				}
-				JarInputStream jarFile = new JarInputStream(new FileInputStream(entry.toFile()));
-				JarEntry jarEntry;
-				while (true) {
-					jarEntry = jarFile.getNextJarEntry();
-					if (jarEntry == null) {
-						break;
+				try (JarInputStream jarFile = new JarInputStream(new FileInputStream(entry.toFile()))) {
+					JarEntry jarEntry;
+					while (true) {
+						jarEntry = jarFile.getNextJarEntry();
+						if (jarEntry == null) {
+							break;
+						}
+						if (jarEntry.getName().endsWith(".class")) {
+							String className = jarEntry.getName().replaceAll("/", "\\.");
+							classes.add(className);
+							System.out.println("ClassName: " + className);
+						} else {
+							System.out.println("Not a class: " + jarEntry.getName());
+						}
 					}
-					if (jarEntry.getName().endsWith(".class")) {
-						String className = jarEntry.getName().replaceAll("/", "\\.");
-						classes.add(className);
-						System.out.println("ClassName: " + className);
-					} else {
-						System.out.println("Not a class: " + jarEntry.getName());
-					}
-				}
-				if(jarFile != null) {
-					jarFile.close();
 				}
 			}
 		} catch (Exception e) {
