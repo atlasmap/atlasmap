@@ -15,12 +15,7 @@
  */
 package io.atlasmap.v2;
 
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.module.SimpleModule;
-
 import io.atlasmap.v2.AtlasMapping;
 
 import org.junit.After;
@@ -29,10 +24,6 @@ import org.junit.Test;
 
 import java.io.File;
 
-import javax.xml.bind.JAXBElement;
-import javax.xml.transform.stream.StreamSource;
-
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 public class JsonMarshallerTest extends BaseMarshallerTest {

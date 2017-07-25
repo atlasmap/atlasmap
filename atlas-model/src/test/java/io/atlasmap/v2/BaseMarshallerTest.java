@@ -18,12 +18,10 @@ package io.atlasmap.v2;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
-import org.junit.Test;
 import org.junit.rules.TestName;
 
 import io.atlasmap.v2.AtlasMapping;
 import io.atlasmap.v2.Field;
-import io.atlasmap.v2.Mappings;
 import io.atlasmap.v2.FieldType;
 import io.atlasmap.v2.LookupEntry;
 import io.atlasmap.v2.LookupTable;
@@ -31,7 +29,6 @@ import io.atlasmap.v2.MockField;
 
 import io.atlasmap.v2.AtlasModelFactory;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;

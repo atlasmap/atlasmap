@@ -22,7 +22,6 @@ import io.atlasmap.api.AtlasSession;
 import io.atlasmap.api.AtlasValidationException;
 import io.atlasmap.core.AtlasUtil;
 import io.atlasmap.core.BaseAtlasModule;
-import io.atlasmap.core.DefaultAtlasValidationService;
 import io.atlasmap.spi.AtlasModuleDetail;
 import io.atlasmap.spi.AtlasModuleMode;
 import io.atlasmap.v2.Audit;

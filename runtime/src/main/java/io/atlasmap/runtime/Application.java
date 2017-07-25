@@ -20,8 +20,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.ComponentScan;
 
-import io.atlasmap.service.AtlasJsonProvider;
-
 @SpringBootApplication
 @ComponentScan(basePackageClasses = {
     Application.class,

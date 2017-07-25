@@ -13,7 +13,6 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
-import io.atlasmap.java.v2.MavenClasspathRequest;
 import io.atlasmap.v2.AtlasMapping;
 
 public class JavaToXMLJSONMarshallingTest {

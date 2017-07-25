@@ -26,8 +26,6 @@ import io.atlasmap.json.v2.JsonDocument;
 import io.atlasmap.json.v2.JsonInspectionRequest;
 import io.atlasmap.json.v2.JsonInspectionResponse;
 
-import java.io.File;
-
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
