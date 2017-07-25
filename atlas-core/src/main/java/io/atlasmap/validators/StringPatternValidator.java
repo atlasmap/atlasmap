@@ -16,9 +16,10 @@
 package io.atlasmap.validators;
 
 import io.atlasmap.spi.AtlasValidator;
-import io.atlasmap.v2.Validations;
 import io.atlasmap.v2.Validation;
 import io.atlasmap.v2.ValidationStatus;
+
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -41,17 +42,17 @@ public class StringPatternValidator implements AtlasValidator {
     }
 
     @Override
-    public boolean supports(Class clazz) {
+    public boolean supports(Class<?> clazz) {
         return String.class.isAssignableFrom(clazz);
     }
 
     @Override
-    public void validate(Object target, Validations validations) {
+    public void validate(Object target, List<Validation> validations) {
         validate(target, validations, ValidationStatus.ERROR);
     }
 
     @Override
-    public void validate(Object target, Validations validations, ValidationStatus status) {
+    public void validate(Object target, List<Validation> validations, ValidationStatus status) {
         Pattern regEx = Pattern.compile(pattern);
         
         if (target != null && supports(target.getClass())) {
@@ -64,7 +65,7 @@ public class StringPatternValidator implements AtlasValidator {
                     validation.setValue(target.toString());
                     validation.setMessage(violationMessage);
                     validation.setStatus(status);
-                    validations.getValidation().add(validation);
+                    validations.add(validation);
                 }
             } else {
                 if (m.find()) {
@@ -73,7 +74,7 @@ public class StringPatternValidator implements AtlasValidator {
                     validation.setValue(target.toString());
                     validation.setMessage(violationMessage);
                     validation.setStatus(status);
-                    validations.getValidation().add(validation);
+                    validations.add(validation);
                 }
             }
         }

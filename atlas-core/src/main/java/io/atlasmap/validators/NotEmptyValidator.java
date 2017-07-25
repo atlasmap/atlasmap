@@ -18,7 +18,6 @@ package io.atlasmap.validators;
 import io.atlasmap.spi.AtlasValidator;
 import io.atlasmap.v2.Validation;
 import io.atlasmap.v2.ValidationStatus;
-import io.atlasmap.v2.Validations;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -35,29 +34,34 @@ public class NotEmptyValidator implements AtlasValidator {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public boolean supports(Class clazz) {
-
+    public boolean supports(Class<?> clazz) {
         return clazz.isAssignableFrom(List.class) || clazz.isAssignableFrom(Map.class)
                 || clazz.isAssignableFrom(Set.class) || clazz.isAssignableFrom(Collection.class);
-
     }
 
+    public boolean supports(Object object) {
+        return (object instanceof List || object instanceof Map || object instanceof Set || object instanceof Collection);
+    }
+    
     @Override
-    public void validate(Object target, Validations validations) {
+    public void validate(Object target, List<Validation> validations) {
         validate(target, validations, ValidationStatus.ERROR);
     }
 
     @Override
-    public void validate(Object target, Validations validations, ValidationStatus status) {
-
-        if (((Collection) target).isEmpty()) {
+    public void validate(Object target, List<Validation> validations, ValidationStatus status) {
+        
+        if(!supports(target)) {
+            return;
+        }
+         
+        if (((Collection<?>) target).isEmpty()) {
             Validation validation = new Validation();
             validation.setField(field);
             validation.setMessage(this.violationMessage);
             validation.setStatus(status);
             validation.setValue(target.toString());
-            validations.getValidation().add(validation);
+            validations.add(validation);
         }
     }
 }

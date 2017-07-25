@@ -30,6 +30,7 @@ public interface AtlasContextFactory {
 	AtlasConversionService getConversionService() throws AtlasException;
     AtlasFieldActionService getFieldActionService() throws AtlasException;
     AtlasPropertyStrategy getPropertyStrategy() throws AtlasException;
+    AtlasValidationService getValidationService() throws AtlasException;
 	void setProperties(Map<String, String> properties);
 	Map<String, String> getProperties();
 }

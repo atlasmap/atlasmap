@@ -16,59 +16,53 @@
 package io.atlasmap.validators;
 
 import io.atlasmap.v2.Validation;
-import io.atlasmap.v2.Validations;
 import io.atlasmap.validators.StringLengthValidator;
-import io.atlasmap.validators.AtlasValidationHelper;
-import io.atlasmap.validators.DefaultAtlasValidationsHelper;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 
-public class StringLengthValidatorTest {
+public class StringLengthValidatorTest extends BaseValidatorTest {
 
     private StringLengthValidator validator;
-    private Validations validations;
 
     @Before
     public void setUp() {
+        super.setUp();
         validator = new StringLengthValidator("qwerty", "Must be of this length", 1, 10);
-        validations = new DefaultAtlasValidationsHelper();
     }
     
     @After
     public void tearDown() {
+        super.tearDown();
         validator = null;
-        validations = null;
     }
     
     @Test
-    public void supports() throws Exception {
+    public void testSupported() throws Exception {
         assertTrue(validator.supports(String.class));
     }
 
     @Test
-    public void doesnt_supports() throws Exception {
+    public void testUnsupported() throws Exception {
         assertFalse(validator.supports(Integer.class));
     }
 
     @Test
-    public void validate() throws Exception {
+    public void testValidate() throws Exception {
         String pass = "1112332";
         validator.validate(pass, validations);
-        assertFalse(((AtlasValidationHelper)validations).hasErrors());
+        assertFalse(validationHelper.hasErrors());
     }
 
     @Test
-    public void validate_invalid() throws Exception {
+    public void testValidateInvalid() throws Exception {
         String pass = "";
         validator.validate(pass, validations);
-        assertTrue(((AtlasValidationHelper)validations).hasErrors());
-        assertThat(((AtlasValidationHelper)validations).getAllValidations().size(), is(1));
+        assertTrue(validationHelper.hasErrors());
+        assertEquals(new Integer(1), new Integer(validationHelper.getAllValidations().size()));
 
-        Validation validation = validations.getValidation().get(0);
+        Validation validation = validations.get(0);
         assertNotNull(validation);
         assertTrue("".equals(validation.getValue()));
         assertTrue("Must be of this length".equals(validation.getMessage()));

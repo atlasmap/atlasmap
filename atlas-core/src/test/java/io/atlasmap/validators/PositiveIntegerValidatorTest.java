@@ -18,78 +18,75 @@ package io.atlasmap.validators;
 import io.atlasmap.v2.ValidationStatus;
 import io.atlasmap.v2.Validations;
 import io.atlasmap.validators.PositiveIntegerValidator;
-import io.atlasmap.validators.AtlasValidationHelper;
-import io.atlasmap.validators.DefaultAtlasValidationsHelper;
+import io.atlasmap.validators.AtlasValidationTestHelper;
 
 import org.junit.Test;
-import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 import org.junit.After;
 import org.junit.Before;
 
-public class PositiveIntegerValidatorTest {
+public class PositiveIntegerValidatorTest extends BaseValidatorTest {
 
     private PositiveIntegerValidator validator;
-    private Validations validations;
 
     @Before
     public void setUp() {
+        super.setUp();
         validator = new PositiveIntegerValidator("test.integer", "Integer must be >= 0");
-        validations = new DefaultAtlasValidationsHelper();
     }
     
     @After
     public void tearDown() {
+        super.tearDown();
         validator = null;
-        validations = null;
     }
 
     @Test
-    public void supports() throws Exception {
+    public void testSupported() throws Exception {
         assertTrue(validator.supports(Integer.class));
         assertTrue(validator.supports(String.class));
     }
 
     @Test
-    public void doesnot_supports() throws Exception {
+    public void testUnsupported() throws Exception {
         assertFalse(validator.supports(Boolean.class));
     }
 
     @Test
-    public void validate() throws Exception {
+    public void testValidate() throws Exception {
         validator.validate(0, validations);
         validator.validate(1222, validations);
-        assertFalse(((AtlasValidationHelper)validations).hasErrors());
+        assertFalse(validationHelper.hasErrors());
     }
 
     @Test
-    public void validate_Invalid() throws Exception {
+    public void testValidateInvalid() throws Exception {
         validator.validate(-1, validations);
-        assertTrue(((AtlasValidationHelper)validations).hasErrors());
-        assertThat(((AtlasValidationHelper)validations).getCount(), is(1));
+        assertTrue(validationHelper.hasErrors());
+        assertEquals(new Integer(1), new Integer(validationHelper.getCount()));
     }
 
     @Test
-    public void validate_Invalid_Warn() throws Exception {
+    public void testValidateInvalidWarn() throws Exception {
         validator.validate(-1, validations, ValidationStatus.WARN);
-        assertFalse(((AtlasValidationHelper)validations).hasErrors());
-        assertTrue(((AtlasValidationHelper)validations).hasWarnings());
-        assertThat(((AtlasValidationHelper)validations).getCount(), is(1));
+        assertFalse(validationHelper.hasErrors());
+        assertTrue(validationHelper.hasWarnings());
+        assertEquals(new Integer(1), new Integer(validationHelper.getCount()));
     }
 
     @Test
-    public void validate_Invalid_Info() throws Exception {
+    public void testValidateInvalidInfo() throws Exception {
         validator.validate(-1, validations, ValidationStatus.INFO);
-        assertFalse(((AtlasValidationHelper)validations).hasErrors());
-        assertFalse(((AtlasValidationHelper)validations).hasWarnings());
-        assertTrue(((AtlasValidationHelper)validations).hasInfos());
-        assertThat(((AtlasValidationHelper)validations).getCount(), is(1));
+        assertFalse(validationHelper.hasErrors());
+        assertFalse(validationHelper.hasWarnings());
+        assertTrue(validationHelper.hasInfos());
+        assertEquals(new Integer(1), new Integer(validationHelper.getCount()));
     }
 
     @Test
-    public void validateWithErrorLevel() throws Exception {
+    public void testValidateWithErrorLevel() throws Exception {
         validator.validate(0, validations, ValidationStatus.WARN);
-        assertFalse(((AtlasValidationHelper)validations).hasErrors());
+        assertFalse(validationHelper.hasErrors());
     }
 
 }

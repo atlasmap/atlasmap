@@ -41,6 +41,7 @@
 			<modules>
 				<module>atlas-itests-core</module>
 				<module>atlas-itests-reference-mappings</module>
+        <module>atlas-itests-validation-mappings</module>
 				<!--
 				<module>atlas-itests-java-inspect-twitter4j</module>
 				<module>atlas-itests-twitterToSalesforce</module>

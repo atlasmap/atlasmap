@@ -21,7 +21,6 @@ import io.atlasmap.api.AtlasSession;
 import io.atlasmap.api.AtlasValidationException;
 import io.atlasmap.core.AtlasUtil;
 import io.atlasmap.core.BaseAtlasModule;
-import io.atlasmap.core.DefaultAtlasMappingValidator;
 import io.atlasmap.spi.AtlasModuleDetail;
 import io.atlasmap.spi.AtlasModuleMode;
 import io.atlasmap.v2.Audit;
@@ -32,7 +31,7 @@ import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldType;
 import io.atlasmap.v2.Mapping;
 import io.atlasmap.v2.PropertyField;
-import io.atlasmap.v2.Validations;
+import io.atlasmap.v2.Validation;
 import io.atlasmap.xml.v2.DocumentXmlFieldReader;
 import io.atlasmap.xml.v2.XmlField;
 
@@ -90,20 +89,14 @@ public class XmlModule extends BaseAtlasModule {
             throw new AtlasValidationException("Invalid session");
         }
         
-        DefaultAtlasMappingValidator defaultValidator = new DefaultAtlasMappingValidator(atlasSession.getMapping());
-        Validations validations = defaultValidator.validateAtlasMappingFile();
+        XmlValidationService xmlValidationService = new XmlValidationService(getConversionService());
+        List<Validation> xmlValidations = xmlValidationService.validateMapping(atlasSession.getMapping());
+        atlasSession.getValidations().getValidation().addAll(xmlValidations);
         
         if(logger.isDebugEnabled()) {
-            logger.debug("Detected " + validations.getValidation().size() + " core validation notices");
+            logger.debug("Detected " + xmlValidations.size() + " java validation notices");
         }
-        
-        XmlMappingValidator xmlValidator = new XmlMappingValidator(atlasSession.getMapping(), validations);
-        validations = xmlValidator.validateAtlasMappingFile();
-        
-        if(logger.isDebugEnabled()) {
-            logger.debug("Detected " + validations.getValidation().size() + " xml validation notices");
-        }
-        
+
         if(logger.isDebugEnabled()) {
             logger.debug("processPreValidation completed");
         }

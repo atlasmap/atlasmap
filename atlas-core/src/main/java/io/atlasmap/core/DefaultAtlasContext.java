@@ -30,6 +30,7 @@ import io.atlasmap.v2.BaseMapping;
 import io.atlasmap.v2.Collection;
 import io.atlasmap.v2.Mapping;
 import io.atlasmap.v2.Mappings;
+import io.atlasmap.v2.Validation;
 import io.atlasmap.v2.Validations;
 
 import org.slf4j.Logger;
@@ -214,19 +215,16 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
         if(logger.isDebugEnabled()) {
             logger.debug("Begin processValidation " + (session == null ? null : session.toString()));
         }
-        
-        // Replace w/ a preExecute / validation lifecycle phase
-        /*
-        if(session == null || session.getOutputStream() == null) {
-            throw new AtlasException("Unable to marshal, invalid session object." + (session == null ? null : session.toString()));
+
+        List<Validation> validations = getContextFactory().getValidationService().validateMapping(session.getMapping());
+        if(validations != null && !validations.isEmpty()) {
+            session.getValidations().getValidation().addAll(validations);
         }
         
-        
-        if(getSourceModule() == null || getTargetModule() == null) {
-            throw new AtlasException("Unable to marshal, invalid modules. InputModule: " + (getInputModule() == null ? null : getInputModule().toString()) + " OutputModule: " + (getOutputModule() == null ? null : getOutputModule().toString()));
+        if(logger.isDebugEnabled()) {
+            logger.debug("Detected " + validations.size() + " core validation notices");
         }
-        */
-        
+         
         getSourceModule().processPreValidation(session);
         getTargetModule().processPreValidation(session);
    

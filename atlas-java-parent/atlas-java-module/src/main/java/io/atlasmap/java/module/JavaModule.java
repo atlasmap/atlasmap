@@ -26,7 +26,6 @@ import io.atlasmap.core.AtlasModuleSupport;
 import io.atlasmap.core.AtlasUtil;
 import io.atlasmap.core.BaseAtlasModule;
 import io.atlasmap.core.DefaultAtlasContextFactory;
-import io.atlasmap.core.DefaultAtlasMappingValidator;
 import io.atlasmap.java.inspect.ClassHelper;
 import io.atlasmap.java.inspect.ClassInspectionService;
 import io.atlasmap.java.inspect.ConstructException;
@@ -55,8 +54,7 @@ import io.atlasmap.v2.Mapping;
 import io.atlasmap.v2.MappingType;
 import io.atlasmap.v2.Mappings;
 import io.atlasmap.v2.PropertyField;
-import io.atlasmap.v2.Validations;
-
+import io.atlasmap.v2.Validation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -142,22 +140,14 @@ public class JavaModule extends BaseAtlasModule {
             throw new AtlasValidationException("Invalid session");
         }
         
-        DefaultAtlasMappingValidator defaultValidator = new DefaultAtlasMappingValidator(atlasSession.getMapping());
-        Validations validations = defaultValidator.validateAtlasMappingFile();
+        JavaValidationService javaValidator = new JavaValidationService(getConversionService());
+        List<Validation> javaValidations = javaValidator.validateMapping(atlasSession.getMapping());
+        atlasSession.getValidations().getValidation().addAll(javaValidations);
         
         if(logger.isDebugEnabled()) {
-            logger.debug("Detected " + validations.getValidation().size() + " core validation notices");
+            logger.debug("Detected " + javaValidations.size() + " java validation notices");
         }
-        
-        JavaMappingValidator javaValidator = new JavaMappingValidator(atlasSession.getMapping(), validations);
-        validations = javaValidator.validateAtlasMappingFile();
-       
-        if(logger.isDebugEnabled()) {
-            logger.debug("Detected " + validations.getValidation().size() + " java validation notices");
-        }
-       
-        atlasSession.getValidations().getValidation().addAll(validations.getValidation());
-        
+               
         if(logger.isDebugEnabled()) {
             logger.debug("processPreValidation completed");
         }

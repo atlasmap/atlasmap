@@ -15,10 +15,10 @@
  */
 package io.atlasmap.validators;
 
+import java.util.List;
 import io.atlasmap.spi.AtlasValidator;
 import io.atlasmap.v2.Validation;
 import io.atlasmap.v2.ValidationStatus;
-import io.atlasmap.v2.Validations;
 
 public class PositiveIntegerValidator implements AtlasValidator {
     
@@ -31,17 +31,17 @@ public class PositiveIntegerValidator implements AtlasValidator {
     }
 
     @Override
-    public boolean supports(Class clazz) {
+    public boolean supports(Class<?> clazz) {
         return Integer.class.isAssignableFrom(clazz) || String.class.isAssignableFrom(clazz);
     }
 
     @Override
-    public void validate(Object target, Validations validations) {
+    public void validate(Object target, List<Validation> validations) {
         this.validate(target, validations, ValidationStatus.ERROR);
     }
 
     @Override
-    public void validate(Object target, Validations validations, ValidationStatus status) {
+    public void validate(Object target, List<Validation> validations, ValidationStatus status) {
         Integer value = (Integer) target;
         if (value == null || value < 0) {
             Validation validation = new Validation();
@@ -49,7 +49,7 @@ public class PositiveIntegerValidator implements AtlasValidator {
             validation.setValue(target.toString());
             validation.setMessage(violationMessage);
             validation.setStatus(status);
-            validations.getValidation().add(validation);
+            validations.add(validation);
         }
     }
 }

@@ -17,7 +17,7 @@ package io.atlasmap.validators;
 
 import io.atlasmap.spi.AtlasValidator;
 import io.atlasmap.v2.ValidationStatus;
-import io.atlasmap.v2.Validations;
+import io.atlasmap.v2.Validation;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -36,7 +36,7 @@ public class CompositeValidator implements AtlasValidator {
     }
 
     @Override
-    public boolean supports(Class clazz) {
+    public boolean supports(Class<?> clazz) {
         for (AtlasValidator validator : validators) {
             if (validator.supports(clazz)) {
                 return true;
@@ -46,12 +46,12 @@ public class CompositeValidator implements AtlasValidator {
     }
 
     @Override
-    public void validate(Object target, Validations validations) {
+    public void validate(Object target, List<Validation> validations) {
         validate(target, validations, ValidationStatus.ERROR);
     }
 
     @Override
-    public void validate(Object target, Validations validations, ValidationStatus status) {
+    public void validate(Object target, List<Validation> validations, ValidationStatus status) {
         for (AtlasValidator validator : validators) {
             validator.validate(target, validations, status);
         }

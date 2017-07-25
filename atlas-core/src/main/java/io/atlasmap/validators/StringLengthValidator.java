@@ -15,10 +15,11 @@
  */
 package io.atlasmap.validators;
 
+import java.util.List;
+
 import io.atlasmap.spi.AtlasValidator;
 import io.atlasmap.v2.Validation;
 import io.atlasmap.v2.ValidationStatus;
-import io.atlasmap.v2.Validations;
 
 public class StringLengthValidator implements AtlasValidator {
 
@@ -35,17 +36,17 @@ public class StringLengthValidator implements AtlasValidator {
     }
 
     @Override
-    public boolean supports(Class clazz) {
+    public boolean supports(Class<?> clazz) {
         return String.class.isAssignableFrom(clazz);
     }
 
     @Override
-    public void validate(Object target, Validations validations) {
+    public void validate(Object target, List<Validation> validations) {
         validate(target, validations, ValidationStatus.ERROR);
     }
 
     @Override
-    public void validate(Object target, Validations validations, ValidationStatus status) {
+    public void validate(Object target, List<Validation> validations, ValidationStatus status) {
         String value = (String) target;
         if (value.isEmpty() || value.length() > maxLength || value.length() < minLength) {
             Validation validation = new Validation();
@@ -53,7 +54,7 @@ public class StringLengthValidator implements AtlasValidator {
             validation.setValue(target.toString());
             validation.setMessage(violationMessage);
             validation.setStatus(status);
-            validations.getValidation().add(validation);
+            validations.add(validation);
         }
     }
 }

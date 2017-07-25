@@ -21,7 +21,6 @@ import io.atlasmap.v2.LookupTable;
 import io.atlasmap.v2.LookupTables;
 import io.atlasmap.v2.Validation;
 import io.atlasmap.v2.ValidationStatus;
-import io.atlasmap.v2.Validations;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -44,17 +43,17 @@ public class LookupTableNameValidator implements AtlasValidator {
     }
 
     @Override
-    public boolean supports(Class clazz) {
+    public boolean supports(Class<?> clazz) {
         return LookupTables.class.isAssignableFrom(clazz);
     }
 
     @Override
-    public void validate(Object target, Validations validations) {
+    public void validate(Object target, List<Validation> validations) {
         validate(target, validations, ValidationStatus.ERROR);
     }
 
     @Override
-    public void validate(Object target, Validations validations, ValidationStatus status) {
+    public void validate(Object target, List<Validation> validations, ValidationStatus status) {
         LookupTables lookupTables = (LookupTables) target;
         List<LookupTable> tables = lookupTables.getLookupTable();
         List<LookupTable> deduped = Collections.unmodifiableList(tables).stream()
@@ -66,7 +65,7 @@ public class LookupTableNameValidator implements AtlasValidator {
             validation.setValue(dupedName);
             validation.setMessage(violationMessage);
             validation.setStatus(status);
-            validations.getValidation().add(validation);
+            validations.add(validation);
         }
     }
 

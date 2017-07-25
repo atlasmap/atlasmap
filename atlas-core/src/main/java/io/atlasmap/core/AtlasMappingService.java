@@ -186,9 +186,9 @@ public class AtlasMappingService implements Serializable {
 	}
 
 	public void validate(AtlasMapping atlasMapping) throws AtlasValidationException {
-		if(atlasMapping == null || atlasMapping.getName() == null) {
-			throw new AtlasValidationException("AtlasMapping and name must be specified");
-		}
+//		if(atlasMapping == null || atlasMapping.getName() == null) {
+//			throw new AtlasValidationException("AtlasMapping and name must be specified");
+//		}
 	}
 	
 	public JAXBContext getJAXBContext() {

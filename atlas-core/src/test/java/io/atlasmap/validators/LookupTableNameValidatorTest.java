@@ -15,60 +15,49 @@
  */
 package io.atlasmap.validators;
 
-import io.atlasmap.v2.AtlasModelFactory;
 import io.atlasmap.v2.LookupTable;
 import io.atlasmap.v2.LookupTables;
-import io.atlasmap.v2.Validations;
 import io.atlasmap.validators.LookupTableNameValidator;
-import io.atlasmap.validators.AtlasValidationHelper;
-import io.atlasmap.validators.DefaultAtlasValidationsHelper;
-
 import org.junit.Before;
 import org.junit.Test;
-
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-
 import org.junit.After;
 
-/**
- */
-public class LookupTableNameValidatorTest extends BaseMappingTest {
-    private LookupTableNameValidator validator;
-    private Validations validations;
+public class LookupTableNameValidatorTest extends BaseValidatorTest {
     
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
+        super.setUp();
         validator = new LookupTableNameValidator("lookuptables.lookuptable.name", "LookupTables contain duplicated LookupTable names.");
-        validations = new DefaultAtlasValidationsHelper();
     }
     
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
+        super.tearDown();
         validator = null;
-        validations = null;
     }
 
     @Test
-    public void supports() throws Exception {
+    public void testSupportsLookupTables() throws Exception {
         LookupTables lookupTables = makeLookupTables();
         assertTrue(validator.supports(lookupTables.getClass()));
     }
 
     @Test
-    public void validate_DuplicatedNames() throws Exception {
+    public void testValidateDuplicatedNames() throws Exception {
         LookupTables lookupTables = makeLookupTables();
         validator.validate(lookupTables, validations);
-        assertTrue(((AtlasValidationHelper)validations).hasErrors());
-        debugErrors(validations);
+        assertTrue(validationHelper.hasErrors());
+        debugErrors(validationHelper);
     }
 
     @Test
-    public void validate_NoDuplicateNames() throws Exception {
+    public void testValidateNoDuplicateNames() throws Exception {
         LookupTables lookupTables = makeLookupTables();
         lookupTables.getLookupTable().remove(2);
         validator.validate(lookupTables, validations);
-        assertFalse(((AtlasValidationHelper)validations).hasErrors());
+        assertFalse(validationHelper.hasErrors());
     }
 
 

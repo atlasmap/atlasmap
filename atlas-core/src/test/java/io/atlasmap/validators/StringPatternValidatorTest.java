@@ -16,66 +16,51 @@
 package io.atlasmap.validators;
 
 import org.junit.Test;
-
-import io.atlasmap.v2.Validations;
 import io.atlasmap.validators.StringPatternValidator;
-import io.atlasmap.validators.AtlasValidationHelper;
-import io.atlasmap.validators.DefaultAtlasValidationsHelper;
-
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-
 import org.junit.After;
-import org.junit.Before;
 
-public class StringPatternValidatorTest {
+public class StringPatternValidatorTest extends BaseValidatorTest {
 
-    private StringPatternValidator validator;
-    private Validations validations;
-
-    @Before
-    public void setUp() {
-        validations = new DefaultAtlasValidationsHelper();
-    }
-    
     @After
     public void tearDown() {
+        super.tearDown();
         validator = null;
-        validations = null;
     }
-
+    
     @Test
-    public void supports() throws Exception {
+    public void testSupported() throws Exception {
         validator = new StringPatternValidator("qwerty", "Must match .*", ".*");
         assertTrue(validator.supports(String.class));
     }
 
     @Test
-    public void not_Supports() throws Exception {
+    public void testUnsupported() throws Exception {
         validator = new StringPatternValidator("qwerty", "Must match [0-9_.]", "[0-9_.]");
         assertFalse(validator.supports(Double.class));
     }
 
     @Test
-    public void validate() throws Exception {
+    public void testValidate() throws Exception {
         validator = new StringPatternValidator("qwerty", "Must match [^A-Za-z0-9_.]", "[^A-Za-z0-9_.]");
         validator.validate("This. &* should result in an error", validations);
-        assertTrue(((AtlasValidationHelper)validations).hasErrors());
-        validations.getValidation().clear();
-        assertFalse(((AtlasValidationHelper)validations).hasErrors());
+        assertTrue(validationHelper.hasErrors());
+        validations.clear();
+        assertFalse(validationHelper.hasErrors());
         validator.validate("This_isafineexample.whatever1223", validations);
-        assertFalse(((AtlasValidationHelper)validations).hasErrors());
+        assertFalse(validationHelper.hasErrors());
     }
 
     @Test
-    public void validate_UsingMatch() throws Exception {
+    public void testValidateUsingMatch() throws Exception {
         validator = new StringPatternValidator("qwerty", "Must match [0-9]+", "[0-9]+", true);
         validator.validate("0333", validations);
-        assertFalse(((AtlasValidationHelper)validations).hasErrors());
+        assertFalse(validationHelper.hasErrors());
 
         validator = new StringPatternValidator("qwerty", "Must match [0-9]", "[0-9]", true);
         validator.validate("This_isafineexample.whatever", validations);
-        assertTrue(((AtlasValidationHelper)validations).hasErrors());
+        assertTrue(validationHelper.hasErrors());
     }
 
 }
