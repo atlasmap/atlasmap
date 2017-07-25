@@ -11,7 +11,8 @@ import io.atlasmap.v2.FieldType;
  */
 public class MockPrimitiveConverter implements AtlasPrimitiveConverter<String> {
 
-    @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.BOOLEAN, concerns = AtlasConversionConcern.RANGE)
+    @Override
+	@AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.BOOLEAN, concerns = AtlasConversionConcern.RANGE)
     public Boolean convertToBoolean(String value) throws AtlasConversionException {
         if (value == null) {
             return null;

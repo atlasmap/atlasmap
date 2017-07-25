@@ -68,7 +68,8 @@ public class JsonValidationService implements AtlasValidationService {
         init();
     }
 
-    public List<Validation> validateMapping(AtlasMapping mapping) {
+    @Override
+	public List<Validation> validateMapping(AtlasMapping mapping) {
         List<Validation> validations = new ArrayList<Validation>();
         if(mapping != null && mapping.getMappings() != null && mapping.getMappings().getMapping() != null && !mapping.getMappings().getMapping().isEmpty()) {
             validateMappings(mapping.getMappings().getMapping(), validations);

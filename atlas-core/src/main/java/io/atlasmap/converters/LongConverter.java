@@ -29,7 +29,8 @@ public class LongConverter implements AtlasPrimitiveConverter<Long> {
      * @return
      * @throws AtlasConversionException
      */
-    @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.BOOLEAN, concerns = AtlasConversionConcern.RANGE)
+    @Override
+	@AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.BOOLEAN, concerns = AtlasConversionConcern.RANGE)
     public Boolean convertToBoolean(Long value) throws AtlasConversionException {
         if (value == null) {
             return null;
@@ -49,7 +50,8 @@ public class LongConverter implements AtlasPrimitiveConverter<Long> {
      * @throws AtlasConversionException
      * @throws AtlasUnsupportedException
      */
-    @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.BYTE, concerns = AtlasConversionConcern.UNSUPPORTED)
+    @Override
+	@AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.BYTE, concerns = AtlasConversionConcern.UNSUPPORTED)
     public Byte convertToByte(Long value) throws AtlasConversionException {
         if (value == null) {
             return null;
@@ -62,7 +64,8 @@ public class LongConverter implements AtlasPrimitiveConverter<Long> {
      * @return
      * @throws AtlasConversionException
      */
-    @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.CHAR, concerns = AtlasConversionConcern.RANGE)
+    @Override
+	@AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.CHAR, concerns = AtlasConversionConcern.RANGE)
     public Character convertToCharacter(Long value) throws AtlasConversionException {
         if (value == null) {
             return null;
@@ -80,7 +83,8 @@ public class LongConverter implements AtlasPrimitiveConverter<Long> {
      * @return
      * @throws AtlasConversionException
      */
-    @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.DOUBLE)
+    @Override
+	@AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.DOUBLE)
     public Double convertToDouble(Long value) throws AtlasConversionException {
         if (value == null) {
             return null;
@@ -88,7 +92,8 @@ public class LongConverter implements AtlasPrimitiveConverter<Long> {
         return value.doubleValue();
     }
 
-    @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.FLOAT)
+    @Override
+	@AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.FLOAT)
     public Float convertToFloat(Long value) throws AtlasConversionException {
         if (value == null) {
             return null;
@@ -99,7 +104,8 @@ public class LongConverter implements AtlasPrimitiveConverter<Long> {
         return value.floatValue();
     }
 
-    @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.INTEGER, concerns = AtlasConversionConcern.RANGE)
+    @Override
+	@AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.INTEGER, concerns = AtlasConversionConcern.RANGE)
     public Integer convertToInteger(Long value) throws AtlasConversionException {
         if (value == null) {
             return null;
@@ -110,7 +116,8 @@ public class LongConverter implements AtlasPrimitiveConverter<Long> {
         return value.intValue();
     }
 
-    @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.LONG)
+    @Override
+	@AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.LONG)
     public Long convertToLong(Long value) throws AtlasConversionException {
         if (value == null) {
             return null;
@@ -119,7 +126,8 @@ public class LongConverter implements AtlasPrimitiveConverter<Long> {
         return new Long(value);
     }
 
-    @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.SHORT, concerns = AtlasConversionConcern.RANGE)
+    @Override
+	@AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.SHORT, concerns = AtlasConversionConcern.RANGE)
     public Short convertToShort(Long value) throws AtlasConversionException {
         if (value == null) {
             return null;
@@ -130,7 +138,8 @@ public class LongConverter implements AtlasPrimitiveConverter<Long> {
         return value.shortValue();
     }
 
-    @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.STRING)
+    @Override
+	@AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.STRING)
     public String convertToString(Long value) throws AtlasConversionException {
         if (value == null) {
             return null;

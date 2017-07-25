@@ -47,7 +47,8 @@ public class DefaultAtlasPropertyStrategy implements AtlasPropertyStrategy {
 
     private AtlasConversionService atlasConversionService = null;
     
-    public void processPropertyField(AtlasMapping atlasMapping, PropertyField propertyField, Map<String, Object> runtimeProperties) throws AtlasUnsupportedException, AtlasConversionException {
+    @Override
+	public void processPropertyField(AtlasMapping atlasMapping, PropertyField propertyField, Map<String, Object> runtimeProperties) throws AtlasUnsupportedException, AtlasConversionException {
         if(propertyField == null || propertyField.getName() == null || propertyField.getName().trim().length() == 0) {
             if(logger.isDebugEnabled()) {
                 logger.debug(String.format("Null or empty PropertyField specified popertyField=%s", AtlasModelFactory.toString(propertyField)));

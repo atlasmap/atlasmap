@@ -29,7 +29,8 @@ public class DoubleConverter implements AtlasPrimitiveConverter<Double> {
      * @return
      * @throws AtlasConversionException
      */
-    @AtlasConversionInfo(sourceType = FieldType.DOUBLE, targetType = FieldType.BOOLEAN, concerns = AtlasConversionConcern.RANGE)
+    @Override
+	@AtlasConversionInfo(sourceType = FieldType.DOUBLE, targetType = FieldType.BOOLEAN, concerns = AtlasConversionConcern.RANGE)
     public Boolean convertToBoolean(Double value) throws AtlasConversionException {
         if (value == null) {
             return null;
@@ -49,7 +50,8 @@ public class DoubleConverter implements AtlasPrimitiveConverter<Double> {
      * @throws AtlasConversionException
      * @throws AtlasUnsupportedException
      */
-    @AtlasConversionInfo(sourceType = FieldType.DOUBLE, targetType = FieldType.BYTE, concerns = AtlasConversionConcern.UNSUPPORTED)
+    @Override
+	@AtlasConversionInfo(sourceType = FieldType.DOUBLE, targetType = FieldType.BYTE, concerns = AtlasConversionConcern.UNSUPPORTED)
     public Byte convertToByte(Double value) throws AtlasConversionException {
         if (value == null) {
             return null;
@@ -62,7 +64,8 @@ public class DoubleConverter implements AtlasPrimitiveConverter<Double> {
      * @return
      * @throws AtlasConversionException
      */
-    @AtlasConversionInfo(sourceType = FieldType.DOUBLE, targetType = FieldType.CHAR, concerns = AtlasConversionConcern.RANGE)
+    @Override
+	@AtlasConversionInfo(sourceType = FieldType.DOUBLE, targetType = FieldType.CHAR, concerns = AtlasConversionConcern.RANGE)
     public Character convertToCharacter(Double value) throws AtlasConversionException {
         if (value == null) {
             return null;
@@ -80,7 +83,8 @@ public class DoubleConverter implements AtlasPrimitiveConverter<Double> {
      * @return
      * @throws AtlasConversionException
      */
-    @AtlasConversionInfo(sourceType = FieldType.DOUBLE, targetType = FieldType.DOUBLE)
+    @Override
+	@AtlasConversionInfo(sourceType = FieldType.DOUBLE, targetType = FieldType.DOUBLE)
     public Double convertToDouble(Double value) throws AtlasConversionException {
         if (value == null) {
             return null;
@@ -94,7 +98,8 @@ public class DoubleConverter implements AtlasPrimitiveConverter<Double> {
      * @return
      * @throws AtlasConversionException
      */
-    @AtlasConversionInfo(sourceType = FieldType.DOUBLE, targetType = FieldType.FLOAT, concerns = AtlasConversionConcern.RANGE)
+    @Override
+	@AtlasConversionInfo(sourceType = FieldType.DOUBLE, targetType = FieldType.FLOAT, concerns = AtlasConversionConcern.RANGE)
     public Float convertToFloat(Double value) throws AtlasConversionException {
         if (value == null) {
             return null;
@@ -110,7 +115,8 @@ public class DoubleConverter implements AtlasPrimitiveConverter<Double> {
      * @return
      * @throws AtlasConversionException
      */
-    @AtlasConversionInfo(sourceType = FieldType.DOUBLE, targetType = FieldType.INTEGER, concerns = AtlasConversionConcern.RANGE)
+    @Override
+	@AtlasConversionInfo(sourceType = FieldType.DOUBLE, targetType = FieldType.INTEGER, concerns = AtlasConversionConcern.RANGE)
     public Integer convertToInteger(Double value) throws AtlasConversionException {
         if (value == null) {
             return null;
@@ -126,7 +132,8 @@ public class DoubleConverter implements AtlasPrimitiveConverter<Double> {
      * @return
      * @throws AtlasConversionException
      */
-    @AtlasConversionInfo(sourceType = FieldType.DOUBLE, targetType = FieldType.LONG, concerns = AtlasConversionConcern.RANGE)
+    @Override
+	@AtlasConversionInfo(sourceType = FieldType.DOUBLE, targetType = FieldType.LONG, concerns = AtlasConversionConcern.RANGE)
     public Long convertToLong(Double value) throws AtlasConversionException {
         if (value == null) {
             return null;
@@ -142,7 +149,8 @@ public class DoubleConverter implements AtlasPrimitiveConverter<Double> {
      * @return
      * @throws AtlasConversionException
      */
-    @AtlasConversionInfo(sourceType = FieldType.DOUBLE, targetType = FieldType.SHORT, concerns = AtlasConversionConcern.RANGE)
+    @Override
+	@AtlasConversionInfo(sourceType = FieldType.DOUBLE, targetType = FieldType.SHORT, concerns = AtlasConversionConcern.RANGE)
     public Short convertToShort(Double value) throws AtlasConversionException {
         if (value == null) {
             return null;
@@ -158,7 +166,8 @@ public class DoubleConverter implements AtlasPrimitiveConverter<Double> {
      * @return
      * @throws AtlasConversionException
      */
-    @AtlasConversionInfo(sourceType = FieldType.DOUBLE, targetType = FieldType.BOOLEAN)
+    @Override
+	@AtlasConversionInfo(sourceType = FieldType.DOUBLE, targetType = FieldType.BOOLEAN)
     public String convertToString(Double value) throws AtlasConversionException {
         if (value == null) {
             return null;

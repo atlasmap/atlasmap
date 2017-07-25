@@ -29,6 +29,7 @@ public class AtlasJsonProvider implements ContextResolver<ObjectMapper> {
 		objectMapper = new AtlasJsonMapper();
 	}
 
+	@Override
 	public ObjectMapper getContext(Class<?> objectType) {
 		return objectMapper;
 	}

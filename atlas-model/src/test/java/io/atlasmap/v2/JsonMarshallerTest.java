@@ -39,7 +39,8 @@ public class JsonMarshallerTest extends BaseMarshallerTest {
 
     public ObjectMapper mapper = null;
 
-    @Before
+    @Override
+	@Before
     public void setUp() throws Exception {
         super.setUp();
 
@@ -48,7 +49,8 @@ public class JsonMarshallerTest extends BaseMarshallerTest {
         mapper = new AtlasJsonMapper();
     }
 
-    @After
+    @Override
+	@After
     public void tearDown() throws Exception {
         super.tearDown();
 

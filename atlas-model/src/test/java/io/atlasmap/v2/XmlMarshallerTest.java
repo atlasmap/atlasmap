@@ -41,6 +41,7 @@ public class XmlMarshallerTest extends BaseMarshallerTest {
 	private Marshaller marshaller = null;
 	private Unmarshaller unmarshaller = null;
 	
+	@Override
 	@Before
 	public void setUp() throws Exception {
 		super.setUp();
@@ -71,6 +72,7 @@ public class XmlMarshallerTest extends BaseMarshallerTest {
 		unmarshaller = jaxbContext.createUnmarshaller();
 	}
 	
+	@Override
 	@After
 	public void tearDown() throws Exception {
 		super.tearDown();

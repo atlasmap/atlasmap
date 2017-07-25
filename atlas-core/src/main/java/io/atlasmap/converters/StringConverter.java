@@ -32,7 +32,8 @@ public class StringConverter implements AtlasPrimitiveConverter<String> {
      * @return
      * @throws AtlasConversionException
      */
-    @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.BOOLEAN, concerns = AtlasConversionConcern.RANGE)
+    @Override
+	@AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.BOOLEAN, concerns = AtlasConversionConcern.RANGE)
     public Boolean convertToBoolean(String value) throws AtlasConversionException {
         if (value == null) {
             return null;
@@ -51,7 +52,8 @@ public class StringConverter implements AtlasPrimitiveConverter<String> {
      * @throws AtlasConversionException
      * @throws AtlasUnsupportedException
      */
-    @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.BYTE, concerns = AtlasConversionConcern.UNSUPPORTED)
+    @Override
+	@AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.BYTE, concerns = AtlasConversionConcern.UNSUPPORTED)
     public Byte convertToByte(String value) throws AtlasConversionException {
         if (value == null) {
             return null;
@@ -64,7 +66,8 @@ public class StringConverter implements AtlasPrimitiveConverter<String> {
      * @return
      * @throws AtlasConversionException
      */
-    @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.CHAR, concerns = AtlasConversionConcern.RANGE)
+    @Override
+	@AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.CHAR, concerns = AtlasConversionConcern.RANGE)
     public Character convertToCharacter(String value) throws AtlasConversionException {
         if (value == null) {
             return null;
@@ -83,7 +86,8 @@ public class StringConverter implements AtlasPrimitiveConverter<String> {
      * @return
      * @throws AtlasConversionException
      */
-    @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.DOUBLE, concerns = {AtlasConversionConcern.FORMAT, AtlasConversionConcern.RANGE})
+    @Override
+	@AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.DOUBLE, concerns = {AtlasConversionConcern.FORMAT, AtlasConversionConcern.RANGE})
     public Double convertToDouble(String value) throws AtlasConversionException {
         if (value == null) {
             return null;
@@ -110,7 +114,8 @@ public class StringConverter implements AtlasPrimitiveConverter<String> {
      * @return
      * @throws AtlasConversionException
      */
-    @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.FLOAT, concerns = {AtlasConversionConcern.FORMAT, AtlasConversionConcern.RANGE})
+    @Override
+	@AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.FLOAT, concerns = {AtlasConversionConcern.FORMAT, AtlasConversionConcern.RANGE})
     public Float convertToFloat(String value) throws AtlasConversionException {
         if (value == null) {
             return null;
@@ -141,7 +146,8 @@ public class StringConverter implements AtlasPrimitiveConverter<String> {
      * @return
      * @throws AtlasConversionException
      */
-    @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.INTEGER, concerns = {AtlasConversionConcern.FORMAT, AtlasConversionConcern.RANGE})
+    @Override
+	@AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.INTEGER, concerns = {AtlasConversionConcern.FORMAT, AtlasConversionConcern.RANGE})
     public Integer convertToInteger(String value) throws AtlasConversionException {
         if (value == null) {
             return null;
@@ -172,7 +178,8 @@ public class StringConverter implements AtlasPrimitiveConverter<String> {
      * @return
      * @throws AtlasConversionException
      */
-    @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.LONG, concerns = {AtlasConversionConcern.FORMAT, AtlasConversionConcern.RANGE})
+    @Override
+	@AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.LONG, concerns = {AtlasConversionConcern.FORMAT, AtlasConversionConcern.RANGE})
     public Long convertToLong(String value) throws AtlasConversionException {
         if (value == null) {
             return null;
@@ -203,7 +210,8 @@ public class StringConverter implements AtlasPrimitiveConverter<String> {
      * @return
      * @throws AtlasConversionException
      */
-    @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.SHORT, concerns = {AtlasConversionConcern.FORMAT, AtlasConversionConcern.RANGE})
+    @Override
+	@AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.SHORT, concerns = {AtlasConversionConcern.FORMAT, AtlasConversionConcern.RANGE})
     public Short convertToShort(String value) throws AtlasConversionException {
         if (value == null) {
             return null;
@@ -222,7 +230,8 @@ public class StringConverter implements AtlasPrimitiveConverter<String> {
      * @return
      * @throws AtlasConversionException
      */
-    @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.STRING)
+    @Override
+	@AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.STRING)
     public String convertToString(String value) throws AtlasConversionException {
         if (value == null) {
             return null;

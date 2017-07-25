@@ -100,7 +100,8 @@ public class DefaultAtlasValidationService implements AtlasValidationService {
         validatorMap.clear();
     }
     
-    public List<Validation> validateMapping(AtlasMapping mapping) {
+    @Override
+	public List<Validation> validateMapping(AtlasMapping mapping) {
         List<Validation> validations = new ArrayList<Validation>();
         validatorMap.get("mapping.name").validate(mapping.getName(), validations);
         

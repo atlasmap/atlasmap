@@ -46,9 +46,12 @@ public class DefaultAtlasSession implements AtlasSession {
 								 validations = new Validations();
 								 audits = new Audits();}
 
-    public AtlasContext getAtlasContext() { return atlasContext; }
-    public void setAtlasContext(AtlasContext atlasContext) { this.atlasContext = atlasContext; }
-    public AtlasMapping getMapping() { return mapping; }
+    @Override
+	public AtlasContext getAtlasContext() { return atlasContext; }
+    @Override
+	public void setAtlasContext(AtlasContext atlasContext) { this.atlasContext = atlasContext; }
+    @Override
+	public AtlasMapping getMapping() { return mapping; }
 	@Override
     public Validations getValidations() { return this.validations; }
     @Override
@@ -73,7 +76,8 @@ public class DefaultAtlasSession implements AtlasSession {
     public void setOutput(Object output) { this.outputMap.put(AtlasConstants.DEFAULT_TARGET_DOC_ID, output); }
 	@Override
     public void setOutput(Object outputObject, String docId) { this.outputMap.put(docId, outputObject); }
-    public Map<String, Object> getProperties() { return this.properties; }
+    @Override
+	public Map<String, Object> getProperties() { return this.properties; }
 
     @Override
     public Integer errorCount() {

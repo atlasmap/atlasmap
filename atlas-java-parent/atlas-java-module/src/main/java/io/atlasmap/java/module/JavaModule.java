@@ -853,11 +853,13 @@ public class JavaModule extends BaseAtlasModule {
         return String.valueOf(sentence.charAt(0)).toUpperCase() + sentence.substring(1);
     }
     
-    public AtlasConversionService getConversionService() {
+    @Override
+	public AtlasConversionService getConversionService() {
         return atlasConversionService;
     }
 
-    public void setConversionService(AtlasConversionService atlasConversionService) {
+    @Override
+	public void setConversionService(AtlasConversionService atlasConversionService) {
         this.atlasConversionService = atlasConversionService;
     }
     

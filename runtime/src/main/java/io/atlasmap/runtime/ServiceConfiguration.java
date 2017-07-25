@@ -44,7 +44,8 @@ public class ServiceConfiguration {
          * @return
          * @throws Exception
          */
-        @POST
+        @Override
+		@POST
         @Consumes({MediaType.APPLICATION_JSON})
         @Produces({MediaType.APPLICATION_JSON})
         @Path("/mavenclasspath")

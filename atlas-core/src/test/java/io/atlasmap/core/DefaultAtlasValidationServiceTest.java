@@ -39,13 +39,15 @@ public class DefaultAtlasValidationServiceTest extends BaseValidatorTest {
 
     private DefaultAtlasValidationService validationService = null;
     
-    @Before
+    @Override
+	@Before
     public void setUp() {
         super.setUp();
         validationService = new DefaultAtlasValidationService();
     }
     
-    @After
+    @Override
+	@After
     public void tearDown() {
         super.tearDown();
         validationService = null;

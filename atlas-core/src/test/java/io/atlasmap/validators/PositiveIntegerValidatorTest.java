@@ -29,13 +29,15 @@ public class PositiveIntegerValidatorTest extends BaseValidatorTest {
 
     private PositiveIntegerValidator validator;
 
-    @Before
+    @Override
+	@Before
     public void setUp() {
         super.setUp();
         validator = new PositiveIntegerValidator("test.integer", "Integer must be >= 0");
     }
     
-    @After
+    @Override
+	@After
     public void tearDown() {
         super.tearDown();
         validator = null;

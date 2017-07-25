@@ -259,7 +259,8 @@ public class AtlasPath {
         }
     }
     
-    public String toString() {
+    @Override
+	public String toString() {
         StringBuffer buffer = new StringBuffer();
 
         int i = 0;
