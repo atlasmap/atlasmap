@@ -20,6 +20,7 @@ import io.atlasmap.api.AtlasContextFactory;
 import io.atlasmap.api.AtlasConversionService;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.api.AtlasFieldActionService;
+import io.atlasmap.api.AtlasValidationService;
 import io.atlasmap.mxbean.AtlasContextFactoryMXBean;
 import io.atlasmap.spi.AtlasModule;
 import io.atlasmap.spi.AtlasModuleDetail;
@@ -61,6 +62,7 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
 	private DefaultAtlasConversionService atlasConversionService = null;
 	private DefaultAtlasFieldActionService atlasFieldActionService = null;
 	private AtlasPropertyStrategy atlasPropertyStrategy = new DefaultAtlasPropertyStrategy();
+	private AtlasValidationService atlasValidationService = new DefaultAtlasValidationService();
 
 	private Map<String, String> properties = null;
 
@@ -416,4 +418,11 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
         this.atlasPropertyStrategy = atlasPropertyStrategy;
     }
 	
+    public AtlasValidationService getValidationService() {
+        return atlasValidationService;
+    }
+
+    public void setValidationService(AtlasValidationService atlasValidationService) {
+        this.atlasValidationService = atlasValidationService;
+    }
 }

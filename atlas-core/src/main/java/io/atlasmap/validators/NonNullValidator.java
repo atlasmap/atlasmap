@@ -15,10 +15,10 @@
  */
 package io.atlasmap.validators;
 
+import java.util.List;
 import io.atlasmap.spi.AtlasValidator;
 import io.atlasmap.v2.Validation;
 import io.atlasmap.v2.ValidationStatus;
-import io.atlasmap.v2.Validations;
 
 public class NonNullValidator implements AtlasValidator {
 
@@ -31,24 +31,24 @@ public class NonNullValidator implements AtlasValidator {
     }
 
     @Override
-    public boolean supports(Class clazz) {
+    public boolean supports(Class<?> clazz) {
         return true;
     }
 
     @Override
-    public void validate(Object target, Validations validations) {
+    public void validate(Object target, List<Validation> validations) {
         validate(target, validations, ValidationStatus.ERROR);
     }
 
     @Override
-    public void validate(Object target, Validations validations, ValidationStatus status) {
+    public void validate(Object target, List<Validation> validations, ValidationStatus status) {
 
         if (target == null) {
             Validation validation = new Validation();
             validation.setField(field);
             validation.setMessage(violationMessage);
             validation.setStatus(status);
-            validations.getValidation().add(validation);
+            validations.add(validation);
         } else if (target.getClass().isAssignableFrom(String.class)) {
             String value = (String) target;
             if (value.trim().isEmpty()) {
@@ -58,7 +58,7 @@ public class NonNullValidator implements AtlasValidator {
                 validation.setMessage(violationMessage);
                 validation.setStatus(status);
                 validation.setValue(target.toString());
-                validations.getValidation().add(validation);            
+                validations.add(validation);            
             }
         }
     }

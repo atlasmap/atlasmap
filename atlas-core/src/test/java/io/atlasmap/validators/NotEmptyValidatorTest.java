@@ -16,11 +16,7 @@
 package io.atlasmap.validators;
 
 import io.atlasmap.v2.ValidationStatus;
-import io.atlasmap.v2.Validations;
 import io.atlasmap.validators.NotEmptyValidator;
-import io.atlasmap.validators.AtlasValidationHelper;
-import io.atlasmap.validators.DefaultAtlasValidationsHelper;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,29 +26,26 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 
-public class NotEmptyValidatorTest {
+public class NotEmptyValidatorTest extends BaseValidatorTest {
 
     private NotEmptyValidator validator;
-    private Validations validations;
 
     @Before
     public void setUp() {
+        super.setUp();
         validator = new NotEmptyValidator("test.field", "Collection should not be empty");
-        validations = new DefaultAtlasValidationsHelper();
     }
     
     @After
     public void tearDown() {
+        super.setUp();
         validator = null;
-        validations = null;
     }
     
     @Test
-    public void supports() throws Exception {
+    public void testSupported() throws Exception {
         assertTrue(validator.supports(Map.class));
         assertTrue(validator.supports(List.class));
         assertTrue(validator.supports(Set.class));
@@ -60,31 +53,31 @@ public class NotEmptyValidatorTest {
     }
 
     @Test
-    public void not_supports() throws Exception {
+    public void testUnsupported() throws Exception {
         assertFalse(validator.supports(HashMap.class));
     }
 
     @Test
-    public void validate() throws Exception {
+    public void testValidate() throws Exception {
         List<String> stuff = new ArrayList<>();
         stuff.add("one");
         stuff.add("two");
 
         validator.validate(stuff, validations);
-        assertFalse(((AtlasValidationHelper)validations).hasErrors());
+        assertFalse(validationHelper.hasErrors());
 
         validator.validate(stuff, validations, ValidationStatus.WARN);
-        assertFalse(((AtlasValidationHelper)validations).hasErrors());
+        assertFalse(validationHelper.hasErrors());
     }
 
     @Test
-    public void invalid_validate() throws Exception {
+    public void testValidateInvalid() throws Exception {
         List<String> stuff = new ArrayList<>();
         validator.validate(stuff, validations);
-        assertTrue(((AtlasValidationHelper)validations).hasErrors());
-        assertThat(((AtlasValidationHelper)validations).getCount(), is(1));
-        assertFalse(((AtlasValidationHelper)validations).hasWarnings());
-        assertFalse(((AtlasValidationHelper)validations).hasInfos());
+        assertTrue(validationHelper.hasErrors());
+        assertEquals(new Integer(1), new Integer(validationHelper.getCount()));
+        assertFalse(validationHelper.hasWarnings());
+        assertFalse(validationHelper.hasInfos());
     }
 
 }

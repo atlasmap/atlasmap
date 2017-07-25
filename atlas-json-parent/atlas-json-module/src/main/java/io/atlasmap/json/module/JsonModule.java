@@ -22,7 +22,7 @@ import io.atlasmap.api.AtlasSession;
 import io.atlasmap.api.AtlasValidationException;
 import io.atlasmap.core.AtlasUtil;
 import io.atlasmap.core.BaseAtlasModule;
-import io.atlasmap.core.DefaultAtlasMappingValidator;
+import io.atlasmap.core.DefaultAtlasValidationService;
 import io.atlasmap.spi.AtlasModuleDetail;
 import io.atlasmap.spi.AtlasModuleMode;
 import io.atlasmap.v2.Audit;
@@ -35,6 +35,7 @@ import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldType;
 import io.atlasmap.v2.Mapping;
 import io.atlasmap.v2.PropertyField;
+import io.atlasmap.v2.Validation;
 import io.atlasmap.v2.Validations;
 import io.atlasmap.json.core.DocumentJsonFieldReader;
 import io.atlasmap.json.core.DocumentJsonFieldWriter;
@@ -87,18 +88,15 @@ public class JsonModule extends BaseAtlasModule {
             throw new AtlasValidationException("Invalid session");
         }
         
-        DefaultAtlasMappingValidator defaultValidator = new DefaultAtlasMappingValidator(atlasSession.getMapping());
-        Validations validations = defaultValidator.validateAtlasMappingFile();
-        
-        if(logger.isDebugEnabled()) {
-            logger.debug("Detected " + validations.getValidation().size() + " core validation notices");
+        Validations validations = atlasSession.getValidations();
+        JsonValidationService jsonValidationService = new JsonValidationService(getConversionService());
+        List<Validation> jsonValidations = jsonValidationService.validateMapping(atlasSession.getMapping());
+        if(jsonValidations != null && !jsonValidations.isEmpty()) {
+            validations.getValidation().addAll(jsonValidations);
         }
         
-        JsonMappingValidator jsonValidator = new JsonMappingValidator(atlasSession.getMapping(), validations);
-        validations = jsonValidator.validateAtlasMappingFile();
-        
         if(logger.isDebugEnabled()) {
-            logger.debug("Detected " + validations.getValidation().size() + " json validation notices");
+            logger.debug("Detected " + jsonValidations.size() + " json validation notices");
         }
         
         if(logger.isDebugEnabled()) {

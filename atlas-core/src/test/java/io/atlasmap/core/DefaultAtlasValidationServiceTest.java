@@ -23,77 +23,87 @@ import io.atlasmap.v2.LookupTables;
 import io.atlasmap.v2.Mapping;
 import io.atlasmap.v2.MappingType;
 import io.atlasmap.v2.Validations;
-import io.atlasmap.validators.AtlasValidationHelper;
-import io.atlasmap.validators.BaseMappingTest;
-import io.atlasmap.validators.DefaultAtlasValidationsHelper;
+import io.atlasmap.validators.BaseValidatorTest;
+import io.atlasmap.validators.AtlasValidationTestHelper;
 import io.atlasmap.core.AtlasMappingUtil;
-import io.atlasmap.core.DefaultAtlasMappingValidator;
+import io.atlasmap.core.DefaultAtlasValidationService;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import static org.junit.Assert.*;
 
-public class DefaultAtlasMappingValidationTest extends BaseMappingTest {
+public class DefaultAtlasValidationServiceTest extends BaseValidatorTest {
 
+    private DefaultAtlasValidationService validationService = null;
+    
+    @Before
+    public void setUp() {
+        super.setUp();
+        validationService = new DefaultAtlasValidationService();
+    }
+    
+    @After
+    public void tearDown() {
+        super.tearDown();
+        validationService = null;
+    }
+    
     @Test
-    public void validateAtlasMappingFile_HappyPath() throws Exception {
+    public void testValidateAtlasMappingFileHappyPath() throws Exception {
         AtlasMapping mapping = getAtlasMappingFullValid();
         assertNotNull(mapping);
 
         //validation
-        DefaultAtlasMappingValidator validator = new DefaultAtlasMappingValidator(mapping);
-        Validations validations = validator.validateAtlasMappingFile();
+        validations.addAll(validationService.validateMapping(mapping));
 
-        assertFalse(((AtlasValidationHelper)validations).hasErrors());
-        assertFalse(((AtlasValidationHelper)validations).hasWarnings());
-        assertFalse(((AtlasValidationHelper)validations).hasInfos());
+        assertFalse(validationHelper.hasErrors());
+        assertFalse(validationHelper.hasWarnings());
+        assertFalse(validationHelper.hasInfos());
     }
 
     @Test
-    public void validateAtlasMappingFile_HappyPath2() throws Exception {
+    public void testValidateAtlasMappingFileHappyPath2() throws Exception {
         AtlasMapping mapping = getAtlasMappingFullValid();
         assertNotNull(mapping);
 
         //validation
-        Validations validations = new DefaultAtlasValidationsHelper();
-        DefaultAtlasMappingValidator validator = new DefaultAtlasMappingValidator(mapping, validations);
-        validator.validateAtlasMappingFile();
+        validations.addAll(validationService.validateMapping(mapping));
 
-        assertFalse(((AtlasValidationHelper)validations).hasErrors());
-        assertFalse(((AtlasValidationHelper)validations).hasWarnings());
-        assertFalse(((AtlasValidationHelper)validations).hasInfos());
+        assertFalse(validationHelper.hasErrors());
+        assertFalse(validationHelper.hasWarnings());
+        assertFalse(validationHelper.hasInfos());
     }
 
     @Test
-    public void validateAtlasMappingFile_InvalidName() throws Exception {
+    public void testValidateAtlasMappingFileInvalidName() throws Exception {
         AtlasMapping mapping = new AtlasMapping();
         mapping.setName("thisis in_valid.name");
 
-        DefaultAtlasMappingValidator validator = new DefaultAtlasMappingValidator(mapping);
-        Validations validations = validator.validateAtlasMappingFile();
-        assertTrue(((AtlasValidationHelper)validations).hasErrors());
-        assertFalse(((AtlasValidationHelper)validations).hasWarnings());
-        assertFalse(((AtlasValidationHelper)validations).hasInfos());
+        validations.addAll(validationService.validateMapping(mapping));
+        assertTrue(validationHelper.hasErrors());
+        assertFalse(validationHelper.hasWarnings());
+        assertFalse(validationHelper.hasInfos());
 
     }
 
 
     @Test
-    public void validateAtlasMappingFile_LookupTablesDuplicateNames() throws Exception {
+    public void testValidateAtlasMappingFileLookupTablesDuplicateNames() throws Exception {
         AtlasMapping mapping = getAtlasMappingWithLookupTables("duplicate_name", "duplicate_name");
-        DefaultAtlasMappingValidator validator = new DefaultAtlasMappingValidator(mapping);
-        Validations validations = validator.validateAtlasMappingFile();
+        validations.addAll(validationService.validateMapping(mapping));
 
-        assertTrue(((AtlasValidationHelper)validations).hasErrors());
-        assertFalse(((AtlasValidationHelper)validations).hasWarnings());
-        assertFalse(((AtlasValidationHelper)validations).hasInfos());
+        assertTrue(validationHelper.hasErrors());
+        assertFalse(validationHelper.hasWarnings());
+        assertFalse(validationHelper.hasInfos());
 
     }
 
 
     @Test
-    public void validateAtlasMappingFile_LookupFieldMappingRefNonExistentNames() throws Exception {
+    public void testValidateAtlasMappingFileLookupFieldMappingRefNonExistentNames() throws Exception {
         AtlasMapping mapping = getAtlasMappingWithLookupTables("table1", "table2");
 
         //add one that does not exists
@@ -108,16 +118,15 @@ public class DefaultAtlasMappingValidationTest extends BaseMappingTest {
 
         mapping.getMappings().getMapping().add(lookupFieldMapping);
 
-        DefaultAtlasMappingValidator validator = new DefaultAtlasMappingValidator(mapping);
-        Validations validations = validator.validateAtlasMappingFile();
+        validations.addAll(validationService.validateMapping(mapping));
 
-        assertTrue(((AtlasValidationHelper)validations).hasErrors());
-        assertFalse(((AtlasValidationHelper)validations).hasWarnings());
-        assertFalse(((AtlasValidationHelper)validations).hasInfos());
+        assertTrue(validationHelper.hasErrors());
+        assertFalse(validationHelper.hasWarnings());
+        assertFalse(validationHelper.hasInfos());
     }
 
     @Test
-    public void validateAtlasMappingFile_LookupFieldMappingUnusedLookupTable() throws Exception {
+    public void testValidateAtlasMappingFileLookupFieldMappingUnusedLookupTable() throws Exception {
         AtlasMapping mapping = getAtlasMappingFullValid();
         LookupTables lookupTables = new LookupTables();
         mapping.setLookupTables(lookupTables);
@@ -144,16 +153,15 @@ public class DefaultAtlasMappingValidationTest extends BaseMappingTest {
 
         mapping.getMappings().getMapping().add(lookupFieldMapping);
 
-        DefaultAtlasMappingValidator validator = new DefaultAtlasMappingValidator(mapping);
-        Validations validations = validator.validateAtlasMappingFile();
+        validations.addAll(validationService.validateMapping(mapping));
 
-        assertFalse(((AtlasValidationHelper)validations).hasErrors());
-        assertTrue(((AtlasValidationHelper)validations).hasWarnings());
-        assertFalse(((AtlasValidationHelper)validations).hasInfos());
+        assertFalse(validationHelper.hasErrors());
+        assertTrue(validationHelper.hasWarnings());
+        assertFalse(validationHelper.hasInfos());
     }
 
     @Test
-    public void validateAtlasMappingFile_NoLookupFieldMappingsWithTablesDefined() throws Exception {
+    public void testValidateAtlasMappingFileNoLookupFieldMappingsWithTablesDefined() throws Exception {
         AtlasMapping mapping = getAtlasMappingFullValid();
         LookupTables lookupTables = new LookupTables();
         mapping.setLookupTables(lookupTables);
@@ -164,12 +172,11 @@ public class DefaultAtlasMappingValidationTest extends BaseMappingTest {
         lookupTables.getLookupTable().add(lookupTable);
 
 
-        DefaultAtlasMappingValidator validator = new DefaultAtlasMappingValidator(mapping);
-        Validations validations = validator.validateAtlasMappingFile();
+        validations.addAll(validationService.validateMapping(mapping));
 
-        assertFalse(((AtlasValidationHelper)validations).hasErrors());
-        assertTrue(((AtlasValidationHelper)validations).hasWarnings());
-        assertFalse(((AtlasValidationHelper)validations).hasInfos());
+        assertFalse(validationHelper.hasErrors());
+        assertTrue(validationHelper.hasWarnings());
+        assertFalse(validationHelper.hasInfos());
     }
 
     @Test

@@ -16,55 +16,48 @@
 package io.atlasmap.validators;
 
 import io.atlasmap.v2.Validation;
-import io.atlasmap.v2.Validations;
 import io.atlasmap.validators.NonNullValidator;
-import io.atlasmap.validators.AtlasValidationHelper;
-import io.atlasmap.validators.DefaultAtlasValidationsHelper;
 
 import org.junit.Test;
-import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 import org.junit.After;
 import org.junit.Before;
 
-public class NonNullValidatorTest {
-
-    private NonNullValidator validator;
-    private Validations validations;
+public class NonNullValidatorTest extends BaseValidatorTest {
 
     @Before
     public void setUp() {
+        super.setUp();
         validator = new NonNullValidator("qwerty", "Cannot be null");
-        validations = new DefaultAtlasValidationsHelper();
     }
     
     @After
     public void tearDown() {
+        super.tearDown();
         validator = null;
-        validations = null;
     }
     
     @Test
-    public void supports() throws Exception {
+    public void testSupports() throws Exception {
         assertTrue(validator.supports(String.class));
         assertTrue(validator.supports(Integer.class));
         assertTrue(validator.supports(Double.class));
     }
 
     @Test
-    public void validate() throws Exception {
+    public void testValidate() throws Exception {
         String notNull = "notNull";
         validator.validate(notNull, validations);
-        assertFalse(((AtlasValidationHelper)validations).hasErrors());
+        assertFalse(validationHelper.hasErrors());
     }
 
     @Test
-    public void validate_invalid() throws Exception {
+    public void testValidateInvalid() throws Exception {
         validator.validate(null, validations);
-        assertTrue(((AtlasValidationHelper)validations).hasErrors());
-        assertThat(((AtlasValidationHelper)validations).getCount(), is(1));
+        assertTrue(validationHelper.hasErrors());
+        assertEquals(new Integer(1), new Integer(validationHelper.getCount()));
 
-        Validation validation = ((AtlasValidationHelper)validations).getAllValidations().get(0);
+        Validation validation = validationHelper.getAllValidations().get(0);
         assertNotNull(validation);
 
         // TODO: Support rejected value assertNull(validation.getRejectedValue());
@@ -72,12 +65,12 @@ public class NonNullValidatorTest {
         assertTrue("qwerty".equals(validation.getField()));
 
         String empty = "";
-        ((AtlasValidationHelper)validations).getAllValidations().clear();
+        validationHelper.getAllValidations().clear();
 
         validator.validate(empty, validations);
 
-        assertTrue(((AtlasValidationHelper)validations).hasErrors());
-        assertThat(((AtlasValidationHelper)validations).getCount(), is(1));
+        assertTrue(validationHelper.hasErrors());
+        assertEquals(new Integer(1), new Integer(validationHelper.getCount()));
     }
 
 }

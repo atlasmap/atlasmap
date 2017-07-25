@@ -1,30 +1,25 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<AtlasMapping xmlns="http://atlasmap.io/v2" xmlns:ns2="http://atlasmap.io/java/v2" name="thisis_a_valid.name" sourceUri="atlas:java::2" targetUri="atlas:java::3">
-    <Properties/>
-    <FieldMappings>
-        <FieldMapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="MapFieldMapping">
-            <InputField>
-                <Field xsi:type="ns2:JavaField" name="inputName" className="java.lang.String" type="String"/>
-                <FieldActions/>
+<AtlasMapping xmlns="http://atlasmap.io/v2" xmlns:ns2="http://atlasmap.io/java/v2" name="thisis_a_valid.name">
+    <DataSource uri="atlas:java?className=io.atlasmap.java.module.MockJavaClass" dataSourceType="Source"/>
+    <DataSource uri="atlas:java?className=io.atlasmap.java.module.MockJavaClass" dataSourceType="Target"/>
+    <Mappings>
+        <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="Mapping" mappingType="Map">
+            <InputField xsi:type="ns2:JavaField" path="firstName" fieldType="String">
+                <ns2:Modifiers/>
             </InputField>
-            <OutputField>
-                <Field xsi:type="ns2:JavaField" name="outputName" className="java.lang.String" type="String"/>
-                <FieldActions/>
+            <OutputField xsi:type="ns2:JavaField" path="firstName" fieldType="String">
+                <ns2:Modifiers/>
             </OutputField>
-        </FieldMapping>
-        <FieldMapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="SeparateFieldMapping">
-            <InputField>
-                <Field xsi:type="ns2:JavaField" name="inputName" className="java.lang.String" type="String"/>
-                <FieldActions/>
+        </Mapping>
+        <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="Mapping" mappingType="Separate">
+            <InputField xsi:type="ns2:JavaField" path="displayName" fieldType="String">
+                <ns2:Modifiers/>
             </InputField>
-            <OutputFields>
-                <MappedField>
-                    <Field xsi:type="ns2:JavaField" name="outputName" className="java.lang.String" type="String"/>
-                    <FieldActions>
-                        <FieldAction xsi:type="MapAction" index="0"/>
-                    </FieldActions>
-                </MappedField>
-            </OutputFields>
-        </FieldMapping>
-    </FieldMappings>
+            <OutputField xsi:type="ns2:JavaField" index="1" path="lastName" fieldType="String">
+                <ns2:Modifiers/>
+            </OutputField>
+        </Mapping>
+    </Mappings>
+    <LookupTables/>
+    <Properties/>
 </AtlasMapping>
