@@ -104,9 +104,16 @@ public class AtlasUtilTest {
 	public void testFindClassesForPackage() {
 	    List<Class<?>> classes = AtlasUtil.findClassesForPackage("io.atlasmap.v2");
 	    assertNotNull(classes);
+	    int found = 0;
 	    for(Class<?> clazz : classes) {
-	        System.out.println("Class: " + clazz.getName());
+	        //System.out.println(clazz);
+	        if("io.atlasmap.v2.Field".equals(clazz.getName())) { found++; }
+	        if("io.atlasmap.v2.AtlasMapping".equals(clazz.getName())) { found++; }
+	        if("io.atlasmap.v2.Action".equals(clazz.getName())) { found++; }
+	        if("io.atlasmap.v2.Capitalize".equals(clazz.getName())) { found++; }
 	    }
+	    
+	    assertEquals(new Integer(4), new Integer(found));
 	}
 
 }
