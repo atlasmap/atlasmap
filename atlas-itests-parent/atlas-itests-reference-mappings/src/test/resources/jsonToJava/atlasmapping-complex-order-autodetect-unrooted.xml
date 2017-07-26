@@ -10,7 +10,7 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="JsonJavaComplexMappi
     </Mapping>
     <Mapping xsi:type="Mapping" mappingType="Map">
       <InputField xsi:type="ns3:JsonField" path="/Contact" />
-      <OutputField xsi:type="ns2:JavaField" path="/contact" className="io.atlasmap.java.test.TargetContact" />
+      <OutputField xsi:type="ns2:JavaField" path="/contact" className="io.atlasmap.java.test.TargetContact" fieldType="Complex"/>
     </Mapping>
     <Mapping xsi:type="Mapping" mappingType="Map">
       <InputField xsi:type="ns3:JsonField" path="/Contact/firstName"/>
@@ -30,7 +30,7 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="JsonJavaComplexMappi
     </Mapping>
      <Mapping xsi:type="Mapping" mappingType="Map">
       <InputField xsi:type="ns3:JsonField" path="/Address" />
-      <OutputField xsi:type="ns2:JavaField" path="/address" className="io.atlasmap.java.test.TargetAddress" />
+      <OutputField xsi:type="ns2:JavaField" path="/address" className="io.atlasmap.java.test.TargetAddress" fieldType="Complex"/>
     </Mapping>
     <Mapping xsi:type="Mapping" mappingType="Map">
       <InputField xsi:type="ns3:JsonField" path="/Address/addressLine1"/>
