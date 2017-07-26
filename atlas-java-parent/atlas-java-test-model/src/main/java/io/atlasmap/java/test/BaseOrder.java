@@ -74,6 +74,6 @@ public abstract class BaseOrder implements Serializable {
 	}
 	@Override
 	public String toString() {
-		return "Order [orderId=" + orderId + " contact=" + (contact == null ? "" : contact.toString()) + ", address=" + (address == null ? "" : address.toString()) + "]";
+		return getClass().getName() + " [orderId=" + orderId + " contact=" + (contact == null ? "" : contact.toString()) + ", address=" + (address == null ? "" : address.toString()) + "]";
 	}
 }

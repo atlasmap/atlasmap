@@ -15,6 +15,8 @@
  */
 package io.atlasmap.java.test;
 
+import java.util.Arrays;
+
 public abstract class BaseFlatPrimitiveClass {
 
 	protected int intField;
@@ -120,5 +122,31 @@ public abstract class BaseFlatPrimitiveClass {
 	public void setBoxedStringField(String boxedStringField) { this.boxedStringField = boxedStringField; }
 	public String[] getBoxedStringArrayField() { return boxedStringArrayField; }
 	public void setBoxedStringArrayField(String[] boxedStringArrayField) { this.boxedStringArrayField = boxedStringArrayField; }
+	
+	@Override
+	public String toString() {
+		return "BaseFlatPrimitiveClass [intField=" + intField + ", shortField=" + shortField + ", longField="
+				+ longField + ", doubleField=" + doubleField + ", floatField=" + floatField + ", booleanField="
+				+ booleanField + ", charField=" + charField + ", byteField=" + byteField + ", boxedBooleanField="
+				+ boxedBooleanField + ", boxedByteField=" + boxedByteField + ", boxedCharField=" + boxedCharField
+				+ ", boxedDoubleField=" + boxedDoubleField + ", boxedFloatField=" + boxedFloatField + ", boxedIntField="
+				+ boxedIntField + ", boxedLongField=" + boxedLongField + ", boxedShortField=" + boxedShortField
+				+ ", boxedStringField=" + boxedStringField + ", intArrayField=" + Arrays.toString(intArrayField)
+				+ ", shortArrayField=" + Arrays.toString(shortArrayField) + ", longArrayField="
+				+ Arrays.toString(longArrayField) + ", doubleArrayField=" + Arrays.toString(doubleArrayField)
+				+ ", floatArrayField=" + Arrays.toString(floatArrayField) + ", booleanArrayField="
+				+ Arrays.toString(booleanArrayField) + ", charArrayField=" + Arrays.toString(charArrayField)
+				+ ", byteArrayField=" + Arrays.toString(byteArrayField) + ", boxedIntArrayField="
+				+ Arrays.toString(boxedIntArrayField) + ", boxedShortArrayField="
+				+ Arrays.toString(boxedShortArrayField) + ", boxedLongArrayField="
+				+ Arrays.toString(boxedLongArrayField) + ", boxedDoubleArrayField="
+				+ Arrays.toString(boxedDoubleArrayField) + ", boxedFloatArrayField="
+				+ Arrays.toString(boxedFloatArrayField) + ", boxedBooleanArrayField="
+				+ Arrays.toString(boxedBooleanArrayField) + ", boxedCharArrayField="
+				+ Arrays.toString(boxedCharArrayField) + ", boxedByteArrayField=" + Arrays.toString(boxedByteArrayField)
+				+ ", boxedStringArrayField=" + Arrays.toString(boxedStringArrayField) + "]";
+	}
+	
+	
 	
 }
