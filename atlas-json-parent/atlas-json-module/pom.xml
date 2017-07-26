@@ -21,7 +21,7 @@
   <parent>
     <groupId>io.atlasmap</groupId>
     <artifactId>atlas-json-parent</artifactId>
-    <version>1.15.0-SNAPSHOT</version>
+    <version>1.16.0-SNAPSHOT</version>
   </parent>
   <artifactId>atlas-json-module</artifactId>  
   <packaging>bundle</packaging>
