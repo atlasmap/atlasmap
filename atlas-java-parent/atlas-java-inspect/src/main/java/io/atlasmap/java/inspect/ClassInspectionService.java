@@ -15,21 +15,6 @@
  */
 package io.atlasmap.java.inspect;
 
-import io.atlasmap.api.AtlasConversionService;
-import io.atlasmap.java.v2.AtlasJavaModelFactory;
-import io.atlasmap.java.v2.JavaClass;
-import io.atlasmap.java.v2.JavaEnumField;
-import io.atlasmap.java.v2.JavaField;
-import io.atlasmap.java.v2.ModifierList;
-import io.atlasmap.v2.CollectionType;
-import io.atlasmap.v2.FieldStatus;
-import io.atlasmap.v2.FieldType;
-import io.atlasmap.v2.StringList;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.xeustechnologies.jcl.JarClassLoader;
-import org.xeustechnologies.jcl.exception.JclException;
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedType;
@@ -49,6 +34,23 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.xeustechnologies.jcl.JarClassLoader;
+import org.xeustechnologies.jcl.exception.JclException;
+
+import io.atlasmap.api.AtlasConversionService;
+import io.atlasmap.core.PathUtil;
+import io.atlasmap.java.v2.AtlasJavaModelFactory;
+import io.atlasmap.java.v2.JavaClass;
+import io.atlasmap.java.v2.JavaEnumField;
+import io.atlasmap.java.v2.JavaField;
+import io.atlasmap.java.v2.ModifierList;
+import io.atlasmap.v2.CollectionType;
+import io.atlasmap.v2.FieldStatus;
+import io.atlasmap.v2.FieldType;
+import io.atlasmap.v2.StringList;
 
 public class ClassInspectionService implements Serializable {
 
@@ -328,7 +330,7 @@ public class ClassInspectionService implements Serializable {
         s.setName(StringUtil.removeGetterAndLowercaseFirstLetter(m.getName()));
         
         if(pathPrefix != null && pathPrefix.length() > 0) {
-            s.setPath(pathPrefix + JavaPath.JAVAPATH_SEPARATOR + StringUtil.removeGetterAndLowercaseFirstLetter(m.getName()));
+            s.setPath(pathPrefix + PathUtil.PATH_SEPARATOR + StringUtil.removeGetterAndLowercaseFirstLetter(m.getName()));
         } else {
             s.setPath(StringUtil.removeGetterAndLowercaseFirstLetter(m.getName()));
         }
@@ -394,7 +396,7 @@ public class ClassInspectionService implements Serializable {
         s.setName(StringUtil.removeSetterAndLowercaseFirstLetter(m.getName()));
         
         if(pathPrefix != null && pathPrefix.length() > 0) {
-            s.setPath(pathPrefix + JavaPath.JAVAPATH_SEPARATOR + StringUtil.removeSetterAndLowercaseFirstLetter(m.getName()));
+            s.setPath(pathPrefix + PathUtil.PATH_SEPARATOR + StringUtil.removeSetterAndLowercaseFirstLetter(m.getName()));
         } else {
             s.setPath(StringUtil.removeSetterAndLowercaseFirstLetter(m.getName()));
         }
@@ -468,7 +470,7 @@ public class ClassInspectionService implements Serializable {
         s.setName(f.getName());
         
         if(pathPrefix != null && pathPrefix.length() > 0) {
-            s.setPath(pathPrefix + JavaPath.JAVAPATH_SEPARATOR + f.getName());
+            s.setPath(pathPrefix + PathUtil.PATH_SEPARATOR + f.getName());
         } else {
             s.setPath(f.getName());
         }

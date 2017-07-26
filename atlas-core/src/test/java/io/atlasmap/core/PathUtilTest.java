@@ -29,7 +29,7 @@ public class PathUtilTest {
     
     @Test
     public void testOneClass() {
-        PathUtil foo = new PathUtil();
+        PathUtil foo = new PathUtil("");
         foo.appendField("user");
         assertEquals("user", foo.toString());
     }
@@ -37,7 +37,7 @@ public class PathUtilTest {
     
     @Test
     public void testFields() {
-        PathUtil foo = new PathUtil();
+        PathUtil foo = new PathUtil("");
         foo.appendField("user").appendField("name");
         assertEquals("/user/name", foo.toString());
         foo.appendField("bar");
@@ -186,5 +186,55 @@ public class PathUtilTest {
         p = new PathUtil("/orders<>/contact/firstName");
         assertFalse(p.isIndexedCollection());
 
+    }
+    
+    @Test
+    public void testRemoveCollectionIndexes() {
+    	//no collection cases
+    	assertEquals(null, PathUtil.removeCollectionIndex(null));
+    	assertEquals("blah", PathUtil.removeCollectionIndex("blah"));
+    	assertEquals("@blah", PathUtil.removeCollectionIndex("@blah"));
+    	assertEquals("@x:blah", PathUtil.removeCollectionIndex("@x:blah"));
+    	
+    	//cases with already empty collections
+    	assertEquals("blah[]", PathUtil.removeCollectionIndex("blah[]"));
+    	assertEquals("@blah[]", PathUtil.removeCollectionIndex("@blah[]"));
+    	assertEquals("@x:blah[]", PathUtil.removeCollectionIndex("@x:blah[]"));
+    	assertEquals("blah<>", PathUtil.removeCollectionIndex("blah<>"));
+    	assertEquals("@blah<>", PathUtil.removeCollectionIndex("@blah<>"));
+    	assertEquals("@x:blah<>", PathUtil.removeCollectionIndex("@x:blah<>"));
+    	assertEquals("blah{}", PathUtil.removeCollectionIndex("blah{}"));
+    	assertEquals("@blah{}", PathUtil.removeCollectionIndex("@blah{}"));
+    	assertEquals("@x:blah{}", PathUtil.removeCollectionIndex("@x:blah{}"));
+    	    	
+    	//cases with stuff in collections
+    	assertEquals("blah[]", PathUtil.removeCollectionIndex("blah[8]"));
+    	assertEquals("@blah[]", PathUtil.removeCollectionIndex("@blah[955]"));
+    	assertEquals("@x:blah[]", PathUtil.removeCollectionIndex("@x:blah[800]"));
+    	assertEquals("blah<>", PathUtil.removeCollectionIndex("blah<5>"));
+    	assertEquals("@blah<>", PathUtil.removeCollectionIndex("@blah<6>"));
+    	assertEquals("@x:blah<>", PathUtil.removeCollectionIndex("@x:blah<75555>"));
+    	assertEquals("blah{}", PathUtil.removeCollectionIndex("blah{5}"));
+    	assertEquals("@blah{}", PathUtil.removeCollectionIndex("@blah{6}"));
+    	assertEquals("@x:blah{}", PathUtil.removeCollectionIndex("@x:blah{65565657}"));
+    	
+    	//strange cases with malformed collections
+    	testMalformed("blah");
+    	testMalformed("@blah");
+    	testMalformed("@x:blah");
+    	
+    	assertEquals("/a/b[]/c/d[]/e{}/f<>/g[112/x{/z>>11", 
+    			PathUtil.removeCollectionIndexes("/a/b[]/c/d[15]/e{11}/f<111>/g[112/x{/z>>11"));
+    }
+    
+    public void testMalformed(String var) {
+    	assertEquals(var + "[", PathUtil.removeCollectionIndex(var + "["));
+    	assertEquals(var + "]", PathUtil.removeCollectionIndex(var + "]"));
+    	assertEquals(var + "<", PathUtil.removeCollectionIndex(var + "<"));
+    	assertEquals(var + ">", PathUtil.removeCollectionIndex(var + ">"));
+    	assertEquals(var + "{", PathUtil.removeCollectionIndex(var + "{"));
+    	assertEquals(var + "}", PathUtil.removeCollectionIndex(var + "}"));
+    	assertEquals(var + "{{", PathUtil.removeCollectionIndex(var + "{{"));
+    	assertEquals(var + "}}", PathUtil.removeCollectionIndex(var + "}}"));
     }
 }
