@@ -5,35 +5,35 @@
     <Mappings>
         <Mapping xsi:type="Mapping" mappingType="Map">
             <InputField xsi:type="ns3:XmlField" path="/XmlFBPA/@boxedIntField"/>
-            <OutputField xsi:type="ns2:JavaField" path="boxedIntField"/>
+            <OutputField xsi:type="ns2:JavaField" path="/boxedIntField"/>
         </Mapping>
         <Mapping xsi:type="Mapping" mappingType="Map">
             <InputField xsi:type="ns3:XmlField" path="/XmlFBPA/@boxedShortField"/>
-            <OutputField xsi:type="ns2:JavaField" path="boxedShortField"/>
+            <OutputField xsi:type="ns2:JavaField" path="/boxedShortField"/>
         </Mapping>
         <Mapping xsi:type="Mapping" mappingType="Map">
             <InputField xsi:type="ns3:XmlField" path="/XmlFBPA/@boxedLongField"/>
-            <OutputField xsi:type="ns2:JavaField" path="boxedLongField"/>
+            <OutputField xsi:type="ns2:JavaField" path="/boxedLongField"/>
         </Mapping>
         <Mapping xsi:type="Mapping" mappingType="Map">
             <InputField xsi:type="ns3:XmlField" path="/XmlFBPA/@boxedDoubleField"/>
-            <OutputField xsi:type="ns2:JavaField" path="boxedDoubleField"/>
+            <OutputField xsi:type="ns2:JavaField" path="/boxedDoubleField"/>
         </Mapping>
         <Mapping xsi:type="Mapping" mappingType="Map">
             <InputField xsi:type="ns3:XmlField" path="/XmlFBPA/@boxedFloatField"/>
-            <OutputField xsi:type="ns2:JavaField" path="boxedFloatField"/>
+            <OutputField xsi:type="ns2:JavaField" path="/boxedFloatField"/>
         </Mapping>
         <Mapping xsi:type="Mapping" mappingType="Map">
             <InputField xsi:type="ns3:XmlField" path="/XmlFBPA/@boxedBooleanField"/>
-            <OutputField xsi:type="ns2:JavaField" path="boxedBooleanField"/>
+            <OutputField xsi:type="ns2:JavaField" path="/boxedBooleanField"/>
         </Mapping>
         <Mapping xsi:type="Mapping" mappingType="Map">
             <InputField xsi:type="ns3:XmlField" path="/XmlFBPA/@boxedCharField"/>
-            <OutputField xsi:type="ns2:JavaField" path="boxedCharField"/>
+            <OutputField xsi:type="ns2:JavaField" path="/boxedCharField"/>
         </Mapping>
         <Mapping xsi:type="Mapping" mappingType="Map">
             <InputField xsi:type="ns3:XmlField" path="/XmlFBPA/@boxedByteField"/>
-            <OutputField xsi:type="ns2:JavaField" path="boxedByteField"/>
+            <OutputField xsi:type="ns2:JavaField" path="/boxedByteField"/>
         </Mapping>
     </Mappings>
     <LookupTables/>

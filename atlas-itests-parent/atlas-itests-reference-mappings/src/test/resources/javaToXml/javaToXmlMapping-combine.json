@@ -33,7 +33,7 @@
             {
               "jsonType": "io.atlasmap.java.v2.JavaField",
               "name": "lastName",
-              "path": "lastName",
+              "path": "/lastName",
               "fieldType": "STRING",
               "docId": "io.atlasmap.java.test.SourceContact"
             }

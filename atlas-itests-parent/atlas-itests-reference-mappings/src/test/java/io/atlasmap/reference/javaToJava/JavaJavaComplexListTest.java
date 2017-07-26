@@ -20,13 +20,17 @@ import static org.junit.Assert.*;
 import java.io.File;
 import java.util.Arrays;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
 import io.atlasmap.api.AtlasContext;
+import io.atlasmap.api.AtlasContextFactory;
 import io.atlasmap.api.AtlasSession;
 import io.atlasmap.core.AtlasMappingService;
 import io.atlasmap.core.DefaultAtlasContext;
+import io.atlasmap.core.DefaultAtlasContextFactory;
 import io.atlasmap.java.test.BaseOrderList;
 import io.atlasmap.java.test.SourceAddress;
 import io.atlasmap.java.test.SourceContact;
@@ -63,11 +67,11 @@ public class JavaJavaComplexListTest extends AtlasMappingBaseTest {
         t.setUri("atlas:java?className=io.atlasmap.java.test.TargetOrderList");
         
         JavaField f1 = AtlasJavaModelFactory.createJavaField();
-        f1.setPath("numberOrders");
+        f1.setPath("/numberOrders");
         f1.setModifiers(null);
         
         JavaField f2 = AtlasJavaModelFactory.createJavaField();
-        f2.setPath("orderBatchNumber");
+        f2.setPath("/orderBatchNumber");
         f2.setModifiers(null);
         
         Mapping m1 = AtlasModelFactory.createMapping(MappingType.MAP);
@@ -83,7 +87,7 @@ public class JavaJavaComplexListTest extends AtlasMappingBaseTest {
         cm.setCollectionType(CollectionType.LIST);
         
         JavaField f3 = AtlasJavaModelFactory.createJavaField();
-        f3.setPath("orders<>.orderId");
+        f3.setPath("/orders<>/orderId");
         f3.setModifiers(null);
                 
         Mapping m3 = AtlasModelFactory.createMapping(MappingType.MAP);

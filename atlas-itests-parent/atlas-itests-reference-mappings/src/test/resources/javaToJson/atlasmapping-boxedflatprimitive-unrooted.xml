@@ -4,42 +4,42 @@
     <DataSource dataSourceType="Target" uri="atlas:json"/>
     <Mappings>
         <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns2:JavaField" path="boxedBooleanField"/>
-            <OutputField xsi:type="ns3:JsonField" path="boxedBooleanField"/>
+            <InputField xsi:type="ns2:JavaField" path="/boxedBooleanField"/>
+            <OutputField xsi:type="ns3:JsonField" path="/boxedBooleanField"/>
         </Mapping>
         <!-- 
         <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns2:JavaField" path="boxedByteField"/>
-            <OutputField xsi:type="ns3:JsonField" path="boxedByteField"/>
+            <InputField xsi:type="ns2:JavaField" path="/boxedByteField"/>
+            <OutputField xsi:type="ns3:JsonField" path="/boxedByteField"/>
         </Mapping>
          -->
         <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns2:JavaField" path="boxedCharField"/>
-            <OutputField xsi:type="ns3:JsonField" path="boxedCharField"/>
+            <InputField xsi:type="ns2:JavaField" path="/boxedCharField"/>
+            <OutputField xsi:type="ns3:JsonField" path="/boxedCharField"/>
         </Mapping>
         <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns2:JavaField" path="boxedDoubleField"/>
-            <OutputField xsi:type="ns3:JsonField" path="boxedDoubleField"/>
+            <InputField xsi:type="ns2:JavaField" path="/boxedDoubleField"/>
+            <OutputField xsi:type="ns3:JsonField" path="/boxedDoubleField"/>
         </Mapping>
         <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns2:JavaField" path="boxedFloatField"/>
-            <OutputField xsi:type="ns3:JsonField" path="boxedFloatField"/>
+            <InputField xsi:type="ns2:JavaField" path="/boxedFloatField"/>
+            <OutputField xsi:type="ns3:JsonField" path="/boxedFloatField"/>
         </Mapping>
         <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns2:JavaField" path="boxedIntField"/>
-            <OutputField xsi:type="ns3:JsonField" path="boxedIntField"/>
+            <InputField xsi:type="ns2:JavaField" path="/boxedIntField"/>
+            <OutputField xsi:type="ns3:JsonField" path="/boxedIntField"/>
         </Mapping>
         <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns2:JavaField" path="boxedLongField"/>
-            <OutputField xsi:type="ns3:JsonField" path="boxedLongField"/>
+            <InputField xsi:type="ns2:JavaField" path="/boxedLongField"/>
+            <OutputField xsi:type="ns3:JsonField" path="/boxedLongField"/>
         </Mapping>
         <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns2:JavaField" path="boxedShortField"/>
-            <OutputField xsi:type="ns3:JsonField" path="boxedShortField"/>
+            <InputField xsi:type="ns2:JavaField" path="/boxedShortField"/>
+            <OutputField xsi:type="ns3:JsonField" path="/boxedShortField"/>
         </Mapping>
         <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns2:JavaField" path="boxedStringField"/>
-            <OutputField xsi:type="ns3:JsonField" path="boxedStringField"/>
+            <InputField xsi:type="ns2:JavaField" path="/boxedStringField"/>
+            <OutputField xsi:type="ns3:JsonField" path="/boxedStringField"/>
         </Mapping>
     </Mappings>
     <LookupTables/>
