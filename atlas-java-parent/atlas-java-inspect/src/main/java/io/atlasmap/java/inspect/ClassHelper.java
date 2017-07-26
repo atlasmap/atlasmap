@@ -21,6 +21,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import io.atlasmap.core.PathUtil;
+
 public class ClassHelper {
     
     public static List<String> getterMethodNames(String fieldName) {
@@ -127,14 +129,14 @@ public class ClassHelper {
         }
         
         Object parentObject = targetObject;
-        JavaPath parentPath = javaPath.getLastSegmentParentPath();
+        PathUtil parentPath = javaPath.getLastSegmentParentPath();
         
         if(parentPath == null) {
             parentPath = javaPath;
         }
         
         for(String parentField : parentPath.getSegments()) {
-            List<String> getters = getterMethodNames(JavaPath.cleanPathSegment(parentField));
+            List<String> getters = getterMethodNames(PathUtil.cleanPathSegment(parentField));
             Method getterMethod = null;
             for(String getter : getters) {
                 try {

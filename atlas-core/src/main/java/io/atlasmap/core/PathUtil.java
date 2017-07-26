@@ -1,6 +1,8 @@
 package io.atlasmap.core;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class PathUtil {
@@ -16,11 +18,9 @@ public class PathUtil {
     private List<String> segments = new ArrayList<String>();
     private String originalPath = null;
 
-    public PathUtil() {}
-
     public PathUtil(String path) {
     	this.originalPath = path;
-        if (path != null) {
+        if (path != null && !"".equals(path)) {
             if(path.startsWith(PATH_SEPARATOR)) {
             	path = path.replaceFirst(PATH_SEPARATOR, "");
             }
@@ -33,6 +33,41 @@ public class PathUtil {
                 getSegments().add(path);
             }
         }
+    }
+    
+    private PathUtil() {}
+    
+    public List<SegmentContext> getSegmentContexts(boolean includeLeadingSlashSegment) {
+    	List<SegmentContext> contexts = new LinkedList<>();
+    	String segmentPath = "";
+    	SegmentContext previousContext = null;
+    	int index = 0;
+    	
+    	List<String> segments = this.getSegments();
+    	if (includeLeadingSlashSegment) {
+    		segments.add(0, "");
+    	}
+    	
+    	for (String s : segments) {
+    		SegmentContext c = new SegmentContext();
+    		segmentPath += PATH_SEPARATOR + s;
+    		c.setPathUtil(this);
+    		c.setSegment(s);
+    		c.setSegmentIndex(index);
+    		c.setSegmentPath(segmentPath);
+    		if (previousContext != null) {
+    			c.setPrev(previousContext);
+    			previousContext.setNext(c);
+    			
+    		}
+    		contexts.add(c);
+    		previousContext = c;
+    		if (index == 0 && includeLeadingSlashSegment) {
+    			segmentPath = "";
+    		}
+    		index++;
+    	}
+    	return contexts;
     }
 
     public PathUtil appendField(String fieldName) {
@@ -54,7 +89,38 @@ public class PathUtil {
 
     public boolean hasParent() {
         return segments.size() > 1;
-
+    }
+    
+    public static String removeCollectionIndexes(String path) {
+    	PathUtil pathUtil = new PathUtil(path);
+    	String cleanedPath = "";
+    	for (String s: pathUtil.getSegments()) {
+    		cleanedPath += PATH_SEPARATOR + removeCollectionIndex(s);
+    	}
+    	return cleanedPath;
+	}
+    
+    public static String removeCollectionIndex(String segment) {
+    	if (segment == null) {
+    		return null;
+    	}
+    	
+    	if (segment.contains(PATH_ARRAY_START) && segment.contains(PATH_ARRAY_END)) {
+    		return segment.substring(0, segment.indexOf(PATH_ARRAY_START)+1) 
+    				+ segment.substring(segment.indexOf(PATH_ARRAY_END));     		
+    	}
+    	
+    	if (segment.contains(PATH_LIST_START) && segment.contains(PATH_LIST_END)) {
+    		return segment.substring(0, segment.indexOf(PATH_LIST_START)+1) 
+    				+ segment.substring(segment.indexOf(PATH_LIST_END));     		
+    	}
+    	
+    	if (segment.contains(PATH_MAP_START) && segment.contains(PATH_MAP_END)) {
+    		return segment.substring(0, segment.indexOf(PATH_MAP_START)+1) 
+    				+ segment.substring(segment.indexOf(PATH_MAP_END));     		
+    	}
+    	
+    	return segment;
     }
 
     public boolean hasCollection() {
@@ -270,8 +336,7 @@ public class PathUtil {
         }
     }
 
-    @Override
-	public String toString() {
+    public String toString() {
         StringBuffer buffer = new StringBuffer();
 
         int i = 0;
@@ -318,4 +383,66 @@ public class PathUtil {
 		}
 		return null;
 	}
+	
+	public static class SegmentContext implements Serializable {
+		private static final long serialVersionUID = 1L;
+		
+		protected String segment;
+		protected String segmentPath;
+		protected int segmentIndex;		
+		
+		protected SegmentContext prev;
+		protected SegmentContext next;
+		protected PathUtil pathUtil;
+		
+		public String getSegment() {
+			return segment;
+		}
+		public void setSegment(String segment) {
+			this.segment = segment;
+		}
+		public String getSegmentPath() {
+			return segmentPath;
+		}
+		public void setSegmentPath(String segmentPath) {
+			this.segmentPath = segmentPath;
+		}
+		public int getSegmentIndex() {
+			return segmentIndex;
+		}
+		public void setSegmentIndex(int segmentIndex) {
+			this.segmentIndex = segmentIndex;
+		}
+		public SegmentContext getPrev() {
+			return prev;
+		}
+		public void setPrev(SegmentContext prev) {
+			this.prev = prev;
+		}
+		public SegmentContext getNext() {
+			return next;
+		}
+		public void setNext(SegmentContext next) {
+			this.next = next;
+		}		
+		public void setPathUtil(PathUtil pathUtil) {
+			this.pathUtil = pathUtil;
+		}
+		public PathUtil getPathUtil() {
+			return pathUtil;
+		}
+		
+		public boolean hasParent() {
+			return this.prev != null;
+		}
+		
+		public boolean hasChild() {
+			return this.next != null;
+		}
+		@Override
+		public String toString() {
+			return "SegmentContext [segment=" + segment + ", segmentPath=" + segmentPath + ", segmentIndex="
+					+ segmentIndex + "]";
+		}				
+	}	
 }
