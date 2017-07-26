@@ -132,13 +132,21 @@ public class JavaWriterUtil {
 		if (logger.isDebugEnabled()) {
 			logger.debug("Setting object for path:'" + javaField.getPath() + "'.\n\tchildObject: " + childObject + "\n\tparentObject: " + parentObject);
 		}
-
+		
 		PathUtil PathUtil = new PathUtil(javaField.getPath());
 
 		try {
 			Class<?> childClass = childObject == null ? null : childObject.getClass();
 			Method targetMethod = resolveSetMethod(parentObject, segmentContext, childClass);
 			Object targetObject = parentObject;
+			
+			// We already know we have a 1 paramter setter here
+			if(childObject == null && conversionService.isPrimitive(targetMethod.getParameterTypes()[0])) {
+			    if (logger.isDebugEnabled()) {
+		            logger.debug("Not setting null value for primitive method paramter for path:'" + javaField.getPath() + "'.\n\tchildObject: " + childObject + "\n\tparentObject: " + parentObject);
+		        }
+			    return;
+			}
 			
 			if(targetMethod != null) {
 				targetMethod.invoke(targetObject, childObject);

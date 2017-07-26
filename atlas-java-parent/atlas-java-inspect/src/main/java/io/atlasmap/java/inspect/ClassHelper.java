@@ -71,7 +71,7 @@ public class ClassHelper {
             }
         }
         
-        String paramTypeClassName = paramType == null ? null : paramType.getClass().getName();
+        String paramTypeClassName = paramType == null ? null : paramType.getName();
         
         if(candidates.size() == 0) {
             throw new NoSuchMethodException(String.format("No matching setter found for class=%s method=%s paramType=%s", clazz.getName(), methodName, paramTypeClassName));

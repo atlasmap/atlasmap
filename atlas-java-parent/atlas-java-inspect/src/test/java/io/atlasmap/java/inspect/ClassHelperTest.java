@@ -77,7 +77,7 @@ public class ClassHelperTest {
             Method setter = ClassHelper.detectSetterMethod(JavaGetterSetterModel.class, "setOverloadParam", Short.class);
             fail("NoSuchMethodException expected instead found=" + setter.getName());
         } catch (NoSuchMethodException e) {
-        	assertEquals("No matching setter found for class=io.atlasmap.java.inspect.JavaGetterSetterModel method=setOverloadParam paramType=java.lang.Class", e.getMessage());
+        	assertEquals("No matching setter found for class=io.atlasmap.java.inspect.JavaGetterSetterModel method=setOverloadParam paramType=java.lang.Short", e.getMessage());
         }
     }
     
