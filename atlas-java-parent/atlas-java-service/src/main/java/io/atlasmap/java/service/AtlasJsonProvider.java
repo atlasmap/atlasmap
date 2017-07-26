@@ -15,6 +15,7 @@
  */
 package io.atlasmap.java.service;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -28,17 +29,22 @@ public class AtlasJsonProvider implements ContextResolver<ObjectMapper> {
 
 	private ObjectMapper objectMapper;
 
-	public AtlasJsonProvider() {		
-		objectMapper = new ObjectMapper();
-		objectMapper.configure(SerializationFeature.WRAP_ROOT_VALUE, true);
-		objectMapper.configure(DeserializationFeature.UNWRAP_ROOT_VALUE, true);
-		// Causes errors in serialization .. NPE in 
-		// FilteringJacksonJaxbJsonProvider.writeTo(FilteringJacksonJaxbJsonProvider.java:130)
-		objectMapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
-		objectMapper.setSerializationInclusion(Include.NON_NULL);	
+	public AtlasJsonProvider() {
+        objectMapper = createObjectMapper();
 	}
 
-	@Override
+    public static ObjectMapper createObjectMapper() {
+        ObjectMapper om = new ObjectMapper();
+        om.configure(SerializationFeature.WRAP_ROOT_VALUE, true);
+        om.configure(DeserializationFeature.UNWRAP_ROOT_VALUE, true);
+        // Causes errors in serialization .. NPE in
+        // FilteringJacksonJaxbJsonProvider.writeTo(FilteringJacksonJaxbJsonProvider.java:130)
+        om.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
+        om.setSerializationInclusion(Include.NON_NULL);
+        return om;
+    }
+
+    @Override
 	public ObjectMapper getContext(Class<?> objectType) {
 		return objectMapper;
 	}
