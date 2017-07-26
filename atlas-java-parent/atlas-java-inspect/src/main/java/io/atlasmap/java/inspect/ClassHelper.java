@@ -62,60 +62,71 @@ public class ClassHelper {
     public static Method detectSetterMethod(Class<?> clazz, String methodName, Class<?> paramType) throws NoSuchMethodException {
         List<Method> candidates = new ArrayList<Method>();
         
-        if(paramType == null) {
-            Method[] methods = clazz.getMethods();
-            for(Method method : methods) {
-                if(method.getName().equals(methodName)) {
-                    if(method.getParameterCount() == 1) {
-                        candidates.add(method);
-                    }
+        Method[] methods = clazz.getMethods();
+        for(Method method : methods) {
+            if(method.getName().equals(methodName)) {
+                if(method.getParameterCount() == 1) {
+                    candidates.add(method);
                 }
             }
-            
-            if(candidates.size() == 0) {
-                throw new NoSuchMethodException(String.format("No matching setter found for class=%s method=%s", clazz.getName(), methodName));
-            }
-            
-            if(candidates.size() == 1) {
-                return candidates.get(0);
-            } 
-
-            Method getter = null;
-            Class<?> returnType = null;
-            for(String prefix : Arrays.asList("get", "is")) {
-                try {
-                    getter = detectGetterMethod(clazz, methodName.replace("set", prefix));
-                    returnType = getter.getReturnType();
-                    break;
-                } catch (NoSuchMethodException nsme) {
-                    // System.out.println("\t\t could not find getter " + methodName.replace("set", prefix));
-                }
-            }
-                
-            // Solid match
-            for(Method candidate : candidates) {
-                // Getter and setter w/ same returnType & paramType
-                if(candidate.getParameterTypes()[0].equals(returnType)) {
-                    return candidate;
-                }
-            }
-                
-            // Not as good of a match .. find one with a matching converter
-            for(Method candidate : candidates) {
-                /* 
-                if(candidate.getParameterTypes()[0].equals(String.class)) {
-                    return candidate;
-                }
-                 */
-            }
-            
-            // Yikes! User should specify type, or provide a converter
-            throw new NoSuchMethodException(String.format("Unable to auto-detect setter class=%s method=%s", clazz.getName(), methodName));
         }
-        return clazz.getMethod(methodName, paramType);
+        
+        String paramTypeClassName = paramType == null ? null : paramType.getClass().getName();
+        
+        if(candidates.size() == 0) {
+            throw new NoSuchMethodException(String.format("No matching setter found for class=%s method=%s paramType=%s", clazz.getName(), methodName, paramTypeClassName));
+        }
+        
+        if (paramType != null) {
+        	for(Method candidate : candidates) {
+                // Getter and setter w/ same returnType & paramType
+                if(candidate.getParameterTypes()[0].isAssignableFrom(paramType)) {
+                    return candidate;
+                }
+            }
+        	throw new NoSuchMethodException(String.format("No matching setter found for class=%s method=%s paramType=%s", clazz.getName(), methodName, paramTypeClassName));
+        }
+        
+        //paramType is null, let's do some more digging...                     
+        
+        if(candidates.size() == 1) {
+            return candidates.get(0);
+        } 
+
+        Method getter = null;
+        Class<?> returnType = null;
+        for(String prefix : Arrays.asList("get", "is")) {
+            try {
+                getter = detectGetterMethod(clazz, methodName.replace("set", prefix));
+                returnType = getter.getReturnType();
+                break;
+            } catch (NoSuchMethodException nsme) {
+                // System.out.println("\t\t could not find getter " + methodName.replace("set", prefix));
+            }
+        }
+            
+        // Solid match
+        for(Method candidate : candidates) {
+            // Getter and setter w/ same returnType & paramType
+            if(candidate.getParameterTypes()[0].equals(returnType)) {
+                return candidate;
+            }
+        }
+            
+        // Not as good of a match .. find one with a matching converter
+        for(Method candidate : candidates) {
+            /* 
+            if(candidate.getParameterTypes()[0].equals(String.class)) {
+                return candidate;
+            }
+             */
+        }
+        
+        // Yikes! User should specify type, or provide a converter
+        throw new NoSuchMethodException(String.format("Unable to auto-detect setter class=%s method=%s paramType=%s", clazz.getName(), methodName, paramTypeClassName));
     }
-  
-    public static Object parentObjectForPath(Object targetObject, JavaPath javaPath) throws NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+      
+    public static Object parentObjectForPath(Object targetObject, PathUtil javaPath) throws NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
         if(targetObject == null) {
             return null;
         }
