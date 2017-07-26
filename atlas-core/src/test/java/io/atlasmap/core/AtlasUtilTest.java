@@ -15,15 +15,20 @@
  */
 package io.atlasmap.core;
 
+import static org.hamcrest.Matchers.hasItems;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+
 import org.junit.Test;
-
 import io.atlasmap.core.AtlasUtil;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-
-import static org.junit.Assert.*;
+import java.util.stream.Collectors;
 
 public class AtlasUtilTest {
 
@@ -85,7 +90,7 @@ public class AtlasUtilTest {
 		for(String uri: PARM_URIS) {
 			Map<String, String> params = AtlasUtil.getUriParameters(uri);
 			assertNotNull(params);
-			assertEquals(new Integer(1), new Integer(params.size()));
+			assertEquals(Integer.valueOf(1), Integer.valueOf(params.size()));
 			assertEquals("bar", params.get("foo"));
 			assertNull(params.get("bar"));
 		}
@@ -93,7 +98,7 @@ public class AtlasUtilTest {
 		for(String uri: PARMS_URIS) {
 			Map<String, String> params = AtlasUtil.getUriParameters(uri);
 			assertNotNull(params);
-			assertEquals(new Integer(2), new Integer(params.size()));
+			assertEquals(Integer.valueOf(2), Integer.valueOf(params.size()));
 			assertEquals("bar", params.get("foo"));
 			assertEquals("blah", params.get("bar"));
 			assertNull(params.get("blah"));
@@ -104,16 +109,6 @@ public class AtlasUtilTest {
 	public void testFindClassesForPackage() {
 	    List<Class<?>> classes = AtlasUtil.findClassesForPackage("io.atlasmap.v2");
 	    assertNotNull(classes);
-	    int found = 0;
-	    for(Class<?> clazz : classes) {
-	        //System.out.println(clazz);
-	        if("io.atlasmap.v2.Field".equals(clazz.getName())) { found++; }
-	        if("io.atlasmap.v2.AtlasMapping".equals(clazz.getName())) { found++; }
-	        if("io.atlasmap.v2.Action".equals(clazz.getName())) { found++; }
-	        if("io.atlasmap.v2.Capitalize".equals(clazz.getName())) { found++; }
-	    }
-	    
-	    assertEquals(new Integer(4), new Integer(found));
+	    assertThat(classes.stream().map(Class::getName).collect(Collectors.toList()), hasItems("io.atlasmap.v2.Field", "io.atlasmap.v2.AtlasMapping", "io.atlasmap.v2.Action", "io.atlasmap.v2.Capitalize"));
 	}
-
 }
