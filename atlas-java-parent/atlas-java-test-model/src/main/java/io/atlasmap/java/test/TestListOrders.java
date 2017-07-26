@@ -21,5 +21,10 @@ public class TestListOrders {
     
     public void setOrderIds(List<Long> orderIds) {
 		this.orderIds = orderIds;
-	}    
+	}
+
+	@Override
+	public String toString() {
+		return "TestListOrders [orders=" + orders + ", orderIds=" + orderIds + "]";
+	}            
 }

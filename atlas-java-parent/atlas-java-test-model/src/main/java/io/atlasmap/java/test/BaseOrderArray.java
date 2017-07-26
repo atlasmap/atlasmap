@@ -1,5 +1,7 @@
 package io.atlasmap.java.test;
 
+import java.util.Arrays;
+
 public abstract class BaseOrderArray {
 
     private BaseOrder[] orders;
@@ -29,5 +31,13 @@ public abstract class BaseOrderArray {
     public void setOrders(BaseOrder[] orders) {
         this.orders = orders;
     }
+
+	@Override
+	public String toString() {
+		return "BaseOrderArray [orders=" + Arrays.toString(orders) + ", numberOrders=" + numberOrders
+				+ ", orderBatchNumber=" + orderBatchNumber + "]";
+	}
+    
+    
     
 }
