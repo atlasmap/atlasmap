@@ -54,8 +54,8 @@ public class JsonJavaFlatMappingTest extends AtlasMappingBaseTest {
         // Add fieldMappings
         for (String fieldName : FLAT_FIELDS) {
             Mapping mfm = AtlasModelFactory.createMapping(MappingType.MAP);
-            mfm.getInputField().add(generateJsonField(fieldName));
-            mfm.getOutputField().add(generateJavaField(fieldName));
+            mfm.getInputField().add(generateJsonField("/" + fieldName));
+            mfm.getOutputField().add(generateJavaField("/" + fieldName));
             mappings.add(mfm);
         }
 

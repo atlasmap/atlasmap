@@ -81,7 +81,7 @@ public class iPaaSTwitterToSalesForceTest {
 		MappedField nameField = AtlasModelFactory.createMappedField();
 		JavaField jNameField = new JavaField();
 		jNameField.setName("Name");
-		jNameField.setPath("User.name");
+		jNameField.setPath("/User/name");
 		jNameField.setGetMethod("getName");
 		jNameField.setType(FieldType.STRING);
 		nameField.setField(jNameField);
@@ -89,7 +89,7 @@ public class iPaaSTwitterToSalesForceTest {
 		MappedField fnField = AtlasModelFactory.createMappedField();
 		JavaField jFirstNameField = new JavaField();
 		jFirstNameField.setName("FirstName");
-		jFirstNameField.setPath("FirstName");
+		jFirstNameField.setPath("/FirstName");
 		jFirstNameField.setSetMethod("setFirstName");
 		jFirstNameField.setType(FieldType.STRING);
 		fnField.setField(jFirstNameField);
@@ -100,7 +100,7 @@ public class iPaaSTwitterToSalesForceTest {
 		MappedField lnField = AtlasModelFactory.createMappedField();
 		JavaField jLastNameField = new JavaField();
 		jLastNameField.setName("LastName");
-		jLastNameField.setPath("LastName");
+		jLastNameField.setPath("/LastName");
 		jLastNameField.setSetMethod("setLastName");
 		jLastNameField.setType(FieldType.STRING);
 		lnField.setField(jLastNameField);
@@ -117,7 +117,7 @@ public class iPaaSTwitterToSalesForceTest {
 		MappedField textField = AtlasModelFactory.createMappedField();
 		JavaField jTextField = new JavaField();
 		jTextField.setName("Text");
-		jTextField.setPath("Text");
+		jTextField.setPath("/Text");
 		jTextField.setGetMethod("getText");
 		jTextField.setType(FieldType.STRING);
 		textField.setField(jTextField);
@@ -125,7 +125,7 @@ public class iPaaSTwitterToSalesForceTest {
 		MappedField descField = AtlasModelFactory.createMappedField();
 		JavaField jDescField = new JavaField();
 		jDescField.setName("Description");
-		jDescField.setPath("description");
+		jDescField.setPath("/description");
 		jDescField.setSetMethod("setDescription");
 		jDescField.setType(FieldType.STRING);
 		descField.setField(jDescField);
@@ -138,7 +138,7 @@ public class iPaaSTwitterToSalesForceTest {
 		MappedField screenField = AtlasModelFactory.createMappedField();
 		JavaField jScreenField = new JavaField();
 		jScreenField.setName("ScreenName");
-		jScreenField.setPath("User.screenName");
+		jScreenField.setPath("/User/screenName");
 		jScreenField.setGetMethod("getScreenName");
 		jScreenField.setType(FieldType.STRING);
 		screenField.setField(jScreenField);
@@ -146,7 +146,7 @@ public class iPaaSTwitterToSalesForceTest {
 		MappedField titleField = AtlasModelFactory.createMappedField();
 		JavaField jTitleField = new JavaField();
 		jTitleField.setName("Title");
-		jTitleField.setPath("Title");
+		jTitleField.setPath("/Title");
 		jTitleField.setSetMethod("setTitle");
 		jTitleField.setType(FieldType.STRING);
 		titleField.setField(jTitleField);

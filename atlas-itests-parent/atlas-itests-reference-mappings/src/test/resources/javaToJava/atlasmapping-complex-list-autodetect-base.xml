@@ -4,18 +4,18 @@
     <DataSource dataSourceType="Target" uri="atlas:java?className=io.atlasmap.java.test.TargetOrderList"/>
     <Mappings>
         <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns2:JavaField" path="numberOrders"/>
-            <OutputField xsi:type="ns2:JavaField" path="numberOrders"/>
+            <InputField xsi:type="ns2:JavaField" path="/numberOrders"/>
+            <OutputField xsi:type="ns2:JavaField" path="/numberOrders"/>
         </Mapping>
         <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns2:JavaField" path="orderBatchNumber"/>
-            <OutputField xsi:type="ns2:JavaField" path="orderBatchNumber"/>
+            <InputField xsi:type="ns2:JavaField" path="/orderBatchNumber"/>
+            <OutputField xsi:type="ns2:JavaField" path="/orderBatchNumber"/>
         </Mapping>
         <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ns2:JavaCollection" collectionType="List" mappingType="Collection">
             <Mappings>
                 <Mapping xsi:type="Mapping" mappingType="Map">
-                    <InputField xsi:type="ns2:JavaField" path="orders&lt;&gt;.orderId"/>
-                    <OutputField xsi:type="ns2:JavaField" path="orders&lt;&gt;.orderId"/>
+                    <InputField xsi:type="ns2:JavaField" path="/orders&lt;&gt;/orderId"/>
+                    <OutputField xsi:type="ns2:JavaField" path="/orders&lt;&gt;/orderId"/>
                 </Mapping>
             </Mappings>
         </Mapping>

@@ -4,7 +4,7 @@
   <DataSource dataSourceType="Target" uri="atlas:json"/>
   <Mappings>
     <Mapping xsi:type="Mapping" mappingType="Map">
-      <InputField xsi:type="ns3:JsonField" path="orderId"/>
+      <InputField xsi:type="ns3:JsonField" path="/orderId"/>
       <OutputField xsi:type="ns3:JsonField" path="/TargetOrder/orderId"/>
     </Mapping>
     <Mapping xsi:type="Mapping" mappingType="Map">

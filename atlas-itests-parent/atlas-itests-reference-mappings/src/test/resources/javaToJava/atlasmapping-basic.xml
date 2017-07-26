@@ -6,16 +6,8 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   <DataSource dataSourceType="Target" uri="atlas:java?className=io.atlasmap.java.test.TargetOrder"/>
   <Mappings>
     <Mapping xsi:type="Mapping" mappingType="Map">
-      <InputField xsi:type="ns2:JavaField" path="orderId"/>
-      <OutputField xsi:type="ns2:JavaField" path="orderId"/>
-    </Mapping>
-    <Mapping xsi:type="Mapping" mappingType="Map">
-      <InputField xsi:type="ns2:JavaField" path="contact" />
-      <OutputField xsi:type="ns2:JavaField" path="contact" className="io.atlasmap.java.test.TargetContact" />
-    </Mapping>
-    <Mapping xsi:type="Mapping" mappingType="Map">
-      <InputField xsi:type="ns2:JavaField" path="contact.firstName"/>
-      <OutputField xsi:type="ns2:JavaField" path="contact.firstName"/>
+      <InputField xsi:type="ns2:JavaField" path="/orderId"/>
+      <OutputField xsi:type="ns2:JavaField" path="/orderId"/>
     </Mapping>
   </Mappings>
   <LookupTables />
