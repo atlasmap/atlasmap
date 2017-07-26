@@ -36,6 +36,7 @@ import io.atlasmap.java.inspect.StringUtil;
 import io.atlasmap.java.v2.AtlasJavaModelFactory;
 import io.atlasmap.java.v2.JavaClass;
 import io.atlasmap.java.v2.JavaCollection;
+import io.atlasmap.java.v2.JavaEnumField;
 import io.atlasmap.java.v2.JavaField;
 import io.atlasmap.spi.AtlasModuleDetail;
 import io.atlasmap.spi.AtlasModuleMode;
@@ -49,7 +50,6 @@ import io.atlasmap.v2.ConstantField;
 import io.atlasmap.v2.DataSource;
 import io.atlasmap.v2.DataSourceType;
 import io.atlasmap.v2.Field;
-import io.atlasmap.v2.FieldType;
 import io.atlasmap.v2.Mapping;
 import io.atlasmap.v2.MappingType;
 import io.atlasmap.v2.Mappings;
@@ -401,7 +401,7 @@ public class JavaModule extends BaseAtlasModule {
     protected void populateTargetObjectValue(Object targetObject, JavaField targetField, Object targetValue) throws Exception {
         
         PathUtil pathUtil = new PathUtil(targetField.getPath());
-        Method targetMethod = resolveSetMethod(targetObject, targetField, targetValue.getClass());
+        Method targetMethod = resolveInputSetMethod(targetObject, targetField, targetValue.getClass());
         
         Object parentObject = targetObject;
         if (pathUtil.hasParent()) {
@@ -434,7 +434,7 @@ public class JavaModule extends BaseAtlasModule {
         
         Field outputField = mapping.getOutputField().get(0);
         
-        if(!(outputField instanceof JavaField)) {
+        if(!(outputField instanceof JavaField) && !(outputField instanceof JavaEnumField)) {
             Audit audit = new Audit();
             audit.setDocId(outputField.getDocId());
             audit.setPath(outputField.getPath());
@@ -444,80 +444,43 @@ public class JavaModule extends BaseAtlasModule {
             return;
         }
         
-        JavaField outputJavaField = (JavaField)outputField;
-        
         try {
-            Object targetObject = null;
-            if(session.getOutput() == null) {
-                targetObject = initializeTargetObject(session.getMapping());
-                session.setOutput(targetObject);
-            } else {
-                targetObject = session.getOutput();
+            DocumentJavaFieldWriter writer = (DocumentJavaFieldWriter) session.getOutput();
+            if (writer == null) {
+                writer = new DocumentJavaFieldWriter();
+                session.setOutput(writer);
             }
-            
-            internalProcessOutputMapping(targetObject, mapping.getInputField().get(0), outputJavaField);
-           
+            Object targetObject = writer.getRootObject();
+            if (targetObject == null) {
+                try {
+                    targetObject = initializeTargetObject(session.getMapping());
+                    writer.setRootObject(targetObject);
+                } catch (Exception e) {
+                    logger.error(String.format("Error initializing targetObject msg=%s", e.getMessage()), e);
+                    Audit audit = new Audit();
+                    audit.setStatus(AuditStatus.ERROR);
+                    audit.setMessage(String.format("Error initializing targetObject msg=%s", e.getMessage()));
+                    session.getAudits().getAudit().add(audit);
+                    return;
+                }                
+            }
+            Field inputField = mapping.getInputField().get(0);      
+            OutputValueConverter valueConverter = new OutputValueConverter(inputField, getConversionService());
+            writer.write(outputField, valueConverter);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
-            throw new AtlasException(e.getMessage(), e.getCause());
+            if (e instanceof AtlasException) {
+                throw (AtlasException) e;
+            }
+            throw new AtlasException(e.getMessage(), e);
         }
-        
-        if(logger.isDebugEnabled()) {
+
+        if (logger.isDebugEnabled()) {
             logger.debug("processOutputMapping completed");
         }
     }
     
-    protected void internalProcessOutputMapping(Object parentObject, Field inputField, JavaField outputField) throws Exception {
-
-        FieldType inputType = inputField.getFieldType();
-        Object inputValue = inputField.getValue();
-        
-        Object outputValue = null;
-        FieldType outputType = outputField.getFieldType();;
-        
-        if(logger.isDebugEnabled()) {
-            logger.debug("processOutputMapping iPath=" + inputField.getPath() + " iV=" + inputValue + " iT=" + inputType + " oPath=" + outputField.getPath() + " docId: " + outputField.getDocId());
-        }
-        
-        if(inputValue == null) {
-            // TODO: Finish targetValue = null processing
-            logger.warn("Null sourceValue for field: " + outputField.getPath() + " docId: " + outputField.getDocId());
-            return;
-        }
-        
-        if(outputType == null) {
-            try {
-                Method setter = resolveSetMethod(parentObject, outputField, null);
-                if(setter != null && setter.getParameterCount() == 1) {
-                    outputType = getConversionService().fieldTypeFromClass(setter.getParameterTypes()[0]);
-                    outputField.setFieldType(outputType);
-                    if(logger.isTraceEnabled()) {
-                        logger.trace("Auto-detected targetType as {} for class={} path={}", outputType, parentObject.toString(), outputField.getPath());
-                    }
-                }
-            } catch (NoSuchMethodException e) {
-                logger.debug("Unable to auto-detect targetType for class={} path={}", parentObject.toString(), outputField.getPath());
-            }
-        }
-             
-        if(inputType != null && inputType.equals(outputType)) {
-            outputValue = inputValue;
-        } else {
-            try {
-                outputValue = getConversionService().convertType(inputValue, inputType, outputType);
-            } catch (AtlasConversionException e) {
-                logger.error(String.format("Unable to auto-convert for sT=%s tT=%s tF=%s msg=%s", inputType, outputType, outputField.getPath(), e.getMessage()), e);
-                return;
-            }
-        }
-                
-        if(FieldType.COMPLEX.equals(outputType)) {
-            logger.debug("Skipping complex outputType iT={} tT={} tF={}", inputType, outputType, outputField.getPath());
-        } else {
-            logger.debug("Populating primitive type sT={} tT={} tF={}", inputType, outputType, outputField.getPath());
-            populateTargetObjectValue(parentObject, outputField, outputValue);
-        }
-    }
+    
     
     @Override
     public void processOutputCollection(AtlasSession session, Collection collection) throws AtlasException {
@@ -528,135 +491,28 @@ public class JavaModule extends BaseAtlasModule {
             }
             Audit audit = new Audit();
             audit.setStatus(AuditStatus.WARN);
-            audit.setMessage(String.format("Collection does not contain any mapping entries alias=%s, desc=%s", collection.getAlias(), collection.getDescription()));
+            audit.setMessage(String.format("Collection does not contain any mapping entries alias=%s, desc=%s, skipping.", collection.getAlias(), collection.getDescription()));
             session.getAudits().getAudit().add(audit);
             return;
         }
         
-        logger.debug("Processing output for collection mapping items: " + collection.getMappings().getMapping().size());
+        logger.debug("Processing output for collection mapping items: " + collection.getMappings().getMapping().size() + " mappings.");
         
         JavaCollection javaCollection = null;
         if(collection instanceof JavaCollection) {
             javaCollection = (JavaCollection)collection;
             // do javaCollection.getCollectionClassName() stuff
         }
-        
-        Object targetObject = null;
-        Object targetCollectionObject = null;
 
-        if(session.getOutput() == null) {
-            try {
-                targetObject = initializeTargetObject(session.getMapping());
-            } catch (Exception e) {
-                logger.error(String.format("Error initializing targetObject msg=%s", e.getMessage()), e);
-                Audit audit = new Audit();
-                audit.setStatus(AuditStatus.ERROR);
-                audit.setMessage(String.format("Error initializing targetObject msg=%s", e.getMessage()));
-                session.getAudits().getAudit().add(audit);
-                return;
+        for (BaseMapping baseMapping : javaCollection.getMappings().getMapping()) {
+            if (MappingType.COLLECTION.equals(baseMapping.getMappingType())) {
+                throw new AtlasException("We do not support collection mappings nested inside other collection mappings: " + baseMapping + ", collection: " + collection);
+            } else if (MappingType.LOOKUP.equals(baseMapping.getMappingType())) {
+                throw new AtlasException("We do not support lookup mappings nested inside collection mappings: " + baseMapping + ", collection: " + collection);
             }
-            session.setOutput(targetObject);
-        } else {
-            targetObject = session.getOutput();
+            Mapping mapping = (Mapping) baseMapping;
+            this.processOutputMapping(session, mapping);
         }
-            
-        Class<?> targetClazz = targetObject.getClass();
-        String collectionMemberClassName = null;
-        List<BaseMapping> collectionItems = new ArrayList<BaseMapping>();    
-        for(BaseMapping baseMapping : javaCollection.getMappings().getMapping()) {
-            switch(baseMapping.getMappingType()) {
-            case MAP: 
-                Mapping mapping = (Mapping)baseMapping;
-                JavaField outputField = null;
-                JavaPath outputFieldPath = null;
-                
-                Field inputField = mapping.getInputField().get(0);
-                outputField = (JavaField)mapping.getOutputField().get(0);
-                outputFieldPath = new JavaPath(outputField.getPath());
-                
-                // Setup initial collection object
-                try {
-//                    targetCollectionObject = ClassHelper.parentObjectForPath(targetObject, outputFieldPath);
-//                    if(targetCollectionObject == null) {
-//                        String collectionClassName = javaCollection.getCollectionClassName();
-//                        if(collectionClassName == null) { 
-//                            collectionClassName = DEFAULT_LIST_CLASS;
-//                        }
-//                        Class<?> collectionClass = Class.forName(collectionClassName);
-//                        targetCollectionObject = collectionClass.newInstance();
-//                        Method collectionSetter = ClassHelper.detectSetterMethod(targetObject.getClass(), ClassHelper.setMethodNameFromFieldName(JavaPath.cleanPathSegment(outputFieldPath.getCollectionSegment())), null);
-//                        if(collectionSetter != null) {
-//                            collectionSetter.invoke(targetObject, targetCollectionObject);
-//                        }
-//                    }
-                    
-                } catch (Exception e) {
-                    logger.error(String.format("Error initializing target List object msg=%s", e.getMessage()), e);
-                    Audit audit = new Audit();
-                    audit.setStatus(AuditStatus.ERROR);
-                    audit.setMessage(String.format("Error initializing target List object msg=%s", e.getMessage()));
-                    session.getAudits().getAudit().add(audit);
-                    return;
-                }
-                
-                if(outputFieldPath == null) {
-                    // This is a collectionMember source field
-                    if(logger.isDebugEnabled()) {
-                        logger.debug(String.format("Found collectionMember entry sPath=%s tPath=%s", inputField.getPath(), outputField.getPath()));
-                    }
-                    continue;
-                }
-                // Detect that there is something to map.. aka the inputField is indexed
-                if(outputFieldPath.isCollectionRoot() && !outputFieldPath.isIndexedCollection()) {
-                    if(logger.isDebugEnabled()) {
-                        logger.debug(String.format("Found collectionRoot mapping entry sPath=%s tPath=%s clz=%s", inputField.getPath(), outputField.getPath(), outputField.getClassName()));
-                    }
-                    
-                    // Instantiate a class for a given path inside a collection
-                    if(outputField.getClassName() == null) {
-                        Audit audit = new Audit();
-                        audit.setStatus(AuditStatus.ERROR);
-                        audit.setMessage(String.format("Collection mapping must contain a collection root entry with className specified tPath=%s", outputField.getPath()));
-                        session.getAudits().getAudit().add(audit);
-                        continue;
-                    }
-                    
-                    collectionMemberClassName = outputField.getClassName();
-                    continue;
-                }
-                
-                if(outputFieldPath.isIndexedCollection()) {
-                    
-                }
-
-                
-                logger.info(String.format("Processing output mapping for inputField=%s outputField=%s", inputField.getPath(), outputFieldPath));
-                break;
-            case COLLECTION: 
-                Audit audit = new Audit();
-                audit.setStatus(AuditStatus.ERROR);
-                audit.setMessage(String.format("Collection mappings with a collection are unsupported"));
-                session.getAudits().getAudit().add(audit);
-                break;
-            case COMBINE: break;
-            case SEPARATE: break;
-            case LOOKUP: break;
-            default: 
-                Audit audit2 = new Audit();
-                audit2.setStatus(AuditStatus.ERROR);
-                audit2.setMessage(String.format("Unsupported mapping type within a collection type=%s", baseMapping.getMappingType()));
-                session.getAudits().getAudit().add(audit2);
-                break;
-            }
-        }
-        
-        try {
-            instantiateJavaObject(collectionMemberClassName, collectionItems);
-        } catch (ConstructException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
-            logger.error(String.format("Error constructing colletionMemberClass=%s msg=%s", collectionMemberClassName, e.getMessage()), e);
-        }
-        
-        
         if(logger.isDebugEnabled()) {
             logger.debug("processOutputCollectionMapping completed");
         }
@@ -672,7 +528,17 @@ public class JavaModule extends BaseAtlasModule {
     
     @Override
     public void processPostOutputExecution(AtlasSession session) throws AtlasException {
-        if(logger.isDebugEnabled()) {
+        Object output = session.getOutput();
+        if (output instanceof DocumentJavaFieldWriter) {
+            if (((DocumentJavaFieldWriter) output).getRootObject() != null) {
+                session.setOutput(((DocumentJavaFieldWriter) output).getRootObject());
+            } else {
+                // TODO: handle error where rootnode on DocumentJavaFieldWriter is set to null, which should never happen.
+            }
+        } else {
+            logger.error("DocumentJavaFieldWriter object expected for Java output data source, instead it's: " + session.getOutput());
+        }
+        if (logger.isDebugEnabled()) {
             logger.debug("processPostOutputExecution completed");
         }
     }
@@ -760,7 +626,7 @@ public class JavaModule extends BaseAtlasModule {
         return null;
     }
     
-    protected Method resolveSetMethod(Object sourceObject, JavaField javaField, Class<?> targetType) throws NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+    protected Method resolveInputSetMethod(Object sourceObject, JavaField javaField, Class<?> targetType) throws NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
         
         PathUtil pathUtil = new PathUtil(javaField.getPath());
         Object parentObject = sourceObject;
@@ -798,8 +664,8 @@ public class JavaModule extends BaseAtlasModule {
         throw new NoSuchMethodException(String.format("Unable to resolve setter for path=%s", javaField.getPath()));
     }
     
-    protected List<Class<?>> resolveMappableClasses(Class<?> className) {
         
+    public static List<Class<?>> resolveMappableClasses(Class<?> className) {        
         List<Class<?>> classTree = new ArrayList<Class<?>>();
         classTree.add(className);
         
@@ -843,7 +709,7 @@ public class JavaModule extends BaseAtlasModule {
         return null;
     }
     
-    private static String capitalizeFirstLetter(String sentence) {
+    public static String capitalizeFirstLetter(String sentence) {
         if (StringUtil.isEmpty(sentence)) {
             return sentence;
         }
