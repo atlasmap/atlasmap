@@ -11,7 +11,7 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     </Mapping>
     <Mapping xsi:type="Mapping" mappingType="Map">
       <InputField xsi:type="ns2:JavaField" path="/contact" />
-      <OutputField xsi:type="ns2:JavaField" path="/contact" className="io.atlasmap.java.test.TargetContact" fieldType="COMPLEX" />
+      <OutputField xsi:type="ns2:JavaField" path="/contact" className="io.atlasmap.java.test.TargetContact" fieldType="Complex" />
     </Mapping>
     <Mapping xsi:type="Mapping" mappingType="Map">
       <InputField xsi:type="ns2:JavaField" path="/contact/firstName"/>
