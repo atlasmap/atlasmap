@@ -225,10 +225,10 @@ public class JavaConstructServiceComplexTest {
             
             if(jf instanceof JavaClass) {
                 for(JavaField cjf : ((JavaClass)jf).getJavaFields().getJavaField()) {
-                    if(cjf.getPath().equals("order.contact")) {
+                    if(cjf.getPath().equals("order/contact")) {
                         cjf.setClassName("io.atlasmap.java.test." + prefix + "Contact");
                     }
-                    if(cjf.getPath().equals("order.address")) {
+                    if(cjf.getPath().equals("order/address")) {
                         cjf.setClassName("io.atlasmap.java.test." + prefix + "Address");
                     }
                 }

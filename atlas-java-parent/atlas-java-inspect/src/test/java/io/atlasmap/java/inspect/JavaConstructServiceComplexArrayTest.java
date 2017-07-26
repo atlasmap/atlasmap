@@ -117,7 +117,7 @@ public class JavaConstructServiceComplexArrayTest {
     
     @Test
     public void testConstructTargetOrderArrayFiltered() throws Exception {
-        Object targetObject = constructService.constructClass(generateOrderArray("Target"), Arrays.asList("orders", "orders.address"));
+        Object targetObject = constructService.constructClass(generateOrderArray("Target"), Arrays.asList("orders", "orders/address"));
         assertNotNull(targetObject);
         assertTrue(targetObject instanceof io.atlasmap.java.test.TargetOrderArray);
         TargetOrderArray orderArray = (TargetOrderArray)targetObject;
@@ -167,10 +167,10 @@ public class JavaConstructServiceComplexArrayTest {
             }
             if(jf instanceof JavaClass) {
                 for(JavaField cjf : ((JavaClass)jf).getJavaFields().getJavaField()) {
-                    if(cjf.getPath().equals("orders.contact")) {
+                    if(cjf.getPath().equals("orders/contact")) {
                         cjf.setClassName("io.atlasmap.java.test." + prefix + "Contact");
                     }
-                    if(cjf.getPath().equals("orders.address")) {
+                    if(cjf.getPath().equals("orders/address")) {
                         cjf.setClassName("io.atlasmap.java.test." + prefix + "Address");
                     }
                 }
