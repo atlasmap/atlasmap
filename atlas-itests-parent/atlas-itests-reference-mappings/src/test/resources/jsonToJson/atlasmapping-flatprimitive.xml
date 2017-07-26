@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <AtlasMapping xmlns="http://atlasmap.io/v2" xmlns:ns2="http://atlasmap.io/json/v2" name="JsonJsonFlatMapping">
-    <DataSource uri="atlas:json" dataSourceType="Source"/>
-    <DataSource uri="atlas:json" dataSourceType="Target"/>
+    <DataSource dataSourceType="Source" uri="atlas:json"/>
+    <DataSource dataSourceType="Target" uri="atlas:json"/>
     <Mappings>
         <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="Mapping" mappingType="Map">
             <InputField xsi:type="ns2:JsonField" path="intField"/>

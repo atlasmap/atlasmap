@@ -16,6 +16,8 @@
 package io.atlasmap.xml.v2;
 
 import io.atlasmap.v2.AtlasMapping;
+import io.atlasmap.v2.DataSourceType;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -70,4 +72,20 @@ public class XmlMarshallerTest extends BaseMarshallerTest {
 		validateAtlasMapping(mappingElem.getValue());
 	}
 
+	@Test
+	public void testWriteXmlMapping() throws Exception {
+	    AtlasMapping mapping = generateAtlasMapping();
+	    XmlNamespace xmlNs = new XmlNamespace();
+	    xmlNs.setAlias("xt1");
+	    xmlNs.setUri("http://atlasmap.io/xml/test/v2");
+	    xmlNs.setTargetNamespace(true);
+	    XmlDataSource xds = new XmlDataSource();
+	    xds.setDataSourceType(DataSourceType.TARGET);
+	    xds.setTemplate("my sample seed data");
+	    xds.setXmlNamespaces(new XmlNamespaces());
+	    xds.getXmlNamespaces().getXmlNamespace().add(xmlNs);
+	    mapping.getDataSource().add(xds);
+	    
+	    marshaller.marshal(mapping, new File("target/atlasmapping-xml-sample.xml"));
+	}
 }

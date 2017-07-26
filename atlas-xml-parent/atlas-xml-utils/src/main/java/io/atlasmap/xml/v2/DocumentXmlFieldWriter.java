@@ -26,8 +26,6 @@ import io.atlasmap.api.AtlasException;
 import io.atlasmap.core.PathUtil;
 import io.atlasmap.v2.FieldType;
 
-/**
- */
 public class DocumentXmlFieldWriter extends XmlFieldTransformer {
 	private static final org.slf4j.Logger logger = LoggerFactory.getLogger(DocumentXmlFieldWriter.class);
 

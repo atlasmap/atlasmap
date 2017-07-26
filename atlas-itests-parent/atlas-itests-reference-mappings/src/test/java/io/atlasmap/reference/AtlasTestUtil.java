@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
+
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -14,6 +16,16 @@ import io.atlasmap.java.test.BaseContact;
 import io.atlasmap.java.test.BaseFlatPrimitiveClass;
 import io.atlasmap.java.test.BaseOrder;
 import io.atlasmap.java.test.BaseOrderList;
+import io.atlasmap.xml.test.v2.XmlAddressAttribute;
+import io.atlasmap.xml.test.v2.XmlAddressElement;
+import io.atlasmap.xml.test.v2.XmlContactAttribute;
+import io.atlasmap.xml.test.v2.XmlContactElement;
+import io.atlasmap.xml.test.v2.XmlFlatBoxedPrimitiveAttribute;
+import io.atlasmap.xml.test.v2.XmlFlatBoxedPrimitiveElement;
+import io.atlasmap.xml.test.v2.XmlFlatPrimitiveAttribute;
+import io.atlasmap.xml.test.v2.XmlFlatPrimitiveElement;
+import io.atlasmap.xml.test.v2.XmlOrderAttribute;
+import io.atlasmap.xml.test.v2.XmlOrderElement;
 
 public class AtlasTestUtil {
 
@@ -724,4 +736,243 @@ public class AtlasTestUtil {
         assertTrue(targetObject.getBoxedStringArrayField().isEmpty());
         assertNull(targetObject.getBoxedStringField());
     }
+    
+    public static void validateXmlOrderElement(XmlOrderElement orderObject) {
+        assertNotNull(orderObject);
+        assertNotNull(orderObject.getOrderId());
+        assertEquals("8765309", orderObject.getOrderId());
+        validateXmlAddressElement(orderObject.getAddress());
+        validateXmlContactElement(orderObject.getContact());
+    }
+    
+    public static void validateXmlOrderElement(XmlOrderElement orderObject, int expectedOrderId) {
+        assertNotNull(orderObject);
+        assertNotNull(orderObject.getOrderId());
+        assertEquals(new Integer(expectedOrderId), orderObject.getOrderId());
+        validateXmlAddressElement(orderObject.getAddress());
+        validateXmlContactElement(orderObject.getContact());
+    }
+    
+    public static void validateXmlAddressElement(XmlAddressElement addressObject) {
+        assertNotNull(addressObject);
+        assertEquals("123 Main St", addressObject.getAddressLine1());
+        assertEquals("Suite 42b", addressObject.getAddressLine2());
+        assertEquals("Anytown", addressObject.getCity());
+        assertEquals("NY", addressObject.getState());
+        assertEquals("90210", addressObject.getZipCode());
+    }
+    
+    public static void validateXmlContactElement(XmlContactElement contactObject) {
+        assertNotNull(contactObject);
+        assertEquals("Ozzie", contactObject.getFirstName());
+        assertEquals("Smith", contactObject.getLastName());
+        assertEquals("5551212", contactObject.getPhoneNumber());
+        assertEquals("81111", contactObject.getZipCode());
+    }
+    
+    public static void validateXmlOrderAttribute(XmlOrderAttribute orderObject) {
+        assertNotNull(orderObject);
+        assertNotNull(orderObject.getOrderId());
+        assertEquals(new Integer(8765309), orderObject.getOrderId());
+        validateXmlAddressAttribute(orderObject.getAddress());
+        validateXmlContactAttribute(orderObject.getContact());
+    }
+    
+    public static void validateXmlOrderAttribute(XmlOrderAttribute orderObject, int expectedOrderId) {
+        assertNotNull(orderObject);
+        assertNotNull(orderObject.getOrderId());
+        assertEquals(new Integer(expectedOrderId), orderObject.getOrderId());
+        validateXmlAddressAttribute(orderObject.getAddress());
+        validateXmlContactAttribute(orderObject.getContact());
+    }
+    
+    public static void validateXmlAddressAttribute(XmlAddressAttribute addressObject) {
+        assertNotNull(addressObject);
+        assertEquals("123 Main St", addressObject.getAddressLine1());
+        assertEquals("Suite 42b", addressObject.getAddressLine2());
+        assertEquals("Anytown", addressObject.getCity());
+        assertEquals("NY", addressObject.getState());
+        assertEquals("90210", addressObject.getZipCode());
+    }
+    
+    public static void validateXmlContactAttribute(XmlContactAttribute contactObject) {
+        assertNotNull(contactObject);
+        assertEquals("Ozzie", contactObject.getFirstName());
+        assertEquals("Smith", contactObject.getLastName());
+        assertEquals("5551212", contactObject.getPhoneNumber());
+        assertEquals("81111", contactObject.getZipCode());
+    }
+    
+    public static void validateXmlFlatPrimitiveElement(XmlFlatPrimitiveElement targetObject) {
+        assertNotNull(targetObject);
+        assertEquals(new Double(50000000d), new Double(targetObject.getDoubleField()));
+        assertEquals(new Float(40000000f), new Float(targetObject.getFloatField()));
+        assertEquals(new Integer(2), new Integer(targetObject.getIntField()));
+        assertEquals(new Long(30000L), new Long(targetObject.getLongField()));
+        assertEquals(new Short((short) 1), new Short(targetObject.getShortField()));
+        assertEquals(Boolean.FALSE, targetObject.isBooleanField());
+        //assertEquals(new Byte((byte) 99), new Byte(targetObject.getByteField()));
+        assertEquals(new Character('a'), new Character(targetObject.getCharField().charAt(0)));
+//        assertNull(targetObject.getBooleanArrayField());
+//        assertNull(targetObject.getBoxedBooleanArrayField());
+//        assertNull(targetObject.getBoxedBooleanField());
+//        assertNull(targetObject.getBoxedByteArrayField());
+//        assertNull(targetObject.getBoxedByteField());
+//        assertNull(targetObject.getBoxedCharArrayField());
+//        assertNull(targetObject.getBoxedCharField());
+//        assertNull(targetObject.getBoxedDoubleArrayField());
+//        assertNull(targetObject.getBoxedDoubleField());
+//        assertNull(targetObject.getBoxedFloatArrayField());
+//        assertNull(targetObject.getBoxedFloatField());
+//        assertNull(targetObject.getBoxedIntArrayField());
+//        assertNull(targetObject.getBoxedIntField());
+//        assertNull(targetObject.getBoxedLongArrayField());
+//        assertNull(targetObject.getBoxedLongField());
+//        assertNull(targetObject.getBoxedShortArrayField());
+//        assertNull(targetObject.getBoxedShortField());
+//        assertNull(targetObject.getBoxedStringArrayField());
+//        assertNull(targetObject.getBoxedStringField());
+    }
+    
+    public static void validateXmlFlatPrimitiveAttribute(XmlFlatPrimitiveAttribute targetObject) {
+        assertNotNull(targetObject);
+        assertEquals(new Double(50000000d), new Double(targetObject.getDoubleField()));
+        assertEquals(new Float(40000000f), new Float(targetObject.getFloatField()));
+        assertEquals(new Integer(2), new Integer(targetObject.getIntField()));
+        assertEquals(new Long(30000L), new Long(targetObject.getLongField()));
+        assertEquals(new Short((short) 1), new Short(targetObject.getShortField()));
+        assertEquals(Boolean.FALSE, targetObject.isBooleanField());
+        //assertEquals(new Byte((byte) 99), new Byte(targetObject.getByteField()));
+        assertEquals(new Character('a'), new Character(targetObject.getCharField().charAt(0)));
+//        assertNull(targetObject.getBooleanArrayField());
+//        assertNull(targetObject.getBoxedBooleanArrayField());
+//        assertNull(targetObject.getBoxedBooleanField());
+//        assertNull(targetObject.getBoxedByteArrayField());
+//        assertNull(targetObject.getBoxedByteField());
+//        assertNull(targetObject.getBoxedCharArrayField());
+//        assertNull(targetObject.getBoxedCharField());
+//        assertNull(targetObject.getBoxedDoubleArrayField());
+//        assertNull(targetObject.getBoxedDoubleField());
+//        assertNull(targetObject.getBoxedFloatArrayField());
+//        assertNull(targetObject.getBoxedFloatField());
+//        assertNull(targetObject.getBoxedIntArrayField());
+//        assertNull(targetObject.getBoxedIntField());
+//        assertNull(targetObject.getBoxedLongArrayField());
+//        assertNull(targetObject.getBoxedLongField());
+//        assertNull(targetObject.getBoxedShortArrayField());
+//        assertNull(targetObject.getBoxedShortField());
+//        assertNull(targetObject.getBoxedStringArrayField());
+//        assertNull(targetObject.getBoxedStringField());
+    }
+    
+    public static void validateXmlFlatPrimitivePrimitiveElementAutoConversion1(XmlFlatPrimitiveElement targetObject) {
+        assertNotNull(targetObject);
+        assertEquals(new Double(40000000d), new Double(targetObject.getDoubleField()));
+        assertEquals(new Float(0f), new Float(targetObject.getFloatField()));
+        assertEquals(new Integer(1), new Integer(targetObject.getIntField()));
+        assertEquals(new Long(50000000L), new Long(targetObject.getLongField()));
+        assertEquals(new Short((short) 30000), new Short(targetObject.getShortField()));
+        assertEquals(new Character('2'), new Character(targetObject.getCharField().charAt(0)));
+        
+        // Primitive auto-initialized values
+        assertFalse(targetObject.isBooleanField());
+        //assertEquals(new Byte((byte) 0), new Byte(targetObject.getByteField()));
+    }
+    
+    public static void validateXmlFlatPrimitivePrimitiveElementAutoConversion2(XmlFlatPrimitiveElement targetObject) {
+        assertNotNull(targetObject);
+        assertEquals(new Double(0.0d), new Double(targetObject.getDoubleField()));
+        assertEquals(new Float(97f), new Float(targetObject.getFloatField()));
+        assertEquals(new Integer(30000), new Integer(targetObject.getIntField()));
+        assertEquals(new Long(40000000L), new Long(targetObject.getLongField()));
+        assertEquals(new Character('1'), new Character(targetObject.getCharField().charAt(0)));
+        
+        // Primitive auto-initialized values
+        assertFalse(targetObject.isBooleanField());
+        //assert equals(new Byte((byte) 0), new Byte(targetObject.getByteField()));
+        assertEquals(new Short((short)0), new Short(targetObject.getShortField()));
+    }
+    
+    public static void validateXmlFlatPrimitivePrimitiveElementAutoConversion3(XmlFlatPrimitiveElement targetObject) {
+        assertNotNull(targetObject);
+        assertEquals(true, targetObject.isBooleanField());
+        assertEquals(new Double(97d), new Double(targetObject.getDoubleField()));
+        assertEquals(new Float(2.0f), new Float(targetObject.getFloatField()));
+        assertEquals(new Integer(50000000), new Integer(targetObject.getIntField()));
+        assertEquals(new Long(0L), new Long(targetObject.getLongField()));
+        // TODO: XmlModule can map char into a String b/c we do not support restricted field types
+        //assertTrue(Character.valueOf((char)30000) == targetObject.getCharField());
+        
+        // Primitive auto-initialized values
+        //assertEquals(new Byte((byte) 0), new Byte(targetObject.getByteField()));
+        assertEquals(new Short((short)0), new Short(targetObject.getShortField()));
+    }
+    
+    public static void validateXmlFlatPrimitivePrimitiveElementAutoConversion4(XmlFlatPrimitiveElement targetObject) {
+        assertNotNull(targetObject);
+        assertEquals(new Double(2.0d), new Double(targetObject.getDoubleField()));
+        assertEquals(new Float(1.0f), new Float(targetObject.getFloatField()));
+        assertEquals(new Integer(40000000), new Integer(targetObject.getIntField()));
+        assertEquals(new Long(97L), new Long(targetObject.getLongField()));
+        assertEquals(new Short((short) 0), new Short(targetObject.getShortField()));
+
+        // Primitive auto-initialized values
+        assertFalse(targetObject.isBooleanField());
+        //assertEquals(new Byte((byte) 0), new Byte(targetObject.getByteField()));
+        assertNotNull(targetObject.getCharField());
+    }
+    
+    public static void validateXmlFlatPrimitivePrimitiveElementAutoConversion5(XmlFlatPrimitiveElement targetObject) {
+        assertNotNull(targetObject);
+        assertEquals(new Double(1.0d), new Double(targetObject.getDoubleField()));
+        assertEquals(new Float(30000.0f), new Float(targetObject.getFloatField()));
+        assertEquals(new Integer(0), new Integer(targetObject.getIntField()));
+        assertEquals(new Long(2L), new Long(targetObject.getLongField()));
+        assertEquals(new Short((short) 97), new Short(targetObject.getShortField()));
+
+        // Primitive auto-initialized values
+        assertFalse(targetObject.isBooleanField());
+        //assertEquals(new Byte((byte) 0), new Byte(targetObject.getByteField()));
+        assertNull(targetObject.getCharField());
+    }
+    
+    public static void validateXmlFlatPrimitivePrimitiveElementAutoConversion6(XmlFlatPrimitiveElement targetObject) {
+        assertNotNull(targetObject);
+        assertEquals(new Double(30000.0d), new Double(targetObject.getDoubleField()));
+        assertEquals(new Float(50000000.0f), new Float(targetObject.getFloatField()));
+        assertEquals(new Integer(97), new Integer(targetObject.getIntField()));
+        assertEquals(new Long(1L), new Long(targetObject.getLongField()));
+        assertEquals(new Short((short) 2), new Short(targetObject.getShortField()));
+        // TODO: AutoConversion/XmlWrtier takes boolean -> String. It should be 'false' -> 0 when specified as fieldType="Char"
+        // assertTrue(Character.valueOf((char)0) == targetObject.getCharField().charAt(0));
+
+        // Primitive auto-initialized values
+        assertFalse(targetObject.isBooleanField());
+        //assertEquals(new Byte((byte) 0), new Byte(targetObject.getByteField()));
+    }
+    
+    public static void validateXmlFlatPrimitiveBoxedPrimitiveElementFields(XmlFlatBoxedPrimitiveElement targetObject) {        
+        assertEquals(new Double(90000000d), new Double(targetObject.getBoxedDoubleField()));
+        assertEquals(new Float(70000000f), new Float(targetObject.getBoxedFloatField()));
+        assertEquals(new Integer(5), new Integer(targetObject.getBoxedIntField()));
+        assertEquals(new Long(20000L), new Long(targetObject.getBoxedLongField()));
+        assertEquals(new Short((short) 5), new Short(targetObject.getBoxedShortField()));
+        assertEquals(new Boolean(Boolean.TRUE), targetObject.isBoxedBooleanField());
+        assertEquals(new Byte((byte) 87), new Byte(targetObject.getBoxedByteField()));
+        assertEquals(new Character('z'), new Character(targetObject.getBoxedCharField().charAt(0)));
+        assertNull(targetObject.getBoxedStringField());
+    }
+    
+    public static void validateXmlFlatPrimitiveBoxedPrimitiveAttributeFields(XmlFlatBoxedPrimitiveAttribute targetObject) {        
+        assertEquals(new Double(90000000d), new Double(targetObject.getBoxedDoubleField()));
+        assertEquals(new Float(70000000f), new Float(targetObject.getBoxedFloatField()));
+        assertEquals(new Integer(5), new Integer(targetObject.getBoxedIntField()));
+        assertEquals(new Long(20000L), new Long(targetObject.getBoxedLongField()));
+        assertEquals(new Short((short) 5), new Short(targetObject.getBoxedShortField()));
+        assertEquals(new Boolean(Boolean.TRUE), targetObject.isBoxedBooleanField());
+        assertEquals(new Byte((byte) 87), new Byte(targetObject.getBoxedByteField()));
+        assertEquals(new Character('z'), new Character(targetObject.getBoxedCharField().charAt(0)));
+        assertNull(targetObject.getBoxedStringField());
+    }
 }
+

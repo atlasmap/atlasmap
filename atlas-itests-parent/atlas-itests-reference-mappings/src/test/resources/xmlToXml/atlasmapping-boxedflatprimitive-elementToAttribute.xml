@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AtlasMapping xmlns="http://atlasmap.io/v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns3="http://atlasmap.io/xml/v2" name="XmlXmlFlatMapping">
+    <DataSource dataSourceType="Source" uri="atlas:xml?complexType=ns:XmlFlatBoxedPrimitiveElement"/>
+    <DataSource dataSourceType="Target" uri="atlas:xml?complexType=ns:XmlFlatBoxedPrimitiveAttribute"/>
+    <Mappings>
+        <Mapping xsi:type="Mapping" mappingType="Map">
+            <InputField xsi:type="ns3:XmlField" path="/XmlFBPE/boxedIntField"/>
+            <OutputField xsi:type="ns3:XmlField" path="/XmlFBPA/@boxedIntField"/>
+        </Mapping>
+        <Mapping xsi:type="Mapping" mappingType="Map">
+            <InputField xsi:type="ns3:XmlField" path="/XmlFBPE/boxedShortField"/>
+            <OutputField xsi:type="ns3:XmlField" path="/XmlFBPA/@boxedShortField"/>
+        </Mapping>
+        <Mapping xsi:type="Mapping" mappingType="Map">
+            <InputField xsi:type="ns3:XmlField" path="/XmlFBPE/boxedLongField"/>
+            <OutputField xsi:type="ns3:XmlField" path="/XmlFBPA/@boxedLongField"/>
+        </Mapping>
+        <Mapping xsi:type="Mapping" mappingType="Map">
+            <InputField xsi:type="ns3:XmlField" path="/XmlFBPE/boxedDoubleField"/>
+            <OutputField xsi:type="ns3:XmlField" path="/XmlFBPA/@boxedDoubleField"/>
+        </Mapping>
+        <Mapping xsi:type="Mapping" mappingType="Map">
+            <InputField xsi:type="ns3:XmlField" path="/XmlFBPE/boxedFloatField"/>
+            <OutputField xsi:type="ns3:XmlField" path="/XmlFBPA/@boxedFloatField"/>
+        </Mapping>
+        <Mapping xsi:type="Mapping" mappingType="Map">
+            <InputField xsi:type="ns3:XmlField" path="/XmlFBPE/boxedBooleanField"/>
+            <OutputField xsi:type="ns3:XmlField" path="/XmlFBPA/@boxedBooleanField"/>
+        </Mapping>
+        <Mapping xsi:type="Mapping" mappingType="Map">
+            <InputField xsi:type="ns3:XmlField" path="/XmlFBPE/boxedCharField"/>
+            <OutputField xsi:type="ns3:XmlField" path="/XmlFBPA/@boxedCharField"/>
+        </Mapping>
+        <Mapping xsi:type="Mapping" mappingType="Map">
+            <InputField xsi:type="ns3:XmlField" path="/XmlFBPE/boxedByteField"/>
+            <OutputField xsi:type="ns3:XmlField" path="/XmlFBPA/@boxedByteField"/>
+        </Mapping>
+    </Mappings>
+</AtlasMapping>

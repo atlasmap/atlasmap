@@ -15,6 +15,7 @@
  */
 package io.atlasmap.xml.module;
 
+import io.atlasmap.api.AtlasConversionException;
 import io.atlasmap.api.AtlasConversionService;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.api.AtlasSession;
@@ -27,23 +28,36 @@ import io.atlasmap.v2.Audit;
 import io.atlasmap.v2.AuditStatus;
 import io.atlasmap.v2.Collection;
 import io.atlasmap.v2.ConstantField;
+import io.atlasmap.v2.DataSource;
+import io.atlasmap.v2.DataSourceType;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldType;
 import io.atlasmap.v2.Mapping;
 import io.atlasmap.v2.PropertyField;
 import io.atlasmap.v2.Validation;
 import io.atlasmap.xml.v2.DocumentXmlFieldReader;
+import io.atlasmap.xml.v2.DocumentXmlFieldWriter;
+import io.atlasmap.xml.v2.XmlDataSource;
 import io.atlasmap.xml.v2.XmlField;
+import io.atlasmap.xml.v2.XmlNamespace;
+import io.atlasmap.xml.v2.XmlNamespaces;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.StringWriter;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -76,6 +90,26 @@ public class XmlModule extends BaseAtlasModule {
     
     @Override
     public void processPreOutputExecution(AtlasSession session) throws AtlasException {
+        
+        XmlNamespaces xmlNs = null;
+        String template = null;
+        for(DataSource ds : session.getMapping().getDataSource()) {
+            if(DataSourceType.TARGET.equals(ds.getDataSourceType()) && ds instanceof XmlDataSource) {
+                xmlNs = ((XmlDataSource)ds).getXmlNamespaces();
+                template = ((XmlDataSource)ds).getTemplate();
+            }
+        }
+        
+        Map<String, String> nsMap = new HashMap<String, String>();
+        if(xmlNs != null && xmlNs.getXmlNamespace() != null && !xmlNs.getXmlNamespace().isEmpty()) {
+            for(XmlNamespace ns : xmlNs.getXmlNamespace()) {
+                nsMap.put(ns.getAlias(), ns.getUri());
+            }
+        }
+        
+        DocumentXmlFieldWriter writer = new DocumentXmlFieldWriter(nsMap, template);
+        session.setOutput(writer);
+        
         if(logger.isDebugEnabled()) {
             logger.debug("processPreOutputExcution completed");
         }
@@ -94,7 +128,7 @@ public class XmlModule extends BaseAtlasModule {
         atlasSession.getValidations().getValidation().addAll(xmlValidations);
         
         if(logger.isDebugEnabled()) {
-            logger.debug("Detected " + xmlValidations.size() + " java validation notices");
+            logger.debug("Detected " + xmlValidations.size() + " xml validation notices");
         }
 
         if(logger.isDebugEnabled()) {
@@ -199,8 +233,57 @@ public class XmlModule extends BaseAtlasModule {
     }
         
     @Override
-    public void processOutputMapping(AtlasSession session, Mapping mapping) throws AtlasException {
-
+    public void processOutputMapping(AtlasSession session, Mapping mapping) throws AtlasException {        
+        switch(mapping.getMappingType()) {
+        case MAP: processMapOutputMapping(session, mapping); break;
+        case COMBINE: break;
+        case SEPARATE: break;
+        default: logger.warn(String.format("Unsupported mapping type=%s", mapping.getMappingType())); return;
+        }  
+    }
+    
+    protected void processMapOutputMapping(AtlasSession session, Mapping mapping) throws AtlasException {
+        Field inField = mapping.getInputField().get(0);
+        Field outField = mapping.getOutputField().get(0);
+        if(!(outField instanceof XmlField)) {
+            logger.error(String.format("Unsupported field type %s", outField.getClass().getName()));
+            return;
+        }
+        
+        if(inField.getValue() == null) {
+            return;
+        }
+        
+        XmlField outputField = (XmlField)outField;
+        Object outputValue = null;
+        
+        if(outputField.getFieldType() == null) {
+            outputField.setFieldType(getConversionService().fieldTypeFromClass(inField.getValue().getClass()));
+        }
+        
+        if(inField.getFieldType() != null && inField.getFieldType().equals(outputField.getFieldType())) {
+            outputValue = inField.getValue();
+        } else {
+            try {
+                outputValue = getConversionService().convertType(inField.getValue(), inField.getFieldType(), outputField.getFieldType());
+            } catch (AtlasConversionException e) {
+                logger.error(String.format("Unable to auto-convert for iT=%s oT=%s oF=%s msg=%s", inField.getFieldType(),  outputField.getFieldType(), outputField.getPath(), e.getMessage()), e);
+                return;
+            }
+        }
+        
+        outputField.setValue(outputValue);        
+        
+        if(session.getOutput() != null && session.getOutput() instanceof DocumentXmlFieldWriter) {
+            DocumentXmlFieldWriter writer = (DocumentXmlFieldWriter) session.getOutput();
+            writer.write(outputField);
+        } else {
+            //TODO: add error handler to detect if the output writer isn't there or is wrong class instance
+        }        
+        
+        if(logger.isDebugEnabled()) {
+            logger.debug(String.format("Processed output field oP=%s oV=%s oT=%s docId: %s", outputField.getPath(), outputField.getValue(), outputField.getFieldType(), outputField.getDocId()));
+        }
     }
     
     @Override
@@ -219,6 +302,13 @@ public class XmlModule extends BaseAtlasModule {
     public void processPostOutputExecution(AtlasSession session) throws AtlasException {
         if(logger.isDebugEnabled()) {
             logger.debug("processPostOutputExecution completed");
+        }
+        
+        Object output = session.getOutput();
+        if(output != null) {
+            if(output instanceof DocumentXmlFieldWriter) {
+                session.setOutput(convertDocumentToString(((DocumentXmlFieldWriter)output).getDocument()));
+            }
         }
     }
 
@@ -274,6 +364,25 @@ public class XmlModule extends BaseAtlasModule {
     @Override
     public void setConversionService(AtlasConversionService atlasConversionService) {
         this.atlasConversionService = atlasConversionService;
+    }
+    
+    private String convertDocumentToString(Document document) throws AtlasException {
+        DocumentBuilderFactory domFact = DocumentBuilderFactory.newInstance();
+        domFact.setNamespaceAware(true);
+        
+        StringWriter writer = null;
+        try {
+            DOMSource domSource = new DOMSource(document);
+            writer = new StringWriter();
+            StreamResult result = new StreamResult(writer);
+            TransformerFactory tf = TransformerFactory.newInstance();
+            Transformer transformer = tf.newTransformer();
+            transformer.transform(domSource, result);
+            return writer.toString();
+        } catch (TransformerException e ) {
+            logger.error(String.format("Error converting Xml document to string msg=%s", e.getMessage()), e);
+            throw new AtlasException(e.getMessage(), e);
+        }
     }
     
     private Document getDocument(String data, boolean namespaced) throws ParserConfigurationException, SAXException, IOException {
