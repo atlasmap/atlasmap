@@ -26,6 +26,7 @@ import io.atlasmap.core.AtlasModuleSupport;
 import io.atlasmap.core.AtlasUtil;
 import io.atlasmap.core.BaseAtlasModule;
 import io.atlasmap.core.DefaultAtlasContextFactory;
+import io.atlasmap.core.PathUtil;
 import io.atlasmap.java.inspect.ClassHelper;
 import io.atlasmap.java.inspect.ClassInspectionService;
 import io.atlasmap.java.inspect.ConstructException;
@@ -36,7 +37,6 @@ import io.atlasmap.java.v2.AtlasJavaModelFactory;
 import io.atlasmap.java.v2.JavaClass;
 import io.atlasmap.java.v2.JavaCollection;
 import io.atlasmap.java.v2.JavaField;
-import io.atlasmap.java.inspect.JavaPath;
 import io.atlasmap.spi.AtlasModuleDetail;
 import io.atlasmap.spi.AtlasModuleMode;
 import io.atlasmap.v2.AtlasMapping;
@@ -236,8 +236,8 @@ public class JavaModule extends BaseAtlasModule {
                 }
                 if(collectionObject == null) {
                     try {
-                        JavaPath javaPath = new JavaPath(cMapSourceField.getPath());
-                        collectionObject = ClassHelper.parentObjectForPath(sourceObject, javaPath); 
+                        PathUtil pathUtil = new PathUtil(cMapSourceField.getPath());
+                        collectionObject = ClassHelper.parentObjectForPath(sourceObject, pathUtil);
 
                         switch(collection.getCollectionType()) {
                         case LIST: processInputCollectionList(collection, (List<?>)collectionObject, session); break;
@@ -278,7 +278,7 @@ public class JavaModule extends BaseAtlasModule {
                     Mapping m = (Mapping)bm;
                     Field in = m.getInputField().get(0);
                     if(in instanceof JavaField) {
-                        JavaPath inPath = new JavaPath(in.getPath());
+                        PathUtil inPath = new PathUtil(in.getPath());
                         inPath.setCollectionIndex(inPath.getCollectionSegment(), i);
 
                         Mapping collectionInstanceMapping = AtlasModelFactory.cloneMapping(m);
@@ -329,10 +329,10 @@ public class JavaModule extends BaseAtlasModule {
     protected void populateSourceFieldValue(JavaField javaField, Object source, Method getter) throws NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
 
         Object sourceValue = null;
-        JavaPath javaPath = new JavaPath(javaField.getPath());
-        
-        if(javaPath.hasCollection()) {
-            JavaPath collectionItemPath = javaPath.deCollectionify(javaPath.getCollectionSegment());
+        PathUtil pathUtil = new PathUtil(javaField.getPath());
+
+        if (pathUtil.hasCollection()) {
+            PathUtil collectionItemPath = pathUtil.deCollectionify(pathUtil.getCollectionSegment());
             Object parentObject = ClassHelper.parentObjectForPath(source, collectionItemPath);
             if(getter == null) {
                 getter = resolveGetMethod(parentObject, javaField, true);
@@ -344,9 +344,9 @@ public class JavaModule extends BaseAtlasModule {
                 // we are ourselves
                 sourceValue = source;
             }
-        } else if (javaPath.hasParent()) {
-            Object parentObject = ClassHelper.parentObjectForPath(source, javaPath);
-            if(getter == null) {
+        } else if (pathUtil.hasParent()) {
+            Object parentObject = ClassHelper.parentObjectForPath(source, pathUtil);
+            if (getter == null) {
                 getter = resolveGetMethod(parentObject, javaField, true);
             }
             sourceValue = getter.invoke(parentObject);
@@ -360,7 +360,7 @@ public class JavaModule extends BaseAtlasModule {
         // TODO: support doing parent stuff at field level vs getter
         if(sourceValue == null) {
             try {
-                java.lang.reflect.Field field = source.getClass().getField(javaPath.getLastSegment());
+                java.lang.reflect.Field field = source.getClass().getField(pathUtil.getLastSegment());
                 field.setAccessible(true);
                 sourceValue = field.get(source);
             } catch (NoSuchFieldException nsfe) {
@@ -400,19 +400,19 @@ public class JavaModule extends BaseAtlasModule {
     
     protected void populateTargetObjectValue(Object targetObject, JavaField targetField, Object targetValue) throws Exception {
         
-        JavaPath javaPath = new JavaPath(targetField.getPath());
+        PathUtil pathUtil = new PathUtil(targetField.getPath());
         Method targetMethod = resolveSetMethod(targetObject, targetField, targetValue.getClass());
         
         Object parentObject = targetObject;
-        if (javaPath.hasParent()) {
-            parentObject = ClassHelper.parentObjectForPath(parentObject, javaPath);
+        if (pathUtil.hasParent()) {
+            parentObject = ClassHelper.parentObjectForPath(parentObject, pathUtil);
         }
         
         if(targetMethod != null) {
             targetMethod.invoke(parentObject, targetValue);
         } else {
             try {
-                java.lang.reflect.Field field = parentObject.getClass().getField(javaPath.getLastSegment());
+                java.lang.reflect.Field field = parentObject.getClass().getField(pathUtil.getLastSegment());
                 field.setAccessible(true);
                 targetField.setValue(field.get(parentObject));
             } catch (NoSuchFieldException nsfe) {
@@ -726,11 +726,11 @@ public class JavaModule extends BaseAtlasModule {
     protected Method resolveGetMethod(Object sourceObject, JavaField javaField, boolean objectIsParent) throws NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
 
         Object parentObject = sourceObject;
-        JavaPath javaPath = new JavaPath(javaField.getPath());
+        PathUtil pathUtil = new PathUtil(javaField.getPath());
         Method getter = null;
-        
-        if(javaPath.hasParent() && !objectIsParent) {
-            parentObject = ClassHelper.parentObjectForPath(sourceObject, javaPath);
+
+        if (pathUtil.hasParent() && !objectIsParent) {
+            parentObject = ClassHelper.parentObjectForPath(sourceObject, pathUtil);
         }
         
         List<Class<?>> classTree = resolveMappableClasses(parentObject.getClass());
@@ -747,7 +747,7 @@ public class JavaModule extends BaseAtlasModule {
             }
 
             for(String m : Arrays.asList("get", "is")) {
-                String getterMethod = m + capitalizeFirstLetter(javaPath.getLastSegment());
+                String getterMethod = m + capitalizeFirstLetter(pathUtil.getLastSegment());
                 try {
                     getter = clazz.getMethod(getterMethod);
                     getter.setAccessible(true);
@@ -762,11 +762,11 @@ public class JavaModule extends BaseAtlasModule {
     
     protected Method resolveSetMethod(Object sourceObject, JavaField javaField, Class<?> targetType) throws NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
         
-        JavaPath javaPath = new JavaPath(javaField.getPath());
+        PathUtil pathUtil = new PathUtil(javaField.getPath());
         Object parentObject = sourceObject;
-        
-        if(javaPath.hasParent()) {
-            parentObject = ClassHelper.parentObjectForPath(parentObject, javaPath);
+
+        if (pathUtil.hasParent()) {
+            parentObject = ClassHelper.parentObjectForPath(parentObject, pathUtil);
         }
         List<Class<?>> classTree = resolveMappableClasses(parentObject.getClass());
         
@@ -774,7 +774,7 @@ public class JavaModule extends BaseAtlasModule {
             try {
                 String setterMethodName = javaField.getSetMethod();
                 if(setterMethodName == null) { 
-                    setterMethodName = "set" + capitalizeFirstLetter(javaPath.getLastSegment());
+                    setterMethodName = "set" + capitalizeFirstLetter(pathUtil.getLastSegment());
                 } 
                 return ClassHelper.detectSetterMethod(clazz, setterMethodName, targetType);
             } catch (NoSuchMethodException e) {
@@ -786,8 +786,8 @@ public class JavaModule extends BaseAtlasModule {
                 try {
                     String setterMethodName = javaField.getSetMethod();
                     if(setterMethodName == null) { 
-                        setterMethodName = "set" + capitalizeFirstLetter(javaPath.getLastSegment());
                     } 
+                        setterMethodName = "set" + capitalizeFirstLetter(pathUtil.getLastSegment());
                     return ClassHelper.detectSetterMethod(clazz, setterMethodName, getConversionService().boxOrUnboxPrimitive(targetType));
                 } catch (NoSuchMethodException e) {
                     // method does not exist
