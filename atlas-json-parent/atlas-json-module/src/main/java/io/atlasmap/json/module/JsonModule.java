@@ -182,9 +182,7 @@ public class JsonModule extends BaseAtlasModule {
         case COMBINE: break;
         case SEPARATE: break;
         default: logger.warn(String.format("Unsupported mapping type=%s", mapping.getMappingType())); return;
-        }
-        
-        
+        }  
     }
     
     protected void processMapOutputMapping(AtlasSession session, Mapping mapping) throws AtlasException {
