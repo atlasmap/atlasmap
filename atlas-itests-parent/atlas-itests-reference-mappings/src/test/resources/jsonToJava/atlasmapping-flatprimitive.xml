@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <AtlasMapping xmlns="http://atlasmap.io/v2" xmlns:ns2="http://atlasmap.io/java/v2" xmlns:ns3="http://atlasmap.io/json/v2" name="JsonJavaFlatMapping">
-    <DataSource uri="atlas:json" dataSourceType="Source"/>
-    <DataSource uri="atlas:java?className=io.atlasmap.java.test.TargetFlatPrimitiveClass" dataSourceType="Target"/>
+    <DataSource dataSourceType="Source" uri="atlas:json"/>
+    <DataSource dataSourceType="Target" uri="atlas:java?className=io.atlasmap.java.test.TargetFlatPrimitiveClass"/>
     <Mappings>
         <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="Mapping" mappingType="Map">
             <InputField xsi:type="ns3:JsonField" path="/intField"/>
