@@ -47,3 +47,39 @@ AtlasMap terminology
 |Map, Combine, Separate, Collection or Lookup
 
 |===
+
+
+
+AtlasMap Data Format terminology 
+
+[cols="1,2,2", options="header"] 
+|===
+|Term
+|Definition
+|Example
+
+|Boxed Primitive
+|A type of primitive that have a 'null' value
+| Integer, Long, Boolean, etc
+
+|(Unboxed) Primitive
+|A type of primitive that cannot be 'null' and generally has a default initialized value
+| int, long, boolean, etc
+
+|Rooted
+|JSON documents that have a parent node identifying to contents of the JSON document
+| { "Contact": { "firstName": "Yu", "lastName": "Darvish" } }
+
+|Unrooted
+|JSON documents that do not have a parent node identifying the contents of the JSON document
+| { "firstName": "Yu", "lastName": "Darvish" }
+
+|Qualified
+|Xml elements and/or attributes that contain the namespace prefix
+| <ns1:Contact ns1:firstName="Yu" ns1:lastName="Darvish" />
+
+|Unqualified
+|Xml elements and/or attributes that do not contain the namespace prefix 
+| <Contact firstName="Yu" lastName="Darvish" />
+
+|===

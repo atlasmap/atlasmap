@@ -264,6 +264,11 @@ public class DocumentXmlFieldReaderTest {
         reader.read(doc, xmlField);
     }
 
+    @Test
+    public void testFieldTypeValueOf() {
+        System.out.println(Boolean.valueOf("Foo"));
+    }
+    
     private Document getDocument(String uri) throws IOException, SAXException, ParserConfigurationException {
         return getDocument(uri, false);
     }

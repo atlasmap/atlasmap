@@ -68,15 +68,35 @@ public class DocumentXmlFieldReader extends XmlFieldTransformer {
                 if(xmlField.getFieldType() == null || FieldType.STRING.equals(xmlField.getFieldType())) {
                     xmlField.setValue(value);
                     xmlField.setFieldType(FieldType.STRING);
-                } else {
-                    if(FieldType.CHAR.equals(xmlField.getFieldType())) {
-                        xmlField.setValue(value.charAt(0));
+                } else if(FieldType.CHAR.equals(xmlField.getFieldType())) {
+                    xmlField.setValue(value.charAt(0));
+                } 
+                
+                if(value != null) {
+                    if(FieldType.BOOLEAN.equals(xmlField.getFieldType())) {
+                        xmlField.setValue(processXmlStringAsBoolean(value));
                     } else {
                         logger.warn(String.format("Unsupported FieldType for text data t=%s p=%s docId=%s", xmlField.getFieldType().value(), xmlField.getPath(), xmlField.getDocId()));
                     }
                 }
             }
         }
+    }
+    
+    public static Boolean processXmlStringAsBoolean(String value) {
+        if(value == null) {
+            return null;
+        }
+        
+        if("true".equalsIgnoreCase(value) || "1".equalsIgnoreCase(value)) {
+            return Boolean.TRUE;
+        }
+        
+        if("false".equalsIgnoreCase(value) || "0".equalsIgnoreCase(value)) {
+            return Boolean.FALSE;
+        }
+
+        return null;
     }
 
     public void read(final Document document, final List<XmlField> xmlFields) throws AtlasException {
