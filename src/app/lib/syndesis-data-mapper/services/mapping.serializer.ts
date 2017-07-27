@@ -204,10 +204,11 @@ export class MappingSerializer {
             if (field.isProperty()) {
                 serializedField["jsonType"] = ConfigModel.mappingServicesPackagePrefix + ".PropertyField";
                 serializedField["name"] = field.path;
-            }
-            else if (field.isConstant()) {
+            } else if (field.isConstant()) {
                 serializedField["jsonType"] = ConfigModel.mappingServicesPackagePrefix + ".ConstantField";
                 delete(serializedField["name"]);
+            } else if (field.enumeration) {
+                serializedField["jsonType"] = "io.atlasmap.java.v2.JavaEnumField";
             } else {
                 delete(serializedField["value"]);
             }

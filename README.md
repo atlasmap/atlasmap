@@ -35,7 +35,7 @@ Running the Data Mapper in stand alone mode will require installing the Data Map
 
 *Troubleshooting Installation*
 
-1. Compile errors: If the UI doesn't run, check the terminal window where you ran 'npm start', there may be compilation errors reported there even if it attempts to run the UI successfully without exiting with error.
+1. Compile errors: If the UI doesn't run, check the terminal window where you ran `npm start`, there may be compilation errors reported there even if it attempts to run the UI successfully without exiting with error.
 
 2. Check the console window of chrome's developer tools window for errors, this is found via the chrome "view->developer->developer tools" menu, the javascript console will be on the bottom of the tab you've opened the tools in.
 
