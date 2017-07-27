@@ -139,6 +139,14 @@
         <attribute name="fieldType" type="atlas:FieldType" use="optional" />
 	</complexType>
     
+    <complexType name="SimpleField">
+         <complexContent>
+            <extension base="atlas:Field" >
+                <attribute name="name" type="string" use="required" />
+            </extension>
+         </complexContent>
+    </complexType>
+    
     <complexType name="PropertyField">
         <complexContent>
             <extension base="atlas:Field">
