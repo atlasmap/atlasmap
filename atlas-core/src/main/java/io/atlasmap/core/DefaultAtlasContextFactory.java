@@ -57,12 +57,13 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
 	private String threadName = null;
 	private ObjectName objectName = null;
 	private List<AtlasModuleInfo> modules = new ArrayList<AtlasModuleInfo>();
-	private AtlasSeparateStrategy separateStrategy = new DefaultAtlasSeparateStrategy();
 	private AtlasMappingService atlasMappingService = null;
 	private DefaultAtlasConversionService atlasConversionService = null;
 	private DefaultAtlasFieldActionService atlasFieldActionService = null;
 	private AtlasPropertyStrategy atlasPropertyStrategy = new DefaultAtlasPropertyStrategy();
-	private AtlasValidationService atlasValidationService = new DefaultAtlasValidationService();
+	private AtlasSeparateStrategy atlasSeparateStrategy = new DefaultAtlasSeparateStrategy();
+
+    private AtlasValidationService atlasValidationService = new DefaultAtlasValidationService();
 
 	private Map<String, String> properties = null;
 
@@ -135,6 +136,7 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
 		this.atlasMappingService = null;
 	    this.atlasFieldActionService = null;
 		this.atlasConversionService = null;
+		this.atlasPropertyStrategy = null;
 		this.threadName = null;
 		factory = null;
 	}
@@ -390,10 +392,6 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
 	protected static DefaultAtlasContextFactory getFactory() {
 		return factory;
 	}
-
-	public AtlasSeparateStrategy getSeparateStrategy() {
-		return this.separateStrategy;
-	}
 	
 	public List<AtlasModuleInfo> getModules() {
 		return this.modules;
@@ -428,6 +426,15 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
 
     public void setPropertyStrategy(AtlasPropertyStrategy atlasPropertyStrategy) {
         this.atlasPropertyStrategy = atlasPropertyStrategy;
+    }
+    
+    @Override
+    public AtlasSeparateStrategy getSeparateStrategy() {
+        return atlasSeparateStrategy;
+    }
+    
+    public void setSeparateStrategy(AtlasSeparateStrategy atlasSeparateStrategy) {
+        this.atlasSeparateStrategy = atlasSeparateStrategy;
     }
 	
     @Override

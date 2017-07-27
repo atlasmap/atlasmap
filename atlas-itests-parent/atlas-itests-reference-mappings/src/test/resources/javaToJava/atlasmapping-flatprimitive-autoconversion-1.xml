@@ -32,6 +32,4 @@
             <OutputField xsi:type="ns2:JavaField" path="/booleanField"/>
         </Mapping>
     </Mappings>
-    <LookupTables/>
-    <Properties/>
 </AtlasMapping>

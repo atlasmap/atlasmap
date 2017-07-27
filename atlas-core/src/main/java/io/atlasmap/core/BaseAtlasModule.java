@@ -15,6 +15,8 @@
  */
 package io.atlasmap.core;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,14 +25,17 @@ import io.atlasmap.api.AtlasFieldActionService;
 import io.atlasmap.api.AtlasSession;
 import io.atlasmap.spi.AtlasModule;
 import io.atlasmap.spi.AtlasPropertyStrategy;
+import io.atlasmap.v2.AtlasModelFactory;
 import io.atlasmap.v2.Audit;
 import io.atlasmap.v2.AuditStatus;
 import io.atlasmap.v2.Field;
+import io.atlasmap.v2.FieldType;
 import io.atlasmap.v2.LookupEntry;
 import io.atlasmap.v2.LookupTable;
 import io.atlasmap.v2.Mapping;
 import io.atlasmap.v2.MappingType;
 import io.atlasmap.v2.PropertyField;
+import io.atlasmap.v2.SimpleField;
 
 public abstract class BaseAtlasModule implements AtlasModule {
 
@@ -118,6 +123,45 @@ public abstract class BaseAtlasModule implements AtlasModule {
         
     }
 
+    protected Field processSeparateField(AtlasSession session, Mapping mapping, Field inputField, Field outputField) throws AtlasException {
+        if(outputField.getIndex() == null || outputField.getIndex() < 0) {
+            logger.warn(String.format("Separate requires Index value to be set on outputField outputField.path=%s", outputField.getPath()));
+            addAudit(session, outputField.getDocId(), String.format("Separate requires Index value to be set on outputField outputField.path=%s", outputField.getPath()), outputField.getPath(), AuditStatus.ERROR, null);
+            return null;
+        }
+        
+        Field inputFieldsep = mapping.getInputField().get(0);
+        if((inputFieldsep.getFieldType() != null && !FieldType.STRING.equals(inputFieldsep.getFieldType()) ||
+           (inputFieldsep.getValue() == null || !inputFieldsep.getValue().getClass().isAssignableFrom(String.class)))) {
+            logger.warn(String.format("Separate requires String field type for inputField.path=%s", inputFieldsep.getPath()));
+            addAudit(session, outputField.getDocId(), String.format("Separate requires String field type for inputField.path=%s", inputFieldsep.getPath()), outputField.getPath(), AuditStatus.WARN, null);
+            return null;
+        }
+        
+        String inputValue = (String)inputFieldsep.getValue();
+        List<String> separatedValues = null;
+        if(mapping.getDelimiter() != null) {
+            separatedValues = session.getAtlasContext().getContextFactory().getSeparateStrategy().separateValue(inputValue, mapping.getDelimiter());
+        } else {
+            separatedValues = session.getAtlasContext().getContextFactory().getSeparateStrategy().separateValue(inputValue);
+        }
+        
+        if(separatedValues == null || separatedValues.isEmpty()) {
+            logger.debug(String.format("Empty string for Separate mapping inputField.path=%s", inputFieldsep.getPath()));
+            return null;
+        }
+        
+        if(separatedValues.size() < outputField.getIndex()) {
+            logger.error(String.format("Separate returned fewer segements count=%s when outputField.path=%s requested index=%s", separatedValues.size(), outputField.getPath(), outputField.getIndex()));
+            addAudit(session, outputField.getDocId(), String.format("Separate returned fewer segements count=%s when outputField.path=%s requested index=%s", separatedValues.size(), outputField.getPath(), outputField.getIndex()), outputField.getPath(), AuditStatus.ERROR, null);
+            return null;
+        }
+        
+        SimpleField simpleField = AtlasModelFactory.cloneFieldToSimpleField(inputFieldsep);
+        simpleField.setValue(separatedValues.get(outputField.getIndex()));
+        return simpleField;
+    }
+    
     protected void addAudit(AtlasSession session, String docId, String message, String path, AuditStatus status, String value) {
         Audit audit = new Audit();
         audit.setDocId(docId);
