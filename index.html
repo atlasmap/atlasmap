@@ -623,6 +623,55 @@ table.CodeRay td.code>pre{padding:0}
 </tr>
 </tbody>
 </table>
+<div class="paragraph">
+<p>AtlasMap Data Format terminology</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 40%;">
+<col style="width: 40%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Term</th>
+<th class="tableblock halign-left valign-top">Definition</th>
+<th class="tableblock halign-left valign-top">Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Boxed Primitive</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A type of primitive that have a 'null' value</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Integer, Long, Boolean, etc</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">(Unboxed) Primitive</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A type of primitive that cannot be 'null' and generally has a default initialized value</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">int, long, boolean, etc</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Rooted</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">JSON documents that have a parent node identifying to contents of the JSON document</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">{ "Contact": { "firstName": "Yu", "lastName": "Darvish" } }</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Unrooted</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">JSON documents that do not have a parent node identifying the contents of the JSON document</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">{ "firstName": "Yu", "lastName": "Darvish" }</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Qualified</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Xml elements and/or attributes that contain the namespace prefix</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">&lt;ns1:Contact ns1:firstName="Yu" ns1:lastName="Darvish" /&gt;</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Unqualified</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Xml elements and/or attributes that do not contain the namespace prefix</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">&lt;Contact firstName="Yu" lastName="Darvish" /&gt;</p></td>
+</tr>
+</tbody>
+</table>
 <div style="page-break-after: always;"></div>
 </div>
 </div>
@@ -709,7 +758,7 @@ table.CodeRay td.code>pre{padding:0}
 <div id="footer">
 <div id="footer-text">
 Version 1.16.0-SNAPSHOT<br>
-Last updated 2017-07-27 19:15:06 UTC
+Last updated 2017-07-27 21:45:33 UTC
 </div>
 </div>
 </body>
