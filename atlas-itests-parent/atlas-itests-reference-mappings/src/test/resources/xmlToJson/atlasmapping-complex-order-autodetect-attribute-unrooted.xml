@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AtlasMapping xmlns="http://atlasmap.io/v2" xmlns:ns2="http://atlasmap.io/json/v2" xmlns:ns3="http://atlasmap.io/xml/v2" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="XmlJsonComplexMapping" >
+  <DataSource dataSourceType="Source" uri="atlas:xml?complexType=ns:XmlOrderAttribute"/>
+  <DataSource dataSourceType="Target" uri="atlas:json"/>
+  <Mappings>
+    <Mapping xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="ns3:XmlField" path="/XmlOA/@orderId"/>
+      <OutputField xsi:type="ns2:JsonField" path="/orderId"/>
+    </Mapping>
+    <Mapping xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="ns3:XmlField" path="/XmlOA/Contact/@firstName"/>
+      <OutputField xsi:type="ns2:JsonField" path="/contact/firstName"/>
+    </Mapping>
+    <Mapping xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="ns3:XmlField" path="/XmlOA/Contact/@lastName"/>
+      <OutputField xsi:type="ns2:JsonField" path="/contact/lastName"/>
+    </Mapping>
+    <Mapping xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="ns3:XmlField" path="/XmlOA/Contact/@phoneNumber"/>
+      <OutputField xsi:type="ns2:JsonField" path="/contact/phoneNumber"/>
+    </Mapping>
+    <Mapping xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="ns3:XmlField" path="/XmlOA/Contact/@zipCode"/>
+      <OutputField xsi:type="ns2:JsonField" path="/contact/zipCode"/>
+    </Mapping>
+    <Mapping xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="ns3:XmlField" path="/XmlOA/Address/@addressLine1"/>
+      <OutputField xsi:type="ns2:JsonField" path="/address/addressLine1"/>
+    </Mapping>
+    <Mapping xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="ns3:XmlField" path="/XmlOA/Address/@addressLine2"/>
+      <OutputField xsi:type="ns2:JsonField" path="/address/addressLine2"/>
+    </Mapping>
+    <Mapping xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="ns3:XmlField" path="/XmlOA/Address/@city"/>
+      <OutputField xsi:type="ns2:JsonField" path="/address/city"/>
+    </Mapping>
+    <Mapping xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="ns3:XmlField" path="/XmlOA/Address/@state"/>
+      <OutputField xsi:type="ns2:JsonField" path="/address/state"/>
+    </Mapping>
+    <Mapping xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="ns3:XmlField" path="/XmlOA/Address/@zipCode"/>
+      <OutputField xsi:type="ns2:JsonField" path="/address/zipCode"/>
+    </Mapping>
+  </Mappings>
+</AtlasMapping>
