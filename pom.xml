@@ -67,37 +67,37 @@
         <docker.image>atlasmap/atlasmap:%l</docker.image>
   </properties>
 
-  <description>The AtlasMap Project</description>
-  <url>http://www.atlasmap.io</url>
-  <inceptionYear>2017</inceptionYear>
-  <licenses>
-    <license>
-      <name>The Apache Software License, Version 2.0</name>
-      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-      <distribution>repo</distribution>
-    </license>
-  </licenses>
-  <developers>
-    <developer>
-      <id>mattrpav</id>
-      <name>Matt Pavlovich</name>
-      <email>matt@mediadriver.com</email>
-      <url>http://mediadriver.com</url>
-      <timezone>-6</timezone>
-    </developer>
-    <developer>
-      <id>chirino</id>
-      <name>Hiram Chirino</name>
-      <email>hiram@hiramchirino.com</email>
-      <url>http://hiramchirino.com</url>
-      <timezone>-5</timezone>
-    </developer>
-  </developers>
-  <scm>
-    <connection>git:https://github.com/redhat-ipaas/ipaas-datamapper.git</connection>
-    <developerConnection>git:git@github.com:redhat-ipaas/ipaas-datamapper.git</developerConnection>
-    <url>https://github.com/redhat-ipaas/ipaas-datamapper</url>
-  </scm>
+	<description>The AtlasMap Project</description>
+	<url>http://www.atlasmap.io</url>
+	<inceptionYear>2017</inceptionYear>
+	<licenses>
+		<license>
+			<name>The Apache Software License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+	<developers>
+		<developer>
+			<id>mattrpav</id>
+			<name>Matt Pavlovich</name>
+			<email>matt@mediadriver.com</email>
+			<url>http://mediadriver.com</url>
+			<timezone>-6</timezone>
+		</developer>
+		<developer>
+			<id>chirino</id>
+			<name>Hiram Chirino</name>
+			<email>hiram@hiramchirino.com</email>
+			<url>http://hiramchirino.com</url>
+			<timezone>-5</timezone>
+		</developer>
+	</developers>
+	<scm>
+		<connection>git:https://github.com/atlasmap/atlasmap.git</connection>
+		<developerConnection>git:git@github.com:atlasmap/atlasmap.git</developerConnection>
+		<url>https://atlasmap.io</url>
+	</scm>
 
   <distributionManagement>
     <snapshotRepository>
