@@ -15,6 +15,15 @@
  */
 package io.atlasmap.java.module;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import io.atlasmap.api.AtlasContextFactory;
 import io.atlasmap.api.AtlasConversionException;
 import io.atlasmap.api.AtlasConversionService;
@@ -50,18 +59,12 @@ import io.atlasmap.v2.ConstantField;
 import io.atlasmap.v2.DataSource;
 import io.atlasmap.v2.DataSourceType;
 import io.atlasmap.v2.Field;
+import io.atlasmap.v2.LookupTable;
 import io.atlasmap.v2.Mapping;
 import io.atlasmap.v2.MappingType;
 import io.atlasmap.v2.Mappings;
 import io.atlasmap.v2.PropertyField;
 import io.atlasmap.v2.Validation;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @AtlasModuleDetail(name = "JavaModule", uri = "atlas:java", modes = { "SOURCE", "TARGET" }, dataFormats = { "java" }, configPackages = { "io.atlasmap.java.v2" })
 public class JavaModule extends BaseAtlasModule {
@@ -191,7 +194,7 @@ public class JavaModule extends BaseAtlasModule {
         }
         
         try {
-            processMapping((JavaField)field, sourceObject, session);
+            processInputMapping(field, sourceObject, session);
             
             if(logger.isDebugEnabled()) {
                 logger.debug("Processed input field sPath=" + field.getPath() + " sV=" + field.getValue() + " sT=" + field.getFieldType() + " docId: " + field.getDocId());
@@ -286,7 +289,7 @@ public class JavaModule extends BaseAtlasModule {
 
                         JavaField cloneField = AtlasJavaModelFactory.cloneJavaField((JavaField)in);
                         cloneField.setPath(inPath.toString());
-                        populateSourceFieldValue(cloneField, collectionItem);
+                        populateSourceFieldValue(cloneField, collectionItem, null);
                         collectionInstanceMapping.getInputField().add(cloneField);
                         collectionInstanceMapping.getOutputField().addAll(m.getOutputField());
 
@@ -300,42 +303,34 @@ public class JavaModule extends BaseAtlasModule {
         mapping.getMappings().getMapping().addAll(collectionInstanceMappings.getMapping());
     }
     
-    protected void processMapping(JavaField sourceField, Object source, AtlasSession session) throws NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+    protected void processInputMapping(Field sourceField, Object source, AtlasSession session) throws NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
         Method getter = null;
         if((sourceField).getFieldType() == null) {
-            getter = resolveGetMethod(source, (JavaField)sourceField, false);
+            getter = resolveGetMethod(source, sourceField, false);
             if(getter == null) {
-                logger.warn("Unable to auto-detect sourceField type p=" + ((JavaField)sourceField).getPath() + " d=" + ((JavaField)sourceField).getDocId());
+                logger.warn("Unable to auto-detect sourceField type p=" + sourceField.getPath() + " d=" + sourceField.getDocId());
                 return;
             }
             Class<?> returnType = getter.getReturnType();
             sourceField.setFieldType(getConversionService().fieldTypeFromClass(returnType));
             if(logger.isTraceEnabled()) {
-                logger.trace("Auto-detected sourceField type p=" + ((JavaField)sourceField).getPath() + " t=" + ((JavaField)sourceField).getFieldType());
+                logger.trace("Auto-detected sourceField type p=" + sourceField.getPath() + " t=" + sourceField.getFieldType());
             }
         }
             
-        if(getter != null) {
-            populateSourceFieldValue((JavaField) sourceField, source, getter);
-        } else {
-            populateSourceFieldValue((JavaField) sourceField, source);
-        }
-    }
-
-    protected void populateSourceFieldValue(JavaField javaField, Object source) throws NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
-        populateSourceFieldValue(javaField, source, null);
+        populateSourceFieldValue(sourceField, source, getter);
     }
     
-    protected void populateSourceFieldValue(JavaField javaField, Object source, Method getter) throws NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+    protected void populateSourceFieldValue(Field field, Object source, Method getter) throws NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
 
         Object sourceValue = null;
-        PathUtil pathUtil = new PathUtil(javaField.getPath());
+        PathUtil pathUtil = new PathUtil(field.getPath());
 
         if (pathUtil.hasCollection()) {
             PathUtil collectionItemPath = pathUtil.deCollectionify(pathUtil.getCollectionSegment());
             Object parentObject = ClassHelper.parentObjectForPath(source, collectionItemPath);
             if(getter == null) {
-                getter = resolveGetMethod(parentObject, javaField, true);
+                getter = resolveGetMethod(parentObject, field, true);
             }
             
             if(getter != null) {
@@ -347,12 +342,12 @@ public class JavaModule extends BaseAtlasModule {
         } else if (pathUtil.hasParent()) {
             Object parentObject = ClassHelper.parentObjectForPath(source, pathUtil);
             if (getter == null) {
-                getter = resolveGetMethod(parentObject, javaField, true);
+                getter = resolveGetMethod(parentObject, field, true);
             }
             sourceValue = getter.invoke(parentObject);
         } else {
             if(getter == null) {
-                getter = resolveGetMethod(source, javaField, false);
+                getter = resolveGetMethod(source, field, false);
             }
             sourceValue = getter.invoke(source);
         }
@@ -360,9 +355,9 @@ public class JavaModule extends BaseAtlasModule {
         // TODO: support doing parent stuff at field level vs getter
         if(sourceValue == null) {
             try {
-                java.lang.reflect.Field field = source.getClass().getField(pathUtil.getLastSegment());
-                field.setAccessible(true);
-                sourceValue = field.get(source);
+                java.lang.reflect.Field reflectField = source.getClass().getField(pathUtil.getLastSegment());
+                reflectField.setAccessible(true);
+                sourceValue = reflectField.get(source);
             } catch (NoSuchFieldException nsfe) {
                 // TODO: Add audit entry
             }
@@ -370,11 +365,11 @@ public class JavaModule extends BaseAtlasModule {
         
         if(sourceValue == null) {
             // TODO: Add audit entry
-            javaField.setValue(null);
+            field.setValue(null);
         } else if(getConversionService().isPrimitive(sourceValue.getClass()) || getConversionService().isBoxedPrimitive(sourceValue.getClass())) {
-            javaField.setValue(getConversionService().copyPrimitive(sourceValue));
+            field.setValue(getConversionService().copyPrimitive(sourceValue));
         } else {
-            javaField.setValue(sourceValue);
+            field.setValue(sourceValue);
         }
     }
 
@@ -465,7 +460,7 @@ public class JavaModule extends BaseAtlasModule {
                 }                
             }
             Field inputField = mapping.getInputField().get(0);      
-            OutputValueConverter valueConverter = new OutputValueConverter(inputField, getConversionService());
+            OutputValueConverter valueConverter = new OutputValueConverter(inputField, session, mapping, getConversionService());
             writer.write(outputField, valueConverter);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
@@ -479,8 +474,6 @@ public class JavaModule extends BaseAtlasModule {
             logger.debug("processOutputMapping completed");
         }
     }
-    
-    
     
     @Override
     public void processOutputCollection(AtlasSession session, Collection collection) throws AtlasException {
@@ -574,13 +567,15 @@ public class JavaModule extends BaseAtlasModule {
         for(BaseMapping fm :mappings) {
             if(fm instanceof Mapping) {
                 if(((Mapping)fm).getOutputField() != null) {
-                    JavaField f = (JavaField)((Mapping)fm).getOutputField().get(0);
+                    Field f = ((Mapping)fm).getOutputField().get(0);
                     if(f.getPath() != null) {
-                        JavaField inspectField = findFieldByPath(inspectionClass, f.getPath());
-                        if(inspectField != null) {
+                        Field inspectField = findFieldByPath(inspectionClass, f.getPath());
+                        if(inspectField != null && f instanceof JavaField && inspectField instanceof JavaField) {
+                            String overrideClassName = ((JavaField)f).getClassName();
+                            JavaField javaInspectField = (JavaField) inspectField;
                             // Support mapping overrides className
-                            if(f.getClassName() != null && !f.getClassName().equals(inspectField.getClassName())) {
-                                inspectField.setClassName(f.getClassName());
+                            if(overrideClassName != null && !overrideClassName.equals(javaInspectField.getClassName())) {
+                                javaInspectField.setClassName(overrideClassName);
                             }
                         }
                     }
@@ -589,10 +584,10 @@ public class JavaModule extends BaseAtlasModule {
         }
     }
     
-    protected Method resolveGetMethod(Object sourceObject, JavaField javaField, boolean objectIsParent) throws NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+    protected static Method resolveGetMethod(Object sourceObject, Field field, boolean objectIsParent) throws NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
 
         Object parentObject = sourceObject;
-        PathUtil pathUtil = new PathUtil(javaField.getPath());
+        PathUtil pathUtil = new PathUtil(field.getPath());
         Method getter = null;
 
         if (pathUtil.hasParent() && !objectIsParent) {
@@ -602,9 +597,9 @@ public class JavaModule extends BaseAtlasModule {
         List<Class<?>> classTree = resolveMappableClasses(parentObject.getClass());
         
         for(Class<?> clazz : classTree) {
-            try {
-                if(javaField.getGetMethod() != null) { 
-                    getter = clazz.getMethod(javaField.getGetMethod());
+            try {                
+                if(field instanceof JavaField && ((JavaField)field).getGetMethod() != null) { 
+                    getter = clazz.getMethod(((JavaField)field).getGetMethod());
                     getter.setAccessible(true);
                     return getter;
                 }
@@ -773,6 +768,8 @@ public class JavaModule extends BaseAtlasModule {
     @Override
     public Boolean isSupportedField(Field field) {
         if (field instanceof JavaField) {
+            return true;
+        } else if (field instanceof JavaEnumField) {
             return true;
         } else if (field instanceof PropertyField) {
             return true;
