@@ -651,9 +651,9 @@ public class JavaModule extends BaseAtlasModule {
             if(getConversionService().isPrimitive(targetType) || getConversionService().isBoxedPrimitive(targetType)) {
                 try {
                     String setterMethodName = javaField.getSetMethod();
-                    if(setterMethodName == null) { 
-                    } 
+                    if(setterMethodName == null) {
                         setterMethodName = "set" + capitalizeFirstLetter(pathUtil.getLastSegment());
+                    }                         
                     return ClassHelper.detectSetterMethod(clazz, setterMethodName, getConversionService().boxOrUnboxPrimitive(targetType));
                 } catch (NoSuchMethodException e) {
                     // method does not exist
