@@ -70,11 +70,11 @@ public class AtlasUtil {
 
     protected static void validateUri(String atlasUri) {
         if (!atlasUri.startsWith("atlas:")) {
-            throw new IllegalStateException("Invalid atlas uri " + atlasUri + " does not begin with 'atlas:'");
+            throw new IllegalStateException("Invalid atlas uri " + atlasUri + " does not begin with 'atlas:': " + atlasUri);
         }
 
         if (countCharacters(atlasUri, '?') > 1) {
-            throw new IllegalStateException("Invalid atlas uri " + atlasUri + " multiple '?' characters");
+            throw new IllegalStateException("Invalid atlas uri " + atlasUri + " multiple '?' characters: " + atlasUri);
         }
     }
 

@@ -32,6 +32,8 @@ import io.atlasmap.java.test.BaseOrder;
 import io.atlasmap.java.test.SourceAddress;
 import io.atlasmap.java.test.SourceContact;
 import io.atlasmap.java.test.SourceOrder;
+import io.atlasmap.java.test.StateEnumClassLong;
+import io.atlasmap.java.test.StateEnumClassShort;
 import io.atlasmap.java.test.TargetContact;
 import io.atlasmap.java.test.TargetOrder;
 import io.atlasmap.java.test.TargetTestClass;
@@ -113,6 +115,32 @@ public class JavaJavaComplexTest extends AtlasMappingBaseTest {
         	}
         }
 	}
+	
+	@Test
+    public void testProcessLookup() throws Exception {
+        AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/javaToJava/atlasmapping-lookup.xml").toURI());
+        ((DefaultAtlasContext)context).setNewProcessFlow(true);
+        
+        TargetTestClass input = new TargetTestClass();
+        
+        input.setStatesLong(StateEnumClassLong.Arizona);
+        AtlasSession session = context.createSession();
+        session.setInput(input, "io.atlasmap.java.test.TargetTestClass");
+        context.process(session);        
+        TargetTestClass object = (TargetTestClass) session.getOutput();
+        assertNotNull(object);
+        assertEquals(TargetTestClass.class.getName(), object.getClass().getName());
+        assertEquals(StateEnumClassShort.AZ, object.getStatesShort());
+        
+        input.setStatesLong(StateEnumClassLong.Alabama);
+        session = context.createSession();
+        session.setInput(input, "io.atlasmap.java.test.TargetTestClass");
+        context.process(session);        
+        object = (TargetTestClass) session.getOutput();
+        assertNotNull(object);
+        assertEquals(TargetTestClass.class.getName(), object.getClass().getName());
+        assertNull(object.getStatesShort());
+    }		
 
     @Test
     public void testProcessJavaJavaComplexWithAbstractBasic() throws Exception {

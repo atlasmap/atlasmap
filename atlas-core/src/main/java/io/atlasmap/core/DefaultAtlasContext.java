@@ -29,6 +29,7 @@ import io.atlasmap.v2.Audits;
 import io.atlasmap.v2.BaseMapping;
 import io.atlasmap.v2.Collection;
 import io.atlasmap.v2.Mapping;
+import io.atlasmap.v2.MappingType;
 import io.atlasmap.v2.Validation;
 import io.atlasmap.v2.Validations;
 
@@ -169,26 +170,21 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
 		getTargetModule().processPreOutputExecution(session);
 
 		for(BaseMapping mapping : session.getMapping().getMappings().getMapping()) {
-		    switch(mapping.getMappingType()) {
-		    case MAP: 
-		        getSourceModule().processInputMapping(session, (Mapping)mapping);
-                getSourceModule().processInputActions(session, (Mapping)mapping);
+		    boolean isCollection = MappingType.COLLECTION.equals(mapping.getMappingType());		    
+		    if (isCollection) {
+		        getSourceModule().processInputCollection(session, (Collection)mapping);
+		    } else {
+	            getSourceModule().processInputMapping(session, (Mapping)mapping);
+		    }                        
+
+            getSourceModule().processInputActions(session, (Mapping)mapping);
+            getTargetModule().processOutputActions(session, (Mapping)mapping);
+            
+            if (isCollection) {
+                getTargetModule().processOutputCollection(session, (Collection)mapping);
+            } else {
                 getTargetModule().processOutputMapping(session, (Mapping)mapping);
-                getTargetModule().processOutputActions(session, (Mapping)mapping);
-                break;
-		    case SEPARATE: break;
-		    case COMBINE: break;
-		    case COLLECTION:
-		        if(mapping instanceof Collection) {
-		            getSourceModule().processInputCollection(session, (Collection)mapping);
-		            getSourceModule().processOutputCollection(session, (Collection)mapping);
-		        } else {
-		            logger.error(String.format("Unsupported collection mapping class=%s", mapping.getClass().getName()));
-		        }
-		        break;
-		    case LOOKUP: break;
-		    default: logger.warn(String.format("Unsupported mapping type specified %s", mapping.getMappingType())); break;
-		    }
+            }            		    
               
 		    if(session.hasErrors()) {
 		        if(logger.isDebugEnabled()) {

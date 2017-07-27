@@ -9,22 +9,31 @@ import org.slf4j.LoggerFactory;
 import io.atlasmap.api.AtlasConversionException;
 import io.atlasmap.api.AtlasConversionService;
 import io.atlasmap.api.AtlasException;
+import io.atlasmap.api.AtlasSession;
 import io.atlasmap.core.PathUtil;
 import io.atlasmap.java.inspect.ClassHelper;
 import io.atlasmap.java.module.DocumentJavaFieldWriter.JavaFieldWriterValueConverter;
+import io.atlasmap.java.v2.JavaEnumField;
 import io.atlasmap.java.v2.JavaField;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldType;
+import io.atlasmap.v2.LookupEntry;
+import io.atlasmap.v2.LookupTable;
+import io.atlasmap.v2.Mapping;
 
 public class OutputValueConverter implements JavaFieldWriterValueConverter {
     private static final Logger logger = LoggerFactory.getLogger(OutputValueConverter.class);
 
     private Field inputField = null;
+    private AtlasSession session = null;
     private AtlasConversionService conversionService = null;
+    private Mapping mapping = null;
 
-    public OutputValueConverter(Field inputField, AtlasConversionService conversionService) {
+    public OutputValueConverter(Field inputField, AtlasSession session, Mapping mapping, AtlasConversionService conversionService) {
         super();
         this.inputField = inputField;
+        this.session = session;
+        this.mapping = mapping;
         this.conversionService = conversionService;
     }
 
@@ -34,7 +43,7 @@ public class OutputValueConverter implements JavaFieldWriterValueConverter {
         return populateOutputValue(parentObject, inputField, outputField);        
     }
 
-    protected Object populateOutputValue(Object parentObject, Field inputField, Field outputField) throws AtlasException {
+    protected Object populateOutputValue(Object parentObject, Field inputField, Field outputField) throws AtlasException {        
         FieldType inputType = inputField.getFieldType();
         Object inputValue = inputField.getValue();
 
@@ -52,10 +61,18 @@ public class OutputValueConverter implements JavaFieldWriterValueConverter {
             return null;
         }
 
-        if (outputType == null) {
+        String outputClassName = (outputField instanceof JavaField) ? ((JavaField)outputField).getClassName() : null;
+        outputClassName = (outputField instanceof JavaEnumField) ? ((JavaEnumField)outputField).getClassName() : outputClassName;
+        if (outputType == null || outputClassName == null) {
             try {
                 Method setter = resolveOutputSetMethod(parentObject, outputField, null);
                 if (setter != null && setter.getParameterCount() == 1) {
+                    if (outputField instanceof JavaField) {
+                        ((JavaField) outputField).setClassName(setter.getParameterTypes()[0].getName());
+                    } else if (outputField instanceof JavaEnumField) {
+                        ((JavaEnumField) outputField).setClassName(setter.getParameterTypes()[0].getName());
+                    }
+                
                     outputType = conversionService.fieldTypeFromClass(setter.getParameterTypes()[0]);
                     outputField.setFieldType(outputType);
                     if (logger.isTraceEnabled()) {
@@ -67,6 +84,13 @@ public class OutputValueConverter implements JavaFieldWriterValueConverter {
                 logger.debug("Unable to auto-detect targetType for class={} path={}", parentObject.toString(),
                         outputField.getPath());
             }
+        }
+        
+        if (inputField instanceof JavaEnumField || outputField instanceof JavaEnumField) {
+            if (!(inputField instanceof JavaEnumField) || !(outputField instanceof JavaEnumField)) {
+                throw new AtlasException("Value conversion between enum fields and non-enum fields is not yet supported.");
+            }
+            return populateEnumValue((JavaEnumField) inputField, (JavaEnumField) outputField);
         }
 
         if (inputType != null && inputType.equals(outputType)) {
@@ -82,6 +106,55 @@ public class OutputValueConverter implements JavaFieldWriterValueConverter {
         }
 
         return outputValue;
+    }
+
+    @SuppressWarnings("unchecked")
+    private Object populateEnumValue(JavaEnumField inputField, JavaEnumField outputField) throws AtlasException {
+        if (inputField == null || inputField.getValue() == null) {
+            if (logger.isDebugEnabled()) {
+                logger.debug("Input enum field or value is null, field: " + inputField);
+            }
+            return null;
+        }
+        
+        String lookupTableName = mapping.getLookupTableName();
+        LookupTable table = null;
+        for (LookupTable t : session.getMapping().getLookupTables().getLookupTable()) {
+            if (t.getName().equals(lookupTableName)) {
+                table = t;
+                break;
+            }
+        }
+        if (table == null) {
+            throw new AtlasException("Could not find lookup table with name '" + lookupTableName + "' for mapping: " + mapping);
+        }                
+        
+        String inputValue = ((Enum<?>) inputField.getValue()).name();
+        String outputValue = null;
+        for (LookupEntry e : table.getLookupEntry()) {
+            if (e.getSourceValue().equals(inputValue)) {
+                outputValue = e.getTargetValue();
+                break;
+            }
+        }
+        if (logger.isDebugEnabled()) {
+            logger.debug("Mapped input enum value '" + inputValue + "' to output enum value '" + outputValue + "'.");
+        }
+        
+        if (outputValue == null) {
+            return null;
+        }
+        
+        @SuppressWarnings("rawtypes")
+        Class enumClass = null;
+        try {
+            enumClass = Class.forName(outputField.getClassName());
+        } catch (Exception e) {
+            throw new AtlasException("Could not find class for output field class '" + outputField.getClassName() + "'.", e);
+        }
+        
+        return Enum.valueOf(enumClass, outputValue);
+        
     }
 
     protected Method resolveOutputSetMethod(Object sourceObject, Field field, Class<?> targetType) throws AtlasException {
@@ -116,6 +189,16 @@ public class OutputValueConverter implements JavaFieldWriterValueConverter {
                     } catch (NoSuchMethodException e) {
                         // method does not exist
                     }
+                }
+            }
+        } else if (field instanceof JavaEnumField) {
+            JavaEnumField javaField = (JavaEnumField) field;
+            for (Class<?> clazz : classTree) {
+                try {
+                    String setterMethodName = "set" + JavaModule.capitalizeFirstLetter(pathUtil.getLastSegment());
+                    return ClassHelper.detectSetterMethod(clazz, setterMethodName, targetType);
+                } catch (NoSuchMethodException e) {
+                    // method does not exist
                 }
             }
         }

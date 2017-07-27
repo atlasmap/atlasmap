@@ -84,10 +84,15 @@ public class DocumentJavaFieldWriter {
 		    		} else {
 		    			segmentIsComplexSegment = false;
 		    		}
+		    		if (field instanceof JavaEnumField) {
+		    		    segmentIsComplexSegment = false;
+		    		}
 	    		}
 	    		if (logger.isDebugEnabled()) {
 	    			if (segmentIsComplexSegment) {
-	    				logger.debug("Now processing complex segment: " + segmentContext);  
+	    				logger.debug("Now processing complex segment: " + segmentContext);
+	    			} else if (field instanceof JavaEnumField) {
+	    			    logger.debug("Now processing field enum value segment: " + segmentContext);
 					} else {
 						logger.debug("Now processing field value segment: " + segmentContext);
 					}
