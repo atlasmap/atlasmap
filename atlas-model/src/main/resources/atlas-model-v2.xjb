@@ -31,6 +31,9 @@
 		<jaxb:bindings node="xs:complexType[@name='Field']">
 			<annox:annotate><annox:annotate annox:class="com.fasterxml.jackson.annotation.JsonTypeInfo" use="CLASS" include="PROPERTY" property="jsonType"></annox:annotate></annox:annotate>		
         </jaxb:bindings>
+        <jaxb:bindings node="xs:complexType[@name='SimpleField']">
+            <annox:annotate><annox:annotate annox:class="com.fasterxml.jackson.annotation.JsonTypeInfo" use="CLASS" include="PROPERTY" property="jsonType"></annox:annotate></annox:annotate>       
+        </jaxb:bindings>
 		<jaxb:bindings node="xs:complexType[@name='BaseMapping']">
 			<annox:annotate><annox:annotate annox:class="com.fasterxml.jackson.annotation.JsonTypeInfo" use="CLASS" include="PROPERTY" property="jsonType"></annox:annotate></annox:annotate>		
         </jaxb:bindings>
