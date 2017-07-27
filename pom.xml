@@ -93,9 +93,9 @@
 		</developer>
 	</developers>
 	<scm>
-		<connection>git:https://github.com/redhat-ipaas/ipaas-datamapper.git</connection>
-		<developerConnection>git:git@github.com:redhat-ipaas/ipaas-datamapper.git</developerConnection>
-		<url>https://github.com/redhat-ipaas/ipaas-datamapper</url>
+		<connection>git:https://github.com/atlasmap/atlasmap.git</connection>
+		<developerConnection>git:git@github.com:atlasmap/atlasmap.git</developerConnection>
+		<url>https://atlasmap.io</url>
 	</scm>
 
 	<distributionManagement>
