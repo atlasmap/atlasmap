@@ -109,8 +109,8 @@ public class OutputValueConverter implements JavaFieldWriterValueConverter {
                     try {
                         String setterMethodName = javaField.getSetMethod();
                         if (setterMethodName == null) {
+                            setterMethodName = "set" + JavaModule.capitalizeFirstLetter(pathUtil.getLastSegment());
                         }
-                        setterMethodName = "set" + JavaModule.capitalizeFirstLetter(pathUtil.getLastSegment());
                         return ClassHelper.detectSetterMethod(clazz, setterMethodName,
                                 conversionService.boxOrUnboxPrimitive(targetType));
                     } catch (NoSuchMethodException e) {
