@@ -18,6 +18,8 @@ package io.atlasmap.core;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -25,14 +27,18 @@ import java.util.TreeMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.atlasmap.api.AtlasConversionService;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.api.AtlasFieldActionService;
 import io.atlasmap.api.AtlasSession;
 import io.atlasmap.spi.AtlasModule;
+import io.atlasmap.spi.AtlasModuleMode;
 import io.atlasmap.spi.AtlasPropertyStrategy;
 import io.atlasmap.v2.AtlasModelFactory;
 import io.atlasmap.v2.Audit;
 import io.atlasmap.v2.AuditStatus;
+import io.atlasmap.v2.BaseMapping;
+import io.atlasmap.v2.Collection;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldType;
 import io.atlasmap.v2.LookupEntry;
@@ -43,34 +49,139 @@ import io.atlasmap.v2.PropertyField;
 import io.atlasmap.v2.SimpleField;
 
 public abstract class BaseAtlasModule implements AtlasModule {
-
     private static final Logger logger = LoggerFactory.getLogger(BaseAtlasModule.class);
     
+    private AtlasConversionService atlasConversionService = null;
+    private AtlasModuleMode atlasModuleMode = AtlasModuleMode.UNSET;
+
+    
     @Override
-    public void processInputActions(AtlasSession atlasSession, Mapping mapping) throws AtlasException {
+    public void init() {}
+
+    @Override
+    public void destroy() {}
+    
+    @Override
+    public void processInputActions(AtlasSession atlasSession, BaseMapping baseMapping) throws AtlasException {
+        if (baseMapping.getMappingType().equals(MappingType.COLLECTION)) {
+            return;
+        }
         AtlasFieldActionService fieldActionService = atlasSession.getAtlasContext().getContextFactory().getFieldActionService();
-        switch(mapping.getMappingType()) {
-            case MAP: for(Field field : mapping.getInputField()) { processFieldActions(fieldActionService, field); }
-            case COLLECTION: return; // TODO support field actions on sub-field collections
-            case SEPARATE: for(Field field : mapping.getInputField()) { processFieldActions(fieldActionService, field); }
-            case COMBINE: for(Field field : mapping.getInputField()) { processFieldActions(fieldActionService, field); }
-            case LOOKUP:  for(Field field : mapping.getInputField()) { processFieldActions(fieldActionService, field); }
-            default: return; // ALL NONE are not supported here
+        Mapping mapping = (Mapping) baseMapping;
+        for (Field field : mapping.getInputField()) { 
+            processFieldActions(fieldActionService, field); 
         }
     }
 
     @Override
-    public void processOutputActions(AtlasSession atlasSession, Mapping mapping) throws AtlasException {
+    public void processOutputActions(AtlasSession atlasSession, BaseMapping baseMapping) throws AtlasException {
+        if (baseMapping.getMappingType().equals(MappingType.COLLECTION)) {
+            return;
+        }
         AtlasFieldActionService fieldActionService = atlasSession.getAtlasContext().getContextFactory().getFieldActionService();
-        switch(mapping.getMappingType()) {
-            case MAP: for(Field field : mapping.getOutputField()) { processFieldActions(fieldActionService, field); }
-            case COLLECTION: return; // TODO support field actions on sub-field collections
-            case SEPARATE: for(Field field : mapping.getOutputField()) { processFieldActions(fieldActionService, field); }
-            case COMBINE: for(Field field : mapping.getOutputField()) { processFieldActions(fieldActionService, field); }
-            case LOOKUP:  for(Field field : mapping.getOutputField()) { processFieldActions(fieldActionService, field); }
-            default: return; // ALL NONE are not supported here
-        }    
+        Mapping mapping = (Mapping) baseMapping;
+        for (Field field : mapping.getOutputField()) { 
+            processFieldActions(fieldActionService, field); 
+        }
     }
+    
+    public abstract int getCollectionSize(AtlasSession session, Field field) throws AtlasException;
+    public abstract Field cloneField(Field field) throws AtlasException;
+    
+    
+    public List<Mapping> generateInputMappings(AtlasSession session, BaseMapping baseMapping) throws AtlasException {
+        if (logger.isDebugEnabled()) {
+            logger.debug("Generating Input Mappings from mapping: " + baseMapping);
+        }
+        if (!baseMapping.getMappingType().equals(MappingType.COLLECTION)) {
+            if (logger.isDebugEnabled()) {
+                logger.debug("Mapping is not a collection mapping, not cloning: " + baseMapping);
+            }
+            return Arrays.asList((Mapping) baseMapping);
+        }
+        List<Mapping> mappings = new LinkedList<>();
+        for (BaseMapping m : ((Collection)baseMapping).getMappings().getMapping()) {
+            Mapping mapping = (Mapping)m;
+            Field inputField = mapping.getInputField().get(0);
+            boolean inputIsCollection = PathUtil.isCollection(inputField.getPath());
+            if (!inputIsCollection) {
+                //this is a input non-collection to output collection, ie: contact.firstName -> contact[].firstName
+                //this will be expanded later by generateOutputMappings, for input processing, just copy it over
+                if (logger.isDebugEnabled()) {
+                    logger.debug("Internal mapping's input field is not a collection, not cloning: " + mapping);                
+                }
+
+                //this is a output collection such as contact<>.firstName, but input is non collection such as contact.firstName
+                //so just set the output collection field path to be contact<0>.firstName, which will cause at least one
+                //output object to be created for our copied firstName value
+                for (Field f : mapping.getOutputField()) {
+                    f.setPath(PathUtil.overwriteCollectionIndex(f.getPath(), 0));
+                }
+                mappings.add(mapping);
+                continue;
+            }
+            
+            int inputCollectionSize = this.getCollectionSize(session, inputField);
+            if (logger.isDebugEnabled()) {
+                logger.debug("Internal mapping's input field is a collection. Cloning it for each item (" + inputCollectionSize + " clones): " + mapping);
+            }
+            for (int i = 0; i < inputCollectionSize; i++) {
+                Mapping cloneMapping = (Mapping) AtlasModelFactory.cloneMapping(mapping, false);
+                for (Field f : mapping.getInputField()) {
+                    Field clonedField = cloneField(f);
+                    clonedField.setPath(PathUtil.overwriteCollectionIndex(clonedField.getPath(), i));
+                    cloneMapping.getInputField().add(clonedField);                    
+                }
+                for (Field f : mapping.getOutputField()) {
+                    Field clonedField = cloneField(f);
+                    if (PathUtil.isCollection(clonedField.getPath())) {
+                        clonedField.setPath(PathUtil.overwriteCollectionIndex(clonedField.getPath(), i));
+                    }
+                    cloneMapping.getOutputField().add(clonedField);
+                }
+                mappings.add(cloneMapping);
+            }            
+        }
+        if (logger.isDebugEnabled()) {
+            logger.debug("Generated " + mappings.size() + " mappings from mapping: " + baseMapping);
+        }
+        ((Collection)baseMapping).getMappings().getMapping().clear();
+        ((Collection)baseMapping).getMappings().getMapping().addAll(mappings);
+        
+        return mappings;
+    }
+    
+    public List<Mapping> getOutputMappings(AtlasSession session, BaseMapping baseMapping) throws AtlasException {
+        if (!baseMapping.getMappingType().equals(MappingType.COLLECTION)) {            
+            return Arrays.asList((Mapping) baseMapping);
+        }
+        List<Mapping> mappings = new LinkedList<>();
+        for (BaseMapping m : ((Collection)baseMapping).getMappings().getMapping()) {
+            mappings.add((Mapping)m);                
+        }
+        return mappings;
+    }
+    
+    @Override
+    public void processPreInputExecution(AtlasSession session) throws AtlasException {
+        if(logger.isDebugEnabled()) {
+            logger.debug("processPreInputExcution completed");
+        }
+    }
+    
+    @Override
+    public void processPostInputExecution(AtlasSession session) throws AtlasException {
+        if(logger.isDebugEnabled()) {
+            logger.debug("processPostInputExecution completed");
+        }
+    }
+    
+    @Override
+    public void processPostValidation(AtlasSession session) throws AtlasException {
+        if(logger.isDebugEnabled()) {
+            logger.debug("processPostValidation completed");
+        }
+    }       
     
     protected void processPropertyField(AtlasSession atlasSession, Mapping mapping, AtlasPropertyStrategy atlasPropertyStrategy) throws AtlasException {
         for(Field f : mapping.getInputField()) {
@@ -218,4 +329,41 @@ public abstract class BaseAtlasModule implements AtlasModule {
     protected void processFieldActions(AtlasFieldActionService fieldActionService, Field field) throws AtlasException {
         field.setValue(fieldActionService.processActions(field.getActions(), field.getValue()));
     }
+    
+    @Override
+    public AtlasModuleMode getMode() {
+        return this.atlasModuleMode;
+    }
+
+    @Override
+    public void setMode(AtlasModuleMode atlasModuleMode) {
+        this.atlasModuleMode = atlasModuleMode;
+    }
+            
+    @Override
+    public Boolean isStatisticsSupported() {
+        return false;
+    }
+
+    @Override
+    public Boolean isStatisticsEnabled() {
+        return false;
+    }
+    
+    @Override
+    public List<AtlasModuleMode> listSupportedModes() {
+        return Arrays.asList(AtlasModuleMode.SOURCE, AtlasModuleMode.TARGET);
+    }
+    
+    @Override
+    public AtlasConversionService getConversionService() {
+        return atlasConversionService;
+    }
+
+    @Override
+    public void setConversionService(AtlasConversionService atlasConversionService) {
+        this.atlasConversionService = atlasConversionService;
+    }
+
+
 }

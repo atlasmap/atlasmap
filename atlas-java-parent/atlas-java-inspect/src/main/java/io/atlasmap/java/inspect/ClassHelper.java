@@ -15,12 +15,13 @@
  */
 package io.atlasmap.java.inspect;
 
-import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import io.atlasmap.api.AtlasException;
 import io.atlasmap.core.PathUtil;
 
 public class ClassHelper {
@@ -126,46 +127,60 @@ public class ClassHelper {
         throw new NoSuchMethodException(String.format("Unable to auto-detect setter class=%s method=%s paramType=%s", clazz.getName(), methodName, paramTypeClassName));
     }
       
-    public static Object parentObjectForPath(Object targetObject, PathUtil javaPath) throws NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
-        if(targetObject == null) {
-            return null;
-        }
-                
-        if(javaPath == null) { 
-            return targetObject;
-        }
-    
-        if(!javaPath.hasParent() && !javaPath.hasCollection()) {
-            return targetObject;
-        }
+    public static Object parentObjectForPath(Object targetObject, PathUtil pathUtil, boolean skipCollectionWrapper) throws AtlasException {
+        try {
+            if(targetObject == null) {
+                return null;
+            }
+                    
+            if(pathUtil == null) { 
+                return targetObject;
+            }
         
-        Object parentObject = targetObject;
-        PathUtil parentPath = javaPath.getLastSegmentParentPath();
-        
-        if(parentPath == null) {
-            parentPath = javaPath;
-        }
-        
-        for(String parentField : parentPath.getSegments()) {
-            List<String> getters = getterMethodNames(PathUtil.cleanPathSegment(parentField));
-            Method getterMethod = null;
-            for(String getter : getters) {
-                try {
-                    getterMethod = detectGetterMethod(parentObject.getClass(), getter);
-                    break;
-                } catch (NoSuchMethodException e) {
-                    // exhaust options
+            if(!pathUtil.hasParent() && !pathUtil.hasCollection()) {
+                return targetObject;
+            }
+            
+            Object parentObject = targetObject;
+            PathUtil parentPath = pathUtil.getLastSegmentParentPath();
+            
+            if(parentPath == null) {
+                parentPath = pathUtil;
+            }
+            
+            for(String segment : parentPath.getSegments()) {
+                List<String> getters = getterMethodNames(PathUtil.cleanPathSegment(segment));
+                Method getterMethod = null;
+                for(String getter : getters) {
+                    try {
+                        getterMethod = detectGetterMethod(parentObject.getClass(), getter);
+                        break;
+                    } catch (NoSuchMethodException e) {
+                        // exhaust options
+                    }
                 }
-            }
+                
+                if(getterMethod == null) {
+                    throw new NoSuchMethodException("Unable to detect getter method for " + segment);
+                }
+                
+                getterMethod.setAccessible(true);
+                parentObject = getterMethod.invoke(parentObject);
+                
+                if (skipCollectionWrapper) {
+                    if (PathUtil.isListSegment(segment) && pathUtil.isIndexedCollection()) {
+                        int index = PathUtil.indexOfSegment(segment);
+                        parentObject = ((List)parentObject).get(index);
+                    } else if (PathUtil.isArraySegment(segment)) {
+                        int index = PathUtil.indexOfSegment(segment);
+                        parentObject = Array.get(parentObject, index);
+                    }
+                }
+            }    
             
-            if(getterMethod == null) {
-                throw new NoSuchMethodException("Unable to detect getter method for " + parentField);
-            }
-            
-            getterMethod.setAccessible(true);
-            parentObject = getterMethod.invoke(parentObject);
+            return parentObject;
+        } catch (Exception e) {
+            throw new AtlasException(e);
         }
-        
-        return parentObject;
     }
 }

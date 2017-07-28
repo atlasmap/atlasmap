@@ -179,35 +179,38 @@ public class JavaWriterUtil {
 		Method m = null;
 		for(Class<?> clazz : classTree) {
 			if (logger.isDebugEnabled()) {
-				logger.debug("Looking for setter '" + setterMethodName + " on this class: " + clazz.getName());
+				logger.debug("Looking for setter '" + setterMethodName + "' on this class: " + clazz.getName());
 			}
 			try {
 				m = ClassHelper.detectSetterMethod(clazz, setterMethodName, targetType);
 				if (m != null) {
 					if (logger.isDebugEnabled()) {
-						logger.debug("Found setter '" + setterMethodName + " on this class: " + clazz.getName());
+						logger.debug("Found setter '" + setterMethodName + "' on this class: " + clazz.getName());
 					}
 					return m;
 				}
 			} catch (NoSuchMethodException e) {
 				if (logger.isDebugEnabled()) {
-					logger.debug("Did not find setter '" + setterMethodName + " on this class: " + clazz.getName(), e );
+					logger.debug("Did not find setter '" + setterMethodName + "' on this class: " + clazz.getName(), e );
 				}
 			}
 
 			// Try the boxUnboxed version
 			if(conversionService.isPrimitive(targetType) || conversionService.isBoxedPrimitive(targetType)) {
 				try {
+				    if (logger.isDebugEnabled()) {
+		                logger.debug("Looking for boxed setter '" + setterMethodName + "' on this class: " + clazz.getName());
+		            }
 					m = ClassHelper.detectSetterMethod(clazz, setterMethodName, conversionService.boxOrUnboxPrimitive(targetType));
 					if (m != null) {
 						if (logger.isDebugEnabled()) {
-							logger.debug("Found setter '" + setterMethodName + " on this class: " + clazz.getName());
+							logger.debug("Found setter '" + setterMethodName + "' on this class: " + clazz.getName());
 						}
 						return m;
 					}
 				} catch (NoSuchMethodException e) {
 					if (logger.isDebugEnabled()) {
-						logger.debug("Did not find setter '" + setterMethodName + " on this class: " + clazz.getName(), e);
+						logger.debug("Did not find setter '" + setterMethodName + "' on this class: " + clazz.getName(), e);
 					}
 				}
 			}

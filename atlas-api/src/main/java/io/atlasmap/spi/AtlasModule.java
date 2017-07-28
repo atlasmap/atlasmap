@@ -15,13 +15,13 @@
  */
 package io.atlasmap.spi;
 
+import java.util.List;
+
 import io.atlasmap.api.AtlasConversionService;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.api.AtlasSession;
-import io.atlasmap.v2.Collection;
+import io.atlasmap.v2.BaseMapping;
 import io.atlasmap.v2.Field;
-import io.atlasmap.v2.Mapping;
-import java.util.List;
 
 public interface AtlasModule {
 
@@ -29,16 +29,17 @@ public interface AtlasModule {
 	void destroy();
 	void processPreValidation(AtlasSession session) throws AtlasException;
 	void processPreInputExecution(AtlasSession session) throws AtlasException;
-    void processInputMapping(AtlasSession session, Mapping mapping) throws AtlasException;
-    void processInputCollection(AtlasSession session, Collection mapping) throws AtlasException;
-	void processInputActions(AtlasSession session, Mapping mapping) throws AtlasException;
+	
+    void processInputMapping(AtlasSession session, BaseMapping mapping) throws AtlasException;
+	void processInputActions(AtlasSession session, BaseMapping mapping) throws AtlasException;
 	void processPostInputExecution(AtlasSession session) throws AtlasException;
+	
 	void processPreOutputExecution(AtlasSession session) throws AtlasException;
-    void processOutputMapping(AtlasSession session, Mapping mapping) throws AtlasException;
-    void processOutputCollection(AtlasSession session, Collection mapping) throws AtlasException;
-	void processOutputActions(AtlasSession session, Mapping mapping) throws AtlasException;
+    void processOutputMapping(AtlasSession session, BaseMapping mapping) throws AtlasException;
+	void processOutputActions(AtlasSession session, BaseMapping mapping) throws AtlasException;
 	void processPostOutputExecution(AtlasSession session) throws AtlasException;
 	void processPostValidation(AtlasSession session) throws AtlasException;
+	
 	AtlasModuleMode getMode();
 	void setMode(AtlasModuleMode atlasModuleMode);
 	AtlasConversionService getConversionService();

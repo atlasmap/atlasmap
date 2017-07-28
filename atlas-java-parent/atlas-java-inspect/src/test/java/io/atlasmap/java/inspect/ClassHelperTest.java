@@ -103,11 +103,11 @@ public class ClassHelperTest {
     
     @Test
     public void testParentObjectForPathParamChecking() throws Exception {
-        assertNull(ClassHelper.parentObjectForPath(null, null));
-        assertNull(ClassHelper.parentObjectForPath(null, new PathUtil("foo.bar")));
+        assertNull(ClassHelper.parentObjectForPath(null, null, true));
+        assertNull(ClassHelper.parentObjectForPath(null, new PathUtil("foo.bar"), true));
         
         SourceContact targetObject = new SourceContact();
-        Object parentObject = ClassHelper.parentObjectForPath(targetObject, null);
+        Object parentObject = ClassHelper.parentObjectForPath(targetObject, null, true);
         assertNotNull(parentObject);
         assertTrue(parentObject instanceof SourceContact);
         assertEquals(targetObject, parentObject);
@@ -120,7 +120,7 @@ public class ClassHelperTest {
         SourceOrder sourceOrder = new SourceOrder();
         sourceOrder.setAddress(sourceAddress);
         
-        Object parentObject = ClassHelper.parentObjectForPath(sourceOrder, new PathUtil("/address/city"));
+        Object parentObject = ClassHelper.parentObjectForPath(sourceOrder, new PathUtil("/address/city"), true);
         assertNotNull(parentObject);
         assertTrue(parentObject instanceof SourceAddress);
         assertEquals(sourceAddress, parentObject);
@@ -136,7 +136,7 @@ public class ClassHelperTest {
         SourceParentOrder sourceParentOrder = new SourceParentOrder();
         sourceParentOrder.setOrder(sourceOrder);
         
-        Object parentObject = ClassHelper.parentObjectForPath(sourceParentOrder, new PathUtil("/order/address/city"));
+        Object parentObject = ClassHelper.parentObjectForPath(sourceParentOrder, new PathUtil("/order/address/city"), true);
         assertNotNull(parentObject);
         assertTrue(parentObject instanceof SourceAddress);
         assertEquals(sourceAddress, parentObject);
@@ -154,7 +154,7 @@ public class ClassHelperTest {
 
         sourceOrderList.getOrders().add(sourceOrder);
         
-        Object parentObject = ClassHelper.parentObjectForPath(sourceOrderList, new PathUtil("orders<>"));
+        Object parentObject = ClassHelper.parentObjectForPath(sourceOrderList, new PathUtil("orders<>"), true);
         assertNotNull(parentObject);
         assertTrue(parentObject instanceof List<?>);
         assertEquals(sourceOrders, parentObject);

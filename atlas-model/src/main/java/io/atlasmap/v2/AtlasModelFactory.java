@@ -72,6 +72,46 @@ public class AtlasModelFactory {
         return new PropertyField();
     }
     
+    public static BaseMapping cloneMapping(BaseMapping baseMapping, boolean deepClone) {
+        if (baseMapping.getMappingType().equals(MappingType.COLLECTION)) {
+            Collection mapping = (Collection) baseMapping;
+            Collection clone = new Collection();
+            clone.setAlias(mapping.getAlias());
+            clone.setDescription(mapping.getDescription());
+            clone.setMappingType(mapping.getMappingType());
+            if (deepClone) {
+                for (BaseMapping m : mapping.getMappings().getMapping()) {
+                    clone.getMappings().getMapping().add(cloneMapping(m, deepClone));
+                }
+            }
+            return clone;
+        } else { //non-collection mapping
+            Mapping mapping = (Mapping) baseMapping;
+            Mapping clone = new Mapping();
+            clone.setAlias(mapping.getAlias());
+            clone.setDelimiter(mapping.getDelimiter());
+            clone.setDelimiterString(mapping.getDelimiterString());
+            clone.setDescription(mapping.getDescription());
+            clone.setLookupTableName(mapping.getLookupTableName());
+            clone.setMappingType(MappingType.fromValue(mapping.getMappingType().value()));
+            clone.setStrategy(mapping.getStrategy());
+            clone.setStrategyClassName(mapping.getStrategyClassName());
+            if (deepClone) {
+                for (Field f : mapping.getInputField()) {
+                    clone.getInputField().add(cloneField(f));
+                }
+                for (Field f : mapping.getOutputField()) {
+                    clone.getOutputField().add(cloneField(f));
+                }
+            }
+            return clone;
+        }        
+    }
+    
+    public static Field cloneField(Field f) {
+        return null;
+    }
+    
     public static SimpleField cloneFieldToSimpleField(Field field) {
         if(field == null) {
             return null;
@@ -133,19 +173,6 @@ public class AtlasModelFactory {
             }
         }
         return a;
-    }
-    
-    public static Mapping cloneMapping(Mapping mapping) {
-        Mapping clone = new Mapping();
-        clone.setAlias(mapping.getAlias());
-        clone.setDelimiter(mapping.getDelimiter());
-        clone.setDelimiterString(mapping.getDelimiterString());
-        clone.setDescription(mapping.getDescription());
-        clone.setLookupTableName(mapping.getLookupTableName());
-        clone.setMappingType(MappingType.fromValue(mapping.getMappingType().value()));
-        clone.setStrategy(mapping.getStrategy());
-        clone.setStrategyClassName(mapping.getStrategyClassName());
-        return clone;
     }
     
     protected static String baseFieldToString(Field f) {
