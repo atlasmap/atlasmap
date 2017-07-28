@@ -142,6 +142,30 @@ public class JsonMarshallerTest extends BaseMarshallerTest {
                 psr.setPadCharacter("z");
                 psr.setPadCount(25);
             }
+            if(a instanceof ConvertAreaUnit) {
+                ConvertAreaUnit cau = (ConvertAreaUnit)a;
+                cau.setFromUnit(AreaUnitType.SQUARE_FOOT);
+                cau.setToUnit(AreaUnitType.SQUARE_METER);
+            }
+            if(a instanceof ConvertDistanceUnit) {
+                ConvertDistanceUnit cdu = (ConvertDistanceUnit)a;
+                cdu.setFromUnit(DistanceUnitType.FOOT);
+                cdu.setToUnit(DistanceUnitType.METER);
+            }
+            if(a instanceof ConvertMassUnit) {
+                ConvertMassUnit cmu = (ConvertMassUnit)a;
+                cmu.setFromUnit(MassUnitType.KILO_GRAM);
+                cmu.setToUnit(MassUnitType.POUND);
+            }
+            if(a instanceof ConvertVolumeUnit) {
+                ConvertVolumeUnit cvu = (ConvertVolumeUnit)a;
+                cvu.setFromUnit(VolumeUnitType.CUBIC_FOOT);
+                cvu.setToUnit(VolumeUnitType.CUBIC_METER);
+            }
+            if(a instanceof SumUp) {
+                SumUp su = (SumUp)a;
+                su.setNumberType(NumberType.DECIMAL);
+            }
         }
         mapper.writeValue(new File("target/junit/" + testName.getMethodName() + "/" + "atlasmapping.json"), atlasMapping);
         

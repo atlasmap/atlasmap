@@ -283,6 +283,53 @@
 		</restriction>
 	</simpleType>
 
+    <simpleType name="NumberType">
+        <restriction base="string">
+            <enumeration value="Byte" />
+            <enumeration value="Decimal" />
+            <enumeration value="Double" />
+            <enumeration value="Float" />
+            <enumeration value="Integer" />
+            <enumeration value="Long" />
+            <enumeration value="Short" />
+        </restriction>
+    </simpleType>
+
+    <simpleType name="MassUnitType">
+        <restriction base="string">
+            <enumeration value="KiloGram"/>
+            <enumeration value="Pound"/>
+        </restriction>
+    </simpleType>
+
+    <simpleType name="DistanceUnitType">
+        <restriction base="string">
+            <enumeration value="Meter"/>
+            <enumeration value="Mile"/>
+            <enumeration value="Yard"/>
+            <enumeration value="Foot"/>
+            <enumeration value="Inch"/>
+        </restriction>
+    </simpleType>
+
+    <simpleType name="AreaUnitType">
+        <restriction base="string">
+            <enumeration value="SquareMeter"/>
+            <enumeration value="SquareMile"/>
+            <enumeration value="SquareFoot"/>
+        </restriction>
+    </simpleType>
+
+    <simpleType name="VolumeUnitType">
+        <restriction base="string">
+            <enumeration value="CubicMeter"/>
+            <enumeration value="Litter"/>
+            <enumeration value="CubicFoot"/>
+            <enumeration value="Gallon_US_Fluid"/>
+        </restriction>
+    </simpleType>
+
+
 	<complexType name="StringList">
 		<sequence>
 			<element name="String" type="string" minOccurs="0" maxOccurs="unbounded" />

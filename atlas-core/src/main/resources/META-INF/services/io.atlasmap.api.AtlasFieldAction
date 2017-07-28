@@ -1,2 +1,3 @@
 io.atlasmap.actions.StringSimpleFieldActions
 io.atlasmap.actions.StringComplexFieldActions
+io.atlasmap.actions.NumberFieldActions

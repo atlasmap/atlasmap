@@ -43,6 +43,10 @@ public class ActionsJsonSerializer extends JsonSerializer<Actions>{
     protected void writeActionField(JsonGenerator gen, Action action) throws IOException {
         
         switch(action.getClass().getSimpleName()) {
+        case "ConvertAreaUnit": writeConvertAreaUnit(gen, (ConvertAreaUnit)action); break;
+        case "ConvertDistanceUnit": writeConvertDistanceUnit(gen, (ConvertDistanceUnit)action); break;
+        case "ConvertMassUnit": writeConvertMassUnit(gen, (ConvertMassUnit)action); break;
+        case "ConvertVolumeUnit": writeConvertVolumeUnit(gen, (ConvertVolumeUnit)action); break;
         case "CurrentDate": writeCurrentDate(gen, (CurrentDate)action); break;
         case "CurrentDateTime": writeCurrentDateTime(gen, (CurrentDateTime)action); break;
         case "CurrentTime": writeCurrentTime(gen, (CurrentTime)action); break;
@@ -52,6 +56,7 @@ public class ActionsJsonSerializer extends JsonSerializer<Actions>{
         case "SubString": writeSubString(gen, (SubString)action); break;
         case "SubStringAfter": writeSubStringAfter(gen, (SubStringAfter)action); break;
         case "SubStringBefore": writeSubStringBefore(gen, (SubStringBefore)action); break;
+        case "SumUp": writeSumUp(gen, (SumUp)action); break;
         default:
             gen.writeStartObject();
             gen.writeNullField(action.getClass().getSimpleName());
@@ -175,6 +180,57 @@ public class ActionsJsonSerializer extends JsonSerializer<Actions>{
             gen.writeNumberField("endIndex", subStringBefore.getEndIndex());
         }
         gen.writeEndObject();
+        gen.writeEndObject();
+    }
+    
+    protected void writeConvertAreaUnit(JsonGenerator gen, ConvertAreaUnit action) throws IOException {
+        gen.writeStartObject();
+        gen.writeFieldName("ConvertAreaUnit");
+        gen.writeStartObject();
+        gen.writeStringField("fromUnit", action.getFromUnit().value());
+        gen.writeStringField("toUnit", action.getToUnit().value());
+        gen.writeEndObject();
+        gen.writeEndObject();
+    }
+    
+    protected void writeConvertDistanceUnit(JsonGenerator gen, ConvertDistanceUnit action) throws IOException {
+        gen.writeStartObject();
+        gen.writeFieldName("ConvertDistanceUnit");
+        gen.writeStartObject();
+        gen.writeStringField("fromUnit", action.getFromUnit().value());
+        gen.writeStringField("toUnit", action.getToUnit().value());
+        gen.writeEndObject();
+        gen.writeEndObject();
+    }
+    
+    protected void writeConvertMassUnit(JsonGenerator gen, ConvertMassUnit action) throws IOException {
+        gen.writeStartObject();
+        gen.writeFieldName("ConvertMassUnit");
+        gen.writeStartObject();
+        gen.writeStringField("fromUnit", action.getFromUnit().value());
+        gen.writeStringField("toUnit", action.getToUnit().value());
+        gen.writeEndObject();
+        gen.writeEndObject();
+    }
+    
+    protected void writeConvertVolumeUnit(JsonGenerator gen, ConvertVolumeUnit action) throws IOException {
+        gen.writeStartObject();
+        gen.writeFieldName("ConvertVolumeUnit");
+        gen.writeStartObject();
+        gen.writeStringField("fromUnit", action.getFromUnit().value());
+        gen.writeStringField("toUnit", action.getToUnit().value());
+        gen.writeEndObject();
+        gen.writeEndObject();
+    }
+    
+    protected void writeSumUp(JsonGenerator gen, SumUp action) throws IOException {
+        gen.writeStartObject();
+        gen.writeFieldName("SumUp");
+        if (action.getNumberType() != null) {
+            gen.writeStartObject();
+            gen.writeStringField("numberType", action.getNumberType().value());
+            gen.writeEndObject();
+        }
         gen.writeEndObject();
     }
 }
