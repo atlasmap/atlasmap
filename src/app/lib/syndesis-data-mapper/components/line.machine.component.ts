@@ -231,10 +231,8 @@ export class LineMachineComponent {
                 }
                 var sourceY: number = inputFieldPos.y;
 
-                if ((sourceY < 16) || (sourceY > (lineMachineHeight - 40))) {
-                    //console.log("Not drawing line, input line coords are out of bounds.", sourceY);
-                    continue;
-                }
+                sourceY = (sourceY < 55) ? 55 : sourceY;
+                sourceY = (sourceY > (lineMachineHeight - 27) ? (lineMachineHeight - 27) : sourceY;
 
                 for (let mappedOutputField of fieldPair.targetFields) {
                     var outputField: Field = mappedOutputField.field;
