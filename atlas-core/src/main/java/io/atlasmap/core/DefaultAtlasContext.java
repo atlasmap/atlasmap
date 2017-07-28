@@ -27,15 +27,10 @@ import io.atlasmap.spi.AtlasModuleMode;
 import io.atlasmap.v2.AtlasMapping;
 import io.atlasmap.v2.Audits;
 import io.atlasmap.v2.BaseMapping;
-import io.atlasmap.v2.Collection;
-import io.atlasmap.v2.Mapping;
-import io.atlasmap.v2.MappingType;
 import io.atlasmap.v2.Validation;
 import io.atlasmap.v2.Validations;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import javax.management.ObjectName;
 import java.lang.management.ManagementFactory;
 import java.net.URI;
@@ -64,9 +59,6 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
 	private Map<String, String> sourceProperties;
 	private Map<String, String> targetProperties;
 	
-	// TODO: remove this soon!!
-	private boolean newProcessFlow = false;
-		
 	public DefaultAtlasContext(URI atlasMappingUri) throws AtlasException {
 		this.factory = DefaultAtlasContextFactory.getInstance();
 		this.uuid = UUID.randomUUID();
@@ -139,7 +131,7 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
 	}
 	
 	/**
-	 * process the session
+	 * Process session lifecycle
 	 * 
 	 */
 	@Override
@@ -148,27 +140,27 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
 			logger.debug("Begin process " + (session == null ? null : session.toString()));
 		}
 		
-		
-		// Replace w/ a preExecute / validation lifecycle phase
-		/*
-		if(session == null || session.getOutputStream() == null) {
-			throw new AtlasException("Unable to marshal, invalid session object." + (session == null ? null : session.toString()));
-		}
-		
-		
-		if(getSourceModule() == null || getTargetModule() == null) {
-			throw new AtlasException("Unable to marshal, invalid modules. InputModule: " + (getInputModule() == null ? null : getInputModule().toString()) + " OutputModule: " + (getOutputModule() == null ? null : getOutputModule().toString()));
-		}
-		*/
-		
-		logger.warn("NEW PROCESS FLOW ENABLED");
-		
 	    getSourceModule().processPreValidation(session);
 	    getTargetModule().processPreValidation(session);
 		
+	    // TODO: Finish validations
+	    /* 
+            if(session.hasErrors()) {
+                logger.error(String.format("Aborting processing due to %s errors", session.errorCount()));
+                return;
+            }
+        */
 		getSourceModule().processPreInputExecution(session);
 		getTargetModule().processPreOutputExecution(session);
 
+	      // TODO: Finish validations
+        /* 
+            if(session.hasErrors()) {
+                logger.error(String.format("Aborting processing due to %s errors", session.errorCount()));
+                return;
+            }
+        */
+		
 		for(BaseMapping mapping : session.getMapping().getMappings().getMapping()) {		    
 		    getSourceModule().processInputMapping(session, mapping);
             getSourceModule().processInputActions(session, mapping);
@@ -176,9 +168,7 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
             getTargetModule().processOutputMapping(session, mapping);            		    
               
 		    if(session.hasErrors()) {
-		        if(logger.isDebugEnabled()) {
-		            logger.debug(String.format("Aborting processing due to %s errors", session.errorCount()));
-		        }
+		        logger.error(String.format("Aborting processing due to %s errors", session.errorCount()));
 		        break;
 		    }
 		}
@@ -186,6 +176,14 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
 		getSourceModule().processPostValidation(session);
 		getTargetModule().processPostValidation(session);
         
+	      // TODO: Finish validations
+        /* 
+            if(session.hasErrors()) {
+                logger.error(String.format("Aborting processing due to %s errors", session.errorCount()));
+                return;
+            }
+        */
+		
 		getSourceModule().processPostInputExecution(session);
 		getTargetModule().processPostOutputExecution(session);
 		
@@ -369,14 +367,6 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
 		return Thread.currentThread().getName();
 	}
 	
-	public void setNewProcessFlow(boolean newProcessFlow) {
-        this.newProcessFlow = newProcessFlow;
-    }
-	
-	public boolean isNewProcessFlow() {
-        return newProcessFlow;
-    }
-
 	@Override
 	public String toString() {
 		return "DefaultAtlasContext [jmxObjectName=" + jmxObjectName + ", uuid=" + uuid + ", factory=" + factory

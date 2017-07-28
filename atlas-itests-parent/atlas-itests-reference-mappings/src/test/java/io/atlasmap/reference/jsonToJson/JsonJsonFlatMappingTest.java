@@ -24,7 +24,6 @@ import org.junit.Test;
 import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasSession;
 import io.atlasmap.core.AtlasMappingService;
-import io.atlasmap.core.DefaultAtlasContext;
 import io.atlasmap.java.v2.AtlasJavaModelFactory;
 import io.atlasmap.java.v2.JavaField;
 import io.atlasmap.json.test.AtlasJsonTestRootedMapper;
@@ -99,7 +98,6 @@ public class JsonJsonFlatMappingTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessJsonJsonFlatPrimitiveUnrooted() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/jsonToJson/atlasmapping-flatprimitive-unrooted.xml"));
-        ((DefaultAtlasContext)context).setNewProcessFlow(true);
 
         AtlasSession session = context.createSession();
         String source = AtlasTestUtil.loadFileAsString("src/test/resources/jsonToJson/atlas-json-flatprimitive-unrooted.json");
@@ -117,7 +115,6 @@ public class JsonJsonFlatMappingTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessJsonJsonFlatPrimitiveRooted() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/jsonToJson/atlasmapping-flatprimitive-rooted.xml"));
-        ((DefaultAtlasContext)context).setNewProcessFlow(true);
 
         AtlasSession session = context.createSession();
         String source = AtlasTestUtil.loadFileAsString("src/test/resources/jsonToJson/atlas-json-flatprimitive-rooted.json");
@@ -135,7 +132,6 @@ public class JsonJsonFlatMappingTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessJsonJsonBoxedFlatMappingPrimitiveUnrooted() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/jsonToJson/atlasmapping-boxedflatprimitive-unrooted.xml"));
-        ((DefaultAtlasContext)context).setNewProcessFlow(true);
 
         AtlasSession session = context.createSession();
         String source = AtlasTestUtil.loadFileAsString("src/test/resources/jsonToJson/atlas-json-boxedflatprimitive-unrooted.json");
@@ -153,7 +149,6 @@ public class JsonJsonFlatMappingTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessJsonJsonBoxedFlatMappingPrimitiveRooted() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/jsonToJson/atlasmapping-boxedflatprimitive-rooted.xml"));
-        ((DefaultAtlasContext)context).setNewProcessFlow(true);
 
         AtlasSession session = context.createSession();
         String source = AtlasTestUtil.loadFileAsString("src/test/resources/jsonToJson/atlas-json-boxedflatprimitive-rooted.json");

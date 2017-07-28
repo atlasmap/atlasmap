@@ -63,7 +63,6 @@ public class JavaJavaAutoConversionTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessJavaJavaFlatFieldMappingAutoConversion1() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/javaToJava/atlasmapping-flatprimitive-autoconversion-1.xml").toURI());
-        ((DefaultAtlasContext)context).setNewProcessFlow(true);
         AtlasSession session = context.createSession();
         BaseFlatPrimitiveClass sourceObject = AtlasTestUtil.generateFlatPrimitiveClass(SourceFlatPrimitiveClass.class);
         session.setInput(sourceObject);
@@ -78,7 +77,6 @@ public class JavaJavaAutoConversionTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessJavaJavaFlatFieldMappingAutoConversion2() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/javaToJava/atlasmapping-flatprimitive-autoconversion-2.xml").toURI());
-        ((DefaultAtlasContext)context).setNewProcessFlow(true);
         AtlasSession session = context.createSession();
         BaseFlatPrimitiveClass sourceObject = AtlasTestUtil.generateFlatPrimitiveClass(SourceFlatPrimitiveClass.class);
         session.setInput(sourceObject);
@@ -93,7 +91,6 @@ public class JavaJavaAutoConversionTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessJavaJavaFlatFieldMappingAutoConversion3() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/javaToJava/atlasmapping-flatprimitive-autoconversion-3.xml").toURI());
-        ((DefaultAtlasContext)context).setNewProcessFlow(true);
         AtlasSession session = context.createSession();
         BaseFlatPrimitiveClass sourceObject = AtlasTestUtil.generateFlatPrimitiveClass(SourceFlatPrimitiveClass.class);
         session.setInput(sourceObject);
@@ -108,7 +105,6 @@ public class JavaJavaAutoConversionTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessJavaJavaFlatFieldMappingAutoConversion4() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/javaToJava/atlasmapping-flatprimitive-autoconversion-4.xml").toURI());
-        ((DefaultAtlasContext)context).setNewProcessFlow(true);
         AtlasSession session = context.createSession();
         BaseFlatPrimitiveClass sourceObject = AtlasTestUtil.generateFlatPrimitiveClass(SourceFlatPrimitiveClass.class);
         session.setInput(sourceObject);
@@ -123,7 +119,6 @@ public class JavaJavaAutoConversionTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessJavaJavaFlatFieldMappingAutoConversion5() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/javaToJava/atlasmapping-flatprimitive-autoconversion-5.xml").toURI());
-        ((DefaultAtlasContext)context).setNewProcessFlow(true);
         AtlasSession session = context.createSession();
         BaseFlatPrimitiveClass sourceObject = AtlasTestUtil.generateFlatPrimitiveClass(SourceFlatPrimitiveClass.class);
         session.setInput(sourceObject);
@@ -138,7 +133,6 @@ public class JavaJavaAutoConversionTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessJavaJavaFlatFieldMappingAutoConversion6() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/javaToJava/atlasmapping-flatprimitive-autoconversion-6.xml").toURI());
-        ((DefaultAtlasContext)context).setNewProcessFlow(true);
         AtlasSession session = context.createSession();
         BaseFlatPrimitiveClass sourceObject = AtlasTestUtil.generateFlatPrimitiveClass(SourceFlatPrimitiveClass.class);
         session.setInput(sourceObject);

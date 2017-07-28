@@ -71,7 +71,6 @@ public class XmlJsonComplexTest extends AtlasMappingBaseTest {
     
     protected void processXmlToJsonOrder(String mappingFile, String inputFile, boolean rooted) throws Exception {
         AtlasContext context = atlasContextFactory.createContext(new File(mappingFile).toURI());
-        ((DefaultAtlasContext)context).setNewProcessFlow(true);
 
         AtlasSession session = context.createSession();
         String sourceXml = AtlasTestUtil.loadFileAsString(inputFile);

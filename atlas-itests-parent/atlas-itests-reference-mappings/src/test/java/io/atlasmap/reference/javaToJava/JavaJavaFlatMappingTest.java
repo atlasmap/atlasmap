@@ -194,7 +194,6 @@ public class JavaJavaFlatMappingTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessJavaJavaFlatFieldMapping() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/javaToJava/atlasmapping-flatprimitive.xml").toURI());
-        ((DefaultAtlasContext)context).setNewProcessFlow(true);
         AtlasSession session = context.createSession();
         BaseFlatPrimitiveClass sourceClass = generateFlatPrimitiveClass(SourceFlatPrimitiveClass.class);
         session.setInput(sourceClass);
@@ -209,7 +208,6 @@ public class JavaJavaFlatMappingTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessJavaJavaFlatFieldMappingPrimitivesBoxedValues() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/javaToJava/atlasmapping-flatprimitive.xml").toURI());
-        ((DefaultAtlasContext)context).setNewProcessFlow(true);
         AtlasSession session = context.createSession();
         BaseFlatPrimitiveClass sourceClass = generateFlatPrimitiveClassPrimitiveFieldsBoxedValues(SourceFlatPrimitiveClass.class);
         session.setInput(sourceClass);
@@ -229,7 +227,6 @@ public class JavaJavaFlatMappingTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessJavaJavaFlatFieldMappingBoxedPrimitives() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/javaToJava/atlasmapping-flatprimitive-boxed.xml").toURI());
-        ((DefaultAtlasContext)context).setNewProcessFlow(true);
         AtlasSession session = context.createSession();
         BaseFlatPrimitiveClass sourceClass = generateFlatPrimitiveClassBoxedPrimitiveFieldsBoxedValues(SourceFlatPrimitiveClass.class);
         session.setInput(sourceClass);

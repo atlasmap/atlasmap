@@ -45,7 +45,6 @@ public class JavaJavaComplexTest extends AtlasMappingBaseTest {
 	@Test
     public void testProcessBasic() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/javaToJava/atlasmapping-basic.xml").toURI());
-        ((DefaultAtlasContext)context).setNewProcessFlow(true);
         AtlasSession session = context.createSession();
         BaseOrder sourceOrder = AtlasTestUtil.generateOrderClass(SourceOrder.class, SourceAddress.class, SourceContact.class);
         session.setInput(sourceOrder);
@@ -60,7 +59,6 @@ public class JavaJavaComplexTest extends AtlasMappingBaseTest {
 	@Test
     public void testProcessComplexBasic() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/javaToJava/atlasmapping-complex-simple.xml").toURI());
-        ((DefaultAtlasContext)context).setNewProcessFlow(true);
         AtlasSession session = context.createSession();
         BaseOrder sourceOrder = AtlasTestUtil.generateOrderClass(SourceOrder.class, SourceAddress.class, SourceContact.class);
         session.setInput(sourceOrder);
@@ -75,7 +73,6 @@ public class JavaJavaComplexTest extends AtlasMappingBaseTest {
 	@Test
     public void testProcessCollectionList() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/javaToJava/atlasmapping-collection-list.xml").toURI());
-        ((DefaultAtlasContext)context).setNewProcessFlow(true);
         AtlasSession session = context.createSession();
         BaseOrder sourceOrder = AtlasTestUtil.generateOrderClass(SourceOrder.class, SourceAddress.class, SourceContact.class);
         session.setInput(sourceOrder);
@@ -97,7 +94,6 @@ public class JavaJavaComplexTest extends AtlasMappingBaseTest {
 	@Test
     public void testProcessCollectionArray() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/javaToJava/atlasmapping-collection-array.xml").toURI());
-        ((DefaultAtlasContext)context).setNewProcessFlow(true);
         AtlasSession session = context.createSession();
         BaseOrder sourceOrder = AtlasTestUtil.generateOrderClass(SourceOrder.class, SourceAddress.class, SourceContact.class);
         session.setInput(sourceOrder);
@@ -119,7 +115,6 @@ public class JavaJavaComplexTest extends AtlasMappingBaseTest {
 	@Test 
 	public void testProcessCollectionListSimple() throws Exception {
 	    AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/javaToJava/atlasmapping-collection-list-simple.xml").toURI());
-        ((DefaultAtlasContext)context).setNewProcessFlow(true);
         TargetTestClass input = new TargetTestClass();
         input.setContactList(new LinkedList<>());
         for (int i = 0; i < 5; i++) {
@@ -140,7 +135,6 @@ public class JavaJavaComplexTest extends AtlasMappingBaseTest {
 	@Test 
     public void testProcessCollectionArraySimple() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/javaToJava/atlasmapping-collection-array-simple.xml").toURI());
-        ((DefaultAtlasContext)context).setNewProcessFlow(true);
         TargetTestClass input = new TargetTestClass();
         input.setContactList(new LinkedList<>());
         for (int i = 0; i < 5; i++) {
@@ -161,7 +155,6 @@ public class JavaJavaComplexTest extends AtlasMappingBaseTest {
 	@Test 
     public void testProcessCollectionToNonCollection() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/javaToJava/atlasmapping-collection-to-noncollection.xml").toURI());
-        ((DefaultAtlasContext)context).setNewProcessFlow(true);
         TargetTestClass input = new TargetTestClass();
         input.setContactList(new LinkedList<>());
         for (int i = 0; i < 5; i++) {
@@ -181,7 +174,6 @@ public class JavaJavaComplexTest extends AtlasMappingBaseTest {
 	@Test 
     public void testProcessCollectionFromNonCollection() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/javaToJava/atlasmapping-collection-from-noncollection.xml").toURI());
-        ((DefaultAtlasContext)context).setNewProcessFlow(true);
         TargetTestClass input = new TargetTestClass();
         input.setContact(new TargetContact());
         input.getContact().setFirstName("first name");
@@ -200,7 +192,6 @@ public class JavaJavaComplexTest extends AtlasMappingBaseTest {
 	@Test
     public void testProcessLookup() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/javaToJava/atlasmapping-lookup.xml").toURI());
-        ((DefaultAtlasContext)context).setNewProcessFlow(true);
         
         TargetTestClass input = new TargetTestClass();
         
@@ -226,7 +217,6 @@ public class JavaJavaComplexTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessJavaJavaComplexWithAbstractBasic() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/javaToJava/atlasmapping-complex-abstract.xml").toURI());
-        ((DefaultAtlasContext)context).setNewProcessFlow(true);
         AtlasSession session = context.createSession();
         BaseOrder sourceOrder = AtlasTestUtil.generateOrderClass(SourceOrder.class, SourceAddress.class, SourceContact.class);
         session.setInput(sourceOrder);
@@ -256,7 +246,6 @@ public class JavaJavaComplexTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessJavaJavaComplexAutoDetectFull() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/javaToJava/atlasmapping-complex-autodetect-full.xml").toURI());
-        ((DefaultAtlasContext)context).setNewProcessFlow(true);
         AtlasSession session = context.createSession();
         BaseOrder sourceOrder = AtlasTestUtil.generateOrderClass(SourceOrder.class, SourceAddress.class, SourceContact.class);
         session.setInput(sourceOrder);
@@ -272,7 +261,6 @@ public class JavaJavaComplexTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessJavaJavaComplexAutoDetectFullActions() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/javaToJava/atlasmapping-complex-autodetect-full-actions.xml"));
-        ((DefaultAtlasContext)context).setNewProcessFlow(true);
         AtlasSession session = context.createSession();
         BaseOrder sourceOrder = AtlasTestUtil.generateOrderClass(SourceOrder.class, SourceAddress.class, SourceContact.class);
         session.setInput(sourceOrder);

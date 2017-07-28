@@ -31,7 +31,6 @@ public class JsonJavaComplexTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessJsonJavaComplexOrderAutodetectUnrooted() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/jsonToJava/atlasmapping-complex-order-autodetect-unrooted.xml").toURI());
-        ((DefaultAtlasContext)context).setNewProcessFlow(true);
 
         AtlasSession session = context.createSession();
         String source = AtlasTestUtil.loadFileAsString("src/test/resources/jsonToJava/atlas-json-complex-order-autodetect-unrooted.json");
@@ -47,7 +46,6 @@ public class JsonJavaComplexTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessJsonJavaComplexOrderAutodetectRooted() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/jsonToJava/atlasmapping-complex-order-autodetect-rooted.xml").toURI());
-        ((DefaultAtlasContext)context).setNewProcessFlow(true);
 
         AtlasSession session = context.createSession();
         String source = AtlasTestUtil.loadFileAsString("src/test/resources/jsonToJava/atlas-json-complex-order-autodetect-rooted.json");

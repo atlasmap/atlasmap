@@ -147,7 +147,6 @@ public class JavaJsonFlatMappingTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessJavaJsonFlatPrimitiveUnrooted() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/javaToJson/atlasmapping-flatprimitive-unrooted.xml"));
-        ((DefaultAtlasContext)context).setNewProcessFlow(true);
 
         AtlasSession session = context.createSession();
         session.setInput(generateFlatPrimitiveClass(SourceFlatPrimitiveClass.class));
@@ -164,7 +163,6 @@ public class JavaJsonFlatMappingTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessJavaJsonFlatPrimitiveRooted() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/javaToJson/atlasmapping-flatprimitive-rooted.xml"));
-        ((DefaultAtlasContext)context).setNewProcessFlow(true);
 
         AtlasSession session = context.createSession();
         session.setInput(generateFlatPrimitiveClass(SourceFlatPrimitiveClass.class));
@@ -181,7 +179,6 @@ public class JavaJsonFlatMappingTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessJavaJsonBoxedFlatMappingPrimitiveUnrooted() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/javaToJson/atlasmapping-boxedflatprimitive-unrooted.xml"));
-        ((DefaultAtlasContext)context).setNewProcessFlow(true);
 
         AtlasSession session = context.createSession();
         session.setInput(generateFlatPrimitiveClassBoxedPrimitiveFieldsBoxedValues(SourceFlatPrimitiveClass.class));
@@ -198,7 +195,6 @@ public class JavaJsonFlatMappingTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessJavaJsonBoxedFlatMappingPrimitiveRooted() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/javaToJson/atlasmapping-boxedflatprimitive-rooted.xml"));
-        ((DefaultAtlasContext)context).setNewProcessFlow(true);
 
         AtlasSession session = context.createSession();
         session.setInput(generateFlatPrimitiveClassBoxedPrimitiveFieldsBoxedValues(SourceFlatPrimitiveClass.class));

@@ -15,18 +15,13 @@
  */
 package io.atlasmap.core;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import io.atlasmap.api.AtlasConversionService;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.api.AtlasFieldActionService;
