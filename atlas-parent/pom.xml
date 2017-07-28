@@ -40,7 +40,9 @@
 		<at.jcl.version>2.8</at.jcl.version>
 		<at.junit.version>4.11</at.junit.version>
 		<at.log4j.version>1.2.17</at.log4j.version>
-		<at.atlas.version.range>[1,3)</at.atlas.version.range>
+    <at.xsom.version>20140925.0.0.redhat-1</at.xsom.version>
+    <at.xmlunit.version>2.2.1</at.xmlunit.version>
+    <at.atlas.version.range>[1,3)</at.atlas.version.range>
 	</properties>
 
 	<dependencyManagement>
@@ -80,11 +82,11 @@
 				<artifactId>jaxb-api</artifactId>
 				<version>${at.jaxb-api.version}</version>
 			</dependency>
-            <dependency>
-                <groupId>javax.xml</groupId>
-                <artifactId>jaxb-impl</artifactId>
-                <version>${at.jaxb-impl.version}</version>
-            </dependency>
+      <dependency>
+        <groupId>javax.xml</groupId>
+        <artifactId>jaxb-impl</artifactId>
+        <version>${at.jaxb-impl.version}</version>
+      </dependency>
 			<dependency>
 				<groupId>org.xeustechnologies</groupId>
 				<artifactId>jcl-core</artifactId>
@@ -100,6 +102,16 @@
 				<artifactId>hamcrest-all</artifactId>
 				<version>${at.hamcrest.version}</version>
 			</dependency>
+      <dependency>
+        <groupId>com.sun.xsom</groupId>
+        <artifactId>xsom</artifactId>
+        <version>${at.xsom.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.xmlunit</groupId>
+        <artifactId>xmlunit-matchers</artifactId>
+        <version>${at.xmlunit.version}</version>
+      </dependency>
 		</dependencies>
 	</dependencyManagement>
 
