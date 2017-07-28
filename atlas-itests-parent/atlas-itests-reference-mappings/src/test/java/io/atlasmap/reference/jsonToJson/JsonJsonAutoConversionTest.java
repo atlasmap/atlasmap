@@ -16,12 +16,10 @@
 package io.atlasmap.reference.jsonToJson;
 
 import static org.junit.Assert.*;
-
 import java.io.File;
 import org.junit.Test;
 import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasSession;
-import io.atlasmap.core.DefaultAtlasContext;
 import io.atlasmap.json.test.AtlasJsonTestUnrootedMapper;
 import io.atlasmap.json.test.TargetFlatPrimitive;
 import io.atlasmap.reference.AtlasMappingBaseTest;
@@ -32,7 +30,6 @@ public class JsonJsonAutoConversionTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessJsonJsonFlatFieldMappingAutoConversion1() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/jsonToJson/atlasmapping-flatprimitive-unrooted-autoconversion-1.xml").toURI());
-        ((DefaultAtlasContext)context).setNewProcessFlow(true);
         AtlasSession session = context.createSession();
         String source = AtlasTestUtil.loadFileAsString("src/test/resources/jsonToJson/atlas-json-flatprimitive-unrooted-autoconversion.json");
         session.setInput(source);
@@ -49,7 +46,6 @@ public class JsonJsonAutoConversionTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessJsonJsonFlatFieldMappingAutoConversion2() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/jsonToJson/atlasmapping-flatprimitive-unrooted-autoconversion-2.xml").toURI());
-        ((DefaultAtlasContext)context).setNewProcessFlow(true);
         AtlasSession session = context.createSession();
         String source = AtlasTestUtil.loadFileAsString("src/test/resources/jsonToJson/atlas-json-flatprimitive-unrooted-autoconversion.json");
         session.setInput(source);
@@ -66,7 +62,6 @@ public class JsonJsonAutoConversionTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessJsonJsonFlatFieldMappingAutoConversion3() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/jsonToJson/atlasmapping-flatprimitive-unrooted-autoconversion-3.xml").toURI());
-        ((DefaultAtlasContext)context).setNewProcessFlow(true);
         AtlasSession session = context.createSession();
         String source = AtlasTestUtil.loadFileAsString("src/test/resources/jsonToJson/atlas-json-flatprimitive-unrooted-autoconversion.json");
         session.setInput(source);
@@ -83,7 +78,6 @@ public class JsonJsonAutoConversionTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessJsonJsonFlatFieldMappingAutoConversion4() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/jsonToJson/atlasmapping-flatprimitive-unrooted-autoconversion-4.xml").toURI());
-        ((DefaultAtlasContext)context).setNewProcessFlow(true);
         AtlasSession session = context.createSession();
         String source = AtlasTestUtil.loadFileAsString("src/test/resources/jsonToJson/atlas-json-flatprimitive-unrooted-autoconversion.json");
         session.setInput(source);
@@ -100,7 +94,6 @@ public class JsonJsonAutoConversionTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessJsonJsonFlatFieldMappingAutoConversion5() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/jsonToJson/atlasmapping-flatprimitive-unrooted-autoconversion-5.xml").toURI());
-        ((DefaultAtlasContext)context).setNewProcessFlow(true);
         AtlasSession session = context.createSession();
         String source = AtlasTestUtil.loadFileAsString("src/test/resources/jsonToJson/atlas-json-flatprimitive-unrooted-autoconversion.json");
         session.setInput(source);
@@ -117,7 +110,6 @@ public class JsonJsonAutoConversionTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessJsonJsonFlatFieldMappingAutoConversion6() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/jsonToJson/atlasmapping-flatprimitive-unrooted-autoconversion-6.xml").toURI());
-        ((DefaultAtlasContext)context).setNewProcessFlow(true);
         AtlasSession session = context.createSession();
         String source = AtlasTestUtil.loadFileAsString("src/test/resources/jsonToJson/atlas-json-flatprimitive-unrooted-autoconversion.json");
         session.setInput(source);

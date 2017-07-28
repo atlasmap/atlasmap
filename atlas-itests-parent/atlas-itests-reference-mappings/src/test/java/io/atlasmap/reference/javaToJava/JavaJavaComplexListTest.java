@@ -110,7 +110,6 @@ public class JavaJavaComplexListTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessJavaJavaComplexAutoDetectBaseTest() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/javaToJava/atlasmapping-complex-list-autodetect-base.xml"));
-        ((DefaultAtlasContext)context).setNewProcessFlow(true);
         AtlasSession session = context.createSession();
         BaseOrderList sourceOrderList = AtlasTestUtil.generateOrderListClass(SourceOrderList.class, SourceOrder.class, SourceAddress.class, SourceContact.class);
         session.setInput(sourceOrderList);
@@ -125,7 +124,6 @@ public class JavaJavaComplexListTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessJavaJavaComplexAutoDetectFullTest() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/javaToJava/atlasmapping-complex-list-autodetect-full.xml"));
-        ((DefaultAtlasContext)context).setNewProcessFlow(true);
         AtlasSession session = context.createSession();
         BaseOrderList sourceOrderList = AtlasTestUtil.generateOrderListClass(SourceOrderList.class, SourceOrder.class, SourceAddress.class, SourceContact.class);
         session.setInput(sourceOrderList);

@@ -61,7 +61,6 @@ public class XmlJsonAutoConversionTest extends AtlasMappingBaseTest {
     
     protected void processXmlJsonFlatMappingAutoConversion(String mappingFile, String inputFile, int num) throws Exception {
         AtlasContext context = atlasContextFactory.createContext(new File(mappingFile).toURI());
-        ((DefaultAtlasContext)context).setNewProcessFlow(true);
         AtlasSession session = context.createSession();
         String source = AtlasTestUtil.loadFileAsString(inputFile);
         session.setInput(source);

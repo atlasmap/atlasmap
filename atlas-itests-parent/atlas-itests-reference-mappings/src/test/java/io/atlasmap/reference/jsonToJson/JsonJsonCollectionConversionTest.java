@@ -3,14 +3,10 @@ package io.atlasmap.reference.jsonToJson;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-
 import java.io.File;
-
 import org.junit.Test;
-
 import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasSession;
-import io.atlasmap.core.DefaultAtlasContext;
 import io.atlasmap.reference.AtlasMappingBaseTest;
 
 public class JsonJsonCollectionConversionTest extends AtlasMappingBaseTest {
@@ -18,7 +14,6 @@ public class JsonJsonCollectionConversionTest extends AtlasMappingBaseTest {
     @Test 
     public void testProcessCollectionListSimple() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/jsonToJson/atlasmapping-collection-list-simple.xml").toURI());
-        ((DefaultAtlasContext)context).setNewProcessFlow(true);
         
         // contact<>.firstName -> contact<>.name
         
@@ -49,7 +44,6 @@ public class JsonJsonCollectionConversionTest extends AtlasMappingBaseTest {
     @Test 
     public void testProcessCollectionArraySimple() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/jsonToJson/atlasmapping-collection-array-simple.xml").toURI());
-        ((DefaultAtlasContext)context).setNewProcessFlow(true);
         
         // contact[].firstName -> contact[].name
         
@@ -80,7 +74,6 @@ public class JsonJsonCollectionConversionTest extends AtlasMappingBaseTest {
     @Test 
     public void testProcessCollectionToNonCollection() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/jsonToJson/atlasmapping-collection-to-noncollection.xml").toURI());                     
-        ((DefaultAtlasContext)context).setNewProcessFlow(true);
 
         // contact<>.firstName -> contact.name
         
@@ -106,7 +99,6 @@ public class JsonJsonCollectionConversionTest extends AtlasMappingBaseTest {
     @Test 
     public void testProcessCollectionFromNonCollection() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/jsonToJson/atlasmapping-collection-from-noncollection.xml").toURI());
-        ((DefaultAtlasContext)context).setNewProcessFlow(true);
         
         // contact.firstName -> contact<>.name
         

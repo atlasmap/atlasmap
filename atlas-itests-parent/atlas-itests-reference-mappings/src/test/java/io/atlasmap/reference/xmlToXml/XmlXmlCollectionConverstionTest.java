@@ -18,7 +18,6 @@ public class XmlXmlCollectionConverstionTest extends AtlasMappingBaseTest {
     @Test 
     public void testProcessCollectionListSimple() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/xmlToXml/atlasmapping-collection-list-simple.xml").toURI());
-        ((DefaultAtlasContext)context).setNewProcessFlow(true);
         
         // contact<>.firstName -> contact<>.name
         
@@ -48,7 +47,6 @@ public class XmlXmlCollectionConverstionTest extends AtlasMappingBaseTest {
     @Test 
     public void testProcessCollectionArraySimple() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/xmlToXml/atlasmapping-collection-array-simple.xml").toURI());
-        ((DefaultAtlasContext)context).setNewProcessFlow(true);
         
         // contact[].firstName -> contact[].name
         
@@ -80,7 +78,6 @@ public class XmlXmlCollectionConverstionTest extends AtlasMappingBaseTest {
     @Test 
     public void testProcessCollectionToNonCollection() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/xmlToXml/atlasmapping-collection-to-noncollection.xml").toURI());                     
-        ((DefaultAtlasContext)context).setNewProcessFlow(true);
 
         // contact<>.firstName -> contact.name
         
@@ -108,7 +105,6 @@ public class XmlXmlCollectionConverstionTest extends AtlasMappingBaseTest {
     @Test 
     public void testProcessCollectionFromNonCollection() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/xmlToXml/atlasmapping-collection-from-noncollection.xml").toURI());
-        ((DefaultAtlasContext)context).setNewProcessFlow(true);
         
         // contact.firstName -> contact<>.name
         

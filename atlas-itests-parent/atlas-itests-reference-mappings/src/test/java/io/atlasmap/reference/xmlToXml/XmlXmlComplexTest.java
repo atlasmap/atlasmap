@@ -34,7 +34,6 @@ public class XmlXmlComplexTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessXmlXmlComplexOrderAutodetectAttributeToElement() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/xmlToXml/atlasmapping-complex-order-autodetect-attributeToElement.xml").toURI());
-        ((DefaultAtlasContext)context).setNewProcessFlow(true);
 
         AtlasSession session = context.createSession();
         String sourceXml = AtlasTestUtil.loadFileAsString("src/test/resources/xmlToXml/atlas-xml-complex-order-autodetect-attribute.xml");
@@ -50,7 +49,6 @@ public class XmlXmlComplexTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessXmlXmlComplexOrderAutodetectElementToAttribute() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/xmlToXml/atlasmapping-complex-order-autodetect-elementToAttribute.xml").toURI());
-        ((DefaultAtlasContext)context).setNewProcessFlow(true);
 
         AtlasSession session = context.createSession();
         String sourceXml = AtlasTestUtil.loadFileAsString("src/test/resources/xmlToXml/atlas-xml-complex-order-autodetect-element.xml");
@@ -66,7 +64,6 @@ public class XmlXmlComplexTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessXmlXmlComplexOrderAutodetectAttributeToElementNS() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/xmlToXml/atlasmapping-complex-order-autodetect-attributeToElement-ns.xml").toURI());
-        ((DefaultAtlasContext)context).setNewProcessFlow(true);
 
         AtlasSession session = context.createSession();
         String sourceXml = AtlasTestUtil.loadFileAsString("src/test/resources/xmlToXml/atlas-xml-complex-order-autodetect-attribute-ns.xml");
@@ -83,7 +80,6 @@ public class XmlXmlComplexTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessXmlXmlComplexOrderAutodetectElementToAttributeNS() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/xmlToXml/atlasmapping-complex-order-autodetect-elementToAttribute-ns.xml").toURI());
-        ((DefaultAtlasContext)context).setNewProcessFlow(true);
 
         AtlasSession session = context.createSession();
         String sourceXml = AtlasTestUtil.loadFileAsString("src/test/resources/xmlToXml/atlas-xml-complex-order-autodetect-element-ns.xml");

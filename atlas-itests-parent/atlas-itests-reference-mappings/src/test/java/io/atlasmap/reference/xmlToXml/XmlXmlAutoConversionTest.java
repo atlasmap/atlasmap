@@ -33,7 +33,6 @@ public class XmlXmlAutoConversionTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessXmlXmlFlatFieldMappingAutoConversion1() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/xmlToXml/atlasmapping-flatprimitive-attribute-autoconversion-1.xml").toURI());
-        ((DefaultAtlasContext)context).setNewProcessFlow(true);
         AtlasSession session = context.createSession();
         String source = AtlasTestUtil.loadFileAsString("src/test/resources/xmlToXml/atlas-xml-flatprimitive-attribute-autoconversion.xml");
         session.setInput(source);
@@ -49,7 +48,6 @@ public class XmlXmlAutoConversionTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessXmlXmlFlatFieldMappingAutoConversion2() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/xmlToXml/atlasmapping-flatprimitive-attribute-autoconversion-2.xml").toURI());
-        ((DefaultAtlasContext)context).setNewProcessFlow(true);
         AtlasSession session = context.createSession();
         String source = AtlasTestUtil.loadFileAsString("src/test/resources/xmlToXml/atlas-xml-flatprimitive-attribute-autoconversion.xml");
         session.setInput(source);
@@ -65,7 +63,6 @@ public class XmlXmlAutoConversionTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessXmlXmlFlatFieldMappingAutoConversion3() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/xmlToXml/atlasmapping-flatprimitive-attribute-autoconversion-3.xml").toURI());
-        ((DefaultAtlasContext)context).setNewProcessFlow(true);
         AtlasSession session = context.createSession();
         String source = AtlasTestUtil.loadFileAsString("src/test/resources/xmlToXml/atlas-xml-flatprimitive-attribute-autoconversion.xml");
         session.setInput(source);
@@ -81,7 +78,6 @@ public class XmlXmlAutoConversionTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessXmlXmlFlatFieldMappingAutoConversion4() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/xmlToXml/atlasmapping-flatprimitive-attribute-autoconversion-4.xml").toURI());
-        ((DefaultAtlasContext)context).setNewProcessFlow(true);
         AtlasSession session = context.createSession();
         String source = AtlasTestUtil.loadFileAsString("src/test/resources/xmlToXml/atlas-xml-flatprimitive-attribute-autoconversion.xml");
         session.setInput(source);
@@ -97,7 +93,6 @@ public class XmlXmlAutoConversionTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessXmlXmlFlatFieldMappingAutoConversion5() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/xmlToXml/atlasmapping-flatprimitive-attribute-autoconversion-5.xml").toURI());
-        ((DefaultAtlasContext)context).setNewProcessFlow(true);
         AtlasSession session = context.createSession();
         String source = AtlasTestUtil.loadFileAsString("src/test/resources/xmlToXml/atlas-xml-flatprimitive-attribute-autoconversion.xml");
         session.setInput(source);
@@ -113,7 +108,6 @@ public class XmlXmlAutoConversionTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessXmlXmlFlatFieldMappingAutoConversion6() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/xmlToXml/atlasmapping-flatprimitive-attribute-autoconversion-6.xml").toURI());
-        ((DefaultAtlasContext)context).setNewProcessFlow(true);
         AtlasSession session = context.createSession();
         String source = AtlasTestUtil.loadFileAsString("src/test/resources/xmlToXml/atlas-xml-flatprimitive-attribute-autoconversion.xml");
         session.setInput(source);

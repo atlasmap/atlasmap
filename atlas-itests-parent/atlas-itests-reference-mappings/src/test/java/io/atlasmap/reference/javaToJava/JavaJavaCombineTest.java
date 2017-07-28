@@ -38,7 +38,6 @@ public class JavaJavaCombineTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessCombineSimple() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/javaToJava/atlasmapping-combine-simple.xml").toURI());
-        ((DefaultAtlasContext) context).setNewProcessFlow(true);
         AtlasSession session = context.createSession();
         BaseContact sourceContact = AtlasTestUtil.generateContact(SourceContact.class);
         session.setInput(sourceContact);
@@ -58,7 +57,6 @@ public class JavaJavaCombineTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessCombineSkip() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/javaToJava/atlasmapping-combine-skip.xml").toURI());
-        ((DefaultAtlasContext) context).setNewProcessFlow(true);
         AtlasSession session = context.createSession();
         BaseContact sourceContact = AtlasTestUtil.generateContact(SourceContact.class);
         session.setInput(sourceContact);
@@ -78,7 +76,6 @@ public class JavaJavaCombineTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessCombineOutOfOrder() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/javaToJava/atlasmapping-combine-outoforder.xml").toURI());
-        ((DefaultAtlasContext) context).setNewProcessFlow(true);
         AtlasSession session = context.createSession();
         BaseContact sourceContact = AtlasTestUtil.generateContact(SourceContact.class);
         session.setInput(sourceContact);
@@ -100,7 +97,6 @@ public class JavaJavaCombineTest extends AtlasMappingBaseTest {
     @Ignore // TODO: see: https://github.com/atlasmap/atlasmap/issues/107
     public void testProcessCombineNullInput() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/javaToJava/atlasmapping-combine-inputnull.xml").toURI());
-        ((DefaultAtlasContext) context).setNewProcessFlow(true);
         AtlasSession session = context.createSession();
         BaseContact sourceContact = AtlasTestUtil.generateContact(SourceContact.class);
         sourceContact.setLastName(null);

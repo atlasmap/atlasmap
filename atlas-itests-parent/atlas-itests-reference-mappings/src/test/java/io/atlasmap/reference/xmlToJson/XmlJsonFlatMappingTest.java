@@ -125,7 +125,6 @@ public class XmlJsonFlatMappingTest extends AtlasMappingBaseTest {
     @Ignore
     public void testProcessXmlJavaFlatPrimitiveElementNS() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/xmlToJava/atlasmapping-flatprimitive-element-ns.xml"));
-        ((DefaultAtlasContext)context).setNewProcessFlow(true);
 
         AtlasSession session = context.createSession();
         String sourceXml = AtlasTestUtil.loadFileAsString("src/test/resources/xmlToJava/atlas-xml-flatprimitive-element-ns.xml");
@@ -151,7 +150,6 @@ public class XmlJsonFlatMappingTest extends AtlasMappingBaseTest {
     @Ignore
     public void testProcessXmlJavaBoxedFlatMappingPrimitiveAttributeNS() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/xmlToJava/atlasmapping-boxedflatprimitive-attribute-ns.xml"));
-        ((DefaultAtlasContext)context).setNewProcessFlow(true);
 
         AtlasSession session = context.createSession();
         String sourceXml = AtlasTestUtil.loadFileAsString("src/test/resources/xmlToJava/atlas-xml-boxedflatprimitive-attribute-ns.xml");
@@ -167,7 +165,6 @@ public class XmlJsonFlatMappingTest extends AtlasMappingBaseTest {
     @Ignore
     public void testProcessXmlJavaBoxedFlatMappingPrimitiveElement() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/xmlToJava/atlasmapping-boxedflatprimitive-element.xml"));
-        ((DefaultAtlasContext)context).setNewProcessFlow(true);
 
         AtlasSession session = context.createSession();
         String sourceXml = AtlasTestUtil.loadFileAsString("src/test/resources/xmlToJava/atlas-xml-boxedflatprimitive-element.xml");
@@ -183,7 +180,6 @@ public class XmlJsonFlatMappingTest extends AtlasMappingBaseTest {
     @Ignore
     public void testProcessXmlJavaBoxedFlatMappingPrimitiveElementNS() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/xmlToJava/atlasmapping-boxedflatprimitive-element-ns.xml"));
-        ((DefaultAtlasContext)context).setNewProcessFlow(true);
 
         AtlasSession session = context.createSession();
         String sourceXml = AtlasTestUtil.loadFileAsString("src/test/resources/xmlToJava/atlas-xml-boxedflatprimitive-element-ns.xml");
@@ -197,7 +193,6 @@ public class XmlJsonFlatMappingTest extends AtlasMappingBaseTest {
     
     protected void processXmlToJsonUnrooted(String mappingFile, String inputFile, boolean boxed) throws Exception {
         AtlasContext context = atlasContextFactory.createContext(new File(mappingFile));
-        ((DefaultAtlasContext)context).setNewProcessFlow(true);
 
         AtlasSession session = context.createSession();
         String sourceXml = AtlasTestUtil.loadFileAsString(inputFile);
@@ -218,7 +213,6 @@ public class XmlJsonFlatMappingTest extends AtlasMappingBaseTest {
     
     protected void processXmlToJsonRooted(String mappingFile, String inputFile, boolean boxed) throws Exception {
         AtlasContext context = atlasContextFactory.createContext(new File(mappingFile));
-        ((DefaultAtlasContext)context).setNewProcessFlow(true);
 
         AtlasSession session = context.createSession();
         String sourceXml = AtlasTestUtil.loadFileAsString(inputFile);
