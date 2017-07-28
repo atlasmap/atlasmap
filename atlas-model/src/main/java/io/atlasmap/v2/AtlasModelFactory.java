@@ -172,6 +172,40 @@ public class AtlasModelFactory {
                 ((CustomAction)a).setOutputFieldType(FieldType.fromValue(((CustomAction)action).getOutputFieldType().value()));
             }
         }
+        if(action instanceof GenerateUUID) { return new GenerateUUID(); }
+        if(action instanceof Lowercase) { return new Lowercase(); }
+        if(action instanceof PadStringLeft) { 
+            a = new PadStringLeft();
+            ((PadStringLeft)a).setPadCharacter(new String(((PadStringLeft)action).getPadCharacter()));
+            ((PadStringLeft)a).setPadCount(Integer.valueOf(((PadStringLeft)action).getPadCount()));
+        }
+        if(action instanceof PadStringRight) { 
+            a = new PadStringRight();
+            ((PadStringRight)a).setPadCharacter(new String(((PadStringRight)action).getPadCharacter()));
+            ((PadStringRight)a).setPadCount(Integer.valueOf(((PadStringRight)action).getPadCount()));
+        }
+        if(action instanceof SeparateByDash) { return new SeparateByDash(); }
+        if(action instanceof SeparateByDash) { return new SeparateByUnderscore(); }
+        if(action instanceof StringLength) { return new StringLength(); }
+        if(action instanceof SubString) { 
+            a = new SubString();
+            ((SubString)a).setStartIndex(Integer.valueOf(((SubString)action).getStartIndex()));
+            ((SubString)a).setEndIndex(Integer.valueOf(((SubString)action).getEndIndex()));
+        }
+        if(action instanceof SubStringAfter) { 
+            a = new SubStringAfter();
+            ((SubString)a).setStartIndex(Integer.valueOf(((SubStringAfter)action).getStartIndex()));
+            ((SubString)a).setEndIndex(Integer.valueOf(((SubStringAfter)action).getEndIndex()));
+        }
+        if(action instanceof SubStringBefore) { 
+            a = new SubStringBefore();
+            ((SubString)a).setStartIndex(Integer.valueOf(((SubStringBefore)action).getStartIndex()));
+            ((SubString)a).setEndIndex(Integer.valueOf(((SubStringBefore)action).getEndIndex()));
+        }
+        if(action instanceof Trim) { return new Trim(); }
+        if(action instanceof TrimLeft) { return new TrimLeft(); }
+        if(action instanceof TrimRight) { return new TrimRight(); }
+        if(action instanceof Uppercase) { return new Uppercase(); }
         return a;
     }
     
