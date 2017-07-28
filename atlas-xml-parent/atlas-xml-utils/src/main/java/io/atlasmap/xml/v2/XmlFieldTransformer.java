@@ -39,12 +39,17 @@ public abstract class XmlFieldTransformer {
         LinkedList<XmlPathCoordinate> xmlPathCoordinates = new LinkedList<>();
         for (String element : elements) {
             XmlPathCoordinate xmlPathCoordinate;
-            int index = 0;
+            Integer index = 0;
             //indexed elements
             if (element.contains("[")) {
                 String[] indexedTargetElement = element.split("\\[");
                 String indexedElement = indexedTargetElement[0].substring(indexedTargetElement[0].lastIndexOf("/") + 1);
-                index = Integer.valueOf(indexedTargetElement[1].replace("]", ""));
+                String indexValue = indexedTargetElement[1].replace("]", "");
+                if(indexValue != null && !indexValue.trim().isEmpty()) {
+                    index = Integer.valueOf(indexValue);
+                } else {
+                    index = null;
+                }
                 element = indexedElement;
             }
             xmlPathCoordinate = new XmlPathCoordinate(index, element);

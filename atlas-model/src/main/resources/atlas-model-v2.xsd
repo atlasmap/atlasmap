@@ -106,6 +106,7 @@
                 <sequence>
                     <element name="Mappings" type="atlas:Mappings" minOccurs="1" maxOccurs="1" />
                 </sequence>
+                <attribute name="collectionSize" type="integer" use="optional" />
                 <attribute name="collectionType" type="atlas:CollectionType" use="required" />
             </extension>
         </complexContent>
