@@ -104,19 +104,25 @@ export class InitializationService {
             }
         }
 
+        if (this.cfg.initCfg.addMockJavaCachedSource) {
+            console.error("INIT SERVICE MOCK DATA: Adding mock Java cache source document.");
+            var docDef: DocumentDefinition = this.cfg.addJavaDocument("io.atlasmap.java.test.Name", true);
+            docDef.initCfg.inspectionResultContents = DocumentManagementService.generateMockJavaDoc();
+        }
+
         if (this.cfg.initCfg.addMockXMLInstanceSources) {
             console.error("INIT SERVICE MOCK DATA: Adding mock XML instance source documents.");
-            this.cfg.addXMLInstanceDocument("XMLInstanceSource", DocumentManagementService.generateMockInstanceXML(), true);
+            this.cfg.addXMLInstanceDocument("XMLInstanceSource", DocumentManagementService.generateMockInstanceXMLDoc(), true);
         }
 
         if (this.cfg.initCfg.addMockXMLSchemaSources) {
             console.error("INIT SERVICE MOCK DATA: Adding mock XML scehema source documents.");
-            this.cfg.addXMLSchemaDocument("XMLSchemaSource", DocumentManagementService.generateMockSchemaXML(), true);
+            this.cfg.addXMLSchemaDocument("XMLSchemaSource", DocumentManagementService.generateMockSchemaXMLDoc(), true);
         }
 
         if (this.cfg.initCfg.addMockJSONSources) {
             console.error("INIT SERVICE MOCK DATA: Adding mock JSON source documents.");
-            this.cfg.addJSONDocument("JSONSource", DocumentManagementService.generateMockJSON(), true);
+            this.cfg.addJSONDocument("JSONSource", DocumentManagementService.generateMockJSONDoc(), true);
         }
 
         if (this.cfg.initCfg.addMockJavaTarget) {
@@ -124,30 +130,34 @@ export class InitializationService {
             this.cfg.addJavaDocument("io.atlasmap.java.test.TargetTestClass", false);
         }
 
+        if (this.cfg.initCfg.addMockJavaCachedTarget) {
+            console.error("INIT SERVICE MOCK DATA: Adding mock Java cache target document.");
+            var docDef: DocumentDefinition = this.cfg.addJavaDocument("io.atlasmap.java.test.Name", false);
+            docDef.initCfg.inspectionResultContents = DocumentManagementService.generateMockJavaDoc();
+        }
+
         if (this.cfg.initCfg.addMockXMLInstanceTarget) {
             console.error("INIT SERVICE MOCK DATA: Adding mock XML instance target document.");
-            this.cfg.addXMLInstanceDocument("XMLInstanceTarget", DocumentManagementService.generateMockInstanceXML(), false);
+            this.cfg.addXMLInstanceDocument("XMLInstanceTarget", DocumentManagementService.generateMockInstanceXMLDoc(), false);
         }
 
         if (this.cfg.initCfg.addMockXMLSchemaTarget) {
             console.error("INIT SERVICE MOCK DATA: Adding mock XML schema  target document.");
-            this.cfg.addXMLSchemaDocument("XMLSchemaTarget", DocumentManagementService.generateMockSchemaXML(), false);
+            this.cfg.addXMLSchemaDocument("XMLSchemaTarget", DocumentManagementService.generateMockSchemaXMLDoc(), false);
         }
 
         if (this.cfg.initCfg.addMockJSONTarget) {
             console.error("INIT SERVICE MOCK DATA: Adding mock JSON target document.");
-            this.cfg.addJSONDocument("JSONTarget", DocumentManagementService.generateMockJSON(), false);
+            this.cfg.addJSONDocument("JSONTarget", DocumentManagementService.generateMockJSONDoc(), false);
         }                                
 
         //load field actions
         this.fetchFieldActions();
 
         //load documents
-        if (!this.cfg.hasJavaDocuments()) {
-            console.log("No java sources/targets specified, skipping classpath resolution.");
-            this.fetchDocuments();
-        } else if (this.cfg.initCfg.classPath) {
-            console.log("Classpath already provided, skipping Maven loading.");
+        if (!this.cfg.isClassPathResolutionNeeded()) {
+            console.log("Specified java documents (if any) have cached content or classpath is already specified. "
+                + "Skipping classpath resolution.");
             this.fetchDocuments();
         } else {
             console.log("Loading class path from Maven.");

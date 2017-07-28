@@ -78,9 +78,21 @@ export class DocumentManagementService {
         });
     }
 
-    public fetchDocument(docDef: DocumentDefinition, classPath:string): Observable<DocumentDefinition> {
-        return new Observable<DocumentDefinition>((observer:any) => {
+    public fetchDocument(docDef: DocumentDefinition, classPath:string): Observable<DocumentDefinition> {        
+        return new Observable<DocumentDefinition>((observer:any) => {        
             var startTime: number = Date.now();
+
+            if (docDef.initCfg.inspectionResultContents != null) {
+                console.log("Document's inspection response is already specified, parsing: " + docDef.name);
+                var responseJson: any = JSON.parse(docDef.initCfg.inspectionResultContents);
+                this.parseDocumentResponse(responseJson, docDef);
+                console.log("Finished parsing document '" + docDef.name + "' in "
+                        + (Date.now() - startTime) + "ms.");
+                observer.next(docDef);
+                observer.complete();
+                return;
+            }
+
             var payload: any = this.createDocumentFetchRequest(docDef, classPath);
             var url: string = this.cfg.initCfg.baseJavaInspectionServiceUrl + "class";
             if (docDef.initCfg.type.isXML()) {
@@ -92,17 +104,9 @@ export class DocumentManagementService {
             DataMapperUtil.debugLogJSON(payload, "Document Service Request", this.cfg.initCfg.debugDocumentServiceCalls, url);
             this.http.post(url, payload, { headers: this.headers }).toPromise()
                 .then((res: Response) => {
-                    DataMapperUtil.debugLogJSON(res.json(), "Document Service Response", this.cfg.initCfg.debugDocumentServiceCalls, url);
-                    docDef.name = docDef.initCfg.shortIdentifier;
-                    docDef.fullyQualifiedName = docDef.initCfg.shortIdentifier;
-                    if (docDef.initCfg.type.isJava()) {
-                        this.extractJavaDocumentDefinitionData(res, docDef);
-                    } else if (docDef.initCfg.type.isJSON()) {
-                        this.extractJSONDocumentDefinitionData(res, docDef);
-                    } else {
-                        this.extractXMLDocumentDefinitionData(res, docDef);
-                    }
-                    docDef.initializeFromFields();
+                    var responseJson: any = res.json();
+                    DataMapperUtil.debugLogJSON(responseJson, "Document Service Response", this.cfg.initCfg.debugDocumentServiceCalls, url);
+                    this.parseDocumentResponse(responseJson, docDef);
                     console.log("Finished fetching and parsing document '" + docDef.name + "' in "
                         + (Date.now() - startTime) + "ms.");
                     observer.next(docDef);
@@ -158,8 +162,21 @@ export class DocumentManagementService {
         return payload;
     }
 
-    private extractJSONDocumentDefinitionData(res: Response, docDef: DocumentDefinition): void {
-        var body: any = res.json().JsonInspectionResponse;
+    private parseDocumentResponse(responseJson: any, docDef: DocumentDefinition): void {
+        docDef.name = docDef.initCfg.shortIdentifier;
+        docDef.fullyQualifiedName = docDef.initCfg.shortIdentifier;
+        if (docDef.initCfg.type.isJava()) {
+            this.extractJavaDocumentDefinitionData(responseJson, docDef);
+        } else if (docDef.initCfg.type.isJSON()) {
+            this.extractJSONDocumentDefinitionData(responseJson, docDef);
+        } else {
+            this.extractXMLDocumentDefinitionData(responseJson, docDef);
+        }
+        docDef.initializeFromFields();
+    }
+
+    private extractJSONDocumentDefinitionData(responseJson: any, docDef: DocumentDefinition): void {
+        var body: any = responseJson.json().JsonInspectionResponse;
         if (body.errorMessage) {
             var docIdentifier: string = docDef.initCfg.documentIdentifier;
             this.handleError("Could not load JSON document, error: " + body.errorMessage, null);
@@ -177,8 +194,8 @@ export class DocumentManagementService {
         }
     }
 
-    private extractXMLDocumentDefinitionData(res: Response, docDef: DocumentDefinition): void {
-        var body: any = res.json().XmlInspectionResponse;
+    private extractXMLDocumentDefinitionData(responseJson: any, docDef: DocumentDefinition): void {
+        var body: any = responseJson.XmlInspectionResponse;
         if (body.errorMessage) {
             var docIdentifier: string = docDef.initCfg.documentIdentifier;
             this.handleError("Could not load XML document, error: " + body.errorMessage, null);
@@ -209,8 +226,8 @@ export class DocumentManagementService {
         }
     }
 
-    private extractJavaDocumentDefinitionData(res: Response, docDef: DocumentDefinition): void {
-        var body: any = res.json().ClassInspectionResponse;
+    private extractJavaDocumentDefinitionData(responseJson: any, docDef: DocumentDefinition): void {
+        var body: any = responseJson.ClassInspectionResponse;
 
         if (body.errorMessage) {
             var docIdentifier: string = docDef.initCfg.documentIdentifier;
@@ -348,9 +365,9 @@ export class DocumentManagementService {
         }
     }
 
-    public static generateMockInstanceXML(): string {
+    public static generateMockInstanceXMLDoc(): string {
         // here we have a bunch of examples we can use.
-        var sampleXML: string = `<data>
+        var mockDoc: string = `<data>
                 <intField a='1'>32000</intField><longField>12421</longField>
                 <stringField>abc</stringField><booleanField>true</booleanField>
                 <doubleField b='2'>12.0</doubleField><shortField>1000</shortField>
@@ -359,13 +376,13 @@ export class DocumentManagementService {
             </data>
         `;
 
-        sampleXML = `<?xml version="1.0" encoding="UTF-8" ?>
+        mockDoc = `<?xml version="1.0" encoding="UTF-8" ?>
             <foo>bar</foo>
         `;
 
-        sampleXML = "<foo>bar</foo>";
+        mockDoc = "<foo>bar</foo>";
 
-        sampleXML = `
+        mockDoc = `
             <XMLOrder>
             <orderId>orderId</orderId>
             <Address>
@@ -384,11 +401,11 @@ export class DocumentManagementService {
             </XMLOrder>
         `;
 
-        sampleXML = `
+        mockDoc = `
             <foo><bar><jason>somevalue</jason></bar></foo>
         `;
 
-        sampleXML = `
+        mockDoc = `
             <orders totalCost="12525.00" xmlns="http://www.example.com/x/"
                 xmlns:y="http://www.example.com/y/"
                 xmlns:q="http://www.example.com/q/">
@@ -402,7 +419,7 @@ export class DocumentManagementService {
             </orders>
         `;
 
-        sampleXML = `
+        mockDoc = `
             <ns:XmlFPE targetNamespace="http://atlasmap.io/xml/test/v2"
                 xmlns:ns="http://atlasmap.io/xml/test/v2"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -418,7 +435,7 @@ export class DocumentManagementService {
             </ns:XmlFPE>
         `;
 
-        sampleXML = `
+        mockDoc = `
             <ns:XmlOE xmlns:ns="http://atlasmap.io/xml/test/v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://atlasmap.io/xml/test/v2 atlas-xml-test-model-v2.xsd ">
             <ns:orderId>ns:orderId</ns:orderId>
             <ns:Address>
@@ -437,11 +454,11 @@ export class DocumentManagementService {
             </ns:XmlOE>
         `;
 
-        return sampleXML;
+        return mockDoc;
     }
 
-    public static generateMockSchemaXML(): string {
-        var sampleXML: string = `
+    public static generateMockSchemaXMLDoc(): string {
+        var mockDoc: string = `
             <xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified"
                      xmlns:xs="http://www.w3.org/2001/XMLSchema">
                 <xs:element name="data">
@@ -462,7 +479,7 @@ export class DocumentManagementService {
             </xs:schema>
         `;
 
-        sampleXML = `
+        mockDoc = `
             <schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://example.com/"
                 xmlns:tns="http://example.com/">
                 <element name="aGlobalElement" type="tns:aGlobalType"/>
@@ -470,7 +487,7 @@ export class DocumentManagementService {
             </schema>
         `;
 
-        sampleXML = `
+        mockDoc = `
             <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
                 <xs:element name="shiporder">
                     <xs:complexType>
@@ -503,7 +520,7 @@ export class DocumentManagementService {
             </xs:schema>
         `;
 
-        sampleXML = `
+        mockDoc = `
             <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
                 <xs:element name="shiporder">
                     <xs:complexType>
@@ -528,11 +545,11 @@ export class DocumentManagementService {
             </xs:schema>
         `;
 
-        return sampleXML;
+        return mockDoc;
     }
 
-    public static generateMockJSON(): string {
-        var sampleJSON: string = `   {
+    public static generateMockJSONDoc(): string {
+        var mockDoc: string = `   {
                 "order": {
                     "address": {
                         "street": "123 any st",
@@ -561,7 +578,65 @@ export class DocumentManagementService {
             }
         `;
 
-        return sampleJSON;
+        return mockDoc;
+    }
+
+    public static generateMockJavaDoc(): string {
+        var mockDoc: string = `
+            {
+              "ClassInspectionResponse": {
+                "jsonType": "io.atlasmap.java.v2.ClassInspectionResponse",
+                "javaClass": {
+                  "jsonType": "io.atlasmap.java.v2.JavaClass",
+                  "modifiers": { "modifier": [ "PUBLIC" ] },
+                  "className": "io.atlasmap.java.test.Name",
+                  "primitive": false,
+                  "synthetic": false,
+                  "javaEnumFields": { "javaEnumField": [] },
+                  "javaFields": {
+                    "javaField": [          
+                      {
+                        "jsonType": "io.atlasmap.java.v2.JavaField",
+                        "path": "firstName",
+                        "status": "SUPPORTED",
+                        "fieldType": "STRING",
+                        "modifiers": { "modifier": [ "PRIVATE" ] },
+                        "name": "firstName",
+                        "className": "java.lang.String",
+                        "getMethod": "getFirstName",
+                        "setMethod": "setFirstName",
+                        "primitive": true,
+                        "synthetic": false
+                      },  
+                      {
+                        "jsonType": "io.atlasmap.java.v2.JavaField",
+                        "path": "lastName",
+                        "status": "SUPPORTED",
+                        "fieldType": "STRING",
+                        "modifiers": { "modifier": [ "PRIVATE" ] },
+                        "name": "lastName",
+                        "className": "java.lang.String",
+                        "getMethod": "getLastName",
+                        "setMethod": "setLastName",
+                        "primitive": true,
+                        "synthetic": false
+                      }                        
+                    ]
+                  },
+                  "packageName": "io.atlasmap.java.test",
+                  "annotation": false,
+                  "annonymous": false,
+                  "enumeration": false,
+                  "localClass": false,
+                  "memberClass": false,
+                  "uri": "atlas:java?className=io.atlasmap.java.test.Name",
+                  "interface": false
+                },
+                "executionTime": 1
+              }
+            }
+        `;
+        return mockDoc;
     }
 
     private handleError(message:string, error: any): void {

@@ -56,10 +56,13 @@ export class DataMapperInitializationModel {
     public addMockJSONMappings: boolean = false;
     public addMockJavaSingleSource: boolean = false;
     public addMockJavaSources: boolean = false;
+    public addMockJavaCachedSource: boolean = false;
     public addMockXMLInstanceSources: boolean = false;
-    public addMockXMLSchemaSources: boolean = false;
+    public addMockXMLSchemaSources: boolean = false;    
     public addMockJSONSources: boolean = false;
+
     public addMockJavaTarget: boolean = false;
+    public addMockJavaCachedTarget: boolean = false;
     public addMockXMLInstanceTarget: boolean = false;
     public addMockXMLSchemaTarget: boolean = false;
     public addMockJSONTarget: boolean = false;
@@ -146,22 +149,24 @@ export class ConfigModel {
 
     }
 
-    public addJavaDocument(documentIdentifier: string, isSource: boolean): void {
-        this.createDocument(documentIdentifier, isSource, DocumentTypes.JAVA, null);
+    public addJavaDocument(documentIdentifier: string, isSource: boolean): DocumentDefinition {
+        return this.createDocument(documentIdentifier, isSource, DocumentTypes.JAVA, null);
     }
 
-    public addJSONDocument(documentIdentifier: string, documentContents: string, isSource: boolean): void {
-        this.createDocument(documentIdentifier, isSource, DocumentTypes.JSON, documentContents);
+    public addJSONDocument(documentIdentifier: string, documentContents: string, isSource: boolean): DocumentDefinition {
+        return this.createDocument(documentIdentifier, isSource, DocumentTypes.JSON, documentContents);
     }
 
-    public addXMLInstanceDocument(documentIdentifier: string, documentContents: string, isSource: boolean): void {
+    public addXMLInstanceDocument(documentIdentifier: string, documentContents: string, isSource: boolean): DocumentDefinition {
         var docDef: DocumentDefinition = this.createDocument(documentIdentifier, isSource, DocumentTypes.XML, documentContents);
         docDef.initCfg.inspectionType = "INSTANCE";
+        return docDef;
     }
 
-    public addXMLSchemaDocument(documentIdentifier: string, documentContents: string, isSource: boolean): void {
+    public addXMLSchemaDocument(documentIdentifier: string, documentContents: string, isSource: boolean): DocumentDefinition {
         var docDef: DocumentDefinition = this.createDocument(documentIdentifier, isSource, DocumentTypes.XML, documentContents);
         docDef.initCfg.inspectionType = "SCHEMA";
+        return docDef;
     }
 
     public getDocsWithoutPropertyDoc(isSource: boolean): DocumentDefinition[] {
@@ -176,6 +181,18 @@ export class ConfigModel {
     public hasJavaDocuments(): boolean {
         for (let doc of this.getAllDocs()) {
             if (doc.initCfg.type.isJava()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public isClassPathResolutionNeeded(): boolean {
+        if (this.initCfg.classPath) {
+            return false;
+        }
+        for (let doc of this.getAllDocs()) {
+            if (doc.initCfg.type.isJava() && doc.initCfg.inspectionResultContents == null) {
                 return true;
             }
         }
