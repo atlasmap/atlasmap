@@ -34,6 +34,7 @@ import io.atlasmap.v2.Audit;
 import io.atlasmap.v2.AuditStatus;
 import io.atlasmap.v2.BaseMapping;
 import io.atlasmap.v2.Collection;
+import io.atlasmap.v2.ConstantField;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldType;
 import io.atlasmap.v2.LookupEntry;
@@ -177,6 +178,16 @@ public abstract class BaseAtlasModule implements AtlasModule {
             logger.debug("processPostValidation completed");
         }
     }       
+    
+    protected void processConstantField(AtlasSession atlasSession, Mapping mapping) throws AtlasException {
+        for(Field f : mapping.getInputField()) {
+            if(f instanceof ConstantField) {
+                if(f.getFieldType() == null && f.getValue() != null) {
+                    f.setFieldType(getConversionService().fieldTypeFromClass(f.getValue().getClass()));
+                }
+            }
+        }        
+    }
     
     protected void processPropertyField(AtlasSession atlasSession, Mapping mapping, AtlasPropertyStrategy atlasPropertyStrategy) throws AtlasException {
         for(Field f : mapping.getInputField()) {

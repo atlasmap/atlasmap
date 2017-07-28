@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<AtlasMapping xmlns="http://atlasmap.io/v2" xmlns:ns2="http://atlasmap.io/java/v2" 
-xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-  name="JavaJavaFlatMapping" >
+<AtlasMapping xmlns="http://atlasmap.io/v2" xmlns:ns2="http://atlasmap.io/java/v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="JavaJavaComplex" >
   <DataSource dataSourceType="Source" uri="atlas:java?className=io.atlasmap.java.test.SourceOrder"/>
   <DataSource dataSourceType="Target" uri="atlas:java?className=io.atlasmap.java.test.TargetOrder"/>
   <Mappings>
@@ -54,6 +52,4 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       <OutputField xsi:type="ns2:JavaField" path="/address/zipCode"/>
     </Mapping>
   </Mappings>
-  <LookupTables />
-  <Properties />
 </AtlasMapping>
