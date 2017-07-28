@@ -1,6 +1,7 @@
 package io.atlasmap.xml.v2;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
@@ -21,6 +22,7 @@ import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 import io.atlasmap.api.AtlasException;
+import io.atlasmap.core.PathUtil;
 
 /**
  */
@@ -62,6 +64,34 @@ public class DocumentXmlFieldReaderTest {
         reader.read(doc, xmlField);
         assertNotNull(xmlField.getValue());
         assertThat(xmlField.getValue(), is("54554555"));
+    }
+    
+    @Test
+    public void testCountCollectionIndex() throws Exception {
+        Document doc = getDocument("src/test/resources/complex_example.xml");
+        XmlField xmlField = AtlasXmlModelFactory.createXmlField();
+        xmlField.setPath("/orders/order[]/id[]");
+
+        Integer orderCount = null;
+        Integer idCount = null;
+        
+        PathUtil pathUtil = new PathUtil(xmlField.getPath());
+        for(String seg : pathUtil.getSegments()) {
+            if(PathUtil.isCollectionSegment(seg)) {
+                if("order".equals(PathUtil.cleanPathSegment(seg))) {
+                    orderCount = reader.getCollectionCount(doc, xmlField, PathUtil.cleanPathSegment(seg));
+                }
+                if("id".equals(PathUtil.cleanPathSegment(seg))) {
+                    idCount = reader.getCollectionCount(doc, xmlField, PathUtil.cleanPathSegment(seg));
+                }
+
+            }
+        }
+        
+        assertNotNull(orderCount);
+        assertNotNull(idCount);
+        assertEquals(Integer.valueOf(4), Integer.valueOf(orderCount));
+        assertEquals(Integer.valueOf(8), Integer.valueOf(idCount));
     }
 
     @Test

@@ -156,4 +156,33 @@ public class DocumentXmlFieldReader extends XmlFieldTransformer {
         }
         return nodes;
     }
+    
+    public Integer getCollectionCount(Document document, XmlField xmlField, String collectionSegment) throws AtlasException {
+        if (document == null) {
+            throw new AtlasException(new IllegalArgumentException("Argument 'document' cannot be null"));
+        }
+        if (xmlField == null) {
+            throw new AtlasException(new IllegalArgumentException("Argument 'xmlField' cannot be null"));
+        }
+
+        //check to see if the document has namespaces
+        seedDocumentNamespaces(document);
+        //read the Document using xmlPath field to set the value on the XmlField
+        String xmlPath = xmlField.getPath();
+        LinkedList<String> elements = getElementsInXmlPath(xmlPath);
+        LinkedList<XmlPathCoordinate> xmlPathCoordinates = (LinkedList<XmlPathCoordinate>) createXmlPathCoordinates(elements);
+        //is the last coordinate an attribute?
+        if (xmlPathCoordinates.getLast().getElementName().startsWith("@")) {
+            xmlPathCoordinates.removeLast();
+        }
+        // the first coordinate sets the 'root' node including the namespace we are working with...
+        for(XmlPathCoordinate xc : xmlPathCoordinates) {
+            if(xc.getElementName().equals(collectionSegment)) {
+                NodeList nodes = getNodeList(document, xc);
+                return Integer.valueOf(nodes.getLength());
+            }
+        }
+        
+        return null;
+    }
 }
