@@ -78,13 +78,17 @@ public class DocumentXmlFieldReader extends XmlFieldTransformer {
                 if (PathUtil.isAttributeSegment(sc.getSegment())) {
                     String attributeName = PathUtil.cleanPathSegment(sc.getSegment());
                     value = parentNode.getAttribute(attributeName);
-                }
+                }                
                 if(xmlField.getFieldType() == null || FieldType.STRING.equals(xmlField.getFieldType())) {
                     xmlField.setValue(value);
                     xmlField.setFieldType(FieldType.STRING);
-                } else {
-                    if(FieldType.CHAR.equals(xmlField.getFieldType())) {
-                        xmlField.setValue(value.charAt(0));
+                } else if(FieldType.CHAR.equals(xmlField.getFieldType())) {
+                    xmlField.setValue(value.charAt(0));
+                } 
+                
+                if(value != null) {
+                    if(FieldType.BOOLEAN.equals(xmlField.getFieldType())) {
+                        xmlField.setValue(processXmlStringAsBoolean(value));
                     } else {
                         logger.warn(String.format("Unsupported FieldType for text data t=%s p=%s docId=%s", xmlField.getFieldType().value(), xmlField.getPath(), xmlField.getDocId()));
                     }
