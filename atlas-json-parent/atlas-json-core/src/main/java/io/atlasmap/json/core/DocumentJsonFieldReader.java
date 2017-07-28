@@ -1,14 +1,18 @@
 package io.atlasmap.json.core;
 
 import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.atlasmap.api.AtlasException;
+import io.atlasmap.core.PathUtil;
 import io.atlasmap.json.v2.JsonField;
 import io.atlasmap.v2.CollectionType;
 import io.atlasmap.v2.FieldType;
 import java.io.IOException;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -123,6 +127,31 @@ public class DocumentJsonFieldReader {
             }
         } catch (IOException e) {
             throw new AtlasException(e);
+        }
+    }
+    
+    public Integer getCollectionCount(final String document, final JsonField jsonField, final String collectionSegment) throws AtlasException {
+        if (document == null || document.isEmpty()) {
+            throw new AtlasException(new IllegalArgumentException("Argument 'document' cannot be null nor empty"));
+        }
+        if (jsonField == null) {
+            throw new AtlasException(new IllegalArgumentException("Argument 'jsonField' cannot be null"));
+        }
+        //make this a JSON document
+        JsonFactory jsonFactory = new JsonFactory();
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonParser parser;
+        JsonNode rootNode;
+        try {
+            parser = jsonFactory.createParser(document);
+            rootNode = objectMapper.readTree(parser);            
+            JsonNode collectionNode = rootNode.findValue(collectionSegment);
+            if(collectionNode != null && collectionNode.isArray()) {
+                return collectionNode.size();
+            }
+            return null;
+        } catch (IOException e) {
+            throw new AtlasException(e.getMessage(), e);
         }
     }
 }
