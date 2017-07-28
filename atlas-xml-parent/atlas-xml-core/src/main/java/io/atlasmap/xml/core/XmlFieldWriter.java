@@ -43,19 +43,19 @@ import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldType;
 import io.atlasmap.xml.v2.XmlField;
 
-public class DocumentXmlFieldWriter extends XmlFieldTransformer {
-	private static final org.slf4j.Logger logger = LoggerFactory.getLogger(DocumentXmlFieldWriter.class);
+public class XmlFieldWriter extends XmlFieldTransformer {
+	private static final org.slf4j.Logger logger = LoggerFactory.getLogger(XmlFieldWriter.class);
 
 	private Document document = null;
 	private boolean enableElementNamespaces = true;
 	private boolean enableAttributeNamespaces = true;
 	private boolean ignoreMissingNamespaces = true;
 	
-    public DocumentXmlFieldWriter() throws AtlasException {
+    public XmlFieldWriter() throws AtlasException {
     	this(new HashMap<>(), null);
     }
 
-    public DocumentXmlFieldWriter(Map<String, String> namespaces, String seedDocument) throws AtlasException {
+    public XmlFieldWriter(Map<String, String> namespaces, String seedDocument) throws AtlasException {
         super(namespaces);
         this.document = createDocument(namespaces, seedDocument);
         //check to see if the seed document has namespaces

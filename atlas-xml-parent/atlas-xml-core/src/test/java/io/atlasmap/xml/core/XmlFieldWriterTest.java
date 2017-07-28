@@ -32,9 +32,9 @@ import io.atlasmap.api.AtlasException;
 import io.atlasmap.xml.v2.AtlasXmlModelFactory;
 import io.atlasmap.xml.v2.XmlField;
 
-public class DocumentXmlFieldWriterTest {
+public class XmlFieldWriterTest {
 
-    private DocumentXmlFieldWriter writer = null;
+    private XmlFieldWriter writer = null;
 
     private Document document = null;
     private String seedDocument = null;
@@ -49,7 +49,7 @@ public class DocumentXmlFieldWriterTest {
     }
     
     public void createWriter() throws Exception {
-    	writer = new DocumentXmlFieldWriter(namespaces, seedDocument);
+    	writer = new XmlFieldWriter(namespaces, seedDocument);
     	this.document = writer.getDocument();
     	assertNotNull(document);
     }
@@ -167,7 +167,7 @@ public class DocumentXmlFieldWriterTest {
     	Diff diff = DiffBuilder.compare(Input.fromString(expected)).withTest(Input.fromDocument(document)).ignoreWhitespace().build();
         assertFalse(diff.toString(), diff.hasDifferences());
         */
-    	String actual = DocumentXmlFieldWriter.writeDocumentToString(true, writer.getDocument());    	
+    	String actual = XmlFieldWriter.writeDocumentToString(true, writer.getDocument());    	
     	expected = expected.replaceAll("\n|\r", "");
     	expected = expected.replaceAll("> *?<", "><");
     	expected = expected.replace("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>", "");

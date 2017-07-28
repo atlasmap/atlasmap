@@ -35,8 +35,8 @@ import io.atlasmap.core.AtlasUtil;
 import io.atlasmap.core.BaseAtlasModule;
 import io.atlasmap.core.PathUtil;
 import io.atlasmap.core.PathUtil.SegmentContext;
-import io.atlasmap.json.core.DocumentJsonFieldReader;
-import io.atlasmap.json.core.DocumentJsonFieldWriter;
+import io.atlasmap.json.core.JsonFieldReader;
+import io.atlasmap.json.core.JsonFieldWriter;
 import io.atlasmap.json.v2.AtlasJsonModelFactory;
 import io.atlasmap.json.v2.JsonField;
 import io.atlasmap.spi.AtlasModuleDetail;
@@ -60,7 +60,7 @@ public class JsonModule extends BaseAtlasModule {
     
     @Override
     public void processPreOutputExecution(AtlasSession session) throws AtlasException {
-        DocumentJsonFieldWriter writer = new DocumentJsonFieldWriter();
+        JsonFieldWriter writer = new JsonFieldWriter();
         session.setOutput(writer);
         
         if(logger.isDebugEnabled()) {
@@ -132,7 +132,7 @@ public class JsonModule extends BaseAtlasModule {
                     
             Map<String,String> sourceUriParams = AtlasUtil.getUriParameters(session.getMapping().getDataSource().get(0).getUri());
                               
-            DocumentJsonFieldReader djfr = new DocumentJsonFieldReader();
+            JsonFieldReader djfr = new JsonFieldReader();
             djfr.read(document, inputField);
     
             // NOTE: This shouldn't happen
@@ -150,12 +150,12 @@ public class JsonModule extends BaseAtlasModule {
     @Override
     public void processOutputMapping(AtlasSession session, BaseMapping baseMapping) throws AtlasException {
         
-        DocumentJsonFieldWriter writer = null;
+        JsonFieldWriter writer = null;
         if(session.getOutput() == null) {
-            writer = new DocumentJsonFieldWriter();
+            writer = new JsonFieldWriter();
             session.setOutput(writer);
-        } else if(session.getOutput() != null && session.getOutput() instanceof DocumentJsonFieldWriter) {
-            writer = (DocumentJsonFieldWriter) session.getOutput();
+        } else if(session.getOutput() != null && session.getOutput() instanceof JsonFieldWriter) {
+            writer = (JsonFieldWriter) session.getOutput();
         } else {
             addAudit(session, null, String.format("Unsupported output object type=%s", session.getOutput().getClass().getName()), null, AuditStatus.ERROR, null);                
             return;
@@ -276,9 +276,9 @@ public class JsonModule extends BaseAtlasModule {
 //        for(String docId : docIds) {
             //Object output = session.getOutput(docId);
             Object output = session.getOutput();
-            if(output instanceof DocumentJsonFieldWriter) {
-            	if (((DocumentJsonFieldWriter)output).getRootNode() != null) {
-	                String outputBody = ((DocumentJsonFieldWriter)output).getRootNode().toString();
+            if(output instanceof JsonFieldWriter) {
+            	if (((JsonFieldWriter)output).getRootNode() != null) {
+	                String outputBody = ((JsonFieldWriter)output).getRootNode().toString();
 	                session.setOutput(outputBody);
 	                if(logger.isDebugEnabled()) {
 	                    logger.debug(String.format("processPostOutputExecution converting JsonNode to string size=%s", outputBody.length()));
@@ -333,7 +333,7 @@ public class JsonModule extends BaseAtlasModule {
                 ObjectNode parentNode = (ObjectNode) rootNode;
                 String parentSegment = "[root node]";
                 for (SegmentContext sc : new PathUtil(field.getPath()).getSegmentContexts(false)) {                    
-                    JsonNode currentNode = DocumentJsonFieldWriter.getChildNode(parentNode, parentSegment, sc.getSegment());
+                    JsonNode currentNode = JsonFieldWriter.getChildNode(parentNode, parentSegment, sc.getSegment());
                     if (currentNode == null) {
                         return 0;
                     }

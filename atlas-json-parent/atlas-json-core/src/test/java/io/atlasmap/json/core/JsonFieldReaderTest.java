@@ -14,9 +14,9 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 
-public class DocumentJsonFieldReaderTest {
+public class JsonFieldReaderTest {
 
-    private static DocumentJsonFieldReader reader = new DocumentJsonFieldReader();
+    private static JsonFieldReader reader = new JsonFieldReader();
 
     @Test(expected = AtlasException.class)
     public void testWithNullDocument() throws Exception {
