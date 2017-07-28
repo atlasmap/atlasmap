@@ -15,7 +15,10 @@
  */
 package io.atlasmap.core;
 
-import java.util.List;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import io.atlasmap.spi.AtlasCombineStrategy;
 
 public class DefaultAtlasCombineStrategy implements AtlasCombineStrategy {
@@ -25,6 +28,7 @@ public class DefaultAtlasCombineStrategy implements AtlasCombineStrategy {
 	private String delimiter = DEFAULT_COMBINE_DELIMITER;
 	private Integer limit = DEFAULT_COMBINE_LIMIT;
 	private boolean disableAutoTrim = false;
+	private boolean disableAddDelimiterOnNull = false;
 	
 	@Override
 	public String getDelimiter() {
@@ -53,19 +57,27 @@ public class DefaultAtlasCombineStrategy implements AtlasCombineStrategy {
     public void setDisableAutoTrim(boolean disableAutoTrim) {
         this.disableAutoTrim = disableAutoTrim;
     }
+    
+    public boolean isDisableAddDelimiterOnNull() {
+        return disableAddDelimiterOnNull;
+    }
+
+    public void setDisableAddDelimiterOnNull(boolean disableAddDelimiterOnNull) {
+        this.disableAddDelimiterOnNull = disableAddDelimiterOnNull;
+    }
 
     @Override
-    public String combineValues(List<String> values) {
+    public String combineValues(Map<Integer, String> values) {
         return combineValues(values, getDelimiter(), getLimit());
     }
     
     @Override
-    public String combineValues(List<String> values, String delimiter) {
+    public String combineValues(Map<Integer, String> values, String delimiter) {
        return combineValues(values, delimiter, getLimit());
     }
 
     @Override
-    public String combineValues(List<String> values, String delimiter, Integer limit) {
+    public String combineValues(Map<Integer, String> values, String delimiter, Integer limit) {
         if(values == null || values.isEmpty()) {
             return null;
         }
@@ -76,9 +88,11 @@ public class DefaultAtlasCombineStrategy implements AtlasCombineStrategy {
             return combinedString;
         }
         
+        Map<Integer, String> sortedMap = sortByKey(values);
+        
         boolean first = true;
         int count = 0;
-        for(String value : values) {
+        for(String value : sortedMap.values()) {
             if(first) {
                 if(isDisableAutoTrim()) {
                     combinedString = combinedString.concat(value);
@@ -101,5 +115,12 @@ public class DefaultAtlasCombineStrategy implements AtlasCombineStrategy {
         }
         
         return combinedString;
+    }
+    
+    protected static Map<Integer, String> sortByKey(Map<Integer, String> map) {
+        return map.entrySet().stream()
+                .sorted(Map.Entry.comparingByKey())
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
+                        (oldValue, newValue) -> oldValue, LinkedHashMap::new));
     }
 }

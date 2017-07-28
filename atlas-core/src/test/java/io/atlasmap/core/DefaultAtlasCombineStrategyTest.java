@@ -1,9 +1,8 @@
 package io.atlasmap.core;
 
 import static org.junit.Assert.*;
-
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,6 +29,15 @@ public class DefaultAtlasCombineStrategyTest {
         assertEquals("DefaultAtlasCombineStrategy", combine.getName());
     }
     
+    protected Map<Integer, String> generateCombineMap(int count) {
+        String combines = new String("abcdefghijklmnopqrstuvwxyz");
+        Map<Integer, String> cMap = new HashMap<Integer, String>();
+        for(int i=0; i < count; i++) {
+            cMap.put(i, combines.substring(i, i+1));
+        }
+        return cMap;
+    }
+    
     @Test
     public void testGetSetDelimiter() {
         assertNotNull(combine);
@@ -38,7 +46,7 @@ public class DefaultAtlasCombineStrategyTest {
 
         combine.setDelimiter(":");
         assertEquals(":", combine.getDelimiter());
-        String value = combine.combineValues(Arrays.asList("a", "b", "c", "d"));
+        String value = combine.combineValues(generateCombineMap(4));
         assertNotNull(value);
         assertEquals("a:b:c:d", value);
     }
@@ -50,7 +58,7 @@ public class DefaultAtlasCombineStrategyTest {
         assertEquals(DefaultAtlasCombineStrategy.DEFAULT_COMBINE_LIMIT, combine.getLimit());
                 
         combine.setLimit(2);
-        String value = combine.combineValues(Arrays.asList("a", "b", "c", "d"));
+        String value = combine.combineValues(generateCombineMap(4));
         assertNotNull(value);
         assertEquals("a b", value);
     }
@@ -61,8 +69,9 @@ public class DefaultAtlasCombineStrategyTest {
         assertFalse(((DefaultAtlasCombineStrategy)combine).isDisableAutoTrim());
         ((DefaultAtlasCombineStrategy)combine).setDisableAutoTrim(true);
         assertTrue(((DefaultAtlasCombineStrategy)combine).isDisableAutoTrim());
-        
-        String value = combine.combineValues(Arrays.asList("a ", "b"));
+        Map<Integer, String> cMap = generateCombineMap(2);
+        cMap.put(0, cMap.get(0) + " ");
+        String value = combine.combineValues(cMap);
         assertNotNull(value);
         assertEquals("a  b", value);
     }
@@ -73,8 +82,10 @@ public class DefaultAtlasCombineStrategyTest {
         assertFalse(((DefaultAtlasCombineStrategy)combine).isDisableAutoTrim());
         ((DefaultAtlasCombineStrategy)combine).setDisableAutoTrim(true);
         assertTrue(((DefaultAtlasCombineStrategy)combine).isDisableAutoTrim());
-        
-        String value = combine.combineValues(Arrays.asList("a ", "b", "  c"), null);
+        Map<Integer, String> cMap = generateCombineMap(3);
+        cMap.put(0, cMap.get(0) + " ");
+        cMap.put(2, "  " + cMap.get(2));
+        String value = combine.combineValues(cMap, null);
         assertNotNull(value);
         assertEquals("a  b   c", value);
     }
@@ -82,7 +93,7 @@ public class DefaultAtlasCombineStrategyTest {
     @Test
     public void testCombineSingleValue() {
         assertNotNull(combine);
-        String value = combine.combineValues(Arrays.asList("a"));
+        String value = combine.combineValues(generateCombineMap(1));
         assertNotNull(value);
         assertEquals("a", value);
     }
@@ -90,7 +101,7 @@ public class DefaultAtlasCombineStrategyTest {
     @Test
     public void testCombineValues() {
         assertNotNull(combine);
-        String value = combine.combineValues(Arrays.asList("a", "b", "c", "d", "e", "f"));
+        String value = combine.combineValues(generateCombineMap(6));
         assertNotNull(value);
         assertEquals("a b c d e f", value);
     }
@@ -98,7 +109,7 @@ public class DefaultAtlasCombineStrategyTest {
     @Test
     public void testCombineValuesDelimiter() {
         assertNotNull(combine);
-        String value = combine.combineValues(Arrays.asList("a", "b", "c", "d", "e", "f"), "1");
+        String value = combine.combineValues(generateCombineMap(6), "1");
         assertNotNull(value);
         assertEquals("a1b1c1d1e1f", value);
     }
@@ -106,7 +117,7 @@ public class DefaultAtlasCombineStrategyTest {
     @Test
     public void testCombineValuesDelimiterLimit() {
         assertNotNull(combine);
-        String value = combine.combineValues(Arrays.asList("a", "b", "c", "d", "e", "f"), "1", 3);
+        String value = combine.combineValues(generateCombineMap(6), "1", 3);
         assertNotNull(value);
         assertEquals("a1b1c", value);
     }
@@ -117,7 +128,7 @@ public class DefaultAtlasCombineStrategyTest {
         combine.setDelimiter(null);
         assertNull(combine.getDelimiter());
         
-        String value = combine.combineValues(Arrays.asList("a", "b", "c", "d", "e", "f"));
+        String value = combine.combineValues(generateCombineMap(6));
         assertNotNull(value);
         assertEquals("a b c d e f", value);
     }
@@ -128,7 +139,7 @@ public class DefaultAtlasCombineStrategyTest {
         combine.setLimit(null);
         assertNull(combine.getLimit());
         
-        String value = combine.combineValues(Arrays.asList("a", "b", "c", "d", "e", "f"));
+        String value = combine.combineValues(generateCombineMap(6));
         assertNotNull(value);
         assertEquals("a b c d e f", value);
     }
@@ -144,7 +155,56 @@ public class DefaultAtlasCombineStrategyTest {
     @Test
     public void testCombineValuesEmptyValue() {
         assertNotNull(combine);
-        String value = combine.combineValues(new ArrayList<String>());
+        String value = combine.combineValues(new HashMap<Integer, String>());
         assertNull(value);
+    }
+    
+    @Test
+    public void testSortByKey() {
+        Map<Integer, String> cMap = DefaultAtlasCombineStrategy.sortByKey(generateCombineMap(4));
+        assertEquals("a", cMap.get(0));
+        assertEquals("b", cMap.get(1));
+        assertEquals("c", cMap.get(2));
+        assertEquals("d", cMap.get(3));
+    }
+
+    @Test
+    public void testSortByKeyOutOfOrder() {
+
+        Map<Integer, String> outOfOrder = new HashMap<Integer, String>();
+        outOfOrder.put(2, "c");
+        outOfOrder.put(0, "a");
+        outOfOrder.put(3, "d");
+        outOfOrder.put(1, "b");
+        
+        Map<Integer, String> cMap = DefaultAtlasCombineStrategy.sortByKey(outOfOrder);
+        int count = 0;
+        for(String str : cMap.values()) {
+            if(count == 0) { assertEquals("a", str); }
+            if(count == 1) { assertEquals("b", str); }
+            if(count == 2) { assertEquals("c", str); }
+            if(count == 3) { assertEquals("d", str); }
+            count++;
+        }
+    }
+    
+    @Test
+    public void testSortByKeyOutOfOrderGaps() {
+
+        Map<Integer, String> outOfOrder = new HashMap<Integer, String>();
+        outOfOrder.put(7, "c");
+        outOfOrder.put(3, "a");
+        outOfOrder.put(99, "d");
+        outOfOrder.put(5, "b");
+        
+        Map<Integer, String> cMap = DefaultAtlasCombineStrategy.sortByKey(outOfOrder);
+        int count = 0;
+        for(String str : cMap.values()) {
+            if(count == 0) { assertEquals("a", str); }
+            if(count == 1) { assertEquals("b", str); }
+            if(count == 2) { assertEquals("c", str); }
+            if(count == 3) { assertEquals("d", str); }
+            count++;
+        }
     }
 }

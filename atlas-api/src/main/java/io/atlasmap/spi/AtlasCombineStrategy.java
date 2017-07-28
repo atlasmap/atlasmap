@@ -15,7 +15,7 @@
  */
 package io.atlasmap.spi;
 
-import java.util.List;
+import java.util.Map;
 
 public interface AtlasCombineStrategy {
 
@@ -24,7 +24,7 @@ public interface AtlasCombineStrategy {
 	void setDelimiter(String delimiter);
 	Integer getLimit();
 	void setLimit(Integer limit);
-	String combineValues(List<String> values);
-	String combineValues(List<String> values, String delimiter);
-	String combineValues(List<String> values, String delimiter, Integer maxItems);
+	String combineValues(Map<Integer, String> values);
+	String combineValues(Map<Integer, String> values, String delimiter);
+	String combineValues(Map<Integer, String> values, String delimiter, Integer maxItems);
 }

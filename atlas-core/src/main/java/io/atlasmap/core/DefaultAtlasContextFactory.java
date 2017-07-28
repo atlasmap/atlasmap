@@ -22,6 +22,7 @@ import io.atlasmap.api.AtlasException;
 import io.atlasmap.api.AtlasFieldActionService;
 import io.atlasmap.api.AtlasValidationService;
 import io.atlasmap.mxbean.AtlasContextFactoryMXBean;
+import io.atlasmap.spi.AtlasCombineStrategy;
 import io.atlasmap.spi.AtlasModule;
 import io.atlasmap.spi.AtlasModuleDetail;
 import io.atlasmap.spi.AtlasModuleInfo;
@@ -60,6 +61,7 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
 	private AtlasMappingService atlasMappingService = null;
 	private DefaultAtlasConversionService atlasConversionService = null;
 	private DefaultAtlasFieldActionService atlasFieldActionService = null;
+	private AtlasCombineStrategy atlasCombineStrategy = new DefaultAtlasCombineStrategy();
 	private AtlasPropertyStrategy atlasPropertyStrategy = new DefaultAtlasPropertyStrategy();
 	private AtlasSeparateStrategy atlasSeparateStrategy = new DefaultAtlasSeparateStrategy();
 
@@ -419,6 +421,15 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
 	    return this.atlasFieldActionService;
 	}
 
+    @Override
+    public AtlasCombineStrategy getCombineStrategy() {
+        return atlasCombineStrategy;
+    }
+
+    public void setCombineStrategy(AtlasCombineStrategy atlasCombineStrategy) {
+        this.atlasCombineStrategy = atlasCombineStrategy;
+    }
+	
     @Override
 	public AtlasPropertyStrategy getPropertyStrategy() {
         return atlasPropertyStrategy;
