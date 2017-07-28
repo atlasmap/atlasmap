@@ -192,11 +192,11 @@ public class XmlValidationService implements AtlasValidationService {
     }
 
     private void validateSeparateMapping(Mapping fieldMapping, List<Validation> validations) {
-        XmlField inputField = (XmlField)fieldMapping.getInputField().get(0);
+        Field inputField = fieldMapping.getInputField().get(0);
         XmlField outField = null;
 
         // check that the input field is of type String else error
-        if (inputField != null && inputField.getFieldType().compareTo(FieldType.STRING) != 0) {
+        if (inputField != null && inputField.getFieldType() != null && inputField.getFieldType().compareTo(FieldType.STRING) != 0) {
             Validation validation = new Validation();
             validation.setField("Input.Field");
             validation.setMessage("Input field must be of type " + FieldType.STRING + " for a Separate Mapping");
@@ -205,7 +205,9 @@ public class XmlValidationService implements AtlasValidationService {
             validations.add(validation);
         }
 
-        validateXmlField(inputField, "input", validations);
+        if(inputField instanceof XmlField) {
+            validateXmlField((XmlField)inputField, "input", validations);
+        }
         //TODO call XmlModule.isSupported() on field  (false = ERROR)
         // output
         for (Field mappedField : fieldMapping.getOutputField()) {

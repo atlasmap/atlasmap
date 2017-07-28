@@ -20,16 +20,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-
 import io.atlasmap.api.AtlasConversionException;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.api.AtlasSession;
@@ -44,7 +41,6 @@ import io.atlasmap.json.v2.AtlasJsonModelFactory;
 import io.atlasmap.json.v2.JsonField;
 import io.atlasmap.spi.AtlasModuleDetail;
 import io.atlasmap.spi.AtlasModuleMode;
-import io.atlasmap.v2.Audit;
 import io.atlasmap.v2.AuditStatus;
 import io.atlasmap.v2.BaseMapping;
 import io.atlasmap.v2.ConstantField;
@@ -99,22 +95,14 @@ public class JsonModule extends BaseAtlasModule {
     public void processInputMapping(AtlasSession session, BaseMapping baseMapping) throws AtlasException {
         for (Mapping mapping : this.generateInputMappings(session, baseMapping)) {
             if(mapping.getInputField() == null || mapping.getInputField().isEmpty() || mapping.getInputField().size() != 1) {
-                Audit audit = new Audit();
-                audit.setStatus(AuditStatus.WARN);
-                audit.setMessage(String.format("Mapping does not contain exactly one input field alias=%s desc=%s", mapping.getAlias(), mapping.getDescription()));
-                session.getAudits().getAudit().add(audit);
+                addAudit(session, null, String.format("Mapping does not contain exactly one input field alias=%s desc=%s", mapping.getAlias(), mapping.getDescription()), null, AuditStatus.WARN, null);
                 return;
             }
             
             Field field = mapping.getInputField().get(0);
             
             if(!isSupportedField(field)) {
-                Audit audit = new Audit();
-                audit.setDocId(field.getDocId());
-                audit.setPath(field.getPath());
-                audit.setStatus(AuditStatus.ERROR);
-                audit.setMessage(String.format("Unsupported input field type=%s", field.getClass().getName()));
-                session.getAudits().getAudit().add(audit);
+                addAudit(session, field.getDocId(), String.format("Unsupported input field type=%s", field.getClass().getName()), field.getPath(), AuditStatus.ERROR, null);
                 return;
             }
             
@@ -136,12 +124,7 @@ public class JsonModule extends BaseAtlasModule {
             }
             
             if(session.getInput() == null || !(session.getInput() instanceof String)) {
-                Audit audit = new Audit();
-                audit.setDocId(field.getDocId());
-                audit.setPath(field.getPath());
-                audit.setStatus(AuditStatus.ERROR);
-                audit.setMessage(String.format("Unsupported input object type=%s", field.getClass().getName()));
-                session.getAudits().getAudit().add(audit);
+                addAudit(session, field.getDocId(), String.format("Unsupported input object type=%s", field.getClass().getName()), field.getPath(), AuditStatus.ERROR, null);
                 return;
             }
             

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AtlasMapping xmlns="http://atlasmap.io/v2" xmlns:ns2="http://atlasmap.io/java/v2" xmlns:ns3="http://atlasmap.io/xml/v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="JavaXmlSeparateMapping" >
+  <DataSource dataSourceType="Source" uri="atlas:java?className=io.atlasmap.java.test.SourceContact"/>
+  <DataSource dataSourceType="Target" uri="atlas:xml"/>
+  <Mappings>
+    <Mapping xsi:type="Mapping" mappingType="Separate">
+      <InputField xsi:type="ns2:JavaField" path="/firstName"/>
+      <OutputField xsi:type="ns3:XmlField" path="/Contact/@firstName" index="0"/>
+      <OutputField xsi:type="ns3:XmlField" path="/Contact/@lastName" index="1"/>
+    </Mapping>
+    <Mapping xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="ns2:JavaField" path="/phoneNumber"/>
+      <OutputField xsi:type="ns3:XmlField" path="/Contact/@phoneNumber"/>
+    </Mapping>
+    <Mapping xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="ns2:JavaField" path="/zipCode"/>
+      <OutputField xsi:type="ns3:XmlField" path="/Contact/@zipCode"/>
+    </Mapping>
+  </Mappings>
+</AtlasMapping>
