@@ -217,7 +217,12 @@ public class JsonModule extends BaseAtlasModule {
                     }
                 }
             
-                outputField.setValue(outputValue);        
+                outputField.setValue(outputValue);
+                
+                if(outputField.getActions() != null && outputField.getActions().getActions() != null && !outputField.getActions().getActions().isEmpty()) {
+                    processFieldActions(session.getAtlasContext().getContextFactory().getFieldActionService(), outputField);
+                }
+                
                 writer.write((JsonField)outputField);
                 break;
             case COMBINE:
@@ -226,7 +231,45 @@ public class JsonModule extends BaseAtlasModule {
                 combinedField.setFieldType(FieldType.STRING);
                 combinedField.setPath(outputField.getPath());
                 combinedField.setValue(outputField.getValue());
+                
+                if(combinedField.getActions() != null && combinedField.getActions().getActions() != null && !combinedField.getActions().getActions().isEmpty()) {
+                    processFieldActions(session.getAtlasContext().getContextFactory().getFieldActionService(), combinedField);
+                }
+                
                 writer.write(combinedField);
+                break;
+            case LOOKUP:
+                Field inputFieldlkp = mapping.getInputField().get(0);
+                if(inputFieldlkp.getValue() != null && inputFieldlkp.getValue().getClass().isAssignableFrom(String.class)) {
+                    processLookupField(session, mapping.getLookupTableName(), (String)inputFieldlkp.getValue(), outputField);
+                } else {
+                    processLookupField(session, mapping.getLookupTableName(), (String)getConversionService().convertType(inputFieldlkp.getValue(), inputFieldlkp.getFieldType(), FieldType.STRING), outputField);
+                }
+                
+                if(outputField.getActions() != null && outputField.getActions().getActions() != null && !outputField.getActions().getActions().isEmpty()) {
+                    processFieldActions(session.getAtlasContext().getContextFactory().getFieldActionService(), outputField);
+                }
+                
+                writer.write(outputField);
+                break;
+            case SEPARATE:
+                Field inputFieldsep = mapping.getInputField().get(0);
+                for(Field outputFieldsep : mapping.getOutputField()) {
+                    Field separateField = processSeparateField(session, mapping, inputFieldsep, outputFieldsep);
+                    if(separateField == null) {
+                        continue;
+                    }
+                    
+                    outputFieldsep.setValue(separateField.getValue());
+                    if(outputFieldsep.getFieldType() == null) {
+                        outputFieldsep.setFieldType(separateField.getFieldType());
+                    }
+                    
+                    if(outputFieldsep.getActions() != null && outputFieldsep.getActions().getActions() != null && !outputFieldsep.getActions().getActions().isEmpty()) {
+                        processFieldActions(session.getAtlasContext().getContextFactory().getFieldActionService(), outputFieldsep);
+                    }
+                    writer.write(outputFieldsep);
+                }
                 break;
             default: logger.error("Unsupported mappingType=%s detected", mapping.getMappingType()); return;
             }

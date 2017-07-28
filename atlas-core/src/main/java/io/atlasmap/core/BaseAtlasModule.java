@@ -311,6 +311,42 @@ public abstract class BaseAtlasModule implements AtlasModule {
         outputField.setValue(combinedValue);
     }
     
+    protected void processLookupField(AtlasSession session, String lookupTableName, String inputValue, Field outputField) throws AtlasException {
+        LookupTable table = null;
+        for (LookupTable t : session.getMapping().getLookupTables().getLookupTable()) {
+            if (t.getName().equals(lookupTableName)) {
+                table = t;
+                break;
+            }
+        }
+        if (table == null) {
+            throw new AtlasException("Could not find lookup table with name '" + lookupTableName + "' for outputField: " + outputField.getPath());
+        }                
+        
+        String lookupValue = null;
+        FieldType lookupType = null;
+        for (LookupEntry lkp : table.getLookupEntry()) {
+            if (lkp.getSourceValue().equals(inputValue)) {
+                lookupValue = lkp.getTargetValue();
+                lookupType = lkp.getTargetType();
+                break;
+            }
+        }
+        
+        Object outputValue = null;
+        if(lookupType == null || FieldType.STRING.equals(lookupType)) {
+            outputValue = lookupValue;
+        } else {
+            outputValue = getConversionService().convertType(lookupValue, FieldType.STRING, lookupType);
+        }
+        
+        if(outputField.getFieldType() != null && !outputField.getFieldType().equals(lookupType)) {
+            outputValue = getConversionService().convertType(outputValue, lookupType, outputField.getFieldType());
+        }
+        
+        outputField.setValue(outputValue);
+    }
+    
     protected void addAudit(AtlasSession session, String docId, String message, String path, AuditStatus status, String value) {
         Audit audit = new Audit();
         audit.setDocId(docId);
