@@ -31,7 +31,7 @@ import { DataMapperAppComponent } from './data.mapper.app.component';
 @Component({
     selector: 'data-mapper-example-host',
     template: `
-        <data-mapper #dataMapperComponent</data-mapper>
+        <data-mapper #dataMapperComponent></data-mapper>
     `,
     providers: [MappingManagementService, ErrorHandlerService, DocumentManagementService]
 })
