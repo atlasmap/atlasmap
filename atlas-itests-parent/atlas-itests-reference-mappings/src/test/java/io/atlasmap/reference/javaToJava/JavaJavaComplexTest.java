@@ -21,8 +21,8 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
+import java.util.LinkedList;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import io.atlasmap.api.AtlasContext;
@@ -116,6 +116,87 @@ public class JavaJavaComplexTest extends AtlasMappingBaseTest {
         }
 	}
 	
+	@Test 
+	public void testProcessCollectionListSimple() throws Exception {
+	    AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/javaToJava/atlasmapping-collection-list-simple.xml").toURI());
+        ((DefaultAtlasContext)context).setNewProcessFlow(true);
+        TargetTestClass input = new TargetTestClass();
+        input.setContactList(new LinkedList<>());
+        for (int i = 0; i < 5; i++) {
+            input.getContactList().add(new TargetContact());
+            input.getContactList().get(i).setFirstName("fname" + i);
+        }
+        AtlasSession session = context.createSession();
+        session.setInput(input, "io.atlasmap.java.test.TargetTestClass");
+        context.process(session);
+        
+        TargetTestClass object = (TargetTestClass) session.getOutput();
+        assertEquals(5, object.getContactList().size());
+        for (int i = 0; i < 5; i++) {
+            assertEquals(input.getContactList().get(i).getFirstName(), object.getContactList().get(i).getFirstName());
+        }	    
+	}
+	
+	@Test 
+    public void testProcessCollectionArraySimple() throws Exception {
+        AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/javaToJava/atlasmapping-collection-array-simple.xml").toURI());
+        ((DefaultAtlasContext)context).setNewProcessFlow(true);
+        TargetTestClass input = new TargetTestClass();
+        input.setContactList(new LinkedList<>());
+        for (int i = 0; i < 5; i++) {
+            input.getContactList().add(new TargetContact());
+            input.getContactList().get(i).setFirstName("fname" + i);
+        }
+        AtlasSession session = context.createSession();
+        session.setInput(input, "io.atlasmap.java.test.TargetTestClass");
+        context.process(session);
+        
+        TargetTestClass object = (TargetTestClass) session.getOutput();
+        assertEquals(5, object.getContactList().size());
+        for (int i = 0; i < 5; i++) {
+            assertEquals(input.getContactList().get(i).getFirstName(), object.getContactList().get(i).getFirstName());
+        }       
+    }
+	
+	@Test 
+    public void testProcessCollectionToNonCollection() throws Exception {
+        AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/javaToJava/atlasmapping-collection-to-noncollection.xml").toURI());
+        ((DefaultAtlasContext)context).setNewProcessFlow(true);
+        TargetTestClass input = new TargetTestClass();
+        input.setContactList(new LinkedList<>());
+        for (int i = 0; i < 5; i++) {
+            input.getContactList().add(new TargetContact());
+            input.getContactList().get(i).setFirstName("fname" + i);
+        }
+        AtlasSession session = context.createSession();
+        session.setInput(input, "io.atlasmap.java.test.TargetTestClass");
+        context.process(session);
+        
+        TargetTestClass object = (TargetTestClass) session.getOutput();
+        assertNull(object.getContactArray());
+        assertNull(object.getContactList());
+        assertEquals("fname4", object.getContact().getFirstName());
+    }
+	
+	@Test 
+    public void testProcessCollectionFromNonCollection() throws Exception {
+        AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/javaToJava/atlasmapping-collection-from-noncollection.xml").toURI());
+        ((DefaultAtlasContext)context).setNewProcessFlow(true);
+        TargetTestClass input = new TargetTestClass();
+        input.setContact(new TargetContact());
+        input.getContact().setFirstName("first name");
+        input.getContact().setLastName("last name");
+
+        AtlasSession session = context.createSession();
+        session.setInput(input, "io.atlasmap.java.test.TargetTestClass");
+        context.process(session);
+        
+        TargetTestClass object = (TargetTestClass) session.getOutput();
+        assertEquals(1, object.getContactList().size());
+        assertEquals("first name", object.getContactList().get(0).getFirstName());
+        assertEquals("last name", object.getContactList().get(0).getLastName());
+    }
+    	
 	@Test
     public void testProcessLookup() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/javaToJava/atlasmapping-lookup.xml").toURI());

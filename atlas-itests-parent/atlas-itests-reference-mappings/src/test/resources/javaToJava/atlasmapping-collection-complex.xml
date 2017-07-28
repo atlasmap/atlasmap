@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AtlasMapping xmlns="http://atlasmap.io/v2" xmlns:ns2="http://atlasmap.io/java/v2" xmlns:ns3="http://atlasmap.io/xml/v2" xmlns:ns4="http://atlasmap.io/json/v2" name="UI.782860">
+    <DataSource id="io.atlasmap.java.test.TargetTestClass" uri="atlas:java?className=io.atlasmap.java.test.TargetTestClass" dataSourceType="Source"/>
+    <DataSource id="io.atlasmap.java.test.TargetTestClass" uri="atlas:java?className=io.atlasmap.java.test.TargetTestClass" dataSourceType="Target"/>
+    <Mappings>
+        <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="Collection" mappingType="Collection">
+            <Mappings>
+                <Mapping xsi:type="Mapping" mappingType="Map">
+                    <InputField xsi:type="ns2:JavaField" name="firstName" docId="io.atlasmap.java.test.TargetTestClass" path="/contactList&lt;&gt;/firstName" fieldType="String"/>
+                    <OutputField xsi:type="ns2:JavaField" name="firstName" docId="io.atlasmap.java.test.TargetTestClass" path="/contactList&lt;&gt;/firstName" fieldType="String"/>
+                </Mapping>
+                <Mapping xsi:type="Mapping" mappingType="Map">
+                    <InputField xsi:type="ns2:JavaField" name="lastName" docId="io.atlasmap.java.test.TargetTestClass" path="/contactList&lt;&gt;/lastName" fieldType="String"/>
+                    <OutputField xsi:type="ns2:JavaField" name="lastName" docId="io.atlasmap.java.test.TargetTestClass" path="/contactList&lt;&gt;/lastName" fieldType="String"/>
+                </Mapping>
+            </Mappings>
+        </Mapping>
+        <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="Collection" mappingType="Collection">
+            <Mappings>
+                <Mapping xsi:type="Mapping" mappingType="Map">
+                    <InputField xsi:type="ns2:JavaField" name="phoneNumber" docId="io.atlasmap.java.test.TargetTestClass" path="/contactList&lt;&gt;/phoneNumber" fieldType="String"/>
+                    <OutputField xsi:type="ns2:JavaField" name="phoneNumber" docId="io.atlasmap.java.test.TargetTestClass" path="/contactList&lt;&gt;/phoneNumber" fieldType="String"/>
+                </Mapping>
+            </Mappings>
+        </Mapping>
+        <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="Collection" mappingType="Collection">
+            <Mappings>
+                <Mapping xsi:type="Mapping" mappingType="Map">
+                    <InputField xsi:type="ns2:JavaField" name="zipCode" docId="io.atlasmap.java.test.TargetTestClass" path="/contactList&lt;&gt;/zipCode" fieldType="String"/>
+                    <OutputField xsi:type="ns2:JavaField" name="zipCode" docId="io.atlasmap.java.test.TargetTestClass" path="/contact/zipCode" fieldType="String"/>
+                </Mapping>
+            </Mappings>
+        </Mapping>
+        <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="Collection" mappingType="Collection">
+            <Mappings>
+                <Mapping xsi:type="Mapping" mappingType="Map">
+                    <InputField xsi:type="ns2:JavaField" name="firstName" docId="io.atlasmap.java.test.TargetTestClass" path="/contactArray[]/firstName" fieldType="String"/>
+                    <OutputField xsi:type="ns2:JavaField" name="firstName" docId="io.atlasmap.java.test.TargetTestClass" path="/contactArray[]/firstName" fieldType="String"/>
+                </Mapping>
+                <Mapping xsi:type="Mapping" mappingType="Map">
+                    <InputField xsi:type="ns2:JavaField" name="lastName" docId="io.atlasmap.java.test.TargetTestClass" path="/contactArray[]/lastName" fieldType="String"/>
+                    <OutputField xsi:type="ns2:JavaField" name="lastName" docId="io.atlasmap.java.test.TargetTestClass" path="/contactArray[]/lastName" fieldType="String"/>
+                </Mapping>
+            </Mappings>
+        </Mapping>
+        <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="Collection" mappingType="Collection">
+            <Mappings>
+                <Mapping xsi:type="Mapping" mappingType="Map">
+                    <InputField xsi:type="ns2:JavaField" name="phoneNumber" docId="io.atlasmap.java.test.TargetTestClass" path="/contactArray[]/phoneNumber" fieldType="String"/>
+                    <OutputField xsi:type="ns2:JavaField" name="phoneNumber" docId="io.atlasmap.java.test.TargetTestClass" path="/contactArray[]/phoneNumber" fieldType="String"/>
+                </Mapping>
+            </Mappings>
+        </Mapping>
+        <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="Collection" mappingType="Collection">
+            <Mappings>
+                <Mapping xsi:type="Mapping" mappingType="Map">
+                    <InputField xsi:type="ns2:JavaField" name="firstName" docId="io.atlasmap.java.test.TargetTestClass" path="/contact/firstName" fieldType="String"/>
+                    <OutputField xsi:type="ns2:JavaField" name="firstName" docId="io.atlasmap.java.test.TargetTestClass" path="/contactArray[]/firstName" fieldType="String"/>
+                </Mapping>
+            </Mappings>
+        </Mapping>
+        <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="Collection" mappingType="Collection">
+            <Mappings>
+                <Mapping xsi:type="Mapping" mappingType="Map">
+                    <InputField xsi:type="ns2:JavaField" name="firstName" docId="io.atlasmap.java.test.TargetTestClass" path="/contact/firstName" fieldType="String"/>
+                    <OutputField xsi:type="ns2:JavaField" name="firstName" docId="io.atlasmap.java.test.TargetTestClass" path="/contactList&lt;&gt;/firstName" fieldType="String"/>
+                </Mapping>
+            </Mappings>
+        </Mapping>
+        <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="Collection" mappingType="Collection">
+            <Mappings>
+                <Mapping xsi:type="Mapping" mappingType="Map">
+                    <InputField xsi:type="ns2:JavaField" name="firstName" docId="io.atlasmap.java.test.TargetTestClass" path="/contactArray[]/firstName" fieldType="String"/>
+                    <OutputField xsi:type="ns2:JavaField" name="firstName" docId="io.atlasmap.java.test.TargetTestClass" path="/contact/firstName" fieldType="String"/>
+                </Mapping>
+            </Mappings>
+        </Mapping>
+        <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="Collection" mappingType="Collection">
+            <Mappings>
+                <Mapping xsi:type="Mapping" mappingType="Map">
+                    <InputField xsi:type="ns2:JavaField" name="firstName" docId="io.atlasmap.java.test.TargetTestClass" path="/contactList&lt;&gt;/firstName" fieldType="String"/>
+                    <OutputField xsi:type="ns2:JavaField" name="firstName" docId="io.atlasmap.java.test.TargetTestClass" path="/contact/firstName" fieldType="String"/>
+                </Mapping>
+            </Mappings>
+        </Mapping>
+    </Mappings>
+    <LookupTables/>
+    <Properties/>
+</AtlasMapping>
