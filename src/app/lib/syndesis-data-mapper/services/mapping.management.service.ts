@@ -32,6 +32,7 @@ import { TransitionModel, TransitionMode, TransitionDelimiter } from '../models/
 import { FieldActionConfig, FieldActionArgument } from '../models/transition.model';
 import { MappingDefinition } from '../models/mapping.definition.model';
 import { LookupTable } from '../models/lookup.table.model';
+import { ErrorInfo, ErrorLevel } from '../models/error.model';
 
 import { MappingSerializer } from './mapping.serializer';
 import { ErrorHandlerService } from './error.handler.service';
@@ -316,13 +317,17 @@ export class MappingManagementService {
             .then((res: Response) => {
                 DataMapperUtil.debugLogJSON(res, "Validation Service Response", this.cfg.initCfg.debugValidationServiceCalls, url);
                 var mapping: MappingModel = this.cfg.mappings.activeMapping;
-                let body: any = res.json();
-                mapping.clearValidationErrors();
+                let body: any = res.json();                 
+                var errors: ErrorInfo[] = [];
                 if (body && body.Validations && body.Validations.validation) {
                     for (let error of body.Validations.validation) {
-                        mapping.addValidationError(error.message);
+                        var e: ErrorInfo = new ErrorInfo();
+                        e.message = error.message;
+                        e.level = ErrorLevel.VALIDATION_ERROR;
+                        errors.push(e);
                     }
                 }
+                mapping.validationErrors = errors;
                 console.log("Finished fetching and parsing validation errors in " + (Date.now() - startTime) + "ms.");
             })
             .catch((error: any) => {
