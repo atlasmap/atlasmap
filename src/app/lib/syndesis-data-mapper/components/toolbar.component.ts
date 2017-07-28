@@ -31,7 +31,7 @@ template: `
         <div class="dm-toolbar-icons" style="float:right;">
             <i class="fa fa-plus link" (click)="toolbarButtonClicked('addMapping', $event);"></i>
             <i [attr.class]="getCSSClass('editTemplate')"  *ngIf="targetSupportsTemplate()"
-                (click)="toolbarButtonClicked('editTemplate');"></i>
+                (click)="toolbarButtonClicked('editTemplate', $event);"></i>
             <i [attr.class]="getCSSClass('showMappingTable')" (click)="toolbarButtonClicked('showMappingTable', $event);"></i>
             <i *ngIf="cfg.getFirstXmlDoc(false)" [attr.class]="getCSSClass('showNamespaceTable')"
                 (click)="toolbarButtonClicked('showNamespaceTable', $event);"></i>
