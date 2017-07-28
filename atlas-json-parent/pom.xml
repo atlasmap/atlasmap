@@ -41,7 +41,6 @@
       <modules>
         <module>atlas-json-model</module>
         <module>atlas-json-core</module>
-        <module>atlas-json-inspect</module>
         <module>atlas-json-module</module>
       </modules>
     </profile>
@@ -54,7 +53,6 @@
         <module>atlas-json-model</module>
         <module>atlas-json-core</module>
         <module>atlas-json-module</module>
-        <module>atlas-json-inspect</module>
         <module>atlas-json-service</module>
         <module>atlas-json-test-model</module>
       </modules>

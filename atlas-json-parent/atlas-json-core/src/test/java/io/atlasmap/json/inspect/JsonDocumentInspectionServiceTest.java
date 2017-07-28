@@ -1,5 +1,7 @@
-package io.atlasmap.json.inspect.v2;
+package io.atlasmap.json.inspect;
 
+import io.atlasmap.json.inspect.JsonDocumentInspectionService;
+import io.atlasmap.json.inspect.JsonInspectionException;
 import io.atlasmap.json.v2.JsonComplexType;
 import io.atlasmap.json.v2.JsonDocument;
 import io.atlasmap.json.v2.JsonField;
@@ -43,7 +45,7 @@ public class JsonDocumentInspectionServiceTest {
 
     @Test(expected = JsonInspectionException.class)
     public void inspectJsonDocument_UnparseableHighlyComplexNestedObject() throws Exception {
-        final String instance = new String(Files.readAllBytes(Paths.get("src/test/resources/unparseable-highly-complex-nested-object.json")));
+        final String instance = new String(Files.readAllBytes(Paths.get("src/test/resources/inspect/unparseable-highly-complex-nested-object.json")));
         JsonDocument document = inspectionService.inspectJsonDocument(instance);
     }
 
@@ -139,7 +141,7 @@ public class JsonDocumentInspectionServiceTest {
 
     @Test
     public void inspectJsonDocument_ArrayHighlyNestedObjects() throws Exception {
-        final String instance = new String(Files.readAllBytes(Paths.get("src/test/resources/array-highly-nested-objects.json")));
+        final String instance = new String(Files.readAllBytes(Paths.get("src/test/resources/inspect/array-highly-nested-objects.json")));
         JsonDocument document = inspectionService.inspectJsonDocument(instance);
         Assert.assertNotNull(document);
         Assert.assertThat(document.getFields().getField().size(), Is.is(1));
@@ -152,7 +154,7 @@ public class JsonDocumentInspectionServiceTest {
 
     @Test
     public void inspectJsonDocument_EscapedCharsInKeys() throws Exception {
-        final String instance = new String(Files.readAllBytes(Paths.get("src/test/resources/keys-with-escaped-characters.json")));
+        final String instance = new String(Files.readAllBytes(Paths.get("src/test/resources/inspect/keys-with-escaped-characters.json")));
         JsonDocument document = inspectionService.inspectJsonDocument(instance);
         Assert.assertNotNull(document);
         Assert.assertThat(document.getFields().getField().size(), Is.is(7));
@@ -207,7 +209,7 @@ public class JsonDocumentInspectionServiceTest {
 
     @Test
     public void inspectJsonDocument_EscapedCharsInValue() throws Exception {
-        final String instance = new String(Files.readAllBytes(Paths.get("src/test/resources/value-with-escaped-characters.json")));
+        final String instance = new String(Files.readAllBytes(Paths.get("src/test/resources/inspect/value-with-escaped-characters.json")));
         JsonDocument document = inspectionService.inspectJsonDocument(instance);
         Assert.assertNotNull(document);
         Assert.assertThat(document.getFields().getField().size(), Is.is(5));
@@ -251,7 +253,7 @@ public class JsonDocumentInspectionServiceTest {
     // FlatPrimitive
     @Test
     public void inspectFlatPrimitive_NoRoot() throws Exception {
-        final String instance = new String(Files.readAllBytes(Paths.get("src/test/resources/flatprimitive-base-unrooted.json")));
+        final String instance = new String(Files.readAllBytes(Paths.get("src/test/resources/inspect/flatprimitive-base-unrooted.json")));
         JsonDocument document = inspectionService.inspectJsonDocument(instance);
         Assert.assertNotNull(document);
         Assert.assertThat(document.getFields().getField().size(), Is.is(7));
@@ -309,7 +311,7 @@ public class JsonDocumentInspectionServiceTest {
 
     @Test
     public void inspectFlatPrimitive_WithRoot() throws Exception {
-        final String instance = new String(Files.readAllBytes(Paths.get("src/test/resources/flatprimitive-base-rooted.json")));
+        final String instance = new String(Files.readAllBytes(Paths.get("src/test/resources/inspect/flatprimitive-base-rooted.json")));
         JsonDocument document = inspectionService.inspectJsonDocument(instance);
         Assert.assertNotNull(document);
         Assert.assertThat(document.getFields().getField().size(), Is.is(1));
@@ -371,7 +373,7 @@ public class JsonDocumentInspectionServiceTest {
 
     @Test
     public void inspectComplexObject_NoRoot() throws Exception {
-        final String instance = new String(Files.readAllBytes(Paths.get("src/test/resources/complex-object-unrooted.json")));
+        final String instance = new String(Files.readAllBytes(Paths.get("src/test/resources/inspect/complex-object-unrooted.json")));
         JsonDocument document = inspectionService.inspectJsonDocument(instance);
         Assert.assertNotNull(document);
         Assert.assertThat(document.getFields().getField().size(), Is.is(3));
@@ -467,7 +469,7 @@ public class JsonDocumentInspectionServiceTest {
 
     @Test
     public void inspectComplexObject_WithRoot() throws Exception {
-        final String instance = new String(Files.readAllBytes(Paths.get("src/test/resources/complex-object-rooted.json")));
+        final String instance = new String(Files.readAllBytes(Paths.get("src/test/resources/inspect/complex-object-rooted.json")));
         JsonDocument document = inspectionService.inspectJsonDocument(instance);
         Assert.assertNotNull(document);
         Assert.assertThat(document.getFields().getField().size(), Is.is(1));
@@ -566,7 +568,7 @@ public class JsonDocumentInspectionServiceTest {
 
     @Test
     public void inspectRepeatingComplexObject_WithRoot() throws Exception {
-        final String instance = new String(Files.readAllBytes(Paths.get("src/test/resources/complex-repeated-rooted.json")));
+        final String instance = new String(Files.readAllBytes(Paths.get("src/test/resources/inspect/complex-repeated-rooted.json")));
         JsonDocument document = inspectionService.inspectJsonDocument(instance);
         Assert.assertNotNull(document);
         Assert.assertThat(document.getFields().getField().size(), Is.is(1));
@@ -773,7 +775,7 @@ public class JsonDocumentInspectionServiceTest {
 
     @Test
     public void inspectISO8601Dates_NoRoot() throws Exception {
-        final String instance = new String(Files.readAllBytes(Paths.get("src/test/resources/iso8601dates-unrooted.json")));
+        final String instance = new String(Files.readAllBytes(Paths.get("src/test/resources/inspect/iso8601dates-unrooted.json")));
         JsonDocument document = inspectionService.inspectJsonDocument(instance);
         Assert.assertNotNull(document);
         Assert.assertThat(document.getFields().getField().size(), Is.is(7));
@@ -1000,7 +1002,7 @@ public class JsonDocumentInspectionServiceTest {
 
     @Test
     public void inspectJsonDocument_HighlyNestedObject() throws Exception {
-        final String instance = new String(Files.readAllBytes(Paths.get("src/test/resources/highly-nested-object.json")));
+        final String instance = new String(Files.readAllBytes(Paths.get("src/test/resources/inspect/highly-nested-object.json")));
         JsonDocument document = inspectionService.inspectJsonDocument(instance);
         Assert.assertNotNull(document);
         Assert.assertThat(document.getFields().getField().size(), Is.is(6));
@@ -1167,7 +1169,7 @@ public class JsonDocumentInspectionServiceTest {
 
     @Test
     public void inspectJsonDocument_HighlyComplexNestedObject() throws Exception {
-        final String instance = new String(Files.readAllBytes(Paths.get("src/test/resources/highly-complex-nested-object.json")));
+        final String instance = new String(Files.readAllBytes(Paths.get("src/test/resources/inspect/highly-complex-nested-object.json")));
         JsonDocument document = inspectionService.inspectJsonDocument(instance);
         Assert.assertNotNull(document);
         Assert.assertThat(document.getFields().getField().size(), Is.is(1));

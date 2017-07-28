@@ -15,22 +15,17 @@
  */
 package io.atlasmap.java.module;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import io.atlasmap.api.AtlasContextFactory;
 import io.atlasmap.api.AtlasConversionException;
-import io.atlasmap.api.AtlasConversionService;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.api.AtlasSession;
-import io.atlasmap.api.AtlasUnsupportedException;
 import io.atlasmap.api.AtlasValidationException;
 import io.atlasmap.core.AtlasModuleSupport;
 import io.atlasmap.core.AtlasUtil;
@@ -45,28 +40,27 @@ import io.atlasmap.java.inspect.JdkPackages;
 import io.atlasmap.java.inspect.StringUtil;
 import io.atlasmap.java.v2.AtlasJavaModelFactory;
 import io.atlasmap.java.v2.JavaClass;
-import io.atlasmap.java.v2.JavaCollection;
 import io.atlasmap.java.v2.JavaEnumField;
 import io.atlasmap.java.v2.JavaField;
 import io.atlasmap.spi.AtlasModuleDetail;
-import io.atlasmap.spi.AtlasModuleMode;
 import io.atlasmap.v2.AtlasMapping;
-import io.atlasmap.v2.AtlasModelFactory;
-import io.atlasmap.v2.Audit;
 import io.atlasmap.v2.AuditStatus;
 import io.atlasmap.v2.BaseMapping;
-import io.atlasmap.v2.Collection;
 import io.atlasmap.v2.ConstantField;
 import io.atlasmap.v2.DataSource;
 import io.atlasmap.v2.DataSourceType;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldType;
 import io.atlasmap.v2.Mapping;
-import io.atlasmap.v2.MappingType;
-import io.atlasmap.v2.Mappings;
 import io.atlasmap.v2.PropertyField;
 import io.atlasmap.v2.SimpleField;
 import io.atlasmap.v2.Validation;
+
+// pending processOutputCollection removal
+// import io.atlasmap.java.v2.JavaCollection;
+// import io.atlasmap.v2.Audit;
+// import io.atlasmap.v2.Collection;
+// import io.atlasmap.v2.MappingType;
 
 @AtlasModuleDetail(name = "JavaModule", uri = "atlas:java", modes = { "SOURCE", "TARGET" }, dataFormats = { "java" }, configPackages = { "io.atlasmap.java.v2" })
 public class JavaModule extends BaseAtlasModule {
@@ -343,6 +337,7 @@ public class JavaModule extends BaseAtlasModule {
         }
     }
     
+    /*
     private void processOutputCollection(AtlasSession session, Collection collection) throws AtlasException {        
         if(collection == null || collection.getMappings() == null || collection.getMappings().getMapping() == null || collection.getMappings().getMapping().isEmpty()) {
             if(logger.isDebugEnabled()) {
@@ -376,6 +371,7 @@ public class JavaModule extends BaseAtlasModule {
             logger.debug("processOutputCollectionMapping completed");
         }        
     }
+    */
         
     @Override
     public void processPostOutputExecution(AtlasSession session) throws AtlasException {

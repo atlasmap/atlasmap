@@ -1,4 +1,4 @@
-package io.atlasmap.json.inspect.v2;
+package io.atlasmap.json.inspect;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
