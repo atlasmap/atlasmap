@@ -33,9 +33,8 @@
   <modules>
     <module>atlas-xml-model</module>
     <module>atlas-xml-test-model</module>
-    <module>atlas-xml-utils</module>
+    <module>atlas-xml-core</module>
     <module>atlas-xml-module</module>
-    <module>atlas-xml-inspect</module>
     <module>atlas-xml-service</module>
   </modules>
 </project>
