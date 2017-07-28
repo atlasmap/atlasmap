@@ -127,6 +127,9 @@ export class DocumentDefinitionComponent {
 
     private toggleFieldVisibility(docDef: DocumentDefinition): void {
         docDef.showFields = !docDef.showFields;
+        setTimeout(() => {
+            this.lineMachine.redrawLinesForMappings();
+        }, 10);
     }
 
     private getFieldCount(): number {
