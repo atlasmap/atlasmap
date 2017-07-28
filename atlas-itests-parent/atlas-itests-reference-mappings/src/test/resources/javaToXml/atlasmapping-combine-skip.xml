@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AtlasMapping xmlns="http://atlasmap.io/v2" xmlns:ns2="http://atlasmap.io/java/v2" xmlns:ns3="http://atlasmap.io/xml/v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="JavaXmlCombineMapping" >
+  <DataSource dataSourceType="Source" uri="atlas:java?className=io.atlasmap.java.test.SourceContact"/>
+  <DataSource dataSourceType="Target" uri="atlas:xml"/>
+  <Mappings>
+    <Mapping xsi:type="Mapping" mappingType="Combine">
+      <InputField xsi:type="ns2:JavaField" path="/firstName" index="0"/>
+      <InputField xsi:type="ns2:JavaField" path="/lastName" index="1"/>
+      <InputField xsi:type="ns2:JavaField" path="/phoneNumber" index="2"/>
+      <InputField xsi:type="ns2:JavaField" path="/zipCode" index="3"/>
+      <OutputField xsi:type="ns3:XmlField" path="/Contact/@firstName" />
+    </Mapping>
+  </Mappings>
+</AtlasMapping>

@@ -39,6 +39,7 @@ import org.w3c.dom.NodeList;
 
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.core.PathUtil;
+import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldType;
 import io.atlasmap.xml.v2.XmlField;
 
@@ -70,17 +71,14 @@ public class DocumentXmlFieldWriter extends XmlFieldTransformer {
     	}
     }
 
-    public void write(XmlField field) throws AtlasException {
+    public void write(Field field) throws AtlasException {
         if (field == null) {
             throw new AtlasException(new IllegalArgumentException("Argument 'field' cannot be null"));
         }
         
         if (logger.isDebugEnabled()) {    		
-    		logger.debug("Now processing field: " + field.getName());
-    		logger.debug("Field type: " + field.getFieldType());
-    		logger.debug("Field path: " + field.getPath());
-    		logger.debug("Field value: " + field.getValue());    		
-    	}
+    		    logger.debug("Now processing field p=%s t=%s v=%s", field.getPath(), field.getFieldType(), field.getValue());
+        }
         
         PathUtil path = new PathUtil(field.getPath());
     	String lastSegment = path.getLastSegment();
@@ -147,7 +145,7 @@ public class DocumentXmlFieldWriter extends XmlFieldTransformer {
 		}
     }
     
-    public void writeValue(Element parentNode, String segment, XmlField field) throws AtlasException {
+    public void writeValue(Element parentNode, String segment, Field field) throws AtlasException {
     	if (logger.isDebugEnabled()) {
     		logger.debug("Writing field value in parent node '" + segment + "', parentNode: " + writeDocumentToString(true, parentNode));
     	}    	    	
@@ -301,7 +299,7 @@ public class DocumentXmlFieldWriter extends XmlFieldTransformer {
     	return children;
     }
     
-    public String convertValue(XmlField field) throws AtlasException {
+    public String convertValue(Field field) throws AtlasException {
     	FieldType type = field.getFieldType();
     	Object originalValue = field.getValue();
     	String value = originalValue != null ? String.valueOf(originalValue) : null;            	
