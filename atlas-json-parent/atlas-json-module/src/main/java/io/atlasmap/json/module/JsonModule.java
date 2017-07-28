@@ -17,6 +17,7 @@ package io.atlasmap.json.module;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -245,7 +246,7 @@ public class JsonModule extends BaseAtlasModule {
     
     @Override
     public List<AtlasModuleMode> listSupportedModes() {
-        return null;
+        return Arrays.asList(AtlasModuleMode.SOURCE, AtlasModuleMode.TARGET);
     }    
 
     @Override

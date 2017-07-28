@@ -15,7 +15,11 @@
  */
 package io.atlasmap.json.v2;
 
+import io.atlasmap.v2.AtlasModelFactory;
+import io.atlasmap.v2.CollectionType;
 import io.atlasmap.v2.Field;
+import io.atlasmap.v2.FieldStatus;
+import io.atlasmap.v2.FieldType;
 import io.atlasmap.v2.Fields;
 
 public class AtlasJsonModelFactory {
@@ -46,17 +50,16 @@ public class AtlasJsonModelFactory {
         JsonField that = (JsonField)field;
         
         //generic from Field
-        clone.setActions(that.getActions());
-        clone.setArrayDimensions(that.getArrayDimensions());
-        clone.setArraySize(that.getArraySize());
-        clone.setCollectionType(that.getCollectionType());
-        clone.setDocId(that.getDocId());
-        clone.setFieldType(that.getFieldType());
-        clone.setIndex(that.getIndex());        
-        clone.setPath(that.getPath());
-        clone.setRequired(that.isRequired());
-        clone.setStatus(that.getStatus());
-        clone.setValue(that.getValue());       
+        if(field.getActions() != null) { clone.setActions(AtlasModelFactory.cloneFieldActions(field.getActions())); }
+        if(field.getArrayDimensions() != null) { clone.setArrayDimensions(Integer.valueOf(field.getArrayDimensions())); }
+        if(field.getArraySize() != null) { clone.setArraySize(Integer.valueOf(field.getArraySize())); }
+        if(field.getCollectionType() != null) { clone.setCollectionType(CollectionType.fromValue(field.getCollectionType().value())); }
+        if(field.getDocId() != null) { clone.setDocId(new String(field.getDocId())); }
+        if(field.getFieldType() != null) { clone.setFieldType(FieldType.fromValue(field.getFieldType().value())); }
+        if(field.getIndex() != null) { clone.setIndex(Integer.valueOf(field.getIndex())); }
+        if(field.getPath() != null) { clone.setPath(new String(field.getPath())); }
+        if(field.isRequired() != null) { clone.setRequired(Boolean.valueOf(field.isRequired())); }
+        if(field.getStatus() != null) { clone.setStatus(FieldStatus.fromValue(field.getStatus().value())); }  
                 
         //json specific
         clone.setName(that.getName());
