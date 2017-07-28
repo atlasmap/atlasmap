@@ -9,13 +9,11 @@ import org.junit.Test;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
-
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 
-/**
- */
 public class DocumentJsonFieldReaderTest {
 
     private static DocumentJsonFieldReader reader = new DocumentJsonFieldReader();
@@ -283,6 +281,23 @@ public class DocumentJsonFieldReaderTest {
         assertNotNull(field.getValue());
         assertThat(field.getValue(), Is.is("Maple"));
         resetField(field);
+    }
+    
+    @Test
+    public void testCollectionCount_HighlyNested() throws Exception {
+        final String document = new String(Files.readAllBytes(Paths.get("src/test/resources/highly-nested-object.json")));
+        JsonField field = AtlasJsonModelFactory.createJsonField();
+        Integer count = reader.getCollectionCount(document, field, "batter");
+        assertNotNull(count);
+        assertEquals(Integer.valueOf(4), count);
+    }
+    
+    @Test
+    public void testCollectionCount_HighlyNestedSegmentDoesNotExist() throws Exception {
+        final String document = new String(Files.readAllBytes(Paths.get("src/test/resources/highly-nested-object.json")));
+        JsonField field = AtlasJsonModelFactory.createJsonField();
+        Integer count = reader.getCollectionCount(document, field, "battery");
+        assertNull(count);
     }
 
     @Test
