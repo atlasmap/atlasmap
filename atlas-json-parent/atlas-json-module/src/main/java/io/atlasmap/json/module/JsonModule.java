@@ -15,18 +15,37 @@
  */
 package io.atlasmap.json.module;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
 import io.atlasmap.api.AtlasConversionException;
-import io.atlasmap.api.AtlasConversionService;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.api.AtlasSession;
 import io.atlasmap.api.AtlasValidationException;
 import io.atlasmap.core.AtlasUtil;
 import io.atlasmap.core.BaseAtlasModule;
+import io.atlasmap.core.PathUtil;
+import io.atlasmap.core.PathUtil.SegmentContext;
+import io.atlasmap.json.core.DocumentJsonFieldReader;
+import io.atlasmap.json.core.DocumentJsonFieldWriter;
+import io.atlasmap.json.v2.AtlasJsonModelFactory;
+import io.atlasmap.json.v2.JsonField;
 import io.atlasmap.spi.AtlasModuleDetail;
 import io.atlasmap.spi.AtlasModuleMode;
 import io.atlasmap.v2.Audit;
 import io.atlasmap.v2.AuditStatus;
-import io.atlasmap.v2.Collection;
+import io.atlasmap.v2.BaseMapping;
 import io.atlasmap.v2.ConstantField;
 import io.atlasmap.v2.DataSource;
 import io.atlasmap.v2.DataSourceType;
@@ -36,14 +55,6 @@ import io.atlasmap.v2.Mapping;
 import io.atlasmap.v2.PropertyField;
 import io.atlasmap.v2.Validation;
 import io.atlasmap.v2.Validations;
-import io.atlasmap.json.core.DocumentJsonFieldReader;
-import io.atlasmap.json.core.DocumentJsonFieldWriter;
-import io.atlasmap.json.v2.JsonField;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @AtlasModuleDetail(name = "JsonModule", uri = "atlas:json", modes = { "SOURCE", "TARGET" }, dataFormats = { "json" }, configPackages = { "io.atlasmap.json.v2" })
 public class JsonModule extends BaseAtlasModule {
@@ -83,128 +94,119 @@ public class JsonModule extends BaseAtlasModule {
     }
     
     @Override
-    public void processInputMapping(AtlasSession session, Mapping mapping) throws AtlasException {
-        if(mapping.getInputField() == null || mapping.getInputField().isEmpty() || mapping.getInputField().size() != 1) {
-            Audit audit = new Audit();
-            audit.setStatus(AuditStatus.WARN);
-            audit.setMessage(String.format("Mapping does not contain exactly one input field alias=%s desc=%s", mapping.getAlias(), mapping.getDescription()));
-            session.getAudits().getAudit().add(audit);
-            return;
-        }
-        
-        Field field = mapping.getInputField().get(0);
-        
-        if(!isSupportedField(field)) {
-            Audit audit = new Audit();
-            audit.setDocId(field.getDocId());
-            audit.setPath(field.getPath());
-            audit.setStatus(AuditStatus.ERROR);
-            audit.setMessage(String.format("Unsupported input field type=%s", field.getClass().getName()));
-            session.getAudits().getAudit().add(audit);
-            return;
-        }
-        
-        if(field instanceof PropertyField) {
-            processPropertyField(session, mapping, session.getAtlasContext().getContextFactory().getPropertyStrategy());
-            if(logger.isDebugEnabled()) {
-                logger.debug("Processed input propertyField sPath=" + field.getPath() + " sV=" + field.getValue() + " sT=" + field.getFieldType() + " docId: " + field.getDocId());
-            }
-            return;
-        }
-        
-        JsonField inputField = (JsonField)field;
-        
-        Object sourceObject = null;
-        if(field.getDocId() != null) {
-            sourceObject = session.getInput(field.getDocId());
-        } else {
-            sourceObject = session.getInput();
-        }
-        
-        if(session.getInput() == null || !(session.getInput() instanceof String)) {
-            Audit audit = new Audit();
-            audit.setDocId(field.getDocId());
-            audit.setPath(field.getPath());
-            audit.setStatus(AuditStatus.ERROR);
-            audit.setMessage(String.format("Unsupported input object type=%s", field.getClass().getName()));
-            session.getAudits().getAudit().add(audit);
-            return;
-        }
-        
-        String document = (String)sourceObject;
-                
-        Map<String,String> sourceUriParams = AtlasUtil.getUriParameters(session.getMapping().getDataSource().get(0).getUri());
-                          
-        DocumentJsonFieldReader djfr = new DocumentJsonFieldReader();
-        djfr.read(document, inputField);
-
-        // NOTE: This shouldn't happen
-        if(inputField.getFieldType() == null) {
-            logger.warn(String.format("FieldType detection was unsuccessful for p=%s falling back to type UNSUPPORTED", inputField.getPath()));
-            inputField.setFieldType(FieldType.UNSUPPORTED);
-        }
-        
-        if(logger.isDebugEnabled()) {
-            logger.debug("Processed input field sPath=" + field.getPath() + " sV=" + field.getValue() + " sT=" + field.getFieldType() + " docId: " + field.getDocId());
-        }    
-    }
-    
-    @Override
-    public void processInputCollection(AtlasSession session, Collection mapping) throws AtlasException {
-       
-    }
-    
-    @Override
-    public void processOutputMapping(AtlasSession session, Mapping mapping) throws AtlasException {        
-        switch(mapping.getMappingType()) {
-        case MAP: processMapOutputMapping(session, mapping); break;
-        case COMBINE: break;
-        case SEPARATE: break;
-        default: logger.warn(String.format("Unsupported mapping type=%s", mapping.getMappingType())); return;
-        }  
-    }
-    
-    protected void processMapOutputMapping(AtlasSession session, Mapping mapping) throws AtlasException {
-        Field inField = mapping.getInputField().get(0);
-        Field outField = mapping.getOutputField().get(0);
-        if(!(outField instanceof JsonField)) {
-            logger.error(String.format("Unsupported field type %s", outField.getClass().getName()));
-            return;
-        }
-        
-        if(inField.getValue() == null) {
-            return;
-        }
-        
-        JsonField outputField = (JsonField)outField;
-        Object outputValue = null;
-        
-        if(outputField.getFieldType() == null) {
-            outputField.setFieldType(getConversionService().fieldTypeFromClass(inField.getValue().getClass()));
-        }
-        
-        if(inField.getFieldType() != null && inField.getFieldType().equals(outputField.getFieldType())) {
-            outputValue = inField.getValue();
-        } else {
-            try {
-                outputValue = getConversionService().convertType(inField.getValue(), inField.getFieldType(), outputField.getFieldType());
-            } catch (AtlasConversionException e) {
-                logger.error(String.format("Unable to auto-convert for iT=%s oT=%s oF=%s msg=%s", inField.getFieldType(),  outputField.getFieldType(), outputField.getPath(), e.getMessage()), e);
+    public void processInputMapping(AtlasSession session, BaseMapping baseMapping) throws AtlasException {
+        for (Mapping mapping : this.generateInputMappings(session, baseMapping)) {
+            if(mapping.getInputField() == null || mapping.getInputField().isEmpty() || mapping.getInputField().size() != 1) {
+                Audit audit = new Audit();
+                audit.setStatus(AuditStatus.WARN);
+                audit.setMessage(String.format("Mapping does not contain exactly one input field alias=%s desc=%s", mapping.getAlias(), mapping.getDescription()));
+                session.getAudits().getAudit().add(audit);
                 return;
             }
+            
+            Field field = mapping.getInputField().get(0);
+            
+            if(!isSupportedField(field)) {
+                Audit audit = new Audit();
+                audit.setDocId(field.getDocId());
+                audit.setPath(field.getPath());
+                audit.setStatus(AuditStatus.ERROR);
+                audit.setMessage(String.format("Unsupported input field type=%s", field.getClass().getName()));
+                session.getAudits().getAudit().add(audit);
+                return;
+            }
+            
+            if(field instanceof PropertyField) {
+                processPropertyField(session, mapping, session.getAtlasContext().getContextFactory().getPropertyStrategy());
+                if(logger.isDebugEnabled()) {
+                    logger.debug("Processed input propertyField sPath=" + field.getPath() + " sV=" + field.getValue() + " sT=" + field.getFieldType() + " docId: " + field.getDocId());
+                }
+                return;
+            }
+            
+            JsonField inputField = (JsonField)field;
+            
+            Object sourceObject = null;
+            if(field.getDocId() != null) {
+                sourceObject = session.getInput(field.getDocId());
+            } else {
+                sourceObject = session.getInput();
+            }
+            
+            if(session.getInput() == null || !(session.getInput() instanceof String)) {
+                Audit audit = new Audit();
+                audit.setDocId(field.getDocId());
+                audit.setPath(field.getPath());
+                audit.setStatus(AuditStatus.ERROR);
+                audit.setMessage(String.format("Unsupported input object type=%s", field.getClass().getName()));
+                session.getAudits().getAudit().add(audit);
+                return;
+            }
+            
+            String document = (String)sourceObject;
+                    
+            Map<String,String> sourceUriParams = AtlasUtil.getUriParameters(session.getMapping().getDataSource().get(0).getUri());
+                              
+            DocumentJsonFieldReader djfr = new DocumentJsonFieldReader();
+            djfr.read(document, inputField);
+    
+            // NOTE: This shouldn't happen
+            if(inputField.getFieldType() == null) {
+                logger.warn(String.format("FieldType detection was unsuccessful for p=%s falling back to type UNSUPPORTED", inputField.getPath()));
+                inputField.setFieldType(FieldType.UNSUPPORTED);
+            }
+            
+            if(logger.isDebugEnabled()) {
+                logger.debug("Processed input field sPath=" + field.getPath() + " sV=" + field.getValue() + " sT=" + field.getFieldType() + " docId: " + field.getDocId());
+            }  
         }
-        
-        outputField.setValue(outputValue);        
-        
-        if(session.getOutput() != null && session.getOutput() instanceof DocumentJsonFieldWriter) {
-            DocumentJsonFieldWriter writer = (DocumentJsonFieldWriter) session.getOutput();
-            writer.write(outputField);
-        } else {
-            //TODO: add error handler to detect if the output writer isn't there or is wrong class instance
-        }        
-        
-        if(logger.isDebugEnabled()) {
-            logger.debug(String.format("Processed output field oP=%s oV=%s oT=%s docId: %s", outputField.getPath(), outputField.getValue(), outputField.getFieldType(), outputField.getDocId()));
+    }    
+    
+    @Override
+    public void processOutputMapping(AtlasSession session, BaseMapping baseMapping) throws AtlasException {   
+        for (Mapping mapping : this.getOutputMappings(session, baseMapping)) {           
+            
+            Field inField = mapping.getInputField().get(0);
+            Field outField = mapping.getOutputField().get(0);
+            if(!(outField instanceof JsonField)) {
+                logger.error(String.format("Unsupported field type %s", outField.getClass().getName()));
+                return;
+            }
+            
+            if(inField.getValue() == null) {
+                return;
+            }
+            
+            JsonField outputField = (JsonField)outField;
+            Object outputValue = null;
+            
+            if(outputField.getFieldType() == null) {
+                outputField.setFieldType(getConversionService().fieldTypeFromClass(inField.getValue().getClass()));
+            }
+            
+            if(inField.getFieldType() != null && inField.getFieldType().equals(outputField.getFieldType())) {
+                outputValue = inField.getValue();
+            } else {
+                try {
+                    outputValue = getConversionService().convertType(inField.getValue(), inField.getFieldType(), outputField.getFieldType());
+                } catch (AtlasConversionException e) {
+                    logger.error(String.format("Unable to auto-convert for iT=%s oT=%s oF=%s msg=%s", inField.getFieldType(),  outputField.getFieldType(), outputField.getPath(), e.getMessage()), e);
+                    return;
+                }
+            }
+            
+            outputField.setValue(outputValue);        
+            
+            if(session.getOutput() != null && session.getOutput() instanceof DocumentJsonFieldWriter) {
+                DocumentJsonFieldWriter writer = (DocumentJsonFieldWriter) session.getOutput();
+                writer.write(outputField);
+            } else {
+                //TODO: add error handler to detect if the output writer isn't there or is wrong class instance
+            }        
+            
+            if(logger.isDebugEnabled()) {
+                logger.debug(String.format("Processed output field oP=%s oV=%s oT=%s docId: %s", outputField.getPath(), outputField.getValue(), outputField.getFieldType(), outputField.getDocId()));
+            }
         }
     }
        
