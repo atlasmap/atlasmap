@@ -258,7 +258,8 @@ public class JavaValidationService implements AtlasValidationService {
             validations.add(validation);
         }
         // check that the input field is of type String else error
-        if (inputField != null && inputField.getFieldType().compareTo(FieldType.STRING) != 0) {
+        if (inputField != null && inputField.getFieldType() != null && !FieldType.STRING.equals(inputField.getFieldType()) ||
+            (inputField.getValue() != null && inputField.getValue().getClass().isAssignableFrom(String.class))) {
             Validation validation = new Validation();
             validation.setField("Input.Field");
             validation.setMessage("Input field must be of type " + FieldType.STRING + " for a Separate Mapping");

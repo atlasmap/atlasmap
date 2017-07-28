@@ -59,7 +59,6 @@ import io.atlasmap.v2.ConstantField;
 import io.atlasmap.v2.DataSource;
 import io.atlasmap.v2.DataSourceType;
 import io.atlasmap.v2.Field;
-import io.atlasmap.v2.LookupTable;
 import io.atlasmap.v2.Mapping;
 import io.atlasmap.v2.MappingType;
 import io.atlasmap.v2.Mappings;
@@ -419,23 +418,15 @@ public class JavaModule extends BaseAtlasModule {
     @Override
     public void processOutputMapping(AtlasSession session, Mapping mapping) throws AtlasException {
 
-        if(mapping.getOutputField() == null || mapping.getOutputField().isEmpty() || mapping.getOutputField().size() != 1) {
-            Audit audit = new Audit();
-            audit.setStatus(AuditStatus.WARN);
-            audit.setMessage(String.format("Mapping does not contain exactly one output field alias=%s desc=%s", mapping.getAlias(), mapping.getDescription()));
-            session.getAudits().getAudit().add(audit);
+        if(mapping.getOutputField() == null || mapping.getOutputField().isEmpty()) {
+            addAudit(session, null, String.format("Mapping does not contain at least one output field alias=%s desc=%s", mapping.getAlias(), mapping.getDescription()), null, AuditStatus.ERROR, null);
             return;
         }
         
         Field outputField = mapping.getOutputField().get(0);
         
         if(!(outputField instanceof JavaField) && !(outputField instanceof JavaEnumField)) {
-            Audit audit = new Audit();
-            audit.setDocId(outputField.getDocId());
-            audit.setPath(outputField.getPath());
-            audit.setStatus(AuditStatus.ERROR);
-            audit.setMessage(String.format("Unsupported output field type=%s", outputField.getClass().getName()));
-            session.getAudits().getAudit().add(audit);
+            addAudit(session, outputField.getDocId(), String.format("Unsupported output field type=%s", outputField.getClass().getName()), outputField.getPath(), AuditStatus.ERROR, null);
             return;
         }
         
@@ -452,16 +443,39 @@ public class JavaModule extends BaseAtlasModule {
                     writer.setRootObject(targetObject);
                 } catch (Exception e) {
                     logger.error(String.format("Error initializing targetObject msg=%s", e.getMessage()), e);
-                    Audit audit = new Audit();
-                    audit.setStatus(AuditStatus.ERROR);
-                    audit.setMessage(String.format("Error initializing targetObject msg=%s", e.getMessage()));
-                    session.getAudits().getAudit().add(audit);
+                    addAudit(session, outputField.getDocId(), String.format("Error initializing targetObject msg=%s", e.getMessage()), outputField.getPath(), AuditStatus.ERROR, null);
                     return;
                 }                
             }
-            Field inputField = mapping.getInputField().get(0);      
-            OutputValueConverter valueConverter = new OutputValueConverter(inputField, session, mapping, getConversionService());
-            writer.write(outputField, valueConverter);
+            
+            OutputValueConverter valueConverter = null;
+            switch(mapping.getMappingType()) {
+            case MAP: 
+                Field inputField = mapping.getInputField().get(0);      
+                valueConverter = new OutputValueConverter(inputField, session, mapping, getConversionService());
+                writer.write(outputField, valueConverter);
+                break;
+            case COMBINE:
+                break;
+            case LOOKUP:
+                Field inputFieldlkp = mapping.getInputField().get(0);      
+                valueConverter = new OutputValueConverter(inputFieldlkp, session, mapping, getConversionService());
+                writer.write(outputField, valueConverter);
+                break;
+            case SEPARATE:
+                Field inputFieldsep = mapping.getInputField().get(0);
+                for(Field outputFieldsep : mapping.getOutputField()) {
+                    Field separateField = processSeparateField(session, mapping, inputFieldsep, outputFieldsep);
+                    if(separateField == null) {
+                        continue;
+                    }
+                    valueConverter = new OutputValueConverter(separateField, session, mapping, getConversionService());
+                    writer.write(outputFieldsep, valueConverter);
+                }
+                break;
+            default: logger.error("Unsupported mappingType=%s detected", mapping.getMappingType()); return;
+            }
+            
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             if (e instanceof AtlasException) {

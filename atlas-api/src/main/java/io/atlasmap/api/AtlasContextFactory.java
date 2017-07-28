@@ -20,6 +20,7 @@ import java.net.URI;
 import java.util.Map;
 
 import io.atlasmap.spi.AtlasPropertyStrategy;
+import io.atlasmap.spi.AtlasSeparateStrategy;
 
 public interface AtlasContextFactory {
 
@@ -30,6 +31,7 @@ public interface AtlasContextFactory {
 	AtlasConversionService getConversionService() throws AtlasException;
     AtlasFieldActionService getFieldActionService() throws AtlasException;
     AtlasPropertyStrategy getPropertyStrategy() throws AtlasException;
+    AtlasSeparateStrategy getSeparateStrategy() throws AtlasException;
     AtlasValidationService getValidationService() throws AtlasException;
 	void setProperties(Map<String, String> properties);
 	Map<String, String> getProperties();

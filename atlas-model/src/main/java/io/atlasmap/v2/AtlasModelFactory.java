@@ -72,6 +72,69 @@ public class AtlasModelFactory {
         return new PropertyField();
     }
     
+    public static SimpleField cloneFieldToSimpleField(Field field) {
+        if(field == null) {
+            return null;
+        }
+        
+        SimpleField f = new SimpleField();
+        f.setActions(cloneFieldActions(field.getActions()));
+        if(field.getArrayDimensions() != null) { f.setArrayDimensions(Integer.valueOf(field.getArrayDimensions())); }
+        if(field.getArraySize() != null) { f.setArraySize(Integer.valueOf(field.getArraySize())); }
+        if(field.getCollectionType() != null) { f.setCollectionType(CollectionType.fromValue(field.getCollectionType().value())); }
+        if(field.getDocId() != null) { f.setDocId(new String(field.getDocId())); }
+        if(field.getFieldType() != null) { f.setFieldType(FieldType.fromValue(field.getFieldType().value())); }
+        if(field.getIndex() != null) { f.setIndex(Integer.valueOf(field.getIndex())); }
+        if(field.getPath() != null) { f.setPath(new String(field.getPath())); }
+        if(field.isRequired() != null) { f.setRequired(Boolean.valueOf(field.isRequired())); }
+        if(field.getStatus() != null) { f.setStatus(FieldStatus.fromValue(field.getStatus().value())); }
+        // We can't clone so don't set value
+        // f.setValue(field.getValue());
+        return f;
+    }
+    
+    public static Actions cloneFieldActions(Actions actions) {
+        if(actions == null) {
+            return null;
+        }
+        
+        Actions n = new Actions();
+        
+        if(actions.getActions() == null || actions.getActions().isEmpty()) {
+            return n;
+        }
+        
+        for(Action a : actions.getActions()) {
+            n.getActions().add(cloneAction(a));
+        }
+        return n;
+    }
+    
+    public static Action cloneAction(Action action) {
+        if(action == null) {
+            return null;
+        }
+        
+        Action a = null;
+        if(action instanceof Camelize) { return new Camelize(); }
+        if(action instanceof Capitalize) { return new Capitalize(); }
+        if(action instanceof CurrentDate) { return new CurrentDate(); }
+        if(action instanceof CurrentDateTime) { return new CurrentDateTime(); }
+        if(action instanceof CurrentTime) { return new CurrentTime(); }
+        if(action instanceof CustomAction) { 
+            a = new CustomAction();
+            ((CustomAction)a).setClassName(new String(((CustomAction)action).getClassName()));
+            ((CustomAction)a).setMethodName(new String(((CustomAction)action).getMethodName()));
+            if(((CustomAction)a).getInputFieldType() != null) {
+                ((CustomAction)a).setInputFieldType(FieldType.fromValue(((CustomAction)action).getInputFieldType().value()));
+            }
+            if(((CustomAction)a).getOutputFieldType() != null) {
+                ((CustomAction)a).setOutputFieldType(FieldType.fromValue(((CustomAction)action).getOutputFieldType().value()));
+            }
+        }
+        return a;
+    }
+    
     public static Mapping cloneMapping(Mapping mapping) {
         Mapping clone = new Mapping();
         clone.setAlias(mapping.getAlias());
