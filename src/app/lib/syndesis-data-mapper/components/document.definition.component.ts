@@ -56,7 +56,7 @@ import { ModalWindowComponent } from './modal.window.component';
                 </div>
                 <div [attr.class]="searchMode ? 'fieldListSearchOpen' : 'fieldList'" style="overflow:auto;"
                     (scroll)="handleScroll($event)">
-                    <div *ngFor="let docDef of cfg.getDocs(isSource)" class="docIdentifier" [attr.id]='docDef.name'>
+                    <div *ngFor="let docDef of cfg.getDocs(isSource)" #docDetail class="docIdentifier" [attr.id]='docDef.name'>
                         <div class="card-pf-title documentHeader" tooltip="{{ docDef.fullyQualifiedName }}" placement="bottom"
                             *ngIf="isDocNameVisible(docDef)" (click)="toggleFieldVisibility(docDef)">
                             <div style="float:left">
@@ -103,6 +103,7 @@ export class DocumentDefinitionComponent {
 
     @ViewChild('documentDefinitionElement') documentDefinitionElement:ElementRef;
     @ViewChildren('fieldDetail') fieldComponents: QueryList<DocumentFieldDetailComponent>;
+    @ViewChildren('docDetail') docElements: QueryList<ElementRef>;
 
     private getSourcesTargetsLabel(): string {
         if (this.isSource) {
@@ -142,6 +143,19 @@ export class DocumentDefinitionComponent {
         return count;
     }
 
+    public getDocDefElementPosition(docDef: DocumentDefinition): any {
+        for (let c of this.docElements.toArray()) {
+            if (c.nativeElement.id == docDef.name) {
+                var documentElementAbsPosition: any = this.getElementPositionForElement(c.nativeElement, false, true);
+                var myElement: any = this.documentDefinitionElement.nativeElement;
+                var myAbsPosition: any = this.getElementPositionForElement(myElement, false, false);
+                return { "x": (documentElementAbsPosition.x - myAbsPosition.x), 
+                    "y": (documentElementAbsPosition.y - myAbsPosition.y) };
+            }
+        }
+        return null;
+    }
+
     public getFieldDetailComponent(field: Field): DocumentFieldDetailComponent {
         for (let c of this.fieldComponents.toArray()) {
             var returnedComponent: DocumentFieldDetailComponent = c.getFieldDetailComponent(field);
@@ -153,16 +167,24 @@ export class DocumentDefinitionComponent {
     }
 
     public getElementPosition(): any {
+        return this.getElementPositionForElement(this.documentDefinitionElement.nativeElement, true, false);
+    }
+
+    public getElementPositionForElement(el: any, addScrollTop: boolean, subtractScrollTop: boolean): any {
         var x: number = 0;
         var y: number = 0;
 
-        var el: any = this.documentDefinitionElement.nativeElement;
         while (el != null) {
             x += el.offsetLeft;
             y += el.offsetTop;
             el = el.offsetParent;
         }
-        y += this.scrollTop;
+        if (addScrollTop) {
+            y += this.scrollTop;
+        }
+        if (subtractScrollTop) {
+            y -= this.scrollTop;
+        }
         return { "x": x, "y":y };
     }
 
