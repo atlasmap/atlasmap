@@ -19,6 +19,7 @@ import java.io.File;
 import java.net.URI;
 import java.util.Map;
 
+import io.atlasmap.spi.AtlasCombineStrategy;
 import io.atlasmap.spi.AtlasPropertyStrategy;
 import io.atlasmap.spi.AtlasSeparateStrategy;
 
@@ -28,6 +29,7 @@ public interface AtlasContextFactory {
 	void destroy();
 	AtlasContext createContext(File atlasMappingFile) throws AtlasException;
 	AtlasContext createContext(URI atlasMappingUri) throws AtlasException;
+    AtlasCombineStrategy getCombineStrategy() throws AtlasException;
 	AtlasConversionService getConversionService() throws AtlasException;
     AtlasFieldActionService getFieldActionService() throws AtlasException;
     AtlasPropertyStrategy getPropertyStrategy() throws AtlasException;

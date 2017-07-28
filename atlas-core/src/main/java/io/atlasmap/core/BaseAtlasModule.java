@@ -15,7 +15,12 @@
  */
 package io.atlasmap.core;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -160,6 +165,44 @@ public abstract class BaseAtlasModule implements AtlasModule {
         SimpleField simpleField = AtlasModelFactory.cloneFieldToSimpleField(inputFieldsep);
         simpleField.setValue(separatedValues.get(outputField.getIndex()));
         return simpleField;
+    }
+    
+    protected void processCombineField(AtlasSession session, Mapping mapping, List<Field> inputFields, Field outputField) throws AtlasException {
+        Map<Integer, String> combineValues = null;
+        for(Field inputField : inputFields) {
+            if(inputField.getIndex() == null || inputField.getIndex() < 0) {
+                logger.error(String.format("Combine requires Index value to be set on all inputFields inputField.path=%s", inputField.getPath()));
+                addAudit(session, outputField.getDocId(), String.format("Combine requires Index value to be set on all inputFields inputField.path=%s", inputField.getPath()), outputField.getPath(), AuditStatus.ERROR, null);
+                return;
+            }
+            if((inputField.getFieldType() != null && !FieldType.STRING.equals(inputField.getFieldType()) ||
+               (inputField.getValue() != null && !inputField.getValue().getClass().isAssignableFrom(String.class)))) {
+                logger.error(String.format("Combine requires String field type for inputField.path=%s", inputField.getPath()));
+                addAudit(session, outputField.getDocId(), String.format("Combine requires String field type for inputField.path=%s", inputField.getPath()), outputField.getPath(), AuditStatus.WARN, null);
+                continue;
+            }
+            
+            if(combineValues == null) {
+                // We need to support a sorted map w/ null values 
+                combineValues = new HashMap<Integer, String>();
+            }
+            
+            combineValues.put(inputField.getIndex(), (String)inputField.getValue());
+        }
+        
+        String combinedValue = null;
+        if(mapping.getDelimiter() != null) {
+            combinedValue = session.getAtlasContext().getContextFactory().getCombineStrategy().combineValues(combineValues, mapping.getDelimiter());
+        } else {
+            combinedValue = session.getAtlasContext().getContextFactory().getCombineStrategy().combineValues(combineValues);
+        }
+        
+        if(combinedValue == null || combinedValue.trim().isEmpty()) {
+            logger.debug(String.format("Empty combined string for Combine mapping outputField.path=%s", outputField.getPath()));
+            return;
+        }
+                
+        outputField.setValue(combinedValue);
     }
     
     protected void addAudit(AtlasSession session, String docId, String message, String path, AuditStatus status, String value) {

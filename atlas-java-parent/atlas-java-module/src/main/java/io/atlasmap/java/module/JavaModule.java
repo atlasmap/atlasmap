@@ -59,10 +59,12 @@ import io.atlasmap.v2.ConstantField;
 import io.atlasmap.v2.DataSource;
 import io.atlasmap.v2.DataSourceType;
 import io.atlasmap.v2.Field;
+import io.atlasmap.v2.FieldType;
 import io.atlasmap.v2.Mapping;
 import io.atlasmap.v2.MappingType;
 import io.atlasmap.v2.Mappings;
 import io.atlasmap.v2.PropertyField;
+import io.atlasmap.v2.SimpleField;
 import io.atlasmap.v2.Validation;
 
 @AtlasModuleDetail(name = "JavaModule", uri = "atlas:java", modes = { "SOURCE", "TARGET" }, dataFormats = { "java" }, configPackages = { "io.atlasmap.java.v2" })
@@ -157,56 +159,43 @@ public class JavaModule extends BaseAtlasModule {
     
     @Override
     public void processInputMapping(AtlasSession session, Mapping mapping) throws AtlasException {
-        if(mapping.getInputField() == null || mapping.getInputField().isEmpty() || mapping.getInputField().size() != 1) {
-            Audit audit = new Audit();
-            audit.setStatus(AuditStatus.WARN);
-            audit.setMessage(String.format("Mapping does not contain exactly one input field alias=%s desc=%s", mapping.getAlias(), mapping.getDescription()));
-            session.getAudits().getAudit().add(audit);
+        if(mapping.getInputField() == null || mapping.getInputField().isEmpty()) {
+            addAudit(session, null, String.format("Mapping does not contain at least one input field alias=%s desc=%s", mapping.getAlias(), mapping.getDescription()), null, AuditStatus.WARN, null);
             return;
         }
         
-        Field field = mapping.getInputField().get(0);
-        
-        if(!isSupportedField(field)) {
-            Audit audit = new Audit();
-            audit.setDocId(field.getDocId());
-            audit.setPath(field.getPath());
-            audit.setStatus(AuditStatus.ERROR);
-            audit.setMessage(String.format("Unsupported input field type=%s", field.getClass().getName()));
-            session.getAudits().getAudit().add(audit);
-            return;
-        }
-        
-        if(field instanceof PropertyField) {
-            processPropertyField(session, mapping, session.getAtlasContext().getContextFactory().getPropertyStrategy());
-            if(logger.isDebugEnabled()) {
-                logger.debug("Processed input propertyField sPath=" + field.getPath() + " sV=" + field.getValue() + " sT=" + field.getFieldType() + " docId: " + field.getDocId());
+        for(Field field : mapping.getInputField()) {
+            if(!isSupportedField(field)) {
+                addAudit(session, field.getDocId(), String.format("Unsupported input field type=%s", field.getClass().getName()), field.getPath(), AuditStatus.ERROR, null);
+                continue;
             }
-            return;
-        }
         
-        Object sourceObject = null;
-        if(field.getDocId() != null) {
-            sourceObject = session.getInput(field.getDocId());
-        } else {
-            sourceObject = session.getInput();
-        }
+            if(field instanceof PropertyField) {
+                processPropertyField(session, mapping, session.getAtlasContext().getContextFactory().getPropertyStrategy());
+                if(logger.isDebugEnabled()) {
+                    logger.debug("Processed input propertyField sPath=" + field.getPath() + " sV=" + field.getValue() + " sT=" + field.getFieldType() + " docId: " + field.getDocId());
+                }
+                continue;
+            }
         
-        try {
-            processInputMapping(field, sourceObject, session);
+            Object sourceObject = null;
+            if(field.getDocId() != null) {
+                sourceObject = session.getInput(field.getDocId());
+            } else {
+                sourceObject = session.getInput();
+            }
+        
+            try {
+                processInputMapping(field, sourceObject, session);
             
-            if(logger.isDebugEnabled()) {
-                logger.debug("Processed input field sPath=" + field.getPath() + " sV=" + field.getValue() + " sT=" + field.getFieldType() + " docId: " + field.getDocId());
+                if(logger.isDebugEnabled()) {
+                    logger.debug("Processed input field sPath=" + field.getPath() + " sV=" + field.getValue() + " sT=" + field.getFieldType() + " docId: " + field.getDocId());
+                }
+            } catch (Exception e) {
+                addAudit(session, field.getDocId(), String.format("Unexpected error occured msg=%s", e.getMessage()), field.getPath(), AuditStatus.ERROR, null);
+                logger.error("Unexpected error occured msg=" + e.getMessage(), e);
+                continue;
             }
-        } catch (Exception e) {
-            Audit audit = new Audit();
-            audit.setDocId(field.getDocId());
-            audit.setPath(field.getPath());
-            audit.setStatus(AuditStatus.ERROR);
-            audit.setMessage(String.format("Unexpected error occured msg=%s", e.getMessage()));
-            session.getAudits().getAudit().add(audit);
-            logger.error("Unexpected error occured msg=" + e.getMessage(), e);
-            return;
         }
     }
     
@@ -456,6 +445,12 @@ public class JavaModule extends BaseAtlasModule {
                 writer.write(outputField, valueConverter);
                 break;
             case COMBINE:
+                processCombineField(session, mapping, mapping.getInputField(), outputField);
+                SimpleField combinedField = new SimpleField();
+                combinedField.setFieldType(FieldType.STRING);
+                combinedField.setValue(outputField.getValue());
+                valueConverter = new OutputValueConverter(combinedField, session, mapping, getConversionService());
+                writer.write(outputField, valueConverter);
                 break;
             case LOOKUP:
                 Field inputFieldlkp = mapping.getInputField().get(0);      
