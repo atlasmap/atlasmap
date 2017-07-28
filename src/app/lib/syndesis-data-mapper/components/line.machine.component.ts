@@ -224,7 +224,7 @@ export class LineMachineComponent {
                     continue;
                 }
 
-                var inputFieldPos: any = this.docDefInput.getFieldDetailComponentPosition(inputField);
+                var inputFieldPos: any = this.getScreenPosForField(inputField, this.docDefInput);
                 if (inputFieldPos == null) {
                     //console.log("Cant find screen position for input field, not drawing line: " + inputField.path);
                     continue;
@@ -240,7 +240,7 @@ export class LineMachineComponent {
                         continue;
                     }
 
-                    var outputFieldPos: any = this.docDefOutput.getFieldDetailComponentPosition(outputField);
+                    var outputFieldPos: any = this.getScreenPosForField(outputField, this.docDefOutput);
                     if (outputFieldPos == null) {
                         //console.log("Cant find screen position for output field, not drawing line: " + outputField.path);
                         continue;
@@ -259,6 +259,28 @@ export class LineMachineComponent {
         }
     }
 
+    private getScreenPosForField(field: Field, docDefComponent: DocumentDefinitionComponent): any {
+        if (field == null || field.docDef == null) {
+            return null;
+        }
+        if (!field.docDef.showFields) {
+            var pos: any = docDefComponent.getDocDefElementPosition(field.docDef);
+            if (pos) {
+                pos["y"] = pos["y"] + 5;
+            }
+            return pos;
+        }
+        var parentField: Field = field;
+        while (parentField != null) {
+            var fieldPos: any = docDefComponent.getFieldDetailComponentPosition(parentField);
+            if (fieldPos != null) {
+                return fieldPos;
+            }
+            parentField = parentField.parentField;
+        }
+        return null;
+    }
+
     private checkFieldEligibiltyForLineDrawing(field: Field, description: string, m: MappingModel): boolean {
         if (!field) {
             //console.error("Not drawing line, " + description + " field can't be found: " + field.path, m);
@@ -267,14 +289,6 @@ export class LineMachineComponent {
         if (!field.visibleInCurrentDocumentSearch) {
             //console.log("Not drawing line, " + description + " field isn't visible: " + field.path, m);
             return false;
-        }
-        var parentField: Field = field.parentField;
-        while (parentField != null) {
-            if (parentField.collapsed) {
-                //console.log("Not drawing line, " + description + " field's parent is collapsed: "  + field.path, m);
-                return false;
-            }
-            parentField = parentField.parentField;
         }
         return true;
     }
