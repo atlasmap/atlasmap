@@ -169,7 +169,7 @@ public class DocumentXmlFieldWriter extends XmlFieldTransformer {
 		}
     }
     
-    public Element getChildNode(Element parentNode, String parentSegment, String segment) throws AtlasException {
+    public static Element getChildNode(Element parentNode, String parentSegment, String segment) throws AtlasException {
     	if (logger.isDebugEnabled()) {
     		logger.debug("Looking for child node '" + segment + "' in parent '" + parentSegment + "': " + writeDocumentToString(true, parentNode));
     	}
@@ -270,7 +270,7 @@ public class DocumentXmlFieldWriter extends XmlFieldTransformer {
     	return document.createElement(cleanedSegment);
     }
     
-    public List<Element> getChildrenWithName(String name, Element parentNode) {
+    public static List<Element> getChildrenWithName(String name, Element parentNode) {
     	List<Element> children = new LinkedList<>();
     	if (parentNode == null) {
     		return children;

@@ -15,9 +15,8 @@
  */
 package io.atlasmap.json.v2;
 
+import io.atlasmap.v2.Field;
 import io.atlasmap.v2.Fields;
-import io.atlasmap.json.v2.JsonDocument;
-import io.atlasmap.json.v2.JsonField;
 
 public class AtlasJsonModelFactory {
 	
@@ -41,4 +40,30 @@ public class AtlasJsonModelFactory {
 			+ f.getIndex() + ", path=" + f.getPath() + ", required=" + f.isRequired() + ", status=" + f.getStatus() + ", fieldType="
 			+ f.getFieldType() + "]";
 	}
+        
+    public static Field cloneField(Field field) {
+        JsonField clone = new JsonField();
+        JsonField that = (JsonField)field;
+        
+        //generic from Field
+        clone.setActions(that.getActions());
+        clone.setArrayDimensions(that.getArrayDimensions());
+        clone.setArraySize(that.getArraySize());
+        clone.setCollectionType(that.getCollectionType());
+        clone.setDocId(that.getDocId());
+        clone.setFieldType(that.getFieldType());
+        clone.setIndex(that.getIndex());        
+        clone.setPath(that.getPath());
+        clone.setRequired(that.isRequired());
+        clone.setStatus(that.getStatus());
+        clone.setValue(that.getValue());       
+                
+        //json specific
+        clone.setName(that.getName());
+        clone.setPrimitive(that.isPrimitive());
+        clone.setTypeName(that.getTypeName());
+        clone.setUserCreated(that.isUserCreated());
+        
+        return clone;
+    }
 }

@@ -444,5 +444,25 @@ public class PathUtil {
 			return "SegmentContext [segment=" + segment + ", segmentPath=" + segmentPath + ", segmentIndex="
 					+ segmentIndex + "]";
 		}				
-	}	
+	}
+
+    public static boolean isCollection(String path) {
+        return new PathUtil(path).hasCollection();
+    }
+
+    public static String overwriteCollectionIndex(String path, int index) {
+        String newPath = "";
+        for (SegmentContext sg : new PathUtil(path).getSegmentContexts(false)) {
+            String segment = sg.getSegment();
+            if (PathUtil.isCollection(segment)) {
+                if(segment.contains(PATH_ARRAY_START) && segment.contains(PATH_ARRAY_END)) {
+                    segment = cleanPathSegment(segment) + PATH_ARRAY_START + index + PATH_ARRAY_END;
+                } else if (segment.contains(PATH_LIST_START) && segment.contains(PATH_LIST_END)) {
+                    segment = cleanPathSegment(segment) + PATH_LIST_START + index + PATH_LIST_END;
+                }
+            }
+            newPath += PATH_SEPARATOR + segment;
+        }
+        return newPath;
+    }	
 }

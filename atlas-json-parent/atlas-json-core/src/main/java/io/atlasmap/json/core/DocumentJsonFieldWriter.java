@@ -147,7 +147,7 @@ public class DocumentJsonFieldWriter {
 		}
     }
     
-    public JsonNode getChildNode(ObjectNode parentNode, String parentSegment, String segment) {
+    public static JsonNode getChildNode(ObjectNode parentNode, String parentSegment, String segment) {
     	if (logger.isDebugEnabled()) {
     		logger.debug("Looking for child node '" + segment + "' in parent '" + parentSegment + "': " + parentNode);
     	}
