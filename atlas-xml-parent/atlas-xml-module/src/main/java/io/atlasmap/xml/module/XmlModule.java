@@ -63,34 +63,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
-
 @AtlasModuleDetail(name = "XmlModule", uri = "atlas:xml", modes = { "SOURCE", "TARGET" }, dataFormats = { "xml" }, configPackages = { "io.atlasmap.xml.v2" })
 public class XmlModule extends BaseAtlasModule {
     private static final Logger logger = LoggerFactory.getLogger(XmlModule.class);
-    private AtlasConversionService atlasConversionService = null;
-    private AtlasModuleMode atlasModuleMode = AtlasModuleMode.UNSET;
-    
-    @Override
-    public void init() {
-        // TODO Auto-generated method stub
-    }
-
-    @Override
-    public void destroy() {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void processPreInputExecution(AtlasSession session) throws AtlasException {
-        if(logger.isDebugEnabled()) {
-            logger.debug("processPreInputExcution completed");
-        }
-    }
-    
-    @Override
-    public void processPreOutputExecution(AtlasSession session) throws AtlasException {
         
+    @Override
+    public void processPreOutputExecution(AtlasSession session) throws AtlasException {        
         XmlNamespaces xmlNs = null;
         String template = null;
         for(DataSource ds : session.getMapping().getDataSource()) {
@@ -116,8 +94,7 @@ public class XmlModule extends BaseAtlasModule {
     }
 
     @Override
-    public void processPreValidation(AtlasSession atlasSession) throws AtlasException {
-        
+    public void processPreValidation(AtlasSession atlasSession) throws AtlasException {        
         if(atlasSession == null || atlasSession.getMapping() == null) {
             logger.error("Invalid session: Session and AtlasMapping must be specified");
             throw new AtlasValidationException("Invalid session");
@@ -310,39 +287,7 @@ public class XmlModule extends BaseAtlasModule {
                 session.setOutput(convertDocumentToString(((DocumentXmlFieldWriter)output).getDocument()));
             }
         }
-    }
-
-    @Override
-    public void processPostValidation(AtlasSession arg0) throws AtlasException {
-        if(logger.isDebugEnabled()) {
-            logger.debug("processPostValidation completed");
-        }
-    }
-    
-    @Override
-    public AtlasModuleMode getMode() {
-        return this.atlasModuleMode;
-    }
-
-    @Override
-    public void setMode(AtlasModuleMode atlasModuleMode) {
-        this.atlasModuleMode = atlasModuleMode;
-    }
-
-    @Override
-    public List<AtlasModuleMode> listSupportedModes() {
-        return Arrays.asList(AtlasModuleMode.SOURCE, AtlasModuleMode.TARGET);
-    }
-
-    @Override
-    public Boolean isStatisticsSupported() {
-        return false;
-    }
-
-    @Override
-    public Boolean isStatisticsEnabled() {
-        return false;
-    }
+    }    
 
     @Override
     public Boolean isSupportedField(Field field) {
@@ -356,16 +301,6 @@ public class XmlModule extends BaseAtlasModule {
         return false;
     }
 
-    @Override
-    public AtlasConversionService getConversionService() {
-        return this.atlasConversionService;
-    }
-
-    @Override
-    public void setConversionService(AtlasConversionService atlasConversionService) {
-        this.atlasConversionService = atlasConversionService;
-    }
-    
     private String convertDocumentToString(Document document) throws AtlasException {
         DocumentBuilderFactory domFact = DocumentBuilderFactory.newInstance();
         domFact.setNamespaceAware(true);
@@ -390,5 +325,41 @@ public class XmlModule extends BaseAtlasModule {
         dbf.setNamespaceAware(namespaced); //this must be done to use namespaces
         DocumentBuilder b = dbf.newDocumentBuilder();
         return b.parse(new ByteArrayInputStream(data.getBytes("UTF-8")));
+    }
+
+    @Override
+    public int getCollectionSize(AtlasSession session, Field field) throws AtlasException {        
+        try {
+            Object sourceObject = null;
+            if(field.getDocId() != null) {
+                sourceObject = session.getInput(field.getDocId());
+            } else {
+                sourceObject = session.getInput();
+            }
+            Document document = getDocument((String)sourceObject, false);
+            Element parentNode = document.getDocumentElement();
+            for (SegmentContext sc : new PathUtil(field.getPath()).getSegmentContexts(false)) {
+                if (sc.getPrev() == null) {
+                    //processing root node part of path such as the "XOA" part of "/XOA/contact<>/firstName", skip.
+                    continue;
+                }
+                List<Element> children = DocumentXmlFieldWriter.getChildrenWithName(PathUtil.cleanPathSegment(sc.getSegment()), parentNode);
+                if (children == null || children.isEmpty()) {
+                    return 0;
+                }
+                if (PathUtil.isCollectionSegment(sc.getSegment())) {
+                    return children.size();
+                }
+                parentNode = children.get(0);
+            }
+            return 0;
+        } catch (Exception e) {
+            throw new AtlasException(e);
+        }
+    }
+
+    @Override
+    public Field cloneField(Field field) throws AtlasException {
+        return AtlasXmlModelFactory.cloneField(field);
     }
 }

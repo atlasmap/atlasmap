@@ -48,27 +48,7 @@ import org.slf4j.LoggerFactory;
 @AtlasModuleDetail(name = "JsonModule", uri = "atlas:json", modes = { "SOURCE", "TARGET" }, dataFormats = { "json" }, configPackages = { "io.atlasmap.json.v2" })
 public class JsonModule extends BaseAtlasModule {
     private static final Logger logger = LoggerFactory.getLogger(JsonModule.class);
-    private AtlasConversionService atlasConversionService = null;
-    private AtlasModuleMode atlasModuleMode = AtlasModuleMode.UNSET;
     
-    @Override
-    public void init() {
-        // TODO Auto-generated method stub
-    }
-
-    @Override
-    public void destroy() {
-        // TODO Auto-generated method stub
-
-    }
-    
-    @Override
-    public void processPreInputExecution(AtlasSession session) throws AtlasException {
-        if(logger.isDebugEnabled()) {
-            logger.debug("processPreInputExcution completed");
-        }
-    }
-
     @Override
     public void processPreOutputExecution(AtlasSession session) throws AtlasException {
         DocumentJsonFieldWriter writer = new DocumentJsonFieldWriter();
@@ -80,8 +60,7 @@ public class JsonModule extends BaseAtlasModule {
     }
 
     @Override
-    public void processPreValidation(AtlasSession atlasSession) throws AtlasException {
-        
+    public void processPreValidation(AtlasSession atlasSession) throws AtlasException {        
         if(atlasSession == null || atlasSession.getMapping() == null) {
             logger.error("Invalid session: Session and AtlasMapping must be specified");
             throw new AtlasValidationException("Invalid session");
@@ -228,19 +207,7 @@ public class JsonModule extends BaseAtlasModule {
             logger.debug(String.format("Processed output field oP=%s oV=%s oT=%s docId: %s", outputField.getPath(), outputField.getValue(), outputField.getFieldType(), outputField.getDocId()));
         }
     }
-    
-    @Override
-    public void processOutputCollection(AtlasSession session, Collection mapping) throws AtlasException {
        
-    }
-
-    @Override
-    public void processPostInputExecution(AtlasSession session) throws AtlasException {
-        if(logger.isDebugEnabled()) {
-            logger.debug("processPostInputExecution completed");
-        }
-    }
-    
     @Override
     public void processPostOutputExecution(AtlasSession session) throws AtlasException {
         
@@ -272,39 +239,12 @@ public class JsonModule extends BaseAtlasModule {
         if(logger.isDebugEnabled()) {
             logger.debug("processPostOutputExecution completed");
         }
-    }
-
-    @Override
-    public void processPostValidation(AtlasSession arg0) throws AtlasException {
-        if(logger.isDebugEnabled()) {
-            logger.debug("processPostValidation completed");
-        }
-    }
+    }    
     
-    @Override
-    public AtlasModuleMode getMode() {
-        return this.atlasModuleMode;
-    }
-
-    @Override
-    public void setMode(AtlasModuleMode atlasModuleMode) {
-        this.atlasModuleMode = atlasModuleMode;
-    }
-
     @Override
     public List<AtlasModuleMode> listSupportedModes() {
         return null;
-    }
-
-    @Override
-    public Boolean isStatisticsSupported() {
-        return false;
-    }
-
-    @Override
-    public Boolean isStatisticsEnabled() {
-        return false;
-    }
+    }    
 
     @Override
     public Boolean isSupportedField(Field field) {
@@ -319,12 +259,43 @@ public class JsonModule extends BaseAtlasModule {
     }
 
     @Override
-    public AtlasConversionService getConversionService() {
-        return this.atlasConversionService;
+    public int getCollectionSize(AtlasSession session, Field field) throws AtlasException {
+            String sourceDocument = null;
+            if(field.getDocId() != null) {
+                sourceDocument = (String) session.getInput(field.getDocId());
+            } else {
+                sourceDocument = (String) session.getInput();
+            }
+            
+            //make this a JSON document
+            JsonFactory jsonFactory = new JsonFactory();
+            ObjectMapper objectMapper = new ObjectMapper();
+            try {
+                JsonParser parser = jsonFactory.createParser(sourceDocument);
+                JsonNode rootNode = objectMapper.readTree(parser); 
+                ObjectNode parentNode = (ObjectNode) rootNode;
+                String parentSegment = "[root node]";
+                for (SegmentContext sc : new PathUtil(field.getPath()).getSegmentContexts(false)) {                    
+                    JsonNode currentNode = DocumentJsonFieldWriter.getChildNode(parentNode, parentSegment, sc.getSegment());
+                    if (currentNode == null) {
+                        return 0;
+                    }
+                    if (PathUtil.isCollectionSegment(sc.getSegment())) {
+                        if(currentNode != null && currentNode.isArray()) {
+                            return currentNode.size();
+                        }
+                        return 0;
+                    }
+                    parentNode = (ObjectNode) currentNode;
+                }
+            } catch (IOException e) {
+                throw new AtlasException(e.getMessage(), e);
+            }
+            return 0;
     }
 
     @Override
-    public void setConversionService(AtlasConversionService atlasConversionService) {
-        this.atlasConversionService = atlasConversionService;
-    }
+    public Field cloneField(Field field) throws AtlasException {
+        return AtlasJsonModelFactory.cloneField(field);
+    }    
 }

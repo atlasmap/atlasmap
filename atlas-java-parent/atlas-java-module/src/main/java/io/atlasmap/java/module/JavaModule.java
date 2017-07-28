@@ -16,6 +16,7 @@
 package io.atlasmap.java.module;
 
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -70,13 +71,10 @@ import io.atlasmap.v2.Validation;
 @AtlasModuleDetail(name = "JavaModule", uri = "atlas:java", modes = { "SOURCE", "TARGET" }, dataFormats = { "java" }, configPackages = { "io.atlasmap.java.v2" })
 public class JavaModule extends BaseAtlasModule {
     private static final Logger logger = LoggerFactory.getLogger(JavaModule.class);
-    private ClassInspectionService javaInspectionService = null;
-    private JavaConstructService javaConstructService = null;
-
-    private AtlasConversionService atlasConversionService = null;
-    private AtlasModuleMode atlasModuleMode = null;
-    
     public static final String DEFAULT_LIST_CLASS = "java.util.ArrayList";
+    
+    private ClassInspectionService javaInspectionService = null;
+    private JavaConstructService javaConstructService = null;        
     
     @Override
     public void init() {
@@ -98,7 +96,6 @@ public class JavaModule extends BaseAtlasModule {
     // TODO: Support runtime class inspection
     @Override
     public void processPreInputExecution(AtlasSession atlasSession) throws AtlasException {
-
         if(atlasSession == null || atlasSession.getMapping() == null 
                 || atlasSession.getMapping().getMappings() == null 
                 || atlasSession.getMapping().getMappings().getMapping() == null) {
@@ -117,8 +114,7 @@ public class JavaModule extends BaseAtlasModule {
     }
     
     @Override
-    public void processPreOutputExecution(AtlasSession atlasSession) throws AtlasException {
-              
+    public void processPreOutputExecution(AtlasSession atlasSession) throws AtlasException {              
         if(atlasSession == null || atlasSession.getMapping() == null 
                 || atlasSession.getMapping().getMappings() == null 
                 || atlasSession.getMapping().getMappings().getMapping() == null) {
@@ -137,8 +133,7 @@ public class JavaModule extends BaseAtlasModule {
     }
 
     @Override
-    public void processPreValidation(AtlasSession atlasSession) throws AtlasException {
-        
+    public void processPreValidation(AtlasSession atlasSession) throws AtlasException {        
         if(atlasSession == null || atlasSession.getMapping() == null) {
             logger.error("Invalid session: Session and AtlasMapping must be specified");
             throw new AtlasValidationException("Invalid session");
@@ -291,7 +286,7 @@ public class JavaModule extends BaseAtlasModule {
         mapping.getMappings().getMapping().addAll(collectionInstanceMappings.getMapping());
     }
     
-    protected void processInputMapping(Field sourceField, Object source, AtlasSession session) throws NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+    protected void processInputMapping(Field sourceField, Object source, AtlasSession session) throws Exception {
         Method getter = null;
         if((sourceField).getFieldType() == null) {
             getter = resolveGetMethod(source, sourceField, false);
@@ -517,17 +512,9 @@ public class JavaModule extends BaseAtlasModule {
         }
         if(logger.isDebugEnabled()) {
             logger.debug("processOutputCollectionMapping completed");
-        }
+        }        
+    }
         
-    }
-    
-    @Override
-    public void processPostInputExecution(AtlasSession session) throws AtlasException {
-        if(logger.isDebugEnabled()) {
-            logger.debug("processPostInputExecution completed");
-        }
-    }
-    
     @Override
     public void processPostOutputExecution(AtlasSession session) throws AtlasException {
         Object output = session.getOutput();
@@ -543,18 +530,9 @@ public class JavaModule extends BaseAtlasModule {
         if (logger.isDebugEnabled()) {
             logger.debug("processPostOutputExecution completed");
         }
-    }
-
-    @Override
-    public void processPostValidation(AtlasSession arg0) throws AtlasException {
-        if(logger.isDebugEnabled()) {
-            logger.debug("processPostValidation completed");
-        }
-    }
+    }    
     
-    protected List<String> separateValue(AtlasSession session, String value, String delimiter)
-            throws AtlasConversionException {
-
+    protected List<String> separateValue(AtlasSession session, String value, String delimiter) throws AtlasConversionException {
         AtlasContextFactory contextFactory = session.getAtlasContext().getContextFactory();
         if (contextFactory instanceof DefaultAtlasContextFactory) {
             return ((DefaultAtlasContextFactory) contextFactory).getSeparateStrategy().separateValue(value, delimiter,
@@ -593,14 +571,13 @@ public class JavaModule extends BaseAtlasModule {
         }
     }
     
-    protected static Method resolveGetMethod(Object sourceObject, Field field, boolean objectIsParent) throws NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
-
+    protected static Method resolveGetMethod(Object sourceObject, Field field, boolean objectIsParent) throws AtlasException {
         Object parentObject = sourceObject;
         PathUtil pathUtil = new PathUtil(field.getPath());
         Method getter = null;
 
         if (pathUtil.hasParent() && !objectIsParent) {
-            parentObject = ClassHelper.parentObjectForPath(sourceObject, pathUtil);
+            parentObject = ClassHelper.parentObjectForPath(sourceObject, pathUtil, true);
         }
         
         List<Class<?>> classTree = resolveMappableClasses(parentObject.getClass());
@@ -630,13 +607,12 @@ public class JavaModule extends BaseAtlasModule {
         return null;
     }
     
-    protected Method resolveInputSetMethod(Object sourceObject, JavaField javaField, Class<?> targetType) throws NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
-        
+    protected Method resolveInputSetMethod(Object sourceObject, JavaField javaField, Class<?> targetType) throws AtlasException {        
         PathUtil pathUtil = new PathUtil(javaField.getPath());
         Object parentObject = sourceObject;
 
         if (pathUtil.hasParent()) {
-            parentObject = ClassHelper.parentObjectForPath(parentObject, pathUtil);
+            parentObject = ClassHelper.parentObjectForPath(parentObject, pathUtil, true);
         }
         List<Class<?>> classTree = resolveMappableClasses(parentObject.getClass());
         
@@ -665,7 +641,7 @@ public class JavaModule extends BaseAtlasModule {
             }
         }
         
-        throw new NoSuchMethodException(String.format("Unable to resolve setter for path=%s", javaField.getPath()));
+        throw new AtlasException(String.format("Unable to resolve setter for path=%s", javaField.getPath()));
     }
     
         
@@ -722,17 +698,7 @@ public class JavaModule extends BaseAtlasModule {
         }
         return String.valueOf(sentence.charAt(0)).toUpperCase() + sentence.substring(1);
     }
-    
-    @Override
-	public AtlasConversionService getConversionService() {
-        return atlasConversionService;
-    }
-
-    @Override
-	public void setConversionService(AtlasConversionService atlasConversionService) {
-        this.atlasConversionService = atlasConversionService;
-    }
-    
+            
     public ClassInspectionService getJavaInspectionService() {
         return javaInspectionService;
     }
@@ -747,32 +713,7 @@ public class JavaModule extends BaseAtlasModule {
 
     public void setJavaConstructService(JavaConstructService javaConstructService) {
         this.javaConstructService = javaConstructService;
-    }
-    
-    @Override
-    public AtlasModuleMode getMode() {
-        return this.atlasModuleMode;
-    }
-
-    @Override
-    public void setMode(AtlasModuleMode atlasModuleMode) {
-        this.atlasModuleMode = atlasModuleMode;
-    }
-
-    @Override
-    public List<AtlasModuleMode> listSupportedModes() {
-        return Arrays.asList(AtlasModuleMode.SOURCE, AtlasModuleMode.TARGET);
-    }
-
-    @Override
-    public Boolean isStatisticsSupported() {
-        return false;
-    }
-
-    @Override
-    public Boolean isStatisticsEnabled() {
-        return false;
-    }
+    }       
 
     @Override
     public Boolean isSupportedField(Field field) {

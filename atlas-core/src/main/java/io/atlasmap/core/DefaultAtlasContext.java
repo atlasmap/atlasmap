@@ -169,22 +169,11 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
 		getSourceModule().processPreInputExecution(session);
 		getTargetModule().processPreOutputExecution(session);
 
-		for(BaseMapping mapping : session.getMapping().getMappings().getMapping()) {
-		    boolean isCollection = MappingType.COLLECTION.equals(mapping.getMappingType());		    
-		    if (isCollection) {
-		        getSourceModule().processInputCollection(session, (Collection)mapping);
-		    } else {
-	            getSourceModule().processInputMapping(session, (Mapping)mapping);
-		    }                        
-
-            getSourceModule().processInputActions(session, (Mapping)mapping);
-            getTargetModule().processOutputActions(session, (Mapping)mapping);
-            
-            if (isCollection) {
-                getTargetModule().processOutputCollection(session, (Collection)mapping);
-            } else {
-                getTargetModule().processOutputMapping(session, (Mapping)mapping);
-            }            		    
+		for(BaseMapping mapping : session.getMapping().getMappings().getMapping()) {		    
+		    getSourceModule().processInputMapping(session, mapping);
+            getSourceModule().processInputActions(session, mapping);
+            getTargetModule().processOutputActions(session, mapping);
+            getTargetModule().processOutputMapping(session, mapping);            		    
               
 		    if(session.hasErrors()) {
 		        if(logger.isDebugEnabled()) {

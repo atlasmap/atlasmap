@@ -12,6 +12,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import io.atlasmap.api.AtlasException;
+import io.atlasmap.core.PathUtil;
+import io.atlasmap.core.PathUtil.SegmentContext;
+import io.atlasmap.v2.FieldType;
+
 public class DocumentXmlFieldReader extends XmlFieldTransformer {
 
     private static final Logger logger = LoggerFactory.getLogger(DocumentXmlFieldReader.class);
@@ -20,6 +25,73 @@ public class DocumentXmlFieldReader extends XmlFieldTransformer {
 
     public DocumentXmlFieldReader(Map<String, String> namespaces) {
         super(namespaces);
+    }
+    
+    public void readNew(final Document document, final XmlField xmlField) throws AtlasException {
+        if (logger.isDebugEnabled()) {
+            logger.debug("Reading input value for field: " + xmlField.getPath());
+        }
+        Element parentNode = document.getDocumentElement();
+        for (SegmentContext sc : new PathUtil(xmlField.getPath()).getSegmentContexts(false)) {
+            if (logger.isDebugEnabled()) {
+                logger.debug("Now processing segment: " + sc.getSegment());
+                logger.debug("Parent element is currently: " + DocumentXmlFieldWriter.writeDocumentToString(true, parentNode));
+            }
+            if (sc.getPrev() == null) {
+                if (logger.isDebugEnabled()) {
+                    logger.debug("Skipping root segment: " + sc);
+                }
+                //processing root node part of path such as the "XOA" part of "/XOA/contact<>/firstName", skip.
+                continue;
+            }            
+            
+            if (!PathUtil.isAttributeSegment(sc.getSegment())) {
+                String childrenElementName = PathUtil.cleanPathSegment(sc.getSegment());
+                String namespaceAlias = PathUtil.getNamespace(sc.getSegment());
+                if (namespaceAlias != null && !"".equals(namespaceAlias)) {
+                    childrenElementName = namespaceAlias + ":" + childrenElementName;
+                }
+                if (logger.isDebugEnabled()) {
+                    logger.debug("Looking for children elements with name: " + childrenElementName);
+                }
+                List<Element> children = DocumentXmlFieldWriter.getChildrenWithName(childrenElementName, parentNode);
+                if (children == null || children.isEmpty()) {
+                    if (logger.isDebugEnabled()) {
+                        logger.debug("Skipping input value set, couldn't find children with name '" + childrenElementName + "', for segment: " + sc);
+                    }
+                    return;
+                }
+                parentNode = children.get(0);
+                if (PathUtil.isCollectionSegment(sc.getSegment())) {
+                    int index = PathUtil.indexOfSegment(sc.getSegment());
+                    if (index >= children.size()) {
+                        if (logger.isDebugEnabled()) {
+                            logger.debug("Skipping input value set, children list can't fit index " + index + ", children list size: " + children.size());
+                        }
+                        return;
+                    }
+                    parentNode = children.get(index);
+                }
+            }
+            if (sc.getNext() == null) { // last segment.
+                String value = parentNode.getTextContent();
+                if (PathUtil.isAttributeSegment(sc.getSegment())) {
+                    String attributeName = PathUtil.cleanPathSegment(sc.getSegment());
+                    value = parentNode.getAttribute(attributeName);
+                }
+                if(xmlField.getFieldType() == null || FieldType.STRING.equals(xmlField.getFieldType())) {
+                    xmlField.setValue(value);
+                    xmlField.setFieldType(FieldType.STRING);
+                } else {
+                    if(FieldType.CHAR.equals(xmlField.getFieldType())) {
+                        xmlField.setValue(value.charAt(0));
+                    } else {
+                        logger.warn(String.format("Unsupported FieldType for text data t=%s p=%s docId=%s", xmlField.getFieldType().value(), xmlField.getPath(), xmlField.getDocId()));
+                    }
+                }
+                return;
+            }
+        }
     }
 
     public void read(final Document document, final XmlField xmlField) throws AtlasException {
