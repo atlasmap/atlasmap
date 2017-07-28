@@ -15,6 +15,8 @@ import io.atlasmap.api.AtlasException;
 import io.atlasmap.core.PathUtil;
 import io.atlasmap.json.v2.AtlasJsonModelFactory;
 import io.atlasmap.json.v2.JsonField;
+import io.atlasmap.v2.AtlasModelFactory;
+import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldType;
 
 /**
@@ -44,12 +46,12 @@ public class DocumentJsonFieldWriter {
 		return objectMapper;
 	}        
     
-    public void write(JsonField field) throws AtlasException {
+    public void write(Field field) throws AtlasException {
     	if (field == null) {
             throw new AtlasException(new IllegalArgumentException("Argument 'jsonField' cannot be null"));
         }
     	if (logger.isDebugEnabled()) {    		
-    		logger.debug("Field: " + AtlasJsonModelFactory.toString(field));
+    		logger.debug("Field: " + AtlasModelFactory.toString(field));
     		logger.debug("Field type=" + field.getFieldType() + " path=" + field.getPath() + " v=" + field.getValue());    		
     	}
     	PathUtil path = new PathUtil(field.getPath());
@@ -92,7 +94,7 @@ public class DocumentJsonFieldWriter {
     	}                        
     }
     
-    public void writeValue(ObjectNode parentNode, String parentSegment, String segment, JsonField field) throws AtlasException {
+    public void writeValue(ObjectNode parentNode, String parentSegment, String segment, Field field) throws AtlasException {
     	if (logger.isDebugEnabled()) {
     		logger.debug("Writing field value '" + segment + "' in parent node '" + parentSegment + "', parentNode: " + parentNode);
     	}
@@ -201,7 +203,7 @@ public class DocumentJsonFieldWriter {
 		return childNode;
     }
     
-    public JsonNode createValueNode(JsonField jsonField) throws AtlasException {
+    public JsonNode createValueNode(Field jsonField) throws AtlasException {
     	FieldType type = jsonField.getFieldType();
     	Object value = jsonField.getValue();
     	JsonNode valueNode = null;

@@ -20,7 +20,7 @@ import org.glassfish.jersey.server.ResourceConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.atlasmap.json.inspect.v2.JsonDocumentInspectionService;
+import io.atlasmap.json.inspect.JsonDocumentInspectionService;
 import io.atlasmap.json.v2.InspectionType;
 import io.atlasmap.json.v2.JsonDocument;
 import io.atlasmap.json.v2.JsonInspectionRequest;

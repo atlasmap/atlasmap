@@ -210,6 +210,11 @@ public class XmlModule extends BaseAtlasModule {
     @Override
     public void processOutputMapping(AtlasSession session, BaseMapping baseMapping) throws AtlasException { 
         for (Mapping mapping : this.getOutputMappings(session, baseMapping)) {
+            if(mapping.getOutputField() == null || mapping.getOutputField().isEmpty()) {
+                addAudit(session, null, String.format("Mapping does not contain at least one output field alias=%s desc=%s", mapping.getAlias(), mapping.getDescription()), null, AuditStatus.ERROR, null);
+                return;
+            }
+            
             Field inField = mapping.getInputField().get(0);
             Field outField = mapping.getOutputField().get(0);
             if(!(outField instanceof XmlField)) {

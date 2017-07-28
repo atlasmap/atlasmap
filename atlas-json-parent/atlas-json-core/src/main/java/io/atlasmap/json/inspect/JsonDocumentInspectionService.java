@@ -1,4 +1,4 @@
-package io.atlasmap.json.inspect.v2;
+package io.atlasmap.json.inspect;
 
 import io.atlasmap.json.v2.JsonDocument;
 

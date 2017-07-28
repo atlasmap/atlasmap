@@ -244,4 +244,14 @@ public class AtlasModelFactory {
         tmp.concat("]");
         return tmp;
     }
+    
+    public static String toString(Field f) {
+        String tmp = new String("Field [name=");
+        if(f != null) {
+            tmp.concat(f.getClass().getSimpleName());
+        }
+        tmp.concat(baseFieldToString(f));
+        tmp.concat("]");
+        return tmp;
+    }
 }
