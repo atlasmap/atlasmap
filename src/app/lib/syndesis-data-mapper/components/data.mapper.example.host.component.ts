@@ -31,7 +31,7 @@ import { DataMapperAppComponent } from './data.mapper.app.component';
 @Component({
     selector: 'data-mapper-example-host',
     template: `
-        <data-mapper #dataMapperComponent [cfg]="cfg"></data-mapper>
+        <data-mapper #dataMapperComponent></data-mapper>
     `,
     providers: [MappingManagementService, ErrorHandlerService, DocumentManagementService]
 })
@@ -41,12 +41,10 @@ export class DataMapperAppExampleHostComponent {
     @ViewChild('dataMapperComponent')
     public dataMapperComponent: DataMapperAppComponent;
 
-    public cfg: ConfigModel = null;
-
     constructor(private initializationService: InitializationService) {
         console.log("Host component being created.");
         // initialize config information before initializing services
-        var c: ConfigModel = initializationService.cfg
+        var c: ConfigModel = initializationService.cfg;
 
         //store references to our services in our config model
 
@@ -87,7 +85,7 @@ export class DataMapperAppExampleHostComponent {
          */                
 
         //enable debug logging options as needed
-        c.initCfg.debugDocumentServiceCalls = false;
+        c.initCfg.debugDocumentServiceCalls = true;
         c.initCfg.debugDocumentParsing = false;
         c.initCfg.debugMappingServiceCalls = false;
         c.initCfg.debugClassPathServiceCalls = false;
@@ -99,27 +97,27 @@ export class DataMapperAppExampleHostComponent {
 
         //enable mock source/target documents as needed
         c.initCfg.addMockJavaSingleSource = true;
-        c.initCfg.addMockJavaSources = false;
+        c.initCfg.addMockJavaSources = true;
         c.initCfg.addMockXMLInstanceSources = false;
         c.initCfg.addMockXMLSchemaSources = false;
         c.initCfg.addMockJSONSources = false;
-        c.initCfg.addMockJavaTarget = true;
-        c.initCfg.addMockXMLInstanceTarget = true;
-        c.initCfg.addMockXMLSchemaTarget = false;
+        
+        c.initCfg.addMockJavaTarget = false;
+        c.initCfg.addMockXMLInstanceTarget = false;
+        c.initCfg.addMockXMLSchemaTarget = true;
         c.initCfg.addMockJSONTarget = false;
 
         console.log("Example config after host component configuration.", c);
 
         //initialize system
-        this.cfg = c;
-        c.initializationService.initialize();
+        initializationService.initialize();
 
         //save the mappings when the ui calls us back asking for save
         c.mappingService.saveMappingOutput$.subscribe((saveHandler: Function) => {
             //NOTE: the mapping definition being saved is currently stored in "this.cfg.mappings" until further notice.
 
             console.log("Host component saving mappings.");
-            console.log("Mappings to save.", this.cfg.mappings);
+            console.log("Mappings to save.", ConfigModel.getConfig().mappings);
 
             //turn this on to print out example json
             var makeExampleJSON: boolean = false;

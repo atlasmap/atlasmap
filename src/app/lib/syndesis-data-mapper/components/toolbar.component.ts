@@ -31,7 +31,7 @@ template: `
         <div class="dm-toolbar-icons" style="float:right;">
             <i class="fa fa-plus link" (click)="toolbarButtonClicked('addMapping', $event);"></i>
             <i [attr.class]="getCSSClass('editTemplate')"  *ngIf="targetSupportsTemplate()"
-                (click)="toolbarButtonClicked('editTemplate');"></i>
+                (click)="toolbarButtonClicked('editTemplate', $event);"></i>
             <i [attr.class]="getCSSClass('showMappingTable')" (click)="toolbarButtonClicked('showMappingTable', $event);"></i>
             <i *ngIf="cfg.getFirstXmlDoc(false)" [attr.class]="getCSSClass('showNamespaceTable')"
                 (click)="toolbarButtonClicked('showNamespaceTable', $event);"></i>
@@ -139,23 +139,18 @@ export class ToolbarComponent {
             this.cfg.mappingService.addNewMapping(null);
         } else if ("showMappingTable" == action) {
             this.cfg.showMappingTable = !this.cfg.showMappingTable;
-            if (!this.cfg.showMappingTable) {
-                setTimeout(() => {
-                    this.lineMachine.redrawLinesForMappings();
-                }, 10);
-            } else {
-                this.cfg.showNamespaceTable = false;
+            if (this.cfg.showMappingTable) {
+                this.cfg.showNamespaceTable = false;                
             }
         } else if ("showNamespaceTable" == action) {
             this.cfg.showNamespaceTable = !this.cfg.showNamespaceTable;
-            if (!this.cfg.showNamespaceTable) {
-                setTimeout(() => {
-                    this.lineMachine.redrawLinesForMappings();
-                }, 10);
-            } else {
-                this.cfg.showMappingTable = false;
+            if (this.cfg.showNamespaceTable) {
+                this.cfg.showMappingTable = false;                
             }
         }
+        setTimeout(() => {
+            this.lineMachine.redrawLinesForMappings();
+        }, 10);
     }
 
     private editTemplate(): void {

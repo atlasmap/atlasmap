@@ -23,9 +23,10 @@ import { ErrorHandlerService } from '../services/error.handler.service';
 import { DocumentManagementService } from '../services/document.management.service';
 import { MappingManagementService } from '../services/mapping.management.service';
 import { InitializationService } from '../services/initialization.service';
+import { ErrorInfo, ErrorLevel } from '../models/error.model';
 
 export class DataMapperInitializationModel {
-    public dataMapperVersion: string = "0.9.2017.07.20";
+    public dataMapperVersion: string = "0.9.2017.07.28";
     public initialized: boolean = false;
     public loadingStatus: string = "Loading."
     public initializationErrorOccurred: boolean = false;
@@ -70,6 +71,9 @@ export class DataMapperInitializationModel {
     public debugClassPathServiceCalls: boolean = false;
     public debugValidationServiceCalls: boolean = false;
     public debugFieldActionServiceCalls: boolean = false;
+
+    public mappingInitialized: boolean = false;
+    public fieldActionsInitialized: boolean = false;
 }
 
 export class ConfigModel {
@@ -102,6 +106,9 @@ export class ConfigModel {
 
     public mappings: MappingDefinition = null;
 
+    public errors : ErrorInfo[] = [];
+    public validationErrors : ErrorInfo[] = [];
+
     constructor() {
         this.propertyDoc.initCfg.type.type = DocumentTypes.PROPERTY;
         this.propertyDoc.name = "Properties";
@@ -113,6 +120,10 @@ export class ConfigModel {
 
     public static getConfig(): ConfigModel {
         return ConfigModel.cfg;
+    }
+
+    public static setConfig(cfg: ConfigModel): void {
+        ConfigModel.cfg = cfg;
     }
 
     private createDocument(documentIdentifier: string, isSource: boolean,
