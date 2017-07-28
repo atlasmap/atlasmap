@@ -56,8 +56,8 @@ import io.atlasmap.v2.PropertyField;
 import io.atlasmap.v2.SimpleField;
 import io.atlasmap.v2.Validation;
 import io.atlasmap.xml.v2.AtlasXmlModelFactory;
-import io.atlasmap.xml.core.DocumentXmlFieldReader;
-import io.atlasmap.xml.core.DocumentXmlFieldWriter;
+import io.atlasmap.xml.core.XmlFieldReader;
+import io.atlasmap.xml.core.XmlFieldWriter;
 import io.atlasmap.xml.v2.XmlDataSource;
 import io.atlasmap.xml.v2.XmlField;
 import io.atlasmap.xml.v2.XmlNamespace;
@@ -85,7 +85,7 @@ public class XmlModule extends BaseAtlasModule {
             }
         }
         
-        DocumentXmlFieldWriter writer = new DocumentXmlFieldWriter(nsMap, template);
+        XmlFieldWriter writer = new XmlFieldWriter(nsMap, template);
         session.setOutput(writer);
         
         if(logger.isDebugEnabled()) {
@@ -179,7 +179,7 @@ public class XmlModule extends BaseAtlasModule {
                 return;
             }
             
-            DocumentXmlFieldReader dxfr = new DocumentXmlFieldReader();
+            XmlFieldReader dxfr = new XmlFieldReader();
             dxfr.readNew(document, inputField);
             
             if(inputField.getFieldType() == null) {
@@ -195,12 +195,12 @@ public class XmlModule extends BaseAtlasModule {
     @Override
     public void processOutputMapping(AtlasSession session, BaseMapping baseMapping) throws AtlasException {
         
-        DocumentXmlFieldWriter writer = null;
+        XmlFieldWriter writer = null;
         if(session.getOutput() == null) {
-            writer = new DocumentXmlFieldWriter();
+            writer = new XmlFieldWriter();
             session.setOutput(writer);
-        } else if(session.getOutput() != null && session.getOutput() instanceof DocumentXmlFieldWriter) {
-            writer = (DocumentXmlFieldWriter) session.getOutput();
+        } else if(session.getOutput() != null && session.getOutput() instanceof XmlFieldWriter) {
+            writer = (XmlFieldWriter) session.getOutput();
         } else {
             addAudit(session, null, String.format("Unsupported output object type=%s", session.getOutput().getClass().getName()), null, AuditStatus.ERROR, null);                
             return;
@@ -316,8 +316,8 @@ public class XmlModule extends BaseAtlasModule {
         
         Object output = session.getOutput();
         if(output != null) {
-            if(output instanceof DocumentXmlFieldWriter) {
-                session.setOutput(convertDocumentToString(((DocumentXmlFieldWriter)output).getDocument()));
+            if(output instanceof XmlFieldWriter) {
+                session.setOutput(convertDocumentToString(((XmlFieldWriter)output).getDocument()));
             }
         }
     }    
@@ -381,7 +381,7 @@ public class XmlModule extends BaseAtlasModule {
                 if (namespaceAlias != null && !"".equals(namespaceAlias)) {
                     childrenElementName = namespaceAlias + ":" + childrenElementName;
                 }
-                List<Element> children = DocumentXmlFieldWriter.getChildrenWithName(childrenElementName, parentNode);
+                List<Element> children = XmlFieldWriter.getChildrenWithName(childrenElementName, parentNode);
                 if (children == null || children.isEmpty()) {
                     return 0;
                 }

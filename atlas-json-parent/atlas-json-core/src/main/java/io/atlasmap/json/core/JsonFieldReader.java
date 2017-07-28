@@ -16,9 +16,9 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class DocumentJsonFieldReader {
+public class JsonFieldReader {
 
-    private static final Logger logger = LoggerFactory.getLogger(DocumentJsonFieldReader.class);
+    private static final Logger logger = LoggerFactory.getLogger(JsonFieldReader.class);
     
     public void read(final String document, final JsonField jsonField) throws AtlasException {
         if (document == null || document.isEmpty()) {

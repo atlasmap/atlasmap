@@ -21,19 +21,19 @@ import io.atlasmap.v2.FieldType;
 
 /**
  */
-public class DocumentJsonFieldWriter {
-    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(DocumentJsonFieldWriter.class);
+public class JsonFieldWriter {
+    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(JsonFieldWriter.class);
 
     private ObjectMapper objectMapper = null;
     private ObjectNode rootNode = null;
 
-    public DocumentJsonFieldWriter() {
+    public JsonFieldWriter() {
     	this.objectMapper = new ObjectMapper();
     	objectMapper.setDefaultPrettyPrinter(new DefaultPrettyPrinter());
         rootNode = objectMapper.createObjectNode();
     }
     
-    public DocumentJsonFieldWriter(ObjectMapper objectMapper) {
+    public JsonFieldWriter(ObjectMapper objectMapper) {
     	this.objectMapper = objectMapper;
     	this.rootNode = objectMapper.createObjectNode();
     }

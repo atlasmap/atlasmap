@@ -31,13 +31,13 @@ import java.util.Map;
 import io.atlasmap.core.PathUtil;
 import io.atlasmap.core.PathUtil.SegmentContext;
 
-public class DocumentXmlFieldReader extends XmlFieldTransformer {
+public class XmlFieldReader extends XmlFieldTransformer {
 
-    private static final Logger logger = LoggerFactory.getLogger(DocumentXmlFieldReader.class);
+    private static final Logger logger = LoggerFactory.getLogger(XmlFieldReader.class);
     
-    public DocumentXmlFieldReader() {}
+    public XmlFieldReader() {}
 
-    public DocumentXmlFieldReader(Map<String, String> namespaces) {
+    public XmlFieldReader(Map<String, String> namespaces) {
         super(namespaces);
     }
     
@@ -49,7 +49,7 @@ public class DocumentXmlFieldReader extends XmlFieldTransformer {
         for (SegmentContext sc : new PathUtil(xmlField.getPath()).getSegmentContexts(false)) {
             if (logger.isDebugEnabled()) {
                 logger.debug("Now processing segment: " + sc.getSegment());
-                logger.debug("Parent element is currently: " + DocumentXmlFieldWriter.writeDocumentToString(true, parentNode));
+                logger.debug("Parent element is currently: " + XmlFieldWriter.writeDocumentToString(true, parentNode));
             }
             if (sc.getPrev() == null) {
                 if (logger.isDebugEnabled()) {
@@ -68,7 +68,7 @@ public class DocumentXmlFieldReader extends XmlFieldTransformer {
                 if (logger.isDebugEnabled()) {
                     logger.debug("Looking for children elements with name: " + childrenElementName);
                 }
-                List<Element> children = DocumentXmlFieldWriter.getChildrenWithName(childrenElementName, parentNode);
+                List<Element> children = XmlFieldWriter.getChildrenWithName(childrenElementName, parentNode);
                 if (children == null || children.isEmpty()) {
                     if (logger.isDebugEnabled()) {
                         logger.debug("Skipping input value set, couldn't find children with name '" + childrenElementName + "', for segment: " + sc);

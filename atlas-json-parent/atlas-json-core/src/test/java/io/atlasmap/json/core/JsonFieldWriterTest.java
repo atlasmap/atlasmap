@@ -23,12 +23,12 @@ import io.atlasmap.v2.FieldType;
 
 /**
  */
-public class DocumentJsonFieldWriterTest {
-    private DocumentJsonFieldWriter writer = null;
+public class JsonFieldWriterTest {
+    private JsonFieldWriter writer = null;
 
     @Before
     public void setupWriter() {
-    	this.writer = new DocumentJsonFieldWriter();
+    	this.writer = new JsonFieldWriter();
         Assert.assertNotNull(writer.getRootNode());
     }
     

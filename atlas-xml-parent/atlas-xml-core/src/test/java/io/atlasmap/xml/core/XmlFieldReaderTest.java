@@ -41,8 +41,8 @@ import io.atlasmap.core.PathUtil;
 import io.atlasmap.xml.v2.AtlasXmlModelFactory;
 import io.atlasmap.xml.v2.XmlField;
 
-public class DocumentXmlFieldReaderTest {
-    private DocumentXmlFieldReader reader = new DocumentXmlFieldReader();
+public class XmlFieldReaderTest {
+    private XmlFieldReader reader = new XmlFieldReader();
 
 
     @Test
@@ -212,7 +212,7 @@ public class DocumentXmlFieldReaderTest {
         namespaces.put("http://www.example.com/y/", "y");
         namespaces.put("http://www.example.com/x/", "");
 
-        reader = new DocumentXmlFieldReader(namespaces);
+        reader = new XmlFieldReader(namespaces);
 
         reader.read(doc, xmlField);
         assertNotNull(xmlField.getValue());
