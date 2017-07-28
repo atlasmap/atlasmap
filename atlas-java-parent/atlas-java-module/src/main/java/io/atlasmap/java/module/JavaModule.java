@@ -728,4 +728,27 @@ public class JavaModule extends BaseAtlasModule {
         }
         return false;
     }
+    
+    @SuppressWarnings("rawtypes")
+    @Override
+    public int getCollectionSize(AtlasSession session, Field field) throws AtlasException {
+        Object sourceObject = session.getInput();
+        if(field.getDocId() != null) {
+            sourceObject = session.getInput(field.getDocId());
+        }
+
+        Object collectionObject = ClassHelper.parentObjectForPath(sourceObject, new PathUtil(field.getPath()), false);
+        if (collectionObject == null) {
+            throw new AtlasException("Cannot find collection on sourceObject '" + sourceObject.getClass().getName() + "' for path: " + field.getPath());
+        }
+        if (collectionObject.getClass().isArray()) {
+            return Array.getLength(collectionObject);
+        }
+        return ((List)collectionObject).size();
+    }
+    
+    @Override
+    public Field cloneField(Field field) throws AtlasException {
+        return AtlasJavaModelFactory.cloneJavaField((JavaField)field);
+    }
 }
