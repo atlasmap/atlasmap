@@ -229,8 +229,8 @@ export class LineMachineComponent {
                     //console.log("Cant find screen position for input field, not drawing line: " + inputField.path);
                     continue;
                 }
-                var sourceY: number = inputFieldPos.y;
 
+                var sourceY: number = inputFieldPos.y;
                 sourceY = (sourceY < 55) ? 55 : sourceY;
                 sourceY = (sourceY > (lineMachineHeight - 27)) ? (lineMachineHeight - 27) : sourceY;
 
@@ -245,11 +245,10 @@ export class LineMachineComponent {
                         //console.log("Cant find screen position for output field, not drawing line: " + outputField.path);
                         continue;
                     }
+                    
                     var targetY: number = outputFieldPos.y;
-                    if ((targetY < 16) || (targetY > (lineMachineHeight - 40))) {
-                        //console.log("Not drawing line, output line coords are out of bounds.", targetY);
-                        continue;
-                    }
+                    targetY = (targetY < 55) ? 55 : targetY;
+                    targetY = (targetY > (lineMachineHeight - 27)) ? (lineMachineHeight - 27) : targetY;
 
                     if (isSelectedMapping || (this.cfg.showLinesAlways)) {
                         this.addLineFromParams("0", (sourceY + this.yOffset).toString(),
