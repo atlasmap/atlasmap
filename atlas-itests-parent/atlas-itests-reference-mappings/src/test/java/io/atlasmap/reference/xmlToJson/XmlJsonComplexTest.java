@@ -20,7 +20,6 @@ import java.io.File;
 import org.junit.Test;
 import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasSession;
-import io.atlasmap.core.DefaultAtlasContext;
 import io.atlasmap.json.test.TargetOrder;
 import io.atlasmap.json.test.AtlasJsonTestRootedMapper;
 import io.atlasmap.json.test.AtlasJsonTestUnrootedMapper;

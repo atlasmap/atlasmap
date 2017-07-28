@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AtlasMapping xmlns="http://atlasmap.io/v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns2="http://atlasmap.io/json/v2" xmlns:ns3="http://atlasmap.io/xml/v2" name="JsonXmlFlatMappingAuto5">
+    <DataSource dataSourceType="Source" uri="atlas:json"/>
+    <DataSource dataSourceType="Target" uri="atlas:xml?complexType=ns:XmlFlatPrimitiveElement" xsi:type="ns3:XmlDataSource">
+      <ns3:XmlNamespaces>
+        <ns3:XmlNamespace alias="xt1" uri="http://atlasmap.io/xml/test/v2" />
+      </ns3:XmlNamespaces>
+    </DataSource> 
+    <Mappings>
+        <Mapping xsi:type="Mapping" mappingType="Map">
+            <InputField xsi:type="ns2:JsonField" path="/intField"/>
+            <OutputField xsi:type="ns3:XmlField" path="/xt1:XmlFPE/xt1:longField"/>
+        </Mapping>
+        <Mapping xsi:type="Mapping" mappingType="Map">
+            <InputField xsi:type="ns2:JsonField" path="/shortField"/>
+            <OutputField xsi:type="ns3:XmlField" path="/xt1:XmlFPE/xt1:doubleField"/>
+        </Mapping>
+        <Mapping xsi:type="Mapping" mappingType="Map">
+            <InputField xsi:type="ns2:JsonField" path="/longField"/>
+            <OutputField xsi:type="ns3:XmlField" path="/xt1:XmlFPE/xt1:floatField"/>
+        </Mapping>
+        <Mapping xsi:type="Mapping" mappingType="Map">
+            <InputField xsi:type="ns2:JsonField" path="/doubleField"/>
+            <OutputField xsi:type="ns3:XmlField" path="/xt1:XmlFPE/xt1:booleanField"/>
+        </Mapping>
+        <Mapping xsi:type="Mapping" mappingType="Map">
+            <InputField xsi:type="ns2:JsonField" path="/floatField"/>
+            <OutputField xsi:type="ns3:XmlField" path="/xt1:XmlFPE/xt1:charField" fieldType="Char"/>
+        </Mapping>
+        <Mapping xsi:type="Mapping" mappingType="Map">
+            <InputField xsi:type="ns2:JsonField" path="/booleanField"/>
+            <OutputField xsi:type="ns3:XmlField" path="/xt1:XmlFPE/xt1:intField"/>
+        </Mapping>
+        <Mapping xsi:type="Mapping" mappingType="Map">
+            <InputField xsi:type="ns2:JsonField" path="/charField" fieldType="Char" />
+            <OutputField xsi:type="ns3:XmlField" path="/xt1:XmlFPE/xt1:shortField" fieldType="Short"/>
+        </Mapping>
+    </Mappings>
+    <LookupTables/>
+    <Properties/>
+</AtlasMapping>

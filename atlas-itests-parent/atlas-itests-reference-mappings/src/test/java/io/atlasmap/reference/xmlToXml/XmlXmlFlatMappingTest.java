@@ -22,7 +22,6 @@ import javax.xml.bind.JAXBElement;
 import org.junit.Test;
 import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasSession;
-import io.atlasmap.core.DefaultAtlasContext;
 import io.atlasmap.reference.AtlasMappingBaseTest;
 import io.atlasmap.reference.AtlasTestUtil;
 import io.atlasmap.xml.test.v2.AtlasXmlTestHelper;
