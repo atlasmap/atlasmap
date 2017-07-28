@@ -327,7 +327,12 @@ public class XmlModule extends BaseAtlasModule {
                     //processing root node part of path such as the "XOA" part of "/XOA/contact<>/firstName", skip.
                     continue;
                 }
-                List<Element> children = DocumentXmlFieldWriter.getChildrenWithName(PathUtil.cleanPathSegment(sc.getSegment()), parentNode);
+                String childrenElementName = PathUtil.cleanPathSegment(sc.getSegment());
+                String namespaceAlias = PathUtil.getNamespace(sc.getSegment());
+                if (namespaceAlias != null && !"".equals(namespaceAlias)) {
+                    childrenElementName = namespaceAlias + ":" + childrenElementName;
+                }
+                List<Element> children = DocumentXmlFieldWriter.getChildrenWithName(childrenElementName, parentNode);
                 if (children == null || children.isEmpty()) {
                     return 0;
                 }
