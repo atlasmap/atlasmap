@@ -221,6 +221,13 @@ export class MappingManagementService {
 
         var mapping: MappingModel = this.cfg.mappings.activeMapping;
 
+        if (mapping != null && mapping.hasMappedFields(field.isSource())
+            && !mapping.isFieldMapped(field, field.isSource())) {
+            var type: string = field.isSource() ? "source" : "target";
+            console.log("Discarding mapping, it already has a " + type + " field mapped.");
+            mapping = null;
+        }
+
         if (mapping == null) {
             var mappingsForField: MappingModel[] = this.cfg.mappings.findMappingsForField(field);
             if (mappingsForField && mappingsForField.length > 1) {
@@ -232,13 +239,6 @@ export class MappingManagementService {
                 console.log("Found existing mapping for selected field.", { "field": field, "mappings": mappingsForField });
                 mapping = mappingsForField[0];
             }
-        }
-
-        if (mapping != null && mapping.hasMappedFields(field.isSource())
-            && !mapping.isFieldMapped(field, field.isSource())) {
-            var type: string = field.isSource() ? "source" : "target";
-            console.log("Discarding mapping, it already has a " + type + " field mapped.");
-            mapping = null;
         }
 
         if (mapping == null) {
