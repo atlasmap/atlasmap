@@ -35,30 +35,35 @@ import { TransitionModel, FieldAction, FieldActionConfig } from '../models/trans
 
 @Injectable()
 export class InitializationService {
-    public cfg: ConfigModel = ConfigModel.getConfig();
-    private mappingInitialized: boolean = false;
-    private fieldActionsInitialized: boolean = false;
+    public cfg: ConfigModel = ConfigModel.getConfig();    
 
     private systemInitializedSource = new Subject<void>();
     systemInitialized$ = this.systemInitializedSource.asObservable();
 
     private initializationStatusChangedSource = new Subject<void>();
-    initializationStatusChanged$ = this.initializationStatusChangedSource.asObservable();
+    initializationStatusChanged$ = this.initializationStatusChangedSource.asObservable();    
 
     constructor(private documentService: DocumentManagementService,
         private mappingService: MappingManagementService,
         private errorService: ErrorHandlerService) {
         console.log("Initialization Service being created.");
-        this.cfg.documentService = documentService;
-        this.cfg.mappingService = mappingService;
-        this.cfg.errorService = errorService;
-        this.cfg.initializationService = this;
-
-        this.cfg.documentService.cfg = this.cfg;
-        this.cfg.mappingService.cfg = this.cfg;
+        
+        this.resetConfig();
 
         this.cfg.documentService.initialize();
         this.cfg.mappingService.initialize();
+    }
+
+    public resetConfig(): void {
+        this.cfg = new ConfigModel()
+        this.cfg.documentService = this.documentService;
+        this.cfg.documentService.cfg = this.cfg;        
+        this.cfg.mappingService = this.mappingService;
+        this.cfg.mappingService.cfg = this.cfg;
+        this.cfg.errorService = this.errorService;
+        this.cfg.errorService.cfg = this.cfg;
+        this.cfg.initializationService = this;
+        ConfigModel.setConfig(this.cfg);
     }
 
     public initialize(): void {
@@ -162,7 +167,7 @@ export class InitializationService {
         //load mappings
         if (this.cfg.mappings != null) {
             console.log("Mapping data already provided, not loading.");
-            this.mappingInitialized = true;
+            this.cfg.initCfg.mappingInitialized = true;
             this.updateStatus();
         } else {
             this.cfg.mappings = new MappingDefinition();
@@ -221,14 +226,14 @@ export class InitializationService {
         console.log("Loading mappings from files: " + mappingFiles, mappingFiles);
         if (mappingFiles.length == 0) {
             console.log("No mapping files to load.")
-            this.mappingInitialized = true;
+            this.cfg.initCfg.mappingInitialized = true;
             this.updateStatus();
             return;
         }
         this.cfg.mappingService.fetchMappings(mappingFiles, this.cfg.mappings).subscribe(
             (result:boolean) => {
                 console.log("Finished loading mapping files.");
-                this.mappingInitialized = true;
+                this.cfg.initCfg.mappingInitialized = true;
                 this.updateStatus();
             },
             (error: any) => { this.handleError("could not load mapping definitions.", error) }
@@ -238,12 +243,12 @@ export class InitializationService {
     private fetchFieldActions(): void {
         if (this.cfg.mappingService == null) {
             console.error("Mapping service is not provided. Field Actions will not be used.");
-            this.fieldActionsInitialized = true;
+            this.cfg.initCfg.fieldActionsInitialized = true;
             this.updateStatus();
             return;
         } else if (this.cfg.initCfg.baseMappingServiceUrl == null) {
             console.error("Mapping service URL is not provided. Field Actions will not be used.");
-            this.fieldActionsInitialized = true;
+            this.cfg.initCfg.fieldActionsInitialized = true;
             this.updateStatus();
             return;
         }
@@ -252,7 +257,7 @@ export class InitializationService {
             (actionConfigs: FieldActionConfig[]) => {
                 console.log("Field actions were loaded.", actionConfigs);
                 TransitionModel.actionConfigs = actionConfigs;
-                this.fieldActionsInitialized = true;
+                this.cfg.initCfg.fieldActionsInitialized = true;
                 this.updateStatus();
             },
             (error: any) => { this.handleError("Could not load field action configs.", error) }
@@ -269,10 +274,10 @@ export class InitializationService {
         }
 
         console.log("Document load status: " + finishedDocCount + " of " + documentCount
-            + "\nMapping load status: " + (this.mappingInitialized ? "Loaded" : "Loading")
-            + "\Field Action Config load status: " + (this.fieldActionsInitialized ? "Loaded" : "Loading"));
+            + "\nMapping load status: " + (this.cfg.initCfg.mappingInitialized ? "Loaded" : "Loading")
+            + "\Field Action Config load status: " + (this.cfg.initCfg.fieldActionsInitialized ? "Loaded" : "Loading"));
 
-        if ((documentCount == finishedDocCount) && this.mappingInitialized && this.fieldActionsInitialized) {
+        if ((documentCount == finishedDocCount) && this.cfg.initCfg.mappingInitialized && this.cfg.initCfg.fieldActionsInitialized) {
             console.log("All documents and mappings are loaded, initializing data.");
             this.cfg.mappings.detectTableIdentifiers();
             this.cfg.mappings.updateDocumentNamespacesFromMappings(this.cfg);

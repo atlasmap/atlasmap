@@ -17,12 +17,12 @@
 import { Injectable } from '@angular/core';
 
 import { ErrorInfo, ErrorLevel } from '../models/error.model';
+import { ConfigModel } from '../models/config.model';
 
 @Injectable()
-export class ErrorHandlerService {
-    public errors : ErrorInfo[] = [];
-    public validationErrors : ErrorInfo[] = [];
-
+export class ErrorHandlerService {    
+    public cfg: ConfigModel = null;    
+    
     public debug(message: string, error: any) { this.addError(message, ErrorLevel.DEBUG, error); }
     public info(message: string, error: any) { this.addError(message, ErrorLevel.INFO, error); }
     public warn(message: string, error: any) { this.addError(message, ErrorLevel.WARN, error); }
@@ -38,28 +38,28 @@ export class ErrorHandlerService {
         e.level = level;
         e.error = error;
         if (level == ErrorLevel.VALIDATION_ERROR) {
-            this.validationErrors.push(e);
+            this.cfg.validationErrors.push(e);
         } else {
-            this.errors.push(e);
+            this.cfg.errors.push(e);
         }
     }
 
     public removeError(identifier: string): void {
-        for (var i = 0; i < this.errors.length; i++) {
-            if (this.errors[i].identifier == identifier) {
-                this.errors.splice(i, 1);
+        for (var i = 0; i < this.cfg.errors.length; i++) {
+            if (this.cfg.errors[i].identifier == identifier) {
+                this.cfg.errors.splice(i, 1);
                 return;
             }
         }
-        for (var i = 0; i < this.validationErrors.length; i++) {
-            if (this.validationErrors[i].identifier == identifier) {
-                this.validationErrors.splice(i, 1);
+        for (var i = 0; i < this.cfg.validationErrors.length; i++) {
+            if (this.cfg.validationErrors[i].identifier == identifier) {
+                this.cfg.validationErrors.splice(i, 1);
                 return;
             }
         }
     }
 
     public clearValidationErrors(): void {
-        this.validationErrors = [];
+        this.cfg.validationErrors = [];
     }
 }

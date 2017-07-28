@@ -47,9 +47,7 @@ import { MappingDetailComponent } from './mapping/mapping.detail.component';
     styleUrls: ['data.mapper.app.component.css']
 })
 
-export class DataMapperAppComponent implements OnInit {
-
-    @Input() cfg:ConfigModel;
+export class DataMapperAppComponent implements OnInit {    
 
     @ViewChild('lineMachine') lineMachine: LineMachineComponent;
     @ViewChild('errorPanel') errorPanel: DataMapperErrorComponent;
@@ -63,13 +61,17 @@ export class DataMapperAppComponent implements OnInit {
 
     constructor(public detector: ChangeDetectorRef) {}
 
+    public getConfig(): ConfigModel {
+        return ConfigModel.getConfig();
+    }
+
     ngOnInit(): void {
-        this.cfg.initializationService.systemInitialized$.subscribe(() => {
+        this.getConfig().initializationService.systemInitialized$.subscribe(() => {
             this.updateFromConfig();
         });
 
-        this.cfg.initializationService.initializationStatusChanged$.subscribe(() => {
-            this.loadingStatus = this.cfg.initCfg.loadingStatus;
+        this.getConfig().initializationService.initializationStatusChanged$.subscribe(() => {
+            this.loadingStatus = this.getConfig().initCfg.loadingStatus;
             setTimeout(() => {
                 this.detector.detectChanges();
             }, 10);

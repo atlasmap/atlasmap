@@ -18,6 +18,7 @@ import { Component, Input } from '@angular/core';
 
 import { ErrorInfo, ErrorLevel } from '../models/error.model';
 import { ErrorHandlerService } from '../services/error.handler.service';
+import { ConfigModel } from '../models/config.model';
 
 @Component({
     selector: 'data-mapper-error',
@@ -39,7 +40,7 @@ export class DataMapperErrorComponent {
     @Input() public isValidation: boolean = false;
 
     public getErrors(): ErrorInfo[] {
-        return this.isValidation ? this.errorService.validationErrors : this.errorService.errors;
+        return this.isValidation ? ConfigModel.getConfig().validationErrors : ConfigModel.getConfig().errors;
     }
 
     public handleClick(event: any) {
