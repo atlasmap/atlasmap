@@ -295,7 +295,7 @@ export class MappingModel {
     public uuid: string;
     public fieldMappings: FieldMappingPair[] = [];
     public currentFieldMapping: FieldMappingPair = null;
-    public validationErrors : ErrorInfo[] = [];
+    public validationErrors: ErrorInfo[] = [];
     public brandNewMapping: boolean = true;
 
     public constructor() {

@@ -101,6 +101,7 @@ export class DocumentInitializationConfig {
     public errorOccurred: boolean = false;
     public pathSeparator: string = "/";
     public documentContents: string = null;
+    public inspectionResultContents: string = null;
     public inspectionType: string = null;
 }
 
