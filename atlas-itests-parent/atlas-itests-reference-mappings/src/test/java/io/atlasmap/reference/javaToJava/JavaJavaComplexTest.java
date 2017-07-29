@@ -265,5 +265,12 @@ public class JavaJavaComplexTest extends AtlasMappingBaseTest {
         Object object = session.getOutput();
         assertNotNull(object);
         assertTrue(object instanceof TargetOrder);
+        //ensure our Uppercase action on first name did the right thing
+        assertEquals("OZZIE", ((TargetOrder)object).getContact().getFirstName());
+        assertEquals("smith", ((TargetOrder)object).getContact().getLastName());
+        //set values to normalized pre-action-processing state so rest of validation passes..
+        ((TargetOrder)object).getContact().setFirstName("Ozzie");
+        ((TargetOrder)object).getContact().setLastName("Smith");
+        AtlasTestUtil.validateOrder((TargetOrder)object);
     }
 }

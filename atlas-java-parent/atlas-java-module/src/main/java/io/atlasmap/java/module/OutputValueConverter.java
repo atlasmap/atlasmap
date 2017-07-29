@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import io.atlasmap.api.AtlasConversionException;
 import io.atlasmap.api.AtlasConversionService;
 import io.atlasmap.api.AtlasException;
+import io.atlasmap.api.AtlasFieldActionService;
 import io.atlasmap.api.AtlasSession;
 import io.atlasmap.core.PathUtil;
 import io.atlasmap.java.inspect.ClassHelper;
@@ -28,13 +29,15 @@ public class OutputValueConverter implements JavaFieldWriterValueConverter {
     private AtlasSession session = null;
     private AtlasConversionService conversionService = null;
     private Mapping mapping = null;
+    private JavaModule module = null;
 
-    public OutputValueConverter(Field inputField, AtlasSession session, Mapping mapping, AtlasConversionService conversionService) {
+    public OutputValueConverter(Field inputField, AtlasSession session, Mapping mapping, AtlasConversionService conversionService, JavaModule module) {
         super();
         this.inputField = inputField;
         this.session = session;
         this.mapping = mapping;
         this.conversionService = conversionService;
+        this.module = module;
     }
 
     @Override
@@ -92,19 +95,20 @@ public class OutputValueConverter implements JavaFieldWriterValueConverter {
             }
             return populateEnumValue((JavaEnumField) inputField, (JavaEnumField) outputField);
         }
-
-        if (inputType != null && inputType.equals(outputType)) {
-            outputValue = inputValue;
-        } else {
-            try {
-                outputValue = conversionService.convertType(inputValue, inputType, outputType);
-            } catch (AtlasConversionException e) {
-                logger.error(String.format("Unable to auto-convert for sT=%s tT=%s tF=%s msg=%s", inputType, outputType,
-                        outputField.getPath(), e.getMessage()), e);
-                return null;
-            }
+                
+        AtlasFieldActionService fieldActionService = session.getAtlasContext().getContextFactory().getFieldActionService();
+        try {
+            outputValue = fieldActionService.processActions(outputField.getActions(), inputValue, outputType);
+            if (outputValue != null) {
+                FieldType conversionInputType = conversionService.fieldTypeFromClass(outputValue.getClass());
+                outputValue = conversionService.convertType(outputValue, conversionInputType, outputType);
+            } 
+        } catch (AtlasConversionException e) {
+            logger.error(String.format("Unable to auto-convert for sT=%s tT=%s tF=%s msg=%s", inputType, outputType,
+                    outputField.getPath(), e.getMessage()), e);
+            return null;
         }
-
+                
         return outputValue;
     }
 

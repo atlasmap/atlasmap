@@ -99,6 +99,9 @@ public class JsonFieldWriter {
     		logger.debug("Writing field value '" + segment + "' in parent node '" + parentSegment + "', parentNode: " + parentNode);
     	}
     	JsonNode valueNode = createValueNode(field);
+    	if (logger.isDebugEnabled()) {
+    	    logger.debug("Value to write: " + valueNode);
+    	}
 		String cleanedSegment = PathUtil.cleanPathSegment(segment);
 		if (PathUtil.isCollectionSegment(segment)) {
 			//if this field is a collection, we need to place our value in an array
@@ -208,7 +211,7 @@ public class JsonFieldWriter {
     	Object value = jsonField.getValue();
     	JsonNode valueNode = null;
     	if (FieldType.STRING.equals(type)) {
-            valueNode = rootNode.textNode((String)value);
+            valueNode = rootNode.textNode(String.valueOf(value));
         } else if (FieldType.CHAR.equals(type)) {
         	    valueNode = rootNode.textNode(Character.toString((char) value));            
         } else if (FieldType.BOOLEAN.equals(type)) {

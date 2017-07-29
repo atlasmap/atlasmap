@@ -68,7 +68,11 @@ public class JavaModule extends BaseAtlasModule {
     public static final String DEFAULT_LIST_CLASS = "java.util.ArrayList";
     
     private ClassInspectionService javaInspectionService = null;
-    private JavaConstructService javaConstructService = null;        
+    private JavaConstructService javaConstructService = null;     
+    
+    public JavaModule() {
+        this.automaticallyProcessOutputFieldActions = false;
+    }
     
     @Override
     public void init() {
@@ -301,7 +305,7 @@ public class JavaModule extends BaseAtlasModule {
                 switch(mapping.getMappingType()) {
                     case MAP: 
                         Field inputField = mapping.getInputField().get(0);      
-                        valueConverter = new OutputValueConverter(inputField, session, mapping, getConversionService());
+                        valueConverter = new OutputValueConverter(inputField, session, mapping, getConversionService(), this);
                         writer.write(outputField, valueConverter);
                         break;
                     case COMBINE:
@@ -309,12 +313,12 @@ public class JavaModule extends BaseAtlasModule {
                         SimpleField combinedField = new SimpleField();
                         combinedField.setFieldType(FieldType.STRING);
                         combinedField.setValue(outputField.getValue());
-                        valueConverter = new OutputValueConverter(combinedField, session, mapping, getConversionService());
+                        valueConverter = new OutputValueConverter(combinedField, session, mapping, getConversionService(), this);
                         writer.write(outputField, valueConverter);
                         break;
                     case LOOKUP:
                         Field inputFieldlkp = mapping.getInputField().get(0);      
-                        valueConverter = new OutputValueConverter(inputFieldlkp, session, mapping, getConversionService());
+                        valueConverter = new OutputValueConverter(inputFieldlkp, session, mapping, getConversionService(), this);
                         writer.write(outputField, valueConverter);
                         break;
                     case SEPARATE:
@@ -324,7 +328,7 @@ public class JavaModule extends BaseAtlasModule {
                             if(separateField == null) {
                             continue;
                             }
-                            valueConverter = new OutputValueConverter(separateField, session, mapping, getConversionService());
+                            valueConverter = new OutputValueConverter(separateField, session, mapping, getConversionService(), this);
                             writer.write(outputFieldsep, valueConverter);
                         }
                         break;
