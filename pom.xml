@@ -147,7 +147,6 @@
         <module>atlas-json-parent</module>
         <module>atlas-xml-parent</module>
         <module>atlas-docs</module>
-        <module>atlas-demo-deps</module>
         <module>atlas-itests</module>
         <module>atlas-itests-parent</module>
         <module>atlasmap-maven-plugin</module>
@@ -167,7 +166,6 @@
         <module>atlas-json-parent</module>
         <module>atlas-xml-parent</module>
         <module>atlas-docs</module>
-        <module>atlas-demo-deps</module>
         <module>atlas-itests</module>
         <module>atlas-itests-parent</module>
         <module>atlasmap-maven-plugin</module>

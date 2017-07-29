@@ -57,8 +57,13 @@ public class JavaValidationService implements AtlasValidationService {
     private static Map<String, AtlasValidator> validatorMap = new HashMap<>();
     private static Map<String, Integer> versionMap = new HashMap<>();
 
+    public JavaValidationService() {
+        conversionService = DefaultAtlasConversionService.getInstance();
+        init();
+    }
+    
     public JavaValidationService(AtlasConversionService conversionService) {
-        this.conversionService = DefaultAtlasConversionService.getInstance();
+        this.conversionService = conversionService;
         init();
     }
     
@@ -262,7 +267,7 @@ public class JavaValidationService implements AtlasValidationService {
             (inputField.getValue() != null && inputField.getValue().getClass().isAssignableFrom(String.class))) {
             Validation validation = new Validation();
             validation.setField("Input.Field");
-            validation.setMessage("Input field must be of type " + FieldType.STRING + " for a Separate Mapping");
+            validation.setMessage(String.format("Input field must be of type %s for a Separate Mapping", FieldType.STRING));
             validation.setStatus(ValidationStatus.ERROR);
             validation.setValue(inputField.getFieldType().toString());
             validations.add(validation);
@@ -279,7 +284,7 @@ public class JavaValidationService implements AtlasValidationService {
                 } else {
                     Validation validation = new Validation();
                     validation.setField("Output.Field");
-                    validation.setMessage("Output field " + outputField.getClass().getName() + " is not supported by Java Module");
+                    validation.setMessage(String.format("Output field %s is not supported by Java Module",  outputField.getClass().getName()));
                     validation.setStatus(ValidationStatus.ERROR);
                     validation.setValue((outField != null ? outField.toString() : null));
                     validations.add(validation);
@@ -354,20 +359,20 @@ public class JavaValidationService implements AtlasValidationService {
             DataInputStream data = new DataInputStream(in);
             int magic = data.readInt();
             if (magic != 0xCAFEBABE) {
-                logger.error("Invalid Java class: " + className + " magic value: " + data.readInt());
+                logger.error(String.format("Invalid Java class: %s magic value: %s", className, magic));
             }
         
             int minor = 0xFFFF & data.readShort();
             major = new Integer(0xFFFF & data.readShort());
             
             if(logger.isDebugEnabled()) {
-                logger.debug("Detected class: " + className + " version major: " + major + " minor: " + minor);
+                logger.debug(String.format("Detected class: %s version major: %s minor: %s", className, magic, minor));
             }
         } catch (IOException e) {
-            logger.error("Error detected version for class: " + className + " msg: " + e.getMessage(), e);
+            logger.error(String.format("Error detected version for class: %s msg: %s", className, e.getMessage()), e);
         } finally {
             if(in != null) {
-               try { in.close(); } catch (IOException ie) { logger.error("Error closing input stream msg: " + ie.getMessage(), ie); }
+               try { in.close(); } catch (IOException ie) { logger.error(String.format("Error closing input stream msg: %s", ie.getMessage()), ie); }
             }
         }
         return major;

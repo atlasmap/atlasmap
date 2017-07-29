@@ -213,45 +213,45 @@ public class AtlasModelFactory {
         if(f == null) {
             return "";
         }
-        String tmp = new String(); 
-        tmp.concat(" arrayDimensions=" + f.getArrayDimensions());        
-        tmp.concat(" arraySize=" + f.getArraySize());
-        tmp.concat(" collectionType=" + (f.getCollectionType() != null ? f.getCollectionType().value() : null));
-        tmp.concat(" docId=" + f.getDocId());
+        StringBuilder tmp = new StringBuilder(); 
+        tmp.append(" arrayDimensions=" + f.getArrayDimensions());        
+        tmp.append(" arraySize=" + f.getArraySize());
+        tmp.append(" collectionType=" + (f.getCollectionType() != null ? f.getCollectionType().value() : null));
+        tmp.append(" docId=" + f.getDocId());
         if(f.getActions() != null && f.getActions().getActions() != null) {
             if(!f.getActions().getActions().isEmpty()) {
-                tmp.concat(" fieldActions#=" + f.getActions().getActions().size());
+                tmp.append(" fieldActions#=" + f.getActions().getActions().size());
             } else {
-                tmp.concat(" fieldActions#=0");
+                tmp.append(" fieldActions#=0");
             }
         } else {
-            tmp.concat(" fieldActions#=");
+            tmp.append(" fieldActions#=");
         }
-        tmp.concat(" fieldType=" + (f.getFieldType() != null ? f.getFieldType().value() : null));
-        tmp.concat(" index=" + f.getIndex());
-        tmp.concat(" path=" + f.getPath());
-        tmp.concat(" fieldStatus=" + (f.getStatus() != null ? f.getStatus().value() : null));
-        tmp.concat(" value=" + f.getValue());
-        return tmp;
+        tmp.append(" fieldType=" + (f.getFieldType() != null ? f.getFieldType().value() : null));
+        tmp.append(" index=" + f.getIndex());
+        tmp.append(" path=" + f.getPath());
+        tmp.append(" fieldStatus=" + (f.getStatus() != null ? f.getStatus().value() : null));
+        tmp.append(" value=" + f.getValue());
+        return tmp.toString();
     }
     
     public static String toString(PropertyField f) {
-        String tmp = new String("PropertyField [name=");
+        StringBuilder tmp = new StringBuilder("PropertyField [name=");
         if(f != null && f.getName() != null) {
-            tmp.concat(f.getName());
+            tmp.append(f.getName());
         }
-        tmp.concat(baseFieldToString(f));
-        tmp.concat("]");
-        return tmp;
+        tmp.append(baseFieldToString(f));
+        tmp.append("]");
+        return tmp.toString();
     }
     
     public static String toString(Field f) {
-        String tmp = new String("Field [name=");
+        StringBuilder tmp = new StringBuilder("Field [name=");
         if(f != null) {
-            tmp.concat(f.getClass().getSimpleName());
+            tmp.append(f.getClass().getSimpleName());
         }
-        tmp.concat(baseFieldToString(f));
-        tmp.concat("]");
-        return tmp;
+        tmp.append(baseFieldToString(f));
+        tmp.append("]");
+        return tmp.toString();
     }
 }

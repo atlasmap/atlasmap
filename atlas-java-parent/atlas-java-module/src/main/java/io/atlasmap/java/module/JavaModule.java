@@ -56,12 +56,6 @@ import io.atlasmap.v2.PropertyField;
 import io.atlasmap.v2.SimpleField;
 import io.atlasmap.v2.Validation;
 
-// pending processOutputCollection removal
-// import io.atlasmap.java.v2.JavaCollection;
-// import io.atlasmap.v2.Audit;
-// import io.atlasmap.v2.Collection;
-// import io.atlasmap.v2.MappingType;
-
 @AtlasModuleDetail(name = "JavaModule", uri = "atlas:java", modes = { "SOURCE", "TARGET" }, dataFormats = { "java" }, configPackages = { "io.atlasmap.java.v2" })
 public class JavaModule extends BaseAtlasModule {
     private static final Logger logger = LoggerFactory.getLogger(JavaModule.class);
@@ -91,7 +85,6 @@ public class JavaModule extends BaseAtlasModule {
         javaConstructService = null;
     }
 
-    // TODO: Support runtime class inspection
     @Override
     public void processPreInputExecution(AtlasSession atlasSession) throws AtlasException {
         if(atlasSession == null || atlasSession.getMapping() == null 
@@ -348,42 +341,6 @@ public class JavaModule extends BaseAtlasModule {
             }
         }
     }
-    
-    /*
-    private void processOutputCollection(AtlasSession session, Collection collection) throws AtlasException {        
-        if(collection == null || collection.getMappings() == null || collection.getMappings().getMapping() == null || collection.getMappings().getMapping().isEmpty()) {
-            if(logger.isDebugEnabled()) {
-                logger.debug("Empty output collection mapping detected");
-            }
-            Audit audit = new Audit();
-            audit.setStatus(AuditStatus.WARN);
-            audit.setMessage(String.format("Collection does not contain any mapping entries alias=%s, desc=%s, skipping.", collection.getAlias(), collection.getDescription()));
-            session.getAudits().getAudit().add(audit);
-            return;
-        }
-        
-        logger.debug("Processing output for collection mapping items: " + collection.getMappings().getMapping().size() + " mappings.");
-        
-        JavaCollection javaCollection = null;
-        if(collection instanceof JavaCollection) {
-            javaCollection = (JavaCollection)collection;
-            // do javaCollection.getCollectionClassName() stuff
-        }
-
-        for (BaseMapping baseMapping : javaCollection.getMappings().getMapping()) {
-            if (MappingType.COLLECTION.equals(baseMapping.getMappingType())) {
-                throw new AtlasException("We do not support collection mappings nested inside other collection mappings: " + baseMapping + ", collection: " + collection);
-            } else if (MappingType.LOOKUP.equals(baseMapping.getMappingType())) {
-                throw new AtlasException("We do not support lookup mappings nested inside collection mappings: " + baseMapping + ", collection: " + collection);
-            }
-            Mapping mapping = (Mapping) baseMapping;
-            this.processOutputMapping(session, mapping);
-        }
-        if(logger.isDebugEnabled()) {
-            logger.debug("processOutputCollectionMapping completed");
-        }        
-    }
-    */
         
     @Override
     public void processPostOutputExecution(AtlasSession session) throws AtlasException {
@@ -611,7 +568,7 @@ public class JavaModule extends BaseAtlasModule {
 
         Object collectionObject = ClassHelper.parentObjectForPath(sourceObject, new PathUtil(field.getPath()), false);
         if (collectionObject == null) {
-            throw new AtlasException("Cannot find collection on sourceObject '" + sourceObject.getClass().getName() + "' for path: " + field.getPath());
+            throw new AtlasException(String.format("Cannot find collection on sourceObject %s for path: %s", sourceObject.getClass().getName(), field.getPath()));
         }
         if (collectionObject.getClass().isArray()) {
             return Array.getLength(collectionObject);
