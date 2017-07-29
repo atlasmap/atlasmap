@@ -154,6 +154,26 @@
         <module>runtime</module>
       </modules>
     </profile>
+     <profile>
+      <id>eclipse-debug</id>
+      <activation><activeByDefault>false</activeByDefault></activation>
+      <modules>
+        <module>atlas-parent</module>
+        <module>atlas-model</module>
+        <module>atlas-api</module>
+        <!--  module>atlas-core</module -->
+        <module>atlas-service-parent</module>
+        <module>atlas-java-parent</module>
+        <module>atlas-json-parent</module>
+        <module>atlas-xml-parent</module>
+        <module>atlas-docs</module>
+        <module>atlas-demo-deps</module>
+        <module>atlas-itests</module>
+        <module>atlas-itests-parent</module>
+        <module>atlasmap-maven-plugin</module>
+        <module>runtime</module>
+      </modules>
+    </profile>
     <profile>
       <id>release</id>
       <build>
@@ -194,6 +214,72 @@
           </plugin>
         </plugins>
       </build>
+    </profile>
+    <profile>
+      <id>jacoco</id>
+      <properties>
+           <sonar.jacoco.reportPath>${project.basedir}/../target/jacoco.exec</sonar.jacoco.reportPath>
+           <sonar.language>java</sonar.language>
+      </properties>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.jacoco</groupId>
+            <artifactId>jacoco-maven-plugin</artifactId>
+            <version>0.7.9</version>
+            <configuration>
+              <append>true</append>
+            </configuration>
+            <executions>
+              <execution>
+                <id>agent-for-ut</id>
+                <goals>
+                  <goal>prepare-agent</goal>
+                </goals>
+                <configuration>
+                  <append>true</append>
+                  <destFile>${sonar.jacoco.reportPath}</destFile>
+                </configuration>
+              </execution>
+              <execution>
+                <id>agent-for-it</id>
+                <goals>
+                  <goal>prepare-agent-integration</goal>
+                </goals>
+              </execution>
+              <execution>
+                <id>jacoco-site</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>report</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <version>2.13</version>
+            <configuration>
+              <argLine>${argLine}</argLine>
+              <properties>
+                <property>
+                  <name>listener</name>
+                  <value>org.sonar.java.jacoco.JUnitListener</value>
+                </property>
+              </properties>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+      <dependencies>
+        <dependency>
+          <groupId>org.sonarsource.java</groupId>
+          <artifactId>sonar-jacoco-listeners</artifactId>
+          <version>3.8</version>
+          <scope>test</scope>
+        </dependency>
+      </dependencies>
     </profile>
   </profiles>
 

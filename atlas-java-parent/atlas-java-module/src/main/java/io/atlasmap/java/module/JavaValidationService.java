@@ -342,8 +342,9 @@ public class JavaValidationService implements AtlasValidationService {
     
     protected Integer detectClassVersion(String className) {
         Integer major = null;
+        InputStream in = null;
         try {
-            InputStream in = getClass().getClassLoader().getResourceAsStream(className.replace('.', '/') + ".class");
+            in = getClass().getClassLoader().getResourceAsStream(className.replace('.', '/') + ".class");
             if(in == null) {
                 in = ClassLoader.getSystemResourceAsStream(className.replace('.', '/') + ".class");
                 if(in == null) {
@@ -364,6 +365,10 @@ public class JavaValidationService implements AtlasValidationService {
             }
         } catch (IOException e) {
             logger.error("Error detected version for class: " + className + " msg: " + e.getMessage(), e);
+        } finally {
+            if(in != null) {
+               try { in.close(); } catch (IOException ie) { logger.error("Error closing input stream msg: " + ie.getMessage(), ie); }
+            }
         }
         return major;
     }
