@@ -795,7 +795,7 @@ public class ClassInspectionService implements Serializable {
                  pTypes.add(((Class<?>) tv.getAnnotatedBounds()[0].getType()).getCanonicalName());
              }
                     
-             if (!onlyClasses & t instanceof WildcardType) {
+             if (!onlyClasses && t instanceof WildcardType) {
                  WildcardType wc =  (WildcardType) t;
                  Type[] upperBounds = wc.getUpperBounds();
                  Type[] lowerBounds = wc.getLowerBounds();

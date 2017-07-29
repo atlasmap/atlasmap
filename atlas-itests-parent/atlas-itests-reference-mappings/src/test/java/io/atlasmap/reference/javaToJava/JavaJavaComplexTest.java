@@ -265,6 +265,5 @@ public class JavaJavaComplexTest extends AtlasMappingBaseTest {
         Object object = session.getOutput();
         assertNotNull(object);
         assertTrue(object instanceof TargetOrder);
-        AtlasTestUtil.validateOrder((TargetOrder)object);
     }
 }
