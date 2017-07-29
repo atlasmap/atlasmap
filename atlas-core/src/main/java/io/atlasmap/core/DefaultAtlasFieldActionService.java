@@ -111,17 +111,19 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
             return getConversionService().convertType(sourceObject, sourceType, targetType);
         }
         
+        FieldType currentType = sourceType;
         for(Action action : actions.getActions()) {
             ActionDetail detail = getActionDetailByActionName(action.getClass().getSimpleName());
-            if(!detail.getSourceType().equals(sourceType)) {
-                tmpSourceObject = getConversionService().convertType(sourceObject, sourceType, targetType);
+            if(!detail.getSourceType().equals(currentType) && !FieldType.ALL.equals(detail.getSourceType())) {
+                tmpSourceObject = getConversionService().convertType(sourceObject, currentType, detail.getSourceType());
             }
             
             targetObject = processAction(action, getActionDetailByActionName(action.getClass().getSimpleName()), tmpSourceObject);
-            
-            if(!detail.getTargetType().equals(targetType)) {
-                targetObject = getConversionService().convertType(targetObject, detail.getTargetType(), targetType);
-            }
+            currentType = detail.getTargetType();
+        }
+        
+        if(currentType != null && !currentType.equals(targetType)) {
+            targetObject = getConversionService().convertType(targetObject, currentType, targetType);
         }
         
         return targetObject;
