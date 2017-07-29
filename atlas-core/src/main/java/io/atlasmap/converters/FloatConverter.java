@@ -41,7 +41,7 @@ public class FloatConverter implements AtlasPrimitiveConverter<Float> {
             }
             return Boolean.FALSE;
         }
-        throw new AtlasConversionException("Float " + value + " could not be converted to a Boolean");
+        throw new AtlasConversionException(String.format("Float %s could not be converted to a Boolean", value));
     }
 
     /**
@@ -71,7 +71,7 @@ public class FloatConverter implements AtlasPrimitiveConverter<Float> {
         }
 
         if (value < Character.MIN_VALUE || value > Character.MAX_VALUE) {
-            throw new AtlasConversionException("Float " + value + " is greater than Character.MAX_VALUE or is less than Character.MIN_VALUE");
+            throw new AtlasConversionException(String.format("Float %s is greater than Character.MAX_VALUE or is less than Character.MIN_VALUE", value));
         }
 
         return (char) value.intValue();
@@ -125,7 +125,7 @@ public class FloatConverter implements AtlasPrimitiveConverter<Float> {
             return null;
         }
         if (value < Integer.MIN_VALUE || value > Integer.MAX_VALUE) {
-            throw new AtlasConversionException("Float " + value + " is greater than Integer.MAX_VALUE or is less than Integer.MIN_VALUE");
+            throw new AtlasConversionException(String.format("Float %s is greater than Integer.MAX_VALUE or is less than Integer.MIN_VALUE", value));
         }
         return value.intValue();
     }
@@ -143,7 +143,7 @@ public class FloatConverter implements AtlasPrimitiveConverter<Float> {
             return null;
         }
         if (value > Long.MAX_VALUE || value < Long.MIN_VALUE) {
-            throw new AtlasConversionException("Float " + value + " is greater than Long.MAX_VALUE or is less than Long.MIN_VALUE");
+            throw new AtlasConversionException(String.format("Float %s is greater than Long.MAX_VALUE or is less than Long.MIN_VALUE", value));
         }
         return value.longValue();
     }
@@ -161,7 +161,7 @@ public class FloatConverter implements AtlasPrimitiveConverter<Float> {
             return null;
         }
         if (value > Short.MAX_VALUE || value < Short.MIN_VALUE) {
-            throw new AtlasConversionException("Float " + value + " is greater than Short.MAX_VALUE  or is less than Short.MIN_VALUE");
+            throw new AtlasConversionException(String.format("Float %s is greater than Short.MAX_VALUE  or is less than Short.MIN_VALUE", value));
         }
         return value.shortValue();
     }

@@ -41,7 +41,7 @@ public class ShortConverter implements AtlasPrimitiveConverter<Short> {
             }
             return Boolean.FALSE;
         }
-        throw new AtlasConversionException("Short " + value + " cannot be converted to a Boolean");
+        throw new AtlasConversionException(String.format("Short %s cannot be converted to a Boolean", value));
     }
 
     /**
@@ -72,7 +72,7 @@ public class ShortConverter implements AtlasPrimitiveConverter<Short> {
         }
 
         if (value < Character.MIN_VALUE) {
-            throw new AtlasConversionException("Short " + value + " is less than Character.MIN_VALUE");
+            throw new AtlasConversionException(String.format("Short %s is less than Character.MIN_VALUE", value));
         }
         return Character.valueOf((char)value.shortValue());
     }

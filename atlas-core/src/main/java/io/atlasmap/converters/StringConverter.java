@@ -94,7 +94,7 @@ public class StringConverter implements AtlasPrimitiveConverter<String> {
         }
 
         try {
-            Double d = Double.parseDouble(value);
+            Double.parseDouble(value);
         } catch (NumberFormatException nfe) {
             throw new AtlasConversionException(nfe);
         }

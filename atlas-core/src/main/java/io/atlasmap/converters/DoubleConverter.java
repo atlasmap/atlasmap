@@ -90,7 +90,7 @@ public class DoubleConverter implements AtlasPrimitiveConverter<Double> {
             return null;
         }
         //we want a copy of the value.
-        return new Double(value);
+        return Double.valueOf(value);
     }
 
     /**
