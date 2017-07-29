@@ -61,7 +61,7 @@ public class JavaValidationServiceTest {
         mappingUtil = new AtlasMappingUtil("io.atlasmap.v2:io.atlasmap.java.v2");
         moduleDetail = JavaModule.class.getAnnotation(AtlasModuleDetail.class);
 
-        validationService = new JavaValidationService(DefaultAtlasConversionService.getRegistry());
+        validationService = new JavaValidationService(DefaultAtlasConversionService.getInstance());
         validationHelper = new AtlasValidationTestHelper();
         validations = validationHelper.getValidation();
     }

@@ -33,6 +33,8 @@ import io.atlasmap.v2.Validations;
 
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.server.ResourceConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Application;
@@ -57,6 +59,7 @@ import java.util.Optional;
 @Path("v2/atlas")
 public class AtlasService extends Application {		
 	
+    private static final Logger logger = LoggerFactory.getLogger(AtlasService.class);
 	final Application javaServiceApp;
 	final DefaultAtlasContextFactory atlasContextFactory = DefaultAtlasContextFactory.getInstance();
 	private String baseFolder = "target/mappings";
@@ -209,7 +212,9 @@ public class AtlasService extends Application {
         			.build();
     	}
     	
-    	mappingFile.delete();
+    if(!mappingFile.delete()) {
+        logger.warn("Unable to delete mapping file " + mappingFile.toString());
+    }
     	    	
     	return Response.ok()
     			.header("Access-Control-Allow-Origin", "*")
@@ -238,7 +243,7 @@ public class AtlasService extends Application {
     	try {
     		atlasMapping = getMappingFromFile(mappingFile.getAbsolutePath());
     	} catch (Exception e) {
-    		e.printStackTrace();
+    		logger.error("Error retrieving mapping " + e.getMessage(), e);
     	}
     	
     	return Response.ok()
@@ -297,7 +302,9 @@ public class AtlasService extends Application {
         }
 
         if(temporaryMappingFile.exists()) {
-            temporaryMappingFile.delete();
+            if(!temporaryMappingFile.delete()) {
+                logger.warn("Failed to deleting temporary file: " + temporaryMappingFile.toString());
+            }
         }
         
         return Response.ok()
@@ -374,7 +381,7 @@ public class AtlasService extends Application {
         try {
             saveMappingToFile(mapping);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Error saving mapping " + mapping.getName() + " to file: " + e.getMessage(), e);
         }
         
         UriBuilder builder = uriInfo.getAbsolutePathBuilder();

@@ -18,7 +18,7 @@ public class ClassInspectionServiceITest {
 	@Before
 	public void setUp() throws Exception {
 		classInspectionService = new ClassInspectionService();
-		classInspectionService.setConversionService(DefaultAtlasConversionService.getRegistry());
+		classInspectionService.setConversionService(DefaultAtlasConversionService.getInstance());
 	}
 	
 	@After
@@ -28,7 +28,7 @@ public class ClassInspectionServiceITest {
 
 	@Test
 	public void testInspectClassClassNameClassPath() throws InspectionException {
-		JavaClass javaClazz = classInspectionService.inspectClass("io.atlasmap.java.test.v2.FlatPrimitiveClass", "target/reference-jars/atlas-java-test-model-1.15.0-SNAPSHOT.jar");
+		JavaClass javaClazz = classInspectionService.inspectClass("io.atlasmap.java.test.v2.FlatPrimitiveClass", "target/reference-jars/atlas-java-test-model-1.16.0-SNAPSHOT.jar");
 		assertNotNull(javaClazz);	
 	}
 	

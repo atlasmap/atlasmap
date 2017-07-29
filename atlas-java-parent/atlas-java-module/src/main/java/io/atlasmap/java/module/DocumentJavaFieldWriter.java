@@ -26,7 +26,7 @@ public class DocumentJavaFieldWriter {
 
 	private Object rootObject = null;
 	private Map<String,Class<?>> classesForFields = new HashMap<>();
-	private JavaWriterUtil writerUtil = new JavaWriterUtil(DefaultAtlasConversionService.getRegistry());
+	private JavaWriterUtil writerUtil = new JavaWriterUtil(DefaultAtlasConversionService.getInstance());
 	private List<String> processedPaths = new LinkedList<>();
 	
 	public interface JavaFieldWriterValueConverter {

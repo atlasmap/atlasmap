@@ -30,7 +30,7 @@ public class TargetFlatClassInspectTest {
 	@Before
 	public void setUp() {
 		classInspectionService = new ClassInspectionService();
-		classInspectionService.setConversionService(DefaultAtlasConversionService.getRegistry());
+		classInspectionService.setConversionService(DefaultAtlasConversionService.getInstance());
 	}
 	
 	@After

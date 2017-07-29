@@ -41,7 +41,7 @@ public class LongConverter implements AtlasPrimitiveConverter<Long> {
             }
             return Boolean.FALSE;
         }
-        throw new AtlasConversionException("Long " + value + " cannot be converted to a Boolean");
+        throw new AtlasConversionException(String.format("Long %s cannot be converted to a Boolean", value));
     }
 
     /**
@@ -72,7 +72,7 @@ public class LongConverter implements AtlasPrimitiveConverter<Long> {
         }
 
         if (value < Character.MIN_VALUE || value > Character.MAX_VALUE) {
-            throw new AtlasConversionException("Long " + value + " is greater than Character.MAX_VALUE  or less than Character.MIN_VALUE");
+            throw new AtlasConversionException(String.format("Long %s is greater than Character.MAX_VALUE  or less than Character.MIN_VALUE", value));
         }
 
         return (char) value.intValue();
@@ -111,7 +111,7 @@ public class LongConverter implements AtlasPrimitiveConverter<Long> {
             return null;
         }
         if (value > Integer.MAX_VALUE || value < Integer.MIN_VALUE) {
-            throw new AtlasConversionException("Long " + value + " is greater than Integer.MAX_VALUE  or less than Integer.MIN_VALUE");
+            throw new AtlasConversionException(String.format("Long %s is greater than Integer.MAX_VALUE  or less than Integer.MIN_VALUE", value));
         }
         return value.intValue();
     }
@@ -133,7 +133,7 @@ public class LongConverter implements AtlasPrimitiveConverter<Long> {
             return null;
         }
         if (value > Short.MAX_VALUE || value < Short.MIN_VALUE) {
-            throw new AtlasConversionException("Long " + value + " is greater than Short.MAX_VALUE or less than Short.MIN_VALUE");
+            throw new AtlasConversionException(String.format("Long %s is greater than Short.MAX_VALUE or less than Short.MIN_VALUE", value));
         }
         return value.shortValue();
     }

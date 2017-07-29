@@ -39,28 +39,30 @@ import java.util.stream.Collectors;
 public class DefaultAtlasConversionService implements AtlasConversionService {
 
     private static Logger logger = LoggerFactory.getLogger(DefaultAtlasConversionService.class);
-    private static DefaultAtlasConversionService REGISTRY = null;
+    private static DefaultAtlasConversionService instance = null;
     private Map<String, AtlasConverter<?>> converters = null;
     
-    public static final Set<String> PRIMITIVE_CLASSNAMES = new HashSet<String>(
-            Arrays.asList("boolean", "byte", "char", "double", "float", "int", "long", "short"));
+    private static final Set<String> PRIMITIVE_CLASSNAMES = Collections.unmodifiableSet(new HashSet<String>(
+            Arrays.asList("boolean", "byte", "char", "double", "float", "int", "long", "short")));
     
-    public static final Set<String> BOXED_PRIMITIVE_CLASSNAMES = new HashSet<String>(
+    private static final Set<String> BOXED_PRIMITIVE_CLASSNAMES = Collections.unmodifiableSet(new HashSet<String>(
             Arrays.asList("java.lang.Boolean", "java.lang.Byte", "java.lang.Character", "java.lang.Double", 
-                    "java.lang.Float", "java.lang.Integer", "java.lang.Long", "java.lang.Short", "java.lang.String"));
+                    "java.lang.Float", "java.lang.Integer", "java.lang.Long", "java.lang.Short", "java.lang.String")));
     
-    private DefaultAtlasConversionService() {
-        //singleton
-    }
-
-    public static DefaultAtlasConversionService getRegistry() {
-        if (REGISTRY == null) {
-            REGISTRY = new DefaultAtlasConversionService();
-            REGISTRY.init();
+    private DefaultAtlasConversionService() { }
+    
+    public static DefaultAtlasConversionService getInstance() {
+        if (instance == null) {
+            instance = new DefaultAtlasConversionService();
+            instance.init();
         }
-        return REGISTRY;
+        return instance;
     }
 
+    public static Set<String> listPrimitiveClassNames() {
+        return PRIMITIVE_CLASSNAMES;
+    }
+    
     @Override
 	@SuppressWarnings("rawtypes")
     public Optional<AtlasConverter> findMatchingConverter(FieldType source, FieldType target) {
@@ -192,22 +194,22 @@ public class DefaultAtlasConversionService implements AtlasConversionService {
                 
         Class<?> clazz = sourceValue.getClass();
         if(clazz == null) return clazz;
-        if(boolean.class.getName().equals(clazz.getName())) return new Boolean((boolean)sourceValue);
-        if(Boolean.class.getName().equals(clazz.getName())) return new Boolean((Boolean)sourceValue);
-        if(byte.class.getName().equals(clazz.getName())) return new Byte((byte)sourceValue);
-        if(Byte.class.getName().equals(clazz.getName())) return new Byte((Byte)sourceValue);
-        if(char.class.getName().equals(clazz.getName())) return new Character((char)sourceValue);
-        if(Character.class.getName().equals(clazz.getName())) return new Character((Character)sourceValue);
-        if(double.class.getName().equals(clazz.getName())) return new Double((double)sourceValue);
-        if(Double.class.getName().equals(clazz.getName())) return new Double((Double)sourceValue);
-        if(float.class.getName().equals(clazz.getName())) return new Float((float)sourceValue);
-        if(Float.class.getName().equals(clazz.getName())) return new Float((Float)sourceValue);
-        if(int.class.getName().equals(clazz.getName())) return new Integer((int)sourceValue);
-        if(Integer.class.getName().equals(clazz.getName())) return new Integer((Integer)sourceValue);
-        if(long.class.getName().equals(clazz.getName())) return new Long((long)sourceValue);
-        if(Long.class.getName().equals(clazz.getName())) return new Long((Long)sourceValue);
-        if(short.class.getName().equals(clazz.getName())) return new Short((short)sourceValue);
-        if(Short.class.getName().equals(clazz.getName())) return new Short((Short)sourceValue);
+        if(boolean.class.getName().equals(clazz.getName())) return Boolean.valueOf((boolean)sourceValue);
+        if(Boolean.class.getName().equals(clazz.getName())) return Boolean.valueOf((Boolean)sourceValue);
+        if(byte.class.getName().equals(clazz.getName())) return Byte.valueOf((byte)sourceValue);
+        if(Byte.class.getName().equals(clazz.getName())) return Byte.valueOf((Byte)sourceValue);
+        if(char.class.getName().equals(clazz.getName())) return Character.valueOf((char)sourceValue);
+        if(Character.class.getName().equals(clazz.getName())) return Character.valueOf((Character)sourceValue);
+        if(double.class.getName().equals(clazz.getName())) return Double.valueOf((double)sourceValue);
+        if(Double.class.getName().equals(clazz.getName())) return Double.valueOf((Double)sourceValue);
+        if(float.class.getName().equals(clazz.getName())) return Float.valueOf((float)sourceValue);
+        if(Float.class.getName().equals(clazz.getName())) return Float.valueOf((Float)sourceValue);
+        if(int.class.getName().equals(clazz.getName())) return Integer.valueOf((int)sourceValue);
+        if(Integer.class.getName().equals(clazz.getName())) return Integer.valueOf((Integer)sourceValue);
+        if(long.class.getName().equals(clazz.getName())) return Long.valueOf((long)sourceValue);
+        if(Long.class.getName().equals(clazz.getName())) return Long.valueOf((Long)sourceValue);
+        if(short.class.getName().equals(clazz.getName())) return Short.valueOf((short)sourceValue);
+        if(Short.class.getName().equals(clazz.getName())) return Short.valueOf((Short)sourceValue);
 
         // can't count on java copy
         return sourceValue;

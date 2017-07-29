@@ -36,7 +36,7 @@ public class JavaConstructServiceTest {
     @Before
     public void setUp() throws Exception {
         constructService = new JavaConstructService();
-        constructService.setConversionService(DefaultAtlasConversionService.getRegistry());
+        constructService.setConversionService(DefaultAtlasConversionService.getInstance());
     }
 
     @After
@@ -76,7 +76,7 @@ public class JavaConstructServiceTest {
     public void testConstructClassPrimitives() throws Exception {
 
         Object object = null;
-        for(String prim : DefaultAtlasConversionService.PRIMITIVE_CLASSNAMES) {
+        for(String prim : DefaultAtlasConversionService.listPrimitiveClassNames()) {
             try {
                 object = constructService.constructClass(generatePrimitive(prim));
                 fail("ConstructPrimitiveException expected");

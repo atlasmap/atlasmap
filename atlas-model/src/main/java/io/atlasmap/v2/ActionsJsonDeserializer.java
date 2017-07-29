@@ -43,7 +43,7 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
                 }
             }
         } else {
-            throw new IOException("Invalid JSON where array expected: " + jp.getCurrentToken().asString());
+            throw new IOException("Invalid JSON where array expected: " + (jp != null ? jp.getCurrentToken().asString() : null));
         }
         
         return actions;

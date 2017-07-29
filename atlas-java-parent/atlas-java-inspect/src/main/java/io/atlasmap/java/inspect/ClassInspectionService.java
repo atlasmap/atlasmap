@@ -604,6 +604,14 @@ public class ClassInspectionService implements Serializable {
                     s.setStatus(FieldStatus.BLACK_LIST);
                 }
 
+                // skip synthetic members
+                if(s.isSynthetic() != null && s.isSynthetic()) {
+                    if(logger.isDebugEnabled()) {
+                        logger.debug("Synthetic field class detected: " + s.getName());
+                    }
+                    continue;
+                }
+                
                 if (s.getGetMethod() == null && s.getSetMethod() == null) {
                     if (s.getModifiers().getModifier().contains(io.atlasmap.java.v2.Modifier.PRIVATE)
                             && !getDisablePrivateOnlyFields()) {

@@ -20,7 +20,7 @@ public class TestListOrdersTest {
     @Before
     public void setUp() {
         classInspectionService = new ClassInspectionService();
-        classInspectionService.setConversionService(DefaultAtlasConversionService.getRegistry());
+        classInspectionService.setConversionService(DefaultAtlasConversionService.getInstance());
     }
     
     @After
@@ -40,7 +40,7 @@ public class TestListOrdersTest {
         assertNull(c.getGetMethod());
         assertNotNull(c.getJavaEnumFields());
         assertNotNull(c.getJavaEnumFields().getJavaEnumField());
-        assertTrue(c.getJavaEnumFields().getJavaEnumField().size() == 0);
+        assertEquals(Integer.valueOf(0), Integer.valueOf(c.getJavaEnumFields().getJavaEnumField().size()));
         assertNotNull(c.getJavaFields());
         assertNotNull(c.getJavaFields().getJavaField());
         assertNull(c.getName());
@@ -50,7 +50,7 @@ public class TestListOrdersTest {
         assertNotNull(c.getUri());
         assertEquals(String.format(AtlasJavaModelFactory.URI_FORMAT, "io.atlasmap.java.test.TestListOrders"), c.getUri());
         assertNull(c.getValue());
-        assertEquals(new Integer(2), new Integer(c.getJavaFields().getJavaField().size()));
+        assertEquals(Integer.valueOf(2), new Integer(c.getJavaFields().getJavaField().size()));
         
         JavaField f1 = c.getJavaFields().getJavaField().get(0);
         assertNotNull(f1);

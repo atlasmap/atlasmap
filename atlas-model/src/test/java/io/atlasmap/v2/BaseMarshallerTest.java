@@ -36,6 +36,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.Arrays;
+import java.util.List;
+
 import static org.junit.Assert.*;
 
 public abstract class BaseMarshallerTest {
@@ -459,5 +462,10 @@ public abstract class BaseMarshallerTest {
             case 7: assertEquals(FieldType.STRING, p.getFieldType()); assertEquals(Integer.toString(i), p.getValue()); break;
             }
         }
+    }
+    
+    protected List<Action> generateReferenceFieldActions() {
+        List<Action> actions = Arrays.asList(new Camelize(), new Capitalize(), new CurrentDate(), new CurrentDateTime(), new CurrentTime(), new CustomAction(), new GenerateUUID(), new Lowercase(), new PadStringLeft(), new PadStringRight(), new SeparateByDash(), new SeparateByUnderscore(), new StringLength(), new SubString(), new SubStringAfter(), new SubStringBefore(), new Trim(), new TrimLeft(), new TrimRight(), new Uppercase());
+        return actions;
     }
 }

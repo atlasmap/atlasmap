@@ -46,7 +46,7 @@ public class PositiveIntegerValidator implements AtlasValidator {
         if (value == null || value < 0) {
             Validation validation = new Validation();
             validation.setField(field);
-            validation.setValue(target.toString());
+            validation.setValue((target != null ? target.toString() : null));
             validation.setMessage(violationMessage);
             validation.setStatus(status);
             validations.add(validation);

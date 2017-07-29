@@ -23,6 +23,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
+import java.util.List;
 
 import static org.junit.Assert.assertNotNull;
 
@@ -102,31 +103,46 @@ public class JsonMarshallerTest extends BaseMarshallerTest {
         AtlasMapping atlasMapping = generateReferenceAtlasMapping();
         BaseMapping fm = atlasMapping.getMappings().getMapping().get(0);
         ((Mapping) fm).getOutputField().get(0).setActions(new Actions());
-        ((Mapping) fm).getOutputField().get(0).getActions().getActions().add(new Uppercase());
-        ((Mapping) fm).getOutputField().get(0).getActions().getActions().add(new Lowercase());
         
-        SubString subString = new SubString();
-        subString.setEndIndex(5);
-        subString.setStartIndex(2);
-        ((Mapping) fm).getOutputField().get(0).getActions().getActions().add(subString);
-
-        SubStringAfter subStringAfter = new SubStringAfter();
-        subStringAfter.setMatch("a");
-        subStringAfter.setEndIndex(5);
-        subStringAfter.setStartIndex(2);
-        ((Mapping) fm).getOutputField().get(0).getActions().getActions().add(subStringAfter);
+        List<Action> actionsList = generateReferenceFieldActions();
+        ((Mapping) fm).getOutputField().get(0).getActions().getActions().addAll(actionsList);
         
-        SubStringBefore subStringBefore = new SubStringBefore();
-        subStringBefore.setMatch("z");
-        subStringBefore.setEndIndex(5);
-        subStringBefore.setStartIndex(2);
-        ((Mapping) fm).getOutputField().get(0).getActions().getActions().add(subStringBefore);
-        
-        PadStringRight psr = new PadStringRight();
-        psr.setPadCharacter("z");
-        psr.setPadCount(25);
-        ((Mapping) fm).getOutputField().get(0).getActions().getActions().add(psr);
-        
+        for(Action a : ((Mapping) fm).getOutputField().get(0).getActions().getActions()) {
+            if(a instanceof CustomAction) {
+                CustomAction customAction = (CustomAction)a;
+                customAction.setClassName("io.foo.Bar");
+                customAction.setMethodName("doStuff");
+                customAction.setInputFieldType(FieldType.STRING);
+                customAction.setOutputFieldType(FieldType.STRING);
+            }
+            if(a instanceof SubString) {
+                SubString subString = (SubString)a;
+                subString.setEndIndex(5);
+                subString.setStartIndex(2);
+            }
+            if(a instanceof SubStringAfter) {
+                SubStringAfter subStringAfter = (SubStringAfter)a; 
+                subStringAfter.setMatch("a");
+                subStringAfter.setEndIndex(5);
+                subStringAfter.setStartIndex(2);
+            }
+            if(a instanceof SubStringBefore) {
+                SubStringBefore subStringBefore = (SubStringBefore)a;
+                subStringBefore.setMatch("z");
+                subStringBefore.setEndIndex(5);
+                subStringBefore.setStartIndex(2);
+            }
+            if(a instanceof PadStringLeft) {
+                PadStringLeft psl = (PadStringLeft)a;
+                psl.setPadCharacter("a");
+                psl.setPadCount(25);
+            }
+            if(a instanceof PadStringRight) {
+                PadStringRight psr = (PadStringRight)a;
+                psr.setPadCharacter("z");
+                psr.setPadCount(25);
+            }
+        }
         mapper.writeValue(new File("target/junit/" + testName.getMethodName() + "/" + "atlasmapping.json"), atlasMapping);
         
         AtlasMapping rereadMapping = mapper.readValue(new File("target/junit/" + testName.getMethodName() + "/" + "atlasmapping.json"), AtlasMapping.class);

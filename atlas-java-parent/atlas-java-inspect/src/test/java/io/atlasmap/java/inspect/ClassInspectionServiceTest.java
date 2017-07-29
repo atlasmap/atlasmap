@@ -35,7 +35,7 @@ public class ClassInspectionServiceTest {
 	@Before
 	public void setUp() {
 		classInspectionService = new ClassInspectionService();
-		classInspectionService.setConversionService(DefaultAtlasConversionService.getRegistry());
+		classInspectionService.setConversionService(DefaultAtlasConversionService.getInstance());
 	}
 	
 	@After

@@ -40,7 +40,7 @@ public class IntegerConverter implements AtlasPrimitiveConverter<Integer> {
             return value == 1;
         } else {
             // any other value
-            throw new AtlasConversionException("Integer " + value + " cannot be converted to a Boolean");
+            throw new AtlasConversionException(String.format("Integer %s cannot be converted to a Boolean", value));
         }
     }
 
@@ -70,11 +70,11 @@ public class IntegerConverter implements AtlasPrimitiveConverter<Integer> {
             return null;
         }
         if (value < Character.MIN_VALUE || value > Character.MAX_VALUE) {
-            throw new AtlasConversionException("Integer " + value + " is greater than Character.MAX_VALUE or less than Character.MIN_VALUE");
+            throw new AtlasConversionException(String.format("Integer %s is greater than Character.MAX_VALUE or less than Character.MIN_VALUE", value));
         }
         
-        final int RADIX = 10;
-        return Character.forDigit(value.intValue(), RADIX);
+        final int radix = 10;
+        return Character.forDigit(value.intValue(), radix);
     }
 
     /**
@@ -124,7 +124,7 @@ public class IntegerConverter implements AtlasPrimitiveConverter<Integer> {
             return null;
         }
         //we want a copy of value
-        return new Integer(value);
+        return Integer.valueOf(value);
     }
 
     @Override
@@ -148,7 +148,7 @@ public class IntegerConverter implements AtlasPrimitiveConverter<Integer> {
             return null;
         }
         if (value > Short.MAX_VALUE || value < Short.MIN_VALUE) {
-            throw new AtlasConversionException("Integer " + value + " is greater than Short.MAX_VALUE or less than Short.MIN_VALUE");
+            throw new AtlasConversionException(String.format("Integer %s is greater than Short.MAX_VALUE or less than Short.MIN_VALUE", value));
         }
         return value.shortValue();
     }

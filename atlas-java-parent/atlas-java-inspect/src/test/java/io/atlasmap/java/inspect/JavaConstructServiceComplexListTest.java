@@ -37,10 +37,10 @@ public class JavaConstructServiceComplexListTest {
     @Before
     public void setUp() throws Exception {
         constructService = new JavaConstructService();
-        constructService.setConversionService(DefaultAtlasConversionService.getRegistry());
+        constructService.setConversionService(DefaultAtlasConversionService.getInstance());
         
         classInspectionService = new ClassInspectionService();
-        classInspectionService.setConversionService(DefaultAtlasConversionService.getRegistry());
+        classInspectionService.setConversionService(DefaultAtlasConversionService.getInstance());
     }
 
     @After

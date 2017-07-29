@@ -39,11 +39,6 @@
             <version>4.0.4</version>
         </dependency>
         <dependency>
-            <groupId>io.atlasmap</groupId>
-            <artifactId>atlas-demo-deps</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
