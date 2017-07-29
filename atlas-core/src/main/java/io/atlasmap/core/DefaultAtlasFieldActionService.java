@@ -128,6 +128,7 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
                     case LONG: method = actionClazz.getMethod(actionDetail.getMethod(), Action.class, Long.class); break;
                     case SHORT: method = actionClazz.getMethod(actionDetail.getMethod(), Action.class, Short.class); break;
                     case STRING: method = actionClazz.getMethod(actionDetail.getMethod(), Action.class, String.class); break;
+                    case ALL: method = actionClazz.getMethod(actionDetail.getMethod(), Action.class, Object.class); break;
                     default: 
                         logger.warn(String.format("Unsupported sourceType=%s in actionClass=%s", actionDetail.getSourceType().value(), actionDetail.getClassName()));
                         break;
