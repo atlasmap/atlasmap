@@ -3,6 +3,7 @@ package io.atlasmap.reference.jsonToJson;
 import io.atlasmap.json.v2.JsonField;
 import io.atlasmap.reference.AtlasBaseActionsTest;
 import io.atlasmap.v2.Field;
+import io.atlasmap.v2.FieldType;
 
 public class JsonJsonFieldActionsTest extends AtlasBaseActionsTest {
     
@@ -15,6 +16,7 @@ public class JsonJsonFieldActionsTest extends AtlasBaseActionsTest {
     protected Field createField(String path) {
         JsonField f = new JsonField();
         f.setPath(path);
+        f.setFieldType(FieldType.STRING);
         return f;
     }
     

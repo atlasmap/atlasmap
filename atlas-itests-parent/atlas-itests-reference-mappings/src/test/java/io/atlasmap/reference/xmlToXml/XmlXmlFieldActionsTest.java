@@ -2,6 +2,7 @@ package io.atlasmap.reference.xmlToXml;
 
 import io.atlasmap.reference.AtlasBaseActionsTest;
 import io.atlasmap.v2.Field;
+import io.atlasmap.v2.FieldType;
 import io.atlasmap.xml.v2.XmlField;
 
 public class XmlXmlFieldActionsTest extends AtlasBaseActionsTest {
@@ -15,6 +16,7 @@ public class XmlXmlFieldActionsTest extends AtlasBaseActionsTest {
     protected Field createField(String path) {
         XmlField f = new XmlField();
         f.setPath(path);
+        f.setFieldType(FieldType.STRING);
         return f;
     }    
     
