@@ -154,7 +154,7 @@ public class GenerateInspectionsMojo extends AbstractMojo {
             }
 
             ClassInspectionService classInspectionService = new ClassInspectionService();
-            classInspectionService.setConversionService(DefaultAtlasConversionService.getRegistry());
+            classInspectionService.setConversionService(DefaultAtlasConversionService.getInstance());
             JavaClass c = classInspectionService.inspectClass(clazz);
 
             try {

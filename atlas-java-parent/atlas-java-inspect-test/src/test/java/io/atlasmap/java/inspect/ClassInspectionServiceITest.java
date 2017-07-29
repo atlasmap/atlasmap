@@ -18,7 +18,7 @@ public class ClassInspectionServiceITest {
 	@Before
 	public void setUp() throws Exception {
 		classInspectionService = new ClassInspectionService();
-		classInspectionService.setConversionService(DefaultAtlasConversionService.getRegistry());
+		classInspectionService.setConversionService(DefaultAtlasConversionService.getInstance());
 	}
 	
 	@After

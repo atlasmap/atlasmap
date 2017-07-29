@@ -36,7 +36,7 @@ public class DefaultAtlasPropertyStrategyTest {
     @Before
     public void setUp() throws Exception {
         propStrategy = new DefaultAtlasPropertyStrategy();
-        propStrategy.setAtlasConversionService(DefaultAtlasConversionService.getRegistry());
+        propStrategy.setAtlasConversionService(DefaultAtlasConversionService.getInstance());
     }
 
     @After
@@ -363,7 +363,7 @@ public class DefaultAtlasPropertyStrategyTest {
 
     @Test
     public void testGetSetAtlasConversionService() {
-        propStrategy.setAtlasConversionService(DefaultAtlasConversionService.getRegistry());
+        propStrategy.setAtlasConversionService(DefaultAtlasConversionService.getInstance());
         assertNotNull(propStrategy.getAtlasConversionService());
     }
 

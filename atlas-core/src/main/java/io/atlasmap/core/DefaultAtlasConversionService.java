@@ -24,7 +24,6 @@ import io.atlasmap.v2.FieldType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
@@ -40,7 +39,7 @@ import java.util.stream.Collectors;
 public class DefaultAtlasConversionService implements AtlasConversionService {
 
     private static Logger logger = LoggerFactory.getLogger(DefaultAtlasConversionService.class);
-    private static DefaultAtlasConversionService REGISTRY = null;
+    private static DefaultAtlasConversionService instance = null;
     private Map<String, AtlasConverter<?>> converters = null;
     
     private static final Set<String> PRIMITIVE_CLASSNAMES = Collections.unmodifiableSet(new HashSet<String>(
@@ -52,12 +51,12 @@ public class DefaultAtlasConversionService implements AtlasConversionService {
     
     private DefaultAtlasConversionService() { }
     
-    public static DefaultAtlasConversionService getRegistry() {
-        if (REGISTRY == null) {
-            REGISTRY = new DefaultAtlasConversionService();
-            REGISTRY.init();
+    public static DefaultAtlasConversionService getInstance() {
+        if (instance == null) {
+            instance = new DefaultAtlasConversionService();
+            instance.init();
         }
-        return REGISTRY;
+        return instance;
     }
 
     public static Set<String> listPrimitiveClassNames() {

@@ -36,7 +36,7 @@ public class JavaConstructServiceTest {
     @Before
     public void setUp() throws Exception {
         constructService = new JavaConstructService();
-        constructService.setConversionService(DefaultAtlasConversionService.getRegistry());
+        constructService.setConversionService(DefaultAtlasConversionService.getInstance());
     }
 
     @After

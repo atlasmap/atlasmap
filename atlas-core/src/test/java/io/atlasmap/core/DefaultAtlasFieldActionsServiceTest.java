@@ -17,7 +17,7 @@ public class DefaultAtlasFieldActionsServiceTest {
     
     @Before
     public void setUp() throws Exception {
-        fieldActionsService = new DefaultAtlasFieldActionService(DefaultAtlasConversionService.getRegistry());
+        fieldActionsService = new DefaultAtlasFieldActionService(DefaultAtlasConversionService.getInstance());
         fieldActionsService.init();
     }
 

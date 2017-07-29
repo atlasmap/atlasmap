@@ -110,7 +110,7 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
 	public void init(Map<String, String> properties) {
 		this.uuid = UUID.randomUUID().toString();
 		this.threadName = Thread.currentThread().getName();
-		this.atlasConversionService = DefaultAtlasConversionService.getRegistry();
+		this.atlasConversionService = DefaultAtlasConversionService.getInstance();
 		this.atlasFieldActionService = new DefaultAtlasFieldActionService(this.atlasConversionService);
 		this.atlasFieldActionService.init();
 		registerFactoryJmx(this);

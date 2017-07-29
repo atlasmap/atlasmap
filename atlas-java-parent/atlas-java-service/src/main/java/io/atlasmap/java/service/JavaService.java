@@ -80,7 +80,7 @@ public class JavaService extends Application {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getClass(@QueryParam("className") String className) throws Exception {
     	ClassInspectionService classInspectionService = new ClassInspectionService();
-    	classInspectionService.setConversionService(DefaultAtlasConversionService.getRegistry());
+    	classInspectionService.setConversionService(DefaultAtlasConversionService.getInstance());
     	JavaClass c = classInspectionService.inspectClass(className);
     	classInspectionService = null;
     	return Response.ok()
@@ -144,7 +144,7 @@ public class JavaService extends Application {
     	
     	ClassInspectionResponse response = new ClassInspectionResponse();
     	ClassInspectionService classInspectionService = new ClassInspectionService();
-        classInspectionService.setConversionService(DefaultAtlasConversionService.getRegistry());
+        classInspectionService.setConversionService(DefaultAtlasConversionService.getInstance());
 
     	configureInspectionService(classInspectionService, request);
     	

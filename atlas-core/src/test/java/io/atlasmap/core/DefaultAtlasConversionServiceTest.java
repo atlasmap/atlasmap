@@ -38,7 +38,7 @@ public class DefaultAtlasConversionServiceTest {
 
     @Before
     public void setUp() throws Exception {
-        service = DefaultAtlasConversionService.getRegistry();
+        service = DefaultAtlasConversionService.getInstance();
     }
 
     @After
@@ -51,7 +51,7 @@ public class DefaultAtlasConversionServiceTest {
     @Test
     public void getservice() throws Exception {
         assertNotNull(service);
-        DefaultAtlasConversionService service2 = DefaultAtlasConversionService.getRegistry();
+        DefaultAtlasConversionService service2 = DefaultAtlasConversionService.getInstance();
         assertNotNull(service2);
         assertSame(service, service2);
     }

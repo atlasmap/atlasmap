@@ -58,7 +58,7 @@ public class JavaValidationService implements AtlasValidationService {
     private static Map<String, Integer> versionMap = new HashMap<>();
 
     public JavaValidationService(AtlasConversionService conversionService) {
-        this.conversionService = DefaultAtlasConversionService.getRegistry();
+        this.conversionService = DefaultAtlasConversionService.getInstance();
         init();
     }
     

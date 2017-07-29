@@ -22,7 +22,7 @@ import io.atlasmap.java.test.TargetOrder;
 public class JavaWriterUtilTest extends BaseDocumentWriterTest {
 	@Test
 	public void testGetObjectFromParent() throws Exception  {		
-		JavaWriterUtil writerUtil = new JavaWriterUtil(DefaultAtlasConversionService.getRegistry());
+		JavaWriterUtil writerUtil = new JavaWriterUtil(DefaultAtlasConversionService.getInstance());
 		
 		reset();
 		setupPath("/contact");
@@ -49,7 +49,7 @@ public class JavaWriterUtilTest extends BaseDocumentWriterTest {
 	
 	@Test
 	public void testSetObjectOnParent() throws Exception  {		
-		JavaWriterUtil writerUtil = new JavaWriterUtil(DefaultAtlasConversionService.getRegistry());
+		JavaWriterUtil writerUtil = new JavaWriterUtil(DefaultAtlasConversionService.getInstance());
 		
 		reset();
 		setupPath("/contact");		
@@ -89,7 +89,7 @@ public class JavaWriterUtilTest extends BaseDocumentWriterTest {
 				
 	@Test
 	public void testInstantiateObject() throws Exception {
-		JavaWriterUtil writerUtil = new JavaWriterUtil(DefaultAtlasConversionService.getRegistry());		
+		JavaWriterUtil writerUtil = new JavaWriterUtil(DefaultAtlasConversionService.getInstance());		
 		runInstantiateObjectTest(String.class, false);
 		runInstantiateObjectTest(String.class, true);
 		runInstantiateObjectTest(LinkedList.class, false);		
@@ -107,7 +107,7 @@ public class JavaWriterUtilTest extends BaseDocumentWriterTest {
 		SegmentContext sc = new SegmentContext();
 		sc.setSegment("blah[52]");
 		sc.setSegmentPath("/blah[52]");
-		JavaWriterUtil writerUtil = new JavaWriterUtil(DefaultAtlasConversionService.getRegistry());
+		JavaWriterUtil writerUtil = new JavaWriterUtil(DefaultAtlasConversionService.getInstance());
 		Object o = writerUtil.instantiateObject(clz, sc, createWrapperArray);
 		assertNotNull(o);
 		if (createWrapperArray) {
