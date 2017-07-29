@@ -160,6 +160,14 @@ public class JavaModule extends BaseAtlasModule {
                     continue;
                 }
             
+                if(field instanceof ConstantField) {
+                    processConstantField(session, mapping);
+                    if(logger.isDebugEnabled()) {
+                        logger.debug("Processed input constantField sPath=" + field.getPath() + " sV=" + field.getValue() + " sT=" + field.getFieldType() + " docId: " + field.getDocId());
+                    }
+                    continue;
+                }
+                
                 if(field instanceof PropertyField) {
                     processPropertyField(session, mapping, session.getAtlasContext().getContextFactory().getPropertyStrategy());
                     if(logger.isDebugEnabled()) {
@@ -190,7 +198,7 @@ public class JavaModule extends BaseAtlasModule {
     
     protected void processInputMapping(Field sourceField, Object source, AtlasSession session) throws Exception {
         Method getter = null;
-        if((sourceField).getFieldType() == null) {
+        if(sourceField.getFieldType() == null && (sourceField instanceof JavaField || sourceField instanceof JavaEnumField )) {
             getter = resolveGetMethod(source, sourceField, false);
             if(getter == null) {
                 logger.warn("Unable to auto-detect sourceField type p=" + sourceField.getPath() + " d=" + sourceField.getDocId());
@@ -582,6 +590,8 @@ public class JavaModule extends BaseAtlasModule {
         } else if (field instanceof PropertyField) {
             return true;
         } else if (field instanceof ConstantField) {
+            return true;
+        } else if (field instanceof SimpleField) {
             return true;
         }
         return false;
