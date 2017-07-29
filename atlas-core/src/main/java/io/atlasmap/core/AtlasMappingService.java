@@ -52,9 +52,9 @@ public class AtlasMappingService implements Serializable {
     
 	private static final long serialVersionUID = 1668362984516180517L;
 	private static final Logger logger = LoggerFactory.getLogger(AtlasMappingService.class);
-	private JAXBContext ctx = null;
-	private Marshaller marshaller = null;
-	private Unmarshaller unmarshaller = null;
+	private transient JAXBContext ctx = null;
+	private transient Marshaller marshaller = null;
+	private transient Unmarshaller unmarshaller = null;
 	
 	private static final String CONFIG_V2_PACKAGE = "io.atlasmap.v2";
 	
@@ -216,13 +216,13 @@ public class AtlasMappingService implements Serializable {
 	}
 	
 	private String stringListToColonSeparated(List<String> items) {
-		StringBuffer buffer = new StringBuffer(CONFIG_V2_PACKAGE);
+		StringBuilder buffer = new StringBuilder(CONFIG_V2_PACKAGE);
 		
 		if(items == null) {
 			return null;
 		}
 		
-		if(items.size() < 1) {
+		if(items.isEmpty()) {
 			return buffer.toString();
 		}
 		
