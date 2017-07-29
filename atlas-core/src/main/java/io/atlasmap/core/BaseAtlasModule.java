@@ -369,7 +369,7 @@ public abstract class BaseAtlasModule implements AtlasModule {
     }
     
     protected void processFieldActions(AtlasFieldActionService fieldActionService, Field field) throws AtlasException {
-        field.setValue(fieldActionService.processActions(field.getActions(), field.getValue()));
+        field.setValue(fieldActionService.processActions(field.getActions(), field.getValue(), field.getFieldType()));
     }
     
     @Override

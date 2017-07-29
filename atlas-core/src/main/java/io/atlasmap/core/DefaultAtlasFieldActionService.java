@@ -17,6 +17,7 @@ import io.atlasmap.api.AtlasFieldActionService;
 import io.atlasmap.spi.AtlasFieldActionInfo;
 import io.atlasmap.v2.ActionDetails;
 import io.atlasmap.v2.Actions;
+import io.atlasmap.v2.FieldType;
 import io.atlasmap.v2.Properties;
 import io.atlasmap.v2.Property;
 import io.atlasmap.v2.Action;
@@ -92,16 +93,35 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
         return null;
     }
 
-    @Override // TODO: Wire in auto-conversion service
-    public Object processActions(Actions actions, Object sourceObject) throws AtlasException {
-        if(actions == null || actions.getActions() == null || actions.getActions().isEmpty()) {
+    @Override
+    public Object processActions(Actions actions, Object sourceObject, FieldType targetType) throws AtlasException {
+
+        if(FieldType.COMPLEX.equals(targetType)) {
             return sourceObject;
         }
-              
+         
         Object targetObject = null;
-
+        Object tmpSourceObject = sourceObject;
+        FieldType sourceType = (sourceObject != null ? getConversionService().fieldTypeFromClass(sourceObject.getClass()) : FieldType.NONE);
+        
+        if(actions == null || actions.getActions() == null || actions.getActions().isEmpty()) {
+            if(sourceObject == null) {
+                return null;
+            }
+            return getConversionService().convertType(sourceObject, sourceType, targetType);
+        }
+        
         for(Action action : actions.getActions()) {
-            targetObject = processAction(action, getActionDetailByActionName(action.getClass().getSimpleName()), sourceObject);
+            ActionDetail detail = getActionDetailByActionName(action.getClass().getSimpleName());
+            if(!detail.getSourceType().equals(sourceType)) {
+                tmpSourceObject = getConversionService().convertType(sourceObject, sourceType, targetType);
+            }
+            
+            targetObject = processAction(action, getActionDetailByActionName(action.getClass().getSimpleName()), tmpSourceObject);
+            
+            if(!detail.getTargetType().equals(targetType)) {
+                targetObject = getConversionService().convertType(targetObject, detail.getTargetType(), targetType);
+            }
         }
         
         return targetObject;

@@ -17,10 +17,12 @@ package io.atlasmap.api;
 
 import io.atlasmap.v2.ActionDetail;
 import io.atlasmap.v2.Actions;
+import io.atlasmap.v2.FieldType;
+
 import java.util.List;
 
 public interface AtlasFieldActionService {
 
     List<ActionDetail> listActionDetails();
-    Object processActions(Actions actions, Object object) throws AtlasException;
+    Object processActions(Actions actions, Object object, FieldType targetType) throws AtlasException;
 }

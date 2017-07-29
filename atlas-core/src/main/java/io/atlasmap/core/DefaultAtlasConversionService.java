@@ -221,8 +221,16 @@ public class DefaultAtlasConversionService implements AtlasConversionService {
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
-    public Object convertType(Object sourceValue, FieldType sourceType, FieldType targetType) throws AtlasConversionException {
-        if(sourceType == null || targetType == null) {
+    public Object convertType(Object sourceValue, FieldType origSourceType, FieldType targetType) throws AtlasConversionException {
+        FieldType sourceType = null;
+        
+        if(origSourceType == null && sourceValue != null) {
+            sourceType = fieldTypeFromClass(sourceValue.getClass());
+        } else {
+            sourceType = FieldType.fromValue(origSourceType.value());
+        }
+         
+        if(sourceType == null && targetType == null) {
             throw new AtlasConversionException("AutoConversion requires sourceType and targetType be specified");
         }
         
@@ -251,7 +259,7 @@ public class DefaultAtlasConversionService implements AtlasConversionService {
             }
         } else {
             // TODO: Support non-primitive auto conversion
-            throw new AtlasConversionException("AutoConversion of non-primitives not supported");
+            throw new AtlasConversionException("AutoConversion of non-primitives is not supported");
         }
         
     }
