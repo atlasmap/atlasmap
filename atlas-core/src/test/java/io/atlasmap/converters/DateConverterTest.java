@@ -280,6 +280,10 @@ public class DateConverterTest {
         Class aClass = DateConverter.class;
         Method[] methods = aClass.getMethods();
         for (Method method : methods) {
+            if(method.isSynthetic()) {
+                // We are running in Eclipse or jacoco 
+                continue;
+            }
             if (method.getName().startsWith("convertTo") && method.getParameterCount() == 1) {
                 Annotation[] annotations = method.getDeclaredAnnotations();
                 assertNotNull(annotations);

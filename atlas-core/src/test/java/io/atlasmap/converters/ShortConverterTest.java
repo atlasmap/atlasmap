@@ -229,6 +229,10 @@ public class ShortConverterTest {
         Class aClass = ShortConverter.class;
         Method[] methods = aClass.getMethods();
         for (Method method : methods) {
+            if(method.isSynthetic()) {
+                // We are running in Eclipse or jacoco 
+                continue;
+            }
             if (method.getName().startsWith("convert")) {
                 Annotation[] annotations = method.getDeclaredAnnotations();
                 assertNotNull(annotations);

@@ -233,6 +233,10 @@ public class LongConverterTest {
         Class aClass = LongConverter.class;
         Method[] methods = aClass.getMethods();
         for (Method method : methods) {
+            if(method.isSynthetic()) {
+                // We are running in Eclipse or jacoco 
+                continue;
+            }
             if (method.getName().startsWith("convert")) {
                 Annotation[] annotations = method.getDeclaredAnnotations();
                 assertNotNull(annotations);
