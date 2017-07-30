@@ -17,13 +17,10 @@ package io.atlasmap.core;
 
 import io.atlasmap.mxbean.AtlasModuleInfoMXBean;
 import io.atlasmap.spi.AtlasModuleInfo;
-
-import java.io.Serializable;
 import java.lang.reflect.Constructor;
 import java.util.List;
 
-public class DefaultAtlasModuleInfo implements Serializable, AtlasModuleInfo, AtlasModuleInfoMXBean {
-	private static final long serialVersionUID = -4604837498041897724L;
+public class DefaultAtlasModuleInfo implements AtlasModuleInfo, AtlasModuleInfoMXBean {
 	private String name;
 	private String uri;
 	private Boolean sourceSupported;

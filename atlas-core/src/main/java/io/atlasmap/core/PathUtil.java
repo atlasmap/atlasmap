@@ -1,6 +1,5 @@
 package io.atlasmap.core;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -43,12 +42,12 @@ public class PathUtil {
     	SegmentContext previousContext = null;
     	int index = 0;
     	
-    	List<String> segments = this.getSegments();
+    	List<String> newSegments = this.getSegments();
     	if (includeLeadingSlashSegment) {
-    		segments.add(0, "");
+    	    newSegments.add(0, "");
     	}
     	
-    	for (String s : segments) {
+    	for (String s : newSegments) {
     		SegmentContext c = new SegmentContext();
     		segmentPath += PATH_SEPARATOR + s;
     		c.setPathUtil(this);
@@ -80,10 +79,10 @@ public class PathUtil {
     }
 
     public String getLastSegment() {
-        if (segments.size() > 0) {
-            return segments.get(segments.size() - 1);
-        } else {
+        if (segments.isEmpty()) {
             return null;
+        } else {
+            return segments.get(segments.size() - 1);
         }
     }
 
@@ -146,7 +145,7 @@ public class PathUtil {
     }
 
     public String getLastSegmentParent() {
-        if (segments.size() == 0 || segments.size() == 1) {
+        if (segments.isEmpty() || segments.size() == 1) {
             return null;
         }
 
@@ -154,7 +153,7 @@ public class PathUtil {
     }
 
     public PathUtil getLastSegmentParentPath() {
-        if (segments.size() == 0 || segments.size() == 1) {
+        if (segments.isEmpty() || segments.size() == 1) {
             return null;
         }
 
@@ -166,7 +165,7 @@ public class PathUtil {
     }
 
     public PathUtil deCollectionify(String collectionSegment) {
-        if (segments.size() == 0 || segments.size() == 1) {
+        if (segments.isEmpty() || segments.size() == 1) {
             return null;
         }
 
@@ -176,7 +175,8 @@ public class PathUtil {
             if(collectionFound) {
                 j.appendField(part);
             }
-            if(cleanPathSegment(part).equals(cleanPathSegment(collectionSegment))) {
+            String cleanedPart = cleanPathSegment(part);
+            if(cleanedPart != null && cleanedPart.equals(cleanPathSegment(collectionSegment))) {
                 collectionFound = true;
             }
         }
@@ -184,7 +184,7 @@ public class PathUtil {
     }
 
     public PathUtil deParentify() {
-        if (segments.size() == 0 || segments.size() == 1) {
+        if (segments.isEmpty() || segments.size() == 1) {
             return null;
         }
 
@@ -253,7 +253,7 @@ public class PathUtil {
     	if (!isNamespaceSegment(pathSegment)) {
     		return null;
     	}
-    	pathSegment = pathSegment.substring(0, pathSegment.indexOf(":"));
+    	pathSegment = pathSegment.substring(0, pathSegment.indexOf(':'));
     	if (pathSegment.startsWith("@")) {
     		pathSegment = pathSegment.substring(1);
     	}
@@ -288,7 +288,8 @@ public class PathUtil {
 
     public Integer getCollectionIndex(String segment) {
         for(String part : getSegments()) {
-            if(cleanPathSegment(part).equals(cleanPathSegment(segment))) {
+            String cleanedPart = cleanPathSegment(part);
+            if(cleanedPart != null && cleanedPart.equals(cleanPathSegment(segment))) {
                 if((part.contains(PATH_ARRAY_START) && part.contains(PATH_ARRAY_END))||
                    (part.contains(PATH_LIST_START) && (part.contains(PATH_LIST_END)))) {
                     return indexOfSegment(part);
@@ -319,15 +320,15 @@ public class PathUtil {
 
         if(segment.contains(PATH_ARRAY_START) && segment.contains(PATH_ARRAY_END)) {
             for(int i=0; i < getSegments().size(); i++) {
-                String part = getSegments().get(i);
-                if(cleanPathSegment(part).equals(cleanPathSegment(segment))) {
+                String part = cleanPathSegment(getSegments().get(i));
+                if(part != null && part.equals(cleanPathSegment(segment))) {
                     getSegments().set(i, cleanPathSegment(segment) + PATH_ARRAY_START + index + PATH_ARRAY_END);
                 }
             }
         } else if(segment.contains(PATH_LIST_START) && segment.contains(PATH_LIST_END)) {
             for(int i=0; i < getSegments().size(); i++) {
-                String part = getSegments().get(i);
-                if(cleanPathSegment(part).equals(cleanPathSegment(segment))) {
+                String part = cleanPathSegment(getSegments().get(i));
+                if(part != null && part.equals(cleanPathSegment(segment))) {
                     getSegments().set(i,cleanPathSegment(segment) + PATH_LIST_START + index + PATH_LIST_END);
                 }
             }
@@ -337,22 +338,22 @@ public class PathUtil {
     }
 
     public String toString() {
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder builder = new StringBuilder();
 
         int i = 0;
 
         if(getSegments().size() > 1) {
-            buffer.append(PATH_SEPARATOR);
+            builder.append(PATH_SEPARATOR);
         }
 
         for (String part : getSegments()) {
-            buffer.append(part);
+            builder.append(part);
             if (i < (getSegments().size() - 1)) {
-                buffer.append(PATH_SEPARATOR);
+                builder.append(PATH_SEPARATOR);
             }
             i++;
         }
-        return buffer.toString();
+        return builder.toString();
     }       
     
     public String getOriginalPath() {
@@ -384,8 +385,7 @@ public class PathUtil {
 		return null;
 	}
 	
-	public static class SegmentContext implements Serializable {
-		private static final long serialVersionUID = 1L;
+	public static class SegmentContext {
 		
 		protected String segment;
 		protected String segmentPath;

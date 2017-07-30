@@ -29,15 +29,13 @@ public class OutputValueConverter implements JavaFieldWriterValueConverter {
     private AtlasSession session = null;
     private AtlasConversionService conversionService = null;
     private Mapping mapping = null;
-    private JavaModule module = null;
 
-    public OutputValueConverter(Field inputField, AtlasSession session, Mapping mapping, AtlasConversionService conversionService, JavaModule module) {
+    public OutputValueConverter(Field inputField, AtlasSession session, Mapping mapping, AtlasConversionService conversionService) {
         super();
         this.inputField = inputField;
         this.session = session;
         this.mapping = mapping;
         this.conversionService = conversionService;
-        this.module = module;
     }
 
     @Override
@@ -196,7 +194,6 @@ public class OutputValueConverter implements JavaFieldWriterValueConverter {
                 }
             }
         } else if (field instanceof JavaEnumField) {
-            JavaEnumField javaField = (JavaEnumField) field;
             for (Class<?> clazz : classTree) {
                 try {
                     String setterMethodName = "set" + JavaModule.capitalizeFirstLetter(pathUtil.getLastSegment());
