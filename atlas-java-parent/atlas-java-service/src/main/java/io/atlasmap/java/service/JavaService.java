@@ -124,8 +124,6 @@ public class JavaService extends Application {
     	} catch (Exception e) {
     		logger.error("Error generating classpath from maven: " + e.getMessage(), e);
     		response.setErrorMessage(e.getMessage());
-    	} finally {
-    		mavenClasspathHelper = null;
     	}
     	
     	return Response.ok()
@@ -161,7 +159,6 @@ public class JavaService extends Application {
     		logger.error("Error inspecting class with classpath: " + e.getMessage(), e);
     		response.setErrorMessage(e.getMessage());
     	} finally {
-    		classInspectionService = null;
     		response.setExecutionTime(System.currentTimeMillis() - startTime);
     	}
 

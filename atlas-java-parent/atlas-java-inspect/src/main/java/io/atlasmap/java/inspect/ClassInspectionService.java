@@ -15,7 +15,6 @@
  */
 package io.atlasmap.java.inspect;
 
-import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedType;
 import java.lang.reflect.Field;
@@ -52,9 +51,8 @@ import io.atlasmap.v2.FieldStatus;
 import io.atlasmap.v2.FieldType;
 import io.atlasmap.v2.StringList;
 
-public class ClassInspectionService implements Serializable {
+public class ClassInspectionService {
 
-    private static final long serialVersionUID = 6634950157813704038L;
     private static final Logger logger = LoggerFactory.getLogger(ClassInspectionService.class);
     public static final int MAX_REENTRY_LIMIT = 1;
     public static final int MAX_ARRAY_DIM_LIMIT = 256; // JVM specification
@@ -691,7 +689,7 @@ public class ClassInspectionService implements Serializable {
     }
 
     protected Integer detectArrayDimensions(Class<?> clazz) {
-        Integer arrayDim = new Integer(0);
+        Integer arrayDim = Integer.valueOf(0);
         if (clazz == null) {
             return null;
         }

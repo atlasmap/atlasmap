@@ -41,15 +41,18 @@ import javax.ws.rs.core.Application;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
+import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.transform.stream.StreamSource;
 import java.io.File;
 import java.io.FilenameFilter;
+import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
@@ -64,87 +67,96 @@ public class AtlasService extends Application {
 	final DefaultAtlasContextFactory atlasContextFactory = DefaultAtlasContextFactory.getInstance();
 	private String baseFolder = "target/mappings";
 	
+	private static final String ACCESS_CONTROL_ALLOW_ORIGIN = "Access-Control-Allow-Origin";
+	private static final String DEFAULT_ACCESS_CONTROL_ALLOW_ORIGIN = "*";
+	private static final String ACCESS_CONTROL_ALLOW_HEADERS = "Access-Control-Allow-Headers";
+	private static final String DEFAULT_ACCESS_CONTROL_ALLOW_HEADERS = "Content-Type";
+    private static final String ACCESS_CONTROL_ALLOW_METHODS = "Access-Control-Allow-Methods";
+    private static final String DEFAULT_ACCESS_CONTROL_ALLOW_METHODS = "GET,PUT,POST,PATCH,DELETE,OPTIONS,HEAD";
+    private static final String ACCESS_CONTROL_ALLOW_METHODS_GPPPD = "GET,PUT,POST,PATCH,DELETE";
+
+	
 	public AtlasService() {
 		javaServiceApp = new ResourceConfig().register(JacksonFeature.class);
 	}
 
 	protected Response standardCORSResponse() {
 	    return Response.ok()
-                .header("Access-Control-Allow-Origin", "*")
-                .header("Access-Control-Allow-Headers", "Content-Type")
-                .header("Access-Control-Allow-Methods", "GET,PUT,POST,PATCH,DELETE,OPTIONS,HEAD")
+                .header(ACCESS_CONTROL_ALLOW_ORIGIN, DEFAULT_ACCESS_CONTROL_ALLOW_ORIGIN)
+                .header(ACCESS_CONTROL_ALLOW_HEADERS, DEFAULT_ACCESS_CONTROL_ALLOW_HEADERS)
+                .header(ACCESS_CONTROL_ALLOW_METHODS, DEFAULT_ACCESS_CONTROL_ALLOW_METHODS)
                 .build();
 	}
 	
     @OPTIONS
     @Path("/mapping")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getMappingOptions() throws Exception {
+    public Response getMappingOptions() {
     	return standardCORSResponse();
     }
     
     @OPTIONS
     @Path("/mapping/validate")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getMappingValidateOptions() throws Exception {
+    public Response getMappingValidateOptions() {
         return standardCORSResponse();
     }
     
     @OPTIONS
     @Path("/mapping/validate/{mappingId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getMappingValidateParameterizedOptions() throws Exception {
+    public Response getMappingValidateParameterizedOptions() {
         return standardCORSResponse();
     }
     
     @OPTIONS
     @Path("/fieldMapping/converterCheck")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getFieldMappingConverterCheckOptions() throws Exception {
+    public Response getFieldMappingConverterCheckOptions() {
         return standardCORSResponse();
     }
      
     @OPTIONS
     @Path("/mapping/{mappingId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getMappingParameterizedOptions() throws Exception {
+    public Response getMappingParameterizedOptions() {
         return standardCORSResponse();
     }
 
     @OPTIONS
     @Path("/mappings")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getMappingsOptions() throws Exception {
+    public Response getMappingsOptions() {
         return standardCORSResponse();
     }
     
     @OPTIONS
     @Path("/fieldActions")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getFieldActionsOptions() throws Exception {
+    public Response getFieldActionsOptions() {
         return standardCORSResponse();
     }
 	
     @GET
     @Path("/fieldActions")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response listFieldActions(@Context UriInfo uriInfo) throws Exception {
+    public Response listFieldActions(@Context UriInfo uriInfo) {
         ActionDetails details = new ActionDetails();
         
         if(atlasContextFactory == null || atlasContextFactory.getFieldActionService() == null) {
             return Response.ok()
-                    .header("Access-Control-Allow-Origin", "*")
-                    .header("Access-Control-Allow-Headers", "Content-Type")
-                    .header("Access-Control-Allow-Methods", "GET,PUT,POST,PATCH,DELETE")
+                    .header(ACCESS_CONTROL_ALLOW_ORIGIN, DEFAULT_ACCESS_CONTROL_ALLOW_ORIGIN)
+                    .header(ACCESS_CONTROL_ALLOW_HEADERS, DEFAULT_ACCESS_CONTROL_ALLOW_HEADERS)
+                    .header(ACCESS_CONTROL_ALLOW_METHODS, ACCESS_CONTROL_ALLOW_METHODS_GPPPD)
                     .entity(details)
                     .build();
         }
         
         details.getActionDetail().addAll(atlasContextFactory.getFieldActionService().listActionDetails());
         return Response.ok()
-                .header("Access-Control-Allow-Origin", "*")
-                .header("Access-Control-Allow-Headers", "Content-Type")
-                .header("Access-Control-Allow-Methods", "GET,PUT,POST,PATCH,DELETE")
+                .header(ACCESS_CONTROL_ALLOW_ORIGIN, DEFAULT_ACCESS_CONTROL_ALLOW_ORIGIN)
+                .header(ACCESS_CONTROL_ALLOW_HEADERS, DEFAULT_ACCESS_CONTROL_ALLOW_HEADERS)
+                .header(ACCESS_CONTROL_ALLOW_METHODS, ACCESS_CONTROL_ALLOW_METHODS_GPPPD)
                 .entity(details)
                 .build();
     }
@@ -153,7 +165,7 @@ public class AtlasService extends Application {
     @GET
     @Path("/mappings")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response listMappings(@Context UriInfo uriInfo, final @QueryParam("filter") String filter) throws Exception {
+    public Response listMappings(@Context UriInfo uriInfo, final @QueryParam("filter") String filter) {
     	StringMap sMap = new StringMap();
     	
     	java.nio.file.Path mappingFolder = Paths.get(baseFolder);
@@ -164,34 +176,38 @@ public class AtlasService extends Application {
 				if (filter != null && name != null && !name.toLowerCase().contains(filter.toLowerCase())) {
 					return false;
 				}
-                return name.matches("atlasmapping-[a-zA-Z0-9\\.\\-]+.xml");
+                return (name != null ? name.matches("atlasmapping-[a-zA-Z0-9\\.\\-]+.xml") : false);
             }
 		});
     	
     	if(mappings == null) {
     		return Response.ok()
-        			.header("Access-Control-Allow-Origin", "*")
-        			.header("Access-Control-Allow-Headers", "Content-Type")
-        			.header("Access-Control-Allow-Methods", "GET,PUT,POST,PATCH,DELETE")
+                .header(ACCESS_CONTROL_ALLOW_ORIGIN, DEFAULT_ACCESS_CONTROL_ALLOW_ORIGIN)
+                .header(ACCESS_CONTROL_ALLOW_HEADERS, DEFAULT_ACCESS_CONTROL_ALLOW_HEADERS)
+                .header(ACCESS_CONTROL_ALLOW_METHODS, ACCESS_CONTROL_ALLOW_METHODS_GPPPD)
         			.entity(sMap)
         			.build();
     	}
     	
-    	for(File mapping : mappings) {
-    		AtlasMapping map = getMappingFromFile(mapping.getAbsolutePath());
-    		StringMapEntry mapEntry = new StringMapEntry();
-    		mapEntry.setName(map.getName());
+    	try {
+    	    for(File mapping : mappings) {
+    	        AtlasMapping map = getMappingFromFile(mapping.getAbsolutePath());
+    	        StringMapEntry mapEntry = new StringMapEntry();
+    	        mapEntry.setName(map.getName());
     		
-        	UriBuilder builder = uriInfo.getBaseUriBuilder()
+    	        UriBuilder builder = uriInfo.getBaseUriBuilder()
         			.path("v2").path("atlas").path("mapping").path(map.getName());
-    		mapEntry.setValue(builder.build().toString());
-    		sMap.getStringMapEntry().add(mapEntry);
+    	        mapEntry.setValue(builder.build().toString());
+    	        sMap.getStringMapEntry().add(mapEntry);
+    	    }
+    	} catch (JAXBException e) {
+            throw new WebApplicationException(e.getMessage(), Status.INTERNAL_SERVER_ERROR);
     	}
     	    	
     	return Response.ok()
-    			.header("Access-Control-Allow-Origin", "*")
-    			.header("Access-Control-Allow-Headers", "Content-Type")
-    			.header("Access-Control-Allow-Methods", "GET,PUT,POST,PATCH,DELETE")
+            .header(ACCESS_CONTROL_ALLOW_ORIGIN, DEFAULT_ACCESS_CONTROL_ALLOW_ORIGIN)
+            .header(ACCESS_CONTROL_ALLOW_HEADERS, DEFAULT_ACCESS_CONTROL_ALLOW_HEADERS)
+            .header(ACCESS_CONTROL_ALLOW_METHODS, ACCESS_CONTROL_ALLOW_METHODS_GPPPD)
     			.entity(sMap)
     			.build();
     }      
@@ -199,43 +215,43 @@ public class AtlasService extends Application {
     @DELETE
     @Path("/mapping/{mappingId}")
     @Produces(MediaType.APPLICATION_JSON)    
-    public Response removeMappingRequest(@PathParam("mappingId") String mappingId) throws Exception {
+    public Response removeMappingRequest(@PathParam("mappingId") String mappingId) {
     	
     	java.nio.file.Path mappingFilePath = Paths.get(baseFolder + File.separator + generateMappingFileName(mappingId));
     	File mappingFile = mappingFilePath.toFile();
     	
     	if(!mappingFile.exists()) {
     		return Response.noContent()
-        			.header("Access-Control-Allow-Origin", "*")
-        			.header("Access-Control-Allow-Headers", "Content-Type")
-        			.header("Access-Control-Allow-Methods", "GET,PUT,POST,PATCH,DELETE")
+                 .header(ACCESS_CONTROL_ALLOW_ORIGIN, DEFAULT_ACCESS_CONTROL_ALLOW_ORIGIN)
+                 .header(ACCESS_CONTROL_ALLOW_HEADERS, DEFAULT_ACCESS_CONTROL_ALLOW_HEADERS)
+                 .header(ACCESS_CONTROL_ALLOW_METHODS, ACCESS_CONTROL_ALLOW_METHODS_GPPPD)
         			.build();
     	}
     	
-    if(!mappingFile.delete()) {
+    	if(mappingFile != null && !mappingFile.delete()) {
         logger.warn("Unable to delete mapping file " + mappingFile.toString());
     }
     	    	
     	return Response.ok()
-    			.header("Access-Control-Allow-Origin", "*")
-    			.header("Access-Control-Allow-Headers", "Content-Type")
-    			.header("Access-Control-Allow-Methods", "GET,PUT,POST,PATCH,DELETE")
+            .header(ACCESS_CONTROL_ALLOW_ORIGIN, DEFAULT_ACCESS_CONTROL_ALLOW_ORIGIN)
+            .header(ACCESS_CONTROL_ALLOW_HEADERS, DEFAULT_ACCESS_CONTROL_ALLOW_HEADERS)
+            .header(ACCESS_CONTROL_ALLOW_METHODS, ACCESS_CONTROL_ALLOW_METHODS_GPPPD)
     			.build();
     }
     
     @GET
     @Path("/mapping/{mappingId}")
     @Produces(MediaType.APPLICATION_JSON)    
-    public Response getMappingRequest(@PathParam("mappingId") String mappingId) throws Exception {
+    public Response getMappingRequest(@PathParam("mappingId") String mappingId) {
     	
     	java.nio.file.Path mappingFilePath = Paths.get(baseFolder + File.separator + generateMappingFileName(mappingId));
     	File mappingFile = mappingFilePath.toFile();
     	
     	if(!mappingFile.exists()) {
     		return Response.noContent()
-        			.header("Access-Control-Allow-Origin", "*")
-        			.header("Access-Control-Allow-Headers", "Content-Type")
-        			.header("Access-Control-Allow-Methods", "GET,PUT,POST,PATCH,DELETE")
+                .header(ACCESS_CONTROL_ALLOW_ORIGIN, DEFAULT_ACCESS_CONTROL_ALLOW_ORIGIN)
+                .header(ACCESS_CONTROL_ALLOW_HEADERS, DEFAULT_ACCESS_CONTROL_ALLOW_HEADERS)
+                .header(ACCESS_CONTROL_ALLOW_METHODS, ACCESS_CONTROL_ALLOW_METHODS_GPPPD)
         			.build();
     	}
     	
@@ -247,9 +263,9 @@ public class AtlasService extends Application {
     	}
     	
     	return Response.ok()
-    			.header("Access-Control-Allow-Origin", "*")
-    			.header("Access-Control-Allow-Headers", "Content-Type")
-    			.header("Access-Control-Allow-Methods", "GET,PUT,POST,PATCH,DELETE")
+            .header(ACCESS_CONTROL_ALLOW_ORIGIN, DEFAULT_ACCESS_CONTROL_ALLOW_ORIGIN)
+            .header(ACCESS_CONTROL_ALLOW_HEADERS, DEFAULT_ACCESS_CONTROL_ALLOW_HEADERS)
+            .header(ACCESS_CONTROL_ALLOW_METHODS, ACCESS_CONTROL_ALLOW_METHODS_GPPPD)
     			.entity(atlasMapping)
     			.build();
     }
@@ -258,7 +274,7 @@ public class AtlasService extends Application {
     @Path("/mapping")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createMappingRequest(AtlasMapping mapping, @Context UriInfo uriInfo) throws Exception {
+    public Response createMappingRequest(AtlasMapping mapping, @Context UriInfo uriInfo) {
     	return saveMapping(mapping, uriInfo);
     }
     
@@ -266,7 +282,7 @@ public class AtlasService extends Application {
     @Path("/mapping/{mappingId}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateMappingRequest(AtlasMapping mapping, @Context UriInfo uriInfo) throws Exception {
+    public Response updateMappingRequest(AtlasMapping mapping, @Context UriInfo uriInfo) {
     	return saveMapping(mapping, uriInfo);
     }
     	    
@@ -274,19 +290,23 @@ public class AtlasService extends Application {
     @Path("/mapping/validate")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response validateMappingRequest(AtlasMapping mapping, @Context UriInfo uriInfo) throws Exception {
-        return validateMapping(mapping, uriInfo);
+    public Response validateMappingRequest(AtlasMapping mapping, @Context UriInfo uriInfo) {
+        try {
+            return validateMapping(mapping, uriInfo);
+        } catch (AtlasException | IOException e) {
+            throw new WebApplicationException(e.getMessage(), Status.INTERNAL_SERVER_ERROR);
+        }
     }
     
     @PUT
     @Path("/fieldMapping/converterCheck")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response processConverterCheckRequest(Mapping mapping, @Context UriInfo uriInfo) throws Exception {
+    public Response processConverterCheckRequest(Mapping mapping, @Context UriInfo uriInfo) {
         return converterCheck(mapping, uriInfo);
     }
     
-    protected Response validateMapping(AtlasMapping mapping, UriInfo uriInfo) throws Exception {
+    protected Response validateMapping(AtlasMapping mapping, UriInfo uriInfo) throws IOException, AtlasException {
         
         File temporaryMappingFile = File.createTempFile("atlas-mapping", "xml");
         temporaryMappingFile.deleteOnExit();
@@ -301,24 +321,22 @@ public class AtlasService extends Application {
             validations = new Validations();
         }
 
-        if(temporaryMappingFile.exists()) {
-            if(!temporaryMappingFile.delete()) {
-                logger.warn("Failed to deleting temporary file: " + temporaryMappingFile.toString());
-            }
+        if(temporaryMappingFile.exists() && !temporaryMappingFile.delete()) {
+            logger.warn("Failed to deleting temporary file: " + (temporaryMappingFile != null ? temporaryMappingFile.toString() : null));
         }
         
         return Response.ok()
-                .header("Access-Control-Allow-Origin", "*")
-                .header("Access-Control-Allow-Headers", "Content-Type")
-                .header("Access-Control-Allow-Methods", "GET,PUT,POST,PATCH,DELETE")
+                .header(ACCESS_CONTROL_ALLOW_ORIGIN, DEFAULT_ACCESS_CONTROL_ALLOW_ORIGIN)
+                .header(ACCESS_CONTROL_ALLOW_HEADERS, DEFAULT_ACCESS_CONTROL_ALLOW_HEADERS)
+                .header(ACCESS_CONTROL_ALLOW_METHODS, ACCESS_CONTROL_ALLOW_METHODS_GPPPD)
                 .entity(validations)
                 .build();
     }
     
-    protected Response converterCheck(Mapping mapping, UriInfo uriInfo) throws Exception {
+    protected Response converterCheck(Mapping mapping, UriInfo uriInfo) {
         
         if(mapping == null) {
-            throw new AtlasException("Mapping must be specified");
+            throw new WebApplicationException("Mapping must be specified", Status.BAD_REQUEST);
         }
         
         AtlasConversionService conversionService = atlasContextFactory.getConversionService();
@@ -340,8 +358,8 @@ public class AtlasService extends Application {
 //            throw new AtlasException("Unsupported mapping type: " + mapping.getClass().getName());
         //}
         
-        if(inputFields == null || inputFields.size() < 1 || outputFields == null || outputFields.size() < 1) {
-            throw new AtlasException("Must have one of inputField(s) and outputField(s) in order to check for available converter");
+        if(inputFields == null || inputFields.isEmpty() || outputFields == null || outputFields.isEmpty()) {
+            throw new WebApplicationException("Must have one of inputField(s) and outputField(s) in order to check for available converter", Status.BAD_REQUEST);
         }
         
 
@@ -370,14 +388,14 @@ public class AtlasService extends Application {
         }
 
         return Response.ok()
-                .header("Access-Control-Allow-Origin", "*")
-                .header("Access-Control-Allow-Headers", "Content-Type")
-                .header("Access-Control-Allow-Methods", "GET,PUT,POST,PATCH,DELETE")
+                .header(ACCESS_CONTROL_ALLOW_ORIGIN, DEFAULT_ACCESS_CONTROL_ALLOW_ORIGIN)
+                .header(ACCESS_CONTROL_ALLOW_HEADERS, DEFAULT_ACCESS_CONTROL_ALLOW_HEADERS)
+                .header(ACCESS_CONTROL_ALLOW_METHODS, ACCESS_CONTROL_ALLOW_METHODS_GPPPD)
                 .entity(validations)
                 .build();
     }
     
-    protected Response saveMapping(AtlasMapping mapping, UriInfo uriInfo) throws Exception {
+    protected Response saveMapping(AtlasMapping mapping, UriInfo uriInfo) {
         try {
             saveMappingToFile(mapping);
         } catch (Exception e) {
@@ -388,17 +406,17 @@ public class AtlasService extends Application {
         builder.path(mapping.getName());
 
         return Response.ok()
-                .header("Access-Control-Allow-Origin", "*")
-                .header("Access-Control-Allow-Headers", "Content-Type")
-                .header("Access-Control-Allow-Methods", "GET,PUT,POST,PATCH,DELETE")
+                .header(ACCESS_CONTROL_ALLOW_ORIGIN, DEFAULT_ACCESS_CONTROL_ALLOW_ORIGIN)
+                .header(ACCESS_CONTROL_ALLOW_HEADERS, DEFAULT_ACCESS_CONTROL_ALLOW_HEADERS)
+                .header(ACCESS_CONTROL_ALLOW_METHODS, ACCESS_CONTROL_ALLOW_METHODS_GPPPD)
                 .location(builder.build())
                 .build();
     }
     
-    public AtlasMapping getMappingFromFile(String fileName) throws Exception {
-    	JAXBContext jaxbContext = JAXBContext.newInstance("io.atlasmap.v2:io.atlasmap.java.v2:io.atlasmap.xml.v2:io.atlasmap.json.v2");
-    	Marshaller marshaller = null;
-    	Unmarshaller unmarshaller = null;
+    public AtlasMapping getMappingFromFile(String fileName) throws JAXBException {
+    	    JAXBContext jaxbContext = JAXBContext.newInstance("io.atlasmap.v2:io.atlasmap.java.v2:io.atlasmap.xml.v2:io.atlasmap.json.v2");
+    	    Marshaller marshaller = null;
+    	    Unmarshaller unmarshaller = null;
 
 		marshaller = jaxbContext.createMarshaller();
 		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
@@ -412,9 +430,9 @@ public class AtlasService extends Application {
 		return null;	
     }
     
-    protected void saveMappingToFile(AtlasMapping atlasMapping) throws Exception {
-    	JAXBContext jaxbContext = JAXBContext.newInstance("io.atlasmap.v2:io.atlasmap.java.v2:io.atlasmap.xml.v2:io.atlasmap.json.v2");
-    	Marshaller marshaller = null;
+    protected void saveMappingToFile(AtlasMapping atlasMapping) throws JAXBException {
+    	    JAXBContext jaxbContext = JAXBContext.newInstance("io.atlasmap.v2:io.atlasmap.java.v2:io.atlasmap.xml.v2:io.atlasmap.json.v2");
+    	    Marshaller marshaller = null;
 
 		marshaller = jaxbContext.createMarshaller();
 		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
@@ -423,6 +441,6 @@ public class AtlasService extends Application {
     }
     
     protected String generateMappingFileName(String mappingName) {
-    	return String.format("atlasmapping-%s.xml", mappingName);
+    	    return String.format("atlasmapping-%s.xml", mappingName);
     }
 }

@@ -43,7 +43,7 @@ public class StringConverter implements AtlasPrimitiveConverter<String> {
         } else if (value.equals("1") || value.equalsIgnoreCase("t") || value.equals("true")) {
             return Boolean.TRUE;
         }
-        throw new AtlasConversionException("String " + value + " cannot be converted to a Boolean");
+        throw new AtlasConversionException(String.format("String %s cannot be converted to a Boolean", value));
     }
 
     /**
@@ -76,7 +76,7 @@ public class StringConverter implements AtlasPrimitiveConverter<String> {
         if (value.isEmpty() || value.length() > 1) {
             throw new AtlasConversionException("String is either empty or greater than one character long");
         } else if (value.charAt(0) < Character.MIN_VALUE || value.charAt(0) > Character.MAX_VALUE) {
-            throw new AtlasConversionException("String " + value + " is greater than Character.MAX_VALUE  or less than Character.MIN_VALUE");
+            throw new AtlasConversionException(String.format("String %s is greater than Character.MAX_VALUE  or less than Character.MIN_VALUE", value));
         }
         return value.charAt(0);
     }
@@ -103,7 +103,7 @@ public class StringConverter implements AtlasPrimitiveConverter<String> {
             return Double.valueOf(value);
         }
         if (Double.valueOf(value) < Double.MIN_VALUE || Double.valueOf(value) > Double.MAX_VALUE) {
-            throw new AtlasConversionException("String " + value + " is greater than Double.MAX_VALUE  or less than Double.MIN_VALUE");
+            throw new AtlasConversionException(String.format("String %s is greater than Double.MAX_VALUE  or less than Double.MIN_VALUE", value));
         }
 
         return Double.valueOf(value);
@@ -135,7 +135,7 @@ public class StringConverter implements AtlasPrimitiveConverter<String> {
         }
 
         if (bd.floatValue() < Float.MIN_VALUE || bd.floatValue() > Float.MAX_VALUE) {
-            throw new AtlasConversionException("String " + value + " is greater than Float.MAX_VALUE  or less than Float.MIN_VALUE");
+            throw new AtlasConversionException(String.format("String %s is greater than Float.MAX_VALUE  or less than Float.MIN_VALUE", value));
         }
 
         return Float.valueOf(value);
@@ -167,7 +167,7 @@ public class StringConverter implements AtlasPrimitiveConverter<String> {
         }
         
         if(bd != null && bd.compareTo(BigDecimal.valueOf(i)) != 0) {
-            throw new AtlasConversionException("String " + value + " is greater than Integer.MAX_VALUE  or less than Integer.MIN_VALUE");
+            throw new AtlasConversionException(String.format("String %s is greater than Integer.MAX_VALUE  or less than Integer.MIN_VALUE", value));
         }
          
         return i;        
@@ -199,7 +199,7 @@ public class StringConverter implements AtlasPrimitiveConverter<String> {
         }
         
         if(bd != null && bd.compareTo(BigDecimal.valueOf(l)) != 0) {
-            throw new AtlasConversionException("String " + value + " is greater than Long.MAX_VALUE  or less than Long.MIN_VALUE");
+            throw new AtlasConversionException(String.format("String %s is greater than Long.MAX_VALUE  or less than Long.MIN_VALUE", value));
         }
          
         return l;
@@ -217,12 +217,13 @@ public class StringConverter implements AtlasPrimitiveConverter<String> {
             return null;
         }
         //check we can make a short of the String
+        Short shortty;
         try {
-            Short.parseShort(value);
+            shortty = Short.parseShort(value);
         } catch (NumberFormatException nfe) {
             throw new AtlasConversionException(nfe);
         }
-        return Short.valueOf(value);
+        return Short.valueOf(shortty);
     }
 
     /**

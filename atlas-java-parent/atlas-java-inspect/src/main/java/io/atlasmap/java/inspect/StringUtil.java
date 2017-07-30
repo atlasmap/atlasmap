@@ -39,7 +39,7 @@ public class StringUtil {
 			return getter;
 		}
 		
-		String subGetter = new String();
+		String subGetter;
 		if(getter.startsWith("get")) {
 			if (getter.length() <= "get".length()) {
 				return getter;
@@ -62,7 +62,7 @@ public class StringUtil {
 			return setter;
 		}
 		
-		String subSetter = new String();
+		String subSetter;
 		if(setter.startsWith("set")) {
 			if (setter.length() <= "set".length()) {
 				return setter;

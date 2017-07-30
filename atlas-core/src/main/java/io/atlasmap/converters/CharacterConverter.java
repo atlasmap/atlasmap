@@ -44,7 +44,7 @@ public class CharacterConverter implements AtlasPrimitiveConverter<Character> {
             }
         }
         // assuming anything not able to convert to a Boolean should be an exception condition
-        throw new AtlasConversionException("Character value " + value + " cannot be converted to a Boolean");
+        throw new AtlasConversionException(String.format("Character value %s cannot be converted to a Boolean", value));
 
     }
 

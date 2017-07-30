@@ -41,7 +41,7 @@ public class DoubleConverter implements AtlasPrimitiveConverter<Double> {
             }
             return Boolean.FALSE;
         }
-        throw new AtlasConversionException("Double " + value + " cannot be converted to a Boolean.");
+        throw new AtlasConversionException(String.format("Double %s cannot be converted to a Boolean", value));
     }
 
     /**
@@ -72,7 +72,7 @@ public class DoubleConverter implements AtlasPrimitiveConverter<Double> {
         }
 
         if (value < Character.MIN_VALUE || value > Character.MAX_VALUE) {
-            throw new AtlasConversionException("Double " + value + " is greater than Character.MAX_VALUE or less than Character.MIN_VALUE");
+            throw new AtlasConversionException(String.format("Double %s is greater than Character.MAX_VALUE or less than Character.MIN_VALUE", value));
         }
 
         return (char) value.doubleValue();
@@ -105,7 +105,7 @@ public class DoubleConverter implements AtlasPrimitiveConverter<Double> {
             return null;
         }
         if (value > Float.MAX_VALUE || (value < Float.MIN_VALUE && value != 0)) {
-            throw new AtlasConversionException("Double " + value + " is greater than Float.MAX_VALUE or less than Float.MIN_VALUE");
+            throw new AtlasConversionException(String.format("Double %s is greater than Float.MAX_VALUE or less than Float.MIN_VALUE", value));
         }
         return value.floatValue();
     }
@@ -122,7 +122,7 @@ public class DoubleConverter implements AtlasPrimitiveConverter<Double> {
             return null;
         }
         if (value > Integer.MAX_VALUE) {
-            throw new AtlasConversionException("Double " + value + " is greater than Integer.MAX_VALUE");
+            throw new AtlasConversionException(String.format("Double %s is greater than Integer.MAX_VALUE", value));
         }
         return value.intValue();
     }
@@ -139,7 +139,7 @@ public class DoubleConverter implements AtlasPrimitiveConverter<Double> {
             return null;
         }
         if (value > Long.MAX_VALUE) {
-            throw new AtlasConversionException("Double " + value + " is greater than Long.MAX_VALUE");
+            throw new AtlasConversionException(String.format("Double %s is greater than Long.MAX_VALUE", value));
         }
         return value.longValue();
     }
@@ -156,7 +156,7 @@ public class DoubleConverter implements AtlasPrimitiveConverter<Double> {
             return null;
         }
         if (value > Short.MAX_VALUE || value < Short.MIN_VALUE) {
-            throw new AtlasConversionException("Double " + value + " is greater than Short.MAX_VALUE or less than Short.MIN_VALUE");
+            throw new AtlasConversionException(String.format("Double %s is greater than Short.MAX_VALUE or less than Short.MIN_VALUE", value));
         }
         return value.shortValue();
     }
