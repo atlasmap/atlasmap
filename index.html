@@ -582,6 +582,11 @@ table.CodeRay td.code>pre{padding:0}
 <td class="tableblock halign-left valign-top"><p class="tableblock">atlasmapping.xml, atlasmapping.json</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Audit</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">An Audit is informational tracing data captured runtime execution in order to provide user feedback</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Useful during testing cycles, or when user does not have direct access to the runtime logs</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Collection</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">A data type used in conversion that repeats 0 or more times</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Used to process Arrays and Lists</p></td>
@@ -620,6 +625,11 @@ table.CodeRay td.code>pre{padding:0}
 <td class="tableblock halign-left valign-top"><p class="tableblock">Mapping Type</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The specific type of conversion that should be performed at runtime</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Map, Combine, Separate, Collection or Lookup</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Validation</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A Validation is a syntax check of a provide mapping file to ensure execution may proceeed</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Useful during testing cycles, and at runtime to avoid complicated and misleading exception stack traces</p></td>
 </tr>
 </tbody>
 </table>
@@ -738,6 +748,9 @@ table.CodeRay td.code>pre{padding:0}
 <p>Support for design-time and runtime mapping file Validation rules</p>
 </li>
 <li>
+<p>Support for tracking runtime Audits useful for design-time feedback</p>
+</li>
+<li>
 <p>Design Time: Support service</p>
 </li>
 <li>
@@ -758,7 +771,7 @@ table.CodeRay td.code>pre{padding:0}
 <div id="footer">
 <div id="footer-text">
 Version 1.16.0-SNAPSHOT<br>
-Last updated 2017-07-30 18:33:08 UTC
+Last updated 2017-07-30 18:45:08 UTC
 </div>
 </div>
 </body>
