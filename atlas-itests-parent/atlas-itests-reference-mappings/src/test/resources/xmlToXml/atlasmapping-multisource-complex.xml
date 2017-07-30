@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AtlasMapping xmlns="http://atlasmap.io/v2" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns2="http://atlasmap.io/xml/v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="XmlXmlMultiSourceComplex" >
+  <DataSource dataSourceType="Source" uri="atlas:xml" docId="con"/>
+  <DataSource dataSourceType="Source" uri="atlas:xml" docId="addr"/>
+  <DataSource dataSourceType="Target" uri="atlas:xml"/>
+  <Mappings> 
+    <Mapping xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="ConstantField" fieldType="Integer">
+          <value xsi:type="xs:int">8765309</value>
+      </InputField>
+      <OutputField xsi:type="ns2:XmlField" path="/XOA/@orderId"/>
+    </Mapping>
+    <Mapping xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="ns2:XmlField" path="/Contact/@firstName" docId="con"/>
+      <OutputField xsi:type="ns2:XmlField" path="/XOA/Contact/@firstName"/>
+    </Mapping>
+    <Mapping xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="ns2:XmlField" path="/Contact/@lastName" docId="con"/>
+      <OutputField xsi:type="ns2:XmlField" path="/XOA/Contact/@lastName"/>
+    </Mapping>
+    <Mapping xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="ns2:XmlField" path="/Contact/@phoneNumber" docId="con"/>
+      <OutputField xsi:type="ns2:XmlField" path="/XOA/Contact/@phoneNumber"/>
+    </Mapping>
+    <Mapping xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="ns2:XmlField" path="/Contact/@zipCode" docId="con"/>
+      <OutputField xsi:type="ns2:XmlField" path="/XOA/Contact/@zipCode"/>
+    </Mapping>
+    <Mapping xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="ns2:XmlField" path="/Address/@addressLine1" docId="addr"/>
+      <OutputField xsi:type="ns2:XmlField" path="/XOA/Address/@addressLine1"/>
+    </Mapping>
+    <Mapping xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="ns2:XmlField" path="/Address/@addressLine2" docId="addr"/>
+      <OutputField xsi:type="ns2:XmlField" path="/XOA/Address/@addressLine2"/>
+    </Mapping>
+    <Mapping xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="ns2:XmlField" path="/Address/@city" docId="addr"/>
+      <OutputField xsi:type="ns2:XmlField" path="/XOA/Address/@city"/>
+    </Mapping>
+    <Mapping xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="ns2:XmlField" path="/Address/@state" docId="addr"/>
+      <OutputField xsi:type="ns2:XmlField" path="/XOA/Address/@state"/>
+    </Mapping>
+    <Mapping xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="ns2:XmlField" path="/Address/@zipCode" docId="addr"/>
+      <OutputField xsi:type="ns2:XmlField" path="/XOA/Address/@zipCode"/>
+    </Mapping>
+  </Mappings>
+</AtlasMapping>

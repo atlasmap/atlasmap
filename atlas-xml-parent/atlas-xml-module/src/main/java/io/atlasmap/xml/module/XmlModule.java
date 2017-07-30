@@ -128,12 +128,20 @@ public class XmlModule extends BaseAtlasModule {
                 return;
             }
             
+            if(field instanceof ConstantField) {
+                processConstantField(session, mapping);
+                if(logger.isDebugEnabled()) {
+                    logger.debug("Processed input constantField sPath=" + field.getPath() + " sV=" + field.getValue() + " sT=" + field.getFieldType() + " docId: " + field.getDocId());
+                }
+                continue;
+            }
+            
             if(field instanceof PropertyField) {
                 processPropertyField(session, mapping, session.getAtlasContext().getContextFactory().getPropertyStrategy());
                 if(logger.isDebugEnabled()) {
                     logger.debug("Processed input propertyField sPath=" + field.getPath() + " sV=" + field.getValue() + " sT=" + field.getFieldType() + " docId: " + field.getDocId());
                 }
-                return;
+                continue;
             }
             
             XmlField inputField = (XmlField)field;
@@ -145,7 +153,7 @@ public class XmlModule extends BaseAtlasModule {
                 sourceObject = session.getInput();
             }
             
-            if(session.getInput() == null || !(session.getInput() instanceof String)) {
+            if(sourceObject == null || !(sourceObject instanceof String)) {
                 addAudit(session, field.getDocId(), String.format("Unsupported input object type=%s", field.getClass().getName()), field.getPath(), AuditStatus.ERROR, null);
                 return;
             }
