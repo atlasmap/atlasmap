@@ -4,7 +4,7 @@ Design time services and runtime engine
 
 To run:
 
-1. mvn -Pfull clean install
+1. mvn clean install
 
 2. cd atlas.itests/
 

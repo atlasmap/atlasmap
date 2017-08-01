@@ -21,7 +21,7 @@ jobs:
 
       - run:
           name: Maven
-          command: ./mvnw --batch-mode -Pfull -Pfabric8 install
+          command: ./mvnw --batch-mode -Pfabric8 install
 
       - save_cache:
           key: atlasmap-m2

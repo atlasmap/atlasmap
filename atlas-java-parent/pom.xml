@@ -28,33 +28,13 @@
 	<packaging>pom</packaging>
 	<name>Atlas :: Java Parent POM</name>
 
-	<profiles>
-		<profile>
-			<id>parent</id>
-			<modules />
-		</profile>
-		<profile>
-			<id>fast</id>
-			<modules>
-				<module>atlas-java-model</module>
-				<module>atlas-java-test-model</module>
-				<module>atlas-java-inspect</module>
-				<module>atlas-java-module</module>
-			</modules>			
-		</profile>
-		<profile>
-			<id>full</id>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
-			<modules>
-				<module>atlas-java-model</module>
-				<module>atlas-java-test-model</module>
-				<module>atlas-java-inspect</module>
-				<module>atlas-java-inspect-test</module>
-				<module>atlas-java-service</module>
-				<module>atlas-java-module</module>
-			</modules>
-		</profile>
-	</profiles>
+	<modules>
+		<module>atlas-java-model</module>
+		<module>atlas-java-test-model</module>
+		<module>atlas-java-inspect</module>
+		<module>atlas-java-inspect-test</module>
+		<module>atlas-java-service</module>
+		<module>atlas-java-module</module>
+	</modules>
+
 </project>

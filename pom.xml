@@ -111,68 +111,23 @@
     </repository>
   </distributionManagement>
 
+  <modules>
+    <module>atlas-parent</module>
+    <module>atlas-model</module>
+    <module>atlas-api</module>
+    <module>atlas-core</module>
+    <module>atlas-service-parent</module>
+    <module>atlas-java-parent</module>
+    <module>atlas-json-parent</module>
+    <module>atlas-xml-parent</module>
+    <module>atlas-docs</module>
+    <module>atlas-itests</module>
+    <module>atlas-itests-parent</module>
+    <module>atlasmap-maven-plugin</module>
+    <module>runtime</module>
+  </modules>
+
   <profiles>
-    <profile>
-      <id>parent</id>
-      <modules>
-        <module>atlas-parent</module>
-        <module>atlas-service-parent</module>
-        <module>atlas-java-parent</module>
-        <module>atlas-json-parent</module>
-        <module>atlas-xml-parent</module>
-      </modules>
-    </profile>
-    <profile>
-      <id>fast</id>
-      <modules>
-        <module>atlas-parent</module>
-        <module>atlas-model</module>
-        <module>atlas-api</module>
-        <module>atlas-core</module>
-        <module>atlas-service-parent</module>
-        <module>atlas-java-parent</module>
-        <module>atlas-json-parent</module>
-        <module>atlas-xml-parent</module>
-      </modules>
-    </profile>
-    <profile>
-      <id>full</id>
-      <activation><activeByDefault>true</activeByDefault></activation>
-      <modules>
-        <module>atlas-parent</module>
-        <module>atlas-model</module>
-        <module>atlas-api</module>
-        <module>atlas-core</module>
-        <module>atlas-service-parent</module>
-        <module>atlas-java-parent</module>
-        <module>atlas-json-parent</module>
-        <module>atlas-xml-parent</module>
-        <module>atlas-docs</module>
-        <module>atlas-itests</module>
-        <module>atlas-itests-parent</module>
-        <module>atlasmap-maven-plugin</module>
-        <module>runtime</module>
-      </modules>
-    </profile>
-     <profile>
-      <id>eclipse-debug</id>
-      <activation><activeByDefault>false</activeByDefault></activation>
-      <modules>
-        <module>atlas-parent</module>
-        <module>atlas-model</module>
-        <module>atlas-api</module>
-        <!--  module>atlas-core</module -->
-        <module>atlas-service-parent</module>
-        <module>atlas-java-parent</module>
-        <module>atlas-json-parent</module>
-        <module>atlas-xml-parent</module>
-        <module>atlas-docs</module>
-        <module>atlas-itests</module>
-        <module>atlas-itests-parent</module>
-        <module>atlasmap-maven-plugin</module>
-        <module>runtime</module>
-      </modules>
-    </profile>
     <profile>
       <id>java8-doclint-disabled</id>
       <activation>
@@ -446,7 +401,7 @@
           <localCheckout>true</localCheckout>
           <autoVersionSubmodules>true</autoVersionSubmodules>
           <useReleaseProfile>false</useReleaseProfile>
-          <releaseProfiles>full,release</releaseProfiles>
+          <releaseProfiles>release</releaseProfiles>
           <goals>deploy</goals>
         </configuration>
       </plugin>

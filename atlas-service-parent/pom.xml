@@ -28,25 +28,7 @@
 	<packaging>pom</packaging>
 	<name>Atlas :: Service Parent POM</name>
 
-	<profiles>
-		<profile>
-			<id>parent</id>
-			<modules />
-		</profile>
-		<profile>
-			<id>fast</id>
-			<modules>
-				<module>atlas-service</module>
-			</modules>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
-		</profile>
-		<profile>
-			<id>full</id>
-			<modules>
-				<module>atlas-service</module>
-			</modules>
-		</profile>
-	</profiles>
+	<modules>
+		<module>atlas-service</module>
+	</modules>
 </project>

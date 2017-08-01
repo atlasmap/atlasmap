@@ -31,31 +31,12 @@
   <packaging>pom</packaging>
   <name>Atlas :: JSON Parent POM</name>
 
-  <profiles>
-    <profile>
-      <id>parent</id>
-      <modules/>
-    </profile>
-    <profile>
-      <id>fast</id>
-      <modules>
-        <module>atlas-json-model</module>
-        <module>atlas-json-core</module>
-        <module>atlas-json-module</module>
-      </modules>
-    </profile>
-    <profile>
-      <id>full</id>
-      <activation>
-        <activeByDefault>true</activeByDefault>
-      </activation>
-      <modules>
-        <module>atlas-json-model</module>
-        <module>atlas-json-core</module>
-        <module>atlas-json-module</module>
-        <module>atlas-json-service</module>
-        <module>atlas-json-test-model</module>
-      </modules>
-    </profile>
-  </profiles>
+  <modules>
+    <module>atlas-json-model</module>
+    <module>atlas-json-core</module>
+    <module>atlas-json-module</module>
+    <module>atlas-json-service</module>
+    <module>atlas-json-test-model</module>
+  </modules>
+
 </project>

@@ -28,27 +28,11 @@
 	<packaging>pom</packaging>
 	<name>Atlas :: iTests Parent POM</name>
 
-	<profiles>
-		<profile>
-			<id>parent</id>
-			<modules />
-		</profile>
-		<profile>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
-			<id>full</id>
-			<modules>
-				<module>atlas-itests-core</module>
-				<module>atlas-itests-reference-mappings</module>
-        <module>atlas-itests-validation-mappings</module>
-				<!--
-				<module>atlas-itests-java-inspect-twitter4j</module>
-				<module>atlas-itests-twitterToSalesforce</module>
-				<module>atlas-itests-ipaasTwitterToSFDC</module>
-				-->
-				<module>atlas-itests-concurrency</module>
-			</modules>
-		</profile>
-	</profiles>
+	<modules>
+		<module>atlas-itests-core</module>
+		<module>atlas-itests-reference-mappings</module>
+		<module>atlas-itests-validation-mappings</module>
+		<module>atlas-itests-concurrency</module>
+	</modules>
+
 </project>
