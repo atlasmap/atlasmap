@@ -66,8 +66,14 @@ public class GenerateInspectionsMojo extends AbstractMojo {
     /**
      * The directory where inspections get generated to.
      */
-    @Parameter(defaultValue = "${project.build.directory}/generated-sources/atlasmap", readonly = true)
+    @Parameter(defaultValue = "${project.build.directory}/generated-sources/atlasmap")
     private File outputDir;
+
+    /**
+     * The file name to generate.
+     */
+    @Parameter()
+    private File outputFile;
 
     /**
      * The {@code <groupId>:<artifactId>[:<extension>[:<classifier>]]:<version>} of the artifact to resolve.
@@ -89,13 +95,23 @@ public class GenerateInspectionsMojo extends AbstractMojo {
         public String getGav() {
             return gav;
         }
-
         public String getClassName() {
             return className;
         }
-
         public List<String> getClassNames() {
             return classNames;
+        }
+
+        public void setGav(String gav) {
+            this.gav = gav;
+        }
+
+        public void setClassName(String className) {
+            this.className = className;
+        }
+
+        public void setClassNames(List<String> classNames) {
+            this.classNames = classNames;
         }
     }
 
@@ -125,7 +141,9 @@ public class GenerateInspectionsMojo extends AbstractMojo {
     private List<Inspection> inspections;
 
     public void execute() throws MojoExecutionException, MojoFailureException {
-        outputDir.mkdirs();
+        if( outputDir!=null ) {
+            outputDir.mkdirs();
+        }
         if( this.gav!=null && this.className !=null ) {
             generateInspection(this.gav, Arrays.asList(className));
         }
@@ -159,7 +177,10 @@ public class GenerateInspectionsMojo extends AbstractMojo {
 
             try {
                 ObjectMapper objectMapper = AtlasJsonProvider.createObjectMapper();
-                File target = new File(outputDir, "atlasmap-inpection-" + className + ".json");
+                File target = outputFile;
+                if( target == null ) {
+                    target = new File(outputDir, "atlasmap-inpection-" + className + ".json");
+                }
                 objectMapper.writeValue(target, c);
                 getLog().info("Created: "+target);
             } catch (JsonProcessingException e) {
@@ -205,5 +226,70 @@ public class GenerateInspectionsMojo extends AbstractMojo {
         } catch (MalformedURLException e) {
             throw new MojoFailureException(e.getMessage(), e);
         }
+    }
+
+
+    public RepositorySystem getSystem() {
+        return system;
+    }
+
+    public void setSystem(RepositorySystem system) {
+        this.system = system;
+    }
+
+    public List<RemoteRepository> getRemoteRepos() {
+        return remoteRepos;
+    }
+
+    public void setRemoteRepos(List<RemoteRepository> remoteRepos) {
+        this.remoteRepos = remoteRepos;
+    }
+
+    public RepositorySystemSession getRepoSession() {
+        return repoSession;
+    }
+
+    public void setRepoSession(RepositorySystemSession repoSession) {
+        this.repoSession = repoSession;
+    }
+
+    public File getOutputDir() {
+        return outputDir;
+    }
+
+    public void setOutputDir(File outputDir) {
+        this.outputDir = outputDir;
+    }
+
+    public String getGav() {
+        return gav;
+    }
+
+    public void setGav(String gav) {
+        this.gav = gav;
+    }
+
+    public String getClassName() {
+        return className;
+    }
+
+    public void setClassName(String className) {
+        this.className = className;
+    }
+
+    public List<Inspection> getInspections() {
+        return inspections;
+    }
+
+    public void setInspections(List<Inspection> inspections) {
+        this.inspections = inspections;
+    }
+
+    public File getOutputFile() {
+        return outputFile;
+    }
+
+    public void setOutputFile(File outputFile) {
+        this.outputFile = outputFile;
     }
 }
