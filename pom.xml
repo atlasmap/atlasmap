@@ -173,6 +173,15 @@
       </modules>
     </profile>
     <profile>
+      <id>java8-doclint-disabled</id>
+      <activation>
+        <jdk>[1.8,)</jdk>
+      </activation>
+      <properties>
+        <javadoc.opts>-Xdoclint:none</javadoc.opts>
+      </properties>
+    </profile>
+    <profile>
       <id>release</id>
       <build>
         <plugins>
@@ -197,6 +206,9 @@
                 </goals>
               </execution>
             </executions>
+            <configuration>
+              <additionalparam>${javadoc.opts}</additionalparam>
+            </configuration>
           </plugin>
           <plugin>
             <artifactId>maven-gpg-plugin</artifactId>
@@ -429,6 +441,8 @@
       <plugin>
         <artifactId>maven-release-plugin</artifactId>
         <configuration>
+          <pushChanges>false</pushChanges>
+          <localCheckout>true</localCheckout>
           <autoVersionSubmodules>true</autoVersionSubmodules>
           <useReleaseProfile>false</useReleaseProfile>
           <releaseProfiles>full,release</releaseProfiles>
