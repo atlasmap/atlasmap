@@ -158,6 +158,30 @@ public class AtlasModelFactory {
         Action a = null;
         if(action instanceof Camelize) { return new Camelize(); }
         if(action instanceof Capitalize) { return new Capitalize(); }
+        if(action instanceof ConvertAreaUnit) {
+            ConvertAreaUnit cau = new ConvertAreaUnit();
+            cau.setFromUnit(((ConvertAreaUnit) action).getFromUnit());
+            cau.setToUnit(((ConvertAreaUnit) action).getToUnit());
+            a = cau;
+        }
+        if(action instanceof ConvertDistanceUnit) {
+            ConvertDistanceUnit cdu = new ConvertDistanceUnit();
+            cdu.setFromUnit(((ConvertDistanceUnit) action).getFromUnit());
+            cdu.setToUnit(((ConvertDistanceUnit) action).getToUnit());
+            a = cdu;
+        }
+        if(action instanceof ConvertMassUnit) {
+            ConvertMassUnit cmu = new ConvertMassUnit();
+            cmu.setFromUnit(((ConvertMassUnit) action).getFromUnit());
+            cmu.setToUnit(((ConvertMassUnit) action).getToUnit());
+            a = cmu;
+        }
+        if(action instanceof ConvertVolumeUnit) {
+            ConvertVolumeUnit cvu = new ConvertVolumeUnit();
+            cvu.setFromUnit(((ConvertVolumeUnit) action).getFromUnit());
+            cvu.setToUnit(((ConvertVolumeUnit) action).getToUnit());
+            a = cvu;
+        }
         if(action instanceof CurrentDate) { return new CurrentDate(); }
         if(action instanceof CurrentDateTime) { return new CurrentDateTime(); }
         if(action instanceof CurrentTime) { return new CurrentTime(); }
@@ -201,6 +225,11 @@ public class AtlasModelFactory {
             a = new SubStringBefore();
             if(((SubStringBefore)action).getStartIndex() != null) { ((SubStringBefore)a).setStartIndex(Integer.valueOf(((SubStringBefore)action).getStartIndex())); }
             if(((SubStringBefore)action).getEndIndex() != null) { ((SubStringBefore)a).setEndIndex(Integer.valueOf(((SubStringBefore)action).getEndIndex())); }
+        }
+        if (action instanceof SumUp) {
+            SumUp su = new SumUp();
+            su.setNumberType(((SumUp) action).getNumberType());
+            a = su;
         }
         if(action instanceof Trim) { return new Trim(); }
         if(action instanceof TrimLeft) { return new TrimLeft(); }

@@ -12,6 +12,8 @@
 
     <complexType name="Action" abstract="true" />
 
+    <!-- String Actions -->
+
     <element name="Capitalize">
         <complexType>
             <complexContent>
@@ -200,6 +202,60 @@
         </complexType>
     </element> 
 
+    <!-- Number Actions -->
+
+    <element name="SumUp">
+        <complexType>
+            <complexContent>
+                <extension base="atlas:Action" >
+                    <attribute name="numberType" type="atlas:NumberType" />
+                </extension>
+            </complexContent>
+        </complexType>
+    </element> 
+
+    <element name="ConvertMassUnit">
+        <complexType>
+            <complexContent>
+                <extension base="atlas:Action" >
+                    <attribute name="fromUnit" type="atlas:MassUnitType" />
+                    <attribute name="toUnit" type="atlas:MassUnitType" />
+                </extension>
+            </complexContent>
+        </complexType>
+    </element>
+    <element name="ConvertDistanceUnit">
+        <complexType>
+            <complexContent>
+                <extension base="atlas:Action" >
+                    <attribute name="fromUnit" type="atlas:DistanceUnitType" />
+                    <attribute name="toUnit" type="atlas:DistanceUnitType" />
+                </extension>
+            </complexContent>
+        </complexType>
+    </element>
+    <element name="ConvertAreaUnit">
+        <complexType>
+            <complexContent>
+                <extension base="atlas:Action" >
+                    <attribute name="fromUnit" type="atlas:AreaUnitType" />
+                    <attribute name="toUnit" type="atlas:AreaUnitType" />
+                </extension>
+            </complexContent>
+        </complexType>
+    </element>
+    <element name="ConvertVolumeUnit">
+        <complexType>
+            <complexContent>
+                <extension base="atlas:Action" >
+                    <attribute name="fromUnit" type="atlas:VolumeUnitType" />
+                    <attribute name="toUnit" type="atlas:VolumeUnitType" />
+                </extension>
+            </complexContent>
+        </complexType>
+    </element>
+
+
     <complexType name="Actions">        
         <sequence>
             <choice minOccurs="0" maxOccurs="unbounded">
@@ -222,6 +278,11 @@
                 <element ref="atlas:TrimLeft" />
                 <element ref="atlas:TrimRight" />
                 <element ref="atlas:Uppercase" />
+                <element ref="atlas:SumUp" />
+                <element ref="atlas:ConvertMassUnit" />
+                <element ref="atlas:ConvertDistanceUnit" />
+                <element ref="atlas:ConvertAreaUnit" />
+                <element ref="atlas:ConvertVolumeUnit" />
             </choice>
         </sequence>
     </complexType>
