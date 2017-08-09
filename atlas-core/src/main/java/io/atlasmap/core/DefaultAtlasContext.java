@@ -20,6 +20,7 @@ import io.atlasmap.api.AtlasContextFactory;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.api.AtlasSession;
 import io.atlasmap.api.AtlasValidationException;
+import io.atlasmap.core.AtlasMappingService.AtlasMappingFormat;
 import io.atlasmap.mxbean.AtlasContextMXBean;
 import io.atlasmap.spi.AtlasModule;
 import io.atlasmap.spi.AtlasModuleInfo;
@@ -44,154 +45,168 @@ import java.util.UUID;
 
 public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
 
-	private static final Logger logger = LoggerFactory.getLogger(DefaultAtlasContext.class);
-	private ObjectName jmxObjectName;
-	private final UUID uuid;
-	private DefaultAtlasContextFactory factory;
-	private AtlasMapping mappingDefinition;
-	private URI atlasMappingUri;
-	private AtlasModule sourceModule;
-	private AtlasModule targetModule;
-	private Class<AtlasModule> sourceModuleClass;
-	private Class<AtlasModule> targetModuleClass;
-	private String sourceFormat;
-	private String targetFormat;
-	private Map<String, String> sourceProperties;
-	private Map<String, String> targetProperties;
-	
-	public DefaultAtlasContext(URI atlasMappingUri) throws AtlasException {
-		this.factory = DefaultAtlasContextFactory.getInstance();
-		this.uuid = UUID.randomUUID();
-		this.atlasMappingUri = atlasMappingUri;
-	}
-	
-	public DefaultAtlasContext(DefaultAtlasContextFactory factory, URI atlasMappingUri) throws AtlasException {
-		this.factory = factory;
-		this.uuid = UUID.randomUUID();
+    private static final Logger logger = LoggerFactory.getLogger(DefaultAtlasContext.class);
+    private ObjectName jmxObjectName;
+    private final UUID uuid;
+    private DefaultAtlasContextFactory factory;
+    private AtlasMapping mappingDefinition;
+    private AtlasMappingFormat atlasMappingFormat;
+    private URI atlasMappingUri;
+    private AtlasModule sourceModule;
+    private AtlasModule targetModule;
+    private Class<AtlasModule> sourceModuleClass;
+    private Class<AtlasModule> targetModuleClass;
+    private String sourceFormat;
+    private String targetFormat;
+    private Map<String, String> sourceProperties;
+    private Map<String, String> targetProperties;
+
+    public DefaultAtlasContext(URI atlasMappingUri) throws AtlasException {
+        this.factory = DefaultAtlasContextFactory.getInstance();
+        this.uuid = UUID.randomUUID();
         this.atlasMappingUri = atlasMappingUri;
-	}
-	
-	/** 
-	 * TODO: For dynamic re-load. This needs lock()
-	 * 
-	 * @throws AtlasException
-	 */
-	protected void init() throws AtlasException {
-				
-		registerJmx(this);
+    }
 
-		this.mappingDefinition = factory.getMappingService().loadMapping(this.atlasMappingUri);
-		
-		List<AtlasModuleInfo> modules = factory.getModules();
-		
-		for (AtlasModuleInfo module : modules) {
-			if(AtlasUtil.matchUriModule(module.getUri(), getSourceModuleUri())) {
-				try {
-					setSourceModuleClass((Class<AtlasModule>)Class.forName(module.getModuleClassName()));
-					setSourceModule(getSourceModuleClass().newInstance());
-					getSourceModule().setMode(AtlasModuleMode.SOURCE);
-					getSourceModule().setConversionService(getDefaultAtlasContextFactory().getConversionService());
-					getSourceModule().init();
-				} catch (ClassNotFoundException e) {
-					logger.error("Cannot find source ModuleClass " + module.toString(), e);
-					throw new AtlasException("Cannot source ModuleClass: " + module.getModuleClassName(), e);
-				} catch (ReflectiveOperationException e) {
-					logger.error("Unable to initialize target module: " + module.toString(), e);
-					throw new AtlasException("Unable to initialize target module: " + module.getModuleClassName(), e);
-				}
-			}
-			if(AtlasUtil.matchUriModule(module.getUri(), getTargetModuleUri())) {
-				try {
-					setTargetModuleClass((Class<AtlasModule>)Class.forName(module.getModuleClassName()));
-					setTargetModule(getTargetModuleClass().newInstance());
-					getTargetModule().setMode(AtlasModuleMode.TARGET);
-					getTargetModule().setConversionService(getDefaultAtlasContextFactory().getConversionService());
-					getTargetModule().init();
-				} catch (ClassNotFoundException e) {
-					logger.error("Cannot find target ModuleClass: " + module.toString(), e);
-					throw new AtlasException("Cannot find target ModuleClass: " + module.getModuleClassName(), e);
-				} catch (ReflectiveOperationException e) {
-					logger.error("Unable to initialize target module: " + module.toString(), e);
-					throw new AtlasException("Unable to initialize target module: " + module.getModuleClassName(), e);
-				}
-			}
- 		}		
-	}
-	
-	protected void registerJmx(DefaultAtlasContext context) {
-		try {
-			setJmxObjectName(new ObjectName(getDefaultAtlasContextFactory().getJmxObjectName()+",context=Contexts,uuid="+uuid.toString()));
-			ManagementFactory.getPlatformMBeanServer().registerMBean(this, getJmxObjectName());
-			if(logger.isDebugEnabled()) {
-				logger.debug("Registered AtlasContext " + context.getUuid() + " with JMX");
-			}
-		} catch (Throwable t) {
-			logger.warn("Failured to register AtlasContext " + context.getUuid() + " with JMX msg: " + t.getMessage(), t);
-		}
-	}
-	
-	/**
-	 * Process session lifecycle
-	 * 
-	 */
-	@Override
-	public void process(AtlasSession session) throws AtlasException {
-		if(logger.isDebugEnabled()) {
-			logger.debug("Begin process " + (session == null ? null : session.toString()));
-		}
-		
-	    getSourceModule().processPreValidation(session);
-	    getTargetModule().processPreValidation(session);
-		
-	    // TODO: Finish validations
-	    /* 
-            if(session.hasErrors()) {
-                logger.error(String.format("Aborting processing due to %s errors", session.errorCount()));
-                return;
+    public DefaultAtlasContext(DefaultAtlasContextFactory factory, URI atlasMappingUri) throws AtlasException {
+        this(factory, atlasMappingUri, AtlasMappingFormat.XML);
+    }
+    
+    public DefaultAtlasContext(DefaultAtlasContextFactory factory, URI atlasMappingUri, AtlasMappingFormat format) throws AtlasException {
+        this.factory = factory;
+        this.uuid = UUID.randomUUID();
+        this.atlasMappingUri = atlasMappingUri;
+        this.atlasMappingFormat = format;
+    }
+    
+    public DefaultAtlasContext(DefaultAtlasContextFactory factory, AtlasMapping mapping) throws AtlasException {
+        this.factory = factory;
+        this.uuid = UUID.randomUUID();
+        this.mappingDefinition = mapping;
+    }
+
+    /** 
+     * TODO: For dynamic re-load. This needs lock()
+     * 
+     * @throws AtlasException
+     */
+    protected void init() throws AtlasException {
+
+        registerJmx(this);
+
+        if (this.atlasMappingUri != null) {
+            this.mappingDefinition = factory.getMappingService().loadMapping(this.atlasMappingUri, atlasMappingFormat);
+        }
+
+        List<AtlasModuleInfo> modules = factory.getModules();
+
+        for (AtlasModuleInfo module : modules) {
+            if(AtlasUtil.matchUriModule(module.getUri(), getSourceModuleUri())) {
+                try {
+                    setSourceModuleClass((Class<AtlasModule>)Class.forName(module.getModuleClassName()));
+                    setSourceModule(getSourceModuleClass().newInstance());
+                    getSourceModule().setMode(AtlasModuleMode.SOURCE);
+                    getSourceModule().setConversionService(getDefaultAtlasContextFactory().getConversionService());
+                    getSourceModule().init();
+                } catch (ClassNotFoundException e) {
+                    logger.error("Cannot find source ModuleClass " + module.toString(), e);
+                    throw new AtlasException("Cannot source ModuleClass: " + module.getModuleClassName(), e);
+                } catch (ReflectiveOperationException e) {
+                    logger.error("Unable to initialize target module: " + module.toString(), e);
+                    throw new AtlasException("Unable to initialize target module: " + module.getModuleClassName(), e);
+                }
             }
-        */
-		getSourceModule().processPreInputExecution(session);
-		getTargetModule().processPreOutputExecution(session);
+            if(AtlasUtil.matchUriModule(module.getUri(), getTargetModuleUri())) {
+                try {
+                    setTargetModuleClass((Class<AtlasModule>)Class.forName(module.getModuleClassName()));
+                    setTargetModule(getTargetModuleClass().newInstance());
+                    getTargetModule().setMode(AtlasModuleMode.TARGET);
+                    getTargetModule().setConversionService(getDefaultAtlasContextFactory().getConversionService());
+                    getTargetModule().init();
+                } catch (ClassNotFoundException e) {
+                    logger.error("Cannot find target ModuleClass: " + module.toString(), e);
+                    throw new AtlasException("Cannot find target ModuleClass: " + module.getModuleClassName(), e);
+                } catch (ReflectiveOperationException e) {
+                    logger.error("Unable to initialize target module: " + module.toString(), e);
+                    throw new AtlasException("Unable to initialize target module: " + module.getModuleClassName(), e);
+                }
+            }
+        }		
+    }
 
-	      // TODO: Finish validations
+    protected void registerJmx(DefaultAtlasContext context) {
+        try {
+            setJmxObjectName(new ObjectName(getDefaultAtlasContextFactory().getJmxObjectName()+",context=Contexts,uuid="+uuid.toString()));
+            ManagementFactory.getPlatformMBeanServer().registerMBean(this, getJmxObjectName());
+            if(logger.isDebugEnabled()) {
+                logger.debug("Registered AtlasContext " + context.getUuid() + " with JMX");
+            }
+        } catch (Throwable t) {
+            logger.warn("Failured to register AtlasContext " + context.getUuid() + " with JMX msg: " + t.getMessage(), t);
+        }
+    }
+
+    /**
+     * Process session lifecycle
+     * 
+     */
+    @Override
+    public void process(AtlasSession session) throws AtlasException {
+        if(logger.isDebugEnabled()) {
+            logger.debug("Begin process " + (session == null ? null : session.toString()));
+        }
+
+        getSourceModule().processPreValidation(session);
+        getTargetModule().processPreValidation(session);
+
+        // TODO: Finish validations
         /* 
             if(session.hasErrors()) {
                 logger.error(String.format("Aborting processing due to %s errors", session.errorCount()));
                 return;
             }
-        */
-		
-		for(BaseMapping mapping : session.getMapping().getMappings().getMapping()) {		    
-		    getSourceModule().processInputMapping(session, mapping);
+         */
+        getSourceModule().processPreInputExecution(session);
+        getTargetModule().processPreOutputExecution(session);
+
+        // TODO: Finish validations
+        /* 
+            if(session.hasErrors()) {
+                logger.error(String.format("Aborting processing due to %s errors", session.errorCount()));
+                return;
+            }
+         */
+
+        for(BaseMapping mapping : session.getMapping().getMappings().getMapping()) {		    
+            getSourceModule().processInputMapping(session, mapping);
             getSourceModule().processInputActions(session, mapping);
             getTargetModule().processOutputMapping(session, mapping);            		    
-              
-		    if(session.hasErrors()) {
-		        logger.error(String.format("Aborting processing due to %s errors", session.errorCount()));
-		        break;
-		    }
-		}
-            
-		getSourceModule().processPostValidation(session);
-		getTargetModule().processPostValidation(session);
-        
-	      // TODO: Finish validations
+
+            if(session.hasErrors()) {
+                logger.error(String.format("Aborting processing due to %s errors", session.errorCount()));
+                break;
+            }
+        }
+
+        getSourceModule().processPostValidation(session);
+        getTargetModule().processPostValidation(session);
+
+        // TODO: Finish validations
         /* 
             if(session.hasErrors()) {
                 logger.error(String.format("Aborting processing due to %s errors", session.errorCount()));
                 return;
             }
-        */
-		
-		getSourceModule().processPostInputExecution(session);
-		getTargetModule().processPostOutputExecution(session);
-		
-		if(logger.isDebugEnabled()) {
-			logger.debug("End process " + (session == null ? null : session.toString()));
-		}
-	}
-	
-	@Override
+         */
+
+        getSourceModule().processPostInputExecution(session);
+        getTargetModule().processPostOutputExecution(session);
+
+        if(logger.isDebugEnabled()) {
+            logger.debug("End process " + (session == null ? null : session.toString()));
+        }
+    }
+
+    @Override
     public void processValidation(AtlasSession session) throws AtlasException {
         if(logger.isDebugEnabled()) {
             logger.debug("Begin processValidation " + (session == null ? null : session.toString()));
@@ -201,178 +216,182 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
         if(validations != null && !validations.isEmpty()) {
             session.getValidations().getValidation().addAll(validations);
         }
-        
+
         if(logger.isDebugEnabled()) {
             logger.debug("Detected " + validations.size() + " core validation notices");
         }
-         
+
         getSourceModule().processPreValidation(session);
         getTargetModule().processPreValidation(session);
-   
+
         if(logger.isDebugEnabled()) {
             logger.debug("End processValidation " + (session == null ? null : session.toString()));
         }
     }
-	
-	protected DefaultAtlasContextFactory getDefaultAtlasContextFactory() { return this.factory; }
-		
-	@Override
-	public AtlasContextFactory getContextFactory() {
-		return this.factory;
-	}
 
-	public AtlasMapping getMapping() {
-		return mappingDefinition;
-	}
+    protected DefaultAtlasContextFactory getDefaultAtlasContextFactory() { return this.factory; }
 
-	@Override
-	public AtlasSession createSession() throws AtlasValidationException {
-		return createSession(getDefaultAtlasContextFactory().getMappingService().loadMapping(atlasMappingUri));
-	}
-	
-	public AtlasSession createSession(AtlasMapping mappingDefinition) {
-		AtlasSession session = new DefaultAtlasSession(mappingDefinition);
-		session.setAtlasContext(this);
-		session.setAudits(new Audits());
-		session.setValidations(new Validations());
-		setDefaultSessionProperties(session);
-		return session;
-	}
-	
-	protected void setDefaultSessionProperties(AtlasSession session) {
-		Date date = new Date();
-		DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
-		df.setTimeZone(TimeZone.getDefault());
-		session.getProperties().put("Atlas.CreatedDateTimeTZ", df.format(date));
-	}
-	
-	public AtlasModule getSourceModule() {
-		return sourceModule;
-	}
+    @Override
+    public AtlasContextFactory getContextFactory() {
+        return this.factory;
+    }
 
-	public void setSourceModule(AtlasModule sourceModule) {
-		this.sourceModule = sourceModule;
-	}
+    public AtlasMapping getMapping() {
+        return mappingDefinition;
+    }
 
-	public AtlasModule getTargetModule() {
-		return targetModule;
-	}
+    @Override
+    public AtlasSession createSession() throws AtlasValidationException {
+        if (atlasMappingUri != null) {
+            return createSession(getDefaultAtlasContextFactory().getMappingService().loadMapping(atlasMappingUri, atlasMappingFormat));
+        } else {
+            return createSession(mappingDefinition);
+        }
+    }
 
-	public void setTargetModule(AtlasModule targetModule) {
-		this.targetModule = targetModule;
-	}
+    public AtlasSession createSession(AtlasMapping mappingDefinition) {
+        AtlasSession session = new DefaultAtlasSession(mappingDefinition);
+        session.setAtlasContext(this);
+        session.setAudits(new Audits());
+        session.setValidations(new Validations());
+        setDefaultSessionProperties(session);
+        return session;
+    }
 
-	public Class<AtlasModule> getSourceModuleClass() {
-		return sourceModuleClass;
-	}
+    protected void setDefaultSessionProperties(AtlasSession session) {
+        Date date = new Date();
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
+        df.setTimeZone(TimeZone.getDefault());
+        session.getProperties().put("Atlas.CreatedDateTimeTZ", df.format(date));
+    }
 
-	public void setSourceModuleClass(Class<AtlasModule> sourceModuleClass) {
-		this.sourceModuleClass = sourceModuleClass;
-	}
+    public AtlasModule getSourceModule() {
+        return sourceModule;
+    }
 
-	public Class<AtlasModule> getTargetModuleClass() {
-		return targetModuleClass;
-	}
+    public void setSourceModule(AtlasModule sourceModule) {
+        this.sourceModule = sourceModule;
+    }
 
-	public void setTargetModuleClass(Class<AtlasModule> targetModuleClass) {
-		this.targetModuleClass = targetModuleClass;
-	}
+    public AtlasModule getTargetModule() {
+        return targetModule;
+    }
 
-	public String getSourceFormat() {
-		return sourceFormat;
-	}
+    public void setTargetModule(AtlasModule targetModule) {
+        this.targetModule = targetModule;
+    }
 
-	public void setSourceFormat(String sourceFormat) {
-		this.sourceFormat = sourceFormat;
-	}
+    public Class<AtlasModule> getSourceModuleClass() {
+        return sourceModuleClass;
+    }
 
-	public String getTargetFormat() {
-		return targetFormat;
-	}
+    public void setSourceModuleClass(Class<AtlasModule> sourceModuleClass) {
+        this.sourceModuleClass = sourceModuleClass;
+    }
 
-	public void setTargetFormat(String targetFormat) {
-		this.targetFormat = targetFormat;
-	}
+    public Class<AtlasModule> getTargetModuleClass() {
+        return targetModuleClass;
+    }
 
-	public Map<String, String> getSourceProperties() {
-		return sourceProperties;
-	}
+    public void setTargetModuleClass(Class<AtlasModule> targetModuleClass) {
+        this.targetModuleClass = targetModuleClass;
+    }
 
-	public void setSourceProperties(Map<String, String> sourceProperties) {
-		this.sourceProperties = sourceProperties;
-	}
+    public String getSourceFormat() {
+        return sourceFormat;
+    }
 
-	public Map<String, String> getTargetProperties() {
-		return targetProperties;
-	}
+    public void setSourceFormat(String sourceFormat) {
+        this.sourceFormat = sourceFormat;
+    }
 
-	public void setTargetProperties(Map<String, String> targetProperties) {
-		this.targetProperties = targetProperties;
-	}
+    public String getTargetFormat() {
+        return targetFormat;
+    }
 
-	protected void setJmxObjectName(ObjectName jmxObjectName) {
-		this.jmxObjectName = jmxObjectName;
-	}
-	
-	public ObjectName getJmxObjectName() {
-		return this.jmxObjectName;
-	}
-	
-	public String getSourceModuleUri() {
-		if(getMapping() != null && getMapping().getDataSource() != null && getMapping().getDataSource().get(0) != null) {
-			return getMapping().getDataSource().get(0).getUri();
-		}
-		return null;
-	}
-	
-	public String getTargetModuleUri() {
-		if(getMapping() != null && getMapping().getDataSource() != null && getMapping().getDataSource().get(1) != null) {
-			return getMapping().getDataSource().get(1).getUri();
-		}
-		return null;
-	}
-	
-	@Override
-	public String getUuid() {
-		return (this.uuid != null ? this.uuid.toString() : null);
-	}
-	
-	@Override
-	public String getVersion() {
-		return this.getClass().getPackage().getImplementationVersion();
-	}
+    public void setTargetFormat(String targetFormat) {
+        this.targetFormat = targetFormat;
+    }
 
-	@Override
-	public String getMappingName() {
-		return (mappingDefinition != null ? mappingDefinition.getName() : null);
-	}
-	
-	protected void setMappingUri(URI atlasMappingUri) {
-	    this.atlasMappingUri = atlasMappingUri;
-	}
-	
-	@Override
+    public Map<String, String> getSourceProperties() {
+        return sourceProperties;
+    }
+
+    public void setSourceProperties(Map<String, String> sourceProperties) {
+        this.sourceProperties = sourceProperties;
+    }
+
+    public Map<String, String> getTargetProperties() {
+        return targetProperties;
+    }
+
+    public void setTargetProperties(Map<String, String> targetProperties) {
+        this.targetProperties = targetProperties;
+    }
+
+    protected void setJmxObjectName(ObjectName jmxObjectName) {
+        this.jmxObjectName = jmxObjectName;
+    }
+
+    public ObjectName getJmxObjectName() {
+        return this.jmxObjectName;
+    }
+
+    public String getSourceModuleUri() {
+        if(getMapping() != null && getMapping().getDataSource() != null && getMapping().getDataSource().get(0) != null) {
+            return getMapping().getDataSource().get(0).getUri();
+        }
+        return null;
+    }
+
+    public String getTargetModuleUri() {
+        if(getMapping() != null && getMapping().getDataSource() != null && getMapping().getDataSource().get(1) != null) {
+            return getMapping().getDataSource().get(1).getUri();
+        }
+        return null;
+    }
+
+    @Override
+    public String getUuid() {
+        return (this.uuid != null ? this.uuid.toString() : null);
+    }
+
+    @Override
+    public String getVersion() {
+        return this.getClass().getPackage().getImplementationVersion();
+    }
+
+    @Override
+    public String getMappingName() {
+        return (mappingDefinition != null ? mappingDefinition.getName() : null);
+    }
+
+    protected void setMappingUri(URI atlasMappingUri) {
+        this.atlasMappingUri = atlasMappingUri;
+    }
+
+    @Override
     public String getMappingUri() {
         return (atlasMappingUri != null ? atlasMappingUri.toString() : null);
     }
 
     @Override
-	public String getClassName() {
-		return this.getClass().getSimpleName();
-	}
+    public String getClassName() {
+        return this.getClass().getSimpleName();
+    }
 
-	@Override
-	public String getThreadName() {
-		return Thread.currentThread().getName();
-	}
-	
-	@Override
-	public String toString() {
-		return "DefaultAtlasContext [jmxObjectName=" + jmxObjectName + ", uuid=" + uuid + ", factory=" + factory
-				+ ", mappingName=" + getMappingName() + ", mappingUri=" + getMappingUri() 
-				+ ", sourceModule=" + sourceModule + ", targetModule=" + targetModule
-				+ ", sourceModuleClass=" + sourceModuleClass + ", targetModuleClass=" + targetModuleClass
-				+ ", sourceFormat=" + sourceFormat + ", targetFormat=" + targetFormat + ", sourceProperties="
-				+ sourceProperties + ", targetProperties=" + targetProperties + "]";
-	}	
+    @Override
+    public String getThreadName() {
+        return Thread.currentThread().getName();
+    }
+
+    @Override
+    public String toString() {
+        return "DefaultAtlasContext [jmxObjectName=" + jmxObjectName + ", uuid=" + uuid + ", factory=" + factory
+                + ", mappingName=" + getMappingName() + ", mappingUri=" + getMappingUri() 
+                + ", sourceModule=" + sourceModule + ", targetModule=" + targetModule
+                + ", sourceModuleClass=" + sourceModuleClass + ", targetModuleClass=" + targetModuleClass
+                + ", sourceFormat=" + sourceFormat + ", targetFormat=" + targetFormat + ", sourceProperties="
+                + sourceProperties + ", targetProperties=" + targetProperties + "]";
+    }	
 }
