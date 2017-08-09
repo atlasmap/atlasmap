@@ -23,7 +23,7 @@
 	<parent>
 		<groupId>io.atlasmap</groupId>
 		<artifactId>atlas-xml-parent</artifactId>
-		<version>1.18.0-SNAPSHOT</version>
+		<version>1.18.0</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
