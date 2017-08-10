@@ -50,7 +50,8 @@ import org.apache.camel.util.ObjectHelper;
 public class AtlasEndpoint extends ResourceEndpoint {
 
     private AtlasContextFactory atlasContextFactory;
-    // TODO: cache the context so only a session needs to be created on each exchange
+    // TODO: cache the context so only a session needs to be created on each
+    // exchange
     private AtlasContext atlasContext;
 
     @UriParam(defaultValue = "true")
@@ -60,7 +61,8 @@ public class AtlasEndpoint extends ResourceEndpoint {
     @UriParam
     private String propertiesFile;
 
-    public AtlasEndpoint() { }
+    public AtlasEndpoint() {
+    }
 
     public AtlasEndpoint(String uri, AtlasComponent component, String resourceUri) {
         super(uri, component, resourceUri);
@@ -88,7 +90,8 @@ public class AtlasEndpoint extends ResourceEndpoint {
 
             // load the properties from property file which may overrides the default ones
             if (ObjectHelper.isNotEmpty(getPropertiesFile())) {
-                InputStream reader = ResourceHelper.resolveMandatoryResourceAsInputStream(getCamelContext(), getPropertiesFile());
+                InputStream reader = ResourceHelper.resolveMandatoryResourceAsInputStream(getCamelContext(),
+                        getPropertiesFile());
                 try {
                     properties.load(reader);
                     log.info("Loaded the Atlas properties file " + getPropertiesFile());
@@ -99,7 +102,7 @@ public class AtlasEndpoint extends ResourceEndpoint {
                 atlasContextFactory = new DefaultAtlasContextFactory(properties);
             } else {
                 atlasContextFactory = DefaultAtlasContextFactory.getInstance();
-            }       
+            }
         }
         return atlasContextFactory;
     }
@@ -113,7 +116,8 @@ public class AtlasEndpoint extends ResourceEndpoint {
     }
 
     /**
-     * Enables / disables the atlas map resource loader cache which is enabled by default
+     * Enables / disables the atlas map resource loader cache which is enabled by
+     * default
      */
     public void setLoaderCache(boolean loaderCache) {
         this.loaderCache = loaderCache;
@@ -131,7 +135,8 @@ public class AtlasEndpoint extends ResourceEndpoint {
     }
 
     /**
-     * The URI of the properties file which is used for AtlasContextFactory initialization.
+     * The URI of the properties file which is used for AtlasContextFactory
+     * initialization.
      */
     public void setPropertiesFile(String file) {
         propertiesFile = file;
@@ -156,7 +161,8 @@ public class AtlasEndpoint extends ResourceEndpoint {
         if (newResourceUri != null) {
             exchange.getIn().removeHeader(AtlasConstants.ATLAS_RESOURCE_URI);
 
-            log.debug("{} set to {} creating new endpoint to handle exchange", AtlasConstants.ATLAS_RESOURCE_URI, newResourceUri);
+            log.debug("{} set to {} creating new endpoint to handle exchange", AtlasConstants.ATLAS_RESOURCE_URI,
+                    newResourceUri);
             AtlasEndpoint newEndpoint = findOrCreateEndpoint(getEndpointUri(), newResourceUri);
             newEndpoint.onExchange(exchange);
             return;
@@ -168,26 +174,31 @@ public class AtlasEndpoint extends ResourceEndpoint {
             // use content from header
             reader = new StringReader(content);
             if (log.isDebugEnabled()) {
-                log.debug("Atlas mapping content read from header {} for endpoint {}", AtlasConstants.ATLAS_MAPPING, getEndpointUri());
+                log.debug("Atlas mapping content read from header {} for endpoint {}", AtlasConstants.ATLAS_MAPPING,
+                        getEndpointUri());
             }
             // remove the header to avoid it being propagated in the routing
             exchange.getIn().removeHeader(AtlasConstants.ATLAS_MAPPING);
         } else {
             if (log.isDebugEnabled()) {
-                log.debug("Atlas mapping content read from resource {} with resourceUri: {} for endpoint {}", new Object[]{getResourceUri(), path, getEndpointUri()});
+                log.debug("Atlas mapping content read from resource {} with resourceUri: {} for endpoint {}",
+                        new Object[] { getResourceUri(), path, getEndpointUri() });
             }
-            reader = getEncoding() != null ? new InputStreamReader(getResourceAsInputStream(), getEncoding()) : new InputStreamReader(getResourceAsInputStream());
+            reader = getEncoding() != null ? new InputStreamReader(getResourceAsInputStream(), getEncoding())
+                    : new InputStreamReader(getResourceAsInputStream());
         }
 
         AtlasMapping atlasMapping = null;
 
-        if(path != null && path.endsWith("json")) {
-            atlasMapping = ((DefaultAtlasContextFactory)getAtlasContextFactory()).getMappingService().loadMapping(reader, AtlasMappingFormat.JSON);
+        if (path != null && path.endsWith("json")) {
+            atlasMapping = ((DefaultAtlasContextFactory) getAtlasContextFactory()).getMappingService()
+                    .loadMapping(reader, AtlasMappingFormat.JSON);
         } else {
-            atlasMapping = ((DefaultAtlasContextFactory)getAtlasContextFactory()).getMappingService().loadMapping(reader, AtlasMappingFormat.XML);
+            atlasMapping = ((DefaultAtlasContextFactory) getAtlasContextFactory()).getMappingService()
+                    .loadMapping(reader, AtlasMappingFormat.XML);
         }
 
-        AtlasContext atlasContext = ((DefaultAtlasContextFactory)getAtlasContextFactory()).createContext(atlasMapping);
+        AtlasContext atlasContext = ((DefaultAtlasContextFactory) getAtlasContextFactory()).createContext(atlasMapping);
         AtlasSession atlasSession = atlasContext.createSession();
         atlasSession.setInput(exchange.getIn().getBody());
         atlasContext.process(atlasSession);

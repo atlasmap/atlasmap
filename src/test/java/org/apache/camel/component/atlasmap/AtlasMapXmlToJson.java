@@ -12,12 +12,14 @@ import io.atlasmap.v2.AtlasMapping;
 
 @Ignore
 public class AtlasMapXmlToJson {
-    
+
     @Test
     public void testConvertXmlToJson() throws Exception {
         AtlasMappingService atlasMappingService = DefaultAtlasContextFactory.getInstance().getMappingService();
-        AtlasMapping atlasMapping = atlasMappingService.loadMapping("src/test/resources/atlasmapping.xml", AtlasMappingFormat.XML);
-        atlasMappingService.saveMappingAsFile(atlasMapping, new File("src/test/resources/atlasmapping.json"), AtlasMappingFormat.JSON);
+        AtlasMapping atlasMapping = atlasMappingService.loadMapping("src/test/resources/atlasmapping.xml",
+                AtlasMappingFormat.XML);
+        atlasMappingService.saveMappingAsFile(atlasMapping, new File("src/test/resources/atlasmapping.json"),
+                AtlasMappingFormat.JSON);
     }
-    
+
 }

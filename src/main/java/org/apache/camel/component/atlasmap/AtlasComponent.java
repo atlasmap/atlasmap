@@ -26,14 +26,15 @@ import org.apache.camel.util.ResourceHelper;
 import io.atlasmap.api.AtlasContextFactory;
 
 /**
- * @version 
+ * @version
  */
 public class AtlasComponent extends DefaultComponent {
 
     @Metadata(label = "advanced")
     private io.atlasmap.api.AtlasContextFactory atlasContextFactory;
-    
-    public AtlasComponent() { }
+
+    public AtlasComponent() {
+    }
 
     public io.atlasmap.api.AtlasContextFactory getAtlasContextFactory() {
         return atlasContextFactory;
@@ -54,7 +55,8 @@ public class AtlasComponent extends DefaultComponent {
         endpoint.setContentCache(cache);
         endpoint.setAtlasContextFactory(getAtlasContextFactory());
 
-        // if its a http resource then append any remaining parameters and update the resource uri
+        // if its a http resource then append any remaining parameters and update the
+        // resource uri
         if (ResourceHelper.isHttpUri(remaining)) {
             remaining = ResourceHelper.appendParameters(remaining, parameters);
             endpoint.setResourceUri(remaining);
