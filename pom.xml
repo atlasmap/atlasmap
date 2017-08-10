@@ -53,7 +53,7 @@
             <distribution>repo</distribution>
         </license>
     </licenses>
-    
+
     <scm>
         <url>https://github.com/atlasmap/camel-atlasmap</url>
         <connection>scm:git:git://github.com/atlasmap/camel-atlasmap.git</connection>
