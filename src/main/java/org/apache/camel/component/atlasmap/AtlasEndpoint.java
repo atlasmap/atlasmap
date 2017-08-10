@@ -20,11 +20,16 @@ import org.apache.camel.spi.UriEndpoint;
 import org.apache.camel.spi.UriParam;
 import org.apache.camel.util.IOHelper;
 import org.apache.camel.util.ResourceHelper;
-import com.mediadriver.atlas.api.v2.AtlasContext;
-import com.mediadriver.atlas.api.v2.AtlasContextFactory;
-import com.mediadriver.atlas.api.v2.AtlasSession;
-import com.mediadriver.atlas.core.v2.DefaultAtlasContextFactory;
-import com.mediadriver.atlas.v2.AtlasMapping;
+
+import io.atlasmap.api.AtlasContext;
+import io.atlasmap.api.AtlasContextFactory;
+import io.atlasmap.api.AtlasException;
+import io.atlasmap.api.AtlasSession;
+import io.atlasmap.core.AtlasMappingService.AtlasMappingFormat;
+import io.atlasmap.core.DefaultAtlasContext;
+import io.atlasmap.core.DefaultAtlasContextFactory;
+import io.atlasmap.v2.AtlasMapping;
+import io.atlasmap.v2.Audit;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -79,8 +84,8 @@ public class AtlasEndpoint extends ResourceEndpoint {
     private synchronized AtlasContextFactory getAtlasContextFactory() throws Exception {
         if (atlasContextFactory == null) {
 
-        	Properties properties = new Properties();
-        	
+            Properties properties = new Properties();
+
             // load the properties from property file which may overrides the default ones
             if (ObjectHelper.isNotEmpty(getPropertiesFile())) {
                 InputStream reader = ResourceHelper.resolveMandatoryResourceAsInputStream(getCamelContext(), getPropertiesFile());
@@ -93,7 +98,7 @@ public class AtlasEndpoint extends ResourceEndpoint {
                 log.debug("Initializing AtlasContextFactory with properties {}", properties);
                 atlasContextFactory = new DefaultAtlasContextFactory(properties);
             } else {
-            	atlasContextFactory = DefaultAtlasContextFactory.getInstance();
+                atlasContextFactory = DefaultAtlasContextFactory.getInstance();
             }       
         }
         return atlasContextFactory;
@@ -174,19 +179,27 @@ public class AtlasEndpoint extends ResourceEndpoint {
             reader = getEncoding() != null ? new InputStreamReader(getResourceAsInputStream(), getEncoding()) : new InputStreamReader(getResourceAsInputStream());
         }
 
-       	AtlasMapping atlasMapping = null;
-       	        
-       	if(path != null && path.endsWith("json")) {
-       	    atlasMapping = ((DefaultAtlasContextFactory)getAtlasContextFactory()).getMappingService().loadMappingJson(reader);
-       	} else {
-       	    atlasMapping = ((DefaultAtlasContextFactory)getAtlasContextFactory()).getMappingService().loadMapping(reader);
-       	}
-       	
-        AtlasContext atlasContext = getAtlasContextFactory().createContext(atlasMapping);
-		AtlasSession atlasSession = atlasContext.createSession();
-		atlasSession.setInput(exchange.getIn().getBody());
-		atlasContext.process(atlasSession);
-          
+        AtlasMapping atlasMapping = null;
+
+        if(path != null && path.endsWith("json")) {
+            atlasMapping = ((DefaultAtlasContextFactory)getAtlasContextFactory()).getMappingService().loadMapping(reader, AtlasMappingFormat.JSON);
+        } else {
+            atlasMapping = ((DefaultAtlasContextFactory)getAtlasContextFactory()).getMappingService().loadMapping(reader, AtlasMappingFormat.XML);
+        }
+
+        AtlasContext atlasContext = ((DefaultAtlasContextFactory)getAtlasContextFactory()).createContext(atlasMapping);
+        AtlasSession atlasSession = atlasContext.createSession();
+        atlasSession.setInput(exchange.getIn().getBody());
+        atlasContext.process(atlasSession);
+
+        for (Audit audit : atlasSession.getAudits().getAudit()) {
+            switch (audit.getStatus()) {
+            case ERROR:
+                throw new AtlasException(audit.getMessage());
+            default:
+            }
+        }
+
         // now lets output the results to the exchange
         Message out = exchange.getOut();
         out.setBody(atlasSession.getOutput());

@@ -1,1 +1,83 @@
-{"AtlasMapping":{"jsonType":"com.mediadriver.atlas.v2.AtlasMapping","properties":{"property":[]},"fieldMappings":{"fieldMapping":[{"jsonType":"com.mediadriver.atlas.v2.SeparateFieldMapping","inputField":{"jsonType":"com.mediadriver.atlas.v2.MappedField","field":{"jsonType":"com.mediadriver.atlas.java.v2.JavaField","name":"Name","path":"User.name","type":"STRING","getMethod":"getName"},"fieldActions":{"fieldAction":[]}},"outputFields":{"mappedField":[{"jsonType":"com.mediadriver.atlas.v2.MappedField","field":{"jsonType":"com.mediadriver.atlas.java.v2.JavaField","name":"FirstName","path":"FirstName","type":"STRING","setMethod":"setFirstName"},"fieldActions":{"fieldAction":[{"jsonType":"com.mediadriver.atlas.v2.MapAction","index":0}]}},{"jsonType":"com.mediadriver.atlas.v2.MappedField","field":{"jsonType":"com.mediadriver.atlas.java.v2.JavaField","name":"LastName","path":"LastName","type":"STRING","setMethod":"setLastName"},"fieldActions":{"fieldAction":[{"jsonType":"com.mediadriver.atlas.v2.MapAction","index":1}]}}]}},{"jsonType":"com.mediadriver.atlas.v2.MapFieldMapping","inputField":{"jsonType":"com.mediadriver.atlas.v2.MappedField","field":{"jsonType":"com.mediadriver.atlas.java.v2.JavaField","name":"Text","path":"Text","type":"STRING","getMethod":"getText"},"fieldActions":{"fieldAction":[]}},"outputField":{"jsonType":"com.mediadriver.atlas.v2.MappedField","field":{"jsonType":"com.mediadriver.atlas.java.v2.JavaField","name":"Description","path":"description","type":"STRING","setMethod":"setDescription"},"fieldActions":{"fieldAction":[]}}},{"jsonType":"com.mediadriver.atlas.v2.MapFieldMapping","inputField":{"jsonType":"com.mediadriver.atlas.v2.MappedField","field":{"jsonType":"com.mediadriver.atlas.java.v2.JavaField","name":"ScreenName","path":"User.screenName","type":"STRING","getMethod":"getScreenName"},"fieldActions":{"fieldAction":[]}},"outputField":{"jsonType":"com.mediadriver.atlas.v2.MappedField","field":{"jsonType":"com.mediadriver.atlas.java.v2.JavaField","name":"Title","path":"Title","type":"STRING","setMethod":"setTitle"},"fieldActions":{"fieldAction":[]}}}]},"name":"twitterStatusToSalesforceContact","sourceUri":"atlas:java?className=twitter4j.Status","targetUri":"atlas:java?className=com.redhat.ipaas.connector.salesforce.Contact"}}
+{
+  "AtlasMapping" : {
+    "jsonType" : "io.atlasmap.v2.AtlasMapping",
+    "dataSource" : [ {
+      "jsonType" : "io.atlasmap.v2.DataSource",
+      "uri" : "atlas:java?className=twitter4j.Status",
+      "dataSourceType" : "SOURCE"
+    }, {
+      "jsonType" : "io.atlasmap.v2.DataSource",
+      "uri" : "atlas:java?className=com.redhat.ipaas.connector.salesforce.Contact",
+      "dataSourceType" : "TARGET"
+    } ],
+    "mappings" : {
+      "mapping" : [ {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "SEPARATE",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "path" : "/User/name",
+          "fieldType" : "STRING",
+          "name" : "Name",
+          "getMethod" : "getName"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "index" : 0,
+          "path" : "/FirstName",
+          "fieldType" : "STRING",
+          "name" : "FirstName",
+          "setMethod" : "setFirstName"
+        }, {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "index" : 1,
+          "path" : "/LastName",
+          "fieldType" : "STRING",
+          "name" : "LastName",
+          "setMethod" : "setLastName"
+        } ]
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "MAP",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "path" : "/Text",
+          "fieldType" : "STRING",
+          "name" : "Text",
+          "getMethod" : "getText"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "path" : "/description",
+          "fieldType" : "STRING",
+          "name" : "Description",
+          "setMethod" : "setDescription"
+        } ]
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "MAP",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "path" : "/User/screenName",
+          "fieldType" : "STRING",
+          "name" : "ScreenName",
+          "getMethod" : "getScreenName"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "path" : "/Title",
+          "fieldType" : "STRING",
+          "name" : "Title",
+          "setMethod" : "setTitle"
+        } ]
+      } ]
+    },
+    "lookupTables" : {
+      "lookupTable" : [ ]
+    },
+    "properties" : {
+      "property" : [ ]
+    },
+    "name" : "mockMapping"
+  }
+}
