@@ -20,9 +20,10 @@ package org.apache.camel.component.atlasmap;
 import java.util.Map;
 import org.apache.camel.Endpoint;
 import org.apache.camel.impl.DefaultComponent;
-import com.mediadriver.atlas.api.v2.AtlasContextFactory;
 import org.apache.camel.spi.Metadata;
 import org.apache.camel.util.ResourceHelper;
+
+import io.atlasmap.api.AtlasContextFactory;
 
 /**
  * @version 
@@ -30,11 +31,11 @@ import org.apache.camel.util.ResourceHelper;
 public class AtlasComponent extends DefaultComponent {
 
     @Metadata(label = "advanced")
-    private AtlasContextFactory atlasContextFactory;
+    private io.atlasmap.api.AtlasContextFactory atlasContextFactory;
     
     public AtlasComponent() { }
 
-    public AtlasContextFactory getAtlasContextFactory() {
+    public io.atlasmap.api.AtlasContextFactory getAtlasContextFactory() {
         return atlasContextFactory;
     }
 
