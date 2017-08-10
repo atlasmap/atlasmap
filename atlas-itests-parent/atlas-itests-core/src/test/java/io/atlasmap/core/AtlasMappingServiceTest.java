@@ -39,6 +39,15 @@ public class AtlasMappingServiceTest {
     }
     
     @Test
+    public void testMappingXMLViaContext() throws Exception {
+        URL url = Thread.currentThread().getContextClassLoader().getResource("mappings/atlasmapping.xml");
+        assertAtlasMapping(DefaultAtlasContextFactory.getInstance().createContext(url.toURI()).createSession().getMapping());
+        assertAtlasMapping(DefaultAtlasContextFactory.getInstance().createContext(new File(url.toURI())).createSession().getMapping());
+        assertAtlasMapping(DefaultAtlasContextFactory.getInstance().createContext(url.toURI(), AtlasMappingFormat.XML).createSession().getMapping());
+        assertAtlasMapping(DefaultAtlasContextFactory.getInstance().createContext(new File(url.toURI()), AtlasMappingFormat.XML).createSession().getMapping());
+    }
+
+    @Test
     public void testMappingJSON() throws Exception {
         URL url = Thread.currentThread().getContextClassLoader().getResource("mappings/atlasmapping.json");
         assertAtlasMapping(mappingService.loadMapping(url, AtlasMappingFormat.JSON));
@@ -51,6 +60,13 @@ public class AtlasMappingServiceTest {
         assertAtlasMapping(mappingService.loadMapping(outputJson, AtlasMappingFormat.JSON));
     }
     
+    @Test
+    public void testMappingJSONViaContext() throws Exception {
+        URL url = Thread.currentThread().getContextClassLoader().getResource("mappings/atlasmapping.json");
+        assertAtlasMapping(DefaultAtlasContextFactory.getInstance().createContext(url.toURI(), AtlasMappingFormat.JSON).createSession().getMapping());
+        assertAtlasMapping(DefaultAtlasContextFactory.getInstance().createContext(new File(url.toURI()), AtlasMappingFormat.JSON).createSession().getMapping());
+    }
+
     private void assertAtlasMapping(AtlasMapping mapping) throws Exception {
         Assert.assertNotNull(mapping);
         Assert.assertEquals("core-unit-test", mapping.getName());
