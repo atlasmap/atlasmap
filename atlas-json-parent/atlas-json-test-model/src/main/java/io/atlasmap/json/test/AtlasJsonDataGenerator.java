@@ -14,7 +14,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 public class AtlasJsonDataGenerator {
 
     private ObjectMapper mapper = null;
-    
+
     @Before
     public void setUp() throws Exception {
         mapper = new ObjectMapper();
@@ -32,11 +32,13 @@ public class AtlasJsonDataGenerator {
 
     @Test
     public void testGenerateOrderList() throws Exception {
-        BaseOrderList orderList = AtlasJsonUtil.generateOrderListClass(SourceOrderList.class, SourceOrder.class, SourceAddress.class, SourceContact.class);
-        SourceOrderList sourceOrderList = (SourceOrderList)orderList;      
+        BaseOrderList orderList = AtlasJsonUtil.generateOrderListClass(SourceOrderList.class, SourceOrder.class,
+                SourceAddress.class, SourceContact.class);
+        SourceOrderList sourceOrderList = (SourceOrderList) orderList;
         mapper.writeValue(new File("target/list-rooted-sourceorderlist.json"), sourceOrderList);
-        
-        SourceOrderList rereadSourceOrderList = mapper.readValue(new File("target/list-rooted-sourceorderlist.json"), SourceOrderList.class);
+
+        SourceOrderList rereadSourceOrderList = mapper.readValue(new File("target/list-rooted-sourceorderlist.json"),
+                SourceOrderList.class);
         AtlasJsonUtil.validateOrderList(rereadSourceOrderList);
     }
 

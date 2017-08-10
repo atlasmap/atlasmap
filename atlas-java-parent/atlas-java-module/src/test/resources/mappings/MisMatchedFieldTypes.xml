@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<AtlasMapping xmlns="http://atlasmap.io/v2" xmlns:ns2="http://atlasmap.io/java/v2" name="thisis_a_valid.name">
-    <DataSource uri="atlas:java?className=io.atlasmap.java.module.MockJavaClass" dataSourceType="Source"/>
-    <DataSource uri="atlas:java?className=io.atlasmap.java.module.MockJavaClass" dataSourceType="Target"/>
+<AtlasMapping xmlns="http://atlasmap.io/v2" xmlns:ns2="http://atlasmap.io/java/v2"
+    name="thisis_a_valid.name">
+    <DataSource
+        uri="atlas:java?className=io.atlasmap.java.module.MockJavaClass"
+        dataSourceType="Source" />
+    <DataSource
+        uri="atlas:java?className=io.atlasmap.java.module.MockJavaClass"
+        dataSourceType="Target" />
     <Mappings>
-        <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="MockField" name="input.name"/>
-            <OutputField xsi:type="MockField" name="input.name"/>
+        <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:type="Mapping" mappingType="Map">
+            <InputField xsi:type="MockField" name="input.name" />
+            <OutputField xsi:type="MockField" name="input.name" />
         </Mapping>
     </Mappings>
-    <LookupTables/>
-    <Properties/>
+    <LookupTables />
+    <Properties />
 </AtlasMapping>

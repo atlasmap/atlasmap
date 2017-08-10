@@ -11,13 +11,13 @@ import io.atlasmap.core.DefaultAtlasContextFactory;
 
 public abstract class AtlasMappingBaseTest {
 
-    public static final List<String> FLAT_FIELDS = Arrays.asList("intField", "shortField", "longField",
-            "doubleField", "floatField", "booleanField", "charField", "byteField", "boxedBooleanField",
-            "boxedByteField", "boxedCharField", "boxedDoubleField", "boxedFloatField", "boxedIntField",
-            "boxedLongField", "boxedStringField");
-    
+    public static final List<String> FLAT_FIELDS = Arrays.asList("intField", "shortField", "longField", "doubleField",
+            "floatField", "booleanField", "charField", "byteField", "boxedBooleanField", "boxedByteField",
+            "boxedCharField", "boxedDoubleField", "boxedFloatField", "boxedIntField", "boxedLongField",
+            "boxedStringField");
+
     protected AtlasContextFactory atlasContextFactory = null;
-    
+
     @Before
     public void setUp() {
         atlasContextFactory = DefaultAtlasContextFactory.getInstance();
@@ -27,5 +27,5 @@ public abstract class AtlasMappingBaseTest {
     public void tearDown() {
         atlasContextFactory = null;
     }
-    
+
 }

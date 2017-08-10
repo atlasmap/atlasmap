@@ -28,8 +28,8 @@ import io.atlasmap.reference.AtlasMappingBaseTest;
 import io.atlasmap.reference.AtlasTestUtil;
 
 public class JavaJavaAutoConversionTest extends AtlasMappingBaseTest {
-    
-    protected void validateFlatPrimitiveClassBoxedPrimitiveFields(BaseFlatPrimitiveClass targetObject) {        
+
+    protected void validateFlatPrimitiveClassBoxedPrimitiveFields(BaseFlatPrimitiveClass targetObject) {
         assertEquals(new Double(90000000d), new Double(targetObject.getBoxedDoubleField()));
         assertEquals(new Float(70000000f), new Float(targetObject.getBoxedFloatField()));
         assertEquals(new Integer(5), new Integer(targetObject.getBoxedIntField()));
@@ -42,9 +42,9 @@ public class JavaJavaAutoConversionTest extends AtlasMappingBaseTest {
         assertNull(targetObject.getBoxedBooleanArrayField());
         assertTrue(false == targetObject.isBooleanField());
         assertNull(targetObject.getBoxedByteArrayField());
-        assertTrue((byte)0 == targetObject.getByteField());
+        assertTrue((byte) 0 == targetObject.getByteField());
         assertNull(targetObject.getBoxedCharArrayField());
-        assertTrue((char)'\u0000' == targetObject.getCharField());
+        assertTrue((char) '\u0000' == targetObject.getCharField());
         assertNull(targetObject.getBoxedDoubleArrayField());
         assertTrue(0.0d == targetObject.getDoubleField());
         assertNull(targetObject.getBoxedFloatArrayField());
@@ -58,89 +58,95 @@ public class JavaJavaAutoConversionTest extends AtlasMappingBaseTest {
         assertNull(targetObject.getBoxedStringArrayField());
         assertNull(targetObject.getBoxedStringField());
     }
-    
+
     @Test
     public void testProcessJavaJavaFlatFieldMappingAutoConversion1() throws Exception {
-        AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/javaToJava/atlasmapping-flatprimitive-autoconversion-1.xml").toURI());
+        AtlasContext context = atlasContextFactory.createContext(
+                new File("src/test/resources/javaToJava/atlasmapping-flatprimitive-autoconversion-1.xml").toURI());
         AtlasSession session = context.createSession();
         BaseFlatPrimitiveClass sourceObject = AtlasTestUtil.generateFlatPrimitiveClass(SourceFlatPrimitiveClass.class);
         session.setInput(sourceObject);
         context.process(session);
-        
+
         Object object = session.getOutput();
         assertNotNull(object);
         assertTrue(object instanceof TargetFlatPrimitiveClass);
-        AtlasTestUtil.validateFlatPrimitiveClassPrimitiveFieldAutoConversion1((TargetFlatPrimitiveClass)object);
+        AtlasTestUtil.validateFlatPrimitiveClassPrimitiveFieldAutoConversion1((TargetFlatPrimitiveClass) object);
     }
-    
+
     @Test
     public void testProcessJavaJavaFlatFieldMappingAutoConversion2() throws Exception {
-        AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/javaToJava/atlasmapping-flatprimitive-autoconversion-2.xml").toURI());
+        AtlasContext context = atlasContextFactory.createContext(
+                new File("src/test/resources/javaToJava/atlasmapping-flatprimitive-autoconversion-2.xml").toURI());
         AtlasSession session = context.createSession();
         BaseFlatPrimitiveClass sourceObject = AtlasTestUtil.generateFlatPrimitiveClass(SourceFlatPrimitiveClass.class);
         session.setInput(sourceObject);
         context.process(session);
-        
+
         Object object = session.getOutput();
         assertNotNull(object);
         assertTrue(object instanceof TargetFlatPrimitiveClass);
-        AtlasTestUtil.validateFlatPrimitiveClassPrimitiveFieldAutoConversion2((TargetFlatPrimitiveClass)object);
+        AtlasTestUtil.validateFlatPrimitiveClassPrimitiveFieldAutoConversion2((TargetFlatPrimitiveClass) object);
     }
-    
+
     @Test
     public void testProcessJavaJavaFlatFieldMappingAutoConversion3() throws Exception {
-        AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/javaToJava/atlasmapping-flatprimitive-autoconversion-3.xml").toURI());
+        AtlasContext context = atlasContextFactory.createContext(
+                new File("src/test/resources/javaToJava/atlasmapping-flatprimitive-autoconversion-3.xml").toURI());
         AtlasSession session = context.createSession();
         BaseFlatPrimitiveClass sourceObject = AtlasTestUtil.generateFlatPrimitiveClass(SourceFlatPrimitiveClass.class);
         session.setInput(sourceObject);
         context.process(session);
-        
+
         Object object = session.getOutput();
         assertNotNull(object);
         assertTrue(object instanceof TargetFlatPrimitiveClass);
-        AtlasTestUtil.validateFlatPrimitiveClassPrimitiveFieldAutoConversion3((TargetFlatPrimitiveClass)object);
+        AtlasTestUtil.validateFlatPrimitiveClassPrimitiveFieldAutoConversion3((TargetFlatPrimitiveClass) object);
     }
-    
+
     @Test
     public void testProcessJavaJavaFlatFieldMappingAutoConversion4() throws Exception {
-        AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/javaToJava/atlasmapping-flatprimitive-autoconversion-4.xml").toURI());
+        AtlasContext context = atlasContextFactory.createContext(
+                new File("src/test/resources/javaToJava/atlasmapping-flatprimitive-autoconversion-4.xml").toURI());
         AtlasSession session = context.createSession();
         BaseFlatPrimitiveClass sourceObject = AtlasTestUtil.generateFlatPrimitiveClass(SourceFlatPrimitiveClass.class);
         session.setInput(sourceObject);
         context.process(session);
-        
+
         Object object = session.getOutput();
         assertNotNull(object);
         assertTrue(object instanceof TargetFlatPrimitiveClass);
-        AtlasTestUtil.validateFlatPrimitiveClassPrimitiveFieldAutoConversion4((TargetFlatPrimitiveClass)object);
+        AtlasTestUtil.validateFlatPrimitiveClassPrimitiveFieldAutoConversion4((TargetFlatPrimitiveClass) object);
     }
-    
+
     @Test
     public void testProcessJavaJavaFlatFieldMappingAutoConversion5() throws Exception {
-        AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/javaToJava/atlasmapping-flatprimitive-autoconversion-5.xml").toURI());
+        AtlasContext context = atlasContextFactory.createContext(
+                new File("src/test/resources/javaToJava/atlasmapping-flatprimitive-autoconversion-5.xml").toURI());
         AtlasSession session = context.createSession();
         BaseFlatPrimitiveClass sourceObject = AtlasTestUtil.generateFlatPrimitiveClass(SourceFlatPrimitiveClass.class);
         session.setInput(sourceObject);
         context.process(session);
-        
+
         Object object = session.getOutput();
         assertNotNull(object);
         assertTrue(object instanceof TargetFlatPrimitiveClass);
-        AtlasTestUtil.validateFlatPrimitiveClassPrimitiveFieldAutoConversion5((TargetFlatPrimitiveClass)object);
+        AtlasTestUtil.validateFlatPrimitiveClassPrimitiveFieldAutoConversion5((TargetFlatPrimitiveClass) object);
     }
-    
+
     @Test
     public void testProcessJavaJavaFlatFieldMappingAutoConversion6() throws Exception {
-        AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/javaToJava/atlasmapping-flatprimitive-autoconversion-6.xml").toURI());
+        AtlasContext context = atlasContextFactory.createContext(
+                new File("src/test/resources/javaToJava/atlasmapping-flatprimitive-autoconversion-6.xml").toURI());
         AtlasSession session = context.createSession();
         BaseFlatPrimitiveClass sourceObject = AtlasTestUtil.generateFlatPrimitiveClass(SourceFlatPrimitiveClass.class);
         session.setInput(sourceObject);
         context.process(session);
-        
+
         Object object = session.getOutput();
         assertNotNull(object);
         assertTrue(object instanceof TargetFlatPrimitiveClass);
-        AtlasTestUtil.validateFlatPrimitiveClassPrimitiveFieldAutoConversion6((TargetFlatPrimitiveClass)object);
+        AtlasTestUtil.validateFlatPrimitiveClassPrimitiveFieldAutoConversion6((TargetFlatPrimitiveClass) object);
     }
 
 }

@@ -41,7 +41,7 @@ public class AtlasUtil {
     private static final Logger logger = LoggerFactory.getLogger(AtlasUtil.class);
 
     public static Properties loadPropertiesFromURL(URL url) throws Exception {
-        try (InputStream is = url.openStream()){
+        try (InputStream is = url.openStream()) {
             Properties prop = new Properties();
             prop.load(is);
             return prop;
@@ -67,7 +67,8 @@ public class AtlasUtil {
 
     protected static void validateUri(String atlasUri) {
         if (!atlasUri.startsWith("atlas:")) {
-            throw new IllegalStateException("Invalid atlas uri " + atlasUri + " does not begin with 'atlas:': " + atlasUri);
+            throw new IllegalStateException(
+                    "Invalid atlas uri " + atlasUri + " does not begin with 'atlas:': " + atlasUri);
         }
 
         if (countCharacters(atlasUri, '?') > 1) {
@@ -106,8 +107,7 @@ public class AtlasUtil {
      * ie. atlas:stringseparated:csv?quoteChar=&quot;
      * 
      * 
-     * scheme: atlas module: stringseparated remaining: csv config:
-     * quoteChar=&quot;
+     * scheme: atlas module: stringseparated remaining: csv config: quoteChar=&quot;
      * 
      * if atlasUri is null, returns null. if empty or no scheme present, returns
      * empty. otherwise, the $scheme is returned
@@ -223,44 +223,45 @@ public class AtlasUtil {
     public static List<Class<?>> findClassesForPackage(String scannedPackage) {
         String scannedPath = scannedPackage.replace('.', '/');
         URL scannedUrl = getResource(scannedPath);
-        
+
         if (scannedUrl == null) {
-            throw new IllegalArgumentException(String.format("Unable to detect resources for url='%s' for package='%s'", scannedPath, scannedPackage));
+            throw new IllegalArgumentException(String.format("Unable to detect resources for url='%s' for package='%s'",
+                    scannedPath, scannedPackage));
         }
 
-        if("jar".equals(scannedUrl.getProtocol())) {
+        if ("jar".equals(scannedUrl.getProtocol())) {
             return findClassesFromJar(scannedUrl);
         }
-        
+
         File scannedFd = new File(scannedUrl.getFile());
         List<Class<?>> classes = new ArrayList<Class<?>>();
-        
-        if(scannedFd.listFiles() == null) {
+
+        if (scannedFd.listFiles() == null) {
             return classes;
         }
 
         for (File file : scannedFd.listFiles()) {
             classes.addAll(find(file, scannedPackage));
         }
-        
+
         return classes;
     }
-    
+
     protected static URL getResource(String scannedPath) {
         URL url = null;
- 
+
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        if(classLoader == null) {
+        if (classLoader == null) {
             classLoader = AtlasUtil.class.getClassLoader();
         }
-        
-        if(classLoader != null) {
+
+        if (classLoader != null) {
             url = classLoader.getResource(scannedPath);
-            if(url != null){
+            if (url != null) {
                 return url;
-            }   
+            }
         }
-        
+
         return ClassLoader.getSystemResource(scannedPath);
     }
 
@@ -281,35 +282,36 @@ public class AtlasUtil {
         }
         return classes;
     }
-    
+
     protected static List<Class<?>> findClassesFromJar(URL jarFileUrl) {
-        List<Class<?>> classNames = new ArrayList<Class<?>>();        
-        
-        
+        List<Class<?>> classNames = new ArrayList<Class<?>>();
+
         JarURLConnection connection = null;
-        
+
         try {
             connection = (JarURLConnection) jarFileUrl.openConnection();
         } catch (IOException e) {
             logger.warn(String.format("Unable to load classes from jar file=%s msg=%s", jarFileUrl, e.getMessage()), e);
             return classNames;
-        } 
-        
-        try (ZipInputStream zip = new ZipInputStream(new FileInputStream(new File(connection.getJarFileURL().toURI())))) {
+        }
+
+        try (ZipInputStream zip = new ZipInputStream(
+                new FileInputStream(new File(connection.getJarFileURL().toURI())))) {
             for (ZipEntry entry = zip.getNextEntry(); entry != null; entry = zip.getNextEntry()) {
                 if (!entry.isDirectory() && entry.getName().endsWith(".class")) {
                     String className = entry.getName().replace('/', '.');
                     className = className.substring(0, className.length() - ".class".length());
                     ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-                    if(classLoader == null) {
+                    if (classLoader == null) {
                         classLoader = AtlasUtil.class.getClassLoader();
                     }
                     try {
                         Class<?> clazz = Class.forName(className, false, classLoader);
                         classNames.add(clazz);
                     } catch (ClassNotFoundException e) {
-                        logger.warn(String.format("Unable to load class=%s from jar file=%s msg=%s", className, jarFileUrl, e.getMessage()), e);
-                    }  
+                        logger.warn(String.format("Unable to load class=%s from jar file=%s msg=%s", className,
+                                jarFileUrl, e.getMessage()), e);
+                    }
                 }
             }
         } catch (URISyntaxException | IOException e) {

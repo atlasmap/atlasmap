@@ -23,50 +23,71 @@ import io.atlasmap.v2.FieldType;
 import io.atlasmap.v2.Fields;
 
 public class AtlasJsonModelFactory {
-	
-	public static final String URI_FORMAT = "atlas:json";
 
-	public static JsonDocument createJsonDocument() {
-		JsonDocument jsonDocument = new JsonDocument();
-		jsonDocument.setFields(new Fields());
-		return jsonDocument;
-	}
-	
-	public static JsonField createJsonField() {
-	    JsonField jsonField = new JsonField();
-		return jsonField;
-	}
-	
-	public static String toString(JsonField f) {
-		return "JsonField [name=" + f.getName() + ", primitive=" + f.isPrimitive() + ", typeName=" + f.getTypeName() + ", userCreated="
-			+ f.isUserCreated() + ", actions=" + f.getActions() + ", value=" + f.getValue() + ", arrayDimensions=" + f.getArrayDimensions()
-			+ ", arraySize=" + f.getArraySize() + ", collectionType=" + f.getCollectionType() + ", docId=" + f.getDocId() + ", index="
-			+ f.getIndex() + ", path=" + f.getPath() + ", required=" + f.isRequired() + ", status=" + f.getStatus() + ", fieldType="
-			+ f.getFieldType() + "]";
-	}
-        
+    public static final String URI_FORMAT = "atlas:json";
+
+    public static JsonDocument createJsonDocument() {
+        JsonDocument jsonDocument = new JsonDocument();
+        jsonDocument.setFields(new Fields());
+        return jsonDocument;
+    }
+
+    public static JsonField createJsonField() {
+        JsonField jsonField = new JsonField();
+        return jsonField;
+    }
+
+    public static String toString(JsonField f) {
+        return "JsonField [name=" + f.getName() + ", primitive=" + f.isPrimitive() + ", typeName=" + f.getTypeName()
+                + ", userCreated=" + f.isUserCreated() + ", actions=" + f.getActions() + ", value=" + f.getValue()
+                + ", arrayDimensions=" + f.getArrayDimensions() + ", arraySize=" + f.getArraySize()
+                + ", collectionType=" + f.getCollectionType() + ", docId=" + f.getDocId() + ", index=" + f.getIndex()
+                + ", path=" + f.getPath() + ", required=" + f.isRequired() + ", status=" + f.getStatus()
+                + ", fieldType=" + f.getFieldType() + "]";
+    }
+
     public static Field cloneField(Field field) {
         JsonField clone = new JsonField();
-        JsonField that = (JsonField)field;
-        
-        //generic from Field
-        if(field.getActions() != null) { clone.setActions(AtlasModelFactory.cloneFieldActions(field.getActions())); }
-        if(field.getArrayDimensions() != null) { clone.setArrayDimensions(Integer.valueOf(field.getArrayDimensions())); }
-        if(field.getArraySize() != null) { clone.setArraySize(Integer.valueOf(field.getArraySize())); }
-        if(field.getCollectionType() != null) { clone.setCollectionType(CollectionType.fromValue(field.getCollectionType().value())); }
-        if(field.getDocId() != null) { clone.setDocId(new String(field.getDocId())); }
-        if(field.getFieldType() != null) { clone.setFieldType(FieldType.fromValue(field.getFieldType().value())); }
-        if(field.getIndex() != null) { clone.setIndex(Integer.valueOf(field.getIndex())); }
-        if(field.getPath() != null) { clone.setPath(new String(field.getPath())); }
-        if(field.isRequired() != null) { clone.setRequired(Boolean.valueOf(field.isRequired())); }
-        if(field.getStatus() != null) { clone.setStatus(FieldStatus.fromValue(field.getStatus().value())); }  
-                
-        //json specific
+        JsonField that = (JsonField) field;
+
+        // generic from Field
+        if (field.getActions() != null) {
+            clone.setActions(AtlasModelFactory.cloneFieldActions(field.getActions()));
+        }
+        if (field.getArrayDimensions() != null) {
+            clone.setArrayDimensions(Integer.valueOf(field.getArrayDimensions()));
+        }
+        if (field.getArraySize() != null) {
+            clone.setArraySize(Integer.valueOf(field.getArraySize()));
+        }
+        if (field.getCollectionType() != null) {
+            clone.setCollectionType(CollectionType.fromValue(field.getCollectionType().value()));
+        }
+        if (field.getDocId() != null) {
+            clone.setDocId(new String(field.getDocId()));
+        }
+        if (field.getFieldType() != null) {
+            clone.setFieldType(FieldType.fromValue(field.getFieldType().value()));
+        }
+        if (field.getIndex() != null) {
+            clone.setIndex(Integer.valueOf(field.getIndex()));
+        }
+        if (field.getPath() != null) {
+            clone.setPath(new String(field.getPath()));
+        }
+        if (field.isRequired() != null) {
+            clone.setRequired(Boolean.valueOf(field.isRequired()));
+        }
+        if (field.getStatus() != null) {
+            clone.setStatus(FieldStatus.fromValue(field.getStatus().value()));
+        }
+
+        // json specific
         clone.setName(that.getName());
         clone.setPrimitive(that.isPrimitive());
         clone.setTypeName(that.getTypeName());
         clone.setUserCreated(that.isUserCreated());
-        
+
         return clone;
     }
 }

@@ -38,7 +38,7 @@ public class JavaConstructServiceComplexListTest {
     public void setUp() throws Exception {
         constructService = new JavaConstructService();
         constructService.setConversionService(DefaultAtlasConversionService.getInstance());
-        
+
         classInspectionService = new ClassInspectionService();
         classInspectionService.setConversionService(DefaultAtlasConversionService.getInstance());
     }
@@ -54,86 +54,84 @@ public class JavaConstructServiceComplexListTest {
         Object targetObject = constructService.constructClass(generateOrderList("Source"));
         assertNotNull(targetObject);
         assertTrue(targetObject instanceof io.atlasmap.java.test.SourceOrderList);
-        SourceOrderList orderList = (SourceOrderList)targetObject;
+        SourceOrderList orderList = (SourceOrderList) targetObject;
         assertNotNull(orderList.getOrders());
         assertTrue(orderList.getOrders().isEmpty());
         assertNull(orderList.getNumberOrders());
         assertNull(orderList.getOrderBatchNumber());
     }
-    
+
     @Test
     public void testConstructTargetOrderList() throws Exception {
         Object targetObject = constructService.constructClass(generateOrderList("Target"));
         assertNotNull(targetObject);
         assertTrue(targetObject instanceof io.atlasmap.java.test.TargetOrderList);
-        TargetOrderList orderList = (TargetOrderList)targetObject;
+        TargetOrderList orderList = (TargetOrderList) targetObject;
         assertNotNull(orderList.getOrders());
         assertTrue(orderList.getOrders().isEmpty());
         assertNull(orderList.getNumberOrders());
         assertNull(orderList.getOrderBatchNumber());
     }
-    
+
     @Test
     public void testConstructPopulatedOrderList() throws Exception {
         Object targetObject = constructService.constructClass(generateOrderList("PopulatedList"));
         assertNotNull(targetObject);
         assertTrue(targetObject instanceof io.atlasmap.java.test.PopulatedListOrderList);
-        PopulatedListOrderList orderList = (PopulatedListOrderList)targetObject;
+        PopulatedListOrderList orderList = (PopulatedListOrderList) targetObject;
         assertNotNull(orderList.getOrders());
         assertTrue(orderList.getOrders().isEmpty());
         assertNull(orderList.getNumberOrders());
         assertNull(orderList.getOrderBatchNumber());
         assertEquals(Vector.class.getName(), orderList.getOrders().getClass().getName());
     }
-    
+
     @Test
     public void testConstructTargetOrderListFiltered() throws Exception {
         Object targetObject = constructService.constructClass(generateOrderList("Target"), new ArrayList<String>());
         assertNotNull(targetObject);
         assertTrue(targetObject instanceof io.atlasmap.java.test.TargetOrderList);
-        TargetOrderList orderList = (TargetOrderList)targetObject;
+        TargetOrderList orderList = (TargetOrderList) targetObject;
         assertNotNull(orderList.getOrders());
         assertTrue(orderList.getOrders().isEmpty());
         assertNull(orderList.getNumberOrders());
     }
-        
+
     @Test
     public void testConstructAbstractBaseOrderArray() throws Exception {
         try {
             constructService.constructClass(generateOrderList("Base"));
             fail("Expected ConstructInvalidException");
             /*
-            } catch (ConstructInvalidException e) {
-               TODO: Fix modifiers problem 
-            } 
-            */ 
+             * } catch (ConstructInvalidException e) { TODO: Fix modifiers problem }
+             */
         } catch (InstantiationException e) {
-       
+
         } catch (Exception e) {
             fail("Expected ConstructInvalidException instead: " + e.getClass().getName());
         }
     }
-    
+
     protected JavaClass generateOrderList(String prefix) {
         JavaClass j = classInspectionService.inspectClass("io.atlasmap.java.test." + prefix + "OrderList");
-        
-        for(JavaField jf : j.getJavaFields().getJavaField()) {
-            if(jf.getPath().equals("orders")) {
+
+        for (JavaField jf : j.getJavaFields().getJavaField()) {
+            if (jf.getPath().equals("orders")) {
                 jf.setClassName("io.atlasmap.java.test." + prefix + "Order");
                 jf.setCollectionClassName("java.util.ArrayList");
             }
-            if(jf instanceof JavaClass) {
-                for(JavaField cjf : ((JavaClass)jf).getJavaFields().getJavaField()) {
-                    if(cjf.getPath().equals("orders.contact")) {
+            if (jf instanceof JavaClass) {
+                for (JavaField cjf : ((JavaClass) jf).getJavaFields().getJavaField()) {
+                    if (cjf.getPath().equals("orders.contact")) {
                         cjf.setClassName("io.atlasmap.java.test." + prefix + "Contact");
                     }
-                    if(cjf.getPath().equals("orders.address")) {
+                    if (cjf.getPath().equals("orders.address")) {
                         cjf.setClassName("io.atlasmap.java.test." + prefix + "Address");
                     }
                 }
             }
         }
-        
+
         return j;
     }
 }

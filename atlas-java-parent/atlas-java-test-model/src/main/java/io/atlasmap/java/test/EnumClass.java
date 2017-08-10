@@ -15,4 +15,6 @@
  */
 package io.atlasmap.java.test;
 
-public enum EnumClass { ONE, TWO, THREE }
+public enum EnumClass {
+    ONE, TWO, THREE
+}

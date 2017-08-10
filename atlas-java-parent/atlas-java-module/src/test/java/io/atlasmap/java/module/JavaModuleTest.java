@@ -21,7 +21,7 @@ import io.atlasmap.v2.SimpleField;
 public class JavaModuleTest {
 
     private JavaModule module = null;
-    
+
     @Before
     public void setUp() throws Exception {
         module = new JavaModule();
@@ -49,7 +49,7 @@ public class JavaModuleTest {
         field.setPath("/firstName");
         Method setter = module.resolveInputSetMethod(sourceObject, field, String.class);
         assertNotNull(setter);
-        assertEquals(setter.getName(), "setFirstName");    
+        assertEquals(setter.getName(), "setFirstName");
     }
 
     @Test
@@ -71,7 +71,7 @@ public class JavaModuleTest {
         module.setJavaConstructService(jcs);
         assertNotNull(module.getJavaConstructService());
         assertTrue(module.getJavaConstructService() instanceof JavaConstructService);
-        assertSame(jcs, module.getJavaConstructService());    
+        assertSame(jcs, module.getJavaConstructService());
     }
 
     @Test

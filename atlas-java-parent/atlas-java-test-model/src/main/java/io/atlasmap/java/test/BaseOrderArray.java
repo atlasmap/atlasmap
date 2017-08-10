@@ -15,7 +15,7 @@ public abstract class BaseOrderArray {
     public void setOrderBatchNumber(Integer orderBatchNumber) {
         this.orderBatchNumber = orderBatchNumber;
     }
-    
+
     public Integer getNumberOrders() {
         return numberOrders;
     }
@@ -32,12 +32,10 @@ public abstract class BaseOrderArray {
         this.orders = orders;
     }
 
-	@Override
-	public String toString() {
-		return "BaseOrderArray [orders=" + Arrays.toString(orders) + ", numberOrders=" + numberOrders
-				+ ", orderBatchNumber=" + orderBatchNumber + "]";
-	}
-    
-    
-    
+    @Override
+    public String toString() {
+        return "BaseOrderArray [orders=" + Arrays.toString(orders) + ", numberOrders=" + numberOrders
+                + ", orderBatchNumber=" + orderBatchNumber + "]";
+    }
+
 }

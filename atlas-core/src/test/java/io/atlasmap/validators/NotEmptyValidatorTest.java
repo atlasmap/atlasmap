@@ -33,19 +33,19 @@ public class NotEmptyValidatorTest extends BaseValidatorTest {
     private NotEmptyValidator validator;
 
     @Override
-	@Before
+    @Before
     public void setUp() {
         super.setUp();
         validator = new NotEmptyValidator("test.field", "Collection should not be empty");
     }
-    
+
     @Override
-	@After
+    @After
     public void tearDown() {
         super.setUp();
         validator = null;
     }
-    
+
     @Test
     public void testSupported() throws Exception {
         assertTrue(validator.supports(Map.class));

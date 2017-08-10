@@ -70,21 +70,22 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
     public DefaultAtlasContext(DefaultAtlasContextFactory factory, URI atlasMappingUri) throws AtlasException {
         this(factory, atlasMappingUri, AtlasMappingFormat.XML);
     }
-    
-    public DefaultAtlasContext(DefaultAtlasContextFactory factory, URI atlasMappingUri, AtlasMappingFormat format) throws AtlasException {
+
+    public DefaultAtlasContext(DefaultAtlasContextFactory factory, URI atlasMappingUri, AtlasMappingFormat format)
+            throws AtlasException {
         this.factory = factory;
         this.uuid = UUID.randomUUID();
         this.atlasMappingUri = atlasMappingUri;
         this.atlasMappingFormat = format;
     }
-    
+
     public DefaultAtlasContext(DefaultAtlasContextFactory factory, AtlasMapping mapping) throws AtlasException {
         this.factory = factory;
         this.uuid = UUID.randomUUID();
         this.mappingDefinition = mapping;
     }
 
-    /** 
+    /**
      * TODO: For dynamic re-load. This needs lock()
      * 
      * @throws AtlasException
@@ -100,9 +101,9 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
         List<AtlasModuleInfo> modules = factory.getModules();
 
         for (AtlasModuleInfo module : modules) {
-            if(AtlasUtil.matchUriModule(module.getUri(), getSourceModuleUri())) {
+            if (AtlasUtil.matchUriModule(module.getUri(), getSourceModuleUri())) {
                 try {
-                    setSourceModuleClass((Class<AtlasModule>)Class.forName(module.getModuleClassName()));
+                    setSourceModuleClass((Class<AtlasModule>) Class.forName(module.getModuleClassName()));
                     setSourceModule(getSourceModuleClass().newInstance());
                     getSourceModule().setMode(AtlasModuleMode.SOURCE);
                     getSourceModule().setConversionService(getDefaultAtlasContextFactory().getConversionService());
@@ -115,9 +116,9 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
                     throw new AtlasException("Unable to initialize target module: " + module.getModuleClassName(), e);
                 }
             }
-            if(AtlasUtil.matchUriModule(module.getUri(), getTargetModuleUri())) {
+            if (AtlasUtil.matchUriModule(module.getUri(), getTargetModuleUri())) {
                 try {
-                    setTargetModuleClass((Class<AtlasModule>)Class.forName(module.getModuleClassName()));
+                    setTargetModuleClass((Class<AtlasModule>) Class.forName(module.getModuleClassName()));
                     setTargetModule(getTargetModuleClass().newInstance());
                     getTargetModule().setMode(AtlasModuleMode.TARGET);
                     getTargetModule().setConversionService(getDefaultAtlasContextFactory().getConversionService());
@@ -130,18 +131,20 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
                     throw new AtlasException("Unable to initialize target module: " + module.getModuleClassName(), e);
                 }
             }
-        }		
+        }
     }
 
     protected void registerJmx(DefaultAtlasContext context) {
         try {
-            setJmxObjectName(new ObjectName(getDefaultAtlasContextFactory().getJmxObjectName()+",context=Contexts,uuid="+uuid.toString()));
+            setJmxObjectName(new ObjectName(
+                    getDefaultAtlasContextFactory().getJmxObjectName() + ",context=Contexts,uuid=" + uuid.toString()));
             ManagementFactory.getPlatformMBeanServer().registerMBean(this, getJmxObjectName());
-            if(logger.isDebugEnabled()) {
+            if (logger.isDebugEnabled()) {
                 logger.debug("Registered AtlasContext " + context.getUuid() + " with JMX");
             }
         } catch (Throwable t) {
-            logger.warn("Failured to register AtlasContext " + context.getUuid() + " with JMX msg: " + t.getMessage(), t);
+            logger.warn("Failured to register AtlasContext " + context.getUuid() + " with JMX msg: " + t.getMessage(),
+                    t);
         }
     }
 
@@ -151,7 +154,7 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
      */
     @Override
     public void process(AtlasSession session) throws AtlasException {
-        if(logger.isDebugEnabled()) {
+        if (logger.isDebugEnabled()) {
             logger.debug("Begin process " + (session == null ? null : session.toString()));
         }
 
@@ -159,29 +162,27 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
         getTargetModule().processPreValidation(session);
 
         // TODO: Finish validations
-        /* 
-            if(session.hasErrors()) {
-                logger.error(String.format("Aborting processing due to %s errors", session.errorCount()));
-                return;
-            }
+        /*
+         * if(session.hasErrors()) {
+         * logger.error(String.format("Aborting processing due to %s errors",
+         * session.errorCount())); return; }
          */
         getSourceModule().processPreInputExecution(session);
         getTargetModule().processPreOutputExecution(session);
 
         // TODO: Finish validations
-        /* 
-            if(session.hasErrors()) {
-                logger.error(String.format("Aborting processing due to %s errors", session.errorCount()));
-                return;
-            }
+        /*
+         * if(session.hasErrors()) {
+         * logger.error(String.format("Aborting processing due to %s errors",
+         * session.errorCount())); return; }
          */
 
-        for(BaseMapping mapping : session.getMapping().getMappings().getMapping()) {		    
+        for (BaseMapping mapping : session.getMapping().getMappings().getMapping()) {
             getSourceModule().processInputMapping(session, mapping);
             getSourceModule().processInputActions(session, mapping);
-            getTargetModule().processOutputMapping(session, mapping);            		    
+            getTargetModule().processOutputMapping(session, mapping);
 
-            if(session.hasErrors()) {
+            if (session.hasErrors()) {
                 logger.error(String.format("Aborting processing due to %s errors", session.errorCount()));
                 break;
             }
@@ -191,45 +192,46 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
         getTargetModule().processPostValidation(session);
 
         // TODO: Finish validations
-        /* 
-            if(session.hasErrors()) {
-                logger.error(String.format("Aborting processing due to %s errors", session.errorCount()));
-                return;
-            }
+        /*
+         * if(session.hasErrors()) {
+         * logger.error(String.format("Aborting processing due to %s errors",
+         * session.errorCount())); return; }
          */
 
         getSourceModule().processPostInputExecution(session);
         getTargetModule().processPostOutputExecution(session);
 
-        if(logger.isDebugEnabled()) {
+        if (logger.isDebugEnabled()) {
             logger.debug("End process " + (session == null ? null : session.toString()));
         }
     }
 
     @Override
     public void processValidation(AtlasSession session) throws AtlasException {
-        if(logger.isDebugEnabled()) {
+        if (logger.isDebugEnabled()) {
             logger.debug("Begin processValidation " + (session == null ? null : session.toString()));
         }
 
         List<Validation> validations = getContextFactory().getValidationService().validateMapping(session.getMapping());
-        if(validations != null && !validations.isEmpty()) {
+        if (validations != null && !validations.isEmpty()) {
             session.getValidations().getValidation().addAll(validations);
         }
 
-        if(logger.isDebugEnabled()) {
+        if (logger.isDebugEnabled()) {
             logger.debug("Detected " + validations.size() + " core validation notices");
         }
 
         getSourceModule().processPreValidation(session);
         getTargetModule().processPreValidation(session);
 
-        if(logger.isDebugEnabled()) {
+        if (logger.isDebugEnabled()) {
             logger.debug("End processValidation " + (session == null ? null : session.toString()));
         }
     }
 
-    protected DefaultAtlasContextFactory getDefaultAtlasContextFactory() { return this.factory; }
+    protected DefaultAtlasContextFactory getDefaultAtlasContextFactory() {
+        return this.factory;
+    }
 
     @Override
     public AtlasContextFactory getContextFactory() {
@@ -243,7 +245,8 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
     @Override
     public AtlasSession createSession() throws AtlasValidationException {
         if (atlasMappingUri != null) {
-            return createSession(getDefaultAtlasContextFactory().getMappingService().loadMapping(atlasMappingUri, atlasMappingFormat));
+            return createSession(getDefaultAtlasContextFactory().getMappingService().loadMapping(atlasMappingUri,
+                    atlasMappingFormat));
         } else {
             return createSession(mappingDefinition);
         }
@@ -338,14 +341,16 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
     }
 
     public String getSourceModuleUri() {
-        if(getMapping() != null && getMapping().getDataSource() != null && getMapping().getDataSource().get(0) != null) {
+        if (getMapping() != null && getMapping().getDataSource() != null
+                && getMapping().getDataSource().get(0) != null) {
             return getMapping().getDataSource().get(0).getUri();
         }
         return null;
     }
 
     public String getTargetModuleUri() {
-        if(getMapping() != null && getMapping().getDataSource() != null && getMapping().getDataSource().get(1) != null) {
+        if (getMapping() != null && getMapping().getDataSource() != null
+                && getMapping().getDataSource().get(1) != null) {
             return getMapping().getDataSource().get(1).getUri();
         }
         return null;
@@ -388,10 +393,10 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
     @Override
     public String toString() {
         return "DefaultAtlasContext [jmxObjectName=" + jmxObjectName + ", uuid=" + uuid + ", factory=" + factory
-                + ", mappingName=" + getMappingName() + ", mappingUri=" + getMappingUri() 
-                + ", sourceModule=" + sourceModule + ", targetModule=" + targetModule
-                + ", sourceModuleClass=" + sourceModuleClass + ", targetModuleClass=" + targetModuleClass
-                + ", sourceFormat=" + sourceFormat + ", targetFormat=" + targetFormat + ", sourceProperties="
-                + sourceProperties + ", targetProperties=" + targetProperties + "]";
-    }	
+                + ", mappingName=" + getMappingName() + ", mappingUri=" + getMappingUri() + ", sourceModule="
+                + sourceModule + ", targetModule=" + targetModule + ", sourceModuleClass=" + sourceModuleClass
+                + ", targetModuleClass=" + targetModuleClass + ", sourceFormat=" + sourceFormat + ", targetFormat="
+                + targetFormat + ", sourceProperties=" + sourceProperties + ", targetProperties=" + targetProperties
+                + "]";
+    }
 }

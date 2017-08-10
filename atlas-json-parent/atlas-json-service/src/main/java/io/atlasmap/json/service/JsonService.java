@@ -114,17 +114,17 @@ public class JsonService extends Application {
 
         JsonInspectionResponse response = new JsonInspectionResponse();
         JsonDocument d = null;
-        
-  
+
         try {
 
             if (request.getType() == null || request.getJsonData() == null) {
-                response.setErrorMessage("Json data and Instance or Schema inspection type must be specified in request");
+                response.setErrorMessage(
+                        "Json data and Instance or Schema inspection type must be specified in request");
             } else {
                 JsonDocumentInspectionService s = new JsonDocumentInspectionService();
-                
+
                 String jsonData = cleanJsonData(request.getJsonData());
-                if(!validJsonData(jsonData)) {
+                if (!validJsonData(jsonData)) {
                     response.setErrorMessage("Invalid json payload specified");
                 } else {
                     switch (request.getType()) {
@@ -151,19 +151,19 @@ public class JsonService extends Application {
                 .header("Access-Control-Allow-Headers", "Content-Type")
                 .header("Access-Control-Allow-Methods", "GET,PUT,POST,PATCH,DELETE").entity(response).build();
     }
-    
+
     protected boolean validJsonData(String jsonData) {
-        if(jsonData == null || jsonData.isEmpty()) {
+        if (jsonData == null || jsonData.isEmpty()) {
             return false;
         }
-        
-        if(!jsonData.startsWith("{") && !jsonData.startsWith("[")) {
+
+        if (!jsonData.startsWith("{") && !jsonData.startsWith("[")) {
             return false;
-        }        
-        
+        }
+
         return true;
     }
-    
+
     protected String cleanJsonData(String jsonData) {
         return jsonData.trim();
     }

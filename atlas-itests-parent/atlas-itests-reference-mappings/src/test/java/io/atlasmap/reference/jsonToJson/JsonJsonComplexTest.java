@@ -31,35 +31,39 @@ public class JsonJsonComplexTest extends AtlasMappingBaseTest {
 
     @Test
     public void testProcessJsonJsonComplexOrderAutodetectUnrooted() throws Exception {
-        AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/jsonToJson/atlasmapping-complex-order-autodetect-unrooted.xml").toURI());
+        AtlasContext context = atlasContextFactory.createContext(
+                new File("src/test/resources/jsonToJson/atlasmapping-complex-order-autodetect-unrooted.xml").toURI());
 
         AtlasSession session = context.createSession();
-        String source = AtlasTestUtil.loadFileAsString("src/test/resources/jsonToJson/atlas-json-complex-order-autodetect-unrooted.json");
+        String source = AtlasTestUtil
+                .loadFileAsString("src/test/resources/jsonToJson/atlas-json-complex-order-autodetect-unrooted.json");
         session.setInput(source);
         context.process(session);
-        
+
         Object object = session.getOutput();
         assertNotNull(object);
         assertTrue(object instanceof String);
         AtlasJsonTestUnrootedMapper testMapper = new AtlasJsonTestUnrootedMapper();
-        TargetOrder targetObject = testMapper.readValue((String)object, TargetOrder.class);
+        TargetOrder targetObject = testMapper.readValue((String) object, TargetOrder.class);
         AtlasTestUtil.validateJsonOrder(targetObject);
     }
-    
+
     @Test
     public void testProcessJsonJsonComplexOrderAutodetectRooted() throws Exception {
-        AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/jsonToJson/atlasmapping-complex-order-autodetect-rooted.xml").toURI());
+        AtlasContext context = atlasContextFactory.createContext(
+                new File("src/test/resources/jsonToJson/atlasmapping-complex-order-autodetect-rooted.xml").toURI());
 
         AtlasSession session = context.createSession();
-        String source = AtlasTestUtil.loadFileAsString("src/test/resources/jsonToJson/atlas-json-complex-order-autodetect-rooted.json");
+        String source = AtlasTestUtil
+                .loadFileAsString("src/test/resources/jsonToJson/atlas-json-complex-order-autodetect-rooted.json");
         session.setInput(source);
         context.process(session);
-        
+
         Object object = session.getOutput();
         assertNotNull(object);
         assertTrue(object instanceof String);
         AtlasJsonTestRootedMapper testMapper = new AtlasJsonTestRootedMapper();
-        TargetOrder targetObject = testMapper.readValue((String)object, TargetOrder.class);
+        TargetOrder targetObject = testMapper.readValue((String) object, TargetOrder.class);
         AtlasTestUtil.validateJsonOrder(targetObject);
     }
 

@@ -30,88 +30,73 @@ import java.util.Map;
 
 public class ClassInspectionServiceTest {
 
-	private ClassInspectionService classInspectionService = null;
-	
-	@Before
-	public void setUp() {
-		classInspectionService = new ClassInspectionService();
-		classInspectionService.setConversionService(DefaultAtlasConversionService.getInstance());
-	}
-	
-	@After
-	public void tearDown() {
-		classInspectionService = null;
-	}
-	
-	@Test
-	public void testDetectArrayDimensions() {
-		assertNull(classInspectionService.detectArrayDimensions(null));
-		assertEquals(new Integer(0), classInspectionService.detectArrayDimensions(String.class));
-		assertEquals(new Integer(1), classInspectionService.detectArrayDimensions(int[].class));
-		assertEquals(new Integer(2), classInspectionService.detectArrayDimensions(String[][].class));
-		assertEquals(new Integer(3), classInspectionService.detectArrayDimensions(List[][][].class));
-		assertEquals(new Integer(4), classInspectionService.detectArrayDimensions(Map[][][][].class));
-		assertEquals(new Integer(64), classInspectionService.detectArrayDimensions(int[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][].class));
-		// MAX_DIM_LIMIT NOTE: 255 is the JVM Spec limit
-		assertEquals(new Integer(255), 
-				classInspectionService.detectArrayDimensions(int[][][][][][][][][][][][][][][][]
-														[][][][][][][][][][][][][][][][]
-														[][][][][][][][][][][][][][][][]
-														[][][][][][][][][][][][][][][][]
-														[][][][][][][][][][][][][][][][]
-														[][][][][][][][][][][][][][][][]
-														[][][][][][][][][][][][][][][][]
-														[][][][][][][][][][][][][][][][]
-														[][][][][][][][][][][][][][][][]
-														[][][][][][][][][][][][][][][][]
-														[][][][][][][][][][][][][][][][]
-														[][][][][][][][][][][][][][][][]
-														[][][][][][][][][][][][][][][][]
-														[][][][][][][][][][][][][][][][]
-														[][][][][][][][][][][][][][][][]
-														[][][][][][][][][][][][][][][].class));
-	}
-	
-	@Test
-	public void testDetectArrayClass() {
-		assertNull(classInspectionService.detectArrayClass(null));
-		assertEquals(String.class, classInspectionService.detectArrayClass(String.class));
-		assertEquals(int.class, classInspectionService.detectArrayClass(int[].class));
-		assertEquals(String.class, classInspectionService.detectArrayClass(String[][].class));
-		assertEquals(List.class, classInspectionService.detectArrayClass(List[][][].class));
-		assertEquals(Map.class, classInspectionService.detectArrayClass(Map[][][][].class));
-	}
-	
-	@Test
-	public void testClasspathToList() {
-		// Null
-		ClassInspectionService cis = new ClassInspectionService();
-		assertNull(cis.classpathStringToList(null));
-		
-		// Zero
-		assertNotNull(cis.classpathStringToList(""));
-		assertEquals(new Integer(0), new Integer(cis.classpathStringToList("").size()));
-		
-		// One
-		assertNotNull(cis.classpathStringToList("foo.jar"));
-		assertEquals(new Integer(1), new Integer(cis.classpathStringToList("foo.jar").size()));
-		assertEquals("foo.jar", cis.classpathStringToList("foo.jar").get(0));
+    private ClassInspectionService classInspectionService = null;
 
-		// Several
-		assertNotNull(cis.classpathStringToList("foo.jar:bar.jar:blah.jar"));
-		assertEquals(new Integer(3), new Integer(cis.classpathStringToList("foo.jar:bar.jar:blah.jar").size()));
-		assertEquals("foo.jar", cis.classpathStringToList("foo.jar:bar.jar:blah.jar").get(0));
-		assertEquals("bar.jar", cis.classpathStringToList("foo.jar:bar.jar:blah.jar").get(1));
-		assertEquals("blah.jar", cis.classpathStringToList("foo.jar:bar.jar:blah.jar").get(2));
+    @Before
+    public void setUp() {
+        classInspectionService = new ClassInspectionService();
+        classInspectionService.setConversionService(DefaultAtlasConversionService.getInstance());
+    }
 
-		
-		// Several
-		String tmpcp = File.separator + "foo.jar:" + File.separator + "bar.jar:" + File.separator + "blah.jar";
-		assertNotNull(cis.classpathStringToList(tmpcp));
-		assertEquals(new Integer(3), new Integer(cis.classpathStringToList(tmpcp).size()));
-		assertEquals(File.separator +"foo.jar", cis.classpathStringToList(tmpcp).get(0));
-		assertEquals(File.separator +"bar.jar", cis.classpathStringToList(tmpcp).get(1));
-		assertEquals(File.separator +"blah.jar", cis.classpathStringToList(tmpcp).get(2));
-	}
+    @After
+    public void tearDown() {
+        classInspectionService = null;
+    }
+
+    @Test
+    public void testDetectArrayDimensions() {
+        assertNull(classInspectionService.detectArrayDimensions(null));
+        assertEquals(new Integer(0), classInspectionService.detectArrayDimensions(String.class));
+        assertEquals(new Integer(1), classInspectionService.detectArrayDimensions(int[].class));
+        assertEquals(new Integer(2), classInspectionService.detectArrayDimensions(String[][].class));
+        assertEquals(new Integer(3), classInspectionService.detectArrayDimensions(List[][][].class));
+        assertEquals(new Integer(4), classInspectionService.detectArrayDimensions(Map[][][][].class));
+        assertEquals(new Integer(64), classInspectionService.detectArrayDimensions(
+                int[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][].class));
+        // MAX_DIM_LIMIT NOTE: 255 is the JVM Spec limit
+        assertEquals(new Integer(255), classInspectionService.detectArrayDimensions(
+                int[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][].class));
+    }
+
+    @Test
+    public void testDetectArrayClass() {
+        assertNull(classInspectionService.detectArrayClass(null));
+        assertEquals(String.class, classInspectionService.detectArrayClass(String.class));
+        assertEquals(int.class, classInspectionService.detectArrayClass(int[].class));
+        assertEquals(String.class, classInspectionService.detectArrayClass(String[][].class));
+        assertEquals(List.class, classInspectionService.detectArrayClass(List[][][].class));
+        assertEquals(Map.class, classInspectionService.detectArrayClass(Map[][][][].class));
+    }
+
+    @Test
+    public void testClasspathToList() {
+        // Null
+        ClassInspectionService cis = new ClassInspectionService();
+        assertNull(cis.classpathStringToList(null));
+
+        // Zero
+        assertNotNull(cis.classpathStringToList(""));
+        assertEquals(new Integer(0), new Integer(cis.classpathStringToList("").size()));
+
+        // One
+        assertNotNull(cis.classpathStringToList("foo.jar"));
+        assertEquals(new Integer(1), new Integer(cis.classpathStringToList("foo.jar").size()));
+        assertEquals("foo.jar", cis.classpathStringToList("foo.jar").get(0));
+
+        // Several
+        assertNotNull(cis.classpathStringToList("foo.jar:bar.jar:blah.jar"));
+        assertEquals(new Integer(3), new Integer(cis.classpathStringToList("foo.jar:bar.jar:blah.jar").size()));
+        assertEquals("foo.jar", cis.classpathStringToList("foo.jar:bar.jar:blah.jar").get(0));
+        assertEquals("bar.jar", cis.classpathStringToList("foo.jar:bar.jar:blah.jar").get(1));
+        assertEquals("blah.jar", cis.classpathStringToList("foo.jar:bar.jar:blah.jar").get(2));
+
+        // Several
+        String tmpcp = File.separator + "foo.jar:" + File.separator + "bar.jar:" + File.separator + "blah.jar";
+        assertNotNull(cis.classpathStringToList(tmpcp));
+        assertEquals(new Integer(3), new Integer(cis.classpathStringToList(tmpcp).size()));
+        assertEquals(File.separator + "foo.jar", cis.classpathStringToList(tmpcp).get(0));
+        assertEquals(File.separator + "bar.jar", cis.classpathStringToList(tmpcp).get(1));
+        assertEquals(File.separator + "blah.jar", cis.classpathStringToList(tmpcp).get(2));
+    }
 
 }

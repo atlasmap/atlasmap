@@ -1,35 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-    Copyright (C) 2017 Red Hat, Inc.
-    Licensed under the Apache License, Version 2.0 (the "License");
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-            http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
-
--->
-<schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:ns="http://atlasmap.io/xml/test/v2" targetNamespace="http://atlasmap.io/xml/test/v2"
-	elementFormDefault="qualified" attributeFormDefault="unqualified">
+<!-- Copyright (C) 2017 Red Hat, Inc. Licensed under the Apache License, 
+    Version 2.0 (the "License"); you may not use this file except in compliance 
+    with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+    Unless required by applicable law or agreed to in writing, software distributed 
+    under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES 
+    OR CONDITIONS OF ANY KIND, either express or implied. See the License for 
+    the specific language governing permissions and limitations under the License. -->
+<schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:ns="http://atlasmap.io/xml/test/v2"
+    targetNamespace="http://atlasmap.io/xml/test/v2" elementFormDefault="qualified"
+    attributeFormDefault="unqualified">
 
     <element name="XmlFPA" type="ns:XmlFlatPrimitiveAttribute" />
     <element name="XmlFBPA" type="ns:XmlFlatBoxedPrimitiveAttribute" />
     <element name="XmlFPE" type="ns:XmlFlatPrimitiveElement" />
     <element name="XmlFBPE" type="ns:XmlFlatBoxedPrimitiveElement" />
-    
+
     <element name="XmlCA" type="ns:XmlContactAttribute" />
     <element name="XmlCE" type="ns:XmlContactElement" />
     <element name="XmlAA" type="ns:XmlAddressAttribute" />
     <element name="XmlAE" type="ns:XmlAddressElement" />
     <element name="XmlOA" type="ns:XmlOrderAttribute" />
     <element name="XmlOE" type="ns:XmlOrderElement" />
-    
-	<complexType name="XmlFlatPrimitiveAttribute">
+
+    <complexType name="XmlFlatPrimitiveAttribute">
         <attribute name="booleanField" type="boolean" use="required" />
         <attribute name="byteField" type="byte" use="required" />
         <attribute name="charField" type="string" use="required" />
@@ -37,95 +30,118 @@
         <attribute name="floatField" type="float" use="required" />
         <attribute name="intField" type="int" use="required" />
         <attribute name="longField" type="long" use="required" />
-        <attribute name="shortField" type="short" use="required" /> 
- 	</complexType>
-    
+        <attribute name="shortField" type="short" use="required" />
+    </complexType>
+
     <complexType name="XmlFlatBoxedPrimitiveAttribute">
-        <attribute name="boxedBooleanField" type="boolean" use="optional" />
+        <attribute name="boxedBooleanField" type="boolean"
+            use="optional" />
         <attribute name="boxedByteField" type="byte" use="optional" />
         <attribute name="boxedCharField" type="string" use="optional" />
         <attribute name="boxedDoubleField" type="double" use="optional" />
         <attribute name="boxedFloatField" type="float" use="optional" />
         <attribute name="boxedIntField" type="int" use="optional" />
         <attribute name="boxedLongField" type="long" use="optional" />
-        <attribute name="boxedShortField" type="short" use="optional" /> 
+        <attribute name="boxedShortField" type="short" use="optional" />
         <attribute name="boxedStringField" type="string" use="optional" />
     </complexType>
-    
+
     <complexType name="XmlFlatPrimitiveElement">
         <sequence>
-            <element name="booleanField" type="boolean" minOccurs="1" maxOccurs="1" />
-            <element name="byteField" type="byte" minOccurs="1" maxOccurs="1" />
-            <element name="charField" type="string" minOccurs="1" maxOccurs="1" />
-            <element name="doubleField" type="double" minOccurs="1" maxOccurs="1" />
-            <element name="floatField" type="float" minOccurs="1" maxOccurs="1" />
-            <element name="intField" type="int" minOccurs="1" maxOccurs="1" />
-            <element name="longField" type="long" minOccurs="1" maxOccurs="1" />
-            <element name="shortField" type="short" minOccurs="1" maxOccurs="1" />
-        </sequence> 
-    </complexType>
-    
-    <complexType name="XmlFlatBoxedPrimitiveElement">
-        <sequence>
-            <element name="boxedBooleanField" type="boolean" minOccurs="0" maxOccurs="1" />
-            <element name="boxedByteField" type="byte" minOccurs="0" maxOccurs="1" />
-            <element name="boxedCharField" type="string" minOccurs="0" maxOccurs="1" />
-            <element name="boxedDoubleField" type="double" minOccurs="0" maxOccurs="1" />
-            <element name="boxedFloatField" type="float" minOccurs="0" maxOccurs="1" />
-            <element name="boxedIntField" type="int" minOccurs="0" maxOccurs="1" />
-            <element name="boxedLongField" type="long" minOccurs="0" maxOccurs="1" />
-            <element name="boxedShortField" type="short" minOccurs="0" maxOccurs="1" /> 
-            <element name="boxedStringField" type="string" minOccurs="0" maxOccurs="1" />
+            <element name="booleanField" type="boolean"
+                minOccurs="1" maxOccurs="1" />
+            <element name="byteField" type="byte" minOccurs="1"
+                maxOccurs="1" />
+            <element name="charField" type="string" minOccurs="1"
+                maxOccurs="1" />
+            <element name="doubleField" type="double" minOccurs="1"
+                maxOccurs="1" />
+            <element name="floatField" type="float" minOccurs="1"
+                maxOccurs="1" />
+            <element name="intField" type="int" minOccurs="1"
+                maxOccurs="1" />
+            <element name="longField" type="long" minOccurs="1"
+                maxOccurs="1" />
+            <element name="shortField" type="short" minOccurs="1"
+                maxOccurs="1" />
         </sequence>
     </complexType>
-   
+
+    <complexType name="XmlFlatBoxedPrimitiveElement">
+        <sequence>
+            <element name="boxedBooleanField" type="boolean"
+                minOccurs="0" maxOccurs="1" />
+            <element name="boxedByteField" type="byte"
+                minOccurs="0" maxOccurs="1" />
+            <element name="boxedCharField" type="string"
+                minOccurs="0" maxOccurs="1" />
+            <element name="boxedDoubleField" type="double"
+                minOccurs="0" maxOccurs="1" />
+            <element name="boxedFloatField" type="float"
+                minOccurs="0" maxOccurs="1" />
+            <element name="boxedIntField" type="int" minOccurs="0"
+                maxOccurs="1" />
+            <element name="boxedLongField" type="long"
+                minOccurs="0" maxOccurs="1" />
+            <element name="boxedShortField" type="short"
+                minOccurs="0" maxOccurs="1" />
+            <element name="boxedStringField" type="string"
+                minOccurs="0" maxOccurs="1" />
+        </sequence>
+    </complexType>
+
     <complexType name="XmlContactAttribute">
         <attribute name="firstName" type="string" />
         <attribute name="lastName" type="string" />
         <attribute name="phoneNumber" type="string" />
-        <attribute name="zipCode" type="string" /> 
+        <attribute name="zipCode" type="string" />
     </complexType>
-   
+
     <complexType name="XmlContactElement">
         <sequence>
             <element name="firstName" type="string" />
             <element name="lastName" type="string" />
             <element name="phoneNumber" type="string" />
-            <element name="zipCode" type="string" /> 
+            <element name="zipCode" type="string" />
         </sequence>
     </complexType>
-    
+
     <complexType name="XmlAddressAttribute">
         <attribute name="addressLine1" type="string" />
         <attribute name="addressLine2" type="string" />
         <attribute name="city" type="string" />
         <attribute name="state" type="string" />
-        <attribute name="zipCode" type="string" /> 
+        <attribute name="zipCode" type="string" />
     </complexType>
-   
+
     <complexType name="XmlAddressElement">
         <sequence>
             <element name="addressLine1" type="string" />
             <element name="addressLine2" type="string" />
             <element name="city" type="string" />
             <element name="state" type="string" />
-            <element name="zipCode" type="string" /> 
+            <element name="zipCode" type="string" />
         </sequence>
     </complexType>
-    
+
     <complexType name="XmlOrderAttribute">
         <sequence>
-            <element name="Address" type="ns:XmlAddressAttribute" minOccurs="0" maxOccurs="1" />
-            <element name="Contact" type="ns:XmlContactAttribute" minOccurs="0" maxOccurs="1" />
+            <element name="Address" type="ns:XmlAddressAttribute"
+                minOccurs="0" maxOccurs="1" />
+            <element name="Contact" type="ns:XmlContactAttribute"
+                minOccurs="0" maxOccurs="1" />
         </sequence>
         <attribute name="orderId" type="int" />
     </complexType>
-   
+
     <complexType name="XmlOrderElement">
         <sequence>
-            <element name="orderId" type="string" minOccurs="1" maxOccurs="1" />
-            <element name="Address" type="ns:XmlAddressElement" minOccurs="0" maxOccurs="1" />
-            <element name="Contact" type="ns:XmlContactElement" minOccurs="0" maxOccurs="1" />
+            <element name="orderId" type="string" minOccurs="1"
+                maxOccurs="1" />
+            <element name="Address" type="ns:XmlAddressElement"
+                minOccurs="0" maxOccurs="1" />
+            <element name="Contact" type="ns:XmlContactElement"
+                minOccurs="0" maxOccurs="1" />
         </sequence>
     </complexType>
 

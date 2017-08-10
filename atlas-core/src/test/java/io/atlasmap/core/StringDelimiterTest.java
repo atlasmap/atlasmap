@@ -39,7 +39,7 @@ public class StringDelimiterTest {
         assertEquals(StringDelimiter.SPACE.getValue(), values.get(0));
         assertEquals(StringDelimiter.MULTISPACE.getValue(), values.get(1));
         assertEquals(StringDelimiter.COMMA.getValue(), values.get(2));
-        assertEquals(StringDelimiter.COLON.getValue(), values.get(3));    
+        assertEquals(StringDelimiter.COLON.getValue(), values.get(3));
     }
 
     @Test
@@ -50,7 +50,7 @@ public class StringDelimiterTest {
         assertEquals(StringDelimiter.SPACE.getName(), names.get(0));
         assertEquals(StringDelimiter.MULTISPACE.getName(), names.get(1));
         assertEquals(StringDelimiter.COMMA.getName(), names.get(2));
-        assertEquals(StringDelimiter.COLON.getName(), names.get(3));        
+        assertEquals(StringDelimiter.COLON.getName(), names.get(3));
     }
 
 }

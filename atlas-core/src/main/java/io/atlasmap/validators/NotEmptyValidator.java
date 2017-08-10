@@ -40,9 +40,10 @@ public class NotEmptyValidator implements AtlasValidator {
     }
 
     public boolean supports(Object object) {
-        return (object instanceof List || object instanceof Map || object instanceof Set || object instanceof Collection);
+        return (object instanceof List || object instanceof Map || object instanceof Set
+                || object instanceof Collection);
     }
-    
+
     @Override
     public void validate(Object target, List<Validation> validations) {
         validate(target, validations, ValidationStatus.ERROR);
@@ -50,11 +51,11 @@ public class NotEmptyValidator implements AtlasValidator {
 
     @Override
     public void validate(Object target, List<Validation> validations, ValidationStatus status) {
-        
-        if(!supports(target)) {
+
+        if (!supports(target)) {
             return;
         }
-         
+
         if (((Collection<?>) target).isEmpty()) {
             Validation validation = new Validation();
             validation.setField(field);

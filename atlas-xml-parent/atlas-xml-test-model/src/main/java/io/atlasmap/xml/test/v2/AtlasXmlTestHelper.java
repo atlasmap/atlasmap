@@ -13,8 +13,8 @@ import com.sun.xml.bind.marshaller.NamespacePrefixMapper;
 import com.sun.xml.bind.v2.WellKnownNamespace;
 
 public class AtlasXmlTestHelper {
-    
-    private static JAXBContext jaxbContext = null; 
+
+    private static JAXBContext jaxbContext = null;
     private static Unmarshaller unmarshaller = null;
     private static Marshaller marshaller = null;
 
@@ -25,7 +25,9 @@ public class AtlasXmlTestHelper {
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
         marshaller.setProperty("com.sun.xml.bind.namespacePrefixMapper", new NamespacePrefixMapper() {
             @Override
-            public String[] getPreDeclaredNamespaceUris() { return new String[] { XMLConstants.W3C_XML_SCHEMA_NS_URI, XMLConstants.W3C_XML_SCHEMA_INSTANCE_NS_URI }; }
+            public String[] getPreDeclaredNamespaceUris() {
+                return new String[] { XMLConstants.W3C_XML_SCHEMA_NS_URI, XMLConstants.W3C_XML_SCHEMA_INSTANCE_NS_URI };
+            }
 
             @Override
             public String getPreferredPrefix(String namespaceUri, String suggestion, boolean requirePrefix) {
@@ -40,19 +42,19 @@ public class AtlasXmlTestHelper {
             }
         });
     }
-    
+
     public static Object unmarshal(String xmlData, Class<?> clazz) throws Exception {
         StreamSource data = new StreamSource(new StringReader(xmlData));
-        
-        if(unmarshaller == null) {
+
+        if (unmarshaller == null) {
             init();
         }
         return unmarshaller.unmarshal(data, clazz);
     }
-    
+
     public static String marshal(Object object) throws Exception {
         StringWriter writer = new StringWriter();
-        if(marshaller == null) {
+        if (marshaller == null) {
             init();
         }
         marshaller.marshal(object, writer);

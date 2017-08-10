@@ -29,10 +29,13 @@ public class XmlXmlMultiSourceTest extends AtlasMappingBaseTest {
 
     @Test
     public void testProcessBasic() throws Exception {
-        AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/xmlToXml/atlasmapping-multisource-basic.xml").toURI());
+        AtlasContext context = atlasContextFactory
+                .createContext(new File("src/test/resources/xmlToXml/atlasmapping-multisource-basic.xml").toURI());
         AtlasSession session = context.createSession();
-        String sourceContact = AtlasTestUtil.loadFileAsString("src/test/resources/xmlToXml/atlas-xml-contact-attribute.xml");
-        String sourceAddress = AtlasTestUtil.loadFileAsString("src/test/resources/xmlToXml/atlas-xml-address-attribute.xml");
+        String sourceContact = AtlasTestUtil
+                .loadFileAsString("src/test/resources/xmlToXml/atlas-xml-contact-attribute.xml");
+        String sourceAddress = AtlasTestUtil
+                .loadFileAsString("src/test/resources/xmlToXml/atlas-xml-address-attribute.xml");
         session.setInput(sourceContact, "con");
         session.setInput(sourceAddress, "addr");
         context.process(session);
@@ -40,15 +43,20 @@ public class XmlXmlMultiSourceTest extends AtlasMappingBaseTest {
         Object object = session.getOutput();
         assertNotNull(object);
         assertTrue(object instanceof String);
-        assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><Contact firstName=\"Ozzie\" zipCode=\"90210\"/>", (String)object);
+        assertEquals(
+                "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><Contact firstName=\"Ozzie\" zipCode=\"90210\"/>",
+                (String) object);
     }
 
     @Test
     public void testProcessComplex() throws Exception {
-        AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/xmlToXml/atlasmapping-multisource-complex.xml").toURI());
+        AtlasContext context = atlasContextFactory
+                .createContext(new File("src/test/resources/xmlToXml/atlasmapping-multisource-complex.xml").toURI());
         AtlasSession session = context.createSession();
-        String sourceContact = AtlasTestUtil.loadFileAsString("src/test/resources/xmlToXml/atlas-xml-contact-attribute.xml");
-        String sourceAddress = AtlasTestUtil.loadFileAsString("src/test/resources/xmlToXml/atlas-xml-address-attribute.xml");
+        String sourceContact = AtlasTestUtil
+                .loadFileAsString("src/test/resources/xmlToXml/atlas-xml-contact-attribute.xml");
+        String sourceAddress = AtlasTestUtil
+                .loadFileAsString("src/test/resources/xmlToXml/atlas-xml-address-attribute.xml");
         session.setInput(sourceContact, "con");
         session.setInput(sourceAddress, "addr");
         context.process(session);
@@ -56,6 +64,8 @@ public class XmlXmlMultiSourceTest extends AtlasMappingBaseTest {
         Object object = session.getOutput();
         assertNotNull(object);
         assertTrue(object instanceof String);
-        assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><XOA orderId=\"8765309\"><Contact firstName=\"Ozzie\" lastName=\"Smith\" phoneNumber=\"5551212\" zipCode=\"81111\"/><Address addressLine1=\"123 Main St\" addressLine2=\"Suite 42b\" city=\"Anytown\" state=\"NY\" zipCode=\"90210\"/></XOA>", (String)object);
+        assertEquals(
+                "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><XOA orderId=\"8765309\"><Contact firstName=\"Ozzie\" lastName=\"Smith\" phoneNumber=\"5551212\" zipCode=\"81111\"/><Address addressLine1=\"123 Main St\" addressLine2=\"Suite 42b\" city=\"Anytown\" state=\"NY\" zipCode=\"90210\"/></XOA>",
+                (String) object);
     }
 }

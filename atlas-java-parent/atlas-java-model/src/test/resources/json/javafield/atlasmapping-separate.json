@@ -1,36 +1,44 @@
 {
-	"AtlasMapping":{
-		"jsonType":"io.atlasmap.v2.AtlasMapping",
-		"fieldMappings":{
-			"fieldMapping":[{
-				"jsonType":"io.atlasmap.v2.SeparateFieldMapping",
-				"inputField":{
-					"jsonType":"io.atlasmap.v2.MappedField",
-					"field":{
-						"jsonType":"io.atlasmap.java.v2.JavaField",
-						"name":"foo","value":"bar"
-					}
-					,"fieldActions":[]
-				},
-				"outputFields":{
-					"mappedField":[{
-						"jsonType":"io.atlasmap.v2.MappedField",
-						"field":{
-							"jsonType":"io.atlasmap.java.v2.JavaField",
-							"name":"woot","value":"blerg"
-						},
-						"fieldActions":[]
-					},
-						{
-						"jsonType":"io.atlasmap.v2.MappedField",
-						"field":{
-							"jsonType":"io.atlasmap.java.v2.JavaField",
-							"name":"meow",
-							"value":"ruff"
-						},
-						"fieldActions":[]}
-					]}
-				}]
-		},
-	"name":"junit"}
+    "AtlasMapping": {
+        "jsonType": "io.atlasmap.v2.AtlasMapping",
+        "fieldMappings": {
+            "fieldMapping": [
+                {
+                    "jsonType": "io.atlasmap.v2.SeparateFieldMapping",
+                    "inputField": {
+                        "jsonType": "io.atlasmap.v2.MappedField",
+                        "field": {
+                            "jsonType": "io.atlasmap.java.v2.JavaField",
+                            "name": "foo",
+                            "value": "bar"
+                        },
+                        "fieldActions": []
+                    },
+                    "outputFields": {
+                        "mappedField": [
+                            {
+                                "jsonType": "io.atlasmap.v2.MappedField",
+                                "field": {
+                                    "jsonType": "io.atlasmap.java.v2.JavaField",
+                                    "name": "woot",
+                                    "value": "blerg"
+                                },
+                                "fieldActions": []
+                            },
+                            {
+                                "jsonType": "io.atlasmap.v2.MappedField",
+                                "field": {
+                                    "jsonType": "io.atlasmap.java.v2.JavaField",
+                                    "name": "meow",
+                                    "value": "ruff"
+                                },
+                                "fieldActions": []
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        "name": "junit"
+    }
 }

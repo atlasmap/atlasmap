@@ -21,13 +21,13 @@ import static org.junit.Assert.assertNotNull;
 
 public class AtlasXmlModelFactoryTest {
 
-	@Test
-	public void testCreateXmlDocument() {
-		XmlDocument xmlDoc = AtlasXmlModelFactory.createXmlDocument();
-		assertNotNull(xmlDoc);
-		assertNotNull(xmlDoc.getFields());
-		assertNotNull(xmlDoc.getFields().getField());
-		assertEquals(new Integer(0), new Integer(xmlDoc.getFields().getField().size()));
-	}
+    @Test
+    public void testCreateXmlDocument() {
+        XmlDocument xmlDoc = AtlasXmlModelFactory.createXmlDocument();
+        assertNotNull(xmlDoc);
+        assertNotNull(xmlDoc.getFields());
+        assertNotNull(xmlDoc.getFields().getField());
+        assertEquals(new Integer(0), new Integer(xmlDoc.getFields().getField().size()));
+    }
 
 }

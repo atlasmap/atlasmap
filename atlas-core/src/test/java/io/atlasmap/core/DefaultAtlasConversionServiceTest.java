@@ -95,7 +95,8 @@ public class DefaultAtlasConversionServiceTest {
     @Test
     public void findMatchingConverterBySourceClass() throws Exception {
         assertNotNull(service);
-        Optional<AtlasConverter> atlasConverter = service.findMatchingConverter("java.util.Date", "java.time.ZonedDateTime");
+        Optional<AtlasConverter> atlasConverter = service.findMatchingConverter("java.util.Date",
+                "java.time.ZonedDateTime");
         assertNotNull(atlasConverter);
         assertTrue(atlasConverter.isPresent());
         assertTrue(AtlasConverter.class.isAssignableFrom(atlasConverter.get().getClass()));
@@ -105,7 +106,8 @@ public class DefaultAtlasConversionServiceTest {
     @Test
     public void findMatchingConverterBySourceClassNoMatching() throws Exception {
         assertNotNull(service);
-        Optional<AtlasConverter> atlasConverter = service.findMatchingConverter("java.util.Date", "java.time.CustomClass");
+        Optional<AtlasConverter> atlasConverter = service.findMatchingConverter("java.util.Date",
+                "java.time.CustomClass");
         assertFalse(atlasConverter.isPresent());
     }
 
@@ -115,11 +117,12 @@ public class DefaultAtlasConversionServiceTest {
         Optional<AtlasConverter> atlasConverter = service.findMatchingConverter(FieldType.STRING, FieldType.BOOLEAN);
         AtlasConverter converter = atlasConverter.orElse(null);
         assertNotNull(converter);
-        Optional<Method> methods = service.findMatchingMethod(FieldType.STRING, FieldType.BOOLEAN, atlasConverter.orElseGet(null));
+        Optional<Method> methods = service.findMatchingMethod(FieldType.STRING, FieldType.BOOLEAN,
+                atlasConverter.orElseGet(null));
         Method method = methods.orElseGet(null);
         assertNotNull(method);
     }
-    
+
     @Test
     public void testIsPrimitiveClass() {
         assertTrue(service.isPrimitive(boolean.class));
@@ -130,7 +133,7 @@ public class DefaultAtlasConversionServiceTest {
         assertTrue(service.isPrimitive(int.class));
         assertTrue(service.isPrimitive(long.class));
         assertTrue(service.isPrimitive(short.class));
-                
+
         // Negative testing
         assertFalse(service.isPrimitive(Boolean.class));
         assertFalse(service.isPrimitive(Byte.class));
@@ -144,9 +147,9 @@ public class DefaultAtlasConversionServiceTest {
 
         assertFalse(service.isPrimitive(AtlasMapping.class));
         assertFalse(service.isPrimitive(List.class));
-        assertFalse(service.isPrimitive((Class)null));
+        assertFalse(service.isPrimitive((Class) null));
     }
-    
+
     @Test
     public void testIsPrimitiveFieldType() {
         assertTrue(service.isPrimitive(FieldType.BOOLEAN));
@@ -159,7 +162,7 @@ public class DefaultAtlasConversionServiceTest {
         assertTrue(service.isPrimitive(FieldType.LONG));
         assertTrue(service.isPrimitive(FieldType.SHORT));
         assertTrue(service.isPrimitive(FieldType.STRING));
-                
+
         // Negative testing
         assertFalse(service.isPrimitive(FieldType.ALL));
         assertFalse(service.isPrimitive(FieldType.BYTE_ARRAY));
@@ -170,9 +173,9 @@ public class DefaultAtlasConversionServiceTest {
         assertFalse(service.isPrimitive(FieldType.DATE_TZ));
         assertFalse(service.isPrimitive(FieldType.TIME));
         assertFalse(service.isPrimitive(FieldType.TIME_TZ));
-        assertFalse(service.isPrimitive((FieldType)null));
+        assertFalse(service.isPrimitive((FieldType) null));
     }
-    
+
     @Test
     public void testIsBoxedPrimitive() {
         assertTrue(service.isBoxedPrimitive(Boolean.class));
@@ -184,7 +187,7 @@ public class DefaultAtlasConversionServiceTest {
         assertTrue(service.isBoxedPrimitive(Long.class));
         assertTrue(service.isBoxedPrimitive(Short.class));
         assertTrue(service.isBoxedPrimitive(String.class));
-        
+
         // Negative testing
         assertFalse(service.isBoxedPrimitive(boolean.class));
         assertFalse(service.isBoxedPrimitive(byte.class));
@@ -199,7 +202,7 @@ public class DefaultAtlasConversionServiceTest {
         assertFalse(service.isBoxedPrimitive(List.class));
         assertFalse(service.isBoxedPrimitive(null));
     }
-    
+
     @Test
     public void testBoxOrUnboxPrimitive() {
         assertEquals(Boolean.class, service.boxOrUnboxPrimitive(boolean.class));
@@ -217,7 +220,7 @@ public class DefaultAtlasConversionServiceTest {
         assertEquals(Short.class, service.boxOrUnboxPrimitive(short.class));
         assertEquals(short.class, service.boxOrUnboxPrimitive(Short.class));
         assertEquals(String.class, service.boxOrUnboxPrimitive(String.class));
-        
+
         // Negative testing
         assertNotEquals(Boolean.class, service.boxOrUnboxPrimitive(Boolean.class));
         assertNotEquals(boolean.class, service.boxOrUnboxPrimitive(boolean.class));
@@ -234,111 +237,111 @@ public class DefaultAtlasConversionServiceTest {
         assertNotEquals(Short.class, service.boxOrUnboxPrimitive(Short.class));
         assertNotEquals(short.class, service.boxOrUnboxPrimitive(short.class));
         assertNotEquals(String.class, service.boxOrUnboxPrimitive(List.class));
-        
+
         assertNull(service.boxOrUnboxPrimitive(null));
     }
-    
+
     @Test
     public void testCopyPrimitive() {
-        
+
         Object sourceValue = null;
         Object targetValue = service.copyPrimitive(sourceValue);
         assertNull(targetValue);
-        
-        sourceValue = (boolean)true;
-        targetValue = service.copyPrimitive(sourceValue);
-        assertNotNull(targetValue);
-        assertTrue(Boolean.class.getCanonicalName().equals(targetValue.getClass().getCanonicalName()));
-        assertEquals(new Boolean(true), (Boolean)targetValue);
-        sourceValue = (boolean)false;
-        targetValue = service.copyPrimitive(sourceValue);
-        assertNotNull(targetValue);
-        assertTrue(Boolean.class.getCanonicalName().equals(targetValue.getClass().getCanonicalName()));
-        assertEquals(new Boolean(false), (Boolean)targetValue);
-        
-        sourceValue = (byte)1;
-        targetValue = service.copyPrimitive(sourceValue);
-        assertNotNull(targetValue);
-        assertTrue(Byte.class.getCanonicalName().equals(targetValue.getClass().getCanonicalName()));
-        assertEquals(new Byte((byte)1), (Byte)targetValue);
-        sourceValue = (byte)0;
-        targetValue = service.copyPrimitive(sourceValue);
-        assertNotNull(targetValue);
-        assertTrue(Byte.class.getCanonicalName().equals(targetValue.getClass().getCanonicalName()));
-        assertEquals(new Byte((byte)0), (Byte)targetValue);
 
-        sourceValue = (char)'a';
+        sourceValue = (boolean) true;
+        targetValue = service.copyPrimitive(sourceValue);
+        assertNotNull(targetValue);
+        assertTrue(Boolean.class.getCanonicalName().equals(targetValue.getClass().getCanonicalName()));
+        assertEquals(new Boolean(true), (Boolean) targetValue);
+        sourceValue = (boolean) false;
+        targetValue = service.copyPrimitive(sourceValue);
+        assertNotNull(targetValue);
+        assertTrue(Boolean.class.getCanonicalName().equals(targetValue.getClass().getCanonicalName()));
+        assertEquals(new Boolean(false), (Boolean) targetValue);
+
+        sourceValue = (byte) 1;
+        targetValue = service.copyPrimitive(sourceValue);
+        assertNotNull(targetValue);
+        assertTrue(Byte.class.getCanonicalName().equals(targetValue.getClass().getCanonicalName()));
+        assertEquals(new Byte((byte) 1), (Byte) targetValue);
+        sourceValue = (byte) 0;
+        targetValue = service.copyPrimitive(sourceValue);
+        assertNotNull(targetValue);
+        assertTrue(Byte.class.getCanonicalName().equals(targetValue.getClass().getCanonicalName()));
+        assertEquals(new Byte((byte) 0), (Byte) targetValue);
+
+        sourceValue = (char) 'a';
         targetValue = service.copyPrimitive(sourceValue);
         assertNotNull(targetValue);
         assertTrue(Character.class.getCanonicalName().equals(targetValue.getClass().getCanonicalName()));
-        assertEquals(new Character((char)'a'), (Character)targetValue);
-        sourceValue = (char)'z';
+        assertEquals(new Character((char) 'a'), (Character) targetValue);
+        sourceValue = (char) 'z';
         targetValue = service.copyPrimitive(sourceValue);
         assertNotNull(targetValue);
         assertTrue(Character.class.getCanonicalName().equals(targetValue.getClass().getCanonicalName()));
-        assertEquals(new Character((char)'z'), (Character)targetValue);
-        
+        assertEquals(new Character((char) 'z'), (Character) targetValue);
+
         sourceValue = Double.MIN_VALUE;
         targetValue = service.copyPrimitive(sourceValue);
         assertNotNull(targetValue);
         assertTrue(Double.class.getCanonicalName().equals(targetValue.getClass().getCanonicalName()));
-        assertEquals(new Double(Double.MIN_VALUE), (Double)targetValue);
+        assertEquals(new Double(Double.MIN_VALUE), (Double) targetValue);
         sourceValue = Double.MAX_VALUE;
         targetValue = service.copyPrimitive(sourceValue);
         assertNotNull(targetValue);
         assertTrue(Double.class.getCanonicalName().equals(targetValue.getClass().getCanonicalName()));
-        assertEquals(new Double(Double.MAX_VALUE), (Double)targetValue);
-        
+        assertEquals(new Double(Double.MAX_VALUE), (Double) targetValue);
+
         sourceValue = Float.MIN_VALUE;
         targetValue = service.copyPrimitive(sourceValue);
         assertNotNull(targetValue);
         assertTrue(Float.class.getCanonicalName().equals(targetValue.getClass().getCanonicalName()));
-        assertEquals(new Float(Float.MIN_VALUE), (Float)targetValue);
+        assertEquals(new Float(Float.MIN_VALUE), (Float) targetValue);
         sourceValue = Float.MAX_VALUE;
         targetValue = service.copyPrimitive(sourceValue);
         assertNotNull(targetValue);
         assertTrue(Float.class.getCanonicalName().equals(targetValue.getClass().getCanonicalName()));
-        assertEquals(new Float(Float.MAX_VALUE), (Float)targetValue);
-        
+        assertEquals(new Float(Float.MAX_VALUE), (Float) targetValue);
+
         sourceValue = Integer.MIN_VALUE;
         targetValue = service.copyPrimitive(sourceValue);
         assertNotNull(targetValue);
         assertTrue(Integer.class.getCanonicalName().equals(targetValue.getClass().getCanonicalName()));
-        assertEquals(new Integer(Integer.MIN_VALUE), (Integer)targetValue);
+        assertEquals(new Integer(Integer.MIN_VALUE), (Integer) targetValue);
         sourceValue = Integer.MAX_VALUE;
         targetValue = service.copyPrimitive(sourceValue);
         assertNotNull(targetValue);
         assertTrue(Integer.class.getCanonicalName().equals(targetValue.getClass().getCanonicalName()));
-        assertEquals(new Integer(Integer.MAX_VALUE), (Integer)targetValue);
-        
+        assertEquals(new Integer(Integer.MAX_VALUE), (Integer) targetValue);
+
         sourceValue = Long.MIN_VALUE;
         targetValue = service.copyPrimitive(sourceValue);
         assertNotNull(targetValue);
         assertTrue(Long.class.getCanonicalName().equals(targetValue.getClass().getCanonicalName()));
-        assertEquals(new Long(Long.MIN_VALUE), (Long)targetValue);
+        assertEquals(new Long(Long.MIN_VALUE), (Long) targetValue);
         sourceValue = Long.MAX_VALUE;
         targetValue = service.copyPrimitive(sourceValue);
         assertNotNull(targetValue);
         assertTrue(Long.class.getCanonicalName().equals(targetValue.getClass().getCanonicalName()));
-        assertEquals(new Long(Long.MAX_VALUE), (Long)targetValue);
-        
+        assertEquals(new Long(Long.MAX_VALUE), (Long) targetValue);
+
         sourceValue = Short.MIN_VALUE;
         targetValue = service.copyPrimitive(sourceValue);
         assertNotNull(targetValue);
         assertTrue(Short.class.getCanonicalName().equals(targetValue.getClass().getCanonicalName()));
-        assertEquals(new Short(Short.MIN_VALUE), (Short)targetValue);
+        assertEquals(new Short(Short.MIN_VALUE), (Short) targetValue);
         sourceValue = Short.MAX_VALUE;
         targetValue = service.copyPrimitive(sourceValue);
         assertNotNull(targetValue);
         assertTrue(Short.class.getCanonicalName().equals(targetValue.getClass().getCanonicalName()));
-        assertEquals(new Short(Short.MAX_VALUE), (Short)targetValue);
-        
+        assertEquals(new Short(Short.MAX_VALUE), (Short) targetValue);
+
         // Non primitive handling
         sourceValue = new ArrayList<String>();
         targetValue = service.copyPrimitive(sourceValue);
         assertNotNull(targetValue);
         assertEquals(sourceValue, targetValue);
-        
+
         sourceValue = new String("foo");
         targetValue = service.copyPrimitive(sourceValue);
         assertNotNull(targetValue);

@@ -16,13 +16,11 @@
 package io.atlasmap.spi;
 
 public enum AtlasModuleMode {
-	SOURCE("source"),
-	TARGET("target"),
-	UNSET("unset");
+    SOURCE("source"), TARGET("target"), UNSET("unset");
 
-	private final String mode;
-	
-	AtlasModuleMode(String mode) {
+    private final String mode;
+
+    AtlasModuleMode(String mode) {
         this.mode = mode;
     }
 
@@ -31,7 +29,7 @@ public enum AtlasModuleMode {
     }
 
     public static AtlasModuleMode fromValue(String v) {
-        for (AtlasModuleMode c: AtlasModuleMode.values()) {
+        for (AtlasModuleMode c : AtlasModuleMode.values()) {
             if (c.mode.equals(v)) {
                 return c;
             }

@@ -45,151 +45,141 @@ import javax.ws.rs.core.Response;
 
 @ApplicationPath("/")
 @Path("v2/atlas/java")
-public class JavaService extends Application {		
-	
-	final Application javaServiceApp;
-	
-	private static final Logger logger = LoggerFactory.getLogger(JavaService.class);
-	
-	public JavaService() {
-		javaServiceApp = new ResourceConfig().register(JacksonFeature.class);
-	}
-	
-	//example request: http://localhost:8181/rest/myresource?from=jason%20baker
+public class JavaService extends Application {
+
+    final Application javaServiceApp;
+
+    private static final Logger logger = LoggerFactory.getLogger(JavaService.class);
+
+    public JavaService() {
+        javaServiceApp = new ResourceConfig().register(JacksonFeature.class);
+    }
+
+    // example request: http://localhost:8181/rest/myresource?from=jason%20baker
     @GET
     @Path("/simple")
     @Produces(MediaType.TEXT_PLAIN)
     public String simpleHelloWorld(@QueryParam("from") String from) {
         return "Got it! " + from;
     }
-    
+
     @OPTIONS
     @Path("/class")
     @Produces(MediaType.APPLICATION_JSON)
     public Response testJsonOptions() throws Exception {
-    	return Response.ok()
-    			.header("Access-Control-Allow-Origin", "*")
-    			.header("Access-Control-Allow-Headers", "Content-Type")
-    			.header("Access-Control-Allow-Methods", "GET,PUT,POST,PATCH,DELETE")
-    			.build();
+        return Response.ok().header("Access-Control-Allow-Origin", "*")
+                .header("Access-Control-Allow-Headers", "Content-Type")
+                .header("Access-Control-Allow-Methods", "GET,PUT,POST,PATCH,DELETE").build();
     }
-    
-    //example from: https://www.mkyong.com/webservices/jax-rs/json-example-with-jersey-jackson/
+
+    // example from:
+    // https://www.mkyong.com/webservices/jax-rs/json-example-with-jersey-jackson/
     @GET
     @Path("/class")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getClass(@QueryParam("className") String className) throws Exception {
-    	ClassInspectionService classInspectionService = new ClassInspectionService();
-    	classInspectionService.setConversionService(DefaultAtlasConversionService.getInstance());
-    	JavaClass c = classInspectionService.inspectClass(className);
-    	classInspectionService = null;
-    	return Response.ok()
-    			.header("Access-Control-Allow-Origin", "*")
-    			.header("Access-Control-Allow-Headers", "Content-Type")
-    			.header("Access-Control-Allow-Methods", "GET,PUT,POST,PATCH,DELETE")
-    			.entity(c)
-    			.build();
+        ClassInspectionService classInspectionService = new ClassInspectionService();
+        classInspectionService.setConversionService(DefaultAtlasConversionService.getInstance());
+        JavaClass c = classInspectionService.inspectClass(className);
+        classInspectionService = null;
+        return Response.ok().header("Access-Control-Allow-Origin", "*")
+                .header("Access-Control-Allow-Headers", "Content-Type")
+                .header("Access-Control-Allow-Methods", "GET,PUT,POST,PATCH,DELETE").entity(c).build();
     }
-    
+
     @OPTIONS
     @Path("/mavenclasspath")
     @Produces(MediaType.APPLICATION_JSON)
     public Response generateClasspathCORS() throws Exception {
-    	return Response.ok()
-    			.header("Access-Control-Allow-Origin", "*")
-    			.header("Access-Control-Allow-Headers", "Content-Type")
-    			.header("Access-Control-Allow-Methods", "GET,PUT,POST,PATCH,DELETE")
-    			.build();
+        return Response.ok().header("Access-Control-Allow-Origin", "*")
+                .header("Access-Control-Allow-Headers", "Content-Type")
+                .header("Access-Control-Allow-Methods", "GET,PUT,POST,PATCH,DELETE").build();
     }
-    
+
     @POST
-    @Consumes({MediaType.APPLICATION_JSON})
-    @Produces({MediaType.APPLICATION_JSON})
+    @Consumes({ MediaType.APPLICATION_JSON })
+    @Produces({ MediaType.APPLICATION_JSON })
     @Path("/mavenclasspath")
     public Response generateClasspath(MavenClasspathRequest request) throws Exception {
-    	
-    	MavenClasspathResponse response = new MavenClasspathResponse();
-    	MavenClasspathHelper mavenClasspathHelper = null;
-    	try {
-    		mavenClasspathHelper = new MavenClasspathHelper();
-    		if(request.getExecuteTimeout() != null) {
-    			mavenClasspathHelper.setProcessMaxExecutionTime(request.getExecuteTimeout());
-    		}
-    		
-    		long startTime = System.currentTimeMillis();
-    		String mavenResponse = mavenClasspathHelper.generateClasspathFromPom(request.getPomXmlData());
-    		response.setExecutionTime(System.currentTimeMillis() - startTime);
-    		response.setClasspath(mavenResponse);
-    		
-    	} catch (Exception e) {
-    		logger.error("Error generating classpath from maven: " + e.getMessage(), e);
-    		response.setErrorMessage(e.getMessage());
-    	}
-    	
-    	return Response.ok()
-    			.header("Access-Control-Allow-Origin", "*")
-    			.header("Access-Control-Allow-Headers", "Content-Type")
-    			.header("Access-Control-Allow-Methods", "GET,PUT,POST,PATCH,DELETE")
-    			.entity(response)
-    			.build();
+
+        MavenClasspathResponse response = new MavenClasspathResponse();
+        MavenClasspathHelper mavenClasspathHelper = null;
+        try {
+            mavenClasspathHelper = new MavenClasspathHelper();
+            if (request.getExecuteTimeout() != null) {
+                mavenClasspathHelper.setProcessMaxExecutionTime(request.getExecuteTimeout());
+            }
+
+            long startTime = System.currentTimeMillis();
+            String mavenResponse = mavenClasspathHelper.generateClasspathFromPom(request.getPomXmlData());
+            response.setExecutionTime(System.currentTimeMillis() - startTime);
+            response.setClasspath(mavenResponse);
+
+        } catch (Exception e) {
+            logger.error("Error generating classpath from maven: " + e.getMessage(), e);
+            response.setErrorMessage(e.getMessage());
+        }
+
+        return Response.ok().header("Access-Control-Allow-Origin", "*")
+                .header("Access-Control-Allow-Headers", "Content-Type")
+                .header("Access-Control-Allow-Methods", "GET,PUT,POST,PATCH,DELETE").entity(response).build();
     }
-    
+
     @POST
-    @Consumes({MediaType.APPLICATION_JSON})
-    @Produces({MediaType.APPLICATION_JSON})
+    @Consumes({ MediaType.APPLICATION_JSON })
+    @Produces({ MediaType.APPLICATION_JSON })
     @Path("/class")
     public Response inspectClass(ClassInspectionRequest request) throws Exception {
-    	
-    	ClassInspectionResponse response = new ClassInspectionResponse();
-    	ClassInspectionService classInspectionService = new ClassInspectionService();
+
+        ClassInspectionResponse response = new ClassInspectionResponse();
+        ClassInspectionService classInspectionService = new ClassInspectionService();
         classInspectionService.setConversionService(DefaultAtlasConversionService.getInstance());
 
-    	configureInspectionService(classInspectionService, request);
-    	
-		long startTime = System.currentTimeMillis();
-    	try {
-    		JavaClass c = null;
-		if(request.getClasspath() == null || request.getClasspath().isEmpty()) {
-    			c = classInspectionService.inspectClass(request.getClassName());
-    		} else {
-    			c = classInspectionService.inspectClass(request.getClassName(), request.getClasspath());
-    		}
-    		response.setJavaClass(c);
-    	} catch (Exception e) {
-    		logger.error("Error inspecting class with classpath: " + e.getMessage(), e);
-    		response.setErrorMessage(e.getMessage());
-    	} finally {
-    		response.setExecutionTime(System.currentTimeMillis() - startTime);
-    	}
+        configureInspectionService(classInspectionService, request);
 
-    	return Response.ok()
-    			.header("Access-Control-Allow-Origin", "*")
-    			.header("Access-Control-Allow-Headers", "Content-Type")
-    			.header("Access-Control-Allow-Methods", "GET,PUT,POST,PATCH,DELETE")
-    			.entity(response)
-    			.build();
+        long startTime = System.currentTimeMillis();
+        try {
+            JavaClass c = null;
+            if (request.getClasspath() == null || request.getClasspath().isEmpty()) {
+                c = classInspectionService.inspectClass(request.getClassName());
+            } else {
+                c = classInspectionService.inspectClass(request.getClassName(), request.getClasspath());
+            }
+            response.setJavaClass(c);
+        } catch (Exception e) {
+            logger.error("Error inspecting class with classpath: " + e.getMessage(), e);
+            response.setErrorMessage(e.getMessage());
+        } finally {
+            response.setExecutionTime(System.currentTimeMillis() - startTime);
+        }
+
+        return Response.ok().header("Access-Control-Allow-Origin", "*")
+                .header("Access-Control-Allow-Headers", "Content-Type")
+                .header("Access-Control-Allow-Methods", "GET,PUT,POST,PATCH,DELETE").entity(response).build();
     }
-    
-    protected void configureInspectionService(ClassInspectionService classInspectionService, ClassInspectionRequest request) {
-    	if(request.getFieldNameBlacklist() != null && request.getFieldNameBlacklist().getString() != null && !request.getFieldNameBlacklist().getString().isEmpty()) {
-    		classInspectionService.getFieldBlacklist().addAll(request.getFieldNameBlacklist().getString());
-    	}
-    	
-    	if(request.isDisablePrivateOnlyFields() != null) {
-    		classInspectionService.setDisablePrivateOnlyFields(request.isDisablePrivateOnlyFields());
-    	}
-    	
-    	if(request.isDisableProtectedOnlyFields() != null) {
-    		classInspectionService.setDisableProtectedOnlyFields(request.isDisableProtectedOnlyFields());
-    	}
-   
-    	if(request.isDisablePublicOnlyFields() != null) {
-    		classInspectionService.setDisablePublicOnlyFields(request.isDisablePublicOnlyFields());
-    	}
-    	   
-    	if(request.isDisablePublicGetterSetterFields() != null) {
-    		classInspectionService.setDisablePublicGetterSetterFields(request.isDisablePublicGetterSetterFields());
-    	}
-    	
+
+    protected void configureInspectionService(ClassInspectionService classInspectionService,
+            ClassInspectionRequest request) {
+        if (request.getFieldNameBlacklist() != null && request.getFieldNameBlacklist().getString() != null
+                && !request.getFieldNameBlacklist().getString().isEmpty()) {
+            classInspectionService.getFieldBlacklist().addAll(request.getFieldNameBlacklist().getString());
+        }
+
+        if (request.isDisablePrivateOnlyFields() != null) {
+            classInspectionService.setDisablePrivateOnlyFields(request.isDisablePrivateOnlyFields());
+        }
+
+        if (request.isDisableProtectedOnlyFields() != null) {
+            classInspectionService.setDisableProtectedOnlyFields(request.isDisableProtectedOnlyFields());
+        }
+
+        if (request.isDisablePublicOnlyFields() != null) {
+            classInspectionService.setDisablePublicOnlyFields(request.isDisablePublicOnlyFields());
+        }
+
+        if (request.isDisablePublicGetterSetterFields() != null) {
+            classInspectionService.setDisablePublicGetterSetterFields(request.isDisablePublicGetterSetterFields());
+        }
+
     }
 }

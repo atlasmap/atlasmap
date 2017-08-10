@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 package io.atlasmap.validators;
+
 import io.atlasmap.core.AtlasMappingUtil;
 // TODO: Fix circular dependency
 // import io.atlasmap.java.v2.JavaField;
@@ -27,7 +28,8 @@ public abstract class BaseMappingTest {
 
     protected static Logger logger = LoggerFactory.getLogger(BaseMappingTest.class);
 
-//    protected io.atlasmap.java.v2.ObjectFactory javaModelFactory = new io.atlasmap.java.v2.ObjectFactory();
+    // protected io.atlasmap.java.v2.ObjectFactory javaModelFactory = new
+    // io.atlasmap.java.v2.ObjectFactory();
     protected AtlasMappingUtil mappingUtil = new AtlasMappingUtil("io.atlasmap.v2");
 
     protected AtlasMapping getAtlasMappingFullValid() throws Exception {
@@ -38,11 +40,11 @@ public abstract class BaseMappingTest {
         DataSource src = new DataSource();
         src.setDataSourceType(DataSourceType.SOURCE);
         src.setUri("atlas:java?2");
-        
+
         DataSource tgt = new DataSource();
         tgt.setDataSourceType(DataSourceType.TARGET);
         tgt.setUri("atlas:java?3");
-        
+
         mapping.getDataSource().add(src);
         mapping.getDataSource().add(tgt);
 
@@ -60,9 +62,8 @@ public abstract class BaseMappingTest {
         outputField.setName("outputName");
         mapFieldMapping.getOutputField().add(outputField);
 
-
         Mapping separateMapping = AtlasModelFactory.createMapping(MappingType.SEPARATE);
-        
+
         MockField sIJavaField = AtlasModelFactory.createMockField();
         sIJavaField.setFieldType(FieldType.STRING);
         sIJavaField.setCustom("java.lang.String");
@@ -87,10 +88,10 @@ public abstract class BaseMappingTest {
         inputField.setName("input.name");
         MockField outputField = new MockField();
         outputField.setName("out.name");
-        
+
         mapFieldMapping.getInputField().add(inputField);
         mapFieldMapping.getOutputField().add(outputField);
-        
+
         mapping.getMappings().getMapping().add(mapFieldMapping);
     }
 
@@ -118,7 +119,6 @@ public abstract class BaseMappingTest {
 
         return mapping;
     }
-
 
     protected Field createInputJavaField(String inputName) {
         MockField inputJavaField = AtlasModelFactory.createMockField();

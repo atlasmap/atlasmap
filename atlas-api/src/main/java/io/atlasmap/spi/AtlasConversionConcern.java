@@ -18,10 +18,10 @@ package io.atlasmap.spi;
 /**
  */
 public enum AtlasConversionConcern {
-    NONE("none", "Conversion between source and target types is supported"),
-    RANGE("range", "Conversion can cause out of range exceptions between source and target"),
-    FORMAT("format", "Conversion can cause numeric format exceptions between source and target"),
-    UNSUPPORTED("unsupported", "Conversions between the source and target types is not supported");
+    NONE("none", "Conversion between source and target types is supported"), RANGE("range",
+            "Conversion can cause out of range exceptions between source and target"), FORMAT("format",
+                    "Conversion can cause numeric format exceptions between source and target"), UNSUPPORTED(
+                            "unsupported", "Conversions between the source and target types is not supported");
 
     private String name;
     private String message;

@@ -36,7 +36,8 @@ public class JavaJsonCombineTest extends AtlasMappingBaseTest {
 
     @Test
     public void testProcessCombineSimple() throws Exception {
-        AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/javaToJson/atlasmapping-combine-simple.xml").toURI());
+        AtlasContext context = atlasContextFactory
+                .createContext(new File("src/test/resources/javaToJson/atlasmapping-combine-simple.xml").toURI());
         AtlasSession session = context.createSession();
         BaseContact sourceContact = AtlasTestUtil.generateContact(SourceContact.class);
         session.setInput(sourceContact);
@@ -46,7 +47,8 @@ public class JavaJsonCombineTest extends AtlasMappingBaseTest {
         assertNotNull(object);
         assertTrue(object instanceof String);
         AtlasJsonTestUnrootedMapper mapper = new AtlasJsonTestUnrootedMapper();
-        io.atlasmap.json.test.TargetContact targetContact = mapper.readValue((String)object, io.atlasmap.json.test.TargetContact.class);
+        io.atlasmap.json.test.TargetContact targetContact = mapper.readValue((String) object,
+                io.atlasmap.json.test.TargetContact.class);
         assertEquals("Ozzie Smith 5551212 81111", targetContact.getFirstName());
         assertNull(targetContact.getLastName());
         assertNull(targetContact.getPhoneNumber());
@@ -56,7 +58,8 @@ public class JavaJsonCombineTest extends AtlasMappingBaseTest {
 
     @Test
     public void testProcessCombineSkip() throws Exception {
-        AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/javaToJson/atlasmapping-combine-skip.xml").toURI());
+        AtlasContext context = atlasContextFactory
+                .createContext(new File("src/test/resources/javaToJson/atlasmapping-combine-skip.xml").toURI());
         AtlasSession session = context.createSession();
         BaseContact sourceContact = AtlasTestUtil.generateContact(SourceContact.class);
         session.setInput(sourceContact);
@@ -66,17 +69,19 @@ public class JavaJsonCombineTest extends AtlasMappingBaseTest {
         assertNotNull(object);
         assertTrue(object instanceof String);
         AtlasJsonTestUnrootedMapper mapper = new AtlasJsonTestUnrootedMapper();
-        io.atlasmap.json.test.TargetContact targetContact = mapper.readValue((String)object, io.atlasmap.json.test.TargetContact.class);
+        io.atlasmap.json.test.TargetContact targetContact = mapper.readValue((String) object,
+                io.atlasmap.json.test.TargetContact.class);
         assertEquals("Ozzie Smith 5551212 81111", targetContact.getFirstName());
         assertNull(targetContact.getLastName());
         assertNull(targetContact.getPhoneNumber());
         assertNull(targetContact.getZipCode());
         assertFalse(session.hasErrors());
     }
-    
+
     @Test
     public void testProcessCombineOutOfOrder() throws Exception {
-        AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/javaToJson/atlasmapping-combine-outoforder.xml").toURI());
+        AtlasContext context = atlasContextFactory
+                .createContext(new File("src/test/resources/javaToJson/atlasmapping-combine-outoforder.xml").toURI());
         AtlasSession session = context.createSession();
         BaseContact sourceContact = AtlasTestUtil.generateContact(SourceContact.class);
         session.setInput(sourceContact);
@@ -86,19 +91,20 @@ public class JavaJsonCombineTest extends AtlasMappingBaseTest {
         assertNotNull(object);
         assertTrue(object instanceof String);
         AtlasJsonTestUnrootedMapper mapper = new AtlasJsonTestUnrootedMapper();
-        io.atlasmap.json.test.TargetContact targetContact = mapper.readValue((String)object, io.atlasmap.json.test.TargetContact.class);
+        io.atlasmap.json.test.TargetContact targetContact = mapper.readValue((String) object,
+                io.atlasmap.json.test.TargetContact.class);
         assertEquals("Ozzie Smith 5551212 81111", targetContact.getFirstName());
         assertNull(targetContact.getLastName());
         assertNull(targetContact.getPhoneNumber());
         assertNull(targetContact.getZipCode());
         assertFalse(session.hasErrors());
     }
-    
-    
+
     @Test
     @Ignore // support null value and double-delimiter in combine
     public void testProcessCombineNullInput() throws Exception {
-        AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/javaToJson/atlasmapping-combine-inputnull.xml").toURI());
+        AtlasContext context = atlasContextFactory
+                .createContext(new File("src/test/resources/javaToJson/atlasmapping-combine-inputnull.xml").toURI());
         AtlasSession session = context.createSession();
         BaseContact sourceContact = AtlasTestUtil.generateContact(SourceContact.class);
         sourceContact.setLastName(null);
@@ -109,7 +115,8 @@ public class JavaJsonCombineTest extends AtlasMappingBaseTest {
         assertNotNull(object);
         assertTrue(object instanceof String);
         AtlasJsonTestUnrootedMapper mapper = new AtlasJsonTestUnrootedMapper();
-        io.atlasmap.json.test.TargetContact targetContact = mapper.readValue((String)object, io.atlasmap.json.test.TargetContact.class);
+        io.atlasmap.json.test.TargetContact targetContact = mapper.readValue((String) object,
+                io.atlasmap.json.test.TargetContact.class);
         assertNotNull(targetContact);
         assertEquals("Ozzie 5551212 81111", targetContact.getFirstName());
         assertFalse(session.hasErrors());

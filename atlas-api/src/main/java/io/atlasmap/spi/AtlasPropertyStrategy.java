@@ -22,5 +22,6 @@ import io.atlasmap.v2.AtlasMapping;
 import io.atlasmap.v2.PropertyField;
 
 public interface AtlasPropertyStrategy {
-    void processPropertyField(AtlasMapping atlasMapping, PropertyField propertyField, Map<String, Object> runtimeProperties) throws AtlasUnsupportedException, AtlasConversionException;
+    void processPropertyField(AtlasMapping atlasMapping, PropertyField propertyField,
+            Map<String, Object> runtimeProperties) throws AtlasUnsupportedException, AtlasConversionException;
 }

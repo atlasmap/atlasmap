@@ -29,33 +29,33 @@ import org.junit.Before;
 
 public class Twitter4jInspectTest {
 
-	private static final Logger logger = LoggerFactory.getLogger(Twitter4jInspectTest.class);
-	
-	private ClassInspectionService classInspectionService = null;
-	
-	@Before
-	public void setUp() {
-		classInspectionService = new ClassInspectionService();
-		classInspectionService.setConversionService(DefaultAtlasConversionService.getRegistry());
-	}
-	
-	@After
-	public void tearDown() {
-		classInspectionService = null;
-	}
-	
-	@Test
-	public void testInspectTwitter4jStatus() {
-		JavaClass j = classInspectionService.inspectClass("twitter4j.Status");
-		assertNotNull(j);
-		logger.debug("Hello");
-	}
-	
-	@Test
-	public void testInspectTwitter4jStatusJSONImpl() {
-		JavaClass j = classInspectionService.inspectClass("twitter4j.StatusJSONImpl");
-		assertNotNull(j);
-		logger.debug("Hello");
-	}
+    private static final Logger logger = LoggerFactory.getLogger(Twitter4jInspectTest.class);
+
+    private ClassInspectionService classInspectionService = null;
+
+    @Before
+    public void setUp() {
+        classInspectionService = new ClassInspectionService();
+        classInspectionService.setConversionService(DefaultAtlasConversionService.getRegistry());
+    }
+
+    @After
+    public void tearDown() {
+        classInspectionService = null;
+    }
+
+    @Test
+    public void testInspectTwitter4jStatus() {
+        JavaClass j = classInspectionService.inspectClass("twitter4j.Status");
+        assertNotNull(j);
+        logger.debug("Hello");
+    }
+
+    @Test
+    public void testInspectTwitter4jStatusJSONImpl() {
+        JavaClass j = classInspectionService.inspectClass("twitter4j.StatusJSONImpl");
+        assertNotNull(j);
+        logger.debug("Hello");
+    }
 
 }

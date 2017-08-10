@@ -30,7 +30,7 @@ public class BooleanConverter implements AtlasPrimitiveConverter<Boolean> {
      * @throws AtlasConversionException
      */
     @Override
-	@AtlasConversionInfo(sourceType = FieldType.BOOLEAN, targetType = FieldType.BOOLEAN)
+    @AtlasConversionInfo(sourceType = FieldType.BOOLEAN, targetType = FieldType.BOOLEAN)
     public Boolean convertToBoolean(Boolean value) throws AtlasConversionException {
         if (value == null) {
             return null;
@@ -45,12 +45,13 @@ public class BooleanConverter implements AtlasPrimitiveConverter<Boolean> {
      * @throws AtlasConversionException
      */
     @Override
-	@AtlasConversionInfo(sourceType = FieldType.BOOLEAN, targetType = FieldType.BYTE, concerns = AtlasConversionConcern.UNSUPPORTED)
+    @AtlasConversionInfo(sourceType = FieldType.BOOLEAN, targetType = FieldType.BYTE, concerns = AtlasConversionConcern.UNSUPPORTED)
     public Byte convertToByte(Boolean value) throws AtlasConversionException {
         if (value == null) {
             return null;
         }
-        throw  new AtlasConversionException(new AtlasUnsupportedException("Boolean to Byte conversion is not supported."));
+        throw new AtlasConversionException(
+                new AtlasUnsupportedException("Boolean to Byte conversion is not supported."));
     }
 
     /**
@@ -59,7 +60,7 @@ public class BooleanConverter implements AtlasPrimitiveConverter<Boolean> {
      * @throws AtlasConversionException
      */
     @Override
-	@AtlasConversionInfo(sourceType = FieldType.BOOLEAN, targetType = FieldType.CHAR)
+    @AtlasConversionInfo(sourceType = FieldType.BOOLEAN, targetType = FieldType.CHAR)
     public Character convertToCharacter(Boolean value) throws AtlasConversionException {
         if (value == null) {
             return null;
@@ -73,7 +74,7 @@ public class BooleanConverter implements AtlasPrimitiveConverter<Boolean> {
      * @throws AtlasConversionException
      */
     @Override
-	@AtlasConversionInfo(sourceType = FieldType.BOOLEAN, targetType = FieldType.DOUBLE)
+    @AtlasConversionInfo(sourceType = FieldType.BOOLEAN, targetType = FieldType.DOUBLE)
     public Double convertToDouble(Boolean value) throws AtlasConversionException {
         if (value == null) {
             return null;
@@ -87,7 +88,7 @@ public class BooleanConverter implements AtlasPrimitiveConverter<Boolean> {
      * @throws AtlasConversionException
      */
     @Override
-	@AtlasConversionInfo(sourceType = FieldType.BOOLEAN, targetType = FieldType.FLOAT)
+    @AtlasConversionInfo(sourceType = FieldType.BOOLEAN, targetType = FieldType.FLOAT)
     public Float convertToFloat(Boolean value) throws AtlasConversionException {
         if (value == null) {
             return null;
@@ -102,7 +103,7 @@ public class BooleanConverter implements AtlasPrimitiveConverter<Boolean> {
      * @throws AtlasConversionException
      */
     @Override
-	@AtlasConversionInfo(sourceType = FieldType.BOOLEAN, targetType = FieldType.INTEGER)
+    @AtlasConversionInfo(sourceType = FieldType.BOOLEAN, targetType = FieldType.INTEGER)
     public Integer convertToInteger(Boolean value) throws AtlasConversionException {
         if (value == null) {
             return null;
@@ -116,7 +117,7 @@ public class BooleanConverter implements AtlasPrimitiveConverter<Boolean> {
      * @throws AtlasConversionException
      */
     @Override
-	@AtlasConversionInfo(sourceType = FieldType.BOOLEAN, targetType = FieldType.LONG)
+    @AtlasConversionInfo(sourceType = FieldType.BOOLEAN, targetType = FieldType.LONG)
     public Long convertToLong(Boolean value) throws AtlasConversionException {
         if (value == null) {
             return null;
@@ -130,7 +131,7 @@ public class BooleanConverter implements AtlasPrimitiveConverter<Boolean> {
      * @throws AtlasConversionException
      */
     @Override
-	@AtlasConversionInfo(sourceType = FieldType.BOOLEAN, targetType = FieldType.SHORT)
+    @AtlasConversionInfo(sourceType = FieldType.BOOLEAN, targetType = FieldType.SHORT)
     public Short convertToShort(Boolean value) throws AtlasConversionException {
         if (value == null) {
             return null;
@@ -144,7 +145,7 @@ public class BooleanConverter implements AtlasPrimitiveConverter<Boolean> {
      * @throws AtlasConversionException
      */
     @Override
-	@AtlasConversionInfo(sourceType = FieldType.BOOLEAN, targetType = FieldType.STRING)
+    @AtlasConversionInfo(sourceType = FieldType.BOOLEAN, targetType = FieldType.STRING)
     public String convertToString(Boolean value) throws AtlasConversionException {
         if (value == null) {
             return null;

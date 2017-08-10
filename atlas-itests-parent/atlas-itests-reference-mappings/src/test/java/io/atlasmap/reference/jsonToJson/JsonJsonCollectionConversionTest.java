@@ -10,46 +10,48 @@ import io.atlasmap.api.AtlasSession;
 import io.atlasmap.reference.AtlasMappingBaseTest;
 
 public class JsonJsonCollectionConversionTest extends AtlasMappingBaseTest {
-   
-    @Test 
+
+    @Test
     public void testProcessCollectionListSimple() throws Exception {
-        AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/jsonToJson/atlasmapping-collection-list-simple.xml").toURI());
-        
+        AtlasContext context = atlasContextFactory.createContext(
+                new File("src/test/resources/jsonToJson/atlasmapping-collection-list-simple.xml").toURI());
+
         // contact<>.firstName -> contact<>.name
-        
+
         String input = "{ \"contact\": [";
         for (int i = 0; i < 3; i++) {
             input += "{ \"firstName\": \"name" + i + "\"}";
             input += (i == 2) ? "" : ",";
         }
-        input += "] }";       
+        input += "] }";
 
         AtlasSession session = context.createSession();
         session.setInput(input);
         context.process(session);
-        
+
         Object object = session.getOutput();
         assertNotNull(object);
         assertTrue(object instanceof String);
-        
+
         String output = "{\"contact\":[";
         for (int i = 0; i < 3; i++) {
             output += "{\"name\":\"name" + i + "\"}";
             output += (i == 2) ? "" : ",";
         }
-        output += "]}";        
+        output += "]}";
         assertEquals(output, (String) object);
-    }      
-    
-    @Test 
+    }
+
+    @Test
     public void testProcessCollectionArraySimple() throws Exception {
-        AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/jsonToJson/atlasmapping-collection-array-simple.xml").toURI());
-        
+        AtlasContext context = atlasContextFactory.createContext(
+                new File("src/test/resources/jsonToJson/atlasmapping-collection-array-simple.xml").toURI());
+
         // contact[].firstName -> contact[].name
-        
+
         String input = "{ \"contact\": [";
         for (int i = 0; i < 3; i++) {
-            input += "{ \"firstName\": \"name" + i + "\"}";     
+            input += "{ \"firstName\": \"name" + i + "\"}";
             input += (i == 2) ? "" : ",";
         }
         input += "] }";
@@ -57,29 +59,30 @@ public class JsonJsonCollectionConversionTest extends AtlasMappingBaseTest {
         AtlasSession session = context.createSession();
         session.setInput(input);
         context.process(session);
-        
+
         Object object = session.getOutput();
         assertNotNull(object);
         assertTrue(object instanceof String);
-        
+
         String output = "{\"contact\":[";
         for (int i = 0; i < 3; i++) {
-            output += "{\"name\":\"name" + i + "\"}";  
+            output += "{\"name\":\"name" + i + "\"}";
             output += (i == 2) ? "" : ",";
         }
-        output += "]}";        
+        output += "]}";
         assertEquals(output, (String) object);
-    }   
-    
-    @Test 
+    }
+
+    @Test
     public void testProcessCollectionToNonCollection() throws Exception {
-        AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/jsonToJson/atlasmapping-collection-to-noncollection.xml").toURI());                     
+        AtlasContext context = atlasContextFactory.createContext(
+                new File("src/test/resources/jsonToJson/atlasmapping-collection-to-noncollection.xml").toURI());
 
         // contact<>.firstName -> contact.name
-        
+
         String input = "{ \"contact\": [";
         for (int i = 0; i < 3; i++) {
-            input += "{ \"firstName\": \"name" + i + "\"}"; 
+            input += "{ \"firstName\": \"name" + i + "\"}";
             input += (i == 2) ? "" : ",";
         }
         input += "] }";
@@ -87,30 +90,31 @@ public class JsonJsonCollectionConversionTest extends AtlasMappingBaseTest {
         AtlasSession session = context.createSession();
         session.setInput(input);
         context.process(session);
-        
+
         Object object = session.getOutput();
         assertNotNull(object);
         assertTrue(object instanceof String);
-        
+
         String output = "{\"contact\":{\"name\":\"name2\"}}";
         assertEquals(output, (String) object);
     }
-    
-    @Test 
+
+    @Test
     public void testProcessCollectionFromNonCollection() throws Exception {
-        AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/jsonToJson/atlasmapping-collection-from-noncollection.xml").toURI());
-        
+        AtlasContext context = atlasContextFactory.createContext(
+                new File("src/test/resources/jsonToJson/atlasmapping-collection-from-noncollection.xml").toURI());
+
         // contact.firstName -> contact<>.name
-        
-        String input = "{ \"contact\": [ { \"firstName\": \"name9\" } ] }";        
+
+        String input = "{ \"contact\": [ { \"firstName\": \"name9\" } ] }";
         AtlasSession session = context.createSession();
         session.setInput(input);
-        context.process(session);               
-        
+        context.process(session);
+
         Object object = session.getOutput();
         assertNotNull(object);
         assertTrue(object instanceof String);
-        
+
         String output = "{\"contact\":[{\"name\":\"name9\"}]}";
         assertEquals(output, (String) object);
     }

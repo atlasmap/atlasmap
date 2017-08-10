@@ -19,9 +19,20 @@ public class ConstructUnsupportedException extends ConstructException {
 
     private static final long serialVersionUID = 6871120885253971603L;
 
-    public ConstructUnsupportedException() { super(); }
-    public ConstructUnsupportedException(String message, Throwable cause) { super(message, cause); }
-    public ConstructUnsupportedException(String message) { super(message); }
-    public ConstructUnsupportedException(Throwable cause) { super(cause); }
+    public ConstructUnsupportedException() {
+        super();
+    }
+
+    public ConstructUnsupportedException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public ConstructUnsupportedException(String message) {
+        super(message);
+    }
+
+    public ConstructUnsupportedException(Throwable cause) {
+        super(cause);
+    }
 
 }

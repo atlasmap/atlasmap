@@ -1,18 +1,19 @@
-<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified"
-           xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:schema attributeFormDefault="unqualified"
+    elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
     <xs:element name="data">
         <xs:complexType>
             <xs:sequence>
-                <xs:element type="xs:short" name="intField"/>
-                <xs:element type="xs:short" name="longField"/>
-                <xs:element type="xs:string" name="stringField"/>
-                <xs:element type="xs:string" name="booleanField"/>
-                <xs:element type="xs:float" name="doubleField"/>
-                <xs:element type="xs:short" name="shortField"/>
-                <xs:element type="xs:string" name="floatField"/>
-                <xs:element type="xs:string" name="charField"/>
+                <xs:element type="xs:short" name="intField" />
+                <xs:element type="xs:short" name="longField" />
+                <xs:element type="xs:string" name="stringField" />
+                <xs:element type="xs:string" name="booleanField" />
+                <xs:element type="xs:float" name="doubleField" />
+                <xs:element type="xs:short" name="shortField" />
+                <xs:element type="xs:string" name="floatField" />
+                <xs:element type="xs:string" name="charField" />
             </xs:sequence>
-            <xs:attribute name="intAttr" type="xs:int" use="optional" default="1"/>
+            <xs:attribute name="intAttr" type="xs:int" use="optional"
+                default="1" />
         </xs:complexType>
     </xs:element>
 </xs:schema>

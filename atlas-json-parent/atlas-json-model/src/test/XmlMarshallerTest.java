@@ -31,30 +31,30 @@ import static org.junit.Assert.assertNotNull;
 
 public class XmlMarshallerTest extends BaseMarshallerTest {
 
-	private JAXBContext jaxbContext = null;
-	private Marshaller marshaller = null;
-	private Unmarshaller unmarshaller = null;
-	
-	@Before
-	public void setUp() throws Exception {
-		super.setUp();
-		
-		this.deleteTestFolders = false;
-		
-		jaxbContext = JAXBContext.newInstance("io.atlasmap.v2:io.atlasmap.json.v2");
-		
-		marshaller = jaxbContext.createMarshaller();
-		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-		unmarshaller = jaxbContext.createUnmarshaller();
-	}
-	
-	@After
-	public void tearDown() throws Exception {
-		super.tearDown();
-		
-		marshaller = null;
-		unmarshaller = null;
-		jaxbContext = null;
-	}
-	
+    private JAXBContext jaxbContext = null;
+    private Marshaller marshaller = null;
+    private Unmarshaller unmarshaller = null;
+
+    @Before
+    public void setUp() throws Exception {
+        super.setUp();
+
+        this.deleteTestFolders = false;
+
+        jaxbContext = JAXBContext.newInstance("io.atlasmap.v2:io.atlasmap.json.v2");
+
+        marshaller = jaxbContext.createMarshaller();
+        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+        unmarshaller = jaxbContext.createUnmarshaller();
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        super.tearDown();
+
+        marshaller = null;
+        unmarshaller = null;
+        jaxbContext = null;
+    }
+
 }

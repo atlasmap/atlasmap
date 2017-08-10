@@ -24,66 +24,66 @@ import io.atlasmap.v2.CollectionType;
 import io.atlasmap.v2.FieldType;
 
 public class StringSimpleFieldActions implements AtlasFieldAction {
-    
+
     public static final String STRING_SEPARATOR_REGEX = "[\\s+\\:\\_\\+\\=\\-]+";
-    public static final Pattern STRING_SEPARATOR_PATTERN  = Pattern.compile(STRING_SEPARATOR_REGEX);
-    
-    @AtlasFieldActionInfo(name="Uppercase", sourceType=FieldType.STRING, targetType=FieldType.STRING, sourceCollectionType=CollectionType.NONE, targetCollectionType=CollectionType.NONE)
+    public static final Pattern STRING_SEPARATOR_PATTERN = Pattern.compile(STRING_SEPARATOR_REGEX);
+
+    @AtlasFieldActionInfo(name = "Uppercase", sourceType = FieldType.STRING, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
     public static String uppercase(Action action, String input) {
-        if(input == null) {
+        if (input == null) {
             return null;
         }
-        
+
         return input.toUpperCase();
     }
-      
-    @AtlasFieldActionInfo(name="Lowercase", sourceType=FieldType.STRING, targetType=FieldType.STRING, sourceCollectionType=CollectionType.NONE, targetCollectionType=CollectionType.NONE)
+
+    @AtlasFieldActionInfo(name = "Lowercase", sourceType = FieldType.STRING, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
     public static String lowercase(Action action, String input) {
-        if(input == null) {
+        if (input == null) {
             return null;
         }
-        
+
         return input.toLowerCase();
     }
-    
-    @AtlasFieldActionInfo(name="Trim", sourceType=FieldType.STRING, targetType=FieldType.STRING, sourceCollectionType=CollectionType.NONE, targetCollectionType=CollectionType.NONE)
+
+    @AtlasFieldActionInfo(name = "Trim", sourceType = FieldType.STRING, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
     public static String trim(Action action, String input) {
-        if(input == null || input.length() == 0) {
+        if (input == null || input.length() == 0) {
             return input;
         }
-        
+
         return input.trim();
     }
-    
-    @AtlasFieldActionInfo(name="TrimLeft", sourceType=FieldType.STRING, targetType=FieldType.STRING, sourceCollectionType=CollectionType.NONE, targetCollectionType=CollectionType.NONE)
+
+    @AtlasFieldActionInfo(name = "TrimLeft", sourceType = FieldType.STRING, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
     public static String trimLeft(Action action, String input) {
-        if(input == null || input.length() == 0) {
+        if (input == null || input.length() == 0) {
             return input;
         }
-        
+
         int i = 0;
         while (i < input.length() && Character.isWhitespace(input.charAt(i))) {
             i++;
         }
         return input.substring(i);
     }
-    
-    @AtlasFieldActionInfo(name="TrimRight", sourceType=FieldType.STRING, targetType=FieldType.STRING, sourceCollectionType=CollectionType.NONE, targetCollectionType=CollectionType.NONE)
+
+    @AtlasFieldActionInfo(name = "TrimRight", sourceType = FieldType.STRING, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
     public static String trimRight(Action action, String input) {
-        if(input == null || input.length() == 0) {
+        if (input == null || input.length() == 0) {
             return input;
         }
-        
-        int i = input.length()-1;
+
+        int i = input.length() - 1;
         while (i >= 0 && Character.isWhitespace(input.charAt(i))) {
             i--;
         }
-        return input.substring(0,i+1);
+        return input.substring(0, i + 1);
     }
-        
-    @AtlasFieldActionInfo(name="Capitalize", sourceType=FieldType.STRING, targetType=FieldType.STRING, sourceCollectionType=CollectionType.NONE, targetCollectionType=CollectionType.NONE)
+
+    @AtlasFieldActionInfo(name = "Capitalize", sourceType = FieldType.STRING, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
     public static String capitalize(Action action, String input) {
-        if(input == null || input.length() == 0) {
+        if (input == null || input.length() == 0) {
             return input;
         }
         if (input.length() == 1) {
@@ -92,28 +92,28 @@ public class StringSimpleFieldActions implements AtlasFieldAction {
         return String.valueOf(input.charAt(0)).toUpperCase() + input.substring(1);
     }
 
-    @AtlasFieldActionInfo(name="StringLength", sourceType=FieldType.STRING, targetType=FieldType.INTEGER, sourceCollectionType=CollectionType.NONE, targetCollectionType=CollectionType.NONE)
+    @AtlasFieldActionInfo(name = "StringLength", sourceType = FieldType.STRING, targetType = FieldType.INTEGER, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
     public static Integer stringLength(Action action, String input) {
-        if(input == null || input.length() == 0) {
+        if (input == null || input.length() == 0) {
             return new Integer(0);
         }
-        
+
         return input.length();
     }
 
-    @AtlasFieldActionInfo(name="SeparateByDash", sourceType=FieldType.STRING, targetType=FieldType.STRING, sourceCollectionType=CollectionType.NONE, targetCollectionType=CollectionType.NONE)
+    @AtlasFieldActionInfo(name = "SeparateByDash", sourceType = FieldType.STRING, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
     public static String separateByDash(Action action, String input) {
-        if(input == null || input.length() == 0) {
+        if (input == null || input.length() == 0) {
             return input;
-        }        
+        }
         return STRING_SEPARATOR_PATTERN.matcher(input).replaceAll("-");
-    }  
-    
-    @AtlasFieldActionInfo(name="SeparateByUnderscore", sourceType=FieldType.STRING, targetType=FieldType.STRING, sourceCollectionType=CollectionType.NONE, targetCollectionType=CollectionType.NONE)
+    }
+
+    @AtlasFieldActionInfo(name = "SeparateByUnderscore", sourceType = FieldType.STRING, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
     public static String separateByUnderscore(Action action, String input) {
-        if(input == null || input.length() == 0) {
+        if (input == null || input.length() == 0) {
             return input;
-        }        
+        }
         return STRING_SEPARATOR_PATTERN.matcher(input).replaceAll("_");
-    }  
-} 
+    }
+}

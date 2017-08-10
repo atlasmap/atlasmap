@@ -24,344 +24,344 @@ import java.util.Date;
 
 public class MockUser implements User {
 
-	private static final long serialVersionUID = -7980625793724945814L;
-	private String name;
-	private String screenName;
-	
-	@Override
-	public int compareTo(User o) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+    private static final long serialVersionUID = -7980625793724945814L;
+    private String name;
+    private String screenName;
 
-	@Override
-	public RateLimitStatus getRateLimitStatus() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public int compareTo(User o) {
+        // TODO Auto-generated method stub
+        return 0;
+    }
 
-	@Override
-	public int getAccessLevel() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+    @Override
+    public RateLimitStatus getRateLimitStatus() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public long getId() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+    @Override
+    public int getAccessLevel() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
-	
-	@Override
-	public String getName() {
-		return this.name;
-	}
-	
-	public void setScreenName(String screenName) {
-		this.screenName = screenName;
-	}
+    @Override
+    public long getId() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
 
-	@Override
-	public String getScreenName() {
-		return this.screenName;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	@Override
-	public String getLocation() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public String getName() {
+        return this.name;
+    }
 
-	@Override
-	public String getDescription() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    public void setScreenName(String screenName) {
+        this.screenName = screenName;
+    }
 
-	@Override
-	public boolean isContributorsEnabled() {
-		// TODO Auto-generated method stub
-		return false;
-	}
+    @Override
+    public String getScreenName() {
+        return this.screenName;
+    }
 
-	@Override
-	public String getProfileImageURL() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public String getLocation() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public String getBiggerProfileImageURL() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public String getDescription() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public String getMiniProfileImageURL() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public boolean isContributorsEnabled() {
+        // TODO Auto-generated method stub
+        return false;
+    }
 
-	@Override
-	public String getOriginalProfileImageURL() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public String getProfileImageURL() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public String getProfileImageURLHttps() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public String getBiggerProfileImageURL() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public String getBiggerProfileImageURLHttps() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public String getMiniProfileImageURL() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public String getMiniProfileImageURLHttps() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public String getOriginalProfileImageURL() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public String getOriginalProfileImageURLHttps() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public String getProfileImageURLHttps() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public boolean isDefaultProfileImage() {
-		// TODO Auto-generated method stub
-		return false;
-	}
+    @Override
+    public String getBiggerProfileImageURLHttps() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public String getURL() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public String getMiniProfileImageURLHttps() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public boolean isProtected() {
-		// TODO Auto-generated method stub
-		return false;
-	}
+    @Override
+    public String getOriginalProfileImageURLHttps() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public int getFollowersCount() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+    @Override
+    public boolean isDefaultProfileImage() {
+        // TODO Auto-generated method stub
+        return false;
+    }
 
-	@Override
-	public Status getStatus() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public String getURL() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public String getProfileBackgroundColor() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public boolean isProtected() {
+        // TODO Auto-generated method stub
+        return false;
+    }
 
-	@Override
-	public String getProfileTextColor() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public int getFollowersCount() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
 
-	@Override
-	public String getProfileLinkColor() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public Status getStatus() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public String getProfileSidebarFillColor() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public String getProfileBackgroundColor() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public String getProfileSidebarBorderColor() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public String getProfileTextColor() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public boolean isProfileUseBackgroundImage() {
-		// TODO Auto-generated method stub
-		return false;
-	}
+    @Override
+    public String getProfileLinkColor() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public boolean isDefaultProfile() {
-		// TODO Auto-generated method stub
-		return false;
-	}
+    @Override
+    public String getProfileSidebarFillColor() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public boolean isShowAllInlineMedia() {
-		// TODO Auto-generated method stub
-		return false;
-	}
+    @Override
+    public String getProfileSidebarBorderColor() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public int getFriendsCount() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+    @Override
+    public boolean isProfileUseBackgroundImage() {
+        // TODO Auto-generated method stub
+        return false;
+    }
 
-	@Override
-	public Date getCreatedAt() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public boolean isDefaultProfile() {
+        // TODO Auto-generated method stub
+        return false;
+    }
 
-	@Override
-	public int getFavouritesCount() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+    @Override
+    public boolean isShowAllInlineMedia() {
+        // TODO Auto-generated method stub
+        return false;
+    }
 
-	@Override
-	public int getUtcOffset() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+    @Override
+    public int getFriendsCount() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
 
-	@Override
-	public String getTimeZone() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public Date getCreatedAt() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public String getProfileBackgroundImageURL() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public int getFavouritesCount() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
 
-	@Override
-	public String getProfileBackgroundImageUrlHttps() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public int getUtcOffset() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
 
-	@Override
-	public String getProfileBannerURL() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public String getTimeZone() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public String getProfileBannerRetinaURL() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public String getProfileBackgroundImageURL() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public String getProfileBannerIPadURL() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public String getProfileBackgroundImageUrlHttps() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public String getProfileBannerIPadRetinaURL() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public String getProfileBannerURL() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public String getProfileBannerMobileURL() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public String getProfileBannerRetinaURL() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public String getProfileBannerMobileRetinaURL() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public String getProfileBannerIPadURL() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public boolean isProfileBackgroundTiled() {
-		// TODO Auto-generated method stub
-		return false;
-	}
+    @Override
+    public String getProfileBannerIPadRetinaURL() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public String getLang() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public String getProfileBannerMobileURL() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public int getStatusesCount() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+    @Override
+    public String getProfileBannerMobileRetinaURL() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public boolean isGeoEnabled() {
-		// TODO Auto-generated method stub
-		return false;
-	}
+    @Override
+    public boolean isProfileBackgroundTiled() {
+        // TODO Auto-generated method stub
+        return false;
+    }
 
-	@Override
-	public boolean isVerified() {
-		// TODO Auto-generated method stub
-		return false;
-	}
+    @Override
+    public String getLang() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public boolean isTranslator() {
-		// TODO Auto-generated method stub
-		return false;
-	}
+    @Override
+    public int getStatusesCount() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
 
-	@Override
-	public int getListedCount() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+    @Override
+    public boolean isGeoEnabled() {
+        // TODO Auto-generated method stub
+        return false;
+    }
 
-	@Override
-	public boolean isFollowRequestSent() {
-		// TODO Auto-generated method stub
-		return false;
-	}
+    @Override
+    public boolean isVerified() {
+        // TODO Auto-generated method stub
+        return false;
+    }
 
-	@Override
-	public URLEntity[] getDescriptionURLEntities() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public boolean isTranslator() {
+        // TODO Auto-generated method stub
+        return false;
+    }
 
-	@Override
-	public URLEntity getURLEntity() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public int getListedCount() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
 
-	@Override
-	public String[] getWithheldInCountries() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public boolean isFollowRequestSent() {
+        // TODO Auto-generated method stub
+        return false;
+    }
 
-	@Override
-	public String getEmail() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public URLEntity[] getDescriptionURLEntities() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public URLEntity getURLEntity() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public String[] getWithheldInCountries() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public String getEmail() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
 }

@@ -29,7 +29,7 @@
             </complexContent>
         </complexType>
     </element>
-    
+
     <element name="CustomAction">
         <complexType>
             <complexContent>
@@ -111,32 +111,35 @@
         <complexType>
             <complexContent>
                 <extension base="atlas:Action">
-                    <attribute name="dateFormat" type="string" default="yyyy-MM-dd" />
+                    <attribute name="dateFormat" type="string"
+                        default="yyyy-MM-dd" />
                 </extension>
             </complexContent>
         </complexType>
     </element>
-    
+
     <element name="CurrentTime">
         <complexType>
             <complexContent>
                 <extension base="atlas:Action">
-                    <attribute name="dateFormat" type="string" default="HH:mm:ss" />
+                    <attribute name="dateFormat" type="string"
+                        default="HH:mm:ss" />
                 </extension>
             </complexContent>
         </complexType>
     </element>
-    
+
     <element name="CurrentDateTime">
         <complexType>
             <complexContent>
                 <extension base="atlas:Action">
-                    <attribute name="dateFormat" type="string" default="yyyy-MM-dd'T'HH:mm'Z'" />
+                    <attribute name="dateFormat" type="string"
+                        default="yyyy-MM-dd'T'HH:mm'Z'" />
                 </extension>
             </complexContent>
         </complexType>
     </element>
-    
+
     <element name="GenerateUUID">
         <complexType>
             <complexContent>
@@ -144,7 +147,7 @@
             </complexContent>
         </complexType>
     </element>
-    
+
     <element name="PadStringLeft">
         <complexType>
             <complexContent>
@@ -154,8 +157,8 @@
                 </extension>
             </complexContent>
         </complexType>
-    </element>   
-    
+    </element>
+
     <element name="PadStringRight">
         <complexType>
             <complexContent>
@@ -165,8 +168,8 @@
                 </extension>
             </complexContent>
         </complexType>
-    </element>    
-    
+    </element>
+
     <element name="SubString">
         <complexType>
             <complexContent>
@@ -176,8 +179,8 @@
                 </extension>
             </complexContent>
         </complexType>
-    </element> 
-    
+    </element>
+
     <element name="SubStringAfter">
         <complexType>
             <complexContent>
@@ -188,36 +191,36 @@
                 </extension>
             </complexContent>
         </complexType>
-    </element>   
-    
+    </element>
+
     <element name="SubStringBefore">
         <complexType>
             <complexContent>
-                <extension base="atlas:Action" >
+                <extension base="atlas:Action">
                     <attribute name="startIndex" type="int" />
                     <attribute name="endIndex" type="int" />
                     <attribute name="match" type="string" />
                 </extension>
             </complexContent>
         </complexType>
-    </element> 
+    </element>
 
     <!-- Number Actions -->
 
     <element name="SumUp">
         <complexType>
             <complexContent>
-                <extension base="atlas:Action" >
+                <extension base="atlas:Action">
                     <attribute name="numberType" type="atlas:NumberType" />
                 </extension>
             </complexContent>
         </complexType>
-    </element> 
+    </element>
 
     <element name="ConvertMassUnit">
         <complexType>
             <complexContent>
-                <extension base="atlas:Action" >
+                <extension base="atlas:Action">
                     <attribute name="fromUnit" type="atlas:MassUnitType" />
                     <attribute name="toUnit" type="atlas:MassUnitType" />
                 </extension>
@@ -227,7 +230,7 @@
     <element name="ConvertDistanceUnit">
         <complexType>
             <complexContent>
-                <extension base="atlas:Action" >
+                <extension base="atlas:Action">
                     <attribute name="fromUnit" type="atlas:DistanceUnitType" />
                     <attribute name="toUnit" type="atlas:DistanceUnitType" />
                 </extension>
@@ -237,7 +240,7 @@
     <element name="ConvertAreaUnit">
         <complexType>
             <complexContent>
-                <extension base="atlas:Action" >
+                <extension base="atlas:Action">
                     <attribute name="fromUnit" type="atlas:AreaUnitType" />
                     <attribute name="toUnit" type="atlas:AreaUnitType" />
                 </extension>
@@ -247,7 +250,7 @@
     <element name="ConvertVolumeUnit">
         <complexType>
             <complexContent>
-                <extension base="atlas:Action" >
+                <extension base="atlas:Action">
                     <attribute name="fromUnit" type="atlas:VolumeUnitType" />
                     <attribute name="toUnit" type="atlas:VolumeUnitType" />
                 </extension>
@@ -256,7 +259,7 @@
     </element>
 
 
-    <complexType name="Actions">        
+    <complexType name="Actions">
         <sequence>
             <choice minOccurs="0" maxOccurs="unbounded">
                 <element ref="atlas:Camelize" />

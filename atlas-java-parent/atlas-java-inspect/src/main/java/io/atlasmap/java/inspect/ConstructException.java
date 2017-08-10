@@ -19,9 +19,20 @@ public class ConstructException extends Exception {
 
     private static final long serialVersionUID = 6871120885253971603L;
 
-    public ConstructException() { super(); }
-    public ConstructException(String message, Throwable cause) { super(message, cause); }
-    public ConstructException(String message) { super(message); }
-    public ConstructException(Throwable cause) { super(cause); }
+    public ConstructException() {
+        super();
+    }
+
+    public ConstructException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public ConstructException(String message) {
+        super(message);
+    }
+
+    public ConstructException(Throwable cause) {
+        super(cause);
+    }
 
 }

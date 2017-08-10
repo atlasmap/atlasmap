@@ -30,7 +30,7 @@ public class LongConverter implements AtlasPrimitiveConverter<Long> {
      * @throws AtlasConversionException
      */
     @Override
-	@AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.BOOLEAN, concerns = AtlasConversionConcern.RANGE)
+    @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.BOOLEAN, concerns = AtlasConversionConcern.RANGE)
     public Boolean convertToBoolean(Long value) throws AtlasConversionException {
         if (value == null) {
             return null;
@@ -51,7 +51,7 @@ public class LongConverter implements AtlasPrimitiveConverter<Long> {
      * @throws AtlasUnsupportedException
      */
     @Override
-	@AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.BYTE, concerns = AtlasConversionConcern.UNSUPPORTED)
+    @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.BYTE, concerns = AtlasConversionConcern.UNSUPPORTED)
     public Byte convertToByte(Long value) throws AtlasConversionException {
         if (value == null) {
             return null;
@@ -65,14 +65,15 @@ public class LongConverter implements AtlasPrimitiveConverter<Long> {
      * @throws AtlasConversionException
      */
     @Override
-	@AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.CHAR, concerns = AtlasConversionConcern.RANGE)
+    @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.CHAR, concerns = AtlasConversionConcern.RANGE)
     public Character convertToCharacter(Long value) throws AtlasConversionException {
         if (value == null) {
             return null;
         }
 
         if (value < Character.MIN_VALUE || value > Character.MAX_VALUE) {
-            throw new AtlasConversionException(String.format("Long %s is greater than Character.MAX_VALUE  or less than Character.MIN_VALUE", value));
+            throw new AtlasConversionException(String
+                    .format("Long %s is greater than Character.MAX_VALUE  or less than Character.MIN_VALUE", value));
         }
 
         return (char) value.intValue();
@@ -84,7 +85,7 @@ public class LongConverter implements AtlasPrimitiveConverter<Long> {
      * @throws AtlasConversionException
      */
     @Override
-	@AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.DOUBLE)
+    @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.DOUBLE)
     public Double convertToDouble(Long value) throws AtlasConversionException {
         if (value == null) {
             return null;
@@ -93,7 +94,7 @@ public class LongConverter implements AtlasPrimitiveConverter<Long> {
     }
 
     @Override
-	@AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.FLOAT)
+    @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.FLOAT)
     public Float convertToFloat(Long value) throws AtlasConversionException {
         if (value == null) {
             return null;
@@ -105,41 +106,43 @@ public class LongConverter implements AtlasPrimitiveConverter<Long> {
     }
 
     @Override
-	@AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.INTEGER, concerns = AtlasConversionConcern.RANGE)
+    @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.INTEGER, concerns = AtlasConversionConcern.RANGE)
     public Integer convertToInteger(Long value) throws AtlasConversionException {
         if (value == null) {
             return null;
         }
         if (value > Integer.MAX_VALUE || value < Integer.MIN_VALUE) {
-            throw new AtlasConversionException(String.format("Long %s is greater than Integer.MAX_VALUE  or less than Integer.MIN_VALUE", value));
+            throw new AtlasConversionException(
+                    String.format("Long %s is greater than Integer.MAX_VALUE  or less than Integer.MIN_VALUE", value));
         }
         return value.intValue();
     }
 
     @Override
-	@AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.LONG)
+    @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.LONG)
     public Long convertToLong(Long value) throws AtlasConversionException {
         if (value == null) {
             return null;
         }
-        //we want a copy of value
+        // we want a copy of value
         return new Long(value);
     }
 
     @Override
-	@AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.SHORT, concerns = AtlasConversionConcern.RANGE)
+    @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.SHORT, concerns = AtlasConversionConcern.RANGE)
     public Short convertToShort(Long value) throws AtlasConversionException {
         if (value == null) {
             return null;
         }
         if (value > Short.MAX_VALUE || value < Short.MIN_VALUE) {
-            throw new AtlasConversionException(String.format("Long %s is greater than Short.MAX_VALUE or less than Short.MIN_VALUE", value));
+            throw new AtlasConversionException(
+                    String.format("Long %s is greater than Short.MAX_VALUE or less than Short.MIN_VALUE", value));
         }
         return value.shortValue();
     }
 
     @Override
-	@AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.STRING)
+    @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.STRING)
     public String convertToString(Long value) throws AtlasConversionException {
         if (value == null) {
             return null;

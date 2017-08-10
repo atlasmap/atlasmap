@@ -44,11 +44,12 @@ import io.atlasmap.v2.Mapping;
 import io.atlasmap.v2.MappingType;
 
 public class JavaJsonFlatMappingTest extends AtlasMappingBaseTest {
-    
+
     protected AtlasMapping generateJsonJavaFlatMapping() {
         AtlasMapping atlasMapping = AtlasModelFactory.createAtlasMapping();
         atlasMapping.setName("JsonJavaFlatMapping");
-        atlasMapping.getDataSource().add(generateDataSource("atlas:java?className=io.atlasmap.java.test.SourceFlatPrimitiveClass", DataSourceType.SOURCE));
+        atlasMapping.getDataSource().add(generateDataSource(
+                "atlas:java?className=io.atlasmap.java.test.SourceFlatPrimitiveClass", DataSourceType.SOURCE));
         atlasMapping.getDataSource().add(generateDataSource("atlas:json", DataSourceType.TARGET));
 
         List<BaseMapping> mappings = atlasMapping.getMappings().getMapping();
@@ -70,68 +71,71 @@ public class JavaJsonFlatMappingTest extends AtlasMappingBaseTest {
         ds.setDataSourceType(type);
         return ds;
     }
-    
+
     protected JsonField generateJsonField(String path) {
         JsonField field = AtlasJsonModelFactory.createJsonField();
         field.setPath(path);
         return field;
     }
-    
+
     protected JsonField generateJsonField(String parent, String path) {
         JsonField field = AtlasJsonModelFactory.createJsonField();
         field.setPath("/" + parent + "/" + path);
         return field;
     }
-    
+
     protected JavaField generateJavaField(String path) {
         JavaField javaField = AtlasJavaModelFactory.createJavaField();
         javaField.setPath(path);
         javaField.setModifiers(null);
         return javaField;
     }
-        
-    protected BaseFlatPrimitiveClass generateFlatPrimitiveClass(Class<? extends BaseFlatPrimitiveClass> clazz) throws Exception {
+
+    protected BaseFlatPrimitiveClass generateFlatPrimitiveClass(Class<? extends BaseFlatPrimitiveClass> clazz)
+            throws Exception {
         Class<?> targetClazz = this.getClass().getClassLoader().loadClass(clazz.getName());
-        BaseFlatPrimitiveClass newObject = (BaseFlatPrimitiveClass)targetClazz.newInstance();
-        
+        BaseFlatPrimitiveClass newObject = (BaseFlatPrimitiveClass) targetClazz.newInstance();
+
         newObject.setBooleanField(false);
         newObject.setByteField((byte) 99);
-        newObject.setCharField((char)'a');
+        newObject.setCharField((char) 'a');
         newObject.setDoubleField(50000000d);
         newObject.setFloatField(40000000f);
         newObject.setIntField(2);
-        newObject.setLongField(30000L);        
-        newObject.setShortField((short)1);
+        newObject.setLongField(30000L);
+        newObject.setShortField((short) 1);
         return newObject;
     }
-    
-    protected BaseFlatPrimitiveClass generateFlatPrimitiveClassPrimitiveFieldsBoxedValues(Class<? extends BaseFlatPrimitiveClass> clazz) throws Exception {
+
+    protected BaseFlatPrimitiveClass generateFlatPrimitiveClassPrimitiveFieldsBoxedValues(
+            Class<? extends BaseFlatPrimitiveClass> clazz) throws Exception {
         Class<?> targetClazz = this.getClass().getClassLoader().loadClass(clazz.getName());
-        BaseFlatPrimitiveClass newObject = (BaseFlatPrimitiveClass)targetClazz.newInstance();
-        
+        BaseFlatPrimitiveClass newObject = (BaseFlatPrimitiveClass) targetClazz.newInstance();
+
         newObject.setBooleanField(new Boolean(Boolean.FALSE));
         newObject.setByteField(new Byte((byte) 99));
         newObject.setCharField(new Character('a'));
         newObject.setDoubleField(new Double(50000000d));
         newObject.setFloatField(new Float(40000000f));
         newObject.setIntField(new Integer(2));
-        newObject.setLongField(new Long(30000L));        
-        newObject.setShortField(new Short((short)1));
+        newObject.setLongField(new Long(30000L));
+        newObject.setShortField(new Short((short) 1));
         return newObject;
     }
-    
-    protected BaseFlatPrimitiveClass generateFlatPrimitiveClassBoxedPrimitiveFieldsBoxedValues(Class<? extends BaseFlatPrimitiveClass> clazz) throws Exception {
+
+    protected BaseFlatPrimitiveClass generateFlatPrimitiveClassBoxedPrimitiveFieldsBoxedValues(
+            Class<? extends BaseFlatPrimitiveClass> clazz) throws Exception {
         Class<?> targetClazz = this.getClass().getClassLoader().loadClass(clazz.getName());
-        BaseFlatPrimitiveClass newObject = (BaseFlatPrimitiveClass)targetClazz.newInstance();
-        
+        BaseFlatPrimitiveClass newObject = (BaseFlatPrimitiveClass) targetClazz.newInstance();
+
         newObject.setBoxedBooleanField(new Boolean(Boolean.TRUE));
         newObject.setBoxedByteField(new Byte((byte) 87));
         newObject.setBoxedCharField(new Character('z'));
         newObject.setBoxedDoubleField(new Double(90000000d));
         newObject.setBoxedFloatField(new Float(70000000f));
         newObject.setBoxedIntField(new Integer(5));
-        newObject.setBoxedLongField(new Long(20000L));        
-        newObject.setBoxedShortField(new Short((short)5));
+        newObject.setBoxedLongField(new Long(20000L));
+        newObject.setBoxedShortField(new Short((short) 5));
         newObject.setBoxedStringField("boxedStringValue");
         return newObject;
     }
@@ -139,72 +143,78 @@ public class JavaJsonFlatMappingTest extends AtlasMappingBaseTest {
     @Test
     public void testCreateJavaJsonFlatFieldMappings() throws Exception {
         AtlasMapping atlasMapping = generateJsonJavaFlatMapping();
-        AtlasMappingService atlasMappingService = new AtlasMappingService(Arrays.asList("io.atlasmap.v2", "io.atlasmap.java.v2", "io.atlasmap.json.v2"));
-        atlasMappingService.saveMappingAsFile(atlasMapping, new File("src/test/resources/javaToJson/atlasmapping-flatprimitive.xml"));
+        AtlasMappingService atlasMappingService = new AtlasMappingService(
+                Arrays.asList("io.atlasmap.v2", "io.atlasmap.java.v2", "io.atlasmap.json.v2"));
+        atlasMappingService.saveMappingAsFile(atlasMapping,
+                new File("src/test/resources/javaToJson/atlasmapping-flatprimitive.xml"));
     }
 
     @Test
     public void testProcessJavaJsonFlatPrimitiveUnrooted() throws Exception {
-        AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/javaToJson/atlasmapping-flatprimitive-unrooted.xml"));
+        AtlasContext context = atlasContextFactory
+                .createContext(new File("src/test/resources/javaToJson/atlasmapping-flatprimitive-unrooted.xml"));
 
         AtlasSession session = context.createSession();
         session.setInput(generateFlatPrimitiveClass(SourceFlatPrimitiveClass.class));
         context.process(session);
-        
+
         Object object = session.getOutput();
         assertNotNull(object);
         assertTrue(object instanceof String);
         AtlasJsonTestUnrootedMapper testMapper = new AtlasJsonTestUnrootedMapper();
-        TargetFlatPrimitive targetObject = testMapper.readValue((String)object, TargetFlatPrimitive.class);
+        TargetFlatPrimitive targetObject = testMapper.readValue((String) object, TargetFlatPrimitive.class);
         AtlasTestUtil.validateJsonFlatPrimitivePrimitiveFields(targetObject);
     }
-        
+
     @Test
     public void testProcessJavaJsonFlatPrimitiveRooted() throws Exception {
-        AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/javaToJson/atlasmapping-flatprimitive-rooted.xml"));
+        AtlasContext context = atlasContextFactory
+                .createContext(new File("src/test/resources/javaToJson/atlasmapping-flatprimitive-rooted.xml"));
 
         AtlasSession session = context.createSession();
         session.setInput(generateFlatPrimitiveClass(SourceFlatPrimitiveClass.class));
         context.process(session);
-        
+
         Object object = session.getOutput();
         assertNotNull(object);
         assertTrue(object instanceof String);
         AtlasJsonTestRootedMapper testMapper = new AtlasJsonTestRootedMapper();
-        TargetFlatPrimitive targetObject = testMapper.readValue((String)object, TargetFlatPrimitive.class);
+        TargetFlatPrimitive targetObject = testMapper.readValue((String) object, TargetFlatPrimitive.class);
         AtlasTestUtil.validateJsonFlatPrimitivePrimitiveFields(targetObject);
     }
-              
+
     @Test
     public void testProcessJavaJsonBoxedFlatMappingPrimitiveUnrooted() throws Exception {
-        AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/javaToJson/atlasmapping-boxedflatprimitive-unrooted.xml"));
+        AtlasContext context = atlasContextFactory
+                .createContext(new File("src/test/resources/javaToJson/atlasmapping-boxedflatprimitive-unrooted.xml"));
 
         AtlasSession session = context.createSession();
         session.setInput(generateFlatPrimitiveClassBoxedPrimitiveFieldsBoxedValues(SourceFlatPrimitiveClass.class));
         context.process(session);
-        
+
         Object object = session.getOutput();
         assertNotNull(object);
         assertTrue(object instanceof String);
         AtlasJsonTestUnrootedMapper testMapper = new AtlasJsonTestUnrootedMapper();
-        TargetFlatPrimitive targetObject = testMapper.readValue((String)object, TargetFlatPrimitive.class);
+        TargetFlatPrimitive targetObject = testMapper.readValue((String) object, TargetFlatPrimitive.class);
         AtlasTestUtil.validateJsonFlatPrimitiveBoxedPrimitiveFields(targetObject);
     }
-        
+
     @Test
     public void testProcessJavaJsonBoxedFlatMappingPrimitiveRooted() throws Exception {
-        AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/javaToJson/atlasmapping-boxedflatprimitive-rooted.xml"));
+        AtlasContext context = atlasContextFactory
+                .createContext(new File("src/test/resources/javaToJson/atlasmapping-boxedflatprimitive-rooted.xml"));
 
         AtlasSession session = context.createSession();
         session.setInput(generateFlatPrimitiveClassBoxedPrimitiveFieldsBoxedValues(SourceFlatPrimitiveClass.class));
         context.process(session);
-        
+
         Object object = session.getOutput();
         assertNotNull(object);
         assertTrue(object instanceof String);
         AtlasJsonTestRootedMapper testMapper = new AtlasJsonTestRootedMapper();
-        TargetFlatPrimitive targetObject = testMapper.readValue((String)object, TargetFlatPrimitive.class);
+        TargetFlatPrimitive targetObject = testMapper.readValue((String) object, TargetFlatPrimitive.class);
         AtlasTestUtil.validateJsonFlatPrimitiveBoxedPrimitiveFields(targetObject);
     }
 
-} 
+}

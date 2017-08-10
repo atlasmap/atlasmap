@@ -19,12 +19,21 @@ import java.util.Map;
 
 public interface AtlasCombineStrategy {
 
-	default String getName() { return this.getClass().getSimpleName(); }
-	String getDelimiter();
-	void setDelimiter(String delimiter);
-	Integer getLimit();
-	void setLimit(Integer limit);
-	String combineValues(Map<Integer, String> values);
-	String combineValues(Map<Integer, String> values, String delimiter);
-	String combineValues(Map<Integer, String> values, String delimiter, Integer maxItems);
+    default String getName() {
+        return this.getClass().getSimpleName();
+    }
+
+    String getDelimiter();
+
+    void setDelimiter(String delimiter);
+
+    Integer getLimit();
+
+    void setLimit(Integer limit);
+
+    String combineValues(Map<Integer, String> values);
+
+    String combineValues(Map<Integer, String> values, String delimiter);
+
+    String combineValues(Map<Integer, String> values, String delimiter, Integer maxItems);
 }

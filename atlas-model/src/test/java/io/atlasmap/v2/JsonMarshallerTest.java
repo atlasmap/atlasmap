@@ -32,7 +32,7 @@ public class JsonMarshallerTest extends BaseMarshallerTest {
     public ObjectMapper mapper = null;
 
     @Override
-	@Before
+    @Before
     public void setUp() throws Exception {
         super.setUp();
 
@@ -42,7 +42,7 @@ public class JsonMarshallerTest extends BaseMarshallerTest {
     }
 
     @Override
-	@After
+    @After
     public void tearDown() throws Exception {
         super.tearDown();
 
@@ -53,8 +53,10 @@ public class JsonMarshallerTest extends BaseMarshallerTest {
     public void testReferenceMapping() throws Exception {
         AtlasMapping atlasMapping = generateReferenceAtlasMapping();
         // Object to JSON in file
-        mapper.writerWithDefaultPrettyPrinter().writeValue(new File("target" + File.separator + "junit" + File.separator + testName.getMethodName() + File.separator + "atlasmapping.json"), atlasMapping);
-        AtlasMapping uMapping = mapper.readValue(new File("target" + File.separator + "junit" + File.separator + testName.getMethodName() + File.separator + "atlasmapping.json"), AtlasMapping.class);
+        mapper.writerWithDefaultPrettyPrinter().writeValue(new File("target" + File.separator + "junit" + File.separator
+                + testName.getMethodName() + File.separator + "atlasmapping.json"), atlasMapping);
+        AtlasMapping uMapping = mapper.readValue(new File("target" + File.separator + "junit" + File.separator
+                + testName.getMethodName() + File.separator + "atlasmapping.json"), AtlasMapping.class);
         assertNotNull(uMapping);
         validateReferenceAtlasMapping(uMapping);
     }
@@ -97,81 +99,83 @@ public class JsonMarshallerTest extends BaseMarshallerTest {
     // uMapping.getLookupTables().getLookupTable().get(0).getLookupEntryList().getLookupEntry().size()));
     // }
     //
-    
+
     @Test
     public void testFieldActions() throws Exception {
         AtlasMapping atlasMapping = generateReferenceAtlasMapping();
         BaseMapping fm = atlasMapping.getMappings().getMapping().get(0);
         ((Mapping) fm).getOutputField().get(0).setActions(new Actions());
-        
+
         List<Action> actionsList = generateReferenceFieldActions();
         ((Mapping) fm).getOutputField().get(0).getActions().getActions().addAll(actionsList);
-        
-        for(Action a : ((Mapping) fm).getOutputField().get(0).getActions().getActions()) {
-            if(a instanceof CustomAction) {
-                CustomAction customAction = (CustomAction)a;
+
+        for (Action a : ((Mapping) fm).getOutputField().get(0).getActions().getActions()) {
+            if (a instanceof CustomAction) {
+                CustomAction customAction = (CustomAction) a;
                 customAction.setClassName("io.foo.Bar");
                 customAction.setMethodName("doStuff");
                 customAction.setInputFieldType(FieldType.STRING);
                 customAction.setOutputFieldType(FieldType.STRING);
             }
-            if(a instanceof SubString) {
-                SubString subString = (SubString)a;
+            if (a instanceof SubString) {
+                SubString subString = (SubString) a;
                 subString.setEndIndex(5);
                 subString.setStartIndex(2);
             }
-            if(a instanceof SubStringAfter) {
-                SubStringAfter subStringAfter = (SubStringAfter)a; 
+            if (a instanceof SubStringAfter) {
+                SubStringAfter subStringAfter = (SubStringAfter) a;
                 subStringAfter.setMatch("a");
                 subStringAfter.setEndIndex(5);
                 subStringAfter.setStartIndex(2);
             }
-            if(a instanceof SubStringBefore) {
-                SubStringBefore subStringBefore = (SubStringBefore)a;
+            if (a instanceof SubStringBefore) {
+                SubStringBefore subStringBefore = (SubStringBefore) a;
                 subStringBefore.setMatch("z");
                 subStringBefore.setEndIndex(5);
                 subStringBefore.setStartIndex(2);
             }
-            if(a instanceof PadStringLeft) {
-                PadStringLeft psl = (PadStringLeft)a;
+            if (a instanceof PadStringLeft) {
+                PadStringLeft psl = (PadStringLeft) a;
                 psl.setPadCharacter("a");
                 psl.setPadCount(25);
             }
-            if(a instanceof PadStringRight) {
-                PadStringRight psr = (PadStringRight)a;
+            if (a instanceof PadStringRight) {
+                PadStringRight psr = (PadStringRight) a;
                 psr.setPadCharacter("z");
                 psr.setPadCount(25);
             }
-            if(a instanceof ConvertAreaUnit) {
-                ConvertAreaUnit cau = (ConvertAreaUnit)a;
+            if (a instanceof ConvertAreaUnit) {
+                ConvertAreaUnit cau = (ConvertAreaUnit) a;
                 cau.setFromUnit(AreaUnitType.SQUARE_FOOT);
                 cau.setToUnit(AreaUnitType.SQUARE_METER);
             }
-            if(a instanceof ConvertDistanceUnit) {
-                ConvertDistanceUnit cdu = (ConvertDistanceUnit)a;
+            if (a instanceof ConvertDistanceUnit) {
+                ConvertDistanceUnit cdu = (ConvertDistanceUnit) a;
                 cdu.setFromUnit(DistanceUnitType.FOOT);
                 cdu.setToUnit(DistanceUnitType.METER);
             }
-            if(a instanceof ConvertMassUnit) {
-                ConvertMassUnit cmu = (ConvertMassUnit)a;
+            if (a instanceof ConvertMassUnit) {
+                ConvertMassUnit cmu = (ConvertMassUnit) a;
                 cmu.setFromUnit(MassUnitType.KILO_GRAM);
                 cmu.setToUnit(MassUnitType.POUND);
             }
-            if(a instanceof ConvertVolumeUnit) {
-                ConvertVolumeUnit cvu = (ConvertVolumeUnit)a;
+            if (a instanceof ConvertVolumeUnit) {
+                ConvertVolumeUnit cvu = (ConvertVolumeUnit) a;
                 cvu.setFromUnit(VolumeUnitType.CUBIC_FOOT);
                 cvu.setToUnit(VolumeUnitType.CUBIC_METER);
             }
-            if(a instanceof SumUp) {
-                SumUp su = (SumUp)a;
+            if (a instanceof SumUp) {
+                SumUp su = (SumUp) a;
                 su.setNumberType(NumberType.DECIMAL);
             }
         }
-        mapper.writeValue(new File("target/junit/" + testName.getMethodName() + "/" + "atlasmapping.json"), atlasMapping);
-        
-        AtlasMapping rereadMapping = mapper.readValue(new File("target/junit/" + testName.getMethodName() + "/" + "atlasmapping.json"), AtlasMapping.class);
+        mapper.writeValue(new File("target/junit/" + testName.getMethodName() + "/" + "atlasmapping.json"),
+                atlasMapping);
+
+        AtlasMapping rereadMapping = mapper.readValue(
+                new File("target/junit/" + testName.getMethodName() + "/" + "atlasmapping.json"), AtlasMapping.class);
     }
-    
+
     //
     // @Test
     // public void testMulitSourceMapping() throws Exception {

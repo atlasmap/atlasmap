@@ -15,7 +15,7 @@ public abstract class BaseOrderList {
     public void setOrderBatchNumber(Integer orderBatchNumber) {
         this.orderBatchNumber = orderBatchNumber;
     }
-    
+
     public Integer getNumberOrders() {
         return numberOrders;
     }
@@ -31,5 +31,5 @@ public abstract class BaseOrderList {
     public void setOrders(List<BaseOrder> orders) {
         this.orders = orders;
     }
-    
+
 }

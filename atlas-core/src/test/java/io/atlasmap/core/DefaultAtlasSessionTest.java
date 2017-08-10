@@ -16,8 +16,8 @@ import io.atlasmap.v2.Validations;
 
 public class DefaultAtlasSessionTest {
 
-    private DefaultAtlasSession session =  null;
-            
+    private DefaultAtlasSession session = null;
+
     @Before
     public void setUp() throws Exception {
         session = new DefaultAtlasSession(AtlasTestData.generateAtlasMapping());
@@ -60,14 +60,13 @@ public class DefaultAtlasSessionTest {
         assertNotNull(session.getValidations());
         assertNotNull(session.getValidations().getValidation());
         assertTrue(session.getValidations().getValidation().size() == 0);
-        
+
         Validations validations = new Validations();
         Validation validation = new Validation();
         validation.setField("foo");
         validation.setValue("bar");
         validations.getValidation().add(validation);
 
-        
         session.setValidations(validations);
         assertNotNull(session.getValidations());
         assertNotNull(session.getValidations().getValidation());
@@ -79,14 +78,14 @@ public class DefaultAtlasSessionTest {
         assertNotNull(session.getAudits());
         assertNotNull(session.getAudits().getAudit());
         assertTrue(session.getAudits().getAudit().size() == 0);
-        
+
         Audits audits = new Audits();
         Audit audit = new Audit();
         audit.setStatus(AuditStatus.INFO);
         audit.setMessage("hello");
-                
+
         audits.getAudit().add(audit);
-        
+
         session.setAudits(audits);
         assertNotNull(session.getAudits());
         assertNotNull(session.getAudits().getAudit());
@@ -98,7 +97,7 @@ public class DefaultAtlasSessionTest {
         session.setInput(new String("defaultInput"));
         assertNotNull(session.getInput());
         assertTrue(session.getInput() instanceof String);
-        assertEquals("defaultInput", (String)session.getInput());
+        assertEquals("defaultInput", (String) session.getInput());
     }
 
     @Test
@@ -106,16 +105,16 @@ public class DefaultAtlasSessionTest {
         session.setInput(new String("defaultInput"));
         assertNotNull(session.getInput());
         assertTrue(session.getInput() instanceof String);
-        assertEquals("defaultInput", (String)session.getInput());
-        
+        assertEquals("defaultInput", (String) session.getInput());
+
         session.setInput(new String("secondInput"), "second");
         assertNotNull(session.getInput());
         assertTrue(session.getInput() instanceof String);
-        assertEquals("defaultInput", (String)session.getInput());
-        
+        assertEquals("defaultInput", (String) session.getInput());
+
         assertNotNull(session.getInput("second"));
         assertTrue(session.getInput("second") instanceof String);
-        assertEquals("secondInput", (String)session.getInput("second"));
+        assertEquals("secondInput", (String) session.getInput("second"));
     }
 
     @Test
@@ -123,7 +122,7 @@ public class DefaultAtlasSessionTest {
         session.setOutput(new String("defaultOutput"));
         assertNotNull(session.getOutput());
         assertTrue(session.getOutput() instanceof String);
-        assertEquals("defaultOutput", (String)session.getOutput());    
+        assertEquals("defaultOutput", (String) session.getOutput());
     }
 
     @Test
@@ -131,16 +130,16 @@ public class DefaultAtlasSessionTest {
         session.setOutput(new String("defaultOutput"));
         assertNotNull(session.getOutput());
         assertTrue(session.getOutput() instanceof String);
-        assertEquals("defaultOutput", (String)session.getOutput());
-        
+        assertEquals("defaultOutput", (String) session.getOutput());
+
         session.setOutput(new String("secondOutput"), "second");
         assertNotNull(session.getOutput());
         assertTrue(session.getOutput() instanceof String);
-        assertEquals("defaultOutput", (String)session.getOutput());
-        
+        assertEquals("defaultOutput", (String) session.getOutput());
+
         assertNotNull(session.getOutput("second"));
         assertTrue(session.getOutput("second") instanceof String);
-        assertEquals("secondOutput", (String)session.getOutput("second"));
+        assertEquals("secondOutput", (String) session.getOutput("second"));
     }
 
     @Test
@@ -148,10 +147,10 @@ public class DefaultAtlasSessionTest {
         assertNotNull(session);
         assertNotNull(session.getProperties());
         assertTrue(session.getProperties().size() == 0);
-        
+
         session.getProperties().put("foo", "bar");
         assertTrue(session.getProperties().size() == 1);
-        assertEquals("bar", (String)session.getProperties().get("foo"));
+        assertEquals("bar", (String) session.getProperties().get("foo"));
     }
 
     @Test
@@ -160,11 +159,11 @@ public class DefaultAtlasSessionTest {
         assertFalse(session.hasErrors());
         assertTrue(session.warnCount() == 0);
         assertFalse(session.hasWarns());
-        
+
         Audit error = new Audit();
         error.setStatus(AuditStatus.ERROR);
         session.getAudits().getAudit().add(error);
-        
+
         assertTrue(session.errorCount() == 1);
         assertTrue(session.hasErrors());
         assertTrue(session.warnCount() == 0);
@@ -177,11 +176,11 @@ public class DefaultAtlasSessionTest {
         assertFalse(session.hasErrors());
         assertTrue(session.warnCount() == 0);
         assertFalse(session.hasWarns());
-        
+
         Audit warn = new Audit();
         warn.setStatus(AuditStatus.WARN);
         session.getAudits().getAudit().add(warn);
-        
+
         assertTrue(session.errorCount() == 0);
         assertFalse(session.hasErrors());
         assertTrue(session.warnCount() == 1);

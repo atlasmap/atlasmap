@@ -26,24 +26,24 @@ import java.lang.reflect.Array;
 
 public class StringUtilTest {
 
-	@Test
-	public void testRemoveGetterAndLowercaseFirstLetter() {
-		assertNull(StringUtil.removeGetterAndLowercaseFirstLetter(null));
-		assertEquals("", StringUtil.removeGetterAndLowercaseFirstLetter(""));
-		assertEquals("g", StringUtil.removeGetterAndLowercaseFirstLetter("g"));
-		assertEquals("ge", StringUtil.removeGetterAndLowercaseFirstLetter("ge"));
-		assertEquals("get", StringUtil.removeGetterAndLowercaseFirstLetter("get"));
-		assertEquals("i", StringUtil.removeGetterAndLowercaseFirstLetter("i"));
-		assertEquals("is", StringUtil.removeGetterAndLowercaseFirstLetter("is"));
-		assertEquals("abc", StringUtil.removeGetterAndLowercaseFirstLetter("getAbc"));
-		assertEquals("abc", StringUtil.removeGetterAndLowercaseFirstLetter("isAbc"));
-	}
+    @Test
+    public void testRemoveGetterAndLowercaseFirstLetter() {
+        assertNull(StringUtil.removeGetterAndLowercaseFirstLetter(null));
+        assertEquals("", StringUtil.removeGetterAndLowercaseFirstLetter(""));
+        assertEquals("g", StringUtil.removeGetterAndLowercaseFirstLetter("g"));
+        assertEquals("ge", StringUtil.removeGetterAndLowercaseFirstLetter("ge"));
+        assertEquals("get", StringUtil.removeGetterAndLowercaseFirstLetter("get"));
+        assertEquals("i", StringUtil.removeGetterAndLowercaseFirstLetter("i"));
+        assertEquals("is", StringUtil.removeGetterAndLowercaseFirstLetter("is"));
+        assertEquals("abc", StringUtil.removeGetterAndLowercaseFirstLetter("getAbc"));
+        assertEquals("abc", StringUtil.removeGetterAndLowercaseFirstLetter("isAbc"));
+    }
 
-	@Test
-	public void testInspectArraySize() {
-	    int[] foo = new int[10];
-	    
-	    int arraySize = Array.getLength(foo);
-	    System.out.println("ArraySize: " + arraySize);
-	}
+    @Test
+    public void testInspectArraySize() {
+        int[] foo = new int[10];
+
+        int arraySize = Array.getLength(foo);
+        System.out.println("ArraySize: " + arraySize);
+    }
 }

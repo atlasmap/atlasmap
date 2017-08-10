@@ -46,27 +46,29 @@ import io.atlasmap.v2.SimpleField;
 
 public abstract class BaseAtlasModule implements AtlasModule {
     private static final Logger logger = LoggerFactory.getLogger(BaseAtlasModule.class);
-    
+
     private AtlasConversionService atlasConversionService = null;
     private AtlasModuleMode atlasModuleMode = AtlasModuleMode.UNSET;
     protected boolean automaticallyProcessOutputFieldActions = true;
 
-    
     @Override
-    public void init() {}
+    public void init() {
+    }
 
     @Override
-    public void destroy() {}
-    
+    public void destroy() {
+    }
+
     @Override
     public void processInputActions(AtlasSession atlasSession, BaseMapping baseMapping) throws AtlasException {
         if (baseMapping.getMappingType().equals(MappingType.COLLECTION)) {
             return;
         }
-        AtlasFieldActionService fieldActionService = atlasSession.getAtlasContext().getContextFactory().getFieldActionService();
+        AtlasFieldActionService fieldActionService = atlasSession.getAtlasContext().getContextFactory()
+                .getFieldActionService();
         Mapping mapping = (Mapping) baseMapping;
-        for (Field field : mapping.getInputField()) { 
-            processFieldActions(fieldActionService, field); 
+        for (Field field : mapping.getInputField()) {
+            processFieldActions(fieldActionService, field);
         }
     }
 
@@ -78,17 +80,18 @@ public abstract class BaseAtlasModule implements AtlasModule {
         if (baseMapping.getMappingType().equals(MappingType.COLLECTION)) {
             return;
         }
-        AtlasFieldActionService fieldActionService = atlasSession.getAtlasContext().getContextFactory().getFieldActionService();
+        AtlasFieldActionService fieldActionService = atlasSession.getAtlasContext().getContextFactory()
+                .getFieldActionService();
         Mapping mapping = (Mapping) baseMapping;
-        for (Field field : mapping.getOutputField()) { 
-            processFieldActions(fieldActionService, field); 
+        for (Field field : mapping.getOutputField()) {
+            processFieldActions(fieldActionService, field);
         }
     }
-    
+
     public abstract int getCollectionSize(AtlasSession session, Field field) throws AtlasException;
+
     public abstract Field cloneField(Field field) throws AtlasException;
-    
-    
+
     public List<Mapping> generateInputMappings(AtlasSession session, BaseMapping baseMapping) throws AtlasException {
         if (logger.isDebugEnabled()) {
             logger.debug("Generating Input Mappings from mapping: " + baseMapping);
@@ -100,37 +103,42 @@ public abstract class BaseAtlasModule implements AtlasModule {
             return Arrays.asList((Mapping) baseMapping);
         }
         List<Mapping> mappings = new LinkedList<>();
-        for (BaseMapping m : ((Collection)baseMapping).getMappings().getMapping()) {
-            Mapping mapping = (Mapping)m;
+        for (BaseMapping m : ((Collection) baseMapping).getMappings().getMapping()) {
+            Mapping mapping = (Mapping) m;
             Field inputField = mapping.getInputField().get(0);
             boolean inputIsCollection = PathUtil.isCollection(inputField.getPath());
             if (!inputIsCollection) {
-                //this is a input non-collection to output collection, ie: contact.firstName -> contact[].firstName
-                //this will be expanded later by generateOutputMappings, for input processing, just copy it over
+                // this is a input non-collection to output collection, ie: contact.firstName ->
+                // contact[].firstName
+                // this will be expanded later by generateOutputMappings, for input processing,
+                // just copy it over
                 if (logger.isDebugEnabled()) {
-                    logger.debug("Internal mapping's input field is not a collection, not cloning: " + mapping);                
+                    logger.debug("Internal mapping's input field is not a collection, not cloning: " + mapping);
                 }
 
-                //this is a output collection such as contact<>.firstName, but input is non collection such as contact.firstName
-                //so just set the output collection field path to be contact<0>.firstName, which will cause at least one
-                //output object to be created for our copied firstName value
+                // this is a output collection such as contact<>.firstName, but input is non
+                // collection such as contact.firstName
+                // so just set the output collection field path to be contact<0>.firstName,
+                // which will cause at least one
+                // output object to be created for our copied firstName value
                 for (Field f : mapping.getOutputField()) {
                     f.setPath(PathUtil.overwriteCollectionIndex(f.getPath(), 0));
                 }
                 mappings.add(mapping);
                 continue;
             }
-            
+
             int inputCollectionSize = this.getCollectionSize(session, inputField);
             if (logger.isDebugEnabled()) {
-                logger.debug("Internal mapping's input field is a collection. Cloning it for each item (" + inputCollectionSize + " clones): " + mapping);
+                logger.debug("Internal mapping's input field is a collection. Cloning it for each item ("
+                        + inputCollectionSize + " clones): " + mapping);
             }
             for (int i = 0; i < inputCollectionSize; i++) {
                 Mapping cloneMapping = (Mapping) AtlasModelFactory.cloneMapping(mapping, false);
                 for (Field f : mapping.getInputField()) {
                     Field clonedField = cloneField(f);
                     clonedField.setPath(PathUtil.overwriteCollectionIndex(clonedField.getPath(), i));
-                    cloneMapping.getInputField().add(clonedField);                    
+                    cloneMapping.getInputField().add(clonedField);
                 }
                 for (Field f : mapping.getOutputField()) {
                     Field clonedField = cloneField(f);
@@ -140,193 +148,234 @@ public abstract class BaseAtlasModule implements AtlasModule {
                     cloneMapping.getOutputField().add(clonedField);
                 }
                 mappings.add(cloneMapping);
-            }            
+            }
         }
         if (logger.isDebugEnabled()) {
             logger.debug("Generated " + mappings.size() + " mappings from mapping: " + baseMapping);
         }
-        ((Collection)baseMapping).getMappings().getMapping().clear();
-        ((Collection)baseMapping).getMappings().getMapping().addAll(mappings);
-        
+        ((Collection) baseMapping).getMappings().getMapping().clear();
+        ((Collection) baseMapping).getMappings().getMapping().addAll(mappings);
+
         return mappings;
     }
-    
+
     public List<Mapping> getOutputMappings(AtlasSession session, BaseMapping baseMapping) throws AtlasException {
-        if (!baseMapping.getMappingType().equals(MappingType.COLLECTION)) {            
+        if (!baseMapping.getMappingType().equals(MappingType.COLLECTION)) {
             return Arrays.asList((Mapping) baseMapping);
         }
         List<Mapping> mappings = new LinkedList<>();
-        for (BaseMapping m : ((Collection)baseMapping).getMappings().getMapping()) {
-            mappings.add((Mapping)m);                
+        for (BaseMapping m : ((Collection) baseMapping).getMappings().getMapping()) {
+            mappings.add((Mapping) m);
         }
         return mappings;
     }
-    
+
     @Override
     public void processPreInputExecution(AtlasSession session) throws AtlasException {
-        if(logger.isDebugEnabled()) {
+        if (logger.isDebugEnabled()) {
             logger.debug("processPreInputExcution completed");
         }
     }
-    
+
     @Override
     public void processPostInputExecution(AtlasSession session) throws AtlasException {
-        if(logger.isDebugEnabled()) {
+        if (logger.isDebugEnabled()) {
             logger.debug("processPostInputExecution completed");
         }
     }
-    
+
     @Override
     public void processPostValidation(AtlasSession session) throws AtlasException {
-        if(logger.isDebugEnabled()) {
+        if (logger.isDebugEnabled()) {
             logger.debug("processPostValidation completed");
         }
-    }       
-    
+    }
+
     protected void processConstantField(AtlasSession atlasSession, Mapping mapping) throws AtlasException {
-        for(Field f : mapping.getInputField()) {
-            if(f instanceof ConstantField) {
-                if(f.getFieldType() == null && f.getValue() != null) {
+        for (Field f : mapping.getInputField()) {
+            if (f instanceof ConstantField) {
+                if (f.getFieldType() == null && f.getValue() != null) {
                     f.setFieldType(getConversionService().fieldTypeFromClass(f.getValue().getClass()));
                 }
             }
-        }        
-    }
-    
-    protected void processPropertyField(AtlasSession atlasSession, Mapping mapping, AtlasPropertyStrategy atlasPropertyStrategy) throws AtlasException {
-        for(Field f : mapping.getInputField()) {
-            if(f instanceof PropertyField) {
-                atlasPropertyStrategy.processPropertyField(atlasSession.getMapping(), (PropertyField)f, atlasSession.getProperties());
-            }
-        }
-        
-        for(Field f : mapping.getOutputField()) {
-            if(f instanceof PropertyField) {
-                atlasPropertyStrategy.processPropertyField(atlasSession.getMapping(), (PropertyField)f, atlasSession.getProperties());
-            }
         }
     }
-    
+
+    protected void processPropertyField(AtlasSession atlasSession, Mapping mapping,
+            AtlasPropertyStrategy atlasPropertyStrategy) throws AtlasException {
+        for (Field f : mapping.getInputField()) {
+            if (f instanceof PropertyField) {
+                atlasPropertyStrategy.processPropertyField(atlasSession.getMapping(), (PropertyField) f,
+                        atlasSession.getProperties());
+            }
+        }
+
+        for (Field f : mapping.getOutputField()) {
+            if (f instanceof PropertyField) {
+                atlasPropertyStrategy.processPropertyField(atlasSession.getMapping(), (PropertyField) f,
+                        atlasSession.getProperties());
+            }
+        }
+    }
+
     protected void processLookupField(AtlasSession session, Mapping mapping) throws AtlasException {
-        
-        if(mapping == null || mapping.getMappingType() == null || MappingType.LOOKUP.equals(mapping.getMappingType()) || 
-                mapping.getLookupTableName() == null || mapping.getLookupTableName().trim().length() == 0) {
+
+        if (mapping == null || mapping.getMappingType() == null || MappingType.LOOKUP.equals(mapping.getMappingType())
+                || mapping.getLookupTableName() == null || mapping.getLookupTableName().trim().length() == 0) {
             throw new AtlasException("Lookup mapping must have lookupTableName specified");
         }
-        
-        if(session == null || session.getMapping() == null) {
+
+        if (session == null || session.getMapping() == null) {
             throw new AtlasException("AtlasSession must be initialized");
         }
-        
-        if(session.getMapping().getLookupTables() == null || session.getMapping().getLookupTables().getLookupTable() == null 
+
+        if (session.getMapping().getLookupTables() == null
+                || session.getMapping().getLookupTables().getLookupTable() == null
                 || session.getMapping().getLookupTables().getLookupTable().size() == 0) {
-            logger.warn(String.format("No lookup table found for specified lookupTableName=%s", mapping.getLookupTableName()));
+            logger.warn(String.format("No lookup table found for specified lookupTableName=%s",
+                    mapping.getLookupTableName()));
             return;
         }
 
         LookupTable currentTable = null;
-        for(LookupTable lookupTable : session.getMapping().getLookupTables().getLookupTable()) {
-            if(lookupTable.getName() != null && lookupTable.getName().equals(mapping.getLookupTableName())) {
+        for (LookupTable lookupTable : session.getMapping().getLookupTables().getLookupTable()) {
+            if (lookupTable.getName() != null && lookupTable.getName().equals(mapping.getLookupTableName())) {
                 currentTable = lookupTable;
             }
         }
-        
-        if(currentTable.getLookupEntry() == null || currentTable.getLookupEntry().isEmpty()) {
-            logger.warn(String.format("Lookup table lookupTableName=%s does not contain any entries", mapping.getLookupTableName()));
+
+        if (currentTable.getLookupEntry() == null || currentTable.getLookupEntry().isEmpty()) {
+            logger.warn(String.format("Lookup table lookupTableName=%s does not contain any entries",
+                    mapping.getLookupTableName()));
             return;
         }
-        
-        for(LookupEntry entry : currentTable.getLookupEntry()) {
-            for(Field inputField : mapping.getInputField()) {
-                if(entry.getSourceValue().equals(inputField.getValue())) {
+
+        for (LookupEntry entry : currentTable.getLookupEntry()) {
+            for (Field inputField : mapping.getInputField()) {
+                if (entry.getSourceValue().equals(inputField.getValue())) {
                     inputField.setValue(entry.getTargetValue());
-                    if(logger.isDebugEnabled()) {
-                        logger.debug(String.format("Processing lookup value for iP=%s iV=%s lksV=%s lksT=%s lktV=%s lktT=%s", inputField.getPath(), inputField.getValue(), entry.getSourceValue(), entry.getSourceType(), entry.getTargetValue(), entry.getTargetType()));
+                    if (logger.isDebugEnabled()) {
+                        logger.debug(
+                                String.format("Processing lookup value for iP=%s iV=%s lksV=%s lksT=%s lktV=%s lktT=%s",
+                                        inputField.getPath(), inputField.getValue(), entry.getSourceValue(),
+                                        entry.getSourceType(), entry.getTargetValue(), entry.getTargetType()));
                     }
                 }
             }
         }
-        
+
     }
 
-    protected Field processSeparateField(AtlasSession session, Mapping mapping, Field inputField, Field outputField) throws AtlasException {
-        if(outputField.getIndex() == null || outputField.getIndex() < 0) {
-            logger.warn(String.format("Separate requires Index value to be set on outputField outputField.path=%s", outputField.getPath()));
-            addAudit(session, outputField.getDocId(), String.format("Separate requires Index value to be set on outputField outputField.path=%s", outputField.getPath()), outputField.getPath(), AuditStatus.ERROR, null);
+    protected Field processSeparateField(AtlasSession session, Mapping mapping, Field inputField, Field outputField)
+            throws AtlasException {
+        if (outputField.getIndex() == null || outputField.getIndex() < 0) {
+            logger.warn(String.format("Separate requires Index value to be set on outputField outputField.path=%s",
+                    outputField.getPath()));
+            addAudit(session, outputField.getDocId(),
+                    String.format("Separate requires Index value to be set on outputField outputField.path=%s",
+                            outputField.getPath()),
+                    outputField.getPath(), AuditStatus.ERROR, null);
             return null;
         }
-        
+
         Field inputFieldsep = mapping.getInputField().get(0);
-        if((inputFieldsep.getFieldType() != null && !FieldType.STRING.equals(inputFieldsep.getFieldType()) ||
-           (inputFieldsep.getValue() == null || !inputFieldsep.getValue().getClass().isAssignableFrom(String.class)))) {
-            logger.warn(String.format("Separate requires String field type for inputField.path=%s", inputFieldsep.getPath()));
-            addAudit(session, outputField.getDocId(), String.format("Separate requires String field type for inputField.path=%s", inputFieldsep.getPath()), outputField.getPath(), AuditStatus.WARN, null);
+        if ((inputFieldsep.getFieldType() != null && !FieldType.STRING.equals(inputFieldsep.getFieldType())
+                || (inputFieldsep.getValue() == null
+                        || !inputFieldsep.getValue().getClass().isAssignableFrom(String.class)))) {
+            logger.warn(String.format("Separate requires String field type for inputField.path=%s",
+                    inputFieldsep.getPath()));
+            addAudit(session, outputField.getDocId(), String
+                    .format("Separate requires String field type for inputField.path=%s", inputFieldsep.getPath()),
+                    outputField.getPath(), AuditStatus.WARN, null);
             return null;
         }
-        
-        String inputValue = (String)inputFieldsep.getValue();
+
+        String inputValue = (String) inputFieldsep.getValue();
         List<String> separatedValues = null;
-        if(mapping.getDelimiter() != null) {
-            separatedValues = session.getAtlasContext().getContextFactory().getSeparateStrategy().separateValue(inputValue, mapping.getDelimiter());
+        if (mapping.getDelimiter() != null) {
+            separatedValues = session.getAtlasContext().getContextFactory().getSeparateStrategy()
+                    .separateValue(inputValue, mapping.getDelimiter());
         } else {
-            separatedValues = session.getAtlasContext().getContextFactory().getSeparateStrategy().separateValue(inputValue);
+            separatedValues = session.getAtlasContext().getContextFactory().getSeparateStrategy()
+                    .separateValue(inputValue);
         }
-        
-        if(separatedValues == null || separatedValues.isEmpty()) {
-            logger.debug(String.format("Empty string for Separate mapping inputField.path=%s", inputFieldsep.getPath()));
+
+        if (separatedValues == null || separatedValues.isEmpty()) {
+            logger.debug(
+                    String.format("Empty string for Separate mapping inputField.path=%s", inputFieldsep.getPath()));
             return null;
         }
-        
-        if(separatedValues.size() < outputField.getIndex()) {
-            logger.error(String.format("Separate returned fewer segements count=%s when outputField.path=%s requested index=%s", separatedValues.size(), outputField.getPath(), outputField.getIndex()));
-            addAudit(session, outputField.getDocId(), String.format("Separate returned fewer segements count=%s when outputField.path=%s requested index=%s", separatedValues.size(), outputField.getPath(), outputField.getIndex()), outputField.getPath(), AuditStatus.ERROR, null);
+
+        if (separatedValues.size() < outputField.getIndex()) {
+            logger.error(String.format(
+                    "Separate returned fewer segements count=%s when outputField.path=%s requested index=%s",
+                    separatedValues.size(), outputField.getPath(), outputField.getIndex()));
+            addAudit(session, outputField.getDocId(),
+                    String.format(
+                            "Separate returned fewer segements count=%s when outputField.path=%s requested index=%s",
+                            separatedValues.size(), outputField.getPath(), outputField.getIndex()),
+                    outputField.getPath(), AuditStatus.ERROR, null);
             return null;
         }
-        
+
         SimpleField simpleField = AtlasModelFactory.cloneFieldToSimpleField(inputFieldsep);
         simpleField.setValue(separatedValues.get(outputField.getIndex()));
         return simpleField;
     }
-    
-    protected void processCombineField(AtlasSession session, Mapping mapping, List<Field> inputFields, Field outputField) throws AtlasException {
+
+    protected void processCombineField(AtlasSession session, Mapping mapping, List<Field> inputFields,
+            Field outputField) throws AtlasException {
         Map<Integer, String> combineValues = null;
-        for(Field inputField : inputFields) {
-            if(inputField.getIndex() == null || inputField.getIndex() < 0) {
-                logger.error(String.format("Combine requires Index value to be set on all inputFields inputField.path=%s", inputField.getPath()));
-                addAudit(session, outputField.getDocId(), String.format("Combine requires Index value to be set on all inputFields inputField.path=%s", inputField.getPath()), outputField.getPath(), AuditStatus.ERROR, null);
+        for (Field inputField : inputFields) {
+            if (inputField.getIndex() == null || inputField.getIndex() < 0) {
+                logger.error(
+                        String.format("Combine requires Index value to be set on all inputFields inputField.path=%s",
+                                inputField.getPath()));
+                addAudit(session, outputField.getDocId(),
+                        String.format("Combine requires Index value to be set on all inputFields inputField.path=%s",
+                                inputField.getPath()),
+                        outputField.getPath(), AuditStatus.ERROR, null);
                 return;
             }
-            if((inputField.getFieldType() != null && !FieldType.STRING.equals(inputField.getFieldType()) ||
-               (inputField.getValue() != null && !inputField.getValue().getClass().isAssignableFrom(String.class)))) {
-                logger.error(String.format("Combine requires String field type for inputField.path=%s", inputField.getPath()));
-                addAudit(session, outputField.getDocId(), String.format("Combine requires String field type for inputField.path=%s", inputField.getPath()), outputField.getPath(), AuditStatus.WARN, null);
+            if ((inputField.getFieldType() != null && !FieldType.STRING.equals(inputField.getFieldType())
+                    || (inputField.getValue() != null
+                            && !inputField.getValue().getClass().isAssignableFrom(String.class)))) {
+                logger.error(String.format("Combine requires String field type for inputField.path=%s",
+                        inputField.getPath()));
+                addAudit(session, outputField.getDocId(), String
+                        .format("Combine requires String field type for inputField.path=%s", inputField.getPath()),
+                        outputField.getPath(), AuditStatus.WARN, null);
                 continue;
             }
-            
-            if(combineValues == null) {
-                // We need to support a sorted map w/ null values 
+
+            if (combineValues == null) {
+                // We need to support a sorted map w/ null values
                 combineValues = new HashMap<Integer, String>();
             }
-            
-            combineValues.put(inputField.getIndex(), (String)inputField.getValue());
+
+            combineValues.put(inputField.getIndex(), (String) inputField.getValue());
         }
-        
+
         String combinedValue = null;
-        if(mapping.getDelimiter() != null) {
-            combinedValue = session.getAtlasContext().getContextFactory().getCombineStrategy().combineValues(combineValues, mapping.getDelimiter());
+        if (mapping.getDelimiter() != null) {
+            combinedValue = session.getAtlasContext().getContextFactory().getCombineStrategy()
+                    .combineValues(combineValues, mapping.getDelimiter());
         } else {
-            combinedValue = session.getAtlasContext().getContextFactory().getCombineStrategy().combineValues(combineValues);
+            combinedValue = session.getAtlasContext().getContextFactory().getCombineStrategy()
+                    .combineValues(combineValues);
         }
-        
-        if(combinedValue == null || combinedValue.trim().isEmpty()) {
-            logger.debug(String.format("Empty combined string for Combine mapping outputField.path=%s", outputField.getPath()));
+
+        if (combinedValue == null || combinedValue.trim().isEmpty()) {
+            logger.debug(String.format("Empty combined string for Combine mapping outputField.path=%s",
+                    outputField.getPath()));
             return;
         }
-                
+
         outputField.setValue(combinedValue);
     }
-    
-    protected void processLookupField(AtlasSession session, String lookupTableName, String inputValue, Field outputField) throws AtlasException {
+
+    protected void processLookupField(AtlasSession session, String lookupTableName, String inputValue,
+            Field outputField) throws AtlasException {
         LookupTable table = null;
         for (LookupTable t : session.getMapping().getLookupTables().getLookupTable()) {
             if (t.getName().equals(lookupTableName)) {
@@ -335,9 +384,10 @@ public abstract class BaseAtlasModule implements AtlasModule {
             }
         }
         if (table == null) {
-            throw new AtlasException("Could not find lookup table with name '" + lookupTableName + "' for outputField: " + outputField.getPath());
-        }                
-        
+            throw new AtlasException("Could not find lookup table with name '" + lookupTableName + "' for outputField: "
+                    + outputField.getPath());
+        }
+
         String lookupValue = null;
         FieldType lookupType = null;
         for (LookupEntry lkp : table.getLookupEntry()) {
@@ -347,22 +397,23 @@ public abstract class BaseAtlasModule implements AtlasModule {
                 break;
             }
         }
-        
+
         Object outputValue = null;
-        if(lookupType == null || FieldType.STRING.equals(lookupType)) {
+        if (lookupType == null || FieldType.STRING.equals(lookupType)) {
             outputValue = lookupValue;
         } else {
             outputValue = getConversionService().convertType(lookupValue, FieldType.STRING, lookupType);
         }
-        
-        if(outputField.getFieldType() != null && !outputField.getFieldType().equals(lookupType)) {
+
+        if (outputField.getFieldType() != null && !outputField.getFieldType().equals(lookupType)) {
             outputValue = getConversionService().convertType(outputValue, lookupType, outputField.getFieldType());
         }
-        
+
         outputField.setValue(outputValue);
     }
-    
-    protected void addAudit(AtlasSession session, String docId, String message, String path, AuditStatus status, String value) {
+
+    protected void addAudit(AtlasSession session, String docId, String message, String path, AuditStatus status,
+            String value) {
         Audit audit = new Audit();
         audit.setDocId(docId);
         audit.setMessage(message);
@@ -371,11 +422,11 @@ public abstract class BaseAtlasModule implements AtlasModule {
         audit.setValue(value);
         session.getAudits().getAudit().add(audit);
     }
-    
+
     protected void processFieldActions(AtlasFieldActionService fieldActionService, Field field) throws AtlasException {
         field.setValue(fieldActionService.processActions(field.getActions(), field.getValue(), field.getFieldType()));
     }
-    
+
     @Override
     public AtlasModuleMode getMode() {
         return this.atlasModuleMode;
@@ -385,7 +436,7 @@ public abstract class BaseAtlasModule implements AtlasModule {
     public void setMode(AtlasModuleMode atlasModuleMode) {
         this.atlasModuleMode = atlasModuleMode;
     }
-            
+
     @Override
     public Boolean isStatisticsSupported() {
         return false;
@@ -395,12 +446,12 @@ public abstract class BaseAtlasModule implements AtlasModule {
     public Boolean isStatisticsEnabled() {
         return false;
     }
-    
+
     @Override
     public List<AtlasModuleMode> listSupportedModes() {
         return Arrays.asList(AtlasModuleMode.SOURCE, AtlasModuleMode.TARGET);
     }
-    
+
     @Override
     public AtlasConversionService getConversionService() {
         return atlasConversionService;
@@ -410,6 +461,5 @@ public abstract class BaseAtlasModule implements AtlasModule {
     public void setConversionService(AtlasConversionService atlasConversionService) {
         this.atlasConversionService = atlasConversionService;
     }
-
 
 }

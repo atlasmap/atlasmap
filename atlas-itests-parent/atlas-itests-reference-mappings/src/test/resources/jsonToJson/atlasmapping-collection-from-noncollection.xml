@@ -1,17 +1,23 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<AtlasMapping xmlns="http://atlasmap.io/v2" xmlns:ns3="http://atlasmap.io/json/v2" name="UI.782860">
-    <DataSource dataSourceType="Source" uri="atlas:json"/>
-    <DataSource dataSourceType="Target" uri="atlas:json"/>
+<AtlasMapping xmlns="http://atlasmap.io/v2" xmlns:ns3="http://atlasmap.io/json/v2"
+    name="UI.782860">
+    <DataSource dataSourceType="Source" uri="atlas:json" />
+    <DataSource dataSourceType="Target" uri="atlas:json" />
     <Mappings>
-        <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="Collection" mappingType="Collection">
+        <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:type="Collection" mappingType="Collection">
             <Mappings>
                 <Mapping xsi:type="Mapping" mappingType="Map">
-                    <InputField xsi:type="ns3:JsonField" name="firstName" path="/contact/firstName" fieldType="String"/>
-                    <OutputField xsi:type="ns3:JsonField" name="firstName" path="/contact&lt;&gt;/name" fieldType="String"/>
+                    <InputField xsi:type="ns3:JsonField"
+                        name="firstName" path="/contact/firstName"
+                        fieldType="String" />
+                    <OutputField xsi:type="ns3:JsonField"
+                        name="firstName" path="/contact&lt;&gt;/name"
+                        fieldType="String" />
                 </Mapping>
             </Mappings>
         </Mapping>
     </Mappings>
-    <LookupTables/>
-    <Properties/>
+    <LookupTables />
+    <Properties />
 </AtlasMapping>

@@ -27,11 +27,11 @@ import javax.ws.rs.ext.Provider;
 @Provider
 public class AtlasJsonProvider implements ContextResolver<ObjectMapper> {
 
-	private ObjectMapper objectMapper;
+    private ObjectMapper objectMapper;
 
-	public AtlasJsonProvider() {
+    public AtlasJsonProvider() {
         objectMapper = createObjectMapper();
-	}
+    }
 
     public static ObjectMapper createObjectMapper() {
         ObjectMapper om = new ObjectMapper();
@@ -45,8 +45,8 @@ public class AtlasJsonProvider implements ContextResolver<ObjectMapper> {
     }
 
     @Override
-	public ObjectMapper getContext(Class<?> objectType) {
-		return objectMapper;
-	}
+    public ObjectMapper getContext(Class<?> objectType) {
+        return objectMapper;
+    }
 
 }

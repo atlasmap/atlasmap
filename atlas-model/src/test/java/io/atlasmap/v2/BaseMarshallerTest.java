@@ -140,22 +140,22 @@ public abstract class BaseMarshallerTest {
 
         Mapping f0 = (Mapping) mapping.getMappings().getMapping().get(0);
         validateMapField(f0, "map", false);
-        
+
         Mapping f1 = (Mapping) mapping.getMappings().getMapping().get(1);
         validateCombineField(f1, "combine");
 
         Mapping f2 = (Mapping) mapping.getMappings().getMapping().get(2);
         validateMapField(f2, "mapActions", true);
-        
+
         Mapping f3 = (Mapping) mapping.getMappings().getMapping().get(3);
         validateSeparateField(f3, "separate");
-        
+
         Mapping f4 = (Mapping) mapping.getMappings().getMapping().get(4);
         validateMapPropertyField(f4, "prop");
-        
+
         Mapping f5 = (Mapping) mapping.getMappings().getMapping().get(5);
         validateMapLookupField(f5, "lookup");
-        
+
         validateProperties(mapping.getProperties());
     }
 
@@ -176,8 +176,8 @@ public abstract class BaseMarshallerTest {
         fm.getOutputField().add(outputMockField);
 
         mapping.getMappings().getMapping().add(fm);
-        
-        if(outputActions) {
+
+        if (outputActions) {
             outputMockField.setActions(new Actions());
             outputMockField.getActions().getActions().add(new Uppercase());
             outputMockField.getActions().getActions().add(new Lowercase());
@@ -205,43 +205,63 @@ public abstract class BaseMarshallerTest {
         assertEquals(key + "-output", ((MockField) f2).getName());
         assertEquals(key + "-output-value", f2.getValue());
         assertEquals(FieldType.STRING, ((MockField) f2).getFieldType());
-        
-        if(outputActions) {
+
+        if (outputActions) {
             assertNotNull(f2.getActions());
-            
-            int i=0;
-            for(Action a : f2.getActions().getActions()) {
-                if(a instanceof Camelize) { i++; }
-                if(a instanceof Capitalize) { i++; }
-                if(a instanceof Lowercase) { i++; }
-                if(a instanceof SeparateByDash) { i++; }
-                if(a instanceof SeparateByUnderscore) { i++; }
-                if(a instanceof StringLength) { i++; }
-                if(a instanceof Trim) { i++; }
-                if(a instanceof TrimLeft) { i++; }
-                if(a instanceof TrimRight) { i++; }
-                if(a instanceof Uppercase) { i++; }
+
+            int i = 0;
+            for (Action a : f2.getActions().getActions()) {
+                if (a instanceof Camelize) {
+                    i++;
+                }
+                if (a instanceof Capitalize) {
+                    i++;
+                }
+                if (a instanceof Lowercase) {
+                    i++;
+                }
+                if (a instanceof SeparateByDash) {
+                    i++;
+                }
+                if (a instanceof SeparateByUnderscore) {
+                    i++;
+                }
+                if (a instanceof StringLength) {
+                    i++;
+                }
+                if (a instanceof Trim) {
+                    i++;
+                }
+                if (a instanceof TrimLeft) {
+                    i++;
+                }
+                if (a instanceof TrimRight) {
+                    i++;
+                }
+                if (a instanceof Uppercase) {
+                    i++;
+                }
             }
             assertEquals(new Integer(2), new Integer(i));
         } else {
             assertNull(f2.getActions());
         }
     }
-    
+
     protected void addMapLookupField(AtlasMapping mapping, String key) {
-        
+
         LookupTable table = new LookupTable();
-        table.setName(key+"-lookupTable");
-        
+        table.setName(key + "-lookupTable");
+
         LookupEntry l1 = new LookupEntry();
         l1.setSourceType(FieldType.STRING);
         l1.setSourceValue("Foo");
         l1.setTargetType(FieldType.STRING);
         l1.setTargetValue("Bar");
-        
+
         table.getLookupEntry().add(l1);
         mapping.getLookupTables().getLookupTable().add(table);
-        
+
         MockField inputField = new MockField();
         inputField.setName(key + "-input");
         inputField.setValue(key + "-input-value");
@@ -255,7 +275,7 @@ public abstract class BaseMarshallerTest {
         fm.getInputField().add(inputField);
         fm.getOutputField().add(outputField);
 
-        fm.setLookupTableName(key+"-lookupTable");
+        fm.setLookupTableName(key + "-lookupTable");
         mapping.getMappings().getMapping().add(fm);
     }
 
@@ -263,7 +283,7 @@ public abstract class BaseMarshallerTest {
         assertNotNull(fm);
         assertNull(fm.getAlias());
         assertEquals(MappingType.LOOKUP, fm.getMappingType());
-        
+
         assertNotNull(fm.getInputField());
         Field f1 = fm.getInputField().get(0);
         assertNull(f1.getActions());
@@ -280,10 +300,10 @@ public abstract class BaseMarshallerTest {
         assertEquals(key + "-output-value", f2.getValue());
         assertNull(((MockField) f2).getFieldType());
         assertNull(f2.getActions());
-        
-        assertEquals(key+"-lookupTable", fm.getLookupTableName());
+
+        assertEquals(key + "-lookupTable", fm.getLookupTableName());
     }
-    
+
     protected void addMapPropertyField(AtlasMapping mapping, String key) {
         MockField inputField = new MockField();
         inputField.setName(key + "-input");
@@ -298,7 +318,7 @@ public abstract class BaseMarshallerTest {
         fm.getOutputField().add(outputField);
 
         mapping.getMappings().getMapping().add(fm);
-        
+
     }
 
     protected void validateMapPropertyField(Mapping fm, String key) {
@@ -324,100 +344,100 @@ public abstract class BaseMarshallerTest {
         assertNull(((PropertyField) f2).getFieldType());
         assertNull(f2.getActions());
     }
-    
+
     protected void addCombineField(AtlasMapping mapping, String key) {
         Mapping fm = AtlasModelFactory.createMapping(MappingType.COMBINE);
 
-        for(int i=0; i < 3; i++) {
+        for (int i = 0; i < 3; i++) {
             MockField inputMockField = new MockField();
-            inputMockField.setName(key+"-input-"+i);
-            inputMockField.setValue(key+"-input-"+i+"-value");
+            inputMockField.setName(key + "-input-" + i);
+            inputMockField.setValue(key + "-input-" + i + "-value");
             inputMockField.setIndex(i);
             fm.getInputField().add(inputMockField);
         }
-       
+
         MockField outputMockField = new MockField();
-        outputMockField.setName(key+"-output");
-        outputMockField.setValue(key+"-output-value");
+        outputMockField.setName(key + "-output");
+        outputMockField.setValue(key + "-output-value");
         fm.getOutputField().add(outputMockField);
 
         fm.setDelimiterString(",");
         mapping.getMappings().getMapping().add(fm);
     }
-    
+
     protected void validateCombineField(Mapping fm, String key) {
         assertNotNull(fm);
         assertNull(fm.getAlias());
         assertEquals(MappingType.COMBINE, fm.getMappingType());
         assertEquals(",", fm.getDelimiterString());
-        
+
         assertEquals(new Integer(3), new Integer(fm.getInputField().size()));
         assertNotNull(fm.getInputField());
-        
-        for(int i=0; i < 3; i++) {
-            Field in = fm.getInputField().get(i);      
+
+        for (int i = 0; i < 3; i++) {
+            Field in = fm.getInputField().get(i);
             assertNull(in.getActions());
             assertTrue(in instanceof MockField);
-            assertEquals(key+"-input-"+i, ((MockField) in).getName());
-            assertEquals(key+"-input-"+i+"-value", in.getValue());
+            assertEquals(key + "-input-" + i, ((MockField) in).getName());
+            assertEquals(key + "-input-" + i + "-value", in.getValue());
             assertEquals(new Integer(i), new Integer(in.getIndex()));
             assertNull(((MockField) in).getFieldType());
         }
 
-        //assertTrue(m2.getFieldActions().getFieldAction().isEmpty());
+        // assertTrue(m2.getFieldActions().getFieldAction().isEmpty());
         assertNotNull(fm.getOutputField());
         Field o1 = fm.getOutputField().get(0);
         assertNull(o1.getActions());
         assertTrue(o1 instanceof MockField);
-        assertEquals(key+"-output", ((MockField) o1).getName());
-        assertEquals(key+"-output-value", o1.getValue());
+        assertEquals(key + "-output", ((MockField) o1).getName());
+        assertEquals(key + "-output-value", o1.getValue());
         assertNull(((MockField) o1).getFieldType());
     }
-    
+
     protected void addSeparateField(AtlasMapping mapping, String key) {
         Mapping fm = AtlasModelFactory.createMapping(MappingType.SEPARATE);
 
         MockField inputField = new MockField();
-        inputField.setName(key+"-input");
-        inputField.setValue(key+"-input-value");
+        inputField.setName(key + "-input");
+        inputField.setValue(key + "-input-value");
         fm.getInputField().add(inputField);
-        
-        for(int i=0; i < 3; i++) {
+
+        for (int i = 0; i < 3; i++) {
             MockField outputField = new MockField();
-            outputField.setName(key+"-output-"+i);
-            outputField.setValue(key+"-output-"+i+"-value");
+            outputField.setName(key + "-output-" + i);
+            outputField.setValue(key + "-output-" + i + "-value");
             outputField.setIndex(i);
             fm.getOutputField().add(outputField);
         }
-       
+
         fm.setDelimiterString(",");
         mapping.getMappings().getMapping().add(fm);
     }
-    
+
     protected void validateSeparateField(Mapping fm, String key) {
         assertNotNull(fm);
         assertNull(fm.getAlias());
         assertEquals(MappingType.SEPARATE, fm.getMappingType());
         assertEquals((","), fm.getDelimiterString());
-        
+
         assertNotNull(fm.getOutputField());
         assertEquals(new Integer(3), new Integer(fm.getOutputField().size()));
-        
-        //assertTrue(m2.getFieldActions().getFieldAction().isEmpty());
+
+        // assertTrue(m2.getFieldActions().getFieldAction().isEmpty());
         assertNotNull(fm.getInputField());
         Field o1 = fm.getInputField().get(0);
         assertNull(o1.getActions());
         assertTrue(o1 instanceof MockField);
-        assertEquals(key+"-input", ((MockField) o1).getName());
-        assertEquals(key+"-input-value", o1.getValue());
+        assertEquals(key + "-input", ((MockField) o1).getName());
+        assertEquals(key + "-input-value", o1.getValue());
         assertNull(((MockField) o1).getFieldType());
-        
-        for(int i=0; i < 3; i++) {
-            Field in = fm.getOutputField().get(i);      
+
+        for (int i = 0; i < 3; i++) {
+            Field in = fm.getOutputField().get(i);
             assertNull(in.getActions());
             assertTrue(in instanceof MockField);
-            assertEquals(key+"-output-"+i, ((MockField) in).getName());
-            assertEquals(key+"-output-"+i+"-value", in.getValue());
+            assertEquals(key + "-output-" + i, ((MockField) in).getName());
+            assertEquals(key + "-output-" + i + "-value", in.getValue());
             assertEquals(new Integer(i), new Integer(in.getIndex()));
             assertNull(((MockField) in).getFieldType());
         }
@@ -425,45 +445,93 @@ public abstract class BaseMarshallerTest {
 
     protected void addProperties(AtlasMapping mapping) {
         Properties props = new Properties();
-        
-        for(int i=0; i < 8; i++) {
+
+        for (int i = 0; i < 8; i++) {
             Property p = new Property();
-            p.setName("p"+i);
-            
-            switch(i) {
-            case 0: p.setFieldType(FieldType.BOOLEAN); p.setValue(Boolean.toString(true)); break;
-            case 1: p.setFieldType(FieldType.CHAR); p.setValue("a"); break;
-            case 2: p.setFieldType(FieldType.DOUBLE); p.setValue(Double.toString(Double.MAX_VALUE)); break;
-            case 3: p.setFieldType(FieldType.FLOAT); p.setValue(Float.toString(Float.MAX_VALUE)); break;
-            case 4: p.setFieldType(FieldType.INTEGER); p.setValue(Integer.toString(Integer.MAX_VALUE)); break;
-            case 5: p.setFieldType(FieldType.LONG); p.setValue(Long.toString(Long.MAX_VALUE)); break;
-            case 6: p.setFieldType(FieldType.SHORT); p.setValue(Short.toString(Short.MAX_VALUE)); break;
-            case 7: p.setFieldType(FieldType.STRING); p.setValue(Integer.toString(i)); break;
+            p.setName("p" + i);
+
+            switch (i) {
+            case 0:
+                p.setFieldType(FieldType.BOOLEAN);
+                p.setValue(Boolean.toString(true));
+                break;
+            case 1:
+                p.setFieldType(FieldType.CHAR);
+                p.setValue("a");
+                break;
+            case 2:
+                p.setFieldType(FieldType.DOUBLE);
+                p.setValue(Double.toString(Double.MAX_VALUE));
+                break;
+            case 3:
+                p.setFieldType(FieldType.FLOAT);
+                p.setValue(Float.toString(Float.MAX_VALUE));
+                break;
+            case 4:
+                p.setFieldType(FieldType.INTEGER);
+                p.setValue(Integer.toString(Integer.MAX_VALUE));
+                break;
+            case 5:
+                p.setFieldType(FieldType.LONG);
+                p.setValue(Long.toString(Long.MAX_VALUE));
+                break;
+            case 6:
+                p.setFieldType(FieldType.SHORT);
+                p.setValue(Short.toString(Short.MAX_VALUE));
+                break;
+            case 7:
+                p.setFieldType(FieldType.STRING);
+                p.setValue(Integer.toString(i));
+                break;
             }
-            
+
             props.getProperty().add(p);
-        }      
+        }
         mapping.setProperties(props);
     }
-    
+
     protected void validateProperties(Properties props) {
-        for(int i=0; i < 8; i++) {
+        for (int i = 0; i < 8; i++) {
             Property p = props.getProperty().get(i);
-            p.setName("p"+i);
-            
-            switch(i) {
-            case 0: assertEquals(FieldType.BOOLEAN, p.getFieldType()); assertEquals(Boolean.toString(true), p.getValue()); break;
-            case 1: assertEquals(FieldType.CHAR, p.getFieldType()); assertEquals("a", p.getValue()); break;
-            case 2: assertEquals(FieldType.DOUBLE, p.getFieldType()); assertEquals(Double.toString(Double.MAX_VALUE), p.getValue()); break;
-            case 3: assertEquals(FieldType.FLOAT, p.getFieldType()); assertEquals(Float.toString(Float.MAX_VALUE), p.getValue()); break;
-            case 4: assertEquals(FieldType.INTEGER, p.getFieldType()); assertEquals(Integer.toString(Integer.MAX_VALUE), p.getValue()); break;
-            case 5: assertEquals(FieldType.LONG, p.getFieldType()); assertEquals(Long.toString(Long.MAX_VALUE), p.getValue()); break;
-            case 6: assertEquals(FieldType.SHORT, p.getFieldType()); assertEquals(Short.toString(Short.MAX_VALUE), p.getValue()); break;
-            case 7: assertEquals(FieldType.STRING, p.getFieldType()); assertEquals(Integer.toString(i), p.getValue()); break;
+            p.setName("p" + i);
+
+            switch (i) {
+            case 0:
+                assertEquals(FieldType.BOOLEAN, p.getFieldType());
+                assertEquals(Boolean.toString(true), p.getValue());
+                break;
+            case 1:
+                assertEquals(FieldType.CHAR, p.getFieldType());
+                assertEquals("a", p.getValue());
+                break;
+            case 2:
+                assertEquals(FieldType.DOUBLE, p.getFieldType());
+                assertEquals(Double.toString(Double.MAX_VALUE), p.getValue());
+                break;
+            case 3:
+                assertEquals(FieldType.FLOAT, p.getFieldType());
+                assertEquals(Float.toString(Float.MAX_VALUE), p.getValue());
+                break;
+            case 4:
+                assertEquals(FieldType.INTEGER, p.getFieldType());
+                assertEquals(Integer.toString(Integer.MAX_VALUE), p.getValue());
+                break;
+            case 5:
+                assertEquals(FieldType.LONG, p.getFieldType());
+                assertEquals(Long.toString(Long.MAX_VALUE), p.getValue());
+                break;
+            case 6:
+                assertEquals(FieldType.SHORT, p.getFieldType());
+                assertEquals(Short.toString(Short.MAX_VALUE), p.getValue());
+                break;
+            case 7:
+                assertEquals(FieldType.STRING, p.getFieldType());
+                assertEquals(Integer.toString(i), p.getValue());
+                break;
             }
         }
     }
-    
+
     protected List<Action> generateReferenceFieldActions() {
         List<Action> actions = Arrays.asList(new Camelize(), new Capitalize(), new CurrentDate(), new CurrentDateTime(),
                 new CurrentTime(), new CustomAction(), new GenerateUUID(), new Lowercase(), new PadStringLeft(),

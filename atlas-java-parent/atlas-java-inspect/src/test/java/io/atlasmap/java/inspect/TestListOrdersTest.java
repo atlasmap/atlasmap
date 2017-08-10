@@ -16,18 +16,18 @@ import io.atlasmap.v2.CollectionType;
 public class TestListOrdersTest {
 
     private ClassInspectionService classInspectionService = null;
-    
+
     @Before
     public void setUp() {
         classInspectionService = new ClassInspectionService();
         classInspectionService.setConversionService(DefaultAtlasConversionService.getInstance());
     }
-    
+
     @After
     public void tearDown() {
         classInspectionService = null;
     }
-    
+
     @Test
     public void testInspectJavaList() {
         JavaClass c = classInspectionService.inspectClass(TestListOrders.class);
@@ -48,36 +48,37 @@ public class TestListOrdersTest {
         assertNull(c.getSetMethod());
         assertNull(c.getFieldType());
         assertNotNull(c.getUri());
-        assertEquals(String.format(AtlasJavaModelFactory.URI_FORMAT, "io.atlasmap.java.test.TestListOrders"), c.getUri());
+        assertEquals(String.format(AtlasJavaModelFactory.URI_FORMAT, "io.atlasmap.java.test.TestListOrders"),
+                c.getUri());
         assertNull(c.getValue());
         assertEquals(Integer.valueOf(2), new Integer(c.getJavaFields().getJavaField().size()));
-        
+
         JavaField f1 = c.getJavaFields().getJavaField().get(0);
         assertNotNull(f1);
         assertTrue(f1 instanceof JavaClass);
-        JavaClass c2 = (JavaClass)f1;
-        
+        JavaClass c2 = (JavaClass) f1;
+
         assertNotNull(c2.getCollectionClassName());
         assertEquals("java.util.List", c2.getCollectionClassName());
         assertEquals(CollectionType.LIST, c2.getCollectionType());
-    
+
         boolean foundAddress = false;
         boolean foundContact = false;
-        
-        for(JavaField c2f : c2.getJavaFields().getJavaField()) {
-            if(c2f instanceof JavaClass) {
-                if("io.atlasmap.java.test.BaseAddress".equals(((JavaClass)c2f).getClassName())) {
-                    ClassValidationUtil.validateSimpleTestAddress(((JavaClass)c2f));
+
+        for (JavaField c2f : c2.getJavaFields().getJavaField()) {
+            if (c2f instanceof JavaClass) {
+                if ("io.atlasmap.java.test.BaseAddress".equals(((JavaClass) c2f).getClassName())) {
+                    ClassValidationUtil.validateSimpleTestAddress(((JavaClass) c2f));
                     foundAddress = true;
-                } else if("io.atlasmap.java.test.BaseContact".equals(((JavaClass)c2f).getClassName())) {
-                    ClassValidationUtil.validateSimpleTestContact(((JavaClass)c2f));
+                } else if ("io.atlasmap.java.test.BaseContact".equals(((JavaClass) c2f).getClassName())) {
+                    ClassValidationUtil.validateSimpleTestContact(((JavaClass) c2f));
                     foundContact = true;
                 } else {
-                    fail("Unexpected class: " + ((JavaClass)c2f).getClassName());
-                }   
+                    fail("Unexpected class: " + ((JavaClass) c2f).getClassName());
+                }
             }
         }
-        
+
         assertTrue(foundAddress);
         assertTrue(foundContact);
     }

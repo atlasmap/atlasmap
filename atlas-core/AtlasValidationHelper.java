@@ -20,9 +20,14 @@ import io.atlasmap.v2.Validation;
 
 public interface AtlasValidationHelper {
     void addValidation(Validation validation);
+
     List<Validation> getAllValidations();
+
     boolean hasErrors();
+
     boolean hasWarnings();
+
     boolean hasInfos();
+
     int getCount();
 }

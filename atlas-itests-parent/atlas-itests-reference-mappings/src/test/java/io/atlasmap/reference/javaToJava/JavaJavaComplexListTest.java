@@ -54,78 +54,84 @@ public class JavaJavaComplexListTest extends AtlasMappingBaseTest {
         DataSource s = new DataSource();
         s.setDataSourceType(DataSourceType.SOURCE);
         s.setUri("atlas:java?className=io.atlasmap.java.test.SourceOrderList");
-        
+
         DataSource t = new DataSource();
         t.setDataSourceType(DataSourceType.TARGET);
         t.setUri("atlas:java?className=io.atlasmap.java.test.TargetOrderList");
-        
+
         JavaField f1 = AtlasJavaModelFactory.createJavaField();
         f1.setPath("/numberOrders");
         f1.setModifiers(null);
-        
+
         JavaField f2 = AtlasJavaModelFactory.createJavaField();
         f2.setPath("/orderBatchNumber");
         f2.setModifiers(null);
-        
+
         Mapping m1 = AtlasModelFactory.createMapping(MappingType.MAP);
         m1.getInputField().add(f1);
         m1.getOutputField().add(f1);
-        
+
         Mapping m2 = AtlasModelFactory.createMapping(MappingType.MAP);
         m2.getInputField().add(f2);
         m2.getOutputField().add(f2);
-        
+
         JavaCollection cm = new JavaCollection();
         cm.setMappingType(MappingType.COLLECTION);
         cm.setCollectionType(CollectionType.LIST);
-        
+
         JavaField f3 = AtlasJavaModelFactory.createJavaField();
         f3.setPath("/orders<>/orderId");
         f3.setModifiers(null);
-                
+
         Mapping m3 = AtlasModelFactory.createMapping(MappingType.MAP);
         m3.getInputField().add(f3);
         m3.getOutputField().add(f3);
-               
-        if(cm.getMappings() == null) {
+
+        if (cm.getMappings() == null) {
             cm.setMappings(new Mappings());
         }
-        
+
         cm.getMappings().getMapping().add(m3);
-                
+
         a.getDataSource().addAll(Arrays.asList(s, t));
         a.getMappings().getMapping().addAll(Arrays.asList(m1, m2, cm));
-        
-        AtlasMappingService atlasMappingService = new AtlasMappingService(Arrays.asList("io.atlasmap.v2", "io.atlasmap.java.v2", "io.atlasmap.xml.v2"));
-        atlasMappingService.saveMappingAsFile(a, new File("src/test/resources/javaToJava/atlasmapping-complex-list-autodetect-base.xml"));
+
+        AtlasMappingService atlasMappingService = new AtlasMappingService(
+                Arrays.asList("io.atlasmap.v2", "io.atlasmap.java.v2", "io.atlasmap.xml.v2"));
+        atlasMappingService.saveMappingAsFile(a,
+                new File("src/test/resources/javaToJava/atlasmapping-complex-list-autodetect-base.xml"));
     }
-    
+
     @Test
     public void testProcessJavaJavaComplexAutoDetectBaseTest() throws Exception {
-        AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/javaToJava/atlasmapping-complex-list-autodetect-base.xml"));
+        AtlasContext context = atlasContextFactory
+                .createContext(new File("src/test/resources/javaToJava/atlasmapping-complex-list-autodetect-base.xml"));
         AtlasSession session = context.createSession();
-        BaseOrderList sourceOrderList = AtlasTestUtil.generateOrderListClass(SourceOrderList.class, SourceOrder.class, SourceAddress.class, SourceContact.class);
+        BaseOrderList sourceOrderList = AtlasTestUtil.generateOrderListClass(SourceOrderList.class, SourceOrder.class,
+                SourceAddress.class, SourceContact.class);
         session.setInput(sourceOrderList);
         context.process(session);
-        
+
         Object object = session.getOutput();
         assertNotNull(object);
         assertTrue(object instanceof TargetOrderList);
-        AtlasTestUtil.validateOrderList((TargetOrderList)object);
+        AtlasTestUtil.validateOrderList((TargetOrderList) object);
     }
-    
+
     @Test
     public void testProcessJavaJavaComplexAutoDetectFullTest() throws Exception {
-        AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/javaToJava/atlasmapping-complex-list-autodetect-full.xml"));
+        AtlasContext context = atlasContextFactory
+                .createContext(new File("src/test/resources/javaToJava/atlasmapping-complex-list-autodetect-full.xml"));
         AtlasSession session = context.createSession();
-        BaseOrderList sourceOrderList = AtlasTestUtil.generateOrderListClass(SourceOrderList.class, SourceOrder.class, SourceAddress.class, SourceContact.class);
+        BaseOrderList sourceOrderList = AtlasTestUtil.generateOrderListClass(SourceOrderList.class, SourceOrder.class,
+                SourceAddress.class, SourceContact.class);
         session.setInput(sourceOrderList);
         context.process(session);
-        
+
         Object object = session.getOutput();
         assertNotNull(object);
         assertTrue(object instanceof TargetOrderList);
-        AtlasTestUtil.validateOrderList((TargetOrderList)object);
+        AtlasTestUtil.validateOrderList((TargetOrderList) object);
     }
 
 }

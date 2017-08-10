@@ -224,7 +224,6 @@ public class StringConverterTest {
         assertEquals(0.0, f, 0.0);
     }
 
-
     @Test
     public void convertToInteger() throws Exception {
         String s = "0";
@@ -325,7 +324,6 @@ public class StringConverterTest {
         Short aShort = converter.convertToShort(s);
     }
 
-
     @Test
     public void convertToString() throws Exception {
         String S = "0";
@@ -346,8 +344,8 @@ public class StringConverterTest {
         Class aClass = StringConverter.class;
         Method[] methods = aClass.getMethods();
         for (Method method : methods) {
-            if(method.isSynthetic()) {
-                // We are running in Eclipse or jacoco 
+            if (method.isSynthetic()) {
+                // We are running in Eclipse or jacoco
                 continue;
             }
             if (method.getName().startsWith("convert")) {

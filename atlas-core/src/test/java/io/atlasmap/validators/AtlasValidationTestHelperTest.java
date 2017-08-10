@@ -29,12 +29,12 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.*;
 
 public class AtlasValidationTestHelperTest {
-    
+
     private AtlasValidationTestHelper validations = null;
     private Validation error = null;
     private Validation warning = null;
     private Validation info = null;
-    
+
     @Before
     public void setUp() {
         validations = new AtlasValidationTestHelper();
@@ -43,14 +43,14 @@ public class AtlasValidationTestHelperTest {
         error.setMessage("Error message");
         error.setStatus(ValidationStatus.ERROR);
         validations.addValidation(error);
-        
+
         warning = new Validation();
         warning.setField("test.field.one");
         warning.setMessage("Warning message");
         warning.setStatus(ValidationStatus.WARN);
         warning.setValue("");
         validations.addValidation(warning);
-        
+
         info = new Validation();
         info.setField("test.field.two");
         info.setMessage("Information message");
@@ -58,7 +58,7 @@ public class AtlasValidationTestHelperTest {
         info.setValue("qwerty");
         validations.addValidation(info);
     }
-    
+
     @After
     public void tearDown() {
         validations = null;

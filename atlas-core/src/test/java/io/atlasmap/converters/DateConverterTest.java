@@ -83,7 +83,6 @@ public class DateConverterTest {
         assertTrue(localDateTime.atZone(ZoneId.of("America/New_York")).getZone().getId().equals("America/New_York"));
     }
 
-
     @Test
     public void convertFromLocalDateTime() throws Exception {
         Date date = dateConverter.convertFromLocalDateTime(LocalDateTime.now());
@@ -186,11 +185,11 @@ public class DateConverterTest {
 
     @Test
     public void convertFromSqlDateWithZoneId() throws Exception {
-        Date date = dateConverter.convertFromSqlDate(java.sql.Date.valueOf(LocalDate.now()), ZoneId.of("America/New_York"));
+        Date date = dateConverter.convertFromSqlDate(java.sql.Date.valueOf(LocalDate.now()),
+                ZoneId.of("America/New_York"));
         assertNotNull(date);
         assertThat(date, instanceOf(Date.class));
     }
-
 
     @Test
     public void convertToGregorianCalendar() throws Exception {
@@ -201,7 +200,8 @@ public class DateConverterTest {
 
     @Test
     public void convertToGregorianCalendarWithZoneId() throws Exception {
-        GregorianCalendar gregorianCalendar = dateConverter.convertToGregorianCalendar(new Date(), ZoneId.of("America/New_York"));
+        GregorianCalendar gregorianCalendar = dateConverter.convertToGregorianCalendar(new Date(),
+                ZoneId.of("America/New_York"));
         assertNotNull(gregorianCalendar);
         assertThat(gregorianCalendar, instanceOf(GregorianCalendar.class));
         assertTrue(gregorianCalendar.getTimeZone().getID().equals("America/New_York"));
@@ -280,8 +280,8 @@ public class DateConverterTest {
         Class aClass = DateConverter.class;
         Method[] methods = aClass.getMethods();
         for (Method method : methods) {
-            if(method.isSynthetic()) {
-                // We are running in Eclipse or jacoco 
+            if (method.isSynthetic()) {
+                // We are running in Eclipse or jacoco
                 continue;
             }
             if (method.getName().startsWith("convertTo") && method.getParameterCount() == 1) {

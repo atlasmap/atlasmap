@@ -25,28 +25,44 @@ import io.atlasmap.v2.Field;
 
 public interface AtlasModule {
 
-	void init();
-	void destroy();
-	void processPreValidation(AtlasSession session) throws AtlasException;
-	void processPreInputExecution(AtlasSession session) throws AtlasException;
-	
+    void init();
+
+    void destroy();
+
+    void processPreValidation(AtlasSession session) throws AtlasException;
+
+    void processPreInputExecution(AtlasSession session) throws AtlasException;
+
     void processInputMapping(AtlasSession session, BaseMapping mapping) throws AtlasException;
-	void processInputActions(AtlasSession session, BaseMapping mapping) throws AtlasException;
-	void processPostInputExecution(AtlasSession session) throws AtlasException;
-	
-	void processPreOutputExecution(AtlasSession session) throws AtlasException;
+
+    void processInputActions(AtlasSession session, BaseMapping mapping) throws AtlasException;
+
+    void processPostInputExecution(AtlasSession session) throws AtlasException;
+
+    void processPreOutputExecution(AtlasSession session) throws AtlasException;
+
     void processOutputMapping(AtlasSession session, BaseMapping mapping) throws AtlasException;
-	void processOutputActions(AtlasSession session, BaseMapping mapping) throws AtlasException;
-	void processPostOutputExecution(AtlasSession session) throws AtlasException;
-	void processPostValidation(AtlasSession session) throws AtlasException;
-	
-	AtlasModuleMode getMode();
-	void setMode(AtlasModuleMode atlasModuleMode);
-	AtlasConversionService getConversionService();
-	void setConversionService(AtlasConversionService atlasConversionService);
-	List<AtlasModuleMode> listSupportedModes();
-	Boolean isStatisticsSupported();
-	Boolean isStatisticsEnabled();
-	Boolean isSupportedField(Field field);
+
+    void processOutputActions(AtlasSession session, BaseMapping mapping) throws AtlasException;
+
+    void processPostOutputExecution(AtlasSession session) throws AtlasException;
+
+    void processPostValidation(AtlasSession session) throws AtlasException;
+
+    AtlasModuleMode getMode();
+
+    void setMode(AtlasModuleMode atlasModuleMode);
+
+    AtlasConversionService getConversionService();
+
+    void setConversionService(AtlasConversionService atlasConversionService);
+
+    List<AtlasModuleMode> listSupportedModes();
+
+    Boolean isStatisticsSupported();
+
+    Boolean isStatisticsEnabled();
+
+    Boolean isSupportedField(Field field);
 
 }

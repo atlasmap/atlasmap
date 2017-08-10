@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <orders totalCost="12525.00" xmlns="http://www.example.com/x/"
-        xmlns:y="http://www.example.com/y/">
-  <order>
-    <id y:custId="a">12312</id>
-    <id y:custId="b">4423423</id>
-  </order>
-  <order>
-    <id y:custId="a">12312</id>
-  </order>
-  <order>
-    <id y:custId="a">12312</id>
-    <id y:custId="b">4423423</id>
-    <id y:custId="c">54554555</id>
-  </order>
-  <order>
-    <id y:custId="a">12312</id>
-    <id y:custId="b">54554555</id>
-  </order>
+    xmlns:y="http://www.example.com/y/">
+    <order>
+        <id y:custId="a">12312</id>
+        <id y:custId="b">4423423</id>
+    </order>
+    <order>
+        <id y:custId="a">12312</id>
+    </order>
+    <order>
+        <id y:custId="a">12312</id>
+        <id y:custId="b">4423423</id>
+        <id y:custId="c">54554555</id>
+    </order>
+    <order>
+        <id y:custId="a">12312</id>
+        <id y:custId="b">54554555</id>
+    </order>
 </orders>

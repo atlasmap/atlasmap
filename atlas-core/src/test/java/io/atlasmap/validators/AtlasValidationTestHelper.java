@@ -71,21 +71,33 @@ public class AtlasValidationTestHelper extends Validations {
         }
         return 0;
     }
-    
+
     public static String validationToString(Validation validation) {
         String output = "[Validation ";
-        
-        if(validation == null) {
+
+        if (validation == null) {
             return output + ">null< ]";
         }
-        
-        if(validation.getName() != null) { output = output + " name=" + validation.getName(); }
-        if(validation.getGroup() != null) { output = output + " group=" + validation.getGroup(); }
-        if(validation.getField() != null) { output = output + " field=" + validation.getField(); }
-        if(validation.getValue() != null) { output = output + " value=" + validation.getValue(); }
-        if(validation.getStatus() != null) { output = output + " status=" + validation.getStatus().value(); }
-        if(validation.getMessage() != null) { output = output + " msg=" + validation.getMessage(); }
-        
+
+        if (validation.getName() != null) {
+            output = output + " name=" + validation.getName();
+        }
+        if (validation.getGroup() != null) {
+            output = output + " group=" + validation.getGroup();
+        }
+        if (validation.getField() != null) {
+            output = output + " field=" + validation.getField();
+        }
+        if (validation.getValue() != null) {
+            output = output + " value=" + validation.getValue();
+        }
+        if (validation.getStatus() != null) {
+            output = output + " status=" + validation.getStatus().value();
+        }
+        if (validation.getMessage() != null) {
+            output = output + " msg=" + validation.getMessage();
+        }
+
         return output + "]";
     }
 }

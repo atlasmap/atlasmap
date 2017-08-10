@@ -1,2 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ns:XmlFBPA boxedBooleanField="true" boxedByteField="87" boxedCharField="z" boxedDoubleField="90000000.0" boxedFloatField="70000000.0" boxedIntField="5" boxedLongField="20000" boxedShortField="5" boxedStringField="boxedStringValue" xmlns:ns="http://atlasmap.io/xml/test/v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://atlasmap.io/xml/test/v2 atlas-xml-test-model-v2.xsd "></ns:XmlFBPA>
+<ns:XmlFBPA boxedBooleanField="true" boxedByteField="87"
+    boxedCharField="z" boxedDoubleField="90000000.0" boxedFloatField="70000000.0"
+    boxedIntField="5" boxedLongField="20000" boxedShortField="5"
+    boxedStringField="boxedStringValue" xmlns:ns="http://atlasmap.io/xml/test/v2"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://atlasmap.io/xml/test/v2 atlas-xml-test-model-v2.xsd "></ns:XmlFBPA>

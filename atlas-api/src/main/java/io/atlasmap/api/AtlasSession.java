@@ -22,24 +22,43 @@ import java.util.Map;
 
 public interface AtlasSession {
 
-	Map<String, Object> getProperties();
-	AtlasContext getAtlasContext();
-	void setAtlasContext(AtlasContext atlasContext);
-	AtlasMapping getMapping();
-	Object getInput();
-	void setInput(Object inputObject);
+    Map<String, Object> getProperties();
+
+    AtlasContext getAtlasContext();
+
+    void setAtlasContext(AtlasContext atlasContext);
+
+    AtlasMapping getMapping();
+
+    Object getInput();
+
+    void setInput(Object inputObject);
+
     Object getInput(String docId);
+
     void setInput(Object inputObject, String docId);
-	Object getOutput();
-	void setOutput(Object outputObject);
-	Object getOutput(String docId);
-	void setOutput(Object outputObject, String docId);
-	Validations getValidations();
-	void setValidations(Validations validations);
-	Audits getAudits();
-	void setAudits(Audits audits);
-	boolean hasErrors();
-	boolean hasWarns();
-	Integer errorCount();
-	Integer warnCount();
+
+    Object getOutput();
+
+    void setOutput(Object outputObject);
+
+    Object getOutput(String docId);
+
+    void setOutput(Object outputObject, String docId);
+
+    Validations getValidations();
+
+    void setValidations(Validations validations);
+
+    Audits getAudits();
+
+    void setAudits(Audits audits);
+
+    boolean hasErrors();
+
+    boolean hasWarns();
+
+    Integer errorCount();
+
+    Integer warnCount();
 }

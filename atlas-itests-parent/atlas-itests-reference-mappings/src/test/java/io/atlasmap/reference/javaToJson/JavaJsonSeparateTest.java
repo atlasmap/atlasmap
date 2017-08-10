@@ -33,7 +33,8 @@ public class JavaJsonSeparateTest extends AtlasMappingBaseTest {
 
     @Test
     public void testProcessSeparateSimple() throws Exception {
-        AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/javaToJson/atlasmapping-separate-simple.xml").toURI());
+        AtlasContext context = atlasContextFactory
+                .createContext(new File("src/test/resources/javaToJson/atlasmapping-separate-simple.xml").toURI());
         AtlasSession session = context.createSession();
         BaseContact sourceContact = AtlasTestUtil.generateContact(SourceContact.class);
         sourceContact.setFirstName("Ozzie Smith");
@@ -43,17 +44,19 @@ public class JavaJsonSeparateTest extends AtlasMappingBaseTest {
 
         Object object = session.getOutput();
         assertNotNull(object);
-        
+
         assertTrue(object instanceof String);
         AtlasJsonTestUnrootedMapper mapper = new AtlasJsonTestUnrootedMapper();
-        io.atlasmap.json.test.TargetContact targetContact = mapper.readValue((String)object, io.atlasmap.json.test.TargetContact.class);        
+        io.atlasmap.json.test.TargetContact targetContact = mapper.readValue((String) object,
+                io.atlasmap.json.test.TargetContact.class);
         AtlasTestUtil.validateJsonContact(targetContact);
         assertFalse(session.hasErrors());
     }
 
     @Test
     public void testProcessSeparateSkip() throws Exception {
-        AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/javaToJson/atlasmapping-separate-skip.xml").toURI());
+        AtlasContext context = atlasContextFactory
+                .createContext(new File("src/test/resources/javaToJson/atlasmapping-separate-skip.xml").toURI());
         AtlasSession session = context.createSession();
         BaseContact sourceContact = AtlasTestUtil.generateContact(SourceContact.class);
         sourceContact.setFirstName("Dr. Mr. Ozzie L. Smith Jr.");
@@ -65,14 +68,16 @@ public class JavaJsonSeparateTest extends AtlasMappingBaseTest {
         assertNotNull(object);
         assertTrue(object instanceof String);
         AtlasJsonTestUnrootedMapper mapper = new AtlasJsonTestUnrootedMapper();
-        io.atlasmap.json.test.TargetContact targetContact = mapper.readValue((String)object, io.atlasmap.json.test.TargetContact.class);        
+        io.atlasmap.json.test.TargetContact targetContact = mapper.readValue((String) object,
+                io.atlasmap.json.test.TargetContact.class);
         AtlasTestUtil.validateJsonContact(targetContact);
         assertFalse(session.hasErrors());
     }
-    
+
     @Test
     public void testProcessSeparateOutOfOrder() throws Exception {
-        AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/javaToJson/atlasmapping-separate-outoforder.xml").toURI());
+        AtlasContext context = atlasContextFactory
+                .createContext(new File("src/test/resources/javaToJson/atlasmapping-separate-outoforder.xml").toURI());
         AtlasSession session = context.createSession();
         BaseContact sourceContact = AtlasTestUtil.generateContact(SourceContact.class);
         sourceContact.setFirstName("Dr. Mr. Ozzie L. Smith Jr.");
@@ -84,14 +89,16 @@ public class JavaJsonSeparateTest extends AtlasMappingBaseTest {
         assertNotNull(object);
         assertTrue(object instanceof String);
         AtlasJsonTestUnrootedMapper mapper = new AtlasJsonTestUnrootedMapper();
-        io.atlasmap.json.test.TargetContact targetContact = mapper.readValue((String)object, io.atlasmap.json.test.TargetContact.class);        
+        io.atlasmap.json.test.TargetContact targetContact = mapper.readValue((String) object,
+                io.atlasmap.json.test.TargetContact.class);
         AtlasTestUtil.validateJsonContact(targetContact);
         assertFalse(session.hasErrors());
     }
-    
+
     @Test
     public void testProcessSeparateNotEnoughInput() throws Exception {
-        AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/javaToJson/atlasmapping-separate-inputshort.xml").toURI());
+        AtlasContext context = atlasContextFactory
+                .createContext(new File("src/test/resources/javaToJson/atlasmapping-separate-inputshort.xml").toURI());
         AtlasSession session = context.createSession();
         BaseContact sourceContact = AtlasTestUtil.generateContact(SourceContact.class);
         sourceContact.setFirstName("Dr. Mr. Ozzie");
@@ -101,20 +108,23 @@ public class JavaJsonSeparateTest extends AtlasMappingBaseTest {
 
         Object object = session.getOutput();
         assertNotNull(object);
-        
+
         assertTrue(object instanceof String);
         AtlasJsonTestUnrootedMapper mapper = new AtlasJsonTestUnrootedMapper();
-        io.atlasmap.json.test.TargetContact targetContact = mapper.readValue((String)object, io.atlasmap.json.test.TargetContact.class);        
+        io.atlasmap.json.test.TargetContact targetContact = mapper.readValue((String) object,
+                io.atlasmap.json.test.TargetContact.class);
         assertNotNull(targetContact);
         assertEquals("Ozzie", targetContact.getFirstName());
-        assertEquals(null, targetContact.getLastName());        
-        assertTrue(session.hasErrors());        
-        assertEquals("Separate returned fewer segements count=3 when outputField.path=/lastName requested index=4", session.getAudits().getAudit().get(0).getMessage());
+        assertEquals(null, targetContact.getLastName());
+        assertTrue(session.hasErrors());
+        assertEquals("Separate returned fewer segements count=3 when outputField.path=/lastName requested index=4",
+                session.getAudits().getAudit().get(0).getMessage());
     }
-    
+
     @Test
     public void testProcessSeparateNullInput() throws Exception {
-        AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/javaToJson/atlasmapping-separate-inputnull.xml").toURI());
+        AtlasContext context = atlasContextFactory
+                .createContext(new File("src/test/resources/javaToJson/atlasmapping-separate-inputnull.xml").toURI());
         AtlasSession session = context.createSession();
         BaseContact sourceContact = AtlasTestUtil.generateContact(SourceContact.class);
         sourceContact.setFirstName(null);
@@ -126,9 +136,10 @@ public class JavaJsonSeparateTest extends AtlasMappingBaseTest {
         assertNotNull(object);
         assertTrue(object instanceof String);
         AtlasJsonTestUnrootedMapper mapper = new AtlasJsonTestUnrootedMapper();
-        io.atlasmap.json.test.TargetContact targetContact = mapper.readValue((String)object, io.atlasmap.json.test.TargetContact.class);        
+        io.atlasmap.json.test.TargetContact targetContact = mapper.readValue((String) object,
+                io.atlasmap.json.test.TargetContact.class);
         assertFalse(session.hasErrors());
-        
+
         assertEquals(null, targetContact.getFirstName());
         assertEquals(null, targetContact.getLastName());
         assertEquals("5551212", targetContact.getPhoneNumber());

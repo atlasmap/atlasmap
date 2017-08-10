@@ -18,42 +18,42 @@ package io.atlasmap.java.v2;
 import io.atlasmap.v2.Field;
 
 public class AtlasJavaModelFactory {
-	
-	public static final String URI_FORMAT = "atlas:java?className=%s";
 
-	public static JavaClass createJavaClass() {
-		JavaClass javaClass = new JavaClass();
-		javaClass.setJavaEnumFields(new JavaEnumFields());
-		javaClass.setJavaFields(new JavaFields());
-		return javaClass;
-	}
-	
-	public static JavaField createJavaField() {
-		JavaField javaField = new JavaField();
-		javaField.setModifiers(new ModifierList());
-		return javaField;
-	}
-	
+    public static final String URI_FORMAT = "atlas:java?className=%s";
+
+    public static JavaClass createJavaClass() {
+        JavaClass javaClass = new JavaClass();
+        javaClass.setJavaEnumFields(new JavaEnumFields());
+        javaClass.setJavaFields(new JavaFields());
+        return javaClass;
+    }
+
+    public static JavaField createJavaField() {
+        JavaField javaField = new JavaField();
+        javaField.setModifiers(new ModifierList());
+        return javaField;
+    }
+
     public static Field cloneJavaField(Field field) {
-        
+
         if (field instanceof JavaField) {
             JavaField that = (JavaField) field;
             JavaField clone = new JavaField();
-            
-            //generic from Field
+
+            // generic from Field
             clone.setActions(that.getActions());
             clone.setArrayDimensions(that.getArrayDimensions());
             clone.setArraySize(that.getArraySize());
             clone.setCollectionType(that.getCollectionType());
             clone.setDocId(that.getDocId());
             clone.setFieldType(that.getFieldType());
-            clone.setIndex(that.getIndex());        
+            clone.setIndex(that.getIndex());
             clone.setPath(that.getPath());
             clone.setRequired(that.isRequired());
             clone.setStatus(that.getStatus());
             clone.setValue(that.getValue());
-            
-            //defined by JavaField
+
+            // defined by JavaField
             clone.setAnnotations(that.getAnnotations());
             clone.setClassName(that.getClassName());
             clone.setCollectionClassName(that.getCollectionClassName());
@@ -64,34 +64,35 @@ public class AtlasJavaModelFactory {
             clone.setPrimitive(that.isPrimitive());
             clone.setSetMethod(that.getSetMethod());
             clone.setSynthetic(that.isSynthetic());
-            
+
             return clone;
         } else if (field instanceof JavaEnumField) {
             JavaEnumField that = (JavaEnumField) field;
             JavaEnumField clone = new JavaEnumField();
-            
-            //generic from Field
+
+            // generic from Field
             clone.setActions(that.getActions());
             clone.setArrayDimensions(that.getArrayDimensions());
             clone.setArraySize(that.getArraySize());
             clone.setCollectionType(that.getCollectionType());
             clone.setDocId(that.getDocId());
             clone.setFieldType(that.getFieldType());
-            clone.setIndex(that.getIndex());        
+            clone.setIndex(that.getIndex());
             clone.setPath(that.getPath());
             clone.setRequired(that.isRequired());
             clone.setStatus(that.getStatus());
             clone.setValue(that.getValue());
-            
-            //defined by JavaEnumField
-            clone.setClassName(that.getClassName());            
+
+            // defined by JavaEnumField
+            clone.setClassName(that.getClassName());
             clone.setName(that.getName());
-            clone.setOrdinal(that.getOrdinal());            
-            
+            clone.setOrdinal(that.getOrdinal());
+
             return clone;
-            
+
         }
-        //TODO: needs to be atlasexception, but that's not a dependency for some reason on this project.
+        // TODO: needs to be atlasexception, but that's not a dependency for some reason
+        // on this project.
         throw new RuntimeException("Unsupported field type to clone: " + field);
     }
 }

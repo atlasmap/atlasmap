@@ -28,15 +28,14 @@ public class JsonFieldWriterTest {
 
     @Before
     public void setupWriter() {
-    	this.writer = new JsonFieldWriter();
+        this.writer = new JsonFieldWriter();
         Assert.assertNotNull(writer.getRootNode());
     }
-    
+
     @Test(expected = AtlasException.class)
     public void testWriteNullField() throws Exception {
-    	writer.write(null); 
+        writer.write(null);
     }
-    
 
     @Test
     public void testWriteSimpleObjectNoRoot() throws Exception {
@@ -55,7 +54,7 @@ public class JsonFieldWriterTest {
         field2.setFieldType(FieldType.INTEGER);
         writer.write(field2);
         Assert.assertThat(writer.getRootNode().toString(), Is.is("{\"brand\":\"Mercedes\",\"doors\":5}"));
-    }        
+    }
 
     @Test
     public void testWriteSimpleObjectWithRoot() throws Exception {
@@ -128,7 +127,8 @@ public class JsonFieldWriterTest {
         longField.setStatus(FieldStatus.SUPPORTED);
         writer.write(longField);
 
-        Assert.assertThat(writer.getRootNode().toString(), Is.is("{\"booleanField\":false,\"charField\":\"a\",\"doubleField\":-27152745.3422,\"floatField\":-63988281,\"intField\":8281,\"shortField\":81,\"longField\":3988281}"));
+        Assert.assertThat(writer.getRootNode().toString(), Is.is(
+                "{\"booleanField\":false,\"charField\":\"a\",\"doubleField\":-27152745.3422,\"floatField\":-63988281,\"intField\":8281,\"shortField\":81,\"longField\":3988281}"));
     }
 
     @Test
@@ -145,7 +145,7 @@ public class JsonFieldWriterTest {
         charField.setValue('a');
         charField.setPath("/SourceFlatPrimitive/charField");
         charField.setStatus(FieldStatus.SUPPORTED);
-        writer.write(charField);        
+        writer.write(charField);
 
         JsonField doubleField = AtlasJsonModelFactory.createJsonField();
         doubleField.setFieldType(FieldType.DOUBLE);
@@ -182,84 +182,90 @@ public class JsonFieldWriterTest {
         longField.setStatus(FieldStatus.SUPPORTED);
         writer.write(longField);
 
-        Assert.assertThat(writer.getRootNode().toString(), Is.is("{\"SourceFlatPrimitive\":{\"booleanField\":false,\"charField\":\"a\",\"doubleField\":-27152745.3422,\"floatField\":-63988281,\"intField\":8281,\"shortField\":81,\"longField\":3988281}}"));
-    }
-    
-    @Test 
-    public void testSimpleRepeated() throws Exception {
-    	writeString("/orders[0]/orderid", "orderid1");
-    	writeString("/orders[1]/orderid", "orderid2");
-    	Assert.assertThat(writer.getRootNode().toString(), Is.is("{\"orders\":[{\"orderid\":\"orderid1\"},{\"orderid\":\"orderid2\"}]}"));
-    }
-    
-    public void writeString(String path, String value) throws Exception {
-    	JsonField field = AtlasJsonModelFactory.createJsonField();
-    	field.setValue(value);
-    	field.setStatus(FieldStatus.SUPPORTED);
-    	field.setFieldType(FieldType.STRING);
-    	field.setPath(path);
-    	writer.write(field);
-    }
-    
-    public void writeInteger(String path, Integer value) throws Exception {
-    	JsonField field = AtlasJsonModelFactory.createJsonField();
-    	field.setValue(value);
-    	field.setStatus(FieldStatus.SUPPORTED);
-    	field.setFieldType(FieldType.INTEGER);
-    	field.setPath(path);
-    	writer.write(field);
+        Assert.assertThat(writer.getRootNode().toString(), Is.is(
+                "{\"SourceFlatPrimitive\":{\"booleanField\":false,\"charField\":\"a\",\"doubleField\":-27152745.3422,\"floatField\":-63988281,\"intField\":8281,\"shortField\":81,\"longField\":3988281}}"));
     }
 
     @Test
-    public void testWriteComplexObject_Unrooted() throws Exception {    	      
-    	writeComplexTestData("", "");
-        Assert.assertThat(writer.getRootNode().toString(), Is.is("{\"address\":{\"addressLine1\":\"123 Main St\",\"addressLine2\":\"Suite 42b\",\"city\":\"Anytown\",\"state\":\"NY\",\"zipCode\":\"90210\"},\"contact\":{\"firstName\":\"Ozzie\",\"lastName\":\"Smith\",\"phoneNumber\":\"5551212\",\"zipCode\":\"81111\"},\"orderId\":9}"));
+    public void testSimpleRepeated() throws Exception {
+        writeString("/orders[0]/orderid", "orderid1");
+        writeString("/orders[1]/orderid", "orderid2");
+        Assert.assertThat(writer.getRootNode().toString(),
+                Is.is("{\"orders\":[{\"orderid\":\"orderid1\"},{\"orderid\":\"orderid2\"}]}"));
+    }
+
+    public void writeString(String path, String value) throws Exception {
+        JsonField field = AtlasJsonModelFactory.createJsonField();
+        field.setValue(value);
+        field.setStatus(FieldStatus.SUPPORTED);
+        field.setFieldType(FieldType.STRING);
+        field.setPath(path);
+        writer.write(field);
+    }
+
+    public void writeInteger(String path, Integer value) throws Exception {
+        JsonField field = AtlasJsonModelFactory.createJsonField();
+        field.setValue(value);
+        field.setStatus(FieldStatus.SUPPORTED);
+        field.setFieldType(FieldType.INTEGER);
+        field.setPath(path);
+        writer.write(field);
+    }
+
+    @Test
+    public void testWriteComplexObject_Unrooted() throws Exception {
+        writeComplexTestData("", "");
+        Assert.assertThat(writer.getRootNode().toString(), Is.is(
+                "{\"address\":{\"addressLine1\":\"123 Main St\",\"addressLine2\":\"Suite 42b\",\"city\":\"Anytown\",\"state\":\"NY\",\"zipCode\":\"90210\"},\"contact\":{\"firstName\":\"Ozzie\",\"lastName\":\"Smith\",\"phoneNumber\":\"5551212\",\"zipCode\":\"81111\"},\"orderId\":9}"));
     }
 
     @Test
     public void testWriteComplexObject_Rooted() throws Exception {
-    	writeComplexTestData("/order", "");    	      
+        writeComplexTestData("/order", "");
 
-        final String instance = new String(Files.readAllBytes(Paths.get("src/test/resources/complex-rooted-result.json")));
+        final String instance = new String(
+                Files.readAllBytes(Paths.get("src/test/resources/complex-rooted-result.json")));
         Assert.assertNotNull(instance);
 
         Assert.assertThat(prettyPrintJson(writer.getRootNode().toString()), Is.is(prettyPrintJson(instance)));
     }
-    
+
     public void writeComplexTestData(String prefix, String valueSuffix) throws Exception {
-    	System.out.println("\nNow writing with prefix: " + prefix + ", suffix: " + valueSuffix);
-    	writeString(prefix + "/address/addressLine1", "123 Main St" + valueSuffix);
-    	writeString(prefix + "/address/addressLine2", "Suite 42b" + valueSuffix);
-    	writeString(prefix + "/address/city", "Anytown" + valueSuffix);
-    	writeString(prefix + "/address/state", "NY" + valueSuffix);
-    	writeString(prefix + "/address/zipCode", "90210" + valueSuffix);
-    	writeString(prefix + "/contact/firstName", "Ozzie" + valueSuffix);
-    	writeString(prefix + "/contact/lastName", "Smith" + valueSuffix);
-    	writeString(prefix + "/contact/phoneNumber", "5551212" + valueSuffix);
-    	writeString(prefix + "/contact/zipCode", "81111" + valueSuffix);
-    	writeInteger(prefix + "/orderId", 9);  
+        System.out.println("\nNow writing with prefix: " + prefix + ", suffix: " + valueSuffix);
+        writeString(prefix + "/address/addressLine1", "123 Main St" + valueSuffix);
+        writeString(prefix + "/address/addressLine2", "Suite 42b" + valueSuffix);
+        writeString(prefix + "/address/city", "Anytown" + valueSuffix);
+        writeString(prefix + "/address/state", "NY" + valueSuffix);
+        writeString(prefix + "/address/zipCode", "90210" + valueSuffix);
+        writeString(prefix + "/contact/firstName", "Ozzie" + valueSuffix);
+        writeString(prefix + "/contact/lastName", "Smith" + valueSuffix);
+        writeString(prefix + "/contact/phoneNumber", "5551212" + valueSuffix);
+        writeString(prefix + "/contact/zipCode", "81111" + valueSuffix);
+        writeInteger(prefix + "/orderId", 9);
     }
 
     @Test
     public void testWriteComplexObject_Repeated() throws Exception {
-    	
-    	for (int i = 0; i < 5; i++) {
-    		String prefix = "/SourceOrderList/orders[" + i + "]";
-    		String valueSuffix = " (" + (i + 1) + ")";
-    		writeComplexTestData(prefix, valueSuffix);
-    	}
-    	
-    	writeInteger("/SourceOrderList/orderBatchNumber", 4123562);
-    	writeInteger("/SourceOrderList/numberOfOrders", 5);       
 
-        final String instance = new String(Files.readAllBytes(Paths.get("src/test/resources/complex-repeated-result.json")));
+        for (int i = 0; i < 5; i++) {
+            String prefix = "/SourceOrderList/orders[" + i + "]";
+            String valueSuffix = " (" + (i + 1) + ")";
+            writeComplexTestData(prefix, valueSuffix);
+        }
+
+        writeInteger("/SourceOrderList/orderBatchNumber", 4123562);
+        writeInteger("/SourceOrderList/numberOfOrders", 5);
+
+        final String instance = new String(
+                Files.readAllBytes(Paths.get("src/test/resources/complex-repeated-result.json")));
         Assert.assertNotNull(instance);
         Assert.assertThat(prettyPrintJson(writer.getRootNode().toString()), Is.is(prettyPrintJson(instance)));
     }
 
     @Test
     @Ignore
-//    TODO this needs more fleshing out. Currently we cannot handle nested objects with nested arrays.
+    // TODO this needs more fleshing out. Currently we cannot handle nested objects
+    // with nested arrays.
     public void testWriteHighlyComplexObject() throws Exception {
 
         JsonComplexType items = new JsonComplexType();
@@ -508,7 +514,7 @@ public class JsonFieldWriterTest {
         topping.getJsonFields().getJsonField().add(topping7_type);
         writer.write(topping7_type);
 
-        //repeat complex
+        // repeat complex
 
         JsonComplexType item1 = new JsonComplexType();
         item1.setJsonFields(new JsonFields());
@@ -566,26 +572,27 @@ public class JsonFieldWriterTest {
         batters1.getJsonFields().getJsonField().add(batter1);
         writer.write(batter1);
 
-//        FIXME this writes to the items/item/batters/batter and not at items/item[1]/batters/batter
+        // FIXME this writes to the items/item/batters/batter and not at
+        // items/item[1]/batters/batter
 
-//        JsonField batter1_1_id = new JsonField();
-//        batter1_1_id.setPath("/items/item[1]/batters/batter/id");
-//        batter1_1_id.setValue("1001");
-//        batter1_1_id.setFieldType(FieldType.STRING);
-//        batter1_1_id.setStatus(FieldStatus.SUPPORTED);
-//        batter1.getJsonFields().getJsonField().add(batter1_1_id);
-//        writer.write(batter1_1_id, root);
-//
-//        JsonField batter1_1_type = new JsonField();
-//        batter1_1_type.setPath("/items/item[1]/batters/batter/type");
-//        batter1_1_type.setValue("Regular");
-//        batter1_1_type.setFieldType(FieldType.STRING);
-//        batter1_1_type.setStatus(FieldStatus.SUPPORTED);
-//        batter1.getJsonFields().getJsonField().add(batter1_1_type);
-//        writer.write(batter1_1_type, root);
+        // JsonField batter1_1_id = new JsonField();
+        // batter1_1_id.setPath("/items/item[1]/batters/batter/id");
+        // batter1_1_id.setValue("1001");
+        // batter1_1_id.setFieldType(FieldType.STRING);
+        // batter1_1_id.setStatus(FieldStatus.SUPPORTED);
+        // batter1.getJsonFields().getJsonField().add(batter1_1_id);
+        // writer.write(batter1_1_id, root);
+        //
+        // JsonField batter1_1_type = new JsonField();
+        // batter1_1_type.setPath("/items/item[1]/batters/batter/type");
+        // batter1_1_type.setValue("Regular");
+        // batter1_1_type.setFieldType(FieldType.STRING);
+        // batter1_1_type.setStatus(FieldStatus.SUPPORTED);
+        // batter1.getJsonFields().getJsonField().add(batter1_1_type);
+        // writer.write(batter1_1_type, root);
 
         System.out.println(prettyPrintJson(writer.getRootNode().toString()));
-    }    
+    }
 
     private String prettyPrintJson(String json) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();

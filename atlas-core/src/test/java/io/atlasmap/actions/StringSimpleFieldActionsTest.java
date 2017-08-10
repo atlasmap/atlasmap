@@ -52,7 +52,7 @@ public class StringSimpleFieldActionsTest {
         assertEquals("foo", StringSimpleFieldActions.lowercase(new Lowercase(), "fOo"));
         assertEquals("foo", StringSimpleFieldActions.lowercase(new Lowercase(), "foO"));
         assertEquals("foo", StringSimpleFieldActions.lowercase(new Lowercase(), "FOO"));
-        assertEquals("foo bar", StringSimpleFieldActions.lowercase(new Lowercase(), "FOO BAR"));    
+        assertEquals("foo bar", StringSimpleFieldActions.lowercase(new Lowercase(), "FOO BAR"));
     }
 
     @Test
@@ -64,7 +64,7 @@ public class StringSimpleFieldActionsTest {
         assertEquals("fOo", StringSimpleFieldActions.trim(new Trim(), "fOo   "));
         assertEquals("foO", StringSimpleFieldActions.trim(new Trim(), "    foO   "));
         assertEquals("FOO", StringSimpleFieldActions.trim(new Trim(), "\t\n   FOO"));
-        assertEquals("FOO", StringSimpleFieldActions.trim(new Trim(), "\t\n   FOO\f\r")); 
+        assertEquals("FOO", StringSimpleFieldActions.trim(new Trim(), "\t\n   FOO\f\r"));
     }
 
     @Test
@@ -76,7 +76,7 @@ public class StringSimpleFieldActionsTest {
         assertEquals("fOo   ", StringSimpleFieldActions.trimLeft(new TrimLeft(), "fOo   "));
         assertEquals("foO   ", StringSimpleFieldActions.trimLeft(new TrimLeft(), "    foO   "));
         assertEquals("FOO", StringSimpleFieldActions.trimLeft(new TrimLeft(), "\t\n   FOO"));
-        assertEquals("FOO\f\r", StringSimpleFieldActions.trimLeft(new TrimLeft(), "\t\n   FOO\f\r"));     
+        assertEquals("FOO\f\r", StringSimpleFieldActions.trimLeft(new TrimLeft(), "\t\n   FOO\f\r"));
     }
 
     @Test
@@ -100,7 +100,7 @@ public class StringSimpleFieldActionsTest {
         assertEquals("FOo   ", StringSimpleFieldActions.capitalize(new Capitalize(), "fOo   "));
         assertEquals("    foO   ", StringSimpleFieldActions.capitalize(new Capitalize(), "    foO   "));
         assertEquals("\t\n   FOO", StringSimpleFieldActions.capitalize(new Capitalize(), "\t\n   FOO"));
-        assertEquals("\t\n   FOO\f\r", StringSimpleFieldActions.capitalize(new Capitalize(), "\t\n   FOO\f\r"));    
+        assertEquals("\t\n   FOO\f\r", StringSimpleFieldActions.capitalize(new Capitalize(), "\t\n   FOO\f\r"));
     }
 
     @Test
@@ -112,7 +112,7 @@ public class StringSimpleFieldActionsTest {
 
     @Test
     public void testSeparatorRegex() {
-        Pattern pattern =  Pattern.compile(StringSimpleFieldActions.STRING_SEPARATOR_REGEX);
+        Pattern pattern = Pattern.compile(StringSimpleFieldActions.STRING_SEPARATOR_REGEX);
         assertFalse(pattern.matcher("foo").find());
         assertFalse(pattern.matcher("").find());
         assertTrue(pattern.matcher("f o").find());
@@ -123,7 +123,7 @@ public class StringSimpleFieldActionsTest {
         assertTrue(pattern.matcher("f:o:o").find());
         assertTrue(pattern.matcher("f  o").find());
     }
-    
+
     @Test
     public void testSeparateByDash() {
         assertNull(StringSimpleFieldActions.separateByDash(new SeparateByDash(), null));
@@ -147,7 +147,8 @@ public class StringSimpleFieldActionsTest {
         assertEquals("foo_bar", StringSimpleFieldActions.separateByUnderscore(new SeparateByUnderscore(), "foo+bar"));
         assertEquals("foo_bar", StringSimpleFieldActions.separateByUnderscore(new SeparateByUnderscore(), "foo=bar"));
         assertEquals("foo_bar", StringSimpleFieldActions.separateByUnderscore(new SeparateByUnderscore(), "foo:bar"));
-        assertEquals("f_o_o_b_a_r", StringSimpleFieldActions.separateByUnderscore(new SeparateByUnderscore(), "f:o:o:b:a:r"));    
+        assertEquals("f_o_o_b_a_r",
+                StringSimpleFieldActions.separateByUnderscore(new SeparateByUnderscore(), "f:o:o:b:a:r"));
     }
 
 }

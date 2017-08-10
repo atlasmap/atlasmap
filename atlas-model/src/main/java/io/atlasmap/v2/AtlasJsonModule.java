@@ -7,7 +7,8 @@ public class AtlasJsonModule extends SimpleModule {
 
     private static final long serialVersionUID = -2352383379765836801L;
     private static final String NAME = "AtlasJsonModule";
-    private static final VersionUtil VERSION_UTIL = new VersionUtil() {};
+    private static final VersionUtil VERSION_UTIL = new VersionUtil() {
+    };
 
     public AtlasJsonModule() {
         super(NAME, VERSION_UTIL.version());
