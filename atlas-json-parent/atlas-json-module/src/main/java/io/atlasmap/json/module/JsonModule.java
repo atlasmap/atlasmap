@@ -135,7 +135,8 @@ public class JsonModule extends BaseAtlasModule {
             JsonField inputField = (JsonField) field;
 
             Object sourceObject = null;
-            if (field.getDocId() != null) {
+            if (field.getDocId() != null && session.hasInput(field.getDocId())) {
+                // Use docId only when it exists, otherwise use default input
                 sourceObject = session.getInput(field.getDocId());
             } else {
                 sourceObject = session.getInput();
@@ -369,7 +370,8 @@ public class JsonModule extends BaseAtlasModule {
     @Override
     public int getCollectionSize(AtlasSession session, Field field) throws AtlasException {
         String sourceDocument = null;
-        if (field.getDocId() != null) {
+        if (field.getDocId() != null && session.hasInput(field.getDocId())) {
+            // Use docId only when it exists, otherwise use default input
             sourceDocument = (String) session.getInput(field.getDocId());
         } else {
             sourceDocument = (String) session.getInput();

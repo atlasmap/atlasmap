@@ -68,6 +68,23 @@
             <artifactId>slf4j-log4j12</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.twitter4j</groupId>
+            <artifactId>twitter4j-core</artifactId>
+            <version>4.0.6</version>
+        </dependency>
+        <dependency>
+            <groupId>io.syndesis</groupId>
+            <artifactId>salesforce-upsert-contact-connector</artifactId>
+            <version>0.4-SNAPSHOT</version>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.camel</groupId>
+                    <artifactId>camel-salesforce-starter</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
     </dependencies>
 
 </project>

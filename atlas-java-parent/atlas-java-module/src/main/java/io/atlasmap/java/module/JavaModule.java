@@ -182,7 +182,8 @@ public class JavaModule extends BaseAtlasModule {
 
                 Object sourceObject = session.getInput();
                 ;
-                if (field.getDocId() != null) {
+                if (field.getDocId() != null && session.hasInput(field.getDocId())) {
+                    // Use docId only when it exists, otherwise use default input
                     sourceObject = session.getInput(field.getDocId());
                 }
 
@@ -597,7 +598,8 @@ public class JavaModule extends BaseAtlasModule {
     @Override
     public int getCollectionSize(AtlasSession session, Field field) throws AtlasException {
         Object sourceObject = session.getInput();
-        if (field.getDocId() != null) {
+        if (field.getDocId() != null && session.hasInput(field.getDocId())) {
+            // Use docId only when it exists, otherwise use default input
             sourceObject = session.getInput(field.getDocId());
         }
 
