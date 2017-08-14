@@ -34,13 +34,13 @@ public class AtlasMapComponentJsonTest {
     public void testMocksAreValid() throws Exception {
         result.setExpectedCount(1);
 
-        ProducerTemplate producerTemplate = camelContext.createProducerTemplate();    	
+        ProducerTemplate producerTemplate = camelContext.createProducerTemplate();
         producerTemplate.sendBody("direct:start", generateTwitterStatus());
 
         MockEndpoint.assertIsSatisfied(camelContext);
         Object body = result.getExchanges().get(0).getIn().getBody();
         assertEquals(Contact.class, body.getClass());
-        Contact output = (Contact)body;
+        Contact output = (Contact) body;
         assertEquals("Bob", output.getFirstName());
         assertEquals("Vila", output.getLastName());
         assertEquals("bobvila1982", output.getTitle());
