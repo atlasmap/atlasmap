@@ -1,58 +1,75 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<AtlasMapping xmlns="http://atlasmap.io/v2" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns2="http://atlasmap.io/json/v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="JsonJsonMultiSourceComplex" >
-  <DataSource dataSourceType="Source" uri="atlas:json" docId="con"/>
-  <DataSource dataSourceType="Source" uri="atlas:json" docId="addr"/>
-  <DataSource dataSourceType="Target" uri="atlas:json"/>
-  <Mappings> 
-    <Mapping xsi:type="Mapping" mappingType="Map">
-      <InputField xsi:type="ConstantField" fieldType="Integer">
-          <value xsi:type="xs:int">8765309</value>
-      </InputField>
-      <OutputField xsi:type="ns2:JsonField" path="/orderId"/>
-    </Mapping>
-    <Mapping xsi:type="Mapping" mappingType="Map">
-      <InputField xsi:type="ns2:JsonField" path="/" docId="con" fieldType="Complex" />
-      <OutputField xsi:type="ns2:JsonField" path="/contact" fieldType="Complex" />
-    </Mapping>
-    <Mapping xsi:type="Mapping" mappingType="Map">
-      <InputField xsi:type="ns2:JsonField" path="/firstName" docId="con"/>
-      <OutputField xsi:type="ns2:JsonField" path="/contact/firstName"/>
-    </Mapping>
-    <Mapping xsi:type="Mapping" mappingType="Map">
-      <InputField xsi:type="ns2:JsonField" path="/lastName" docId="con"/>
-      <OutputField xsi:type="ns2:JsonField" path="/contact/lastName"/>
-    </Mapping>
-    <Mapping xsi:type="Mapping" mappingType="Map">
-      <InputField xsi:type="ns2:JsonField" path="/phoneNumber" docId="con"/>
-      <OutputField xsi:type="ns2:JsonField" path="/contact/phoneNumber"/>
-    </Mapping>
-    <Mapping xsi:type="Mapping" mappingType="Map">
-      <InputField xsi:type="ns2:JsonField" path="/zipCode" docId="con"/>
-      <OutputField xsi:type="ns2:JsonField" path="/contact/zipCode"/>
-    </Mapping>
-     <Mapping xsi:type="Mapping" mappingType="Map">
-      <InputField xsi:type="ns2:JsonField" path="/" docId="addr" fieldType="Complex"/>
-      <OutputField xsi:type="ns2:JsonField" path="/address" fieldType="Complex"/>
-    </Mapping>
-    <Mapping xsi:type="Mapping" mappingType="Map">
-      <InputField xsi:type="ns2:JsonField" path="/addressLine1" docId="addr"/>
-      <OutputField xsi:type="ns2:JsonField" path="/address/addressLine1"/>
-    </Mapping>
-    <Mapping xsi:type="Mapping" mappingType="Map">
-      <InputField xsi:type="ns2:JsonField" path="/addressLine2" docId="addr"/>
-      <OutputField xsi:type="ns2:JsonField" path="/address/addressLine2"/>
-    </Mapping>
-    <Mapping xsi:type="Mapping" mappingType="Map">
-      <InputField xsi:type="ns2:JsonField" path="/city" docId="addr"/>
-      <OutputField xsi:type="ns2:JsonField" path="/address/city"/>
-    </Mapping>
-    <Mapping xsi:type="Mapping" mappingType="Map">
-      <InputField xsi:type="ns2:JsonField" path="/state" docId="addr"/>
-      <OutputField xsi:type="ns2:JsonField" path="/address/state"/>
-    </Mapping>
-    <Mapping xsi:type="Mapping" mappingType="Map">
-      <InputField xsi:type="ns2:JsonField" path="/zipCode" docId="addr"/>
-      <OutputField xsi:type="ns2:JsonField" path="/address/zipCode"/>
-    </Mapping>
-  </Mappings>
+<AtlasMapping xmlns="http://atlasmap.io/v2" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:ns2="http://atlasmap.io/json/v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    name="JsonJsonMultiSourceComplex">
+    <DataSource dataSourceType="Source" uri="atlas:json"
+        docId="con" />
+    <DataSource dataSourceType="Source" uri="atlas:json"
+        docId="addr" />
+    <DataSource dataSourceType="Target" uri="atlas:json" />
+    <Mappings>
+        <Mapping xsi:type="Mapping" mappingType="Map">
+            <InputField xsi:type="ConstantField" fieldType="Integer">
+                <value xsi:type="xs:int">8765309</value>
+            </InputField>
+            <OutputField xsi:type="ns2:JsonField" path="/orderId" />
+        </Mapping>
+        <Mapping xsi:type="Mapping" mappingType="Map">
+            <InputField xsi:type="ns2:JsonField" path="/"
+                docId="con" fieldType="Complex" />
+            <OutputField xsi:type="ns2:JsonField" path="/contact"
+                fieldType="Complex" />
+        </Mapping>
+        <Mapping xsi:type="Mapping" mappingType="Map">
+            <InputField xsi:type="ns2:JsonField" path="/firstName"
+                docId="con" />
+            <OutputField xsi:type="ns2:JsonField" path="/contact/firstName" />
+        </Mapping>
+        <Mapping xsi:type="Mapping" mappingType="Map">
+            <InputField xsi:type="ns2:JsonField" path="/lastName"
+                docId="con" />
+            <OutputField xsi:type="ns2:JsonField" path="/contact/lastName" />
+        </Mapping>
+        <Mapping xsi:type="Mapping" mappingType="Map">
+            <InputField xsi:type="ns2:JsonField" path="/phoneNumber"
+                docId="con" />
+            <OutputField xsi:type="ns2:JsonField" path="/contact/phoneNumber" />
+        </Mapping>
+        <Mapping xsi:type="Mapping" mappingType="Map">
+            <InputField xsi:type="ns2:JsonField" path="/zipCode"
+                docId="con" />
+            <OutputField xsi:type="ns2:JsonField" path="/contact/zipCode" />
+        </Mapping>
+        <Mapping xsi:type="Mapping" mappingType="Map">
+            <InputField xsi:type="ns2:JsonField" path="/"
+                docId="addr" fieldType="Complex" />
+            <OutputField xsi:type="ns2:JsonField" path="/address"
+                fieldType="Complex" />
+        </Mapping>
+        <Mapping xsi:type="Mapping" mappingType="Map">
+            <InputField xsi:type="ns2:JsonField" path="/addressLine1"
+                docId="addr" />
+            <OutputField xsi:type="ns2:JsonField" path="/address/addressLine1" />
+        </Mapping>
+        <Mapping xsi:type="Mapping" mappingType="Map">
+            <InputField xsi:type="ns2:JsonField" path="/addressLine2"
+                docId="addr" />
+            <OutputField xsi:type="ns2:JsonField" path="/address/addressLine2" />
+        </Mapping>
+        <Mapping xsi:type="Mapping" mappingType="Map">
+            <InputField xsi:type="ns2:JsonField" path="/city"
+                docId="addr" />
+            <OutputField xsi:type="ns2:JsonField" path="/address/city" />
+        </Mapping>
+        <Mapping xsi:type="Mapping" mappingType="Map">
+            <InputField xsi:type="ns2:JsonField" path="/state"
+                docId="addr" />
+            <OutputField xsi:type="ns2:JsonField" path="/address/state" />
+        </Mapping>
+        <Mapping xsi:type="Mapping" mappingType="Map">
+            <InputField xsi:type="ns2:JsonField" path="/zipCode"
+                docId="addr" />
+            <OutputField xsi:type="ns2:JsonField" path="/address/zipCode" />
+        </Mapping>
+    </Mappings>
 </AtlasMapping>

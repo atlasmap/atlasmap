@@ -21,7 +21,7 @@ import io.atlasmap.v2.Validation;
 import io.atlasmap.v2.ValidationStatus;
 
 public class PositiveIntegerValidator implements AtlasValidator {
-    
+
     private String violationMessage;
     private String field;
 

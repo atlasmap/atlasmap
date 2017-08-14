@@ -44,7 +44,6 @@ import io.atlasmap.xml.v2.XmlField;
 public class XmlFieldReaderTest {
     private XmlFieldReader reader = new XmlFieldReader();
 
-
     @Test
     public void testReadDocumentSetElementValueAsString() throws Exception {
         Document doc = getDocument("src/test/resources/simple_example.xml");
@@ -80,7 +79,7 @@ public class XmlFieldReaderTest {
         assertNotNull(xmlField.getValue());
         assertThat(xmlField.getValue(), is("54554555"));
     }
-    
+
     @Test
     public void testCountCollectionIndex() throws Exception {
         Document doc = getDocument("src/test/resources/complex_example.xml");
@@ -89,20 +88,20 @@ public class XmlFieldReaderTest {
 
         Integer orderCount = null;
         Integer idCount = null;
-        
+
         PathUtil pathUtil = new PathUtil(xmlField.getPath());
-        for(String seg : pathUtil.getSegments()) {
-            if(PathUtil.isCollectionSegment(seg)) {
-                if("order".equals(PathUtil.cleanPathSegment(seg))) {
+        for (String seg : pathUtil.getSegments()) {
+            if (PathUtil.isCollectionSegment(seg)) {
+                if ("order".equals(PathUtil.cleanPathSegment(seg))) {
                     orderCount = reader.getCollectionCount(doc, xmlField, PathUtil.cleanPathSegment(seg));
                 }
-                if("id".equals(PathUtil.cleanPathSegment(seg))) {
+                if ("id".equals(PathUtil.cleanPathSegment(seg))) {
                     idCount = reader.getCollectionCount(doc, xmlField, PathUtil.cleanPathSegment(seg));
                 }
 
             }
         }
-        
+
         assertNotNull(orderCount);
         assertNotNull(idCount);
         assertEquals(Integer.valueOf(4), Integer.valueOf(orderCount));
@@ -168,7 +167,9 @@ public class XmlFieldReaderTest {
     @Test
     public void testReadDocumentElementWithMultipleNamespaceComplex() throws Exception {
         Document doc = getDocument("src/test/resources/complex_example_multiple_ns.xml", true);
-        //NB: the index is namespace aware, that is, if there are multiple namespaces, each namespace has an index starting at zero regardless of the element's indexed position in the document...
+        // NB: the index is namespace aware, that is, if there are multiple namespaces,
+        // each namespace has an index starting at zero regardless of the element's
+        // indexed position in the document...
         XmlField xmlField = AtlasXmlModelFactory.createXmlField();
         xmlField.setPath("/orders/q:order/id/@y:custId");
         assertNull(xmlField.getValue());
@@ -198,11 +199,12 @@ public class XmlFieldReaderTest {
         assertThat(xmlField.getValue(), is("ea"));
     }
 
-
     @Test
     public void testReadDocumentElementWithMultipleNamespaceComplexConstructorArg() throws Exception {
         Document doc = getDocument("src/test/resources/complex_example_multiple_ns.xml", true);
-//NB: the index is namespace aware, that is, if there are multiple namespaces, each namespace has an index starting at zero regardless of the element's indexed position in the document...
+        // NB: the index is namespace aware, that is, if there are multiple namespaces,
+        // each namespace has an index starting at zero regardless of the element's
+        // indexed position in the document...
         XmlField xmlField = AtlasXmlModelFactory.createXmlField();
         xmlField.setPath("/orders/q:order/id/@y:custId");
         assertNull(xmlField.getValue());
@@ -258,7 +260,7 @@ public class XmlFieldReaderTest {
     public void testReadDocumentMisMatchedFieldName_AT416() throws Exception {
         Document doc = getDocument("src/test/resources/simple_example.xml");
         XmlField xmlField = AtlasXmlModelFactory.createXmlField();
-        //correct field name should be id or id[1]
+        // correct field name should be id or id[1]
         xmlField.setPath("/orders/order/id1");
         assertNull(xmlField.getValue());
         reader.read(doc, xmlField);
@@ -269,7 +271,7 @@ public class XmlFieldReaderTest {
     public void testReadDocumentMixedNamespaces_NoNSDocument() throws Exception {
         Document doc = getDocument("src/test/resources/simple_example.xml");
         XmlField xmlField = AtlasXmlModelFactory.createXmlField();
-        //there is no namespace on the document but there is this field....
+        // there is no namespace on the document but there is this field....
         xmlField.setPath("/ns:orders/order/id");
         assertNull(xmlField.getValue());
         reader.read(doc, xmlField);
@@ -281,14 +283,13 @@ public class XmlFieldReaderTest {
     public void testReadDocumentMixedNamespaces_NoNSOnPaths() throws Exception {
         Document doc = getDocument("src/test/resources/simple_example_single_ns.xml", true);
         XmlField xmlField = AtlasXmlModelFactory.createXmlField();
-        //there is a namespace on the document but there is not on the paths....
+        // there is a namespace on the document but there is not on the paths....
         xmlField.setPath("/orders/order/id");
         assertNull(xmlField.getValue());
         reader.read(doc, xmlField);
         assertNotNull(xmlField.getValue());
         assertThat(xmlField.getValue(), is("12312"));
     }
-
 
     @Test(expected = AtlasException.class)
     public void testThrowExceptionOnNullDocument() throws Exception {
@@ -313,14 +314,15 @@ public class XmlFieldReaderTest {
     public void testFieldTypeValueOf() {
         System.out.println(Boolean.valueOf("Foo"));
     }
-    
+
     private Document getDocument(String uri) throws IOException, SAXException, ParserConfigurationException {
         return getDocument(uri, false);
     }
 
-    private Document getDocument(String uri, boolean namespaced) throws ParserConfigurationException, SAXException, IOException {
+    private Document getDocument(String uri, boolean namespaced)
+            throws ParserConfigurationException, SAXException, IOException {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        dbf.setNamespaceAware(namespaced); //this must be done to use namespaces
+        dbf.setNamespaceAware(namespaced); // this must be done to use namespaces
         DocumentBuilder b = dbf.newDocumentBuilder();
         return b.parse(new FileInputStream(uri));
     }

@@ -27,57 +27,83 @@ import io.atlasmap.reference.AtlasMappingBaseTest;
 import io.atlasmap.reference.AtlasTestUtil;
 
 public class XmlJsonAutoConversionTest extends AtlasMappingBaseTest {
-            
+
     @Test
     public void testProcessXmlJsonFlatFieldMappingAutoConversion1() throws Exception {
-        processXmlJsonFlatMappingAutoConversion("src/test/resources/xmlToJson/atlasmapping-flatprimitive-attribute-autoconversion-1.xml", "src/test/resources/xmlToJson/atlas-xml-flatprimitive-attribute-autoconversion.xml", 1);
+        processXmlJsonFlatMappingAutoConversion(
+                "src/test/resources/xmlToJson/atlasmapping-flatprimitive-attribute-autoconversion-1.xml",
+                "src/test/resources/xmlToJson/atlas-xml-flatprimitive-attribute-autoconversion.xml", 1);
     }
-    
+
     @Test
     public void testProcessXmlJsonFlatFieldMappingAutoConversion2() throws Exception {
-        processXmlJsonFlatMappingAutoConversion("src/test/resources/xmlToJson/atlasmapping-flatprimitive-attribute-autoconversion-2.xml", "src/test/resources/xmlToJson/atlas-xml-flatprimitive-attribute-autoconversion.xml", 2);
+        processXmlJsonFlatMappingAutoConversion(
+                "src/test/resources/xmlToJson/atlasmapping-flatprimitive-attribute-autoconversion-2.xml",
+                "src/test/resources/xmlToJson/atlas-xml-flatprimitive-attribute-autoconversion.xml", 2);
     }
-    
+
     @Test
     public void testProcessXmlJsonFlatFieldMappingAutoConversion3() throws Exception {
-        processXmlJsonFlatMappingAutoConversion("src/test/resources/xmlToJson/atlasmapping-flatprimitive-attribute-autoconversion-3.xml", "src/test/resources/xmlToJson/atlas-xml-flatprimitive-attribute-autoconversion.xml", 3);
+        processXmlJsonFlatMappingAutoConversion(
+                "src/test/resources/xmlToJson/atlasmapping-flatprimitive-attribute-autoconversion-3.xml",
+                "src/test/resources/xmlToJson/atlas-xml-flatprimitive-attribute-autoconversion.xml", 3);
     }
-    
+
     @Test
     public void testProcessXmlJsonFlatFieldMappingAutoConversion4() throws Exception {
-        processXmlJsonFlatMappingAutoConversion("src/test/resources/xmlToJson/atlasmapping-flatprimitive-attribute-autoconversion-4.xml", "src/test/resources/xmlToJson/atlas-xml-flatprimitive-attribute-autoconversion.xml", 4);
+        processXmlJsonFlatMappingAutoConversion(
+                "src/test/resources/xmlToJson/atlasmapping-flatprimitive-attribute-autoconversion-4.xml",
+                "src/test/resources/xmlToJson/atlas-xml-flatprimitive-attribute-autoconversion.xml", 4);
     }
-    
+
     @Test
     public void testProcessXmlJsonFlatFieldMappingAutoConversion5() throws Exception {
-        processXmlJsonFlatMappingAutoConversion("src/test/resources/xmlToJson/atlasmapping-flatprimitive-attribute-autoconversion-5.xml", "src/test/resources/xmlToJson/atlas-xml-flatprimitive-attribute-autoconversion.xml", 5);
+        processXmlJsonFlatMappingAutoConversion(
+                "src/test/resources/xmlToJson/atlasmapping-flatprimitive-attribute-autoconversion-5.xml",
+                "src/test/resources/xmlToJson/atlas-xml-flatprimitive-attribute-autoconversion.xml", 5);
     }
-    
+
     @Test
     public void testProcessXmlJsonFlatFieldMappingAutoConversion6() throws Exception {
-        processXmlJsonFlatMappingAutoConversion("src/test/resources/xmlToJson/atlasmapping-flatprimitive-attribute-autoconversion-6.xml", "src/test/resources/xmlToJson/atlas-xml-flatprimitive-attribute-autoconversion.xml", 6);
+        processXmlJsonFlatMappingAutoConversion(
+                "src/test/resources/xmlToJson/atlasmapping-flatprimitive-attribute-autoconversion-6.xml",
+                "src/test/resources/xmlToJson/atlas-xml-flatprimitive-attribute-autoconversion.xml", 6);
     }
-    
-    protected void processXmlJsonFlatMappingAutoConversion(String mappingFile, String inputFile, int num) throws Exception {
+
+    protected void processXmlJsonFlatMappingAutoConversion(String mappingFile, String inputFile, int num)
+            throws Exception {
         AtlasContext context = atlasContextFactory.createContext(new File(mappingFile).toURI());
         AtlasSession session = context.createSession();
         String source = AtlasTestUtil.loadFileAsString(inputFile);
         session.setInput(source);
         context.process(session);
-        
+
         Object object = session.getOutput();
         assertNotNull(object);
         assertTrue(object instanceof String);
         AtlasJsonTestUnrootedMapper testMapper = new AtlasJsonTestUnrootedMapper();
-        TargetFlatPrimitive targetObject = testMapper.readValue((String)object, TargetFlatPrimitive.class);
-        switch(num) {
-        case 1:AtlasTestUtil.validateJsonFlatPrimitivePrimitiveFieldAutoConversion1(targetObject); break;
-        case 2:AtlasTestUtil.validateJsonFlatPrimitivePrimitiveFieldAutoConversion2(targetObject); break;
-        case 3:AtlasTestUtil.validateJsonFlatPrimitivePrimitiveFieldAutoConversion3(targetObject); break;
-        case 4:AtlasTestUtil.validateJsonFlatPrimitivePrimitiveFieldAutoConversion4(targetObject); break;
-        case 5:AtlasTestUtil.validateJsonFlatPrimitivePrimitiveFieldAutoConversion5(targetObject); break;
-        case 6:AtlasTestUtil.validateJsonFlatPrimitivePrimitiveFieldAutoConversion6(targetObject); break;
-        default: fail("Unexpected number: " + num);
+        TargetFlatPrimitive targetObject = testMapper.readValue((String) object, TargetFlatPrimitive.class);
+        switch (num) {
+        case 1:
+            AtlasTestUtil.validateJsonFlatPrimitivePrimitiveFieldAutoConversion1(targetObject);
+            break;
+        case 2:
+            AtlasTestUtil.validateJsonFlatPrimitivePrimitiveFieldAutoConversion2(targetObject);
+            break;
+        case 3:
+            AtlasTestUtil.validateJsonFlatPrimitivePrimitiveFieldAutoConversion3(targetObject);
+            break;
+        case 4:
+            AtlasTestUtil.validateJsonFlatPrimitivePrimitiveFieldAutoConversion4(targetObject);
+            break;
+        case 5:
+            AtlasTestUtil.validateJsonFlatPrimitivePrimitiveFieldAutoConversion5(targetObject);
+            break;
+        case 6:
+            AtlasTestUtil.validateJsonFlatPrimitivePrimitiveFieldAutoConversion6(targetObject);
+            break;
+        default:
+            fail("Unexpected number: " + num);
         }
     }
 

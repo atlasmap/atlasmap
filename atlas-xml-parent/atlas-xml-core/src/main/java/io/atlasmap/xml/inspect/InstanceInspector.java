@@ -132,10 +132,10 @@ public class InstanceInspector {
                 Node attrNode = attrs.item(i);
                 // don't map default namespace attribute ...
                 if (attrNode.getNamespaceURI() != null
-                    && attrNode.getNamespaceURI().equals(XMLConstants.XMLNS_ATTRIBUTE_NS_URI)) {
+                        && attrNode.getNamespaceURI().equals(XMLConstants.XMLNS_ATTRIBUTE_NS_URI)) {
                     continue;
                 } else if (attrNode.getNamespaceURI() != null
-                    && attrNode.getNamespaceURI().equals(XMLConstants.W3C_XML_SCHEMA_INSTANCE_NS_URI)) {
+                        && attrNode.getNamespaceURI().equals(XMLConstants.W3C_XML_SCHEMA_INSTANCE_NS_URI)) {
                     mapNamespace(attrNode);
                     xmlComplexType.setTypeName(attrNode.getTextContent());
                     continue;
@@ -208,7 +208,7 @@ public class InstanceInspector {
     private int getNodeIndex(Node node) {
         if (node.getParentNode().getNodeType() == Node.ELEMENT_NODE) {
             Element parent = (Element) node.getParentNode();
-            //find my index
+            // find my index
             NodeList siblings = parent.getElementsByTagName(node.getNodeName());
             if (siblings != null) {
                 for (int i = 0; i < siblings.getLength(); i++) {

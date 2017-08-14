@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
+
     Copyright (C) 2017 Red Hat, Inc.
+
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
@@ -15,162 +17,186 @@
 
 -->
 <schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:atlas="http://atlasmap.io/v2"
-	xmlns:atlasx="http://atlasmap.io/xml/v2" targetNamespace="http://atlasmap.io/xml/v2"
-	elementFormDefault="qualified" attributeFormDefault="unqualified">
+    xmlns:atlasx="http://atlasmap.io/xml/v2" targetNamespace="http://atlasmap.io/xml/v2"
+    elementFormDefault="qualified" attributeFormDefault="unqualified">
 
-	<import namespace="http://atlasmap.io/v2" schemaLocation="http://atlasmap.io/v2/atlas-model-v2.xsd" />
+    <import namespace="http://atlasmap.io/v2" schemaLocation="http://atlasmap.io/v2/atlas-model-v2.xsd" />
 
-	<complexType name="XmlDataSource">
-		<complexContent>
-			<extension base="atlas:DataSource">
-				<sequence>
-					<element name="XmlNamespaces" type="atlasx:XmlNamespaces" minOccurs="0" maxOccurs="1" />
-					<element name="Template" type="string" minOccurs="0" maxOccurs="1" />
-				</sequence>
-			</extension>
-		</complexContent>
-	</complexType>
+    <complexType name="XmlDataSource">
+        <complexContent>
+            <extension base="atlas:DataSource">
+                <sequence>
+                    <element name="XmlNamespaces" type="atlasx:XmlNamespaces"
+                        minOccurs="0" maxOccurs="1" />
+                    <element name="Template" type="string"
+                        minOccurs="0" maxOccurs="1" />
+                </sequence>
+            </extension>
+        </complexContent>
+    </complexType>
 
-	<complexType name="XmlDocument">
-		<complexContent>
-			<extension base="atlas:Document">
-				<sequence>
-					<element name="XmlNamespaces" type="atlasx:XmlNamespaces" minOccurs="1" maxOccurs="1" />
-				</sequence>
-			</extension>
-		</complexContent>
-	</complexType>
+    <complexType name="XmlDocument">
+        <complexContent>
+            <extension base="atlas:Document">
+                <sequence>
+                    <element name="XmlNamespaces" type="atlasx:XmlNamespaces"
+                        minOccurs="1" maxOccurs="1" />
+                </sequence>
+            </extension>
+        </complexContent>
+    </complexType>
 
-	<complexType name="XmlNamespaces">
-		<sequence>
-			<element name="XmlNamespace" type="atlasx:XmlNamespace" minOccurs="0" maxOccurs="unbounded" />
-		</sequence>
-	</complexType>
+    <complexType name="XmlNamespaces">
+        <sequence>
+            <element name="XmlNamespace" type="atlasx:XmlNamespace"
+                minOccurs="0" maxOccurs="unbounded" />
+        </sequence>
+    </complexType>
 
-	<complexType name="XmlNamespace">
-		<attribute name="alias" type="string" use="optional" />
-		<attribute name="uri" type="string" use="required" />
-		<attribute name="locationUri" type="string" use="optional" />
-		<attribute name="targetNamespace" type="boolean" use="optional" />
-	</complexType>
+    <complexType name="XmlNamespace">
+        <attribute name="alias" type="string" use="optional" />
+        <attribute name="uri" type="string" use="required" />
+        <attribute name="locationUri" type="string" use="optional" />
+        <attribute name="targetNamespace" type="boolean" use="optional" />
+    </complexType>
 
-	<complexType name="XmlEnumFields">
-		<sequence>
-			<element name="XmlEnumField" type="atlasx:XmlEnumField" minOccurs="0" maxOccurs="unbounded" />
-		</sequence>
-	</complexType>
+    <complexType name="XmlEnumFields">
+        <sequence>
+            <element name="XmlEnumField" type="atlasx:XmlEnumField"
+                minOccurs="0" maxOccurs="unbounded" />
+        </sequence>
+    </complexType>
 
-	<complexType name="XmlFields">
-		<sequence>
-			<element name="XmlField" type="atlasx:XmlField" minOccurs="0" maxOccurs="unbounded" />
-		</sequence>
-	</complexType>
+    <complexType name="XmlFields">
+        <sequence>
+            <element name="XmlField" type="atlasx:XmlField"
+                minOccurs="0" maxOccurs="unbounded" />
+        </sequence>
+    </complexType>
 
-	<complexType name="XmlField">
-		<complexContent>
-			<extension base="atlas:Field">
-				<sequence>
-					<element name="Annotations" type="atlas:StringList" minOccurs="1" maxOccurs="1" />
-					<element name="Restrictions" type="atlasx:Restrictions" minOccurs="1" maxOccurs="1" />
-				</sequence>
-				<attribute name="name" type="string" use="required" />
-				<attribute name="nodeType" type="atlasx:NodeType" use="optional" />
-				<attribute name="primitive" type="boolean" use="optional" />
-				<attribute name="typeName" type="string" use="optional" />
-				<attribute name="userCreated" type="boolean" use="optional" />
-			</extension>
-		</complexContent>
-	</complexType>
+    <complexType name="XmlField">
+        <complexContent>
+            <extension base="atlas:Field">
+                <sequence>
+                    <element name="Annotations" type="atlas:StringList"
+                        minOccurs="1" maxOccurs="1" />
+                    <element name="Restrictions" type="atlasx:Restrictions"
+                        minOccurs="1" maxOccurs="1" />
+                </sequence>
+                <attribute name="name" type="string" use="required" />
+                <attribute name="nodeType" type="atlasx:NodeType"
+                    use="optional" />
+                <attribute name="primitive" type="boolean"
+                    use="optional" />
+                <attribute name="typeName" type="string" use="optional" />
+                <attribute name="userCreated" type="boolean"
+                    use="optional" />
+            </extension>
+        </complexContent>
+    </complexType>
 
-	<complexType name="XmlEnumField">
-		<complexContent>
-			<extension base="atlas:Field">
-				<attribute name="name" type="string" use="optional" />
-				<attribute name="ordinal" type="int" use="optional" />
-				<attribute name="typeName" type="string" use="optional" />
-			</extension>
-		</complexContent>
-	</complexType>
+    <complexType name="XmlEnumField">
+        <complexContent>
+            <extension base="atlas:Field">
+                <attribute name="name" type="string" use="optional" />
+                <attribute name="ordinal" type="int" use="optional" />
+                <attribute name="typeName" type="string" use="optional" />
+            </extension>
+        </complexContent>
+    </complexType>
 
-	<complexType name="XmlComplexType">
-		<complexContent>
-			<extension base="atlasx:XmlField">
-				<sequence>
-					<element name="XmlEnumFields" type="atlasx:XmlEnumFields" minOccurs="1" maxOccurs="1" />
-					<element name="XmlFields" type="atlasx:XmlFields" minOccurs="1" maxOccurs="1" />
-				</sequence>
-				<attribute name="annotation" type="boolean" use="optional" />
-				<attribute name="annonymous" type="boolean" use="optional" />
-				<attribute name="enumeration" type="boolean" use="optional" />
-				<attribute name="uri" type="string" use="optional" />
-			</extension>
-		</complexContent>
-	</complexType>
+    <complexType name="XmlComplexType">
+        <complexContent>
+            <extension base="atlasx:XmlField">
+                <sequence>
+                    <element name="XmlEnumFields" type="atlasx:XmlEnumFields"
+                        minOccurs="1" maxOccurs="1" />
+                    <element name="XmlFields" type="atlasx:XmlFields"
+                        minOccurs="1" maxOccurs="1" />
+                </sequence>
+                <attribute name="annotation" type="boolean"
+                    use="optional" />
+                <attribute name="annonymous" type="boolean"
+                    use="optional" />
+                <attribute name="enumeration" type="boolean"
+                    use="optional" />
+                <attribute name="uri" type="string" use="optional" />
+            </extension>
+        </complexContent>
+    </complexType>
 
-	<complexType name="Restrictions">
-		<sequence>
-			<element name="Restriction" type="atlasx:Restriction" minOccurs="0" maxOccurs="unbounded" />
-		</sequence>
-	</complexType>
+    <complexType name="Restrictions">
+        <sequence>
+            <element name="Restriction" type="atlasx:Restriction"
+                minOccurs="0" maxOccurs="unbounded" />
+        </sequence>
+    </complexType>
 
-	<complexType name="Restriction">
-		<attribute name="type" type="atlasx:RestrictionType" use="required" />
-		<attribute name="value" type="string" use="optional" />
-	</complexType>
+    <complexType name="Restriction">
+        <attribute name="type" type="atlasx:RestrictionType"
+            use="required" />
+        <attribute name="value" type="string" use="optional" />
+    </complexType>
 
-	<simpleType name="RestrictionType">
-		<restriction base="string">
-			<enumeration value="All" />
-			<enumeration value="enumeration" />
-			<enumeration value="fractionDigits" />
-			<enumeration value="length" />
-			<enumeration value="maxExclusive" />
-			<enumeration value="maxInclusive" />
-			<enumeration value="maxLength" />
-			<enumeration value="minExclusive" />
-			<enumeration value="minInclusive" />
-			<enumeration value="minLength" />
-			<enumeration value="pattern" />
-			<enumeration value="totalDigits" />
-			<enumeration value="whiteSpace" />
-			<enumeration value="None" />
-		</restriction>
-	</simpleType>
+    <simpleType name="RestrictionType">
+        <restriction base="string">
+            <enumeration value="All" />
+            <enumeration value="enumeration" />
+            <enumeration value="fractionDigits" />
+            <enumeration value="length" />
+            <enumeration value="maxExclusive" />
+            <enumeration value="maxInclusive" />
+            <enumeration value="maxLength" />
+            <enumeration value="minExclusive" />
+            <enumeration value="minInclusive" />
+            <enumeration value="minLength" />
+            <enumeration value="pattern" />
+            <enumeration value="totalDigits" />
+            <enumeration value="whiteSpace" />
+            <enumeration value="None" />
+        </restriction>
+    </simpleType>
 
-	<complexType name="XmlInspectionRequest">
-		<sequence>
-			<element name="FieldNameBlacklist" type="atlas:StringList" minOccurs="0" maxOcurs="1" />
-			<element name="TypeNameBlacklist" type="atlas:StringList" minOccurs="0" maxOcurs="1" />
-			<element name="NamespaceBlacklist" type="atlas:StringList" minOccurs="0" maxOcurs="1" />
-			<element name="XmlData" type="string" minOccurs="0" maxOccurs="1" />
-		</sequence>
-		<attribute name="uri" type="string" use="optional" />
-		<attribute name="type" type="atlasx:InspectionType" use="required" />
-	</complexType>
+    <complexType name="XmlInspectionRequest">
+        <sequence>
+            <element name="FieldNameBlacklist" type="atlas:StringList"
+                minOccurs="0" maxOcurs="1" />
+            <element name="TypeNameBlacklist" type="atlas:StringList"
+                minOccurs="0" maxOcurs="1" />
+            <element name="NamespaceBlacklist" type="atlas:StringList"
+                minOccurs="0" maxOcurs="1" />
+            <element name="XmlData" type="string" minOccurs="0"
+                maxOccurs="1" />
+        </sequence>
+        <attribute name="uri" type="string" use="optional" />
+        <attribute name="type" type="atlasx:InspectionType"
+            use="required" />
+    </complexType>
 
-	<complexType name="XmlInspectionResponse">
-		<sequence>
-			<element name="XmlDocument" type="atlasx:XmlDocument" minOccurs="0" maxOccurs="1" />
-		</sequence>
-		<attribute name="errorMessage" type="string" use="optional" />
-		<attribute name="executionTime" type="long" use="optional" />
-	</complexType>
+    <complexType name="XmlInspectionResponse">
+        <sequence>
+            <element name="XmlDocument" type="atlasx:XmlDocument"
+                minOccurs="0" maxOccurs="1" />
+        </sequence>
+        <attribute name="errorMessage" type="string" use="optional" />
+        <attribute name="executionTime" type="long" use="optional" />
+    </complexType>
 
-	<simpleType name="InspectionType">
-		<restriction base="string">
-			<enumeration value="All" />
-			<enumeration value="Instance" />
-			<enumeration value="Schema" />
-			<enumeration value="None" />
-		</restriction>
-	</simpleType>
+    <simpleType name="InspectionType">
+        <restriction base="string">
+            <enumeration value="All" />
+            <enumeration value="Instance" />
+            <enumeration value="Schema" />
+            <enumeration value="None" />
+        </restriction>
+    </simpleType>
 
-	<simpleType name="NodeType">
-		<restriction base="string">
-			<enumeration value="All" />
-			<enumeration value="Element" />
-			<enumeration value="Attribute" />
-			<enumeration value="None" />
-		</restriction>
-	</simpleType>
+    <simpleType name="NodeType">
+        <restriction base="string">
+            <enumeration value="All" />
+            <enumeration value="Element" />
+            <enumeration value="Attribute" />
+            <enumeration value="None" />
+        </restriction>
+    </simpleType>
 </schema>

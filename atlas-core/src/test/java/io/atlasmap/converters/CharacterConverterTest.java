@@ -33,7 +33,6 @@ public class CharacterConverterTest {
 
     private AtlasPrimitiveConverter<Character> converter = new CharacterConverter();
 
-
     @Test
     public void convertToBoolean() throws Exception {
         Character c = Character.forDigit(1, 10);
@@ -143,7 +142,6 @@ public class CharacterConverterTest {
         assertNull(f);
     }
 
-
     @Test
     public void convertToInteger() throws Exception {
         Character c = Character.forDigit(0, 10);
@@ -228,8 +226,8 @@ public class CharacterConverterTest {
         Class aClass = CharacterConverter.class;
         Method[] methods = aClass.getMethods();
         for (Method method : methods) {
-            if(method.isSynthetic()) {
-                // We are running in Eclipse or jacoco 
+            if (method.isSynthetic()) {
+                // We are running in Eclipse or jacoco
                 continue;
             }
             if (method.getName().startsWith("convert")) {

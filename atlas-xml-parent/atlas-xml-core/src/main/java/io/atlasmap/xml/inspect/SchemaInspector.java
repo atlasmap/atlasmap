@@ -120,7 +120,7 @@ public class SchemaInspector {
         Iterator itr = schemaSet.iterateSchema();
         while (itr.hasNext()) {
             XSSchema s = (XSSchema) itr.next();
-            //check the target namespace where null == default ("") and needs no mapping
+            // check the target namespace where null == default ("") and needs no mapping
             if (s.getTargetNamespace() != null) {
                 xmlDocument.setXmlNamespaces(new XmlNamespaces());
                 XmlNamespace namespace = new XmlNamespace();
@@ -128,7 +128,7 @@ public class SchemaInspector {
                 namespace.setAlias("tns");// default prefix for target namespace (is this the only one possible?)
                 xmlDocument.getXmlNamespaces().getXmlNamespace().add(namespace);
             }
-            //we only care about declared elements...
+            // we only care about declared elements...
             Iterator jtr = s.iterateElementDecls();
             while (jtr.hasNext()) {
                 XSElementDecl e = (XSElementDecl) jtr.next();
@@ -173,7 +173,7 @@ public class SchemaInspector {
     }
 
     private void printGroup(XSModelGroup modelGroup, String rootName, XmlComplexType xmlComplexType) {
-        //this is the parent of the group
+        // this is the parent of the group
         for (XSParticle particle : modelGroup.getChildren()) {
             printParticle(particle, rootName, xmlComplexType);
         }
@@ -183,7 +183,8 @@ public class SchemaInspector {
         printGroup(modelGroupDecl.getModelGroup(), rootName, parentXmlComplexType);
     }
 
-    private void printElement(XSElementDecl element, String rootName, XmlComplexType xmlComplexType, CollectionType collectionType) {
+    private void printElement(XSElementDecl element, String rootName, XmlComplexType xmlComplexType,
+            CollectionType collectionType) {
         if (element.getType().isComplexType()) {
             XmlComplexType complexType = getXmlComplexType();
             rootName = rootName + "/" + element.getName();
@@ -228,8 +229,9 @@ public class SchemaInspector {
             FieldType attrType = getFieldType(attributeDecl.getType().getName());
             xmlField.setFieldType(attrType);
             if (xmlField.getFieldType() == null) {
-                //check the simple types in the schema....
-                XSSimpleType simpleType = xsComplexType.getRoot().getSimpleType(xsComplexType.getTargetNamespace(), attributeDecl.getType().getName());
+                // check the simple types in the schema....
+                XSSimpleType simpleType = xsComplexType.getRoot().getSimpleType(xsComplexType.getTargetNamespace(),
+                        attributeDecl.getType().getName());
                 if (simpleType != null) {
                     FieldType fieldType = getFieldType(simpleType.getBaseType().getName());
                     xmlField.setFieldType(fieldType);
@@ -238,7 +240,7 @@ public class SchemaInspector {
                         mapRestrictions(xmlField, simpleType.asRestriction());
                     }
                 } else {
-                    //cannot figure it out....
+                    // cannot figure it out....
                     xmlField.setFieldType(FieldType.UNSUPPORTED);
                 }
             }
@@ -269,7 +271,7 @@ public class SchemaInspector {
     }
 
     private FieldType getFieldType(String name) {
-        //check the blacklist
+        // check the blacklist
         FieldType attrType = blacklistedTypes.get(name);
         if (attrType == null) {
             attrType = xsTypeToFieldTypeMap.get(name);
@@ -292,7 +294,7 @@ public class SchemaInspector {
         for (Field field : SimpleTypeRestriction.class.getDeclaredFields()) {
             field.setAccessible(true);
             try {
-                //do we even care about this restriction?
+                // do we even care about this restriction?
                 if (typeRestrictionExists(field.getName())) {
                     Object value = field.get(simpleTypeRestriction);
                     if (value != null) {
@@ -303,7 +305,7 @@ public class SchemaInspector {
                     }
                 }
             } catch (IllegalAccessException e) {
-                //eat it...
+                // eat it...
             }
         }
     }

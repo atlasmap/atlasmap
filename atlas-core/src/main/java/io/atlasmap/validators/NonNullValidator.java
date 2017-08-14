@@ -58,7 +58,7 @@ public class NonNullValidator implements AtlasValidator {
                 validation.setMessage(violationMessage);
                 validation.setStatus(status);
                 validation.setValue(target.toString());
-                validations.add(validation);            
+                validations.add(validation);
             }
         }
     }

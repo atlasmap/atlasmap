@@ -15,73 +15,74 @@
     limitations under the License.
 
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>io.atlasmap</groupId>
-    <artifactId>atlas-java-parent</artifactId>
-    <version>1.19.0-SNAPSHOT</version>
-    <relativePath>../pom.xml</relativePath>
-  </parent>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>io.atlasmap</groupId>
+        <artifactId>atlas-java-parent</artifactId>
+        <version>1.19.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
 
-  <artifactId>atlas-java-module</artifactId>
-  <packaging>bundle</packaging>
-  <name>Atlas :: Java Module</name>
+    <artifactId>atlas-java-module</artifactId>
+    <packaging>bundle</packaging>
+    <name>Atlas :: Java Module</name>
 
-  <properties>
-    <at.osgi.export.pkg>io.atlasmap.java.module</at.osgi.export.pkg>
-    <at.osgi.import.pkg>io.atlasmap.v2;version="${at.atlas.version.range}",io.atlasmap.api;version="${at.atlas.version.range}",
-      io.atlasmap.java.v2;version="${at.atlas.version.range}",io.atlasmap.java.inspect;version="${at.atlas.version.range}"</at.osgi.import.pkg>
-  </properties>
+    <properties>
+        <at.osgi.export.pkg>io.atlasmap.java.module</at.osgi.export.pkg>
+        <at.osgi.import.pkg>io.atlasmap.v2;version="${at.atlas.version.range}",io.atlasmap.api;version="${at.atlas.version.range}",
+            io.atlasmap.java.v2;version="${at.atlas.version.range}",io.atlasmap.java.inspect;version="${at.atlas.version.range}"</at.osgi.import.pkg>
+    </properties>
 
-  <dependencies>
-    <dependency>
-      <groupId>io.atlasmap</groupId>
-      <artifactId>atlas-model</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>io.atlasmap</groupId>
-      <artifactId>atlas-api</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>io.atlasmap</groupId>
-      <artifactId>atlas-core</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>io.atlasmap</groupId>
-      <artifactId>atlas-java-model</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>io.atlasmap</groupId>
-      <artifactId>atlas-java-inspect</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-log4j12</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>io.atlasmap</groupId>
-      <artifactId>atlas-java-test-model</artifactId>
-      <version>${project.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>io.atlasmap</groupId>
-      <artifactId>atlas-core</artifactId>
-      <version>${project.version}</version>
-      <classifier>tests</classifier>
-    </dependency>
-  </dependencies>
+    <dependencies>
+        <dependency>
+            <groupId>io.atlasmap</groupId>
+            <artifactId>atlas-model</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.atlasmap</groupId>
+            <artifactId>atlas-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.atlasmap</groupId>
+            <artifactId>atlas-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.atlasmap</groupId>
+            <artifactId>atlas-java-model</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.atlasmap</groupId>
+            <artifactId>atlas-java-inspect</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.atlasmap</groupId>
+            <artifactId>atlas-java-test-model</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.atlasmap</groupId>
+            <artifactId>atlas-core</artifactId>
+            <version>${project.version}</version>
+            <classifier>tests</classifier>
+        </dependency>
+    </dependencies>
 
 </project>

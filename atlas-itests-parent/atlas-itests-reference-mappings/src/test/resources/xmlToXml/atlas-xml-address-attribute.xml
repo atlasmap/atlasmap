@@ -1,2 +1,3 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Address addressLine1="123 Main St" addressLine2="Suite 42b" city="Anytown" state="NY" zipCode="90210" />
+<Address addressLine1="123 Main St" addressLine2="Suite 42b"
+    city="Anytown" state="NY" zipCode="90210" />

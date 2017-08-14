@@ -72,11 +72,11 @@ public class ShortConverterTest {
     }
 
     @Test
-    public void convertToCharacter() throws Exception {      
-        Short shorty = new Short((short)4);
+    public void convertToCharacter() throws Exception {
+        Short shorty = new Short((short) 4);
         Character character = converter.convertToCharacter(shorty);
         assertNotNull(character);
-        assertEquals(Character.valueOf((char)shorty.shortValue()), character);
+        assertEquals(Character.valueOf((char) shorty.shortValue()), character);
     }
 
     @Test
@@ -91,7 +91,7 @@ public class ShortConverterTest {
         Short s = Short.MAX_VALUE;
         Character c = converter.convertToCharacter(s);
         assertNotNull(c);
-        assertEquals(Character.valueOf((char)s.shortValue()), c);
+        assertEquals(Character.valueOf((char) s.shortValue()), c);
     }
 
     @Test(expected = AtlasConversionException.class)
@@ -99,7 +99,6 @@ public class ShortConverterTest {
         Short s = Short.MIN_VALUE;
         Character c = converter.convertToCharacter(s);
     }
-
 
     @Test
     public void convertToDouble() throws Exception {
@@ -123,7 +122,6 @@ public class ShortConverterTest {
         assertNotNull(d);
         assertEquals(Short.MAX_VALUE, s, 0.0);
     }
-
 
     @Test
     public void convertToFloat() throws Exception {
@@ -208,7 +206,6 @@ public class ShortConverterTest {
         assertNull(s);
     }
 
-
     @Test
     public void convertToString() throws Exception {
         Short l = 0;
@@ -229,8 +226,8 @@ public class ShortConverterTest {
         Class aClass = ShortConverter.class;
         Method[] methods = aClass.getMethods();
         for (Method method : methods) {
-            if(method.isSynthetic()) {
-                // We are running in Eclipse or jacoco 
+            if (method.isSynthetic()) {
+                // We are running in Eclipse or jacoco
                 continue;
             }
             if (method.getName().startsWith("convert")) {
@@ -251,14 +248,13 @@ public class ShortConverterTest {
             }
         }
     }
-    
+
     @Test
     public void testCharacterDigit() {
         int RADIX = 10;
-        char ch = Character.valueOf((char)Short.MAX_VALUE);
-       
+        char ch = Character.valueOf((char) Short.MAX_VALUE);
 
         int i2 = Character.digit(ch, RADIX);
-       
+
     }
 }

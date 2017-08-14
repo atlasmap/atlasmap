@@ -19,19 +19,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AtlasPath {
-    
+
     public static final String JAVAPATH_SEPARATOR = ".";
     public static final String JAVAPATH_SEPARATOR_ESCAPTED = "\\.";
-    public static final String JAVAPATH_ARRAY_START= "[";
-    public static final String JAVAPATH_ARRAY_END= "]";
+    public static final String JAVAPATH_ARRAY_START = "[";
+    public static final String JAVAPATH_ARRAY_END = "]";
     public static final String JAVAPATH_LIST_START = "<";
     public static final String JAVAPATH_LIST_END = ">";
     public static final String JAVAPATH_MAP_START = "{";
     public static final String JAVAPATH_MAP_END = "}";
-    
+
     private List<String> segments = new ArrayList<String>();
 
-    public AtlasPath() {}
+    public AtlasPath() {
+    }
 
     public AtlasPath(String javaPath) {
         if (javaPath != null) {
@@ -70,29 +71,29 @@ public class AtlasPath {
 
         return false;
     }
-    
+
     public boolean hasCollection() {
-       for(String seg: getSegments()) {
-           if(isCollectionSegment(seg)) {
-               return true;
-           }
-       }
-       return false;
-    }
-    
-    public Boolean isIndexedCollection() {
-        for(String seg: getSegments()) {
-            if(isCollectionSegment(seg) && indexOfSegment(seg) != null) {
+        for (String seg : getSegments()) {
+            if (isCollectionSegment(seg)) {
                 return true;
             }
         }
         return false;
     }
-    
+
+    public Boolean isIndexedCollection() {
+        for (String seg : getSegments()) {
+            if (isCollectionSegment(seg) && indexOfSegment(seg) != null) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public Boolean isCollectionRoot() {
         return isCollectionSegment(getLastSegment());
     }
-    
+
     public String getLastSegmentParent() {
         if (segments.size() == 0 || segments.size() == 1) {
             return null;
@@ -112,7 +113,7 @@ public class AtlasPath {
         }
         return parentPath;
     }
-    
+
     public AtlasPath deCollectionify(String collectionSegment) {
         if (segments.size() == 0 || segments.size() == 1) {
             return null;
@@ -121,17 +122,17 @@ public class AtlasPath {
         AtlasPath j = new AtlasPath();
         boolean collectionFound = false;
         for (String part : segments) {
-            if(collectionFound) {
+            if (collectionFound) {
                 j.appendField(part);
             }
-            if(cleanPathSegment(part).equals(cleanPathSegment(collectionSegment))) {
+            if (cleanPathSegment(part).equals(cleanPathSegment(collectionSegment))) {
                 collectionFound = true;
             }
         }
         return j;
     }
 
-    public AtlasPath deParentify() {        
+    public AtlasPath deParentify() {
         if (segments.size() == 0 || segments.size() == 1) {
             return null;
         }
@@ -142,7 +143,7 @@ public class AtlasPath {
         }
         return j;
     }
-    
+
     public static String cleanPathSegment(String pathSegment) {
         if (pathSegment == null) {
             return null;
@@ -162,7 +163,7 @@ public class AtlasPath {
 
         return pathSegment;
     }
-    
+
     public static Boolean isCollectionSegment(String pathSegment) {
         if (pathSegment == null) {
             return false;
@@ -182,7 +183,7 @@ public class AtlasPath {
 
         return false;
     }
-        
+
     public static Integer indexOfSegment(String pathSegment) {
         if (pathSegment == null) {
             return null;
@@ -191,76 +192,76 @@ public class AtlasPath {
         if (pathSegment.contains(JAVAPATH_ARRAY_START) && pathSegment.endsWith(JAVAPATH_ARRAY_END)) {
             int start = pathSegment.indexOf(JAVAPATH_ARRAY_START, 0) + 1;
             String index = pathSegment.substring(start, pathSegment.indexOf(JAVAPATH_ARRAY_END, start));
-            if(index != null && index.length() > 0) {
+            if (index != null && index.length() > 0) {
                 return Integer.valueOf(index);
             }
             return null;
         }
-        
+
         if (pathSegment.contains(JAVAPATH_LIST_START) && pathSegment.endsWith(JAVAPATH_LIST_END)) {
             int start = pathSegment.indexOf(JAVAPATH_LIST_START, 0) + 1;
             String index = pathSegment.substring(start, pathSegment.indexOf(JAVAPATH_LIST_END, start));
-            if(index != null && index.length() > 0) {
+            if (index != null && index.length() > 0) {
                 return Integer.valueOf(index);
             }
             return null;
         }
-        
+
         return null;
     }
 
     public Integer getCollectionIndex(String segment) {
-        for(String part : getSegments()) {
-            if(cleanPathSegment(part).equals(cleanPathSegment(segment))) {
-                if((part.contains(JAVAPATH_ARRAY_START) && part.contains(JAVAPATH_ARRAY_END))|| 
-                   (part.contains(JAVAPATH_LIST_START) && (part.contains(JAVAPATH_LIST_END)))) {
+        for (String part : getSegments()) {
+            if (cleanPathSegment(part).equals(cleanPathSegment(segment))) {
+                if ((part.contains(JAVAPATH_ARRAY_START) && part.contains(JAVAPATH_ARRAY_END))
+                        || (part.contains(JAVAPATH_LIST_START) && (part.contains(JAVAPATH_LIST_END)))) {
                     return indexOfSegment(part);
                 }
             }
         }
-        
+
         return null;
     }
-    
+
     public String getCollectionSegment() {
-        for(String part : getSegments()) {
-            if(AtlasPath.isCollectionSegment(part)) {
+        for (String part : getSegments()) {
+            if (AtlasPath.isCollectionSegment(part)) {
                 return part;
             }
         }
         return null;
     }
-    
+
     public void setCollectionIndex(String segment, Integer index) {
-        if(segment == null) {
+        if (segment == null) {
             throw new IllegalArgumentException("JavaPath segment cannot be null");
         }
-        
-        if(index < 0) {
+
+        if (index < 0) {
             throw new IllegalArgumentException("JavaPath index must be a positive integer");
         }
-        
-        if(segment.contains(JAVAPATH_ARRAY_START) && segment.contains(JAVAPATH_ARRAY_END)) { 
-            for(int i=0; i < getSegments().size(); i++) {
+
+        if (segment.contains(JAVAPATH_ARRAY_START) && segment.contains(JAVAPATH_ARRAY_END)) {
+            for (int i = 0; i < getSegments().size(); i++) {
                 String part = getSegments().get(i);
-                if(cleanPathSegment(part).equals(cleanPathSegment(segment))) {
-                    getSegments().set(i, cleanPathSegment(segment) + JAVAPATH_ARRAY_START + index + JAVAPATH_ARRAY_END); 
+                if (cleanPathSegment(part).equals(cleanPathSegment(segment))) {
+                    getSegments().set(i, cleanPathSegment(segment) + JAVAPATH_ARRAY_START + index + JAVAPATH_ARRAY_END);
                 }
             }
-        } else if(segment.contains(JAVAPATH_LIST_START) && segment.contains(JAVAPATH_LIST_END)) {
-            for(int i=0; i < getSegments().size(); i++) {
+        } else if (segment.contains(JAVAPATH_LIST_START) && segment.contains(JAVAPATH_LIST_END)) {
+            for (int i = 0; i < getSegments().size(); i++) {
                 String part = getSegments().get(i);
-                if(cleanPathSegment(part).equals(cleanPathSegment(segment))) {
-                    getSegments().set(i,cleanPathSegment(segment) + JAVAPATH_LIST_START + index + JAVAPATH_LIST_END); 
+                if (cleanPathSegment(part).equals(cleanPathSegment(segment))) {
+                    getSegments().set(i, cleanPathSegment(segment) + JAVAPATH_LIST_START + index + JAVAPATH_LIST_END);
                 }
             }
         } else {
             throw new IllegalArgumentException("JavaPath segment is not a List or Array segment");
         }
     }
-    
+
     @Override
-	public String toString() {
+    public String toString() {
         StringBuffer buffer = new StringBuffer();
 
         int i = 0;

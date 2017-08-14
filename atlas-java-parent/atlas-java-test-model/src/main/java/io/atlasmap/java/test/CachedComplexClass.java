@@ -17,26 +17,31 @@ package io.atlasmap.java.test;
 
 public class CachedComplexClass {
 
-	private BaseOrder testOrder;
-	private BaseAddress primaryAddress;
-	private BaseContact primaryContact;
-	
-	public BaseOrder getTestOrder() {
-		return testOrder;
-	}
-	public void setTestOrder(BaseOrder testOrder) {
-		this.testOrder = testOrder;
-	}
-	public BaseAddress getPrimaryAddress() {
-		return primaryAddress;
-	}
-	public void setPrimaryAddress(BaseAddress primaryAddress) {
-		this.primaryAddress = primaryAddress;
-	}
-	public BaseContact getPrimaryContact() {
-		return primaryContact;
-	}
-	public void setPrimaryContact(BaseContact primaryContact) {
-		this.primaryContact = primaryContact;
-	}
+    private BaseOrder testOrder;
+    private BaseAddress primaryAddress;
+    private BaseContact primaryContact;
+
+    public BaseOrder getTestOrder() {
+        return testOrder;
+    }
+
+    public void setTestOrder(BaseOrder testOrder) {
+        this.testOrder = testOrder;
+    }
+
+    public BaseAddress getPrimaryAddress() {
+        return primaryAddress;
+    }
+
+    public void setPrimaryAddress(BaseAddress primaryAddress) {
+        this.primaryAddress = primaryAddress;
+    }
+
+    public BaseContact getPrimaryContact() {
+        return primaryContact;
+    }
+
+    public void setPrimaryContact(BaseContact primaryContact) {
+        this.primaryContact = primaryContact;
+    }
 }

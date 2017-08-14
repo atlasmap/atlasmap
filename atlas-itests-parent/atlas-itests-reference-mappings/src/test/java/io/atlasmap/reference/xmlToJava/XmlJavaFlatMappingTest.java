@@ -43,12 +43,14 @@ import io.atlasmap.xml.v2.AtlasXmlModelFactory;
 import io.atlasmap.xml.v2.XmlField;
 
 public class XmlJavaFlatMappingTest extends AtlasMappingBaseTest {
-    
+
     protected AtlasMapping generateXmlJavaFlatMapping() {
         AtlasMapping atlasMapping = AtlasModelFactory.createAtlasMapping();
         atlasMapping.setName("XmlJavaFlatMapping");
-        atlasMapping.getDataSource().add(generateDataSource("atlas:xml?complexType=ns:XmlFlatPrimitiveAttribute", DataSourceType.SOURCE));
-        atlasMapping.getDataSource().add(generateDataSource("atlas:java?className=io.atlasmap.java.test.TargetFlatPrimitiveClass", DataSourceType.TARGET));
+        atlasMapping.getDataSource()
+                .add(generateDataSource("atlas:xml?complexType=ns:XmlFlatPrimitiveAttribute", DataSourceType.SOURCE));
+        atlasMapping.getDataSource().add(generateDataSource(
+                "atlas:java?className=io.atlasmap.java.test.TargetFlatPrimitiveClass", DataSourceType.TARGET));
 
         List<BaseMapping> mappings = atlasMapping.getMappings().getMapping();
 
@@ -69,65 +71,68 @@ public class XmlJavaFlatMappingTest extends AtlasMappingBaseTest {
         ds.setDataSourceType(type);
         return ds;
     }
-    
+
     protected XmlField generateXmlField(String parent, String path) {
         XmlField xmlField = AtlasXmlModelFactory.createXmlField();
         xmlField.setPath(parent + "@" + path);
         return xmlField;
     }
-    
+
     protected JavaField generateJavaField(String path) {
         JavaField javaField = AtlasJavaModelFactory.createJavaField();
         javaField.setPath(path);
         javaField.setModifiers(null);
         return javaField;
     }
-        
-    protected BaseFlatPrimitiveClass generateFlatPrimitiveClass(Class<? extends BaseFlatPrimitiveClass> clazz) throws Exception {
+
+    protected BaseFlatPrimitiveClass generateFlatPrimitiveClass(Class<? extends BaseFlatPrimitiveClass> clazz)
+            throws Exception {
         Class<?> targetClazz = this.getClass().getClassLoader().loadClass(clazz.getName());
-        BaseFlatPrimitiveClass newObject = (BaseFlatPrimitiveClass)targetClazz.newInstance();
-        
+        BaseFlatPrimitiveClass newObject = (BaseFlatPrimitiveClass) targetClazz.newInstance();
+
         newObject.setBooleanField(false);
         newObject.setByteField((byte) 99);
-        newObject.setCharField((char)'a');
+        newObject.setCharField((char) 'a');
         newObject.setDoubleField(50000000d);
         newObject.setFloatField(40000000f);
         newObject.setIntField(2);
-        newObject.setLongField(30000L);        
-        newObject.setShortField((short)1);
+        newObject.setLongField(30000L);
+        newObject.setShortField((short) 1);
         return newObject;
     }
-    
-    protected BaseFlatPrimitiveClass generateFlatPrimitiveClassPrimitiveFieldsBoxedValues(Class<? extends BaseFlatPrimitiveClass> clazz) throws Exception {
+
+    protected BaseFlatPrimitiveClass generateFlatPrimitiveClassPrimitiveFieldsBoxedValues(
+            Class<? extends BaseFlatPrimitiveClass> clazz) throws Exception {
         Class<?> targetClazz = this.getClass().getClassLoader().loadClass(clazz.getName());
-        BaseFlatPrimitiveClass newObject = (BaseFlatPrimitiveClass)targetClazz.newInstance();
-        
+        BaseFlatPrimitiveClass newObject = (BaseFlatPrimitiveClass) targetClazz.newInstance();
+
         newObject.setBooleanField(new Boolean(Boolean.FALSE));
         newObject.setByteField(new Byte((byte) 99));
         newObject.setCharField(new Character('a'));
         newObject.setDoubleField(new Double(50000000d));
         newObject.setFloatField(new Float(40000000f));
         newObject.setIntField(new Integer(2));
-        newObject.setLongField(new Long(30000L));        
-        newObject.setShortField(new Short((short)1));
+        newObject.setLongField(new Long(30000L));
+        newObject.setShortField(new Short((short) 1));
         return newObject;
     }
-    
-    protected BaseFlatPrimitiveClass generateFlatPrimitiveClassBoxedPrimitiveFieldsBoxedValues(Class<? extends BaseFlatPrimitiveClass> clazz) throws Exception {
+
+    protected BaseFlatPrimitiveClass generateFlatPrimitiveClassBoxedPrimitiveFieldsBoxedValues(
+            Class<? extends BaseFlatPrimitiveClass> clazz) throws Exception {
         Class<?> targetClazz = this.getClass().getClassLoader().loadClass(clazz.getName());
-        BaseFlatPrimitiveClass newObject = (BaseFlatPrimitiveClass)targetClazz.newInstance();
-        
+        BaseFlatPrimitiveClass newObject = (BaseFlatPrimitiveClass) targetClazz.newInstance();
+
         newObject.setBoxedBooleanField(new Boolean(Boolean.TRUE));
         newObject.setBoxedByteField(new Byte((byte) 87));
         newObject.setBoxedCharField(new Character('z'));
         newObject.setBoxedDoubleField(new Double(90000000d));
         newObject.setBoxedFloatField(new Float(70000000f));
         newObject.setBoxedIntField(new Integer(5));
-        newObject.setBoxedLongField(new Long(20000L));        
-        newObject.setBoxedShortField(new Short((short)5));
+        newObject.setBoxedLongField(new Long(20000L));
+        newObject.setBoxedShortField(new Short((short) 5));
         return newObject;
     }
-    
+
     protected void validateFlatPrimitiveClassPrimitiveFields(BaseFlatPrimitiveClass targetObject) {
         assertNotNull(targetObject);
         assertEquals(new Double(50000000d), new Double(targetObject.getDoubleField()));
@@ -136,7 +141,7 @@ public class XmlJavaFlatMappingTest extends AtlasMappingBaseTest {
         assertEquals(new Long(30000L), new Long(targetObject.getLongField()));
         assertEquals(new Short((short) 1), new Short(targetObject.getShortField()));
         assertEquals(Boolean.FALSE, targetObject.isBooleanField());
-        //assertEquals(new Byte((byte) 99), new Byte(targetObject.getByteField()));
+        // assertEquals(new Byte((byte) 99), new Byte(targetObject.getByteField()));
         assertEquals(new Character('a'), new Character(targetObject.getCharField()));
         assertNull(targetObject.getBooleanArrayField());
         assertNull(targetObject.getBoxedBooleanArrayField());
@@ -158,23 +163,24 @@ public class XmlJavaFlatMappingTest extends AtlasMappingBaseTest {
         assertNull(targetObject.getBoxedStringArrayField());
         assertNull(targetObject.getBoxedStringField());
     }
-    
-    protected void validateFlatPrimitiveClassBoxedPrimitiveFields(BaseFlatPrimitiveClass targetObject) {        
+
+    protected void validateFlatPrimitiveClassBoxedPrimitiveFields(BaseFlatPrimitiveClass targetObject) {
         assertEquals(new Double(90000000d), new Double(targetObject.getBoxedDoubleField()));
         assertEquals(new Float(70000000f), new Float(targetObject.getBoxedFloatField()));
         assertEquals(new Integer(5), new Integer(targetObject.getBoxedIntField()));
         assertEquals(new Long(20000L), new Long(targetObject.getBoxedLongField()));
         assertEquals(new Short((short) 5), new Short(targetObject.getBoxedShortField()));
         assertEquals(new Boolean(Boolean.TRUE), targetObject.getBoxedBooleanField());
-        //assertEquals(new Byte((byte) 87), new Byte(targetObject.getBoxedByteField()));
+        // assertEquals(new Byte((byte) 87), new
+        // Byte(targetObject.getBoxedByteField()));
         assertEquals(new Character('z'), new Character(targetObject.getBoxedCharField()));
         assertNull(targetObject.getBooleanArrayField());
         assertNull(targetObject.getBoxedBooleanArrayField());
         assertTrue(false == targetObject.isBooleanField());
         assertNull(targetObject.getBoxedByteArrayField());
-        assertTrue((byte)0 == targetObject.getByteField());
+        assertTrue((byte) 0 == targetObject.getByteField());
         assertNull(targetObject.getBoxedCharArrayField());
-        assertTrue((char)'\u0000' == targetObject.getCharField());
+        assertTrue((char) '\u0000' == targetObject.getCharField());
         assertNull(targetObject.getBoxedDoubleArrayField());
         assertTrue(0.0d == targetObject.getDoubleField());
         assertNull(targetObject.getBoxedFloatArrayField());
@@ -193,147 +199,169 @@ public class XmlJavaFlatMappingTest extends AtlasMappingBaseTest {
     @Ignore
     public void testCreateXmlJavaFlatFieldMapping() throws Exception {
         AtlasMapping atlasMapping = generateXmlJavaFlatMapping();
-        AtlasMappingService atlasMappingService = new AtlasMappingService(Arrays.asList("io.atlasmap.v2", "io.atlasmap.java.v2", "io.atlasmap.xml.v2"));
-        atlasMappingService.saveMappingAsFile(atlasMapping, new File("src/test/resources/xmlToJava/atlasmapping-flatprimitive.xml"));
+        AtlasMappingService atlasMappingService = new AtlasMappingService(
+                Arrays.asList("io.atlasmap.v2", "io.atlasmap.java.v2", "io.atlasmap.xml.v2"));
+        atlasMappingService.saveMappingAsFile(atlasMapping,
+                new File("src/test/resources/xmlToJava/atlasmapping-flatprimitive.xml"));
     }
 
     @Test
     public void testProcessXmlJavaFlatPrimitiveAttribute() throws Exception {
-        AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/xmlToJava/atlasmapping-flatprimitive-attribute.xml"));
+        AtlasContext context = atlasContextFactory
+                .createContext(new File("src/test/resources/xmlToJava/atlasmapping-flatprimitive-attribute.xml"));
 
         AtlasSession session = context.createSession();
-        String sourceXml = AtlasTestUtil.loadFileAsString("src/test/resources/xmlToJava/atlas-xml-flatprimitive-attribute.xml");
+        String sourceXml = AtlasTestUtil
+                .loadFileAsString("src/test/resources/xmlToJava/atlas-xml-flatprimitive-attribute.xml");
         session.setInput(sourceXml);
         context.process(session);
-        
+
         Object object = session.getOutput();
         assertNotNull(object);
         assertTrue(object instanceof TargetFlatPrimitiveClass);
-        validateFlatPrimitiveClassPrimitiveFields((TargetFlatPrimitiveClass)object);
+        validateFlatPrimitiveClassPrimitiveFields((TargetFlatPrimitiveClass) object);
     }
-    
+
     @Test
     public void testProcessXmlJavaFlatPrimitiveAttributeNS() throws Exception {
-        AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/xmlToJava/atlasmapping-flatprimitive-attribute-ns.xml"));
+        AtlasContext context = atlasContextFactory
+                .createContext(new File("src/test/resources/xmlToJava/atlasmapping-flatprimitive-attribute-ns.xml"));
 
         AtlasSession session = context.createSession();
-        String sourceXml = AtlasTestUtil.loadFileAsString("src/test/resources/xmlToJava/atlas-xml-flatprimitive-attribute-ns.xml");
+        String sourceXml = AtlasTestUtil
+                .loadFileAsString("src/test/resources/xmlToJava/atlas-xml-flatprimitive-attribute-ns.xml");
         session.setInput(sourceXml);
         context.process(session);
-        
+
         Object object = session.getOutput();
         assertNotNull(object);
         assertTrue(object instanceof TargetFlatPrimitiveClass);
-        validateFlatPrimitiveClassPrimitiveFields((TargetFlatPrimitiveClass)object);
+        validateFlatPrimitiveClassPrimitiveFields((TargetFlatPrimitiveClass) object);
     }
-    
+
     @Test
     public void testProcessXmlJavaFlatPrimitiveElement() throws Exception {
-        AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/xmlToJava/atlasmapping-flatprimitive-element.xml"));
+        AtlasContext context = atlasContextFactory
+                .createContext(new File("src/test/resources/xmlToJava/atlasmapping-flatprimitive-element.xml"));
 
         AtlasSession session = context.createSession();
-        String sourceXml = AtlasTestUtil.loadFileAsString("src/test/resources/xmlToJava/atlas-xml-flatprimitive-element.xml");
+        String sourceXml = AtlasTestUtil
+                .loadFileAsString("src/test/resources/xmlToJava/atlas-xml-flatprimitive-element.xml");
         session.setInput(sourceXml);
         context.process(session);
-        
+
         Object object = session.getOutput();
         assertNotNull(object);
         assertTrue(object instanceof TargetFlatPrimitiveClass);
-        validateFlatPrimitiveClassPrimitiveFields((TargetFlatPrimitiveClass)object);
+        validateFlatPrimitiveClassPrimitiveFields((TargetFlatPrimitiveClass) object);
     }
-    
+
     @Test
     public void testProcessXmlJavaFlatPrimitiveElementNS() throws Exception {
-        AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/xmlToJava/atlasmapping-flatprimitive-element-ns.xml"));
+        AtlasContext context = atlasContextFactory
+                .createContext(new File("src/test/resources/xmlToJava/atlasmapping-flatprimitive-element-ns.xml"));
 
         AtlasSession session = context.createSession();
-        String sourceXml = AtlasTestUtil.loadFileAsString("src/test/resources/xmlToJava/atlas-xml-flatprimitive-element-ns.xml");
+        String sourceXml = AtlasTestUtil
+                .loadFileAsString("src/test/resources/xmlToJava/atlas-xml-flatprimitive-element-ns.xml");
         session.setInput(sourceXml);
         context.process(session);
-        
+
         Object object = session.getOutput();
         assertNotNull(object);
         assertTrue(object instanceof TargetFlatPrimitiveClass);
-        validateFlatPrimitiveClassPrimitiveFields((TargetFlatPrimitiveClass)object);
+        validateFlatPrimitiveClassPrimitiveFields((TargetFlatPrimitiveClass) object);
     }
-    
+
     @Test
     @Ignore // reference: [AT-420]
     public void testProcessXmlJavaFlatPrimitiveElementNSDocumentWithoutNS() throws Exception {
-        AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/xmlToJava/atlasmapping-flatprimitive-element-ns-doc-wo-ns.xml"));
+        AtlasContext context = atlasContextFactory.createContext(
+                new File("src/test/resources/xmlToJava/atlasmapping-flatprimitive-element-ns-doc-wo-ns.xml"));
 
         AtlasSession session = context.createSession();
-        String sourceXml = AtlasTestUtil.loadFileAsString("src/test/resources/xmlToJava/atlas-xml-flatprimitive-element.xml");
+        String sourceXml = AtlasTestUtil
+                .loadFileAsString("src/test/resources/xmlToJava/atlas-xml-flatprimitive-element.xml");
         session.setInput(sourceXml);
         context.process(session);
-        
+
         Object object = session.getOutput();
         assertNotNull(object);
         assertTrue(object instanceof TargetFlatPrimitiveClass);
-        validateFlatPrimitiveClassPrimitiveFields((TargetFlatPrimitiveClass)object);
+        validateFlatPrimitiveClassPrimitiveFields((TargetFlatPrimitiveClass) object);
     }
-      
+
     @Test
     public void testProcessXmlJavaBoxedFlatMappingPrimitiveAttribute() throws Exception {
-        AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/xmlToJava/atlasmapping-boxedflatprimitive-attribute.xml"));
+        AtlasContext context = atlasContextFactory
+                .createContext(new File("src/test/resources/xmlToJava/atlasmapping-boxedflatprimitive-attribute.xml"));
 
         AtlasSession session = context.createSession();
-        String sourceXml = AtlasTestUtil.loadFileAsString("src/test/resources/xmlToJava/atlas-xml-boxedflatprimitive-attribute.xml");
+        String sourceXml = AtlasTestUtil
+                .loadFileAsString("src/test/resources/xmlToJava/atlas-xml-boxedflatprimitive-attribute.xml");
         session.setInput(sourceXml);
         context.process(session);
-        
+
         Object object = session.getOutput();
         assertNotNull(object);
         assertTrue(object instanceof TargetFlatPrimitiveClass);
-        validateFlatPrimitiveClassBoxedPrimitiveFields((TargetFlatPrimitiveClass)object);
+        validateFlatPrimitiveClassBoxedPrimitiveFields((TargetFlatPrimitiveClass) object);
     }
-    
+
     @Test
     public void testProcessXmlJavaBoxedFlatMappingPrimitiveAttributeNS() throws Exception {
-        AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/xmlToJava/atlasmapping-boxedflatprimitive-attribute-ns.xml"));
+        AtlasContext context = atlasContextFactory.createContext(
+                new File("src/test/resources/xmlToJava/atlasmapping-boxedflatprimitive-attribute-ns.xml"));
 
         AtlasSession session = context.createSession();
-        String sourceXml = AtlasTestUtil.loadFileAsString("src/test/resources/xmlToJava/atlas-xml-boxedflatprimitive-attribute-ns.xml");
+        String sourceXml = AtlasTestUtil
+                .loadFileAsString("src/test/resources/xmlToJava/atlas-xml-boxedflatprimitive-attribute-ns.xml");
         session.setInput(sourceXml);
         context.process(session);
-        
+
         Object object = session.getOutput();
         assertNotNull(object);
         assertTrue(object instanceof TargetFlatPrimitiveClass);
-        validateFlatPrimitiveClassBoxedPrimitiveFields((TargetFlatPrimitiveClass)object);
+        validateFlatPrimitiveClassBoxedPrimitiveFields((TargetFlatPrimitiveClass) object);
     }
-    
+
     @Test
     public void testProcessXmlJavaBoxedFlatMappingPrimitiveElement() throws Exception {
-        AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/xmlToJava/atlasmapping-boxedflatprimitive-element.xml"));
+        AtlasContext context = atlasContextFactory
+                .createContext(new File("src/test/resources/xmlToJava/atlasmapping-boxedflatprimitive-element.xml"));
 
         AtlasSession session = context.createSession();
-        String sourceXml = AtlasTestUtil.loadFileAsString("src/test/resources/xmlToJava/atlas-xml-boxedflatprimitive-element.xml");
+        String sourceXml = AtlasTestUtil
+                .loadFileAsString("src/test/resources/xmlToJava/atlas-xml-boxedflatprimitive-element.xml");
         session.setInput(sourceXml);
         context.process(session);
-        
+
         Object object = session.getOutput();
         assertNotNull(object);
         assertTrue(object instanceof TargetFlatPrimitiveClass);
-        validateFlatPrimitiveClassBoxedPrimitiveFields((TargetFlatPrimitiveClass)object);
+        validateFlatPrimitiveClassBoxedPrimitiveFields((TargetFlatPrimitiveClass) object);
     }
-    
+
     @Test
     public void testProcessXmlJavaBoxedFlatMappingPrimitiveElementNS() throws Exception {
-        AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/xmlToJava/atlasmapping-boxedflatprimitive-element-ns.xml"));
+        AtlasContext context = atlasContextFactory
+                .createContext(new File("src/test/resources/xmlToJava/atlasmapping-boxedflatprimitive-element-ns.xml"));
 
         AtlasSession session = context.createSession();
-        String sourceXml = AtlasTestUtil.loadFileAsString("src/test/resources/xmlToJava/atlas-xml-boxedflatprimitive-element-ns.xml");
+        String sourceXml = AtlasTestUtil
+                .loadFileAsString("src/test/resources/xmlToJava/atlas-xml-boxedflatprimitive-element-ns.xml");
         session.setInput(sourceXml);
         context.process(session);
-        
+
         Object object = session.getOutput();
         assertNotNull(object);
         assertTrue(object instanceof TargetFlatPrimitiveClass);
-        validateFlatPrimitiveClassBoxedPrimitiveFields((TargetFlatPrimitiveClass)object);
+        validateFlatPrimitiveClassBoxedPrimitiveFields((TargetFlatPrimitiveClass) object);
     }
 
     protected void printValidation(Validation v) {
-        //System.out.println("Validation n=" + v.getName() + " f=" + v.getField() + " g=" + v.getGroup() + " v=" + v.getValue() + " s=" + v.getStatus() + " msg=" + v.getMessage());
+        // System.out.println("Validation n=" + v.getName() + " f=" + v.getField() + "
+        // g=" + v.getGroup() + " v=" + v.getValue() + " s=" + v.getStatus() + " msg=" +
+        // v.getMessage());
     }
-} 
+}

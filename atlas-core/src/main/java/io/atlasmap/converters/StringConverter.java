@@ -26,14 +26,13 @@ import java.math.BigDecimal;
 
 public class StringConverter implements AtlasPrimitiveConverter<String> {
 
-
     /**
      * @param value
      * @return
      * @throws AtlasConversionException
      */
     @Override
-	@AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.BOOLEAN, concerns = AtlasConversionConcern.RANGE)
+    @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.BOOLEAN, concerns = AtlasConversionConcern.RANGE)
     public Boolean convertToBoolean(String value) throws AtlasConversionException {
         if (value == null) {
             return null;
@@ -53,7 +52,7 @@ public class StringConverter implements AtlasPrimitiveConverter<String> {
      * @throws AtlasUnsupportedException
      */
     @Override
-	@AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.BYTE, concerns = AtlasConversionConcern.UNSUPPORTED)
+    @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.BYTE, concerns = AtlasConversionConcern.UNSUPPORTED)
     public Byte convertToByte(String value) throws AtlasConversionException {
         if (value == null) {
             return null;
@@ -67,7 +66,7 @@ public class StringConverter implements AtlasPrimitiveConverter<String> {
      * @throws AtlasConversionException
      */
     @Override
-	@AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.CHAR, concerns = AtlasConversionConcern.RANGE)
+    @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.CHAR, concerns = AtlasConversionConcern.RANGE)
     public Character convertToCharacter(String value) throws AtlasConversionException {
         if (value == null) {
             return null;
@@ -76,7 +75,8 @@ public class StringConverter implements AtlasPrimitiveConverter<String> {
         if (value.isEmpty() || value.length() > 1) {
             throw new AtlasConversionException("String is either empty or greater than one character long");
         } else if (value.charAt(0) < Character.MIN_VALUE || value.charAt(0) > Character.MAX_VALUE) {
-            throw new AtlasConversionException(String.format("String %s is greater than Character.MAX_VALUE  or less than Character.MIN_VALUE", value));
+            throw new AtlasConversionException(String
+                    .format("String %s is greater than Character.MAX_VALUE  or less than Character.MIN_VALUE", value));
         }
         return value.charAt(0);
     }
@@ -87,7 +87,8 @@ public class StringConverter implements AtlasPrimitiveConverter<String> {
      * @throws AtlasConversionException
      */
     @Override
-	@AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.DOUBLE, concerns = {AtlasConversionConcern.FORMAT, AtlasConversionConcern.RANGE})
+    @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.DOUBLE, concerns = {
+            AtlasConversionConcern.FORMAT, AtlasConversionConcern.RANGE })
     public Double convertToDouble(String value) throws AtlasConversionException {
         if (value == null) {
             return null;
@@ -103,7 +104,8 @@ public class StringConverter implements AtlasPrimitiveConverter<String> {
             return Double.valueOf(value);
         }
         if (Double.valueOf(value) < Double.MIN_VALUE || Double.valueOf(value) > Double.MAX_VALUE) {
-            throw new AtlasConversionException(String.format("String %s is greater than Double.MAX_VALUE  or less than Double.MIN_VALUE", value));
+            throw new AtlasConversionException(
+                    String.format("String %s is greater than Double.MAX_VALUE  or less than Double.MIN_VALUE", value));
         }
 
         return Double.valueOf(value);
@@ -115,12 +117,13 @@ public class StringConverter implements AtlasPrimitiveConverter<String> {
      * @throws AtlasConversionException
      */
     @Override
-	@AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.FLOAT, concerns = {AtlasConversionConcern.FORMAT, AtlasConversionConcern.RANGE})
+    @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.FLOAT, concerns = {
+            AtlasConversionConcern.FORMAT, AtlasConversionConcern.RANGE })
     public Float convertToFloat(String value) throws AtlasConversionException {
         if (value == null) {
             return null;
         }
-        //check we can make a float of the String
+        // check we can make a float of the String
         try {
             Float.parseFloat(value);
         } catch (NumberFormatException nfe) {
@@ -129,13 +132,14 @@ public class StringConverter implements AtlasPrimitiveConverter<String> {
 
         BigDecimal bd = new BigDecimal(value);
 
-        //handle 0.0f && -0.0  (floats suck)
+        // handle 0.0f && -0.0 (floats suck)
         if (bd.floatValue() == 0.0f || bd.floatValue() == -0.0) {
             return Float.valueOf(value);
         }
 
         if (bd.floatValue() < Float.MIN_VALUE || bd.floatValue() > Float.MAX_VALUE) {
-            throw new AtlasConversionException(String.format("String %s is greater than Float.MAX_VALUE  or less than Float.MIN_VALUE", value));
+            throw new AtlasConversionException(
+                    String.format("String %s is greater than Float.MAX_VALUE  or less than Float.MIN_VALUE", value));
         }
 
         return Float.valueOf(value);
@@ -147,12 +151,13 @@ public class StringConverter implements AtlasPrimitiveConverter<String> {
      * @throws AtlasConversionException
      */
     @Override
-	@AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.INTEGER, concerns = {AtlasConversionConcern.FORMAT, AtlasConversionConcern.RANGE})
+    @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.INTEGER, concerns = {
+            AtlasConversionConcern.FORMAT, AtlasConversionConcern.RANGE })
     public Integer convertToInteger(String value) throws AtlasConversionException {
         if (value == null) {
             return null;
         }
-        
+
         BigDecimal bd = null;
         Integer i = null;
         try {
@@ -165,12 +170,13 @@ public class StringConverter implements AtlasPrimitiveConverter<String> {
                 throw new AtlasConversionException(nfe);
             }
         }
-        
-        if(bd != null && bd.compareTo(BigDecimal.valueOf(i)) != 0) {
-            throw new AtlasConversionException(String.format("String %s is greater than Integer.MAX_VALUE  or less than Integer.MIN_VALUE", value));
+
+        if (bd != null && bd.compareTo(BigDecimal.valueOf(i)) != 0) {
+            throw new AtlasConversionException(String
+                    .format("String %s is greater than Integer.MAX_VALUE  or less than Integer.MIN_VALUE", value));
         }
-         
-        return i;        
+
+        return i;
     }
 
     /**
@@ -179,7 +185,8 @@ public class StringConverter implements AtlasPrimitiveConverter<String> {
      * @throws AtlasConversionException
      */
     @Override
-	@AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.LONG, concerns = {AtlasConversionConcern.FORMAT, AtlasConversionConcern.RANGE})
+    @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.LONG, concerns = {
+            AtlasConversionConcern.FORMAT, AtlasConversionConcern.RANGE })
     public Long convertToLong(String value) throws AtlasConversionException {
         if (value == null) {
             return null;
@@ -197,11 +204,12 @@ public class StringConverter implements AtlasPrimitiveConverter<String> {
                 throw new AtlasConversionException(nfe);
             }
         }
-        
-        if(bd != null && bd.compareTo(BigDecimal.valueOf(l)) != 0) {
-            throw new AtlasConversionException(String.format("String %s is greater than Long.MAX_VALUE  or less than Long.MIN_VALUE", value));
+
+        if (bd != null && bd.compareTo(BigDecimal.valueOf(l)) != 0) {
+            throw new AtlasConversionException(
+                    String.format("String %s is greater than Long.MAX_VALUE  or less than Long.MIN_VALUE", value));
         }
-         
+
         return l;
     }
 
@@ -211,12 +219,13 @@ public class StringConverter implements AtlasPrimitiveConverter<String> {
      * @throws AtlasConversionException
      */
     @Override
-	@AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.SHORT, concerns = {AtlasConversionConcern.FORMAT, AtlasConversionConcern.RANGE})
+    @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.SHORT, concerns = {
+            AtlasConversionConcern.FORMAT, AtlasConversionConcern.RANGE })
     public Short convertToShort(String value) throws AtlasConversionException {
         if (value == null) {
             return null;
         }
-        //check we can make a short of the String
+        // check we can make a short of the String
         Short shortty;
         try {
             shortty = Short.parseShort(value);
@@ -232,12 +241,12 @@ public class StringConverter implements AtlasPrimitiveConverter<String> {
      * @throws AtlasConversionException
      */
     @Override
-	@AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.STRING)
+    @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.STRING)
     public String convertToString(String value) throws AtlasConversionException {
         if (value == null) {
             return null;
         }
-        //we want a copy of value
+        // we want a copy of value
         return new String(value);
     }
 }

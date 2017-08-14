@@ -1,9 +1,9 @@
 {
-    "YYYY":"1997",
+    "YYYY": "1997",
     "YYYY-MM": "1997-07",
     "YYYY-MM-DD": "1997-07-16",
     "YYYY-MM-DDThh:mmTZD": "1997-07-16T19:20+01:00",
     "YYYY-MM-DDThh:mm:ssTZD": "1997-07-16T19:20:30+01:00",
     "YYYY-MM-DDThh:mm:ss.sTZD": "1997-07-16T19:20:30.45+01:00",
-    "YYYY-MM-DDThh:mm:ssUTZ" : "1994-11-05T13:15:30Z"
+    "YYYY-MM-DDThh:mm:ssUTZ": "1994-11-05T13:15:30Z"
 }

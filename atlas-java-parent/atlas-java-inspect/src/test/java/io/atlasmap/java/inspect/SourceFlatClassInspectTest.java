@@ -24,36 +24,40 @@ import org.junit.Test;
 
 public class SourceFlatClassInspectTest {
 
-	private ClassInspectionService classInspectionService = null;
-	
-	@Before
-	public void setUp() {
-		classInspectionService = new ClassInspectionService();
-		classInspectionService.setConversionService(DefaultAtlasConversionService.getInstance());
-	}
-	
-	@After
-	public void tearDown() {
-		classInspectionService = null;
-	}
+    private ClassInspectionService classInspectionService = null;
 
-	@Test
-	public void testSourceFlatPrimitiveClass() throws Exception {
-		ClassValidationUtil.validateFlatPrimitiveClass(classInspectionService, SourceFlatPrimitiveClass.class, "io.atlasmap.java.test.SourceFlatPrimitiveClass");
-	}
+    @Before
+    public void setUp() {
+        classInspectionService = new ClassInspectionService();
+        classInspectionService.setConversionService(DefaultAtlasConversionService.getInstance());
+    }
 
-	@Test
-	public void testSourceFlatPrimitiveClassArray() throws Exception {
-		ClassValidationUtil.validateFlatPrimitiveClassArray(classInspectionService, SourceFlatPrimitiveClass[].class, "io.atlasmap.java.test.SourceFlatPrimitiveClass");
-	}
-	
-	@Test
-	public void testSourceFlatPrimitiveClassTwoDimArray() throws Exception {
-		ClassValidationUtil.validateFlatPrimitiveClassTwoDimArray(classInspectionService, SourceFlatPrimitiveClass[][].class, "io.atlasmap.java.test.SourceFlatPrimitiveClass");
-	}
-	
-	@Test
-	public void testSourceFlatPrimitiveClassThreeDimArray() throws Exception {
-		ClassValidationUtil.validateFlatPrimitiveClassThreeDimArray(classInspectionService, SourceFlatPrimitiveClass[][][].class, "io.atlasmap.java.test.SourceFlatPrimitiveClass");
-	}
+    @After
+    public void tearDown() {
+        classInspectionService = null;
+    }
+
+    @Test
+    public void testSourceFlatPrimitiveClass() throws Exception {
+        ClassValidationUtil.validateFlatPrimitiveClass(classInspectionService, SourceFlatPrimitiveClass.class,
+                "io.atlasmap.java.test.SourceFlatPrimitiveClass");
+    }
+
+    @Test
+    public void testSourceFlatPrimitiveClassArray() throws Exception {
+        ClassValidationUtil.validateFlatPrimitiveClassArray(classInspectionService, SourceFlatPrimitiveClass[].class,
+                "io.atlasmap.java.test.SourceFlatPrimitiveClass");
+    }
+
+    @Test
+    public void testSourceFlatPrimitiveClassTwoDimArray() throws Exception {
+        ClassValidationUtil.validateFlatPrimitiveClassTwoDimArray(classInspectionService,
+                SourceFlatPrimitiveClass[][].class, "io.atlasmap.java.test.SourceFlatPrimitiveClass");
+    }
+
+    @Test
+    public void testSourceFlatPrimitiveClassThreeDimArray() throws Exception {
+        ClassValidationUtil.validateFlatPrimitiveClassThreeDimArray(classInspectionService,
+                SourceFlatPrimitiveClass[][][].class, "io.atlasmap.java.test.SourceFlatPrimitiveClass");
+    }
 }

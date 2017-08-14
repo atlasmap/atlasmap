@@ -47,10 +47,7 @@ public class XmlPathCoordinate {
 
     @Override
     public String toString() {
-        return "XmlPathCoordinate{" +
-            "index=" + index +
-            ", elementName='" + elementName + '\'' +
-            ", namespace=" + namespace +
-            '}';
+        return "XmlPathCoordinate{" + "index=" + index + ", elementName='" + elementName + '\'' + ", namespace="
+                + namespace + '}';
     }
 }

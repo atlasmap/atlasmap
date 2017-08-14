@@ -25,84 +25,87 @@ import io.atlasmap.api.AtlasSession;
 import io.atlasmap.reference.AtlasMappingBaseTest;
 
 public class XmlXmlCollectionConverstionTest extends AtlasMappingBaseTest {
-    
-    @Test 
+
+    @Test
     public void testProcessCollectionListSimple() throws Exception {
-        AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/xmlToXml/atlasmapping-collection-list-simple.xml").toURI());
-        
+        AtlasContext context = atlasContextFactory
+                .createContext(new File("src/test/resources/xmlToXml/atlasmapping-collection-list-simple.xml").toURI());
+
         // contact<>.firstName -> contact<>.name
-        
+
         String input = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
         input += "<XmlOA>";
         for (int i = 0; i < 3; i++) {
-            input += "<contact><firstName>name" + i + "</firstName></contact>";            
+            input += "<contact><firstName>name" + i + "</firstName></contact>";
         }
         input += "</XmlOA>";
 
         AtlasSession session = context.createSession();
         session.setInput(input);
         context.process(session);
-        
+
         Object object = session.getOutput();
         assertNotNull(object);
         assertTrue(object instanceof String);
         String output = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>";
         output += "<XmlOA>";
         for (int i = 0; i < 3; i++) {
-            output += "<contact><name>name" + i + "</name></contact>";            
+            output += "<contact><name>name" + i + "</name></contact>";
         }
         output += "</XmlOA>";
         assertEquals(output, (String) object);
-    }      
-    
-    @Test 
+    }
+
+    @Test
     public void testProcessCollectionArraySimple() throws Exception {
-        AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/xmlToXml/atlasmapping-collection-array-simple.xml").toURI());
-        
+        AtlasContext context = atlasContextFactory.createContext(
+                new File("src/test/resources/xmlToXml/atlasmapping-collection-array-simple.xml").toURI());
+
         // contact[].firstName -> contact[].name
-        
+
         String input = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
         input += "<XmlOA>";
         for (int i = 0; i < 3; i++) {
-            input += "<contact><firstName>name" + i + "</firstName></contact>";            
+            input += "<contact><firstName>name" + i + "</firstName></contact>";
         }
         input += "</XmlOA>";
 
         AtlasSession session = context.createSession();
         session.setInput(input);
         context.process(session);
-        
+
         Object object = session.getOutput();
         assertNotNull(object);
         assertTrue(object instanceof String);
-        
+
         String output = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>";
         output += "<XmlOA>";
         for (int i = 0; i < 3; i++) {
-            output += "<contact><name>name" + i + "</name></contact>";            
+            output += "<contact><name>name" + i + "</name></contact>";
         }
         output += "</XmlOA>";
-        
+
         assertEquals(output, (String) object);
-    }   
-    
-    @Test 
+    }
+
+    @Test
     public void testProcessCollectionToNonCollection() throws Exception {
-        AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/xmlToXml/atlasmapping-collection-to-noncollection.xml").toURI());                     
+        AtlasContext context = atlasContextFactory.createContext(
+                new File("src/test/resources/xmlToXml/atlasmapping-collection-to-noncollection.xml").toURI());
 
         // contact<>.firstName -> contact.name
-        
+
         String input = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
         input += "<XmlOA>";
         for (int i = 0; i < 3; i++) {
-            input += "<contact><firstName>name" + i + "</firstName></contact>";            
+            input += "<contact><firstName>name" + i + "</firstName></contact>";
         }
         input += "</XmlOA>";
 
         AtlasSession session = context.createSession();
         session.setInput(input);
         context.process(session);
-        
+
         Object object = session.getOutput();
         assertNotNull(object);
         assertTrue(object instanceof String);
@@ -112,13 +115,14 @@ public class XmlXmlCollectionConverstionTest extends AtlasMappingBaseTest {
         output += "</XmlOA>";
         assertEquals(output, (String) object);
     }
-    
-    @Test 
+
+    @Test
     public void testProcessCollectionFromNonCollection() throws Exception {
-        AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/xmlToXml/atlasmapping-collection-from-noncollection.xml").toURI());
-        
+        AtlasContext context = atlasContextFactory.createContext(
+                new File("src/test/resources/xmlToXml/atlasmapping-collection-from-noncollection.xml").toURI());
+
         // contact.firstName -> contact<>.name
-        
+
         String input = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
         input += "<XmlOA>";
         input += "<contact><firstName>name76</firstName></contact>";
@@ -127,12 +131,12 @@ public class XmlXmlCollectionConverstionTest extends AtlasMappingBaseTest {
         AtlasSession session = context.createSession();
         session.setInput(input);
         context.process(session);
-        
+
         String output = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>";
         output += "<XmlOA>";
         output += "<contact><name>name76</name></contact>";
         output += "</XmlOA>";
-        
+
         Object object = session.getOutput();
         assertNotNull(object);
         assertTrue(object instanceof String);

@@ -30,7 +30,8 @@ public class CharacterConverter implements AtlasPrimitiveConverter<Character> {
      * @throws AtlasConversionException
      */
     @Override
-	@AtlasConversionInfo(sourceType = FieldType.CHAR, targetType = FieldType.BOOLEAN, concerns = {AtlasConversionConcern.RANGE})
+    @AtlasConversionInfo(sourceType = FieldType.CHAR, targetType = FieldType.BOOLEAN, concerns = {
+            AtlasConversionConcern.RANGE })
     public Boolean convertToBoolean(Character value) throws AtlasConversionException {
         if (value == null) {
             return null;
@@ -43,7 +44,8 @@ public class CharacterConverter implements AtlasPrimitiveConverter<Character> {
                 return Boolean.FALSE;
             }
         }
-        // assuming anything not able to convert to a Boolean should be an exception condition
+        // assuming anything not able to convert to a Boolean should be an exception
+        // condition
         throw new AtlasConversionException(String.format("Character value %s cannot be converted to a Boolean", value));
 
     }
@@ -54,12 +56,14 @@ public class CharacterConverter implements AtlasPrimitiveConverter<Character> {
      * @throws AtlasConversionException
      */
     @Override
-	@AtlasConversionInfo(sourceType = FieldType.CHAR, targetType = FieldType.BYTE, concerns = {AtlasConversionConcern.UNSUPPORTED})
+    @AtlasConversionInfo(sourceType = FieldType.CHAR, targetType = FieldType.BYTE, concerns = {
+            AtlasConversionConcern.UNSUPPORTED })
     public Byte convertToByte(Character value) throws AtlasConversionException {
         if (value == null) {
             return null;
         }
-        throw new AtlasConversionException(new AtlasUnsupportedException("Character to Byte conversion is not supported."));
+        throw new AtlasConversionException(
+                new AtlasUnsupportedException("Character to Byte conversion is not supported."));
     }
 
     /**
@@ -68,7 +72,7 @@ public class CharacterConverter implements AtlasPrimitiveConverter<Character> {
      * @throws AtlasConversionException
      */
     @Override
-	@AtlasConversionInfo(sourceType = FieldType.CHAR, targetType = FieldType.CHAR)
+    @AtlasConversionInfo(sourceType = FieldType.CHAR, targetType = FieldType.CHAR)
     public Character convertToCharacter(Character value) throws AtlasConversionException {
         if (value == null) {
             return null;
@@ -83,7 +87,7 @@ public class CharacterConverter implements AtlasPrimitiveConverter<Character> {
      * @throws AtlasConversionException
      */
     @Override
-	@AtlasConversionInfo(sourceType = FieldType.CHAR, targetType = FieldType.DOUBLE)
+    @AtlasConversionInfo(sourceType = FieldType.CHAR, targetType = FieldType.DOUBLE)
     public Double convertToDouble(Character value) throws AtlasConversionException {
         if (value == null) {
             return null;
@@ -97,7 +101,7 @@ public class CharacterConverter implements AtlasPrimitiveConverter<Character> {
      * @throws AtlasConversionException
      */
     @Override
-	@AtlasConversionInfo(sourceType = FieldType.CHAR, targetType = FieldType.FLOAT)
+    @AtlasConversionInfo(sourceType = FieldType.CHAR, targetType = FieldType.FLOAT)
     public Float convertToFloat(Character value) throws AtlasConversionException {
         if (value == null) {
             return null;
@@ -111,7 +115,7 @@ public class CharacterConverter implements AtlasPrimitiveConverter<Character> {
      * @throws AtlasConversionException
      */
     @Override
-	@AtlasConversionInfo(sourceType = FieldType.CHAR, targetType = FieldType.INTEGER)
+    @AtlasConversionInfo(sourceType = FieldType.CHAR, targetType = FieldType.INTEGER)
     public Integer convertToInteger(Character value) throws AtlasConversionException {
         if (value == null) {
             return null;
@@ -125,7 +129,7 @@ public class CharacterConverter implements AtlasPrimitiveConverter<Character> {
      * @throws AtlasConversionException
      */
     @Override
-	@AtlasConversionInfo(sourceType = FieldType.CHAR, targetType = FieldType.LONG)
+    @AtlasConversionInfo(sourceType = FieldType.CHAR, targetType = FieldType.LONG)
     public Long convertToLong(Character value) throws AtlasConversionException {
         if (value == null) {
             return null;
@@ -139,7 +143,8 @@ public class CharacterConverter implements AtlasPrimitiveConverter<Character> {
      * @throws AtlasConversionException
      */
     @Override
-	@AtlasConversionInfo(sourceType = FieldType.CHAR, targetType = FieldType.SHORT, concerns = {AtlasConversionConcern.RANGE})
+    @AtlasConversionInfo(sourceType = FieldType.CHAR, targetType = FieldType.SHORT, concerns = {
+            AtlasConversionConcern.RANGE })
     public Short convertToShort(Character value) throws AtlasConversionException {
         if (value == null) {
             return null;
@@ -157,7 +162,7 @@ public class CharacterConverter implements AtlasPrimitiveConverter<Character> {
      * @throws AtlasConversionException
      */
     @Override
-	@AtlasConversionInfo(sourceType = FieldType.CHAR, targetType = FieldType.STRING)
+    @AtlasConversionInfo(sourceType = FieldType.CHAR, targetType = FieldType.STRING)
     public String convertToString(Character value) throws AtlasConversionException {
         if (value == null) {
             return null;

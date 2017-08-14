@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 package io.atlasmap.validators;
+
 import io.atlasmap.core.AtlasMappingUtil;
 import io.atlasmap.spi.AtlasValidator;
 import io.atlasmap.v2.*;
@@ -30,24 +31,25 @@ public abstract class BaseValidatorTest {
 
     protected static Logger logger = LoggerFactory.getLogger(BaseValidatorTest.class);
 
-//    protected io.atlasmap.java.v2.ObjectFactory javaModelFactory = new io.atlasmap.java.v2.ObjectFactory();
+    // protected io.atlasmap.java.v2.ObjectFactory javaModelFactory = new
+    // io.atlasmap.java.v2.ObjectFactory();
     protected AtlasMappingUtil mappingUtil = new AtlasMappingUtil("io.atlasmap.v2");
     protected AtlasValidationTestHelper validationHelper = null;
     protected List<Validation> validations = null;
     protected AtlasValidator validator = null;
-    
+
     @Before
     public void setUp() {
         validationHelper = new AtlasValidationTestHelper();
         validations = validationHelper.getValidation();
     }
-    
+
     @After
     public void tearDown() {
         validationHelper = null;
         validations = null;
     }
-    
+
     protected AtlasMapping getAtlasMappingFullValid() throws Exception {
         AtlasMapping mapping = AtlasModelFactory.createAtlasMapping();
 
@@ -56,11 +58,11 @@ public abstract class BaseValidatorTest {
         DataSource src = new DataSource();
         src.setDataSourceType(DataSourceType.SOURCE);
         src.setUri("atlas:java?2");
-        
+
         DataSource tgt = new DataSource();
         tgt.setDataSourceType(DataSourceType.TARGET);
         tgt.setUri("atlas:java?3");
-        
+
         mapping.getDataSource().add(src);
         mapping.getDataSource().add(tgt);
 
@@ -78,9 +80,8 @@ public abstract class BaseValidatorTest {
         outputField.setName("outputName");
         mapFieldMapping.getOutputField().add(outputField);
 
-
         Mapping separateMapping = AtlasModelFactory.createMapping(MappingType.SEPARATE);
-        
+
         MockField sIJavaField = AtlasModelFactory.createMockField();
         sIJavaField.setFieldType(FieldType.STRING);
         sIJavaField.setCustom("java.lang.String");
@@ -105,10 +106,10 @@ public abstract class BaseValidatorTest {
         inputField.setName("input.name");
         MockField outputField = new MockField();
         outputField.setName("out.name");
-        
+
         mapFieldMapping.getInputField().add(inputField);
         mapFieldMapping.getOutputField().add(outputField);
-        
+
         mapping.getMappings().getMapping().add(mapFieldMapping);
     }
 
@@ -136,7 +137,6 @@ public abstract class BaseValidatorTest {
 
         return mapping;
     }
-
 
     protected Field createInputJavaField(String inputName) {
         MockField inputJavaField = AtlasModelFactory.createMockField();

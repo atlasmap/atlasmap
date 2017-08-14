@@ -218,7 +218,8 @@ public class ClassInspectionService {
                     jcl.unloadClass(className);
                 } catch (JclException e) {
                     if (e.getCause() != null) {
-                        logger.warn("Error unloading class " + className + " msg: " + e.getCause().getMessage(), e.getCause());
+                        logger.warn("Error unloading class " + className + " msg: " + e.getCause().getMessage(),
+                                e.getCause());
                     } else {
                         logger.warn("Error unloading class " + className + " msg: " + e.getMessage(), e);
                     }
@@ -260,7 +261,7 @@ public class ClassInspectionService {
         javaClass.setMemberClass(clz.isMemberClass());
         javaClass.setPrimitive(clz.isPrimitive());
         javaClass.setSynthetic(clz.isSynthetic());
-        
+
         if (javaClass.getUri() == null) {
             javaClass.setUri(String.format(AtlasJavaModelFactory.URI_FORMAT, clz.getCanonicalName()));
         }
@@ -306,8 +307,8 @@ public class ClassInspectionService {
         }
 
         inspectClassMethods(clz, javaClass, cachedClasses, pathPrefix);
-        
-        if(javaClass.getModifiers() == null) {
+
+        if (javaClass.getModifiers() == null) {
             javaClass.setModifiers(new ModifierList());
         } else {
             javaClass.getModifiers().getModifier().clear();
@@ -326,9 +327,10 @@ public class ClassInspectionService {
     protected JavaField inspectGetMethod(Method m, JavaField s, Set<String> cachedClasses, String pathPrefix) {
 
         s.setName(StringUtil.removeGetterAndLowercaseFirstLetter(m.getName()));
-        
-        if(pathPrefix != null && pathPrefix.length() > 0) {
-            s.setPath(pathPrefix + PathUtil.PATH_SEPARATOR + StringUtil.removeGetterAndLowercaseFirstLetter(m.getName()));
+
+        if (pathPrefix != null && pathPrefix.length() > 0) {
+            s.setPath(
+                    pathPrefix + PathUtil.PATH_SEPARATOR + StringUtil.removeGetterAndLowercaseFirstLetter(m.getName()));
         } else {
             s.setPath(StringUtil.removeGetterAndLowercaseFirstLetter(m.getName()));
         }
@@ -392,9 +394,10 @@ public class ClassInspectionService {
     protected JavaField inspectSetMethod(Method m, JavaField s, Set<String> cachedClasses, String pathPrefix) {
 
         s.setName(StringUtil.removeSetterAndLowercaseFirstLetter(m.getName()));
-        
-        if(pathPrefix != null && pathPrefix.length() > 0) {
-            s.setPath(pathPrefix + PathUtil.PATH_SEPARATOR + StringUtil.removeSetterAndLowercaseFirstLetter(m.getName()));
+
+        if (pathPrefix != null && pathPrefix.length() > 0) {
+            s.setPath(
+                    pathPrefix + PathUtil.PATH_SEPARATOR + StringUtil.removeSetterAndLowercaseFirstLetter(m.getName()));
         } else {
             s.setPath(StringUtil.removeSetterAndLowercaseFirstLetter(m.getName()));
         }
@@ -466,13 +469,13 @@ public class ClassInspectionService {
         JavaField s = AtlasJavaModelFactory.createJavaField();
         Class<?> clazz = f.getType();
         s.setName(f.getName());
-        
-        if(pathPrefix != null && pathPrefix.length() > 0) {
+
+        if (pathPrefix != null && pathPrefix.length() > 0) {
             s.setPath(pathPrefix + PathUtil.PATH_SEPARATOR + f.getName());
         } else {
             s.setPath(f.getName());
         }
-        
+
         if (clazz.isArray()) {
             s.setCollectionType(CollectionType.ARRAY);
             s.setArrayDimensions(detectArrayDimensions(clazz));
@@ -482,12 +485,13 @@ public class ClassInspectionService {
             s.setCollectionClassName(clazz.getCanonicalName());
             try {
                 clazz = detectListClass(f);
-                if(clazz == null) {
+                if (clazz == null) {
                     s.setStatus(FieldStatus.ERROR);
-                    return s;                    
+                    return s;
                 }
             } catch (ClassCastException | ClassNotFoundException cce) {
-                logger.debug("Error detecting inner listClass: " + cce.getMessage() + " for field: " + f.getName(), cce);
+                logger.debug("Error detecting inner listClass: " + cce.getMessage() + " for field: " + f.getName(),
+                        cce);
                 s.setStatus(FieldStatus.ERROR);
                 return s;
             }
@@ -533,26 +537,26 @@ public class ClassInspectionService {
         Annotation[] annotations = f.getAnnotations();
         if (annotations != null) {
             for (Annotation a : annotations) {
-                if(s.getAnnotations() == null) {
+                if (s.getAnnotations() == null) {
                     s.setAnnotations(new StringList());
                 }
                 s.getAnnotations().getString().add(a.annotationType().getCanonicalName());
             }
         }
 
-        if(s.getModifiers() == null) {
+        if (s.getModifiers() == null) {
             s.setModifiers(new ModifierList());
         }
         s.getModifiers().getModifier().addAll(detectModifiers(f.getModifiers()));
 
         List<String> pTypes = detectParameterizedTypes(f, false);
-        if(pTypes != null) {
-            if(s.getParameterizedTypes() == null) {
+        if (pTypes != null) {
+            if (s.getParameterizedTypes() == null) {
                 s.setParameterizedTypes(new StringList());
             }
             s.getParameterizedTypes().getString().addAll(pTypes);
         }
-        
+
         try {
             String getterName = "get" + StringUtil.capitalizeFirstLetter(f.getName());
             f.getDeclaringClass().getMethod(getterName);
@@ -589,7 +593,8 @@ public class ClassInspectionService {
         return s;
     }
 
-    protected void inspectClassFields(Class<?> clazz, JavaClass javaClass, Set<String> cachedClasses, String pathPrefix) {
+    protected void inspectClassFields(Class<?> clazz, JavaClass javaClass, Set<String> cachedClasses,
+            String pathPrefix) {
         Field[] fields = clazz.getDeclaredFields();
         if (fields != null && !javaClass.isEnumeration()) {
             for (Field f : fields) {
@@ -603,13 +608,13 @@ public class ClassInspectionService {
                 }
 
                 // skip synthetic members
-                if(s.isSynthetic() != null && s.isSynthetic()) {
-                    if(logger.isDebugEnabled()) {
+                if (s.isSynthetic() != null && s.isSynthetic()) {
+                    if (logger.isDebugEnabled()) {
                         logger.debug("Synthetic field class detected: " + s.getName());
                     }
                     continue;
                 }
-                
+
                 if (s.getGetMethod() == null && s.getSetMethod() == null) {
                     if (s.getModifiers().getModifier().contains(io.atlasmap.java.v2.Modifier.PRIVATE)
                             && !getDisablePrivateOnlyFields()) {
@@ -628,7 +633,8 @@ public class ClassInspectionService {
         }
     }
 
-    protected void inspectClassMethods(Class<?> clazz, JavaClass javaClass, Set<String> cachedClasses, String pathPrefix) {
+    protected void inspectClassMethods(Class<?> clazz, JavaClass javaClass, Set<String> cachedClasses,
+            String pathPrefix) {
         Method[] methods = clazz.getDeclaredMethods();
         if (methods != null && !javaClass.isEnumeration()) {
             for (Method m : methods) {
@@ -750,8 +756,8 @@ public class ClassInspectionService {
     }
 
     protected Class<?> detectListClass(Field field) throws ClassNotFoundException {
-        List<String> types = detectParameterizedTypes(field, true); 
-        if(types != null && !types.isEmpty()) {
+        List<String> types = detectParameterizedTypes(field, true);
+        if (types != null && !types.isEmpty()) {
             return Class.forName(types.get(0));
         }
         return null;
@@ -776,46 +782,48 @@ public class ClassInspectionService {
         }
         return tmpClazz;
     }
-    
+
     protected List<String> detectParameterizedTypes(Field field, boolean onlyClasses) {
         List<String> pTypes = null;
-        
+
         if (field == null || field.getGenericType() == null || !(field.getGenericType() instanceof ParameterizedType)) {
             return null;
-         }
-         Type[] types = ((ParameterizedType) field.getGenericType()).getActualTypeArguments();
-         if (types.length == 0) {
+        }
+        Type[] types = ((ParameterizedType) field.getGenericType()).getActualTypeArguments();
+        if (types.length == 0) {
             return null;
-         }
-        
-         for(Type t : types) {
-             if(pTypes == null) {
-                 pTypes = new ArrayList<String>();
-             }
-                    
-             if (!onlyClasses && t instanceof TypeVariable){
-                 TypeVariable<?> tv =  (TypeVariable<?>) t;
-                 // TODO: no current need, but we may want to have treatment for 'T' tv.getTypeName()
-                 AnnotatedType[] annotatedBounds = tv.getAnnotatedBounds();
-                 GenericDeclaration genericDeclaration = tv.getGenericDeclaration();
-                 pTypes.add(((Class<?>) tv.getAnnotatedBounds()[0].getType()).getCanonicalName());
-             }
-                    
-             if (!onlyClasses && t instanceof WildcardType) {
-                 WildcardType wc =  (WildcardType) t;
-                 Type[] upperBounds = wc.getUpperBounds();
-                 Type[] lowerBounds = wc.getLowerBounds();
-                 // TODO: No current need, but we may want to have treatment for '?' wc.getTypeName() 
-                 if(upperBounds != null && upperBounds.length > 0) {
-                     pTypes.add(wc.getUpperBounds()[0].getClass().getCanonicalName());
-                 } else if(lowerBounds != null && lowerBounds.length > 0) {
-                     pTypes.add(wc.getLowerBounds()[0].getClass().getCanonicalName());
-                 }
-             }
-                    
-             if(t instanceof Class) {
-                 pTypes.add(((Class<?>)t).getCanonicalName());
-             }
+        }
+
+        for (Type t : types) {
+            if (pTypes == null) {
+                pTypes = new ArrayList<String>();
+            }
+
+            if (!onlyClasses && t instanceof TypeVariable) {
+                TypeVariable<?> tv = (TypeVariable<?>) t;
+                // TODO: no current need, but we may want to have treatment for 'T'
+                // tv.getTypeName()
+                AnnotatedType[] annotatedBounds = tv.getAnnotatedBounds();
+                GenericDeclaration genericDeclaration = tv.getGenericDeclaration();
+                pTypes.add(((Class<?>) tv.getAnnotatedBounds()[0].getType()).getCanonicalName());
+            }
+
+            if (!onlyClasses && t instanceof WildcardType) {
+                WildcardType wc = (WildcardType) t;
+                Type[] upperBounds = wc.getUpperBounds();
+                Type[] lowerBounds = wc.getLowerBounds();
+                // TODO: No current need, but we may want to have treatment for '?'
+                // wc.getTypeName()
+                if (upperBounds != null && upperBounds.length > 0) {
+                    pTypes.add(wc.getUpperBounds()[0].getClass().getCanonicalName());
+                } else if (lowerBounds != null && lowerBounds.length > 0) {
+                    pTypes.add(wc.getLowerBounds()[0].getClass().getCanonicalName());
+                }
+            }
+
+            if (t instanceof Class) {
+                pTypes.add(((Class<?>) t).getCanonicalName());
+            }
         }
         return pTypes;
     }
@@ -879,6 +887,5 @@ public class ClassInspectionService {
     public void setConversionService(AtlasConversionService atlasConversionService) {
         this.atlasConversionService = atlasConversionService;
     }
-    
-    
+
 }

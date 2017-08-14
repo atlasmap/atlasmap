@@ -44,7 +44,7 @@ public class JavaConstructServiceComplexTest {
     public void setUp() throws Exception {
         constructService = new JavaConstructService();
         constructService.setConversionService(DefaultAtlasConversionService.getInstance());
-        
+
         classInspectionService = new ClassInspectionService();
         classInspectionService.setConversionService(DefaultAtlasConversionService.getInstance());
     }
@@ -60,181 +60,179 @@ public class JavaConstructServiceComplexTest {
         Object targetObject = constructService.constructClass(generateOrder("Source"));
         assertNotNull(targetObject);
         assertTrue(targetObject instanceof io.atlasmap.java.test.SourceOrder);
-        SourceOrder order = (SourceOrder)targetObject;
-        
+        SourceOrder order = (SourceOrder) targetObject;
+
         assertNotNull(order.getAddress());
         assertTrue(order.getAddress() instanceof io.atlasmap.java.test.SourceAddress);
-        SourceAddress address = (SourceAddress)order.getAddress();
+        SourceAddress address = (SourceAddress) order.getAddress();
         assertNull(address.getAddressLine1());
         assertNull(address.getAddressLine2());
         assertNull(address.getCity());
         assertNull(address.getState());
         assertNull(address.getZipCode());
-        
+
         assertNotNull(order.getContact());
         assertTrue(order.getContact() instanceof io.atlasmap.java.test.SourceContact);
-        SourceContact contact = (SourceContact)order.getContact();
+        SourceContact contact = (SourceContact) order.getContact();
         assertNull(contact.getFirstName());
         assertNull(contact.getLastName());
         assertNull(contact.getPhoneNumber());
         assertNull(contact.getZipCode());
     }
-    
+
     @Test
     public void testConstructTargetOrder() throws Exception {
         Object targetObject = constructService.constructClass(generateOrder("Target"));
         assertNotNull(targetObject);
         assertTrue(targetObject instanceof io.atlasmap.java.test.TargetOrder);
-        TargetOrder order = (TargetOrder)targetObject;
-        
+        TargetOrder order = (TargetOrder) targetObject;
+
         assertNotNull(order.getAddress());
         assertTrue(order.getAddress() instanceof io.atlasmap.java.test.TargetAddress);
-        TargetAddress address = (TargetAddress)order.getAddress();
+        TargetAddress address = (TargetAddress) order.getAddress();
         assertNull(address.getAddressLine1());
         assertNull(address.getAddressLine2());
         assertNull(address.getCity());
         assertNull(address.getState());
         assertNull(address.getZipCode());
-        
+
         assertNotNull(order.getContact());
         assertTrue(order.getContact() instanceof io.atlasmap.java.test.TargetContact);
-        TargetContact contact = (TargetContact)order.getContact();
+        TargetContact contact = (TargetContact) order.getContact();
         assertNull(contact.getFirstName());
         assertNull(contact.getLastName());
         assertNull(contact.getPhoneNumber());
         assertNull(contact.getZipCode());
     }
-    
+
     @Test
     public void testConstructTargetOrderFiltered() throws Exception {
         JavaClass javaClass = generateOrder("Target");
         Object targetObject = constructService.constructClass(javaClass, Arrays.asList("address"));
         assertNotNull(targetObject);
         assertTrue(targetObject instanceof io.atlasmap.java.test.TargetOrder);
-        TargetOrder order = (TargetOrder)targetObject;
-        
+        TargetOrder order = (TargetOrder) targetObject;
+
         assertNotNull(order.getAddress());
         assertTrue(order.getAddress() instanceof io.atlasmap.java.test.TargetAddress);
-        TargetAddress address = (TargetAddress)order.getAddress();
+        TargetAddress address = (TargetAddress) order.getAddress();
         assertNull(address.getAddressLine1());
         assertNull(address.getAddressLine2());
         assertNull(address.getCity());
         assertNull(address.getState());
         assertNull(address.getZipCode());
-        
+
         assertNull(order.getContact());
     }
-    
+
     @Test
     public void testConstructSourceParentOrder() throws Exception {
         JavaClass javaClass = generateParentOrder("Source");
         Object targetObject = constructService.constructClass(javaClass);
         assertNotNull(targetObject);
         assertTrue(targetObject instanceof io.atlasmap.java.test.SourceParentOrder);
-        SourceParentOrder parentOrder = (SourceParentOrder)targetObject;
-        
+        SourceParentOrder parentOrder = (SourceParentOrder) targetObject;
+
         assertNotNull(parentOrder.getOrder());
-        SourceOrder order = (SourceOrder)parentOrder.getOrder();
-        
+        SourceOrder order = (SourceOrder) parentOrder.getOrder();
+
         assertNotNull(order.getAddress());
         assertTrue(order.getAddress() instanceof io.atlasmap.java.test.SourceAddress);
-        SourceAddress address = (SourceAddress)order.getAddress();
+        SourceAddress address = (SourceAddress) order.getAddress();
         assertNull(address.getAddressLine1());
         assertNull(address.getAddressLine2());
         assertNull(address.getCity());
         assertNull(address.getState());
         assertNull(address.getZipCode());
-        
+
         assertNotNull(order.getContact());
         assertTrue(order.getContact() instanceof io.atlasmap.java.test.SourceContact);
-        SourceContact contact = (SourceContact)order.getContact();
+        SourceContact contact = (SourceContact) order.getContact();
         assertNull(contact.getFirstName());
         assertNull(contact.getLastName());
         assertNull(contact.getPhoneNumber());
         assertNull(contact.getZipCode());
     }
-    
+
     @Test
     public void testConstructTargetParentOrder() throws Exception {
         JavaClass javaClass = generateParentOrder("Target");
         Object targetObject = constructService.constructClass(javaClass);
         assertNotNull(targetObject);
         assertTrue(targetObject instanceof io.atlasmap.java.test.TargetParentOrder);
-        TargetParentOrder parentOrder = (TargetParentOrder)targetObject;
-        
+        TargetParentOrder parentOrder = (TargetParentOrder) targetObject;
+
         assertNotNull(parentOrder.getOrder());
-        TargetOrder order = (TargetOrder)parentOrder.getOrder();
-        
+        TargetOrder order = (TargetOrder) parentOrder.getOrder();
+
         assertNotNull(order.getAddress());
         assertTrue(order.getAddress() instanceof io.atlasmap.java.test.TargetAddress);
-        TargetAddress address = (TargetAddress)order.getAddress();
+        TargetAddress address = (TargetAddress) order.getAddress();
         assertNull(address.getAddressLine1());
         assertNull(address.getAddressLine2());
         assertNull(address.getCity());
         assertNull(address.getState());
         assertNull(address.getZipCode());
-        
+
         assertNotNull(order.getContact());
         assertTrue(order.getContact() instanceof io.atlasmap.java.test.TargetContact);
-        TargetContact contact = (TargetContact)order.getContact();
+        TargetContact contact = (TargetContact) order.getContact();
         assertNull(contact.getFirstName());
         assertNull(contact.getLastName());
         assertNull(contact.getPhoneNumber());
         assertNull(contact.getZipCode());
     }
-        
+
     @Test
     public void testConstructAbstractBaseOrder() throws Exception {
         try {
             constructService.constructClass(generateOrder("Base"));
             fail("Expected ConstructInvalidException");
             /*
-            } catch (ConstructInvalidException e) {
-               TODO: Fix modifiers problem 
-            } 
-            */ 
+             * } catch (ConstructInvalidException e) { TODO: Fix modifiers problem }
+             */
         } catch (InstantiationException e) {
-       
+
         } catch (Exception e) {
             fail("Expected ConstructInvalidException instead: " + e.getClass().getName());
         }
     }
-    
+
     protected JavaClass generateOrder(String prefix) {
         JavaClass j = classInspectionService.inspectClass("io.atlasmap.java.test." + prefix + "Order");
-        
-        for(JavaField jf : j.getJavaFields().getJavaField()) {
-            if(jf.getPath().equals("contact")) {
+
+        for (JavaField jf : j.getJavaFields().getJavaField()) {
+            if (jf.getPath().equals("contact")) {
                 jf.setClassName("io.atlasmap.java.test." + prefix + "Contact");
             }
-            if(jf.getPath().equals("address")) {
+            if (jf.getPath().equals("address")) {
                 jf.setClassName("io.atlasmap.java.test." + prefix + "Address");
             }
         }
-        
+
         return j;
     }
-    
+
     protected JavaClass generateParentOrder(String prefix) {
         JavaClass j = classInspectionService.inspectClass("io.atlasmap.java.test." + prefix + "ParentOrder");
-        
-        for(JavaField jf : j.getJavaFields().getJavaField()) {
-            if(jf.getPath().equals("order")) {
+
+        for (JavaField jf : j.getJavaFields().getJavaField()) {
+            if (jf.getPath().equals("order")) {
                 jf.setClassName("io.atlasmap.java.test." + prefix + "Order");
             }
-            
-            if(jf instanceof JavaClass) {
-                for(JavaField cjf : ((JavaClass)jf).getJavaFields().getJavaField()) {
-                    if(cjf.getPath().equals("order/contact")) {
+
+            if (jf instanceof JavaClass) {
+                for (JavaField cjf : ((JavaClass) jf).getJavaFields().getJavaField()) {
+                    if (cjf.getPath().equals("order/contact")) {
                         cjf.setClassName("io.atlasmap.java.test." + prefix + "Contact");
                     }
-                    if(cjf.getPath().equals("order/address")) {
+                    if (cjf.getPath().equals("order/address")) {
                         cjf.setClassName("io.atlasmap.java.test." + prefix + "Address");
                     }
                 }
             }
         }
-        
+
         return j;
     }
 }

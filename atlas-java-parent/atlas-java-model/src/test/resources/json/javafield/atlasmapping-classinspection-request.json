@@ -1,1 +1,7 @@
-{"ClassInspectionRequest":{"jsonType":"io.atlasmap.java.v2.ClassInspectionRequest","classpath":"/Users/mattrpav/.m2/repository/org/twitter4j/twitter4j-core/4.0.5/twitter4j-core-4.0.5.jar","className":"twitter4j.Status"}}
+{
+    "ClassInspectionRequest": {
+        "jsonType": "io.atlasmap.java.v2.ClassInspectionRequest",
+        "classpath": "/Users/mattrpav/.m2/repository/org/twitter4j/twitter4j-core/4.0.5/twitter4j-core-4.0.5.jar",
+        "className": "twitter4j.Status"
+    }
+}

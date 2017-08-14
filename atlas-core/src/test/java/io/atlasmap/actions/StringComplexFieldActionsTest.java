@@ -35,28 +35,31 @@ public class StringComplexFieldActionsTest {
     protected void validateGeneratedUUID(String uuid) {
         assertNotNull(uuid);
         assertTrue(uuid.length() > 0);
-        assertTrue(Pattern.compile("[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}").matcher(uuid).matches());
+        assertTrue(Pattern.compile("[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}").matcher(uuid)
+                .matches());
     }
-    
+
     @Test
     public void testGenareteUUID() {
         validateGeneratedUUID(StringComplexFieldActions.genareteUUID(new GenerateUUID(), null));
-        validateGeneratedUUID(StringComplexFieldActions.genareteUUID(new GenerateUUID(), new Byte(Byte.parseByte("0"))));
+        validateGeneratedUUID(
+                StringComplexFieldActions.genareteUUID(new GenerateUUID(), new Byte(Byte.parseByte("0"))));
         validateGeneratedUUID(StringComplexFieldActions.genareteUUID(new GenerateUUID(), new Character('a')));
         validateGeneratedUUID(StringComplexFieldActions.genareteUUID(new GenerateUUID(), new Double(14324d)));
         validateGeneratedUUID(StringComplexFieldActions.genareteUUID(new GenerateUUID(), new Float(234235235325f)));
         validateGeneratedUUID(StringComplexFieldActions.genareteUUID(new GenerateUUID(), new Integer(32523)));
         validateGeneratedUUID(StringComplexFieldActions.genareteUUID(new GenerateUUID(), new Long(235325L)));
-        validateGeneratedUUID(StringComplexFieldActions.genareteUUID(new GenerateUUID(), new Short((short)4323)));
+        validateGeneratedUUID(StringComplexFieldActions.genareteUUID(new GenerateUUID(), new Short((short) 4323)));
         validateGeneratedUUID(StringComplexFieldActions.genareteUUID(new GenerateUUID(), new String()));
     }
 
     protected void validateCurrentDate(String dateValue) {
         assertNotNull(dateValue);
         assertTrue(dateValue.length() > 0);
-        assertTrue(Pattern.compile("20([1-9][0-9])-(0[0-9]|1[0-2])-(0[0-9]|1[0-9]|2[0-9]|3[0-1])").matcher(dateValue).matches());
+        assertTrue(Pattern.compile("20([1-9][0-9])-(0[0-9]|1[0-2])-(0[0-9]|1[0-9]|2[0-9]|3[0-1])").matcher(dateValue)
+                .matches());
     }
-    
+
     @Test
     public void testCurrentDate() {
         validateCurrentDate(StringComplexFieldActions.currentDate(new CurrentDate(), null));
@@ -66,10 +69,10 @@ public class StringComplexFieldActionsTest {
         validateCurrentDate(StringComplexFieldActions.currentDate(new CurrentDate(), new Float(234235235325f)));
         validateCurrentDate(StringComplexFieldActions.currentDate(new CurrentDate(), new Integer(32523)));
         validateCurrentDate(StringComplexFieldActions.currentDate(new CurrentDate(), new Long(235325L)));
-        validateCurrentDate(StringComplexFieldActions.currentDate(new CurrentDate(), new Short((short)4323)));
-        validateCurrentDate(StringComplexFieldActions.currentDate(new CurrentDate(), new String()));    
+        validateCurrentDate(StringComplexFieldActions.currentDate(new CurrentDate(), new Short((short) 4323)));
+        validateCurrentDate(StringComplexFieldActions.currentDate(new CurrentDate(), new String()));
     }
-    
+
     protected void validateCurrentTime(String timeValue) {
         assertNotNull(timeValue);
         assertTrue(timeValue.length() > 0);
@@ -85,8 +88,8 @@ public class StringComplexFieldActionsTest {
         validateCurrentTime(StringComplexFieldActions.currentTime(new CurrentTime(), new Float(234235235325f)));
         validateCurrentTime(StringComplexFieldActions.currentTime(new CurrentTime(), new Integer(32523)));
         validateCurrentTime(StringComplexFieldActions.currentTime(new CurrentTime(), new Long(235325L)));
-        validateCurrentTime(StringComplexFieldActions.currentTime(new CurrentTime(), new Short((short)4323)));
-        validateCurrentTime(StringComplexFieldActions.currentTime(new CurrentTime(), new String()));       
+        validateCurrentTime(StringComplexFieldActions.currentTime(new CurrentTime(), new Short((short) 4323)));
+        validateCurrentTime(StringComplexFieldActions.currentTime(new CurrentTime(), new String()));
     }
 
     @Test
@@ -99,7 +102,7 @@ public class StringComplexFieldActionsTest {
         PadStringRight padStringRight = new PadStringRight();
         padStringRight.setPadCharacter("a");
         padStringRight.setPadCount(3);
-        
+
         assertNull(StringComplexFieldActions.padStringRight(padStringRight, null));
         assertEquals("aaa", StringComplexFieldActions.padStringRight(padStringRight, ""));
         assertEquals("aaaa", StringComplexFieldActions.padStringRight(padStringRight, "a"));
@@ -111,14 +114,14 @@ public class StringComplexFieldActionsTest {
         } catch (IllegalArgumentException e) {
             assertTrue(true);
         }
-        
+
         try {
             StringComplexFieldActions.padStringRight(new PadStringRight(), "aa");
             fail("IllegalArgumentException expected");
         } catch (IllegalArgumentException e) {
             assertTrue(true);
         }
-        
+
         try {
             PadStringRight incomplete = new PadStringRight();
             incomplete.setPadCharacter("f");
@@ -127,7 +130,7 @@ public class StringComplexFieldActionsTest {
         } catch (IllegalArgumentException e) {
             assertTrue(true);
         }
-        
+
         try {
             PadStringRight incomplete = new PadStringRight();
             incomplete.setPadCount(3);
@@ -143,7 +146,7 @@ public class StringComplexFieldActionsTest {
         PadStringLeft padStringLeft = new PadStringLeft();
         padStringLeft.setPadCharacter("a");
         padStringLeft.setPadCount(3);
-        
+
         assertNull(StringComplexFieldActions.padStringLeft(padStringLeft, null));
         assertEquals("aaa", StringComplexFieldActions.padStringLeft(padStringLeft, ""));
         assertEquals("aaaa", StringComplexFieldActions.padStringLeft(padStringLeft, "a"));
@@ -155,14 +158,14 @@ public class StringComplexFieldActionsTest {
         } catch (IllegalArgumentException e) {
             assertTrue(true);
         }
-        
+
         try {
             StringComplexFieldActions.padStringLeft(new PadStringLeft(), "aa");
             fail("IllegalArgumentException expected");
         } catch (IllegalArgumentException e) {
             assertTrue(true);
         }
-        
+
         try {
             PadStringLeft incomplete = new PadStringLeft();
             incomplete.setPadCharacter("f");
@@ -171,7 +174,7 @@ public class StringComplexFieldActionsTest {
         } catch (IllegalArgumentException e) {
             assertTrue(true);
         }
-        
+
         try {
             PadStringLeft incomplete = new PadStringLeft();
             incomplete.setPadCount(3);
@@ -179,7 +182,7 @@ public class StringComplexFieldActionsTest {
             fail("IllegalArgumentException expected");
         } catch (IllegalArgumentException e) {
             assertTrue(true);
-        }    
+        }
     }
 
     @Test
@@ -187,7 +190,7 @@ public class StringComplexFieldActionsTest {
         SubString action = new SubString();
         action.setStartIndex(2);
         action.setEndIndex(4);
-        
+
         assertNull(StringComplexFieldActions.subString(action, null));
         assertEquals("", StringComplexFieldActions.subString(action, ""));
 
@@ -205,29 +208,29 @@ public class StringComplexFieldActionsTest {
         action.setStartIndex(3);
         action.setEndIndex(null);
         action.setMatch("foo");
-                
+
         assertNull(StringComplexFieldActions.subStringAfter(action, null));
         assertEquals("", StringComplexFieldActions.subStringAfter(action, ""));
-        assertEquals("blah", StringComplexFieldActions.subStringAfter(action, "foobarblah"));    
-        assertEquals("blahfoo", StringComplexFieldActions.subStringAfter(action, "foobarblahfoo"));     
+        assertEquals("blah", StringComplexFieldActions.subStringAfter(action, "foobarblah"));
+        assertEquals("blahfoo", StringComplexFieldActions.subStringAfter(action, "foobarblahfoo"));
 
         assertEquals("barblah", StringComplexFieldActions.subStringAfter(action, "barblah"));
-        
+
         try {
             StringComplexFieldActions.subStringAfter(null, "aa");
             fail("IllegalArgumentException expected");
         } catch (IllegalArgumentException e) {
             assertTrue(true);
-        }   
-        
+        }
+
         try {
-            SubStringAfter err = new SubStringAfter();            
+            SubStringAfter err = new SubStringAfter();
             StringComplexFieldActions.subStringAfter(err, "aa");
             fail("IllegalArgumentException expected");
         } catch (IllegalArgumentException e) {
             assertTrue(true);
-        }  
-        
+        }
+
         try {
             SubStringAfter err = new SubStringAfter();
             err.setEndIndex(5);
@@ -236,8 +239,8 @@ public class StringComplexFieldActionsTest {
             fail("IllegalArgumentException expected");
         } catch (IllegalArgumentException e) {
             assertTrue(true);
-        } 
-        
+        }
+
         try {
             SubStringAfter err = new SubStringAfter();
             err.setEndIndex(0);
@@ -246,7 +249,7 @@ public class StringComplexFieldActionsTest {
             fail("IllegalArgumentException expected");
         } catch (IllegalArgumentException e) {
             assertTrue(true);
-        } 
+        }
     }
 
     @Test
@@ -255,28 +258,28 @@ public class StringComplexFieldActionsTest {
         action.setStartIndex(3);
         action.setEndIndex(null);
         action.setMatch("blah");
-                
+
         assertNull(StringComplexFieldActions.subStringBefore(action, null));
         assertEquals("", StringComplexFieldActions.subStringBefore(action, ""));
-        assertEquals("bar", StringComplexFieldActions.subStringBefore(action, "foobarblah"));    
-        assertEquals("foobar", StringComplexFieldActions.subStringBefore(action, "foofoobarblahfoo"));     
+        assertEquals("bar", StringComplexFieldActions.subStringBefore(action, "foobarblah"));
+        assertEquals("foobar", StringComplexFieldActions.subStringBefore(action, "foofoobarblahfoo"));
         assertEquals("", StringComplexFieldActions.subStringBefore(action, "barblah"));
-        
+
         try {
             StringComplexFieldActions.subStringBefore(null, "aa");
             fail("IllegalArgumentException expected");
         } catch (IllegalArgumentException e) {
             assertTrue(true);
-        }   
-        
+        }
+
         try {
-            SubStringBefore err = new SubStringBefore();            
+            SubStringBefore err = new SubStringBefore();
             StringComplexFieldActions.subStringBefore(err, "aa");
             fail("IllegalArgumentException expected");
         } catch (IllegalArgumentException e) {
             assertTrue(true);
-        }  
-        
+        }
+
         try {
             SubStringBefore err = new SubStringBefore();
             err.setEndIndex(5);
@@ -285,8 +288,8 @@ public class StringComplexFieldActionsTest {
             fail("IllegalArgumentException expected");
         } catch (IllegalArgumentException e) {
             assertTrue(true);
-        } 
-        
+        }
+
         try {
             SubStringBefore err = new SubStringBefore();
             err.setEndIndex(0);
@@ -295,7 +298,7 @@ public class StringComplexFieldActionsTest {
             fail("IllegalArgumentException expected");
         } catch (IllegalArgumentException e) {
             assertTrue(true);
-        }     
+        }
     }
 
 }

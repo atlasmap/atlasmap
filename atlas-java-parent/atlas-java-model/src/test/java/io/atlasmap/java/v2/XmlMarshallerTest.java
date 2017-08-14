@@ -31,43 +31,45 @@ import static org.junit.Assert.assertNotNull;
 
 public class XmlMarshallerTest extends BaseMarshallerTest {
 
-	private JAXBContext jaxbContext = null;
-	private Marshaller marshaller = null;
-	private Unmarshaller unmarshaller = null;
-	
-	@Override
-	@Before
-	public void setUp() throws Exception {
-		super.setUp();
-		
-		this.deleteTestFolders = false;
-		
-		jaxbContext = JAXBContext.newInstance("io.atlasmap.v2:io.atlasmap.java.v2");
-		
-		marshaller = jaxbContext.createMarshaller();
-		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-		unmarshaller = jaxbContext.createUnmarshaller();
-	}
-	
-	@Override
-	@After
-	public void tearDown() throws Exception {
-		super.tearDown();
-		
-		marshaller = null;
-		unmarshaller = null;
-		jaxbContext = null;
-	}
-	
-	@Test
-	public void testXmlJavaField() throws Exception {
-		
-		marshaller.marshal(generateAtlasMapping(), new File("target/junit/" + testName.getMethodName() + "/" + "atlasmapping.xml"));
-		StreamSource fileSource = new StreamSource(new File("target/junit/" + testName.getMethodName() + "/" + "atlasmapping.xml"));
-		JAXBElement<AtlasMapping> mappingElem = unmarshaller.unmarshal(fileSource, AtlasMapping.class);
-		assertNotNull(mappingElem);
-		assertNotNull(mappingElem.getValue());
-		// TODO: validateAtlasMapping(mappingElem.getValue());
-	}
+    private JAXBContext jaxbContext = null;
+    private Marshaller marshaller = null;
+    private Unmarshaller unmarshaller = null;
+
+    @Override
+    @Before
+    public void setUp() throws Exception {
+        super.setUp();
+
+        this.deleteTestFolders = false;
+
+        jaxbContext = JAXBContext.newInstance("io.atlasmap.v2:io.atlasmap.java.v2");
+
+        marshaller = jaxbContext.createMarshaller();
+        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+        unmarshaller = jaxbContext.createUnmarshaller();
+    }
+
+    @Override
+    @After
+    public void tearDown() throws Exception {
+        super.tearDown();
+
+        marshaller = null;
+        unmarshaller = null;
+        jaxbContext = null;
+    }
+
+    @Test
+    public void testXmlJavaField() throws Exception {
+
+        marshaller.marshal(generateAtlasMapping(),
+                new File("target/junit/" + testName.getMethodName() + "/" + "atlasmapping.xml"));
+        StreamSource fileSource = new StreamSource(
+                new File("target/junit/" + testName.getMethodName() + "/" + "atlasmapping.xml"));
+        JAXBElement<AtlasMapping> mappingElem = unmarshaller.unmarshal(fileSource, AtlasMapping.class);
+        assertNotNull(mappingElem);
+        assertNotNull(mappingElem.getValue());
+        // TODO: validateAtlasMapping(mappingElem.getValue());
+    }
 
 }

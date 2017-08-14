@@ -17,9 +17,21 @@ package io.atlasmap.api;
 
 public class AtlasConversionException extends AtlasException {
 
-	private static final long serialVersionUID = -8909275615751481096L;
-	public AtlasConversionException() { super(); }
-	public AtlasConversionException(String message, Throwable cause) { super(message, cause); }
-	public AtlasConversionException(String message) { super(message); }
-	public AtlasConversionException(Throwable cause) { super(cause); }
+    private static final long serialVersionUID = -8909275615751481096L;
+
+    public AtlasConversionException() {
+        super();
+    }
+
+    public AtlasConversionException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public AtlasConversionException(String message) {
+        super(message);
+    }
+
+    public AtlasConversionException(Throwable cause) {
+        super(cause);
+    }
 }

@@ -21,12 +21,12 @@ import io.atlasmap.core.DefaultAtlasContextFactory;
 
 public class DefaultAtlasContextTest {
 
-	@Test
-	public void testModuleInit() {
-		DefaultAtlasContextFactory factory = new DefaultAtlasContextFactory();
-		factory.init();
-		assertNotNull(factory.getModules());
-		assertEquals(new Integer(3), new Integer(factory.getModules().size()));
-	}
+    @Test
+    public void testModuleInit() {
+        DefaultAtlasContextFactory factory = new DefaultAtlasContextFactory();
+        factory.init();
+        assertNotNull(factory.getModules());
+        assertEquals(new Integer(3), new Integer(factory.getModules().size()));
+    }
 
 }

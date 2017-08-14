@@ -17,14 +17,15 @@
 
 -->
 <AtlasMapping xmlns="http://atlasmap.io/v2" name="junit">
-	<FieldMappings>
-		<FieldMapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="MapFieldMapping">
-			<InputField>
-				<Field xsi:type="MockField" name="foo" value="bar" />
-			</InputField>
-			<OutputField>
-				<Field xsi:type="MockField" name="woot" value="blerg" />
-			</OutputField>
-		</FieldMapping>
-	</FieldMappings>
+    <FieldMappings>
+        <FieldMapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:type="MapFieldMapping">
+            <InputField>
+                <Field xsi:type="MockField" name="foo" value="bar" />
+            </InputField>
+            <OutputField>
+                <Field xsi:type="MockField" name="woot" value="blerg" />
+            </OutputField>
+        </FieldMapping>
+    </FieldMappings>
 </AtlasMapping>

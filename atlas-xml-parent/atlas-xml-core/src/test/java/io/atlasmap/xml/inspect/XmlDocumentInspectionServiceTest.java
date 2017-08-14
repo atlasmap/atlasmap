@@ -41,17 +41,10 @@ public class XmlDocumentInspectionServiceTest {
 
     @Test
     public void testInspectXmlStringAsSource() throws Exception {
-        final String source =
-            "<data>\n" +
-                "     <intField>32000</intField>\n" +
-                "     <longField>12421</longField>\n" +
-                "     <stringField>abc</stringField>\n" +
-                "     <booleanField>true</booleanField>\n" +
-                "     <doubleField>12.0</doubleField>\n" +
-                "     <shortField>1000</shortField>\n" +
-                "     <floatField>234.5f</floatField>\n" +
-                "     <charField>A</charField>\n" +
-                "</data>";
+        final String source = "<data>\n" + "     <intField>32000</intField>\n" + "     <longField>12421</longField>\n"
+                + "     <stringField>abc</stringField>\n" + "     <booleanField>true</booleanField>\n"
+                + "     <doubleField>12.0</doubleField>\n" + "     <shortField>1000</shortField>\n"
+                + "     <floatField>234.5f</floatField>\n" + "     <charField>A</charField>\n" + "</data>";
         XmlDocumentInspectionService service = new XmlDocumentInspectionService();
         XmlDocument xmlDocument = service.inspectXmlDocument(source);
         Assert.assertNotNull(xmlDocument);
@@ -59,8 +52,8 @@ public class XmlDocumentInspectionServiceTest {
         Assert.assertThat(xmlDocument.getFields().getField().size(), Is.is(1));
 
         List<XmlComplexType> complexTypeList = xmlDocument.getFields().getField().stream()
-            .filter(xmlField -> xmlField instanceof XmlComplexType)
-            .map(xmlField -> (XmlComplexType) xmlField).collect(Collectors.toList());
+                .filter(xmlField -> xmlField instanceof XmlComplexType).map(xmlField -> (XmlComplexType) xmlField)
+                .collect(Collectors.toList());
         Assert.assertThat(complexTypeList.size(), Is.is(1));
 
         XmlComplexType root = (XmlComplexType) xmlDocument.getFields().getField().get(0);
@@ -68,26 +61,20 @@ public class XmlDocumentInspectionServiceTest {
         Assert.assertThat(root.getXmlFields().getXmlField().size(), Is.is(8));
 
         complexTypeList = root.getXmlFields().getXmlField().stream()
-            .filter(xmlField -> xmlField instanceof XmlComplexType)
-            .map(xmlField -> (XmlComplexType) xmlField).collect(Collectors.toList());
+                .filter(xmlField -> xmlField instanceof XmlComplexType).map(xmlField -> (XmlComplexType) xmlField)
+                .collect(Collectors.toList());
         Assert.assertThat(complexTypeList.size(), Is.is(0));
 
-//        debugFields(xmlDocument.getFields());
+        // debugFields(xmlDocument.getFields());
     }
 
     @Test
     public void testInspectXmlStringAsSourceElementsWithAttrs() throws Exception {
-        final String source =
-            "<data>\n" +
-                "     <intField a='1'>32000</intField>\n" +
-                "     <longField>12421</longField>\n" +
-                "     <stringField>abc</stringField>\n" +
-                "     <booleanField>true</booleanField>\n" +
-                "     <doubleField b='2'>12.0</doubleField>\n" +
-                "     <shortField>1000</shortField>\n" +
-                "     <floatField>234.5f</floatField>\n" +
-                "     <charField>A</charField>\n" +
-                "</data>";
+        final String source = "<data>\n" + "     <intField a='1'>32000</intField>\n"
+                + "     <longField>12421</longField>\n" + "     <stringField>abc</stringField>\n"
+                + "     <booleanField>true</booleanField>\n" + "     <doubleField b='2'>12.0</doubleField>\n"
+                + "     <shortField>1000</shortField>\n" + "     <floatField>234.5f</floatField>\n"
+                + "     <charField>A</charField>\n" + "</data>";
         XmlDocumentInspectionService service = new XmlDocumentInspectionService();
         XmlDocument xmlDocument = service.inspectXmlDocument(source);
         Assert.assertNotNull(xmlDocument);
@@ -96,14 +83,13 @@ public class XmlDocumentInspectionServiceTest {
         XmlComplexType root = (XmlComplexType) xmlDocument.getFields().getField().get(0);
         Assert.assertNotNull(root);
         Assert.assertThat(root.getXmlFields().getXmlField().size(), Is.is(10));
-//        debugFields(xmlDocument.getFields());
+        // debugFields(xmlDocument.getFields());
     }
 
     @Test
     public void testInspectXmlStringAsSourceUsingAttrs() throws Exception {
-        final String source =
-            "<data intField='32000' longField='12421' stringField='abc' " +
-                "booleanField='true' doubleField='12.0' shortField='1000' floatField='234.5f' charField='A' />";
+        final String source = "<data intField='32000' longField='12421' stringField='abc' "
+                + "booleanField='true' doubleField='12.0' shortField='1000' floatField='234.5f' charField='A' />";
         XmlDocumentInspectionService service = new XmlDocumentInspectionService();
         XmlDocument xmlDocument = service.inspectXmlDocument(source);
         Assert.assertNotNull(xmlDocument);
@@ -112,27 +98,21 @@ public class XmlDocumentInspectionServiceTest {
         XmlComplexType root = (XmlComplexType) xmlDocument.getFields().getField().get(0);
         Assert.assertNotNull(root);
         Assert.assertThat(root.getXmlFields().getXmlField().size(), Is.is(8));
-//        debugFields(xmlDocument.getFields());
+        // debugFields(xmlDocument.getFields());
     }
 
     @Test
     public void testInspectXmlStringWithDefaultNamespace() throws Exception {
-        final String source =
-            "<data xmlns=\"http://x.namespace.com/\">\n" +
-                "     <intField>32000</intField>\n" +
-                "     <longField>12421</longField>\n" +
-                "     <stringField>abc</stringField>\n" +
-                "     <booleanField>true</booleanField>\n" +
-                "     <doubleField>12.0</doubleField>\n" +
-                "     <shortField>1000</shortField>\n" +
-                "     <floatField>234.5f</floatField>\n" +
-                "     <charField>A</charField>\n" +
-                "</data>";
+        final String source = "<data xmlns=\"http://x.namespace.com/\">\n" + "     <intField>32000</intField>\n"
+                + "     <longField>12421</longField>\n" + "     <stringField>abc</stringField>\n"
+                + "     <booleanField>true</booleanField>\n" + "     <doubleField>12.0</doubleField>\n"
+                + "     <shortField>1000</shortField>\n" + "     <floatField>234.5f</floatField>\n"
+                + "     <charField>A</charField>\n" + "</data>";
         XmlDocumentInspectionService service = new XmlDocumentInspectionService();
         XmlDocument xmlDocument = service.inspectXmlDocument(source);
         Assert.assertNotNull(xmlDocument);
 
-        //check for namespace
+        // check for namespace
         Assert.assertNotNull(xmlDocument.getXmlNamespaces());
         XmlNamespace namespace = xmlDocument.getXmlNamespaces().getXmlNamespace().get(0);
         Assert.assertThat(xmlDocument.getXmlNamespaces().getXmlNamespace().size(), Is.is(1));
@@ -145,27 +125,21 @@ public class XmlDocumentInspectionServiceTest {
         XmlComplexType root = (XmlComplexType) xmlDocument.getFields().getField().get(0);
         Assert.assertNotNull(root);
         Assert.assertThat(root.getXmlFields().getXmlField().size(), Is.is(8));
-//        debugFields(xmlDocument.getFields());
+        // debugFields(xmlDocument.getFields());
     }
 
     @Test
     public void testInspectXmlStringWithNamespaces() throws Exception {
-        final String source =
-            "<x:data xmlns:x=\"http://x.namespace.com/\">\n" +
-                "     <x:intField>32000</x:intField>\n" +
-                "     <x:longField>12421</x:longField>\n" +
-                "     <x:stringField>abc</x:stringField>\n" +
-                "     <x:booleanField>true</x:booleanField>\n" +
-                "     <x:doubleField>12.0</x:doubleField>\n" +
-                "     <x:shortField>1000</x:shortField>\n" +
-                "     <x:floatField>234.5f</x:floatField>\n" +
-                "     <x:charField>A</x:charField>\n" +
-                "</x:data>";
+        final String source = "<x:data xmlns:x=\"http://x.namespace.com/\">\n" + "     <x:intField>32000</x:intField>\n"
+                + "     <x:longField>12421</x:longField>\n" + "     <x:stringField>abc</x:stringField>\n"
+                + "     <x:booleanField>true</x:booleanField>\n" + "     <x:doubleField>12.0</x:doubleField>\n"
+                + "     <x:shortField>1000</x:shortField>\n" + "     <x:floatField>234.5f</x:floatField>\n"
+                + "     <x:charField>A</x:charField>\n" + "</x:data>";
         XmlDocumentInspectionService service = new XmlDocumentInspectionService();
         XmlDocument xmlDocument = service.inspectXmlDocument(source);
         Assert.assertNotNull(xmlDocument);
         Assert.assertNotNull(xmlDocument.getFields());
-        //check for namespace
+        // check for namespace
         Assert.assertNotNull(xmlDocument.getXmlNamespaces());
         XmlNamespace namespace = xmlDocument.getXmlNamespaces().getXmlNamespace().get(0);
         Assert.assertThat(xmlDocument.getXmlNamespaces().getXmlNamespace().size(), Is.is(1));
@@ -178,19 +152,18 @@ public class XmlDocumentInspectionServiceTest {
         XmlComplexType root = (XmlComplexType) xmlDocument.getFields().getField().get(0);
         Assert.assertNotNull(root);
         Assert.assertThat(root.getXmlFields().getXmlField().size(), Is.is(8));
-//        debugFields(xmlDocument.getFields());
+        // debugFields(xmlDocument.getFields());
     }
 
     @Test
     public void testInspectXmlStringAsSourceAttrsWithNamespace() throws Exception {
-        final String source =
-            "<data xmlns:y=\"http://y.namespace.com/\" y:intField='32000' longField='12421' stringField='abc' " +
-                "booleanField='true' doubleField='12.0' shortField='1000' floatField='234.5f' y:charField='A' />";
+        final String source = "<data xmlns:y=\"http://y.namespace.com/\" y:intField='32000' longField='12421' stringField='abc' "
+                + "booleanField='true' doubleField='12.0' shortField='1000' floatField='234.5f' y:charField='A' />";
         XmlDocumentInspectionService service = new XmlDocumentInspectionService();
         XmlDocument xmlDocument = service.inspectXmlDocument(source);
         Assert.assertNotNull(xmlDocument);
         Assert.assertNotNull(xmlDocument.getFields());
-        //check for namespace
+        // check for namespace
         Assert.assertNotNull(xmlDocument.getXmlNamespaces());
         Assert.assertThat(xmlDocument.getXmlNamespaces().getXmlNamespace().size(), Is.is(1));
         XmlNamespace namespace = xmlDocument.getXmlNamespaces().getXmlNamespace().get(0);
@@ -203,22 +176,19 @@ public class XmlDocumentInspectionServiceTest {
         XmlComplexType root = (XmlComplexType) xmlDocument.getFields().getField().get(0);
         Assert.assertNotNull(root);
         Assert.assertThat(root.getXmlFields().getXmlField().size(), Is.is(8));
-//        debugFields(xmlDocument.getFields());
+        // debugFields(xmlDocument.getFields());
     }
 
     @Test
     public void testInspectXmlStringAsSource_MultipleChildren() throws Exception {
-        final String source =
-            "<data>\n" +
-                "     <intFields><int>3200</int><int>2500</int><int>15</int></intFields>\n" +
-                "     <longFields><long>12421</long></longFields>\n" +
-                "     <stringFields><string>abc</string></stringFields>\n" +
-                "     <booleanFields><boolean>true</boolean></booleanFields>\n" +
-                "     <doubleFields><double>12.0</double></doubleFields>\n" +
-                "     <shortFields><short>1000</short></shortFields>\n" +
-                "     <floatFields><float>234.5f</float></floatFields>\n" +
-                "     <charFields><char>A</char></charFields>\n" +
-                "</data>";
+        final String source = "<data>\n" + "     <intFields><int>3200</int><int>2500</int><int>15</int></intFields>\n"
+                + "     <longFields><long>12421</long></longFields>\n"
+                + "     <stringFields><string>abc</string></stringFields>\n"
+                + "     <booleanFields><boolean>true</boolean></booleanFields>\n"
+                + "     <doubleFields><double>12.0</double></doubleFields>\n"
+                + "     <shortFields><short>1000</short></shortFields>\n"
+                + "     <floatFields><float>234.5f</float></floatFields>\n"
+                + "     <charFields><char>A</char></charFields>\n" + "</data>";
         XmlDocumentInspectionService service = new XmlDocumentInspectionService();
         XmlDocument xmlDocument = service.inspectXmlDocument(source);
         Assert.assertNotNull(xmlDocument);
@@ -227,7 +197,7 @@ public class XmlDocumentInspectionServiceTest {
         XmlComplexType root = (XmlComplexType) xmlDocument.getFields().getField().get(0);
         Assert.assertNotNull(root);
         Assert.assertThat(root.getXmlFields().getXmlField().size(), Is.is(8));
-        //children
+        // children
         XmlComplexType childZero = (XmlComplexType) root.getXmlFields().getXmlField().get(0);
         Assert.assertNotNull(childZero);
         Assert.assertThat(childZero.getXmlFields().getXmlField().size(), Is.is(3));
@@ -243,22 +213,14 @@ public class XmlDocumentInspectionServiceTest {
         Assert.assertThat(childZeroOne.getValue(), Is.is("2500"));
         Assert.assertThat(childZeroOne.getPath(), Is.is("/data/intFields/int[1]"));
 
-//        debugFields(xmlDocument.getFields());
+        // debugFields(xmlDocument.getFields());
     }
 
     @Test
     public void testInspectXmlStringAsSource_AT370_A() throws Exception {
-        final String source =
-            "<order>\n" +
-                "   <orders>\n" +
-                "      <order>\n" +
-                "\t      <items>\n" +
-                "\t\t     <item sku=\"4\"/>\n" +
-                "\t\t     <item sku=\"5\"/>\n" +
-                "\t      </items>\n" +
-                "      </order>\n" +
-                "   </orders>\n" +
-                "</order>";
+        final String source = "<order>\n" + "   <orders>\n" + "      <order>\n" + "\t      <items>\n"
+                + "\t\t     <item sku=\"4\"/>\n" + "\t\t     <item sku=\"5\"/>\n" + "\t      </items>\n"
+                + "      </order>\n" + "   </orders>\n" + "</order>";
         XmlDocumentInspectionService service = new XmlDocumentInspectionService();
         XmlDocument xmlDocument = service.inspectXmlDocument(source);
         Assert.assertNotNull(xmlDocument);
@@ -267,28 +229,16 @@ public class XmlDocumentInspectionServiceTest {
         XmlComplexType root = (XmlComplexType) xmlDocument.getFields().getField().get(0);
         Assert.assertNotNull(root);
         Assert.assertThat(root.getXmlFields().getXmlField().size(), Is.is(1));
-//        debugFields(xmlDocument.getFields());
+        // debugFields(xmlDocument.getFields());
     }
 
     @Test
     public void testInspectXmlStringAsSource_AT370_B() throws Exception {
-        final String source =
-            "<order>\n" +
-                "   <orders>\n" +
-                "      <order>\n" +
-                "\t      <items>\n" +
-                "\t\t     <item sku=\"4\"/>\n" +
-                "\t\t     <item sku=\"7\"/>\n" +
-                "\t      </items>\n" +
-                "      </order>\n" +
-                "      <order>\n" +
-                "\t      <items>\n" +
-                "\t\t     <item sku=\"5\"/>\n" +
-                "\t\t     <item sku=\"8\"/>\n" +
-                "\t      </items>\n" +
-                "      </order>\n" +
-                "   </orders>\n" +
-                "</order>";
+        final String source = "<order>\n" + "   <orders>\n" + "      <order>\n" + "\t      <items>\n"
+                + "\t\t     <item sku=\"4\"/>\n" + "\t\t     <item sku=\"7\"/>\n" + "\t      </items>\n"
+                + "      </order>\n" + "      <order>\n" + "\t      <items>\n" + "\t\t     <item sku=\"5\"/>\n"
+                + "\t\t     <item sku=\"8\"/>\n" + "\t      </items>\n" + "      </order>\n" + "   </orders>\n"
+                + "</order>";
         XmlDocumentInspectionService service = new XmlDocumentInspectionService();
         XmlDocument xmlDocument = service.inspectXmlDocument(source);
         Assert.assertNotNull(xmlDocument);
@@ -297,13 +247,13 @@ public class XmlDocumentInspectionServiceTest {
         XmlComplexType root = (XmlComplexType) xmlDocument.getFields().getField().get(0);
         Assert.assertNotNull(root);
         Assert.assertThat(root.getXmlFields().getXmlField().size(), Is.is(1));
-//        debugFields(xmlDocument.getFields());
+        // debugFields(xmlDocument.getFields());
     }
-
 
     @Test
     public void testInspectInstanceFileWithXSIType() throws Exception {
-        final String instance = new String(Files.readAllBytes(Paths.get("src/test/resources/inspect/xsi-type-instance.xml")));
+        final String instance = new String(
+                Files.readAllBytes(Paths.get("src/test/resources/inspect/xsi-type-instance.xml")));
         XmlDocumentInspectionService service = new XmlDocumentInspectionService();
         XmlDocument xmlDocument = service.inspectXmlDocument(instance);
         Assert.assertNotNull(xmlDocument);
@@ -312,9 +262,8 @@ public class XmlDocumentInspectionServiceTest {
         XmlComplexType root = (XmlComplexType) xmlDocument.getFields().getField().get(0);
         Assert.assertNotNull(root);
         Assert.assertThat(root.getXmlFields().getXmlField().size(), Is.is(8));
-//        debugFields(xmlDocument.getFields());
+        // debugFields(xmlDocument.getFields());
     }
-
 
     @Test(expected = IllegalArgumentException.class)
     public void testInspectXmlStringAsSource_Null() throws Exception {
@@ -344,34 +293,26 @@ public class XmlDocumentInspectionServiceTest {
         service.inspectXmlDocument(xmlDocument);
     }
 
-
     @Test(expected = XmlInspectionException.class)
     public void testInspectXmlStringAsSource_BadHeaderWithBOM() throws Exception {
         XmlDocumentInspectionService service = new XmlDocumentInspectionService();
-        String xmlDocument = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\\ufeff" +
-            "<foo>bar</foo>";
+        String xmlDocument = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\\ufeff" + "<foo>bar</foo>";
         service.inspectXmlDocument(xmlDocument);
     }
 
     @Test
     public void testInspectSchemaString() throws Exception {
-        final String source =
-            "<xs:schema attributeFormDefault=\"unqualified\" elementFormDefault=\"qualified\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\">\n" +
-                "  <xs:element name=\"data\">\n" +
-                "    <xs:complexType>\n" +
-                "      <xs:sequence>\n" +
-                "        <xs:element type=\"xs:int\" name=\"intField\"/>\n" +
-                "        <xs:element type=\"xs:long\" name=\"longField\"/>\n" +
-                "        <xs:element type=\"xs:string\" name=\"stringField\"/>\n" +
-                "        <xs:element type=\"xs:boolean\" name=\"booleanField\"/>\n" +
-                "        <xs:element type=\"xs:double\" name=\"doubleField\"/>\n" +
-                "        <xs:element type=\"xs:short\" name=\"shortField\"/>\n" +
-                "        <xs:element type=\"xs:float\" name=\"floatField\"/>\n" +
-                "        <xs:element type=\"xs:string\" name=\"charField\"/>\n" +
-                "      </xs:sequence>\n" +
-                "    </xs:complexType>\n" +
-                "  </xs:element>\n" +
-                "</xs:schema>";
+        final String source = "<xs:schema attributeFormDefault=\"unqualified\" elementFormDefault=\"qualified\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\">\n"
+                + "  <xs:element name=\"data\">\n" + "    <xs:complexType>\n" + "      <xs:sequence>\n"
+                + "        <xs:element type=\"xs:int\" name=\"intField\"/>\n"
+                + "        <xs:element type=\"xs:long\" name=\"longField\"/>\n"
+                + "        <xs:element type=\"xs:string\" name=\"stringField\"/>\n"
+                + "        <xs:element type=\"xs:boolean\" name=\"booleanField\"/>\n"
+                + "        <xs:element type=\"xs:double\" name=\"doubleField\"/>\n"
+                + "        <xs:element type=\"xs:short\" name=\"shortField\"/>\n"
+                + "        <xs:element type=\"xs:float\" name=\"floatField\"/>\n"
+                + "        <xs:element type=\"xs:string\" name=\"charField\"/>\n" + "      </xs:sequence>\n"
+                + "    </xs:complexType>\n" + "  </xs:element>\n" + "</xs:schema>";
 
         XmlDocumentInspectionService service = new XmlDocumentInspectionService();
         XmlDocument xmlDocument = service.inspectSchema(source);
@@ -381,7 +322,7 @@ public class XmlDocumentInspectionServiceTest {
         XmlComplexType root = (XmlComplexType) xmlDocument.getFields().getField().get(0);
         Assert.assertNotNull(root);
         Assert.assertThat(root.getXmlFields().getXmlField().size(), Is.is(8));
-//        debugFields(xmlDocument.getFields());
+        // debugFields(xmlDocument.getFields());
     }
 
     @Test
@@ -395,7 +336,7 @@ public class XmlDocumentInspectionServiceTest {
         XmlComplexType root = (XmlComplexType) xmlDocument.getFields().getField().get(0);
         Assert.assertNotNull(root);
         Assert.assertThat(root.getXmlFields().getXmlField().size(), Is.is(8));
-//        debugFields(xmlDocument.getFields());
+        // debugFields(xmlDocument.getFields());
     }
 
     @Test
@@ -411,7 +352,7 @@ public class XmlDocumentInspectionServiceTest {
         XmlComplexType root = (XmlComplexType) xmlDocument.getFields().getField().get(0);
         Assert.assertNotNull(root);
         Assert.assertThat(root.getXmlFields().getXmlField().size(), Is.is(9));
-//        debugFields(xmlDocument.getFields());
+        // debugFields(xmlDocument.getFields());
     }
 
     @Test
@@ -431,7 +372,7 @@ public class XmlDocumentInspectionServiceTest {
         XmlNamespace namespace = xmlDocument.getXmlNamespaces().getXmlNamespace().get(0);
         Assert.assertThat(namespace.getAlias(), Is.is("tns"));
         Assert.assertThat(namespace.getUri(), Is.is("http://example.com/"));
-//        debugFields(xmlDocument.getFields());
+        // debugFields(xmlDocument.getFields());
     }
 
     @Test
@@ -448,34 +389,33 @@ public class XmlDocumentInspectionServiceTest {
         Assert.assertNotNull(root);
         Assert.assertThat(root.getXmlFields().getXmlField().size(), Is.is(4));
 
-        //@orderId
+        // @orderId
         XmlField orderIdAttr = root.getXmlFields().getXmlField().get(0);
         Assert.assertNotNull(orderIdAttr);
         Assert.assertThat(orderIdAttr.getName(), Is.is("orderid"));
         Assert.assertThat(orderIdAttr.getValue(), Is.is("2"));
         Assert.assertThat(orderIdAttr.getPath(), Is.is("/shiporder/@orderid"));
         Assert.assertThat(orderIdAttr.getFieldType(), Is.is(FieldType.STRING));
-        //orderperson
+        // orderperson
         XmlField orderPerson = root.getXmlFields().getXmlField().get(1);
         Assert.assertNotNull(orderPerson);
         Assert.assertThat(orderPerson.getName(), Is.is("orderperson"));
         Assert.assertNull(orderPerson.getValue());
         Assert.assertThat(orderPerson.getPath(), Is.is("/shiporder/orderperson"));
         Assert.assertThat(orderPerson.getFieldType(), Is.is(FieldType.STRING));
-        //shipTo
+        // shipTo
         XmlField shipTo = root.getXmlFields().getXmlField().get(2);
         Assert.assertNotNull(shipTo);
         Assert.assertTrue(shipTo instanceof XmlComplexType);
         Assert.assertThat(((XmlComplexType) shipTo).getXmlFields().getXmlField().size(), Is.is(4));
-        //item
+        // item
         XmlField item = root.getXmlFields().getXmlField().get(3);
         Assert.assertNotNull(item);
         Assert.assertTrue(item instanceof XmlComplexType);
         Assert.assertThat(((XmlComplexType) item).getXmlFields().getXmlField().size(), Is.is(4));
 
-//        debugFields(xmlDocument.getFields());
+        // debugFields(xmlDocument.getFields());
     }
-
 
     @Test
     public void testInspectPOExampleSchemaFile() throws Exception {
@@ -488,12 +428,12 @@ public class XmlDocumentInspectionServiceTest {
         Assert.assertNotNull(xmlDocument.getFields());
         Assert.assertThat(xmlDocument.getFields().getField().size(), Is.is(2));
 
-        //PurchaseOrderType
+        // PurchaseOrderType
         XmlComplexType purchaseOrder = (XmlComplexType) xmlDocument.getFields().getField().get(0);
         Assert.assertNotNull(purchaseOrder);
         Assert.assertThat(purchaseOrder.getXmlFields().getXmlField().size(), Is.is(5));
 
-        //orderDate
+        // orderDate
         XmlField orderDateAttr = purchaseOrder.getXmlFields().getXmlField().get(0);
         Assert.assertNotNull(orderDateAttr);
         Assert.assertThat(orderDateAttr.getName(), Is.is("orderDate"));
@@ -501,7 +441,7 @@ public class XmlDocumentInspectionServiceTest {
         Assert.assertThat(orderDateAttr.getPath(), Is.is("/purchaseOrder/@orderDate"));
         Assert.assertThat(orderDateAttr.getFieldType(), Is.is(FieldType.DATE));
 
-        //shipTo
+        // shipTo
         XmlField shipTo = purchaseOrder.getXmlFields().getXmlField().get(1);
         Assert.assertNotNull(shipTo);
         Assert.assertThat(shipTo.getName(), Is.is("shipTo"));
@@ -509,7 +449,7 @@ public class XmlDocumentInspectionServiceTest {
         Assert.assertThat(shipTo.getPath(), Is.is("/purchaseOrder/shipTo"));
         Assert.assertThat(shipTo.getFieldType(), Is.is(FieldType.COMPLEX));
         Assert.assertThat(((XmlComplexType) shipTo).getXmlFields().getXmlField().size(), Is.is(6));
-        //shipTo/@country
+        // shipTo/@country
         XmlField shipToCountry = ((XmlComplexType) shipTo).getXmlFields().getXmlField().get(0);
         Assert.assertNotNull(shipTo);
         Assert.assertThat(shipToCountry.getName(), Is.is("country"));
@@ -524,14 +464,12 @@ public class XmlDocumentInspectionServiceTest {
         Assert.assertThat(shipToName.getPath(), Is.is("/purchaseOrder/shipTo/name"));
         Assert.assertThat(shipToName.getFieldType(), Is.is(FieldType.STRING));
 
-
         XmlField shipToStreet = ((XmlComplexType) shipTo).getXmlFields().getXmlField().get(2);
         Assert.assertNotNull(shipToStreet);
         Assert.assertThat(shipToStreet.getName(), Is.is("street"));
         Assert.assertNull(shipToStreet.getValue());
         Assert.assertThat(shipToStreet.getPath(), Is.is("/purchaseOrder/shipTo/street"));
         Assert.assertThat(shipToStreet.getFieldType(), Is.is(FieldType.STRING));
-
 
         XmlField shipToCity = ((XmlComplexType) shipTo).getXmlFields().getXmlField().get(3);
         Assert.assertNotNull(shipToCity);
@@ -554,14 +492,14 @@ public class XmlDocumentInspectionServiceTest {
         Assert.assertThat(shipToZip.getPath(), Is.is("/purchaseOrder/shipTo/zip"));
         Assert.assertThat(shipToZip.getFieldType(), Is.is(FieldType.DECIMAL));
 
-        //comment
+        // comment
         XmlField comment = purchaseOrder.getXmlFields().getXmlField().get(3);
         Assert.assertNotNull(comment);
         Assert.assertThat(comment.getName(), Is.is("comment"));
         Assert.assertNull(comment.getValue());
         Assert.assertThat(comment.getPath(), Is.is("/purchaseOrder/comment"));
         Assert.assertThat(comment.getFieldType(), Is.is(FieldType.STRING));
-        //items
+        // items
         XmlField items = purchaseOrder.getXmlFields().getXmlField().get(4);
         Assert.assertNotNull(items);
         Assert.assertThat(items.getName(), Is.is("items"));
@@ -571,7 +509,7 @@ public class XmlDocumentInspectionServiceTest {
 
         Assert.assertThat(((XmlComplexType) items).getXmlFields().getXmlField().size(), Is.is(1));
 
-        //items/item
+        // items/item
         XmlComplexType item = (XmlComplexType) ((XmlComplexType) items).getXmlFields().getXmlField().get(0);
         Assert.assertNotNull(item);
         Assert.assertThat(item.getName(), Is.is("item"));
@@ -581,7 +519,7 @@ public class XmlDocumentInspectionServiceTest {
         Assert.assertThat(item.getCollectionType(), Is.is(CollectionType.LIST));
         Assert.assertThat(item.getXmlFields().getXmlField().size(), Is.is(6));
 
-        //partNum
+        // partNum
         XmlField partNum = item.getXmlFields().getXmlField().get(0);
         Assert.assertNotNull(partNum);
         Assert.assertThat(partNum.getName(), Is.is("partNum"));
@@ -590,7 +528,7 @@ public class XmlDocumentInspectionServiceTest {
         Assert.assertThat(partNum.getFieldType(), Is.is(FieldType.STRING));
         Assert.assertThat(partNum.getTypeName(), Is.is("SKU"));
 
-        //productName
+        // productName
         XmlField productName = item.getXmlFields().getXmlField().get(1);
         Assert.assertNotNull(productName);
         Assert.assertThat(productName.getName(), Is.is("productName"));
@@ -598,7 +536,7 @@ public class XmlDocumentInspectionServiceTest {
         Assert.assertThat(productName.getPath(), Is.is("/purchaseOrder/items/item/productName"));
         Assert.assertThat(productName.getFieldType(), Is.is(FieldType.STRING));
 
-        //quantity
+        // quantity
         XmlField quantity = item.getXmlFields().getXmlField().get(2);
         Assert.assertNotNull(quantity);
         Assert.assertThat(quantity.getName(), Is.is("quantity"));
@@ -614,7 +552,7 @@ public class XmlDocumentInspectionServiceTest {
         Assert.assertNotNull(qRestriction.getValue());
         Assert.assertThat(qRestriction.getValue(), Is.is("99"));
 
-        //USPrice
+        // USPrice
         XmlField usPrice = item.getXmlFields().getXmlField().get(3);
         Assert.assertNotNull(usPrice);
         Assert.assertThat(usPrice.getName(), Is.is("USPrice"));
@@ -622,7 +560,7 @@ public class XmlDocumentInspectionServiceTest {
         Assert.assertThat(usPrice.getPath(), Is.is("/purchaseOrder/items/item/USPrice"));
         Assert.assertThat(usPrice.getFieldType(), Is.is(FieldType.DECIMAL));
 
-        //comment
+        // comment
         XmlField itemComment = item.getXmlFields().getXmlField().get(4);
         Assert.assertNotNull(itemComment);
         Assert.assertThat(itemComment.getName(), Is.is("comment"));
@@ -630,7 +568,7 @@ public class XmlDocumentInspectionServiceTest {
         Assert.assertThat(itemComment.getPath(), Is.is("/purchaseOrder/items/item/comment"));
         Assert.assertThat(itemComment.getFieldType(), Is.is(FieldType.STRING));
 
-        //shipDate
+        // shipDate
         XmlField shipDate = item.getXmlFields().getXmlField().get(5);
         Assert.assertNotNull(shipDate);
         Assert.assertThat(shipDate.getName(), Is.is("shipDate"));
@@ -647,9 +585,8 @@ public class XmlDocumentInspectionServiceTest {
         Assert.assertThat(namespace.getAlias(), Is.is("tns"));
         Assert.assertThat(namespace.getUri(), Is.is("http://tempuri.org/po.xsd"));
 
-//        debugFields(xmlDocument.getFields());
+        // debugFields(xmlDocument.getFields());
     }
-
 
     @Test(expected = IllegalArgumentException.class)
     public void testInspectSchemaStringAsSource_Null() throws Exception {
@@ -672,11 +609,9 @@ public class XmlDocumentInspectionServiceTest {
         service.inspectSchema(schema);
     }
 
-
     @Test(expected = XmlInspectionException.class)
     public void testInspectSchemaBad() throws Exception {
-        final String source =
-            "<xs:schema/>";
+        final String source = "<xs:schema/>";
         XmlDocumentInspectionService service = new XmlDocumentInspectionService();
         XmlDocument xmlDocument = service.inspectSchema(source);
     }

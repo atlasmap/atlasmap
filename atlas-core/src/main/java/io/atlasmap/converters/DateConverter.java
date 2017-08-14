@@ -203,5 +203,4 @@ public class DateConverter implements AtlasConverter<Date> {
         return Date.from(Instant.ofEpochMilli(date));
     }
 
-
 }

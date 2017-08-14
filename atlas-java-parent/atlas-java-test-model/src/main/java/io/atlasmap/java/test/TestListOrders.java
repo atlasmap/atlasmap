@@ -14,17 +14,17 @@ public class TestListOrders {
     public void setOrders(List<BaseOrder> orders) {
         this.orders = orders;
     }
-    
-    public List<Long> getOrderIds() {
-		return orderIds;
-	}
-    
-    public void setOrderIds(List<Long> orderIds) {
-		this.orderIds = orderIds;
-	}
 
-	@Override
-	public String toString() {
-		return "TestListOrders [orders=" + orders + ", orderIds=" + orderIds + "]";
-	}            
+    public List<Long> getOrderIds() {
+        return orderIds;
+    }
+
+    public void setOrderIds(List<Long> orderIds) {
+        this.orderIds = orderIds;
+    }
+
+    @Override
+    public String toString() {
+        return "TestListOrders [orders=" + orders + ", orderIds=" + orderIds + "]";
+    }
 }

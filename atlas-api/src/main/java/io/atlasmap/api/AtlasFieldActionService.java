@@ -24,5 +24,6 @@ import java.util.List;
 public interface AtlasFieldActionService {
 
     List<ActionDetail> listActionDetails();
+
     Object processActions(Actions actions, Object object, FieldType targetType) throws AtlasException;
 }

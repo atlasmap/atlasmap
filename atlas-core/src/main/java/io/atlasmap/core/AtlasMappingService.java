@@ -46,13 +46,17 @@ import java.util.List;
 public class AtlasMappingService implements Serializable {
 
     public enum AtlasMappingFormat {
-        XML("xml"),
-        JSON("json");
+        XML("xml"), JSON("json");
 
         private String value;
 
-        private AtlasMappingFormat(String value) { this.value = value; }
-        public String value() { return value; }
+        private AtlasMappingFormat(String value) {
+            this.value = value;
+        }
+
+        public String value() {
+            return value;
+        }
     }
 
     private static final long serialVersionUID = 1668362984516180517L;
@@ -88,7 +92,7 @@ public class AtlasMappingService implements Serializable {
 
         if (getJAXBContext() == null) {
             setJAXBContext(JAXBContext.newInstance(stringListToColonSeparated(packages)));
-            if(logger.isDebugEnabled()) {
+            if (logger.isDebugEnabled()) {
                 logger.debug("Initialized JAXBContext: " + stringListToColonSeparated(packages));
             }
         }
@@ -98,11 +102,11 @@ public class AtlasMappingService implements Serializable {
         jaxbUnmarshaller = getJAXBContext().createUnmarshaller();
         jsonMapper = new AtlasJsonMapper();
     }
-    
+
     public AtlasMapping loadMapping(File file) throws AtlasValidationException {
         return loadMapping(file, AtlasMappingFormat.XML);
     }
-    
+
     public AtlasMapping loadMapping(File file, AtlasMappingFormat format) throws AtlasValidationException {
         try {
             AtlasMapping atlasMapping;
@@ -123,11 +127,11 @@ public class AtlasMappingService implements Serializable {
             throw new AtlasValidationException(e.getMessage(), e);
         }
     }
-    
+
     public AtlasMapping loadMapping(Reader reader) throws AtlasValidationException {
         return loadMapping(reader, AtlasMappingFormat.XML);
     }
-    
+
     public AtlasMapping loadMapping(Reader reader, AtlasMappingFormat format) throws AtlasValidationException {
         try {
             AtlasMapping atlasMapping;
@@ -148,35 +152,36 @@ public class AtlasMappingService implements Serializable {
             throw new AtlasValidationException(e.getMessage(), e);
         }
     }
-    
+
     public AtlasMapping loadMapping(String fileName, AtlasMappingFormat format) throws AtlasValidationException {
         return loadMapping(new File(fileName), format);
     }
-    
+
     public AtlasMapping loadMapping(String fileName) throws AtlasValidationException {
         return loadMapping(fileName, AtlasMappingFormat.XML);
     }
-    
+
     public AtlasMapping loadMapping(InputStream inputStream) throws AtlasValidationException {
         return loadMapping(inputStream, AtlasMappingFormat.XML);
     }
-    
-    public AtlasMapping loadMapping(InputStream inputStream, AtlasMappingFormat format) throws AtlasValidationException {
+
+    public AtlasMapping loadMapping(InputStream inputStream, AtlasMappingFormat format)
+            throws AtlasValidationException {
         return loadMapping(new InputStreamReader(inputStream), format);
     }
-    
+
     public AtlasMapping loadMapping(URI uri) throws AtlasValidationException {
         return loadMapping(uri, AtlasMappingFormat.XML);
     }
-    
+
     public AtlasMapping loadMapping(URI uri, AtlasMappingFormat format) throws AtlasValidationException {
         return loadMapping(new File(uri), format);
     }
-    
+
     public AtlasMapping loadMapping(URL url) throws AtlasValidationException {
         return loadMapping(url, AtlasMappingFormat.XML);
     }
-    
+
     public AtlasMapping loadMapping(URL url, AtlasMappingFormat format) throws AtlasValidationException {
         try {
             return loadMapping(new File(url.toURI()), format);
@@ -184,16 +189,23 @@ public class AtlasMappingService implements Serializable {
             throw new AtlasValidationException(e.getMessage(), e);
         }
     }
-    
+
     public void saveMappingAsFile(AtlasMapping atlasMapping, File file) throws AtlasException {
         saveMappingAsFile(atlasMapping, file, AtlasMappingFormat.XML);
     }
 
-    public void saveMappingAsFile(AtlasMapping atlasMapping, File file, AtlasMappingFormat format) throws AtlasException {
-        switch(format) {
-        case JSON: saveMappingAsJsonFile(atlasMapping, file); break;
-        case XML: saveMappingAsXmlFile(atlasMapping, file); break;
-        default: saveMappingAsXmlFile(atlasMapping, file); break;
+    public void saveMappingAsFile(AtlasMapping atlasMapping, File file, AtlasMappingFormat format)
+            throws AtlasException {
+        switch (format) {
+        case JSON:
+            saveMappingAsJsonFile(atlasMapping, file);
+            break;
+        case XML:
+            saveMappingAsXmlFile(atlasMapping, file);
+            break;
+        default:
+            saveMappingAsXmlFile(atlasMapping, file);
+            break;
         }
     }
 
@@ -207,16 +219,17 @@ public class AtlasMappingService implements Serializable {
 
     protected void saveMappingAsXmlFile(AtlasMapping atlasMapping, File file) throws AtlasException {
         try {
-            jaxbMarshaller.marshal(atlasMapping ,file);
+            jaxbMarshaller.marshal(atlasMapping, file);
         } catch (JAXBException e) {
             throw new AtlasValidationException(e.getMessage(), e);
-        }       
+        }
     }
 
     public void validate(AtlasMapping atlasMapping) throws AtlasValidationException {
-        //		if(atlasMapping == null || atlasMapping.getName() == null) {
-        //			throw new AtlasValidationException("AtlasMapping and name must be specified");
-        //		}
+        // if(atlasMapping == null || atlasMapping.getName() == null) {
+        // throw new AtlasValidationException("AtlasMapping and name must be
+        // specified");
+        // }
     }
 
     public JAXBContext getJAXBContext() {
@@ -246,32 +259,32 @@ public class AtlasMappingService implements Serializable {
     public ObjectMapper getObjectMapper() {
         return jsonMapper;
     }
-    
+
     public void setObjectMapper(ObjectMapper mapper) {
         this.jsonMapper = mapper;
     }
-    
+
     private String stringListToColonSeparated(List<String> items) {
         StringBuilder buffer = new StringBuilder(CONFIG_V2_PACKAGE);
 
-        if(items == null) {
+        if (items == null) {
             return null;
         }
 
-        if(items.isEmpty()) {
+        if (items.isEmpty()) {
             return buffer.toString();
         }
 
         boolean first = true;
-        for (int i=0; i<items.size(); i++) {
-            if(!CONFIG_V2_PACKAGE.equals(items.get(i))) {
-                if(first) {
+        for (int i = 0; i < items.size(); i++) {
+            if (!CONFIG_V2_PACKAGE.equals(items.get(i))) {
+                if (first) {
                     buffer.append(":");
                     first = false;
                 }
                 buffer.append(items.get(i));
 
-                if(i < items.size()-1 ) {
+                if (i < items.size() - 1) {
                     buffer.append(":");
                 }
             }

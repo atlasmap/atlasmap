@@ -16,39 +16,70 @@
     limitations under the License.
 
 -->
-<AtlasMapping xmlns="http://atlasmap.io/v2" xmlns:ns2="http://atlasmap.io/java/v2" name="UI.820809" sourceUri="atlas:java?className=twitter4j.Status" targetUri="atlas:java?className=org.apache.camel.salesforce.dto.Contact">
+<AtlasMapping xmlns="http://atlasmap.io/v2" xmlns:ns2="http://atlasmap.io/java/v2"
+    name="UI.820809" sourceUri="atlas:java?className=twitter4j.Status"
+    targetUri="atlas:java?className=org.apache.camel.salesforce.dto.Contact">
     <FieldMappings>
-        <FieldMapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="MapFieldMapping">
+        <FieldMapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:type="MapFieldMapping">
             <InputField>
-                <Field xsi:type="ns2:JavaField" name="text" path="/Text" className="java.lang.String" type="String" getMethod="getText" primitive="true" array="false" synthetic="false" status="Supported"/>
+                <Field xsi:type="ns2:JavaField" name="text" path="/Text"
+                    className="java.lang.String" type="String"
+                    getMethod="getText" primitive="true" array="false"
+                    synthetic="false" status="Supported" />
             </InputField>
             <OutputField>
-                <Field xsi:type="ns2:JavaField" name="Description" path="/Description" className="java.lang.String" type="String" getMethod="getDescription" setMethod="setDescription" primitive="true" array="false" synthetic="false" status="Supported"/>
+                <Field xsi:type="ns2:JavaField" name="Description"
+                    path="/Description" className="java.lang.String"
+                    type="String" getMethod="getDescription" setMethod="setDescription"
+                    primitive="true" array="false" synthetic="false"
+                    status="Supported" />
             </OutputField>
         </FieldMapping>
-        <FieldMapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="MapFieldMapping">
+        <FieldMapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:type="MapFieldMapping">
             <InputField>
-                <Field xsi:type="ns2:JavaField" name="screenName" path="/User/ScreenName" className="java.lang.String" type="String" getMethod="getScreenName" primitive="true" array="false" synthetic="false" status="Supported"/>
+                <Field xsi:type="ns2:JavaField" name="screenName"
+                    path="/User/ScreenName" className="java.lang.String"
+                    type="String" getMethod="getScreenName" primitive="true"
+                    array="false" synthetic="false" status="Supported" />
             </InputField>
             <OutputField>
-                <Field xsi:type="ns2:JavaField" name="Title" path="/Title" className="java.lang.String" type="String" getMethod="getTitle" setMethod="setTitle" primitive="true" array="false" synthetic="false" status="Supported"/>
+                <Field xsi:type="ns2:JavaField" name="Title" path="/Title"
+                    className="java.lang.String" type="String"
+                    getMethod="getTitle" setMethod="setTitle" primitive="true"
+                    array="false" synthetic="false" status="Supported" />
             </OutputField>
         </FieldMapping>
-        <FieldMapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="SeparateFieldMapping" strategy="SPACE">
+        <FieldMapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:type="SeparateFieldMapping" strategy="SPACE">
             <InputField>
-                <Field xsi:type="ns2:JavaField" name="name" path="/User/Name" className="java.lang.String" type="String" getMethod="getName" primitive="true" array="false" synthetic="false" status="Supported"/>
+                <Field xsi:type="ns2:JavaField" name="name" path="/User/Name"
+                    className="java.lang.String" type="String"
+                    getMethod="getName" primitive="true" array="false"
+                    synthetic="false" status="Supported" />
             </InputField>
             <OutputFields>
                 <MappedField>
-                    <Field xsi:type="ns2:JavaField" name="FirstName" path="/FirstName" className="java.lang.String" type="String" getMethod="getFirstName" setMethod="setFirstName" primitive="true" array="false" synthetic="false" status="Supported"/>
+                    <Field xsi:type="ns2:JavaField" name="FirstName"
+                        path="/FirstName" className="java.lang.String"
+                        type="String" getMethod="getFirstName"
+                        setMethod="setFirstName" primitive="true" array="false"
+                        synthetic="false" status="Supported" />
                     <FieldActions>
-                        <FieldAction xsi:type="MapAction" index="0"/>
+                        <FieldAction xsi:type="MapAction"
+                            index="0" />
                     </FieldActions>
                 </MappedField>
                 <MappedField>
-                    <Field xsi:type="ns2:JavaField" name="LastName" path="/LastName" className="java.lang.String" type="String" getMethod="getLastName" setMethod="setLastName" primitive="true" array="false" synthetic="false" status="Supported"/>
+                    <Field xsi:type="ns2:JavaField" name="LastName"
+                        path="/LastName" className="java.lang.String"
+                        type="String" getMethod="getLastName" setMethod="setLastName"
+                        primitive="true" array="false" synthetic="false"
+                        status="Supported" />
                     <FieldActions>
-                        <FieldAction xsi:type="MapAction" index="1"/>
+                        <FieldAction xsi:type="MapAction"
+                            index="1" />
                     </FieldActions>
                 </MappedField>
             </OutputFields>

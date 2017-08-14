@@ -25,16 +25,27 @@ import io.atlasmap.spi.AtlasSeparateStrategy;
 
 public interface AtlasContextFactory {
 
-	void init();
-	void destroy();
-	AtlasContext createContext(File atlasMappingFile) throws AtlasException;
-	AtlasContext createContext(URI atlasMappingUri) throws AtlasException;
+    void init();
+
+    void destroy();
+
+    AtlasContext createContext(File atlasMappingFile) throws AtlasException;
+
+    AtlasContext createContext(URI atlasMappingUri) throws AtlasException;
+
     AtlasCombineStrategy getCombineStrategy() throws AtlasException;
-	AtlasConversionService getConversionService() throws AtlasException;
+
+    AtlasConversionService getConversionService() throws AtlasException;
+
     AtlasFieldActionService getFieldActionService() throws AtlasException;
+
     AtlasPropertyStrategy getPropertyStrategy() throws AtlasException;
+
     AtlasSeparateStrategy getSeparateStrategy() throws AtlasException;
+
     AtlasValidationService getValidationService() throws AtlasException;
-	void setProperties(Map<String, String> properties);
-	Map<String, String> getProperties();
+
+    void setProperties(Map<String, String> properties);
+
+    Map<String, String> getProperties();
 }

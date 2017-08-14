@@ -80,7 +80,8 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
         return factory;
     }
 
-    public DefaultAtlasContextFactory() { }
+    public DefaultAtlasContextFactory() {
+    }
 
     public DefaultAtlasContextFactory(Map<String, String> properties) {
         this.properties = properties;
@@ -89,7 +90,7 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
 
     public DefaultAtlasContextFactory(Properties properties) {
         Map<String, String> tmpProps = new HashMap<String, String>();
-        for (final String name: properties.stringPropertyNames()) {
+        for (final String name : properties.stringPropertyNames()) {
             tmpProps.put(name, properties.getProperty(name));
         }
         setProperties(tmpProps);
@@ -128,7 +129,7 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
 
         try {
             ManagementFactory.getPlatformMBeanServer().unregisterMBean(getJmxObjectName());
-            if(logger.isDebugEnabled()) {
+            if (logger.isDebugEnabled()) {
                 logger.debug("Unregistered AtlasContextFactory with JMX");
             }
         } catch (Exception e) {
@@ -152,30 +153,30 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
     }
 
     public AtlasContext createContext(File atlasMappingFile, AtlasMappingFormat format) throws AtlasException {
-        if(atlasMappingFile == null) {
+        if (atlasMappingFile == null) {
             throw new AtlasException("AtlasMappingFile must be specified");
         }
 
         return createContext(atlasMappingFile.toURI(), format);
     }
-    
+
     @Override
     public AtlasContext createContext(URI atlasMappingUri) throws AtlasException {
         return createContext(atlasMappingUri, AtlasMappingFormat.XML);
     }
-    
+
     public AtlasContext createContext(URI atlasMappingUri, AtlasMappingFormat format) throws AtlasException {
-        if(atlasMappingUri == null) {
+        if (atlasMappingUri == null) {
             throw new AtlasException("AtlasMappingUri must be specified");
         }
-        if(getMappingService() == null) {
+        if (getMappingService() == null) {
             throw new AtlasException("AtlasMappingService is not set");
         }
         DefaultAtlasContext context = new DefaultAtlasContext(this, atlasMappingUri, format);
         context.init();
         return context;
     }
-    
+
     public AtlasContext createContext(AtlasMapping mapping) throws AtlasException {
         DefaultAtlasContext context = new DefaultAtlasContext(this, mapping);
         context.init();
@@ -189,28 +190,30 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
 
         ClassLoader classLoader = this.getClass().getClassLoader();
         try {
-            Enumeration<URL> urls = classLoader.getResources("META-INF/services/atlas/module/atlas.module");        	
-            while(urls.hasMoreElements()) {
+            Enumeration<URL> urls = classLoader.getResources("META-INF/services/atlas/module/atlas.module");
+            while (urls.hasMoreElements()) {
                 URL tmp = urls.nextElement();
                 Properties prop = AtlasUtil.loadPropertiesFromURL(tmp);
                 String serviceClassPropertyValue = (String) prop.get(moduleClassProperty);
                 if (!AtlasUtil.isEmpty(serviceClassPropertyValue)) {
                     serviceClasses.add((serviceClassPropertyValue));
                 }
-            }            
+            }
         } catch (Exception e) {
             logger.warn("Error loading module resources", e);
         }
 
-        for(String clazz : serviceClasses) {			
+        for (String clazz : serviceClasses) {
             try {
                 moduleClass = Class.forName(clazz);
                 moduleClassName = moduleClass.getName();
 
                 if (isClassAtlasModule(moduleClass, moduleInterface)) {
                     Constructor<?> constructor = moduleClass.getDeclaredConstructor();
-                    if(constructor != null) {
-                        AtlasModuleInfo module = new DefaultAtlasModuleInfo(getModuleName(moduleClass), getModuleUri(moduleClass), moduleClass, constructor, getSupportedDataFormats(moduleClass), getConfigPackages(moduleClass));
+                    if (constructor != null) {
+                        AtlasModuleInfo module = new DefaultAtlasModuleInfo(getModuleName(moduleClass),
+                                getModuleUri(moduleClass), moduleClass, constructor,
+                                getSupportedDataFormats(moduleClass), getConfigPackages(moduleClass));
                         getModules().add(module);
                         registerModuleJmx(module);
                     } else {
@@ -226,9 +229,9 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
             } catch (Exception e) {
                 logger.warn("Invalid module class " + moduleClassName + " unknown error", e);
             }
-        } 
+        }
 
-        if(logger.isDebugEnabled()) {
+        if (logger.isDebugEnabled()) {
             logger.debug("Loaded: " + getModules().size() + " of " + serviceClasses.size() + " detected modules");
         }
     }
@@ -237,32 +240,36 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
         int moduleCount = getModules().size();
         for (AtlasModuleInfo module : getModules()) {
             try {
-                String n = getJmxObjectName()+",info=AvailableModules,moduleName="+module.getName();
-                ManagementFactory.getPlatformMBeanServer().unregisterMBean(new ObjectName(n));				
+                String n = getJmxObjectName() + ",info=AvailableModules,moduleName=" + module.getName();
+                ManagementFactory.getPlatformMBeanServer().unregisterMBean(new ObjectName(n));
             } catch (Exception e) {
-                logger.warn("Unable to unregister module '" + module.getName() +"' from JMX");
+                logger.warn("Unable to unregister module '" + module.getName() + "' from JMX");
             }
         }
 
         this.modules.clear();
 
-        if(logger.isDebugEnabled()) {
+        if (logger.isDebugEnabled()) {
             logger.debug("Unloaded: " + moduleCount + " modules");
         }
     }
 
-    protected boolean isClassAtlasModule(Class<?> clazz, Class<?> moduleInterface) {                
-        if (clazz == null) { return false; }
+    protected boolean isClassAtlasModule(Class<?> clazz, Class<?> moduleInterface) {
+        if (clazz == null) {
+            return false;
+        }
 
         if (isAtlasModuleInterface(clazz, moduleInterface) && clazz.isAnnotationPresent(AtlasModuleDetail.class)) {
-            if(logger.isDebugEnabled()) {
-                logger.debug(clazz.getCanonicalName() + " is a '" + moduleInterface.getSimpleName() + "' implementation");
+            if (logger.isDebugEnabled()) {
+                logger.debug(
+                        clazz.getCanonicalName() + " is a '" + moduleInterface.getSimpleName() + "' implementation");
             }
             return true;
         }
 
-        if(logger.isDebugEnabled()) {
-            logger.debug(clazz.getCanonicalName() + " is NOT a '" + moduleInterface.getSimpleName() + "' implementation");
+        if (logger.isDebugEnabled()) {
+            logger.debug(
+                    clazz.getCanonicalName() + " is NOT a '" + moduleInterface.getSimpleName() + "' implementation");
         }
         return false;
     }
@@ -270,7 +277,7 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
     protected boolean isAtlasModuleInterface(Class<?> clazz, Class<?> moduleInterface) {
         if (clazz == null) {
             return false;
-        }   
+        }
 
         boolean isIface = false;
         Class<?> superClazz = clazz.getSuperclass();
@@ -286,7 +293,7 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
         }
 
         return isIface;
-    }	
+    }
 
     protected String getModuleUri(Class<?> clazz) {
 
@@ -294,11 +301,10 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
 
         if (detail != null) {
             return detail.uri();
-        }        
+        }
 
         return "UNDEFINED";
     }
-
 
     protected String getModuleName(Class<?> clazz) {
 
@@ -306,9 +312,9 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
 
         if (detail != null) {
             return detail.name();
-        }        
+        }
 
-        return "UNDEFINED-"+UUID.randomUUID().toString();
+        return "UNDEFINED-" + UUID.randomUUID().toString();
     }
 
     protected List<String> getSupportedDataFormats(Class<?> clazz) {
@@ -321,12 +327,12 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
 
             String[] formats = detail.dataFormats();
 
-            for(String format : formats) {
+            for (String format : formats) {
                 dataFormats.add(format.trim());
             }
-        }        
+        }
 
-        if(logger.isDebugEnabled()) {
+        if (logger.isDebugEnabled()) {
             logger.debug("Module: " + clazz.getCanonicalName() + " supports data formats: " + dataFormats.toString());
         }
 
@@ -343,12 +349,12 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
 
             String[] packages = detail.configPackages();
 
-            for(String pkg : packages) {
+            for (String pkg : packages) {
                 configPackages.add(pkg.trim());
             }
-        }        
+        }
 
-        if(logger.isDebugEnabled()) {
+        if (logger.isDebugEnabled()) {
             logger.debug("Module: " + clazz.getCanonicalName() + " config packages: " + configPackages.toString());
         }
 
@@ -367,7 +373,7 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
         try {
             setObjectName(factory.uuid);
             ManagementFactory.getPlatformMBeanServer().registerMBean(factory, factory.getJmxObjectName());
-            if(logger.isDebugEnabled()) {
+            if (logger.isDebugEnabled()) {
                 logger.debug("Registered AtlasContextFactory with JMX");
             }
         } catch (Exception e) {
@@ -377,30 +383,43 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
 
     protected void registerModuleJmx(AtlasModuleInfo atlasModuleInfo) {
         try {
-            String n = getJmxObjectName()+",modules=AvailableModules,moduleName="+atlasModuleInfo.getName();
+            String n = getJmxObjectName() + ",modules=AvailableModules,moduleName=" + atlasModuleInfo.getName();
             ManagementFactory.getPlatformMBeanServer().registerMBean(atlasModuleInfo, new ObjectName(n));
 
-            if(logger.isDebugEnabled()) {
-                logger.debug("Registered AtlasModule '"+atlasModuleInfo.getName()+"' with JMX");
+            if (logger.isDebugEnabled()) {
+                logger.debug("Registered AtlasModule '" + atlasModuleInfo.getName() + "' with JMX");
             }
         } catch (Exception e) {
-            logger.warn("Unable to register AtlasModule '"+atlasModuleInfo.getName()+"' with JMX", e);
+            logger.warn("Unable to register AtlasModule '" + atlasModuleInfo.getName() + "' with JMX", e);
         }
     }
 
     @Override
-    public String getClassName() { return this.getClass().getName(); }
-    @Override
-    public String getThreadName() { return this.threadName; }	
-    public void setThreadName(String threadName) { this.threadName = threadName; }
-    @Override
-    public String getVersion() { return this.getClass().getPackage().getImplementationVersion(); }
+    public String getClassName() {
+        return this.getClass().getName();
+    }
 
     @Override
-    public String getUuid() { return this.uuid; }
+    public String getThreadName() {
+        return this.threadName;
+    }
+
+    public void setThreadName(String threadName) {
+        this.threadName = threadName;
+    }
+
+    @Override
+    public String getVersion() {
+        return this.getClass().getPackage().getImplementationVersion();
+    }
+
+    @Override
+    public String getUuid() {
+        return this.uuid;
+    }
 
     protected void setObjectName(String name) throws MalformedObjectNameException {
-        String objectName = String.format("io.atlasmap:type=AtlasServiceFactory,factoryUuid=%s",getUuid());
+        String objectName = String.format("io.atlasmap:type=AtlasServiceFactory,factoryUuid=%s", getUuid());
         this.objectName = new ObjectName(objectName);
     }
 

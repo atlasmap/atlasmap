@@ -21,9 +21,7 @@ import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-@ComponentScan(basePackageClasses = {
-    Application.class,
-})
+@ComponentScan(basePackageClasses = { Application.class, })
 public class Application extends SpringBootServletInitializer {
 
     public static void main(String[] args) {

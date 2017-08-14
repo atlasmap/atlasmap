@@ -22,10 +22,14 @@ import io.atlasmap.v2.FieldType;
 
 @Retention(RetentionPolicy.RUNTIME)
 public @interface AtlasFieldActionInfo {
-    
+
     String name();
+
     FieldType sourceType();
+
     FieldType targetType();
+
     CollectionType sourceCollectionType();
+
     CollectionType targetCollectionType();
 }

@@ -33,7 +33,6 @@ public class SimpleTypeRestriction {
     String maxExclusive = null;
     String minExclusive = null;
 
-
     public void initRestrictions(XSRestrictionSimpleType restriction) {
         if (restriction != null) {
             Vector<String> enumeration = new Vector<>();
@@ -70,7 +69,7 @@ public class SimpleTypeRestriction {
                 }
             }
             if (enumeration.size() > 0) {
-                this.enumeration = enumeration.toArray(new String[]{});
+                this.enumeration = enumeration.toArray(new String[] {});
             }
         }
     }

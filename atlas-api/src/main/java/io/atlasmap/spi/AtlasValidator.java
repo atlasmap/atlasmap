@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 package io.atlasmap.spi;
+
 import java.util.List;
 
 import io.atlasmap.v2.Validation;
@@ -22,6 +23,8 @@ import io.atlasmap.v2.ValidationStatus;
 public interface AtlasValidator {
 
     boolean supports(Class<?> clazz);
+
     void validate(Object target, List<Validation> validations);
+
     void validate(Object target, List<Validation> validations, ValidationStatus status);
 }

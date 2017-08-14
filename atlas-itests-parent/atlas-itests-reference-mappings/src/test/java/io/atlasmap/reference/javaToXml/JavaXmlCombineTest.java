@@ -39,7 +39,8 @@ public class JavaXmlCombineTest extends AtlasMappingBaseTest {
 
     @Test
     public void testProcessCombineSimple() throws Exception {
-        AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/javaToXml/atlasmapping-combine-simple.xml").toURI());
+        AtlasContext context = atlasContextFactory
+                .createContext(new File("src/test/resources/javaToXml/atlasmapping-combine-simple.xml").toURI());
         AtlasSession session = context.createSession();
         BaseContact sourceContact = AtlasTestUtil.generateContact(SourceContact.class);
         session.setInput(sourceContact);
@@ -49,7 +50,8 @@ public class JavaXmlCombineTest extends AtlasMappingBaseTest {
         assertNotNull(object);
         assertTrue(object instanceof String);
         AtlasXmlTestHelper helper = new AtlasXmlTestHelper();
-        JAXBElement<XmlContactAttribute> targetContact = (JAXBElement<XmlContactAttribute>)helper.unmarshal((String)object, XmlContactAttribute.class);
+        JAXBElement<XmlContactAttribute> targetContact = (JAXBElement<XmlContactAttribute>) helper
+                .unmarshal((String) object, XmlContactAttribute.class);
         assertEquals("Ozzie Smith 5551212 81111", targetContact.getValue().getFirstName());
         assertNull(targetContact.getValue().getLastName());
         assertNull(targetContact.getValue().getPhoneNumber());
@@ -59,7 +61,8 @@ public class JavaXmlCombineTest extends AtlasMappingBaseTest {
 
     @Test
     public void testProcessCombineSkip() throws Exception {
-        AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/javaToXml/atlasmapping-combine-skip.xml").toURI());
+        AtlasContext context = atlasContextFactory
+                .createContext(new File("src/test/resources/javaToXml/atlasmapping-combine-skip.xml").toURI());
         AtlasSession session = context.createSession();
         BaseContact sourceContact = AtlasTestUtil.generateContact(SourceContact.class);
         session.setInput(sourceContact);
@@ -69,17 +72,19 @@ public class JavaXmlCombineTest extends AtlasMappingBaseTest {
         assertNotNull(object);
         assertTrue(object instanceof String);
         AtlasXmlTestHelper helper = new AtlasXmlTestHelper();
-        JAXBElement<XmlContactAttribute> targetContact = (JAXBElement<XmlContactAttribute>)helper.unmarshal((String)object, XmlContactAttribute.class);
+        JAXBElement<XmlContactAttribute> targetContact = (JAXBElement<XmlContactAttribute>) helper
+                .unmarshal((String) object, XmlContactAttribute.class);
         assertEquals("Ozzie Smith 5551212 81111", targetContact.getValue().getFirstName());
         assertNull(targetContact.getValue().getLastName());
         assertNull(targetContact.getValue().getPhoneNumber());
         assertNull(targetContact.getValue().getZipCode());
         assertFalse(session.hasErrors());
     }
-    
+
     @Test
     public void testProcessCombineOutOfOrder() throws Exception {
-        AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/javaToXml/atlasmapping-combine-outoforder.xml").toURI());
+        AtlasContext context = atlasContextFactory
+                .createContext(new File("src/test/resources/javaToXml/atlasmapping-combine-outoforder.xml").toURI());
         AtlasSession session = context.createSession();
         BaseContact sourceContact = AtlasTestUtil.generateContact(SourceContact.class);
         session.setInput(sourceContact);
@@ -89,19 +94,20 @@ public class JavaXmlCombineTest extends AtlasMappingBaseTest {
         assertNotNull(object);
         assertTrue(object instanceof String);
         AtlasXmlTestHelper helper = new AtlasXmlTestHelper();
-        JAXBElement<XmlContactAttribute> targetContact = (JAXBElement<XmlContactAttribute>)helper.unmarshal((String)object, XmlContactAttribute.class);
+        JAXBElement<XmlContactAttribute> targetContact = (JAXBElement<XmlContactAttribute>) helper
+                .unmarshal((String) object, XmlContactAttribute.class);
         assertEquals("Ozzie Smith 5551212 81111", targetContact.getValue().getFirstName());
         assertNull(targetContact.getValue().getLastName());
         assertNull(targetContact.getValue().getPhoneNumber());
         assertNull(targetContact.getValue().getZipCode());
         assertFalse(session.hasErrors());
     }
-    
-    
+
     @Test
     @Ignore // support null value and double-delimiter in combine
     public void testProcessCombineNullInput() throws Exception {
-        AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/javaToXml/atlasmapping-combine-inputnull.xml").toURI());
+        AtlasContext context = atlasContextFactory
+                .createContext(new File("src/test/resources/javaToXml/atlasmapping-combine-inputnull.xml").toURI());
         AtlasSession session = context.createSession();
         BaseContact sourceContact = AtlasTestUtil.generateContact(SourceContact.class);
         sourceContact.setLastName(null);
@@ -112,7 +118,8 @@ public class JavaXmlCombineTest extends AtlasMappingBaseTest {
         assertNotNull(object);
         assertTrue(object instanceof String);
         AtlasXmlTestHelper helper = new AtlasXmlTestHelper();
-        JAXBElement<XmlContactAttribute> targetContact = (JAXBElement<XmlContactAttribute>)helper.unmarshal((String)object, XmlContactAttribute.class);
+        JAXBElement<XmlContactAttribute> targetContact = (JAXBElement<XmlContactAttribute>) helper
+                .unmarshal((String) object, XmlContactAttribute.class);
         assertNotNull(targetContact);
         assertEquals("Ozzie 5551212 81111", targetContact.getValue().getFirstName());
         assertFalse(session.hasErrors());

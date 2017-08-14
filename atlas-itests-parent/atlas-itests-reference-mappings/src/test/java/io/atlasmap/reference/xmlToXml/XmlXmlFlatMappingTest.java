@@ -31,190 +31,232 @@ import io.atlasmap.xml.test.v2.XmlFlatPrimitiveAttribute;
 import io.atlasmap.xml.test.v2.XmlFlatPrimitiveElement;
 
 public class XmlXmlFlatMappingTest extends AtlasMappingBaseTest {
-    
+
     @Test
     public void testProcessXmlXmlFlatPrimitiveAttributeToElementNS() throws Exception {
-        AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/xmlToXml/atlasmapping-flatprimitive-attributeToElement-ns.xml"));
+        AtlasContext context = atlasContextFactory.createContext(
+                new File("src/test/resources/xmlToXml/atlasmapping-flatprimitive-attributeToElement-ns.xml"));
 
         AtlasSession session = context.createSession();
-        String sourceXml = AtlasTestUtil.loadFileAsString("src/test/resources/xmlToXml/atlas-xml-flatprimitive-attribute-ns.xml");
+        String sourceXml = AtlasTestUtil
+                .loadFileAsString("src/test/resources/xmlToXml/atlas-xml-flatprimitive-attribute-ns.xml");
         session.setInput(sourceXml);
         context.process(session);
-        
+
         Object object = session.getOutput();
         assertNotNull(object);
         assertTrue(object instanceof String);
-        JAXBElement<XmlFlatPrimitiveElement> xmlFPE = (JAXBElement<XmlFlatPrimitiveElement>)AtlasXmlTestHelper.unmarshal((String)object, XmlFlatPrimitiveElement.class);
+        JAXBElement<XmlFlatPrimitiveElement> xmlFPE = (JAXBElement<XmlFlatPrimitiveElement>) AtlasXmlTestHelper
+                .unmarshal((String) object, XmlFlatPrimitiveElement.class);
         AtlasTestUtil.validateXmlFlatPrimitiveElement(xmlFPE.getValue());
     }
-    
+
     @Test
     public void testProcessXmlXmlFlatPrimitiveAttributeToElementNoMappedBoxedFieldsNS() throws Exception {
-        AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/xmlToXml/atlasmapping-flatprimitive-attributeToElement-noboxed-ns.xml"));
+        AtlasContext context = atlasContextFactory.createContext(
+                new File("src/test/resources/xmlToXml/atlasmapping-flatprimitive-attributeToElement-noboxed-ns.xml"));
 
         AtlasSession session = context.createSession();
-        String sourceXml = AtlasTestUtil.loadFileAsString("src/test/resources/xmlToXml/atlas-xml-flatprimitive-attribute-ns.xml");
+        String sourceXml = AtlasTestUtil
+                .loadFileAsString("src/test/resources/xmlToXml/atlas-xml-flatprimitive-attribute-ns.xml");
         session.setInput(sourceXml);
         context.process(session);
-        
+
         Object object = session.getOutput();
         assertNotNull(object);
         assertTrue(object instanceof String);
-        JAXBElement<XmlFlatPrimitiveElement> xmlFPE = (JAXBElement<XmlFlatPrimitiveElement>)AtlasXmlTestHelper.unmarshal((String)object, XmlFlatPrimitiveElement.class);
+        JAXBElement<XmlFlatPrimitiveElement> xmlFPE = (JAXBElement<XmlFlatPrimitiveElement>) AtlasXmlTestHelper
+                .unmarshal((String) object, XmlFlatPrimitiveElement.class);
         AtlasTestUtil.validateXmlFlatPrimitiveElement(xmlFPE.getValue());
     }
-    
+
     @Test
     public void testProcessXmlXmlFlatPrimitiveElementToAttributeNS() throws Exception {
-        AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/xmlToXml/atlasmapping-flatprimitive-elementToAttribute-ns.xml"));
+        AtlasContext context = atlasContextFactory.createContext(
+                new File("src/test/resources/xmlToXml/atlasmapping-flatprimitive-elementToAttribute-ns.xml"));
 
         AtlasSession session = context.createSession();
-        String sourceXml = AtlasTestUtil.loadFileAsString("src/test/resources/xmlToXml/atlas-xml-flatprimitive-element-ns.xml");
+        String sourceXml = AtlasTestUtil
+                .loadFileAsString("src/test/resources/xmlToXml/atlas-xml-flatprimitive-element-ns.xml");
         session.setInput(sourceXml);
         context.process(session);
-        
+
         Object object = session.getOutput();
         assertNotNull(object);
         assertTrue(object instanceof String);
-        JAXBElement<XmlFlatPrimitiveAttribute> xmlFPA = (JAXBElement<XmlFlatPrimitiveAttribute>)AtlasXmlTestHelper.unmarshal((String)object, XmlFlatPrimitiveAttribute.class);
+        JAXBElement<XmlFlatPrimitiveAttribute> xmlFPA = (JAXBElement<XmlFlatPrimitiveAttribute>) AtlasXmlTestHelper
+                .unmarshal((String) object, XmlFlatPrimitiveAttribute.class);
         AtlasTestUtil.validateXmlFlatPrimitiveAttribute(xmlFPA.getValue());
     }
-    
+
     @Test
     public void testProcessXmlXmlFlatPrimitiveElementToAtributeNoMappedBoxedFieldsNS() throws Exception {
-        AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/xmlToXml/atlasmapping-flatprimitive-elementToAttribute-noboxed-ns.xml"));
+        AtlasContext context = atlasContextFactory.createContext(
+                new File("src/test/resources/xmlToXml/atlasmapping-flatprimitive-elementToAttribute-noboxed-ns.xml"));
 
         AtlasSession session = context.createSession();
-        String sourceXml = AtlasTestUtil.loadFileAsString("src/test/resources/xmlToXml/atlas-xml-flatprimitive-element-ns.xml");
+        String sourceXml = AtlasTestUtil
+                .loadFileAsString("src/test/resources/xmlToXml/atlas-xml-flatprimitive-element-ns.xml");
         session.setInput(sourceXml);
         context.process(session);
-        
+
         Object object = session.getOutput();
         assertNotNull(object);
         assertTrue(object instanceof String);
-        JAXBElement<XmlFlatPrimitiveAttribute> xmlFPA = (JAXBElement<XmlFlatPrimitiveAttribute>)AtlasXmlTestHelper.unmarshal((String)object, XmlFlatPrimitiveAttribute.class);
+        JAXBElement<XmlFlatPrimitiveAttribute> xmlFPA = (JAXBElement<XmlFlatPrimitiveAttribute>) AtlasXmlTestHelper
+                .unmarshal((String) object, XmlFlatPrimitiveAttribute.class);
         AtlasTestUtil.validateXmlFlatPrimitiveAttribute(xmlFPA.getValue());
     }
-    
+
     @Test
     public void testProcessXmlXmlFlatPrimitiveAttributeToElement() throws Exception {
-        AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/xmlToXml/atlasmapping-flatprimitive-attributeToElement.xml"));
+        AtlasContext context = atlasContextFactory.createContext(
+                new File("src/test/resources/xmlToXml/atlasmapping-flatprimitive-attributeToElement.xml"));
 
         AtlasSession session = context.createSession();
-        String sourceXml = AtlasTestUtil.loadFileAsString("src/test/resources/xmlToXml/atlas-xml-flatprimitive-attribute.xml");
+        String sourceXml = AtlasTestUtil
+                .loadFileAsString("src/test/resources/xmlToXml/atlas-xml-flatprimitive-attribute.xml");
         session.setInput(sourceXml);
         context.process(session);
-        
+
         Object object = session.getOutput();
         assertNotNull(object);
         assertTrue(object instanceof String);
-        assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><XmlFPE><intField>2</intField><shortField>1</shortField><longField>30000</longField><doubleField>50000000.0</doubleField><floatField>40000000.0</floatField><booleanField>false</booleanField><charField>a</charField><byteField>99</byteField><boxedBooleanField/><boxedByteField/><boxedCharField/><boxedDoubleField/><boxedFloatField/><boxedIntField/><boxedLongField/><boxedStringField/></XmlFPE>", (String) object);
+        assertEquals(
+                "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><XmlFPE><intField>2</intField><shortField>1</shortField><longField>30000</longField><doubleField>50000000.0</doubleField><floatField>40000000.0</floatField><booleanField>false</booleanField><charField>a</charField><byteField>99</byteField><boxedBooleanField/><boxedByteField/><boxedCharField/><boxedDoubleField/><boxedFloatField/><boxedIntField/><boxedLongField/><boxedStringField/></XmlFPE>",
+                (String) object);
     }
-    
+
     @Test
     public void testProcessXmlXmlFlatPrimitiveAttributeToElementNoBoxed() throws Exception {
-        AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/xmlToXml/atlasmapping-flatprimitive-attributeToElement-noboxed.xml"));
+        AtlasContext context = atlasContextFactory.createContext(
+                new File("src/test/resources/xmlToXml/atlasmapping-flatprimitive-attributeToElement-noboxed.xml"));
 
         AtlasSession session = context.createSession();
-        String sourceXml = AtlasTestUtil.loadFileAsString("src/test/resources/xmlToXml/atlas-xml-flatprimitive-attribute.xml");
+        String sourceXml = AtlasTestUtil
+                .loadFileAsString("src/test/resources/xmlToXml/atlas-xml-flatprimitive-attribute.xml");
         session.setInput(sourceXml);
         context.process(session);
-        
+
         Object object = session.getOutput();
         assertNotNull(object);
         assertTrue(object instanceof String);
-        assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><XmlFPE><intField>2</intField><shortField>1</shortField><longField>30000</longField><doubleField>50000000.0</doubleField><floatField>40000000.0</floatField><booleanField>false</booleanField><charField>a</charField><byteField>99</byteField></XmlFPE>", (String) object);
+        assertEquals(
+                "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><XmlFPE><intField>2</intField><shortField>1</shortField><longField>30000</longField><doubleField>50000000.0</doubleField><floatField>40000000.0</floatField><booleanField>false</booleanField><charField>a</charField><byteField>99</byteField></XmlFPE>",
+                (String) object);
     }
-    
+
     @Test
     public void testProcessXmlXmlFlatPrimitiveElementToAttribute() throws Exception {
-        AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/xmlToXml/atlasmapping-flatprimitive-elementToAttribute.xml"));
+        AtlasContext context = atlasContextFactory.createContext(
+                new File("src/test/resources/xmlToXml/atlasmapping-flatprimitive-elementToAttribute.xml"));
 
         AtlasSession session = context.createSession();
-        String sourceXml = AtlasTestUtil.loadFileAsString("src/test/resources/xmlToXml/atlas-xml-flatprimitive-element.xml");
+        String sourceXml = AtlasTestUtil
+                .loadFileAsString("src/test/resources/xmlToXml/atlas-xml-flatprimitive-element.xml");
         session.setInput(sourceXml);
         context.process(session);
-        
+
         Object object = session.getOutput();
         assertNotNull(object);
         assertTrue(object instanceof String);
-        assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><XmlFPA booleanField=\"false\" byteField=\"99\" charField=\"a\" doubleField=\"50000000.0\" floatField=\"40000000.0\" intField=\"2\" longField=\"30000\" shortField=\"1\"/>", (String)object);
+        assertEquals(
+                "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><XmlFPA booleanField=\"false\" byteField=\"99\" charField=\"a\" doubleField=\"50000000.0\" floatField=\"40000000.0\" intField=\"2\" longField=\"30000\" shortField=\"1\"/>",
+                (String) object);
     }
-    
+
     @Test
     public void testProcessXmlXmlFlatPrimitiveElementToAttributeNoBoxed() throws Exception {
-        AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/xmlToXml/atlasmapping-flatprimitive-elementToAttribute-noboxed.xml"));
+        AtlasContext context = atlasContextFactory.createContext(
+                new File("src/test/resources/xmlToXml/atlasmapping-flatprimitive-elementToAttribute-noboxed.xml"));
 
         AtlasSession session = context.createSession();
-        String sourceXml = AtlasTestUtil.loadFileAsString("src/test/resources/xmlToXml/atlas-xml-flatprimitive-element.xml");
+        String sourceXml = AtlasTestUtil
+                .loadFileAsString("src/test/resources/xmlToXml/atlas-xml-flatprimitive-element.xml");
         session.setInput(sourceXml);
         context.process(session);
-        
+
         Object object = session.getOutput();
         assertNotNull(object);
         assertTrue(object instanceof String);
-        assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><XmlFPA booleanField=\"false\" byteField=\"99\" charField=\"a\" doubleField=\"50000000.0\" floatField=\"40000000.0\" intField=\"2\" longField=\"30000\" shortField=\"1\"/>", (String)object);
+        assertEquals(
+                "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><XmlFPA booleanField=\"false\" byteField=\"99\" charField=\"a\" doubleField=\"50000000.0\" floatField=\"40000000.0\" intField=\"2\" longField=\"30000\" shortField=\"1\"/>",
+                (String) object);
     }
-          
+
     @Test
     public void testProcessXmlXmlBoxedFlatMappingPrimitiveAttributeToElement() throws Exception {
-        AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/xmlToXml/atlasmapping-boxedflatprimitive-attributeToElement.xml"));
+        AtlasContext context = atlasContextFactory.createContext(
+                new File("src/test/resources/xmlToXml/atlasmapping-boxedflatprimitive-attributeToElement.xml"));
 
         AtlasSession session = context.createSession();
-        String sourceXml = AtlasTestUtil.loadFileAsString("src/test/resources/xmlToXml/atlas-xml-boxedflatprimitive-attribute.xml");
+        String sourceXml = AtlasTestUtil
+                .loadFileAsString("src/test/resources/xmlToXml/atlas-xml-boxedflatprimitive-attribute.xml");
         session.setInput(sourceXml);
         context.process(session);
-        
+
         Object object = session.getOutput();
         assertNotNull(object);
         assertTrue(object instanceof String);
-        assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><XmlFBPE><boxedIntField>5</boxedIntField><boxedShortField>5</boxedShortField><boxedLongField>20000</boxedLongField><boxedDoubleField>90000000.0</boxedDoubleField><boxedFloatField>70000000.0</boxedFloatField><boxedBooleanField>true</boxedBooleanField><boxedCharField>z</boxedCharField><boxedByteField>87</boxedByteField></XmlFBPE>", (String)object);
+        assertEquals(
+                "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><XmlFBPE><boxedIntField>5</boxedIntField><boxedShortField>5</boxedShortField><boxedLongField>20000</boxedLongField><boxedDoubleField>90000000.0</boxedDoubleField><boxedFloatField>70000000.0</boxedFloatField><boxedBooleanField>true</boxedBooleanField><boxedCharField>z</boxedCharField><boxedByteField>87</boxedByteField></XmlFBPE>",
+                (String) object);
     }
-    
+
     @Test
     public void testProcessXmlXmlBoxedFlatMappingPrimitiveAttributeToElementNS() throws Exception {
-        AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/xmlToXml/atlasmapping-boxedflatprimitive-attributeToElement-ns.xml"));
+        AtlasContext context = atlasContextFactory.createContext(
+                new File("src/test/resources/xmlToXml/atlasmapping-boxedflatprimitive-attributeToElement-ns.xml"));
 
         AtlasSession session = context.createSession();
-        String sourceXml = AtlasTestUtil.loadFileAsString("src/test/resources/xmlToXml/atlas-xml-boxedflatprimitive-attribute-ns.xml");
+        String sourceXml = AtlasTestUtil
+                .loadFileAsString("src/test/resources/xmlToXml/atlas-xml-boxedflatprimitive-attribute-ns.xml");
         session.setInput(sourceXml);
         context.process(session);
-        
+
         Object object = session.getOutput();
         assertNotNull(object);
         assertTrue(object instanceof String);
-        JAXBElement<XmlFlatBoxedPrimitiveElement> xmlFPE = (JAXBElement<XmlFlatBoxedPrimitiveElement>)AtlasXmlTestHelper.unmarshal((String)object, XmlFlatBoxedPrimitiveElement.class);
+        JAXBElement<XmlFlatBoxedPrimitiveElement> xmlFPE = (JAXBElement<XmlFlatBoxedPrimitiveElement>) AtlasXmlTestHelper
+                .unmarshal((String) object, XmlFlatBoxedPrimitiveElement.class);
         AtlasTestUtil.validateXmlFlatPrimitiveBoxedPrimitiveElementFields(xmlFPE.getValue());
     }
-    
+
     @Test
     public void testProcessXmlXmlBoxedFlatMappingPrimitiveElementToAttribute() throws Exception {
-        AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/xmlToXml/atlasmapping-boxedflatprimitive-elementToAttribute.xml"));
+        AtlasContext context = atlasContextFactory.createContext(
+                new File("src/test/resources/xmlToXml/atlasmapping-boxedflatprimitive-elementToAttribute.xml"));
 
         AtlasSession session = context.createSession();
-        String sourceXml = AtlasTestUtil.loadFileAsString("src/test/resources/xmlToXml/atlas-xml-boxedflatprimitive-element.xml");
+        String sourceXml = AtlasTestUtil
+                .loadFileAsString("src/test/resources/xmlToXml/atlas-xml-boxedflatprimitive-element.xml");
         session.setInput(sourceXml);
         context.process(session);
-        
+
         Object object = session.getOutput();
         assertNotNull(object);
         assertTrue(object instanceof String);
-        assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><XmlFBPA boxedBooleanField=\"true\" boxedByteField=\"87\" boxedCharField=\"z\" boxedDoubleField=\"90000000.0\" boxedFloatField=\"70000000.0\" boxedIntField=\"5\" boxedLongField=\"20000\" boxedShortField=\"5\"/>", (String)object);
+        assertEquals(
+                "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><XmlFBPA boxedBooleanField=\"true\" boxedByteField=\"87\" boxedCharField=\"z\" boxedDoubleField=\"90000000.0\" boxedFloatField=\"70000000.0\" boxedIntField=\"5\" boxedLongField=\"20000\" boxedShortField=\"5\"/>",
+                (String) object);
     }
-    
+
     @Test
     public void testProcessXmlXmlBoxedFlatMappingPrimitiveElementToAttributeNS() throws Exception {
-        AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/xmlToXml/atlasmapping-boxedflatprimitive-elementToAttribute-ns.xml"));
+        AtlasContext context = atlasContextFactory.createContext(
+                new File("src/test/resources/xmlToXml/atlasmapping-boxedflatprimitive-elementToAttribute-ns.xml"));
 
         AtlasSession session = context.createSession();
-        String sourceXml = AtlasTestUtil.loadFileAsString("src/test/resources/xmlToXml/atlas-xml-boxedflatprimitive-element-ns.xml");
+        String sourceXml = AtlasTestUtil
+                .loadFileAsString("src/test/resources/xmlToXml/atlas-xml-boxedflatprimitive-element-ns.xml");
         session.setInput(sourceXml);
         context.process(session);
-        
+
         Object object = session.getOutput();
         assertNotNull(object);
         assertTrue(object instanceof String);
-        JAXBElement<XmlFlatBoxedPrimitiveAttribute> xmlFPE = (JAXBElement<XmlFlatBoxedPrimitiveAttribute>)AtlasXmlTestHelper.unmarshal((String)object, XmlFlatBoxedPrimitiveAttribute.class);
+        JAXBElement<XmlFlatBoxedPrimitiveAttribute> xmlFPE = (JAXBElement<XmlFlatBoxedPrimitiveAttribute>) AtlasXmlTestHelper
+                .unmarshal((String) object, XmlFlatBoxedPrimitiveAttribute.class);
         AtlasTestUtil.validateXmlFlatPrimitiveBoxedPrimitiveAttributeFields(xmlFPE.getValue());
     }
-} 
+}

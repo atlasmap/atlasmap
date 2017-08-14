@@ -23,38 +23,38 @@ import static org.junit.Assert.*;
 
 public class PrimitiveValidationUtil {
 
-	public static void validatePrimitive(JavaClass j, String name) {
-		validatePrimitiveCommon(j);
-		assertEquals(name, j.getClassName());
-		assertNull(j.getCollectionType());
-		assertNull(j.getArrayDimensions());
-	}
-	
-	public static void validatePrimitiveArray(JavaClass j, String name, int dim) {
-		validatePrimitiveCommon(j);
-		assertEquals(name, j.getClassName());
-		assertEquals(new Integer(dim), j.getArrayDimensions());
-		assertEquals(CollectionType.ARRAY, j.getCollectionType());
-	}
-	
-	protected static void validatePrimitiveCommon(JavaClass j) {
-		assertNotNull(j);
-		assertFalse(j.isAnnonymous());
-		assertFalse(j.isAnnotation());
-		assertFalse(j.isEnumeration());
-		assertFalse(j.isInterface());
-		assertFalse(j.isLocalClass());
-		assertFalse(j.isMemberClass());
-		assertTrue(j.isPrimitive());
-		assertFalse(j.isSynthetic());
-		assertNotNull(j.getJavaFields());
-		assertNotNull(j.getJavaFields().getJavaField());
-		assertTrue(j.getJavaFields().getJavaField().size() == 0);
-		assertNotNull(j.getJavaEnumFields());
-		assertNotNull(j.getJavaEnumFields().getJavaEnumField());
-		assertTrue(j.getJavaEnumFields().getJavaEnumField().size() == 0);
-		assertNull(j.getPackageName());
-		assertNotNull(j.getUri());
-		assertEquals(String.format(AtlasJavaModelFactory.URI_FORMAT, j.getClassName()), j.getUri());
-	}
+    public static void validatePrimitive(JavaClass j, String name) {
+        validatePrimitiveCommon(j);
+        assertEquals(name, j.getClassName());
+        assertNull(j.getCollectionType());
+        assertNull(j.getArrayDimensions());
+    }
+
+    public static void validatePrimitiveArray(JavaClass j, String name, int dim) {
+        validatePrimitiveCommon(j);
+        assertEquals(name, j.getClassName());
+        assertEquals(new Integer(dim), j.getArrayDimensions());
+        assertEquals(CollectionType.ARRAY, j.getCollectionType());
+    }
+
+    protected static void validatePrimitiveCommon(JavaClass j) {
+        assertNotNull(j);
+        assertFalse(j.isAnnonymous());
+        assertFalse(j.isAnnotation());
+        assertFalse(j.isEnumeration());
+        assertFalse(j.isInterface());
+        assertFalse(j.isLocalClass());
+        assertFalse(j.isMemberClass());
+        assertTrue(j.isPrimitive());
+        assertFalse(j.isSynthetic());
+        assertNotNull(j.getJavaFields());
+        assertNotNull(j.getJavaFields().getJavaField());
+        assertTrue(j.getJavaFields().getJavaField().size() == 0);
+        assertNotNull(j.getJavaEnumFields());
+        assertNotNull(j.getJavaEnumFields().getJavaEnumField());
+        assertTrue(j.getJavaEnumFields().getJavaEnumField().size() == 0);
+        assertNull(j.getPackageName());
+        assertNotNull(j.getUri());
+        assertEquals(String.format(AtlasJavaModelFactory.URI_FORMAT, j.getClassName()), j.getUri());
+    }
 }

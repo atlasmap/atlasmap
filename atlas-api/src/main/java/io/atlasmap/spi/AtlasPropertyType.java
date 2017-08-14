@@ -19,35 +19,36 @@ import java.util.Arrays;
 import java.util.List;
 
 public enum AtlasPropertyType {
-	ENVIRONMENT_VARIABLES("EnvironmentVariables"),
-	JAVA_SYSTEM_PROPERTIES("SystemProperties"),
-	MAPPING_DEFINED_PROPERTIES("MappingDefinedProperties"),
-	RUNTIME_PROPERTIES("RuntimeProperties");
+    ENVIRONMENT_VARIABLES("EnvironmentVariables"), JAVA_SYSTEM_PROPERTIES(
+            "SystemProperties"), MAPPING_DEFINED_PROPERTIES(
+                    "MappingDefinedProperties"), RUNTIME_PROPERTIES("RuntimeProperties");
 
-	private final String value;
-	
-	private AtlasPropertyType(String value) {
-	    this.value = value;
-	}
+    private final String value;
+
+    private AtlasPropertyType(String value) {
+        this.value = value;
+    }
 
     public String value() {
         return this.value;
     }
 
     public static AtlasPropertyType fromValue(String v) {
-        for (AtlasPropertyType c: AtlasPropertyType.values()) {
+        for (AtlasPropertyType c : AtlasPropertyType.values()) {
             if (c.value.equals(v)) {
                 return c;
             }
         }
         throw new IllegalArgumentException(v);
     }
-    
+
     public static List<AtlasPropertyType> getAll() {
-        return Arrays.asList(ENVIRONMENT_VARIABLES, JAVA_SYSTEM_PROPERTIES, MAPPING_DEFINED_PROPERTIES, RUNTIME_PROPERTIES);
+        return Arrays.asList(ENVIRONMENT_VARIABLES, JAVA_SYSTEM_PROPERTIES, MAPPING_DEFINED_PROPERTIES,
+                RUNTIME_PROPERTIES);
     }
-    
+
     public static List<String> getAllValues() {
-        return Arrays.asList(ENVIRONMENT_VARIABLES.value(), JAVA_SYSTEM_PROPERTIES.value(), MAPPING_DEFINED_PROPERTIES.value(), RUNTIME_PROPERTIES.value());
+        return Arrays.asList(ENVIRONMENT_VARIABLES.value(), JAVA_SYSTEM_PROPERTIES.value(),
+                MAPPING_DEFINED_PROPERTIES.value(), RUNTIME_PROPERTIES.value());
     }
 }

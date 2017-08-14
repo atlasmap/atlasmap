@@ -33,7 +33,6 @@ public class JsonFieldReaderTest {
         reader.read("{qwerty : ytrewq}", null);
     }
 
-
     @Test
     public void testSimpleJsonDocument() throws Exception {
         final String document = "   { \"brand\" : \"Mercedes\", \"doors\" : 5 }";
@@ -59,7 +58,7 @@ public class JsonFieldReaderTest {
         assertNotNull(field.getValue());
         assertThat(field.getValue(), Is.is(5));
         resetField(field);
-        
+
         field.setPath("/car/brand");
         reader.read(document, field);
         assertNotNull(field.getValue());
@@ -68,17 +67,11 @@ public class JsonFieldReaderTest {
 
     @Test
     public void testComplexJsonDocument_NestedObjectArray() throws Exception {
-        final String document = "{\"menu\": {\n" +
-            "  \"id\": \"file\",\n" +
-            "  \"value\": \"Filed\",\n" +
-            "  \"popup\": {\n" +
-            "    \"menuitem\": [\n" +
-            "      {\"value\": \"New\", \"onclick\": \"CreateNewDoc()\"},\n" +
-            "      {\"value\": \"Open\", \"onclick\": \"OpenDoc()\"},\n" +
-            "      {\"value\": \"Close\", \"onclick\": \"CloseDoc()\"}\n" +
-            "    ]\n" +
-            "  }\n" +
-            "}}";
+        final String document = "{\"menu\": {\n" + "  \"id\": \"file\",\n" + "  \"value\": \"Filed\",\n"
+                + "  \"popup\": {\n" + "    \"menuitem\": [\n"
+                + "      {\"value\": \"New\", \"onclick\": \"CreateNewDoc()\"},\n"
+                + "      {\"value\": \"Open\", \"onclick\": \"OpenDoc()\"},\n"
+                + "      {\"value\": \"Close\", \"onclick\": \"CloseDoc()\"}\n" + "    ]\n" + "  }\n" + "}}";
 
         JsonField field = AtlasJsonModelFactory.createJsonField();
         field.setPath("/menu/id");
@@ -124,7 +117,8 @@ public class JsonFieldReaderTest {
 
     @Test
     public void testComplexJsonDocument_HighlyNested() throws Exception {
-        final String document = new String(Files.readAllBytes(Paths.get("src/test/resources/highly-nested-object.json")));
+        final String document = new String(
+                Files.readAllBytes(Paths.get("src/test/resources/highly-nested-object.json")));
         JsonField field = AtlasJsonModelFactory.createJsonField();
         field.setPath("/id");
         reader.read(document, field);
@@ -282,19 +276,21 @@ public class JsonFieldReaderTest {
         assertThat(field.getValue(), Is.is("Maple"));
         resetField(field);
     }
-    
+
     @Test
     public void testCollectionCount_HighlyNested() throws Exception {
-        final String document = new String(Files.readAllBytes(Paths.get("src/test/resources/highly-nested-object.json")));
+        final String document = new String(
+                Files.readAllBytes(Paths.get("src/test/resources/highly-nested-object.json")));
         JsonField field = AtlasJsonModelFactory.createJsonField();
         Integer count = reader.getCollectionCount(document, field, "batter");
         assertNotNull(count);
         assertEquals(Integer.valueOf(4), count);
     }
-    
+
     @Test
     public void testCollectionCount_HighlyNestedSegmentDoesNotExist() throws Exception {
-        final String document = new String(Files.readAllBytes(Paths.get("src/test/resources/highly-nested-object.json")));
+        final String document = new String(
+                Files.readAllBytes(Paths.get("src/test/resources/highly-nested-object.json")));
         JsonField field = AtlasJsonModelFactory.createJsonField();
         Integer count = reader.getCollectionCount(document, field, "battery");
         assertNull(count);
@@ -302,7 +298,8 @@ public class JsonFieldReaderTest {
 
     @Test
     public void testComplexJsonDocument_HighlyComplexNested() throws Exception {
-        final String document = new String(Files.readAllBytes(Paths.get("src/test/resources/highly-complex-nested-object.json")));
+        final String document = new String(
+                Files.readAllBytes(Paths.get("src/test/resources/highly-complex-nested-object.json")));
         JsonField field = AtlasJsonModelFactory.createJsonField();
         field.setPath("/items/item/id");
         reader.read(document, field);
@@ -328,7 +325,7 @@ public class JsonFieldReaderTest {
         assertThat(field.getValue(), Is.is(0.55));
         resetField(field);
 
-        //array of objects
+        // array of objects
         field.setPath("/items/item/batters/batter/id");
         reader.read(document, field);
         assertNotNull(field.getValue());
@@ -377,7 +374,7 @@ public class JsonFieldReaderTest {
         assertThat(field.getValue(), Is.is("Devil's Food"));
         resetField(field);
 
-        //simple array
+        // simple array
         field.setPath("/items/item/topping/id");
         reader.read(document, field);
         assertNotNull(field.getValue());
@@ -486,7 +483,7 @@ public class JsonFieldReaderTest {
         assertThat(field.getValue(), Is.is(0.55));
         resetField(field);
 
-        //array of objects
+        // array of objects
         field.setPath("/items/item[1]/batters/batter/id");
         reader.read(document, field);
         assertNotNull(field.getValue());

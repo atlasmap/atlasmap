@@ -16,25 +16,26 @@
     limitations under the License.
 
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>io.atlasmap</groupId>
-    <artifactId>atlas-parent</artifactId>
-    <version>1.19.0-SNAPSHOT</version>
-    <relativePath>../atlas-parent/pom.xml</relativePath>
-  </parent>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>io.atlasmap</groupId>
+        <artifactId>atlas-parent</artifactId>
+        <version>1.19.0-SNAPSHOT</version>
+        <relativePath>../atlas-parent/pom.xml</relativePath>
+    </parent>
 
-  <artifactId>atlas-json-parent</artifactId>
-  <packaging>pom</packaging>
-  <name>Atlas :: JSON Parent POM</name>
+    <artifactId>atlas-json-parent</artifactId>
+    <packaging>pom</packaging>
+    <name>Atlas :: JSON Parent POM</name>
 
-  <modules>
-    <module>atlas-json-model</module>
-    <module>atlas-json-core</module>
-    <module>atlas-json-module</module>
-    <module>atlas-json-service</module>
-    <module>atlas-json-test-model</module>
-  </modules>
+    <modules>
+        <module>atlas-json-model</module>
+        <module>atlas-json-core</module>
+        <module>atlas-json-module</module>
+        <module>atlas-json-service</module>
+        <module>atlas-json-test-model</module>
+    </modules>
 
 </project>

@@ -71,7 +71,6 @@ public class FloatConverterTest {
         assertNull(converter.convertToByte(null));
     }
 
-
     @Test
     public void convertToCharacter() throws Exception {
         Float df = 0.0f;
@@ -158,7 +157,6 @@ public class FloatConverterTest {
         Integer i = converter.convertToInteger(df);
     }
 
-
     @Test
     public void convertToLong() throws Exception {
         Float df = 0.0f;
@@ -221,8 +219,8 @@ public class FloatConverterTest {
         Class aClass = FloatConverter.class;
         Method[] methods = aClass.getMethods();
         for (Method method : methods) {
-            if(method.isSynthetic()) {
-                // We are running in Eclipse or jacoco 
+            if (method.isSynthetic()) {
+                // We are running in Eclipse or jacoco
                 continue;
             }
             if (method.getName().startsWith("convert")) {

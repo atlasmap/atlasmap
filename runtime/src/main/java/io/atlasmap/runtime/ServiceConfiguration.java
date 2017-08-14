@@ -32,7 +32,7 @@ public class ServiceConfiguration {
 
     // =====================================================================
 
-    public  static class JavaServiceEmptyClasspath extends JavaService {
+    public static class JavaServiceEmptyClasspath extends JavaService {
         public JavaServiceEmptyClasspath() {
             super();
         }
@@ -45,20 +45,17 @@ public class ServiceConfiguration {
          * @throws Exception
          */
         @Override
-		@POST
-        @Consumes({MediaType.APPLICATION_JSON})
-        @Produces({MediaType.APPLICATION_JSON})
+        @POST
+        @Consumes({ MediaType.APPLICATION_JSON })
+        @Produces({ MediaType.APPLICATION_JSON })
         @Path("/mavenclasspath")
         public Response generateClasspath(MavenClasspathRequest request) throws Exception {
             MavenClasspathResponse response = new MavenClasspathResponse();
             response.setExecutionTime(0L);
             response.setClasspath("");
-            return Response.ok()
-                           .header("Access-Control-Allow-Origin", "*")
-                           .header("Access-Control-Allow-Headers", "Content-Type")
-                           .header("Access-Control-Allow-Methods", "GET,PUT,POST,PATCH,DELETE")
-                           .entity(response)
-                           .build();
+            return Response.ok().header("Access-Control-Allow-Origin", "*")
+                    .header("Access-Control-Allow-Headers", "Content-Type")
+                    .header("Access-Control-Allow-Methods", "GET,PUT,POST,PATCH,DELETE").entity(response).build();
         }
     }
 }

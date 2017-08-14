@@ -35,7 +35,8 @@ public class JavaXmlSeparateTest extends AtlasMappingBaseTest {
 
     @Test
     public void testProcessSeparateSimple() throws Exception {
-        AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/javaToXml/atlasmapping-separate-simple.xml").toURI());
+        AtlasContext context = atlasContextFactory
+                .createContext(new File("src/test/resources/javaToXml/atlasmapping-separate-simple.xml").toURI());
         AtlasSession session = context.createSession();
         BaseContact sourceContact = AtlasTestUtil.generateContact(SourceContact.class);
         sourceContact.setFirstName("Ozzie Smith");
@@ -45,17 +46,19 @@ public class JavaXmlSeparateTest extends AtlasMappingBaseTest {
 
         Object object = session.getOutput();
         assertNotNull(object);
-        
+
         assertTrue(object instanceof String);
         AtlasXmlTestHelper helper = new AtlasXmlTestHelper();
-        JAXBElement<XmlContactAttribute> targetContact = (JAXBElement<XmlContactAttribute>)helper.unmarshal((String)object, XmlContactAttribute.class);
+        JAXBElement<XmlContactAttribute> targetContact = (JAXBElement<XmlContactAttribute>) helper
+                .unmarshal((String) object, XmlContactAttribute.class);
         AtlasTestUtil.validateXmlContactAttribute(targetContact.getValue());
         assertFalse(session.hasErrors());
     }
 
     @Test
     public void testProcessSeparateSkip() throws Exception {
-        AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/javaToXml/atlasmapping-separate-skip.xml").toURI());
+        AtlasContext context = atlasContextFactory
+                .createContext(new File("src/test/resources/javaToXml/atlasmapping-separate-skip.xml").toURI());
         AtlasSession session = context.createSession();
         BaseContact sourceContact = AtlasTestUtil.generateContact(SourceContact.class);
         sourceContact.setFirstName("Dr. Mr. Ozzie L. Smith Jr.");
@@ -67,14 +70,16 @@ public class JavaXmlSeparateTest extends AtlasMappingBaseTest {
         assertNotNull(object);
         assertTrue(object instanceof String);
         AtlasXmlTestHelper helper = new AtlasXmlTestHelper();
-        JAXBElement<XmlContactAttribute> targetContact = (JAXBElement<XmlContactAttribute>)helper.unmarshal((String)object, XmlContactAttribute.class);
+        JAXBElement<XmlContactAttribute> targetContact = (JAXBElement<XmlContactAttribute>) helper
+                .unmarshal((String) object, XmlContactAttribute.class);
         AtlasTestUtil.validateXmlContactAttribute(targetContact.getValue());
         assertFalse(session.hasErrors());
     }
-    
+
     @Test
     public void testProcessSeparateOutOfOrder() throws Exception {
-        AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/javaToXml/atlasmapping-separate-outoforder.xml").toURI());
+        AtlasContext context = atlasContextFactory
+                .createContext(new File("src/test/resources/javaToXml/atlasmapping-separate-outoforder.xml").toURI());
         AtlasSession session = context.createSession();
         BaseContact sourceContact = AtlasTestUtil.generateContact(SourceContact.class);
         sourceContact.setFirstName("Dr. Mr. Ozzie L. Smith Jr.");
@@ -86,14 +91,16 @@ public class JavaXmlSeparateTest extends AtlasMappingBaseTest {
         assertNotNull(object);
         assertTrue(object instanceof String);
         AtlasXmlTestHelper helper = new AtlasXmlTestHelper();
-        JAXBElement<XmlContactAttribute> targetContact = (JAXBElement<XmlContactAttribute>)helper.unmarshal((String)object, XmlContactAttribute.class);
+        JAXBElement<XmlContactAttribute> targetContact = (JAXBElement<XmlContactAttribute>) helper
+                .unmarshal((String) object, XmlContactAttribute.class);
         AtlasTestUtil.validateXmlContactAttribute(targetContact.getValue());
         assertFalse(session.hasErrors());
     }
-    
+
     @Test
     public void testProcessSeparateNotEnoughInput() throws Exception {
-        AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/javaToXml/atlasmapping-separate-inputshort.xml").toURI());
+        AtlasContext context = atlasContextFactory
+                .createContext(new File("src/test/resources/javaToXml/atlasmapping-separate-inputshort.xml").toURI());
         AtlasSession session = context.createSession();
         BaseContact sourceContact = AtlasTestUtil.generateContact(SourceContact.class);
         sourceContact.setFirstName("Dr. Mr. Ozzie");
@@ -103,20 +110,24 @@ public class JavaXmlSeparateTest extends AtlasMappingBaseTest {
 
         Object object = session.getOutput();
         assertNotNull(object);
-        
+
         assertTrue(object instanceof String);
         AtlasXmlTestHelper helper = new AtlasXmlTestHelper();
-        JAXBElement<XmlContactAttribute> targetContact = (JAXBElement<XmlContactAttribute>)helper.unmarshal((String)object, XmlContactAttribute.class);
+        JAXBElement<XmlContactAttribute> targetContact = (JAXBElement<XmlContactAttribute>) helper
+                .unmarshal((String) object, XmlContactAttribute.class);
         assertNotNull(targetContact.getValue());
         assertEquals("Ozzie", targetContact.getValue().getFirstName());
-        assertEquals(null, targetContact.getValue().getLastName());        
-        assertTrue(session.hasErrors());        
-        assertEquals("Separate returned fewer segements count=3 when outputField.path=/Contact/@lastName requested index=4", session.getAudits().getAudit().get(0).getMessage());
+        assertEquals(null, targetContact.getValue().getLastName());
+        assertTrue(session.hasErrors());
+        assertEquals(
+                "Separate returned fewer segements count=3 when outputField.path=/Contact/@lastName requested index=4",
+                session.getAudits().getAudit().get(0).getMessage());
     }
-    
+
     @Test
     public void testProcessSeparateNullInput() throws Exception {
-        AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/javaToXml/atlasmapping-separate-inputnull.xml").toURI());
+        AtlasContext context = atlasContextFactory
+                .createContext(new File("src/test/resources/javaToXml/atlasmapping-separate-inputnull.xml").toURI());
         AtlasSession session = context.createSession();
         BaseContact sourceContact = AtlasTestUtil.generateContact(SourceContact.class);
         sourceContact.setFirstName(null);
@@ -126,12 +137,13 @@ public class JavaXmlSeparateTest extends AtlasMappingBaseTest {
 
         Object object = session.getOutput();
         assertNotNull(object);
-        
+
         assertTrue(object instanceof String);
         AtlasXmlTestHelper helper = new AtlasXmlTestHelper();
-        JAXBElement<XmlContactAttribute> targetContact = (JAXBElement<XmlContactAttribute>)helper.unmarshal((String)object, XmlContactAttribute.class);
+        JAXBElement<XmlContactAttribute> targetContact = (JAXBElement<XmlContactAttribute>) helper
+                .unmarshal((String) object, XmlContactAttribute.class);
         assertFalse(session.hasErrors());
-        
+
         assertEquals(null, targetContact.getValue().getFirstName());
         assertEquals(null, targetContact.getValue().getLastName());
         assertEquals("5551212", targetContact.getValue().getPhoneNumber());

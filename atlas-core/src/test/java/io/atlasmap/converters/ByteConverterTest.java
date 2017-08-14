@@ -43,7 +43,6 @@ public class ByteConverterTest {
         assertNull(byteConverter.convertToBoolean(null));
     }
 
-
     @Test(expected = AtlasConversionException.class)
     public void convertToByte() throws Exception {
         byteConverter.convertToByte(Byte.MAX_VALUE);
@@ -129,8 +128,8 @@ public class ByteConverterTest {
         Class aClass = ByteConverter.class;
         Method[] methods = aClass.getMethods();
         for (Method method : methods) {
-            if(method.isSynthetic()) {
-                // We are running in Eclipse or jacoco 
+            if (method.isSynthetic()) {
+                // We are running in Eclipse or jacoco
                 continue;
             }
             if (method.getName().startsWith("convert")) {

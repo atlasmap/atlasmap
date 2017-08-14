@@ -24,7 +24,6 @@ public class JsonDocumentInspectionServiceTest {
 
     private final JsonDocumentInspectionService inspectionService = new JsonDocumentInspectionService();
 
-
     @Test(expected = IllegalArgumentException.class)
     public void inspectJsonDocument_Empty() throws Exception {
         final String instance = "";
@@ -45,7 +44,8 @@ public class JsonDocumentInspectionServiceTest {
 
     @Test(expected = JsonInspectionException.class)
     public void inspectJsonDocument_UnparseableHighlyComplexNestedObject() throws Exception {
-        final String instance = new String(Files.readAllBytes(Paths.get("src/test/resources/inspect/unparseable-highly-complex-nested-object.json")));
+        final String instance = new String(Files
+                .readAllBytes(Paths.get("src/test/resources/inspect/unparseable-highly-complex-nested-object.json")));
         JsonDocument document = inspectionService.inspectJsonDocument(instance);
     }
 
@@ -93,9 +93,9 @@ public class JsonDocumentInspectionServiceTest {
         Assert.assertNull(jsonField.getFieldType());
         Assert.assertNull(jsonField.getName());
         Assert.assertNull(jsonField.getPath());
-//        printDocument(document);
+        // printDocument(document);
     }
-    
+
     @Test
     public void inspectJsonDocument_SimpleArrayStartsWithWhiteSpace() throws Exception {
         final String instance = "\n\t\r [ 100, 500, 300, 200, 400 ]";
@@ -108,24 +108,14 @@ public class JsonDocumentInspectionServiceTest {
         Assert.assertNull(jsonField.getFieldType());
         Assert.assertNull(jsonField.getName());
         Assert.assertNull(jsonField.getPath());
-//        printDocument(document);
+        // printDocument(document);
     }
 
     @Test
     public void inspectJsonDocument_SimpleObjectArray() throws Exception {
-        final String instance = "[\n" +
-            "\t{\n" +
-            "\t\t\"color\": \"red\",\n" +
-            "\t\t\"value\": \"#f00\"\n" +
-            "\t},\n" +
-            "\t{\n" +
-            "\t\t\"color\": \"green\",\n" +
-            "\t\t\"value\": \"#0f0\"\n" +
-            "\t},\n" +
-            "\t{\n" +
-            "\t\t\"color\": \"blue\",\n" +
-            "\t\t\"value\": \"#00f\"\n" +
-            "\t}]";
+        final String instance = "[\n" + "\t{\n" + "\t\t\"color\": \"red\",\n" + "\t\t\"value\": \"#f00\"\n" + "\t},\n"
+                + "\t{\n" + "\t\t\"color\": \"green\",\n" + "\t\t\"value\": \"#0f0\"\n" + "\t},\n" + "\t{\n"
+                + "\t\t\"color\": \"blue\",\n" + "\t\t\"value\": \"#00f\"\n" + "\t}]";
         JsonDocument document = inspectionService.inspectJsonDocument(instance);
         Assert.assertNotNull(document);
         Assert.assertThat(1, Is.is(document.getFields().getField().size()));
@@ -135,26 +125,26 @@ public class JsonDocumentInspectionServiceTest {
         Assert.assertNull(jsonField.getFieldType());
         Assert.assertNull(jsonField.getName());
         Assert.assertNull(jsonField.getPath());
-//        printDocument(document);
+        // printDocument(document);
     }
-
 
     @Test
     public void inspectJsonDocument_ArrayHighlyNestedObjects() throws Exception {
-        final String instance = new String(Files.readAllBytes(Paths.get("src/test/resources/inspect/array-highly-nested-objects.json")));
+        final String instance = new String(
+                Files.readAllBytes(Paths.get("src/test/resources/inspect/array-highly-nested-objects.json")));
         JsonDocument document = inspectionService.inspectJsonDocument(instance);
         Assert.assertNotNull(document);
         Assert.assertThat(document.getFields().getField().size(), Is.is(1));
         JsonField jsonField = (JsonField) document.getFields().getField().get(0);
         Assert.assertTrue(jsonField.getStatus().compareTo(FieldStatus.UNSUPPORTED) == 0);
         Assert.assertTrue(jsonField.getCollectionType().compareTo(CollectionType.ARRAY) == 0);
-//        printDocument(document);
+        // printDocument(document);
     }
-
 
     @Test
     public void inspectJsonDocument_EscapedCharsInKeys() throws Exception {
-        final String instance = new String(Files.readAllBytes(Paths.get("src/test/resources/inspect/keys-with-escaped-characters.json")));
+        final String instance = new String(
+                Files.readAllBytes(Paths.get("src/test/resources/inspect/keys-with-escaped-characters.json")));
         JsonDocument document = inspectionService.inspectJsonDocument(instance);
         Assert.assertNotNull(document);
         Assert.assertThat(document.getFields().getField().size(), Is.is(7));
@@ -204,12 +194,13 @@ public class JsonDocumentInspectionServiceTest {
                 Assert.assertThat(field.getStatus(), Is.is(FieldStatus.SUPPORTED));
             }
         }
-//        printDocument(document);
+        // printDocument(document);
     }
 
     @Test
     public void inspectJsonDocument_EscapedCharsInValue() throws Exception {
-        final String instance = new String(Files.readAllBytes(Paths.get("src/test/resources/inspect/value-with-escaped-characters.json")));
+        final String instance = new String(
+                Files.readAllBytes(Paths.get("src/test/resources/inspect/value-with-escaped-characters.json")));
         JsonDocument document = inspectionService.inspectJsonDocument(instance);
         Assert.assertNotNull(document);
         Assert.assertThat(document.getFields().getField().size(), Is.is(5));
@@ -247,13 +238,14 @@ public class JsonDocumentInspectionServiceTest {
                 Assert.assertThat(field.getStatus(), Is.is(FieldStatus.SUPPORTED));
             }
         }
-//        printDocument(document);
+        // printDocument(document);
     }
 
     // FlatPrimitive
     @Test
     public void inspectFlatPrimitive_NoRoot() throws Exception {
-        final String instance = new String(Files.readAllBytes(Paths.get("src/test/resources/inspect/flatprimitive-base-unrooted.json")));
+        final String instance = new String(
+                Files.readAllBytes(Paths.get("src/test/resources/inspect/flatprimitive-base-unrooted.json")));
         JsonDocument document = inspectionService.inspectJsonDocument(instance);
         Assert.assertNotNull(document);
         Assert.assertThat(document.getFields().getField().size(), Is.is(7));
@@ -269,7 +261,8 @@ public class JsonDocumentInspectionServiceTest {
                 Assert.assertThat(field.getName(), Is.is("charField"));
                 Assert.assertThat(field.getValue(), Is.is("a"));
                 Assert.assertThat(field.getPath(), Is.is("/".concat(field.getName())));
-                //FIXME DOES NOT RECOGNIZE CHAR DISTINCTLY AND RETURNS THIS AS A STRING (TEXTUAL)
+                // FIXME DOES NOT RECOGNIZE CHAR DISTINCTLY AND RETURNS THIS AS A STRING
+                // (TEXTUAL)
                 Assert.assertThat(field.getFieldType(), Is.is(FieldType.STRING));
                 Assert.assertThat(field.getStatus(), Is.is(FieldStatus.SUPPORTED));
             } else if (i == 2) {
@@ -282,7 +275,7 @@ public class JsonDocumentInspectionServiceTest {
                 Assert.assertThat(field.getName(), Is.is("floatField"));
                 Assert.assertThat(field.getValue(), Is.is(-63988281.00));
                 Assert.assertThat(field.getPath(), Is.is("/".concat(field.getName())));
-                //FIXME DOES NOT RECOGNIZE FLOAT DISTINCTLY AND RETURNS THIS AS A DOUBLE
+                // FIXME DOES NOT RECOGNIZE FLOAT DISTINCTLY AND RETURNS THIS AS A DOUBLE
                 Assert.assertThat(field.getFieldType(), Is.is(FieldType.DOUBLE));
                 Assert.assertThat(field.getStatus(), Is.is(FieldStatus.SUPPORTED));
             } else if (i == 4) {
@@ -295,14 +288,14 @@ public class JsonDocumentInspectionServiceTest {
                 Assert.assertThat(field.getName(), Is.is("shortField"));
                 Assert.assertThat(field.getValue(), Is.is(81));
                 Assert.assertThat(field.getPath(), Is.is("/".concat(field.getName())));
-                //FIXME JSON DOES NOT RECOGNIZE SHORT DISTINCTLY AND RETURNS THIS AS A INTEGER
+                // FIXME JSON DOES NOT RECOGNIZE SHORT DISTINCTLY AND RETURNS THIS AS A INTEGER
                 Assert.assertThat(field.getFieldType(), Is.is(FieldType.INTEGER));
                 Assert.assertThat(field.getStatus(), Is.is(FieldStatus.SUPPORTED));
             } else if (i == 6) {
                 Assert.assertThat(field.getName(), Is.is("longField"));
                 Assert.assertThat(field.getValue(), Is.is(3988281));
                 Assert.assertThat(field.getPath(), Is.is("/".concat(field.getName())));
-                //FIXME JSON DOES NOT RECOGNIZE LONG DISTINCTLY AND RETURNS THIS AS A INTEGER
+                // FIXME JSON DOES NOT RECOGNIZE LONG DISTINCTLY AND RETURNS THIS AS A INTEGER
                 Assert.assertThat(field.getFieldType(), Is.is(FieldType.INTEGER));
                 Assert.assertThat(field.getStatus(), Is.is(FieldStatus.SUPPORTED));
             }
@@ -311,7 +304,8 @@ public class JsonDocumentInspectionServiceTest {
 
     @Test
     public void inspectFlatPrimitive_WithRoot() throws Exception {
-        final String instance = new String(Files.readAllBytes(Paths.get("src/test/resources/inspect/flatprimitive-base-rooted.json")));
+        final String instance = new String(
+                Files.readAllBytes(Paths.get("src/test/resources/inspect/flatprimitive-base-rooted.json")));
         JsonDocument document = inspectionService.inspectJsonDocument(instance);
         Assert.assertNotNull(document);
         Assert.assertThat(document.getFields().getField().size(), Is.is(1));
@@ -373,7 +367,8 @@ public class JsonDocumentInspectionServiceTest {
 
     @Test
     public void inspectComplexObject_NoRoot() throws Exception {
-        final String instance = new String(Files.readAllBytes(Paths.get("src/test/resources/inspect/complex-object-unrooted.json")));
+        final String instance = new String(
+                Files.readAllBytes(Paths.get("src/test/resources/inspect/complex-object-unrooted.json")));
         JsonDocument document = inspectionService.inspectJsonDocument(instance);
         Assert.assertNotNull(document);
         Assert.assertThat(document.getFields().getField().size(), Is.is(3));
@@ -469,7 +464,8 @@ public class JsonDocumentInspectionServiceTest {
 
     @Test
     public void inspectComplexObject_WithRoot() throws Exception {
-        final String instance = new String(Files.readAllBytes(Paths.get("src/test/resources/inspect/complex-object-rooted.json")));
+        final String instance = new String(
+                Files.readAllBytes(Paths.get("src/test/resources/inspect/complex-object-rooted.json")));
         JsonDocument document = inspectionService.inspectJsonDocument(instance);
         Assert.assertNotNull(document);
         Assert.assertThat(document.getFields().getField().size(), Is.is(1));
@@ -568,7 +564,8 @@ public class JsonDocumentInspectionServiceTest {
 
     @Test
     public void inspectRepeatingComplexObject_WithRoot() throws Exception {
-        final String instance = new String(Files.readAllBytes(Paths.get("src/test/resources/inspect/complex-repeated-rooted.json")));
+        final String instance = new String(
+                Files.readAllBytes(Paths.get("src/test/resources/inspect/complex-repeated-rooted.json")));
         JsonDocument document = inspectionService.inspectJsonDocument(instance);
         Assert.assertNotNull(document);
         Assert.assertThat(document.getFields().getField().size(), Is.is(1));
@@ -582,7 +579,7 @@ public class JsonDocumentInspectionServiceTest {
         Assert.assertThat(orders.getJsonFields().getJsonField().size(), Is.is(15));
         Assert.assertThat(orders.getName(), Is.is("orders"));
 
-        JsonField orderBatchNumber =root.getJsonFields().getJsonField().get(1);
+        JsonField orderBatchNumber = root.getJsonFields().getJsonField().get(1);
         Assert.assertNotNull(orderBatchNumber);
         Assert.assertThat(orderBatchNumber.getName(), Is.is("orderBatchNumber"));
         Assert.assertThat(orderBatchNumber.getValue(), Is.is(4123562));
@@ -590,7 +587,7 @@ public class JsonDocumentInspectionServiceTest {
         Assert.assertThat(orderBatchNumber.getFieldType(), Is.is(FieldType.INTEGER));
         Assert.assertThat(orderBatchNumber.getStatus(), Is.is(FieldStatus.SUPPORTED));
 
-        JsonField numberOrders =root.getJsonFields().getJsonField().get(2);
+        JsonField numberOrders = root.getJsonFields().getJsonField().get(2);
         Assert.assertNotNull(numberOrders);
         Assert.assertThat(numberOrders.getName(), Is.is("numberOrders"));
         Assert.assertThat(numberOrders.getValue(), Is.is(5));
@@ -682,7 +679,7 @@ public class JsonDocumentInspectionServiceTest {
         Assert.assertThat(zipCode.getFieldType(), Is.is(FieldType.STRING));
         Assert.assertThat(zipCode.getStatus(), Is.is(FieldStatus.SUPPORTED));
 
-        //repeat
+        // repeat
         JsonComplexType complexAddress1_2 = (JsonComplexType) orders.getJsonFields().getJsonField().get(3);
         Assert.assertNotNull(complexAddress1_2);
         Assert.assertThat(complexAddress1_2.getJsonFields().getJsonField().size(), Is.is(5));
@@ -735,7 +732,6 @@ public class JsonDocumentInspectionServiceTest {
         Assert.assertThat(complexContact1_2.getName(), Is.is("contact"));
         Assert.assertThat(complexContact1_2.getPath(), Is.is("/SourceOrderList/orders[1]/contact"));
 
-
         JsonField firstName2 = complexContact1_2.getJsonFields().getJsonField().get(0);
         Assert.assertNotNull(firstName2);
         Assert.assertThat(firstName2.getName(), Is.is("firstName"));
@@ -768,14 +764,15 @@ public class JsonDocumentInspectionServiceTest {
         Assert.assertThat(zipCode2.getFieldType(), Is.is(FieldType.STRING));
         Assert.assertThat(zipCode2.getStatus(), Is.is(FieldStatus.SUPPORTED));
 
-        //etc......
+        // etc......
 
-//        printDocument(document);
+        // printDocument(document);
     }
 
     @Test
     public void inspectISO8601Dates_NoRoot() throws Exception {
-        final String instance = new String(Files.readAllBytes(Paths.get("src/test/resources/inspect/iso8601dates-unrooted.json")));
+        final String instance = new String(
+                Files.readAllBytes(Paths.get("src/test/resources/inspect/iso8601dates-unrooted.json")));
         JsonDocument document = inspectionService.inspectJsonDocument(instance);
         Assert.assertNotNull(document);
         Assert.assertThat(document.getFields().getField().size(), Is.is(7));
@@ -860,9 +857,8 @@ public class JsonDocumentInspectionServiceTest {
         Assert.assertThat(field2.getPath(), Is.is("/doors"));
         Assert.assertThat(field2.getFieldType(), Is.is(FieldType.INTEGER));
         Assert.assertThat(field2.getStatus(), Is.is(FieldStatus.SUPPORTED));
-//        printDocument(document);
+        // printDocument(document);
     }
-
 
     @Test
     public void inspectJsonDocument_WithRoot() throws Exception {
@@ -893,23 +889,16 @@ public class JsonDocumentInspectionServiceTest {
         Assert.assertThat(field2.getPath(), Is.is("/car/doors"));
         Assert.assertThat(field2.getFieldType(), Is.is(FieldType.INTEGER));
         Assert.assertThat(field2.getStatus(), Is.is(FieldStatus.SUPPORTED));
-//        printDocument(document);
+        // printDocument(document);
     }
-
 
     @Test
     public void inspectJsonDocument_NestedObjectArray() throws Exception {
-        final String instance = "{\"menu\": {\n" +
-            "  \"id\": \"file\",\n" +
-            "  \"value\": \"Filed\",\n" +
-            "  \"popup\": {\n" +
-            "    \"menuitem\": [\n" +
-            "      {\"value\": \"New\", \"onclick\": \"CreateNewDoc()\"},\n" +
-            "      {\"value\": \"Open\", \"onclick\": \"OpenDoc()\"},\n" +
-            "      {\"value\": \"Close\", \"onclick\": \"CloseDoc()\"}\n" +
-            "    ]\n" +
-            "  }\n" +
-            "}}";
+        final String instance = "{\"menu\": {\n" + "  \"id\": \"file\",\n" + "  \"value\": \"Filed\",\n"
+                + "  \"popup\": {\n" + "    \"menuitem\": [\n"
+                + "      {\"value\": \"New\", \"onclick\": \"CreateNewDoc()\"},\n"
+                + "      {\"value\": \"Open\", \"onclick\": \"OpenDoc()\"},\n"
+                + "      {\"value\": \"Close\", \"onclick\": \"CloseDoc()\"}\n" + "    ]\n" + "  }\n" + "}}";
         JsonDocument document = inspectionService.inspectJsonDocument(instance);
         Assert.assertNotNull(document);
         Assert.assertThat(1, Is.is(document.getFields().getField().size()));
@@ -997,12 +986,13 @@ public class JsonDocumentInspectionServiceTest {
         Assert.assertThat(menuitem2_onclick.getPath(), Is.is("/menu/popup/menuitem[2]/onclick"));
         Assert.assertThat(menuitem2_onclick.getFieldType(), Is.is(FieldType.STRING));
         Assert.assertThat(menuitem2_onclick.getStatus(), Is.is(FieldStatus.SUPPORTED));
-//        printDocument(document);
+        // printDocument(document);
     }
 
     @Test
     public void inspectJsonDocument_HighlyNestedObject() throws Exception {
-        final String instance = new String(Files.readAllBytes(Paths.get("src/test/resources/inspect/highly-nested-object.json")));
+        final String instance = new String(
+                Files.readAllBytes(Paths.get("src/test/resources/inspect/highly-nested-object.json")));
         JsonDocument document = inspectionService.inspectJsonDocument(instance);
         Assert.assertNotNull(document);
         Assert.assertThat(document.getFields().getField().size(), Is.is(6));
@@ -1042,7 +1032,6 @@ public class JsonDocumentInspectionServiceTest {
         JsonComplexType batters = (JsonComplexType) document.getFields().getField().get(4);
         Assert.assertNotNull(batters);
         Assert.assertThat(batters.getJsonFields().getJsonField().size(), Is.is(1));
-
 
         JsonComplexType batterParent = (JsonComplexType) batters.getJsonFields().getJsonField().get(0);
         Assert.assertNotNull(batterParent);
@@ -1163,13 +1152,14 @@ public class JsonDocumentInspectionServiceTest {
         Assert.assertThat(toppingType2.getPath(), Is.is("/topping/type[2]"));
         Assert.assertThat(toppingType2.getFieldType(), Is.is(FieldType.STRING));
         Assert.assertThat(toppingType2.getStatus(), Is.is(FieldStatus.SUPPORTED));
-        //etc....
-//        printDocument(document);
+        // etc....
+        // printDocument(document);
     }
 
     @Test
     public void inspectJsonDocument_HighlyComplexNestedObject() throws Exception {
-        final String instance = new String(Files.readAllBytes(Paths.get("src/test/resources/inspect/highly-complex-nested-object.json")));
+        final String instance = new String(
+                Files.readAllBytes(Paths.get("src/test/resources/inspect/highly-complex-nested-object.json")));
         JsonDocument document = inspectionService.inspectJsonDocument(instance);
         Assert.assertNotNull(document);
         Assert.assertThat(document.getFields().getField().size(), Is.is(1));
@@ -1224,7 +1214,8 @@ public class JsonDocumentInspectionServiceTest {
         Assert.assertThat(itemBattersComplexType.getName(), Is.is("batters"));
         Assert.assertThat(itemBattersComplexType.getJsonFields().getJsonField().size(), Is.is(1));
 
-        JsonComplexType itemBatterComplexType = (JsonComplexType) itemBattersComplexType.getJsonFields().getJsonField().get(0);
+        JsonComplexType itemBatterComplexType = (JsonComplexType) itemBattersComplexType.getJsonFields().getJsonField()
+                .get(0);
         Assert.assertNotNull(itemBatterComplexType);
         Assert.assertThat(itemBatterComplexType.getFieldType(), Is.is(FieldType.COMPLEX));
         Assert.assertThat(itemBatterComplexType.getName(), Is.is("batter"));
@@ -1262,7 +1253,6 @@ public class JsonDocumentInspectionServiceTest {
         Assert.assertThat(batterType1.getFieldType(), Is.is(FieldType.STRING));
         Assert.assertThat(batterType1.getStatus(), Is.is(FieldStatus.SUPPORTED));
 
-
         JsonField batterId2 = itemBatterComplexType.getJsonFields().getJsonField().get(4);
         Assert.assertNotNull(batterId2);
         Assert.assertThat(batterId2.getName(), Is.is("id"));
@@ -1294,7 +1284,6 @@ public class JsonDocumentInspectionServiceTest {
         Assert.assertThat(batterType3.getPath(), Is.is("/items/item/batters/batter[3]/type"));
         Assert.assertThat(batterType3.getFieldType(), Is.is(FieldType.STRING));
         Assert.assertThat(batterType3.getStatus(), Is.is(FieldStatus.SUPPORTED));
-
 
         JsonComplexType itemToppingComplexType = (JsonComplexType) item.getJsonFields().getJsonField().get(5);
         Assert.assertNotNull(itemToppingComplexType);
@@ -1452,7 +1441,8 @@ public class JsonDocumentInspectionServiceTest {
         Assert.assertThat(itemBattersComplexType1.getName(), Is.is("batters"));
         Assert.assertThat(itemBattersComplexType1.getJsonFields().getJsonField().size(), Is.is(1));
 
-        JsonComplexType itemBatterComplexType1 = (JsonComplexType) itemBattersComplexType1.getJsonFields().getJsonField().get(0);
+        JsonComplexType itemBatterComplexType1 = (JsonComplexType) itemBattersComplexType1.getJsonFields()
+                .getJsonField().get(0);
         Assert.assertNotNull(itemBatterComplexType1);
         Assert.assertThat(itemBatterComplexType1.getFieldType(), Is.is(FieldType.COMPLEX));
         Assert.assertThat(itemBatterComplexType1.getName(), Is.is("batter"));
@@ -1473,7 +1463,6 @@ public class JsonDocumentInspectionServiceTest {
         Assert.assertThat(batterType1_0.getPath(), Is.is("/items/item[1]/batters/batter/type"));
         Assert.assertThat(batterType1_0.getFieldType(), Is.is(FieldType.STRING));
         Assert.assertThat(batterType1_0.getStatus(), Is.is(FieldStatus.SUPPORTED));
-
 
         JsonComplexType itemToppingsComplexType1 = (JsonComplexType) item.getJsonFields().getJsonField().get(11);
         Assert.assertNotNull(itemToppingsComplexType1);
@@ -1561,10 +1550,9 @@ public class JsonDocumentInspectionServiceTest {
         Assert.assertThat(toppingType1_5.getFieldType(), Is.is(FieldType.STRING));
         Assert.assertThat(toppingType1_5.getStatus(), Is.is(FieldStatus.SUPPORTED));
 
-        //etc....
-//        printDocument(document);
+        // etc....
+        // printDocument(document);
     }
-
 
     private void printDocument(JsonDocument document) {
         Assert.assertNotNull(document.getFields());

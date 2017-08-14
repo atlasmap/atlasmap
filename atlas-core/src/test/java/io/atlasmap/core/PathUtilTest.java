@@ -25,8 +25,8 @@ import org.junit.Test;
 
 import io.atlasmap.core.PathUtil;
 
-public class PathUtilTest { 
-    
+public class PathUtilTest {
+
     @Test
     public void testOneClass() {
         PathUtil foo = new PathUtil("");
@@ -34,7 +34,6 @@ public class PathUtilTest {
         assertEquals("user", foo.toString());
     }
 
-    
     @Test
     public void testFields() {
         PathUtil foo = new PathUtil("");
@@ -43,7 +42,7 @@ public class PathUtilTest {
         foo.appendField("bar");
         assertEquals("/user/name/bar", foo.toString());
     }
-    
+
     @Test
     public void testCleanPathSegment() {
         assertNull(PathUtil.cleanPathSegment(null));
@@ -52,39 +51,39 @@ public class PathUtilTest {
         assertEquals("foo", PathUtil.cleanPathSegment("foo[]"));
         assertEquals("foo", PathUtil.cleanPathSegment("foo<>"));
         assertEquals("foo", PathUtil.cleanPathSegment("foo{}"));
-        
+
         assertEquals("foo", PathUtil.cleanPathSegment("foo"));
         assertEquals("foo", PathUtil.cleanPathSegment("foo[0]"));
         assertEquals("foo", PathUtil.cleanPathSegment("foo<1234>"));
         assertEquals("foo", PathUtil.cleanPathSegment("foo{bar}"));
-        
+
         // We do not try to outsmart busted paths
         assertEquals("foo[0", PathUtil.cleanPathSegment("foo[0"));
         assertEquals("foo1234>", PathUtil.cleanPathSegment("foo1234>"));
         assertEquals("foo}", PathUtil.cleanPathSegment("foo}"));
     }
-    
+
     @Test
     public void testGetLastSegmentParent() {
         PathUtil p = new PathUtil("/orders/contact/firstName");
         assertEquals("contact", p.getLastSegmentParent());
     }
-    
+
     @Test
     public void testGetLastSegmentParentPath() {
         PathUtil p = new PathUtil("/orders[]/contact/firstName");
         assertEquals("/orders[]/contact", p.getLastSegmentParentPath().toString());
     }
-    
+
     @Test
     public void testDeParentify() {
         PathUtil p = new PathUtil("/orders[]/contact/firstName");
         assertEquals("/contact/firstName", p.deParentify().toString());
-        
+
         p = new PathUtil("/orders/contact[]/firstName");
         assertEquals("/contact[]/firstName", p.deParentify().toString());
     }
-    
+
     @Test
     public void testDeCollectionfy() {
         PathUtil p = new PathUtil("/orders[]/contact/firstName");
@@ -96,7 +95,7 @@ public class PathUtilTest {
         assertEquals("firstName", p.deCollectionify("contact").toString());
         assertEquals("firstName", p.deCollectionify("contact[]").toString());
         assertEquals("firstName", p.deCollectionify("contact[3]").toString());
-        
+
         p = new PathUtil("/orders<>/contact/firstName");
         assertEquals("/contact/firstName", p.deCollectionify("orders").toString());
         assertEquals("/contact/firstName", p.deCollectionify("orders<>").toString());
@@ -107,7 +106,7 @@ public class PathUtilTest {
         assertEquals("firstName", p.deCollectionify("contact<>").toString());
         assertEquals("firstName", p.deCollectionify("contact<3>").toString());
     }
-    
+
     @Test
     public void testCollectionIndexHandling() {
         assertNull(PathUtil.indexOfSegment(null));
@@ -116,40 +115,56 @@ public class PathUtilTest {
         assertNull(PathUtil.indexOfSegment("foo[]"));
         assertNull(PathUtil.indexOfSegment("foo<>"));
         assertNull(PathUtil.indexOfSegment("foo{}"));
-            
+
         assertEquals(new Integer(0), PathUtil.indexOfSegment("foo[0]"));
         assertEquals(new Integer(1234), PathUtil.indexOfSegment("foo<1234>"));
         assertNull(PathUtil.indexOfSegment("foo{bar}"));
-        
+
         PathUtil p = new PathUtil("/orders[4]/contact/firstName");
         p.setCollectionIndex("orders[4]", 5);
         assertEquals("/orders[5]/contact/firstName", p.toString());
         assertEquals(new Integer(5), PathUtil.indexOfSegment("orders[5]"));
-        
-        try { p.setCollectionIndex("orders<>", -3); fail("Exception expected"); } catch (IllegalArgumentException e) { }
-        try { p.setCollectionIndex("orders{}", 3); fail("Exception expected"); } catch (IllegalArgumentException e) { }
-        try { p.setCollectionIndex("orders", 3); fail("Exception expected"); } catch (IllegalArgumentException e) { }
-        try { p.setCollectionIndex("/orders/contact/foo", 3); fail("Exception expected"); } catch (IllegalArgumentException e) { }
-        
+
+        try {
+            p.setCollectionIndex("orders<>", -3);
+            fail("Exception expected");
+        } catch (IllegalArgumentException e) {
+        }
+        try {
+            p.setCollectionIndex("orders{}", 3);
+            fail("Exception expected");
+        } catch (IllegalArgumentException e) {
+        }
+        try {
+            p.setCollectionIndex("orders", 3);
+            fail("Exception expected");
+        } catch (IllegalArgumentException e) {
+        }
+        try {
+            p.setCollectionIndex("/orders/contact/foo", 3);
+            fail("Exception expected");
+        } catch (IllegalArgumentException e) {
+        }
+
         PathUtil q = new PathUtil("/orders<4>/contact/firstName");
         q.setCollectionIndex("orders<7>", 6);
         assertEquals("/orders<6>/contact/firstName", q.toString());
         assertEquals(new Integer(5), PathUtil.indexOfSegment("orders<5>"));
-        
+
         PathUtil r = new PathUtil("/orders<>/contact/firstName");
         assertEquals("orders<>", r.getCollectionSegment());
         r.setCollectionIndex("orders<>", 6);
         assertEquals("/orders<6>/contact/firstName", r.toString());
         assertEquals(new Integer(6), PathUtil.indexOfSegment(r.getCollectionSegment()));
     }
-    
+
     @Test
     public void testIsIndexedCollection() {
         PathUtil p = null;
-        
+
         p = new PathUtil("order");
         assertFalse(p.isIndexedCollection());
-            
+
         p = new PathUtil("/order/contact/firstName");
         assertFalse(p.isIndexedCollection());
 
@@ -158,28 +173,28 @@ public class PathUtilTest {
 
         p = new PathUtil("/orders[4]/contact/firstName");
         assertTrue(p.isIndexedCollection());
-        
+
         p = new PathUtil("/orders[0]/contact/firstName");
         assertTrue(p.isIndexedCollection());
 
         p = new PathUtil("/orders[]/contact/firstName");
         assertFalse(p.isIndexedCollection());
-        
+
         p = new PathUtil("orders<>");
         assertFalse(p.isIndexedCollection());
-        
+
         p = new PathUtil("orders<6>");
         assertTrue(p.isIndexedCollection());
-        
+
         p = new PathUtil("/foo/orders<6>");
         assertTrue(p.isIndexedCollection());
-        
+
         p = new PathUtil("/foo/orders<6>/bar");
         assertTrue(p.isIndexedCollection());
-        
+
         p = new PathUtil("/orders<3>/contact/firstName");
         assertTrue(p.isIndexedCollection());
-            
+
         p = new PathUtil("/orders<0>/contact/firstName");
         assertTrue(p.isIndexedCollection());
 
@@ -187,54 +202,54 @@ public class PathUtilTest {
         assertFalse(p.isIndexedCollection());
 
     }
-    
+
     @Test
     public void testRemoveCollectionIndexes() {
-    	//no collection cases
-    	assertEquals(null, PathUtil.removeCollectionIndex(null));
-    	assertEquals("blah", PathUtil.removeCollectionIndex("blah"));
-    	assertEquals("@blah", PathUtil.removeCollectionIndex("@blah"));
-    	assertEquals("@x:blah", PathUtil.removeCollectionIndex("@x:blah"));
-    	
-    	//cases with already empty collections
-    	assertEquals("blah[]", PathUtil.removeCollectionIndex("blah[]"));
-    	assertEquals("@blah[]", PathUtil.removeCollectionIndex("@blah[]"));
-    	assertEquals("@x:blah[]", PathUtil.removeCollectionIndex("@x:blah[]"));
-    	assertEquals("blah<>", PathUtil.removeCollectionIndex("blah<>"));
-    	assertEquals("@blah<>", PathUtil.removeCollectionIndex("@blah<>"));
-    	assertEquals("@x:blah<>", PathUtil.removeCollectionIndex("@x:blah<>"));
-    	assertEquals("blah{}", PathUtil.removeCollectionIndex("blah{}"));
-    	assertEquals("@blah{}", PathUtil.removeCollectionIndex("@blah{}"));
-    	assertEquals("@x:blah{}", PathUtil.removeCollectionIndex("@x:blah{}"));
-    	    	
-    	//cases with stuff in collections
-    	assertEquals("blah[]", PathUtil.removeCollectionIndex("blah[8]"));
-    	assertEquals("@blah[]", PathUtil.removeCollectionIndex("@blah[955]"));
-    	assertEquals("@x:blah[]", PathUtil.removeCollectionIndex("@x:blah[800]"));
-    	assertEquals("blah<>", PathUtil.removeCollectionIndex("blah<5>"));
-    	assertEquals("@blah<>", PathUtil.removeCollectionIndex("@blah<6>"));
-    	assertEquals("@x:blah<>", PathUtil.removeCollectionIndex("@x:blah<75555>"));
-    	assertEquals("blah{}", PathUtil.removeCollectionIndex("blah{5}"));
-    	assertEquals("@blah{}", PathUtil.removeCollectionIndex("@blah{6}"));
-    	assertEquals("@x:blah{}", PathUtil.removeCollectionIndex("@x:blah{65565657}"));
-    	
-    	//strange cases with malformed collections
-    	testMalformed("blah");
-    	testMalformed("@blah");
-    	testMalformed("@x:blah");
-    	
-    	assertEquals("/a/b[]/c/d[]/e{}/f<>/g[112/x{/z>>11", 
-    			PathUtil.removeCollectionIndexes("/a/b[]/c/d[15]/e{11}/f<111>/g[112/x{/z>>11"));
+        // no collection cases
+        assertEquals(null, PathUtil.removeCollectionIndex(null));
+        assertEquals("blah", PathUtil.removeCollectionIndex("blah"));
+        assertEquals("@blah", PathUtil.removeCollectionIndex("@blah"));
+        assertEquals("@x:blah", PathUtil.removeCollectionIndex("@x:blah"));
+
+        // cases with already empty collections
+        assertEquals("blah[]", PathUtil.removeCollectionIndex("blah[]"));
+        assertEquals("@blah[]", PathUtil.removeCollectionIndex("@blah[]"));
+        assertEquals("@x:blah[]", PathUtil.removeCollectionIndex("@x:blah[]"));
+        assertEquals("blah<>", PathUtil.removeCollectionIndex("blah<>"));
+        assertEquals("@blah<>", PathUtil.removeCollectionIndex("@blah<>"));
+        assertEquals("@x:blah<>", PathUtil.removeCollectionIndex("@x:blah<>"));
+        assertEquals("blah{}", PathUtil.removeCollectionIndex("blah{}"));
+        assertEquals("@blah{}", PathUtil.removeCollectionIndex("@blah{}"));
+        assertEquals("@x:blah{}", PathUtil.removeCollectionIndex("@x:blah{}"));
+
+        // cases with stuff in collections
+        assertEquals("blah[]", PathUtil.removeCollectionIndex("blah[8]"));
+        assertEquals("@blah[]", PathUtil.removeCollectionIndex("@blah[955]"));
+        assertEquals("@x:blah[]", PathUtil.removeCollectionIndex("@x:blah[800]"));
+        assertEquals("blah<>", PathUtil.removeCollectionIndex("blah<5>"));
+        assertEquals("@blah<>", PathUtil.removeCollectionIndex("@blah<6>"));
+        assertEquals("@x:blah<>", PathUtil.removeCollectionIndex("@x:blah<75555>"));
+        assertEquals("blah{}", PathUtil.removeCollectionIndex("blah{5}"));
+        assertEquals("@blah{}", PathUtil.removeCollectionIndex("@blah{6}"));
+        assertEquals("@x:blah{}", PathUtil.removeCollectionIndex("@x:blah{65565657}"));
+
+        // strange cases with malformed collections
+        testMalformed("blah");
+        testMalformed("@blah");
+        testMalformed("@x:blah");
+
+        assertEquals("/a/b[]/c/d[]/e{}/f<>/g[112/x{/z>>11",
+                PathUtil.removeCollectionIndexes("/a/b[]/c/d[15]/e{11}/f<111>/g[112/x{/z>>11"));
     }
-    
+
     public void testMalformed(String var) {
-    	assertEquals(var + "[", PathUtil.removeCollectionIndex(var + "["));
-    	assertEquals(var + "]", PathUtil.removeCollectionIndex(var + "]"));
-    	assertEquals(var + "<", PathUtil.removeCollectionIndex(var + "<"));
-    	assertEquals(var + ">", PathUtil.removeCollectionIndex(var + ">"));
-    	assertEquals(var + "{", PathUtil.removeCollectionIndex(var + "{"));
-    	assertEquals(var + "}", PathUtil.removeCollectionIndex(var + "}"));
-    	assertEquals(var + "{{", PathUtil.removeCollectionIndex(var + "{{"));
-    	assertEquals(var + "}}", PathUtil.removeCollectionIndex(var + "}}"));
+        assertEquals(var + "[", PathUtil.removeCollectionIndex(var + "["));
+        assertEquals(var + "]", PathUtil.removeCollectionIndex(var + "]"));
+        assertEquals(var + "<", PathUtil.removeCollectionIndex(var + "<"));
+        assertEquals(var + ">", PathUtil.removeCollectionIndex(var + ">"));
+        assertEquals(var + "{", PathUtil.removeCollectionIndex(var + "{"));
+        assertEquals(var + "}", PathUtil.removeCollectionIndex(var + "}"));
+        assertEquals(var + "{{", PathUtil.removeCollectionIndex(var + "{{"));
+        assertEquals(var + "}}", PathUtil.removeCollectionIndex(var + "}}"));
     }
 }

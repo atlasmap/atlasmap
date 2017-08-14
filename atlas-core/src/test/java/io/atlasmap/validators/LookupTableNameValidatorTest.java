@@ -25,16 +25,17 @@ import static org.junit.Assert.assertTrue;
 import org.junit.After;
 
 public class LookupTableNameValidatorTest extends BaseValidatorTest {
-    
+
     @Override
-	@Before
+    @Before
     public void setUp() {
         super.setUp();
-        validator = new LookupTableNameValidator("lookuptables.lookuptable.name", "LookupTables contain duplicated LookupTable names.");
+        validator = new LookupTableNameValidator("lookuptables.lookuptable.name",
+                "LookupTables contain duplicated LookupTable names.");
     }
-    
+
     @Override
-	@After
+    @After
     public void tearDown() {
         super.tearDown();
         validator = null;
@@ -61,7 +62,6 @@ public class LookupTableNameValidatorTest extends BaseValidatorTest {
         validator.validate(lookupTables, validations);
         assertFalse(validationHelper.hasErrors());
     }
-
 
     private LookupTables makeLookupTables() {
         LookupTables lookupTables = new LookupTables();

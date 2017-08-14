@@ -22,30 +22,31 @@ import io.atlasmap.validators.AtlasValidationTestHelper;
 
 public class AtlasCoreValidationTest extends AtlasMappingBaseTest {
 
-    @Rule 
+    @Rule
     public TestName name = new TestName();
 
     protected AtlasContext context = null;
     protected AtlasSession session = null;
-    
+
     @Before
     public void setUp() {
         super.setUp();
         try {
-            context = atlasContextFactory.createContext(new File("src/test/resources/validation/core/atlasmapping-" + name.getMethodName() + ".xml"));
+            context = atlasContextFactory.createContext(
+                    new File("src/test/resources/validation/core/atlasmapping-" + name.getMethodName() + ".xml"));
             session = context.createSession();
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException("Error initializing test: " + e.getMessage(), e);
-            
+
         }
     }
-    
+
     @After
     public void tearDown() {
         super.tearDown();
     }
-    
+
     @Test
     public void testMappingNameNull() throws AtlasException {
         assertNotNull(context);
@@ -55,10 +56,10 @@ public class AtlasCoreValidationTest extends AtlasMappingBaseTest {
         assertNotNull(validations);
         assertNotNull(validations.getValidation());
         assertFalse(validations.getValidation().isEmpty());
-        
+
         boolean found = false;
-        for(Validation v : validations.getValidation()) {
-            if("Mapping.Name".equals(v.getField())) {
+        for (Validation v : validations.getValidation()) {
+            if ("Mapping.Name".equals(v.getField())) {
                 found = true;
                 assertEquals(ValidationStatus.ERROR, v.getStatus());
                 assertEquals("Mapping name must not be null nor empty", v.getMessage());
@@ -66,10 +67,10 @@ public class AtlasCoreValidationTest extends AtlasMappingBaseTest {
             System.out.println(AtlasValidationTestHelper.validationToString(v));
 
         }
-        
+
         assertTrue(found);
     }
-    
+
     @Test
     public void testMappingNameEmpty() throws AtlasException {
         assertNotNull(context);
@@ -79,16 +80,16 @@ public class AtlasCoreValidationTest extends AtlasMappingBaseTest {
         assertNotNull(validations);
         assertNotNull(validations.getValidation());
         assertFalse(validations.getValidation().isEmpty());
-        
+
         boolean found = false;
-        for(Validation v : validations.getValidation()) {
-            if("Mapping.Name".equals(v.getField())) {
+        for (Validation v : validations.getValidation()) {
+            if ("Mapping.Name".equals(v.getField())) {
                 found = true;
                 assertEquals(ValidationStatus.ERROR, v.getStatus());
                 assertEquals("Mapping name must not be null nor empty", v.getMessage());
             }
         }
-        
+
         assertTrue(found);
     }
 

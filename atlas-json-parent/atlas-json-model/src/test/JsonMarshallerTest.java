@@ -35,34 +35,39 @@ import static org.junit.Assert.assertNotNull;
 
 public class JsonMarshallerTest extends BaseMarshallerTest {
 
-	public ObjectMapper mapper = null;
-	
-	@Before
-	public void setUp() throws Exception {
-		super.setUp();
-		
-		this.deleteTestFolders = false;
-		
-		mapper = new ObjectMapper();
-		mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, true);
-		mapper.configure(DeserializationFeature.UNWRAP_ROOT_VALUE, true);
-		mapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
-		mapper.setSerializationInclusion(Include.NON_NULL);		
-	}
-	
-	@After
-	public void tearDown() throws Exception {
-		super.tearDown();
-		
-		mapper = null;
-	}
-	
-	@Test
-	public void testJsonJsonInspectionRequest() throws Exception {	
-		JsonInspectionRequest request = generateInspectionRequest();
-		//Object to JSON in file
-		mapper.writeValue(new File("target" + File.separator + "junit" + File.separator + testName.getMethodName() + File.separator + "atlasmapping-jsoninspection-request.json"), request);
-		JsonInspectionRequest uRequest = mapper.readValue(new File("target" + File.separator + "junit" + File.separator + testName.getMethodName() + File.separator + "atlasmapping-jsoninspection-request.json"), JsonInspectionRequest.class);
-		assertNotNull(uRequest);
-	}
+    public ObjectMapper mapper = null;
+
+    @Before
+    public void setUp() throws Exception {
+        super.setUp();
+
+        this.deleteTestFolders = false;
+
+        mapper = new ObjectMapper();
+        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, true);
+        mapper.configure(DeserializationFeature.UNWRAP_ROOT_VALUE, true);
+        mapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
+        mapper.setSerializationInclusion(Include.NON_NULL);
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        super.tearDown();
+
+        mapper = null;
+    }
+
+    @Test
+    public void testJsonJsonInspectionRequest() throws Exception {
+        JsonInspectionRequest request = generateInspectionRequest();
+        // Object to JSON in file
+        mapper.writeValue(new File("target" + File.separator + "junit" + File.separator + testName.getMethodName()
+                + File.separator + "atlasmapping-jsoninspection-request.json"), request);
+        JsonInspectionRequest uRequest = mapper
+                .readValue(
+                        new File("target" + File.separator + "junit" + File.separator + testName.getMethodName()
+                                + File.separator + "atlasmapping-jsoninspection-request.json"),
+                        JsonInspectionRequest.class);
+        assertNotNull(uRequest);
+    }
 }

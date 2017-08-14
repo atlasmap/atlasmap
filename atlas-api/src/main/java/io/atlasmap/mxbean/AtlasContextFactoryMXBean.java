@@ -16,9 +16,12 @@
 package io.atlasmap.mxbean;
 
 public interface AtlasContextFactoryMXBean {
-	public String getUuid();
-	public String getClassName();
-	public String getThreadName();
-	public String getVersion();
+    public String getUuid();
+
+    public String getClassName();
+
+    public String getThreadName();
+
+    public String getVersion();
 
 }

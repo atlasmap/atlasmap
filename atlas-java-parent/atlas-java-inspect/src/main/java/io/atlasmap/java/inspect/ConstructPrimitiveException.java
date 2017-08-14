@@ -19,9 +19,20 @@ public class ConstructPrimitiveException extends ConstructException {
 
     private static final long serialVersionUID = 6135273415522137236L;
 
-    public ConstructPrimitiveException() { super(); }
-    public ConstructPrimitiveException(String message, Throwable cause) { super(message, cause); }
-    public ConstructPrimitiveException(String message) { super(message); }
-    public ConstructPrimitiveException(Throwable cause) { super(cause); }
+    public ConstructPrimitiveException() {
+        super();
+    }
+
+    public ConstructPrimitiveException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public ConstructPrimitiveException(String message) {
+        super(message);
+    }
+
+    public ConstructPrimitiveException(Throwable cause) {
+        super(cause);
+    }
 
 }

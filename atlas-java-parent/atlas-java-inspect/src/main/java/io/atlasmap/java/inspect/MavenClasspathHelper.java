@@ -33,279 +33,287 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class MavenClasspathHelper {
-	
-	private static final Logger logger = LoggerFactory.getLogger(MavenClasspathHelper.class);
-	
-	private long processCheckInterval = 1000l;
-	private long processMaxExecutionTime = 5000l;
-	private String baseFolder = System.getProperty("java.io.tmpdir");
-	public static final String WORKING_FOLDER_PREFIX = "atlas-mapping-mvn-";
-	
-	public String generateClasspathFromPom(String pom) throws Exception {
-		
-		if(pom == null || pom.isEmpty()) {
-			return null;
-		}
-		
-		if (logger.isDebugEnabled()) {
-			logger.debug("Generating classpath from pom:\n" + pom);
-		}
-		
-		Path workingDirectory = createWorkingDirectory();
-		Path pomFile = Paths.get(workingDirectory.toString(), "pom.xml");
+
+    private static final Logger logger = LoggerFactory.getLogger(MavenClasspathHelper.class);
+
+    private long processCheckInterval = 1000l;
+    private long processMaxExecutionTime = 5000l;
+    private String baseFolder = System.getProperty("java.io.tmpdir");
+    public static final String WORKING_FOLDER_PREFIX = "atlas-mapping-mvn-";
+
+    public String generateClasspathFromPom(String pom) throws Exception {
+
+        if (pom == null || pom.isEmpty()) {
+            return null;
+        }
+
+        if (logger.isDebugEnabled()) {
+            logger.debug("Generating classpath from pom:\n" + pom);
+        }
+
+        Path workingDirectory = createWorkingDirectory();
+        Path pomFile = Paths.get(workingDirectory.toString(), "pom.xml");
         Files.write(pomFile, pom.getBytes());
 
-		List<String> cmd = new LinkedList<String>();
-		cmd.add("mvn");
-		cmd.add("org.apache.maven.plugins:maven-dependency-plugin:3.0.0:build-classpath");
-		cmd.add("-DincludeScope=runtime");
-		
-		String result = executeMavenProcess(workingDirectory.toString(), cmd);
-		
-		if(result != null) {
-			result = parseClasspathFromMavenOutput(result);
-		} else {
-			logger.error("MavenProcess returned unexpected result: " + result);
-			throw new InspectionException("Unable to generate classpath from pom file");
-		}
-		
-		try {
-			deleteWorkingDirectory(workingDirectory);
-		} catch (IOException ioe) {
-			logger.warn("Cleanup of working directory failed to complete: " + ioe.getMessage(), ioe);
-		}
-	
-		return result;
-	}
-	
-	protected String executeMavenProcess(String workingDirectory, List<String> cmd) throws IOException {
-		String mavenOutputFilePath = workingDirectory + File.separator + "maven.output.txt";
-		if (logger.isDebugEnabled()) {
-			logger.debug("Starting to execute process for command: " + cmd 
-					+ "\n\tworkingDirectory: " + workingDirectory
-					+ "\n\tmvn output log: " + mavenOutputFilePath);
-		}
+        List<String> cmd = new LinkedList<String>();
+        cmd.add("mvn");
+        cmd.add("org.apache.maven.plugins:maven-dependency-plugin:3.0.0:build-classpath");
+        cmd.add("-DincludeScope=runtime");
 
-		File cwd = null;
-		long startTime = System.currentTimeMillis();
-		long totalTime = 0;
-		Process process = null;
-		StringBuilder outputMessage = new StringBuilder();
+        String result = executeMavenProcess(workingDirectory.toString(), cmd);
 
-		if (workingDirectory == null || workingDirectory.isEmpty() || cmd == null || cmd.isEmpty() || cmd.get(0).isEmpty()) {
-			logger.error("Invalid workingDirectory: " + workingDirectory + " or command: " + cmd + " specified");
-			throw new IllegalArgumentException("Working directory and command must be specified");
-		}
+        if (result != null) {
+            result = parseClasspathFromMavenOutput(result);
+        } else {
+            logger.error("MavenProcess returned unexpected result: " + result);
+            throw new InspectionException("Unable to generate classpath from pom file");
+        }
 
-		if (workingDirectory != null) {
-			cwd = new File(workingDirectory);
-			if (!cwd.exists()) {
-				throw new IOException("Working Directory does not exist: " + workingDirectory);
-			} else if (!cwd.isDirectory()) {
-				throw new IOException("Working Directory is not a directory: " + workingDirectory);
-			}
-		}
+        try {
+            deleteWorkingDirectory(workingDirectory);
+        } catch (IOException ioe) {
+            logger.warn("Cleanup of working directory failed to complete: " + ioe.getMessage(), ioe);
+        }
 
-		InputStream stdout = null;
-		BufferedReader reader = null;
-		
-		long lastTimeDebugPrinted = 0;
-		
-		try {
-			ProcessBuilder processBuilder = new ProcessBuilder(cmd);
-			processBuilder.redirectErrorStream(true);
-			processBuilder.directory(new File(workingDirectory));
+        return result;
+    }
 
-			process = processBuilder.start();
-			boolean running = true;
-			int r = -1;
-									
-			if (process != null) {				
-				try {
-					stdout = process.getInputStream();
-					reader = new BufferedReader(new InputStreamReader(stdout));
-				} catch (Exception e) {
-					logger.error("Error reading output for command: " + cmd + " msg: " + e.getMessage(), e);
-				} 
-			}
-			
-			Path mavenOutputFile = Paths.get(mavenOutputFilePath);
+    protected String executeMavenProcess(String workingDirectory, List<String> cmd) throws IOException {
+        String mavenOutputFilePath = workingDirectory + File.separator + "maven.output.txt";
+        if (logger.isDebugEnabled()) {
+            logger.debug("Starting to execute process for command: " + cmd + "\n\tworkingDirectory: " + workingDirectory
+                    + "\n\tmvn output log: " + mavenOutputFilePath);
+        }
 
-			while (running) {
-				Thread.sleep(getProcessCheckInterval());
-				totalTime = totalTime + getProcessCheckInterval();
+        File cwd = null;
+        long startTime = System.currentTimeMillis();
+        long totalTime = 0;
+        Process process = null;
+        StringBuilder outputMessage = new StringBuilder();
 
-				if (process != null) {
-					try {
-						StringBuilder currentUpdate = new StringBuilder();
-						String line = null;
-						while ((line = reader.readLine()) != null) {
-							if (outputMessage.length() > 0) {
-								outputMessage.append(line).append("\n");
-								currentUpdate.append(line).append("\n");
-							} else {
-								outputMessage.append(line);
-							}
-						}
-						if (currentUpdate.length() > 0) {
-							try {
-								Files.write(mavenOutputFile, currentUpdate.toString().getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
-							} catch (Exception e) {
-								logger.error("Error writing output for command: " + cmd + " to file: " + mavenOutputFilePath, e);
-							}
-						}
-					} catch (Exception e) {
-						logger.error("Error reading output for command: " + cmd + " msg: " + e.getMessage(), e);
-					}
-				}
-				
-				if (totalTime >= getProcessMaxExecutionTime()) {
-					process.destroy();
-					running = false;
-					throw new IOException("Command " + cmd + " killed due to exceeding max process time");
-				}
-				
-				try {
-					r = process.exitValue();
-					running = false;
-					if (r != 0) {
-						outputMessage.append("Command returned non-zero exit code: " + r);
-					}					
-				} catch (IllegalThreadStateException itse) {
-					if (logger.isDebugEnabled()) {
-						if (System.currentTimeMillis() - lastTimeDebugPrinted > 10000) {
-							String timeHMS = StringUtil.formatTimeHMS(System.currentTimeMillis() - startTime);
-							logger.debug("Command still running: " + cmd + ", msg: " + itse.getMessage() + ", elapsed: " + timeHMS);
-							lastTimeDebugPrinted = System.currentTimeMillis();
-						}
-					}
-				}
-			}
+        if (workingDirectory == null || workingDirectory.isEmpty() || cmd == null || cmd.isEmpty()
+                || cmd.get(0).isEmpty()) {
+            logger.error("Invalid workingDirectory: " + workingDirectory + " or command: " + cmd + " specified");
+            throw new IllegalArgumentException("Working directory and command must be specified");
+        }
 
-		} catch (IllegalArgumentException iae) {
-			String errMsg = "Unable to execute command: " + cmd + " error: " + iae.getMessage();
-			logger.error(errMsg, iae);
-			throw new IOException(errMsg, iae);
-		} catch (IOException ioe) {
-			String errMsg = "Unable to execute command: " + cmd + " error: " + ioe.getMessage();
-			logger.error(errMsg, ioe);
-			throw new IOException(errMsg, ioe);
-		} catch (InterruptedException intre) {
-			String errMsg = "Command interrupted cmd: " + cmd + " error: " + intre.getMessage();
-			logger.error(errMsg, intre);
-			throw new IOException(errMsg, intre);
-		} finally {
-			if (reader != null) {
-				try {
-					reader.close();
-				} catch (Exception e) {
-					logger.warn("Error closing BufferedReader for cmd: " + cmd, e);
-				} finally {
-					reader = null;
-				}
-			}
-			if (stdout != null) {
-				try {
-					stdout.close();
-				} catch (Exception e) {
-					logger.warn("Error closing InputStream for cmd: " + cmd, e);
-				} finally {
-					stdout = null;
-				}
-			}
-			
-			if (process != null) {
-				try {
-					process.destroy();
-				} catch (Throwable t) {
-					logger.error("Error while attempting to destroy process for command: " + cmd + " msg: " + t.getMessage(), t);
-				}
-			}
+        if (workingDirectory != null) {
+            cwd = new File(workingDirectory);
+            if (!cwd.exists()) {
+                throw new IOException("Working Directory does not exist: " + workingDirectory);
+            } else if (!cwd.isDirectory()) {
+                throw new IOException("Working Directory is not a directory: " + workingDirectory);
+            }
+        }
 
-			if (logger.isDebugEnabled()) {
-				logger.debug("Exiting process for command: " + cmd + " exec time(ms): " + (System.currentTimeMillis() - startTime) + " workingDirectory: " + workingDirectory);
-			}
-		}
-		
-		if (logger.isDebugEnabled()) {
-			logger.debug("Output for command: " + cmd + "\n" + outputMessage.toString());
-		}
+        InputStream stdout = null;
+        BufferedReader reader = null;
 
-		return outputMessage.toString();
-	}
+        long lastTimeDebugPrinted = 0;
 
-	protected Path createWorkingDirectory() throws IOException {
-		return Files.createTempDirectory(WORKING_FOLDER_PREFIX);
-	}
+        try {
+            ProcessBuilder processBuilder = new ProcessBuilder(cmd);
+            processBuilder.redirectErrorStream(true);
+            processBuilder.directory(new File(workingDirectory));
 
-	protected void deleteWorkingDirectory(Path tempDirectory) throws IOException {
-		Files.deleteIfExists(Paths.get(tempDirectory.toString(), "pom.xml"));
-		Files.deleteIfExists(Paths.get(tempDirectory.toString(), "maven.output.txt"));
-		Files.deleteIfExists(tempDirectory);
-	}
-	
-	public Integer cleanupTempFolders() throws IOException {
-		Integer count = new Integer(0);
-		try (Stream<Path> tmpFolders = Files.list(Paths.get(System.getProperty("java.io.tmpdir")))) {
-			for (Path tmpFolder : tmpFolders.toArray(Path[]::new)) {
-				try {
-					if (tmpFolder.getFileName().toString().startsWith(WORKING_FOLDER_PREFIX)) {
-						deleteWorkingDirectory(tmpFolder);
-						count++;
-						if (logger.isDebugEnabled()) {
-							logger.debug("Deleted tempFolder: " + tmpFolder.getFileName());
-						}
-					}
-				} catch (IOException ioe) {
-					logger.warn("Error when attempting to delete tempFolder: " + tmpFolder.getFileName() + " msg: " + ioe.getMessage(), ioe);
-				}
-			}
-		}
-		return count;
-	}
-	
-	private String parseClasspathFromMavenOutput(String commandOutput) throws IOException {
-		BufferedReader reader = new BufferedReader(new StringReader(commandOutput));
-		boolean useNextLine = true;
-		String result = null;
-		String line;
-		while ((line = reader.readLine()) != null) {
-			if (useNextLine) {
-				useNextLine = false;
-				result = line;
-			}
-			if (line.startsWith("[INFO] Dependencies classpath:")) {
-				useNextLine = true;
-			}
-		}
-		return result;
-	}
+            process = processBuilder.start();
+            boolean running = true;
+            int r = -1;
 
-	public long getProcessCheckInterval() {
-		return processCheckInterval;
-	}
+            if (process != null) {
+                try {
+                    stdout = process.getInputStream();
+                    reader = new BufferedReader(new InputStreamReader(stdout));
+                } catch (Exception e) {
+                    logger.error("Error reading output for command: " + cmd + " msg: " + e.getMessage(), e);
+                }
+            }
 
-	public void setProcessCheckInterval(long processCheckInterval) {
-		this.processCheckInterval = processCheckInterval;
-	}
+            Path mavenOutputFile = Paths.get(mavenOutputFilePath);
 
-	public long getProcessMaxExecutionTime() {
-		return processMaxExecutionTime;
-	}
+            while (running) {
+                Thread.sleep(getProcessCheckInterval());
+                totalTime = totalTime + getProcessCheckInterval();
 
-	public void setProcessMaxExecutionTime(long processMaxExecutionTime) {
-		this.processMaxExecutionTime = processMaxExecutionTime;
-	}
+                if (process != null) {
+                    try {
+                        StringBuilder currentUpdate = new StringBuilder();
+                        String line = null;
+                        while ((line = reader.readLine()) != null) {
+                            if (outputMessage.length() > 0) {
+                                outputMessage.append(line).append("\n");
+                                currentUpdate.append(line).append("\n");
+                            } else {
+                                outputMessage.append(line);
+                            }
+                        }
+                        if (currentUpdate.length() > 0) {
+                            try {
+                                Files.write(mavenOutputFile, currentUpdate.toString().getBytes(),
+                                        StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+                            } catch (Exception e) {
+                                logger.error(
+                                        "Error writing output for command: " + cmd + " to file: " + mavenOutputFilePath,
+                                        e);
+                            }
+                        }
+                    } catch (Exception e) {
+                        logger.error("Error reading output for command: " + cmd + " msg: " + e.getMessage(), e);
+                    }
+                }
 
-	public String getBaseFolder() {
-		return baseFolder;
-	}
+                if (totalTime >= getProcessMaxExecutionTime()) {
+                    process.destroy();
+                    running = false;
+                    throw new IOException("Command " + cmd + " killed due to exceeding max process time");
+                }
 
-	public void setBaseFolder(String baseFolder) {
-		this.baseFolder = baseFolder;
-	}
+                try {
+                    r = process.exitValue();
+                    running = false;
+                    if (r != 0) {
+                        outputMessage.append("Command returned non-zero exit code: " + r);
+                    }
+                } catch (IllegalThreadStateException itse) {
+                    if (logger.isDebugEnabled()) {
+                        if (System.currentTimeMillis() - lastTimeDebugPrinted > 10000) {
+                            String timeHMS = StringUtil.formatTimeHMS(System.currentTimeMillis() - startTime);
+                            logger.debug("Command still running: " + cmd + ", msg: " + itse.getMessage() + ", elapsed: "
+                                    + timeHMS);
+                            lastTimeDebugPrinted = System.currentTimeMillis();
+                        }
+                    }
+                }
+            }
 
-	protected String generateJavaCommand() {
-		return System.getProperty("java.home") + File.separator + "bin" + File.separator + "java";
-	}
+        } catch (IllegalArgumentException iae) {
+            String errMsg = "Unable to execute command: " + cmd + " error: " + iae.getMessage();
+            logger.error(errMsg, iae);
+            throw new IOException(errMsg, iae);
+        } catch (IOException ioe) {
+            String errMsg = "Unable to execute command: " + cmd + " error: " + ioe.getMessage();
+            logger.error(errMsg, ioe);
+            throw new IOException(errMsg, ioe);
+        } catch (InterruptedException intre) {
+            String errMsg = "Command interrupted cmd: " + cmd + " error: " + intre.getMessage();
+            logger.error(errMsg, intre);
+            throw new IOException(errMsg, intre);
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (Exception e) {
+                    logger.warn("Error closing BufferedReader for cmd: " + cmd, e);
+                } finally {
+                    reader = null;
+                }
+            }
+            if (stdout != null) {
+                try {
+                    stdout.close();
+                } catch (Exception e) {
+                    logger.warn("Error closing InputStream for cmd: " + cmd, e);
+                } finally {
+                    stdout = null;
+                }
+            }
+
+            if (process != null) {
+                try {
+                    process.destroy();
+                } catch (Throwable t) {
+                    logger.error(
+                            "Error while attempting to destroy process for command: " + cmd + " msg: " + t.getMessage(),
+                            t);
+                }
+            }
+
+            if (logger.isDebugEnabled()) {
+                logger.debug("Exiting process for command: " + cmd + " exec time(ms): "
+                        + (System.currentTimeMillis() - startTime) + " workingDirectory: " + workingDirectory);
+            }
+        }
+
+        if (logger.isDebugEnabled()) {
+            logger.debug("Output for command: " + cmd + "\n" + outputMessage.toString());
+        }
+
+        return outputMessage.toString();
+    }
+
+    protected Path createWorkingDirectory() throws IOException {
+        return Files.createTempDirectory(WORKING_FOLDER_PREFIX);
+    }
+
+    protected void deleteWorkingDirectory(Path tempDirectory) throws IOException {
+        Files.deleteIfExists(Paths.get(tempDirectory.toString(), "pom.xml"));
+        Files.deleteIfExists(Paths.get(tempDirectory.toString(), "maven.output.txt"));
+        Files.deleteIfExists(tempDirectory);
+    }
+
+    public Integer cleanupTempFolders() throws IOException {
+        Integer count = new Integer(0);
+        try (Stream<Path> tmpFolders = Files.list(Paths.get(System.getProperty("java.io.tmpdir")))) {
+            for (Path tmpFolder : tmpFolders.toArray(Path[]::new)) {
+                try {
+                    if (tmpFolder.getFileName().toString().startsWith(WORKING_FOLDER_PREFIX)) {
+                        deleteWorkingDirectory(tmpFolder);
+                        count++;
+                        if (logger.isDebugEnabled()) {
+                            logger.debug("Deleted tempFolder: " + tmpFolder.getFileName());
+                        }
+                    }
+                } catch (IOException ioe) {
+                    logger.warn("Error when attempting to delete tempFolder: " + tmpFolder.getFileName() + " msg: "
+                            + ioe.getMessage(), ioe);
+                }
+            }
+        }
+        return count;
+    }
+
+    private String parseClasspathFromMavenOutput(String commandOutput) throws IOException {
+        BufferedReader reader = new BufferedReader(new StringReader(commandOutput));
+        boolean useNextLine = true;
+        String result = null;
+        String line;
+        while ((line = reader.readLine()) != null) {
+            if (useNextLine) {
+                useNextLine = false;
+                result = line;
+            }
+            if (line.startsWith("[INFO] Dependencies classpath:")) {
+                useNextLine = true;
+            }
+        }
+        return result;
+    }
+
+    public long getProcessCheckInterval() {
+        return processCheckInterval;
+    }
+
+    public void setProcessCheckInterval(long processCheckInterval) {
+        this.processCheckInterval = processCheckInterval;
+    }
+
+    public long getProcessMaxExecutionTime() {
+        return processMaxExecutionTime;
+    }
+
+    public void setProcessMaxExecutionTime(long processMaxExecutionTime) {
+        this.processMaxExecutionTime = processMaxExecutionTime;
+    }
+
+    public String getBaseFolder() {
+        return baseFolder;
+    }
+
+    public void setBaseFolder(String baseFolder) {
+        this.baseFolder = baseFolder;
+    }
+
+    protected String generateJavaCommand() {
+        return System.getProperty("java.home") + File.separator + "bin" + File.separator + "java";
+    }
 }

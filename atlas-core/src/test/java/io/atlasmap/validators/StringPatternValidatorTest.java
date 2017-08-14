@@ -24,12 +24,12 @@ import org.junit.After;
 public class StringPatternValidatorTest extends BaseValidatorTest {
 
     @Override
-	@After
+    @After
     public void tearDown() {
         super.tearDown();
         validator = null;
     }
-    
+
     @Test
     public void testSupported() throws Exception {
         validator = new StringPatternValidator("qwerty", "Must match .*", ".*");

@@ -31,12 +31,13 @@ public class ByteConverter implements AtlasPrimitiveConverter<Byte> {
      * @throws AtlasUnsupportedException
      */
     @Override
-	@AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.BOOLEAN, concerns = AtlasConversionConcern.UNSUPPORTED)
+    @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.BOOLEAN, concerns = AtlasConversionConcern.UNSUPPORTED)
     public Boolean convertToBoolean(Byte value) throws AtlasConversionException {
         if (value == null) {
             return null;
         }
-        throw new AtlasConversionException(new AtlasUnsupportedException("Byte to Boolean conversion is not supported."));
+        throw new AtlasConversionException(
+                new AtlasUnsupportedException("Byte to Boolean conversion is not supported."));
     }
 
     /**
@@ -46,7 +47,7 @@ public class ByteConverter implements AtlasPrimitiveConverter<Byte> {
      * @throws AtlasUnsupportedException
      */
     @Override
-	@AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.BYTE, concerns = AtlasConversionConcern.UNSUPPORTED)
+    @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.BYTE, concerns = AtlasConversionConcern.UNSUPPORTED)
     public Byte convertToByte(Byte value) throws AtlasConversionException {
         if (value == null) {
             return null;
@@ -61,12 +62,13 @@ public class ByteConverter implements AtlasPrimitiveConverter<Byte> {
      * @throws AtlasUnsupportedException
      */
     @Override
-	@AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.CHAR, concerns = AtlasConversionConcern.UNSUPPORTED)
+    @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.CHAR, concerns = AtlasConversionConcern.UNSUPPORTED)
     public Character convertToCharacter(Byte value) throws AtlasConversionException {
         if (value == null) {
             return null;
         }
-        throw  new AtlasConversionException(new AtlasUnsupportedException("Byte to Character conversion is not supported."));
+        throw new AtlasConversionException(
+                new AtlasUnsupportedException("Byte to Character conversion is not supported."));
     }
 
     /**
@@ -76,12 +78,13 @@ public class ByteConverter implements AtlasPrimitiveConverter<Byte> {
      * @throws AtlasUnsupportedException
      */
     @Override
-	@AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.DOUBLE, concerns = AtlasConversionConcern.UNSUPPORTED)
+    @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.DOUBLE, concerns = AtlasConversionConcern.UNSUPPORTED)
     public Double convertToDouble(Byte value) throws AtlasConversionException {
         if (value == null) {
             return null;
         }
-        throw  new AtlasConversionException(new AtlasUnsupportedException("Byte to Double conversion is not supported."));
+        throw new AtlasConversionException(
+                new AtlasUnsupportedException("Byte to Double conversion is not supported."));
     }
 
     /**
@@ -91,12 +94,12 @@ public class ByteConverter implements AtlasPrimitiveConverter<Byte> {
      * @throws AtlasUnsupportedException
      */
     @Override
-	@AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.FLOAT, concerns = AtlasConversionConcern.UNSUPPORTED)
+    @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.FLOAT, concerns = AtlasConversionConcern.UNSUPPORTED)
     public Float convertToFloat(Byte value) throws AtlasConversionException {
         if (value == null) {
             return null;
         }
-        throw  new AtlasConversionException(new AtlasUnsupportedException("Byte to Float conversion is not supported."));
+        throw new AtlasConversionException(new AtlasUnsupportedException("Byte to Float conversion is not supported."));
     }
 
     /**
@@ -106,12 +109,13 @@ public class ByteConverter implements AtlasPrimitiveConverter<Byte> {
      * @throws AtlasUnsupportedException
      */
     @Override
-	@AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.INTEGER, concerns = AtlasConversionConcern.UNSUPPORTED)
+    @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.INTEGER, concerns = AtlasConversionConcern.UNSUPPORTED)
     public Integer convertToInteger(Byte value) throws AtlasConversionException {
         if (value == null) {
             return null;
         }
-        throw  new AtlasConversionException(new AtlasUnsupportedException("Byte to Integer conversion is not supported."));
+        throw new AtlasConversionException(
+                new AtlasUnsupportedException("Byte to Integer conversion is not supported."));
     }
 
     /**
@@ -121,12 +125,12 @@ public class ByteConverter implements AtlasPrimitiveConverter<Byte> {
      * @throws AtlasUnsupportedException
      */
     @Override
-	@AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.LONG, concerns = AtlasConversionConcern.UNSUPPORTED)
+    @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.LONG, concerns = AtlasConversionConcern.UNSUPPORTED)
     public Long convertToLong(Byte value) throws AtlasConversionException {
         if (value == null) {
             return null;
         }
-        throw  new AtlasConversionException(new AtlasUnsupportedException("Byte to Long conversion is not supported."));
+        throw new AtlasConversionException(new AtlasUnsupportedException("Byte to Long conversion is not supported."));
     }
 
     /**
@@ -136,12 +140,12 @@ public class ByteConverter implements AtlasPrimitiveConverter<Byte> {
      * @throws AtlasUnsupportedException
      */
     @Override
-	@AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.SHORT, concerns = AtlasConversionConcern.UNSUPPORTED)
+    @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.SHORT, concerns = AtlasConversionConcern.UNSUPPORTED)
     public Short convertToShort(Byte value) throws AtlasConversionException {
         if (value == null) {
             return null;
         }
-        throw  new AtlasConversionException(new AtlasUnsupportedException("Byte to Short conversion is not supported."));
+        throw new AtlasConversionException(new AtlasUnsupportedException("Byte to Short conversion is not supported."));
     }
 
     /**
@@ -151,11 +155,12 @@ public class ByteConverter implements AtlasPrimitiveConverter<Byte> {
      * @throws AtlasUnsupportedException
      */
     @Override
-	@AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.STRING, concerns = AtlasConversionConcern.UNSUPPORTED)
+    @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.STRING, concerns = AtlasConversionConcern.UNSUPPORTED)
     public String convertToString(Byte value) throws AtlasConversionException {
         if (value == null) {
             return null;
         }
-        throw  new AtlasConversionException(new AtlasUnsupportedException("Byte to String conversion is not supported."));
+        throw new AtlasConversionException(
+                new AtlasUnsupportedException("Byte to String conversion is not supported."));
     }
 }

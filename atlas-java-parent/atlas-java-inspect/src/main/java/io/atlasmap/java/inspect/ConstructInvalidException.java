@@ -19,9 +19,20 @@ public class ConstructInvalidException extends ConstructException {
 
     private static final long serialVersionUID = 6871120885253971603L;
 
-    public ConstructInvalidException() { super(); }
-    public ConstructInvalidException(String message, Throwable cause) { super(message, cause); }
-    public ConstructInvalidException(String message) { super(message); }
-    public ConstructInvalidException(Throwable cause) { super(cause); }
+    public ConstructInvalidException() {
+        super();
+    }
+
+    public ConstructInvalidException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public ConstructInvalidException(String message) {
+        super(message);
+    }
+
+    public ConstructInvalidException(Throwable cause) {
+        super(cause);
+    }
 
 }

@@ -9,7 +9,7 @@ import org.junit.Test;
 public class JsonServiceTest {
 
     private JsonService jsonService = null;
-    
+
     @Before
     public void setUp() throws Exception {
         jsonService = new JsonService();
@@ -29,7 +29,8 @@ public class JsonServiceTest {
 
         assertTrue(jsonService.validJsonData(jsonService.cleanJsonData("  { \"foo\":\"bar\" }")));
         assertTrue(jsonService.validJsonData(jsonService.cleanJsonData("{ \"foo\":\"bar\" }   ")));
-        assertTrue(jsonService.validJsonData(jsonService.cleanJsonData("  [ { \"foo\":\"bar\" }, { \"meow\":\"blah\" } ]")));
+        assertTrue(jsonService
+                .validJsonData(jsonService.cleanJsonData("  [ { \"foo\":\"bar\" }, { \"meow\":\"blah\" } ]")));
         assertTrue(jsonService.validJsonData(jsonService.cleanJsonData("\b\t\n\f\r   { \"foo\":\"bar\" }")));
 
     }

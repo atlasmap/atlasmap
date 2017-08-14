@@ -25,17 +25,17 @@ public class DefaultAtlasValidationsHelper extends Validations implements AtlasV
     private static final long serialVersionUID = -7993298271986178508L;
 
     @Override
-	public void addValidation(Validation validation) {
+    public void addValidation(Validation validation) {
         getValidation().add(validation);
     }
 
     @Override
-	public List<Validation> getAllValidations() {
+    public List<Validation> getAllValidations() {
         return validation;
     }
 
     @Override
-	public boolean hasErrors() {
+    public boolean hasErrors() {
         if (getValidation() != null && !getValidation().isEmpty()) {
             for (Validation validation : getValidation()) {
                 if (ValidationStatus.ERROR.compareTo(validation.getStatus()) == 0) {
@@ -47,7 +47,7 @@ public class DefaultAtlasValidationsHelper extends Validations implements AtlasV
     }
 
     @Override
-	public boolean hasWarnings() {
+    public boolean hasWarnings() {
         if (getValidation() != null && !getValidation().isEmpty()) {
             for (Validation validation : getValidation()) {
                 if (ValidationStatus.WARN.compareTo(validation.getStatus()) == 0) {
@@ -59,7 +59,7 @@ public class DefaultAtlasValidationsHelper extends Validations implements AtlasV
     }
 
     @Override
-	public boolean hasInfos() {
+    public boolean hasInfos() {
         if (getValidation() != null && !getValidation().isEmpty()) {
             for (Validation validation : getValidation()) {
                 if (ValidationStatus.INFO.compareTo(validation.getStatus()) == 0) {
@@ -71,27 +71,39 @@ public class DefaultAtlasValidationsHelper extends Validations implements AtlasV
     }
 
     @Override
-	public int getCount() {
+    public int getCount() {
         if (getValidation() != null && !getValidation().isEmpty()) {
             return getValidation().size();
         }
         return 0;
     }
-    
+
     public static String validationToString(Validation validation) {
         String output = "[Validation ";
-        
-        if(validation == null) {
+
+        if (validation == null) {
             return output + ">null< ]";
         }
-        
-        if(validation.getName() != null) { output = output + " name=" + validation.getName(); }
-        if(validation.getGroup() != null) { output = output + " group=" + validation.getGroup(); }
-        if(validation.getField() != null) { output = output + " field=" + validation.getField(); }
-        if(validation.getValue() != null) { output = output + " value=" + validation.getValue(); }
-        if(validation.getStatus() != null) { output = output + " status=" + validation.getStatus().value(); }
-        if(validation.getMessage() != null) { output = output + " msg=" + validation.getMessage(); }
-        
+
+        if (validation.getName() != null) {
+            output = output + " name=" + validation.getName();
+        }
+        if (validation.getGroup() != null) {
+            output = output + " group=" + validation.getGroup();
+        }
+        if (validation.getField() != null) {
+            output = output + " field=" + validation.getField();
+        }
+        if (validation.getValue() != null) {
+            output = output + " value=" + validation.getValue();
+        }
+        if (validation.getStatus() != null) {
+            output = output + " status=" + validation.getStatus().value();
+        }
+        if (validation.getMessage() != null) {
+            output = output + " msg=" + validation.getMessage();
+        }
+
         return output + "]";
     }
 }

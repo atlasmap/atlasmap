@@ -33,7 +33,8 @@ public class JavaJavaSeparateTest extends AtlasMappingBaseTest {
 
     @Test
     public void testProcessSeparateSimple() throws Exception {
-        AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/javaToJava/atlasmapping-separate-simple.xml").toURI());
+        AtlasContext context = atlasContextFactory
+                .createContext(new File("src/test/resources/javaToJava/atlasmapping-separate-simple.xml").toURI());
         AtlasSession session = context.createSession();
         BaseContact sourceContact = AtlasTestUtil.generateContact(SourceContact.class);
         sourceContact.setFirstName("Ozzie Smith");
@@ -51,7 +52,8 @@ public class JavaJavaSeparateTest extends AtlasMappingBaseTest {
 
     @Test
     public void testProcessSeparateSkip() throws Exception {
-        AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/javaToJava/atlasmapping-separate-skip.xml").toURI());
+        AtlasContext context = atlasContextFactory
+                .createContext(new File("src/test/resources/javaToJava/atlasmapping-separate-skip.xml").toURI());
         AtlasSession session = context.createSession();
         BaseContact sourceContact = AtlasTestUtil.generateContact(SourceContact.class);
         sourceContact.setFirstName("Dr. Mr. Ozzie L. Smith Jr.");
@@ -66,10 +68,11 @@ public class JavaJavaSeparateTest extends AtlasMappingBaseTest {
         AtlasTestUtil.validateContact(targetContact);
         assertFalse(session.hasErrors());
     }
-    
+
     @Test
     public void testProcessSeparateOutOfOrder() throws Exception {
-        AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/javaToJava/atlasmapping-separate-outoforder.xml").toURI());
+        AtlasContext context = atlasContextFactory
+                .createContext(new File("src/test/resources/javaToJava/atlasmapping-separate-outoforder.xml").toURI());
         AtlasSession session = context.createSession();
         BaseContact sourceContact = AtlasTestUtil.generateContact(SourceContact.class);
         sourceContact.setFirstName("Dr. Mr. Ozzie L. Smith Jr.");
@@ -84,10 +87,11 @@ public class JavaJavaSeparateTest extends AtlasMappingBaseTest {
         AtlasTestUtil.validateContact(targetContact);
         assertFalse(session.hasErrors());
     }
-    
+
     @Test
     public void testProcessSeparateNotEnoughInput() throws Exception {
-        AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/javaToJava/atlasmapping-separate-inputshort.xml").toURI());
+        AtlasContext context = atlasContextFactory
+                .createContext(new File("src/test/resources/javaToJava/atlasmapping-separate-inputshort.xml").toURI());
         AtlasSession session = context.createSession();
         BaseContact sourceContact = AtlasTestUtil.generateContact(SourceContact.class);
         sourceContact.setFirstName("Dr. Mr. Ozzie");
@@ -101,14 +105,16 @@ public class JavaJavaSeparateTest extends AtlasMappingBaseTest {
         TargetContact targetContact = (TargetContact) object;
         assertNotNull(targetContact);
         assertEquals("Ozzie", targetContact.getFirstName());
-        assertEquals(null, targetContact.getLastName());        
-        assertTrue(session.hasErrors());        
-        assertEquals("Separate returned fewer segements count=3 when outputField.path=/lastName requested index=4", session.getAudits().getAudit().get(0).getMessage());
+        assertEquals(null, targetContact.getLastName());
+        assertTrue(session.hasErrors());
+        assertEquals("Separate returned fewer segements count=3 when outputField.path=/lastName requested index=4",
+                session.getAudits().getAudit().get(0).getMessage());
     }
-    
+
     @Test
     public void testProcessSeparateNullInput() throws Exception {
-        AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/javaToJava/atlasmapping-separate-inputnull.xml").toURI());
+        AtlasContext context = atlasContextFactory
+                .createContext(new File("src/test/resources/javaToJava/atlasmapping-separate-inputnull.xml").toURI());
         AtlasSession session = context.createSession();
         BaseContact sourceContact = AtlasTestUtil.generateContact(SourceContact.class);
         sourceContact.setFirstName(null);

@@ -24,9 +24,13 @@ import java.lang.annotation.RetentionPolicy;
 public @interface AtlasConversionInfo {
 
     FieldType sourceType() default FieldType.ALL;
+
     FieldType targetType() default FieldType.ALL;
+
     String sourceClassName() default "";
+
     String targetClassName() default "";
-    AtlasConversionConcern[] concerns() default {AtlasConversionConcern.NONE};
+
+    AtlasConversionConcern[] concerns() default { AtlasConversionConcern.NONE };
 
 }

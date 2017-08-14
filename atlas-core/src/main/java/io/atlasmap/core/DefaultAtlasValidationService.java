@@ -47,34 +47,53 @@ import java.util.stream.Stream;
 public class DefaultAtlasValidationService implements AtlasValidationService {
 
     private static Map<String, AtlasValidator> validatorMap = new HashMap<>();
-   
+
     public DefaultAtlasValidationService() {
         init();
     }
 
     public void init() {
-        NonNullValidator sourceURINotNullOrEmptyValidator = new NonNullValidator("DataSource.source.uri", "DataSource source uri must not be null nor empty");
-        NonNullValidator targetURINotNullOrEmptyValidator = new NonNullValidator("DataSource.target.uri", "DataSource target uri must not be null nor empty");
-        StringPatternValidator namePatternValidator = new StringPatternValidator("Mapping.Name", "Mapping name must not contain spaces nor special characters other than period (.) and underscore (_)", "[^A-Za-z0-9_.]");
-        NonNullValidator nameNotNullOrEmptyValidator = new NonNullValidator("Mapping.Name", "Mapping name must not be null nor empty");
+        NonNullValidator sourceURINotNullOrEmptyValidator = new NonNullValidator("DataSource.source.uri",
+                "DataSource source uri must not be null nor empty");
+        NonNullValidator targetURINotNullOrEmptyValidator = new NonNullValidator("DataSource.target.uri",
+                "DataSource target uri must not be null nor empty");
+        StringPatternValidator namePatternValidator = new StringPatternValidator("Mapping.Name",
+                "Mapping name must not contain spaces nor special characters other than period (.) and underscore (_)",
+                "[^A-Za-z0-9_.]");
+        NonNullValidator nameNotNullOrEmptyValidator = new NonNullValidator("Mapping.Name",
+                "Mapping name must not be null nor empty");
         CompositeValidator nameValidator = new CompositeValidator(nameNotNullOrEmptyValidator, namePatternValidator);
-        NonNullValidator fieldNamesNotNullValidator = new NonNullValidator("Field.Mappings", "Field mappings must not be null");
-        NotEmptyValidator fieldNamesNotEmptyValidator = new NotEmptyValidator("Field.Mappings", "Field mappings should not be empty");
-        NonNullValidator inputNonNullValidator = new NonNullValidator("MapFieldMapping.Input", "Input element must not be null");
-        NonNullValidator inputFieldNonNullValidator = new NonNullValidator("MapFieldMapping.Input.Field", "Input field element must not be null");
-        NonNullValidator outputNonNullValidator = new NonNullValidator("MapFieldMapping.Output", "Output element should not be null");
-        NonNullValidator outputFieldNonNullValidator = new NonNullValidator("MapFieldMapping.Output.Field", "Output field element should not be null");
-        NonNullValidator separateInputNonNullValidator = new NonNullValidator("SeparateFieldMapping.Input", "Input element must not be null");
-        NonNullValidator separateInputFieldNonNullValidator = new NonNullValidator("SeparateFieldMapping.Input.Field", "Input field element must not be null");
+        NonNullValidator fieldNamesNotNullValidator = new NonNullValidator("Field.Mappings",
+                "Field mappings must not be null");
+        NotEmptyValidator fieldNamesNotEmptyValidator = new NotEmptyValidator("Field.Mappings",
+                "Field mappings should not be empty");
+        NonNullValidator inputNonNullValidator = new NonNullValidator("MapFieldMapping.Input",
+                "Input element must not be null");
+        NonNullValidator inputFieldNonNullValidator = new NonNullValidator("MapFieldMapping.Input.Field",
+                "Input field element must not be null");
+        NonNullValidator outputNonNullValidator = new NonNullValidator("MapFieldMapping.Output",
+                "Output element should not be null");
+        NonNullValidator outputFieldNonNullValidator = new NonNullValidator("MapFieldMapping.Output.Field",
+                "Output field element should not be null");
+        NonNullValidator separateInputNonNullValidator = new NonNullValidator("SeparateFieldMapping.Input",
+                "Input element must not be null");
+        NonNullValidator separateInputFieldNonNullValidator = new NonNullValidator("SeparateFieldMapping.Input.Field",
+                "Input field element must not be null");
 
-        NonNullValidator separateOutputNonNullValidator = new NonNullValidator("SeparateFieldMapping.Output", "Output element should not be null");
-        NotEmptyValidator separateOutputNotEmptyValidator = new NotEmptyValidator("SeparateFieldMapping.Output.Fields", "Output elements should not be empty");
-        NonNullValidator separateOutputFieldNonNullValidator = new NonNullValidator("SeparateFieldMapping.Output.FieldActions", "Output field actions cannot not be null");
-        NotEmptyValidator separateOutputNotEmptyFieldActionValidator = new NotEmptyValidator("SeparateFieldMapping.Output.Fields.FieldActions", "Field actions cannot be null or empty");
-        PositiveIntegerValidator separateOutputMapActionPositiveIntegerValidator = new PositiveIntegerValidator("SeparateFieldMapping.Output.Fields.FieldActions.MapAction.Index", "MapAction index must exists and be greater than or equal to zero (0)");
+        NonNullValidator separateOutputNonNullValidator = new NonNullValidator("SeparateFieldMapping.Output",
+                "Output element should not be null");
+        NotEmptyValidator separateOutputNotEmptyValidator = new NotEmptyValidator("SeparateFieldMapping.Output.Fields",
+                "Output elements should not be empty");
+        NonNullValidator separateOutputFieldNonNullValidator = new NonNullValidator(
+                "SeparateFieldMapping.Output.FieldActions", "Output field actions cannot not be null");
+        NotEmptyValidator separateOutputNotEmptyFieldActionValidator = new NotEmptyValidator(
+                "SeparateFieldMapping.Output.Fields.FieldActions", "Field actions cannot be null or empty");
+        PositiveIntegerValidator separateOutputMapActionPositiveIntegerValidator = new PositiveIntegerValidator(
+                "SeparateFieldMapping.Output.Fields.FieldActions.MapAction.Index",
+                "MapAction index must exists and be greater than or equal to zero (0)");
 
-        LookupTableNameValidator lookupTableNameValidator = new LookupTableNameValidator("lookuptables.lookuptable.name", "LookupTables contain duplicated LookupTable names.");
-
+        LookupTableNameValidator lookupTableNameValidator = new LookupTableNameValidator(
+                "lookuptables.lookuptable.name", "LookupTables contain duplicated LookupTable names.");
 
         validatorMap.put("datasource.source.uri", sourceURINotNullOrEmptyValidator);
         validatorMap.put("datasource.target.uri", targetURINotNullOrEmptyValidator);
@@ -92,24 +111,29 @@ public class DefaultAtlasValidationService implements AtlasValidationService {
         validatorMap.put("separate.output.not.empty", separateOutputNotEmptyValidator);
         validatorMap.put("separate.output.field.not.null", separateOutputFieldNonNullValidator);
         validatorMap.put("separate.output.field.field.action.not.empty", separateOutputNotEmptyFieldActionValidator);
-        validatorMap.put("separate.output.field.field.action.index.positive", separateOutputMapActionPositiveIntegerValidator);
+        validatorMap.put("separate.output.field.field.action.index.positive",
+                separateOutputMapActionPositiveIntegerValidator);
         validatorMap.put("lookuptable.name.check.for.duplicate", lookupTableNameValidator);
     }
-    
+
     public void destroy() {
         validatorMap.clear();
     }
-    
+
     @Override
-	public List<Validation> validateMapping(AtlasMapping mapping) {
+    public List<Validation> validateMapping(AtlasMapping mapping) {
         List<Validation> validations = new ArrayList<Validation>();
         validatorMap.get("mapping.name").validate(mapping.getName(), validations);
-        
+
         List<DataSource> dataSources = mapping.getDataSource();
-        for(DataSource ds : dataSources) {
-            switch(ds.getDataSourceType()) {
-            case SOURCE: validatorMap.get("datasource.source.uri").validate(ds.getUri(), validations); break;
-            case TARGET: validatorMap.get("datasource.target.uri").validate(ds.getUri(), validations); break;
+        for (DataSource ds : dataSources) {
+            switch (ds.getDataSourceType()) {
+            case SOURCE:
+                validatorMap.get("datasource.source.uri").validate(ds.getUri(), validations);
+                break;
+            case TARGET:
+                validatorMap.get("datasource.target.uri").validate(ds.getUri(), validations);
+                break;
             }
         }
         validateFieldMappings(mapping.getMappings(), mapping.getLookupTables(), validations);
@@ -124,20 +148,16 @@ public class DefaultAtlasValidationService implements AtlasValidationService {
             List<BaseMapping> fieldMappings = mappings.getMapping();
             if (fieldMappings != null && !fieldMappings.isEmpty()) {
                 List<Mapping> mapFieldMappings = fieldMappings.stream()
-                        .filter(p -> p.getMappingType() == MappingType.MAP)
-                        .map(p -> (Mapping) p)
+                        .filter(p -> p.getMappingType() == MappingType.MAP).map(p -> (Mapping) p)
                         .collect(Collectors.toList());
                 List<Mapping> combineFieldMappings = fieldMappings.stream()
-                        .filter(p -> p.getMappingType() == MappingType.COMBINE)
-                        .map(p -> (Mapping) p)
+                        .filter(p -> p.getMappingType() == MappingType.COMBINE).map(p -> (Mapping) p)
                         .collect(Collectors.toList());
                 List<Mapping> separateFieldMappings = fieldMappings.stream()
-                        .filter(p -> p.getMappingType() == MappingType.SEPARATE)
-                        .map(p -> (Mapping) p)
+                        .filter(p -> p.getMappingType() == MappingType.SEPARATE).map(p -> (Mapping) p)
                         .collect(Collectors.toList());
                 List<Mapping> lookupFieldMappings = fieldMappings.stream()
-                        .filter(p -> p.getMappingType() == MappingType.LOOKUP)
-                        .map(p -> (Mapping) p)
+                        .filter(p -> p.getMappingType() == MappingType.LOOKUP).map(p -> (Mapping) p)
                         .collect(Collectors.toList());
                 validateMapMapping(mapFieldMappings, validations);
                 validateCombineMapping(combineFieldMappings, validations);
@@ -147,9 +167,10 @@ public class DefaultAtlasValidationService implements AtlasValidationService {
         }
     }
 
-    private void validateLookupTables(List<Mapping> lookupFieldMappings, LookupTables lookupTables, List<Validation> validations) {
+    private void validateLookupTables(List<Mapping> lookupFieldMappings, LookupTables lookupTables,
+            List<Validation> validations) {
         if (lookupTables != null && lookupTables.getLookupTable() != null && !lookupTables.getLookupTable().isEmpty()) {
-            //check for duplicate names
+            // check for duplicate names
             validatorMap.get("lookuptable.name.check.for.duplicate").validate(lookupTables, validations);
             if (lookupFieldMappings.isEmpty()) {
                 Validation validation = new Validation();
@@ -163,35 +184,37 @@ public class DefaultAtlasValidationService implements AtlasValidationService {
         }
     }
 
-    //mapping field validations
-    private void validateLookupFieldMapping(List<Mapping> fieldMappings, LookupTables lookupTables, List<Validation> validations) {
-        Set<String> lookupFieldMappingTableNameRefs =
-                fieldMappings.stream()
-                        .map(Mapping::getLookupTableName)
-                        .collect(Collectors.toSet());
+    // mapping field validations
+    private void validateLookupFieldMapping(List<Mapping> fieldMappings, LookupTables lookupTables,
+            List<Validation> validations) {
+        Set<String> lookupFieldMappingTableNameRefs = fieldMappings.stream().map(Mapping::getLookupTableName)
+                .collect(Collectors.toSet());
 
-        Set<String> tableNames = lookupTables.getLookupTable().stream()
-                .map(LookupTable::getName).collect(Collectors.toSet());
+        Set<String> tableNames = lookupTables.getLookupTable().stream().map(LookupTable::getName)
+                .collect(Collectors.toSet());
 
         if (!lookupFieldMappingTableNameRefs.isEmpty() && !tableNames.isEmpty()) {
             Set<String> disjoint = Stream.concat(lookupFieldMappingTableNameRefs.stream(), tableNames.stream())
-                    .collect(Collectors.toMap(Function.identity(), t -> true, (a, b) -> null))
-                    .keySet();
+                    .collect(Collectors.toMap(Function.identity(), t -> true, (a, b) -> null)).keySet();
             if (!disjoint.isEmpty()) {
 
-                boolean isInFieldList = !lookupFieldMappingTableNameRefs.stream().filter(disjoint::contains).collect(Collectors.toList()).isEmpty();
-                boolean isInTableNameList = !tableNames.stream().filter(disjoint::contains).collect(Collectors.toList()).isEmpty();
-                //which list has the disjoin.... if its the lookup fields then ERROR
+                boolean isInFieldList = !lookupFieldMappingTableNameRefs.stream().filter(disjoint::contains)
+                        .collect(Collectors.toList()).isEmpty();
+                boolean isInTableNameList = !tableNames.stream().filter(disjoint::contains).collect(Collectors.toList())
+                        .isEmpty();
+                // which list has the disjoin.... if its the lookup fields then ERROR
                 if (isInFieldList) {
                     Validation validation = new Validation();
                     validation.setField("lookupfield.tablename");
-                    validation.setMessage("One ore more LookupFieldMapping references a non existent LookupTable name in the mapping");
+                    validation.setMessage(
+                            "One ore more LookupFieldMapping references a non existent LookupTable name in the mapping");
                     validation.setStatus(ValidationStatus.ERROR);
                     validation.setValue(disjoint.toString());
                     validations.add(validation);
                 }
 
-                //check that if a name exists in table names that at least one field mapping uses it, else WARN
+                // check that if a name exists in table names that at least one field mapping
+                // uses it, else WARN
                 if (isInTableNameList) {
                     Validation validation = new Validation();
                     validation.setField("lookupfield.tablename");
@@ -207,9 +230,11 @@ public class DefaultAtlasValidationService implements AtlasValidationService {
             if (fieldMapping.getInputField() != null) {
                 validatorMap.get("input.field.not.null").validate(fieldMapping.getInputField(), validations);
             }
-            validatorMap.get("output.not.null").validate(fieldMapping.getOutputField(), validations, ValidationStatus.WARN);
+            validatorMap.get("output.not.null").validate(fieldMapping.getOutputField(), validations,
+                    ValidationStatus.WARN);
             if (fieldMapping.getOutputField() != null) {
-                validatorMap.get("output.field.not.null").validate(fieldMapping.getOutputField(), validations, ValidationStatus.WARN);
+                validatorMap.get("output.field.not.null").validate(fieldMapping.getOutputField(), validations,
+                        ValidationStatus.WARN);
             }
         }
 
@@ -221,9 +246,11 @@ public class DefaultAtlasValidationService implements AtlasValidationService {
             if (fieldMapping.getInputField() != null) {
                 validatorMap.get("input.field.not.null").validate(fieldMapping.getInputField(), validations);
             }
-            validatorMap.get("output.not.null").validate(fieldMapping.getOutputField(), validations, ValidationStatus.WARN);
+            validatorMap.get("output.not.null").validate(fieldMapping.getOutputField(), validations,
+                    ValidationStatus.WARN);
             if (fieldMapping.getOutputField() != null) {
-                validatorMap.get("output.field.not.null").validate(fieldMapping.getOutputField(), validations, ValidationStatus.WARN);
+                validatorMap.get("output.field.not.null").validate(fieldMapping.getOutputField(), validations,
+                        ValidationStatus.WARN);
             }
         }
     }
@@ -236,20 +263,23 @@ public class DefaultAtlasValidationService implements AtlasValidationService {
                 // source must be a String type
             }
 
-            validatorMap.get("separate.output.not.null").validate(fieldMapping.getOutputField(), validations, ValidationStatus.WARN);
-            validatorMap.get("separate.output.not.empty").validate(fieldMapping.getOutputField(), validations, ValidationStatus.WARN);
+            validatorMap.get("separate.output.not.null").validate(fieldMapping.getOutputField(), validations,
+                    ValidationStatus.WARN);
+            validatorMap.get("separate.output.not.empty").validate(fieldMapping.getOutputField(), validations,
+                    ValidationStatus.WARN);
 
             if (fieldMapping.getOutputField() != null) {
                 for (Field field : fieldMapping.getOutputField()) {
                     validatorMap.get("separate.output.field.not.null").validate(field, validations);
                     if (field.getIndex() == null || field.getIndex() < 0) {
-                        validatorMap.get("separate.output.field.field.action.index.positive").validate(field.getIndex(), validations);
+                        validatorMap.get("separate.output.field.field.action.index.positive").validate(field.getIndex(),
+                                validations);
                     }
                 }
             }
         }
     }
-    
+
     private void validateCombineMapping(List<Mapping> fieldMappings, List<Validation> validations) {
         for (Mapping fieldMapping : fieldMappings) {
             validatorMap.get("combine.output.not.null").validate(fieldMapping.getOutputField(), validations);
@@ -258,14 +288,17 @@ public class DefaultAtlasValidationService implements AtlasValidationService {
                 // source must be a String type
             }
 
-            validatorMap.get("combine.input.not.null").validate(fieldMapping.getInputField(), validations, ValidationStatus.WARN);
-            validatorMap.get("combine.input.not.empty").validate(fieldMapping.getInputField(), validations, ValidationStatus.WARN);
+            validatorMap.get("combine.input.not.null").validate(fieldMapping.getInputField(), validations,
+                    ValidationStatus.WARN);
+            validatorMap.get("combine.input.not.empty").validate(fieldMapping.getInputField(), validations,
+                    ValidationStatus.WARN);
 
             if (fieldMapping.getInputField() != null) {
                 for (Field field : fieldMapping.getInputField()) {
                     validatorMap.get("combine.output.field.not.null").validate(field, validations);
                     if (field.getIndex() == null || field.getIndex() < 0) {
-                        validatorMap.get("combine.output.field.field.action.index.positive").validate(field.getIndex(), validations);
+                        validatorMap.get("combine.output.field.field.action.index.positive").validate(field.getIndex(),
+                                validations);
                     }
                 }
             }

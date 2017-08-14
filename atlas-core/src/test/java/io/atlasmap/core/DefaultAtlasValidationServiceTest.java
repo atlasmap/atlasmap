@@ -36,27 +36,27 @@ import static org.junit.Assert.*;
 public class DefaultAtlasValidationServiceTest extends BaseValidatorTest {
 
     private DefaultAtlasValidationService validationService = null;
-    
+
     @Override
-	@Before
+    @Before
     public void setUp() {
         super.setUp();
         validationService = new DefaultAtlasValidationService();
     }
-    
+
     @Override
-	@After
+    @After
     public void tearDown() {
         super.tearDown();
         validationService = null;
     }
-    
+
     @Test
     public void testValidateAtlasMappingFileHappyPath() throws Exception {
         AtlasMapping mapping = getAtlasMappingFullValid();
         assertNotNull(mapping);
 
-        //validation
+        // validation
         validations.addAll(validationService.validateMapping(mapping));
 
         assertFalse(validationHelper.hasErrors());
@@ -69,7 +69,7 @@ public class DefaultAtlasValidationServiceTest extends BaseValidatorTest {
         AtlasMapping mapping = getAtlasMappingFullValid();
         assertNotNull(mapping);
 
-        //validation
+        // validation
         validations.addAll(validationService.validateMapping(mapping));
 
         assertFalse(validationHelper.hasErrors());
@@ -89,7 +89,6 @@ public class DefaultAtlasValidationServiceTest extends BaseValidatorTest {
 
     }
 
-
     @Test
     public void testValidateAtlasMappingFileLookupTablesDuplicateNames() throws Exception {
         AtlasMapping mapping = getAtlasMappingWithLookupTables("duplicate_name", "duplicate_name");
@@ -101,12 +100,11 @@ public class DefaultAtlasValidationServiceTest extends BaseValidatorTest {
 
     }
 
-
     @Test
     public void testValidateAtlasMappingFileLookupFieldMappingRefNonExistentNames() throws Exception {
         AtlasMapping mapping = getAtlasMappingWithLookupTables("table1", "table2");
 
-        //add one that does not exists
+        // add one that does not exists
         Mapping lookupFieldMapping = AtlasModelFactory.createMapping(MappingType.LOOKUP);
         lookupFieldMapping.setLookupTableName("table3");
 
@@ -170,7 +168,6 @@ public class DefaultAtlasValidationServiceTest extends BaseValidatorTest {
         lookupTable.setName("table1");
         lookupTable.setDescription("desc_table1");
         lookupTables.getLookupTable().add(lookupTable);
-
 
         validations.addAll(validationService.validateMapping(mapping));
 

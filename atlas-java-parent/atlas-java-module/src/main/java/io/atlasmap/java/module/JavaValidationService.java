@@ -61,17 +61,21 @@ public class JavaValidationService implements AtlasValidationService {
         conversionService = DefaultAtlasConversionService.getInstance();
         init();
     }
-    
+
     public JavaValidationService(AtlasConversionService conversionService) {
         this.conversionService = conversionService;
         init();
     }
-    
+
     public void init() {
-        NonNullValidator javaFilePathNonNullValidator = new NonNullValidator("JavaField.Path", "Field path must not be null nor empty");
-        NonNullValidator inputFieldTypeNonNullValidator = new NonNullValidator("Input.Field.Type", "FieldType should not be null nor empty");
-        NonNullValidator outputFieldTypeNonNullValidator = new NonNullValidator("Output.Field.Type", "FieldType should not be null nor empty");
-        NonNullValidator fieldTypeNonNullValidator = new NonNullValidator("Field.Type", "Filed type should not be null nor empty");
+        NonNullValidator javaFilePathNonNullValidator = new NonNullValidator("JavaField.Path",
+                "Field path must not be null nor empty");
+        NonNullValidator inputFieldTypeNonNullValidator = new NonNullValidator("Input.Field.Type",
+                "FieldType should not be null nor empty");
+        NonNullValidator outputFieldTypeNonNullValidator = new NonNullValidator("Output.Field.Type",
+                "FieldType should not be null nor empty");
+        NonNullValidator fieldTypeNonNullValidator = new NonNullValidator("Field.Type",
+                "Filed type should not be null nor empty");
 
         validatorMap.put("java.field.type.not.null", fieldTypeNonNullValidator);
         validatorMap.put("java.field.path.not.null", javaFilePathNonNullValidator);
@@ -88,42 +92,45 @@ public class JavaValidationService implements AtlasValidationService {
         versionMap.put("1.2", 46);
         versionMap.put("1.1", 45);
     }
-    
+
     public void destroy() {
         validatorMap.clear();
         versionMap.clear();
     }
-    
+
     @Override
-	public List<Validation> validateMapping(AtlasMapping mapping) {
+    public List<Validation> validateMapping(AtlasMapping mapping) {
         List<Validation> validations = new ArrayList<Validation>();
-        if(mapping != null && mapping.getMappings() != null && mapping.getMappings().getMapping() != null && !mapping.getMappings().getMapping().isEmpty()) {
+        if (mapping != null && mapping.getMappings() != null && mapping.getMappings().getMapping() != null
+                && !mapping.getMappings().getMapping().isEmpty()) {
             validateMappings(mapping.getMappings().getMapping(), validations);
         }
-        
+
         boolean found = false;
-        for(DataSource ds : mapping.getDataSource()) {
-            if(ds.getUri() != null && ds.getUri().startsWith(moduleDetail.uri())) {
+        for (DataSource ds : mapping.getDataSource()) {
+            if (ds.getUri() != null && ds.getUri().startsWith(moduleDetail.uri())) {
                 found = true;
             }
         }
-        
-        if(!found) {
+
+        if (!found) {
             Validation validation = new Validation();
             validation.setField(String.format("DataSource.uri"));
             validation.setMessage("No DataSource with atlas:java uri specified");
-            validation.setStatus(ValidationStatus.ERROR);   
+            validation.setStatus(ValidationStatus.ERROR);
             validations.add(validation);
         }
-        
+
         return validations;
     }
 
     private void validateMappings(List<BaseMapping> mappings, List<Validation> validations) {
         for (BaseMapping fieldMapping : mappings) {
-            if (fieldMapping.getClass().isAssignableFrom(Mapping.class) && MappingType.MAP.equals(((Mapping)fieldMapping).getMappingType())) {
+            if (fieldMapping.getClass().isAssignableFrom(Mapping.class)
+                    && MappingType.MAP.equals(((Mapping) fieldMapping).getMappingType())) {
                 validateMapMapping((Mapping) fieldMapping, validations);
-            } else if (fieldMapping.getClass().isAssignableFrom(Mapping.class) && MappingType.SEPARATE.equals(((Mapping)fieldMapping).getMappingType())) {
+            } else if (fieldMapping.getClass().isAssignableFrom(Mapping.class)
+                    && MappingType.SEPARATE.equals(((Mapping) fieldMapping).getMappingType())) {
                 validateSeparateMapping((Mapping) fieldMapping, validations);
             }
         }
@@ -132,25 +139,27 @@ public class JavaValidationService implements AtlasValidationService {
     private void validateMapMapping(Mapping mapping, List<Validation> validations) {
         JavaField inputField = null;
         JavaField outField = null;
-       
-        if(mapping != null && mapping.getInputField() != null && mapping.getInputField().size() > 0
+
+        if (mapping != null && mapping.getInputField() != null && mapping.getInputField().size() > 0
                 && mapping.getInputField().get(0).getClass().isAssignableFrom(JavaField.class)) {
             inputField = (JavaField) mapping.getInputField().get(0);
         } else {
             Validation validation = new Validation();
             validation.setField("Input.Field");
-            validation.setMessage("Input field " + generateBestFieldName(mapping.getInputField().get(0)) + " is not supported by the Java Module");
+            validation.setMessage("Input field " + generateBestFieldName(mapping.getInputField().get(0))
+                    + " is not supported by the Java Module");
             validation.setStatus(ValidationStatus.ERROR);
             validations.add(validation);
         }
-        
+
         if (mapping != null && mapping.getOutputField() != null && mapping.getOutputField().size() > 0
                 && mapping.getOutputField().get(0).getClass().isAssignableFrom(JavaField.class)) {
             outField = (JavaField) mapping.getOutputField().get(0);
         } else {
             Validation validation = new Validation();
             validation.setField("Output.Field");
-            validation.setMessage("Output field " + generateBestFieldName(mapping.getOutputField().get(0)) + " is not supported by the Java Module");
+            validation.setMessage("Output field " + generateBestFieldName(mapping.getOutputField().get(0))
+                    + " is not supported by the Java Module");
             validation.setStatus(ValidationStatus.ERROR);
             validations.add(validation);
         }
@@ -163,26 +172,34 @@ public class JavaValidationService implements AtlasValidationService {
     }
 
     private void validateSourceAndTargetTypes(JavaField inputField, JavaField outField, List<Validation> validations) {
-        // making an assumption that anything marked as COMPLEX would require the use of the class name to find a validator.
-        if ((inputField.getFieldType() == null || outField.getFieldType() == null) ||
-                (inputField.getFieldType().compareTo(FieldType.COMPLEX) == 0 || outField.getFieldType().compareTo(FieldType.COMPLEX) == 0)) {
+        // making an assumption that anything marked as COMPLEX would require the use of
+        // the class name to find a validator.
+        if ((inputField.getFieldType() == null || outField.getFieldType() == null)
+                || (inputField.getFieldType().compareTo(FieldType.COMPLEX) == 0
+                        || outField.getFieldType().compareTo(FieldType.COMPLEX) == 0)) {
             validateConversion(inputField, outField, true, validations);
         } else if (inputField.getFieldType().compareTo(outField.getFieldType()) != 0) {
-            // is this check superseded by the further checks using the AtlasConversionInfo annotations?
+            // is this check superseded by the further checks using the AtlasConversionInfo
+            // annotations?
 
-//            errors.getAllErrors().add(new AtlasMappingError("Field.Input/Output", inputField.getType().value() + " --> " + outField.getType().value(), "Output field type does not match input field type, may require a converter.", AtlasMappingError.Level.WARN));
+            // errors.getAllErrors().add(new AtlasMappingError("Field.Input/Output",
+            // inputField.getType().value() + " --> " + outField.getType().value(), "Output
+            // field type does not match input field type, may require a converter.",
+            // AtlasMappingError.Level.WARN));
             validateConversion(inputField, outField, false, validations);
         }
     }
 
-    private void validateConversion(JavaField inputField, JavaField outField, boolean useClassNames, List<Validation> validations) {
+    private void validateConversion(JavaField inputField, JavaField outField, boolean useClassNames,
+            List<Validation> validations) {
         FieldType inFieldType = inputField.getFieldType();
         FieldType outFieldType = outField.getFieldType();
         String rejectedValue;
         Optional<AtlasConverter> atlasConverter;
-        //do we have a converter for this?
+        // do we have a converter for this?
         if (useClassNames) {
-            atlasConverter = conversionService.findMatchingConverter(inputField.getClassName(), outField.getClassName());
+            atlasConverter = conversionService.findMatchingConverter(inputField.getClassName(),
+                    outField.getClassName());
         } else {
             atlasConverter = conversionService.findMatchingConverter(inFieldType, outFieldType);
         }
@@ -190,24 +207,28 @@ public class JavaValidationService implements AtlasValidationService {
             rejectedValue = inputField.getClassName() + " --> " + outField.getClassName();
             Validation validation = new Validation();
             validation.setField("Field.Input/Output.conversion");
-            validation.setMessage("A conversion between the input and output fields is required but no converter is available");
+            validation.setMessage(
+                    "A conversion between the input and output fields is required but no converter is available");
             validation.setStatus(ValidationStatus.WARN);
             validation.setValue(rejectedValue.toString());
             validations.add(validation);
         } else {
             AtlasConversionInfo conversionInfo;
-            //find the method that does the conversion
+            // find the method that does the conversion
             Method[] methods = atlasConverter.get().getClass().getMethods();
             if (useClassNames) {
                 conversionInfo = Arrays.stream(methods).map(method -> method.getAnnotation(AtlasConversionInfo.class))
                         .filter(atlasConversionInfo -> atlasConversionInfo != null)
-                        .filter(atlasConversionInfo -> atlasConversionInfo.sourceClassName().equals(inputField.getClassName())
-                                && atlasConversionInfo.targetClassName().equals(outField.getClassName())).findFirst().orElse(null);
+                        .filter(atlasConversionInfo -> atlasConversionInfo.sourceClassName()
+                                .equals(inputField.getClassName())
+                                && atlasConversionInfo.targetClassName().equals(outField.getClassName()))
+                        .findFirst().orElse(null);
             } else {
                 conversionInfo = Arrays.stream(methods).map(method -> method.getAnnotation(AtlasConversionInfo.class))
                         .filter(atlasConversionInfo -> atlasConversionInfo != null)
                         .filter(atlasConversionInfo -> (atlasConversionInfo.sourceType().compareTo(inFieldType) == 0
-                                && atlasConversionInfo.targetType().compareTo(outFieldType) == 0)).findFirst().orElse(null);
+                                && atlasConversionInfo.targetType().compareTo(outFieldType) == 0))
+                        .findFirst().orElse(null);
             }
 
             if (conversionInfo != null) {
@@ -227,7 +248,8 @@ public class JavaValidationService implements AtlasValidationService {
                         validation.setValue(rejectedValue.toString());
                         validations.add(validation);
                     }
-                    if (atlasConversionConcern.equals(AtlasConversionConcern.RANGE) || atlasConversionConcern.equals(AtlasConversionConcern.FORMAT)) {
+                    if (atlasConversionConcern.equals(AtlasConversionConcern.RANGE)
+                            || atlasConversionConcern.equals(AtlasConversionConcern.FORMAT)) {
                         Validation validation = new Validation();
                         validation.setField("Field.Input/Output.conversion");
                         validation.setMessage(atlasConversionConcern.getMessage());
@@ -258,51 +280,57 @@ public class JavaValidationService implements AtlasValidationService {
         } else {
             Validation validation = new Validation();
             validation.setField("Input.Field");
-            validation.setMessage("Input field " + fieldMapping.getInputField().get(0).getClass().getName() + " + is not supported by Java Module");
+            validation.setMessage("Input field " + fieldMapping.getInputField().get(0).getClass().getName()
+                    + " + is not supported by Java Module");
             validation.setStatus(ValidationStatus.ERROR);
             validations.add(validation);
         }
         // check that the input field is of type String else error
-        if (inputField != null && inputField.getFieldType() != null && !FieldType.STRING.equals(inputField.getFieldType()) ||
-            (inputField.getValue() != null && inputField.getValue().getClass().isAssignableFrom(String.class))) {
+        if (inputField != null && inputField.getFieldType() != null
+                && !FieldType.STRING.equals(inputField.getFieldType())
+                || (inputField.getValue() != null && inputField.getValue().getClass().isAssignableFrom(String.class))) {
             Validation validation = new Validation();
             validation.setField("Input.Field");
-            validation.setMessage(String.format("Input field must be of type %s for a Separate Mapping", FieldType.STRING));
+            validation.setMessage(
+                    String.format("Input field must be of type %s for a Separate Mapping", FieldType.STRING));
             validation.setStatus(ValidationStatus.ERROR);
             validation.setValue(inputField.getFieldType().toString());
             validations.add(validation);
         }
 
         validateJavaField(inputField, "input", validations);
-        //TODO call JavaModule.isSupported() on field  (false = ERROR)
+        // TODO call JavaModule.isSupported() on field (false = ERROR)
         // output
-        if (fieldMapping != null && fieldMapping.getOutputField() != null && fieldMapping.getOutputField().size() > 0) 
-            for(Field outputField : fieldMapping.getOutputField()) {
-                if(outputField.getClass().isAssignableFrom(JavaField.class)) {
+        if (fieldMapping != null && fieldMapping.getOutputField() != null && fieldMapping.getOutputField().size() > 0)
+            for (Field outputField : fieldMapping.getOutputField()) {
+                if (outputField.getClass().isAssignableFrom(JavaField.class)) {
                     validateJavaField((JavaField) outputField, "output", validations);
-                    //TODO call JavaModule.isSupported() on field  (false = ERROR)
+                    // TODO call JavaModule.isSupported() on field (false = ERROR)
                 } else {
                     Validation validation = new Validation();
                     validation.setField("Output.Field");
-                    validation.setMessage(String.format("Output field %s is not supported by Java Module",  outputField.getClass().getName()));
+                    validation.setMessage(String.format("Output field %s is not supported by Java Module",
+                            outputField.getClass().getName()));
                     validation.setStatus(ValidationStatus.ERROR);
                     validation.setValue((outField != null ? outField.toString() : null));
                     validations.add(validation);
                 }
             }
-        }
+    }
 
     private void validateJavaField(JavaField field, String direction, List<Validation> validations) {
-        //TODO check that it is a valid type on the AtlasContext
+        // TODO check that it is a valid type on the AtlasContext
 
         validatorMap.get("java.field.type.not.null").validate(field, validations, ValidationStatus.WARN);
         if ("input".equalsIgnoreCase(direction)) {
             if (field != null) {
-                validatorMap.get("input.field.type.not.null").validate(field.getFieldType(), validations, ValidationStatus.WARN);
+                validatorMap.get("input.field.type.not.null").validate(field.getFieldType(), validations,
+                        ValidationStatus.WARN);
             }
         } else {
             if (field != null) {
-                validatorMap.get("output.field.type.not.null").validate(field.getFieldType(), validations, ValidationStatus.WARN);
+                validatorMap.get("output.field.type.not.null").validate(field.getFieldType(), validations,
+                        ValidationStatus.WARN);
             }
         }
         if (field != null) {
@@ -318,10 +346,12 @@ public class JavaValidationService implements AtlasValidationService {
         if (clazzName != null && !clazzName.isEmpty()) {
             Integer major = detectClassVersion(clazzName);
             if (major != null) {
-                if(major > versionMap.get(System.getProperty("java.vm.specification.version"))) {
+                if (major > versionMap.get(System.getProperty("java.vm.specification.version"))) {
                     Validation validation = new Validation();
                     validation.setField("Field.Classname");
-                    validation.setMessage(String.format("Class for field is compiled against unsupported JDK version: %d current JDK: %d", major, versionMap.get(System.getProperty("java.vm.specification.version"))));
+                    validation.setMessage(String.format(
+                            "Class for field is compiled against unsupported JDK version: %d current JDK: %d", major,
+                            versionMap.get(System.getProperty("java.vm.specification.version"))));
                     validation.setStatus(ValidationStatus.ERROR);
                     validation.setValue(clazzName);
                     validations.add(validation);
@@ -336,23 +366,23 @@ public class JavaValidationService implements AtlasValidationService {
             }
         }
     }
-    
+
     private String generateBestFieldName(Field field) {
-        if(field == null) {
+        if (field == null) {
             return "null";
         }
-        
-        return field.getClass().getName(); 
+
+        return field.getClass().getName();
     }
-    
+
     protected Integer detectClassVersion(String className) {
         Integer major = null;
         InputStream in = null;
         try {
             in = getClass().getClassLoader().getResourceAsStream(className.replace('.', '/') + ".class");
-            if(in == null) {
+            if (in == null) {
                 in = ClassLoader.getSystemResourceAsStream(className.replace('.', '/') + ".class");
-                if(in == null) {
+                if (in == null) {
                     return null;
                 }
             }
@@ -361,18 +391,22 @@ public class JavaValidationService implements AtlasValidationService {
             if (magic != 0xCAFEBABE) {
                 logger.error(String.format("Invalid Java class: %s magic value: %s", className, magic));
             }
-        
+
             int minor = 0xFFFF & data.readShort();
             major = new Integer(0xFFFF & data.readShort());
-            
-            if(logger.isDebugEnabled()) {
+
+            if (logger.isDebugEnabled()) {
                 logger.debug(String.format("Detected class: %s version major: %s minor: %s", className, magic, minor));
             }
         } catch (IOException e) {
             logger.error(String.format("Error detected version for class: %s msg: %s", className, e.getMessage()), e);
         } finally {
-            if(in != null) {
-               try { in.close(); } catch (IOException ie) { logger.error(String.format("Error closing input stream msg: %s", ie.getMessage()), ie); }
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (IOException ie) {
+                    logger.error(String.format("Error closing input stream msg: %s", ie.getMessage()), ie);
+                }
             }
         }
         return major;

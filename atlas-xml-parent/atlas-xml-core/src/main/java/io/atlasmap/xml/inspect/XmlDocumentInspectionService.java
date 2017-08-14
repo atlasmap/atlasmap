@@ -29,7 +29,6 @@ import java.io.InputStream;
 
 public class XmlDocumentInspectionService {
 
-
     public XmlDocument inspectXmlDocument(String sourceDocument) throws XmlInspectionException {
         if (sourceDocument == null || sourceDocument.isEmpty()) {
             throw new IllegalArgumentException("Source must be specified");
@@ -52,7 +51,6 @@ public class XmlDocumentInspectionService {
         return inspector.getXmlDocument();
     }
 
-
     public XmlDocument inspectSchema(String schemaSource) throws XmlInspectionException {
         if (schemaSource == null || schemaSource.isEmpty()) {
             throw new IllegalArgumentException("Source must be specified");
@@ -71,10 +69,10 @@ public class XmlDocumentInspectionService {
         return inspector.getXmlDocument();
     }
 
-
-    private Document getDocument(InputStream is, boolean namespaced) throws ParserConfigurationException, SAXException, IOException {
+    private Document getDocument(InputStream is, boolean namespaced)
+            throws ParserConfigurationException, SAXException, IOException {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        dbf.setNamespaceAware(namespaced); //this must be done to use namespaces
+        dbf.setNamespaceAware(namespaced); // this must be done to use namespaces
         DocumentBuilder b = dbf.newDocumentBuilder();
         return b.parse(is);
     }

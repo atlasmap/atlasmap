@@ -28,7 +28,7 @@ import io.atlasmap.java.v2.JavaClass;
 public class JavaConstructServiceSimpleTest {
 
     private JavaConstructService constructService = null;
-    
+
     @Before
     public void setUp() throws Exception {
         constructService = new JavaConstructService();
@@ -45,35 +45,35 @@ public class JavaConstructServiceSimpleTest {
         Object targetObject = constructService.constructClass(generateJavaClass("java.lang.String"));
         assertNotNull(targetObject);
         assertTrue(targetObject instanceof java.lang.String);
-        assertEquals("", ((String)targetObject));
-        assertEquals(new Integer(0), new Integer(((String)targetObject).length()));
+        assertEquals("", ((String) targetObject));
+        assertEquals(new Integer(0), new Integer(((String) targetObject).length()));
     }
-    
+
     @Test
     public void testConstructSourceAddress() throws Exception {
         Object targetObject = constructService.constructClass(generateJavaClass("io.atlasmap.java.test.SourceAddress"));
         assertNotNull(targetObject);
         assertTrue(targetObject instanceof io.atlasmap.java.test.SourceAddress);
-        SourceAddress source = (SourceAddress)targetObject;
+        SourceAddress source = (SourceAddress) targetObject;
         assertNull(source.getAddressLine1());
         assertNull(source.getAddressLine2());
         assertNull(source.getCity());
         assertNull(source.getState());
         assertNull(source.getZipCode());
     }
-    
+
     @Test
     public void testConstructSourceContact() throws Exception {
         Object targetObject = constructService.constructClass(generateJavaClass("io.atlasmap.java.test.SourceContact"));
         assertNotNull(targetObject);
         assertTrue(targetObject instanceof io.atlasmap.java.test.SourceContact);
-        SourceContact source = (SourceContact)targetObject;
+        SourceContact source = (SourceContact) targetObject;
         assertNull(source.getFirstName());
         assertNull(source.getLastName());
         assertNull(source.getPhoneNumber());
         assertNull(source.getZipCode());
     }
-    
+
     @Test
     public void testConstructAbstractBaseContactMinimalData() throws Exception {
         try {
@@ -85,7 +85,7 @@ public class JavaConstructServiceSimpleTest {
             fail("InstantiationException expected instead: " + e.getMessage());
         }
     }
-    
+
     protected JavaClass generateJavaClass(String className) {
         JavaClass j = new JavaClass();
         j.setClassName(className);

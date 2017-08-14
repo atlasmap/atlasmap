@@ -54,7 +54,7 @@ public class StringPatternValidator implements AtlasValidator {
     @Override
     public void validate(Object target, List<Validation> validations, ValidationStatus status) {
         Pattern regEx = Pattern.compile(pattern);
-        
+
         if (target != null && supports(target.getClass())) {
             String value = (String) target;
             Matcher m = regEx.matcher(value);

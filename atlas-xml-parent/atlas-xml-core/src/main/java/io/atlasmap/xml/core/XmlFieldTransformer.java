@@ -45,7 +45,7 @@ public abstract class XmlFieldTransformer {
 
     protected LinkedList<String> getElementsInXmlPath(String xmlPath) {
         return Arrays.stream(xmlPath.replaceFirst("/", "").split("/"))
-            .collect(Collectors.toCollection(LinkedList::new));
+                .collect(Collectors.toCollection(LinkedList::new));
     }
 
     protected List<XmlPathCoordinate> createXmlPathCoordinates(final List<String> elements) {
@@ -53,12 +53,12 @@ public abstract class XmlFieldTransformer {
         for (String element : elements) {
             XmlPathCoordinate xmlPathCoordinate;
             Integer index = 0;
-            //indexed elements
+            // indexed elements
             if (element.contains("[")) {
                 String[] indexedTargetElement = element.split("\\[");
                 String indexedElement = indexedTargetElement[0].substring(indexedTargetElement[0].lastIndexOf("/") + 1);
                 String indexValue = indexedTargetElement[1].replace("]", "");
-                if(indexValue != null && !indexValue.trim().isEmpty()) {
+                if (indexValue != null && !indexValue.trim().isEmpty()) {
                     index = Integer.valueOf(indexValue);
                 } else {
                     index = null;
@@ -75,11 +75,8 @@ public abstract class XmlFieldTransformer {
     }
 
     protected String findNamespaceURIFromPrefix(String prefix) {
-        return namespaces.entrySet().stream()
-            .filter(e -> e.getValue().equals(prefix))
-            .map(Map.Entry::getKey)
-            .findFirst()
-            .orElse(null);
+        return namespaces.entrySet().stream().filter(e -> e.getValue().equals(prefix)).map(Map.Entry::getKey)
+                .findFirst().orElse(null);
     }
 
     protected void seedDocumentNamespaces(Document document) {
@@ -109,7 +106,7 @@ public abstract class XmlFieldTransformer {
         if (element.contains(":")) {
             String[] namespacedElement = element.split(":");
             String prefix = namespacedElement[0];
-            //dealing with an attr
+            // dealing with an attr
             if (prefix.contains("@")) {
                 prefix = prefix.substring(1);
             }

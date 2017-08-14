@@ -16,12 +16,19 @@
 package io.atlasmap.mxbean;
 
 public interface AtlasModuleInfoMXBean {
-	public String getName();
-	public String getClassName();
-	public String getModuleClassName();
-	public String getVersion();
-	public String[] getDataFormats();
-	public String[] getPackageNames();
-	public Boolean isSourceSupported();
-	public Boolean isTargetSupported();
+    public String getName();
+
+    public String getClassName();
+
+    public String getModuleClassName();
+
+    public String getVersion();
+
+    public String[] getDataFormats();
+
+    public String[] getPackageNames();
+
+    public Boolean isSourceSupported();
+
+    public Boolean isTargetSupported();
 }

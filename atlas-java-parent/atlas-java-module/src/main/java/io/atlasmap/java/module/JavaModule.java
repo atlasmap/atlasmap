@@ -56,24 +56,25 @@ import io.atlasmap.v2.PropertyField;
 import io.atlasmap.v2.SimpleField;
 import io.atlasmap.v2.Validation;
 
-@AtlasModuleDetail(name = "JavaModule", uri = "atlas:java", modes = { "SOURCE", "TARGET" }, dataFormats = { "java" }, configPackages = { "io.atlasmap.java.v2" })
+@AtlasModuleDetail(name = "JavaModule", uri = "atlas:java", modes = { "SOURCE", "TARGET" }, dataFormats = {
+        "java" }, configPackages = { "io.atlasmap.java.v2" })
 public class JavaModule extends BaseAtlasModule {
     private static final Logger logger = LoggerFactory.getLogger(JavaModule.class);
     public static final String DEFAULT_LIST_CLASS = "java.util.ArrayList";
-    
+
     private ClassInspectionService javaInspectionService = null;
-    private JavaConstructService javaConstructService = null;     
-    
+    private JavaConstructService javaConstructService = null;
+
     public JavaModule() {
         this.automaticallyProcessOutputFieldActions = false;
     }
-    
+
     @Override
     public void init() {
         javaInspectionService = new ClassInspectionService();
         javaInspectionService.setConversionService(getConversionService());
         setJavaInspectionService(javaInspectionService);
-        
+
         javaConstructService = new JavaConstructService();
         javaConstructService.setConversionService(getConversionService());
         setJavaConstructService(javaConstructService);
@@ -87,155 +88,169 @@ public class JavaModule extends BaseAtlasModule {
 
     @Override
     public void processPreInputExecution(AtlasSession atlasSession) throws AtlasException {
-        if(atlasSession == null || atlasSession.getMapping() == null 
-                || atlasSession.getMapping().getMappings() == null 
+        if (atlasSession == null || atlasSession.getMapping() == null || atlasSession.getMapping().getMappings() == null
                 || atlasSession.getMapping().getMappings().getMapping() == null) {
             logger.error("AtlasSession not properly intialized with a mapping that contains field mappings");
             return;
         }
-        
-        if(javaInspectionService == null) {
+
+        if (javaInspectionService == null) {
             javaInspectionService = new ClassInspectionService();
             javaInspectionService.setConversionService(getConversionService());
         }
-        
-        if(logger.isDebugEnabled()) {
+
+        if (logger.isDebugEnabled()) {
             logger.debug("processPreInputExcution completed");
         }
     }
-    
+
     @Override
-    public void processPreOutputExecution(AtlasSession atlasSession) throws AtlasException {              
-        if(atlasSession == null || atlasSession.getMapping() == null 
-                || atlasSession.getMapping().getMappings() == null 
+    public void processPreOutputExecution(AtlasSession atlasSession) throws AtlasException {
+        if (atlasSession == null || atlasSession.getMapping() == null || atlasSession.getMapping().getMappings() == null
                 || atlasSession.getMapping().getMappings().getMapping() == null) {
             logger.error("AtlasSession not properly intialized with a mapping that contains field mappings");
             return;
         }
-        
-        if(javaInspectionService == null) {
+
+        if (javaInspectionService == null) {
             javaInspectionService = new ClassInspectionService();
             javaInspectionService.setConversionService(getConversionService());
         }
-        
-        if(logger.isDebugEnabled()) {
+
+        if (logger.isDebugEnabled()) {
             logger.debug("processPreOutputExcution completed");
         }
     }
 
     @Override
-    public void processPreValidation(AtlasSession atlasSession) throws AtlasException {        
-        if(atlasSession == null || atlasSession.getMapping() == null) {
+    public void processPreValidation(AtlasSession atlasSession) throws AtlasException {
+        if (atlasSession == null || atlasSession.getMapping() == null) {
             logger.error("Invalid session: Session and AtlasMapping must be specified");
             throw new AtlasValidationException("Invalid session");
         }
-        
+
         JavaValidationService javaValidator = new JavaValidationService(getConversionService());
         List<Validation> javaValidations = javaValidator.validateMapping(atlasSession.getMapping());
         atlasSession.getValidations().getValidation().addAll(javaValidations);
-        
-        if(logger.isDebugEnabled()) {
+
+        if (logger.isDebugEnabled()) {
             logger.debug("Detected " + javaValidations.size() + " java validation notices");
         }
-               
-        if(logger.isDebugEnabled()) {
+
+        if (logger.isDebugEnabled()) {
             logger.debug("processPreValidation completed");
         }
     }
-    
+
     @Override
     public void processInputMapping(AtlasSession session, BaseMapping baseMapping) throws AtlasException {
         for (Mapping mapping : this.generateInputMappings(session, baseMapping)) {
-            if(mapping.getInputField() == null || mapping.getInputField().isEmpty()) {
-                addAudit(session, null, String.format("Mapping does not contain at least one input field alias=%s desc=%s", mapping.getAlias(), mapping.getDescription()), null, AuditStatus.WARN, null);
+            if (mapping.getInputField() == null || mapping.getInputField().isEmpty()) {
+                addAudit(session, null,
+                        String.format("Mapping does not contain at least one input field alias=%s desc=%s",
+                                mapping.getAlias(), mapping.getDescription()),
+                        null, AuditStatus.WARN, null);
                 return;
             }
-            
-            for(Field field : mapping.getInputField()) {
-                if(!isSupportedField(field)) {
-                    addAudit(session, field.getDocId(), String.format("Unsupported input field type=%s", field.getClass().getName()), field.getPath(), AuditStatus.ERROR, null);
+
+            for (Field field : mapping.getInputField()) {
+                if (!isSupportedField(field)) {
+                    addAudit(session, field.getDocId(),
+                            String.format("Unsupported input field type=%s", field.getClass().getName()),
+                            field.getPath(), AuditStatus.ERROR, null);
                     continue;
                 }
-            
-                if(field instanceof ConstantField) {
+
+                if (field instanceof ConstantField) {
                     processConstantField(session, mapping);
-                    if(logger.isDebugEnabled()) {
-                        logger.debug("Processed input constantField sPath=" + field.getPath() + " sV=" + field.getValue() + " sT=" + field.getFieldType() + " docId: " + field.getDocId());
+                    if (logger.isDebugEnabled()) {
+                        logger.debug("Processed input constantField sPath=" + field.getPath() + " sV="
+                                + field.getValue() + " sT=" + field.getFieldType() + " docId: " + field.getDocId());
                     }
                     continue;
                 }
-                
-                if(field instanceof PropertyField) {
-                    processPropertyField(session, mapping, session.getAtlasContext().getContextFactory().getPropertyStrategy());
-                    if(logger.isDebugEnabled()) {
-                        logger.debug("Processed input propertyField sPath=" + field.getPath() + " sV=" + field.getValue() + " sT=" + field.getFieldType() + " docId: " + field.getDocId());
+
+                if (field instanceof PropertyField) {
+                    processPropertyField(session, mapping,
+                            session.getAtlasContext().getContextFactory().getPropertyStrategy());
+                    if (logger.isDebugEnabled()) {
+                        logger.debug("Processed input propertyField sPath=" + field.getPath() + " sV="
+                                + field.getValue() + " sT=" + field.getFieldType() + " docId: " + field.getDocId());
                     }
                     continue;
                 }
-            
-                Object sourceObject = session.getInput();;
-                if(field.getDocId() != null) {
+
+                Object sourceObject = session.getInput();
+                ;
+                if (field.getDocId() != null) {
                     sourceObject = session.getInput(field.getDocId());
                 }
-            
+
                 try {
                     processInputMapping(field, sourceObject, session);
-                
-                    if(logger.isDebugEnabled()) {
-                        logger.debug("Processed input field sPath=" + field.getPath() + " sV=" + field.getValue() + " sT=" + field.getFieldType() + " docId: " + field.getDocId());
+
+                    if (logger.isDebugEnabled()) {
+                        logger.debug("Processed input field sPath=" + field.getPath() + " sV=" + field.getValue()
+                                + " sT=" + field.getFieldType() + " docId: " + field.getDocId());
                     }
                 } catch (Exception e) {
-                    addAudit(session, field.getDocId(), String.format("Unexpected error occured msg=%s", e.getMessage()), field.getPath(), AuditStatus.ERROR, null);
+                    addAudit(session, field.getDocId(),
+                            String.format("Unexpected error occured msg=%s", e.getMessage()), field.getPath(),
+                            AuditStatus.ERROR, null);
                     logger.error("Unexpected error occured msg=" + e.getMessage(), e);
                     throw new AtlasException(e);
                 }
             }
         }
-    }                    
-    
+    }
+
     protected void processInputMapping(Field sourceField, Object source, AtlasSession session) throws Exception {
         Method getter = null;
-        if(sourceField.getFieldType() == null && (sourceField instanceof JavaField || sourceField instanceof JavaEnumField )) {
+        if (sourceField.getFieldType() == null
+                && (sourceField instanceof JavaField || sourceField instanceof JavaEnumField)) {
             getter = resolveGetMethod(source, sourceField, false);
-            if(getter == null) {
-                logger.warn("Unable to auto-detect sourceField type p=" + sourceField.getPath() + " d=" + sourceField.getDocId());
+            if (getter == null) {
+                logger.warn("Unable to auto-detect sourceField type p=" + sourceField.getPath() + " d="
+                        + sourceField.getDocId());
                 return;
             }
             Class<?> returnType = getter.getReturnType();
             sourceField.setFieldType(getConversionService().fieldTypeFromClass(returnType));
-            if(logger.isTraceEnabled()) {
-                logger.trace("Auto-detected sourceField type p=" + sourceField.getPath() + " t=" + sourceField.getFieldType());
+            if (logger.isTraceEnabled()) {
+                logger.trace("Auto-detected sourceField type p=" + sourceField.getPath() + " t="
+                        + sourceField.getFieldType());
             }
         }
-            
+
         populateSourceFieldValue(sourceField, source, getter);
     }
-    
+
     protected void populateSourceFieldValue(Field field, Object source, Method getter) throws Exception {
         Object parentObject = source;
-        PathUtil pathUtil = new PathUtil(field.getPath());        
+        PathUtil pathUtil = new PathUtil(field.getPath());
         if (pathUtil.hasParent()) {
             parentObject = ClassHelper.parentObjectForPath(source, pathUtil, true);
         }
         getter = (getter == null) ? resolveGetMethod(parentObject, field, (parentObject != source)) : getter;
-        
-        Object sourceValue = null;               
+
+        Object sourceValue = null;
         if (getter != null) {
             sourceValue = getter.invoke(parentObject);
         }
-                
+
         // TODO: support doing parent stuff at field level vs getter
-        if(sourceValue == null) {
+        if (sourceValue == null) {
             sourceValue = getValueFromMemberField(source, pathUtil.getLastSegment());
         }
-        
-        if(sourceValue != null && (getConversionService().isPrimitive(sourceValue.getClass()) || getConversionService().isBoxedPrimitive(sourceValue.getClass()))) {
+
+        if (sourceValue != null && (getConversionService().isPrimitive(sourceValue.getClass())
+                || getConversionService().isBoxedPrimitive(sourceValue.getClass()))) {
             sourceValue = getConversionService().copyPrimitive(sourceValue);
         }
-        
+
         field.setValue(sourceValue);
     }
-    
+
     public static Object getValueFromMemberField(Object source, String fieldName) throws Exception {
         try {
             java.lang.reflect.Field reflectField = source.getClass().getField(fieldName);
@@ -247,36 +262,42 @@ public class JavaModule extends BaseAtlasModule {
         return null;
     }
 
-    private Object initializeTargetObject(AtlasMapping atlasMapping) throws ClassNotFoundException, IllegalAccessException, InstantiationException, ConstructException {        
+    private Object initializeTargetObject(AtlasMapping atlasMapping)
+            throws ClassNotFoundException, IllegalAccessException, InstantiationException, ConstructException {
         String targetUri = null;
-        for(DataSource ds : atlasMapping.getDataSource()) {
-            if(DataSourceType.TARGET.equals(ds.getDataSourceType())) {
+        for (DataSource ds : atlasMapping.getDataSource()) {
+            if (DataSourceType.TARGET.equals(ds.getDataSourceType())) {
                 targetUri = ds.getUri();
             }
         }
-        
+
         String targetClassName = AtlasUtil.getUriParameterValue(targetUri, "className");
         JavaClass inspectClass = getJavaInspectionService().inspectClass(targetClassName);
         merge(inspectClass, atlasMapping.getMappings().getMapping());
         List<String> targetPaths = AtlasModuleSupport.listTargetPaths(atlasMapping.getMappings().getMapping());
         return getJavaConstructService().constructClass(inspectClass, targetPaths);
-    }      
-       
+    }
+
     @Override
     public void processOutputMapping(AtlasSession session, BaseMapping baseMapping) throws AtlasException {
         for (Mapping mapping : this.getOutputMappings(session, baseMapping)) {
-            if(mapping.getOutputField() == null || mapping.getOutputField().isEmpty()) {
-                addAudit(session, null, String.format("Mapping does not contain at least one output field alias=%s desc=%s", mapping.getAlias(), mapping.getDescription()), null, AuditStatus.ERROR, null);
+            if (mapping.getOutputField() == null || mapping.getOutputField().isEmpty()) {
+                addAudit(session, null,
+                        String.format("Mapping does not contain at least one output field alias=%s desc=%s",
+                                mapping.getAlias(), mapping.getDescription()),
+                        null, AuditStatus.ERROR, null);
                 return;
             }
-            
+
             Field outputField = mapping.getOutputField().get(0);
-            
-            if(!(outputField instanceof JavaField) && !(outputField instanceof JavaEnumField)) {
-                addAudit(session, outputField.getDocId(), String.format("Unsupported output field type=%s", outputField.getClass().getName()), outputField.getPath(), AuditStatus.ERROR, null);                
+
+            if (!(outputField instanceof JavaField) && !(outputField instanceof JavaEnumField)) {
+                addAudit(session, outputField.getDocId(),
+                        String.format("Unsupported output field type=%s", outputField.getClass().getName()),
+                        outputField.getPath(), AuditStatus.ERROR, null);
                 return;
             }
-            
+
             try {
                 DocumentJavaFieldWriter writer = (DocumentJavaFieldWriter) session.getOutput();
                 if (writer == null) {
@@ -289,45 +310,50 @@ public class JavaModule extends BaseAtlasModule {
                         targetObject = initializeTargetObject(session.getMapping());
                         writer.setRootObject(targetObject);
                     } catch (Exception e) {
-                        addAudit(session, outputField.getDocId(), String.format("Error initializing targetObject msg=%s", e.getMessage()), outputField.getPath(), AuditStatus.ERROR, null);                        
+                        addAudit(session, outputField.getDocId(),
+                                String.format("Error initializing targetObject msg=%s", e.getMessage()),
+                                outputField.getPath(), AuditStatus.ERROR, null);
                         return;
-                    }                
+                    }
                 }
-                                
+
                 OutputValueConverter valueConverter = null;
-                switch(mapping.getMappingType()) {
-                    case MAP: 
-                        Field inputField = mapping.getInputField().get(0);      
-                        valueConverter = new OutputValueConverter(inputField, session, mapping, getConversionService());
-                        writer.write(outputField, valueConverter);
-                        break;
-                    case COMBINE:
-                        processCombineField(session, mapping, mapping.getInputField(), outputField);
-                        SimpleField combinedField = new SimpleField();
-                        combinedField.setFieldType(FieldType.STRING);
-                        combinedField.setValue(outputField.getValue());
-                        valueConverter = new OutputValueConverter(combinedField, session, mapping, getConversionService());
-                        writer.write(outputField, valueConverter);
-                        break;
-                    case LOOKUP:
-                        Field inputFieldlkp = mapping.getInputField().get(0);      
-                        valueConverter = new OutputValueConverter(inputFieldlkp, session, mapping, getConversionService());
-                        writer.write(outputField, valueConverter);
-                        break;
-                    case SEPARATE:
-                        Field inputFieldsep = mapping.getInputField().get(0);
-                        for(Field outputFieldsep : mapping.getOutputField()) {
-                            Field separateField = processSeparateField(session, mapping, inputFieldsep, outputFieldsep);
-                            if(separateField == null) {
+                switch (mapping.getMappingType()) {
+                case MAP:
+                    Field inputField = mapping.getInputField().get(0);
+                    valueConverter = new OutputValueConverter(inputField, session, mapping, getConversionService());
+                    writer.write(outputField, valueConverter);
+                    break;
+                case COMBINE:
+                    processCombineField(session, mapping, mapping.getInputField(), outputField);
+                    SimpleField combinedField = new SimpleField();
+                    combinedField.setFieldType(FieldType.STRING);
+                    combinedField.setValue(outputField.getValue());
+                    valueConverter = new OutputValueConverter(combinedField, session, mapping, getConversionService());
+                    writer.write(outputField, valueConverter);
+                    break;
+                case LOOKUP:
+                    Field inputFieldlkp = mapping.getInputField().get(0);
+                    valueConverter = new OutputValueConverter(inputFieldlkp, session, mapping, getConversionService());
+                    writer.write(outputField, valueConverter);
+                    break;
+                case SEPARATE:
+                    Field inputFieldsep = mapping.getInputField().get(0);
+                    for (Field outputFieldsep : mapping.getOutputField()) {
+                        Field separateField = processSeparateField(session, mapping, inputFieldsep, outputFieldsep);
+                        if (separateField == null) {
                             continue;
-                            }
-                            valueConverter = new OutputValueConverter(separateField, session, mapping, getConversionService());
-                            writer.write(outputFieldsep, valueConverter);
                         }
-                        break;
-                    default: logger.error("Unsupported mappingType=%s detected", mapping.getMappingType()); return;
+                        valueConverter = new OutputValueConverter(separateField, session, mapping,
+                                getConversionService());
+                        writer.write(outputFieldsep, valueConverter);
+                    }
+                    break;
+                default:
+                    logger.error("Unsupported mappingType=%s detected", mapping.getMappingType());
+                    return;
                 }
-                
+
             } catch (Exception e) {
                 logger.error(e.getMessage(), e);
                 if (e instanceof AtlasException) {
@@ -335,13 +361,13 @@ public class JavaModule extends BaseAtlasModule {
                 }
                 throw new AtlasException(e.getMessage(), e);
             }
-    
+
             if (logger.isDebugEnabled()) {
                 logger.debug("processOutputMapping completed");
             }
         }
     }
-        
+
     @Override
     public void processPostOutputExecution(AtlasSession session) throws AtlasException {
         Object output = session.getOutput();
@@ -349,17 +375,20 @@ public class JavaModule extends BaseAtlasModule {
             if (((DocumentJavaFieldWriter) output).getRootObject() != null) {
                 session.setOutput(((DocumentJavaFieldWriter) output).getRootObject());
             } else {
-                // TODO: handle error where rootnode on DocumentJavaFieldWriter is set to null, which should never happen.
+                // TODO: handle error where rootnode on DocumentJavaFieldWriter is set to null,
+                // which should never happen.
             }
         } else {
-            logger.error("DocumentJavaFieldWriter object expected for Java output data source, instead it's: " + session.getOutput());
+            logger.error("DocumentJavaFieldWriter object expected for Java output data source, instead it's: "
+                    + session.getOutput());
         }
         if (logger.isDebugEnabled()) {
             logger.debug("processPostOutputExecution completed");
         }
-    }    
-    
-    protected List<String> separateValue(AtlasSession session, String value, String delimiter) throws AtlasConversionException {
+    }
+
+    protected List<String> separateValue(AtlasSession session, String value, String delimiter)
+            throws AtlasConversionException {
         AtlasContextFactory contextFactory = session.getAtlasContext().getContextFactory();
         if (contextFactory instanceof DefaultAtlasContextFactory) {
             return ((DefaultAtlasContextFactory) contextFactory).getSeparateStrategy().separateValue(value, delimiter,
@@ -368,27 +397,29 @@ public class JavaModule extends BaseAtlasModule {
             throw new AtlasConversionException("No supported SeparateStrategy found");
         }
     }
-    
+
     protected void merge(JavaClass inspectionClass, List<BaseMapping> mappings) {
-        if(inspectionClass == null || inspectionClass.getJavaFields() == null || inspectionClass.getJavaFields().getJavaField() == null) {
+        if (inspectionClass == null || inspectionClass.getJavaFields() == null
+                || inspectionClass.getJavaFields().getJavaField() == null) {
             return;
         }
-        
-        if(mappings == null || mappings.size() == 0) {
+
+        if (mappings == null || mappings.size() == 0) {
             return;
         }
-        
-        for(BaseMapping fm :mappings) {
-            if(fm instanceof Mapping) {
-                if(((Mapping)fm).getOutputField() != null) {
-                    Field f = ((Mapping)fm).getOutputField().get(0);
-                    if(f.getPath() != null) {
+
+        for (BaseMapping fm : mappings) {
+            if (fm instanceof Mapping) {
+                if (((Mapping) fm).getOutputField() != null) {
+                    Field f = ((Mapping) fm).getOutputField().get(0);
+                    if (f.getPath() != null) {
                         Field inspectField = findFieldByPath(inspectionClass, f.getPath());
-                        if(inspectField != null && f instanceof JavaField && inspectField instanceof JavaField) {
-                            String overrideClassName = ((JavaField)f).getClassName();
+                        if (inspectField != null && f instanceof JavaField && inspectField instanceof JavaField) {
+                            String overrideClassName = ((JavaField) f).getClassName();
                             JavaField javaInspectField = (JavaField) inspectField;
                             // Support mapping overrides className
-                            if(overrideClassName != null && !overrideClassName.equals(javaInspectField.getClassName())) {
+                            if (overrideClassName != null
+                                    && !overrideClassName.equals(javaInspectField.getClassName())) {
                                 javaInspectField.setClassName(overrideClassName);
                             }
                         }
@@ -397,8 +428,9 @@ public class JavaModule extends BaseAtlasModule {
             }
         }
     }
-    
-    protected static Method resolveGetMethod(Object sourceObject, Field field, boolean objectIsParent) throws AtlasException {
+
+    protected static Method resolveGetMethod(Object sourceObject, Field field, boolean objectIsParent)
+            throws AtlasException {
         Object parentObject = sourceObject;
         PathUtil pathUtil = new PathUtil(field.getPath());
         Method getter = null;
@@ -406,21 +438,21 @@ public class JavaModule extends BaseAtlasModule {
         if (pathUtil.hasParent() && !objectIsParent) {
             parentObject = ClassHelper.parentObjectForPath(sourceObject, pathUtil, true);
         }
-        
+
         List<Class<?>> classTree = resolveMappableClasses(parentObject.getClass());
-        
-        for(Class<?> clazz : classTree) {
-            try {                
-                if(field instanceof JavaField && ((JavaField)field).getGetMethod() != null) { 
-                    getter = clazz.getMethod(((JavaField)field).getGetMethod());
+
+        for (Class<?> clazz : classTree) {
+            try {
+                if (field instanceof JavaField && ((JavaField) field).getGetMethod() != null) {
+                    getter = clazz.getMethod(((JavaField) field).getGetMethod());
                     getter.setAccessible(true);
                     return getter;
                 }
             } catch (NoSuchMethodException e) {
-                // no getter method specified in mapping file   
+                // no getter method specified in mapping file
             }
 
-            for(String m : Arrays.asList("get", "is")) {
+            for (String m : Arrays.asList("get", "is")) {
                 String getterMethod = m + capitalizeFirstLetter(pathUtil.getLastSegment());
                 try {
                     getter = clazz.getMethod(getterMethod);
@@ -433,8 +465,9 @@ public class JavaModule extends BaseAtlasModule {
         }
         return null;
     }
-    
-    protected Method resolveInputSetMethod(Object sourceObject, JavaField javaField, Class<?> targetType) throws AtlasException {        
+
+    protected Method resolveInputSetMethod(Object sourceObject, JavaField javaField, Class<?> targetType)
+            throws AtlasException {
         PathUtil pathUtil = new PathUtil(javaField.getPath());
         Object parentObject = sourceObject;
 
@@ -442,80 +475,82 @@ public class JavaModule extends BaseAtlasModule {
             parentObject = ClassHelper.parentObjectForPath(parentObject, pathUtil, true);
         }
         List<Class<?>> classTree = resolveMappableClasses(parentObject.getClass());
-        
-        for(Class<?> clazz : classTree) {
+
+        for (Class<?> clazz : classTree) {
             try {
                 String setterMethodName = javaField.getSetMethod();
-                if(setterMethodName == null) { 
+                if (setterMethodName == null) {
                     setterMethodName = "set" + capitalizeFirstLetter(pathUtil.getLastSegment());
-                } 
+                }
                 return ClassHelper.detectSetterMethod(clazz, setterMethodName, targetType);
             } catch (NoSuchMethodException e) {
                 // method does not exist
             }
 
             // Try the boxUnboxed version
-            if(getConversionService().isPrimitive(targetType) || getConversionService().isBoxedPrimitive(targetType)) {
+            if (getConversionService().isPrimitive(targetType) || getConversionService().isBoxedPrimitive(targetType)) {
                 try {
                     String setterMethodName = javaField.getSetMethod();
-                    if(setterMethodName == null) {
+                    if (setterMethodName == null) {
                         setterMethodName = "set" + capitalizeFirstLetter(pathUtil.getLastSegment());
-                    }                         
-                    return ClassHelper.detectSetterMethod(clazz, setterMethodName, getConversionService().boxOrUnboxPrimitive(targetType));
+                    }
+                    return ClassHelper.detectSetterMethod(clazz, setterMethodName,
+                            getConversionService().boxOrUnboxPrimitive(targetType));
                 } catch (NoSuchMethodException e) {
                     // method does not exist
                 }
             }
         }
-        
+
         throw new AtlasException(String.format("Unable to resolve setter for path=%s", javaField.getPath()));
     }
-    
-        
-    public static List<Class<?>> resolveMappableClasses(Class<?> className) {        
+
+    public static List<Class<?>> resolveMappableClasses(Class<?> className) {
         List<Class<?>> classTree = new ArrayList<Class<?>>();
         classTree.add(className);
-        
+
         Class<?> superClazz = className.getSuperclass();
         while (superClazz != null) {
             if (JdkPackages.contains(superClazz.getPackage().getName())) {
-//                if (logger.isDebugEnabled()) {
-//                    logger.debug("Ignoring SuperClass " + superClazz.getName() + " which is a Jdk core class");
-//                }
+                // if (logger.isDebugEnabled()) {
+                // logger.debug("Ignoring SuperClass " + superClazz.getName() + " which is a Jdk
+                // core class");
+                // }
                 superClazz = null;
             } else {
                 classTree.add(superClazz);
                 superClazz = superClazz.getSuperclass();
             }
         }
-        
+
         // DON'T reverse.. prefer child -> parent -> grandparent
-        //List<Class<?>> reverseTree = classTree.subList(0, classTree.size());
-        //Collections.reverse(reverseTree);
-        //return reverseTree;
+        // List<Class<?>> reverseTree = classTree.subList(0, classTree.size());
+        // Collections.reverse(reverseTree);
+        // return reverseTree;
         return classTree;
     }
-    
+
     protected JavaField findFieldByPath(JavaClass javaClass, String javaPath) {
-        if(javaClass == null || javaClass.getJavaFields() == null || javaClass.getJavaFields().getJavaField() == null) {
+        if (javaClass == null || javaClass.getJavaFields() == null
+                || javaClass.getJavaFields().getJavaField() == null) {
             return null;
         }
-        
-        for(JavaField jf : javaClass.getJavaFields().getJavaField()) {
-            if(jf.getPath().equals(javaPath)) {
+
+        for (JavaField jf : javaClass.getJavaFields().getJavaField()) {
+            if (jf.getPath().equals(javaPath)) {
                 return jf;
             }
-            if(jf instanceof JavaClass) {
-                JavaField childJavaField = findFieldByPath((JavaClass)jf, javaPath);
-                if(childJavaField != null) {
+            if (jf instanceof JavaClass) {
+                JavaField childJavaField = findFieldByPath((JavaClass) jf, javaPath);
+                if (childJavaField != null) {
                     return childJavaField;
                 }
             }
         }
-        
+
         return null;
     }
-    
+
     public static String capitalizeFirstLetter(String sentence) {
         if (StringUtil.isEmpty(sentence)) {
             return sentence;
@@ -525,7 +560,7 @@ public class JavaModule extends BaseAtlasModule {
         }
         return String.valueOf(sentence.charAt(0)).toUpperCase() + sentence.substring(1);
     }
-            
+
     public ClassInspectionService getJavaInspectionService() {
         return javaInspectionService;
     }
@@ -540,7 +575,7 @@ public class JavaModule extends BaseAtlasModule {
 
     public void setJavaConstructService(JavaConstructService javaConstructService) {
         this.javaConstructService = javaConstructService;
-    }       
+    }
 
     @Override
     public Boolean isSupportedField(Field field) {
@@ -557,27 +592,28 @@ public class JavaModule extends BaseAtlasModule {
         }
         return false;
     }
-    
+
     @SuppressWarnings("rawtypes")
     @Override
     public int getCollectionSize(AtlasSession session, Field field) throws AtlasException {
         Object sourceObject = session.getInput();
-        if(field.getDocId() != null) {
+        if (field.getDocId() != null) {
             sourceObject = session.getInput(field.getDocId());
         }
 
         Object collectionObject = ClassHelper.parentObjectForPath(sourceObject, new PathUtil(field.getPath()), false);
         if (collectionObject == null) {
-            throw new AtlasException(String.format("Cannot find collection on sourceObject %s for path: %s", sourceObject.getClass().getName(), field.getPath()));
+            throw new AtlasException(String.format("Cannot find collection on sourceObject %s for path: %s",
+                    sourceObject.getClass().getName(), field.getPath()));
         }
         if (collectionObject.getClass().isArray()) {
             return Array.getLength(collectionObject);
         }
-        return ((List)collectionObject).size();
+        return ((List) collectionObject).size();
     }
-    
+
     @Override
     public Field cloneField(Field field) throws AtlasException {
-        return AtlasJavaModelFactory.cloneJavaField((JavaField)field);
+        return AtlasJavaModelFactory.cloneJavaField((JavaField) field);
     }
 }

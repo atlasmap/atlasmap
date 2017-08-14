@@ -11,7 +11,7 @@ import io.atlasmap.v2.FieldType;
 import io.atlasmap.v2.Property;
 
 public class AtlasTestData {
-    
+
     public static List<Property> generateAtlasProperties() {
         List<Property> props = new ArrayList<Property>();
         Property p = new Property();
@@ -19,64 +19,64 @@ public class AtlasTestData {
         p.setValue("false");
         p.setFieldType(FieldType.BOOLEAN);
         props.add(p);
-        
+
         p = new Property();
         p.setName("prop-byte");
         p.setValue("92");
         p.setFieldType(FieldType.BYTE);
         props.add(p);
-        
+
         p = new Property();
         p.setName("prop-char");
         p.setValue("z");
         p.setFieldType(FieldType.CHAR);
         props.add(p);
-        
+
         p = new Property();
         p.setName("prop-double");
         p.setValue(Double.toString(Double.MIN_VALUE));
         p.setFieldType(FieldType.DOUBLE);
         props.add(p);
-        
+
         p = new Property();
         p.setName("prop-float");
         p.setValue(Float.toString(Float.MIN_VALUE));
         p.setFieldType(FieldType.FLOAT);
         props.add(p);
-        
+
         p = new Property();
         p.setName("prop-int");
         p.setValue(Integer.toString(Integer.MIN_VALUE));
         p.setFieldType(FieldType.INTEGER);
         props.add(p);
-        
+
         p = new Property();
         p.setName("prop-long");
         p.setValue(Long.toString(Long.MIN_VALUE));
         p.setFieldType(FieldType.LONG);
         props.add(p);
-        
+
         p = new Property();
         p.setName("prop-short");
         p.setValue(Short.toString(Short.MIN_VALUE));
         p.setFieldType(FieldType.SHORT);
         props.add(p);
-        
+
         p = new Property();
         p.setName("prop-string");
         p.setValue("helloworld");
         p.setFieldType(FieldType.STRING);
         props.add(p);
-        
+
         p = new Property();
         p.setName("dupe-string");
         p.setValue("whatup");
         p.setFieldType(FieldType.STRING);
         props.add(p);
-        
+
         return props;
     }
-    
+
     public static AtlasMapping generateAtlasMapping() {
         AtlasMapping mapping = AtlasModelFactory.createAtlasMapping();
         mapping.getProperties().getProperty().addAll(generateAtlasProperties());

@@ -54,7 +54,7 @@ public class JavaValidationServiceTest {
     protected AtlasValidationTestHelper validationHelper = null;
     protected List<Validation> validations = null;
     protected AtlasModuleDetail moduleDetail = null;
-    
+
     @Before
     public void setUp() {
         javaModelFactory = new io.atlasmap.java.v2.ObjectFactory();
@@ -65,7 +65,7 @@ public class JavaValidationServiceTest {
         validationHelper = new AtlasValidationTestHelper();
         validations = validationHelper.getValidation();
     }
-    
+
     @After
     public void tearDown() {
         javaModelFactory = null;
@@ -74,14 +74,16 @@ public class JavaValidationServiceTest {
         validationHelper = null;
         validations = null;
     }
-    
+
     protected AtlasMapping getAtlasMappingFullValid() throws Exception {
         AtlasMapping mapping = AtlasModelFactory.createAtlasMapping();
 
         mapping.setName("thisis_a_valid.name");
 
-        mapping.getDataSource().add(generateDataSource("atlas:java?className=io.atlasmap.java.module.MockJavaClass", DataSourceType.SOURCE));
-        mapping.getDataSource().add(generateDataSource("atlas:java?className=io.atlasmap.java.module.MockJavaClass", DataSourceType.TARGET));
+        mapping.getDataSource().add(generateDataSource("atlas:java?className=io.atlasmap.java.module.MockJavaClass",
+                DataSourceType.SOURCE));
+        mapping.getDataSource().add(generateDataSource("atlas:java?className=io.atlasmap.java.module.MockJavaClass",
+                DataSourceType.TARGET));
 
         Mapping mapMapping = AtlasModelFactory.createMapping(MappingType.MAP);
         Mapping sepMapping = AtlasModelFactory.createMapping(MappingType.SEPARATE);
@@ -97,7 +99,7 @@ public class JavaValidationServiceTest {
 
         mapMapping.getInputField().add(inputField);
         mapMapping.getOutputField().add(outputField);
-        
+
         JavaField sIJavaField = AtlasJavaModelFactory.createJavaField();
         sIJavaField.setFieldType(FieldType.STRING);
         sIJavaField.setPath("displayName");
@@ -113,14 +115,14 @@ public class JavaValidationServiceTest {
         mapping.getMappings().getMapping().add(sepMapping);
         return mapping;
     }
-    
+
     protected DataSource generateDataSource(String uri, DataSourceType type) {
         DataSource ds = new DataSource();
         ds.setUri(uri);
         ds.setDataSourceType(type);
         return ds;
     }
-    
+
     protected Mapping createMockMapping() {
         // Mock MappedField
         MockField inputField = new MockField();
@@ -134,28 +136,31 @@ public class JavaValidationServiceTest {
         mapping.getOutputField().add(inputField);
         return mapping;
     }
-    
+
     protected void debugErrors(List<Validation> validations) {
         for (Validation validation : validations) {
             logger.debug(AtlasValidationTestHelper.validationToString(validation));
         }
     }
-    
-//    @Test
-//    @Ignore // Note: manual utility to assist in creating files
-//    public void saveSampleFile() throws Exception {
-//        AtlasMappingUtil util = new AtlasMappingUtil("io.atlasmap.v2:io.atlasmap.java.v2");
-//        
-//        AtlasMapping mapping = getAtlasMappingFullValid();
-//        util.marshallMapping(mapping, "src/test/resources/mappings/HappyPathMapping.xml");
-//        
-//        mapping = getAtlasMappingFullValid();
-//        mapping.getMappings().getMapping().clear();
-//        mapping.getMappings().getMapping().add(createMockMapping());
-//        mappingUtil.marshallMapping(mapping, "src/test/resources/mappings/MisMatchedFieldTypes.xml");
-//
-//    }
-    
+
+    // @Test
+    // @Ignore // Note: manual utility to assist in creating files
+    // public void saveSampleFile() throws Exception {
+    // AtlasMappingUtil util = new
+    // AtlasMappingUtil("io.atlasmap.v2:io.atlasmap.java.v2");
+    //
+    // AtlasMapping mapping = getAtlasMappingFullValid();
+    // util.marshallMapping(mapping,
+    // "src/test/resources/mappings/HappyPathMapping.xml");
+    //
+    // mapping = getAtlasMappingFullValid();
+    // mapping.getMappings().getMapping().clear();
+    // mapping.getMappings().getMapping().add(createMockMapping());
+    // mappingUtil.marshallMapping(mapping,
+    // "src/test/resources/mappings/MisMatchedFieldTypes.xml");
+    //
+    // }
+
     @Test
     public void testValidateMappingHappyPath() throws Exception {
         AtlasMapping mapping = getAtlasMappingFullValid();
@@ -170,7 +175,7 @@ public class JavaValidationServiceTest {
     public void testValidateMappingHappyPathFromFile() throws Exception {
         AtlasMapping mapping = mappingUtil.loadMapping("src/test/resources/mappings/HappyPathMapping.xml");
         assertNotNull(mapping);
-        
+
         validations.addAll(validationService.validateMapping(mapping));
 
         assertFalse(validationHelper.hasErrors());
@@ -183,7 +188,7 @@ public class JavaValidationServiceTest {
         AtlasMapping mapping = getAtlasMappingFullValid();
         assertNotNull(mapping);
         mapping.getMappings().getMapping().clear();
-        
+
         // Mock MappedField
         mapping.getMappings().getMapping().add(createMockMapping());
 
@@ -203,7 +208,7 @@ public class JavaValidationServiceTest {
         mapping.getDataSource().add(generateDataSource("atlas:xml", DataSourceType.TARGET));
 
         validations.addAll(validationService.validateMapping(mapping));
-        
+
         assertTrue(validationHelper.hasErrors());
         assertFalse(validationHelper.hasWarnings());
         assertFalse(validationHelper.hasInfos());
@@ -221,7 +226,7 @@ public class JavaValidationServiceTest {
         bIJavaField.setPath("firstName");
 
         separateFieldMapping.getInputField().add(bIJavaField);
-        
+
         JavaField sOJavaField = javaModelFactory.createJavaField();
         sOJavaField.setFieldType(FieldType.STRING);
         sOJavaField.setPath("lastName");
@@ -229,7 +234,7 @@ public class JavaValidationServiceTest {
         separateFieldMapping.getOutputField().add(sOJavaField);
 
         atlasMapping.getMappings().getMapping().add(separateFieldMapping);
-        
+
         validations.addAll(validationService.validateMapping(atlasMapping));
 
         assertTrue(validationHelper.hasErrors());
@@ -286,15 +291,14 @@ public class JavaValidationServiceTest {
         assertTrue(validationHelper.hasWarnings());
         assertFalse(validationHelper.hasInfos());
         assertThat(1, is(validationHelper.getCount()));
-        assertTrue(validations.stream()
-                .anyMatch(me -> me.getField().equals("Field.Input/Output.conversion")));
+        assertTrue(validations.stream().anyMatch(me -> me.getField().equals("Field.Input/Output.conversion")));
 
         Long errorCount = validations.stream()
-                .filter(atlasMappingError -> atlasMappingError.getStatus().compareTo(ValidationStatus.WARN) == 0).count();
+                .filter(atlasMappingError -> atlasMappingError.getStatus().compareTo(ValidationStatus.WARN) == 0)
+                .count();
         assertNotNull(errorCount);
         assertEquals(1L, errorCount.longValue());
     }
-
 
     @Test
     public void testValidateMappingSourceToTargetCustomUsingClassNames() throws Exception {
@@ -320,10 +324,10 @@ public class JavaValidationServiceTest {
         assertFalse(validationHelper.hasWarnings());
         assertTrue(validationHelper.hasInfos());
         assertThat(1, is(validationHelper.getCount()));
-        assertTrue(validations.stream()
-                .anyMatch(me -> me.getField().equals("Field.Input/Output.conversion")));
+        assertTrue(validations.stream().anyMatch(me -> me.getField().equals("Field.Input/Output.conversion")));
         Long errorCount = validations.stream()
-                .filter(atlasMappingError -> atlasMappingError.getStatus().compareTo(ValidationStatus.INFO) == 0).count();
+                .filter(atlasMappingError -> atlasMappingError.getStatus().compareTo(ValidationStatus.INFO) == 0)
+                .count();
         assertNotNull(errorCount);
         assertEquals(1L, errorCount.longValue());
     }
@@ -353,8 +357,8 @@ public class JavaValidationServiceTest {
         assertFalse(validationHelper.hasInfos());
         assertThat(1, is(validationHelper.getCount()));
 
-        assertTrue(validations.stream()
-                .anyMatch(atlasMappingError -> atlasMappingError.getMessage().contains("range")));
+        assertTrue(
+                validations.stream().anyMatch(atlasMappingError -> atlasMappingError.getMessage().contains("range")));
     }
 
     @Test
@@ -382,10 +386,10 @@ public class JavaValidationServiceTest {
         assertFalse(validationHelper.hasInfos());
         assertThat(2, is(validationHelper.getCount()));
 
-        assertTrue(validations.stream()
-                .anyMatch(atlasMappingError -> atlasMappingError.getMessage().contains("range")));
-        assertTrue(validations.stream()
-                .anyMatch(atlasMappingError -> atlasMappingError.getMessage().contains("format")));
+        assertTrue(
+                validations.stream().anyMatch(atlasMappingError -> atlasMappingError.getMessage().contains("range")));
+        assertTrue(
+                validations.stream().anyMatch(atlasMappingError -> atlasMappingError.getMessage().contains("format")));
     }
 
     @Test
@@ -432,10 +436,10 @@ public class JavaValidationServiceTest {
         assertTrue(validationHelper.hasErrors());
         assertFalse(validationHelper.hasWarnings());
         assertFalse(validationHelper.hasInfos());
-        
+
         boolean found = false;
-        for(Validation v : validations) {
-            if("Field.Classname".equals(v.getField())) {
+        for (Validation v : validations) {
+            if ("Field.Classname".equals(v.getField())) {
                 assertEquals("Class for field is not found on the classpath", v.getMessage());
                 assertEquals(ValidationStatus.ERROR, v.getStatus());
                 found = true;
@@ -453,7 +457,7 @@ public class JavaValidationServiceTest {
 
         JavaField in = (JavaField) fieldMapping.getInputField().get(0);
         in.setPath(null);
-        
+
         validations.addAll(validationService.validateMapping(mapping));
 
         assertTrue(validationHelper.hasErrors());
@@ -465,16 +469,13 @@ public class JavaValidationServiceTest {
     public void testDetectJavaCompiledVersion() throws Exception {
         validationService.detectClassVersion("java.lang.String");
     }
-    
+
     public static <T> Collector<T, ?, T> singletonCollector() {
-        return Collectors.collectingAndThen(
-                Collectors.toList(),
-                list -> {
-                    if (list.size() != 1) {
-                        throw new IllegalStateException();
-                    }
-                    return list.get(0);
-                }
-        );
+        return Collectors.collectingAndThen(Collectors.toList(), list -> {
+            if (list.size() != 1) {
+                throw new IllegalStateException();
+            }
+            return list.get(0);
+        });
     }
 }

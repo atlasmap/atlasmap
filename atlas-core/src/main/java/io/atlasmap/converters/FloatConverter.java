@@ -30,7 +30,7 @@ public class FloatConverter implements AtlasPrimitiveConverter<Float> {
      * @throws AtlasConversionException
      */
     @Override
-	@AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.BOOLEAN, concerns = AtlasConversionConcern.RANGE)
+    @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.BOOLEAN, concerns = AtlasConversionConcern.RANGE)
     public Boolean convertToBoolean(Float value) throws AtlasConversionException {
         if (value == null) {
             return null;
@@ -50,7 +50,7 @@ public class FloatConverter implements AtlasPrimitiveConverter<Float> {
      * @throws AtlasConversionException
      */
     @Override
-	@AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.BYTE, concerns = AtlasConversionConcern.UNSUPPORTED)
+    @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.BYTE, concerns = AtlasConversionConcern.UNSUPPORTED)
     public Byte convertToByte(Float value) throws AtlasConversionException {
         if (value == null) {
             return null;
@@ -64,14 +64,15 @@ public class FloatConverter implements AtlasPrimitiveConverter<Float> {
      * @throws AtlasConversionException
      */
     @Override
-	@AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.CHAR, concerns = AtlasConversionConcern.RANGE)
+    @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.CHAR, concerns = AtlasConversionConcern.RANGE)
     public Character convertToCharacter(Float value) throws AtlasConversionException {
         if (value == null) {
             return null;
         }
 
         if (value < Character.MIN_VALUE || value > Character.MAX_VALUE) {
-            throw new AtlasConversionException(String.format("Float %s is greater than Character.MAX_VALUE or is less than Character.MIN_VALUE", value));
+            throw new AtlasConversionException(String
+                    .format("Float %s is greater than Character.MAX_VALUE or is less than Character.MIN_VALUE", value));
         }
 
         return (char) value.intValue();
@@ -83,7 +84,7 @@ public class FloatConverter implements AtlasPrimitiveConverter<Float> {
      * @throws AtlasConversionException
      */
     @Override
-	@AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.DOUBLE)
+    @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.DOUBLE)
     public Double convertToDouble(Float value) throws AtlasConversionException {
         if (value == null) {
             return null;
@@ -103,12 +104,12 @@ public class FloatConverter implements AtlasPrimitiveConverter<Float> {
      * @throws AtlasConversionException
      */
     @Override
-	@AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.FLOAT)
+    @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.FLOAT)
     public Float convertToFloat(Float value) throws AtlasConversionException {
         if (value == null) {
             return null;
         }
-        //we want a copy of value
+        // we want a copy of value
         return value.floatValue();
     }
 
@@ -119,13 +120,14 @@ public class FloatConverter implements AtlasPrimitiveConverter<Float> {
      * @throws AtlasConversionException
      */
     @Override
-	@AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.INTEGER, concerns = AtlasConversionConcern.RANGE)
+    @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.INTEGER, concerns = AtlasConversionConcern.RANGE)
     public Integer convertToInteger(Float value) throws AtlasConversionException {
         if (value == null) {
             return null;
         }
         if (value < Integer.MIN_VALUE || value > Integer.MAX_VALUE) {
-            throw new AtlasConversionException(String.format("Float %s is greater than Integer.MAX_VALUE or is less than Integer.MIN_VALUE", value));
+            throw new AtlasConversionException(String
+                    .format("Float %s is greater than Integer.MAX_VALUE or is less than Integer.MIN_VALUE", value));
         }
         return value.intValue();
     }
@@ -137,13 +139,14 @@ public class FloatConverter implements AtlasPrimitiveConverter<Float> {
      * @throws AtlasConversionException
      */
     @Override
-	@AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.LONG, concerns = AtlasConversionConcern.RANGE)
+    @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.LONG, concerns = AtlasConversionConcern.RANGE)
     public Long convertToLong(Float value) throws AtlasConversionException {
         if (value == null) {
             return null;
         }
         if (value > Long.MAX_VALUE || value < Long.MIN_VALUE) {
-            throw new AtlasConversionException(String.format("Float %s is greater than Long.MAX_VALUE or is less than Long.MIN_VALUE", value));
+            throw new AtlasConversionException(
+                    String.format("Float %s is greater than Long.MAX_VALUE or is less than Long.MIN_VALUE", value));
         }
         return value.longValue();
     }
@@ -155,13 +158,14 @@ public class FloatConverter implements AtlasPrimitiveConverter<Float> {
      * @throws AtlasConversionException
      */
     @Override
-	@AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.SHORT, concerns = AtlasConversionConcern.RANGE)
+    @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.SHORT, concerns = AtlasConversionConcern.RANGE)
     public Short convertToShort(Float value) throws AtlasConversionException {
         if (value == null) {
             return null;
         }
         if (value > Short.MAX_VALUE || value < Short.MIN_VALUE) {
-            throw new AtlasConversionException(String.format("Float %s is greater than Short.MAX_VALUE  or is less than Short.MIN_VALUE", value));
+            throw new AtlasConversionException(
+                    String.format("Float %s is greater than Short.MAX_VALUE  or is less than Short.MIN_VALUE", value));
         }
         return value.shortValue();
     }
@@ -173,7 +177,7 @@ public class FloatConverter implements AtlasPrimitiveConverter<Float> {
      * @throws AtlasConversionException
      */
     @Override
-	@AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.STRING)
+    @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.STRING)
     public String convertToString(Float value) throws AtlasConversionException {
         if (value == null) {
             return null;

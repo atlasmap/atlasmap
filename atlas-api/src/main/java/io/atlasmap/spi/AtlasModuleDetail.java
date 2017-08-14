@@ -20,10 +20,14 @@ import java.lang.annotation.RetentionPolicy;
 
 @Retention(RetentionPolicy.RUNTIME)
 public @interface AtlasModuleDetail {
-	
-	String name();
-	String uri();
-	String[] dataFormats();
-	String[] configPackages();
-	String[] modes();
+
+    String name();
+
+    String uri();
+
+    String[] dataFormats();
+
+    String[] configPackages();
+
+    String[] modes();
 }

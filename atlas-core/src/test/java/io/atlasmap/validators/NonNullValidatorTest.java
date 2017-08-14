@@ -26,19 +26,19 @@ import org.junit.Before;
 public class NonNullValidatorTest extends BaseValidatorTest {
 
     @Override
-	@Before
+    @Before
     public void setUp() {
         super.setUp();
         validator = new NonNullValidator("qwerty", "Cannot be null");
     }
-    
+
     @Override
-	@After
+    @After
     public void tearDown() {
         super.tearDown();
         validator = null;
     }
-    
+
     @Test
     public void testSupports() throws Exception {
         assertTrue(validator.supports(String.class));

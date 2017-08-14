@@ -20,46 +20,43 @@ import java.util.Arrays;
 import java.util.List;
 
 public enum StringDelimiter {
-	SPACE("Space", "\\s"),
-	MULTISPACE("MultiSpace", "\\s+"),
-	COMMA("Comma", ","),
-	COLON("Colon", ":");
-	
-	private String name;
-	private String value;
-	
-	private StringDelimiter(String name, String value) {
-		this.name = name;
-		this.value = value;
-	}
-	
-	public String getName() {
-		return name;
-	}
-	
-	public String getValue() {
-		return value;
-	}
-	
-	public static List<StringDelimiter> getAll() {
-		return Arrays.asList(SPACE, MULTISPACE, COMMA, COLON);
-	}
-	
-	public static List<String> getAllValues() {
-		List<String> values = new ArrayList<String>();
-		List<StringDelimiter> enums = getAll();
-		for(StringDelimiter en : enums) {
-			values.add(en.getValue());
-		}
-		return values;
-	}
-	
-	public static List<String> getAllNames() {
-		List<String> names = new ArrayList<String>();
-		List<StringDelimiter> enums = getAll();
-		for(StringDelimiter en : enums) {
-			names.add(en.getName());
-		}
-		return names;
-	}
+    SPACE("Space", "\\s"), MULTISPACE("MultiSpace", "\\s+"), COMMA("Comma", ","), COLON("Colon", ":");
+
+    private String name;
+    private String value;
+
+    private StringDelimiter(String name, String value) {
+        this.name = name;
+        this.value = value;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public static List<StringDelimiter> getAll() {
+        return Arrays.asList(SPACE, MULTISPACE, COMMA, COLON);
+    }
+
+    public static List<String> getAllValues() {
+        List<String> values = new ArrayList<String>();
+        List<StringDelimiter> enums = getAll();
+        for (StringDelimiter en : enums) {
+            values.add(en.getValue());
+        }
+        return values;
+    }
+
+    public static List<String> getAllNames() {
+        List<String> names = new ArrayList<String>();
+        List<StringDelimiter> enums = getAll();
+        for (StringDelimiter en : enums) {
+            names.add(en.getName());
+        }
+        return names;
+    }
 }

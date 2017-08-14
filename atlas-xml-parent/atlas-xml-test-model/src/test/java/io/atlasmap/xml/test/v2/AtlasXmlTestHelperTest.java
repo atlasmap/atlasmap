@@ -30,9 +30,11 @@ public class AtlasXmlTestHelperTest {
         xfpe.setFloatField(23432.431f);
         xfpe.setIntField(-94);
         xfpe.setLongField(124234324l);
-        xfpe.setShortField((short)234);
-        
-        //Files.write(Paths.get(new File("target/xmlflatprimitiveelement.xml").toURI()), AtlasXmlTestHelper.marshal(xfpe).getBytes(), StandardOpenOption.CREATE_NEW);
+        xfpe.setShortField((short) 234);
+
+        // Files.write(Paths.get(new
+        // File("target/xmlflatprimitiveelement.xml").toURI()),
+        // AtlasXmlTestHelper.marshal(xfpe).getBytes(), StandardOpenOption.CREATE_NEW);
     }
 
 }

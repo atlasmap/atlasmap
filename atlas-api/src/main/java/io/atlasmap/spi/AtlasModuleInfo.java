@@ -16,11 +16,17 @@
 package io.atlasmap.spi;
 
 public interface AtlasModuleInfo {
-	public String getName();
-	public String getUri();
-	public String getModuleClassName();
-	public String[] getDataFormats();
-	public String[] getPackageNames();
-	public Boolean isSourceSupported();
-	public Boolean isTargetSupported();
+    public String getName();
+
+    public String getUri();
+
+    public String getModuleClassName();
+
+    public String[] getDataFormats();
+
+    public String[] getPackageNames();
+
+    public Boolean isSourceSupported();
+
+    public Boolean isTargetSupported();
 }

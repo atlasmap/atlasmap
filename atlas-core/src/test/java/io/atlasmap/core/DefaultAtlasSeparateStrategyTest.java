@@ -13,7 +13,7 @@ import io.atlasmap.spi.AtlasSeparateStrategy;
 public class DefaultAtlasSeparateStrategyTest {
 
     private AtlasSeparateStrategy separate = null;
-    
+
     @Before
     public void setUp() throws Exception {
         separate = new DefaultAtlasSeparateStrategy();
@@ -29,7 +29,7 @@ public class DefaultAtlasSeparateStrategyTest {
         assertNotNull(separate);
         assertEquals("DefaultAtlasSeparateStrategy", separate.getName());
     }
-    
+
     @Test
     public void testGetSetDelimiter() {
         assertNotNull(separate);
@@ -46,13 +46,13 @@ public class DefaultAtlasSeparateStrategyTest {
         assertEquals("c", values.get(2));
         assertEquals("d", values.get(3));
     }
-    
+
     @Test
     public void testGetSetLimit() {
         assertNotNull(separate);
         assertNotNull(separate.getDelimiter());
         assertEquals(DefaultAtlasSeparateStrategy.DEFAULT_SEPARATE_LIMIT, separate.getLimit());
-                
+
         separate.setLimit(2);
         List<String> values = separate.separateValue("a b c d");
         assertNotNull(values);
@@ -74,7 +74,7 @@ public class DefaultAtlasSeparateStrategyTest {
         assertEquals("e", values.get(4));
         assertEquals("f", values.get(5));
     }
-    
+
     @Test
     public void testSeparateValueDelimiter() {
         assertNotNull(separate);
@@ -88,7 +88,7 @@ public class DefaultAtlasSeparateStrategyTest {
         assertEquals("e", values.get(4));
         assertEquals("f", values.get(5));
     }
-    
+
     @Test
     public void testSeparateValueDelimiterLimit() {
         assertNotNull(separate);
@@ -99,13 +99,13 @@ public class DefaultAtlasSeparateStrategyTest {
         assertEquals("b", values.get(1));
         assertEquals("c1d1e1f", values.get(2));
     }
-    
+
     @Test
     public void testSeparateValueNullDelimiter() {
         assertNotNull(separate);
         separate.setDelimiter(null);
         assertNull(separate.getDelimiter());
-        
+
         List<String> values = separate.separateValue("a b c d e f");
         assertNotNull(values);
         assertEquals(new Integer(6), new Integer(values.size()));
@@ -116,13 +116,13 @@ public class DefaultAtlasSeparateStrategyTest {
         assertEquals("e", values.get(4));
         assertEquals("f", values.get(5));
     }
-    
+
     @Test
     public void testSeparateValueNullLimit() {
         assertNotNull(separate);
         separate.setLimit(null);
         assertNull(separate.getLimit());
-        
+
         List<String> values = separate.separateValue("a b c d e f");
         assertNotNull(values);
         assertEquals(new Integer(6), new Integer(values.size()));
@@ -133,11 +133,11 @@ public class DefaultAtlasSeparateStrategyTest {
         assertEquals("e", values.get(4));
         assertEquals("f", values.get(5));
     }
-    
+
     @Test
     public void testSeparateValueNullValue() {
         assertNotNull(separate);
-        
+
         List<String> values = separate.separateValue(null);
         assertNotNull(values);
         assertTrue(values.isEmpty());
@@ -146,7 +146,7 @@ public class DefaultAtlasSeparateStrategyTest {
     @Test
     public void testSeparateValueEmptyValue() {
         assertNotNull(separate);
-        
+
         List<String> values = separate.separateValue("");
         assertNotNull(values);
         assertTrue(values.isEmpty());

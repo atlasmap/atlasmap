@@ -33,10 +33,13 @@ public class JsonJsonMultiSourceTest extends AtlasMappingBaseTest {
 
     @Test
     public void testProcessBasic() throws Exception {
-        AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/jsonToJson/atlasmapping-multisource-basic.xml").toURI());
+        AtlasContext context = atlasContextFactory
+                .createContext(new File("src/test/resources/jsonToJson/atlasmapping-multisource-basic.xml").toURI());
         AtlasSession session = context.createSession();
-        String sourceContact = AtlasTestUtil.loadFileAsString("src/test/resources/jsonToJson/atlas-json-contact-unrooted.json");
-        String sourceAddress = AtlasTestUtil.loadFileAsString("src/test/resources/jsonToJson/atlas-json-address-unrooted.json");
+        String sourceContact = AtlasTestUtil
+                .loadFileAsString("src/test/resources/jsonToJson/atlas-json-contact-unrooted.json");
+        String sourceAddress = AtlasTestUtil
+                .loadFileAsString("src/test/resources/jsonToJson/atlas-json-address-unrooted.json");
         session.setInput(sourceContact, "con");
         session.setInput(sourceAddress, "addr");
         context.process(session);
@@ -45,7 +48,7 @@ public class JsonJsonMultiSourceTest extends AtlasMappingBaseTest {
         assertNotNull(object);
         assertTrue(object instanceof String);
         AtlasJsonTestUnrootedMapper testMapper = new AtlasJsonTestUnrootedMapper();
-        TargetContact targetContact = testMapper.readValue((String)object, TargetContact.class);
+        TargetContact targetContact = testMapper.readValue((String) object, TargetContact.class);
         assertEquals("Ozzie", targetContact.getFirstName());
         assertNull(targetContact.getLastName());
         assertNull(targetContact.getPhoneNumber());
@@ -54,10 +57,13 @@ public class JsonJsonMultiSourceTest extends AtlasMappingBaseTest {
 
     @Test
     public void testProcessComplex() throws Exception {
-        AtlasContext context = atlasContextFactory.createContext(new File("src/test/resources/jsonToJson/atlasmapping-multisource-complex.xml").toURI());
+        AtlasContext context = atlasContextFactory
+                .createContext(new File("src/test/resources/jsonToJson/atlasmapping-multisource-complex.xml").toURI());
         AtlasSession session = context.createSession();
-        String sourceContact = AtlasTestUtil.loadFileAsString("src/test/resources/jsonToJson/atlas-json-contact-unrooted.json");
-        String sourceAddress = AtlasTestUtil.loadFileAsString("src/test/resources/jsonToJson/atlas-json-address-unrooted.json");
+        String sourceContact = AtlasTestUtil
+                .loadFileAsString("src/test/resources/jsonToJson/atlas-json-contact-unrooted.json");
+        String sourceAddress = AtlasTestUtil
+                .loadFileAsString("src/test/resources/jsonToJson/atlas-json-address-unrooted.json");
         session.setInput(sourceContact, "con");
         session.setInput(sourceAddress, "addr");
         context.process(session);
@@ -66,7 +72,7 @@ public class JsonJsonMultiSourceTest extends AtlasMappingBaseTest {
         assertNotNull(object);
         assertTrue(object instanceof String);
         AtlasJsonTestUnrootedMapper testMapper = new AtlasJsonTestUnrootedMapper();
-        TargetOrder targetOrder = testMapper.readValue((String)object, TargetOrder.class);
+        TargetOrder targetOrder = testMapper.readValue((String) object, TargetOrder.class);
         AtlasTestUtil.validateJsonOrder(targetOrder);
     }
 }

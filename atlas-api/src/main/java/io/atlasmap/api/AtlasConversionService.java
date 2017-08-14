@@ -23,18 +23,32 @@ import java.util.Optional;
 public interface AtlasConversionService {
 
     Optional<AtlasConverter> findMatchingConverter(FieldType source, FieldType target);
+
     Optional<AtlasConverter> findMatchingConverter(String sourceClassName, String targetClassName);
+
     Optional<Method> findMatchingMethod(FieldType source, FieldType target, AtlasConverter customConverter);
+
     Object copyPrimitive(Object sourceValue);
+
     Object convertType(Object sourceValue, FieldType sourceType, FieldType targetType) throws AtlasConversionException;
-    Object convertType(Object sourceValue, FieldType sourceType, FieldType targetType, String customClassName) throws AtlasConversionException;
+
+    Object convertType(Object sourceValue, FieldType sourceType, FieldType targetType, String customClassName)
+            throws AtlasConversionException;
+
     Class<?> boxOrUnboxPrimitive(Class<?> clazz);
+
     Class<?> classFromFieldType(FieldType fieldType);
+
     FieldType fieldTypeFromClass(Class<?> clazz);
+
     FieldType fieldTypeFromClass(String className);
+
     Boolean isPrimitive(String className);
+
     Boolean isPrimitive(Class<?> clazz);
+
     Boolean isPrimitive(FieldType fieldType);
+
     Boolean isBoxedPrimitive(Class<?> clazz);
 
 }

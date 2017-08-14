@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ns:XmlFBPE xmlns:ns="http://atlasmap.io/xml/test/v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://atlasmap.io/xml/test/v2 atlas-xml-test-model-v2.xsd ">
-  <ns:boxedBooleanField>true</ns:boxedBooleanField>
-  <ns:boxedByteField>87</ns:boxedByteField>
-  <ns:boxedCharField>z</ns:boxedCharField>
-  <ns:boxedDoubleField>90000000.0</ns:boxedDoubleField>
-  <ns:boxedFloatField>70000000.0</ns:boxedFloatField>
-  <ns:boxedIntField>5</ns:boxedIntField>
-  <ns:boxedLongField>20000</ns:boxedLongField>
-  <ns:boxedShortField>5</ns:boxedShortField>
-  <ns:boxedStringField>boxedStringValue</ns:boxedStringField>
+<ns:XmlFBPE xmlns:ns="http://atlasmap.io/xml/test/v2"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://atlasmap.io/xml/test/v2 atlas-xml-test-model-v2.xsd ">
+    <ns:boxedBooleanField>true</ns:boxedBooleanField>
+    <ns:boxedByteField>87</ns:boxedByteField>
+    <ns:boxedCharField>z</ns:boxedCharField>
+    <ns:boxedDoubleField>90000000.0</ns:boxedDoubleField>
+    <ns:boxedFloatField>70000000.0</ns:boxedFloatField>
+    <ns:boxedIntField>5</ns:boxedIntField>
+    <ns:boxedLongField>20000</ns:boxedLongField>
+    <ns:boxedShortField>5</ns:boxedShortField>
+    <ns:boxedStringField>boxedStringValue</ns:boxedStringField>
 </ns:XmlFBPE>

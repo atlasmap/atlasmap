@@ -1,37 +1,47 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<AtlasMapping xmlns="http://atlasmap.io/v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns2="http://atlasmap.io/java/v2" xmlns:ns3="http://atlasmap.io/json/v2" name="JavaJsonFlatMappingAuto5">
-    <DataSource dataSourceType="Source" uri="atlas:java?className=io.atlasmap.java.test.SourceFlatPrimitiveClass"/>
-    <DataSource dataSourceType="Target" uri="atlas:json"/>
+<AtlasMapping xmlns="http://atlasmap.io/v2"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns2="http://atlasmap.io/java/v2"
+    xmlns:ns3="http://atlasmap.io/json/v2" name="JavaJsonFlatMappingAuto5">
+    <DataSource dataSourceType="Source"
+        uri="atlas:java?className=io.atlasmap.java.test.SourceFlatPrimitiveClass" />
+    <DataSource dataSourceType="Target" uri="atlas:json" />
     <Mappings>
         <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns2:JavaField" path="/intField"/>
-            <OutputField xsi:type="ns3:JsonField" path="/longField" fieldType="Long" />
+            <InputField xsi:type="ns2:JavaField" path="/intField" />
+            <OutputField xsi:type="ns3:JsonField" path="/longField"
+                fieldType="Long" />
         </Mapping>
         <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns2:JavaField" path="/shortField"/>
-            <OutputField xsi:type="ns3:JsonField" path="/doubleField" fieldType="Double" />
+            <InputField xsi:type="ns2:JavaField" path="/shortField" />
+            <OutputField xsi:type="ns3:JsonField" path="/doubleField"
+                fieldType="Double" />
         </Mapping>
         <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns2:JavaField" path="/longField"/>
-            <OutputField xsi:type="ns3:JsonField" path="/floatField" fieldType="Float" />
+            <InputField xsi:type="ns2:JavaField" path="/longField" />
+            <OutputField xsi:type="ns3:JsonField" path="/floatField"
+                fieldType="Float" />
         </Mapping>
         <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns2:JavaField" path="/doubleField"/>
-            <OutputField xsi:type="ns3:JsonField" path="/booleanField" fieldType="Boolean" />
+            <InputField xsi:type="ns2:JavaField" path="/doubleField" />
+            <OutputField xsi:type="ns3:JsonField" path="/booleanField"
+                fieldType="Boolean" />
         </Mapping>
         <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns2:JavaField" path="/floatField"/>
-            <OutputField xsi:type="ns3:JsonField" path="/charField" fieldType="Char" />
+            <InputField xsi:type="ns2:JavaField" path="/floatField" />
+            <OutputField xsi:type="ns3:JsonField" path="/charField"
+                fieldType="Char" />
         </Mapping>
         <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns2:JavaField" path="/booleanField"/>
-            <OutputField xsi:type="ns3:JsonField" path="/intField" fieldType="Integer" />
+            <InputField xsi:type="ns2:JavaField" path="/booleanField" />
+            <OutputField xsi:type="ns3:JsonField" path="/intField"
+                fieldType="Integer" />
         </Mapping>
         <Mapping xsi:type="Mapping" mappingType="Map">
             <InputField xsi:type="ns2:JavaField" path="/charField" />
-            <OutputField xsi:type="ns3:JsonField" path="/shortField" fieldType="Short" />
+            <OutputField xsi:type="ns3:JsonField" path="/shortField"
+                fieldType="Short" />
         </Mapping>
     </Mappings>
-    <LookupTables/>
-    <Properties/>
+    <LookupTables />
+    <Properties />
 </AtlasMapping>

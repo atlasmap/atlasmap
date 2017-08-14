@@ -21,39 +21,40 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import io.atlasmap.v2.AtlasMapping;
 
 public class XmlToJsonTest {
-    
+
     public ObjectMapper mapper = null;
     private JAXBContext jaxbContext = null;
     private Marshaller marshaller = null;
     private Unmarshaller unmarshaller = null;
-    
+
     @Before
-    public void setUp() throws Exception {        
+    public void setUp() throws Exception {
         mapper = new ObjectMapper();
         mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, true);
         mapper.configure(DeserializationFeature.UNWRAP_ROOT_VALUE, true);
         mapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
-        mapper.setSerializationInclusion(Include.NON_NULL);     
+        mapper.setSerializationInclusion(Include.NON_NULL);
     }
-    
+
     @After
     public void tearDown() throws Exception {
         mapper = null;
     }
-    
+
     @Test
-    public void testXmlToJson() throws Exception {  
-        AtlasMapping atlasMapping = loadAtlasMapping("src/test/resources/atlasmapping-twitterStatusToSalesforceContact.xml");
-        //Object to JSON in file
+    public void testXmlToJson() throws Exception {
+        AtlasMapping atlasMapping = loadAtlasMapping(
+                "src/test/resources/atlasmapping-twitterStatusToSalesforceContact.xml");
+        // Object to JSON in file
         mapper.writeValue(new File("target" + File.separator + "atlasmapping.json"), atlasMapping);
         AtlasMapping uMapping = mapper.readValue(new File("target/atlasmapping.json"), AtlasMapping.class);
         assertNotNull(uMapping);
     }
-    
+
     protected AtlasMapping loadAtlasMapping(String filename) throws Exception {
         jaxbContext = JAXBContext.newInstance("io.atlasmap.v2:io.atlasmap.java.v2");
         unmarshaller = jaxbContext.createUnmarshaller();
-        return ((JAXBElement<AtlasMapping>)unmarshaller.unmarshal(new File(filename))).getValue();
+        return ((JAXBElement<AtlasMapping>) unmarshaller.unmarshal(new File(filename))).getValue();
     }
-    
+
 }

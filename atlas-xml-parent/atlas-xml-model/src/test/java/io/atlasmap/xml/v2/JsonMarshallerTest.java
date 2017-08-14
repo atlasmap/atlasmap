@@ -34,66 +34,73 @@ import io.atlasmap.v2.DataSourceType;
 
 public class JsonMarshallerTest extends BaseMarshallerTest {
 
-	public ObjectMapper mapper = null;
-	
-	@Override
-	@Before
-	public void setUp() throws Exception {
-		super.setUp();
-		
-		this.deleteTestFolders = false;
-		
-		mapper = new ObjectMapper();
-		mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, true);
-		mapper.configure(DeserializationFeature.UNWRAP_ROOT_VALUE, true);
-		mapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
-		mapper.setSerializationInclusion(Include.NON_NULL);		
-	}
-	
-	@Override
-	@After
-	public void tearDown() throws Exception {
-		super.tearDown();		
-		mapper = null;
-	}
-	
-	@Test
-	public void testJsonMapXMLField() throws Exception {	
-		AtlasMapping atlasMapping = generateAtlasMapping();
-		
-		XmlDataSource ds = new XmlDataSource();
-		ds.setUri("someuri");
-		ds.setId("someid");
-		ds.setDataSourceType(DataSourceType.SOURCE);
-		ds.setXmlNamespaces(new XmlNamespaces());
-		ds.setTemplate("Some template");
-		XmlNamespace ns = new XmlNamespace();
-		ns.setAlias("tns");
-		ns.setLocationUri("location");
-		ns.setTargetNamespace(false);
-		ns.setUri("uri");
-		ds.getXmlNamespaces().getXmlNamespace().add(ns);
-		atlasMapping.getDataSource().add(ds);
-		
-		DataSource ds2 = new DataSource();
-		ds2.setUri("someuri2");
-		ds2.setId("someid2");
-		ds2.setDataSourceType(DataSourceType.TARGET);
-		atlasMapping.getDataSource().add(ds2);
-		
-		//Object to JSON in file
-		mapper.writerWithDefaultPrettyPrinter().writeValue(new File("target" + File.separator + "junit" + File.separator + testName.getMethodName() + File.separator + "atlasmapping.json"), atlasMapping);
-		AtlasMapping uMapping = mapper.readValue(new File("target" + File.separator + "junit" + File.separator + testName.getMethodName() + File.separator + "atlasmapping.json"), AtlasMapping.class);
-		assertNotNull(uMapping);
-		validateAtlasMapping(uMapping);
-	}
-	
-	@Test
-	public void testJsonXmlInspectionRequest() throws Exception {	
-		XmlInspectionRequest request = generateInspectionRequest();
-		//Object to JSON in file
-		mapper.writerWithDefaultPrettyPrinter().writeValue(new File("target" + File.separator + "junit" + File.separator + testName.getMethodName() + File.separator + "atlasmapping-xmlinspection-request.json"), request);
-		XmlInspectionRequest uRequest = mapper.readValue(new File("target" + File.separator + "junit" + File.separator + testName.getMethodName() + File.separator + "atlasmapping-xmlinspection-request.json"), XmlInspectionRequest.class);
-		assertNotNull(uRequest);
-	}
+    public ObjectMapper mapper = null;
+
+    @Override
+    @Before
+    public void setUp() throws Exception {
+        super.setUp();
+
+        this.deleteTestFolders = false;
+
+        mapper = new ObjectMapper();
+        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, true);
+        mapper.configure(DeserializationFeature.UNWRAP_ROOT_VALUE, true);
+        mapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
+        mapper.setSerializationInclusion(Include.NON_NULL);
+    }
+
+    @Override
+    @After
+    public void tearDown() throws Exception {
+        super.tearDown();
+        mapper = null;
+    }
+
+    @Test
+    public void testJsonMapXMLField() throws Exception {
+        AtlasMapping atlasMapping = generateAtlasMapping();
+
+        XmlDataSource ds = new XmlDataSource();
+        ds.setUri("someuri");
+        ds.setId("someid");
+        ds.setDataSourceType(DataSourceType.SOURCE);
+        ds.setXmlNamespaces(new XmlNamespaces());
+        ds.setTemplate("Some template");
+        XmlNamespace ns = new XmlNamespace();
+        ns.setAlias("tns");
+        ns.setLocationUri("location");
+        ns.setTargetNamespace(false);
+        ns.setUri("uri");
+        ds.getXmlNamespaces().getXmlNamespace().add(ns);
+        atlasMapping.getDataSource().add(ds);
+
+        DataSource ds2 = new DataSource();
+        ds2.setUri("someuri2");
+        ds2.setId("someid2");
+        ds2.setDataSourceType(DataSourceType.TARGET);
+        atlasMapping.getDataSource().add(ds2);
+
+        // Object to JSON in file
+        mapper.writerWithDefaultPrettyPrinter().writeValue(new File("target" + File.separator + "junit" + File.separator
+                + testName.getMethodName() + File.separator + "atlasmapping.json"), atlasMapping);
+        AtlasMapping uMapping = mapper.readValue(new File("target" + File.separator + "junit" + File.separator
+                + testName.getMethodName() + File.separator + "atlasmapping.json"), AtlasMapping.class);
+        assertNotNull(uMapping);
+        validateAtlasMapping(uMapping);
+    }
+
+    @Test
+    public void testJsonXmlInspectionRequest() throws Exception {
+        XmlInspectionRequest request = generateInspectionRequest();
+        // Object to JSON in file
+        mapper.writerWithDefaultPrettyPrinter().writeValue(new File("target" + File.separator + "junit" + File.separator
+                + testName.getMethodName() + File.separator + "atlasmapping-xmlinspection-request.json"), request);
+        XmlInspectionRequest uRequest = mapper
+                .readValue(
+                        new File("target" + File.separator + "junit" + File.separator + testName.getMethodName()
+                                + File.separator + "atlasmapping-xmlinspection-request.json"),
+                        XmlInspectionRequest.class);
+        assertNotNull(uRequest);
+    }
 }

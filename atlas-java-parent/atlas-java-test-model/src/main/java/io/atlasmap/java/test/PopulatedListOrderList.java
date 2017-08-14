@@ -22,7 +22,7 @@ public class PopulatedListOrderList extends BaseOrderList {
 
     @Override
     public List<BaseOrder> getOrders() {
-        if(this.orders == null) {
+        if (this.orders == null) {
             this.orders = new Vector<BaseOrder>();
         }
         return this.orders;
@@ -30,7 +30,7 @@ public class PopulatedListOrderList extends BaseOrderList {
 
     @Override
     public void setOrders(List<BaseOrder> orders) {
-       // do nothing
+        // do nothing
     }
 
 }

@@ -168,7 +168,6 @@ public class DoubleConverterTest {
         Integer i = converter.convertToInteger(df);
     }
 
-
     @Test
     public void convertToLong() throws Exception {
         Double df = 0.0;
@@ -231,8 +230,8 @@ public class DoubleConverterTest {
         Class aClass = DoubleConverter.class;
         Method[] methods = aClass.getMethods();
         for (Method method : methods) {
-            if(method.isSynthetic()) {
-                // We are running in Eclipse or jacoco 
+            if (method.isSynthetic()) {
+                // We are running in Eclipse or jacoco
                 continue;
             }
             if (method.getName().startsWith("convert")) {

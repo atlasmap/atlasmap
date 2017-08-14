@@ -16,78 +16,79 @@
     limitations under the License.
 
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-	<modelVersion>4.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>io.atlasmap</groupId>
-		<artifactId>atlas-xml-parent</artifactId>
-		<version>1.19.0-SNAPSHOT</version>
-		<relativePath>../pom.xml</relativePath>
-	</parent>
+    <parent>
+        <groupId>io.atlasmap</groupId>
+        <artifactId>atlas-xml-parent</artifactId>
+        <version>1.19.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
 
-	<artifactId>atlas-xml-service</artifactId>
-	<name>Atlas :: Xml Service</name>
-	<packaging>bundle</packaging>
+    <artifactId>atlas-xml-service</artifactId>
+    <name>Atlas :: Xml Service</name>
+    <packaging>bundle</packaging>
 
-	<dependencies>
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-api</artifactId>
-    </dependency>
-		<dependency>
-			<groupId>org.glassfish.jersey.core</groupId>
-			<artifactId>jersey-server</artifactId>
-			<version>${at.jersey.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.glassfish.jersey.core</groupId>
-			<artifactId>jersey-common</artifactId>
-			<version>${at.jersey.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.glassfish.jersey.containers</groupId>
-			<artifactId>jersey-container-servlet</artifactId>
-			<version>${at.jersey.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.glassfish.jersey.core</groupId>
-			<artifactId>jersey-client</artifactId>
-			<version>${at.jersey.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.glassfish.jersey.media</groupId>
-			<artifactId>jersey-media-json-jackson</artifactId>
-			<version>${at.jersey.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>io.atlasmap</groupId>
-			<artifactId>atlas-xml-core</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>io.atlasmap</groupId>
-			<artifactId>atlas-xml-model</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-	</dependencies>
+    <dependencies>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.core</groupId>
+            <artifactId>jersey-server</artifactId>
+            <version>${at.jersey.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.core</groupId>
+            <artifactId>jersey-common</artifactId>
+            <version>${at.jersey.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.containers</groupId>
+            <artifactId>jersey-container-servlet</artifactId>
+            <version>${at.jersey.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.core</groupId>
+            <artifactId>jersey-client</artifactId>
+            <version>${at.jersey.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.media</groupId>
+            <artifactId>jersey-media-json-jackson</artifactId>
+            <version>${at.jersey.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.atlasmap</groupId>
+            <artifactId>atlas-xml-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.atlasmap</groupId>
+            <artifactId>atlas-xml-model</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
 
-	<build>
-		<defaultGoal>clean site install</defaultGoal>
-		<plugins>
-			<plugin>
-				<groupId>org.eclipse.jetty</groupId>
-				<artifactId>jetty-maven-plugin</artifactId>
-				<configuration>
-					<scanIntervalSeconds>10</scanIntervalSeconds>
-					<webApp>
-						<contextPath>/</contextPath>
-					</webApp>
-					<jettyXml>src/test/resources/jetty.xml</jettyXml>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
+    <build>
+        <defaultGoal>clean site install</defaultGoal>
+        <plugins>
+            <plugin>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-maven-plugin</artifactId>
+                <configuration>
+                    <scanIntervalSeconds>10</scanIntervalSeconds>
+                    <webApp>
+                        <contextPath>/</contextPath>
+                    </webApp>
+                    <jettyXml>src/test/resources/jetty.xml</jettyXml>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

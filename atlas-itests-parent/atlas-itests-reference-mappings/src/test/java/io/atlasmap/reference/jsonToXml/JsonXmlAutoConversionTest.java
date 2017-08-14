@@ -28,60 +28,78 @@ import io.atlasmap.xml.test.v2.AtlasXmlTestHelper;
 import io.atlasmap.xml.test.v2.XmlFlatPrimitiveElement;
 
 public class JsonXmlAutoConversionTest extends AtlasMappingBaseTest {
-            
+
     @Test
     public void testProcessJsonXmlFlatFieldMappingAutoConversion1() throws Exception {
-        processJsonXmlFlatMappingAutoConversion("src/test/resources/jsonToXml/atlasmapping-flatprimitive-attribute-autoconversion-1.xml", 1);
+        processJsonXmlFlatMappingAutoConversion(
+                "src/test/resources/jsonToXml/atlasmapping-flatprimitive-attribute-autoconversion-1.xml", 1);
     }
-    
+
     @Test
     public void testProcessJsonXmlFlatFieldMappingAutoConversion2() throws Exception {
-        processJsonXmlFlatMappingAutoConversion("src/test/resources/jsonToXml/atlasmapping-flatprimitive-attribute-autoconversion-2.xml", 2);
+        processJsonXmlFlatMappingAutoConversion(
+                "src/test/resources/jsonToXml/atlasmapping-flatprimitive-attribute-autoconversion-2.xml", 2);
     }
-    
-    
+
     @Test
     public void testProcessJsonXmlFlatFieldMappingAutoConversion3() throws Exception {
-        processJsonXmlFlatMappingAutoConversion("src/test/resources/jsonToXml/atlasmapping-flatprimitive-attribute-autoconversion-3.xml", 3);
+        processJsonXmlFlatMappingAutoConversion(
+                "src/test/resources/jsonToXml/atlasmapping-flatprimitive-attribute-autoconversion-3.xml", 3);
     }
-    
-    
+
     @Test
     public void testProcessJsonXmlFlatFieldMappingAutoConversion4() throws Exception {
-        processJsonXmlFlatMappingAutoConversion("src/test/resources/jsonToXml/atlasmapping-flatprimitive-attribute-autoconversion-4.xml", 4);
+        processJsonXmlFlatMappingAutoConversion(
+                "src/test/resources/jsonToXml/atlasmapping-flatprimitive-attribute-autoconversion-4.xml", 4);
     }
-    
-    
+
     @Test
     public void testProcessJsonXmlFlatFieldMappingAutoConversion5() throws Exception {
-        processJsonXmlFlatMappingAutoConversion("src/test/resources/jsonToXml/atlasmapping-flatprimitive-attribute-autoconversion-5.xml", 5);
+        processJsonXmlFlatMappingAutoConversion(
+                "src/test/resources/jsonToXml/atlasmapping-flatprimitive-attribute-autoconversion-5.xml", 5);
     }
-    
+
     @Test
     public void testProcessJsonXmlFlatFieldMappingAutoConversion6() throws Exception {
-        processJsonXmlFlatMappingAutoConversion("src/test/resources/jsonToXml/atlasmapping-flatprimitive-attribute-autoconversion-6.xml" , 6);
+        processJsonXmlFlatMappingAutoConversion(
+                "src/test/resources/jsonToXml/atlasmapping-flatprimitive-attribute-autoconversion-6.xml", 6);
     }
-    
+
     protected void processJsonXmlFlatMappingAutoConversion(String mappingFile, int num) throws Exception {
         AtlasContext context = atlasContextFactory.createContext(new File(mappingFile).toURI());
         AtlasSession session = context.createSession();
-        String source = AtlasTestUtil.loadFileAsString("src/test/resources/jsonToJson/atlas-json-flatprimitive-unrooted-autoconversion.json");
+        String source = AtlasTestUtil.loadFileAsString(
+                "src/test/resources/jsonToJson/atlas-json-flatprimitive-unrooted-autoconversion.json");
         session.setInput(source);
         context.process(session);
-        
+
         Object object = session.getOutput();
         assertNotNull(object);
         assertTrue(object instanceof String);
-        JAXBElement<XmlFlatPrimitiveElement> xmlFPE = (JAXBElement<XmlFlatPrimitiveElement>)AtlasXmlTestHelper.unmarshal((String)object, XmlFlatPrimitiveElement.class);
-        
-        switch(num) {
-        case 1:AtlasTestUtil.validateXmlFlatPrimitivePrimitiveElementAutoConversion1(xmlFPE.getValue()); break;
-        case 2:AtlasTestUtil.validateXmlFlatPrimitivePrimitiveElementAutoConversion2(xmlFPE.getValue()); break;
-        case 3:AtlasTestUtil.validateXmlFlatPrimitivePrimitiveElementAutoConversion3(xmlFPE.getValue()); break;
-        case 4:AtlasTestUtil.validateXmlFlatPrimitivePrimitiveElementAutoConversion4(xmlFPE.getValue()); break;
-        case 5:AtlasTestUtil.validateXmlFlatPrimitivePrimitiveElementAutoConversion5(xmlFPE.getValue()); break;
-        case 6:AtlasTestUtil.validateXmlFlatPrimitivePrimitiveElementAutoConversion6(xmlFPE.getValue()); break;
-        default: fail("Unexpected number: " + num);
+        JAXBElement<XmlFlatPrimitiveElement> xmlFPE = (JAXBElement<XmlFlatPrimitiveElement>) AtlasXmlTestHelper
+                .unmarshal((String) object, XmlFlatPrimitiveElement.class);
+
+        switch (num) {
+        case 1:
+            AtlasTestUtil.validateXmlFlatPrimitivePrimitiveElementAutoConversion1(xmlFPE.getValue());
+            break;
+        case 2:
+            AtlasTestUtil.validateXmlFlatPrimitivePrimitiveElementAutoConversion2(xmlFPE.getValue());
+            break;
+        case 3:
+            AtlasTestUtil.validateXmlFlatPrimitivePrimitiveElementAutoConversion3(xmlFPE.getValue());
+            break;
+        case 4:
+            AtlasTestUtil.validateXmlFlatPrimitivePrimitiveElementAutoConversion4(xmlFPE.getValue());
+            break;
+        case 5:
+            AtlasTestUtil.validateXmlFlatPrimitivePrimitiveElementAutoConversion5(xmlFPE.getValue());
+            break;
+        case 6:
+            AtlasTestUtil.validateXmlFlatPrimitivePrimitiveElementAutoConversion6(xmlFPE.getValue());
+            break;
+        default:
+            fail("Unexpected number: " + num);
         }
     }
 }

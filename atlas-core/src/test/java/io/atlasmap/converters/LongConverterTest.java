@@ -98,7 +98,6 @@ public class LongConverterTest {
         Character c = converter.convertToCharacter(l);
     }
 
-
     @Test
     public void convertToDouble() throws Exception {
         Long l = 0L;
@@ -191,7 +190,6 @@ public class LongConverterTest {
         assertNull(d);
     }
 
-
     @Test
     public void convertToShort() throws Exception {
         Long l = 0L;
@@ -233,8 +231,8 @@ public class LongConverterTest {
         Class aClass = LongConverter.class;
         Method[] methods = aClass.getMethods();
         for (Method method : methods) {
-            if(method.isSynthetic()) {
-                // We are running in Eclipse or jacoco 
+            if (method.isSynthetic()) {
+                // We are running in Eclipse or jacoco
                 continue;
             }
             if (method.getName().startsWith("convert")) {

@@ -42,7 +42,7 @@ public class ConcurrencyChaosMonkeyTest {
         atlasContextFactory = null;
     }
 
-    //    one thread, many contexts
+    // one thread, many contexts
     @Test
     public void chaosMonkeyTest_ManyContexts() throws Exception {
         long startTime = System.nanoTime();
@@ -86,12 +86,12 @@ public class ConcurrencyChaosMonkeyTest {
         Thread.sleep(600000L);
         long difference = System.nanoTime() - startTime;
 
-        logger.info(String.format("Total time: %d minutes to process 100000 mappings with one context per execution", TimeUnit.NANOSECONDS.toMinutes(difference)));
+        logger.info(String.format("Total time: %d minutes to process 100000 mappings with one context per execution",
+                TimeUnit.NANOSECONDS.toMinutes(difference)));
 
     }
 
-
-    //    many threads, one context
+    // many threads, one context
     @Test
     public void chaosMonkeyTest_ManyThreads() throws Exception {
         long startTime = System.nanoTime();
@@ -134,7 +134,9 @@ public class ConcurrencyChaosMonkeyTest {
         Thread.sleep(600000L);
         long difference = System.nanoTime() - startTime;
 
-        logger.info(String.format("Total time: %d minutes to process 100000 mappings with one context shared with 256 threads", TimeUnit.NANOSECONDS.toMinutes(difference)));
+        logger.info(String.format(
+                "Total time: %d minutes to process 100000 mappings with one context shared with 256 threads",
+                TimeUnit.NANOSECONDS.toMinutes(difference)));
 
     }
 
@@ -142,18 +144,18 @@ public class ConcurrencyChaosMonkeyTest {
         AtlasMapping mapping = AtlasModelFactory.createAtlasMapping();
 
         mapping.setName("mockMapping");
-        
+
         DataSource src = new DataSource();
         src.setDataSourceType(DataSourceType.SOURCE);
         src.setUri("atlas:java?className=twitter4j.Status");
-        
+
         DataSource tgt = new DataSource();
         tgt.setDataSourceType(DataSourceType.TARGET);
         tgt.setUri("atlas:java?className=org.apache.camel.salesforce.dto.Contact");
-        
+
         mapping.getDataSource().add(src);
         mapping.getDataSource().add(tgt);
-        
+
         Mapping sepMapping = AtlasModelFactory.createMapping(MappingType.SEPARATE);
         JavaField jNameField = new JavaField();
         jNameField.setName("Name");
@@ -167,7 +169,7 @@ public class ConcurrencyChaosMonkeyTest {
         jFirstNameField.setSetMethod("setFirstName");
         jFirstNameField.setFieldType(FieldType.STRING);
         jFirstNameField.setIndex(0);
-        
+
         JavaField jLastNameField = new JavaField();
         jLastNameField.setName("LastName");
         jLastNameField.setPath("LastName");
@@ -213,10 +215,10 @@ public class ConcurrencyChaosMonkeyTest {
         screenTitleMapping.getInputField().add(jScreenField);
         screenTitleMapping.getOutputField().add(jTitleField);
         mapping.getMappings().getMapping().add(screenTitleMapping);
-        
-        File mappingFile = new File("target/junit-atlasmapping.xml"); 
+
+        File mappingFile = new File("target/junit-atlasmapping.xml");
         atlasContextFactory.getMappingService().saveMappingAsFile(mapping, mappingFile);
-        
+
         return mappingFile.toURI();
     }
 

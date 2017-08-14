@@ -30,7 +30,7 @@ public class ShortConverter implements AtlasPrimitiveConverter<Short> {
      * @throws AtlasConversionException
      */
     @Override
-	@AtlasConversionInfo(sourceType = FieldType.SHORT, targetType = FieldType.BOOLEAN, concerns = AtlasConversionConcern.RANGE)
+    @AtlasConversionInfo(sourceType = FieldType.SHORT, targetType = FieldType.BOOLEAN, concerns = AtlasConversionConcern.RANGE)
     public Boolean convertToBoolean(Short value) throws AtlasConversionException {
         if (value == null) {
             return null;
@@ -51,7 +51,7 @@ public class ShortConverter implements AtlasPrimitiveConverter<Short> {
      * @throws AtlasUnsupportedException
      */
     @Override
-	@AtlasConversionInfo(sourceType = FieldType.SHORT, targetType = FieldType.BYTE, concerns = AtlasConversionConcern.UNSUPPORTED)
+    @AtlasConversionInfo(sourceType = FieldType.SHORT, targetType = FieldType.BYTE, concerns = AtlasConversionConcern.UNSUPPORTED)
     public Byte convertToByte(Short value) throws AtlasConversionException {
         if (value == null) {
             return null;
@@ -65,7 +65,7 @@ public class ShortConverter implements AtlasPrimitiveConverter<Short> {
      * @throws AtlasConversionException
      */
     @Override
-	@AtlasConversionInfo(sourceType = FieldType.SHORT, targetType = FieldType.CHAR, concerns = AtlasConversionConcern.RANGE)
+    @AtlasConversionInfo(sourceType = FieldType.SHORT, targetType = FieldType.CHAR, concerns = AtlasConversionConcern.RANGE)
     public Character convertToCharacter(Short value) throws AtlasConversionException {
         if (value == null) {
             return null;
@@ -74,7 +74,7 @@ public class ShortConverter implements AtlasPrimitiveConverter<Short> {
         if (value < Character.MIN_VALUE) {
             throw new AtlasConversionException(String.format("Short %s is less than Character.MIN_VALUE", value));
         }
-        return Character.valueOf((char)value.shortValue());
+        return Character.valueOf((char) value.shortValue());
     }
 
     /**
@@ -83,7 +83,7 @@ public class ShortConverter implements AtlasPrimitiveConverter<Short> {
      * @throws AtlasConversionException
      */
     @Override
-	@AtlasConversionInfo(sourceType = FieldType.SHORT, targetType = FieldType.DOUBLE)
+    @AtlasConversionInfo(sourceType = FieldType.SHORT, targetType = FieldType.DOUBLE)
     public Double convertToDouble(Short value) throws AtlasConversionException {
         if (value == null) {
             return null;
@@ -97,7 +97,7 @@ public class ShortConverter implements AtlasPrimitiveConverter<Short> {
      * @throws AtlasConversionException
      */
     @Override
-	@AtlasConversionInfo(sourceType = FieldType.SHORT, targetType = FieldType.FLOAT)
+    @AtlasConversionInfo(sourceType = FieldType.SHORT, targetType = FieldType.FLOAT)
     public Float convertToFloat(Short value) throws AtlasConversionException {
         if (value == null) {
             return null;
@@ -111,7 +111,7 @@ public class ShortConverter implements AtlasPrimitiveConverter<Short> {
      * @throws AtlasConversionException
      */
     @Override
-	@AtlasConversionInfo(sourceType = FieldType.SHORT, targetType = FieldType.INTEGER)
+    @AtlasConversionInfo(sourceType = FieldType.SHORT, targetType = FieldType.INTEGER)
     public Integer convertToInteger(Short value) throws AtlasConversionException {
         if (value == null) {
             return null;
@@ -125,7 +125,7 @@ public class ShortConverter implements AtlasPrimitiveConverter<Short> {
      * @throws AtlasConversionException
      */
     @Override
-	@AtlasConversionInfo(sourceType = FieldType.SHORT, targetType = FieldType.LONG)
+    @AtlasConversionInfo(sourceType = FieldType.SHORT, targetType = FieldType.LONG)
     public Long convertToLong(Short value) throws AtlasConversionException {
         if (value == null) {
             return null;
@@ -139,12 +139,12 @@ public class ShortConverter implements AtlasPrimitiveConverter<Short> {
      * @throws AtlasConversionException
      */
     @Override
-	@AtlasConversionInfo(sourceType = FieldType.SHORT, targetType = FieldType.SHORT)
+    @AtlasConversionInfo(sourceType = FieldType.SHORT, targetType = FieldType.SHORT)
     public Short convertToShort(Short value) throws AtlasConversionException {
         if (value == null) {
             return null;
         }
-        //we want a copy of the value
+        // we want a copy of the value
         return new Short(value);
     }
 
@@ -154,7 +154,7 @@ public class ShortConverter implements AtlasPrimitiveConverter<Short> {
      * @throws AtlasConversionException
      */
     @Override
-	@AtlasConversionInfo(sourceType = FieldType.SHORT, targetType = FieldType.STRING)
+    @AtlasConversionInfo(sourceType = FieldType.SHORT, targetType = FieldType.STRING)
     public String convertToString(Short value) throws AtlasConversionException {
         if (value == null) {
             return null;

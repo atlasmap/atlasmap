@@ -14,7 +14,7 @@ import io.atlasmap.v2.Property;
 public class DefaultAtlasFieldActionsServiceTest {
 
     private DefaultAtlasFieldActionService fieldActionsService = null;
-    
+
     @Before
     public void setUp() throws Exception {
         fieldActionsService = new DefaultAtlasFieldActionService(DefaultAtlasConversionService.getInstance());
@@ -37,10 +37,10 @@ public class DefaultAtlasFieldActionsServiceTest {
     public void testListActionDetails() {
         assertNotNull(fieldActionsService);
         List<ActionDetail> actionDetails = fieldActionsService.listActionDetails();
-        for(ActionDetail d : actionDetails) {
-            if(d.getParameters() != null) {
+        for (ActionDetail d : actionDetails) {
+            if (d.getParameters() != null) {
                 System.out.println("Action: " + d.getName());
-                for(Property prop : d.getParameters().getProperty()) {
+                for (Property prop : d.getParameters().getProperty()) {
                     System.out.println("\t param: " + prop.getName());
                     System.out.println("\t type: " + prop.getFieldType().value());
                 }

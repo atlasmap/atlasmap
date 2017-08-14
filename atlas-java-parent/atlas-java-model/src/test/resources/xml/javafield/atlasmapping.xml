@@ -16,24 +16,31 @@
     limitations under the License.
 
 -->
-<AtlasMapping xmlns="http://atlasmap.io/v2" xmlns:ns2="http://atlasmap.io/java/v2" name="junit">
+<AtlasMapping xmlns="http://atlasmap.io/v2" xmlns:ns2="http://atlasmap.io/java/v2"
+    name="junit">
     <FieldMappings>
-        <CollectionFieldMapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="MapFieldMapping">
-        	<MapFieldMapping>
-            	<InputField>
-                	<Field xsi:type="ns2:JavaField" name="foo" value="bar"/>
-            	</InputField>
-            	<OutputField>
-                	<Field xsi:type="ns2:JavaField" name="woot" value="blerg"/>
-            	</OutputField>
-            </MapFieldMapping>	
-           	<MapFieldMapping>
-            	<InputField>
-                	<Field xsi:type="ns2:JavaField" name="subclass.foo" value="bar"/>
-            	</InputField>
-            	<OutputField>
-                	<Field xsi:type="ns2:JavaField" name="othersubclass.bleh" value="blerg"/>
-            	</OutputField>
+        <CollectionFieldMapping
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:type="MapFieldMapping">
+            <MapFieldMapping>
+                <InputField>
+                    <Field xsi:type="ns2:JavaField" name="foo"
+                        value="bar" />
+                </InputField>
+                <OutputField>
+                    <Field xsi:type="ns2:JavaField" name="woot"
+                        value="blerg" />
+                </OutputField>
+            </MapFieldMapping>
+            <MapFieldMapping>
+                <InputField>
+                    <Field xsi:type="ns2:JavaField" name="subclass.foo"
+                        value="bar" />
+                </InputField>
+                <OutputField>
+                    <Field xsi:type="ns2:JavaField" name="othersubclass.bleh"
+                        value="blerg" />
+                </OutputField>
             </MapFieldMapping>
         </CollectionFieldMapping>
     </FieldMappings>

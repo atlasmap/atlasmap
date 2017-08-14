@@ -33,7 +33,6 @@ public class IntegerConverterTest {
 
     private AtlasPrimitiveConverter<Integer> converter = new IntegerConverter();
 
-
     @Test
     public void convertToBoolean() throws Exception {
         int xTrue = 1;
@@ -134,7 +133,6 @@ public class IntegerConverterTest {
         assertNull(converter.convertToFloat(null));
     }
 
-
     @Test
     public void convertToShort() throws Exception {
         int i = Short.MAX_VALUE;
@@ -226,8 +224,8 @@ public class IntegerConverterTest {
         Class aClass = IntegerConverter.class;
         Method[] methods = aClass.getMethods();
         for (Method method : methods) {
-            if(method.isSynthetic()) {
-                // We are running in Eclipse or jacoco 
+            if (method.isSynthetic()) {
+                // We are running in Eclipse or jacoco
                 continue;
             }
             if (method.getName().startsWith("convert")) {
@@ -248,7 +246,7 @@ public class IntegerConverterTest {
             }
         }
     }
-    
+
     @Test
     public void testCharacterDigit() {
         int RADIX = 10;
