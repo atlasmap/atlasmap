@@ -132,7 +132,8 @@ public class JsonService extends Application {
                         d = s.inspectJsonDocument(jsonData);
                         break;
                     case SCHEMA:
-                        // d = s.inspectSchema(request.getJsonData()); break;
+                        d = s.inspectJsonSchema(jsonData);
+                        break;
                     default:
                         response.setErrorMessage("Unsupported inspection type: " + request.getType());
                         break;
