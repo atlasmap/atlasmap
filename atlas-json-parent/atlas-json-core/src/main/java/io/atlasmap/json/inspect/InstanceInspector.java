@@ -20,23 +20,25 @@ import java.util.Map;
 
 /**
  */
-public class InstanceInspector {
+public class InstanceInspector implements JsonInspector {
 
-    private JsonDocument jsonDocument = AtlasJsonModelFactory.createJsonDocument();
+
     private static final Logger logger = LoggerFactory.getLogger(InstanceInspector.class);
+    private static InstanceInspector myself = new InstanceInspector();
 
-    public InstanceInspector() {
+    private InstanceInspector() {
     }
 
-    public JsonDocument getJsonDocument() {
-        return jsonDocument;
+    public static InstanceInspector instance() {
+        return myself;
     }
 
-    public void inspect(String instance) throws JsonInspectionException {
+    public JsonDocument inspect(String instance) throws JsonInspectionException {
         if (instance == null || instance.isEmpty()) {
             throw new IllegalArgumentException("JSON instance cannot be null");
         }
         try {
+            JsonDocument jsonDocument = AtlasJsonModelFactory.createJsonDocument();
             ObjectMapper objectMapper = new ObjectMapper();
 
             JsonNode rootNode = objectMapper.readTree(instance);
@@ -58,7 +60,7 @@ public class InstanceInspector {
                         // this is a complex type
                         JsonComplexType parent = getJsonComplexTypeFromEntry(entry);
                         jsonDocument.getFields().getField().add(parent);
-                        handleObjectNode(entry.getValue(), parent, 0);
+                        handleObjectNode(jsonDocument, entry.getValue(), parent, 0);
                     } else if (entry.getValue().isArray()) {
                         // this is a complex type as an ARRAY
                         logger.trace("NODE IS AN ARRAY --> " + entry.getKey() + " WITH ---> " + entry.getValue().size()
@@ -66,20 +68,21 @@ public class InstanceInspector {
                         JsonComplexType parent = getJsonComplexTypeFromEntry(entry);
                         parent.setCollectionType(CollectionType.ARRAY);
                         jsonDocument.getFields().getField().add(parent);
-                        handleArrayNode((ArrayNode) entry.getValue(), parent, entry.getKey(), 0);
+                        handleArrayNode(jsonDocument, (ArrayNode) entry.getValue(), parent, entry.getKey(), 0);
                     } else if (entry.getValue().isValueNode()) {
                         logger.trace("NODE IS A VALUE --> " + entry.getKey() + " WITH ---> " + entry.getValue().size()
                                 + " CHILDREN");
-                        handleValueEntry(entry, null, 0);
+                        handleValueEntry(jsonDocument, entry, null, 0);
                     }
                 }
             }
+            return jsonDocument;
         } catch (IOException e) {
             throw new JsonInspectionException(e);
         }
     }
 
-    private void handleArrayNode(ArrayNode aNode, JsonComplexType parent, String aKey, int index) throws IOException {
+    private void handleArrayNode(JsonDocument jsonDocument, ArrayNode aNode, JsonComplexType parent, String aKey, int index) throws IOException {
         if (aNode.get(0).isObject()) {
             logger.trace("ARRAY OF OBJECTS WITH PARENT ---> " + parent.getName().concat(String.valueOf(index))
                     + " WITH KEY ----> " + aKey + " AND SIZE OF ---> " + aNode.size());
@@ -92,9 +95,9 @@ public class InstanceInspector {
             for (JsonNode jsonNode : aNode) {
                 if (childObject != null) {
                     // rest for child fields...
-                    handleObjectNode(jsonNode, childObject, childIndex);
+                    handleObjectNode(jsonDocument, jsonNode, childObject, childIndex);
                 } else {
-                    handleObjectNode(jsonNode, parent, index);
+                    handleObjectNode(jsonDocument, jsonNode, parent, index);
                 }
                 childIndex++;
                 index++;
@@ -108,7 +111,7 @@ public class InstanceInspector {
         }
     }
 
-    private void handleObjectNode(JsonNode jsonNode, JsonComplexType parent, int index) throws IOException {
+    private void handleObjectNode(JsonDocument jsonDocument, JsonNode jsonNode, JsonComplexType parent, int index) throws IOException {
         logger.trace("HANDLING AN OBJECT NODE " + jsonNode.fields().next().getKey() + " WITH PARENT ---> "
                 + parent.getName() + " WITH INDEX OF " + index);
         Iterator<Map.Entry<String, JsonNode>> fields = jsonNode.fields();
@@ -117,14 +120,14 @@ public class InstanceInspector {
             String key = next.getKey();
             JsonNode node = next.getValue();
             if (node.isValueNode()) {
-                handleValueEntry(next, parent, index);
+                handleValueEntry(jsonDocument, next, parent, index);
             } else if (node.isObject()) {
                 logger.trace("FOUND AN OBJECT NODE THAT IS A CONTAINER WITH KEY --> " + key + " WITH A PARENT INDEX OF "
                         + index);
                 JsonComplexType container = getJsonComplexType(parent, key, index);
                 // rest index to zero when dealing with containers (we don't need an index on
                 // containers)
-                handleObjectNode(next.getValue(), container, 0);
+                handleObjectNode(jsonDocument, next.getValue(), container, 0);
             } else if (node.isArray()) {
                 if (node.get(0).isObject()) {
                     ArrayNode arrayNode = (ArrayNode) node;
@@ -137,7 +140,7 @@ public class InstanceInspector {
                         deeperChild.setCollectionType(CollectionType.ARRAY);
                     }
                     for (JsonNode deeperJsonNode : arrayNode) {
-                        handleObjectNode(deeperJsonNode, deeperChild, innerIndex);
+                        handleObjectNode(jsonDocument, deeperJsonNode, deeperChild, innerIndex);
                         innerIndex++;
                     }
                 }
@@ -145,7 +148,7 @@ public class InstanceInspector {
         }
     }
 
-    private void handleValueEntry(Map.Entry<String, JsonNode> jsonNodeEntry, JsonComplexType parent, int index) {
+    private void handleValueEntry(JsonDocument jsonDocument, Map.Entry<String, JsonNode> jsonNodeEntry, JsonComplexType parent, int index) {
         JsonNode theNode = jsonNodeEntry.getValue();
         String nodeKey = jsonNodeEntry.getKey();
         JsonField field = AtlasJsonModelFactory.createJsonField();
