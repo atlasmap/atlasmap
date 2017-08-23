@@ -21,7 +21,7 @@
     <DataSource uri="atlas:java?className=twitter4j.Status"
         dataSourceType="Source" />
     <DataSource
-        uri="atlas:java?className=com.redhat.ipaas.connector.salesforce.Contact"
+        uri="atlas:java?className=io.syndesis.connector.salesforce.Contact"
         dataSourceType="Target" />
     <Mappings>
         <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
