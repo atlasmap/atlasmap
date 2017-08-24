@@ -60,13 +60,17 @@ export class DataMapperInitializationModel {
     public addMockXMLInstanceSources: boolean = false;
     public addMockXMLSchemaSources: boolean = false;    
     public addMockJSONSources: boolean = false;
-
+    public addMockJSONInstanceSources: boolean = false;
+    public addMockJSONSchemaSources: boolean = false;
+    
     public addMockJavaTarget: boolean = false;
     public addMockJavaCachedTarget: boolean = false;
     public addMockXMLInstanceTarget: boolean = false;
     public addMockXMLSchemaTarget: boolean = false;
     public addMockJSONTarget: boolean = false;
-
+    public addMockJSONInstanceTarget: boolean = false;
+    public addMockJSONSchemaTarget: boolean = false;
+    
     /* debug logging toggles */
     public debugDocumentServiceCalls: boolean = false;
     public debugDocumentParsing: boolean = false;
@@ -155,6 +159,18 @@ export class ConfigModel {
 
     public addJSONDocument(documentIdentifier: string, documentContents: string, isSource: boolean): DocumentDefinition {
         return this.createDocument(documentIdentifier, isSource, DocumentTypes.JSON, documentContents);
+    }
+
+    public addJSONInstanceDocument(documentIdentifier: string, documentContents: string, isSource: boolean): DocumentDefinition {
+        var docDef: DocumentDefinition = this.createDocument(documentIdentifier, isSource, DocumentTypes.JSON, documentContents);
+        docDef.initCfg.inspectionType = "INSTANCE";
+        return docDef;
+    }
+    
+    public addJSONSchemaDocument(documentIdentifier: string, documentContents: string, isSource: boolean): DocumentDefinition {
+        var docDef: DocumentDefinition = this.createDocument(documentIdentifier, isSource, DocumentTypes.JSON, documentContents);
+        docDef.initCfg.inspectionType = "SCHEMA";
+        return docDef;
     }
 
     public addXMLInstanceDocument(documentIdentifier: string, documentContents: string, isSource: boolean): DocumentDefinition {

@@ -120,9 +120,14 @@ export class InitializationService {
             this.cfg.addXMLSchemaDocument("XMLSchemaSource", DocumentManagementService.generateMockSchemaXMLDoc(), true);
         }
 
-        if (this.cfg.initCfg.addMockJSONSources) {
-            console.error("INIT SERVICE MOCK DATA: Adding mock JSON source documents.");
-            this.cfg.addJSONDocument("JSONSource", DocumentManagementService.generateMockJSONDoc(), true);
+        if (this.cfg.initCfg.addMockJSONSources || this.cfg.initCfg.addMockJSONInstanceSources) {
+            console.error("INIT SERVICE MOCK DATA: Adding mock JSON instance source documents.");
+            this.cfg.addJSONInstanceDocument("JSONInstanceSource", DocumentManagementService.generateMockJSONInstanceDoc(), true);
+        }
+
+        if (this.cfg.initCfg.addMockJSONSchemaSources) {
+            console.error("INIT SERVICE MOCK DATA: Adding mock JSON schema source documents.");
+            this.cfg.addJSONSchemaDocument("JSONSchemaSource", DocumentManagementService.generateMockJSONSchemaDoc(), true);
         }
 
         if (this.cfg.initCfg.addMockJavaTarget) {
@@ -146,10 +151,15 @@ export class InitializationService {
             this.cfg.addXMLSchemaDocument("XMLSchemaTarget", DocumentManagementService.generateMockSchemaXMLDoc(), false);
         }
 
-        if (this.cfg.initCfg.addMockJSONTarget) {
-            console.error("INIT SERVICE MOCK DATA: Adding mock JSON target document.");
-            this.cfg.addJSONDocument("JSONTarget", DocumentManagementService.generateMockJSONDoc(), false);
-        }                                
+        if (this.cfg.initCfg.addMockJSONTarget || this.cfg.initCfg.addMockJSONInstanceTarget) {
+            console.error("INIT SERVICE MOCK DATA: Adding mock JSON instance target document.");
+            this.cfg.addJSONInstanceDocument("JSONInstanceTarget", DocumentManagementService.generateMockJSONInstanceDoc(), false);
+        }
+
+        if (this.cfg.initCfg.addMockJSONSchemaTarget) {
+            console.error("INIT SERVICE MOCK DATA: Adding mock JSON schema target document.");
+            this.cfg.addJSONSchemaDocument("JSONSchemaTarget", DocumentManagementService.generateMockJSONSchemaDoc(), false);
+        }
 
         //load field actions
         this.fetchFieldActions();

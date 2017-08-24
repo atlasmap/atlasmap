@@ -98,17 +98,21 @@ export class DataMapperAppExampleHostComponent {
         //enable mock source/target documents as needed
         c.initCfg.addMockJavaSingleSource = false;
         c.initCfg.addMockJavaSources = false;
-        c.initCfg.addMockJavaCachedSource = true;
+        c.initCfg.addMockJavaCachedSource = false;
         c.initCfg.addMockXMLInstanceSources = false;
         c.initCfg.addMockXMLSchemaSources = false;
         c.initCfg.addMockJSONSources = false;
+        c.initCfg.addMockJSONInstanceSources = false;
+        c.initCfg.addMockJSONSchemaSources = true;
         
         c.initCfg.addMockJavaTarget = false;
-        c.initCfg.addMockJavaCachedTarget = true;
+        c.initCfg.addMockJavaCachedTarget = false;
         c.initCfg.addMockXMLInstanceTarget = false;
         c.initCfg.addMockXMLSchemaTarget = false;
         c.initCfg.addMockJSONTarget = false;
-
+        c.initCfg.addMockJSONInstanceTarget = false;
+        c.initCfg.addMockJSONSchemaTarget = true;
+        
         console.log("Example config after host component configuration.", c);
 
         //initialize system
