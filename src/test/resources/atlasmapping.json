@@ -9,7 +9,7 @@
             },
             {
                 "jsonType": "io.atlasmap.v2.DataSource",
-                "uri": "atlas:java?className=com.redhat.ipaas.connector.salesforce.Contact",
+                "uri": "atlas:java?className=io.syndesis.connector.salesforce.Contact",
                 "dataSourceType": "TARGET"
             }
         ],

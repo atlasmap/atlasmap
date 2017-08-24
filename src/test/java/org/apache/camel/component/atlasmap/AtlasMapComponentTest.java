@@ -15,7 +15,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.BootstrapWith;
 import org.springframework.test.context.ContextConfiguration;
 
-import com.redhat.ipaas.connector.salesforce.Contact;
+import io.syndesis.connector.salesforce.Contact;
 
 import twitter4j.Status;
 
