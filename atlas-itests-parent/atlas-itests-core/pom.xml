@@ -76,7 +76,7 @@
         <dependency>
             <groupId>io.syndesis</groupId>
             <artifactId>salesforce-upsert-contact-connector</artifactId>
-            <version>0.4-SNAPSHOT</version>
+            <version>${syndesis.connector.version}</version>
             <scope>test</scope>
             <exclusions>
                 <exclusion>

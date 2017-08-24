@@ -34,7 +34,6 @@
         <failOnMissingWebXml>false</failOnMissingWebXml>
         <maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
         <java-image.version>1.2</java-image.version>
-        <syndesis.connector.version>0.4.5</syndesis.connector.version>
         <camel.version>2.19.0.fuse-000035</camel.version>
     </properties>
 
