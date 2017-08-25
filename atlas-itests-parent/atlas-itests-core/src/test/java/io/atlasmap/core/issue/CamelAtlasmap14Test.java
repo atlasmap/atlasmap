@@ -1,5 +1,7 @@
 package io.atlasmap.core.issue;
 
+import static org.mockito.Mockito.*;
+
 import java.net.URL;
 
 import org.junit.Assert;
@@ -14,6 +16,7 @@ import io.atlasmap.core.DefaultAtlasContextFactory;
 import io.atlasmap.v2.AtlasMapping;
 import io.syndesis.connector.salesforce.Contact;
 import twitter4j.Status;
+import twitter4j.User;
 
 public class CamelAtlasmap14Test {
 
@@ -39,12 +42,12 @@ public class CamelAtlasmap14Test {
     }
     
     protected Status generateTwitterStatus() {
-        MockStatus status = new MockStatus();
-        MockUser user = new MockUser();
-        user.setName("Bob Vila");
-        user.setScreenName("bobvila1982");
-        status.setUser(user);
-        status.setText("Let's build a house!");
+        Status status = mock(Status.class);
+        User user = mock(User.class);
+        when(user.getName()).thenReturn("Bob Vila");
+        when(user.getScreenName()).thenReturn("bobvila1982");
+        when(status.getUser()).thenReturn(user);
+        when(status.getText()).thenReturn("Let's build a house!");
         return status;
     }
 }
