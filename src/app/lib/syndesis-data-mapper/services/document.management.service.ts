@@ -176,7 +176,7 @@ export class DocumentManagementService {
     }
 
     private extractJSONDocumentDefinitionData(responseJson: any, docDef: DocumentDefinition): void {
-        var body: any = responseJson.json().JsonInspectionResponse;
+        var body: any = responseJson.JsonInspectionResponse;
         if (body.errorMessage) {
             var docIdentifier: string = docDef.initCfg.documentIdentifier;
             this.handleError("Could not load JSON document, error: " + body.errorMessage, null);
@@ -549,6 +549,10 @@ export class DocumentManagementService {
     }
 
     public static generateMockJSONDoc(): string {
+        return DocumentManagementService.generateMockJSONInstanceDoc();
+    }
+
+    public static generateMockJSONInstanceDoc(): string {
         var mockDoc: string = `   {
                 "order": {
                     "address": {
@@ -575,6 +579,63 @@ export class DocumentManagementService {
                     { "street": "123 any st", "city": "Austin", "state": "TX", "zip": "78626" },
                     { "street": "123 any st", "city": "Austin", "state": "TX", "zip": "78626" }
                 ]
+            }
+        `;
+
+        return mockDoc;
+    }
+
+    public static generateMockJSONSchemaDoc(): string {
+        var mockDoc: string = `
+            {
+                "$schema": "http://json-schema.org/schema#",
+                "description": "Order",
+                "type": "object",
+                "properties": {
+                    "order": {
+                        "type": "object",
+                        "properties": {
+                            "address": {
+                                "type": "object",
+                                "properties": {
+                                    "street": { "type": "string" },
+                                    "city": { "type": "string" },
+                                    "state": { "type": "string" },
+                                    "zip": { "type": "string" }
+                                }
+                            },
+                            "contact": {
+                                "type": "object",
+                                "properties": {
+                                    "firstName": { "type": "string" },
+                                    "lastName": { "type": "string" },
+                                    "phone": { "type": "string" }
+                                }
+                            },
+                            "orderId": { "type": "string" }
+                        }
+                    },
+                    "primitives": {
+                        "type": "object",
+                        "properties": {
+                            "stringPrimitive": { "type": "string" },
+                            "booleanPrimitive": { "type": "boolean" },
+                            "numberPrimitive": { "type": "number" }
+                        }
+                    },
+                    "addressList": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "street": { "type": "string" },
+                                "city": { "type": "string" },
+                                "state": { "type": "string" },
+                                "zip": { "type": "string" }
+                            }
+                        }
+                    }
+                }
             }
         `;
 
