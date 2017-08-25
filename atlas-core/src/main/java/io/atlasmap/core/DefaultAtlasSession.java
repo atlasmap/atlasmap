@@ -23,6 +23,8 @@ import io.atlasmap.v2.Audit;
 import io.atlasmap.v2.AuditStatus;
 import io.atlasmap.v2.Audits;
 import io.atlasmap.v2.Validations;
+
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -94,6 +96,16 @@ public class DefaultAtlasSession implements AtlasSession {
     }
 
     @Override
+    public boolean hasInput(String docId) {
+        return inputMap.containsKey(docId);
+    }
+
+    @Override
+    public Map<String, Object> getInputMap() {
+        return Collections.unmodifiableMap(inputMap);
+    }
+
+    @Override
     public Object getOutput() {
         return outputMap.get(AtlasConstants.DEFAULT_TARGET_DOC_ID);
     }
@@ -101,6 +113,16 @@ public class DefaultAtlasSession implements AtlasSession {
     @Override
     public Object getOutput(String docId) {
         return outputMap.get(docId);
+    }
+
+    @Override
+    public boolean hasOutput(String docId) {
+        return outputMap.containsKey(docId);
+    }
+
+    @Override
+    public Map<String, Object> getOutputMap() {
+        return Collections.unmodifiableMap(outputMap);
     }
 
     @Override

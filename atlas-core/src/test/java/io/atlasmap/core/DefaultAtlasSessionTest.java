@@ -112,6 +112,8 @@ public class DefaultAtlasSessionTest {
         assertTrue(session.getInput() instanceof String);
         assertEquals("defaultInput", (String) session.getInput());
 
+        assertTrue(session.hasInput("second"));
+        assertFalse(session.hasInput("third"));
         assertNotNull(session.getInput("second"));
         assertTrue(session.getInput("second") instanceof String);
         assertEquals("secondInput", (String) session.getInput("second"));
@@ -137,6 +139,8 @@ public class DefaultAtlasSessionTest {
         assertTrue(session.getOutput() instanceof String);
         assertEquals("defaultOutput", (String) session.getOutput());
 
+        assertTrue(session.hasOutput("second"));
+        assertFalse(session.hasOutput("third"));
         assertNotNull(session.getOutput("second"));
         assertTrue(session.getOutput("second") instanceof String);
         assertEquals("secondOutput", (String) session.getOutput("second"));

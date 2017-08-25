@@ -38,6 +38,10 @@ public interface AtlasSession {
 
     void setInput(Object inputObject, String docId);
 
+    boolean hasInput(String docId);
+
+    Map<String, Object> getInputMap();
+
     Object getOutput();
 
     void setOutput(Object outputObject);
@@ -45,6 +49,10 @@ public interface AtlasSession {
     Object getOutput(String docId);
 
     void setOutput(Object outputObject, String docId);
+
+    boolean hasOutput(String docId);
+
+    Map<String, Object> getOutputMap();
 
     Validations getValidations();
 

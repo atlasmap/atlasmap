@@ -1,5 +1,7 @@
 package io.atlasmap.itests;
 
+import static org.mockito.Mockito.*;
+
 import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasContextFactory;
 import io.atlasmap.api.AtlasSession;
@@ -20,6 +22,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import twitter4j.Status;
+import twitter4j.User;
 
 import java.io.File;
 import java.net.URI;
@@ -223,12 +226,12 @@ public class ConcurrencyChaosMonkeyTest {
     }
 
     protected Status generateTwitterStatus() {
-        MockStatus status = new MockStatus();
-        MockUser user = new MockUser();
-        user.setName("Bob Vila");
-        user.setScreenName("bobvila1982");
-        status.setUser(user);
-        status.setText("Let's build a house!");
+        Status status = mock(Status.class);
+        User user = mock(User.class);
+        when(user.getName()).thenReturn("Bob Vila");
+        when(user.getScreenName()).thenReturn("bobvila1982");
+        when(status.getUser()).thenReturn(user);
+        when(status.getText()).thenReturn("Let's build a house!");
         return status;
     }
 }

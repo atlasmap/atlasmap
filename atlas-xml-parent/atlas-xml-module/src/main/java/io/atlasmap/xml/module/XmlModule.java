@@ -157,7 +157,8 @@ public class XmlModule extends BaseAtlasModule {
             XmlField inputField = (XmlField) field;
 
             Object sourceObject = null;
-            if (field.getDocId() != null) {
+            if (field.getDocId() != null && session.hasInput(field.getDocId())) {
+                // Use docId only when it exists, otherwise use default input
                 sourceObject = session.getInput(field.getDocId());
             } else {
                 sourceObject = session.getInput();
@@ -411,7 +412,8 @@ public class XmlModule extends BaseAtlasModule {
     public int getCollectionSize(AtlasSession session, Field field) throws AtlasException {
         try {
             Object sourceObject = null;
-            if (field.getDocId() != null) {
+            if (field.getDocId() != null && session.hasInput(field.getDocId())) {
+                // Use docId only when it exists, otherwise use default input
                 sourceObject = session.getInput(field.getDocId());
             } else {
                 sourceObject = session.getInput();
