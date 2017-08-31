@@ -1,0 +1,77 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "description": "A representation of a person, company, organization, or place",
+    "type": "object",
+    "required": ["familyName", "givenName"],
+    "definitions": {
+        "address": {
+            "$id": "http://json-schema.org.internal/address",
+            "type": "object",
+            "properties": {
+                "post-office-box": { "type": "string" },
+                "extended-address": { "type": "string" },
+                "street-address": { "type": "string" },
+                "locality":{ "type": "string" },
+                "region": { "type": "string" },
+                "postal-code": { "type": "string" },
+                "country-name": { "type": "string"}
+            },
+            "required": ["locality", "region", "country-name"],
+            "dependencies": {
+                "post-office-box": ["street-address"],
+                "extended-address": ["street-address"]
+            }
+        },
+        "geo": {
+            "$id": "http://json-schema.org.internal/geo",
+            "type": "object",
+            "properties": {
+                "latitude": { "type": "number" },
+                "longitude": { "type": "number" }
+            }
+        }
+    },
+    "properties": {
+        "fn": {
+            "description": "Formatted Name",
+            "type": "string"
+        },
+        "familyName": { "type": "string" },
+        "givenName": { "type": "string" },
+        "additionalName": { "type": "array", "items": { "type": "string" } },
+        "honorificPrefix": { "type": "array", "items": { "type": "string" } },
+        "honorificSuffix": { "type": "array", "items": { "type": "string" } },
+        "nickname": { "type": "string" },
+        "url": { "type": "string", "format": "uri" },
+        "email": {
+            "type": "object",
+            "properties": {
+                "type": { "type": "string" },
+                "value": { "type": "string", "format": "email" }
+            }
+        },
+        "tel": {
+            "type": "object",
+            "properties": {
+                "type": { "type": "string" },
+                "value": { "type": "string", "format": "phone" }
+            }
+        },
+        "adr": { "$ref": "http://json-schema.org.internal/address" },
+        "geo": { "$ref": "http://json-schema.org.internal/geo" },
+        "tz": { "type": "string" },
+        "photo": { "type": "string" },
+        "logo": { "type": "string" },
+        "sound": { "type": "string" },
+        "bday": { "type": "string", "format": "date" },
+        "title": { "type": "string" },
+        "role": { "type": "string" },
+        "org": {
+            "type": "object",
+            "properties": {
+                "organizationName": { "type": "string" },
+                "organizationUnit": { "type": "string" }
+            }
+        }
+    }
+}
