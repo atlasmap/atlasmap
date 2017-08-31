@@ -418,3 +418,5 @@
     </complexType>
 
 </schema>
+
+<!-- Atlasmap: ${project.version} -->

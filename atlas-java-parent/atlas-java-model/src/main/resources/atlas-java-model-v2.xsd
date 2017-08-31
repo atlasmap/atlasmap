@@ -176,3 +176,5 @@
     </simpleType>
 
 </schema>
+
+<!-- Atlasmap: ${project.version} -->
