@@ -19,7 +19,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>io.atlasmap</groupId>
     <artifactId>atlas</artifactId>
-    <version>1.19.0</version>
+    <version>1.20.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Atlas :: Project Build</name>
 
@@ -97,7 +97,7 @@
         <connection>scm:git:https://github.com/atlasmap/atlasmap.git</connection>
         <developerConnection>scm:git:git@github.com:atlasmap/atlasmap.git</developerConnection>
         <url>https://atlasmap.io</url>
-        <tag>atlas-1.19.0</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <distributionManagement>
