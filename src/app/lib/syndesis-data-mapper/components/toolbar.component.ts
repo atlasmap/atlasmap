@@ -29,15 +29,19 @@ selector: 'dm-toolbar',
 template: `
     <div class="dm-toolbar">
         <div class="dm-toolbar-icons" style="float:right;">
-            <i class="fa fa-plus link" (click)="toolbarButtonClicked('addMapping', $event);"></i>
+            <i class="fa fa-plus link" (click)="toolbarButtonClicked('addMapping', $event);"
+                tooltip="Add new mapping"></i>
             <i [attr.class]="getCSSClass('editTemplate')"  *ngIf="targetSupportsTemplate()"
                 (click)="toolbarButtonClicked('editTemplate', $event);"></i>
-            <i [attr.class]="getCSSClass('showMappingTable')" (click)="toolbarButtonClicked('showMappingTable', $event);"></i>
+            <i [attr.class]="getCSSClass('showMappingTable')" (click)="toolbarButtonClicked('showMappingTable', $event);"
+               tooltip="Show / hide mapping table"></i>
             <i *ngIf="cfg.getFirstXmlDoc(false)" [attr.class]="getCSSClass('showNamespaceTable')"
                 (click)="toolbarButtonClicked('showNamespaceTable', $event);"></i>
-            <i [attr.class]="getCSSClass('showDetails')" (click)="toolbarButtonClicked('showDetails', $event);"></i>
+            <i [attr.class]="getCSSClass('showDetails')" (click)="toolbarButtonClicked('showDetails', $event);"
+                tooltip="Show / hide mapping details"></i>
             <div dropdown placement="bottom right" style="display:inline; position:relative;">
-                <i [attr.class]="getCSSClass('advancedMode')" dropdownToggle (click)="false"></i>
+                <i [attr.class]="getCSSClass('advancedMode')" dropdownToggle (click)="false"
+                    tooltip="Editor settings"></i>
                 <!-- <a href dropdownToggle (click)="false">X</a> -->
                 <ul *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu">
                     <li role="menuitem" (click)="toolbarButtonClicked('showTypes', $event);">
