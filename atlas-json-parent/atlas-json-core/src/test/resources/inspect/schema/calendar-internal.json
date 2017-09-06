@@ -3,6 +3,16 @@
     "description": "A representation of an event",
     "type": "object",
     "required": [ "dtstart", "summary" ],
+    "definitions": {
+        "geo": {
+            "$id": "http://json-schema.org.internal/geo",
+            "type": "object",
+            "properties": {
+                "latitude": { "type": "number" },
+                "longitude": { "type": "number" }
+            }
+        }
+    },
     "properties": {
         "dtstart": {
             "format": "date-time",
@@ -33,6 +43,6 @@
         },
         "category": { "type": "string" },
         "description": { "type": "string" },
-        "geo": { "$ref": "http://json-schema.org/geo" }
+        "geo": { "$ref": "http://json-schema.org.internal/geo" }
     }
 }

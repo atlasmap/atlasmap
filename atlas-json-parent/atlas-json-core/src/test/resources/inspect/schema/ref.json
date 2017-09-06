@@ -1,0 +1,31 @@
+{
+    "$schema": "http://json-schema.org/schema#",
+    "type": "object",
+    "properties": {
+        "ref-a": { "$ref": "urn:a" },
+        "ref-b": { "$ref": "urn:b" },
+        "ref-c": { "$ref": "urn:c" }
+    },
+    "definitions": {
+        "def-a": {
+            "$id": "urn:a",
+            "type": "string"
+        },
+        "def-b": {
+            "$id": "urn:b",
+            "type": "object",
+            "properties": {
+                "ref-c-from-b": { "$ref": "urn:c" },
+                "str-b": { "type": "string" }
+            }
+        },
+        "def-c": {
+            "$id": "urn:c",
+            "type": "object",
+            "properties": {
+                "str-c": { "type": "string" }
+            }
+        }
+    }
+}
+    
