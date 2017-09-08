@@ -62,7 +62,7 @@ public class SchemaInspector implements JsonInspector {
             } else if (rootNodeType.getJsonFields().getJsonField().size() != 0) {
                 jsonDocument.getFields().getField().addAll(rootNodeType.getJsonFields().getJsonField());
             } else if (rootNodeType.getFieldType() == FieldType.COMPLEX) {
-                logger.warn("No type nor property is defined for the root node. It's going to be empty");
+                logger.warn("No simple type nor property is defined for the root node. It's going to be empty");
             } else {
                 jsonDocument.getFields().getField().add(rootNodeType);
             }
