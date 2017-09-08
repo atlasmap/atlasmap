@@ -78,8 +78,8 @@ export class DocumentManagementService {
         });
     }
 
-    public fetchDocument(docDef: DocumentDefinition, classPath:string): Observable<DocumentDefinition> {        
-        return new Observable<DocumentDefinition>((observer:any) => {        
+    public fetchDocument(docDef: DocumentDefinition, classPath:string): Observable<DocumentDefinition> {
+        return new Observable<DocumentDefinition>((observer:any) => {
             var startTime: number = Date.now();
 
             if (docDef.initCfg.inspectionResultContents != null) {
@@ -166,16 +166,37 @@ export class DocumentManagementService {
         docDef.name = docDef.initCfg.shortIdentifier;
         docDef.fullyQualifiedName = docDef.initCfg.shortIdentifier;
         if (docDef.initCfg.type.isJava()) {
-            this.extractJavaDocumentDefinitionData(responseJson, docDef);
+            if (typeof responseJson.ClassInspectionResponse != "undefined") {
+                this.extractJavaDocumentDefinitionFromInspectionResponse(responseJson, docDef);
+            } else if ((typeof responseJson.javaClass != "undefined")
+                    || (typeof responseJson.JavaClass != "undefined")) {
+                this.extractJavaDocumentDefinition(responseJson, docDef);
+            } else {
+                this.handleError("Unknown Java inspection result format", responseJson);
+            }
         } else if (docDef.initCfg.type.isJSON()) {
-            this.extractJSONDocumentDefinitionData(responseJson, docDef);
+            if (typeof responseJson.JsonInspectionResponse != "undefined") {
+                this.extractJSONDocumentDefinitionFromInspectionResponse(responseJson, docDef);
+            } else if ((typeof responseJson.jsonDocument != "undefined")
+                    || (typeof responseJson.JsonDocument != "undefined")) {
+                this.extractJSONDocumentDefinition(responseJson, docDef);
+            } else {
+                this.handleError("Unknown JSON inspection result format", responseJson);
+            }
         } else {
-            this.extractXMLDocumentDefinitionData(responseJson, docDef);
+            if (typeof responseJson.XmlInspectionResponse != "undefined") {
+                this.extractXMLDocumentDefinitionFromInspectionResponse(responseJson, docDef);
+            } else if ((typeof responseJson.xmlDocument != "undefined")
+                    || (typeof responseJson.XmlDocument != "undefined")) {
+                this.extractXMLDocumentDefinition(responseJson, docDef);
+            } else {
+                this.handleError("Unknown XML inspection result format", responseJson);
+            }
         }
         docDef.initializeFromFields();
     }
 
-    private extractJSONDocumentDefinitionData(responseJson: any, docDef: DocumentDefinition): void {
+    private extractJSONDocumentDefinitionFromInspectionResponse(responseJson: any, docDef: DocumentDefinition): void {
         var body: any = responseJson.JsonInspectionResponse;
         if (body.errorMessage) {
             var docIdentifier: string = docDef.initCfg.documentIdentifier;
@@ -184,17 +205,26 @@ export class DocumentManagementService {
             return;
         }
 
-        body = body.jsonDocument;
+        this.extractJSONDocumentDefinition(body, docDef);
+    }
 
-        docDef.characterEncoding = body.characterEncoding;
-        docDef.locale = body.locale;
+    private extractJSONDocumentDefinition(body: any, docDef: DocumentDefinition): void {
+        var jsonDocument: any;
+        if (typeof body.jsonDocument != "undefined") {
+            jsonDocument = body.jsonDocument;
+        } else {
+            jsonDocument = body.JsonDocument;
+        }
+        
+        docDef.characterEncoding = jsonDocument.characterEncoding;
+        docDef.locale = jsonDocument.locale;
 
-        for (let field of body.fields.field) {
+        for (let field of jsonDocument.fields.field) {
             this.parseJSONFieldFromDocument(field, null, docDef);
         }
     }
 
-    private extractXMLDocumentDefinitionData(responseJson: any, docDef: DocumentDefinition): void {
+    private extractXMLDocumentDefinitionFromInspectionResponse(responseJson: any, docDef: DocumentDefinition): void {
         var body: any = responseJson.XmlInspectionResponse;
         if (body.errorMessage) {
             var docIdentifier: string = docDef.initCfg.documentIdentifier;
@@ -203,15 +233,23 @@ export class DocumentManagementService {
             return;
         }
 
-        body = body.xmlDocument;
+        this.extractXMLDocumentDefinition(body, docDef);
+    }
 
-        docDef.characterEncoding = body.characterEncoding;
-        docDef.locale = body.locale;
+    private extractXMLDocumentDefinition(body: any, docDef: DocumentDefinition): void {
+        var xmlDocument: any;
+        if (typeof body.xmlDocument != "undefined") {
+            xmlDocument = body.xmlDocument;
+        } else {
+            xmlDocument = body.XmlDocument;
+        }
+        docDef.characterEncoding = xmlDocument.characterEncoding;
+        docDef.locale = xmlDocument.locale;
 
 
-        if (body.xmlNamespaces && body.xmlNamespaces.xmlNamespace
-            && body.xmlNamespaces.xmlNamespace.length) {
-            for (let serviceNS of body.xmlNamespaces.xmlNamespace) {
+        if (xmlDocument.xmlNamespaces && xmlDocument.xmlNamespaces.xmlNamespace
+            && xmlDocument.xmlNamespaces.xmlNamespace.length) {
+            for (let serviceNS of xmlDocument.xmlNamespaces.xmlNamespace) {
                 var ns: NamespaceModel = new NamespaceModel();
                 ns.alias = serviceNS.alias;
                 ns.uri = serviceNS.uri;
@@ -221,12 +259,12 @@ export class DocumentManagementService {
             }
         }
 
-        for (let field of body.fields.field) {
+        for (let field of xmlDocument.fields.field) {
             this.parseXMLFieldFromDocument(field, null, docDef);
         }
     }
 
-    private extractJavaDocumentDefinitionData(responseJson: any, docDef: DocumentDefinition): void {
+    private extractJavaDocumentDefinitionFromInspectionResponse(responseJson: any, docDef: DocumentDefinition): void {
         var body: any = responseJson.ClassInspectionResponse;
 
         if (body.errorMessage) {
@@ -235,32 +273,40 @@ export class DocumentManagementService {
             docDef.initCfg.errorOccurred = true;
             return;
         }
+        this.extractJavaDocumentDefinition(body, docDef);
+    }
 
-        body = body.javaClass;
-
-        if (body.status == "NOT_FOUND") {
+    private extractJavaDocumentDefinition(body: any, docDef: DocumentDefinition): void {
+        var javaClass: any;
+        if (typeof body.javaClass != "undefined") {
+            javaClass = body.javaClass;
+        } else {
+            javaClass = body.JavaClass;
+        }
+        
+        if (javaClass.status == "NOT_FOUND") {
             var docIdentifier: string = docDef.initCfg.documentIdentifier;
             this.handleError("Could not load JAVA document. Document is not found: " + docIdentifier, null);
             docDef.initCfg.errorOccurred = true;
             return;
         }
 
-        docDef.name = body.className;
+        docDef.name = javaClass.className;
         //Make doc name the class name rather than fully qualified name
         if (docDef.name && docDef.name.indexOf(".") != -1) {
             docDef.name = docDef.name.substr(docDef.name.lastIndexOf(".") + 1);
         }
 
-        docDef.fullyQualifiedName = body.className;
+        docDef.fullyQualifiedName = javaClass.className;
         if (docDef.name == null) {
-            console.error("Document's className is empty.", body);
+            console.error("Document's className is empty.", javaClass);
         }
-        docDef.uri = body.uri;
+        docDef.uri = javaClass.uri;
 
-        docDef.characterEncoding = body.characterEncoding;
-        docDef.locale = body.locale;
+        docDef.characterEncoding = javaClass.characterEncoding;
+        docDef.locale = javaClass.locale;
 
-        for (let field of body.javaFields.javaField) {
+        for (let field of javaClass.javaFields.javaField) {
             this.parseJavaFieldFromDocument(field, null, docDef);
         }
     }
@@ -645,55 +691,51 @@ export class DocumentManagementService {
     public static generateMockJavaDoc(): string {
         var mockDoc: string = `
             {
-              "ClassInspectionResponse": {
-                "jsonType": "io.atlasmap.java.v2.ClassInspectionResponse",
-                "javaClass": {
-                  "jsonType": "io.atlasmap.java.v2.JavaClass",
-                  "modifiers": { "modifier": [ "PUBLIC" ] },
-                  "className": "io.atlasmap.java.test.Name",
-                  "primitive": false,
-                  "synthetic": false,
-                  "javaEnumFields": { "javaEnumField": [] },
-                  "javaFields": {
-                    "javaField": [          
-                      {
-                        "jsonType": "io.atlasmap.java.v2.JavaField",
-                        "path": "firstName",
-                        "status": "SUPPORTED",
-                        "fieldType": "STRING",
-                        "modifiers": { "modifier": [ "PRIVATE" ] },
-                        "name": "firstName",
-                        "className": "java.lang.String",
-                        "getMethod": "getFirstName",
-                        "setMethod": "setFirstName",
-                        "primitive": true,
-                        "synthetic": false
-                      },  
-                      {
-                        "jsonType": "io.atlasmap.java.v2.JavaField",
-                        "path": "lastName",
-                        "status": "SUPPORTED",
-                        "fieldType": "STRING",
-                        "modifiers": { "modifier": [ "PRIVATE" ] },
-                        "name": "lastName",
-                        "className": "java.lang.String",
-                        "getMethod": "getLastName",
-                        "setMethod": "setLastName",
-                        "primitive": true,
-                        "synthetic": false
-                      }                        
-                    ]
-                  },
-                  "packageName": "io.atlasmap.java.test",
-                  "annotation": false,
-                  "annonymous": false,
-                  "enumeration": false,
-                  "localClass": false,
-                  "memberClass": false,
-                  "uri": "atlas:java?className=io.atlasmap.java.test.Name",
-                  "interface": false
+              "JavaClass": {
+                "jsonType": "io.atlasmap.java.v2.JavaClass",
+                "modifiers": { "modifier": [ "PUBLIC" ] },
+                "className": "io.atlasmap.java.test.Name",
+                "primitive": false,
+                "synthetic": false,
+                "javaEnumFields": { "javaEnumField": [] },
+                "javaFields": {
+                  "javaField": [
+                    {
+                      "jsonType": "io.atlasmap.java.v2.JavaField",
+                      "path": "firstName",
+                      "status": "SUPPORTED",
+                      "fieldType": "STRING",
+                      "modifiers": { "modifier": [ "PRIVATE" ] },
+                      "name": "firstName",
+                      "className": "java.lang.String",
+                      "getMethod": "getFirstName",
+                      "setMethod": "setFirstName",
+                      "primitive": true,
+                      "synthetic": false
+                    },
+                    {
+                      "jsonType": "io.atlasmap.java.v2.JavaField",
+                      "path": "lastName",
+                      "status": "SUPPORTED",
+                      "fieldType": "STRING",
+                      "modifiers": { "modifier": [ "PRIVATE" ] },
+                      "name": "lastName",
+                      "className": "java.lang.String",
+                      "getMethod": "getLastName",
+                      "setMethod": "setLastName",
+                      "primitive": true,
+                      "synthetic": false
+                    }
+                  ]
                 },
-                "executionTime": 1
+                "packageName": "io.atlasmap.java.test",
+                "annotation": false,
+                "annonymous": false,
+                "enumeration": false,
+                "localClass": false,
+                "memberClass": false,
+                "uri": "atlas:java?className=io.atlasmap.java.test.Name",
+                "interface": false
               }
             }
         `;
