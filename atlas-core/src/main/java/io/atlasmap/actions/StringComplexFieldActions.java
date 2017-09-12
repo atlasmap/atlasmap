@@ -29,6 +29,7 @@ import io.atlasmap.v2.CollectionType;
 import io.atlasmap.v2.FieldType;
 import io.atlasmap.v2.PadStringLeft;
 import io.atlasmap.v2.PadStringRight;
+import io.atlasmap.v2.Replace;
 import io.atlasmap.v2.SubString;
 import io.atlasmap.v2.SubStringAfter;
 import io.atlasmap.v2.SubStringBefore;
@@ -73,7 +74,7 @@ public class StringComplexFieldActions implements AtlasFieldAction {
 
         if (action == null || !(action instanceof PadStringRight) || ((PadStringRight) action).getPadCharacter() == null
                 || ((PadStringRight) action).getPadCount() == null) {
-            throw new IllegalArgumentException("PadStringRight must be specfied with padCharater and padCount");
+            throw new IllegalArgumentException("PadStringRight must be specfied with padCharacter and padCount");
         }
 
         PadStringRight padStringRight = (PadStringRight) action;
@@ -95,7 +96,7 @@ public class StringComplexFieldActions implements AtlasFieldAction {
 
         if (action == null || !(action instanceof PadStringLeft) || ((PadStringLeft) action).getPadCharacter() == null
                 || ((PadStringLeft) action).getPadCount() == null) {
-            throw new IllegalArgumentException("PadStringLeft must be specfied with padCharater and padCount");
+            throw new IllegalArgumentException("PadStringLeft must be specfied with padCharacter and padCount");
         }
 
         PadStringLeft padStringLeft = (PadStringLeft) action;
@@ -105,6 +106,23 @@ public class StringComplexFieldActions implements AtlasFieldAction {
         }
 
         return output;
+    }
+
+    @AtlasFieldActionInfo(name = "Replace", sourceType = FieldType.STRING, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
+    public static String replace(Action action, String input) {
+        if (input == null || input.length() == 0) {
+            return input;
+        }
+
+        assert action instanceof Replace;
+        Replace replace = (Replace) action;
+        String oldString = replace.getOldString();
+        if (oldString == null || oldString.length() == 0) {
+            throw new IllegalArgumentException("Replace action must be specified with a non-empty old string");
+        }
+
+        String newString = replace.getNewString();
+        return input.replace(oldString, newString == null ? "" : newString);
     }
 
     @AtlasFieldActionInfo(name = "SubString", sourceType = FieldType.STRING, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)

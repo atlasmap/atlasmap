@@ -90,6 +90,8 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
             return processPadStringLeftJsonToken(jsonToken);
         case "PadStringRight":
             return processPadStringRightJsonToken(jsonToken);
+        case "replace":
+            return processReplaceJsonToken(jsonToken);
         case "SeparateByDash":
             action = new SeparateByDash();
             return action;
@@ -126,6 +128,37 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
         }
 
         return null;
+    }
+
+    protected Replace processReplaceJsonToken(JsonParser jsonToken) throws IOException {
+        Replace replace = new Replace();
+
+        if (JsonToken.END_ARRAY.equals(jsonToken.currentToken())
+                || JsonToken.END_OBJECT.equals(jsonToken.currentToken())) {
+            return replace;
+        }
+
+        JsonToken nextToken = null;
+        do {
+            if (JsonToken.START_OBJECT.equals(jsonToken.currentToken())) {
+                jsonToken.nextToken();
+            }
+            switch (jsonToken.getCurrentName()) {
+                case "oldString":
+                    jsonToken.nextToken();
+                    replace.setOldString(jsonToken.getValueAsString());
+                    break;
+                case "newString":
+                    jsonToken.nextToken();
+                    replace.setNewString(jsonToken.getValueAsString());
+                    break;
+                default:
+                    break;
+            }
+
+            nextToken = jsonToken.nextToken();
+        } while (!JsonToken.END_ARRAY.equals(nextToken) && !JsonToken.END_OBJECT.equals(nextToken));
+        return replace;
     }
 
     protected SubString processSubStringJsonToken(JsonParser jsonToken) throws IOException {

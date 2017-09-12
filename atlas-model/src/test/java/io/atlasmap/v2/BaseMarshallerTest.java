@@ -535,7 +535,7 @@ public abstract class BaseMarshallerTest {
     protected List<Action> generateReferenceFieldActions() {
         List<Action> actions = Arrays.asList(new Camelize(), new Capitalize(), new CurrentDate(), new CurrentDateTime(),
                 new CurrentTime(), new CustomAction(), new GenerateUUID(), new Lowercase(), new PadStringLeft(),
-                new PadStringRight(), new SeparateByDash(), new SeparateByUnderscore(), new StringLength(),
+                new PadStringRight(), new Replace(), new SeparateByDash(), new SeparateByUnderscore(), new StringLength(),
                 new SubString(), new SubStringAfter(), new SubStringBefore(), new Trim(), new TrimLeft(),
                 new TrimRight(), new Uppercase(), new ConvertAreaUnit(), new ConvertDistanceUnit(),
                 new ConvertMassUnit(), new ConvertVolumeUnit(), new SumUp());
