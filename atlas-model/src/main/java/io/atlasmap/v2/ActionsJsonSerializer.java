@@ -73,6 +73,9 @@ public class ActionsJsonSerializer extends JsonSerializer<Actions> {
         case "PadStringRight":
             writePadStringRight(gen, (PadStringRight) action);
             break;
+        case "Replace":
+            writeReplace(gen, (Replace) action);
+            break;
         case "SubString":
             writeSubString(gen, (SubString) action);
             break;
@@ -169,6 +172,18 @@ public class ActionsJsonSerializer extends JsonSerializer<Actions> {
         gen.writeStartObject();
         gen.writeStringField("padCharacter", padStringRight.getPadCharacter());
         gen.writeNumberField("padCount", padStringRight.getPadCount());
+        gen.writeEndObject();
+        gen.writeEndObject();
+    }
+
+    protected void writeReplace(JsonGenerator gen, Replace replace) throws IOException {
+        gen.writeStartObject();
+        gen.writeFieldName("Replace");
+        gen.writeStartObject();
+        gen.writeStringField("oldString", replace.getOldString());
+        if (replace.getNewString() != null) {
+            gen.writeStringField("newString", replace.getNewString());
+        }
         gen.writeEndObject();
         gen.writeEndObject();
     }

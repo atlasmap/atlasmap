@@ -26,6 +26,7 @@ import io.atlasmap.v2.CurrentTime;
 import io.atlasmap.v2.GenerateUUID;
 import io.atlasmap.v2.PadStringLeft;
 import io.atlasmap.v2.PadStringRight;
+import io.atlasmap.v2.Replace;
 import io.atlasmap.v2.SubString;
 import io.atlasmap.v2.SubStringAfter;
 import io.atlasmap.v2.SubStringBefore;
@@ -183,6 +184,36 @@ public class StringComplexFieldActionsTest {
         } catch (IllegalArgumentException e) {
             assertTrue(true);
         }
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testReplaceFailsWithNullOldString() {
+        Replace replace = new Replace();
+        StringComplexFieldActions.replace(replace, " ");
+    }
+
+      @Test(expected = IllegalArgumentException.class)
+      public void testReplaceFailsWithEmptyOldString() {
+          Replace replace = new Replace();
+          replace.setOldString("");
+          StringComplexFieldActions.replace(replace, " ");
+      }
+
+    @Test
+    public void testReplace() {
+        Replace replace = new Replace();
+        assertNull(StringComplexFieldActions.replace(replace, null));
+        assertEquals("", StringComplexFieldActions.replace(replace, ""));
+        replace.setOldString(" ");
+        assertEquals("test", StringComplexFieldActions.replace(replace, "test"));
+        replace.setOldString("e");
+        assertEquals("tst", StringComplexFieldActions.replace(replace, "test"));
+        replace.setOldString("t");
+        replace.setNewString("h");
+        assertEquals("hesh", StringComplexFieldActions.replace(replace, "test"));
+        replace.setOldString("is");
+        replace.setNewString("at");
+        assertEquals("That at a test", StringComplexFieldActions.replace(replace, "This is a test"));
     }
 
     @Test

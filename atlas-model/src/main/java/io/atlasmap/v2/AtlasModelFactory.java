@@ -269,6 +269,15 @@ public class AtlasModelFactory {
                 ((PadStringRight) a).setPadCount(Integer.valueOf(((PadStringRight) action).getPadCount()));
             }
         }
+        if (action instanceof Replace) {
+            a = new Replace();
+            if (((Replace) action).getOldString() != null) {
+                ((Replace) a).setOldString(new String(((Replace) action).getOldString()));
+            }
+            if (((Replace) action).getNewString() != null) {
+                ((Replace) a).setNewString(new String(((Replace) action).getNewString()));
+            }
+        }
         if (action instanceof SeparateByDash) {
             return new SeparateByDash();
         }
