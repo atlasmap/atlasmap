@@ -164,24 +164,28 @@ export class ConfigModel {
     public addJSONInstanceDocument(documentIdentifier: string, documentContents: string, isSource: boolean): DocumentDefinition {
         var docDef: DocumentDefinition = this.createDocument(documentIdentifier, isSource, DocumentTypes.JSON, documentContents);
         docDef.initCfg.inspectionType = "INSTANCE";
+        docDef.uri = "atlas:json:" + documentIdentifier;
         return docDef;
     }
     
     public addJSONSchemaDocument(documentIdentifier: string, documentContents: string, isSource: boolean): DocumentDefinition {
         var docDef: DocumentDefinition = this.createDocument(documentIdentifier, isSource, DocumentTypes.JSON, documentContents);
         docDef.initCfg.inspectionType = "SCHEMA";
+        docDef.uri = "atlas:json:" + documentIdentifier;
         return docDef;
     }
 
     public addXMLInstanceDocument(documentIdentifier: string, documentContents: string, isSource: boolean): DocumentDefinition {
         var docDef: DocumentDefinition = this.createDocument(documentIdentifier, isSource, DocumentTypes.XML, documentContents);
         docDef.initCfg.inspectionType = "INSTANCE";
+        docDef.uri = "atlas:xml:" + documentIdentifier;
         return docDef;
     }
 
     public addXMLSchemaDocument(documentIdentifier: string, documentContents: string, isSource: boolean): DocumentDefinition {
         var docDef: DocumentDefinition = this.createDocument(documentIdentifier, isSource, DocumentTypes.XML, documentContents);
         docDef.initCfg.inspectionType = "SCHEMA";
+        docDef.uri = "atlas:xml:" + documentIdentifier;
         return docDef;
     }
 
