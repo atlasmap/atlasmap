@@ -16,6 +16,7 @@
 package io.atlasmap.java.test;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public abstract class BaseOrder implements Serializable {
 
@@ -24,6 +25,7 @@ public abstract class BaseOrder implements Serializable {
     private BaseContact contact;
     private BaseAddress address;
     private Integer orderId;
+    private Date created;
 
     public Integer getOrderId() {
         return orderId;
@@ -47,6 +49,14 @@ public abstract class BaseOrder implements Serializable {
 
     public void setAddress(BaseAddress address) {
         this.address = address;
+    }
+
+    public Date getCreated() {
+        return created;
+    }
+
+    public void setCreated(Date created) {
+        this.created = created;
     }
 
     @Override

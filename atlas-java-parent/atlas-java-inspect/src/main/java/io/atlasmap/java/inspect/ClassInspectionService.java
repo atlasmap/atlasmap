@@ -497,17 +497,12 @@ public class ClassInspectionService {
             }
         }
 
-        if (getConversionService().isPrimitive(clazz)) {
+        s.setFieldType(getConversionService().fieldTypeFromClass(clazz));
+        if (getConversionService().isPrimitive(clazz) || getConversionService().isBoxedPrimitive(clazz)) {
             s.setPrimitive(true);
-            s.setFieldType(getConversionService().fieldTypeFromClass(clazz));
-            s.setStatus(FieldStatus.SUPPORTED);
-        } else if (getConversionService().isBoxedPrimitive(clazz)) {
-            s.setPrimitive(true);
-            s.setFieldType(getConversionService().fieldTypeFromClass(clazz));
             s.setStatus(FieldStatus.SUPPORTED);
         } else {
             s.setPrimitive(false);
-            s.setFieldType(FieldType.COMPLEX);
 
             Class<?> complexClazz = null;
             JavaClass tmpField = convertJavaFieldToJavaClass(s);

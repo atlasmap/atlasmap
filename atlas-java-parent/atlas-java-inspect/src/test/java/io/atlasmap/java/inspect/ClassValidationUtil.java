@@ -321,4 +321,14 @@ public class ClassValidationUtil {
         assertNull(f.getCollectionType());
         assertEquals(false, f.isSynthetic());
     }
+
+    public static void validateCreated(JavaField f) {
+        assertNotNull(f);
+        assertEquals("created", f.getName());
+        assertEquals("java.util.Date", f.getClassName());
+        assertEquals(FieldType.DATE_TIME_TZ, f.getFieldType());
+        assertEquals(false, f.isPrimitive());
+        assertNull(f.getCollectionType());
+        assertEquals(false, f.isSynthetic());
+    }
 }

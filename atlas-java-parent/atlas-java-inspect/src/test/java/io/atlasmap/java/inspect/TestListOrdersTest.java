@@ -64,6 +64,7 @@ public class TestListOrdersTest {
 
         boolean foundAddress = false;
         boolean foundContact = false;
+        boolean foundCreated = false;
 
         for (JavaField c2f : c2.getJavaFields().getJavaField()) {
             if (c2f instanceof JavaClass) {
@@ -73,6 +74,9 @@ public class TestListOrdersTest {
                 } else if ("io.atlasmap.java.test.BaseContact".equals(((JavaClass) c2f).getClassName())) {
                     ClassValidationUtil.validateSimpleTestContact(((JavaClass) c2f));
                     foundContact = true;
+                } else if ("java.util.Date".equals(((JavaClass) c2f).getClassName())) {
+                    ClassValidationUtil.validateCreated((JavaClass)c2f);
+                    foundCreated = true;
                 } else {
                     fail("Unexpected class: " + ((JavaClass) c2f).getClassName());
                 }
@@ -81,6 +85,7 @@ public class TestListOrdersTest {
 
         assertTrue(foundAddress);
         assertTrue(foundContact);
+        assertTrue(foundCreated);
     }
 
 }

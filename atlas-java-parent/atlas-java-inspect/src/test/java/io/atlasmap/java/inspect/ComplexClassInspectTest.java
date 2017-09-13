@@ -81,7 +81,7 @@ public class ComplexClassInspectTest {
         assertNull(c.getValue());
 
         // Two serialVersionUID fields due to inheritance
-        assertEquals(new Integer(5), new Integer(c.getJavaFields().getJavaField().size()));
+        assertEquals(new Integer(6), new Integer(c.getJavaFields().getJavaField().size()));
 
         Integer validated = 0;
         for (JavaField f : c.getJavaFields().getJavaField()) {
@@ -104,6 +104,11 @@ public class ComplexClassInspectTest {
 
             if ("java.lang.Integer".equals(f.getClassName())) {
                 ClassValidationUtil.validateOrderId(f);
+                validated++;
+            }
+
+            if ("java.util.Date".equals(f.getClassName())) {
+                ClassValidationUtil.validateCreated(f);
                 validated++;
             }
         }
