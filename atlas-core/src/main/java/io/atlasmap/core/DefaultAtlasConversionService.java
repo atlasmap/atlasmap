@@ -437,6 +437,19 @@ public class DefaultAtlasConversionService implements AtlasConversionService {
             return FieldType.SHORT;
         case "java.lang.String":
             return FieldType.STRING;
+        case "java.time.Year":
+        case "java.time.YearMonth":
+        case "java.time.MonthDay":
+        case "java.time.LocalDate":
+            return FieldType.DATE;
+        case "java.time.LocalTime":
+            return FieldType.TIME;
+        case "java.time.LocalDateTime":
+            return FieldType.DATE_TIME;
+        case "java.sql.Date":
+        case "java.util.Date":
+        case "java.time.ZonedDateTime":
+            return FieldType.DATE_TIME_TZ;
         default:
             return FieldType.COMPLEX;
         }
@@ -467,6 +480,16 @@ public class DefaultAtlasConversionService implements AtlasConversionService {
             return java.lang.Short.class;
         case STRING:
             return java.lang.String.class;
+        case DATE:
+            return java.time.LocalDate.class;
+        case TIME:
+            return java.time.LocalTime.class;
+        case DATE_TIME:
+            return java.time.LocalDateTime.class;
+        case DATE_TZ:
+        case TIME_TZ:
+        case DATE_TIME_TZ:
+            return java.time.ZonedDateTime.class;
         // TODO: need to fix the default return type for non-primitive
         default:
             return java.lang.Object.class;

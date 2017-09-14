@@ -1,6 +1,7 @@
 package io.atlasmap.java.test;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -19,6 +20,15 @@ public class TargetTestClass {
     private EmptyComplexField emptyComplexField;
     private LinkedList<TargetContact> contactList;
     private TargetContact[] contactArray;
+    private Date created;
+
+    public Date getCreated() {
+        return created;
+    }
+
+    public void setCreated(Date created) {
+        this.created = created;
+    }
 
     public TargetAddress getAddress() {
         return address;
