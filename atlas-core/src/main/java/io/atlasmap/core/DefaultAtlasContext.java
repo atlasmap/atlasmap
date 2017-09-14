@@ -221,8 +221,12 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
             logger.debug("Detected " + validations.size() + " core validation notices");
         }
 
-        getSourceModule().processPreValidation(session);
-        getTargetModule().processPreValidation(session);
+        if (getSourceModule() != null) {
+            getSourceModule().processPreValidation(session);
+        }
+        if (getTargetModule() != null) {
+            getTargetModule().processPreValidation(session);
+        }
 
         if (logger.isDebugEnabled()) {
             logger.debug("End processValidation " + (session == null ? null : session.toString()));
