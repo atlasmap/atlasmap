@@ -16,18 +16,15 @@
 package io.atlasmap.core;
 
 import io.atlasmap.api.AtlasException;
-import io.atlasmap.api.AtlasUnsupportedException;
 import io.atlasmap.api.AtlasValidationException;
 import io.atlasmap.v2.AtlasJsonMapper;
 import io.atlasmap.v2.AtlasMapping;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
@@ -62,8 +59,6 @@ public class AtlasMappingService implements Serializable {
     private static final long serialVersionUID = 1668362984516180517L;
     private static final Logger logger = LoggerFactory.getLogger(AtlasMappingService.class);
     private transient JAXBContext ctx = null;
-    private transient Marshaller jaxbMarshaller = null;
-    private transient Unmarshaller jaxbUnmarshaller = null;
     private transient ObjectMapper jsonMapper = null;
 
     private static final String CONFIG_V2_PACKAGE = "io.atlasmap.v2";
@@ -97,9 +92,6 @@ public class AtlasMappingService implements Serializable {
             }
         }
 
-        jaxbMarshaller = getJAXBContext().createMarshaller();
-        jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-        jaxbUnmarshaller = getJAXBContext().createUnmarshaller();
         jsonMapper = new AtlasJsonMapper();
     }
 
@@ -113,7 +105,7 @@ public class AtlasMappingService implements Serializable {
             switch (format) {
             case XML:
                 StreamSource streamSource = new StreamSource(file);
-                atlasMapping = jaxbUnmarshaller.unmarshal(streamSource, AtlasMapping.class).getValue();
+                atlasMapping = createUnmarshaller().unmarshal(streamSource, AtlasMapping.class).getValue();
                 break;
             case JSON:
                 atlasMapping = jsonMapper.readValue(file, AtlasMapping.class);
@@ -138,7 +130,7 @@ public class AtlasMappingService implements Serializable {
             switch (format) {
             case XML:
                 StreamSource streamSource = new StreamSource(reader);
-                atlasMapping = jaxbUnmarshaller.unmarshal(streamSource, AtlasMapping.class).getValue();
+                atlasMapping = createUnmarshaller().unmarshal(streamSource, AtlasMapping.class).getValue();
                 break;
             case JSON:
                 atlasMapping = jsonMapper.readValue(reader, AtlasMapping.class);
@@ -219,7 +211,7 @@ public class AtlasMappingService implements Serializable {
 
     protected void saveMappingAsXmlFile(AtlasMapping atlasMapping, File file) throws AtlasException {
         try {
-            jaxbMarshaller.marshal(atlasMapping, file);
+            createMarshaller().marshal(atlasMapping, file);
         } catch (JAXBException e) {
             throw new AtlasValidationException(e.getMessage(), e);
         }
@@ -240,20 +232,14 @@ public class AtlasMappingService implements Serializable {
         this.ctx = ctx;
     }
 
-    public Marshaller getMarshaller() {
-        return jaxbMarshaller;
+    public Marshaller createMarshaller() throws JAXBException {
+        Marshaller marshaller = getJAXBContext().createMarshaller();
+        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+        return marshaller;
     }
 
-    public void setMarshaller(Marshaller marshaller) {
-        this.jaxbMarshaller = marshaller;
-    }
-
-    public Unmarshaller getUnmarshaller() {
-        return jaxbUnmarshaller;
-    }
-
-    public void setUnmarshaller(Unmarshaller unmarshaller) {
-        this.jaxbUnmarshaller = unmarshaller;
+    public Unmarshaller createUnmarshaller() throws JAXBException {
+        return getJAXBContext().createUnmarshaller();
     }
 
     public ObjectMapper getObjectMapper() {
