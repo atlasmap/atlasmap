@@ -174,6 +174,13 @@
                             <port>8585</port>
                             <maxIdleTime>60000</maxIdleTime>
                         </connector>
+                        <connector implementation="org.mortbay.jetty.security.SslSocketConnector">
+                            <port>8443</port>
+                            <maxIdleTime>60000</maxIdleTime>
+                            <keystore>${project.build.directory}/jetty-ssl.keystore</keystore>
+                            <keyPassword>jetty8</keyPassword>
+                            <password>jetty8</password>
+                        </connector>
                     </connectors>
                     <systemProperties>
                         <systemProperty>
@@ -196,6 +203,37 @@
                     <!-- <dependency> <groupId>log4j</groupId> <artifactId>log4j</artifactId> 
                         <version>${at.log4j.version}</version> </dependency> -->
                 </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>keytool-maven-plugin</artifactId>
+                <version>1.5</version>
+                <executions>
+                    <execution>
+                        <phase>generate-resources</phase>
+                        <id>clean</id>
+                        <goals>
+                            <goal>clean</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <phase>generate-resources</phase>
+                        <id>generateKeyPair</id>
+                        <goals>
+                            <goal>generateKeyPair</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <keystore>${project.build.directory}/jetty-ssl.keystore</keystore>
+                    <dname>cn=localhost</dname>
+                    <!--Both `keypass` and `storepass` must be at least 6 
+                        characters long. -->
+                    <keypass>jetty8</keypass>
+                    <storepass>jetty8</storepass>
+                    <alias>jetty8</alias>
+                    <keyalg>RSA</keyalg>
+                </configuration>
             </plugin>
         </plugins>
     </build>
