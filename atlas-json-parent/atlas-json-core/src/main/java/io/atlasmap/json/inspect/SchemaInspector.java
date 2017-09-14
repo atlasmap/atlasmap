@@ -45,11 +45,6 @@ public class SchemaInspector implements JsonInspector {
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(schema);
             
-            JsonNode header = rootNode.get("$schema");
-            if (header == null || !header.asText().startsWith("http://json-schema.org/")) {
-                throw new JsonInspectionException(String.format("The $schema property not found or invalid: '%s'", header.asText()));
-            }
-            
             Map<String, JsonNode> definitionMap = new HashMap<>();
             populateDefinitions(rootNode, definitionMap);
             JsonComplexType rootNodeType = createJsonComplexType(null, rootNode, null, definitionMap);
