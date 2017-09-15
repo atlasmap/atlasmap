@@ -6,9 +6,9 @@ To run:
 
 1. mvn clean install
 
-2. cd atlas-itests/
+2. cd runtime/
 
-3. mvn jetty:run
+3. mvn -Pitests spring-boot:run
 
 4. (In new terminal) cd ${atlasmap-ui}
 

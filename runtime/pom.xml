@@ -305,5 +305,57 @@
                 </plugins>
             </build>
         </profile>
+        <profile>
+            <id>itests</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-maven-plugin</artifactId>
+                        <configuration>
+                            <useTestClasspath>true</useTestClasspath>
+                            <folders>
+                                <folder>${project.build.testOutputDirectory}</folder>
+                            </folders>
+                            <arguments>
+                                <argument>--logging.level.io.atlasmap=DEBUG</argument>
+                                <argument>--logging.file=target/atlasmap-spring-boot.log</argument>
+                            </arguments>
+                            <jvmArguments>-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8000
+                                -server -Xms256m -Xmx512m</jvmArguments>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>keytool-maven-plugin</artifactId>
+                        <version>1.5</version>
+                        <executions>
+                            <execution>
+                                <phase>generate-resources</phase>
+                                <id>clean</id>
+                                <goals>
+                                    <goal>clean</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <phase>generate-resources</phase>
+                                <id>generateKeyPair</id>
+                                <goals>
+                                    <goal>generateKeyPair</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <keystore>${project.build.testOutputDirectory}/ssl.keystore</keystore>
+                            <dname>cn=localhost</dname>
+                            <keypass>atlasmap</keypass>
+                            <storepass>atlasmap</storepass>
+                            <alias>atlasmap</alias>
+                            <keyalg>RSA</keyalg>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
     </profiles>
 </project>
