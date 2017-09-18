@@ -27,36 +27,30 @@ export class ErrorHandlerService {
     public info(message: string, error: any) { this.addError(message, ErrorLevel.INFO, error); }
     public warn(message: string, error: any) { this.addError(message, ErrorLevel.WARN, error); }
     public error(message: string, error: any) { this.addError(message, ErrorLevel.ERROR, error); }
-    public validationError(message: string, error: any) { this.addError(message, ErrorLevel.VALIDATION_ERROR, error); }
+    public validationError(message: string, error: any) { this.addValidationError(message, ErrorLevel.VALIDATION_ERROR, error); }
 
     private addError(message: string, level: ErrorLevel, error:any): void {
         if (level == ErrorLevel.ERROR) {
             console.error(message, error);
         }
-        var e: ErrorInfo = new ErrorInfo();
-        e.message = message;
-        e.level = level;
-        e.error = error;
-        if (level == ErrorLevel.VALIDATION_ERROR) {
-            this.cfg.validationErrors.push(e);
-        } else {
+        if (this.arrayDoesNotContainError(message)) {
+            const e = new ErrorInfo(message, level, error);
             this.cfg.errors.push(e);
         }
     }
 
+    private arrayDoesNotContainError(message: string) {
+        return this.cfg.errors.filter(e => e.message === message).length === 0;
+    }
+
+    private addValidationError(message: string, level: ErrorLevel, error:any): void {
+        const e = new ErrorInfo(message, level, error);
+        this.cfg.validationErrors.push(e);
+    }
+    
     public removeError(identifier: string): void {
-        for (var i = 0; i < this.cfg.errors.length; i++) {
-            if (this.cfg.errors[i].identifier == identifier) {
-                this.cfg.errors.splice(i, 1);
-                return;
-            }
-        }
-        for (var i = 0; i < this.cfg.validationErrors.length; i++) {
-            if (this.cfg.validationErrors[i].identifier == identifier) {
-                this.cfg.validationErrors.splice(i, 1);
-                return;
-            }
-        }
+        this.cfg.errors = this.cfg.errors.filter(e => e.identifier !== identifier);
+        this.cfg.validationErrors = this.cfg.validationErrors.filter(e => e.identifier !== identifier);
     }
 
     public clearValidationErrors(): void {
