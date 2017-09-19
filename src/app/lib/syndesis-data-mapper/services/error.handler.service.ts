@@ -27,7 +27,7 @@ export class ErrorHandlerService {
     public info(message: string, error: any) { this.addError(message, ErrorLevel.INFO, error); }
     public warn(message: string, error: any) { this.addError(message, ErrorLevel.WARN, error); }
     public error(message: string, error: any) { this.addError(message, ErrorLevel.ERROR, error); }
-    public validationError(message: string, error: any) { this.addValidationError(message, ErrorLevel.VALIDATION_ERROR, error); }
+    public validationError(message: string, error: any) { this.addValidationError(message, error); }
 
     private addError(message: string, level: ErrorLevel, error:any): void {
         if (level == ErrorLevel.ERROR) {
@@ -43,8 +43,8 @@ export class ErrorHandlerService {
         return this.cfg.errors.filter(e => e.message === message).length === 0;
     }
 
-    private addValidationError(message: string, level: ErrorLevel, error:any): void {
-        const e = new ErrorInfo(message, level, error);
+    private addValidationError(message: string, error:any): void {
+        const e = new ErrorInfo(message, ErrorLevel.VALIDATION_ERROR, error);
         this.cfg.validationErrors.push(e);
     }
     
