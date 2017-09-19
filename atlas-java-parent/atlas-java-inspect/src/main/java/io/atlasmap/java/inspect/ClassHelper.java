@@ -178,7 +178,7 @@ public class ClassHelper {
                 if (skipCollectionWrapper) {
                     if (PathUtil.isListSegment(segment) && pathUtil.isIndexedCollection()) {
                         int index = PathUtil.indexOfSegment(segment);
-                        parentObject = ((List) parentObject).get(index);
+                        parentObject = ((List<?>) parentObject).get(index);
                     } else if (PathUtil.isArraySegment(segment)) {
                         int index = PathUtil.indexOfSegment(segment);
                         parentObject = Array.get(parentObject, index);

@@ -117,9 +117,9 @@ public class SchemaInspector {
         if (schemaSet == null) {
             throw new XmlInspectionException("Schema set is null");
         }
-        Iterator itr = schemaSet.iterateSchema();
+        Iterator<XSSchema> itr = schemaSet.iterateSchema();
         while (itr.hasNext()) {
-            XSSchema s = (XSSchema) itr.next();
+            XSSchema s = itr.next();
             // check the target namespace where null == default ("") and needs no mapping
             if (s.getTargetNamespace() != null) {
                 xmlDocument.setXmlNamespaces(new XmlNamespaces());
@@ -129,9 +129,9 @@ public class SchemaInspector {
                 xmlDocument.getXmlNamespaces().getXmlNamespace().add(namespace);
             }
             // we only care about declared elements...
-            Iterator jtr = s.iterateElementDecls();
+            Iterator<XSElementDecl> jtr = s.iterateElementDecls();
             while (jtr.hasNext()) {
-                XSElementDecl e = (XSElementDecl) jtr.next();
+                XSElementDecl e = jtr.next();
                 String rootName = "/".concat(e.getName());
                 if (e.getType().isComplexType()) {
                     XmlComplexType rootComplexType = getXmlComplexType();
