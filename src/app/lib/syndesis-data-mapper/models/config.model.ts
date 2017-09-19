@@ -94,7 +94,7 @@ export class ConfigModel {
     public showMappingDetailTray: boolean = false;
     public showMappingTable: boolean = false;
     public showNamespaceTable: boolean = false;
-    public showLinesAlways: boolean = false;
+    public showLinesAlways: boolean = true;
     public showTypes: boolean = false;
     public showMappedFields: boolean = true;
     public showUnmappedFields: boolean = true;
