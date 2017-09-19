@@ -6,7 +6,6 @@ import java.net.URL;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import io.atlasmap.core.AtlasMappingService.AtlasMappingFormat;

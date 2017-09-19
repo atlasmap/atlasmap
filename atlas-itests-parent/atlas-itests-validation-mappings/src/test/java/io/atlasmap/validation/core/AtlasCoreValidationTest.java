@@ -13,7 +13,6 @@ import org.junit.rules.TestName;
 import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.api.AtlasSession;
-import io.atlasmap.core.DefaultAtlasContext;
 import io.atlasmap.v2.Validation;
 import io.atlasmap.v2.ValidationStatus;
 import io.atlasmap.v2.Validations;
