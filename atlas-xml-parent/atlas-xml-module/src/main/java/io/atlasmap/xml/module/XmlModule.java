@@ -377,6 +377,8 @@ public class XmlModule extends BaseAtlasModule {
             return true;
         } else if (field instanceof ConstantField) {
             return true;
+        } else if (field instanceof SimpleField) {
+            return true;
         }
         return false;
     }

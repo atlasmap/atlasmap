@@ -13,13 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  **/
-package io.atlasmap.java.module;
+package io.atlasmap.xml.module;
 
 import io.atlasmap.core.AtlasMappingUtil;
 import io.atlasmap.core.DefaultAtlasConversionService;
-import io.atlasmap.java.module.JavaValidationService;
-import io.atlasmap.java.v2.AtlasJavaModelFactory;
-import io.atlasmap.java.v2.JavaField;
 import io.atlasmap.spi.AtlasModuleDetail;
 import io.atlasmap.spi.AtlasModuleMode;
 import io.atlasmap.v2.AtlasMapping;
@@ -33,6 +30,10 @@ import io.atlasmap.v2.MockField;
 import io.atlasmap.v2.Validation;
 import io.atlasmap.v2.ValidationStatus;
 import io.atlasmap.validators.AtlasValidationTestHelper;
+import io.atlasmap.xml.v2.AtlasXmlModelFactory;
+import io.atlasmap.xml.v2.XmlComplexType;
+import io.atlasmap.xml.v2.XmlField;
+import io.atlasmap.xml.v2.XmlFields;
 
 import org.junit.After;
 import org.junit.Before;
@@ -46,26 +47,26 @@ import java.util.stream.Collectors;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 
-public class JavaValidationServiceTest {
+public class XmlValidationServiceTest {
 
-    private static final Logger logger = LoggerFactory.getLogger(JavaValidationServiceTest.class);
-    protected io.atlasmap.java.v2.ObjectFactory javaModelFactory = null;
+    private static final Logger logger = LoggerFactory.getLogger(XmlValidationServiceTest.class);
+    protected io.atlasmap.xml.v2.ObjectFactory xmlModelFactory = null;
     protected AtlasMappingUtil mappingUtil = null;
-    protected JavaValidationService sourceValidationService = null;
-    protected JavaValidationService targetValidationService = null;
+    protected XmlValidationService sourceValidationService = null;
+    protected XmlValidationService targetValidationService = null;
     protected AtlasValidationTestHelper validationHelper = null;
     protected List<Validation> validations = null;
     protected AtlasModuleDetail moduleDetail = null;
 
     @Before
     public void setUp() {
-        javaModelFactory = new io.atlasmap.java.v2.ObjectFactory();
-        mappingUtil = new AtlasMappingUtil("io.atlasmap.v2:io.atlasmap.java.v2");
-        moduleDetail = JavaModule.class.getAnnotation(AtlasModuleDetail.class);
+        xmlModelFactory = new io.atlasmap.xml.v2.ObjectFactory();
+        mappingUtil = new AtlasMappingUtil("io.atlasmap.v2:io.atlasmap.xml.v2");
+        moduleDetail = XmlModule.class.getAnnotation(AtlasModuleDetail.class);
 
-        sourceValidationService = new JavaValidationService(DefaultAtlasConversionService.getInstance());
+        sourceValidationService = new XmlValidationService(DefaultAtlasConversionService.getInstance());
         sourceValidationService.setMode(AtlasModuleMode.SOURCE);
-        targetValidationService = new JavaValidationService(DefaultAtlasConversionService.getInstance());
+        targetValidationService = new XmlValidationService(DefaultAtlasConversionService.getInstance());
         targetValidationService.setMode(AtlasModuleMode.TARGET);
         validationHelper = new AtlasValidationTestHelper();
         validations = validationHelper.getValidation();
@@ -73,7 +74,7 @@ public class JavaValidationServiceTest {
 
     @After
     public void tearDown() {
-        javaModelFactory = null;
+        xmlModelFactory = null;
         mappingUtil = null;
         sourceValidationService = null;
         targetValidationService = null;
@@ -86,32 +87,30 @@ public class JavaValidationServiceTest {
 
         mapping.setName("thisis_a_valid.name");
 
-        mapping.getDataSource().add(generateDataSource("atlas:java?className=io.atlasmap.java.module.MockJavaClass",
-                DataSourceType.SOURCE));
-        mapping.getDataSource().add(generateDataSource("atlas:java?className=io.atlasmap.java.module.MockJavaClass",
-                DataSourceType.TARGET));
+        mapping.getDataSource().add(generateDataSource("atlas:xml:MockXml", DataSourceType.SOURCE));
+        mapping.getDataSource().add(generateDataSource("atlas:xml:MockXml", DataSourceType.TARGET));
 
         Mapping mapMapping = AtlasModelFactory.createMapping(MappingType.MAP);
         Mapping sepMapping = AtlasModelFactory.createMapping(MappingType.SEPARATE);
 
         // MappedField
-        JavaField inputField = AtlasJavaModelFactory.createJavaField();
+        XmlField inputField = AtlasXmlModelFactory.createXmlField();
         inputField.setFieldType(FieldType.STRING);
         inputField.setPath("firstName");
 
-        JavaField outputField = AtlasJavaModelFactory.createJavaField();
+        XmlField outputField = AtlasXmlModelFactory.createXmlField();
         outputField.setFieldType(FieldType.STRING);
         outputField.setPath("firstName");
 
         mapMapping.getInputField().add(inputField);
         mapMapping.getOutputField().add(outputField);
 
-        JavaField sIJavaField = AtlasJavaModelFactory.createJavaField();
+        XmlField sIJavaField = AtlasXmlModelFactory.createXmlField();
         sIJavaField.setFieldType(FieldType.STRING);
         sIJavaField.setPath("displayName");
         sepMapping.getInputField().add(sIJavaField);
 
-        JavaField sOJavaField = AtlasJavaModelFactory.createJavaField();
+        XmlField sOJavaField = AtlasXmlModelFactory.createXmlField();
         sOJavaField.setFieldType(FieldType.STRING);
         sOJavaField.setPath("lastName");
         sOJavaField.setIndex(1);
@@ -213,8 +212,8 @@ public class JavaValidationServiceTest {
         AtlasMapping mapping = AtlasModelFactory.createAtlasMapping();
 
         mapping.setName("thisis_a_valid.name");
-        mapping.getDataSource().add(generateDataSource("atlas:xml", DataSourceType.SOURCE));
-        mapping.getDataSource().add(generateDataSource("atlas:xml", DataSourceType.TARGET));
+        mapping.getDataSource().add(generateDataSource("atlas:java", DataSourceType.SOURCE));
+        mapping.getDataSource().add(generateDataSource("atlas:json", DataSourceType.TARGET));
 
         validations.addAll(sourceValidationService.validateMapping(mapping));
         validations.addAll(targetValidationService.validateMapping(mapping));
@@ -230,14 +229,14 @@ public class JavaValidationServiceTest {
 
         Mapping separateFieldMapping = AtlasModelFactory.createMapping(MappingType.SEPARATE);
 
-        JavaField bIJavaField = javaModelFactory.createJavaField();
+        XmlField bIJavaField = xmlModelFactory.createXmlField();
         bIJavaField.setFieldType(FieldType.BOOLEAN);
         bIJavaField.setValue(Boolean.TRUE);
         bIJavaField.setPath("firstName");
 
         separateFieldMapping.getInputField().add(bIJavaField);
 
-        JavaField sOJavaField = javaModelFactory.createJavaField();
+        XmlField sOJavaField = xmlModelFactory.createXmlField();
         sOJavaField.setFieldType(FieldType.STRING);
         sOJavaField.setPath("lastName");
         sOJavaField.setIndex(0);
@@ -275,7 +274,7 @@ public class JavaValidationServiceTest {
 
         Mapping fieldMapping = (Mapping) mapping.getMappings().getMapping().get(0);
 
-        JavaField in = (JavaField) fieldMapping.getInputField().get(0);
+        XmlField in = (XmlField) fieldMapping.getInputField().get(0);
         in.setFieldType(FieldType.CHAR);
 
         validations.addAll(sourceValidationService.validateMapping(mapping));
@@ -296,11 +295,17 @@ public class JavaValidationServiceTest {
 
         Mapping fieldMapping = (Mapping) mapping.getMappings().getMapping().get(0);
 
-        JavaField in = (JavaField) fieldMapping.getInputField().get(0);
-        in.setFieldType(FieldType.COMPLEX);
-        in.setClassName("io.atlasmap.java.module.MockJavaClass");
+        XmlComplexType complex = xmlModelFactory.createXmlComplexType();
+        complex.setFieldType(FieldType.COMPLEX);
+        XmlField in = (XmlField) fieldMapping.getInputField().get(0);
+        complex.setXmlFields(new XmlFields());
+        complex.setPath("/nest");
+        complex.setName("nest");
+        in.setPath("/nest/" + in.getPath());
+        complex.getXmlFields().getXmlField().add(in);
+        fieldMapping.getInputField().set(0, complex);
 
-        JavaField out = (JavaField) fieldMapping.getOutputField().get(0);
+        XmlField out = (XmlField) fieldMapping.getOutputField().get(0);
         out.setFieldType(FieldType.STRING);
 
         validations.addAll(sourceValidationService.validateMapping(mapping));
@@ -320,52 +325,17 @@ public class JavaValidationServiceTest {
     }
 
     @Test
-    public void testValidateMappingSourceToTargetCustomUsingClassNames() throws Exception {
-        AtlasMapping mapping = mappingUtil.loadMapping("src/test/resources/mappings/HappyPathMapping.xml");
-        assertNotNull(mapping);
-
-        Mapping fieldMapping = (Mapping) mapping.getMappings().getMapping().get(0);
-
-        JavaField in = (JavaField) fieldMapping.getInputField().get(0);
-        in.setFieldType(FieldType.DATE);
-        in.setClassName("java.util.Date");
-
-        JavaField out = (JavaField) fieldMapping.getOutputField().get(0);
-        out.setFieldType(FieldType.COMPLEX);
-        out.setClassName("java.time.ZonedDateTime");
-
-        validations.addAll(sourceValidationService.validateMapping(mapping));
-        validations.addAll(targetValidationService.validateMapping(mapping));
-
-        if (logger.isDebugEnabled()) {
-            debugErrors(validations);
-        }
-        assertFalse(validationHelper.hasErrors());
-        assertFalse(validationHelper.hasWarnings());
-        assertTrue(validationHelper.hasInfos());
-        assertThat(1, is(validationHelper.getCount()));
-        assertTrue(validations.stream().anyMatch(me -> me.getField().equals("Field.Input/Output.conversion")));
-        Long errorCount = validations.stream()
-                .filter(atlasMappingError -> atlasMappingError.getStatus().compareTo(ValidationStatus.INFO) == 0)
-                .count();
-        assertNotNull(errorCount);
-        assertEquals(1L, errorCount.longValue());
-    }
-
-    @Test
     public void testValidateMappingSourceToTargetRangeConcerns() throws Exception {
         AtlasMapping mapping = mappingUtil.loadMapping("src/test/resources/mappings/HappyPathMapping.xml");
         assertNotNull(mapping);
 
         Mapping fieldMapping = (Mapping) mapping.getMappings().getMapping().get(0);
 
-        JavaField in = (JavaField) fieldMapping.getInputField().get(0);
+        XmlField in = (XmlField) fieldMapping.getInputField().get(0);
         in.setFieldType(FieldType.DOUBLE);
-        in.setClassName("java.lang.Double");
 
-        JavaField out = (JavaField) fieldMapping.getOutputField().get(0);
+        XmlField out = (XmlField) fieldMapping.getOutputField().get(0);
         out.setFieldType(FieldType.LONG);
-        out.setClassName("java.lang.Long");
 
         validations.addAll(sourceValidationService.validateMapping(mapping));
         validations.addAll(targetValidationService.validateMapping(mapping));
@@ -389,13 +359,11 @@ public class JavaValidationServiceTest {
 
         Mapping fieldMapping = (Mapping) mapping.getMappings().getMapping().get(0);
 
-        JavaField in = (JavaField) fieldMapping.getInputField().get(0);
+        XmlField in = (XmlField) fieldMapping.getInputField().get(0);
         in.setFieldType(FieldType.STRING);
-        in.setClassName("java.lang.String");
 
-        JavaField out = (JavaField) fieldMapping.getOutputField().get(0);
+        XmlField out = (XmlField) fieldMapping.getOutputField().get(0);
         out.setFieldType(FieldType.LONG);
-        out.setClassName("java.lang.Long");
 
         validations.addAll(sourceValidationService.validateMapping(mapping));
         validations.addAll(targetValidationService.validateMapping(mapping));
@@ -415,71 +383,13 @@ public class JavaValidationServiceTest {
     }
 
     @Test
-    public void testValidateMappingSourceToTargetUnsupported() throws Exception {
-        AtlasMapping mapping = mappingUtil.loadMapping("src/test/resources/mappings/HappyPathMapping.xml");
-        assertNotNull(mapping);
-
-        Mapping fieldMapping = (Mapping) mapping.getMappings().getMapping().get(0);
-
-        JavaField in = (JavaField) fieldMapping.getInputField().get(0);
-        in.setFieldType(FieldType.STRING);
-        in.setClassName("java.lang.String");
-
-        JavaField out = (JavaField) fieldMapping.getOutputField().get(0);
-        out.setFieldType(FieldType.BYTE);
-        out.setClassName("java.lang.Byte");
-
-        validations.addAll(sourceValidationService.validateMapping(mapping));
-        validations.addAll(targetValidationService.validateMapping(mapping));
-
-        if (logger.isDebugEnabled()) {
-            debugErrors(validations);
-        }
-        assertTrue(validationHelper.hasErrors());
-        assertFalse(validationHelper.hasWarnings());
-        assertFalse(validationHelper.hasInfos());
-        assertThat(validationHelper.getCount(), is(1));
-
-        assertTrue(validations.stream()
-                .anyMatch(atlasMappingError -> atlasMappingError.getMessage().contains("not supported")));
-    }
-
-    @Test
-    public void testValidateMappingClassNotFound() throws Exception {
-        AtlasMapping mapping = mappingUtil.loadMapping("src/test/resources/mappings/HappyPathMapping.xml");
-        assertNotNull(mapping);
-
-        Mapping fieldMapping = (Mapping) mapping.getMappings().getMapping().get(0);
-
-        JavaField in = (JavaField) fieldMapping.getInputField().get(0);
-        in.setClassName("java.lang.String3");
-
-        validations.addAll(sourceValidationService.validateMapping(mapping));
-        validations.addAll(targetValidationService.validateMapping(mapping));
-
-        assertTrue(validationHelper.hasErrors());
-        assertFalse(validationHelper.hasWarnings());
-        assertFalse(validationHelper.hasInfos());
-
-        boolean found = false;
-        for (Validation v : validations) {
-            if ("Field.Classname".equals(v.getField())) {
-                assertEquals("Class for field is not found on the classpath", v.getMessage());
-                assertEquals(ValidationStatus.ERROR, v.getStatus());
-                found = true;
-            }
-        }
-        assertTrue(found);
-    }
-
-    @Test
     public void testValidateMappingPathNull() throws Exception {
         AtlasMapping mapping = mappingUtil.loadMapping("src/test/resources/mappings/HappyPathMapping.xml");
         assertNotNull(mapping);
 
         Mapping fieldMapping = (Mapping) mapping.getMappings().getMapping().get(0);
 
-        JavaField in = (JavaField) fieldMapping.getInputField().get(0);
+        XmlField in = (XmlField) fieldMapping.getInputField().get(0);
         in.setPath(null);
 
         validations.addAll(sourceValidationService.validateMapping(mapping));
@@ -488,37 +398,6 @@ public class JavaValidationServiceTest {
         assertTrue(validationHelper.hasErrors());
         assertFalse(validationHelper.hasWarnings());
         assertFalse(validationHelper.hasInfos());
-    }
-
-    @Test
-    public void testDetectJavaCompiledVersion() throws Exception {
-        sourceValidationService.detectClassVersion("java.lang.String");
-        targetValidationService.detectClassVersion("java.lang.String");
-    }
-
-    @Test
-    public void testIssue127() throws Exception {
-        AtlasMapping mapping = mappingUtil.loadMapping("src/test/resources/mappings/Issue127Mapping.xml");
-        assertNotNull(mapping);
-
-        validations.addAll(sourceValidationService.validateMapping(mapping));
-        validations.addAll(targetValidationService.validateMapping(mapping));
-
-        assertFalse(validationHelper.hasErrors());
-        assertTrue(validationHelper.hasWarnings());
-        assertFalse(validationHelper.hasInfos());
-        assertEquals(2, validations.size());
-
-        Validation v = validations.get(0);
-        assertEquals("Conversion can cause numeric format exceptions between source and target", v.getMessage());
-        assertEquals("firstName(STRING) --> id(INTEGER)", v.getValue());
-        assertEquals(ValidationStatus.WARN, v.getStatus());
-
-        v = validations.get(1);
-        assertEquals("Conversion can cause out of range exceptions between source and target", v.getMessage());
-        assertEquals("firstName(STRING) --> id(INTEGER)", v.getValue());
-        assertEquals(ValidationStatus.WARN, v.getStatus());
-
     }
 
     public static <T> Collector<T, ?, T> singletonCollector() {
