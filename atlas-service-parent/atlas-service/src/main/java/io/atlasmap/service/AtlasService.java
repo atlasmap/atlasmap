@@ -411,8 +411,17 @@ public class AtlasService extends Application {
         marshaller = jaxbContext.createMarshaller();
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 
-        marshaller.marshal(atlasMapping,
-                new File(baseFolder + File.separator + generateMappingFileName(atlasMapping.getName())));
+        marshaller.marshal(atlasMapping, createMappingFile(atlasMapping.getName()));
+    }
+
+    private File createMappingFile(String mappingName) {
+        File dir = new File(baseFolder);
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+        String fileName = baseFolder + File.separator + generateMappingFileName(mappingName);
+        logger.debug("Creating mapping file '{}'", fileName);
+        return new File(fileName);
     }
 
     protected String generateMappingFileName(String mappingName) {
