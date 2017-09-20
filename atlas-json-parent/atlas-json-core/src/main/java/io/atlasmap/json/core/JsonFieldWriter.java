@@ -13,8 +13,6 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.core.PathUtil;
-import io.atlasmap.json.v2.AtlasJsonModelFactory;
-import io.atlasmap.json.v2.JsonField;
 import io.atlasmap.v2.AtlasModelFactory;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldType;

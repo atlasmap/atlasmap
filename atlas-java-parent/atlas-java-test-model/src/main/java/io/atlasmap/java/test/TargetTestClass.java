@@ -3,7 +3,6 @@ package io.atlasmap.java.test;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.LinkedList;
-import java.util.List;
 
 public class TargetTestClass {
     private String name;

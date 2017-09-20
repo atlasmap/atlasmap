@@ -1,12 +1,5 @@
 package io.atlasmap.xml.test.v2;
 
-import static org.junit.Assert.*;
-
-import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

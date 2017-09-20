@@ -3,7 +3,6 @@ package io.atlasmap.itests;
 import static org.mockito.Mockito.*;
 
 import io.atlasmap.api.AtlasContext;
-import io.atlasmap.api.AtlasContextFactory;
 import io.atlasmap.api.AtlasSession;
 import io.atlasmap.core.DefaultAtlasContextFactory;
 import io.atlasmap.java.v2.JavaField;
