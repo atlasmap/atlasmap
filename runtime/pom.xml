@@ -210,6 +210,21 @@
         </dependency>
         <dependency>
             <groupId>io.syndesis</groupId>
+            <artifactId>salesforce-on-create-connector</artifactId>
+            <version>${syndesis.connector.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.syndesis</groupId>
+            <artifactId>salesforce-on-update-connector</artifactId>
+            <version>${syndesis.connector.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.syndesis</groupId>
+            <artifactId>salesforce-on-delete-connector</artifactId>
+            <version>${syndesis.connector.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.syndesis</groupId>
             <artifactId>http-get-connector</artifactId>
             <version>${syndesis.connector.version}</version>
         </dependency>
