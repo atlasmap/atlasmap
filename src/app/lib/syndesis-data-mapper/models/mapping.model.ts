@@ -322,9 +322,7 @@ export class MappingModel {
     }
 
     public addValidationError(message: string) {
-        var e: ErrorInfo = new ErrorInfo();
-        e.message = message;
-        e.level = ErrorLevel.VALIDATION_ERROR;
+        const e = new ErrorInfo(message, ErrorLevel.VALIDATION_ERROR);
         this.validationErrors.push(e);
     }
 

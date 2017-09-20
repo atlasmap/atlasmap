@@ -321,9 +321,7 @@ export class MappingManagementService {
                 var errors: ErrorInfo[] = [];
                 if (body && body.Validations && body.Validations.validation) {
                     for (let error of body.Validations.validation) {
-                        var e: ErrorInfo = new ErrorInfo();
-                        e.message = error.message;
-                        e.level = ErrorLevel.VALIDATION_ERROR;
+                        const e = new ErrorInfo(error.message, ErrorLevel.VALIDATION_ERROR);
                         errors.push(e);
                     }
                 }
