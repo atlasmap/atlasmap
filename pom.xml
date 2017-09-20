@@ -44,7 +44,7 @@
         <maven-version>3.5.0</maven-version>
         <nexus-staging-maven-plugin.version>1.6.7</nexus-staging-maven-plugin.version>
         <asciidoctor-maven-plugin.version>1.5.5</asciidoctor-maven-plugin.version>
-        <syndesis.connector.version>0.5.1</syndesis.connector.version>
+        <syndesis.connector.version>0.5.2</syndesis.connector.version>
         <mockito.version>2.8.47</mockito.version>
 
         <!-- Does this fix the NPE problem ?? <jetty-maven-plugin.version>9.4.2.v20170220</jetty-maven-plugin.version> -->
