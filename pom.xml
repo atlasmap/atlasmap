@@ -82,6 +82,16 @@
             <artifactId>atlas-java-module</artifactId>
             <version>${atlas.version}</version>
         </dependency>
+        <dependency>
+            <groupId>io.atlasmap</groupId>
+            <artifactId>atlas-json-module</artifactId>
+            <version>${atlas.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.atlasmap</groupId>
+            <artifactId>atlas-xml-module</artifactId>
+            <version>${atlas.version}</version>
+        </dependency>
 
         <!-- for testing -->
         <dependency>
