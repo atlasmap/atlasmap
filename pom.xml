@@ -17,7 +17,7 @@
     </parent>
 
     <artifactId>camel-atlasmap</artifactId>
-    <version>1.21.0-SNAPSHOT</version>
+    <version>1.21.1</version>
     <packaging>jar</packaging>
     <name>Camel :: AtlasMap</name>
     <description>Camel AtlasMap support</description>
@@ -58,7 +58,7 @@
         <url>https://github.com/atlasmap/camel-atlasmap</url>
         <connection>scm:git:git://github.com/atlasmap/camel-atlasmap.git</connection>
         <developerConnection>scm:git:git@github.com:atlasmap/camel-atlasmap.git</developerConnection>
-      <tag>HEAD</tag>
+      <tag>1.21.1</tag>
   </scm>
 
     <dependencies>
