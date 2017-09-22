@@ -33,7 +33,7 @@
         <failOnMissingWebXml>false</failOnMissingWebXml>
         <maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
         <java-image.version>1.2</java-image.version>
-        <camel.version>2.20.0.fuse-000093</camel.version>
+        <camel.version>2.20.0.fuse-000101</camel.version>
     </properties>
 
     <build>
