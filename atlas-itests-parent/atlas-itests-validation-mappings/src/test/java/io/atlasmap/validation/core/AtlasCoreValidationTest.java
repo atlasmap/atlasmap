@@ -92,4 +92,69 @@ public class AtlasCoreValidationTest extends AtlasMappingBaseTest {
         assertTrue(found);
     }
 
+    @Test
+    public void testJavaToJson() throws AtlasException {
+        assertNotNull(context);
+        assertNotNull(session);
+        context.processValidation(session);
+        Validations validations = session.getValidations();
+        assertNotNull(validations);
+        assertNotNull(validations.getValidation());
+        assertTrue(validations.getValidation().isEmpty());
+    }
+
+    @Test
+    public void testJavaToXml() throws AtlasException {
+        assertNotNull(context);
+        assertNotNull(session);
+        context.processValidation(session);
+        Validations validations = session.getValidations();
+        assertNotNull(validations);
+        assertNotNull(validations.getValidation());
+        assertTrue(validations.getValidation().isEmpty());
+    }
+
+    @Test
+    public void testJsonToJava() throws AtlasException {
+        assertNotNull(context);
+        assertNotNull(session);
+        context.processValidation(session);
+        Validations validations = session.getValidations();
+        assertNotNull(validations);
+        assertNotNull(validations.getValidation());
+        assertTrue(validations.getValidation().isEmpty());
+    }
+
+    @Test
+    public void testJsonToXml() throws AtlasException {
+        assertNotNull(context);
+        assertNotNull(session);
+        context.processValidation(session);
+        Validations validations = session.getValidations();
+        assertNotNull(validations);
+        assertNotNull(validations.getValidation());
+        assertTrue(validations.getValidation().isEmpty());
+    }
+
+    @Test
+    public void testXmlToJava() throws AtlasException {
+        assertNotNull(context);
+        assertNotNull(session);
+        context.processValidation(session);
+        Validations validations = session.getValidations();
+        assertNotNull(validations);
+        assertNotNull(validations.getValidation());
+        assertTrue(validations.getValidation().isEmpty());
+    }
+
+    @Test
+    public void testXmlToJson() throws AtlasException {
+        assertNotNull(context);
+        assertNotNull(session);
+        context.processValidation(session);
+        Validations validations = session.getValidations();
+        assertNotNull(validations);
+        assertNotNull(validations.getValidation());
+        assertTrue(validations.getValidation().isEmpty());
+    }
 }
