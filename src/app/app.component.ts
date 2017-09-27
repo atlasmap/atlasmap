@@ -3,8 +3,7 @@ import { ElectronService } from './providers/electron.service';
 
 @Component({
   selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  template: `<data-mapper-example-host></data-mapper-example-host>`
 })
 export class AppComponent {
   constructor(public electronService: ElectronService) {
