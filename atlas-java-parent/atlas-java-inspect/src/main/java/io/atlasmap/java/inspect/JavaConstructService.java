@@ -87,7 +87,7 @@ public class JavaConstructService {
             /*
              * We aren't using the path for construction for now JavaPath javaPath = new
              * JavaPath(f.getPath()); if(javaPath.hasParent()) {
-             * 
+             *
              * }
              */
 

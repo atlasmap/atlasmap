@@ -89,7 +89,7 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
 
     /**
      * TODO: For dynamic re-load. This needs lock()
-     * 
+     *
      * @throws AtlasException
      */
     protected void init() throws AtlasException {
@@ -152,7 +152,7 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
 
     /**
      * Process session lifecycle
-     * 
+     *
      */
     @Override
     public void process(AtlasSession session) throws AtlasException {

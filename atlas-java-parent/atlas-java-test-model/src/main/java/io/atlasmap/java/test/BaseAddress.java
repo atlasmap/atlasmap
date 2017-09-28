@@ -80,38 +80,51 @@ public abstract class BaseAddress implements Serializable {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
+        if (this == obj) {
             return true;
-        if (obj == null)
+        }
+        if (obj == null) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (getClass() != obj.getClass()) {
             return false;
+        }
         BaseAddress other = (BaseAddress) obj;
         if (addressLine1 == null) {
-            if (other.addressLine1 != null)
+            if (other.addressLine1 != null) {
                 return false;
-        } else if (!addressLine1.equals(other.addressLine1))
+            }
+        } else if (!addressLine1.equals(other.addressLine1)) {
             return false;
+        }
         if (addressLine2 == null) {
-            if (other.addressLine2 != null)
+            if (other.addressLine2 != null) {
                 return false;
-        } else if (!addressLine2.equals(other.addressLine2))
+            }
+        } else if (!addressLine2.equals(other.addressLine2)) {
             return false;
+        }
         if (city == null) {
-            if (other.city != null)
+            if (other.city != null) {
                 return false;
-        } else if (!city.equals(other.city))
+            }
+        } else if (!city.equals(other.city)) {
             return false;
+        }
         if (state == null) {
-            if (other.state != null)
+            if (other.state != null) {
                 return false;
-        } else if (!state.equals(other.state))
+            }
+        } else if (!state.equals(other.state)) {
             return false;
+        }
         if (zipCode == null) {
-            if (other.zipCode != null)
+            if (other.zipCode != null) {
                 return false;
-        } else if (!zipCode.equals(other.zipCode))
+            }
+        } else if (!zipCode.equals(other.zipCode)) {
             return false;
+        }
         return true;
     }
 

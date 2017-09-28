@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 public class AtlasJsonTestRootedMapper extends ObjectMapper {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = -2292373925488427113L;
 

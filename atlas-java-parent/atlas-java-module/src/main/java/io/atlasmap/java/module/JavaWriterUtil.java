@@ -28,7 +28,7 @@ public class JavaWriterUtil {
 
     /**
      * Instantiate the given class.
-     * 
+     *
      * @param JavaField
      *            The JavaField to instantiate.
      * @param segmentContext
@@ -67,7 +67,7 @@ public class JavaWriterUtil {
     /**
      * Retrieve a child object (which may be a complex class or collection class)
      * from the given parentObject.
-     * 
+     *
      * @param field
      *            - provided for convenience, probably not needed here
      * @param ParentObject
@@ -139,7 +139,7 @@ public class JavaWriterUtil {
 
     /**
      * Set the given object within the parentObject.
-     * 
+     *
      * @param field
      *            - provided if we need it, I don't think we will since we already
      *            have the value in hand?

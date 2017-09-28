@@ -164,75 +164,102 @@ public class TargetTestClass {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
+        if (this == obj) {
             return true;
-        if (obj == null)
+        }
+        if (obj == null) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (getClass() != obj.getClass()) {
             return false;
+        }
+
         TargetTestClass other = (TargetTestClass) obj;
         if (Department == null) {
-            if (other.Department != null)
+            if (other.Department != null) {
                 return false;
-        } else if (!Department.equals(other.Department))
+            }
+        } else if (!Department.equals(other.Department)) {
             return false;
+        }
         if (address == null) {
-            if (other.address != null)
+            if (other.address != null) {
                 return false;
-        } else if (!address.equals(other.address))
+            }
+        } else if (!address.equals(other.address)) {
             return false;
+        }
         if (contact == null) {
-            if (other.contact != null)
+            if (other.contact != null) {
                 return false;
-        } else if (!contact.equals(other.contact))
+            }
+        } else if (!contact.equals(other.contact)) {
             return false;
-        if (!Arrays.equals(contactArray, other.contactArray))
+        }
+        if (!Arrays.equals(contactArray, other.contactArray)) {
             return false;
+        }
         if (contactList == null) {
-            if (other.contactList != null)
+            if (other.contactList != null) {
                 return false;
-        } else if (!contactList.equals(other.contactList))
+            }
+        } else if (!contactList.equals(other.contactList)) {
             return false;
+        }
         if (emptyComplexField == null) {
-            if (other.emptyComplexField != null)
+            if (other.emptyComplexField != null) {
                 return false;
-        } else if (!emptyComplexField.equals(other.emptyComplexField))
+            }
+        } else if (!emptyComplexField.equals(other.emptyComplexField)) {
             return false;
+        }
         if (fullAddress == null) {
-            if (other.fullAddress != null)
+            if (other.fullAddress != null) {
                 return false;
-        } else if (!fullAddress.equals(other.fullAddress))
+            }
+        } else if (!fullAddress.equals(other.fullAddress)) {
             return false;
+        }
         if (listOrders == null) {
-            if (other.listOrders != null)
+            if (other.listOrders != null) {
                 return false;
-        } else if (!listOrders.equals(other.listOrders))
+            }
+        } else if (!listOrders.equals(other.listOrders)) {
             return false;
+        }
         if (name == null) {
-            if (other.name != null)
+            if (other.name != null) {
                 return false;
-        } else if (!name.equals(other.name))
+            }
+        } else if (!name.equals(other.name)) {
             return false;
+        }
         if (order == null) {
-            if (other.order != null)
+            if (other.order != null) {
                 return false;
-        } else if (!order.equals(other.order))
+            }
+        } else if (!order.equals(other.order)) {
             return false;
+        }
         if (orderArray == null) {
-            if (other.orderArray != null)
+            if (other.orderArray != null) {
                 return false;
-        } else if (!orderArray.equals(other.orderArray))
+            }
+        } else if (!orderArray.equals(other.orderArray)) {
             return false;
+        }
         if (primitives == null) {
-            if (other.primitives != null)
+            if (other.primitives != null) {
                 return false;
-        } else if (!primitives.equals(other.primitives))
+            }
+        } else if (!primitives.equals(other.primitives)) {
             return false;
-        if (statesLong != other.statesLong)
+        }
+        if (statesLong != other.statesLong) {
             return false;
-        if (statesShort != other.statesShort)
-            return false;
-        return true;
+        }
+
+        return statesShort != other.statesShort;
     }
 
     @Override

@@ -70,33 +70,44 @@ public abstract class BaseContact implements Serializable {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
+        if (this == obj) {
             return true;
-        if (obj == null)
+        }
+        if (obj == null) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (getClass() != obj.getClass()) {
             return false;
+        }
         BaseContact other = (BaseContact) obj;
         if (firstName == null) {
-            if (other.firstName != null)
+            if (other.firstName != null) {
                 return false;
-        } else if (!firstName.equals(other.firstName))
+            }
+        } else if (!firstName.equals(other.firstName)) {
             return false;
+        }
         if (lastName == null) {
-            if (other.lastName != null)
+            if (other.lastName != null) {
                 return false;
-        } else if (!lastName.equals(other.lastName))
+            }
+        } else if (!lastName.equals(other.lastName)) {
             return false;
+        }
         if (phoneNumber == null) {
-            if (other.phoneNumber != null)
+            if (other.phoneNumber != null) {
                 return false;
-        } else if (!phoneNumber.equals(other.phoneNumber))
+            }
+        } else if (!phoneNumber.equals(other.phoneNumber)) {
             return false;
+        }
         if (zipCode == null) {
-            if (other.zipCode != null)
+            if (other.zipCode != null) {
                 return false;
-        } else if (!zipCode.equals(other.zipCode))
+            }
+        } else if (!zipCode.equals(other.zipCode)) {
             return false;
+        }
         return true;
     }
 

@@ -44,11 +44,11 @@ public class SchemaInspector implements JsonInspector {
             JsonDocument jsonDocument = AtlasJsonModelFactory.createJsonDocument();
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(schema);
-            
+
             Map<String, JsonNode> definitionMap = new HashMap<>();
             populateDefinitions(rootNode, definitionMap);
             JsonComplexType rootNodeType = createJsonComplexType(null, rootNode, null, definitionMap);
-            
+
             if (rootNodeType.getCollectionType() == CollectionType.LIST) {
                 logger.warn("Topmost array is not supported");
                 rootNodeType.getJsonFields().getJsonField().clear();
@@ -61,7 +61,7 @@ public class SchemaInspector implements JsonInspector {
             } else {
                 jsonDocument.getFields().getField().add(rootNodeType);
             }
-            
+
             return jsonDocument;
         } catch (Exception e) {
             throw new JsonInspectionException(e);
@@ -70,7 +70,7 @@ public class SchemaInspector implements JsonInspector {
 
     /**
      * Store the JsonNode rather than pre-built JsonComplexType as path needs to be filled by their own.
-     * 
+     *
      * TODO do we need to honor pointer reference vs. full URI? as long as the pointer is always from root document,
      * the pointer works as a unique key, therefore not necessary to resolve to full URI.
      */
@@ -120,7 +120,7 @@ public class SchemaInspector implements JsonInspector {
             answer.setPath((parentPath != null ? parentPath.concat("/") : "/").concat(name));
         }
         answer.setStatus(FieldStatus.SUPPORTED);
-        
+
         populateDefinitions(value, definitionMap);
         value = resolveReference(value, definitionMap);
 
@@ -168,14 +168,14 @@ public class SchemaInspector implements JsonInspector {
         if (uri == null || uri.isEmpty()) {
             return node;
         }
-        
+
         logger.trace("Resolving JSON schema reference '{}'", uri);
         // internal reference precedes even if it's full URL
         JsonNode def = definitionMap.get(uri);
         if (def != null) {
             return def;
         }
-        
+
         // then try external resource
         try {
             JsonNode external = new ObjectMapper().readTree(new URI(uri).toURL().openStream());

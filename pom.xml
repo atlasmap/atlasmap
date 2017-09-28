@@ -262,6 +262,15 @@
                     <version>${spring-boot.version}</version>
                 </plugin>
                 <plugin>
+                    <artifactId>maven-checkstyle-plugin</artifactId>
+                    <configuration>
+                        <configLocation>../checkstyle.xml</configLocation>
+                        <propertyExpansion>
+                            checkstyle.suppression.file=../checkstyle-suppressions.xml
+                        </propertyExpansion>
+                    </configuration>
+                </plugin>
+                <plugin>
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>${maven-compiler-plugin.version}</version>
                 </plugin>
@@ -386,6 +395,15 @@
             </plugins>
         </pluginManagement>
         <plugins>
+            <plugin>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <configuration>
+                    <configLocation>checkstyle.xml</configLocation>
+                    <propertyExpansion>
+                        checkstyle.suppression.file=checkstyle-suppressions.xml
+                    </propertyExpansion>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-deploy-plugin</artifactId>

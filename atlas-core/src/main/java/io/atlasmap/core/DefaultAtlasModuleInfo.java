@@ -54,10 +54,11 @@ public class DefaultAtlasModuleInfo implements AtlasModuleInfo, AtlasModuleInfoM
 
     @Override
     public String[] getDataFormats() {
-        if (formats != null)
+        if (formats != null) {
             return formats.toArray(new String[formats.size()]);
-        else
+        } else {
             return new String[0];
+        }
     }
 
     @Override

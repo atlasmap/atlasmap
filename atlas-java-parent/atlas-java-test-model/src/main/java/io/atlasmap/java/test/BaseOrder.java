@@ -70,23 +70,30 @@ public abstract class BaseOrder implements Serializable {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
+        if (this == obj) {
             return true;
-        if (obj == null)
+        }
+        if (obj == null) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (getClass() != obj.getClass()) {
             return false;
+        }
         BaseOrder other = (BaseOrder) obj;
         if (address == null) {
-            if (other.address != null)
+            if (other.address != null) {
                 return false;
-        } else if (!address.equals(other.address))
+            }
+        } else if (!address.equals(other.address)) {
             return false;
+        }
         if (contact == null) {
-            if (other.contact != null)
+            if (other.contact != null) {
                 return false;
-        } else if (!contact.equals(other.contact))
+            }
+        } else if (!contact.equals(other.contact)) {
             return false;
+        }
         return true;
     }
 

@@ -122,7 +122,7 @@ public class BooleanConverter implements AtlasPrimitiveConverter<Boolean> {
         if (value == null) {
             return null;
         }
-        return value ? 1l : 0l;
+        return value ? 1L : 0L;
     }
 
     /**

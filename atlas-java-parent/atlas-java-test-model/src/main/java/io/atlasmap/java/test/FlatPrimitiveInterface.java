@@ -17,139 +17,139 @@ package io.atlasmap.java.test;
 
 public interface FlatPrimitiveInterface {
 
-    public int getIntField();
+    int getIntField();
 
-    public void setIntField(int intField);
+    void setIntField(int intField);
 
-    public short getShortField();
+    short getShortField();
 
-    public void setShortField(short shortField);
+    void setShortField(short shortField);
 
-    public long getLongField();
+    long getLongField();
 
-    public void setLongField(long longField);
+    void setLongField(long longField);
 
-    public double getDoubleField();
+    double getDoubleField();
 
-    public void setDoubleField(double doubleField);
+    void setDoubleField(double doubleField);
 
-    public float getFloatField();
+    float getFloatField();
 
-    public void setFloatField(float floatField);
+    void setFloatField(float floatField);
 
-    public boolean isBooleanField();
+    boolean isBooleanField();
 
-    public void setBooleanField(boolean booleanField);
+    void setBooleanField(boolean booleanField);
 
-    public char getCharField();
+    char getCharField();
 
-    public void setCharField(char charField);
+    void setCharField(char charField);
 
-    public byte getByteField();
+    byte getByteField();
 
-    public void setByteField(byte byteField);
+    void setByteField(byte byteField);
 
-    public Integer getBoxedIntField();
+    Integer getBoxedIntField();
 
-    public void setBoxedIntField(Integer boxedIntField);
+    void setBoxedIntField(Integer boxedIntField);
 
-    public Short getBoxedShortField();
+    Short getBoxedShortField();
 
-    public void setBoxedShortField(Short boxedShortField);
+    void setBoxedShortField(Short boxedShortField);
 
-    public Long getBoxedLongField();
+    Long getBoxedLongField();
 
-    public void setBoxedLongField(Long boxedLongField);
+    void setBoxedLongField(Long boxedLongField);
 
-    public Double getBoxedDoubleField();
+    Double getBoxedDoubleField();
 
-    public void setBoxedDoubleField(Double boxedDoubleField);
+    void setBoxedDoubleField(Double boxedDoubleField);
 
-    public Float getBoxedFloatField();
+    Float getBoxedFloatField();
 
-    public void setBoxedFloatField(Float boxedFloatField);
+    void setBoxedFloatField(Float boxedFloatField);
 
-    public Boolean getBoxedBooleanField();
+    Boolean getBoxedBooleanField();
 
-    public void setBoxedBooleanField(Boolean boxedBooleanField);
+    void setBoxedBooleanField(Boolean boxedBooleanField);
 
-    public Character getBoxedCharField();
+    Character getBoxedCharField();
 
-    public void setBoxedCharField(Character boxedCharField);
+    void setBoxedCharField(Character boxedCharField);
 
-    public Byte getBoxedByteField();
+    Byte getBoxedByteField();
 
-    public void setBoxedByteField(Byte boxedByteField);
+    void setBoxedByteField(Byte boxedByteField);
 
-    public int[] getIntArrayField();
+    int[] getIntArrayField();
 
-    public void setIntArrayField(int[] intArrayField);
+    void setIntArrayField(int[] intArrayField);
 
-    public short[] getShortArrayField();
+    short[] getShortArrayField();
 
-    public void setShortArrayField(short[] shortArrayField);
+    void setShortArrayField(short[] shortArrayField);
 
-    public long[] getLongArrayField();
+    long[] getLongArrayField();
 
-    public void setLongArrayField(long[] longArrayField);
+    void setLongArrayField(long[] longArrayField);
 
-    public double[] getDoubleArrayField();
+    double[] getDoubleArrayField();
 
-    public void setDoubleArrayField(double[] doubleArrayField);
+    void setDoubleArrayField(double[] doubleArrayField);
 
-    public float[] getFloatArrayField();
+    float[] getFloatArrayField();
 
-    public void setFloatArrayField(float[] floatArrayField);
+    void setFloatArrayField(float[] floatArrayField);
 
-    public boolean[] getBooleanArrayField();
+    boolean[] getBooleanArrayField();
 
-    public void setBooleanArrayField(boolean[] booleanArrayField);
+    void setBooleanArrayField(boolean[] booleanArrayField);
 
-    public char[] getCharArrayField();
+    char[] getCharArrayField();
 
-    public void setCharArrayField(char[] charArrayField);
+    void setCharArrayField(char[] charArrayField);
 
-    public byte[] getByteArrayField();
+    byte[] getByteArrayField();
 
-    public void setByteArrayField(byte[] byteArrayField);
+    void setByteArrayField(byte[] byteArrayField);
 
-    public Integer[] getBoxedIntArrayField();
+    Integer[] getBoxedIntArrayField();
 
-    public void setBoxedIntArrayField(Integer[] boxedIntArrayField);
+    void setBoxedIntArrayField(Integer[] boxedIntArrayField);
 
-    public Short[] getBoxedShortArrayField();
+    Short[] getBoxedShortArrayField();
 
-    public void setBoxedShortArrayField(Short[] boxedShortArrayField);
+    void setBoxedShortArrayField(Short[] boxedShortArrayField);
 
-    public Long[] getBoxedLongArrayField();
+    Long[] getBoxedLongArrayField();
 
-    public void setBoxedLongArrayField(Long[] boxedLongArrayField);
+    void setBoxedLongArrayField(Long[] boxedLongArrayField);
 
-    public Double[] getBoxedDoubleArrayField();
+    Double[] getBoxedDoubleArrayField();
 
-    public void setBoxedDoubleArrayField(Double[] boxedDoubleArrayField);
+    void setBoxedDoubleArrayField(Double[] boxedDoubleArrayField);
 
-    public Float[] getBoxedFloatArrayField();
+    Float[] getBoxedFloatArrayField();
 
-    public void setBoxedFloatArrayField(Float[] boxedFloatArrayField);
+    void setBoxedFloatArrayField(Float[] boxedFloatArrayField);
 
-    public Boolean[] getBoxedBooleanArrayField();
+    Boolean[] getBoxedBooleanArrayField();
 
-    public void setBoxedBooleanArrayField(Boolean[] boxedBooleanArrayField);
+    void setBoxedBooleanArrayField(Boolean[] boxedBooleanArrayField);
 
-    public Character[] getBoxedCharArrayField();
+    Character[] getBoxedCharArrayField();
 
-    public void setBoxedCharArrayField(Character[] boxedCharArrayField);
+    void setBoxedCharArrayField(Character[] boxedCharArrayField);
 
-    public Byte[] getBoxedByteArrayField();
+    Byte[] getBoxedByteArrayField();
 
-    public void setBoxedByteArrayField(Byte[] boxedByteArrayField);
+    void setBoxedByteArrayField(Byte[] boxedByteArrayField);
 
-    public String getBoxedStringField();
+    String getBoxedStringField();
 
-    public void setBoxedStringField(String boxedStringField);
+    void setBoxedStringField(String boxedStringField);
 
-    public String[] getBoxedStringArrayField();
+    String[] getBoxedStringArrayField();
 
-    public void setBoxedStringArrayField(String[] boxedStringArrayField);
+    void setBoxedStringArrayField(String[] boxedStringArrayField);
 }

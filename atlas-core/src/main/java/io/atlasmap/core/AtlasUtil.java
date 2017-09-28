@@ -78,11 +78,13 @@ public class AtlasUtil {
 
     protected static List<String> getUriPartsAsArray(String atlasUri) {
 
-        if (atlasUri == null)
+        if (atlasUri == null) {
             return null;
+        }
 
-        if (AtlasUtil.isEmpty(atlasUri))
+        if (AtlasUtil.isEmpty(atlasUri)) {
             return Arrays.asList(new String[0]);
+        }
 
         validateUri(atlasUri);
 
@@ -103,46 +105,50 @@ public class AtlasUtil {
 
     /**
      * Returns the "scheme" piece of an Atlas uri
-     * 
+     *
      * ie. atlas:stringseparated:csv?quoteChar=&quot;
-     * 
-     * 
+     *
+     *
      * scheme: atlas module: stringseparated remaining: csv config: quoteChar=&quot;
-     * 
+     *
      * if atlasUri is null, returns null. if empty or no scheme present, returns
      * empty. otherwise, the $scheme is returned
-     * 
+     *
      * @return
-     * 
+     *
      */
     public static String getUriScheme(String atlasUri) {
         List<String> uriA = AtlasUtil.getUriPartsAsArray(atlasUri);
-        if (uriA == null || uriA.size() < 1 || isEmpty(uriA.get(0)))
+        if (uriA == null || uriA.size() < 1 || isEmpty(uriA.get(0))) {
             return null;
+        }
 
         return uriA.get(0);
     }
 
     public static String getUriModule(String atlasUri) {
         List<String> uriA = AtlasUtil.getUriPartsAsArray(atlasUri);
-        if (uriA == null || uriA.size() < 2 || isEmpty(uriA.get(1)))
+        if (uriA == null || uriA.size() < 2 || isEmpty(uriA.get(1))) {
             return null;
+        }
 
         return uriA.get(1);
     }
 
     public static String getUriDataType(String atlasUri) {
         List<String> uriA = AtlasUtil.getUriPartsAsArray(atlasUri);
-        if (uriA == null || uriA.size() < 3 || isEmpty(uriA.get(2)))
+        if (uriA == null || uriA.size() < 3 || isEmpty(uriA.get(2))) {
             return null;
+        }
 
         return uriA.get(2);
     }
 
     public static String getUriModuleVersion(String atlasUri) {
         List<String> uriA = AtlasUtil.getUriPartsAsArray(atlasUri);
-        if (uriA == null || uriA.size() < 4 || isEmpty(uriA.get(3)))
+        if (uriA == null || uriA.size() < 4 || isEmpty(uriA.get(3))) {
             return null;
+        }
 
         return uriA.get(3);
     }
@@ -158,12 +164,14 @@ public class AtlasUtil {
 
     public static Map<String, String> getUriParameters(String atlasUri) {
 
-        if (atlasUri == null)
+        if (atlasUri == null) {
             return null;
+        }
 
         Map<String, String> params = new HashMap<String, String>();
-        if (AtlasUtil.isEmpty(atlasUri))
+        if (AtlasUtil.isEmpty(atlasUri)) {
             return params;
+        }
 
         validateUri(atlasUri);
 
@@ -172,8 +180,9 @@ public class AtlasUtil {
             pass1 = atlasUri.split("\\?", 2);
         }
 
-        if (pass1 == null || pass1.length < 2 || pass1[1] == null || pass1[1].length() < 1)
+        if (pass1 == null || pass1.length < 2 || pass1[1] == null || pass1[1].length() < 1) {
             return params;
+        }
 
         String allParams = null;
         try {

@@ -326,8 +326,9 @@ public class NumberFieldActions implements AtlasFieldAction {
             for (byte e : bin) {
                 binList.add(e);
             }
-            if (numberType == null)
+            if (numberType == null) {
                 numberType = NumberType.BYTE;
+            }
             inputs = binList;
         } else {
             throw new IllegalArgumentException(
