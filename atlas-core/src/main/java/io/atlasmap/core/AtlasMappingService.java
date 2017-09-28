@@ -47,7 +47,7 @@ public class AtlasMappingService implements Serializable {
 
         private String value;
 
-        private AtlasMappingFormat(String value) {
+        AtlasMappingFormat(String value) {
             this.value = value;
         }
 

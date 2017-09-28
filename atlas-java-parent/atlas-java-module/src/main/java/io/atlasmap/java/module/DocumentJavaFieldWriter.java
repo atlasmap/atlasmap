@@ -30,7 +30,7 @@ public class DocumentJavaFieldWriter {
     private List<String> processedPaths = new LinkedList<>();
 
     public interface JavaFieldWriterValueConverter {
-        public Object convertValue(Object parentObject, Field outputField) throws AtlasException;
+        Object convertValue(Object parentObject, Field outputField) throws AtlasException;
     }
 
     public DocumentJavaFieldWriter() {

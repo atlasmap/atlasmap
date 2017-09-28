@@ -25,7 +25,7 @@ public enum StringDelimiter {
     private String name;
     private String value;
 
-    private StringDelimiter(String name, String value) {
+    StringDelimiter(String name, String value) {
         this.name = name;
         this.value = value;
     }

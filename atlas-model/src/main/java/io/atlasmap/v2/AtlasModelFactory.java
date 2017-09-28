@@ -15,14 +15,6 @@
  */
 package io.atlasmap.v2;
 
-import io.atlasmap.v2.MockField;
-import io.atlasmap.v2.AtlasMapping;
-import io.atlasmap.v2.Collection;
-import io.atlasmap.v2.Mapping;
-import io.atlasmap.v2.Mappings;
-import io.atlasmap.v2.LookupTables;
-import io.atlasmap.v2.Properties;
-
 public class AtlasModelFactory {
 
     @SuppressWarnings("unchecked")

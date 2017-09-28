@@ -15,13 +15,34 @@
  */
 package io.atlasmap.xml.inspect;
 
-import com.sun.xml.xsom.*;
+import com.sun.xml.xsom.XSAttributeDecl;
+import com.sun.xml.xsom.XSAttributeUse;
+import com.sun.xml.xsom.XSComplexType;
+import com.sun.xml.xsom.XSElementDecl;
+import com.sun.xml.xsom.XSModelGroup;
+import com.sun.xml.xsom.XSModelGroupDecl;
+import com.sun.xml.xsom.XSParticle;
+import com.sun.xml.xsom.XSRestrictionSimpleType;
+import com.sun.xml.xsom.XSSchema;
+import com.sun.xml.xsom.XSSchemaSet;
+import com.sun.xml.xsom.XSSimpleType;
+import com.sun.xml.xsom.XSTerm;
 import com.sun.xml.xsom.parser.XSOMParser;
 import com.sun.xml.xsom.util.DomAnnotationParserFactory;
 import io.atlasmap.v2.CollectionType;
 import io.atlasmap.v2.FieldType;
 import io.atlasmap.v2.Fields;
-import io.atlasmap.xml.v2.*;
+import io.atlasmap.xml.v2.AtlasXmlModelFactory;
+import io.atlasmap.xml.v2.Restriction;
+import io.atlasmap.xml.v2.RestrictionType;
+import io.atlasmap.xml.v2.Restrictions;
+import io.atlasmap.xml.v2.XmlComplexType;
+import io.atlasmap.xml.v2.XmlDocument;
+import io.atlasmap.xml.v2.XmlField;
+import io.atlasmap.xml.v2.XmlFields;
+import io.atlasmap.xml.v2.XmlNamespace;
+import io.atlasmap.xml.v2.XmlNamespaces;
+
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.SAXParserFactory;

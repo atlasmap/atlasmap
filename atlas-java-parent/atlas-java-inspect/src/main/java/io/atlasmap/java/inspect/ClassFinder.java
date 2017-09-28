@@ -20,7 +20,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-/* 
+/**
  * ClassFinder - from: http://stackoverflow.com/questions/15519626/how-to-get-all-classes-names-in-a-package
  */
 public class ClassFinder {

@@ -9,3 +9,6 @@ node_modules
 pom.xml.versionsBackup
 
 .DS_Store
+
+.checkstyle
+checkstyle.cache

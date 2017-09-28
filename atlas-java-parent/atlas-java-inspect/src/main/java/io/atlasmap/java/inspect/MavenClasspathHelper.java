@@ -36,8 +36,8 @@ public class MavenClasspathHelper {
 
     private static final Logger logger = LoggerFactory.getLogger(MavenClasspathHelper.class);
 
-    private long processCheckInterval = 1000l;
-    private long processMaxExecutionTime = 5000l;
+    private long processCheckInterval = 1000L;
+    private long processMaxExecutionTime = 5000L;
     private String baseFolder = System.getProperty("java.io.tmpdir");
     public static final String WORKING_FOLDER_PREFIX = "atlas-mapping-mvn-";
 

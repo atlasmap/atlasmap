@@ -83,8 +83,9 @@ public class DefaultAtlasConversionService implements AtlasConversionService {
         // prefer the custom converter over the primitive
         if (primitiveConverter.isPresent() && !customConverter.isPresent()) {
             return primitiveConverter;
-        } else
+        } else {
             return customConverter;
+        }
     }
 
     @Override
@@ -201,40 +202,41 @@ public class DefaultAtlasConversionService implements AtlasConversionService {
         }
 
         Class<?> clazz = sourceValue.getClass();
-        if (clazz == null)
+        if (clazz == null) {
             return clazz;
-        if (boolean.class.getName().equals(clazz.getName()))
+        } else if (boolean.class.getName().equals(clazz.getName())) {
             return Boolean.valueOf((boolean) sourceValue);
-        if (Boolean.class.getName().equals(clazz.getName()))
+        } else if (Boolean.class.getName().equals(clazz.getName())) {
             return Boolean.valueOf((Boolean) sourceValue);
-        if (byte.class.getName().equals(clazz.getName()))
+        } else if (byte.class.getName().equals(clazz.getName())) {
             return Byte.valueOf((byte) sourceValue);
-        if (Byte.class.getName().equals(clazz.getName()))
+        } else if (Byte.class.getName().equals(clazz.getName())) {
             return Byte.valueOf((Byte) sourceValue);
-        if (char.class.getName().equals(clazz.getName()))
+        } else if (char.class.getName().equals(clazz.getName())) {
             return Character.valueOf((char) sourceValue);
-        if (Character.class.getName().equals(clazz.getName()))
+        } else if (Character.class.getName().equals(clazz.getName())) {
             return Character.valueOf((Character) sourceValue);
-        if (double.class.getName().equals(clazz.getName()))
+        } else if (double.class.getName().equals(clazz.getName())) {
             return Double.valueOf((double) sourceValue);
-        if (Double.class.getName().equals(clazz.getName()))
+        } else if (Double.class.getName().equals(clazz.getName())) {
             return Double.valueOf((Double) sourceValue);
-        if (float.class.getName().equals(clazz.getName()))
+        } else if (float.class.getName().equals(clazz.getName())) {
             return Float.valueOf((float) sourceValue);
-        if (Float.class.getName().equals(clazz.getName()))
+        } else if (Float.class.getName().equals(clazz.getName())) {
             return Float.valueOf((Float) sourceValue);
-        if (int.class.getName().equals(clazz.getName()))
+        } else if (int.class.getName().equals(clazz.getName())) {
             return Integer.valueOf((int) sourceValue);
-        if (Integer.class.getName().equals(clazz.getName()))
+        } else if (Integer.class.getName().equals(clazz.getName())) {
             return Integer.valueOf((Integer) sourceValue);
-        if (long.class.getName().equals(clazz.getName()))
+        } else if (long.class.getName().equals(clazz.getName())) {
             return Long.valueOf((long) sourceValue);
-        if (Long.class.getName().equals(clazz.getName()))
+        } else if (Long.class.getName().equals(clazz.getName())) {
             return Long.valueOf((Long) sourceValue);
-        if (short.class.getName().equals(clazz.getName()))
+        } else if (short.class.getName().equals(clazz.getName())) {
             return Short.valueOf((short) sourceValue);
-        if (Short.class.getName().equals(clazz.getName()))
+        } else if (Short.class.getName().equals(clazz.getName())) {
             return Short.valueOf((Short) sourceValue);
+        }
 
         // can't count on java copy
         return sourceValue;
@@ -307,8 +309,9 @@ public class DefaultAtlasConversionService implements AtlasConversionService {
 
     @Override
     public Boolean isPrimitive(String className) {
-        if (className == null)
+        if (className == null) {
             return false;
+        }
         if (PRIMITIVE_CLASSNAMES.contains(className)) {
             return true;
         }
@@ -317,8 +320,9 @@ public class DefaultAtlasConversionService implements AtlasConversionService {
 
     @Override
     public Boolean isPrimitive(Class<?> clazz) {
-        if (clazz == null)
+        if (clazz == null) {
             return false;
+        }
         if (PRIMITIVE_CLASSNAMES.contains(clazz.getCanonicalName())) {
             return true;
         }
@@ -327,8 +331,9 @@ public class DefaultAtlasConversionService implements AtlasConversionService {
 
     @Override
     public Boolean isPrimitive(FieldType fieldType) {
-        if (fieldType == null)
+        if (fieldType == null) {
             return false;
+        }
         if (Arrays
                 .asList(FieldType.BOOLEAN, FieldType.BYTE, FieldType.CHAR, FieldType.DECIMAL, FieldType.DOUBLE,
                         FieldType.FLOAT, FieldType.INTEGER, FieldType.LONG, FieldType.SHORT, FieldType.STRING)
@@ -340,8 +345,9 @@ public class DefaultAtlasConversionService implements AtlasConversionService {
 
     @Override
     public Boolean isBoxedPrimitive(Class<?> clazz) {
-        if (clazz == null)
+        if (clazz == null) {
             return false;
+        }
         if (BOXED_PRIMITIVE_CLASSNAMES.contains(clazz.getCanonicalName())) {
             return true;
         }
@@ -350,40 +356,41 @@ public class DefaultAtlasConversionService implements AtlasConversionService {
 
     @Override
     public Class<?> boxOrUnboxPrimitive(Class<?> clazz) {
-        if (clazz == null)
+        if (clazz == null) {
             return clazz;
-        if (boolean.class.getName().equals(clazz.getName()))
+        } else if (boolean.class.getName().equals(clazz.getName())) {
             return Boolean.class;
-        if (Boolean.class.getName().equals(clazz.getName()))
+        } else if (Boolean.class.getName().equals(clazz.getName())) {
             return boolean.class;
-        if (byte.class.getName().equals(clazz.getName()))
+        } else if (byte.class.getName().equals(clazz.getName())) {
             return Byte.class;
-        if (Byte.class.getName().equals(clazz.getName()))
+        } else if (Byte.class.getName().equals(clazz.getName())) {
             return byte.class;
-        if (char.class.getName().equals(clazz.getName()))
+        } else if (char.class.getName().equals(clazz.getName())) {
             return Character.class;
-        if (Character.class.getName().equals(clazz.getName()))
+        } else if (Character.class.getName().equals(clazz.getName())) {
             return char.class;
-        if (double.class.getName().equals(clazz.getName()))
+        } else if (double.class.getName().equals(clazz.getName())) {
             return Double.class;
-        if (Double.class.getName().equals(clazz.getName()))
+        } else if (Double.class.getName().equals(clazz.getName())) {
             return double.class;
-        if (float.class.getName().equals(clazz.getName()))
+        } else if (float.class.getName().equals(clazz.getName())) {
             return Float.class;
-        if (Float.class.getName().equals(clazz.getName()))
+        } else if (Float.class.getName().equals(clazz.getName())) {
             return float.class;
-        if (int.class.getName().equals(clazz.getName()))
+        } else if (int.class.getName().equals(clazz.getName())) {
             return Integer.class;
-        if (Integer.class.getName().equals(clazz.getName()))
+        } else if (Integer.class.getName().equals(clazz.getName())) {
             return int.class;
-        if (long.class.getName().equals(clazz.getName()))
+        } else if (long.class.getName().equals(clazz.getName())) {
             return Long.class;
-        if (Long.class.getName().equals(clazz.getName()))
+        } else if (Long.class.getName().equals(clazz.getName())) {
             return long.class;
-        if (short.class.getName().equals(clazz.getName()))
+        } else if (short.class.getName().equals(clazz.getName())) {
             return Short.class;
-        if (Short.class.getName().equals(clazz.getName()))
+        } else if (Short.class.getName().equals(clazz.getName())) {
             return short.class;
+        }
         return clazz;
     }
 

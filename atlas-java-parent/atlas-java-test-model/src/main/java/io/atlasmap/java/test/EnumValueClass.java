@@ -38,3 +38,4 @@ public enum EnumValueClass {
         throw new IllegalArgumentException(v);
     }
 }
+

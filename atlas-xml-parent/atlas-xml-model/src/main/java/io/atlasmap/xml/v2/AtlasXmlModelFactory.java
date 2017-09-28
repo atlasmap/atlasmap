@@ -21,8 +21,6 @@ import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldStatus;
 import io.atlasmap.v2.FieldType;
 import io.atlasmap.v2.Fields;
-import io.atlasmap.xml.v2.XmlDocument;
-import io.atlasmap.xml.v2.XmlField;
 
 public class AtlasXmlModelFactory {
 
