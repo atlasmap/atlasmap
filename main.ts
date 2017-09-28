@@ -2,7 +2,8 @@ import { app, BrowserWindow, screen } from 'electron';
 import * as path from 'path';
 
 const { spawn } = require('child_process');
-
+const fs = require('fs');
+const os = require('os');
 
 let win, serve;
 const args = process.argv.slice(1);
@@ -30,9 +31,9 @@ function createWindow() {
   win.loadURL('file://' + __dirname + '/index.html');
 
   // Open the DevTools.
-  if (serve) {
+  //if (serve) {
     win.webContents.openDevTools();
-  }
+  //}
 
   // Emitted when the window is closed.
   win.on('closed', () => {
@@ -45,7 +46,17 @@ function createWindow() {
 
 try {
   
-  const javaProcess = spawn('java', ['-jar', __dirname+'/assets/runtime-1.20.0.jar'], { shell: true, stdio:'inherit' });
+  var jarFile = __dirname+'/assets/runtime-1.20.0.jar';
+  console.log("jarFile: ", jarFile);
+  if( __dirname.endsWith("/app.asar") ) {    
+    var data = fs.readFileSync(jarFile);
+    jarFile = os.homedir()+"/.atlasmap-runtime-1.20.0.jar"
+    console.log("unpacking to jarFile: ", jarFile);
+    fs.writeFileSync(jarFile, data);
+  }
+
+  console.log("Booting java runtime...");
+  const javaProcess = spawn('java', ['-jar', jarFile], { shell: true, stdio:'inherit' });
 
   // This method will be called when Electron has finished
   // initialization and is ready to create browser windows.
