@@ -56,7 +56,13 @@ try {
   }
 
   console.log("Booting java runtime...");
-  const javaProcess = spawn('java', ['-jar', jarFile], { shell: true, stdio:'inherit' });
+  var javaProcess = spawn('java', ['-jar', jarFile], { shell: true, stdio:'inherit' });
+
+  app.on('quit', ()=>{
+      console.log("Stopping java runtime...");
+      javaProcess.kill();
+      javaProcess = null;
+  });
 
   // This method will be called when Electron has finished
   // initialization and is ready to create browser windows.
@@ -68,7 +74,6 @@ try {
     // On OS X it is common for applications and their menu bar
     // to stay active until the user quits explicitly with Cmd + Q
     if (process.platform !== 'darwin') {
-      javaProcess.kill();
       app.quit();
     }
   });
