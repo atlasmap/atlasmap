@@ -188,7 +188,7 @@ public class AtlasService extends Application {
                 sMap.getStringMapEntry().add(mapEntry);
             }
         } catch (JAXBException e) {
-            throw new WebApplicationException(e.getMessage(), Status.INTERNAL_SERVER_ERROR);
+            throw new WebApplicationException(e.getMessage(), e, Status.INTERNAL_SERVER_ERROR);
         }
 
         return Response.ok().header(ACCESS_CONTROL_ALLOW_ORIGIN, DEFAULT_ACCESS_CONTROL_ALLOW_ORIGIN)
@@ -271,7 +271,7 @@ public class AtlasService extends Application {
         try {
             return validateMapping(mapping, uriInfo);
         } catch (AtlasException | IOException e) {
-            throw new WebApplicationException(e.getMessage(), Status.INTERNAL_SERVER_ERROR);
+            throw new WebApplicationException(e.getMessage(), e, Status.INTERNAL_SERVER_ERROR);
         }
     }
 

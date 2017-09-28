@@ -28,6 +28,8 @@ import io.atlasmap.spi.AtlasModuleMode;
 import io.atlasmap.v2.AtlasMapping;
 import io.atlasmap.v2.Audits;
 import io.atlasmap.v2.BaseMapping;
+import io.atlasmap.v2.DataSource;
+import io.atlasmap.v2.DataSourceType;
 import io.atlasmap.v2.Validation;
 import io.atlasmap.v2.Validations;
 import org.slf4j.Logger;
@@ -345,19 +347,27 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
     }
 
     public String getSourceModuleUri() {
-        if (getMapping() != null && getMapping().getDataSource() != null
-                && getMapping().getDataSource().get(0) != null) {
-            return getMapping().getDataSource().get(0).getUri();
-        }
-        return null;
+        return doGetModuleUri(DataSourceType.SOURCE);
     }
 
     public String getTargetModuleUri() {
-        if (getMapping() != null && getMapping().getDataSource() != null
-                && getMapping().getDataSource().get(1) != null) {
-            return getMapping().getDataSource().get(1).getUri();
+        return doGetModuleUri(DataSourceType.TARGET);
+    }
+
+    private String doGetModuleUri(DataSourceType type) {
+        DataSource sourceds = null;
+        if (getMapping() != null && getMapping().getDataSource() != null) {
+            for (DataSource ds : getMapping().getDataSource()) {
+                if (ds.getDataSourceType() == type) {
+                    if (sourceds == null) {
+                        sourceds = ds;
+                    } else {
+                        logger.warn("Multiple {} DataSource found, ignoring '{}'", type, ds.getId());
+                    }
+                }
+            }
         }
-        return null;
+        return sourceds != null ? sourceds.getUri() : null;
     }
 
     @Override
