@@ -1,6 +1,9 @@
 import { app, BrowserWindow, screen } from 'electron';
 import * as path from 'path';
 
+const { spawn } = require('child_process');
+
+
 let win, serve;
 const args = process.argv.slice(1);
 serve = args.some(val => val === '--serve');
@@ -41,6 +44,8 @@ function createWindow() {
 }
 
 try {
+  
+  const javaProcess = spawn('java', ['-jar', __dirname+'/assets/runtime-1.20.0.jar'], { shell: true, stdio:'inherit' });
 
   // This method will be called when Electron has finished
   // initialization and is ready to create browser windows.
@@ -52,6 +57,7 @@ try {
     // On OS X it is common for applications and their menu bar
     // to stay active until the user quits explicitly with Cmd + Q
     if (process.platform !== 'darwin') {
+      javaProcess.kill();
       app.quit();
     }
   });

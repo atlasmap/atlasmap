@@ -1,17 +1,15 @@
 {
-  "name": "angular-electron",
-  "version": "1.9.0",
-  "description": "Angular 4 with Electron (Typescript + SASS + Hot Reload)",
-  "homepage": "https://github.com/maximegris/angular-electron",
+  "name": "atlasmap",
+  "version": "1.0.0",
+  "description": "The open source cross palform data mapper",
+  "homepage": "https://atlasmap.io",
   "author": {
-    "name": "Maxime GRIS",
-    "email": "maxime.gris@gmail.com"
+    "name": "Hiram Chirino",
+    "email": "hiram@hiramchirino.com"
   },
   "keywords": [
-    "angular",
-    "electron",
-    "typescript",
-    "sass"
+    "atlasmap",
+    "datamapper"
   ],
   "main": "main.js",
   "private": true,
@@ -21,7 +19,7 @@
     "start": "npm-run-all --parallel webpack:watch electron:serve",
     "webpack:watch": "webpack --watch",
     "start:web": "webpack-dev-server --content-base . --port 4200 --inline",
-    "build:electron:main": "tsc main.ts --outDir dist && copyfiles package.json dist && cd dist && npm install --prod && cd ..",
+    "build:electron:main": "./bin/download.sh && tsc main.ts --outDir dist && copyfiles package.json dist && cd dist && npm install --prod && cd ..",
     "build": "webpack --display-error-details && npm run build:electron:main",
     "build:prod": "cross-env NODE_ENV=production npm run build",
     "electron:serve": "npm run build:electron:main && electron ./dist --serve",
@@ -106,5 +104,5 @@
     "webpack": "3.6.0",
     "webpack-dev-server": "2.8.2"
   },
-  "license": "SEE LICENSE IN LICENSE.md"
+  "license": "ASL 2.0"
 }
