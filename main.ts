@@ -4,6 +4,22 @@ import * as path from 'path';
 const { spawn } = require('child_process');
 const fs = require('fs');
 const os = require('os');
+const net = require('net');
+
+
+function findOpenPort() {
+  const server = net.createServer((c) => {
+    c.close(c);
+  });
+  server.listen(0, () => {
+    console.log('server bound');
+  });
+  var port = server.address().port
+  server.close()
+  return port;
+}
+const atlasMapServicePort = findOpenPort()
+
 
 let win, serve;
 const args = process.argv.slice(1);
@@ -24,16 +40,19 @@ function createWindow() {
     x: 0,
     y: 0,
     width: size.width,
-    height: size.height
+    height: size.height,
+    webPreferences: {
+    'nodeIntegration': true
+    }
   });
 
   // and load the index.html of the app.
-  win.loadURL('file://' + __dirname + '/index.html');
+  win.loadURL('file://' + __dirname + '/index.html#'+encodeURIComponent(JSON.stringify({atlasMapServicePort:atlasMapServicePort})));
 
   // Open the DevTools.
-  //if (serve) {
+  if (serve) {
     win.webContents.openDevTools();
-  //}
+  }
 
   // Emitted when the window is closed.
   win.on('closed', () => {
@@ -55,8 +74,8 @@ try {
     fs.writeFileSync(jarFile, data);
   }
 
-  console.log("Booting java runtime...");
-  var javaProcess = spawn('java', ['-jar', jarFile], { shell: true, stdio:'inherit' });
+  console.log("Booting java runtime on port: ", atlasMapServicePort);
+  var javaProcess = spawn('java', ['-jar', jarFile, "--server.port="+atlasMapServicePort], { shell: true, stdio:'inherit' });
 
   app.on('quit', ()=>{
       console.log("Stopping java runtime...");
