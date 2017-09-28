@@ -135,6 +135,8 @@ export class AppComponent {
             //After you've sucessfully saved you *MUST* call this (don't call on error)
             c.mappingService.handleMappingSaveSuccess(saveHandler);
         });
+        
+        
     }
 
 }

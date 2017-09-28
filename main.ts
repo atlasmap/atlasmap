@@ -35,6 +35,7 @@ function createWindow() {
   const electronScreen = screen;
   const size = electronScreen.getPrimaryDisplay().workAreaSize;
 
+
   // Create the browser window.
   win = new BrowserWindow({
     x: 0,
@@ -46,12 +47,14 @@ function createWindow() {
     }
   });
 
-  // and load the index.html of the app.
-  win.loadURL('file://' + __dirname + '/index.html#'+encodeURIComponent(JSON.stringify({atlasMapServicePort:atlasMapServicePort})));
+  setTimeout(()=>{
+    // and load the index.html of the app.
+    win.loadURL('file://' + __dirname + '/index.html#'+encodeURIComponent(JSON.stringify({atlasMapServicePort:atlasMapServicePort})));
+  }, 1000*10 );
 
   // Open the DevTools.
   if (serve) {
-    win.webContents.openDevTools();
+     // win.webContents.openDevTools();
   }
 
   // Emitted when the window is closed.
