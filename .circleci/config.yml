@@ -1,0 +1,28 @@
+version: 2
+jobs:
+  build:
+    working_directory: /workspace
+    docker:
+    - image: node:7.9
+    environment:
+      CHROME_BIN: /usr/bin/chromium
+      DOCKER_VERSION: 17.04.0-ce
+
+    steps:
+
+    - checkout
+
+    - restore_cache:
+        key: atlasmap-ui-{{ checksum "package.json" }}
+
+    - run:
+        name: Install Dependencies
+        command: npm install
+
+    - save_cache:
+        key: atlasmap-ui-{{ checksum "package.json" }}
+
+    - run:
+        name: Lint
+        command: npm run lint
+
