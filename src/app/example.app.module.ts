@@ -26,17 +26,17 @@ import { DataMapperModule } from './lib/syndesis-data-mapper/data.mapper.module'
 
 @NgModule({
     declarations: [
-        AppComponent
+        AppComponent,
     ],
     imports: [
         BrowserModule,
         FormsModule,
         HttpModule,
         RouterModule.forRoot([]),
-        DataMapperModule
+        DataMapperModule,
     ],
     providers: [],
-    bootstrap: [AppComponent]
+    bootstrap: [AppComponent],
 })
 
 export class ExampleAppModule { }
