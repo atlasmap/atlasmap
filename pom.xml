@@ -223,6 +223,15 @@
         </pluginManagement>
         <plugins>
             <plugin>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <configuration>
+                    <configLocation>checkstyle.xml</configLocation>
+                    <propertyExpansion>
+                        checkstyle.suppression.file=checkstyle-suppressions.xml
+                    </propertyExpansion>
+                </configuration>
+            </plugin>
+            <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
                     <source>1.8</source>

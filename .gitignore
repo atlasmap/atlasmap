@@ -20,3 +20,6 @@ pom.xml.versionsBackup
 hs_err_pid*
 /target/
 .DS_Store
+
+.checkstyle
+checkstyle.cache

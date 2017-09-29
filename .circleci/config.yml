@@ -1,0 +1,24 @@
+version: 2
+jobs:
+  build:
+    docker:
+    - image: openjdk:8-jdk
+    environment:
+      MAVEN_OPTS: -Xmx128m
+      DOCKER_VERSION: 17.04.0-ce
+
+    steps:
+      - checkout
+
+      - run:
+          name: Maven
+          command: mvn install
+
+      - run:
+          name: Collect junit reports
+          command: |
+            mkdir ./junit/
+            find . -type f -regex ".*/target/.*-reports/.*xml" -exec cp {} ./junit/ \;
+
+      - store_test_results:
+          path: ./junit
