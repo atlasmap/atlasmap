@@ -21,6 +21,8 @@ jobs:
 
     - save_cache:
         key: atlasmap-ui-{{ checksum "package.json" }}
+        paths:
+        - ~/.m2
 
     - run:
         name: Lint
