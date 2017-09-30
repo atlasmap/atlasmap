@@ -12,7 +12,7 @@ jobs:
 
       - run:
           name: Maven
-          command: mvn install
+          command: ./mvnw install
 
       - run:
           name: Collect junit reports
