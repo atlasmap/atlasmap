@@ -15,7 +15,7 @@ jobs:
 
       - run:
           name: Maven
-          command: bash -x mvnw --batch-mode install
+          command: ./mvnw --batch-mode install
 
       - run:
           name: Collect junit reports
