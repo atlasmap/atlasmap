@@ -9,6 +9,8 @@ jobs:
       DOCKER_VERSION: 17.04.0-ce
 
     steps:
+      - setup_remote_docker
+
       - checkout
 
       - run:
