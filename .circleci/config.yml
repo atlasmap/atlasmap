@@ -1,10 +1,11 @@
 version: 2
 jobs:
   build:
+    working_directory: /workspace
     docker:
     - image: openjdk:8-jdk
     environment:
-      MAVEN_OPTS: -Xmx128m
+      MAVEN_OPTS: -Xmx512m
       DOCKER_VERSION: 17.04.0-ce
 
     steps:
@@ -12,7 +13,7 @@ jobs:
 
       - run:
           name: Maven
-          command: ./mvnw install
+          command: ./mvnw --batch-mode install
 
       - run:
           name: Collect junit reports
