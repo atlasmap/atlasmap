@@ -26,15 +26,17 @@ import io.atlasmap.api.AtlasContextFactory;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.api.AtlasSession;
 import io.atlasmap.core.AtlasMappingService.AtlasMappingFormat;
-import io.atlasmap.core.DefaultAtlasContext;
 import io.atlasmap.core.DefaultAtlasContextFactory;
 import io.atlasmap.v2.AtlasMapping;
 import io.atlasmap.v2.Audit;
+import io.atlasmap.v2.DataSource;
+import io.atlasmap.v2.DataSourceType;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
+import java.util.List;
 import java.util.Properties;
 
 import org.apache.camel.Exchange;
@@ -157,9 +159,10 @@ public class AtlasEndpoint extends ResourceEndpoint {
         String path = getResourceUri();
         ObjectHelper.notNull(path, "mappingUri");
 
-        String newResourceUri = exchange.getIn().getHeader(AtlasConstants.ATLAS_RESOURCE_URI, String.class);
+        Message incomingMessage = exchange.getIn();
+		String newResourceUri = incomingMessage.getHeader(AtlasConstants.ATLAS_RESOURCE_URI, String.class);
         if (newResourceUri != null) {
-            exchange.getIn().removeHeader(AtlasConstants.ATLAS_RESOURCE_URI);
+            incomingMessage.removeHeader(AtlasConstants.ATLAS_RESOURCE_URI);
 
             log.debug("{} set to {} creating new endpoint to handle exchange", AtlasConstants.ATLAS_RESOURCE_URI,
                     newResourceUri);
@@ -169,7 +172,7 @@ public class AtlasEndpoint extends ResourceEndpoint {
         }
 
         Reader reader;
-        String content = exchange.getIn().getHeader(AtlasConstants.ATLAS_MAPPING, String.class);
+        String content = incomingMessage.getHeader(AtlasConstants.ATLAS_MAPPING, String.class);
         if (content != null) {
             // use content from header
             reader = new StringReader(content);
@@ -178,7 +181,7 @@ public class AtlasEndpoint extends ResourceEndpoint {
                         getEndpointUri());
             }
             // remove the header to avoid it being propagated in the routing
-            exchange.getIn().removeHeader(AtlasConstants.ATLAS_MAPPING);
+            incomingMessage.removeHeader(AtlasConstants.ATLAS_MAPPING);
         } else {
             if (log.isDebugEnabled()) {
                 log.debug("Atlas mapping content read from resource {} with resourceUri: {} for endpoint {}",
@@ -200,7 +203,16 @@ public class AtlasEndpoint extends ResourceEndpoint {
 
         AtlasContext atlasContext = ((DefaultAtlasContextFactory) getAtlasContextFactory()).createContext(atlasMapping);
         AtlasSession atlasSession = atlasContext.createSession();
-        atlasSession.setInput(exchange.getIn().getBody());
+
+        boolean sourceIsXmlOrJson = isSourceXmlOrJson(atlasMapping);
+        Object body = incomingMessage.getBody();
+        if (sourceIsXmlOrJson && body instanceof InputStream) {
+            // read the whole stream into a String
+            // the XML and JSON parsers expect that
+            body = incomingMessage.getBody(String.class);
+        }
+
+        atlasSession.setInput(body);
         atlasContext.process(atlasSession);
 
         for (Audit audit : atlasSession.getAudits().getAudit()) {
@@ -214,7 +226,23 @@ public class AtlasEndpoint extends ResourceEndpoint {
         // now lets output the results to the exchange
         Message out = exchange.getOut();
         out.setBody(atlasSession.getOutput());
-        out.setHeaders(exchange.getIn().getHeaders());
-        out.setAttachments(exchange.getIn().getAttachments());
+        out.setHeaders(incomingMessage.getHeaders());
+        out.setAttachments(incomingMessage.getAttachments());
+    }
+
+    /* default */ static boolean isSourceXmlOrJson(final AtlasMapping atlasMapping) {
+        final List<DataSource> dataSources = atlasMapping.getDataSource();
+
+        for (final DataSource dataSource : dataSources) {
+            final DataSourceType dataSourceType = dataSource.getDataSourceType();
+            final String dataSourceUri = dataSource.getUri();
+
+            if (dataSourceType == DataSourceType.SOURCE && dataSourceUri != null
+                && (dataSourceUri.startsWith("atlas:json") || dataSourceUri.startsWith("atlas:xml"))) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
