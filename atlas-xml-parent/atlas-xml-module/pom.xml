@@ -20,7 +20,7 @@
     <parent>
         <groupId>io.atlasmap</groupId>
         <artifactId>atlas-xml-parent</artifactId>
-        <version>1.21.0-SNAPSHOT</version>
+        <version>1.30.0</version>
     </parent>
     <artifactId>atlas-xml-module</artifactId>
     <packaging>bundle</packaging>
