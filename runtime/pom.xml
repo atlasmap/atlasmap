@@ -116,12 +116,27 @@
         <!-- === Internal dependencies (don't touch without discussion) ========================== -->
         <dependency>
             <groupId>io.atlasmap</groupId>
+            <artifactId>atlas-java-module</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.atlasmap</groupId>
             <artifactId>atlas-java-service</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>io.atlasmap</groupId>
+            <artifactId>atlas-json-module</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.atlasmap</groupId>
             <artifactId>atlas-json-service</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.atlasmap</groupId>
+            <artifactId>atlas-xml-module</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
