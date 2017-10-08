@@ -33,22 +33,18 @@
         <dependency>
             <groupId>io.atlasmap</groupId>
             <artifactId>atlas-api</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>io.atlasmap</groupId>
             <artifactId>atlas-core</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>io.atlasmap</groupId>
             <artifactId>atlas-java-model</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>io.atlasmap</groupId>
             <artifactId>atlas-java-inspect</artifactId>
-            <version>${project.version}</version>
             <exclusions>
                 <exclusion>
                     <groupId>io.atlasmap</groupId>
@@ -59,7 +55,6 @@
         <dependency>
             <groupId>org.xeustechnologies</groupId>
             <artifactId>jcl-core</artifactId>
-            <version>2.8</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
@@ -72,21 +67,6 @@
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-twitter</artifactId>
-            <version>2.19.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-salesforce</artifactId>
-            <version>2.19.0</version>
-        </dependency>
-        <dependency>
-            <groupId>io.syndesis</groupId>
-            <artifactId>salesforce-upsert-contact-connector</artifactId>
-            <version>0.4.5</version>
         </dependency>
     </dependencies>
 
@@ -127,20 +107,6 @@
                             <groupId>io.atlasmap</groupId>
                             <artifactId>atlas-java-test-model</artifactId>
                             <version>${project.version}</version>
-                            <overWrite>true</overWrite>
-                            <outputDirectory>${project.build.directory}/reference-jars</outputDirectory>
-                        </artifactItem>
-                        <artifactItem>
-                            <groupId>io.syndesis</groupId>
-                            <artifactId>salesforce-upsert-contact-connector</artifactId>
-                            <version>0.4.5</version>
-                            <overWrite>true</overWrite>
-                            <outputDirectory>${project.build.directory}/reference-jars</outputDirectory>
-                        </artifactItem>
-                        <artifactItem>
-                            <groupId>org.apache.camel</groupId>
-                            <artifactId>camel-salesforce</artifactId>
-                            <version>2.19.0</version>
                             <overWrite>true</overWrite>
                             <outputDirectory>${project.build.directory}/reference-jars</outputDirectory>
                         </artifactItem>

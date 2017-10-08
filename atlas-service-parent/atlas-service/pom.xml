@@ -35,57 +35,46 @@
         <dependency>
             <groupId>io.atlasmap</groupId>
             <artifactId>atlas-model</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>io.atlasmap</groupId>
             <artifactId>atlas-core</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>io.atlasmap</groupId>
             <artifactId>atlas-java-model</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>io.atlasmap</groupId>
             <artifactId>atlas-java-module</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>io.atlasmap</groupId>
             <artifactId>atlas-xml-model</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>io.atlasmap</groupId>
             <artifactId>atlas-json-model</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.glassfish.jersey.core</groupId>
             <artifactId>jersey-server</artifactId>
-            <version>${at.jersey.version}</version>
         </dependency>
         <dependency>
             <groupId>org.glassfish.jersey.core</groupId>
             <artifactId>jersey-common</artifactId>
-            <version>${at.jersey.version}</version>
         </dependency>
         <dependency>
             <groupId>org.glassfish.jersey.containers</groupId>
             <artifactId>jersey-container-servlet</artifactId>
-            <version>${at.jersey.version}</version>
         </dependency>
         <dependency>
             <groupId>org.glassfish.jersey.core</groupId>
             <artifactId>jersey-client</artifactId>
-            <version>${at.jersey.version}</version>
         </dependency>
         <dependency>
             <groupId>org.glassfish.jersey.media</groupId>
             <artifactId>jersey-media-json-jackson</artifactId>
-            <version>${at.jersey.version}</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>

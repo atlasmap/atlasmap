@@ -29,8 +29,8 @@
     <name>Atlas :: JSON Test Models</name>
 
     <properties>
-        <at.osgi.export.pkg>io.atlasmap.json.test</at.osgi.export.pkg>
-        <at.osgi.import.pkg>*</at.osgi.import.pkg>
+        <osgi.export.pkg>io.atlasmap.json.test</osgi.export.pkg>
+        <osgi.import.pkg>*</osgi.import.pkg>
     </properties>
 
     <dependencies>

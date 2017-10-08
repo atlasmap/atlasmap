@@ -29,8 +29,8 @@
     <name>Atlas :: Java Object Test Model</name>
 
     <properties>
-        <at.osgi.export.pkg>io.atlasmap.java.test</at.osgi.export.pkg>
-        <at.osgi.import.pkg>*</at.osgi.import.pkg>
+        <osgi.export.pkg>io.atlasmap.java.test</osgi.export.pkg>
+        <osgi.import.pkg>*</osgi.import.pkg>
     </properties>
 
     <dependencies>

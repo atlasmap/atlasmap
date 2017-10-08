@@ -33,8 +33,8 @@
         <xjb.file>atlas-model-v2.xjb</xjb.file>
         <xsd.folder>src/main/resources</xsd.folder>
         <xsd.file>atlas-model-v2.xsd</xsd.file>
-        <at.osgi.export.pkg>io.atlasmap.v2</at.osgi.export.pkg>
-        <at.osgi.import.pkg>com.fasterxml.jackson.annotation;version="[2.6,3)",javax.xml.bind;version="[2.2,3)",javax.xml.bind.annotation;version="[2.2,3)",javax.xml.namespace</at.osgi.import.pkg>
+        <osgi.export.pkg>io.atlasmap.v2</osgi.export.pkg>
+        <osgi.import.pkg>com.fasterxml.jackson.annotation;version="[2.6,3)",javax.xml.bind;version="[2.2,3)",javax.xml.bind.annotation;version="[2.2,3)",javax.xml.namespace</osgi.import.pkg>
     </properties>
 
     <dependencies>
@@ -78,45 +78,11 @@
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <episode>true</episode>
                             <schemaDirectory>${xsd.folder}</schemaDirectory>
                             <bindingDirectory>${xjb.folder}</bindingDirectory>
                             <schemaExcludes>
                                 <include>**/atlas-actions-v3.xsd</include>
                             </schemaExcludes>
-                            <verbose>true</verbose>
-                            <strict>false</strict>
-                            <extension>true</extension>
-                            <debugMode>true</debugMode>
-                            <args>
-                                <arg>-no-header</arg>
-                                <arg>-XsimpleEquals</arg>
-                                <arg>-XsimpleHashCode</arg>
-                                <arg>-Xannotate</arg>
-                                <arg>-Xnamespace-prefix</arg>
-                            </args>
-                            <plugins>
-                                <plugin>
-                                    <groupId>org.jvnet.jaxb2_commons</groupId>
-                                    <artifactId>jaxb2-basics</artifactId>
-                                    <version>${at.jaxb2-basics.version}</version>
-                                </plugin>
-                                <plugin>
-                                    <groupId>org.jvnet.jaxb2_commons</groupId>
-                                    <artifactId>jaxb2-basics-annotate</artifactId>
-                                    <version>${at.jaxb2-basics-annotate.version}</version>
-                                </plugin>
-                                <plugin>
-                                    <groupId>org.jvnet.jaxb2_commons</groupId>
-                                    <artifactId>jaxb2-namespace-prefix</artifactId>
-                                    <version>${at.jaxb2-basics-namespace-prefix.version}</version>
-                                </plugin>
-                                <plugin>
-                                    <groupId>com.fasterxml.jackson.module</groupId>
-                                    <artifactId>jackson-module-jaxb-annotations</artifactId>
-                                    <version>${at.jackson-module-jaxb-annotations.version}</version>
-                                </plugin>
-                            </plugins>
                         </configuration>
                     </execution>
                 </executions>

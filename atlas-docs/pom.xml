@@ -21,35 +21,13 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>io.atlasmap</groupId>
-        <artifactId>atlas</artifactId>
+        <artifactId>atlas-parent</artifactId>
         <version>1.31-SNAPSHOT</version>
-        <relativePath>../pom.xml</relativePath>
+        <relativePath>../atlas-parent/pom.xml</relativePath>
     </parent>
 
     <artifactId>atlas-docs</artifactId>
     <name>Atlas :: Documentation</name>
-
-    <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.asciidoctor</groupId>
-                    <artifactId>asciidoctor-maven-plugin</artifactId>
-                    <configuration>
-                        <sourceDirectory>src/main/asciidoc</sourceDirectory>
-                        <attributes>
-                            <icons>font</icons>
-                            <pagenums />
-                            <version>${project.version}</version>
-                            <idprefix />
-                            <idseparator>-</idseparator>
-                            <allow-uri-read>true</allow-uri-read>
-                        </attributes>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-    </build>
 
     <!-- ==== HTML documentation ====================== -->
     <profiles>
@@ -111,13 +89,6 @@
                                 </configuration>
                             </execution>
                         </executions>
-                        <dependencies>
-                            <dependency>
-                                <groupId>org.asciidoctor</groupId>
-                                <artifactId>asciidoctorj-pdf</artifactId>
-                                <version>1.5.0-alpha.15</version>
-                            </dependency>
-                        </dependencies>
                     </plugin>
                 </plugins>
             </build>

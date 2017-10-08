@@ -27,40 +27,22 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <jdk.version>1.8</jdk.version>
+
+        <!-- plugins -->
         <build-helper-maven-plugin.version>3.0.0</build-helper-maven-plugin.version>
-        <jsonschema2pojo-maven-plugin.version>0.4.37</jsonschema2pojo-maven-plugin.version>
         <license-maven-plugin.version>3.0</license-maven-plugin.version>
-        <maven-bundle-plugin.version>3.2.0</maven-bundle-plugin.version>
+        <maven-checkstyle-plugin.version>2.17</maven-checkstyle-plugin.version>
         <maven-compiler-plugin.version>3.6.1</maven-compiler-plugin.version>
         <maven-dependency-plugin.version>3.0.0</maven-dependency-plugin.version>
         <maven-deploy-plugin.version>2.8.2</maven-deploy-plugin.version>
         <maven-gpg-plugin.version>1.5</maven-gpg-plugin.version>
         <maven-jar-plugin.version>3.0.2</maven-jar-plugin.version>
         <maven-javadoc-plugin.version>2.9.1</maven-javadoc-plugin.version>
-        <maven-jaxb2-plugin.version>0.13.1</maven-jaxb2-plugin.version>
         <maven-resources-plugin.version>3.0.2</maven-resources-plugin.version>
         <maven-release-plugin.version>2.5.3</maven-release-plugin.version>
         <maven-source-plugin.version>2.2.1</maven-source-plugin.version>
         <maven-version>3.5.0</maven-version>
         <nexus-staging-maven-plugin.version>1.6.7</nexus-staging-maven-plugin.version>
-        <asciidoctor-maven-plugin.version>1.5.5</asciidoctor-maven-plugin.version>
-        <syndesis.connector.version>0.5.5</syndesis.connector.version>
-        <mockito.version>2.8.47</mockito.version>
-
-        <!-- Does this fix the NPE problem ?? <jetty-maven-plugin.version>9.4.2.v20170220</jetty-maven-plugin.version> -->
-        <jetty-maven-plugin.version>9.4.5.v20170502</jetty-maven-plugin.version>
-
-        <!-- Atlas specific -->
-        <at.jackson.version>2.8.5</at.jackson.version>
-        <at.jersey.version>2.25.1</at.jersey.version>
-        <at.osgi.symbolic.name>${project.artifactId}</at.osgi.symbolic.name>
-        <at.jaxb2-basics.version>0.11.1</at.jaxb2-basics.version>
-        <at.jaxb2-basics-annotate.version>1.0.2</at.jaxb2-basics-annotate.version>
-        <at.jaxb2-basics-namespace-prefix.version>1.2</at.jaxb2-basics-namespace-prefix.version>
-        <at.jackson-module-jaxb-annotations.version>2.8.6</at.jackson-module-jaxb-annotations.version>
-        <spring-boot.version>1.5.2.RELEASE</spring-boot.version>
-        <resteasy-spring-boot-starter.version>2.3.0-RELEASE</resteasy-spring-boot-starter.version>
-        <fabric8-maven-plugin.version>3.2.30</fabric8-maven-plugin.version>
 
         <!-- Controls Docker Image Generation -->
         <from.image>registry.access.redhat.com/jboss-fuse-6/fis-java-openshift:2.0</from.image>
@@ -252,17 +234,8 @@
         <pluginManagement>
             <plugins>
                 <plugin>
-                    <groupId>io.fabric8</groupId>
-                    <artifactId>fabric8-maven-plugin</artifactId>
-                    <version>${fabric8-maven-plugin.version}</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-maven-plugin</artifactId>
-                    <version>${spring-boot.version}</version>
-                </plugin>
-                <plugin>
                     <artifactId>maven-checkstyle-plugin</artifactId>
+                    <version>${maven-checkstyle-plugin.version}</version>
                     <configuration>
                         <configLocation>../checkstyle.xml</configLocation>
                         <propertyExpansion>
@@ -307,24 +280,14 @@
                     <version>${maven-source-plugin.version}</version>
                 </plugin>
                 <plugin>
-                    <groupId>org.apache.felix</groupId>
-                    <artifactId>maven-bundle-plugin</artifactId>
-                    <version>${maven-bundle-plugin.version}</version>
-                </plugin>
-                <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>build-helper-maven-plugin</artifactId>
                     <version>${build-helper-maven-plugin.version}</version>
                 </plugin>
                 <plugin>
-                    <groupId>org.jvnet.jaxb2.maven2</groupId>
-                    <artifactId>maven-jaxb2-plugin</artifactId>
-                    <version>${maven-jaxb2-plugin.version}</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.eclipse.jetty</groupId>
-                    <artifactId>jetty-maven-plugin</artifactId>
-                    <version>${jetty-maven-plugin.version}</version>
+                    <groupId>com.fasterxml.jackson.module</groupId>
+                    <artifactId>jackson-module-jaxb-annotations</artifactId>
+                    <version>${jackson-module-jaxb-annotations.version}</version>
                 </plugin>
                 <plugin>
                     <groupId>org.sonatype.plugins</groupId>
@@ -381,16 +344,6 @@
                             <exclude>**/src/main/webapp/angular2/src/app/lib/**</exclude>
                         </excludes>
                     </configuration>
-                </plugin>
-                <plugin>
-                    <groupId>org.jsonschema2pojo</groupId>
-                    <artifactId>jsonschema2pojo-maven-plugin</artifactId>
-                    <version>${jsonschema2pojo-maven-plugin.version}</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.asciidoctor</groupId>
-                    <artifactId>asciidoctor-maven-plugin</artifactId>
-                    <version>${asciidoctor-maven-plugin.version}</version>
                 </plugin>
             </plugins>
         </pluginManagement>

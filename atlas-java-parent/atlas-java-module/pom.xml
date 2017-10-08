@@ -29,36 +29,31 @@
     <name>Atlas :: Java Module</name>
 
     <properties>
-        <at.osgi.export.pkg>io.atlasmap.java.module</at.osgi.export.pkg>
-        <at.osgi.import.pkg>io.atlasmap.v2;version="${at.atlas.version.range}",io.atlasmap.api;version="${at.atlas.version.range}",
-            io.atlasmap.java.v2;version="${at.atlas.version.range}",io.atlasmap.java.inspect;version="${at.atlas.version.range}"</at.osgi.import.pkg>
+        <osgi.export.pkg>io.atlasmap.java.module</osgi.export.pkg>
+        <osgi.import.pkg>io.atlasmap.v2;version="${atlas.version.range}",io.atlasmap.api;version="${atlas.version.range}",
+            io.atlasmap.java.v2;version="${atlas.version.range}",io.atlasmap.java.inspect;version="${atlas.version.range}"</osgi.import.pkg>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>io.atlasmap</groupId>
             <artifactId>atlas-model</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>io.atlasmap</groupId>
             <artifactId>atlas-api</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>io.atlasmap</groupId>
             <artifactId>atlas-core</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>io.atlasmap</groupId>
             <artifactId>atlas-java-model</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>io.atlasmap</groupId>
             <artifactId>atlas-java-inspect</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
@@ -73,13 +68,11 @@
         <dependency>
             <groupId>io.atlasmap</groupId>
             <artifactId>atlas-java-test-model</artifactId>
-            <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>io.atlasmap</groupId>
             <artifactId>atlas-core</artifactId>
-            <version>${project.version}</version>
             <classifier>tests</classifier>
         </dependency>
     </dependencies>
