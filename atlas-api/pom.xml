@@ -29,15 +29,14 @@
     <packaging>bundle</packaging>
 
     <properties>
-        <at.osgi.export.pkg>io.atlasmap.api,io.atlasmap.spi</at.osgi.export.pkg>
-        <at.osgi.import.pkg>io.atlasmap.v2;version="${at.atlas.version.range}",com.fasterxml.jackson.annotation;version="${at.jackson.version.range}",javax.xml.bind;version="${at.jaxb.version.range}",javax.xml.bind.annotation;version="${at.jaxb.version.range}",javax.xml.namespace</at.osgi.import.pkg>
+        <osgi.export.pkg>io.atlasmap.api,io.atlasmap.spi</osgi.export.pkg>
+        <osgi.import.pkg>io.atlasmap.v2;version="${atlas.version.range}",com.fasterxml.jackson.annotation;version="${jackson.version.range}",javax.xml.bind;version="${jaxb.version.range}",javax.xml.bind.annotation;version="${jaxb.version.range}",javax.xml.namespace</osgi.import.pkg>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>io.atlasmap</groupId>
             <artifactId>atlas-model</artifactId>
-            <version>${project.version}</version>
         </dependency>
     </dependencies>
 

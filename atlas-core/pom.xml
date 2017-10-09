@@ -32,12 +32,10 @@
         <dependency>
             <groupId>io.atlasmap</groupId>
             <artifactId>atlas-model</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>io.atlasmap</groupId>
             <artifactId>atlas-api</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>

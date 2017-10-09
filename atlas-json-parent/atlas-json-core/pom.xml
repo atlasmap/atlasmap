@@ -16,12 +16,10 @@
         <dependency>
             <groupId>io.atlasmap</groupId>
             <artifactId>atlas-json-model</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>io.atlasmap</groupId>
             <artifactId>atlas-core</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>

@@ -20,9 +20,9 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>io.atlasmap</groupId>
-        <artifactId>atlas</artifactId>
+        <artifactId>atlas-parent</artifactId>
         <version>1.31-SNAPSHOT</version>
-        <relativePath>../pom.xml</relativePath>
+        <relativePath>../atlas-parent/pom.xml</relativePath>
     </parent>
 
     <artifactId>runtime</artifactId>
@@ -33,7 +33,6 @@
         <failOnMissingWebXml>false</failOnMissingWebXml>
         <maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
         <java-image.version>1.2</java-image.version>
-        <camel.version>2.20.0.fuse-000101</camel.version>
     </properties>
 
     <build>
@@ -107,7 +106,6 @@
             <dependency>
                 <groupId>org.apache.camel</groupId>
                 <artifactId>camel-parent</artifactId>
-                <version>${camel.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -117,37 +115,30 @@
         <dependency>
             <groupId>io.atlasmap</groupId>
             <artifactId>atlas-java-module</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>io.atlasmap</groupId>
             <artifactId>atlas-java-service</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>io.atlasmap</groupId>
             <artifactId>atlas-json-module</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>io.atlasmap</groupId>
             <artifactId>atlas-json-service</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>io.atlasmap</groupId>
             <artifactId>atlas-xml-module</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>io.atlasmap</groupId>
             <artifactId>atlas-xml-service</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>io.atlasmap</groupId>
             <artifactId>atlas-service</artifactId>
-            <version>${project.version}</version>
         </dependency>
 
 
@@ -174,109 +165,88 @@
         <dependency>
             <groupId>com.paypal.springboot</groupId>
             <artifactId>resteasy-spring-boot-starter</artifactId>
-            <version>${resteasy-spring-boot-starter.version}</version>
         </dependency>
 
         <!-- for now adding all connectors -->
         <dependency>
             <groupId>io.syndesis</groupId>
             <artifactId>twitter-mention-connector</artifactId>
-            <version>${syndesis.connector.version}</version>
         </dependency>
         <dependency>
             <groupId>io.syndesis</groupId>
             <artifactId>twitter-search-connector</artifactId>
-            <version>${syndesis.connector.version}</version>
         </dependency>
         <dependency>
             <groupId>io.syndesis</groupId>
             <artifactId>salesforce-upsert-contact-connector</artifactId>
-            <version>${syndesis.connector.version}</version>
         </dependency>
         <dependency>
             <groupId>io.syndesis</groupId>
             <artifactId>salesforce-create-sobject-connector</artifactId>
-            <version>${syndesis.connector.version}</version>
         </dependency>
         <dependency>
             <groupId>io.syndesis</groupId>
             <artifactId>salesforce-delete-sobject-connector</artifactId>
-            <version>${syndesis.connector.version}</version>
         </dependency>
         <dependency>
             <groupId>io.syndesis</groupId>
             <artifactId>salesforce-delete-sobject-with-id-connector</artifactId>
-            <version>${syndesis.connector.version}</version>
         </dependency>
         <dependency>
             <groupId>io.syndesis</groupId>
             <artifactId>salesforce-get-sobject-with-id-connector</artifactId>
-            <version>${syndesis.connector.version}</version>
         </dependency>
         <dependency>
             <groupId>io.syndesis</groupId>
             <artifactId>salesforce-update-sobject-connector</artifactId>
-            <version>${syndesis.connector.version}</version>
         </dependency>
         <dependency>
             <groupId>io.syndesis</groupId>
             <artifactId>salesforce-upsert-sobject-connector</artifactId>
-            <version>${syndesis.connector.version}</version>
         </dependency>
         <dependency>
             <groupId>io.syndesis</groupId>
             <artifactId>salesforce-on-create-connector</artifactId>
-            <version>${syndesis.connector.version}</version>
         </dependency>
         <dependency>
             <groupId>io.syndesis</groupId>
             <artifactId>salesforce-on-update-connector</artifactId>
-            <version>${syndesis.connector.version}</version>
         </dependency>
         <dependency>
             <groupId>io.syndesis</groupId>
             <artifactId>salesforce-on-delete-connector</artifactId>
-            <version>${syndesis.connector.version}</version>
         </dependency>
         <dependency>
             <groupId>io.syndesis</groupId>
             <artifactId>http-get-connector</artifactId>
-            <version>${syndesis.connector.version}</version>
         </dependency>
         <dependency>
             <groupId>io.syndesis</groupId>
             <artifactId>http-post-connector</artifactId>
-            <version>${syndesis.connector.version}</version>
         </dependency>
         <dependency>
             <groupId>io.syndesis</groupId>
             <artifactId>timer-connector</artifactId>
-            <version>${syndesis.connector.version}</version>
         </dependency>
         <dependency>
             <groupId>io.syndesis</groupId>
             <artifactId>trade-insight-buy-connector</artifactId>
-            <version>${syndesis.connector.version}</version>
         </dependency>
         <dependency>
             <groupId>io.syndesis</groupId>
             <artifactId>trade-insight-sell-connector</artifactId>
-            <version>${syndesis.connector.version}</version>
         </dependency>
         <dependency>
             <groupId>io.syndesis</groupId>
             <artifactId>trade-insight-top-connector</artifactId>
-            <version>${syndesis.connector.version}</version>
         </dependency>
         <dependency>
             <groupId>io.syndesis</groupId>
             <artifactId>day-trade-place-connector</artifactId>
-            <version>${syndesis.connector.version}</version>
         </dependency>
         <dependency>
             <groupId>io.syndesis</groupId>
             <artifactId>sql-stored-connector</artifactId>
-            <version>${syndesis.connector.version}</version>
         </dependency>
 
     </dependencies>
@@ -358,7 +328,6 @@
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>keytool-maven-plugin</artifactId>
-                        <version>1.5</version>
                         <executions>
                             <execution>
                                 <phase>generate-resources</phase>
@@ -390,7 +359,6 @@
                 <dependency>
                     <groupId>io.atlasmap</groupId>
                     <artifactId>atlas-java-test-model</artifactId>
-                    <version>${project.version}</version>
                 </dependency>
             </dependencies>
         </profile>

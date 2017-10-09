@@ -27,35 +27,30 @@
     <name>Atlas :: JSON Module</name>
 
     <properties>
-        <at.osgi.export.pkg>io.atlasmap.json.module</at.osgi.export.pkg>
-        <at.osgi.import.pkg>io.atlasmap.v2;version="${at.atlas.version.range}",io.atlasmap.api;version="${at.atlas.version.range}",io.atlasmap.spi;version="${at.atlas.version.range}",io.atlasmap.json.v2;version="${at.atlas.version.range}",</at.osgi.import.pkg>
+        <osgi.export.pkg>io.atlasmap.json.module</osgi.export.pkg>
+        <osgi.import.pkg>io.atlasmap.v2;version="${atlas.version.range}",io.atlasmap.api;version="${atlas.version.range}",io.atlasmap.spi;version="${atlas.version.range}",io.atlasmap.json.v2;version="${atlas.version.range}",</osgi.import.pkg>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>io.atlasmap</groupId>
             <artifactId>atlas-model</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>io.atlasmap</groupId>
             <artifactId>atlas-api</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>io.atlasmap</groupId>
             <artifactId>atlas-core</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>io.atlasmap</groupId>
             <artifactId>atlas-json-model</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>io.atlasmap</groupId>
             <artifactId>atlas-json-core</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
@@ -65,7 +60,6 @@
         <dependency>
             <groupId>io.atlasmap</groupId>
             <artifactId>atlas-core</artifactId>
-            <version>${project.version}</version>
             <classifier>tests</classifier>
         </dependency>
     </dependencies>
