@@ -123,6 +123,9 @@ public class JsonFieldReader {
                         jsonField.setValue(valueNode.toString());
                         jsonField.setFieldType(FieldType.COMPLEX);
                     }
+                } else if (valueNode.isNull()) {
+                    jsonField.setValue(null);
+                    // we can't detect field type if it's null node
                 } else {
                     logger.warn(String.format("Detected unsupported json type for field p=%s docId=%s",
                             jsonField.getPath(), jsonField.getDocId()));

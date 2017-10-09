@@ -33,5 +33,9 @@
             <InputField xsi:type="ns3:JsonField" path="/charField" />
             <OutputField xsi:type="ns3:JsonField" path="/charField" />
         </Mapping>
+        <Mapping xsi:type="Mapping" mappingType="Map">
+            <InputField xsi:type="ns3:JsonField" path="/nullField" fieldType="String" />
+            <OutputField xsi:type="ns3:JsonField" path="/boxedStringField" />
+        </Mapping>
     </Mappings>
 </AtlasMapping>

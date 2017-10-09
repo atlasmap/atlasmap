@@ -40,5 +40,10 @@
             <OutputField xsi:type="ns3:JsonField"
                 path="/TargetFlatPrimitive/charField" />
         </Mapping>
+        <Mapping xsi:type="Mapping" mappingType="Map">
+            <InputField xsi:type="ns3:JsonField" path="/nullField" fieldType="String" />
+            <OutputField xsi:type="ns3:JsonField"
+                path="/TargetFlatPrimitive/boxedStringField" />
+        </Mapping>
     </Mappings>
 </AtlasMapping>
