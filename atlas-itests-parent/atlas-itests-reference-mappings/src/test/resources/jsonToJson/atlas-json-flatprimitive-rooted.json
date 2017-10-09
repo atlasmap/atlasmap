@@ -7,6 +7,7 @@
         "floatField": 40000000.0,
         "intField": 2,
         "longField": 30000,
-        "shortField": 1
+        "shortField": 1,
+        "nullField": null
     }
 }
