@@ -33,6 +33,7 @@
         <failOnMissingWebXml>false</failOnMissingWebXml>
         <maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
         <java-image.version>1.2</java-image.version>
+        <fabric8.mode>kubernetes</fabric8.mode>
     </properties>
 
     <build>
@@ -72,7 +73,6 @@
                 <groupId>io.fabric8</groupId>
                 <artifactId>fabric8-maven-plugin</artifactId>
                 <configuration>
-                    <mode>kubernetes</mode>
                     <generator>
                         <config>
                             <spring-boot>
@@ -271,6 +271,14 @@
     </repositories>
 
     <profiles>
+        <profile>
+            <id>ci</id>
+            <properties>
+                <user.home>/home/jenkins</user.home>
+                <fabric8.namespace>syndesis-ci</fabric8.namespace>
+                <fabric8.mode>openshift</fabric8.mode>
+            </properties>
+        </profile>
         <profile>
             <id>fabric8</id>
             <build>
