@@ -92,14 +92,20 @@ public class DefaultAtlasCombineStrategy implements AtlasCombineStrategy {
         int count = 0;
         for (String value : sortedMap.values()) {
             if (first) {
-                if (isDisableAutoTrim()) {
+                first = false;
+                if (value == null) {
+                    continue;
+                } else if (isDisableAutoTrim()) {
                     combinedString = combinedString.concat(value);
                 } else {
                     combinedString = combinedString.concat(value.trim());
                 }
-                first = false;
             } else {
-                if (isDisableAutoTrim()) {
+                if (value == null) {
+                    if (!disableAddDelimiterOnNull) {
+                        combinedString = combinedString.concat((delimiter != null ? delimiter : DEFAULT_COMBINE_DELIMITER));
+                    }
+                } else if (isDisableAutoTrim()) {
                     combinedString = combinedString.concat((delimiter != null ? delimiter : DEFAULT_COMBINE_DELIMITER))
                             .concat(value);
                 } else {
