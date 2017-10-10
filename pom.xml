@@ -340,6 +340,7 @@
         <plugins>
             <plugin>
                 <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>${maven-checkstyle-plugin.version}</version>
                 <configuration>
                     <sourceDirectory>${project.build.sourceDirectory}</sourceDirectory>
                     <configLocation>checkstyle.xml</configLocation>
