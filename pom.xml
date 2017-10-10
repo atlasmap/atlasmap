@@ -234,16 +234,6 @@
         <pluginManagement>
             <plugins>
                 <plugin>
-                    <artifactId>maven-checkstyle-plugin</artifactId>
-                    <version>${maven-checkstyle-plugin.version}</version>
-                    <configuration>
-                        <configLocation>../checkstyle.xml</configLocation>
-                        <propertyExpansion>
-                            checkstyle.suppression.file=../checkstyle-suppressions.xml
-                        </propertyExpansion>
-                    </configuration>
-                </plugin>
-                <plugin>
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>${maven-compiler-plugin.version}</version>
                 </plugin>
@@ -351,6 +341,7 @@
             <plugin>
                 <artifactId>maven-checkstyle-plugin</artifactId>
                 <configuration>
+                    <sourceDirectory>${project.build.sourceDirectory}</sourceDirectory>
                     <configLocation>checkstyle.xml</configLocation>
                     <propertyExpansion>
                         checkstyle.suppression.file=checkstyle-suppressions.xml

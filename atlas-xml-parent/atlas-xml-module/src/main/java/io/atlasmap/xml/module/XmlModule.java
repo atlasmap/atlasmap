@@ -117,100 +117,100 @@ public class XmlModule extends BaseAtlasModule {
     @Override
     public void processInputMapping(AtlasSession session, BaseMapping baseMapping) throws AtlasException {
         for (Mapping mapping : this.generateInputMappings(session, baseMapping)) {
-            if (mapping.getInputField() == null || mapping.getInputField().isEmpty()
-                    || mapping.getInputField().size() != 1) {
+            if (mapping.getInputField() == null || mapping.getInputField().isEmpty()) {
                 addAudit(session, null,
-                        String.format("Mapping does not contain exactly one input field alias=%s desc=%s",
+                        String.format("Mapping does not contain at least one input field alias=%s desc=%s",
                                 mapping.getAlias(), mapping.getDescription()),
                         null, AuditStatus.WARN, null);
                 return;
             }
 
-            Field field = mapping.getInputField().get(0);
+            for (Field field : mapping.getInputField()) {
 
-            if (!isSupportedField(field)) {
-                addAudit(session, field.getDocId(),
-                        String.format("Unsupported input field type=%s", field.getClass().getName()), field.getPath(),
-                        AuditStatus.ERROR, null);
-                return;
-            }
-
-            if (field instanceof ConstantField) {
-                processConstantField(session, mapping);
-                if (logger.isDebugEnabled()) {
-                    logger.debug("Processed input constantField sPath=" + field.getPath() + " sV=" + field.getValue()
-                            + " sT=" + field.getFieldType() + " docId: " + field.getDocId());
+                if (!isSupportedField(field)) {
+                    addAudit(session, field.getDocId(),
+                            String.format("Unsupported input field type=%s", field.getClass().getName()), field.getPath(),
+                            AuditStatus.ERROR, null);
+                    return;
                 }
-                continue;
-            }
 
-            if (field instanceof PropertyField) {
-                processPropertyField(session, mapping,
-                        session.getAtlasContext().getContextFactory().getPropertyStrategy());
-                if (logger.isDebugEnabled()) {
-                    logger.debug("Processed input propertyField sPath=" + field.getPath() + " sV=" + field.getValue()
-                            + " sT=" + field.getFieldType() + " docId: " + field.getDocId());
+                if (field instanceof ConstantField) {
+                    processConstantField(session, mapping);
+                    if (logger.isDebugEnabled()) {
+                        logger.debug("Processed input constantField sPath=" + field.getPath() + " sV=" + field.getValue()
+                        + " sT=" + field.getFieldType() + " docId: " + field.getDocId());
+                    }
+                    continue;
                 }
-                continue;
-            }
 
-            XmlField inputField = (XmlField) field;
+                if (field instanceof PropertyField) {
+                    processPropertyField(session, mapping,
+                            session.getAtlasContext().getContextFactory().getPropertyStrategy());
+                    if (logger.isDebugEnabled()) {
+                        logger.debug("Processed input propertyField sPath=" + field.getPath() + " sV=" + field.getValue()
+                        + " sT=" + field.getFieldType() + " docId: " + field.getDocId());
+                    }
+                    continue;
+                }
 
-            Object sourceObject = null;
-            if (field.getDocId() != null && session.hasInput(field.getDocId())) {
-                // Use docId only when it exists, otherwise use default input
-                sourceObject = session.getInput(field.getDocId());
-            } else {
-                sourceObject = session.getInput();
-            }
+                XmlField inputField = (XmlField) field;
 
-            if (sourceObject == null || !(sourceObject instanceof String)) {
-                addAudit(session, field.getDocId(),
-                        String.format("Unsupported input object type=%s", field.getClass().getName()), field.getPath(),
-                        AuditStatus.ERROR, null);
-                return;
-            }
+                Object sourceObject = null;
+                if (field.getDocId() != null && session.hasInput(field.getDocId())) {
+                    // Use docId only when it exists, otherwise use default input
+                    sourceObject = session.getInput(field.getDocId());
+                } else {
+                    sourceObject = session.getInput();
+                }
 
-            Document document = null;
+                if (sourceObject == null || !(sourceObject instanceof String)) {
+                    addAudit(session, field.getDocId(),
+                            String.format("Unsupported input object type=%s", field.getClass().getName()), field.getPath(),
+                            AuditStatus.ERROR, null);
+                    return;
+                }
 
-            Map<String, String> sourceUriParams = AtlasUtil
-                    .getUriParameters(session.getMapping().getDataSource().get(0).getUri());
+                Document document = null;
 
-            boolean enableNamespaces = true;
-            for (String key : sourceUriParams.keySet()) {
-                if ("disableNamespaces".equals(key)) {
-                    if ("true".equals(sourceUriParams.get("disableNamespaces"))) {
-                        if (logger.isDebugEnabled()) {
-                            logger.debug("Disabling namespace support");
+                Map<String, String> sourceUriParams = AtlasUtil
+                        .getUriParameters(session.getMapping().getDataSource().get(0).getUri());
+
+                boolean enableNamespaces = true;
+                for (String key : sourceUriParams.keySet()) {
+                    if ("disableNamespaces".equals(key)) {
+                        if ("true".equals(sourceUriParams.get("disableNamespaces"))) {
+                            if (logger.isDebugEnabled()) {
+                                logger.debug("Disabling namespace support");
+                            }
+                            enableNamespaces = false;
                         }
-                        enableNamespaces = false;
                     }
                 }
-            }
 
-            try {
-                document = getDocument((String) sourceObject, enableNamespaces);
-            } catch (IOException | ParserConfigurationException | SAXException e) {
-                logger.error(String.format("Error parsing xml input object msg=%s", e.getMessage()), e);
-                Audit audit = new Audit();
-                audit.setDocId(field.getDocId());
-                audit.setPath(field.getPath());
-                audit.setStatus(AuditStatus.ERROR);
-                audit.setMessage(String.format("Error parsing xml input object msg=%s", field.getClass().getName()));
-                session.getAudits().getAudit().add(audit);
-                return;
-            }
+                try {
+                    document = getDocument((String) sourceObject, enableNamespaces);
+                } catch (IOException | ParserConfigurationException | SAXException e) {
+                    logger.error(String.format("Error parsing xml input object msg=%s", e.getMessage()), e);
+                    Audit audit = new Audit();
+                    audit.setDocId(field.getDocId());
+                    audit.setPath(field.getPath());
+                    audit.setStatus(AuditStatus.ERROR);
+                    audit.setMessage(String.format("Error parsing xml input object msg=%s", field.getClass().getName()));
+                    session.getAudits().getAudit().add(audit);
+                    return;
+                }
 
-            XmlFieldReader dxfr = new XmlFieldReader();
-            dxfr.readNew(document, inputField);
+                XmlFieldReader dxfr = new XmlFieldReader();
+                dxfr.readNew(document, inputField);
 
-            if (inputField.getFieldType() == null) {
-                inputField.setFieldType(FieldType.STRING);
-            }
+                if (inputField.getFieldType() == null) {
+                    inputField.setFieldType(FieldType.STRING);
+                }
 
-            if (logger.isDebugEnabled()) {
-                logger.debug("Processed input field sPath=" + field.getPath() + " sV=" + field.getValue() + " sT="
-                        + field.getFieldType() + " docId: " + field.getDocId());
+                if (logger.isDebugEnabled()) {
+                    logger.debug("Processed input field sPath=" + field.getPath() + " sV=" + field.getValue() + " sT="
+                            + field.getFieldType() + " docId: " + field.getDocId());
+                }
             }
         }
     }
