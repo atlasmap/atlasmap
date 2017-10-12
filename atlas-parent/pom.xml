@@ -35,7 +35,7 @@
         <!-- TODO syndesis connectors should be removed -->
         <syndesis.connector.version>0.5.5</syndesis.connector.version>
         <!-- TODO camel should be removed -->
-        <camel.version>2.20.0.fuse-000106</camel.version>
+        <camel.version>2.20.0</camel.version>
 
         <asciidoctor-maven-plugin.version>1.5.5</asciidoctor-maven-plugin.version>
         <asciidoctorj.version>1.5.6</asciidoctorj.version>
@@ -419,31 +419,6 @@
             </snapshots>
         </repository>
         <repository>
-            <id>fusesource.public</id>
-            <name>Fusesource Public Release Repositories</name>
-            <url>https://repository.jboss.org/nexus/content/groups/fs-public</url>
-            <layout>default</layout>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-            <releases>
-                <enabled>true</enabled>
-                <updatePolicy>never</updatePolicy>
-            </releases>
-        </repository>
-        <repository>
-            <id>fusesource.ea</id>
-            <name>Fusesource Early Access Release Repository</name>
-            <url>https://repository.jboss.org/nexus/content/groups/ea</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-            <releases>
-                <enabled>true</enabled>
-                <updatePolicy>never</updatePolicy>
-            </releases>
-        </repository>
-        <repository>
             <id>redhat-ga-repository</id>
             <url>https://maven.repository.redhat.com/ga</url>
             <releases>
@@ -470,31 +445,6 @@
         </repository>
     </repositories>
     <pluginRepositories>
-        <pluginRepository>
-            <id>fusesource.public</id>
-            <name>Fusesource Public Release Repositories</name>
-            <url>https://repository.jboss.org/nexus/content/groups/fs-public</url>
-            <layout>default</layout>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-            <releases>
-                <enabled>true</enabled>
-                <updatePolicy>never</updatePolicy>
-            </releases>
-        </pluginRepository>
-        <pluginRepository>
-            <id>fusesource.ea</id>
-            <name>Fusesource Early Access Release Repository</name>
-            <url>https://repository.jboss.org/nexus/content/groups/ea</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-            <releases>
-                <enabled>true</enabled>
-                <updatePolicy>never</updatePolicy>
-            </releases>
-        </pluginRepository>
         <pluginRepository>
             <id>redhat-ga-repository</id>
             <url>https://maven.repository.redhat.com/ga</url>

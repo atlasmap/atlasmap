@@ -251,25 +251,6 @@
 
     </dependencies>
 
-    <repositories>
-        <repository>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-            <id>ipaas-releases</id>
-            <name>ipaas-releases</name>
-            <url>https://dl.bintray.com/redhat-ipaas/maven/</url>
-        </repository>
-        <repository>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-            <id>jboss.ea</id>
-            <name>JBoss EA</name>
-            <url>https://repository.jboss.org/nexus/content/groups/ea</url>
-        </repository>
-    </repositories>
-
     <profiles>
         <profile>
             <id>ci</id>
