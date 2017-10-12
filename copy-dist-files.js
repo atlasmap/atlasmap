@@ -26,15 +26,6 @@ function copyPath(sourcePath, targetPath) {
 		console.log('Folder copied: ' + sourcePath);
 	});
 }
-
-function copyLibrary(libName) {	
-	var sourcePath = "src/app/lib/" + libName;
-	var targetPath = "./aot/dist/lib/" + libName;
-	copyPath(sourcePath, targetPath);	
-}
-
-copyLibrary("font-awesome-4.7.0");
-copyLibrary("patternfly-3.19.0");
    
 
 var resources = [
