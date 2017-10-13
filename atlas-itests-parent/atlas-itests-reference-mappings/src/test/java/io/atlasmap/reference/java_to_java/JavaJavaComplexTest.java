@@ -71,6 +71,23 @@ public class JavaJavaComplexTest extends AtlasMappingBaseTest {
     }
 
     @Test
+    public void testProcessComplexBasicNullContact() throws Exception {
+        AtlasContext context = atlasContextFactory
+                .createContext(new File("src/test/resources/javaToJava/atlasmapping-complex-simple.xml").toURI());
+        AtlasSession session = context.createSession();
+        BaseOrder sourceOrder = AtlasTestUtil.generateOrderClass(SourceOrder.class, SourceAddress.class,
+                SourceContact.class);
+        sourceOrder.setContact(null);
+        session.setInput(sourceOrder);
+        context.process(session);
+
+        TargetTestClass object = (TargetTestClass) session.getOutput();
+        assertEquals(TargetTestClass.class.getName(), object.getClass().getName());
+        assertEquals(TargetContact.class.getName(), object.getContact().getClass().getName());
+        assertNull(object.getContact().getFirstName());
+    }
+
+    @Test
     public void testProcessCollectionList() throws Exception {
         AtlasContext context = atlasContextFactory
                 .createContext(new File("src/test/resources/javaToJava/atlasmapping-collection-list.xml").toURI());

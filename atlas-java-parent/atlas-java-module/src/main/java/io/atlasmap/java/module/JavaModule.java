@@ -440,6 +440,9 @@ public class JavaModule extends BaseAtlasModule {
         if (pathUtil.hasParent() && !objectIsParent) {
             parentObject = ClassHelper.parentObjectForPath(sourceObject, pathUtil, true);
         }
+        if (parentObject == null) {
+            return null;
+        }
 
         List<Class<?>> classTree = resolveMappableClasses(parentObject.getClass());
 
