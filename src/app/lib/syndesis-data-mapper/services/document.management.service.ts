@@ -17,7 +17,7 @@
 import { Injectable } from '@angular/core';
 import { Headers, Http, RequestOptions, Response, HttpModule } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
-import { Observable } from 'rxjs/Rx';
+import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/forkJoin';
 import { Subject } from 'rxjs/Subject';
 
