@@ -7,6 +7,7 @@
 !screenshots
 
 # compiled output
+/aot
 /dist
 /tmp
 /src/**/*.js
@@ -36,10 +37,12 @@
 /.sass-cache
 /connect.lock
 /coverage/*
+/junit/*
 /libpeerconnection.log
 npm-debug.log
 testem.log
 /typings
+nohup.out
 
 # e2e
 /e2e/*.js

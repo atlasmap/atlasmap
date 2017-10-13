@@ -42,8 +42,8 @@ import { PropertyFieldEditComponent } from './components/property.field.edit.com
 import { ConstantFieldEditComponent } from './components/constant.field.edit.component';
 import { FieldEditComponent } from './components/field.edit.component';
 import { NamespaceEditComponent } from './components/namespace.edit.component';
-import { MappingListComponent, MappingListFieldComponent } from './components/mapping/mapping.list';
-import { NamespaceListComponent } from './components/namespace.list';
+import { MappingListComponent, MappingListFieldComponent } from './components/mapping/mapping.list.component';
+import { NamespaceListComponent } from './components/namespace.list.component';
 
 import { MappingDetailComponent, CollectionMappingComponent, SimpleMappingComponent, MappingPairDetailComponent } from './components/mapping/mapping.detail.component';
 import { MappingFieldDetailComponent } from './components/mapping/mapping.field.detail.component';

@@ -31,8 +31,8 @@ import { ToolbarComponent } from './toolbar.component';
 import { DataMapperErrorComponent } from './data.mapper.error.component';
 import { LineMachineComponent } from './line.machine.component';
 import { ModalWindowComponent } from './modal.window.component';
-import { MappingListComponent } from './mapping/mapping.list';
-import { NamespaceListComponent } from './namespace.list';
+import { MappingListComponent } from './mapping/mapping.list.component';
+import { NamespaceListComponent } from './namespace.list.component';
 
 import { DocumentDefinitionComponent } from './document.definition.component';
 import { DocumentFieldDetailComponent } from './document.field.detail.component';
