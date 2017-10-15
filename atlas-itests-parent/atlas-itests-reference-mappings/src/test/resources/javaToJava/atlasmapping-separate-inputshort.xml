@@ -9,7 +9,7 @@
         <Mapping xsi:type="Mapping" mappingType="Separate">
             <InputField xsi:type="ns2:JavaField" path="/firstName" />
             <OutputField xsi:type="ns2:JavaField" path="/firstName"
-                index="2" />
+                index="3" />
             <OutputField xsi:type="ns2:JavaField" path="/lastName"
                 index="4" />
         </Mapping>

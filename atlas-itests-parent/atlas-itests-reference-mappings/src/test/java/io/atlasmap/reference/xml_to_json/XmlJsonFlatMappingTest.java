@@ -20,7 +20,6 @@ import static org.junit.Assert.*;
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
-import org.junit.Ignore;
 import org.junit.Test;
 import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasSession;
@@ -84,7 +83,6 @@ public class XmlJsonFlatMappingTest extends AtlasMappingBaseTest {
     }
 
     @Test
-    @Ignore
     public void testCreateXmlJsonFlatFieldMapping() throws Exception {
         AtlasMapping atlasMapping = generateXmlJsonFlatMapping();
         AtlasMappingService atlasMappingService = new AtlasMappingService(
@@ -130,7 +128,6 @@ public class XmlJsonFlatMappingTest extends AtlasMappingBaseTest {
     }
 
     @Test
-    @Ignore
     public void testProcessXmlJavaFlatPrimitiveElementNS() throws Exception {
         AtlasContext context = atlasContextFactory
                 .createContext(new File("src/test/resources/xmlToJava/atlasmapping-flatprimitive-element-ns.xml"));
@@ -159,7 +156,6 @@ public class XmlJsonFlatMappingTest extends AtlasMappingBaseTest {
     }
 
     @Test
-    @Ignore
     public void testProcessXmlJavaBoxedFlatMappingPrimitiveAttributeNS() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(
                 new File("src/test/resources/xmlToJava/atlasmapping-boxedflatprimitive-attribute-ns.xml"));
@@ -176,7 +172,6 @@ public class XmlJsonFlatMappingTest extends AtlasMappingBaseTest {
     }
 
     @Test
-    @Ignore
     public void testProcessXmlJavaBoxedFlatMappingPrimitiveElement() throws Exception {
         AtlasContext context = atlasContextFactory
                 .createContext(new File("src/test/resources/xmlToJava/atlasmapping-boxedflatprimitive-element.xml"));
@@ -193,7 +188,6 @@ public class XmlJsonFlatMappingTest extends AtlasMappingBaseTest {
     }
 
     @Test
-    @Ignore
     public void testProcessXmlJavaBoxedFlatMappingPrimitiveElementNS() throws Exception {
         AtlasContext context = atlasContextFactory
                 .createContext(new File("src/test/resources/xmlToJava/atlasmapping-boxedflatprimitive-element-ns.xml"));

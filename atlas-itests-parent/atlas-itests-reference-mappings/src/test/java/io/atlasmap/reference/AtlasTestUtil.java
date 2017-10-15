@@ -112,6 +112,29 @@ public class AtlasTestUtil {
         }
     }
 
+    public static void validateOrderList(NoAbstractTargetOrderList orderListObject) {
+        assertNotNull(orderListObject);
+        assertNotNull(orderListObject.getNumberOrders());
+        assertNotNull(orderListObject.getOrderBatchNumber());
+
+        assertEquals(new Integer(5), orderListObject.getNumberOrders());
+        assertEquals(new Integer(4123562), orderListObject.getOrderBatchNumber());
+
+        if (orderListObject.getOrders() != null) {
+            for (int i = 0; i < orderListObject.getOrders().size(); i++) {
+                validateOrderNoAbstract(orderListObject.getOrders().get(i), i);
+            }
+        }
+    }
+
+    public static void validateOrderNoAbstract(BaseOrder orderObject, int expectedOrderId) {
+        assertNotNull(orderObject);
+        assertNotNull(orderObject.getOrderId());
+        assertEquals(new Integer(expectedOrderId), orderObject.getOrderId());
+        // https://github.com/atlasmap/atlasmap-runtime/issues/229 - Allow default implementation for abstract target field
+        assertNull(orderObject.getAddress());
+        assertNull(orderObject.getContact());
+    }
     public static void validateOrder(BaseOrder orderObject) {
         assertNotNull(orderObject);
         assertNotNull(orderObject.getOrderId());

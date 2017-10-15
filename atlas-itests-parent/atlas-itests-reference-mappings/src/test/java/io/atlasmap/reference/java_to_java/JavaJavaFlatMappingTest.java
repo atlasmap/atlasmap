@@ -188,7 +188,6 @@ public class JavaJavaFlatMappingTest extends AtlasMappingBaseTest {
     }
 
     @Test
-    @Ignore
     public void testCreateJavaJavaFlatFieldMapping() throws Exception {
         AtlasMapping atlasMapping = generateJavaJavaFlatMapping();
         AtlasMappingService atlasMappingService = new AtlasMappingService(

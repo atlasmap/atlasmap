@@ -268,11 +268,11 @@ public abstract class BaseAtlasModule implements AtlasModule {
 
     protected Field processSeparateField(AtlasSession session, Mapping mapping, Field inputField, Field outputField)
             throws AtlasException {
-        if (outputField.getIndex() == null || outputField.getIndex() < 0) {
-            logger.warn(String.format("Separate requires Index value to be set on outputField outputField.path=%s",
+        if (outputField.getIndex() == null || outputField.getIndex() < 1) {
+            logger.warn(String.format("Separate requires positive Index value to be set on outputField outputField.path=%s",
                     outputField.getPath()));
             addAudit(session, outputField.getDocId(),
-                    String.format("Separate requires Index value to be set on outputField outputField.path=%s",
+                    String.format("Separate requires positive Index value to be set on outputField outputField.path=%s",
                             outputField.getPath()),
                     outputField.getPath(), AuditStatus.ERROR, null);
             return null;
@@ -319,7 +319,7 @@ public abstract class BaseAtlasModule implements AtlasModule {
         }
 
         SimpleField simpleField = AtlasModelFactory.cloneFieldToSimpleField(inputFieldsep);
-        simpleField.setValue(separatedValues.get(outputField.getIndex()));
+        simpleField.setValue(separatedValues.get(outputField.getIndex()-1));
         return simpleField;
     }
 
@@ -327,15 +327,15 @@ public abstract class BaseAtlasModule implements AtlasModule {
             Field outputField) throws AtlasException {
         Map<Integer, String> combineValues = null;
         for (Field inputField : inputFields) {
-            if (inputField.getIndex() == null || inputField.getIndex() < 0) {
+            if (inputField.getIndex() == null || inputField.getIndex() < 1) {
                 logger.error(
-                        String.format("Combine requires Index value to be set on all inputFields inputField.path=%s",
+                        String.format("Combine requires positive Index value to be set on all inputFields inputField.path=%s",
                                 inputField.getPath()));
                 addAudit(session, outputField.getDocId(),
-                        String.format("Combine requires Index value to be set on all inputFields inputField.path=%s",
+                        String.format("Combine requires positive Index value to be set on all inputFields inputField.path=%s",
                                 inputField.getPath()),
                         outputField.getPath(), AuditStatus.ERROR, null);
-                return;
+                continue;
             }
             if ((inputField.getFieldType() != null && !FieldType.STRING.equals(inputField.getFieldType())
                     || (inputField.getValue() != null
@@ -353,7 +353,7 @@ public abstract class BaseAtlasModule implements AtlasModule {
                 combineValues = new HashMap<Integer, String>();
             }
 
-            combineValues.put(inputField.getIndex(), (String) inputField.getValue());
+            combineValues.put(inputField.getIndex()-1, (String) inputField.getValue());
         }
 
         String combinedValue = null;

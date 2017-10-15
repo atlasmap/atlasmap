@@ -46,7 +46,7 @@
                             "fieldType": "STRING",
                             "docId": "XMLSampleSchemaSource",
                             "userCreated": false,
-                            "index": 0,
+                            "index": 1,
                             "actions": null
                         }
                     ],

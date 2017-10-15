@@ -24,7 +24,6 @@ import java.io.File;
 
 import javax.xml.bind.JAXBElement;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasSession;
@@ -104,7 +103,6 @@ public class JavaXmlCombineTest extends AtlasMappingBaseTest {
     }
 
     @Test
-    @Ignore // support null value and double-delimiter in combine
     public void testProcessCombineNullInput() throws Exception {
         AtlasContext context = atlasContextFactory
                 .createContext(new File("src/test/resources/javaToXml/atlasmapping-combine-inputnull.xml").toURI());
@@ -121,7 +119,7 @@ public class JavaXmlCombineTest extends AtlasMappingBaseTest {
         JAXBElement<XmlContactAttribute> targetContact = (JAXBElement<XmlContactAttribute>) helper
                 .unmarshal((String) object, XmlContactAttribute.class);
         assertNotNull(targetContact);
-        assertEquals("Ozzie 5551212 81111", targetContact.getValue().getFirstName());
+        assertEquals("Ozzie  5551212 81111", targetContact.getValue().getFirstName());
         assertFalse(session.hasErrors());
     }
 }

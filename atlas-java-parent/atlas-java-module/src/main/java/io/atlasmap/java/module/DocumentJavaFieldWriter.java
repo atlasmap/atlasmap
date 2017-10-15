@@ -3,6 +3,7 @@ package io.atlasmap.java.module;
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -321,6 +322,7 @@ public class DocumentJavaFieldWriter {
             String normalizedSegment = PathUtil.removeCollectionIndexes(segmentContext.getSegmentPath());
             clz = this.classesForFields.get(normalizedSegment);
         }
+        Type clzType = null;
         if (clz == null) { // attempt to determine it from the parent object.
             if (logger.isDebugEnabled()) {
                 logger.debug("Couldn't find configured class for segment: " + segmentContext
@@ -338,6 +340,7 @@ public class DocumentJavaFieldWriter {
                 }
             }
             clz = m == null ? null : m.getReturnType();
+            clzType = m.getGenericReturnType();
         }
         if (clz == null) {
             throw new AtlasException(
@@ -354,25 +357,30 @@ public class DocumentJavaFieldWriter {
             Class<?> oldClass = clz;
             clz = null;
             String cleanedSegment = PathUtil.cleanPathSegment(segmentContext.getSegment());
-            for (java.lang.reflect.Field declaredField : parentObject.getClass().getDeclaredFields()) {
-                if (cleanedSegment.equals(declaredField.getName())) {
-                    if (declaredField.getGenericType() == null) {
-                        if (logger.isDebugEnabled()) {
-                            logger.debug("Skipping determining generic type declared field '" + declaredField.getName()
-                                    + "', the field isn't generic. Segment: " + segmentContext);
-                        }
-                        continue;
-                    }
-                    ParameterizedType paramType = (ParameterizedType) declaredField.getGenericType();
-                    String typeName = paramType.getActualTypeArguments()[0].getTypeName();
-                    try {
-                        clz = typeName == null ? null : Class.forName(typeName);
-                    } catch (Exception e) {
-                        throw new AtlasException("Could not find class for '" + typeName + "', for segment: "
-                                + segmentContext + ", on field: " + field, e);
-                    }
+
+            // From return type of getter method
+            if (clzType instanceof Class) {
+                // No type parameter, use Object
+                clz = Object.class;
+            } else if (clzType instanceof ParameterizedType){
+                ParameterizedType pt = (ParameterizedType) clzType;
+                String typeName = pt.getActualTypeArguments()[0].getTypeName();
+                try {
+                    clz = typeName == null ? null : Class.forName(typeName);
+                } catch (Exception e) {
+                    throw new AtlasException("Could not find class for '" + typeName + "', for segment: "
+                            + segmentContext + ", on field: " + field, e);
+                }
+
+            // No getter found - check fields of parent object
+            } else if (clz == null) {
+                Class<?> parentClass = parentObject.getClass();
+                while (parentClass != Object.class && clz == null) {
+                    clz = findClassOfNamedField(parentClass, cleanedSegment);
+                    parentClass = parentClass.getSuperclass();
                 }
             }
+
             if (clz == null) {
                 throw new AtlasException(
                         "Could not unwrap list collection's generic type for segment: " + segmentContext);
@@ -389,10 +397,38 @@ public class DocumentJavaFieldWriter {
         return clz;
     }
 
+    private Class<?> findClassOfNamedField(Class<?> clazz, String name) {
+        for (java.lang.reflect.Field declaredField : clazz.getDeclaredFields()) {
+            if (name.equals(declaredField.getName())) {
+                if (declaredField.getGenericType() == null) {
+                    if (logger.isDebugEnabled()) {
+                        logger.debug("Skipping field '{}' on class '{}', the field isn't generic",
+                                declaredField.getName(), clazz.getName());
+                    }
+                    continue;
+                }
+                ParameterizedType paramType = (ParameterizedType) declaredField.getGenericType();
+                String typeName = paramType.getActualTypeArguments()[0].getTypeName();
+                try {
+                    if (typeName != null) {
+                        return Class.forName(typeName);
+                    }
+                } catch (Exception e) {
+                    logger.warn("Could not load class '{}' for field '{}' on class '{}': {}",
+                            typeName, name, clazz.getName(), e.getMessage());
+                    logger.debug(e.getMessage(), e);
+                }
+            }
+        }
+        return null;
+    }
+
     public Object createObject(Field javaField, SegmentContext segmentContext, Object parentObject,
             boolean createWrapperArray) throws AtlasException {
-        return writerUtil.instantiateObject(getClassForField(javaField, segmentContext, parentObject, true),
-                segmentContext, createWrapperArray);
+        Class<?> clazz = getClassForField(javaField, segmentContext, parentObject, true);
+        // TODO https://github.com/atlasmap/atlasmap-runtime/issues/229
+        //      - Allow default implementation for abstract target field
+        return writerUtil.instantiateObject(clazz , segmentContext, createWrapperArray);
     }
 
     public Object getCollectionItem(Object collection, SegmentContext segmentContext) throws AtlasException {
