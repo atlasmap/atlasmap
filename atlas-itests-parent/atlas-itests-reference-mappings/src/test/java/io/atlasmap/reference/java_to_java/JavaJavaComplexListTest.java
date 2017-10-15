@@ -35,6 +35,7 @@ import io.atlasmap.java.v2.JavaCollection;
 import io.atlasmap.java.v2.JavaField;
 import io.atlasmap.reference.AtlasMappingBaseTest;
 import io.atlasmap.reference.AtlasTestUtil;
+import io.atlasmap.reference.NoAbstractTargetOrderList;
 import io.atlasmap.v2.AtlasMapping;
 import io.atlasmap.v2.AtlasModelFactory;
 import io.atlasmap.v2.CollectionType;
@@ -44,7 +45,6 @@ import io.atlasmap.v2.Mapping;
 import io.atlasmap.v2.MappingType;
 import io.atlasmap.v2.Mappings;
 
-@Ignore
 public class JavaJavaComplexListTest extends AtlasMappingBaseTest {
 
     @Test
@@ -103,6 +103,23 @@ public class JavaJavaComplexListTest extends AtlasMappingBaseTest {
     }
 
     @Test
+    public void testProcessJavaJavaComplexAutoDetectBaseNoAbstractTest() throws Exception {
+        AtlasContext context = atlasContextFactory
+                .createContext(new File("src/test/resources/javaToJava/atlasmapping-complex-list-autodetect-base-no-abstract.xml"));
+        AtlasSession session = context.createSession();
+        BaseOrderList sourceOrderList = AtlasTestUtil.generateOrderListClass(SourceOrderList.class, SourceOrder.class,
+                SourceAddress.class, SourceContact.class);
+        session.setInput(sourceOrderList);
+        context.process(session);
+
+        Object object = session.getOutput();
+        assertNotNull(object);
+        assertTrue(object instanceof NoAbstractTargetOrderList);
+        AtlasTestUtil.validateOrderList((NoAbstractTargetOrderList) object);
+    }
+
+    @Test
+    @Ignore("https://github.com/atlasmap/atlasmap-runtime/issues/229 - Allow default implementation for abstract target field")
     public void testProcessJavaJavaComplexAutoDetectBaseTest() throws Exception {
         AtlasContext context = atlasContextFactory
                 .createContext(new File("src/test/resources/javaToJava/atlasmapping-complex-list-autodetect-base.xml"));
@@ -119,6 +136,7 @@ public class JavaJavaComplexListTest extends AtlasMappingBaseTest {
     }
 
     @Test
+    @Ignore("https://github.com/atlasmap/atlasmap-runtime/issues/229 - Allow default implementation for abstract target field")
     public void testProcessJavaJavaComplexAutoDetectFullTest() throws Exception {
         AtlasContext context = atlasContextFactory
                 .createContext(new File("src/test/resources/javaToJava/atlasmapping-complex-list-autodetect-full.xml"));

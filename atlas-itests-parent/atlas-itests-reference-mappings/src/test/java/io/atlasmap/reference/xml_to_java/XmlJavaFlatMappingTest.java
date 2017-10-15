@@ -20,6 +20,7 @@ import static org.junit.Assert.*;
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
+
 import org.junit.Ignore;
 import org.junit.Test;
 import io.atlasmap.api.AtlasContext;
@@ -196,7 +197,6 @@ public class XmlJavaFlatMappingTest extends AtlasMappingBaseTest {
     }
 
     @Test
-    @Ignore
     public void testCreateXmlJavaFlatFieldMapping() throws Exception {
         AtlasMapping atlasMapping = generateXmlJavaFlatMapping();
         AtlasMappingService atlasMappingService = new AtlasMappingService(

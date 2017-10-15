@@ -22,7 +22,6 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import java.io.File;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasSession;
@@ -101,7 +100,6 @@ public class JavaJsonCombineTest extends AtlasMappingBaseTest {
     }
 
     @Test
-    @Ignore // support null value and double-delimiter in combine
     public void testProcessCombineNullInput() throws Exception {
         AtlasContext context = atlasContextFactory
                 .createContext(new File("src/test/resources/javaToJson/atlasmapping-combine-inputnull.xml").toURI());
@@ -118,7 +116,7 @@ public class JavaJsonCombineTest extends AtlasMappingBaseTest {
         io.atlasmap.json.test.TargetContact targetContact = mapper.readValue((String) object,
                 io.atlasmap.json.test.TargetContact.class);
         assertNotNull(targetContact);
-        assertEquals("Ozzie 5551212 81111", targetContact.getFirstName());
+        assertEquals("Ozzie  5551212 81111", targetContact.getFirstName());
         assertFalse(session.hasErrors());
     }
 }

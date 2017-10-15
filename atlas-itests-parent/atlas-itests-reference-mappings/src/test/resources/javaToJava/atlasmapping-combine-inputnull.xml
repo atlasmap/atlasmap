@@ -8,13 +8,13 @@
     <Mappings>
         <Mapping xsi:type="Mapping" mappingType="Combine">
             <InputField xsi:type="ns2:JavaField" path="/firstName"
-                index="0" />
-            <InputField xsi:type="ns2:JavaField" path="/lastName"
                 index="1" />
-            <InputField xsi:type="ns2:JavaField" path="/phoneNumber"
+            <InputField xsi:type="ns2:JavaField" path="/lastName"
                 index="2" />
-            <InputField xsi:type="ns2:JavaField" path="/zipCode"
+            <InputField xsi:type="ns2:JavaField" path="/phoneNumber"
                 index="3" />
+            <InputField xsi:type="ns2:JavaField" path="/zipCode"
+                index="4" />
             <OutputField xsi:type="ns2:JavaField" path="/firstName" />
         </Mapping>
     </Mappings>

@@ -9,9 +9,9 @@
         <Mapping xsi:type="Mapping" mappingType="Separate">
             <InputField xsi:type="ns2:JavaField" path="/firstName" />
             <OutputField xsi:type="ns3:XmlField" path="/Contact/@lastName"
-                index="4" />
+                index="5" />
             <OutputField xsi:type="ns3:XmlField" path="/Contact/@firstName"
-                index="2" />
+                index="3" />
         </Mapping>
         <Mapping xsi:type="Mapping" mappingType="Map">
             <InputField xsi:type="ns2:JavaField" path="/phoneNumber" />

@@ -5,10 +5,10 @@
     <DataSource dataSourceType="Target" uri="atlas:java?className=io.atlasmap.java.test.TargetContact" />
     <Mappings>
         <Mapping xsi:type="Mapping" mappingType="Combine">
-            <InputField xsi:type="ns3:JsonField" fieldType="String" path="/firstName" index="0" />
-            <InputField xsi:type="ns3:JsonField" fieldType="String" path="/lastName" index="4" />
-            <InputField xsi:type="ns3:JsonField" fieldType="String" path="/phoneNumber" index="7" />
-            <InputField xsi:type="ns3:JsonField" fieldType="String" path="/zipCode" index="99" />
+            <InputField xsi:type="ns3:JsonField" fieldType="String" path="/firstName" index="1" />
+            <InputField xsi:type="ns3:JsonField" fieldType="String" path="/lastName" index="5" />
+            <InputField xsi:type="ns3:JsonField" fieldType="String" path="/phoneNumber" index="8" />
+            <InputField xsi:type="ns3:JsonField" fieldType="String" path="/zipCode" index="100" />
             <OutputField xsi:type="ns2:JavaField" path="/firstName" />
         </Mapping>
     </Mappings>
