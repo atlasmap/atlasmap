@@ -17,7 +17,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-    selector: 'syndesis-dev-root',
+    selector: 'atlasmap-dev-root',
     template: `<data-mapper-example-host></data-mapper-example-host>`,
 })
 

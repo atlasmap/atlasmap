@@ -1,13 +1,13 @@
 {
-  "name": "syndesis.data.mapper",
-  "version": "1.0.0",
-  "description": "Data Mapper module for Syndesis.",
+  "name": "atlasmap.data.mapper",
+  "version": "1.31-SNAPSHOT",
+  "description": "Atlasmap Data Mapper UI module.",
   "author": "",
   "license": "MIT",
   "keywords": [],
   "repository": {},
-  "main": "src/app/lib/syndesis-data-mapper/data.mapper.module.ts",
-  "typings": "src/app/lib/syndesis-data-mapper/data.mapper.module.ts",
+  "main": "src/app/lib/atlasmap-data-mapper/data.mapper.module.ts",
+  "typings": "src/app/lib/atlasmap-data-mapper/data.mapper.module.ts",
   "scripts": {
     "build": "tsc -p ./",
     "build:watch": "tsc -p ./ -w",

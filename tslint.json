@@ -120,13 +120,13 @@
     "directive-selector": [
       true,
       "attribute",
-      "syndesis",
+      "atlasmap",
       "camelCase"
     ],
     "component-selector": [
       true,
       "element",
-      "syndesis",
+      "atlasmap",
       "kebab-case"
     ],
     "use-input-property-decorator": true,

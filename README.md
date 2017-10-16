@@ -46,27 +46,27 @@ Running the Data Mapper in stand alone mode will require installing the Data Map
 
 ## Developing Within Syndesis UI ##
 
-The Data Mapper UI is referenced by Syndesis as a dependency [here](). When the Syndesis UI's dependencies are installed during the **yarn install** step, the Data Mapper UI will be cloned from the public github master branch into the **${syndesis.ui.home}/node_modules/syndesis_data_mapper** directory. 
+The Data Mapper UI is referenced by Syndesis as a dependency [here](). When the Syndesis UI's dependencies are installed during the **yarn install** step, the Data Mapper UI will be cloned from the public github master branch into the **${syndesis.ui.home}/node_modules/atlasmap_data_mapper** directory. 
 
 You can point your local Syndesis UI's Data Mapper UI reference to your working copy of the Data Mapper by changing the **src** directory in the node_modules folder to point to your code. You'll do something like this:
 
 ```
     # save the original data mapper library contents for syndesis in case we want to use that version again later.
     # ${syndesis.ui.home} is your local syndesis ui directory. 
-    > mv ${syndesis.ui.home}/node_modules/syndesis_data_mapper/src ${syndesis.ui.home}/node_modules/syndesis_data_mapper/src.old
+    > mv ${syndesis.ui.home}/node_modules/atlasmap_data_mapper/src ${syndesis.ui.home}/node_modules/atlasmap_data_mapper/src.old
 
     # ${atlas.ui.home} is your local data mapper ui directory
-    > ln -s ${atlas.ui.home}/src ${syndesis.ui.home}/node_modules/syndesis_data_mapper/src
+    > ln -s ${atlas.ui.home}/src ${syndesis.ui.home}/node_modules/atlasmap_data_mapper/src
 ```
 
 After making this change, restart the Syndesis UI with **yarn start**.
 
-Note that running `yarn install` in the Syndesis UI directory **will remove and redownload the ${syndesis.ui.home}/node_modules/syndesis_data_mapper directory**. For this reason, do *not* make changes within the **${syndesis.ui.home}/node_modules/syndesis_data_mapper** directory. Instead, make changes in another directory and use the soft link (`ln -s`) command shown above to point the Syndesis UI dependency to your code. 
+Note that running `yarn install` in the Syndesis UI directory **will remove and redownload the ${syndesis.ui.home}/node_modules/atlasmap_data_mapper directory**. For this reason, do *not* make changes within the **${syndesis.ui.home}/node_modules/atlasmap_data_mapper** directory. Instead, make changes in another directory and use the soft link (`ln -s`) command shown above to point the Syndesis UI dependency to your code. 
 
 
 ## Debug Configuration ##
 
-The Data Mapper UI features several developer-friendly debug configuration options. These configuration fields are specified on the [ConfigModel](https://github.com/atlasmap/atlasmap-ui/blob/master/src/app/lib/syndesis-data-mapper/models/config.model.ts) class. 
+The Data Mapper UI features several developer-friendly debug configuration options. These configuration fields are specified on the [ConfigModel](https://github.com/atlasmap/atlasmap-ui/blob/master/src/app/lib/atlasmap-data-mapper/models/config.model.ts) class. 
 
 ** Service Endpoint Configuration**
 
@@ -89,7 +89,7 @@ These flags control the UI automatically adding the specified mock documents to 
 1. addMockXMLSchemaTarget - Add a XML schema target document.
 1. addMockJSONTarget - Add a JSON target document.
 
-The code that initializes these mock documents is in the [Initialization Service](https://github.com/atlasmap/atlasmap-ui/blob/master/src/app/lib/syndesis-data-mapper/services/initialization.service.ts). That service calls various static methods in the [Document Management Service](https://github.com/atlasmap/atlasmap-ui/blob/master/src/app/lib/syndesis-data-mapper/services/document.management.service.ts) to create example XML instance, XML schema, and JSON documents. Mock Java documents referenced are from the AtlasMap Services' [Atlas Java Test Model Maven Module](https://github.com/atlasmap/atlasmap/tree/master/atlas-java-parent/atlas-java-test-model/src/main/java/io/atlasmap/java/test).
+The code that initializes these mock documents is in the [Initialization Service](https://github.com/atlasmap/atlasmap-ui/blob/master/src/app/lib/atlasmap-data-mapper/services/initialization.service.ts). That service calls various static methods in the [Document Management Service](https://github.com/atlasmap/atlasmap-ui/blob/master/src/app/lib/atlasmap-data-mapper/services/document.management.service.ts) to create example XML instance, XML schema, and JSON documents. Mock Java documents referenced are from the AtlasMap Services' [Atlas Java Test Model Maven Module](https://github.com/atlasmap/atlasmap/tree/master/atlas-java-parent/atlas-java-test-model/src/main/java/io/atlasmap/java/test).
 
 ** Additional Debug Configuration**
 
@@ -142,7 +142,7 @@ Data Mapper Debug Configuration within the Syndesis UI is defined within your **
 }
 ```
 
-If you're running the Data Mapper UI locally outside of the Syndesis UI, the debug configuration is specified within the [DataMapperAppExampleHostComponent](https://github.com/atlasmap/atlasmap-ui/blob/master/src/app/lib/syndesis-data-mapper/components/data.mapper.example.host.component.ts).
+If you're running the Data Mapper UI locally outside of the Syndesis UI, the debug configuration is specified within the [DataMapperAppExampleHostComponent](https://github.com/atlasmap/atlasmap-ui/blob/master/src/app/lib/atlasmap-data-mapper/components/data.mapper.example.host.component.ts).
 
 ## Code Overview ##
 
@@ -156,7 +156,7 @@ If you're running the Data Mapper UI locally outside of the Syndesis UI, the deb
 
 Bootstrapping the Data Mapper UI requires a bit of configuration. An example bootstrapping component is provided within the project:
 
-src/app/lib/syndesis-data-mapper/components/data.mapper.example.host.component.ts
+src/app/lib/atlasmap-data-mapper/components/data.mapper.example.host.component.ts
 
 *MODEL OVERVIEW*
 

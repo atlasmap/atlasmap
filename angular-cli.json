@@ -2,7 +2,7 @@
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "project": {
     "version": "1.0.0",
-    "name": "syndesis.data.mapper"
+    "name": "atlasmap.data.mapper"
   },
   "apps": [
     {
