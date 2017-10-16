@@ -294,6 +294,18 @@ public class AtlasService extends Application {
         return converterCheck(mapping, uriInfo);
     }
 
+
+    /**
+     * Simple liveness check method used in liveness checks. Must not be protected via authetication.
+     *
+     * @return literally "pong"
+     */
+    @GET
+    @Path("/ping")
+    public String ping() {
+        return "pong";
+    }
+
     protected Response validateMapping(AtlasMapping mapping, UriInfo uriInfo) throws IOException, AtlasException {
 
         File temporaryMappingFile = File.createTempFile("atlas-mapping", "xml");
