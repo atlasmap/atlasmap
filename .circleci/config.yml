@@ -81,6 +81,8 @@ jobs:
           npm version ${TAG}
 
           echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
+          git config --global user.email "tm.igarashi+atlasmapci@gmail.com"
+          git config --global user.name "AtlasMap CI"
           npm publish
 
           # git push --follow-tags
