@@ -80,7 +80,7 @@ jobs:
           fi
           git config --global user.name "AtlasMap CI"
           git config --global user.email "tm.igarashi+atlasmapci@gmail.com"
-          npm version ${TAG}
+          npm version --no-git-tag-version ${TAG}
 
           echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
           npm publish
