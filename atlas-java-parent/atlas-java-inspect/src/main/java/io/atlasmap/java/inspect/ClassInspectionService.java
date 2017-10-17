@@ -36,8 +36,6 @@ import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.xeustechnologies.jcl.JarClassLoader;
-import org.xeustechnologies.jcl.exception.JclException;
 
 import io.atlasmap.api.AtlasConversionService;
 import io.atlasmap.core.PathUtil;
@@ -199,11 +197,9 @@ public class ClassInspectionService {
         }
 
         JavaClass d = null;
-        Class<?> clazz = null;
-        JarClassLoader jcl = null;
         try {
-            jcl = new JarClassLoader(new String[] { "target/reference-jars" });
-            clazz = jcl.loadClass(className);
+            JarClassLoader jcl = new JarClassLoader(new String[] { "target/reference-jars" });
+            Class<?> clazz = jcl.loadClass(className);
             d = inspectClass(clazz);
         } catch (ClassNotFoundException cnfe) {
             if (logger.isDebugEnabled()) {
@@ -212,20 +208,6 @@ public class ClassInspectionService {
             d = AtlasJavaModelFactory.createJavaClass();
             d.setClassName(className);
             d.setStatus(FieldStatus.NOT_FOUND);
-        } finally {
-            if (jcl != null) {
-                try {
-                    jcl.unloadClass(className);
-                } catch (JclException e) {
-                    if (e.getCause() != null) {
-                        logger.warn("Error unloading class " + className + " msg: " + e.getCause().getMessage(),
-                                e.getCause());
-                    } else {
-                        logger.warn("Error unloading class " + className + " msg: " + e.getMessage(), e);
-                    }
-                }
-            }
-            jcl = null;
         }
         return d;
     }

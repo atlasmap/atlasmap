@@ -16,8 +16,6 @@
 package io.atlasmap.java.inspect;
 
 import org.junit.Test;
-import org.xeustechnologies.jcl.JarClassLoader;
-import org.xeustechnologies.jcl.exception.JclException;
 
 import java.io.FileInputStream;
 import java.nio.file.DirectoryStream;
@@ -90,9 +88,6 @@ public class DynamicClassLoaderTest {
             fail("Expected class to load");
         }
 
-        jc.unloadClass("io.atlasmap.java.test.BaseFlatPrimitiveClass");
-        jc = null;
-
         try {
             flatClazz = this.getClass().getClassLoader().loadClass("io.atlasmap.java.test.FlatPrimitiveClass");
             fail("ClassNotFoundException expected");
@@ -101,25 +96,14 @@ public class DynamicClassLoaderTest {
         }
     }
 
-    @Test
     public void testLoadUnloadNeverLoadedClass() throws Exception {
-
-        Class<?> flatClazz = null;
-
         try {
-            flatClazz = this.getClass().getClassLoader().loadClass("io.atlasmap.java.test.BaseFlatPrimitiveClass");
+            this.getClass().getClassLoader().loadClass("io.atlasmap.java.test.BaseFlatPrimitiveClass");
             fail("ClassNotFoundException expected");
         } catch (ClassNotFoundException e) {
             // Expected
         }
 
-        JarClassLoader jc = new JarClassLoader(new String[] { "target/reference-jars" });
-
-        try {
-            jc.unloadClass("io.atlasmap.java.test.BaseFlatPrimitiveClass");
-        } catch (JclException e) {
-            assertEquals("Resource not found in local ClasspathResources", e.getCause().getMessage());
-        }
     }
 
 }

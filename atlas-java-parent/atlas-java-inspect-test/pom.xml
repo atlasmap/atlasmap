@@ -53,10 +53,6 @@
             </exclusions>
         </dependency>
         <dependency>
-            <groupId>org.xeustechnologies</groupId>
-            <artifactId>jcl-core</artifactId>
-        </dependency>
-        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>

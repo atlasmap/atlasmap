@@ -396,11 +396,6 @@
                 <version>${slf4j.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.xeustechnologies</groupId>
-                <artifactId>jcl-core</artifactId>
-                <version>${jcl.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>org.xmlunit</groupId>
                 <artifactId>xmlunit-matchers</artifactId>
                 <version>${xmlunit.version}</version>
