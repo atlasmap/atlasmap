@@ -160,7 +160,7 @@ public class AtlasEndpoint extends ResourceEndpoint {
         ObjectHelper.notNull(path, "mappingUri");
 
         Message incomingMessage = exchange.getIn();
-		String newResourceUri = incomingMessage.getHeader(AtlasConstants.ATLAS_RESOURCE_URI, String.class);
+        String newResourceUri = incomingMessage.getHeader(AtlasConstants.ATLAS_RESOURCE_URI, String.class);
         if (newResourceUri != null) {
             incomingMessage.removeHeader(AtlasConstants.ATLAS_RESOURCE_URI);
 

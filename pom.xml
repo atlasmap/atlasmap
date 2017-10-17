@@ -13,7 +13,7 @@
     <parent>
         <groupId>io.atlasmap</groupId>
         <artifactId>atlas</artifactId>
-        <version>1.30.1</version>
+        <version>1.30.2</version>
     </parent>
 
     <artifactId>camel-atlasmap</artifactId>
@@ -25,7 +25,7 @@
         <camel.osgi.import.before.defaults>com.sun.xml.bind.marshaller;resolution:=optional</camel.osgi.import.before.defaults>
         <camel.osgi.export.pkg>org.apache.camel.converter.atlasmap.*</camel.osgi.export.pkg>
         <camel.osgi.export.service>org.apache.camel.spi.DataFormatResolver;dataformat=atlasmap</camel.osgi.export.service>
-        <atlas.version>1.30.1</atlas.version>
+        <atlas.version>1.30.2</atlas.version>
         <camel.version>2.20.0.fuse-000106</camel.version>
         <ipaas.connector.version>0.4.5</ipaas.connector.version>
         <jaxb.version>2.2.11</jaxb.version>
