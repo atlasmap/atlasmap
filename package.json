@@ -9,6 +9,7 @@
   "main": "src/app/lib/atlasmap-data-mapper/data.mapper.module.ts",
   "typings": "src/app/lib/atlasmap-data-mapper/data.mapper.module.ts",
   "scripts": {
+    "version": "echo $npm_package_version",
     "build": "tsc -p ./",
     "build:watch": "tsc -p ./ -w",
     "build:e2e": "tsc -p e2e/",
