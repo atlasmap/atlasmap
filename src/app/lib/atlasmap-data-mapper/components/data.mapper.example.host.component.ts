@@ -97,7 +97,7 @@ export class DataMapperAppExampleHostComponent {
 
         //enable mock source/target documents as needed
         c.initCfg.addMockJavaSingleSource = false;
-        c.initCfg.addMockJavaSources = false;
+        c.initCfg.addMockJavaSources = true;
         c.initCfg.addMockJavaCachedSource = false;
         c.initCfg.addMockXMLInstanceSources = false;
         c.initCfg.addMockXMLSchemaSources = false;
