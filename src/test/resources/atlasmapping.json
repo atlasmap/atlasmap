@@ -30,7 +30,7 @@
                     "outputField": [
                         {
                             "jsonType": "io.atlasmap.java.v2.JavaField",
-                            "index": 0,
+                            "index": 1,
                             "path": "/FirstName",
                             "fieldType": "STRING",
                             "name": "FirstName",
@@ -38,7 +38,7 @@
                         },
                         {
                             "jsonType": "io.atlasmap.java.v2.JavaField",
-                            "index": 1,
+                            "index": 2,
                             "path": "/LastName",
                             "fieldType": "STRING",
                             "name": "LastName",
