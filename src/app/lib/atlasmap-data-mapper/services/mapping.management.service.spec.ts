@@ -14,7 +14,7 @@ describe('MappingManagementService', () => {
         { provide: RequestOptions, useClass: BaseRequestOptions },
         {
           provide: Http,
-          useFactory: (backend, options) => {
+          useFactory: (backend : MockBackend, options : RequestOptions) => {
             return new Http(backend, options);
           },
           deps: [MockBackend, RequestOptions],

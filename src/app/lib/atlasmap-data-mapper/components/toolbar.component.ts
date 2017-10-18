@@ -161,7 +161,6 @@ export class ToolbarComponent {
         var self: ToolbarComponent = this;
         this.modalWindow.reset();
         this.modalWindow.confirmButtonText = "Save";
-        this.modalWindow.parentComponent = this;
         this.modalWindow.headerText = this.cfg.mappings.templateExists() ? "Edit Template" : "Add Template";
         this.modalWindow.nestedComponentInitializedCallback = (mw: ModalWindowComponent) => {
             var templateComponent: TemplateEditComponent = mw.nestedComponent as TemplateEditComponent;

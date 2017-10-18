@@ -63,7 +63,6 @@ export class EmptyModalBodyComponent { }
 
 export class ModalWindowComponent implements AfterViewInit {
     @Input() headerText: string = "";
-    @Input() parentComponent: Component;
     @Input() nestedComponentType: Type<any>;
     @Input() nestedComponentInitializedCallback: Function;
     @Input() okButtonHandler: Function;
@@ -137,7 +136,6 @@ export class ModalWindowComponent implements AfterViewInit {
         this.confirmButtonText = "OK";
         this.message = "";
         this.headerText = "";
-        this.parentComponent = null;
         this.componentLoaded = false;
         this.nestedComponentType = EmptyModalBodyComponent;
         this.okButtonHandler = null;

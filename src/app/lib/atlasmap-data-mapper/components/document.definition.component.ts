@@ -245,7 +245,6 @@ export class DocumentDefinitionComponent {
         var self: DocumentDefinitionComponent = this;
         this.modalWindow.reset();
         this.modalWindow.confirmButtonText = "Save";
-        this.modalWindow.parentComponent = this;
         var isProperty: boolean = docDef.initCfg.type.isProperty();
         var isConstant: boolean = docDef.initCfg.type.isConstant();
         this.modalWindow.headerText = isProperty ? "Create Property" : (isConstant ? "Create Constant" : "Create Field");
