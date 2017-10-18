@@ -1,7 +1,7 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "project": {
-    "version": "1.31.0",
+    "version": "1.32.0-SNAPSHOT",
     "name": "@atlasmap/atlasmap.data.mapper"
   },
   "apps": [
