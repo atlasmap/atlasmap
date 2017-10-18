@@ -134,7 +134,6 @@ export class NamespaceListComponent {
         var self: NamespaceListComponent = this;
         this.modalWindow.reset();
         this.modalWindow.confirmButtonText = "Save";
-        this.modalWindow.parentComponent = this;
         this.modalWindow.headerText = (ns == null) ? "Add Namespace" : "Edit Namespace";
         this.modalWindow.nestedComponentInitializedCallback = (mw: ModalWindowComponent) => {
             var namespaceComponent: NamespaceEditComponent = mw.nestedComponent as NamespaceEditComponent;
@@ -161,7 +160,6 @@ export class NamespaceListComponent {
         var self: NamespaceListComponent = this;
         this.modalWindow.reset();
         this.modalWindow.confirmButtonText = "Remove";
-        this.modalWindow.parentComponent = this;
         this.modalWindow.headerText = "Remove Namespace?"
         this.modalWindow.message = "Are you sure you want to remove '" + ns.alias + "' ?";
         this.modalWindow.okButtonHandler = (mw: ModalWindowComponent) => {

@@ -237,7 +237,6 @@ export class DocumentFieldDetailComponent {
         var oldPath: string = this.field.path;
         this.modalWindow.reset();
         this.modalWindow.confirmButtonText = "Save";
-        this.modalWindow.parentComponent = this;
         var isProperty: boolean = this.field.isProperty();
         var isConstant: boolean = this.field.isConstant();
         this.modalWindow.headerText = isProperty ? "Edit Property" : (isConstant ? "Edit Constant" : "Edit Field");
@@ -282,7 +281,6 @@ export class DocumentFieldDetailComponent {
         var self: DocumentFieldDetailComponent = this;
         this.modalWindow.reset();
         this.modalWindow.confirmButtonText = "Remove";
-        this.modalWindow.parentComponent = this;
         if (this.field.isPropertyOrConstant()) {
             this.modalWindow.headerText = this.field.isProperty() ? "Remove Property?" : "Remove Constant?";
         } else {

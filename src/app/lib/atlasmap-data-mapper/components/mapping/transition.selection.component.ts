@@ -106,19 +106,16 @@ export class TransitionSelectionComponent {
         }
         this.modalWindow.reset();
         this.modalWindow.confirmButtonText = "Finish";
-        this.modalWindow.parentComponent = this;
         this.modalWindow.headerText = "Map Enumeration Values";
         this.modalWindow.nestedComponentInitializedCallback = (mw: ModalWindowComponent) => {
-            var self: TransitionSelectionComponent = mw.parentComponent as TransitionSelectionComponent;
             var c: LookupTableComponent = mw.nestedComponent as LookupTableComponent;
-            c.initialize(self.cfg, this.fieldPair);
+            c.initialize(this.cfg, this.fieldPair);
         };
         this.modalWindow.nestedComponentType = LookupTableComponent;
         this.modalWindow.okButtonHandler = (mw: ModalWindowComponent) => {
-            var self: TransitionSelectionComponent = mw.parentComponent as TransitionSelectionComponent;
             var c: LookupTableComponent = mw.nestedComponent as LookupTableComponent;
             c.saveTable();
-            self.cfg.mappingService.saveCurrentMapping();
+            this.cfg.mappingService.saveCurrentMapping();
         };
         this.modalWindow.show();
     }

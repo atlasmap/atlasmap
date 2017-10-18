@@ -282,12 +282,10 @@ export class MappingDetailComponent implements OnInit {
     private removeMapping(event: MouseEvent): void {
         this.modalWindow.reset();
         this.modalWindow.confirmButtonText = "Remove";
-        this.modalWindow.parentComponent = this;
         this.modalWindow.headerText = "Remove Mapping?";
         this.modalWindow.message = "Are you sure you want to remove the current mapping?";
         this.modalWindow.okButtonHandler = (mw: ModalWindowComponent) => {
-            var self: MappingDetailComponent = mw.parentComponent as MappingDetailComponent;
-            self.cfg.mappingService.removeMapping(self.cfg.mappings.activeMapping);
+            this.cfg.mappingService.removeMapping(this.cfg.mappings.activeMapping);
             this.cfg.showMappingDetailTray = false;
         };
         this.modalWindow.show();
@@ -298,7 +296,6 @@ export class MappingDetailComponent implements OnInit {
         var self: MappingDetailComponent = this;
         this.modalWindow.reset();
         this.modalWindow.confirmButtonText = "Select";
-        this.modalWindow.parentComponent = this;
         this.modalWindow.headerText = "Select Mapping";
         this.modalWindow.nestedComponentInitializedCallback = (mw: ModalWindowComponent) => {
             var c: MappingSelectionComponent = mw.nestedComponent as MappingSelectionComponent;
