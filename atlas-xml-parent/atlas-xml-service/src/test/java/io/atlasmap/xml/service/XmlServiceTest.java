@@ -2,15 +2,12 @@ package io.atlasmap.xml.service;
 
 import static org.junit.Assert.*;
 
-import java.util.List;
-
 import javax.ws.rs.core.Response;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import io.atlasmap.v2.Field;
 import io.atlasmap.xml.v2.InspectionType;
 import io.atlasmap.xml.v2.XmlComplexType;
 import io.atlasmap.xml.v2.XmlDocument;
