@@ -29,8 +29,6 @@
     <packaging>pom</packaging>
 
     <properties>
-        <!-- TODO jersey should be removed -->
-        <jersey.version>2.25.1</jersey.version>
         <!-- TODO syndesis connectors should be removed -->
         <syndesis.connector.version>0.5.5</syndesis.connector.version>
         <!-- TODO camel should be removed -->
@@ -45,13 +43,14 @@
         <jackson.version>2.8.5</jackson.version>
         <jackson.version.range>[2.6,3)</jackson.version.range>
         <jackson-module-jaxb-annotations.version>2.8.6</jackson-module-jaxb-annotations.version>
+        <javax.ws.rs.version>2.0</javax.ws.rs.version>
         <jaxb-api.version>2.2.12</jaxb-api.version>
         <jaxb-impl.version>2.1</jaxb-impl.version>
         <jaxb.version.range>[2.2,3)</jaxb.version.range>
         <jaxb2-basics.version>0.11.1</jaxb2-basics.version>
         <jaxb2-basics-annotate.version>1.0.2</jaxb2-basics-annotate.version>
         <jaxb2-basics-namespace-prefix.version>1.2</jaxb2-basics-namespace-prefix.version>
-        <jcl.version>2.8</jcl.version>
+        <jersey.version>2.25.1</jersey.version>
         <!-- Does this fix the NPE problem ?? <jetty-maven-plugin.version>9.4.2.v20170220</jetty-maven-plugin.version> -->
         <jetty-maven-plugin.version>9.4.5.v20170502</jetty-maven-plugin.version>
         <jsonschema2pojo-maven-plugin.version>0.4.37</jsonschema2pojo-maven-plugin.version>
@@ -290,6 +289,12 @@
                 <version>${syndesis.connector.version}</version>
             </dependency>
             <dependency>
+                <groupId>javax.ws.rs</groupId>
+                <artifactId>javax.ws.rs-api</artifactId>
+                <version>${javax.ws.rs.version}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
                 <groupId>javax.xml.bind</groupId>
                 <artifactId>jaxb-api</artifactId>
                 <version>${jaxb-api.version}</version>
@@ -303,6 +308,7 @@
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
                 <version>${junit.version}</version>
+                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>log4j</groupId>
@@ -344,26 +350,31 @@
                 <groupId>org.glassfish.jersey.core</groupId>
                 <artifactId>jersey-server</artifactId>
                 <version>${jersey.version}</version>
+                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.glassfish.jersey.core</groupId>
                 <artifactId>jersey-common</artifactId>
                 <version>${jersey.version}</version>
+                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.glassfish.jersey.containers</groupId>
                 <artifactId>jersey-container-servlet</artifactId>
                 <version>${jersey.version}</version>
+                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.glassfish.jersey.core</groupId>
                 <artifactId>jersey-client</artifactId>
                 <version>${jersey.version}</version>
+                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.glassfish.jersey.media</groupId>
                 <artifactId>jersey-media-json-jackson</artifactId>
                 <version>${jersey.version}</version>
+                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.hamcrest</groupId>

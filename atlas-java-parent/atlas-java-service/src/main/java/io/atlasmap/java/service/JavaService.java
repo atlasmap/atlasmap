@@ -24,8 +24,6 @@ import io.atlasmap.java.v2.JavaClass;
 import io.atlasmap.java.v2.MavenClasspathRequest;
 import io.atlasmap.java.v2.MavenClasspathResponse;
 
-import org.glassfish.jersey.jackson.JacksonFeature;
-import org.glassfish.jersey.server.ResourceConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,13 +45,7 @@ import javax.ws.rs.core.Response;
 @Path("v2/atlas/java")
 public class JavaService extends Application {
 
-    final Application javaServiceApp;
-
     private static final Logger logger = LoggerFactory.getLogger(JavaService.class);
-
-    public JavaService() {
-        javaServiceApp = new ResourceConfig().register(JacksonFeature.class);
-    }
 
     // example request: http://localhost:8181/rest/myresource?from=jason%20baker
     @GET

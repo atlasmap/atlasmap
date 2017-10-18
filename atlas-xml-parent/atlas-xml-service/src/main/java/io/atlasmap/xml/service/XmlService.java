@@ -15,8 +15,6 @@
  */
 package io.atlasmap.xml.service;
 
-import org.glassfish.jersey.jackson.JacksonFeature;
-import org.glassfish.jersey.server.ResourceConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,13 +44,7 @@ import javax.ws.rs.core.Response;
 @Path("v2/atlas/xml")
 public class XmlService extends Application {
 
-    final Application xmlServiceApp;
-
     private static final Logger logger = LoggerFactory.getLogger(XmlService.class);
-
-    public XmlService() {
-        xmlServiceApp = new ResourceConfig().register(JacksonFeature.class);
-    }
 
     // example request: http://localhost:8181/rest/myresource?from=jason%20baker
     @GET

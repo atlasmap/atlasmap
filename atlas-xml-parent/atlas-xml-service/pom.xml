@@ -64,6 +64,10 @@
             <groupId>io.atlasmap</groupId>
             <artifactId>atlas-xml-model</artifactId>
         </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
@@ -73,12 +77,23 @@
                 <groupId>org.eclipse.jetty</groupId>
                 <artifactId>jetty-maven-plugin</artifactId>
                 <configuration>
+                    <useTestScope>true</useTestScope>
+                    <scanTargets>
+                        <scanTarget>${project.basedir}/src/main</scanTarget>
+                    </scanTargets>
                     <scanIntervalSeconds>10</scanIntervalSeconds>
                     <webApp>
                         <contextPath>/</contextPath>
                     </webApp>
                     <jettyXml>src/test/resources/jetty.xml</jettyXml>
                 </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>javax.ws.rs</groupId>
+                        <artifactId>javax.ws.rs-api</artifactId>
+                        <version>${javax.ws.rs.version}</version>
+                    </dependency>
+                </dependencies>
             </plugin>
         </plugins>
     </build>

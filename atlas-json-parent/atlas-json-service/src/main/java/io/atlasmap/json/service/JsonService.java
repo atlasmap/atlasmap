@@ -15,8 +15,6 @@
  */
 package io.atlasmap.json.service;
 
-import org.glassfish.jersey.jackson.JacksonFeature;
-import org.glassfish.jersey.server.ResourceConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,13 +42,7 @@ import javax.ws.rs.core.Response;
 @Path("v2/atlas/json")
 public class JsonService extends Application {
 
-    final Application jsonServiceApp;
-
     private static final Logger logger = LoggerFactory.getLogger(JsonService.class);
-
-    public JsonService() {
-        jsonServiceApp = new ResourceConfig().register(JacksonFeature.class);
-    }
 
     // example request: http://localhost:8181/rest/myresource?from=jason%20baker
     @GET

@@ -75,6 +75,10 @@
         <dependency>
             <groupId>org.glassfish.jersey.media</groupId>
             <artifactId>jersey-media-json-jackson</artifactId>
+         </dependency>
+         <dependency>
+            <groupId>javax.ws.rs</groupId>
+            <artifactId>javax.ws.rs-api</artifactId>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
@@ -89,12 +93,23 @@
                 <groupId>org.eclipse.jetty</groupId>
                 <artifactId>jetty-maven-plugin</artifactId>
                 <configuration>
+                    <useTestScope>true</useTestScope>
+                    <scanTargets>
+                        <scanTarget>${project.basedir}/src/main</scanTarget>
+                    </scanTargets>
                     <scanIntervalSeconds>10</scanIntervalSeconds>
                     <webApp>
                         <contextPath>/</contextPath>
                     </webApp>
                     <jettyXml>src/test/resources/jetty.xml</jettyXml>
                 </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>javax.ws.rs</groupId>
+                        <artifactId>javax.ws.rs-api</artifactId>
+                        <version>${javax.ws.rs.version}</version>
+                    </dependency>
+                </dependencies>
             </plugin>
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>

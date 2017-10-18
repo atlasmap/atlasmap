@@ -31,8 +31,6 @@ import io.atlasmap.v2.StringMap;
 import io.atlasmap.v2.StringMapEntry;
 import io.atlasmap.v2.Validations;
 
-import org.glassfish.jersey.jackson.JacksonFeature;
-import org.glassfish.jersey.server.ResourceConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -74,7 +72,6 @@ import java.util.Optional;
 public class AtlasService extends Application {
 
     private static final Logger logger = LoggerFactory.getLogger(AtlasService.class);
-    final Application javaServiceApp;
     final DefaultAtlasContextFactory atlasContextFactory = DefaultAtlasContextFactory.getInstance();
     private String baseFolder = "target/mappings";
 
@@ -85,10 +82,6 @@ public class AtlasService extends Application {
     private static final String ACCESS_CONTROL_ALLOW_METHODS = "Access-Control-Allow-Methods";
     private static final String DEFAULT_ACCESS_CONTROL_ALLOW_METHODS = "GET,PUT,POST,PATCH,DELETE,OPTIONS,HEAD";
     private static final String ACCESS_CONTROL_ALLOW_METHODS_GPPPD = "GET,PUT,POST,PATCH,DELETE";
-
-    public AtlasService() {
-        javaServiceApp = new ResourceConfig().register(JacksonFeature.class);
-    }
 
     protected Response standardCORSResponse() {
         return Response.ok().header(ACCESS_CONTROL_ALLOW_ORIGIN, DEFAULT_ACCESS_CONTROL_ALLOW_ORIGIN)
