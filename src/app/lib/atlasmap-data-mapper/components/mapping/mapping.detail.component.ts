@@ -240,12 +240,19 @@ export class MappingPairDetailComponent {
                     </h2>
                 </div>
                 <div class="fieldMappingDetail-body">
-                    <div class="alert alert-danger" *ngFor="let error of cfg.mappings.activeMapping.validationErrors">
+                    <div class="alert alert-danger" *ngFor="let error of cfg.mappings.activeMapping.getValidationErrors()">
                         <a class="close" (click)="cfg.mappings.activeMapping.removeError(error.identifier)">
                             <i class="fa fa-close"></i>
                         </a>
                         <span class="pficon pficon-error-circle-o"></span>
                         <label>{{ error.message }}</label>
+                    </div>
+                    <div class="alert alert-warning" *ngFor="let warn of cfg.mappings.activeMapping.getValidationWarnings()">
+                        <a class="close" (click)="cfg.mappings.activeMapping.removeError(warn.identifier)">
+                            <i class="fa fa-close"></i>
+                        </a>
+                        <span class="pficon pficon-warning-triangle-o"></span>
+                        <label>{{ warn.message }}</label>
                     </div>
                     <div *ngIf="!isMappingCollection()">
                         <mapping-pair-detail *ngFor="let fieldPair of cfg.mappings.activeMapping.fieldMappings"
