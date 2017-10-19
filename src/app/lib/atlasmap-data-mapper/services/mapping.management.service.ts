@@ -317,11 +317,20 @@ export class MappingManagementService {
             .then((res: Response) => {
                 DataMapperUtil.debugLogJSON(res, "Validation Service Response", this.cfg.initCfg.debugValidationServiceCalls, url);
                 var mapping: MappingModel = this.cfg.mappings.activeMapping;
-                let body: any = res.json();                 
+                let body: any = res.json();
                 var errors: ErrorInfo[] = [];
                 if (body && body.Validations && body.Validations.validation) {
                     for (let error of body.Validations.validation) {
-                        const e = new ErrorInfo(error.message, ErrorLevel.VALIDATION_ERROR);
+                        // FIXME: https://github.com/atlasmap/atlasmap-ui/issues/112
+                        // This validation results contains all results for the entire mappings,
+                        // must get into each mapping details instead of putting everything into active mapping detail
+                        let level : ErrorLevel = ErrorLevel.VALIDATION_ERROR;
+                        if (error.status === "WARN") {
+                            level = ErrorLevel.WARN;
+                        } else if (error.status === "INFO") {
+                            level = ErrorLevel.INFO;
+                        }
+                        const e = new ErrorInfo(error.message, level);
                         errors.push(e);
                     }
                 }

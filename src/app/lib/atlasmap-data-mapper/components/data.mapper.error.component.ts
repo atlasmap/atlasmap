@@ -31,6 +31,13 @@ import { ConfigModel } from '../models/config.model';
                 <span class="pficon pficon-error-circle-o"></span>
                 {{e.message}}
             </div>
+            <div class="alert alert-warning" *ngFor="let w of getWarnings()">
+                <a class="close" (click)="handleClick($event)">
+                    <i class="fa fa-close" attr.errorIdentifier="{{w.identifier}}"></i>
+                </a>
+                <span class="pficon pficon-warning-triangle-o"></span>
+                {{w.message}}
+            </div>
         </div>
     `
 })
@@ -40,7 +47,12 @@ export class DataMapperErrorComponent {
     @Input() public isValidation: boolean = false;
 
     public getErrors(): ErrorInfo[] {
-        return this.isValidation ? ConfigModel.getConfig().validationErrors : ConfigModel.getConfig().errors;
+        let test : ErrorInfo[] = ConfigModel.getConfig().validationErrors;
+        return this.isValidation ? ConfigModel.getConfig().validationErrors.filter(e => e.level >= ErrorLevel.ERROR) : ConfigModel.getConfig().errors;
+    }
+
+    public getWarnings(): ErrorInfo[] {
+        return this.isValidation ? ConfigModel.getConfig().validationErrors.filter(e => e.level === ErrorLevel.WARN) : ErrorInfo[0];
     }
 
     public handleClick(event: any) {

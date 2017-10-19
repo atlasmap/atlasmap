@@ -64,6 +64,7 @@
     "no-trailing-whitespace": true,
     "no-unused-expression": false,
     "no-unused-new": false,
+    "no-unused-variable": true,
     "no-use-before-declare": true,
     "no-var-keyword": true,
     "object-literal-sort-keys": false,

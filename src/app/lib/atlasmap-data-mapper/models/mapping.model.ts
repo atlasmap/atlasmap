@@ -330,6 +330,14 @@ export class MappingModel {
         this.validationErrors = [];
     }
 
+    public getValidationErrors(): ErrorInfo[] {
+        return this.validationErrors.filter(e => e.level >= ErrorLevel.ERROR);
+    }
+
+    public getValidationWarnings(): ErrorInfo[] {
+        return this.validationErrors.filter(e => e.level == ErrorLevel.WARN);
+    }
+
     public removeError(identifier: string) {
         for (var i = 0; i < this.validationErrors.length; i++) {
             if (this.validationErrors[i].identifier == identifier) {
