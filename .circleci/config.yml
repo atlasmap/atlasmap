@@ -15,7 +15,7 @@ jobs:
 
       - run:
           name: Maven
-          command: ./mvnw --batch-mode install
+          command: ./mvnw --batch-mode install checkstyle:check
 
       - run:
           name: Collect junit reports
@@ -23,5 +23,17 @@ jobs:
             mkdir ./junit/
             find . -type f -regex ".*/target/.*-reports/.*xml" -exec cp {} ./junit/ \;
 
+      - run:
+          name: Collect checkstyle reports
+          command: |
+            mkdir ./checkstyle/
+            find . -type f -regex ".*/target/checkstyle.*xml" -exec cp {} ./checkstyle/ \;
+
       - store_test_results:
           path: ./junit
+
+      - store_artifacts:
+          path: ./junit
+
+      - store_artifacts:
+          path: ./checkstyle
