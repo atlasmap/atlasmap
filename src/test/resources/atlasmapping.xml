@@ -29,10 +29,10 @@
             <InputField xsi:type="ns2:JavaField" name="Name"
                 getMethod="getName" path="/User/name" fieldType="String" />
             <OutputField xsi:type="ns2:JavaField" name="FirstName"
-                setMethod="setFirstName" index="1" path="/FirstName"
+                setMethod="setFirstName" index="0" path="/FirstName"
                 fieldType="String" />
             <OutputField xsi:type="ns2:JavaField" name="LastName"
-                setMethod="setLastName" index="2" path="/LastName"
+                setMethod="setLastName" index="1" path="/LastName"
                 fieldType="String" />
         </Mapping>
         <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
