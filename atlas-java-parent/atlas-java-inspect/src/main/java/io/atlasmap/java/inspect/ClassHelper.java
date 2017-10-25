@@ -116,12 +116,12 @@ public class ClassHelper {
         // Solid match
         for (Method candidate : candidates) {
             // Getter and setter w/ same returnType & paramType
-        		Class<?> candidateReturnType = candidate.getParameterTypes()[0];
-        		if (returnType == null) {
-        			if (candidateReturnType == null) {
-        				return candidate;
-        			}
-        		} else if (returnType.isAssignableFrom(candidateReturnType)) {
+            Class<?> candidateReturnType = candidate.getParameterTypes()[0];
+            if (returnType == null) {
+                if (candidateReturnType == null) {
+                    return candidate;
+                }
+            } else if (returnType.isAssignableFrom(candidateReturnType)) {
                 return candidate;
             }
         }
