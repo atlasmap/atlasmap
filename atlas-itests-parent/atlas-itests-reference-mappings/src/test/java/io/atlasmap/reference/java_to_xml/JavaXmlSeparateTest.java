@@ -120,7 +120,7 @@ public class JavaXmlSeparateTest extends AtlasMappingBaseTest {
         assertEquals(null, targetContact.getValue().getLastName());
         assertTrue(session.hasErrors());
         assertEquals(
-                "Separate returned fewer segements count=3 when outputField.path=/Contact/@lastName requested index=4",
+                "Separate returned fewer segements count=3 when outputField.path=/Contact/@lastName requested index=3",
                 session.getAudits().getAudit().get(0).getMessage());
     }
 
