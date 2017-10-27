@@ -1,7 +1,5 @@
 package org.apache.camel.component.atlasmap;
 
-import static org.junit.Assert.*;
-
 import org.apache.camel.CamelContext;
 import org.apache.camel.EndpointInject;
 import org.apache.camel.ProducerTemplate;
@@ -18,6 +16,8 @@ import org.springframework.test.context.ContextConfiguration;
 import io.syndesis.connector.salesforce.Contact;
 
 import twitter4j.Status;
+
+import static org.junit.Assert.assertEquals;
 
 @RunWith(CamelSpringRunner.class)
 @BootstrapWith(CamelTestContextBootstrapper.class)
