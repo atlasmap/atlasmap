@@ -15,8 +15,6 @@
  */
 package io.atlasmap.reference.java_to_java;
 
-import static org.junit.Assert.*;
-
 import java.io.File;
 import java.util.Arrays;
 import org.junit.Ignore;
@@ -44,6 +42,9 @@ import io.atlasmap.v2.DataSourceType;
 import io.atlasmap.v2.Mapping;
 import io.atlasmap.v2.MappingType;
 import io.atlasmap.v2.Mappings;
+
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 public class JavaJavaComplexListTest extends AtlasMappingBaseTest {
 

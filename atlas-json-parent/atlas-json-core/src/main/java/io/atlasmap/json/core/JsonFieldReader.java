@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 
 public class JsonFieldReader {
 
-    private static final Logger logger = LoggerFactory.getLogger(JsonFieldReader.class);
+    private static final Logger LOG = LoggerFactory.getLogger(JsonFieldReader.class);
 
     public void read(final String document, final JsonField jsonField) throws AtlasException {
         if (document == null || document.isEmpty()) {
@@ -73,7 +73,7 @@ public class JsonFieldReader {
                         if (FieldType.CHAR.equals(jsonField.getFieldType())) {
                             jsonField.setValue(valueNode.textValue().charAt(0));
                         } else {
-                            logger.warn(String.format("Unsupported FieldType for text data t=%s p=%s docId=%s",
+                            LOG.warn(String.format("Unsupported FieldType for text data t=%s p=%s docId=%s",
                                     jsonField.getFieldType().value(), jsonField.getPath(), jsonField.getDocId()));
                         }
                     }
@@ -108,16 +108,16 @@ public class JsonFieldReader {
                     jsonField.setFieldType(FieldType.BOOLEAN);
                 } else if (valueNode.isContainerNode()) {
                     if (valueNode.isArray()) {
-                        if (logger.isDebugEnabled()) {
-                            logger.debug(String.format("Detected json array p=%s docId=%s", jsonField.getPath(),
+                        if (LOG.isDebugEnabled()) {
+                            LOG.debug(String.format("Detected json array p=%s docId=%s", jsonField.getPath(),
                                     jsonField.getDocId()));
                         }
                         jsonField.setValue(valueNode.toString());
                         jsonField.setFieldType(FieldType.COMPLEX);
                         jsonField.setCollectionType(CollectionType.ARRAY);
                     } else if (valueNode.isObject()) {
-                        if (logger.isDebugEnabled()) {
-                            logger.debug(String.format("Detected json complex object p=%s docId=%s",
+                        if (LOG.isDebugEnabled()) {
+                            LOG.debug(String.format("Detected json complex object p=%s docId=%s",
                                     jsonField.getPath(), jsonField.getDocId()));
                         }
                         jsonField.setValue(valueNode.toString());
@@ -127,7 +127,7 @@ public class JsonFieldReader {
                     jsonField.setValue(null);
                     // we can't detect field type if it's null node
                 } else {
-                    logger.warn(String.format("Detected unsupported json type for field p=%s docId=%s",
+                    LOG.warn(String.format("Detected unsupported json type for field p=%s docId=%s",
                             jsonField.getPath(), jsonField.getDocId()));
                     jsonField.setValue(valueNode.toString());
                     jsonField.setFieldType(FieldType.UNSUPPORTED);

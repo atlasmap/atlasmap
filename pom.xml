@@ -360,6 +360,7 @@
                 <version>${maven-checkstyle-plugin.version}</version>
                 <configuration>
                     <sourceDirectory>${project.build.sourceDirectory}</sourceDirectory>
+                    <includeTestSourceDirectory>true</includeTestSourceDirectory>
                     <configLocation>checkstyle.xml</configLocation>
                     <propertyExpansion>
                         checkstyle.suppression.file=checkstyle-suppressions.xml

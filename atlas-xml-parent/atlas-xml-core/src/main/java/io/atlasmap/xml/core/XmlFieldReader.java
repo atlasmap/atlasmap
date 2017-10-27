@@ -33,7 +33,7 @@ import io.atlasmap.core.PathUtil.SegmentContext;
 
 public class XmlFieldReader extends XmlFieldTransformer {
 
-    private static final Logger logger = LoggerFactory.getLogger(XmlFieldReader.class);
+    private static final Logger LOG = LoggerFactory.getLogger(XmlFieldReader.class);
 
     public XmlFieldReader() {
     }
@@ -43,18 +43,18 @@ public class XmlFieldReader extends XmlFieldTransformer {
     }
 
     public void readNew(final Document document, final XmlField xmlField) throws AtlasException {
-        if (logger.isDebugEnabled()) {
-            logger.debug("Reading input value for field: " + xmlField.getPath());
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Reading input value for field: " + xmlField.getPath());
         }
         Element parentNode = document.getDocumentElement();
         for (SegmentContext sc : new PathUtil(xmlField.getPath()).getSegmentContexts(false)) {
-            if (logger.isDebugEnabled()) {
-                logger.debug("Now processing segment: " + sc.getSegment());
-                logger.debug("Parent element is currently: " + XmlFieldWriter.writeDocumentToString(true, parentNode));
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Now processing segment: " + sc.getSegment());
+                LOG.debug("Parent element is currently: " + XmlFieldWriter.writeDocumentToString(true, parentNode));
             }
             if (sc.getPrev() == null) {
-                if (logger.isDebugEnabled()) {
-                    logger.debug("Skipping root segment: " + sc);
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Skipping root segment: " + sc);
                 }
                 // processing root node part of path such as the "XOA" part of
                 // "/XOA/contact<>/firstName", skip.
@@ -67,13 +67,13 @@ public class XmlFieldReader extends XmlFieldTransformer {
                 if (namespaceAlias != null && !"".equals(namespaceAlias)) {
                     childrenElementName = namespaceAlias + ":" + childrenElementName;
                 }
-                if (logger.isDebugEnabled()) {
-                    logger.debug("Looking for children elements with name: " + childrenElementName);
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Looking for children elements with name: " + childrenElementName);
                 }
                 List<Element> children = XmlFieldWriter.getChildrenWithName(childrenElementName, parentNode);
                 if (children == null || children.isEmpty()) {
-                    if (logger.isDebugEnabled()) {
-                        logger.debug("Skipping input value set, couldn't find children with name '"
+                    if (LOG.isDebugEnabled()) {
+                        LOG.debug("Skipping input value set, couldn't find children with name '"
                                 + childrenElementName + "', for segment: " + sc);
                     }
                     return;
@@ -82,8 +82,8 @@ public class XmlFieldReader extends XmlFieldTransformer {
                 if (PathUtil.isCollectionSegment(sc.getSegment())) {
                     int index = PathUtil.indexOfSegment(sc.getSegment());
                     if (index >= children.size()) {
-                        if (logger.isDebugEnabled()) {
-                            logger.debug("Skipping input value set, children list can't fit index " + index
+                        if (LOG.isDebugEnabled()) {
+                            LOG.debug("Skipping input value set, children list can't fit index " + index
                                     + ", children list size: " + children.size());
                         }
                         return;
@@ -108,7 +108,7 @@ public class XmlFieldReader extends XmlFieldTransformer {
                     if (FieldType.BOOLEAN.equals(xmlField.getFieldType())) {
                         xmlField.setValue(processXmlStringAsBoolean(value));
                     } else {
-                        logger.warn(String.format("Unsupported FieldType for text data t=%s p=%s docId=%s",
+                        LOG.warn(String.format("Unsupported FieldType for text data t=%s p=%s docId=%s",
                                 xmlField.getFieldType().value(), xmlField.getPath(), xmlField.getDocId()));
                     }
                 }
@@ -173,7 +173,7 @@ public class XmlFieldReader extends XmlFieldTransformer {
                     if (FieldType.BOOLEAN.equals(xmlField.getFieldType())) {
                         xmlField.setValue(processXmlStringAsBoolean(value));
                     } else {
-                        logger.warn(String.format("Unsupported FieldType for text data t=%s p=%s docId=%s",
+                        LOG.warn(String.format("Unsupported FieldType for text data t=%s p=%s docId=%s",
                                 xmlField.getFieldType().value(), xmlField.getPath(), xmlField.getDocId()));
                     }
                 }

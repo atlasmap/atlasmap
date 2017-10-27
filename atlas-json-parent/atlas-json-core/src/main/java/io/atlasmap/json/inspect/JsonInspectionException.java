@@ -1,7 +1,5 @@
 package io.atlasmap.json.inspect;
 
-import java.security.PrivilegedActionException;
-
 /**
  */
 public class JsonInspectionException extends Exception {

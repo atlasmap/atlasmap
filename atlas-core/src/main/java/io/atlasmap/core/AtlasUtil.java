@@ -38,7 +38,7 @@ import java.util.zip.ZipInputStream;
 public class AtlasUtil {
     public static final int SPLIT_LIMIT = 4;
     public static final String NEW_LINE_CHARS = "(?m)$^|[\\r\\n]+\\z";
-    private static final Logger logger = LoggerFactory.getLogger(AtlasUtil.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AtlasUtil.class);
 
     public static Properties loadPropertiesFromURL(URL url) throws Exception {
         try (InputStream is = url.openStream()) {
@@ -188,7 +188,7 @@ public class AtlasUtil {
         try {
             allParams = URLDecoder.decode(pass1[1], "UTF-8");
         } catch (UnsupportedEncodingException e) {
-            logger.error("Unable to parse uri" + atlasUri + " for configuration parameters", e);
+            LOG.error("Unable to parse uri" + atlasUri + " for configuration parameters", e);
             return params;
         }
 
@@ -203,13 +203,13 @@ public class AtlasUtil {
 
         for (int i = 0; i < configs.length; i++) {
             if (!configs[i].contains("=")) {
-                logger.warn("Invalid configuration parameter: " + configs[i] + " for uri: '" + atlasUri + "'");
+                LOG.warn("Invalid configuration parameter: " + configs[i] + " for uri: '" + atlasUri + "'");
                 continue;
             }
 
             String[] cfgs = configs[i].split("=");
             if (cfgs == null || cfgs.length != 2) {
-                logger.warn("Invalid configuration parameter: " + configs[i] + " for uri: '" + atlasUri + "'");
+                LOG.warn("Invalid configuration parameter: " + configs[i] + " for uri: '" + atlasUri + "'");
                 continue;
             }
 
@@ -300,7 +300,7 @@ public class AtlasUtil {
         try {
             connection = (JarURLConnection) jarFileUrl.openConnection();
         } catch (IOException e) {
-            logger.warn(String.format("Unable to load classes from jar file=%s msg=%s", jarFileUrl, e.getMessage()), e);
+            LOG.warn(String.format("Unable to load classes from jar file=%s msg=%s", jarFileUrl, e.getMessage()), e);
             return classNames;
         }
 
@@ -318,13 +318,13 @@ public class AtlasUtil {
                         Class<?> clazz = Class.forName(className, false, classLoader);
                         classNames.add(clazz);
                     } catch (ClassNotFoundException e) {
-                        logger.warn(String.format("Unable to load class=%s from jar file=%s msg=%s", className,
+                        LOG.warn(String.format("Unable to load class=%s from jar file=%s msg=%s", className,
                                 jarFileUrl, e.getMessage()), e);
                     }
                 }
             }
         } catch (URISyntaxException | IOException e) {
-            logger.warn(String.format("Unable to load classes from jar file=%s msg=%s", jarFileUrl, e.getMessage()), e);
+            LOG.warn(String.format("Unable to load classes from jar file=%s msg=%s", jarFileUrl, e.getMessage()), e);
         }
         return classNames;
     }

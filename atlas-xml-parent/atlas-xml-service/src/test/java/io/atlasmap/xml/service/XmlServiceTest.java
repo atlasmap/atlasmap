@@ -1,7 +1,5 @@
 package io.atlasmap.xml.service;
 
-import static org.junit.Assert.*;
-
 import javax.ws.rs.core.Response;
 
 import org.junit.After;
@@ -13,6 +11,9 @@ import io.atlasmap.xml.v2.XmlComplexType;
 import io.atlasmap.xml.v2.XmlDocument;
 import io.atlasmap.xml.v2.XmlInspectionRequest;
 import io.atlasmap.xml.v2.XmlInspectionResponse;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class XmlServiceTest {
 

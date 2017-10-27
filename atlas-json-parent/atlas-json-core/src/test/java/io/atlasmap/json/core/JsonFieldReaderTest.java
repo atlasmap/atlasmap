@@ -50,7 +50,7 @@ public class JsonFieldReaderTest {
     }
 
     @Test
-    public void testSimpleJsonDocument_WithRoot() throws Exception {
+    public void testSimpleJsonDocumentWithRoot() throws Exception {
         final String document = " {\"car\" :{ \"brand\" : \"Mercedes\", \"doors\" : 5 } }";
         JsonField field = AtlasJsonModelFactory.createJsonField();
         field.setPath("/car/doors");
@@ -66,7 +66,7 @@ public class JsonFieldReaderTest {
     }
 
     @Test
-    public void testComplexJsonDocument_NestedObjectArray() throws Exception {
+    public void testComplexJsonDocumentNestedObjectArray() throws Exception {
         final String document = "{\"menu\": {\n" + "  \"id\": \"file\",\n" + "  \"value\": \"Filed\",\n"
                 + "  \"popup\": {\n" + "    \"menuitem\": [\n"
                 + "      {\"value\": \"New\", \"onclick\": \"CreateNewDoc()\"},\n"
@@ -116,7 +116,7 @@ public class JsonFieldReaderTest {
     }
 
     @Test
-    public void testComplexJsonDocument_HighlyNested() throws Exception {
+    public void testComplexJsonDocumentHighlyNested() throws Exception {
         final String document = new String(
                 Files.readAllBytes(Paths.get("src/test/resources/highly-nested-object.json")));
         JsonField field = AtlasJsonModelFactory.createJsonField();
@@ -278,7 +278,7 @@ public class JsonFieldReaderTest {
     }
 
     @Test
-    public void testCollectionCount_HighlyNested() throws Exception {
+    public void testCollectionCountHighlyNested() throws Exception {
         final String document = new String(
                 Files.readAllBytes(Paths.get("src/test/resources/highly-nested-object.json")));
         JsonField field = AtlasJsonModelFactory.createJsonField();
@@ -288,7 +288,7 @@ public class JsonFieldReaderTest {
     }
 
     @Test
-    public void testCollectionCount_HighlyNestedSegmentDoesNotExist() throws Exception {
+    public void testCollectionCountHighlyNestedSegmentDoesNotExist() throws Exception {
         final String document = new String(
                 Files.readAllBytes(Paths.get("src/test/resources/highly-nested-object.json")));
         JsonField field = AtlasJsonModelFactory.createJsonField();
@@ -297,7 +297,7 @@ public class JsonFieldReaderTest {
     }
 
     @Test
-    public void testComplexJsonDocument_HighlyComplexNested() throws Exception {
+    public void testComplexJsonDocumentHighlyComplexNested() throws Exception {
         final String document = new String(
                 Files.readAllBytes(Paths.get("src/test/resources/highly-complex-nested-object.json")));
         JsonField field = AtlasJsonModelFactory.createJsonField();

@@ -1,7 +1,5 @@
 package io.atlasmap.core.issue;
 
-import static org.mockito.Mockito.*;
-
 import java.net.URL;
 
 import org.junit.Assert;
@@ -18,15 +16,18 @@ import io.syndesis.connector.salesforce.Contact;
 import twitter4j.Status;
 import twitter4j.User;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 public class CamelAtlasmap14Test {
 
     private AtlasMappingService mappingService;
-    
+
     @Before
     public void before() throws Exception {
         mappingService = DefaultAtlasContextFactory.getInstance().getMappingService();
     }
-    
+
     @Test
     public void test() throws Exception {
         URL url = Thread.currentThread().getContextClassLoader().getResource("mappings/issue-camel-atlasmap-14-mapping.json");
@@ -40,7 +41,7 @@ public class CamelAtlasmap14Test {
         Contact contact = (Contact)output;
         Assert.assertEquals("bobvila1982", contact.getTwitterScreenName__c());
     }
-    
+
     protected Status generateTwitterStatus() {
         Status status = mock(Status.class);
         User user = mock(User.class);

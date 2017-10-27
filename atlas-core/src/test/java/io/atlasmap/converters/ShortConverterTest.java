@@ -17,7 +17,6 @@ package io.atlasmap.converters;
 
 import io.atlasmap.spi.AtlasConversionConcern;
 import io.atlasmap.api.AtlasConversionException;
-import io.atlasmap.converters.ShortConverter;
 import io.atlasmap.spi.AtlasConversionInfo;
 import io.atlasmap.spi.AtlasPrimitiveConverter;
 import io.atlasmap.v2.FieldType;
@@ -27,7 +26,12 @@ import org.junit.Test;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 public class ShortConverterTest {
     private AtlasPrimitiveConverter<Short> converter = new ShortConverter();
@@ -48,26 +52,26 @@ public class ShortConverterTest {
     }
 
     @Test
-    public void convertToBoolean_Null() throws Exception {
+    public void convertToBooleanNull() throws Exception {
         Short l = null;
         Boolean b = converter.convertToBoolean(l);
         assertNull(b);
     }
 
     @Test(expected = AtlasConversionException.class)
-    public void convertToBoolean_Exception() throws Exception {
+    public void convertToBooleanException() throws Exception {
         Short dt = -1;
-        Boolean b = converter.convertToBoolean(dt);
+        converter.convertToBoolean(dt);
     }
 
     @Test(expected = AtlasConversionException.class)
     public void convertToByte() throws Exception {
         Short l = 0;
-        Byte b = converter.convertToByte(l);
+        converter.convertToByte(l);
     }
 
     @Test
-    public void convertToByte_Null() throws Exception {
+    public void convertToByteNull() throws Exception {
         assertNull(converter.convertToByte(null));
     }
 
@@ -80,14 +84,14 @@ public class ShortConverterTest {
     }
 
     @Test
-    public void convertToCharacter_Null() throws Exception {
+    public void convertToCharacterNull() throws Exception {
         Short s = null;
         Character c = converter.convertToCharacter(s);
         assertNull(c);
     }
 
     @Test
-    public void convertToCharacter_MAX() throws Exception {
+    public void convertToCharacterMAX() throws Exception {
         Short s = Short.MAX_VALUE;
         Character c = converter.convertToCharacter(s);
         assertNotNull(c);
@@ -95,9 +99,9 @@ public class ShortConverterTest {
     }
 
     @Test(expected = AtlasConversionException.class)
-    public void convertToCharacter_MIN() throws Exception {
+    public void convertToCharacterMIN() throws Exception {
         Short s = Short.MIN_VALUE;
-        Character c = converter.convertToCharacter(s);
+        converter.convertToCharacter(s);
     }
 
     @Test
@@ -109,14 +113,14 @@ public class ShortConverterTest {
     }
 
     @Test
-    public void convertToDouble_Null() throws Exception {
+    public void convertToDoubleNull() throws Exception {
         Short s = null;
         Double d = converter.convertToDouble(s);
         assertNull(d);
     }
 
     @Test
-    public void convertToDouble_MAX() throws Exception {
+    public void convertToDoubleMAX() throws Exception {
         Short s = Short.MAX_VALUE;
         Double d = converter.convertToDouble(s);
         assertNotNull(d);
@@ -132,12 +136,12 @@ public class ShortConverterTest {
     }
 
     @Test
-    public void convertToFloat_Null() throws Exception {
+    public void convertToFloatNull() throws Exception {
         assertNull(converter.convertToFloat(null));
     }
 
     @Test
-    public void convertToFloat_MAX() throws Exception {
+    public void convertToFloatMAX() throws Exception {
         Short s = Short.MAX_VALUE;
         Float f = converter.convertToFloat(s);
         assertNotNull(f);
@@ -153,7 +157,7 @@ public class ShortConverterTest {
     }
 
     @Test
-    public void convertToInteger_Null() throws Exception {
+    public void convertToIntegerNull() throws Exception {
         Short l = null;
         Integer i = converter.convertToInteger(l);
         assertNull(i);
@@ -168,14 +172,14 @@ public class ShortConverterTest {
     }
 
     @Test
-    public void convertToLong_Null() throws Exception {
+    public void convertToLongNull() throws Exception {
         Short s = null;
         Long l = converter.convertToLong(s);
         assertNull(l);
     }
 
     @Test
-    public void convertToLong_MAX() throws Exception {
+    public void convertToLongMAX() throws Exception {
         Short s = Short.MAX_VALUE;
         Long l = converter.convertToLong(s);
         assertNotNull(l);
@@ -183,7 +187,7 @@ public class ShortConverterTest {
     }
 
     @Test
-    public void convertToLong_MIN() throws Exception {
+    public void convertToLongMIN() throws Exception {
         Short s = Short.MIN_VALUE;
         Long l = converter.convertToLong(s);
         assertNotNull(l);
@@ -200,7 +204,7 @@ public class ShortConverterTest {
     }
 
     @Test
-    public void convertToShort_Null() throws Exception {
+    public void convertToShortNull() throws Exception {
         Short l = null;
         Short s = converter.convertToShort(l);
         assertNull(s);
@@ -215,7 +219,7 @@ public class ShortConverterTest {
     }
 
     @Test
-    public void convertToString_Null() throws Exception {
+    public void convertToStringNull() throws Exception {
         Short l = null;
         String s = converter.convertToString(l);
         assertNull(s);
@@ -223,7 +227,7 @@ public class ShortConverterTest {
 
     @Test
     public void checkAnnotations() throws Exception {
-        Class aClass = ShortConverter.class;
+        Class<?> aClass = ShortConverter.class;
         Method[] methods = aClass.getMethods();
         for (Method method : methods) {
             if (method.isSynthetic()) {
@@ -251,10 +255,10 @@ public class ShortConverterTest {
 
     @Test
     public void testCharacterDigit() {
-        int RADIX = 10;
+        int intTen = 10;
         char ch = Character.valueOf((char) Short.MAX_VALUE);
 
-        int i2 = Character.digit(ch, RADIX);
+        Character.digit(ch, intTen);
 
     }
 }

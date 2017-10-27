@@ -15,7 +15,6 @@
  */
 package io.atlasmap.java.inspect;
 
-import static org.junit.Assert.*;
 import java.util.ArrayList;
 import java.util.Vector;
 
@@ -28,6 +27,11 @@ import io.atlasmap.java.test.SourceOrderList;
 import io.atlasmap.java.test.TargetOrderList;
 import io.atlasmap.java.v2.JavaClass;
 import io.atlasmap.java.v2.JavaField;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 public class JavaConstructServiceComplexListTest {
 
@@ -97,19 +101,9 @@ public class JavaConstructServiceComplexListTest {
         assertNull(orderList.getNumberOrders());
     }
 
-    @Test
+    @Test(expected=InstantiationException.class)
     public void testConstructAbstractBaseOrderArray() throws Exception {
-        try {
-            constructService.constructClass(generateOrderList("Base"));
-            fail("Expected ConstructInvalidException");
-            /*
-             * } catch (ConstructInvalidException e) { TODO: Fix modifiers problem }
-             */
-        } catch (InstantiationException e) {
-
-        } catch (Exception e) {
-            fail("Expected ConstructInvalidException instead: " + e.getClass().getName());
-        }
+        constructService.constructClass(generateOrderList("Base"));
     }
 
     protected JavaClass generateOrderList(String prefix) {

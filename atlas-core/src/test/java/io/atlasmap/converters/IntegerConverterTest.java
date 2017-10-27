@@ -17,7 +17,6 @@ package io.atlasmap.converters;
 
 import io.atlasmap.spi.AtlasConversionConcern;
 import io.atlasmap.api.AtlasConversionException;
-import io.atlasmap.converters.IntegerConverter;
 import io.atlasmap.spi.AtlasConversionInfo;
 import io.atlasmap.spi.AtlasPrimitiveConverter;
 import io.atlasmap.v2.FieldType;
@@ -27,7 +26,13 @@ import org.junit.Test;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 public class IntegerConverterTest {
 
@@ -47,31 +52,29 @@ public class IntegerConverterTest {
     }
 
     @Test
-    public void convertToBoolean_Null() throws Exception {
+    public void convertToBooleanNull() throws Exception {
         Boolean out = converter.convertToBoolean(null);
         assertNull(out);
     }
 
     @Test(expected = AtlasConversionException.class)
-    public void convertToBoolean_ConvertException() throws Exception {
-        Boolean out = converter.convertToBoolean(10);
-        fail();
+    public void convertToBooleanConvertException() throws Exception {
+        converter.convertToBoolean(10);
     }
 
     @Test(expected = AtlasConversionException.class)
     public void convertToByte() throws Exception {
-        Byte byt = converter.convertToByte(Integer.MAX_VALUE);
-        fail();
+        converter.convertToByte(Integer.MAX_VALUE);
     }
 
     @Test
-    public void convertToByte_Null() throws Exception {
+    public void convertToByteNull() throws Exception {
         Byte byt = converter.convertToByte(null);
         assertNull(byt);
     }
 
     @Test
-    public void convertToCharacter_Null() throws Exception {
+    public void convertToCharacterNull() throws Exception {
         Character character = converter.convertToCharacter(null);
         assertNull(character);
     }
@@ -86,15 +89,15 @@ public class IntegerConverterTest {
     }
 
     @Test(expected = AtlasConversionException.class)
-    public void convertToCharacter_GreaterThanMAX() throws Exception {
+    public void convertToCharacterGreaterThanMAX() throws Exception {
         Integer integer = 1500000;
-        Character character = converter.convertToCharacter(integer);
+        converter.convertToCharacter(integer);
     }
 
     @Test(expected = AtlasConversionException.class)
-    public void convertToCharacter_LessThanMIN() throws Exception {
+    public void convertToCharacterLessThanMIN() throws Exception {
         Integer integer = -1500000;
-        Character character = converter.convertToCharacter(integer);
+        converter.convertToCharacter(integer);
     }
 
     @Test
@@ -111,7 +114,7 @@ public class IntegerConverterTest {
     }
 
     @Test
-    public void convertToDouble_Null() throws Exception {
+    public void convertToDoubleNull() throws Exception {
         assertNull(converter.convertToDouble(null));
     }
 
@@ -129,7 +132,7 @@ public class IntegerConverterTest {
     }
 
     @Test
-    public void convertToFloat_Null() throws Exception {
+    public void convertToFloatNull() throws Exception {
         assertNull(converter.convertToFloat(null));
     }
 
@@ -147,21 +150,19 @@ public class IntegerConverterTest {
     }
 
     @Test
-    public void convertToShort_Null() throws Exception {
+    public void convertToShortNull() throws Exception {
         Short out = converter.convertToShort(null);
         assertNull(out);
     }
 
     @Test(expected = AtlasConversionException.class)
-    public void convertToShort_ConvertExceptionGreaterThanMax() throws Exception {
-        Short out = converter.convertToShort(Integer.MAX_VALUE);
-        fail();
+    public void convertToShortConvertExceptionGreaterThanMax() throws Exception {
+        converter.convertToShort(Integer.MAX_VALUE);
     }
 
     @Test(expected = AtlasConversionException.class)
-    public void convertToShort_ConvertExceptionLessThanMin() throws Exception {
-        Short out = converter.convertToShort(Integer.MIN_VALUE);
-        fail();
+    public void convertToShortConvertExceptionLessThanMin() throws Exception {
+        converter.convertToShort(Integer.MIN_VALUE);
     }
 
     @Test
@@ -178,7 +179,7 @@ public class IntegerConverterTest {
     }
 
     @Test
-    public void convertToLong_Null() throws Exception {
+    public void convertToLongNull() throws Exception {
         Long out = converter.convertToLong(null);
         assertNull(out);
     }
@@ -197,7 +198,7 @@ public class IntegerConverterTest {
     }
 
     @Test
-    public void convertToString_Null() throws Exception {
+    public void convertToStringNull() throws Exception {
         String out = converter.convertToString(null);
         assertNull(out);
     }
@@ -214,14 +215,14 @@ public class IntegerConverterTest {
     }
 
     @Test
-    public void convertToInteger_Null() throws Exception {
+    public void convertToIntegerNull() throws Exception {
         Integer out = converter.convertToInteger(null);
         assertNull(out);
     }
 
     @Test
     public void checkAnnotations() throws Exception {
-        Class aClass = IntegerConverter.class;
+        Class<?> aClass = IntegerConverter.class;
         Method[] methods = aClass.getMethods();
         for (Method method : methods) {
             if (method.isSynthetic()) {
@@ -249,11 +250,11 @@ public class IntegerConverterTest {
 
     @Test
     public void testCharacterDigit() {
-        int RADIX = 10;
+        int intTen = 10;
         int i = 4;
-        char ch = Character.forDigit(i, RADIX);
+        char ch = Character.forDigit(i, intTen);
         assertTrue(ch == '4');
-        int i2 = Character.digit(ch, RADIX);
+        int i2 = Character.digit(ch, intTen);
         assertTrue(i2 == 4);
     }
 

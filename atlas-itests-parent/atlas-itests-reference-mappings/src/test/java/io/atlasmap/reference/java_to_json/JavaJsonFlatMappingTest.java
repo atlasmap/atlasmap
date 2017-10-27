@@ -15,8 +15,6 @@
  */
 package io.atlasmap.reference.java_to_json;
 
-import static org.junit.Assert.*;
-
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
@@ -42,6 +40,9 @@ import io.atlasmap.v2.DataSource;
 import io.atlasmap.v2.DataSourceType;
 import io.atlasmap.v2.Mapping;
 import io.atlasmap.v2.MappingType;
+
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 public class JavaJsonFlatMappingTest extends AtlasMappingBaseTest {
 

@@ -16,7 +16,6 @@
 package io.atlasmap.java.inspect;
 
 import io.atlasmap.core.DefaultAtlasConversionService;
-import io.atlasmap.java.inspect.ClassInspectionService;
 import io.atlasmap.java.test.FlatPrimitiveInterface;
 
 import org.junit.After;

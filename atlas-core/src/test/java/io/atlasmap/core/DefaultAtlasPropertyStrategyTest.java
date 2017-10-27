@@ -15,8 +15,6 @@
  */
 package io.atlasmap.core;
 
-import static org.junit.Assert.*;
-
 import java.io.File;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -28,6 +26,12 @@ import io.atlasmap.spi.AtlasPropertyType;
 import io.atlasmap.v2.AtlasMapping;
 import io.atlasmap.v2.AtlasModelFactory;
 import io.atlasmap.v2.PropertyField;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 public class DefaultAtlasPropertyStrategyTest {
 

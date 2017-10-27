@@ -23,15 +23,16 @@ import io.atlasmap.v2.LookupTables;
 import io.atlasmap.v2.Mapping;
 import io.atlasmap.v2.MappingType;
 import io.atlasmap.validators.BaseValidatorTest;
-import io.atlasmap.core.AtlasMappingUtil;
-import io.atlasmap.core.DefaultAtlasValidationService;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 public class DefaultAtlasValidationServiceTest extends BaseValidatorTest {
 

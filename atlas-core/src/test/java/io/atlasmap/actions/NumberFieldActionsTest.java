@@ -15,8 +15,6 @@
  */
 package io.atlasmap.actions;
 
-import static org.junit.Assert.*;
-
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -34,6 +32,8 @@ import io.atlasmap.v2.NumberType;
 import io.atlasmap.v2.SumUp;
 import io.atlasmap.v2.VolumeUnitType;
 
+import static org.junit.Assert.assertEquals;
+
 public class NumberFieldActionsTest {
 
     @Test
@@ -41,8 +41,8 @@ public class NumberFieldActionsTest {
         assertEquals(15.0000000000015, NumberFieldActions.sumUp(new SumUp(),
                 new double[] { 1.0000000000001, 2.0000000000002, 3.0000000000003, 4.0000000000004, 5.0000000000005 }));
         assertEquals(16.5f, NumberFieldActions.sumUp(new SumUp(), new float[] { 1.1f, 2.2f, 3.3f, 4.4f, 5.5f }));
-        assertEquals(3000000000000000000l,
-                NumberFieldActions.sumUp(new SumUp(), new long[] { 1000000000000000000l, 2000000000000000000l }));
+        assertEquals(3000000000000000000L,
+                NumberFieldActions.sumUp(new SumUp(), new long[] { 1000000000000000000L, 2000000000000000000L }));
         assertEquals(15, NumberFieldActions.sumUp(new SumUp(), new int[] { 1, 2, 3, 4, 5 }));
         assertEquals((byte) 0xf, NumberFieldActions.sumUp(new SumUp(), new byte[] { 1, 2, 3, 4, 5 }));
         assertEquals(16.0000000000015, NumberFieldActions.sumUp(new SumUp(), new Number[] { 1.0000000000001,

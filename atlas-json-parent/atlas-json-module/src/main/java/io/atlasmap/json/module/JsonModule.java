@@ -19,7 +19,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.core.JsonFactory;
@@ -31,7 +30,6 @@ import io.atlasmap.api.AtlasConversionException;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.api.AtlasSession;
 import io.atlasmap.api.AtlasValidationException;
-import io.atlasmap.core.AtlasUtil;
 import io.atlasmap.core.BaseAtlasModule;
 import io.atlasmap.core.PathUtil;
 import io.atlasmap.core.PathUtil.SegmentContext;
@@ -57,22 +55,22 @@ import io.atlasmap.v2.Validations;
 @AtlasModuleDetail(name = "JsonModule", uri = "atlas:json", modes = { "SOURCE", "TARGET" }, dataFormats = {
         "json" }, configPackages = { "io.atlasmap.json.v2" })
 public class JsonModule extends BaseAtlasModule {
-    private static final Logger logger = LoggerFactory.getLogger(JsonModule.class);
+    private static final Logger LOG = LoggerFactory.getLogger(JsonModule.class);
 
     @Override
     public void processPreOutputExecution(AtlasSession session) throws AtlasException {
         JsonFieldWriter writer = new JsonFieldWriter();
         session.setOutput(writer);
 
-        if (logger.isDebugEnabled()) {
-            logger.debug("processPreOutputExcution completed");
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("processPreOutputExcution completed");
         }
     }
 
     @Override
     public void processPreValidation(AtlasSession atlasSession) throws AtlasException {
         if (atlasSession == null || atlasSession.getMapping() == null) {
-            logger.error("Invalid session: Session and AtlasMapping must be specified");
+            LOG.error("Invalid session: Session and AtlasMapping must be specified");
             throw new AtlasValidationException("Invalid session");
         }
 
@@ -83,12 +81,12 @@ public class JsonModule extends BaseAtlasModule {
             validations.getValidation().addAll(jsonValidations);
         }
 
-        if (logger.isDebugEnabled()) {
-            logger.debug("Detected " + jsonValidations.size() + " json validation notices");
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Detected " + jsonValidations.size() + " json validation notices");
         }
 
-        if (logger.isDebugEnabled()) {
-            logger.debug("processPreValidation completed");
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("processPreValidation completed");
         }
     }
 
@@ -114,8 +112,8 @@ public class JsonModule extends BaseAtlasModule {
 
                 if (field instanceof ConstantField) {
                     processConstantField(session, mapping);
-                    if (logger.isDebugEnabled()) {
-                        logger.debug("Processed input constantField sPath=" + field.getPath() + " sV=" + field.getValue()
+                    if (LOG.isDebugEnabled()) {
+                        LOG.debug("Processed input constantField sPath=" + field.getPath() + " sV=" + field.getValue()
                                 + " sT=" + field.getFieldType() + " docId: " + field.getDocId());
                     }
                     continue;
@@ -124,8 +122,8 @@ public class JsonModule extends BaseAtlasModule {
                 if (field instanceof PropertyField) {
                     processPropertyField(session, mapping,
                             session.getAtlasContext().getContextFactory().getPropertyStrategy());
-                    if (logger.isDebugEnabled()) {
-                        logger.debug("Processed input propertyField sPath=" + field.getPath() + " sV=" + field.getValue()
+                    if (LOG.isDebugEnabled()) {
+                        LOG.debug("Processed input propertyField sPath=" + field.getPath() + " sV=" + field.getValue()
                                 + " sT=" + field.getFieldType() + " docId: " + field.getDocId());
                     }
                     continue;
@@ -155,14 +153,14 @@ public class JsonModule extends BaseAtlasModule {
 
                 // NOTE: This shouldn't happen
                 if (inputField.getFieldType() == null) {
-                    logger.warn(
+                    LOG.warn(
                             String.format("FieldType detection was unsuccessful for p=%s falling back to type UNSUPPORTED",
                                     inputField.getPath()));
                     inputField.setFieldType(FieldType.UNSUPPORTED);
                 }
 
-                if (logger.isDebugEnabled()) {
-                    logger.debug("Processed input field sPath=" + field.getPath() + " sV=" + field.getValue() + " sT="
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Processed input field sPath=" + field.getPath() + " sV=" + field.getValue() + " sT="
                             + field.getFieldType() + " docId: " + field.getDocId());
                 }
             }
@@ -199,7 +197,7 @@ public class JsonModule extends BaseAtlasModule {
                 addAudit(session, outputField.getDocId(),
                         String.format("Unsupported output field type=%s", outputField.getClass().getName()),
                         outputField.getPath(), AuditStatus.ERROR, null);
-                logger.error(String.format("Unsupported field type %s", outputField.getClass().getName()));
+                LOG.error(String.format("Unsupported field type %s", outputField.getClass().getName()));
                 return;
             }
 
@@ -225,7 +223,7 @@ public class JsonModule extends BaseAtlasModule {
                         outputValue = getConversionService().convertType(inField.getValue(), inField.getFieldType(),
                                 outputField.getFieldType());
                     } catch (AtlasConversionException e) {
-                        logger.error(String.format("Unable to auto-convert for iT=%s oT=%s oF=%s msg=%s",
+                        LOG.error(String.format("Unable to auto-convert for iT=%s oT=%s oF=%s msg=%s",
                                 inField.getFieldType(), outputField.getFieldType(), outputField.getPath(),
                                 e.getMessage()), e);
                         continue;
@@ -299,12 +297,12 @@ public class JsonModule extends BaseAtlasModule {
                 }
                 break;
             default:
-                logger.error("Unsupported mappingType=%s detected", mapping.getMappingType());
+                LOG.error("Unsupported mappingType=%s detected", mapping.getMappingType());
                 return;
             }
 
-            if (logger.isDebugEnabled()) {
-                logger.debug(String.format("Processed output field oP=%s oV=%s oT=%s docId: %s", outputField.getPath(),
+            if (LOG.isDebugEnabled()) {
+                LOG.debug(String.format("Processed output field oP=%s oV=%s oT=%s docId: %s", outputField.getPath(),
                         outputField.getValue(), outputField.getFieldType(), outputField.getDocId()));
             }
         }
@@ -327,8 +325,8 @@ public class JsonModule extends BaseAtlasModule {
             if (((JsonFieldWriter) output).getRootNode() != null) {
                 String outputBody = ((JsonFieldWriter) output).getRootNode().toString();
                 session.setOutput(outputBody);
-                if (logger.isDebugEnabled()) {
-                    logger.debug(String.format("processPostOutputExecution converting JsonNode to string size=%s",
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug(String.format("processPostOutputExecution converting JsonNode to string size=%s",
                             outputBody.length()));
                 }
             } else {
@@ -336,12 +334,12 @@ public class JsonModule extends BaseAtlasModule {
                 // (which should never happen).
             }
         } else {
-            logger.error("DocumentJsonFieldWriter object expected for Json output data source");
+            LOG.error("DocumentJsonFieldWriter object expected for Json output data source");
         }
         // }
 
-        if (logger.isDebugEnabled()) {
-            logger.debug("processPostOutputExecution completed");
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("processPostOutputExecution completed");
         }
     }
 

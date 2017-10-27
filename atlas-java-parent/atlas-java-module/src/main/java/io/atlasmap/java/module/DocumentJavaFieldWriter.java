@@ -23,7 +23,7 @@ import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldType;
 
 public class DocumentJavaFieldWriter {
-    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(DocumentJavaFieldWriter.class);
+    private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(DocumentJavaFieldWriter.class);
 
     private Object rootObject = null;
     private Map<String, Class<?>> classesForFields = new HashMap<>();
@@ -43,14 +43,14 @@ public class DocumentJavaFieldWriter {
                 throw new AtlasException(new IllegalArgumentException("Argument 'field' cannot be null"));
             }
 
-            if (logger.isDebugEnabled()) {
-                logger.debug("Now processing field: " + field);
-                logger.debug("Field type: " + field.getFieldType());
-                logger.debug("Field path: " + field.getPath());
-                logger.debug("Field value: " + field.getValue());
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Now processing field: " + field);
+                LOG.debug("Field type: " + field.getFieldType());
+                LOG.debug("Field path: " + field.getPath());
+                LOG.debug("Field value: " + field.getValue());
                 String fieldClassName = (field instanceof JavaField) ? ((JavaField) field).getClassName()
                         : ((JavaEnumField) field).getClassName();
-                logger.debug("Field className: " + fieldClassName);
+                LOG.debug("Field className: " + fieldClassName);
             }
 
             processedPaths.add(field.getPath());
@@ -59,20 +59,20 @@ public class DocumentJavaFieldWriter {
             Object parentObject = rootObject;
             boolean segmentIsComplexSegment = true;
             for (SegmentContext segmentContext : path.getSegmentContexts(true)) {
-                if (logger.isDebugEnabled()) {
-                    logger.debug("Now processing segment: " + segmentContext);
-                    logger.debug("Parent object is currently: " + writeDocumentToString(false, parentObject));
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Now processing segment: " + segmentContext);
+                    LOG.debug("Parent object is currently: " + writeDocumentToString(false, parentObject));
                 }
 
                 if ("/".equals(segmentContext.getSegmentPath())) {
                     if (rootObject == null) {
-                        if (logger.isDebugEnabled()) {
-                            logger.debug("Creating root node: " + segmentContext);
+                        if (LOG.isDebugEnabled()) {
+                            LOG.debug("Creating root node: " + segmentContext);
                         }
                         rootObject = createParentObject(field, parentObject, segmentContext);
                     } else {
-                        if (logger.isDebugEnabled()) {
-                            logger.debug("Root node already exists, skipping segment: " + segmentContext);
+                        if (LOG.isDebugEnabled()) {
+                            LOG.debug("Root node already exists, skipping segment: " + segmentContext);
                         }
                     }
                     parentObject = rootObject;
@@ -91,13 +91,13 @@ public class DocumentJavaFieldWriter {
                         segmentIsComplexSegment = false;
                     }
                 }
-                if (logger.isDebugEnabled()) {
+                if (LOG.isDebugEnabled()) {
                     if (segmentIsComplexSegment) {
-                        logger.debug("Now processing complex segment: " + segmentContext);
+                        LOG.debug("Now processing complex segment: " + segmentContext);
                     } else if (field instanceof JavaEnumField) {
-                        logger.debug("Now processing field enum value segment: " + segmentContext);
+                        LOG.debug("Now processing field enum value segment: " + segmentContext);
                     } else {
-                        logger.debug("Now processing field value segment: " + segmentContext);
+                        LOG.debug("Now processing field value segment: " + segmentContext);
                     }
                 }
 
@@ -117,8 +117,8 @@ public class DocumentJavaFieldWriter {
                 }
             }
         } catch (Throwable t) {
-            if (logger.isDebugEnabled()) {
-                logger.debug("Error occured while writing field: " + field.getPath(), t);
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Error occured while writing field: " + field.getPath(), t);
             }
             if (t instanceof AtlasException) {
                 throw (AtlasException) t;
@@ -138,8 +138,8 @@ public class DocumentJavaFieldWriter {
 
         String segment = segmentContext.getSegment();
         String parentSegment = segmentContext.getPrev() == null ? null : segmentContext.getPrev().getSegment();
-        if (logger.isDebugEnabled()) {
-            logger.debug("Looking for child object '" + segment + "' in parent '" + parentSegment + "': "
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Looking for child object '" + segment + "' in parent '" + parentSegment + "': "
                     + writeDocumentToString(false, parentObject));
         }
 
@@ -147,8 +147,8 @@ public class DocumentJavaFieldWriter {
         Object childObject = writerUtil.getObjectFromParent(field, parentObject, segmentContext);
         if (childObject != null && PathUtil.isCollectionSegment(segment)) {
             if (!collectionHasRoomForIndex(childObject, segmentContext)) {
-                if (logger.isDebugEnabled()) {
-                    logger.debug("Found child collection '" + segment + "' (" + childObject.getClass().getName()
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Found child collection '" + segment + "' (" + childObject.getClass().getName()
                             + ") in parent '" + parentSegment
                             + "', but it doesn't have room for the segment's index. Parent Object: "
                             + writeDocumentToString(false, parentObject));
@@ -158,11 +158,11 @@ public class DocumentJavaFieldWriter {
             childObject = getCollectionItem(childObject, segmentContext);
         }
 
-        if (logger.isDebugEnabled()) {
+        if (LOG.isDebugEnabled()) {
             if (childObject == null) {
-                logger.debug("Could not find child object '" + segment + "' in parent '" + parentSegment + "'.");
+                LOG.debug("Could not find child object '" + segment + "' in parent '" + parentSegment + "'.");
             } else {
-                logger.debug("Found child object '" + segment + "' in parent '" + parentSegment + "', class: "
+                LOG.debug("Found child object '" + segment + "' in parent '" + parentSegment + "', class: "
                         + childObject.getClass().getName() + ", child object: "
                         + writeDocumentToString(false, childObject));
             }
@@ -174,37 +174,37 @@ public class DocumentJavaFieldWriter {
     public Object createParentObject(Field field, Object parentObject, SegmentContext segmentContext)
             throws AtlasException {
         String segment = segmentContext.getSegment();
-        if (logger.isDebugEnabled()) {
-            logger.debug("Creating parent object: " + segmentContext);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Creating parent object: " + segmentContext);
         }
         Object childObject = null;
         if (PathUtil.isCollectionSegment(segment)) {
             // first, let's see if we have the collection object at all
-            if (logger.isDebugEnabled()) {
-                logger.debug(
+            if (LOG.isDebugEnabled()) {
+                LOG.debug(
                         "Looking for collection wrapper child for " + segmentContext + " on parent: " + parentObject);
             }
             Object collectionObject = findOrCreateOrExpandParentCollectionObject(field, parentObject, segmentContext);
             childObject = getCollectionItem(collectionObject, segmentContext);
 
             if (childObject == null) {
-                if (logger.isDebugEnabled()) {
-                    logger.debug("Could not find child object in collection, creating it.");
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Could not find child object in collection, creating it.");
                 }
                 childObject = createObject(field, segmentContext, parentObject, false);
                 addChildObject(field, segmentContext, collectionObject, childObject);
             }
 
-            if (logger.isDebugEnabled()) {
-                logger.debug("Child object inside collection wrapper for segment '" + segment + "': "
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Child object inside collection wrapper for segment '" + segment + "': "
                         + writeDocumentToString(false, childObject));
             }
         } else {
             childObject = createObject(field, segmentContext, parentObject, false);
             addChildObject(field, segmentContext, parentObject, childObject);
         }
-        if (logger.isDebugEnabled()) {
-            logger.debug(
+        if (LOG.isDebugEnabled()) {
+            LOG.debug(
                     "Created child object for segment '" + segment + "': " + writeDocumentToString(true, childObject));
         }
         return childObject;
@@ -214,20 +214,20 @@ public class DocumentJavaFieldWriter {
             SegmentContext segmentContext) throws AtlasException {
         String segment = segmentContext.getSegment();
         // first, let's see if we have the collection object at all
-        if (logger.isDebugEnabled()) {
-            logger.debug("Looking for collection wrapper child for " + segmentContext + " on parent: " + parentObject);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Looking for collection wrapper child for " + segmentContext + " on parent: " + parentObject);
         }
         Object collectionObject = writerUtil.getObjectFromParent(field, parentObject, segmentContext);
         if (collectionObject == null) {
-            if (logger.isDebugEnabled()) {
-                logger.debug("Cannot find pre-existing child collection for segment '" + segment
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Cannot find pre-existing child collection for segment '" + segment
                         + "', creating the collection.");
             }
             collectionObject = createCollectionWrapperObject(field, segmentContext, parentObject);
         }
 
-        if (logger.isDebugEnabled()) {
-            logger.debug("Collection wrapper child object for segment '" + segment + "': "
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Collection wrapper child object for segment '" + segment + "': "
                     + writeDocumentToString(false, collectionObject));
         }
 
@@ -242,8 +242,8 @@ public class DocumentJavaFieldWriter {
             Object parentObject) throws AtlasException {
         String segment = segmentContext.getSegment();
         if (!collectionHasRoomForIndex(collectionObject, segmentContext)) {
-            if (logger.isDebugEnabled()) {
-                logger.debug("Collection is not large enough for segment '" + segment + "', expanding the collection.");
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Collection is not large enough for segment '" + segment + "', expanding the collection.");
             }
             int index = PathUtil.indexOfSegment(segment);
             if (collectionObject instanceof List) {
@@ -265,8 +265,8 @@ public class DocumentJavaFieldWriter {
                 }
             }
 
-            if (logger.isDebugEnabled()) {
-                logger.debug("Finished expanding collection: " + collectionObject);
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Finished expanding collection: " + collectionObject);
             }
         }
         return collectionObject;
@@ -290,14 +290,14 @@ public class DocumentJavaFieldWriter {
 
     public Class<?> getClassForField(Field field, SegmentContext segmentContext, Object parentObject,
             boolean unwrapCollectionType) throws AtlasException {
-        if (logger.isDebugEnabled()) {
-            logger.debug(
+        if (LOG.isDebugEnabled()) {
+            LOG.debug(
                     "Looking up class to use for segment: " + segmentContext + "\n\tparentObject: " + parentObject);
         }
         Class<?> clz = null;
 
-        if (logger.isDebugEnabled()) {
-            logger.debug("Looking for configured class for field: " + field + ".");
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Looking for configured class for field: " + field + ".");
         }
         String className = null;
         if (field instanceof JavaField) {
@@ -315,8 +315,8 @@ public class DocumentJavaFieldWriter {
         }
 
         if (clz == null) {
-            if (logger.isDebugEnabled()) {
-                logger.debug("Couldn't find class on field. Looking for configured class for segment: " + segmentContext
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Couldn't find class on field. Looking for configured class for segment: " + segmentContext
                         + ".");
             }
             String normalizedSegment = PathUtil.removeCollectionIndexes(segmentContext.getSegmentPath());
@@ -324,8 +324,8 @@ public class DocumentJavaFieldWriter {
         }
         Type clzType = null;
         if (clz == null) { // attempt to determine it from the parent object.
-            if (logger.isDebugEnabled()) {
-                logger.debug("Couldn't find configured class for segment: " + segmentContext
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Couldn't find configured class for segment: " + segmentContext
                         + ", looking up getter method.");
             }
             Method m = null;
@@ -335,8 +335,8 @@ public class DocumentJavaFieldWriter {
                 m = ClassHelper.detectGetterMethod(parentObject.getClass(), methodName);
             } catch (NoSuchMethodException e) {
                 // it's ok, we didnt find a getter.
-                if (logger.isDebugEnabled()) {
-                    logger.debug("Couldn't find getter method for segment: " + segmentContext, e);
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Couldn't find getter method for segment: " + segmentContext, e);
                 }
             }
             clz = m == null ? null : m.getReturnType();
@@ -349,8 +349,8 @@ public class DocumentJavaFieldWriter {
         if (unwrapCollectionType && clz.isArray()) {
             Class<?> oldClass = clz;
             clz = clz.getComponentType();
-            if (logger.isDebugEnabled()) {
-                logger.debug(
+            if (LOG.isDebugEnabled()) {
+                LOG.debug(
                         "Unwrapped type '" + clz.getName() + "' from wrapper array type '" + oldClass.getName() + "'.");
             }
         } else if (unwrapCollectionType && Collection.class.isAssignableFrom(clz)) {
@@ -385,14 +385,14 @@ public class DocumentJavaFieldWriter {
                 throw new AtlasException(
                         "Could not unwrap list collection's generic type for segment: " + segmentContext);
             }
-            if (logger.isDebugEnabled()) {
-                logger.debug(
+            if (LOG.isDebugEnabled()) {
+                LOG.debug(
                         "Unwrapped type '" + clz.getName() + "' from wrapper list type '" + oldClass.getName() + "'.");
             }
         }
 
-        if (logger.isDebugEnabled()) {
-            logger.debug("Found class '" + clz.getName() + "' to use for segment: " + segmentContext);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Found class '" + clz.getName() + "' to use for segment: " + segmentContext);
         }
         return clz;
     }
@@ -401,8 +401,8 @@ public class DocumentJavaFieldWriter {
         for (java.lang.reflect.Field declaredField : clazz.getDeclaredFields()) {
             if (name.equals(declaredField.getName())) {
                 if (declaredField.getGenericType() == null) {
-                    if (logger.isDebugEnabled()) {
-                        logger.debug("Skipping field '{}' on class '{}', the field isn't generic",
+                    if (LOG.isDebugEnabled()) {
+                        LOG.debug("Skipping field '{}' on class '{}', the field isn't generic",
                                 declaredField.getName(), clazz.getName());
                     }
                     continue;
@@ -414,9 +414,9 @@ public class DocumentJavaFieldWriter {
                         return Class.forName(typeName);
                     }
                 } catch (Exception e) {
-                    logger.warn("Could not load class '{}' for field '{}' on class '{}': {}",
+                    LOG.warn("Could not load class '{}' for field '{}' on class '{}': {}",
                             typeName, name, clazz.getName(), e.getMessage());
-                    logger.debug(e.getMessage(), e);
+                    LOG.debug(e.getMessage(), e);
                 }
             }
         }
@@ -449,8 +449,8 @@ public class DocumentJavaFieldWriter {
         int index = PathUtil.indexOfSegment(segment);
         int size = getCollectionSize(collection);
         boolean result = size > index;
-        if (logger.isDebugEnabled()) {
-            logger.debug("collectionHasRoomForIndex: " + result + ", size: " + size + ", index: " + index);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("collectionHasRoomForIndex: " + result + ", size: " + size + ", index: " + index);
         }
         return result;
     }
@@ -469,13 +469,13 @@ public class DocumentJavaFieldWriter {
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public void addChildObject(Field field, SegmentContext segmentContext, Object parentObject, Object childObject)
             throws AtlasException {
-        if (logger.isDebugEnabled()) {
-            logger.debug("Adding child object for segment: " + segmentContext + "\n\tparentObject: " + parentObject
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Adding child object for segment: " + segmentContext + "\n\tparentObject: " + parentObject
                     + "\n\tchild: " + childObject);
         }
         if (this.rootObject == null) {
-            if (logger.isDebugEnabled()) {
-                logger.debug("Setting root object: " + childObject);
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Setting root object: " + childObject);
             }
             this.rootObject = childObject;
             return;
@@ -512,8 +512,8 @@ public class DocumentJavaFieldWriter {
         } else {
             writerUtil.setObjectOnParent(field, segmentContext, parentObject, childObject);
         }
-        if (logger.isDebugEnabled()) {
-            logger.debug("Finished adding child object for segment: " + segmentContext + "\n\tparentObject: "
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Finished adding child object for segment: " + segmentContext + "\n\tparentObject: "
                     + parentObject + "\n\t: " + childObject);
         }
     }

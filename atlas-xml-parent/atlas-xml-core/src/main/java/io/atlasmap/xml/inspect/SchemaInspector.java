@@ -58,55 +58,54 @@ import java.util.Map;
 
 public class SchemaInspector {
 
-    private static final XmlDocument xmlDocument = AtlasXmlModelFactory.createXmlDocument();
-    private static final Map<String, FieldType> xsTypeToFieldTypeMap;
-
-    private static final Map<String, FieldType> blacklistedTypes;
+    private static final XmlDocument XML_DOCUMENT = AtlasXmlModelFactory.createXmlDocument();
+    private static final Map<String, FieldType> XS_TYPE_TO_FIELD_TYPE_MAP;
+    private static final Map<String, FieldType> BLACKLISTED_TYPES;
 
     static {
-        xsTypeToFieldTypeMap = new HashMap<>();
-        xsTypeToFieldTypeMap.put("int", FieldType.INTEGER);
-        xsTypeToFieldTypeMap.put("integer", FieldType.INTEGER);
-        xsTypeToFieldTypeMap.put("negativeInteger", FieldType.INTEGER);
-        xsTypeToFieldTypeMap.put("nonNegativeInteger", FieldType.INTEGER);
-        xsTypeToFieldTypeMap.put("positiveInteger", FieldType.INTEGER);
-        xsTypeToFieldTypeMap.put("nonPositiveInteger", FieldType.INTEGER);
-        xsTypeToFieldTypeMap.put("string", FieldType.STRING);
-        xsTypeToFieldTypeMap.put("short", FieldType.SHORT);
-        xsTypeToFieldTypeMap.put("long", FieldType.LONG);
-        xsTypeToFieldTypeMap.put("double", FieldType.DOUBLE);
-        xsTypeToFieldTypeMap.put("float", FieldType.FLOAT);
-        xsTypeToFieldTypeMap.put("boolean", FieldType.BOOLEAN);
-        xsTypeToFieldTypeMap.put("date", FieldType.DATE);
-        xsTypeToFieldTypeMap.put("dateTime", FieldType.DATE_TIME);
-        xsTypeToFieldTypeMap.put("decimal", FieldType.DECIMAL);
-        xsTypeToFieldTypeMap.put("float", FieldType.FLOAT);
-        xsTypeToFieldTypeMap.put("unsignedLong", FieldType.UNSIGNED_LONG);
-        xsTypeToFieldTypeMap.put("unsignedInt", FieldType.UNSIGNED_INTEGER);
-        xsTypeToFieldTypeMap.put("unsignedLong", FieldType.UNSIGNED_LONG);
-        xsTypeToFieldTypeMap.put("unsignedShort", FieldType.UNSIGNED_SHORT);
+        XS_TYPE_TO_FIELD_TYPE_MAP = new HashMap<>();
+        XS_TYPE_TO_FIELD_TYPE_MAP.put("int", FieldType.INTEGER);
+        XS_TYPE_TO_FIELD_TYPE_MAP.put("integer", FieldType.INTEGER);
+        XS_TYPE_TO_FIELD_TYPE_MAP.put("negativeInteger", FieldType.INTEGER);
+        XS_TYPE_TO_FIELD_TYPE_MAP.put("nonNegativeInteger", FieldType.INTEGER);
+        XS_TYPE_TO_FIELD_TYPE_MAP.put("positiveInteger", FieldType.INTEGER);
+        XS_TYPE_TO_FIELD_TYPE_MAP.put("nonPositiveInteger", FieldType.INTEGER);
+        XS_TYPE_TO_FIELD_TYPE_MAP.put("string", FieldType.STRING);
+        XS_TYPE_TO_FIELD_TYPE_MAP.put("short", FieldType.SHORT);
+        XS_TYPE_TO_FIELD_TYPE_MAP.put("long", FieldType.LONG);
+        XS_TYPE_TO_FIELD_TYPE_MAP.put("double", FieldType.DOUBLE);
+        XS_TYPE_TO_FIELD_TYPE_MAP.put("float", FieldType.FLOAT);
+        XS_TYPE_TO_FIELD_TYPE_MAP.put("boolean", FieldType.BOOLEAN);
+        XS_TYPE_TO_FIELD_TYPE_MAP.put("date", FieldType.DATE);
+        XS_TYPE_TO_FIELD_TYPE_MAP.put("dateTime", FieldType.DATE_TIME);
+        XS_TYPE_TO_FIELD_TYPE_MAP.put("decimal", FieldType.DECIMAL);
+        XS_TYPE_TO_FIELD_TYPE_MAP.put("float", FieldType.FLOAT);
+        XS_TYPE_TO_FIELD_TYPE_MAP.put("unsignedLong", FieldType.UNSIGNED_LONG);
+        XS_TYPE_TO_FIELD_TYPE_MAP.put("unsignedInt", FieldType.UNSIGNED_INTEGER);
+        XS_TYPE_TO_FIELD_TYPE_MAP.put("unsignedLong", FieldType.UNSIGNED_LONG);
+        XS_TYPE_TO_FIELD_TYPE_MAP.put("unsignedShort", FieldType.UNSIGNED_SHORT);
 
-        blacklistedTypes = new HashMap<>();
-        blacklistedTypes.put("NMTOKEN", FieldType.UNSUPPORTED);
-        blacklistedTypes.put("anyURI", FieldType.UNSUPPORTED);
-        blacklistedTypes.put("base64Binary", FieldType.UNSUPPORTED);
-        blacklistedTypes.put("byte", FieldType.UNSUPPORTED);
-        blacklistedTypes.put("unsignedByte", FieldType.UNSUPPORTED);
-        blacklistedTypes.put("hexBinary", FieldType.UNSUPPORTED);
-        blacklistedTypes.put("NOTATION", FieldType.UNSUPPORTED);
-        blacklistedTypes.put("QName", FieldType.UNSUPPORTED);
+        BLACKLISTED_TYPES = new HashMap<>();
+        BLACKLISTED_TYPES.put("NMTOKEN", FieldType.UNSUPPORTED);
+        BLACKLISTED_TYPES.put("anyURI", FieldType.UNSUPPORTED);
+        BLACKLISTED_TYPES.put("base64Binary", FieldType.UNSUPPORTED);
+        BLACKLISTED_TYPES.put("byte", FieldType.UNSUPPORTED);
+        BLACKLISTED_TYPES.put("unsignedByte", FieldType.UNSUPPORTED);
+        BLACKLISTED_TYPES.put("hexBinary", FieldType.UNSUPPORTED);
+        BLACKLISTED_TYPES.put("NOTATION", FieldType.UNSUPPORTED);
+        BLACKLISTED_TYPES.put("QName", FieldType.UNSUPPORTED);
     }
 
     public SchemaInspector() {
     }
 
     public XmlDocument getXmlDocument() {
-        return xmlDocument;
+        return XML_DOCUMENT;
     }
 
     public void inspect(File schemaFile) throws XmlInspectionException {
         Fields fields = new Fields();
-        xmlDocument.setFields(fields);
+        XML_DOCUMENT.setFields(fields);
         XSOMParser parser = new XSOMParser(SAXParserFactory.newInstance());
         parser.setAnnotationParser(new DomAnnotationParserFactory());
         try {
@@ -120,7 +119,7 @@ public class SchemaInspector {
 
     public void inspect(String schemaAsString) throws XmlInspectionException {
         Fields fields = new Fields();
-        xmlDocument.setFields(fields);
+        XML_DOCUMENT.setFields(fields);
         XSOMParser parser = new XSOMParser(SAXParserFactory.newInstance());
         ByteArrayInputStream is;
         try {
@@ -138,34 +137,34 @@ public class SchemaInspector {
         if (schemaSet == null) {
             throw new XmlInspectionException("Schema set is null");
         }
-        Iterator itr = schemaSet.iterateSchema();
+        Iterator<XSSchema> itr = schemaSet.iterateSchema();
         while (itr.hasNext()) {
-            XSSchema s = (XSSchema) itr.next();
+            XSSchema s = itr.next();
             // check the target namespace where null == default ("") and needs no mapping
             if (s.getTargetNamespace() != null) {
-                xmlDocument.setXmlNamespaces(new XmlNamespaces());
+                XML_DOCUMENT.setXmlNamespaces(new XmlNamespaces());
                 XmlNamespace namespace = new XmlNamespace();
                 namespace.setUri(s.getTargetNamespace());
                 namespace.setAlias("tns");// default prefix for target namespace (is this the only one possible?)
-                xmlDocument.getXmlNamespaces().getXmlNamespace().add(namespace);
+                XML_DOCUMENT.getXmlNamespaces().getXmlNamespace().add(namespace);
             }
             // we only care about declared elements...
-            Iterator jtr = s.iterateElementDecls();
+            Iterator<XSElementDecl> jtr = s.iterateElementDecls();
             while (jtr.hasNext()) {
-                XSElementDecl e = (XSElementDecl) jtr.next();
+                XSElementDecl e = jtr.next();
                 String rootName = "/".concat(e.getName());
                 if (e.getType().isComplexType()) {
                     XmlComplexType rootComplexType = getXmlComplexType();
                     rootComplexType.setName(e.getName());
                     rootComplexType.setPath(rootName);
                     rootComplexType.setFieldType(FieldType.COMPLEX);
-                    xmlDocument.getFields().getField().add(rootComplexType);
+                    XML_DOCUMENT.getFields().getField().add(rootComplexType);
                     printComplexType(e.getType().asComplexType(), rootName, rootComplexType);
                 } else if (e.getType().isSimpleType()) {
                     XmlField xmlField = AtlasXmlModelFactory.createXmlField();
                     xmlField.setName(e.getName());
                     xmlField.setPath("/".concat(e.getName()));
-                    xmlDocument.getFields().getField().add(xmlField);
+                    XML_DOCUMENT.getFields().getField().add(xmlField);
                     printSimpleType(e.getType().asSimpleType(), xmlField);
                 }
             }
@@ -227,7 +226,7 @@ public class SchemaInspector {
                 }
                 XSRestrictionSimpleType typeRestriction = element.getType().asSimpleType().asRestriction();
                 if (typeRestriction != null) {
-                    xmlField.setFieldType(xsTypeToFieldTypeMap.get(typeRestriction.getBaseType().getName()));
+                    xmlField.setFieldType(XS_TYPE_TO_FIELD_TYPE_MAP.get(typeRestriction.getBaseType().getName()));
                     mapRestrictions(xmlField, typeRestriction);
                 }
                 printSimpleType(element.getType().asSimpleType(), xmlField);
@@ -293,9 +292,9 @@ public class SchemaInspector {
 
     private FieldType getFieldType(String name) {
         // check the blacklist
-        FieldType attrType = blacklistedTypes.get(name);
+        FieldType attrType = BLACKLISTED_TYPES.get(name);
         if (attrType == null) {
-            attrType = xsTypeToFieldTypeMap.get(name);
+            attrType = XS_TYPE_TO_FIELD_TYPE_MAP.get(name);
         }
         return attrType;
     }

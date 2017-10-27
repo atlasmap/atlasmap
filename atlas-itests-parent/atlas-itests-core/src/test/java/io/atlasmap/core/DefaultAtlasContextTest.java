@@ -15,9 +15,10 @@
  */
 package io.atlasmap.core;
 
-import static org.junit.Assert.*;
 import org.junit.Test;
-import io.atlasmap.core.DefaultAtlasContextFactory;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class DefaultAtlasContextTest {
 

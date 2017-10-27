@@ -20,7 +20,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import io.atlasmap.core.DefaultAtlasConversionService;
-import io.atlasmap.java.inspect.ClassInspectionService;
 
 public class PrimitiveInspectTest {
 

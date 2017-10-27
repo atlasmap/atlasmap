@@ -15,11 +15,24 @@
  */
 package io.atlasmap.xml.v2;
 
-import io.atlasmap.v2.*;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.TestName;
+
+import io.atlasmap.v2.AtlasMapping;
+import io.atlasmap.v2.AtlasModelFactory;
+import io.atlasmap.v2.Collection;
+import io.atlasmap.v2.CollectionType;
+import io.atlasmap.v2.ConstantField;
+import io.atlasmap.v2.DataSource;
+import io.atlasmap.v2.DataSourceType;
+import io.atlasmap.v2.Mapping;
+import io.atlasmap.v2.MappingType;
+import io.atlasmap.v2.Mappings;
+import io.atlasmap.v2.Properties;
+import io.atlasmap.v2.Property;
+import io.atlasmap.v2.PropertyField;
 
 import java.io.IOException;
 import java.nio.file.FileVisitResult;
@@ -29,7 +42,10 @@ import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 public abstract class BaseMarshallerTest {
 

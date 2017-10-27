@@ -20,13 +20,14 @@ import org.junit.Before;
 import org.junit.Test;
 
 import io.atlasmap.core.DefaultAtlasConversionService;
-import io.atlasmap.java.inspect.ClassInspectionService;
-
-import static org.junit.Assert.*;
 
 import java.io.File;
 import java.util.List;
 import java.util.Map;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 public class ClassInspectionServiceTest {
 

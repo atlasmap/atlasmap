@@ -17,8 +17,6 @@ package io.atlasmap.java.v2;
 
 import org.junit.Test;
 
-import io.atlasmap.java.v2.AtlasJavaModelFactory;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -37,3 +35,4 @@ public class AtlasJavaModelFactoryTest {
     }
 
 }
+

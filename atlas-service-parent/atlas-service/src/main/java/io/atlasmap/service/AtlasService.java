@@ -71,7 +71,7 @@ import java.util.Optional;
 @Path("v2/atlas")
 public class AtlasService extends Application {
 
-    private static final Logger logger = LoggerFactory.getLogger(AtlasService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AtlasService.class);
     final DefaultAtlasContextFactory atlasContextFactory = DefaultAtlasContextFactory.getInstance();
     private String baseFolder = "target/mappings";
 
@@ -216,7 +216,7 @@ public class AtlasService extends Application {
         }
 
         if (mappingFile != null && !mappingFile.delete()) {
-            logger.warn("Unable to delete mapping file " + mappingFile.toString());
+            LOG.warn("Unable to delete mapping file " + mappingFile.toString());
         }
 
         return Response.ok().header(ACCESS_CONTROL_ALLOW_ORIGIN, DEFAULT_ACCESS_CONTROL_ALLOW_ORIGIN)
@@ -243,7 +243,7 @@ public class AtlasService extends Application {
         try {
             atlasMapping = getMappingFromFile(mappingFile.getAbsolutePath());
         } catch (Exception e) {
-            logger.error("Error retrieving mapping " + e.getMessage(), e);
+            LOG.error("Error retrieving mapping " + e.getMessage(), e);
         }
 
         return Response.ok().header(ACCESS_CONTROL_ALLOW_ORIGIN, DEFAULT_ACCESS_CONTROL_ALLOW_ORIGIN)
@@ -315,7 +315,7 @@ public class AtlasService extends Application {
         }
 
         if (temporaryMappingFile.exists() && !temporaryMappingFile.delete()) {
-            logger.warn("Failed to deleting temporary file: "
+            LOG.warn("Failed to deleting temporary file: "
                     + (temporaryMappingFile != null ? temporaryMappingFile.toString() : null));
         }
 
@@ -389,7 +389,7 @@ public class AtlasService extends Application {
         try {
             saveMappingToFile(mapping);
         } catch (Exception e) {
-            logger.error("Error saving mapping " + mapping.getName() + " to file: " + e.getMessage(), e);
+            LOG.error("Error saving mapping " + mapping.getName() + " to file: " + e.getMessage(), e);
         }
 
         UriBuilder builder = uriInfo.getAbsolutePathBuilder();
@@ -436,7 +436,7 @@ public class AtlasService extends Application {
             dir.mkdirs();
         }
         String fileName = baseFolder + File.separator + generateMappingFileName(mappingName);
-        logger.debug("Creating mapping file '{}'", fileName);
+        LOG.debug("Creating mapping file '{}'", fileName);
         return new File(fileName);
     }
 

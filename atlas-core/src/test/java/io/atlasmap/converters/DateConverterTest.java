@@ -15,7 +15,6 @@
  */
 package io.atlasmap.converters;
 
-import io.atlasmap.converters.DateConverter;
 import io.atlasmap.spi.AtlasConversionConcern;
 import io.atlasmap.spi.AtlasConversionInfo;
 import io.atlasmap.v2.FieldType;
@@ -38,7 +37,10 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 public class DateConverterTest {
 
@@ -277,7 +279,7 @@ public class DateConverterTest {
 
     @Test
     public void checkAnnotations() throws Exception {
-        Class aClass = DateConverter.class;
+        Class<?> aClass = DateConverter.class;
         Method[] methods = aClass.getMethods();
         for (Method method : methods) {
             if (method.isSynthetic()) {

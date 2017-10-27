@@ -16,12 +16,15 @@
 package io.atlasmap.validators;
 
 import io.atlasmap.v2.Validation;
-import io.atlasmap.validators.NonNullValidator;
 
 import org.junit.Test;
-import static org.junit.Assert.*;
 import org.junit.After;
 import org.junit.Before;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 public class NonNullValidatorTest extends BaseValidatorTest {
 

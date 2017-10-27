@@ -25,7 +25,7 @@ import java.util.Map.Entry;
  */
 public class SchemaInspector implements JsonInspector {
 
-    private static final Logger logger = LoggerFactory.getLogger(SchemaInspector.class);
+    private static final Logger LOG = LoggerFactory.getLogger(SchemaInspector.class);
     private static SchemaInspector myself = new SchemaInspector();
 
     private SchemaInspector() {
@@ -50,7 +50,7 @@ public class SchemaInspector implements JsonInspector {
             JsonField rootNodeType = getJsonFieldBuilder(null, rootNode, null, definitionMap).build();
 
             if (rootNodeType.getCollectionType() == CollectionType.LIST) {
-                logger.warn("Topmost array is not supported");
+                LOG.warn("Topmost array is not supported");
                 if (rootNodeType instanceof JsonComplexType) {
                     ((JsonComplexType)rootNodeType).getJsonFields().getJsonField().clear();
                 }
@@ -60,7 +60,7 @@ public class SchemaInspector implements JsonInspector {
                     && ((JsonComplexType)rootNodeType).getJsonFields().getJsonField().size() != 0) {
                 jsonDocument.getFields().getField().addAll(((JsonComplexType)rootNodeType).getJsonFields().getJsonField());
             } else if (rootNodeType.getFieldType() == FieldType.COMPLEX) {
-                logger.warn("No simple type nor property is defined for the root node. It's going to be empty");
+                LOG.warn("No simple type nor property is defined for the root node. It's going to be empty");
             } else {
                 jsonDocument.getFields().getField().add(rootNodeType);
             }
@@ -86,7 +86,7 @@ public class SchemaInspector implements JsonInspector {
         definitions.forEach(entry -> {
             JsonNode id = entry.get("$id");
             if (id == null || id.asText().isEmpty()) {
-                logger.warn("$id must be specified for the definition '{}', ignoring", entry);
+                LOG.warn("$id must be specified for the definition '{}', ignoring", entry);
             } else {
                 definitionMap.put(id.asText(), entry);
             }
@@ -97,7 +97,7 @@ public class SchemaInspector implements JsonInspector {
         List<JsonField> answer = new ArrayList<>();
         JsonNode properties = node.get("properties");
         if (properties == null || !properties.fields().hasNext()) {
-            logger.warn("An object node without 'properties', it will be ignored: {}", node);
+            LOG.warn("An object node without 'properties', it will be ignored: {}", node);
             return answer;
         }
 
@@ -105,7 +105,7 @@ public class SchemaInspector implements JsonInspector {
         while (topFields.hasNext()) {
             Entry<String, JsonNode> entry = topFields.next();
             if (!entry.getValue().isObject()) {
-                logger.warn("Ignoring non-object field '{}'", entry);
+                LOG.warn("Ignoring non-object field '{}'", entry);
                 continue;
             }
             JsonField type = getJsonFieldBuilder(entry.getKey(), entry.getValue(), parentPath, definitionMap).build();
@@ -115,7 +115,7 @@ public class SchemaInspector implements JsonInspector {
     }
 
     private JsonFieldBuilder getJsonFieldBuilder(String name, JsonNode value, String parentPath, Map<String, JsonNode> definitionMap) throws JsonInspectionException {
-        logger.trace("--> Field:[name=[{}], value=[{}], parentPath=[{}]", name, value, parentPath);
+        LOG.trace("--> Field:[name=[{}], value=[{}], parentPath=[{}]", name, value, parentPath);
         JsonFieldBuilder builder = new JsonFieldBuilder();
         if (name != null) {
             builder.name = name;
@@ -129,13 +129,13 @@ public class SchemaInspector implements JsonInspector {
 
         JsonNode fieldType = nodeValue.get("type");
         if (fieldType == null || fieldType.asText() == null) {
-            logger.warn("'type' is not defined for node '{}', assuming as an object", name);
+            LOG.warn("'type' is not defined for node '{}', assuming as an object", name);
             builder.type = FieldType.COMPLEX;
             builder.subFields.getJsonField().addAll(loadProperties(nodeValue, builder.path, definitionMap));
         } else if ("array".equals(fieldType.asText())) {
             JsonNode arrayItems = nodeValue.get("items");
             if (arrayItems == null || !arrayItems.fields().hasNext()) {
-                logger.warn("'{}' is an array node, but no 'items' found in it. It will be ignored", name);
+                LOG.warn("'{}' is an array node, but no 'items' found in it. It will be ignored", name);
                 builder.collectionType = CollectionType.LIST;
                 builder.status = FieldStatus.UNSUPPORTED;
             } else {
@@ -154,7 +154,7 @@ public class SchemaInspector implements JsonInspector {
             builder.type = FieldType.STRING;
         } else {
             if (!"object".equals(fieldType.asText())) {
-                logger.warn("Unsupported field type '{}' found, assuming as an object", fieldType.asText());
+                LOG.warn("Unsupported field type '{}' found, assuming as an object", fieldType.asText());
             }
             builder.type = FieldType.COMPLEX;
             builder.subFields.getJsonField().addAll(loadProperties(nodeValue, builder.path, definitionMap));
@@ -198,7 +198,7 @@ public class SchemaInspector implements JsonInspector {
             return node;
         }
 
-        logger.trace("Resolving JSON schema reference '{}'", uri);
+        LOG.trace("Resolving JSON schema reference '{}'", uri);
         // internal reference precedes even if it's full URL
         JsonNode def = definitionMap.get(uri);
         if (def != null) {
@@ -208,11 +208,11 @@ public class SchemaInspector implements JsonInspector {
         // then try external resource
         try {
             JsonNode external = new ObjectMapper().readTree(new URI(uri).toURL().openStream());
-            logger.trace("Successfully fetched external JSON schema '{}'    ", uri);
+            LOG.trace("Successfully fetched external JSON schema '{}'    ", uri);
             return external;
         } catch (Exception e) {
-            logger.debug("", e);
-            logger.warn("The referenced schema '{}' is not found. Ignoring", node.get("$ref"));
+            LOG.debug("", e);
+            LOG.warn("The referenced schema '{}' is not found. Ignoring", node.get("$ref"));
             return node;
         }
     }

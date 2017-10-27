@@ -16,10 +16,10 @@
 package io.atlasmap.validators;
 
 import org.junit.Test;
-import io.atlasmap.validators.StringPatternValidator;
+import org.junit.After;
+
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import org.junit.After;
 
 public class StringPatternValidatorTest extends BaseValidatorTest {
 

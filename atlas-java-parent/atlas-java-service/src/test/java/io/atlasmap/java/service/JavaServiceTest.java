@@ -1,7 +1,5 @@
 package io.atlasmap.java.service;
 
-import static org.junit.Assert.*;
-
 import javax.ws.rs.core.Response;
 
 import org.junit.After;
@@ -9,6 +7,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import io.atlasmap.java.v2.JavaClass;
+
+import static org.junit.Assert.assertEquals;
 
 public class JavaServiceTest {
 

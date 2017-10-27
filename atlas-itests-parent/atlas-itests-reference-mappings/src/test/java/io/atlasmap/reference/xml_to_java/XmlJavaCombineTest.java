@@ -23,15 +23,11 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasSession;
-import io.atlasmap.java.test.BaseContact;
-import io.atlasmap.java.test.SourceContact;
 import io.atlasmap.java.test.TargetContact;
 import io.atlasmap.reference.AtlasMappingBaseTest;
-import io.atlasmap.reference.AtlasTestUtil;
 
 public class XmlJavaCombineTest extends AtlasMappingBaseTest {
 

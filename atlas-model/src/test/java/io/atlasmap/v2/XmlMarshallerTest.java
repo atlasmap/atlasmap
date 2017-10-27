@@ -15,15 +15,12 @@
  */
 package io.atlasmap.v2;
 
-import static org.junit.Assert.*;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.sun.xml.bind.marshaller.NamespacePrefixMapper;
 import com.sun.xml.bind.v2.WellKnownNamespace;
-
-import io.atlasmap.v2.AtlasMapping;
 
 import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
@@ -62,12 +59,15 @@ public class XmlMarshallerTest extends BaseMarshallerTest {
 
             @Override
             public String getPreferredPrefix(String namespaceUri, String suggestion, boolean requirePrefix) {
-                if (namespaceUri.equals(XMLConstants.W3C_XML_SCHEMA_INSTANCE_NS_URI))
+                if (namespaceUri.equals(XMLConstants.W3C_XML_SCHEMA_INSTANCE_NS_URI)) {
                     return "xsi";
-                if (namespaceUri.equals(XMLConstants.W3C_XML_SCHEMA_NS_URI))
+                }
+                if (namespaceUri.equals(XMLConstants.W3C_XML_SCHEMA_NS_URI)) {
                     return "xs";
-                if (namespaceUri.equals(WellKnownNamespace.XML_MIME_URI))
+                }
+                if (namespaceUri.equals(WellKnownNamespace.XML_MIME_URI)) {
                     return "xmime";
+                }
                 return suggestion;
 
             }

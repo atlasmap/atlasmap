@@ -34,7 +34,7 @@ import org.slf4j.LoggerFactory;
 
 public class MavenClasspathHelper {
 
-    private static final Logger logger = LoggerFactory.getLogger(MavenClasspathHelper.class);
+    private static final Logger LOG = LoggerFactory.getLogger(MavenClasspathHelper.class);
 
     private long processCheckInterval = 1000L;
     private long processMaxExecutionTime = 5000L;
@@ -47,8 +47,8 @@ public class MavenClasspathHelper {
             return null;
         }
 
-        if (logger.isDebugEnabled()) {
-            logger.debug("Generating classpath from pom:\n" + pom);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Generating classpath from pom:\n" + pom);
         }
 
         Path workingDirectory = createWorkingDirectory();
@@ -65,14 +65,14 @@ public class MavenClasspathHelper {
         if (result != null) {
             result = parseClasspathFromMavenOutput(result);
         } else {
-            logger.error("MavenProcess returned unexpected result: " + result);
+            LOG.error("MavenProcess returned unexpected result: " + result);
             throw new InspectionException("Unable to generate classpath from pom file");
         }
 
         try {
             deleteWorkingDirectory(workingDirectory);
         } catch (IOException ioe) {
-            logger.warn("Cleanup of working directory failed to complete: " + ioe.getMessage(), ioe);
+            LOG.warn("Cleanup of working directory failed to complete: " + ioe.getMessage(), ioe);
         }
 
         return result;
@@ -80,8 +80,8 @@ public class MavenClasspathHelper {
 
     protected String executeMavenProcess(String workingDirectory, List<String> cmd) throws IOException {
         String mavenOutputFilePath = workingDirectory + File.separator + "maven.output.txt";
-        if (logger.isDebugEnabled()) {
-            logger.debug("Starting to execute process for command: " + cmd + "\n\tworkingDirectory: " + workingDirectory
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Starting to execute process for command: " + cmd + "\n\tworkingDirectory: " + workingDirectory
                     + "\n\tmvn output log: " + mavenOutputFilePath);
         }
 
@@ -93,7 +93,7 @@ public class MavenClasspathHelper {
 
         if (workingDirectory == null || workingDirectory.isEmpty() || cmd == null || cmd.isEmpty()
                 || cmd.get(0).isEmpty()) {
-            logger.error("Invalid workingDirectory: " + workingDirectory + " or command: " + cmd + " specified");
+            LOG.error("Invalid workingDirectory: " + workingDirectory + " or command: " + cmd + " specified");
             throw new IllegalArgumentException("Working directory and command must be specified");
         }
 
@@ -125,7 +125,7 @@ public class MavenClasspathHelper {
                     stdout = process.getInputStream();
                     reader = new BufferedReader(new InputStreamReader(stdout));
                 } catch (Exception e) {
-                    logger.error("Error reading output for command: " + cmd + " msg: " + e.getMessage(), e);
+                    LOG.error("Error reading output for command: " + cmd + " msg: " + e.getMessage(), e);
                 }
             }
 
@@ -152,13 +152,13 @@ public class MavenClasspathHelper {
                                 Files.write(mavenOutputFile, currentUpdate.toString().getBytes(),
                                         StandardOpenOption.CREATE, StandardOpenOption.APPEND);
                             } catch (Exception e) {
-                                logger.error(
+                                LOG.error(
                                         "Error writing output for command: " + cmd + " to file: " + mavenOutputFilePath,
                                         e);
                             }
                         }
                     } catch (Exception e) {
-                        logger.error("Error reading output for command: " + cmd + " msg: " + e.getMessage(), e);
+                        LOG.error("Error reading output for command: " + cmd + " msg: " + e.getMessage(), e);
                     }
                 }
 
@@ -175,10 +175,10 @@ public class MavenClasspathHelper {
                         outputMessage.append("Command returned non-zero exit code: " + r);
                     }
                 } catch (IllegalThreadStateException itse) {
-                    if (logger.isDebugEnabled()) {
+                    if (LOG.isDebugEnabled()) {
                         if (System.currentTimeMillis() - lastTimeDebugPrinted > 10000) {
                             String timeHMS = StringUtil.formatTimeHMS(System.currentTimeMillis() - startTime);
-                            logger.debug("Command still running: " + cmd + ", msg: " + itse.getMessage() + ", elapsed: "
+                            LOG.debug("Command still running: " + cmd + ", msg: " + itse.getMessage() + ", elapsed: "
                                     + timeHMS);
                             lastTimeDebugPrinted = System.currentTimeMillis();
                         }
@@ -188,22 +188,22 @@ public class MavenClasspathHelper {
 
         } catch (IllegalArgumentException iae) {
             String errMsg = "Unable to execute command: " + cmd + " error: " + iae.getMessage();
-            logger.error(errMsg, iae);
+            LOG.error(errMsg, iae);
             throw new IOException(errMsg, iae);
         } catch (IOException ioe) {
             String errMsg = "Unable to execute command: " + cmd + " error: " + ioe.getMessage();
-            logger.error(errMsg, ioe);
+            LOG.error(errMsg, ioe);
             throw new IOException(errMsg, ioe);
         } catch (InterruptedException intre) {
             String errMsg = "Command interrupted cmd: " + cmd + " error: " + intre.getMessage();
-            logger.error(errMsg, intre);
+            LOG.error(errMsg, intre);
             throw new IOException(errMsg, intre);
         } finally {
             if (reader != null) {
                 try {
                     reader.close();
                 } catch (Exception e) {
-                    logger.warn("Error closing BufferedReader for cmd: " + cmd, e);
+                    LOG.warn("Error closing BufferedReader for cmd: " + cmd, e);
                 } finally {
                     reader = null;
                 }
@@ -212,7 +212,7 @@ public class MavenClasspathHelper {
                 try {
                     stdout.close();
                 } catch (Exception e) {
-                    logger.warn("Error closing InputStream for cmd: " + cmd, e);
+                    LOG.warn("Error closing InputStream for cmd: " + cmd, e);
                 } finally {
                     stdout = null;
                 }
@@ -222,20 +222,20 @@ public class MavenClasspathHelper {
                 try {
                     process.destroy();
                 } catch (Throwable t) {
-                    logger.error(
+                    LOG.error(
                             "Error while attempting to destroy process for command: " + cmd + " msg: " + t.getMessage(),
                             t);
                 }
             }
 
-            if (logger.isDebugEnabled()) {
-                logger.debug("Exiting process for command: " + cmd + " exec time(ms): "
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Exiting process for command: " + cmd + " exec time(ms): "
                         + (System.currentTimeMillis() - startTime) + " workingDirectory: " + workingDirectory);
             }
         }
 
-        if (logger.isDebugEnabled()) {
-            logger.debug("Output for command: " + cmd + "\n" + outputMessage.toString());
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Output for command: " + cmd + "\n" + outputMessage.toString());
         }
 
         return outputMessage.toString();
@@ -259,12 +259,12 @@ public class MavenClasspathHelper {
                     if (tmpFolder.getFileName().toString().startsWith(WORKING_FOLDER_PREFIX)) {
                         deleteWorkingDirectory(tmpFolder);
                         count++;
-                        if (logger.isDebugEnabled()) {
-                            logger.debug("Deleted tempFolder: " + tmpFolder.getFileName());
+                        if (LOG.isDebugEnabled()) {
+                            LOG.debug("Deleted tempFolder: " + tmpFolder.getFileName());
                         }
                     }
                 } catch (IOException ioe) {
-                    logger.warn("Error when attempting to delete tempFolder: " + tmpFolder.getFileName() + " msg: "
+                    LOG.warn("Error when attempting to delete tempFolder: " + tmpFolder.getFileName() + " msg: "
                             + ioe.getMessage(), ioe);
                 }
             }

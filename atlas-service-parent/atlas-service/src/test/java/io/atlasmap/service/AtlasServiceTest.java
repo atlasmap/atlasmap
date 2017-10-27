@@ -16,7 +16,6 @@
 package io.atlasmap.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.atlasmap.service.AtlasService;
 import io.atlasmap.v2.AtlasJsonMapper;
 import io.atlasmap.v2.AtlasMapping;
 import io.atlasmap.v2.BaseMapping;
@@ -35,9 +34,9 @@ import java.io.File;
 import java.net.URI;
 import java.util.List;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-//@Ignore // TODO: Update service tests due to model changes
 public class AtlasServiceTest {
 
     private AtlasService service = null;
@@ -69,7 +68,7 @@ public class AtlasServiceTest {
     @Test
     public void testGetMapping() throws Exception {
         Response resp = service.getMappingRequest("junit3");
-        AtlasMapping mapping = (AtlasMapping) resp.getEntity();
+        assertEquals(AtlasMapping.class, resp.getEntity().getClass());
     }
 
     @Test

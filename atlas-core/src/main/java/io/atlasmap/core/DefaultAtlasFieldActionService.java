@@ -25,7 +25,7 @@ import io.atlasmap.v2.ActionDetail;
 
 public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
 
-    private static final Logger logger = LoggerFactory.getLogger(DefaultAtlasFieldActionService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DefaultAtlasFieldActionService.class);
     private ActionDetails actionDetails = new ActionDetails();
     private AtlasConversionService conversionService = null;
 
@@ -42,8 +42,8 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
         final ServiceLoader<AtlasFieldAction> fieldActionServiceLoader = ServiceLoader.load(AtlasFieldAction.class,
                 classLoader);
         for (final AtlasFieldAction atlasFieldAction : fieldActionServiceLoader) {
-            if (logger.isDebugEnabled()) {
-                logger.debug("Loading FieldAction class: " + atlasFieldAction.getClass().getCanonicalName());
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Loading FieldAction class: " + atlasFieldAction.getClass().getCanonicalName());
             }
 
             Class<?> clazz = atlasFieldAction.getClass();
@@ -63,20 +63,20 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
                     try {
                         det.setParameters(detectFieldActionParameters("io.atlasmap.v2." + annotation.name()));
                     } catch (ClassNotFoundException e) {
-                        logger.error(String.format("Error detecting parameters for field action=%s msg=%s",
+                        LOG.error(String.format("Error detecting parameters for field action=%s msg=%s",
                                 annotation.name(), e.getMessage()), e);
                     }
 
-                    if (logger.isTraceEnabled()) {
-                        logger.trace("Loaded FieldAction: " + det.getName());
+                    if (LOG.isTraceEnabled()) {
+                        LOG.trace("Loaded FieldAction: " + det.getName());
                     }
                     listActionDetails().add(det);
                 }
             }
         }
 
-        if (logger.isDebugEnabled()) {
-            logger.debug(String.format("Loaded %s Field Actions", listActionDetails().size()));
+        if (LOG.isDebugEnabled()) {
+            LOG.debug(String.format("Loaded %s Field Actions", listActionDetails().size()));
         }
     }
 
@@ -180,7 +180,7 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
                         method = actionClazz.getMethod(actionDetail.getMethod(), Action.class, Object.class);
                         break;
                     default:
-                        logger.warn(String.format("Unsupported sourceType=%s in actionClass=%s",
+                        LOG.warn(String.format("Unsupported sourceType=%s in actionClass=%s",
                                 actionDetail.getSourceType().value(), actionDetail.getClassName()));
                         break;
                     }

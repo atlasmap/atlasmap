@@ -45,7 +45,7 @@ import io.atlasmap.v2.PropertyField;
 import io.atlasmap.v2.SimpleField;
 
 public abstract class BaseAtlasModule implements AtlasModule {
-    private static final Logger logger = LoggerFactory.getLogger(BaseAtlasModule.class);
+    private static final Logger LOG = LoggerFactory.getLogger(BaseAtlasModule.class);
 
     private AtlasConversionService atlasConversionService = null;
     private AtlasModuleMode atlasModuleMode = AtlasModuleMode.UNSET;
@@ -53,10 +53,12 @@ public abstract class BaseAtlasModule implements AtlasModule {
 
     @Override
     public void init() {
+        // no-op now
     }
 
     @Override
     public void destroy() {
+        // no-op now
     }
 
     @Override
@@ -93,12 +95,12 @@ public abstract class BaseAtlasModule implements AtlasModule {
     public abstract Field cloneField(Field field) throws AtlasException;
 
     public List<Mapping> generateInputMappings(AtlasSession session, BaseMapping baseMapping) throws AtlasException {
-        if (logger.isDebugEnabled()) {
-            logger.debug("Generating Input Mappings from mapping: " + baseMapping);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Generating Input Mappings from mapping: " + baseMapping);
         }
         if (!baseMapping.getMappingType().equals(MappingType.COLLECTION)) {
-            if (logger.isDebugEnabled()) {
-                logger.debug("Mapping is not a collection mapping, not cloning: " + baseMapping);
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Mapping is not a collection mapping, not cloning: " + baseMapping);
             }
             return Arrays.asList((Mapping) baseMapping);
         }
@@ -112,8 +114,8 @@ public abstract class BaseAtlasModule implements AtlasModule {
                 // contact[].firstName
                 // this will be expanded later by generateOutputMappings, for input processing,
                 // just copy it over
-                if (logger.isDebugEnabled()) {
-                    logger.debug("Internal mapping's input field is not a collection, not cloning: " + mapping);
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Internal mapping's input field is not a collection, not cloning: " + mapping);
                 }
 
                 // this is a output collection such as contact<>.firstName, but input is non
@@ -129,8 +131,8 @@ public abstract class BaseAtlasModule implements AtlasModule {
             }
 
             int inputCollectionSize = this.getCollectionSize(session, inputField);
-            if (logger.isDebugEnabled()) {
-                logger.debug("Internal mapping's input field is a collection. Cloning it for each item ("
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Internal mapping's input field is a collection. Cloning it for each item ("
                         + inputCollectionSize + " clones): " + mapping);
             }
             for (int i = 0; i < inputCollectionSize; i++) {
@@ -150,8 +152,8 @@ public abstract class BaseAtlasModule implements AtlasModule {
                 mappings.add(cloneMapping);
             }
         }
-        if (logger.isDebugEnabled()) {
-            logger.debug("Generated " + mappings.size() + " mappings from mapping: " + baseMapping);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Generated " + mappings.size() + " mappings from mapping: " + baseMapping);
         }
         ((Collection) baseMapping).getMappings().getMapping().clear();
         ((Collection) baseMapping).getMappings().getMapping().addAll(mappings);
@@ -172,22 +174,22 @@ public abstract class BaseAtlasModule implements AtlasModule {
 
     @Override
     public void processPreInputExecution(AtlasSession session) throws AtlasException {
-        if (logger.isDebugEnabled()) {
-            logger.debug("processPreInputExcution completed");
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("processPreInputExcution completed");
         }
     }
 
     @Override
     public void processPostInputExecution(AtlasSession session) throws AtlasException {
-        if (logger.isDebugEnabled()) {
-            logger.debug("processPostInputExecution completed");
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("processPostInputExecution completed");
         }
     }
 
     @Override
     public void processPostValidation(AtlasSession session) throws AtlasException {
-        if (logger.isDebugEnabled()) {
-            logger.debug("processPostValidation completed");
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("processPostValidation completed");
         }
     }
 
@@ -232,7 +234,7 @@ public abstract class BaseAtlasModule implements AtlasModule {
         if (session.getMapping().getLookupTables() == null
                 || session.getMapping().getLookupTables().getLookupTable() == null
                 || session.getMapping().getLookupTables().getLookupTable().size() == 0) {
-            logger.warn(String.format("No lookup table found for specified lookupTableName=%s",
+            LOG.warn(String.format("No lookup table found for specified lookupTableName=%s",
                     mapping.getLookupTableName()));
             return;
         }
@@ -245,7 +247,7 @@ public abstract class BaseAtlasModule implements AtlasModule {
         }
 
         if (currentTable.getLookupEntry() == null || currentTable.getLookupEntry().isEmpty()) {
-            logger.warn(String.format("Lookup table lookupTableName=%s does not contain any entries",
+            LOG.warn(String.format("Lookup table lookupTableName=%s does not contain any entries",
                     mapping.getLookupTableName()));
             return;
         }
@@ -254,8 +256,8 @@ public abstract class BaseAtlasModule implements AtlasModule {
             for (Field inputField : mapping.getInputField()) {
                 if (entry.getSourceValue().equals(inputField.getValue())) {
                     inputField.setValue(entry.getTargetValue());
-                    if (logger.isDebugEnabled()) {
-                        logger.debug(
+                    if (LOG.isDebugEnabled()) {
+                        LOG.debug(
                                 String.format("Processing lookup value for iP=%s iV=%s lksV=%s lksT=%s lktV=%s lktT=%s",
                                         inputField.getPath(), inputField.getValue(), entry.getSourceValue(),
                                         entry.getSourceType(), entry.getTargetValue(), entry.getTargetType()));
@@ -269,7 +271,7 @@ public abstract class BaseAtlasModule implements AtlasModule {
     protected Field processSeparateField(AtlasSession session, Mapping mapping, Field inputField, Field outputField)
             throws AtlasException {
         if (outputField.getIndex() == null || outputField.getIndex() < 0) {
-            logger.warn(String.format("Separate requires zero or positive Index value to be set on outputField outputField.path=%s",
+            LOG.warn(String.format("Separate requires zero or positive Index value to be set on outputField outputField.path=%s",
                     outputField.getPath()));
             addAudit(session, outputField.getDocId(),
                     String.format("Separate requires zero or positive Index value to be set on outputField outputField.path=%s",
@@ -282,7 +284,7 @@ public abstract class BaseAtlasModule implements AtlasModule {
         if ((inputFieldsep.getFieldType() != null && !FieldType.STRING.equals(inputFieldsep.getFieldType())
                 || (inputFieldsep.getValue() == null
                         || !inputFieldsep.getValue().getClass().isAssignableFrom(String.class)))) {
-            logger.warn(String.format("Separate requires String field type for inputField.path=%s",
+            LOG.warn(String.format("Separate requires String field type for inputField.path=%s",
                     inputFieldsep.getPath()));
             addAudit(session, outputField.getDocId(), String
                     .format("Separate requires String field type for inputField.path=%s", inputFieldsep.getPath()),
@@ -301,13 +303,13 @@ public abstract class BaseAtlasModule implements AtlasModule {
         }
 
         if (separatedValues == null || separatedValues.isEmpty()) {
-            logger.debug(
+            LOG.debug(
                     String.format("Empty string for Separate mapping inputField.path=%s", inputFieldsep.getPath()));
             return null;
         }
 
         if (separatedValues.size() <= outputField.getIndex()) {
-            logger.error(String.format(
+            LOG.error(String.format(
                     "Separate returned fewer segements count=%s when outputField.path=%s requested index=%s",
                     separatedValues.size(), outputField.getPath(), outputField.getIndex()));
             addAudit(session, outputField.getDocId(),
@@ -328,7 +330,7 @@ public abstract class BaseAtlasModule implements AtlasModule {
         Map<Integer, String> combineValues = null;
         for (Field inputField : inputFields) {
             if (inputField.getIndex() == null || inputField.getIndex() < 0) {
-                logger.error(
+                LOG.error(
                         String.format("Combine requires zero or positive Index value to be set on all inputFields inputField.path=%s",
                                 inputField.getPath()));
                 addAudit(session, outputField.getDocId(),
@@ -340,7 +342,7 @@ public abstract class BaseAtlasModule implements AtlasModule {
             if ((inputField.getFieldType() != null && !FieldType.STRING.equals(inputField.getFieldType())
                     || (inputField.getValue() != null
                             && !inputField.getValue().getClass().isAssignableFrom(String.class)))) {
-                logger.error(String.format("Combine requires String field type for inputField.path=%s",
+                LOG.error(String.format("Combine requires String field type for inputField.path=%s",
                         inputField.getPath()));
                 addAudit(session, outputField.getDocId(), String
                         .format("Combine requires String field type for inputField.path=%s", inputField.getPath()),
@@ -366,7 +368,7 @@ public abstract class BaseAtlasModule implements AtlasModule {
         }
 
         if (combinedValue == null || combinedValue.trim().isEmpty()) {
-            logger.debug(String.format("Empty combined string for Combine mapping outputField.path=%s",
+            LOG.debug(String.format("Empty combined string for Combine mapping outputField.path=%s",
                     outputField.getPath()));
             return;
         }

@@ -17,8 +17,6 @@ package io.atlasmap.java.inspect;
 
 import org.junit.Test;
 
-import io.atlasmap.java.inspect.StringUtil;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 

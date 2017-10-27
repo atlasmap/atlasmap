@@ -44,7 +44,7 @@ import javax.ws.rs.core.Response;
 @Path("v2/atlas/xml")
 public class XmlService extends Application {
 
-    private static final Logger logger = LoggerFactory.getLogger(XmlService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(XmlService.class);
 
     // example request: http://localhost:8181/rest/myresource?from=jason%20baker
     @GET
@@ -90,7 +90,7 @@ public class XmlService extends Application {
                 }
             }
         } catch (Exception e) {
-            logger.error("Error inspecting xml: " + e.getMessage(), e);
+            LOG.error("Error inspecting xml: " + e.getMessage(), e);
         } finally {
             endTime = System.currentTimeMillis() - startTime;
         }
@@ -130,7 +130,7 @@ public class XmlService extends Application {
                 }
             }
         } catch (Exception e) {
-            logger.error("Error inspecting xml: " + e.getMessage(), e);
+            LOG.error("Error inspecting xml: " + e.getMessage(), e);
             response.setErrorMessage(e.getMessage());
         } finally {
             response.setExecutionTime(System.currentTimeMillis() - startTime);

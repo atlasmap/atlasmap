@@ -28,7 +28,7 @@ import io.atlasmap.java.v2.JavaField;
 
 public class JavaConstructService {
 
-    private static final Logger logger = LoggerFactory.getLogger(JavaConstructService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(JavaConstructService.class);
     private AtlasConversionService atlasConversionService = null;
 
     public Object constructClass(JavaClass javaClass)
@@ -78,8 +78,8 @@ public class JavaConstructService {
                 continue;
             }
 
-            if (logger.isDebugEnabled()) {
-                logger.debug(String.format("Constructing complex child p=%s c=%s", f.getPath(), f.getClassName()));
+            if (LOG.isDebugEnabled()) {
+                LOG.debug(String.format("Constructing complex child p=%s c=%s", f.getPath(), f.getClassName()));
             }
 
             Object parentObject = targetObject;
@@ -101,15 +101,15 @@ public class JavaConstructService {
                     getter.setAccessible(true);
                     getterResult = getter.invoke(parentObject);
                 } catch (NoSuchMethodException | IllegalArgumentException | InvocationTargetException e) {
-                    logger.warn(String.format("Error invoking getter for field p=%s c=%s msg=%s", f.getPath(),
+                    LOG.warn(String.format("Error invoking getter for field p=%s c=%s msg=%s", f.getPath(),
                             f.getClassName(), e.getMessage()), e);
                     continue;
                 }
 
                 if (getterResult != null) {
                     doSetter = false;
-                    if (logger.isDebugEnabled()) {
-                        logger.debug(String.format("Field instantiated by parent class p=%s c=%s", f.getPath(),
+                    if (LOG.isDebugEnabled()) {
+                        LOG.debug(String.format("Field instantiated by parent class p=%s c=%s", f.getPath(),
                                 f.getClassName()));
                     }
                 }
@@ -122,7 +122,7 @@ public class JavaConstructService {
                     setter.setAccessible(true);
                     setter.invoke(parentObject, constructClass((JavaClass) f, pathFilters));
                 } catch (NoSuchMethodException | IllegalArgumentException | InvocationTargetException e) {
-                    logger.warn(String.format("Error invoking setter for field p=%s c=%s msg=%s", f.getPath(),
+                    LOG.warn(String.format("Error invoking setter for field p=%s c=%s msg=%s", f.getPath(),
                             f.getClassName(), e.getMessage()), e);
                     continue;
                 }
@@ -139,8 +139,8 @@ public class JavaConstructService {
 
     protected Object instantiateArray(JavaClass javaClass, List<String> pathFilters)
             throws ConstructException, ClassNotFoundException, IllegalAccessException, InstantiationException {
-        if (logger.isDebugEnabled()) {
-            logger.debug(String.format("Constructing array c=%s size=%s", javaClass.getClassName(),
+        if (LOG.isDebugEnabled()) {
+            LOG.debug(String.format("Constructing array c=%s size=%s", javaClass.getClassName(),
                     javaClass.getArraySize()));
         }
         Object objectArray = Array.newInstance(Class.forName(javaClass.getClassName()), javaClass.getArraySize());
@@ -152,8 +152,8 @@ public class JavaConstructService {
 
     protected Object instantiateList(JavaClass javaClass, List<String> pathFilters)
             throws ConstructException, ClassNotFoundException, InstantiationException, IllegalAccessException {
-        if (logger.isDebugEnabled()) {
-            logger.debug(String.format("Constructing list c=%s", javaClass.getCollectionClassName()));
+        if (LOG.isDebugEnabled()) {
+            LOG.debug(String.format("Constructing list c=%s", javaClass.getCollectionClassName()));
         }
         Class<?> collectionClass = Class.forName(javaClass.getCollectionClassName());
         return collectionClass.newInstance();
@@ -161,8 +161,8 @@ public class JavaConstructService {
 
     protected Object instantiateMap(JavaClass javaClass, List<String> pathFilters)
             throws ConstructException, ClassNotFoundException, InstantiationException, IllegalAccessException {
-        if (logger.isDebugEnabled()) {
-            logger.debug(String.format("Constructing map c=%s", javaClass.getCollectionClassName()));
+        if (LOG.isDebugEnabled()) {
+            LOG.debug(String.format("Constructing map c=%s", javaClass.getCollectionClassName()));
         }
         Class<?> collectionClass = Class.forName(javaClass.getCollectionClassName());
         return collectionClass.newInstance();

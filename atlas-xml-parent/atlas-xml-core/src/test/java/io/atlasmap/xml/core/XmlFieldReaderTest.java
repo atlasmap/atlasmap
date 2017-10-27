@@ -121,7 +121,6 @@ public class XmlFieldReaderTest {
 
     @Test
     public void testReadDocumentSetAttributeValueComplex() throws Exception {
-        DocumentBuilder b = DocumentBuilderFactory.newInstance().newDocumentBuilder();
         Document doc = getDocument("src/test/resources/complex_example.xml");
         XmlField xmlField = AtlasXmlModelFactory.createXmlField();
         xmlField.setPath("/orders/order[2]/id[1]/@custId");
@@ -257,7 +256,7 @@ public class XmlFieldReaderTest {
     }
 
     @Test
-    public void testReadDocumentMisMatchedFieldName_AT416() throws Exception {
+    public void testReadDocumentMisMatchedFieldNameAT416() throws Exception {
         Document doc = getDocument("src/test/resources/simple_example.xml");
         XmlField xmlField = AtlasXmlModelFactory.createXmlField();
         // correct field name should be id or id[1]
@@ -268,7 +267,7 @@ public class XmlFieldReaderTest {
     }
 
     @Test
-    public void testReadDocumentMixedNamespaces_NoNSDocument() throws Exception {
+    public void testReadDocumentMixedNamespacesNoNSDocument() throws Exception {
         Document doc = getDocument("src/test/resources/simple_example.xml");
         XmlField xmlField = AtlasXmlModelFactory.createXmlField();
         // there is no namespace on the document but there is this field....
@@ -280,7 +279,7 @@ public class XmlFieldReaderTest {
     }
 
     @Test
-    public void testReadDocumentMixedNamespaces_NoNSOnPaths() throws Exception {
+    public void testReadDocumentMixedNamespacesNoNSOnPaths() throws Exception {
         Document doc = getDocument("src/test/resources/simple_example_single_ns.xml", true);
         XmlField xmlField = AtlasXmlModelFactory.createXmlField();
         // there is a namespace on the document but there is not on the paths....

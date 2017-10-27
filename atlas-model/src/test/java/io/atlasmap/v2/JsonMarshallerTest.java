@@ -16,7 +16,6 @@
 package io.atlasmap.v2;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.atlasmap.v2.AtlasMapping;
 
 import org.junit.After;
 import org.junit.Before;
@@ -177,7 +176,7 @@ public class JsonMarshallerTest extends BaseMarshallerTest {
         mapper.writeValue(new File("target/junit/" + testName.getMethodName() + "/" + "atlasmapping.json"),
                 atlasMapping);
 
-        AtlasMapping rereadMapping = mapper.readValue(
+        mapper.readValue(
                 new File("target/junit/" + testName.getMethodName() + "/" + "atlasmapping.json"), AtlasMapping.class);
     }
 

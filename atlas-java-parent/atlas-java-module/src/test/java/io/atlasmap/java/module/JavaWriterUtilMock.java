@@ -19,7 +19,7 @@ import io.atlasmap.java.test.TestListOrders;
 import io.atlasmap.v2.Field;
 
 public class JavaWriterUtilMock extends JavaWriterUtil {
-    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(JavaWriterUtilMock.class);
+    private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(JavaWriterUtilMock.class);
 
     public JavaWriterUtilMock() {
         super(null);
@@ -28,7 +28,7 @@ public class JavaWriterUtilMock extends JavaWriterUtil {
     /**
      * Retrieve a child object (which may be a complex class or collection class)
      * from the given parentObject.
-     * 
+     *
      * @param field
      *            - provided for convenience, probably not needed here
      * @param ParentObject
@@ -40,14 +40,14 @@ public class JavaWriterUtilMock extends JavaWriterUtil {
     public Object getObjectFromParent(Field field, Object parentObject, SegmentContext segmentContext)
             throws AtlasException {
         String segment = segmentContext.getSegment();
-        if (logger.isDebugEnabled()) {
-            logger.debug(
+        if (LOG.isDebugEnabled()) {
+            LOG.debug(
                     "Retrieving child '" + segmentContext.getSegmentPath() + "'.\n\tparentObject: " + parentObject);
         }
 
         if (parentObject == null) {
-            if (logger.isDebugEnabled()) {
-                logger.debug("Cannot find child '" + segmentContext.getSegmentPath() + "', parent is null.");
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Cannot find child '" + segmentContext.getSegmentPath() + "', parent is null.");
             }
             return null;
         }
@@ -90,7 +90,7 @@ public class JavaWriterUtilMock extends JavaWriterUtil {
             String getter = "get" + cleanedSegment.substring(0, 1).toUpperCase() + cleanedSegment.substring(1);
             String fix = "} else if (\"" + cleanedSegment + "\".equals(cleanedSegment) && parentObject instanceof "
                     + clz + ") {\n " + "childObject = ((" + clz + ")parentObject)." + getter + "();";
-            logger.error(fix);
+            LOG.error(fix);
             throw new AtlasException("Don't know how to handle get object from parent: " + parentObject + ", segment: "
                     + cleanedSegment);
         }
@@ -107,11 +107,11 @@ public class JavaWriterUtilMock extends JavaWriterUtil {
             // childObject = parentObject.addressLine1;
         }
 
-        if (logger.isDebugEnabled()) {
+        if (LOG.isDebugEnabled()) {
             if (childObject == null) {
-                logger.debug("Could not find child object for path: " + segmentContext.getSegmentPath());
+                LOG.debug("Could not find child object for path: " + segmentContext.getSegmentPath());
             } else {
-                logger.debug("Found child object for path '" + segmentContext.getSegmentPath() + "': " + childObject);
+                LOG.debug("Found child object for path '" + segmentContext.getSegmentPath() + "': " + childObject);
             }
         }
 
@@ -121,7 +121,7 @@ public class JavaWriterUtilMock extends JavaWriterUtil {
 
     /**
      * Set the given object within the parentObject.
-     * 
+     *
      * @param field
      *            - provided if we need it, I don't think we will since we already
      *            have the value in hand?
@@ -138,8 +138,8 @@ public class JavaWriterUtilMock extends JavaWriterUtil {
     public void setObjectOnParent(Field field, SegmentContext segmentContext, Object parentObject, Object childObject)
             throws AtlasException {
         String segment = segmentContext.getSegment();
-        if (logger.isDebugEnabled()) {
-            logger.debug("Setting object '" + segmentContext.getSegmentPath() + "'.\n\tchildObject: " + childObject
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Setting object '" + segmentContext.getSegmentPath() + "'.\n\tchildObject: " + childObject
                     + "\n\tparentObject: " + parentObject);
         }
 
@@ -196,12 +196,12 @@ public class JavaWriterUtilMock extends JavaWriterUtil {
             String setter = "set" + cleanedSegment.substring(0, 1).toUpperCase() + cleanedSegment.substring(1);
             String fix = "} else if (\"" + cleanedSegment + "\".equals(cleanedSegment) && parentObject instanceof "
                     + clz + ") {\n " + "((" + clz + ") parentObject)." + setter + "((" + clz2 + ")childObject);";
-            logger.error(fix);
+            LOG.error(fix);
             throw new AtlasException("FIX: " + fix);
         }
 
-        if (logger.isDebugEnabled()) {
-            logger.debug("Object after value written: " + parentObject);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Object after value written: " + parentObject);
         }
     }
 }

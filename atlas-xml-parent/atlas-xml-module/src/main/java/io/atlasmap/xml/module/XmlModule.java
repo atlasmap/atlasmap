@@ -66,7 +66,7 @@ import io.atlasmap.xml.v2.XmlNamespaces;
 @AtlasModuleDetail(name = "XmlModule", uri = "atlas:xml", modes = { "SOURCE", "TARGET" }, dataFormats = {
         "xml" }, configPackages = { "io.atlasmap.xml.v2" })
 public class XmlModule extends BaseAtlasModule {
-    private static final Logger logger = LoggerFactory.getLogger(XmlModule.class);
+    private static final Logger LOG = LoggerFactory.getLogger(XmlModule.class);
 
     @Override
     public void processPreOutputExecution(AtlasSession session) throws AtlasException {
@@ -89,15 +89,15 @@ public class XmlModule extends BaseAtlasModule {
         XmlFieldWriter writer = new XmlFieldWriter(nsMap, template);
         session.setOutput(writer);
 
-        if (logger.isDebugEnabled()) {
-            logger.debug("processPreOutputExcution completed");
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("processPreOutputExcution completed");
         }
     }
 
     @Override
     public void processPreValidation(AtlasSession atlasSession) throws AtlasException {
         if (atlasSession == null || atlasSession.getMapping() == null) {
-            logger.error("Invalid session: Session and AtlasMapping must be specified");
+            LOG.error("Invalid session: Session and AtlasMapping must be specified");
             throw new AtlasValidationException("Invalid session");
         }
 
@@ -105,12 +105,12 @@ public class XmlModule extends BaseAtlasModule {
         List<Validation> xmlValidations = xmlValidationService.validateMapping(atlasSession.getMapping());
         atlasSession.getValidations().getValidation().addAll(xmlValidations);
 
-        if (logger.isDebugEnabled()) {
-            logger.debug("Detected " + xmlValidations.size() + " xml validation notices");
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Detected " + xmlValidations.size() + " xml validation notices");
         }
 
-        if (logger.isDebugEnabled()) {
-            logger.debug("processPreValidation completed");
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("processPreValidation completed");
         }
     }
 
@@ -136,8 +136,8 @@ public class XmlModule extends BaseAtlasModule {
 
                 if (field instanceof ConstantField) {
                     processConstantField(session, mapping);
-                    if (logger.isDebugEnabled()) {
-                        logger.debug("Processed input constantField sPath=" + field.getPath() + " sV=" + field.getValue()
+                    if (LOG.isDebugEnabled()) {
+                        LOG.debug("Processed input constantField sPath=" + field.getPath() + " sV=" + field.getValue()
                         + " sT=" + field.getFieldType() + " docId: " + field.getDocId());
                     }
                     continue;
@@ -146,8 +146,8 @@ public class XmlModule extends BaseAtlasModule {
                 if (field instanceof PropertyField) {
                     processPropertyField(session, mapping,
                             session.getAtlasContext().getContextFactory().getPropertyStrategy());
-                    if (logger.isDebugEnabled()) {
-                        logger.debug("Processed input propertyField sPath=" + field.getPath() + " sV=" + field.getValue()
+                    if (LOG.isDebugEnabled()) {
+                        LOG.debug("Processed input propertyField sPath=" + field.getPath() + " sV=" + field.getValue()
                         + " sT=" + field.getFieldType() + " docId: " + field.getDocId());
                     }
                     continue;
@@ -179,8 +179,8 @@ public class XmlModule extends BaseAtlasModule {
                 for (String key : sourceUriParams.keySet()) {
                     if ("disableNamespaces".equals(key)) {
                         if ("true".equals(sourceUriParams.get("disableNamespaces"))) {
-                            if (logger.isDebugEnabled()) {
-                                logger.debug("Disabling namespace support");
+                            if (LOG.isDebugEnabled()) {
+                                LOG.debug("Disabling namespace support");
                             }
                             enableNamespaces = false;
                         }
@@ -190,7 +190,7 @@ public class XmlModule extends BaseAtlasModule {
                 try {
                     document = getDocument((String) sourceObject, enableNamespaces);
                 } catch (IOException | ParserConfigurationException | SAXException e) {
-                    logger.error(String.format("Error parsing xml input object msg=%s", e.getMessage()), e);
+                    LOG.error(String.format("Error parsing xml input object msg=%s", e.getMessage()), e);
                     Audit audit = new Audit();
                     audit.setDocId(field.getDocId());
                     audit.setPath(field.getPath());
@@ -207,8 +207,8 @@ public class XmlModule extends BaseAtlasModule {
                     inputField.setFieldType(FieldType.STRING);
                 }
 
-                if (logger.isDebugEnabled()) {
-                    logger.debug("Processed input field sPath=" + field.getPath() + " sV=" + field.getValue() + " sT="
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Processed input field sPath=" + field.getPath() + " sV=" + field.getValue() + " sT="
                             + field.getFieldType() + " docId: " + field.getDocId());
                 }
             }
@@ -270,7 +270,7 @@ public class XmlModule extends BaseAtlasModule {
                         outputValue = getConversionService().convertType(inField.getValue(), inField.getFieldType(),
                                 outputField.getFieldType());
                     } catch (AtlasConversionException e) {
-                        logger.error(String.format("Unable to auto-convert for iT=%s oT=%s oF=%s msg=%s",
+                        LOG.error(String.format("Unable to auto-convert for iT=%s oT=%s oF=%s msg=%s",
                                 inField.getFieldType(), outputField.getFieldType(), outputField.getPath(),
                                 e.getMessage()), e);
                         continue;
@@ -344,12 +344,12 @@ public class XmlModule extends BaseAtlasModule {
                 }
                 break;
             default:
-                logger.error("Unsupported mappingType=%s detected", mapping.getMappingType());
+                LOG.error("Unsupported mappingType=%s detected", mapping.getMappingType());
                 return;
             }
 
-            if (logger.isDebugEnabled()) {
-                logger.debug(String.format("Processed output field oP=%s oV=%s oT=%s docId: %s", outputField.getPath(),
+            if (LOG.isDebugEnabled()) {
+                LOG.debug(String.format("Processed output field oP=%s oV=%s oT=%s docId: %s", outputField.getPath(),
                         outputField.getValue(), outputField.getFieldType(), outputField.getDocId()));
             }
         }
@@ -357,8 +357,8 @@ public class XmlModule extends BaseAtlasModule {
 
     @Override
     public void processPostOutputExecution(AtlasSession session) throws AtlasException {
-        if (logger.isDebugEnabled()) {
-            logger.debug("processPostOutputExecution completed");
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("processPostOutputExecution completed");
         }
 
         Object output = session.getOutput();
@@ -397,7 +397,7 @@ public class XmlModule extends BaseAtlasModule {
             transformer.transform(domSource, result);
             return writer.toString();
         } catch (TransformerException e) {
-            logger.error(String.format("Error converting Xml document to string msg=%s", e.getMessage()), e);
+            LOG.error(String.format("Error converting Xml document to string msg=%s", e.getMessage()), e);
             throw new AtlasException(e.getMessage(), e);
         }
     }

@@ -1,7 +1,5 @@
 package io.atlasmap.json.module;
 
-import static org.junit.Assert.*;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -10,6 +8,8 @@ import io.atlasmap.json.v2.JsonField;
 import io.atlasmap.v2.ConstantField;
 import io.atlasmap.v2.PropertyField;
 import io.atlasmap.v2.SimpleField;
+
+import static org.junit.Assert.assertTrue;
 
 public class JsonModuleTest {
 

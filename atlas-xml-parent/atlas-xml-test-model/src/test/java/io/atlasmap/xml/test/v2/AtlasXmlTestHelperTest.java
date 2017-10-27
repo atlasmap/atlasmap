@@ -22,7 +22,7 @@ public class AtlasXmlTestHelperTest {
         xfpe.setDoubleField(43214321.43214d);
         xfpe.setFloatField(23432.431f);
         xfpe.setIntField(-94);
-        xfpe.setLongField(124234324l);
+        xfpe.setLongField(124234324L);
         xfpe.setShortField((short) 234);
 
         // Files.write(Paths.get(new

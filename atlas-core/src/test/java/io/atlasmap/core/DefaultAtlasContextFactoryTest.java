@@ -18,18 +18,19 @@ package io.atlasmap.core;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import io.atlasmap.core.DefaultAtlasContextFactory;
-
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 public class DefaultAtlasContextFactoryTest {
 
     private DefaultAtlasContextFactory factory = null;
-    private static String THREAD_NAME = null;
+    private static String threadName = null;
 
     @BeforeClass
     public static void beforeClass() {
-        THREAD_NAME = Thread.currentThread().getName();
+        threadName = Thread.currentThread().getName();
     }
 
     @Test
@@ -38,7 +39,7 @@ public class DefaultAtlasContextFactoryTest {
         factory.init();
 
         assertNotNull(factory);
-        assertEquals(THREAD_NAME, factory.getThreadName());
+        assertEquals(threadName, factory.getThreadName());
         assertEquals("io.atlasmap.core.DefaultAtlasContextFactory", factory.getClassName());
         assertNotNull(factory.getUuid());
         assertNotNull(factory.getJmxObjectName());
@@ -64,7 +65,7 @@ public class DefaultAtlasContextFactoryTest {
         String origUuid = factory.getUuid();
 
         assertNotNull(factory);
-        assertEquals(THREAD_NAME, factory.getThreadName());
+        assertEquals(threadName, factory.getThreadName());
         assertEquals("io.atlasmap.core.DefaultAtlasContextFactory", factory.getClassName());
         assertNotNull(factory.getUuid());
         assertNotNull(factory.getJmxObjectName());
@@ -83,7 +84,7 @@ public class DefaultAtlasContextFactoryTest {
 
         factory.init();
         assertNotNull(factory);
-        assertEquals(THREAD_NAME, factory.getThreadName());
+        assertEquals(threadName, factory.getThreadName());
         assertEquals("io.atlasmap.core.DefaultAtlasContextFactory", factory.getClassName());
         assertNotNull(factory.getUuid());
         assertNotNull(factory.getJmxObjectName());
@@ -106,7 +107,7 @@ public class DefaultAtlasContextFactoryTest {
     public void testStaticFactoryInitDestroy() {
         factory = DefaultAtlasContextFactory.getInstance();
         assertNotNull(factory);
-        assertEquals(THREAD_NAME, factory.getThreadName());
+        assertEquals(threadName, factory.getThreadName());
         assertEquals("io.atlasmap.core.DefaultAtlasContextFactory", factory.getClassName());
         assertNotNull(factory.getUuid());
         assertNotNull(factory.getJmxObjectName());

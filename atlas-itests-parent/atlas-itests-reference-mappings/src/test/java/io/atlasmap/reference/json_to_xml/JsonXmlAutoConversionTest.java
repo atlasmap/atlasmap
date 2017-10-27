@@ -15,8 +15,6 @@
  */
 package io.atlasmap.reference.json_to_xml;
 
-import static org.junit.Assert.*;
-
 import java.io.File;
 import javax.xml.bind.JAXBElement;
 import org.junit.Test;
@@ -26,6 +24,10 @@ import io.atlasmap.reference.AtlasMappingBaseTest;
 import io.atlasmap.reference.AtlasTestUtil;
 import io.atlasmap.xml.test.v2.AtlasXmlTestHelper;
 import io.atlasmap.xml.test.v2.XmlFlatPrimitiveElement;
+
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 public class JsonXmlAutoConversionTest extends AtlasMappingBaseTest {
 
@@ -76,6 +78,7 @@ public class JsonXmlAutoConversionTest extends AtlasMappingBaseTest {
         Object object = session.getOutput();
         assertNotNull(object);
         assertTrue(object instanceof String);
+        @SuppressWarnings("unchecked")
         JAXBElement<XmlFlatPrimitiveElement> xmlFPE = (JAXBElement<XmlFlatPrimitiveElement>) AtlasXmlTestHelper
                 .unmarshal((String) object, XmlFlatPrimitiveElement.class);
 
