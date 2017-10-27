@@ -47,15 +47,18 @@ public class SchemaInspector implements JsonInspector {
 
             Map<String, JsonNode> definitionMap = new HashMap<>();
             populateDefinitions(rootNode, definitionMap);
-            JsonComplexType rootNodeType = createJsonComplexType(null, rootNode, null, definitionMap);
+            JsonField rootNodeType = getJsonFieldBuilder(null, rootNode, null, definitionMap).build();
 
             if (rootNodeType.getCollectionType() == CollectionType.LIST) {
                 logger.warn("Topmost array is not supported");
-                rootNodeType.getJsonFields().getJsonField().clear();
+                if (rootNodeType instanceof JsonComplexType) {
+                    ((JsonComplexType)rootNodeType).getJsonFields().getJsonField().clear();
+                }
                 rootNodeType.setStatus(FieldStatus.UNSUPPORTED);
                 jsonDocument.getFields().getField().add(rootNodeType);
-            } else if (rootNodeType.getJsonFields().getJsonField().size() != 0) {
-                jsonDocument.getFields().getField().addAll(rootNodeType.getJsonFields().getJsonField());
+            } else if (rootNodeType instanceof JsonComplexType
+                    && ((JsonComplexType)rootNodeType).getJsonFields().getJsonField().size() != 0) {
+                jsonDocument.getFields().getField().addAll(((JsonComplexType)rootNodeType).getJsonFields().getJsonField());
             } else if (rootNodeType.getFieldType() == FieldType.COMPLEX) {
                 logger.warn("No simple type nor property is defined for the root node. It's going to be empty");
             } else {
@@ -105,59 +108,85 @@ public class SchemaInspector implements JsonInspector {
                 logger.warn("Ignoring non-object field '{}'", entry);
                 continue;
             }
-            JsonComplexType type = createJsonComplexType(entry.getKey(), entry.getValue(), parentPath, definitionMap);
+            JsonField type = getJsonFieldBuilder(entry.getKey(), entry.getValue(), parentPath, definitionMap).build();
             answer.add(type);
         }
         return answer;
     }
 
-    private JsonComplexType createJsonComplexType(String name, JsonNode value, String parentPath, Map<String, JsonNode> definitionMap) throws JsonInspectionException {
+    private JsonFieldBuilder getJsonFieldBuilder(String name, JsonNode value, String parentPath, Map<String, JsonNode> definitionMap) throws JsonInspectionException {
         logger.trace("--> Field:[name=[{}], value=[{}], parentPath=[{}]", name, value, parentPath);
-        JsonComplexType answer = new JsonComplexType();
-        answer.setJsonFields(new JsonFields());
+        JsonFieldBuilder builder = new JsonFieldBuilder();
         if (name != null) {
-            answer.setName(name);
-            answer.setPath((parentPath != null ? parentPath.concat("/") : "/").concat(name));
+            builder.name = name;
+            builder.path = (parentPath != null ? parentPath.concat("/") : "/").concat(name);
         }
-        answer.setStatus(FieldStatus.SUPPORTED);
+        builder.status = FieldStatus.SUPPORTED;
 
-        populateDefinitions(value, definitionMap);
-        value = resolveReference(value, definitionMap);
+        JsonNode nodeValue = value;
+        populateDefinitions(nodeValue, definitionMap);
+        nodeValue = resolveReference(nodeValue, definitionMap);
 
-        JsonNode fieldType = value.get("type");
+        JsonNode fieldType = nodeValue.get("type");
         if (fieldType == null || fieldType.asText() == null) {
             logger.warn("'type' is not defined for node '{}', assuming as an object", name);
-            answer.setFieldType(FieldType.COMPLEX);
-            answer.getJsonFields().getJsonField().addAll(loadProperties(value, answer.getPath(), definitionMap));
+            builder.type = FieldType.COMPLEX;
+            builder.subFields.getJsonField().addAll(loadProperties(nodeValue, builder.path, definitionMap));
         } else if ("array".equals(fieldType.asText())) {
-            JsonNode arrayItems = value.get("items");
+            JsonNode arrayItems = nodeValue.get("items");
             if (arrayItems == null || !arrayItems.fields().hasNext()) {
                 logger.warn("'{}' is an array node, but no 'items' found in it. It will be ignored", name);
-                answer.setCollectionType(CollectionType.LIST);
-                answer.setStatus(FieldStatus.UNSUPPORTED);
+                builder.collectionType = CollectionType.LIST;
+                builder.status = FieldStatus.UNSUPPORTED;
             } else {
-                answer = createJsonComplexType(name, value.get("items"), parentPath, definitionMap);
-                answer.setCollectionType(CollectionType.LIST);
+                builder = getJsonFieldBuilder(name, nodeValue.get("items"), parentPath, definitionMap);
+                builder.collectionType = CollectionType.LIST;
             }
         } else if ("boolean".equals(fieldType.asText())) {
-            answer.setFieldType(FieldType.BOOLEAN);
+            builder.type = FieldType.BOOLEAN;
         } else if ("integer".equals(fieldType.asText())) {
-            answer.setFieldType(FieldType.INTEGER);
+            builder.type = FieldType.INTEGER;
         } else if ("null".equals(fieldType.asText())) {
-            answer.setFieldType(FieldType.NONE);
+            builder.type = FieldType.NONE;
         } else if ("number".equals(fieldType.asText())) {
-            answer.setFieldType(FieldType.NUMBER);
+            builder.type = FieldType.NUMBER;
         } else if ("string".equals(fieldType.asText())) {
-            answer.setFieldType(FieldType.STRING);
+            builder.type = FieldType.STRING;
         } else {
             if (!"object".equals(fieldType.asText())) {
                 logger.warn("Unsupported field type '{}' found, assuming as an object", fieldType.asText());
             }
-            answer.setFieldType(FieldType.COMPLEX);
-            answer.getJsonFields().getJsonField().addAll(loadProperties(value, answer.getPath(), definitionMap));
+            builder.type = FieldType.COMPLEX;
+            builder.subFields.getJsonField().addAll(loadProperties(nodeValue, builder.path, definitionMap));
         }
 
-        return answer;
+        return builder;
+    }
+
+    private class JsonFieldBuilder {
+        private String name;
+        private String path;
+        private FieldType type;
+        private CollectionType collectionType;
+        private FieldStatus status;
+        private JsonFields subFields = new JsonFields();
+
+        public JsonField build() {
+            JsonField answer;
+            if (type == FieldType.COMPLEX) {
+                JsonComplexType complex = new JsonComplexType();
+                complex.setJsonFields(subFields);
+                answer = complex;
+            } else {
+                answer = new JsonField();
+            }
+            answer.setName(name);
+            answer.setPath(path);
+            answer.setFieldType(type);
+            answer.setCollectionType(collectionType);
+            answer.setStatus(status);
+            return answer;
+        }
     }
 
     private JsonNode resolveReference(JsonNode node, Map<String, JsonNode> definitionMap) {
