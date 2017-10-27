@@ -57,7 +57,7 @@ public class AtlasMappingService implements Serializable {
     }
 
     private static final long serialVersionUID = 1668362984516180517L;
-    private static final Logger logger = LoggerFactory.getLogger(AtlasMappingService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AtlasMappingService.class);
     private transient JAXBContext ctx = null;
     private transient ObjectMapper jsonMapper = null;
 
@@ -69,7 +69,7 @@ public class AtlasMappingService implements Serializable {
             tmp.add(CONFIG_V2_PACKAGE);
             initialize(tmp);
         } catch (Exception e) {
-            logger.error("Error initializing JAXB: " + e.getMessage(), e);
+            LOG.error("Error initializing JAXB: " + e.getMessage(), e);
             throw new IllegalStateException(e.getMessage(), e);
         }
     }
@@ -78,7 +78,7 @@ public class AtlasMappingService implements Serializable {
         try {
             initialize(modulePackages);
         } catch (Exception e) {
-            logger.error("Error initializing JAXB: " + e.getMessage(), e);
+            LOG.error("Error initializing JAXB: " + e.getMessage(), e);
             throw new IllegalStateException(e.getMessage(), e);
         }
     }
@@ -87,8 +87,8 @@ public class AtlasMappingService implements Serializable {
 
         if (getJAXBContext() == null) {
             setJAXBContext(JAXBContext.newInstance(stringListToColonSeparated(packages)));
-            if (logger.isDebugEnabled()) {
-                logger.debug("Initialized JAXBContext: " + stringListToColonSeparated(packages));
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Initialized JAXBContext: " + stringListToColonSeparated(packages));
             }
         }
 

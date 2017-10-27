@@ -17,7 +17,6 @@ package io.atlasmap.converters;
 
 import io.atlasmap.spi.AtlasConversionConcern;
 import io.atlasmap.api.AtlasConversionException;
-import io.atlasmap.converters.CharacterConverter;
 import io.atlasmap.spi.AtlasConversionInfo;
 import io.atlasmap.spi.AtlasPrimitiveConverter;
 import io.atlasmap.v2.FieldType;
@@ -27,7 +26,12 @@ import org.junit.Test;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 public class CharacterConverterTest {
 
@@ -63,13 +67,13 @@ public class CharacterConverterTest {
     }
 
     @Test(expected = AtlasConversionException.class)
-    public void convertToBoolean_Null() throws Exception {
+    public void convertToBooleanNull() throws Exception {
         Character c = "q".charAt(0);
         converter.convertToBoolean(c);
     }
 
     @Test
-    public void convertToBoolean_Invalid() throws Exception {
+    public void convertToBooleanInvalid() throws Exception {
         Character c = null;
         converter.convertToBoolean(c);
         assertNull(c);
@@ -82,7 +86,7 @@ public class CharacterConverterTest {
     }
 
     @Test
-    public void convertToByte_Null() throws Exception {
+    public void convertToByteNull() throws Exception {
         assertNull(converter.convertToByte(null));
     }
 
@@ -96,7 +100,7 @@ public class CharacterConverterTest {
     }
 
     @Test
-    public void convertToCharacter_Null() throws Exception {
+    public void convertToCharacterNull() throws Exception {
         Character c = null;
         Character c2 = converter.convertToCharacter(c);
         assertNull(c2);
@@ -116,7 +120,7 @@ public class CharacterConverterTest {
     }
 
     @Test
-    public void convertToDouble_Null() throws Exception {
+    public void convertToDoubleNull() throws Exception {
         Character c = null;
         Double d = converter.convertToDouble(c);
         assertNull(d);
@@ -136,7 +140,7 @@ public class CharacterConverterTest {
     }
 
     @Test
-    public void convertToFloat_Null() throws Exception {
+    public void convertToFloatNull() throws Exception {
         Character c = null;
         Float f = converter.convertToFloat(c);
         assertNull(f);
@@ -157,7 +161,7 @@ public class CharacterConverterTest {
     }
 
     @Test
-    public void convertToInteger_Null() throws Exception {
+    public void convertToIntegerNull() throws Exception {
         Character c = null;
         Integer i = converter.convertToInteger(c);
         assertNull(i);
@@ -179,8 +183,7 @@ public class CharacterConverterTest {
     }
 
     @Test
-    public void convertToLong_Null() throws Exception {
-        Character c = null;
+    public void convertToLongNull() throws Exception {
         Long l = converter.convertToLong(null);
         assertNull(l);
     }
@@ -194,16 +197,16 @@ public class CharacterConverterTest {
     }
 
     @Test
-    public void convertToShort_Null() throws Exception {
+    public void convertToShortNull() throws Exception {
         Character c = null;
         Short s = converter.convertToShort(c);
         assertNull(s);
     }
 
     @Test(expected = AtlasConversionException.class)
-    public void convertToShort_Exception() throws Exception {
+    public void convertToShortException() throws Exception {
         Character c = Character.MAX_VALUE;
-        Short s = converter.convertToShort(c);
+        converter.convertToShort(c);
     }
 
     @Test
@@ -215,7 +218,7 @@ public class CharacterConverterTest {
     }
 
     @Test
-    public void convertToString_Null() throws Exception {
+    public void convertToStringNull() throws Exception {
         Character c = null;
         String s = converter.convertToString(c);
         assertNull(s);
@@ -223,7 +226,7 @@ public class CharacterConverterTest {
 
     @Test
     public void checkAnnotations() throws Exception {
-        Class aClass = CharacterConverter.class;
+        Class<?> aClass = CharacterConverter.class;
         Method[] methods = aClass.getMethods();
         for (Method method : methods) {
             if (method.isSynthetic()) {

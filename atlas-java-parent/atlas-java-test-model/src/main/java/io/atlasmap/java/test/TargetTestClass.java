@@ -7,7 +7,7 @@ import java.util.LinkedList;
 public class TargetTestClass {
     private String name;
     private String fullAddress;
-    private String Department;
+    private String department;
     private TargetAddress address;
     private TargetContact contact;
     private TargetOrder order;
@@ -110,11 +110,11 @@ public class TargetTestClass {
     }
 
     public String getDepartment() {
-        return Department;
+        return department;
     }
 
     public void setDepartment(String department) {
-        Department = department;
+        this.department = department;
     }
 
     public EmptyComplexField getEmptyComplexField() {
@@ -145,7 +145,7 @@ public class TargetTestClass {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((Department == null) ? 0 : Department.hashCode());
+        result = prime * result + ((department == null) ? 0 : department.hashCode());
         result = prime * result + ((address == null) ? 0 : address.hashCode());
         result = prime * result + ((contact == null) ? 0 : contact.hashCode());
         result = prime * result + Arrays.hashCode(contactArray);
@@ -175,11 +175,11 @@ public class TargetTestClass {
         }
 
         TargetTestClass other = (TargetTestClass) obj;
-        if (Department == null) {
-            if (other.Department != null) {
+        if (department == null) {
+            if (other.department != null) {
                 return false;
             }
-        } else if (!Department.equals(other.Department)) {
+        } else if (!department.equals(other.department)) {
             return false;
         }
         if (address == null) {
@@ -264,7 +264,7 @@ public class TargetTestClass {
 
     @Override
     public String toString() {
-        return "TargetTestClass [name=" + name + ", fullAddress=" + fullAddress + ", Department=" + Department
+        return "TargetTestClass [name=" + name + ", fullAddress=" + fullAddress + ", Department=" + department
                 + ", address=" + address + ", contact=" + contact + ", order=" + order + ", orderArray=" + orderArray
                 + ", listOrders=" + listOrders + ", primitives=" + primitives + ", statesLong=" + statesLong
                 + ", statesShort=" + statesShort + ", emptyComplexField=" + emptyComplexField + ", contactsList="

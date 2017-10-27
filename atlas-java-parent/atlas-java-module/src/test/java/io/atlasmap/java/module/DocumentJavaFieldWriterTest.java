@@ -462,70 +462,70 @@ public class DocumentJavaFieldWriterTest extends BaseDocumentWriterTest {
     /*
      * @Test(expected=AtlasException.class) public void testFindChildObjectError()
      * throws Exception { throw new Exception("Not implemented yet."); }
-     * 
+     *
      * @Test public void testCreateObject() throws Exception { }
-     * 
+     *
      * @Test(expected=AtlasException.class) public void testCreateObjectError()
      * throws Exception { }
-     * 
+     *
      * @Test(expected=AtlasException.class) public void testWriteError() throws
      * Exception { throw new Exception("Not implemented yet."); }
-     * 
+     *
      * @Test public void testCreateParentObject() throws Exception { throw new
      * Exception("Not implemented yet."); }
-     * 
+     *
      * @Test(expected=AtlasException.class) public void
      * testCreateParentObjectError() throws Exception { throw new
      * Exception("Not implemented yet."); }
-     * 
+     *
      * @Test public void testExpandCollectionToFitItem() throws Exception { throw
      * new Exception("Not implemented yet."); }
-     * 
+     *
      * @Test(expected=AtlasException.class) public void
      * testExpandCollectionToFitItemError() throws Exception { throw new
      * Exception("Not implemented yet."); }
-     * 
+     *
      * @Test public void testAddChildObject() throws Exception { throw new
      * Exception("Not implemented yet."); }
-     * 
+     *
      * @Test(expected=AtlasException.class) public void testAddChildObjectError()
      * throws Exception { throw new Exception("Not implemented yet."); }
-     * 
+     *
      * @Test(expected=AtlasException.class) public void
      * testGetObjectFromParentError() throws Exception { throw new
      * Exception("Not implemented yet."); }
-     * 
+     *
      * @Test(expected=AtlasException.class) public void testSetObjectOnParentError()
      * throws Exception { throw new Exception("Not implemented yet."); }
-     * 
+     *
      * @Test public void testConvertValue() throws Exception { throw new
      * Exception("Not implemented yet."); }
-     * 
+     *
      * @Test(expected=AtlasException.class) public void testConvertValueError()
      * throws Exception { throw new Exception("Not implemented yet."); }
-     * 
+     *
      * @Test public void testGetCollectionSize() throws Exception { throw new
      * Exception("Not implemented yet."); }
-     * 
+     *
      * @Test(expected=AtlasException.class) public void testGetCollectionSizeError()
      * throws Exception { throw new Exception("Not implemented yet."); }
-     * 
+     *
      * @Test public void testCreateCollectionWrapperObject() throws Exception {
      * throw new Exception("Not implemented yet."); }
-     * 
+     *
      * @Test(expected=AtlasException.class) public void
      * testCreateCollectionWrapperObjectError() throws Exception { throw new
      * Exception("Not implemented yet."); }
-     * 
+     *
      * @Test public void testGetCollectionItem() throws Exception { throw new
      * Exception("Not implemented yet."); }
-     * 
+     *
      * @Test(expected=AtlasException.class) public void testGetCollectionItemError()
      * throws Exception { throw new Exception("Not implemented yet."); }
-     * 
+     *
      * @Test public void testCollectionHasRoomForIndex() throws Exception { throw
      * new Exception("Not implemented yet."); }
-     * 
+     *
      * @Test(expected=AtlasException.class) public void
      * testCollectionHasRoomForIndexError() throws Exception { throw new
      * Exception("Not implemented yet."); }

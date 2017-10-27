@@ -20,7 +20,7 @@ import io.atlasmap.v2.FieldType;
 /**
  */
 public class JsonFieldWriter {
-    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(JsonFieldWriter.class);
+    private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(JsonFieldWriter.class);
 
     private ObjectMapper objectMapper = null;
     private ObjectNode rootNode = null;
@@ -48,9 +48,9 @@ public class JsonFieldWriter {
         if (field == null) {
             throw new AtlasException(new IllegalArgumentException("Argument 'jsonField' cannot be null"));
         }
-        if (logger.isDebugEnabled()) {
-            logger.debug("Field: " + AtlasModelFactory.toString(field));
-            logger.debug("Field type=" + field.getFieldType() + " path=" + field.getPath() + " v=" + field.getValue());
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Field: " + AtlasModelFactory.toString(field));
+            LOG.debug("Field type=" + field.getFieldType() + " path=" + field.getPath() + " v=" + field.getValue());
         }
         PathUtil path = new PathUtil(field.getPath());
         String lastSegment = path.getLastSegment();
@@ -58,8 +58,8 @@ public class JsonFieldWriter {
         String parentSegment = null;
         for (String segment : path.getSegments()) {
             if (segment != lastSegment) { // this is a parent node.
-                if (logger.isDebugEnabled()) {
-                    logger.debug("Now processing parent segment: " + segment);
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Now processing parent segment: " + segment);
                 }
                 JsonNode childNode = getChildNode(parentNode, parentSegment, segment);
                 if (childNode == null) {
@@ -68,8 +68,8 @@ public class JsonFieldWriter {
                     int index = PathUtil.indexOfSegment(segment);
                     ArrayNode arrayChild = (ArrayNode) childNode;
                     if (arrayChild.size() < (index + 1)) {
-                        if (logger.isDebugEnabled()) {
-                            logger.debug("Object Array is too small, resizing to accomodate index: " + index
+                        if (LOG.isDebugEnabled()) {
+                            LOG.debug("Object Array is too small, resizing to accomodate index: " + index
                                     + ", current array: " + arrayChild);
                         }
                         // if our array doesn't have index + 1 items in it, add nulls until we have the
@@ -77,8 +77,8 @@ public class JsonFieldWriter {
                         while (arrayChild.size() < (index + 1)) {
                             arrayChild.addObject();
                         }
-                        if (logger.isDebugEnabled()) {
-                            logger.debug("Object Array after resizing: " + arrayChild);
+                        if (LOG.isDebugEnabled()) {
+                            LOG.debug("Object Array after resizing: " + arrayChild);
                         }
                     }
                     childNode = arrayChild.get(index);
@@ -86,8 +86,8 @@ public class JsonFieldWriter {
                 parentNode = (ObjectNode) childNode;
                 parentSegment = segment;
             } else { // this is the last segment of the path, write the value
-                if (logger.isDebugEnabled()) {
-                    logger.debug("Now processing field value segment: " + segment);
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Now processing field value segment: " + segment);
                 }
                 writeValue(parentNode, parentSegment, segment, field);
             }
@@ -96,42 +96,42 @@ public class JsonFieldWriter {
 
     public void writeValue(ObjectNode parentNode, String parentSegment, String segment, Field field)
             throws AtlasException {
-        if (logger.isDebugEnabled()) {
-            logger.debug("Writing field value '" + segment + "' in parent node '" + parentSegment + "', parentNode: "
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Writing field value '" + segment + "' in parent node '" + parentSegment + "', parentNode: "
                     + parentNode);
         }
         JsonNode valueNode = createValueNode(field);
-        if (logger.isDebugEnabled()) {
-            logger.debug("Value to write: " + valueNode);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Value to write: " + valueNode);
         }
         String cleanedSegment = PathUtil.cleanPathSegment(segment);
         if (PathUtil.isCollectionSegment(segment)) {
             // if this field is a collection, we need to place our value in an array
 
             // get or construct the array the value will be placed in
-            if (logger.isDebugEnabled()) {
-                logger.debug("Field type is collection. Fetching array '" + segment + "' from parent '" + parentSegment
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Field type is collection. Fetching array '" + segment + "' from parent '" + parentSegment
                         + "': " + parentNode);
             }
 
             ArrayNode arrayChild = (ArrayNode) getChildNode(parentNode, parentSegment, segment);
             if (arrayChild == null) {
                 arrayChild = parentNode.putArray(cleanedSegment);
-                if (logger.isDebugEnabled()) {
-                    logger.debug("Could not find array to place value in, created it in parent: " + parentNode);
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Could not find array to place value in, created it in parent: " + parentNode);
                 }
             }
 
-            if (logger.isDebugEnabled()) {
-                logger.debug("Array before placing value: " + arrayChild);
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Array before placing value: " + arrayChild);
             }
 
             // determine where in the array our value will go
             int index = PathUtil.indexOfSegment(segment);
 
             if (arrayChild.size() < (index + 1)) {
-                if (logger.isDebugEnabled()) {
-                    logger.debug("Value Array is too small, resizing to accomodate index: " + index
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Value Array is too small, resizing to accomodate index: " + index
                             + ", current array: " + arrayChild);
                 }
                 // if our array doesn't have index + 1 items in it, add nulls until we have the
@@ -139,8 +139,8 @@ public class JsonFieldWriter {
                 while (arrayChild.size() < (index + 1)) {
                     arrayChild.addNull();
                 }
-                if (logger.isDebugEnabled()) {
-                    logger.debug("Value Array after resizing: " + arrayChild);
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Value Array after resizing: " + arrayChild);
                 }
             }
 
@@ -151,25 +151,25 @@ public class JsonFieldWriter {
             parentNode.replace(cleanedSegment, valueNode);
         }
 
-        if (logger.isDebugEnabled()) {
-            logger.debug("Parent node after value written: " + parentNode);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Parent node after value written: " + parentNode);
         }
     }
 
     public static JsonNode getChildNode(ObjectNode parentNode, String parentSegment, String segment) {
-        if (logger.isDebugEnabled()) {
-            logger.debug("Looking for child node '" + segment + "' in parent '" + parentSegment + "': " + parentNode);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Looking for child node '" + segment + "' in parent '" + parentSegment + "': " + parentNode);
         }
         String cleanedSegment = PathUtil.cleanPathSegment(segment);
         JsonNode childNode = parentNode.path(cleanedSegment);
         if (JsonNodeType.MISSING.equals(childNode.getNodeType())) {
             childNode = null;
         }
-        if (logger.isDebugEnabled()) {
+        if (LOG.isDebugEnabled()) {
             if (childNode == null) {
-                logger.debug("Could not find child node '" + segment + "' in parent '" + parentSegment + "'.");
+                LOG.debug("Could not find child node '" + segment + "' in parent '" + parentSegment + "'.");
             } else {
-                logger.debug("Found child node '" + segment + "' in parent '" + parentSegment + "', class: "
+                LOG.debug("Found child node '" + segment + "' in parent '" + parentSegment + "', class: "
                         + childNode.getClass().getName() + ", node: " + childNode);
             }
         }
@@ -177,8 +177,8 @@ public class JsonFieldWriter {
     }
 
     public ObjectNode createParentNode(ObjectNode parentNode, String parentSegment, String segment) {
-        if (logger.isDebugEnabled()) {
-            logger.debug("Creating parent node '" + segment + "' under previous parent '" + parentSegment + "' ("
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Creating parent node '" + segment + "' under previous parent '" + parentSegment + "' ("
                     + parentNode.getClass().getName() + ")");
         }
         ObjectNode childNode = null;
@@ -188,8 +188,8 @@ public class JsonFieldWriter {
             int index = PathUtil.indexOfSegment(segment);
 
             if (arrayChild.size() < (index + 1)) {
-                if (logger.isDebugEnabled()) {
-                    logger.debug("Object Array is too small, resizing to accomodate index: " + index
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Object Array is too small, resizing to accomodate index: " + index
                             + ", current array: " + arrayChild);
                 }
                 // if our array doesn't have index + 1 items in it, add objects until we have
@@ -197,19 +197,19 @@ public class JsonFieldWriter {
                 while (arrayChild.size() < (index + 1)) {
                     arrayChild.addObject();
                 }
-                if (logger.isDebugEnabled()) {
-                    logger.debug("Object Array after resizing: " + arrayChild);
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Object Array after resizing: " + arrayChild);
                 }
             }
-            if (logger.isDebugEnabled()) {
-                logger.debug("Created wrapper parent array node '" + segment + "': " + arrayChild);
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Created wrapper parent array node '" + segment + "': " + arrayChild);
             }
             childNode = (ObjectNode) arrayChild.get(index);
         } else {
             childNode = parentNode.putObject(cleanedSegment);
         }
-        if (logger.isDebugEnabled()) {
-            logger.debug("Parent Node '" + parentSegment + "' after adding child parent node '" + segment + "':"
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Parent Node '" + parentSegment + "' after adding child parent node '" + segment + "':"
                     + parentNode);
         }
         return childNode;
@@ -237,9 +237,9 @@ public class JsonFieldWriter {
             throw new AtlasException(
                     "Cannot set value for " + jsonField.getPath() + " --> " + value + " for field type " + type);
         }
-        if (logger.isDebugEnabled()) {
+        if (LOG.isDebugEnabled()) {
             String valueClass = value == null ? "null" : value.getClass().getName();
-            logger.debug("Converted JsonField value to ValueNode. Type: " + type + ", value: " + value + "("
+            LOG.debug("Converted JsonField value to ValueNode. Type: " + type + ", value: " + value + "("
                     + valueClass + "), node class: " + valueNode.getClass().getName() + ", node: " + valueNode);
         }
         return valueNode;

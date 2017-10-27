@@ -51,7 +51,7 @@ import io.atlasmap.v2.StringList;
 
 public class ClassInspectionService {
 
-    private static final Logger logger = LoggerFactory.getLogger(ClassInspectionService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ClassInspectionService.class);
     public static final int MAX_REENTRY_LIMIT = 1;
     public static final int MAX_ARRAY_DIM_LIMIT = 256; // JVM specification
                                                        // limit
@@ -189,8 +189,8 @@ public class ClassInspectionService {
     }
 
     public JavaClass inspectClass(String className, String classpath) throws InspectionException {
-        if (logger.isDebugEnabled()) {
-            logger.debug("Inspecting class: " + className + ", classPath: " + classpath);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Inspecting class: " + className + ", classPath: " + classpath);
         }
         if (className == null || classpath == null) {
             throw new InspectionException("ClassName and Classpath must be specified");
@@ -202,8 +202,8 @@ public class ClassInspectionService {
             Class<?> clazz = jcl.loadClass(className);
             d = inspectClass(clazz);
         } catch (ClassNotFoundException cnfe) {
-            if (logger.isDebugEnabled()) {
-                logger.debug("Class was not found: " + className);
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Class was not found: " + className);
             }
             d = AtlasJavaModelFactory.createJavaClass();
             d.setClassName(className);
@@ -254,8 +254,8 @@ public class ClassInspectionService {
         Class<?> superClazz = tmpClazz.getSuperclass();
         while (superClazz != null) {
             if (JdkPackages.contains(superClazz.getPackage().getName())) {
-                if (logger.isTraceEnabled()) {
-                    logger.trace("Skipping SuperClass " + superClazz.getName() + " which is a Jdk core class");
+                if (LOG.isTraceEnabled()) {
+                    LOG.trace("Skipping SuperClass " + superClazz.getName() + " which is a Jdk core class");
                 }
                 superClazz = null;
             } else {
@@ -472,7 +472,7 @@ public class ClassInspectionService {
                     return s;
                 }
             } catch (ClassCastException | ClassNotFoundException cce) {
-                logger.debug("Error detecting inner listClass: " + cce.getMessage() + " for field: " + f.getName(),
+                LOG.debug("Error detecting inner listClass: " + cce.getMessage() + " for field: " + f.getName(),
                         cce);
                 s.setStatus(FieldStatus.ERROR);
                 return s;
@@ -539,8 +539,8 @@ public class ClassInspectionService {
             f.getDeclaringClass().getMethod(getterName);
             s.setGetMethod(getterName);
         } catch (NoSuchMethodException e) {
-            if (logger.isDebugEnabled()) {
-                logger.debug("No 'get' method for field named: " + f.getName() + " in class: "
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("No 'get' method for field named: " + f.getName() + " in class: "
                         + f.getDeclaringClass().getName());
             }
         }
@@ -551,8 +551,8 @@ public class ClassInspectionService {
                 f.getDeclaringClass().getMethod(getterName);
                 s.setGetMethod(getterName);
             } catch (NoSuchMethodException e) {
-                if (logger.isDebugEnabled()) {
-                    logger.debug("No 'is' method for field named: " + f.getName() + " in class: "
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("No 'is' method for field named: " + f.getName() + " in class: "
                             + f.getDeclaringClass().getName());
                 }
             }
@@ -562,8 +562,8 @@ public class ClassInspectionService {
             f.getDeclaringClass().getMethod(setterName, clazz);
             s.setSetMethod(setterName);
         } catch (NoSuchMethodException e) {
-            if (logger.isDebugEnabled()) {
-                logger.debug("No 'set' method for field named: " + f.getName() + " in class: "
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("No 'set' method for field named: " + f.getName() + " in class: "
                         + f.getDeclaringClass().getName());
             }
         }
@@ -586,8 +586,8 @@ public class ClassInspectionService {
 
                 // skip synthetic members
                 if (s.isSynthetic() != null && s.isSynthetic()) {
-                    if (logger.isDebugEnabled()) {
-                        logger.debug("Synthetic field class detected: " + s.getName());
+                    if (LOG.isDebugEnabled()) {
+                        LOG.debug("Synthetic field class detected: " + s.getName());
                     }
                     continue;
                 }
@@ -621,7 +621,7 @@ public class ClassInspectionService {
 
                 if (m.isVarArgs() || m.isBridge() || m.isSynthetic() || m.isDefault()) {
                     s.setStatus(FieldStatus.UNSUPPORTED);
-                    logger.warn("VarArg, Bridge, Synthetic or Default method " + m.getName() + " detected");
+                    LOG.warn("VarArg, Bridge, Synthetic or Default method " + m.getName() + " detected");
                     continue;
                 } else {
                     s.setSynthetic(m.isSynthetic());
@@ -653,14 +653,14 @@ public class ClassInspectionService {
                 }
 
                 if (found) {
-                    if (logger.isTraceEnabled()) {
-                        logger.trace("Field already defined for method: " + m.getName() + " class: " + clazz.getName());
+                    if (LOG.isTraceEnabled()) {
+                        LOG.trace("Field already defined for method: " + m.getName() + " class: " + clazz.getName());
                     }
                 } else if (s.getGetMethod() != null || s.getSetMethod() != null) {
                     javaClass.getJavaFields().getJavaField().add(s);
                 } else {
-                    if (logger.isTraceEnabled()) {
-                        logger.trace("Ignoring non-field method: " + m.getName() + " class: " + clazz.getName());
+                    if (LOG.isTraceEnabled()) {
+                        LOG.trace("Ignoring non-field method: " + m.getName() + " class: " + clazz.getName());
                     }
                 }
             }

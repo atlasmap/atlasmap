@@ -33,7 +33,7 @@ import io.atlasmap.v2.Property;
 import io.atlasmap.v2.PropertyField;
 
 public class DefaultAtlasPropertyStrategy implements AtlasPropertyStrategy {
-    private static final Logger logger = LoggerFactory.getLogger(DefaultAtlasPropertyStrategy.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DefaultAtlasPropertyStrategy.class);
 
     private boolean environmentPropertiesEnabled = true;
     private boolean systemPropertiesEnabled = true;
@@ -50,8 +50,8 @@ public class DefaultAtlasPropertyStrategy implements AtlasPropertyStrategy {
     public void processPropertyField(AtlasMapping atlasMapping, PropertyField propertyField,
             Map<String, Object> runtimeProperties) throws AtlasUnsupportedException, AtlasConversionException {
         if (propertyField == null || propertyField.getName() == null || propertyField.getName().trim().length() == 0) {
-            if (logger.isDebugEnabled()) {
-                logger.debug(String.format("Null or empty PropertyField specified popertyField=%s",
+            if (LOG.isDebugEnabled()) {
+                LOG.debug(String.format("Null or empty PropertyField specified popertyField=%s",
                         AtlasModelFactory.toString(propertyField)));
             }
             return;
@@ -90,13 +90,13 @@ public class DefaultAtlasPropertyStrategy implements AtlasPropertyStrategy {
         try {
             if (System.getenv(propertyField.getName()) != null) {
                 propertyField.setValue(System.getenv(propertyField.getName()));
-                if (logger.isDebugEnabled()) {
-                    logger.debug(String.format("Assigned environment variable for property field name=%s value=%s",
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug(String.format("Assigned environment variable for property field name=%s value=%s",
                             propertyField.getName(), propertyField.getValue()));
                 }
             }
         } catch (SecurityException e) {
-            logger.error(String.format("SecurityException while processing environment variable for propertyField=%s",
+            LOG.error(String.format("SecurityException while processing environment variable for propertyField=%s",
                     AtlasModelFactory.toString(propertyField)), e);
         }
     }
@@ -110,13 +110,13 @@ public class DefaultAtlasPropertyStrategy implements AtlasPropertyStrategy {
         try {
             if (System.getProperty(propertyField.getName()) != null) {
                 propertyField.setValue(System.getProperty(propertyField.getName()));
-                if (logger.isDebugEnabled()) {
-                    logger.debug(String.format("Assigned Java system property for property field name=%s value=%s",
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug(String.format("Assigned Java system property for property field name=%s value=%s",
                             propertyField.getName(), propertyField.getValue()));
                 }
             }
         } catch (SecurityException e) {
-            logger.error(String.format("SecurityException while processing Java system property for propertyField=%s",
+            LOG.error(String.format("SecurityException while processing Java system property for propertyField=%s",
                     AtlasModelFactory.toString(propertyField)), e);
         }
     }
@@ -141,16 +141,16 @@ public class DefaultAtlasPropertyStrategy implements AtlasPropertyStrategy {
                     propertyField.setValue(getAtlasConversionService().convertType(prop.getValue(), FieldType.STRING,
                             (propertyField.getFieldType() != null ? propertyField.getFieldType()
                                     : prop.getFieldType())));
-                    if (logger.isDebugEnabled()) {
-                        logger.debug(
+                    if (LOG.isDebugEnabled()) {
+                        LOG.debug(
                                 String.format("Assigned Mapping defined property for property field name=%s value=%s",
                                         propertyField.getName(), propertyField.getValue()));
                     }
                     return;
                 } else {
                     propertyField.setValue(prop.getValue());
-                    if (logger.isDebugEnabled()) {
-                        logger.debug(
+                    if (LOG.isDebugEnabled()) {
+                        LOG.debug(
                                 String.format("Assigned Mapping defined property for property field name=%s value=%s",
                                         propertyField.getName(), propertyField.getValue()));
                     }
@@ -177,16 +177,16 @@ public class DefaultAtlasPropertyStrategy implements AtlasPropertyStrategy {
                     propertyField.setValue(getAtlasConversionService().convertType(runtimeProperties.get(key),
                             getAtlasConversionService().fieldTypeFromClass(runtimeProperties.get(key).getClass()),
                             propertyField.getFieldType()));
-                    if (logger.isDebugEnabled()) {
-                        logger.debug(
+                    if (LOG.isDebugEnabled()) {
+                        LOG.debug(
                                 String.format("Assigned Runtime defined property for property field name=%s value=%s",
                                         propertyField.getName(), propertyField.getValue()));
                     }
                     return;
                 } else {
                     propertyField.setValue(runtimeProperties.get(key));
-                    if (logger.isDebugEnabled()) {
-                        logger.debug(
+                    if (LOG.isDebugEnabled()) {
+                        LOG.debug(
                                 String.format("Assigned Runtime defined property for property field name=%s value=%s",
                                         propertyField.getName(), propertyField.getValue()));
                     }
@@ -207,7 +207,7 @@ public class DefaultAtlasPropertyStrategy implements AtlasPropertyStrategy {
             try {
                 tmp.add(AtlasPropertyType.fromValue(v));
             } catch (IllegalArgumentException e) {
-                logger.error(String.format("Invalid AtlasPropertyType specified '%s'", v));
+                LOG.error(String.format("Invalid AtlasPropertyType specified '%s'", v));
             }
         }
 

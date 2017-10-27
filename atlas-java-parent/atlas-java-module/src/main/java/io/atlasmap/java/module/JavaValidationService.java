@@ -43,7 +43,7 @@ import org.slf4j.LoggerFactory;
 
 public class JavaValidationService extends BaseModuleValidationService<JavaField> {
 
-    private static final Logger logger = LoggerFactory.getLogger(JavaValidationService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(JavaValidationService.class);
     private AtlasModuleDetail moduleDetail = JavaModule.class.getAnnotation(AtlasModuleDetail.class);
     private static Map<String, AtlasValidator> validatorMap = new HashMap<>();
     private static Map<String, Integer> versionMap = new HashMap<>();
@@ -225,23 +225,23 @@ public class JavaValidationService extends BaseModuleValidationService<JavaField
             DataInputStream data = new DataInputStream(in);
             int magic = data.readInt();
             if (magic != 0xCAFEBABE) {
-                logger.error(String.format("Invalid Java class: %s magic value: %s", className, magic));
+                LOG.error(String.format("Invalid Java class: %s magic value: %s", className, magic));
             }
 
             int minor = 0xFFFF & data.readShort();
             major = new Integer(0xFFFF & data.readShort());
 
-            if (logger.isDebugEnabled()) {
-                logger.debug(String.format("Detected class: %s version major: %s minor: %s", className, magic, minor));
+            if (LOG.isDebugEnabled()) {
+                LOG.debug(String.format("Detected class: %s version major: %s minor: %s", className, magic, minor));
             }
         } catch (IOException e) {
-            logger.error(String.format("Error detected version for class: %s msg: %s", className, e.getMessage()), e);
+            LOG.error(String.format("Error detected version for class: %s msg: %s", className, e.getMessage()), e);
         } finally {
             if (in != null) {
                 try {
                     in.close();
                 } catch (IOException ie) {
-                    logger.error(String.format("Error closing input stream msg: %s", ie.getMessage()), ie);
+                    LOG.error(String.format("Error closing input stream msg: %s", ie.getMessage()), ie);
                 }
             }
         }

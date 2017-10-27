@@ -23,7 +23,7 @@ import io.atlasmap.v2.LookupTable;
 import io.atlasmap.v2.Mapping;
 
 public class OutputValueConverter implements JavaFieldWriterValueConverter {
-    private static final Logger logger = LoggerFactory.getLogger(OutputValueConverter.class);
+    private static final Logger LOG = LoggerFactory.getLogger(OutputValueConverter.class);
 
     private Field inputField = null;
     private AtlasSession session = null;
@@ -53,14 +53,14 @@ public class OutputValueConverter implements JavaFieldWriterValueConverter {
         Object outputValue = null;
         FieldType outputType = outputField.getFieldType();
 
-        if (logger.isDebugEnabled()) {
-            logger.debug("processOutputMapping iPath=" + inputField.getPath() + " iV=" + inputValue + " iT=" + inputType
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("processOutputMapping iPath=" + inputField.getPath() + " iV=" + inputValue + " iT=" + inputType
                     + " oPath=" + outputField.getPath() + " docId: " + outputField.getDocId());
         }
 
         if (inputValue == null) {
             // TODO: Finish targetValue = null processing
-            logger.warn("Null sourceValue for field: " + outputField.getPath() + " docId: " + outputField.getDocId());
+            LOG.warn("Null sourceValue for field: " + outputField.getPath() + " docId: " + outputField.getDocId());
             return null;
         }
 
@@ -79,13 +79,13 @@ public class OutputValueConverter implements JavaFieldWriterValueConverter {
 
                     outputType = conversionService.fieldTypeFromClass(setter.getParameterTypes()[0]);
                     outputField.setFieldType(outputType);
-                    if (logger.isTraceEnabled()) {
-                        logger.trace("Auto-detected targetType as {} for class={} path={}", outputType,
+                    if (LOG.isTraceEnabled()) {
+                        LOG.trace("Auto-detected targetType as {} for class={} path={}", outputType,
                                 parentObject.toString(), outputField.getPath());
                     }
                 }
             } catch (Exception e) {
-                logger.debug("Unable to auto-detect targetType for class={} path={}", parentObject.toString(),
+                LOG.debug("Unable to auto-detect targetType for class={} path={}", parentObject.toString(),
                         outputField.getPath());
             }
         }
@@ -107,7 +107,7 @@ public class OutputValueConverter implements JavaFieldWriterValueConverter {
                 outputValue = conversionService.convertType(outputValue, conversionInputType, outputType);
             }
         } catch (AtlasConversionException e) {
-            logger.error(String.format("Unable to auto-convert for sT=%s tT=%s tF=%s msg=%s", inputType, outputType,
+            LOG.error(String.format("Unable to auto-convert for sT=%s tT=%s tF=%s msg=%s", inputType, outputType,
                     outputField.getPath(), e.getMessage()), e);
             return null;
         }
@@ -118,8 +118,8 @@ public class OutputValueConverter implements JavaFieldWriterValueConverter {
     @SuppressWarnings("unchecked")
     private Object populateEnumValue(JavaEnumField inputField, JavaEnumField outputField) throws AtlasException {
         if (inputField == null || inputField.getValue() == null) {
-            if (logger.isDebugEnabled()) {
-                logger.debug("Input enum field or value is null, field: " + inputField);
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Input enum field or value is null, field: " + inputField);
             }
             return null;
         }
@@ -145,8 +145,8 @@ public class OutputValueConverter implements JavaFieldWriterValueConverter {
                 break;
             }
         }
-        if (logger.isDebugEnabled()) {
-            logger.debug("Mapped input enum value '" + inputValue + "' to output enum value '" + outputValue + "'.");
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Mapped input enum value '" + inputValue + "' to output enum value '" + outputValue + "'.");
         }
 
         if (outputValue == null) {

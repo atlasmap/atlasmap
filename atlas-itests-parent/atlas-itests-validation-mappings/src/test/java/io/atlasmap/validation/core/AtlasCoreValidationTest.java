@@ -1,7 +1,5 @@
 package io.atlasmap.validation.core;
 
-import static org.junit.Assert.*;
-
 import java.io.File;
 
 import org.junit.After;
@@ -18,6 +16,11 @@ import io.atlasmap.v2.ValidationStatus;
 import io.atlasmap.v2.Validations;
 import io.atlasmap.validation.AtlasMappingBaseTest;
 import io.atlasmap.validators.AtlasValidationTestHelper;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 public class AtlasCoreValidationTest extends AtlasMappingBaseTest {
 

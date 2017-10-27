@@ -15,8 +15,6 @@
  */
 package io.atlasmap.actions;
 
-import static org.junit.Assert.*;
-
 import java.util.regex.Pattern;
 
 import org.junit.Test;
@@ -30,6 +28,12 @@ import io.atlasmap.v2.Replace;
 import io.atlasmap.v2.SubString;
 import io.atlasmap.v2.SubStringAfter;
 import io.atlasmap.v2.SubStringBefore;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 public class StringComplexFieldActionsTest {
 
@@ -51,7 +55,7 @@ public class StringComplexFieldActionsTest {
         validateGeneratedUUID(StringComplexFieldActions.genareteUUID(new GenerateUUID(), new Integer(32523)));
         validateGeneratedUUID(StringComplexFieldActions.genareteUUID(new GenerateUUID(), new Long(235325L)));
         validateGeneratedUUID(StringComplexFieldActions.genareteUUID(new GenerateUUID(), new Short((short) 4323)));
-        validateGeneratedUUID(StringComplexFieldActions.genareteUUID(new GenerateUUID(), new String()));
+        validateGeneratedUUID(StringComplexFieldActions.genareteUUID(new GenerateUUID(), ""));
     }
 
     protected void validateCurrentDate(String dateValue) {
@@ -71,7 +75,7 @@ public class StringComplexFieldActionsTest {
         validateCurrentDate(StringComplexFieldActions.currentDate(new CurrentDate(), new Integer(32523)));
         validateCurrentDate(StringComplexFieldActions.currentDate(new CurrentDate(), new Long(235325L)));
         validateCurrentDate(StringComplexFieldActions.currentDate(new CurrentDate(), new Short((short) 4323)));
-        validateCurrentDate(StringComplexFieldActions.currentDate(new CurrentDate(), new String()));
+        validateCurrentDate(StringComplexFieldActions.currentDate(new CurrentDate(), ""));
     }
 
     protected void validateCurrentTime(String timeValue) {
@@ -90,7 +94,7 @@ public class StringComplexFieldActionsTest {
         validateCurrentTime(StringComplexFieldActions.currentTime(new CurrentTime(), new Integer(32523)));
         validateCurrentTime(StringComplexFieldActions.currentTime(new CurrentTime(), new Long(235325L)));
         validateCurrentTime(StringComplexFieldActions.currentTime(new CurrentTime(), new Short((short) 4323)));
-        validateCurrentTime(StringComplexFieldActions.currentTime(new CurrentTime(), new String()));
+        validateCurrentTime(StringComplexFieldActions.currentTime(new CurrentTime(), ""));
     }
 
     @Test

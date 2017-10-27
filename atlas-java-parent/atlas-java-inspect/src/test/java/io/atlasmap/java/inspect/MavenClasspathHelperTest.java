@@ -1,7 +1,5 @@
 package io.atlasmap.java.inspect;
 
-import static org.junit.Assert.*;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -13,7 +11,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import io.atlasmap.java.inspect.MavenClasspathHelper;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 @Ignore
 public class MavenClasspathHelperTest {
@@ -49,7 +50,6 @@ public class MavenClasspathHelperTest {
         cmd.add(workingDirectory.toString() + File.separator + "test-timeout.sh");
 
         mavenClasspathHelper.executeMavenProcess(workingDirectory.toString(), cmd);
-        fail("Expected IOException to indicate process timeout exceeded");
     }
 
     @Test

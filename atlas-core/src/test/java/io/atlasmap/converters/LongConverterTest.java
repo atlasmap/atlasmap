@@ -17,7 +17,6 @@ package io.atlasmap.converters;
 
 import io.atlasmap.spi.AtlasConversionConcern;
 import io.atlasmap.api.AtlasConversionException;
-import io.atlasmap.converters.LongConverter;
 import io.atlasmap.spi.AtlasConversionInfo;
 import io.atlasmap.spi.AtlasPrimitiveConverter;
 import io.atlasmap.v2.FieldType;
@@ -27,7 +26,12 @@ import org.junit.Test;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 public class LongConverterTest {
     private AtlasPrimitiveConverter<Long> converter = new LongConverter();
@@ -48,26 +52,26 @@ public class LongConverterTest {
     }
 
     @Test
-    public void convertToBoolean_Null() throws Exception {
+    public void convertToBooleanNull() throws Exception {
         Long l = null;
         Boolean b = converter.convertToBoolean(l);
         assertNull(b);
     }
 
     @Test(expected = AtlasConversionException.class)
-    public void convertToBoolean_Exception() throws Exception {
+    public void convertToBooleanException() throws Exception {
         Long dt = -1L;
-        Boolean b = converter.convertToBoolean(dt);
+        converter.convertToBoolean(dt);
     }
 
     @Test(expected = AtlasConversionException.class)
     public void convertToByte() throws Exception {
         Long l = 0L;
-        Byte b = converter.convertToByte(l);
+        converter.convertToByte(l);
     }
 
     @Test
-    public void convertToByte_Null() throws Exception {
+    public void convertToByteNull() throws Exception {
         assertNull(converter.convertToByte(null));
     }
 
@@ -80,22 +84,22 @@ public class LongConverterTest {
     }
 
     @Test
-    public void convertToCharacter_Null() throws Exception {
+    public void convertToCharacterNull() throws Exception {
         Long l = null;
         Character c = converter.convertToCharacter(l);
         assertNull(c);
     }
 
     @Test(expected = AtlasConversionException.class)
-    public void convertToCharacter_MAX() throws Exception {
+    public void convertToCharacterMAX() throws Exception {
         Long l = Long.MAX_VALUE;
-        Character c = converter.convertToCharacter(l);
+        converter.convertToCharacter(l);
     }
 
     @Test(expected = AtlasConversionException.class)
-    public void convertToCharacter_MIN() throws Exception {
+    public void convertToCharacterMIN() throws Exception {
         Long l = -1L;
-        Character c = converter.convertToCharacter(l);
+        converter.convertToCharacter(l);
     }
 
     @Test
@@ -107,14 +111,14 @@ public class LongConverterTest {
     }
 
     @Test
-    public void convertToDouble_Null() throws Exception {
+    public void convertToDoubleNull() throws Exception {
         Long l = null;
         Double d = converter.convertToDouble(l);
         assertNull(d);
     }
 
     @Test
-    public void convertToDouble_MAX() throws Exception {
+    public void convertToDoubleMAX() throws Exception {
         Long l = Long.MAX_VALUE;
         Double d = converter.convertToDouble(l);
         assertNotNull(d);
@@ -123,24 +127,24 @@ public class LongConverterTest {
 
     @Test
     public void convertToFloat() throws Exception {
-        Long l = 0l;
+        Long l = 0L;
         Float f = converter.convertToFloat(l);
         assertNotNull(f);
         assertEquals(0.0, f, 0.0);
 
-        l = 1l;
+        l = 1L;
         f = converter.convertToFloat(l);
         assertNotNull(f);
         assertEquals(1.0f, f, 0.0);
     }
 
     @Test
-    public void convertToFloat_Null() throws Exception {
+    public void convertToFloatNull() throws Exception {
         assertNull(converter.convertToFloat(null));
     }
 
     @Test
-    public void convertToFloat_MAX() throws Exception {
+    public void convertToFloatMAX() throws Exception {
         Long l = Long.MAX_VALUE;
         Float f = converter.convertToFloat(l);
         assertNotNull(f);
@@ -156,19 +160,17 @@ public class LongConverterTest {
     }
 
     @Test(expected = AtlasConversionException.class)
-    public void convertToInteger_MAX() throws Exception {
-        Integer i = converter.convertToInteger(Long.MAX_VALUE);
-        fail();
+    public void convertToIntegerMAX() throws Exception {
+        converter.convertToInteger(Long.MAX_VALUE);
     }
 
     @Test(expected = AtlasConversionException.class)
-    public void convertToInteger_MIN() throws Exception {
-        Integer i = converter.convertToInteger(Long.MIN_VALUE);
-        fail();
+    public void convertToIntegerMIN() throws Exception {
+        converter.convertToInteger(Long.MIN_VALUE);
     }
 
     @Test
-    public void convertToInteger_Null() throws Exception {
+    public void convertToIntegerNull() throws Exception {
         Long l = null;
         Integer i = converter.convertToInteger(l);
         assertNull(i);
@@ -184,7 +186,7 @@ public class LongConverterTest {
     }
 
     @Test
-    public void convertToLong_Null() throws Exception {
+    public void convertToLongNull() throws Exception {
         Long l = null;
         Long d = converter.convertToLong(l);
         assertNull(d);
@@ -199,16 +201,16 @@ public class LongConverterTest {
     }
 
     @Test
-    public void convertToShort_Null() throws Exception {
+    public void convertToShortNull() throws Exception {
         Long l = null;
         Short s = converter.convertToShort(l);
         assertNull(s);
     }
 
     @Test(expected = AtlasConversionException.class)
-    public void convertToShort_ExceptionMAX() throws Exception {
+    public void convertToShortExceptionMAX() throws Exception {
         Long l = Long.MAX_VALUE;
-        Short s = converter.convertToShort(l);
+        converter.convertToShort(l);
     }
 
     @Test
@@ -220,7 +222,7 @@ public class LongConverterTest {
     }
 
     @Test
-    public void convertToString_Null() throws Exception {
+    public void convertToStringNull() throws Exception {
         Long l = null;
         String s = converter.convertToString(l);
         assertNull(s);
@@ -228,7 +230,7 @@ public class LongConverterTest {
 
     @Test
     public void checkAnnotations() throws Exception {
-        Class aClass = LongConverter.class;
+        Class<?> aClass = LongConverter.class;
         Method[] methods = aClass.getMethods();
         for (Method method : methods) {
             if (method.isSynthetic()) {

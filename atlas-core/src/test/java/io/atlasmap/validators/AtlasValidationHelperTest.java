@@ -22,12 +22,14 @@ import org.junit.Ignore;
 import org.junit.Test;
 import io.atlasmap.v2.Validation;
 import io.atlasmap.v2.ValidationStatus;
-import io.atlasmap.validators.AtlasValidationHelper;
-import io.atlasmap.validators.DefaultAtlasValidationsHelper;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 public class AtlasValidationHelperTest {
 

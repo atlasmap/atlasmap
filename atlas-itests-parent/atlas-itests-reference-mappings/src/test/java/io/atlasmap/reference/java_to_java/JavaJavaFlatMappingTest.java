@@ -15,12 +15,9 @@
  */
 package io.atlasmap.reference.java_to_java;
 
-import static org.junit.Assert.*;
-
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
-import org.junit.Ignore;
 import org.junit.Test;
 import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasSession;
@@ -40,6 +37,11 @@ import io.atlasmap.v2.Mapping;
 import io.atlasmap.v2.MappingType;
 import io.atlasmap.v2.Validation;
 import io.atlasmap.v2.Validations;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 public class JavaJavaFlatMappingTest extends AtlasMappingBaseTest {
 

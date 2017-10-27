@@ -1,7 +1,5 @@
 package io.atlasmap.json.inspect;
 
-import io.atlasmap.json.inspect.JsonDocumentInspectionService;
-import io.atlasmap.json.inspect.JsonInspectionException;
 import io.atlasmap.json.v2.JsonComplexType;
 import io.atlasmap.json.v2.JsonDocument;
 import io.atlasmap.json.v2.JsonField;
@@ -25,56 +23,56 @@ public class JsonDocumentInspectionServiceTest {
     private final JsonDocumentInspectionService inspectionService = new JsonDocumentInspectionService();
 
     @Test(expected = IllegalArgumentException.class)
-    public void inspectJsonDocument_Empty() throws Exception {
+    public void inspectJsonDocumentEmpty() throws Exception {
         final String instance = "";
-        JsonDocument document = inspectionService.inspectJsonDocument(instance);
+        inspectionService.inspectJsonDocument(instance);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void inspectJsonDocument_WhitespaceOnly() throws Exception {
+    public void inspectJsonDocumentWhitespaceOnly() throws Exception {
         final String instance = " ";
-        JsonDocument document = inspectionService.inspectJsonDocument(instance);
+        inspectionService.inspectJsonDocument(instance);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void inspectJsonDocument_Null() throws Exception {
+    public void inspectJsonDocumentNull() throws Exception {
         final String instance = null;
-        JsonDocument document = inspectionService.inspectJsonDocument(instance);
+        inspectionService.inspectJsonDocument(instance);
     }
 
     @Test(expected = JsonInspectionException.class)
-    public void inspectJsonDocument_UnparseableHighlyComplexNestedObject() throws Exception {
+    public void inspectJsonDocumentUnparseableHighlyComplexNestedObject() throws Exception {
         final String instance = new String(Files
                 .readAllBytes(Paths.get("src/test/resources/inspect/unparseable-highly-complex-nested-object.json")));
-        JsonDocument document = inspectionService.inspectJsonDocument(instance);
+        inspectionService.inspectJsonDocument(instance);
     }
 
     @Test(expected = JsonInspectionException.class)
-    public void inspectJsonDocument_UnparseableMissingOpenCurly() throws Exception {
+    public void inspectJsonDocumentUnparseableMissingOpenCurly() throws Exception {
         final String instance = "\"ads\":[{\"id_ad\":\"20439\"}, {\"id_ad\":\"20449\"}]}";
-        JsonDocument document = inspectionService.inspectJsonDocument(instance);
+        inspectionService.inspectJsonDocument(instance);
     }
 
     @Test(expected = JsonInspectionException.class)
-    public void inspectJsonDocument_UnparseableMissingClosingCurly() throws Exception {
+    public void inspectJsonDocumentUnparseableMissingClosingCurly() throws Exception {
         final String instance = "{\"ads\":[{\"id_ad\":\"20439\"}, {\"id_ad\":\"20449\"}]";
-        JsonDocument document = inspectionService.inspectJsonDocument(instance);
+        inspectionService.inspectJsonDocument(instance);
     }
 
     @Test(expected = JsonInspectionException.class)
-    public void inspectJsonDocument_UnparseableMissingKeySeperator() throws Exception {
+    public void inspectJsonDocumentUnparseableMissingKeySeperator() throws Exception {
         final String instance = "{\"ads\"[{\"id_ad\":\"20439\"}, {\"id_ad\":\"20449\"}]";
-        JsonDocument document = inspectionService.inspectJsonDocument(instance);
+        inspectionService.inspectJsonDocument(instance);
     }
 
     @Test(expected = JsonInspectionException.class)
-    public void inspectJsonDocument_UnparseableMissingValueSeperator() throws Exception {
+    public void inspectJsonDocumentUnparseableMissingValueSeperator() throws Exception {
         final String instance = "{\"id_ad\":\"20439\" \"id_ad\":\"20449\"}";
-        JsonDocument document = inspectionService.inspectJsonDocument(instance);
+        inspectionService.inspectJsonDocument(instance);
     }
 
     @Test()
-    public void inspectJsonDocument_EmptyDocument() throws Exception {
+    public void inspectJsonDocumentEmptyDocument() throws Exception {
         final String instance = "{}";
         JsonDocument document = inspectionService.inspectJsonDocument(instance);
         Assert.assertNotNull(document);
@@ -82,7 +80,7 @@ public class JsonDocumentInspectionServiceTest {
     }
 
     @Test
-    public void inspectJsonDocument_SimpleArray() throws Exception {
+    public void inspectJsonDocumentSimpleArray() throws Exception {
         final String instance = "[ 100, 500, 300, 200, 400 ]";
         JsonDocument document = inspectionService.inspectJsonDocument(instance);
         Assert.assertNotNull(document);
@@ -97,7 +95,7 @@ public class JsonDocumentInspectionServiceTest {
     }
 
     @Test
-    public void inspectJsonDocument_SimpleArrayStartsWithWhiteSpace() throws Exception {
+    public void inspectJsonDocumentSimpleArrayStartsWithWhiteSpace() throws Exception {
         final String instance = "\n\t\r [ 100, 500, 300, 200, 400 ]";
         JsonDocument document = inspectionService.inspectJsonDocument(instance);
         Assert.assertNotNull(document);
@@ -112,7 +110,7 @@ public class JsonDocumentInspectionServiceTest {
     }
 
     @Test
-    public void inspectJsonDocument_SimpleObjectArray() throws Exception {
+    public void inspectJsonDocumentSimpleObjectArray() throws Exception {
         final String instance = "[\n" + "\t{\n" + "\t\t\"color\": \"red\",\n" + "\t\t\"value\": \"#f00\"\n" + "\t},\n"
                 + "\t{\n" + "\t\t\"color\": \"green\",\n" + "\t\t\"value\": \"#0f0\"\n" + "\t},\n" + "\t{\n"
                 + "\t\t\"color\": \"blue\",\n" + "\t\t\"value\": \"#00f\"\n" + "\t}]";
@@ -129,7 +127,7 @@ public class JsonDocumentInspectionServiceTest {
     }
 
     @Test
-    public void inspectJsonDocument_ArrayHighlyNestedObjects() throws Exception {
+    public void inspectJsonDocumentArrayHighlyNestedObjects() throws Exception {
         final String instance = new String(
                 Files.readAllBytes(Paths.get("src/test/resources/inspect/array-highly-nested-objects.json")));
         JsonDocument document = inspectionService.inspectJsonDocument(instance);
@@ -142,7 +140,7 @@ public class JsonDocumentInspectionServiceTest {
     }
 
     @Test
-    public void inspectJsonDocument_EscapedCharsInKeys() throws Exception {
+    public void inspectJsonDocumentEscapedCharsInKeys() throws Exception {
         final String instance = new String(
                 Files.readAllBytes(Paths.get("src/test/resources/inspect/keys-with-escaped-characters.json")));
         JsonDocument document = inspectionService.inspectJsonDocument(instance);
@@ -198,7 +196,7 @@ public class JsonDocumentInspectionServiceTest {
     }
 
     @Test
-    public void inspectJsonDocument_EscapedCharsInValue() throws Exception {
+    public void inspectJsonDocumentEscapedCharsInValue() throws Exception {
         final String instance = new String(
                 Files.readAllBytes(Paths.get("src/test/resources/inspect/value-with-escaped-characters.json")));
         JsonDocument document = inspectionService.inspectJsonDocument(instance);
@@ -243,7 +241,7 @@ public class JsonDocumentInspectionServiceTest {
 
     // FlatPrimitive
     @Test
-    public void inspectFlatPrimitive_NoRoot() throws Exception {
+    public void inspectFlatPrimitiveNoRoot() throws Exception {
         final String instance = new String(
                 Files.readAllBytes(Paths.get("src/test/resources/inspect/flatprimitive-base-unrooted.json")));
         JsonDocument document = inspectionService.inspectJsonDocument(instance);
@@ -303,7 +301,7 @@ public class JsonDocumentInspectionServiceTest {
     }
 
     @Test
-    public void inspectFlatPrimitive_WithRoot() throws Exception {
+    public void inspectFlatPrimitiveWithRoot() throws Exception {
         final String instance = new String(
                 Files.readAllBytes(Paths.get("src/test/resources/inspect/flatprimitive-base-rooted.json")));
         JsonDocument document = inspectionService.inspectJsonDocument(instance);
@@ -366,7 +364,7 @@ public class JsonDocumentInspectionServiceTest {
     }
 
     @Test
-    public void inspectComplexObject_NoRoot() throws Exception {
+    public void inspectComplexObjectNoRoot() throws Exception {
         final String instance = new String(
                 Files.readAllBytes(Paths.get("src/test/resources/inspect/complex-object-unrooted.json")));
         JsonDocument document = inspectionService.inspectJsonDocument(instance);
@@ -463,7 +461,7 @@ public class JsonDocumentInspectionServiceTest {
     }
 
     @Test
-    public void inspectComplexObject_WithRoot() throws Exception {
+    public void inspectComplexObjectWithRoot() throws Exception {
         final String instance = new String(
                 Files.readAllBytes(Paths.get("src/test/resources/inspect/complex-object-rooted.json")));
         JsonDocument document = inspectionService.inspectJsonDocument(instance);
@@ -563,7 +561,7 @@ public class JsonDocumentInspectionServiceTest {
     }
 
     @Test
-    public void inspectRepeatingComplexObject_WithRoot() throws Exception {
+    public void inspectRepeatingComplexObjectWithRoot() throws Exception {
         final String instance = new String(
                 Files.readAllBytes(Paths.get("src/test/resources/inspect/complex-repeated-rooted.json")));
         JsonDocument document = inspectionService.inspectJsonDocument(instance);
@@ -595,29 +593,29 @@ public class JsonDocumentInspectionServiceTest {
         Assert.assertThat(numberOrders.getFieldType(), Is.is(FieldType.INTEGER));
         Assert.assertThat(numberOrders.getStatus(), Is.is(FieldStatus.SUPPORTED));
 
-        JsonComplexType complexAddress1_1 = (JsonComplexType) orders.getJsonFields().getJsonField().get(0);
-        Assert.assertNotNull(complexAddress1_1);
-        Assert.assertThat(complexAddress1_1.getJsonFields().getJsonField().size(), Is.is(5));
-        Assert.assertThat(complexAddress1_1.getName(), Is.is("address"));
-        Assert.assertThat(complexAddress1_1.getPath(), Is.is("/SourceOrderList/orders/address"));
+        JsonComplexType complexAddress11 = (JsonComplexType) orders.getJsonFields().getJsonField().get(0);
+        Assert.assertNotNull(complexAddress11);
+        Assert.assertThat(complexAddress11.getJsonFields().getJsonField().size(), Is.is(5));
+        Assert.assertThat(complexAddress11.getName(), Is.is("address"));
+        Assert.assertThat(complexAddress11.getPath(), Is.is("/SourceOrderList/orders/address"));
 
-        JsonField address1_1 = complexAddress1_1.getJsonFields().getJsonField().get(0);
-        Assert.assertNotNull(address1_1);
-        Assert.assertThat(address1_1.getName(), Is.is("addressLine1"));
-        Assert.assertThat(address1_1.getValue(), Is.is("123 Main St"));
-        Assert.assertThat(address1_1.getPath(), Is.is("/SourceOrderList/orders/address/addressLine1"));
-        Assert.assertThat(address1_1.getFieldType(), Is.is(FieldType.STRING));
-        Assert.assertThat(address1_1.getStatus(), Is.is(FieldStatus.SUPPORTED));
+        JsonField address11 = complexAddress11.getJsonFields().getJsonField().get(0);
+        Assert.assertNotNull(address11);
+        Assert.assertThat(address11.getName(), Is.is("addressLine1"));
+        Assert.assertThat(address11.getValue(), Is.is("123 Main St"));
+        Assert.assertThat(address11.getPath(), Is.is("/SourceOrderList/orders/address/addressLine1"));
+        Assert.assertThat(address11.getFieldType(), Is.is(FieldType.STRING));
+        Assert.assertThat(address11.getStatus(), Is.is(FieldStatus.SUPPORTED));
 
-        JsonField address1_2 = complexAddress1_1.getJsonFields().getJsonField().get(1);
-        Assert.assertNotNull(address1_2);
-        Assert.assertThat(address1_2.getName(), Is.is("addressLine2"));
-        Assert.assertThat(address1_2.getValue(), Is.is("Suite 42b"));
-        Assert.assertThat(address1_2.getPath(), Is.is("/SourceOrderList/orders/address/addressLine2"));
-        Assert.assertThat(address1_2.getFieldType(), Is.is(FieldType.STRING));
-        Assert.assertThat(address1_2.getStatus(), Is.is(FieldStatus.SUPPORTED));
+        JsonField address12 = complexAddress11.getJsonFields().getJsonField().get(1);
+        Assert.assertNotNull(address12);
+        Assert.assertThat(address12.getName(), Is.is("addressLine2"));
+        Assert.assertThat(address12.getValue(), Is.is("Suite 42b"));
+        Assert.assertThat(address12.getPath(), Is.is("/SourceOrderList/orders/address/addressLine2"));
+        Assert.assertThat(address12.getFieldType(), Is.is(FieldType.STRING));
+        Assert.assertThat(address12.getStatus(), Is.is(FieldStatus.SUPPORTED));
 
-        JsonField city = complexAddress1_1.getJsonFields().getJsonField().get(2);
+        JsonField city = complexAddress11.getJsonFields().getJsonField().get(2);
         Assert.assertNotNull(city);
         Assert.assertThat(city.getName(), Is.is("city"));
         Assert.assertThat(city.getValue(), Is.is("Anytown"));
@@ -625,7 +623,7 @@ public class JsonDocumentInspectionServiceTest {
         Assert.assertThat(city.getFieldType(), Is.is(FieldType.STRING));
         Assert.assertThat(city.getStatus(), Is.is(FieldStatus.SUPPORTED));
 
-        JsonField state = complexAddress1_1.getJsonFields().getJsonField().get(3);
+        JsonField state = complexAddress11.getJsonFields().getJsonField().get(3);
         Assert.assertNotNull(state);
         Assert.assertThat(state.getName(), Is.is("state"));
         Assert.assertThat(state.getValue(), Is.is("NY"));
@@ -633,7 +631,7 @@ public class JsonDocumentInspectionServiceTest {
         Assert.assertThat(state.getFieldType(), Is.is(FieldType.STRING));
         Assert.assertThat(state.getStatus(), Is.is(FieldStatus.SUPPORTED));
 
-        JsonField postalCode = complexAddress1_1.getJsonFields().getJsonField().get(4);
+        JsonField postalCode = complexAddress11.getJsonFields().getJsonField().get(4);
         Assert.assertNotNull(postalCode);
         Assert.assertThat(postalCode.getName(), Is.is("zipCode"));
         Assert.assertThat(postalCode.getValue(), Is.is("90210"));
@@ -641,13 +639,13 @@ public class JsonDocumentInspectionServiceTest {
         Assert.assertThat(postalCode.getFieldType(), Is.is(FieldType.STRING));
         Assert.assertThat(postalCode.getStatus(), Is.is(FieldStatus.SUPPORTED));
 
-        JsonComplexType complexContact1_1 = (JsonComplexType) orders.getJsonFields().getJsonField().get(1);
-        Assert.assertNotNull(complexContact1_1);
-        Assert.assertThat(complexContact1_1.getJsonFields().getJsonField().size(), Is.is(4));
-        Assert.assertThat(complexContact1_1.getName(), Is.is("contact"));
-        Assert.assertThat(complexContact1_1.getPath(), Is.is("/SourceOrderList/orders/contact"));
+        JsonComplexType complexContact11 = (JsonComplexType) orders.getJsonFields().getJsonField().get(1);
+        Assert.assertNotNull(complexContact11);
+        Assert.assertThat(complexContact11.getJsonFields().getJsonField().size(), Is.is(4));
+        Assert.assertThat(complexContact11.getName(), Is.is("contact"));
+        Assert.assertThat(complexContact11.getPath(), Is.is("/SourceOrderList/orders/contact"));
 
-        JsonField firstName = complexContact1_1.getJsonFields().getJsonField().get(0);
+        JsonField firstName = complexContact11.getJsonFields().getJsonField().get(0);
         Assert.assertNotNull(firstName);
         Assert.assertThat(firstName.getName(), Is.is("firstName"));
         Assert.assertThat(firstName.getValue(), Is.is("Ozzie"));
@@ -655,7 +653,7 @@ public class JsonDocumentInspectionServiceTest {
         Assert.assertThat(firstName.getFieldType(), Is.is(FieldType.STRING));
         Assert.assertThat(firstName.getStatus(), Is.is(FieldStatus.SUPPORTED));
 
-        JsonField lastName = complexContact1_1.getJsonFields().getJsonField().get(1);
+        JsonField lastName = complexContact11.getJsonFields().getJsonField().get(1);
         Assert.assertNotNull(lastName);
         Assert.assertThat(lastName.getName(), Is.is("lastName"));
         Assert.assertThat(lastName.getValue(), Is.is("Smith"));
@@ -663,7 +661,7 @@ public class JsonDocumentInspectionServiceTest {
         Assert.assertThat(lastName.getFieldType(), Is.is(FieldType.STRING));
         Assert.assertThat(lastName.getStatus(), Is.is(FieldStatus.SUPPORTED));
 
-        JsonField phoneNumber = complexContact1_1.getJsonFields().getJsonField().get(2);
+        JsonField phoneNumber = complexContact11.getJsonFields().getJsonField().get(2);
         Assert.assertNotNull(phoneNumber);
         Assert.assertThat(phoneNumber.getName(), Is.is("phoneNumber"));
         Assert.assertThat(phoneNumber.getValue(), Is.is("5551212"));
@@ -671,7 +669,7 @@ public class JsonDocumentInspectionServiceTest {
         Assert.assertThat(phoneNumber.getFieldType(), Is.is(FieldType.STRING));
         Assert.assertThat(phoneNumber.getStatus(), Is.is(FieldStatus.SUPPORTED));
 
-        JsonField zipCode = complexContact1_1.getJsonFields().getJsonField().get(3);
+        JsonField zipCode = complexContact11.getJsonFields().getJsonField().get(3);
         Assert.assertNotNull(zipCode);
         Assert.assertThat(zipCode.getName(), Is.is("zipCode"));
         Assert.assertThat(zipCode.getValue(), Is.is("81111"));
@@ -680,59 +678,59 @@ public class JsonDocumentInspectionServiceTest {
         Assert.assertThat(zipCode.getStatus(), Is.is(FieldStatus.SUPPORTED));
 
         // repeat
-        JsonComplexType complexAddress1_2 = (JsonComplexType) orders.getJsonFields().getJsonField().get(3);
-        Assert.assertNotNull(complexAddress1_2);
-        Assert.assertThat(complexAddress1_2.getJsonFields().getJsonField().size(), Is.is(5));
-        Assert.assertThat(complexAddress1_2.getName(), Is.is("address"));
-        Assert.assertThat(complexAddress1_2.getPath(), Is.is("/SourceOrderList/orders[1]/address"));
+        JsonComplexType complexAddress12 = (JsonComplexType) orders.getJsonFields().getJsonField().get(3);
+        Assert.assertNotNull(complexAddress12);
+        Assert.assertThat(complexAddress12.getJsonFields().getJsonField().size(), Is.is(5));
+        Assert.assertThat(complexAddress12.getName(), Is.is("address"));
+        Assert.assertThat(complexAddress12.getPath(), Is.is("/SourceOrderList/orders[1]/address"));
 
-        JsonField address_2 = complexAddress1_2.getJsonFields().getJsonField().get(0);
-        Assert.assertNotNull(address_2);
-        Assert.assertThat(address_2.getName(), Is.is("addressLine1"));
-        Assert.assertThat(address_2.getValue(), Is.is("123 Main St"));
-        Assert.assertThat(address_2.getPath(), Is.is("/SourceOrderList/orders[1]/address/addressLine1"));
-        Assert.assertThat(address_2.getFieldType(), Is.is(FieldType.STRING));
-        Assert.assertThat(address_2.getStatus(), Is.is(FieldStatus.SUPPORTED));
+        JsonField address2 = complexAddress12.getJsonFields().getJsonField().get(0);
+        Assert.assertNotNull(address2);
+        Assert.assertThat(address2.getName(), Is.is("addressLine1"));
+        Assert.assertThat(address2.getValue(), Is.is("123 Main St"));
+        Assert.assertThat(address2.getPath(), Is.is("/SourceOrderList/orders[1]/address/addressLine1"));
+        Assert.assertThat(address2.getFieldType(), Is.is(FieldType.STRING));
+        Assert.assertThat(address2.getStatus(), Is.is(FieldStatus.SUPPORTED));
 
-        JsonField address2_2 = complexAddress1_2.getJsonFields().getJsonField().get(1);
-        Assert.assertNotNull(address2_2);
-        Assert.assertThat(address2_2.getName(), Is.is("addressLine2"));
-        Assert.assertThat(address2_2.getValue(), Is.is("Suite 42b"));
-        Assert.assertThat(address2_2.getPath(), Is.is("/SourceOrderList/orders[1]/address/addressLine2"));
-        Assert.assertThat(address2_2.getFieldType(), Is.is(FieldType.STRING));
-        Assert.assertThat(address2_2.getStatus(), Is.is(FieldStatus.SUPPORTED));
+        JsonField address22 = complexAddress12.getJsonFields().getJsonField().get(1);
+        Assert.assertNotNull(address22);
+        Assert.assertThat(address22.getName(), Is.is("addressLine2"));
+        Assert.assertThat(address22.getValue(), Is.is("Suite 42b"));
+        Assert.assertThat(address22.getPath(), Is.is("/SourceOrderList/orders[1]/address/addressLine2"));
+        Assert.assertThat(address22.getFieldType(), Is.is(FieldType.STRING));
+        Assert.assertThat(address22.getStatus(), Is.is(FieldStatus.SUPPORTED));
 
-        JsonField city_2 = complexAddress1_2.getJsonFields().getJsonField().get(2);
-        Assert.assertNotNull(city_2);
-        Assert.assertThat(city_2.getName(), Is.is("city"));
-        Assert.assertThat(city_2.getValue(), Is.is("Anytown"));
-        Assert.assertThat(city_2.getPath(), Is.is("/SourceOrderList/orders[1]/address/city"));
-        Assert.assertThat(city_2.getFieldType(), Is.is(FieldType.STRING));
-        Assert.assertThat(city_2.getStatus(), Is.is(FieldStatus.SUPPORTED));
+        JsonField city2 = complexAddress12.getJsonFields().getJsonField().get(2);
+        Assert.assertNotNull(city2);
+        Assert.assertThat(city2.getName(), Is.is("city"));
+        Assert.assertThat(city2.getValue(), Is.is("Anytown"));
+        Assert.assertThat(city2.getPath(), Is.is("/SourceOrderList/orders[1]/address/city"));
+        Assert.assertThat(city2.getFieldType(), Is.is(FieldType.STRING));
+        Assert.assertThat(city2.getStatus(), Is.is(FieldStatus.SUPPORTED));
 
-        JsonField state_2 = complexAddress1_2.getJsonFields().getJsonField().get(3);
-        Assert.assertNotNull(state_2);
-        Assert.assertThat(state_2.getName(), Is.is("state"));
-        Assert.assertThat(state_2.getValue(), Is.is("NY"));
-        Assert.assertThat(state_2.getPath(), Is.is("/SourceOrderList/orders[1]/address/state"));
-        Assert.assertThat(state_2.getFieldType(), Is.is(FieldType.STRING));
-        Assert.assertThat(state_2.getStatus(), Is.is(FieldStatus.SUPPORTED));
+        JsonField state2 = complexAddress12.getJsonFields().getJsonField().get(3);
+        Assert.assertNotNull(state2);
+        Assert.assertThat(state2.getName(), Is.is("state"));
+        Assert.assertThat(state2.getValue(), Is.is("NY"));
+        Assert.assertThat(state2.getPath(), Is.is("/SourceOrderList/orders[1]/address/state"));
+        Assert.assertThat(state2.getFieldType(), Is.is(FieldType.STRING));
+        Assert.assertThat(state2.getStatus(), Is.is(FieldStatus.SUPPORTED));
 
-        JsonField postalCode_2 = complexAddress1_2.getJsonFields().getJsonField().get(4);
-        Assert.assertNotNull(postalCode_2);
-        Assert.assertThat(postalCode_2.getName(), Is.is("zipCode"));
-        Assert.assertThat(postalCode_2.getValue(), Is.is("90210"));
-        Assert.assertThat(postalCode_2.getPath(), Is.is("/SourceOrderList/orders[1]/address/zipCode"));
-        Assert.assertThat(postalCode_2.getFieldType(), Is.is(FieldType.STRING));
-        Assert.assertThat(postalCode_2.getStatus(), Is.is(FieldStatus.SUPPORTED));
+        JsonField postalCode2 = complexAddress12.getJsonFields().getJsonField().get(4);
+        Assert.assertNotNull(postalCode2);
+        Assert.assertThat(postalCode2.getName(), Is.is("zipCode"));
+        Assert.assertThat(postalCode2.getValue(), Is.is("90210"));
+        Assert.assertThat(postalCode2.getPath(), Is.is("/SourceOrderList/orders[1]/address/zipCode"));
+        Assert.assertThat(postalCode2.getFieldType(), Is.is(FieldType.STRING));
+        Assert.assertThat(postalCode2.getStatus(), Is.is(FieldStatus.SUPPORTED));
 
-        JsonComplexType complexContact1_2 = (JsonComplexType) orders.getJsonFields().getJsonField().get(4);
-        Assert.assertNotNull(complexContact1_2);
-        Assert.assertThat(complexContact1_2.getJsonFields().getJsonField().size(), Is.is(4));
-        Assert.assertThat(complexContact1_2.getName(), Is.is("contact"));
-        Assert.assertThat(complexContact1_2.getPath(), Is.is("/SourceOrderList/orders[1]/contact"));
+        JsonComplexType complexContact12 = (JsonComplexType) orders.getJsonFields().getJsonField().get(4);
+        Assert.assertNotNull(complexContact12);
+        Assert.assertThat(complexContact12.getJsonFields().getJsonField().size(), Is.is(4));
+        Assert.assertThat(complexContact12.getName(), Is.is("contact"));
+        Assert.assertThat(complexContact12.getPath(), Is.is("/SourceOrderList/orders[1]/contact"));
 
-        JsonField firstName2 = complexContact1_2.getJsonFields().getJsonField().get(0);
+        JsonField firstName2 = complexContact12.getJsonFields().getJsonField().get(0);
         Assert.assertNotNull(firstName2);
         Assert.assertThat(firstName2.getName(), Is.is("firstName"));
         Assert.assertThat(firstName2.getValue(), Is.is("Ozzie"));
@@ -740,7 +738,7 @@ public class JsonDocumentInspectionServiceTest {
         Assert.assertThat(firstName2.getFieldType(), Is.is(FieldType.STRING));
         Assert.assertThat(firstName2.getStatus(), Is.is(FieldStatus.SUPPORTED));
 
-        JsonField lastName2 = complexContact1_2.getJsonFields().getJsonField().get(1);
+        JsonField lastName2 = complexContact12.getJsonFields().getJsonField().get(1);
         Assert.assertNotNull(lastName2);
         Assert.assertThat(lastName2.getName(), Is.is("lastName"));
         Assert.assertThat(lastName2.getValue(), Is.is("Smith"));
@@ -748,7 +746,7 @@ public class JsonDocumentInspectionServiceTest {
         Assert.assertThat(lastName2.getFieldType(), Is.is(FieldType.STRING));
         Assert.assertThat(lastName2.getStatus(), Is.is(FieldStatus.SUPPORTED));
 
-        JsonField phoneNumber2 = complexContact1_2.getJsonFields().getJsonField().get(2);
+        JsonField phoneNumber2 = complexContact12.getJsonFields().getJsonField().get(2);
         Assert.assertNotNull(phoneNumber2);
         Assert.assertThat(phoneNumber2.getName(), Is.is("phoneNumber"));
         Assert.assertThat(phoneNumber2.getValue(), Is.is("5551212"));
@@ -756,7 +754,7 @@ public class JsonDocumentInspectionServiceTest {
         Assert.assertThat(phoneNumber2.getFieldType(), Is.is(FieldType.STRING));
         Assert.assertThat(phoneNumber2.getStatus(), Is.is(FieldStatus.SUPPORTED));
 
-        JsonField zipCode2 = complexContact1_2.getJsonFields().getJsonField().get(3);
+        JsonField zipCode2 = complexContact12.getJsonFields().getJsonField().get(3);
         Assert.assertNotNull(zipCode2);
         Assert.assertThat(zipCode2.getName(), Is.is("zipCode"));
         Assert.assertThat(zipCode2.getValue(), Is.is("81111"));
@@ -770,73 +768,73 @@ public class JsonDocumentInspectionServiceTest {
     }
 
     @Test
-    public void inspectISO8601Dates_NoRoot() throws Exception {
+    public void inspectISO8601DatesNoRoot() throws Exception {
         final String instance = new String(
                 Files.readAllBytes(Paths.get("src/test/resources/inspect/iso8601dates-unrooted.json")));
         JsonDocument document = inspectionService.inspectJsonDocument(instance);
         Assert.assertNotNull(document);
         Assert.assertThat(document.getFields().getField().size(), Is.is(7));
 
-        JsonField YYYY = (JsonField) document.getFields().getField().get(0);
-        Assert.assertNotNull(YYYY);
-        Assert.assertThat(YYYY.getName(), Is.is("YYYY"));
-        Assert.assertThat(YYYY.getValue(), Is.is("1997"));
-        Assert.assertThat(YYYY.getPath(), Is.is("/YYYY"));
-        Assert.assertThat(YYYY.getFieldType(), Is.is(FieldType.STRING));
-        Assert.assertThat(YYYY.getStatus(), Is.is(FieldStatus.SUPPORTED));
+        JsonField yyyy = (JsonField) document.getFields().getField().get(0);
+        Assert.assertNotNull(yyyy);
+        Assert.assertThat(yyyy.getName(), Is.is("YYYY"));
+        Assert.assertThat(yyyy.getValue(), Is.is("1997"));
+        Assert.assertThat(yyyy.getPath(), Is.is("/YYYY"));
+        Assert.assertThat(yyyy.getFieldType(), Is.is(FieldType.STRING));
+        Assert.assertThat(yyyy.getStatus(), Is.is(FieldStatus.SUPPORTED));
 
-        JsonField YYYYMM = (JsonField) document.getFields().getField().get(1);
-        Assert.assertNotNull(YYYYMM);
-        Assert.assertThat(YYYYMM.getName(), Is.is("YYYY-MM"));
-        Assert.assertThat(YYYYMM.getValue(), Is.is("1997-07"));
-        Assert.assertThat(YYYYMM.getPath(), Is.is("/YYYY-MM"));
-        Assert.assertThat(YYYYMM.getFieldType(), Is.is(FieldType.STRING));
-        Assert.assertThat(YYYYMM.getStatus(), Is.is(FieldStatus.SUPPORTED));
+        JsonField yyyymm = (JsonField) document.getFields().getField().get(1);
+        Assert.assertNotNull(yyyymm);
+        Assert.assertThat(yyyymm.getName(), Is.is("YYYY-MM"));
+        Assert.assertThat(yyyymm.getValue(), Is.is("1997-07"));
+        Assert.assertThat(yyyymm.getPath(), Is.is("/YYYY-MM"));
+        Assert.assertThat(yyyymm.getFieldType(), Is.is(FieldType.STRING));
+        Assert.assertThat(yyyymm.getStatus(), Is.is(FieldStatus.SUPPORTED));
 
-        JsonField YYYYMMDD = (JsonField) document.getFields().getField().get(2);
-        Assert.assertNotNull(YYYYMMDD);
-        Assert.assertThat(YYYYMMDD.getName(), Is.is("YYYY-MM-DD"));
-        Assert.assertThat(YYYYMMDD.getValue(), Is.is("1997-07-16"));
-        Assert.assertThat(YYYYMMDD.getPath(), Is.is("/YYYY-MM-DD"));
-        Assert.assertThat(YYYYMMDD.getFieldType(), Is.is(FieldType.STRING));
-        Assert.assertThat(YYYYMMDD.getStatus(), Is.is(FieldStatus.SUPPORTED));
+        JsonField yyyymmdd = (JsonField) document.getFields().getField().get(2);
+        Assert.assertNotNull(yyyymmdd);
+        Assert.assertThat(yyyymmdd.getName(), Is.is("YYYY-MM-DD"));
+        Assert.assertThat(yyyymmdd.getValue(), Is.is("1997-07-16"));
+        Assert.assertThat(yyyymmdd.getPath(), Is.is("/YYYY-MM-DD"));
+        Assert.assertThat(yyyymmdd.getFieldType(), Is.is(FieldType.STRING));
+        Assert.assertThat(yyyymmdd.getStatus(), Is.is(FieldStatus.SUPPORTED));
 
-        JsonField YYYYMMDDThhmmTZD = (JsonField) document.getFields().getField().get(3);
-        Assert.assertNotNull(YYYYMMDDThhmmTZD);
-        Assert.assertThat(YYYYMMDDThhmmTZD.getName(), Is.is("YYYY-MM-DDThh:mmTZD"));
-        Assert.assertThat(YYYYMMDDThhmmTZD.getValue(), Is.is("1997-07-16T19:20+01:00"));
-        Assert.assertThat(YYYYMMDDThhmmTZD.getPath(), Is.is("/YYYY-MM-DDThh:mmTZD"));
-        Assert.assertThat(YYYYMMDDThhmmTZD.getFieldType(), Is.is(FieldType.STRING));
-        Assert.assertThat(YYYYMMDDThhmmTZD.getStatus(), Is.is(FieldStatus.SUPPORTED));
+        JsonField yyyymmddthhmmtzd = (JsonField) document.getFields().getField().get(3);
+        Assert.assertNotNull(yyyymmddthhmmtzd);
+        Assert.assertThat(yyyymmddthhmmtzd.getName(), Is.is("YYYY-MM-DDThh:mmTZD"));
+        Assert.assertThat(yyyymmddthhmmtzd.getValue(), Is.is("1997-07-16T19:20+01:00"));
+        Assert.assertThat(yyyymmddthhmmtzd.getPath(), Is.is("/YYYY-MM-DDThh:mmTZD"));
+        Assert.assertThat(yyyymmddthhmmtzd.getFieldType(), Is.is(FieldType.STRING));
+        Assert.assertThat(yyyymmddthhmmtzd.getStatus(), Is.is(FieldStatus.SUPPORTED));
 
-        JsonField YYYYMMDDThhmmssTZD = (JsonField) document.getFields().getField().get(4);
-        Assert.assertNotNull(YYYYMMDDThhmmssTZD);
-        Assert.assertThat(YYYYMMDDThhmmssTZD.getName(), Is.is("YYYY-MM-DDThh:mm:ssTZD"));
-        Assert.assertThat(YYYYMMDDThhmmssTZD.getValue(), Is.is("1997-07-16T19:20:30+01:00"));
-        Assert.assertThat(YYYYMMDDThhmmssTZD.getPath(), Is.is("/YYYY-MM-DDThh:mm:ssTZD"));
-        Assert.assertThat(YYYYMMDDThhmmssTZD.getFieldType(), Is.is(FieldType.STRING));
-        Assert.assertThat(YYYYMMDDThhmmssTZD.getStatus(), Is.is(FieldStatus.SUPPORTED));
+        JsonField yyyymmddthhmmsstzd = (JsonField) document.getFields().getField().get(4);
+        Assert.assertNotNull(yyyymmddthhmmsstzd);
+        Assert.assertThat(yyyymmddthhmmsstzd.getName(), Is.is("YYYY-MM-DDThh:mm:ssTZD"));
+        Assert.assertThat(yyyymmddthhmmsstzd.getValue(), Is.is("1997-07-16T19:20:30+01:00"));
+        Assert.assertThat(yyyymmddthhmmsstzd.getPath(), Is.is("/YYYY-MM-DDThh:mm:ssTZD"));
+        Assert.assertThat(yyyymmddthhmmsstzd.getFieldType(), Is.is(FieldType.STRING));
+        Assert.assertThat(yyyymmddthhmmsstzd.getStatus(), Is.is(FieldStatus.SUPPORTED));
 
-        JsonField YYYYMMDDThhmmsssTZD = (JsonField) document.getFields().getField().get(5);
-        Assert.assertNotNull(YYYYMMDDThhmmsssTZD);
-        Assert.assertThat(YYYYMMDDThhmmsssTZD.getName(), Is.is("YYYY-MM-DDThh:mm:ss.sTZD"));
-        Assert.assertThat(YYYYMMDDThhmmsssTZD.getValue(), Is.is("1997-07-16T19:20:30.45+01:00"));
-        Assert.assertThat(YYYYMMDDThhmmsssTZD.getPath(), Is.is("/YYYY-MM-DDThh:mm:ss.sTZD"));
-        Assert.assertThat(YYYYMMDDThhmmsssTZD.getFieldType(), Is.is(FieldType.STRING));
-        Assert.assertThat(YYYYMMDDThhmmsssTZD.getStatus(), Is.is(FieldStatus.SUPPORTED));
+        JsonField yyyymmddthhmmssstzd = (JsonField) document.getFields().getField().get(5);
+        Assert.assertNotNull(yyyymmddthhmmssstzd);
+        Assert.assertThat(yyyymmddthhmmssstzd.getName(), Is.is("YYYY-MM-DDThh:mm:ss.sTZD"));
+        Assert.assertThat(yyyymmddthhmmssstzd.getValue(), Is.is("1997-07-16T19:20:30.45+01:00"));
+        Assert.assertThat(yyyymmddthhmmssstzd.getPath(), Is.is("/YYYY-MM-DDThh:mm:ss.sTZD"));
+        Assert.assertThat(yyyymmddthhmmssstzd.getFieldType(), Is.is(FieldType.STRING));
+        Assert.assertThat(yyyymmddthhmmssstzd.getStatus(), Is.is(FieldStatus.SUPPORTED));
 
-        JsonField YYYYMMDDThhmmssUTZ = (JsonField) document.getFields().getField().get(6);
-        Assert.assertNotNull(YYYYMMDDThhmmssUTZ);
-        Assert.assertThat(YYYYMMDDThhmmssUTZ.getName(), Is.is("YYYY-MM-DDThh:mm:ssUTZ"));
-        Assert.assertThat(YYYYMMDDThhmmssUTZ.getValue(), Is.is("1994-11-05T13:15:30Z"));
-        Assert.assertThat(YYYYMMDDThhmmssUTZ.getPath(), Is.is("/YYYY-MM-DDThh:mm:ssUTZ"));
-        Assert.assertThat(YYYYMMDDThhmmssUTZ.getFieldType(), Is.is(FieldType.STRING));
-        Assert.assertThat(YYYYMMDDThhmmssUTZ.getStatus(), Is.is(FieldStatus.SUPPORTED));
+        JsonField yyyymmddthhmmssutz = (JsonField) document.getFields().getField().get(6);
+        Assert.assertNotNull(yyyymmddthhmmssutz);
+        Assert.assertThat(yyyymmddthhmmssutz.getName(), Is.is("YYYY-MM-DDThh:mm:ssUTZ"));
+        Assert.assertThat(yyyymmddthhmmssutz.getValue(), Is.is("1994-11-05T13:15:30Z"));
+        Assert.assertThat(yyyymmddthhmmssutz.getPath(), Is.is("/YYYY-MM-DDThh:mm:ssUTZ"));
+        Assert.assertThat(yyyymmddthhmmssutz.getFieldType(), Is.is(FieldType.STRING));
+        Assert.assertThat(yyyymmddthhmmssutz.getStatus(), Is.is(FieldStatus.SUPPORTED));
 
     }
 
     @Test
-    public void inspectJsonDocument_NoRoot() throws Exception {
+    public void inspectJsonDocumentNoRoot() throws Exception {
         final String instance = "{ \"brand\" : \"Mercedes\", \"doors\" : 5 }";
         JsonDocument document = inspectionService.inspectJsonDocument(instance);
         Assert.assertNotNull(document);
@@ -861,7 +859,7 @@ public class JsonDocumentInspectionServiceTest {
     }
 
     @Test
-    public void inspectJsonDocument_WithRoot() throws Exception {
+    public void inspectJsonDocumentWithRoot() throws Exception {
         final String instance = "{\"car\" :{ \"brand\" : \"Mercedes\", \"doors\" : 5 } }";
         JsonDocument document = inspectionService.inspectJsonDocument(instance);
         Assert.assertNotNull(document);
@@ -893,7 +891,7 @@ public class JsonDocumentInspectionServiceTest {
     }
 
     @Test
-    public void inspectJsonDocument_NestedObjectArray() throws Exception {
+    public void inspectJsonDocumentNestedObjectArray() throws Exception {
         final String instance = "{\"menu\": {\n" + "  \"id\": \"file\",\n" + "  \"value\": \"Filed\",\n"
                 + "  \"popup\": {\n" + "    \"menuitem\": [\n"
                 + "      {\"value\": \"New\", \"onclick\": \"CreateNewDoc()\"},\n"
@@ -939,58 +937,58 @@ public class JsonDocumentInspectionServiceTest {
         Assert.assertNotNull(menuitem.getJsonFields().getJsonField());
         Assert.assertThat(menuitem.getJsonFields().getJsonField().size(), Is.is(6));
 
-        JsonField menuitem_value = menuitem.getJsonFields().getJsonField().get(0);
-        Assert.assertNotNull(menuitem_value);
-        Assert.assertThat(menuitem_value.getName(), Is.is("value"));
-        Assert.assertThat(menuitem_value.getValue(), Is.is("New"));
-        Assert.assertThat(menuitem_value.getPath(), Is.is("/menu/popup/menuitem/value"));
-        Assert.assertThat(menuitem_value.getFieldType(), Is.is(FieldType.STRING));
-        Assert.assertThat(menuitem_value.getStatus(), Is.is(FieldStatus.SUPPORTED));
+        JsonField menuitemValue = menuitem.getJsonFields().getJsonField().get(0);
+        Assert.assertNotNull(menuitemValue);
+        Assert.assertThat(menuitemValue.getName(), Is.is("value"));
+        Assert.assertThat(menuitemValue.getValue(), Is.is("New"));
+        Assert.assertThat(menuitemValue.getPath(), Is.is("/menu/popup/menuitem/value"));
+        Assert.assertThat(menuitemValue.getFieldType(), Is.is(FieldType.STRING));
+        Assert.assertThat(menuitemValue.getStatus(), Is.is(FieldStatus.SUPPORTED));
 
-        JsonField menuitem_onclick = menuitem.getJsonFields().getJsonField().get(1);
-        Assert.assertNotNull(menuitem_onclick);
-        Assert.assertThat(menuitem_onclick.getName(), Is.is("onclick"));
-        Assert.assertThat(menuitem_onclick.getValue(), Is.is("CreateNewDoc()"));
-        Assert.assertThat(menuitem_onclick.getPath(), Is.is("/menu/popup/menuitem/onclick"));
-        Assert.assertThat(menuitem_onclick.getFieldType(), Is.is(FieldType.STRING));
-        Assert.assertThat(menuitem_onclick.getStatus(), Is.is(FieldStatus.SUPPORTED));
+        JsonField menuitemOnclick = menuitem.getJsonFields().getJsonField().get(1);
+        Assert.assertNotNull(menuitemOnclick);
+        Assert.assertThat(menuitemOnclick.getName(), Is.is("onclick"));
+        Assert.assertThat(menuitemOnclick.getValue(), Is.is("CreateNewDoc()"));
+        Assert.assertThat(menuitemOnclick.getPath(), Is.is("/menu/popup/menuitem/onclick"));
+        Assert.assertThat(menuitemOnclick.getFieldType(), Is.is(FieldType.STRING));
+        Assert.assertThat(menuitemOnclick.getStatus(), Is.is(FieldStatus.SUPPORTED));
 
-        JsonField menuitem1_value = menuitem.getJsonFields().getJsonField().get(2);
-        Assert.assertNotNull(menuitem1_value);
-        Assert.assertThat(menuitem1_value.getName(), Is.is("value"));
-        Assert.assertThat(menuitem1_value.getValue(), Is.is("Open"));
-        Assert.assertThat(menuitem1_value.getPath(), Is.is("/menu/popup/menuitem[1]/value"));
-        Assert.assertThat(menuitem1_value.getFieldType(), Is.is(FieldType.STRING));
-        Assert.assertThat(menuitem1_value.getStatus(), Is.is(FieldStatus.SUPPORTED));
+        JsonField menuitem1Value = menuitem.getJsonFields().getJsonField().get(2);
+        Assert.assertNotNull(menuitem1Value);
+        Assert.assertThat(menuitem1Value.getName(), Is.is("value"));
+        Assert.assertThat(menuitem1Value.getValue(), Is.is("Open"));
+        Assert.assertThat(menuitem1Value.getPath(), Is.is("/menu/popup/menuitem[1]/value"));
+        Assert.assertThat(menuitem1Value.getFieldType(), Is.is(FieldType.STRING));
+        Assert.assertThat(menuitem1Value.getStatus(), Is.is(FieldStatus.SUPPORTED));
 
-        JsonField menuitem1_onclick = menuitem.getJsonFields().getJsonField().get(3);
-        Assert.assertNotNull(menuitem1_onclick);
-        Assert.assertThat(menuitem1_onclick.getName(), Is.is("onclick"));
-        Assert.assertThat(menuitem1_onclick.getValue(), Is.is("OpenDoc()"));
-        Assert.assertThat(menuitem1_onclick.getPath(), Is.is("/menu/popup/menuitem[1]/onclick"));
-        Assert.assertThat(menuitem1_onclick.getFieldType(), Is.is(FieldType.STRING));
-        Assert.assertThat(menuitem1_onclick.getStatus(), Is.is(FieldStatus.SUPPORTED));
+        JsonField menuitem1Onclick = menuitem.getJsonFields().getJsonField().get(3);
+        Assert.assertNotNull(menuitem1Onclick);
+        Assert.assertThat(menuitem1Onclick.getName(), Is.is("onclick"));
+        Assert.assertThat(menuitem1Onclick.getValue(), Is.is("OpenDoc()"));
+        Assert.assertThat(menuitem1Onclick.getPath(), Is.is("/menu/popup/menuitem[1]/onclick"));
+        Assert.assertThat(menuitem1Onclick.getFieldType(), Is.is(FieldType.STRING));
+        Assert.assertThat(menuitem1Onclick.getStatus(), Is.is(FieldStatus.SUPPORTED));
 
-        JsonField menuitem2_value = menuitem.getJsonFields().getJsonField().get(4);
-        Assert.assertNotNull(menuitem2_value);
-        Assert.assertThat(menuitem2_value.getName(), Is.is("value"));
-        Assert.assertThat(menuitem2_value.getValue(), Is.is("Close"));
-        Assert.assertThat(menuitem2_value.getPath(), Is.is("/menu/popup/menuitem[2]/value"));
-        Assert.assertThat(menuitem2_value.getFieldType(), Is.is(FieldType.STRING));
-        Assert.assertThat(menuitem2_value.getStatus(), Is.is(FieldStatus.SUPPORTED));
+        JsonField menuitem2Value = menuitem.getJsonFields().getJsonField().get(4);
+        Assert.assertNotNull(menuitem2Value);
+        Assert.assertThat(menuitem2Value.getName(), Is.is("value"));
+        Assert.assertThat(menuitem2Value.getValue(), Is.is("Close"));
+        Assert.assertThat(menuitem2Value.getPath(), Is.is("/menu/popup/menuitem[2]/value"));
+        Assert.assertThat(menuitem2Value.getFieldType(), Is.is(FieldType.STRING));
+        Assert.assertThat(menuitem2Value.getStatus(), Is.is(FieldStatus.SUPPORTED));
 
-        JsonField menuitem2_onclick = menuitem.getJsonFields().getJsonField().get(5);
-        Assert.assertNotNull(menuitem2_onclick);
-        Assert.assertThat(menuitem2_onclick.getName(), Is.is("onclick"));
-        Assert.assertThat(menuitem2_onclick.getValue(), Is.is("CloseDoc()"));
-        Assert.assertThat(menuitem2_onclick.getPath(), Is.is("/menu/popup/menuitem[2]/onclick"));
-        Assert.assertThat(menuitem2_onclick.getFieldType(), Is.is(FieldType.STRING));
-        Assert.assertThat(menuitem2_onclick.getStatus(), Is.is(FieldStatus.SUPPORTED));
+        JsonField menuitem2Onclick = menuitem.getJsonFields().getJsonField().get(5);
+        Assert.assertNotNull(menuitem2Onclick);
+        Assert.assertThat(menuitem2Onclick.getName(), Is.is("onclick"));
+        Assert.assertThat(menuitem2Onclick.getValue(), Is.is("CloseDoc()"));
+        Assert.assertThat(menuitem2Onclick.getPath(), Is.is("/menu/popup/menuitem[2]/onclick"));
+        Assert.assertThat(menuitem2Onclick.getFieldType(), Is.is(FieldType.STRING));
+        Assert.assertThat(menuitem2Onclick.getStatus(), Is.is(FieldStatus.SUPPORTED));
         // printDocument(document);
     }
 
     @Test
-    public void inspectJsonDocument_HighlyNestedObject() throws Exception {
+    public void inspectJsonDocumentHighlyNestedObject() throws Exception {
         final String instance = new String(
                 Files.readAllBytes(Paths.get("src/test/resources/inspect/highly-nested-object.json")));
         JsonDocument document = inspectionService.inspectJsonDocument(instance);
@@ -1157,7 +1155,7 @@ public class JsonDocumentInspectionServiceTest {
     }
 
     @Test
-    public void inspectJsonDocument_HighlyComplexNestedObject() throws Exception {
+    public void inspectJsonDocumentHighlyComplexNestedObject() throws Exception {
         final String instance = new String(
                 Files.readAllBytes(Paths.get("src/test/resources/inspect/highly-complex-nested-object.json")));
         JsonDocument document = inspectionService.inspectJsonDocument(instance);
@@ -1448,21 +1446,21 @@ public class JsonDocumentInspectionServiceTest {
         Assert.assertThat(itemBatterComplexType1.getName(), Is.is("batter"));
         Assert.assertThat(itemBatterComplexType1.getJsonFields().getJsonField().size(), Is.is(2));
 
-        JsonField batterId1_0 = itemBatterComplexType1.getJsonFields().getJsonField().get(0);
-        Assert.assertNotNull(batterId1_0);
-        Assert.assertThat(batterId1_0.getName(), Is.is("id"));
-        Assert.assertThat(batterId1_0.getValue(), Is.is("1001"));
-        Assert.assertThat(batterId1_0.getPath(), Is.is("/items/item[1]/batters/batter/id"));
-        Assert.assertThat(batterId1_0.getFieldType(), Is.is(FieldType.STRING));
-        Assert.assertThat(batterId1_0.getStatus(), Is.is(FieldStatus.SUPPORTED));
+        JsonField batterId10 = itemBatterComplexType1.getJsonFields().getJsonField().get(0);
+        Assert.assertNotNull(batterId10);
+        Assert.assertThat(batterId10.getName(), Is.is("id"));
+        Assert.assertThat(batterId10.getValue(), Is.is("1001"));
+        Assert.assertThat(batterId10.getPath(), Is.is("/items/item[1]/batters/batter/id"));
+        Assert.assertThat(batterId10.getFieldType(), Is.is(FieldType.STRING));
+        Assert.assertThat(batterId10.getStatus(), Is.is(FieldStatus.SUPPORTED));
 
-        JsonField batterType1_0 = itemBatterComplexType1.getJsonFields().getJsonField().get(1);
-        Assert.assertNotNull(batterType1_0);
-        Assert.assertThat(batterType1_0.getName(), Is.is("type"));
-        Assert.assertThat(batterType1_0.getValue(), Is.is("Regular"));
-        Assert.assertThat(batterType1_0.getPath(), Is.is("/items/item[1]/batters/batter/type"));
-        Assert.assertThat(batterType1_0.getFieldType(), Is.is(FieldType.STRING));
-        Assert.assertThat(batterType1_0.getStatus(), Is.is(FieldStatus.SUPPORTED));
+        JsonField batterType10 = itemBatterComplexType1.getJsonFields().getJsonField().get(1);
+        Assert.assertNotNull(batterType10);
+        Assert.assertThat(batterType10.getName(), Is.is("type"));
+        Assert.assertThat(batterType10.getValue(), Is.is("Regular"));
+        Assert.assertThat(batterType10.getPath(), Is.is("/items/item[1]/batters/batter/type"));
+        Assert.assertThat(batterType10.getFieldType(), Is.is(FieldType.STRING));
+        Assert.assertThat(batterType10.getStatus(), Is.is(FieldStatus.SUPPORTED));
 
         JsonComplexType itemToppingsComplexType1 = (JsonComplexType) item.getJsonFields().getJsonField().get(11);
         Assert.assertNotNull(itemToppingsComplexType1);
@@ -1470,90 +1468,91 @@ public class JsonDocumentInspectionServiceTest {
         Assert.assertThat(itemToppingsComplexType1.getName(), Is.is("topping"));
         Assert.assertThat(itemToppingsComplexType1.getJsonFields().getJsonField().size(), Is.is(10));
 
-        JsonField toppingID1_1 = itemToppingsComplexType1.getJsonFields().getJsonField().get(0);
-        Assert.assertNotNull(toppingID1_1);
-        Assert.assertThat(toppingID1_1.getName(), Is.is("id"));
-        Assert.assertThat(toppingID1_1.getValue(), Is.is("5001"));
-        Assert.assertThat(toppingID1_1.getPath(), Is.is("/items/item[1]/topping/id"));
-        Assert.assertThat(toppingID1_1.getFieldType(), Is.is(FieldType.STRING));
-        Assert.assertThat(toppingID1_1.getStatus(), Is.is(FieldStatus.SUPPORTED));
+        JsonField toppingID11 = itemToppingsComplexType1.getJsonFields().getJsonField().get(0);
+        Assert.assertNotNull(toppingID11);
+        Assert.assertThat(toppingID11.getName(), Is.is("id"));
+        Assert.assertThat(toppingID11.getValue(), Is.is("5001"));
+        Assert.assertThat(toppingID11.getPath(), Is.is("/items/item[1]/topping/id"));
+        Assert.assertThat(toppingID11.getFieldType(), Is.is(FieldType.STRING));
+        Assert.assertThat(toppingID11.getStatus(), Is.is(FieldStatus.SUPPORTED));
 
-        JsonField toppingType1_1 = itemToppingsComplexType1.getJsonFields().getJsonField().get(1);
-        Assert.assertNotNull(toppingType1_1);
-        Assert.assertThat(toppingType1_1.getName(), Is.is("type"));
-        Assert.assertThat(toppingType1_1.getValue(), Is.is("None"));
-        Assert.assertThat(toppingType1_1.getPath(), Is.is("/items/item[1]/topping/type"));
-        Assert.assertThat(toppingType1_1.getFieldType(), Is.is(FieldType.STRING));
-        Assert.assertThat(toppingType1_1.getStatus(), Is.is(FieldStatus.SUPPORTED));
+        JsonField toppingType11 = itemToppingsComplexType1.getJsonFields().getJsonField().get(1);
+        Assert.assertNotNull(toppingType11);
+        Assert.assertThat(toppingType11.getName(), Is.is("type"));
+        Assert.assertThat(toppingType11.getValue(), Is.is("None"));
+        Assert.assertThat(toppingType11.getPath(), Is.is("/items/item[1]/topping/type"));
+        Assert.assertThat(toppingType11.getFieldType(), Is.is(FieldType.STRING));
+        Assert.assertThat(toppingType11.getStatus(), Is.is(FieldStatus.SUPPORTED));
 
-        JsonField toppingID1_2 = itemToppingsComplexType1.getJsonFields().getJsonField().get(2);
-        Assert.assertNotNull(toppingID1_2);
-        Assert.assertThat(toppingID1_2.getName(), Is.is("id"));
-        Assert.assertThat(toppingID1_2.getValue(), Is.is("5002"));
-        Assert.assertThat(toppingID1_2.getPath(), Is.is("/items/item[1]/topping/id[1]"));
-        Assert.assertThat(toppingID1_2.getFieldType(), Is.is(FieldType.STRING));
-        Assert.assertThat(toppingID1_2.getStatus(), Is.is(FieldStatus.SUPPORTED));
+        JsonField toppingID12 = itemToppingsComplexType1.getJsonFields().getJsonField().get(2);
+        Assert.assertNotNull(toppingID12);
+        Assert.assertThat(toppingID12.getName(), Is.is("id"));
+        Assert.assertThat(toppingID12.getValue(), Is.is("5002"));
+        Assert.assertThat(toppingID12.getPath(), Is.is("/items/item[1]/topping/id[1]"));
+        Assert.assertThat(toppingID12.getFieldType(), Is.is(FieldType.STRING));
+        Assert.assertThat(toppingID12.getStatus(), Is.is(FieldStatus.SUPPORTED));
 
-        JsonField toppingType1_2 = itemToppingsComplexType1.getJsonFields().getJsonField().get(3);
-        Assert.assertNotNull(toppingType1_2);
-        Assert.assertThat(toppingType1_2.getName(), Is.is("type"));
-        Assert.assertThat(toppingType1_2.getValue(), Is.is("Glazed"));
-        Assert.assertThat(toppingType1_2.getPath(), Is.is("/items/item[1]/topping/type[1]"));
-        Assert.assertThat(toppingType1_2.getFieldType(), Is.is(FieldType.STRING));
-        Assert.assertThat(toppingType1_2.getStatus(), Is.is(FieldStatus.SUPPORTED));
+        JsonField toppingType12 = itemToppingsComplexType1.getJsonFields().getJsonField().get(3);
+        Assert.assertNotNull(toppingType12);
+        Assert.assertThat(toppingType12.getName(), Is.is("type"));
+        Assert.assertThat(toppingType12.getValue(), Is.is("Glazed"));
+        Assert.assertThat(toppingType12.getPath(), Is.is("/items/item[1]/topping/type[1]"));
+        Assert.assertThat(toppingType12.getFieldType(), Is.is(FieldType.STRING));
+        Assert.assertThat(toppingType12.getStatus(), Is.is(FieldStatus.SUPPORTED));
 
-        JsonField toppingID1_3 = itemToppingsComplexType1.getJsonFields().getJsonField().get(4);
-        Assert.assertNotNull(toppingID1_3);
-        Assert.assertThat(toppingID1_3.getName(), Is.is("id"));
-        Assert.assertThat(toppingID1_3.getValue(), Is.is("5005"));
-        Assert.assertThat(toppingID1_3.getPath(), Is.is("/items/item[1]/topping/id[2]"));
-        Assert.assertThat(toppingID1_3.getFieldType(), Is.is(FieldType.STRING));
-        Assert.assertThat(toppingID1_3.getStatus(), Is.is(FieldStatus.SUPPORTED));
+        JsonField toppingID13 = itemToppingsComplexType1.getJsonFields().getJsonField().get(4);
+        Assert.assertNotNull(toppingID13);
+        Assert.assertThat(toppingID13.getName(), Is.is("id"));
+        Assert.assertThat(toppingID13.getValue(), Is.is("5005"));
+        Assert.assertThat(toppingID13.getPath(), Is.is("/items/item[1]/topping/id[2]"));
+        Assert.assertThat(toppingID13.getFieldType(), Is.is(FieldType.STRING));
+        Assert.assertThat(toppingID13.getStatus(), Is.is(FieldStatus.SUPPORTED));
 
-        JsonField toppingType1_3 = itemToppingsComplexType1.getJsonFields().getJsonField().get(5);
-        Assert.assertNotNull(toppingType1_3);
-        Assert.assertThat(toppingType1_3.getName(), Is.is("type"));
-        Assert.assertThat(toppingType1_3.getValue(), Is.is("Sugar"));
-        Assert.assertThat(toppingType1_3.getPath(), Is.is("/items/item[1]/topping/type[2]"));
-        Assert.assertThat(toppingType1_3.getFieldType(), Is.is(FieldType.STRING));
-        Assert.assertThat(toppingType1_3.getStatus(), Is.is(FieldStatus.SUPPORTED));
+        JsonField toppingType13 = itemToppingsComplexType1.getJsonFields().getJsonField().get(5);
+        Assert.assertNotNull(toppingType13);
+        Assert.assertThat(toppingType13.getName(), Is.is("type"));
+        Assert.assertThat(toppingType13.getValue(), Is.is("Sugar"));
+        Assert.assertThat(toppingType13.getPath(), Is.is("/items/item[1]/topping/type[2]"));
+        Assert.assertThat(toppingType13.getFieldType(), Is.is(FieldType.STRING));
+        Assert.assertThat(toppingType13.getStatus(), Is.is(FieldStatus.SUPPORTED));
 
-        JsonField toppingID1_4 = itemToppingsComplexType1.getJsonFields().getJsonField().get(6);
-        Assert.assertNotNull(toppingID1_4);
-        Assert.assertThat(toppingID1_4.getName(), Is.is("id"));
-        Assert.assertThat(toppingID1_4.getValue(), Is.is("5003"));
-        Assert.assertThat(toppingID1_4.getPath(), Is.is("/items/item[1]/topping/id[3]"));
-        Assert.assertThat(toppingID1_4.getFieldType(), Is.is(FieldType.STRING));
-        Assert.assertThat(toppingID1_4.getStatus(), Is.is(FieldStatus.SUPPORTED));
+        JsonField toppingID14 = itemToppingsComplexType1.getJsonFields().getJsonField().get(6);
+        Assert.assertNotNull(toppingID14);
+        Assert.assertThat(toppingID14.getName(), Is.is("id"));
+        Assert.assertThat(toppingID14.getValue(), Is.is("5003"));
+        Assert.assertThat(toppingID14.getPath(), Is.is("/items/item[1]/topping/id[3]"));
+        Assert.assertThat(toppingID14.getFieldType(), Is.is(FieldType.STRING));
+        Assert.assertThat(toppingID14.getStatus(), Is.is(FieldStatus.SUPPORTED));
 
-        JsonField toppingType1_4 = itemToppingsComplexType1.getJsonFields().getJsonField().get(7);
-        Assert.assertNotNull(toppingType1_4);
-        Assert.assertThat(toppingType1_4.getName(), Is.is("type"));
-        Assert.assertThat(toppingType1_4.getValue(), Is.is("Chocolate"));
-        Assert.assertThat(toppingType1_4.getPath(), Is.is("/items/item[1]/topping/type[3]"));
-        Assert.assertThat(toppingType1_4.getFieldType(), Is.is(FieldType.STRING));
-        Assert.assertThat(toppingType1_4.getStatus(), Is.is(FieldStatus.SUPPORTED));
+        JsonField toppingType14 = itemToppingsComplexType1.getJsonFields().getJsonField().get(7);
+        Assert.assertNotNull(toppingType14);
+        Assert.assertThat(toppingType14.getName(), Is.is("type"));
+        Assert.assertThat(toppingType14.getValue(), Is.is("Chocolate"));
+        Assert.assertThat(toppingType14.getPath(), Is.is("/items/item[1]/topping/type[3]"));
+        Assert.assertThat(toppingType14.getFieldType(), Is.is(FieldType.STRING));
+        Assert.assertThat(toppingType14.getStatus(), Is.is(FieldStatus.SUPPORTED));
 
-        JsonField toppingID1_5 = itemToppingsComplexType1.getJsonFields().getJsonField().get(8);
-        Assert.assertNotNull(toppingID1_5);
-        Assert.assertThat(toppingID1_5.getName(), Is.is("id"));
-        Assert.assertThat(toppingID1_5.getValue(), Is.is("5004"));
-        Assert.assertThat(toppingID1_5.getPath(), Is.is("/items/item[1]/topping/id[4]"));
-        Assert.assertThat(toppingID1_5.getFieldType(), Is.is(FieldType.STRING));
-        Assert.assertThat(toppingID1_5.getStatus(), Is.is(FieldStatus.SUPPORTED));
+        JsonField toppingID15 = itemToppingsComplexType1.getJsonFields().getJsonField().get(8);
+        Assert.assertNotNull(toppingID15);
+        Assert.assertThat(toppingID15.getName(), Is.is("id"));
+        Assert.assertThat(toppingID15.getValue(), Is.is("5004"));
+        Assert.assertThat(toppingID15.getPath(), Is.is("/items/item[1]/topping/id[4]"));
+        Assert.assertThat(toppingID15.getFieldType(), Is.is(FieldType.STRING));
+        Assert.assertThat(toppingID15.getStatus(), Is.is(FieldStatus.SUPPORTED));
 
-        JsonField toppingType1_5 = itemToppingsComplexType1.getJsonFields().getJsonField().get(9);
-        Assert.assertNotNull(toppingType1_5);
-        Assert.assertThat(toppingType1_5.getName(), Is.is("type"));
-        Assert.assertThat(toppingType1_5.getValue(), Is.is("Maple"));
-        Assert.assertThat(toppingType1_5.getPath(), Is.is("/items/item[1]/topping/type[4]"));
-        Assert.assertThat(toppingType1_5.getFieldType(), Is.is(FieldType.STRING));
-        Assert.assertThat(toppingType1_5.getStatus(), Is.is(FieldStatus.SUPPORTED));
+        JsonField toppingType15 = itemToppingsComplexType1.getJsonFields().getJsonField().get(9);
+        Assert.assertNotNull(toppingType15);
+        Assert.assertThat(toppingType15.getName(), Is.is("type"));
+        Assert.assertThat(toppingType15.getValue(), Is.is("Maple"));
+        Assert.assertThat(toppingType15.getPath(), Is.is("/items/item[1]/topping/type[4]"));
+        Assert.assertThat(toppingType15.getFieldType(), Is.is(FieldType.STRING));
+        Assert.assertThat(toppingType15.getStatus(), Is.is(FieldStatus.SUPPORTED));
 
         // etc....
         // printDocument(document);
     }
 
+    @SuppressWarnings("unused")
     private void printDocument(JsonDocument document) {
         Assert.assertNotNull(document.getFields());
         printFields(document.getFields());

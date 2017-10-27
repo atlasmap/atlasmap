@@ -1,7 +1,5 @@
 package io.atlasmap.java.module;
 
-import static org.junit.Assert.*;
-
 import java.lang.reflect.Method;
 
 import org.junit.After;
@@ -17,6 +15,12 @@ import io.atlasmap.java.v2.JavaField;
 import io.atlasmap.v2.ConstantField;
 import io.atlasmap.v2.PropertyField;
 import io.atlasmap.v2.SimpleField;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 
 public class JavaModuleTest {
 

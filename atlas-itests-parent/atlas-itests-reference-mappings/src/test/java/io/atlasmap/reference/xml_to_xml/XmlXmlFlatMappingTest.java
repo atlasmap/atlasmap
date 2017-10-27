@@ -15,8 +15,6 @@
  */
 package io.atlasmap.reference.xml_to_xml;
 
-import static org.junit.Assert.*;
-
 import java.io.File;
 import javax.xml.bind.JAXBElement;
 import org.junit.Test;
@@ -29,6 +27,10 @@ import io.atlasmap.xml.test.v2.XmlFlatBoxedPrimitiveAttribute;
 import io.atlasmap.xml.test.v2.XmlFlatBoxedPrimitiveElement;
 import io.atlasmap.xml.test.v2.XmlFlatPrimitiveAttribute;
 import io.atlasmap.xml.test.v2.XmlFlatPrimitiveElement;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 public class XmlXmlFlatMappingTest extends AtlasMappingBaseTest {
 
@@ -46,6 +48,7 @@ public class XmlXmlFlatMappingTest extends AtlasMappingBaseTest {
         Object object = session.getOutput();
         assertNotNull(object);
         assertTrue(object instanceof String);
+        @SuppressWarnings("unchecked")
         JAXBElement<XmlFlatPrimitiveElement> xmlFPE = (JAXBElement<XmlFlatPrimitiveElement>) AtlasXmlTestHelper
                 .unmarshal((String) object, XmlFlatPrimitiveElement.class);
         AtlasTestUtil.validateXmlFlatPrimitiveElement(xmlFPE.getValue());
@@ -65,6 +68,7 @@ public class XmlXmlFlatMappingTest extends AtlasMappingBaseTest {
         Object object = session.getOutput();
         assertNotNull(object);
         assertTrue(object instanceof String);
+        @SuppressWarnings("unchecked")
         JAXBElement<XmlFlatPrimitiveElement> xmlFPE = (JAXBElement<XmlFlatPrimitiveElement>) AtlasXmlTestHelper
                 .unmarshal((String) object, XmlFlatPrimitiveElement.class);
         AtlasTestUtil.validateXmlFlatPrimitiveElement(xmlFPE.getValue());
@@ -84,6 +88,7 @@ public class XmlXmlFlatMappingTest extends AtlasMappingBaseTest {
         Object object = session.getOutput();
         assertNotNull(object);
         assertTrue(object instanceof String);
+        @SuppressWarnings("unchecked")
         JAXBElement<XmlFlatPrimitiveAttribute> xmlFPA = (JAXBElement<XmlFlatPrimitiveAttribute>) AtlasXmlTestHelper
                 .unmarshal((String) object, XmlFlatPrimitiveAttribute.class);
         AtlasTestUtil.validateXmlFlatPrimitiveAttribute(xmlFPA.getValue());
@@ -103,6 +108,7 @@ public class XmlXmlFlatMappingTest extends AtlasMappingBaseTest {
         Object object = session.getOutput();
         assertNotNull(object);
         assertTrue(object instanceof String);
+        @SuppressWarnings("unchecked")
         JAXBElement<XmlFlatPrimitiveAttribute> xmlFPA = (JAXBElement<XmlFlatPrimitiveAttribute>) AtlasXmlTestHelper
                 .unmarshal((String) object, XmlFlatPrimitiveAttribute.class);
         AtlasTestUtil.validateXmlFlatPrimitiveAttribute(xmlFPA.getValue());
@@ -217,6 +223,7 @@ public class XmlXmlFlatMappingTest extends AtlasMappingBaseTest {
         Object object = session.getOutput();
         assertNotNull(object);
         assertTrue(object instanceof String);
+        @SuppressWarnings("unchecked")
         JAXBElement<XmlFlatBoxedPrimitiveElement> xmlFPE = (JAXBElement<XmlFlatBoxedPrimitiveElement>) AtlasXmlTestHelper
                 .unmarshal((String) object, XmlFlatBoxedPrimitiveElement.class);
         AtlasTestUtil.validateXmlFlatPrimitiveBoxedPrimitiveElementFields(xmlFPE.getValue());
@@ -255,6 +262,7 @@ public class XmlXmlFlatMappingTest extends AtlasMappingBaseTest {
         Object object = session.getOutput();
         assertNotNull(object);
         assertTrue(object instanceof String);
+        @SuppressWarnings("unchecked")
         JAXBElement<XmlFlatBoxedPrimitiveAttribute> xmlFPE = (JAXBElement<XmlFlatBoxedPrimitiveAttribute>) AtlasXmlTestHelper
                 .unmarshal((String) object, XmlFlatBoxedPrimitiveAttribute.class);
         AtlasTestUtil.validateXmlFlatPrimitiveBoxedPrimitiveAttributeFields(xmlFPE.getValue());

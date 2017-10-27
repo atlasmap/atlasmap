@@ -15,8 +15,6 @@
  */
 package io.atlasmap.xml.inspect;
 
-import java.security.PrivilegedActionException;
-
 public class XmlInspectionException extends Exception {
 
     private static final long serialVersionUID = 1L;

@@ -1,7 +1,5 @@
 package io.atlasmap.itests;
 
-import static org.mockito.Mockito.*;
-
 import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasSession;
 import io.atlasmap.core.DefaultAtlasContextFactory;
@@ -28,11 +26,14 @@ import java.net.URI;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 @Ignore(value = "Integration Test")
 public class ConcurrencyChaosMonkeyTest {
 
     private DefaultAtlasContextFactory atlasContextFactory = null;
-    private static final Logger logger = LoggerFactory.getLogger(ConcurrencyChaosMonkeyTest.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ConcurrencyChaosMonkeyTest.class);
 
     @Before
     public void setUp() {
@@ -46,7 +47,7 @@ public class ConcurrencyChaosMonkeyTest {
 
     // one thread, many contexts
     @Test
-    public void chaosMonkeyTest_ManyContexts() throws Exception {
+    public void chaosMonkeyTestManyContexts() throws Exception {
         long startTime = System.nanoTime();
 
         URI mappingURI = generateMappingURI();
@@ -55,7 +56,7 @@ public class ConcurrencyChaosMonkeyTest {
 
             Thread chaosMonkeyThread = new Thread("ChaosMonkeyThread-" + i) {
                 public void run() {
-                    logger.info(this.getName() + " starting.");
+                    LOG.info(this.getName() + " starting.");
 
                     for (int j = 0; j < 100000; j++) {
 
@@ -74,11 +75,11 @@ public class ConcurrencyChaosMonkeyTest {
 
                             Thread.sleep(randSleep);
                         } catch (Throwable e) {
-                            logger.error("ERROR", e);
+                            LOG.error("ERROR", e);
                         }
                     }
 
-                    logger.info(this.getName() + " thread completed.");
+                    LOG.info(this.getName() + " thread completed.");
                 }
             };
 
@@ -88,14 +89,14 @@ public class ConcurrencyChaosMonkeyTest {
         Thread.sleep(600000L);
         long difference = System.nanoTime() - startTime;
 
-        logger.info(String.format("Total time: %d minutes to process 100000 mappings with one context per execution",
+        LOG.info(String.format("Total time: %d minutes to process 100000 mappings with one context per execution",
                 TimeUnit.NANOSECONDS.toMinutes(difference)));
 
     }
 
     // many threads, one context
     @Test
-    public void chaosMonkeyTest_ManyThreads() throws Exception {
+    public void chaosMonkeyTestManyThreads() throws Exception {
         long startTime = System.nanoTime();
 
         URI mappingURI = generateMappingURI();
@@ -104,7 +105,7 @@ public class ConcurrencyChaosMonkeyTest {
         for (int i = 0; i < 256; i++) {
             Thread chaosMonkeyThread = new Thread("ChaosMonkeyThread-" + i) {
                 public void run() {
-                    logger.info(this.getName() + " starting.");
+                    LOG.info(this.getName() + " starting.");
                     for (int j = 0; j < 100000; j++) {
 
                         try {
@@ -122,11 +123,11 @@ public class ConcurrencyChaosMonkeyTest {
 
                             Thread.sleep(randSleep);
                         } catch (Throwable e) {
-                            logger.error("ERROR", e);
+                            LOG.error("ERROR", e);
                         }
                     }
 
-                    logger.info(this.getName() + " thread completed.");
+                    LOG.info(this.getName() + " thread completed.");
                 }
             };
 
@@ -136,7 +137,7 @@ public class ConcurrencyChaosMonkeyTest {
         Thread.sleep(600000L);
         long difference = System.nanoTime() - startTime;
 
-        logger.info(String.format(
+        LOG.info(String.format(
                 "Total time: %d minutes to process 100000 mappings with one context shared with 256 threads",
                 TimeUnit.NANOSECONDS.toMinutes(difference)));
 

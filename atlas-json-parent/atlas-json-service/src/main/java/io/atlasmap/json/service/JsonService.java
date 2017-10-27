@@ -42,7 +42,7 @@ import javax.ws.rs.core.Response;
 @Path("v2/atlas/json")
 public class JsonService extends Application {
 
-    private static final Logger logger = LoggerFactory.getLogger(JsonService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(JsonService.class);
 
     // example request: http://localhost:8181/rest/myresource?from=jason%20baker
     @GET
@@ -87,7 +87,7 @@ public class JsonService extends Application {
                 }
             }
         } catch (Exception e) {
-            logger.error("Error inspecting xml: " + e.getMessage(), e);
+            LOG.error("Error inspecting xml: " + e.getMessage(), e);
         } finally {
             endTime = System.currentTimeMillis() - startTime;
         }
@@ -133,7 +133,7 @@ public class JsonService extends Application {
                 }
             }
         } catch (Exception e) {
-            logger.error("Error inspecting json: " + e.getMessage(), e);
+            LOG.error("Error inspecting json: " + e.getMessage(), e);
             response.setErrorMessage(e.getMessage());
         } finally {
             response.setExecutionTime(System.currentTimeMillis() - startTime);

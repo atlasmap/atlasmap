@@ -15,8 +15,6 @@
  */
 package io.atlasmap.java.inspect;
 
-import static org.junit.Assert.*;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,6 +22,11 @@ import io.atlasmap.core.DefaultAtlasConversionService;
 import io.atlasmap.java.test.SourceAddress;
 import io.atlasmap.java.test.SourceContact;
 import io.atlasmap.java.v2.JavaClass;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 public class JavaConstructServiceSimpleTest {
 
@@ -74,16 +77,9 @@ public class JavaConstructServiceSimpleTest {
         assertNull(source.getZipCode());
     }
 
-    @Test
+    @Test(expected=InstantiationException.class)
     public void testConstructAbstractBaseContactMinimalData() throws Exception {
-        try {
-            constructService.constructClass(generateJavaClass("io.atlasmap.java.test.BaseContact"));
-            fail("InstantiationException expected");
-        } catch (InstantiationException e) {
-            assertTrue(true);
-        } catch (Exception e) {
-            fail("InstantiationException expected instead: " + e.getMessage());
-        }
+        constructService.constructClass(generateJavaClass("io.atlasmap.java.test.BaseContact"));
     }
 
     protected JavaClass generateJavaClass(String className) {

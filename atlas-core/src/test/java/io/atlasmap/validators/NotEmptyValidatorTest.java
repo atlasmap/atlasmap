@@ -16,7 +16,6 @@
 package io.atlasmap.validators;
 
 import io.atlasmap.v2.ValidationStatus;
-import io.atlasmap.validators.NotEmptyValidator;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,7 +25,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class NotEmptyValidatorTest extends BaseValidatorTest {
 

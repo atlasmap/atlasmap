@@ -17,12 +17,12 @@ package io.atlasmap.validators;
 
 import io.atlasmap.v2.LookupTable;
 import io.atlasmap.v2.LookupTables;
-import io.atlasmap.validators.LookupTableNameValidator;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.After;
+
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import org.junit.After;
 
 public class LookupTableNameValidatorTest extends BaseValidatorTest {
 

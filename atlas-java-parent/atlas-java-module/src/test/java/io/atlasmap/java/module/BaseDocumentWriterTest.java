@@ -22,7 +22,7 @@ import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldType;
 
 public abstract class BaseDocumentWriterTest {
-    protected static String DEFAULT_VALUE = "Some string.";
+    protected static final String DEFAULT_VALUE = "Some string.";
 
     protected DocumentJavaFieldWriter writer = null;
     protected List<SegmentContext> segmentContexts = new LinkedList<>();

@@ -45,7 +45,7 @@ import javax.ws.rs.core.Response;
 @Path("v2/atlas/java")
 public class JavaService extends Application {
 
-    private static final Logger logger = LoggerFactory.getLogger(JavaService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(JavaService.class);
 
     // example request: http://localhost:8181/rest/myresource?from=jason%20baker
     @GET
@@ -108,7 +108,7 @@ public class JavaService extends Application {
             response.setClasspath(mavenResponse);
 
         } catch (Exception e) {
-            logger.error("Error generating classpath from maven: " + e.getMessage(), e);
+            LOG.error("Error generating classpath from maven: " + e.getMessage(), e);
             response.setErrorMessage(e.getMessage());
         }
 
@@ -139,7 +139,7 @@ public class JavaService extends Application {
             }
             response.setJavaClass(c);
         } catch (Exception e) {
-            logger.error("Error inspecting class with classpath: " + e.getMessage(), e);
+            LOG.error("Error inspecting class with classpath: " + e.getMessage(), e);
             response.setErrorMessage(e.getMessage());
         } finally {
             response.setExecutionTime(System.currentTimeMillis() - startTime);

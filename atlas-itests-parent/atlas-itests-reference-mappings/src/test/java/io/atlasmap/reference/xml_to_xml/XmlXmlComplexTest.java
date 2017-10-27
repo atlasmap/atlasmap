@@ -15,8 +15,6 @@
  */
 package io.atlasmap.reference.xml_to_xml;
 
-import static org.junit.Assert.*;
-
 import java.io.File;
 import javax.xml.bind.JAXBElement;
 import org.junit.Test;
@@ -27,6 +25,10 @@ import io.atlasmap.reference.AtlasTestUtil;
 import io.atlasmap.xml.test.v2.AtlasXmlTestHelper;
 import io.atlasmap.xml.test.v2.XmlOrderAttribute;
 import io.atlasmap.xml.test.v2.XmlOrderElement;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 public class XmlXmlComplexTest extends AtlasMappingBaseTest {
 
@@ -85,6 +87,7 @@ public class XmlXmlComplexTest extends AtlasMappingBaseTest {
         Object object = session.getOutput();
         assertNotNull(object);
         assertTrue(object instanceof String);
+        @SuppressWarnings("unchecked")
         JAXBElement<XmlOrderElement> xmlOE = (JAXBElement<XmlOrderElement>) AtlasXmlTestHelper
                 .unmarshal((String) object, XmlOrderElement.class);
         AtlasTestUtil.validateXmlOrderElement(xmlOE.getValue());
@@ -105,6 +108,7 @@ public class XmlXmlComplexTest extends AtlasMappingBaseTest {
         Object object = session.getOutput();
         assertNotNull(object);
         assertTrue(object instanceof String);
+        @SuppressWarnings("unchecked")
         JAXBElement<XmlOrderAttribute> xmlOA = (JAXBElement<XmlOrderAttribute>) AtlasXmlTestHelper
                 .unmarshal((String) object, XmlOrderAttribute.class);
         AtlasTestUtil.validateXmlOrderAttribute(xmlOA.getValue());

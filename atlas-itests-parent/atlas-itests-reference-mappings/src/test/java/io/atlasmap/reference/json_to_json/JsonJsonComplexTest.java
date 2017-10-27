@@ -15,8 +15,6 @@
  */
 package io.atlasmap.reference.json_to_json;
 
-import static org.junit.Assert.*;
-
 import java.io.File;
 import org.junit.Test;
 import io.atlasmap.api.AtlasContext;
@@ -26,6 +24,9 @@ import io.atlasmap.json.test.AtlasJsonTestUnrootedMapper;
 import io.atlasmap.json.test.TargetOrder;
 import io.atlasmap.reference.AtlasMappingBaseTest;
 import io.atlasmap.reference.AtlasTestUtil;
+
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 public class JsonJsonComplexTest extends AtlasMappingBaseTest {
 

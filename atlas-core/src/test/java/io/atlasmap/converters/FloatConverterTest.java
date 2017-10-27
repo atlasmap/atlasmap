@@ -17,7 +17,6 @@ package io.atlasmap.converters;
 
 import io.atlasmap.spi.AtlasConversionConcern;
 import io.atlasmap.api.AtlasConversionException;
-import io.atlasmap.converters.FloatConverter;
 import io.atlasmap.spi.AtlasConversionInfo;
 import io.atlasmap.spi.AtlasPrimitiveConverter;
 import io.atlasmap.v2.FieldType;
@@ -27,7 +26,12 @@ import org.junit.Test;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 public class FloatConverterTest {
     private AtlasPrimitiveConverter<Float> converter = new FloatConverter();
@@ -48,26 +52,26 @@ public class FloatConverterTest {
     }
 
     @Test
-    public void convertToBoolean_Null() throws Exception {
+    public void convertToBooleanNull() throws Exception {
         Float df = null;
         Boolean b = converter.convertToBoolean(df);
         assertNull(b);
     }
 
     @Test(expected = AtlasConversionException.class)
-    public void convertToBoolean_Exception() throws Exception {
+    public void convertToBooleanException() throws Exception {
         Float dt = -1.0f;
-        Boolean b = converter.convertToBoolean(dt);
+        converter.convertToBoolean(dt);
     }
 
     @Test(expected = AtlasConversionException.class)
     public void convertToByte() throws Exception {
         Float df = 0.0f;
-        Byte b = converter.convertToByte(df);
+        converter.convertToByte(df);
     }
 
     @Test
-    public void convertToByte_Null() throws Exception {
+    public void convertToByteNull() throws Exception {
         assertNull(converter.convertToByte(null));
     }
 
@@ -80,22 +84,22 @@ public class FloatConverterTest {
     }
 
     @Test
-    public void convertToCharacter_Null() throws Exception {
+    public void convertToCharacterNull() throws Exception {
         Float df = null;
         Character c = converter.convertToCharacter(df);
         assertNull(c);
     }
 
     @Test(expected = AtlasConversionException.class)
-    public void convertToCharacter_MAX() throws Exception {
+    public void convertToCharacterMAX() throws Exception {
         Float df = Float.MAX_VALUE;
-        Character c = converter.convertToCharacter(df);
+        converter.convertToCharacter(df);
     }
 
     @Test(expected = AtlasConversionException.class)
-    public void convertToCharacter_MIN() throws Exception {
+    public void convertToCharacterMIN() throws Exception {
         Float df = -1.00f;
-        Character c = converter.convertToCharacter(df);
+        converter.convertToCharacter(df);
     }
 
     @Test
@@ -114,7 +118,7 @@ public class FloatConverterTest {
     }
 
     @Test
-    public void convertToDouble_Null() throws Exception {
+    public void convertToDoubleNull() throws Exception {
         Float df = null;
         Double d = converter.convertToDouble(df);
         assertNull(d);
@@ -130,7 +134,7 @@ public class FloatConverterTest {
     }
 
     @Test
-    public void convertToFloat_Null() throws Exception {
+    public void convertToFloatNull() throws Exception {
         Float df = null;
         Float d = converter.convertToFloat(df);
         assertNull(d);
@@ -145,16 +149,16 @@ public class FloatConverterTest {
     }
 
     @Test
-    public void convertToInteger_Null() throws Exception {
+    public void convertToIntegerNull() throws Exception {
         Float df = null;
         Integer i = converter.convertToInteger(df);
         assertNull(i);
     }
 
     @Test(expected = AtlasConversionException.class)
-    public void convertToInteger_ExceptionMAX() throws Exception {
+    public void convertToIntegerExceptionMAX() throws Exception {
         Float df = Float.MAX_VALUE;
-        Integer i = converter.convertToInteger(df);
+        converter.convertToInteger(df);
     }
 
     @Test
@@ -166,16 +170,16 @@ public class FloatConverterTest {
     }
 
     @Test
-    public void convertToLong_Null() throws Exception {
+    public void convertToLongNull() throws Exception {
         Float df = null;
         Long l = converter.convertToLong(df);
         assertNull(l);
     }
 
     @Test(expected = AtlasConversionException.class)
-    public void convertToLong_ExceptionMAX() throws Exception {
+    public void convertToLongExceptionMAX() throws Exception {
         Float df = Float.MAX_VALUE;
-        Long l = converter.convertToLong(df);
+        converter.convertToLong(df);
     }
 
     @Test
@@ -187,16 +191,16 @@ public class FloatConverterTest {
     }
 
     @Test
-    public void convertToShort_Null() throws Exception {
+    public void convertToShortNull() throws Exception {
         Float df = null;
         Short s = converter.convertToShort(df);
         assertNull(s);
     }
 
     @Test(expected = AtlasConversionException.class)
-    public void convertToShort_ExceptionMAX() throws Exception {
+    public void convertToShortExceptionMAX() throws Exception {
         Float df = Float.MAX_VALUE;
-        Short s = converter.convertToShort(df);
+        converter.convertToShort(df);
     }
 
     @Test
@@ -208,7 +212,7 @@ public class FloatConverterTest {
     }
 
     @Test
-    public void convertToString_Null() throws Exception {
+    public void convertToStringNull() throws Exception {
         Float df = null;
         String s = converter.convertToString(df);
         assertNull(s);
@@ -216,7 +220,7 @@ public class FloatConverterTest {
 
     @Test
     public void checkAnnotations() throws Exception {
-        Class aClass = FloatConverter.class;
+        Class<?> aClass = FloatConverter.class;
         Method[] methods = aClass.getMethods();
         for (Method method : methods) {
             if (method.isSynthetic()) {

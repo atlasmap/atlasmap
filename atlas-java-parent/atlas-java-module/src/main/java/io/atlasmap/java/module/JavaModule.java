@@ -59,7 +59,7 @@ import io.atlasmap.v2.Validation;
 @AtlasModuleDetail(name = "JavaModule", uri = "atlas:java", modes = { "SOURCE", "TARGET" }, dataFormats = {
         "java" }, configPackages = { "io.atlasmap.java.v2" })
 public class JavaModule extends BaseAtlasModule {
-    private static final Logger logger = LoggerFactory.getLogger(JavaModule.class);
+    private static final Logger LOG = LoggerFactory.getLogger(JavaModule.class);
     public static final String DEFAULT_LIST_CLASS = "java.util.ArrayList";
 
     private ClassInspectionService javaInspectionService = null;
@@ -90,7 +90,7 @@ public class JavaModule extends BaseAtlasModule {
     public void processPreInputExecution(AtlasSession atlasSession) throws AtlasException {
         if (atlasSession == null || atlasSession.getMapping() == null || atlasSession.getMapping().getMappings() == null
                 || atlasSession.getMapping().getMappings().getMapping() == null) {
-            logger.error("AtlasSession not properly intialized with a mapping that contains field mappings");
+            LOG.error("AtlasSession not properly intialized with a mapping that contains field mappings");
             return;
         }
 
@@ -99,8 +99,8 @@ public class JavaModule extends BaseAtlasModule {
             javaInspectionService.setConversionService(getConversionService());
         }
 
-        if (logger.isDebugEnabled()) {
-            logger.debug("processPreInputExcution completed");
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("processPreInputExcution completed");
         }
     }
 
@@ -108,7 +108,7 @@ public class JavaModule extends BaseAtlasModule {
     public void processPreOutputExecution(AtlasSession atlasSession) throws AtlasException {
         if (atlasSession == null || atlasSession.getMapping() == null || atlasSession.getMapping().getMappings() == null
                 || atlasSession.getMapping().getMappings().getMapping() == null) {
-            logger.error("AtlasSession not properly intialized with a mapping that contains field mappings");
+            LOG.error("AtlasSession not properly intialized with a mapping that contains field mappings");
             return;
         }
 
@@ -117,15 +117,15 @@ public class JavaModule extends BaseAtlasModule {
             javaInspectionService.setConversionService(getConversionService());
         }
 
-        if (logger.isDebugEnabled()) {
-            logger.debug("processPreOutputExcution completed");
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("processPreOutputExcution completed");
         }
     }
 
     @Override
     public void processPreValidation(AtlasSession atlasSession) throws AtlasException {
         if (atlasSession == null || atlasSession.getMapping() == null) {
-            logger.error("Invalid session: Session and AtlasMapping must be specified");
+            LOG.error("Invalid session: Session and AtlasMapping must be specified");
             throw new AtlasValidationException("Invalid session");
         }
 
@@ -134,12 +134,12 @@ public class JavaModule extends BaseAtlasModule {
         List<Validation> javaValidations = javaValidator.validateMapping(atlasSession.getMapping());
         atlasSession.getValidations().getValidation().addAll(javaValidations);
 
-        if (logger.isDebugEnabled()) {
-            logger.debug("Detected " + javaValidations.size() + " java validation notices");
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Detected " + javaValidations.size() + " java validation notices");
         }
 
-        if (logger.isDebugEnabled()) {
-            logger.debug("processPreValidation completed");
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("processPreValidation completed");
         }
     }
 
@@ -164,8 +164,8 @@ public class JavaModule extends BaseAtlasModule {
 
                 if (field instanceof ConstantField) {
                     processConstantField(session, mapping);
-                    if (logger.isDebugEnabled()) {
-                        logger.debug("Processed input constantField sPath=" + field.getPath() + " sV="
+                    if (LOG.isDebugEnabled()) {
+                        LOG.debug("Processed input constantField sPath=" + field.getPath() + " sV="
                                 + field.getValue() + " sT=" + field.getFieldType() + " docId: " + field.getDocId());
                     }
                     continue;
@@ -174,8 +174,8 @@ public class JavaModule extends BaseAtlasModule {
                 if (field instanceof PropertyField) {
                     processPropertyField(session, mapping,
                             session.getAtlasContext().getContextFactory().getPropertyStrategy());
-                    if (logger.isDebugEnabled()) {
-                        logger.debug("Processed input propertyField sPath=" + field.getPath() + " sV="
+                    if (LOG.isDebugEnabled()) {
+                        LOG.debug("Processed input propertyField sPath=" + field.getPath() + " sV="
                                 + field.getValue() + " sT=" + field.getFieldType() + " docId: " + field.getDocId());
                     }
                     continue;
@@ -191,15 +191,15 @@ public class JavaModule extends BaseAtlasModule {
                 try {
                     processInputMapping(field, sourceObject, session);
 
-                    if (logger.isDebugEnabled()) {
-                        logger.debug("Processed input field sPath=" + field.getPath() + " sV=" + field.getValue()
+                    if (LOG.isDebugEnabled()) {
+                        LOG.debug("Processed input field sPath=" + field.getPath() + " sV=" + field.getValue()
                                 + " sT=" + field.getFieldType() + " docId: " + field.getDocId());
                     }
                 } catch (Exception e) {
                     addAudit(session, field.getDocId(),
                             String.format("Unexpected error occured msg=%s", e.getMessage()), field.getPath(),
                             AuditStatus.ERROR, null);
-                    logger.error("Unexpected error occured msg=" + e.getMessage(), e);
+                    LOG.error("Unexpected error occured msg=" + e.getMessage(), e);
                     throw new AtlasException(e);
                 }
             }
@@ -212,14 +212,14 @@ public class JavaModule extends BaseAtlasModule {
                 && (sourceField instanceof JavaField || sourceField instanceof JavaEnumField)) {
             getter = resolveGetMethod(source, sourceField, false);
             if (getter == null) {
-                logger.warn("Unable to auto-detect sourceField type p=" + sourceField.getPath() + " d="
+                LOG.warn("Unable to auto-detect sourceField type p=" + sourceField.getPath() + " d="
                         + sourceField.getDocId());
                 return;
             }
             Class<?> returnType = getter.getReturnType();
             sourceField.setFieldType(getConversionService().fieldTypeFromClass(returnType));
-            if (logger.isTraceEnabled()) {
-                logger.trace("Auto-detected sourceField type p=" + sourceField.getPath() + " t="
+            if (LOG.isTraceEnabled()) {
+                LOG.trace("Auto-detected sourceField type p=" + sourceField.getPath() + " t="
                         + sourceField.getFieldType());
             }
         }
@@ -352,20 +352,20 @@ public class JavaModule extends BaseAtlasModule {
                     }
                     break;
                 default:
-                    logger.error("Unsupported mappingType=%s detected", mapping.getMappingType());
+                    LOG.error("Unsupported mappingType=%s detected", mapping.getMappingType());
                     return;
                 }
 
             } catch (Exception e) {
-                logger.error(e.getMessage(), e);
+                LOG.error(e.getMessage(), e);
                 if (e instanceof AtlasException) {
                     throw (AtlasException) e;
                 }
                 throw new AtlasException(e.getMessage(), e);
             }
 
-            if (logger.isDebugEnabled()) {
-                logger.debug("processOutputMapping completed");
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("processOutputMapping completed");
             }
         }
     }
@@ -381,11 +381,11 @@ public class JavaModule extends BaseAtlasModule {
                 // which should never happen.
             }
         } else {
-            logger.error("DocumentJavaFieldWriter object expected for Java output data source, instead it's: "
+            LOG.error("DocumentJavaFieldWriter object expected for Java output data source, instead it's: "
                     + session.getOutput());
         }
-        if (logger.isDebugEnabled()) {
-            logger.debug("processPostOutputExecution completed");
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("processPostOutputExecution completed");
         }
     }
 

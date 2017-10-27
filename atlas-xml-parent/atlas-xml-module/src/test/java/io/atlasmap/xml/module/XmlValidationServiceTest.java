@@ -44,12 +44,17 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
+
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 public class XmlValidationServiceTest {
 
-    private static final Logger logger = LoggerFactory.getLogger(XmlValidationServiceTest.class);
+    private static final Logger LOG = LoggerFactory.getLogger(XmlValidationServiceTest.class);
     protected io.atlasmap.xml.v2.ObjectFactory xmlModelFactory = null;
     protected AtlasMappingUtil mappingUtil = null;
     protected XmlValidationService sourceValidationService = null;
@@ -144,7 +149,7 @@ public class XmlValidationServiceTest {
 
     protected void debugErrors(List<Validation> validations) {
         for (Validation validation : validations) {
-            logger.debug(AtlasValidationTestHelper.validationToString(validation));
+            LOG.debug(AtlasValidationTestHelper.validationToString(validation));
         }
     }
 
@@ -280,7 +285,7 @@ public class XmlValidationServiceTest {
         validations.addAll(sourceValidationService.validateMapping(mapping));
         validations.addAll(targetValidationService.validateMapping(mapping));
 
-        if (logger.isDebugEnabled()) {
+        if (LOG.isDebugEnabled()) {
             debugErrors(validations);
         }
         assertFalse(validationHelper.hasErrors());
@@ -340,7 +345,7 @@ public class XmlValidationServiceTest {
         validations.addAll(sourceValidationService.validateMapping(mapping));
         validations.addAll(targetValidationService.validateMapping(mapping));
 
-        if (logger.isDebugEnabled()) {
+        if (LOG.isDebugEnabled()) {
             debugErrors(validations);
         }
         assertFalse(validationHelper.hasErrors());
@@ -368,7 +373,7 @@ public class XmlValidationServiceTest {
         validations.addAll(sourceValidationService.validateMapping(mapping));
         validations.addAll(targetValidationService.validateMapping(mapping));
 
-        if (logger.isDebugEnabled()) {
+        if (LOG.isDebugEnabled()) {
             debugErrors(validations);
         }
         assertFalse(validationHelper.hasErrors());

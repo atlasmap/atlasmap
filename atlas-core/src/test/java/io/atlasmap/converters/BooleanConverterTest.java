@@ -17,7 +17,6 @@ package io.atlasmap.converters;
 
 import io.atlasmap.spi.AtlasConversionConcern;
 import io.atlasmap.api.AtlasConversionException;
-import io.atlasmap.converters.BooleanConverter;
 import io.atlasmap.spi.AtlasConversionInfo;
 import io.atlasmap.spi.AtlasPrimitiveConverter;
 import io.atlasmap.v2.FieldType;
@@ -27,7 +26,12 @@ import org.junit.Test;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 public class BooleanConverterTest {
 
@@ -48,7 +52,7 @@ public class BooleanConverterTest {
     }
 
     @Test
-    public void convertToBoolean_Null() throws Exception {
+    public void convertToBooleanNull() throws Exception {
         Boolean t = null;
         Boolean t2 = converter.convertToBoolean(t);
         assertNull(t2);
@@ -60,7 +64,7 @@ public class BooleanConverterTest {
     }
 
     @Test
-    public void convertToByte_Null() throws Exception {
+    public void convertToByteNull() throws Exception {
         assertNull(converter.convertToByte(null));
     }
 
@@ -77,7 +81,7 @@ public class BooleanConverterTest {
     }
 
     @Test
-    public void convertToCharacter_Null() throws Exception {
+    public void convertToCharacterNull() throws Exception {
         Boolean t = null;
         Character c = converter.convertToCharacter(t);
         assertNull(c);
@@ -97,7 +101,7 @@ public class BooleanConverterTest {
     }
 
     @Test
-    public void convertToDouble_Null() throws Exception {
+    public void convertToDoubleNull() throws Exception {
         Boolean t = null;
         Double d = converter.convertToDouble(t);
         assertNull(d);
@@ -116,7 +120,7 @@ public class BooleanConverterTest {
     }
 
     @Test
-    public void convertToFloat_Null() throws Exception {
+    public void convertToFloatNull() throws Exception {
         Boolean t = null;
         Float f = converter.convertToFloat(t);
         assertNull(f);
@@ -135,7 +139,7 @@ public class BooleanConverterTest {
     }
 
     @Test
-    public void convertToInteger_Null() throws Exception {
+    public void convertToIntegerNull() throws Exception {
         Boolean t = null;
         Integer i = converter.convertToInteger(t);
         assertNull(i);
@@ -154,7 +158,7 @@ public class BooleanConverterTest {
     }
 
     @Test
-    public void convertToLong_Null() throws Exception {
+    public void convertToLongNull() throws Exception {
         Boolean t = null;
         Long l = converter.convertToLong(t);
         assertNull(l);
@@ -173,7 +177,7 @@ public class BooleanConverterTest {
     }
 
     @Test
-    public void convertToShort_Null() throws Exception {
+    public void convertToShortNull() throws Exception {
         Boolean t = null;
         Short s = converter.convertToShort(t);
         assertNull(s);
@@ -192,7 +196,7 @@ public class BooleanConverterTest {
     }
 
     @Test
-    public void convertToString_Null() throws Exception {
+    public void convertToStringNull() throws Exception {
         Boolean t = null;
         String s = converter.convertToString(t);
         assertNull(s);
@@ -200,7 +204,7 @@ public class BooleanConverterTest {
 
     @Test
     public void checkAnnotations() throws Exception {
-        Class aClass = BooleanConverter.class;
+        Class<?> aClass = BooleanConverter.class;
         Method[] methods = aClass.getMethods();
         for (Method method : methods) {
             if (method.isSynthetic()) {

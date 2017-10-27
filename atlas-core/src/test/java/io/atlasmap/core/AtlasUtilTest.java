@@ -15,6 +15,12 @@
  */
 package io.atlasmap.core;
 
+import org.junit.Test;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import static org.hamcrest.Matchers.hasItems;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -22,13 +28,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
-
-import org.junit.Test;
-import io.atlasmap.core.AtlasUtil;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 public class AtlasUtilTest {
 
@@ -47,48 +46,48 @@ public class AtlasUtilTest {
 
     @Test
     public void testAtlasUri() {
-        String URI_JAVA_NOVER = "atlas:java";
-        String URI_JAVA_NOVER_W_PARM = "atlas:java?foo=bar";
-        String URI_JAVA_NOVER_W_PARMS = "atlas:java?foo=bar&bar=blah";
+        String uriJavaNover = "atlas:java";
+        String uriJavaNoverWParm = "atlas:java?foo=bar";
+        String uriJavaNoverWParms = "atlas:java?foo=bar&bar=blah";
 
-        String URI_JAVA_VER1 = "atlas:java::1";
-        String URI_JAVA_VER2 = "atlas:java::2";
-        String URI_JAVA_VER2_W_PARM = "atlas:java::2?foo=bar";
-        String URI_JAVA_VER2_W_PARMS = "atlas:java::2?foo=bar&bar=blah";
+        String uriJavaVer1 = "atlas:java::1";
+        String uriJavaVer2 = "atlas:java::2";
+        String uriJavaVer2WParm = "atlas:java::2?foo=bar";
+        String uriJavaVer2WParams = "atlas:java::2?foo=bar&bar=blah";
 
-        List<String> JAVA_URIS = Arrays.asList(URI_JAVA_NOVER, URI_JAVA_NOVER_W_PARM, URI_JAVA_NOVER_W_PARMS,
-                URI_JAVA_VER1, URI_JAVA_VER2, URI_JAVA_VER2_W_PARM, URI_JAVA_VER2_W_PARMS);
-        List<String> NOVER_URIS = Arrays.asList(URI_JAVA_NOVER, URI_JAVA_NOVER_W_PARM, URI_JAVA_NOVER_W_PARMS);
-        List<String> JAVA_VER1_URIS = Arrays.asList(URI_JAVA_VER1);
-        List<String> JAVA_VER2_URIS = Arrays.asList(URI_JAVA_VER2, URI_JAVA_VER2_W_PARM, URI_JAVA_VER2_W_PARMS);
-        List<String> PARM_URIS = Arrays.asList(URI_JAVA_NOVER_W_PARM, URI_JAVA_VER2_W_PARM);
-        List<String> PARMS_URIS = Arrays.asList(URI_JAVA_NOVER_W_PARMS, URI_JAVA_VER2_W_PARMS);
+        List<String> javaUris = Arrays.asList(uriJavaNover, uriJavaNoverWParm, uriJavaNoverWParms,
+                uriJavaVer1, uriJavaVer2, uriJavaVer2WParm, uriJavaVer2WParams);
+        List<String> noverUris = Arrays.asList(uriJavaNover, uriJavaNoverWParm, uriJavaNoverWParms);
+        List<String> javaVer1Uris = Arrays.asList(uriJavaVer1);
+        List<String> javaVer2Uris = Arrays.asList(uriJavaVer2, uriJavaVer2WParm, uriJavaVer2WParams);
+        List<String> parmUris = Arrays.asList(uriJavaNoverWParm, uriJavaVer2WParm);
+        List<String> parmsUris = Arrays.asList(uriJavaNoverWParms, uriJavaVer2WParams);
 
-        for (String uri : JAVA_URIS) {
+        for (String uri : javaUris) {
             assertEquals("atlas", AtlasUtil.getUriScheme(uri));
         }
 
-        for (String uri : JAVA_URIS) {
+        for (String uri : javaUris) {
             assertEquals("java", AtlasUtil.getUriModule(uri));
         }
 
-        for (String uri : JAVA_URIS) {
+        for (String uri : javaUris) {
             assertNull(AtlasUtil.getUriDataType(uri));
         }
 
-        for (String uri : NOVER_URIS) {
+        for (String uri : noverUris) {
             assertNull(AtlasUtil.getUriModuleVersion(uri));
         }
 
-        for (String uri : JAVA_VER1_URIS) {
+        for (String uri : javaVer1Uris) {
             assertEquals("1", AtlasUtil.getUriModuleVersion(uri));
         }
 
-        for (String uri : JAVA_VER2_URIS) {
+        for (String uri : javaVer2Uris) {
             assertEquals("2", AtlasUtil.getUriModuleVersion(uri));
         }
 
-        for (String uri : PARM_URIS) {
+        for (String uri : parmUris) {
             Map<String, String> params = AtlasUtil.getUriParameters(uri);
             assertNotNull(params);
             assertEquals(Integer.valueOf(1), Integer.valueOf(params.size()));
@@ -96,7 +95,7 @@ public class AtlasUtilTest {
             assertNull(params.get("bar"));
         }
 
-        for (String uri : PARMS_URIS) {
+        for (String uri : parmsUris) {
             Map<String, String> params = AtlasUtil.getUriParameters(uri);
             assertNotNull(params);
             assertEquals(Integer.valueOf(2), Integer.valueOf(params.size()));

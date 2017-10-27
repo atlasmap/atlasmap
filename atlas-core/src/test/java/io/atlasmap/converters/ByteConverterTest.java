@@ -17,7 +17,6 @@ package io.atlasmap.converters;
 
 import io.atlasmap.spi.AtlasConversionConcern;
 import io.atlasmap.api.AtlasConversionException;
-import io.atlasmap.converters.ByteConverter;
 import io.atlasmap.spi.AtlasConversionInfo;
 import io.atlasmap.spi.AtlasPrimitiveConverter;
 import io.atlasmap.v2.FieldType;
@@ -27,7 +26,9 @@ import org.junit.Test;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 public class ByteConverterTest {
 
@@ -39,7 +40,7 @@ public class ByteConverterTest {
     }
 
     @Test
-    public void convertToBoolean_Null() throws Exception {
+    public void convertToBooleanNull() throws Exception {
         assertNull(byteConverter.convertToBoolean(null));
     }
 
@@ -49,7 +50,7 @@ public class ByteConverterTest {
     }
 
     @Test
-    public void convertToByte_Null() throws Exception {
+    public void convertToByteNull() throws Exception {
         assertNull(byteConverter.convertToByte(null));
     }
 
@@ -59,7 +60,7 @@ public class ByteConverterTest {
     }
 
     @Test
-    public void convertToCharacter_Null() throws Exception {
+    public void convertToCharacterNull() throws Exception {
         assertNull(byteConverter.convertToCharacter(null));
     }
 
@@ -69,7 +70,7 @@ public class ByteConverterTest {
     }
 
     @Test
-    public void convertToDouble_Null() throws Exception {
+    public void convertToDoubleNull() throws Exception {
         assertNull(byteConverter.convertToDouble(null));
     }
 
@@ -79,7 +80,7 @@ public class ByteConverterTest {
     }
 
     @Test
-    public void convertToFloat_Null() throws Exception {
+    public void convertToFloatNull() throws Exception {
         assertNull(byteConverter.convertToFloat(null));
     }
 
@@ -89,7 +90,7 @@ public class ByteConverterTest {
     }
 
     @Test
-    public void convertToInteger_Null() throws Exception {
+    public void convertToIntegerNull() throws Exception {
         assertNull(byteConverter.convertToInteger(null));
     }
 
@@ -99,7 +100,7 @@ public class ByteConverterTest {
     }
 
     @Test
-    public void convertToLong_Null() throws Exception {
+    public void convertToLongNull() throws Exception {
         assertNull(byteConverter.convertToLong(null));
     }
 
@@ -109,7 +110,7 @@ public class ByteConverterTest {
     }
 
     @Test
-    public void convertToIShort_Null() throws Exception {
+    public void convertToIShortNull() throws Exception {
         assertNull(byteConverter.convertToShort(null));
     }
 
@@ -119,13 +120,13 @@ public class ByteConverterTest {
     }
 
     @Test
-    public void convertToString_Null() throws Exception {
+    public void convertToStringNull() throws Exception {
         assertNull(byteConverter.convertToString(null));
     }
 
     @Test
     public void checkAnnotations() throws Exception {
-        Class aClass = ByteConverter.class;
+        Class<?> aClass = ByteConverter.class;
         Method[] methods = aClass.getMethods();
         for (Method method : methods) {
             if (method.isSynthetic()) {

@@ -1,10 +1,11 @@
 package io.atlasmap.core;
 
-import static org.junit.Assert.*;
-
 import java.util.List;
 
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class StringDelimiterTest {
 

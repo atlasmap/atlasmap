@@ -15,8 +15,6 @@
  */
 package io.atlasmap.java.inspect;
 
-import static org.junit.Assert.*;
-
 import java.util.Arrays;
 
 import org.junit.After;
@@ -34,6 +32,10 @@ import io.atlasmap.java.test.TargetOrder;
 import io.atlasmap.java.test.TargetParentOrder;
 import io.atlasmap.java.v2.JavaClass;
 import io.atlasmap.java.v2.JavaField;
+
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 public class JavaConstructServiceComplexTest {
 
@@ -183,19 +185,9 @@ public class JavaConstructServiceComplexTest {
         assertNull(contact.getZipCode());
     }
 
-    @Test
+    @Test(expected=InstantiationException.class)
     public void testConstructAbstractBaseOrder() throws Exception {
-        try {
-            constructService.constructClass(generateOrder("Base"));
-            fail("Expected ConstructInvalidException");
-            /*
-             * } catch (ConstructInvalidException e) { TODO: Fix modifiers problem }
-             */
-        } catch (InstantiationException e) {
-
-        } catch (Exception e) {
-            fail("Expected ConstructInvalidException instead: " + e.getClass().getName());
-        }
+        constructService.constructClass(generateOrder("Base"));
     }
 
     protected JavaClass generateOrder(String prefix) {

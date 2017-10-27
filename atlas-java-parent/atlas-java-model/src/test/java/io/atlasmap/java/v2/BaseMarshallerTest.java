@@ -282,17 +282,17 @@ public abstract class BaseMarshallerTest {
     public String generatePomXmlAsString() {
         return new String(
                 "<project xmlns=\"http://maven.apache.org/POM/4.0.0\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd\">"
-                        + "	<modelVersion>4.0.0</modelVersion>" + "	<groupId>foo.bar</groupId>"
-                        + "	<artifactId>test.model</artifactId>" + "	<version>1.10.0</version>"
-                        + "	<packaging>jar</packaging>" + "	<name>Test :: Model</name>" + "	<dependencies>"
-                        + "		<dependency>" + "			<groupId>com.fasterxml.jackson.core</groupId>"
-                        + "			<artifactId>jackson-annotations</artifactId>"
-                        + "			<version>2.8.5</version>" + "		</dependency>" + "		<dependency>"
-                        + "			<groupId>com.fasterxml.jackson.core</groupId>"
-                        + "			<artifactId>jackson-databind</artifactId>" + "			<version>2.8.5</version>"
-                        + "		</dependency>" + "		<dependency>"
-                        + "			<groupId>com.fasterxml.jackson.core</groupId>"
-                        + "			<artifactId>jackson-core</artifactId>" + "			<version>2.8.5</version>"
-                        + "		</dependency>" + "	</dependencies>" + "</project>");
+                        + "\t<modelVersion>4.0.0</modelVersion>" + "\t<groupId>foo.bar</groupId>"
+                        + "\t<artifactId>test.model</artifactId>" + "\t<version>1.10.0</version>"
+                        + "\t<packaging>jar</packaging>" + "\t<name>Test :: Model</name>" + "\t<dependencies>"
+                        + "\t\t<dependency>" + "\t\t\t<groupId>com.fasterxml.jackson.core</groupId>"
+                        + "\t\t\t<artifactId>jackson-annotations</artifactId>"
+                        + "\t\t\t<version>2.8.5</version>" + "\t\t</dependency>" + "\t\t<dependency>"
+                        + "]t]t]t<groupId>com.fasterxml.jackson.core</groupId>"
+                        + "\t\t\t<artifactId>jackson-databind</artifactId>" + "\t\t\t<version>2.8.5</version>"
+                        + "\t\t</dependency>" + "\t\t<dependency>"
+                        + "\t\t\t<groupId>com.fasterxml.jackson.core</groupId>"
+                        + "\t\t\t<artifactId>jackson-core</artifactId>" + "\t\t\t<version>2.8.5</version>"
+                        + "\t\t</dependency>" + "\t</dependencies>" + "</project>");
     }
 }

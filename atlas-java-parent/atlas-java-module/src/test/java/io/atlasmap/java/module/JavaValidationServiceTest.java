@@ -17,7 +17,6 @@ package io.atlasmap.java.module;
 
 import io.atlasmap.core.AtlasMappingUtil;
 import io.atlasmap.core.DefaultAtlasConversionService;
-import io.atlasmap.java.module.JavaValidationService;
 import io.atlasmap.java.v2.AtlasJavaModelFactory;
 import io.atlasmap.java.v2.JavaField;
 import io.atlasmap.spi.AtlasModuleDetail;
@@ -43,12 +42,17 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
+
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 public class JavaValidationServiceTest {
 
-    private static final Logger logger = LoggerFactory.getLogger(JavaValidationServiceTest.class);
+    private static final Logger LOG = LoggerFactory.getLogger(JavaValidationServiceTest.class);
     protected io.atlasmap.java.v2.ObjectFactory javaModelFactory = null;
     protected AtlasMappingUtil mappingUtil = null;
     protected JavaValidationService sourceValidationService = null;
@@ -145,7 +149,7 @@ public class JavaValidationServiceTest {
 
     protected void debugErrors(List<Validation> validations) {
         for (Validation validation : validations) {
-            logger.debug(AtlasValidationTestHelper.validationToString(validation));
+            LOG.debug(AtlasValidationTestHelper.validationToString(validation));
         }
     }
 
@@ -281,7 +285,7 @@ public class JavaValidationServiceTest {
         validations.addAll(sourceValidationService.validateMapping(mapping));
         validations.addAll(targetValidationService.validateMapping(mapping));
 
-        if (logger.isDebugEnabled()) {
+        if (LOG.isDebugEnabled()) {
             debugErrors(validations);
         }
         assertFalse(validationHelper.hasErrors());
@@ -337,7 +341,7 @@ public class JavaValidationServiceTest {
         validations.addAll(sourceValidationService.validateMapping(mapping));
         validations.addAll(targetValidationService.validateMapping(mapping));
 
-        if (logger.isDebugEnabled()) {
+        if (LOG.isDebugEnabled()) {
             debugErrors(validations);
         }
         assertFalse(validationHelper.hasErrors());
@@ -370,7 +374,7 @@ public class JavaValidationServiceTest {
         validations.addAll(sourceValidationService.validateMapping(mapping));
         validations.addAll(targetValidationService.validateMapping(mapping));
 
-        if (logger.isDebugEnabled()) {
+        if (LOG.isDebugEnabled()) {
             debugErrors(validations);
         }
         assertFalse(validationHelper.hasErrors());
@@ -400,7 +404,7 @@ public class JavaValidationServiceTest {
         validations.addAll(sourceValidationService.validateMapping(mapping));
         validations.addAll(targetValidationService.validateMapping(mapping));
 
-        if (logger.isDebugEnabled()) {
+        if (LOG.isDebugEnabled()) {
             debugErrors(validations);
         }
         assertFalse(validationHelper.hasErrors());
@@ -432,7 +436,7 @@ public class JavaValidationServiceTest {
         validations.addAll(sourceValidationService.validateMapping(mapping));
         validations.addAll(targetValidationService.validateMapping(mapping));
 
-        if (logger.isDebugEnabled()) {
+        if (LOG.isDebugEnabled()) {
             debugErrors(validations);
         }
         assertTrue(validationHelper.hasErrors());

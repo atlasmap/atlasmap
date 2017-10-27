@@ -1,7 +1,5 @@
 package io.atlasmap.json.inspect;
 
-import static org.junit.Assert.*;
-import io.atlasmap.json.inspect.JsonDocumentInspectionService;
 import io.atlasmap.json.v2.JsonComplexType;
 import io.atlasmap.json.v2.JsonDocument;
 import io.atlasmap.json.v2.JsonField;
@@ -17,6 +15,11 @@ import java.util.List;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
 /**
  */
 public class SchemaInspectorTest {
@@ -24,37 +27,37 @@ public class SchemaInspectorTest {
     private final JsonDocumentInspectionService inspectionService = new JsonDocumentInspectionService();
 
     @Test(expected = IllegalArgumentException.class)
-    public void inspectJsonSchema_Empty() throws Exception {
+    public void inspectJsonSchemaEmpty() throws Exception {
         final String schema = "";
         inspectionService.inspectJsonSchema(schema);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void inspectJsonSchema_WhitespaceOnly() throws Exception {
+    public void inspectJsonSchemaWhitespaceOnly() throws Exception {
         final String schema = " ";
         inspectionService.inspectJsonSchema(schema);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void inspectJsonSchema_Null() throws Exception {
+    public void inspectJsonSchemaNull() throws Exception {
         final String schema = null;
         inspectionService.inspectJsonSchema(schema);
     }
 
     @Test(expected = JsonInspectionException.class)
-    public void inspectJsonSchema_UnparseableMissingOpenCurly() throws Exception {
+    public void inspectJsonSchemaUnparseableMissingOpenCurly() throws Exception {
         final String schema = "\"$schema\": \"http://json-schema.org/\"}";
         inspectionService.inspectJsonSchema(schema);
     }
 
     @Test(expected = JsonInspectionException.class)
-    public void inspectJsonSchema_UnparseableMissingClosingCurly() throws Exception {
+    public void inspectJsonSchemaUnparseableMissingClosingCurly() throws Exception {
         final String schema = "{\"$schema\": \"http://json-schema.org/\"";
         inspectionService.inspectJsonSchema(schema);
     }
 
     @Test
-    public void inspectJsonSchema_emptyDocument() throws Exception {
+    public void inspectJsonSchemaEmptyDocument() throws Exception {
         final String schema = "{\"$schema\": \"http://json-schema.org/\"}";
         JsonDocument document = inspectionService.inspectJsonSchema(schema);
         assertNotNull(document);
@@ -62,7 +65,7 @@ public class SchemaInspectorTest {
     }
 
     @Test
-    public void inspectJsonSchema_SimpleArray() throws Exception {
+    public void inspectJsonSchemaSimpleArray() throws Exception {
         final String schema =
                 "{\"$schema\": \"http://json-schema.org/\","
                         + " \"type\": \"array\","
@@ -79,7 +82,7 @@ public class SchemaInspectorTest {
     }
 
     @Test
-    public void inspectJsonSchema_SimpleString() throws Exception {
+    public void inspectJsonSchemaSimpleString() throws Exception {
         final String schema =
                 "{\"$schema\": \"http://json-schema.org/\", \"type\": \"string\"}";
         JsonDocument document = inspectionService.inspectJsonSchema(schema);
@@ -93,7 +96,7 @@ public class SchemaInspectorTest {
     }
 
     @Test
-    public void inspectFlatPrimitive_NoRoot() throws Exception {
+    public void inspectFlatPrimitiveNoRoot() throws Exception {
         final String instance = new String(
                 Files.readAllBytes(Paths.get("src/test/resources/inspect/schema/flatprimitive-base-unrooted.json")));
         JsonDocument document = inspectionService.inspectJsonSchema(instance);
@@ -128,7 +131,7 @@ public class SchemaInspectorTest {
     }
 
     @Test
-    public void inspectFlatPrimitive_WithRoot() throws Exception {
+    public void inspectFlatPrimitiveWithRoot() throws Exception {
         final String instance = new String(
                 Files.readAllBytes(Paths.get("src/test/resources/inspect/schema/flatprimitive-base-rooted.json")));
         JsonDocument document = inspectionService.inspectJsonSchema(instance);
@@ -140,7 +143,7 @@ public class SchemaInspectorTest {
         assertEquals("/SourceFlatPrimitive", root.getPath());
         assertEquals(FieldType.COMPLEX, root.getFieldType());
         assertEquals(FieldStatus.SUPPORTED, root.getStatus());
-        
+
         assertEquals(5, root.getJsonFields().getJsonField().size());
         List<JsonField> fields = root.getJsonFields().getJsonField();
         JsonField field = (JsonField) fields.get(0);
@@ -171,7 +174,7 @@ public class SchemaInspectorTest {
     }
 
     @Test
-    public void inspectComplexObject_NoRoot() throws Exception {
+    public void inspectComplexObjectNoRoot() throws Exception {
         final String schema = new String(
                 Files.readAllBytes(Paths.get("src/test/resources/inspect/schema/complex-object-unrooted.json")));
         JsonDocument document = inspectionService.inspectJsonSchema(schema);
@@ -258,7 +261,7 @@ public class SchemaInspectorTest {
     }
 
     @Test
-    public void inspectComplexObject_WithRoot() throws Exception {
+    public void inspectComplexObjectWithRoot() throws Exception {
         final String schema = new String(
                 Files.readAllBytes(Paths.get("src/test/resources/inspect/schema/complex-object-rooted.json")));
         JsonDocument document = inspectionService.inspectJsonSchema(schema);
@@ -348,7 +351,7 @@ public class SchemaInspectorTest {
     }
 
     @Test
-    public void inspectObjectArray_WithRoot() throws Exception {
+    public void inspectObjectArrayWithRoot() throws Exception {
         final String schema = new String(
                 Files.readAllBytes(Paths.get("src/test/resources/inspect/schema/complex-array-rooted.json")));
         JsonDocument document = inspectionService.inspectJsonSchema(schema);
@@ -464,69 +467,68 @@ public class SchemaInspectorTest {
     }
 
     @Test
-    public void inspectJsonSchema_ref() throws Exception {
+    public void inspectJsonSchemaRef() throws Exception {
         final String schema = new String(Files
                 .readAllBytes(Paths.get("src/test/resources/inspect/schema/ref.json")));
         JsonDocument document = inspectionService.inspectJsonSchema(schema);
         assertNotNull(document);
         assertEquals(3, document.getFields().getField().size());
-        
-        JsonField ref_a = (JsonField) document.getFields().getField().get(0);
-        assertNotNull(ref_a);
-        assertEquals("ref-a", ref_a.getName());
-        assertEquals("/ref-a", ref_a.getPath());
-        assertEquals(FieldType.STRING, ref_a.getFieldType());
-        assertEquals(FieldStatus.SUPPORTED, ref_a.getStatus());
-        
-        JsonComplexType ref_b = (JsonComplexType) document.getFields().getField().get(1);
-        assertNotNull(ref_b);
-        assertEquals("ref-b", ref_b.getName());
-        assertEquals("/ref-b", ref_b.getPath());
-        assertEquals(FieldType.COMPLEX, ref_b.getFieldType());
-        assertEquals(FieldStatus.SUPPORTED, ref_b.getStatus());
-        
-        assertEquals(2, ref_b.getJsonFields().getJsonField().size());
-        JsonComplexType ref_c_from_b = (JsonComplexType) ref_b.getJsonFields().getJsonField().get(0);
-        assertNotNull(ref_c_from_b);
-        assertEquals("ref-c-from-b", ref_c_from_b.getName());
-        assertEquals("/ref-b/ref-c-from-b", ref_c_from_b.getPath());
-        assertEquals(FieldType.COMPLEX, ref_c_from_b.getFieldType());
-        assertEquals(FieldStatus.SUPPORTED, ref_c_from_b.getStatus());
-        
-        assertEquals(1, ref_c_from_b.getJsonFields().getJsonField().size());
-        JsonField str_c_from_b = ref_c_from_b.getJsonFields().getJsonField().get(0);
-        assertNotNull(str_c_from_b);
-        assertEquals("str-c", str_c_from_b.getName());
-        assertEquals("/ref-b/ref-c-from-b/str-c", str_c_from_b.getPath());
-        assertEquals(FieldType.STRING, str_c_from_b.getFieldType());
-        assertEquals(FieldStatus.SUPPORTED, str_c_from_b.getStatus());
-        
-        JsonField str_b = ref_b.getJsonFields().getJsonField().get(1);
-        assertNotNull(str_b);
-        assertEquals("str-b", str_b.getName());
-        assertEquals("/ref-b/str-b", str_b.getPath());
-        assertEquals(FieldType.STRING, str_b.getFieldType());
-        assertEquals(FieldStatus.SUPPORTED, str_b.getStatus());
-        
-        
-        JsonComplexType ref_c = (JsonComplexType) document.getFields().getField().get(2);
-        assertNotNull(ref_c);
-        assertEquals("ref-c", ref_c.getName());
-        assertEquals("/ref-c", ref_c.getPath());
-        assertEquals(FieldType.COMPLEX, ref_c.getFieldType());
-        assertEquals(FieldStatus.SUPPORTED, ref_c.getStatus());
-        assertEquals(1, ref_c.getJsonFields().getJsonField().size());
-        JsonField str_c = ref_c.getJsonFields().getJsonField().get(0);
-        assertNotNull(str_c);
-        assertEquals("str-c", str_c.getName());
-        assertEquals("/ref-c/str-c", str_c.getPath());
-        assertEquals(FieldType.STRING, str_c.getFieldType());
-        assertEquals(FieldStatus.SUPPORTED, str_c.getStatus());
+
+        JsonField refA = (JsonField) document.getFields().getField().get(0);
+        assertNotNull(refA);
+        assertEquals("ref-a", refA.getName());
+        assertEquals("/ref-a", refA.getPath());
+        assertEquals(FieldType.STRING, refA.getFieldType());
+        assertEquals(FieldStatus.SUPPORTED, refA.getStatus());
+
+        JsonComplexType refB = (JsonComplexType) document.getFields().getField().get(1);
+        assertNotNull(refB);
+        assertEquals("ref-b", refB.getName());
+        assertEquals("/ref-b", refB.getPath());
+        assertEquals(FieldType.COMPLEX, refB.getFieldType());
+        assertEquals(FieldStatus.SUPPORTED, refB.getStatus());
+
+        assertEquals(2, refB.getJsonFields().getJsonField().size());
+        JsonComplexType refCFromB = (JsonComplexType) refB.getJsonFields().getJsonField().get(0);
+        assertNotNull(refCFromB);
+        assertEquals("ref-c-from-b", refCFromB.getName());
+        assertEquals("/ref-b/ref-c-from-b", refCFromB.getPath());
+        assertEquals(FieldType.COMPLEX, refCFromB.getFieldType());
+        assertEquals(FieldStatus.SUPPORTED, refCFromB.getStatus());
+
+        assertEquals(1, refCFromB.getJsonFields().getJsonField().size());
+        JsonField strCFromB = refCFromB.getJsonFields().getJsonField().get(0);
+        assertNotNull(strCFromB);
+        assertEquals("str-c", strCFromB.getName());
+        assertEquals("/ref-b/ref-c-from-b/str-c", strCFromB.getPath());
+        assertEquals(FieldType.STRING, strCFromB.getFieldType());
+        assertEquals(FieldStatus.SUPPORTED, strCFromB.getStatus());
+
+        JsonField strB = refB.getJsonFields().getJsonField().get(1);
+        assertNotNull(strB);
+        assertEquals("str-b", strB.getName());
+        assertEquals("/ref-b/str-b", strB.getPath());
+        assertEquals(FieldType.STRING, strB.getFieldType());
+        assertEquals(FieldStatus.SUPPORTED, strB.getStatus());
+
+        JsonComplexType refC = (JsonComplexType) document.getFields().getField().get(2);
+        assertNotNull(refC);
+        assertEquals("ref-c", refC.getName());
+        assertEquals("/ref-c", refC.getPath());
+        assertEquals(FieldType.COMPLEX, refC.getFieldType());
+        assertEquals(FieldStatus.SUPPORTED, refC.getStatus());
+        assertEquals(1, refC.getJsonFields().getJsonField().size());
+        JsonField strC = refC.getJsonFields().getJsonField().get(0);
+        assertNotNull(strC);
+        assertEquals("str-c", strC.getName());
+        assertEquals("/ref-c/str-c", strC.getPath());
+        assertEquals(FieldType.STRING, strC.getFieldType());
+        assertEquals(FieldStatus.SUPPORTED, strC.getStatus());
     }
 
     // examples from json-schema.org
     @Test
-    public void inspectJsonSchema_geo() throws Exception {
+    public void inspectJsonSchemaGeo() throws Exception {
         final String schema = new String(Files
                 .readAllBytes(Paths.get("src/test/resources/inspect/schema/geo.json")));
         JsonDocument document = inspectionService.inspectJsonSchema(schema);
@@ -542,7 +544,7 @@ public class SchemaInspectorTest {
     }
 
     @Test
-    public void inspectJsonSchema_address() throws Exception {
+    public void inspectJsonSchemaAddress() throws Exception {
         final String schema = new String(Files
                 .readAllBytes(Paths.get("src/test/resources/inspect/schema/address.json")));
         JsonDocument document = inspectionService.inspectJsonSchema(schema);
@@ -579,27 +581,27 @@ public class SchemaInspectorTest {
 
     @Ignore("internet access")
     @Test
-    public void inspectJsonSchema_calendar_external() throws Exception {
+    public void inspectJsonSchemaCalendarExternal() throws Exception {
         final String instance = new String(Files
                 .readAllBytes(Paths.get("src/test/resources/inspect/schema/calendar.json")));
-        doInspectJsonSchema_calendar(instance);
+        doInspectJsonSchemaCalendar(instance);
     }
 
     @Test
-    public void inspectJsonSchema_calendar_internal() throws Exception {
+    public void inspectJsonSchemaCalendarInternal() throws Exception {
         final String instance = new String(Files
                 .readAllBytes(Paths.get("src/test/resources/inspect/schema/calendar-internal.json")));
-        doInspectJsonSchema_calendar(instance);
+        doInspectJsonSchemaCalendar(instance);
     }
 
     @Test
-    public void inspectJsonSchema_calendar_inline() throws Exception {
+    public void inspectJsonSchemaCalendarInline() throws Exception {
         final String instance = new String(Files
                 .readAllBytes(Paths.get("src/test/resources/inspect/schema/calendar-inline.json")));
-        doInspectJsonSchema_calendar(instance);
+        doInspectJsonSchemaCalendar(instance);
     }
 
-    private void doInspectJsonSchema_calendar(String instance) throws Exception {
+    private void doInspectJsonSchemaCalendar(String instance) throws Exception {
         JsonDocument document = inspectionService.inspectJsonSchema(instance);
         List<Field> fields = document.getFields().getField();
         JsonField f = (JsonField) fields.get(0);
@@ -659,27 +661,27 @@ public class SchemaInspectorTest {
 
     @Ignore("internet access")
     @Test
-    public void inspectJsonSchema_card_external() throws Exception {
+    public void inspectJsonSchemaCardExternal() throws Exception {
         final String schema = new String(Files
                 .readAllBytes(Paths.get("src/test/resources/inspect/schema/card.json")));
-        doInspectJsonSchema_card(schema);
+        doInspectJsonSchemaCard(schema);
     }
 
     @Test
-    public void inspectJsonSchema_card_internal() throws Exception {
+    public void inspectJsonSchemaCardInternal() throws Exception {
         final String schema = new String(Files
                 .readAllBytes(Paths.get("src/test/resources/inspect/schema/card-internal.json")));
-        doInspectJsonSchema_card(schema);
+        doInspectJsonSchemaCard(schema);
     }
 
     @Test
-    public void inspectJsonSchema_card_inline() throws Exception {
+    public void inspectJsonSchemaCardInline() throws Exception {
         final String schema = new String(Files
                 .readAllBytes(Paths.get("src/test/resources/inspect/schema/card-inline.json")));
-        doInspectJsonSchema_card(schema);
+        doInspectJsonSchemaCard(schema);
     }
 
-    private void doInspectJsonSchema_card(String schema) throws Exception {
+    private void doInspectJsonSchemaCard(String schema) throws Exception {
         JsonDocument document = inspectionService.inspectJsonSchema(schema);
         List<Field> fields = document.getFields().getField();
         JsonField f = (JsonField) fields.get(0);

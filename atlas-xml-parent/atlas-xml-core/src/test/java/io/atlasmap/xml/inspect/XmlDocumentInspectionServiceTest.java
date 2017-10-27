@@ -180,7 +180,7 @@ public class XmlDocumentInspectionServiceTest {
     }
 
     @Test
-    public void testInspectXmlStringAsSource_MultipleChildren() throws Exception {
+    public void testInspectXmlStringAsSourceMultipleChildren() throws Exception {
         final String source = "<data>\n" + "     <intFields><int>3200</int><int>2500</int><int>15</int></intFields>\n"
                 + "     <longFields><long>12421</long></longFields>\n"
                 + "     <stringFields><string>abc</string></stringFields>\n"
@@ -217,7 +217,7 @@ public class XmlDocumentInspectionServiceTest {
     }
 
     @Test
-    public void testInspectXmlStringAsSource_AT370_A() throws Exception {
+    public void testInspectXmlStringAsSourceAT370A() throws Exception {
         final String source = "<order>\n" + "   <orders>\n" + "      <order>\n" + "\t      <items>\n"
                 + "\t\t     <item sku=\"4\"/>\n" + "\t\t     <item sku=\"5\"/>\n" + "\t      </items>\n"
                 + "      </order>\n" + "   </orders>\n" + "</order>";
@@ -233,7 +233,7 @@ public class XmlDocumentInspectionServiceTest {
     }
 
     @Test
-    public void testInspectXmlStringAsSource_AT370_B() throws Exception {
+    public void testInspectXmlStringAsSourceAT370B() throws Exception {
         final String source = "<order>\n" + "   <orders>\n" + "      <order>\n" + "\t      <items>\n"
                 + "\t\t     <item sku=\"4\"/>\n" + "\t\t     <item sku=\"7\"/>\n" + "\t      </items>\n"
                 + "      </order>\n" + "      <order>\n" + "\t      <items>\n" + "\t\t     <item sku=\"5\"/>\n"
@@ -266,35 +266,35 @@ public class XmlDocumentInspectionServiceTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testInspectXmlStringAsSource_Null() throws Exception {
+    public void testInspectXmlStringAsSourceNull() throws Exception {
         XmlDocumentInspectionService service = new XmlDocumentInspectionService();
         String xmlDocument = null;
         service.inspectXmlDocument(xmlDocument);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testInspectXmlStringAsSource_Blank() throws Exception {
+    public void testInspectXmlStringAsSourceBlank() throws Exception {
         XmlDocumentInspectionService service = new XmlDocumentInspectionService();
         String xmlDocument = "";
         service.inspectXmlDocument(xmlDocument);
     }
 
     @Test(expected = XmlInspectionException.class)
-    public void testInspectXmlStringAsSource_ParseExpection() throws Exception {
+    public void testInspectXmlStringAsSourceParseExpection() throws Exception {
         XmlDocumentInspectionService service = new XmlDocumentInspectionService();
         String xmlDocument = "<?>";
         service.inspectXmlDocument(xmlDocument);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testInspectXmlDocumentAsSource_Null() throws Exception {
+    public void testInspectXmlDocumentAsSourceNull() throws Exception {
         XmlDocumentInspectionService service = new XmlDocumentInspectionService();
         Document xmlDocument = null;
         service.inspectXmlDocument(xmlDocument);
     }
 
     @Test(expected = XmlInspectionException.class)
-    public void testInspectXmlStringAsSource_BadHeaderWithBOM() throws Exception {
+    public void testInspectXmlStringAsSourceBadHeaderWithBOM() throws Exception {
         XmlDocumentInspectionService service = new XmlDocumentInspectionService();
         String xmlDocument = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\\ufeff" + "<foo>bar</foo>";
         service.inspectXmlDocument(xmlDocument);
@@ -589,21 +589,21 @@ public class XmlDocumentInspectionServiceTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testInspectSchemaStringAsSource_Null() throws Exception {
+    public void testInspectSchemaStringAsSourceNull() throws Exception {
         XmlDocumentInspectionService service = new XmlDocumentInspectionService();
         String schema = null;
         service.inspectSchema(schema);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testInspectSchemaStringAsSource_Blank() throws Exception {
+    public void testInspectSchemaStringAsSourceBlank() throws Exception {
         XmlDocumentInspectionService service = new XmlDocumentInspectionService();
         String schema = "";
         service.inspectSchema(schema);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testInspectSchemaFileAsSource_Null() throws Exception {
+    public void testInspectSchemaFileAsSourceNull() throws Exception {
         XmlDocumentInspectionService service = new XmlDocumentInspectionService();
         File schema = null;
         service.inspectSchema(schema);
@@ -613,16 +613,17 @@ public class XmlDocumentInspectionServiceTest {
     public void testInspectSchemaBad() throws Exception {
         final String source = "<xs:schema/>";
         XmlDocumentInspectionService service = new XmlDocumentInspectionService();
-        XmlDocument xmlDocument = service.inspectSchema(source);
+        service.inspectSchema(source);
     }
 
     @Test(expected = XmlInspectionException.class)
     public void testInspectSchemaFileBad() throws Exception {
         File schemaFile = Paths.get("src/test/resources/inspect/simple-schema-bad.xsd").toFile();
         XmlDocumentInspectionService service = new XmlDocumentInspectionService();
-        XmlDocument xmlDocument = service.inspectSchema(schemaFile);
+        service.inspectSchema(schemaFile);
     }
 
+    @SuppressWarnings("unused")
     private void debugFields(Fields xmlFields) {
         for (Field field : xmlFields.getField()) {
             Assert.assertTrue(field instanceof XmlField);

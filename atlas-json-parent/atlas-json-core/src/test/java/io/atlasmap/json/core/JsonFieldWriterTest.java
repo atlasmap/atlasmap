@@ -74,7 +74,7 @@ public class JsonFieldWriterTest {
     }
 
     @Test
-    public void testWriteFlatPrimitiveObject_Unrooted() throws Exception {
+    public void testWriteFlatPrimitiveObjectUnrooted() throws Exception {
 
         JsonField booleanField = AtlasJsonModelFactory.createJsonField();
         booleanField.setFieldType(FieldType.BOOLEAN);
@@ -132,7 +132,7 @@ public class JsonFieldWriterTest {
     }
 
     @Test
-    public void testWriteFlatPrimitiveObject_Rooted() throws Exception {
+    public void testWriteFlatPrimitiveObjectRooted() throws Exception {
         JsonField booleanField = AtlasJsonModelFactory.createJsonField();
         booleanField.setFieldType(FieldType.BOOLEAN);
         booleanField.setValue(false);
@@ -213,14 +213,14 @@ public class JsonFieldWriterTest {
     }
 
     @Test
-    public void testWriteComplexObject_Unrooted() throws Exception {
+    public void testWriteComplexObjectUnrooted() throws Exception {
         writeComplexTestData("", "");
         Assert.assertThat(writer.getRootNode().toString(), Is.is(
                 "{\"address\":{\"addressLine1\":\"123 Main St\",\"addressLine2\":\"Suite 42b\",\"city\":\"Anytown\",\"state\":\"NY\",\"zipCode\":\"90210\"},\"contact\":{\"firstName\":\"Ozzie\",\"lastName\":\"Smith\",\"phoneNumber\":\"5551212\",\"zipCode\":\"81111\"},\"orderId\":9}"));
     }
 
     @Test
-    public void testWriteComplexObject_Rooted() throws Exception {
+    public void testWriteComplexObjectRooted() throws Exception {
         writeComplexTestData("/order", "");
 
         final String instance = new String(
@@ -245,7 +245,7 @@ public class JsonFieldWriterTest {
     }
 
     @Test
-    public void testWriteComplexObject_Repeated() throws Exception {
+    public void testWriteComplexObjectRepeated() throws Exception {
 
         for (int i = 0; i < 5; i++) {
             String prefix = "/SourceOrderList/orders[" + i + "]";
@@ -330,69 +330,69 @@ public class JsonFieldWriterTest {
         batters.getJsonFields().getJsonField().add(batter);
         writer.write(batter);
 
-        JsonField batter1_id = new JsonField();
-        batter1_id.setPath("/items/item/batters/batter/id");
-        batter1_id.setValue("1001");
-        batter1_id.setFieldType(FieldType.STRING);
-        batter1_id.setStatus(FieldStatus.SUPPORTED);
-        batter.getJsonFields().getJsonField().add(batter1_id);
-        writer.write(batter1_id);
+        JsonField batter1Id = new JsonField();
+        batter1Id.setPath("/items/item/batters/batter/id");
+        batter1Id.setValue("1001");
+        batter1Id.setFieldType(FieldType.STRING);
+        batter1Id.setStatus(FieldStatus.SUPPORTED);
+        batter.getJsonFields().getJsonField().add(batter1Id);
+        writer.write(batter1Id);
 
-        JsonField batter1_type = new JsonField();
-        batter1_type.setPath("/items/item/batters/batter/type");
-        batter1_type.setValue("Regular");
-        batter1_type.setFieldType(FieldType.STRING);
-        batter1_type.setStatus(FieldStatus.SUPPORTED);
-        batter.getJsonFields().getJsonField().add(batter1_type);
-        writer.write(batter1_type);
+        JsonField batter1Type = new JsonField();
+        batter1Type.setPath("/items/item/batters/batter/type");
+        batter1Type.setValue("Regular");
+        batter1Type.setFieldType(FieldType.STRING);
+        batter1Type.setStatus(FieldStatus.SUPPORTED);
+        batter.getJsonFields().getJsonField().add(batter1Type);
+        writer.write(batter1Type);
 
-        JsonField batter2_id = new JsonField();
-        batter2_id.setPath("/items/item/batters/batter[1]/id");
-        batter2_id.setValue("1002");
-        batter2_id.setFieldType(FieldType.STRING);
-        batter2_id.setStatus(FieldStatus.SUPPORTED);
-        batter.getJsonFields().getJsonField().add(batter2_id);
-        writer.write(batter2_id);
+        JsonField batter2Id = new JsonField();
+        batter2Id.setPath("/items/item/batters/batter[1]/id");
+        batter2Id.setValue("1002");
+        batter2Id.setFieldType(FieldType.STRING);
+        batter2Id.setStatus(FieldStatus.SUPPORTED);
+        batter.getJsonFields().getJsonField().add(batter2Id);
+        writer.write(batter2Id);
 
-        JsonField batter2_type = new JsonField();
-        batter2_type.setPath("/items/item/batters/batter[1]/type");
-        batter2_type.setValue("Chocolate");
-        batter2_type.setFieldType(FieldType.STRING);
-        batter2_type.setStatus(FieldStatus.SUPPORTED);
-        batter.getJsonFields().getJsonField().add(batter2_type);
-        writer.write(batter2_type);
+        JsonField batter2Type = new JsonField();
+        batter2Type.setPath("/items/item/batters/batter[1]/type");
+        batter2Type.setValue("Chocolate");
+        batter2Type.setFieldType(FieldType.STRING);
+        batter2Type.setStatus(FieldStatus.SUPPORTED);
+        batter.getJsonFields().getJsonField().add(batter2Type);
+        writer.write(batter2Type);
 
-        JsonField batter3_id = new JsonField();
-        batter3_id.setPath("/items/item/batters/batter[2]/id");
-        batter3_id.setValue("1003");
-        batter3_id.setFieldType(FieldType.STRING);
-        batter3_id.setStatus(FieldStatus.SUPPORTED);
-        batter.getJsonFields().getJsonField().add(batter3_id);
-        writer.write(batter3_id);
+        JsonField batter3Id = new JsonField();
+        batter3Id.setPath("/items/item/batters/batter[2]/id");
+        batter3Id.setValue("1003");
+        batter3Id.setFieldType(FieldType.STRING);
+        batter3Id.setStatus(FieldStatus.SUPPORTED);
+        batter.getJsonFields().getJsonField().add(batter3Id);
+        writer.write(batter3Id);
 
-        JsonField batter3_type = new JsonField();
-        batter3_type.setPath("/items/item/batters/batter[2]/type");
-        batter3_type.setValue("Blueberry");
-        batter3_type.setFieldType(FieldType.STRING);
-        batter3_type.setStatus(FieldStatus.SUPPORTED);
-        batter.getJsonFields().getJsonField().add(batter3_type);
-        writer.write(batter3_type);
+        JsonField batter3Type = new JsonField();
+        batter3Type.setPath("/items/item/batters/batter[2]/type");
+        batter3Type.setValue("Blueberry");
+        batter3Type.setFieldType(FieldType.STRING);
+        batter3Type.setStatus(FieldStatus.SUPPORTED);
+        batter.getJsonFields().getJsonField().add(batter3Type);
+        writer.write(batter3Type);
 
-        JsonField batter4_id = new JsonField();
-        batter4_id.setPath("/items/item/batters/batter[3]/id");
-        batter4_id.setValue("1004");
-        batter4_id.setFieldType(FieldType.STRING);
-        batter4_id.setStatus(FieldStatus.SUPPORTED);
-        batter.getJsonFields().getJsonField().add(batter4_id);
-        writer.write(batter4_id);
+        JsonField batter4Id = new JsonField();
+        batter4Id.setPath("/items/item/batters/batter[3]/id");
+        batter4Id.setValue("1004");
+        batter4Id.setFieldType(FieldType.STRING);
+        batter4Id.setStatus(FieldStatus.SUPPORTED);
+        batter.getJsonFields().getJsonField().add(batter4Id);
+        writer.write(batter4Id);
 
-        JsonField batter4_type = new JsonField();
-        batter4_type.setPath("/items/item/batters/batter[3]/type");
-        batter4_type.setValue("Devil's Food");
-        batter4_type.setFieldType(FieldType.STRING);
-        batter4_type.setStatus(FieldStatus.SUPPORTED);
-        batter.getJsonFields().getJsonField().add(batter4_type);
-        writer.write(batter4_type);
+        JsonField batter4Type = new JsonField();
+        batter4Type.setPath("/items/item/batters/batter[3]/type");
+        batter4Type.setValue("Devil's Food");
+        batter4Type.setFieldType(FieldType.STRING);
+        batter4Type.setStatus(FieldStatus.SUPPORTED);
+        batter.getJsonFields().getJsonField().add(batter4Type);
+        writer.write(batter4Type);
 
         JsonComplexType topping = new JsonComplexType();
         topping.setJsonFields(new JsonFields());
@@ -402,117 +402,117 @@ public class JsonFieldWriterTest {
         items.getJsonFields().getJsonField().add(topping);
         writer.write(topping);
 
-        JsonField topping1_id = new JsonField();
-        topping1_id.setPath("/items/item/topping/id");
-        topping1_id.setValue("5001");
-        topping1_id.setFieldType(FieldType.STRING);
-        topping1_id.setStatus(FieldStatus.SUPPORTED);
-        topping.getJsonFields().getJsonField().add(topping1_id);
-        writer.write(topping1_id);
+        JsonField topping1Id = new JsonField();
+        topping1Id.setPath("/items/item/topping/id");
+        topping1Id.setValue("5001");
+        topping1Id.setFieldType(FieldType.STRING);
+        topping1Id.setStatus(FieldStatus.SUPPORTED);
+        topping.getJsonFields().getJsonField().add(topping1Id);
+        writer.write(topping1Id);
 
-        JsonField topping1_type = new JsonField();
-        topping1_type.setPath("/items/item/topping/type");
-        topping1_type.setValue("None");
-        topping1_type.setFieldType(FieldType.STRING);
-        topping1_type.setStatus(FieldStatus.SUPPORTED);
-        topping.getJsonFields().getJsonField().add(topping1_type);
-        writer.write(topping1_type);
+        JsonField topping1Type = new JsonField();
+        topping1Type.setPath("/items/item/topping/type");
+        topping1Type.setValue("None");
+        topping1Type.setFieldType(FieldType.STRING);
+        topping1Type.setStatus(FieldStatus.SUPPORTED);
+        topping.getJsonFields().getJsonField().add(topping1Type);
+        writer.write(topping1Type);
 
-        JsonField topping2_id = new JsonField();
-        topping2_id.setPath("/items/item/topping/id[1]");
-        topping2_id.setValue("5002");
-        topping2_id.setFieldType(FieldType.STRING);
-        topping2_id.setStatus(FieldStatus.SUPPORTED);
-        topping.getJsonFields().getJsonField().add(topping2_id);
-        writer.write(topping2_id);
+        JsonField topping2Id = new JsonField();
+        topping2Id.setPath("/items/item/topping/id[1]");
+        topping2Id.setValue("5002");
+        topping2Id.setFieldType(FieldType.STRING);
+        topping2Id.setStatus(FieldStatus.SUPPORTED);
+        topping.getJsonFields().getJsonField().add(topping2Id);
+        writer.write(topping2Id);
 
-        JsonField topping2_type = new JsonField();
-        topping2_type.setPath("/items/item/topping/type[1]");
-        topping2_type.setValue("Glazed");
-        topping2_type.setFieldType(FieldType.STRING);
-        topping2_type.setStatus(FieldStatus.SUPPORTED);
-        topping.getJsonFields().getJsonField().add(topping2_type);
-        writer.write(topping2_type);
+        JsonField topping2Type = new JsonField();
+        topping2Type.setPath("/items/item/topping/type[1]");
+        topping2Type.setValue("Glazed");
+        topping2Type.setFieldType(FieldType.STRING);
+        topping2Type.setStatus(FieldStatus.SUPPORTED);
+        topping.getJsonFields().getJsonField().add(topping2Type);
+        writer.write(topping2Type);
 
-        JsonField topping3_id = new JsonField();
-        topping3_id.setPath("/items/item/topping/id[2]");
-        topping3_id.setValue("5005");
-        topping3_id.setFieldType(FieldType.STRING);
-        topping3_id.setStatus(FieldStatus.SUPPORTED);
-        topping.getJsonFields().getJsonField().add(topping3_id);
-        writer.write(topping3_id);
+        JsonField topping3Id = new JsonField();
+        topping3Id.setPath("/items/item/topping/id[2]");
+        topping3Id.setValue("5005");
+        topping3Id.setFieldType(FieldType.STRING);
+        topping3Id.setStatus(FieldStatus.SUPPORTED);
+        topping.getJsonFields().getJsonField().add(topping3Id);
+        writer.write(topping3Id);
 
-        JsonField topping3_type = new JsonField();
-        topping3_type.setPath("/items/item/topping/type[2]");
-        topping3_type.setValue("Sugar");
-        topping3_type.setFieldType(FieldType.STRING);
-        topping3_type.setStatus(FieldStatus.SUPPORTED);
-        topping.getJsonFields().getJsonField().add(topping3_type);
-        writer.write(topping3_type);
+        JsonField topping3Type = new JsonField();
+        topping3Type.setPath("/items/item/topping/type[2]");
+        topping3Type.setValue("Sugar");
+        topping3Type.setFieldType(FieldType.STRING);
+        topping3Type.setStatus(FieldStatus.SUPPORTED);
+        topping.getJsonFields().getJsonField().add(topping3Type);
+        writer.write(topping3Type);
 
-        JsonField topping4_id = new JsonField();
-        topping4_id.setPath("/items/item/topping/id[3]");
-        topping4_id.setValue("5007");
-        topping4_id.setFieldType(FieldType.STRING);
-        topping4_id.setStatus(FieldStatus.SUPPORTED);
-        topping.getJsonFields().getJsonField().add(topping4_id);
-        writer.write(topping4_id);
+        JsonField topping4Id = new JsonField();
+        topping4Id.setPath("/items/item/topping/id[3]");
+        topping4Id.setValue("5007");
+        topping4Id.setFieldType(FieldType.STRING);
+        topping4Id.setStatus(FieldStatus.SUPPORTED);
+        topping.getJsonFields().getJsonField().add(topping4Id);
+        writer.write(topping4Id);
 
-        JsonField topping4_type = new JsonField();
-        topping4_type.setPath("/items/item/topping/type[3]");
-        topping4_type.setValue("Powdered Sugar");
-        topping4_type.setFieldType(FieldType.STRING);
-        topping4_type.setStatus(FieldStatus.SUPPORTED);
-        topping.getJsonFields().getJsonField().add(topping4_type);
-        writer.write(topping4_type);
+        JsonField topping4Type = new JsonField();
+        topping4Type.setPath("/items/item/topping/type[3]");
+        topping4Type.setValue("Powdered Sugar");
+        topping4Type.setFieldType(FieldType.STRING);
+        topping4Type.setStatus(FieldStatus.SUPPORTED);
+        topping.getJsonFields().getJsonField().add(topping4Type);
+        writer.write(topping4Type);
 
-        JsonField topping5_id = new JsonField();
-        topping5_id.setPath("/items/item/topping/id[4]");
-        topping5_id.setValue("5006");
-        topping5_id.setFieldType(FieldType.STRING);
-        topping5_id.setStatus(FieldStatus.SUPPORTED);
-        topping.getJsonFields().getJsonField().add(topping5_id);
-        writer.write(topping5_id);
+        JsonField topping5Id = new JsonField();
+        topping5Id.setPath("/items/item/topping/id[4]");
+        topping5Id.setValue("5006");
+        topping5Id.setFieldType(FieldType.STRING);
+        topping5Id.setStatus(FieldStatus.SUPPORTED);
+        topping.getJsonFields().getJsonField().add(topping5Id);
+        writer.write(topping5Id);
 
-        JsonField topping5_type = new JsonField();
-        topping5_type.setPath("/items/item/topping/type[4]");
-        topping5_type.setValue("Chocolate with Sprinkles");
-        topping5_type.setFieldType(FieldType.STRING);
-        topping5_type.setStatus(FieldStatus.SUPPORTED);
-        topping.getJsonFields().getJsonField().add(topping5_type);
-        writer.write(topping5_type);
+        JsonField topping5Type = new JsonField();
+        topping5Type.setPath("/items/item/topping/type[4]");
+        topping5Type.setValue("Chocolate with Sprinkles");
+        topping5Type.setFieldType(FieldType.STRING);
+        topping5Type.setStatus(FieldStatus.SUPPORTED);
+        topping.getJsonFields().getJsonField().add(topping5Type);
+        writer.write(topping5Type);
 
-        JsonField topping6_id = new JsonField();
-        topping6_id.setPath("/items/item/topping/id[5]");
-        topping6_id.setValue("5003");
-        topping6_id.setFieldType(FieldType.STRING);
-        topping6_id.setStatus(FieldStatus.SUPPORTED);
-        topping.getJsonFields().getJsonField().add(topping6_id);
-        writer.write(topping6_id);
+        JsonField topping6Id = new JsonField();
+        topping6Id.setPath("/items/item/topping/id[5]");
+        topping6Id.setValue("5003");
+        topping6Id.setFieldType(FieldType.STRING);
+        topping6Id.setStatus(FieldStatus.SUPPORTED);
+        topping.getJsonFields().getJsonField().add(topping6Id);
+        writer.write(topping6Id);
 
-        JsonField topping6_type = new JsonField();
-        topping6_type.setPath("/items/item/topping/type[5]");
-        topping6_type.setValue("Chocolate");
-        topping6_type.setFieldType(FieldType.STRING);
-        topping6_type.setStatus(FieldStatus.SUPPORTED);
-        topping.getJsonFields().getJsonField().add(topping6_type);
-        writer.write(topping6_type);
+        JsonField topping6Type = new JsonField();
+        topping6Type.setPath("/items/item/topping/type[5]");
+        topping6Type.setValue("Chocolate");
+        topping6Type.setFieldType(FieldType.STRING);
+        topping6Type.setStatus(FieldStatus.SUPPORTED);
+        topping.getJsonFields().getJsonField().add(topping6Type);
+        writer.write(topping6Type);
 
-        JsonField topping7_id = new JsonField();
-        topping7_id.setPath("/items/item/topping/id[6]");
-        topping7_id.setValue("5004");
-        topping7_id.setFieldType(FieldType.STRING);
-        topping7_id.setStatus(FieldStatus.SUPPORTED);
-        topping.getJsonFields().getJsonField().add(topping7_id);
-        writer.write(topping7_id);
+        JsonField topping7Id = new JsonField();
+        topping7Id.setPath("/items/item/topping/id[6]");
+        topping7Id.setValue("5004");
+        topping7Id.setFieldType(FieldType.STRING);
+        topping7Id.setStatus(FieldStatus.SUPPORTED);
+        topping.getJsonFields().getJsonField().add(topping7Id);
+        writer.write(topping7Id);
 
-        JsonField topping7_type = new JsonField();
-        topping7_type.setPath("/items/item/topping/type[6]");
-        topping7_type.setValue("Maple");
-        topping7_type.setFieldType(FieldType.STRING);
-        topping7_type.setStatus(FieldStatus.SUPPORTED);
-        topping.getJsonFields().getJsonField().add(topping7_type);
-        writer.write(topping7_type);
+        JsonField topping7Type = new JsonField();
+        topping7Type.setPath("/items/item/topping/type[6]");
+        topping7Type.setValue("Maple");
+        topping7Type.setFieldType(FieldType.STRING);
+        topping7Type.setStatus(FieldStatus.SUPPORTED);
+        topping.getJsonFields().getJsonField().add(topping7Type);
+        writer.write(topping7Type);
 
         // repeat complex
 

@@ -47,7 +47,7 @@ import java.util.UUID;
 
 public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
 
-    private static final Logger logger = LoggerFactory.getLogger(DefaultAtlasContext.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DefaultAtlasContext.class);
     private ObjectName jmxObjectName;
     private final UUID uuid;
     private DefaultAtlasContextFactory factory;
@@ -111,10 +111,10 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
                     getSourceModule().setConversionService(getDefaultAtlasContextFactory().getConversionService());
                     getSourceModule().init();
                 } catch (ClassNotFoundException e) {
-                    logger.error("Cannot find source ModuleClass " + module.toString(), e);
+                    LOG.error("Cannot find source ModuleClass " + module.toString(), e);
                     throw new AtlasException("Cannot source ModuleClass: " + module.getModuleClassName(), e);
                 } catch (ReflectiveOperationException e) {
-                    logger.error("Unable to initialize target module: " + module.toString(), e);
+                    LOG.error("Unable to initialize target module: " + module.toString(), e);
                     throw new AtlasException("Unable to initialize target module: " + module.getModuleClassName(), e);
                 }
             }
@@ -126,10 +126,10 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
                     getTargetModule().setConversionService(getDefaultAtlasContextFactory().getConversionService());
                     getTargetModule().init();
                 } catch (ClassNotFoundException e) {
-                    logger.error("Cannot find target ModuleClass: " + module.toString(), e);
+                    LOG.error("Cannot find target ModuleClass: " + module.toString(), e);
                     throw new AtlasException("Cannot find target ModuleClass: " + module.getModuleClassName(), e);
                 } catch (ReflectiveOperationException e) {
-                    logger.error("Unable to initialize target module: " + module.toString(), e);
+                    LOG.error("Unable to initialize target module: " + module.toString(), e);
                     throw new AtlasException("Unable to initialize target module: " + module.getModuleClassName(), e);
                 }
             }
@@ -141,11 +141,11 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
             setJmxObjectName(new ObjectName(
                     getDefaultAtlasContextFactory().getJmxObjectName() + ",context=Contexts,uuid=" + uuid.toString()));
             ManagementFactory.getPlatformMBeanServer().registerMBean(this, getJmxObjectName());
-            if (logger.isDebugEnabled()) {
-                logger.debug("Registered AtlasContext " + context.getUuid() + " with JMX");
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Registered AtlasContext " + context.getUuid() + " with JMX");
             }
         } catch (Throwable t) {
-            logger.warn("Failured to register AtlasContext " + context.getUuid() + " with JMX msg: " + t.getMessage(),
+            LOG.warn("Failured to register AtlasContext " + context.getUuid() + " with JMX msg: " + t.getMessage(),
                     t);
         }
     }
@@ -156,8 +156,8 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
      */
     @Override
     public void process(AtlasSession session) throws AtlasException {
-        if (logger.isDebugEnabled()) {
-            logger.debug("Begin process " + (session == null ? null : session.toString()));
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Begin process " + (session == null ? null : session.toString()));
         }
 
         getSourceModule().processPreValidation(session);
@@ -185,7 +185,7 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
             getTargetModule().processOutputMapping(session, mapping);
 
             if (session.hasErrors()) {
-                logger.error(String.format("Aborting processing due to %s errors", session.errorCount()));
+                LOG.error(String.format("Aborting processing due to %s errors", session.errorCount()));
                 break;
             }
         }
@@ -203,15 +203,15 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
         getSourceModule().processPostInputExecution(session);
         getTargetModule().processPostOutputExecution(session);
 
-        if (logger.isDebugEnabled()) {
-            logger.debug("End process " + (session == null ? null : session.toString()));
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("End process " + (session == null ? null : session.toString()));
         }
     }
 
     @Override
     public void processValidation(AtlasSession session) throws AtlasException {
-        if (logger.isDebugEnabled()) {
-            logger.debug("Begin processValidation " + (session == null ? null : session.toString()));
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Begin processValidation " + (session == null ? null : session.toString()));
         }
 
         List<Validation> validations = getContextFactory().getValidationService().validateMapping(session.getMapping());
@@ -219,8 +219,8 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
             session.getValidations().getValidation().addAll(validations);
         }
 
-        if (logger.isDebugEnabled()) {
-            logger.debug("Detected " + validations.size() + " core validation notices");
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Detected " + validations.size() + " core validation notices");
         }
 
         if (getSourceModule() != null) {
@@ -230,8 +230,8 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
             getTargetModule().processPreValidation(session);
         }
 
-        if (logger.isDebugEnabled()) {
-            logger.debug("End processValidation " + (session == null ? null : session.toString()));
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("End processValidation " + (session == null ? null : session.toString()));
         }
     }
 
@@ -362,7 +362,7 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
                     if (sourceds == null) {
                         sourceds = ds;
                     } else {
-                        logger.warn("Multiple {} DataSource found, ignoring '{}'", type, ds.getId());
+                        LOG.warn("Multiple {} DataSource found, ignoring '{}'", type, ds.getId());
                     }
                 }
             }

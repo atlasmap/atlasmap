@@ -19,7 +19,7 @@ import io.atlasmap.java.inspect.StringUtil;
 import io.atlasmap.v2.Field;
 
 public class JavaWriterUtil {
-    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(JavaWriterUtil.class);
+    private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(JavaWriterUtil.class);
     protected AtlasConversionService conversionService = null;
 
     public JavaWriterUtil(AtlasConversionService conversionService) {
@@ -47,14 +47,14 @@ public class JavaWriterUtil {
             }
             if (createWrapperArray && PathUtil.isArraySegment(segmentContext.getSegment())) {
                 int size = PathUtil.indexOfSegment(segmentContext.getSegment()) + 1;
-                if (logger.isDebugEnabled()) {
-                    logger.debug("Instantiating array of size " + size + " for class '" + clz.getName() + "', segment: "
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Instantiating array of size " + size + " for class '" + clz.getName() + "', segment: "
                             + segmentContext);
                 }
                 return Array.newInstance(clz, size);
             }
-            if (logger.isDebugEnabled()) {
-                logger.debug("Instantiating object for class '" + clz.getName() + "', segment: " + segmentContext);
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Instantiating object for class '" + clz.getName() + "', segment: " + segmentContext);
             }
             return clz.newInstance();
         } catch (Exception e) {
@@ -77,14 +77,14 @@ public class JavaWriterUtil {
      */
     public Object getObjectFromParent(Field field, Object parentObject, SegmentContext segmentContext)
             throws AtlasException {
-        if (logger.isDebugEnabled()) {
-            logger.debug(
+        if (LOG.isDebugEnabled()) {
+            LOG.debug(
                     "Retrieving child '" + segmentContext.getSegmentPath() + "'.\n\tparentObject: " + parentObject);
         }
 
         if (parentObject == null) {
-            if (logger.isDebugEnabled()) {
-                logger.debug("Cannot find child '" + segmentContext.getSegmentPath() + "', parent is null.");
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Cannot find child '" + segmentContext.getSegmentPath() + "', parent is null.");
             }
             return null;
         }
@@ -103,16 +103,16 @@ public class JavaWriterUtil {
                 getterMethod = ClassHelper.detectGetterMethod(parentObject.getClass(), getter);
                 break;
             } catch (NoSuchMethodException e) {
-                if (logger.isDebugEnabled()) {
-                    logger.debug("Looking for getter for '" + segmentContext.getSegmentPath() + " on this class: "
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Looking for getter for '" + segmentContext.getSegmentPath() + " on this class: "
                             + parentObject.getClass().getName(), e);
                 }
             }
         }
 
         if (getterMethod == null) {
-            if (logger.isDebugEnabled()) {
-                logger.debug("Unable to detect getter method for: " + segmentContext.getSegment() + " from "
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Unable to detect getter method for: " + segmentContext.getSegment() + " from "
                         + segmentContext.getSegmentPath() + " on parent: " + parentObject);
             }
             return null;
@@ -126,11 +126,11 @@ public class JavaWriterUtil {
             throw new AtlasException(e);
         }
 
-        if (logger.isDebugEnabled()) {
+        if (LOG.isDebugEnabled()) {
             if (childObject == null) {
-                logger.debug("Could not find child object for path: " + segmentContext.getSegmentPath());
+                LOG.debug("Could not find child object for path: " + segmentContext.getSegmentPath());
             } else {
-                logger.debug("Found child object for path '" + segmentContext.getSegmentPath() + "': " + childObject);
+                LOG.debug("Found child object for path '" + segmentContext.getSegmentPath() + "': " + childObject);
             }
         }
 
@@ -154,12 +154,12 @@ public class JavaWriterUtil {
 
     public void setObjectOnParent(Field javaField, SegmentContext segmentContext, Object parentObject,
             Object childObject) throws AtlasException {
-        if (logger.isDebugEnabled()) {
-            logger.debug("Setting object for path:'" + javaField.getPath() + "'.\n\tchildObject: " + childObject
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Setting object for path:'" + javaField.getPath() + "'.\n\tchildObject: " + childObject
                     + "\n\tparentObject: " + parentObject);
         }
 
-        PathUtil PathUtil = new PathUtil(javaField.getPath());
+        PathUtil pathUtil = new PathUtil(javaField.getPath());
 
         try {
             Class<?> childClass = childObject == null ? null : childObject.getClass();
@@ -168,8 +168,8 @@ public class JavaWriterUtil {
 
             // We already know we have a 1 paramter setter here
             if (childObject == null && conversionService.isPrimitive(targetMethod.getParameterTypes()[0])) {
-                if (logger.isDebugEnabled()) {
-                    logger.debug("Not setting null value for primitive method paramter for path:'" + javaField.getPath()
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Not setting null value for primitive method paramter for path:'" + javaField.getPath()
                             + "'.\n\tchildObject: " + childObject + "\n\tparentObject: " + parentObject);
                 }
                 return;
@@ -179,7 +179,7 @@ public class JavaWriterUtil {
                 targetMethod.invoke(targetObject, childObject);
             } else {
                 try {
-                    java.lang.reflect.Field field = targetObject.getClass().getField(PathUtil.getLastSegment());
+                    java.lang.reflect.Field field = targetObject.getClass().getField(pathUtil.getLastSegment());
                     field.setAccessible(true);
                     field.set(targetObject, childObject);
                     javaField.setValue(field.get(targetObject));
@@ -202,48 +202,48 @@ public class JavaWriterUtil {
 
         List<Class<?>> classTree = resolveMappableClasses(sourceObject.getClass());
 
-        if (logger.isDebugEnabled()) {
-            logger.debug("Found " + classTree.size() + " mappable classes for class '"
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Found " + classTree.size() + " mappable classes for class '"
                     + sourceObject.getClass().getName() + "': " + classTree);
         }
 
         Method m = null;
         for (Class<?> clazz : classTree) {
-            if (logger.isDebugEnabled()) {
-                logger.debug("Looking for setter '" + setterMethodName + "' on this class: " + clazz.getName());
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Looking for setter '" + setterMethodName + "' on this class: " + clazz.getName());
             }
             try {
                 m = ClassHelper.detectSetterMethod(clazz, setterMethodName, targetType);
                 if (m != null) {
-                    if (logger.isDebugEnabled()) {
-                        logger.debug("Found setter '" + setterMethodName + "' on this class: " + clazz.getName());
+                    if (LOG.isDebugEnabled()) {
+                        LOG.debug("Found setter '" + setterMethodName + "' on this class: " + clazz.getName());
                     }
                     return m;
                 }
             } catch (NoSuchMethodException e) {
-                if (logger.isDebugEnabled()) {
-                    logger.debug("Did not find setter '" + setterMethodName + "' on this class: " + clazz.getName(), e);
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Did not find setter '" + setterMethodName + "' on this class: " + clazz.getName(), e);
                 }
             }
 
             // Try the boxUnboxed version
             if (conversionService.isPrimitive(targetType) || conversionService.isBoxedPrimitive(targetType)) {
                 try {
-                    if (logger.isDebugEnabled()) {
-                        logger.debug("Looking for boxed setter '" + setterMethodName + "' on this class: "
+                    if (LOG.isDebugEnabled()) {
+                        LOG.debug("Looking for boxed setter '" + setterMethodName + "' on this class: "
                                 + clazz.getName());
                     }
                     m = ClassHelper.detectSetterMethod(clazz, setterMethodName,
                             conversionService.boxOrUnboxPrimitive(targetType));
                     if (m != null) {
-                        if (logger.isDebugEnabled()) {
-                            logger.debug("Found setter '" + setterMethodName + "' on this class: " + clazz.getName());
+                        if (LOG.isDebugEnabled()) {
+                            LOG.debug("Found setter '" + setterMethodName + "' on this class: " + clazz.getName());
                         }
                         return m;
                     }
                 } catch (NoSuchMethodException e) {
-                    if (logger.isDebugEnabled()) {
-                        logger.debug("Did not find setter '" + setterMethodName + "' on this class: " + clazz.getName(),
+                    if (LOG.isDebugEnabled()) {
+                        LOG.debug("Did not find setter '" + setterMethodName + "' on this class: " + clazz.getName(),
                                 e);
                     }
                 }

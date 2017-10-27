@@ -17,8 +17,19 @@ package io.atlasmap.validators;
 
 import io.atlasmap.core.AtlasMappingUtil;
 import io.atlasmap.spi.AtlasValidator;
-import io.atlasmap.v2.*;
-import io.atlasmap.validators.AtlasValidationTestHelper;
+import io.atlasmap.v2.AtlasMapping;
+import io.atlasmap.v2.AtlasModelFactory;
+import io.atlasmap.v2.DataSource;
+import io.atlasmap.v2.DataSourceType;
+import io.atlasmap.v2.Field;
+import io.atlasmap.v2.FieldType;
+import io.atlasmap.v2.LookupTable;
+import io.atlasmap.v2.LookupTables;
+import io.atlasmap.v2.Mapping;
+import io.atlasmap.v2.MappingType;
+import io.atlasmap.v2.MockField;
+import io.atlasmap.v2.Validation;
+import io.atlasmap.v2.Validations;
 
 import java.util.List;
 

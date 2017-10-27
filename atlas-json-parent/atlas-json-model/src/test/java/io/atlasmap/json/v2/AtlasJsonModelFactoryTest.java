@@ -17,8 +17,6 @@ package io.atlasmap.json.v2;
 
 import org.junit.Test;
 
-import io.atlasmap.json.v2.AtlasJsonModelFactory;
-import io.atlasmap.json.v2.JsonDocument;
 import io.atlasmap.v2.AtlasJsonMapper;
 
 import static org.junit.Assert.assertEquals;

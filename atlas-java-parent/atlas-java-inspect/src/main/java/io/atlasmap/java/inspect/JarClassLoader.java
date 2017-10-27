@@ -26,7 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class JarClassLoader {
-    private static final Logger logger = LoggerFactory.getLogger(ClassInspectionService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ClassInspectionService.class);
     private URLClassLoader loader;
 
     public JarClassLoader(String... paths) {
@@ -50,8 +50,8 @@ public class JarClassLoader {
             try {
                 urls.add(file.toURI().toURL());
             } catch (Exception e) {
-                if (logger.isDebugEnabled()) {
-                    logger.debug("Ignoring invalid file name: {}", file.getName());
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Ignoring invalid file name: {}", file.getName());
                 }
             }
         }
