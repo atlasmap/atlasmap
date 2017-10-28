@@ -128,21 +128,19 @@ public class InstanceInspector implements JsonInspector {
                 // rest index to zero when dealing with containers (we don't need an index on
                 // containers)
                 handleObjectNode(jsonDocument, next.getValue(), container, 0);
-            } else if (node.isArray()) {
-                if (node.get(0).isObject()) {
-                    ArrayNode arrayNode = (ArrayNode) node;
-                    // index for children
-                    int innerIndex = 0;
-                    JsonComplexType deeperChild = getJsonComplexType(parent, key, index);
-                    if (parent.getCollectionType() == null) {
-                        deeperChild.setCollectionType(CollectionType.LIST);
-                    } else {
-                        deeperChild.setCollectionType(CollectionType.ARRAY);
-                    }
-                    for (JsonNode deeperJsonNode : arrayNode) {
-                        handleObjectNode(jsonDocument, deeperJsonNode, deeperChild, innerIndex);
-                        innerIndex++;
-                    }
+            } else if (node.isArray() && node.get(0).isObject()) {
+                ArrayNode arrayNode = (ArrayNode) node;
+                // index for children
+                int innerIndex = 0;
+                JsonComplexType deeperChild = getJsonComplexType(parent, key, index);
+                if (parent.getCollectionType() == null) {
+                    deeperChild.setCollectionType(CollectionType.LIST);
+                } else {
+                    deeperChild.setCollectionType(CollectionType.ARRAY);
+                }
+                for (JsonNode deeperJsonNode : arrayNode) {
+                    handleObjectNode(jsonDocument, deeperJsonNode, deeperChild, innerIndex);
+                    innerIndex++;
                 }
             }
         }

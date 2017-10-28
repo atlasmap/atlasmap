@@ -50,10 +50,8 @@ public class ClassHelper {
         Method[] methods = clazz.getMethods();
 
         for (Method method : methods) {
-            if (method.getName().equals(methodName)) {
-                if (method.getParameterCount() == 0) {
-                    return method;
-                }
+            if (method.getName().equals(methodName) && method.getParameterCount() == 0) {
+                return method;
             }
         }
 
@@ -67,10 +65,8 @@ public class ClassHelper {
 
         Method[] methods = clazz.getMethods();
         for (Method method : methods) {
-            if (method.getName().equals(methodName)) {
-                if (method.getParameterCount() == 1) {
-                    candidates.add(method);
-                }
+            if (method.getName().equals(methodName) && method.getParameterCount() == 1) {
+                candidates.add(method);
             }
         }
 

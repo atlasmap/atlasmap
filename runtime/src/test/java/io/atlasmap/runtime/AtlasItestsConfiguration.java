@@ -78,8 +78,10 @@ public class AtlasItestsConfiguration {
 
     private class DummyTrustManager implements X509TrustManager {
         public void checkClientTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {
+            // no-op
         }
         public void checkServerTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {
+            // no-op
         }
         public X509Certificate[] getAcceptedIssuers() {
             return new X509Certificate[] {};

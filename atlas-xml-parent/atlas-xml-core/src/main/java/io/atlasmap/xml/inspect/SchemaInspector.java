@@ -203,8 +203,9 @@ public class SchemaInspector {
         printGroup(modelGroupDecl.getModelGroup(), rootName, parentXmlComplexType);
     }
 
-    private void printElement(XSElementDecl element, String rootName, XmlComplexType xmlComplexType,
+    private void printElement(XSElementDecl element, String root, XmlComplexType xmlComplexType,
             CollectionType collectionType) {
+        String rootName = root;
         if (element.getType().isComplexType()) {
             XmlComplexType complexType = getXmlComplexType();
             rootName = rootName + "/" + element.getName();

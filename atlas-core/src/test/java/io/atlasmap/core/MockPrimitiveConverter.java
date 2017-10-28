@@ -17,9 +17,9 @@ public class MockPrimitiveConverter implements AtlasPrimitiveConverter<String> {
         if (value == null) {
             return null;
         }
-        if (value.equals("0") || value.equalsIgnoreCase("f") || value.equals("false")) {
+        if ("0".equals(value) || "f".equalsIgnoreCase(value) || "false".equals(value)) {
             return Boolean.FALSE;
-        } else if (value.equals("1") || value.equalsIgnoreCase("t") || value.equals("true")) {
+        } else if ("1".equals(value) || "t".equalsIgnoreCase(value) || "true".equals(value)) {
             return Boolean.TRUE;
         }
         throw new AtlasConversionException("String " + value + " cannot be converted to a Boolean");

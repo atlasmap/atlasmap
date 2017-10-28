@@ -32,10 +32,8 @@ public class AtlasModuleSupport {
                 for (Field f : ((Mapping) fm).getOutputField()) {
                     targetPaths.add(f.getPath());
                 }
-            } else if (fm instanceof Collection) {
-                if (((Collection) fm).getMappings() != null) {
-                    targetPaths.addAll(listTargetPaths(((Collection) fm).getMappings().getMapping()));
-                }
+            } else if (fm instanceof Collection && ((Collection) fm).getMappings() != null) {
+                targetPaths.addAll(listTargetPaths(((Collection) fm).getMappings().getMapping()));
             }
         }
 

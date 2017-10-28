@@ -2,6 +2,7 @@ package io.atlasmap.java.inspect;
 
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class JavaGetterSetterModel {
 
     private String param;

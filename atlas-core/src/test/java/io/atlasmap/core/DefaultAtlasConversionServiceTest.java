@@ -259,12 +259,12 @@ public class DefaultAtlasConversionServiceTest {
         targetValue = service.copyPrimitive(sourceValue);
         assertNotNull(targetValue);
         assertTrue(Boolean.class.getCanonicalName().equals(targetValue.getClass().getCanonicalName()));
-        assertEquals(new Boolean(true), (Boolean) targetValue);
+        assertEquals(Boolean.valueOf(true), (Boolean) targetValue);
         sourceValue = (boolean) false;
         targetValue = service.copyPrimitive(sourceValue);
         assertNotNull(targetValue);
         assertTrue(Boolean.class.getCanonicalName().equals(targetValue.getClass().getCanonicalName()));
-        assertEquals(new Boolean(false), (Boolean) targetValue);
+        assertEquals(Boolean.valueOf(false), (Boolean) targetValue);
 
         sourceValue = (byte) 1;
         targetValue = service.copyPrimitive(sourceValue);
@@ -349,7 +349,7 @@ public class DefaultAtlasConversionServiceTest {
         assertNotNull(targetValue);
         assertEquals(sourceValue, targetValue);
 
-        sourceValue = new String("foo");
+        sourceValue = "foo";
         targetValue = service.copyPrimitive(sourceValue);
         assertNotNull(targetValue);
         assertEquals("foo", targetValue);

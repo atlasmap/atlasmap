@@ -69,7 +69,7 @@ public class JavaConstructService {
         filterFields(javaClass, pathFilters);
 
         if (javaClass.getJavaFields() == null || javaClass.getJavaFields().getJavaField() == null
-                && javaClass.getJavaFields().getJavaField().isEmpty()) {
+                || javaClass.getJavaFields().getJavaField().isEmpty()) {
             return targetObject;
         }
 

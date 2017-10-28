@@ -20,18 +20,19 @@ import com.sun.xml.xsom.XSRestrictionSimpleType;
 
 import java.util.Vector;
 
+@SuppressWarnings("unused")
 public class SimpleTypeRestriction {
 
-    String[] enumeration = null;
-    String maxValue = null;
-    String minValue = null;
-    String length = null;
-    String maxLength = null;
-    String minLength = null;
-    String pattern = null;
-    String totalDigits = null;
-    String maxExclusive = null;
-    String minExclusive = null;
+    private String[] enumeration = null;
+    private String maxValue = null;
+    private String minValue = null;
+    private String length = null;
+    private String maxLength = null;
+    private String minLength = null;
+    private String pattern = null;
+    private String totalDigits = null;
+    private String maxExclusive = null;
+    private String minExclusive = null;
 
     public void initRestrictions(XSRestrictionSimpleType restriction) {
         if (restriction != null) {

@@ -77,8 +77,6 @@ public class DefaultAtlasPropertyStrategy implements AtlasPropertyStrategy {
                                 AtlasModelFactory.toString(propertyField)));
             }
         }
-
-        return;
     }
 
     protected void processEnvironmentVariable(PropertyField propertyField) {

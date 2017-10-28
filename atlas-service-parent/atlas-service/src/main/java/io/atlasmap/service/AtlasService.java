@@ -72,7 +72,7 @@ import java.util.Optional;
 public class AtlasService extends Application {
 
     private static final Logger LOG = LoggerFactory.getLogger(AtlasService.class);
-    final DefaultAtlasContextFactory atlasContextFactory = DefaultAtlasContextFactory.getInstance();
+    private final DefaultAtlasContextFactory atlasContextFactory = DefaultAtlasContextFactory.getInstance();
     private String baseFolder = "target/mappings";
 
     private static final String ACCESS_CONTROL_ALLOW_ORIGIN = "Access-Control-Allow-Origin";

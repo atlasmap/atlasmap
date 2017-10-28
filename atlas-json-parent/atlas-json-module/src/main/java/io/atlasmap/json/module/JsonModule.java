@@ -330,8 +330,7 @@ public class JsonModule extends BaseAtlasModule {
                             outputBody.length()));
                 }
             } else {
-                // TODO: handle error where rootnode on DocumentJsonFieldWriter is set to null
-                // (which should never happen).
+                LOG.error("Root node for {} is null", output);
             }
         } else {
             LOG.error("DocumentJsonFieldWriter object expected for Json output data source");

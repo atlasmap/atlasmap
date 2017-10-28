@@ -362,10 +362,8 @@ public class XmlModule extends BaseAtlasModule {
         }
 
         Object output = session.getOutput();
-        if (output != null) {
-            if (output instanceof XmlFieldWriter) {
-                session.setOutput(convertDocumentToString(((XmlFieldWriter) output).getDocument()));
-            }
+        if (output != null && (output instanceof XmlFieldWriter)) {
+            session.setOutput(convertDocumentToString(((XmlFieldWriter) output).getDocument()));
         }
     }
 

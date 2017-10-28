@@ -61,11 +61,11 @@ public class JavaConstructServiceComplexTest {
     public void testConstructSourceOrder() throws Exception {
         Object targetObject = constructService.constructClass(generateOrder("Source"));
         assertNotNull(targetObject);
-        assertTrue(targetObject instanceof io.atlasmap.java.test.SourceOrder);
+        assertTrue(targetObject instanceof SourceOrder);
         SourceOrder order = (SourceOrder) targetObject;
 
         assertNotNull(order.getAddress());
-        assertTrue(order.getAddress() instanceof io.atlasmap.java.test.SourceAddress);
+        assertTrue(order.getAddress() instanceof SourceAddress);
         SourceAddress address = (SourceAddress) order.getAddress();
         assertNull(address.getAddressLine1());
         assertNull(address.getAddressLine2());
@@ -74,7 +74,7 @@ public class JavaConstructServiceComplexTest {
         assertNull(address.getZipCode());
 
         assertNotNull(order.getContact());
-        assertTrue(order.getContact() instanceof io.atlasmap.java.test.SourceContact);
+        assertTrue(order.getContact() instanceof SourceContact);
         SourceContact contact = (SourceContact) order.getContact();
         assertNull(contact.getFirstName());
         assertNull(contact.getLastName());
@@ -86,11 +86,11 @@ public class JavaConstructServiceComplexTest {
     public void testConstructTargetOrder() throws Exception {
         Object targetObject = constructService.constructClass(generateOrder("Target"));
         assertNotNull(targetObject);
-        assertTrue(targetObject instanceof io.atlasmap.java.test.TargetOrder);
+        assertTrue(targetObject instanceof TargetOrder);
         TargetOrder order = (TargetOrder) targetObject;
 
         assertNotNull(order.getAddress());
-        assertTrue(order.getAddress() instanceof io.atlasmap.java.test.TargetAddress);
+        assertTrue(order.getAddress() instanceof TargetAddress);
         TargetAddress address = (TargetAddress) order.getAddress();
         assertNull(address.getAddressLine1());
         assertNull(address.getAddressLine2());
@@ -99,7 +99,7 @@ public class JavaConstructServiceComplexTest {
         assertNull(address.getZipCode());
 
         assertNotNull(order.getContact());
-        assertTrue(order.getContact() instanceof io.atlasmap.java.test.TargetContact);
+        assertTrue(order.getContact() instanceof TargetContact);
         TargetContact contact = (TargetContact) order.getContact();
         assertNull(contact.getFirstName());
         assertNull(contact.getLastName());
@@ -112,11 +112,11 @@ public class JavaConstructServiceComplexTest {
         JavaClass javaClass = generateOrder("Target");
         Object targetObject = constructService.constructClass(javaClass, Arrays.asList("address"));
         assertNotNull(targetObject);
-        assertTrue(targetObject instanceof io.atlasmap.java.test.TargetOrder);
+        assertTrue(targetObject instanceof TargetOrder);
         TargetOrder order = (TargetOrder) targetObject;
 
         assertNotNull(order.getAddress());
-        assertTrue(order.getAddress() instanceof io.atlasmap.java.test.TargetAddress);
+        assertTrue(order.getAddress() instanceof TargetAddress);
         TargetAddress address = (TargetAddress) order.getAddress();
         assertNull(address.getAddressLine1());
         assertNull(address.getAddressLine2());
@@ -132,14 +132,14 @@ public class JavaConstructServiceComplexTest {
         JavaClass javaClass = generateParentOrder("Source");
         Object targetObject = constructService.constructClass(javaClass);
         assertNotNull(targetObject);
-        assertTrue(targetObject instanceof io.atlasmap.java.test.SourceParentOrder);
+        assertTrue(targetObject instanceof SourceParentOrder);
         SourceParentOrder parentOrder = (SourceParentOrder) targetObject;
 
         assertNotNull(parentOrder.getOrder());
         SourceOrder order = (SourceOrder) parentOrder.getOrder();
 
         assertNotNull(order.getAddress());
-        assertTrue(order.getAddress() instanceof io.atlasmap.java.test.SourceAddress);
+        assertTrue(order.getAddress() instanceof SourceAddress);
         SourceAddress address = (SourceAddress) order.getAddress();
         assertNull(address.getAddressLine1());
         assertNull(address.getAddressLine2());
@@ -148,7 +148,7 @@ public class JavaConstructServiceComplexTest {
         assertNull(address.getZipCode());
 
         assertNotNull(order.getContact());
-        assertTrue(order.getContact() instanceof io.atlasmap.java.test.SourceContact);
+        assertTrue(order.getContact() instanceof SourceContact);
         SourceContact contact = (SourceContact) order.getContact();
         assertNull(contact.getFirstName());
         assertNull(contact.getLastName());
@@ -161,14 +161,14 @@ public class JavaConstructServiceComplexTest {
         JavaClass javaClass = generateParentOrder("Target");
         Object targetObject = constructService.constructClass(javaClass);
         assertNotNull(targetObject);
-        assertTrue(targetObject instanceof io.atlasmap.java.test.TargetParentOrder);
+        assertTrue(targetObject instanceof TargetParentOrder);
         TargetParentOrder parentOrder = (TargetParentOrder) targetObject;
 
         assertNotNull(parentOrder.getOrder());
         TargetOrder order = (TargetOrder) parentOrder.getOrder();
 
         assertNotNull(order.getAddress());
-        assertTrue(order.getAddress() instanceof io.atlasmap.java.test.TargetAddress);
+        assertTrue(order.getAddress() instanceof TargetAddress);
         TargetAddress address = (TargetAddress) order.getAddress();
         assertNull(address.getAddressLine1());
         assertNull(address.getAddressLine2());
@@ -177,7 +177,7 @@ public class JavaConstructServiceComplexTest {
         assertNull(address.getZipCode());
 
         assertNotNull(order.getContact());
-        assertTrue(order.getContact() instanceof io.atlasmap.java.test.TargetContact);
+        assertTrue(order.getContact() instanceof TargetContact);
         TargetContact contact = (TargetContact) order.getContact();
         assertNull(contact.getFirstName());
         assertNull(contact.getLastName());

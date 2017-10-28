@@ -42,6 +42,7 @@ import io.atlasmap.xml.v2.AtlasXmlModelFactory;
 import io.atlasmap.xml.v2.XmlField;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -180,7 +181,7 @@ public class XmlJavaFlatMappingTest extends AtlasMappingBaseTest {
         assertEquals(new Character('z'), new Character(targetObject.getBoxedCharField()));
         assertNull(targetObject.getBooleanArrayField());
         assertNull(targetObject.getBoxedBooleanArrayField());
-        assertTrue(false == targetObject.isBooleanField());
+        assertFalse(targetObject.isBooleanField());
         assertNull(targetObject.getBoxedByteArrayField());
         assertTrue((byte) 0 == targetObject.getByteField());
         assertNull(targetObject.getBoxedCharArrayField());

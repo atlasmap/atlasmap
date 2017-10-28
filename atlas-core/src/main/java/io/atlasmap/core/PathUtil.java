@@ -17,7 +17,8 @@ public class PathUtil {
     private List<String> segments = new ArrayList<String>();
     private String originalPath = null;
 
-    public PathUtil(String path) {
+    public PathUtil(String p) {
+        String path = p;
         this.originalPath = path;
         if (path != null && !"".equals(path)) {
             if (path.startsWith(PATH_SEPARATOR)) {
@@ -196,7 +197,8 @@ public class PathUtil {
         return j;
     }
 
-    public static String cleanPathSegment(String pathSegment) {
+    public static String cleanPathSegment(String pathSeg) {
+        String pathSegment = pathSeg;
         if (pathSegment == null) {
             return null;
         }
@@ -290,11 +292,10 @@ public class PathUtil {
     public Integer getCollectionIndex(String segment) {
         for (String part : getSegments()) {
             String cleanedPart = cleanPathSegment(part);
-            if (cleanedPart != null && cleanedPart.equals(cleanPathSegment(segment))) {
-                if ((part.contains(PATH_ARRAY_START) && part.contains(PATH_ARRAY_END))
-                        || (part.contains(PATH_LIST_START) && (part.contains(PATH_LIST_END)))) {
+            if (cleanedPart != null && cleanedPart.equals(cleanPathSegment(segment))
+                && ((part.contains(PATH_ARRAY_START) && part.contains(PATH_ARRAY_END))
+                        || (part.contains(PATH_LIST_START) && (part.contains(PATH_LIST_END))))) {
                     return indexOfSegment(part);
-                }
             }
         }
 

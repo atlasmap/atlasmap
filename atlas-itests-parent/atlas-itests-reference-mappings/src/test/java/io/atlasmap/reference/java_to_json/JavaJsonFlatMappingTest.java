@@ -129,7 +129,7 @@ public class JavaJsonFlatMappingTest extends AtlasMappingBaseTest {
         Class<?> targetClazz = this.getClass().getClassLoader().loadClass(clazz.getName());
         BaseFlatPrimitiveClass newObject = (BaseFlatPrimitiveClass) targetClazz.newInstance();
 
-        newObject.setBoxedBooleanField(new Boolean(Boolean.TRUE));
+        newObject.setBoxedBooleanField(Boolean.valueOf(Boolean.TRUE));
         newObject.setBoxedByteField(new Byte((byte) 87));
         newObject.setBoxedCharField(new Character('z'));
         newObject.setBoxedDoubleField(new Double(90000000d));

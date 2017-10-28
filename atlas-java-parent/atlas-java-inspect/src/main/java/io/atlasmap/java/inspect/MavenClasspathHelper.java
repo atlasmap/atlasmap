@@ -175,13 +175,11 @@ public class MavenClasspathHelper {
                         outputMessage.append("Command returned non-zero exit code: " + r);
                     }
                 } catch (IllegalThreadStateException itse) {
-                    if (LOG.isDebugEnabled()) {
-                        if (System.currentTimeMillis() - lastTimeDebugPrinted > 10000) {
-                            String timeHMS = StringUtil.formatTimeHMS(System.currentTimeMillis() - startTime);
-                            LOG.debug("Command still running: " + cmd + ", msg: " + itse.getMessage() + ", elapsed: "
-                                    + timeHMS);
-                            lastTimeDebugPrinted = System.currentTimeMillis();
-                        }
+                    if (LOG.isDebugEnabled() && (System.currentTimeMillis() - lastTimeDebugPrinted > 10000)) {
+                        String timeHMS = StringUtil.formatTimeHMS(System.currentTimeMillis() - startTime);
+                        LOG.debug("Command still running: " + cmd + ", msg: " + itse.getMessage() + ", elapsed: "
+                                + timeHMS);
+                        lastTimeDebugPrinted = System.currentTimeMillis();
                     }
                 }
             }

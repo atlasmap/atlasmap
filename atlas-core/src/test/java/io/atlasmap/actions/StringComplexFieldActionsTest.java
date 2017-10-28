@@ -20,6 +20,7 @@ import java.util.regex.Pattern;
 import org.junit.Test;
 
 import io.atlasmap.v2.CurrentDate;
+import io.atlasmap.v2.CurrentDateTime;
 import io.atlasmap.v2.CurrentTime;
 import io.atlasmap.v2.GenerateUUID;
 import io.atlasmap.v2.PadStringLeft;
@@ -97,9 +98,24 @@ public class StringComplexFieldActionsTest {
         validateCurrentTime(StringComplexFieldActions.currentTime(new CurrentTime(), ""));
     }
 
+    protected void validateCurrentDateTime(String dateTimeValue) {
+        assertNotNull(dateTimeValue);
+        assertTrue(dateTimeValue.length() > 0);
+        assertTrue(Pattern.compile("20([1-9][0-9])-(0[0-9]|1[0-2])-(0[0-9]|1[0-9]|2[0-9]|3[0-1])T([01]?[0-9]|2[0-3]):[0-5][0-9]Z").matcher(dateTimeValue)
+                .matches());
+    }
+
     @Test
     public void testCurrentDateTime() {
-
+        validateCurrentDateTime(StringComplexFieldActions.currentDateTime(new CurrentDateTime(), null));
+        validateCurrentDateTime(StringComplexFieldActions.currentDateTime(new CurrentTime(), new Byte(Byte.parseByte("0"))));
+        validateCurrentDateTime(StringComplexFieldActions.currentDateTime(new CurrentTime(), new Character('a')));
+        validateCurrentDateTime(StringComplexFieldActions.currentDateTime(new CurrentTime(), new Double(14324d)));
+        validateCurrentDateTime(StringComplexFieldActions.currentDateTime(new CurrentTime(), new Float(234235235325f)));
+        validateCurrentDateTime(StringComplexFieldActions.currentDateTime(new CurrentTime(), new Integer(32523)));
+        validateCurrentDateTime(StringComplexFieldActions.currentDateTime(new CurrentTime(), new Long(235325L)));
+        validateCurrentDateTime(StringComplexFieldActions.currentDateTime(new CurrentTime(), new Short((short) 4323)));
+        validateCurrentDateTime(StringComplexFieldActions.currentDateTime(new CurrentTime(), ""));
     }
 
     @Test

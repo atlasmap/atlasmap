@@ -101,7 +101,7 @@ public class JavaJavaFlatMappingTest extends AtlasMappingBaseTest {
         Class<?> targetClazz = this.getClass().getClassLoader().loadClass(clazz.getName());
         BaseFlatPrimitiveClass newObject = (BaseFlatPrimitiveClass) targetClazz.newInstance();
 
-        newObject.setBooleanField(new Boolean(Boolean.FALSE));
+        newObject.setBooleanField(Boolean.valueOf(Boolean.FALSE));
         newObject.setByteField(new Byte((byte) 99));
         newObject.setCharField(new Character('a'));
         newObject.setDoubleField(new Double(50000000d));
@@ -117,7 +117,7 @@ public class JavaJavaFlatMappingTest extends AtlasMappingBaseTest {
         Class<?> targetClazz = this.getClass().getClassLoader().loadClass(clazz.getName());
         BaseFlatPrimitiveClass newObject = (BaseFlatPrimitiveClass) targetClazz.newInstance();
 
-        newObject.setBoxedBooleanField(new Boolean(Boolean.TRUE));
+        newObject.setBoxedBooleanField(Boolean.valueOf(Boolean.TRUE));
         newObject.setBoxedByteField(new Byte((byte) 87));
         newObject.setBoxedCharField(new Character('z'));
         newObject.setBoxedDoubleField(new Double(90000000d));
@@ -165,7 +165,7 @@ public class JavaJavaFlatMappingTest extends AtlasMappingBaseTest {
         assertEquals(new Integer(5), new Integer(targetObject.getBoxedIntField()));
         assertEquals(new Long(20000L), new Long(targetObject.getBoxedLongField()));
         assertEquals(new Short((short) 5), new Short(targetObject.getBoxedShortField()));
-        assertEquals(new Boolean(Boolean.TRUE), targetObject.getBoxedBooleanField());
+        assertEquals(Boolean.valueOf(Boolean.TRUE), targetObject.getBoxedBooleanField());
         assertEquals(new Byte((byte) 87), new Byte(targetObject.getBoxedByteField()));
         assertEquals(new Character('z'), new Character(targetObject.getBoxedCharField()));
         assertNull(targetObject.getBooleanArrayField());
