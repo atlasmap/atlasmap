@@ -539,8 +539,8 @@ public class DocumentJavaFieldWriter {
     }
 
     public void addClassForFieldPath(String fieldPath, Class<?> clz) {
-        fieldPath = PathUtil.removeCollectionIndexes(fieldPath);
-        this.classesForFields.put(fieldPath, clz);
+        String fieldPathTrimmed = PathUtil.removeCollectionIndexes(fieldPath);
+        this.classesForFields.put(fieldPathTrimmed, clz);
     }
 
     public void clearClassesForFields() {

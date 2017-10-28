@@ -177,13 +177,11 @@ public class XmlModule extends BaseAtlasModule {
 
                 boolean enableNamespaces = true;
                 for (String key : sourceUriParams.keySet()) {
-                    if ("disableNamespaces".equals(key)) {
-                        if ("true".equals(sourceUriParams.get("disableNamespaces"))) {
-                            if (LOG.isDebugEnabled()) {
-                                LOG.debug("Disabling namespace support");
-                            }
-                            enableNamespaces = false;
+                    if ("disableNamespaces".equals(key) && ("true".equals(sourceUriParams.get("disableNamespaces")))) {
+                        if (LOG.isDebugEnabled()) {
+                            LOG.debug("Disabling namespace support");
                         }
+                        enableNamespaces = false;
                     }
                 }
 

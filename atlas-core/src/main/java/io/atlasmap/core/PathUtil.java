@@ -252,7 +252,8 @@ public class PathUtil {
         return pathSegment != null && pathSegment.contains(":");
     }
 
-    public static String getNamespace(String pathSegment) {
+    public static String getNamespace(String pathSeg) {
+        String pathSegment = pathSeg;
         if (!isNamespaceSegment(pathSegment)) {
             return null;
         }

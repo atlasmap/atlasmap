@@ -35,7 +35,7 @@ import io.undertow.Undertow.Builder;
 
 @Configuration
 public class AtlasItestsConfiguration {
-    Properties properties;
+    private Properties properties;
 
     public AtlasItestsConfiguration() throws Exception {
         properties = new Properties();

@@ -35,7 +35,7 @@ public class DefaultAtlasCombineStrategyTest {
     }
 
     protected Map<Integer, String> generateCombineMap(int count) {
-        String combines = new String("abcdefghijklmnopqrstuvwxyz");
+        String combines = "abcdefghijklmnopqrstuvwxyz";
         Map<Integer, String> cMap = new HashMap<Integer, String>();
         for (int i = 0; i < count; i++) {
             cMap.put(i, combines.substring(i, i + 1));

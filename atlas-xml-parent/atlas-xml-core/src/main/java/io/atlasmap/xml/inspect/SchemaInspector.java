@@ -96,9 +96,6 @@ public class SchemaInspector {
         BLACKLISTED_TYPES.put("QName", FieldType.UNSUPPORTED);
     }
 
-    public SchemaInspector() {
-    }
-
     public XmlDocument getXmlDocument() {
         return XML_DOCUMENT;
     }

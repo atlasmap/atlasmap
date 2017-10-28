@@ -160,7 +160,8 @@ public class XmlFieldWriterTest {
         checkResult(expected);
     }
 
-    public void checkResult(String expected) throws Exception {
+    public void checkResult(String s) throws Exception {
+        String expected = s;
         if (document == null) {
             throw new Exception("document is not initialized.");
         }

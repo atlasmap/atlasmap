@@ -39,9 +39,6 @@ public class InstanceInspector {
 
     private XmlDocument xmlDocument = AtlasXmlModelFactory.createXmlDocument();
 
-    public InstanceInspector() {
-    }
-
     public void inspect(Document document) {
         xmlDocument.setFields(new Fields());
         parseDocument(document.getDocumentElement());

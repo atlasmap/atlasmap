@@ -39,6 +39,7 @@ import io.atlasmap.v2.Validation;
 import io.atlasmap.v2.Validations;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -165,12 +166,12 @@ public class JavaJavaFlatMappingTest extends AtlasMappingBaseTest {
         assertEquals(new Integer(5), new Integer(targetObject.getBoxedIntField()));
         assertEquals(new Long(20000L), new Long(targetObject.getBoxedLongField()));
         assertEquals(new Short((short) 5), new Short(targetObject.getBoxedShortField()));
-        assertEquals(Boolean.valueOf(Boolean.TRUE), targetObject.getBoxedBooleanField());
+        assertEquals(Boolean.TRUE, targetObject.getBoxedBooleanField());
         assertEquals(new Byte((byte) 87), new Byte(targetObject.getBoxedByteField()));
         assertEquals(new Character('z'), new Character(targetObject.getBoxedCharField()));
         assertNull(targetObject.getBooleanArrayField());
         assertNull(targetObject.getBoxedBooleanArrayField());
-        assertTrue(false == targetObject.isBooleanField());
+        assertFalse(targetObject.isBooleanField());
         assertNull(targetObject.getBoxedByteArrayField());
         assertTrue((byte) 0 == targetObject.getByteField());
         assertNull(targetObject.getBoxedCharArrayField());

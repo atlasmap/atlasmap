@@ -412,19 +412,17 @@ public class JavaModule extends BaseAtlasModule {
         }
 
         for (BaseMapping fm : mappings) {
-            if (fm instanceof Mapping) {
-                if (((Mapping) fm).getOutputField() != null) {
-                    Field f = ((Mapping) fm).getOutputField().get(0);
-                    if (f.getPath() != null) {
-                        Field inspectField = findFieldByPath(inspectionClass, f.getPath());
-                        if (inspectField != null && f instanceof JavaField && inspectField instanceof JavaField) {
-                            String overrideClassName = ((JavaField) f).getClassName();
-                            JavaField javaInspectField = (JavaField) inspectField;
-                            // Support mapping overrides className
-                            if (overrideClassName != null
-                                    && !overrideClassName.equals(javaInspectField.getClassName())) {
-                                javaInspectField.setClassName(overrideClassName);
-                            }
+            if (fm instanceof Mapping && (((Mapping) fm).getOutputField() != null)) {
+                Field f = ((Mapping) fm).getOutputField().get(0);
+                if (f.getPath() != null) {
+                    Field inspectField = findFieldByPath(inspectionClass, f.getPath());
+                    if (inspectField != null && f instanceof JavaField && inspectField instanceof JavaField) {
+                        String overrideClassName = ((JavaField) f).getClassName();
+                        JavaField javaInspectField = (JavaField) inspectField;
+                        // Support mapping overrides className
+                        if (overrideClassName != null
+                                && !overrideClassName.equals(javaInspectField.getClassName())) {
+                            javaInspectField.setClassName(overrideClassName);
                         }
                     }
                 }

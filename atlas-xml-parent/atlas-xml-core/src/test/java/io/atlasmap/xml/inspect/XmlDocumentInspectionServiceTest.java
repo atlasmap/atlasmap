@@ -638,10 +638,8 @@ public class XmlDocumentInspectionServiceTest {
     private void debugFields(XmlFields xmlFields) {
         for (XmlField xmlField : xmlFields.getXmlField()) {
             printXmlField(xmlField);
-            if (xmlField instanceof XmlComplexType) {
-                if (((XmlComplexType) xmlField).getXmlFields() != null) {
-                    debugFields(((XmlComplexType) xmlField).getXmlFields());
-                }
+            if (xmlField instanceof XmlComplexType && (((XmlComplexType) xmlField).getXmlFields() != null)) {
+                debugFields(((XmlComplexType) xmlField).getXmlFields());
             }
         }
     }

@@ -15,7 +15,6 @@
  */
 package io.atlasmap.validators;
 
-import org.hamcrest.CoreMatchers;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -106,12 +105,12 @@ public class AtlasValidationTestHelperTest {
         assertThat(error.getStatus(), is(ValidationStatus.ERROR));
 
         assertThat(warning.getField(), is("test.field.one"));
-        assertThat(warning.getValue(), CoreMatchers.is(""));
+        assertThat(warning.getValue(), is(""));
         assertThat(warning.getMessage(), is("Warning message"));
         assertThat(warning.getStatus(), is(ValidationStatus.WARN));
 
         assertThat(info.getField(), is("test.field.two"));
-        assertThat(info.getValue(), CoreMatchers.is("qwerty"));
+        assertThat(info.getValue(), is("qwerty"));
         assertThat(info.getMessage(), is("Information message"));
         assertThat(info.getStatus(), is(ValidationStatus.INFO));
     }

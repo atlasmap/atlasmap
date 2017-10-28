@@ -308,70 +308,71 @@ public class ClassInspectionService {
     }
 
     protected JavaField inspectGetMethod(Method m, JavaField s, Set<String> cachedClasses, String pathPrefix) {
+        JavaField field = s;
 
-        s.setName(StringUtil.removeGetterAndLowercaseFirstLetter(m.getName()));
+        field.setName(StringUtil.removeGetterAndLowercaseFirstLetter(m.getName()));
 
         if (pathPrefix != null && pathPrefix.length() > 0) {
-            s.setPath(
+            field.setPath(
                     pathPrefix + PathUtil.PATH_SEPARATOR + StringUtil.removeGetterAndLowercaseFirstLetter(m.getName()));
         } else {
-            s.setPath(StringUtil.removeGetterAndLowercaseFirstLetter(m.getName()));
+            field.setPath(StringUtil.removeGetterAndLowercaseFirstLetter(m.getName()));
         }
 
         if (m.getParameterCount() != 0) {
-            s.setStatus(FieldStatus.UNSUPPORTED);
-            return s;
+            field.setStatus(FieldStatus.UNSUPPORTED);
+            return field;
         }
 
         if (m.getReturnType().equals(Void.TYPE)) {
-            s.setStatus(FieldStatus.UNSUPPORTED);
-            return s;
+            field.setStatus(FieldStatus.UNSUPPORTED);
+            return field;
         }
 
         Class<?> returnType = m.getReturnType();
         if (returnType.isArray()) {
-            s.setCollectionType(CollectionType.ARRAY);
-            s.setArrayDimensions(detectArrayDimensions(returnType));
+            field.setCollectionType(CollectionType.ARRAY);
+            field.setArrayDimensions(detectArrayDimensions(returnType));
             returnType = detectArrayClass(returnType);
         }
 
-        s.setClassName(returnType.getCanonicalName());
-        s.setGetMethod(m.getName());
+        field.setClassName(returnType.getCanonicalName());
+        field.setGetMethod(m.getName());
         if (getConversionService().isPrimitive(returnType)) {
-            s.setPrimitive(true);
-            s.setFieldType(getConversionService().fieldTypeFromClass(returnType));
-            s.setStatus(FieldStatus.SUPPORTED);
+            field.setPrimitive(true);
+            field.setFieldType(getConversionService().fieldTypeFromClass(returnType));
+            field.setStatus(FieldStatus.SUPPORTED);
         } else if (getConversionService().isBoxedPrimitive(returnType)) {
-            s.setPrimitive(true);
-            s.setFieldType(getConversionService().fieldTypeFromClass(returnType));
-            s.setStatus(FieldStatus.SUPPORTED);
+            field.setPrimitive(true);
+            field.setFieldType(getConversionService().fieldTypeFromClass(returnType));
+            field.setStatus(FieldStatus.SUPPORTED);
         } else {
-            s.setPrimitive(false);
-            s.setFieldType(FieldType.COMPLEX);
+            field.setPrimitive(false);
+            field.setFieldType(FieldType.COMPLEX);
 
             Class<?> complexClazz = null;
-            JavaClass tmpField = convertJavaFieldToJavaClass(s);
-            s = tmpField;
+            JavaClass tmpField = convertJavaFieldToJavaClass(field);
+            field = tmpField;
 
             if (returnType.getCanonicalName() == null) {
-                s.setStatus(FieldStatus.UNSUPPORTED);
+                field.setStatus(FieldStatus.UNSUPPORTED);
             } else if (!cachedClasses.contains(returnType.getCanonicalName())) {
                 try {
                     complexClazz = Class.forName(returnType.getCanonicalName());
                     cachedClasses.add(returnType.getCanonicalName());
-                    inspectClass(complexClazz, tmpField, cachedClasses, s.getPath());
+                    inspectClass(complexClazz, tmpField, cachedClasses, field.getPath());
                     if (tmpField.getStatus() == null) {
-                        s.setStatus(FieldStatus.SUPPORTED);
+                        field.setStatus(FieldStatus.SUPPORTED);
                     }
                 } catch (ClassNotFoundException cnfe) {
-                    s.setStatus(FieldStatus.NOT_FOUND);
+                    field.setStatus(FieldStatus.NOT_FOUND);
                 }
             } else {
-                s.setStatus(FieldStatus.CACHED);
+                field.setStatus(FieldStatus.CACHED);
             }
         }
 
-        return s;
+        return field;
     }
 
     protected JavaField inspectSetMethod(Method m, JavaField s, Set<String> cachedClasses, String pathPrefix) {

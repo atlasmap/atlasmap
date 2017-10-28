@@ -150,11 +150,7 @@ public class JsonService extends Application {
             return false;
         }
 
-        if (!jsonData.startsWith("{") && !jsonData.startsWith("[")) {
-            return false;
-        }
-
-        return true;
+        return jsonData.startsWith("{") || jsonData.startsWith("[");
     }
 
     protected String cleanJsonData(String jsonData) {

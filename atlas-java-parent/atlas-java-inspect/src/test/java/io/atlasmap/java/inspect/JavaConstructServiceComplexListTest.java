@@ -57,7 +57,7 @@ public class JavaConstructServiceComplexListTest {
     public void testConstructSourceOrderList() throws Exception {
         Object targetObject = constructService.constructClass(generateOrderList("Source"));
         assertNotNull(targetObject);
-        assertTrue(targetObject instanceof io.atlasmap.java.test.SourceOrderList);
+        assertTrue(targetObject instanceof SourceOrderList);
         SourceOrderList orderList = (SourceOrderList) targetObject;
         assertNotNull(orderList.getOrders());
         assertTrue(orderList.getOrders().isEmpty());
@@ -69,7 +69,7 @@ public class JavaConstructServiceComplexListTest {
     public void testConstructTargetOrderList() throws Exception {
         Object targetObject = constructService.constructClass(generateOrderList("Target"));
         assertNotNull(targetObject);
-        assertTrue(targetObject instanceof io.atlasmap.java.test.TargetOrderList);
+        assertTrue(targetObject instanceof TargetOrderList);
         TargetOrderList orderList = (TargetOrderList) targetObject;
         assertNotNull(orderList.getOrders());
         assertTrue(orderList.getOrders().isEmpty());
@@ -81,7 +81,7 @@ public class JavaConstructServiceComplexListTest {
     public void testConstructPopulatedOrderList() throws Exception {
         Object targetObject = constructService.constructClass(generateOrderList("PopulatedList"));
         assertNotNull(targetObject);
-        assertTrue(targetObject instanceof io.atlasmap.java.test.PopulatedListOrderList);
+        assertTrue(targetObject instanceof PopulatedListOrderList);
         PopulatedListOrderList orderList = (PopulatedListOrderList) targetObject;
         assertNotNull(orderList.getOrders());
         assertTrue(orderList.getOrders().isEmpty());
@@ -94,7 +94,7 @@ public class JavaConstructServiceComplexListTest {
     public void testConstructTargetOrderListFiltered() throws Exception {
         Object targetObject = constructService.constructClass(generateOrderList("Target"), new ArrayList<String>());
         assertNotNull(targetObject);
-        assertTrue(targetObject instanceof io.atlasmap.java.test.TargetOrderList);
+        assertTrue(targetObject instanceof TargetOrderList);
         TargetOrderList orderList = (TargetOrderList) targetObject;
         assertNotNull(orderList.getOrders());
         assertTrue(orderList.getOrders().isEmpty());
