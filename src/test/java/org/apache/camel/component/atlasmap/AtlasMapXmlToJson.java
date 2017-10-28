@@ -1,5 +1,7 @@
 package org.apache.camel.component.atlasmap;
 
+import static org.junit.Assert.assertEquals;
+
 import java.io.File;
 
 import org.junit.Ignore;
@@ -15,11 +17,15 @@ public class AtlasMapXmlToJson {
 
     @Test
     public void testConvertXmlToJson() throws Exception {
+        String sourceXmlPath = "src/test/resources/atlasmapping.xml";
+        String destJsonPath = "src/test/resources/atlasmapping.json";
         AtlasMappingService atlasMappingService = DefaultAtlasContextFactory.getInstance().getMappingService();
-        AtlasMapping atlasMapping = atlasMappingService.loadMapping("src/test/resources/atlasmapping.xml",
-                AtlasMappingFormat.XML);
-        atlasMappingService.saveMappingAsFile(atlasMapping, new File("src/test/resources/atlasmapping.json"),
-                AtlasMappingFormat.JSON);
+        AtlasMapping mappingFromXml = atlasMappingService.loadMapping(sourceXmlPath, AtlasMappingFormat.XML);
+        atlasMappingService.saveMappingAsFile(mappingFromXml, new File(destJsonPath), AtlasMappingFormat.JSON);
+        AtlasMapping mappingFromJson = atlasMappingService.loadMapping(destJsonPath, AtlasMappingFormat.JSON);
+        assertEquals(mappingFromXml.getName(), mappingFromJson.getName());
+        assertEquals(mappingFromXml.getDataSource().size(), mappingFromJson.getDataSource().size());
+        assertEquals(mappingFromXml.getMappings().getMapping().size(), mappingFromJson.getMappings().getMapping().size());
     }
 
 }
