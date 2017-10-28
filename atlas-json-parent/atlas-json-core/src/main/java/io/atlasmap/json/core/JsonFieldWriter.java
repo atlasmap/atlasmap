@@ -57,7 +57,7 @@ public class JsonFieldWriter {
         ObjectNode parentNode = this.rootNode;
         String parentSegment = null;
         for (String segment : path.getSegments()) {
-            if (segment != lastSegment) { // this is a parent node.
+            if (!segment.equals(lastSegment)) { // this is a parent node.
                 if (LOG.isDebugEnabled()) {
                     LOG.debug("Now processing parent segment: " + segment);
                 }

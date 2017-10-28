@@ -163,6 +163,8 @@ public class DefaultAtlasValidationService implements AtlasValidationService {
             case TARGET:
                 Validators.DATASOURCE_TARGET_URI.get().validate(ds.getUri(), validations);
                 break;
+            default:
+                throw new IllegalArgumentException(String.format("Unknown DataSource type '%s'", ds.getDataSourceType()));
             }
         }
         validateFieldMappings(mapping.getMappings(), mapping.getLookupTables(), validations);

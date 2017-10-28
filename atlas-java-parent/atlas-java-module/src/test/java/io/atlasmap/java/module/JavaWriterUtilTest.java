@@ -95,7 +95,6 @@ public class JavaWriterUtilTest extends BaseDocumentWriterTest {
 
     @Test
     public void testInstantiateObject() throws Exception {
-        JavaWriterUtil writerUtil = new JavaWriterUtil(DefaultAtlasConversionService.getInstance());
         runInstantiateObjectTest(String.class, false);
         runInstantiateObjectTest(String.class, true);
         runInstantiateObjectTest(LinkedList.class, false);

@@ -34,9 +34,6 @@ public class DocumentJavaFieldWriter {
         Object convertValue(Object parentObject, Field outputField) throws AtlasException;
     }
 
-    public DocumentJavaFieldWriter() {
-    }
-
     public void write(Field field, JavaFieldWriterValueConverter converter) throws AtlasException {
         try {
             if (field == null) {
@@ -238,8 +235,9 @@ public class DocumentJavaFieldWriter {
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    public Object expandCollectionToFitItem(Field field, Object collectionObject, SegmentContext segmentContext,
+    public Object expandCollectionToFitItem(Field field, Object obj, SegmentContext segmentContext,
             Object parentObject) throws AtlasException {
+        Object collectionObject = obj;
         String segment = segmentContext.getSegment();
         if (!collectionHasRoomForIndex(collectionObject, segmentContext)) {
             if (LOG.isDebugEnabled()) {

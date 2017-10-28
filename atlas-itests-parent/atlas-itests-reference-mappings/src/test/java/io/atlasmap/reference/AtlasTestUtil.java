@@ -431,7 +431,7 @@ public class AtlasTestUtil {
         assertEquals(new Integer(5), new Integer(targetObject.getBoxedIntField()));
         assertEquals(new Long(20000L), new Long(targetObject.getBoxedLongField().longValue()));
         assertEquals(new Short((short) 5), new Short(targetObject.getBoxedShortField().shortValue()));
-        assertEquals(new Boolean(Boolean.TRUE), targetObject.getBoxedBooleanField());
+        assertEquals(Boolean.TRUE, targetObject.getBoxedBooleanField());
         // assertEquals(new Byte((byte) 87), new
         // Byte(targetObject.getBoxedByteField()));
         assertEquals(new Character('z'), new Character(targetObject.getBoxedCharField().charAt(0)));
@@ -993,7 +993,7 @@ public class AtlasTestUtil {
         assertEquals(new Integer(5), new Integer(targetObject.getBoxedIntField()));
         assertEquals(new Long(20000L), new Long(targetObject.getBoxedLongField()));
         assertEquals(new Short((short) 5), new Short(targetObject.getBoxedShortField()));
-        assertEquals(new Boolean(Boolean.TRUE), targetObject.isBoxedBooleanField());
+        assertEquals(Boolean.TRUE, targetObject.isBoxedBooleanField());
         assertEquals(new Byte((byte) 87), new Byte(targetObject.getBoxedByteField()));
         assertEquals(new Character('z'), new Character(targetObject.getBoxedCharField().charAt(0)));
         assertNull(targetObject.getBoxedStringField());
@@ -1006,7 +1006,7 @@ public class AtlasTestUtil {
         assertEquals(new Integer(5), new Integer(targetObject.getBoxedIntField()));
         assertEquals(new Long(20000L), new Long(targetObject.getBoxedLongField()));
         assertEquals(new Short((short) 5), new Short(targetObject.getBoxedShortField()));
-        assertEquals(new Boolean(Boolean.TRUE), targetObject.isBoxedBooleanField());
+        assertEquals(Boolean.TRUE, targetObject.isBoxedBooleanField());
         assertEquals(new Byte((byte) 87), new Byte(targetObject.getBoxedByteField()));
         assertEquals(new Character('z'), new Character(targetObject.getBoxedCharField().charAt(0)));
         assertNull(targetObject.getBoxedStringField());

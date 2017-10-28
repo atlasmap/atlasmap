@@ -118,11 +118,11 @@ public class DateConverter implements AtlasConverter<Date> {
     }
 
     @AtlasConversionInfo(sourceType = FieldType.COMPLEX, targetType = FieldType.DATE, sourceClassName = "java.sql.Time", targetClassName = "java.util.Date")
-    public Date convertFromTime(java.sql.Time time) throws AtlasConversionException {
+    public Date convertFromTime(Time time) throws AtlasConversionException {
         return convertFromLocalTime(time.toLocalTime(), ZoneId.systemDefault());
     }
 
-    public Date convertFromTime(java.sql.Time time, ZoneId zoneId) throws AtlasConversionException {
+    public Date convertFromTime(Time time, ZoneId zoneId) throws AtlasConversionException {
         return convertFromLocalTime(time.toLocalTime(), zoneId);
     }
 

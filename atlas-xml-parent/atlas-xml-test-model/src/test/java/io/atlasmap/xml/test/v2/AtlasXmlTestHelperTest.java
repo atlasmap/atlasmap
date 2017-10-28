@@ -8,10 +8,12 @@ public class AtlasXmlTestHelperTest {
 
     @Before
     public void setUp() throws Exception {
+        // no-op
     }
 
     @After
     public void tearDown() throws Exception {
+        // no-op
     }
 
     @Test

@@ -477,6 +477,8 @@ public abstract class BaseMarshallerTest {
                 p.setFieldType(FieldType.STRING);
                 p.setValue(Integer.toString(i));
                 break;
+            default:
+                throw new IllegalArgumentException("Uh-oh " + i);
             }
 
             props.getProperty().add(p);

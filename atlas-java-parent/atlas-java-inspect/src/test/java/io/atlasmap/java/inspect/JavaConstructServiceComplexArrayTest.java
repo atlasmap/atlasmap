@@ -61,7 +61,7 @@ public class JavaConstructServiceComplexArrayTest {
     public void testConstructSourceOrderArray() throws Exception {
         Object targetObject = constructService.constructClass(generateOrderArray("Source"));
         assertNotNull(targetObject);
-        assertTrue(targetObject instanceof io.atlasmap.java.test.SourceOrderArray);
+        assertTrue(targetObject instanceof SourceOrderArray);
         SourceOrderArray orderArray = (SourceOrderArray) targetObject;
         assertNotNull(orderArray.getOrders());
         assertTrue(orderArray.getOrders().length > 0);
@@ -78,7 +78,7 @@ public class JavaConstructServiceComplexArrayTest {
             assertNull(address.getZipCode());
 
             assertNotNull(order.getContact());
-            assertTrue(order.getContact() instanceof io.atlasmap.java.test.SourceContact);
+            assertTrue(order.getContact() instanceof SourceContact);
             SourceContact contact = (SourceContact) order.getContact();
             assertNull(contact.getFirstName());
             assertNull(contact.getLastName());
@@ -91,14 +91,14 @@ public class JavaConstructServiceComplexArrayTest {
     public void testConstructTargetOrderArray() throws Exception {
         Object targetObject = constructService.constructClass(generateOrderArray("Target"));
         assertNotNull(targetObject);
-        assertTrue(targetObject instanceof io.atlasmap.java.test.TargetOrderArray);
+        assertTrue(targetObject instanceof TargetOrderArray);
         TargetOrderArray orderArray = (TargetOrderArray) targetObject;
 
         for (int i = 0; i < orderArray.getOrders().length; i++) {
             TargetOrder order = (TargetOrder) orderArray.getOrders()[i];
             assertNotNull(order);
             assertNotNull(order.getAddress());
-            assertTrue(order.getAddress() instanceof io.atlasmap.java.test.TargetAddress);
+            assertTrue(order.getAddress() instanceof TargetAddress);
             TargetAddress address = (TargetAddress) order.getAddress();
             assertNull(address.getAddressLine1());
             assertNull(address.getAddressLine2());
@@ -107,7 +107,7 @@ public class JavaConstructServiceComplexArrayTest {
             assertNull(address.getZipCode());
 
             assertNotNull(order.getContact());
-            assertTrue(order.getContact() instanceof io.atlasmap.java.test.TargetContact);
+            assertTrue(order.getContact() instanceof TargetContact);
             TargetContact contact = (TargetContact) order.getContact();
             assertNull(contact.getFirstName());
             assertNull(contact.getLastName());
@@ -122,7 +122,7 @@ public class JavaConstructServiceComplexArrayTest {
         Object targetObject = constructService.constructClass(generateOrderArray("Target"),
                 Arrays.asList("orders", "orders/address"));
         assertNotNull(targetObject);
-        assertTrue(targetObject instanceof io.atlasmap.java.test.TargetOrderArray);
+        assertTrue(targetObject instanceof TargetOrderArray);
         TargetOrderArray orderArray = (TargetOrderArray) targetObject;
         assertNotNull(orderArray.getOrders());
         assertTrue(orderArray.getOrders().length > 0);
@@ -131,7 +131,7 @@ public class JavaConstructServiceComplexArrayTest {
         for (int i = 0; i < orderArray.getOrders().length; i++) {
             TargetOrder order = (TargetOrder) orderArray.getOrders()[i];
             assertNotNull(order.getAddress());
-            assertTrue(order.getAddress() instanceof io.atlasmap.java.test.TargetAddress);
+            assertTrue(order.getAddress() instanceof TargetAddress);
             TargetAddress address = (TargetAddress) order.getAddress();
             assertNull(address.getAddressLine1());
             assertNull(address.getAddressLine2());

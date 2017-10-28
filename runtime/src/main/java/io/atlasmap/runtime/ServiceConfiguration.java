@@ -64,9 +64,6 @@ public class ServiceConfiguration {
     // =====================================================================
 
     public static class JavaServiceEmptyClasspath extends JavaService {
-        public JavaServiceEmptyClasspath() {
-            super();
-        }
 
         /**
          * Stub out mavenclasspath processing for now.

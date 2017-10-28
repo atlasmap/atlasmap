@@ -133,14 +133,12 @@ public class StringComplexFieldActionsTest {
             StringComplexFieldActions.padStringRight(null, "aa");
             fail("IllegalArgumentException expected");
         } catch (IllegalArgumentException e) {
-            assertTrue(true);
         }
 
         try {
             StringComplexFieldActions.padStringRight(new PadStringRight(), "aa");
             fail("IllegalArgumentException expected");
         } catch (IllegalArgumentException e) {
-            assertTrue(true);
         }
 
         try {
@@ -149,7 +147,6 @@ public class StringComplexFieldActionsTest {
             StringComplexFieldActions.padStringRight(incomplete, "aa");
             fail("IllegalArgumentException expected");
         } catch (IllegalArgumentException e) {
-            assertTrue(true);
         }
 
         try {
@@ -158,7 +155,6 @@ public class StringComplexFieldActionsTest {
             StringComplexFieldActions.padStringRight(incomplete, "aa");
             fail("IllegalArgumentException expected");
         } catch (IllegalArgumentException e) {
-            assertTrue(true);
         }
     }
 

@@ -122,8 +122,9 @@ public class ClassInspectionService {
         return inspectPackages(Arrays.asList(packageName), inspectChildren);
     }
 
-    public Map<String, JavaClass> inspectPackages(List<String> packages, boolean inspectChildren)
+    public Map<String, JavaClass> inspectPackages(List<String> pkgs, boolean inspectChildren)
             throws ClassNotFoundException, InspectionException {
+        List<String> packages = pkgs;
         packages = inspectChildren ? findChildPackages(packages) : packages;
         Map<String, JavaClass> classes = new HashMap<>();
         for (String p : packages) {
@@ -374,76 +375,77 @@ public class ClassInspectionService {
     }
 
     protected JavaField inspectSetMethod(Method m, JavaField s, Set<String> cachedClasses, String pathPrefix) {
+        JavaField field = s;
 
-        s.setName(StringUtil.removeSetterAndLowercaseFirstLetter(m.getName()));
+        field.setName(StringUtil.removeSetterAndLowercaseFirstLetter(m.getName()));
 
         if (pathPrefix != null && pathPrefix.length() > 0) {
-            s.setPath(
+            field.setPath(
                     pathPrefix + PathUtil.PATH_SEPARATOR + StringUtil.removeSetterAndLowercaseFirstLetter(m.getName()));
         } else {
-            s.setPath(StringUtil.removeSetterAndLowercaseFirstLetter(m.getName()));
+            field.setPath(StringUtil.removeSetterAndLowercaseFirstLetter(m.getName()));
         }
 
         if (m.getParameterCount() != 1) {
-            s.setStatus(FieldStatus.UNSUPPORTED);
-            return s;
+            field.setStatus(FieldStatus.UNSUPPORTED);
+            return field;
         }
 
         if (!m.getReturnType().equals(Void.TYPE)) {
-            s.setStatus(FieldStatus.UNSUPPORTED);
-            return s;
+            field.setStatus(FieldStatus.UNSUPPORTED);
+            return field;
         }
 
         Class<?>[] params = m.getParameterTypes();
         if (params == null || params.length != 1) {
-            s.setStatus(FieldStatus.UNSUPPORTED);
-            return s;
+            field.setStatus(FieldStatus.UNSUPPORTED);
+            return field;
         }
 
         Class<?> paramType = params[0];
         if (paramType.isArray()) {
-            s.setCollectionType(CollectionType.ARRAY);
-            s.setArrayDimensions(detectArrayDimensions(paramType));
+            field.setCollectionType(CollectionType.ARRAY);
+            field.setArrayDimensions(detectArrayDimensions(paramType));
             paramType = detectArrayClass(paramType);
         }
 
-        s.setClassName(paramType.getCanonicalName());
-        s.setSetMethod(m.getName());
+        field.setClassName(paramType.getCanonicalName());
+        field.setSetMethod(m.getName());
         if (getConversionService().isPrimitive(paramType)) {
-            s.setPrimitive(true);
-            s.setFieldType(getConversionService().fieldTypeFromClass(paramType));
-            s.setStatus(FieldStatus.SUPPORTED);
+            field.setPrimitive(true);
+            field.setFieldType(getConversionService().fieldTypeFromClass(paramType));
+            field.setStatus(FieldStatus.SUPPORTED);
         } else if (getConversionService().isBoxedPrimitive(paramType)) {
-            s.setPrimitive(true);
-            s.setFieldType(getConversionService().fieldTypeFromClass(paramType));
-            s.setStatus(FieldStatus.SUPPORTED);
+            field.setPrimitive(true);
+            field.setFieldType(getConversionService().fieldTypeFromClass(paramType));
+            field.setStatus(FieldStatus.SUPPORTED);
         } else {
-            s.setPrimitive(false);
-            s.setFieldType(FieldType.COMPLEX);
+            field.setPrimitive(false);
+            field.setFieldType(FieldType.COMPLEX);
 
             Class<?> complexClazz = null;
-            JavaClass tmpField = convertJavaFieldToJavaClass(s);
-            s = tmpField;
+            JavaClass tmpField = convertJavaFieldToJavaClass(field);
+            field = tmpField;
 
             if (paramType.getCanonicalName() == null) {
-                s.setStatus(FieldStatus.UNSUPPORTED);
+                field.setStatus(FieldStatus.UNSUPPORTED);
             } else if (!cachedClasses.contains(paramType.getCanonicalName())) {
                 try {
                     complexClazz = Class.forName(paramType.getCanonicalName());
                     cachedClasses.add(paramType.getCanonicalName());
-                    inspectClass(complexClazz, tmpField, cachedClasses, s.getPath());
+                    inspectClass(complexClazz, tmpField, cachedClasses, field.getPath());
                     if (tmpField.getStatus() == null) {
-                        s.setStatus(FieldStatus.SUPPORTED);
+                        field.setStatus(FieldStatus.SUPPORTED);
                     }
                 } catch (ClassNotFoundException cnfe) {
-                    s.setStatus(FieldStatus.NOT_FOUND);
+                    field.setStatus(FieldStatus.NOT_FOUND);
                 }
             } else {
-                s.setStatus(FieldStatus.CACHED);
+                field.setStatus(FieldStatus.CACHED);
             }
         }
 
-        return s;
+        return field;
     }
 
     protected JavaField inspectField(Field f, Set<String> cachedClasses, String pathPrefix) {

@@ -195,10 +195,8 @@ public abstract class BaseAtlasModule implements AtlasModule {
 
     protected void processConstantField(AtlasSession atlasSession, Mapping mapping) throws AtlasException {
         for (Field f : mapping.getInputField()) {
-            if (f instanceof ConstantField) {
-                if (f.getFieldType() == null && f.getValue() != null) {
-                    f.setFieldType(getConversionService().fieldTypeFromClass(f.getValue().getClass()));
-                }
+            if (f instanceof ConstantField && (f.getFieldType() == null && f.getValue() != null)) {
+                f.setFieldType(getConversionService().fieldTypeFromClass(f.getValue().getClass()));
             }
         }
     }

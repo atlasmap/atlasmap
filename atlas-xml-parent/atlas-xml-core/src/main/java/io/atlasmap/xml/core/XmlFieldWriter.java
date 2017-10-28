@@ -111,7 +111,7 @@ public class XmlFieldWriter extends XmlFieldTransformer {
                 parentSegment = segment;
             } else {
                 if (LOG.isDebugEnabled()) {
-                    if (segment == lastSegment) {
+                    if (segment.equals(lastSegment)) {
                         LOG.debug("Now processing field value segment: " + segment);
                     } else {
                         LOG.debug("Now processing parent segment: " + segment);
@@ -129,7 +129,7 @@ public class XmlFieldWriter extends XmlFieldTransformer {
                     parentSegment = segment;
                 }
 
-                if (segment == lastSegment) {
+                if (segment.equals(lastSegment)) {
                     writeValue(parentNode, segment, field);
                 }
             }

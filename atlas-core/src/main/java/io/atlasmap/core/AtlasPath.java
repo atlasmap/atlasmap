@@ -65,11 +65,7 @@ public class AtlasPath {
     }
 
     public boolean hasParent() {
-        if (segments.size() > 1) {
-            return true;
-        }
-
-        return false;
+        return segments.size() > 1;
     }
 
     public boolean hasCollection() {

@@ -227,7 +227,8 @@ public class JavaModule extends BaseAtlasModule {
         populateSourceFieldValue(sourceField, source, getter);
     }
 
-    protected void populateSourceFieldValue(Field field, Object source, Method getter) throws Exception {
+    protected void populateSourceFieldValue(Field field, Object source, Method m) throws Exception {
+        Method getter = m;
         Object parentObject = source;
         PathUtil pathUtil = new PathUtil(field.getPath());
         if (pathUtil.hasParent()) {

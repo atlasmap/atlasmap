@@ -24,16 +24,16 @@ public class XmlPathCoordinate {
     private String elementName;
     private Map<String, String> namespace;
 
-    XmlPathCoordinate(Integer index, String elementName) {
+    protected XmlPathCoordinate(Integer index, String elementName) {
         this.index = index;
         this.elementName = elementName;
     }
 
-    Integer getIndex() {
+    protected Integer getIndex() {
         return index;
     }
 
-    String getElementName() {
+    protected String getElementName() {
         return elementName;
     }
 
@@ -41,7 +41,7 @@ public class XmlPathCoordinate {
         return namespace;
     }
 
-    void setNamespace(String uri, String prefix) {
+    protected void setNamespace(String uri, String prefix) {
         namespace = Collections.singletonMap(uri, prefix);
     }
 
