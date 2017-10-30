@@ -20,14 +20,21 @@ import org.junit.Before;
 import org.junit.Test;
 
 import io.atlasmap.core.DefaultAtlasConversionService;
+import io.atlasmap.java.v2.JavaClass;
+import io.atlasmap.java.v2.JavaField;
+import io.atlasmap.java.v2.Modifier;
+import io.atlasmap.v2.FieldType;
 
 import java.io.File;
 import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 public class ClassInspectionServiceTest {
 
@@ -98,6 +105,195 @@ public class ClassInspectionServiceTest {
         assertEquals(File.separator + "foo.jar", cis.classpathStringToList(tmpcp).get(0));
         assertEquals(File.separator + "bar.jar", cis.classpathStringToList(tmpcp).get(1));
         assertEquals(File.separator + "blah.jar", cis.classpathStringToList(tmpcp).get(2));
+    }
+
+    @Test
+    public void testDateTimeViaField() {
+        JavaClass javaClass = classInspectionService.inspectClass(DateTimeField.class);
+        // FIXME java.time.Month is Enum - https://github.com/atlasmap/atlasmap-runtime/issues/251
+        // assertEquals(10, javaClass.getJavaFields().getJavaField().size());
+        assertEquals(9, javaClass.getJavaFields().getJavaField().size());
+        assertFalse(javaClass.getModifiers().getModifier().contains(Modifier.PRIVATE));
+        assertFalse(javaClass.getModifiers().getModifier().contains(Modifier.PROTECTED));
+        assertFalse(javaClass.getModifiers().getModifier().contains(Modifier.PUBLIC));
+        assertTrue(javaClass.getModifiers().getModifier().contains(Modifier.PACKAGE_PRIVATE));
+        for (JavaField field : javaClass.getJavaFields().getJavaField()) {
+            if ("year".equals(field.getName())) {
+                assertEquals("java.time.Year", field.getClassName());
+                assertEquals(FieldType.DATE, field.getFieldType());
+                assertFalse(field.getModifiers().getModifier().contains(Modifier.PRIVATE));
+                assertFalse(field.getModifiers().getModifier().contains(Modifier.PROTECTED));
+                assertFalse(field.getModifiers().getModifier().contains(Modifier.PUBLIC));
+                assertTrue(field.getModifiers().getModifier().contains(Modifier.PACKAGE_PRIVATE));
+            } else if ("month".equals(field.getName())) {
+                assertEquals("java.time.Month", field.getClassName());
+                assertEquals(FieldType.DATE, field.getFieldType());
+                assertFalse(field.getModifiers().getModifier().contains(Modifier.PRIVATE));
+                assertFalse(field.getModifiers().getModifier().contains(Modifier.PROTECTED));
+                assertFalse(field.getModifiers().getModifier().contains(Modifier.PUBLIC));
+                assertTrue(field.getModifiers().getModifier().contains(Modifier.PACKAGE_PRIVATE));
+            } else if ("yearMonth".equals(field.getName())) {
+                assertEquals("java.time.YearMonth", field.getClassName());
+                assertEquals(FieldType.DATE, field.getFieldType());
+                assertFalse(field.getModifiers().getModifier().contains(Modifier.PRIVATE));
+                assertFalse(field.getModifiers().getModifier().contains(Modifier.PROTECTED));
+                assertFalse(field.getModifiers().getModifier().contains(Modifier.PUBLIC));
+                assertTrue(field.getModifiers().getModifier().contains(Modifier.PACKAGE_PRIVATE));
+            } else if ("monthDay".equals(field.getName())) {
+                assertEquals("java.time.MonthDay", field.getClassName());
+                assertEquals(FieldType.DATE, field.getFieldType());
+                assertFalse(field.getModifiers().getModifier().contains(Modifier.PRIVATE));
+                assertFalse(field.getModifiers().getModifier().contains(Modifier.PROTECTED));
+                assertFalse(field.getModifiers().getModifier().contains(Modifier.PUBLIC));
+                assertTrue(field.getModifiers().getModifier().contains(Modifier.PACKAGE_PRIVATE));
+            } else if ("localDate".equals(field.getName())) {
+                assertEquals("java.time.LocalDate", field.getClassName());
+                assertEquals(FieldType.DATE, field.getFieldType());
+                assertFalse(field.getModifiers().getModifier().contains(Modifier.PRIVATE));
+                assertFalse(field.getModifiers().getModifier().contains(Modifier.PROTECTED));
+                assertFalse(field.getModifiers().getModifier().contains(Modifier.PUBLIC));
+                assertTrue(field.getModifiers().getModifier().contains(Modifier.PACKAGE_PRIVATE));
+            } else if ("localTime".equals(field.getName())) {
+                assertEquals("java.time.LocalTime", field.getClassName());
+                assertEquals(FieldType.TIME, field.getFieldType());
+                assertFalse(field.getModifiers().getModifier().contains(Modifier.PRIVATE));
+                assertFalse(field.getModifiers().getModifier().contains(Modifier.PROTECTED));
+                assertFalse(field.getModifiers().getModifier().contains(Modifier.PUBLIC));
+                assertTrue(field.getModifiers().getModifier().contains(Modifier.PACKAGE_PRIVATE));
+            } else if ("localDateTime".equals(field.getName())) {
+                assertEquals("java.time.LocalDateTime", field.getClassName());
+                assertEquals(FieldType.DATE_TIME, field.getFieldType());
+                assertFalse(field.getModifiers().getModifier().contains(Modifier.PRIVATE));
+                assertFalse(field.getModifiers().getModifier().contains(Modifier.PROTECTED));
+                assertFalse(field.getModifiers().getModifier().contains(Modifier.PUBLIC));
+                assertTrue(field.getModifiers().getModifier().contains(Modifier.PACKAGE_PRIVATE));
+            } else if ("zonedDateTime".equals(field.getName())) {
+                assertEquals("java.time.ZonedDateTime", field.getClassName());
+                assertEquals(FieldType.DATE_TIME_TZ, field.getFieldType());
+                assertFalse(field.getModifiers().getModifier().contains(Modifier.PRIVATE));
+                assertFalse(field.getModifiers().getModifier().contains(Modifier.PROTECTED));
+                assertFalse(field.getModifiers().getModifier().contains(Modifier.PUBLIC));
+                assertTrue(field.getModifiers().getModifier().contains(Modifier.PACKAGE_PRIVATE));
+            } else if ("date".equals(field.getName())) {
+                assertEquals("java.util.Date", field.getClassName());
+                assertEquals(FieldType.DATE_TIME_TZ, field.getFieldType());
+                assertFalse(field.getModifiers().getModifier().contains(Modifier.PRIVATE));
+                assertFalse(field.getModifiers().getModifier().contains(Modifier.PROTECTED));
+                assertFalse(field.getModifiers().getModifier().contains(Modifier.PUBLIC));
+                assertTrue(field.getModifiers().getModifier().contains(Modifier.PACKAGE_PRIVATE));
+            } else if ("sqlDate".equals(field.getName())) {
+                assertEquals("java.sql.Date", field.getClassName());
+                assertEquals(FieldType.DATE_TIME_TZ, field.getFieldType());
+                assertFalse(field.getModifiers().getModifier().contains(Modifier.PRIVATE));
+                assertFalse(field.getModifiers().getModifier().contains(Modifier.PROTECTED));
+                assertFalse(field.getModifiers().getModifier().contains(Modifier.PUBLIC));
+                assertTrue(field.getModifiers().getModifier().contains(Modifier.PACKAGE_PRIVATE));
+            } else {
+                fail("Unsupported field was detected: " + field);
+            }
+        }
+    }
+
+    @Test
+    public void testDateTimeViaGetter() {
+        JavaClass javaClass = classInspectionService.inspectClass(DateTimeGetter.class);
+        assertEquals(10, javaClass.getJavaFields().getJavaField().size());
+        for (JavaField field : javaClass.getJavaFields().getJavaField()) {
+            if ("year".equals(field.getName())) {
+                assertEquals("java.time.Year", field.getClassName());
+                assertEquals(FieldType.DATE, field.getFieldType());
+                assertEquals("getYear", field.getGetMethod());
+            } else if ("month".equals(field.getName())) {
+                assertEquals("java.time.Month", field.getClassName());
+                assertEquals(FieldType.DATE, field.getFieldType());
+                assertEquals("getMonth", field.getGetMethod());
+            } else if ("yearMonth".equals(field.getName())) {
+                assertEquals("java.time.YearMonth", field.getClassName());
+                assertEquals(FieldType.DATE, field.getFieldType());
+                assertEquals("getYearMonth", field.getGetMethod());
+            } else if ("monthDay".equals(field.getName())) {
+                assertEquals("java.time.MonthDay", field.getClassName());
+                assertEquals(FieldType.DATE, field.getFieldType());
+                assertEquals("getMonthDay", field.getGetMethod());
+            } else if ("localDate".equals(field.getName())) {
+                assertEquals("java.time.LocalDate", field.getClassName());
+                assertEquals(FieldType.DATE, field.getFieldType());
+                assertEquals("getLocalDate", field.getGetMethod());
+            } else if ("localTime".equals(field.getName())) {
+                assertEquals("java.time.LocalTime", field.getClassName());
+                assertEquals(FieldType.TIME, field.getFieldType());
+                assertEquals("getLocalTime", field.getGetMethod());
+            } else if ("localDateTime".equals(field.getName())) {
+                assertEquals("java.time.LocalDateTime", field.getClassName());
+                assertEquals(FieldType.DATE_TIME, field.getFieldType());
+                assertEquals("getLocalDateTime", field.getGetMethod());
+            } else if ("zonedDateTime".equals(field.getName())) {
+                assertEquals("java.time.ZonedDateTime", field.getClassName());
+                assertEquals(FieldType.DATE_TIME_TZ, field.getFieldType());
+                assertEquals("getZonedDateTime", field.getGetMethod());
+            } else if ("date".equals(field.getName())) {
+                assertEquals("java.util.Date", field.getClassName());
+                assertEquals(FieldType.DATE_TIME_TZ, field.getFieldType());
+                assertEquals("getDate", field.getGetMethod());
+            } else if ("sqlDate".equals(field.getName())) {
+                assertEquals("java.sql.Date", field.getClassName());
+                assertEquals(FieldType.DATE_TIME_TZ, field.getFieldType());
+                assertEquals("getSqlDate", field.getGetMethod());
+            } else {
+                fail("Unsupported field was detected: " + field);
+            }
+        }
+    }
+
+    @Test
+    public void testDateTimeViaSetter() {
+        JavaClass javaClass = classInspectionService.inspectClass(DateTimeSetter.class);
+        assertEquals(10, javaClass.getJavaFields().getJavaField().size());
+        for (JavaField field : javaClass.getJavaFields().getJavaField()) {
+            if ("year".equals(field.getName())) {
+                assertEquals("java.time.Year", field.getClassName());
+                assertEquals(FieldType.DATE, field.getFieldType());
+                assertEquals("setYear", field.getSetMethod());
+            } else if ("month".equals(field.getName())) {
+                assertEquals("java.time.Month", field.getClassName());
+                assertEquals(FieldType.DATE, field.getFieldType());
+                assertEquals("setMonth", field.getSetMethod());
+            } else if ("yearMonth".equals(field.getName())) {
+                assertEquals("java.time.YearMonth", field.getClassName());
+                assertEquals(FieldType.DATE, field.getFieldType());
+                assertEquals("setYearMonth", field.getSetMethod());
+            } else if ("monthDay".equals(field.getName())) {
+                assertEquals("java.time.MonthDay", field.getClassName());
+                assertEquals(FieldType.DATE, field.getFieldType());
+                assertEquals("setMonthDay", field.getSetMethod());
+            } else if ("localDate".equals(field.getName())) {
+                assertEquals("java.time.LocalDate", field.getClassName());
+                assertEquals(FieldType.DATE, field.getFieldType());
+                assertEquals("setLocalDate", field.getSetMethod());
+            } else if ("localTime".equals(field.getName())) {
+                assertEquals("java.time.LocalTime", field.getClassName());
+                assertEquals(FieldType.TIME, field.getFieldType());
+                assertEquals("setLocalTime", field.getSetMethod());
+            } else if ("localDateTime".equals(field.getName())) {
+                assertEquals("java.time.LocalDateTime", field.getClassName());
+                assertEquals(FieldType.DATE_TIME, field.getFieldType());
+                assertEquals("setLocalDateTime", field.getSetMethod());
+            } else if ("zonedDateTime".equals(field.getName())) {
+                assertEquals("java.time.ZonedDateTime", field.getClassName());
+                assertEquals(FieldType.DATE_TIME_TZ, field.getFieldType());
+                assertEquals("setZonedDateTime", field.getSetMethod());
+            } else if ("date".equals(field.getName())) {
+                assertEquals("java.util.Date", field.getClassName());
+                assertEquals(FieldType.DATE_TIME_TZ, field.getFieldType());
+                assertEquals("setDate", field.getSetMethod());
+            } else if ("sqlDate".equals(field.getName())) {
+                assertEquals("java.sql.Date", field.getClassName());
+                assertEquals(FieldType.DATE_TIME_TZ, field.getFieldType());
+                assertEquals("setSqlDate", field.getSetMethod());
+            } else {
+                fail("Unsupported field was detected: " + field);
+            }
+        }
     }
 
 }

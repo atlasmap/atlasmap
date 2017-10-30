@@ -67,7 +67,7 @@ public class DefaultAtlasConversionServiceTest {
     @SuppressWarnings("unchecked")
     public void findMatchingConverterByFieldTypes() throws Exception {
         assertNotNull(service);
-        Optional<AtlasConverter> atlasConverter = service.findMatchingConverter(FieldType.STRING, FieldType.BOOLEAN);
+        Optional<AtlasConverter<?>> atlasConverter = service.findMatchingConverter(FieldType.STRING, FieldType.BOOLEAN);
         assertTrue(atlasConverter.isPresent());
         assertNotNull(atlasConverter);
         assertTrue(AtlasPrimitiveConverter.class.isAssignableFrom(atlasConverter.get().getClass()));
@@ -85,7 +85,7 @@ public class DefaultAtlasConversionServiceTest {
     @Test
     public void findMatchingConverterByFieldTypesCustomConverter() throws Exception {
         assertNotNull(service);
-        Optional<AtlasConverter> atlasConverter = service.findMatchingConverter(FieldType.STRING, FieldType.STRING);
+        Optional<AtlasConverter<?>> atlasConverter = service.findMatchingConverter(FieldType.STRING, FieldType.STRING);
         assertNotNull(atlasConverter);
         assertTrue(atlasConverter.isPresent());
         assertTrue(AtlasConverter.class.isAssignableFrom(atlasConverter.get().getClass()));
@@ -95,14 +95,14 @@ public class DefaultAtlasConversionServiceTest {
     @Test
     public void findMatchingConverterByFieldTypesNoMatching() throws Exception {
         assertNotNull(service);
-        Optional<AtlasConverter> atlasConverter = service.findMatchingConverter(FieldType.STRING, FieldType.COMPLEX);
+        Optional<AtlasConverter<?>> atlasConverter = service.findMatchingConverter(FieldType.STRING, FieldType.COMPLEX);
         assertFalse(atlasConverter.isPresent());
     }
 
     @Test
     public void findMatchingConverterBySourceClass() throws Exception {
         assertNotNull(service);
-        Optional<AtlasConverter> atlasConverter = service.findMatchingConverter("java.util.Date",
+        Optional<AtlasConverter<?>> atlasConverter = service.findMatchingConverter("java.util.Date",
                 "java.time.ZonedDateTime");
         assertNotNull(atlasConverter);
         assertTrue(atlasConverter.isPresent());
@@ -113,7 +113,7 @@ public class DefaultAtlasConversionServiceTest {
     @Test
     public void findMatchingConverterBySourceClassNoMatching() throws Exception {
         assertNotNull(service);
-        Optional<AtlasConverter> atlasConverter = service.findMatchingConverter("java.util.Date",
+        Optional<AtlasConverter<?>> atlasConverter = service.findMatchingConverter("java.util.Date",
                 "java.time.CustomClass");
         assertFalse(atlasConverter.isPresent());
     }
@@ -121,8 +121,8 @@ public class DefaultAtlasConversionServiceTest {
     @Test
     public void findMatchingMethodByFieldTypes() throws Exception {
         assertNotNull(service);
-        Optional<AtlasConverter> atlasConverter = service.findMatchingConverter(FieldType.STRING, FieldType.BOOLEAN);
-        AtlasConverter converter = atlasConverter.orElse(null);
+        Optional<AtlasConverter<?>> atlasConverter = service.findMatchingConverter(FieldType.STRING, FieldType.BOOLEAN);
+        AtlasConverter<?> converter = atlasConverter.orElse(null);
         assertNotNull(converter);
         Optional<Method> methods = service.findMatchingMethod(FieldType.STRING, FieldType.BOOLEAN,
                 atlasConverter.orElseGet(null));
@@ -154,7 +154,7 @@ public class DefaultAtlasConversionServiceTest {
 
         assertFalse(service.isPrimitive(AtlasMapping.class));
         assertFalse(service.isPrimitive(List.class));
-        assertFalse(service.isPrimitive((Class) null));
+        assertFalse(service.isPrimitive((Class<?>) null));
     }
 
     @Test
@@ -207,7 +207,7 @@ public class DefaultAtlasConversionServiceTest {
 
         assertFalse(service.isBoxedPrimitive(AtlasMapping.class));
         assertFalse(service.isBoxedPrimitive(List.class));
-        assertFalse(service.isBoxedPrimitive(null));
+        assertFalse(service.isBoxedPrimitive((Class<?>)null));
     }
 
     @Test

@@ -22,11 +22,11 @@ import java.util.Optional;
 
 public interface AtlasConversionService {
 
-    Optional<AtlasConverter> findMatchingConverter(FieldType source, FieldType target);
+    Optional<AtlasConverter<?>> findMatchingConverter(FieldType source, FieldType target);
 
-    Optional<AtlasConverter> findMatchingConverter(String sourceClassName, String targetClassName);
+    Optional<AtlasConverter<?>> findMatchingConverter(String sourceClassName, String targetClassName);
 
-    Optional<Method> findMatchingMethod(FieldType source, FieldType target, AtlasConverter customConverter);
+    Optional<Method> findMatchingMethod(FieldType source, FieldType target, AtlasConverter<?> customConverter);
 
     Object copyPrimitive(Object sourceValue);
 

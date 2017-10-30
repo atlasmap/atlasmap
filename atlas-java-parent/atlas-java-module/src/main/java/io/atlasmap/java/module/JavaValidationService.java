@@ -141,7 +141,7 @@ public class JavaValidationService extends BaseModuleValidationService<JavaField
     }
 
     private void validateClassConversion(JavaField inputField, JavaField outField, List<Validation> validations) {
-        Optional<AtlasConverter> atlasConverter = getConversionService().findMatchingConverter(
+        Optional<AtlasConverter<?>> atlasConverter = getConversionService().findMatchingConverter(
                 inputField.getClassName(), outField.getClassName());
         String rejectedValue = getFieldName(inputField) + " --> " + getFieldName(outField);
         if (!atlasConverter.isPresent()) {

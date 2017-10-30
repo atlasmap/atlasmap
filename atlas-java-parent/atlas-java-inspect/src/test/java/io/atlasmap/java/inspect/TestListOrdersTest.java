@@ -84,6 +84,9 @@ public class TestListOrdersTest {
                 } else {
                     fail("Unexpected class: " + ((JavaClass) c2f).getClassName());
                 }
+            } else if ("java.util.Date".equals(c2f.getClassName())) {
+                ClassValidationUtil.validateCreated(c2f);
+                foundCreated = true;
             }
         }
 
