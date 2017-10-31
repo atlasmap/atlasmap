@@ -124,7 +124,7 @@ public class StringComplexFieldActionsTest {
         padStringRight.setPadCharacter("a");
         padStringRight.setPadCount(3);
 
-        assertNull(StringComplexFieldActions.padStringRight(padStringRight, null));
+        assertEquals("aaa", StringComplexFieldActions.padStringRight(padStringRight, null));
         assertEquals("aaa", StringComplexFieldActions.padStringRight(padStringRight, ""));
         assertEquals("aaaa", StringComplexFieldActions.padStringRight(padStringRight, "a"));
         assertEquals("baaa", StringComplexFieldActions.padStringRight(padStringRight, "b"));
@@ -164,7 +164,7 @@ public class StringComplexFieldActionsTest {
         padStringLeft.setPadCharacter("a");
         padStringLeft.setPadCount(3);
 
-        assertNull(StringComplexFieldActions.padStringLeft(padStringLeft, null));
+        assertEquals("aaa", StringComplexFieldActions.padStringLeft(padStringLeft, null));
         assertEquals("aaa", StringComplexFieldActions.padStringLeft(padStringLeft, ""));
         assertEquals("aaaa", StringComplexFieldActions.padStringLeft(padStringLeft, "a"));
         assertEquals("aaab", StringComplexFieldActions.padStringLeft(padStringLeft, "b"));

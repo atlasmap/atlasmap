@@ -66,11 +66,7 @@ public class StringComplexFieldActions implements AtlasFieldAction {
 
     @AtlasFieldActionInfo(name = "PadStringRight", sourceType = FieldType.STRING, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
     public static String padStringRight(Action action, String input) {
-        String output = input;
-
-        if (input == null) {
-            return input;
-        }
+        String output = input == null ? "" : input;
 
         if (action == null || !(action instanceof PadStringRight) || ((PadStringRight) action).getPadCharacter() == null
                 || ((PadStringRight) action).getPadCount() == null) {
@@ -88,11 +84,7 @@ public class StringComplexFieldActions implements AtlasFieldAction {
 
     @AtlasFieldActionInfo(name = "PadStringLeft", sourceType = FieldType.STRING, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
     public static String padStringLeft(Action action, String input) {
-        String output = input;
-
-        if (input == null) {
-            return input;
-        }
+      String output = input == null ? "" : input;
 
         if (action == null || !(action instanceof PadStringLeft) || ((PadStringLeft) action).getPadCharacter() == null
                 || ((PadStringLeft) action).getPadCount() == null) {
