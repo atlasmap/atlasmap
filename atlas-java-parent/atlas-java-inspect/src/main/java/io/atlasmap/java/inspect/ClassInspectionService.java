@@ -63,6 +63,7 @@ public class ClassInspectionService {
     private AtlasConversionService atlasConversionService = null;
     private List<String> fieldBlacklist = new ArrayList<String>(Arrays.asList("serialVersionUID"));
     private List<String> classNameBlacklist = new ArrayList<String>();
+    private Boolean disablePackagePrivateOnlyFields = false;
     private Boolean disableProtectedOnlyFields = false;
     private Boolean disablePrivateOnlyFields = false;
     private Boolean disablePublicOnlyFields = false;
@@ -86,6 +87,14 @@ public class ClassInspectionService {
 
     public void setDisableProtectedOnlyFields(Boolean disableProtectedOnlyFields) {
         this.disableProtectedOnlyFields = disableProtectedOnlyFields;
+    }
+
+    public Boolean getDisablePackagePrivateOnlyFields() {
+        return disablePackagePrivateOnlyFields;
+    }
+
+    public void setDisablePackagePrivateOnlyFields(Boolean disablePackagePrivateOnlyFields) {
+        this.disablePackagePrivateOnlyFields = disablePackagePrivateOnlyFields;
     }
 
     public Boolean getDisablePrivateOnlyFields() {
@@ -249,6 +258,13 @@ public class ClassInspectionService {
             javaClass.setUri(String.format(AtlasJavaModelFactory.URI_FORMAT, clz.getCanonicalName()));
         }
 
+        if (clz.isPrimitive() || JdkPackages.contains(clz.getPackage().getName())) {
+            if (LOG.isTraceEnabled()) {
+                LOG.trace("Skipping class " + clz.getName() + " which is a Jdk core class");
+            }
+            return;
+        }
+
         // Process super class fields and methods first, so child class fields
         // and methods override
         Class<?> tmpClazz = clz;
@@ -338,17 +354,15 @@ public class ClassInspectionService {
 
         field.setClassName(returnType.getCanonicalName());
         field.setGetMethod(m.getName());
-        if (getConversionService().isPrimitive(returnType)) {
+        field.setFieldType(getConversionService().fieldTypeFromClass(returnType));
+        if (getConversionService().isPrimitive(returnType) || getConversionService().isBoxedPrimitive(returnType)) {
             field.setPrimitive(true);
-            field.setFieldType(getConversionService().fieldTypeFromClass(returnType));
             field.setStatus(FieldStatus.SUPPORTED);
-        } else if (getConversionService().isBoxedPrimitive(returnType)) {
-            field.setPrimitive(true);
-            field.setFieldType(getConversionService().fieldTypeFromClass(returnType));
+        } else if (field.getFieldType() != FieldType.COMPLEX) {
+            field.setPrimitive(false);
             field.setStatus(FieldStatus.SUPPORTED);
         } else {
             field.setPrimitive(false);
-            field.setFieldType(FieldType.COMPLEX);
 
             Class<?> complexClazz = null;
             JavaClass tmpField = convertJavaFieldToJavaClass(field);
@@ -412,17 +426,15 @@ public class ClassInspectionService {
 
         field.setClassName(paramType.getCanonicalName());
         field.setSetMethod(m.getName());
-        if (getConversionService().isPrimitive(paramType)) {
+        field.setFieldType(getConversionService().fieldTypeFromClass(paramType));
+        if (getConversionService().isPrimitive(paramType) || getConversionService().isBoxedPrimitive(paramType)) {
             field.setPrimitive(true);
-            field.setFieldType(getConversionService().fieldTypeFromClass(paramType));
             field.setStatus(FieldStatus.SUPPORTED);
-        } else if (getConversionService().isBoxedPrimitive(paramType)) {
-            field.setPrimitive(true);
-            field.setFieldType(getConversionService().fieldTypeFromClass(paramType));
+        } else if (field.getFieldType() != FieldType.COMPLEX) {
+            field.setPrimitive(false);
             field.setStatus(FieldStatus.SUPPORTED);
         } else {
             field.setPrimitive(false);
-            field.setFieldType(FieldType.COMPLEX);
 
             Class<?> complexClazz = null;
             JavaClass tmpField = convertJavaFieldToJavaClass(field);
@@ -485,6 +497,9 @@ public class ClassInspectionService {
         s.setFieldType(getConversionService().fieldTypeFromClass(clazz));
         if (getConversionService().isPrimitive(clazz) || getConversionService().isBoxedPrimitive(clazz)) {
             s.setPrimitive(true);
+            s.setStatus(FieldStatus.SUPPORTED);
+        } else if (s.getFieldType() != FieldType.COMPLEX) {
+            s.setPrimitive(false);
             s.setStatus(FieldStatus.SUPPORTED);
         } else {
             s.setPrimitive(false);
@@ -605,6 +620,9 @@ public class ClassInspectionService {
                     } else if (s.getModifiers().getModifier().contains(io.atlasmap.java.v2.Modifier.PUBLIC)
                             && !getDisablePublicOnlyFields()) {
                         javaClass.getJavaFields().getJavaField().add(s);
+                    } else if (s.getModifiers().getModifier().contains(io.atlasmap.java.v2.Modifier.PACKAGE_PRIVATE)
+                            && !getDisablePackagePrivateOnlyFields()) {
+                        javaClass.getJavaFields().getJavaField().add(s);
                     }
                 } else if (!getDisablePublicGetterSetterFields()) {
                     javaClass.getJavaFields().getJavaField().add(s);
@@ -716,6 +734,9 @@ public class ClassInspectionService {
         }
         if (Modifier.isPublic(m)) {
             modifiers.add(io.atlasmap.java.v2.Modifier.PUBLIC);
+        }
+        if (!Modifier.isPrivate(m) && !Modifier.isProtected(m) && !Modifier.isPublic(m)) {
+            modifiers.add(io.atlasmap.java.v2.Modifier.PACKAGE_PRIVATE);
         }
         if (Modifier.isStatic(m)) {
             modifiers.add(io.atlasmap.java.v2.Modifier.STATIC);

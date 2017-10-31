@@ -43,9 +43,14 @@ public class DefaultAtlasConversionService implements AtlasConversionService {
     private Map<String, AtlasConverter<?>> converters = null;
 
     private static final Set<String> PRIMITIVE_CLASSNAMES = Collections.unmodifiableSet(
-            new HashSet<String>(Arrays.asList("boolean", "byte", "char", "double", "float", "int", "long", "short")));
+            new HashSet<>(Arrays.asList("boolean", "byte", "char", "double", "float", "int", "long", "short")));
 
-    private static final Set<String> BOXED_PRIMITIVE_CLASSNAMES = Collections.unmodifiableSet(new HashSet<String>(
+    private static final Set<FieldType> PRIMITIVE_FIELDTYPES = Collections.unmodifiableSet(
+            new HashSet<>(Arrays.asList(FieldType.BOOLEAN, FieldType.BYTE, FieldType.CHAR,
+                    FieldType.DECIMAL, FieldType.DOUBLE, FieldType.FLOAT, FieldType.INTEGER,
+                    FieldType.LONG, FieldType.SHORT, FieldType.STRING)));
+
+    private static final Set<String> BOXED_PRIMITIVE_CLASSNAMES = Collections.unmodifiableSet(new HashSet<>(
             Arrays.asList("java.lang.Boolean", "java.lang.Byte", "java.lang.Character", "java.lang.Double",
                     "java.lang.Float", "java.lang.Integer", "java.lang.Long", "java.lang.Short", "java.lang.String")));
 
@@ -65,18 +70,17 @@ public class DefaultAtlasConversionService implements AtlasConversionService {
     }
 
     @Override
-    @SuppressWarnings("rawtypes")
-    public Optional<AtlasConverter> findMatchingConverter(FieldType source, FieldType target) {
+    public Optional<AtlasConverter<?>> findMatchingConverter(FieldType source, FieldType target) {
 
-        Optional<AtlasConverter> primitiveConverter = Optional.empty();
-        Optional<AtlasConverter> customConverter = Optional.empty();
+        Optional<AtlasConverter<?>> primitiveConverter = Optional.empty();
+        Optional<AtlasConverter<?>> customConverter = Optional.empty();
 
-        List<AtlasPrimitiveConverter> primitiveConverters = converters.values().stream()
-                .filter(p -> p instanceof AtlasPrimitiveConverter).map(p -> (AtlasPrimitiveConverter) p)
+        List<AtlasPrimitiveConverter<?>> primitiveConverters = converters.values().stream()
+                .filter(p -> p instanceof AtlasPrimitiveConverter).map(p -> (AtlasPrimitiveConverter<?>) p)
                 .collect(Collectors.toList());
         primitiveConverter = checkPrimitiveConverters(primitiveConverters, source, target);
 
-        List<AtlasConverter> customConverters = converters.values().stream()
+        List<AtlasConverter<?>> customConverters = converters.values().stream()
                 .filter(not(p -> p instanceof AtlasPrimitiveConverter)).collect(Collectors.toList());
         customConverter = checkCustomConverters(customConverters, source, target);
 
@@ -89,13 +93,12 @@ public class DefaultAtlasConversionService implements AtlasConversionService {
     }
 
     @Override
-    @SuppressWarnings("rawtypes")
-    public Optional<AtlasConverter> findMatchingConverter(String sourceClassName, String targetClassName) {
+    public Optional<AtlasConverter<?>> findMatchingConverter(String sourceClassName, String targetClassName) {
         // assuming only custom converters define sourceClassName / targetClassName and
         // must match exactly.
-        List<AtlasConverter> customConverters = converters.values().stream()
+        List<AtlasConverter<?>> customConverters = converters.values().stream()
                 .filter(not(p -> p instanceof AtlasPrimitiveConverter)).collect(Collectors.toList());
-        for (AtlasConverter converter : customConverters) {
+        for (AtlasConverter<?> converter : customConverters) {
             if (findConverterByMethodAnnotationClassName(sourceClassName, targetClassName, converter)) {
                 return Optional.of(converter);
             }
@@ -116,8 +119,7 @@ public class DefaultAtlasConversionService implements AtlasConversionService {
                 .findFirst();
     }
 
-    @SuppressWarnings("rawtypes")
-    private Optional<AtlasConverter> checkCustomConverters(List<AtlasConverter> customConverters, FieldType source,
+    private Optional<AtlasConverter<?>> checkCustomConverters(List<AtlasConverter<?>> customConverters, FieldType source,
             FieldType target) {
         if (source == null || target == null) {
             // TODO: investigate how we handle when sType -> tType (null -> something and
@@ -125,7 +127,7 @@ public class DefaultAtlasConversionService implements AtlasConversionService {
             return Optional.empty();
         }
 
-        for (AtlasConverter customConverter : customConverters) {
+        for (AtlasConverter<?> customConverter : customConverters) {
             if (findConverterByMethodAnnotationSourceType(source, target, customConverter)) {
                 return Optional.of(customConverter);
             }
@@ -134,15 +136,14 @@ public class DefaultAtlasConversionService implements AtlasConversionService {
         return Optional.empty();
     }
 
-    @SuppressWarnings("rawtypes")
-    private Optional<AtlasConverter> checkPrimitiveConverters(List<AtlasPrimitiveConverter> primitiveConverters,
+    private Optional<AtlasConverter<?>> checkPrimitiveConverters(List<AtlasPrimitiveConverter<?>> primitiveConverters,
             FieldType source, FieldType target) {
         if (source == null || target == null) {
             // TODO: investigate how we handle when sType -> tType (null -> something and
             // something -> null)
             return Optional.empty();
         }
-        for (AtlasPrimitiveConverter primitiveConverter : primitiveConverters) {
+        for (AtlasPrimitiveConverter<?> primitiveConverter : primitiveConverters) {
             // get all the methods --> getAnnotations of Type AtlasConversionInfo
             if (findConverterByMethodAnnotationSourceType(source, target, primitiveConverter)) {
                 return Optional.of(primitiveConverter);
@@ -269,13 +270,13 @@ public class DefaultAtlasConversionService implements AtlasConversionService {
             return sourceValue;
         }
 
-        Optional<AtlasConverter> converter = findMatchingConverter(sourceType, targetType);
+        Optional<AtlasConverter<?>> converter = findMatchingConverter(sourceType, targetType);
         if (!converter.isPresent()) {
             throw new AtlasConversionException(
                     "Converter not found for sourceType: " + sourceType + " targetType: " + targetType);
         }
 
-        AtlasConverter atlasConverter = converter.get();
+        AtlasConverter<?> atlasConverter = converter.get();
         if (isPrimitive(sourceType) && isPrimitive(targetType)) {
             switch (targetType) {
             case BOOLEAN:
@@ -334,13 +335,7 @@ public class DefaultAtlasConversionService implements AtlasConversionService {
         if (fieldType == null) {
             return false;
         }
-        if (Arrays
-                .asList(FieldType.BOOLEAN, FieldType.BYTE, FieldType.CHAR, FieldType.DECIMAL, FieldType.DOUBLE,
-                        FieldType.FLOAT, FieldType.INTEGER, FieldType.LONG, FieldType.SHORT, FieldType.STRING)
-                .contains(fieldType)) {
-            return true;
-        }
-        return false;
+        return PRIMITIVE_FIELDTYPES.contains(fieldType);
     }
 
     @Override
@@ -348,10 +343,7 @@ public class DefaultAtlasConversionService implements AtlasConversionService {
         if (clazz == null) {
             return false;
         }
-        if (BOXED_PRIMITIVE_CLASSNAMES.contains(clazz.getCanonicalName())) {
-            return true;
-        }
-        return false;
+        return BOXED_PRIMITIVE_CLASSNAMES.contains(clazz.getCanonicalName());
     }
 
     @Override
@@ -445,6 +437,7 @@ public class DefaultAtlasConversionService implements AtlasConversionService {
         case "java.lang.String":
             return FieldType.STRING;
         case "java.time.Year":
+        case "java.time.Month":
         case "java.time.YearMonth":
         case "java.time.MonthDay":
         case "java.time.LocalDate":

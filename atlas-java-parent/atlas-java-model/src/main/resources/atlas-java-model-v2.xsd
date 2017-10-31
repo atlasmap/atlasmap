@@ -163,6 +163,7 @@
             <enumeration value="Final" />
             <enumeration value="Interface" />
             <enumeration value="Native" />
+            <enumeration value="Package Private" />
             <enumeration value="Public" />
             <enumeration value="Protected" />
             <enumeration value="Private" />

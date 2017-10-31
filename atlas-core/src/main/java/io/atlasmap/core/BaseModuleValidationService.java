@@ -245,7 +245,7 @@ public abstract class BaseModuleValidationService<T extends Field> implements At
     protected void validateFieldTypeConversion(Field inputField, Field outField, List<Validation> validations) {
         FieldType inFieldType = inputField.getFieldType();
         FieldType outFieldType = outField.getFieldType();
-        Optional<AtlasConverter> atlasConverter = conversionService.findMatchingConverter(inFieldType, outFieldType);
+        Optional<AtlasConverter<?>> atlasConverter = conversionService.findMatchingConverter(inFieldType, outFieldType);
         String rejectedValue = getFieldName(inputField) + " --> " + getFieldName(outField);
         if (!atlasConverter.isPresent()) {
             Validation validation = new Validation();

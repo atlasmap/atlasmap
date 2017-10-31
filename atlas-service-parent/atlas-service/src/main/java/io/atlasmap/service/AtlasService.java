@@ -368,10 +368,10 @@ public class AtlasService extends Application {
                     outputType = ((JavaField) outputField).getFieldType();
                 }
 
-                Optional<AtlasConverter> optionalConverter = conversionService.findMatchingConverter(inputType,
+                Optional<AtlasConverter<?>> optionalConverter = conversionService.findMatchingConverter(inputType,
                         outputType);
                 if (optionalConverter.isPresent()) {
-                    AtlasConverter converter = optionalConverter.get();
+                    AtlasConverter<?> converter = optionalConverter.get();
                     // TODO: return "ok"
                 } else {
                     // TODO: return "Converter needed"
