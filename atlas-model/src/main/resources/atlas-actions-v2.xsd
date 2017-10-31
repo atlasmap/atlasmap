@@ -13,7 +13,6 @@
     <complexType name="Action" abstract="true" />
 
     <!-- String Actions -->
-
     <element name="Camelize">
         <complexType>
             <complexContent>

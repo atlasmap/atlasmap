@@ -98,8 +98,7 @@ public class OutputValueConverter implements JavaFieldWriterValueConverter {
             return populateEnumValue((JavaEnumField) inputField, (JavaEnumField) outputField);
         }
 
-        AtlasFieldActionService fieldActionService = session.getAtlasContext().getContextFactory()
-                .getFieldActionService();
+        AtlasFieldActionService fieldActionService = session.getAtlasContext().getContextFactory().getFieldActionService();
         try {
             outputValue = fieldActionService.processActions(outputField.getActions(), inputValue, outputType);
             if (outputValue != null) {

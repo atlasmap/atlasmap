@@ -26,13 +26,16 @@ public class XmlXmlFieldActionsTest extends AtlasBaseActionsTest {
                 + "</firstName></contact>";
     }
 
-    public Object getOutputValue(Object output) {
+    public Object getOutputValue(Object output, Class<?> ouputClassExpected) {
         System.out.println("Extracting output value from: " + output);
         String result = (String) output;
-        result = result
-                .substring("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><contact><firstName>".length());
+        result = result.substring("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><contact><firstName>".length());
         result = result.substring(0, result.length() - "</firstName></contact>".length());
         System.out.println("Output value extracted: " + result);
+
+        if(ouputClassExpected != null && ouputClassExpected.equals(Integer.class)) {
+            return Integer.valueOf(result);
+        }
         return result;
     }
 }

@@ -17,6 +17,7 @@ package io.atlasmap.api;
 
 import io.atlasmap.v2.ActionDetail;
 import io.atlasmap.v2.Actions;
+import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldType;
 
 import java.util.List;
@@ -24,6 +25,7 @@ import java.util.List;
 public interface AtlasFieldActionService {
 
     List<ActionDetail> listActionDetails();
+    void processActions(Actions actions, Field field) throws AtlasException;
+    Object processActions(Actions actions, Object sourceValue, FieldType targetType) throws AtlasException;
 
-    Object processActions(Actions actions, Object object, FieldType targetType) throws AtlasException;
 }

@@ -2,6 +2,7 @@
 <jaxb:bindings xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" xmlns:xs="http://www.w3.org/2001/XMLSchema"
                xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                xmlns:annox="http://annox.dev.java.net"
+               xmlns:inheritance="http://jaxb2-commons.dev.java.net/basic/inheritance"
                xsi:schemaLocation="http://java.sun.com/xml/ns/jaxb http://java.sun.com/xml/ns/jaxb/bindingschema_2_0.xsd"
                jaxb:extensionBindingPrefixes="xjc annox"
                version="2.1">
@@ -19,6 +20,9 @@
         </jaxb:bindings>
         <jaxb:bindings node="xs:complexType[@name='Actions']//xs:choice">
             <jaxb:property name="actions"/>
+        </jaxb:bindings>
+        <jaxb:bindings node="//xs:complexType[@name='Action']">
+            <inheritance:implements>io.atlasmap.v2.FieldAction</inheritance:implements> 
         </jaxb:bindings>
     </jaxb:bindings>
     

@@ -27,14 +27,14 @@ public class JavaJavaFieldActionsTest extends AtlasBaseActionsTest {
     @Override
     public void runStringLengthTest() throws Exception {
         this.outputField = createField("/boxedIntField");
-        this.runActionTest(new StringLength(), "fname", new Integer(5));
+        this.runActionTest(new StringLength(), "fname", new Integer(5), Integer.class);
         this.outputField = createField("/boxedStringField");
     }
 
     @Test
     public void runNoConversionTest() throws Exception {
         this.outputField = createField("/boxedIntField");
-        this.runActionTestList(null, "fname", null);
+        this.runActionTestList(null, "fname", null, String.class);
         this.outputField = createField("/boxedStringField");
     }
 
@@ -45,7 +45,7 @@ public class JavaJavaFieldActionsTest extends AtlasBaseActionsTest {
         return c;
     }
 
-    public Object getOutputValue(Object output) {
+    public Object getOutputValue(Object output, Class<?> outputClassExpected) {
         System.out.println("Extracting output value from: " + output);
         TargetFlatPrimitiveClass c = (TargetFlatPrimitiveClass) output;
         Object result = c.getBoxedStringField();

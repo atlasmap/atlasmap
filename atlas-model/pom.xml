@@ -81,8 +81,25 @@
                             <schemaDirectory>${xsd.folder}</schemaDirectory>
                             <bindingDirectory>${xjb.folder}</bindingDirectory>
                             <schemaExcludes>
-                                <include>**/atlas-actions-v3.xsd</include>
+                                <schemaExclude>**/atlas-actions-v2.xsd</schemaExclude>
                             </schemaExcludes>
+                            <args><arg>-Xannotate</arg><arg>-Xinheritance</arg></args>
+                            <plugins>
+                               <plugin>
+                                  <groupId>org.jvnet.jaxb2_commons</groupId>
+                                  <artifactId>jaxb2-basics</artifactId>
+                                  <version>0.11.1</version>
+                               </plugin>
+                               <plugin>
+                                  <groupId>org.jvnet.jaxb2_commons</groupId>
+                                  <artifactId>jaxb2-basics-annotate</artifactId>
+                                  <version>1.0.4</version>
+                                </plugin>
+                                <plugin>
+                                   <groupId>com.fasterxml.jackson.core</groupId>
+                                   <artifactId>jackson-databind</artifactId>
+                                </plugin>
+                            </plugins>
                         </configuration>
                     </execution>
                 </executions>
