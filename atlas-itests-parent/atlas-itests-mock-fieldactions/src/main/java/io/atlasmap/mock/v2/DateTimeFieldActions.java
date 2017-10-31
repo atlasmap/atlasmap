@@ -47,9 +47,7 @@ public class DateTimeFieldActions implements AtlasFieldAction {
         case "thur": return "Thursday";
         case "fri": return "Friday";
         case "sat": return "Saturday";
+        default: return "Funday";
         }
-        
-        return "Funday";
-
     }
 }
