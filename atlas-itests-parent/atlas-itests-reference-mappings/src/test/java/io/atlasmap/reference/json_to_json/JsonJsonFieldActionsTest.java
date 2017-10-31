@@ -25,12 +25,23 @@ public class JsonJsonFieldActionsTest extends AtlasBaseActionsTest {
         return "{ \"contact\": { \"firstName\": \"" + inputFirstName + "\" } }";
     }
 
-    public Object getOutputValue(Object output) {
+    public Object getOutputValue(Object output, Class<?> outputClassExpected) {
         System.out.println("Extracting output value from: " + output);
         String result = (String) output;
-        result = result.substring("{\"contact\":{\"firstName\":\"".length());
-        result = result.substring(0, result.length() - "\"}}".length());
-        System.out.println("Output value extracted: " + result);
+
+        if(outputClassExpected != null && outputClassExpected.equals(Integer.class)) {
+            result = result.substring("{\"contact\":{\"firstName\":".length());
+            result = result.substring(0, result.length() - "}}".length());
+            return Integer.valueOf(result);
+        } else if(outputClassExpected != null && outputClassExpected.equals(Boolean.class)) {
+            result = result.substring("{\"contact\":{\"firstName\":".length());
+            result = result.substring(0, result.length() - "}}".length());
+            return Boolean.valueOf(result);
+        } else {
+            // everything else is a string for JSON
+            result = result.substring("{\"contact\":{\"firstName\":\"".length());
+            result = result.substring(0, result.length() - "\"}}".length());
+        }
         return result;
     }
 

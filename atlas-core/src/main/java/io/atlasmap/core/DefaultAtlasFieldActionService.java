@@ -19,22 +19,24 @@ import io.atlasmap.api.AtlasFieldActionService;
 import io.atlasmap.spi.AtlasFieldActionInfo;
 import io.atlasmap.v2.ActionDetails;
 import io.atlasmap.v2.Actions;
+import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldType;
 import io.atlasmap.v2.Properties;
 import io.atlasmap.v2.Property;
+import io.atlasmap.v2.SimpleField;
 import io.atlasmap.v2.Action;
 import io.atlasmap.v2.ActionDetail;
 
 public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
 
-    private static final Logger logger = LoggerFactory.getLogger(DefaultAtlasFieldActionService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DefaultAtlasFieldActionService.class);
     private ActionDetails actionDetails = new ActionDetails();
     private AtlasConversionService conversionService = null;
-    
+
     public DefaultAtlasFieldActionService(AtlasConversionService conversionService) {
         this.conversionService = conversionService;
     }
-    
+
     public void init() {
         loadFieldActions();
     }
@@ -43,11 +45,11 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
         ClassLoader classLoader = this.getClass().getClassLoader();
         final ServiceLoader<AtlasFieldAction> fieldActionServiceLoader = ServiceLoader.load(AtlasFieldAction.class, classLoader);
         for (final AtlasFieldAction atlasFieldAction : fieldActionServiceLoader) {
-            if (logger.isDebugEnabled()) {
-                logger.debug("Loading FieldAction class: " + atlasFieldAction.getClass().getCanonicalName());
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Loading FieldAction class: " + atlasFieldAction.getClass().getCanonicalName());
             }
-            
-            Class<?> clazz = atlasFieldAction.getClass();             
+
+            Class<?> clazz = atlasFieldAction.getClass();
             Method[] methods = clazz.getMethods();
             for (Method method : methods) {
                 AtlasFieldActionInfo annotation = method.getAnnotation(AtlasFieldActionInfo.class);
@@ -64,32 +66,32 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
                     try {
                         det.setParameters(detectFieldActionParameters("io.atlasmap.v2." + annotation.name()));
                     } catch (ClassNotFoundException e) {
-                        logger.error(String.format("Error detecting parameters for field action=%s msg=%s", annotation.name(), e.getMessage()), e);
+                        LOG.error(String.format("Error detecting parameters for field action=%s msg=%s", annotation.name(), e.getMessage()), e);
                     }
-                    
-                    if (logger.isTraceEnabled()) {
-                        logger.trace("Loaded FieldAction: " + det.getName());
+
+                    if (LOG.isTraceEnabled()) {
+                        LOG.trace("Loaded FieldAction: " + det.getName());
                     }
                     listActionDetails().add(det);
                 }
             }
         }
-    
-        if (logger.isDebugEnabled()) {
-            logger.debug(String.format("Loaded %s Field Actions", listActionDetails().size()));
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug(String.format("Loaded %s Field Actions", listActionDetails().size()));
         }
     }
 
     @Override
-	public List<ActionDetail> listActionDetails() {
+    public List<ActionDetail> listActionDetails() {
         return actionDetails.getActionDetail();
     }
-    
-    /**
+
+    /*
      * TODO: getActionDetailByActionName() when all references are updated to use
-     * 
+     *
      * ActionDetail = findActionDetail(String actionName, FieldType sourceType)
-     * 
+     *
      * ref: https://github.com/atlasmap/atlasmap-runtime/issues/216
      */
     @Deprecated
@@ -99,32 +101,32 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
                 return actionDetail;
             }
         }
-        
+
         return null;
     }
-    
-    /**
+
+    /*
      * 1. Find FieldAction by name
      * 2. If multiple matches are found, return the best one based on FieldType sourceType
      * 3. If there is not an exact match to sourceType, return the first FieldAction
      * 4. If no matches found, return null
-     * 
-     * 
+     *
+     *
      * @param actionName The name of the FieldAction
-     * @param sourceType A hint used to determine which FieldAction to use 
+     * @param sourceType A hint used to determine which FieldAction to use
      *                   when multiple FieldActions exist with the same name
      *
-     * @return
+     * @return ActionDetail
      */
     protected ActionDetail findActionDetail(String actionName, FieldType sourceType) {
-        
+
         List<ActionDetail> matches = new ArrayList<ActionDetail>();
         for(ActionDetail actionDetail : listActionDetails()) {
             if(actionDetail.getName().equals(actionName)) {
                 matches.add(actionDetail);
             }
         }
-        
+
         switch(matches.size()) {
         case 0: return null;
         case 1: return matches.get(0);
@@ -136,46 +138,68 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
                     }
                 }
             }
-            return matches.get(0);   
+            return matches.get(0);
         }
     }
 
     @Override
+    public void processActions(Actions actions, Field field) throws AtlasException {
+        Field tmpField = internalProcessActions(actions, field.getValue(), field.getFieldType());
+        field.setValue(tmpField.getValue());
+        field.setFieldType(tmpField.getFieldType());
+    }
+
+    @Override
     public Object processActions(Actions actions, Object sourceObject, FieldType targetType) throws AtlasException {
+        Field tmpField = internalProcessActions(actions, sourceObject, targetType);
+        if(tmpField == null) {
+            return null;
+        }
+
+        if(tmpField.getFieldType() != null && !tmpField.getFieldType().equals(targetType)) {
+            tmpField.setValue(getConversionService().convertType(tmpField.getValue(), tmpField.getFieldType(), targetType));
+        }
+
+        return tmpField.getValue();
+    }
+
+    protected Field internalProcessActions(Actions actions, Object sourceObject, FieldType targetType) throws AtlasException {
+
+        Field processedField = new SimpleField();
+        processedField.setValue(sourceObject);
+        processedField.setFieldType(targetType);
 
         if(FieldType.COMPLEX.equals(targetType)) {
-            return sourceObject;
+            return processedField;
         }
-         
-        Object targetObject = null;
+
         Object tmpSourceObject = sourceObject;
         FieldType sourceType = (sourceObject != null ? getConversionService().fieldTypeFromClass(sourceObject.getClass()) : FieldType.NONE);
-        
+
         if(actions == null || actions.getActions() == null || actions.getActions().isEmpty()) {
             if(sourceObject == null) {
-                return null;
+                return processedField;
             }
-            return getConversionService().convertType(sourceObject, sourceType, targetType);
+            processedField.setValue(getConversionService().convertType(sourceObject, sourceType, targetType));
+            processedField.setFieldType(targetType);
+            return processedField;
         }
-        
+
         FieldType currentType = sourceType;
         for(Action action : actions.getActions()) {
-            ActionDetail detail = findActionDetail(action.getClass().getSimpleName(), currentType);
+            ActionDetail detail = findActionDetail(action.getDisplayName(), currentType);
             if(!detail.getSourceType().equals(currentType) && !FieldType.ALL.equals(detail.getSourceType())) {
                 tmpSourceObject = getConversionService().convertType(sourceObject, currentType, detail.getSourceType());
             }
-            
-            targetObject = processAction(action, detail, tmpSourceObject);
+
+            processedField.setValue(processAction(action, detail, tmpSourceObject));
+            processedField.setFieldType(detail.getTargetType());
             currentType = detail.getTargetType();
         }
-        
-        if(currentType != null && !currentType.equals(targetType)) {
-            targetObject = getConversionService().convertType(targetObject, currentType, targetType);
-        }
-        
-        return targetObject;
+
+        return processedField;
     }
-    
+
     protected Object processAction(Action action, ActionDetail actionDetail, Object sourceObject) throws AtlasException {
         Object targetObject = null;
         if(actionDetail != null) {
@@ -183,7 +207,7 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
             try {
                 Class<?> actionClazz = Class.forName(actionDetail.getClassName());
                 actionObject = actionClazz.newInstance();
-                
+
                 Method method =  null;
                 if(actionDetail.getSourceType() != null) {
                     switch(actionDetail.getSourceType()) {
@@ -198,16 +222,16 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
                     case SHORT: method = actionClazz.getMethod(actionDetail.getMethod(), Action.class, Short.class); break;
                     case STRING: method = actionClazz.getMethod(actionDetail.getMethod(), Action.class, String.class); break;
                     case ALL: method = actionClazz.getMethod(actionDetail.getMethod(), Action.class, Object.class); break;
-                    default: 
-                        logger.warn(String.format("Unsupported sourceType=%s in actionClass=%s", actionDetail.getSourceType().value(), actionDetail.getClassName()));
+                    default:
+                        LOG.warn(String.format("Unsupported sourceType=%s in actionClass=%s", actionDetail.getSourceType().value(), actionDetail.getClassName()));
                         break;
                     }
                 }
-                
+
                 if(method == null) {
                     throw new AtlasException(String.format("Unable to locate field action className=%s method=%s sourceType=%s", actionDetail.getClassName(), actionDetail.getMethod(), actionDetail.getSourceType().value()));
                 }
-               
+
                 if(Modifier.isStatic(method.getModifiers())) {
                     targetObject = method.invoke(null, action, sourceObject);
                 } else {
@@ -220,10 +244,10 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
         }
         return sourceObject;
     }
-    
+
     protected Properties detectFieldActionParameters(String actionClassName) throws ClassNotFoundException {
         Class<?> actionClazz = Class.forName(actionClassName);
-        
+
         Properties props = null;
         for(Method method : actionClazz.getMethods()) {
             // Find setters to avoid the get / is confusion
@@ -232,7 +256,7 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
                 if(props == null) {
                     props = new Properties();
                 }
-                
+
                 Property prop = null;
                 for(Parameter param : method.getParameters()) {
                     prop = new Property();
@@ -242,14 +266,14 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
                 }
             }
         }
-        
+
         return props;
     }
-    
+
     public AtlasConversionService getConversionService() {
         return this.conversionService;
     }
-    
+
     public static String camelize(String parameter) {
         if (parameter == null || parameter.length() == 0) {
             return parameter;

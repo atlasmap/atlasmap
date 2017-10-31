@@ -59,65 +59,64 @@ public abstract class AtlasBaseActionsTest extends AtlasMappingBaseTest {
             System.out.println(d.getName());
         }
 
-        this.runActionTest(new Uppercase(), "fname", "FNAME");
-        this.runActionTest(new Lowercase(), "fnAme", "fname");
+        this.runActionTest(new Uppercase(), "fname", "FNAME", String.class);
+        this.runActionTest(new Lowercase(), "fnAme", "fname", String.class);
 
-        this.runActionTest(new Trim(), " fname ", "fname");
-        this.runActionTest(new TrimLeft(), " fname ", "fname ");
-        this.runActionTest(new TrimRight(), " fname ", " fname");
-        this.runActionTest(new Capitalize(), "fname", "Fname");
-        this.runActionTest(new SeparateByDash(), "f:name", "f-name");
-        this.runActionTest(new SeparateByUnderscore(), "f-na_me", "f_na_me");
+        this.runActionTest(new Trim(), " fname ", "fname", String.class);
+        this.runActionTest(new TrimLeft(), " fname ", "fname ", String.class);
+        this.runActionTest(new TrimRight(), " fname ", " fname", String.class);
+        this.runActionTest(new Capitalize(), "fname", "Fname", String.class);
+        this.runActionTest(new SeparateByDash(), "f:name", "f-name", String.class);
+        this.runActionTest(new SeparateByUnderscore(), "f-na_me", "f_na_me", String.class);
 
         SubString s = new SubString();
         s.setStartIndex(0);
         s.setEndIndex(3);
-        this.runActionTest(s, "12345", "123");
+        this.runActionTest(s, "12345", "123", String.class);
 
         SubStringAfter s1 = new SubStringAfter();
         s1.setStartIndex(3);
         s1.setEndIndex(null);
         s1.setMatch("foo");
-        this.runActionTest(s1, "foobarblah", "blah");
+        this.runActionTest(s1, "foobarblah", "blah", String.class);
 
         SubStringBefore s2 = new SubStringBefore();
         s2.setStartIndex(3);
         s2.setEndIndex(null);
         s2.setMatch("blah");
-        this.runActionTest(s2, "foobarblah", "bar");
+        this.runActionTest(s2, "foobarblah", "bar", String.class);
 
         PadStringRight ps = new PadStringRight();
         ps.setPadCharacter("X");
         ps.setPadCount(5);
-        this.runActionTest(ps, "fname", "fnameXXXXX");
+        this.runActionTest(ps, "fname", "fnameXXXXX", String.class);
 
         PadStringLeft pl = new PadStringLeft();
         pl.setPadCharacter("X");
         pl.setPadCount(5);
-        this.runActionTest(pl, "fname", "XXXXXfname");
+        this.runActionTest(pl, "fname", "XXXXXfname", String.class);
 
-        String result = (String) runActionTest(new CurrentDate(), "fname", null);
+        String result = (String) runActionTest(new CurrentDate(), "fname", null, String.class);
         assertTrue(Pattern.compile("20([1-9][0-9])-(0[0-9]|1[0-2])-(0[0-9]|1[0-9]|2[0-9]|3[0-1])").matcher(result)
                 .matches());
 
-        result = (String) runActionTest(new CurrentTime(), "fname", null);
+        result = (String) runActionTest(new CurrentTime(), "fname", null, String.class);
         assertTrue(Pattern.compile("([01]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]").matcher(result).matches());
 
-        result = (String) runActionTest(new CurrentDateTime(), "fname", null);
+        result = (String) runActionTest(new CurrentDateTime(), "fname", null, String.class);
         assertTrue(Pattern.compile("20([1-9][0-9])-(0[0-9]|1[0-2])-(0[0-9]|1[0-9]|2[0-9]|3[0-1])T[0-9]{2}:[0-9]{2}Z")
                 .matcher(result).matches());
 
-        result = (String) runActionTest(new GenerateUUID(), "fname", null);
+        result = (String) runActionTest(new GenerateUUID(), "fname", null, String.class);
         assertTrue(Pattern.compile("[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}").matcher(result)
                 .matches());
     }
 
-    public Object runActionTest(Action action, String inputFirstName, Object outputExpected) throws Exception {
-        return this.runActionTestList(Arrays.asList(action), inputFirstName, outputExpected);
+    public Object runActionTest(Action action, String inputFirstName, Object outputExpected, Class<?> ouputClassExpected) throws Exception {
+        return this.runActionTestList(Arrays.asList(action), inputFirstName, outputExpected, ouputClassExpected);
     }
 
-    public Object runActionTestList(List<Action> actions, String inputFirstName, Object outputExpected)
-            throws Exception {
+    public Object runActionTestList(List<Action> actions, String inputFirstName, Object outputExpected, Class<?> outputClassExpected) throws Exception {
         System.out.println("Now running test for actions: " + actions);
         System.out.println("Input: " + inputFirstName);
         System.out.println("Expected output: " + outputExpected);
@@ -157,7 +156,7 @@ public abstract class AtlasBaseActionsTest extends AtlasMappingBaseTest {
 
         Object outputActual = session.getOutput();
         assertNotNull(outputActual);
-        outputActual = getOutputValue(outputActual);
+        outputActual = getOutputValue(outputActual, outputClassExpected);
         if (outputExpected != null) {
             assertEquals(outputExpected, outputActual);
         }
@@ -167,10 +166,10 @@ public abstract class AtlasBaseActionsTest extends AtlasMappingBaseTest {
 
     @Test
     public void runStringLengthTest() throws Exception {
-        this.runActionTest(new StringLength(), "fname", stringLengthTestResultIsInteger ? 5 : "5");
+        this.runActionTest(new StringLength(), "fname", Integer.valueOf(5), Integer.class);
     }
 
     public abstract Object createInput(String inputFirstName);
 
-    public abstract Object getOutputValue(Object output);
+    public abstract Object getOutputValue(Object output, Class<?> outputClassExpected);
 }
