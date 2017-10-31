@@ -24,7 +24,7 @@ import io.atlasmap.v2.FieldType;
 public class DateTimeFieldActions implements AtlasFieldAction {
     
     @AtlasFieldActionInfo(name = "DayOfWeek", sourceType = FieldType.INTEGER, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
-    public static String DayOfWeekInteger(Action action, Integer input) {
+    public static String dayOfWeekInteger(Action action, Integer input) {
         switch(input) {
         case 1: return "Sunday";
         case 2: return "Monday";
@@ -38,7 +38,7 @@ public class DateTimeFieldActions implements AtlasFieldAction {
     }
     
     @AtlasFieldActionInfo(name = "DayOfWeek", sourceType = FieldType.STRING, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
-    public static String DayOfWeekString(Action action, String input) {
+    public static String dayOfWeekString(Action action, String input) {
         switch(input) {
         case "sun": return "Sunday";
         case "mon": return "Monday";
