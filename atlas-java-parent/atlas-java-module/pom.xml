@@ -74,6 +74,7 @@
             <groupId>io.atlasmap</groupId>
             <artifactId>atlas-core</artifactId>
             <classifier>tests</classifier>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
