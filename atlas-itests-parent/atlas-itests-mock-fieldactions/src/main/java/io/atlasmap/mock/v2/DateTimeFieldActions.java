@@ -33,9 +33,8 @@ public class DateTimeFieldActions implements AtlasFieldAction {
         case 5: return "Thursday";
         case 6: return "Friday";
         case 7: return "Saturday";
+        default: return "Funday";
         }
-        
-        return "Funday";
     }
     
     @AtlasFieldActionInfo(name = "DayOfWeek", sourceType = FieldType.STRING, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
