@@ -18,7 +18,9 @@ package io.atlasmap.json.module;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.core.JsonFactory;
@@ -92,6 +94,7 @@ public class JsonModule extends BaseAtlasModule {
 
     @Override
     public void processInputMapping(AtlasSession session, BaseMapping baseMapping) throws AtlasException {
+        Map<String, JsonFieldReader> fieldReaderCache = new HashMap<>();
         for (Mapping mapping : this.generateInputMappings(session, baseMapping)) {
             if (mapping.getInputField() == null || mapping.getInputField().isEmpty()) {
                 addAudit(session, null,
@@ -131,25 +134,28 @@ public class JsonModule extends BaseAtlasModule {
 
                 JsonField inputField = (JsonField) field;
 
-                Object sourceObject = null;
-                if (field.getDocId() != null && session.hasInput(field.getDocId())) {
-                    // Use docId only when it exists, otherwise use default input
-                    sourceObject = session.getInput(field.getDocId());
-                } else {
-                    sourceObject = session.getInput();
+                JsonFieldReader fieldReader = fieldReaderCache.get(field.getDocId());
+                if (fieldReader == null) {
+                    Object sourceObject = null;
+                    if (field.getDocId() != null && session.hasInput(field.getDocId())) {
+                        // Use docId only when it exists, otherwise use default input
+                        sourceObject = session.getInput(field.getDocId());
+                    } else {
+                        sourceObject = session.getInput();
+                    }
+
+                    if (sourceObject == null || !(sourceObject instanceof String)) {
+                        addAudit(session, field.getDocId(),
+                                String.format("Unsupported input object type=%s", field.getClass().getName()), field.getPath(),
+                                AuditStatus.ERROR, null);
+                        return;
+                    }
+                    String document = (String) sourceObject;
+                    fieldReader = new JsonFieldReader();
+                    fieldReader.setDocument(document);
+                    fieldReaderCache.put(field.getDocId(), fieldReader);
                 }
-
-                if (sourceObject == null || !(sourceObject instanceof String)) {
-                    addAudit(session, field.getDocId(),
-                            String.format("Unsupported input object type=%s", field.getClass().getName()), field.getPath(),
-                            AuditStatus.ERROR, null);
-                    return;
-                }
-
-                String document = (String) sourceObject;
-
-                JsonFieldReader djfr = new JsonFieldReader();
-                djfr.read(document, inputField);
+                fieldReader.read(inputField);
 
                 // NOTE: This shouldn't happen
                 if (inputField.getFieldType() == null) {
