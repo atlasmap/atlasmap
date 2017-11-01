@@ -200,7 +200,12 @@ public class DateConverter implements AtlasConverter<Date> {
 
     @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.DATE, sourceClassName = "java.lang.Long", targetClassName = "java.util.Date")
     public Date convertFromLong(Long date) throws AtlasConversionException {
-        return Date.from(Instant.ofEpochMilli(date));
+       if(date>=Instant.MIN.getEpochSecond()) {
+           return Date.from(Instant.ofEpochMilli(date));
+       }
+       else {
+           return new Date(date);
+       }
     }
 
 }

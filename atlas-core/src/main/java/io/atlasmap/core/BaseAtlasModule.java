@@ -328,18 +328,26 @@ public abstract class BaseAtlasModule implements AtlasModule {
                         outputField.getPath(), AuditStatus.WARN, null);
                 continue;
             }
+
+            if (combineValues == null) {
+                // We need to support a sorted map w/ null values
+                combineValues = new HashMap<Integer, String>();
+            }
+
             if ((inputField.getFieldType() != null && !FieldType.STRING.equals(inputField.getFieldType())
                     || (inputField.getValue() != null
                             && !inputField.getValue().getClass().isAssignableFrom(String.class)))) {
                 addAudit(session, outputField.getDocId(), String
                         .format("Combine requires String field type for inputField.path=%s", inputField.getPath()),
                         outputField.getPath(), AuditStatus.WARN, null);
-                continue;
-            }
 
-            if (combineValues == null) {
-                // We need to support a sorted map w/ null values
-                combineValues = new HashMap<Integer, String>();
+                if (getConversionService().isPrimitive(inputField.getFieldType()) && (!FieldType.BYTE.equals(inputField.getFieldType()))) {
+                    final String convertedInput = (String) getConversionService().convertType(inputField.getValue(),
+                        inputField.getFieldType(), FieldType.STRING);
+                    combineValues.put(inputField.getIndex(), convertedInput);
+                }
+
+                continue;
             }
 
             combineValues.put(inputField.getIndex(), (String) inputField.getValue());

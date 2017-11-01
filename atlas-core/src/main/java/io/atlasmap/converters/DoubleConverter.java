@@ -171,7 +171,7 @@ public class DoubleConverter implements AtlasPrimitiveConverter<Double> {
      * @throws AtlasConversionException
      */
     @Override
-    @AtlasConversionInfo(sourceType = FieldType.DOUBLE, targetType = FieldType.BOOLEAN)
+    @AtlasConversionInfo(sourceType = FieldType.DOUBLE, targetType = FieldType.STRING)
     public String convertToString(Double value) throws AtlasConversionException {
         if (value == null) {
             return null;
