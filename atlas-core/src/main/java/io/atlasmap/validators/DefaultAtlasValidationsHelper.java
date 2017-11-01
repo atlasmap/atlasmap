@@ -85,17 +85,11 @@ public class DefaultAtlasValidationsHelper extends Validations implements AtlasV
             return output + ">null< ]";
         }
 
-        if (validation.getName() != null) {
-            output = output + " name=" + validation.getName();
+        if (validation.getScope() != null) {
+            output = output + " scope=" + validation.getScope();
         }
-        if (validation.getGroup() != null) {
-            output = output + " group=" + validation.getGroup();
-        }
-        if (validation.getField() != null) {
-            output = output + " field=" + validation.getField();
-        }
-        if (validation.getValue() != null) {
-            output = output + " value=" + validation.getValue();
+        if (validation.getId() != null) {
+            output = output + " id=" + validation.getId();
         }
         if (validation.getStatus() != null) {
             output = output + " status=" + validation.getStatus().value();

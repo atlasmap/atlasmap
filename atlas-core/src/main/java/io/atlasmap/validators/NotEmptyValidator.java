@@ -17,6 +17,7 @@ package io.atlasmap.validators;
 
 import io.atlasmap.spi.AtlasValidator;
 import io.atlasmap.v2.Validation;
+import io.atlasmap.v2.ValidationScope;
 import io.atlasmap.v2.ValidationStatus;
 import java.util.Collection;
 import java.util.List;
@@ -26,11 +27,11 @@ import java.util.Set;
 public class NotEmptyValidator implements AtlasValidator {
 
     private String violationMessage;
-    private String field;
+    private ValidationScope scope;
 
-    public NotEmptyValidator(String field, String violationMessage) {
+    public NotEmptyValidator(ValidationScope scope, String violationMessage) {
         this.violationMessage = violationMessage;
-        this.field = field;
+        this.scope = scope;
     }
 
     @Override
@@ -45,12 +46,12 @@ public class NotEmptyValidator implements AtlasValidator {
     }
 
     @Override
-    public void validate(Object target, List<Validation> validations) {
-        validate(target, validations, ValidationStatus.ERROR);
+    public void validate(Object target, List<Validation> validations, String id) {
+        validate(target, validations, id, ValidationStatus.ERROR);
     }
 
     @Override
-    public void validate(Object target, List<Validation> validations, ValidationStatus status) {
+    public void validate(Object target, List<Validation> validations, String id, ValidationStatus status) {
 
         if (!supports(target)) {
             return;
@@ -58,10 +59,10 @@ public class NotEmptyValidator implements AtlasValidator {
 
         if (((Collection<?>) target).isEmpty()) {
             Validation validation = new Validation();
-            validation.setField(field);
+            validation.setScope(scope);
+            validation.setId(id);
             validation.setMessage(this.violationMessage);
             validation.setStatus(status);
-            validation.setValue(target.toString());
             validations.add(validation);
         }
     }

@@ -17,6 +17,7 @@ package io.atlasmap.validators;
 
 import io.atlasmap.spi.AtlasValidator;
 import io.atlasmap.v2.Validation;
+import io.atlasmap.v2.ValidationScope;
 import io.atlasmap.v2.ValidationStatus;
 
 import java.util.List;
@@ -27,17 +28,17 @@ public class StringPatternValidator implements AtlasValidator {
 
     private String violationMessage;
     private String pattern;
-    private String field;
+    private ValidationScope scope;
     private boolean useMatch;
 
-    public StringPatternValidator(String field, String violationMessage, String pattern) {
-        this(field, violationMessage, pattern, false);
+    public StringPatternValidator(ValidationScope scope, String violationMessage, String pattern) {
+        this(scope, violationMessage, pattern, false);
     }
 
-    public StringPatternValidator(String field, String violationMessage, String pattern, boolean useMatch) {
+    public StringPatternValidator(ValidationScope scope, String violationMessage, String pattern, boolean useMatch) {
         this.violationMessage = violationMessage;
         this.pattern = pattern;
-        this.field = field;
+        this.scope = scope;
         this.useMatch = useMatch;
     }
 
@@ -47,12 +48,12 @@ public class StringPatternValidator implements AtlasValidator {
     }
 
     @Override
-    public void validate(Object target, List<Validation> validations) {
-        validate(target, validations, ValidationStatus.ERROR);
+    public void validate(Object target, List<Validation> validations, String id) {
+        validate(target, validations, id, ValidationStatus.ERROR);
     }
 
     @Override
-    public void validate(Object target, List<Validation> validations, ValidationStatus status) {
+    public void validate(Object target, List<Validation> validations, String id, ValidationStatus status) {
         Pattern regEx = Pattern.compile(pattern);
 
         if (target != null && supports(target.getClass())) {
@@ -61,18 +62,18 @@ public class StringPatternValidator implements AtlasValidator {
             if (useMatch) {
                 if (!m.matches()) {
                     Validation validation = new Validation();
-                    validation.setField(field);
-                    validation.setValue(target.toString());
-                    validation.setMessage(violationMessage);
+                    validation.setScope(scope);
+                    validation.setId(id);
+                    validation.setMessage(String.format(violationMessage, target.toString()));
                     validation.setStatus(status);
                     validations.add(validation);
                 }
             } else {
                 if (m.find()) {
                     Validation validation = new Validation();
-                    validation.setField(field);
-                    validation.setValue(target.toString());
-                    validation.setMessage(violationMessage);
+                    validation.setScope(scope);
+                    validation.setId(id);
+                    validation.setMessage(String.format(violationMessage, target.toString()));
                     validation.setStatus(status);
                     validations.add(validation);
                 }

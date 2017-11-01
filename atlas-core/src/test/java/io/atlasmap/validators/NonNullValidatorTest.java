@@ -16,6 +16,7 @@
 package io.atlasmap.validators;
 
 import io.atlasmap.v2.Validation;
+import io.atlasmap.v2.ValidationScope;
 
 import org.junit.Test;
 import org.junit.After;
@@ -24,6 +25,7 @@ import org.junit.Before;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 public class NonNullValidatorTest extends BaseValidatorTest {
@@ -32,7 +34,7 @@ public class NonNullValidatorTest extends BaseValidatorTest {
     @Before
     public void setUp() {
         super.setUp();
-        validator = new NonNullValidator("qwerty", "Cannot be null");
+        validator = new NonNullValidator(ValidationScope.MAPPING, "Cannot be null");
     }
 
     @Override
@@ -52,30 +54,32 @@ public class NonNullValidatorTest extends BaseValidatorTest {
     @Test
     public void testValidate() throws Exception {
         String notNull = "notNull";
-        validator.validate(notNull, validations);
+        validator.validate(notNull, validations, null);
         assertFalse(validationHelper.hasErrors());
     }
 
     @Test
     public void testValidateInvalid() throws Exception {
-        validator.validate(null, validations);
+        validator.validate(null, validations, null);
         assertTrue(validationHelper.hasErrors());
         assertEquals(new Integer(1), new Integer(validationHelper.getCount()));
 
         Validation validation = validationHelper.getAllValidations().get(0);
         assertNotNull(validation);
 
-        // TODO: Support rejected value assertNull(validation.getRejectedValue());
         assertTrue("Cannot be null".equals(validation.getMessage()));
-        assertTrue("qwerty".equals(validation.getField()));
+        assertEquals(ValidationScope.MAPPING, validation.getScope());
+        assertNull(validation.getId());
 
         String empty = "";
         validationHelper.getAllValidations().clear();
 
-        validator.validate(empty, validations);
+        validator.validate(empty, validations, "testValidateInvalid-2");
 
         assertTrue(validationHelper.hasErrors());
         assertEquals(new Integer(1), new Integer(validationHelper.getCount()));
+        assertEquals(ValidationScope.MAPPING, validationHelper.getValidation().get(0).getScope());
+        assertEquals("testValidateInvalid-2", validationHelper.getValidation().get(0).getId());
     }
 
 }

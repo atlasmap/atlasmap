@@ -15,6 +15,7 @@
  */
 package io.atlasmap.validators;
 
+import io.atlasmap.v2.ValidationScope;
 import io.atlasmap.v2.ValidationStatus;
 import org.junit.After;
 import org.junit.Before;
@@ -38,7 +39,7 @@ public class NotEmptyValidatorTest extends BaseValidatorTest {
     @Before
     public void setUp() {
         super.setUp();
-        validator = new NotEmptyValidator("test.field", "Collection should not be empty");
+        validator = new NotEmptyValidator(ValidationScope.MAPPING, "Collection should not be empty");
     }
 
     @Override
@@ -67,19 +68,21 @@ public class NotEmptyValidatorTest extends BaseValidatorTest {
         stuff.add("one");
         stuff.add("two");
 
-        validator.validate(stuff, validations);
+        validator.validate(stuff, validations, "testValidate-1");
         assertFalse(validationHelper.hasErrors());
 
-        validator.validate(stuff, validations, ValidationStatus.WARN);
+        validator.validate(stuff, validations, "testValidate-2", ValidationStatus.WARN);
         assertFalse(validationHelper.hasErrors());
     }
 
     @Test
     public void testValidateInvalid() throws Exception {
         List<String> stuff = new ArrayList<>();
-        validator.validate(stuff, validations);
+        validator.validate(stuff, validations, "testValidateInvalid");
         assertTrue(validationHelper.hasErrors());
         assertEquals(new Integer(1), new Integer(validationHelper.getCount()));
+        assertEquals(ValidationScope.MAPPING, validationHelper.getValidation().get(0).getScope());
+        assertEquals("testValidateInvalid", validationHelper.getValidation().get(0).getId());
         assertFalse(validationHelper.hasWarnings());
         assertFalse(validationHelper.hasInfos());
     }

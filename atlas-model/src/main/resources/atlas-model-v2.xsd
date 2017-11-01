@@ -80,6 +80,7 @@
                     <element name="OutputField" type="atlas:Field"
                         minOccurs="0" maxOccurs="unbounded" />
                 </sequence>
+                <attribute name="id" type="string" use="optional" />
                 <attribute name="delimiter" type="string" use="optional" />
                 <attribute name="delimiterString" type="string"
                     use="optional" />
@@ -200,16 +201,22 @@
 
     <complexType name="Validation">
         <sequence>
-            <element name="message" type="string" minOccurs="0"
-                maxOccurs="1" />
+            <element name="message" type="string" minOccurs="0" maxOccurs="1" />
         </sequence>
-        <attribute name="name" type="string" use="required" />
-        <attribute name="group" type="string" use="optional" />
-        <attribute name="field" type="string" use="optional" />
-        <attribute name="value" type="string" use="optional" />
-        <attribute name="status" type="atlas:ValidationStatus"
-            use="required" />
+        <attribute name="id" type="string" use="optional" />
+        <attribute name="scope" type="atlas:ValidationScope" use="required" />
+        <attribute name="status" type="atlas:ValidationStatus" use="required" />
     </complexType>
+
+    <simpleType name="ValidationScope">
+        <restriction base="string">
+            <enumeration value="All" />
+            <enumeration value="DataSource" />
+            <enumeration value="Mapping" />
+            <enumeration value="LookupTable" />
+            <enumeration value="Property" />
+        </restriction>
+    </simpleType>
 
     <simpleType name="ValidationStatus">
         <restriction base="string">

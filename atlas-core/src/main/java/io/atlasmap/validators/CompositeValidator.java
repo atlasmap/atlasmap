@@ -46,14 +46,14 @@ public class CompositeValidator implements AtlasValidator {
     }
 
     @Override
-    public void validate(Object target, List<Validation> validations) {
-        validate(target, validations, ValidationStatus.ERROR);
+    public void validate(Object target, List<Validation> validations, String id) {
+        validate(target, validations, id, ValidationStatus.ERROR);
     }
 
     @Override
-    public void validate(Object target, List<Validation> validations, ValidationStatus status) {
+    public void validate(Object target, List<Validation> validations, String id, ValidationStatus status) {
         for (AtlasValidator validator : validators) {
-            validator.validate(target, validations, status);
+            validator.validate(target, validations, id, status);
         }
     }
 }

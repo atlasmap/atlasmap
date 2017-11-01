@@ -12,6 +12,7 @@ import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.api.AtlasSession;
 import io.atlasmap.v2.Validation;
+import io.atlasmap.v2.ValidationScope;
 import io.atlasmap.v2.ValidationStatus;
 import io.atlasmap.v2.Validations;
 import io.atlasmap.validation.AtlasMappingBaseTest;
@@ -61,10 +62,10 @@ public class AtlasCoreValidationTest extends AtlasMappingBaseTest {
 
         boolean found = false;
         for (Validation v : validations.getValidation()) {
-            if ("Mapping.Name".equals(v.getField())) {
+            if ("Mapping name must not be null nor empty".equals(v.getMessage())) {
                 found = true;
                 assertEquals(ValidationStatus.ERROR, v.getStatus());
-                assertEquals("Mapping name must not be null nor empty", v.getMessage());
+                assertEquals(ValidationScope.ALL, v.getScope());
             }
             System.out.println(AtlasValidationTestHelper.validationToString(v));
 
@@ -85,10 +86,10 @@ public class AtlasCoreValidationTest extends AtlasMappingBaseTest {
 
         boolean found = false;
         for (Validation v : validations.getValidation()) {
-            if ("Mapping.Name".equals(v.getField())) {
+            if ("Mapping name must not be null nor empty".equals(v.getMessage())) {
                 found = true;
                 assertEquals(ValidationStatus.ERROR, v.getStatus());
-                assertEquals("Mapping name must not be null nor empty", v.getMessage());
+                assertEquals(ValidationScope.ALL, v.getScope());
             }
         }
 

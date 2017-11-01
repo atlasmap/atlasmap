@@ -302,7 +302,7 @@ public class DateConverterTest {
                         assertTrue(atlasConversionInfo.sourceType().compareTo(FieldType.DATE) == 0);
                     }
                     for (AtlasConversionConcern atlasConversionConcern : atlasConversionInfo.concerns()) {
-                        assertNotNull(atlasConversionConcern.getMessage());
+                        assertNotNull(atlasConversionConcern.getMessage(atlasConversionInfo));
                         assertNotNull(atlasConversionConcern.value());
                     }
                 }
@@ -323,7 +323,7 @@ public class DateConverterTest {
                         assertTrue(atlasConversionInfo.targetType().compareTo(FieldType.DATE) == 0);
                     }
                     for (AtlasConversionConcern atlasConversionConcern : atlasConversionInfo.concerns()) {
-                        assertNotNull(atlasConversionConcern.getMessage());
+                        assertNotNull(atlasConversionConcern.getMessage(atlasConversionInfo));
                         assertNotNull(atlasConversionConcern.value());
                     }
                 }

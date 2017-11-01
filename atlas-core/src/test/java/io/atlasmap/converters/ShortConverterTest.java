@@ -245,7 +245,7 @@ public class ShortConverterTest {
                     assertTrue(atlasConversionInfo.sourceType().compareTo(FieldType.SHORT) == 0);
                     assertNotNull(atlasConversionInfo.targetType());
                     for (AtlasConversionConcern atlasConversionConcern : atlasConversionInfo.concerns()) {
-                        assertNotNull(atlasConversionConcern.getMessage());
+                        assertNotNull(atlasConversionConcern.getMessage(atlasConversionInfo));
                         assertNotNull(atlasConversionConcern.value());
                     }
                 }

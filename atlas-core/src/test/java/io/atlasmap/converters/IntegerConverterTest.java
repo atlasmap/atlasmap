@@ -240,7 +240,7 @@ public class IntegerConverterTest {
                     assertTrue(atlasConversionInfo.sourceType().compareTo(FieldType.INTEGER) == 0);
                     assertNotNull(atlasConversionInfo.targetType());
                     for (AtlasConversionConcern atlasConversionConcern : atlasConversionInfo.concerns()) {
-                        assertNotNull(atlasConversionConcern.getMessage());
+                        assertNotNull(atlasConversionConcern.getMessage(atlasConversionInfo));
                         assertNotNull(atlasConversionConcern.value());
                     }
                 }

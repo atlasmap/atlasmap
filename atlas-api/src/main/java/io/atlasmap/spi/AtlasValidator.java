@@ -24,7 +24,7 @@ public interface AtlasValidator {
 
     boolean supports(Class<?> clazz);
 
-    void validate(Object target, List<Validation> validations);
+    void validate(Object target, List<Validation> validations, String mappingId);
 
-    void validate(Object target, List<Validation> validations, ValidationStatus status);
+    void validate(Object target, List<Validation> validations, String mappingId, ValidationStatus status);
 }

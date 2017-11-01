@@ -16,6 +16,9 @@
 package io.atlasmap.validators;
 
 import org.junit.Test;
+
+import io.atlasmap.v2.ValidationScope;
+
 import org.junit.After;
 
 import static org.junit.Assert.assertFalse;
@@ -32,35 +35,35 @@ public class StringPatternValidatorTest extends BaseValidatorTest {
 
     @Test
     public void testSupported() throws Exception {
-        validator = new StringPatternValidator("qwerty", "Must match .*", ".*");
+        validator = new StringPatternValidator(ValidationScope.ALL, "Must match .*", ".*");
         assertTrue(validator.supports(String.class));
     }
 
     @Test
     public void testUnsupported() throws Exception {
-        validator = new StringPatternValidator("qwerty", "Must match [0-9_.]", "[0-9_.]");
+        validator = new StringPatternValidator(ValidationScope.DATA_SOURCE, "Must match [0-9_.]", "[0-9_.]");
         assertFalse(validator.supports(Double.class));
     }
 
     @Test
     public void testValidate() throws Exception {
-        validator = new StringPatternValidator("qwerty", "Must match [^A-Za-z0-9_.]", "[^A-Za-z0-9_.]");
-        validator.validate("This. &* should result in an error", validations);
+        validator = new StringPatternValidator(ValidationScope.MAPPING, "Must match [^A-Za-z0-9_.]", "[^A-Za-z0-9_.]");
+        validator.validate("This. &* should result in an error", validations, "testValidate");
         assertTrue(validationHelper.hasErrors());
         validations.clear();
         assertFalse(validationHelper.hasErrors());
-        validator.validate("This_isafineexample.whatever1223", validations);
+        validator.validate("This_isafineexample.whatever1223", validations, "testValidate-2");
         assertFalse(validationHelper.hasErrors());
     }
 
     @Test
     public void testValidateUsingMatch() throws Exception {
-        validator = new StringPatternValidator("qwerty", "Must match [0-9]+", "[0-9]+", true);
-        validator.validate("0333", validations);
+        validator = new StringPatternValidator(ValidationScope.LOOKUP_TABLE, "Must match [0-9]+", "[0-9]+", true);
+        validator.validate("0333", validations, "testValidateUsingMatch");
         assertFalse(validationHelper.hasErrors());
 
-        validator = new StringPatternValidator("qwerty", "Must match [0-9]", "[0-9]", true);
-        validator.validate("This_isafineexample.whatever", validations);
+        validator = new StringPatternValidator(ValidationScope.PROPERTY, "Must match [0-9]", "[0-9]", true);
+        validator.validate("This_isafineexample.whatever", validations, "testValidateUsingMatch-2");
         assertTrue(validationHelper.hasErrors());
     }
 
