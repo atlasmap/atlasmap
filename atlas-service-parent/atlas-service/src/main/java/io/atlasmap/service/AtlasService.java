@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.Consumes;
@@ -52,12 +53,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.atlasmap.api.AtlasContext;
+import io.atlasmap.api.AtlasConversionService;
+import io.atlasmap.api.AtlasConverter;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.api.AtlasSession;
 import io.atlasmap.core.DefaultAtlasContextFactory;
+import io.atlasmap.java.v2.JavaField;
 import io.atlasmap.v2.ActionDetails;
 import io.atlasmap.v2.AtlasMapping;
 import io.atlasmap.v2.Field;
+import io.atlasmap.v2.FieldType;
 import io.atlasmap.v2.Mapping;
 import io.atlasmap.v2.StringMap;
 import io.atlasmap.v2.StringMapEntry;
@@ -326,7 +331,7 @@ public class AtlasService extends Application {
             throw new WebApplicationException("Mapping must be specified", Status.BAD_REQUEST);
         }
 
-//        AtlasConversionService conversionService = atlasContextFactory.getConversionService();
+        AtlasConversionService conversionService = atlasContextFactory.getConversionService();
 
         Validations validations = new Validations();
         List<Field> inputFields = new ArrayList<>();
@@ -351,29 +356,30 @@ public class AtlasService extends Application {
                     Status.BAD_REQUEST);
         }
 
-//        FieldType inputType = null;
-//        FieldType outputType = null;
-//
-//        for (Field inputField : inputFields) {
-//            if (inputField instanceof JavaField) {
-//                inputType = ((JavaField) inputField).getFieldType();
-//            }
-//
-//            for (Field outputField : outputFields) {
-//                if (outputField instanceof JavaField) {
-//                    outputType = ((JavaField) outputField).getFieldType();
-//                }
-//
-//                Optional<AtlasConverter<?>> optionalConverter = conversionService.findMatchingConverter(inputType,
-//                        outputType);
-//                if (optionalConverter.isPresent()) {
+        FieldType inputType = null;
+        FieldType outputType = null;
+
+        // TODO: Needs to be addressed via GitHub issue #273
+        for (Field inputField : inputFields) {
+            if (inputField instanceof JavaField) {
+                inputType = ((JavaField) inputField).getFieldType();
+            }
+
+            for (Field outputField : outputFields) {
+                if (outputField instanceof JavaField) {
+                    outputType = ((JavaField) outputField).getFieldType();
+                }
+
+                Optional<AtlasConverter<?>> optionalConverter = conversionService.findMatchingConverter(inputType,
+                        outputType);
+                if (optionalConverter.isPresent()) {
 //                    AtlasConverter<?> converter = optionalConverter.get();
-//                    // TODO: return "ok"
-//                } else {
-//                    // TODO: return "Converter needed"
-//                }
-//            }
-//        }
+                    // TODO: return "ok"
+                } else {
+                    // TODO: return "Converter needed"
+                }
+            }
+        }
 
         return Response.ok().header(ACCESS_CONTROL_ALLOW_ORIGIN, DEFAULT_ACCESS_CONTROL_ALLOW_ORIGIN)
                 .header(ACCESS_CONTROL_ALLOW_HEADERS, DEFAULT_ACCESS_CONTROL_ALLOW_HEADERS)
