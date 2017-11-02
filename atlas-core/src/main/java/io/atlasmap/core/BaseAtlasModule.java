@@ -307,14 +307,11 @@ public abstract class BaseAtlasModule implements AtlasModule {
         }
 
         if (separatedValues.size() <= outputField.getIndex()) {
-            LOG.error(String.format(
-                    "Separate returned fewer segements count=%s when outputField.path=%s requested index=%s",
-                    separatedValues.size(), outputField.getPath(), outputField.getIndex()));
-            addAudit(session, outputField.getDocId(),
-                    String.format(
-                            "Separate returned fewer segements count=%s when outputField.path=%s requested index=%s",
-                            separatedValues.size(), outputField.getPath(), outputField.getIndex()),
-                    outputField.getPath(), AuditStatus.ERROR, null);
+            String errorMessage = String.format(
+                    "Separate returned fewer segments count=%s when outputField.path=%s requested index=%s",
+                    separatedValues.size(), outputField.getPath(), outputField.getIndex());
+            LOG.error(errorMessage);
+            addAudit(session, outputField.getDocId(), errorMessage, outputField.getPath(), AuditStatus.ERROR, null);
             return null;
         }
 
