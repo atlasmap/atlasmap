@@ -669,6 +669,23 @@ export class DocumentManagementService {
                             "numberPrimitive": { "type": "number" }
                         }
                     },
+                    "primitiveArrays": {
+                        "type": "object",
+                        "properties": {
+                            "stringArray": {
+                                "type": "array",
+                                "items": { "type": "string" }
+                            },
+                            "booleanArray": {
+                                "type": "array",
+                                "items": { "type": "boolean" }
+                            },
+                            "numberArray": {
+                                "type": "array",
+                                "items": { "type": "number" }
+                            }
+                        }
+                    },
                     "addressList": {
                         "type": "array",
                         "items": {
