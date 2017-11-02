@@ -15,14 +15,6 @@
  */
 package io.atlasmap.core;
 
-import io.atlasmap.api.AtlasConverter;
-import io.atlasmap.api.AtlasConversionException;
-import io.atlasmap.api.AtlasConversionService;
-import io.atlasmap.spi.AtlasConversionInfo;
-import io.atlasmap.spi.AtlasPrimitiveConverter;
-import io.atlasmap.v2.FieldType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Collections;
@@ -35,6 +27,16 @@ import java.util.ServiceLoader;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import io.atlasmap.api.AtlasConversionException;
+import io.atlasmap.api.AtlasConversionService;
+import io.atlasmap.api.AtlasConverter;
+import io.atlasmap.spi.AtlasConversionInfo;
+import io.atlasmap.spi.AtlasPrimitiveConverter;
+import io.atlasmap.v2.FieldType;
 
 public class DefaultAtlasConversionService implements AtlasConversionService {
 
@@ -72,24 +74,20 @@ public class DefaultAtlasConversionService implements AtlasConversionService {
     @Override
     public Optional<AtlasConverter<?>> findMatchingConverter(FieldType source, FieldType target) {
 
-        Optional<AtlasConverter<?>> primitiveConverter = Optional.empty();
-        Optional<AtlasConverter<?>> customConverter = Optional.empty();
-
         List<AtlasPrimitiveConverter<?>> primitiveConverters = converters.values().stream()
                 .filter(p -> p instanceof AtlasPrimitiveConverter).map(p -> (AtlasPrimitiveConverter<?>) p)
                 .collect(Collectors.toList());
-        primitiveConverter = checkPrimitiveConverters(primitiveConverters, source, target);
+        Optional<AtlasConverter<?>> primitiveConverter = checkPrimitiveConverters(primitiveConverters, source, target);
 
         List<AtlasConverter<?>> customConverters = converters.values().stream()
                 .filter(not(p -> p instanceof AtlasPrimitiveConverter)).collect(Collectors.toList());
-        customConverter = checkCustomConverters(customConverters, source, target);
+        Optional<AtlasConverter<?>> customConverter = checkCustomConverters(customConverters, source, target);
 
         // prefer the custom converter over the primitive
         if (primitiveConverter.isPresent() && !customConverter.isPresent()) {
             return primitiveConverter;
-        } else {
-            return customConverter;
         }
+        return customConverter;
     }
 
     @Override
@@ -107,8 +105,7 @@ public class DefaultAtlasConversionService implements AtlasConversionService {
     }
 
     @Override
-    @SuppressWarnings("rawtypes")
-    public Optional<Method> findMatchingMethod(FieldType source, FieldType target, AtlasConverter customConverter) {
+    public Optional<Method> findMatchingMethod(FieldType source, FieldType target, AtlasConverter<?> customConverter) {
         Method[] methods = customConverter.getClass().getMethods();
         // assuming only one
         return Arrays.stream(methods)
@@ -301,11 +298,9 @@ public class DefaultAtlasConversionService implements AtlasConversionService {
                 throw new AtlasConversionException(
                         "AutoConversion is not supported for sT=" + sourceType + " tT=" + targetType);
             }
-        } else {
-            // TODO: Support non-primitive auto conversion
-            throw new AtlasConversionException("AutoConversion of non-primitives is not supported");
         }
-
+        // TODO: Support non-primitive auto conversion
+        throw new AtlasConversionException("AutoConversion of non-primitives is not supported");
     }
 
     @Override

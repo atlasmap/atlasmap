@@ -78,7 +78,7 @@ public abstract class BaseModuleValidationService<T extends Field> implements At
 
     @Override
     public List<Validation> validateMapping(AtlasMapping mapping) {
-        List<Validation> validations = new ArrayList<Validation>();
+        List<Validation> validations = new ArrayList<>();
         if (getMode() == AtlasModuleMode.UNSET) {
             Validation validation = new Validation();
             validation.setMessage(String.format(
@@ -95,6 +95,7 @@ public abstract class BaseModuleValidationService<T extends Field> implements At
         for (DataSource ds : mapping.getDataSource()) {
             if (ds.getUri() != null && ds.getUri().startsWith(getModuleDetail().uri())) {
                 found = true;
+                break;
             }
         }
 
@@ -109,6 +110,38 @@ public abstract class BaseModuleValidationService<T extends Field> implements At
         return validations;
     }
 
+    protected void validateCombineMapping(Mapping mapping, List<Validation> validations) {
+        if (mapping == null) {
+            return;
+        }
+
+        List<Field> inputFields = mapping.getInputField();
+        Field outputField = mapping.getOutputField() != null ? mapping.getOutputField().get(0) : null;
+
+        if (getMode() == AtlasModuleMode.TARGET) {
+            if (inputFields != null) {
+                // FIXME Run only for TARGET to avoid duplicate validation...
+                // we should convert per module validations to plugin style
+                for (Field inputField : inputFields) {
+                    validateSourceAndTargetTypes(inputField, outputField, validations);
+                }
+            }
+
+            // check that the output field is of type String else error
+            if (outputField.getFieldType() != FieldType.STRING) {
+                Validation validation = new Validation();
+                validation.setField("Output.Field");
+                validation.setMessage("Output field must be of type " + FieldType.STRING + " for a Combine Mapping");
+                validation.setStatus(ValidationStatus.ERROR);
+                validation.setValue(getFieldName(outputField));
+                validations.add(validation);
+            }
+            validateField(outputField, FieldDirection.OUTPUT, validations);
+        } else if (inputFields != null) { // SOURCE
+            inputFields.forEach(inField -> validateField(inField, FieldDirection.INPUT, validations));
+        }
+    }
+
     protected void validateMappingEntries(List<BaseMapping> mappings, List<Validation> validations) {
         for (BaseMapping fieldMapping : mappings) {
             if (fieldMapping.getClass().isAssignableFrom(Mapping.class)
@@ -117,6 +150,9 @@ public abstract class BaseModuleValidationService<T extends Field> implements At
             } else if (fieldMapping.getClass().isAssignableFrom(Mapping.class)
                     && MappingType.SEPARATE.equals(((Mapping) fieldMapping).getMappingType())) {
                 validateSeparateMapping((Mapping) fieldMapping, validations);
+            } else if (fieldMapping.getClass().isAssignableFrom(Mapping.class)
+                    && MappingType.COMBINE.equals(((Mapping) fieldMapping).getMappingType())) {
+                validateCombineMapping((Mapping) fieldMapping, validations);
             }
         }
     }
@@ -152,7 +188,7 @@ public abstract class BaseModuleValidationService<T extends Field> implements At
         }
 
         final Field inputField = mapping.getInputField() != null ? mapping.getInputField().get(0) : null;
-        List<Field> outputFields =mapping.getOutputField();
+        List<Field> outputFields = mapping.getOutputField();
 
         if (getMode() == AtlasModuleMode.SOURCE) {
             // check that the input field is of type String else error
@@ -178,6 +214,7 @@ public abstract class BaseModuleValidationService<T extends Field> implements At
         }
     }
 
+    @SuppressWarnings("unchecked")
     protected void validateField(Field field, FieldDirection direction, List<Validation> validations) {
         if (field == null || !getFieldType().isAssignableFrom(field.getClass())) {
             Validation validation = new Validation();
@@ -270,6 +307,7 @@ public abstract class BaseModuleValidationService<T extends Field> implements At
         }
     }
 
+    @SuppressWarnings("unchecked")
     protected String getFieldName(Field field) {
         if (field == null) {
             return "null";

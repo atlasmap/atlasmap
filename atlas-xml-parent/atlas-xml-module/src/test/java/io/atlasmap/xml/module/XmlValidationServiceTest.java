@@ -15,6 +15,23 @@
  **/
 package io.atlasmap.xml.module;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+
+import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import io.atlasmap.core.AtlasMappingUtil;
 import io.atlasmap.core.DefaultAtlasConversionService;
 import io.atlasmap.spi.AtlasModuleDetail;
@@ -34,23 +51,6 @@ import io.atlasmap.xml.v2.AtlasXmlModelFactory;
 import io.atlasmap.xml.v2.XmlComplexType;
 import io.atlasmap.xml.v2.XmlField;
 import io.atlasmap.xml.v2.XmlFields;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.List;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
 
 public class XmlValidationServiceTest {
 
@@ -97,6 +97,7 @@ public class XmlValidationServiceTest {
 
         Mapping mapMapping = AtlasModelFactory.createMapping(MappingType.MAP);
         Mapping sepMapping = AtlasModelFactory.createMapping(MappingType.SEPARATE);
+        Mapping combineMapping = AtlasModelFactory.createMapping(MappingType.COMBINE);
 
         // MappedField
         XmlField inputField = AtlasXmlModelFactory.createXmlField();
@@ -121,8 +122,20 @@ public class XmlValidationServiceTest {
         sOJavaField.setIndex(1);
         sepMapping.getOutputField().add(sOJavaField);
 
+        XmlField cIJavaField = AtlasXmlModelFactory.createXmlField();
+        cIJavaField.setFieldType(FieldType.STRING);
+        cIJavaField.setPath("displayName");
+        combineMapping.getInputField().add(cIJavaField);
+
+        XmlField cOJavaField = AtlasXmlModelFactory.createXmlField();
+        cOJavaField.setFieldType(FieldType.STRING);
+        cOJavaField.setPath("lastName");
+        cOJavaField.setIndex(1);
+        combineMapping.getOutputField().add(cOJavaField);
+
         mapping.getMappings().getMapping().add(mapMapping);
         mapping.getMappings().getMapping().add(sepMapping);
+        mapping.getMappings().getMapping().add(combineMapping);
         return mapping;
     }
 
@@ -210,6 +223,49 @@ public class XmlValidationServiceTest {
         assertTrue(validationHelper.hasErrors());
         assertFalse(validationHelper.hasWarnings());
         assertFalse(validationHelper.hasInfos());
+    }
+
+    @Test
+    public void testValidateMappingInvalidCombineInputFieldType() throws Exception {
+        AtlasMapping atlasMapping = getAtlasMappingFullValid();
+
+        Mapping combineFieldMapping = AtlasModelFactory.createMapping(MappingType.COMBINE);
+
+        XmlField bIJavaField = xmlModelFactory.createXmlField();
+        bIJavaField.setFieldType(FieldType.STRING);
+        bIJavaField.setValue(Boolean.TRUE);
+        bIJavaField.setPath("firstName");
+        combineFieldMapping.getInputField().add(bIJavaField);
+
+        XmlField sOJavaField = xmlModelFactory.createXmlField();
+        sOJavaField.setFieldType(FieldType.BOOLEAN);
+        sOJavaField.setPath("lastName");
+        sOJavaField.setIndex(0);
+        combineFieldMapping.getOutputField().add(sOJavaField);
+
+        atlasMapping.getMappings().getMapping().add(combineFieldMapping);
+
+        validations.addAll(sourceValidationService.validateMapping(atlasMapping));
+        validations.addAll(targetValidationService.validateMapping(atlasMapping));
+
+        assertTrue(validationHelper.hasErrors());
+        assertTrue(validationHelper.hasWarnings());
+        assertFalse(validationHelper.hasInfos());
+
+        assertEquals(new Integer(2), new Integer(validationHelper.getCount()));
+
+        Validation validation = validations.get(0);
+        assertNotNull(validation);
+        assertEquals("Field.Input/Output.conversion", validation.getField());
+        assertEquals("(STRING) --> (BOOLEAN)", validation.getValue().toString());
+        assertEquals("Conversion can cause out of range exceptions between source and target", validation.getMessage());
+        assertEquals(ValidationStatus.WARN, validation.getStatus());
+        validation = validations.get(1);
+        assertNotNull(validation);
+        assertEquals("Output.Field", validation.getField());
+        assertEquals("(BOOLEAN)", validation.getValue().toString());
+        assertEquals("Output field must be of type STRING for a Combine Mapping", validation.getMessage());
+        assertEquals(ValidationStatus.ERROR, validation.getStatus());
     }
 
     @Test
