@@ -209,10 +209,10 @@ public class GenerateInspectionsMojo extends AbstractMojo {
             PreorderNodeListGenerator nlg = new PreorderNodeListGenerator();
             dependencyResult.getRoot().accept(nlg);
 
-            Iterator it = nlg.getNodes().iterator();
+            Iterator<DependencyNode> it = nlg.getNodes().iterator();
             ArrayList<URL> urls = new ArrayList<URL>();
             while (it.hasNext()) {
-                DependencyNode node = (DependencyNode) it.next();
+                DependencyNode node = it.next();
                 if (node.getDependency() != null) {
                     Artifact x = node.getDependency().getArtifact();
                     if (x.getFile() != null) {

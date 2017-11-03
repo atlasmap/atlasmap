@@ -42,7 +42,7 @@ public class AtlasMappingUtil {
         if (jaxbContext != null) {
             Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
             Path newFilePath = Paths.get(fileName);
-            mapping = (AtlasMapping) ((javax.xml.bind.JAXBElement) unmarshaller.unmarshal(newFilePath.toFile()))
+            mapping = (AtlasMapping) ((javax.xml.bind.JAXBElement<?>) unmarshaller.unmarshal(newFilePath.toFile()))
                     .getValue();
         }
         return mapping;
