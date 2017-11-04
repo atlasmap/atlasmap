@@ -21,7 +21,7 @@ jobs:
 
       - run:
           name: Maven
-          command: ./mvnw --batch-mode -Pfabric8 install checkstyle:check
+          command: ./mvnw --batch-mode -Pjacoco,fabric8 install checkstyle:check
 
       - save_cache:
           key: atlasmap-m2
@@ -40,6 +40,12 @@ jobs:
             mkdir ./checkstyle/
             find . -type f -regex ".*/target/checkstyle.*xml" -exec cp {} ./checkstyle/ \;
 
+      - run:
+          name: Collect Coverage reports
+          command: |
+          mkdir ./coverage/
+          cp -a ./atlas-docs/target/site/jacoco-aggregate/* ./coverage/
+
       - store_test_results:
           path: ./junit
 
@@ -48,6 +54,9 @@ jobs:
 
       - store_artifacts:
           path: ./checkstyle
+
+      - store_artifacts:
+          path: ./coverage
 
       - deploy:
           command: |
@@ -71,3 +80,4 @@ jobs:
             docker push atlasmap/atlasmap:${DOCKER_IMAGE_TAG} | cat -
 
             sh atlas-docs/ci-docs.sh
+            java -cp .circleci/codacy-coverage-reporter-2.0.1-assembly.jar com.codacy.CodacyCoverageReporter -l Java -r atlas-docs/target/site/jacoco-aggregate/jacoco.xml

@@ -93,6 +93,128 @@
                 </plugins>
             </build>
         </profile>
+
+        <!-- Jacoco Test Coverage -->
+        <profile>
+            <id>jacoco</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.jacoco</groupId>
+                        <artifactId>jacoco-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>report-aggregate</id>
+                                <phase>prepare-package</phase>
+                                <goals>
+                                    <goal>report-aggregate</goal>
+                                </goals>
+                                <configuration>
+                                    <includes>
+                                        <include>**/*.class</include>
+                                    </includes>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+            <dependencies>
+                <!-- AtlasMap Core -->
+                <dependency>
+                    <groupId>io.atlasmap</groupId>
+                    <artifactId>atlas-api</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>io.atlasmap</groupId>
+                    <artifactId>atlas-core</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>io.atlasmap</groupId>
+                    <artifactId>atlas-model</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>io.atlasmap</groupId>
+                    <artifactId>atlas-service</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>io.atlasmap</groupId>
+                    <artifactId>runtime</artifactId>
+                </dependency>
+
+                <!-- AtlasMap Java -->
+                <dependency>
+                    <groupId>io.atlasmap</groupId>
+                    <artifactId>atlas-java-inspect</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>io.atlasmap</groupId>
+                    <artifactId>atlas-java-model</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>io.atlasmap</groupId>
+                    <artifactId>atlas-java-module</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>io.atlasmap</groupId>
+                    <artifactId>atlas-java-service</artifactId>
+                </dependency>
+
+                <!-- AtlasMap JSON -->
+                <dependency>
+                    <groupId>io.atlasmap</groupId>
+                    <artifactId>atlas-json-core</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>io.atlasmap</groupId>
+                    <artifactId>atlas-json-model</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>io.atlasmap</groupId>
+                    <artifactId>atlas-json-module</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>io.atlasmap</groupId>
+                    <artifactId>atlas-json-service</artifactId>
+                </dependency>
+
+                <!-- AtlasMap XML -->
+                <dependency>
+                    <groupId>io.atlasmap</groupId>
+                    <artifactId>atlas-xml-core</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>io.atlasmap</groupId>
+                    <artifactId>atlas-xml-model</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>io.atlasmap</groupId>
+                    <artifactId>atlas-xml-module</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>io.atlasmap</groupId>
+                    <artifactId>atlas-xml-service</artifactId>
+                </dependency>
+
+                <!-- Integration Tests -->
+                <dependency>
+                    <groupId>io.atlasmap</groupId>
+                    <artifactId>atlas-itests-concurrency</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>io.atlasmap</groupId>
+                    <artifactId>atlas-itests-core</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>io.atlasmap</groupId>
+                    <artifactId>atlas-itests-reference-mappings</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>io.atlasmap</groupId>
+                    <artifactId>atlas-itests-validation-mappings</artifactId>
+                </dependency>
+            </dependencies>
+        </profile>
     </profiles>
 
 </project>
