@@ -20,6 +20,8 @@ import org.apache.camel.spi.UriEndpoint;
 import org.apache.camel.spi.UriParam;
 import org.apache.camel.util.IOHelper;
 import org.apache.camel.util.ResourceHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasContextFactory;
@@ -36,6 +38,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
@@ -51,6 +54,7 @@ import org.apache.camel.util.ObjectHelper;
 @UriEndpoint(firstVersion = "2.19.0", scheme = "atlas", title = "AtlasMap", syntax = "atlas:resourceUri", producerOnly = true, label = "transformation")
 public class AtlasEndpoint extends ResourceEndpoint {
 
+    private static final Logger LOG = LoggerFactory.getLogger(AtlasEndpoint.class);
     private AtlasContextFactory atlasContextFactory;
     private AtlasContext atlasContext;
 
@@ -218,12 +222,24 @@ public class AtlasEndpoint extends ResourceEndpoint {
         atlasSession.setInput(body);
         atlasContext.process(atlasSession);
 
+        List<Audit> errors = new ArrayList<>();
         for (Audit audit : atlasSession.getAudits().getAudit()) {
             switch (audit.getStatus()) {
             case ERROR:
-                throw new AtlasException(audit.getMessage());
+                errors.add(audit);
+                break;
+            case WARN:
+                LOG.warn("{}: docId='{}', path='{}'", audit.getMessage(), audit.getDocId(), audit.getPath());
+                break;
             default:
+                LOG.info("{}: docId='{}', path='{}'", audit.getMessage(), audit.getDocId(), audit.getPath());
             }
+        }
+        if (!errors.isEmpty()) {
+            StringBuilder buf = new StringBuilder("Errors: ");
+            errors.stream().forEach(a -> buf.append(
+                    String.format("[%s: docId='%s', path='%s'], ", a.getMessage(), a.getDocId(), a.getPath())));
+            throw new AtlasException(buf.toString());
         }
 
         // now lets output the results to the exchange
@@ -248,4 +264,5 @@ public class AtlasEndpoint extends ResourceEndpoint {
 
         return false;
     }
+
 }
