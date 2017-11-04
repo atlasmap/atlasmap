@@ -44,7 +44,7 @@ jobs:
           name: Collect Coverage reports
           command: |
           mkdir ./coverage/
-          cp -a ./atlas-docs/target/site/jacoco-aggregate/* ./coverage/
+          cp -a ./atlas-docs/target/site/jacoco-aggregate/* ./coverage/ \;
 
       - store_test_results:
           path: ./junit
