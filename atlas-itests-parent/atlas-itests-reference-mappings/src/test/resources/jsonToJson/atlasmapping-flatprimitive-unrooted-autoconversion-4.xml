@@ -23,7 +23,7 @@
         <Mapping xsi:type="Mapping" mappingType="Map">
             <InputField xsi:type="ns3:JsonField" path="/doubleField" />
             <OutputField xsi:type="ns3:JsonField" path="/charField"
-                fieldType="String" />
+                fieldType="Char" />
         </Mapping>
         <Mapping xsi:type="Mapping" mappingType="Map">
             <InputField xsi:type="ns3:JsonField" path="/floatField" />

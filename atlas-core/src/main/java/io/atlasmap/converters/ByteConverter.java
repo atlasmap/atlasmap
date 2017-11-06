@@ -155,12 +155,11 @@ public class ByteConverter implements AtlasPrimitiveConverter<Byte> {
      * @throws AtlasUnsupportedException
      */
     @Override
-    @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.STRING, concerns = AtlasConversionConcern.UNSUPPORTED)
+    @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.STRING)
     public String convertToString(Byte value) throws AtlasConversionException {
         if (value == null) {
             return null;
         }
-        throw new AtlasConversionException(
-                new AtlasUnsupportedException("Byte to String conversion is not supported."));
+        return String.valueOf(value);
     }
 }

@@ -15,13 +15,14 @@
  */
 package io.atlasmap.core;
 
-import java.util.HashMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import io.atlasmap.api.AtlasConversionException;
 import io.atlasmap.api.AtlasConversionService;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.api.AtlasFieldActionService;
@@ -334,23 +335,25 @@ public abstract class BaseAtlasModule implements AtlasModule {
                 combineValues = new HashMap<Integer, String>();
             }
 
-            if ((inputField.getFieldType() != null && !FieldType.STRING.equals(inputField.getFieldType())
-                    || (inputField.getValue() != null
-                            && !inputField.getValue().getClass().isAssignableFrom(String.class)))) {
-                addAudit(session, outputField.getDocId(), String
-                        .format("Combine requires String field type for inputField.path=%s", inputField.getPath()),
+            if ((inputField.getFieldType() != null) || (inputField.getValue() != null)) {
+                String convertedInput;
+                try {
+                    convertedInput = (String) getConversionService().convertType(inputField.getValue(),
+                        inputField.getFieldType(), FieldType.STRING);
+
+                } catch (AtlasConversionException e) {
+                    LOG.warn(String.format("Suitable converter for inputField.path=%s hasn't been found",
+                        inputField.getPath()));
+                    addAudit(session, outputField.getDocId(), String
+                            .format("Suitable converter for inputField.path=%s hasn't been found", inputField.getPath()),
                         outputField.getPath(), AuditStatus.WARN, null);
 
-                if (getConversionService().isPrimitive(inputField.getFieldType()) && (!FieldType.BYTE.equals(inputField.getFieldType()))) {
-                    final String convertedInput = (String) getConversionService().convertType(inputField.getValue(),
-                        inputField.getFieldType(), FieldType.STRING);
-                    combineValues.put(inputField.getIndex(), convertedInput);
+                    convertedInput = inputField.getValue().toString();
                 }
-
+                combineValues.put(inputField.getIndex(), convertedInput);
                 continue;
             }
 
-            combineValues.put(inputField.getIndex(), (String) inputField.getValue());
         }
 
         String combinedValue = null;
