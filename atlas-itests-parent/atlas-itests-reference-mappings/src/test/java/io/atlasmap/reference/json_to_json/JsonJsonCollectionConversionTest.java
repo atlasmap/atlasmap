@@ -106,7 +106,7 @@ public class JsonJsonCollectionConversionTest extends AtlasMappingBaseTest {
 
         // contact.firstName -> contact<>.name
 
-        String input = "{ \"contact\": [ { \"firstName\": \"name9\" } ] }";
+        String input = "{ \"contact\": { \"firstName\": \"name9\" } }";
         AtlasSession session = context.createSession();
         session.setInput(input);
         context.process(session);
