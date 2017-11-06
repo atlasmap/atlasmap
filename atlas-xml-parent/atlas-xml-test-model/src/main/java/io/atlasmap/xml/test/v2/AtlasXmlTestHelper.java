@@ -5,6 +5,7 @@ import java.io.StringWriter;
 
 import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.transform.stream.StreamSource;
@@ -46,7 +47,7 @@ public class AtlasXmlTestHelper {
         });
     }
 
-    public static Object unmarshal(String xmlData, Class<?> clazz) throws Exception {
+    public static <T> JAXBElement<T> unmarshal(String xmlData, Class<T> clazz) throws Exception {
         StreamSource data = new StreamSource(new StringReader(xmlData));
 
         if (unmarshaller == null) {

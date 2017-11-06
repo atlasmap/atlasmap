@@ -232,8 +232,9 @@ public abstract class BaseAtlasModule implements AtlasModule {
         if (session.getMapping().getLookupTables() == null
                 || session.getMapping().getLookupTables().getLookupTable() == null
                 || session.getMapping().getLookupTables().getLookupTable().size() == 0) {
-            LOG.warn(String.format("No lookup table found for specified lookupTableName=%s",
-                    mapping.getLookupTableName()));
+            addAudit(session, mapping.getOutputField().get(0).getDocId(), String.format(
+                    "No lookup table found for specified lookupTableName=%s", mapping.getLookupTableName()),
+                    null, AuditStatus.WARN, null);
             return;
         }
 
@@ -245,8 +246,9 @@ public abstract class BaseAtlasModule implements AtlasModule {
         }
 
         if (currentTable.getLookupEntry() == null || currentTable.getLookupEntry().isEmpty()) {
-            LOG.warn(String.format("Lookup table lookupTableName=%s does not contain any entries",
-                    mapping.getLookupTableName()));
+            addAudit(session, mapping.getOutputField().get(0).getDocId(), String.format(
+                    "Lookup table lookupTableName=%s does not contain any entries", mapping.getLookupTableName()),
+                    null, AuditStatus.WARN, null);
             return;
         }
 
@@ -269,12 +271,10 @@ public abstract class BaseAtlasModule implements AtlasModule {
     protected Field processSeparateField(AtlasSession session, Mapping mapping, Field inputField, Field outputField)
             throws AtlasException {
         if (outputField.getIndex() == null || outputField.getIndex() < 0) {
-            LOG.warn(String.format("Separate requires zero or positive Index value to be set on outputField outputField.path=%s",
-                    outputField.getPath()));
             addAudit(session, outputField.getDocId(),
                     String.format("Separate requires zero or positive Index value to be set on outputField outputField.path=%s",
                             outputField.getPath()),
-                    outputField.getPath(), AuditStatus.ERROR, null);
+                    outputField.getPath(), AuditStatus.WARN, null);
             return null;
         }
 
@@ -282,8 +282,6 @@ public abstract class BaseAtlasModule implements AtlasModule {
         if ((inputFieldsep.getFieldType() != null && !FieldType.STRING.equals(inputFieldsep.getFieldType())
                 || (inputFieldsep.getValue() == null
                         || !inputFieldsep.getValue().getClass().isAssignableFrom(String.class)))) {
-            LOG.warn(String.format("Separate requires String field type for inputField.path=%s",
-                    inputFieldsep.getPath()));
             addAudit(session, outputField.getDocId(), String
                     .format("Separate requires String field type for inputField.path=%s", inputFieldsep.getPath()),
                     outputField.getPath(), AuditStatus.WARN, null);
@@ -310,8 +308,7 @@ public abstract class BaseAtlasModule implements AtlasModule {
             String errorMessage = String.format(
                     "Separate returned fewer segments count=%s when outputField.path=%s requested index=%s",
                     separatedValues.size(), outputField.getPath(), outputField.getIndex());
-            LOG.error(errorMessage);
-            addAudit(session, outputField.getDocId(), errorMessage, outputField.getPath(), AuditStatus.ERROR, null);
+            addAudit(session, outputField.getDocId(), errorMessage, outputField.getPath(), AuditStatus.WARN, null);
             return null;
         }
 
@@ -325,20 +322,15 @@ public abstract class BaseAtlasModule implements AtlasModule {
         Map<Integer, String> combineValues = null;
         for (Field inputField : inputFields) {
             if (inputField.getIndex() == null || inputField.getIndex() < 0) {
-                LOG.error(
-                        String.format("Combine requires zero or positive Index value to be set on all inputFields inputField.path=%s",
-                                inputField.getPath()));
                 addAudit(session, outputField.getDocId(),
                         String.format("Combine requires zero or positive Index value to be set on all inputFields inputField.path=%s",
                                 inputField.getPath()),
-                        outputField.getPath(), AuditStatus.ERROR, null);
+                        outputField.getPath(), AuditStatus.WARN, null);
                 continue;
             }
             if ((inputField.getFieldType() != null && !FieldType.STRING.equals(inputField.getFieldType())
                     || (inputField.getValue() != null
                             && !inputField.getValue().getClass().isAssignableFrom(String.class)))) {
-                LOG.error(String.format("Combine requires String field type for inputField.path=%s",
-                        inputField.getPath()));
                 addAudit(session, outputField.getDocId(), String
                         .format("Combine requires String field type for inputField.path=%s", inputField.getPath()),
                         outputField.getPath(), AuditStatus.WARN, null);

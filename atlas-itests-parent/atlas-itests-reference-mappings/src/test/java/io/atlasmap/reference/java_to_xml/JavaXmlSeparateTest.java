@@ -48,9 +48,8 @@ public class JavaXmlSeparateTest extends AtlasMappingBaseTest {
         assertNotNull(object);
 
         assertTrue(object instanceof String);
-        AtlasXmlTestHelper helper = new AtlasXmlTestHelper();
-        JAXBElement<XmlContactAttribute> targetContact = (JAXBElement<XmlContactAttribute>) helper
-                .unmarshal((String) object, XmlContactAttribute.class);
+        JAXBElement<XmlContactAttribute> targetContact =
+                AtlasXmlTestHelper.unmarshal((String) object, XmlContactAttribute.class);
         AtlasTestUtil.validateXmlContactAttribute(targetContact.getValue());
         assertFalse(session.hasErrors());
     }
@@ -69,9 +68,8 @@ public class JavaXmlSeparateTest extends AtlasMappingBaseTest {
         Object object = session.getOutput();
         assertNotNull(object);
         assertTrue(object instanceof String);
-        AtlasXmlTestHelper helper = new AtlasXmlTestHelper();
-        JAXBElement<XmlContactAttribute> targetContact = (JAXBElement<XmlContactAttribute>) helper
-                .unmarshal((String) object, XmlContactAttribute.class);
+        JAXBElement<XmlContactAttribute> targetContact =
+                AtlasXmlTestHelper.unmarshal((String) object, XmlContactAttribute.class);
         AtlasTestUtil.validateXmlContactAttribute(targetContact.getValue());
         assertFalse(session.hasErrors());
     }
@@ -90,9 +88,8 @@ public class JavaXmlSeparateTest extends AtlasMappingBaseTest {
         Object object = session.getOutput();
         assertNotNull(object);
         assertTrue(object instanceof String);
-        AtlasXmlTestHelper helper = new AtlasXmlTestHelper();
-        JAXBElement<XmlContactAttribute> targetContact = (JAXBElement<XmlContactAttribute>) helper
-                .unmarshal((String) object, XmlContactAttribute.class);
+        JAXBElement<XmlContactAttribute> targetContact =
+                AtlasXmlTestHelper.unmarshal((String) object, XmlContactAttribute.class);
         AtlasTestUtil.validateXmlContactAttribute(targetContact.getValue());
         assertFalse(session.hasErrors());
     }
@@ -112,13 +109,12 @@ public class JavaXmlSeparateTest extends AtlasMappingBaseTest {
         assertNotNull(object);
 
         assertTrue(object instanceof String);
-        AtlasXmlTestHelper helper = new AtlasXmlTestHelper();
-        JAXBElement<XmlContactAttribute> targetContact = (JAXBElement<XmlContactAttribute>) helper
-                .unmarshal((String) object, XmlContactAttribute.class);
+        JAXBElement<XmlContactAttribute> targetContact =
+                AtlasXmlTestHelper.unmarshal((String) object, XmlContactAttribute.class);
         assertNotNull(targetContact.getValue());
         assertEquals("Ozzie", targetContact.getValue().getFirstName());
         assertEquals(null, targetContact.getValue().getLastName());
-        assertTrue(session.hasErrors());
+        assertTrue(session.hasWarns());
         assertEquals(
                 "Separate returned fewer segments count=3 when outputField.path=/Contact/@lastName requested index=3",
                 session.getAudits().getAudit().get(0).getMessage());
@@ -139,9 +135,8 @@ public class JavaXmlSeparateTest extends AtlasMappingBaseTest {
         assertNotNull(object);
 
         assertTrue(object instanceof String);
-        AtlasXmlTestHelper helper = new AtlasXmlTestHelper();
-        JAXBElement<XmlContactAttribute> targetContact = (JAXBElement<XmlContactAttribute>) helper
-                .unmarshal((String) object, XmlContactAttribute.class);
+        JAXBElement<XmlContactAttribute> targetContact =
+                AtlasXmlTestHelper.unmarshal((String) object, XmlContactAttribute.class);
         assertFalse(session.hasErrors());
 
         assertEquals(null, targetContact.getValue().getFirstName());
