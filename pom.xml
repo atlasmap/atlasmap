@@ -13,7 +13,7 @@
     <parent>
         <groupId>io.atlasmap</groupId>
         <artifactId>atlas</artifactId>
-        <version>1.31.1</version>
+        <version>1.31.2</version>
     </parent>
 
     <groupId>io.atlasmap</groupId>
@@ -26,14 +26,14 @@
         <camel.osgi.import.before.defaults>com.sun.xml.bind.marshaller;resolution:=optional</camel.osgi.import.before.defaults>
         <camel.osgi.export.pkg>org.apache.camel.converter.atlasmap.*</camel.osgi.export.pkg>
         <camel.osgi.export.service>org.apache.camel.spi.DataFormatResolver;dataformat=atlasmap</camel.osgi.export.service>
-        <atlas.version>1.31.1</atlas.version>
+        <atlas.version>1.31.2</atlas.version>
         <camel.version>2.20.0</camel.version>
         <ipaas.connector.version>0.4.5</ipaas.connector.version>
         <jacoco-maven-plugin.version>0.7.9</jacoco-maven-plugin.version>
         <jaxb.version>2.2.11</jaxb.version>
         <junit.version>4.12</junit.version>
         <log4j.version>2.8.1</log4j.version>
-        <mockito.version>1.10.19</mockito.version>
+        <mockito.version>2.8.47</mockito.version>
         <spring.version>4.3.7.RELEASE</spring.version>
         <woodstox.version>4.4.1</woodstox.version>
         <maven-compiler-plugin.version>3.6.1</maven-compiler-plugin.version>

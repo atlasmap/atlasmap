@@ -16,8 +16,11 @@ import org.springframework.test.context.ContextConfiguration;
 import io.syndesis.connector.salesforce.Contact;
 
 import twitter4j.Status;
+import twitter4j.User;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @RunWith(CamelSpringRunner.class)
 @BootstrapWith(CamelTestContextBootstrapper.class)
@@ -48,12 +51,12 @@ public class AtlasMapComponentJsonTest {
     }
 
     protected Status generateTwitterStatus() {
-        MockStatus status = new MockStatus();
-        MockUser user = new MockUser();
-        user.setName("Bob Vila");
-        user.setScreenName("bobvila1982");
-        status.setUser(user);
-        status.setText("Let's build a house!");
+        Status status = mock(Status.class);
+        User user = mock(User.class);
+        when(user.getName()).thenReturn("Bob Vila");
+        when(user.getScreenName()).thenReturn("bobvila1982");
+        when(status.getUser()).thenReturn(user);
+        when(status.getText()).thenReturn("Let's build a house!");
         return status;
     }
 
