@@ -24,7 +24,7 @@
         <Mapping xsi:type="Mapping" mappingType="Map">
             <InputField xsi:type="ns2:JavaField" path="/doubleField" />
             <OutputField xsi:type="ns3:JsonField" path="/charField"
-                fieldType="String" />
+                fieldType="Char" />
         </Mapping>
         <Mapping xsi:type="Mapping" mappingType="Map">
             <InputField xsi:type="ns2:JavaField" path="/floatField" />

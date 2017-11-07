@@ -21,6 +21,7 @@ import io.atlasmap.spi.AtlasConversionInfo;
 import io.atlasmap.spi.AtlasPrimitiveConverter;
 import io.atlasmap.v2.FieldType;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.lang.annotation.Annotation;
@@ -114,9 +115,9 @@ public class ByteConverterTest {
         assertNull(byteConverter.convertToShort(null));
     }
 
-    @Test(expected = AtlasConversionException.class)
+    @Test
     public void convertToString() throws Exception {
-        byteConverter.convertToString(Byte.MAX_VALUE);
+        Assert.assertEquals(byteConverter.convertToString(Byte.parseByte("1")), "1");
     }
 
     @Test
