@@ -419,7 +419,9 @@ export class MappingManagementService {
     }
 
     public notifyMappingUpdated(): void {
-        this.validateMappings();
+        if (this.cfg.mappings.mappings.length > 0) {
+            this.validateMappings();
+        }
         this.mappingUpdatedSource.next();
     }
 
