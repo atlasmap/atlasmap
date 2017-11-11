@@ -63,20 +63,17 @@ export class MappingManagementService {
 
     public findMappingFiles(filter: string): Observable<string[]> {
         return new Observable<string[]>((observer:any) => {
-            var startTime: number = Date.now();
-            var url = this.cfg.initCfg.baseMappingServiceUrl + "mappings" + (filter == null ? "" : "?filter=" + filter);
+            const url = this.cfg.initCfg.baseMappingServiceUrl + "mappings" + (filter == null ? "" : "?filter=" + filter);
             DataMapperUtil.debugLogJSON(null, "Mapping List Response", this.cfg.initCfg.debugMappingServiceCalls, url);
             this.http.get(url, {headers: this.headers}).toPromise()
                 .then((res:Response) => {
-                    let body = res.json();
+                    const body = res.json();
                     DataMapperUtil.debugLogJSON(body, "Mapping List Response", this.cfg.initCfg.debugMappingServiceCalls, url);
-                    var entries: any[] = body.StringMap.stringMapEntry;
-                    var mappingFileNames: string[] = [];
-                    for (let entry of entries) {
+                    const entries: any[] = body.StringMap.stringMapEntry;
+                    const mappingFileNames: string[] = [];
+                    for (const entry of entries) {
                         mappingFileNames.push(entry.name);
                     }
-                    console.log("Retrieved " + mappingFileNames.length + " mapping file names in "
-                        + (Date.now() - startTime) + "ms.");
                     observer.next(mappingFileNames);
                     observer.complete();
                 })
@@ -91,35 +88,29 @@ export class MappingManagementService {
     public fetchMappings(mappingFileNames: string[], mappingDefinition: MappingDefinition): Observable<boolean> {
         return new Observable<boolean>((observer:any) => {
             if (mappingFileNames.length == 0) {
-                console.log("No pre-existing mapping exists.");
                 observer.complete();
                 return;
             }
-            var startTime: number = Date.now();
 
-            var baseURL: string = this.cfg.initCfg.baseMappingServiceUrl + "mapping/";
-            var operations: any[] = [];
-            for (let mappingName of mappingFileNames) {
-                var url: string = baseURL + mappingName;
+            const baseURL: string = this.cfg.initCfg.baseMappingServiceUrl + "mapping/";
+            const operations: any[] = [];
+            for (const mappingName of mappingFileNames) {
+                const url: string = baseURL + mappingName;
                 DataMapperUtil.debugLogJSON(null, "Mapping Service Request", this.cfg.initCfg.debugMappingServiceCalls, url);
-                let operation = this.http.get(url).map((res:Response) => res.json());
+                const operation = this.http.get(url).map((res:Response) => res.json());
                 operations.push(operation);
             }
             Observable.forkJoin(operations).subscribe((data:any[]) => {
                 if (!data) {
-                    console.log("No pre-existing mappings were found.");
                     observer.next(false);
                     observer.complete();
                     return;
                 }
-                console.log("Initializing from " + data.length + " fetched mappings.");
                 for (let d of data) {
                     DataMapperUtil.debugLogJSON(d, "Mapping Service Response", this.cfg.initCfg.debugMappingServiceCalls, null);
                     MappingSerializer.deserializeMappingServiceJSON(d, mappingDefinition, this.cfg);
                 }
 
-                console.log("Finished loading " + mappingDefinition.mappings.length + " mappings in "
-                    + (Date.now() - startTime) + "ms.");
                 this.notifyMappingUpdated();
                 observer.next(true);
                 observer.complete();
@@ -132,15 +123,15 @@ export class MappingManagementService {
     }
 
     public saveCurrentMapping(): void {
-        var activeMapping: MappingModel = this.cfg.mappings.activeMapping;
+        const activeMapping: MappingModel = this.cfg.mappings.activeMapping;
         if ((activeMapping != null) && (this.cfg.mappings.mappings.indexOf(activeMapping) == -1)) {
             this.cfg.mappings.mappings.push(activeMapping);
         }
 
-        var newMappings: MappingModel[] = [];
-        for (let m of this.cfg.mappings.mappings) {
-            if (m.hasFullyMappedPair()) {
-                newMappings.push(m);
+        const newMappings: MappingModel[] = [];
+        for (let mapping of this.cfg.mappings.mappings) {
+            if (mapping.hasFullyMappedPair()) {
+                newMappings.push(mapping);
             }
         }
 
@@ -154,32 +145,29 @@ export class MappingManagementService {
     }
 
     public saveMappingToService(): void {
-        var startTime: number = Date.now();
-        var payload: any = this.serializeMappingsToJSON();
-        var url = this.cfg.initCfg.baseMappingServiceUrl + "mapping";
+        const startTime: number = Date.now();
+        const payload: any = this.serializeMappingsToJSON();
+        const url = this.cfg.initCfg.baseMappingServiceUrl + "mapping";
         DataMapperUtil.debugLogJSON(payload, "Mapping Service Request", this.cfg.initCfg.debugMappingServiceCalls, url);
         this.http.put(url, JSON.stringify(payload), {headers: this.headers}).toPromise()
             .then((res:Response) => {
                 DataMapperUtil.debugLogJSON(res, "Mapping Service Response", this.cfg.initCfg.debugMappingServiceCalls, url);
-                console.log("Saved mappings to service in " + (Date.now() - startTime) + "ms.", this.cfg.mappings);
             })
             .catch((error: any) => { this.handleError("Error occurred while saving mapping.", error); }
         );
     }
 
     public handleMappingSaveSuccess(saveHandler: Function): void {
-        console.log("Handling mapping save success.");
         if (saveHandler != null) {
             saveHandler();
         }
         this.notifyMappingUpdated();
     }
 
-    public removeMapping(m: MappingModel): void {
-        console.log("Removing mapping.", m);
-        var mappingWasSaved: boolean = this.cfg.mappings.removeMapping(m);
+    public removeMapping(mappingModel: MappingModel): void {
+        const mappingWasSaved: boolean = this.cfg.mappings.removeMapping(mappingModel);
         if (mappingWasSaved) {
-            var saveHandler: Function = (() => {
+            const saveHandler: Function = (() => {
                 this.deselectMapping();
             });
             this.saveMappingSource.next(saveHandler);
@@ -199,7 +187,7 @@ export class MappingManagementService {
     }
 
     public addMappedPair(): FieldMappingPair {
-        var fieldPair: FieldMappingPair = new FieldMappingPair();
+        const fieldPair: FieldMappingPair = new FieldMappingPair();
         this.cfg.mappings.activeMapping.fieldMappings.push(fieldPair);
         this.notifyMappingUpdated();
         this.saveCurrentMapping();
@@ -220,24 +208,20 @@ export class MappingManagementService {
             return;
         }
 
-        var mapping: MappingModel = this.cfg.mappings.activeMapping;
+        let mapping: MappingModel = this.cfg.mappings.activeMapping;
 
         if (mapping != null && mapping.hasMappedFields(field.isSource())
             && !mapping.isFieldMapped(field, field.isSource())) {
-            var type: string = field.isSource() ? "source" : "target";
-            console.log("Discarding mapping, it already has a " + type + " field mapped.");
+            const type: string = field.isSource() ? "source" : "target";
             mapping = null;
         }
 
         if (mapping == null) {
-            var mappingsForField: MappingModel[] = this.cfg.mappings.findMappingsForField(field);
+            const mappingsForField: MappingModel[] = this.cfg.mappings.findMappingsForField(field);
             if (mappingsForField && mappingsForField.length > 1) {
-                console.log("Found " + mappingsForField.length + " existing mappings for selected field, prompting for mapping selection.",
-                    { "field": field, "mappings": mappingsForField });
                 this.mappingSelectionRequiredSource.next(field);
                 return;
             } else if (mappingsForField && mappingsForField.length == 1) {
-                console.log("Found existing mapping for selected field.", { "field": field, "mappings": mappingsForField });
                 mapping = mappingsForField[0];
             }
         }
@@ -248,7 +232,7 @@ export class MappingManagementService {
         }
 
         //check to see if field is a valid selection for this mapping
-        var exclusionReason: string = mapping.getFieldSelectionExclusionReason(field);
+        const exclusionReason: string = mapping.getFieldSelectionExclusionReason(field);
         if (exclusionReason != null) {
             this.cfg.errorService.warn("The field '" + field.displayName + "' cannot be selected, " + exclusionReason + ".", null);
             return;
@@ -256,8 +240,8 @@ export class MappingManagementService {
 
         mapping.brandNewMapping = false;
 
-        var latestFieldPair: FieldMappingPair = mapping.getCurrentFieldMapping();
-        var lastMappedField: MappedField = latestFieldPair.getLastMappedField(field.isSource());
+        const latestFieldPair: FieldMappingPair = mapping.getCurrentFieldMapping();
+        const lastMappedField: MappedField = latestFieldPair.getLastMappedField(field.isSource());
         if ((lastMappedField != null)) {
             lastMappedField.field = field;
         }
@@ -266,40 +250,37 @@ export class MappingManagementService {
     }
 
     public addNewMapping(selectedField: Field): void {
-        console.log("Creating new mapping.")
         this.deselectMapping();
-        var mapping: MappingModel = new MappingModel();
+        const mapping: MappingModel = new MappingModel();
         mapping.brandNewMapping = false;
         if (selectedField != null) {
-            var fieldPair: FieldMappingPair = mapping.getFirstFieldMapping();
+            const fieldPair: FieldMappingPair = mapping.getFirstFieldMapping();
             fieldPair.getMappedFields(selectedField.isSource())[0].field = selectedField;
             fieldPair.updateTransition();
         }
         this.selectMapping(mapping);
     }
 
-    public selectMapping(m: MappingModel) {
-        if (m == null) {
+    public selectMapping(mappingModel: MappingModel) {
+        if (mappingModel == null) {
             this.deselectMapping();
             return;
         }
-        console.log("Selecting active mapping.", m);
-        this.cfg.mappings.activeMapping = m;
+        this.cfg.mappings.activeMapping = mappingModel;
         this.cfg.showMappingDetailTray = true;
-        for (let fieldPair of m.fieldMappings) {
+        for (const fieldPair of mappingModel.fieldMappings) {
             DocumentDefinition.selectFields(fieldPair.getAllFields());
         }
-        this.cfg.mappings.initializeMappingLookupTable(m);
+        this.cfg.mappings.initializeMappingLookupTable(mappingModel);
         this.saveCurrentMapping();
         this.notifyMappingUpdated();
     }
 
     public deselectMapping(): void {
-        console.log("Deselecting active mapping.", { "mapping": this.cfg.mappings.activeMapping });
         this.cfg.showMappingDetailTray = false;
         this.cfg.mappings.activeMapping = null;
-        for (let d of this.cfg.getAllDocs()) {
-            d.clearSelectedFields();
+        for (const doc of this.cfg.getAllDocs()) {
+            doc.clearSelectedFields();
         }
         this.notifyMappingUpdated();
     }
@@ -309,33 +290,40 @@ export class MappingManagementService {
             //validation service not configured.
             return;
         }
-        var startTime: number = Date.now();
-        var payload: any = MappingSerializer.serializeMappings(this.cfg);
-        var url: string = this.cfg.initCfg.baseMappingServiceUrl + "mapping/validate";
+        const startTime: number = Date.now();
+        const payload: any = MappingSerializer.serializeMappings(this.cfg);
+        const url: string = this.cfg.initCfg.baseMappingServiceUrl + "mapping/validate";
         DataMapperUtil.debugLogJSON(payload, "Validation Service Request", this.cfg.initCfg.debugValidationServiceCalls, url);
         this.http.put(url, payload, { headers: this.headers }).toPromise()
             .then((res: Response) => {
                 DataMapperUtil.debugLogJSON(res, "Validation Service Response", this.cfg.initCfg.debugValidationServiceCalls, url);
-                var mapping: MappingModel = this.cfg.mappings.activeMapping;
-                let body: any = res.json();
-                var errors: ErrorInfo[] = [];
+                const mapping: MappingModel = this.cfg.mappings.activeMapping;
+                const body: any = res.json();
+                const activeMappingErrors: ErrorInfo[] = [];
+                const globalErrors: ErrorInfo[] = [];
+                // Only update active mapping and global ones, since validateMappings() is always invoked when mapping is updated.
+                // This should be eventually turned into mapping entry level validation.
+                // https://github.com/atlasmap/atlasmap-ui/issues/116
                 if (body && body.Validations && body.Validations.validation) {
-                    for (let error of body.Validations.validation) {
-                        // FIXME: https://github.com/atlasmap/atlasmap-ui/issues/112
-                        // This validation results contains all results for the entire mappings,
-                        // must get into each mapping details instead of putting everything into active mapping detail
+                    for (let validation of body.Validations.validation) {
                         let level : ErrorLevel = ErrorLevel.VALIDATION_ERROR;
-                        if (error.status === "WARN") {
+                        if (validation.status === "WARN") {
                             level = ErrorLevel.WARN;
-                        } else if (error.status === "INFO") {
+                        } else if (validation.status === "INFO") {
                             level = ErrorLevel.INFO;
                         }
-                        const e = new ErrorInfo(error.message, level);
-                        errors.push(e);
+                        const errorInfo = new ErrorInfo(validation.message, level);
+                        if (!validation.scope || validation.scope != 'MAPPING' || !validation.id) {
+                            globalErrors.push(errorInfo);
+                        } else if (mapping && mapping.uuid && validation.id === mapping.uuid) {
+                            activeMappingErrors.push(errorInfo);
+                        }
                     }
                 }
-                mapping.validationErrors = errors;
-                console.log("Finished fetching and parsing validation errors in " + (Date.now() - startTime) + "ms.");
+                this.cfg.validationErrors = globalErrors;
+                if (mapping) {
+                    mapping.validationErrors = activeMappingErrors;
+                }
             })
             .catch((error: any) => {
                 console.error("Error fetching validation data.", { "error": error, "url": url, "request": payload});
@@ -345,19 +333,18 @@ export class MappingManagementService {
 
     public fetchFieldActions(): Observable<FieldActionConfig[]> {
         return new Observable<FieldActionConfig[]>((observer:any) => {
-            var actionConfigs: FieldActionConfig[] = [];
-            var startTime: number = Date.now();
-            var url: string = this.cfg.initCfg.baseMappingServiceUrl + "fieldActions";
+            let actionConfigs: FieldActionConfig[] = [];
+            const url: string = this.cfg.initCfg.baseMappingServiceUrl + "fieldActions";
             DataMapperUtil.debugLogJSON(null, "Field Action Config Request", this.cfg.initCfg.debugFieldActionServiceCalls, url);
             this.http.get(url, { headers: this.headers }).toPromise()
                 .then((res: Response) => {
-                    let body: any = res.json();
+                    const body: any = res.json();
                     DataMapperUtil.debugLogJSON(body, "Field Action Config Response", this.cfg.initCfg.debugFieldActionServiceCalls, url);
                     if (body && body.ActionDetails
                         && body.ActionDetails.actionDetail
                         && body.ActionDetails.actionDetail.length) {
-                        for (let svcConfig of body.ActionDetails.actionDetail) {
-                            var fieldActionConfig: FieldActionConfig = new FieldActionConfig();
+                        for (const svcConfig of body.ActionDetails.actionDetail) {
+                            const fieldActionConfig: FieldActionConfig = new FieldActionConfig();
                             fieldActionConfig.name = svcConfig.name;
                             fieldActionConfig.sourceType = svcConfig.sourceType;
                             fieldActionConfig.targetType = svcConfig.targetType;
@@ -366,8 +353,8 @@ export class MappingManagementService {
 
                             if (svcConfig.parameters && svcConfig.parameters.property
                                 && svcConfig.parameters.property.length) {
-                                for (let svcProperty of svcConfig.parameters.property) {
-                                    var argumentConfig: FieldActionArgument = new FieldActionArgument();
+                                for (const svcProperty of svcConfig.parameters.property) {
+                                    const argumentConfig: FieldActionArgument = new FieldActionArgument();
                                     argumentConfig.name = svcProperty.name;
                                     argumentConfig.type = svcProperty.fieldType;
                                     argumentConfig.serviceObject = svcProperty;
@@ -378,8 +365,6 @@ export class MappingManagementService {
                         }
                     }
                     actionConfigs = this.sortFieldActionConfigs(actionConfigs);
-                    console.log("Finished fetching and parsing " + actionConfigs.length + " field actionConfigs in "
-                        + (Date.now() - startTime) + "ms.");
                     observer.next(actionConfigs);
                     observer.complete();
                 })
@@ -393,15 +378,15 @@ export class MappingManagementService {
     }
 
     public sortFieldActionConfigs(configs: FieldActionConfig[]): FieldActionConfig[] {
-        var sortedActionConfigs: FieldActionConfig[] = [];
+        const sortedActionConfigs: FieldActionConfig[] = [];
         if (configs == null || configs.length == 0) {
             return sortedActionConfigs;
         }
 
-        var configsByName: { [key:string]: FieldActionConfig; } = {};
-        var configNames: string[] = [];
-        for (let fieldActionConfig of configs) {
-            var name: string = fieldActionConfig.name;
+        const configsByName: { [key:string]: FieldActionConfig; } = {};
+        const configNames: string[] = [];
+        for (const fieldActionConfig of configs) {
+            const name: string = fieldActionConfig.name;
             //if field is a dupe, discard it
             if (configsByName[name] != null) {
                 continue;
@@ -412,7 +397,7 @@ export class MappingManagementService {
 
         configNames.sort();
 
-        for (let name of configNames) {
+        for (const name of configNames) {
             sortedActionConfigs.push(configsByName[name]);
         }
         return sortedActionConfigs;

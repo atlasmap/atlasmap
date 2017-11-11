@@ -8,6 +8,7 @@
     "experimentalDecorators": true,
     "lib": [ "es2015", "dom" ],
     "noImplicitAny": true,
+    "removeComments": true,
     "suppressImplicitAnyIndexErrors": true
   },
   "files": [

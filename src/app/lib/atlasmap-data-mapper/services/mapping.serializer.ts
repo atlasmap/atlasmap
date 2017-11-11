@@ -26,41 +26,42 @@ import { ConfigModel } from '../models/config.model';
 export class MappingSerializer {
 
     public static serializeMappings(cfg: ConfigModel): any {
-        var mappingDefinition: MappingDefinition = cfg.mappings;
-        var jsonMappings: any[] = [];
-        var tables: LookupTable[] = [];
-        for (let m of mappingDefinition.mappings) {
+        const mappingDefinition: MappingDefinition = cfg.mappings;
+        let jsonMappings: any[] = [];
+        const tables: LookupTable[] = [];
+        for (const mapping of mappingDefinition.mappings) {
             try {
-                var fieldMappingsForThisMapping: any[] = [];
-                var jsonMapping: any;
+                let fieldMappingsForThisMapping: any[] = [];
+                let jsonMapping: any;
 
-                for (let fieldPair of m.fieldMappings) {
-                    var serializedInputFields: any[] = MappingSerializer.serializeFields(fieldPair, true);
-                    var serializedOutputFields: any[] = MappingSerializer.serializeFields(fieldPair, false);
+                for (const fieldMappingPair of mapping.fieldMappings) {
+                    const serializedInputFields: any[] = MappingSerializer.serializeFields(fieldMappingPair, true);
+                    const serializedOutputFields: any[] = MappingSerializer.serializeFields(fieldMappingPair, false);
 
                     jsonMapping = {
                         "jsonType" : "io.atlasmap.v2.Mapping",
                         "mappingType" : "MAP",
+                        'id' : mapping.uuid,
                         "inputField": serializedInputFields,
                         "outputField": serializedOutputFields,
                     };
 
-                    if (fieldPair.transition.isSeparateMode()) {
+                    if (fieldMappingPair.transition.isSeparateMode()) {
                         jsonMapping["mappingType"] = "SEPARATE";
-                        jsonMapping["strategy"] = fieldPair.transition.getSerializedDelimeter();
-                    } else if (fieldPair.transition.isCombineMode()) {
+                        jsonMapping["strategy"] = fieldMappingPair.transition.getSerializedDelimeter();
+                    } else if (fieldMappingPair.transition.isCombineMode()) {
                         jsonMapping["mappingType"] = "COMBINE";
-                        jsonMapping["strategy"] = fieldPair.transition.getSerializedDelimeter();
-                    } else if (fieldPair.transition.isEnumerationMode()) {
+                        jsonMapping["strategy"] = fieldMappingPair.transition.getSerializedDelimeter();
+                    } else if (fieldMappingPair.transition.isEnumerationMode()) {
                         jsonMapping["mappingType"] = "LOOKUP";
-                        jsonMapping["lookupTableName"] = fieldPair.transition.lookupTableName;
+                        jsonMapping["lookupTableName"] = fieldMappingPair.transition.lookupTableName;
                     }
                     fieldMappingsForThisMapping.push(jsonMapping);
                 }
 
-                if (m.isCollectionMode()) {
-                    var collectionType: string = null;
-                    for (var field of m.getAllFields()) {
+                if (mapping.isCollectionMode()) {
+                    let collectionType: string = null;
+                    for (const field of mapping.getAllFields()) {
                         collectionType = field.getCollectionType();
                         if (collectionType != null) {
                             break;
@@ -77,16 +78,16 @@ export class MappingSerializer {
 
                 jsonMappings = jsonMappings.concat(fieldMappingsForThisMapping);
             } catch (e) {
-                var input: any = { "mapping": m, "mapping def": mappingDefinition };
+                const input: any = { "mapping": mapping, "mapping def": mappingDefinition };
                 console.error("Caught exception while attempting to serialize mapping, skipping. ", { "input": input, "error": e})
             }
         }
 
-        var serializedLookupTables: any[] = MappingSerializer.serializeLookupTables(cfg.mappings);
-        var propertyDescriptions: any[] = MappingSerializer.serializeProperties(cfg.propertyDoc);
-        var serializedDataSources: any = MappingSerializer.serializeDocuments(cfg.sourceDocs.concat(cfg.targetDocs), mappingDefinition);
+        const serializedLookupTables: any[] = MappingSerializer.serializeLookupTables(cfg.mappings);
+        const propertyDescriptions: any[] = MappingSerializer.serializeProperties(cfg.propertyDoc);
+        const serializedDataSources: any = MappingSerializer.serializeDocuments(cfg.sourceDocs.concat(cfg.targetDocs), mappingDefinition);
 
-        var payload: any = {
+        const payload: any = {
             "AtlasMapping": {
                 "jsonType": ConfigModel.mappingServicesPackagePrefix + ".AtlasMapping",
                 "dataSource": serializedDataSources,
@@ -100,10 +101,10 @@ export class MappingSerializer {
     }
 
     private static serializeDocuments(docs: DocumentDefinition[], mappingDefinition: MappingDefinition): any[] {
-        var serializedDocs: any[] = [];
-        for (let doc of docs) {
-            var docType: string = doc.isSource ? "SOURCE" : "TARGET";
-            var serializedDoc: any = {
+        const serializedDocs: any[] = [];
+        for (const doc of docs) {
+            const docType: string = doc.isSource ? "SOURCE" : "TARGET";
+            const serializedDoc: any = {
                 "jsonType" : "io.atlasmap.v2.DataSource",
                 "id": doc.initCfg.shortIdentifier,
                 "uri": doc.uri,
@@ -117,8 +118,8 @@ export class MappingSerializer {
             }
             if (doc.initCfg.type.isXML()) {
                 serializedDoc["jsonType"] = "io.atlasmap.xml.v2.XmlDataSource";
-                var namespaces: any[] = [];
-                for (let ns of doc.namespaces) {
+                const namespaces: any[] = [];
+                for (const ns of doc.namespaces) {
                     namespaces.push({
                         "alias": ns.alias,
                         "uri": ns.uri,
@@ -143,8 +144,8 @@ export class MappingSerializer {
     }
 
     private static serializeProperties(docDef: DocumentDefinition): any[] {
-        var propertyDescriptions: any[] = [];
-        for (let field of docDef.fields) {
+        const propertyDescriptions: any[] = [];
+        for (const field of docDef.fields) {
             propertyDescriptions.push({ "name": field.name,
                 "value": field.value, "fieldType": field.type });
         }
@@ -152,28 +153,28 @@ export class MappingSerializer {
     }
 
     private static serializeLookupTables(mappingDefinition: MappingDefinition): any[] {
-        var tables: LookupTable[] = mappingDefinition.getTables();
+        const tables: LookupTable[] = mappingDefinition.getTables();
 
         if (!tables || !tables.length) {
             return [];
         }
 
-        var serializedTables: any[] = [];
-        for (let t of tables) {
-            var lookupEntries: any[] = [];
-            for (let e of t.entries) {
-                var serialized: any = {
-                    "sourceValue": e.sourceValue,
-                    "sourceType": e.sourceType,
-                    "targetValue": e.targetValue,
-                    "targetType": e.targetType
+        const serializedTables: any[] = [];
+        for (const table of tables) {
+            const lookupEntries: any[] = [];
+            for (const entry of table.entries) {
+                const serialized: any = {
+                    "sourceValue": entry.sourceValue,
+                    "sourceType": entry.sourceType,
+                    "targetValue": entry.targetValue,
+                    "targetType": entry.targetType
                 };
                 lookupEntries.push(serialized);
             }
 
-            var serialized: any = {
+            const serialized: any = {
                 "lookupEntry": lookupEntries,
-                "name": t.name
+                "name": table.name
             }
             serializedTables.push(serialized);
         }
@@ -181,16 +182,16 @@ export class MappingSerializer {
     }
 
     private static serializeFields(fieldPair: FieldMappingPair, isSource: boolean): any[] {
-        var fields: MappedField[] = fieldPair.getMappedFields(isSource);
-        var fieldsJson: any[] = [];
-        for (let mappedField of fields) {
-            var field: Field = mappedField.field;
+        const fields: MappedField[] = fieldPair.getMappedFields(isSource);
+        const fieldsJson: any[] = [];
+        for (const mappedField of fields) {
+            const field: Field = mappedField.field;
             if (DocumentDefinition.getNoneField().path == field.path) {
                 //do not include "none" options from drop downs in mapping
                 continue;
             }
 
-            var serializedField: any = {
+            const serializedField: any = {
                 "jsonType": field.serviceObject.jsonType,
                 "name": field.name,
                 "path": field.path,
@@ -213,25 +214,25 @@ export class MappingSerializer {
                 delete(serializedField["value"]);
             }
 
-            var includeIndexes: boolean = fieldPair.transition.isSeparateMode() && !isSource;
+            let includeIndexes: boolean = fieldPair.transition.isSeparateMode() && !isSource;
             includeIndexes = includeIndexes || (fieldPair.transition.isCombineMode() && isSource);
             if (includeIndexes) {
-                var index: string = mappedField.getSeparateOrCombineIndex();
+                let index: string = mappedField.getSeparateOrCombineIndex();
                 index = (index == null) ? "1" : index;
                 serializedField["index"] = (parseInt(index) - 1);
             }
 
             if (mappedField.actions.length) {
-                var actions: any[] = [];
-                for (let action of mappedField.actions) {
+                const actions: any[] = [];
+                for (const action of mappedField.actions) {
                     if (action.isSeparateOrCombineMode) {
                         continue;
                     }
 
-                    var actionArguments: any = {};
-                    for (let argValue of action.argumentValues) {
+                    let actionArguments: any = {};
+                    for (const argValue of action.argumentValues) {
                         actionArguments[argValue.name] = argValue.value;
-                        var argumentConfig: FieldActionArgument = action.config.getArgumentForName(argValue.name);
+                        const argumentConfig: FieldActionArgument = action.config.getArgumentForName(argValue.name);
                         if (argumentConfig == null) {
                             console.error("Cannot find action argument with name: " + argValue.name, action);
                             continue;
@@ -243,7 +244,7 @@ export class MappingSerializer {
 
                     actionArguments = (Object.keys(actionArguments).length == 0) ? null : actionArguments;
 
-                    var actionJson: any = {};
+                    const actionJson: any = {};
                     actionJson[action.config.name] = actionArguments;
                     actions.push(actionJson);
                 }
@@ -264,18 +265,18 @@ export class MappingSerializer {
         }
         mappingDefinition.parsedDocs = mappingDefinition.parsedDocs.concat(MappingSerializer.deserializeDocs(json, mappingDefinition));
         mappingDefinition.mappings = mappingDefinition.mappings.concat(MappingSerializer.deserializeMappings(json));
-        for (let lookupTable of MappingSerializer.deserializeLookupTables(json)) {
+        for (const lookupTable of MappingSerializer.deserializeLookupTables(json)) {
             mappingDefinition.addTable(lookupTable);
         }
-        for (let field of MappingSerializer.deserializeProperties(json)) {
+        for (const field of MappingSerializer.deserializeProperties(json)) {
             cfg.propertyDoc.addField(field);
         }
     }
 
     public static deserializeDocs(json: any, mappingDefinition: MappingDefinition): DocumentDefinition[] {
-        var docs: DocumentDefinition[] = [];
-        for (let docRef of json.AtlasMapping.dataSource) {
-            var doc: DocumentDefinition = new DocumentDefinition();
+        const docs: DocumentDefinition[] = [];
+        for (const docRef of json.AtlasMapping.dataSource) {
+            const doc: DocumentDefinition = new DocumentDefinition();
             doc.isSource = (docRef.dataSourceType == "SOURCE");
             doc.initCfg.documentIdentifier = docRef.uri;
             doc.initCfg.shortIdentifier = docRef.id;
@@ -299,41 +300,44 @@ export class MappingSerializer {
     }
 
     public static deserializeMappings(json: any): MappingModel[] {
-        var mappings: MappingModel[] = [];
-        var docRefs: any = {};
-        for (let docRef of json.AtlasMapping.dataSource) {
+        const mappings: MappingModel[] = [];
+        const docRefs: any = {};
+        for (const docRef of json.AtlasMapping.dataSource) {
             docRefs[docRef.id] = docRef.uri;
         }
         for (let fieldMapping of json.AtlasMapping.mappings.mapping) {
-            var m: MappingModel = new MappingModel();
-            m.fieldMappings = [];
+            var mappingModel: MappingModel = new MappingModel();
+            if (fieldMapping.id) {
+                mappingModel.uuid = fieldMapping.id;
+            }
+            mappingModel.fieldMappings = [];
 
-            var isCollectionMapping = (fieldMapping.jsonType == ConfigModel.mappingServicesPackagePrefix + ".Collection");
+            const isCollectionMapping = (fieldMapping.jsonType == ConfigModel.mappingServicesPackagePrefix + ".Collection");
             if (isCollectionMapping) {
                 for (let innerFieldMapping of fieldMapping.mappings.mapping) {
-                    m.fieldMappings.push(MappingSerializer.deserializeFieldMapping(innerFieldMapping, docRefs));
+                    mappingModel.fieldMappings.push(MappingSerializer.deserializeFieldMapping(innerFieldMapping, docRefs));
                 }
             } else {
-                m.fieldMappings.push(MappingSerializer.deserializeFieldMapping(fieldMapping, docRefs));
+                mappingModel.fieldMappings.push(MappingSerializer.deserializeFieldMapping(fieldMapping, docRefs));
             }
 
-            mappings.push(m);
+            mappings.push(mappingModel);
         }
         return mappings;
     }
 
     public static deserializeFieldMapping(fieldMapping: any, docRefs: any): FieldMappingPair {
-        var fieldPair: FieldMappingPair = new FieldMappingPair();
+        const fieldPair: FieldMappingPair = new FieldMappingPair();
         fieldPair.sourceFields = [];
         fieldPair.targetFields = [];
 
-        var isSeparateMapping = (fieldMapping.mappingType == "SEPARATE");
-        var isLookupMapping = (fieldMapping.mappingType == "LOOKUP");
-        var isCombineMapping = (fieldMapping.mappingType == "COMBINE");
-        for (let field of fieldMapping.inputField) {
+        const isSeparateMapping = (fieldMapping.mappingType == "SEPARATE");
+        const isLookupMapping = (fieldMapping.mappingType == "LOOKUP");
+        const isCombineMapping = (fieldMapping.mappingType == "COMBINE");
+        for (const field of fieldMapping.inputField) {
             MappingSerializer.addFieldIfDoesntExist(fieldPair, field, true, docRefs);
         }
-        for (let field of fieldMapping.outputField) {
+        for (const field of fieldMapping.outputField) {
             MappingSerializer.addFieldIfDoesntExist(fieldPair, field, false, docRefs);
         }
         if (isSeparateMapping) {
@@ -353,16 +357,16 @@ export class MappingSerializer {
     }
 
     public static deserializeProperties(jsonMapping: any): Field[] {
-        var fields: Field[] = [];
+        const fields: Field[] = [];
         if (!jsonMapping.AtlasMapping || !jsonMapping.AtlasMapping.properties
             || !jsonMapping.AtlasMapping.properties.property) {
             return fields;
         }
-        for (let f of jsonMapping.AtlasMapping.properties.property) {
-            var field: Field = new Field();
-            field.name = f.name;
-            field.value = f.value;
-            field.type = f.fieldType;
+        for (const property of jsonMapping.AtlasMapping.properties.property) {
+            const field: Field = new Field();
+            field.name = property.name;
+            field.value = property.value;
+            field.type = property.fieldType;
             field.userCreated = true;
             fields.push(field);
         }
@@ -370,30 +374,30 @@ export class MappingSerializer {
     }
 
     public static deserializeLookupTables(jsonMapping: any): LookupTable[] {
-        var tables: LookupTable[] = [];
+        const tables: LookupTable[] = [];
         if (!jsonMapping.AtlasMapping || !jsonMapping.AtlasMapping.lookupTables
             || !jsonMapping.AtlasMapping.lookupTables.lookupTable) {
             return tables;
         }
-        for (let t of jsonMapping.AtlasMapping.lookupTables.lookupTable) {
-            var table: LookupTable = new LookupTable();
-            table.name = t.name;
-            for (let entry of t.lookupEntry) {
-                var parsedEntry: LookupTableEntry = new LookupTableEntry();
+        for (const table of jsonMapping.AtlasMapping.lookupTables.lookupTable) {
+            const parsedTable: LookupTable = new LookupTable();
+            parsedTable.name = table.name;
+            for (const entry of table.lookupEntry) {
+                const parsedEntry: LookupTableEntry = new LookupTableEntry();
                 parsedEntry.sourceValue = entry.sourceValue;
                 parsedEntry.sourceType = entry.sourceType;
                 parsedEntry.targetValue = entry.targetValue;
                 parsedEntry.targetType = entry.targetType;
-                table.entries.push(parsedEntry);
+                parsedTable.entries.push(parsedEntry);
             }
-            tables.push(table);
+            tables.push(parsedTable);
         }
         return tables;
     }
 
     private static addFieldIfDoesntExist(fieldPair: FieldMappingPair, field: any,
         isSource: boolean, docRefs: any): MappedField {
-        var mappedField: MappedField = new MappedField();
+        const mappedField: MappedField = new MappedField();
 
         mappedField.parsedData.parsedValueType = field.fieldType;
         mappedField.parsedData.parsedIndex = "1";
@@ -426,16 +430,16 @@ export class MappingSerializer {
                 return null;
             }
             if (field.actions) {
-                for (let action of field.actions) {
-                    for (let actionName in action) {
-                        var parsedAction: FieldAction = new FieldAction();
+                for (const action of field.actions) {
+                    for (const actionName in action) {
+                        const parsedAction: FieldAction = new FieldAction();
                         parsedAction.name = actionName;
-                        var actionParams: any = action[actionName];
+                        const actionParams: any = action[actionName];
                         if (actionParams) {
-                            for (let paramName in actionParams) {
-                                var parsedArgumentValue: FieldActionArgumentValue = new FieldActionArgumentValue();
+                            for (const paramName in actionParams) {
+                                const parsedArgumentValue: FieldActionArgumentValue = new FieldActionArgumentValue();
                                 parsedArgumentValue.name = paramName;
-                                var value = actionParams[paramName];
+                                let value = actionParams[paramName];
                                 value = value == null ? null : value.toString()
                                 parsedArgumentValue.value = value;
                                 parsedAction.argumentValues.push(parsedArgumentValue);
