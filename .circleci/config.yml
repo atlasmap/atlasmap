@@ -150,7 +150,8 @@ jobs:
             if [ "${CIRCLE_BRANCH}" != "master" ]; then
               exit 0
             fi
-            java -cp ../.circleci/codacy-coverage-reporter-2.0.1-assembly.jar com.codacy.CodacyCoverageReporter -l Java -r ./coverage/jacoco.xml
+            # FIXME: camel component should be built as a part of runtime so the coverage report is integrated
+            # java -cp ../.circleci/codacy-coverage-reporter-2.0.1-assembly.jar com.codacy.CodacyCoverageReporter -l Java -r ./coverage/jacoco.xml
 
 
   build-ui:
@@ -239,7 +240,8 @@ jobs:
 
           if [ "${CIRCLE_BRANCH}" == "master" ]; then
             TAG=`npm run version|sed '$!d'`.`date '+%Y%m%d%H%M%S'`
-            cat ./coverage/lcov.info | ./node_modules/.bin/codacy-coverage
+            # TODO codacy coverage view is used for runtime in monorepo...
+            # cat ./coverage/lcov.info | ./node_modules/.bin/codacy-coverage
           elif [[ "${CIRCLE_TAG}" =~ ^[0-9]+(\.[0-9]+){2} ]]; then
             TAG="${CIRCLE_TAG}"
           else
