@@ -28,13 +28,13 @@
         <camel.osgi.export.service>org.apache.camel.spi.DataFormatResolver;dataformat=atlasmap</camel.osgi.export.service>
         <atlas.version>1.31.2</atlas.version>
         <camel.version>2.20.0</camel.version>
-        <ipaas.connector.version>0.4.5</ipaas.connector.version>
         <jacoco-maven-plugin.version>0.7.9</jacoco-maven-plugin.version>
         <jaxb.version>2.2.11</jaxb.version>
         <junit.version>4.12</junit.version>
         <log4j.version>2.8.1</log4j.version>
         <mockito.version>2.8.47</mockito.version>
         <spring.version>4.3.7.RELEASE</spring.version>
+        <twitter4j.version>4.0.6</twitter4j.version>
         <woodstox.version>4.4.1</woodstox.version>
         <maven-compiler-plugin.version>3.6.1</maven-compiler-plugin.version>
         <maven-dependency-plugin.version>3.0.0</maven-dependency-plugin.version>
@@ -169,33 +169,13 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>io.syndesis</groupId>
-            <artifactId>twitter-mention-connector</artifactId>
-            <version>${ipaas.connector.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.syndesis</groupId>
-            <artifactId>salesforce-upsert-contact-connector</artifactId>
-            <version>${ipaas.connector.version}</version>
-            <scope>test</scope>
+            <groupId>org.twitter4j</groupId>
+            <artifactId>twitter4j-core</artifactId>
+            <version>${twitter4j.version}</version>
         </dependency>
     </dependencies>
 
     <profiles>
-        <profile>
-            <id>bintray</id>
-            <repositories>
-                <repository>
-                    <snapshots>
-                        <enabled>false</enabled>
-                    </snapshots>
-                    <id>ipaas-releases</id>
-                    <name>ipaas-releases</name>
-                    <url>https://dl.bintray.com/redhat-ipaas/maven/</url>
-                </repository>
-            </repositories>
-        </profile>
         <profile>
             <id>jacoco</id>
             <properties>

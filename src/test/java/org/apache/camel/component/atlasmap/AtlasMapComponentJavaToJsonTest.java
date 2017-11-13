@@ -31,13 +31,8 @@ import org.springframework.test.context.ContextConfiguration;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import twitter4j.Status;
-import twitter4j.User;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 @RunWith(CamelSpringRunner.class)
 @BootstrapWith(CamelTestContextBootstrapper.class)
@@ -55,7 +50,7 @@ public class AtlasMapComponentJavaToJsonTest {
         result.setExpectedCount(1);
 
         ProducerTemplate producerTemplate = camelContext.createProducerTemplate();
-        producerTemplate.sendBody("direct:start", generateTwitterStatus());
+        producerTemplate.sendBody("direct:start", Util.generateMockTwitterStatus());
 
         MockEndpoint.assertIsSatisfied(camelContext);
         Object body = result.getExchanges().get(0).getIn().getBody();
@@ -64,16 +59,6 @@ public class AtlasMapComponentJavaToJsonTest {
         JsonNode sfJson = mapper.readTree((String)body);
         assertNotNull(sfJson.get("TwitterScreenName__c"));
         assertEquals("bobvila1982", sfJson.get("TwitterScreenName__c").asText());
-    }
-
-    protected Status generateTwitterStatus() {
-        Status status = mock(Status.class);
-        User user = mock(User.class);
-        when(user.getName()).thenReturn("Bob Vila");
-        when(user.getScreenName()).thenReturn("bobvila1982");
-        when(status.getUser()).thenReturn(user);
-        when(status.getText()).thenReturn("Let's build a house!");
-        return status;
     }
 
 }
