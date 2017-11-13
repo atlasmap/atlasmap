@@ -2,9 +2,11 @@ package io.atlasmap.core.issue;
 
 import java.net.URL;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasSession;
@@ -12,10 +14,11 @@ import io.atlasmap.core.AtlasMappingService;
 import io.atlasmap.core.AtlasMappingService.AtlasMappingFormat;
 import io.atlasmap.core.DefaultAtlasContextFactory;
 import io.atlasmap.v2.AtlasMapping;
-import io.syndesis.connector.salesforce.Contact;
 import twitter4j.Status;
 import twitter4j.User;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -37,9 +40,11 @@ public class CamelAtlasmap14Test {
         session.setInput(generateTwitterStatus());
         context.process(session);
         Object output = session.getOutput();
-        Assert.assertEquals(Contact.class, output.getClass());
-        Contact contact = (Contact)output;
-        Assert.assertEquals("bobvila1982", contact.getTwitterScreenName__c());
+        assertEquals(String.class, output.getClass());
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode outJson = mapper.readTree((String)output);
+        assertNotNull(outJson.get("TwitterScreenName__c"));
+        assertEquals("bobvila1982", outJson.get("TwitterScreenName__c").asText());
     }
 
     protected Status generateTwitterStatus() {

@@ -10,8 +10,8 @@
       },
       {
         "jsonType": "io.atlasmap.v2.DataSource",
-        "id": "io.syndesis.connector.salesforce.Contact",
-        "uri": "atlas:java?className=io.syndesis.connector.salesforce.Contact",
+        "id": "JSONContact",
+        "uri": "atlas:json:Contact",
         "dataSourceType": "TARGET"
       }
     ],
@@ -31,11 +31,11 @@
           ],
           "outputField": [
             {
-              "jsonType": "io.atlasmap.java.v2.JavaField",
+              "jsonType": "io.atlasmap.json.v2.JsonField",
               "name": "TwitterScreenName__c",
               "path": "/TwitterScreenName__c",
               "fieldType": "STRING",
-              "docId": "io.syndesis.connector.salesforce.Contact"
+              "docId": "JSONContact"
             }
           ]
         }

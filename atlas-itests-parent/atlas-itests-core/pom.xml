@@ -73,18 +73,6 @@
             <version>4.0.6</version>
         </dependency>
         <dependency>
-            <groupId>io.syndesis</groupId>
-            <artifactId>salesforce-upsert-contact-connector</artifactId>
-            <version>${syndesis.connector.version}</version>
-            <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.apache.camel</groupId>
-                    <artifactId>camel-salesforce-starter</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
             <version>${mockito.version}</version>
