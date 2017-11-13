@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  build-runtime:
+  build:
     working_directory: /workspace
     docker:
     - image: openjdk:8-jdk
