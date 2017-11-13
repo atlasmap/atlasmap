@@ -22,8 +22,8 @@ jobs:
       - run:
           name: Maven
           command: |
-          cd runtime
-          ./mvnw --batch-mode -Pjacoco,fabric8 install checkstyle:check
+            cd runtime
+            ./mvnw --batch-mode -Pjacoco,fabric8 install checkstyle:check
 
       - save_cache:
           key: atlasmap-m2
@@ -105,8 +105,8 @@ jobs:
       - run:
           name: Maven
           command: |
-          cd camel
-          ./mvnw --batch-mode -Pjacoco install checkstyle:check
+            cd camel
+            ./mvnw --batch-mode -Pjacoco install checkstyle:check
 
       - run:
           name: Collect junit reports
@@ -178,9 +178,9 @@ jobs:
     - run:
         name: Install Chromium and Xvfb
         command: |
-        cd ui
-        apt-get update -qq
-        apt-get install -qq -y chromium Xvfb > /dev/null
+          cd ui
+          apt-get update -qq
+          apt-get install -qq -y chromium Xvfb > /dev/null
 
     - setup_remote_docker
 
@@ -260,13 +260,5 @@ jobs:
           # git push --follow-tags
 
 
-  build-app:
-    working_directory: /workspace
-    docker:
-    - image: node:7.9
-    environment:
-      CHROME_BIN: /usr/bin/chromium
-      DOCKER_VERSION: 17.04.0-ce
+  # TODO build-app:
 
-    steps:
-      # TODO
