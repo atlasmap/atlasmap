@@ -9,7 +9,7 @@
             },
             {
                 "jsonType": "io.atlasmap.v2.DataSource",
-                "uri": "atlas:java?className=io.syndesis.connector.salesforce.Contact",
+                "uri": "atlas:json:JSONContact",
                 "dataSourceType": "TARGET"
             }
         ],
@@ -29,20 +29,18 @@
                     ],
                     "outputField": [
                         {
-                            "jsonType": "io.atlasmap.java.v2.JavaField",
+                            "jsonType": "io.atlasmap.json.v2.JsonField",
                             "index": 0,
                             "path": "/FirstName",
                             "fieldType": "STRING",
-                            "name": "FirstName",
-                            "setMethod": "setFirstName"
+                            "name": "FirstName"
                         },
                         {
-                            "jsonType": "io.atlasmap.java.v2.JavaField",
+                            "jsonType": "io.atlasmap.json.v2.JsonField",
                             "index": 1,
                             "path": "/LastName",
                             "fieldType": "STRING",
-                            "name": "LastName",
-                            "setMethod": "setLastName"
+                            "name": "LastName"
                         }
                     ]
                 },
@@ -60,11 +58,10 @@
                     ],
                     "outputField": [
                         {
-                            "jsonType": "io.atlasmap.java.v2.JavaField",
-                            "path": "/description",
+                            "jsonType": "io.atlasmap.json.v2.JsonField",
+                            "path": "/Description",
                             "fieldType": "STRING",
-                            "name": "Description",
-                            "setMethod": "setDescription"
+                            "name": "Description"
                         }
                     ]
                 },
@@ -82,11 +79,10 @@
                     ],
                     "outputField": [
                         {
-                            "jsonType": "io.atlasmap.java.v2.JavaField",
+                            "jsonType": "io.atlasmap.json.v2.JsonField",
                             "path": "/Title",
                             "fieldType": "STRING",
-                            "name": "Title",
-                            "setMethod": "setTitle"
+                            "name": "Title"
                         }
                     ]
                 }

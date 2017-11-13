@@ -13,14 +13,10 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.BootstrapWith;
 import org.springframework.test.context.ContextConfiguration;
 
-import io.syndesis.connector.salesforce.Contact;
-
-import twitter4j.Status;
-import twitter4j.User;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 @RunWith(CamelSpringRunner.class)
 @BootstrapWith(CamelTestContextBootstrapper.class)
@@ -38,26 +34,17 @@ public class AtlasMapComponentJsonTest {
         result.setExpectedCount(1);
 
         ProducerTemplate producerTemplate = camelContext.createProducerTemplate();
-        producerTemplate.sendBody("direct:start", generateTwitterStatus());
+        producerTemplate.sendBody("direct:start", Util.generateMockTwitterStatus());
 
         MockEndpoint.assertIsSatisfied(camelContext);
         Object body = result.getExchanges().get(0).getIn().getBody();
-        assertEquals(Contact.class, body.getClass());
-        Contact output = (Contact) body;
-        assertEquals("Bob", output.getFirstName());
-        assertEquals("Vila", output.getLastName());
-        assertEquals("bobvila1982", output.getTitle());
-        assertEquals("Let's build a house!", output.getDescription());
-    }
-
-    protected Status generateTwitterStatus() {
-        Status status = mock(Status.class);
-        User user = mock(User.class);
-        when(user.getName()).thenReturn("Bob Vila");
-        when(user.getScreenName()).thenReturn("bobvila1982");
-        when(status.getUser()).thenReturn(user);
-        when(status.getText()).thenReturn("Let's build a house!");
-        return status;
+        assertEquals(String.class, body.getClass());
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode outJson = mapper.readTree((String)body);
+        assertEquals("Bob", outJson.get("FirstName").asText());
+        assertEquals("Vila", outJson.get("LastName").asText());
+        assertEquals("bobvila1982", outJson.get("Title").asText());
+        assertEquals("Let's build a house!", outJson.get("Description").asText());
     }
 
 }
