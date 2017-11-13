@@ -22,6 +22,8 @@ jobs:
       - run:
           name: Maven
           command: |
+            # TODO remove this after migration
+            git submodule update --init --recursive --remote
             cd runtime
             ./mvnw --batch-mode -Pjacoco,fabric8 install checkstyle:check
 
@@ -105,6 +107,8 @@ jobs:
       - run:
           name: Maven
           command: |
+            # TODO remove this after migration
+            git submodule update --init --recursive --remote
             cd camel
             ./mvnw --batch-mode -Pjacoco install checkstyle:check
 
@@ -192,6 +196,8 @@ jobs:
     - run:
         name: Install Dependencies
         command: |
+          # TODO remove this after migration
+          git submodule update --init --recursive --remote
           cd ui
           yarn install --verbose --no-progress
 
