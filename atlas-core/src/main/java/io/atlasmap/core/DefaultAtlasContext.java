@@ -160,8 +160,7 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
             LOG.debug("Begin process " + (session == null ? null : session.toString()));
         }
 
-        getSourceModule().processPreValidation(session);
-        getTargetModule().processPreValidation(session);
+        processValidation(session);
 
         // TODO: Finish validations
         /*

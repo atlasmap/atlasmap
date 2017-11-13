@@ -19,6 +19,7 @@ import java.util.List;
 
 import io.atlasmap.spi.AtlasValidator;
 import io.atlasmap.v2.Validation;
+import io.atlasmap.v2.ValidationScope;
 import io.atlasmap.v2.ValidationStatus;
 
 public class StringLengthValidator implements AtlasValidator {
@@ -26,10 +27,10 @@ public class StringLengthValidator implements AtlasValidator {
     private String violationMessage;
     private int minLength = 1;
     private int maxLength = Integer.MAX_VALUE;
-    private String field;
+    private ValidationScope scope;
 
-    public StringLengthValidator(String field, String violationMessage, int minLength, int maxLength) {
-        this.field = field;
+    public StringLengthValidator(ValidationScope scope, String violationMessage, int minLength, int maxLength) {
+        this.scope = scope;
         this.violationMessage = violationMessage;
         this.minLength = minLength;
         this.maxLength = maxLength;
@@ -41,18 +42,18 @@ public class StringLengthValidator implements AtlasValidator {
     }
 
     @Override
-    public void validate(Object target, List<Validation> validations) {
-        validate(target, validations, ValidationStatus.ERROR);
+    public void validate(Object target, List<Validation> validations, String id) {
+        validate(target, validations, id, ValidationStatus.ERROR);
     }
 
     @Override
-    public void validate(Object target, List<Validation> validations, ValidationStatus status) {
+    public void validate(Object target, List<Validation> validations, String id, ValidationStatus status) {
         String value = (String) target;
         if (value.isEmpty() || value.length() > maxLength || value.length() < minLength) {
             Validation validation = new Validation();
-            validation.setField(field);
-            validation.setValue(target.toString());
-            validation.setMessage(violationMessage);
+            validation.setScope(scope);
+            validation.setId(id);
+            validation.setMessage(String.format(violationMessage, target.toString()));
             validation.setStatus(status);
             validations.add(validation);
         }

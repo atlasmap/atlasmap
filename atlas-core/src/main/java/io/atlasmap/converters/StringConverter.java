@@ -23,6 +23,7 @@ import io.atlasmap.spi.AtlasPrimitiveConverter;
 import io.atlasmap.v2.FieldType;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 
 public class StringConverter implements AtlasPrimitiveConverter<String> {
 
@@ -248,5 +249,21 @@ public class StringConverter implements AtlasPrimitiveConverter<String> {
         }
         // we want a copy of value
         return new String(value);
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.NUMBER, concerns = {
+            AtlasConversionConcern.FORMAT})
+    public Number convertToNumber(String value) throws AtlasConversionException {
+        if (value == null || value.trim().isEmpty()) {
+            return null;
+        }
+        if (value.matches("\\d+")) {
+            return new BigInteger(value);
+        }
+        try {
+            return new BigDecimal(value);
+        } catch (NumberFormatException e) {
+            throw new AtlasConversionException(e);
+        }
     }
 }

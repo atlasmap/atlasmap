@@ -18,16 +18,17 @@ package io.atlasmap.validators;
 import java.util.List;
 import io.atlasmap.spi.AtlasValidator;
 import io.atlasmap.v2.Validation;
+import io.atlasmap.v2.ValidationScope;
 import io.atlasmap.v2.ValidationStatus;
 
 public class PositiveIntegerValidator implements AtlasValidator {
 
     private String violationMessage;
-    private String field;
+    private ValidationScope scope;
 
-    public PositiveIntegerValidator(String field, String violationMessage) {
+    public PositiveIntegerValidator(ValidationScope scope, String violationMessage) {
         this.violationMessage = violationMessage;
-        this.field = field;
+        this.scope = scope;
     }
 
     @Override
@@ -36,18 +37,18 @@ public class PositiveIntegerValidator implements AtlasValidator {
     }
 
     @Override
-    public void validate(Object target, List<Validation> validations) {
-        this.validate(target, validations, ValidationStatus.ERROR);
+    public void validate(Object target, List<Validation> validations, String id) {
+        this.validate(target, validations, id, ValidationStatus.ERROR);
     }
 
     @Override
-    public void validate(Object target, List<Validation> validations, ValidationStatus status) {
+    public void validate(Object target, List<Validation> validations, String id, ValidationStatus status) {
         Integer value = (Integer) target;
         if (value == null || value < 0) {
             Validation validation = new Validation();
-            validation.setField(field);
-            validation.setValue((target != null ? target.toString() : null));
-            validation.setMessage(violationMessage);
+            validation.setScope(scope);
+            validation.setId(id);
+            validation.setMessage(String.format(violationMessage, target != null ? target.toString() : null));
             validation.setStatus(status);
             validations.add(validation);
         }

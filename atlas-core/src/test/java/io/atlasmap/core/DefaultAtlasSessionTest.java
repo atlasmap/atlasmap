@@ -10,6 +10,7 @@ import io.atlasmap.v2.Audit;
 import io.atlasmap.v2.AuditStatus;
 import io.atlasmap.v2.Audits;
 import io.atlasmap.v2.Validation;
+import io.atlasmap.v2.ValidationScope;
 import io.atlasmap.v2.Validations;
 
 import static org.junit.Assert.assertEquals;
@@ -67,8 +68,8 @@ public class DefaultAtlasSessionTest {
 
         Validations validations = new Validations();
         Validation validation = new Validation();
-        validation.setField("foo");
-        validation.setValue("bar");
+        validation.setScope(ValidationScope.MAPPING);
+        validation.setId("bar");
         validations.getValidation().add(validation);
 
         session.setValidations(validations);

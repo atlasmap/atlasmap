@@ -17,11 +17,15 @@ package io.atlasmap.validators;
 
 import io.atlasmap.v2.LookupTable;
 import io.atlasmap.v2.LookupTables;
+import io.atlasmap.v2.ValidationScope;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.After;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 public class LookupTableNameValidatorTest extends BaseValidatorTest {
@@ -30,8 +34,7 @@ public class LookupTableNameValidatorTest extends BaseValidatorTest {
     @Before
     public void setUp() {
         super.setUp();
-        validator = new LookupTableNameValidator("lookuptables.lookuptable.name",
-                "LookupTables contain duplicated LookupTable names.");
+        validator = new LookupTableNameValidator("LookupTables contain duplicated LookupTable names.");
     }
 
     @Override
@@ -50,8 +53,10 @@ public class LookupTableNameValidatorTest extends BaseValidatorTest {
     @Test
     public void testValidateDuplicatedNames() throws Exception {
         LookupTables lookupTables = makeLookupTables();
-        validator.validate(lookupTables, validations);
+        validator.validate(lookupTables, validations, null);
         assertTrue(validationHelper.hasErrors());
+        assertEquals(ValidationScope.LOOKUP_TABLE, validationHelper.getValidation().get(0).getScope());
+        assertNull(validationHelper.getValidation().get(0).getId());
         debugErrors(validationHelper);
     }
 
@@ -59,7 +64,7 @@ public class LookupTableNameValidatorTest extends BaseValidatorTest {
     public void testValidateNoDuplicateNames() throws Exception {
         LookupTables lookupTables = makeLookupTables();
         lookupTables.getLookupTable().remove(2);
-        validator.validate(lookupTables, validations);
+        validator.validate(lookupTables, validations, null);
         assertFalse(validationHelper.hasErrors());
     }
 

@@ -20,6 +20,7 @@ import io.atlasmap.spi.AtlasValidator;
 import io.atlasmap.v2.LookupTable;
 import io.atlasmap.v2.LookupTables;
 import io.atlasmap.v2.Validation;
+import io.atlasmap.v2.ValidationScope;
 import io.atlasmap.v2.ValidationStatus;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -35,10 +36,8 @@ import java.util.stream.Collectors;
 public class LookupTableNameValidator implements AtlasValidator {
 
     private String violationMessage;
-    private String field;
 
-    public LookupTableNameValidator(String field, String violationMessage) {
-        this.field = field;
+    public LookupTableNameValidator(String violationMessage) {
         this.violationMessage = violationMessage;
     }
 
@@ -48,12 +47,12 @@ public class LookupTableNameValidator implements AtlasValidator {
     }
 
     @Override
-    public void validate(Object target, List<Validation> validations) {
-        validate(target, validations, ValidationStatus.ERROR);
+    public void validate(Object target, List<Validation> validations, String id) {
+        validate(target, validations, id, ValidationStatus.ERROR);
     }
 
     @Override
-    public void validate(Object target, List<Validation> validations, ValidationStatus status) {
+    public void validate(Object target, List<Validation> validations, String id, ValidationStatus status) {
         LookupTables lookupTables = (LookupTables) target;
         List<LookupTable> tables = lookupTables.getLookupTable();
         List<LookupTable> deduped = Collections.unmodifiableList(tables).stream()
@@ -61,9 +60,9 @@ public class LookupTableNameValidator implements AtlasValidator {
         if (deduped.size() != tables.size()) {
             String dupedName = findDuplicatedName(tables);
             Validation validation = new Validation();
-            validation.setField(field);
-            validation.setValue(dupedName);
-            validation.setMessage(violationMessage);
+            validation.setScope(ValidationScope.LOOKUP_TABLE);
+            validation.setId(id);
+            validation.setMessage(String.format(violationMessage, dupedName));
             validation.setStatus(status);
             validations.add(validation);
         }

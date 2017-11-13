@@ -36,6 +36,7 @@ import io.atlasmap.v2.FieldType;
 import io.atlasmap.v2.Mapping;
 import io.atlasmap.v2.MappingType;
 import io.atlasmap.v2.Validation;
+import io.atlasmap.v2.ValidationScope;
 import io.atlasmap.v2.ValidationStatus;
 
 public abstract class BaseModuleValidationService<T extends Field> implements AtlasValidationService {
@@ -101,7 +102,7 @@ public abstract class BaseModuleValidationService<T extends Field> implements At
 
         if (!found) {
             Validation validation = new Validation();
-            validation.setField(String.format("DataSource.uri"));
+            validation.setScope(ValidationScope.DATA_SOURCE);
             validation.setMessage(String.format("No DataSource with '%s' uri specified", getModuleDetail().uri()));
             validation.setStatus(ValidationStatus.ERROR);
             validations.add(validation);
@@ -117,28 +118,31 @@ public abstract class BaseModuleValidationService<T extends Field> implements At
 
         List<Field> inputFields = mapping.getInputField();
         Field outputField = mapping.getOutputField() != null ? mapping.getOutputField().get(0) : null;
+        String mappingId = mapping.getId();
 
         if (getMode() == AtlasModuleMode.TARGET) {
             if (inputFields != null) {
                 // FIXME Run only for TARGET to avoid duplicate validation...
                 // we should convert per module validations to plugin style
                 for (Field inputField : inputFields) {
-                    validateSourceAndTargetTypes(inputField, outputField, validations);
+                    validateSourceAndTargetTypes(mappingId, inputField, outputField, validations);
                 }
             }
 
             // check that the output field is of type String else error
             if (outputField.getFieldType() != FieldType.STRING) {
                 Validation validation = new Validation();
-                validation.setField("Output.Field");
-                validation.setMessage("Output field must be of type " + FieldType.STRING + " for a Combine Mapping");
+                validation.setScope(ValidationScope.MAPPING);
+                validation.setId(mappingId);
+                validation.setMessage(String.format(
+                        "Output field '%s' must be of type '%s' for a Combine Mapping",
+                        getFieldName(outputField), FieldType.STRING));
                 validation.setStatus(ValidationStatus.ERROR);
-                validation.setValue(getFieldName(outputField));
                 validations.add(validation);
             }
-            validateField(outputField, FieldDirection.OUTPUT, validations);
+            validateField(mappingId, outputField, FieldDirection.OUTPUT, validations);
         } else if (inputFields != null) { // SOURCE
-            inputFields.forEach(inField -> validateField(inField, FieldDirection.INPUT, validations));
+            inputFields.forEach(inField -> validateField(mappingId, inField, FieldDirection.INPUT, validations));
         }
     }
 
@@ -160,25 +164,26 @@ public abstract class BaseModuleValidationService<T extends Field> implements At
     protected void validateMapMapping(Mapping mapping, List<Validation> validations) {
         Field inputField = null;
         Field outField = null;
+        String mappingId = mapping.getId();
 
         if (mapping != null && mapping.getInputField() != null && mapping.getInputField().size() > 0) {
             inputField = mapping.getInputField().get(0);
             if (getMode() == AtlasModuleMode.SOURCE) {
-                validateField(inputField, FieldDirection.INPUT, validations);
+                validateField(mappingId, inputField, FieldDirection.INPUT, validations);
             }
         }
 
         if (mapping != null && mapping.getOutputField() != null && mapping.getOutputField().size() > 0) {
             outField = mapping.getOutputField().get(0);
             if (getMode() == AtlasModuleMode.TARGET) {
-                validateField(outField, FieldDirection.OUTPUT, validations);
+                validateField(mappingId, outField, FieldDirection.OUTPUT, validations);
             }
         }
 
         if (inputField != null && outField != null && getMode() == AtlasModuleMode.SOURCE) {
             // FIXME Run only for SOURCE to avoid duplicate validation...
             // we should convert per module validations to plugin style
-            validateSourceAndTargetTypes(inputField, outField, validations);
+            validateSourceAndTargetTypes(mappingId, inputField, outField, validations);
         }
     }
 
@@ -189,50 +194,54 @@ public abstract class BaseModuleValidationService<T extends Field> implements At
 
         final Field inputField = mapping.getInputField() != null ? mapping.getInputField().get(0) : null;
         List<Field> outputFields = mapping.getOutputField();
+        String mappingId = mapping.getId();
 
         if (getMode() == AtlasModuleMode.SOURCE) {
             // check that the input field is of type String else error
             if (inputField.getFieldType() != FieldType.STRING) {
                 Validation validation = new Validation();
-                validation.setField("Input.Field");
-                validation.setMessage("Input field must be of type " + FieldType.STRING + " for a Separate Mapping");
+                validation.setScope(ValidationScope.MAPPING);
+                validation.setId(mapping.getId());
+                validation.setMessage(String.format(
+                        "Input field '%s' must be of type '%s' for a Separate Mapping",
+                        getFieldName(inputField), FieldType.STRING));
                 validation.setStatus(ValidationStatus.ERROR);
-                validation.setValue(getFieldName(inputField));
                 validations.add(validation);
             }
-            validateField(inputField, FieldDirection.INPUT, validations);
+            validateField(mappingId, inputField, FieldDirection.INPUT, validations);
 
             if (outputFields != null) {
                 // FIXME Run only for SOURCE to avoid duplicate validation...
                 // we should convert per module validations to plugin style
                 for (Field outField : outputFields) {
-                    validateSourceAndTargetTypes(inputField, outField, validations);
+                    validateSourceAndTargetTypes(mappingId, inputField, outField, validations);
                 }
             }
         } else if (outputFields != null) { // TARGET
-            outputFields.forEach(outField -> validateField(outField, FieldDirection.OUTPUT, validations));
+            outputFields.forEach(outField -> validateField(mappingId, outField, FieldDirection.OUTPUT, validations));
         }
     }
 
     @SuppressWarnings("unchecked")
-    protected void validateField(Field field, FieldDirection direction, List<Validation> validations) {
+    protected void validateField(String mappingId, Field field, FieldDirection direction, List<Validation> validations) {
         if (field == null || !getFieldType().isAssignableFrom(field.getClass())) {
             Validation validation = new Validation();
-            validation.setField(String.format("%s.Field", direction.value()));
+            validation.setScope(ValidationScope.MAPPING);
+            validation.setId(mappingId);
             validation.setMessage(String.format("%s field %s is not supported by the %s",
                     direction.value(), getFieldName(field), getModuleDetail().name()));
             validation.setStatus(ValidationStatus.ERROR);
             validations.add(validation);
         } else {
-            validateModuleField((T)field, direction, validations);
+            validateModuleField(mappingId, (T)field, direction, validations);
         }
     }
 
     protected abstract Class<T> getFieldType();
 
-    protected abstract void validateModuleField(T field, FieldDirection direction, List<Validation> validation);
+    protected abstract void validateModuleField(String mappingId, T field, FieldDirection direction, List<Validation> validation);
 
-    protected void validateSourceAndTargetTypes(Field inputField, Field outField, List<Validation> validations) {
+    protected void validateSourceAndTargetTypes(String mappingId, Field inputField, Field outField, List<Validation> validations) {
         if (inputField.getFieldType() != outField.getFieldType()) {
             // is this check superseded by the further checks using the AtlasConversionInfo
             // annotations?
@@ -241,56 +250,22 @@ public abstract class BaseModuleValidationService<T extends Field> implements At
             // inputField.getType().value() + " --> " + outField.getType().value(), "Output
             // field type does not match input field type, may require a converter.",
             // AtlasMappingError.Level.WARN));
-            validateFieldTypeConversion(inputField, outField, validations);
+            validateFieldTypeConversion(mappingId, inputField, outField, validations);
         }
     }
 
-    protected void populateConversionConcerns(AtlasConversionConcern[] atlasConversionConcerns, String value, List<Validation> validations) {
-        if (atlasConversionConcerns == null) {
-            return;
-        }
-
-        for (AtlasConversionConcern atlasConversionConcern : atlasConversionConcerns) {
-            if (AtlasConversionConcern.NONE.equals(atlasConversionConcern)) {
-                Validation validation = new Validation();
-                validation.setField("Field.Input/Output.conversion");
-                validation.setMessage(atlasConversionConcern.getMessage());
-                validation.setStatus(ValidationStatus.INFO);
-                validation.setValue(value);
-                validations.add(validation);
-            }
-            if (atlasConversionConcern.equals(AtlasConversionConcern.RANGE)
-                    || atlasConversionConcern.equals(AtlasConversionConcern.FORMAT)) {
-                Validation validation = new Validation();
-                validation.setField("Field.Input/Output.conversion");
-                validation.setMessage(atlasConversionConcern.getMessage());
-                validation.setStatus(ValidationStatus.WARN);
-                validation.setValue(value);
-                validations.add(validation);
-            }
-            if (atlasConversionConcern.equals(AtlasConversionConcern.UNSUPPORTED)) {
-                Validation validation = new Validation();
-                validation.setField("Field.Input/Output.conversion");
-                validation.setMessage(atlasConversionConcern.getMessage());
-                validation.setStatus(ValidationStatus.ERROR);
-                validation.setValue(value);
-                validations.add(validation);
-            }
-        }
-    }
-
-    protected void validateFieldTypeConversion(Field inputField, Field outField, List<Validation> validations) {
+    protected void validateFieldTypeConversion(String mappingId, Field inputField, Field outField, List<Validation> validations) {
         FieldType inFieldType = inputField.getFieldType();
         FieldType outFieldType = outField.getFieldType();
         Optional<AtlasConverter<?>> atlasConverter = conversionService.findMatchingConverter(inFieldType, outFieldType);
-        String rejectedValue = getFieldName(inputField) + " --> " + getFieldName(outField);
         if (!atlasConverter.isPresent()) {
             Validation validation = new Validation();
-            validation.setField("Field.Input/Output.conversion");
-            validation.setMessage(
-                    "A conversion between the input and output fields is required but no converter is available");
+            validation.setScope(ValidationScope.MAPPING);
+            validation.setId(mappingId);
+            validation.setMessage(String.format(
+                    "Conversion from '%s' to '%s' is required but no converter is available",
+                    inputField.getFieldType(), outField.getFieldType()));
             validation.setStatus(ValidationStatus.WARN);
-            validation.setValue(rejectedValue);
             validations.add(validation);
         } else {
             AtlasConversionInfo conversionInfo;
@@ -302,7 +277,41 @@ public abstract class BaseModuleValidationService<T extends Field> implements At
                     && atlasConversionInfo.targetType().compareTo(outFieldType) == 0))
                     .findFirst().orElse(null);
             if (conversionInfo != null) {
-                populateConversionConcerns(conversionInfo.concerns(), rejectedValue, validations);
+                populateConversionConcerns(mappingId, conversionInfo, getFieldName(inputField), getFieldName(outField), validations);
+            }
+        }
+    }
+
+    protected void populateConversionConcerns(String mappingId, AtlasConversionInfo converterAnno,
+            String inputFieldName, String outFieldName, List<Validation> validations) {
+        if (converterAnno == null || converterAnno.concerns() == null) {
+            return;
+        }
+
+        for (AtlasConversionConcern atlasConversionConcern : converterAnno.concerns()) {
+            String message = atlasConversionConcern.getMessage(converterAnno);
+            if (AtlasConversionConcern.NONE.equals(atlasConversionConcern)) {
+                Validation validation = new Validation();
+                validation.setScope(ValidationScope.MAPPING);
+                validation.setId(mappingId);
+                validation.setMessage(message);
+                validation.setStatus(ValidationStatus.INFO);
+                validations.add(validation);
+            } else  if (atlasConversionConcern.equals(AtlasConversionConcern.RANGE)
+                    || atlasConversionConcern.equals(AtlasConversionConcern.FORMAT)) {
+                Validation validation = new Validation();
+                validation.setScope(ValidationScope.MAPPING);
+                validation.setId(mappingId);
+                validation.setMessage(message);
+                validation.setStatus(ValidationStatus.WARN);
+                validations.add(validation);
+            } else if (atlasConversionConcern.equals(AtlasConversionConcern.UNSUPPORTED)) {
+                Validation validation = new Validation();
+                validation.setScope(ValidationScope.MAPPING);
+                validation.setId(mappingId);
+                validation.setMessage(message);
+                validation.setStatus(ValidationStatus.ERROR);
+                validations.add(validation);
             }
         }
     }

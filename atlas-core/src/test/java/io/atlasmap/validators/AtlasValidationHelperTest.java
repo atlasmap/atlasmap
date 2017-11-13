@@ -17,9 +17,9 @@ package io.atlasmap.validators;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import io.atlasmap.v2.Validation;
+import io.atlasmap.v2.ValidationScope;
 import io.atlasmap.v2.ValidationStatus;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -41,23 +41,23 @@ public class AtlasValidationHelperTest {
     public void setUp() {
         validations = new DefaultAtlasValidationsHelper();
         error = new Validation();
-        error.setField("test.field");
+        error.setScope(ValidationScope.ALL);
         error.setMessage("Error message");
         error.setStatus(ValidationStatus.ERROR);
         validations.addValidation(error);
 
         warning = new Validation();
-        warning.setField("test.field.one");
+        warning.setScope(ValidationScope.DATA_SOURCE);
+        warning.setId("atlas:testDataSource");
         warning.setMessage("Warning message");
         warning.setStatus(ValidationStatus.WARN);
-        warning.setValue("");
         validations.addValidation(warning);
 
         info = new Validation();
-        info.setField("test.field.two");
+        info.setScope(ValidationScope.MAPPING);
+        info.setId("0001");
         info.setMessage("Information message");
         info.setStatus(ValidationStatus.INFO);
-        info.setValue("qwerty");
         validations.addValidation(info);
     }
 
@@ -70,17 +70,17 @@ public class AtlasValidationHelperTest {
     }
 
     @Test
-    public void testGetField() throws Exception {
-        assertTrue("test.field".equals(error.getField()));
-        assertTrue("test.field.one".equals(warning.getField()));
-        assertTrue("test.field.two".equals(info.getField()));
+    public void testGetScope() throws Exception {
+        assertEquals(ValidationScope.ALL, error.getScope());
+        assertEquals(ValidationScope.DATA_SOURCE, warning.getScope());
+        assertEquals(ValidationScope.MAPPING, info.getScope());
     }
 
     @Test
-    public void testGetRejectedValue() throws Exception {
-        assertNull(error.getValue());
-        assertTrue(((String) warning.getValue()).isEmpty());
-        assertTrue(info.getValue().equals("qwerty"));
+    public void testGetId() throws Exception {
+        assertNull(error.getId());
+        assertEquals("atlas:testDataSource", warning.getId());
+        assertEquals("0001", info.getId());
     }
 
     @Test
@@ -99,18 +99,18 @@ public class AtlasValidationHelperTest {
 
     @Test
     public void testToString() throws Exception {
-        assertThat(error.getField(), is("test.field"));
-        assertThat(error.getValue(), nullValue());
+        assertThat(error.getScope(), is(ValidationScope.ALL));
+        assertThat(error.getId(), nullValue());
         assertThat(error.getMessage(), is("Error message"));
         assertThat(error.getStatus(), is(ValidationStatus.ERROR));
 
-        assertThat(warning.getField(), is("test.field.one"));
-        assertThat(warning.getValue(), is(""));
+        assertThat(warning.getScope(), is(ValidationScope.DATA_SOURCE));
+        assertThat(warning.getId(), is("atlas:testDataSource"));
         assertThat(warning.getMessage(), is("Warning message"));
         assertThat(warning.getStatus(), is(ValidationStatus.WARN));
 
-        assertThat(info.getField(), is("test.field.two"));
-        assertThat(info.getValue(), is("qwerty"));
+        assertThat(info.getScope(), is(ValidationScope.MAPPING));
+        assertThat(info.getId(), is("0001"));
         assertThat(info.getMessage(), is("Information message"));
         assertThat(info.getStatus(), is(ValidationStatus.INFO));
     }
@@ -118,14 +118,6 @@ public class AtlasValidationHelperTest {
     @Test
     public void testEquals() throws Exception {
         assertFalse(error.equals(info));
-    }
-
-    @Test
-    @Ignore // Hashcode not consistent across instances
-    public void testHashCode() throws Exception {
-        assertEquals(1000142829, error.hashCode());
-        assertEquals(warning.hashCode(), -187767976);
-        assertEquals(info.hashCode(), -1746235594);
     }
 
 }

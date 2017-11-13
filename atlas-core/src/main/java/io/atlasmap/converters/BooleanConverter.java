@@ -153,4 +153,8 @@ public class BooleanConverter implements AtlasPrimitiveConverter<Boolean> {
         return String.valueOf((value ? "true" : "false"));
     }
 
+    @AtlasConversionInfo(sourceType = FieldType.BOOLEAN, targetType = FieldType.NUMBER)
+    public Number convertToNumber(Boolean value) throws AtlasConversionException {
+        return convertToShort(value);
+    }
 }

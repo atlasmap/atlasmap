@@ -249,7 +249,7 @@ public class DoubleConverterTest {
                     assertTrue(atlasConversionInfo.sourceType().compareTo(FieldType.DOUBLE) == 0);
                     assertNotNull(atlasConversionInfo.targetType());
                     for (AtlasConversionConcern atlasConversionConcern : atlasConversionInfo.concerns()) {
-                        assertNotNull(atlasConversionConcern.getMessage());
+                        assertNotNull(atlasConversionConcern.getMessage(atlasConversionInfo));
                         assertNotNull(atlasConversionConcern.value());
                     }
                 }

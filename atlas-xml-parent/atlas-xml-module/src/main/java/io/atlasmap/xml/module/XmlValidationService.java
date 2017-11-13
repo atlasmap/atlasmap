@@ -21,6 +21,7 @@ import io.atlasmap.core.BaseModuleValidationService;
 import io.atlasmap.spi.AtlasModuleDetail;
 import io.atlasmap.spi.AtlasValidator;
 import io.atlasmap.v2.Validation;
+import io.atlasmap.v2.ValidationScope;
 import io.atlasmap.v2.ValidationStatus;
 import io.atlasmap.validators.NonNullValidator;
 
@@ -39,15 +40,15 @@ public class XmlValidationService extends BaseModuleValidationService<XmlField> 
     }
 
     public void init() {
-        NonNullValidator javaFileNameNonNullValidator = new NonNullValidator("XmlField.Name",
+        NonNullValidator javaFileNameNonNullValidator = new NonNullValidator(ValidationScope.MAPPING,
                 "The name element must not be null nor empty");
-        NonNullValidator javaFilePathNonNullValidator = new NonNullValidator("XmlField.Path",
+        NonNullValidator javaFilePathNonNullValidator = new NonNullValidator(ValidationScope.MAPPING,
                 "The path element must not be null nor empty");
-        NonNullValidator inputFieldTypeNonNullValidator = new NonNullValidator("Input.Field.Type",
+        NonNullValidator inputFieldTypeNonNullValidator = new NonNullValidator(ValidationScope.MAPPING,
                 "Field type should not be null nor empty");
-        NonNullValidator outputFieldTypeNonNullValidator = new NonNullValidator("Output.Field.Type",
+        NonNullValidator outputFieldTypeNonNullValidator = new NonNullValidator(ValidationScope.MAPPING,
                 "Field type should not be null nor empty");
-        NonNullValidator fieldTypeNonNullValidator = new NonNullValidator("Field.Type",
+        NonNullValidator fieldTypeNonNullValidator = new NonNullValidator(ValidationScope.MAPPING,
                 "Filed type should not be null nor empty");
 
         validatorMap.put("xml.field.type.not.null", fieldTypeNonNullValidator);
@@ -73,44 +74,37 @@ public class XmlValidationService extends BaseModuleValidationService<XmlField> 
 
     @Override
     protected String getModuleFieldName(XmlField field) {
-        StringBuilder buf = new StringBuilder();
-        if (field.getName() != null) {
-            buf.append(field.getName());
-        }
-        if (field.getFieldType() != null) {
-            buf.append("(").append(field.getFieldType().name()).append(")");
-        }
-        return buf.toString();
+        return field.getName() != null ? field.getName() : field.getPath();
     }
 
     @Override
-    protected void validateModuleField(XmlField field, FieldDirection direction, List<Validation> validations) {
+    protected void validateModuleField(String mappingId, XmlField field, FieldDirection direction, List<Validation> validations) {
         // TODO check that it is a valid type on the AtlasContext
 
-        validatorMap.get("xml.field.type.not.null").validate(field, validations, ValidationStatus.WARN);
+        validatorMap.get("xml.field.type.not.null").validate(field, validations, mappingId, ValidationStatus.WARN);
         if (direction == FieldDirection.INPUT) {
             if (field != null) {
                 validatorMap.get("input.field.type.not.null").validate(field.getFieldType(), validations,
-                        ValidationStatus.WARN);
+                        mappingId, ValidationStatus.WARN);
             }
         } else {
             if (field != null) {
                 validatorMap.get("output.field.type.not.null").validate(field.getFieldType(), validations,
-                        ValidationStatus.WARN);
+                        mappingId, ValidationStatus.WARN);
             }
         }
         if (field != null) {
             if ((field.getName() == null && field.getPath() == null)) {
                 Validation validation = new Validation();
-                validation.setField(String.format("Field.%s.Name/Path", direction));
+                validation.setScope(ValidationScope.MAPPING);
+                validation.setId(mappingId);
                 validation.setMessage("One of path or name must be specified");
                 validation.setStatus(ValidationStatus.ERROR);
-                validation.setValue(getFieldName(field));
                 validations.add(validation);
             } else if (field.getName() != null && field.getPath() == null) {
-                validatorMap.get("xml.field.name.not.null").validate(field.getName(), validations);
+                validatorMap.get("xml.field.name.not.null").validate(field.getName(), validations, mappingId);
             } else if (field.getName() == null && field.getPath() != null) {
-                validatorMap.get("xml.field.path.not.null").validate(field.getPath(), validations);
+                validatorMap.get("xml.field.path.not.null").validate(field.getPath(), validations, mappingId);
             }
         }
     }

@@ -18,15 +18,16 @@ package io.atlasmap.validators;
 import java.util.List;
 import io.atlasmap.spi.AtlasValidator;
 import io.atlasmap.v2.Validation;
+import io.atlasmap.v2.ValidationScope;
 import io.atlasmap.v2.ValidationStatus;
 
 public class NonNullValidator implements AtlasValidator {
 
     private String violationMessage;
-    private String field;
+    private ValidationScope scope;
 
-    public NonNullValidator(String field, String violationMessage) {
-        this.field = field;
+    public NonNullValidator(ValidationScope scope, String violationMessage) {
+        this.scope = scope;
         this.violationMessage = violationMessage;
     }
 
@@ -36,16 +37,17 @@ public class NonNullValidator implements AtlasValidator {
     }
 
     @Override
-    public void validate(Object target, List<Validation> validations) {
-        validate(target, validations, ValidationStatus.ERROR);
+    public void validate(Object target, List<Validation> validations, String id) {
+        validate(target, validations, id, ValidationStatus.ERROR);
     }
 
     @Override
-    public void validate(Object target, List<Validation> validations, ValidationStatus status) {
+    public void validate(Object target, List<Validation> validations, String id, ValidationStatus status) {
 
         if (target == null) {
             Validation validation = new Validation();
-            validation.setField(field);
+            validation.setScope(scope);
+            validation.setId(id);
             validation.setMessage(violationMessage);
             validation.setStatus(status);
             validations.add(validation);
@@ -54,10 +56,10 @@ public class NonNullValidator implements AtlasValidator {
             if (value.trim().isEmpty()) {
                 // TODO: Add support for target value
                 Validation validation = new Validation();
-                validation.setField(field);
+                validation.setScope(scope);
+                validation.setId(id);
                 validation.setMessage(violationMessage);
                 validation.setStatus(status);
-                validation.setValue(target.toString());
                 validations.add(validation);
             }
         }

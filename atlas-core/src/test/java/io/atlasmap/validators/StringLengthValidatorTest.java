@@ -16,6 +16,8 @@
 package io.atlasmap.validators;
 
 import io.atlasmap.v2.Validation;
+import io.atlasmap.v2.ValidationScope;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,7 +35,7 @@ public class StringLengthValidatorTest extends BaseValidatorTest {
     @Before
     public void setUp() {
         super.setUp();
-        validator = new StringLengthValidator("qwerty", "Must be of this length", 1, 10);
+        validator = new StringLengthValidator(ValidationScope.MAPPING, "Must be of this length", 1, 10);
     }
 
     @Override
@@ -56,22 +58,22 @@ public class StringLengthValidatorTest extends BaseValidatorTest {
     @Test
     public void testValidate() throws Exception {
         String pass = "1112332";
-        validator.validate(pass, validations);
+        validator.validate(pass, validations, "testValidate");
         assertFalse(validationHelper.hasErrors());
     }
 
     @Test
     public void testValidateInvalid() throws Exception {
         String pass = "";
-        validator.validate(pass, validations);
+        validator.validate(pass, validations, "testValidateInvalid");
         assertTrue(validationHelper.hasErrors());
         assertEquals(new Integer(1), new Integer(validationHelper.getAllValidations().size()));
 
         Validation validation = validations.get(0);
         assertNotNull(validation);
-        assertTrue("".equals(validation.getValue()));
+        assertEquals(ValidationScope.MAPPING, validation.getScope());
+        assertEquals("testValidateInvalid", validation.getId());
         assertTrue("Must be of this length".equals(validation.getMessage()));
-        assertTrue("qwerty".equals(validation.getField()));
     }
 
 }

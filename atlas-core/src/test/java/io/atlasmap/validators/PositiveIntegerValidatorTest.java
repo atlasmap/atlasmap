@@ -15,6 +15,7 @@
  */
 package io.atlasmap.validators;
 
+import io.atlasmap.v2.ValidationScope;
 import io.atlasmap.v2.ValidationStatus;
 import org.junit.Test;
 import org.junit.After;
@@ -32,7 +33,7 @@ public class PositiveIntegerValidatorTest extends BaseValidatorTest {
     @Before
     public void setUp() {
         super.setUp();
-        validator = new PositiveIntegerValidator("test.integer", "Integer must be >= 0");
+        validator = new PositiveIntegerValidator(ValidationScope.MAPPING, "Integer must be >= 0");
     }
 
     @Override
@@ -55,39 +56,44 @@ public class PositiveIntegerValidatorTest extends BaseValidatorTest {
 
     @Test
     public void testValidate() throws Exception {
-        validator.validate(0, validations);
-        validator.validate(1222, validations);
+        validator.validate(0, validations, null);
+        validator.validate(1222, validations, null);
         assertFalse(validationHelper.hasErrors());
     }
 
     @Test
     public void testValidateInvalid() throws Exception {
-        validator.validate(-1, validations);
+        validator.validate(-1, validations, "testValidateInvalid");
         assertTrue(validationHelper.hasErrors());
         assertEquals(new Integer(1), new Integer(validationHelper.getCount()));
+        assertEquals("testValidateInvalid", validationHelper.getValidation().get(0).getId());
     }
 
     @Test
     public void testValidateInvalidWarn() throws Exception {
-        validator.validate(-1, validations, ValidationStatus.WARN);
+        validator.validate(-1, validations, "testValidateInvalidWarn", ValidationStatus.WARN);
         assertFalse(validationHelper.hasErrors());
         assertTrue(validationHelper.hasWarnings());
         assertEquals(new Integer(1), new Integer(validationHelper.getCount()));
+        assertEquals("testValidateInvalidWarn", validationHelper.getValidation().get(0).getId());
     }
 
     @Test
     public void testValidateInvalidInfo() throws Exception {
-        validator.validate(-1, validations, ValidationStatus.INFO);
+        validator.validate(-1, validations, "testValidateInvalidInfo", ValidationStatus.INFO);
         assertFalse(validationHelper.hasErrors());
         assertFalse(validationHelper.hasWarnings());
         assertTrue(validationHelper.hasInfos());
         assertEquals(new Integer(1), new Integer(validationHelper.getCount()));
+        assertEquals("testValidateInvalidInfo", validationHelper.getValidation().get(0).getId());
     }
 
     @Test
     public void testValidateWithErrorLevel() throws Exception {
-        validator.validate(0, validations, ValidationStatus.WARN);
+        validator.validate(0, validations, "testValidateWithErrorLevel", ValidationStatus.WARN);
         assertFalse(validationHelper.hasErrors());
+        assertFalse(validationHelper.hasWarnings());
+        assertFalse(validationHelper.hasInfos());
     }
 
 }

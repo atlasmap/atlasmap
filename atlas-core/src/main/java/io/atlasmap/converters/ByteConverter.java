@@ -162,4 +162,10 @@ public class ByteConverter implements AtlasPrimitiveConverter<Byte> {
         }
         return String.valueOf(value);
     }
+
+
+    @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.NUMBER)
+    public Number convertToNumber(Byte value) throws AtlasConversionException {
+        return convertToShort(value);
+    }
 }

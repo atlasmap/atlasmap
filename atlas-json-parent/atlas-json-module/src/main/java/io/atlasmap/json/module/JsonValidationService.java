@@ -21,6 +21,7 @@ import io.atlasmap.core.BaseModuleValidationService;
 import io.atlasmap.spi.AtlasModuleDetail;
 import io.atlasmap.spi.AtlasValidator;
 import io.atlasmap.v2.Validation;
+import io.atlasmap.v2.ValidationScope;
 import io.atlasmap.v2.ValidationStatus;
 import io.atlasmap.validators.NonNullValidator;
 
@@ -34,13 +35,13 @@ public class JsonValidationService extends BaseModuleValidationService<JsonField
     private AtlasModuleDetail moduleDetail = JsonModule.class.getAnnotation(AtlasModuleDetail.class);
 
     public void init() {
-        NonNullValidator javaFilePathNonNullValidator = new NonNullValidator("JsonField.Path",
+        NonNullValidator javaFilePathNonNullValidator = new NonNullValidator(ValidationScope.MAPPING,
                 "The path element must not be null nor empty");
-        NonNullValidator inputFieldTypeNonNullValidator = new NonNullValidator("Input.Field.Type",
+        NonNullValidator inputFieldTypeNonNullValidator = new NonNullValidator(ValidationScope.MAPPING,
                 "Field type should not be null nor empty");
-        NonNullValidator outputFieldTypeNonNullValidator = new NonNullValidator("Output.Field.Type",
+        NonNullValidator outputFieldTypeNonNullValidator = new NonNullValidator(ValidationScope.MAPPING,
                 "Field type should not be null nor empty");
-        NonNullValidator fieldTypeNonNullValidator = new NonNullValidator("Field.Type",
+        NonNullValidator fieldTypeNonNullValidator = new NonNullValidator(ValidationScope.MAPPING,
                 "Filed type should not be null nor empty");
 
         validatorMap.put("json.field.type.not.null", fieldTypeNonNullValidator);
@@ -70,24 +71,17 @@ public class JsonValidationService extends BaseModuleValidationService<JsonField
 
     @Override
     protected String getModuleFieldName(JsonField field) {
-        StringBuilder buf = new StringBuilder();
-        if (field.getName() != null) {
-            buf.append(field.getName());
-        }
-        if (field.getFieldType() != null) {
-            buf.append("(").append(field.getFieldType().name()).append(")");
-        }
-        return buf.toString();
+        return field.getName() != null ? field.getName() : field.getPath();
     }
 
     @Override
-    protected void validateModuleField(JsonField field, FieldDirection direction, List<Validation> validations) {
+    protected void validateModuleField(String mappingId, JsonField field, FieldDirection direction, List<Validation> validations) {
         // TODO check that it is a valid type on the AtlasContext
 
-        validatorMap.get("json.field.type.not.null").validate(field, validations, ValidationStatus.WARN);
+        validatorMap.get("json.field.type.not.null").validate(field, validations, mappingId, ValidationStatus.WARN);
 
         if (field.getPath() == null) {
-            validatorMap.get("json.field.path.not.null").validate(field.getPath(), validations);
+            validatorMap.get("json.field.path.not.null").validate(field.getPath(), validations, mappingId);
         }
     }
 }

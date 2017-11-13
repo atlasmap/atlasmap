@@ -47,6 +47,7 @@ import io.atlasmap.v2.Mapping;
 import io.atlasmap.v2.MappingType;
 import io.atlasmap.v2.MockField;
 import io.atlasmap.v2.Validation;
+import io.atlasmap.v2.ValidationScope;
 import io.atlasmap.v2.ValidationStatus;
 import io.atlasmap.validators.AtlasValidationTestHelper;
 
@@ -230,6 +231,7 @@ public class JavaValidationServiceTest {
         AtlasMapping atlasMapping = getAtlasMappingFullValid();
 
         Mapping combineFieldMapping = AtlasModelFactory.createMapping(MappingType.COMBINE);
+        combineFieldMapping.setId("combine.firstName.lastName");
 
         JavaField bIJavaField = javaModelFactory.createJavaField();
         bIJavaField.setFieldType(FieldType.STRING);
@@ -256,15 +258,15 @@ public class JavaValidationServiceTest {
 
         Validation validation = validations.get(0);
         assertNotNull(validation);
-        assertEquals("Field.Input/Output.conversion", validation.getField());
-        assertEquals("(STRING) --> (BOOLEAN)", validation.getValue().toString());
-        assertEquals("Conversion can cause out of range exceptions between source and target", validation.getMessage());
+        assertEquals(ValidationScope.MAPPING, validation.getScope());
+        assertEquals("combine.firstName.lastName", validation.getId());
+        assertEquals("Conversion from 'STRING' to 'BOOLEAN' can cause out of range exceptions", validation.getMessage());
         assertEquals(ValidationStatus.WARN, validation.getStatus());
         validation = validations.get(1);
         assertNotNull(validation);
-        assertEquals("Output.Field", validation.getField());
-        assertEquals("(BOOLEAN)", validation.getValue().toString());
-        assertEquals("Output field must be of type STRING for a Combine Mapping", validation.getMessage());
+        assertEquals(ValidationScope.MAPPING, validation.getScope());
+        assertEquals("combine.firstName.lastName", validation.getId());
+        assertEquals("Output field 'lastName' must be of type 'STRING' for a Combine Mapping", validation.getMessage());
         assertEquals(ValidationStatus.ERROR, validation.getStatus());
     }
 
@@ -289,6 +291,7 @@ public class JavaValidationServiceTest {
         AtlasMapping atlasMapping = getAtlasMappingFullValid();
 
         Mapping separateFieldMapping = AtlasModelFactory.createMapping(MappingType.SEPARATE);
+        separateFieldMapping.setId("separate.firstName.lastName");
 
         JavaField bIJavaField = javaModelFactory.createJavaField();
         bIJavaField.setFieldType(FieldType.BOOLEAN);
@@ -316,15 +319,15 @@ public class JavaValidationServiceTest {
 
         Validation validation = validations.get(0);
         assertNotNull(validation);
-        assertEquals("Input.Field", validation.getField());
-        assertEquals("(BOOLEAN)", validation.getValue().toString());
-        assertEquals("Input field must be of type STRING for a Separate Mapping", validation.getMessage());
+        assertEquals(ValidationScope.MAPPING, validation.getScope());
+        assertEquals("separate.firstName.lastName", validation.getId());
+        assertEquals("Input field 'firstName' must be of type 'STRING' for a Separate Mapping", validation.getMessage());
         assertEquals(ValidationStatus.ERROR, validation.getStatus());
         validation = validations.get(1);
         assertNotNull(validation);
-        assertEquals("Field.Input/Output.conversion", validation.getField());
-        assertEquals("(BOOLEAN) --> (STRING)", validation.getValue().toString());
-        assertEquals("Conversion between source and target types is supported", validation.getMessage());
+        assertEquals(ValidationScope.MAPPING, validation.getScope());
+        assertEquals("separate.firstName.lastName", validation.getId());
+        assertEquals("Conversion from 'BOOLEAN' to 'STRING' is supported", validation.getMessage());
         assertEquals(ValidationStatus.INFO, validation.getStatus());
     }
 
@@ -370,13 +373,10 @@ public class JavaValidationServiceTest {
         assertTrue(validationHelper.hasWarnings());
         assertFalse(validationHelper.hasInfos());
         assertThat(1, is(validationHelper.getCount()));
-        assertTrue(validations.stream().anyMatch(me -> me.getField().equals("Field.Input/Output.conversion")));
-
-        Long errorCount = validations.stream()
-                .filter(atlasMappingError -> atlasMappingError.getStatus().compareTo(ValidationStatus.WARN) == 0)
-                .count();
-        assertNotNull(errorCount);
-        assertEquals(1L, errorCount.longValue());
+        Validation v = validations.get(0);
+        assertEquals(ValidationScope.MAPPING, v.getScope());
+        assertEquals("map.firstName.firstName", v.getId());
+        assertEquals(ValidationStatus.WARN, v.getStatus());
     }
 
     @Test
@@ -404,12 +404,10 @@ public class JavaValidationServiceTest {
         assertFalse(validationHelper.hasWarnings());
         assertTrue(validationHelper.hasInfos());
         assertThat(1, is(validationHelper.getCount()));
-        assertTrue(validations.stream().anyMatch(me -> me.getField().equals("Field.Input/Output.conversion")));
-        Long errorCount = validations.stream()
-                .filter(atlasMappingError -> atlasMappingError.getStatus().compareTo(ValidationStatus.INFO) == 0)
-                .count();
-        assertNotNull(errorCount);
-        assertEquals(1L, errorCount.longValue());
+        Validation v = validations.get(0);
+        assertEquals(ValidationScope.MAPPING, v.getScope());
+        assertEquals("map.firstName.firstName", v.getId());
+        assertEquals(ValidationStatus.INFO, v.getStatus());
     }
 
     @Test
@@ -521,15 +519,11 @@ public class JavaValidationServiceTest {
         assertFalse(validationHelper.hasWarnings());
         assertFalse(validationHelper.hasInfos());
 
-        boolean found = false;
-        for (Validation v : validations) {
-            if ("Field.Classname".equals(v.getField())) {
-                assertEquals("Class for field is not found on the classpath", v.getMessage());
-                assertEquals(ValidationStatus.ERROR, v.getStatus());
-                found = true;
-            }
-        }
-        assertTrue(found);
+        assertEquals(1, validations.size());
+        Validation v = validations.get(0);
+        assertEquals(ValidationScope.MAPPING, v.getScope());
+        assertEquals("map.firstName.firstName", v.getId());
+        assertEquals(ValidationStatus.ERROR, v.getStatus());
     }
 
     @Test
@@ -570,13 +564,15 @@ public class JavaValidationServiceTest {
         assertEquals(2, validations.size());
 
         Validation v = validations.get(0);
-        assertEquals("Conversion can cause numeric format exceptions between source and target", v.getMessage());
-        assertEquals("firstName(STRING) --> id(INTEGER)", v.getValue());
+        assertEquals(ValidationScope.MAPPING, v.getScope());
+        assertEquals("issue127-1", v.getId());
+        assertEquals("Conversion from 'STRING' to 'INTEGER' can cause numeric format exceptions", v.getMessage());
         assertEquals(ValidationStatus.WARN, v.getStatus());
 
         v = validations.get(1);
-        assertEquals("Conversion can cause out of range exceptions between source and target", v.getMessage());
-        assertEquals("firstName(STRING) --> id(INTEGER)", v.getValue());
+        assertEquals(ValidationScope.MAPPING, v.getScope());
+        assertEquals("issue127-1", v.getId());
+        assertEquals("Conversion from 'STRING' to 'INTEGER' can cause out of range exceptions", v.getMessage());
         assertEquals(ValidationStatus.WARN, v.getStatus());
 
     }
