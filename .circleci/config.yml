@@ -1,0 +1,270 @@
+version: 2
+jobs:
+  build-runtime:
+    working_directory: /workspace
+    docker:
+    - image: openjdk:8-jdk
+    environment:
+      MAVEN_OPTS: -Xmx1G
+      DOCKER_VERSION: 17.04.0-ce
+    branches:
+      ignore:
+        gh-pages
+
+    steps:
+      - setup_remote_docker
+
+      - checkout
+
+      - restore_cache:
+          key: atlasmap-m2
+
+      - run:
+          name: Maven
+          command: |
+          cd runtime
+          ./mvnw --batch-mode -Pjacoco,fabric8 install checkstyle:check
+
+      - save_cache:
+          key: atlasmap-m2
+          paths:
+          - ~/.m2
+
+      - run:
+          name: Collect junit reports
+          command: |
+            cd runtime
+            mkdir ./junit/
+            find . -type f -regex ".*/target/.*-reports/.*xml" -exec cp {} ./junit/ \;
+
+      - run:
+          name: Collect checkstyle reports
+          command: |
+            cd runtime
+            mkdir ./checkstyle/
+            find . -type f -regex ".*/target/checkstyle.*xml" -exec cp {} ./checkstyle/ \;
+
+      - run:
+          name: Collect Coverage reports
+          command: |
+            cd runtime
+            mkdir ./coverage/
+            cp -a ./atlas-docs/target/site/jacoco-aggregate/* ./coverage/
+
+      - store_test_results:
+          path: ./runtime/junit
+
+      - store_artifacts:
+          path: ./runtime/junit
+
+      - store_artifacts:
+          path: ./runtime/checkstyle
+
+      - store_artifacts:
+          path: ./runtime/coverage
+
+      - deploy:
+          command: |
+            cd runtime
+            if [ "${CIRCLE_PROJECT_USERNAME}" != "atlasmap" ]; then
+              exit 0
+            fi
+
+            curl -fsSL https://get.docker.com/builds/Linux/x86_64/docker-${DOCKER_VERSION}.tgz | tar xz -C /usr/bin --strip-components 1
+
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              DOCKER_IMAGE_TAG="latest"
+            elif [[ "${CIRCLE_TAG}" =~ ^[0-9]+(\.[0-9]+){2} ]]; then
+              DOCKER_IMAGE_TAG="${CIRCLE_TAG}"
+            fi
+
+            if [ -z "${DOCKER_IMAGE_TAG}" ]; then
+              exit 0
+            fi
+
+            docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+            docker push atlasmap/atlasmap:${DOCKER_IMAGE_TAG} | cat -
+
+            sh atlas-docs/ci-docs.sh
+            java -cp ../.circleci/codacy-coverage-reporter-2.0.1-assembly.jar com.codacy.CodacyCoverageReporter -l Java -r ./coverage/jacoco.xml
+
+
+  build-camel:
+    working_directory: /workspace
+    docker:
+    - image: openjdk:8-jdk
+    environment:
+      MAVEN_OPTS: -Xmx512m
+      DOCKER_VERSION: 17.04.0-ce
+
+    steps:
+      - setup_remote_docker
+
+      - checkout
+
+      - run:
+          name: Maven
+          command: |
+          cd camel
+          ./mvnw --batch-mode -Pjacoco install checkstyle:check
+
+      - run:
+          name: Collect junit reports
+          command: |
+            cd camel
+            mkdir ./junit/
+            find . -type f -regex ".*/target/.*-reports/.*xml" -exec cp {} ./junit/ \;
+
+      - run:
+          name: Collect checkstyle reports
+          command: |
+            cd camel
+            mkdir ./checkstyle/
+            find . -type f -regex ".*/target/checkstyle.*xml" -exec cp {} ./checkstyle/ \;
+
+      - run:
+          name: Collect coverage reports
+          command: |
+            cd camel
+            mkdir ./coverage/
+            cp -a ./target/site/jacoco/* ./coverage/
+
+      - store_test_results:
+          path: ./camel/junit
+
+      - store_artifacts:
+          path: ./camel/junit
+
+      - store_artifacts:
+          path: ./camel/checkstyle
+
+      - store_artifacts:
+          path : ./camel/coverage
+
+      - deploy:
+          command: |
+            cd camel
+            if [ "${CIRCLE_PROJECT_USERNAME}" != "atlasmap" ]; then
+              exit 0
+            fi
+            if [ "${CIRCLE_BRANCH}" != "master" ]; then
+              exit 0
+            fi
+            java -cp ../.circleci/codacy-coverage-reporter-2.0.1-assembly.jar com.codacy.CodacyCoverageReporter -l Java -r ./coverage/jacoco.xml
+
+
+  build-ui:
+    working_directory: /workspace
+    docker:
+    - image: node:7.9
+    environment:
+      CHROME_BIN: /usr/bin/chromium
+      DOCKER_VERSION: 17.04.0-ce
+
+    steps:
+
+    - run:
+        name: update yarn
+        command: |
+          cd ui
+          # remove default yarn
+          rm -rf $(dirname $(which yarn))/yarn*
+          # download latest
+          rm -rf ~/.yarn
+          curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 0.28.4
+          echo 'export PATH="${PATH}:${HOME}/.yarn/bin"' >> $BASH_ENV
+
+    - run:
+        name: Install Chromium and Xvfb
+        command: |
+        cd ui
+        apt-get update -qq
+        apt-get install -qq -y chromium Xvfb > /dev/null
+
+    - setup_remote_docker
+
+    - checkout
+
+    - restore_cache:
+        key: atlasmap-ui-{{ checksum "package.json" }}
+
+    - run:
+        name: Install Dependencies
+        command: |
+          cd ui
+          yarn install --verbose --no-progress
+
+    - save_cache:
+        key: atlasmap-ui-{{ checksum "package.json" }}
+        paths:
+        - ~/ui/.yarn
+        - ~/ui/.cache/yarn
+
+    - run:
+        name: Run AOT compile
+        command: |
+          cd ui
+          yarn aot:build
+
+    - run:
+        name: Run unit tests
+        command: |
+          cd ui
+          rm -Rf ./coverage ./junit
+          mkdir ./coverage ./junit
+          ./karma-xvfb.sh
+
+    - store_test_results:
+        path: ./ui/junit
+
+    - run:
+        name: Lint
+        command: |
+          cd ui
+          npm run lint
+
+    - store_artifacts:
+        path: ./ui/dist
+    - store_artifacts:
+        path: ./ui/coverage
+    - store_artifacts:
+        path: ./ui/junit
+
+    - deploy:
+        command: |
+          cd ui
+          if [ "${CIRCLE_PROJECT_USERNAME}" != "atlasmap" ]; then
+            exit 0
+          fi
+
+          if [ "${CIRCLE_BRANCH}" == "master" ]; then
+            TAG=`npm run version|sed '$!d'`.`date '+%Y%m%d%H%M%S'`
+            cat ./coverage/lcov.info | ./node_modules/.bin/codacy-coverage
+          elif [[ "${CIRCLE_TAG}" =~ ^[0-9]+(\.[0-9]+){2} ]]; then
+            TAG="${CIRCLE_TAG}"
+          else
+            exit 0
+          fi
+
+          echo "Publishing atlasmap.data.mapper ${TAG}..."
+
+          git config --global user.name "AtlasMap CI"
+          git config --global user.email "tm.igarashi+atlasmapci@gmail.com"
+          npm version ${TAG}
+
+          echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
+          npm publish
+
+          # git push --follow-tags
+
+
+  build-app:
+    working_directory: /workspace
+    docker:
+    - image: node:7.9
+    environment:
+      CHROME_BIN: /usr/bin/chromium
+      DOCKER_VERSION: 17.04.0-ce
+
+    steps:
+      # TODO
