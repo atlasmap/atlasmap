@@ -62,12 +62,11 @@ jobs:
           command: |
             mkdir ./junit/
             find . -type f -regex ".*/target/.*-reports/.*xml" -exec cp {} ./junit/ \;
-            cp ui/junit/*.xml ./junit/
+            cp -a ui/junit ./junit/ui
 
       - run:
           name: Collect checkstyle reports
           command: |
-            cd runtime
             mkdir ./checkstyle/
             find . -type f -regex ".*/target/checkstyle.*xml" -exec cp {} ./checkstyle/ \;
 
