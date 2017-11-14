@@ -93,9 +93,8 @@ export class InitializationService {
 
         if (this.cfg.initCfg.addMockJavaSources || this.cfg.initCfg.addMockJavaSingleSource) {
             console.error("INIT SERVICE MOCK DATA: Adding mock java source documents.");
-            this.cfg.addJavaDocument("twitter4j.Status", true);
+            this.cfg.addJavaDocument("io.atlasmap.java.test.TargetTestClass", true);
             if (this.cfg.initCfg.addMockJavaSources) {
-                this.cfg.addJavaDocument("io.atlasmap.java.test.TargetTestClass", true);
                 this.cfg.addJavaDocument("io.atlasmap.java.test.SourceContact", true);
                 this.cfg.addJavaDocument("io.atlasmap.java.test.SourceAddress", true);
                 this.cfg.addJavaDocument("io.atlasmap.java.test.TestListOrders", true);
