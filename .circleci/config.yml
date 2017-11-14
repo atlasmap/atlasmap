@@ -114,4 +114,5 @@ jobs:
             docker push atlasmap/atlasmap:${DOCKER_IMAGE_TAG} | cat -
 
             sh atlas-docs/ci-docs.sh
-            java -cp ../.circleci/codacy-coverage-reporter-2.0.1-assembly.jar com.codacy.CodacyCoverageReporter -l Java -r ./coverage/runtime/jacoco.xml
+            cd ..
+            java -cp ./.circleci/codacy-coverage-reporter-2.0.1-assembly.jar com.codacy.CodacyCoverageReporter -l Java -r ./coverage/runtime/jacoco.xml
