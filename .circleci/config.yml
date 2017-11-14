@@ -62,7 +62,7 @@ jobs:
           command: |
             mkdir ./junit/ ./junit-ui/
             find . -type f -regex ".*/target/.*-reports/.*xml" -exec cp {} ./junit/ \;
-            cp -a ui/junit/* ./junit-ui/
+            cp -a ui/junit/* ./junit/
 
       - run:
           name: Collect checkstyle reports
@@ -81,14 +81,8 @@ jobs:
       - store_test_results:
           path: ./junit
 
-      - store_test_results:
-          path: ./junit-ui
-
       - store_artifacts:
           path: ./junit
-
-      - store_artifacts:
-          path: ./junit-ui
 
       - store_artifacts:
           path: ./checkstyle
