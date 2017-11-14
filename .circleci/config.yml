@@ -17,24 +17,24 @@ jobs:
       - checkout
 
       - run:
-        name: Install yarn
-        command: |
-          rm -rf ~/.yarn
-          curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.3.2
-          echo 'export PATH="${HOME}/.yarn/bin:${PATH}"' >> $BASH_ENV
+          name: Install yarn
+          command: |
+            rm -rf ~/.yarn
+            curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.3.2
+            echo 'export PATH="${HOME}/.yarn/bin:${PATH}"' >> $BASH_ENV
 
       - run:
-        name: Install Chromium and Xvfb
-        command: |
-          apt-get update -qq
-          apt-get install -qq -y chromium Xvfb > /dev/null
+          name: Install Chromium and Xvfb
+          command: |
+            apt-get update -qq
+            apt-get install -qq -y chromium Xvfb > /dev/null
 
       - run:
-        name: Prep for Cache Load
-        command: |
-          git submodule init
-          git submodule update
-          find . | grep pom.xml | grep -v src/test/resources | grep -v src/main/resources | sort | xargs cat > all-poms
+          name: Prep for Cache Load
+          command: |
+            git submodule init
+            git submodule update
+            find . | grep pom.xml | grep -v src/test/resources | grep -v src/main/resources | sort | xargs cat > all-poms
 
       - restore_cache:
           key: atlasmap-mvn-{{ checksum "all-poms" }}
