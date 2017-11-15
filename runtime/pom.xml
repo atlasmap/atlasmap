@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!--
 
     Copyright (C) 2017 Red Hat, Inc.
@@ -16,180 +15,148 @@
     limitations under the License.
 
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>io.atlasmap</groupId>
-        <artifactId>atlas-parent</artifactId>
-        <version>1.32-SNAPSHOT</version>
-        <relativePath>../atlas-parent/pom.xml</relativePath>
-    </parent>
-
-    <artifactId>runtime</artifactId>
-    <name>Atlas :: Runtime</name>
-    <packaging>jar</packaging>
+    <groupId>io.atlasmap</groupId>
+    <artifactId>atlas</artifactId>
+    <version>1.32-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>Atlas :: Project Build</name>
 
     <properties>
-        <failOnMissingWebXml>false</failOnMissingWebXml>
-        <maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
-        <java-image.version>1.2</java-image.version>
-        <fabric8.mode>kubernetes</fabric8.mode>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <jdk.version>1.8</jdk.version>
+
+        <!-- plugins -->
+        <build-helper-maven-plugin.version>3.0.0</build-helper-maven-plugin.version>
+        <jacoco-maven-plugin.version>0.7.9</jacoco-maven-plugin.version>
+        <license-maven-plugin.version>3.0</license-maven-plugin.version>
+        <maven-checkstyle-plugin.version>2.17</maven-checkstyle-plugin.version>
+        <maven-compiler-plugin.version>3.6.1</maven-compiler-plugin.version>
+        <maven-dependency-plugin.version>3.0.0</maven-dependency-plugin.version>
+        <maven-deploy-plugin.version>2.8.2</maven-deploy-plugin.version>
+        <maven-gpg-plugin.version>1.5</maven-gpg-plugin.version>
+        <maven-jar-plugin.version>3.0.2</maven-jar-plugin.version>
+        <maven-javadoc-plugin.version>2.9.1</maven-javadoc-plugin.version>
+        <maven-resources-plugin.version>3.0.2</maven-resources-plugin.version>
+        <maven-release-plugin.version>2.5.3</maven-release-plugin.version>
+        <maven-source-plugin.version>2.2.1</maven-source-plugin.version>
+        <maven-surefire-plugin.version>2.13</maven-surefire-plugin.version>
+        <maven-version>3.5.0</maven-version>
+        <nexus-staging-maven-plugin.version>1.6.7</nexus-staging-maven-plugin.version>
+
+        <!-- Controls Docker Image Generation -->
+        <from.image>registry.access.redhat.com/jboss-fuse-6/fis-java-openshift:2.0</from.image>
+        <docker.image>atlasmap/atlasmap:%l</docker.image>
     </properties>
 
-    <build>
-        <finalName>runtime</finalName>
+    <description>The AtlasMap Project</description>
+    <url>http://www.atlasmap.io</url>
+    <inceptionYear>2017</inceptionYear>
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    <developers>
+        <developer>
+            <id>mattrpav</id>
+            <name>Matt Pavlovich</name>
+            <email>matt@mediadriver.com</email>
+            <url>http://mediadriver.com</url>
+            <timezone>-6</timezone>
+        </developer>
+        <developer>
+            <id>chirino</id>
+            <name>Hiram Chirino</name>
+            <email>hiram@hiramchirino.com</email>
+            <url>http://hiramchirino.com</url>
+            <timezone>-5</timezone>
+        </developer>
+    </developers>
+    <scm>
+        <connection>scm:git:https://github.com/atlasmap/atlasmap.git</connection>
+        <developerConnection>scm:git:git@github.com:atlasmap/atlasmap.git</developerConnection>
+        <url>https://atlasmap.io</url>
+        <tag>HEAD</tag>
+    </scm>
 
-        <testResources>
-            <testResource>
-                <directory>src/test/resources</directory>
-                <filtering>true</filtering>
-            </testResource>
-        </testResources>
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
 
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <jvmArguments>-server -Xms256m -Xmx512m</jvmArguments>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>repackage</id>
-                        <goals>
-                            <goal>repackage</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>build-info</id>
-                        <goals>
-                            <goal>build-info</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>io.fabric8</groupId>
-                <artifactId>fabric8-maven-plugin</artifactId>
-                <configuration>
-                    <generator>
-                        <config>
-                            <spring-boot>
-                                <name>${docker.image}</name>
-                                <from>${from.image}</from>
-                            </spring-boot>
-                        </config>
-                    </generator>
-                </configuration>
-            </plugin>
-
-        </plugins>
-    </build>
-
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-dependencies</artifactId>
-                <version>${spring-boot.version}</version>
-                <scope>import</scope>
-                <type>pom</type>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.camel</groupId>
-                <artifactId>camel-spring-boot-dependencies</artifactId>
-                <version>${camel.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.camel</groupId>
-                <artifactId>camel-parent</artifactId>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
-    <dependencies>
-
-        <!-- === Internal dependencies (don't touch without discussion) ========================== -->
-        <dependency>
-            <groupId>io.atlasmap</groupId>
-            <artifactId>atlas-java-module</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.atlasmap</groupId>
-            <artifactId>atlas-java-service</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.atlasmap</groupId>
-            <artifactId>atlas-json-module</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.atlasmap</groupId>
-            <artifactId>atlas-json-service</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.atlasmap</groupId>
-            <artifactId>atlas-xml-module</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.atlasmap</groupId>
-            <artifactId>atlas-xml-service</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.atlasmap</groupId>
-            <artifactId>atlas-service</artifactId>
-        </dependency>
-
-
-        <!-- ===================================================================================== -->
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-tomcat</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-undertow</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.paypal.springboot</groupId>
-            <artifactId>resteasy-spring-boot-starter</artifactId>
-        </dependency>
-
-    </dependencies>
+    <modules>
+        <module>atlas-parent</module>
+        <module>atlas-model</module>
+        <module>atlas-api</module>
+        <module>atlas-core</module>
+        <module>atlas-service-parent</module>
+        <module>atlas-java-parent</module>
+        <module>atlas-json-parent</module>
+        <module>atlas-xml-parent</module>
+        <module>atlas-itests-parent</module>
+        <module>atlasmap-maven-plugin</module>
+        <module>runtime</module>
+        <module>atlas-docs</module>
+    </modules>
 
     <profiles>
         <profile>
-            <id>ci</id>
+            <id>java8-doclint-disabled</id>
+            <activation>
+                <jdk>[1.8,)</jdk>
+            </activation>
             <properties>
-                <user.home>/home/jenkins</user.home>
-                <fabric8.namespace>syndesis-ci</fabric8.namespace>
-                <fabric8.mode>openshift</fabric8.mode>
+                <javadoc.opts>-Xdoclint:none</javadoc.opts>
             </properties>
         </profile>
         <profile>
-            <id>fabric8</id>
+            <id>release</id>
             <build>
                 <plugins>
                     <plugin>
-                        <groupId>io.fabric8</groupId>
-                        <artifactId>fabric8-maven-plugin</artifactId>
+                        <artifactId>maven-source-plugin</artifactId>
                         <executions>
                             <execution>
-                                <id>fmp</id>
+                                <id>attach-sources</id>
                                 <goals>
-                                    <goal>build</goal>
+                                    <goal>jar-no-fork</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <additionalparam>${javadoc.opts}</additionalparam>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
                                 </goals>
                             </execution>
                         </executions>
@@ -198,76 +165,200 @@
             </build>
         </profile>
         <profile>
-            <id>debug</id>
+            <id>jacoco</id>
+            <properties>
+                <sonar.language>java</sonar.language>
+            </properties>
             <build>
                 <plugins>
                     <plugin>
-                        <groupId>org.springframework.boot</groupId>
-                        <artifactId>spring-boot-maven-plugin</artifactId>
+                        <groupId>org.jacoco</groupId>
+                        <artifactId>jacoco-maven-plugin</artifactId>
+                        <version>${jacoco-maven-plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <id>prepare-agent</id>
+                                <goals>
+                                    <goal>prepare-agent</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
                         <configuration>
-                            <jvmArguments>-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=8000
-                                -server -Xms256m -Xmx512m</jvmArguments>
+                            <argLine>${argLine}</argLine>
                         </configuration>
                     </plugin>
                 </plugins>
             </build>
         </profile>
         <profile>
-            <id>itests</id>
+            <id>community-release</id>
             <build>
                 <plugins>
                     <plugin>
-                        <groupId>org.springframework.boot</groupId>
-                        <artifactId>spring-boot-maven-plugin</artifactId>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>nexus-staging-maven-plugin</artifactId>
+                        <extensions>true</extensions>
                         <configuration>
-                            <useTestClasspath>true</useTestClasspath>
-                            <folders>
-                                <folder>${project.build.testOutputDirectory}</folder>
-                            </folders>
-                            <arguments>
-                                <argument>--logging.level.io.atlasmap=DEBUG</argument>
-                                <argument>--logging.file=target/atlasmap-spring-boot.log</argument>
-                            </arguments>
-                            <jvmArguments>-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8000
-                                -server -Xms256m -Xmx512m</jvmArguments>
-                        </configuration>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>keytool-maven-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <phase>generate-resources</phase>
-                                <id>clean</id>
-                                <goals>
-                                    <goal>clean</goal>
-                                </goals>
-                            </execution>
-                            <execution>
-                                <phase>generate-resources</phase>
-                                <id>generateKeyPair</id>
-                                <goals>
-                                    <goal>generateKeyPair</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                        <configuration>
-                            <keystore>${project.build.testOutputDirectory}/ssl.keystore</keystore>
-                            <dname>cn=localhost</dname>
-                            <keypass>atlasmap</keypass>
-                            <storepass>atlasmap</storepass>
-                            <alias>atlasmap</alias>
-                            <keyalg>RSA</keyalg>
+                            <serverId>ossrh</serverId>
+                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                            <autoReleaseAfterClose>false</autoReleaseAfterClose>
                         </configuration>
                     </plugin>
                 </plugins>
             </build>
-            <dependencies>
-                <dependency>
-                    <groupId>io.atlasmap</groupId>
-                    <artifactId>atlas-java-test-model</artifactId>
-                </dependency>
-            </dependencies>
         </profile>
     </profiles>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${maven-compiler-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-dependency-plugin</artifactId>
+                    <version>${maven-dependency-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <version>${maven-deploy-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-gpg-plugin</artifactId>
+                    <version>${maven-gpg-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>${maven-jar-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>${maven-javadoc-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-release-plugin</artifactId>
+                    <version>${maven-release-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>${maven-resources-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>${maven-source-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>${maven-surefire-plugin.version}</version>
+                    <configuration>
+                        <forkCount>8</forkCount>
+                        <reuseForks>false</reuseForks>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>build-helper-maven-plugin</artifactId>
+                    <version>${build-helper-maven-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>com.fasterxml.jackson.module</groupId>
+                    <artifactId>jackson-module-jaxb-annotations</artifactId>
+                    <version>${jackson-module-jaxb-annotations.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.sonatype.plugins</groupId>
+                    <artifactId>nexus-staging-maven-plugin</artifactId>
+                    <version>${nexus-staging-maven-plugin.version}</version>
+                </plugin>
+                <!--This plugin's configuration is used to store Eclipse
+                    m2e settings only. It has no influence on the Maven build itself. -->
+                <plugin>
+                    <groupId>org.eclipse.m2e</groupId>
+                    <artifactId>lifecycle-mapping</artifactId>
+                    <version>1.0.0</version>
+                    <configuration>
+                        <lifecycleMappingMetadata>
+                            <pluginExecutions>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>org.apache.maven.plugins</groupId>
+                                        <artifactId>maven-dependency-plugin</artifactId>
+                                        <versionRange>[${maven-dependency-plugin.version,)</versionRange>
+                                        <goals>
+                                            <goal>copy</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <ignore />
+                                    </action>
+                                </pluginExecution>
+                            </pluginExecutions>
+                        </lifecycleMappingMetadata>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>com.mycila</groupId>
+                    <artifactId>license-maven-plugin</artifactId>
+                    <version>${license-maven-plugin.version}</version>
+                    <configuration>
+                        <aggregate>true</aggregate>
+                        <header>header.txt</header>
+                        <properties>
+                            <owner>Red Hat, Inc.</owner>
+                        </properties>
+                        <excludes>
+                            <exclude>.editorconfig</exclude>
+                            <exclude>.mention-bot</exclude>
+                            <exclude>license.txt</exclude>
+                            <exclude>**/*.adoc</exclude>
+                            <exclude>.mvn/wrapper/maven-wrapper.properties</exclude>
+                            <exclude>mvnw*</exclude>
+                            <exclude>**/resources/**/test-*</exclude>
+                            <exclude>**/org/apache/camel/salesforce/dto/**</exclude>
+                            <exclude>**/node_modules/**</exclude>
+                            <exclude>**/src/main/webapp/angular2/src/lib/**</exclude>
+                            <exclude>**/src/main/webapp/angular2/src/app/lib/**</exclude>
+                        </excludes>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        <plugins>
+            <plugin>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>${maven-checkstyle-plugin.version}</version>
+                <configuration>
+                    <sourceDirectory>${project.build.sourceDirectory}</sourceDirectory>
+                    <includeTestSourceDirectory>true</includeTestSourceDirectory>
+                    <configLocation>checkstyle.xml</configLocation>
+                    <propertyExpansion>
+                        checkstyle.suppression.file=checkstyle-suppressions.xml
+                    </propertyExpansion>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <configuration>
+                    <skip>false</skip>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-release-plugin</artifactId>
+                <configuration>
+                    <pushChanges>false</pushChanges>
+                    <localCheckout>true</localCheckout>
+                    <autoVersionSubmodules>true</autoVersionSubmodules>
+                    <useReleaseProfile>false</useReleaseProfile>
+                    <releaseProfiles>release</releaseProfiles>
+                    <goals>deploy</goals>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>
