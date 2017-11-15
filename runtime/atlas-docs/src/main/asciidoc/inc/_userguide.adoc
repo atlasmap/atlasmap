@@ -1,0 +1,20 @@
+
+[[userguide]]
+= User Guide
+
+The User Guide documents how programmers will use AtlasMap within their code projects. 
+
+== Prerequisites
+
+ * Required: Java 1.8.0u91 
+ * Recommended: Java 1.8.0u131 (especially for running within a container)
+
+== Maven Instructions
+
+Add the AtlasMap core runtime to the pom.xml
+
+ <dependency>
+     <groupId>io.atlasmap</groupId>
+     <artifactId>atlas-core</artifactId>
+     <version>{version}</version>
+ </dependency>

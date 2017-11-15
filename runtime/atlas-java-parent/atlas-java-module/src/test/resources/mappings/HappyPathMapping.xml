@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AtlasMapping xmlns="http://atlasmap.io/v2" xmlns:ns2="http://atlasmap.io/java/v2"
+    name="thisis_a_valid.name">
+    <DataSource
+        uri="atlas:java?className=io.atlasmap.java.module.MockJavaClass"
+        dataSourceType="Source" />
+    <DataSource
+        uri="atlas:java?className=io.atlasmap.java.module.MockJavaClass"
+        dataSourceType="Target" />
+    <Mappings>
+        <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:type="Mapping" mappingType="Map" id="map.firstName.firstName">
+            <InputField xsi:type="ns2:JavaField" path="firstName"
+                fieldType="String">
+                <ns2:Modifiers />
+            </InputField>
+            <OutputField xsi:type="ns2:JavaField" path="firstName"
+                fieldType="String">
+                <ns2:Modifiers />
+            </OutputField>
+        </Mapping>
+        <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:type="Mapping" mappingType="Separate" id="separate.displayName.lastName">
+            <InputField xsi:type="ns2:JavaField" path="displayName"
+                fieldType="String">
+                <ns2:Modifiers />
+            </InputField>
+            <OutputField xsi:type="ns2:JavaField" index="1"
+                path="lastName" fieldType="String">
+                <ns2:Modifiers />
+            </OutputField>
+        </Mapping>
+    </Mappings>
+    <LookupTables />
+    <Properties />
+</AtlasMapping>

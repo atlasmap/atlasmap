@@ -1,0 +1,36 @@
+properties([
+  buildDiscarder(logRotator(numToKeepStr: '5', artifactNumToKeepStr: '5'))
+])
+
+podTemplate(
+  cloud: 'openshift',
+  label: 'atlasmap-ci',
+  containers: [
+    containerTemplate(
+      name: 'maven',
+      image: 'openjdk:8',
+      ttyEnabled: true,
+      command: 'cat',
+      envVars: [
+        containerEnvVar(key: 'HOME', value: '/home/jenkins')
+      ]
+    )
+  ],
+  volumes: [
+    secretVolume(secretName: 'm2-settings', mountPath: '/home/jenkins/.m2-ro')
+  ]
+)
+
+{
+  node('atlasmap-ci') {
+    stage('Build') {
+      checkout scm
+
+      container('maven') {
+        sh "./mvnw -Dmaven.test.failure.ignore=true -Duser.home=/home/jenkins -B -fae -s /home/jenkins/.m2-ro/settings.xml clean install"
+        junit '**/target/surefire-reports/TEST-*.xml'
+      }
+    }
+  }
+}
+

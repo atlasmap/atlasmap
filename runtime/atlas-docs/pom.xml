@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+
+    Copyright (C) 2017 Red Hat, Inc.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+            http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>io.atlasmap</groupId>
+        <artifactId>atlas-parent</artifactId>
+        <version>1.32-SNAPSHOT</version>
+        <relativePath>../atlas-parent/pom.xml</relativePath>
+    </parent>
+
+    <artifactId>atlas-docs</artifactId>
+    <name>Atlas :: Documentation</name>
+
+    <!-- ==== HTML documentation ====================== -->
+    <profiles>
+        <profile>
+            <id>html</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.asciidoctor</groupId>
+                        <artifactId>asciidoctor-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>output-html</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>process-asciidoc</goal>
+                                </goals>
+                                <configuration>
+                                    <sourceHighlighter>coderay</sourceHighlighter>
+                                    <backend>html</backend>
+                                    <sourceHighlighter>coderay</sourceHighlighter>
+                                    <attributes>
+                                        <toc>left</toc>
+                                        <linkcss>false</linkcss>
+                                    </attributes>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+
+        <!-- ==== PDF documentation ====================== -->
+
+        <profile>
+            <id>pdf</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.asciidoctor</groupId>
+                        <artifactId>asciidoctor-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>output-pdf</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>process-asciidoc</goal>
+                                </goals>
+                                <configuration>
+                                    <backend>pdf</backend>
+                                    <sourceHighlighter>rouge</sourceHighlighter>
+                                    <attributes>
+                                        <toc />
+                                    </attributes>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <!-- Jacoco Test Coverage -->
+        <profile>
+            <id>jacoco</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.jacoco</groupId>
+                        <artifactId>jacoco-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>report-aggregate</id>
+                                <phase>prepare-package</phase>
+                                <goals>
+                                    <goal>report-aggregate</goal>
+                                </goals>
+                                <configuration>
+                                    <includes>
+                                        <include>**/*.class</include>
+                                    </includes>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+            <dependencies>
+                <!-- AtlasMap Core -->
+                <dependency>
+                    <groupId>io.atlasmap</groupId>
+                    <artifactId>atlas-api</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>io.atlasmap</groupId>
+                    <artifactId>atlas-core</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>io.atlasmap</groupId>
+                    <artifactId>atlas-model</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>io.atlasmap</groupId>
+                    <artifactId>atlas-service</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>io.atlasmap</groupId>
+                    <artifactId>runtime</artifactId>
+                </dependency>
+
+                <!-- AtlasMap Java -->
+                <dependency>
+                    <groupId>io.atlasmap</groupId>
+                    <artifactId>atlas-java-inspect</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>io.atlasmap</groupId>
+                    <artifactId>atlas-java-model</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>io.atlasmap</groupId>
+                    <artifactId>atlas-java-module</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>io.atlasmap</groupId>
+                    <artifactId>atlas-java-service</artifactId>
+                </dependency>
+
+                <!-- AtlasMap JSON -->
+                <dependency>
+                    <groupId>io.atlasmap</groupId>
+                    <artifactId>atlas-json-core</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>io.atlasmap</groupId>
+                    <artifactId>atlas-json-model</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>io.atlasmap</groupId>
+                    <artifactId>atlas-json-module</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>io.atlasmap</groupId>
+                    <artifactId>atlas-json-service</artifactId>
+                </dependency>
+
+                <!-- AtlasMap XML -->
+                <dependency>
+                    <groupId>io.atlasmap</groupId>
+                    <artifactId>atlas-xml-core</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>io.atlasmap</groupId>
+                    <artifactId>atlas-xml-model</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>io.atlasmap</groupId>
+                    <artifactId>atlas-xml-module</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>io.atlasmap</groupId>
+                    <artifactId>atlas-xml-service</artifactId>
+                </dependency>
+
+                <!-- Integration Tests -->
+                <dependency>
+                    <groupId>io.atlasmap</groupId>
+                    <artifactId>atlas-itests-concurrency</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>io.atlasmap</groupId>
+                    <artifactId>atlas-itests-core</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>io.atlasmap</groupId>
+                    <artifactId>atlas-itests-reference-mappings</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>io.atlasmap</groupId>
+                    <artifactId>atlas-itests-validation-mappings</artifactId>
+                </dependency>
+            </dependencies>
+        </profile>
+    </profiles>
+
+</project>

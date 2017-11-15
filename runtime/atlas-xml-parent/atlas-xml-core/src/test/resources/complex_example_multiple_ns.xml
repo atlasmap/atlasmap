@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<orders xmlns="http://www.example.com/x/" xmlns:q="http://www.example.com/q/" xmlns:y="http://www.example.com/y/" totalCost="12525.00">
+  <order>
+    <id y:custId="aa">a12312</id>
+    <id y:custId="bb">b4423423</id>
+  </order>
+  <q:order>
+    <id y:custId="cx">c12312</id>
+  </q:order>
+  <order>
+    <id y:custId="dc">d54554555</id>
+  </order>
+  <q:order>
+    <id y:custId="ea">e12312</id>
+  </q:order>
+</orders>

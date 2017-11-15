@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ns:XmlFPA booleanField="true" byteField="0" charField="a"
+    doubleField="0.0" floatField="0.0" intField="0" longField="0"
+    shortField="0" xmlns:ns="http://atlasmap.io/xml/test/v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://atlasmap.io/xml/test/v2 atlas-xml-test-model-v2.xsd "></ns:XmlFPA>

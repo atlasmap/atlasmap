@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<orders xmlns="http://www.example.com/x/" xmlns:y="http://www.example.com/y/">
+  <order y:totalCost="12525.00"/>
+</orders>

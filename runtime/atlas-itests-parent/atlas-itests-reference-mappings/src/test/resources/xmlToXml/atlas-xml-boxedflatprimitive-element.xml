@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<XmlFBPE>
+    <boxedBooleanField>true</boxedBooleanField>
+    <boxedByteField>87</boxedByteField>
+    <boxedCharField>z</boxedCharField>
+    <boxedDoubleField>90000000.0</boxedDoubleField>
+    <boxedFloatField>70000000.0</boxedFloatField>
+    <boxedIntField>5</boxedIntField>
+    <boxedLongField>20000</boxedLongField>
+    <boxedShortField>5</boxedShortField>
+    <boxedStringField>boxedStringValue</boxedStringField>
+</XmlFBPE>

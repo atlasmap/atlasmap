@@ -1,0 +1,65 @@
+{
+    "AtlasMapping": {
+        "jsonType": "io.atlasmap.v2.AtlasMapping",
+        "dataSource": [
+            {
+                "jsonType": "io.atlasmap.v2.DataSource",
+                "id": "io.atlasmap.java.test.SourceContact",
+                "uri": "atlas:java?className=io.atlasmap.java.test.SourceContact",
+                "dataSourceType": "SOURCE"
+            },
+            {
+                "jsonType": "io.atlasmap.xml.v2.XmlDataSource",
+                "id": "XMLSampleSchemaSource",
+                "uri": "XMLSampleSchemaSource",
+                "dataSourceType": "TARGET",
+                "template": null,
+                "xmlNamespaces": {
+                    "xmlNamespace": [
+                        {
+                            "alias": "tns",
+                            "uri": ""
+                        }
+                    ]
+                }
+            }
+        ],
+        "mappings": {
+            "mapping": [
+                {
+                    "jsonType": "io.atlasmap.v2.Mapping",
+                    "mappingType": "SEPARATE",
+                    "inputField": [
+                        {
+                            "jsonType": "io.atlasmap.java.v2.JavaField",
+                            "name": "lastName",
+                            "path": "/lastName",
+                            "fieldType": "STRING",
+                            "docId": "io.atlasmap.java.test.SourceContact"
+                        }
+                    ],
+                    "outputField": [
+                        {
+                            "jsonType": "io.atlasmap.xml.v2.XmlField",
+                            "name": "orderid",
+                            "path": "/shiporder/@orderid",
+                            "fieldType": "STRING",
+                            "docId": "XMLSampleSchemaSource",
+                            "userCreated": false,
+                            "index": 0,
+                            "actions": null
+                        }
+                    ],
+                    "strategy": "SPACE"
+                }
+            ]
+        },
+        "name": "UI.72157",
+        "lookupTables": {
+            "lookupTable": []
+        },
+        "properties": {
+            "property": []
+        }
+    }
+}

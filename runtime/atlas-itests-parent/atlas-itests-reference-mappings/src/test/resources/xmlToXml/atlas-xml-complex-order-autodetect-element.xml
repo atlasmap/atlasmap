@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<XmlOE>
+    <orderId>8765309</orderId>
+    <Address>
+        <addressLine1>123 Main St</addressLine1>
+        <addressLine2>Suite 42b</addressLine2>
+        <city>Anytown</city>
+        <state>NY</state>
+        <zipCode>90210</zipCode>
+    </Address>
+    <Contact>
+        <firstName>Ozzie</firstName>
+        <lastName>Smith</lastName>
+        <phoneNumber>5551212</phoneNumber>
+        <zipCode>81111</zipCode>
+    </Contact>
+</XmlOE>

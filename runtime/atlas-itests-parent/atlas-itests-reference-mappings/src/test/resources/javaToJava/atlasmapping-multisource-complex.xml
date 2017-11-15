@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AtlasMapping xmlns="http://atlasmap.io/v2" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:ns2="http://atlasmap.io/java/v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    name="JavaJavaMultiSourceComplex">
+    <DataSource dataSourceType="Source"
+        uri="atlas:java?className=io.atlasmap.java.test.SourceContact"
+        docId="con" />
+    <DataSource dataSourceType="Source"
+        uri="atlas:java?className=io.atlasmap.java.test.SourceAddress"
+        docId="addr" />
+    <DataSource dataSourceType="Target"
+        uri="atlas:java?className=io.atlasmap.java.test.TargetOrder" />
+    <Mappings>
+        <Mapping xsi:type="Mapping" mappingType="Map">
+            <InputField xsi:type="ConstantField" fieldType="Integer">
+                <value xsi:type="xs:int">8765309</value>
+            </InputField>
+            <OutputField xsi:type="ns2:JavaField" path="/orderId" />
+        </Mapping>
+        <Mapping xsi:type="Mapping" mappingType="Map">
+            <InputField xsi:type="ns2:JavaField" path="/"
+                docId="con" fieldType="Complex" />
+            <OutputField xsi:type="ns2:JavaField" path="/contact"
+                className="io.atlasmap.java.test.TargetContact"
+                fieldType="Complex" />
+        </Mapping>
+        <Mapping xsi:type="Mapping" mappingType="Map">
+            <InputField xsi:type="ns2:JavaField" path="/firstName"
+                docId="con" />
+            <OutputField xsi:type="ns2:JavaField" path="/contact/firstName" />
+        </Mapping>
+        <Mapping xsi:type="Mapping" mappingType="Map">
+            <InputField xsi:type="ns2:JavaField" path="/lastName"
+                docId="con" />
+            <OutputField xsi:type="ns2:JavaField" path="/contact/lastName" />
+        </Mapping>
+        <Mapping xsi:type="Mapping" mappingType="Map">
+            <InputField xsi:type="ns2:JavaField" path="/phoneNumber"
+                docId="con" />
+            <OutputField xsi:type="ns2:JavaField" path="/contact/phoneNumber" />
+        </Mapping>
+        <Mapping xsi:type="Mapping" mappingType="Map">
+            <InputField xsi:type="ns2:JavaField" path="/zipCode"
+                docId="con" />
+            <OutputField xsi:type="ns2:JavaField" path="/contact/zipCode" />
+        </Mapping>
+        <Mapping xsi:type="Mapping" mappingType="Map">
+            <InputField xsi:type="ns2:JavaField" path="/"
+                docId="addr" fieldType="Complex" />
+            <OutputField xsi:type="ns2:JavaField" path="/address"
+                className="io.atlasmap.java.test.TargetAddress"
+                fieldType="Complex" />
+        </Mapping>
+        <Mapping xsi:type="Mapping" mappingType="Map">
+            <InputField xsi:type="ns2:JavaField" path="/addressLine1"
+                docId="addr" />
+            <OutputField xsi:type="ns2:JavaField" path="/address/addressLine1" />
+        </Mapping>
+        <Mapping xsi:type="Mapping" mappingType="Map">
+            <InputField xsi:type="ns2:JavaField" path="/addressLine2"
+                docId="addr" />
+            <OutputField xsi:type="ns2:JavaField" path="/address/addressLine2" />
+        </Mapping>
+        <Mapping xsi:type="Mapping" mappingType="Map">
+            <InputField xsi:type="ns2:JavaField" path="/city"
+                docId="addr" />
+            <OutputField xsi:type="ns2:JavaField" path="/address/city" />
+        </Mapping>
+        <Mapping xsi:type="Mapping" mappingType="Map">
+            <InputField xsi:type="ns2:JavaField" path="/state"
+                docId="addr" />
+            <OutputField xsi:type="ns2:JavaField" path="/address/state" />
+        </Mapping>
+        <Mapping xsi:type="Mapping" mappingType="Map">
+            <InputField xsi:type="ns2:JavaField" path="/zipCode"
+                docId="addr" />
+            <OutputField xsi:type="ns2:JavaField" path="/address/zipCode" />
+        </Mapping>
+    </Mappings>
+</AtlasMapping>

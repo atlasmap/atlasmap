@@ -1,0 +1,25 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    
+    "title": "BaseAddress",
+    "type": "object",
+    "additionalProperties": true,
+    "properties": {
+    
+        "addressLine1": {
+            "type": "string"
+        },
+        "addressLine2": {
+            "type": "string"
+        },
+        "city": {
+            "type": "string"
+        },
+        "state": {
+            "type": "string"
+        },
+        "zipCode": {
+            "type": "string"
+        }
+    }
+}
