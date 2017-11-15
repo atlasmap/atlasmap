@@ -1,0 +1,25 @@
+*.class
+target
+.classpath
+.project
+.settings
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+node_modules
+
+# Package Files #
+*.jar
+*.war
+*.ear
+.idea
+*.iml
+pom.xml.versionsBackup
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+/target/
+.DS_Store
+
+.checkstyle
+checkstyle.cache

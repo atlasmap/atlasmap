@@ -1,0 +1,58 @@
+version: 2
+jobs:
+  build:
+    working_directory: /workspace
+    docker:
+    - image: openjdk:8-jdk
+    environment:
+      MAVEN_OPTS: -Xmx512m
+      DOCKER_VERSION: 17.04.0-ce
+
+    steps:
+      - setup_remote_docker
+
+      - checkout
+
+      - run:
+          name: Maven
+          command: ./mvnw --batch-mode -Pjacoco install checkstyle:check
+
+      - run:
+          name: Collect junit reports
+          command: |
+            mkdir ./junit/
+            find . -type f -regex ".*/target/.*-reports/.*xml" -exec cp {} ./junit/ \;
+
+      - run:
+          name: Collect checkstyle reports
+          command: |
+            mkdir ./checkstyle/
+            find . -type f -regex ".*/target/checkstyle.*xml" -exec cp {} ./checkstyle/ \;
+
+      - run:
+          name: Collect coverage reports
+          command: |
+            mkdir ./coverage/
+            cp -a ./target/site/jacoco/* ./coverage/
+
+      - store_test_results:
+          path: ./junit
+
+      - store_artifacts:
+          path: ./junit
+
+      - store_artifacts:
+          path: ./checkstyle
+
+      - store_artifacts:
+          path : ./coverage
+
+      - deploy:
+          command: |
+            if [ "${CIRCLE_PROJECT_USERNAME}" != "atlasmap" ]; then
+              exit 0
+            fi
+            if [ "${CIRCLE_BRANCH}" != "master" ]; then
+              exit 0
+            fi
+            java -cp .circleci/codacy-coverage-reporter-2.0.1-assembly.jar com.codacy.CodacyCoverageReporter -l Java -r ./coverage/jacoco.xml
