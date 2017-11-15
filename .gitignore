@@ -12,3 +12,62 @@ pom.xml.versionsBackup
 
 .checkstyle
 checkstyle.cache
+
+!e2e
+!dev-app
+!.editorconfig
+!.gitignore
+!angular-cli.json
+!screenshots
+
+# compiled output
+/aot
+/dist
+/tmp
+/src/**/*.js
+/src/**/*.map
+/src/*.js
+/src/*.map
+
+# dependencies
+/node_modules
+
+# IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# misc
+/.sass-cache
+/connect.lock
+/coverage/*
+/junit/*
+/libpeerconnection.log
+npm-debug.log
+testem.log
+/typings
+nohup.out
+
+# e2e
+/e2e/*.js
+/e2e/*.map
+
+#System Files
+.DS_Store
+Thumbs.db
+
+/ui/bin
+/ui/node
+
+/app/bin
+/app/node

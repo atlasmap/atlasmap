@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>io.atlasmap</groupId>
+  <artifactId>atlasmap</artifactId>
+  <version>1.32-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  <name>AtlasMap</name>
+  <description>AtlasMap Project</description>
+  <url>https://atlasmap.io/</url>
+  <scm>
+    <connection>scm:git:https://github.com/atlasmap/atlasmap.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com:atlasmap/atlasmap.git</developerConnection>
+    <url>http://github.com/atlasmap/atlasmap</url>
+  </scm>
+  <organization>
+    <name>JBoss by Red Hat</name>
+    <url>http://jboss.org</url>
+  </organization>
+  <issueManagement>
+    <system>github</system>
+    <url>https://github.com/atlasmap/atlasmap/issues</url>
+  </issueManagement>
+  <developers>
+    <developer>
+      <name>AtlasMap committers</name>
+    </developer>
+  </developers>   
+  <licenses>
+    <license>
+      <name>Apache License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+
+  <properties>
+    <node.version>v6.11.5</node.version>
+    <yarn.version>v1.2.1</yarn.version>
+  </properties>
+  
+  <modules>
+      <module>runtime</module>
+      <module>camel</module>
+      <module>ui</module>
+      <module>app</module>
+  </modules>
+
+  <profiles>
+    <profile>
+      <id>yarn</id>      
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>com.github.eirslett</groupId>
+            <artifactId>frontend-maven-plugin</artifactId>
+            <version>${frontend-maven-plugin-version}</version>
+            <executions>
+              <execution>
+                <id>install node and npm</id>
+                <goals>
+                  <goal>install-node-and-npm</goal>
+                </goals>
+                <configuration>
+                  <nodeVersion>${node.version}</nodeVersion>
+                </configuration> 
+              </execution>
+              <execution>
+                <id>install yarn</id>
+                <goals>
+                  <goal>install-node-and-yarn</goal>
+                </goals>
+                <configuration>
+                  <nodeVersion>${node.version}</nodeVersion>
+                  <yarnVersion>${yarn.version}</yarnVersion>
+                </configuration>
+              </execution>
+              <execution>
+                <id>angular-cli install</id>
+                <goals>
+                  <goal>npm</goal>
+                </goals>
+                <configuration>
+                  <arguments>install --no-optional -g angular-cli</arguments>
+                </configuration>
+              </execution>
+              <execution>
+                <id>yarn install</id>
+                <goals>
+                  <goal>yarn</goal>
+                </goals>
+                <configuration>
+                  <arguments>install --no-progress</arguments>
+                </configuration>
+              </execution>
+              <execution>
+                <id>yarn ng build</id>
+                <goals>
+                  <goal>yarn</goal>
+                </goals>
+                <configuration>
+                  <arguments>ng build -- --aot --prod --progress=false</arguments>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>  
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+</project>

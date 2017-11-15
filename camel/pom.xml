@@ -12,8 +12,9 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>io.atlasmap</groupId>
-        <artifactId>atlas</artifactId>
-        <version>1.31.2</version>
+        <artifactId>atlas-parent</artifactId>
+        <version>1.32-SNAPSHOT</version>
+        <relativePath>../runtime/atlas-parent</relativePath>
     </parent>
 
     <groupId>io.atlasmap</groupId>
@@ -26,7 +27,6 @@
         <camel.osgi.import.before.defaults>com.sun.xml.bind.marshaller;resolution:=optional</camel.osgi.import.before.defaults>
         <camel.osgi.export.pkg>org.apache.camel.converter.atlasmap.*</camel.osgi.export.pkg>
         <camel.osgi.export.service>org.apache.camel.spi.DataFormatResolver;dataformat=atlasmap</camel.osgi.export.service>
-        <atlas.version>1.31.2</atlas.version>
         <camel.version>2.20.0</camel.version>
         <jacoco-maven-plugin.version>0.7.9</jacoco-maven-plugin.version>
         <jaxb.version>2.2.11</jaxb.version>
@@ -57,13 +57,6 @@
         </license>
     </licenses>
 
-    <scm>
-        <url>https://github.com/atlasmap/camel-atlasmap</url>
-        <connection>scm:git:git://github.com/atlasmap/camel-atlasmap.git</connection>
-        <developerConnection>scm:git:git@github.com:atlasmap/camel-atlasmap.git</developerConnection>
-      <tag>HEAD</tag>
-    </scm>
-
     <distributionManagement>
         <snapshotRepository>
             <id>ossrh</id>
@@ -84,27 +77,27 @@
         <dependency>
             <groupId>io.atlasmap</groupId>
             <artifactId>atlas-api</artifactId>
-            <version>${atlas.version}</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>io.atlasmap</groupId>
             <artifactId>atlas-core</artifactId>
-            <version>${atlas.version}</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>io.atlasmap</groupId>
             <artifactId>atlas-java-module</artifactId>
-            <version>${atlas.version}</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>io.atlasmap</groupId>
             <artifactId>atlas-json-module</artifactId>
-            <version>${atlas.version}</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>io.atlasmap</groupId>
             <artifactId>atlas-xml-module</artifactId>
-            <version>${atlas.version}</version>
+            <version>${project.version}</version>
         </dependency>
 
         <!-- for testing -->
