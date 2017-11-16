@@ -1,5 +1,5 @@
 # AtlasMap
-The AtlasMap is a data mapping solution with interactive web based user interface, that simplifies configuring integrations between Java, XML, and JSON data sources. You can design your data mapping on the [AtlasMap Data Mapper UI](ui/README.md) canvas, and then run that data mapping via runtime engine. AtlasMap Data Mapper UI is primarily designed to work within the [Syndesis UI](https://github.com/syndesisio/syndesis).
+The AtlasMap is a data mapping solution with interactive web based user interface, that simplifies configuring integrations between Java, XML, and JSON data sources. You can design your data mapping on the AtlasMap Data Mapper UI canvas, and then run that data mapping via runtime engine. AtlasMap Data Mapper UI is primarily designed to work within the [Syndesis UI](https://github.com/syndesisio/syndesis).
 
 In addition to the plain Java API provided by the runtime engine, AtlasMap also provides [Camel Component](camel/README.md) to perform data mapping as a part of Apache Camel route.
 
