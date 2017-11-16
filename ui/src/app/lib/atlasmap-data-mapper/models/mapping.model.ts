@@ -15,7 +15,7 @@
 */
 
 import { Field } from './field.model';
-import { TransitionModel, TransitionMode, FieldAction, FieldActionConfig, FieldActionArgumentValue } from './transition.model';
+import { TransitionModel, TransitionMode, FieldAction, FieldActionConfig } from './transition.model';
 import { DocumentDefinition } from '../models/document.definition.model';
 import { ErrorInfo, ErrorLevel } from '../models/error.model';
 
@@ -28,11 +28,11 @@ export class MappedFieldParsingData {
     public parsedDocID: string = null;
     public parsedDocURI: string = null;
     public parsedIndex: string = null;
-    public fieldIsProperty: boolean = false;
-    public fieldIsConstant: boolean = false;
+    public fieldIsProperty = false;
+    public fieldIsConstant = false;
     public parsedValueType: string = null;
     public parsedActions: FieldAction[] = [];
-    public userCreated: boolean = false;
+    public userCreated = false;
 }
 
 export class MappedField {
@@ -41,10 +41,10 @@ export class MappedField {
     public actions: FieldAction[] = [];
 
     public updateSeparateOrCombineIndex(separateMode: boolean, combineMode: boolean,
-        suggestedValue: string, isSource:boolean): void {
+                                        suggestedValue: string, isSource: boolean): void {
 
         //remove field action when neither combine or separate mode
-        var removeField: boolean = (!separateMode && !combineMode);
+        let removeField: boolean = (!separateMode && !combineMode);
         //remove field when combine and field is target
         removeField = removeField || (combineMode && !isSource);
         //remove field when separate and field is source
@@ -54,7 +54,7 @@ export class MappedField {
             return;
         }
 
-        var firstFieldAction: FieldAction = (this.actions.length > 0) ? this.actions[0] : null;
+        let firstFieldAction: FieldAction = (this.actions.length > 0) ? this.actions[0] : null;
         if (firstFieldAction == null || !firstFieldAction.isSeparateOrCombineMode) {
             //add new separate/combine field action when there isn't one
             firstFieldAction = FieldAction.createSeparateCombineFieldAction(separateMode, suggestedValue);
@@ -63,14 +63,14 @@ export class MappedField {
     }
 
     public removeSeparateOrCombineAction(): void {
-        var firstFieldAction: FieldAction = (this.actions.length > 0) ? this.actions[0] : null;
+        const firstFieldAction: FieldAction = (this.actions.length > 0) ? this.actions[0] : null;
         if (firstFieldAction != null && firstFieldAction.isSeparateOrCombineMode) {
             DataMapperUtil.removeItemFromArray(firstFieldAction, this.actions);
         }
     }
 
     public getSeparateOrCombineIndex(): string {
-        var firstFieldAction: FieldAction = (this.actions.length > 0) ? this.actions[0] : null;
+        const firstFieldAction: FieldAction = (this.actions.length > 0) ? this.actions[0] : null;
         if (firstFieldAction != null && firstFieldAction.isSeparateOrCombineMode) {
             return firstFieldAction.argumentValues[0].value;
         }
@@ -85,22 +85,22 @@ export class MappedField {
         if (mappedFields == null || mappedFields.length == 0) {
             return [];
         }
-        var fieldsByPath: { [key:string]:MappedField; } = {};
-        var fieldPaths: string[] = [];
-        for (let mappedField of mappedFields) {
+        const fieldsByPath: { [key: string]: MappedField; } = {};
+        const fieldPaths: string[] = [];
+        for (const mappedField of mappedFields) {
             if (mappedField == null || mappedField.field == null) {
                 continue;
             }
             if (!allowNone && mappedField.field == DocumentDefinition.getNoneField()) {
                 continue;
             }
-            var path: string = mappedField.field.path;
+            const path: string = mappedField.field.path;
             fieldsByPath[path] = mappedField;
             fieldPaths.push(path);
         }
         fieldPaths.sort();
-        var result: MappedField[] = [];
-        for (let name of fieldPaths) {
+        const result: MappedField[] = [];
+        for (const name of fieldPaths) {
             result.push(fieldsByPath[name]);
         }
         return result;
@@ -116,17 +116,19 @@ export class FieldMappingPair {
     public targetFields: MappedField[] = [new MappedField()];
     public transition: TransitionModel = new TransitionModel();
 
-    public constructor() { }
+    public constructor() {
+        return;
+    }
 
     public addField(field: Field, isSource: boolean): void {
-        var mappedField: MappedField = new MappedField();
+        const mappedField: MappedField = new MappedField();
         mappedField.field = field;
         this.getMappedFields(isSource).push(mappedField);
     }
 
     public hasMappedField(isSource: boolean) {
-        var mappedFields: MappedField[] = isSource ? this.sourceFields : this.targetFields;
-        for (let mappedField of mappedFields) {
+        const mappedFields: MappedField[] = isSource ? this.sourceFields : this.targetFields;
+        for (const mappedField of mappedFields) {
             if (mappedField.isMapped()) {
                 return true;
             }
@@ -147,7 +149,7 @@ export class FieldMappingPair {
     }
 
     public getMappedFieldForField(field: Field, isSource: boolean): MappedField {
-        for (let mappedField of this.getMappedFields(isSource)) {
+        for (const mappedField of this.getMappedFields(isSource)) {
             if (mappedField.field == field) {
                 return mappedField;
             }
@@ -160,7 +162,7 @@ export class FieldMappingPair {
     }
 
     public getLastMappedField(isSource: boolean): MappedField {
-        var fields: MappedField[] = this.getMappedFields(isSource);
+        const fields: MappedField[] = this.getMappedFields(isSource);
         if ((fields != null) && (fields.length > 0)) {
             return fields[fields.length - 1];
         }
@@ -168,8 +170,8 @@ export class FieldMappingPair {
     }
 
     public getFields(isSource: boolean): Field[] {
-        var fields: Field[] = [];
-        for (let mappedField of this.getMappedFields(isSource)) {
+        const fields: Field[] = [];
+        for (const mappedField of this.getMappedFields(isSource)) {
             if (mappedField.field != null) {
                 fields.push(mappedField.field);
             }
@@ -178,10 +180,10 @@ export class FieldMappingPair {
     }
 
     public getFieldNames(isSource: boolean): string[] {
-        var fields: Field[] = this.getFields(isSource);
+        const fields: Field[] = this.getFields(isSource);
         Field.alphabetizeFields(fields);
-        var names: string[] = [];
-        for (let field of fields) {
+        const names: string[] = [];
+        for (const field of fields) {
             if (field == DocumentDefinition.getNoneField()) {
                 continue;
             }
@@ -191,10 +193,10 @@ export class FieldMappingPair {
     }
 
     public getFieldPaths(isSource: boolean): string[] {
-        var fields: Field[] = this.getFields(isSource);
+        const fields: Field[] = this.getFields(isSource);
         Field.alphabetizeFields(fields);
-        var paths: string[] = [];
-        for (let field of fields) {
+        const paths: string[] = [];
+        for (const field of fields) {
             if (field == DocumentDefinition.getNoneField()) {
                 continue;
             }
@@ -204,7 +206,7 @@ export class FieldMappingPair {
     }
 
     public hasFieldActions(): boolean {
-        for (let mappedField of this.getAllMappedFields()) {
+        for (const mappedField of this.getAllMappedFields()) {
             if (mappedField.actions.length > 0) {
                 return true;
             }
@@ -225,8 +227,8 @@ export class FieldMappingPair {
     }
 
     public hasTransition(): boolean {
-        var mappedFields: MappedField[] = this.getAllMappedFields();
-        for (let mappedField of mappedFields) {
+        const mappedFields: MappedField[] = this.getAllMappedFields();
+        for (const mappedField of mappedFields) {
             if (mappedField.actions.length > 0) {
                 return true;
             }
@@ -235,56 +237,56 @@ export class FieldMappingPair {
     }
 
     public updateTransition(): void {
-        for (let field of this.getAllFields()) {
+        for (const field of this.getAllFields()) {
             if (field.enumeration) {
                 this.transition.mode = TransitionMode.ENUM;
                 break;
             }
         }
 
-        var mappedFields: MappedField[] = this.getMappedFields(false);
-        for (let mappedField of mappedFields) {
-            var actionsToRemove: FieldAction[] = [];
-            for (let action of mappedField.actions) {
-                var actionConfig: FieldActionConfig = TransitionModel.getActionConfigForName(action.name);
+        let mappedFields: MappedField[] = this.getMappedFields(false);
+        for (const mappedField of mappedFields) {
+            const actionsToRemove: FieldAction[] = [];
+            for (const action of mappedField.actions) {
+                const actionConfig: FieldActionConfig = TransitionModel.getActionConfigForName(action.name);
                 if (actionConfig != null && !actionConfig.appliesToField(mappedField.field, this)) {
                     actionsToRemove.push(action);
                 }
             }
-            for (let action of actionsToRemove) {
+            for (const action of actionsToRemove) {
                 mappedField.removeAction(action);
             }
         }
 
-        var separateMode: boolean = (this.transition.mode == TransitionMode.SEPARATE);
-        var combineMode: boolean = (this.transition.mode == TransitionMode.COMBINE);
+        const separateMode: boolean = (this.transition.mode == TransitionMode.SEPARATE);
+        const combineMode: boolean = (this.transition.mode == TransitionMode.COMBINE);
 
         if (separateMode || combineMode) {
-            var isSource: boolean = combineMode;
+            const isSource: boolean = combineMode;
             mappedFields = this.getMappedFields(isSource);
             //remove indexes from targets in combine mode, from sources in seperate mode
-            for (let mappedField of this.getMappedFields(!isSource)) {
+            for (const mappedField of this.getMappedFields(!isSource)) {
                 mappedField.removeSeparateOrCombineAction();
             }
             //find max seperator index from existing fields
-            var maxIndex: number = 0;
-            for (let mappedField of mappedFields) {
-                var index: string = mappedField.getSeparateOrCombineIndex();
-                var indexAsNumber = (index == null) ? 0 : parseInt(index);
+            let maxIndex = 0;
+            for (const mappedField of mappedFields) {
+                const index: string = mappedField.getSeparateOrCombineIndex();
+                const indexAsNumber = (index == null) ? 0 : parseInt(index, 10);
                 maxIndex = Math.max(maxIndex, indexAsNumber);
             }
 
             maxIndex += 1; //we want our next index to be one larger than previously found indexes
-            for (let mappedField of mappedFields) {
+            for (const mappedField of mappedFields) {
                 mappedField.updateSeparateOrCombineIndex(separateMode, combineMode, maxIndex.toString(), isSource);
                 //see if this field used the new index, if so, increment
-                var index: string = mappedField.getSeparateOrCombineIndex();
+                const index: string = mappedField.getSeparateOrCombineIndex();
                 if (index == maxIndex.toString()) {
                     maxIndex += 1;
                 }
             }
         } else { //not separate mode
-            for (let mappedField of this.getAllMappedFields()) {
+            for (const mappedField of this.getAllMappedFields()) {
                 mappedField.removeSeparateOrCombineAction();
             }
         }
@@ -296,10 +298,10 @@ export class MappingModel {
     public fieldMappings: FieldMappingPair[] = [];
     public currentFieldMapping: FieldMappingPair = null;
     public validationErrors: ErrorInfo[] = [];
-    public brandNewMapping: boolean = true;
+    public brandNewMapping = true;
 
     public constructor() {
-        this.uuid = "mapping." + Math.floor((Math.random() * 1000000) + 1).toString();
+        this.uuid = 'mapping.' + Math.floor((Math.random() * 1000000) + 1).toString();
         this.fieldMappings.push(new FieldMappingPair());
     }
 
@@ -339,7 +341,7 @@ export class MappingModel {
     }
 
     public removeError(identifier: string) {
-        for (var i = 0; i < this.validationErrors.length; i++) {
+        for (let i = 0; i < this.validationErrors.length; i++) {
             if (this.validationErrors[i].identifier == identifier) {
                 this.validationErrors.splice(i, 1);
                 return;
@@ -348,7 +350,7 @@ export class MappingModel {
     }
 
     public getFirstCollectionField(isSource: boolean): Field {
-        for (let f of this.getFields(isSource)) {
+        for (const f of this.getFields(isSource)) {
             if (f.isInCollection()) {
                 return f;
             }
@@ -362,7 +364,7 @@ export class MappingModel {
     }
 
     public isLookupMode(): boolean {
-        for (let f of this.getAllFields()) {
+        for (const f of this.getAllFields()) {
             if (f.enumeration) {
                 return true;
             }
@@ -375,8 +377,8 @@ export class MappingModel {
     }
 
     public getMappedFields(isSource: boolean): MappedField[] {
-        var fields: MappedField[] = [];
-        for (let fieldPair of this.fieldMappings) {
+        let fields: MappedField[] = [];
+        for (const fieldPair of this.fieldMappings) {
             fields = fields.concat(fieldPair.getMappedFields(isSource));
         }
         return fields;
@@ -392,17 +394,17 @@ export class MappingModel {
         }
 
         if (!field.isTerminal()) {
-            return "field is a parent field";
+            return 'field is a parent field';
         }
 
-        var repeatedMode: boolean = this.isCollectionMode();
-        var lookupMode: boolean = this.isLookupMode();
-        var mapMode: boolean = false;
-        var separateMode: boolean = false;
-        var combineMode: boolean = false;
+        const repeatedMode: boolean = this.isCollectionMode();
+        const lookupMode: boolean = this.isLookupMode();
+        let mapMode = false;
+        let separateMode = false;
+        let combineMode = false;
 
         if (!repeatedMode && !lookupMode) {
-            for (let fieldPair of this.fieldMappings) {
+            for (const fieldPair of this.fieldMappings) {
                 mapMode = mapMode || fieldPair.transition.isMapMode();
                 separateMode = separateMode || fieldPair.transition.isSeparateMode();
                 combineMode = combineMode || fieldPair.transition.isCombineMode();
@@ -411,24 +413,24 @@ export class MappingModel {
         if (mapMode || separateMode || combineMode) {
             //repeated fields and enums are not selectable in these modes
             if (field.isInCollection()) {
-                return "Repeated fields are not valid for this mapping";
+                return 'Repeated fields are not valid for this mapping';
             }
             if (field.enumeration) {
-                return "Enumeration fields are not valid for this mapping";
+                return 'Enumeration fields are not valid for this mapping';
             }
 
             //separate mode sources must be string
             if (separateMode && !field.isStringField() && field.isSource()) {
-                return "source fields for this mapping must be type String"
+                return 'source fields for this mapping must be type String';
             }
         } else if (lookupMode) {
             if (!field.enumeration) {
-                return "only Enumeration fields are valid for this mapping";
+                return 'only Enumeration fields are valid for this mapping';
             }
         } else if (repeatedMode) {
             //enumeration fields are not allowed in repeated mappings
             if (field.enumeration) {
-                return "Enumeration fields are not valid for this mapping";
+                return 'Enumeration fields are not valid for this mapping';
             }
 
             //if no fields for this isSource has been selected yet, everything is open to selection
@@ -436,30 +438,30 @@ export class MappingModel {
                 return null;
             }
 
-            var collectionField: Field = this.getFirstCollectionField(field.isSource());
+            const collectionField: Field = this.getFirstCollectionField(field.isSource());
             if (collectionField == null) {
                 //only primitive fields (not in collections) are selectable
                 if (field.isInCollection()) {
-                    var fieldTypeDesc: string = field.isSource ? "source" : "target"
-                    return fieldTypeDesc + " fields cannot be repeated fields for this mapping.";
+                    const fieldTypeDesc: string = field.isSource ? 'source' : 'target';
+                    return fieldTypeDesc + ' fields cannot be repeated fields for this mapping.';
                 }
             } else { //collection field exists in this mapping for isSource
-                var parentCollectionField: Field = collectionField.getCollectionParentField();
+                const parentCollectionField: Field = collectionField.getCollectionParentField();
                 //primitive fields are not selectable when collection field is already selected
                 if (!field.isInCollection()) {
-                    return "field is not selectable, it is not a child of " + parentCollectionField.displayName;
+                    return 'field is not selectable, it is not a child of ' + parentCollectionField.displayName;
                 }
 
                 //children of collections are only selectable if this field is in the same collection
                 if (field.getCollectionParentField() != parentCollectionField) {
-                    return "field is not selectable, it is not a child of " + parentCollectionField.displayName;
+                    return 'field is not selectable, it is not a child of ' + parentCollectionField.displayName;
                 }
             }
         }
         return null;
     }
 
-    public isFieldMapped(field:Field, isSource:boolean): boolean {
+    public isFieldMapped(field: Field, isSource: boolean): boolean {
         return this.getFields(isSource).indexOf(field) != -1;
     }
 
@@ -472,15 +474,15 @@ export class MappingModel {
     }
 
     public getFields(isSource: boolean): Field[] {
-        var fields: Field[] = [];
-        for (let fieldPair of this.fieldMappings) {
+        let fields: Field[] = [];
+        for (const fieldPair of this.fieldMappings) {
             fields = fields.concat(fieldPair.getFields(isSource));
         }
         return fields;
     }
 
     public hasMappedFields(isSource: boolean): boolean {
-        for (let mappedField of this.getMappedFields(isSource)) {
+        for (const mappedField of this.getMappedFields(isSource)) {
             if (mappedField.isMapped()) {
                 return true;
             }
@@ -489,7 +491,7 @@ export class MappingModel {
     }
 
     public hasFullyMappedPair(): boolean {
-        for (let pair of this.fieldMappings) {
+        for (const pair of this.fieldMappings) {
             if (pair.isFullyMapped()) {
                 return true;
             }

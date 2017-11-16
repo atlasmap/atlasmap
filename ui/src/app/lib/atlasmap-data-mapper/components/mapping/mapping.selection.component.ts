@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-import { Component, Input, ViewChildren, ElementRef, QueryList, } from '@angular/core';
+import { Component, Input, ViewChildren, QueryList } from '@angular/core';
 
 import { MappingModel, FieldMappingPair } from '../../models/mapping.model';
 import { ConfigModel } from '../../models/config.model';
@@ -59,44 +59,44 @@ import { ModalWindowComponent } from '../modal.window.component';
             </div>
             <div class="clear"></div>
         </div>
-    `
+    `,
 })
 
 export class MappingSelectionSectionComponent {
     @Input() outputNumber: number;
     @Input() mapping: MappingModel;
     @Input() selectedCallback: Function;
-    @Input() selected: boolean = false;
-    @Input() selectedFieldIsSource: boolean = false;
+    @Input() selected = false;
+    @Input() selectedFieldIsSource = false;
     @Input() parentComponent: Component;
-    @Input() isOddRow: boolean = false;
+    @Input() isOddRow = false;
 
     public getClass(): string {
-        var cssClass = "MappingSelectionSection";
+        let cssClass = 'MappingSelectionSection';
         if (this.selected) {
-            cssClass += " SelectedMappingSelectionSection";
+            cssClass += ' SelectedMappingSelectionSection';
         }
         if (this.isOddRow) {
-            cssClass += " odd";
+            cssClass += ' odd';
         }
         return cssClass;
     }
 
     public getSourceTargetLabelText(isSource: boolean, fieldPair: FieldMappingPair): string {
         if (isSource) {
-            return (fieldPair.sourceFields.length > 0) ? "Sources" : "Source";
+            return (fieldPair.sourceFields.length > 0) ? 'Sources' : 'Source';
         }
-        return (fieldPair.targetFields.length > 0) ? "Targets" : "Target";
+        return (fieldPair.targetFields.length > 0) ? 'Targets' : 'Target';
     }
 
-    public getFormattedOutputPath(path: string, nameOnly:boolean) {
+    public getFormattedOutputPath(path: string, nameOnly: boolean) {
         if (path == null) {
-            return "";
+            return '';
         }
-        path = path.replace(".", "/");
-        var index: number = path.lastIndexOf("/");
-        var fieldName: string = (index == -1) ? path : path.substr(path.lastIndexOf("/") + 1);
-        path = (index == -1) ? "" : path.substr(0, path.lastIndexOf("/") + 1)
+        path = path.replace('.', '/');
+        const index: number = path.lastIndexOf('/');
+        const fieldName: string = (index == -1) ? path : path.substr(path.lastIndexOf('/') + 1);
+        path = (index == -1) ? '' : path.substr(0, path.lastIndexOf('/') + 1);
         return nameOnly ? fieldName : path;
     }
 
@@ -129,7 +129,7 @@ export class MappingSelectionSectionComponent {
                 </mapping-selection-section>
             </div>
         </div>
-    `
+    `,
 })
 
 export class MappingSelectionComponent {
@@ -137,24 +137,25 @@ export class MappingSelectionComponent {
     public mappings: MappingModel[];
     public selectedField: Field = null;
     public cfg: ConfigModel;
-    private selectedMappingComponent: MappingSelectionSectionComponent = null;
 
     @ViewChildren('mappingSection') sectionComponents: QueryList<MappingSelectionSectionComponent>;
 
+    private selectedMappingComponent: MappingSelectionSectionComponent = null;
+
     selectionChanged(c: MappingSelectionSectionComponent) {
-        var self: MappingSelectionComponent = c.parentComponent as MappingSelectionComponent;
-        var oldSelectedItem: MappingSelectionSectionComponent = self.getSelectedMappingComponent();
+        const self: MappingSelectionComponent = c.parentComponent as MappingSelectionComponent;
+        const oldSelectedItem: MappingSelectionSectionComponent = self.getSelectedMappingComponent();
         oldSelectedItem.selected = false;
         c.selected = true;
         self.selectedMappingComponent = c;
     }
 
-    public getFormattedOutputPath(path: string, nameOnly:boolean) {
-        path = path.replace(".", "/");
-        var index: number = path.lastIndexOf("/");
-        var fieldName: string = (index == -1) ? path : path.substr(path.lastIndexOf("/") + 1);
-        path = (index == -1) ? "" : path.substr(0, path.lastIndexOf("/") + 1)
-        return nameOnly ? fieldName: path;
+    public getFormattedOutputPath(path: string, nameOnly: boolean) {
+        path = path.replace('.', '/');
+        const index: number = path.lastIndexOf('/');
+        const fieldName: string = (index == -1) ? path : path.substr(path.lastIndexOf('/') + 1);
+        path = (index == -1) ? '' : path.substr(0, path.lastIndexOf('/') + 1);
+        return nameOnly ? fieldName : path;
     }
 
     public addMapping() {
@@ -162,9 +163,13 @@ export class MappingSelectionComponent {
         this.modalWindow.close();
     }
 
+    public getSelectedMapping(): MappingModel {
+        return this.getSelectedMappingComponent().mapping;
+    }
+
     private getSelectedMappingComponent(): MappingSelectionSectionComponent {
         if (this.selectedMappingComponent == null) {
-            for (let c of this.sectionComponents.toArray()) {
+            for (const c of this.sectionComponents.toArray()) {
                 if (c.selected) {
                     this.selectedMappingComponent = c;
                     break;
@@ -174,7 +179,4 @@ export class MappingSelectionComponent {
         return this.selectedMappingComponent;
     }
 
-    public getSelectedMapping(): MappingModel {
-        return this.getSelectedMappingComponent().mapping;
-    }
 }

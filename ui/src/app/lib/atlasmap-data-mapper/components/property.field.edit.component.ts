@@ -18,7 +18,6 @@ import { Component } from '@angular/core';
 
 import { Field } from '../models/field.model';
 import { ModalWindowValidator } from './modal.window.component';
-import { ConfigModel } from '../models/config.model';
 
 import { DataMapperUtil } from '../common/data.mapper.util';
 
@@ -62,12 +61,12 @@ import { DataMapperUtil } from '../common/data.mapper.util';
                 </select>
             </div>
         </div>
-    `
+    `,
 })
 
 export class PropertyFieldEditComponent implements ModalWindowValidator {
     public field: Field = new Field();
-    public valueType: any = "STRING";
+    public valueType: any = 'STRING';
 
     public initialize(field: Field): void {
         if (field != null) {
@@ -77,7 +76,7 @@ export class PropertyFieldEditComponent implements ModalWindowValidator {
     }
 
     public valueTypeSelectionChanged(event: any): void {
-        this.valueType = event.target.selectedOptions.item(0).attributes.getNamedItem("value").value;
+        this.valueType = event.target.selectedOptions.item(0).attributes.getNamedItem('value').value;
     }
 
     public getField(): Field {
@@ -89,6 +88,6 @@ export class PropertyFieldEditComponent implements ModalWindowValidator {
     }
 
     isDataValid(): boolean {
-        return DataMapperUtil.isRequiredFieldValid(this.field.name, "Name");
+        return DataMapperUtil.isRequiredFieldValid(this.field.name, 'Name');
     }
 }

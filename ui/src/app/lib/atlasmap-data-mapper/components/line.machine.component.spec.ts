@@ -9,7 +9,7 @@ describe('LineMachineComponent', () => {
     TestBed.configureTestingModule({
       providers: [
         ChangeDetectorRef,
-        LineMachineComponent
+        LineMachineComponent,
       ],
     });
   });

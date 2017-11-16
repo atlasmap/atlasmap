@@ -19,7 +19,7 @@ import { FieldMappingPair } from './mapping.model';
 
 export class FieldActionArgument {
     public name: string = null;
-    public type: string = "STRING";
+    public type = 'STRING';
     public serviceObject: any = new Object();
 }
 
@@ -29,24 +29,25 @@ export class FieldActionArgumentValue {
 }
 
 export class FieldAction {
-    public isSeparateOrCombineMode: boolean = false;
-    public name: string;
-    public config: FieldActionConfig = null;
-    public argumentValues: FieldActionArgumentValue[] = [];
     public static combineActionConfig: FieldActionConfig = null;
     public static separateActionConfig: FieldActionConfig = null;
 
+    public isSeparateOrCombineMode = false;
+    public name: string;
+    public config: FieldActionConfig = null;
+    public argumentValues: FieldActionArgumentValue[] = [];
+
     public getArgumentValue(argumentName: string): FieldActionArgumentValue {
-        for (let argValue of this.argumentValues) {
+        for (const argValue of this.argumentValues) {
             if (argValue.name == argumentName) {
                 return argValue;
             }
         }
-        var argValue: FieldActionArgumentValue = new FieldActionArgumentValue();
-        argValue.name = argumentName;
-        argValue.value = "0";
-        this.argumentValues.push(argValue);
-        return argValue;
+        const newArgValue: FieldActionArgumentValue = new FieldActionArgumentValue();
+        newArgValue.name = argumentName;
+        newArgValue.value = '0';
+        this.argumentValues.push(newArgValue);
+        return newArgValue;
     }
 
     public setArgumentValue(argumentName: string, value: string): void {
@@ -55,25 +56,25 @@ export class FieldAction {
 
     public static createSeparateCombineFieldAction(separateMode: boolean, value: string) {
         if (FieldAction.combineActionConfig == null) {
-            var argument: FieldActionArgument = new FieldActionArgument();
-            argument.name = "Index";
-            argument.type = "NUMBER";
+            const argument: FieldActionArgument = new FieldActionArgument();
+            argument.name = 'Index';
+            argument.type = 'NUMBER';
             FieldAction.combineActionConfig = new FieldActionConfig();
-            FieldAction.combineActionConfig.name = "Combine";
+            FieldAction.combineActionConfig.name = 'Combine';
             FieldAction.combineActionConfig.arguments.push(argument);
             FieldAction.separateActionConfig = new FieldActionConfig();
-            FieldAction.separateActionConfig.name = "Separate";
+            FieldAction.separateActionConfig.name = 'Separate';
             FieldAction.separateActionConfig.arguments.push(argument);
         }
 
-        var fieldAction: FieldAction = new FieldAction();
+        const fieldAction: FieldAction = new FieldAction();
         FieldAction.combineActionConfig.populateFieldAction(fieldAction);
         if (separateMode) {
             FieldAction.separateActionConfig.populateFieldAction(fieldAction);
         }
         fieldAction.isSeparateOrCombineMode = true;
 
-        fieldAction.setArgumentValue("Index", (value == null) ? "1" : value);
+        fieldAction.setArgumentValue('Index', (value == null) ? '1' : value);
         return fieldAction;
     }
 }
@@ -82,31 +83,31 @@ export class FieldActionConfig {
     public name: string;
     public arguments: FieldActionArgument[] = [];
     public method: string;
-    public sourceType: string = "STRING";
-    public targetType: string = "STRING";
+    public sourceType = 'STRING';
+    public targetType = 'STRING';
     public serviceObject: any = new Object();
 
     public appliesToField(field: Field, fieldPair: FieldMappingPair): boolean {
-        var type: string = (field == null) ? null : field.type;
+        const type: string = (field == null) ? null : field.type;
         if (type == null) {
             return false;
         }
 
-        if (this.sourceType == "STRING" && fieldPair.transition.isMapMode()
+        if (this.sourceType == 'STRING' && fieldPair.transition.isMapMode()
             && fieldPair.hasMappedField(true)) {
-            var sourceField: Field = fieldPair.getFields(true)[0];
-            var sourceFieldIsString: boolean = (["STRING", "CHAR"].indexOf(sourceField.type) != -1);
+            const sourceField: Field = fieldPair.getFields(true)[0];
+            const sourceFieldIsString: boolean = (['STRING', 'CHAR'].indexOf(sourceField.type) != -1);
             if (!sourceFieldIsString) {
                 return false;
             }
         }
 
-        if (this.targetType == "STRING") {
-            var fieldTypeIsString: boolean = (["STRING", "CHAR"].indexOf(type) != -1);
+        if (this.targetType == 'STRING') {
+            const fieldTypeIsString: boolean = (['STRING', 'CHAR'].indexOf(type) != -1);
             return fieldTypeIsString;
         }
 
-        var typeIsNumber: boolean = (["LONG", "INTEGER", "FLOAT", "DOUBLE"].indexOf(type) != -1);
+        const typeIsNumber: boolean = (['LONG', 'INTEGER', 'FLOAT', 'DOUBLE'].indexOf(type) != -1);
         return typeIsNumber;
     }
 
@@ -114,13 +115,13 @@ export class FieldActionConfig {
         action.name = this.name;
         action.config = this;
         action.argumentValues = [];
-        for (let arg of this.arguments) {
-            action.setArgumentValue(arg.name, "0");
+        for (const arg of this.arguments) {
+            action.setArgumentValue(arg.name, '0');
         }
     }
 
     public getArgumentForName(name: string): FieldActionArgument {
-        for (let argument of this.arguments) {
+        for (const argument of this.arguments) {
             if (argument.name == name) {
                 return argument;
             }
@@ -145,21 +146,21 @@ export class TransitionDelimiterModel {
 }
 
 export class TransitionModel {
+    public static delimiterModels: TransitionDelimiterModel[] = [];
+    public static actionConfigs: FieldActionConfig[] = [];
+
     public mode: TransitionMode = TransitionMode.MAP;
     public delimiter: TransitionDelimiter = TransitionDelimiter.SPACE;
     public lookupTableName: string = null;
 
-    public static delimiterModels: TransitionDelimiterModel[] = [];
-    public static actionConfigs: FieldActionConfig[] = [];
-
     public constructor() {
         if (TransitionModel.delimiterModels.length == 0) {
-            var models: TransitionDelimiterModel[] = [];
-            models.push(new TransitionDelimiterModel(TransitionDelimiter.NONE, null, "[None]"));
-            models.push(new TransitionDelimiterModel(TransitionDelimiter.COLON, "Colon", "Colon"));
-            models.push(new TransitionDelimiterModel(TransitionDelimiter.COMMA, "Comma", "Comma"));
-            models.push(new TransitionDelimiterModel(TransitionDelimiter.MULTISPACE, "MultiSpace", "Multispace"));
-            models.push(new TransitionDelimiterModel(TransitionDelimiter.SPACE, "Space", "Space"));
+            const models: TransitionDelimiterModel[] = [];
+            models.push(new TransitionDelimiterModel(TransitionDelimiter.NONE, null, '[None]'));
+            models.push(new TransitionDelimiterModel(TransitionDelimiter.COLON, 'Colon', 'Colon'));
+            models.push(new TransitionDelimiterModel(TransitionDelimiter.COMMA, 'Comma', 'Comma'));
+            models.push(new TransitionDelimiterModel(TransitionDelimiter.MULTISPACE, 'MultiSpace', 'Multispace'));
+            models.push(new TransitionDelimiterModel(TransitionDelimiter.SPACE, 'Space', 'Space'));
             TransitionModel.delimiterModels = models;
         }
     }
@@ -168,7 +169,7 @@ export class TransitionModel {
         if (actionName == null) {
             return null;
         }
-        for (let actionConfig of TransitionModel.actionConfigs) {
+        for (const actionConfig of TransitionModel.actionConfigs) {
             if (actionName == actionConfig.name) {
                 return actionConfig;
             }
@@ -176,8 +177,8 @@ export class TransitionModel {
         return null;
     }
 
-    public static getTransitionDelimiterPrettyName(delimiter: TransitionDelimiter) : string {
-        for (let m of TransitionModel.delimiterModels) {
+    public static getTransitionDelimiterPrettyName(delimiter: TransitionDelimiter): string {
+        for (const m of TransitionModel.delimiterModels) {
             if (m.delimiter == delimiter) {
                 return m.prettyName;
             }
@@ -186,7 +187,7 @@ export class TransitionModel {
     }
 
     public getSerializedDelimeter(): string {
-        for (let m of TransitionModel.delimiterModels) {
+        for (const m of TransitionModel.delimiterModels) {
             if (m.delimiter == this.delimiter) {
                 return m.serializedValue;
             }
@@ -195,7 +196,7 @@ export class TransitionModel {
     }
 
     public setSerializedDelimeterFromSerializedValue(value: string): void {
-        for (let m of TransitionModel.delimiterModels) {
+        for (const m of TransitionModel.delimiterModels) {
             if (m.serializedValue == value) {
                 this.delimiter = m.delimiter;
             }
@@ -203,15 +204,15 @@ export class TransitionModel {
     }
 
     public getPrettyName() {
-        var delimiterDesc: string = TransitionModel.getTransitionDelimiterPrettyName(this.delimiter);
+        const delimiterDesc: string = TransitionModel.getTransitionDelimiterPrettyName(this.delimiter);
         if (this.mode == TransitionMode.SEPARATE) {
-            return "Separate (" + delimiterDesc + ")";
+            return 'Separate (' + delimiterDesc + ')';
         } else if (this.mode == TransitionMode.COMBINE) {
-            return "Combine (" + delimiterDesc + ")";
+            return 'Combine (' + delimiterDesc + ')';
         } else if (this.mode == TransitionMode.ENUM) {
-            return "Enum (table: " + this.lookupTableName + ")";
+            return 'Enum (table: ' + this.lookupTableName + ')';
         }
-        return "Map";
+        return 'Map';
     }
 
     public isSeparateMode(): boolean {

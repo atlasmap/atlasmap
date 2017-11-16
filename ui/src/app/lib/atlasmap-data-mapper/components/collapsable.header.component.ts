@@ -22,18 +22,18 @@ import { Component, Input } from '@angular/core';
         <div class="CollapsableCardHeader" (click)="handleMouseClick($event)">
             <h2 class="card-pf-title"><i [attr.class]="getCSSClass()"></i>{{ title }}</h2>
         </div>
-    `
+    `,
 })
 
 export class CollapsableHeaderComponent {
     @Input() title: string;
-    @Input() collapsed: boolean = false;
+    @Input() collapsed = false;
 
     public handleMouseClick(event: MouseEvent): void {
         this.collapsed = !this.collapsed;
     }
 
     public getCSSClass() {
-        return "arrow fa fa-angle-" + (this.collapsed ? "right" : "down");
+        return 'arrow fa fa-angle-' + (this.collapsed ? 'right' : 'down');
     }
 }

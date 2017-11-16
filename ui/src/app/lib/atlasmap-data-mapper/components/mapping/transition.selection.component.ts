@@ -16,10 +16,9 @@
 
 import { Component, Input } from '@angular/core';
 
-import { TransitionModel, TransitionMode, TransitionDelimiter } from '../../models/transition.model';
+import { TransitionMode, TransitionDelimiter } from '../../models/transition.model';
 import { ConfigModel } from '../../models/config.model';
-import { Field, EnumValue } from '../../models/field.model';
-import { LookupTable, LookupTableEntry } from '../../models/lookup.table.model';
+import { LookupTable } from '../../models/lookup.table.model';
 import { MappingModel, FieldMappingPair } from '../../models/mapping.model';
 
 import { ModalWindowComponent } from '../modal.window.component';
@@ -56,7 +55,7 @@ import { LookupTableComponent } from './lookup.table.component';
                 </div>
             </div>
         </div>
-    `
+    `,
 })
 
 export class TransitionSelectionComponent {
@@ -67,6 +66,17 @@ export class TransitionSelectionComponent {
     private modes: any = TransitionMode;
     private delimeters: any = TransitionDelimiter;
 
+    selectionChanged(event: any): void {
+        const selectorIsMode: boolean = 'mode' == event.target.attributes.getNamedItem('selector').value;
+        const selectedValue: any = event.target.selectedOptions.item(0).attributes.getNamedItem('value').value;
+        if (selectorIsMode) {
+            this.fieldPair.transition.mode = parseInt(selectedValue, 10);
+        } else {
+            this.fieldPair.transition.delimiter = parseInt(selectedValue, 10);
+        }
+        this.cfg.mappingService.updateMappedField(this.fieldPair);
+    }
+
     private modeIsEnum(): boolean {
         return this.fieldPair.transition.isEnumerationMode();
     }
@@ -76,44 +86,33 @@ export class TransitionSelectionComponent {
     }
 
     private getMappedValueCount(): number {
-        var tableName: string = this.fieldPair.transition.lookupTableName;
+        const tableName: string = this.fieldPair.transition.lookupTableName;
         if (tableName == null) {
             return 0;
         }
-        var table: LookupTable = this.cfg.mappings.getTableByName(tableName);
+        const table: LookupTable = this.cfg.mappings.getTableByName(tableName);
         if (!table || !table.entries) {
             return 0;
         }
         return table.entries.length;
     }
 
-    selectionChanged(event: any): void {
-        var selectorIsMode: boolean = "mode" == event.target.attributes.getNamedItem("selector").value
-        var selectedValue: any = event.target.selectedOptions.item(0).attributes.getNamedItem("value").value;
-        if (selectorIsMode) {
-            this.fieldPair.transition.mode = parseInt(selectedValue);
-        } else {
-            this.fieldPair.transition.delimiter = parseInt(selectedValue);
-        }
-        this.cfg.mappingService.updateMappedField(this.fieldPair);
-    }
-
     private showLookupTable(): void {
-        var mapping: MappingModel = this.cfg.mappings.activeMapping;
+        const mapping: MappingModel = this.cfg.mappings.activeMapping;
         if (!mapping.hasMappedFields(true) || !mapping.hasMappedFields(false)) {
-            this.cfg.errorService.warn("Please select source and target fields before mapping values.", null);
+            this.cfg.errorService.warn('Please select source and target fields before mapping values.', null);
             return;
         }
         this.modalWindow.reset();
-        this.modalWindow.confirmButtonText = "Finish";
-        this.modalWindow.headerText = "Map Enumeration Values";
+        this.modalWindow.confirmButtonText = 'Finish';
+        this.modalWindow.headerText = 'Map Enumeration Values';
         this.modalWindow.nestedComponentInitializedCallback = (mw: ModalWindowComponent) => {
-            var c: LookupTableComponent = mw.nestedComponent as LookupTableComponent;
+            const c: LookupTableComponent = mw.nestedComponent as LookupTableComponent;
             c.initialize(this.cfg, this.fieldPair);
         };
         this.modalWindow.nestedComponentType = LookupTableComponent;
         this.modalWindow.okButtonHandler = (mw: ModalWindowComponent) => {
-            var c: LookupTableComponent = mw.nestedComponent as LookupTableComponent;
+            const c: LookupTableComponent = mw.nestedComponent as LookupTableComponent;
             c.saveTable();
             this.cfg.mappingService.saveCurrentMapping();
         };

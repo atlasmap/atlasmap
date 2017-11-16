@@ -18,9 +18,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpModule } from '@angular/http';
 import { FormsModule } from '@angular/forms';
-import { TypeaheadModule } from 'ngx-bootstrap';
-import { TooltipModule } from 'ngx-bootstrap';
-import { BsDropdownModule } from 'ngx-bootstrap';
+import { BsDropdownModule, TooltipModule, TypeaheadModule } from 'ngx-bootstrap';
 
 import { DocumentManagementService } from './services/document.management.service';
 import { MappingManagementService } from './services/mapping.management.service';
@@ -44,8 +42,9 @@ import { FieldEditComponent } from './components/field.edit.component';
 import { NamespaceEditComponent } from './components/namespace.edit.component';
 import { MappingListComponent, MappingListFieldComponent } from './components/mapping/mapping.list.component';
 import { NamespaceListComponent } from './components/namespace.list.component';
-
-import { MappingDetailComponent, CollectionMappingComponent, SimpleMappingComponent, MappingPairDetailComponent } from './components/mapping/mapping.detail.component';
+import {
+    MappingDetailComponent, CollectionMappingComponent, SimpleMappingComponent, MappingPairDetailComponent
+} from './components/mapping/mapping.detail.component';
 import { MappingFieldDetailComponent } from './components/mapping/mapping.field.detail.component';
 import { MappingFieldActionComponent } from './components/mapping/mapping.field.action.component';
 import { MappingSelectionComponent, MappingSelectionSectionComponent } from './components/mapping/mapping.selection.component';
@@ -72,7 +71,7 @@ export { DataMapperAppComponent } from './components/data.mapper.app.component';
         FormsModule,
         TypeaheadModule.forRoot(),
         TooltipModule.forRoot(),
-        BsDropdownModule.forRoot()
+        BsDropdownModule.forRoot(),
     ],
     declarations: [
         DataMapperAppComponent,
@@ -102,7 +101,7 @@ export { DataMapperAppComponent } from './components/data.mapper.app.component';
         MappingListComponent,
         MappingListFieldComponent,
         NamespaceListComponent,
-        TemplateEditComponent
+        TemplateEditComponent,
     ],
     exports: [
         DataMapperAppExampleHostComponent,
@@ -113,7 +112,7 @@ export { DataMapperAppComponent } from './components/data.mapper.app.component';
         DocumentManagementService,
         MappingManagementService,
         ErrorHandlerService,
-        InitializationService
+        InitializationService,
     ],
     entryComponents: [
         MappingSelectionComponent,
@@ -123,8 +122,8 @@ export { DataMapperAppComponent } from './components/data.mapper.app.component';
         NamespaceEditComponent,
         PropertyFieldEditComponent,
         ConstantFieldEditComponent,
-        TemplateEditComponent
+        TemplateEditComponent,
     ],
-    bootstrap: [ DataMapperAppExampleHostComponent ]
+    bootstrap: [ DataMapperAppExampleHostComponent ],
 })
 export class DataMapperModule { }

@@ -1,7 +1,7 @@
 /* tslint:disable:no-unused-variable */
 
 import { TestBed, async, inject } from '@angular/core/testing';
-import { NamespaceModel, DocumentType, DocumentInitializationConfig, DocumentDefinition,  } from './document.definition.model';
+import { NamespaceModel, DocumentType, DocumentInitializationConfig, DocumentDefinition  } from './document.definition.model';
 
 describe('DocumentDefinitionModel', () => {
   beforeEach(() => {
@@ -10,7 +10,7 @@ describe('DocumentDefinitionModel', () => {
         NamespaceModel,
         DocumentType,
         DocumentInitializationConfig,
-        DocumentDefinition
+        DocumentDefinition,
      ],
     });
   });
@@ -18,7 +18,7 @@ describe('DocumentDefinitionModel', () => {
   it(
     'should ...',
     inject([NamespaceModel, DocumentType, DocumentInitializationConfig, DocumentDefinition],
-       (ns : NamespaceModel, docType : DocumentType, initCfg : DocumentInitializationConfig, doc : DocumentDefinition) => {
+       (ns: NamespaceModel, docType: DocumentType, initCfg: DocumentInitializationConfig, doc: DocumentDefinition) => {
       expect(ns).toBeTruthy();
       expect(docType).toBeTruthy();
       expect(initCfg).toBeTruthy();

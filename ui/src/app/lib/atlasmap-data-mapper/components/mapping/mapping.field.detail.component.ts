@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-import { Component, Input, TemplateRef, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 
 import { ConfigModel } from '../../models/config.model';
@@ -56,7 +56,7 @@ import { MappingModel, FieldMappingPair, MappedField } from '../../models/mappin
                     typeaheadOptionField="displayName" [typeaheadItemTemplate]="typeaheadTemplate">
             </div>
         </div>
-    `
+    `,
 })
 
 export class MappingFieldDetailComponent {
@@ -76,7 +76,7 @@ export class MappingFieldDetailComponent {
     public getFieldPath(): string {
         if (this.mappedField == null || this.mappedField.field == null
             || (this.mappedField.field == DocumentDefinition.getNoneField())) {
-            return "[None]";
+            return '[None]';
         }
         return this.mappedField.field.path;
     }
@@ -96,28 +96,28 @@ export class MappingFieldDetailComponent {
 
     public getParentObjectName() {
         if (this.mappedField == null || this.mappedField.field == null || this.mappedField.field.docDef == null) {
-            return "";
+            return '';
         }
         return this.mappedField.field.docDef.getName(true);
     }
 
     public selectionChanged(event: any): void {
-        this.mappedField.field = event.item["field"];
+        this.mappedField.field = event.item['field'];
         this.cfg.mappingService.updateMappedField(this.fieldPair);
     }
 
     public executeSearch(filter: string): any[] {
-        var formattedFields: any[] = [];
-        var fields: Field[] = [DocumentDefinition.getNoneField()];
-        for (let docDef of this.cfg.getDocs(this.isSource)) {
+        const formattedFields: any[] = [];
+        let fields: Field[] = [DocumentDefinition.getNoneField()];
+        for (const docDef of this.cfg.getDocs(this.isSource)) {
             fields = fields.concat(docDef.getTerminalFields());
         }
-        var activeMapping: MappingModel = this.cfg.mappings.activeMapping;
-        for (let field of fields) {
-            var displayName = (field == null) ? "" : field.getFieldLabel(true);
-            var formattedField: any = { "field": field, "displayName": displayName };
-            if (filter == null || filter == ""
-                || formattedField["displayName"].toLowerCase().indexOf(filter.toLowerCase()) != -1) {
+        const activeMapping: MappingModel = this.cfg.mappings.activeMapping;
+        for (const field of fields) {
+            const displayName = (field == null) ? '' : field.getFieldLabel(true);
+            const formattedField: any = { 'field': field, 'displayName': displayName };
+            if (filter == null || filter == ''
+                || formattedField['displayName'].toLowerCase().indexOf(filter.toLowerCase()) != -1) {
                 if (!activeMapping.isFieldSelectable(field)) {
                     continue;
                 }

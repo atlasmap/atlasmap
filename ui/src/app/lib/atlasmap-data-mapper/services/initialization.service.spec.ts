@@ -20,7 +20,7 @@ describe('InitializationService', () => {
         { provide: RequestOptions, useClass: BaseRequestOptions },
         {
           provide: Http,
-          useFactory: (backend : MockBackend, options : RequestOptions) => {
+          useFactory: (backend: MockBackend, options: RequestOptions) => {
             return new Http(backend, options);
           },
           deps: [MockBackend, RequestOptions],

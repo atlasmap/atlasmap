@@ -16,16 +16,16 @@
 
 export class LookupTableEntry {
     sourceValue: string;
-    sourceType: string = "STRING";
+    sourceType = 'STRING';
     targetValue: string;
-    targetType: string = "STRING";
+    targetType = 'STRING';
 
     public toJSON(): any {
         return {
-            "sourceValue": this.sourceValue,
-            "sourceType": this.sourceType,
-            "targetValue": this.targetValue,
-            "targetType": this.targetType,
+            'sourceValue': this.sourceValue,
+            'sourceType': this.sourceType,
+            'targetValue': this.targetValue,
+            'targetType': this.targetType,
         };
     }
 
@@ -44,21 +44,21 @@ export class LookupTable {
     targetIdentifier: string;
 
     constructor() {
-        this.name = (new Date().getTime() + "-" + Math.floor(Math.random()*1000000).toString());
+        this.name = (new Date().getTime() + '-' + Math.floor(Math.random() * 1000000).toString());
     }
 
     public getInputOutputKey(): string {
-        return this.sourceIdentifier + ":" + this.targetIdentifier;
+        return this.sourceIdentifier + ':' + this.targetIdentifier;
     }
 
     public getEntryForSource(sourceValue: string, autocreate: boolean): LookupTableEntry {
-        for (let entry of this.entries) {
+        for (const entry of this.entries) {
             if (entry.sourceValue == sourceValue) {
                 return entry;
             }
         }
         if (autocreate) {
-            var entry: LookupTableEntry = new LookupTableEntry();
+            const entry: LookupTableEntry = new LookupTableEntry();
             entry.sourceValue = sourceValue;
             this.entries.push(entry);
             return entry;
@@ -67,12 +67,12 @@ export class LookupTable {
     }
 
     public toString() {
-        var result: string = "Lookup Table, name: " + this.name + ", entries: " + this.entries.length;
-        result += "\n\sourceIdentifier: " + this.sourceIdentifier;
-        result += "\n\targetIdentifier: " + this.targetIdentifier;
-        var counter: number = 0;
-        for (let entry of this.entries) {
-            result += "\n\tEntry #" + counter + ": " + entry.sourceValue + " => " + entry.targetValue;
+        let result: string = 'Lookup Table, name: ' + this.name + ', entries: ' + this.entries.length;
+        result += '\n\sourceIdentifier: ' + this.sourceIdentifier;
+        result += '\n\targetIdentifier: ' + this.targetIdentifier;
+        let counter = 0;
+        for (const entry of this.entries) {
+            result += '\n\tEntry #' + counter + ': ' + entry.sourceValue + ' => ' + entry.targetValue;
             counter += 1;
         }
         return result;

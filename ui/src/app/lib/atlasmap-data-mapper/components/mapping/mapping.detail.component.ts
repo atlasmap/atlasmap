@@ -14,26 +14,15 @@
     limitations under the License.
 */
 
-import { Component, Input, ViewChildren, Injectable, QueryList, ViewChild, OnInit } from '@angular/core';
+import { Component, Input, ViewChild, OnInit } from '@angular/core';
 
 import { ConfigModel } from '../../models/config.model';
 import { Field } from '../../models/field.model';
 import { MappingModel, FieldMappingPair, MappedField } from '../../models/mapping.model';
-import { TransitionModel, TransitionMode, TransitionDelimiter } from '../../models/transition.model';
 import { DocumentDefinition } from '../../models/document.definition.model';
-import { ErrorInfo } from '../../models/error.model';
-
-import { MappingManagementService } from '../../services/mapping.management.service';
-import { DocumentManagementService } from '../../services/document.management.service';
-
-import { DataMapperAppComponent } from '../data.mapper.app.component';
 
 import { ModalWindowComponent } from '../modal.window.component';
 import { CollapsableHeaderComponent } from '../collapsable.header.component';
-
-import { MappingFieldDetailComponent } from './mapping.field.detail.component';
-import { MappingFieldActionComponent } from './mapping.field.action.component';
-import { TransitionSelectionComponent } from './transition.selection.component';
 import { MappingSelectionComponent } from './mapping.selection.component';
 
 @Component({
@@ -49,7 +38,8 @@ import { MappingSelectionComponent } from './mapping.selection.component';
                 </div>
                 <div class="clear"></div>
 
-                <mapping-field-detail [fieldPair]="fieldPair" [cfg]="cfg" [isSource]="isSource" [mappedField]="mappedField"></mapping-field-detail>
+                <mapping-field-detail [fieldPair]="fieldPair" [cfg]="cfg" [isSource]="isSource"
+                    [mappedField]="mappedField"></mapping-field-detail>
                 <mapping-field-action [mappedField]="mappedField" [cfg]="cfg" [isSource]="isSource"
                     [fieldPair]="fieldPair"></mapping-field-action>
             </div>
@@ -58,12 +48,12 @@ import { MappingSelectionComponent } from './mapping.selection.component';
                 <a (click)="addClicked()" class="small-primary">{{ getAddButtonLabel() }}</a>
             </div>
         </div>
-    `
+    `,
 })
 
 export class SimpleMappingComponent {
     @Input() cfg: ConfigModel;
-    @Input() isSource: boolean = false;
+    @Input() isSource = false;
     @Input() fieldPair: FieldMappingPair;
 
     public isAddButtonVisible(): boolean {
@@ -76,11 +66,11 @@ export class SimpleMappingComponent {
     }
 
     public getTopFieldTypeLabel(): string {
-        return this.isSource ? "Source" : "Target";
+        return this.isSource ? 'Source' : 'Target';
     }
 
     public getAddButtonLabel(): string {
-        return this.isSource ? "Add Source" : "Add Target"
+        return this.isSource ? 'Add Source' : 'Add Target';
     }
 
     public addClicked(): void {
@@ -150,26 +140,26 @@ export class SimpleMappingComponent {
                 <div class="clear"></div>
             </div>
         </div>
-    `
+    `,
 })
 
 export class CollectionMappingComponent {
     @Input() cfg: ConfigModel;
     public fieldPairForEditing: FieldMappingPair = null;
-    private animateLeft: boolean = false;
-    private animateRight: boolean = false;
+    private animateLeft = false;
+    private animateRight = false;
 
     public getAnimationCSSClass(): string {
         if (this.animateLeft) {
-            return "dm-swipe-left collectionSectionLeft";
+            return 'dm-swipe-left collectionSectionLeft';
         } else if (this.animateRight) {
-            return "dm-swipe-right";
+            return 'dm-swipe-right';
         }
-        return "";
+        return '';
     }
 
     public getFields(fieldPair: FieldMappingPair, isSource: boolean): Field[] {
-        var fields: Field[] = fieldPair.getFields(isSource);
+        const fields: Field[] = fieldPair.getFields(isSource);
         return (fields.length > 0) ? fields : [DocumentDefinition.getNoneField()];
     }
 
@@ -209,7 +199,7 @@ export class CollectionMappingComponent {
             <simple-mapping [cfg]="cfg" [isSource]="false" *ngIf="!targetsHeader.collapsed"
                 [fieldPair]="fieldPair"></simple-mapping>
         </div>
-    `
+    `,
 })
 
 export class MappingPairDetailComponent {
@@ -262,7 +252,7 @@ export class MappingPairDetailComponent {
                 </div>
             </div>
         </div>
-    `
+    `,
 })
 
 export class MappingDetailComponent implements OnInit {
@@ -275,22 +265,22 @@ export class MappingDetailComponent implements OnInit {
         });
     }
 
-    private getTitle(): string {
-        if (this.cfg.mappings.activeMapping.isLookupMode()) {
-            return "Lookup Mapping";
-        }
-        return this.isMappingCollection() ? "Repeating Mapping" : "Mapping Details";
-    }
-
     public isMappingCollection(): boolean {
         return this.cfg.mappings.activeMapping.isCollectionMode();
     }
 
+    private getTitle(): string {
+        if (this.cfg.mappings.activeMapping.isLookupMode()) {
+            return 'Lookup Mapping';
+        }
+        return this.isMappingCollection() ? 'Repeating Mapping' : 'Mapping Details';
+    }
+
     private removeMapping(event: MouseEvent): void {
         this.modalWindow.reset();
-        this.modalWindow.confirmButtonText = "Remove";
-        this.modalWindow.headerText = "Remove Mapping?";
-        this.modalWindow.message = "Are you sure you want to remove the current mapping?";
+        this.modalWindow.confirmButtonText = 'Remove';
+        this.modalWindow.headerText = 'Remove Mapping?';
+        this.modalWindow.message = 'Are you sure you want to remove the current mapping?';
         this.modalWindow.okButtonHandler = (mw: ModalWindowComponent) => {
             this.cfg.mappingService.removeMapping(this.cfg.mappings.activeMapping);
             this.cfg.showMappingDetailTray = false;
@@ -298,14 +288,14 @@ export class MappingDetailComponent implements OnInit {
         this.modalWindow.show();
     }
 
-    private selectMapping(field:Field): void {
-        var mappingsForField: MappingModel[] = this.cfg.mappings.findMappingsForField(field);
-        var self: MappingDetailComponent = this;
+    private selectMapping(field: Field): void {
+        const mappingsForField: MappingModel[] = this.cfg.mappings.findMappingsForField(field);
+        const self: MappingDetailComponent = this;
         this.modalWindow.reset();
-        this.modalWindow.confirmButtonText = "Select";
-        this.modalWindow.headerText = "Select Mapping";
+        this.modalWindow.confirmButtonText = 'Select';
+        this.modalWindow.headerText = 'Select Mapping';
         this.modalWindow.nestedComponentInitializedCallback = (mw: ModalWindowComponent) => {
-            var c: MappingSelectionComponent = mw.nestedComponent as MappingSelectionComponent;
+            const c: MappingSelectionComponent = mw.nestedComponent as MappingSelectionComponent;
             c.selectedField = field;
             c.cfg = self.cfg;
             c.mappings = mappingsForField;
@@ -313,8 +303,8 @@ export class MappingDetailComponent implements OnInit {
         };
         this.modalWindow.nestedComponentType = MappingSelectionComponent;
         this.modalWindow.okButtonHandler = (mw: ModalWindowComponent) => {
-            var c: MappingSelectionComponent = mw.nestedComponent as MappingSelectionComponent;
-            var mapping: MappingModel = c.getSelectedMapping();
+            const c: MappingSelectionComponent = mw.nestedComponent as MappingSelectionComponent;
+            const mapping: MappingModel = c.getSelectedMapping();
             self.cfg.mappingService.selectMapping(mapping);
         };
         this.modalWindow.cancelButtonHandler = (mw: ModalWindowComponent) => {

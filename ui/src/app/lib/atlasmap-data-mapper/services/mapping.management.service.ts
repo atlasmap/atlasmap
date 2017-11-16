@@ -16,7 +16,7 @@
 
 import { Injectable } from '@angular/core';
 
-import { Headers, Http, RequestOptions, Response, HttpModule } from '@angular/http';
+import { Headers, Http, Response } from '@angular/http';
 
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
@@ -28,15 +28,11 @@ import { ConfigModel } from '../models/config.model';
 import { Field } from '../models/field.model';
 import { DocumentDefinition } from '../models/document.definition.model';
 import { MappingModel, FieldMappingPair, MappedField } from '../models/mapping.model';
-import { TransitionModel, TransitionMode, TransitionDelimiter } from '../models/transition.model';
 import { FieldActionConfig, FieldActionArgument } from '../models/transition.model';
 import { MappingDefinition } from '../models/mapping.definition.model';
-import { LookupTable } from '../models/lookup.table.model';
 import { ErrorInfo, ErrorLevel } from '../models/error.model';
 
 import { MappingSerializer } from './mapping.serializer';
-import { ErrorHandlerService } from './error.handler.service';
-import { DocumentManagementService } from './document.management.service';
 
 import { DataMapperUtil } from '../common/data.mapper.util';
 
@@ -44,31 +40,33 @@ import { DataMapperUtil } from '../common/data.mapper.util';
 export class MappingManagementService {
     public cfg: ConfigModel;
 
-    private mappingUpdatedSource = new Subject<void>();
+    mappingUpdatedSource = new Subject<void>();
     mappingUpdated$ = this.mappingUpdatedSource.asObservable();
 
-    private saveMappingSource = new Subject<Function>();
+    saveMappingSource = new Subject<Function>();
     saveMappingOutput$ = this.saveMappingSource.asObservable();
 
-    private mappingSelectionRequiredSource = new Subject<Field>();
+    mappingSelectionRequiredSource = new Subject<Field>();
     mappingSelectionRequired$ = this.mappingSelectionRequiredSource.asObservable();
 
     private headers: Headers = new Headers();
 
     constructor(private http: Http) {
-        this.headers.append("Content-Type", "application/json");
+        this.headers.append('Content-Type', 'application/json');
     }
 
-    public initialize(): void {	}
+    public initialize(): void {
+        return;
+    }
 
     public findMappingFiles(filter: string): Observable<string[]> {
-        return new Observable<string[]>((observer:any) => {
-            const url = this.cfg.initCfg.baseMappingServiceUrl + "mappings" + (filter == null ? "" : "?filter=" + filter);
-            DataMapperUtil.debugLogJSON(null, "Mapping List Response", this.cfg.initCfg.debugMappingServiceCalls, url);
+        return new Observable<string[]>((observer: any) => {
+            const url = this.cfg.initCfg.baseMappingServiceUrl + 'mappings' + (filter == null ? '' : '?filter=' + filter);
+            DataMapperUtil.debugLogJSON(null, 'Mapping List Response', this.cfg.initCfg.debugMappingServiceCalls, url);
             this.http.get(url, {headers: this.headers}).toPromise()
-                .then((res:Response) => {
+                .then((res: Response) => {
                     const body = res.json();
-                    DataMapperUtil.debugLogJSON(body, "Mapping List Response", this.cfg.initCfg.debugMappingServiceCalls, url);
+                    DataMapperUtil.debugLogJSON(body, 'Mapping List Response', this.cfg.initCfg.debugMappingServiceCalls, url);
                     const entries: any[] = body.StringMap.stringMapEntry;
                     const mappingFileNames: string[] = [];
                     for (const entry of entries) {
@@ -80,34 +78,34 @@ export class MappingManagementService {
                 .catch((error: any) => {
                     observer.error(error);
                     observer.complete();
-                }
+                },
             );
         });
     }
 
     public fetchMappings(mappingFileNames: string[], mappingDefinition: MappingDefinition): Observable<boolean> {
-        return new Observable<boolean>((observer:any) => {
+        return new Observable<boolean>((observer: any) => {
             if (mappingFileNames.length == 0) {
                 observer.complete();
                 return;
             }
 
-            const baseURL: string = this.cfg.initCfg.baseMappingServiceUrl + "mapping/";
+            const baseURL: string = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/';
             const operations: any[] = [];
             for (const mappingName of mappingFileNames) {
                 const url: string = baseURL + mappingName;
-                DataMapperUtil.debugLogJSON(null, "Mapping Service Request", this.cfg.initCfg.debugMappingServiceCalls, url);
-                const operation = this.http.get(url).map((res:Response) => res.json());
+                DataMapperUtil.debugLogJSON(null, 'Mapping Service Request', this.cfg.initCfg.debugMappingServiceCalls, url);
+                const operation = this.http.get(url).map((res: Response) => res.json());
                 operations.push(operation);
             }
-            Observable.forkJoin(operations).subscribe((data:any[]) => {
+            Observable.forkJoin(operations).subscribe((data: any[]) => {
                 if (!data) {
                     observer.next(false);
                     observer.complete();
                     return;
                 }
-                for (let d of data) {
-                    DataMapperUtil.debugLogJSON(d, "Mapping Service Response", this.cfg.initCfg.debugMappingServiceCalls, null);
+                for (const d of data) {
+                    DataMapperUtil.debugLogJSON(d, 'Mapping Service Response', this.cfg.initCfg.debugMappingServiceCalls, null);
                     MappingSerializer.deserializeMappingServiceJSON(d, mappingDefinition, this.cfg);
                 }
 
@@ -115,7 +113,7 @@ export class MappingManagementService {
                 observer.next(true);
                 observer.complete();
             },
-            (error:any) => {
+            (error: any) => {
                 observer.error(error);
                 observer.complete();
             });
@@ -129,7 +127,7 @@ export class MappingManagementService {
         }
 
         const newMappings: MappingModel[] = [];
-        for (let mapping of this.cfg.mappings.mappings) {
+        for (const mapping of this.cfg.mappings.mappings) {
             if (mapping.hasFullyMappedPair()) {
                 newMappings.push(mapping);
             }
@@ -147,13 +145,13 @@ export class MappingManagementService {
     public saveMappingToService(): void {
         const startTime: number = Date.now();
         const payload: any = this.serializeMappingsToJSON();
-        const url = this.cfg.initCfg.baseMappingServiceUrl + "mapping";
-        DataMapperUtil.debugLogJSON(payload, "Mapping Service Request", this.cfg.initCfg.debugMappingServiceCalls, url);
+        const url = this.cfg.initCfg.baseMappingServiceUrl + 'mapping';
+        DataMapperUtil.debugLogJSON(payload, 'Mapping Service Request', this.cfg.initCfg.debugMappingServiceCalls, url);
         this.http.put(url, JSON.stringify(payload), {headers: this.headers}).toPromise()
-            .then((res:Response) => {
-                DataMapperUtil.debugLogJSON(res, "Mapping Service Response", this.cfg.initCfg.debugMappingServiceCalls, url);
+            .then((res: Response) => {
+                DataMapperUtil.debugLogJSON(res, 'Mapping Service Response', this.cfg.initCfg.debugMappingServiceCalls, url);
             })
-            .catch((error: any) => { this.handleError("Error occurred while saving mapping.", error); }
+            .catch((error: any) => { this.handleError('Error occurred while saving mapping.', error); },
         );
     }
 
@@ -212,7 +210,7 @@ export class MappingManagementService {
 
         if (mapping != null && mapping.hasMappedFields(field.isSource())
             && !mapping.isFieldMapped(field, field.isSource())) {
-            const type: string = field.isSource() ? "source" : "target";
+            const type: string = field.isSource() ? 'source' : 'target';
             mapping = null;
         }
 
@@ -234,7 +232,7 @@ export class MappingManagementService {
         //check to see if field is a valid selection for this mapping
         const exclusionReason: string = mapping.getFieldSelectionExclusionReason(field);
         if (exclusionReason != null) {
-            this.cfg.errorService.warn("The field '" + field.displayName + "' cannot be selected, " + exclusionReason + ".", null);
+            this.cfg.errorService.warn("The field '" + field.displayName + "' cannot be selected, " + exclusionReason + '.', null);
             return;
         }
 
@@ -292,11 +290,11 @@ export class MappingManagementService {
         }
         const startTime: number = Date.now();
         const payload: any = MappingSerializer.serializeMappings(this.cfg);
-        const url: string = this.cfg.initCfg.baseMappingServiceUrl + "mapping/validate";
-        DataMapperUtil.debugLogJSON(payload, "Validation Service Request", this.cfg.initCfg.debugValidationServiceCalls, url);
+        const url: string = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/validate';
+        DataMapperUtil.debugLogJSON(payload, 'Validation Service Request', this.cfg.initCfg.debugValidationServiceCalls, url);
         this.http.put(url, payload, { headers: this.headers }).toPromise()
             .then((res: Response) => {
-                DataMapperUtil.debugLogJSON(res, "Validation Service Response", this.cfg.initCfg.debugValidationServiceCalls, url);
+                DataMapperUtil.debugLogJSON(res, 'Validation Service Response', this.cfg.initCfg.debugValidationServiceCalls, url);
                 const mapping: MappingModel = this.cfg.mappings.activeMapping;
                 const body: any = res.json();
                 const activeMappingErrors: ErrorInfo[] = [];
@@ -305,11 +303,11 @@ export class MappingManagementService {
                 // This should be eventually turned into mapping entry level validation.
                 // https://github.com/atlasmap/atlasmap-ui/issues/116
                 if (body && body.Validations && body.Validations.validation) {
-                    for (let validation of body.Validations.validation) {
-                        let level : ErrorLevel = ErrorLevel.VALIDATION_ERROR;
-                        if (validation.status === "WARN") {
+                    for (const validation of body.Validations.validation) {
+                        let level: ErrorLevel = ErrorLevel.VALIDATION_ERROR;
+                        if (validation.status === 'WARN') {
                             level = ErrorLevel.WARN;
-                        } else if (validation.status === "INFO") {
+                        } else if (validation.status === 'INFO') {
                             level = ErrorLevel.INFO;
                         }
                         const errorInfo = new ErrorInfo(validation.message, level);
@@ -326,20 +324,20 @@ export class MappingManagementService {
                 }
             })
             .catch((error: any) => {
-                console.error("Error fetching validation data.", { "error": error, "url": url, "request": payload});
-            }
+                this.cfg.errorService.error('Error fetching validation data.', { 'error': error, 'url': url, 'request': payload});
+            },
         );
     }
 
     public fetchFieldActions(): Observable<FieldActionConfig[]> {
-        return new Observable<FieldActionConfig[]>((observer:any) => {
+        return new Observable<FieldActionConfig[]>((observer: any) => {
             let actionConfigs: FieldActionConfig[] = [];
-            const url: string = this.cfg.initCfg.baseMappingServiceUrl + "fieldActions";
-            DataMapperUtil.debugLogJSON(null, "Field Action Config Request", this.cfg.initCfg.debugFieldActionServiceCalls, url);
+            const url: string = this.cfg.initCfg.baseMappingServiceUrl + 'fieldActions';
+            DataMapperUtil.debugLogJSON(null, 'Field Action Config Request', this.cfg.initCfg.debugFieldActionServiceCalls, url);
             this.http.get(url, { headers: this.headers }).toPromise()
                 .then((res: Response) => {
                     const body: any = res.json();
-                    DataMapperUtil.debugLogJSON(body, "Field Action Config Response", this.cfg.initCfg.debugFieldActionServiceCalls, url);
+                    DataMapperUtil.debugLogJSON(body, 'Field Action Config Response', this.cfg.initCfg.debugFieldActionServiceCalls, url);
                     if (body && body.ActionDetails
                         && body.ActionDetails.actionDetail
                         && body.ActionDetails.actionDetail.length) {
@@ -372,7 +370,7 @@ export class MappingManagementService {
                     observer.error(error);
                     observer.next(actionConfigs);
                     observer.complete();
-                }
+                },
             );
         });
     }
@@ -383,7 +381,7 @@ export class MappingManagementService {
             return sortedActionConfigs;
         }
 
-        const configsByName: { [key:string]: FieldActionConfig; } = {};
+        const configsByName: { [key: string]: FieldActionConfig; } = {};
         const configNames: string[] = [];
         for (const fieldActionConfig of configs) {
             const name: string = fieldActionConfig.name;
@@ -410,7 +408,7 @@ export class MappingManagementService {
         this.mappingUpdatedSource.next();
     }
 
-    private handleError(message:string, error: any): void {
+    private handleError(message: string, error: any): void {
         this.cfg.errorService.error(message, error);
     }
 }

@@ -9,7 +9,7 @@ describe('ModalWindowComponent', () => {
     TestBed.configureTestingModule({
       providers: [
         ChangeDetectorRef,
-        ModalWindowComponent
+        ModalWindowComponent,
       ],
     });
   });

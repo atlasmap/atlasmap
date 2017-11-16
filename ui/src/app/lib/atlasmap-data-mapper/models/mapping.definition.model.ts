@@ -18,7 +18,7 @@ import { MappingModel, MappedField, FieldMappingPair } from './mapping.model';
 import { LookupTable } from '../models/lookup.table.model';
 import { ConfigModel } from '../models/config.model';
 import { Field } from '../models/field.model';
-import { TransitionModel, TransitionMode, FieldAction, FieldActionConfig } from './transition.model';
+import { TransitionModel, TransitionMode, FieldActionConfig } from './transition.model';
 import { DocumentDefinition } from '../models/document.definition.model';
 
 import { DataMapperUtil } from '../common/data.mapper.util';
@@ -31,15 +31,15 @@ export class MappingDefinition {
     public templateText: string = null;
 
     private tables: LookupTable[] = [];
-    private tablesBySourceTargetKey: { [key:string]:LookupTable; } = {};
-    private tablesByName: { [key:string]:LookupTable; } = {};
+    private tablesBySourceTargetKey: { [key: string]: LookupTable; } = {};
+    private tablesByName: { [key: string]: LookupTable; } = {};
 
     public constructor() {
-        this.name = "UI." + Math.floor((Math.random() * 1000000) + 1).toString();
+        this.name = 'UI.' + Math.floor((Math.random() * 1000000) + 1).toString();
     }
 
     public templateExists(): boolean {
-        return ((this.templateText != null) && (this.templateText != ""));
+        return ((this.templateText != null) && (this.templateText != ''));
     }
 
     public addTable(table: LookupTable): void {
@@ -53,26 +53,26 @@ export class MappingDefinition {
     }
 
     public detectTableIdentifiers() {
-        for (let t of this.getTables()) {
+        for (const t of this.getTables()) {
             if (t.sourceIdentifier && t.targetIdentifier) {
                 continue;
             }
-            var tableChanged: boolean = false;
-            var m: MappingModel = this.getFirstMappingForLookupTable(t.name);
+            let tableChanged = false;
+            const m: MappingModel = this.getFirstMappingForLookupTable(t.name);
             if (m != null) {
-                for (let fieldPair of m.fieldMappings) {
+                for (const fieldPair of m.fieldMappings) {
                     if (fieldPair.transition.lookupTableName == null) {
                         continue;
                     }
                     if (!t.sourceIdentifier) {
-                        var inputField: Field = fieldPair.getFields(true)[0];
+                        const inputField: Field = fieldPair.getFields(true)[0];
                         if (inputField) {
                             t.sourceIdentifier = inputField.classIdentifier;
                             tableChanged = true;
                         }
                     }
                     if (!t.targetIdentifier) {
-                        var outputField: Field = fieldPair.getFields(false)[0];
+                        const outputField: Field = fieldPair.getFields(false)[0];
                         if (outputField) {
                             t.targetIdentifier = outputField.classIdentifier;
                             tableChanged = true;
@@ -80,32 +80,32 @@ export class MappingDefinition {
                     }
                 }
             }
-            if (tableChanged) {
-                console.log("Detected lookup table source/target id: " + t.toString());
-            }
         }
-        for (let m of this.mappings) {
+        for (const m of this.mappings) {
             this.initializeMappingLookupTable(m);
         }
     }
 
-    public getTableBySourceTarget(sourceIdentifier:string, targetIdentifier:string): LookupTable {
-        var key: string = sourceIdentifier + ":" + targetIdentifier;
+    public getTableBySourceTarget(sourceIdentifier: string, targetIdentifier: string): LookupTable {
+        const key: string = sourceIdentifier + ':' + targetIdentifier;
         return this.tablesBySourceTargetKey[key];
     }
 
     public getTables(): LookupTable[] {
-        var tables: LookupTable[] = [];
-        for (let key in this.tablesByName) {
-            var table: LookupTable = this.tablesByName[key];
+        const tables: LookupTable[] = [];
+        for (const key in this.tablesByName) {
+            if (!this.tablesByName.hasOwnProperty(key)) {
+                continue;
+            }
+            const table: LookupTable = this.tablesByName[key];
             tables.push(table);
         }
         return tables;
     }
 
     public getFirstMappingForLookupTable(lookupTableName: string): MappingModel {
-        for (let m of this.mappings) {
-            for (let fieldPair of m.fieldMappings) {
+        for (const m of this.mappings) {
+            for (const fieldPair of m.fieldMappings) {
                 if (fieldPair.transition.lookupTableName == lookupTableName) {
                     return m;
                 }
@@ -115,38 +115,33 @@ export class MappingDefinition {
     }
 
     public removeStaleMappings(cfg: ConfigModel): void {
-        console.log("Removing stale mappings. Current Mappings: " + this.mappings.length + ".", this.mappings);
-        var index = 0;
-        var sourceFieldPaths: string[] = [];
-        for (let doc of cfg.getDocs(true)) {
+        let index = 0;
+        let sourceFieldPaths: string[] = [];
+        for (const doc of cfg.getDocs(true)) {
             sourceFieldPaths = sourceFieldPaths.concat(Field.getFieldPaths(doc.getAllFields()));
         }
-        var targetSourcePaths: string[] = [];
-        for (let doc of cfg.getDocs(false)) {
+        let targetSourcePaths: string[] = [];
+        for (const doc of cfg.getDocs(false)) {
             targetSourcePaths = targetSourcePaths.concat(Field.getFieldPaths(doc.getAllFields()));
         }
         while (index < this.mappings.length) {
-            var mapping: MappingModel = this.mappings[index];
-            console.log("Checking if mapping is stale: " + mapping.uuid, mapping);
-            var mappingIsStale: boolean = this.isMappingStale(mapping, sourceFieldPaths, targetSourcePaths);
+            const mapping: MappingModel = this.mappings[index];
+            const mappingIsStale: boolean = this.isMappingStale(mapping, sourceFieldPaths, targetSourcePaths);
             if (mappingIsStale) {
-                console.log("Removing stale mapping.", { "mapping": mapping,
-                    "sourceDocs": cfg.sourceDocs, "targetDocs": cfg.targetDocs });
                 this.mappings.splice(index, 1);
             } else {
                 index++;
             }
         }
-        console.log("Finished removing stale mappings.");
     }
 
     public isMappingStale(mapping: MappingModel, sourceFieldPaths: string[], targetSourcePaths: string[]): boolean {
-        for (var field of mapping.getFields(true)) {
+        for (const field of mapping.getFields(true)) {
             if (sourceFieldPaths.indexOf(field.path) == -1) {
                 return true;
             }
         }
-        for (var field of mapping.getFields(false)) {
+        for (const field of mapping.getFields(false)) {
             if (targetSourcePaths.indexOf(field.path) == -1) {
                 return true;
             }
@@ -155,195 +150,90 @@ export class MappingDefinition {
     }
 
     public initializeMappingLookupTable(m: MappingModel): void {
-        console.log("Checking mapping for lookup table initialization: " + m.toString());
-        for (let fieldPair of m.fieldMappings) {
+        for (const fieldPair of m.fieldMappings) {
             if (!(fieldPair.transition.mode == TransitionMode.ENUM
                 && fieldPair.transition.lookupTableName == null
                 && fieldPair.getFields(true).length == 1
                 && fieldPair.getFields(false).length == 1)) {
-                    console.log("Not looking for lookuptable for mapping field pair.", fieldPair);
-                return;
+                    return;
             }
-            console.log("Looking for lookup table for field pair.", fieldPair);
-            var inputClassIdentifier: string = null;
-            var outputClassIdentifier: string = null;
+            let inputClassIdentifier: string = null;
+            let outputClassIdentifier: string = null;
 
-            var inputField: Field = fieldPair.getFields(true)[0];
+            const inputField: Field = fieldPair.getFields(true)[0];
             if (inputField) {
                 inputClassIdentifier = inputField.classIdentifier;
             }
-            var outputField: Field = fieldPair.getFields(true)[0];
+            const outputField: Field = fieldPair.getFields(true)[0];
             if (outputField) {
                 outputClassIdentifier = outputField.classIdentifier;
             }
             if (inputClassIdentifier && outputClassIdentifier) {
-                var table: LookupTable = this.getTableBySourceTarget(inputClassIdentifier, outputClassIdentifier);
+                let table: LookupTable = this.getTableBySourceTarget(inputClassIdentifier, outputClassIdentifier);
                 if (table == null) {
                     table = new LookupTable();
                     table.sourceIdentifier = inputClassIdentifier;
                     table.targetIdentifier = outputClassIdentifier;
                     this.addTable(table);
                     fieldPair.transition.lookupTableName = table.name;
-                    console.log("Created lookup table for mapping.", m);
                 } else {
                     fieldPair.transition.lookupTableName = table.name;
-                    console.log("Initialized lookup table for mapping.", m)
                 }
             }
         }
     }
 
     public updateMappingsFromDocuments(cfg: ConfigModel): void {
-        console.log("Updating mapping fields from documents.");
-        var sourceDocMap: any = {};
-        for (let doc of cfg.getDocs(true)) {
+        const sourceDocMap: any = {};
+        for (const doc of cfg.getDocs(true)) {
             sourceDocMap[doc.uri] = doc;
         }
-        var targetDocMap: any = {};
-        for (let doc of cfg.getDocs(false)) {
+        const targetDocMap: any = {};
+        for (const doc of cfg.getDocs(false)) {
             targetDocMap[doc.uri] = doc;
         }
-        for (let mapping of this.mappings) {
-            for (let fieldPair of mapping.fieldMappings) {
+        for (const mapping of this.mappings) {
+            for (const fieldPair of mapping.fieldMappings) {
                 this.updateMappedFieldsFromDocuments(fieldPair, cfg, sourceDocMap, true);
                 this.updateMappedFieldsFromDocuments(fieldPair, cfg, targetDocMap, false);
             }
         }
-        for (let doc of cfg.getAllDocs()) {
+        for (const doc of cfg.getAllDocs()) {
             if (doc.initCfg.shortIdentifier == null) {
-                doc.initCfg.shortIdentifier = "DOC." + doc.name + "." + Math.floor((Math.random() * 1000000) + 1).toString();
+                doc.initCfg.shortIdentifier = 'DOC.' + doc.name + '.' + Math.floor((Math.random() * 1000000) + 1).toString();
             }
         }
     }
 
     public updateDocumentNamespacesFromMappings(cfg: ConfigModel): void {
-        console.log("Updating document namespaces from mappings");
-        var docs: DocumentDefinition[] = cfg.getDocs(false);
-        for (let parsedDoc of this.parsedDocs) {
+        const docs: DocumentDefinition[] = cfg.getDocs(false);
+        for (const parsedDoc of this.parsedDocs) {
             if (parsedDoc.isSource) {
-                console.log("Skipping doc namespace update, we do not support source doc namespace override.", parsedDoc);
                 continue;
             }
             if (parsedDoc.namespaces.length == 0) {
-                console.log("Skipping doc namespace update, no namespaces from mappings were parsed.", parsedDoc);
                 continue;
             }
 
-            var doc = DocumentDefinition.getDocumentByIdentifier(parsedDoc.initCfg.documentIdentifier, docs);
+            const doc = DocumentDefinition.getDocumentByIdentifier(parsedDoc.initCfg.documentIdentifier, docs);
             if (doc == null) {
-                console.error("Could not find document with identifier '" + parsedDoc.initCfg.documentIdentifier
+                cfg.errorService.error("Could not find document with identifier '" + parsedDoc.initCfg.documentIdentifier
                     + "' for namespace override.",
-                    { "identifier": parsedDoc.initCfg.documentIdentifier, "parsedDoc": parsedDoc, "docs": docs });
+                    { 'identifier': parsedDoc.initCfg.documentIdentifier, 'parsedDoc': parsedDoc, 'docs': docs });
                 continue;
             }
 
-            console.log("Updating doc's namespaces.", { "doc": doc,
-                "oldNamespaces": doc.namespaces, "newNamespaces": parsedDoc.namespaces });
             doc.namespaces = [].concat(parsedDoc.namespaces);
         }
     }
 
-    private updateMappedFieldsFromDocuments(fieldPair: FieldMappingPair, cfg: ConfigModel, docMap: any, isSource: boolean): void {
-        var mappedFields: MappedField[] = fieldPair.getMappedFields(isSource);
-        for (let mappedField of mappedFields) {
-            var doc: DocumentDefinition = null;
-            if (mappedField.parsedData.fieldIsProperty) {
-                doc = cfg.propertyDoc;
-            } else if (mappedField.parsedData.fieldIsConstant) {
-                doc = cfg.constantDoc;
-            } else {
-                doc = docMap[mappedField.parsedData.parsedDocURI] as DocumentDefinition;
-                if (doc == null) {
-                    console.error("Could not find doc for mapped field.", mappedField);
-                    continue;
-                }
-
-                if (mappedField.parsedData.parsedDocID == null) {
-                    console.error("Could not find doc ID for mapped field.", mappedField);
-                    continue;
-                }
-                doc.initCfg.shortIdentifier = mappedField.parsedData.parsedDocID;
-            }
-            mappedField.field = null;
-            if (!mappedField.parsedData.userCreated) {
-                mappedField.field = doc.getField(mappedField.parsedData.parsedPath);
-            }
-            if (mappedField.field == null) {
-                if (mappedField.parsedData.fieldIsConstant) {
-                    var constantField: Field = new Field();
-                    constantField.value = mappedField.parsedData.parsedValue;
-                    constantField.type = mappedField.parsedData.parsedValueType;
-                    constantField.displayName = constantField.value;
-                    constantField.name = constantField.value;
-                    constantField.path = constantField.value;
-                    constantField.userCreated = true;
-                    mappedField.field = constantField;
-                    doc.addField(constantField);
-                } else if (mappedField.parsedData.userCreated) {
-                    var path: string = mappedField.parsedData.parsedPath;
-
-                    mappedField.field = new Field();
-                    mappedField.field.serviceObject.jsonType = "io.atlasmap.xml.v2.XmlField";
-                    mappedField.field.path = path;
-                    mappedField.field.type = mappedField.parsedData.parsedValueType;
-                    mappedField.field.userCreated = true;
-
-                    var lastSeparator: number = path.lastIndexOf("/");
-
-                    var parentPath: string = (lastSeparator > 0) ? path.substring(0, lastSeparator) : null;
-                    var fieldName: string = (lastSeparator == -1) ? path : path.substring(lastSeparator + 1);
-                    var namespaceAlias: string = null;
-                    if (fieldName.indexOf(":") != -1) {
-                        namespaceAlias = fieldName.split(":")[0];
-                        fieldName = fieldName.split(":")[1];
-                    }
-
-                    mappedField.field.name = fieldName;
-                    mappedField.field.displayName = fieldName;
-                    mappedField.field.isAttribute = (fieldName.indexOf("@") != -1);
-                    mappedField.field.namespaceAlias = namespaceAlias;
-
-                    if (parentPath != null) {
-                        mappedField.field.parentField = doc.getField(parentPath);
-                    }
-                    if (mappedField.field.parentField == null) {
-                        mappedField.field.parentField = DocumentDefinition.getNoneField();
-                    }
-
-                    doc.addField(mappedField.field);
-                } else {
-                    console.error("Could not find field from doc for mapped field.",
-                        { "mappedField": mappedField, "doc": doc });
-                    mappedField.field = DocumentDefinition.getNoneField();
-                    return;
-                }
-            }
-            if (mappedField.parsedData.parsedActions.length > 0) {
-                for (let action of mappedField.parsedData.parsedActions) {
-                    var actionConfig: FieldActionConfig = TransitionModel.getActionConfigForName(action.name);
-                    if (actionConfig == null) {
-                        console.error("Could not find field action config for action name '" + action.name + "'");
-                        continue;
-                    }
-                    actionConfig.populateFieldAction(action);
-                    mappedField.actions.push(action);
-                }
-            }
-
-            var isSeparate: boolean = fieldPair.transition.isSeparateMode();
-            var isCombine: boolean = fieldPair.transition.isCombineMode();
-            var index: string = mappedField.parsedData.parsedIndex;
-            mappedField.updateSeparateOrCombineIndex(isSeparate, isCombine, index, isSource);
-        }
-    }
-
     public getAllMappings(includeActiveMapping: boolean): MappingModel[] {
-        var mappings: MappingModel[] = [].concat(this.mappings);
+        const mappings: MappingModel[] = [].concat(this.mappings);
         if (includeActiveMapping) {
             if (this.activeMapping == null) {
                 return mappings;
             }
-            for (let mapping of mappings) {
+            for (const mapping of mappings) {
                 if (mapping == this.activeMapping) {
                     return mappings;
                 }
@@ -354,8 +244,8 @@ export class MappingDefinition {
     }
 
     public findMappingsForField(field: Field): MappingModel[] {
-        var mappingsForField: MappingModel[] = [];
-        for (let m of this.mappings) {
+        const mappingsForField: MappingModel[] = [];
+        for (const m of this.mappings) {
             if (m.isFieldMapped(field, field.isSource())) {
                 mappingsForField.push(m);
             }
@@ -368,13 +258,108 @@ export class MappingDefinition {
     }
 
     public removeFieldFromAllMappings(field: Field): void {
-        for (let mapping of this.getAllMappings(true)) {
-            for (let fieldPair of mapping.fieldMappings) {
-                var mappedField: MappedField = fieldPair.getMappedFieldForField(field, field.isSource());
+        for (const mapping of this.getAllMappings(true)) {
+            for (const fieldPair of mapping.fieldMappings) {
+                const mappedField: MappedField = fieldPair.getMappedFieldForField(field, field.isSource());
                 if (mappedField != null) {
                     mappedField.field = DocumentDefinition.getNoneField();
                 }
             }
         }
     }
+
+    private updateMappedFieldsFromDocuments(fieldPair: FieldMappingPair, cfg: ConfigModel, docMap: any, isSource: boolean): void {
+        const mappedFields: MappedField[] = fieldPair.getMappedFields(isSource);
+        for (const mappedField of mappedFields) {
+            let doc: DocumentDefinition = null;
+            if (mappedField.parsedData.fieldIsProperty) {
+                doc = cfg.propertyDoc;
+            } else if (mappedField.parsedData.fieldIsConstant) {
+                doc = cfg.constantDoc;
+            } else {
+                doc = docMap[mappedField.parsedData.parsedDocURI] as DocumentDefinition;
+                if (doc == null) {
+                    cfg.errorService.error('Could not find doc for mapped field.', mappedField);
+                    continue;
+                }
+
+                if (mappedField.parsedData.parsedDocID == null) {
+                    cfg.errorService.error('Could not find doc ID for mapped field.', mappedField);
+                    continue;
+                }
+                doc.initCfg.shortIdentifier = mappedField.parsedData.parsedDocID;
+            }
+            mappedField.field = null;
+            if (!mappedField.parsedData.userCreated) {
+                mappedField.field = doc.getField(mappedField.parsedData.parsedPath);
+            }
+            if (mappedField.field == null) {
+                if (mappedField.parsedData.fieldIsConstant) {
+                    const constantField: Field = new Field();
+                    constantField.value = mappedField.parsedData.parsedValue;
+                    constantField.type = mappedField.parsedData.parsedValueType;
+                    constantField.displayName = constantField.value;
+                    constantField.name = constantField.value;
+                    constantField.path = constantField.value;
+                    constantField.userCreated = true;
+                    mappedField.field = constantField;
+                    doc.addField(constantField);
+                } else if (mappedField.parsedData.userCreated) {
+                    const path: string = mappedField.parsedData.parsedPath;
+
+                    mappedField.field = new Field();
+                    mappedField.field.serviceObject.jsonType = 'io.atlasmap.xml.v2.XmlField';
+                    mappedField.field.path = path;
+                    mappedField.field.type = mappedField.parsedData.parsedValueType;
+                    mappedField.field.userCreated = true;
+
+                    const lastSeparator: number = path.lastIndexOf('/');
+
+                    const parentPath: string = (lastSeparator > 0) ? path.substring(0, lastSeparator) : null;
+                    let fieldName: string = (lastSeparator == -1) ? path : path.substring(lastSeparator + 1);
+                    let namespaceAlias: string = null;
+                    if (fieldName.indexOf(':') != -1) {
+                        namespaceAlias = fieldName.split(':')[0];
+                        fieldName = fieldName.split(':')[1];
+                    }
+
+                    mappedField.field.name = fieldName;
+                    mappedField.field.displayName = fieldName;
+                    mappedField.field.isAttribute = (fieldName.indexOf('@') != -1);
+                    mappedField.field.namespaceAlias = namespaceAlias;
+
+                    if (parentPath != null) {
+                        mappedField.field.parentField = doc.getField(parentPath);
+                    }
+                    if (mappedField.field.parentField == null) {
+                        mappedField.field.parentField = DocumentDefinition.getNoneField();
+                    }
+
+                    doc.addField(mappedField.field);
+                } else {
+                    cfg.errorService.error('Could not find field from doc for mapped field.',
+                        { 'mappedField': mappedField, 'doc': doc });
+                    mappedField.field = DocumentDefinition.getNoneField();
+                    return;
+                }
+            }
+            if (mappedField.parsedData.parsedActions.length > 0) {
+                for (const action of mappedField.parsedData.parsedActions) {
+                    const actionConfig: FieldActionConfig = TransitionModel.getActionConfigForName(action.name);
+                    if (actionConfig == null) {
+                        cfg.errorService.error("Could not find field action config for action name '" + action.name + "'", null);
+                        continue;
+                    }
+                    actionConfig.populateFieldAction(action);
+                    mappedField.actions.push(action);
+                }
+            }
+
+            const isSeparate: boolean = fieldPair.transition.isSeparateMode();
+            const isCombine: boolean = fieldPair.transition.isCombineMode();
+            const index: string = mappedField.parsedData.parsedIndex;
+            mappedField.updateSeparateOrCombineIndex(isSeparate, isCombine, index, isSource);
+        }
+    }
+
 }

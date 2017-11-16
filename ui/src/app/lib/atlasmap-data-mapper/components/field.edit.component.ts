@@ -86,7 +86,7 @@ import { DataMapperUtil } from '../common/data.mapper.util';
                 </select>
             </div>
         </div>
-    `
+    `,
 })
 
 export class FieldEditComponent implements ModalWindowValidator {
@@ -94,11 +94,11 @@ export class FieldEditComponent implements ModalWindowValidator {
     public field: Field = new Field();
     public parentField: Field = DocumentDefinition.getNoneField();
     public parentFieldName: String = null;
-    public isSource: boolean = false;
-    public fieldType: any = "element";
-    public valueType: any = "STRING";
-    public namespaceAlias: string = "";
-    public editMode: boolean = false;
+    public isSource = false;
+    public fieldType: any = 'element';
+    public valueType: any = 'STRING';
+    public namespaceAlias = '';
+    public editMode = false;
     public namespaces: NamespaceModel[] = [];
     public docDef: DocumentDefinition = null;
 
@@ -114,13 +114,13 @@ export class FieldEditComponent implements ModalWindowValidator {
         this.docDef = docDef;
         this.editMode = !isAdd;
         this.field = field == null ? new Field() : field.copy();
-        this.valueType = (this.field.type == null) ? "STRING" : this.field.type;
+        this.valueType = (this.field.type == null) ? 'STRING' : this.field.type;
         this.parentField = (this.field.parentField == null) ? DocumentDefinition.getNoneField() : this.field.parentField;
 
         if (this.docDef.initCfg.type.isXML()) {
-            this.fieldType = this.field.isAttribute ? "attribute" : "element";
+            this.fieldType = this.field.isAttribute ? 'attribute' : 'element';
             this.parentField = (this.field.parentField == null) ? docDef.fields[0] : this.field.parentField;
-            var unqualifiedNS: NamespaceModel = NamespaceModel.getUnqualifiedNamespace();
+            const unqualifiedNS: NamespaceModel = NamespaceModel.getUnqualifiedNamespace();
             this.namespaceAlias = unqualifiedNS.alias;
             if (this.field.namespaceAlias) {
                 this.namespaceAlias = this.field.namespaceAlias;
@@ -133,15 +133,15 @@ export class FieldEditComponent implements ModalWindowValidator {
 
             // if the field references a namespace that doesn't exist, add a fake namespace option for the
             // user to select if they desire to leave that bad namespace alias in place
-            var namespaceFound: boolean = false;
-            for (let ns of this.namespaces) {
+            let namespaceFound = false;
+            for (const ns of this.namespaces) {
                 if (ns.alias == this.namespaceAlias) {
                     namespaceFound = true;
                     break;
                 }
             }
             if (!namespaceFound) {
-                var fakeNamespace: NamespaceModel = new NamespaceModel();
+                const fakeNamespace: NamespaceModel = new NamespaceModel();
                 fakeNamespace.alias = this.namespaceAlias;
                 this.namespaces.push(fakeNamespace);
             }
@@ -154,44 +154,44 @@ export class FieldEditComponent implements ModalWindowValidator {
     }
 
     public parentSelectionChanged(event: any): void {
-        var oldParentField: Field = this.parentField;
-        this.parentField = event.item["field"];
+        const oldParentField: Field = this.parentField;
+        this.parentField = event.item['field'];
         this.parentField = (this.parentField == null) ? oldParentField : this.parentField;
         this.parentFieldName = this.parentField.name;
 
         // change namespace dropdown selecte option to match parent fields' namespace automatically
-        var unqualifiedNS: NamespaceModel = NamespaceModel.getUnqualifiedNamespace();
+        const unqualifiedNS: NamespaceModel = NamespaceModel.getUnqualifiedNamespace();
         this.namespaceAlias = this.parentField.namespaceAlias == null ? unqualifiedNS.alias : this.parentField.namespaceAlias;
     }
 
     public fieldTypeSelectionChanged(event: any): void {
-        this.fieldType = event.target.selectedOptions.item(0).attributes.getNamedItem("value").value;
+        this.fieldType = event.target.selectedOptions.item(0).attributes.getNamedItem('value').value;
     }
 
     public valueTypeSelectionChanged(event: any): void {
-        this.valueType = event.target.selectedOptions.item(0).attributes.getNamedItem("value").value;
+        this.valueType = event.target.selectedOptions.item(0).attributes.getNamedItem('value').value;
     }
 
     public namespaceSelectionChanged(event: any): void {
-        this.namespaceAlias = event.target.selectedOptions.item(0).attributes.getNamedItem("value").value;
+        this.namespaceAlias = event.target.selectedOptions.item(0).attributes.getNamedItem('value').value;
     }
 
     public executeSearch(filter: string): any[] {
-        var formattedFields: any[] = [];
+        const formattedFields: any[] = [];
 
         if (this.docDef.initCfg.type.isJSON()) {
-            var noneField: Field = DocumentDefinition.getNoneField();
-            formattedFields.push({ "field": noneField, "displayName": noneField.getFieldLabel(true) });
+            const noneField: Field = DocumentDefinition.getNoneField();
+            formattedFields.push({ 'field': noneField, 'displayName': noneField.getFieldLabel(true) });
         }
 
-        for (let field of this.docDef.getAllFields()) {
+        for (const field of this.docDef.getAllFields()) {
             if (!field.isParentField()) {
                 continue;
             }
-            var displayName = (field == null) ? "" : field.getFieldLabel(true);
-            var formattedField: any = { "field": field, "displayName": displayName };
-            if (filter == null || filter == ""
-                || formattedField["displayName"].toLowerCase().indexOf(filter.toLowerCase()) != -1) {
+            const displayName = (field == null) ? '' : field.getFieldLabel(true);
+            const formattedField: any = { 'field': field, 'displayName': displayName };
+            if (filter == null || filter == ''
+                || formattedField['displayName'].toLowerCase().indexOf(filter.toLowerCase()) != -1) {
                 formattedFields.push(formattedField);
             }
             if (formattedFields.length > 9) {
@@ -206,20 +206,20 @@ export class FieldEditComponent implements ModalWindowValidator {
         this.field.parentField = this.parentField;
         this.field.type = this.valueType;
         this.field.userCreated = true;
-        this.field.serviceObject.jsonType = "io.atlasmap.json.v2.JsonField";
+        this.field.serviceObject.jsonType = 'io.atlasmap.json.v2.JsonField';
         if (this.docDef.initCfg.type.isXML()) {
-            this.field.isAttribute = (this.fieldType == "attribute");
+            this.field.isAttribute = (this.fieldType == 'attribute');
             this.field.namespaceAlias = this.namespaceAlias;
-            var unqualifiedNS: NamespaceModel = NamespaceModel.getUnqualifiedNamespace();
+            const unqualifiedNS: NamespaceModel = NamespaceModel.getUnqualifiedNamespace();
             if (this.namespaceAlias == unqualifiedNS.alias) {
                 this.field.namespaceAlias = null;
             }
-            this.field.serviceObject.jsonType = "io.atlasmap.xml.v2.XmlField";
+            this.field.serviceObject.jsonType = 'io.atlasmap.xml.v2.XmlField';
         }
         return this.field;
     }
 
     isDataValid(): boolean {
-        return DataMapperUtil.isRequiredFieldValid(this.field.name, "Name");
+        return DataMapperUtil.isRequiredFieldValid(this.field.name, 'Name');
     }
 }
