@@ -43,7 +43,7 @@ Note that this assumes that you are using a template flavor that also supports i
 1. Run AtlasMap Services
 ```
     cd ${ATLASMAP}/runtime/runtime
-    mvn -Pitests spring-boot:run
+    ../../mvnw -Pitests spring-boot:run
 ```
 
 2. [Install Yarn](https://yarnpkg.com/lang/en/docs/install/)
