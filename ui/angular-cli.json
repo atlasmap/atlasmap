@@ -54,7 +54,7 @@
   "lint": [
     {
       "files": "src/**/*.ts",
-      "project": "src/tsconfig.json"
+      "project": "tsconfig.json"
     }
   ],
   "test": {
