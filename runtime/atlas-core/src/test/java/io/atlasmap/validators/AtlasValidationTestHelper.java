@@ -15,10 +15,11 @@
  */
 package io.atlasmap.validators;
 
+import java.util.List;
+
 import io.atlasmap.v2.Validation;
 import io.atlasmap.v2.ValidationStatus;
 import io.atlasmap.v2.Validations;
-import java.util.List;
 
 public class AtlasValidationTestHelper extends Validations {
 

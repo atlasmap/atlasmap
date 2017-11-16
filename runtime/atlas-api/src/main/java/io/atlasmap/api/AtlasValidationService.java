@@ -15,9 +15,10 @@
  */
 package io.atlasmap.api;
 
+import java.util.List;
+
 import io.atlasmap.v2.AtlasMapping;
 import io.atlasmap.v2.Validation;
-import java.util.List;
 
 public interface AtlasValidationService {
 

@@ -15,19 +15,22 @@
  */
 package io.atlasmap.reference.json_to_xml;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.io.File;
+
 import javax.xml.bind.JAXBElement;
+
 import org.junit.Test;
+
 import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasSession;
 import io.atlasmap.reference.AtlasMappingBaseTest;
 import io.atlasmap.reference.AtlasTestUtil;
 import io.atlasmap.xml.test.v2.AtlasXmlTestHelper;
 import io.atlasmap.xml.test.v2.XmlFlatPrimitiveElement;
-
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 public class JsonXmlAutoConversionTest extends AtlasMappingBaseTest {
 

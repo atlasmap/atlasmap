@@ -1,13 +1,13 @@
 package io.atlasmap.java.inspect;
 
+import static org.junit.Assert.assertNotNull;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import io.atlasmap.core.DefaultAtlasConversionService;
 import io.atlasmap.java.v2.JavaClass;
-
-import static org.junit.Assert.assertNotNull;
 
 public class ClassInspectionServiceITest {
 

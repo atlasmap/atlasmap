@@ -15,6 +15,11 @@
  */
 package io.atlasmap.core;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 import io.atlasmap.api.AtlasConstants;
 import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasSession;
@@ -23,11 +28,6 @@ import io.atlasmap.v2.Audit;
 import io.atlasmap.v2.AuditStatus;
 import io.atlasmap.v2.Audits;
 import io.atlasmap.v2.Validations;
-
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class DefaultAtlasSession implements AtlasSession {
 

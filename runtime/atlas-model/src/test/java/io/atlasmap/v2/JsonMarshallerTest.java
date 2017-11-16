@@ -15,16 +15,16 @@
  */
 package io.atlasmap.v2;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import static org.junit.Assert.assertNotNull;
+
+import java.io.File;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.File;
-import java.util.List;
-
-import static org.junit.Assert.assertNotNull;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class JsonMarshallerTest extends BaseMarshallerTest {
 

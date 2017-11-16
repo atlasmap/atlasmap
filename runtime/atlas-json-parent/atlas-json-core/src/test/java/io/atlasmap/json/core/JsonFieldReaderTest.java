@@ -1,18 +1,19 @@
 package io.atlasmap.json.core;
 
-import io.atlasmap.api.AtlasException;
-import io.atlasmap.json.v2.AtlasJsonModelFactory;
-import io.atlasmap.json.v2.JsonField;
-
-import org.hamcrest.core.Is;
-import org.junit.Test;
-
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
+
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
+import org.hamcrest.core.Is;
+import org.junit.Test;
+
+import io.atlasmap.api.AtlasException;
+import io.atlasmap.json.v2.AtlasJsonModelFactory;
+import io.atlasmap.json.v2.JsonField;
 
 public class JsonFieldReaderTest {
 

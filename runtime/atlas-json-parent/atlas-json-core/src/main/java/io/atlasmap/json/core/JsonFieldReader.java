@@ -15,16 +15,18 @@
  */
 package io.atlasmap.json.core;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.json.v2.JsonField;
 import io.atlasmap.v2.CollectionType;
 import io.atlasmap.v2.FieldType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class JsonFieldReader {
 

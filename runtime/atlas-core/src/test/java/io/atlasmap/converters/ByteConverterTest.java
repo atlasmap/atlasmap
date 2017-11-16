@@ -15,21 +15,21 @@
  */
 package io.atlasmap.converters;
 
-import io.atlasmap.spi.AtlasConversionConcern;
-import io.atlasmap.api.AtlasConversionException;
-import io.atlasmap.spi.AtlasConversionInfo;
-import io.atlasmap.spi.AtlasPrimitiveConverter;
-import io.atlasmap.v2.FieldType;
-
-import org.junit.Assert;
-import org.junit.Test;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import org.junit.Assert;
+import org.junit.Test;
+
+import io.atlasmap.api.AtlasConversionException;
+import io.atlasmap.spi.AtlasConversionConcern;
+import io.atlasmap.spi.AtlasConversionInfo;
+import io.atlasmap.spi.AtlasPrimitiveConverter;
+import io.atlasmap.v2.FieldType;
 
 public class ByteConverterTest {
 

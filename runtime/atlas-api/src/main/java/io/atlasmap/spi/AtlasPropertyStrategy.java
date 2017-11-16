@@ -16,6 +16,7 @@
 package io.atlasmap.spi;
 
 import java.util.Map;
+
 import io.atlasmap.api.AtlasConversionException;
 import io.atlasmap.api.AtlasUnsupportedException;
 import io.atlasmap.v2.AtlasMapping;

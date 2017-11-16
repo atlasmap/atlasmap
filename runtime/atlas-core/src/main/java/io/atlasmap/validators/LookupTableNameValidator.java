@@ -16,12 +16,6 @@
 
 package io.atlasmap.validators;
 
-import io.atlasmap.spi.AtlasValidator;
-import io.atlasmap.v2.LookupTable;
-import io.atlasmap.v2.LookupTables;
-import io.atlasmap.v2.Validation;
-import io.atlasmap.v2.ValidationScope;
-import io.atlasmap.v2.ValidationStatus;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -32,6 +26,13 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+
+import io.atlasmap.spi.AtlasValidator;
+import io.atlasmap.v2.LookupTable;
+import io.atlasmap.v2.LookupTables;
+import io.atlasmap.v2.Validation;
+import io.atlasmap.v2.ValidationScope;
+import io.atlasmap.v2.ValidationStatus;
 
 public class LookupTableNameValidator implements AtlasValidator {
 

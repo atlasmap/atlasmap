@@ -15,15 +15,16 @@
  */
 package io.atlasmap.core;
 
-import io.atlasmap.v2.AtlasMapping;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+
+import io.atlasmap.v2.AtlasMapping;
 
 public class AtlasMappingUtil {
 

@@ -15,27 +15,6 @@
  */
 package io.atlasmap.core;
 
-import io.atlasmap.api.AtlasContext;
-import io.atlasmap.api.AtlasContextFactory;
-import io.atlasmap.api.AtlasConversionService;
-import io.atlasmap.api.AtlasException;
-import io.atlasmap.api.AtlasFieldActionService;
-import io.atlasmap.api.AtlasValidationService;
-import io.atlasmap.core.AtlasMappingService.AtlasMappingFormat;
-import io.atlasmap.mxbean.AtlasContextFactoryMXBean;
-import io.atlasmap.spi.AtlasCombineStrategy;
-import io.atlasmap.spi.AtlasModule;
-import io.atlasmap.spi.AtlasModuleDetail;
-import io.atlasmap.spi.AtlasModuleInfo;
-import io.atlasmap.spi.AtlasPropertyStrategy;
-import io.atlasmap.spi.AtlasSeparateStrategy;
-import io.atlasmap.v2.AtlasMapping;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.management.MalformedObjectNameException;
-import javax.management.ObjectName;
 import java.io.File;
 import java.lang.management.ManagementFactory;
 import java.lang.reflect.Constructor;
@@ -51,6 +30,28 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.UUID;
+
+import javax.management.MalformedObjectNameException;
+import javax.management.ObjectName;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import io.atlasmap.api.AtlasContext;
+import io.atlasmap.api.AtlasContextFactory;
+import io.atlasmap.api.AtlasConversionService;
+import io.atlasmap.api.AtlasException;
+import io.atlasmap.api.AtlasFieldActionService;
+import io.atlasmap.api.AtlasValidationService;
+import io.atlasmap.core.AtlasMappingService.AtlasMappingFormat;
+import io.atlasmap.mxbean.AtlasContextFactoryMXBean;
+import io.atlasmap.spi.AtlasCombineStrategy;
+import io.atlasmap.spi.AtlasModule;
+import io.atlasmap.spi.AtlasModuleDetail;
+import io.atlasmap.spi.AtlasModuleInfo;
+import io.atlasmap.spi.AtlasPropertyStrategy;
+import io.atlasmap.spi.AtlasSeparateStrategy;
+import io.atlasmap.v2.AtlasMapping;
 
 public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasContextFactoryMXBean {
 

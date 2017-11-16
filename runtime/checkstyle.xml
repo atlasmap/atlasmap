@@ -67,7 +67,15 @@
     <!-- Checks for imports                              -->
     <!-- See http://checkstyle.sf.net/config_import.html -->
     <module name="AvoidStarImport"/>
+    <module name="ImportOrder">
+      <property name="groups" value="/^java\./,javax,org,com"/>
+      <property name="ordered" value="true"/>
+      <property name="separated" value="true"/>
+      <property name="option" value="top"/>
+      <property name="sortStaticImportsAlphabetically" value="true"/>
+    </module>
     <module name="RedundantImport"/>
+    <module name="UnusedImports" />
 
     <!-- Modifier Checks                                    -->
     <!-- See http://checkstyle.sf.net/config_modifiers.html -->
@@ -81,6 +89,7 @@
     <!-- http://checkstyle.sourceforge.net/config_misc.html -->
     <module name="UpperEll"/>
 
+    <!-- Name Checks -->
     <module name="ConstantName" />
     <module name="LocalFinalVariableName" />
     <module name="LocalVariableName" />
@@ -89,7 +98,6 @@
     <module name="PackageName" />
     <module name="ParameterName" />
     <module name="StaticVariableName" />
-    <module name="UnusedImports" />
 
   </module>
 </module>

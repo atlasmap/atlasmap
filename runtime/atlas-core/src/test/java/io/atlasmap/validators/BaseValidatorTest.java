@@ -15,6 +15,13 @@
  */
 package io.atlasmap.validators;
 
+import java.util.List;
+
+import org.junit.After;
+import org.junit.Before;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import io.atlasmap.core.AtlasMappingUtil;
 import io.atlasmap.spi.AtlasValidator;
 import io.atlasmap.v2.AtlasMapping;
@@ -30,13 +37,6 @@ import io.atlasmap.v2.MappingType;
 import io.atlasmap.v2.MockField;
 import io.atlasmap.v2.Validation;
 import io.atlasmap.v2.Validations;
-
-import java.util.List;
-
-import org.junit.After;
-import org.junit.Before;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public abstract class BaseValidatorTest {
 

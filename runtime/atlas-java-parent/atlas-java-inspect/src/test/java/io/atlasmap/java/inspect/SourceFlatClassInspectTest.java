@@ -15,11 +15,12 @@
  */
 package io.atlasmap.java.inspect;
 
-import io.atlasmap.core.DefaultAtlasConversionService;
-import io.atlasmap.java.test.SourceFlatPrimitiveClass;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import io.atlasmap.core.DefaultAtlasConversionService;
+import io.atlasmap.java.test.SourceFlatPrimitiveClass;
 
 public class SourceFlatClassInspectTest {
 

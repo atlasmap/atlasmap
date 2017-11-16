@@ -15,23 +15,24 @@
  */
 package io.atlasmap.java.inspect;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
 import java.util.ArrayList;
 import java.util.Vector;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
 import io.atlasmap.core.DefaultAtlasConversionService;
 import io.atlasmap.java.test.PopulatedListOrderList;
 import io.atlasmap.java.test.SourceOrderList;
 import io.atlasmap.java.test.TargetOrderList;
 import io.atlasmap.java.v2.JavaClass;
 import io.atlasmap.java.v2.JavaField;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 
 public class JavaConstructServiceComplexListTest {
 

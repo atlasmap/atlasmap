@@ -1,16 +1,16 @@
 package org.apache.camel.component.atlasmap;
 
+import static org.apache.camel.component.atlasmap.AtlasEndpoint.isSourceXmlOrJson;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import java.util.List;
+
+import org.junit.Test;
 
 import io.atlasmap.v2.AtlasMapping;
 import io.atlasmap.v2.DataSource;
 import io.atlasmap.v2.DataSourceType;
-
-import org.junit.Test;
-
-import static org.apache.camel.component.atlasmap.AtlasEndpoint.isSourceXmlOrJson;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 public class AtlasEndpointTest {
 

@@ -15,13 +15,6 @@
  */
 package io.atlasmap.validators;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import io.atlasmap.v2.Validation;
-import io.atlasmap.v2.ValidationScope;
-import io.atlasmap.v2.ValidationStatus;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertEquals;
@@ -29,6 +22,14 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import io.atlasmap.v2.Validation;
+import io.atlasmap.v2.ValidationScope;
+import io.atlasmap.v2.ValidationStatus;
 
 public class AtlasValidationHelperTest {
 

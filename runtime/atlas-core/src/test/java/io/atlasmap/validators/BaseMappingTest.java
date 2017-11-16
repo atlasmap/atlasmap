@@ -15,6 +15,9 @@
  */
 package io.atlasmap.validators;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import io.atlasmap.core.AtlasMappingUtil;
 // TODO: Fix circular dependency
 // import io.atlasmap.java.v2.JavaField;
@@ -31,9 +34,6 @@ import io.atlasmap.v2.MappingType;
 import io.atlasmap.v2.MockField;
 import io.atlasmap.v2.Validation;
 import io.atlasmap.v2.Validations;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public abstract class BaseMappingTest {
 

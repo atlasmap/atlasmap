@@ -15,19 +15,21 @@
  */
 package io.atlasmap.java.v2;
 
-import io.atlasmap.v2.AtlasMapping;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.Assert.assertNotNull;
+
+import java.io.File;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.transform.stream.StreamSource;
-import java.io.File;
 
-import static org.junit.Assert.assertNotNull;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import io.atlasmap.v2.AtlasMapping;
 
 public class XmlMarshallerTest extends BaseMarshallerTest {
 

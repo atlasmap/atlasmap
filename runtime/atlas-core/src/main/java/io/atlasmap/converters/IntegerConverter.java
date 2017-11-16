@@ -15,9 +15,9 @@
  */
 package io.atlasmap.converters;
 
+import io.atlasmap.api.AtlasConversionException;
 import io.atlasmap.api.AtlasUnsupportedException;
 import io.atlasmap.spi.AtlasConversionConcern;
-import io.atlasmap.api.AtlasConversionException;
 import io.atlasmap.spi.AtlasConversionInfo;
 import io.atlasmap.spi.AtlasPrimitiveConverter;
 import io.atlasmap.v2.FieldType;

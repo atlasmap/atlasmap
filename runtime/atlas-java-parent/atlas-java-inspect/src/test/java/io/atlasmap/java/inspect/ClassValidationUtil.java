@@ -15,19 +15,19 @@
  */
 package io.atlasmap.java.inspect;
 
-import io.atlasmap.java.v2.AtlasJavaModelFactory;
-import io.atlasmap.java.v2.JavaClass;
-import io.atlasmap.java.v2.JavaField;
-import io.atlasmap.v2.CollectionType;
-import io.atlasmap.v2.FieldStatus;
-import io.atlasmap.v2.FieldType;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+
+import io.atlasmap.java.v2.AtlasJavaModelFactory;
+import io.atlasmap.java.v2.JavaClass;
+import io.atlasmap.java.v2.JavaField;
+import io.atlasmap.v2.CollectionType;
+import io.atlasmap.v2.FieldStatus;
+import io.atlasmap.v2.FieldType;
 
 public class ClassValidationUtil {
 

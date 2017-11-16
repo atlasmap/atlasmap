@@ -15,8 +15,15 @@
  */
 package io.atlasmap.actions;
 
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
 import java.util.regex.Pattern;
+
+import org.junit.Test;
+
 import io.atlasmap.v2.Capitalize;
 import io.atlasmap.v2.Lowercase;
 import io.atlasmap.v2.SeparateByDash;
@@ -26,11 +33,6 @@ import io.atlasmap.v2.Trim;
 import io.atlasmap.v2.TrimLeft;
 import io.atlasmap.v2.TrimRight;
 import io.atlasmap.v2.Uppercase;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 
 public class StringSimpleFieldActionsTest {
 

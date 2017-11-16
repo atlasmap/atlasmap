@@ -1,5 +1,13 @@
 package io.atlasmap.json.inspect;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.List;
+
+import org.hamcrest.core.Is;
+import org.junit.Assert;
+import org.junit.Test;
+
 import io.atlasmap.json.v2.JsonComplexType;
 import io.atlasmap.json.v2.JsonDocument;
 import io.atlasmap.json.v2.JsonField;
@@ -8,13 +16,6 @@ import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldStatus;
 import io.atlasmap.v2.FieldType;
 import io.atlasmap.v2.Fields;
-import org.hamcrest.core.Is;
-import org.junit.Assert;
-import org.junit.Test;
-
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.List;
 
 /**
  */

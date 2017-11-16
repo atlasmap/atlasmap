@@ -15,12 +15,12 @@
  */
 package io.atlasmap.api;
 
+import java.util.List;
+
 import io.atlasmap.v2.ActionDetail;
 import io.atlasmap.v2.Actions;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldType;
-
-import java.util.List;
 
 public interface AtlasFieldActionService {
 

@@ -1,12 +1,9 @@
 package io.atlasmap.json.inspect;
 
-import io.atlasmap.json.v2.JsonComplexType;
-import io.atlasmap.json.v2.JsonDocument;
-import io.atlasmap.json.v2.JsonField;
-import io.atlasmap.v2.CollectionType;
-import io.atlasmap.v2.Field;
-import io.atlasmap.v2.FieldStatus;
-import io.atlasmap.v2.FieldType;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -15,10 +12,13 @@ import java.util.List;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import io.atlasmap.json.v2.JsonComplexType;
+import io.atlasmap.json.v2.JsonDocument;
+import io.atlasmap.json.v2.JsonField;
+import io.atlasmap.v2.CollectionType;
+import io.atlasmap.v2.Field;
+import io.atlasmap.v2.FieldStatus;
+import io.atlasmap.v2.FieldType;
 
 /**
  */

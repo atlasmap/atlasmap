@@ -15,8 +15,16 @@
  */
 package io.atlasmap.reference.java_to_java;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
 import java.io.File;
+
 import org.junit.Test;
+
 import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasSession;
 import io.atlasmap.java.test.BaseFlatPrimitiveClass;
@@ -24,12 +32,6 @@ import io.atlasmap.java.test.SourceFlatPrimitiveClass;
 import io.atlasmap.java.test.TargetFlatPrimitiveClass;
 import io.atlasmap.reference.AtlasMappingBaseTest;
 import io.atlasmap.reference.AtlasTestUtil;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 
 public class JavaJavaAutoConversionTest extends AtlasMappingBaseTest {
 

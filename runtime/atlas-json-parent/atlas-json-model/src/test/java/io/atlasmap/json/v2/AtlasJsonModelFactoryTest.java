@@ -15,14 +15,14 @@
  */
 package io.atlasmap.json.v2;
 
-import org.junit.Test;
-
-import io.atlasmap.v2.AtlasJsonMapper;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.io.File;
+
+import org.junit.Test;
+
+import io.atlasmap.v2.AtlasJsonMapper;
 
 public class AtlasJsonModelFactoryTest {
 

@@ -15,19 +15,19 @@
  */
 package io.atlasmap.json.module;
 
-import io.atlasmap.json.v2.JsonField;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import io.atlasmap.api.AtlasConversionService;
 import io.atlasmap.core.BaseModuleValidationService;
+import io.atlasmap.json.v2.JsonField;
 import io.atlasmap.spi.AtlasModuleDetail;
 import io.atlasmap.spi.AtlasValidator;
 import io.atlasmap.v2.Validation;
 import io.atlasmap.v2.ValidationScope;
 import io.atlasmap.v2.ValidationStatus;
 import io.atlasmap.validators.NonNullValidator;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class JsonValidationService extends BaseModuleValidationService<JsonField> {
 

@@ -2,6 +2,7 @@ package io.atlasmap.validation;
 
 import org.junit.After;
 import org.junit.Before;
+
 import io.atlasmap.api.AtlasContextFactory;
 import io.atlasmap.core.DefaultAtlasContextFactory;
 

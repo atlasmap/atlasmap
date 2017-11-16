@@ -15,15 +15,6 @@
  */
 package io.atlasmap.java.inspect;
 
-import io.atlasmap.core.DefaultAtlasConversionService;
-import io.atlasmap.java.test.CachedComplexClass;
-import io.atlasmap.java.v2.AtlasJavaModelFactory;
-import io.atlasmap.java.v2.JavaClass;
-import io.atlasmap.java.v2.JavaField;
-import io.atlasmap.v2.FieldStatus;
-
-import org.junit.Test;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -31,6 +22,14 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Test;
+
+import io.atlasmap.core.DefaultAtlasConversionService;
+import io.atlasmap.java.test.CachedComplexClass;
+import io.atlasmap.java.v2.AtlasJavaModelFactory;
+import io.atlasmap.java.v2.JavaClass;
+import io.atlasmap.java.v2.JavaField;
+import io.atlasmap.v2.FieldStatus;
 
 public class CachedComplexClassInspectClassTest {
 

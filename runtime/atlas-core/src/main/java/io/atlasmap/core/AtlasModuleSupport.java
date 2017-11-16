@@ -2,6 +2,7 @@ package io.atlasmap.core;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import io.atlasmap.v2.AtlasMapping;
 import io.atlasmap.v2.BaseMapping;
 import io.atlasmap.v2.Collection;

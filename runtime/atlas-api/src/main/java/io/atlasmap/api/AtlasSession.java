@@ -15,10 +15,11 @@
  */
 package io.atlasmap.api;
 
+import java.util.Map;
+
 import io.atlasmap.v2.AtlasMapping;
 import io.atlasmap.v2.Audits;
 import io.atlasmap.v2.Validations;
-import java.util.Map;
 
 public interface AtlasSession {
 

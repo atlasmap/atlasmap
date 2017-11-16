@@ -15,10 +15,11 @@
  */
 package io.atlasmap.core;
 
-import io.atlasmap.mxbean.AtlasModuleInfoMXBean;
-import io.atlasmap.spi.AtlasModuleInfo;
 import java.lang.reflect.Constructor;
 import java.util.List;
+
+import io.atlasmap.mxbean.AtlasModuleInfoMXBean;
+import io.atlasmap.spi.AtlasModuleInfo;
 
 public class DefaultAtlasModuleInfo implements AtlasModuleInfo, AtlasModuleInfoMXBean {
     private String name;

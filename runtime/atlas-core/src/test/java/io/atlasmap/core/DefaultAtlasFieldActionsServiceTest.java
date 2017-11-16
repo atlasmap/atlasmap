@@ -1,5 +1,8 @@
 package io.atlasmap.core;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import java.util.List;
 
 import org.junit.After;
@@ -8,9 +11,6 @@ import org.junit.Test;
 
 import io.atlasmap.v2.ActionDetail;
 import io.atlasmap.v2.Property;
-
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 public class DefaultAtlasFieldActionsServiceTest {
 

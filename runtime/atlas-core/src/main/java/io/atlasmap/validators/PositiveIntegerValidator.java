@@ -16,6 +16,7 @@
 package io.atlasmap.validators;
 
 import java.util.List;
+
 import io.atlasmap.spi.AtlasValidator;
 import io.atlasmap.v2.Validation;
 import io.atlasmap.v2.ValidationScope;

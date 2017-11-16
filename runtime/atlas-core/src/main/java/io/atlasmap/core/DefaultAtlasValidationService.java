@@ -15,6 +15,15 @@
  */
 package io.atlasmap.core;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import io.atlasmap.api.AtlasValidationService;
 import io.atlasmap.spi.AtlasValidator;
 import io.atlasmap.v2.AtlasMapping;
@@ -35,15 +44,6 @@ import io.atlasmap.validators.NonNullValidator;
 import io.atlasmap.validators.NotEmptyValidator;
 import io.atlasmap.validators.PositiveIntegerValidator;
 import io.atlasmap.validators.StringPatternValidator;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.function.Function;
-import java.util.function.Supplier;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class DefaultAtlasValidationService implements AtlasValidationService {
 

@@ -15,17 +15,17 @@
  */
 package io.atlasmap.validators;
 
-import io.atlasmap.v2.Validation;
-import io.atlasmap.v2.ValidationScope;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import io.atlasmap.v2.Validation;
+import io.atlasmap.v2.ValidationScope;
 
 public class StringLengthValidatorTest extends BaseValidatorTest {
 

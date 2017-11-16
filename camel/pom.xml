@@ -256,10 +256,10 @@
             <plugin>
                 <artifactId>maven-checkstyle-plugin</artifactId>
                 <configuration>
-                    <configLocation>checkstyle.xml</configLocation>
+                    <configLocation>../runtime/checkstyle.xml</configLocation>
                     <includeTestSourceDirectory>true</includeTestSourceDirectory>
                     <propertyExpansion>
-                        checkstyle.suppression.file=checkstyle-suppressions.xml
+                        checkstyle.suppression.file=../runtime/checkstyle-suppressions.xml
                     </propertyExpansion>
                 </configuration>
             </plugin>

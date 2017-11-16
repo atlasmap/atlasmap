@@ -17,6 +17,8 @@ import io.atlasmap.api.AtlasException;
 import io.atlasmap.api.AtlasFieldAction;
 import io.atlasmap.api.AtlasFieldActionService;
 import io.atlasmap.spi.AtlasFieldActionInfo;
+import io.atlasmap.v2.Action;
+import io.atlasmap.v2.ActionDetail;
 import io.atlasmap.v2.ActionDetails;
 import io.atlasmap.v2.Actions;
 import io.atlasmap.v2.Field;
@@ -24,8 +26,6 @@ import io.atlasmap.v2.FieldType;
 import io.atlasmap.v2.Properties;
 import io.atlasmap.v2.Property;
 import io.atlasmap.v2.SimpleField;
-import io.atlasmap.v2.Action;
-import io.atlasmap.v2.ActionDetail;
 
 public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
 

@@ -1,9 +1,10 @@
 package org.apache.camel.component.atlasmap;
 
-import twitter4j.Status;
-import twitter4j.User;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+
+import twitter4j.Status;
+import twitter4j.User;
 
 public class Util {
 

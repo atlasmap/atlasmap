@@ -17,6 +17,7 @@ package io.atlasmap.spi;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+
 import io.atlasmap.v2.CollectionType;
 import io.atlasmap.v2.FieldType;
 

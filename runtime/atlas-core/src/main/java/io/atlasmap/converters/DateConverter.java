@@ -15,11 +15,6 @@
  */
 package io.atlasmap.converters;
 
-import io.atlasmap.api.AtlasConversionException;
-import io.atlasmap.api.AtlasConverter;
-import io.atlasmap.spi.AtlasConversionInfo;
-import io.atlasmap.v2.FieldType;
-
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.Instant;
@@ -32,6 +27,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+
+import io.atlasmap.api.AtlasConversionException;
+import io.atlasmap.api.AtlasConverter;
+import io.atlasmap.spi.AtlasConversionInfo;
+import io.atlasmap.v2.FieldType;
 
 public class DateConverter implements AtlasConverter<Date> {
     @AtlasConversionInfo(sourceType = FieldType.DATE, targetType = FieldType.COMPLEX, sourceClassName = "java.util.Date", targetClassName = "java.time.ZonedDateTime")

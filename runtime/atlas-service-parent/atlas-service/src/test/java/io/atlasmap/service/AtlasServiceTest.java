@@ -15,7 +15,22 @@
  */
 package io.atlasmap.service;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+import java.io.File;
+import java.net.URI;
+import java.util.List;
+
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import io.atlasmap.v2.AtlasJsonMapper;
 import io.atlasmap.v2.AtlasMapping;
 import io.atlasmap.v2.BaseMapping;
@@ -25,17 +40,6 @@ import io.atlasmap.v2.MappingType;
 import io.atlasmap.v2.Mappings;
 import io.atlasmap.v2.StringMap;
 import io.atlasmap.v2.StringMapEntry;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
-import java.io.File;
-import java.net.URI;
-import java.util.List;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 public class AtlasServiceTest {
 

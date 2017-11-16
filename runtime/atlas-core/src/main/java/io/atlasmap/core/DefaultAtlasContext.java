@@ -15,6 +15,21 @@
  */
 package io.atlasmap.core;
 
+import java.lang.management.ManagementFactory;
+import java.net.URI;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.TimeZone;
+import java.util.UUID;
+
+import javax.management.ObjectName;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasContextFactory;
 import io.atlasmap.api.AtlasException;
@@ -32,18 +47,6 @@ import io.atlasmap.v2.DataSource;
 import io.atlasmap.v2.DataSourceType;
 import io.atlasmap.v2.Validation;
 import io.atlasmap.v2.Validations;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import javax.management.ObjectName;
-import java.lang.management.ManagementFactory;
-import java.net.URI;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.TimeZone;
-import java.util.UUID;
 
 public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
 

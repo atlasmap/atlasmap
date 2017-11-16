@@ -15,9 +15,10 @@
  */
 package io.atlasmap.xml.v2;
 
-import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+
+import org.junit.Test;
 
 public class AtlasXmlModelFactoryTest {
 

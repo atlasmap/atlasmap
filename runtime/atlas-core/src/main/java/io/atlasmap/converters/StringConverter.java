@@ -15,15 +15,15 @@
  */
 package io.atlasmap.converters;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
+
+import io.atlasmap.api.AtlasConversionException;
 import io.atlasmap.api.AtlasUnsupportedException;
 import io.atlasmap.spi.AtlasConversionConcern;
-import io.atlasmap.api.AtlasConversionException;
 import io.atlasmap.spi.AtlasConversionInfo;
 import io.atlasmap.spi.AtlasPrimitiveConverter;
 import io.atlasmap.v2.FieldType;
-
-import java.math.BigDecimal;
-import java.math.BigInteger;
 
 public class StringConverter implements AtlasPrimitiveConverter<String> {
 

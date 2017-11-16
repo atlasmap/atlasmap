@@ -15,12 +15,9 @@
  */
 package io.atlasmap.v2;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.Assert.assertNotNull;
 
-import com.sun.xml.bind.marshaller.NamespacePrefixMapper;
-import com.sun.xml.bind.v2.WellKnownNamespace;
+import java.io.File;
 
 import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
@@ -28,9 +25,13 @@ import javax.xml.bind.JAXBElement;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.transform.stream.StreamSource;
-import java.io.File;
 
-import static org.junit.Assert.assertNotNull;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import com.sun.xml.bind.marshaller.NamespacePrefixMapper;
+import com.sun.xml.bind.v2.WellKnownNamespace;
 
 public class XmlMarshallerTest extends BaseMarshallerTest {
 

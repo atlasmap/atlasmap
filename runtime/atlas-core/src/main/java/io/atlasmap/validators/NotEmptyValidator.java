@@ -15,14 +15,15 @@
  */
 package io.atlasmap.validators;
 
-import io.atlasmap.spi.AtlasValidator;
-import io.atlasmap.v2.Validation;
-import io.atlasmap.v2.ValidationScope;
-import io.atlasmap.v2.ValidationStatus;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import io.atlasmap.spi.AtlasValidator;
+import io.atlasmap.v2.Validation;
+import io.atlasmap.v2.ValidationScope;
+import io.atlasmap.v2.ValidationStatus;
 
 public class NotEmptyValidator implements AtlasValidator {
 

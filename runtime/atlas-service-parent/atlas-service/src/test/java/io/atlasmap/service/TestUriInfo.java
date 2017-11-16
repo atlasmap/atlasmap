@@ -15,12 +15,13 @@
  */
 package io.atlasmap.service;
 
+import java.net.URI;
+import java.util.List;
+
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.PathSegment;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
-import java.net.URI;
-import java.util.List;
 
 public class TestUriInfo implements UriInfo {
 

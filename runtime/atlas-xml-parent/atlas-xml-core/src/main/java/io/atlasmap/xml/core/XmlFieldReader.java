@@ -15,9 +15,9 @@
  */
 package io.atlasmap.xml.core;
 
-import io.atlasmap.api.AtlasException;
-import io.atlasmap.v2.FieldType;
-import io.atlasmap.xml.v2.XmlField;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,11 +25,12 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+
+import io.atlasmap.api.AtlasException;
 import io.atlasmap.core.PathUtil;
 import io.atlasmap.core.PathUtil.SegmentContext;
+import io.atlasmap.v2.FieldType;
+import io.atlasmap.xml.v2.XmlField;
 
 public class XmlFieldReader extends XmlFieldTransformer {
 

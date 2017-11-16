@@ -15,23 +15,25 @@
  */
 package io.atlasmap.core;
 
-import java.io.File;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import io.atlasmap.spi.AtlasPropertyType;
-import io.atlasmap.v2.AtlasMapping;
-import io.atlasmap.v2.AtlasModelFactory;
-import io.atlasmap.v2.PropertyField;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+
+import java.io.File;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import io.atlasmap.spi.AtlasPropertyType;
+import io.atlasmap.v2.AtlasMapping;
+import io.atlasmap.v2.AtlasModelFactory;
+import io.atlasmap.v2.PropertyField;
 
 public class DefaultAtlasPropertyStrategyTest {
 

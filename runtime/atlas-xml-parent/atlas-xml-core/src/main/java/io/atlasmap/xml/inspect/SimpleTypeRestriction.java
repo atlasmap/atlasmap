@@ -15,10 +15,10 @@
  */
 package io.atlasmap.xml.inspect;
 
+import java.util.Vector;
+
 import com.sun.xml.xsom.XSFacet;
 import com.sun.xml.xsom.XSRestrictionSimpleType;
-
-import java.util.Vector;
 
 @SuppressWarnings("unused")
 public class SimpleTypeRestriction {

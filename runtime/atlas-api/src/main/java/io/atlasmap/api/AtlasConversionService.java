@@ -15,10 +15,10 @@
  */
 package io.atlasmap.api;
 
-import io.atlasmap.v2.FieldType;
-
 import java.lang.reflect.Method;
 import java.util.Optional;
+
+import io.atlasmap.v2.FieldType;
 
 public interface AtlasConversionService {
 

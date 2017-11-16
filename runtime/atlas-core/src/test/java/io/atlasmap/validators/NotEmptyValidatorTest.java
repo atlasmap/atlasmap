@@ -15,11 +15,10 @@
  */
 package io.atlasmap.validators;
 
-import io.atlasmap.v2.ValidationScope;
-import io.atlasmap.v2.ValidationStatus;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -27,9 +26,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import io.atlasmap.v2.ValidationScope;
+import io.atlasmap.v2.ValidationStatus;
 
 public class NotEmptyValidatorTest extends BaseValidatorTest {
 

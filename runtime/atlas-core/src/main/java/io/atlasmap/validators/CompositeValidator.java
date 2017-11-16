@@ -15,12 +15,13 @@
  */
 package io.atlasmap.validators;
 
-import io.atlasmap.spi.AtlasValidator;
-import io.atlasmap.v2.ValidationStatus;
-import io.atlasmap.v2.Validation;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import io.atlasmap.spi.AtlasValidator;
+import io.atlasmap.v2.Validation;
+import io.atlasmap.v2.ValidationStatus;
 
 public class CompositeValidator implements AtlasValidator {
 

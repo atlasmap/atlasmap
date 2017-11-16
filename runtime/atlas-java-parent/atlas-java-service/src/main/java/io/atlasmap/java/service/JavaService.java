@@ -15,18 +15,6 @@
  */
 package io.atlasmap.java.service;
 
-import io.atlasmap.core.DefaultAtlasConversionService;
-import io.atlasmap.java.inspect.ClassInspectionService;
-import io.atlasmap.java.inspect.MavenClasspathHelper;
-import io.atlasmap.java.v2.ClassInspectionRequest;
-import io.atlasmap.java.v2.ClassInspectionResponse;
-import io.atlasmap.java.v2.JavaClass;
-import io.atlasmap.java.v2.MavenClasspathRequest;
-import io.atlasmap.java.v2.MavenClasspathResponse;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -38,6 +26,18 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import io.atlasmap.core.DefaultAtlasConversionService;
+import io.atlasmap.java.inspect.ClassInspectionService;
+import io.atlasmap.java.inspect.MavenClasspathHelper;
+import io.atlasmap.java.v2.ClassInspectionRequest;
+import io.atlasmap.java.v2.ClassInspectionResponse;
+import io.atlasmap.java.v2.JavaClass;
+import io.atlasmap.java.v2.MavenClasspathRequest;
+import io.atlasmap.java.v2.MavenClasspathResponse;
 
 // http://localhost:8585/v2/atlas/java/class?className=java.lang.String
 

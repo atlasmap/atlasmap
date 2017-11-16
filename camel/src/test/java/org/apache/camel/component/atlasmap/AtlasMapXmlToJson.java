@@ -8,8 +8,8 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import io.atlasmap.core.AtlasMappingService;
-import io.atlasmap.core.DefaultAtlasContextFactory;
 import io.atlasmap.core.AtlasMappingService.AtlasMappingFormat;
+import io.atlasmap.core.DefaultAtlasContextFactory;
 import io.atlasmap.v2.AtlasMapping;
 
 @Ignore

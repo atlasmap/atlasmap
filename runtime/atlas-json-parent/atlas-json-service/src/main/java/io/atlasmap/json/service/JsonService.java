@@ -15,15 +15,6 @@
  */
 package io.atlasmap.json.service;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import io.atlasmap.json.inspect.JsonDocumentInspectionService;
-import io.atlasmap.json.v2.InspectionType;
-import io.atlasmap.json.v2.JsonDocument;
-import io.atlasmap.json.v2.JsonInspectionRequest;
-import io.atlasmap.json.v2.JsonInspectionResponse;
-
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -35,6 +26,15 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import io.atlasmap.json.inspect.JsonDocumentInspectionService;
+import io.atlasmap.json.v2.InspectionType;
+import io.atlasmap.json.v2.JsonDocument;
+import io.atlasmap.json.v2.JsonInspectionRequest;
+import io.atlasmap.json.v2.JsonInspectionResponse;
 
 // http://localhost:8585/v2/atlas/xml/inspection
 

@@ -22,6 +22,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
 import io.atlasmap.java.service.JavaService;
 import io.atlasmap.java.v2.MavenClasspathRequest;
 import io.atlasmap.java.v2.MavenClasspathResponse;
@@ -29,9 +32,6 @@ import io.atlasmap.json.service.JsonService;
 import io.atlasmap.service.AtlasJsonProvider;
 import io.atlasmap.service.AtlasService;
 import io.atlasmap.xml.service.XmlService;
-
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class ServiceConfiguration {

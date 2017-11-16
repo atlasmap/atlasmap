@@ -66,8 +66,7 @@ nohup.out
 .DS_Store
 Thumbs.db
 
-/ui/bin
+**/bin
 /ui/node
 
-/app/bin
 /app/node

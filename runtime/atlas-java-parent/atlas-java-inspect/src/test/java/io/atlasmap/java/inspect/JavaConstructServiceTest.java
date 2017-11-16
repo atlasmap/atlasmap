@@ -15,6 +15,12 @@
  */
 package io.atlasmap.java.inspect;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,12 +32,6 @@ import org.junit.Test;
 import io.atlasmap.core.DefaultAtlasConversionService;
 import io.atlasmap.java.v2.JavaClass;
 import io.atlasmap.v2.CollectionType;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 public class JavaConstructServiceTest {
 

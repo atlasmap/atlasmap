@@ -1,18 +1,19 @@
 package io.atlasmap.core;
 
-import java.util.HashMap;
-import java.util.Map;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
-import io.atlasmap.spi.AtlasCombineStrategy;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import io.atlasmap.spi.AtlasCombineStrategy;
 
 public class DefaultAtlasCombineStrategyTest {
 

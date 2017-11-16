@@ -15,23 +15,23 @@
  */
 package io.atlasmap.converters;
 
-import io.atlasmap.spi.AtlasConversionConcern;
-import io.atlasmap.api.AtlasConversionException;
-import io.atlasmap.spi.AtlasConversionInfo;
-import io.atlasmap.spi.AtlasPrimitiveConverter;
-import io.atlasmap.v2.FieldType;
-
-import org.junit.Test;
-
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
+
+import org.junit.Test;
+
+import io.atlasmap.api.AtlasConversionException;
+import io.atlasmap.spi.AtlasConversionConcern;
+import io.atlasmap.spi.AtlasConversionInfo;
+import io.atlasmap.spi.AtlasPrimitiveConverter;
+import io.atlasmap.v2.FieldType;
 
 public class FloatConverterTest {
     private AtlasPrimitiveConverter<Float> converter = new FloatConverter();

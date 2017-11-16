@@ -1,5 +1,7 @@
 package io.atlasmap.xml.module;
 
+import static org.junit.Assert.assertTrue;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -8,8 +10,6 @@ import io.atlasmap.v2.ConstantField;
 import io.atlasmap.v2.PropertyField;
 import io.atlasmap.v2.SimpleField;
 import io.atlasmap.xml.v2.XmlField;
-
-import static org.junit.Assert.assertTrue;
 
 public class XmlModuleTest {
 

@@ -15,10 +15,12 @@
  */
 package io.atlasmap.xml.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.atlasmap.v2.AtlasJsonMapper;
 import javax.ws.rs.ext.ContextResolver;
 import javax.ws.rs.ext.Provider;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import io.atlasmap.v2.AtlasJsonMapper;
 
 @Provider
 public class AtlasJsonProvider implements ContextResolver<ObjectMapper> {

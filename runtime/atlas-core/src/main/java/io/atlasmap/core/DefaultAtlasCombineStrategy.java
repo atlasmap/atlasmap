@@ -17,6 +17,7 @@ package io.atlasmap.core;
 
 import java.util.Map;
 import java.util.TreeMap;
+
 import io.atlasmap.spi.AtlasCombineStrategy;
 
 public class DefaultAtlasCombineStrategy implements AtlasCombineStrategy {

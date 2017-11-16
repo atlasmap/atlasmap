@@ -15,11 +15,11 @@
  */
 package io.atlasmap.converters;
 
-import io.atlasmap.spi.AtlasConversionConcern;
-import io.atlasmap.spi.AtlasConversionInfo;
-import io.atlasmap.v2.FieldType;
-
-import org.junit.Test;
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -36,11 +36,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import org.junit.Test;
+
+import io.atlasmap.spi.AtlasConversionConcern;
+import io.atlasmap.spi.AtlasConversionInfo;
+import io.atlasmap.v2.FieldType;
 
 public class DateConverterTest {
 

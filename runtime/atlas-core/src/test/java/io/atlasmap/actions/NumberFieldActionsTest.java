@@ -15,6 +15,8 @@
  */
 package io.atlasmap.actions;
 
+import static org.junit.Assert.assertEquals;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -31,8 +33,6 @@ import io.atlasmap.v2.MassUnitType;
 import io.atlasmap.v2.NumberType;
 import io.atlasmap.v2.SumUp;
 import io.atlasmap.v2.VolumeUnitType;
-
-import static org.junit.Assert.assertEquals;
 
 public class NumberFieldActionsTest {
 

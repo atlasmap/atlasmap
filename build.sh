@@ -54,7 +54,9 @@ function readopt() {
 # Build functions
 
 function modules_to_build() {
-  modules="runtime camel ui app"
+  # app needs some love...
+  # modules="runtime camel ui app"
+  modules="runtime camel ui"
   resume_from=$(readopt --resume-from $ARGS 2> /dev/null)
   if [ "x${resume_from}" != x ]; then
     modules=$(echo $modules | sed -e "s/^.*$resume_from/$resume_from/")
@@ -150,9 +152,6 @@ if [ -n "$HELP" ]; then
    displayHelp
    exit 0
 fi
-
-git submodule init
-git submodule update
 
 for module in $(modules_to_build)
 do

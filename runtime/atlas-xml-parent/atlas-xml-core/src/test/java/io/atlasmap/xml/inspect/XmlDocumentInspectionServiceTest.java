@@ -15,6 +15,17 @@
  */
 package io.atlasmap.xml.inspect;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.hamcrest.core.Is;
+import org.junit.Assert;
+import org.junit.Test;
+import org.w3c.dom.Document;
+
 import io.atlasmap.v2.CollectionType;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldType;
@@ -26,16 +37,6 @@ import io.atlasmap.xml.v2.XmlDocument;
 import io.atlasmap.xml.v2.XmlField;
 import io.atlasmap.xml.v2.XmlFields;
 import io.atlasmap.xml.v2.XmlNamespace;
-import org.hamcrest.core.Is;
-import org.junit.Assert;
-import org.junit.Test;
-import org.w3c.dom.Document;
-
-import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class XmlDocumentInspectionServiceTest {
 

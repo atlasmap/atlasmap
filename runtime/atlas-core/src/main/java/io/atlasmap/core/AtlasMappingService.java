@@ -15,20 +15,6 @@
  */
 package io.atlasmap.core;
 
-import io.atlasmap.api.AtlasException;
-import io.atlasmap.api.AtlasValidationException;
-import io.atlasmap.v2.AtlasJsonMapper;
-import io.atlasmap.v2.AtlasMapping;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
-import javax.xml.transform.stream.StreamSource;
 import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -39,6 +25,22 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.transform.stream.StreamSource;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import io.atlasmap.api.AtlasException;
+import io.atlasmap.api.AtlasValidationException;
+import io.atlasmap.v2.AtlasJsonMapper;
+import io.atlasmap.v2.AtlasMapping;
 
 public class AtlasMappingService implements Serializable {
 

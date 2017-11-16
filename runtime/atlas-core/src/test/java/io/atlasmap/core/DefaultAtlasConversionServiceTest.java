@@ -15,20 +15,6 @@
  */
 package io.atlasmap.core;
 
-import io.atlasmap.api.AtlasConverter;
-import io.atlasmap.api.AtlasConversionService;
-import io.atlasmap.spi.AtlasPrimitiveConverter;
-import io.atlasmap.v2.AtlasMapping;
-import io.atlasmap.v2.FieldType;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -38,6 +24,21 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
+
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import io.atlasmap.api.AtlasConversionService;
+import io.atlasmap.api.AtlasConverter;
+import io.atlasmap.spi.AtlasPrimitiveConverter;
+import io.atlasmap.v2.AtlasMapping;
+import io.atlasmap.v2.FieldType;
 
 public class DefaultAtlasConversionServiceTest {
 

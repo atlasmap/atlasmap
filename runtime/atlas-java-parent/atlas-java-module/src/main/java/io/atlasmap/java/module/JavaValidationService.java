@@ -15,20 +15,6 @@
  */
 package io.atlasmap.java.module;
 
-import io.atlasmap.java.v2.JavaField;
-import io.atlasmap.api.AtlasConversionService;
-import io.atlasmap.api.AtlasConverter;
-import io.atlasmap.core.BaseModuleValidationService;
-import io.atlasmap.spi.AtlasConversionInfo;
-import io.atlasmap.spi.AtlasModuleDetail;
-import io.atlasmap.spi.AtlasValidator;
-import io.atlasmap.v2.Field;
-import io.atlasmap.v2.FieldType;
-import io.atlasmap.v2.Validation;
-import io.atlasmap.v2.ValidationScope;
-import io.atlasmap.v2.ValidationStatus;
-import io.atlasmap.validators.NonNullValidator;
-
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -41,6 +27,20 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import io.atlasmap.api.AtlasConversionService;
+import io.atlasmap.api.AtlasConverter;
+import io.atlasmap.core.BaseModuleValidationService;
+import io.atlasmap.java.v2.JavaField;
+import io.atlasmap.spi.AtlasConversionInfo;
+import io.atlasmap.spi.AtlasModuleDetail;
+import io.atlasmap.spi.AtlasValidator;
+import io.atlasmap.v2.Field;
+import io.atlasmap.v2.FieldType;
+import io.atlasmap.v2.Validation;
+import io.atlasmap.v2.ValidationScope;
+import io.atlasmap.v2.ValidationStatus;
+import io.atlasmap.validators.NonNullValidator;
 
 public class JavaValidationService extends BaseModuleValidationService<JavaField> {
 

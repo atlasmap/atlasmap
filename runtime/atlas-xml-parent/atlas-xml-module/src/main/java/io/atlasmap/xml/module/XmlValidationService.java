@@ -15,7 +15,10 @@
  */
 package io.atlasmap.xml.module;
 
-import io.atlasmap.xml.v2.XmlField;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import io.atlasmap.api.AtlasConversionService;
 import io.atlasmap.core.BaseModuleValidationService;
 import io.atlasmap.spi.AtlasModuleDetail;
@@ -24,10 +27,7 @@ import io.atlasmap.v2.Validation;
 import io.atlasmap.v2.ValidationScope;
 import io.atlasmap.v2.ValidationStatus;
 import io.atlasmap.validators.NonNullValidator;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import io.atlasmap.xml.v2.XmlField;
 
 public class XmlValidationService extends BaseModuleValidationService<XmlField> {
 

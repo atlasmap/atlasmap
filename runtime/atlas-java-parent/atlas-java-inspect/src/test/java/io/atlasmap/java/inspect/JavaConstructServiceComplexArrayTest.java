@@ -15,6 +15,10 @@
  */
 package io.atlasmap.java.inspect;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
 import java.util.Arrays;
 
 import org.junit.After;
@@ -32,10 +36,6 @@ import io.atlasmap.java.test.TargetOrder;
 import io.atlasmap.java.test.TargetOrderArray;
 import io.atlasmap.java.v2.JavaClass;
 import io.atlasmap.java.v2.JavaField;
-
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 
 public class JavaConstructServiceComplexArrayTest {
 

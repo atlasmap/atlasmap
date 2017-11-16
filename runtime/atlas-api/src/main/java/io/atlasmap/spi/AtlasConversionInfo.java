@@ -15,10 +15,10 @@
  */
 package io.atlasmap.spi;
 
-import io.atlasmap.v2.FieldType;
-
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+
+import io.atlasmap.v2.FieldType;
 
 @Retention(RetentionPolicy.RUNTIME)
 public @interface AtlasConversionInfo {

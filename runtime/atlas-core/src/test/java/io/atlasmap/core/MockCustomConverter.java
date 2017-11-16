@@ -15,14 +15,14 @@
  */
 package io.atlasmap.core;
 
-import io.atlasmap.api.AtlasConverter;
-import io.atlasmap.api.AtlasConversionException;
-import io.atlasmap.spi.AtlasConversionInfo;
-import io.atlasmap.v2.FieldType;
-
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Date;
+
+import io.atlasmap.api.AtlasConversionException;
+import io.atlasmap.api.AtlasConverter;
+import io.atlasmap.spi.AtlasConversionInfo;
+import io.atlasmap.v2.FieldType;
 
 public class MockCustomConverter implements AtlasConverter<Date> {
 
