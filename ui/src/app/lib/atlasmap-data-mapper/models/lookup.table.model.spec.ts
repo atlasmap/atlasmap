@@ -12,7 +12,7 @@ describe('LookupTable', () => {
 
   it(
     'should ...',
-    inject([LookupTableEntry, LookupTable], (entry : LookupTableEntry, table: LookupTable) => {
+    inject([LookupTableEntry, LookupTable], (entry: LookupTableEntry, table: LookupTable) => {
       expect(entry).toBeTruthy();
       expect(table).toBeTruthy();
     }),

@@ -29,26 +29,27 @@ import { ConfigModel } from '../models/config.model';
                     <i class="fa fa-close" attr.errorIdentifier="{{e.identifier}}"></i>
                 </a>
                 <span class="pficon pficon-error-circle-o"></span>
-                {{e.message}}
+                {{ e.message }}
             </div>
             <div class="alert alert-warning" *ngFor="let w of getWarnings()">
                 <a class="close" (click)="handleClick($event)">
                     <i class="fa fa-close" attr.errorIdentifier="{{w.identifier}}"></i>
                 </a>
                 <span class="pficon pficon-warning-triangle-o"></span>
-                {{w.message}}
+                {{ w.message }}
             </div>
         </div>
-    `
+    `,
 })
 
 export class DataMapperErrorComponent {
     @Input() public errorService: ErrorHandlerService;
-    @Input() public isValidation: boolean = false;
+    @Input() public isValidation = false;
 
     public getErrors(): ErrorInfo[] {
-        let test : ErrorInfo[] = ConfigModel.getConfig().validationErrors;
-        return this.isValidation ? ConfigModel.getConfig().validationErrors.filter(e => e.level >= ErrorLevel.ERROR) : ConfigModel.getConfig().errors;
+        const test: ErrorInfo[] = ConfigModel.getConfig().validationErrors;
+        return this.isValidation ? ConfigModel.getConfig().validationErrors.filter(e => e.level >= ErrorLevel.ERROR)
+            : ConfigModel.getConfig().errors;
     }
 
     public getWarnings(): ErrorInfo[] {
@@ -56,8 +57,7 @@ export class DataMapperErrorComponent {
     }
 
     public handleClick(event: any) {
-        var errorIdentifier: string = event.target.attributes.getNamedItem("errorIdentifier").value;
+        const errorIdentifier: string = event.target.attributes.getNamedItem('errorIdentifier').value;
         this.errorService.removeError(errorIdentifier);
     }
 }
-

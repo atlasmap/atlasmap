@@ -15,12 +15,12 @@
     limitations under the License.
 */
 
-import { Component, Input, ViewChildren, ElementRef, QueryList,  } from '@angular/core';
+import { Component, ViewChildren, ElementRef, QueryList  } from '@angular/core';
 
 import { LookupTable, LookupTableEntry } from '../../models/lookup.table.model';
 import { ConfigModel } from '../../models/config.model';
-import { Field, EnumValue } from '../../models/field.model';
-import { MappingModel, FieldMappingPair } from '../../models/mapping.model';
+import { Field } from '../../models/field.model';
+import { FieldMappingPair } from '../../models/mapping.model';
 
 export class LookupTableData {
     sourceEnumValue: string;
@@ -41,7 +41,7 @@ export class LookupTableData {
                 </select>
             </div>
         </div>
-    `
+    `,
 })
 
 export class LookupTableComponent {
@@ -55,26 +55,26 @@ export class LookupTableComponent {
     public initialize(cfg: ConfigModel, fieldPair: FieldMappingPair): void {
         this.fieldPair = fieldPair;
 
-        var targetField: Field = fieldPair.getFields(false)[0];
-        var targetValues: string[] = [];
-        targetValues.push("[ None ]");
-        for (let e of targetField.enumValues) {
+        const targetField: Field = fieldPair.getFields(false)[0];
+        const targetValues: string[] = [];
+        targetValues.push('[ None ]');
+        for (const e of targetField.enumValues) {
             targetValues.push(e.name);
         }
 
         this.table = cfg.mappings.getTableByName(fieldPair.transition.lookupTableName);
         if (this.table == null) {
-            console.error("Could not find enum lookup table for mapping.", fieldPair);
+            cfg.errorService.error('Could not find enum lookup table for mapping.', fieldPair);
         }
 
-        var d: LookupTableData[] = [];
-        var sourceField: Field = fieldPair.getFields(true)[0];
-        for (let e of sourceField.enumValues) {
-            var tableData: LookupTableData = new LookupTableData();
+        const d: LookupTableData[] = [];
+        const sourceField: Field = fieldPair.getFields(true)[0];
+        for (const e of sourceField.enumValues) {
+            const tableData: LookupTableData = new LookupTableData();
             tableData.sourceEnumValue = e.name;
             tableData.targetEnumValues = [].concat(targetValues);
-            var selected: LookupTableEntry = this.table.getEntryForSource(tableData.sourceEnumValue, false);
-            tableData.selectedTargetEnumValue = (selected == null) ? "[ None ]" : selected.targetValue;
+            const selected: LookupTableEntry = this.table.getEntryForSource(tableData.sourceEnumValue, false);
+            tableData.selectedTargetEnumValue = (selected == null) ? '[ None ]' : selected.targetValue;
             d.push(tableData);
         }
         this.data = d;
@@ -82,20 +82,18 @@ export class LookupTableComponent {
 
     public saveTable(): void {
         this.table.entries = [];
-        for (let c of this.outputSelects.toArray()) {
-            var selectedOptions: any[] = c.nativeElement.selectedOptions;
+        for (const c of this.outputSelects.toArray()) {
+            const selectedOptions: any[] = c.nativeElement.selectedOptions;
             if (selectedOptions && selectedOptions.length) {
-                var targetValue: string = selectedOptions[0].label;
-                if (targetValue == "[ None ]") {
+                const targetValue: string = selectedOptions[0].label;
+                if (targetValue == '[ None ]') {
                     continue;
                 }
-                var e: LookupTableEntry = new LookupTableEntry();
-                e.sourceValue = c.nativeElement.attributes["sourceValue"].value;
+                const e: LookupTableEntry = new LookupTableEntry();
+                e.sourceValue = c.nativeElement.attributes['sourceValue'].value;
                 e.targetValue = targetValue;
                 this.table.entries.push(e);
             }
         }
-        console.log("Saved table.", this.table.toString());
     }
 }
-

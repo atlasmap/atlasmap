@@ -14,28 +14,15 @@
     limitations under the License.
 */
 
-import { Component, OnInit, Input, ViewChild, Injectable, ViewEncapsulation, ChangeDetectorRef } from '@angular/core';
-
-import { Field } from '../models/field.model';
-import { DocumentDefinition } from '../models/document.definition.model';
-import { MappingModel } from '../models/mapping.model';
-import { TransitionModel, TransitionMode, TransitionDelimiter } from '../models/transition.model';
-import { MappingDefinition } from '../models/mapping.definition.model';
+import { Component, OnInit, ViewChild, ViewEncapsulation, ChangeDetectorRef } from '@angular/core';
 import { ConfigModel } from '../models/config.model';
-
-import { MappingManagementService } from '../services/mapping.management.service';
-import { DocumentManagementService } from '../services/document.management.service';
-import { ErrorHandlerService } from '../services/error.handler.service';
 
 import { ToolbarComponent } from './toolbar.component';
 import { DataMapperErrorComponent } from './data.mapper.error.component';
 import { LineMachineComponent } from './line.machine.component';
 import { ModalWindowComponent } from './modal.window.component';
-import { MappingListComponent } from './mapping/mapping.list.component';
-import { NamespaceListComponent } from './namespace.list.component';
 
 import { DocumentDefinitionComponent } from './document.definition.component';
-import { DocumentFieldDetailComponent } from './document.field.detail.component';
 
 import { MappingDetailComponent } from './mapping/mapping.detail.component';
 
@@ -44,10 +31,10 @@ import { MappingDetailComponent } from './mapping/mapping.detail.component';
     moduleId: module.id,
     encapsulation: ViewEncapsulation.None,
     templateUrl: './data.mapper.app.component.html',
-    styleUrls: ['data.mapper.app.component.css']
+    styleUrls: ['data.mapper.app.component.css'],
 })
 
-export class DataMapperAppComponent implements OnInit {    
+export class DataMapperAppComponent implements OnInit {
 
     @ViewChild('lineMachine') lineMachine: LineMachineComponent;
     @ViewChild('errorPanel') errorPanel: DataMapperErrorComponent;
@@ -57,7 +44,7 @@ export class DataMapperAppComponent implements OnInit {
     @ViewChild('mappingDetailComponent') mappingDetailComponent: MappingDetailComponent;
     @ViewChild('toolbarComponent') toolbarComponent: ToolbarComponent;
 
-    public loadingStatus: string = "Loading."
+    public loadingStatus = 'Loading.';
 
     constructor(public detector: ChangeDetectorRef) {}
 
@@ -81,6 +68,6 @@ export class DataMapperAppComponent implements OnInit {
     public updateFromConfig(): void {
         // update the mapping line drawing after our fields have redrawn themselves
         // without this, the x/y from the field dom elements is messed up / misaligned.
-        setTimeout(()=> { this.lineMachine.redrawLinesForMappings(); }, 1);
+        setTimeout(() => { this.lineMachine.redrawLinesForMappings(); }, 1);
     }
 }

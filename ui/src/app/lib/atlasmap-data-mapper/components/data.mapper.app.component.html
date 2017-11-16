@@ -38,7 +38,7 @@
         </div>
     </div>
     <div class="DataMapperLoadingMessage" *ngIf="!getConfig().initCfg.initialized">
-        <label [attr.class]="getConfig().initCfg.initializationErrorOccurred ? 'error' : ''">{{loadingStatus}}</label>
+        <label [attr.class]="getConfig().initCfg.initializationErrorOccurred ? 'error' : ''">{{ loadingStatus }}</label>
         <span class="spinner spinner-xs spinner-inline" *ngIf="!getConfig().initCfg.initializationErrorOccurred"></span>
     </div>
 </div>

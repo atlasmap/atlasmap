@@ -20,9 +20,6 @@ import { ConfigModel } from '../models/config.model';
 import { Field } from '../models/field.model';
 import { DocumentDefinition } from '../models/document.definition.model';
 
-import { MappingManagementService } from '../services/mapping.management.service';
-import { DocumentManagementService } from '../services/document.management.service';
-
 import { DocumentFieldDetailComponent } from './document.field.detail.component';
 import { PropertyFieldEditComponent } from './property.field.edit.component';
 import { ConstantFieldEditComponent } from './constant.field.edit.component';
@@ -63,7 +60,7 @@ import { ModalWindowComponent } from './modal.window.component';
                                 <i class="fa fa-angle-right docCollapseIcon" *ngIf="!docDef.showFields"></i>
                                 <i class="fa fa-angle-down docCollapseIcon" *ngIf="docDef.showFields"></i>
                                 <i class="fa {{ isSource ? 'fa-hdd-o' : 'fa-download' }}"></i>
-                                <label>{{docDef.getName(cfg.showTypes)}}</label>
+                                <label>{{ docDef.getName(cfg.showTypes) }}</label>
                             </div>
                             <div style="float:right;" *ngIf="isAddFieldAvailable(docDef)">
                                 <i class="fa fa-plus link" (click)="addField(docDef, $event)"></i>
@@ -73,7 +70,8 @@ import { ModalWindowComponent } from './modal.window.component';
                         <div *ngIf="docDef.showFields">
                             <document-field-detail #fieldDetail *ngFor="let f of docDef.fields" [modalWindow]="modalWindow"
                                 [field]="f" [cfg]="cfg" [lineMachine]="lineMachine"></document-field-detail>
-                            <div class="FieldDetail" *ngIf="!searchMode && docDef.initCfg.type.isPropertyOrConstant() && !docDef.fields.length">
+                            <div class="FieldDetail"
+                                *ngIf="!searchMode && docDef.initCfg.type.isPropertyOrConstant() && !docDef.fields.length">
                                 <label style="width:100%; padding:5px 16px; margin:0">
                                     No {{ docDef.initCfg.type.isProperty() ? 'properties' : 'constants' }} exist.
                                 </label>
@@ -87,29 +85,89 @@ import { ModalWindowComponent } from './modal.window.component';
                 <div class="card-pf-heading fieldsCount">{{ getFieldCount() }} fields</div>
             </div>
         </div>
-    `
+    `,
 })
 
 export class DocumentDefinitionComponent {
     @Input() cfg: ConfigModel;
-    @Input() isSource: boolean = false;
+    @Input() isSource = false;
     @Input() lineMachine: LineMachineComponent;
     @Input() modalWindow: ModalWindowComponent;
 
-    private searchMode: boolean = false;
-    private searchFilter: string = "";
-    private scrollTop: number = 0;
-    private searchResultsExist: boolean = false;
-
-    @ViewChild('documentDefinitionElement') documentDefinitionElement:ElementRef;
+    @ViewChild('documentDefinitionElement') documentDefinitionElement: ElementRef;
     @ViewChildren('fieldDetail') fieldComponents: QueryList<DocumentFieldDetailComponent>;
     @ViewChildren('docDetail') docElements: QueryList<ElementRef>;
 
+    private searchMode = false;
+    private searchFilter = '';
+    private scrollTop = 0;
+    private searchResultsExist = false;
+
+    public getDocDefElementPosition(docDef: DocumentDefinition): any {
+        for (const c of this.docElements.toArray()) {
+            if (c.nativeElement.id == docDef.name) {
+                const documentElementAbsPosition: any = this.getElementPositionForElement(c.nativeElement, false, true);
+                const myElement: any = this.documentDefinitionElement.nativeElement;
+                const myAbsPosition: any = this.getElementPositionForElement(myElement, false, false);
+                return { 'x': (documentElementAbsPosition.x - myAbsPosition.x),
+                         'y': (documentElementAbsPosition.y - myAbsPosition.y) };
+            }
+        }
+        return null;
+    }
+
+    public getFieldDetailComponent(field: Field): DocumentFieldDetailComponent {
+        for (const c of this.fieldComponents.toArray()) {
+            const returnedComponent: DocumentFieldDetailComponent = c.getFieldDetailComponent(field);
+            if (returnedComponent != null) {
+                return returnedComponent;
+            }
+        }
+        return null;
+    }
+
+    public getElementPosition(): any {
+        return this.getElementPositionForElement(this.documentDefinitionElement.nativeElement, true, false);
+    }
+
+    public getElementPositionForElement(el: any, addScrollTop: boolean, subtractScrollTop: boolean): any {
+        let x = 0;
+        let y = 0;
+
+        while (el != null) {
+            x += el.offsetLeft;
+            y += el.offsetTop;
+            el = el.offsetParent;
+        }
+        if (addScrollTop) {
+            y += this.scrollTop;
+        }
+        if (subtractScrollTop) {
+            y -= this.scrollTop;
+        }
+        return { 'x': x, 'y': y };
+    }
+
+    public getFieldDetailComponentPosition(field: Field): any {
+        const c: DocumentFieldDetailComponent = this.getFieldDetailComponent(field);
+        if (c == null) {
+            return null;
+        }
+        const fieldElementAbsPosition: any = c.getElementPosition();
+        const myAbsPosition: any = this.getElementPosition();
+        return { 'x': (fieldElementAbsPosition.x - myAbsPosition.x), 'y': (fieldElementAbsPosition.y - myAbsPosition.y) };
+    }
+
+    public getSearchIconCSSClass(): string {
+        const cssClass = 'fa fa-search searchBoxIcon link';
+        return this.searchMode ? (cssClass + ' selectedIcon') : cssClass;
+    }
+
     private getSourcesTargetsLabel(): string {
         if (this.isSource) {
-            return "Sources"
+            return 'Sources';
         } else {
-            return (this.cfg.targetDocs.length > 1) ? "Targets" : "Target";
+            return (this.cfg.targetDocs.length > 1) ? 'Targets' : 'Target';
         }
     }
 
@@ -134,8 +192,8 @@ export class DocumentDefinitionComponent {
     }
 
     private getFieldCount(): number {
-        var count: number = 0;
-        for (let docDef of this.cfg.getDocs(this.isSource)) {
+        let count = 0;
+        for (const docDef of this.cfg.getDocs(this.isSource)) {
             if (docDef && docDef.allFields) {
                 count += docDef.allFields.length;
             }
@@ -143,77 +201,22 @@ export class DocumentDefinitionComponent {
         return count;
     }
 
-    public getDocDefElementPosition(docDef: DocumentDefinition): any {
-        for (let c of this.docElements.toArray()) {
-            if (c.nativeElement.id == docDef.name) {
-                var documentElementAbsPosition: any = this.getElementPositionForElement(c.nativeElement, false, true);
-                var myElement: any = this.documentDefinitionElement.nativeElement;
-                var myAbsPosition: any = this.getElementPositionForElement(myElement, false, false);
-                return { "x": (documentElementAbsPosition.x - myAbsPosition.x), 
-                    "y": (documentElementAbsPosition.y - myAbsPosition.y) };
-            }
-        }
-        return null;
-    }
-
-    public getFieldDetailComponent(field: Field): DocumentFieldDetailComponent {
-        for (let c of this.fieldComponents.toArray()) {
-            var returnedComponent: DocumentFieldDetailComponent = c.getFieldDetailComponent(field);
-            if (returnedComponent != null) {
-                return returnedComponent;
-            }
-        }
-        return null;
-    }
-
-    public getElementPosition(): any {
-        return this.getElementPositionForElement(this.documentDefinitionElement.nativeElement, true, false);
-    }
-
-    public getElementPositionForElement(el: any, addScrollTop: boolean, subtractScrollTop: boolean): any {
-        var x: number = 0;
-        var y: number = 0;
-
-        while (el != null) {
-            x += el.offsetLeft;
-            y += el.offsetTop;
-            el = el.offsetParent;
-        }
-        if (addScrollTop) {
-            y += this.scrollTop;
-        }
-        if (subtractScrollTop) {
-            y -= this.scrollTop;
-        }
-        return { "x": x, "y":y };
-    }
-
-    public getFieldDetailComponentPosition(field: Field): any {
-        var c: DocumentFieldDetailComponent = this.getFieldDetailComponent(field);
-        if (c == null) {
-            return null;
-        }
-        var fieldElementAbsPosition: any = c.getElementPosition();
-        var myAbsPosition:any = this.getElementPosition();
-        return { "x": (fieldElementAbsPosition.x - myAbsPosition.x), "y": (fieldElementAbsPosition.y - myAbsPosition.y) };
-    }
-
     private search(searchFilter: string): void {
         this.searchResultsExist = false;
-        var searchIsEmpty: boolean = (searchFilter == null) || ("" == searchFilter);
-        var defaultVisibility: boolean = searchIsEmpty ? true : false;
-        for (let docDef of this.cfg.getDocs(this.isSource)) {        
+        const searchIsEmpty: boolean = (searchFilter == null) || ('' == searchFilter);
+        const defaultVisibility: boolean = searchIsEmpty ? true : false;
+        for (const docDef of this.cfg.getDocs(this.isSource)) {
             docDef.visibleInCurrentDocumentSearch = defaultVisibility;
-            for (let field of docDef.getAllFields()) {
+            for (const field of docDef.getAllFields()) {
                 field.visibleInCurrentDocumentSearch = defaultVisibility;
             }
             if (!searchIsEmpty) {
-                for (let field of docDef.getTerminalFields()) {
+                for (const field of docDef.getTerminalFields()) {
                     field.visibleInCurrentDocumentSearch = field.name.toLowerCase().includes(searchFilter.toLowerCase());
-                        this.searchResultsExist = this.searchResultsExist || field.visibleInCurrentDocumentSearch;
+                    this.searchResultsExist = this.searchResultsExist || field.visibleInCurrentDocumentSearch;
                     if (field.visibleInCurrentDocumentSearch) {
                         docDef.visibleInCurrentDocumentSearch = true;
-                        var parentField = field.parentField;
+                        let parentField = field.parentField;
                         while (parentField != null) {
                             parentField.visibleInCurrentDocumentSearch = true;
                             parentField.collapsed = false;
@@ -225,11 +228,6 @@ export class DocumentDefinitionComponent {
         }
     }
 
-    public getSearchIconCSSClass(): string {
-        var cssClass: string = "fa fa-search searchBoxIcon link";
-        return this.searchMode ? (cssClass + " selectedIcon") : cssClass;
-    }
-
     private handleScroll(event: any) {
         this.scrollTop = event.target.scrollTop;
         this.lineMachine.redrawLinesForMappings();
@@ -237,44 +235,46 @@ export class DocumentDefinitionComponent {
 
     private toggleSearch(): void  {
         this.searchMode = !this.searchMode;
-        this.search(this.searchMode ? this.searchFilter : "");
+        this.search(this.searchMode ? this.searchFilter : '');
     }
 
     private addField(docDef: DocumentDefinition, event: any): void {
         event.stopPropagation();
-        var self: DocumentDefinitionComponent = this;
+        const self: DocumentDefinitionComponent = this;
         this.modalWindow.reset();
-        this.modalWindow.confirmButtonText = "Save";
-        var isProperty: boolean = docDef.initCfg.type.isProperty();
-        var isConstant: boolean = docDef.initCfg.type.isConstant();
-        this.modalWindow.headerText = isProperty ? "Create Property" : (isConstant ? "Create Constant" : "Create Field");
+        this.modalWindow.confirmButtonText = 'Save';
+        const isProperty: boolean = docDef.initCfg.type.isProperty();
+        const isConstant: boolean = docDef.initCfg.type.isConstant();
+        this.modalWindow.headerText = isProperty ? 'Create Property' : (isConstant ? 'Create Constant' : 'Create Field');
         this.modalWindow.nestedComponentInitializedCallback = (mw: ModalWindowComponent) => {
             if (isProperty) {
-                var propertyComponent: PropertyFieldEditComponent = mw.nestedComponent as PropertyFieldEditComponent;
+                const propertyComponent: PropertyFieldEditComponent = mw.nestedComponent as PropertyFieldEditComponent;
                 propertyComponent.initialize(null);
             } else if (isConstant) {
-                var constantComponent: ConstantFieldEditComponent = mw.nestedComponent as ConstantFieldEditComponent;
+                const constantComponent: ConstantFieldEditComponent = mw.nestedComponent as ConstantFieldEditComponent;
                 constantComponent.initialize(null);
             } else {
-                var fieldComponent: FieldEditComponent = mw.nestedComponent as FieldEditComponent;
+                const fieldComponent: FieldEditComponent = mw.nestedComponent as FieldEditComponent;
                 fieldComponent.isSource = this.isSource;
                 fieldComponent.initialize(null, docDef, true);
             }
         };
-        this.modalWindow.nestedComponentType = isProperty ? PropertyFieldEditComponent : (isConstant ? ConstantFieldEditComponent : FieldEditComponent)
+        this.modalWindow.nestedComponentType = isProperty ? PropertyFieldEditComponent
+            : (isConstant ? ConstantFieldEditComponent : FieldEditComponent);
         this.modalWindow.okButtonHandler = (mw: ModalWindowComponent) => {
             if (isProperty) {
-                var propertyComponent: PropertyFieldEditComponent = mw.nestedComponent as PropertyFieldEditComponent;
+                const propertyComponent: PropertyFieldEditComponent = mw.nestedComponent as PropertyFieldEditComponent;
                 docDef.addField(propertyComponent.getField());
             } else if (isConstant) {
-                var constantComponent: ConstantFieldEditComponent = mw.nestedComponent as ConstantFieldEditComponent;
+                const constantComponent: ConstantFieldEditComponent = mw.nestedComponent as ConstantFieldEditComponent;
                 docDef.addField(constantComponent.getField());
             } else {
-                var fieldComponent: FieldEditComponent = mw.nestedComponent as FieldEditComponent;
+                const fieldComponent: FieldEditComponent = mw.nestedComponent as FieldEditComponent;
                 docDef.addField(fieldComponent.getField());
             }
             self.cfg.mappingService.saveCurrentMapping();
         };
         this.modalWindow.show();
     }
+
 }

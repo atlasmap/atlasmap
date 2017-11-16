@@ -19,9 +19,7 @@ import { Component, Input } from '@angular/core';
 import { ConfigModel } from '../../models/config.model';
 import { Field } from '../../models/field.model';
 import { MappingModel, FieldMappingPair, MappedField } from '../../models/mapping.model';
-import { TransitionModel, TransitionMode, TransitionDelimiter } from '../../models/transition.model';
 import { DocumentDefinition } from '../../models/document.definition.model';
-
 
 @Component({
     selector: 'mapping-list-field',
@@ -42,7 +40,7 @@ import { DocumentDefinition } from '../../models/document.definition.model';
             {{ getFieldPath() }}
             <i class="fa fa-bolt" *ngIf="mappedField.actions.length != 0"></i>
         </label>
-    `
+    `,
 })
 
 export class MappingListFieldComponent {
@@ -57,7 +55,7 @@ export class MappingListFieldComponent {
     public getFieldPath(): string {
         if (this.mappedField == null || this.mappedField.field == null
             || (this.mappedField.field == DocumentDefinition.getNoneField())) {
-            return "[None]";
+            return '[None]';
         }
         return this.mappedField.field.getFieldLabel(true);
     }
@@ -73,7 +71,7 @@ export class MappingListFieldComponent {
 
     public getParentObjectName() {
         if (this.mappedField == null || this.mappedField.field == null || this.mappedField.field.docDef == null) {
-            return "";
+            return '';
         }
         return this.mappedField.field.docDef.getName(true);
     }
@@ -145,32 +143,32 @@ export class MappingListFieldComponent {
                 <div class="clear"></div>
             </div>
         </div>
-    `
+    `,
 })
 
 export class MappingListComponent {
-    @Input() cfg:ConfigModel;
+    @Input() cfg: ConfigModel;
 
-    public searchMode: boolean = false;
-    private searchFilter: string = "";
+    public searchMode = false;
+    private searchFilter = '';
     private searchResults: MappingModel[] = [];
 
     public getItemsCSSClass(): string {
-        return "items mappings" + (this.searchMode ? " searchShown" : "");
+        return 'items mappings' + (this.searchMode ? ' searchShown' : '');
     }
 
     public searchResultsVisible(): boolean {
-        if (!this.searchMode || this.searchFilter == null || this.searchFilter == "") {
+        if (!this.searchMode || this.searchFilter == null || this.searchFilter == '') {
             return false;
         }
         return (this.searchResults.length == 0);
     }
 
     public getMappingCSSClass(mapping: MappingModel, index: number): string {
-        var cssClass: string = "item ";
-        cssClass += (index % 2 == 1) ? " even" : "";
+        let cssClass = 'item ';
+        cssClass += (index % 2 == 1) ? ' even' : '';
         if (mapping == this.cfg.mappings.activeMapping) {
-            cssClass += " active";
+            cssClass += ' active';
         }
         return cssClass;
     }
@@ -184,11 +182,11 @@ export class MappingListComponent {
     }
 
     public getRowTitleCSSClass(): string {
-        return this.searchMode ? "rowTitles searchShown" : "rowTitles"
+        return this.searchMode ? 'rowTitles searchShown' : 'rowTitles';
     }
 
     public getMappingRowsCSSClass(): string {
-        return this.searchMode ? "rows searchShown" : "rows"
+        return this.searchMode ? 'rows searchShown' : 'rows';
     }
 
     public getMappings(): MappingModel[] {
@@ -196,10 +194,10 @@ export class MappingListComponent {
     }
 
     public getMappedFields(fieldPair: FieldMappingPair, isSource: boolean): MappedField[] {
-        var fields: MappedField[] = fieldPair.getMappedFields(isSource);
+        let fields: MappedField[] = fieldPair.getMappedFields(isSource);
         fields = MappedField.sortMappedFieldsByPath(fields, false);
         if (fields.length == 0) {
-            var mappedField: MappedField = new MappedField();
+            const mappedField: MappedField = new MappedField();
             mappedField.field = DocumentDefinition.getNoneField();
             fields.push(mappedField);
         }
@@ -212,40 +210,21 @@ export class MappingListComponent {
     }
 
     public getSearchIconCSSClass(): string {
-        var cssClass: string = "fa fa-search searchBoxIcon link";
-        return this.searchMode ? (cssClass + " selectedIcon") : cssClass;
-    }
-
-    private search(searchFilter: string): void {
-        this.searchFilter = searchFilter;
-
-        if (!this.searchMode || this.searchFilter == null || this.searchFilter == "") {
-            this.searchResults = [].concat(this.cfg.mappings.getAllMappings(true));
-            return;
-        }
-
-        this.searchResults = [];
-        for (let mapping of this.cfg.mappings.getAllMappings(true)) {
-            for (let fieldPair of mapping.fieldMappings) {
-                if (this.fieldPairMatchesSearch(fieldPair)) {
-                    this.searchResults.push(mapping);
-                    break;
-                }
-            }
-        }
+        const cssClass = 'fa fa-search searchBoxIcon link';
+        return this.searchMode ? (cssClass + ' selectedIcon') : cssClass;
     }
 
     public fieldPairMatchesSearch(fieldPair: FieldMappingPair): boolean {
-        if (!this.searchMode || this.searchFilter == null || this.searchFilter == "") {
+        if (!this.searchMode || this.searchFilter == null || this.searchFilter == '') {
             return true;
         }
-        var filter: string = this.searchFilter.toLowerCase();
-        var transitionName: string = fieldPair.transition.getPrettyName();
+        const filter: string = this.searchFilter.toLowerCase();
+        const transitionName: string = fieldPair.transition.getPrettyName();
         if (transitionName != null && transitionName.toLowerCase().includes(filter)) {
             return true;
         }
-        for (let mappedField of fieldPair.getAllMappedFields()) {
-            let field: Field = mappedField.field;
+        for (const mappedField of fieldPair.getAllMappedFields()) {
+            const field: Field = mappedField.field;
             if (field == null || field.path == null) {
                 continue;
             }
@@ -255,4 +234,24 @@ export class MappingListComponent {
         }
         return false;
     }
+
+    private search(searchFilter: string): void {
+        this.searchFilter = searchFilter;
+
+        if (!this.searchMode || this.searchFilter == null || this.searchFilter == '') {
+            this.searchResults = [].concat(this.cfg.mappings.getAllMappings(true));
+            return;
+        }
+
+        this.searchResults = [];
+        for (const mapping of this.cfg.mappings.getAllMappings(true)) {
+            for (const fieldPair of mapping.fieldMappings) {
+                if (this.fieldPairMatchesSearch(fieldPair)) {
+                    this.searchResults.push(mapping);
+                    break;
+                }
+            }
+        }
+    }
+
 }

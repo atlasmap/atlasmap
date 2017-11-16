@@ -17,7 +17,6 @@
 import { Component } from '@angular/core';
 
 import { ModalWindowValidator } from './modal.window.component';
-import { DataMapperUtil } from '../common/data.mapper.util';
 
 @Component({
     selector: 'template-edit',
@@ -27,7 +26,7 @@ import { DataMapperUtil } from '../common/data.mapper.util';
                 <textarea [(ngModel)]="templateText" rows="16" cols="100"></textarea>
             </div>
         </div>
-    `
+    `,
 })
 
 export class TemplateEditComponent implements ModalWindowValidator {

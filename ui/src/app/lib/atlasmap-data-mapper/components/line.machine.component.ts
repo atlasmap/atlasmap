@@ -14,15 +14,12 @@
     limitations under the License.
 */
 
-import { Component, Input, OnInit, ElementRef, ViewChild, ChangeDetectorRef } from '@angular/core';
-import { DomSanitizer, SafeResourceUrl, SafeUrl, SafeStyle} from '@angular/platform-browser';
+import { ChangeDetectorRef, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 
 import { ConfigModel } from '../models/config.model';
 import { MappingModel } from '../models/mapping.model';
 import { Field } from '../models/field.model';
-
-import { MappingManagementService } from '../services/mapping.management.service';
-import { DocumentManagementService } from '../services/document.management.service';
 
 import { DocumentDefinitionComponent } from './document.definition.component';
 import { DocumentFieldDetailComponent } from './document.field.detail.component';
@@ -32,7 +29,7 @@ export class LineModel {
     public sourceY: string;
     public targetX: string;
     public targetY: string;
-    public stroke: string = "url(#line-gradient-dormant)";
+    public stroke = 'url(#line-gradient-dormant)';
     public style: SafeStyle;
 }
 
@@ -63,21 +60,22 @@ export class LineModel {
                     [attr.style]="lineBeingFormed.style"></svg:line>
             </svg>
         </div>
-    `
+    `,
 })
 
-export class LineMachineComponent {
+export class LineMachineComponent implements OnInit {
     @Input() cfg: ConfigModel;
     @Input() docDefInput: DocumentDefinitionComponent;
     @Input() docDefOutput: DocumentDefinitionComponent;
 
     public lines: LineModel[] = [];
     public lineBeingFormed: LineModel;
-    public drawingLine: boolean = false;
+    public drawingLine = false;
     public svgStyle: SafeStyle;
-    private yOffset = 3;
 
     @ViewChild('lineMachineElement') lineMachineElement: ElementRef;
+
+    private yOffset = 3;
 
     constructor(private sanitizer: DomSanitizer, public detector: ChangeDetectorRef) {}
 
@@ -88,7 +86,7 @@ export class LineMachineComponent {
     }
 
     public addLineFromParams(sourceX: string, sourceY: string, targetX: string, targetY: string, stroke: string): void {
-        var l: LineModel = new LineModel();
+        const l: LineModel = new LineModel();
         l.sourceX = sourceX;
         l.sourceY = sourceY;
         l.targetX = targetX;
@@ -98,14 +96,8 @@ export class LineMachineComponent {
     }
 
     public addLine(l: LineModel): void {
-        //console.log("Add line", l);
         this.createLineStyle(l);
         this.lines.push(l);
-    }
-
-    private createLineStyle(l: LineModel): void {
-        //angular2 will throw an error if we don't use this sanitizer to signal to angular2 that the css style value is ok.
-        l.style = this.sanitizer.bypassSecurityTrustStyle("stroke:" + l.stroke + "; stroke-width:4px;");
     }
 
     public setLineBeingFormed(l: LineModel): void {
@@ -137,15 +129,13 @@ export class LineMachineComponent {
         if (isSource) {
             return;
         }
-        //console.log("Drawing current line from mouse over.");
-        var targetY = this.docDefOutput.getFieldDetailComponentPosition(component.field).y;
-        this.drawCurrentLine("100%", (targetY + this.yOffset).toString());
+        const targetY = this.docDefOutput.getFieldDetailComponentPosition(component.field).y;
+        this.drawCurrentLine('100%', (targetY + this.yOffset).toString());
     }
 
     public mappingChanged(): void {
-        var mappingIsNew: boolean = false;
+        const mappingIsNew = false;
         if (!mappingIsNew) {
-            //console.log("Mapping is not new, active line drawing turned off.");
             this.drawingLine = false;
             this.setLineBeingFormed(null);
         } else {
@@ -181,20 +171,16 @@ export class LineMachineComponent {
 
     public redrawLinesForMappings(): void {
         if (!this.cfg.initCfg.initialized) {
-            //console.log("Not drawing lines, system is not yet initialized.");
             return;
         }
-        //console.log("Drawing lines");
         if (!this.cfg.mappings.activeMapping) {
-            //console.log("No active mapping for line drawing.");
             this.setLineBeingFormed(null);
         }
         this.clearLines();
-        var mappings: MappingModel[] = this.cfg.mappings.mappings;
-        var activeMapping: MappingModel = this.cfg.mappings.activeMapping;
-        var foundSelectedMapping: boolean = false;
-        for (let m of mappings) {
-            //console.log("Drawing line for mapping.", m);
+        const mappings: MappingModel[] = this.cfg.mappings.mappings;
+        const activeMapping: MappingModel = this.cfg.mappings.activeMapping;
+        let foundSelectedMapping = false;
+        for (const m of mappings) {
             foundSelectedMapping = foundSelectedMapping || (m == activeMapping);
             this.drawLinesForMapping(m);
         }
@@ -206,53 +192,55 @@ export class LineMachineComponent {
         }, 10);
     }
 
-    private drawLinesForMapping(m: MappingModel): void {
-        var el: any = this.lineMachineElement.nativeElement;
-        var lineMachineHeight: number = el.offsetHeight;
+    private createLineStyle(l: LineModel): void {
+        //angular2 will throw an error if we don't use this sanitizer to signal to angular2 that the css style value is ok.
+        l.style = this.sanitizer.bypassSecurityTrustStyle('stroke:' + l.stroke + '; stroke-width:4px;');
+    }
 
-        var isSelectedMapping: boolean = (this.cfg.mappings.activeMapping == m);
-        var stroke: string = "url(#line-gradient-" + (isSelectedMapping ? "active" : "dormant") + ")";
-        for (let fieldPair of m.fieldMappings) {
+    private drawLinesForMapping(m: MappingModel): void {
+        const el: any = this.lineMachineElement.nativeElement;
+        const lineMachineHeight: number = el.offsetHeight;
+
+        const isSelectedMapping: boolean = (this.cfg.mappings.activeMapping == m);
+        const stroke: string = 'url(#line-gradient-' + (isSelectedMapping ? 'active' : 'dormant') + ')';
+        for (const fieldPair of m.fieldMappings) {
             if (!fieldPair.sourceFields.length || !fieldPair.targetFields.length) {
-                //console.log("Not drawing lines for mapping, source or target fields are empty.", fieldPair);
                 return;
             }
 
-            for (let mappedInputField of fieldPair.sourceFields) {
-                var inputField: Field = mappedInputField.field;
-                if (!this.checkFieldEligibiltyForLineDrawing(inputField, "input", m)) {
+            for (const mappedInputField of fieldPair.sourceFields) {
+                const inputField: Field = mappedInputField.field;
+                if (!this.checkFieldEligibiltyForLineDrawing(inputField, 'input', m)) {
                     continue;
                 }
 
-                var inputFieldPos: any = this.getScreenPosForField(inputField, this.docDefInput);
+                const inputFieldPos: any = this.getScreenPosForField(inputField, this.docDefInput);
                 if (inputFieldPos == null) {
-                    //console.log("Cant find screen position for input field, not drawing line: " + inputField.path);
                     continue;
                 }
 
-                var sourceY: number = inputFieldPos.y;
+                let sourceY: number = inputFieldPos.y;
                 sourceY = (sourceY < 55) ? 55 : sourceY;
                 sourceY = (sourceY > (lineMachineHeight - 27)) ? (lineMachineHeight - 27) : sourceY;
 
-                for (let mappedOutputField of fieldPair.targetFields) {
-                    var outputField: Field = mappedOutputField.field;
-                    if (!this.checkFieldEligibiltyForLineDrawing(outputField, "output", m)) {
+                for (const mappedOutputField of fieldPair.targetFields) {
+                    const outputField: Field = mappedOutputField.field;
+                    if (!this.checkFieldEligibiltyForLineDrawing(outputField, 'output', m)) {
                         continue;
                     }
 
-                    var outputFieldPos: any = this.getScreenPosForField(outputField, this.docDefOutput);
+                    const outputFieldPos: any = this.getScreenPosForField(outputField, this.docDefOutput);
                     if (outputFieldPos == null) {
-                        //console.log("Cant find screen position for output field, not drawing line: " + outputField.path);
                         continue;
                     }
-                    
-                    var targetY: number = outputFieldPos.y;
+
+                    let targetY: number = outputFieldPos.y;
                     targetY = (targetY < 55) ? 55 : targetY;
                     targetY = (targetY > (lineMachineHeight - 27)) ? (lineMachineHeight - 27) : targetY;
 
                     if (isSelectedMapping || (this.cfg.showLinesAlways)) {
-                        this.addLineFromParams("0", (sourceY + this.yOffset).toString(),
-                            "100%", (targetY + this.yOffset).toString(), stroke);
+                        this.addLineFromParams('0', (sourceY + this.yOffset).toString(),
+                            '100%', (targetY + this.yOffset).toString(), stroke);
                     }
                 }
             }
@@ -264,15 +252,15 @@ export class LineMachineComponent {
             return null;
         }
         if (!field.docDef.showFields) {
-            var pos: any = docDefComponent.getDocDefElementPosition(field.docDef);
+            const pos: any = docDefComponent.getDocDefElementPosition(field.docDef);
             if (pos) {
-                pos["y"] = pos["y"] + 5;
+                pos['y'] = pos['y'] + 5;
             }
             return pos;
         }
-        var parentField: Field = field;
+        let parentField: Field = field;
         while (parentField != null) {
-            var fieldPos: any = docDefComponent.getFieldDetailComponentPosition(parentField);
+            const fieldPos: any = docDefComponent.getFieldDetailComponentPosition(parentField);
             if (fieldPos != null) {
                 return fieldPos;
             }
@@ -283,11 +271,9 @@ export class LineMachineComponent {
 
     private checkFieldEligibiltyForLineDrawing(field: Field, description: string, m: MappingModel): boolean {
         if (!field) {
-            //console.error("Not drawing line, " + description + " field can't be found: " + field.path, m);
             return false;
         }
         if (!field.visibleInCurrentDocumentSearch) {
-            //console.log("Not drawing line, " + description + " field isn't visible: " + field.path, m);
             return false;
         }
         return true;

@@ -17,7 +17,7 @@
 import { Component, Input } from '@angular/core';
 
 import { ConfigModel } from '../models/config.model';
-import { DocumentDefinition, NamespaceModel } from '../models/document.definition.model';
+import { NamespaceModel } from '../models/document.definition.model';
 import { NamespaceEditComponent } from './namespace.edit.component';
 import { ModalWindowComponent } from './modal.window.component';
 import { DataMapperUtil } from '../common/data.mapper.util';
@@ -57,9 +57,9 @@ import { DataMapperUtil } from '../common/data.mapper.util';
                     <div [attr.class]="getRowsCSSClass()">
                         <div *ngFor="let namespace of getNamespaces(); let index=index;"
                             [attr.class]="getNamespaceCSSClass(namespace, index)" (click)="selectNamespace(namespace)">
-                            <label class="alias">{{namespace.isTarget ? 'Target (tns)' : namespace.alias}}</label>
-                            <label class="uri">{{namespace.uri}}</label>
-                            <label class="locationUri">{{namespace.locationUri}}</label>
+                            <label class="alias">{{ namespace.isTarget ? 'Target (tns)' : namespace.alias }}</label>
+                            <label class="uri">{{ namespace.uri }}</label>
+                            <label class="locationUri">{{ namespace.locationUri }}</label>
                             <div class="actions" style="float:right">
                                 <i class="fa fa-edit link" aria-hidden="true" (click)="addEditNamespace(namespace, $event);"></i>
                                 <i class="fa fa-trash link" aria-hidden="true" (click)="removeNamespace(namespace, $event);"></i>
@@ -76,29 +76,29 @@ import { DataMapperUtil } from '../common/data.mapper.util';
                 <div class="clear"></div>
             </div>
         </div>
-    `
+    `,
 })
 
 export class NamespaceListComponent {
     @Input() cfg: ConfigModel;
     @Input() modalWindow: ModalWindowComponent;
 
-    public searchMode: boolean = false;
-    private searchFilter: string = "";
+    public searchMode = false;
+    private searchFilter = '';
     private selectedNamespace: NamespaceModel = null;
     private searchResults: NamespaceModel[] = [];
 
     public getNamespaceCSSClass(namespace: NamespaceModel, index: number): string {
-        var cssClass: string = "item itemRow ";
-        cssClass += (index % 2 == 1) ? " even" : "";
+        let cssClass = 'item itemRow ';
+        cssClass += (index % 2 == 1) ? ' even' : '';
         if (namespace == this.selectedNamespace) {
-            cssClass += " active";
+            cssClass += ' active';
         }
         return cssClass;
     }
 
     public searchResultsVisible(): boolean {
-        if (!this.searchMode || this.searchFilter == null || this.searchFilter == "") {
+        if (!this.searchMode || this.searchFilter == null || this.searchFilter == '') {
             return false;
         }
         return (this.searchResults.length == 0);
@@ -109,15 +109,15 @@ export class NamespaceListComponent {
     }
 
     public getItemsCSSClass(): string {
-        return "items namespaces" + (this.searchMode ? " searchShown" : "");
+        return 'items namespaces' + (this.searchMode ? ' searchShown' : '');
     }
 
     public getRowTitleCSSClass(): string {
-        return this.searchMode ? "rowTitles searchShown" : "rowTitles"
+        return this.searchMode ? 'rowTitles searchShown' : 'rowTitles';
     }
 
     public getRowsCSSClass(): string {
-        return this.searchMode ? "rows searchShown" : "rows"
+        return this.searchMode ? 'rows searchShown' : 'rows';
     }
 
     public getNamespaces(): NamespaceModel[] {
@@ -126,23 +126,23 @@ export class NamespaceListComponent {
 
     public addEditNamespace(ns: NamespaceModel, event: any): void {
         event.stopPropagation();
-        var isEditMode = (ns != null);
+        const isEditMode = (ns != null);
         if (!isEditMode) {
             ns = new NamespaceModel();
             ns.createdByUser = true;
         }
-        var self: NamespaceListComponent = this;
+        const self: NamespaceListComponent = this;
         this.modalWindow.reset();
-        this.modalWindow.confirmButtonText = "Save";
-        this.modalWindow.headerText = (ns == null) ? "Add Namespace" : "Edit Namespace";
+        this.modalWindow.confirmButtonText = 'Save';
+        this.modalWindow.headerText = (ns == null) ? 'Add Namespace' : 'Edit Namespace';
         this.modalWindow.nestedComponentInitializedCallback = (mw: ModalWindowComponent) => {
-            var namespaceComponent: NamespaceEditComponent = mw.nestedComponent as NamespaceEditComponent;
+            const namespaceComponent: NamespaceEditComponent = mw.nestedComponent as NamespaceEditComponent;
             namespaceComponent.initialize(ns, this.cfg.getFirstXmlDoc(false).namespaces);
         };
         this.modalWindow.nestedComponentType = NamespaceEditComponent;
         this.modalWindow.okButtonHandler = (mw: ModalWindowComponent) => {
-            var namespaceComponent: NamespaceEditComponent = mw.nestedComponent as NamespaceEditComponent;
-            var newNamespace: NamespaceModel = namespaceComponent.namespace;
+            const namespaceComponent: NamespaceEditComponent = mw.nestedComponent as NamespaceEditComponent;
+            const newNamespace: NamespaceModel = namespaceComponent.namespace;
             if (isEditMode) {
                 ns.copyFrom(newNamespace);
             } else {
@@ -154,55 +154,22 @@ export class NamespaceListComponent {
         this.modalWindow.show();
     }
 
-    private removeNamespace(ns: NamespaceModel, event: any): void {
-        event.stopPropagation();
-        event.stopPropagation();
-        var self: NamespaceListComponent = this;
-        this.modalWindow.reset();
-        this.modalWindow.confirmButtonText = "Remove";
-        this.modalWindow.headerText = "Remove Namespace?"
-        this.modalWindow.message = "Are you sure you want to remove '" + ns.alias + "' ?";
-        this.modalWindow.okButtonHandler = (mw: ModalWindowComponent) => {
-            DataMapperUtil.removeItemFromArray(ns, this.cfg.getFirstXmlDoc(false).namespaces);
-            this.selectedNamespace = null;
-            this.search(this.searchFilter);
-        };
-        this.modalWindow.show();
-    }
-
     public toggleSearch(): void  {
         this.searchMode = !this.searchMode;
         this.search(this.searchFilter);
     }
 
     public getSearchIconCSSClass(): string {
-        var cssClass: string = "fa fa-search searchBoxIcon link";
-        return this.searchMode ? (cssClass + " selectedIcon") : cssClass;
-    }
-
-    private search(searchFilter: string): void {
-        if (!this.searchMode || this.searchFilter == null || this.searchFilter == "") {
-            this.searchResults = [].concat(this.cfg.getFirstXmlDoc(false).namespaces);
-            return;
-        }
-
-        this.searchFilter = searchFilter;
-        this.searchResults = [];
-        for (let ns of this.cfg.getFirstXmlDoc(false).namespaces) {
-            if (this.namespaceMatchesSearch(ns)) {
-                this.searchResults.push(ns);
-            } else if (this.selectedNamespace != null) {
-                this.selectNamespace = null;
-            }
-        }
+        const cssClass = 'fa fa-search searchBoxIcon link';
+        return this.searchMode ? (cssClass + ' selectedIcon') : cssClass;
     }
 
     public namespaceMatchesSearch(ns: NamespaceModel): boolean {
-        if (!this.searchMode || this.searchFilter == null || this.searchFilter == "") {
+        if (!this.searchMode || this.searchFilter == null || this.searchFilter == '') {
             return true;
         }
-        var filter: string = this.searchFilter.toLowerCase();
-        if (ns.isTarget && ("tns".includes(filter) || "target".includes(filter))) {
+        const filter: string = this.searchFilter.toLowerCase();
+        if (ns.isTarget && ('tns'.includes(filter) || 'target'.includes(filter))) {
             return true;
         }
         if (ns.alias != null && ns.alias.toLowerCase().includes(filter)) {
@@ -217,5 +184,37 @@ export class NamespaceListComponent {
         return false;
     }
 
+    private removeNamespace(ns: NamespaceModel, event: any): void {
+        event.stopPropagation();
+        event.stopPropagation();
+        const self: NamespaceListComponent = this;
+        this.modalWindow.reset();
+        this.modalWindow.confirmButtonText = 'Remove';
+        this.modalWindow.headerText = 'Remove Namespace?';
+        this.modalWindow.message = "Are you sure you want to remove '" + ns.alias + "' ?";
+        this.modalWindow.okButtonHandler = (mw: ModalWindowComponent) => {
+            DataMapperUtil.removeItemFromArray(ns, this.cfg.getFirstXmlDoc(false).namespaces);
+            this.selectedNamespace = null;
+            this.search(this.searchFilter);
+        };
+        this.modalWindow.show();
+    }
+
+    private search(searchFilter: string): void {
+        if (!this.searchMode || this.searchFilter == null || this.searchFilter == '') {
+            this.searchResults = [].concat(this.cfg.getFirstXmlDoc(false).namespaces);
+            return;
+        }
+
+        this.searchFilter = searchFilter;
+        this.searchResults = [];
+        for (const ns of this.cfg.getFirstXmlDoc(false).namespaces) {
+            if (this.namespaceMatchesSearch(ns)) {
+                this.searchResults.push(ns);
+            } else if (this.selectedNamespace != null) {
+                this.selectNamespace = null;
+            }
+        }
+    }
 
 }

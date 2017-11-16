@@ -15,11 +15,7 @@
 */
 
 import { Component, ViewChild } from '@angular/core';
-
-import { DocumentDefinition } from '../models/document.definition.model';
-import { MappingDefinition } from '../models/mapping.definition.model';
 import { ConfigModel } from '../models/config.model';
-import { MappingModel } from '../models/mapping.model';
 
 import { ErrorHandlerService } from '../services/error.handler.service';
 import { DocumentManagementService } from '../services/document.management.service';
@@ -33,7 +29,7 @@ import { DataMapperAppComponent } from './data.mapper.app.component';
     template: `
         <data-mapper #dataMapperComponent></data-mapper>
     `,
-    providers: [MappingManagementService, ErrorHandlerService, DocumentManagementService]
+    providers: [MappingManagementService, ErrorHandlerService, DocumentManagementService],
 })
 
 export class DataMapperAppExampleHostComponent {
@@ -42,17 +38,16 @@ export class DataMapperAppExampleHostComponent {
     public dataMapperComponent: DataMapperAppComponent;
 
     constructor(private initializationService: InitializationService) {
-        console.log("Host component being created.");
         // initialize config information before initializing services
-        var c: ConfigModel = initializationService.cfg;
+        const c: ConfigModel = initializationService.cfg;
 
         //store references to our services in our config model
 
         //initialize base urls for our service calls
-        c.initCfg.baseJavaInspectionServiceUrl = "http://localhost:8585/v2/atlas/java/";
-        c.initCfg.baseXMLInspectionServiceUrl = "http://localhost:8585/v2/atlas/xml/";
-        c.initCfg.baseJSONInspectionServiceUrl = "http://localhost:8585/v2/atlas/json/";
-        c.initCfg.baseMappingServiceUrl = "http://localhost:8585/v2/atlas/";
+        c.initCfg.baseJavaInspectionServiceUrl = 'http://localhost:8585/v2/atlas/java/';
+        c.initCfg.baseXMLInspectionServiceUrl = 'http://localhost:8585/v2/atlas/xml/';
+        c.initCfg.baseJSONInspectionServiceUrl = 'http://localhost:8585/v2/atlas/json/';
+        c.initCfg.baseMappingServiceUrl = 'http://localhost:8585/v2/atlas/';
 
         //initialize data for our class path service call
         //note that quotes, newlines, and tabs are escaped
@@ -61,28 +56,28 @@ export class DataMapperAppExampleHostComponent {
         // if classPath is specified, maven call to resolve pom will be skipped
         c.initCfg.classPath = null;
 
-        /* 
-         * The following examples demonstrate adding source/target documents to the Data Mapper's configuration. 
+        /*
+         * The following examples demonstrate adding source/target documents to the Data Mapper's configuration.
          * Note that multiple source documents are supported, but multiple target documents are not supported.
-         * 
+         *
          * example java source document configuration:
-         * 
+         *
          * var documentIsSourceDocument: boolean = true;
          * c.addJavaDocument("io.atlasmap.java.test.SourceOrder", documentIsSourceDocument);
-         * 
-         * example xml instance document: 
-         * 
+         *
+         * example xml instance document:
+         *
          * c.addXMLInstanceDocument("XMLInstanceSource", DocumentManagementService.generateMockInstanceXML(), documentIsSourceDocument);
-         * 
+         *
          * example xml schema document:
          *
          * c.addXMLSchemaDocument("XMLSchemaSource", DocumentManagementService.generateMockSchemaXML(), documentIsSourceDocument);
-         * 
-         * example json document: 
-         * 
+         *
+         * example json document:
+         *
          * c.addJSONDocument("JSONTarget", DocumentManagementService.generateMockJSON(), documentIsSourceDocument);
-         * 
-         */                
+         *
+         */
 
         //enable debug logging options as needed
         c.initCfg.debugDocumentServiceCalls = true;
@@ -104,7 +99,7 @@ export class DataMapperAppExampleHostComponent {
         c.initCfg.addMockJSONSources = false;
         c.initCfg.addMockJSONInstanceSources = false;
         c.initCfg.addMockJSONSchemaSources = true;
-        
+
         c.initCfg.addMockJavaTarget = false;
         c.initCfg.addMockJavaCachedTarget = false;
         c.initCfg.addMockXMLInstanceTarget = false;
@@ -112,8 +107,6 @@ export class DataMapperAppExampleHostComponent {
         c.initCfg.addMockJSONTarget = false;
         c.initCfg.addMockJSONInstanceTarget = false;
         c.initCfg.addMockJSONSchemaTarget = true;
-        
-        console.log("Example config after host component configuration.", c);
 
         //initialize system
         initializationService.initialize();
@@ -122,16 +115,12 @@ export class DataMapperAppExampleHostComponent {
         c.mappingService.saveMappingOutput$.subscribe((saveHandler: Function) => {
             //NOTE: the mapping definition being saved is currently stored in "this.cfg.mappings" until further notice.
 
-            console.log("Host component saving mappings.");
-            console.log("Mappings to save.", ConfigModel.getConfig().mappings);
-
             //turn this on to print out example json
-            var makeExampleJSON: boolean = false;
+            const makeExampleJSON = false;
             if (makeExampleJSON) {
-                var jsonObject: any = c.mappingService.serializeMappingsToJSON();
-                var jsonVersion = JSON.stringify(jsonObject);
-                var jsonPretty = JSON.stringify(JSON.parse(jsonVersion),null,2);
-                console.log("Mappings as JSON: " + jsonPretty);
+                const jsonObject: any = c.mappingService.serializeMappingsToJSON();
+                const jsonVersion = JSON.stringify(jsonObject);
+                const jsonPretty = JSON.stringify(JSON.parse(jsonVersion), null, 2);
             }
 
             //This is an example callout to save the mapping to the mock java service

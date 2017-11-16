@@ -6,15 +6,12 @@ import { DataMapperAppComponent } from './data.mapper.app.component';
 
 describe('DataMapperAppComponent', () => {
 
-  let detector : ChangeDetectorRef;
-  let component : DataMapperAppComponent;
-
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
         ChangeDetectorRef,
-      DataMapperAppComponent
-      ]
+      DataMapperAppComponent,
+      ],
     });
   });
 

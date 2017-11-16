@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-import { DocumentDefinition, NamespaceModel } from './document.definition.model';
+import { DocumentDefinition } from './document.definition.model';
 import { ConfigModel } from '../models/config.model';
 
 export class EnumValue {
@@ -31,26 +31,26 @@ export class Field {
     public value: string = null;
     public serviceObject: any = new Object();
     public parentField: Field;
-    public partOfMapping: boolean = false;
-    public partOfTransformation: boolean = false;
-    public visibleInCurrentDocumentSearch: boolean = true;
-    public selected: boolean = false;
-    public enumeration: boolean = false;
+    public partOfMapping = false;
+    public partOfTransformation = false;
+    public visibleInCurrentDocumentSearch = true;
+    public selected = false;
+    public enumeration = false;
     public enumValues: EnumValue[] = [];
     public children: Field[] = [];
-    public fieldDepth: number = 0;
+    public fieldDepth = 0;
     public uuid: string = null;
-    public collapsed: boolean = true;
-    public hasUnmappedChildren: boolean = false;
-    public isCollection: boolean = false;
-    public isArray: boolean = false;
-    public isAttribute: boolean = false;
-    public isPrimitive: boolean = false;
-    public userCreated: boolean = false;
+    public collapsed = true;
+    public hasUnmappedChildren = false;
+    public isCollection = false;
+    public isArray = false;
+    public isAttribute = false;
+    public isPrimitive = false;
+    public userCreated = false;
     public docDef: DocumentDefinition = null;
     public namespaceAlias: string = null;
 
-    private static uuidCounter: number = 0;
+    private static uuidCounter = 0;
 
     constructor() {
         this.uuid = Field.uuidCounter.toString();
@@ -61,18 +61,18 @@ export class Field {
         if (!this.docDef || !this.namespaceAlias) {
             return this.name;
         }
-        return this.namespaceAlias + ":" + this.name;
+        return this.namespaceAlias + ':' + this.name;
     }
 
     public isParentField(): boolean {
         if (this.isCollection && !this.isPrimitive) {
             return true;
         }
-        return (this.type == "COMPLEX");
+        return (this.type == 'COMPLEX');
     }
 
     public isStringField(): boolean {
-        return (this.type == "STRING");
+        return (this.type == 'STRING');
     }
 
     public isTerminal(): boolean {
@@ -82,11 +82,11 @@ export class Field {
         if (this.isCollection && !this.isPrimitive) {
             return false;
         }
-        return (this.type != "COMPLEX");
+        return (this.type != 'COMPLEX');
     }
 
     public copy(): Field {
-        var copy: Field = new Field();
+        const copy: Field = new Field();
         Object.assign(copy, this);
 
         //make these pointers to the same object, not copies
@@ -95,7 +95,7 @@ export class Field {
         copy.docDef = this.docDef;
 
         copy.children = [];
-        for (let childField of this.children) {
+        for (const childField of this.children) {
             copy.children.push(childField.copy());
         }
         //console.log("Copied: " + this.name, { "src": this, "target": copy });
@@ -111,14 +111,14 @@ export class Field {
         this.docDef = that.docDef;
 
         this.children = [];
-        for (let childField of that.children) {
+        for (const childField of that.children) {
             this.children.push(childField.copy());
         }
         //console.log("Copied: " + that.name, { "src": that, "target": this });
     }
 
     public getCollectionParentField(): Field {
-        var parent: Field = this;
+        let parent: Field = this;
         while (parent != null) {
             if (parent.isCollection) {
                 return parent;
@@ -137,16 +137,16 @@ export class Field {
     }
 
     public getCollectionType(): string {
-        return this.isCollection ? (this.isArray ? "ARRAY" : "LIST") : null;
+        return this.isCollection ? (this.isArray ? 'ARRAY' : 'LIST') : null;
     }
 
     public getFieldLabel(includePath: boolean): string {
-        var fieldPath = includePath ? this.path : this.getNameWithNamespace();
+        let fieldPath = includePath ? this.path : this.getNameWithNamespace();
         if (this != DocumentDefinition.getNoneField() && ConfigModel.getConfig().showTypes && this.type && !this.isPropertyOrConstant()) {
-            fieldPath = fieldPath + " (" + this.type + ")";
+            fieldPath = fieldPath + ' (' + this.type + ')';
         }
         if (this.isProperty() && this.value != null) {
-            fieldPath += " = " + this.value;
+            fieldPath += ' = ' + this.value;
         }
         return fieldPath;
     }
@@ -170,7 +170,7 @@ export class Field {
         if (field.isTerminal()) {
             return (field.partOfMapping == false);
         }
-        for (let childField of field.children) {
+        for (const childField of field.children) {
             if (childField.hasUnmappedChildren || Field.fieldHasUnmappedChild(childField)) {
                 return true;
             }
@@ -179,23 +179,23 @@ export class Field {
     }
 
     public static getFieldPaths(fields: Field[]): string[] {
-        var paths: string[] = [];
-        for (let field of fields) {
+        const paths: string[] = [];
+        for (const field of fields) {
             paths.push(field.path);
         }
         return paths;
     }
 
     public static getFieldNames(fields: Field[]): string[] {
-        var paths: string[] = [];
-        for (let field of fields) {
+        const paths: string[] = [];
+        for (const field of fields) {
             paths.push(field.name);
         }
         return paths;
     }
 
     public static getField(fieldPath: string, fields: Field[]): Field {
-        for (let field of fields) {
+        for (const field of fields) {
             if (fieldPath == field.path) {
                 return field;
             }
@@ -204,11 +204,11 @@ export class Field {
     }
 
     public static alphabetizeFields(fields: Field[]): void {
-        var fieldsByName: { [key:string]:Field; } = {};
-        var fieldNames: string[] = [];
-        for (let field of fields) {
-            var name: string = field.name;
-            var firstCharacter: string = name.charAt(0).toUpperCase();
+        const fieldsByName: { [key: string]: Field; } = {};
+        const fieldNames: string[] = [];
+        for (const field of fields) {
+            let name: string = field.name;
+            const firstCharacter: string = name.charAt(0).toUpperCase();
             name = firstCharacter + name.substring(1);
             field.displayName = name;
             //if field is a dupe, discard it
@@ -220,11 +220,11 @@ export class Field {
         }
         fieldNames.sort();
         fields.length = 0;
-        for (let name of fieldNames) {
+        for (const name of fieldNames) {
             fields.push(fieldsByName[name]);
         }
 
-        for (let field of fields) {
+        for (const field of fields) {
             if (field.children && field.children.length) {
                 this.alphabetizeFields(field.children);
             }

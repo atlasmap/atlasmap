@@ -21,8 +21,8 @@ export class DataMapperUtil {
         if (item == null || items == null || items.length == 0) {
             return false;
         }
-        var i: number = 0;
-        var itemWasRemoved: boolean = false;
+        let i = 0;
+        let itemWasRemoved = false;
         while (i < items.length) {
             if (items[i] == item) {
                 items.splice(i, 1);
@@ -38,15 +38,14 @@ export class DataMapperUtil {
         if (!loggingEnabled) {
             return;
         }
-        var jsonPretty: string = (object == null) ? "[none]" : JSON.stringify(object, null, 2);
-        object = (object == null) ? "[none]" : object;
-        url = (url == null) ? "[none]" : url;
-        console.log("JSON for " + description, { "url": url, "object": object, "pretty": jsonPretty});
+        const jsonPretty: string = (object == null) ? '[none]' : JSON.stringify(object, null, 2);
+        object = (object == null) ? '[none]' : object;
+        url = (url == null) ? '[none]' : url;
     }
 
     public static isRequiredFieldValid(value: string, fieldDescription: string): boolean {
-        if (value == null || "" == value) {
-            var errorMessage: string = fieldDescription + " is required.";
+        if (value == null || '' == value) {
+            const errorMessage: string = fieldDescription + ' is required.';
             ConfigModel.getConfig().errorService.validationError(errorMessage, null);
             return false;
         }

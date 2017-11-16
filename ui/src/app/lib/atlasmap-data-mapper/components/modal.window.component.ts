@@ -14,9 +14,8 @@
     limitations under the License.
 */
 
-import { Component, OnInit, Input, ViewChild, ViewChildren, DoCheck, QueryList,
-    ViewContainerRef, Directive, Type, ComponentFactoryResolver, AfterViewInit,
-    SimpleChange, Inject, ChangeDetectorRef} from '@angular/core';
+import { Component, Input, ViewChildren, QueryList,
+    ViewContainerRef, Type, ComponentFactoryResolver, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { ConfigModel } from '../models/config.model';
 
 // source: http://www.w3schools.com/howto/howto_css_modals.asp
@@ -27,7 +26,7 @@ export interface ModalWindowValidator {
 
 @Component({
     selector: 'empty-modal-body',
-    template: ""
+    template: '',
 })
 
 export class EmptyModalBodyComponent { }
@@ -40,29 +39,29 @@ export class EmptyModalBodyComponent { }
                 <div class="modal-content">
                     <div class="modal-header">
                         <a (click)="closeClicked($event)"><span class='close'><i class="fa fa-close"></i></span></a>
-                        {{headerText}}
+                        {{ headerText }}
                     </div>
                     <div class="modal-error">
                         <data-mapper-error [isValidation]="true" [errorService]="cfg.errorService"></data-mapper-error>
                     </div>
                     <div class="modal-body">
-                        <div class="modal-message" *ngIf="message">{{message}}</div>
+                        <div class="modal-message" *ngIf="message">{{ message }}</div>
                         <template #dyn_target></template>
                     </div>
                     <div class="modal-footer">
                         <div class="modal-buttons">
-                            <button class="pull-right btn btn-primary" (click)="buttonClicked(true)">{{confirmButtonText}}</button>
+                            <button class="pull-right btn btn-primary" (click)="buttonClicked(true)">{{ confirmButtonText }}</button>
                             <button class="pull-right btn btn-cancel" (click)="buttonClicked(false)">Cancel</button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    `
+    `,
 })
 
 export class ModalWindowComponent implements AfterViewInit {
-    @Input() headerText: string = "";
+    @Input() headerText = '';
     @Input() nestedComponentType: Type<any>;
     @Input() nestedComponentInitializedCallback: Function;
     @Input() okButtonHandler: Function;
@@ -71,12 +70,12 @@ export class ModalWindowComponent implements AfterViewInit {
 
     public message: string = null;
     public nestedComponent: Component;
-    public confirmButtonText: string = "OK";
-
-    private componentLoaded: boolean = false;
-    public visible: boolean = false;
+    public confirmButtonText = 'OK';
+    public visible = false;
 
     @ViewChildren('dyn_target', {read: ViewContainerRef}) myTarget: QueryList<ViewContainerRef>;
+
+    private componentLoaded = false;
 
     constructor(private componentFactoryResolver: ComponentFactoryResolver, public detector: ChangeDetectorRef) { }
 
@@ -85,7 +84,7 @@ export class ModalWindowComponent implements AfterViewInit {
         this.myTarget.changes.subscribe(changes => {
             setTimeout(() => {
                 if (!this.componentLoaded && this.visible && this.myTarget && (this.myTarget.toArray().length)) {
-                    this.loadComponent()
+                    this.loadComponent();
                 }
                 setTimeout(() => {
                     this.detector.detectChanges();
@@ -95,9 +94,9 @@ export class ModalWindowComponent implements AfterViewInit {
     }
 
     public loadComponent(): void {
-        var viewContainerRef: ViewContainerRef = this.myTarget.toArray()[0];
+        const viewContainerRef: ViewContainerRef = this.myTarget.toArray()[0];
         viewContainerRef.clear();
-        let componentFactory = this.componentFactoryResolver.resolveComponentFactory(this.nestedComponentType);
+        const componentFactory = this.componentFactoryResolver.resolveComponentFactory(this.nestedComponentType);
         this.nestedComponent = viewContainerRef.createComponent(componentFactory).instance;
         if (this.nestedComponentInitializedCallback != null) {
             this.nestedComponentInitializedCallback(this);
@@ -110,9 +109,21 @@ export class ModalWindowComponent implements AfterViewInit {
         this.visible = true;
     }
 
+    public reset(): void {
+        this.cfg.errorService.clearValidationErrors();
+        this.nestedComponentInitializedCallback = null;
+        this.confirmButtonText = 'OK';
+        this.message = '';
+        this.headerText = '';
+        this.componentLoaded = false;
+        this.nestedComponentType = EmptyModalBodyComponent;
+        this.okButtonHandler = null;
+        this.cancelButtonHandler = null;
+    }
+
     private buttonClicked(okClicked: boolean): void {
         if (okClicked) {
-            var anyComponent: any = this.nestedComponent;
+            const anyComponent: any = this.nestedComponent;
             if ((anyComponent != null) && (anyComponent.isDataValid)) {
                 this.cfg.errorService.clearValidationErrors();
                 if (!(anyComponent.isDataValid())) {
@@ -130,15 +141,4 @@ export class ModalWindowComponent implements AfterViewInit {
         this.close();
     }
 
-    public reset(): void {
-        this.cfg.errorService.clearValidationErrors();
-        this.nestedComponentInitializedCallback = null;
-        this.confirmButtonText = "OK";
-        this.message = "";
-        this.headerText = "";
-        this.componentLoaded = false;
-        this.nestedComponentType = EmptyModalBodyComponent;
-        this.okButtonHandler = null;
-        this.cancelButtonHandler = null;
-    }
 }

@@ -17,7 +17,6 @@
 import { Component } from '@angular/core';
 
 import { NamespaceModel } from '../models/document.definition.model';
-import { ConfigModel } from '../models/config.model';
 import { ModalWindowValidator } from './modal.window.component';
 import { DataMapperUtil } from '../common/data.mapper.util';
 
@@ -45,17 +44,17 @@ import { DataMapperUtil } from '../common/data.mapper.util';
                 <div class="clear"></div>
             </div>
         </div>
-    `
+    `,
 })
 
 export class NamespaceEditComponent implements ModalWindowValidator {
     public namespace: NamespaceModel = new NamespaceModel();
-    public targetEnabled: boolean = true;
+    public targetEnabled = true;
 
     public initialize(namespace: NamespaceModel, namespaces: NamespaceModel[]): void {
         this.namespace = (namespace == null) ? new NamespaceModel() : namespace.copy();
         if (!namespace.isTarget) {
-            for (let ns of namespaces) {
+            for (const ns of namespaces) {
                 if (ns.isTarget) {
                     this.targetEnabled = false;
                     break;
@@ -66,12 +65,12 @@ export class NamespaceEditComponent implements ModalWindowValidator {
 
     targetToggled(): void {
         this.namespace.isTarget = !this.namespace.isTarget;
-        this.namespace.alias = this.namespace.isTarget ? "tns" : "";
+        this.namespace.alias = this.namespace.isTarget ? 'tns' : '';
     }
 
     isDataValid(): boolean {
-        var dataIsValid: boolean = DataMapperUtil.isRequiredFieldValid(this.namespace.alias, "Alias");
-        dataIsValid = DataMapperUtil.isRequiredFieldValid(this.namespace.uri, "URI") && dataIsValid;
+        let dataIsValid: boolean = DataMapperUtil.isRequiredFieldValid(this.namespace.alias, 'Alias');
+        dataIsValid = DataMapperUtil.isRequiredFieldValid(this.namespace.uri, 'URI') && dataIsValid;
         return dataIsValid;
     }
 }
