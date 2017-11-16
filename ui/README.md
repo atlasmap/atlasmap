@@ -1,15 +1,4 @@
-## AtlasMap Data Mapper UI ##
-
-
-The AtlasMap Data Mapper UI is a visual integration tool that simplifies configuring integrations between Java, XML, and JSON data sources. It is designed to work within the [Syndesis UI](https://github.com/syndesisio/syndesis-ui).
-
-![AtlasMap Data Mapper UI Screenshot](https://raw.githubusercontent.com/atlasmap/atlasmap-ui/master/docs/datamapper.png)
-
-## Running the Data Mapper UI ##
-
-The easiest way to install and run the Data Mapper UI is to install and run the [Syndesis UI](https://github.com/syndesisio/syndesis-ui). Simply follow the Syndesis UI's [installation instructions](https://github.com/syndesisio/syndesis-ui), and run the Syndesis UI. You will find the Data Mapper UI under the integrations panel after selecting or adding an integration with a data mapping step involved in the integration.
-
-## UI Developer Quick Start ##
+# AtlasMap Data Mapper UI Developer Quick Start
 
 The Data Mapper features a stand-alone development mode which allows developers to run the Data Mapper UI on their local machine outside of the Syndesis UI. 
 
@@ -17,21 +6,23 @@ Running the Data Mapper in stand alone mode will require installing the Data Map
 
 *Installation* 
 
-1. Install and run the [Atlas Map Services](https://github.com/atlasmap/atlasmap) as directed in the services' [installation instructions](https://github.com/atlasmap/atlasmap). Running the services will require installing a [Java Development Kit](http://www.oracle.com/technetwork/java/javase/downloads/index.html) and [Maven](https://maven.apache.org/).
+1. Run the AtlasMap Services
 
-2. [Install NPM](https://docs.npmjs.com/getting-started/installing-node).
+    cd ${ATLASMAP}/runtime/runtime
+    mvn -Pitests spring-boot:run
 
-3. Create a directory for the Data Mapper UI, we'll refer to this directory as **${atlas.ui.home}** for the remainder of these instructions.
+2. [Install Yarn](https://yarnpkg.com/lang/en/docs/install/)
 
-4. Clone the Data Mapper UI in **${atlas.ui.home}** with `git clone https://github.com/atlasmap/atlasmap-ui.git ${atlas.ui.home}`.
+3. In another console, install the Data Mapper UI's dependencies
 
-5. Install the Data Mapper's dependencies by running `npm install` in **${atlas.ui.home}**.
+    cd ${ATLASMAP}/ui
+    yarn install
 
-6. Start the [Atlas Map Services](https://github.com/atlasmap/atlasmap) if you have not already done so.
+4. Start the Data Mapper UI
 
-7. Start the Data Mapper UI by running `npm start` in **${atlas.ui.home}**.
+    yarn start
 
-8. The **npm start** command will attempt to automatically open your browser window, but if it doesn't, open it directy with this URL: [http://localhost:3000].
+5. The **yarn start** command will attempt to automatically open your browser window, but if it doesn't, open it directy with this URL: [http://localhost:3000].
 
 *Troubleshooting Installation*
 
@@ -46,27 +37,27 @@ Running the Data Mapper in stand alone mode will require installing the Data Map
 
 ## Developing Within Syndesis UI ##
 
-The Data Mapper UI is referenced by Syndesis as a dependency [here](). When the Syndesis UI's dependencies are installed during the **yarn install** step, the Data Mapper UI will be cloned from the public github master branch into the **${syndesis.ui.home}/node_modules/atlasmap_data_mapper** directory. 
+The Data Mapper UI is referenced by Syndesis as a dependency. When the Syndesis UI's dependencies are installed during the **yarn install** step, the Data Mapper UI will be cloned from the NPM package repository into the **${SYNDESIS}/ui/node_modules/@atlasmap/atlasmap.data.mapper** directory. 
 
 You can point your local Syndesis UI's Data Mapper UI reference to your working copy of the Data Mapper by changing the **src** directory in the node_modules folder to point to your code. You'll do something like this:
 
 ```
     # save the original data mapper library contents for syndesis in case we want to use that version again later.
-    # ${syndesis.ui.home} is your local syndesis ui directory. 
-    > mv ${syndesis.ui.home}/node_modules/atlasmap_data_mapper/src ${syndesis.ui.home}/node_modules/atlasmap_data_mapper/src.old
+    # ${SYNDESIS}/ui is your local syndesis ui directory. 
+    > mv ${SYNDESIS}/ui/node_modules/@atlasmap/atlasmap.data.mapper/src ${SYNDESIS}/ui/node_modules/@atlasmap/atlasmap.data.mapper/src.old
 
-    # ${atlas.ui.home} is your local data mapper ui directory
-    > ln -s ${atlas.ui.home}/src ${syndesis.ui.home}/node_modules/atlasmap_data_mapper/src
+    # ${ATLASMAP}/ui is your local data mapper ui directory
+    > ln -s ${ATLASMAP}/ui/src ${SYNDESIS}/ui/node_modules/@atlasmap/atlasmap.data.mapper/src
 ```
 
 After making this change, restart the Syndesis UI with **yarn start**.
 
-Note that running `yarn install` in the Syndesis UI directory **will remove and redownload the ${syndesis.ui.home}/node_modules/atlasmap_data_mapper directory**. For this reason, do *not* make changes within the **${syndesis.ui.home}/node_modules/atlasmap_data_mapper** directory. Instead, make changes in another directory and use the soft link (`ln -s`) command shown above to point the Syndesis UI dependency to your code. 
+Note that running `yarn install` in the Syndesis UI directory **will remove and redownload the ${SYNDESIS}/ui/node_modules/@atlasmap/atlasmap.data.mapper directory**. For this reason, do *not* make changes within the **${SYNDESIS}/ui/node_modules/atlasmap_data_mapper** directory. Instead, make changes in another directory and use the soft link (`ln -s`) command shown above to point the Syndesis UI dependency to your code. 
 
 
 ## Debug Configuration ##
 
-The Data Mapper UI features several developer-friendly debug configuration options. These configuration fields are specified on the [ConfigModel](https://github.com/atlasmap/atlasmap-ui/blob/master/src/app/lib/atlasmap-data-mapper/models/config.model.ts) class. 
+The Data Mapper UI features several developer-friendly debug configuration options. These configuration fields are specified on the [ConfigModel](https://github.com/atlasmap/atlasmap/blob/master/ui/src/app/lib/atlasmap-data-mapper/models/config.model.ts) class. 
 
 ** Service Endpoint Configuration**
 
@@ -89,7 +80,7 @@ These flags control the UI automatically adding the specified mock documents to 
 1. addMockXMLSchemaTarget - Add a XML schema target document.
 1. addMockJSONTarget - Add a JSON target document.
 
-The code that initializes these mock documents is in the [Initialization Service](https://github.com/atlasmap/atlasmap-ui/blob/master/src/app/lib/atlasmap-data-mapper/services/initialization.service.ts). That service calls various static methods in the [Document Management Service](https://github.com/atlasmap/atlasmap-ui/blob/master/src/app/lib/atlasmap-data-mapper/services/document.management.service.ts) to create example XML instance, XML schema, and JSON documents. Mock Java documents referenced are from the AtlasMap Services' [Atlas Java Test Model Maven Module](https://github.com/atlasmap/atlasmap/tree/master/atlas-java-parent/atlas-java-test-model/src/main/java/io/atlasmap/java/test).
+The code that initializes these mock documents is in the [Initialization Service](https://github.com/atlasmap/atlasmap/blob/master/ui/src/app/lib/atlasmap-data-mapper/services/initialization.service.ts). That service calls various static methods in the [Document Management Service](https://github.com/atlasmap/atlasmap/blob/master/ui/src/app/lib/atlasmap-data-mapper/services/document.management.service.ts) to create example XML instance, XML schema, and JSON documents. Mock Java documents referenced are from the AtlasMap Services' [Atlas Java Test Model Maven Module](https://github.com/atlasmap/atlasmap/tree/master/runtime/atlas-java-parent/atlas-java-test-model/src/main/java/io/atlasmap/java/test).
 
 ** Additional Debug Configuration**
 
@@ -102,7 +93,7 @@ The code that initializes these mock documents is in the [Initialization Service
 7. debugFieldActionServiceCalls - Log details about JSON request/responses to/from the mapping field action configuration service.
 8. debugDocumentParsing - Log details about parsing JSON responses from the inspection services.
 
-Data Mapper Debug Configuration within the Syndesis UI is defined within your **${syndesis.ui.home}/src/config.json** file's data mapper section:
+Data Mapper Debug Configuration within the Syndesis UI is defined within your **${SYNDESIS}/ui/src/config.json** file's data mapper section:
 
 ```
 {
@@ -142,7 +133,7 @@ Data Mapper Debug Configuration within the Syndesis UI is defined within your **
 }
 ```
 
-If you're running the Data Mapper UI locally outside of the Syndesis UI, the debug configuration is specified within the [DataMapperAppExampleHostComponent](https://github.com/atlasmap/atlasmap-ui/blob/master/src/app/lib/atlasmap-data-mapper/components/data.mapper.example.host.component.ts).
+If you're running the Data Mapper UI locally outside of the Syndesis UI, the debug configuration is specified within the [DataMapperAppExampleHostComponent](https://github.com/atlasmap/atlasmap/blob/master/ui/src/app/lib/atlasmap-data-mapper/components/data.mapper.example.host.component.ts).
 
 ## Code Overview ##
 
@@ -156,7 +147,7 @@ If you're running the Data Mapper UI locally outside of the Syndesis UI, the deb
 
 Bootstrapping the Data Mapper UI requires a bit of configuration. An example bootstrapping component is provided within the project:
 
-src/app/lib/atlasmap-data-mapper/components/data.mapper.example.host.component.ts
+ui/src/app/lib/atlasmap-data-mapper/components/data.mapper.example.host.component.ts
 
 *MODEL OVERVIEW*
 
@@ -179,12 +170,3 @@ When the Data Mapper UI Bootstraps, a series of service calls are made to the ma
 The document service is used to fetch our source/target document information (name of doc, fields). After these are parsed from the service, they are stored in the ConfigModel's inputDoc and outputDoc DocumentDefinition models.
 
 The mapping service is used to fetch our mappings for the fields mapped from the source to the target document. These mappings (and related lookup tables) are parsed by the management service and stored in the ConfigModel's mappings MappingDefinition model. 
-
-## Third Party Libraries ##
-
-//TODO: 
-
-## License ##
-
-//TODO: 
-
