@@ -7,28 +7,31 @@ Running the Data Mapper in stand alone mode will require installing the Data Map
 *Installation* 
 
 1. Run the AtlasMap Services
-
+```
     cd ${ATLASMAP}/runtime/runtime
     mvn -Pitests spring-boot:run
+```
 
-2. [Install Yarn](https://yarnpkg.com/lang/en/docs/install/)
+1. [Install Yarn](https://yarnpkg.com/lang/en/docs/install/)
 
-3. In another console, install the Data Mapper UI's dependencies
-
+1. In another console, install the Data Mapper UI's dependencies
+```
     cd ${ATLASMAP}/ui
     yarn install
+```
 
-4. Start the Data Mapper UI
-
+1. Start the Data Mapper UI
+```
     yarn start
+```
 
-5. The **yarn start** command will attempt to automatically open your browser window, but if it doesn't, open it directy with this URL: [http://localhost:3000].
+1. The **yarn start** command will attempt to automatically open your browser window, but if it doesn't, open it directy with this URL: [http://localhost:3000].
 
 *Troubleshooting Installation*
 
 1. Compile errors: If the UI doesn't run, check the terminal window where you ran `npm start`, there may be compilation errors reported there even if it attempts to run the UI successfully without exiting with error.
 
-2. Check the console window of chrome's developer tools window for errors, this is found via the chrome "view->developer->developer tools" menu, the javascript console will be on the bottom of the tab you've opened the tools in.
+1. Check the console window of chrome's developer tools window for errors, this is found via the chrome "view->developer->developer tools" menu, the javascript console will be on the bottom of the tab you've opened the tools in.
 
 *Reference Documents For Installation Guide*
 
@@ -52,7 +55,7 @@ You can point your local Syndesis UI's Data Mapper UI reference to your working 
 
 After making this change, restart the Syndesis UI with **yarn start**.
 
-Note that running `yarn install` in the Syndesis UI directory **will remove and redownload the ${SYNDESIS}/ui/node_modules/@atlasmap/atlasmap.data.mapper directory**. For this reason, do *not* make changes within the **${SYNDESIS}/ui/node_modules/atlasmap_data_mapper** directory. Instead, make changes in another directory and use the soft link (`ln -s`) command shown above to point the Syndesis UI dependency to your code. 
+Note that running `yarn install` in the Syndesis UI directory **will remove and redownload the ${SYNDESIS}/ui/node_modules/@atlasmap/atlasmap.data.mapper directory**. For this reason, do *not* make changes within the **${SYNDESIS}/ui/node_modules/@atlasmap/atlasmap.data.mapper** directory. Instead, make changes in another directory and use the soft link (`ln -s`) command shown above to point the Syndesis UI dependency to your code. 
 
 
 ## Debug Configuration ##
@@ -62,9 +65,9 @@ The Data Mapper UI features several developer-friendly debug configuration optio
 ** Service Endpoint Configuration**
 
 1. baseJavaInspectionServiceUrl - URL for the Java Inspection Service provided by the AtlasMap Services.
-2. baseXMLInspectionServiceUrl - URL for the XML Inspection Service provided by the AtlasMap Services.
-3. baseJSONInspectionServiceUrl - URL for the JSON Inspection Service provided by the AtlasMap Services.
-4. baseMappingServiceUrl - URL for the Mapping Service provided by the AtlasMap Services.
+1. baseXMLInspectionServiceUrl - URL for the XML Inspection Service provided by the AtlasMap Services.
+1. baseJSONInspectionServiceUrl - URL for the JSON Inspection Service provided by the AtlasMap Services.
+1. baseMappingServiceUrl - URL for the Mapping Service provided by the AtlasMap Services.
 
 ** Mock Source/Target Document Configuration**
 
@@ -85,17 +88,17 @@ The code that initializes these mock documents is in the [Initialization Service
 ** Additional Debug Configuration**
 
 1. discardNonMockSources - Automatically discard all user-specified (or Syndesis UI-specified) source/target documents before initializing. This is helpful if you're trying to test with mock documents alone.
-2. addMockJSONMappings - This flag bootstraps the UI's mappings from the provided JSON mapping definition. Useful for repeatedly debugging a particular scenario.
-3. debugClassPathServiceCalls - Log details about JSON request/responses to/from the class path resolution service.
-4. debugDocumentServiceCalls - Log details about JSON request/responses to/from the Java/XML/JSON inspection services.
-5. debugMappingServiceCalls - Log details about JSON request/responses to/from the mapping service.
-6. debugValidationServiceCalls - Log details about JSON request/responses to/from the mapping validation service.
-7. debugFieldActionServiceCalls - Log details about JSON request/responses to/from the mapping field action configuration service.
-8. debugDocumentParsing - Log details about parsing JSON responses from the inspection services.
+1. addMockJSONMappings - This flag bootstraps the UI's mappings from the provided JSON mapping definition. Useful for repeatedly debugging a particular scenario.
+1. debugClassPathServiceCalls - Log details about JSON request/responses to/from the class path resolution service.
+1. debugDocumentServiceCalls - Log details about JSON request/responses to/from the Java/XML/JSON inspection services.
+1. debugMappingServiceCalls - Log details about JSON request/responses to/from the mapping service.
+1. debugValidationServiceCalls - Log details about JSON request/responses to/from the mapping validation service.
+1. debugFieldActionServiceCalls - Log details about JSON request/responses to/from the mapping field action configuration service.
+1. debugDocumentParsing - Log details about parsing JSON responses from the inspection services.
 
 Data Mapper Debug Configuration within the Syndesis UI is defined within your **${SYNDESIS}/ui/src/config.json** file's data mapper section:
 
-```
+```json
 {
   "apiEndpoint": "https://syndesis-staging.b6ff.rh-idev.openshiftapps.com/api/v1",
   "title": "Syndesis",
@@ -143,13 +146,13 @@ If you're running the Data Mapper UI locally outside of the Syndesis UI, the deb
 
 //TODO: brief high level overview of what the ui does (service calls made, etc)
 
-[BOOTSTRAPPING OVERVIEW]
+### BOOTSTRAPPING OVERVIEW
 
 Bootstrapping the Data Mapper UI requires a bit of configuration. An example bootstrapping component is provided within the project:
 
 ui/src/app/lib/atlasmap-data-mapper/components/data.mapper.example.host.component.ts
 
-*MODEL OVERVIEW*
+### MODEL OVERVIEW
 
 All application data and configuration is stored in a centralized ConfigModel object.
 
@@ -163,7 +166,7 @@ There are two document models contained within the ConfigModel object, both of t
 
 A single MappingDefinition model in the ConfigModel object stores information about field mappings and related lookup tables. Individual mappings are represented in instances of MappingModel, and lookup tables are represented by the LookupTable model.
 
-*SERVICE OVERVIEW*
+### SERVICE OVERVIEW
 
 When the Data Mapper UI Bootstraps, a series of service calls are made to the mapping service (MappingManagementService) and document service (DocumentManagementService). 
 

@@ -15,43 +15,49 @@ The easiest way to install and run the Data Mapper UI is to install and run the 
 First you need to build AtlasMap.
 
 ### Building everything for standalone usage
-
+```
     ./build.sh --skip-image-builds
+```
 
 To see all the available options:
-
+```
     ./build.sh --help
-    
+```
+
 #### Resume from module    
 To resume from a particular module:
-
+```
     ./build.sh --skip-image-builds --resume-from ui
-    
+```
+
 #### Using the image streams (in case you want to build a docker image for design runtime)
 To build everything using image streams (instead of directly talking to docker):
-
+```
     ./build.sh --with-image-streams
-    
+```
+
 Note that this assumes that you are using a template flavor that also supports image streams.
 
 ### Run AtlasMap Services and UI
 
 1. Run AtlasMap Services
-
+```
     cd ${ATLASMAP}/runtime/runtime
     mvn -Pitests spring-boot:run
+```
 
 2. [Install Yarn](https://yarnpkg.com/lang/en/docs/install/)
 
 3. In another console, install Data Mapper UI's dependencies
-
+```
     cd ${ATLASMAP}/ui
     yarn install
+```
 
 4. Start Data Mapper UI
-
+```
     yarn start
-
+```
 5. The **yarn start** command will attempt to automatically open your browser window, but if it doesn't, open it directy with this URL: [http://localhost:3000].
 
 
