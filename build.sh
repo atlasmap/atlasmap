@@ -55,8 +55,8 @@ function readopt() {
 
 function modules_to_build() {
   # app needs some love...
-  # modules="runtime camel ui app"
-  modules="runtime camel ui"
+  # modules="parent runtime camel ui app"
+  modules="parent runtime camel ui"
   resume_from=$(readopt --resume-from $ARGS 2> /dev/null)
   if [ "x${resume_from}" != x ]; then
     modules=$(echo $modules | sed -e "s/^.*$resume_from/$resume_from/")
@@ -112,6 +112,12 @@ function init_options() {
   else
     MAVEN_OPTS=" -Dfabric8.mode=kubernetes"
   fi
+}
+
+function parent() {
+  pushd parent
+  "${MAVEN_CMD}" $MAVEN_CLEAN_GOAL install $MAVEN_OPTS
+  popd
 }
 
 function runtime() {

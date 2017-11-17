@@ -27,7 +27,7 @@ podTemplate(
       checkout scm
 
       container('maven') {
-        sh "./mvnw -Dmaven.test.failure.ignore=true -Duser.home=/home/jenkins -B -fae -s /home/jenkins/.m2-ro/settings.xml clean install"
+        sh "../mvnw -Dmaven.test.failure.ignore=true -Duser.home=/home/jenkins -B -fae -s /home/jenkins/.m2-ro/settings.xml clean install"
         junit '**/target/surefire-reports/TEST-*.xml'
       }
     }

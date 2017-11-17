@@ -72,7 +72,7 @@ jobs:
           name: Collect Coverage reports
           command: |
             mkdir ./coverage/
-            cp -a ./runtime/atlas-docs/target/site/jacoco-aggregate ./coverage/runtime
+            cp -a ./runtime/docs/target/site/jacoco-aggregate ./coverage/runtime
             cp -a ./camel/target/site/jacoco ./coverage/camel
             cp -a ./ui/coverage ./coverage/ui
 
@@ -110,6 +110,6 @@ jobs:
             docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
             docker push atlasmap/atlasmap:${DOCKER_IMAGE_TAG} | cat -
 
-            sh atlas-docs/ci-docs.sh
+            sh docs/ci-docs.sh
             cd ..
             java -cp ./.circleci/codacy-coverage-reporter-2.0.1-assembly.jar com.codacy.CodacyCoverageReporter -l Java -r ./coverage/runtime/jacoco.xml

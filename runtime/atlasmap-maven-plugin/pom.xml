@@ -20,9 +20,9 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>io.atlasmap</groupId>
-        <artifactId>atlas-parent</artifactId>
+        <artifactId>atlas-runtime</artifactId>
         <version>1.32-SNAPSHOT</version>
-        <relativePath>../atlas-parent/pom.xml</relativePath>
+        <relativePath>..</relativePath>
     </parent>
 
     <artifactId>atlasmap-maven-plugin</artifactId>
