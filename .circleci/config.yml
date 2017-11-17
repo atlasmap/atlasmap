@@ -66,7 +66,7 @@ jobs:
           name: Collect checkstyle reports
           command: |
             mkdir ./checkstyle/
-            find . -type f -regex ".*/target/checkstyle.*xml" -exec cp {} ./checkstyle/ \;
+            find . -type f -regex "./[runtime|camel].*/target/checkstyle-result.xml" -exec bash -c "cp {} ./checkstyle/\`echo {} | sed -e 's#^\./##' | sed -e 's#/#-#g'\`" \;
 
       - run:
           name: Collect Coverage reports
