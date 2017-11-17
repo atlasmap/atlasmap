@@ -34,6 +34,11 @@ public class JsonValidationService extends BaseModuleValidationService<JsonField
     private static Map<String, AtlasValidator> validatorMap = new HashMap<>();
     private AtlasModuleDetail moduleDetail = JsonModule.class.getAnnotation(AtlasModuleDetail.class);
 
+    public JsonValidationService(AtlasConversionService conversionService) {
+        super(conversionService);
+        init();
+    }
+
     public void init() {
         NonNullValidator javaFilePathNonNullValidator = new NonNullValidator(ValidationScope.MAPPING,
                 "The path element must not be null nor empty");
@@ -52,11 +57,6 @@ public class JsonValidationService extends BaseModuleValidationService<JsonField
 
     public void destroy() {
         validatorMap.clear();
-    }
-
-    public JsonValidationService(AtlasConversionService conversionService) {
-        super(conversionService);
-        init();
     }
 
     @Override

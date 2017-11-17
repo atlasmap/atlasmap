@@ -40,21 +40,19 @@ import io.atlasmap.v2.FieldType;
 
 public class DefaultAtlasConversionService implements AtlasConversionService {
 
-    private static Logger logger = LoggerFactory.getLogger(DefaultAtlasConversionService.class);
-    private static DefaultAtlasConversionService instance = null;
-    private Map<String, AtlasConverter<?>> converters = null;
-
+    private static final Logger LOG = LoggerFactory.getLogger(DefaultAtlasConversionService.class);
     private static final Set<String> PRIMITIVE_CLASSNAMES = Collections.unmodifiableSet(
             new HashSet<>(Arrays.asList("boolean", "byte", "char", "double", "float", "int", "long", "short")));
-
     private static final Set<FieldType> PRIMITIVE_FIELDTYPES = Collections.unmodifiableSet(
             new HashSet<>(Arrays.asList(FieldType.BOOLEAN, FieldType.BYTE, FieldType.CHAR,
                     FieldType.DECIMAL, FieldType.DOUBLE, FieldType.FLOAT, FieldType.INTEGER,
                     FieldType.LONG, FieldType.SHORT, FieldType.STRING)));
-
     private static final Set<String> BOXED_PRIMITIVE_CLASSNAMES = Collections.unmodifiableSet(new HashSet<>(
             Arrays.asList("java.lang.Boolean", "java.lang.Byte", "java.lang.Character", "java.lang.Double",
                     "java.lang.Float", "java.lang.Integer", "java.lang.Long", "java.lang.Short", "java.lang.String")));
+
+    private static DefaultAtlasConversionService instance = null;
+    private Map<String, AtlasConverter<?>> converters = null;
 
     private DefaultAtlasConversionService() {
     }
@@ -178,8 +176,8 @@ public class DefaultAtlasConversionService implements AtlasConversionService {
                 classLoader);
         Map<String, AtlasConverter<?>> tmp = new LinkedHashMap<>();
         for (final AtlasConverter<?> atlasConverter : converterServiceLoader) {
-            if (logger.isDebugEnabled()) {
-                logger.debug("Loading converter : " + atlasConverter.getClass().getCanonicalName());
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Loading converter : " + atlasConverter.getClass().getCanonicalName());
             }
             tmp.put(atlasConverter.getClass().getCanonicalName(), atlasConverter);
         }

@@ -44,6 +44,12 @@ import io.atlasmap.v2.AtlasMapping;
 
 public class AtlasMappingService implements Serializable {
 
+    private static final long serialVersionUID = 1668362984516180517L;
+    private static final Logger LOG = LoggerFactory.getLogger(AtlasMappingService.class);
+    private static final String CONFIG_V2_PACKAGE = "io.atlasmap.v2";
+    private transient JAXBContext ctx = null;
+    private transient ObjectMapper jsonMapper = null;
+
     public enum AtlasMappingFormat {
         XML("xml"), JSON("json");
 
@@ -57,13 +63,6 @@ public class AtlasMappingService implements Serializable {
             return value;
         }
     }
-
-    private static final long serialVersionUID = 1668362984516180517L;
-    private static final Logger LOG = LoggerFactory.getLogger(AtlasMappingService.class);
-    private transient JAXBContext ctx = null;
-    private transient ObjectMapper jsonMapper = null;
-
-    private static final String CONFIG_V2_PACKAGE = "io.atlasmap.v2";
 
     public AtlasMappingService() {
         try {

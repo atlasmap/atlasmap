@@ -78,6 +78,7 @@
     <module name="UnusedImports" />
 
     <!-- Modifier Checks                                    -->
+    <module name="DeclarationOrder"/>
     <!-- See http://checkstyle.sf.net/config_modifiers.html -->
     <module name="ModifierOrder"/>
 

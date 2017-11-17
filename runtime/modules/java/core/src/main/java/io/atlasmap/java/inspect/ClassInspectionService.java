@@ -51,9 +51,10 @@ import io.atlasmap.v2.StringList;
 
 public class ClassInspectionService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ClassInspectionService.class);
     public static final int MAX_REENTRY_LIMIT = 1;
     public static final int MAX_ARRAY_DIM_LIMIT = 256; // JVM specification
+
+    private static final Logger LOG = LoggerFactory.getLogger(ClassInspectionService.class);
                                                        // limit
 
     private List<String> listClasses = new ArrayList<String>(

@@ -50,9 +50,9 @@ import io.atlasmap.v2.SimpleField;
 public abstract class BaseAtlasModule implements AtlasModule {
     private static final Logger LOG = LoggerFactory.getLogger(BaseAtlasModule.class);
 
+    private boolean automaticallyProcessOutputFieldActions = true;
     private AtlasConversionService atlasConversionService = null;
     private AtlasModuleMode atlasModuleMode = AtlasModuleMode.UNSET;
-    protected boolean automaticallyProcessOutputFieldActions = true;
 
     @Override
     public void init() {
@@ -462,6 +462,14 @@ public abstract class BaseAtlasModule implements AtlasModule {
     @Override
     public void setConversionService(AtlasConversionService atlasConversionService) {
         this.atlasConversionService = atlasConversionService;
+    }
+
+    public boolean isAutomaticallyProcessOutputFieldActions() {
+        return automaticallyProcessOutputFieldActions;
+    }
+
+    public void setAutomaticallyProcessOutputFieldActions(boolean automaticallyProcessOutputFieldActions) {
+        this.automaticallyProcessOutputFieldActions = automaticallyProcessOutputFieldActions;
     }
 
 }

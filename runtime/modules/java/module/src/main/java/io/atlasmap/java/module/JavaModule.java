@@ -61,14 +61,14 @@ import io.atlasmap.v2.Validation;
 @AtlasModuleDetail(name = "JavaModule", uri = "atlas:java", modes = { "SOURCE", "TARGET" }, dataFormats = {
         "java" }, configPackages = { "io.atlasmap.java.v2" })
 public class JavaModule extends BaseAtlasModule {
-    private static final Logger LOG = LoggerFactory.getLogger(JavaModule.class);
     public static final String DEFAULT_LIST_CLASS = "java.util.ArrayList";
+    private static final Logger LOG = LoggerFactory.getLogger(JavaModule.class);
 
     private ClassInspectionService javaInspectionService = null;
     private JavaConstructService javaConstructService = null;
 
     public JavaModule() {
-        this.automaticallyProcessOutputFieldActions = false;
+        this.setAutomaticallyProcessOutputFieldActions(false);
     }
 
     @Override

@@ -25,8 +25,8 @@ import org.junit.Test;
 
 public class DefaultAtlasContextFactoryTest {
 
-    private DefaultAtlasContextFactory factory = null;
     private static String threadName = null;
+    private DefaultAtlasContextFactory factory = null;
 
     @BeforeClass
     public static void beforeClass() {

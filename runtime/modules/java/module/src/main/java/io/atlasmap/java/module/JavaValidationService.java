@@ -45,9 +45,9 @@ import io.atlasmap.validators.NonNullValidator;
 public class JavaValidationService extends BaseModuleValidationService<JavaField> {
 
     private static final Logger LOG = LoggerFactory.getLogger(JavaValidationService.class);
-    private AtlasModuleDetail moduleDetail = JavaModule.class.getAnnotation(AtlasModuleDetail.class);
     private static Map<String, AtlasValidator> validatorMap = new HashMap<>();
     private static Map<String, Integer> versionMap = new HashMap<>();
+    private AtlasModuleDetail moduleDetail = JavaModule.class.getAnnotation(AtlasModuleDetail.class);
 
     public JavaValidationService() {
         super();

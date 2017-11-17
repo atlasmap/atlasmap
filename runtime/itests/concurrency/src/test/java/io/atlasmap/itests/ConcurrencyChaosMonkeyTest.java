@@ -32,8 +32,8 @@ import twitter4j.User;
 @Ignore(value = "Integration Test")
 public class ConcurrencyChaosMonkeyTest {
 
-    private DefaultAtlasContextFactory atlasContextFactory = null;
     private static final Logger LOG = LoggerFactory.getLogger(ConcurrencyChaosMonkeyTest.class);
+    private DefaultAtlasContextFactory atlasContextFactory = null;
 
     @Before
     public void setUp() {

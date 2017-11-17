@@ -73,8 +73,6 @@ import io.atlasmap.v2.Validations;
 public class AtlasService extends Application {
 
     private static final Logger LOG = LoggerFactory.getLogger(AtlasService.class);
-    private final DefaultAtlasContextFactory atlasContextFactory = DefaultAtlasContextFactory.getInstance();
-    private String baseFolder = "target/mappings";
 
     private static final String ACCESS_CONTROL_ALLOW_ORIGIN = "Access-Control-Allow-Origin";
     private static final String DEFAULT_ACCESS_CONTROL_ALLOW_ORIGIN = "*";
@@ -83,6 +81,9 @@ public class AtlasService extends Application {
     private static final String ACCESS_CONTROL_ALLOW_METHODS = "Access-Control-Allow-Methods";
     private static final String DEFAULT_ACCESS_CONTROL_ALLOW_METHODS = "GET,PUT,POST,PATCH,DELETE,OPTIONS,HEAD";
     private static final String ACCESS_CONTROL_ALLOW_METHODS_GPPPD = "GET,PUT,POST,PATCH,DELETE";
+
+    private final DefaultAtlasContextFactory atlasContextFactory = DefaultAtlasContextFactory.getInstance();
+    private String baseFolder = "target/mappings";
 
     protected Response standardCORSResponse() {
         return Response.ok().header(ACCESS_CONTROL_ALLOW_ORIGIN, DEFAULT_ACCESS_CONTROL_ALLOW_ORIGIN)

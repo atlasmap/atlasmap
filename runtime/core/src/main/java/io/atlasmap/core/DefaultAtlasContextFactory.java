@@ -55,7 +55,7 @@ import io.atlasmap.v2.AtlasMapping;
 
 public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasContextFactoryMXBean {
 
-    private static Logger logger = LoggerFactory.getLogger(DefaultAtlasContextFactory.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DefaultAtlasContextFactory.class);
 
     private static DefaultAtlasContextFactory factory = null;
     private String uuid = null;
@@ -68,18 +68,8 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
     private AtlasCombineStrategy atlasCombineStrategy = new DefaultAtlasCombineStrategy();
     private AtlasPropertyStrategy atlasPropertyStrategy = new DefaultAtlasPropertyStrategy();
     private AtlasSeparateStrategy atlasSeparateStrategy = new DefaultAtlasSeparateStrategy();
-
     private AtlasValidationService atlasValidationService = new DefaultAtlasValidationService();
-
     private Map<String, String> properties = null;
-
-    public static DefaultAtlasContextFactory getInstance() {
-        if (factory == null) {
-            factory = new DefaultAtlasContextFactory();
-            factory.init();
-        }
-        return factory;
-    }
 
     public DefaultAtlasContextFactory() {
     }
@@ -95,6 +85,14 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
             tmpProps.put(name, properties.getProperty(name));
         }
         setProperties(tmpProps);
+    }
+
+    public static DefaultAtlasContextFactory getInstance() {
+        if (factory == null) {
+            factory = new DefaultAtlasContextFactory();
+            factory.init();
+        }
+        return factory;
     }
 
     @Override
@@ -130,11 +128,11 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
 
         try {
             ManagementFactory.getPlatformMBeanServer().unregisterMBean(getJmxObjectName());
-            if (logger.isDebugEnabled()) {
-                logger.debug("Unregistered AtlasContextFactory with JMX");
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Unregistered AtlasContextFactory with JMX");
             }
         } catch (Exception e) {
-            logger.warn("Unable to unregister with JMX", e);
+            LOG.warn("Unable to unregister with JMX", e);
         }
 
         this.uuid = null;
@@ -201,7 +199,7 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
                 }
             }
         } catch (Exception e) {
-            logger.warn("Error loading module resources", e);
+            LOG.warn("Error loading module resources", e);
         }
 
         for (String clazz : serviceClasses) {
@@ -218,22 +216,22 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
                         getModules().add(module);
                         registerModuleJmx(module);
                     } else {
-                        logger.warn("Invalid module class " + moduleClassName + ": constructor is not present");
+                        LOG.warn("Invalid module class " + moduleClassName + ": constructor is not present");
                     }
                 } else {
-                    logger.warn("Invalid module class  " + moduleClassName + ": unsupported AtlasModule");
+                    LOG.warn("Invalid module class  " + moduleClassName + ": unsupported AtlasModule");
                 }
             } catch (NoSuchMethodException e) {
-                logger.warn("Invalid module class " + moduleClassName + ": constructor is not present.", e);
+                LOG.warn("Invalid module class " + moduleClassName + ": constructor is not present.", e);
             } catch (ClassNotFoundException e) {
-                logger.warn("Invalid module class " + moduleClassName + " not found in classLoader", e);
+                LOG.warn("Invalid module class " + moduleClassName + " not found in classLoader", e);
             } catch (Exception e) {
-                logger.warn("Invalid module class " + moduleClassName + " unknown error", e);
+                LOG.warn("Invalid module class " + moduleClassName + " unknown error", e);
             }
         }
 
-        if (logger.isDebugEnabled()) {
-            logger.debug("Loaded: " + getModules().size() + " of " + serviceClasses.size() + " detected modules");
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Loaded: " + getModules().size() + " of " + serviceClasses.size() + " detected modules");
         }
     }
 
@@ -244,14 +242,14 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
                 String n = getJmxObjectName() + ",info=AvailableModules,moduleName=" + module.getName();
                 ManagementFactory.getPlatformMBeanServer().unregisterMBean(new ObjectName(n));
             } catch (Exception e) {
-                logger.warn("Unable to unregister module '" + module.getName() + "' from JMX");
+                LOG.warn("Unable to unregister module '" + module.getName() + "' from JMX");
             }
         }
 
         this.modules.clear();
 
-        if (logger.isDebugEnabled()) {
-            logger.debug("Unloaded: " + moduleCount + " modules");
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Unloaded: " + moduleCount + " modules");
         }
     }
 
@@ -261,15 +259,15 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
         }
 
         if (isAtlasModuleInterface(clazz, moduleInterface) && clazz.isAnnotationPresent(AtlasModuleDetail.class)) {
-            if (logger.isDebugEnabled()) {
-                logger.debug(
+            if (LOG.isDebugEnabled()) {
+                LOG.debug(
                         clazz.getCanonicalName() + " is a '" + moduleInterface.getSimpleName() + "' implementation");
             }
             return true;
         }
 
-        if (logger.isDebugEnabled()) {
-            logger.debug(
+        if (LOG.isDebugEnabled()) {
+            LOG.debug(
                     clazz.getCanonicalName() + " is NOT a '" + moduleInterface.getSimpleName() + "' implementation");
         }
         return false;
@@ -333,8 +331,8 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
             }
         }
 
-        if (logger.isDebugEnabled()) {
-            logger.debug("Module: " + clazz.getCanonicalName() + " supports data formats: " + dataFormats.toString());
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Module: " + clazz.getCanonicalName() + " supports data formats: " + dataFormats.toString());
         }
 
         return dataFormats;
@@ -355,8 +353,8 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
             }
         }
 
-        if (logger.isDebugEnabled()) {
-            logger.debug("Module: " + clazz.getCanonicalName() + " config packages: " + configPackages.toString());
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Module: " + clazz.getCanonicalName() + " config packages: " + configPackages.toString());
         }
 
         return configPackages;
@@ -374,11 +372,11 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
         try {
             setObjectName(factory.uuid);
             ManagementFactory.getPlatformMBeanServer().registerMBean(factory, factory.getJmxObjectName());
-            if (logger.isDebugEnabled()) {
-                logger.debug("Registered AtlasContextFactory with JMX");
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Registered AtlasContextFactory with JMX");
             }
         } catch (Exception e) {
-            logger.warn("Unable to resgister DefaultAtlasContextFactory with JMX", e);
+            LOG.warn("Unable to resgister DefaultAtlasContextFactory with JMX", e);
         }
     }
 
@@ -387,11 +385,11 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
             String n = getJmxObjectName() + ",modules=AvailableModules,moduleName=" + atlasModuleInfo.getName();
             ManagementFactory.getPlatformMBeanServer().registerMBean(atlasModuleInfo, new ObjectName(n));
 
-            if (logger.isDebugEnabled()) {
-                logger.debug("Registered AtlasModule '" + atlasModuleInfo.getName() + "' with JMX");
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Registered AtlasModule '" + atlasModuleInfo.getName() + "' with JMX");
             }
         } catch (Exception e) {
-            logger.warn("Unable to register AtlasModule '" + atlasModuleInfo.getName() + "' with JMX", e);
+            LOG.warn("Unable to register AtlasModule '" + atlasModuleInfo.getName() + "' with JMX", e);
         }
     }
 
