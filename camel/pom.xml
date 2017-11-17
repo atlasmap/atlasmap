@@ -14,7 +14,7 @@
         <groupId>io.atlasmap</groupId>
         <artifactId>atlas-parent</artifactId>
         <version>1.32-SNAPSHOT</version>
-        <relativePath>../runtime/atlas-parent</relativePath>
+        <relativePath>../parent</relativePath>
     </parent>
 
     <groupId>io.atlasmap</groupId>
@@ -25,28 +25,8 @@
     <description>Camel AtlasMap support</description>
     <properties>
         <camel.osgi.import.before.defaults>com.sun.xml.bind.marshaller;resolution:=optional</camel.osgi.import.before.defaults>
-        <camel.osgi.export.pkg>org.apache.camel.converter.atlasmap.*</camel.osgi.export.pkg>
+        <camel.osgi.export.pkg>org.apache.camel.component.atlasmap.*</camel.osgi.export.pkg>
         <camel.osgi.export.service>org.apache.camel.spi.DataFormatResolver;dataformat=atlasmap</camel.osgi.export.service>
-        <camel.version>2.20.0</camel.version>
-        <jacoco-maven-plugin.version>0.7.9</jacoco-maven-plugin.version>
-        <jaxb.version>2.2.11</jaxb.version>
-        <junit.version>4.12</junit.version>
-        <log4j.version>2.8.1</log4j.version>
-        <mockito.version>2.8.47</mockito.version>
-        <spring.version>4.3.7.RELEASE</spring.version>
-        <twitter4j.version>4.0.6</twitter4j.version>
-        <woodstox.version>4.4.1</woodstox.version>
-        <maven-compiler-plugin.version>3.6.1</maven-compiler-plugin.version>
-        <maven-dependency-plugin.version>3.0.0</maven-dependency-plugin.version>
-        <maven-deploy-plugin.version>2.8.2</maven-deploy-plugin.version>
-        <maven-gpg-plugin.version>1.5</maven-gpg-plugin.version>
-        <maven-jar-plugin.version>3.0.2</maven-jar-plugin.version>
-        <maven-javadoc-plugin.version>2.9.1</maven-javadoc-plugin.version>
-        <maven-resources-plugin.version>3.0.2</maven-resources-plugin.version>
-        <maven-release-plugin.version>2.5.3</maven-release-plugin.version>
-        <maven-source-plugin.version>2.2.1</maven-source-plugin.version>
-        <maven-surefire-plugin.version>2.13</maven-surefire-plugin.version>
-        <nexus-staging-maven-plugin.version>1.6.7</nexus-staging-maven-plugin.version>
     </properties>
 
     <licenses>
@@ -72,99 +52,82 @@
         <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-core</artifactId>
-            <version>${camel.version}</version>
         </dependency>
         <dependency>
             <groupId>io.atlasmap</groupId>
             <artifactId>atlas-api</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>io.atlasmap</groupId>
             <artifactId>atlas-core</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>io.atlasmap</groupId>
             <artifactId>atlas-java-module</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>io.atlasmap</groupId>
             <artifactId>atlas-json-module</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>io.atlasmap</groupId>
             <artifactId>atlas-xml-module</artifactId>
-            <version>${project.version}</version>
         </dependency>
 
         <!-- for testing -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-test-spring</artifactId>
-            <version>${camel.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-core-xml</artifactId>
-            <version>${camel.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-spring-javaconfig</artifactId>
-            <version>${camel.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-api</artifactId>
-            <version>${log4j.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
-            <version>${log4j.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-slf4j-impl</artifactId>
-            <version>${log4j.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.codehaus.woodstox</groupId>
             <artifactId>woodstox-core-asl</artifactId>
-            <version>${woodstox.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-            <version>${mockito.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
-            <version>${spring.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.twitter4j</groupId>
             <artifactId>twitter4j-core</artifactId>
-            <version>${twitter4j.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -180,7 +143,6 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-surefire-plugin</artifactId>
-                        <version>${maven-surefire-plugin.version}</version>
                         <configuration>
                             <argLine>${argLine}</argLine>
                         </configuration>
@@ -188,7 +150,6 @@
                     <plugin>
                         <groupId>org.jacoco</groupId>
                         <artifactId>jacoco-maven-plugin</artifactId>
-                        <version>${jacoco-maven-plugin.version}</version>
                         <executions>
                             <execution>
                                 <id>prepare-agent</id>
@@ -256,10 +217,11 @@
             <plugin>
                 <artifactId>maven-checkstyle-plugin</artifactId>
                 <configuration>
-                    <configLocation>../runtime/checkstyle.xml</configLocation>
+                    <sourceDirectory>${project.build.sourceDirectory}</sourceDirectory>
                     <includeTestSourceDirectory>true</includeTestSourceDirectory>
+                    <configLocation>../checkstyle.xml</configLocation>
                     <propertyExpansion>
-                        checkstyle.suppression.file=../runtime/checkstyle-suppressions.xml
+                        checkstyle.suppression.file=../checkstyle-suppressions.xml
                     </propertyExpansion>
                 </configuration>
             </plugin>
@@ -268,14 +230,6 @@
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
-                </configuration>
-            </plugin>
-            <plugin>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.19.1</version>
-                <configuration>
-                    <forkCount>1</forkCount>
-                    <reuseForks>false</reuseForks>
                 </configuration>
             </plugin>
             <plugin>
