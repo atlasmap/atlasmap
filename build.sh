@@ -136,9 +136,9 @@ function ui() {
   pushd ui
   yarn install --verbose --no-progress
   yarn lint
-  yarn aot:build
+  yarn build
   if [ -z "$SKIP_TESTS" ]; then
-    ./karma-xvfb.sh
+    yarn test:coverage
   fi
   popd
 }
