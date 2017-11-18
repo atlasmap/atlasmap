@@ -25,10 +25,10 @@ jobs:
             echo 'export PATH="${HOME}/.yarn/bin:${PATH}"' >> $BASH_ENV
 
       - run:
-          name: Install Chromium and Xvfb
+          name: Install Chromium
           command: |
             apt-get update -qq
-            apt-get install -qq -y chromium Xvfb > /dev/null
+            apt-get install -qq -y chromium libgconf2-4 libnss3-1d libxss1 libgtk-3-0
 
       - run:
           name: Prep for Cache Load
@@ -60,7 +60,7 @@ jobs:
           command: |
             mkdir ./junit/ ./junit-ui/
             find . -type f -regex ".*/target/.*-reports/.*xml" -exec cp {} ./junit/ \;
-            cp -a ui/junit/* ./junit/
+            find ui/junit -type f -regex  ".*xml" -exec cp {} ./junit/ \;
 
       - run:
           name: Collect checkstyle reports

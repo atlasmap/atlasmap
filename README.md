@@ -63,7 +63,7 @@ Note that this assumes that you are using a template flavor that also supports i
 ```
     yarn start
 ```
-5. The **yarn start** command will attempt to automatically open your browser window, but if it doesn't, open it directy with this URL: [http://localhost:3000].
+5. The **yarn start** command will attempt to automatically open your browser window, but if it doesn't, open it directy with this URL: <http://localhost:3000>.
 
 
 ## See also ##

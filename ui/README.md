@@ -25,7 +25,7 @@ Running the Data Mapper in stand alone mode will require installing the Data Map
     yarn start
 ```
 
-1. The **yarn start** command will attempt to automatically open your browser window, but if it doesn't, open it directy with this URL: [http://localhost:3000].
+1. The **yarn start** command will attempt to automatically open your browser window, but if it doesn't, open it directy with this URL: <http://localhost:3000>.
 
 *Troubleshooting Installation*
 
