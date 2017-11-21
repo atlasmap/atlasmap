@@ -42,7 +42,8 @@ import { TransitionModel, FieldAction, FieldActionConfig } from '../../models/tr
                 </div>
                 <div class="form-group argument" *ngFor="let argConfig of action.config.arguments; let i = index">
                     <label style="">{{ argConfig.name }}</label>
-                    <input type="text" [(ngModel)]="action.getArgumentValue(argConfig.name).value" (change)="selectionChanged($event)"/>
+                    <input type="text" id="input-index-{{action.getArgumentValue(argConfig.name).value}}"
+                        [(ngModel)]="action.getArgumentValue(argConfig.name).value" (change)="selectionChanged($event)"/>
                     <div class="clear"></div>
                 </div>
             </div>

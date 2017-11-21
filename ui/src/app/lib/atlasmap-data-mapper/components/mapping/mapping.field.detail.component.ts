@@ -51,7 +51,8 @@ import { MappingModel, FieldMappingPair, MappedField } from '../../models/mappin
                 {{ getParentObjectName() }}
             </label>
             <div style="width:100%;">
-                <input type="text" [ngModel]="mappedField.field.getFieldLabel(false)" [typeahead]="dataSource"
+                <input type="text" id="input-{{isSource?'source':'target'}}-{{mappedField.field.getFieldLabel(false)}}"
+                    [ngModel]="mappedField.field.getFieldLabel(false)" [typeahead]="dataSource"
                     typeaheadWaitMs="200" (typeaheadOnSelect)="selectionChanged($event)"
                     typeaheadOptionField="displayName" [typeaheadItemTemplate]="typeaheadTemplate">
             </div>
