@@ -116,6 +116,8 @@ function init_options() {
 
 function parent() {
   pushd parent
+  "${MAVEN_CMD}" -v
+  "${MAVEN_CMD}" -h
   "${MAVEN_CMD}" $MAVEN_CLEAN_GOAL install $MAVEN_OPTS
   popd
 }
