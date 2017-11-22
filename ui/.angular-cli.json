@@ -1,37 +1,27 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "project": {
-    "name": "@atlasmap/atlasmap.data.mapper"
+    "name": "@atlasmap/atlasmap-data-mapper"
   },
   "apps": [
     {
       "root": "src",
       "outDir": "dist",
       "assets": [
-        "assets",
-        "favicon.ico",
-        "favicon-16x16.png",
-        "favicon-32x32.png",
-        "android-chrome-192x192.png",
-        "android-chrome-512x512.png",
-        "apple-touch-icon.png",
-        "mstile-150x150.png",
-        "safari-pinned-tab.svg",
-        "manifest.webapp",
-        "browserconfig.xml",
-        "config.json"
+        "assets"
       ],
       "index": "index.html",
       "main": "main.ts",
       "polyfills": "polyfills.ts",
       "test": "test.ts",
-      "tsconfig": "tsconfig.json",
+      "tsconfig": "tsconfig.app.json",
+      "testTsconfig": "tsconfig.spec.json",
       "prefix": "app",
-      "mobile": false,
       "styles": [
         "../node_modules/bootstrap/dist/css/bootstrap.css",
         "../node_modules/patternfly/dist/css/patternfly.css",
         "../node_modules/patternfly/dist/css/patternfly-additions.css",
+        "../node_modules/font-awesome/css/font-awesome.min.css",
         "styles.scss"
       ],
       "stylePreprocessorOptions": {
@@ -40,22 +30,40 @@
         ]
       },
       "scripts": [
-        "../node_modules/jquery/dist/jquery.js",
+        "../node_modules/jquery/dist/jquery.min.js",
         "../node_modules/jquery-match-height/dist/jquery.matchHeight.js",
         "../node_modules/tether/dist/js/tether.js",
         "../node_modules/bootstrap/dist/js/bootstrap.js",
         "../node_modules/patternfly/dist/js/patternfly.js",
         "../node_modules/chart.js/dist/Chart.js"
-      ]
+      ],
+      "environmentSource": "environments/environment.ts",
+      "environments": {
+        "dev": "environments/environment.ts",
+        "prod": "environments/environment.prod.ts"
+      }
     }
   ],
-  "addons": [],
-  "packages": [],
+  "e2e": {
+    "protractor": {
+      "config": "./protractor.conf.js"
+    }
+  },
   "lint": [
     {
-      "files": "src/**/*.ts",
-      "project": "tsconfig.json",
-      "tslintConfig": "../tslint.json"
+      "project": "src/tsconfig.app.json",
+      "exclude": "**/node_modules/**",
+      "tslintConfig": "./tslint.json"
+    },
+    {
+      "project": "src/tsconfig.spec.json",
+      "exclude": "**/node_modules/**",
+      "tslintConfig": "./tslint.json"
+    },
+    {
+      "project": "e2e/tsconfig.e2e.json",
+      "exclude": "**/node_modules/**",
+      "tslintConfig": "./tslint.json"
     }
   ],
   "test": {
@@ -64,19 +72,7 @@
     }
   },
   "defaults": {
-    "styleExt": "scss",
-    "prefixInterfaces": false,
-    "inline": {
-      "style": false,
-      "template": false
-    },
-    "spec": {
-      "class": false,
-      "component": true,
-      "directive": true,
-      "module": false,
-      "pipe": true,
-      "service": true
-    }
+    "styleExt": "css",
+    "component": {}
   }
 }

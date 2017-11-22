@@ -46,7 +46,7 @@ export class EmptyModalBodyComponent { }
                     </div>
                     <div class="modal-body">
                         <div class="modal-message" *ngIf="message">{{ message }}</div>
-                        <template #dyn_target></template>
+                        <ng-template #dyn_target></ng-template>
                     </div>
                     <div class="modal-footer">
                         <div class="modal-buttons">
