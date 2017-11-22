@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash
 
 # Exit if any error occurs
 set -e
@@ -76,19 +76,19 @@ function init_options() {
 
   # Internal variable default values
   OC_OPTS=""
-  MAVEN_OPTS=""
+  MAVEN_PARAMETERS=""
   MAVEN_CLEAN_GOAL="clean"
   MAVEN_IMAGE_BUILD_PROFILE="-Pfabric8"
   MAVEN_CMD="${MAVEN_CMD:-${BASEDIR}/mvnw}"
 
   # Apply options
   if [ -n "$(hasflag --batch-mode $ARGS 2> /dev/null)" ]; then
-    MAVEN_OPTS="$MAVEN_OPTS --batch-mode"
+    MAVEN_PARAMETERS="$MAVEN_PARAMETERS --batch-mode"
   fi
 
   if [ -n "$SKIP_TESTS" ]; then
       echo "Skipping tests ..."
-      MAVEN_OPTS="$MAVEN_OPTS -DskipTests"
+      MAVEN_PARAMETERS="$MAVEN_PARAMETERS -DskipTests"
   fi
 
   if [ -n "$SKIP_IMAGE_BUILDS" ]; then
@@ -98,7 +98,7 @@ function init_options() {
 
   if [ -n "$NAMESPACE" ]; then
       echo "Namespace: $NAMESPACE"
-      MAVEN_OPTS="$MAVEN_OPTS -Dfabric8.namespace=$NAMESPACE"
+      MAVEN_PARAMETERS="$MAVEN_PARAMETERS -Dfabric8.namespace=$NAMESPACE"
       OC_OPTS=" -n $NAMESPACE"
   fi
 
@@ -108,29 +108,27 @@ function init_options() {
 
   if [ -n "$WITH_IMAGE_STREAMS" ]; then
     echo "With image streams ..."
-    MAVEN_OPTS="$MAVEN_OPTS -Dfabric8.mode=openshift"
+    MAVEN_PARAMETERS="$MAVEN_PARAMETERS -Dfabric8.mode=openshift"
   else
-    MAVEN_OPTS="$MAVEN_OPTS -Dfabric8.mode=kubernetes"
+    MAVEN_PARAMETERS="$MAVEN_PARAMETERS -Dfabric8.mode=kubernetes"
   fi
 }
 
 function parent() {
   pushd parent
-  "${MAVEN_CMD}" -v
-  "${MAVEN_CMD}" -h
-  "${MAVEN_CMD}" $MAVEN_CLEAN_GOAL install $MAVEN_OPTS
+  "${MAVEN_CMD}" $MAVEN_CLEAN_GOAL install $MAVEN_PARAMETERS
   popd
 }
 
 function runtime() {
   pushd runtime
-  "${MAVEN_CMD}" -Pjacoco $MAVEN_IMAGE_BUILD_PROFILE $MAVEN_CLEAN_GOAL checkstyle:check install $MAVEN_OPTS
+  "${MAVEN_CMD}" -Pjacoco $MAVEN_IMAGE_BUILD_PROFILE $MAVEN_CLEAN_GOAL checkstyle:check install $MAVEN_PARAMETERS
   popd
 }
 
 function camel() {
   pushd camel
-  "${MAVEN_CMD}" -Pjacoco $MAVEN_CLEAN_GOAL checkstyle:check install $MAVEN_OPTS
+  "${MAVEN_CMD}" -Pjacoco $MAVEN_CLEAN_GOAL checkstyle:check install $MAVEN_PARAMETERS
   popd  
 }
 
