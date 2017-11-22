@@ -44,7 +44,7 @@ jobs:
           name: Build
           command: |
             echo Using node version: $(node --version)
-            sh -x ./build.sh --batch-mode
+            ./build.sh --batch-mode
 
       - save_cache:
           key: atlasmap-mvn-{{ checksum "all-poms" }}
