@@ -90,10 +90,10 @@ public class XmlJsonComplexTest extends AtlasMappingBaseTest {
 
         AtlasSession session = context.createSession();
         String sourceXml = AtlasTestUtil.loadFileAsString(inputFile);
-        session.setInput(sourceXml);
+        session.setDefaultSourceDocument(sourceXml);
         context.process(session);
 
-        Object object = session.getOutput();
+        Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof String);
 

@@ -43,10 +43,10 @@ public class JavaJsonComplexTest extends AtlasMappingBaseTest {
         AtlasSession session = context.createSession();
         BaseOrder source = AtlasTestUtil.generateOrderClass(SourceOrder.class, SourceAddress.class,
                 SourceContact.class);
-        session.setInput(source);
+        session.setDefaultSourceDocument(source);
         context.process(session);
 
-        Object object = session.getOutput();
+        Object object = session.getDefaultTargetDocument();
         assertTrue(object instanceof String);
         AtlasJsonTestUnrootedMapper testMapper = new AtlasJsonTestUnrootedMapper();
         io.atlasmap.json.test.TargetOrder targetObject = testMapper.readValue((String) object,
@@ -62,10 +62,10 @@ public class JavaJsonComplexTest extends AtlasMappingBaseTest {
         AtlasSession session = context.createSession();
         BaseOrder source = AtlasTestUtil.generateOrderClass(SourceOrder.class, SourceAddress.class,
                 SourceContact.class);
-        session.setInput(source);
+        session.setDefaultSourceDocument(source);
         context.process(session);
 
-        Object object = session.getOutput();
+        Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof String);
         AtlasJsonTestRootedMapper testMapper = new AtlasJsonTestRootedMapper();

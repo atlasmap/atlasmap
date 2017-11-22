@@ -211,6 +211,7 @@ public class AtlasTestUtil {
         assertNotNull(targetObject);
         assertEquals(new Double(0.0d), new Double(targetObject.getDoubleField()));
         assertEquals(new Float(97f), new Float(targetObject.getFloatField()));
+        assertEquals(new Short((short)99), new Short(targetObject.getShortField()));
         assertEquals(new Integer(30000), new Integer(targetObject.getIntField()));
         assertEquals(new Long(40000000L), new Long(targetObject.getLongField()));
         // TODO: Fix char validateion
@@ -219,7 +220,6 @@ public class AtlasTestUtil {
         // Primitive auto-initialized values
         assertEquals(false, targetObject.isBooleanField());
         assertEquals(new Byte((byte) 0), new Byte(targetObject.getByteField()));
-        assertEquals(new Short((short) 0), new Short(targetObject.getShortField()));
 
         // Unused by mapping
         assertNull(targetObject.getBooleanArrayField());
@@ -248,6 +248,7 @@ public class AtlasTestUtil {
         assertEquals(true, targetObject.isBooleanField());
         assertEquals(new Double(97d), new Double(targetObject.getDoubleField()));
         assertEquals(new Float(2.0f), new Float(targetObject.getFloatField()));
+        assertEquals(new Short((short)99), new Short(targetObject.getShortField()));
         assertEquals(new Integer(50000000), new Integer(targetObject.getIntField()));
         assertEquals(new Long(0L), new Long(targetObject.getLongField()));
         // TODO: fix char validation
@@ -255,7 +256,6 @@ public class AtlasTestUtil {
 
         // Primitive auto-initialized values
         assertEquals(new Byte((byte) 0), new Byte(targetObject.getByteField()));
-        assertEquals(new Short((short) 0), new Short(targetObject.getShortField()));
 
         // Unused by mapping
         assertNull(targetObject.getBooleanArrayField());
@@ -325,7 +325,7 @@ public class AtlasTestUtil {
         // Primitive auto-initialized values
         assertEquals(false, targetObject.isBooleanField());
         assertEquals(new Byte((byte) 0), new Byte(targetObject.getByteField()));
-        assertTrue(Character.valueOf((char) 0) == targetObject.getCharField());
+        assertEquals((char) 0, targetObject.getCharField());
 
         // Unused by mapping
         assertNull(targetObject.getBooleanArrayField());
@@ -356,7 +356,7 @@ public class AtlasTestUtil {
         assertEquals(new Integer(97), new Integer(targetObject.getIntField()));
         assertEquals(new Long(1L), new Long(targetObject.getLongField()));
         assertEquals(new Short((short) 2), new Short(targetObject.getShortField()));
-        assertTrue(Character.valueOf((char) 0) == targetObject.getCharField());
+        assertEquals((char) 0, targetObject.getCharField());
 
         // Primitive auto-initialized values
         assertEquals(false, targetObject.isBooleanField());
@@ -467,8 +467,8 @@ public class AtlasTestUtil {
     }
 
     public static void validateJsonOrder(io.atlasmap.json.test.BaseOrder orderObject) {
-        assertNotNull(orderObject);
-        assertNotNull(orderObject.getOrderId());
+        assertNotNull("Order object is null", orderObject);
+        assertNotNull("orderId is null: " + orderObject.toString(), orderObject.getOrderId());
         assertEquals(new Integer(8765309), orderObject.getOrderId());
         validateJsonAddress(orderObject.getAddress());
         validateJsonContact(orderObject.getContact());
@@ -483,7 +483,7 @@ public class AtlasTestUtil {
     }
 
     public static void validateJsonAddress(io.atlasmap.json.test.BaseAddress addressObject) {
-        assertNotNull(addressObject);
+        assertNotNull("Address object is null", addressObject);
         assertEquals("123 Main St", addressObject.getAddressLine1());
         assertEquals("Suite 42b", addressObject.getAddressLine2());
         assertEquals("Anytown", addressObject.getCity());
@@ -492,7 +492,7 @@ public class AtlasTestUtil {
     }
 
     public static void validateJsonContact(io.atlasmap.json.test.BaseContact contactObject) {
-        assertNotNull(contactObject);
+        assertNotNull("Contact object is null", contactObject);
         assertEquals("Ozzie", contactObject.getFirstName());
         assertEquals("Smith", contactObject.getLastName());
         assertEquals("5551212", contactObject.getPhoneNumber());

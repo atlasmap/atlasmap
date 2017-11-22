@@ -28,12 +28,8 @@
             <OutputField xsi:type="ns2:JavaField" path="/doubleField" />
         </Mapping>
         <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns3:XmlField" path="/XmlFPA/@booleanField" />
+            <InputField xsi:type="ns3:XmlField" path="/XmlFPA/@booleanField" fieldType="Boolean" />
             <OutputField xsi:type="ns2:JavaField" path="/floatField" />
-        </Mapping>
-        <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns3:XmlField" path="/XmlFPA/@charField" />
-            <OutputField xsi:type="ns2:JavaField" path="/booleanField" />
         </Mapping>
     </Mappings>
     <LookupTables />

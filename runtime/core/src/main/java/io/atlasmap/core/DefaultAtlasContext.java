@@ -19,7 +19,11 @@ import java.lang.management.ManagementFactory;
 import java.net.URI;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
@@ -30,25 +34,42 @@ import javax.management.ObjectName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.atlasmap.api.AtlasConstants;
 import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasContextFactory;
+import io.atlasmap.api.AtlasConversionException;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.api.AtlasSession;
-import io.atlasmap.api.AtlasValidationException;
 import io.atlasmap.core.AtlasMappingService.AtlasMappingFormat;
 import io.atlasmap.mxbean.AtlasContextMXBean;
 import io.atlasmap.spi.AtlasModule;
 import io.atlasmap.spi.AtlasModuleInfo;
+import io.atlasmap.spi.AtlasModuleInfoRegistry;
 import io.atlasmap.spi.AtlasModuleMode;
+import io.atlasmap.spi.FieldDirection;
 import io.atlasmap.v2.AtlasMapping;
+import io.atlasmap.v2.AtlasModelFactory;
+import io.atlasmap.v2.AuditStatus;
 import io.atlasmap.v2.Audits;
 import io.atlasmap.v2.BaseMapping;
+import io.atlasmap.v2.Collection;
+import io.atlasmap.v2.ConstantField;
 import io.atlasmap.v2.DataSource;
 import io.atlasmap.v2.DataSourceType;
+import io.atlasmap.v2.Field;
+import io.atlasmap.v2.FieldType;
+import io.atlasmap.v2.LookupTable;
+import io.atlasmap.v2.Mapping;
+import io.atlasmap.v2.MappingType;
+import io.atlasmap.v2.PropertyField;
+import io.atlasmap.v2.SimpleField;
 import io.atlasmap.v2.Validation;
 import io.atlasmap.v2.Validations;
 
 public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
+
+    public static final String CONSTANTS_DOCUMENT_ID = "io.atlasmap.core.DefaultAtlasContext.constants.docId";
+    public static final String PROPERTIES_DOCUMENT_ID = "io.atlasmap.core.DefaultAtlasContext.properties.docId";
 
     private static final Logger LOG = LoggerFactory.getLogger(DefaultAtlasContext.class);
     private ObjectName jmxObjectName;
@@ -57,19 +78,12 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
     private AtlasMapping mappingDefinition;
     private AtlasMappingFormat atlasMappingFormat;
     private URI atlasMappingUri;
-    private AtlasModule sourceModule;
-    private AtlasModule targetModule;
-    private Class<AtlasModule> sourceModuleClass;
-    private Class<AtlasModule> targetModuleClass;
-    private String sourceFormat;
-    private String targetFormat;
-    private Map<String, String> sourceProperties;
-    private Map<String, String> targetProperties;
+    private Map<String, AtlasModule> sourceModules = new HashMap<>();
+    private Map<String, AtlasModule> targetModules = new HashMap<>();
+    private Map<String, LookupTable> lookupTables = new HashMap<>();
 
     public DefaultAtlasContext(URI atlasMappingUri) throws AtlasException {
-        this.factory = DefaultAtlasContextFactory.getInstance();
-        this.uuid = UUID.randomUUID();
-        this.atlasMappingUri = atlasMappingUri;
+        this(DefaultAtlasContextFactory.getInstance(), atlasMappingUri, AtlasMappingFormat.XML);
     }
 
     public DefaultAtlasContext(DefaultAtlasContextFactory factory, URI atlasMappingUri) throws AtlasException {
@@ -103,38 +117,69 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
             this.mappingDefinition = factory.getMappingService().loadMapping(this.atlasMappingUri, atlasMappingFormat);
         }
 
-        List<AtlasModuleInfo> modules = factory.getModules();
+        sourceModules.clear();
+        ConstantModule constant = new ConstantModule();
+        constant.setConversionService(factory.getConversionService());
+        constant.setFieldActionService(factory.getFieldActionService());
+        sourceModules.put(CONSTANTS_DOCUMENT_ID, constant);
+        PropertyModule propSource = new PropertyModule(factory.getPropertyStrategy());
+        propSource.setMode(AtlasModuleMode.SOURCE);
+        propSource.setConversionService(factory.getConversionService());
+        propSource.setFieldActionService(factory.getFieldActionService());
+        sourceModules.put(PROPERTIES_DOCUMENT_ID, propSource);
+        targetModules.clear();
 
-        for (AtlasModuleInfo module : modules) {
-            if (AtlasUtil.matchUriModule(module.getUri(), getSourceModuleUri())) {
-                try {
-                    setSourceModuleClass((Class<AtlasModule>) Class.forName(module.getModuleClassName()));
-                    setSourceModule(getSourceModuleClass().newInstance());
-                    getSourceModule().setMode(AtlasModuleMode.SOURCE);
-                    getSourceModule().setConversionService(getDefaultAtlasContextFactory().getConversionService());
-                    getSourceModule().init();
-                } catch (ClassNotFoundException e) {
-                    LOG.error("Cannot find source ModuleClass " + module.toString(), e);
-                    throw new AtlasException("Cannot source ModuleClass: " + module.getModuleClassName(), e);
-                } catch (ReflectiveOperationException e) {
-                    LOG.error("Unable to initialize target module: " + module.toString(), e);
-                    throw new AtlasException("Unable to initialize target module: " + module.getModuleClassName(), e);
-                }
+        lookupTables.clear();
+        if (mappingDefinition.getLookupTables() != null && mappingDefinition.getLookupTables().getLookupTable() != null) {
+            for (LookupTable table : mappingDefinition.getLookupTables().getLookupTable()) {
+                lookupTables.put(table.getName(), table);
             }
-            if (AtlasUtil.matchUriModule(module.getUri(), getTargetModuleUri())) {
-                try {
-                    setTargetModuleClass((Class<AtlasModule>) Class.forName(module.getModuleClassName()));
-                    setTargetModule(getTargetModuleClass().newInstance());
-                    getTargetModule().setMode(AtlasModuleMode.TARGET);
-                    getTargetModule().setConversionService(getDefaultAtlasContextFactory().getConversionService());
-                    getTargetModule().init();
-                } catch (ClassNotFoundException e) {
-                    LOG.error("Cannot find target ModuleClass: " + module.toString(), e);
-                    throw new AtlasException("Cannot find target ModuleClass: " + module.getModuleClassName(), e);
-                } catch (ReflectiveOperationException e) {
-                    LOG.error("Unable to initialize target module: " + module.toString(), e);
-                    throw new AtlasException("Unable to initialize target module: " + module.getModuleClassName(), e);
+        }
+
+        AtlasModuleInfoRegistry moduleInfoRegistry = factory.getModuleInfoRegistry();
+        for (DataSource ds : mappingDefinition.getDataSource()) {
+            AtlasModuleInfo moduleInfo = moduleInfoRegistry.lookupByUri(ds.getUri());
+            if (moduleInfo == null) {
+                LOG.error("Cannot find module info for the DataSource uri '{}'", ds.getUri());
+                continue;
+            }
+            if (ds.getDataSourceType() != DataSourceType.SOURCE && ds.getDataSourceType() != DataSourceType.TARGET) {
+                LOG.error("Unsupported DataSource type '{}'", ds.getDataSourceType());
+                continue;
+            }
+
+            String docId = ds.getId();
+            if (docId == null || docId.isEmpty()) {
+                docId = ds.getDataSourceType() == DataSourceType.SOURCE ?
+                        AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID : AtlasConstants.DEFAULT_TARGET_DOCUMENT_ID;
+            }
+            if (ds.getDataSourceType() == DataSourceType.SOURCE && sourceModules.containsKey(docId)) {
+                LOG.error("Duplicated {} DataSource ID '{}' was detected, ignoring...", ds.getDataSourceType(), ds.getId());
+                continue;
+            }
+            if (ds.getDataSourceType() == DataSourceType.TARGET && targetModules.containsKey(docId)) {
+                LOG.error("Duplicated {} DataSource ID '{}' was detected, ignoring...", ds.getDataSourceType(), docId);
+                continue;
+            }
+
+            try {
+                AtlasModule module = moduleInfo.getModuleClass().newInstance();
+                module.setConversionService(factory.getConversionService());
+                module.setFieldActionService(factory.getFieldActionService());
+                module.setUri(ds.getUri());
+                if (ds.getDataSourceType() == DataSourceType.SOURCE) {
+                    module.setMode(AtlasModuleMode.SOURCE);
+                    getSourceModules().put(docId, module);
+                } else if (ds.getDataSourceType() == DataSourceType.TARGET) {
+                    module.setMode(AtlasModuleMode.TARGET);
+                    getTargetModules().put(docId, module);
                 }
+                module.setDocId(docId);
+                module.init();
+            } catch (Throwable t) {
+                LOG.error("Unable to initialize {} module: {}", ds.getDataSourceType(), moduleInfo.toString());
+                LOG.error(t.getMessage(), t);
+                throw new AtlasException(String.format("Unable to initialize %s module: %s", ds.getDataSourceType(), moduleInfo.toString()), t) ;
             }
         }
     }
@@ -145,11 +190,11 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
                     getDefaultAtlasContextFactory().getJmxObjectName() + ",context=Contexts,uuid=" + uuid.toString()));
             ManagementFactory.getPlatformMBeanServer().registerMBean(this, getJmxObjectName());
             if (LOG.isDebugEnabled()) {
-                LOG.debug("Registered AtlasContext " + context.getUuid() + " with JMX");
+                LOG.debug("Registered AtlasContext {} with JMX", context.getUuid());
             }
         } catch (Throwable t) {
-            LOG.warn("Failured to register AtlasContext " + context.getUuid() + " with JMX msg: " + t.getMessage(),
-                    t);
+            LOG.warn("Failed to register AtlasContext {} with JMX", context.getUuid());
+            LOG.warn(t.getMessage(), t);
         }
     }
 
@@ -158,62 +203,389 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
      *
      */
     @Override
-    public void process(AtlasSession session) throws AtlasException {
+    public void process(AtlasSession userSession) throws AtlasException {
+        if (!(userSession instanceof DefaultAtlasSession)) {
+            throw new AtlasException(String.format("Unsupported session class '%s'", userSession.getClass().getName()));
+        }
+        if (!this.equals(userSession.getAtlasContext())) {
+            throw new AtlasException("Cannot execute AtlasSession created by the other AtlasContext");
+        }
+
+        DefaultAtlasSession session = (DefaultAtlasSession)userSession;
         if (LOG.isDebugEnabled()) {
-            LOG.debug("Begin process " + (session == null ? null : session.toString()));
+            LOG.debug("Begin process {}", (session == null ? null : session.toString()));
         }
 
         processValidation(session);
+        if (session.hasErrors()) {
+            if (LOG.isDebugEnabled()) {
+                LOG.error("Aborting due to {} errors in pre-validation", session.errorCount());
+            }
+            return;
+        }
 
-        // TODO: Finish validations
-        /*
-         * if(session.hasErrors()) {
-         * logger.error(String.format("Aborting processing due to %s errors",
-         * session.errorCount())); return; }
-         */
-        getSourceModule().processPreInputExecution(session);
-        getTargetModule().processPreOutputExecution(session);
+        for (AtlasModule module : getSourceModules().values()) {
+            module.processPreSourceExecution(session);
+        }
+        for (AtlasModule module : getTargetModules().values()) {
+            module.processPreTargetExecution(session);
+        }
 
-        // TODO: Finish validations
-        /*
-         * if(session.hasErrors()) {
-         * logger.error(String.format("Aborting processing due to %s errors",
-         * session.errorCount())); return; }
-         */
+        if (session.hasErrors()) {
+            if (LOG.isDebugEnabled()) {
+                LOG.error("Aborting due to {} errors in pre-execution", session.errorCount());
+            }
+            return;
+        }
 
-        for (BaseMapping mapping : session.getMapping().getMappings().getMapping()) {
-            getSourceModule().processInputMapping(session, mapping);
-            getSourceModule().processInputActions(session, mapping);
-            getTargetModule().processOutputMapping(session, mapping);
+        for (BaseMapping baseMapping : session.getMapping().getMappings().getMapping()) {
+            for (Mapping mapping : extractCollectionMappings(session, baseMapping)) {
+                session.head().unset()
+                              .setMapping(mapping)
+                              .setLookupTable(lookupTables.get(mapping.getLookupTableName()));
 
-            if (session.hasErrors()) {
-                LOG.error(String.format("Aborting processing due to %s errors", session.errorCount()));
-                break;
+                if (mapping.getOutputField() == null || mapping.getOutputField().isEmpty()) {
+                    AtlasUtil.addAudit(session, null,
+                            String.format("Mapping does not contain at least one output field: alias=%s desc=%s",
+                                    mapping.getAlias(), mapping.getDescription()),
+                            null, AuditStatus.WARN, null);
+                    continue;
+                }
+
+                if (mapping.getInputField() == null || mapping.getInputField().isEmpty()) {
+                    AtlasUtil.addAudit(session, null,
+                            String.format("Mapping does not contain at least one source field: alias=%s desc=%s",
+                                    mapping.getAlias(), mapping.getDescription()),
+                            null, AuditStatus.WARN, null);
+                } else {
+                    processSourceFieldMappings(session, mapping.getInputField());
+                }
+
+                processTargetFieldMappings(session, mapping);
             }
         }
 
-        getSourceModule().processPostValidation(session);
-        getTargetModule().processPostValidation(session);
+        for (AtlasModule module : getSourceModules().values()) {
+            module.processPostValidation(session);
+        }
+        for (AtlasModule module : getTargetModules().values()) {
+            module.processPostValidation(session);
+        }
 
-        // TODO: Finish validations
-        /*
-         * if(session.hasErrors()) {
-         * logger.error(String.format("Aborting processing due to %s errors",
-         * session.errorCount())); return; }
-         */
-
-        getSourceModule().processPostInputExecution(session);
-        getTargetModule().processPostOutputExecution(session);
+        for (AtlasModule module : getSourceModules().values()) {
+            module.processPostSourceExecution(session);
+        }
+        for (AtlasModule module : getTargetModules().values()) {
+            module.processPostTargetExecution(session);
+        }
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug("End process " + (session == null ? null : session.toString()));
+            LOG.debug("End process {}", session == null ? null : session.toString());
         }
     }
 
-    @Override
-    public void processValidation(AtlasSession session) throws AtlasException {
+    private List<Mapping> extractCollectionMappings(DefaultAtlasSession session, BaseMapping baseMapping) throws AtlasException {
         if (LOG.isDebugEnabled()) {
-            LOG.debug("Begin processValidation " + (session == null ? null : session.toString()));
+            LOG.debug("Generating Source Mappings from mapping: {}", baseMapping);
+        }
+        if (!baseMapping.getMappingType().equals(MappingType.COLLECTION)) {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Mapping is not a collection mapping, not cloning: {}", baseMapping);
+            }
+            return Arrays.asList((Mapping) baseMapping);
+        }
+        List<Mapping> mappings = new LinkedList<>();
+        for (BaseMapping m : ((Collection) baseMapping).getMappings().getMapping()) {
+            Mapping mapping = (Mapping) m;
+            Field sourceField = mapping.getInputField().get(0);
+            boolean sourceIsCollection = AtlasPath.isCollection(sourceField.getPath());
+            if (!sourceIsCollection) {
+                // this is a input non-collection to output collection, ie: contact.firstName ->
+                // contact[].firstName
+                // this will be expanded later by generateOutputMappings, for input processing,
+                // just copy it over
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Internal mapping's source field is not a collection, not cloning: {}", mapping);
+                }
+
+                // this is a output collection such as contact<>.firstName, but input is non
+                // collection such as contact.firstName
+                // so just set the output collection field path to be contact<0>.firstName,
+                // which will cause at least one
+                // output object to be created for our copied firstName value
+                for (Field f : mapping.getOutputField()) {
+                    f.setPath(AtlasPath.overwriteCollectionIndex(f.getPath(), 0));
+                }
+                mappings.add(mapping);
+                continue;
+            }
+
+            AtlasModule module = resolveModule(FieldDirection.SOURCE, sourceField);
+            int sourceCollectionSize = module.getCollectionSize(session, sourceField);
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Internal mapping's source field is a collection. Cloning it for each item ({} clones): {}",
+                        sourceCollectionSize, mapping);
+            }
+            for (int i = 0; i < sourceCollectionSize; i++) {
+                Mapping cloneMapping = (Mapping) AtlasModelFactory.cloneMapping(mapping, false);
+                for (Field f : mapping.getInputField()) {
+                    Field clonedField = module.cloneField(f);
+                    clonedField.setPath(AtlasPath.overwriteCollectionIndex(clonedField.getPath(), i));
+                    cloneMapping.getInputField().add(clonedField);
+                }
+                for (Field f : mapping.getOutputField()) {
+                    Field clonedField = module.cloneField(f);
+                    if (AtlasPath.isCollection(clonedField.getPath())) {
+                        clonedField.setPath(AtlasPath.overwriteCollectionIndex(clonedField.getPath(), i));
+                    }
+                    cloneMapping.getOutputField().add(clonedField);
+                }
+                mappings.add(cloneMapping);
+            }
+        }
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Generated {} mappings from mapping: {}", mappings.size(), baseMapping);
+        }
+        ((Collection) baseMapping).getMappings().getMapping().clear();
+        ((Collection) baseMapping).getMappings().getMapping().addAll(mappings);
+
+        return mappings;
+    }
+
+    private AtlasModule resolveModule(FieldDirection direction, Field field) {
+        if (direction == FieldDirection.SOURCE && field instanceof ConstantField) {
+            return sourceModules.get(CONSTANTS_DOCUMENT_ID);
+        }
+        if (direction == FieldDirection.SOURCE && field instanceof PropertyField) {
+            return sourceModules.get(PROPERTIES_DOCUMENT_ID);
+        }
+
+        String docId = field.getDocId();
+        if (docId == null || docId.isEmpty()) {
+            docId = direction == FieldDirection.SOURCE
+                    ? AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID : AtlasConstants.DEFAULT_TARGET_DOCUMENT_ID;
+        }
+        return direction == FieldDirection.SOURCE ? sourceModules.get(docId) : targetModules.get(docId);
+    }
+
+    private void processSourceFieldMappings(DefaultAtlasSession session, List<Field> sourceFields) throws AtlasException {
+        for (Field sourceField : sourceFields) {
+            session.head().setSourceField(sourceField);
+            AtlasModule module = resolveModule(FieldDirection.SOURCE, sourceField);
+            if (module == null) {
+                AtlasUtil.addAudit(session, sourceField.getDocId(),
+                        String.format("Module not found for docId '%s'", sourceField.getDocId()),
+                        sourceField.getPath(), AuditStatus.ERROR, null);
+                return;
+            }
+            if (!module.isSupportedField(sourceField)) {
+                AtlasUtil.addAudit(session, sourceField.getDocId(),
+                        String.format("Unsupported source field type '%s' for DataSource '%s'",
+                                sourceField.getClass().getName(), module.getUri()),
+                        sourceField.getPath(), AuditStatus.ERROR, null);
+                return;
+            }
+
+            module.processSourceFieldMapping(session);
+        }
+    }
+
+    private void processTargetFieldMappings(DefaultAtlasSession session, Mapping mapping) throws AtlasException {
+        MappingType mappingType = mapping.getMappingType();
+        List<Field> sourceFields = mapping.getInputField();
+        List<Field> targetFields = mapping.getOutputField();
+
+        AtlasModule module = null;
+        Field targetField = null;
+        switch (mappingType) {
+
+        case LOOKUP:
+        case MAP:
+            targetField = targetFields.get(0);
+            module = resolveModule(FieldDirection.TARGET, targetField);
+            if (!auditTargetFieldType(session, module, targetField)) {
+                return;
+            }
+            session.head().setTargetField(targetField);
+            module.processTargetFieldMapping(session);
+            return;
+
+        case COMBINE:
+            targetField = targetFields.get(0);
+            module = resolveModule(FieldDirection.TARGET, targetField);
+            if (!auditTargetFieldType(session, module, targetField)) {
+                return;
+            }
+            Field sourceField = processCombineField(session, mapping, sourceFields, targetField);
+            session.head().setSourceField(sourceField)
+                          .setTargetField(targetField);
+            module.processTargetFieldMapping(session);
+            return;
+
+        case SEPARATE:
+            Field sourceFieldsep = sourceFields.get(0);
+            if ((sourceFieldsep.getFieldType() != null && !FieldType.STRING.equals(sourceFieldsep.getFieldType())
+                    || (sourceFieldsep.getValue() == null
+                            || !sourceFieldsep.getValue().getClass().isAssignableFrom(String.class)))) {
+                AtlasUtil.addAudit(session, sourceFieldsep.getDocId(), String
+                        .format("Separate requires String field type for sourceField.path=%s", sourceFieldsep.getPath()),
+                        sourceFieldsep.getPath(), AuditStatus.WARN, null);
+                return;
+            }
+            List<Field> separatedFields = processSeparateField(session, mapping, sourceFields.get(0));
+            for (Field f : targetFields) {
+                targetField = f;
+                module = resolveModule(FieldDirection.TARGET, targetField);
+                if (!auditTargetFieldType(session, module, targetField)) {
+                    continue;
+                }
+                if (targetField.getIndex() == null || targetField.getIndex() < 0) {
+                    AtlasUtil.addAudit(session, targetField.getDocId(),
+                            String.format("Separate requires zero or positive Index value to be set on targetField targetField.path=%s",
+                                    targetField.getPath()),
+                            targetField.getPath(), AuditStatus.WARN, null);
+                    continue;
+                }
+                if (separatedFields.size() <= targetField.getIndex()) {
+                    String errorMessage = String.format(
+                            "Separate returned fewer segments count=%s when targetField.path=%s requested index=%s",
+                            separatedFields.size(), targetField.getPath(), targetField.getIndex());
+                    AtlasUtil.addAudit(session, targetField.getDocId(), errorMessage, targetField.getPath(), AuditStatus.WARN, null);
+                    break;
+                }
+                session.head().setSourceField(separatedFields.get(targetField.getIndex()))
+                              .setTargetField(targetField);
+                module.processTargetFieldMapping(session);
+            }
+            return;
+
+        default:
+            AtlasUtil.addAudit(session, null,
+                    String.format("Unsupported mappingType=%s detected", mapping.getMappingType()),
+                    null, AuditStatus.ERROR, null);
+        }
+    }
+
+    private boolean auditTargetFieldType(DefaultAtlasSession session, AtlasModule module, Field field) {
+        if (module == null) {
+            AtlasUtil.addAudit(session, field.getDocId(),
+                    String.format("Module not found for field type='%s', path='%s'",
+                            field.getFieldType(), field.getPath()),
+                    field.getPath(), AuditStatus.ERROR, null);
+            return false;
+        }
+        if (!module.isSupportedField(field)) {
+            AtlasUtil.addAudit(session, field.getDocId(),
+                    String.format("Unsupported target field type '%s' for DataSource '%s'",
+                            field.getClass().getName(), module.getUri()),
+                    field.getPath(), AuditStatus.ERROR, null);
+            return false;
+        }
+        return true;
+    }
+
+    private Field processCombineField(DefaultAtlasSession session, Mapping mapping,
+            List<Field> sourceFields, Field targetField) throws AtlasException {
+        Map<Integer, String> combineValues = null;
+        for (Field sourceField : sourceFields) {
+            if (sourceField.getIndex() == null || sourceField.getIndex() < 0) {
+                AtlasUtil.addAudit(session, targetField.getDocId(),
+                        String.format("Combine requires zero or positive Index value to be set on all sourceFields sourceField.path=%s",
+                                sourceField.getPath()),
+                        targetField.getPath(), AuditStatus.WARN, null);
+                continue;
+            }
+
+            if (combineValues == null) {
+                // We need to support a sorted map w/ null values
+                combineValues = new HashMap<Integer, String>();
+            }
+
+            if ((sourceField.getFieldType() != null) || (sourceField.getValue() != null)) {
+                String sourceValue;
+                try {
+                    sourceValue = (String) factory.getConversionService().convertType(sourceField.getValue(),
+                        sourceField.getFieldType(), FieldType.STRING);
+                } catch (AtlasConversionException e) {
+                    AtlasUtil.addAudit(session, targetField.getDocId(), String
+                            .format("Suitable converter for sourceField.path=%s hasn't been found", sourceField.getPath()),
+                        targetField.getPath(), AuditStatus.WARN, null);
+
+                    sourceValue = sourceField.getValue() != null ? sourceField.getValue().toString() : null;
+                }
+                combineValues.put(sourceField.getIndex(), sourceValue);
+                continue;
+            }
+        }
+
+        String combinedValue = null;
+        if (mapping.getDelimiter() != null) {
+            combinedValue = session.getAtlasContext().getContextFactory().getCombineStrategy()
+                    .combineValues(combineValues, mapping.getDelimiter());
+        } else {
+            combinedValue = session.getAtlasContext().getContextFactory().getCombineStrategy()
+                    .combineValues(combineValues);
+        }
+
+        Field answer = AtlasModelFactory.cloneFieldToSimpleField(sourceFields.get(0));
+        if (combinedValue == null || combinedValue.trim().isEmpty()) {
+            LOG.debug(String.format("Empty combined string for Combine mapping targetField.path=%s",
+                    targetField.getPath()));
+        } else {
+            answer.setValue(combinedValue);
+        }
+        return answer;
+    }
+
+    protected List<Field> processSeparateField(DefaultAtlasSession session, Mapping mapping,
+            Field sourceField) throws AtlasException {
+        List<Field> answer = new ArrayList<>();
+
+        String sourceValue;
+        try {
+            sourceValue = (String) factory.getConversionService().convertType(sourceField.getValue(),
+                sourceField.getFieldType(), FieldType.STRING);
+        } catch (AtlasConversionException e) {
+            AtlasUtil.addAudit(session, sourceField.getDocId(), String.format(
+                    "Suitable converter for sourceField.path=%s hasn't been found", sourceField.getPath()),
+                    sourceField.getPath(), AuditStatus.WARN, null);
+            sourceValue = sourceField.getValue().toString();
+        }
+        List<String> separatedValues = null;
+        if (mapping.getDelimiter() != null) {
+            separatedValues = session.getAtlasContext().getContextFactory().getSeparateStrategy()
+                    .separateValue(sourceValue, mapping.getDelimiter());
+        } else {
+            separatedValues = session.getAtlasContext().getContextFactory().getSeparateStrategy()
+                    .separateValue(sourceValue);
+        }
+
+        if (separatedValues == null || separatedValues.isEmpty()) {
+            LOG.debug(
+                    String.format("Empty string for Separate mapping sourceField.path=%s", sourceField.getPath()));
+        } else {
+            for (String separatedValue : separatedValues) {
+                SimpleField simpleField = AtlasModelFactory.cloneFieldToSimpleField(sourceField);
+                simpleField.setValue(separatedValue);
+                simpleField.setFieldType(FieldType.STRING);
+                answer.add(simpleField);
+            }
+        }
+        return answer;
+    }
+
+    @Override
+    public void processValidation(AtlasSession userSession) throws AtlasException {
+        if (!(userSession instanceof DefaultAtlasSession)) {
+            throw new AtlasException(String.format("Unsupported session class '%s'", userSession.getClass().getName()));
+        }
+        if (!this.equals(userSession.getAtlasContext())) {
+            throw new AtlasException("Cannot execute AtlasSession created by the other AtlasContext");
+        }
+
+        DefaultAtlasSession session = (DefaultAtlasSession)userSession;
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Begin processValidation {}", session == null ? null : session.toString());
         }
 
         List<Validation> validations = getContextFactory().getValidationService().validateMapping(session.getMapping());
@@ -222,18 +594,18 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
         }
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug("Detected " + validations.size() + " core validation notices");
+            LOG.debug("Detected {} core validation notices", validations.size());
         }
 
-        if (getSourceModule() != null) {
-            getSourceModule().processPreValidation(session);
+        for (AtlasModule module : getSourceModules().values()) {
+            module.processPreValidation(session);
         }
-        if (getTargetModule() != null) {
-            getTargetModule().processPreValidation(session);
+        for (AtlasModule module : getTargetModules().values()) {
+            module.processPreValidation(session);
         }
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug("End processValidation " + (session == null ? null : session.toString()));
+            LOG.debug("End processValidation {}", session == null ? null : session.toString());
         }
     }
 
@@ -251,16 +623,21 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
     }
 
     @Override
-    public AtlasSession createSession() throws AtlasValidationException {
-        if (atlasMappingUri != null) {
-            return createSession(getDefaultAtlasContextFactory().getMappingService().loadMapping(atlasMappingUri,
-                    atlasMappingFormat));
-        } else {
-            return createSession(mappingDefinition);
+    public AtlasSession createSession() throws AtlasException {
+        if (mappingDefinition == null && atlasMappingUri != null) {
+            init();
         }
+        return doCreateSession();
     }
 
-    public AtlasSession createSession(AtlasMapping mappingDefinition) {
+    public AtlasSession createSession(AtlasMapping mappingDefinition) throws AtlasException {
+        this.atlasMappingUri = null;
+        this.mappingDefinition = mappingDefinition;
+        init();
+        return doCreateSession();
+    }
+
+    private AtlasSession doCreateSession() {
         AtlasSession session = new DefaultAtlasSession(mappingDefinition);
         session.setAtlasContext(this);
         session.setAudits(new Audits());
@@ -276,68 +653,28 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
         session.getProperties().put("Atlas.CreatedDateTimeTZ", df.format(date));
     }
 
-    public AtlasModule getSourceModule() {
-        return sourceModule;
+    public Map<String, AtlasModule> getSourceModules() {
+        return sourceModules;
     }
 
-    public void setSourceModule(AtlasModule sourceModule) {
-        this.sourceModule = sourceModule;
+    public void setSourceModules(Map<String, AtlasModule> sourceModules) {
+        this.sourceModules = sourceModules;
     }
 
-    public AtlasModule getTargetModule() {
-        return targetModule;
+    public Map<String, AtlasModule> getTargetModules() {
+        return targetModules;
     }
 
-    public void setTargetModule(AtlasModule targetModule) {
-        this.targetModule = targetModule;
+    public void setTargetModules(Map<String, AtlasModule> targetModules) {
+        this.targetModules = targetModules;
     }
 
-    public Class<AtlasModule> getSourceModuleClass() {
-        return sourceModuleClass;
+    public Map<String, LookupTable> getLookupTables() {
+        return lookupTables;
     }
 
-    public void setSourceModuleClass(Class<AtlasModule> sourceModuleClass) {
-        this.sourceModuleClass = sourceModuleClass;
-    }
-
-    public Class<AtlasModule> getTargetModuleClass() {
-        return targetModuleClass;
-    }
-
-    public void setTargetModuleClass(Class<AtlasModule> targetModuleClass) {
-        this.targetModuleClass = targetModuleClass;
-    }
-
-    public String getSourceFormat() {
-        return sourceFormat;
-    }
-
-    public void setSourceFormat(String sourceFormat) {
-        this.sourceFormat = sourceFormat;
-    }
-
-    public String getTargetFormat() {
-        return targetFormat;
-    }
-
-    public void setTargetFormat(String targetFormat) {
-        this.targetFormat = targetFormat;
-    }
-
-    public Map<String, String> getSourceProperties() {
-        return sourceProperties;
-    }
-
-    public void setSourceProperties(Map<String, String> sourceProperties) {
-        this.sourceProperties = sourceProperties;
-    }
-
-    public Map<String, String> getTargetProperties() {
-        return targetProperties;
-    }
-
-    public void setTargetProperties(Map<String, String> targetProperties) {
-        this.targetProperties = targetProperties;
+    public void setLookupTables(Map<String, LookupTable> lookupTables) {
+        this.lookupTables = lookupTables;
     }
 
     protected void setJmxObjectName(ObjectName jmxObjectName) {
@@ -346,30 +683,6 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
 
     public ObjectName getJmxObjectName() {
         return this.jmxObjectName;
-    }
-
-    public String getSourceModuleUri() {
-        return doGetModuleUri(DataSourceType.SOURCE);
-    }
-
-    public String getTargetModuleUri() {
-        return doGetModuleUri(DataSourceType.TARGET);
-    }
-
-    private String doGetModuleUri(DataSourceType type) {
-        DataSource sourceds = null;
-        if (getMapping() != null && getMapping().getDataSource() != null) {
-            for (DataSource ds : getMapping().getDataSource()) {
-                if (ds.getDataSourceType() == type) {
-                    if (sourceds == null) {
-                        sourceds = ds;
-                    } else {
-                        LOG.warn("Multiple {} DataSource found, ignoring '{}'", type, ds.getId());
-                    }
-                }
-            }
-        }
-        return sourceds != null ? sourceds.getUri() : null;
     }
 
     @Override
@@ -409,10 +722,7 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
     @Override
     public String toString() {
         return "DefaultAtlasContext [jmxObjectName=" + jmxObjectName + ", uuid=" + uuid + ", factory=" + factory
-                + ", mappingName=" + getMappingName() + ", mappingUri=" + getMappingUri() + ", sourceModule="
-                + sourceModule + ", targetModule=" + targetModule + ", sourceModuleClass=" + sourceModuleClass
-                + ", targetModuleClass=" + targetModuleClass + ", sourceFormat=" + sourceFormat + ", targetFormat="
-                + targetFormat + ", sourceProperties=" + sourceProperties + ", targetProperties=" + targetProperties
-                + "]";
+                + ", mappingName=" + getMappingName() + ", mappingUri=" + getMappingUri() + ", sourceModules="
+                + sourceModules + ", targetModules=" + targetModules +"]";
     }
 }

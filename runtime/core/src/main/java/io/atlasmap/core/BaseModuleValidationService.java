@@ -28,6 +28,7 @@ import io.atlasmap.spi.AtlasConversionConcern;
 import io.atlasmap.spi.AtlasConversionInfo;
 import io.atlasmap.spi.AtlasModuleDetail;
 import io.atlasmap.spi.AtlasModuleMode;
+import io.atlasmap.spi.FieldDirection;
 import io.atlasmap.v2.AtlasMapping;
 import io.atlasmap.v2.BaseMapping;
 import io.atlasmap.v2.DataSource;
@@ -58,21 +59,6 @@ public abstract class BaseModuleValidationService<T extends Field> implements At
 
     public AtlasModuleMode getMode() {
         return mode;
-    }
-
-    public enum FieldDirection {
-        INPUT("Input"),
-        OUTPUT("Output");
-
-        private String value;
-
-        FieldDirection(String value) {
-            this.value = value;
-        }
-
-        public String value() {
-            return value;
-        }
     }
 
     protected abstract AtlasModuleDetail getModuleDetail();
@@ -140,9 +126,9 @@ public abstract class BaseModuleValidationService<T extends Field> implements At
                 validation.setStatus(ValidationStatus.ERROR);
                 validations.add(validation);
             }
-            validateField(mappingId, outputField, FieldDirection.OUTPUT, validations);
+            validateField(mappingId, outputField, FieldDirection.TARGET, validations);
         } else if (inputFields != null) { // SOURCE
-            inputFields.forEach(inField -> validateField(mappingId, inField, FieldDirection.INPUT, validations));
+            inputFields.forEach(inField -> validateField(mappingId, inField, FieldDirection.SOURCE, validations));
         }
     }
 
@@ -169,14 +155,14 @@ public abstract class BaseModuleValidationService<T extends Field> implements At
         if (mapping != null && mapping.getInputField() != null && mapping.getInputField().size() > 0) {
             inputField = mapping.getInputField().get(0);
             if (getMode() == AtlasModuleMode.SOURCE) {
-                validateField(mappingId, inputField, FieldDirection.INPUT, validations);
+                validateField(mappingId, inputField, FieldDirection.SOURCE, validations);
             }
         }
 
         if (mapping != null && mapping.getOutputField() != null && mapping.getOutputField().size() > 0) {
             outField = mapping.getOutputField().get(0);
             if (getMode() == AtlasModuleMode.TARGET) {
-                validateField(mappingId, outField, FieldDirection.OUTPUT, validations);
+                validateField(mappingId, outField, FieldDirection.TARGET, validations);
             }
         }
 
@@ -208,7 +194,7 @@ public abstract class BaseModuleValidationService<T extends Field> implements At
                 validation.setStatus(ValidationStatus.ERROR);
                 validations.add(validation);
             }
-            validateField(mappingId, inputField, FieldDirection.INPUT, validations);
+            validateField(mappingId, inputField, FieldDirection.SOURCE, validations);
 
             if (outputFields != null) {
                 // FIXME Run only for SOURCE to avoid duplicate validation...
@@ -218,7 +204,7 @@ public abstract class BaseModuleValidationService<T extends Field> implements At
                 }
             }
         } else if (outputFields != null) { // TARGET
-            outputFields.forEach(outField -> validateField(mappingId, outField, FieldDirection.OUTPUT, validations));
+            outputFields.forEach(outField -> validateField(mappingId, outField, FieldDirection.TARGET, validations));
         }
     }
 

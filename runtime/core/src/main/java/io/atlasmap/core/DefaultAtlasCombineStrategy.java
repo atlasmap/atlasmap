@@ -88,10 +88,12 @@ public class DefaultAtlasCombineStrategy implements AtlasCombineStrategy {
         }
 
         Map<Integer, String> sortedMap = sortByKey(values);
+        Integer last = sortedMap.keySet().toArray(new Integer[0])[sortedMap.size()-1];
 
         boolean first = true;
         int count = 0;
-        for (String value : sortedMap.values()) {
+        for (int i=0; i<=last; i++) {
+            String value = sortedMap.get(i);
             if (first) {
                 first = false;
                 if (value == null) {

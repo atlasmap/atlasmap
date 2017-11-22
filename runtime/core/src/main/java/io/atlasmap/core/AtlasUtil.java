@@ -36,6 +36,10 @@ import java.util.zip.ZipInputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.atlasmap.api.AtlasSession;
+import io.atlasmap.v2.Audit;
+import io.atlasmap.v2.AuditStatus;
+
 public class AtlasUtil {
     public static final int SPLIT_LIMIT = 4;
     public static final String NEW_LINE_CHARS = "(?m)$^|[\\r\\n]+\\z";
@@ -255,6 +259,17 @@ public class AtlasUtil {
         }
 
         return classes;
+    }
+
+    public static void addAudit(AtlasSession session, String docId, String message, String path, AuditStatus status,
+            String value) {
+        Audit audit = new Audit();
+        audit.setDocId(docId);
+        audit.setMessage(message);
+        audit.setPath(path);
+        audit.setStatus(status);
+        audit.setValue(value);
+        session.getAudits().getAudit().add(audit);
     }
 
     protected static URL getResource(String scannedPath) {

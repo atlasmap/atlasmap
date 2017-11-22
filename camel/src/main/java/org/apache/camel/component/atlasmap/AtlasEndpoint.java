@@ -218,7 +218,7 @@ public class AtlasEndpoint extends ResourceEndpoint {
 
         // TODO Lookup multiple inputs and map with corresponding source docId
         //      https://github.com/atlasmap/camel-atlasmap/issues/18
-        atlasSession.setInput(body);
+        atlasSession.setDefaultSourceDocument(body);
         atlasContext.process(atlasSession);
 
         List<Audit> errors = new ArrayList<>();
@@ -243,7 +243,7 @@ public class AtlasEndpoint extends ResourceEndpoint {
 
         // now lets output the results to the exchange
         Message out = exchange.getOut();
-        out.setBody(atlasSession.getOutput());
+        out.setBody(atlasSession.getDefaultTargetDocument());
         out.setHeaders(incomingMessage.getHeaders());
         out.setAttachments(incomingMessage.getAttachments());
     }

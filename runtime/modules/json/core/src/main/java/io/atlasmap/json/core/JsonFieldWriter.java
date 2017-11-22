@@ -1,3 +1,18 @@
+/**
+ * Copyright (C) 2017 Red Hat, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package io.atlasmap.json.core;
 
 import java.math.BigDecimal;
@@ -13,13 +28,15 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.core.AtlasPath;
+import io.atlasmap.spi.AtlasFieldWriter;
+import io.atlasmap.spi.AtlasInternalSession;
 import io.atlasmap.v2.AtlasModelFactory;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldType;
 
 /**
  */
-public class JsonFieldWriter {
+public class JsonFieldWriter implements AtlasFieldWriter {
     private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(JsonFieldWriter.class);
 
     private ObjectMapper objectMapper = null;
@@ -44,15 +61,17 @@ public class JsonFieldWriter {
         return objectMapper;
     }
 
-    public void write(Field field) throws AtlasException {
-        if (field == null) {
+    @Override
+    public void write(AtlasInternalSession session) throws AtlasException {
+        Field targetField = session.head().getTargetField();
+        if (targetField == null) {
             throw new AtlasException(new IllegalArgumentException("Argument 'jsonField' cannot be null"));
         }
         if (LOG.isDebugEnabled()) {
-            LOG.debug("Field: " + AtlasModelFactory.toString(field));
-            LOG.debug("Field type=" + field.getFieldType() + " path=" + field.getPath() + " v=" + field.getValue());
+            LOG.debug("Field: " + AtlasModelFactory.toString(targetField));
+            LOG.debug("Field type=" + targetField.getFieldType() + " path=" + targetField.getPath() + " v=" + targetField.getValue());
         }
-        AtlasPath path = new AtlasPath(field.getPath());
+        AtlasPath path = new AtlasPath(targetField.getPath());
         String lastSegment = path.getLastSegment();
         ObjectNode parentNode = this.rootNode;
         String parentSegment = null;
@@ -86,15 +105,19 @@ public class JsonFieldWriter {
                 parentNode = (ObjectNode) childNode;
                 parentSegment = segment;
             } else { // this is the last segment of the path, write the value
+                if (targetField.getFieldType() == FieldType.COMPLEX) {
+                    createParentNode(parentNode, parentSegment, segment);
+                    return;
+                }
                 if (LOG.isDebugEnabled()) {
                     LOG.debug("Now processing field value segment: " + segment);
                 }
-                writeValue(parentNode, parentSegment, segment, field);
+                writeValue(parentNode, parentSegment, segment, targetField);
             }
         }
     }
 
-    public void writeValue(ObjectNode parentNode, String parentSegment, String segment, Field field)
+    private void writeValue(ObjectNode parentNode, String parentSegment, String segment, Field field)
             throws AtlasException {
         if (LOG.isDebugEnabled()) {
             LOG.debug("Writing field value '" + segment + "' in parent node '" + parentSegment + "', parentNode: "
@@ -156,27 +179,7 @@ public class JsonFieldWriter {
         }
     }
 
-    public static JsonNode getChildNode(ObjectNode parentNode, String parentSegment, String segment) {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Looking for child node '" + segment + "' in parent '" + parentSegment + "': " + parentNode);
-        }
-        String cleanedSegment = AtlasPath.cleanPathSegment(segment);
-        JsonNode childNode = parentNode.path(cleanedSegment);
-        if (JsonNodeType.MISSING.equals(childNode.getNodeType())) {
-            childNode = null;
-        }
-        if (LOG.isDebugEnabled()) {
-            if (childNode == null) {
-                LOG.debug("Could not find child node '" + segment + "' in parent '" + parentSegment + "'.");
-            } else {
-                LOG.debug("Found child node '" + segment + "' in parent '" + parentSegment + "', class: "
-                        + childNode.getClass().getName() + ", node: " + childNode);
-            }
-        }
-        return childNode;
-    }
-
-    public ObjectNode createParentNode(ObjectNode parentNode, String parentSegment, String segment) {
+    private ObjectNode createParentNode(ObjectNode parentNode, String parentSegment, String segment) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("Creating parent node '" + segment + "' under previous parent '" + parentSegment + "' ("
                     + parentNode.getClass().getName() + ")");
@@ -215,7 +218,7 @@ public class JsonFieldWriter {
         return childNode;
     }
 
-    public JsonNode createValueNode(Field jsonField) throws AtlasException {
+    private JsonNode createValueNode(Field jsonField) throws AtlasException {
         FieldType type = jsonField.getFieldType();
         Object value = jsonField.getValue();
         JsonNode valueNode = null;
@@ -244,4 +247,25 @@ public class JsonFieldWriter {
         }
         return valueNode;
     }
+
+    public static JsonNode getChildNode(ObjectNode parentNode, String parentSegment, String segment) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Looking for child node '" + segment + "' in parent '" + parentSegment + "': " + parentNode);
+        }
+        String cleanedSegment = AtlasPath.cleanPathSegment(segment);
+        JsonNode childNode = parentNode.path(cleanedSegment);
+        if (JsonNodeType.MISSING.equals(childNode.getNodeType())) {
+            childNode = null;
+        }
+        if (LOG.isDebugEnabled()) {
+            if (childNode == null) {
+                LOG.debug("Could not find child node '" + segment + "' in parent '" + parentSegment + "'.");
+            } else {
+                LOG.debug("Found child node '" + segment + "' in parent '" + parentSegment + "', class: "
+                        + childNode.getClass().getName() + ", node: " + childNode);
+            }
+        }
+        return childNode;
+    }
+
 }

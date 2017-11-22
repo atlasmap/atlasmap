@@ -207,10 +207,10 @@ public class JavaJavaFlatMappingTest extends AtlasMappingBaseTest {
                 .createContext(new File("src/test/resources/javaToJava/atlasmapping-flatprimitive.xml").toURI());
         AtlasSession session = context.createSession();
         BaseFlatPrimitiveClass sourceClass = generateFlatPrimitiveClass(SourceFlatPrimitiveClass.class);
-        session.setInput(sourceClass);
+        session.setDefaultSourceDocument(sourceClass);
         context.process(session);
 
-        Object object = session.getOutput();
+        Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof TargetFlatPrimitiveClass);
         validateFlatPrimitiveClassPrimitiveFields((TargetFlatPrimitiveClass) object);
@@ -223,10 +223,10 @@ public class JavaJavaFlatMappingTest extends AtlasMappingBaseTest {
         AtlasSession session = context.createSession();
         BaseFlatPrimitiveClass sourceClass = generateFlatPrimitiveClassPrimitiveFieldsBoxedValues(
                 SourceFlatPrimitiveClass.class);
-        session.setInput(sourceClass);
+        session.setDefaultSourceDocument(sourceClass);
         context.process(session);
 
-        Object object = session.getOutput();
+        Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof TargetFlatPrimitiveClass);
         validateFlatPrimitiveClassPrimitiveFields((TargetFlatPrimitiveClass) object);
@@ -244,10 +244,10 @@ public class JavaJavaFlatMappingTest extends AtlasMappingBaseTest {
         AtlasSession session = context.createSession();
         BaseFlatPrimitiveClass sourceClass = generateFlatPrimitiveClassBoxedPrimitiveFieldsBoxedValues(
                 SourceFlatPrimitiveClass.class);
-        session.setInput(sourceClass);
+        session.setDefaultSourceDocument(sourceClass);
         context.process(session);
 
-        Object object = session.getOutput();
+        Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof TargetFlatPrimitiveClass);
         validateFlatPrimitiveClassBoxedPrimitiveFields((TargetFlatPrimitiveClass) object);

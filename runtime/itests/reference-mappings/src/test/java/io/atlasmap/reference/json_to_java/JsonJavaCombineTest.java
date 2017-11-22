@@ -38,8 +38,8 @@ public class JsonJavaCombineTest extends AtlasMappingBaseTest {
         AtlasSession session = processCombineMapping(
                 "src/test/resources/jsonToJava/atlasmapping-combine-simple.xml",
                 new String(Files.readAllBytes(Paths.get("src/test/resources/jsonToJava/atlas-json-combine.json"))));
-        TargetContact targetContact = (TargetContact) session.getOutput();
-        assertEquals("Ozzie Smith 5551212 81111", targetContact.getFirstName());
+        TargetContact targetContact = (TargetContact) session.getDefaultTargetDocument();
+        assertEquals("Ozzie    Smith   5551212                                                                                            81111", targetContact.getFirstName());
         assertNull(targetContact.getLastName());
         assertNull(targetContact.getPhoneNumber());
         assertNull(targetContact.getZipCode());
@@ -51,7 +51,7 @@ public class JsonJavaCombineTest extends AtlasMappingBaseTest {
         AtlasSession session = processCombineMapping(
                 "src/test/resources/jsonToJava/atlasmapping-combine-skip.xml",
                 new String(Files.readAllBytes(Paths.get("src/test/resources/jsonToJava/atlas-json-combine.json"))));
-        TargetContact targetContact = (TargetContact) session.getOutput();
+        TargetContact targetContact = (TargetContact) session.getDefaultTargetDocument();
         assertEquals("Ozzie Smith 5551212 81111", targetContact.getFirstName());
         assertNull(targetContact.getLastName());
         assertNull(targetContact.getPhoneNumber());
@@ -64,7 +64,7 @@ public class JsonJavaCombineTest extends AtlasMappingBaseTest {
         AtlasSession session = processCombineMapping(
                 "src/test/resources/jsonToJava/atlasmapping-combine-outoforder.xml",
                 new String(Files.readAllBytes(Paths.get("src/test/resources/jsonToJava/atlas-json-combine.json"))));
-        TargetContact targetContact = (TargetContact) session.getOutput();
+        TargetContact targetContact = (TargetContact) session.getDefaultTargetDocument();
         assertEquals("Ozzie Smith 5551212 81111", targetContact.getFirstName());
         assertNull(targetContact.getLastName());
         assertNull(targetContact.getPhoneNumber());
@@ -77,7 +77,7 @@ public class JsonJavaCombineTest extends AtlasMappingBaseTest {
         AtlasSession session = processCombineMapping(
                 "src/test/resources/jsonToJava/atlasmapping-combine-inputnull.xml",
                 new String(Files.readAllBytes(Paths.get("src/test/resources/jsonToJava/atlas-json-combine-null-lastName.json"))));
-        TargetContact targetContact = (TargetContact) session.getOutput();
+        TargetContact targetContact = (TargetContact) session.getDefaultTargetDocument();
         assertNotNull(targetContact);
         assertEquals("Ozzie  5551212 81111", targetContact.getFirstName());
         assertFalse(session.hasErrors());
@@ -86,10 +86,10 @@ public class JsonJavaCombineTest extends AtlasMappingBaseTest {
     protected AtlasSession processCombineMapping(String mappingFile, String sourceContact) throws Exception {
         AtlasContext context = atlasContextFactory.createContext(new File(mappingFile).toURI());
         AtlasSession session = context.createSession();
-        session.setInput(sourceContact);
+        session.setDefaultSourceDocument(sourceContact);
         context.process(session);
 
-        Object object = session.getOutput();
+        Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertEquals(TargetContact.class.getName(), object.getClass().getName());
         return session;

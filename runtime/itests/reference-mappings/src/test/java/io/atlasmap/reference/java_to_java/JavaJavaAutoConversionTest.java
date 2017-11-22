@@ -71,10 +71,11 @@ public class JavaJavaAutoConversionTest extends AtlasMappingBaseTest {
                 new File("src/test/resources/javaToJava/atlasmapping-flatprimitive-autoconversion-1.xml").toURI());
         AtlasSession session = context.createSession();
         BaseFlatPrimitiveClass sourceObject = AtlasTestUtil.generateFlatPrimitiveClass(SourceFlatPrimitiveClass.class);
-        session.setInput(sourceObject);
+        session.setDefaultSourceDocument(sourceObject);
         context.process(session);
 
-        Object object = session.getOutput();
+        assertFalse(printAudit(session), session.hasErrors());
+        Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof TargetFlatPrimitiveClass);
         AtlasTestUtil.validateFlatPrimitiveClassPrimitiveFieldAutoConversion1((TargetFlatPrimitiveClass) object);
@@ -86,10 +87,11 @@ public class JavaJavaAutoConversionTest extends AtlasMappingBaseTest {
                 new File("src/test/resources/javaToJava/atlasmapping-flatprimitive-autoconversion-2.xml").toURI());
         AtlasSession session = context.createSession();
         BaseFlatPrimitiveClass sourceObject = AtlasTestUtil.generateFlatPrimitiveClass(SourceFlatPrimitiveClass.class);
-        session.setInput(sourceObject);
+        session.setDefaultSourceDocument(sourceObject);
         context.process(session);
 
-        Object object = session.getOutput();
+        assertFalse(printAudit(session), session.hasErrors());
+        Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof TargetFlatPrimitiveClass);
         AtlasTestUtil.validateFlatPrimitiveClassPrimitiveFieldAutoConversion2((TargetFlatPrimitiveClass) object);
@@ -101,10 +103,11 @@ public class JavaJavaAutoConversionTest extends AtlasMappingBaseTest {
                 new File("src/test/resources/javaToJava/atlasmapping-flatprimitive-autoconversion-3.xml").toURI());
         AtlasSession session = context.createSession();
         BaseFlatPrimitiveClass sourceObject = AtlasTestUtil.generateFlatPrimitiveClass(SourceFlatPrimitiveClass.class);
-        session.setInput(sourceObject);
+        session.setDefaultSourceDocument(sourceObject);
         context.process(session);
 
-        Object object = session.getOutput();
+        assertFalse(printAudit(session), session.hasErrors());
+        Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof TargetFlatPrimitiveClass);
         AtlasTestUtil.validateFlatPrimitiveClassPrimitiveFieldAutoConversion3((TargetFlatPrimitiveClass) object);
@@ -116,10 +119,11 @@ public class JavaJavaAutoConversionTest extends AtlasMappingBaseTest {
                 new File("src/test/resources/javaToJava/atlasmapping-flatprimitive-autoconversion-4.xml").toURI());
         AtlasSession session = context.createSession();
         BaseFlatPrimitiveClass sourceObject = AtlasTestUtil.generateFlatPrimitiveClass(SourceFlatPrimitiveClass.class);
-        session.setInput(sourceObject);
+        session.setDefaultSourceDocument(sourceObject);
         context.process(session);
 
-        Object object = session.getOutput();
+        assertFalse(printAudit(session), session.hasErrors());
+        Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof TargetFlatPrimitiveClass);
         AtlasTestUtil.validateFlatPrimitiveClassPrimitiveFieldAutoConversion4((TargetFlatPrimitiveClass) object);
@@ -131,10 +135,11 @@ public class JavaJavaAutoConversionTest extends AtlasMappingBaseTest {
                 new File("src/test/resources/javaToJava/atlasmapping-flatprimitive-autoconversion-5.xml").toURI());
         AtlasSession session = context.createSession();
         BaseFlatPrimitiveClass sourceObject = AtlasTestUtil.generateFlatPrimitiveClass(SourceFlatPrimitiveClass.class);
-        session.setInput(sourceObject);
+        session.setDefaultSourceDocument(sourceObject);
         context.process(session);
 
-        Object object = session.getOutput();
+        assertFalse(printAudit(session), session.hasErrors());
+        Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof TargetFlatPrimitiveClass);
         AtlasTestUtil.validateFlatPrimitiveClassPrimitiveFieldAutoConversion5((TargetFlatPrimitiveClass) object);
@@ -146,10 +151,11 @@ public class JavaJavaAutoConversionTest extends AtlasMappingBaseTest {
                 new File("src/test/resources/javaToJava/atlasmapping-flatprimitive-autoconversion-6.xml").toURI());
         AtlasSession session = context.createSession();
         BaseFlatPrimitiveClass sourceObject = AtlasTestUtil.generateFlatPrimitiveClass(SourceFlatPrimitiveClass.class);
-        session.setInput(sourceObject);
+        session.setDefaultSourceDocument(sourceObject);
         context.process(session);
 
-        Object object = session.getOutput();
+        assertFalse(printAudit(session), session.hasErrors());
+        Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof TargetFlatPrimitiveClass);
         AtlasTestUtil.validateFlatPrimitiveClassPrimitiveFieldAutoConversion6((TargetFlatPrimitiveClass) object);

@@ -48,4 +48,5 @@ public interface AtlasContextFactory {
     void setProperties(Map<String, String> properties);
 
     Map<String, String> getProperties();
+
 }

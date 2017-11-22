@@ -34,7 +34,7 @@
         <Mapping xsi:type="Mapping" mappingType="Map">
             <InputField xsi:type="ns2:JsonField" path="/floatField" />
             <OutputField xsi:type="ns3:XmlField"
-                path="/xt1:XmlFPE/xt1:charField" fieldType="Char" />
+                path="/xt1:XmlFPE/xt1:stringField" fieldType="String" />
         </Mapping>
         <Mapping xsi:type="Mapping" mappingType="Map">
             <InputField xsi:type="ns2:JsonField" path="/booleanField" />

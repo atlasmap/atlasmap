@@ -48,44 +48,44 @@
         </Mapping>
         <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
             xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns2:XmlField" path="/XmlFPE/boxedBooleanField" />
+            <InputField xsi:type="ns2:XmlField" path="/XmlFPE/booleanField" />
             <OutputField xsi:type="ns2:XmlField"
                 path="/XmlFPA/@boxedBooleanField" />
         </Mapping>
         <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
             xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns2:XmlField" path="/XmlFPE/boxedByteField" />
+            <InputField xsi:type="ns2:XmlField" path="/XmlFPE/byteField" />
             <OutputField xsi:type="ns2:XmlField" path="/XmlFPA/@boxedByteField" />
         </Mapping>
         <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
             xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns2:XmlField" path="/XmlFPE/boxedCharField" />
+            <InputField xsi:type="ns2:XmlField" path="/XmlFPE/charField" />
             <OutputField xsi:type="ns2:XmlField" path="/XmlFPA/@boxedCharField" />
         </Mapping>
         <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
             xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns2:XmlField" path="/XmlFPE/boxedDoubleField" />
+            <InputField xsi:type="ns2:XmlField" path="/XmlFPE/doubleField" />
             <OutputField xsi:type="ns2:XmlField"
                 path="/XmlFPA/@boxedDoubleField" />
         </Mapping>
         <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
             xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns2:XmlField" path="/XmlFPE/boxedFloatField" />
+            <InputField xsi:type="ns2:XmlField" path="/XmlFPE/floatField" />
             <OutputField xsi:type="ns2:XmlField" path="/XmlFPA/@boxedFloatField" />
         </Mapping>
         <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
             xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns2:XmlField" path="/XmlFPE/boxedIntField" />
+            <InputField xsi:type="ns2:XmlField" path="/XmlFPE/intField" />
             <OutputField xsi:type="ns2:XmlField" path="/XmlFPA/@boxedIntField" />
         </Mapping>
         <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
             xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns2:XmlField" path="/XmlFPE/boxedLongField" />
+            <InputField xsi:type="ns2:XmlField" path="/XmlFPE/longField" />
             <OutputField xsi:type="ns2:XmlField" path="/XmlFPA/@boxedLongField" />
         </Mapping>
         <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
             xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns2:XmlField" path="/XmlFPE/boxedStringField" />
+            <InputField xsi:type="ns2:XmlField" path="/XmlFPE/stringField" />
             <OutputField xsi:type="ns2:XmlField"
                 path="/XmlFPA/@boxedStringField" />
         </Mapping>

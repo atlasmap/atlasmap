@@ -77,7 +77,8 @@ public class StringConverter implements AtlasPrimitiveConverter<String> {
         }
         // empty or greater than 1 char String throws Exception
         if (value.isEmpty() || value.length() > 1) {
-            throw new AtlasConversionException("String is either empty or greater than one character long");
+            throw new AtlasConversionException(String.format(
+                    "String '%s' is either empty or greater than one character long", value));
         } else if (value.charAt(0) < Character.MIN_VALUE || value.charAt(0) > Character.MAX_VALUE) {
             throw new AtlasConversionException(String
                     .format("String %s is greater than Character.MAX_VALUE  or less than Character.MIN_VALUE", value));

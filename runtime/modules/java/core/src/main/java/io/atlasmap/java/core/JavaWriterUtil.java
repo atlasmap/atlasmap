@@ -1,4 +1,4 @@
-package io.atlasmap.java.module;
+package io.atlasmap.java.core;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
@@ -18,7 +18,7 @@ import io.atlasmap.java.inspect.JdkPackages;
 import io.atlasmap.java.inspect.StringUtil;
 import io.atlasmap.v2.Field;
 
-public class JavaWriterUtil {
+class JavaWriterUtil {
     private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(JavaWriterUtil.class);
     protected AtlasConversionService conversionService = null;
 
@@ -177,6 +177,7 @@ public class JavaWriterUtil {
 
             if (targetMethod != null) {
                 targetMethod.invoke(targetObject, childObject);
+                javaField.setValue(childObject);
             } else {
                 try {
                     java.lang.reflect.Field field = targetObject.getClass().getField(pathUtil.getLastSegment());

@@ -63,7 +63,7 @@ public class ConcurrencyChaosMonkeyTest {
                         try {
                             AtlasContext context = atlasContextFactory.createContext(mappingURI);
                             AtlasSession session = context.createSession();
-                            session.setInput(twitterStatus);
+                            session.setDefaultSourceDocument(twitterStatus);
                             context.process(session);
 
                             Random rand = new Random(System.currentTimeMillis() % 13);
@@ -111,7 +111,7 @@ public class ConcurrencyChaosMonkeyTest {
                         try {
 
                             AtlasSession session = context.createSession();
-                            session.setInput(twitterStatus);
+                            session.setDefaultSourceDocument(twitterStatus);
                             context.process(session);
 
                             Random rand = new Random(System.currentTimeMillis() % 13);

@@ -44,7 +44,7 @@ public class DefaultAtlasContextFactoryTest {
         assertNotNull(factory.getUuid());
         assertNotNull(factory.getJmxObjectName());
         assertNotNull(factory.getMappingService());
-        assertNotNull(factory.getModules());
+        assertNotNull(factory.getModuleInfoRegistry());
 
         factory.destroy();
         assertNotNull(factory);
@@ -53,9 +53,7 @@ public class DefaultAtlasContextFactoryTest {
         assertNull(factory.getUuid());
         assertNull(factory.getJmxObjectName());
         assertNull(factory.getMappingService());
-        assertNotNull(factory.getModules());
-        assertEquals(new Integer(0), new Integer(factory.getModules().size()));
-
+        assertNull(factory.getModuleInfoRegistry());
     }
 
     @Test
@@ -70,7 +68,7 @@ public class DefaultAtlasContextFactoryTest {
         assertNotNull(factory.getUuid());
         assertNotNull(factory.getJmxObjectName());
         assertNotNull(factory.getMappingService());
-        assertNotNull(factory.getModules());
+        assertNotNull(factory.getModuleInfoRegistry());
 
         factory.destroy();
         assertNotNull(factory);
@@ -79,8 +77,7 @@ public class DefaultAtlasContextFactoryTest {
         assertNull(factory.getUuid());
         assertNull(factory.getJmxObjectName());
         assertNull(factory.getMappingService());
-        assertNotNull(factory.getModules());
-        assertEquals(new Integer(0), new Integer(factory.getModules().size()));
+        assertNull(factory.getModuleInfoRegistry());
 
         factory.init();
         assertNotNull(factory);
@@ -89,7 +86,7 @@ public class DefaultAtlasContextFactoryTest {
         assertNotNull(factory.getUuid());
         assertNotNull(factory.getJmxObjectName());
         assertNotNull(factory.getMappingService());
-        assertNotNull(factory.getModules());
+        assertNotNull(factory.getModuleInfoRegistry());
         assertNotEquals(origUuid, factory.getUuid());
 
         factory.destroy();
@@ -99,8 +96,7 @@ public class DefaultAtlasContextFactoryTest {
         assertNull(factory.getUuid());
         assertNull(factory.getJmxObjectName());
         assertNull(factory.getMappingService());
-        assertNotNull(factory.getModules());
-        assertEquals(new Integer(0), new Integer(factory.getModules().size()));
+        assertNull(factory.getModuleInfoRegistry());
     }
 
     @Test
@@ -112,7 +108,7 @@ public class DefaultAtlasContextFactoryTest {
         assertNotNull(factory.getUuid());
         assertNotNull(factory.getJmxObjectName());
         assertNotNull(factory.getMappingService());
-        assertNotNull(factory.getModules());
+        assertNotNull(factory.getModuleInfoRegistry());
 
         factory.destroy();
         assertNotNull(factory);
@@ -121,7 +117,6 @@ public class DefaultAtlasContextFactoryTest {
         assertNull(factory.getUuid());
         assertNull(factory.getJmxObjectName());
         assertNull(factory.getMappingService());
-        assertNotNull(factory.getModules());
-        assertEquals(new Integer(0), new Integer(factory.getModules().size()));
+        assertNull(factory.getModuleInfoRegistry());
     }
 }
