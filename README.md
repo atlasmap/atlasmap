@@ -45,25 +45,33 @@ Note that this assumes that you are using a template flavor that also supports i
 
 ### Run AtlasMap Services and UI
 
+1. Build AtlasMap runtime
+
+    If you haven't run build.sh described above, you need to build&install runtime first.
+```
+    cd ${ATLASMAP}/runtime
+    ../mvnw clean install
+```
+
 1. Run AtlasMap Services
 ```
     cd ${ATLASMAP}/runtime/runtime
     ../../mvnw -Pitests spring-boot:run
 ```
 
-2. [Install Yarn](https://yarnpkg.com/lang/en/docs/install/)
+1. [Install Yarn](https://yarnpkg.com/lang/en/docs/install/)
 
-3. In another console, install Data Mapper UI's dependencies
+1. In another console, install Data Mapper UI's dependencies
 ```
     cd ${ATLASMAP}/ui
     yarn install
 ```
 
-4. Start Data Mapper UI
+1. Start Data Mapper UI
 ```
     yarn start
 ```
-5. The **yarn start** command will attempt to automatically open your browser window, but if it doesn't, open it directy with this URL: <http://localhost:3000>.
+1. The **yarn start** command will attempt to automatically open your browser window, but if it doesn't, open it directy with this URL: <http://localhost:3000>.
 
 
 ## See also ##

@@ -78,7 +78,7 @@ function init_options() {
   OC_OPTS=""
   MAVEN_OPTS=""
   MAVEN_CLEAN_GOAL="clean"
-  MAVEN_IMAGE_BUILD_GOAL="fabric8:build"
+  MAVEN_IMAGE_BUILD_PROFILE="-Pfabric8"
   MAVEN_CMD="${MAVEN_CMD:-${BASEDIR}/mvnw}"
 
   # Apply options
@@ -93,7 +93,7 @@ function init_options() {
 
   if [ -n "$SKIP_IMAGE_BUILDS" ]; then
       echo "Skipping image builds ..."
-      MAVEN_IMAGE_BUILD_GOAL=""
+      MAVEN_IMAGE_BUILD_PROFILE=""
   fi
 
   if [ -n "$NAMESPACE" ]; then
@@ -108,9 +108,9 @@ function init_options() {
 
   if [ -n "$WITH_IMAGE_STREAMS" ]; then
     echo "With image streams ..."
-    MAVEN_OPTS=" -Dfabric8.mode=openshift"
+    MAVEN_OPTS="$MAVEN_OPTS -Dfabric8.mode=openshift"
   else
-    MAVEN_OPTS=" -Dfabric8.mode=kubernetes"
+    MAVEN_OPTS="$MAVEN_OPTS -Dfabric8.mode=kubernetes"
   fi
 }
 
@@ -122,7 +122,7 @@ function parent() {
 
 function runtime() {
   pushd runtime
-  "${MAVEN_CMD}" -Pjacoco,fabric8 $MAVEN_CLEAN_GOAL checkstyle:check install $MAVEN_OPTS
+  "${MAVEN_CMD}" -Pjacoco $MAVEN_IMAGE_BUILD_PROFILE $MAVEN_CLEAN_GOAL checkstyle:check install $MAVEN_OPTS
   popd
 }
 

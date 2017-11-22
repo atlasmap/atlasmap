@@ -99,8 +99,10 @@ jobs:
 
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
               DOCKER_IMAGE_TAG="latest"
+              NPM_TAG=`npm run version|sed '$!d'`.`date '+%Y%m%d%H%M%S'`
             elif [[ "${CIRCLE_TAG}" =~ ^[0-9]+(\.[0-9]+){2} ]]; then
               DOCKER_IMAGE_TAG="${CIRCLE_TAG}"
+              NPM_TAG="${CIRCLE_TAG}"
             fi
 
             if [ -z "${DOCKER_IMAGE_TAG}" ]; then
@@ -111,5 +113,14 @@ jobs:
             docker push atlasmap/atlasmap:${DOCKER_IMAGE_TAG} | cat -
 
             sh docs/ci-docs.sh
+
+            cd ../ui
+            echo "Publishing @atlasmap/atlasmap.data.mapper ${NPM_TAG}..."
+            git config --global user.name "AtlasMap CI"
+            git config --global user.email "tm.igarashi+atlasmapci@gmail.com"
+            npm version ${NPM_TAG}
+            echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
+            npm publish
+
             cd ..
             java -cp ./.circleci/codacy-coverage-reporter-2.0.1-assembly.jar com.codacy.CodacyCoverageReporter -l Java -r ./coverage/runtime/jacoco.xml
