@@ -4,11 +4,16 @@
   "description": "Atlasmap Data Mapper UI module.",
   "author": "AtlasMap",
   "license": "Apache-2.0",
-  "main": "src/app/lib/atlasmap-data-mapper/data.mapper.module.ts",
-  "typings": "src/app/lib/atlasmap-data-mapper/data.mapper.module.ts",
+  "homepage": "https://github.com/atlasmap/atlasmap/ui",
+  "bugs": "https://github.com/atlasmap/atlasmap/issues",
+  "repository": {
+    "url": "https://github.com/atlasmap/atlasmap",
+    "type": "git"
+  },
   "scripts": {
     "ng": "ng",
-    "build": "ng build --aot --progress=false",
+    "build": "ng-packagr -p ng-package.json && cd ./dist && yarn pack",
+    "build:app": "ng build --aot --progress=false",
     "e2e": "ng e2e",
     "lint": "ng lint",
     "lint:fix": "ng lint --fix",
@@ -66,6 +71,7 @@
     "karma-jasmine-html-reporter": "^0.2.2",
     "karma-junit-reporter": "^1.2.0",
     "lodash": "^4.16.4",
+    "ng-packagr": "^1.6.0",
     "protractor": "~4.0.14",
     "puppeteer": "^0.12.0",
     "rimraf": "^2.5.4",
