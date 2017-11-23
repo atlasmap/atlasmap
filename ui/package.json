@@ -15,7 +15,7 @@
     "pretest": "rm -rf coverage junit",
     "pretest:coverage": "yarn pretest",
     "start": "ng serve --port 3000 --open",
-    "test": "ng test --watch=false",
+    "test": "ng test --reporters junit,progress --watch=false",
     "test:coverage": "ng test --watch=false --code-coverage",
     "version": "echo $npm_package_version"
   },
@@ -64,6 +64,7 @@
     "karma-coverage-istanbul-reporter": "^1.2.1",
     "karma-jasmine": "~1.1.0",
     "karma-jasmine-html-reporter": "^0.2.2",
+    "karma-junit-reporter": "^1.2.0",
     "lodash": "^4.16.4",
     "protractor": "~4.0.14",
     "puppeteer": "^0.12.0",
