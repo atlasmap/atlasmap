@@ -53,17 +53,17 @@
     {
       "project": "src/tsconfig.app.json",
       "exclude": "**/node_modules/**",
-      "tslintConfig": "./tslint.json"
+      "tslintConfig": "../tslint.json"
     },
     {
       "project": "src/tsconfig.spec.json",
       "exclude": "**/node_modules/**",
-      "tslintConfig": "./tslint.json"
+      "tslintConfig": "../tslint.json"
     },
     {
       "project": "e2e/tsconfig.e2e.json",
       "exclude": "**/node_modules/**",
-      "tslintConfig": "./tslint.json"
+      "tslintConfig": "../tslint.json"
     }
   ],
   "test": {
