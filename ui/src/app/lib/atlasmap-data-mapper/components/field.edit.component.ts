@@ -27,10 +27,10 @@ import { DataMapperUtil } from '../common/data.mapper.util';
     selector: 'field-edit',
     template: `
         <!-- our template for type ahead -->
-        <template #typeaheadTemplate let-model="item" let-index="index">
+        <ng-template #typeaheadTemplate let-model="item" let-index="index">
             <h5 style="font-style:italic;" *ngIf="model['field'].docDef">{{ model['field'].docDef.name }}</h5>
             <h5>{{ model['field'].path }}</h5>
-        </template>
+        </ng-template>
 
         <div class="DataMapperEditComponent">
             <div class="form-group">

@@ -26,13 +26,13 @@ import { MappingModel, FieldMappingPair, MappedField } from '../../models/mappin
     selector: 'mapping-field-detail',
     template: `
         <!-- our template for type ahead -->
-        <template #typeaheadTemplate let-model="item" let-index="index">
+        <ng-template #typeaheadTemplate let-model="item" let-index="index">
             <h5 style="font-style:italic;">{{ model['field'].docDef == null ? '' : model['field'].docDef.name }}</h5>
             <h5>{{ model['field'].path }}</h5>
-        </template>
+        </ng-template>
 
         <!-- our template for tooltip popover -->
-        <template #tolTemplate>
+        <ng-template #tolTemplate>
             <div class="fieldDetailTooltip">
                 <label class="parentObjectName" *ngIf="displayParentObject()">
                     <i [attr.class]="getSourceIconCSSClass()"></i>
@@ -42,7 +42,7 @@ import { MappingModel, FieldMappingPair, MappedField } from '../../models/mappin
                 <label *ngIf="displayParentObject() && mappedField.field.type">({{ mappedField.field.type }})</label>
                 <div class="clear"></div>
             </div>
-        </template>
+        </ng-template>
 
         <div class='fieldDetail' style="margin-bottom:5px;" *ngIf="mappedField"
             [tooltip]="tolTemplate" placement="left">
