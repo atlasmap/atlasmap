@@ -116,7 +116,7 @@ jobs:
 
             sh docs/ci-docs.sh
 
-            cd ../ui
+            cd ../ui/dist
             echo "Publishing @atlasmap/atlasmap.data.mapper ${NPM_TAG}..."
             git config --global user.name "AtlasMap CI"
             git config --global user.email "tm.igarashi+atlasmapci@gmail.com"
