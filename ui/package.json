@@ -10,9 +10,16 @@
     "url": "https://github.com/atlasmap/atlasmap",
     "type": "git"
   },
+  "$schema": "./node_modules/ng-packagr/package.schema.json",
+  "ngPackage": {
+    "lib": {
+      "entryFile": "public_api.ts"
+    }
+  },
   "scripts": {
     "ng": "ng",
-    "build": "ng-packagr -p ng-package.json && cd ./dist && yarn pack",
+    "prebuild": "rimraf ./dist",
+    "build": "ng-packagr -p package.json",
     "build:app": "ng build --aot --progress=false",
     "e2e": "ng e2e",
     "lint": "ng lint",
