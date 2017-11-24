@@ -1,8 +1,8 @@
 # AtlasMap
 
 [![CircleCI Badge](https://circleci.com/gh/atlasmap/atlasmap.svg?style=shield)](https://circleci.com/gh/atlasmap/atlasmap)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/4acba1646e0a4cbabac3a76ad5df4df7)](https://www.codacy.com/app/igarashitm/atlasmap?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=atlasmap/atlasmap&amp;utm_campaign=Badge_Grade)
-[![Codacy Badge](https://api.codacy.com/project/badge/Coverage/4acba1646e0a4cbabac3a76ad5df4df7)](https://www.codacy.com/app/igarashitm/atlasmap?utm_source=github.com&utm_medium=referral&utm_content=atlasmap/atlasmap&utm_campaign=Badge_Coverage)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/4acba1646e0a4cbabac3a76ad5df4df7)](https://www.codacy.com/app/atlasmapio/atlasmap?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=atlasmap/atlasmap&amp;utm_campaign=Badge_Grade)
+[![Codacy Badge](https://api.codacy.com/project/badge/Coverage/4acba1646e0a4cbabac3a76ad5df4df7)](https://www.codacy.com/app/atlasmapio/atlasmap?utm_source=github.com&utm_medium=referral&utm_content=atlasmap/atlasmap&utm_campaign=Badge_Coverage)
 
 The AtlasMap is a data mapping solution with interactive web based user interface, that simplifies configuring integrations between Java, XML, and JSON data sources. You can design your data mapping on the AtlasMap Data Mapper UI canvas, and then run that data mapping via runtime engine. AtlasMap Data Mapper UI is primarily designed to work within the [Syndesis UI](https://github.com/syndesisio/syndesis).
 
@@ -45,25 +45,33 @@ Note that this assumes that you are using a template flavor that also supports i
 
 ### Run AtlasMap Services and UI
 
-1. Run AtlasMap Services
+1. Build AtlasMap runtime
+
+    If you haven't run build.sh described above, you need to build&install runtime first.
+```
+    cd ${ATLASMAP}/runtime
+    ../mvnw clean install
+```
+
+2. Run AtlasMap Services
 ```
     cd ${ATLASMAP}/runtime/runtime
     ../../mvnw -Pitests spring-boot:run
 ```
 
-2. [Install Yarn](https://yarnpkg.com/lang/en/docs/install/)
+3. [Install Yarn](https://yarnpkg.com/lang/en/docs/install/)
 
-3. In another console, install Data Mapper UI's dependencies
+4. In another console, install Data Mapper UI's dependencies
 ```
     cd ${ATLASMAP}/ui
     yarn install
 ```
 
-4. Start Data Mapper UI
+5. Start Data Mapper UI
 ```
     yarn start
 ```
-5. The **yarn start** command will attempt to automatically open your browser window, but if it doesn't, open it directy with this URL: <http://localhost:3000>.
+6. The **yarn start** command will attempt to automatically open your browser window, but if it doesn't, open it directy with this URL: <http://localhost:3000>.
 
 
 ## See also ##
