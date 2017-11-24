@@ -265,18 +265,18 @@ export class MappingDetailComponent implements OnInit {
         });
     }
 
-    public isMappingCollection(): boolean {
+    isMappingCollection(): boolean {
         return this.cfg.mappings.activeMapping.isCollectionMode();
     }
 
-    private getTitle(): string {
+    getTitle(): string {
         if (this.cfg.mappings.activeMapping.isLookupMode()) {
             return 'Lookup Mapping';
         }
         return this.isMappingCollection() ? 'Repeating Mapping' : 'Mapping Details';
     }
 
-    private removeMapping(event: MouseEvent): void {
+    removeMapping(event: MouseEvent): void {
         this.modalWindow.reset();
         this.modalWindow.confirmButtonText = 'Remove';
         this.modalWindow.headerText = 'Remove Mapping?';

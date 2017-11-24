@@ -15,7 +15,6 @@
 */
 
 import { Field } from './field.model';
-import { MappingModel } from './mapping.model';
 import { ConfigModel } from '../models/config.model';
 import { MappingDefinition } from '../models/mapping.definition.model';
 import { DataMapperUtil } from '../common/data.mapper.util';
@@ -349,10 +348,6 @@ export class DocumentDefinition {
     }
 
     public updateFromMappings(mappingDefinition: MappingDefinition, cfg: ConfigModel): void {
-        const activeMapping: MappingModel = mappingDefinition.activeMapping;
-        const collectionMode: boolean = (activeMapping != null && activeMapping.isCollectionMode());
-        const fieldsInMapping: Field[] = null;
-
         for (const field of this.allFields) {
             field.partOfMapping = false;
             field.hasUnmappedChildren = false;

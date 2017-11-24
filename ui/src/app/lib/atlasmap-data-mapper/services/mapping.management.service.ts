@@ -143,7 +143,6 @@ export class MappingManagementService {
     }
 
     public saveMappingToService(): void {
-        const startTime: number = Date.now();
         const payload: any = this.serializeMappingsToJSON();
         const url = this.cfg.initCfg.baseMappingServiceUrl + 'mapping';
         DataMapperUtil.debugLogJSON(payload, 'Mapping Service Request', this.cfg.initCfg.debugMappingServiceCalls, url);
@@ -208,9 +207,9 @@ export class MappingManagementService {
 
         let mapping: MappingModel = this.cfg.mappings.activeMapping;
 
-        if (mapping != null && mapping.hasMappedFields(field.isSource())
+        if (mapping != null
+            && mapping.hasMappedFields(field.isSource())
             && !mapping.isFieldMapped(field, field.isSource())) {
-            const type: string = field.isSource() ? 'source' : 'target';
             mapping = null;
         }
 
@@ -288,7 +287,6 @@ export class MappingManagementService {
             //validation service not configured.
             return;
         }
-        const startTime: number = Date.now();
         const payload: any = MappingSerializer.serializeMappings(this.cfg);
         const url: string = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/validate';
         DataMapperUtil.debugLogJSON(payload, 'Validation Service Request', this.cfg.initCfg.debugValidationServiceCalls, url);

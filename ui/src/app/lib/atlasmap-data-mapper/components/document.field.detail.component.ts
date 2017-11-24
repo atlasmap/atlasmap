@@ -114,7 +114,6 @@ export class DocumentFieldDetailComponent {
     public endDrag(event: any): void {
         this.isDragDropTarget = false;
         if (!this.field.isTerminal() || (this.field.isSource() == this.cfg.currentDraggedField.isSource())) {
-            const desc: string = this.field.isSource() ? 'source' : 'target';
             return;
         }
 

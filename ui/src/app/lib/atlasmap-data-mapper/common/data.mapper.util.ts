@@ -38,7 +38,6 @@ export class DataMapperUtil {
         if (!loggingEnabled) {
             return;
         }
-        const jsonPretty: string = (object == null) ? '[none]' : JSON.stringify(object, null, 2);
         object = (object == null) ? '[none]' : object;
         url = (url == null) ? '[none]' : url;
     }

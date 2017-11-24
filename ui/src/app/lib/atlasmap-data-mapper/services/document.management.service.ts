@@ -48,7 +48,6 @@ export class DocumentManagementService {
 
     public fetchClassPath(): Observable<string> {
         return new Observable<string>((observer: any) => {
-            const startTime: number = Date.now();
             const requestBody = {
                 'MavenClasspathRequest': {
                     'jsonType': ConfigModel.javaServicesPackagePrefix + '.MavenClasspathRequest',
@@ -76,8 +75,6 @@ export class DocumentManagementService {
 
     public fetchDocument(docDef: DocumentDefinition, classPath: string): Observable<DocumentDefinition> {
         return new Observable<DocumentDefinition>((observer: any) => {
-            const startTime: number = Date.now();
-
             if (docDef.initCfg.inspectionResultContents != null) {
                 const responseJson: any = JSON.parse(docDef.initCfg.inspectionResultContents);
                 this.parseDocumentResponse(responseJson, docDef);
@@ -190,7 +187,6 @@ export class DocumentManagementService {
     private extractJSONDocumentDefinitionFromInspectionResponse(responseJson: any, docDef: DocumentDefinition): void {
         const body: any = responseJson.JsonInspectionResponse;
         if (body.errorMessage) {
-            const docIdentifier: string = docDef.initCfg.documentIdentifier;
             this.handleError('Could not load JSON document, error: ' + body.errorMessage, null);
             docDef.initCfg.errorOccurred = true;
             return;
@@ -218,7 +214,6 @@ export class DocumentManagementService {
     private extractXMLDocumentDefinitionFromInspectionResponse(responseJson: any, docDef: DocumentDefinition): void {
         const body: any = responseJson.XmlInspectionResponse;
         if (body.errorMessage) {
-            const docIdentifier: string = docDef.initCfg.documentIdentifier;
             this.handleError('Could not load XML document, error: ' + body.errorMessage, null);
             docDef.initCfg.errorOccurred = true;
             return;
@@ -258,7 +253,6 @@ export class DocumentManagementService {
         const body: any = responseJson.ClassInspectionResponse;
 
         if (body.errorMessage) {
-            const docIdentifier: string = docDef.initCfg.documentIdentifier;
             this.handleError('Could not load Java document, error: ' + body.errorMessage, null);
             docDef.initCfg.errorOccurred = true;
             return;
