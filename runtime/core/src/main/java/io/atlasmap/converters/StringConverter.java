@@ -56,15 +56,11 @@ public class StringConverter implements AtlasPrimitiveConverter<String> {
         if (value == null) {
             return null;
         }
-        if (value.length() == 1 && value.charAt(0) <= Byte.MAX_VALUE) {
-            return (byte) value.charAt(0);
-        } else {
-            if (value.length() > 1) {
-                throw new AtlasConversionException("String is greater than one character");
-            } else {
-                throw new AtlasConversionException(
-                        String.format("String (char) %s is greater than Byte.MAX_VALUE", value));
-            }
+        try {
+            return Byte.parseByte(value);
+        } catch (NumberFormatException nfex) {
+            throw new AtlasConversionException(String
+                    .format("String %s cannont be converted to a Byte as it is not in a numerical format", value));
         }
     }
 
