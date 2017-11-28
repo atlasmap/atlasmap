@@ -97,19 +97,28 @@ public class StringConverterTest {
     @Test
     public void convertToByte() throws Exception {
         String s = "0";
-        Byte value = (byte) 48;
+        Byte value = (byte) 0;
         assertEquals(value, converter.convertToByte(s));
+
+        s = "+127";
+        value = (byte) 127;
+        assertEquals(value, converter.convertToByte(s));
+
+        s = "-128";
+        value = (byte) -128;
+        assertEquals(value, converter.convertToByte(s));
+
     }
 
     @Test(expected = AtlasConversionException.class)
     public void convertToByteOutOfRange() throws Exception {
-        String s = "00";
+        String s = "128";
         converter.convertToByte(s);
     }
 
     @Test(expected = AtlasConversionException.class)
     public void convertToByteOutOfRange2() throws Exception {
-        String s = "\uD840";
+        String s = "-129";
         converter.convertToByte(s);
     }
 
