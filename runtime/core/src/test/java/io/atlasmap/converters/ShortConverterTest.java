@@ -64,10 +64,16 @@ public class ShortConverterTest {
         converter.convertToBoolean(dt);
     }
 
-    @Test(expected = AtlasConversionException.class)
+    @Test
     public void convertToByte() throws Exception {
         Short l = 0;
-        converter.convertToByte(l);
+        Byte value = (byte) 0;
+        assertEquals(value, converter.convertToByte(l));
+    }
+
+    @Test(expected = AtlasConversionException.class)
+    public void convertToByteOutOfRange() throws Exception {
+        converter.convertToByte(Short.MAX_VALUE);
     }
 
     @Test

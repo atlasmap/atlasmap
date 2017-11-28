@@ -62,8 +62,14 @@ public class IntegerConverterTest {
         converter.convertToBoolean(10);
     }
 
-    @Test(expected = AtlasConversionException.class)
+    @Test
     public void convertToByte() throws Exception {
+        Byte value = (byte) 100;
+        assertEquals(value, converter.convertToByte(100));
+    }
+
+    @Test(expected = AtlasConversionException.class)
+    public void convertToByteOutOfRange() throws Exception {
         converter.convertToByte(Integer.MAX_VALUE);
     }
 
