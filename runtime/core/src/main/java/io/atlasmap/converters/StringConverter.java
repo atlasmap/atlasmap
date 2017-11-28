@@ -19,7 +19,6 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 
 import io.atlasmap.api.AtlasConversionException;
-import io.atlasmap.api.AtlasUnsupportedException;
 import io.atlasmap.spi.AtlasConversionConcern;
 import io.atlasmap.spi.AtlasConversionInfo;
 import io.atlasmap.spi.AtlasPrimitiveConverter;
@@ -38,9 +37,9 @@ public class StringConverter implements AtlasPrimitiveConverter<String> {
         if (value == null) {
             return null;
         }
-        if ("0".equals(value) || "f".equalsIgnoreCase(value) || "false".equals(value)) {
+        if ("0".equals(value) || "f".equalsIgnoreCase(value) || "false".equalsIgnoreCase(value)) {
             return Boolean.FALSE;
-        } else if ("1".equals(value) || "t".equalsIgnoreCase(value) || "true".equals(value)) {
+        } else if ("1".equals(value) || "t".equalsIgnoreCase(value) || "true".equalsIgnoreCase(value)) {
             return Boolean.TRUE;
         }
         throw new AtlasConversionException(String.format("String %s cannot be converted to a Boolean", value));
@@ -50,15 +49,23 @@ public class StringConverter implements AtlasPrimitiveConverter<String> {
      * @param value
      * @return
      * @throws AtlasConversionException
-     * @throws AtlasUnsupportedException
      */
     @Override
-    @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.BYTE, concerns = AtlasConversionConcern.UNSUPPORTED)
+    @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.BYTE, concerns = AtlasConversionConcern.RANGE)
     public Byte convertToByte(String value) throws AtlasConversionException {
         if (value == null) {
             return null;
         }
-        throw new AtlasConversionException(new AtlasUnsupportedException("String to Byte conversion is not supported"));
+        if (value.length() == 1 && value.charAt(0) <= Byte.MAX_VALUE) {
+            return (byte) value.charAt(0);
+        } else {
+            if (value.length() > 1) {
+                throw new AtlasConversionException("String is greater than one character");
+            } else {
+                throw new AtlasConversionException(
+                        String.format("String (char) %s is greater than Byte.MAX_VALUE", value));
+            }
+        }
     }
 
     /**
@@ -252,7 +259,7 @@ public class StringConverter implements AtlasPrimitiveConverter<String> {
     }
 
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.NUMBER, concerns = {
-            AtlasConversionConcern.FORMAT})
+            AtlasConversionConcern.FORMAT })
     public Number convertToNumber(String value) throws AtlasConversionException {
         if (value == null || value.trim().isEmpty()) {
             return null;

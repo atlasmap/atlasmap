@@ -16,8 +16,6 @@
 package io.atlasmap.converters;
 
 import io.atlasmap.api.AtlasConversionException;
-import io.atlasmap.api.AtlasUnsupportedException;
-import io.atlasmap.spi.AtlasConversionConcern;
 import io.atlasmap.spi.AtlasConversionInfo;
 import io.atlasmap.spi.AtlasPrimitiveConverter;
 import io.atlasmap.v2.FieldType;
@@ -45,13 +43,12 @@ public class BooleanConverter implements AtlasPrimitiveConverter<Boolean> {
      * @throws AtlasConversionException
      */
     @Override
-    @AtlasConversionInfo(sourceType = FieldType.BOOLEAN, targetType = FieldType.BYTE, concerns = AtlasConversionConcern.UNSUPPORTED)
+    @AtlasConversionInfo(sourceType = FieldType.BOOLEAN, targetType = FieldType.BYTE)
     public Byte convertToByte(Boolean value) throws AtlasConversionException {
         if (value == null) {
             return null;
         }
-        throw new AtlasConversionException(
-                new AtlasUnsupportedException("Boolean to Byte conversion is not supported."));
+        return (byte) (value ? 1 : 0);
     }
 
     /**

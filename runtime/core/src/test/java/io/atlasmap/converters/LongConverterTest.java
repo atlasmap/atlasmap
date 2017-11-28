@@ -64,10 +64,16 @@ public class LongConverterTest {
         converter.convertToBoolean(dt);
     }
 
-    @Test(expected = AtlasConversionException.class)
+    @Test
     public void convertToByte() throws Exception {
         Long l = 0L;
-        converter.convertToByte(l);
+        Byte value = (byte) 0;
+        assertEquals(value, converter.convertToByte(l));
+    }
+
+    @Test(expected = AtlasConversionException.class)
+    public void convertToByteOutOfRange() throws Exception {
+        converter.convertToByte(Long.MAX_VALUE);
     }
 
     @Test

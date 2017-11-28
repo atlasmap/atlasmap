@@ -260,7 +260,8 @@ public class JavaValidationServiceTest {
         assertNotNull(validation);
         assertEquals(ValidationScope.MAPPING, validation.getScope());
         assertEquals("combine.firstName.lastName", validation.getId());
-        assertEquals("Conversion from 'STRING' to 'BOOLEAN' can cause out of range exceptions", validation.getMessage());
+        assertEquals("Conversion from 'STRING' to 'BOOLEAN' can cause out of range exceptions",
+                validation.getMessage());
         assertEquals(ValidationStatus.WARN, validation.getStatus());
         validation = validations.get(1);
         assertNotNull(validation);
@@ -321,7 +322,8 @@ public class JavaValidationServiceTest {
         assertNotNull(validation);
         assertEquals(ValidationScope.MAPPING, validation.getScope());
         assertEquals("separate.firstName.lastName", validation.getId());
-        assertEquals("Input field 'firstName' must be of type 'STRING' for a Separate Mapping", validation.getMessage());
+        assertEquals("Input field 'firstName' must be of type 'STRING' for a Separate Mapping",
+                validation.getMessage());
         assertEquals(ValidationStatus.ERROR, validation.getStatus());
         validation = validations.get(1);
         assertNotNull(validation);
@@ -480,8 +482,8 @@ public class JavaValidationServiceTest {
         Mapping fieldMapping = (Mapping) mapping.getMappings().getMapping().get(0);
 
         JavaField in = (JavaField) fieldMapping.getInputField().get(0);
-        in.setFieldType(FieldType.STRING);
-        in.setClassName("java.lang.String");
+        in.setFieldType(FieldType.DATE);
+        in.setClassName("java.util.Date");
 
         JavaField out = (JavaField) fieldMapping.getOutputField().get(0);
         out.setFieldType(FieldType.BYTE);
@@ -493,13 +495,13 @@ public class JavaValidationServiceTest {
         if (LOG.isDebugEnabled()) {
             debugErrors(validations);
         }
-        assertTrue(validationHelper.hasErrors());
-        assertFalse(validationHelper.hasWarnings());
+        assertFalse(validationHelper.hasErrors());
+        assertTrue(validationHelper.hasWarnings());
         assertFalse(validationHelper.hasInfos());
         assertThat(validationHelper.getCount(), is(1));
 
         assertTrue(validations.stream()
-                .anyMatch(atlasMappingError -> atlasMappingError.getMessage().contains("not supported")));
+                .anyMatch(atlasMappingError -> atlasMappingError.getMessage().contains("no converter is")));
     }
 
     @Test

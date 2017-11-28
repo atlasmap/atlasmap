@@ -65,10 +65,16 @@ public class DoubleConverterTest {
         converter.convertToBoolean(dt);
     }
 
-    @Test(expected = AtlasConversionException.class)
+    @Test
     public void convertToByte() throws Exception {
         Double df = 0.0;
-        converter.convertToByte(df);
+        Byte value = (byte) 0;
+        assertEquals(value, converter.convertToByte(df));
+    }
+
+    @Test(expected = AtlasConversionException.class)
+    public void convertToByteOutOfRange() throws Exception {
+        converter.convertToByte(Double.MAX_VALUE);
     }
 
     @Test

@@ -15,6 +15,8 @@
  */
 package io.atlasmap.converters;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -25,7 +27,6 @@ import java.lang.reflect.Method;
 import org.junit.Assert;
 import org.junit.Test;
 
-import io.atlasmap.api.AtlasConversionException;
 import io.atlasmap.spi.AtlasConversionConcern;
 import io.atlasmap.spi.AtlasConversionInfo;
 import io.atlasmap.spi.AtlasPrimitiveConverter;
@@ -33,11 +34,15 @@ import io.atlasmap.v2.FieldType;
 
 public class ByteConverterTest {
 
+    private static final byte DEFAULT_VALUE = 100;
+
     private AtlasPrimitiveConverter<Byte> byteConverter = new ByteConverter();
 
-    @Test(expected = AtlasConversionException.class)
+    @Test()
     public void convertToBoolean() throws Exception {
-        byteConverter.convertToBoolean(Byte.MAX_VALUE);
+        byte zero = 0;
+        assertFalse(byteConverter.convertToBoolean(new Byte(zero)));
+        assertTrue(byteConverter.convertToBoolean(Byte.MAX_VALUE));
     }
 
     @Test
@@ -45,7 +50,7 @@ public class ByteConverterTest {
         assertNull(byteConverter.convertToBoolean(null));
     }
 
-    @Test(expected = AtlasConversionException.class)
+    @Test
     public void convertToByte() throws Exception {
         byteConverter.convertToByte(Byte.MAX_VALUE);
     }
@@ -55,9 +60,12 @@ public class ByteConverterTest {
         assertNull(byteConverter.convertToByte(null));
     }
 
-    @Test(expected = AtlasConversionException.class)
+    @Test
     public void convertToCharacter() throws Exception {
-        byteConverter.convertToCharacter(Byte.MAX_VALUE);
+        byte value = 0;
+        assertEquals('\u0000', byteConverter.convertToCharacter(new Byte(value)).charValue());
+        value = 99;
+        assertEquals('c', byteConverter.convertToCharacter(new Byte(value)).charValue());
     }
 
     @Test
@@ -65,9 +73,9 @@ public class ByteConverterTest {
         assertNull(byteConverter.convertToCharacter(null));
     }
 
-    @Test(expected = AtlasConversionException.class)
+    @Test
     public void convertToDouble() throws Exception {
-        byteConverter.convertToDouble(Byte.MAX_VALUE);
+        assertEquals(100, byteConverter.convertToDouble(DEFAULT_VALUE).doubleValue(), 0);
     }
 
     @Test
@@ -75,9 +83,9 @@ public class ByteConverterTest {
         assertNull(byteConverter.convertToDouble(null));
     }
 
-    @Test(expected = AtlasConversionException.class)
+    @Test
     public void convertToFloat() throws Exception {
-        byteConverter.convertToFloat(Byte.MAX_VALUE);
+        assertEquals(100, byteConverter.convertToFloat(DEFAULT_VALUE).floatValue(), 0);
     }
 
     @Test
@@ -85,9 +93,9 @@ public class ByteConverterTest {
         assertNull(byteConverter.convertToFloat(null));
     }
 
-    @Test(expected = AtlasConversionException.class)
+    @Test
     public void convertToInteger() throws Exception {
-        byteConverter.convertToInteger(Byte.MAX_VALUE);
+        assertEquals(100, byteConverter.convertToInteger(DEFAULT_VALUE).intValue());
     }
 
     @Test
@@ -95,9 +103,9 @@ public class ByteConverterTest {
         assertNull(byteConverter.convertToInteger(null));
     }
 
-    @Test(expected = AtlasConversionException.class)
+    @Test
     public void convertToLong() throws Exception {
-        byteConverter.convertToLong(Byte.MAX_VALUE);
+        assertEquals(100, byteConverter.convertToLong(DEFAULT_VALUE).longValue());
     }
 
     @Test
@@ -105,9 +113,9 @@ public class ByteConverterTest {
         assertNull(byteConverter.convertToLong(null));
     }
 
-    @Test(expected = AtlasConversionException.class)
+    @Test
     public void convertToShort() throws Exception {
-        byteConverter.convertToShort(Byte.MAX_VALUE);
+        assertEquals(100, byteConverter.convertToShort(DEFAULT_VALUE).shortValue());
     }
 
     @Test

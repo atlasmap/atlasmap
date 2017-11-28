@@ -79,10 +79,16 @@ public class CharacterConverterTest {
         assertNull(c);
     }
 
-    @Test(expected = AtlasConversionException.class)
+    @Test
     public void convertToByte() throws Exception {
-        Character c = "T".charAt(0);
-        converter.convertToByte(c);
+        byte value = 99;
+        assertEquals(value, converter.convertToByte('c').byteValue());
+    }
+
+    @Test(expected = AtlasConversionException.class)
+    public void convertToByteOutOfRange() throws Exception {
+        byte value = 99;
+        assertEquals(value, converter.convertToByte('\uD840').byteValue());
     }
 
     @Test

@@ -64,9 +64,16 @@ public class FloatConverterTest {
         converter.convertToBoolean(dt);
     }
 
-    @Test(expected = AtlasConversionException.class)
+    @Test
     public void convertToByte() throws Exception {
         Float df = 0.0f;
+        Byte value = (byte) 0;
+        assertEquals(value, converter.convertToByte(df));
+    }
+
+    @Test(expected = AtlasConversionException.class)
+    public void convertToByteOutOfRange() throws Exception {
+        Float df = Float.MAX_VALUE;
         converter.convertToByte(df);
     }
 
