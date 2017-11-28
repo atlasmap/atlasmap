@@ -60,7 +60,7 @@ public class StringConverter implements AtlasPrimitiveConverter<String> {
             return (byte) value.charAt(0);
         } else {
             if (value.length() > 1) {
-                throw new AtlasConversionException("String is greater then one character");
+                throw new AtlasConversionException("String is greater than one character");
             } else {
                 throw new AtlasConversionException(
                         String.format("String (char) %s is greater than Byte.MAX_VALUE", value));
