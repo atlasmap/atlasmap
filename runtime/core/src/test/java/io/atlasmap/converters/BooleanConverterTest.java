@@ -27,7 +27,6 @@ import java.lang.reflect.Method;
 
 import org.junit.Test;
 
-import io.atlasmap.api.AtlasConversionException;
 import io.atlasmap.spi.AtlasConversionConcern;
 import io.atlasmap.spi.AtlasConversionInfo;
 import io.atlasmap.spi.AtlasPrimitiveConverter;
@@ -58,9 +57,12 @@ public class BooleanConverterTest {
         assertNull(t2);
     }
 
-    @Test(expected = AtlasConversionException.class)
+    @Test
     public void convertToByte() throws Exception {
-        converter.convertToByte(Boolean.TRUE);
+        Byte trueValue = (byte) 1;
+        assertEquals(trueValue, converter.convertToByte(Boolean.TRUE));
+        Byte falseValue = (byte) 0;
+        assertEquals(falseValue, converter.convertToByte(Boolean.FALSE));
     }
 
     @Test

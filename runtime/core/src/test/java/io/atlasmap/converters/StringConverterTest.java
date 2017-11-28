@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2017 Red Hat, Inc.
+  * Copyright (C) 2017 Red Hat, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -94,9 +94,22 @@ public class StringConverterTest {
         converter.convertToBoolean(s);
     }
 
-    @Test(expected = AtlasConversionException.class)
+    @Test
     public void convertToByte() throws Exception {
         String s = "0";
+        Byte value = (byte) 48;
+        assertEquals(value, converter.convertToByte(s));
+    }
+
+    @Test(expected = AtlasConversionException.class)
+    public void convertToByteOutOfRange() throws Exception {
+        String s = "00";
+        converter.convertToByte(s);
+    }
+
+    @Test(expected = AtlasConversionException.class)
+    public void convertToByteOutOfRange2() throws Exception {
+        String s = "\uD840";
         converter.convertToByte(s);
     }
 

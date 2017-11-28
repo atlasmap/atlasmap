@@ -51,13 +51,18 @@ public class DoubleConverter implements AtlasPrimitiveConverter<Double> {
      * @throws AtlasUnsupportedException
      */
     @Override
-    @AtlasConversionInfo(sourceType = FieldType.DOUBLE, targetType = FieldType.BYTE, concerns = AtlasConversionConcern.UNSUPPORTED)
+    @AtlasConversionInfo(sourceType = FieldType.DOUBLE, targetType = FieldType.BYTE, concerns = AtlasConversionConcern.RANGE)
     public Byte convertToByte(Double value) throws AtlasConversionException {
         if (value == null) {
             return null;
         }
-        throw new AtlasConversionException(
-                new AtlasUnsupportedException("Double to Byte conversion is not supported."));
+        if (value % 1 == 0 && value >= Byte.MIN_VALUE && value <= Byte.MAX_VALUE) {
+            return value.byteValue();
+        } else {
+            throw new AtlasConversionException(new AtlasUnsupportedException(String.format(
+                    "Double %s is greater than Byte.MAX_VALUE or less than Byte.MIN_VALUE or is not a whole number",
+                    value)));
+        }
     }
 
     /**

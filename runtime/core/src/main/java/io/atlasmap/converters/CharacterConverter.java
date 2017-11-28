@@ -16,7 +16,6 @@
 package io.atlasmap.converters;
 
 import io.atlasmap.api.AtlasConversionException;
-import io.atlasmap.api.AtlasUnsupportedException;
 import io.atlasmap.spi.AtlasConversionConcern;
 import io.atlasmap.spi.AtlasConversionInfo;
 import io.atlasmap.spi.AtlasPrimitiveConverter;
@@ -57,13 +56,17 @@ public class CharacterConverter implements AtlasPrimitiveConverter<Character> {
      */
     @Override
     @AtlasConversionInfo(sourceType = FieldType.CHAR, targetType = FieldType.BYTE, concerns = {
-            AtlasConversionConcern.UNSUPPORTED })
+            AtlasConversionConcern.RANGE })
     public Byte convertToByte(Character value) throws AtlasConversionException {
         if (value == null) {
             return null;
         }
-        throw new AtlasConversionException(
-                new AtlasUnsupportedException("Character to Byte conversion is not supported."));
+        if (value.charValue() > Byte.MAX_VALUE) {
+            throw new AtlasConversionException(
+                    String.format("Character value %s is greater than BYTE.MAX_VALUE", value.charValue()));
+        } else {
+            return (byte) value.charValue();
+        }
     }
 
     /**

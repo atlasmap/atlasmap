@@ -51,12 +51,17 @@ public class LongConverter implements AtlasPrimitiveConverter<Long> {
      * @throws AtlasUnsupportedException
      */
     @Override
-    @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.BYTE, concerns = AtlasConversionConcern.UNSUPPORTED)
+    @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.BYTE, concerns = AtlasConversionConcern.RANGE)
     public Byte convertToByte(Long value) throws AtlasConversionException {
         if (value == null) {
             return null;
         }
-        throw new AtlasConversionException(new AtlasUnsupportedException("Long to Byte conversion is not supported"));
+        if (value >= Byte.MIN_VALUE && value <= Byte.MAX_VALUE) {
+            return value.byteValue();
+        } else {
+            throw new AtlasConversionException(new AtlasUnsupportedException(
+                    String.format("Long %s is greater than Byte.MAX_VALUE or less than Byte.MIN_VALUE", value)));
+        }
     }
 
     /**
