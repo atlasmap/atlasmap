@@ -1,19 +1,10 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
-!e2e
-!dev-app
-!.editorconfig
-!.gitignore
-!angular-cli.json
-!screenshots
 
 # compiled output
-/aot
 /dist
 /tmp
-/src/**/*.js
-/src/**/*.map
-/src/*.js
-/src/*.map
+/out-tsc
+/junit/*
 
 # dependencies
 /node_modules
@@ -25,6 +16,7 @@
 .c9/
 *.launch
 .settings/
+*.sublime-workspace
 
 # IDE - VSCode
 .vscode/*
@@ -36,23 +28,20 @@
 # misc
 /.sass-cache
 /connect.lock
-/coverage/*
-/junit/*
+/coverage
 /libpeerconnection.log
 npm-debug.log
 testem.log
 /typings
-nohup.out
 
 # e2e
 /e2e/*.js
 /e2e/*.map
 
-#System Files
+# System Files
 .DS_Store
 Thumbs.db
 
 # don't ignore these
-!/src/systemjs.config.js
 !/src/app/lib/patternfly-3.19.0/**/*.js
 !/src/app/lib/patternfly-3.19.0/*.js

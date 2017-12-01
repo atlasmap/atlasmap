@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, OnInit } from '@angular/core';
 import { ConfigModel } from '../models/config.model';
 
 import { ErrorHandlerService } from '../services/error.handler.service';
@@ -32,14 +32,16 @@ import { DataMapperAppComponent } from './data.mapper.app.component';
     providers: [MappingManagementService, ErrorHandlerService, DocumentManagementService],
 })
 
-export class DataMapperAppExampleHostComponent {
+export class DataMapperAppExampleHostComponent implements OnInit {
 
     @ViewChild('dataMapperComponent')
-    public dataMapperComponent: DataMapperAppComponent;
+    dataMapperComponent: DataMapperAppComponent;
 
-    constructor(private initializationService: InitializationService) {
+    constructor(private initializationService: InitializationService) { }
+
+    ngOnInit() {
         // initialize config information before initializing services
-        const c: ConfigModel = initializationService.cfg;
+        const c: ConfigModel = this.initializationService.cfg;
 
         //store references to our services in our config model
 
@@ -109,19 +111,11 @@ export class DataMapperAppExampleHostComponent {
         c.initCfg.addMockJSONSchemaTarget = true;
 
         //initialize system
-        initializationService.initialize();
+        this.initializationService.initialize();
 
         //save the mappings when the ui calls us back asking for save
         c.mappingService.saveMappingOutput$.subscribe((saveHandler: Function) => {
             //NOTE: the mapping definition being saved is currently stored in "this.cfg.mappings" until further notice.
-
-            //turn this on to print out example json
-            const makeExampleJSON = false;
-            if (makeExampleJSON) {
-                const jsonObject: any = c.mappingService.serializeMappingsToJSON();
-                const jsonVersion = JSON.stringify(jsonObject);
-                const jsonPretty = JSON.stringify(JSON.parse(jsonVersion), null, 2);
-            }
 
             //This is an example callout to save the mapping to the mock java service
             c.mappingService.saveMappingToService();

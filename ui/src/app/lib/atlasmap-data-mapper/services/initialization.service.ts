@@ -18,6 +18,7 @@ import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/observable/forkJoin';
 import { Subject } from 'rxjs/Subject';
+import { Observable } from 'rxjs/Observable';
 
 import { ConfigModel } from '../models/config.model';
 import { DocumentDefinition } from '../models/document.definition.model';
@@ -35,10 +36,10 @@ export class InitializationService {
     public cfg: ConfigModel = ConfigModel.getConfig();
 
     systemInitializedSource = new Subject<void>();
-    systemInitialized$ = this.systemInitializedSource.asObservable();
+    systemInitialized$: Observable<void> = this.systemInitializedSource.asObservable();
 
     initializationStatusChangedSource = new Subject<void>();
-    initializationStatusChanged$ = this.initializationStatusChangedSource.asObservable();
+    initializationStatusChanged$: Observable<void> = this.initializationStatusChangedSource.asObservable();
 
     constructor(private documentService: DocumentManagementService,
                 private mappingService: MappingManagementService,

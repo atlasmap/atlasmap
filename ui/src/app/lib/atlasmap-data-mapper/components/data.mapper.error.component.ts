@@ -47,7 +47,6 @@ export class DataMapperErrorComponent {
     @Input() public isValidation = false;
 
     public getErrors(): ErrorInfo[] {
-        const test: ErrorInfo[] = ConfigModel.getConfig().validationErrors;
         return this.isValidation ? ConfigModel.getConfig().validationErrors.filter(e => e.level >= ErrorLevel.ERROR)
             : ConfigModel.getConfig().errors;
     }

@@ -24,7 +24,7 @@ import { DocumentDefinition } from '../../models/document.definition.model';
 @Component({
     selector: 'mapping-list-field',
     template: `
-        <template #tolTemplate>
+        <ng-template #tolTemplate>
             <div class="fieldDetailTooltip" *ngIf="displayParentObject()">
                 <label class="parentObjectName">
                     <i [attr.class]="isSource ? 'fa fa-hdd-o' : 'fa fa-download'"></i>
@@ -34,7 +34,7 @@ import { DocumentDefinition } from '../../models/document.definition.model';
                 <label *ngIf="displayParentObject() && mappedField.field.type">({{ mappedField.field.type }})</label>
                 <div class="clear"></div>
             </div>
-        </template>
+        </ng-template>
 
         <label class="fieldPath" [tooltip]="tolTemplate" placement="bottom" [isDisabled]="!displayParentObject()">
             {{ getFieldPath() }}

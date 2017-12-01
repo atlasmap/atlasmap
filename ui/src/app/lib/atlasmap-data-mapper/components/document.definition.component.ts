@@ -103,20 +103,22 @@ export class DocumentDefinitionComponent {
     private scrollTop = 0;
     private searchResultsExist = false;
 
-    public getDocDefElementPosition(docDef: DocumentDefinition): any {
+    getDocDefElementPosition(docDef: DocumentDefinition): any {
         for (const c of this.docElements.toArray()) {
             if (c.nativeElement.id == docDef.name) {
                 const documentElementAbsPosition: any = this.getElementPositionForElement(c.nativeElement, false, true);
                 const myElement: any = this.documentDefinitionElement.nativeElement;
                 const myAbsPosition: any = this.getElementPositionForElement(myElement, false, false);
-                return { 'x': (documentElementAbsPosition.x - myAbsPosition.x),
-                         'y': (documentElementAbsPosition.y - myAbsPosition.y) };
+                return {
+                    'x': (documentElementAbsPosition.x - myAbsPosition.x),
+                    'y': (documentElementAbsPosition.y - myAbsPosition.y)
+                };
             }
         }
         return null;
     }
 
-    public getFieldDetailComponent(field: Field): DocumentFieldDetailComponent {
+    getFieldDetailComponent(field: Field): DocumentFieldDetailComponent {
         for (const c of this.fieldComponents.toArray()) {
             const returnedComponent: DocumentFieldDetailComponent = c.getFieldDetailComponent(field);
             if (returnedComponent != null) {
@@ -126,11 +128,11 @@ export class DocumentDefinitionComponent {
         return null;
     }
 
-    public getElementPosition(): any {
+    getElementPosition(): any {
         return this.getElementPositionForElement(this.documentDefinitionElement.nativeElement, true, false);
     }
 
-    public getElementPositionForElement(el: any, addScrollTop: boolean, subtractScrollTop: boolean): any {
+    getElementPositionForElement(el: any, addScrollTop: boolean, subtractScrollTop: boolean): any {
         let x = 0;
         let y = 0;
 
@@ -148,7 +150,7 @@ export class DocumentDefinitionComponent {
         return { 'x': x, 'y': y };
     }
 
-    public getFieldDetailComponentPosition(field: Field): any {
+    getFieldDetailComponentPosition(field: Field): any {
         const c: DocumentFieldDetailComponent = this.getFieldDetailComponent(field);
         if (c == null) {
             return null;
@@ -158,12 +160,12 @@ export class DocumentDefinitionComponent {
         return { 'x': (fieldElementAbsPosition.x - myAbsPosition.x), 'y': (fieldElementAbsPosition.y - myAbsPosition.y) };
     }
 
-    public getSearchIconCSSClass(): string {
+    getSearchIconCSSClass(): string {
         const cssClass = 'fa fa-search searchBoxIcon link';
         return this.searchMode ? (cssClass + ' selectedIcon') : cssClass;
     }
 
-    private getSourcesTargetsLabel(): string {
+    getSourcesTargetsLabel(): string {
         if (this.isSource) {
             return 'Sources';
         } else {
@@ -171,27 +173,7 @@ export class DocumentDefinitionComponent {
         }
     }
 
-    private isAddFieldAvailable(docDef: DocumentDefinition): boolean {
-        return docDef.initCfg.type.isPropertyOrConstant()
-            || (!docDef.isSource && docDef.initCfg.type.isJSON())
-            || (!docDef.isSource && docDef.initCfg.type.isXML());
-    }
-
-    private isDocNameVisible(docDef: DocumentDefinition): boolean {
-        if (this.searchMode && !docDef.visibleInCurrentDocumentSearch) {
-            return false;
-        }
-        return true;
-    }
-
-    private toggleFieldVisibility(docDef: DocumentDefinition): void {
-        docDef.showFields = !docDef.showFields;
-        setTimeout(() => {
-            this.lineMachine.redrawLinesForMappings();
-        }, 10);
-    }
-
-    private getFieldCount(): number {
+    getFieldCount(): number {
         let count = 0;
         for (const docDef of this.cfg.getDocs(this.isSource)) {
             if (docDef && docDef.allFields) {
@@ -200,45 +182,17 @@ export class DocumentDefinitionComponent {
         }
         return count;
     }
-
-    private search(searchFilter: string): void {
-        this.searchResultsExist = false;
-        const searchIsEmpty: boolean = (searchFilter == null) || ('' == searchFilter);
-        const defaultVisibility: boolean = searchIsEmpty ? true : false;
-        for (const docDef of this.cfg.getDocs(this.isSource)) {
-            docDef.visibleInCurrentDocumentSearch = defaultVisibility;
-            for (const field of docDef.getAllFields()) {
-                field.visibleInCurrentDocumentSearch = defaultVisibility;
-            }
-            if (!searchIsEmpty) {
-                for (const field of docDef.getTerminalFields()) {
-                    field.visibleInCurrentDocumentSearch = field.name.toLowerCase().includes(searchFilter.toLowerCase());
-                    this.searchResultsExist = this.searchResultsExist || field.visibleInCurrentDocumentSearch;
-                    if (field.visibleInCurrentDocumentSearch) {
-                        docDef.visibleInCurrentDocumentSearch = true;
-                        let parentField = field.parentField;
-                        while (parentField != null) {
-                            parentField.visibleInCurrentDocumentSearch = true;
-                            parentField.collapsed = false;
-                            parentField = parentField.parentField;
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    private handleScroll(event: any) {
+    handleScroll(event: any) {
         this.scrollTop = event.target.scrollTop;
         this.lineMachine.redrawLinesForMappings();
     }
 
-    private toggleSearch(): void  {
+    toggleSearch(): void {
         this.searchMode = !this.searchMode;
         this.search(this.searchMode ? this.searchFilter : '');
     }
 
-    private addField(docDef: DocumentDefinition, event: any): void {
+    addField(docDef: DocumentDefinition, event: any): void {
         event.stopPropagation();
         const self: DocumentDefinitionComponent = this;
         this.modalWindow.reset();
@@ -277,4 +231,50 @@ export class DocumentDefinitionComponent {
         this.modalWindow.show();
     }
 
+    isDocNameVisible(docDef: DocumentDefinition): boolean {
+        if (this.searchMode && !docDef.visibleInCurrentDocumentSearch) {
+            return false;
+        }
+        return true;
+    }
+
+    toggleFieldVisibility(docDef: DocumentDefinition): void {
+        docDef.showFields = !docDef.showFields;
+        setTimeout(() => {
+            this.lineMachine.redrawLinesForMappings();
+        }, 10);
+    }
+
+    isAddFieldAvailable(docDef: DocumentDefinition): boolean {
+        return docDef.initCfg.type.isPropertyOrConstant()
+            || (!docDef.isSource && docDef.initCfg.type.isJSON())
+            || (!docDef.isSource && docDef.initCfg.type.isXML());
+    }
+
+    private search(searchFilter: string): void {
+        this.searchResultsExist = false;
+        const searchIsEmpty: boolean = (searchFilter == null) || ('' == searchFilter);
+        const defaultVisibility: boolean = searchIsEmpty ? true : false;
+        for (const docDef of this.cfg.getDocs(this.isSource)) {
+            docDef.visibleInCurrentDocumentSearch = defaultVisibility;
+            for (const field of docDef.getAllFields()) {
+                field.visibleInCurrentDocumentSearch = defaultVisibility;
+            }
+            if (!searchIsEmpty) {
+                for (const field of docDef.getTerminalFields()) {
+                    field.visibleInCurrentDocumentSearch = field.name.toLowerCase().includes(searchFilter.toLowerCase());
+                    this.searchResultsExist = this.searchResultsExist || field.visibleInCurrentDocumentSearch;
+                    if (field.visibleInCurrentDocumentSearch) {
+                        docDef.visibleInCurrentDocumentSearch = true;
+                        let parentField = field.parentField;
+                        while (parentField != null) {
+                            parentField.visibleInCurrentDocumentSearch = true;
+                            parentField.collapsed = false;
+                            parentField = parentField.parentField;
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
