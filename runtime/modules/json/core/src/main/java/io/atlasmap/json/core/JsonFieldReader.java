@@ -23,7 +23,9 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import io.atlasmap.api.AtlasConversionException;
 import io.atlasmap.api.AtlasException;
+import io.atlasmap.core.DefaultAtlasConversionService;
 import io.atlasmap.json.v2.JsonField;
 import io.atlasmap.v2.CollectionType;
 import io.atlasmap.v2.FieldType;
@@ -83,22 +85,28 @@ public class JsonFieldReader {
             return;
         }
 
-        if (valueNode.isTextual()) {
-            handleTextualNode(valueNode, jsonField);
-        } else if (valueNode.isNumber()) {
-            handleNumberNode(valueNode, jsonField);
-        } else if (valueNode.isBoolean()) {
-            handleBooleanNode(valueNode, jsonField);
-        } else if (valueNode.isContainerNode()) {
-            handleContainerNode(valueNode, jsonField);
-        } else if (valueNode.isNull()) {
-            jsonField.setValue(null);
-            // we can't detect field type if it's null node
+        if (jsonField.getFieldType() != null) { // mapping is overriding the fieldType
+            DefaultAtlasConversionService conversionService = DefaultAtlasConversionService.getInstance();
+            jsonField.setValue(conversionService.convertType(valueNode.asText(), FieldType.STRING, jsonField.getFieldType()));
+
         } else {
-            LOG.warn(String.format("Detected unsupported json type for field p=%s docId=%s",
-                    jsonField.getPath(), jsonField.getDocId()));
-            jsonField.setValue(valueNode.toString());
-            jsonField.setFieldType(FieldType.UNSUPPORTED);
+            if (valueNode.isTextual()) {
+                handleTextualNode(valueNode, jsonField);
+            } else if (valueNode.isNumber()) {
+                handleNumberNode(valueNode, jsonField);
+            } else if (valueNode.isBoolean()) {
+                handleBooleanNode(valueNode, jsonField);
+            } else if (valueNode.isContainerNode()) {
+                handleContainerNode(valueNode, jsonField);
+            } else if (valueNode.isNull()) {
+                jsonField.setValue(null);
+                // we can't detect field type if it's null node
+            } else {
+                LOG.warn(String.format("Detected unsupported json type for field p=%s docId=%s", jsonField.getPath(),
+                        jsonField.getDocId()));
+                jsonField.setValue(valueNode.toString());
+                jsonField.setFieldType(FieldType.UNSUPPORTED);
+            }
         }
     }
 
@@ -139,7 +147,7 @@ public class JsonFieldReader {
         }
     }
 
-    private void handleNumberNode(JsonNode valueNode, JsonField jsonField) {
+    private void handleNumberNode(JsonNode valueNode, JsonField jsonField) throws AtlasConversionException {
         if (valueNode.isInt()) {
             jsonField.setValue(valueNode.intValue());
             jsonField.setFieldType(FieldType.INTEGER);

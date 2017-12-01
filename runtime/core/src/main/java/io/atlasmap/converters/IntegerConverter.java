@@ -30,17 +30,15 @@ public class IntegerConverter implements AtlasPrimitiveConverter<Integer> {
      * @throws AtlasConversionException
      */
     @Override
-    @AtlasConversionInfo(sourceType = FieldType.INTEGER, targetType = FieldType.BOOLEAN, concerns = AtlasConversionConcern.RANGE)
+    @AtlasConversionInfo(sourceType = FieldType.INTEGER, targetType = FieldType.BOOLEAN)
     public Boolean convertToBoolean(Integer value) throws AtlasConversionException {
         if (value == null) {
             return null;
         }
-        // 1 == True, 0 == False
-        if (value == 0 || value == 1) {
-            return value == 1;
+        if (value == 0) {
+            return Boolean.FALSE;
         } else {
-            // any other value
-            throw new AtlasConversionException(String.format("Integer %s cannot be converted to a Boolean", value));
+            return Boolean.TRUE;
         }
     }
 
@@ -80,7 +78,8 @@ public class IntegerConverter implements AtlasPrimitiveConverter<Integer> {
         }
 
         final int radix = 10;
-        return Character.forDigit(value.intValue(), radix);
+        // return Character.forDigit(value.intValue(), radix);
+        return Character.valueOf((char) value.intValue());
     }
 
     /**

@@ -30,18 +30,16 @@ public class ShortConverter implements AtlasPrimitiveConverter<Short> {
      * @throws AtlasConversionException
      */
     @Override
-    @AtlasConversionInfo(sourceType = FieldType.SHORT, targetType = FieldType.BOOLEAN, concerns = AtlasConversionConcern.RANGE)
+    @AtlasConversionInfo(sourceType = FieldType.SHORT, targetType = FieldType.BOOLEAN)
     public Boolean convertToBoolean(Short value) throws AtlasConversionException {
         if (value == null) {
             return null;
         }
-        if (value == 0 || value == 1) {
-            if (value == 1) {
-                return Boolean.TRUE;
-            }
+        if (value == 0) {
             return Boolean.FALSE;
+        } else {
+            return Boolean.TRUE;
         }
-        throw new AtlasConversionException(String.format("Short %s cannot be converted to a Boolean", value));
     }
 
     /**
@@ -76,10 +74,11 @@ public class ShortConverter implements AtlasPrimitiveConverter<Short> {
             return null;
         }
 
-        if (value < Character.MIN_VALUE) {
-            throw new AtlasConversionException(String.format("Short %s is less than Character.MIN_VALUE", value));
+        if (value < Character.MIN_VALUE || value > Character.MAX_VALUE) {
+            throw new AtlasConversionException(String
+                    .format("Short %s is greater than Character.MAX_VALUE  or less than Character.MIN_VALUE", value));
         }
-        return Character.valueOf((char) value.shortValue());
+        return Character.valueOf((char) value.intValue());
     }
 
     /**

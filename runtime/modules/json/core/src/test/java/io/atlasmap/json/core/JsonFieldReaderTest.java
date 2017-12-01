@@ -47,6 +47,7 @@ public class JsonFieldReaderTest {
         assertNotNull(field.getValue());
         assertThat(field.getValue(), Is.is("Mercedes"));
 
+        field.setFieldType(null);
         field.setPath("/doors");
         reader.read(field);
         assertNotNull(field.getValue());

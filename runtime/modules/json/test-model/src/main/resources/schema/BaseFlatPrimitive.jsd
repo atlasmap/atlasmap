@@ -27,6 +27,9 @@
         "charField": {
             "type": "string"
         },
+        "byteField": {
+            "type": "integer"
+        },
         "boxedIntField": {
             "type": "integer"
         },

@@ -27,6 +27,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import io.atlasmap.api.AtlasException;
+import io.atlasmap.core.DefaultAtlasConversionService;
 import io.atlasmap.core.PathUtil;
 import io.atlasmap.core.PathUtil.SegmentContext;
 import io.atlasmap.v2.FieldType;
@@ -74,8 +75,8 @@ public class XmlFieldReader extends XmlFieldTransformer {
                 List<Element> children = XmlFieldWriter.getChildrenWithName(childrenElementName, parentNode);
                 if (children == null || children.isEmpty()) {
                     if (LOG.isDebugEnabled()) {
-                        LOG.debug("Skipping input value set, couldn't find children with name '"
-                                + childrenElementName + "', for segment: " + sc);
+                        LOG.debug("Skipping input value set, couldn't find children with name '" + childrenElementName
+                                + "', for segment: " + sc);
                     }
                     return;
                 }
@@ -98,21 +99,18 @@ public class XmlFieldReader extends XmlFieldTransformer {
                     String attributeName = PathUtil.cleanPathSegment(sc.getSegment());
                     value = parentNode.getAttribute(attributeName);
                 }
-                if (xmlField.getFieldType() == null || FieldType.STRING.equals(xmlField.getFieldType())) {
+                if (xmlField.getFieldType() == null) {
                     xmlField.setValue(value);
                     xmlField.setFieldType(FieldType.STRING);
-                } else if (FieldType.CHAR.equals(xmlField.getFieldType())) {
-                    xmlField.setValue(value.charAt(0));
-                }
-
-                if (value != null) {
-                    if (FieldType.BOOLEAN.equals(xmlField.getFieldType())) {
-                        xmlField.setValue(processXmlStringAsBoolean(value));
-                    } else {
+                    if (value != null) {
                         LOG.warn(String.format("Unsupported FieldType for text data t=%s p=%s docId=%s",
                                 xmlField.getFieldType().value(), xmlField.getPath(), xmlField.getDocId()));
                     }
+                } else {
+                    DefaultAtlasConversionService conversionService = DefaultAtlasConversionService.getInstance();
+                    xmlField.setValue(conversionService.convertType(value, FieldType.STRING, xmlField.getFieldType()));
                 }
+
                 return;
             }
         }

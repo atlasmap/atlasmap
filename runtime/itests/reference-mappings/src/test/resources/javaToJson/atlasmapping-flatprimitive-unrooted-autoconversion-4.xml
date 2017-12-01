@@ -8,38 +8,35 @@
     <Mappings>
         <Mapping xsi:type="Mapping" mappingType="Map">
             <InputField xsi:type="ns2:JavaField" path="/intField" />
-            <OutputField xsi:type="ns3:JsonField" path="/doubleField"
-                fieldType="Double" />
+            <OutputField xsi:type="ns3:JsonField" path="/floatField" fieldType="Float" />
         </Mapping>
         <Mapping xsi:type="Mapping" mappingType="Map">
             <InputField xsi:type="ns2:JavaField" path="/shortField" />
-            <OutputField xsi:type="ns3:JsonField" path="/floatField"
-                fieldType="Float" />
+            <OutputField xsi:type="ns3:JsonField" path="/booleanField" fieldType="Boolean" />
         </Mapping>
         <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns2:JavaField" path="/longField" />
-            <OutputField xsi:type="ns3:JsonField" path="/booleanField"
-                fieldType="Boolean" />
+            <InputField xsi:type="ns2:JavaField" path="/longField"  fieldType="Long" />
+            <OutputField xsi:type="ns3:JsonField" path="/charField" fieldType="Char" />
         </Mapping>
         <Mapping xsi:type="Mapping" mappingType="Map">
             <InputField xsi:type="ns2:JavaField" path="/doubleField" />
-            <OutputField xsi:type="ns3:JsonField" path="/charField"
-                fieldType="Char" />
+            <OutputField xsi:type="ns3:JsonField" path="/byteField" fieldType="Byte" />
         </Mapping>
         <Mapping xsi:type="Mapping" mappingType="Map">
             <InputField xsi:type="ns2:JavaField" path="/floatField" />
-            <OutputField xsi:type="ns3:JsonField" path="/intField"
-                fieldType="Integer" />
+            <OutputField xsi:type="ns3:JsonField" path="/intField" fieldType="Integer" />
         </Mapping>
         <Mapping xsi:type="Mapping" mappingType="Map">
             <InputField xsi:type="ns2:JavaField" path="/booleanField" />
-            <OutputField xsi:type="ns3:JsonField" path="/shortField"
-                fieldType="Short" />
+            <OutputField xsi:type="ns3:JsonField" path="/shortField" fieldType="Short" />
         </Mapping>
         <Mapping xsi:type="Mapping" mappingType="Map">
             <InputField xsi:type="ns2:JavaField" path="/charField" />
-            <OutputField xsi:type="ns3:JsonField" path="/longField"
-                fieldType="Long" />
+            <OutputField xsi:type="ns3:JsonField" path="/longField" fieldType="Long" />
+        </Mapping>
+        <Mapping xsi:type="Mapping" mappingType="Map">
+            <InputField xsi:type="ns2:JavaField" path="/byteField" fieldType="Byte" />
+            <OutputField xsi:type="ns3:JsonField" path="/doubleField" fieldType="Double" />
         </Mapping>
     </Mappings>
     <LookupTables />

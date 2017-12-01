@@ -30,11 +30,8 @@ import io.atlasmap.reference.AtlasTestUtil;
 
 public class XmlJavaAutoConversionTest extends AtlasMappingBaseTest {
 
-    @Test
-    public void testProcessXmlJavaFlatFieldMappingAutoConversion1() throws Exception {
-        AtlasContext context = atlasContextFactory.createContext(
-                new File("src/test/resources/xmlToJava/atlasmapping-flatprimitive-attribute-autoconversion-1.xml")
-                        .toURI());
+    protected Object executeMapping(String fileName) throws Exception {
+        AtlasContext context = atlasContextFactory.createContext(new File(fileName).toURI());
         AtlasSession session = context.createSession();
         String source = AtlasTestUtil
                 .loadFileAsString("src/test/resources/xmlToJava/atlas-xml-flatprimitive-attribute-autoconversion.xml");
@@ -44,92 +41,56 @@ public class XmlJavaAutoConversionTest extends AtlasMappingBaseTest {
         Object object = session.getOutput();
         assertNotNull(object);
         assertTrue(object instanceof TargetFlatPrimitiveClass);
+        return object;
+    }
+
+    @Test
+    public void testProcessXmlJavaFlatFieldMappingAutoConversion1() throws Exception {
+        Object object = executeMapping(
+                "src/test/resources/xmlToJava/atlasmapping-flatprimitive-attribute-autoconversion-1.xml");
         AtlasTestUtil.validateFlatPrimitiveClassPrimitiveFieldAutoConversion1((TargetFlatPrimitiveClass) object);
     }
 
     @Test
     public void testProcessXmlJavaFlatFieldMappingAutoConversion2() throws Exception {
-        AtlasContext context = atlasContextFactory.createContext(
-                new File("src/test/resources/xmlToJava/atlasmapping-flatprimitive-attribute-autoconversion-2.xml")
-                        .toURI());
-        AtlasSession session = context.createSession();
-        String source = AtlasTestUtil
-                .loadFileAsString("src/test/resources/xmlToJava/atlas-xml-flatprimitive-attribute-autoconversion.xml");
-        session.setInput(source);
-        context.process(session);
-
-        Object object = session.getOutput();
-        assertNotNull(object);
-        assertTrue(object instanceof TargetFlatPrimitiveClass);
+        Object object = executeMapping(
+                "src/test/resources/xmlToJava/atlasmapping-flatprimitive-attribute-autoconversion-2.xml");
         AtlasTestUtil.validateFlatPrimitiveClassPrimitiveFieldAutoConversion2((TargetFlatPrimitiveClass) object);
     }
 
     @Test
     public void testProcessXmlJavaFlatFieldMappingAutoConversion3() throws Exception {
-        AtlasContext context = atlasContextFactory.createContext(
-                new File("src/test/resources/xmlToJava/atlasmapping-flatprimitive-attribute-autoconversion-3.xml")
-                        .toURI());
-        AtlasSession session = context.createSession();
-        String source = AtlasTestUtil
-                .loadFileAsString("src/test/resources/xmlToJava/atlas-xml-flatprimitive-attribute-autoconversion.xml");
-        session.setInput(source);
-        context.process(session);
-
-        Object object = session.getOutput();
-        assertNotNull(object);
-        assertTrue(object instanceof TargetFlatPrimitiveClass);
+        Object object = executeMapping(
+                "src/test/resources/xmlToJava/atlasmapping-flatprimitive-attribute-autoconversion-3.xml");
         AtlasTestUtil.validateFlatPrimitiveClassPrimitiveFieldAutoConversion3((TargetFlatPrimitiveClass) object);
     }
 
     @Test
     public void testProcessXmlJavaFlatFieldMappingAutoConversion4() throws Exception {
-        AtlasContext context = atlasContextFactory.createContext(
-                new File("src/test/resources/xmlToJava/atlasmapping-flatprimitive-attribute-autoconversion-4.xml")
-                        .toURI());
-        AtlasSession session = context.createSession();
-        String source = AtlasTestUtil
-                .loadFileAsString("src/test/resources/xmlToJava/atlas-xml-flatprimitive-attribute-autoconversion.xml");
-        session.setInput(source);
-        context.process(session);
-
-        Object object = session.getOutput();
-        assertNotNull(object);
-        assertTrue(object instanceof TargetFlatPrimitiveClass);
+        Object object = executeMapping(
+                "src/test/resources/xmlToJava/atlasmapping-flatprimitive-attribute-autoconversion-4.xml");
         AtlasTestUtil.validateFlatPrimitiveClassPrimitiveFieldAutoConversion4((TargetFlatPrimitiveClass) object);
     }
 
     @Test
     public void testProcessXmlJavaFlatFieldMappingAutoConversion5() throws Exception {
-        AtlasContext context = atlasContextFactory.createContext(
-                new File("src/test/resources/xmlToJava/atlasmapping-flatprimitive-attribute-autoconversion-5.xml")
-                        .toURI());
-        AtlasSession session = context.createSession();
-        String source = AtlasTestUtil
-                .loadFileAsString("src/test/resources/xmlToJava/atlas-xml-flatprimitive-attribute-autoconversion.xml");
-        session.setInput(source);
-        context.process(session);
-
-        Object object = session.getOutput();
-        assertNotNull(object);
-        assertTrue(object instanceof TargetFlatPrimitiveClass);
+        Object object = executeMapping(
+                "src/test/resources/xmlToJava/atlasmapping-flatprimitive-attribute-autoconversion-5.xml");
         AtlasTestUtil.validateFlatPrimitiveClassPrimitiveFieldAutoConversion5((TargetFlatPrimitiveClass) object);
     }
 
     @Test
     public void testProcessXmlJavaFlatFieldMappingAutoConversion6() throws Exception {
-        AtlasContext context = atlasContextFactory.createContext(
-                new File("src/test/resources/xmlToJava/atlasmapping-flatprimitive-attribute-autoconversion-6.xml")
-                        .toURI());
-        AtlasSession session = context.createSession();
-        String source = AtlasTestUtil
-                .loadFileAsString("src/test/resources/xmlToJava/atlas-xml-flatprimitive-attribute-autoconversion.xml");
-        session.setInput(source);
-        context.process(session);
-
-        Object object = session.getOutput();
-        assertNotNull(object);
-        assertTrue(object instanceof TargetFlatPrimitiveClass);
+        Object object = executeMapping(
+                "src/test/resources/xmlToJava/atlasmapping-flatprimitive-attribute-autoconversion-6.xml");
         AtlasTestUtil.validateFlatPrimitiveClassPrimitiveFieldAutoConversion6((TargetFlatPrimitiveClass) object);
+    }
+
+    @Test
+    public void testProcessXmlJavaFlatFieldMappingAutoConversion7() throws Exception {
+        Object object = executeMapping(
+                "src/test/resources/xmlToJava/atlasmapping-flatprimitive-attribute-autoconversion-7.xml");
+        AtlasTestUtil.validateFlatPrimitiveClassPrimitiveFieldAutoConversion7((TargetFlatPrimitiveClass) object);
     }
 
 }

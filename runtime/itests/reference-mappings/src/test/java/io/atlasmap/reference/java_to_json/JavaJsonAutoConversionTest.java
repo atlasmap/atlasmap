@@ -26,6 +26,7 @@ import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasSession;
 import io.atlasmap.java.test.BaseFlatPrimitiveClass;
 import io.atlasmap.java.test.SourceFlatPrimitiveClass;
+import io.atlasmap.java.test.TargetFlatPrimitiveClass;
 import io.atlasmap.json.test.AtlasJsonTestUnrootedMapper;
 import io.atlasmap.json.test.TargetFlatPrimitive;
 import io.atlasmap.reference.AtlasMappingBaseTest;
@@ -33,11 +34,21 @@ import io.atlasmap.reference.AtlasTestUtil;
 
 public class JavaJsonAutoConversionTest extends AtlasMappingBaseTest {
 
-    @Test
-    public void testProcessJsonJavaFlatFieldMappingAutoConversion1() throws Exception {
-        AtlasContext context = atlasContextFactory.createContext(
-                new File("src/test/resources/javaToJson/atlasmapping-flatprimitive-unrooted-autoconversion-1.xml")
-                        .toURI());
+    protected Object executeMapping2(String fileName) throws Exception {
+        AtlasContext context = atlasContextFactory.createContext(new File(fileName).toURI());
+        AtlasSession session = context.createSession();
+        BaseFlatPrimitiveClass sourceObject = AtlasTestUtil.generateFlatPrimitiveClass(SourceFlatPrimitiveClass.class);
+        session.setInput(sourceObject);
+        context.process(session);
+
+        Object object = session.getOutput();
+        assertNotNull(object);
+        assertTrue(object instanceof TargetFlatPrimitiveClass);
+        return object;
+    }
+
+    protected Object executeMapping(String fileName) throws Exception {
+        AtlasContext context = atlasContextFactory.createContext(new File(fileName).toURI());
         AtlasSession session = context.createSession();
         BaseFlatPrimitiveClass source = AtlasTestUtil.generateFlatPrimitiveClass(SourceFlatPrimitiveClass.class);
         session.setInput(source);
@@ -48,97 +59,55 @@ public class JavaJsonAutoConversionTest extends AtlasMappingBaseTest {
         assertTrue(object instanceof String);
         AtlasJsonTestUnrootedMapper testMapper = new AtlasJsonTestUnrootedMapper();
         TargetFlatPrimitive targetObject = testMapper.readValue((String) object, TargetFlatPrimitive.class);
-        AtlasTestUtil.validateJsonFlatPrimitivePrimitiveFieldAutoConversion1((TargetFlatPrimitive) targetObject);
+        return targetObject;
+    }
+
+    @Test
+    public void testProcessJsonJavaFlatFieldMappingAutoConversion1() throws Exception {
+        Object object = executeMapping(
+                "src/test/resources/javaToJson/atlasmapping-flatprimitive-unrooted-autoconversion-1.xml");
+        AtlasTestUtil.validateJsonFlatPrimitivePrimitiveFieldAutoConversion1((TargetFlatPrimitive) object);
     }
 
     @Test
     public void testProcessJsonJavaFlatFieldMappingAutoConversion2() throws Exception {
-        AtlasContext context = atlasContextFactory.createContext(
-                new File("src/test/resources/javaToJson/atlasmapping-flatprimitive-unrooted-autoconversion-2.xml")
-                        .toURI());
-        AtlasSession session = context.createSession();
-        BaseFlatPrimitiveClass source = AtlasTestUtil.generateFlatPrimitiveClass(SourceFlatPrimitiveClass.class);
-        session.setInput(source);
-        context.process(session);
-
-        Object object = session.getOutput();
-        assertNotNull(object);
-        assertTrue(object instanceof String);
-        AtlasJsonTestUnrootedMapper testMapper = new AtlasJsonTestUnrootedMapper();
-        TargetFlatPrimitive targetObject = testMapper.readValue((String) object, TargetFlatPrimitive.class);
-        AtlasTestUtil.validateJsonFlatPrimitivePrimitiveFieldAutoConversion2((TargetFlatPrimitive) targetObject);
+        Object object = executeMapping(
+                "src/test/resources/javaToJson/atlasmapping-flatprimitive-unrooted-autoconversion-2.xml");
+        AtlasTestUtil.validateJsonFlatPrimitivePrimitiveFieldAutoConversion2((TargetFlatPrimitive) object);
     }
 
     @Test
     public void testProcessJsonJavaFlatFieldMappingAutoConversion3() throws Exception {
-        AtlasContext context = atlasContextFactory.createContext(
-                new File("src/test/resources/javaToJson/atlasmapping-flatprimitive-unrooted-autoconversion-3.xml")
-                        .toURI());
-        AtlasSession session = context.createSession();
-        BaseFlatPrimitiveClass source = AtlasTestUtil.generateFlatPrimitiveClass(SourceFlatPrimitiveClass.class);
-        session.setInput(source);
-        context.process(session);
-
-        Object object = session.getOutput();
-        assertNotNull(object);
-        assertTrue(object instanceof String);
-        AtlasJsonTestUnrootedMapper testMapper = new AtlasJsonTestUnrootedMapper();
-        TargetFlatPrimitive targetObject = testMapper.readValue((String) object, TargetFlatPrimitive.class);
-        AtlasTestUtil.validateJsonFlatPrimitivePrimitiveFieldAutoConversion3((TargetFlatPrimitive) targetObject);
+        Object object = executeMapping(
+                "src/test/resources/javaToJson/atlasmapping-flatprimitive-unrooted-autoconversion-3.xml");
+        AtlasTestUtil.validateJsonFlatPrimitivePrimitiveFieldAutoConversion3((TargetFlatPrimitive) object);
     }
 
     @Test
     public void testProcessJsonJavaFlatFieldMappingAutoConversion4() throws Exception {
-        AtlasContext context = atlasContextFactory.createContext(
-                new File("src/test/resources/javaToJson/atlasmapping-flatprimitive-unrooted-autoconversion-4.xml")
-                        .toURI());
-        AtlasSession session = context.createSession();
-        BaseFlatPrimitiveClass source = AtlasTestUtil.generateFlatPrimitiveClass(SourceFlatPrimitiveClass.class);
-        session.setInput(source);
-        context.process(session);
-
-        Object object = session.getOutput();
-        assertNotNull(object);
-        assertTrue(object instanceof String);
-        AtlasJsonTestUnrootedMapper testMapper = new AtlasJsonTestUnrootedMapper();
-        TargetFlatPrimitive targetObject = testMapper.readValue((String) object, TargetFlatPrimitive.class);
-        AtlasTestUtil.validateJsonFlatPrimitivePrimitiveFieldAutoConversion4((TargetFlatPrimitive) targetObject);
+        Object object = executeMapping(
+                "src/test/resources/javaToJson/atlasmapping-flatprimitive-unrooted-autoconversion-4.xml");
+        AtlasTestUtil.validateJsonFlatPrimitivePrimitiveFieldAutoConversion4((TargetFlatPrimitive) object);
     }
 
     @Test
     public void testProcessJsonJavaFlatFieldMappingAutoConversion5() throws Exception {
-        AtlasContext context = atlasContextFactory.createContext(
-                new File("src/test/resources/javaToJson/atlasmapping-flatprimitive-unrooted-autoconversion-5.xml")
-                        .toURI());
-        AtlasSession session = context.createSession();
-        BaseFlatPrimitiveClass source = AtlasTestUtil.generateFlatPrimitiveClass(SourceFlatPrimitiveClass.class);
-        session.setInput(source);
-        context.process(session);
-
-        Object object = session.getOutput();
-        assertNotNull(object);
-        assertTrue(object instanceof String);
-        AtlasJsonTestUnrootedMapper testMapper = new AtlasJsonTestUnrootedMapper();
-        TargetFlatPrimitive targetObject = testMapper.readValue((String) object, TargetFlatPrimitive.class);
-        AtlasTestUtil.validateJsonFlatPrimitivePrimitiveFieldAutoConversion5((TargetFlatPrimitive) targetObject);
+        Object object = executeMapping(
+                "src/test/resources/javaToJson/atlasmapping-flatprimitive-unrooted-autoconversion-5.xml");
+        AtlasTestUtil.validateJsonFlatPrimitivePrimitiveFieldAutoConversion5((TargetFlatPrimitive) object);
     }
 
     @Test
     public void testProcessJsonJavaFlatFieldMappingAutoConversion6() throws Exception {
-        AtlasContext context = atlasContextFactory.createContext(
-                new File("src/test/resources/javaToJson/atlasmapping-flatprimitive-unrooted-autoconversion-6.xml")
-                        .toURI());
-        AtlasSession session = context.createSession();
-        BaseFlatPrimitiveClass source = AtlasTestUtil.generateFlatPrimitiveClass(SourceFlatPrimitiveClass.class);
-        session.setInput(source);
-        context.process(session);
-
-        Object object = session.getOutput();
-        assertNotNull(object);
-        assertTrue(object instanceof String);
-        AtlasJsonTestUnrootedMapper testMapper = new AtlasJsonTestUnrootedMapper();
-        TargetFlatPrimitive targetObject = testMapper.readValue((String) object, TargetFlatPrimitive.class);
-        AtlasTestUtil.validateJsonFlatPrimitivePrimitiveFieldAutoConversion6((TargetFlatPrimitive) targetObject);
+        Object object = executeMapping(
+                "src/test/resources/javaToJson/atlasmapping-flatprimitive-unrooted-autoconversion-6.xml");
+        AtlasTestUtil.validateJsonFlatPrimitivePrimitiveFieldAutoConversion6((TargetFlatPrimitive) object);
     }
 
+    @Test
+    public void testProcessJsonJavaFlatFieldMappingAutoConversion7() throws Exception {
+        Object object = executeMapping(
+                "src/test/resources/javaToJson/atlasmapping-flatprimitive-unrooted-autoconversion-7.xml");
+        AtlasTestUtil.validateJsonFlatPrimitivePrimitiveFieldAutoConversion7((TargetFlatPrimitive) object);
+    }
 }

@@ -145,4 +145,23 @@ public class JsonJsonAutoConversionTest extends AtlasMappingBaseTest {
         AtlasTestUtil.validateJsonFlatPrimitivePrimitiveFieldAutoConversion6(targetObject);
     }
 
+    @Test
+    public void testProcessJsonJsonFlatFieldMappingAutoConversion7() throws Exception {
+        AtlasContext context = atlasContextFactory.createContext(
+                new File("src/test/resources/jsonToJson/atlasmapping-flatprimitive-unrooted-autoconversion-7.xml")
+                        .toURI());
+        AtlasSession session = context.createSession();
+        String source = AtlasTestUtil.loadFileAsString(
+                "src/test/resources/jsonToJson/atlas-json-flatprimitive-unrooted-autoconversion.json");
+        session.setInput(source);
+        context.process(session);
+
+        Object object = session.getOutput();
+        assertNotNull(object);
+        assertTrue(object instanceof String);
+        AtlasJsonTestUnrootedMapper testMapper = new AtlasJsonTestUnrootedMapper();
+        TargetFlatPrimitive targetObject = testMapper.readValue((String) object, TargetFlatPrimitive.class);
+        AtlasTestUtil.validateJsonFlatPrimitivePrimitiveFieldAutoConversion7(targetObject);
+    }
+
 }

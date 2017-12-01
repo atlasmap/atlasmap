@@ -131,8 +131,8 @@ public class JsonFieldWriter {
 
             if (arrayChild.size() < (index + 1)) {
                 if (LOG.isDebugEnabled()) {
-                    LOG.debug("Value Array is too small, resizing to accomodate index: " + index
-                            + ", current array: " + arrayChild);
+                    LOG.debug("Value Array is too small, resizing to accomodate index: " + index + ", current array: "
+                            + arrayChild);
                 }
                 // if our array doesn't have index + 1 items in it, add nulls until we have the
                 // index available
@@ -189,8 +189,8 @@ public class JsonFieldWriter {
 
             if (arrayChild.size() < (index + 1)) {
                 if (LOG.isDebugEnabled()) {
-                    LOG.debug("Object Array is too small, resizing to accomodate index: " + index
-                            + ", current array: " + arrayChild);
+                    LOG.debug("Object Array is too small, resizing to accomodate index: " + index + ", current array: "
+                            + arrayChild);
                 }
                 // if our array doesn't have index + 1 items in it, add objects until we have
                 // the index available
@@ -233,14 +233,16 @@ public class JsonFieldWriter {
             valueNode = rootNode.numberNode(Short.valueOf(String.valueOf(value)));
         } else if (FieldType.LONG.equals(type)) {
             valueNode = rootNode.numberNode(Long.valueOf(String.valueOf(value)));
+        } else if (FieldType.BYTE.equals(type)) {
+            valueNode = rootNode.numberNode(Byte.valueOf(String.valueOf(value)));
         } else {
             throw new AtlasException(
                     "Cannot set value for " + jsonField.getPath() + " --> " + value + " for field type " + type);
         }
         if (LOG.isDebugEnabled()) {
             String valueClass = value == null ? "null" : value.getClass().getName();
-            LOG.debug("Converted JsonField value to ValueNode. Type: " + type + ", value: " + value + "("
-                    + valueClass + "), node class: " + valueNode.getClass().getName() + ", node: " + valueNode);
+            LOG.debug("Converted JsonField value to ValueNode. Type: " + type + ", value: " + value + "(" + valueClass
+                    + "), node class: " + valueNode.getClass().getName() + ", node: " + valueNode);
         }
         return valueNode;
     }
