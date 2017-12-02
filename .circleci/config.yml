@@ -124,5 +124,5 @@ jobs:
             echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
             npm publish
 
-            cd ..
+            cd ../..
             java -cp ./.circleci/codacy-coverage-reporter-2.0.1-assembly.jar com.codacy.CodacyCoverageReporter -l Java -r ./coverage/runtime/jacoco.xml
