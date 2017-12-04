@@ -216,7 +216,14 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
             LOG.debug("Begin process {}", (session == null ? null : session.toString()));
         }
 
+        session.head().unset();
+        session.getAudits().getAudit().clear();
+        session.getValidations().getValidation().clear();
+
         processValidation(session);
+        for (Validation v : session.getValidations().getValidation()) {
+            AtlasUtil.addAudit(session, v);
+        }
         if (session.hasErrors()) {
             if (LOG.isDebugEnabled()) {
                 LOG.error("Aborting due to {} errors in pre-validation", session.errorCount());
@@ -240,8 +247,7 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
 
         for (BaseMapping baseMapping : session.getMapping().getMappings().getMapping()) {
             for (Mapping mapping : extractCollectionMappings(session, baseMapping)) {
-                session.head().unset()
-                              .setMapping(mapping)
+                session.head().setMapping(mapping)
                               .setLookupTable(lookupTables.get(mapping.getLookupTableName()));
 
                 if (mapping.getOutputField() == null || mapping.getOutputField().isEmpty()) {
