@@ -25,3 +25,6 @@ Substring | String | String | startIndex \*</br>endIndex</br> | Retrieve the seg
 SubstringAfter | String | String | startIndex \*</br>endIndex</br>match \*</br> | Retrieve the segment of a string after the supplied match string from the supplied inclusive startIndex to the supplied exclusive endIndex. Both indexes start at zero. The default endIndex is the length of the string after the supplied match string.
 SubstringBefore | String | String | startIndex \*</br>endIndex</br>match \*</br> | Retrieve the segment of a string before the supplied match string from the supplied inclusive startIndex to the supplied exclusive endIndex. Both indexes start at zero. The default endIndex is the length of the string before the supplied match string.
 SumUp | Complex | Number | numberType | Add the numbers in a collection, array, or map. The collection/array must only contain numbers; For a map, the values must only be numbers. The result will be of the supplied numberType, if provided, or otherwise the type of the first item in the collection/array/values.
+
+
+Test change
