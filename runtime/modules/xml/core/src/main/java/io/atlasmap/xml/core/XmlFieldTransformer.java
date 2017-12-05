@@ -15,13 +15,9 @@
  */
 package io.atlasmap.xml.core;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -41,42 +37,6 @@ public abstract class XmlFieldTransformer {
 
     public void setNamespaces(Map<String, String> namespaces) {
         this.namespaces = namespaces;
-    }
-
-    protected LinkedList<String> getElementsInXmlPath(String xmlPath) {
-        return Arrays.stream(xmlPath.replaceFirst("/", "").split("/"))
-                .collect(Collectors.toCollection(LinkedList::new));
-    }
-
-    protected List<XmlPathCoordinate> createXmlPathCoordinates(final List<String> elements) {
-        LinkedList<XmlPathCoordinate> xmlPathCoordinates = new LinkedList<>();
-        for (String element : elements) {
-            XmlPathCoordinate xmlPathCoordinate;
-            Integer index = 0;
-            // indexed elements
-            if (element.contains("[")) {
-                String[] indexedTargetElement = element.split("\\[");
-                String indexedElement = indexedTargetElement[0].substring(indexedTargetElement[0].lastIndexOf("/") + 1);
-                String indexValue = indexedTargetElement[1].replace("]", "");
-                if (indexValue != null && !indexValue.trim().isEmpty()) {
-                    index = Integer.valueOf(indexValue);
-                } else {
-                    index = null;
-                }
-                element = indexedElement;
-            }
-            xmlPathCoordinate = new XmlPathCoordinate(index, element);
-            if (namespaces != null && !namespaces.isEmpty()) {
-                handleNamespacedElements(element, xmlPathCoordinate);
-            }
-            xmlPathCoordinates.addLast(xmlPathCoordinate);
-        }
-        return xmlPathCoordinates;
-    }
-
-    protected String findNamespaceURIFromPrefix(String prefix) {
-        return namespaces.entrySet().stream().filter(e -> e.getValue().equals(prefix)).map(Map.Entry::getKey)
-                .findFirst().orElse(null);
     }
 
     protected void seedDocumentNamespaces(Document document) {
@@ -102,21 +62,4 @@ public abstract class XmlFieldTransformer {
         }
     }
 
-    private void handleNamespacedElements(String element, XmlPathCoordinate xmlPathCoordinate) {
-        if (element.contains(":")) {
-            String[] namespacedElement = element.split(":");
-            String prefix = namespacedElement[0];
-            // dealing with an attr
-            if (prefix.contains("@")) {
-                prefix = prefix.substring(1);
-            }
-            String namespaceURI = findNamespaceURIFromPrefix(prefix);
-            xmlPathCoordinate.setNamespace(namespaceURI, prefix);
-        } else {
-            String namespaceURI = findNamespaceURIFromPrefix("");
-            if (namespaceURI != null) {
-                xmlPathCoordinate.setNamespace(namespaceURI, "");
-            }
-        }
-    }
 }

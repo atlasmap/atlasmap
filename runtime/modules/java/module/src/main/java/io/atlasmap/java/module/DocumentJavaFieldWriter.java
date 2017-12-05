@@ -13,9 +13,9 @@ import java.util.Map;
 import org.slf4j.LoggerFactory;
 
 import io.atlasmap.api.AtlasException;
+import io.atlasmap.core.AtlasPath;
+import io.atlasmap.core.AtlasPath.SegmentContext;
 import io.atlasmap.core.DefaultAtlasConversionService;
-import io.atlasmap.core.PathUtil;
-import io.atlasmap.core.PathUtil.SegmentContext;
 import io.atlasmap.java.inspect.ClassHelper;
 import io.atlasmap.java.v2.JavaEnumField;
 import io.atlasmap.java.v2.JavaField;
@@ -52,7 +52,7 @@ public class DocumentJavaFieldWriter {
 
             processedPaths.add(field.getPath());
 
-            PathUtil path = new PathUtil(field.getPath());
+            AtlasPath path = new AtlasPath(field.getPath());
             Object parentObject = rootObject;
             boolean segmentIsComplexSegment = true;
             for (SegmentContext segmentContext : path.getSegmentContexts(true)) {
@@ -106,7 +106,7 @@ public class DocumentJavaFieldWriter {
                     }
                     parentObject = childObject;
                 } else { // processing field value
-                    if (PathUtil.isCollectionSegment(segmentContext.getSegment())) {
+                    if (AtlasPath.isCollectionSegment(segmentContext.getSegment())) {
                         parentObject = findOrCreateOrExpandParentCollectionObject(field, parentObject, segmentContext);
                     }
                     Object value = converter.convertValue(parentObject, field);
@@ -142,7 +142,7 @@ public class DocumentJavaFieldWriter {
 
         // find the child object on the given parent
         Object childObject = writerUtil.getObjectFromParent(field, parentObject, segmentContext);
-        if (childObject != null && PathUtil.isCollectionSegment(segment)) {
+        if (childObject != null && AtlasPath.isCollectionSegment(segment)) {
             if (!collectionHasRoomForIndex(childObject, segmentContext)) {
                 if (LOG.isDebugEnabled()) {
                     LOG.debug("Found child collection '" + segment + "' (" + childObject.getClass().getName()
@@ -175,11 +175,10 @@ public class DocumentJavaFieldWriter {
             LOG.debug("Creating parent object: " + segmentContext);
         }
         Object childObject = null;
-        if (PathUtil.isCollectionSegment(segment)) {
+        if (AtlasPath.isCollectionSegment(segment)) {
             // first, let's see if we have the collection object at all
             if (LOG.isDebugEnabled()) {
-                LOG.debug(
-                        "Looking for collection wrapper child for " + segmentContext + " on parent: " + parentObject);
+                LOG.debug("Looking for collection wrapper child for " + segmentContext + " on parent: " + parentObject);
             }
             Object collectionObject = findOrCreateOrExpandParentCollectionObject(field, parentObject, segmentContext);
             childObject = getCollectionItem(collectionObject, segmentContext);
@@ -235,15 +234,15 @@ public class DocumentJavaFieldWriter {
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    public Object expandCollectionToFitItem(Field field, Object obj, SegmentContext segmentContext,
-            Object parentObject) throws AtlasException {
+    public Object expandCollectionToFitItem(Field field, Object obj, SegmentContext segmentContext, Object parentObject)
+            throws AtlasException {
         Object collectionObject = obj;
         String segment = segmentContext.getSegment();
         if (!collectionHasRoomForIndex(collectionObject, segmentContext)) {
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Collection is not large enough for segment '" + segment + "', expanding the collection.");
             }
-            int index = PathUtil.indexOfSegment(segment);
+            int index = AtlasPath.indexOfSegment(segment);
             if (collectionObject instanceof List) {
                 List list = (List) collectionObject;
                 while (list.size() < (index + 1)) {
@@ -274,12 +273,12 @@ public class DocumentJavaFieldWriter {
             throws AtlasException {
         // create the "List" part of List<Contact>
         String segment = segmentContext.getSegment();
-        if (PathUtil.isArraySegment(segment)) {
+        if (AtlasPath.isArraySegment(segment)) {
             return createObject(field, segmentContext, parentObject, true);
-        } else if (PathUtil.isListSegment(segment)) {
+        } else if (AtlasPath.isListSegment(segment)) {
             // TODO: look up field level or document level default list impl
             return writerUtil.instantiateObject(LinkedList.class, segmentContext, false);
-        } else if (PathUtil.isMapSegment(segment)) {
+        } else if (AtlasPath.isMapSegment(segment)) {
             // TODO: look up field level or document level default map impl
             return writerUtil.instantiateObject(HashMap.class, segmentContext, false);
         }
@@ -289,8 +288,7 @@ public class DocumentJavaFieldWriter {
     public Class<?> getClassForField(Field field, SegmentContext segmentContext, Object parentObject,
             boolean unwrapCollectionType) throws AtlasException {
         if (LOG.isDebugEnabled()) {
-            LOG.debug(
-                    "Looking up class to use for segment: " + segmentContext + "\n\tparentObject: " + parentObject);
+            LOG.debug("Looking up class to use for segment: " + segmentContext + "\n\tparentObject: " + parentObject);
         }
         Class<?> clz = null;
 
@@ -317,7 +315,7 @@ public class DocumentJavaFieldWriter {
                 LOG.debug("Couldn't find class on field. Looking for configured class for segment: " + segmentContext
                         + ".");
             }
-            String normalizedSegment = PathUtil.removeCollectionIndexes(segmentContext.getSegmentPath());
+            String normalizedSegment = AtlasPath.removeCollectionIndexes(segmentContext.getSegmentPath());
             clz = this.classesForFields.get(normalizedSegment);
         }
         Type clzType = null;
@@ -329,7 +327,7 @@ public class DocumentJavaFieldWriter {
             Method m = null;
             try {
                 String methodName = "get"
-                        + JavaWriterUtil.capitalizeFirstLetter(PathUtil.cleanPathSegment(segmentContext.getSegment()));
+                        + JavaWriterUtil.capitalizeFirstLetter(AtlasPath.cleanPathSegment(segmentContext.getSegment()));
                 m = ClassHelper.detectGetterMethod(parentObject.getClass(), methodName);
             } catch (NoSuchMethodException e) {
                 // it's ok, we didnt find a getter.
@@ -354,13 +352,13 @@ public class DocumentJavaFieldWriter {
         } else if (unwrapCollectionType && Collection.class.isAssignableFrom(clz)) {
             Class<?> oldClass = clz;
             clz = null;
-            String cleanedSegment = PathUtil.cleanPathSegment(segmentContext.getSegment());
+            String cleanedSegment = AtlasPath.cleanPathSegment(segmentContext.getSegment());
 
             // From return type of getter method
             if (clzType instanceof Class) {
                 // No type parameter, use Object
                 clz = Object.class;
-            } else if (clzType instanceof ParameterizedType){
+            } else if (clzType instanceof ParameterizedType) {
                 ParameterizedType pt = (ParameterizedType) clzType;
                 String typeName = pt.getActualTypeArguments()[0].getTypeName();
                 try {
@@ -370,7 +368,7 @@ public class DocumentJavaFieldWriter {
                             + segmentContext + ", on field: " + field, e);
                 }
 
-            // No getter found - check fields of parent object
+                // No getter found - check fields of parent object
             } else if (clz == null) {
                 Class<?> parentClass = parentObject.getClass();
                 while (parentClass != Object.class && clz == null) {
@@ -400,8 +398,8 @@ public class DocumentJavaFieldWriter {
             if (name.equals(declaredField.getName())) {
                 if (declaredField.getGenericType() == null) {
                     if (LOG.isDebugEnabled()) {
-                        LOG.debug("Skipping field '{}' on class '{}', the field isn't generic",
-                                declaredField.getName(), clazz.getName());
+                        LOG.debug("Skipping field '{}' on class '{}', the field isn't generic", declaredField.getName(),
+                                clazz.getName());
                     }
                     continue;
                 }
@@ -412,8 +410,8 @@ public class DocumentJavaFieldWriter {
                         return Class.forName(typeName);
                     }
                 } catch (Exception e) {
-                    LOG.warn("Could not load class '{}' for field '{}' on class '{}': {}",
-                            typeName, name, clazz.getName(), e.getMessage());
+                    LOG.warn("Could not load class '{}' for field '{}' on class '{}': {}", typeName, name,
+                            clazz.getName(), e.getMessage());
                     LOG.debug(e.getMessage(), e);
                 }
             }
@@ -425,18 +423,18 @@ public class DocumentJavaFieldWriter {
             boolean createWrapperArray) throws AtlasException {
         Class<?> clazz = getClassForField(javaField, segmentContext, parentObject, true);
         // TODO https://github.com/atlasmap/atlasmap-runtime/issues/229
-        //      - Allow default implementation for abstract target field
-        return writerUtil.instantiateObject(clazz , segmentContext, createWrapperArray);
+        // - Allow default implementation for abstract target field
+        return writerUtil.instantiateObject(clazz, segmentContext, createWrapperArray);
     }
 
     public Object getCollectionItem(Object collection, SegmentContext segmentContext) throws AtlasException {
         String segment = segmentContext.getSegment();
-        int index = PathUtil.indexOfSegment(segment);
-        if (PathUtil.isArraySegment(segment)) {
+        int index = AtlasPath.indexOfSegment(segment);
+        if (AtlasPath.isArraySegment(segment)) {
             return Array.get(collection, index);
-        } else if (PathUtil.isListSegment(segment)) {
+        } else if (AtlasPath.isListSegment(segment)) {
             return ((List<?>) collection).get(index);
-        } else if (PathUtil.isMapSegment(segment)) {
+        } else if (AtlasPath.isMapSegment(segment)) {
             throw new AtlasException("Maps are currently unhandled for segment: " + segment);
         }
         throw new AtlasException("Cannot determine collection type from segment: " + segment);
@@ -444,7 +442,7 @@ public class DocumentJavaFieldWriter {
 
     public boolean collectionHasRoomForIndex(Object collection, SegmentContext segmentContext) throws AtlasException {
         String segment = segmentContext.getSegment();
-        int index = PathUtil.indexOfSegment(segment);
+        int index = AtlasPath.indexOfSegment(segment);
         int size = getCollectionSize(collection);
         boolean result = size > index;
         if (LOG.isDebugEnabled()) {
@@ -481,7 +479,7 @@ public class DocumentJavaFieldWriter {
         boolean parentIsCollection = (parentObject instanceof Collection) || (parentObject.getClass().isArray());
         if (parentIsCollection) {
             String segment = segmentContext.getSegment();
-            int index = PathUtil.indexOfSegment(segment);
+            int index = AtlasPath.indexOfSegment(segment);
             if (parentObject instanceof List) {
                 List list = (List) parentObject;
                 if (index >= list.size()) {
@@ -539,7 +537,7 @@ public class DocumentJavaFieldWriter {
     }
 
     public void addClassForFieldPath(String fieldPath, Class<?> clz) {
-        String fieldPathTrimmed = PathUtil.removeCollectionIndexes(fieldPath);
+        String fieldPathTrimmed = AtlasPath.removeCollectionIndexes(fieldPath);
         this.classesForFields.put(fieldPathTrimmed, clz);
     }
 

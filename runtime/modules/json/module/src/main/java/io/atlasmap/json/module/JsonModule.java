@@ -35,9 +35,9 @@ import io.atlasmap.api.AtlasConversionException;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.api.AtlasSession;
 import io.atlasmap.api.AtlasValidationException;
+import io.atlasmap.core.AtlasPath;
+import io.atlasmap.core.AtlasPath.SegmentContext;
 import io.atlasmap.core.BaseAtlasModule;
-import io.atlasmap.core.PathUtil;
-import io.atlasmap.core.PathUtil.SegmentContext;
 import io.atlasmap.json.core.JsonFieldReader;
 import io.atlasmap.json.core.JsonFieldWriter;
 import io.atlasmap.json.v2.AtlasJsonModelFactory;
@@ -388,12 +388,12 @@ public class JsonModule extends BaseAtlasModule {
             JsonNode rootNode = objectMapper.readTree(parser);
             ObjectNode parentNode = (ObjectNode) rootNode;
             String parentSegment = "[root node]";
-            for (SegmentContext sc : new PathUtil(field.getPath()).getSegmentContexts(false)) {
+            for (SegmentContext sc : new AtlasPath(field.getPath()).getSegmentContexts(false)) {
                 JsonNode currentNode = JsonFieldWriter.getChildNode(parentNode, parentSegment, sc.getSegment());
                 if (currentNode == null) {
                     return 0;
                 }
-                if (PathUtil.isCollectionSegment(sc.getSegment())) {
+                if (AtlasPath.isCollectionSegment(sc.getSegment())) {
                     if (currentNode != null && currentNode.isArray()) {
                         return currentNode.size();
                     }

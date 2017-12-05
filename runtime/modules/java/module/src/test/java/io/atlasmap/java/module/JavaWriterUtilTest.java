@@ -12,8 +12,8 @@ import java.util.List;
 import org.junit.Test;
 
 import io.atlasmap.api.AtlasException;
+import io.atlasmap.core.AtlasPath.SegmentContext;
 import io.atlasmap.core.DefaultAtlasConversionService;
-import io.atlasmap.core.PathUtil.SegmentContext;
 import io.atlasmap.java.test.TargetAddress;
 import io.atlasmap.java.test.TargetContact;
 import io.atlasmap.java.test.TargetOrder;

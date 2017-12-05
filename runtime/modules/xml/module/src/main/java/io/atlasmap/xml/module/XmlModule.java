@@ -41,10 +41,9 @@ import io.atlasmap.api.AtlasConversionException;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.api.AtlasSession;
 import io.atlasmap.api.AtlasValidationException;
+import io.atlasmap.core.AtlasPath.SegmentContext;
 import io.atlasmap.core.AtlasUtil;
 import io.atlasmap.core.BaseAtlasModule;
-import io.atlasmap.core.PathUtil;
-import io.atlasmap.core.PathUtil.SegmentContext;
 import io.atlasmap.spi.AtlasModuleDetail;
 import io.atlasmap.v2.Audit;
 import io.atlasmap.v2.AuditStatus;
@@ -60,11 +59,13 @@ import io.atlasmap.v2.SimpleField;
 import io.atlasmap.v2.Validation;
 import io.atlasmap.xml.core.XmlFieldReader;
 import io.atlasmap.xml.core.XmlFieldWriter;
+import io.atlasmap.xml.core.XmlPath;
 import io.atlasmap.xml.v2.AtlasXmlModelFactory;
 import io.atlasmap.xml.v2.XmlDataSource;
 import io.atlasmap.xml.v2.XmlField;
 import io.atlasmap.xml.v2.XmlNamespace;
 import io.atlasmap.xml.v2.XmlNamespaces;
+
 
 @AtlasModuleDetail(name = "XmlModule", uri = "atlas:xml", modes = { "SOURCE", "TARGET" }, dataFormats = {
         "xml" }, configPackages = { "io.atlasmap.xml.v2" })
@@ -202,7 +203,7 @@ public class XmlModule extends BaseAtlasModule {
                 }
 
                 XmlFieldReader dxfr = new XmlFieldReader();
-                dxfr.readNew(document, inputField);
+                dxfr.read(document, inputField);
 
                 if (inputField.getFieldType() == null) {
                     inputField.setFieldType(FieldType.STRING);
@@ -421,14 +422,14 @@ public class XmlModule extends BaseAtlasModule {
             }
             Document document = getDocument((String) sourceObject, false);
             Element parentNode = document.getDocumentElement();
-            for (SegmentContext sc : new PathUtil(field.getPath()).getSegmentContexts(false)) {
+            for (SegmentContext sc : new XmlPath(field.getPath()).getSegmentContexts(false)) {
                 if (sc.getPrev() == null) {
                     // processing root node part of path such as the "XOA" part of
                     // "/XOA/contact<>/firstName", skip.
                     continue;
                 }
-                String childrenElementName = PathUtil.cleanPathSegment(sc.getSegment());
-                String namespaceAlias = PathUtil.getNamespace(sc.getSegment());
+                String childrenElementName = XmlPath.cleanPathSegment(sc.getSegment());
+                String namespaceAlias = XmlPath.getNamespace(sc.getSegment());
                 if (namespaceAlias != null && !"".equals(namespaceAlias)) {
                     childrenElementName = namespaceAlias + ":" + childrenElementName;
                 }
@@ -436,7 +437,7 @@ public class XmlModule extends BaseAtlasModule {
                 if (children == null || children.isEmpty()) {
                     return 0;
                 }
-                if (PathUtil.isCollectionSegment(sc.getSegment())) {
+                if (XmlPath.isCollectionSegment(sc.getSegment())) {
                     return children.size();
                 }
                 parentNode = children.get(0);
