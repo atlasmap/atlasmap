@@ -23,7 +23,7 @@
     <parent>
         <groupId>io.atlasmap</groupId>
         <artifactId>atlas-xml-parent</artifactId>
-        <version>1.32-SNAPSHOT</version>
+        <version>1.32.0.fuse-000021</version>
         <relativePath>..</relativePath>
     </parent>
 
