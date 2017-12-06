@@ -72,6 +72,16 @@
         </complexType>
     </element>
 
+    <element name="Contains">
+        <complexType>
+            <complexContent>
+                <extension base="atlas:Action">
+                    <attribute name="value" type="string" />
+                </extension>
+            </complexContent>
+        </complexType>
+    </element>
+
     <element name="ConvertAreaUnit">
         <complexType>
             <complexContent>
@@ -453,6 +463,7 @@
                 <element ref="atlas:Capitalize" />
                 <element ref="atlas:Ceiling" />
                 <element ref="atlas:Concatenate" />
+                <element ref="atlas:Contains" />
                 <element ref="atlas:ConvertAreaUnit" />
                 <element ref="atlas:ConvertDistanceUnit" />
                 <element ref="atlas:ConvertMassUnit" />
