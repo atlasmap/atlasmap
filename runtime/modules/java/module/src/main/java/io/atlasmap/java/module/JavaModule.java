@@ -87,6 +87,7 @@ public class JavaModule extends BaseAtlasModule {
 
         JavaValidationService javaValidator = new JavaValidationService(getConversionService());
         javaValidator.setMode(getMode());
+        javaValidator.setDocId(getDocId());
         List<Validation> javaValidations = javaValidator.validateMapping(atlasSession.getMapping());
         atlasSession.getValidations().getValidation().addAll(javaValidations);
 

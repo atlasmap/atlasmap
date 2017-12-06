@@ -61,6 +61,7 @@ public class JsonModule extends BaseAtlasModule {
 
         Validations validations = atlasSession.getValidations();
         JsonValidationService jsonValidationService = new JsonValidationService(getConversionService());
+        jsonValidationService.setDocId(getDocId());
         List<Validation> jsonValidations = jsonValidationService.validateMapping(atlasSession.getMapping());
         if (jsonValidations != null && !jsonValidations.isEmpty()) {
             validations.getValidation().addAll(jsonValidations);

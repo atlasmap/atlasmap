@@ -44,6 +44,7 @@ public abstract class BaseModuleValidationService<T extends Field> implements At
 
     private AtlasConversionService conversionService;
     private AtlasModuleMode mode;
+    private String docId;
 
     public BaseModuleValidationService() {
         this.conversionService = DefaultAtlasConversionService.getInstance();
@@ -59,6 +60,14 @@ public abstract class BaseModuleValidationService<T extends Field> implements At
 
     public AtlasModuleMode getMode() {
         return mode;
+    }
+
+    public void setDocId(String docId) {
+        this.docId = docId;
+    }
+
+    public String getDocId() {
+        return this.docId;
     }
 
     protected abstract AtlasModuleDetail getModuleDetail();
@@ -102,33 +111,37 @@ public abstract class BaseModuleValidationService<T extends Field> implements At
             return;
         }
 
-        List<Field> inputFields = mapping.getInputField();
-        Field outputField = mapping.getOutputField() != null ? mapping.getOutputField().get(0) : null;
+        List<Field> sourceFields = mapping.getInputField();
+        Field targetField = mapping.getOutputField() != null ? mapping.getOutputField().get(0) : null;
         String mappingId = mapping.getId();
 
-        if (getMode() == AtlasModuleMode.TARGET) {
-            if (inputFields != null) {
+        if (getMode() == AtlasModuleMode.TARGET && matchDocIdOrNull(targetField.getDocId())) {
+            if (sourceFields != null) {
                 // FIXME Run only for TARGET to avoid duplicate validation...
                 // we should convert per module validations to plugin style
-                for (Field inputField : inputFields) {
-                    validateSourceAndTargetTypes(mappingId, inputField, outputField, validations);
+                for (Field sourceField : sourceFields) {
+                    validateSourceAndTargetTypes(mappingId, sourceField, targetField, validations);
                 }
             }
 
             // check that the output field is of type String else error
-            if (outputField.getFieldType() != FieldType.STRING) {
+            if (targetField.getFieldType() != FieldType.STRING) {
                 Validation validation = new Validation();
                 validation.setScope(ValidationScope.MAPPING);
                 validation.setId(mappingId);
                 validation.setMessage(String.format(
                         "Output field '%s' must be of type '%s' for a Combine Mapping",
-                        getFieldName(outputField), FieldType.STRING));
+                        getFieldName(targetField), FieldType.STRING));
                 validation.setStatus(ValidationStatus.ERROR);
                 validations.add(validation);
             }
-            validateField(mappingId, outputField, FieldDirection.TARGET, validations);
-        } else if (inputFields != null) { // SOURCE
-            inputFields.forEach(inField -> validateField(mappingId, inField, FieldDirection.SOURCE, validations));
+            validateField(mappingId, targetField, FieldDirection.TARGET, validations);
+        } else if (sourceFields != null) { // SOURCE
+            for (Field sourceField : sourceFields) {
+                if (matchDocIdOrNull(sourceField.getDocId())) {
+                    validateField(mappingId, sourceField, FieldDirection.SOURCE, validations);
+                }
+            }
         }
     }
 
@@ -148,28 +161,29 @@ public abstract class BaseModuleValidationService<T extends Field> implements At
     }
 
     protected void validateMapMapping(Mapping mapping, List<Validation> validations) {
-        Field inputField = null;
-        Field outField = null;
+        Field sourceField = null;
+        Field targetField = null;
         String mappingId = mapping.getId();
 
         if (mapping != null && mapping.getInputField() != null && mapping.getInputField().size() > 0) {
-            inputField = mapping.getInputField().get(0);
-            if (getMode() == AtlasModuleMode.SOURCE) {
-                validateField(mappingId, inputField, FieldDirection.SOURCE, validations);
+            sourceField = mapping.getInputField().get(0);
+            if (getMode() == AtlasModuleMode.SOURCE && matchDocIdOrNull(sourceField.getDocId())) {
+                validateField(mappingId, sourceField, FieldDirection.SOURCE, validations);
             }
         }
 
         if (mapping != null && mapping.getOutputField() != null && mapping.getOutputField().size() > 0) {
-            outField = mapping.getOutputField().get(0);
-            if (getMode() == AtlasModuleMode.TARGET) {
-                validateField(mappingId, outField, FieldDirection.TARGET, validations);
+            targetField = mapping.getOutputField().get(0);
+            if (getMode() == AtlasModuleMode.TARGET && matchDocIdOrNull(targetField.getDocId())) {
+                validateField(mappingId, targetField, FieldDirection.TARGET, validations);
             }
         }
 
-        if (inputField != null && outField != null && getMode() == AtlasModuleMode.SOURCE) {
+        if (sourceField != null && targetField != null && getMode() == AtlasModuleMode.SOURCE
+                && matchDocIdOrNull(sourceField.getDocId())) {
             // FIXME Run only for SOURCE to avoid duplicate validation...
             // we should convert per module validations to plugin style
-            validateSourceAndTargetTypes(mappingId, inputField, outField, validations);
+            validateSourceAndTargetTypes(mappingId, sourceField, targetField, validations);
         }
     }
 
@@ -178,33 +192,37 @@ public abstract class BaseModuleValidationService<T extends Field> implements At
             return;
         }
 
-        final Field inputField = mapping.getInputField() != null ? mapping.getInputField().get(0) : null;
-        List<Field> outputFields = mapping.getOutputField();
+        final Field sourceField = mapping.getInputField() != null ? mapping.getInputField().get(0) : null;
+        List<Field> targetFields = mapping.getOutputField();
         String mappingId = mapping.getId();
 
-        if (getMode() == AtlasModuleMode.SOURCE) {
+        if (getMode() == AtlasModuleMode.SOURCE && matchDocIdOrNull(sourceField.getDocId())) {
             // check that the input field is of type String else error
-            if (inputField.getFieldType() != FieldType.STRING) {
+            if (sourceField.getFieldType() != FieldType.STRING) {
                 Validation validation = new Validation();
                 validation.setScope(ValidationScope.MAPPING);
                 validation.setId(mapping.getId());
                 validation.setMessage(String.format(
                         "Input field '%s' must be of type '%s' for a Separate Mapping",
-                        getFieldName(inputField), FieldType.STRING));
+                        getFieldName(sourceField), FieldType.STRING));
                 validation.setStatus(ValidationStatus.ERROR);
                 validations.add(validation);
             }
-            validateField(mappingId, inputField, FieldDirection.SOURCE, validations);
+            validateField(mappingId, sourceField, FieldDirection.SOURCE, validations);
 
-            if (outputFields != null) {
+            if (targetFields != null) {
                 // FIXME Run only for SOURCE to avoid duplicate validation...
                 // we should convert per module validations to plugin style
-                for (Field outField : outputFields) {
-                    validateSourceAndTargetTypes(mappingId, inputField, outField, validations);
+                for (Field targetField : targetFields) {
+                    validateSourceAndTargetTypes(mappingId, sourceField, targetField, validations);
                 }
             }
-        } else if (outputFields != null) { // TARGET
-            outputFields.forEach(outField -> validateField(mappingId, outField, FieldDirection.TARGET, validations));
+        } else if (targetFields != null) { // TARGET
+            for (Field targetField : targetFields) {
+                if (matchDocIdOrNull(targetField.getDocId())) {
+                    validateField(mappingId, targetField, FieldDirection.TARGET, validations);
+                }
+            }
         }
     }
 
@@ -300,6 +318,10 @@ public abstract class BaseModuleValidationService<T extends Field> implements At
                 validations.add(validation);
             }
         }
+    }
+
+    private boolean matchDocIdOrNull(String docId) {
+        return docId == null || getDocId().equals(docId);
     }
 
     @SuppressWarnings("unchecked")
