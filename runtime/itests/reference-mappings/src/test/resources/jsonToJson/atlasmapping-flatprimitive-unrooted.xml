@@ -35,7 +35,7 @@
         </Mapping>
         <Mapping xsi:type="Mapping" mappingType="Map">
             <InputField xsi:type="ns3:JsonField" path="/nullField" fieldType="String" />
-            <OutputField xsi:type="ns3:JsonField" path="/boxedStringField" />
+            <OutputField xsi:type="ns3:JsonField" path="/boxedStringField" fieldType="String" />
         </Mapping>
     </Mappings>
 </AtlasMapping>

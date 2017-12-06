@@ -76,9 +76,6 @@ public class IntegerConverter implements AtlasPrimitiveConverter<Integer> {
             throw new AtlasConversionException(String
                     .format("Integer %s is greater than Character.MAX_VALUE or less than Character.MIN_VALUE", value));
         }
-
-        final int radix = 10;
-        // return Character.forDigit(value.intValue(), radix);
         return Character.valueOf((char) value.intValue());
     }
 

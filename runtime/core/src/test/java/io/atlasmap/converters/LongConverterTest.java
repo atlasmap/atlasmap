@@ -58,10 +58,11 @@ public class LongConverterTest {
         assertNull(b);
     }
 
-    @Test(expected = AtlasConversionException.class)
-    public void convertToBooleanException() throws Exception {
+    @Test
+    public void convertToBooleanNegative() throws Exception {
         Long dt = -1L;
-        converter.convertToBoolean(dt);
+        Boolean b = converter.convertToBoolean(dt);
+        assertTrue(b);
     }
 
     @Test
