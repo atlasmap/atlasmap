@@ -50,12 +50,18 @@ public class ActionsJsonSerializer extends JsonSerializer<Actions> {
     protected void writeActionField(JsonGenerator gen, Action action) throws IOException {
 
         switch (action.getClass().getSimpleName()) {
+<<<<<<< c4b30f5503986f14c5fa837312c60e2da1e957da
 <<<<<<< 47ddb07e1b3541f5aea5c4007ff93368151f40bf
             case "Concatentate":
                 writeConcatenate(gen, (Concatenate) action);
                 break;
 =======
 >>>>>>> Issue #151: Implement Number-related p0 field actions
+=======
+            case "Concatentate":
+                writeConcatenate(gen, (Concatenate) action);
+                break;
+>>>>>>> Issue #153: Implement String-related p0 field actions
             case "ConvertAreaUnit":
                 writeConvertAreaUnit(gen, (ConvertAreaUnit) action);
                 break;
@@ -80,7 +86,10 @@ public class ActionsJsonSerializer extends JsonSerializer<Actions> {
             case "CustomAction":
                 writeCustomAction(gen, (CustomAction) action);
                 break;
+<<<<<<< c4b30f5503986f14c5fa837312c60e2da1e957da
 <<<<<<< 47ddb07e1b3541f5aea5c4007ff93368151f40bf
+=======
+>>>>>>> Issue #153: Implement String-related p0 field actions
             case "EndsWith":
                 writeEndsWith(gen, (EndsWith) action);
                 break;
@@ -93,15 +102,21 @@ public class ActionsJsonSerializer extends JsonSerializer<Actions> {
             case "LastIndexOf":
                 writeLastIndexOf(gen, (LastIndexOf) action);
                 break;
+<<<<<<< c4b30f5503986f14c5fa837312c60e2da1e957da
 =======
 >>>>>>> Issue #151: Implement Number-related p0 field actions
+=======
+>>>>>>> Issue #153: Implement String-related p0 field actions
             case "PadStringLeft":
                 writePadStringLeft(gen, (PadStringLeft) action);
                 break;
             case "PadStringRight":
                 writePadStringRight(gen, (PadStringRight) action);
                 break;
+<<<<<<< c4b30f5503986f14c5fa837312c60e2da1e957da
 <<<<<<< 47ddb07e1b3541f5aea5c4007ff93368151f40bf
+=======
+>>>>>>> Issue #153: Implement String-related p0 field actions
             case "ReplaceAll":
                 writeReplaceAll(gen, (ReplaceAll) action);
                 break;
@@ -110,10 +125,13 @@ public class ActionsJsonSerializer extends JsonSerializer<Actions> {
                 break;
             case "StartsWith":
                 writeStartsWith(gen, (StartsWith) action);
+<<<<<<< c4b30f5503986f14c5fa837312c60e2da1e957da
 =======
             case "Replace":
                 writeReplace(gen, (Replace) action);
 >>>>>>> Issue #151: Implement Number-related p0 field actions
+=======
+>>>>>>> Issue #153: Implement String-related p0 field actions
                 break;
             case "SubString":
                 writeSubString(gen, (SubString) action);

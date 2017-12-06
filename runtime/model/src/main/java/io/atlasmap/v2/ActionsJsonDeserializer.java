@@ -24,6 +24,7 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 
 public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
 
+<<<<<<< c4b30f5503986f14c5fa837312c60e2da1e957da
 <<<<<<< 47ddb07e1b3541f5aea5c4007ff93368151f40bf
     private static final String CLASS_NAME = "className";
     private static final String DATE_FORMAT = "dateFormat";
@@ -37,13 +38,23 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
     private static final String TEMPLATE = "template";
 =======
     private static final String START_INDEX = "startIndex";
-    private static final String END_INDEX = "endIndex";
-    private static final String MATCH = "match";
-    private static final String DATE_FORMAT = "dateFormat";
+=======
     private static final String CLASS_NAME = "className";
+    private static final String DATE_FORMAT = "dateFormat";
+    private static final String DELIMITER = "delimiter";
+>>>>>>> Issue #153: Implement String-related p0 field actions
+    private static final String END_INDEX = "endIndex";
+    private static final String FROM_UNIT = "fromUnit";
+    private static final String MATCH = "match";
     private static final String METHOD_NAME = "methodName";
+<<<<<<< c4b30f5503986f14c5fa837312c60e2da1e957da
     private static final String FROM_UNIT = "fromUnit";
 >>>>>>> Issue #151: Implement Number-related p0 field actions
+=======
+    private static final String START_INDEX = "startIndex";
+    private static final String STRING = "string";
+    private static final String TEMPLATE = "template";
+>>>>>>> Issue #153: Implement String-related p0 field actions
     private static final String TO_UNIT = "toUnit";
 
     @Override
@@ -91,11 +102,16 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
                 return new Capitalize();
             case "Ceiling":
                 return new Ceiling();
+<<<<<<< c4b30f5503986f14c5fa837312c60e2da1e957da
 <<<<<<< 47ddb07e1b3541f5aea5c4007ff93368151f40bf
             case "Concatentate":
                 return processConcatenateJsonToken(jsonToken);
 =======
 >>>>>>> Issue #151: Implement Number-related p0 field actions
+=======
+            case "Concatentate":
+                return processConcatenateJsonToken(jsonToken);
+>>>>>>> Issue #153: Implement String-related p0 field actions
             case "ConvertAreaUnit":
                 return processConvertAreaUnitJsonToken(jsonToken);
             case "ConvertDistanceUnit":
@@ -114,11 +130,15 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
                 return processCustomActionJsonToken(jsonToken);
             case "Divide":
                 return new Divide();
+<<<<<<< c4b30f5503986f14c5fa837312c60e2da1e957da
 <<<<<<< 47ddb07e1b3541f5aea5c4007ff93368151f40bf
+=======
+>>>>>>> Issue #153: Implement String-related p0 field actions
             case "EndsWith":
                 return processEndsWithJsonToken(jsonToken);
             case "FileExtension":
                 return new FileExtension();
+<<<<<<< c4b30f5503986f14c5fa837312c60e2da1e957da
             case "Floor":
                 return new Floor();
             case "Format":
@@ -132,17 +152,31 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
             case "Lowercase":
                 return new Lowercase();
 =======
+=======
+>>>>>>> Issue #153: Implement String-related p0 field actions
             case "Floor":
                 return new Floor();
+            case "Format":
+                return processFormatJsonToken(jsonToken);
             case "GenerateUUID":
                 return new GenerateUUID();
+<<<<<<< c4b30f5503986f14c5fa837312c60e2da1e957da
 >>>>>>> Issue #151: Implement Number-related p0 field actions
+=======
+            case "IndexOf":
+                return processIndexOfJsonToken(jsonToken);
+            case "LastIndexOf":
+                return processLastIndexOfJsonToken(jsonToken);
+            case "Lowercase":
+                return new Lowercase();
+>>>>>>> Issue #153: Implement String-related p0 field actions
             case "Maximum":
                 return new Maximum();
             case "Minimum":
                 return new Minimum();
             case "Multiply":
                 return new Multiply();
+<<<<<<< c4b30f5503986f14c5fa837312c60e2da1e957da
 <<<<<<< 47ddb07e1b3541f5aea5c4007ff93368151f40bf
             case "Normalize":
                 return new Normalize();
@@ -150,32 +184,47 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
             case "Lowercase":
                 return new Lowercase();
 >>>>>>> Issue #151: Implement Number-related p0 field actions
+=======
+            case "Normalize":
+                return new Normalize();
+>>>>>>> Issue #153: Implement String-related p0 field actions
             case "PadStringLeft":
                 return processPadStringLeftJsonToken(jsonToken);
             case "PadStringRight":
                 return processPadStringRightJsonToken(jsonToken);
+<<<<<<< c4b30f5503986f14c5fa837312c60e2da1e957da
 <<<<<<< 47ddb07e1b3541f5aea5c4007ff93368151f40bf
+=======
+>>>>>>> Issue #153: Implement String-related p0 field actions
             case "RemoveFileExtension":
                 return new RemoveFileExtension();
             case "ReplaceAll":
                 return processReplaceAllJsonToken(jsonToken);
             case "ReplaceFirst":
                 return processReplaceFirstJsonToken(jsonToken);
+<<<<<<< c4b30f5503986f14c5fa837312c60e2da1e957da
 =======
             case "Replace":
                 return processReplaceJsonToken(jsonToken);
 >>>>>>> Issue #151: Implement Number-related p0 field actions
+=======
+>>>>>>> Issue #153: Implement String-related p0 field actions
             case "Round":
                 return new Round();
             case "SeparateByDash":
                 return new SeparateByDash();
             case "SeparateByUnderscore":
                 return new SeparateByUnderscore();
+<<<<<<< c4b30f5503986f14c5fa837312c60e2da1e957da
 <<<<<<< 47ddb07e1b3541f5aea5c4007ff93368151f40bf
             case "StartsWith":
                 return processStartsWithJsonToken(jsonToken);
 =======
 >>>>>>> Issue #151: Implement Number-related p0 field actions
+=======
+            case "StartsWith":
+                return processStartsWithJsonToken(jsonToken);
+>>>>>>> Issue #153: Implement String-related p0 field actions
             case "StringLength":
                 return new StringLength();
             case "SubString":
@@ -244,6 +293,7 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
                 jsonToken.nextToken();
             }
             switch (jsonToken.getCurrentName()) {
+<<<<<<< c4b30f5503986f14c5fa837312c60e2da1e957da
 <<<<<<< 47ddb07e1b3541f5aea5c4007ff93368151f40bf
             case FROM_UNIT:
 =======
@@ -257,6 +307,13 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
 =======
             case END_INDEX:
 >>>>>>> Issue #151: Implement Number-related p0 field actions
+=======
+            case FROM_UNIT:
+                jsonToken.nextToken();
+                action.setFromUnit(AreaUnitType.fromValue(jsonToken.getValueAsString()));
+                break;
+            case TO_UNIT:
+>>>>>>> Issue #153: Implement String-related p0 field actions
                 jsonToken.nextToken();
                 action.setToUnit(AreaUnitType.fromValue(jsonToken.getValueAsString()));
                 break;
@@ -285,6 +342,7 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
                 jsonToken.nextToken();
             }
             switch (jsonToken.getCurrentName()) {
+<<<<<<< c4b30f5503986f14c5fa837312c60e2da1e957da
 <<<<<<< 47ddb07e1b3541f5aea5c4007ff93368151f40bf
             case FROM_UNIT:
 =======
@@ -302,6 +360,13 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
 =======
             case MATCH:
 >>>>>>> Issue #151: Implement Number-related p0 field actions
+=======
+            case FROM_UNIT:
+                jsonToken.nextToken();
+                action.setFromUnit(DistanceUnitType.fromValue(jsonToken.getValueAsString()));
+                break;
+            case TO_UNIT:
+>>>>>>> Issue #153: Implement String-related p0 field actions
                 jsonToken.nextToken();
                 action.setToUnit(DistanceUnitType.fromValue(jsonToken.getValueAsString()));
                 break;
@@ -330,6 +395,7 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
                 jsonToken.nextToken();
             }
             switch (jsonToken.getCurrentName()) {
+<<<<<<< c4b30f5503986f14c5fa837312c60e2da1e957da
 <<<<<<< 47ddb07e1b3541f5aea5c4007ff93368151f40bf
             case FROM_UNIT:
                 jsonToken.nextToken();
@@ -342,11 +408,18 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
                 action.setStartIndex(jsonToken.getIntValue());
                 break;
             case END_INDEX:
+=======
+            case FROM_UNIT:
+>>>>>>> Issue #153: Implement String-related p0 field actions
                 jsonToken.nextToken();
-                action.setEndIndex(jsonToken.getIntValue());
+                action.setFromUnit(MassUnitType.fromValue(jsonToken.getValueAsString()));
                 break;
+<<<<<<< c4b30f5503986f14c5fa837312c60e2da1e957da
             case MATCH:
 >>>>>>> Issue #151: Implement Number-related p0 field actions
+=======
+            case TO_UNIT:
+>>>>>>> Issue #153: Implement String-related p0 field actions
                 jsonToken.nextToken();
                 action.setToUnit(MassUnitType.fromValue(jsonToken.getValueAsString()));
                 break;
@@ -357,6 +430,7 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
             nextToken = jsonToken.nextToken();
         } while (!JsonToken.END_ARRAY.equals(nextToken) && !JsonToken.END_OBJECT.equals(nextToken));
 
+<<<<<<< c4b30f5503986f14c5fa837312c60e2da1e957da
         return action;
 
     }
@@ -369,9 +443,26 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
             return action;
         }
 
+=======
+>>>>>>> Issue #153: Implement String-related p0 field actions
+        return action;
+
+    }
+
+<<<<<<< c4b30f5503986f14c5fa837312c60e2da1e957da
+=======
+    protected ConvertVolumeUnit processConvertVolumeUnitJsonToken(JsonParser jsonToken) {
+        ConvertVolumeUnit action = new ConvertVolumeUnit();
+
+        if (JsonToken.END_ARRAY.equals(jsonToken.currentToken())
+                || JsonToken.END_OBJECT.equals(jsonToken.currentToken())) {
+            return action;
+        }
+
         return action;
     }
 
+>>>>>>> Issue #153: Implement String-related p0 field actions
     protected CurrentDate processCurrentDateJsonToken(JsonParser jsonToken) throws IOException {
         CurrentDate action = new CurrentDate();
 
@@ -467,11 +558,15 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
                 jsonToken.nextToken();
             }
             switch (jsonToken.getCurrentName()) {
+<<<<<<< c4b30f5503986f14c5fa837312c60e2da1e957da
 <<<<<<< 47ddb07e1b3541f5aea5c4007ff93368151f40bf
             case CLASS_NAME:
 =======
             case DATE_FORMAT:
 >>>>>>> Issue #151: Implement Number-related p0 field actions
+=======
+            case CLASS_NAME:
+>>>>>>> Issue #153: Implement String-related p0 field actions
                 jsonToken.nextToken();
                 action.setClassName(jsonToken.getValueAsString());
                 break;
@@ -502,7 +597,10 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
                 jsonToken.nextToken();
             }
             switch (jsonToken.getCurrentName()) {
+<<<<<<< c4b30f5503986f14c5fa837312c60e2da1e957da
 <<<<<<< 47ddb07e1b3541f5aea5c4007ff93368151f40bf
+=======
+>>>>>>> Issue #153: Implement String-related p0 field actions
                 case STRING:
                     jsonToken.nextToken();
                     action.setString(jsonToken.getValueAsString());
@@ -527,9 +625,12 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
         JsonToken nextToken = null;
         do {
             if (JsonToken.START_OBJECT.equals(jsonToken.currentToken())) {
+<<<<<<< c4b30f5503986f14c5fa837312c60e2da1e957da
 =======
             case DATE_FORMAT:
 >>>>>>> Issue #151: Implement Number-related p0 field actions
+=======
+>>>>>>> Issue #153: Implement String-related p0 field actions
                 jsonToken.nextToken();
             }
             switch (jsonToken.getCurrentName()) {
@@ -587,7 +688,10 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
                 jsonToken.nextToken();
             }
             switch (jsonToken.getCurrentName()) {
+<<<<<<< c4b30f5503986f14c5fa837312c60e2da1e957da
 <<<<<<< 47ddb07e1b3541f5aea5c4007ff93368151f40bf
+=======
+>>>>>>> Issue #153: Implement String-related p0 field actions
                 case STRING:
                     jsonToken.nextToken();
                     action.setString(jsonToken.getValueAsString());
@@ -612,9 +716,12 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
         JsonToken nextToken = null;
         do {
             if (JsonToken.START_OBJECT.equals(jsonToken.currentToken())) {
+<<<<<<< c4b30f5503986f14c5fa837312c60e2da1e957da
 =======
             case CLASS_NAME:
 >>>>>>> Issue #151: Implement Number-related p0 field actions
+=======
+>>>>>>> Issue #153: Implement String-related p0 field actions
                 jsonToken.nextToken();
             }
             switch (jsonToken.getCurrentName()) {
@@ -622,7 +729,10 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
                 jsonToken.nextToken();
                 action.setPadCharacter(jsonToken.getValueAsString());
                 break;
+<<<<<<< c4b30f5503986f14c5fa837312c60e2da1e957da
 <<<<<<< 47ddb07e1b3541f5aea5c4007ff93368151f40bf
+=======
+>>>>>>> Issue #153: Implement String-related p0 field actions
             case "padCount":
                 jsonToken.nextToken();
                 action.setPadCount(jsonToken.getIntValue());
@@ -655,6 +765,7 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
                 action.setPadCharacter(jsonToken.getValueAsString());
                 break;
             case "padCount":
+<<<<<<< c4b30f5503986f14c5fa837312c60e2da1e957da
                 jsonToken.nextToken();
                 action.setPadCount(jsonToken.getIntValue());
 =======
@@ -662,6 +773,10 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
                 jsonToken.nextToken();
                 action.setMethodName(jsonToken.getValueAsString());
 >>>>>>> Issue #151: Implement Number-related p0 field actions
+=======
+                jsonToken.nextToken();
+                action.setPadCount(jsonToken.getIntValue());
+>>>>>>> Issue #153: Implement String-related p0 field actions
                 break;
             default:
                 break;
@@ -741,9 +856,109 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
         return action;
     }
 
+<<<<<<< c4b30f5503986f14c5fa837312c60e2da1e957da
     protected ConvertVolumeUnit processConvertVolumeUnitJsonToken(JsonParser jsonToken) {
         ConvertVolumeUnit action = new ConvertVolumeUnit();
 >>>>>>> Issue #151: Implement Number-related p0 field actions
+=======
+    protected ReplaceAll processReplaceAllJsonToken(JsonParser jsonToken) throws IOException {
+        ReplaceAll action = new ReplaceAll();
+>>>>>>> Issue #153: Implement String-related p0 field actions
+
+        if (JsonToken.END_ARRAY.equals(jsonToken.currentToken())
+                || JsonToken.END_OBJECT.equals(jsonToken.currentToken())) {
+            return action;
+        }
+
+        JsonToken nextToken = null;
+        do {
+            if (JsonToken.START_OBJECT.equals(jsonToken.currentToken())) {
+                jsonToken.nextToken();
+            }
+            switch (jsonToken.getCurrentName()) {
+<<<<<<< c4b30f5503986f14c5fa837312c60e2da1e957da
+                case STRING:
+                    jsonToken.nextToken();
+                    action.setString(jsonToken.getValueAsString());
+=======
+                case "oldString":
+                    jsonToken.nextToken();
+                    action.setOldString(jsonToken.getValueAsString());
+                    break;
+                case "newString":
+                    jsonToken.nextToken();
+                    action.setNewString(jsonToken.getValueAsString());
+>>>>>>> Issue #153: Implement String-related p0 field actions
+                    break;
+                default:
+                    break;
+            }
+
+            nextToken = jsonToken.nextToken();
+        } while (!JsonToken.END_ARRAY.equals(nextToken) && !JsonToken.END_OBJECT.equals(nextToken));
+        return action;
+    }
+
+<<<<<<< c4b30f5503986f14c5fa837312c60e2da1e957da
+    protected SubStringAfter processSubStringAfterJsonToken(JsonParser jsonToken) throws IOException {
+        SubStringAfter action = new SubStringAfter();
+=======
+    protected ReplaceFirst processReplaceFirstJsonToken(JsonParser jsonToken) throws IOException {
+        ReplaceFirst action = new ReplaceFirst();
+>>>>>>> Issue #153: Implement String-related p0 field actions
+
+        if (JsonToken.END_ARRAY.equals(jsonToken.currentToken())
+                || JsonToken.END_OBJECT.equals(jsonToken.currentToken())) {
+            return action;
+        }
+
+        JsonToken nextToken = null;
+        do {
+            if (JsonToken.START_OBJECT.equals(jsonToken.currentToken())) {
+                jsonToken.nextToken();
+            }
+            switch (jsonToken.getCurrentName()) {
+<<<<<<< c4b30f5503986f14c5fa837312c60e2da1e957da
+<<<<<<< 47ddb07e1b3541f5aea5c4007ff93368151f40bf
+            case START_INDEX:
+=======
+            case FROM_UNIT:
+>>>>>>> Issue #151: Implement Number-related p0 field actions
+                jsonToken.nextToken();
+                action.setStartIndex(jsonToken.getIntValue());
+                break;
+<<<<<<< 47ddb07e1b3541f5aea5c4007ff93368151f40bf
+            case END_INDEX:
+=======
+            case TO_UNIT:
+>>>>>>> Issue #151: Implement Number-related p0 field actions
+                jsonToken.nextToken();
+                action.setEndIndex(jsonToken.getIntValue());
+                break;
+            case MATCH:
+                jsonToken.nextToken();
+                action.setMatch(jsonToken.getValueAsString());
+                break;
+=======
+                case "oldString":
+                    jsonToken.nextToken();
+                    action.setOldString(jsonToken.getValueAsString());
+                    break;
+                case "newString":
+                    jsonToken.nextToken();
+                    action.setNewString(jsonToken.getValueAsString());
+                    break;
+                default:
+                    break;
+            }
+
+            nextToken = jsonToken.nextToken();
+        } while (!JsonToken.END_ARRAY.equals(nextToken) && !JsonToken.END_OBJECT.equals(nextToken));
+        return action;
+    }
+
+    protected StartsWith processStartsWithJsonToken(JsonParser jsonToken) throws IOException {
+        StartsWith action = new StartsWith();
 
         if (JsonToken.END_ARRAY.equals(jsonToken.currentToken())
                 || JsonToken.END_OBJECT.equals(jsonToken.currentToken())) {
@@ -783,19 +998,11 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
                 jsonToken.nextToken();
             }
             switch (jsonToken.getCurrentName()) {
-<<<<<<< 47ddb07e1b3541f5aea5c4007ff93368151f40bf
             case START_INDEX:
-=======
-            case FROM_UNIT:
->>>>>>> Issue #151: Implement Number-related p0 field actions
                 jsonToken.nextToken();
                 action.setStartIndex(jsonToken.getIntValue());
                 break;
-<<<<<<< 47ddb07e1b3541f5aea5c4007ff93368151f40bf
             case END_INDEX:
-=======
-            case TO_UNIT:
->>>>>>> Issue #151: Implement Number-related p0 field actions
                 jsonToken.nextToken();
                 action.setEndIndex(jsonToken.getIntValue());
                 break;
@@ -803,6 +1010,7 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
                 jsonToken.nextToken();
                 action.setMatch(jsonToken.getValueAsString());
                 break;
+>>>>>>> Issue #153: Implement String-related p0 field actions
 
             default:
                 break;
@@ -827,6 +1035,7 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
                 jsonToken.nextToken();
             }
             switch (jsonToken.getCurrentName()) {
+<<<<<<< c4b30f5503986f14c5fa837312c60e2da1e957da
 <<<<<<< 47ddb07e1b3541f5aea5c4007ff93368151f40bf
             case START_INDEX:
 =======
@@ -840,6 +1049,13 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
 =======
             case TO_UNIT:
 >>>>>>> Issue #151: Implement Number-related p0 field actions
+=======
+            case START_INDEX:
+                jsonToken.nextToken();
+                action.setStartIndex(jsonToken.getIntValue());
+                break;
+            case END_INDEX:
+>>>>>>> Issue #153: Implement String-related p0 field actions
                 jsonToken.nextToken();
                 action.setEndIndex(jsonToken.getIntValue());
                 break;
@@ -871,6 +1087,7 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
                 jsonToken.nextToken();
             }
             switch (jsonToken.getCurrentName()) {
+<<<<<<< c4b30f5503986f14c5fa837312c60e2da1e957da
 <<<<<<< 47ddb07e1b3541f5aea5c4007ff93368151f40bf
             case START_INDEX:
 =======
@@ -884,6 +1101,13 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
 =======
             case TO_UNIT:
 >>>>>>> Issue #151: Implement Number-related p0 field actions
+=======
+            case START_INDEX:
+                jsonToken.nextToken();
+                action.setStartIndex(jsonToken.getIntValue());
+                break;
+            case END_INDEX:
+>>>>>>> Issue #153: Implement String-related p0 field actions
                 jsonToken.nextToken();
                 action.setEndIndex(jsonToken.getIntValue());
                 break;
