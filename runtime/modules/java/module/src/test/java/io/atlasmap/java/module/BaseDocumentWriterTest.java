@@ -6,8 +6,8 @@ import java.util.List;
 import org.junit.Before;
 
 import io.atlasmap.api.AtlasException;
-import io.atlasmap.core.PathUtil;
-import io.atlasmap.core.PathUtil.SegmentContext;
+import io.atlasmap.core.AtlasPath;
+import io.atlasmap.core.AtlasPath.SegmentContext;
 import io.atlasmap.java.module.DocumentJavaFieldWriter.JavaFieldWriterValueConverter;
 import io.atlasmap.java.test.BaseOrder;
 import io.atlasmap.java.test.TargetAddress;
@@ -63,7 +63,7 @@ public abstract class BaseDocumentWriterTest {
     }
 
     public void setupPath(String fieldPath) {
-        this.segmentContexts = new PathUtil(fieldPath).getSegmentContexts(true);
+        this.segmentContexts = new AtlasPath(fieldPath).getSegmentContexts(true);
         for (SegmentContext ctx : this.segmentContexts) {
             writer.addClassForFieldPath(ctx.getSegmentPath(), String.class);
         }

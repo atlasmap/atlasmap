@@ -22,7 +22,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import io.atlasmap.api.AtlasException;
-import io.atlasmap.core.PathUtil;
+import io.atlasmap.core.AtlasPath;
 
 public class ClassHelper {
 
@@ -135,7 +135,7 @@ public class ClassHelper {
                 clazz.getName(), methodName, paramTypeClassName));
     }
 
-    public static Object parentObjectForPath(Object targetObject, PathUtil pathUtil, boolean skipCollectionWrapper)
+    public static Object parentObjectForPath(Object targetObject, AtlasPath pathUtil, boolean skipCollectionWrapper)
             throws AtlasException {
         try {
             if (targetObject == null) {
@@ -151,14 +151,14 @@ public class ClassHelper {
             }
 
             Object parentObject = targetObject;
-            PathUtil parentPath = pathUtil.getLastSegmentParentPath();
+            AtlasPath parentPath = pathUtil.getLastSegmentParentPath();
 
             if (parentPath == null) {
                 parentPath = pathUtil;
             }
 
             for (String segment : parentPath.getSegments()) {
-                List<String> getters = getterMethodNames(PathUtil.cleanPathSegment(segment));
+                List<String> getters = getterMethodNames(AtlasPath.cleanPathSegment(segment));
                 Method getterMethod = null;
                 for (String getter : getters) {
                     try {
@@ -177,11 +177,11 @@ public class ClassHelper {
                 parentObject = getterMethod.invoke(parentObject);
 
                 if (skipCollectionWrapper) {
-                    if (PathUtil.isListSegment(segment) && pathUtil.isIndexedCollection()) {
-                        int index = PathUtil.indexOfSegment(segment);
+                    if (AtlasPath.isListSegment(segment) && pathUtil.isIndexedCollection()) {
+                        int index = AtlasPath.indexOfSegment(segment);
                         parentObject = ((List<?>) parentObject).get(index);
-                    } else if (PathUtil.isArraySegment(segment)) {
-                        int index = PathUtil.indexOfSegment(segment);
+                    } else if (AtlasPath.isArraySegment(segment)) {
+                        int index = AtlasPath.indexOfSegment(segment);
                         parentObject = Array.get(parentObject, index);
                     }
                 }

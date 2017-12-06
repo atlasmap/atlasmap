@@ -11,8 +11,8 @@ import org.slf4j.LoggerFactory;
 
 import io.atlasmap.api.AtlasConversionService;
 import io.atlasmap.api.AtlasException;
-import io.atlasmap.core.PathUtil;
-import io.atlasmap.core.PathUtil.SegmentContext;
+import io.atlasmap.core.AtlasPath;
+import io.atlasmap.core.AtlasPath.SegmentContext;
 import io.atlasmap.java.inspect.ClassHelper;
 import io.atlasmap.java.inspect.JdkPackages;
 import io.atlasmap.java.inspect.StringUtil;
@@ -45,8 +45,8 @@ public class JavaWriterUtil {
                 throw new AtlasException("Cannot instantiate object, class is abstract: " + clz.getName()
                         + ", segment: " + segmentContext);
             }
-            if (createWrapperArray && PathUtil.isArraySegment(segmentContext.getSegment())) {
-                int size = PathUtil.indexOfSegment(segmentContext.getSegment()) + 1;
+            if (createWrapperArray && AtlasPath.isArraySegment(segmentContext.getSegment())) {
+                int size = AtlasPath.indexOfSegment(segmentContext.getSegment()) + 1;
                 if (LOG.isDebugEnabled()) {
                     LOG.debug("Instantiating array of size " + size + " for class '" + clz.getName() + "', segment: "
                             + segmentContext);
@@ -91,7 +91,7 @@ public class JavaWriterUtil {
 
         // clean up our segment from something like "@addressLine1" to "addressLine1".
         // collection segments like "orders[4]" will be cleaned to "orders"
-        String cleanedSegment = PathUtil.cleanPathSegment(segmentContext.getSegment());
+        String cleanedSegment = AtlasPath.cleanPathSegment(segmentContext.getSegment());
 
         // FIXME: this doesn't work if there isn't a getter but there is a private
         // member variable
@@ -159,7 +159,7 @@ public class JavaWriterUtil {
                     + "\n\tparentObject: " + parentObject);
         }
 
-        PathUtil pathUtil = new PathUtil(javaField.getPath());
+        AtlasPath pathUtil = new AtlasPath(javaField.getPath());
 
         try {
             Class<?> childClass = childObject == null ? null : childObject.getClass();
@@ -198,7 +198,7 @@ public class JavaWriterUtil {
 
     protected Method resolveSetMethod(Object sourceObject, SegmentContext segmentContext, Class<?> targetType)
             throws NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
-        String setterMethodName = "set" + capitalizeFirstLetter(PathUtil.cleanPathSegment(segmentContext.getSegment()));
+        String setterMethodName = "set" + capitalizeFirstLetter(AtlasPath.cleanPathSegment(segmentContext.getSegment()));
 
         List<Class<?>> classTree = resolveMappableClasses(sourceObject.getClass());
 

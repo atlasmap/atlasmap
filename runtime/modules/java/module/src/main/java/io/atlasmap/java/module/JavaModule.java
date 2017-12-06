@@ -30,10 +30,10 @@ import io.atlasmap.api.AtlasException;
 import io.atlasmap.api.AtlasSession;
 import io.atlasmap.api.AtlasValidationException;
 import io.atlasmap.core.AtlasModuleSupport;
+import io.atlasmap.core.AtlasPath;
 import io.atlasmap.core.AtlasUtil;
 import io.atlasmap.core.BaseAtlasModule;
 import io.atlasmap.core.DefaultAtlasContextFactory;
-import io.atlasmap.core.PathUtil;
 import io.atlasmap.java.inspect.ClassHelper;
 import io.atlasmap.java.inspect.ClassInspectionService;
 import io.atlasmap.java.inspect.ConstructException;
@@ -232,7 +232,7 @@ public class JavaModule extends BaseAtlasModule {
     protected void populateSourceFieldValue(Field field, Object source, Method m) throws Exception {
         Method getter = m;
         Object parentObject = source;
-        PathUtil pathUtil = new PathUtil(field.getPath());
+        AtlasPath pathUtil = new AtlasPath(field.getPath());
         if (pathUtil.hasParent()) {
             parentObject = ClassHelper.parentObjectForPath(source, pathUtil, true);
         }
@@ -435,7 +435,7 @@ public class JavaModule extends BaseAtlasModule {
     protected static Method resolveGetMethod(Object sourceObject, Field field, boolean objectIsParent)
             throws AtlasException {
         Object parentObject = sourceObject;
-        PathUtil pathUtil = new PathUtil(field.getPath());
+        AtlasPath pathUtil = new AtlasPath(field.getPath());
         Method getter = null;
 
         if (pathUtil.hasParent() && !objectIsParent) {
@@ -474,7 +474,7 @@ public class JavaModule extends BaseAtlasModule {
 
     protected Method resolveInputSetMethod(Object sourceObject, JavaField javaField, Class<?> targetType)
             throws AtlasException {
-        PathUtil pathUtil = new PathUtil(javaField.getPath());
+        AtlasPath pathUtil = new AtlasPath(javaField.getPath());
         Object parentObject = sourceObject;
 
         if (pathUtil.hasParent()) {
@@ -608,7 +608,7 @@ public class JavaModule extends BaseAtlasModule {
             sourceObject = session.getInput(field.getDocId());
         }
 
-        Object collectionObject = ClassHelper.parentObjectForPath(sourceObject, new PathUtil(field.getPath()), false);
+        Object collectionObject = ClassHelper.parentObjectForPath(sourceObject, new AtlasPath(field.getPath()), false);
         if (collectionObject == null) {
             throw new AtlasException(String.format("Cannot find collection on sourceObject %s for path: %s",
                     sourceObject.getClass().getName(), field.getPath()));

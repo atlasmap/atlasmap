@@ -12,7 +12,7 @@ import com.fasterxml.jackson.databind.node.JsonNodeType;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import io.atlasmap.api.AtlasException;
-import io.atlasmap.core.PathUtil;
+import io.atlasmap.core.AtlasPath;
 import io.atlasmap.v2.AtlasModelFactory;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldType;
@@ -52,7 +52,7 @@ public class JsonFieldWriter {
             LOG.debug("Field: " + AtlasModelFactory.toString(field));
             LOG.debug("Field type=" + field.getFieldType() + " path=" + field.getPath() + " v=" + field.getValue());
         }
-        PathUtil path = new PathUtil(field.getPath());
+        AtlasPath path = new AtlasPath(field.getPath());
         String lastSegment = path.getLastSegment();
         ObjectNode parentNode = this.rootNode;
         String parentSegment = null;
@@ -65,7 +65,7 @@ public class JsonFieldWriter {
                 if (childNode == null) {
                     childNode = createParentNode(parentNode, parentSegment, segment);
                 } else if (childNode instanceof ArrayNode) {
-                    int index = PathUtil.indexOfSegment(segment);
+                    int index = AtlasPath.indexOfSegment(segment);
                     ArrayNode arrayChild = (ArrayNode) childNode;
                     if (arrayChild.size() < (index + 1)) {
                         if (LOG.isDebugEnabled()) {
@@ -104,8 +104,8 @@ public class JsonFieldWriter {
         if (LOG.isDebugEnabled()) {
             LOG.debug("Value to write: " + valueNode);
         }
-        String cleanedSegment = PathUtil.cleanPathSegment(segment);
-        if (PathUtil.isCollectionSegment(segment)) {
+        String cleanedSegment = AtlasPath.cleanPathSegment(segment);
+        if (AtlasPath.isCollectionSegment(segment)) {
             // if this field is a collection, we need to place our value in an array
 
             // get or construct the array the value will be placed in
@@ -127,7 +127,7 @@ public class JsonFieldWriter {
             }
 
             // determine where in the array our value will go
-            int index = PathUtil.indexOfSegment(segment);
+            int index = AtlasPath.indexOfSegment(segment);
 
             if (arrayChild.size() < (index + 1)) {
                 if (LOG.isDebugEnabled()) {
@@ -160,7 +160,7 @@ public class JsonFieldWriter {
         if (LOG.isDebugEnabled()) {
             LOG.debug("Looking for child node '" + segment + "' in parent '" + parentSegment + "': " + parentNode);
         }
-        String cleanedSegment = PathUtil.cleanPathSegment(segment);
+        String cleanedSegment = AtlasPath.cleanPathSegment(segment);
         JsonNode childNode = parentNode.path(cleanedSegment);
         if (JsonNodeType.MISSING.equals(childNode.getNodeType())) {
             childNode = null;
@@ -182,10 +182,10 @@ public class JsonFieldWriter {
                     + parentNode.getClass().getName() + ")");
         }
         ObjectNode childNode = null;
-        String cleanedSegment = PathUtil.cleanPathSegment(segment);
-        if (PathUtil.isCollectionSegment(segment)) {
+        String cleanedSegment = AtlasPath.cleanPathSegment(segment);
+        if (AtlasPath.isCollectionSegment(segment)) {
             ArrayNode arrayChild = parentNode.putArray(cleanedSegment);
-            int index = PathUtil.indexOfSegment(segment);
+            int index = AtlasPath.indexOfSegment(segment);
 
             if (arrayChild.size() < (index + 1)) {
                 if (LOG.isDebugEnabled()) {

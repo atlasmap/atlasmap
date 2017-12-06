@@ -11,7 +11,7 @@ import io.atlasmap.api.AtlasConversionService;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.api.AtlasFieldActionService;
 import io.atlasmap.api.AtlasSession;
-import io.atlasmap.core.PathUtil;
+import io.atlasmap.core.AtlasPath;
 import io.atlasmap.java.inspect.ClassHelper;
 import io.atlasmap.java.module.DocumentJavaFieldWriter.JavaFieldWriterValueConverter;
 import io.atlasmap.java.v2.JavaEnumField;
@@ -168,7 +168,7 @@ public class OutputValueConverter implements JavaFieldWriterValueConverter {
     protected Method resolveOutputSetMethod(Object sourceObject, Field field, Class<?> targetType)
             throws AtlasException {
 
-        PathUtil pathUtil = new PathUtil(field.getPath());
+        AtlasPath pathUtil = new AtlasPath(field.getPath());
         Object parentObject = sourceObject;
 
         List<Class<?>> classTree = JavaModule.resolveMappableClasses(parentObject.getClass());

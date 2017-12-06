@@ -24,6 +24,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.atlasmap.api.AtlasException;
+import io.atlasmap.core.AtlasPath;
 import io.atlasmap.json.v2.JsonField;
 import io.atlasmap.v2.CollectionType;
 import io.atlasmap.v2.FieldType;
@@ -57,13 +58,9 @@ public class JsonFieldReader {
         }
 
         JsonNode valueNode = null;
-        String path = jsonField.getPath();
-        if (path.startsWith("/")) {
-            path = path.substring(1);
-        }
-        String[] nodes = path.split("/");
-        if (nodes.length >= 1) {
-            if (rootNode.size() == 1 && !nodes[0].startsWith(rootNode.fieldNames().next())) {
+        AtlasPath path = new AtlasPath(jsonField.getPath());
+        if (path.getSegments().size() >= 1) {
+            if (rootNode.size() == 1 && !path.getSegments().get(0).startsWith(rootNode.fieldNames().next())) {
                 // peel off a rooted object
                 valueNode = rootNode.elements().next();
             } else {
@@ -71,7 +68,7 @@ public class JsonFieldReader {
             }
 
             // need to walk the path....
-            for (String nodeName : nodes) {
+            for (String nodeName : path.getSegments()) {
                 if (valueNode == null) {
                     break;
                 }

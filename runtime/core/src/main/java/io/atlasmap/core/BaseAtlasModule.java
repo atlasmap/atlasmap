@@ -111,7 +111,7 @@ public abstract class BaseAtlasModule implements AtlasModule {
         for (BaseMapping m : ((Collection) baseMapping).getMappings().getMapping()) {
             Mapping mapping = (Mapping) m;
             Field inputField = mapping.getInputField().get(0);
-            boolean inputIsCollection = PathUtil.isCollection(inputField.getPath());
+            boolean inputIsCollection = AtlasPath.isCollection(inputField.getPath());
             if (!inputIsCollection) {
                 // this is a input non-collection to output collection, ie: contact.firstName ->
                 // contact[].firstName
@@ -127,7 +127,7 @@ public abstract class BaseAtlasModule implements AtlasModule {
                 // which will cause at least one
                 // output object to be created for our copied firstName value
                 for (Field f : mapping.getOutputField()) {
-                    f.setPath(PathUtil.overwriteCollectionIndex(f.getPath(), 0));
+                    f.setPath(AtlasPath.overwriteCollectionIndex(f.getPath(), 0));
                 }
                 mappings.add(mapping);
                 continue;
@@ -142,13 +142,13 @@ public abstract class BaseAtlasModule implements AtlasModule {
                 Mapping cloneMapping = (Mapping) AtlasModelFactory.cloneMapping(mapping, false);
                 for (Field f : mapping.getInputField()) {
                     Field clonedField = cloneField(f);
-                    clonedField.setPath(PathUtil.overwriteCollectionIndex(clonedField.getPath(), i));
+                    clonedField.setPath(AtlasPath.overwriteCollectionIndex(clonedField.getPath(), i));
                     cloneMapping.getInputField().add(clonedField);
                 }
                 for (Field f : mapping.getOutputField()) {
                     Field clonedField = cloneField(f);
-                    if (PathUtil.isCollection(clonedField.getPath())) {
-                        clonedField.setPath(PathUtil.overwriteCollectionIndex(clonedField.getPath(), i));
+                    if (AtlasPath.isCollection(clonedField.getPath())) {
+                        clonedField.setPath(AtlasPath.overwriteCollectionIndex(clonedField.getPath(), i));
                     }
                     cloneMapping.getOutputField().add(clonedField);
                 }
