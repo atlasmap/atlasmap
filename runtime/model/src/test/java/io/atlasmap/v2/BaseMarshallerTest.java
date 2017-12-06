@@ -219,7 +219,7 @@ public abstract class BaseMarshallerTest {
                 if (a instanceof SeparateByUnderscore) {
                     i++;
                 }
-                if (a instanceof StringLength) {
+                if (a instanceof Length) {
                     i++;
                 }
                 if (a instanceof Trim) {

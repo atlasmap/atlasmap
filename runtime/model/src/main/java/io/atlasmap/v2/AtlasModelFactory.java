@@ -192,14 +192,20 @@ public class AtlasModelFactory {
         if (action instanceof Ceiling) {
             return new Ceiling();
         }
+<<<<<<< c4b30f5503986f14c5fa837312c60e2da1e957da
 <<<<<<< 47ddb07e1b3541f5aea5c4007ff93368151f40bf
+=======
+>>>>>>> Issue #153: Implement String-related p0 field actions
         if (action instanceof Concatenate) {
             Concatenate concat = new Concatenate();
             concat.setDelimiter(((Concatenate) action).getDelimiter());
             return concat;
         }
+<<<<<<< c4b30f5503986f14c5fa837312c60e2da1e957da
 =======
 >>>>>>> Issue #151: Implement Number-related p0 field actions
+=======
+>>>>>>> Issue #153: Implement String-related p0 field actions
         if (action instanceof ConvertAreaUnit) {
             ConvertAreaUnit cau = new ConvertAreaUnit();
             cau.setFromUnit(((ConvertAreaUnit) action).getFromUnit());
@@ -252,7 +258,10 @@ public class AtlasModelFactory {
         if (action instanceof Divide) {
             return new Divide();
         }
+<<<<<<< c4b30f5503986f14c5fa837312c60e2da1e957da
 <<<<<<< 47ddb07e1b3541f5aea5c4007ff93368151f40bf
+=======
+>>>>>>> Issue #153: Implement String-related p0 field actions
         if (action instanceof EndsWith) {
             EndsWith endsWith = new EndsWith();
             endsWith.setString(((EndsWith) action).getString());
@@ -266,8 +275,11 @@ public class AtlasModelFactory {
         if (action instanceof FileExtension) {
             return new FileExtension();
         }
+<<<<<<< c4b30f5503986f14c5fa837312c60e2da1e957da
 =======
 >>>>>>> Issue #151: Implement Number-related p0 field actions
+=======
+>>>>>>> Issue #153: Implement String-related p0 field actions
         if (action instanceof Floor) {
             return new Floor();
         }
@@ -296,12 +308,18 @@ public class AtlasModelFactory {
         if (action instanceof Multiply) {
             return new Multiply();
         }
+<<<<<<< c4b30f5503986f14c5fa837312c60e2da1e957da
 <<<<<<< 47ddb07e1b3541f5aea5c4007ff93368151f40bf
         if (action instanceof Normalize) {
             return new Normalize();
         }
 =======
 >>>>>>> Issue #151: Implement Number-related p0 field actions
+=======
+        if (action instanceof Normalize) {
+            return new Normalize();
+        }
+>>>>>>> Issue #153: Implement String-related p0 field actions
         if (action instanceof PadStringLeft) {
             PadStringLeft a = new PadStringLeft();
             if (((PadStringLeft) action).getPadCharacter() != null) {
@@ -347,14 +365,32 @@ public class AtlasModelFactory {
             }
             return a;
         }
-        if (action instanceof Replace) {
-            Replace a = new Replace();
-            if (((Replace) action).getOldString() != null) {
-                a.setOldString(((Replace) action).getOldString());
+        if (action instanceof RemoveFileExtension) {
+            return new RemoveFileExtension();
+        }
+        if (action instanceof ReplaceAll) {
+            ReplaceAll a = new ReplaceAll();
+            if (((ReplaceAll) action).getOldString() != null) {
+                a.setOldString(((ReplaceAll) action).getOldString());
             }
+            if (((ReplaceAll) action).getNewString() != null) {
+                a.setNewString(((ReplaceAll) action).getNewString());
+            }
+            return a;
+        }
+        if (action instanceof ReplaceFirst) {
+            ReplaceFirst a = new ReplaceFirst();
+            if (((ReplaceFirst) action).getOldString() != null) {
+                a.setOldString(((ReplaceFirst) action).getOldString());
+            }
+<<<<<<< c4b30f5503986f14c5fa837312c60e2da1e957da
             if (((Replace) action).getNewString() != null) {
                 a.setNewString(((Replace) action).getNewString());
 >>>>>>> Issue #151: Implement Number-related p0 field actions
+=======
+            if (((ReplaceFirst) action).getNewString() != null) {
+                a.setNewString(((ReplaceFirst) action).getNewString());
+>>>>>>> Issue #153: Implement String-related p0 field actions
             }
             return a;
         }

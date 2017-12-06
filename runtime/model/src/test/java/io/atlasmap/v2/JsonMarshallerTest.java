@@ -118,7 +118,7 @@ public class JsonMarshallerTest extends BaseMarshallerTest {
             }
             if (a instanceof ReplaceFirst) {
                 ReplaceFirst replace = (ReplaceFirst) a;
-                replace.setOldString("test");
+                replace.setMatch("test");
                 replace.setNewString("h");
             }
             if (a instanceof SubString) {

@@ -102,7 +102,11 @@ public class StringComplexFieldActions implements AtlasFieldAction {
         return df.format(new Date());
     }
 
+<<<<<<< c4b30f5503986f14c5fa837312c60e2da1e957da
     @AtlasFieldActionInfo(name = "EndsWith", sourceType = FieldType.STRING, targetType = FieldType.BOOLEAN, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
+=======
+    @AtlasFieldActionInfo(name = "EndsWith", sourceType = FieldType.STRING, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
+>>>>>>> Issue #153: Implement String-related p0 field actions
     public static Boolean endsWith(Action action, String input) {
         if (action == null || !(action instanceof EndsWith)) {
             throw new IllegalArgumentException("Action must be an EndsWith action");
@@ -132,7 +136,11 @@ public class StringComplexFieldActions implements AtlasFieldAction {
         return String.format(format.getTemplate(), input);
     }
 
+<<<<<<< c4b30f5503986f14c5fa837312c60e2da1e957da
     @AtlasFieldActionInfo(name = "IndexOf", sourceType = FieldType.STRING, targetType = FieldType.NUMBER, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
+=======
+    @AtlasFieldActionInfo(name = "IndexOf", sourceType = FieldType.STRING, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
+>>>>>>> Issue #153: Implement String-related p0 field actions
     public static Number indexOf(Action action, String input) {
         if (action == null || !(action instanceof IndexOf)) {
             throw new IllegalArgumentException("Action must be an IndexOf action");
@@ -147,7 +155,11 @@ public class StringComplexFieldActions implements AtlasFieldAction {
         return input == null ? -1 : input.indexOf(indexOf.getString());
     }
 
+<<<<<<< c4b30f5503986f14c5fa837312c60e2da1e957da
     @AtlasFieldActionInfo(name = "LastIndexOf", sourceType = FieldType.STRING, targetType = FieldType.NUMBER, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
+=======
+    @AtlasFieldActionInfo(name = "LastIndexOf", sourceType = FieldType.STRING, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
+>>>>>>> Issue #153: Implement String-related p0 field actions
     public static Number lastIndexOf(Action action, String input) {
         if (action == null || !(action instanceof LastIndexOf)) {
             throw new IllegalArgumentException("Action must be a LastIndexOf action");
@@ -230,7 +242,11 @@ public class StringComplexFieldActions implements AtlasFieldAction {
         return input == null ? null : input.replaceFirst(oldString, newString == null ? "" : newString);
     }
 
+<<<<<<< c4b30f5503986f14c5fa837312c60e2da1e957da
     @AtlasFieldActionInfo(name = "StartsWith", sourceType = FieldType.STRING, targetType = FieldType.BOOLEAN, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
+=======
+    @AtlasFieldActionInfo(name = "StartsWith", sourceType = FieldType.STRING, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
+>>>>>>> Issue #153: Implement String-related p0 field actions
     public static Boolean startsWith(Action action, String input) {
         if (action == null || !(action instanceof StartsWith)) {
             throw new IllegalArgumentException("Action must be an StartsWith action");
