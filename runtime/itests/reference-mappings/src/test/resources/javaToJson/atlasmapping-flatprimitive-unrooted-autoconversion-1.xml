@@ -32,11 +32,6 @@
             <OutputField xsi:type="ns3:JsonField" path="/floatField"
                 fieldType="Float" />
         </Mapping>
-        <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns2:JavaField" path="/charField" />
-            <OutputField xsi:type="ns3:JsonField" path="/booleanField"
-                fieldType="Boolean" />
-        </Mapping>
     </Mappings>
     <LookupTables />
     <Properties />

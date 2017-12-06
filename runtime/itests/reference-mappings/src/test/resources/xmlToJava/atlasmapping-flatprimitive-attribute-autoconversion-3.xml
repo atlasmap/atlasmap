@@ -16,19 +16,15 @@
             <OutputField xsi:type="ns2:JavaField" path="/booleanField" />
         </Mapping>
         <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns3:XmlField" path="/XmlFPA/@longField" />
-            <OutputField xsi:type="ns2:JavaField" path="/charField" />
-        </Mapping>
-        <Mapping xsi:type="Mapping" mappingType="Map">
             <InputField xsi:type="ns3:XmlField" path="/XmlFPA/@doubleField" />
             <OutputField xsi:type="ns2:JavaField" path="/intField" />
         </Mapping>
         <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns3:XmlField" path="/XmlFPA/@floatField" />
+            <InputField xsi:type="ns3:XmlField" path="/XmlFPA/@byteField" />
             <OutputField xsi:type="ns2:JavaField" path="/shortField" />
         </Mapping>
         <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns3:XmlField" path="/XmlFPA/@booleanField" />
+            <InputField xsi:type="ns3:XmlField" path="/XmlFPA/@booleanField" fieldType="Boolean" />
             <OutputField xsi:type="ns2:JavaField" path="/longField" />
         </Mapping>
         <Mapping xsi:type="Mapping" mappingType="Map">

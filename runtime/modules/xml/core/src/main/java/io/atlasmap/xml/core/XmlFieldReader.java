@@ -15,33 +15,59 @@
  */
 package io.atlasmap.xml.core;
 
+import java.io.ByteArrayInputStream;
 import java.util.List;
 import java.util.Map;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import io.atlasmap.api.AtlasConversionException;
+import io.atlasmap.api.AtlasConversionService;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.core.AtlasPath.SegmentContext;
+import io.atlasmap.core.AtlasUtil;
+import io.atlasmap.spi.AtlasFieldReader;
+import io.atlasmap.spi.AtlasInternalSession;
+import io.atlasmap.v2.AuditStatus;
+import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldType;
 import io.atlasmap.xml.v2.XmlField;
 
-public class XmlFieldReader extends XmlFieldTransformer {
+public class XmlFieldReader extends XmlFieldTransformer implements AtlasFieldReader {
 
     private static final Logger LOG = LoggerFactory.getLogger(XmlFieldReader.class);
 
-    public XmlFieldReader() {
+    private AtlasConversionService conversionService;
+    private Document document;
+
+    public XmlFieldReader(AtlasConversionService conversionService) {
+        this.conversionService = conversionService;
     }
 
     public XmlFieldReader(Map<String, String> namespaces) {
         super(namespaces);
     }
 
-    public void read(final Document document, final XmlField xmlField) throws AtlasException {
+    public void read(AtlasInternalSession session) throws AtlasException {
+        if (document == null) {
+            throw new AtlasException(new IllegalArgumentException("'document' cannot be null"));
+        }
+        Field field = session.head().getSourceField();
+        if (field == null) {
+            throw new AtlasException(new IllegalArgumentException("Argument 'field' cannot be null"));
+        }
+
+        seedDocumentNamespaces(document);
+        XmlField xmlField = XmlField.class.cast(field);
+
         if (LOG.isDebugEnabled()) {
-            LOG.debug("Reading input value for field: " + xmlField.getPath());
+            LOG.debug("Reading source value for field: " + xmlField.getPath());
         }
         if (document == null) {
             throw new AtlasException(new IllegalArgumentException("Argument 'document' cannot be null"));
@@ -53,7 +79,7 @@ public class XmlFieldReader extends XmlFieldTransformer {
         for (SegmentContext sc : new XmlPath(xmlField.getPath()).getSegmentContexts(false)) {
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Now processing segment: " + sc.getSegment());
-                LOG.debug("Parent element is currently: " + XmlFieldWriter.writeDocumentToString(true, parentNode));
+                LOG.debug("Parent element is currently: " + XmlIOHelper.writeDocumentToString(true, parentNode));
             }
             if (sc.getPrev() == null) {
                 if (LOG.isDebugEnabled()) {
@@ -73,10 +99,10 @@ public class XmlFieldReader extends XmlFieldTransformer {
                 if (LOG.isDebugEnabled()) {
                     LOG.debug("Looking for children elements with name: " + childrenElementName);
                 }
-                List<Element> children = XmlFieldWriter.getChildrenWithName(childrenElementName, parentNode);
+                List<Element> children = XmlIOHelper.getChildrenWithName(childrenElementName, parentNode);
                 if (children == null || children.isEmpty()) {
                     if (LOG.isDebugEnabled()) {
-                        LOG.debug("Skipping input value set, couldn't find children with name '"
+                        LOG.debug("Skipping source value set, couldn't find children with name '"
                                 + childrenElementName + "', for segment: " + sc);
                     }
                     return;
@@ -86,7 +112,7 @@ public class XmlFieldReader extends XmlFieldTransformer {
                     int index = XmlPath.indexOfSegment(sc.getSegment());
                     if (index >= children.size()) {
                         if (LOG.isDebugEnabled()) {
-                            LOG.debug("Skipping input value set, children list can't fit index " + index
+                            LOG.debug("Skipping source value set, children list can't fit index " + index
                                     + ", children list size: " + children.size());
                         }
                         return;
@@ -100,51 +126,39 @@ public class XmlFieldReader extends XmlFieldTransformer {
                     String attributeName = XmlPath.getAttribute(sc.getSegment());
                     value = parentNode.getAttribute(attributeName);
                 }
-                if (xmlField.getFieldType() == null || FieldType.STRING.equals(xmlField.getFieldType())) {
-                    xmlField.setValue(value);
+                if (xmlField.getFieldType() == null) {
                     xmlField.setFieldType(FieldType.STRING);
-                } else if (FieldType.CHAR.equals(xmlField.getFieldType())) {
-                    xmlField.setValue(value.charAt(0));
                 }
 
-                if (value != null) {
-                    if (FieldType.BOOLEAN.equals(xmlField.getFieldType())) {
-                        xmlField.setValue(processXmlStringAsBoolean(value));
-                    } else {
-                        LOG.warn(String.format("Unsupported FieldType for text data t=%s p=%s docId=%s",
-                                xmlField.getFieldType().value(), xmlField.getPath(), xmlField.getDocId()));
-                    }
+                if (value == null) {
+                    return;
                 }
-                return;
+                if (FieldType.STRING.equals(xmlField.getFieldType())) {
+                    xmlField.setValue(value);
+                    return;
+                }
+
+                Object convertedValue;
+                try {
+                    convertedValue = conversionService.convertType(value, FieldType.STRING, xmlField.getFieldType());
+                    xmlField.setValue(convertedValue);
+                } catch (AtlasConversionException e) {
+                    AtlasUtil.addAudit(session, xmlField.getDocId(), String.format(
+                            "Failed to convert field value '%s' into type '%s'", value, xmlField.getFieldType()),
+                            xmlField.getPath(), AuditStatus.ERROR, value);
+                }
             }
         }
     }
 
-
-    public static Boolean processXmlStringAsBoolean(String value) {
-        if (value == null) {
-            return null;
-        }
-
-        if ("true".equalsIgnoreCase(value) || "1".equalsIgnoreCase(value)) {
-            return Boolean.TRUE;
-        }
-
-        if ("false".equalsIgnoreCase(value) || "0".equalsIgnoreCase(value)) {
-            return Boolean.FALSE;
-        }
-
-        return null;
-    }
-
-    public void read(final Document document, final List<XmlField> xmlFields) throws AtlasException {
-        if (xmlFields == null) {
-            throw new AtlasException(new IllegalArgumentException("Argument 'xmlFields' cannot be null"));
-        }
-        // check to see if the document has namespaces
-        seedDocumentNamespaces(document);
-        for (XmlField xmlField : xmlFields) {
-            read(document, xmlField);
+    public void setDocument(String docString, boolean namespaced) throws AtlasException {
+        try {
+            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+            dbf.setNamespaceAware(namespaced); // this must be done to use namespaces
+            DocumentBuilder b = dbf.newDocumentBuilder();
+            this.document = b.parse(new ByteArrayInputStream(docString.getBytes("UTF-8")));
+        } catch (Exception e) {
+            throw new AtlasException(e);
         }
     }
 

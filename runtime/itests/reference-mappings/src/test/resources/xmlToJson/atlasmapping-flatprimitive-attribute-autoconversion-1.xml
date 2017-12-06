@@ -8,39 +8,27 @@
     <Mappings>
         <Mapping xsi:type="Mapping" mappingType="Map">
             <InputField xsi:type="ns3:XmlField" path="/XmlFPA/@intField" />
-            <OutputField xsi:type="ns2:JsonField" path="/charField"
-                fieldType="Char" />
+            <OutputField xsi:type="ns2:JsonField" path="/charField" fieldType="Char" />
         </Mapping>
         <Mapping xsi:type="Mapping" mappingType="Map">
             <InputField xsi:type="ns3:XmlField" path="/XmlFPA/@shortField" />
-            <OutputField xsi:type="ns2:JsonField" path="/intField"
-                fieldType="Integer" />
+            <OutputField xsi:type="ns2:JsonField" path="/intField" fieldType="Integer" />
         </Mapping>
         <Mapping xsi:type="Mapping" mappingType="Map">
             <InputField xsi:type="ns3:XmlField" path="/XmlFPA/@longField" />
-            <OutputField xsi:type="ns2:JsonField" path="/shortField"
-                fieldType="Short" />
+            <OutputField xsi:type="ns2:JsonField" path="/shortField" fieldType="Short" />
         </Mapping>
         <Mapping xsi:type="Mapping" mappingType="Map">
             <InputField xsi:type="ns3:XmlField" path="/XmlFPA/@doubleField" />
-            <OutputField xsi:type="ns2:JsonField" path="/longField"
-                fieldType="Long" />
+            <OutputField xsi:type="ns2:JsonField" path="/longField" fieldType="Long" />
         </Mapping>
         <Mapping xsi:type="Mapping" mappingType="Map">
             <InputField xsi:type="ns3:XmlField" path="/XmlFPA/@floatField" />
-            <OutputField xsi:type="ns2:JsonField" path="/doubleField"
-                fieldType="Double" />
+            <OutputField xsi:type="ns2:JsonField" path="/doubleField" fieldType="Double" />
         </Mapping>
         <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns3:XmlField" path="/XmlFPA/@booleanField"
-                fieldType="Boolean" />
-            <OutputField xsi:type="ns2:JsonField" path="/floatField"
-                fieldType="Float" />
-        </Mapping>
-        <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns3:XmlField" path="/XmlFPA/@charField" />
-            <OutputField xsi:type="ns2:JsonField" path="/booleanField"
-                fieldType="Boolean" />
+            <InputField xsi:type="ns3:XmlField" path="/XmlFPA/@booleanField" fieldType="Boolean" />
+            <OutputField xsi:type="ns2:JsonField" path="/floatField" fieldType="Float" />
         </Mapping>
     </Mappings>
 </AtlasMapping>

@@ -38,10 +38,10 @@ public class XmlJavaComplexTest extends AtlasMappingBaseTest {
         AtlasSession session = context.createSession();
         String sourceXml = AtlasTestUtil
                 .loadFileAsString("src/test/resources/xmlToJava/atlas-xml-complex-order-autodetect-attribute.xml");
-        session.setInput(sourceXml);
+        session.setDefaultSourceDocument(sourceXml);
         context.process(session);
 
-        Object object = session.getOutput();
+        Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof TargetOrder);
         AtlasTestUtil.validateOrder((TargetOrder) object);
@@ -56,10 +56,10 @@ public class XmlJavaComplexTest extends AtlasMappingBaseTest {
         AtlasSession session = context.createSession();
         String sourceXml = AtlasTestUtil
                 .loadFileAsString("src/test/resources/xmlToJava/atlas-xml-complex-order-autodetect-attribute-ns.xml");
-        session.setInput(sourceXml);
+        session.setDefaultSourceDocument(sourceXml);
         context.process(session);
 
-        Object object = session.getOutput();
+        Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof TargetOrder);
         AtlasTestUtil.validateOrder((TargetOrder) object);
@@ -73,10 +73,10 @@ public class XmlJavaComplexTest extends AtlasMappingBaseTest {
         AtlasSession session = context.createSession();
         String sourceXml = AtlasTestUtil
                 .loadFileAsString("src/test/resources/xmlToJava/atlas-xml-complex-order-autodetect-element.xml");
-        session.setInput(sourceXml);
+        session.setDefaultSourceDocument(sourceXml);
         context.process(session);
 
-        Object object = session.getOutput();
+        Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof TargetOrder);
         AtlasTestUtil.validateOrder((TargetOrder) object);
@@ -90,10 +90,10 @@ public class XmlJavaComplexTest extends AtlasMappingBaseTest {
         AtlasSession session = context.createSession();
         String sourceXml = AtlasTestUtil
                 .loadFileAsString("src/test/resources/xmlToJava/atlas-xml-complex-order-autodetect-element-ns.xml");
-        session.setInput(sourceXml);
+        session.setDefaultSourceDocument(sourceXml);
         context.process(session);
 
-        Object object = session.getOutput();
+        Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof TargetOrder);
         AtlasTestUtil.validateOrder((TargetOrder) object);

@@ -16,6 +16,7 @@
 package io.atlasmap.reference.java_to_java;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
@@ -43,11 +44,12 @@ public class JavaJavaMultiSourceTest extends AtlasMappingBaseTest {
         AtlasSession session = context.createSession();
         BaseContact sourceContact = AtlasTestUtil.generateContact(SourceContact.class);
         BaseAddress sourceAddress = AtlasTestUtil.generateAddress(SourceAddress.class);
-        session.setInput(sourceContact, "con");
-        session.setInput(sourceAddress, "addr");
+        session.setSourceDocument("con", sourceContact);
+        session.setSourceDocument("addr", sourceAddress);
         context.process(session);
 
-        Object object = session.getOutput();
+        assertFalse(printAudit(session), session.hasErrors());
+        Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertEquals(TargetContact.class.getName(), object.getClass().getName());
         TargetContact targetContact = (TargetContact) object;
@@ -64,11 +66,12 @@ public class JavaJavaMultiSourceTest extends AtlasMappingBaseTest {
         AtlasSession session = context.createSession();
         BaseContact sourceContact = AtlasTestUtil.generateContact(SourceContact.class);
         BaseAddress sourceAddress = AtlasTestUtil.generateAddress(SourceAddress.class);
-        session.setInput(sourceContact, "con");
-        session.setInput(sourceAddress, "addr");
+        session.setSourceDocument("con", sourceContact);
+        session.setSourceDocument("addr", sourceAddress);
         context.process(session);
 
-        Object object = session.getOutput();
+        assertFalse(printAudit(session), session.hasErrors());
+        Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertEquals(TargetOrder.class.getName(), object.getClass().getName());
         TargetOrder targetOrder = (TargetOrder) object;

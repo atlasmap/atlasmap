@@ -19,6 +19,7 @@ import java.lang.reflect.Constructor;
 import java.util.List;
 
 import io.atlasmap.mxbean.AtlasModuleInfoMXBean;
+import io.atlasmap.spi.AtlasModule;
 import io.atlasmap.spi.AtlasModuleInfo;
 
 public class DefaultAtlasModuleInfo implements AtlasModuleInfo, AtlasModuleInfoMXBean {
@@ -26,12 +27,12 @@ public class DefaultAtlasModuleInfo implements AtlasModuleInfo, AtlasModuleInfoM
     private String uri;
     private Boolean sourceSupported;
     private Boolean targetSupported;
-    private Class<?> moduleClass;
-    private Constructor<?> constructor;
+    private Class<AtlasModule> moduleClass;
+    private Constructor<AtlasModule> constructor;
     private List<String> formats;
     private List<String> packageNames;
 
-    public DefaultAtlasModuleInfo(String name, String uri, Class<?> moduleClass, Constructor<?> constructor,
+    public DefaultAtlasModuleInfo(String name, String uri, Class<AtlasModule> moduleClass, Constructor<AtlasModule> constructor,
             List<String> formats, List<String> packageNames) {
         this.name = name;
         this.uri = uri;
@@ -41,11 +42,15 @@ public class DefaultAtlasModuleInfo implements AtlasModuleInfo, AtlasModuleInfoM
         this.packageNames = packageNames;
     }
 
-    public Class<?> getModuleClass() {
-        return moduleClass;
+    public String getModuleClassName() {
+        if (moduleClass != null) {
+            return moduleClass.getName();
+        } else {
+            return null;
+        }
     }
 
-    public Constructor<?> getConstructor() {
+    public Constructor<AtlasModule> getConstructor() {
         return constructor;
     }
 
@@ -54,20 +59,16 @@ public class DefaultAtlasModuleInfo implements AtlasModuleInfo, AtlasModuleInfoM
     }
 
     @Override
+    public Class<AtlasModule> getModuleClass() {
+        return moduleClass;
+    }
+
+    @Override
     public String[] getDataFormats() {
         if (formats != null) {
             return formats.toArray(new String[formats.size()]);
         } else {
             return new String[0];
-        }
-    }
-
-    @Override
-    public String getModuleClassName() {
-        if (moduleClass != null) {
-            return moduleClass.getName();
-        } else {
-            return null;
         }
     }
 

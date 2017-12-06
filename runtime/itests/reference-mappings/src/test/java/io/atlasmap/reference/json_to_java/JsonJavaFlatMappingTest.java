@@ -222,10 +222,10 @@ public class JsonJavaFlatMappingTest extends AtlasMappingBaseTest {
         AtlasSession session = context.createSession();
         String source = AtlasTestUtil
                 .loadFileAsString("src/test/resources/jsonToJava/atlas-json-flatprimitive-unrooted.json");
-        session.setInput(source);
+        session.setDefaultSourceDocument(source);
         context.process(session);
 
-        Object object = session.getOutput();
+        Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof TargetFlatPrimitiveClass);
         validateFlatPrimitiveClassPrimitiveFields((TargetFlatPrimitiveClass) object);
@@ -239,10 +239,10 @@ public class JsonJavaFlatMappingTest extends AtlasMappingBaseTest {
         AtlasSession session = context.createSession();
         String source = AtlasTestUtil
                 .loadFileAsString("src/test/resources/jsonToJava/atlas-json-flatprimitive-rooted.json");
-        session.setInput(source);
+        session.setDefaultSourceDocument(source);
         context.process(session);
 
-        Object object = session.getOutput();
+        Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof TargetFlatPrimitiveClass);
         validateFlatPrimitiveClassPrimitiveFields((TargetFlatPrimitiveClass) object);
@@ -256,10 +256,10 @@ public class JsonJavaFlatMappingTest extends AtlasMappingBaseTest {
         AtlasSession session = context.createSession();
         String source = AtlasTestUtil
                 .loadFileAsString("src/test/resources/jsonToJava/atlas-json-boxedflatprimitive-unrooted.json");
-        session.setInput(source);
+        session.setDefaultSourceDocument(source);
         context.process(session);
 
-        Object object = session.getOutput();
+        Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof TargetFlatPrimitiveClass);
         validateFlatPrimitiveClassBoxedPrimitiveFields((TargetFlatPrimitiveClass) object);
@@ -273,10 +273,10 @@ public class JsonJavaFlatMappingTest extends AtlasMappingBaseTest {
         AtlasSession session = context.createSession();
         String source = AtlasTestUtil
                 .loadFileAsString("src/test/resources/jsonToJava/atlas-json-boxedflatprimitive-rooted.json");
-        session.setInput(source);
+        session.setDefaultSourceDocument(source);
         context.process(session);
 
-        Object object = session.getOutput();
+        Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof TargetFlatPrimitiveClass);
         validateFlatPrimitiveClassBoxedPrimitiveFields((TargetFlatPrimitiveClass) object);

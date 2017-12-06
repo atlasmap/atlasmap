@@ -1,4 +1,4 @@
-package io.atlasmap.java.module;
+package io.atlasmap.java.core;
 
 import java.util.List;
 

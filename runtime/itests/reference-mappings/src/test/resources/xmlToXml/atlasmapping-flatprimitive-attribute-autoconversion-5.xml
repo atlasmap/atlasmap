@@ -33,19 +33,12 @@
                 path="/xt1:XmlFPE/xt1:booleanField" />
         </Mapping>
         <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns3:XmlField" path="/XmlFPA/@floatField" />
-            <OutputField xsi:type="ns3:XmlField"
-                path="/xt1:XmlFPE/xt1:charField" fieldType="Char" />
-        </Mapping>
-        <Mapping xsi:type="Mapping" mappingType="Map">
             <InputField xsi:type="ns3:XmlField" path="/XmlFPA/@booleanField" />
             <OutputField xsi:type="ns3:XmlField" path="/xt1:XmlFPE/xt1:intField" />
         </Mapping>
         <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns3:XmlField" path="/XmlFPA/@charField"
-                fieldType="Char" />
-            <OutputField xsi:type="ns3:XmlField"
-                path="/xt1:XmlFPE/xt1:shortField" fieldType="Short" />
+            <InputField xsi:type="ns3:XmlField" path="/XmlFPA/@charField" fieldType="Char" />
+            <OutputField xsi:type="ns3:XmlField" path="/xt1:XmlFPE/xt1:shortField" fieldType="Short" />
         </Mapping>
     </Mappings>
     <LookupTables />

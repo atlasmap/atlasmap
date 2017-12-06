@@ -1,4 +1,7 @@
-package io.atlasmap.java.module;
+package io.atlasmap.java.core;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -8,7 +11,6 @@ import org.junit.Before;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.core.AtlasPath;
 import io.atlasmap.core.AtlasPath.SegmentContext;
-import io.atlasmap.java.module.DocumentJavaFieldWriter.JavaFieldWriterValueConverter;
 import io.atlasmap.java.test.BaseOrder;
 import io.atlasmap.java.test.TargetAddress;
 import io.atlasmap.java.test.TargetContact;
@@ -18,8 +20,10 @@ import io.atlasmap.java.test.TargetTestClass;
 import io.atlasmap.java.test.TestListOrders;
 import io.atlasmap.java.v2.JavaEnumField;
 import io.atlasmap.java.v2.JavaField;
+import io.atlasmap.spi.AtlasInternalSession;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldType;
+import io.atlasmap.v2.LookupTable;
 
 public abstract class BaseDocumentWriterTest {
     protected static final String DEFAULT_VALUE = "Some string.";
@@ -31,17 +35,16 @@ public abstract class BaseDocumentWriterTest {
     protected TargetTestClass targetTestClassInstance = null;
     protected TestListOrders targetOrderListInstance = null;
     protected TargetOrderArray targetOrderArrayInstance = null;
-
-    protected JavaFieldWriterValueConverter valueConverter = new JavaFieldWriterValueConverter() {
-        @Override
-        public Object convertValue(Object parentObject, Field outputField) throws AtlasException {
-            return outputField.getValue();
-        }
-    };
+    protected TargetValueConverter valueConverter = null;
 
     @Before
     public void reset() {
         writer = new DocumentJavaFieldWriter();
+        writer.setTargetValueConverter(new TargetValueConverter(null) {
+            public Object convert(AtlasInternalSession session, LookupTable lookupTable, Field sourceField, Object parentObject, Field targetField) throws AtlasException {
+                return targetField.getValue();
+            }
+        });
         field = null;
         segmentContexts = new LinkedList<>();
 
@@ -64,9 +67,11 @@ public abstract class BaseDocumentWriterTest {
 
     public void setupPath(String fieldPath) {
         this.segmentContexts = new AtlasPath(fieldPath).getSegmentContexts(true);
+        /** BAD PRACTICE ** don't pollute with test only method
         for (SegmentContext ctx : this.segmentContexts) {
             writer.addClassForFieldPath(ctx.getSegmentPath(), String.class);
         }
+        */
         this.lastSegmentContext = segmentContexts.get(segmentContexts.size() - 1);
         this.field = createField(fieldPath, DEFAULT_VALUE);
     }
@@ -102,6 +107,8 @@ public abstract class BaseDocumentWriterTest {
     }
 
     protected void write(Field field) throws AtlasException {
-        writer.write(field, valueConverter);
+        AtlasInternalSession session = mock(AtlasInternalSession.class);
+        when(session.head().getTargetField()).thenReturn(field);
+        writer.write(session);
     }
 }

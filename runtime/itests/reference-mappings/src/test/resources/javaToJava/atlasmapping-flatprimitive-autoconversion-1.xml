@@ -32,7 +32,7 @@
             <OutputField xsi:type="ns2:JavaField" path="/floatField" />
         </Mapping>
         <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns2:JavaField" path="/charField" />
+            <InputField xsi:type="ns2:JavaField" path="/booleanField" />
             <OutputField xsi:type="ns2:JavaField" path="/booleanField" />
         </Mapping>
     </Mappings>

@@ -28,13 +28,7 @@
         </Mapping>
         <Mapping xsi:type="Mapping" mappingType="Map">
             <InputField xsi:type="ns3:JsonField" path="/booleanField" />
-            <OutputField xsi:type="ns3:JsonField" path="/floatField"
-                fieldType="Float" />
-        </Mapping>
-        <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns3:JsonField" path="/charField" />
-            <OutputField xsi:type="ns3:JsonField" path="/booleanField"
-                fieldType="Boolean" />
+            <OutputField xsi:type="ns3:JsonField" path="/floatField" fieldType="Float" />
         </Mapping>
     </Mappings>
 </AtlasMapping>

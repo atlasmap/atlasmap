@@ -7,11 +7,6 @@
     <DataSource dataSourceType="Target" uri="atlas:json" />
     <Mappings>
         <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns2:JavaField" path="/intField" />
-            <OutputField xsi:type="ns3:JsonField" path="/booleanField"
-                fieldType="Boolean" />
-        </Mapping>
-        <Mapping xsi:type="Mapping" mappingType="Map">
             <InputField xsi:type="ns2:JavaField" path="/shortField" />
             <OutputField xsi:type="ns3:JsonField" path="/charField"
                 fieldType="String" />
@@ -20,11 +15,6 @@
             <InputField xsi:type="ns2:JavaField" path="/longField" />
             <OutputField xsi:type="ns3:JsonField" path="/intField"
                 fieldType="Integer" />
-        </Mapping>
-        <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns2:JavaField" path="/doubleField" />
-            <OutputField xsi:type="ns3:JsonField" path="/shortField"
-                fieldType="Short" />
         </Mapping>
         <Mapping xsi:type="Mapping" mappingType="Map">
             <InputField xsi:type="ns2:JavaField" path="/floatField" />

@@ -1,6 +1,7 @@
 package io.atlasmap.core.issue;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -19,6 +20,7 @@ import io.atlasmap.core.AtlasMappingService;
 import io.atlasmap.core.AtlasMappingService.AtlasMappingFormat;
 import io.atlasmap.core.DefaultAtlasContextFactory;
 import io.atlasmap.v2.AtlasMapping;
+import io.atlasmap.v2.Audit;
 import twitter4j.Status;
 import twitter4j.User;
 
@@ -37,9 +39,10 @@ public class CamelAtlasmap14Test {
         AtlasMapping mapping = mappingService.loadMapping(url, AtlasMappingFormat.JSON);
         AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(mapping);
         AtlasSession session = context.createSession();
-        session.setInput(generateTwitterStatus());
+        session.setDefaultSourceDocument(generateTwitterStatus());
         context.process(session);
-        Object output = session.getOutput();
+        assertFalse(printAudit(session), session.hasErrors());
+        Object output = session.getDefaultTargetDocument();
         assertEquals(String.class, output.getClass());
         ObjectMapper mapper = new ObjectMapper();
         JsonNode outJson = mapper.readTree((String)output);
@@ -55,5 +58,17 @@ public class CamelAtlasmap14Test {
         when(status.getUser()).thenReturn(user);
         when(status.getText()).thenReturn("Let's build a house!");
         return status;
+    }
+
+    protected String printAudit(AtlasSession session) {
+        StringBuilder buf = new StringBuilder("Audits: ");
+        for (Audit a : session.getAudits().getAudit()) {
+            buf.append('[');
+            buf.append(a.getStatus());
+            buf.append(", message=");
+            buf.append(a.getMessage());
+            buf.append("], ");
+        }
+        return buf.toString();
     }
 }

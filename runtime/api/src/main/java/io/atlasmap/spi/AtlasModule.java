@@ -19,8 +19,7 @@ import java.util.List;
 
 import io.atlasmap.api.AtlasConversionService;
 import io.atlasmap.api.AtlasException;
-import io.atlasmap.api.AtlasSession;
-import io.atlasmap.v2.BaseMapping;
+import io.atlasmap.api.AtlasFieldActionService;
 import io.atlasmap.v2.Field;
 
 public interface AtlasModule {
@@ -29,25 +28,21 @@ public interface AtlasModule {
 
     void destroy();
 
-    void processPreValidation(AtlasSession session) throws AtlasException;
+    void processPreValidation(AtlasInternalSession session) throws AtlasException;
 
-    void processPreInputExecution(AtlasSession session) throws AtlasException;
+    void processPreSourceExecution(AtlasInternalSession session) throws AtlasException;
 
-    void processInputMapping(AtlasSession session, BaseMapping mapping) throws AtlasException;
+    void processPreTargetExecution(AtlasInternalSession session) throws AtlasException;
 
-    void processInputActions(AtlasSession session, BaseMapping mapping) throws AtlasException;
+    void processSourceFieldMapping(AtlasInternalSession session) throws AtlasException;
 
-    void processPostInputExecution(AtlasSession session) throws AtlasException;
+    void processTargetFieldMapping(AtlasInternalSession session) throws AtlasException;
 
-    void processPreOutputExecution(AtlasSession session) throws AtlasException;
+    void processPostSourceExecution(AtlasInternalSession session) throws AtlasException;
 
-    void processOutputMapping(AtlasSession session, BaseMapping mapping) throws AtlasException;
+    void processPostTargetExecution(AtlasInternalSession session) throws AtlasException;
 
-    void processOutputActions(AtlasSession session, BaseMapping mapping) throws AtlasException;
-
-    void processPostOutputExecution(AtlasSession session) throws AtlasException;
-
-    void processPostValidation(AtlasSession session) throws AtlasException;
+    void processPostValidation(AtlasInternalSession session) throws AtlasException;
 
     AtlasModuleMode getMode();
 
@@ -57,12 +52,28 @@ public interface AtlasModule {
 
     void setConversionService(AtlasConversionService atlasConversionService);
 
+    AtlasFieldActionService getFieldActionService();
+
+    void setFieldActionService(AtlasFieldActionService atlasFieldActionService);
+
     List<AtlasModuleMode> listSupportedModes();
+
+    String getDocId();
+
+    void setDocId(String docId);
+
+    String getUri();
+
+    void setUri(String uri);
 
     Boolean isStatisticsSupported();
 
     Boolean isStatisticsEnabled();
 
     Boolean isSupportedField(Field field);
+
+    Field cloneField(Field field) throws AtlasException;
+
+    int getCollectionSize(AtlasInternalSession session, Field field) throws AtlasException;
 
 }

@@ -26,11 +26,6 @@
                 fieldType="Integer" />
         </Mapping>
         <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns3:JsonField" path="/floatField" />
-            <OutputField xsi:type="ns3:JsonField" path="/shortField"
-                fieldType="Short" />
-        </Mapping>
-        <Mapping xsi:type="Mapping" mappingType="Map">
             <InputField xsi:type="ns3:JsonField" path="/booleanField" />
             <OutputField xsi:type="ns3:JsonField" path="/longField"
                 fieldType="Long" />

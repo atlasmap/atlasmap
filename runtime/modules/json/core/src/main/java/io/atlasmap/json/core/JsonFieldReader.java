@@ -26,30 +26,18 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.core.AtlasPath;
 import io.atlasmap.json.v2.JsonField;
+import io.atlasmap.spi.AtlasFieldReader;
+import io.atlasmap.spi.AtlasInternalSession;
 import io.atlasmap.v2.CollectionType;
 import io.atlasmap.v2.FieldType;
 
-public class JsonFieldReader {
+public class JsonFieldReader implements AtlasFieldReader {
 
     private static final Logger LOG = LoggerFactory.getLogger(JsonFieldReader.class);
     private JsonNode rootNode;
 
-    public void setDocument(String document) throws AtlasException {
-        if (document == null || document.isEmpty()) {
-            throw new AtlasException(new IllegalArgumentException("document cannot be null nor empty"));
-        }
-
-        try {
-            JsonFactory factory = new JsonFactory();
-            ObjectMapper mapper = new ObjectMapper();
-            JsonParser parser = factory.createParser(document);
-            this.rootNode = mapper.readTree(parser);
-        } catch (Exception e) {
-            throw new AtlasException(e);
-        }
-    }
-
-    public void read(final JsonField jsonField) throws AtlasException {
+    public void read(AtlasInternalSession session) throws AtlasException {
+        JsonField jsonField = JsonField.class.cast(session.head().getSourceField());
         if (rootNode == null) {
             throw new AtlasException("document is not set");
         }
@@ -76,7 +64,6 @@ public class JsonFieldReader {
             }
         }
         if (valueNode == null) {
-            jsonField.setFieldType(FieldType.NONE);
             return;
         }
 
@@ -185,6 +172,21 @@ public class JsonFieldReader {
             }
             jsonField.setValue(valueNode.toString());
             jsonField.setFieldType(FieldType.COMPLEX);
+        }
+    }
+
+    public void setDocument(String document) throws AtlasException {
+        if (document == null || document.isEmpty()) {
+            throw new AtlasException(new IllegalArgumentException("document cannot be null nor empty"));
+        }
+
+        try {
+            JsonFactory factory = new JsonFactory();
+            ObjectMapper mapper = new ObjectMapper();
+            JsonParser parser = factory.createParser(document);
+            this.rootNode = mapper.readTree(parser);
+        } catch (Exception e) {
+            throw new AtlasException(e);
         }
     }
 
