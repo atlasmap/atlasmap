@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ns:XmlOA orderId="8765309" xmlns:ns="http://atlasmap.io/xml/test/v2"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://atlasmap.io/xml/test/v2 atlas-xml-test-model-v2.xsd ">
+    <ns:Address addressLine1="123 Main St" addressLine2="Suite 42b"
+        city="Anytown" state="NY" zipCode="90210" />
+    <ns:Contact firstName="Ozzie" lastName="Smith"
+        phoneNumber="5551212" zipCode="81111" />
+</ns:XmlOA>

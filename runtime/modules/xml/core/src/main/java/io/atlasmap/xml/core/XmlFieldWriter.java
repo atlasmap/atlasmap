@@ -103,6 +103,10 @@ public class XmlFieldWriter extends XmlFieldTransformer implements AtlasFieldWri
                     }
                 }
 
+                if (segment.equals(lastSegment) && targetField.getValue() == null) {
+                    break;
+                }
+
                 if (!XmlPath.isAttributeSegment(segment)) {
                     // if current segment of path isn't attribute, it refers to a child element,
                     // find it or create it..

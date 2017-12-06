@@ -170,7 +170,7 @@ public class XmlModule extends BaseAtlasModule {
         // Do auto-conversion
         if (sourceField.getFieldType() != null && sourceField.getFieldType().equals(targetField.getFieldType())) {
             outputValue = sourceField.getValue();
-        } else {
+        } else if (sourceField.getValue() != null) {
             try {
                 outputValue = getConversionService().convertType(sourceField.getValue(), sourceField.getFieldType(),
                         targetField.getFieldType());

@@ -90,7 +90,6 @@ public class XmlXmlComplexTest extends AtlasMappingBaseTest {
         Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof String);
-        @SuppressWarnings("unchecked")
         JAXBElement<XmlOrderElement> xmlOE = (JAXBElement<XmlOrderElement>) AtlasXmlTestHelper
                 .unmarshal((String) object, XmlOrderElement.class);
         AtlasTestUtil.validateXmlOrderElement(xmlOE.getValue());
@@ -111,7 +110,6 @@ public class XmlXmlComplexTest extends AtlasMappingBaseTest {
         Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof String);
-        @SuppressWarnings("unchecked")
         JAXBElement<XmlOrderAttribute> xmlOA = (JAXBElement<XmlOrderAttribute>) AtlasXmlTestHelper
                 .unmarshal((String) object, XmlOrderAttribute.class);
         AtlasTestUtil.validateXmlOrderAttribute(xmlOA.getValue());

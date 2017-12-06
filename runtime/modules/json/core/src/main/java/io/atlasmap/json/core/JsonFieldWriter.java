@@ -237,8 +237,7 @@ public class JsonFieldWriter implements AtlasFieldWriter {
         } else if (FieldType.LONG.equals(type)) {
             valueNode = rootNode.numberNode(Long.valueOf(String.valueOf(value)));
         } else {
-            throw new AtlasException(
-                    "Cannot set value for " + jsonField.getPath() + " --> " + value + " for field type " + type);
+            valueNode = rootNode.nullNode();
         }
         if (LOG.isDebugEnabled()) {
             String valueClass = value == null ? "null" : value.getClass().getName();

@@ -132,7 +132,7 @@ public class JsonModule extends BaseAtlasModule {
         // Do auto-conversion
         if (sourceField.getFieldType() != null && sourceField.getFieldType().equals(targetField.getFieldType())) {
             targetValue = sourceField.getValue();
-        } else {
+        } else if (sourceField.getValue() != null) {
             try {
                 targetValue = getConversionService().convertType(sourceField.getValue(), sourceField.getFieldType(),
                         targetField.getFieldType());
