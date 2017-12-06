@@ -150,7 +150,6 @@ public class XmlFieldReaderTest {
         assertThat(xmlField.getValue(), is("a"));
     }
 
-    @Ignore("https://github.com/atlasmap/atlasmap/issues/141")
     @Test
     public void testReadDocumentWithMultipleNamespaceComplex() throws Exception {
         String doc = getDocumentString("src/test/resources/complex_example_ns.xml");
