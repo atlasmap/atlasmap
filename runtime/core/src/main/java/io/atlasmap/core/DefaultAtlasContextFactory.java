@@ -81,7 +81,7 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
     }
 
     public DefaultAtlasContextFactory(Properties properties) {
-        Map<String, String> tmpProps = new HashMap<String, String>();
+        Map<String, String> tmpProps = new HashMap<>();
         for (final String name : properties.stringPropertyNames()) {
             tmpProps.put(name, properties.getProperty(name));
         }
@@ -278,7 +278,7 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
     protected void loadModules(String moduleClassProperty, Class<?> moduleInterface) {
         Class<?> moduleClass = null;
         String moduleClassName = null;
-        Set<String> serviceClasses = new HashSet<String>();
+        Set<String> serviceClasses = new HashSet<>();
 
         ClassLoader classLoader = this.getClass().getClassLoader();
         try {
@@ -407,7 +407,7 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
         AtlasModuleDetail detail = clazz.getAnnotation(AtlasModuleDetail.class);
 
         if (detail != null) {
-            dataFormats = new ArrayList<String>();
+            dataFormats = new ArrayList<>();
 
             String[] formats = detail.dataFormats();
 
@@ -429,7 +429,7 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
         AtlasModuleDetail detail = clazz.getAnnotation(AtlasModuleDetail.class);
 
         if (detail != null) {
-            configPackages = new ArrayList<String>();
+            configPackages = new ArrayList<>();
 
             String[] packages = detail.configPackages();
 
@@ -446,7 +446,7 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
     }
 
     protected List<String> getAllModuleConfigPackages(AtlasModuleInfoRegistry registry) {
-        List<String> pkgs = new ArrayList<String>();
+        List<String> pkgs = new ArrayList<>();
         for (AtlasModuleInfo moduleInfo : registry.getAll()) {
             pkgs.addAll(Arrays.asList(moduleInfo.getPackageNames()));
         }

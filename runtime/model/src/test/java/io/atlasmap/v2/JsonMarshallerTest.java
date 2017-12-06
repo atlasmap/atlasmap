@@ -168,10 +168,6 @@ public class JsonMarshallerTest extends BaseMarshallerTest {
                 cvu.setFromUnit(VolumeUnitType.CUBIC_FOOT);
                 cvu.setToUnit(VolumeUnitType.CUBIC_METER);
             }
-            if (a instanceof SumUp) {
-                SumUp su = (SumUp) a;
-                su.setNumberType(NumberType.DECIMAL);
-            }
         }
         mapper.writeValue(new File("target/junit/" + testName.getMethodName() + "/" + "atlasmapping.json"),
                 atlasMapping);
