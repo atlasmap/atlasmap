@@ -192,11 +192,14 @@ public class AtlasModelFactory {
         if (action instanceof Ceiling) {
             return new Ceiling();
         }
+<<<<<<< 47ddb07e1b3541f5aea5c4007ff93368151f40bf
         if (action instanceof Concatenate) {
             Concatenate concat = new Concatenate();
             concat.setDelimiter(((Concatenate) action).getDelimiter());
             return concat;
         }
+=======
+>>>>>>> Issue #151: Implement Number-related p0 field actions
         if (action instanceof ConvertAreaUnit) {
             ConvertAreaUnit cau = new ConvertAreaUnit();
             cau.setFromUnit(((ConvertAreaUnit) action).getFromUnit());
@@ -249,6 +252,7 @@ public class AtlasModelFactory {
         if (action instanceof Divide) {
             return new Divide();
         }
+<<<<<<< 47ddb07e1b3541f5aea5c4007ff93368151f40bf
         if (action instanceof EndsWith) {
             EndsWith endsWith = new EndsWith();
             endsWith.setString(((EndsWith) action).getString());
@@ -262,6 +266,8 @@ public class AtlasModelFactory {
         if (action instanceof FileExtension) {
             return new FileExtension();
         }
+=======
+>>>>>>> Issue #151: Implement Number-related p0 field actions
         if (action instanceof Floor) {
             return new Floor();
         }
@@ -290,9 +296,12 @@ public class AtlasModelFactory {
         if (action instanceof Multiply) {
             return new Multiply();
         }
+<<<<<<< 47ddb07e1b3541f5aea5c4007ff93368151f40bf
         if (action instanceof Normalize) {
             return new Normalize();
         }
+=======
+>>>>>>> Issue #151: Implement Number-related p0 field actions
         if (action instanceof PadStringLeft) {
             PadStringLeft a = new PadStringLeft();
             if (((PadStringLeft) action).getPadCharacter() != null) {
@@ -310,6 +319,7 @@ public class AtlasModelFactory {
             }
             if (((PadStringRight) action).getPadCount() != null) {
                 a.setPadCount(((PadStringRight) action).getPadCount());
+<<<<<<< 47ddb07e1b3541f5aea5c4007ff93368151f40bf
             }
             return a;
         }
@@ -333,6 +343,18 @@ public class AtlasModelFactory {
             }
             if (((ReplaceFirst) action).getNewString() != null) {
                 a.setNewString(((ReplaceFirst) action).getNewString());
+=======
+            }
+            return a;
+        }
+        if (action instanceof Replace) {
+            Replace a = new Replace();
+            if (((Replace) action).getOldString() != null) {
+                a.setOldString(((Replace) action).getOldString());
+            }
+            if (((Replace) action).getNewString() != null) {
+                a.setNewString(((Replace) action).getNewString());
+>>>>>>> Issue #151: Implement Number-related p0 field actions
             }
             return a;
         }
