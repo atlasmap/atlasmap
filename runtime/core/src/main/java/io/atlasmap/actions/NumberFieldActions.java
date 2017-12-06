@@ -440,49 +440,55 @@ public class NumberFieldActions implements AtlasFieldAction {
     private static Collection<?> collection(Object input) {
         if (input instanceof Collection) {
             return (Collection<?>) input;
-        } else if (input instanceof Map) {
+        }
+        if (input instanceof Map) {
             return ((Map<?, ?>) input).values();
-        } else if (input instanceof Number[]) {
+        }
+        if (input instanceof Number[]) {
             return Arrays.asList((Object[]) input);
-        } else if (input instanceof double[]) {
+        }
+        if (input instanceof double[]) {
             double[] din = (double[]) input;
             List<Double> dinList = new ArrayList<>(din.length);
             for (double e : din) {
                 dinList.add(e);
             }
             return dinList;
-        } else if (input instanceof float[]) {
+        }
+        if (input instanceof float[]) {
             float[] fin = (float[]) input;
             List<Float> finList = new ArrayList<>(fin.length);
             for (float e : fin) {
                 finList.add(e);
             }
             return finList;
-        } else if (input instanceof long[]) {
+        }
+        if (input instanceof long[]) {
             long[] lin = (long[]) input;
             List<Long> linList = new ArrayList<>(lin.length);
             for (long e : lin) {
                 linList.add(e);
             }
             return linList;
-        } else if (input instanceof int[]) {
+        }
+        if (input instanceof int[]) {
             int[] iin = (int[]) input;
             List<Integer> iinList = new ArrayList<>(iin.length);
             for (int e : iin) {
                 iinList.add(e);
             }
             return iinList;
-        } else if (input instanceof byte[]) {
+        }
+        if (input instanceof byte[]) {
             byte[] bin = (byte[]) input;
             List<Byte> binList = new ArrayList<>(bin.length);
             for (byte e : bin) {
                 binList.add(e);
             }
             return binList;
-        } else {
-            throw new IllegalArgumentException(
-                    "Illegal input[" + input + "]. Input must be a Collection, Map or array of numbers");
         }
+        throw new IllegalArgumentException(
+                "Illegal input[" + input + "]. Input must be a Collection, Map or array of numbers");
     }
 
     private static Number doMultiply(Number input, double rate) {
