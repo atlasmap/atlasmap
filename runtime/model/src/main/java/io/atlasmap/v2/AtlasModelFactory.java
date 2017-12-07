@@ -192,6 +192,11 @@ public class AtlasModelFactory {
         if (action instanceof Ceiling) {
             return new Ceiling();
         }
+        if (action instanceof Concatenate) {
+            Concatenate concat = new Concatenate();
+            concat.setDelimiter(((Concatenate) action).getDelimiter());
+            return concat;
+        }
         if (action instanceof ConvertAreaUnit) {
             ConvertAreaUnit cau = new ConvertAreaUnit();
             cau.setFromUnit(((ConvertAreaUnit) action).getFromUnit());
@@ -244,11 +249,34 @@ public class AtlasModelFactory {
         if (action instanceof Divide) {
             return new Divide();
         }
+        if (action instanceof EndsWith) {
+            EndsWith endsWith = new EndsWith();
+            endsWith.setString(((EndsWith) action).getString());
+            return endsWith;
+        }
+        if (action instanceof Format) {
+            Format format = new Format();
+            format.setTemplate(((Format) action).getTemplate());
+            return format;
+        }
+        if (action instanceof FileExtension) {
+            return new FileExtension();
+        }
         if (action instanceof Floor) {
             return new Floor();
         }
         if (action instanceof GenerateUUID) {
             return new GenerateUUID();
+        }
+        if (action instanceof IndexOf) {
+            IndexOf indexOf = new IndexOf();
+            indexOf.setString(((IndexOf) action).getString());
+            return indexOf;
+        }
+        if (action instanceof LastIndexOf) {
+            LastIndexOf lastIndexOf = new LastIndexOf();
+            lastIndexOf.setString(((LastIndexOf) action).getString());
+            return lastIndexOf;
         }
         if (action instanceof Lowercase) {
             return new Lowercase();
@@ -261,6 +289,9 @@ public class AtlasModelFactory {
         }
         if (action instanceof Multiply) {
             return new Multiply();
+        }
+        if (action instanceof Normalize) {
+            return new Normalize();
         }
         if (action instanceof PadStringLeft) {
             PadStringLeft a = new PadStringLeft();
@@ -282,13 +313,26 @@ public class AtlasModelFactory {
             }
             return a;
         }
-        if (action instanceof Replace) {
-            Replace a = new Replace();
-            if (((Replace) action).getOldString() != null) {
-                a.setOldString(((Replace) action).getOldString());
+        if (action instanceof RemoveFileExtension) {
+            return new RemoveFileExtension();
+        }
+        if (action instanceof ReplaceAll) {
+            ReplaceAll a = new ReplaceAll();
+            if (((ReplaceAll) action).getOldString() != null) {
+                a.setOldString(((ReplaceAll) action).getOldString());
             }
-            if (((Replace) action).getNewString() != null) {
-                a.setNewString(((Replace) action).getNewString());
+            if (((ReplaceAll) action).getNewString() != null) {
+                a.setNewString(((ReplaceAll) action).getNewString());
+            }
+            return a;
+        }
+        if (action instanceof ReplaceFirst) {
+            ReplaceFirst a = new ReplaceFirst();
+            if (((ReplaceFirst) action).getOldString() != null) {
+                a.setOldString(((ReplaceFirst) action).getOldString());
+            }
+            if (((ReplaceFirst) action).getNewString() != null) {
+                a.setNewString(((ReplaceFirst) action).getNewString());
             }
             return a;
         }
@@ -300,6 +344,11 @@ public class AtlasModelFactory {
         }
         if (action instanceof SeparateByUnderscore) {
             return new SeparateByUnderscore();
+        }
+        if (action instanceof StartsWith) {
+            StartsWith startsWith = new StartsWith();
+            startsWith.setString(((StartsWith) action).getString());
+            return startsWith;
         }
         if (action instanceof StringLength) {
             return new StringLength();

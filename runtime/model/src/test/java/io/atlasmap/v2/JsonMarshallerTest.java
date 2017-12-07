@@ -116,8 +116,8 @@ public class JsonMarshallerTest extends BaseMarshallerTest {
                 customAction.setInputFieldType(FieldType.STRING);
                 customAction.setOutputFieldType(FieldType.STRING);
             }
-            if (a instanceof Replace) {
-                Replace replace = (Replace) a;
+            if (a instanceof ReplaceFirst) {
+                ReplaceFirst replace = (ReplaceFirst) a;
                 replace.setOldString("test");
                 replace.setNewString("h");
             }
