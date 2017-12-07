@@ -85,27 +85,32 @@ public class JsonFieldReader {
             return;
         }
 
-        if (jsonField.getFieldType() != null) { // mapping is overriding the fieldType
-            DefaultAtlasConversionService conversionService = DefaultAtlasConversionService.getInstance();
-            jsonField.setValue(conversionService.convertType(valueNode.asText(), FieldType.STRING, jsonField.getFieldType()));
-
+        if (valueNode.isNull()) {
+            jsonField.setValue(null);
+            // we can't detect field type if it's null node
         } else {
-            if (valueNode.isTextual()) {
-                handleTextualNode(valueNode, jsonField);
-            } else if (valueNode.isNumber()) {
-                handleNumberNode(valueNode, jsonField);
-            } else if (valueNode.isBoolean()) {
-                handleBooleanNode(valueNode, jsonField);
-            } else if (valueNode.isContainerNode()) {
-                handleContainerNode(valueNode, jsonField);
-            } else if (valueNode.isNull()) {
-                jsonField.setValue(null);
-                // we can't detect field type if it's null node
+            if (jsonField.getFieldType() != null) { // mapping is overriding the fieldType
+                DefaultAtlasConversionService conversionService = DefaultAtlasConversionService.getInstance();
+                jsonField.setValue(
+                        conversionService.convertType(valueNode.asText(), FieldType.STRING, jsonField.getFieldType()));
             } else {
-                LOG.warn(String.format("Detected unsupported json type for field p=%s docId=%s", jsonField.getPath(),
-                        jsonField.getDocId()));
-                jsonField.setValue(valueNode.toString());
-                jsonField.setFieldType(FieldType.UNSUPPORTED);
+                if (valueNode.isTextual()) {
+                    handleTextualNode(valueNode, jsonField);
+                } else if (valueNode.isNumber()) {
+                    handleNumberNode(valueNode, jsonField);
+                } else if (valueNode.isBoolean()) {
+                    handleBooleanNode(valueNode, jsonField);
+                } else if (valueNode.isContainerNode()) {
+                    handleContainerNode(valueNode, jsonField);
+                } else if (valueNode.isNull()) {
+                    jsonField.setValue(null);
+
+                } else {
+                    LOG.warn(String.format("Detected unsupported json type for field p=%s docId=%s",
+                            jsonField.getPath(), jsonField.getDocId()));
+                    jsonField.setValue(valueNode.toString());
+                    jsonField.setFieldType(FieldType.UNSUPPORTED);
+                }
             }
         }
     }
@@ -183,16 +188,16 @@ public class JsonFieldReader {
     private void handleContainerNode(JsonNode valueNode, JsonField jsonField) {
         if (valueNode.isArray()) {
             if (LOG.isDebugEnabled()) {
-                LOG.debug(String.format("Detected json array p=%s docId=%s", jsonField.getPath(),
-                        jsonField.getDocId()));
+                LOG.debug(
+                        String.format("Detected json array p=%s docId=%s", jsonField.getPath(), jsonField.getDocId()));
             }
             jsonField.setValue(valueNode.toString());
             jsonField.setFieldType(FieldType.COMPLEX);
             jsonField.setCollectionType(CollectionType.ARRAY);
         } else if (valueNode.isObject()) {
             if (LOG.isDebugEnabled()) {
-                LOG.debug(String.format("Detected json complex object p=%s docId=%s",
-                        jsonField.getPath(), jsonField.getDocId()));
+                LOG.debug(String.format("Detected json complex object p=%s docId=%s", jsonField.getPath(),
+                        jsonField.getDocId()));
             }
             jsonField.setValue(valueNode.toString());
             jsonField.setFieldType(FieldType.COMPLEX);
