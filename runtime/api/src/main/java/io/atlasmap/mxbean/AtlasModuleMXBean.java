@@ -31,39 +31,39 @@ public interface AtlasModuleMXBean {
 
     public String[] getPackageNames();
 
-    public String getMode();
+    public String getModeName();
 
     public boolean isSourceSupported();
 
     public boolean isTargetSupported();
 
-    public boolean isStatisticsEnabled();
+    public Boolean isStatisticsEnabled();
 
     public void setStatisticsEnabled(boolean enabled);
 
-    public long getInputCount();
+    public long getSourceCount();
 
-    public long getInputErrorCount();
+    public long getSourceErrorCount();
 
-    public long getInputSuccessCount();
+    public long getSourceSuccessCount();
 
-    public long getInputMinExecutionTime();
+    public long getSourceMinExecutionTime();
 
-    public long getInputMaxExecutionTime();
+    public long getSourceMaxExecutionTime();
 
-    public long getInputTotalExecutionTime();
+    public long getSourceTotalExecutionTime();
 
-    public long getOutputCount();
+    public long getTargetCount();
 
-    public long getOutputErrorCount();
+    public long getTargetErrorCount();
 
-    public long getOutputSuccessCount();
+    public long getTargetSuccessCount();
 
-    public long getOutputMinExecutionTime();
+    public long getTargetMinExecutionTime();
 
-    public long getOutputMaxExecutionTime();
+    public long getTargetMaxExecutionTime();
 
-    public long getOutputTotalExecutionTime();
+    public long getTargetTotalExecutionTime();
 
     public TabularData readAndResetStatistics() throws OpenDataException;
 

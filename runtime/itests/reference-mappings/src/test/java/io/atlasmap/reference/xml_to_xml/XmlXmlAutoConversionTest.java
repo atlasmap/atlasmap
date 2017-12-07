@@ -15,6 +15,7 @@
  */
 package io.atlasmap.reference.xml_to_xml;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -38,13 +39,13 @@ public class XmlXmlAutoConversionTest extends AtlasMappingBaseTest {
         AtlasSession session = context.createSession();
         String source = AtlasTestUtil
                 .loadFileAsString("src/test/resources/xmlToXml/atlas-xml-flatprimitive-attribute-autoconversion.xml");
-        session.setInput(source);
+        session.setDefaultSourceDocument(source);
         context.process(session);
 
-        Object object = session.getOutput();
+        assertFalse(printAudit(session), session.hasErrors());
+        Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof String);
-        @SuppressWarnings("unchecked")
         JAXBElement<XmlFlatPrimitiveElement> xmlFPE = (JAXBElement<XmlFlatPrimitiveElement>) AtlasXmlTestHelper
                 .unmarshal((String) object, XmlFlatPrimitiveElement.class);
         return xmlFPE;

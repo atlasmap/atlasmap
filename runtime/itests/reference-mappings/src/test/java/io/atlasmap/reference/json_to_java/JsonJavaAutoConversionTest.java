@@ -15,6 +15,7 @@
  */
 package io.atlasmap.reference.json_to_java;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -35,10 +36,11 @@ public class JsonJavaAutoConversionTest extends AtlasMappingBaseTest {
         AtlasSession session = context.createSession();
         String source = AtlasTestUtil.loadFileAsString(
                 "src/test/resources/jsonToJava/atlas-json-flatprimitive-unrooted-autoconversion.json");
-        session.setInput(source);
+        session.setDefaultSourceDocument(source);
         context.process(session);
 
-        Object object = session.getOutput();
+        assertFalse(printAudit(session), session.hasErrors());
+        Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof TargetFlatPrimitiveClass);
         return object;

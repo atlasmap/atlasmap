@@ -112,10 +112,10 @@ public class JavaJavaComplexListTest extends AtlasMappingBaseTest {
         AtlasSession session = context.createSession();
         BaseOrderList sourceOrderList = AtlasTestUtil.generateOrderListClass(SourceOrderList.class, SourceOrder.class,
                 SourceAddress.class, SourceContact.class);
-        session.setInput(sourceOrderList);
+        session.setDefaultSourceDocument(sourceOrderList);
         context.process(session);
 
-        Object object = session.getOutput();
+        Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof NoAbstractTargetOrderList);
         AtlasTestUtil.validateOrderList((NoAbstractTargetOrderList) object);
@@ -129,10 +129,10 @@ public class JavaJavaComplexListTest extends AtlasMappingBaseTest {
         AtlasSession session = context.createSession();
         BaseOrderList sourceOrderList = AtlasTestUtil.generateOrderListClass(SourceOrderList.class, SourceOrder.class,
                 SourceAddress.class, SourceContact.class);
-        session.setInput(sourceOrderList);
+        session.setDefaultSourceDocument(sourceOrderList);
         context.process(session);
 
-        Object object = session.getOutput();
+        Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof TargetOrderList);
         AtlasTestUtil.validateOrderList((TargetOrderList) object);
@@ -146,10 +146,10 @@ public class JavaJavaComplexListTest extends AtlasMappingBaseTest {
         AtlasSession session = context.createSession();
         BaseOrderList sourceOrderList = AtlasTestUtil.generateOrderListClass(SourceOrderList.class, SourceOrder.class,
                 SourceAddress.class, SourceContact.class);
-        session.setInput(sourceOrderList);
+        session.setDefaultSourceDocument(sourceOrderList);
         context.process(session);
 
-        Object object = session.getOutput();
+        Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof TargetOrderList);
         AtlasTestUtil.validateOrderList((TargetOrderList) object);

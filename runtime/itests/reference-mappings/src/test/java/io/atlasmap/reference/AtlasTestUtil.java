@@ -378,8 +378,8 @@ public class AtlasTestUtil {
     }
 
     public static void validateJsonOrder(io.atlasmap.json.test.BaseOrder orderObject) {
-        assertNotNull(orderObject);
-        assertNotNull(orderObject.getOrderId());
+        assertNotNull("Order object is null", orderObject);
+        assertNotNull("orderId is null: " + orderObject.toString(), orderObject.getOrderId());
         assertEquals(new Integer(8765309), orderObject.getOrderId());
         validateJsonAddress(orderObject.getAddress());
         validateJsonContact(orderObject.getContact());
@@ -394,7 +394,7 @@ public class AtlasTestUtil {
     }
 
     public static void validateJsonAddress(io.atlasmap.json.test.BaseAddress addressObject) {
-        assertNotNull(addressObject);
+        assertNotNull("Address object is null", addressObject);
         assertEquals("123 Main St", addressObject.getAddressLine1());
         assertEquals("Suite 42b", addressObject.getAddressLine2());
         assertEquals("Anytown", addressObject.getCity());
@@ -403,7 +403,7 @@ public class AtlasTestUtil {
     }
 
     public static void validateJsonContact(io.atlasmap.json.test.BaseContact contactObject) {
-        assertNotNull(contactObject);
+        assertNotNull("Contact object is null", contactObject);
         assertEquals("Ozzie", contactObject.getFirstName());
         assertEquals("Smith", contactObject.getLastName());
         assertEquals("5551212", contactObject.getPhoneNumber());

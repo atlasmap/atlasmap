@@ -49,6 +49,7 @@ import io.atlasmap.spi.AtlasCombineStrategy;
 import io.atlasmap.spi.AtlasModule;
 import io.atlasmap.spi.AtlasModuleDetail;
 import io.atlasmap.spi.AtlasModuleInfo;
+import io.atlasmap.spi.AtlasModuleInfoRegistry;
 import io.atlasmap.spi.AtlasPropertyStrategy;
 import io.atlasmap.spi.AtlasSeparateStrategy;
 import io.atlasmap.v2.AtlasMapping;
@@ -61,7 +62,6 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
     private String uuid = null;
     private String threadName = null;
     private ObjectName objectName = null;
-    private List<AtlasModuleInfo> modules = new ArrayList<AtlasModuleInfo>();
     private AtlasMappingService atlasMappingService = null;
     private DefaultAtlasConversionService atlasConversionService = null;
     private DefaultAtlasFieldActionService atlasFieldActionService = null;
@@ -69,6 +69,7 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
     private AtlasPropertyStrategy atlasPropertyStrategy = new DefaultAtlasPropertyStrategy();
     private AtlasSeparateStrategy atlasSeparateStrategy = new DefaultAtlasSeparateStrategy();
     private AtlasValidationService atlasValidationService = new DefaultAtlasValidationService();
+    private AtlasModuleInfoRegistry moduleInfoRegistry;
     private Map<String, String> properties = null;
 
     public DefaultAtlasContextFactory() {
@@ -117,8 +118,9 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
         this.atlasFieldActionService = new DefaultAtlasFieldActionService(this.atlasConversionService);
         this.atlasFieldActionService.init();
         registerFactoryJmx(this);
+        this.moduleInfoRegistry = new DefaultAtlasModuleInfoRegistry(this);
         loadModules("moduleClass", AtlasModule.class);
-        setMappingService(new AtlasMappingService(getAllModuleConfigPackages(getModules())));
+        setMappingService(new AtlasMappingService(getAllModuleConfigPackages(getModuleInfoRegistry())));
     }
 
     @Override
@@ -142,6 +144,7 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
         this.atlasFieldActionService = null;
         this.atlasConversionService = null;
         this.atlasPropertyStrategy = null;
+        this.moduleInfoRegistry = null;
         this.threadName = null;
         factory = null;
     }
@@ -182,6 +185,96 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
         return context;
     }
 
+    @Override
+    public String getClassName() {
+        return this.getClass().getName();
+    }
+
+    @Override
+    public String getThreadName() {
+        return this.threadName;
+    }
+
+    public void setThreadName(String threadName) {
+        this.threadName = threadName;
+    }
+
+    @Override
+    public String getVersion() {
+        return this.getClass().getPackage().getImplementationVersion();
+    }
+
+    @Override
+    public String getUuid() {
+        return this.uuid;
+    }
+
+    public ObjectName getJmxObjectName() {
+        return this.objectName;
+    }
+
+    public AtlasMappingService getMappingService() {
+        return this.atlasMappingService;
+    }
+
+    public void setMappingService(AtlasMappingService atlasMappingService) {
+        this.atlasMappingService = atlasMappingService;
+    }
+
+    public AtlasModuleInfoRegistry getModuleInfoRegistry() {
+        return this.moduleInfoRegistry;
+    }
+
+    public void setModuleInfoRegistry(AtlasModuleInfoRegistry registry) {
+        this.moduleInfoRegistry = registry;
+    }
+
+    @Override
+    public AtlasConversionService getConversionService() {
+        return this.atlasConversionService;
+    }
+
+    @Override
+    public AtlasFieldActionService getFieldActionService() {
+        return this.atlasFieldActionService;
+    }
+
+    @Override
+    public AtlasCombineStrategy getCombineStrategy() {
+        return atlasCombineStrategy;
+    }
+
+    public void setCombineStrategy(AtlasCombineStrategy atlasCombineStrategy) {
+        this.atlasCombineStrategy = atlasCombineStrategy;
+    }
+
+    @Override
+    public AtlasPropertyStrategy getPropertyStrategy() {
+        return atlasPropertyStrategy;
+    }
+
+    public void setPropertyStrategy(AtlasPropertyStrategy atlasPropertyStrategy) {
+        this.atlasPropertyStrategy = atlasPropertyStrategy;
+    }
+
+    @Override
+    public AtlasSeparateStrategy getSeparateStrategy() {
+        return atlasSeparateStrategy;
+    }
+
+    public void setSeparateStrategy(AtlasSeparateStrategy atlasSeparateStrategy) {
+        this.atlasSeparateStrategy = atlasSeparateStrategy;
+    }
+
+    @Override
+    public AtlasValidationService getValidationService() {
+        return atlasValidationService;
+    }
+
+    public void setValidationService(AtlasValidationService atlasValidationService) {
+        this.atlasValidationService = atlasValidationService;
+    }
+
     protected void loadModules(String moduleClassProperty, Class<?> moduleInterface) {
         Class<?> moduleClass = null;
         String moduleClassName = null;
@@ -208,13 +301,14 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
                 moduleClassName = moduleClass.getName();
 
                 if (isClassAtlasModule(moduleClass, moduleInterface)) {
-                    Constructor<?> constructor = moduleClass.getDeclaredConstructor();
+                    @SuppressWarnings("unchecked")
+                    Class<AtlasModule> atlasModuleClass = (Class<AtlasModule>)moduleClass;
+                    Constructor<AtlasModule> constructor = atlasModuleClass.getDeclaredConstructor();
                     if (constructor != null) {
                         AtlasModuleInfo module = new DefaultAtlasModuleInfo(getModuleName(moduleClass),
-                                getModuleUri(moduleClass), moduleClass, constructor,
+                                getModuleUri(moduleClass), atlasModuleClass, constructor,
                                 getSupportedDataFormats(moduleClass), getConfigPackages(moduleClass));
-                        getModules().add(module);
-                        registerModuleJmx(module);
+                        getModuleInfoRegistry().register(module);
                     } else {
                         LOG.warn("Invalid module class " + moduleClassName + ": constructor is not present");
                     }
@@ -231,22 +325,13 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
         }
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug("Loaded: " + getModules().size() + " of " + serviceClasses.size() + " detected modules");
+            LOG.debug("Loaded: " + getModuleInfoRegistry().size() + " of " + serviceClasses.size() + " detected modules");
         }
     }
 
     protected void unloadModules() {
-        int moduleCount = getModules().size();
-        for (AtlasModuleInfo module : getModules()) {
-            try {
-                String n = getJmxObjectName() + ",info=AvailableModules,moduleName=" + module.getName();
-                ManagementFactory.getPlatformMBeanServer().unregisterMBean(new ObjectName(n));
-            } catch (Exception e) {
-                LOG.warn("Unable to unregister module '" + module.getName() + "' from JMX");
-            }
-        }
-
-        this.modules.clear();
+        int moduleCount = getModuleInfoRegistry().size();
+        getModuleInfoRegistry().unregisterAll();
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("Unloaded: " + moduleCount + " modules");
@@ -360,9 +445,9 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
         return configPackages;
     }
 
-    protected List<String> getAllModuleConfigPackages(List<AtlasModuleInfo> moduleInfos) {
+    protected List<String> getAllModuleConfigPackages(AtlasModuleInfoRegistry registry) {
         List<String> pkgs = new ArrayList<String>();
-        for (AtlasModuleInfo moduleInfo : moduleInfos) {
+        for (AtlasModuleInfo moduleInfo : registry.getAll()) {
             pkgs.addAll(Arrays.asList(moduleInfo.getPackageNames()));
         }
         return pkgs;
@@ -380,115 +465,13 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
         }
     }
 
-    protected void registerModuleJmx(AtlasModuleInfo atlasModuleInfo) {
-        try {
-            String n = getJmxObjectName() + ",modules=AvailableModules,moduleName=" + atlasModuleInfo.getName();
-            ManagementFactory.getPlatformMBeanServer().registerMBean(atlasModuleInfo, new ObjectName(n));
-
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("Registered AtlasModule '" + atlasModuleInfo.getName() + "' with JMX");
-            }
-        } catch (Exception e) {
-            LOG.warn("Unable to register AtlasModule '" + atlasModuleInfo.getName() + "' with JMX", e);
-        }
-    }
-
-    @Override
-    public String getClassName() {
-        return this.getClass().getName();
-    }
-
-    @Override
-    public String getThreadName() {
-        return this.threadName;
-    }
-
-    public void setThreadName(String threadName) {
-        this.threadName = threadName;
-    }
-
-    @Override
-    public String getVersion() {
-        return this.getClass().getPackage().getImplementationVersion();
-    }
-
-    @Override
-    public String getUuid() {
-        return this.uuid;
-    }
-
     protected void setObjectName(String name) throws MalformedObjectNameException {
         String objectName = String.format("io.atlasmap:type=AtlasServiceFactory,factoryUuid=%s", getUuid());
         this.objectName = new ObjectName(objectName);
-    }
-
-    public ObjectName getJmxObjectName() {
-        return this.objectName;
     }
 
     protected static DefaultAtlasContextFactory getFactory() {
         return factory;
     }
 
-    public List<AtlasModuleInfo> getModules() {
-        return this.modules;
-    }
-
-    protected void setModules(List<AtlasModuleInfo> modules) {
-        this.modules = modules;
-    }
-
-    public AtlasMappingService getMappingService() {
-        return this.atlasMappingService;
-    }
-
-    public void setMappingService(AtlasMappingService atlasMappingService) {
-        this.atlasMappingService = atlasMappingService;
-    }
-
-    @Override
-    public AtlasConversionService getConversionService() {
-        return this.atlasConversionService;
-    }
-
-    @Override
-    public AtlasFieldActionService getFieldActionService() {
-        return this.atlasFieldActionService;
-    }
-
-    @Override
-    public AtlasCombineStrategy getCombineStrategy() {
-        return atlasCombineStrategy;
-    }
-
-    public void setCombineStrategy(AtlasCombineStrategy atlasCombineStrategy) {
-        this.atlasCombineStrategy = atlasCombineStrategy;
-    }
-
-    @Override
-    public AtlasPropertyStrategy getPropertyStrategy() {
-        return atlasPropertyStrategy;
-    }
-
-    public void setPropertyStrategy(AtlasPropertyStrategy atlasPropertyStrategy) {
-        this.atlasPropertyStrategy = atlasPropertyStrategy;
-    }
-
-    @Override
-    public AtlasSeparateStrategy getSeparateStrategy() {
-        return atlasSeparateStrategy;
-    }
-
-    public void setSeparateStrategy(AtlasSeparateStrategy atlasSeparateStrategy) {
-        this.atlasSeparateStrategy = atlasSeparateStrategy;
-    }
-
-    @Override
-    public AtlasValidationService getValidationService() {
-        return atlasValidationService;
-    }
-
-    public void setValidationService(AtlasValidationService atlasValidationService) {
-        this.atlasValidationService = atlasValidationService;
-    }
 }

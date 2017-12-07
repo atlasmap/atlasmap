@@ -16,6 +16,7 @@
 package io.atlasmap.reference.java_to_java;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -48,10 +49,11 @@ public class JavaJavaComplexTest extends AtlasMappingBaseTest {
         AtlasSession session = context.createSession();
         BaseOrder sourceOrder = AtlasTestUtil.generateOrderClass(SourceOrder.class, SourceAddress.class,
                 SourceContact.class);
-        session.setInput(sourceOrder);
+        session.setDefaultSourceDocument(sourceOrder);
         context.process(session);
 
-        Object object = session.getOutput();
+        assertFalse(printAudit(session), session.hasErrors());
+        Object object = session.getDefaultTargetDocument();
         assertEquals(TargetOrder.class.getName(), object.getClass().getName());
         TargetOrder targetOrder = (TargetOrder) object;
         assertEquals(new Integer(8765309), targetOrder.getOrderId());
@@ -64,10 +66,11 @@ public class JavaJavaComplexTest extends AtlasMappingBaseTest {
         AtlasSession session = context.createSession();
         BaseOrder sourceOrder = AtlasTestUtil.generateOrderClass(SourceOrder.class, SourceAddress.class,
                 SourceContact.class);
-        session.setInput(sourceOrder);
+        session.setDefaultSourceDocument(sourceOrder);
         context.process(session);
 
-        TargetTestClass object = (TargetTestClass) session.getOutput();
+        assertFalse(printAudit(session), session.hasErrors());
+        TargetTestClass object = (TargetTestClass) session.getDefaultTargetDocument();
         assertEquals(TargetTestClass.class.getName(), object.getClass().getName());
         assertEquals(TargetContact.class.getName(), object.getContact().getClass().getName());
         assertEquals("Ozzie", object.getContact().getFirstName());
@@ -81,10 +84,11 @@ public class JavaJavaComplexTest extends AtlasMappingBaseTest {
         BaseOrder sourceOrder = AtlasTestUtil.generateOrderClass(SourceOrder.class, SourceAddress.class,
                 SourceContact.class);
         sourceOrder.setContact(null);
-        session.setInput(sourceOrder);
+        session.setDefaultSourceDocument(sourceOrder);
         context.process(session);
 
-        TargetTestClass object = (TargetTestClass) session.getOutput();
+        assertFalse(printAudit(session), session.hasErrors());
+        TargetTestClass object = (TargetTestClass) session.getDefaultTargetDocument();
         assertEquals(TargetTestClass.class.getName(), object.getClass().getName());
         assertEquals(TargetContact.class.getName(), object.getContact().getClass().getName());
         assertNull(object.getContact().getFirstName());
@@ -97,10 +101,11 @@ public class JavaJavaComplexTest extends AtlasMappingBaseTest {
         AtlasSession session = context.createSession();
         BaseOrder sourceOrder = AtlasTestUtil.generateOrderClass(SourceOrder.class, SourceAddress.class,
                 SourceContact.class);
-        session.setInput(sourceOrder);
+        session.setDefaultSourceDocument(sourceOrder);
         context.process(session);
 
-        TargetTestClass object = (TargetTestClass) session.getOutput();
+        assertFalse(printAudit(session), session.hasErrors());
+        TargetTestClass object = (TargetTestClass) session.getDefaultTargetDocument();
         assertEquals(TargetTestClass.class.getName(), object.getClass().getName());
         assertEquals(20, object.getContactList().size());
         for (int i = 0; i < 20; i++) {
@@ -120,10 +125,11 @@ public class JavaJavaComplexTest extends AtlasMappingBaseTest {
         AtlasSession session = context.createSession();
         BaseOrder sourceOrder = AtlasTestUtil.generateOrderClass(SourceOrder.class, SourceAddress.class,
                 SourceContact.class);
-        session.setInput(sourceOrder);
+        session.setDefaultSourceDocument(sourceOrder);
         context.process(session);
 
-        TargetTestClass object = (TargetTestClass) session.getOutput();
+        assertFalse(printAudit(session), session.hasErrors());
+        TargetTestClass object = (TargetTestClass) session.getDefaultTargetDocument();
         assertEquals(TargetTestClass.class.getName(), object.getClass().getName());
         assertEquals(20, object.getContactArray().length);
         for (int i = 0; i < 20; i++) {
@@ -147,10 +153,11 @@ public class JavaJavaComplexTest extends AtlasMappingBaseTest {
             input.getContactList().get(i).setFirstName("fname" + i);
         }
         AtlasSession session = context.createSession();
-        session.setInput(input, "io.atlasmap.java.test.TargetTestClass");
+        session.setSourceDocument("io.atlasmap.java.test.TargetTestClass", input);
         context.process(session);
 
-        TargetTestClass object = (TargetTestClass) session.getOutput();
+        assertFalse(printAudit(session), session.hasErrors());
+        TargetTestClass object = (TargetTestClass) session.getDefaultTargetDocument();
         assertEquals(5, object.getContactList().size());
         for (int i = 0; i < 5; i++) {
             assertEquals(input.getContactList().get(i).getFirstName(), object.getContactList().get(i).getFirstName());
@@ -168,10 +175,11 @@ public class JavaJavaComplexTest extends AtlasMappingBaseTest {
             input.getContactList().get(i).setFirstName("fname" + i);
         }
         AtlasSession session = context.createSession();
-        session.setInput(input, "io.atlasmap.java.test.TargetTestClass");
+        session.setSourceDocument("io.atlasmap.java.test.TargetTestClass", input);
         context.process(session);
 
-        TargetTestClass object = (TargetTestClass) session.getOutput();
+        assertFalse(printAudit(session), session.hasErrors());
+        TargetTestClass object = (TargetTestClass) session.getDefaultTargetDocument();
         assertEquals(5, object.getContactList().size());
         for (int i = 0; i < 5; i++) {
             assertEquals(input.getContactList().get(i).getFirstName(), object.getContactList().get(i).getFirstName());
@@ -189,10 +197,11 @@ public class JavaJavaComplexTest extends AtlasMappingBaseTest {
             input.getContactList().get(i).setFirstName("fname" + i);
         }
         AtlasSession session = context.createSession();
-        session.setInput(input, "io.atlasmap.java.test.TargetTestClass");
+        session.setSourceDocument("io.atlasmap.java.test.TargetTestClass", input);
         context.process(session);
 
-        TargetTestClass object = (TargetTestClass) session.getOutput();
+        assertFalse(printAudit(session), session.hasErrors());
+        TargetTestClass object = (TargetTestClass) session.getDefaultTargetDocument();
         assertNull(object.getContactArray());
         assertNull(object.getContactList());
         assertEquals("fname4", object.getContact().getFirstName());
@@ -208,10 +217,11 @@ public class JavaJavaComplexTest extends AtlasMappingBaseTest {
         input.getContact().setLastName("last name");
 
         AtlasSession session = context.createSession();
-        session.setInput(input, "io.atlasmap.java.test.TargetTestClass");
+        session.setSourceDocument("io.atlasmap.java.test.TargetTestClass", input);
         context.process(session);
 
-        TargetTestClass object = (TargetTestClass) session.getOutput();
+        assertFalse(printAudit(session), session.hasErrors());
+        TargetTestClass object = (TargetTestClass) session.getDefaultTargetDocument();
         assertEquals(1, object.getContactList().size());
         assertEquals("first name", object.getContactList().get(0).getFirstName());
         assertEquals("last name", object.getContactList().get(0).getLastName());
@@ -226,21 +236,23 @@ public class JavaJavaComplexTest extends AtlasMappingBaseTest {
 
         input.setStatesLong(StateEnumClassLong.Arizona);
         AtlasSession session = context.createSession();
-        session.setInput(input, "io.atlasmap.java.test.TargetTestClass");
+        session.setSourceDocument("io.atlasmap.java.test.TargetTestClass", input);
         context.process(session);
-        TargetTestClass object = (TargetTestClass) session.getOutput();
+        assertFalse(printAudit(session), session.hasErrors());
+        TargetTestClass object = (TargetTestClass) session.getDefaultTargetDocument();
         assertNotNull(object);
         assertEquals(TargetTestClass.class.getName(), object.getClass().getName());
         assertEquals(StateEnumClassShort.AZ, object.getStatesShort());
 
         input.setStatesLong(StateEnumClassLong.Alabama);
         session = context.createSession();
-        session.setInput(input, "io.atlasmap.java.test.TargetTestClass");
+        session.setSourceDocument("io.atlasmap.java.test.TargetTestClass", input);
         context.process(session);
-        object = (TargetTestClass) session.getOutput();
+        object = (TargetTestClass) session.getDefaultTargetDocument();
         assertNotNull(object);
         assertEquals(TargetTestClass.class.getName(), object.getClass().getName());
         assertNull(object.getStatesShort());
+        assertTrue(printAudit(session), session.hasErrors());
     }
 
     @Test
@@ -250,10 +262,11 @@ public class JavaJavaComplexTest extends AtlasMappingBaseTest {
         AtlasSession session = context.createSession();
         BaseOrder sourceOrder = AtlasTestUtil.generateOrderClass(SourceOrder.class, SourceAddress.class,
                 SourceContact.class);
-        session.setInput(sourceOrder);
+        session.setDefaultSourceDocument(sourceOrder);
         context.process(session);
 
-        Object object = session.getOutput();
+        assertFalse(printAudit(session), session.hasErrors());
+        Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof TargetOrder);
         TargetOrder targetOrder = (TargetOrder) object;
@@ -281,10 +294,11 @@ public class JavaJavaComplexTest extends AtlasMappingBaseTest {
         AtlasSession session = context.createSession();
         BaseOrder sourceOrder = AtlasTestUtil.generateOrderClass(SourceOrder.class, SourceAddress.class,
                 SourceContact.class);
-        session.setInput(sourceOrder);
+        session.setDefaultSourceDocument(sourceOrder);
         context.process(session);
 
-        Object object = session.getOutput();
+        assertFalse(printAudit(session), session.hasErrors());
+        Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof TargetOrder);
         AtlasTestUtil.validateOrder((TargetOrder) object);
@@ -297,10 +311,11 @@ public class JavaJavaComplexTest extends AtlasMappingBaseTest {
         AtlasSession session = context.createSession();
         BaseOrder sourceOrder = AtlasTestUtil.generateOrderClass(SourceOrder.class, SourceAddress.class,
                 SourceContact.class);
-        session.setInput(sourceOrder);
+        session.setDefaultSourceDocument(sourceOrder);
         context.process(session);
 
-        Object object = session.getOutput();
+        assertFalse(printAudit(session), session.hasErrors());
+        Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof TargetOrder);
         // ensure our Uppercase action on first name did the right thing

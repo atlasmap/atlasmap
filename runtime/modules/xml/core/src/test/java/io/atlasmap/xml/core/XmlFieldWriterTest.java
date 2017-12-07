@@ -17,11 +17,12 @@ package io.atlasmap.xml.core;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.junit.Before;
@@ -29,6 +30,9 @@ import org.junit.Test;
 import org.w3c.dom.Document;
 
 import io.atlasmap.api.AtlasException;
+import io.atlasmap.spi.AtlasInternalSession;
+import io.atlasmap.spi.AtlasInternalSession.Head;
+import io.atlasmap.v2.Field;
 import io.atlasmap.xml.v2.AtlasXmlModelFactory;
 import io.atlasmap.xml.v2.XmlField;
 
@@ -61,7 +65,11 @@ public class XmlFieldWriterTest {
         XmlField xmlField = AtlasXmlModelFactory.createXmlField();
         xmlField.setPath(path);
         xmlField.setValue(value);
-        writer.write(xmlField);
+        AtlasInternalSession session = mock(AtlasInternalSession.class);
+        when(session.head()).thenReturn(mock(Head.class));
+        when(session.head().getSourceField()).thenReturn(mock(Field.class));
+        when(session.head().getTargetField()).thenReturn(xmlField);
+        writer.write(session);
     }
 
     @Test
@@ -171,7 +179,7 @@ public class XmlFieldWriterTest {
          * document)).ignoreWhitespace().build(); assertFalse(diff.toString(),
          * diff.hasDifferences());
          */
-        String actual = XmlFieldWriter.writeDocumentToString(true, writer.getDocument());
+        String actual = XmlIOHelper.writeDocumentToString(true, writer.getDocument());
         expected = expected.replaceAll("\n|\r", "");
         expected = expected.replaceAll("> *?<", "><");
         expected = expected.replace("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>", "");
@@ -269,27 +277,11 @@ public class XmlFieldWriterTest {
     public void testThrowExceptionOnNullXmlField() throws Exception {
         createWriter();
         XmlField field = null;
-        writer.write(field);
+        AtlasInternalSession session = mock(AtlasInternalSession.class);
+        when(session.head()).thenReturn(mock(Head.class));
+        when(session.head().getSourceField()).thenReturn(mock(Field.class));
+        when(session.head().getTargetField()).thenReturn(field);
+        writer.write(session);
     }
 
-    @Test(expected = AtlasException.class)
-    public void testThrowExceptionOnNullXmlFields() throws Exception {
-        createWriter();
-        List<XmlField> xmlFields = null;
-        writer.write(xmlFields);
-    }
-
-    // --Commented out by Inspection START (5/3/17, 2:48 PM):
-    // private void writeDocument(Document document, OutputStream out) throws
-    // Exception {
-    // DOMSource source = new DOMSource(document.getDocumentElement());
-    // StreamResult result = new StreamResult(out);
-    // TransformerFactory transFactory = TransformerFactory.newInstance();
-    // Transformer transformer = transFactory.newTransformer();
-    // transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-    // transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount",
-    // "2");
-    // transformer.transform(source, result);
-    // }
-    // --Commented out by Inspection STOP (5/3/17, 2:48 PM)
 }

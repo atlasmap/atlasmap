@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<AtlasMapping xmlns="http://atlasmap.io/v2"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns2="http://atlasmap.io/json/v2"
-    xmlns:ns3="http://atlasmap.io/xml/v2" name="XmlJsonFlatMapping">
+<AtlasMapping xmlns="http://atlasmap.io/v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ns2="http://atlasmap.io/json/v2" xmlns:ns3="http://atlasmap.io/xml/v2" name="XmlJsonFlatMapping">
     <DataSource dataSourceType="Source"
         uri="atlas:xml?complexType=ns:XmlFlatPrimitiveAttribute&amp;disableNamespaces=true" />
     <DataSource dataSourceType="Target" uri="atlas:json" />

@@ -23,6 +23,7 @@ import io.atlasmap.api.AtlasConversionService;
 import io.atlasmap.core.BaseModuleValidationService;
 import io.atlasmap.spi.AtlasModuleDetail;
 import io.atlasmap.spi.AtlasValidator;
+import io.atlasmap.spi.FieldDirection;
 import io.atlasmap.v2.Validation;
 import io.atlasmap.v2.ValidationScope;
 import io.atlasmap.v2.ValidationStatus;
@@ -82,7 +83,7 @@ public class XmlValidationService extends BaseModuleValidationService<XmlField> 
         // TODO check that it is a valid type on the AtlasContext
 
         validatorMap.get("xml.field.type.not.null").validate(field, validations, mappingId, ValidationStatus.WARN);
-        if (direction == FieldDirection.INPUT) {
+        if (direction == FieldDirection.SOURCE) {
             if (field != null) {
                 validatorMap.get("input.field.type.not.null").validate(field.getFieldType(), validations,
                         mappingId, ValidationStatus.WARN);

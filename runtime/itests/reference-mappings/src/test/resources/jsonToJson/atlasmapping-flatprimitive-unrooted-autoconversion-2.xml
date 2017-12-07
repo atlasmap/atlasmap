@@ -15,23 +15,15 @@
         </Mapping>
         <Mapping xsi:type="Mapping" mappingType="Map">
             <InputField xsi:type="ns3:JsonField" path="/longField" />
-            <OutputField xsi:type="ns3:JsonField" path="/intField"
-                fieldType="Integer" />
-        </Mapping>
-        <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns3:JsonField" path="/doubleField" />
-            <OutputField xsi:type="ns3:JsonField" path="/shortField"
-                fieldType="Short" />
+            <OutputField xsi:type="ns3:JsonField" path="/intField" fieldType="Integer" />
         </Mapping>
         <Mapping xsi:type="Mapping" mappingType="Map">
             <InputField xsi:type="ns3:JsonField" path="/floatField" />
-            <OutputField xsi:type="ns3:JsonField" path="/longField"
-                fieldType="Long" />
+            <OutputField xsi:type="ns3:JsonField" path="/longField" fieldType="Long" />
         </Mapping>
         <Mapping xsi:type="Mapping" mappingType="Map">
             <InputField xsi:type="ns3:JsonField" path="/booleanField" />
-            <OutputField xsi:type="ns3:JsonField" path="/doubleField"
-                fieldType="Double" />
+            <OutputField xsi:type="ns3:JsonField" path="/doubleField" fieldType="Double" />
         </Mapping>
         <Mapping xsi:type="Mapping" mappingType="Map">
             <InputField xsi:type="ns3:JsonField" path="/charField" fieldType="Char" />

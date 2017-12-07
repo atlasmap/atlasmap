@@ -15,6 +15,7 @@
  */
 package io.atlasmap.reference.json_to_json;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -39,10 +40,11 @@ public class JsonJsonAutoConversionTest extends AtlasMappingBaseTest {
         AtlasSession session = context.createSession();
         String source = AtlasTestUtil.loadFileAsString(
                 "src/test/resources/jsonToJson/atlas-json-flatprimitive-unrooted-autoconversion.json");
-        session.setInput(source);
+        session.setDefaultSourceDocument(source);
         context.process(session);
 
-        Object object = session.getOutput();
+        assertFalse(printAudit(session), session.hasErrors());
+        Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof String);
         AtlasJsonTestUnrootedMapper testMapper = new AtlasJsonTestUnrootedMapper();
@@ -58,10 +60,11 @@ public class JsonJsonAutoConversionTest extends AtlasMappingBaseTest {
         AtlasSession session = context.createSession();
         String source = AtlasTestUtil.loadFileAsString(
                 "src/test/resources/jsonToJson/atlas-json-flatprimitive-unrooted-autoconversion.json");
-        session.setInput(source);
+        session.setDefaultSourceDocument(source);
         context.process(session);
 
-        Object object = session.getOutput();
+        assertFalse(printAudit(session), session.hasErrors());
+        Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof String);
         AtlasJsonTestUnrootedMapper testMapper = new AtlasJsonTestUnrootedMapper();
@@ -77,10 +80,11 @@ public class JsonJsonAutoConversionTest extends AtlasMappingBaseTest {
         AtlasSession session = context.createSession();
         String source = AtlasTestUtil.loadFileAsString(
                 "src/test/resources/jsonToJson/atlas-json-flatprimitive-unrooted-autoconversion.json");
-        session.setInput(source);
+        session.setDefaultSourceDocument(source);
         context.process(session);
 
-        Object object = session.getOutput();
+        assertFalse(printAudit(session), session.hasErrors());
+        Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof String);
         AtlasJsonTestUnrootedMapper testMapper = new AtlasJsonTestUnrootedMapper();
@@ -96,10 +100,11 @@ public class JsonJsonAutoConversionTest extends AtlasMappingBaseTest {
         AtlasSession session = context.createSession();
         String source = AtlasTestUtil.loadFileAsString(
                 "src/test/resources/jsonToJson/atlas-json-flatprimitive-unrooted-autoconversion.json");
-        session.setInput(source);
+        session.setDefaultSourceDocument(source);
         context.process(session);
 
-        Object object = session.getOutput();
+        assertFalse(printAudit(session), session.hasErrors());
+        Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof String);
         AtlasJsonTestUnrootedMapper testMapper = new AtlasJsonTestUnrootedMapper();
@@ -115,10 +120,11 @@ public class JsonJsonAutoConversionTest extends AtlasMappingBaseTest {
         AtlasSession session = context.createSession();
         String source = AtlasTestUtil.loadFileAsString(
                 "src/test/resources/jsonToJson/atlas-json-flatprimitive-unrooted-autoconversion.json");
-        session.setInput(source);
+        session.setDefaultSourceDocument(source);
         context.process(session);
 
-        Object object = session.getOutput();
+        assertFalse(printAudit(session), session.hasErrors());
+        Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof String);
         AtlasJsonTestUnrootedMapper testMapper = new AtlasJsonTestUnrootedMapper();
@@ -134,10 +140,11 @@ public class JsonJsonAutoConversionTest extends AtlasMappingBaseTest {
         AtlasSession session = context.createSession();
         String source = AtlasTestUtil.loadFileAsString(
                 "src/test/resources/jsonToJson/atlas-json-flatprimitive-unrooted-autoconversion.json");
-        session.setInput(source);
+        session.setDefaultSourceDocument(source);
         context.process(session);
 
-        Object object = session.getOutput();
+        assertFalse(printAudit(session), session.hasErrors());
+        Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof String);
         AtlasJsonTestUnrootedMapper testMapper = new AtlasJsonTestUnrootedMapper();

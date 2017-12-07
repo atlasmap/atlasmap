@@ -1,12 +1,12 @@
-package io.atlasmap.java.module;
+package io.atlasmap.java.core;
 
 import java.util.List;
 
 import org.slf4j.LoggerFactory;
 
 import io.atlasmap.api.AtlasException;
-import io.atlasmap.core.PathUtil;
-import io.atlasmap.core.PathUtil.SegmentContext;
+import io.atlasmap.core.AtlasPath;
+import io.atlasmap.core.AtlasPath.SegmentContext;
 import io.atlasmap.java.test.BaseOrder;
 import io.atlasmap.java.test.StateEnumClassLong;
 import io.atlasmap.java.test.TargetAddress;
@@ -54,7 +54,7 @@ public class JavaWriterUtilMock extends JavaWriterUtil {
 
         // clean up our segment from something like "@addressLine1" to "addressLine1".
         // collection segments like "orders[4]" will be cleaned to "orders"
-        String cleanedSegment = PathUtil.cleanPathSegment(segmentContext.getSegment());
+        String cleanedSegment = AtlasPath.cleanPathSegment(segmentContext.getSegment());
         Object childObject = null;
 
         if (parentObject instanceof TargetAddress && "addressLine1".equals(cleanedSegment)) {
@@ -97,7 +97,7 @@ public class JavaWriterUtilMock extends JavaWriterUtil {
 
         // FIXME: Matt, right? an @ here indicates use the getter, or does @ mean access
         // member?
-        boolean useGetter = PathUtil.isAttributeSegment(segment);
+        boolean useGetter = AtlasPath.isAttributeSegment(segment);
         if (useGetter) {
             // FIXME: matt, something like this, but with reflection and what not
             // childObject = parentObject.getAddressLine1();
@@ -144,7 +144,7 @@ public class JavaWriterUtilMock extends JavaWriterUtil {
         }
 
         // now the cleanedSegment is a cleaned name such as "addressLine1"
-        String cleanedSegment = PathUtil.cleanPathSegment(segment);
+        String cleanedSegment = AtlasPath.cleanPathSegment(segment);
 
         if ("addressLine1".equals(cleanedSegment) && parentObject instanceof TargetAddress) {
             ((TargetAddress) parentObject).setAddressLine1((String) childObject);

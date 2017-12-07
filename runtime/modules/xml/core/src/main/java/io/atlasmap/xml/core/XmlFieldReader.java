@@ -15,44 +15,71 @@
  */
 package io.atlasmap.xml.core;
 
-import java.util.LinkedList;
+import java.io.ByteArrayInputStream;
 import java.util.List;
 import java.util.Map;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
+import io.atlasmap.api.AtlasConversionException;
+import io.atlasmap.api.AtlasConversionService;
 import io.atlasmap.api.AtlasException;
-import io.atlasmap.core.DefaultAtlasConversionService;
-import io.atlasmap.core.PathUtil;
-import io.atlasmap.core.PathUtil.SegmentContext;
+import io.atlasmap.core.AtlasPath.SegmentContext;
+import io.atlasmap.core.AtlasUtil;
+import io.atlasmap.spi.AtlasFieldReader;
+import io.atlasmap.spi.AtlasInternalSession;
+import io.atlasmap.v2.AuditStatus;
+import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldType;
 import io.atlasmap.xml.v2.XmlField;
 
-public class XmlFieldReader extends XmlFieldTransformer {
+public class XmlFieldReader extends XmlFieldTransformer implements AtlasFieldReader {
 
     private static final Logger LOG = LoggerFactory.getLogger(XmlFieldReader.class);
 
-    public XmlFieldReader() {
+    private AtlasConversionService conversionService;
+    private Document document;
+
+    public XmlFieldReader(AtlasConversionService conversionService) {
+        this.conversionService = conversionService;
     }
 
     public XmlFieldReader(Map<String, String> namespaces) {
         super(namespaces);
     }
 
-    public void readNew(final Document document, final XmlField xmlField) throws AtlasException {
+    public void read(AtlasInternalSession session) throws AtlasException {
+        if (document == null) {
+            throw new AtlasException(new IllegalArgumentException("'document' cannot be null"));
+        }
+        Field field = session.head().getSourceField();
+        if (field == null) {
+            throw new AtlasException(new IllegalArgumentException("Argument 'field' cannot be null"));
+        }
+
+        seedDocumentNamespaces(document);
+        XmlField xmlField = XmlField.class.cast(field);
+
         if (LOG.isDebugEnabled()) {
-            LOG.debug("Reading input value for field: " + xmlField.getPath());
+            LOG.debug("Reading source value for field: " + xmlField.getPath());
+        }
+        if (document == null) {
+            throw new AtlasException(new IllegalArgumentException("Argument 'document' cannot be null"));
+        }
+        if (xmlField == null) {
+            throw new AtlasException(new IllegalArgumentException("Argument 'xmlField' cannot be null"));
         }
         Element parentNode = document.getDocumentElement();
-        for (SegmentContext sc : new PathUtil(xmlField.getPath()).getSegmentContexts(false)) {
+        for (SegmentContext sc : new XmlPath(xmlField.getPath()).getSegmentContexts(false)) {
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Now processing segment: " + sc.getSegment());
-                LOG.debug("Parent element is currently: " + XmlFieldWriter.writeDocumentToString(true, parentNode));
+                LOG.debug("Parent element is currently: " + XmlIOHelper.writeDocumentToString(true, parentNode));
             }
             if (sc.getPrev() == null) {
                 if (LOG.isDebugEnabled()) {
@@ -63,29 +90,29 @@ public class XmlFieldReader extends XmlFieldTransformer {
                 continue;
             }
 
-            if (!PathUtil.isAttributeSegment(sc.getSegment())) {
-                String childrenElementName = PathUtil.cleanPathSegment(sc.getSegment());
-                String namespaceAlias = PathUtil.getNamespace(sc.getSegment());
+            if (!XmlPath.isAttributeSegment(sc.getSegment())) {
+                String childrenElementName = XmlPath.cleanPathSegment(sc.getSegment());
+                String namespaceAlias = XmlPath.getNamespace(sc.getSegment());
                 if (namespaceAlias != null && !"".equals(namespaceAlias)) {
                     childrenElementName = namespaceAlias + ":" + childrenElementName;
                 }
                 if (LOG.isDebugEnabled()) {
                     LOG.debug("Looking for children elements with name: " + childrenElementName);
                 }
-                List<Element> children = XmlFieldWriter.getChildrenWithName(childrenElementName, parentNode);
+                List<Element> children = XmlIOHelper.getChildrenWithName(childrenElementName, parentNode);
                 if (children == null || children.isEmpty()) {
                     if (LOG.isDebugEnabled()) {
-                        LOG.debug("Skipping input value set, couldn't find children with name '" + childrenElementName
+                        LOG.debug("Skipping source value set, couldn't find children with name '" + childrenElementName
                                 + "', for segment: " + sc);
                     }
                     return;
                 }
                 parentNode = children.get(0);
-                if (PathUtil.isCollectionSegment(sc.getSegment())) {
-                    int index = PathUtil.indexOfSegment(sc.getSegment());
+                if (XmlPath.isCollectionSegment(sc.getSegment())) {
+                    int index = XmlPath.indexOfSegment(sc.getSegment());
                     if (index >= children.size()) {
                         if (LOG.isDebugEnabled()) {
-                            LOG.debug("Skipping input value set, children list can't fit index " + index
+                            LOG.debug("Skipping source value set, children list can't fit index " + index
                                     + ", children list size: " + children.size());
                         }
                         return;
@@ -95,197 +122,44 @@ public class XmlFieldReader extends XmlFieldTransformer {
             }
             if (sc.getNext() == null) { // last segment.
                 String value = parentNode.getTextContent();
-                if (PathUtil.isAttributeSegment(sc.getSegment())) {
-                    String attributeName = PathUtil.cleanPathSegment(sc.getSegment());
+                if (XmlPath.isAttributeSegment(sc.getSegment())) {
+                    String attributeName = XmlPath.getAttribute(sc.getSegment());
                     value = parentNode.getAttribute(attributeName);
                 }
+
+                if (value == null) {
+                    return;
+                }
+
                 if (xmlField.getFieldType() == null) {
                     xmlField.setValue(value);
                     xmlField.setFieldType(FieldType.STRING);
-                    if (value != null) {
-                        LOG.warn(String.format("Unsupported FieldType for text data t=%s p=%s docId=%s",
-                                xmlField.getFieldType().value(), xmlField.getPath(), xmlField.getDocId()));
-                    }
                 } else {
-                    DefaultAtlasConversionService conversionService = DefaultAtlasConversionService.getInstance();
-                    xmlField.setValue(conversionService.convertType(value, FieldType.STRING, xmlField.getFieldType()));
-                }
-
-                return;
-            }
-        }
-    }
-
-    public void read(final Document document, final XmlField xmlField) throws AtlasException {
-        if (document == null) {
-            throw new AtlasException(new IllegalArgumentException("Argument 'document' cannot be null"));
-        }
-        if (xmlField == null) {
-            throw new AtlasException(new IllegalArgumentException("Argument 'xmlField' cannot be null"));
-        }
-
-        // check to see if the document has namespaces
-        seedDocumentNamespaces(document);
-        // read the Document using xmlPath field to set the value on the XmlField
-        String xmlPath = xmlField.getPath();
-        String attr = null;
-        LinkedList<String> elements = getElementsInXmlPath(xmlPath);
-        LinkedList<XmlPathCoordinate> xmlPathCoordinates = (LinkedList<XmlPathCoordinate>) createXmlPathCoordinates(
-                elements);
-        // is the last coordinate an attribute?
-        if (xmlPathCoordinates.getLast().getElementName().startsWith("@")) {
-            attr = xmlPathCoordinates.getLast().getElementName().replace("@", "").trim();
-            xmlPathCoordinates.removeLast();
-        }
-        // the first coordinate sets the 'root' node including the namespace we are
-        // working with...
-        XmlPathCoordinate root = xmlPathCoordinates.getFirst();
-        NodeList nodes = getNodeList(document, root);
-        Node node = nodes.item(root.getIndex());
-        if (node != null) {
-            // find the (grand)child node that has the value to set
-            for (XmlPathCoordinate xmlPathCoordinate : xmlPathCoordinates.subList(1, xmlPathCoordinates.size())) {
-                node = getChildNodeForRead(node, xmlPathCoordinate);
-            }
-            if (node != null && node.getNodeType() == Node.ELEMENT_NODE) {
-                Element e = (Element) node;
-                String value;
-                if (attr != null) {
-                    if (attr.contains(":")) {
-                        String[] attrSplit = attr.split(":");
-                        String namespace = findNamespaceURIFromPrefix(attrSplit[0]);
-                        value = e.getAttributeNS(namespace, attrSplit[1]);
-                    } else {
-                        value = e.getAttribute(attr);
-                    }
-                } else {
-                    value = e.getTextContent();
-                }
-                if (xmlField.getFieldType() == null || FieldType.STRING.equals(xmlField.getFieldType())) {
-                    xmlField.setValue(value);
-                    xmlField.setFieldType(FieldType.STRING);
-                } else if (FieldType.CHAR.equals(xmlField.getFieldType())) {
-                    xmlField.setValue(value.charAt(0));
-                }
-
-                if (value != null) {
-                    if (FieldType.BOOLEAN.equals(xmlField.getFieldType())) {
-                        xmlField.setValue(processXmlStringAsBoolean(value));
-                    } else {
-                        LOG.warn(String.format("Unsupported FieldType for text data t=%s p=%s docId=%s",
-                                xmlField.getFieldType().value(), xmlField.getPath(), xmlField.getDocId()));
+                    Object convertedValue;
+                    try {
+                        convertedValue = conversionService.convertType(value, FieldType.STRING,
+                                xmlField.getFieldType());
+                        xmlField.setValue(convertedValue);
+                    } catch (AtlasConversionException e) {
+                        AtlasUtil.addAudit(session, xmlField.getDocId(),
+                                String.format("Failed to convert field value '%s' into type '%s'", value,
+                                        xmlField.getFieldType()),
+                                xmlField.getPath(), AuditStatus.ERROR, value);
                     }
                 }
             }
         }
     }
 
-    public static Boolean processXmlStringAsBoolean(String value) {
-        if (value == null) {
-            return null;
-        }
-
-        if ("true".equalsIgnoreCase(value) || "1".equalsIgnoreCase(value)) {
-            return Boolean.TRUE;
-        }
-
-        if ("false".equalsIgnoreCase(value) || "0".equalsIgnoreCase(value)) {
-            return Boolean.FALSE;
-        }
-
-        return null;
-    }
-
-    public void read(final Document document, final List<XmlField> xmlFields) throws AtlasException {
-        if (xmlFields == null) {
-            throw new AtlasException(new IllegalArgumentException("Argument 'xmlFields' cannot be null"));
-        }
-        // check to see if the document has namespaces
-        seedDocumentNamespaces(document);
-        for (XmlField xmlField : xmlFields) {
-            read(document, xmlField);
+    public void setDocument(String docString, boolean namespaced) throws AtlasException {
+        try {
+            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+            dbf.setNamespaceAware(namespaced); // this must be done to use namespaces
+            DocumentBuilder b = dbf.newDocumentBuilder();
+            this.document = b.parse(new ByteArrayInputStream(docString.getBytes("UTF-8")));
+        } catch (Exception e) {
+            throw new AtlasException(e);
         }
     }
 
-    private Node getChildNodeForRead(final Node node, final XmlPathCoordinate xmlPathCoordinate) {
-        if (!node.hasChildNodes() || node.getNodeType() != Node.ELEMENT_NODE) {
-            return node;
-        }
-        Node returnNode;
-        Map.Entry<String, String> namespace = null;
-        Element element = (Element) node;
-        String childName = xmlPathCoordinate.getElementName();
-        if (xmlPathCoordinate.getNamespace() != null) {
-            namespace = xmlPathCoordinate.getNamespace().entrySet().iterator().next();
-        }
-        if (childName.contains(":")) {
-            childName = childName.substring(childName.indexOf(":") + 1, childName.length());
-        }
-        if (namespace != null) {
-            returnNode = element.getElementsByTagNameNS(namespace.getKey(), childName)
-                    .item(xmlPathCoordinate.getIndex());
-        } else {
-            returnNode = element.getElementsByTagName(childName).item(xmlPathCoordinate.getIndex());
-        }
-        return returnNode;
-    }
-
-    private NodeList getNodeList(Document document, XmlPathCoordinate root) {
-        NodeList nodes = null;
-        // if the document does not have namespacing but the paths do....
-        if ((namespaces != null && namespaces.isEmpty())
-                && (root.getElementName().contains(":") && root.getNamespace() == null)) {
-            // strip out the namespace from the root coordinate path
-            String correctedElement = root.getElementName().substring(root.getElementName().indexOf(":") + 1,
-                    root.getElementName().length());
-            nodes = document.getElementsByTagName(correctedElement);
-        } else if ((namespaces != null && !namespaces.isEmpty())
-                && (!root.getElementName().contains(":") && root.getNamespace() == null)) {
-            // if the document has namespaces but the paths don't
-            for (Map.Entry<String, String> namespaceEntry : namespaces.entrySet()) {
-                root.setNamespace(namespaceEntry.getKey(), namespaceEntry.getValue());
-                nodes = document.getElementsByTagNameNS(namespaceEntry.getKey(), root.getElementName());
-                // we found the element with the namespace
-                if (nodes.getLength() > 0) {
-                    break;
-                }
-            }
-        } else {
-            // default to find nodes without namespaces
-            nodes = document.getElementsByTagName(root.getElementName());
-        }
-        return nodes;
-    }
-
-    public Integer getCollectionCount(Document document, XmlField xmlField, String collectionSegment)
-            throws AtlasException {
-        if (document == null) {
-            throw new AtlasException(new IllegalArgumentException("Argument 'document' cannot be null"));
-        }
-        if (xmlField == null) {
-            throw new AtlasException(new IllegalArgumentException("Argument 'xmlField' cannot be null"));
-        }
-
-        // check to see if the document has namespaces
-        seedDocumentNamespaces(document);
-        // read the Document using xmlPath field to set the value on the XmlField
-        String xmlPath = xmlField.getPath();
-        LinkedList<String> elements = getElementsInXmlPath(xmlPath);
-        LinkedList<XmlPathCoordinate> xmlPathCoordinates = (LinkedList<XmlPathCoordinate>) createXmlPathCoordinates(
-                elements);
-        // is the last coordinate an attribute?
-        if (xmlPathCoordinates.getLast().getElementName().startsWith("@")) {
-            xmlPathCoordinates.removeLast();
-        }
-        // the first coordinate sets the 'root' node including the namespace we are
-        // working with...
-        for (XmlPathCoordinate xc : xmlPathCoordinates) {
-            if (xc.getElementName().equals(collectionSegment)) {
-                NodeList nodes = getNodeList(document, xc);
-                return Integer.valueOf(nodes.getLength());
-            }
-        }
-
-        return null;
-    }
 }
