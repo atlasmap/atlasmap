@@ -17,6 +17,9 @@ package io.atlasmap.v2;
 
 public class AtlasModelFactory {
 
+    private AtlasModelFactory() {
+    }
+
     @SuppressWarnings("unchecked")
     public static <T extends BaseMapping> T createMapping(MappingType type) {
         T fm = null;
@@ -30,17 +33,8 @@ public class AtlasModelFactory {
             ((Collection) fm).setMappingType(type);
             return fm;
         case COMBINE:
-            fm = (T) new Mapping();
-            ((Mapping) fm).setMappingType(type);
-            return fm;
         case LOOKUP:
-            fm = (T) new Mapping();
-            ((Mapping) fm).setMappingType(type);
-            return fm;
         case MAP:
-            fm = (T) new Mapping();
-            ((Mapping) fm).setMappingType(type);
-            return fm;
         case SEPARATE:
             fm = (T) new Mapping();
             ((Mapping) fm).setMappingType(type);
@@ -92,27 +86,27 @@ public class AtlasModelFactory {
                 }
             }
             return clone;
-        } else { // non-collection mapping
-            Mapping mapping = (Mapping) baseMapping;
-            Mapping clone = new Mapping();
-            clone.setAlias(mapping.getAlias());
-            clone.setDelimiter(mapping.getDelimiter());
-            clone.setDelimiterString(mapping.getDelimiterString());
-            clone.setDescription(mapping.getDescription());
-            clone.setLookupTableName(mapping.getLookupTableName());
-            clone.setMappingType(MappingType.fromValue(mapping.getMappingType().value()));
-            clone.setStrategy(mapping.getStrategy());
-            clone.setStrategyClassName(mapping.getStrategyClassName());
-            if (deepClone) {
-                for (Field f : mapping.getInputField()) {
-                    clone.getInputField().add(cloneField(f));
-                }
-                for (Field f : mapping.getOutputField()) {
-                    clone.getOutputField().add(cloneField(f));
-                }
-            }
-            return clone;
         }
+        // Non-collection mapping
+        Mapping mapping = (Mapping) baseMapping;
+        Mapping clone = new Mapping();
+        clone.setAlias(mapping.getAlias());
+        clone.setDelimiter(mapping.getDelimiter());
+        clone.setDelimiterString(mapping.getDelimiterString());
+        clone.setDescription(mapping.getDescription());
+        clone.setLookupTableName(mapping.getLookupTableName());
+        clone.setMappingType(MappingType.fromValue(mapping.getMappingType().value()));
+        clone.setStrategy(mapping.getStrategy());
+        clone.setStrategyClassName(mapping.getStrategyClassName());
+        if (deepClone) {
+            for (Field f : mapping.getInputField()) {
+                clone.getInputField().add(cloneField(f));
+            }
+            for (Field f : mapping.getOutputField()) {
+                clone.getOutputField().add(cloneField(f));
+            }
+        }
+        return clone;
     }
 
     public static Field cloneField(Field f) {
@@ -136,7 +130,7 @@ public class AtlasModelFactory {
             f.setCollectionType(CollectionType.fromValue(field.getCollectionType().value()));
         }
         if (field.getDocId() != null) {
-            f.setDocId(new String(field.getDocId()));
+            f.setDocId(field.getDocId());
         }
         if (field.getFieldType() != null) {
             f.setFieldType(FieldType.fromValue(field.getFieldType().value()));
@@ -145,7 +139,7 @@ public class AtlasModelFactory {
             f.setIndex(Integer.valueOf(field.getIndex()));
         }
         if (field.getPath() != null) {
-            f.setPath(new String(field.getPath()));
+            f.setPath(field.getPath());
         }
         if (field.isRequired() != null) {
             f.setRequired(Boolean.valueOf(field.isRequired()));
@@ -180,36 +174,47 @@ public class AtlasModelFactory {
             return null;
         }
 
-        Action a = null;
+        if (action instanceof AbsoluteValue) {
+            return new AbsoluteValue();
+        }
+        if (action instanceof Add) {
+            return new Add();
+        }
+        if (action instanceof Average) {
+            return new Average();
+        }
         if (action instanceof Camelize) {
             return new Camelize();
         }
         if (action instanceof Capitalize) {
             return new Capitalize();
         }
+        if (action instanceof Ceiling) {
+            return new Ceiling();
+        }
         if (action instanceof ConvertAreaUnit) {
             ConvertAreaUnit cau = new ConvertAreaUnit();
             cau.setFromUnit(((ConvertAreaUnit) action).getFromUnit());
             cau.setToUnit(((ConvertAreaUnit) action).getToUnit());
-            a = cau;
+            return cau;
         }
         if (action instanceof ConvertDistanceUnit) {
             ConvertDistanceUnit cdu = new ConvertDistanceUnit();
             cdu.setFromUnit(((ConvertDistanceUnit) action).getFromUnit());
             cdu.setToUnit(((ConvertDistanceUnit) action).getToUnit());
-            a = cdu;
+            return cdu;
         }
         if (action instanceof ConvertMassUnit) {
             ConvertMassUnit cmu = new ConvertMassUnit();
             cmu.setFromUnit(((ConvertMassUnit) action).getFromUnit());
             cmu.setToUnit(((ConvertMassUnit) action).getToUnit());
-            a = cmu;
+            return cmu;
         }
         if (action instanceof ConvertVolumeUnit) {
             ConvertVolumeUnit cvu = new ConvertVolumeUnit();
             cvu.setFromUnit(((ConvertVolumeUnit) action).getFromUnit());
             cvu.setToUnit(((ConvertVolumeUnit) action).getToUnit());
-            a = cvu;
+            return cvu;
         }
         if (action instanceof CurrentDate) {
             return new CurrentDate();
@@ -221,21 +226,26 @@ public class AtlasModelFactory {
             return new CurrentTime();
         }
         if (action instanceof CustomAction) {
-            a = new CustomAction();
+            CustomAction a = new CustomAction();
             if (((CustomAction) action).getClassName() != null) {
-                ((CustomAction) a).setClassName(new String(((CustomAction) action).getClassName()));
+                a.setClassName(((CustomAction) action).getClassName());
             }
             if (((CustomAction) action).getMethodName() != null) {
-                ((CustomAction) a).setMethodName(new String(((CustomAction) action).getMethodName()));
+                a.setMethodName(((CustomAction) action).getMethodName());
             }
-            if (((CustomAction) a).getInputFieldType() != null) {
-                ((CustomAction) a)
-                        .setInputFieldType(FieldType.fromValue(((CustomAction) action).getInputFieldType().value()));
+            if (a.getInputFieldType() != null) {
+                a.setInputFieldType(FieldType.fromValue(((CustomAction) action).getInputFieldType().value()));
             }
-            if (((CustomAction) a).getOutputFieldType() != null) {
-                ((CustomAction) a)
-                        .setOutputFieldType(FieldType.fromValue(((CustomAction) action).getOutputFieldType().value()));
+            if (a.getOutputFieldType() != null) {
+                a.setOutputFieldType(FieldType.fromValue(((CustomAction) action).getOutputFieldType().value()));
             }
+            return a;
+        }
+        if (action instanceof Divide) {
+            return new Divide();
+        }
+        if (action instanceof Floor) {
+            return new Floor();
         }
         if (action instanceof GenerateUUID) {
             return new GenerateUUID();
@@ -243,32 +253,47 @@ public class AtlasModelFactory {
         if (action instanceof Lowercase) {
             return new Lowercase();
         }
+        if (action instanceof Maximum) {
+            return new Maximum();
+        }
+        if (action instanceof Minimum) {
+            return new Minimum();
+        }
+        if (action instanceof Multiply) {
+            return new Multiply();
+        }
         if (action instanceof PadStringLeft) {
-            a = new PadStringLeft();
+            PadStringLeft a = new PadStringLeft();
             if (((PadStringLeft) action).getPadCharacter() != null) {
-                ((PadStringLeft) a).setPadCharacter(new String(((PadStringLeft) action).getPadCharacter()));
+                a.setPadCharacter(((PadStringLeft) action).getPadCharacter());
             }
             if (((PadStringLeft) action).getPadCount() != null) {
-                ((PadStringLeft) a).setPadCount(Integer.valueOf(((PadStringLeft) action).getPadCount()));
+                a.setPadCount(Integer.valueOf(((PadStringLeft) action).getPadCount()));
             }
+            return a;
         }
         if (action instanceof PadStringRight) {
-            a = new PadStringRight();
+            PadStringRight a = new PadStringRight();
             if (((PadStringRight) action).getPadCharacter() != null) {
-                ((PadStringRight) a).setPadCharacter(new String(((PadStringRight) action).getPadCharacter()));
+                a.setPadCharacter(((PadStringRight) action).getPadCharacter());
             }
             if (((PadStringRight) action).getPadCount() != null) {
-                ((PadStringRight) a).setPadCount(Integer.valueOf(((PadStringRight) action).getPadCount()));
+                a.setPadCount(((PadStringRight) action).getPadCount());
             }
+            return a;
         }
         if (action instanceof Replace) {
-            a = new Replace();
+            Replace a = new Replace();
             if (((Replace) action).getOldString() != null) {
-                ((Replace) a).setOldString(new String(((Replace) action).getOldString()));
+                a.setOldString(((Replace) action).getOldString());
             }
             if (((Replace) action).getNewString() != null) {
-                ((Replace) a).setNewString(new String(((Replace) action).getNewString()));
+                a.setNewString(((Replace) action).getNewString());
             }
+            return a;
+        }
+        if (action instanceof Round) {
+            return new Round();
         }
         if (action instanceof SeparateByDash) {
             return new SeparateByDash();
@@ -280,36 +305,37 @@ public class AtlasModelFactory {
             return new StringLength();
         }
         if (action instanceof SubString) {
-            a = new SubString();
+            SubString a = new SubString();
             if (((SubString) action).getStartIndex() != null) {
-                ((SubString) a).setStartIndex(Integer.valueOf(((SubString) action).getStartIndex()));
+                a.setStartIndex(((SubString) action).getStartIndex());
             }
             if (((SubString) action).getEndIndex() != null) {
-                ((SubString) a).setEndIndex(Integer.valueOf(((SubString) action).getEndIndex()));
+                a.setEndIndex(((SubString) action).getEndIndex());
             }
+            return a;
         }
         if (action instanceof SubStringAfter) {
-            a = new SubStringAfter();
+            SubStringAfter a = new SubStringAfter();
             if (((SubStringAfter) action).getStartIndex() != null) {
-                ((SubStringAfter) a).setStartIndex(Integer.valueOf(((SubStringAfter) action).getStartIndex()));
+                a.setStartIndex(((SubStringAfter) action).getStartIndex());
             }
             if (((SubStringAfter) action).getEndIndex() != null) {
-                ((SubStringAfter) a).setEndIndex(Integer.valueOf(((SubStringAfter) action).getEndIndex()));
+                a.setEndIndex(((SubStringAfter) action).getEndIndex());
             }
+            return a;
         }
         if (action instanceof SubStringBefore) {
-            a = new SubStringBefore();
+            SubStringBefore a = new SubStringBefore();
             if (((SubStringBefore) action).getStartIndex() != null) {
-                ((SubStringBefore) a).setStartIndex(Integer.valueOf(((SubStringBefore) action).getStartIndex()));
+                a.setStartIndex(((SubStringBefore) action).getStartIndex());
             }
             if (((SubStringBefore) action).getEndIndex() != null) {
-                ((SubStringBefore) a).setEndIndex(Integer.valueOf(((SubStringBefore) action).getEndIndex()));
+                a.setEndIndex(((SubStringBefore) action).getEndIndex());
             }
+            return a;
         }
-        if (action instanceof SumUp) {
-            SumUp su = new SumUp();
-            su.setNumberType(((SumUp) action).getNumberType());
-            a = su;
+        if (action instanceof Subtract) {
+            return new Subtract();
         }
         if (action instanceof Trim) {
             return new Trim();
@@ -323,7 +349,7 @@ public class AtlasModelFactory {
         if (action instanceof Uppercase) {
             return new Uppercase();
         }
-        return a;
+        return null;
     }
 
     protected static String baseFieldToString(Field f) {

@@ -69,9 +69,8 @@ public abstract class BaseMarshallerTest {
                     if (exc == null) {
                         Files.delete(dir);
                         return FileVisitResult.CONTINUE;
-                    } else {
-                        throw exc;
                     }
+                    throw exc;
                 }
             });
         }
@@ -529,12 +528,43 @@ public abstract class BaseMarshallerTest {
     }
 
     protected List<Action> generateReferenceFieldActions() {
-        List<Action> actions = Arrays.asList(new Camelize(), new Capitalize(), new CurrentDate(), new CurrentDateTime(),
-                new CurrentTime(), new CustomAction(), new GenerateUUID(), new Lowercase(), new PadStringLeft(),
-                new PadStringRight(), new Replace(), new SeparateByDash(), new SeparateByUnderscore(), new StringLength(),
-                new SubString(), new SubStringAfter(), new SubStringBefore(), new Trim(), new TrimLeft(),
-                new TrimRight(), new Uppercase(), new ConvertAreaUnit(), new ConvertDistanceUnit(),
-                new ConvertMassUnit(), new ConvertVolumeUnit(), new SumUp());
+        List<Action> actions = Arrays.asList(
+                new AbsoluteValue(),
+                new Add(),
+                new Average(),
+                new Camelize(),
+                new Capitalize(),
+                new Ceiling(),
+                new ConvertAreaUnit(),
+                new ConvertDistanceUnit(),
+                new ConvertMassUnit(),
+                new ConvertVolumeUnit(),
+                new CurrentDate(),
+                new CurrentDateTime(),
+                new CurrentTime(),
+                new CustomAction(),
+                new Divide(),
+                new Floor(),
+                new GenerateUUID(),
+                new Lowercase(),
+                new Maximum(),
+                new Minimum(),
+                new Multiply(),
+                new PadStringLeft(),
+                new PadStringRight(),
+                new Replace(),
+                new Round(),
+                new SeparateByDash(),
+                new SeparateByUnderscore(),
+                new StringLength(),
+                new SubString(),
+                new SubStringAfter(),
+                new SubStringBefore(),
+                new Subtract(),
+                new Trim(),
+                new TrimLeft(),
+                new TrimRight(),
+                new Uppercase());
         return actions;
     }
 }

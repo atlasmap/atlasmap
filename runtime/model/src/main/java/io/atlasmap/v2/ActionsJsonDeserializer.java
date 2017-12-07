@@ -24,6 +24,15 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 
 public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
 
+    private static final String START_INDEX = "startIndex";
+    private static final String END_INDEX = "endIndex";
+    private static final String MATCH = "match";
+    private static final String DATE_FORMAT = "dateFormat";
+    private static final String CLASS_NAME = "className";
+    private static final String METHOD_NAME = "methodName";
+    private static final String FROM_UNIT = "fromUnit";
+    private static final String TO_UNIT = "toUnit";
+
     @Override
     public Actions deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {
         Actions actions = null;
@@ -52,79 +61,87 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
 
     protected Action processActionJsonToken(JsonParser jsonToken) throws IOException {
 
-        Action action = null;
         if (jsonToken.getCurrentName() == null) {
             return null;
         }
 
         switch (jsonToken.getCurrentName()) {
-        case "Camelize":
-            action = new Camelize();
-            return action;
-        case "Capitalize":
-            action = new Capitalize();
-            return action;
-        case "ConvertAreaUnit":
-            return processConvertAreaUnitJsonToken(jsonToken);
-        case "ConvertDistanceUnit":
-            return processConvertDistanceUnitJsonToken(jsonToken);
-        case "ConvertMassUnit":
-            return processConvertMassUnitJsonToken(jsonToken);
-        case "ConvertVolumeUnit":
-            return processConvertVolumeUnitJsonToken(jsonToken);
-        case "CurrentDate":
-            return processCurrentDateJsonToken(jsonToken);
-        case "CurrentDateTime":
-            return processCurrentDateTimeJsonToken(jsonToken);
-        case "CurrentTime":
-            return processCurrentTimeJsonToken(jsonToken);
-        case "CustomAction":
-            return processCustomActionJsonToken(jsonToken);
-        case "GenerateUUID":
-            action = new GenerateUUID();
-            return action;
-        case "Lowercase":
-            action = new Lowercase();
-            return action;
-        case "PadStringLeft":
-            return processPadStringLeftJsonToken(jsonToken);
-        case "PadStringRight":
-            return processPadStringRightJsonToken(jsonToken);
-        case "replace":
-            return processReplaceJsonToken(jsonToken);
-        case "SeparateByDash":
-            action = new SeparateByDash();
-            return action;
-        case "SeparateByUnderscore":
-            action = new SeparateByUnderscore();
-            return action;
-        case "StringLength":
-            action = new StringLength();
-            return action;
-        case "SubString":
-            return processSubStringJsonToken(jsonToken);
-        case "SubStringAfter":
-            return processSubStringAfterJsonToken(jsonToken);
-        case "SubStringBefore":
-            return processSubStringBeforeJsonToken(jsonToken);
-        case "SumUp":
-            return processSumUpJsonToken(jsonToken);
-        case "Trim":
-            action = new Trim();
-            return action;
-        case "TrimLeft":
-            action = new TrimLeft();
-            return action;
-        case "TrimRight":
-            action = new TrimRight();
-            return action;
-        case "Uppercase":
-            action = new Uppercase();
-            return action;
-        default:
-            // ref: https://github.com/atlasmap/atlasmap/issues/6
-            // TODO: Logger not required in model module
-            // logger.warn("Unsupported action named: " + jsonToken.getCurrentName());
+            case "AbsoluteValue":
+                return new AbsoluteValue();
+            case "Add":
+                return new Average();
+            case "Average":
+                return new Average();
+            case "Camelize":
+                return new Camelize();
+            case "Capitalize":
+                return new Capitalize();
+            case "Ceiling":
+                return new Ceiling();
+            case "ConvertAreaUnit":
+                return processConvertAreaUnitJsonToken(jsonToken);
+            case "ConvertDistanceUnit":
+                return processConvertDistanceUnitJsonToken(jsonToken);
+            case "ConvertMassUnit":
+                return processConvertMassUnitJsonToken(jsonToken);
+            case "ConvertVolumeUnit":
+                return processConvertVolumeUnitJsonToken(jsonToken);
+            case "CurrentDate":
+                return processCurrentDateJsonToken(jsonToken);
+            case "CurrentDateTime":
+                return processCurrentDateTimeJsonToken(jsonToken);
+            case "CurrentTime":
+                return processCurrentTimeJsonToken(jsonToken);
+            case "CustomAction":
+                return processCustomActionJsonToken(jsonToken);
+            case "Divide":
+                return new Divide();
+            case "Floor":
+                return new Floor();
+            case "GenerateUUID":
+                return new GenerateUUID();
+            case "Maximum":
+                return new Maximum();
+            case "Minimum":
+                return new Minimum();
+            case "Multiply":
+                return new Multiply();
+            case "Lowercase":
+                return new Lowercase();
+            case "PadStringLeft":
+                return processPadStringLeftJsonToken(jsonToken);
+            case "PadStringRight":
+                return processPadStringRightJsonToken(jsonToken);
+            case "Replace":
+                return processReplaceJsonToken(jsonToken);
+            case "Round":
+                return new Round();
+            case "SeparateByDash":
+                return new SeparateByDash();
+            case "SeparateByUnderscore":
+                return new SeparateByUnderscore();
+            case "StringLength":
+                return new StringLength();
+            case "SubString":
+                return processSubStringJsonToken(jsonToken);
+            case "SubStringAfter":
+                return processSubStringAfterJsonToken(jsonToken);
+            case "SubStringBefore":
+                return processSubStringBeforeJsonToken(jsonToken);
+            case "Subtract":
+                return new Subtract();
+            case "Trim":
+                return new Trim();
+            case "TrimLeft":
+                return new TrimLeft();
+            case "TrimRight":
+                return new TrimRight();
+            case "Uppercase":
+                return new Uppercase();
+            default:
+                // ref: https://github.com/atlasmap/atlasmap/issues/6
+                // TODO: Logger not required in model module
+                // logger.warn("Unsupported action named: " + jsonToken.getCurrentName());
         }
 
         return null;
@@ -175,11 +192,11 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
                 jsonToken.nextToken();
             }
             switch (jsonToken.getCurrentName()) {
-            case "startIndex":
+            case START_INDEX:
                 jsonToken.nextToken();
                 action.setStartIndex(jsonToken.getIntValue());
                 break;
-            case "endIndex":
+            case END_INDEX:
                 jsonToken.nextToken();
                 action.setEndIndex(jsonToken.getIntValue());
                 break;
@@ -206,15 +223,15 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
                 jsonToken.nextToken();
             }
             switch (jsonToken.getCurrentName()) {
-            case "startIndex":
+            case START_INDEX:
                 jsonToken.nextToken();
                 action.setStartIndex(jsonToken.getIntValue());
                 break;
-            case "endIndex":
+            case END_INDEX:
                 jsonToken.nextToken();
                 action.setEndIndex(jsonToken.getIntValue());
                 break;
-            case "match":
+            case MATCH:
                 jsonToken.nextToken();
                 action.setMatch(jsonToken.getValueAsString());
                 break;
@@ -242,15 +259,15 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
                 jsonToken.nextToken();
             }
             switch (jsonToken.getCurrentName()) {
-            case "startIndex":
+            case START_INDEX:
                 jsonToken.nextToken();
                 action.setStartIndex(jsonToken.getIntValue());
                 break;
-            case "endIndex":
+            case END_INDEX:
                 jsonToken.nextToken();
                 action.setEndIndex(jsonToken.getIntValue());
                 break;
-            case "match":
+            case MATCH:
                 jsonToken.nextToken();
                 action.setMatch(jsonToken.getValueAsString());
                 break;
@@ -340,7 +357,7 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
                 jsonToken.nextToken();
             }
             switch (jsonToken.getCurrentName()) {
-            case "dateFormat":
+            case DATE_FORMAT:
                 jsonToken.nextToken();
                 action.setDateFormat(jsonToken.getValueAsString());
                 break;
@@ -367,7 +384,7 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
                 jsonToken.nextToken();
             }
             switch (jsonToken.getCurrentName()) {
-            case "dateFormat":
+            case DATE_FORMAT:
                 jsonToken.nextToken();
                 action.setDateFormat(jsonToken.getValueAsString());
                 break;
@@ -394,7 +411,7 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
                 jsonToken.nextToken();
             }
             switch (jsonToken.getCurrentName()) {
-            case "dateFormat":
+            case DATE_FORMAT:
                 jsonToken.nextToken();
                 action.setDateFormat(jsonToken.getValueAsString());
                 break;
@@ -421,13 +438,13 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
                 jsonToken.nextToken();
             }
             switch (jsonToken.getCurrentName()) {
-            case "className":
+            case CLASS_NAME:
                 jsonToken.nextToken();
                 action.setClassName(jsonToken.getValueAsString());
                 break;
-            case "methodName":
+            case METHOD_NAME:
                 jsonToken.nextToken();
-                action.setClassName(jsonToken.getValueAsString());
+                action.setMethodName(jsonToken.getValueAsString());
                 break;
             default:
                 break;
@@ -438,35 +455,7 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
         return action;
     }
 
-    protected SumUp processSumUpJsonToken(JsonParser jsonToken) throws IOException {
-        SumUp action = new SumUp();
-
-        if (JsonToken.END_ARRAY.equals(jsonToken.currentToken())
-                || JsonToken.END_OBJECT.equals(jsonToken.currentToken())) {
-            return action;
-        }
-
-        JsonToken nextToken = null;
-        do {
-            if (JsonToken.START_OBJECT.equals(jsonToken.currentToken())) {
-                jsonToken.nextToken();
-            }
-            switch (jsonToken.getCurrentName()) {
-            case "numberType":
-                jsonToken.nextToken();
-                action.setNumberType(NumberType.fromValue(jsonToken.getValueAsString()));
-                break;
-            default:
-                break;
-            }
-
-            nextToken = jsonToken.nextToken();
-        } while (!JsonToken.END_ARRAY.equals(nextToken) && !JsonToken.END_OBJECT.equals(nextToken));
-
-        return action;
-    }
-
-    protected ConvertVolumeUnit processConvertVolumeUnitJsonToken(JsonParser jsonToken) throws IOException {
+    protected ConvertVolumeUnit processConvertVolumeUnitJsonToken(JsonParser jsonToken) {
         ConvertVolumeUnit action = new ConvertVolumeUnit();
 
         if (JsonToken.END_ARRAY.equals(jsonToken.currentToken())
@@ -491,11 +480,11 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
                 jsonToken.nextToken();
             }
             switch (jsonToken.getCurrentName()) {
-            case "fromUnit":
+            case FROM_UNIT:
                 jsonToken.nextToken();
                 action.setFromUnit(MassUnitType.fromValue(jsonToken.getValueAsString()));
                 break;
-            case "toUnit":
+            case TO_UNIT:
                 jsonToken.nextToken();
                 action.setToUnit(MassUnitType.fromValue(jsonToken.getValueAsString()));
                 break;
@@ -524,11 +513,11 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
                 jsonToken.nextToken();
             }
             switch (jsonToken.getCurrentName()) {
-            case "fromUnit":
+            case FROM_UNIT:
                 jsonToken.nextToken();
                 action.setFromUnit(DistanceUnitType.fromValue(jsonToken.getValueAsString()));
                 break;
-            case "toUnit":
+            case TO_UNIT:
                 jsonToken.nextToken();
                 action.setToUnit(DistanceUnitType.fromValue(jsonToken.getValueAsString()));
                 break;
@@ -557,11 +546,11 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
                 jsonToken.nextToken();
             }
             switch (jsonToken.getCurrentName()) {
-            case "fromUnit":
+            case FROM_UNIT:
                 jsonToken.nextToken();
                 action.setFromUnit(AreaUnitType.fromValue(jsonToken.getValueAsString()));
                 break;
-            case "toUnit":
+            case TO_UNIT:
                 jsonToken.nextToken();
                 action.setToUnit(AreaUnitType.fromValue(jsonToken.getValueAsString()));
                 break;
