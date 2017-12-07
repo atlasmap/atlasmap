@@ -30,7 +30,7 @@ public class LongConverter implements AtlasPrimitiveConverter<Long> {
      * @throws AtlasConversionException
      */
     @Override
-    @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.BOOLEAN)
+    @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.BOOLEAN, concerns = AtlasConversionConcern.CONVENTION)
     public Boolean convertToBoolean(Long value) throws AtlasConversionException {
         if (value == null) {
             return null;
@@ -68,7 +68,8 @@ public class LongConverter implements AtlasPrimitiveConverter<Long> {
      * @throws AtlasConversionException
      */
     @Override
-    @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.CHAR, concerns = AtlasConversionConcern.RANGE)
+    @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.CHAR, concerns = {
+            AtlasConversionConcern.RANGE, AtlasConversionConcern.CONVENTION })
     public Character convertToCharacter(Long value) throws AtlasConversionException {
         if (value == null) {
             return null;
@@ -101,9 +102,6 @@ public class LongConverter implements AtlasPrimitiveConverter<Long> {
     public Float convertToFloat(Long value) throws AtlasConversionException {
         if (value == null) {
             return null;
-        }
-        if (value.floatValue() == 0.0f || value.floatValue() == -0.0f) {
-            return value.floatValue();
         }
         return value.floatValue();
     }

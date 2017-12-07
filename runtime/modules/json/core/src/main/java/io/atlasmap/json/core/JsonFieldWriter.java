@@ -69,7 +69,8 @@ public class JsonFieldWriter implements AtlasFieldWriter {
         }
         if (LOG.isDebugEnabled()) {
             LOG.debug("Field: " + AtlasModelFactory.toString(targetField));
-            LOG.debug("Field type=" + targetField.getFieldType() + " path=" + targetField.getPath() + " v=" + targetField.getValue());
+            LOG.debug("Field type=" + targetField.getFieldType() + " path=" + targetField.getPath() + " v="
+                    + targetField.getValue());
         }
         AtlasPath path = new AtlasPath(targetField.getPath());
         String lastSegment = path.getLastSegment();
@@ -223,7 +224,11 @@ public class JsonFieldWriter implements AtlasFieldWriter {
         Object value = jsonField.getValue();
         JsonNode valueNode = null;
         if (FieldType.STRING.equals(type)) {
-            valueNode = rootNode.textNode(String.valueOf(value));
+            if (value != null) {
+                valueNode = rootNode.textNode(String.valueOf(value));
+            } else {
+                valueNode = rootNode.nullNode();
+            }
         } else if (FieldType.CHAR.equals(type)) {
             valueNode = rootNode.textNode(Character.toString((char) value));
         } else if (FieldType.BOOLEAN.equals(type)) {

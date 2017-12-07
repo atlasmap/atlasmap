@@ -30,7 +30,8 @@ public class IntegerConverter implements AtlasPrimitiveConverter<Integer> {
      * @throws AtlasConversionException
      */
     @Override
-    @AtlasConversionInfo(sourceType = FieldType.INTEGER, targetType = FieldType.BOOLEAN)
+    @AtlasConversionInfo(sourceType = FieldType.INTEGER, targetType = FieldType.BOOLEAN, concerns = {
+            AtlasConversionConcern.CONVENTION })
     public Boolean convertToBoolean(Integer value) throws AtlasConversionException {
         if (value == null) {
             return null;
@@ -67,7 +68,8 @@ public class IntegerConverter implements AtlasPrimitiveConverter<Integer> {
      * @throws AtlasConversionException
      */
     @Override
-    @AtlasConversionInfo(sourceType = FieldType.INTEGER, targetType = FieldType.CHAR, concerns = AtlasConversionConcern.RANGE)
+    @AtlasConversionInfo(sourceType = FieldType.INTEGER, targetType = FieldType.CHAR, concerns = {
+            AtlasConversionConcern.RANGE, AtlasConversionConcern.CONVENTION })
     public Character convertToCharacter(Integer value) throws AtlasConversionException {
         if (value == null) {
             return null;
@@ -90,9 +92,6 @@ public class IntegerConverter implements AtlasPrimitiveConverter<Integer> {
         if (value == null) {
             return null;
         }
-        if (value.doubleValue() == 0.0d || value.doubleValue() == -0.0d) {
-            return value.doubleValue();
-        }
         return value.doubleValue();
     }
 
@@ -106,10 +105,6 @@ public class IntegerConverter implements AtlasPrimitiveConverter<Integer> {
     public Float convertToFloat(Integer value) throws AtlasConversionException {
         if (value == null) {
             return null;
-        }
-
-        if ((value.floatValue() == 0.0f) || (value.floatValue() == -0.0f)) {
-            return value.floatValue();
         }
         return value.floatValue();
     }

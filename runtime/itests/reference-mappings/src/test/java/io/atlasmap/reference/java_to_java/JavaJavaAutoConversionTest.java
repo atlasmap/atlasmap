@@ -41,6 +41,7 @@ public class JavaJavaAutoConversionTest extends AtlasMappingBaseTest {
         context.process(session);
 
         assertFalse(printAudit(session), session.hasErrors());
+
         Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof TargetFlatPrimitiveClass);

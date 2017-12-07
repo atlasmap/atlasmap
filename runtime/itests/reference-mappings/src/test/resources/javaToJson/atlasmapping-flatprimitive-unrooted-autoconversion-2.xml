@@ -12,7 +12,7 @@
         </Mapping>
         <Mapping xsi:type="Mapping" mappingType="Map">
             <InputField xsi:type="ns2:JavaField" path="/shortField" />
-            <OutputField xsi:type="ns3:JsonField" path="/intField" fieldType="Integer" />
+            <OutputField xsi:type="ns3:JsonField" path="/byteField" fieldType="Byte" />
         </Mapping>
         <Mapping xsi:type="Mapping" mappingType="Map">
             <InputField xsi:type="ns2:JavaField" path="/longField" />

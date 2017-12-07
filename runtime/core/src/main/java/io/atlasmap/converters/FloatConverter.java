@@ -30,7 +30,8 @@ public class FloatConverter implements AtlasPrimitiveConverter<Float> {
      * @throws AtlasConversionException
      */
     @Override
-    @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.BOOLEAN)
+    @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.BOOLEAN, concerns = {
+            AtlasConversionConcern.CONVENTION })
     public Boolean convertToBoolean(Float value) throws AtlasConversionException {
         if (value == null) {
             return null;
@@ -48,7 +49,8 @@ public class FloatConverter implements AtlasPrimitiveConverter<Float> {
      * @throws AtlasConversionException
      */
     @Override
-    @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.BYTE, concerns = AtlasConversionConcern.RANGE)
+    @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.BYTE, concerns = {
+            AtlasConversionConcern.RANGE })
     public Byte convertToByte(Float value) throws AtlasConversionException {
         if (value == null) {
             return null;
@@ -68,7 +70,8 @@ public class FloatConverter implements AtlasPrimitiveConverter<Float> {
      * @throws AtlasConversionException
      */
     @Override
-    @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.CHAR, concerns = AtlasConversionConcern.RANGE)
+    @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.CHAR, concerns = {
+            AtlasConversionConcern.RANGE, AtlasConversionConcern.CONVENTION })
     public Character convertToCharacter(Float value) throws AtlasConversionException {
         if (value == null) {
             return null;
@@ -93,11 +96,6 @@ public class FloatConverter implements AtlasPrimitiveConverter<Float> {
         if (value == null) {
             return null;
         }
-
-        if (value == 0.0f) {
-            return value.doubleValue();
-        }
-
         return value.doubleValue();
     }
 

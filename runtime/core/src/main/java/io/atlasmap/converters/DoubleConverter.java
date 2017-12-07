@@ -30,7 +30,8 @@ public class DoubleConverter implements AtlasPrimitiveConverter<Double> {
      * @throws AtlasConversionException
      */
     @Override
-    @AtlasConversionInfo(sourceType = FieldType.DOUBLE, targetType = FieldType.BOOLEAN)
+    @AtlasConversionInfo(sourceType = FieldType.DOUBLE, targetType = FieldType.BOOLEAN, concerns = {
+            AtlasConversionConcern.CONVENTION })
     public Boolean convertToBoolean(Double value) throws AtlasConversionException {
         if (value == null) {
             return null;
@@ -69,7 +70,8 @@ public class DoubleConverter implements AtlasPrimitiveConverter<Double> {
      * @throws AtlasConversionException
      */
     @Override
-    @AtlasConversionInfo(sourceType = FieldType.DOUBLE, targetType = FieldType.CHAR, concerns = AtlasConversionConcern.RANGE)
+    @AtlasConversionInfo(sourceType = FieldType.DOUBLE, targetType = FieldType.CHAR, concerns = {
+            AtlasConversionConcern.RANGE, AtlasConversionConcern.CONVENTION })
     public Character convertToCharacter(Double value) throws AtlasConversionException {
         if (value == null) {
             return null;

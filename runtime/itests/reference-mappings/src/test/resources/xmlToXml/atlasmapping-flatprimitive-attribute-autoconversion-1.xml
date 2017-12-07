@@ -37,8 +37,8 @@
             <OutputField xsi:type="ns3:XmlField" path="/xt1:XmlFPE/xt1:floatField" />
         </Mapping>
         <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns3:XmlField" path="/XmlFPA/@charField" />
-            <OutputField xsi:type="ns3:XmlField" path="/xt1:XmlFPE/xt1:booleanField" />
+            <InputField xsi:type="ns3:XmlField" path="/XmlFPA/@charField" fieldType="Char" />
+            <OutputField xsi:type="ns3:XmlField" path="/xt1:XmlFPE/xt1:booleanField"  fieldType="Boolean" />
         </Mapping>
         <Mapping xsi:type="Mapping" mappingType="Map">
             <InputField xsi:type="ns3:XmlField" path="/XmlFPA/@byteField" fieldType="Byte" />
