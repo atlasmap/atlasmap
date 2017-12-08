@@ -4,13 +4,13 @@
   <parent>
     <groupId>io.atlasmap</groupId>
     <artifactId>atlasmapio</artifactId>
-    <version>1.32-SNAPSHOT</version>
+    <version>1.32.0.fuse-000024</version>
     <relativePath>..</relativePath>
   </parent>
 
   <groupId>io.atlasmap</groupId>
   <artifactId>atlasmap-ui</artifactId>
-  <version>1.32-SNAPSHOT</version>
+  <version>1.32.0.fuse-000024</version>
   <packaging>pom</packaging>
   <name>Atlasmap UI</name>
   <description>Atlasmap :: ${project.artifactId}</description>
