@@ -318,24 +318,24 @@ public class StringComplexFieldActionsTest {
     @Test
     public void testReplaceFirst() {
         ReplaceFirst replaceFirst = new ReplaceFirst();
-        replaceFirst.setOldString(" ");
+        replaceFirst.setMatch(" ");
         assertNull(StringComplexFieldActions.replaceFirst(replaceFirst, null));
         assertEquals("", StringComplexFieldActions.replaceFirst(replaceFirst, ""));
         assertEquals("test", StringComplexFieldActions.replaceFirst(replaceFirst, "test"));
-        replaceFirst.setOldString("e");
+        replaceFirst.setMatch("e");
         assertEquals("tst", StringComplexFieldActions.replaceFirst(replaceFirst, "test"));
-        replaceFirst.setOldString("t");
+        replaceFirst.setMatch("t");
         replaceFirst.setNewString("h");
         assertEquals("hest", StringComplexFieldActions.replaceFirst(replaceFirst, "test"));
-        replaceFirst.setOldString("is");
+        replaceFirst.setMatch("is");
         replaceFirst.setNewString("at");
         assertEquals("That is a test", StringComplexFieldActions.replaceFirst(replaceFirst, "This is a test"));
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testReplaceFirstEmptyOldString() {
+    public void testReplaceFirstEmptyMatch() {
         ReplaceFirst replaceFirst = new ReplaceFirst();
-        replaceFirst.setOldString("");
+        replaceFirst.setMatch("");
         StringComplexFieldActions.replaceFirst(replaceFirst, " ");
     }
 
@@ -345,7 +345,7 @@ public class StringComplexFieldActionsTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testReplaceFirstNullOldString() {
+    public void testReplaceFirstNullMatch() {
         ReplaceFirst replaceFirst = new ReplaceFirst();
         StringComplexFieldActions.replaceFirst(replaceFirst, " ");
     }
@@ -353,24 +353,24 @@ public class StringComplexFieldActionsTest {
     @Test
     public void testReplaceAll() {
         ReplaceAll replaceAll = new ReplaceAll();
-        replaceAll.setOldString(" ");
+        replaceAll.setMatch(" ");
         assertNull(StringComplexFieldActions.replaceAll(replaceAll, null));
         assertEquals("", StringComplexFieldActions.replaceAll(replaceAll, ""));
         assertEquals("test", StringComplexFieldActions.replaceAll(replaceAll, "test"));
-        replaceAll.setOldString("e");
+        replaceAll.setMatch("e");
         assertEquals("tst", StringComplexFieldActions.replaceAll(replaceAll, "test"));
-        replaceAll.setOldString("t");
+        replaceAll.setMatch("t");
         replaceAll.setNewString("h");
         assertEquals("hesh", StringComplexFieldActions.replaceAll(replaceAll, "test"));
-        replaceAll.setOldString("is");
+        replaceAll.setMatch("is");
         replaceAll.setNewString("at");
         assertEquals("That at a test", StringComplexFieldActions.replaceAll(replaceAll, "This is a test"));
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testReplaceAllEmptyOldString() {
+    public void testReplaceAllEmptyMatch() {
         ReplaceAll replaceAll = new ReplaceAll();
-        replaceAll.setOldString("");
+        replaceAll.setMatch("");
         StringComplexFieldActions.replaceAll(replaceAll, " ");
     }
 

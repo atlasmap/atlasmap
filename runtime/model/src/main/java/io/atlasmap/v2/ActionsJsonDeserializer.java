@@ -22,19 +22,13 @@ import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 
+@SuppressWarnings({"squid:S1118", // Add private constructor
+    "squid:S1226", // Introduce new variable
+    "squid:S1301", // Replace switch with if
+    "squid:S1479", // Reduce number of switch cases
+    "squid:S3358", // Extract nested ternary
+    "squid:S3776", }) // Cognitive complexity of method
 public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
-
-    private static final String CLASS_NAME = "className";
-    private static final String DATE_FORMAT = "dateFormat";
-    private static final String DELIMITER = "delimiter";
-    private static final String END_INDEX = "endIndex";
-    private static final String FROM_UNIT = "fromUnit";
-    private static final String MATCH = "match";
-    private static final String METHOD_NAME = "methodName";
-    private static final String START_INDEX = "startIndex";
-    private static final String STRING = "string";
-    private static final String TEMPLATE = "template";
-    private static final String TO_UNIT = "toUnit";
 
     @Override
     public Actions deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {
@@ -115,6 +109,8 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
                 return processIndexOfJsonToken(jsonToken);
             case "LastIndexOf":
                 return processLastIndexOfJsonToken(jsonToken);
+            case "Length":
+                return new Length();
             case "Lowercase":
                 return new Lowercase();
             case "Maximum":
@@ -143,8 +139,6 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
                 return new SeparateByUnderscore();
             case "StartsWith":
                 return processStartsWithJsonToken(jsonToken);
-            case "StringLength":
-                return new StringLength();
             case "SubString":
                 return processSubStringJsonToken(jsonToken);
             case "SubStringAfter":
@@ -184,7 +178,7 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
                 jsonToken.nextToken();
             }
             switch (jsonToken.getCurrentName()) {
-            case DELIMITER:
+            case ActionsJsonSerializer.DELIMITER:
                 jsonToken.nextToken();
                 action.setDelimiter(jsonToken.getValueAsString());
                 break;
@@ -211,11 +205,11 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
                 jsonToken.nextToken();
             }
             switch (jsonToken.getCurrentName()) {
-            case FROM_UNIT:
+            case ActionsJsonSerializer.FROM_UNIT:
                 jsonToken.nextToken();
                 action.setFromUnit(AreaUnitType.fromValue(jsonToken.getValueAsString()));
                 break;
-            case TO_UNIT:
+            case ActionsJsonSerializer.TO_UNIT:
                 jsonToken.nextToken();
                 action.setToUnit(AreaUnitType.fromValue(jsonToken.getValueAsString()));
                 break;
@@ -244,11 +238,11 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
                 jsonToken.nextToken();
             }
             switch (jsonToken.getCurrentName()) {
-            case FROM_UNIT:
+            case ActionsJsonSerializer.FROM_UNIT:
                 jsonToken.nextToken();
                 action.setFromUnit(DistanceUnitType.fromValue(jsonToken.getValueAsString()));
                 break;
-            case TO_UNIT:
+            case ActionsJsonSerializer.TO_UNIT:
                 jsonToken.nextToken();
                 action.setToUnit(DistanceUnitType.fromValue(jsonToken.getValueAsString()));
                 break;
@@ -277,11 +271,11 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
                 jsonToken.nextToken();
             }
             switch (jsonToken.getCurrentName()) {
-            case FROM_UNIT:
+            case ActionsJsonSerializer.FROM_UNIT:
                 jsonToken.nextToken();
                 action.setFromUnit(MassUnitType.fromValue(jsonToken.getValueAsString()));
                 break;
-            case TO_UNIT:
+            case ActionsJsonSerializer.TO_UNIT:
                 jsonToken.nextToken();
                 action.setToUnit(MassUnitType.fromValue(jsonToken.getValueAsString()));
                 break;
@@ -321,7 +315,7 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
                 jsonToken.nextToken();
             }
             switch (jsonToken.getCurrentName()) {
-            case DATE_FORMAT:
+            case ActionsJsonSerializer.DATE_FORMAT:
                 jsonToken.nextToken();
                 action.setDateFormat(jsonToken.getValueAsString());
                 break;
@@ -348,7 +342,7 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
                 jsonToken.nextToken();
             }
             switch (jsonToken.getCurrentName()) {
-            case DATE_FORMAT:
+            case ActionsJsonSerializer.DATE_FORMAT:
                 jsonToken.nextToken();
                 action.setDateFormat(jsonToken.getValueAsString());
                 break;
@@ -375,7 +369,7 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
                 jsonToken.nextToken();
             }
             switch (jsonToken.getCurrentName()) {
-            case DATE_FORMAT:
+            case ActionsJsonSerializer.DATE_FORMAT:
                 jsonToken.nextToken();
                 action.setDateFormat(jsonToken.getValueAsString());
                 break;
@@ -402,11 +396,11 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
                 jsonToken.nextToken();
             }
             switch (jsonToken.getCurrentName()) {
-            case CLASS_NAME:
+            case ActionsJsonSerializer.CLASS_NAME:
                 jsonToken.nextToken();
                 action.setClassName(jsonToken.getValueAsString());
                 break;
-            case METHOD_NAME:
+            case ActionsJsonSerializer.METHOD_NAME:
                 jsonToken.nextToken();
                 action.setMethodName(jsonToken.getValueAsString());
                 break;
@@ -433,7 +427,7 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
                 jsonToken.nextToken();
             }
             switch (jsonToken.getCurrentName()) {
-                case STRING:
+                case ActionsJsonSerializer.STRING:
                     jsonToken.nextToken();
                     action.setString(jsonToken.getValueAsString());
                     break;
@@ -460,7 +454,7 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
                 jsonToken.nextToken();
             }
             switch (jsonToken.getCurrentName()) {
-                case TEMPLATE:
+                case ActionsJsonSerializer.TEMPLATE:
                     jsonToken.nextToken();
                     action.setTemplate(jsonToken.getValueAsString());
                     break;
@@ -487,7 +481,7 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
                 jsonToken.nextToken();
             }
             switch (jsonToken.getCurrentName()) {
-                case STRING:
+                case ActionsJsonSerializer.STRING:
                     jsonToken.nextToken();
                     action.setString(jsonToken.getValueAsString());
                     break;
@@ -514,7 +508,7 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
                 jsonToken.nextToken();
             }
             switch (jsonToken.getCurrentName()) {
-                case STRING:
+                case ActionsJsonSerializer.STRING:
                     jsonToken.nextToken();
                     action.setString(jsonToken.getValueAsString());
                     break;
@@ -541,11 +535,11 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
                 jsonToken.nextToken();
             }
             switch (jsonToken.getCurrentName()) {
-            case "padCharacter":
+            case ActionsJsonSerializer.PAD_CHARACTER:
                 jsonToken.nextToken();
                 action.setPadCharacter(jsonToken.getValueAsString());
                 break;
-            case "padCount":
+            case ActionsJsonSerializer.PAD_COUNT:
                 jsonToken.nextToken();
                 action.setPadCount(jsonToken.getIntValue());
                 break;
@@ -572,11 +566,11 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
                 jsonToken.nextToken();
             }
             switch (jsonToken.getCurrentName()) {
-            case "padCharacter":
+            case ActionsJsonSerializer.PAD_CHARACTER:
                 jsonToken.nextToken();
                 action.setPadCharacter(jsonToken.getValueAsString());
                 break;
-            case "padCount":
+            case ActionsJsonSerializer.PAD_COUNT:
                 jsonToken.nextToken();
                 action.setPadCount(jsonToken.getIntValue());
                 break;
@@ -603,11 +597,11 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
                 jsonToken.nextToken();
             }
             switch (jsonToken.getCurrentName()) {
-                case "oldString":
+                case ActionsJsonSerializer.MATCH:
                     jsonToken.nextToken();
-                    action.setOldString(jsonToken.getValueAsString());
+                    action.setMatch(jsonToken.getValueAsString());
                     break;
-                case "newString":
+                case ActionsJsonSerializer.NEW_STRING:
                     jsonToken.nextToken();
                     action.setNewString(jsonToken.getValueAsString());
                     break;
@@ -634,11 +628,11 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
                 jsonToken.nextToken();
             }
             switch (jsonToken.getCurrentName()) {
-                case "oldString":
+                case ActionsJsonSerializer.MATCH:
                     jsonToken.nextToken();
-                    action.setOldString(jsonToken.getValueAsString());
+                    action.setMatch(jsonToken.getValueAsString());
                     break;
-                case "newString":
+                case ActionsJsonSerializer.NEW_STRING:
                     jsonToken.nextToken();
                     action.setNewString(jsonToken.getValueAsString());
                     break;
@@ -665,7 +659,7 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
                 jsonToken.nextToken();
             }
             switch (jsonToken.getCurrentName()) {
-                case STRING:
+                case ActionsJsonSerializer.STRING:
                     jsonToken.nextToken();
                     action.setString(jsonToken.getValueAsString());
                     break;
@@ -692,15 +686,15 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
                 jsonToken.nextToken();
             }
             switch (jsonToken.getCurrentName()) {
-            case START_INDEX:
+            case ActionsJsonSerializer.START_INDEX:
                 jsonToken.nextToken();
                 action.setStartIndex(jsonToken.getIntValue());
                 break;
-            case END_INDEX:
+            case ActionsJsonSerializer.END_INDEX:
                 jsonToken.nextToken();
                 action.setEndIndex(jsonToken.getIntValue());
                 break;
-            case MATCH:
+            case ActionsJsonSerializer.MATCH:
                 jsonToken.nextToken();
                 action.setMatch(jsonToken.getValueAsString());
                 break;
@@ -728,15 +722,15 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
                 jsonToken.nextToken();
             }
             switch (jsonToken.getCurrentName()) {
-            case START_INDEX:
+            case ActionsJsonSerializer.START_INDEX:
                 jsonToken.nextToken();
                 action.setStartIndex(jsonToken.getIntValue());
                 break;
-            case END_INDEX:
+            case ActionsJsonSerializer.END_INDEX:
                 jsonToken.nextToken();
                 action.setEndIndex(jsonToken.getIntValue());
                 break;
-            case MATCH:
+            case ActionsJsonSerializer.MATCH:
                 jsonToken.nextToken();
                 action.setMatch(jsonToken.getValueAsString());
                 break;
@@ -764,11 +758,11 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
                 jsonToken.nextToken();
             }
             switch (jsonToken.getCurrentName()) {
-            case START_INDEX:
+            case ActionsJsonSerializer.START_INDEX:
                 jsonToken.nextToken();
                 action.setStartIndex(jsonToken.getIntValue());
                 break;
-            case END_INDEX:
+            case ActionsJsonSerializer.END_INDEX:
                 jsonToken.nextToken();
                 action.setEndIndex(jsonToken.getIntValue());
                 break;

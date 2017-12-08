@@ -219,7 +219,7 @@ public abstract class BaseMarshallerTest {
                 if (a instanceof SeparateByUnderscore) {
                     i++;
                 }
-                if (a instanceof StringLength) {
+                if (a instanceof Length) {
                     i++;
                 }
                 if (a instanceof Trim) {
@@ -536,6 +536,7 @@ public abstract class BaseMarshallerTest {
                 new Capitalize(),
                 new Ceiling(),
                 new Concatenate(),
+                new Contains(),
                 new ConvertAreaUnit(),
                 new ConvertDistanceUnit(),
                 new ConvertMassUnit(),
@@ -546,12 +547,15 @@ public abstract class BaseMarshallerTest {
                 new CustomAction(),
                 new Divide(),
                 new EndsWith(),
+                new Equals(),
                 new FileExtension(),
                 new Floor(),
                 new Format(),
                 new GenerateUUID(),
                 new IndexOf(),
+                new IsNull(),
                 new LastIndexOf(),
+                new Length(),
                 new Lowercase(),
                 new Maximum(),
                 new Minimum(),
@@ -566,7 +570,6 @@ public abstract class BaseMarshallerTest {
                 new SeparateByDash(),
                 new SeparateByUnderscore(),
                 new StartsWith(),
-                new StringLength(),
                 new SubString(),
                 new SubStringAfter(),
                 new SubStringBefore(),

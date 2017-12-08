@@ -15,6 +15,7 @@
  */
 package io.atlasmap.v2;
 
+@SuppressWarnings("squid:S3776")
 public class AtlasModelFactory {
 
     private AtlasModelFactory() {
@@ -197,6 +198,11 @@ public class AtlasModelFactory {
             concat.setDelimiter(((Concatenate) action).getDelimiter());
             return concat;
         }
+        if (action instanceof Contains) {
+            Contains contains = new Contains();
+            contains.setValue(((Contains) action).getValue());
+            return contains;
+        }
         if (action instanceof ConvertAreaUnit) {
             ConvertAreaUnit cau = new ConvertAreaUnit();
             cau.setFromUnit(((ConvertAreaUnit) action).getFromUnit());
@@ -254,6 +260,11 @@ public class AtlasModelFactory {
             endsWith.setString(((EndsWith) action).getString());
             return endsWith;
         }
+        if (action instanceof Equals) {
+            Equals equals = new Equals();
+            equals.setValue(((Equals) action).getValue());
+            return equals;
+        }
         if (action instanceof Format) {
             Format format = new Format();
             format.setTemplate(((Format) action).getTemplate());
@@ -273,10 +284,16 @@ public class AtlasModelFactory {
             indexOf.setString(((IndexOf) action).getString());
             return indexOf;
         }
+        if (action instanceof IsNull) {
+            return new IsNull();
+        }
         if (action instanceof LastIndexOf) {
             LastIndexOf lastIndexOf = new LastIndexOf();
             lastIndexOf.setString(((LastIndexOf) action).getString());
             return lastIndexOf;
+        }
+        if (action instanceof Length) {
+            return new Length();
         }
         if (action instanceof Lowercase) {
             return new Lowercase();
@@ -318,8 +335,8 @@ public class AtlasModelFactory {
         }
         if (action instanceof ReplaceAll) {
             ReplaceAll a = new ReplaceAll();
-            if (((ReplaceAll) action).getOldString() != null) {
-                a.setOldString(((ReplaceAll) action).getOldString());
+            if (((ReplaceAll) action).getMatch() != null) {
+                a.setMatch(((ReplaceAll) action).getMatch());
             }
             if (((ReplaceAll) action).getNewString() != null) {
                 a.setNewString(((ReplaceAll) action).getNewString());
@@ -328,8 +345,8 @@ public class AtlasModelFactory {
         }
         if (action instanceof ReplaceFirst) {
             ReplaceFirst a = new ReplaceFirst();
-            if (((ReplaceFirst) action).getOldString() != null) {
-                a.setOldString(((ReplaceFirst) action).getOldString());
+            if (((ReplaceFirst) action).getMatch() != null) {
+                a.setMatch(((ReplaceFirst) action).getMatch());
             }
             if (((ReplaceFirst) action).getNewString() != null) {
                 a.setNewString(((ReplaceFirst) action).getNewString());
@@ -349,9 +366,6 @@ public class AtlasModelFactory {
             StartsWith startsWith = new StartsWith();
             startsWith.setString(((StartsWith) action).getString());
             return startsWith;
-        }
-        if (action instanceof StringLength) {
-            return new StringLength();
         }
         if (action instanceof SubString) {
             SubString a = new SubString();
