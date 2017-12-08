@@ -27,6 +27,7 @@ import io.atlasmap.v2.DataSource;
 import io.atlasmap.v2.DataSourceType;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.GenerateUUID;
+import io.atlasmap.v2.Length;
 import io.atlasmap.v2.Lowercase;
 import io.atlasmap.v2.Mapping;
 import io.atlasmap.v2.MappingType;
@@ -35,7 +36,6 @@ import io.atlasmap.v2.PadStringLeft;
 import io.atlasmap.v2.PadStringRight;
 import io.atlasmap.v2.SeparateByDash;
 import io.atlasmap.v2.SeparateByUnderscore;
-import io.atlasmap.v2.StringLength;
 import io.atlasmap.v2.SubString;
 import io.atlasmap.v2.SubStringAfter;
 import io.atlasmap.v2.SubStringBefore;
@@ -165,8 +165,8 @@ public abstract class AtlasBaseActionsTest extends AtlasMappingBaseTest {
     }
 
     @Test
-    public void runStringLengthTest() throws Exception {
-        this.runActionTest(new StringLength(), "fname", Integer.valueOf(5), Integer.class);
+    public void runLengthTest() throws Exception {
+        this.runActionTest(new Length(), "fname", Integer.valueOf(5), Integer.class);
     }
 
     public abstract Object createSource(String sourceFirstName);

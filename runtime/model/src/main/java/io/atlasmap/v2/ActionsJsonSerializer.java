@@ -23,12 +23,21 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 
 public class ActionsJsonSerializer extends JsonSerializer<Actions> {
 
-    private static final String DATE_FORMAT = "dateFormat";
-    private static final String END_INDEX = "endIndex";
-    private static final String FROM_UNIT = "fromUnit";
-    private static final String START_INDEX = "startIndex";
-    private static final String STRING = "string";
-    private static final String TO_UNIT = "toUnit";
+    public static final String CLASS_NAME = "className";
+    public static final String DATE_FORMAT = "dateFormat";
+    public static final String DELIMITER = "delimiter";
+    public static final String END_INDEX = "endIndex";
+    public static final String FROM_UNIT = "fromUnit";
+    public static final String MATCH = "match";
+    public static final String METHOD_NAME = "methodName";
+    public static final String NEW_STRING = "newString";
+    public static final String PAD_CHARACTER = "padCharacter";
+    public static final String PAD_COUNT = "padCount";
+    public static final String START_INDEX = "startIndex";
+    public static final String STRING = "string";
+    public static final String TEMPLATE = "template";
+    public static final String TO_UNIT = "toUnit";
+    public static final String VALUE = "value";
 
     @Override
     public void serialize(Actions actions, JsonGenerator gen, SerializerProvider provider) throws IOException {
@@ -50,18 +59,12 @@ public class ActionsJsonSerializer extends JsonSerializer<Actions> {
     protected void writeActionField(JsonGenerator gen, Action action) throws IOException {
 
         switch (action.getClass().getSimpleName()) {
-<<<<<<< c4b30f5503986f14c5fa837312c60e2da1e957da
-<<<<<<< 47ddb07e1b3541f5aea5c4007ff93368151f40bf
-            case "Concatentate":
+            case "Concatenate":
                 writeConcatenate(gen, (Concatenate) action);
                 break;
-=======
->>>>>>> Issue #151: Implement Number-related p0 field actions
-=======
-            case "Concatentate":
-                writeConcatenate(gen, (Concatenate) action);
+            case "Contains":
+                writeContains(gen, (Contains) action);
                 break;
->>>>>>> Issue #153: Implement String-related p0 field actions
             case "ConvertAreaUnit":
                 writeConvertAreaUnit(gen, (ConvertAreaUnit) action);
                 break;
@@ -86,12 +89,11 @@ public class ActionsJsonSerializer extends JsonSerializer<Actions> {
             case "CustomAction":
                 writeCustomAction(gen, (CustomAction) action);
                 break;
-<<<<<<< c4b30f5503986f14c5fa837312c60e2da1e957da
-<<<<<<< 47ddb07e1b3541f5aea5c4007ff93368151f40bf
-=======
->>>>>>> Issue #153: Implement String-related p0 field actions
             case "EndsWith":
                 writeEndsWith(gen, (EndsWith) action);
+                break;
+            case "Equals":
+                writeEquals(gen, (Equals) action);
                 break;
             case "Format":
                 writeFormat(gen, (Format) action);
@@ -102,21 +104,12 @@ public class ActionsJsonSerializer extends JsonSerializer<Actions> {
             case "LastIndexOf":
                 writeLastIndexOf(gen, (LastIndexOf) action);
                 break;
-<<<<<<< c4b30f5503986f14c5fa837312c60e2da1e957da
-=======
->>>>>>> Issue #151: Implement Number-related p0 field actions
-=======
->>>>>>> Issue #153: Implement String-related p0 field actions
             case "PadStringLeft":
                 writePadStringLeft(gen, (PadStringLeft) action);
                 break;
             case "PadStringRight":
                 writePadStringRight(gen, (PadStringRight) action);
                 break;
-<<<<<<< c4b30f5503986f14c5fa837312c60e2da1e957da
-<<<<<<< 47ddb07e1b3541f5aea5c4007ff93368151f40bf
-=======
->>>>>>> Issue #153: Implement String-related p0 field actions
             case "ReplaceAll":
                 writeReplaceAll(gen, (ReplaceAll) action);
                 break;
@@ -125,13 +118,6 @@ public class ActionsJsonSerializer extends JsonSerializer<Actions> {
                 break;
             case "StartsWith":
                 writeStartsWith(gen, (StartsWith) action);
-<<<<<<< c4b30f5503986f14c5fa837312c60e2da1e957da
-=======
-            case "Replace":
-                writeReplace(gen, (Replace) action);
->>>>>>> Issue #151: Implement Number-related p0 field actions
-=======
->>>>>>> Issue #153: Implement String-related p0 field actions
                 break;
             case "SubString":
                 writeSubString(gen, (SubString) action);
@@ -153,11 +139,18 @@ public class ActionsJsonSerializer extends JsonSerializer<Actions> {
     protected void writeConcatenate(JsonGenerator gen, Concatenate action) throws IOException {
         gen.writeStartObject();
         gen.writeFieldName("Concatenate");
-        if (action.getDelimiter() != null && action.getDelimiter().trim().length() > 0) {
-            gen.writeStartObject();
-            gen.writeStringField("delimiter", action.getDelimiter().trim());
-            gen.writeEndObject();
-        }
+        gen.writeStartObject();
+        gen.writeStringField(DELIMITER, action.getDelimiter());
+        gen.writeEndObject();
+        gen.writeEndObject();
+    }
+
+    protected void writeContains(JsonGenerator gen, Contains action) throws IOException {
+        gen.writeStartObject();
+        gen.writeFieldName("Contains");
+        gen.writeStartObject();
+        gen.writeStringField("value", action.getValue());
+        gen.writeEndObject();
         gen.writeEndObject();
     }
 
@@ -241,7 +234,7 @@ public class ActionsJsonSerializer extends JsonSerializer<Actions> {
         boolean objectStarted = false;
         if (customAction.getClassName() != null && customAction.getClassName().trim().length() > 0) {
             gen.writeStartObject();
-            gen.writeStringField("className", customAction.getClassName().trim());
+            gen.writeStringField(CLASS_NAME, customAction.getClassName().trim());
             gen.writeEndObject();
             objectStarted = true;
         }
@@ -251,7 +244,7 @@ public class ActionsJsonSerializer extends JsonSerializer<Actions> {
                 gen.writeStartObject();
             }
 
-            gen.writeStringField("methodName", customAction.getMethodName().trim());
+            gen.writeStringField(METHOD_NAME, customAction.getMethodName().trim());
 
             if (!objectStarted) {
                 gen.writeEndObject();
@@ -270,11 +263,20 @@ public class ActionsJsonSerializer extends JsonSerializer<Actions> {
         gen.writeEndObject();
     }
 
+    protected void writeEquals(JsonGenerator gen, Equals action) throws IOException {
+        gen.writeStartObject();
+        gen.writeFieldName("Equals");
+        gen.writeStartObject();
+        gen.writeStringField(VALUE, action.getValue());
+        gen.writeEndObject();
+        gen.writeEndObject();
+    }
+
     protected void writeFormat(JsonGenerator gen, Format action) throws IOException {
         gen.writeStartObject();
         gen.writeFieldName("Format");
         gen.writeStartObject();
-        gen.writeStringField("template", action.getTemplate());
+        gen.writeStringField(TEMPLATE, action.getTemplate());
         gen.writeEndObject();
         gen.writeEndObject();
     }
@@ -301,8 +303,8 @@ public class ActionsJsonSerializer extends JsonSerializer<Actions> {
         gen.writeStartObject();
         gen.writeFieldName("PadStringLeft");
         gen.writeStartObject();
-        gen.writeStringField("padCharacter", padStringLeft.getPadCharacter());
-        gen.writeNumberField("padCount", padStringLeft.getPadCount());
+        gen.writeStringField(PAD_CHARACTER, padStringLeft.getPadCharacter());
+        gen.writeNumberField(PAD_COUNT, padStringLeft.getPadCount());
         gen.writeEndObject();
         gen.writeEndObject();
     }
@@ -311,8 +313,8 @@ public class ActionsJsonSerializer extends JsonSerializer<Actions> {
         gen.writeStartObject();
         gen.writeFieldName("PadStringRight");
         gen.writeStartObject();
-        gen.writeStringField("padCharacter", padStringRight.getPadCharacter());
-        gen.writeNumberField("padCount", padStringRight.getPadCount());
+        gen.writeStringField(PAD_CHARACTER, padStringRight.getPadCharacter());
+        gen.writeNumberField(PAD_COUNT, padStringRight.getPadCount());
         gen.writeEndObject();
         gen.writeEndObject();
     }
@@ -321,10 +323,8 @@ public class ActionsJsonSerializer extends JsonSerializer<Actions> {
         gen.writeStartObject();
         gen.writeFieldName("ReplaceAll");
         gen.writeStartObject();
-        gen.writeStringField("oldString", action.getOldString());
-        if (action.getNewString() != null) {
-            gen.writeStringField("newString", action.getNewString());
-        }
+        gen.writeStringField(MATCH, action.getMatch());
+        gen.writeStringField(NEW_STRING, action.getNewString());
         gen.writeEndObject();
         gen.writeEndObject();
     }
@@ -333,10 +333,8 @@ public class ActionsJsonSerializer extends JsonSerializer<Actions> {
         gen.writeStartObject();
         gen.writeFieldName("ReplaceFirst");
         gen.writeStartObject();
-        gen.writeStringField("oldString", action.getOldString());
-        if (action.getNewString() != null) {
-            gen.writeStringField("newString", action.getNewString());
-        }
+        gen.writeStringField(MATCH, action.getMatch());
+        gen.writeStringField(NEW_STRING, action.getNewString());
         gen.writeEndObject();
         gen.writeEndObject();
     }
@@ -366,7 +364,7 @@ public class ActionsJsonSerializer extends JsonSerializer<Actions> {
         gen.writeStartObject();
         gen.writeFieldName("SubStringAfter");
         gen.writeStartObject();
-        gen.writeStringField("match", subStringAfter.getMatch());
+        gen.writeStringField(MATCH, subStringAfter.getMatch());
         gen.writeNumberField(START_INDEX, subStringAfter.getStartIndex());
         if (subStringAfter.getEndIndex() != null) {
             gen.writeNumberField(END_INDEX, subStringAfter.getEndIndex());
@@ -374,13 +372,12 @@ public class ActionsJsonSerializer extends JsonSerializer<Actions> {
         gen.writeEndObject();
         gen.writeEndObject();
     }
-<<<<<<< 47ddb07e1b3541f5aea5c4007ff93368151f40bf
 
     protected void writeSubStringBefore(JsonGenerator gen, SubStringBefore subStringBefore) throws IOException {
         gen.writeStartObject();
         gen.writeFieldName("SubStringBefore");
         gen.writeStartObject();
-        gen.writeStringField("match", subStringBefore.getMatch());
+        gen.writeStringField(MATCH, subStringBefore.getMatch());
         gen.writeNumberField(START_INDEX, subStringBefore.getStartIndex());
         if (subStringBefore.getEndIndex() != null) {
             gen.writeNumberField(END_INDEX, subStringBefore.getEndIndex());
@@ -388,6 +385,4 @@ public class ActionsJsonSerializer extends JsonSerializer<Actions> {
         gen.writeEndObject();
         gen.writeEndObject();
     }
-=======
->>>>>>> Issue #151: Implement Number-related p0 field actions
 }

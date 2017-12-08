@@ -28,7 +28,6 @@ import io.atlasmap.v2.Capitalize;
 import io.atlasmap.v2.Lowercase;
 import io.atlasmap.v2.SeparateByDash;
 import io.atlasmap.v2.SeparateByUnderscore;
-import io.atlasmap.v2.StringLength;
 import io.atlasmap.v2.Trim;
 import io.atlasmap.v2.TrimLeft;
 import io.atlasmap.v2.TrimRight;
@@ -133,13 +132,6 @@ public class StringSimpleFieldActionsTest {
         assertTrue(pattern.matcher("f:o").find());
         assertTrue(pattern.matcher("f:o:o").find());
         assertTrue(pattern.matcher("f  o").find());
-    }
-
-    @Test
-    public void testStringLength() {
-        assertEquals(new Integer(0), StringSimpleFieldActions.stringLength(new StringLength(), null));
-        assertEquals(new Integer(0), StringSimpleFieldActions.stringLength(new StringLength(), ""));
-        assertEquals(new Integer(5), StringSimpleFieldActions.stringLength(new StringLength(), " foo "));
     }
 
     @Test

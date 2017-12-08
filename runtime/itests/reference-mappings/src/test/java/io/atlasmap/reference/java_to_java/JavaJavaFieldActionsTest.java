@@ -7,7 +7,7 @@ import io.atlasmap.java.v2.JavaField;
 import io.atlasmap.reference.AtlasBaseActionsTest;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldType;
-import io.atlasmap.v2.StringLength;
+import io.atlasmap.v2.Length;
 
 public class JavaJavaFieldActionsTest extends AtlasBaseActionsTest {
 
@@ -25,9 +25,9 @@ public class JavaJavaFieldActionsTest extends AtlasBaseActionsTest {
     }
 
     @Override
-    public void runStringLengthTest() throws Exception {
+    public void runLengthTest() throws Exception {
         this.targetField = createField("/boxedIntField");
-        this.runActionTest(new StringLength(), "fname", new Integer(5), Integer.class);
+        this.runActionTest(new Length(), "fname", new Integer(5), Integer.class);
         this.targetField = createField("/boxedStringField");
     }
 
@@ -45,6 +45,7 @@ public class JavaJavaFieldActionsTest extends AtlasBaseActionsTest {
         return c;
     }
 
+    @Override
     public Object getTargetValue(Object target, Class<?> targetClassExpected) {
         System.out.println("Extracting target value from: " + target);
         TargetFlatPrimitiveClass c = (TargetFlatPrimitiveClass) target;
