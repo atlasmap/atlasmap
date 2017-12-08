@@ -84,7 +84,7 @@ public class JsonModule extends BaseAtlasModule {
         }
 
         String document = (String) sourceDocument;
-        JsonFieldReader fieldReader = new JsonFieldReader();
+        JsonFieldReader fieldReader = new JsonFieldReader(getConversionService());
         fieldReader.setDocument(document);
         session.setFieldReader(getDocId(), fieldReader);
 
@@ -115,7 +115,8 @@ public class JsonModule extends BaseAtlasModule {
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("{}: processSourceFieldMapping completed: SourceField:[docId={}, path={}, type={}, value={}]",
-                    getDocId(), sourceField.getDocId(), sourceField.getPath(), sourceField.getFieldType(), sourceField.getValue());
+                    getDocId(), sourceField.getDocId(), sourceField.getPath(), sourceField.getFieldType(),
+                    sourceField.getValue());
         }
     }
 
@@ -139,9 +140,9 @@ public class JsonModule extends BaseAtlasModule {
                         targetField.getFieldType());
             } catch (AtlasConversionException e) {
                 AtlasUtil.addAudit(session, targetField.getDocId(),
-                        String.format("Unable to auto-convert for sT=%s tT=%s tF=%s msg=%s",
-                                sourceField.getFieldType(), targetField.getFieldType(), targetField.getPath(),
-                                e.getMessage()), targetField.getPath(), AuditStatus.ERROR, null);
+                        String.format("Unable to auto-convert for sT=%s tT=%s tF=%s msg=%s", sourceField.getFieldType(),
+                                targetField.getFieldType(), targetField.getPath(), e.getMessage()),
+                        targetField.getPath(), AuditStatus.ERROR, null);
                 return;
             }
         }
@@ -152,7 +153,8 @@ public class JsonModule extends BaseAtlasModule {
             processLookupField(session, lookupTable, targetField.getValue(), targetField);
         }
 
-        if (isAutomaticallyProcessOutputFieldActions() && targetField.getActions() != null && targetField.getActions().getActions() != null) {
+        if (isAutomaticallyProcessOutputFieldActions() && targetField.getActions() != null
+                && targetField.getActions().getActions() != null) {
             getFieldActionService().processActions(targetField.getActions(), targetField);
         }
 
@@ -180,9 +182,9 @@ public class JsonModule extends BaseAtlasModule {
                         outputBody.length()));
             }
         } else {
-            AtlasUtil.addAudit(session, getDocId(),
-                    String.format("No target document created for DataSource:[id=%s, uri=%s]",
-                            getDocId(), this.getUri()), null, AuditStatus.WARN, null);
+            AtlasUtil.addAudit(session, getDocId(), String
+                    .format("No target document created for DataSource:[id=%s, uri=%s]", getDocId(), this.getUri()),
+                    null, AuditStatus.WARN, null);
         }
         session.removeFieldWriter(getDocId());
 

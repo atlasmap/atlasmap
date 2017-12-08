@@ -24,19 +24,31 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.atlasmap.api.AtlasConversionException;
+import io.atlasmap.api.AtlasConversionService;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.core.AtlasPath;
-import io.atlasmap.core.DefaultAtlasConversionService;
+import io.atlasmap.core.AtlasUtil;
 import io.atlasmap.json.v2.JsonField;
 import io.atlasmap.spi.AtlasFieldReader;
 import io.atlasmap.spi.AtlasInternalSession;
+import io.atlasmap.v2.AuditStatus;
 import io.atlasmap.v2.CollectionType;
 import io.atlasmap.v2.FieldType;
 
 public class JsonFieldReader implements AtlasFieldReader {
 
     private static final Logger LOG = LoggerFactory.getLogger(JsonFieldReader.class);
+
+    private AtlasConversionService conversionService;
     private JsonNode rootNode;
+
+    @SuppressWarnings("unused")
+    private JsonFieldReader() {
+    }
+
+    public JsonFieldReader(AtlasConversionService conversionService) {
+        this.conversionService = conversionService;
+    }
 
     public void read(AtlasInternalSession session) throws AtlasException {
         JsonField jsonField = JsonField.class.cast(session.head().getSourceField());
@@ -74,9 +86,16 @@ public class JsonFieldReader implements AtlasFieldReader {
             // we can't detect field type if it's null node
         } else {
             if (jsonField.getFieldType() != null) { // mapping is overriding the fieldType
-                DefaultAtlasConversionService conversionService = DefaultAtlasConversionService.getInstance();
-                jsonField.setValue(
-                        conversionService.convertType(valueNode.asText(), FieldType.STRING, jsonField.getFieldType()));
+                try {
+                    Object convertedValue = conversionService.convertType(valueNode.asText(), FieldType.STRING,
+                            jsonField.getFieldType());
+                    jsonField.setValue(convertedValue);
+                } catch (AtlasConversionException e) {
+                    AtlasUtil.addAudit(session, jsonField.getDocId(),
+                            String.format("Failed to convert field value '%s' into type '%s'", valueNode.asText(),
+                                    jsonField.getFieldType()),
+                            jsonField.getPath(), AuditStatus.ERROR, valueNode.asText());
+                }
             } else {
                 if (valueNode.isTextual()) {
                     handleTextualNode(valueNode, jsonField);

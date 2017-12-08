@@ -46,12 +46,17 @@ public class XmlFieldReader extends XmlFieldTransformer implements AtlasFieldRea
     private AtlasConversionService conversionService;
     private Document document;
 
+    @SuppressWarnings("unused")
+    private XmlFieldReader() {
+    }
+
     public XmlFieldReader(AtlasConversionService conversionService) {
         this.conversionService = conversionService;
     }
 
-    public XmlFieldReader(Map<String, String> namespaces) {
+    public XmlFieldReader(AtlasConversionService conversionService, Map<String, String> namespaces) {
         super(namespaces);
+        this.conversionService = conversionService;
     }
 
     public void read(AtlasInternalSession session) throws AtlasException {

@@ -222,7 +222,7 @@ public class XmlFieldReaderTest {
         namespaces.put("http://www.example.com/y/", "y");
         namespaces.put("http://www.example.com/x/", "");
 
-        reader = new XmlFieldReader(namespaces);
+        reader = new XmlFieldReader(DefaultAtlasConversionService.getInstance(), namespaces);
 
         AtlasInternalSession session = mock(AtlasInternalSession.class);
         when(session.head()).thenReturn(mock(Head.class));
@@ -354,7 +354,7 @@ public class XmlFieldReaderTest {
     private String getDocumentString(String uri) throws IOException {
         File f = new File(uri);
         FileInputStream fis = new FileInputStream(f);
-        byte[] buf = new byte[(int)f.length()];
+        byte[] buf = new byte[(int) f.length()];
         fis.read(buf);
         fis.close();
         return new String(buf);
