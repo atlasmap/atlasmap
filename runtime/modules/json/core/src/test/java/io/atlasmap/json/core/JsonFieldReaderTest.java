@@ -29,6 +29,7 @@ import org.hamcrest.core.Is;
 import org.junit.Test;
 
 import io.atlasmap.api.AtlasException;
+import io.atlasmap.core.DefaultAtlasConversionService;
 import io.atlasmap.json.v2.AtlasJsonModelFactory;
 import io.atlasmap.json.v2.JsonField;
 import io.atlasmap.spi.AtlasInternalSession;
@@ -36,7 +37,7 @@ import io.atlasmap.spi.AtlasInternalSession.Head;
 
 public class JsonFieldReaderTest {
 
-    private static JsonFieldReader reader = new JsonFieldReader();
+    private static JsonFieldReader reader = new JsonFieldReader(DefaultAtlasConversionService.getInstance());
 
     @Test(expected = AtlasException.class)
     public void testWithNullDocument() throws Exception {
@@ -73,6 +74,7 @@ public class JsonFieldReaderTest {
         assertNotNull(field.getValue());
         assertThat(field.getValue(), Is.is("Mercedes"));
 
+        field.setFieldType(null);
         field.setPath("/doors");
         reader.read(session);
         assertNotNull(field.getValue());
@@ -724,8 +726,7 @@ public class JsonFieldReaderTest {
 
     @Test
     public void testArrayUnderRoot() throws Exception {
-        final String document = new String(
-                Files.readAllBytes(Paths.get("src/test/resources/array-under-root.json")));
+        final String document = new String(Files.readAllBytes(Paths.get("src/test/resources/array-under-root.json")));
         reader.setDocument(document);
         JsonField field = AtlasJsonModelFactory.createJsonField();
         field.setPath("/array[0]");

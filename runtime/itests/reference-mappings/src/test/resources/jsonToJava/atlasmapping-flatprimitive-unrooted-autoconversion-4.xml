@@ -8,15 +8,19 @@
     <Mappings>
         <Mapping xsi:type="Mapping" mappingType="Map">
             <InputField xsi:type="ns3:JsonField" path="/intField" />
-            <OutputField xsi:type="ns2:JavaField" path="/doubleField" />
-        </Mapping>
-        <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns3:JsonField" path="/shortField" />
             <OutputField xsi:type="ns2:JavaField" path="/floatField" />
         </Mapping>
         <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns3:JsonField" path="/byteField" />
+            <InputField xsi:type="ns3:JsonField" path="/shortField" />
+            <OutputField xsi:type="ns2:JavaField" path="/booleanField" />
+        </Mapping>
+        <Mapping xsi:type="Mapping" mappingType="Map">
+            <InputField xsi:type="ns3:JsonField" path="/longField" fieldType="Long" />
             <OutputField xsi:type="ns2:JavaField" path="/charField" />
+        </Mapping>
+        <Mapping xsi:type="Mapping" mappingType="Map">
+            <InputField xsi:type="ns3:JsonField" path="/doubleField" />
+            <OutputField xsi:type="ns2:JavaField" path="/byteField" />
         </Mapping>
         <Mapping xsi:type="Mapping" mappingType="Map">
             <InputField xsi:type="ns3:JsonField" path="/floatField" />
@@ -27,9 +31,12 @@
             <OutputField xsi:type="ns2:JavaField" path="/shortField" />
         </Mapping>
         <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns3:JsonField" path="/charField"
-                fieldType="Char" />
+            <InputField xsi:type="ns3:JsonField" path="/charField" fieldType="Char" />
             <OutputField xsi:type="ns2:JavaField" path="/longField" />
+        </Mapping>
+        <Mapping xsi:type="Mapping" mappingType="Map">
+            <InputField xsi:type="ns3:JsonField" path="/byteField" fieldType="Byte" />
+            <OutputField xsi:type="ns2:JavaField" path="/doubleField" />
         </Mapping>
     </Mappings>
     <LookupTables />

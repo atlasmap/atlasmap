@@ -21,6 +21,7 @@ public enum AtlasConversionConcern {
     NONE("none", "Conversion from '%s' to '%s' is supported"),
     RANGE("range", "Conversion from '%s' to '%s' can cause out of range exceptions"),
     FORMAT("format", "Conversion from '%s' to '%s' can cause numeric format exceptions"),
+    CONVENTION("format", "Conversion from '%s' to '%s' uses a default convention for values"),
     UNSUPPORTED("unsupported", "Conversions from '%s' to '%s' is not supported");
 
     private String name;

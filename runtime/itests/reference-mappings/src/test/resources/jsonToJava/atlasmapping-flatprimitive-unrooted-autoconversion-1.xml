@@ -8,7 +8,7 @@
     <Mappings>
         <Mapping xsi:type="Mapping" mappingType="Map">
             <InputField xsi:type="ns3:JsonField" path="/intField" />
-            <OutputField xsi:type="ns2:JavaField" path="/charField" />
+            <OutputField xsi:type="ns2:JavaField" path="/byteField" />
         </Mapping>
         <Mapping xsi:type="Mapping" mappingType="Map">
             <InputField xsi:type="ns3:JsonField" path="/shortField" />
@@ -29,6 +29,14 @@
         <Mapping xsi:type="Mapping" mappingType="Map">
             <InputField xsi:type="ns3:JsonField" path="/booleanField" />
             <OutputField xsi:type="ns2:JavaField" path="/floatField" />
+        </Mapping>
+        <Mapping xsi:type="Mapping" mappingType="Map">
+            <InputField xsi:type="ns3:JsonField" path="/charField" />
+            <OutputField xsi:type="ns2:JavaField" path="/booleanField" />
+        </Mapping>
+        <Mapping xsi:type="Mapping" mappingType="Map">
+            <InputField xsi:type="ns3:JsonField" path="/byteField" fieldType="Byte" />
+            <OutputField xsi:type="ns2:JavaField" path="/charField" />
         </Mapping>
     </Mappings>
 </AtlasMapping>

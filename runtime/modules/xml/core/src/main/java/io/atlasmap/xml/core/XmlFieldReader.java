@@ -46,12 +46,17 @@ public class XmlFieldReader extends XmlFieldTransformer implements AtlasFieldRea
     private AtlasConversionService conversionService;
     private Document document;
 
+    @SuppressWarnings("unused")
+    private XmlFieldReader() {
+    }
+
     public XmlFieldReader(AtlasConversionService conversionService) {
         this.conversionService = conversionService;
     }
 
-    public XmlFieldReader(Map<String, String> namespaces) {
+    public XmlFieldReader(AtlasConversionService conversionService, Map<String, String> namespaces) {
         super(namespaces);
+        this.conversionService = conversionService;
     }
 
     public void read(AtlasInternalSession session) throws AtlasException {
@@ -102,8 +107,8 @@ public class XmlFieldReader extends XmlFieldTransformer implements AtlasFieldRea
                 List<Element> children = XmlIOHelper.getChildrenWithName(childrenElementName, parentNode);
                 if (children == null || children.isEmpty()) {
                     if (LOG.isDebugEnabled()) {
-                        LOG.debug("Skipping source value set, couldn't find children with name '"
-                                + childrenElementName + "', for segment: " + sc);
+                        LOG.debug("Skipping source value set, couldn't find children with name '" + childrenElementName
+                                + "', for segment: " + sc);
                     }
                     return;
                 }
@@ -126,26 +131,26 @@ public class XmlFieldReader extends XmlFieldTransformer implements AtlasFieldRea
                     String attributeName = XmlPath.getAttribute(sc.getSegment());
                     value = parentNode.getAttribute(attributeName);
                 }
-                if (xmlField.getFieldType() == null) {
-                    xmlField.setFieldType(FieldType.STRING);
-                }
 
                 if (value == null) {
                     return;
                 }
-                if (FieldType.STRING.equals(xmlField.getFieldType())) {
-                    xmlField.setValue(value);
-                    return;
-                }
 
-                Object convertedValue;
-                try {
-                    convertedValue = conversionService.convertType(value, FieldType.STRING, xmlField.getFieldType());
-                    xmlField.setValue(convertedValue);
-                } catch (AtlasConversionException e) {
-                    AtlasUtil.addAudit(session, xmlField.getDocId(), String.format(
-                            "Failed to convert field value '%s' into type '%s'", value, xmlField.getFieldType()),
-                            xmlField.getPath(), AuditStatus.ERROR, value);
+                if (xmlField.getFieldType() == null) {
+                    xmlField.setValue(value);
+                    xmlField.setFieldType(FieldType.STRING);
+                } else {
+                    Object convertedValue;
+                    try {
+                        convertedValue = conversionService.convertType(value, FieldType.STRING,
+                                xmlField.getFieldType());
+                        xmlField.setValue(convertedValue);
+                    } catch (AtlasConversionException e) {
+                        AtlasUtil.addAudit(session, xmlField.getDocId(),
+                                String.format("Failed to convert field value '%s' into type '%s'", value,
+                                        xmlField.getFieldType()),
+                                xmlField.getPath(), AuditStatus.ERROR, value);
+                    }
                 }
             }
         }

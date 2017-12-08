@@ -30,18 +30,17 @@ public class DoubleConverter implements AtlasPrimitiveConverter<Double> {
      * @throws AtlasConversionException
      */
     @Override
-    @AtlasConversionInfo(sourceType = FieldType.DOUBLE, targetType = FieldType.BOOLEAN, concerns = AtlasConversionConcern.RANGE)
+    @AtlasConversionInfo(sourceType = FieldType.DOUBLE, targetType = FieldType.BOOLEAN, concerns = {
+            AtlasConversionConcern.CONVENTION })
     public Boolean convertToBoolean(Double value) throws AtlasConversionException {
         if (value == null) {
             return null;
         }
-        if (value == 0.0 || value == 1.0) {
-            if (value == 1.0) {
-                return Boolean.TRUE;
-            }
+        if (value == 0.0) {
             return Boolean.FALSE;
+        } else {
+            return Boolean.TRUE;
         }
-        throw new AtlasConversionException(String.format("Double %s cannot be converted to a Boolean", value));
     }
 
     /**
@@ -71,7 +70,8 @@ public class DoubleConverter implements AtlasPrimitiveConverter<Double> {
      * @throws AtlasConversionException
      */
     @Override
-    @AtlasConversionInfo(sourceType = FieldType.DOUBLE, targetType = FieldType.CHAR, concerns = AtlasConversionConcern.RANGE)
+    @AtlasConversionInfo(sourceType = FieldType.DOUBLE, targetType = FieldType.CHAR, concerns = {
+            AtlasConversionConcern.RANGE, AtlasConversionConcern.CONVENTION })
     public Character convertToCharacter(Double value) throws AtlasConversionException {
         if (value == null) {
             return null;
@@ -81,8 +81,7 @@ public class DoubleConverter implements AtlasPrimitiveConverter<Double> {
             throw new AtlasConversionException(String
                     .format("Double %s is greater than Character.MAX_VALUE or less than Character.MIN_VALUE", value));
         }
-
-        return (char) value.doubleValue();
+        return Character.valueOf((char) value.intValue());
     }
 
     /**

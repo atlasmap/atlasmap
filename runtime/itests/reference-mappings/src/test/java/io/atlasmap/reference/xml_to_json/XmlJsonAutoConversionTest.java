@@ -75,6 +75,13 @@ public class XmlJsonAutoConversionTest extends AtlasMappingBaseTest {
                 "src/test/resources/xmlToJson/atlas-xml-flatprimitive-attribute-autoconversion.xml", 6);
     }
 
+    @Test
+    public void testProcessXmlJsonFlatFieldMappingAutoConversion7() throws Exception {
+        processXmlJsonFlatMappingAutoConversion(
+                "src/test/resources/xmlToJson/atlasmapping-flatprimitive-attribute-autoconversion-7.xml",
+                "src/test/resources/xmlToJson/atlas-xml-flatprimitive-attribute-autoconversion.xml", 7);
+    }
+
     protected void processXmlJsonFlatMappingAutoConversion(String mappingFile, String inputFile, int num)
             throws Exception {
         AtlasContext context = atlasContextFactory.createContext(new File(mappingFile).toURI());
@@ -107,6 +114,9 @@ public class XmlJsonAutoConversionTest extends AtlasMappingBaseTest {
             break;
         case 6:
             AtlasTestUtil.validateJsonFlatPrimitivePrimitiveFieldAutoConversion6(targetObject);
+            break;
+        case 7:
+            AtlasTestUtil.validateJsonFlatPrimitivePrimitiveFieldAutoConversion7(targetObject);
             break;
         default:
             fail("Unexpected number: " + num);

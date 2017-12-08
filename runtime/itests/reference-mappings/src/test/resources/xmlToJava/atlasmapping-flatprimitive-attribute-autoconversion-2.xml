@@ -8,15 +8,19 @@
         uri="atlas:java?className=io.atlasmap.java.test.TargetFlatPrimitiveClass" />
     <Mappings>
         <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns3:XmlField" path="/XmlFPA/@shortField" />
+            <InputField xsi:type="ns3:XmlField" path="/XmlFPA/@intField" fieldType="Integer"/>
             <OutputField xsi:type="ns2:JavaField" path="/charField" />
+        </Mapping>
+        <Mapping xsi:type="Mapping" mappingType="Map">
+            <InputField xsi:type="ns3:XmlField" path="/XmlFPA/@shortField" />
+            <OutputField xsi:type="ns2:JavaField" path="/byteField" />
         </Mapping>
         <Mapping xsi:type="Mapping" mappingType="Map">
             <InputField xsi:type="ns3:XmlField" path="/XmlFPA/@longField" />
             <OutputField xsi:type="ns2:JavaField" path="/intField" />
         </Mapping>
         <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns3:XmlField" path="/XmlFPA/@byteField" fieldType="Byte" />
+            <InputField xsi:type="ns3:XmlField" path="/XmlFPA/@doubleField" fieldType="Double" />
             <OutputField xsi:type="ns2:JavaField" path="/shortField" />
         </Mapping>
         <Mapping xsi:type="Mapping" mappingType="Map">
@@ -30,6 +34,10 @@
         <Mapping xsi:type="Mapping" mappingType="Map">
             <InputField xsi:type="ns3:XmlField" path="/XmlFPA/@charField" fieldType="Char" />
             <OutputField xsi:type="ns2:JavaField" path="/floatField" />
+        </Mapping>
+        <Mapping xsi:type="Mapping" mappingType="Map">
+            <InputField xsi:type="ns3:XmlField" path="/XmlFPA/@byteField" fieldType="Byte"/>
+            <OutputField xsi:type="ns2:JavaField" path="/booleanField" />
         </Mapping>
     </Mappings>
     <LookupTables />

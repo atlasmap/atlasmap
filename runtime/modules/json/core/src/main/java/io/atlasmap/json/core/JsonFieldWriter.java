@@ -69,7 +69,8 @@ public class JsonFieldWriter implements AtlasFieldWriter {
         }
         if (LOG.isDebugEnabled()) {
             LOG.debug("Field: " + AtlasModelFactory.toString(targetField));
-            LOG.debug("Field type=" + targetField.getFieldType() + " path=" + targetField.getPath() + " v=" + targetField.getValue());
+            LOG.debug("Field type=" + targetField.getFieldType() + " path=" + targetField.getPath() + " v="
+                    + targetField.getValue());
         }
         AtlasPath path = new AtlasPath(targetField.getPath());
         String lastSegment = path.getLastSegment();
@@ -154,8 +155,8 @@ public class JsonFieldWriter implements AtlasFieldWriter {
 
             if (arrayChild.size() < (index + 1)) {
                 if (LOG.isDebugEnabled()) {
-                    LOG.debug("Value Array is too small, resizing to accomodate index: " + index
-                            + ", current array: " + arrayChild);
+                    LOG.debug("Value Array is too small, resizing to accomodate index: " + index + ", current array: "
+                            + arrayChild);
                 }
                 // if our array doesn't have index + 1 items in it, add nulls until we have the
                 // index available
@@ -192,8 +193,8 @@ public class JsonFieldWriter implements AtlasFieldWriter {
 
             if (arrayChild.size() < (index + 1)) {
                 if (LOG.isDebugEnabled()) {
-                    LOG.debug("Object Array is too small, resizing to accomodate index: " + index
-                            + ", current array: " + arrayChild);
+                    LOG.debug("Object Array is too small, resizing to accomodate index: " + index + ", current array: "
+                            + arrayChild);
                 }
                 // if our array doesn't have index + 1 items in it, add objects until we have
                 // the index available
@@ -223,7 +224,11 @@ public class JsonFieldWriter implements AtlasFieldWriter {
         Object value = jsonField.getValue();
         JsonNode valueNode = null;
         if (FieldType.STRING.equals(type)) {
-            valueNode = rootNode.textNode(String.valueOf(value));
+            if (value != null) {
+                valueNode = rootNode.textNode(String.valueOf(value));
+            } else {
+                valueNode = rootNode.nullNode();
+            }
         } else if (FieldType.CHAR.equals(type)) {
             valueNode = rootNode.textNode(Character.toString((char) value));
         } else if (FieldType.BOOLEAN.equals(type)) {
@@ -236,13 +241,15 @@ public class JsonFieldWriter implements AtlasFieldWriter {
             valueNode = rootNode.numberNode(Short.valueOf(String.valueOf(value)));
         } else if (FieldType.LONG.equals(type)) {
             valueNode = rootNode.numberNode(Long.valueOf(String.valueOf(value)));
+        } else if (FieldType.BYTE.equals(type)) {
+            valueNode = rootNode.numberNode(Byte.valueOf(String.valueOf(value)));
         } else {
             valueNode = rootNode.nullNode();
         }
         if (LOG.isDebugEnabled()) {
             String valueClass = value == null ? "null" : value.getClass().getName();
-            LOG.debug("Converted JsonField value to ValueNode. Type: " + type + ", value: " + value + "("
-                    + valueClass + "), node class: " + valueNode.getClass().getName() + ", node: " + valueNode);
+            LOG.debug("Converted JsonField value to ValueNode. Type: " + type + ", value: " + value + "(" + valueClass
+                    + "), node class: " + valueNode.getClass().getName() + ", node: " + valueNode);
         }
         return valueNode;
     }

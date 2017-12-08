@@ -66,10 +66,11 @@ public class CharacterConverterTest {
         assertFalse(f3);
     }
 
-    @Test(expected = AtlasConversionException.class)
-    public void convertToBooleanNull() throws Exception {
+    @Test
+    public void convertToBooleanrFallback() throws Exception {
         Character c = "q".charAt(0);
-        converter.convertToBoolean(c);
+        Boolean t = converter.convertToBoolean(c);
+        assertTrue(t);
     }
 
     @Test

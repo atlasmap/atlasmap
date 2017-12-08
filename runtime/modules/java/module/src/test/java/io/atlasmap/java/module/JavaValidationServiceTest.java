@@ -255,19 +255,12 @@ public class JavaValidationServiceTest {
         validations.addAll(targetValidationService.validateMapping(atlasMapping));
 
         assertTrue(validationHelper.hasErrors());
-        assertTrue(validationHelper.hasWarnings());
+        assertFalse(validationHelper.hasWarnings());
         assertFalse(validationHelper.hasInfos());
 
-        assertEquals(new Integer(2), new Integer(validationHelper.getCount()));
+        assertEquals(new Integer(1), new Integer(validationHelper.getCount()));
 
         Validation validation = validations.get(0);
-        assertNotNull(validation);
-        assertEquals(ValidationScope.MAPPING, validation.getScope());
-        assertEquals("combine.firstName.lastName", validation.getId());
-        assertEquals("Conversion from 'STRING' to 'BOOLEAN' can cause out of range exceptions",
-                validation.getMessage());
-        assertEquals(ValidationStatus.WARN, validation.getStatus());
-        validation = validations.get(1);
         assertNotNull(validation);
         assertEquals(ValidationScope.MAPPING, validation.getScope());
         assertEquals("combine.firstName.lastName", validation.getId());
@@ -280,8 +273,10 @@ public class JavaValidationServiceTest {
         AtlasMapping mapping = AtlasModelFactory.createAtlasMapping();
 
         mapping.setName("thisis_a_valid.name");
-        mapping.getDataSource().add(generateDataSource("atlas:xml", DataSourceType.SOURCE, AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID));
-        mapping.getDataSource().add(generateDataSource("atlas:xml", DataSourceType.TARGET, AtlasConstants.DEFAULT_TARGET_DOCUMENT_ID));
+        mapping.getDataSource()
+                .add(generateDataSource("atlas:xml", DataSourceType.SOURCE, AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID));
+        mapping.getDataSource()
+                .add(generateDataSource("atlas:xml", DataSourceType.TARGET, AtlasConstants.DEFAULT_TARGET_DOCUMENT_ID));
 
         validations.addAll(sourceValidationService.validateMapping(mapping));
         validations.addAll(targetValidationService.validateMapping(mapping));
@@ -318,9 +313,9 @@ public class JavaValidationServiceTest {
 
         assertTrue(validationHelper.hasErrors());
         assertFalse(validationHelper.hasWarnings());
-        assertTrue(validationHelper.hasInfos());
+        assertFalse(validationHelper.hasInfos());
 
-        assertEquals(new Integer(2), new Integer(validationHelper.getCount()));
+        assertEquals(new Integer(1), new Integer(validationHelper.getCount()));
 
         Validation validation = validations.get(0);
         assertNotNull(validation);
@@ -329,12 +324,6 @@ public class JavaValidationServiceTest {
         assertEquals("Input field 'firstName' must be of type 'STRING' for a Separate Mapping",
                 validation.getMessage());
         assertEquals(ValidationStatus.ERROR, validation.getStatus());
-        validation = validations.get(1);
-        assertNotNull(validation);
-        assertEquals(ValidationScope.MAPPING, validation.getScope());
-        assertEquals("separate.firstName.lastName", validation.getId());
-        assertEquals("Conversion from 'BOOLEAN' to 'STRING' is supported", validation.getMessage());
-        assertEquals(ValidationStatus.INFO, validation.getStatus());
     }
 
     @Test

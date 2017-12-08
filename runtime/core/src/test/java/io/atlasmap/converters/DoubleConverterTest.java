@@ -59,10 +59,11 @@ public class DoubleConverterTest {
         assertNull(b);
     }
 
-    @Test(expected = AtlasConversionException.class)
-    public void convertToBooleanException() throws Exception {
+    @Test
+    public void convertToBooleanNegative() throws Exception {
         Double dt = -1.0;
-        converter.convertToBoolean(dt);
+        Boolean b = converter.convertToBoolean(dt);
+        assertTrue(b);
     }
 
     @Test

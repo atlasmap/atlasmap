@@ -9,7 +9,7 @@
     <Mappings>
         <Mapping xsi:type="Mapping" mappingType="Map">
             <InputField xsi:type="ns3:XmlField" path="/XmlFPA/@intField" />
-            <OutputField xsi:type="ns2:JavaField" path="/charField" />
+            <OutputField xsi:type="ns2:JavaField" path="/byteField" />
         </Mapping>
         <Mapping xsi:type="Mapping" mappingType="Map">
             <InputField xsi:type="ns3:XmlField" path="/XmlFPA/@shortField" />
@@ -30,6 +30,14 @@
         <Mapping xsi:type="Mapping" mappingType="Map">
             <InputField xsi:type="ns3:XmlField" path="/XmlFPA/@booleanField" fieldType="Boolean" />
             <OutputField xsi:type="ns2:JavaField" path="/floatField" />
+        </Mapping>
+        <Mapping xsi:type="Mapping" mappingType="Map">
+            <InputField xsi:type="ns3:XmlField" path="/XmlFPA/@charField" />
+            <OutputField xsi:type="ns2:JavaField" path="/booleanField" />
+        </Mapping>
+        <Mapping xsi:type="Mapping" mappingType="Map">
+            <InputField xsi:type="ns3:XmlField" path="/XmlFPA/@byteField" fieldType="Byte" />
+            <OutputField xsi:type="ns2:JavaField" path="/charField" />
         </Mapping>
     </Mappings>
     <LookupTables />
