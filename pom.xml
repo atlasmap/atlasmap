@@ -20,7 +20,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>io.atlasmap</groupId>
   <artifactId>atlasmapio</artifactId>
-  <version>1.32-SNAPSHOT</version>
+  <version>1.32.0.fuse-000023</version>
   <packaging>pom</packaging>
   <name>AtlasMap Project</name>
   <description>AtlasMap Project</description>
@@ -58,6 +58,17 @@
     <npm.version>5.5.1</npm.version>
     <yarn.version>v1.3.2</yarn.version>
   </properties>
+
+  <distributionManagement>
+    <snapshotRepository>
+      <id>ossrh</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+    </snapshotRepository>
+    <repository>
+      <id>ossrh</id>
+      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+    </repository>
+  </distributionManagement>
   
   <modules>
       <module>parent</module>
