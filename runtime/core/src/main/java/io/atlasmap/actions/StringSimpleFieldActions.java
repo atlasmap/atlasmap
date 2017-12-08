@@ -23,6 +23,7 @@ import io.atlasmap.v2.Action;
 import io.atlasmap.v2.CollectionType;
 import io.atlasmap.v2.FieldType;
 
+@SuppressWarnings("squid:S1118")
 public class StringSimpleFieldActions implements AtlasFieldAction {
 
     public static final String STRING_SEPARATOR_REGEX = "[\\s+\\:\\_\\+\\=\\-]+";
@@ -87,15 +88,6 @@ public class StringSimpleFieldActions implements AtlasFieldAction {
             return input;
         }
         return STRING_SEPARATOR_PATTERN.matcher(input).replaceAll("_");
-    }
-
-    @AtlasFieldActionInfo(name = "StringLength", sourceType = FieldType.STRING, targetType = FieldType.INTEGER, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
-    public static Integer stringLength(Action action, String input) {
-        if (input == null || input.length() == 0) {
-            return new Integer(0);
-        }
-
-        return input.length();
     }
 
     @AtlasFieldActionInfo(name = "Trim", sourceType = FieldType.STRING, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)

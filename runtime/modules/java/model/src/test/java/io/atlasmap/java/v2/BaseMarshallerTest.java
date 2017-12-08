@@ -37,6 +37,7 @@ import io.atlasmap.v2.Collection;
 import io.atlasmap.v2.CollectionType;
 import io.atlasmap.v2.ConstantField;
 import io.atlasmap.v2.DataSource;
+import io.atlasmap.v2.Length;
 import io.atlasmap.v2.Lowercase;
 import io.atlasmap.v2.Mapping;
 import io.atlasmap.v2.MappingType;
@@ -46,7 +47,6 @@ import io.atlasmap.v2.Property;
 import io.atlasmap.v2.PropertyField;
 import io.atlasmap.v2.SeparateByDash;
 import io.atlasmap.v2.SeparateByUnderscore;
-import io.atlasmap.v2.StringLength;
 import io.atlasmap.v2.StringList;
 import io.atlasmap.v2.Trim;
 import io.atlasmap.v2.TrimLeft;
@@ -87,9 +87,8 @@ public abstract class BaseMarshallerTest {
                     if (exc == null) {
                         Files.delete(dir);
                         return FileVisitResult.CONTINUE;
-                    } else {
-                        throw exc;
                     }
+                    throw exc;
                 }
             });
         }
@@ -123,10 +122,10 @@ public abstract class BaseMarshallerTest {
         Actions actions = new Actions();
         actions.getActions().add(new Camelize());
         actions.getActions().add(new Capitalize());
+        actions.getActions().add(new Length());
         actions.getActions().add(new Lowercase());
         actions.getActions().add(new SeparateByDash());
         actions.getActions().add(new SeparateByUnderscore());
-        actions.getActions().add(new StringLength());
         actions.getActions().add(new Trim());
         actions.getActions().add(new TrimLeft());
         actions.getActions().add(new TrimRight());

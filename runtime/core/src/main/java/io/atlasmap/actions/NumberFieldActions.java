@@ -316,20 +316,6 @@ public class NumberFieldActions implements AtlasFieldAction {
             } else {
                 throw new IllegalArgumentException(COLLECTION_MUST_CONTAIN_NUMBERS_ERR_MSG);
             }
-<<<<<<< 47ddb07e1b3541f5aea5c4007ff93368151f40bf
-        }
-
-        return quotient;
-    }
-
-    @AtlasFieldActionInfo(name = "Floor", sourceType = FieldType.NUMBER, targetType = FieldType.NUMBER, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
-    public static Number floor(Action action, Number input) {
-        return input == null ? 0L : (long)Math.floor(input.doubleValue());
-    }
-
-    @AtlasFieldActionInfo(name = "Maximum", sourceType = FieldType.NUMBER, targetType = FieldType.NUMBER, sourceCollectionType = CollectionType.ALL, targetCollectionType = CollectionType.NONE)
-    public static Number maximum(Action action, Object input) {
-=======
         }
 
         return quotient;
@@ -366,56 +352,12 @@ public class NumberFieldActions implements AtlasFieldAction {
 
     @AtlasFieldActionInfo(name = "Minimum", sourceType = FieldType.NUMBER, targetType = FieldType.NUMBER, sourceCollectionType = CollectionType.ALL, targetCollectionType = CollectionType.NONE)
     public static Number minimum(Action action, Object input) {
->>>>>>> Issue #151: Implement Number-related p0 field actions
         if (input == null) {
             return 0;
         }
 
         Collection<?> inputs = collection(input);
 
-<<<<<<< 47ddb07e1b3541f5aea5c4007ff93368151f40bf
-        Number max = null;
-        for (Object entry : inputs) {
-            if (entry instanceof Number) {
-                if (max instanceof BigDecimal && entry instanceof BigDecimal) {
-                    max = ((BigDecimal) entry).max((BigDecimal)max);
-                } else if (max == null || ((Number) entry).doubleValue() > max.doubleValue()) {
-                    max = (Number) entry;
-=======
-        Number min = null;
-        for (Object entry : inputs) {
-            if (entry instanceof Number) {
-                if (min instanceof BigDecimal && entry instanceof BigDecimal) {
-                    min = ((BigDecimal) entry).min((BigDecimal)min);
-                } else if (min == null || ((Number) entry).doubleValue() < min.doubleValue()) {
-                    min = (Number) entry;
->>>>>>> Issue #151: Implement Number-related p0 field actions
-                }
-            } else {
-                throw new IllegalArgumentException(COLLECTION_MUST_CONTAIN_NUMBERS_ERR_MSG);
-            }
-        }
-
-<<<<<<< 47ddb07e1b3541f5aea5c4007ff93368151f40bf
-        return max;
-    }
-
-    @AtlasFieldActionInfo(name = "Minimum", sourceType = FieldType.NUMBER, targetType = FieldType.NUMBER, sourceCollectionType = CollectionType.ALL, targetCollectionType = CollectionType.NONE)
-    public static Number minimum(Action action, Object input) {
-=======
-        return min;
-    }
-
-    @AtlasFieldActionInfo(name = "Multiply", sourceType = FieldType.NUMBER, targetType = FieldType.NUMBER, sourceCollectionType = CollectionType.ALL, targetCollectionType = CollectionType.NONE)
-    public static Number multiply(Action action, Object input) {
->>>>>>> Issue #151: Implement Number-related p0 field actions
-        if (input == null) {
-            return 0;
-        }
-
-        Collection<?> inputs = collection(input);
-
-<<<<<<< 47ddb07e1b3541f5aea5c4007ff93368151f40bf
         Number min = null;
         for (Object entry : inputs) {
             if (entry instanceof Number) {
@@ -440,8 +382,6 @@ public class NumberFieldActions implements AtlasFieldAction {
 
         Collection<?> inputs = collection(input);
 
-=======
->>>>>>> Issue #151: Implement Number-related p0 field actions
         Number product = 1L;
         for (Object entry : inputs) {
             if (entry instanceof Number) {
@@ -500,8 +440,6 @@ public class NumberFieldActions implements AtlasFieldAction {
     private static Collection<?> collection(Object input) {
         if (input instanceof Collection) {
             return (Collection<?>) input;
-<<<<<<< c4b30f5503986f14c5fa837312c60e2da1e957da
-<<<<<<< 47ddb07e1b3541f5aea5c4007ff93368151f40bf
         }
         if (input instanceof Map) {
             return ((Map<?, ?>) input).values();
@@ -510,113 +448,47 @@ public class NumberFieldActions implements AtlasFieldAction {
             return Arrays.asList((Object[]) input);
         }
         if (input instanceof double[]) {
-=======
-        } else if (input instanceof Map) {
-=======
-        }
-        if (input instanceof Map) {
->>>>>>> Issue #153: Implement String-related p0 field actions
-            return ((Map<?, ?>) input).values();
-        }
-        if (input instanceof Number[]) {
-            return Arrays.asList((Object[]) input);
-<<<<<<< c4b30f5503986f14c5fa837312c60e2da1e957da
-        } else if (input instanceof double[]) {
->>>>>>> Issue #151: Implement Number-related p0 field actions
-=======
-        }
-        if (input instanceof double[]) {
->>>>>>> Issue #153: Implement String-related p0 field actions
             double[] din = (double[]) input;
             List<Double> dinList = new ArrayList<>(din.length);
             for (double e : din) {
                 dinList.add(e);
             }
             return dinList;
-<<<<<<< c4b30f5503986f14c5fa837312c60e2da1e957da
-<<<<<<< 47ddb07e1b3541f5aea5c4007ff93368151f40bf
         }
         if (input instanceof float[]) {
-=======
-        } else if (input instanceof float[]) {
->>>>>>> Issue #151: Implement Number-related p0 field actions
-=======
-        }
-        if (input instanceof float[]) {
->>>>>>> Issue #153: Implement String-related p0 field actions
             float[] fin = (float[]) input;
             List<Float> finList = new ArrayList<>(fin.length);
             for (float e : fin) {
                 finList.add(e);
             }
             return finList;
-<<<<<<< c4b30f5503986f14c5fa837312c60e2da1e957da
-<<<<<<< 47ddb07e1b3541f5aea5c4007ff93368151f40bf
         }
         if (input instanceof long[]) {
-=======
-        } else if (input instanceof long[]) {
->>>>>>> Issue #151: Implement Number-related p0 field actions
-=======
-        }
-        if (input instanceof long[]) {
->>>>>>> Issue #153: Implement String-related p0 field actions
             long[] lin = (long[]) input;
             List<Long> linList = new ArrayList<>(lin.length);
             for (long e : lin) {
                 linList.add(e);
             }
             return linList;
-<<<<<<< c4b30f5503986f14c5fa837312c60e2da1e957da
-<<<<<<< 47ddb07e1b3541f5aea5c4007ff93368151f40bf
         }
         if (input instanceof int[]) {
-=======
-        } else if (input instanceof int[]) {
->>>>>>> Issue #151: Implement Number-related p0 field actions
-=======
-        }
-        if (input instanceof int[]) {
->>>>>>> Issue #153: Implement String-related p0 field actions
             int[] iin = (int[]) input;
             List<Integer> iinList = new ArrayList<>(iin.length);
             for (int e : iin) {
                 iinList.add(e);
             }
             return iinList;
-<<<<<<< c4b30f5503986f14c5fa837312c60e2da1e957da
-<<<<<<< 47ddb07e1b3541f5aea5c4007ff93368151f40bf
         }
         if (input instanceof byte[]) {
-=======
-        } else if (input instanceof byte[]) {
->>>>>>> Issue #151: Implement Number-related p0 field actions
-=======
-        }
-        if (input instanceof byte[]) {
->>>>>>> Issue #153: Implement String-related p0 field actions
             byte[] bin = (byte[]) input;
             List<Byte> binList = new ArrayList<>(bin.length);
             for (byte e : bin) {
                 binList.add(e);
             }
             return binList;
-<<<<<<< c4b30f5503986f14c5fa837312c60e2da1e957da
-<<<<<<< 47ddb07e1b3541f5aea5c4007ff93368151f40bf
         }
         throw new IllegalArgumentException(
                 "Illegal input[" + input + "]. Input must be a Collection, Map or array of numbers");
-=======
-        } else {
-            throw new IllegalArgumentException(
-                    "Illegal input[" + input + "]. Input must be a Collection, Map or array of numbers");
-        }
->>>>>>> Issue #151: Implement Number-related p0 field actions
-=======
-        }
-        throw new IllegalArgumentException(
-                "Illegal input[" + input + "]. Input must be a Collection, Map or array of numbers");
->>>>>>> Issue #153: Implement String-related p0 field actions
     }
 
     private static Number doMultiply(Number input, double rate) {
