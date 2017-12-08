@@ -61,12 +61,14 @@ jobs:
             mkdir ./junit/ ./junit-ui/
             find . -type f -regex ".*/target/.*-reports/.*xml" -exec cp {} ./junit/ \;
             find ui/junit -type f -regex  ".*xml" -exec cp {} ./junit/ \;
+          when: always
 
       - run:
           name: Collect checkstyle reports
           command: |
             mkdir ./checkstyle/
             find . -type f -regex "./[runtime|camel].*/target/checkstyle-result.xml" -exec bash -c "cp {} ./checkstyle/\`echo {} | sed -e 's#^\./##' | sed -e 's#/#-#g'\`" \;
+          when: always
 
       - run:
           name: Collect Coverage reports
@@ -75,6 +77,7 @@ jobs:
             cp -a ./runtime/docs/target/site/jacoco-aggregate ./coverage/runtime
             cp -a ./camel/target/site/jacoco ./coverage/camel
             cp -a ./ui/coverage ./coverage/ui
+          when: always
 
       - store_test_results:
           path: ./junit
