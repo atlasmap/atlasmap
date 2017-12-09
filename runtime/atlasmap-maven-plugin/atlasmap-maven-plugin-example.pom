@@ -1,0 +1,49 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>io.atlasmap</groupId>
+    <artifactId>atlasmap-maven-plugin-example</artifactId>
+    <version>1.32-SNAPSHOT</version>
+    <name>Atlas :: Maven Plugin :: Example</name>
+    <packaging>jar</packaging>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>io.atlasmap</groupId>
+                <artifactId>atlasmap-maven-plugin</artifactId>
+                <version>${project.version}</version>
+                <executions>
+                    <execution>
+                        <id>generate-inspections</id>
+                        <goals>
+                            <goal>generate-inspections</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <inspections>
+                        <inspection>
+                            <artifacts>
+                                <artifact>org.apache.camel:camel-twitter:2.20.1</artifact>
+                            </artifacts>
+                            <className>twitter4j.Status</className>
+                        </inspection>
+                    </inspections>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.camel</groupId>
+                        <artifactId>camel-twitter</artifactId>
+                        <version>2.20.1</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>javax.ws.rs</groupId>
+                        <artifactId>javax.ws.rs-api</artifactId>
+                        <version>2.0</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+        </plugins>
+    </build>
+</project>

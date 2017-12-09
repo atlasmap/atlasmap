@@ -158,9 +158,13 @@ public class GenerateInspectionsMojo extends AbstractMojo {
         }
         if (inspections != null) {
             for (Inspection inspection : inspections) {
-                ArrayList<String> classNames = new ArrayList<>(inspection.classNames);
-                if (inspection.className != null) {
+                ArrayList<String> classNames = new ArrayList<>();
+                if (inspection.classNames != null) {
+                    classNames.addAll(inspection.classNames);
+                } else if (inspection.className != null) {
                     classNames.add(inspection.className);
+                } else {
+                    throw new MojoExecutionException("None of classNames nor className was found in the inspection configuration");
                 }
                 generateInspection(inspection.artifacts, classNames);
             }
@@ -172,19 +176,22 @@ public class GenerateInspectionsMojo extends AbstractMojo {
 
         List<URL> urls = artifacts == null ? Collections.emptyList() : resolveClasspath(artifacts);
 
+        ClassLoader origTccl = Thread.currentThread().getContextClassLoader();
         for (String className : classNames) {
             Class<?> clazz = null;
-            try {
-                // Not even this plugin will be available on this new URLClassLoader
-                URLClassLoader loader = new URLClassLoader(urls.toArray(new URL[urls.size()]), null);
+            JavaClass c = null;
+            // Not even this plugin will be available on this new URLClassLoader
+            try (URLClassLoader loader = new URLClassLoader(urls.toArray(new URL[urls.size()]), origTccl)) {
+                Thread.currentThread().setContextClassLoader(loader);
                 clazz = loader.loadClass(className);
-            } catch (ClassNotFoundException e) {
+                ClassInspectionService classInspectionService = new ClassInspectionService();
+                classInspectionService.setConversionService(DefaultAtlasConversionService.getInstance());
+                c = classInspectionService.inspectClass(clazz);
+            } catch (ClassNotFoundException | IOException e) {
                 throw new MojoExecutionException(e.getMessage(), e);
+            } finally {
+                Thread.currentThread().setContextClassLoader(origTccl);
             }
-
-            ClassInspectionService classInspectionService = new ClassInspectionService();
-            classInspectionService.setConversionService(DefaultAtlasConversionService.getInstance());
-            JavaClass c = classInspectionService.inspectClass(clazz);
 
             try {
                 ObjectMapper objectMapper = AtlasJsonProvider.createObjectMapper();
