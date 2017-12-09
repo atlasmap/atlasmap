@@ -32,7 +32,7 @@ public class StringConverter implements AtlasPrimitiveConverter<String> {
      * @throws AtlasConversionException
      */
     @Override
-    @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.BOOLEAN, concerns = AtlasConversionConcern.RANGE)
+    @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.BOOLEAN, concerns = AtlasConversionConcern.CONVENTION)
     public Boolean convertToBoolean(String value) throws AtlasConversionException {
         if (value == null) {
             return null;
@@ -42,7 +42,12 @@ public class StringConverter implements AtlasPrimitiveConverter<String> {
         } else if ("1".equals(value) || "t".equalsIgnoreCase(value) || "true".equalsIgnoreCase(value)) {
             return Boolean.TRUE;
         }
-        throw new AtlasConversionException(String.format("String %s cannot be converted to a Boolean", value));
+        // fall back
+        if ("".equals(value)) {
+            return Boolean.FALSE;
+        } else {
+            return Boolean.TRUE;
+        }
     }
 
     /**
@@ -77,7 +82,8 @@ public class StringConverter implements AtlasPrimitiveConverter<String> {
         }
         // empty or greater than 1 char String throws Exception
         if (value.isEmpty() || value.length() > 1) {
-            throw new AtlasConversionException("String is either empty or greater than one character long");
+            throw new AtlasConversionException(
+                    String.format("String '%s' is either empty or greater than one character long", value));
         } else if (value.charAt(0) < Character.MIN_VALUE || value.charAt(0) > Character.MAX_VALUE) {
             throw new AtlasConversionException(String
                     .format("String %s is greater than Character.MAX_VALUE  or less than Character.MIN_VALUE", value));

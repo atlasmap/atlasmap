@@ -30,7 +30,7 @@ public class CharacterConverter implements AtlasPrimitiveConverter<Character> {
      */
     @Override
     @AtlasConversionInfo(sourceType = FieldType.CHAR, targetType = FieldType.BOOLEAN, concerns = {
-            AtlasConversionConcern.RANGE })
+            AtlasConversionConcern.CONVENTION })
     public Boolean convertToBoolean(Character value) throws AtlasConversionException {
         if (value == null) {
             return null;
@@ -42,10 +42,10 @@ public class CharacterConverter implements AtlasPrimitiveConverter<Character> {
             } else {
                 return Boolean.FALSE;
             }
+        } else {
+            // fall back to TRUE being non zero char value
+            return value.charValue() != 0;
         }
-        // assuming anything not able to convert to a Boolean should be an exception
-        // condition
-        throw new AtlasConversionException(String.format("Character value %s cannot be converted to a Boolean", value));
 
     }
 
@@ -147,7 +147,7 @@ public class CharacterConverter implements AtlasPrimitiveConverter<Character> {
      */
     @Override
     @AtlasConversionInfo(sourceType = FieldType.CHAR, targetType = FieldType.SHORT, concerns = {
-            AtlasConversionConcern.RANGE })
+            AtlasConversionConcern.RANGE, AtlasConversionConcern.CONVENTION })
     public Short convertToShort(Character value) throws AtlasConversionException {
         if (value == null) {
             return null;

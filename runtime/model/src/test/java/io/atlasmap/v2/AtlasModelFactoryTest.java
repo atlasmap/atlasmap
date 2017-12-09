@@ -74,7 +74,7 @@ public class AtlasModelFactoryTest {
         List<Action> actionsList = Arrays.asList(new Camelize(), new Capitalize(), new CurrentDate(),
                 new CurrentDateTime(), new CurrentTime(), new CustomAction(), new GenerateUUID(), new Lowercase(),
                 new PadStringLeft(), new PadStringRight(), new SeparateByDash(), new SeparateByUnderscore(),
-                new StringLength(), new SubString(), new SubStringAfter(), new SubStringBefore(), new Trim(),
+                new Length(), new SubString(), new SubStringAfter(), new SubStringBefore(), new Trim(),
                 new TrimLeft(), new TrimRight(), new Uppercase());
         Actions actions = new Actions();
         actions.getActions().addAll(actionsList);
@@ -87,7 +87,7 @@ public class AtlasModelFactoryTest {
     public void testCloneAction() {
         List<Action> actions = Arrays.asList(new Camelize(), new Capitalize(), new CurrentDate(), new CurrentDateTime(),
                 new CurrentTime(), new CustomAction(), new GenerateUUID(), new Lowercase(), new PadStringLeft(),
-                new PadStringRight(), new SeparateByDash(), new SeparateByUnderscore(), new StringLength(),
+                new PadStringRight(), new SeparateByDash(), new SeparateByUnderscore(), new Length(),
                 new SubString(), new SubStringAfter(), new SubStringBefore(), new Trim(), new TrimLeft(),
                 new TrimRight(), new Uppercase());
         for (Action a : actions) {

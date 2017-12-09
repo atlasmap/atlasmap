@@ -57,9 +57,10 @@ public class IntegerConverterTest {
         assertNull(out);
     }
 
-    @Test(expected = AtlasConversionException.class)
-    public void convertToBooleanConvertException() throws Exception {
-        converter.convertToBoolean(10);
+    @Test
+    public void convertToBooleanHigh() throws Exception {
+        Boolean out = converter.convertToBoolean(10);
+        assertTrue(out);
     }
 
     @Test
@@ -90,7 +91,7 @@ public class IntegerConverterTest {
         Integer integer = new Integer(4);
         Character character = converter.convertToCharacter(integer);
         assertNotNull(character);
-        int revert = Character.digit(character, 10);
+        int revert = (char) character.charValue();
         assertEquals(integer, new Integer(revert));
     }
 

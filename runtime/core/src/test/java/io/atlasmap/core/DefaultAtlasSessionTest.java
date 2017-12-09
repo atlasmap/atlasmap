@@ -41,8 +41,8 @@ public class DefaultAtlasSessionTest {
         assertNotNull(session.getAudits());
         assertNotNull(session.getProperties());
         assertNotNull(session.getValidations());
-        assertNull(session.getInput());
-        assertNull(session.getOutput());
+        assertNull(session.getDefaultSourceDocument());
+        assertNull(session.getDefaultTargetDocument());
     }
 
     @Test
@@ -99,56 +99,56 @@ public class DefaultAtlasSessionTest {
 
     @Test
     public void testGetSetInput() {
-        session.setInput(new String("defaultInput"));
-        assertNotNull(session.getInput());
-        assertTrue(session.getInput() instanceof String);
-        assertEquals("defaultInput", (String) session.getInput());
+        session.setDefaultSourceDocument(new String("defaultInput"));
+        assertNotNull(session.getDefaultSourceDocument());
+        assertTrue(session.getDefaultSourceDocument() instanceof String);
+        assertEquals("defaultInput", (String) session.getDefaultSourceDocument());
     }
 
     @Test
     public void testGetSetInputDocId() {
-        session.setInput(new String("defaultInput"));
-        assertNotNull(session.getInput());
-        assertTrue(session.getInput() instanceof String);
-        assertEquals("defaultInput", (String) session.getInput());
+        session.setDefaultSourceDocument(new String("defaultInput"));
+        assertNotNull(session.getDefaultSourceDocument());
+        assertTrue(session.getDefaultSourceDocument() instanceof String);
+        assertEquals("defaultInput", (String) session.getDefaultSourceDocument());
 
-        session.setInput(new String("secondInput"), "second");
-        assertNotNull(session.getInput());
-        assertTrue(session.getInput() instanceof String);
-        assertEquals("defaultInput", (String) session.getInput());
+        session.setSourceDocument("second", new String("secondInput"));
+        assertNotNull(session.getDefaultSourceDocument());
+        assertTrue(session.getDefaultSourceDocument() instanceof String);
+        assertEquals("defaultInput", (String) session.getDefaultSourceDocument());
 
-        assertTrue(session.hasInput("second"));
-        assertFalse(session.hasInput("third"));
-        assertNotNull(session.getInput("second"));
-        assertTrue(session.getInput("second") instanceof String);
-        assertEquals("secondInput", (String) session.getInput("second"));
+        assertTrue(session.hasSourceDocument("second"));
+        assertFalse(session.hasSourceDocument("third"));
+        assertNotNull(session.getSourceDocument("second"));
+        assertTrue(session.getSourceDocument("second") instanceof String);
+        assertEquals("secondInput", (String) session.getSourceDocument("second"));
     }
 
     @Test
     public void testGetSetOutput() {
-        session.setOutput(new String("defaultOutput"));
-        assertNotNull(session.getOutput());
-        assertTrue(session.getOutput() instanceof String);
-        assertEquals("defaultOutput", (String) session.getOutput());
+        session.setDefaultTargetDocument(new String("defaultOutput"));
+        assertNotNull(session.getDefaultTargetDocument());
+        assertTrue(session.getDefaultTargetDocument() instanceof String);
+        assertEquals("defaultOutput", (String) session.getDefaultTargetDocument());
     }
 
     @Test
     public void testGetSetOutputDocId() {
-        session.setOutput(new String("defaultOutput"));
-        assertNotNull(session.getOutput());
-        assertTrue(session.getOutput() instanceof String);
-        assertEquals("defaultOutput", (String) session.getOutput());
+        session.setDefaultTargetDocument(new String("defaultOutput"));
+        assertNotNull(session.getDefaultTargetDocument());
+        assertTrue(session.getDefaultTargetDocument() instanceof String);
+        assertEquals("defaultOutput", (String) session.getDefaultTargetDocument());
 
-        session.setOutput(new String("secondOutput"), "second");
-        assertNotNull(session.getOutput());
-        assertTrue(session.getOutput() instanceof String);
-        assertEquals("defaultOutput", (String) session.getOutput());
+        session.setTargetDocument("second", new String("secondOutput"));
+        assertNotNull(session.getDefaultTargetDocument());
+        assertTrue(session.getDefaultTargetDocument() instanceof String);
+        assertEquals("defaultOutput", (String) session.getDefaultTargetDocument());
 
-        assertTrue(session.hasOutput("second"));
-        assertFalse(session.hasOutput("third"));
-        assertNotNull(session.getOutput("second"));
-        assertTrue(session.getOutput("second") instanceof String);
-        assertEquals("secondOutput", (String) session.getOutput("second"));
+        assertTrue(session.hasTargetDocument("second"));
+        assertFalse(session.hasTargetDocument("third"));
+        assertNotNull(session.getTargetDocument("second"));
+        assertTrue(session.getTargetDocument("second") instanceof String);
+        assertEquals("secondOutput", (String) session.getTargetDocument("second"));
     }
 
     @Test

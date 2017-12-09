@@ -1,5 +1,6 @@
 package io.atlasmap.xml.module;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.After;
@@ -28,8 +29,8 @@ public class XmlModuleTest {
     @Test
     public void testIsSupportedField() {
         assertTrue(module.isSupportedField(new XmlField()));
-        assertTrue(module.isSupportedField(new PropertyField()));
-        assertTrue(module.isSupportedField(new ConstantField()));
+        assertFalse(module.isSupportedField(new PropertyField()));
+        assertFalse(module.isSupportedField(new ConstantField()));
         assertTrue(module.isSupportedField(new SimpleField()));
     }
 

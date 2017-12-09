@@ -20,7 +20,7 @@ public interface AtlasModuleInfo {
 
     public String getUri();
 
-    public String getModuleClassName();
+    public Class<AtlasModule> getModuleClass();
 
     public String[] getDataFormats();
 

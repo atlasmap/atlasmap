@@ -16,6 +16,7 @@
 package io.atlasmap.converters;
 
 import io.atlasmap.api.AtlasConversionException;
+import io.atlasmap.spi.AtlasConversionConcern;
 import io.atlasmap.spi.AtlasConversionInfo;
 import io.atlasmap.spi.AtlasPrimitiveConverter;
 import io.atlasmap.v2.FieldType;
@@ -142,7 +143,8 @@ public class BooleanConverter implements AtlasPrimitiveConverter<Boolean> {
      * @throws AtlasConversionException
      */
     @Override
-    @AtlasConversionInfo(sourceType = FieldType.BOOLEAN, targetType = FieldType.STRING)
+    @AtlasConversionInfo(sourceType = FieldType.BOOLEAN, targetType = FieldType.STRING, concerns = {
+            AtlasConversionConcern.CONVENTION })
     public String convertToString(Boolean value) throws AtlasConversionException {
         if (value == null) {
             return null;

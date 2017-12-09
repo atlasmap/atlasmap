@@ -15,6 +15,7 @@
  */
 package io.atlasmap.reference.json_to_xml;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -70,18 +71,24 @@ public class JsonXmlAutoConversionTest extends AtlasMappingBaseTest {
                 "src/test/resources/jsonToXml/atlasmapping-flatprimitive-attribute-autoconversion-6.xml", 6);
     }
 
+    @Test
+    public void testProcessJsonXmlFlatFieldMappingAutoConversion7() throws Exception {
+        processJsonXmlFlatMappingAutoConversion(
+                "src/test/resources/jsonToXml/atlasmapping-flatprimitive-attribute-autoconversion-7.xml", 7);
+    }
+
     protected void processJsonXmlFlatMappingAutoConversion(String mappingFile, int num) throws Exception {
         AtlasContext context = atlasContextFactory.createContext(new File(mappingFile).toURI());
         AtlasSession session = context.createSession();
         String source = AtlasTestUtil.loadFileAsString(
                 "src/test/resources/jsonToJson/atlas-json-flatprimitive-unrooted-autoconversion.json");
-        session.setInput(source);
+        session.setDefaultSourceDocument(source);
         context.process(session);
 
-        Object object = session.getOutput();
+        assertFalse(printAudit(session), session.hasErrors());
+        Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof String);
-        @SuppressWarnings("unchecked")
         JAXBElement<XmlFlatPrimitiveElement> xmlFPE = (JAXBElement<XmlFlatPrimitiveElement>) AtlasXmlTestHelper
                 .unmarshal((String) object, XmlFlatPrimitiveElement.class);
 
@@ -103,6 +110,9 @@ public class JsonXmlAutoConversionTest extends AtlasMappingBaseTest {
             break;
         case 6:
             AtlasTestUtil.validateXmlFlatPrimitivePrimitiveElementAutoConversion6(xmlFPE.getValue());
+            break;
+        case 7:
+            AtlasTestUtil.validateXmlFlatPrimitivePrimitiveElementAutoConversion7(xmlFPE.getValue());
             break;
         default:
             fail("Unexpected number: " + num);

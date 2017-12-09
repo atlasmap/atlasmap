@@ -88,10 +88,14 @@ public class StringConverterTest {
         assertNull(b);
     }
 
-    @Test(expected = AtlasConversionException.class)
-    public void convertToBooleanException() throws Exception {
-        String s = "-1";
-        converter.convertToBoolean(s);
+    @Test
+    public void convertToBooleanFallback() throws Exception {
+        String s = "";
+        Boolean b = converter.convertToBoolean(s);
+        assertFalse(b);
+
+        b = converter.convertToBoolean("junk");
+        assertTrue(b);
     }
 
     @Test

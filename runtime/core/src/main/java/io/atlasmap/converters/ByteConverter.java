@@ -16,6 +16,7 @@
 package io.atlasmap.converters;
 
 import io.atlasmap.api.AtlasConversionException;
+import io.atlasmap.spi.AtlasConversionConcern;
 import io.atlasmap.spi.AtlasConversionInfo;
 import io.atlasmap.spi.AtlasPrimitiveConverter;
 import io.atlasmap.v2.FieldType;
@@ -28,7 +29,9 @@ public class ByteConverter implements AtlasPrimitiveConverter<Byte> {
      * @throws AtlasConversionException
      */
     @Override
-    @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.BOOLEAN)
+    @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.BOOLEAN, concerns = {
+            AtlasConversionConcern.CONVENTION })
+
     public Boolean convertToBoolean(Byte value) throws AtlasConversionException {
         if (value == null) {
             return null;
@@ -140,7 +143,8 @@ public class ByteConverter implements AtlasPrimitiveConverter<Byte> {
      * @throws AtlasConversionException
      */
     @Override
-    @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.STRING)
+    @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.STRING, concerns = {
+            AtlasConversionConcern.CONVENTION })
     public String convertToString(Byte value) throws AtlasConversionException {
         if (value == null) {
             return null;

@@ -58,10 +58,11 @@ public class FloatConverterTest {
         assertNull(b);
     }
 
-    @Test(expected = AtlasConversionException.class)
-    public void convertToBooleanException() throws Exception {
+    @Test
+    public void convertToBooleanNegative() throws Exception {
         Float dt = -1.0f;
-        converter.convertToBoolean(dt);
+        Boolean b = converter.convertToBoolean(dt);
+        assertTrue(b);
     }
 
     @Test

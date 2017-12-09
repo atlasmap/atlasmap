@@ -22,6 +22,12 @@ import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 
+@SuppressWarnings({"squid:S1118", // Add private constructor
+    "squid:S1226", // Introduce new variable
+    "squid:S1301", // Replace switch with if
+    "squid:S1479", // Reduce number of switch cases
+    "squid:S3358", // Extract nested ternary
+    "squid:S3776", }) // Cognitive complexity of method
 public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
 
     @Override
@@ -52,90 +58,118 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
 
     protected Action processActionJsonToken(JsonParser jsonToken) throws IOException {
 
-        Action action = null;
         if (jsonToken.getCurrentName() == null) {
             return null;
         }
 
         switch (jsonToken.getCurrentName()) {
-        case "Camelize":
-            action = new Camelize();
-            return action;
-        case "Capitalize":
-            action = new Capitalize();
-            return action;
-        case "ConvertAreaUnit":
-            return processConvertAreaUnitJsonToken(jsonToken);
-        case "ConvertDistanceUnit":
-            return processConvertDistanceUnitJsonToken(jsonToken);
-        case "ConvertMassUnit":
-            return processConvertMassUnitJsonToken(jsonToken);
-        case "ConvertVolumeUnit":
-            return processConvertVolumeUnitJsonToken(jsonToken);
-        case "CurrentDate":
-            return processCurrentDateJsonToken(jsonToken);
-        case "CurrentDateTime":
-            return processCurrentDateTimeJsonToken(jsonToken);
-        case "CurrentTime":
-            return processCurrentTimeJsonToken(jsonToken);
-        case "CustomAction":
-            return processCustomActionJsonToken(jsonToken);
-        case "GenerateUUID":
-            action = new GenerateUUID();
-            return action;
-        case "Lowercase":
-            action = new Lowercase();
-            return action;
-        case "PadStringLeft":
-            return processPadStringLeftJsonToken(jsonToken);
-        case "PadStringRight":
-            return processPadStringRightJsonToken(jsonToken);
-        case "replace":
-            return processReplaceJsonToken(jsonToken);
-        case "SeparateByDash":
-            action = new SeparateByDash();
-            return action;
-        case "SeparateByUnderscore":
-            action = new SeparateByUnderscore();
-            return action;
-        case "StringLength":
-            action = new StringLength();
-            return action;
-        case "SubString":
-            return processSubStringJsonToken(jsonToken);
-        case "SubStringAfter":
-            return processSubStringAfterJsonToken(jsonToken);
-        case "SubStringBefore":
-            return processSubStringBeforeJsonToken(jsonToken);
-        case "SumUp":
-            return processSumUpJsonToken(jsonToken);
-        case "Trim":
-            action = new Trim();
-            return action;
-        case "TrimLeft":
-            action = new TrimLeft();
-            return action;
-        case "TrimRight":
-            action = new TrimRight();
-            return action;
-        case "Uppercase":
-            action = new Uppercase();
-            return action;
-        default:
-            // ref: https://github.com/atlasmap/atlasmap/issues/6
-            // TODO: Logger not required in model module
-            // logger.warn("Unsupported action named: " + jsonToken.getCurrentName());
+            case "AbsoluteValue":
+                return new AbsoluteValue();
+            case "Add":
+                return new Average();
+            case "Average":
+                return new Average();
+            case "Camelize":
+                return new Camelize();
+            case "Capitalize":
+                return new Capitalize();
+            case "Ceiling":
+                return new Ceiling();
+            case "Concatentate":
+                return processConcatenateJsonToken(jsonToken);
+            case "ConvertAreaUnit":
+                return processConvertAreaUnitJsonToken(jsonToken);
+            case "ConvertDistanceUnit":
+                return processConvertDistanceUnitJsonToken(jsonToken);
+            case "ConvertMassUnit":
+                return processConvertMassUnitJsonToken(jsonToken);
+            case "ConvertVolumeUnit":
+                return processConvertVolumeUnitJsonToken(jsonToken);
+            case "CurrentDate":
+                return processCurrentDateJsonToken(jsonToken);
+            case "CurrentDateTime":
+                return processCurrentDateTimeJsonToken(jsonToken);
+            case "CurrentTime":
+                return processCurrentTimeJsonToken(jsonToken);
+            case "CustomAction":
+                return processCustomActionJsonToken(jsonToken);
+            case "Divide":
+                return new Divide();
+            case "EndsWith":
+                return processEndsWithJsonToken(jsonToken);
+            case "FileExtension":
+                return new FileExtension();
+            case "Floor":
+                return new Floor();
+            case "Format":
+                return processFormatJsonToken(jsonToken);
+            case "GenerateUUID":
+                return new GenerateUUID();
+            case "IndexOf":
+                return processIndexOfJsonToken(jsonToken);
+            case "LastIndexOf":
+                return processLastIndexOfJsonToken(jsonToken);
+            case "Length":
+                return new Length();
+            case "Lowercase":
+                return new Lowercase();
+            case "Maximum":
+                return new Maximum();
+            case "Minimum":
+                return new Minimum();
+            case "Multiply":
+                return new Multiply();
+            case "Normalize":
+                return new Normalize();
+            case "PadStringLeft":
+                return processPadStringLeftJsonToken(jsonToken);
+            case "PadStringRight":
+                return processPadStringRightJsonToken(jsonToken);
+            case "RemoveFileExtension":
+                return new RemoveFileExtension();
+            case "ReplaceAll":
+                return processReplaceAllJsonToken(jsonToken);
+            case "ReplaceFirst":
+                return processReplaceFirstJsonToken(jsonToken);
+            case "Round":
+                return new Round();
+            case "SeparateByDash":
+                return new SeparateByDash();
+            case "SeparateByUnderscore":
+                return new SeparateByUnderscore();
+            case "StartsWith":
+                return processStartsWithJsonToken(jsonToken);
+            case "SubString":
+                return processSubStringJsonToken(jsonToken);
+            case "SubStringAfter":
+                return processSubStringAfterJsonToken(jsonToken);
+            case "SubStringBefore":
+                return processSubStringBeforeJsonToken(jsonToken);
+            case "Subtract":
+                return new Subtract();
+            case "Trim":
+                return new Trim();
+            case "TrimLeft":
+                return new TrimLeft();
+            case "TrimRight":
+                return new TrimRight();
+            case "Uppercase":
+                return new Uppercase();
+            default:
+                // ref: https://github.com/atlasmap/atlasmap/issues/6
+                // TODO: Logger not required in model module
+                // logger.warn("Unsupported action named: " + jsonToken.getCurrentName());
         }
 
         return null;
     }
 
-    protected Replace processReplaceJsonToken(JsonParser jsonToken) throws IOException {
-        Replace replace = new Replace();
+    protected Concatenate processConcatenateJsonToken(JsonParser jsonToken) throws IOException {
+        Concatenate action = new Concatenate();
 
         if (JsonToken.END_ARRAY.equals(jsonToken.currentToken())
                 || JsonToken.END_OBJECT.equals(jsonToken.currentToken())) {
-            return replace;
+            return action;
         }
 
         JsonToken nextToken = null;
@@ -144,13 +178,258 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
                 jsonToken.nextToken();
             }
             switch (jsonToken.getCurrentName()) {
-                case "oldString":
+            case ActionsJsonSerializer.DELIMITER:
+                jsonToken.nextToken();
+                action.setDelimiter(jsonToken.getValueAsString());
+                break;
+            default:
+                break;
+            }
+
+            nextToken = jsonToken.nextToken();
+        } while (!JsonToken.END_ARRAY.equals(nextToken) && !JsonToken.END_OBJECT.equals(nextToken));
+        return action;
+    }
+
+    protected ConvertAreaUnit processConvertAreaUnitJsonToken(JsonParser jsonToken) throws IOException {
+        ConvertAreaUnit action = new ConvertAreaUnit();
+
+        if (JsonToken.END_ARRAY.equals(jsonToken.currentToken())
+                || JsonToken.END_OBJECT.equals(jsonToken.currentToken())) {
+            return action;
+        }
+
+        JsonToken nextToken = null;
+        do {
+            if (JsonToken.START_OBJECT.equals(jsonToken.currentToken())) {
+                jsonToken.nextToken();
+            }
+            switch (jsonToken.getCurrentName()) {
+            case ActionsJsonSerializer.FROM_UNIT:
+                jsonToken.nextToken();
+                action.setFromUnit(AreaUnitType.fromValue(jsonToken.getValueAsString()));
+                break;
+            case ActionsJsonSerializer.TO_UNIT:
+                jsonToken.nextToken();
+                action.setToUnit(AreaUnitType.fromValue(jsonToken.getValueAsString()));
+                break;
+            default:
+                break;
+            }
+
+            nextToken = jsonToken.nextToken();
+        } while (!JsonToken.END_ARRAY.equals(nextToken) && !JsonToken.END_OBJECT.equals(nextToken));
+
+        return action;
+
+    }
+
+    protected ConvertDistanceUnit processConvertDistanceUnitJsonToken(JsonParser jsonToken) throws IOException {
+        ConvertDistanceUnit action = new ConvertDistanceUnit();
+
+        if (JsonToken.END_ARRAY.equals(jsonToken.currentToken())
+                || JsonToken.END_OBJECT.equals(jsonToken.currentToken())) {
+            return action;
+        }
+
+        JsonToken nextToken = null;
+        do {
+            if (JsonToken.START_OBJECT.equals(jsonToken.currentToken())) {
+                jsonToken.nextToken();
+            }
+            switch (jsonToken.getCurrentName()) {
+            case ActionsJsonSerializer.FROM_UNIT:
+                jsonToken.nextToken();
+                action.setFromUnit(DistanceUnitType.fromValue(jsonToken.getValueAsString()));
+                break;
+            case ActionsJsonSerializer.TO_UNIT:
+                jsonToken.nextToken();
+                action.setToUnit(DistanceUnitType.fromValue(jsonToken.getValueAsString()));
+                break;
+            default:
+                break;
+            }
+
+            nextToken = jsonToken.nextToken();
+        } while (!JsonToken.END_ARRAY.equals(nextToken) && !JsonToken.END_OBJECT.equals(nextToken));
+
+        return action;
+
+    }
+
+    protected ConvertMassUnit processConvertMassUnitJsonToken(JsonParser jsonToken) throws IOException {
+        ConvertMassUnit action = new ConvertMassUnit();
+
+        if (JsonToken.END_ARRAY.equals(jsonToken.currentToken())
+                || JsonToken.END_OBJECT.equals(jsonToken.currentToken())) {
+            return action;
+        }
+
+        JsonToken nextToken = null;
+        do {
+            if (JsonToken.START_OBJECT.equals(jsonToken.currentToken())) {
+                jsonToken.nextToken();
+            }
+            switch (jsonToken.getCurrentName()) {
+            case ActionsJsonSerializer.FROM_UNIT:
+                jsonToken.nextToken();
+                action.setFromUnit(MassUnitType.fromValue(jsonToken.getValueAsString()));
+                break;
+            case ActionsJsonSerializer.TO_UNIT:
+                jsonToken.nextToken();
+                action.setToUnit(MassUnitType.fromValue(jsonToken.getValueAsString()));
+                break;
+            default:
+                break;
+            }
+
+            nextToken = jsonToken.nextToken();
+        } while (!JsonToken.END_ARRAY.equals(nextToken) && !JsonToken.END_OBJECT.equals(nextToken));
+
+        return action;
+
+    }
+
+    protected ConvertVolumeUnit processConvertVolumeUnitJsonToken(JsonParser jsonToken) {
+        ConvertVolumeUnit action = new ConvertVolumeUnit();
+
+        if (JsonToken.END_ARRAY.equals(jsonToken.currentToken())
+                || JsonToken.END_OBJECT.equals(jsonToken.currentToken())) {
+            return action;
+        }
+
+        return action;
+    }
+
+    protected CurrentDate processCurrentDateJsonToken(JsonParser jsonToken) throws IOException {
+        CurrentDate action = new CurrentDate();
+
+        if (JsonToken.END_ARRAY.equals(jsonToken.currentToken())
+                || JsonToken.END_OBJECT.equals(jsonToken.currentToken())) {
+            return action;
+        }
+
+        JsonToken nextToken = null;
+        do {
+            if (JsonToken.START_OBJECT.equals(jsonToken.currentToken())) {
+                jsonToken.nextToken();
+            }
+            switch (jsonToken.getCurrentName()) {
+            case ActionsJsonSerializer.DATE_FORMAT:
+                jsonToken.nextToken();
+                action.setDateFormat(jsonToken.getValueAsString());
+                break;
+            default:
+                break;
+            }
+
+            nextToken = jsonToken.nextToken();
+        } while (!JsonToken.END_ARRAY.equals(nextToken) && !JsonToken.END_OBJECT.equals(nextToken));
+        return action;
+    }
+
+    protected CurrentDateTime processCurrentDateTimeJsonToken(JsonParser jsonToken) throws IOException {
+        CurrentDateTime action = new CurrentDateTime();
+
+        if (JsonToken.END_ARRAY.equals(jsonToken.currentToken())
+                || JsonToken.END_OBJECT.equals(jsonToken.currentToken())) {
+            return action;
+        }
+
+        JsonToken nextToken = null;
+        do {
+            if (JsonToken.START_OBJECT.equals(jsonToken.currentToken())) {
+                jsonToken.nextToken();
+            }
+            switch (jsonToken.getCurrentName()) {
+            case ActionsJsonSerializer.DATE_FORMAT:
+                jsonToken.nextToken();
+                action.setDateFormat(jsonToken.getValueAsString());
+                break;
+            default:
+                break;
+            }
+
+            nextToken = jsonToken.nextToken();
+        } while (!JsonToken.END_ARRAY.equals(nextToken) && !JsonToken.END_OBJECT.equals(nextToken));
+        return action;
+    }
+
+    protected CurrentTime processCurrentTimeJsonToken(JsonParser jsonToken) throws IOException {
+        CurrentTime action = new CurrentTime();
+
+        if (JsonToken.END_ARRAY.equals(jsonToken.currentToken())
+                || JsonToken.END_OBJECT.equals(jsonToken.currentToken())) {
+            return action;
+        }
+
+        JsonToken nextToken = null;
+        do {
+            if (JsonToken.START_OBJECT.equals(jsonToken.currentToken())) {
+                jsonToken.nextToken();
+            }
+            switch (jsonToken.getCurrentName()) {
+            case ActionsJsonSerializer.DATE_FORMAT:
+                jsonToken.nextToken();
+                action.setDateFormat(jsonToken.getValueAsString());
+                break;
+            default:
+                break;
+            }
+
+            nextToken = jsonToken.nextToken();
+        } while (!JsonToken.END_ARRAY.equals(nextToken) && !JsonToken.END_OBJECT.equals(nextToken));
+        return action;
+    }
+
+    protected CustomAction processCustomActionJsonToken(JsonParser jsonToken) throws IOException {
+        CustomAction action = new CustomAction();
+
+        if (JsonToken.END_ARRAY.equals(jsonToken.currentToken())
+                || JsonToken.END_OBJECT.equals(jsonToken.currentToken())) {
+            return action;
+        }
+
+        JsonToken nextToken = null;
+        do {
+            if (JsonToken.START_OBJECT.equals(jsonToken.currentToken())) {
+                jsonToken.nextToken();
+            }
+            switch (jsonToken.getCurrentName()) {
+            case ActionsJsonSerializer.CLASS_NAME:
+                jsonToken.nextToken();
+                action.setClassName(jsonToken.getValueAsString());
+                break;
+            case ActionsJsonSerializer.METHOD_NAME:
+                jsonToken.nextToken();
+                action.setMethodName(jsonToken.getValueAsString());
+                break;
+            default:
+                break;
+            }
+
+            nextToken = jsonToken.nextToken();
+        } while (!JsonToken.END_ARRAY.equals(nextToken) && !JsonToken.END_OBJECT.equals(nextToken));
+        return action;
+    }
+
+    protected EndsWith processEndsWithJsonToken(JsonParser jsonToken) throws IOException {
+        EndsWith action = new EndsWith();
+
+        if (JsonToken.END_ARRAY.equals(jsonToken.currentToken())
+                || JsonToken.END_OBJECT.equals(jsonToken.currentToken())) {
+            return action;
+        }
+
+        JsonToken nextToken = null;
+        do {
+            if (JsonToken.START_OBJECT.equals(jsonToken.currentToken())) {
+                jsonToken.nextToken();
+            }
+            switch (jsonToken.getCurrentName()) {
+                case ActionsJsonSerializer.STRING:
                     jsonToken.nextToken();
-                    replace.setOldString(jsonToken.getValueAsString());
-                    break;
-                case "newString":
-                    jsonToken.nextToken();
-                    replace.setNewString(jsonToken.getValueAsString());
+                    action.setString(jsonToken.getValueAsString());
                     break;
                 default:
                     break;
@@ -158,11 +437,11 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
 
             nextToken = jsonToken.nextToken();
         } while (!JsonToken.END_ARRAY.equals(nextToken) && !JsonToken.END_OBJECT.equals(nextToken));
-        return replace;
+        return action;
     }
 
-    protected SubString processSubStringJsonToken(JsonParser jsonToken) throws IOException {
-        SubString action = new SubString();
+    protected Format processFormatJsonToken(JsonParser jsonToken) throws IOException {
+        Format action = new Format();
 
         if (JsonToken.END_ARRAY.equals(jsonToken.currentToken())
                 || JsonToken.END_OBJECT.equals(jsonToken.currentToken())) {
@@ -175,16 +454,217 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
                 jsonToken.nextToken();
             }
             switch (jsonToken.getCurrentName()) {
-            case "startIndex":
+                case ActionsJsonSerializer.TEMPLATE:
+                    jsonToken.nextToken();
+                    action.setTemplate(jsonToken.getValueAsString());
+                    break;
+                default:
+                    break;
+            }
+
+            nextToken = jsonToken.nextToken();
+        } while (!JsonToken.END_ARRAY.equals(nextToken) && !JsonToken.END_OBJECT.equals(nextToken));
+        return action;
+    }
+
+    protected IndexOf processIndexOfJsonToken(JsonParser jsonToken) throws IOException {
+        IndexOf action = new IndexOf();
+
+        if (JsonToken.END_ARRAY.equals(jsonToken.currentToken())
+                || JsonToken.END_OBJECT.equals(jsonToken.currentToken())) {
+            return action;
+        }
+
+        JsonToken nextToken = null;
+        do {
+            if (JsonToken.START_OBJECT.equals(jsonToken.currentToken())) {
                 jsonToken.nextToken();
-                action.setStartIndex(jsonToken.getIntValue());
+            }
+            switch (jsonToken.getCurrentName()) {
+                case ActionsJsonSerializer.STRING:
+                    jsonToken.nextToken();
+                    action.setString(jsonToken.getValueAsString());
+                    break;
+                default:
+                    break;
+            }
+
+            nextToken = jsonToken.nextToken();
+        } while (!JsonToken.END_ARRAY.equals(nextToken) && !JsonToken.END_OBJECT.equals(nextToken));
+        return action;
+    }
+
+    protected LastIndexOf processLastIndexOfJsonToken(JsonParser jsonToken) throws IOException {
+        LastIndexOf action = new LastIndexOf();
+
+        if (JsonToken.END_ARRAY.equals(jsonToken.currentToken())
+                || JsonToken.END_OBJECT.equals(jsonToken.currentToken())) {
+            return action;
+        }
+
+        JsonToken nextToken = null;
+        do {
+            if (JsonToken.START_OBJECT.equals(jsonToken.currentToken())) {
+                jsonToken.nextToken();
+            }
+            switch (jsonToken.getCurrentName()) {
+                case ActionsJsonSerializer.STRING:
+                    jsonToken.nextToken();
+                    action.setString(jsonToken.getValueAsString());
+                    break;
+                default:
+                    break;
+            }
+
+            nextToken = jsonToken.nextToken();
+        } while (!JsonToken.END_ARRAY.equals(nextToken) && !JsonToken.END_OBJECT.equals(nextToken));
+        return action;
+    }
+
+    protected PadStringLeft processPadStringLeftJsonToken(JsonParser jsonToken) throws IOException {
+        PadStringLeft action = new PadStringLeft();
+
+        if (JsonToken.END_ARRAY.equals(jsonToken.currentToken())
+                || JsonToken.END_OBJECT.equals(jsonToken.currentToken())) {
+            return action;
+        }
+
+        JsonToken nextToken = null;
+        do {
+            if (JsonToken.START_OBJECT.equals(jsonToken.currentToken())) {
+                jsonToken.nextToken();
+            }
+            switch (jsonToken.getCurrentName()) {
+            case ActionsJsonSerializer.PAD_CHARACTER:
+                jsonToken.nextToken();
+                action.setPadCharacter(jsonToken.getValueAsString());
                 break;
-            case "endIndex":
+            case ActionsJsonSerializer.PAD_COUNT:
                 jsonToken.nextToken();
-                action.setEndIndex(jsonToken.getIntValue());
+                action.setPadCount(jsonToken.getIntValue());
                 break;
             default:
                 break;
+            }
+
+            nextToken = jsonToken.nextToken();
+        } while (!JsonToken.END_ARRAY.equals(nextToken) && !JsonToken.END_OBJECT.equals(nextToken));
+        return action;
+    }
+
+    protected PadStringRight processPadStringRightJsonToken(JsonParser jsonToken) throws IOException {
+        PadStringRight action = new PadStringRight();
+
+        if (JsonToken.END_ARRAY.equals(jsonToken.currentToken())
+                || JsonToken.END_OBJECT.equals(jsonToken.currentToken())) {
+            return action;
+        }
+
+        JsonToken nextToken = null;
+        do {
+            if (JsonToken.START_OBJECT.equals(jsonToken.currentToken())) {
+                jsonToken.nextToken();
+            }
+            switch (jsonToken.getCurrentName()) {
+            case ActionsJsonSerializer.PAD_CHARACTER:
+                jsonToken.nextToken();
+                action.setPadCharacter(jsonToken.getValueAsString());
+                break;
+            case ActionsJsonSerializer.PAD_COUNT:
+                jsonToken.nextToken();
+                action.setPadCount(jsonToken.getIntValue());
+                break;
+            default:
+                break;
+            }
+
+            nextToken = jsonToken.nextToken();
+        } while (!JsonToken.END_ARRAY.equals(nextToken) && !JsonToken.END_OBJECT.equals(nextToken));
+        return action;
+    }
+
+    protected ReplaceAll processReplaceAllJsonToken(JsonParser jsonToken) throws IOException {
+        ReplaceAll action = new ReplaceAll();
+
+        if (JsonToken.END_ARRAY.equals(jsonToken.currentToken())
+                || JsonToken.END_OBJECT.equals(jsonToken.currentToken())) {
+            return action;
+        }
+
+        JsonToken nextToken = null;
+        do {
+            if (JsonToken.START_OBJECT.equals(jsonToken.currentToken())) {
+                jsonToken.nextToken();
+            }
+            switch (jsonToken.getCurrentName()) {
+                case ActionsJsonSerializer.MATCH:
+                    jsonToken.nextToken();
+                    action.setMatch(jsonToken.getValueAsString());
+                    break;
+                case ActionsJsonSerializer.NEW_STRING:
+                    jsonToken.nextToken();
+                    action.setNewString(jsonToken.getValueAsString());
+                    break;
+                default:
+                    break;
+            }
+
+            nextToken = jsonToken.nextToken();
+        } while (!JsonToken.END_ARRAY.equals(nextToken) && !JsonToken.END_OBJECT.equals(nextToken));
+        return action;
+    }
+
+    protected ReplaceFirst processReplaceFirstJsonToken(JsonParser jsonToken) throws IOException {
+        ReplaceFirst action = new ReplaceFirst();
+
+        if (JsonToken.END_ARRAY.equals(jsonToken.currentToken())
+                || JsonToken.END_OBJECT.equals(jsonToken.currentToken())) {
+            return action;
+        }
+
+        JsonToken nextToken = null;
+        do {
+            if (JsonToken.START_OBJECT.equals(jsonToken.currentToken())) {
+                jsonToken.nextToken();
+            }
+            switch (jsonToken.getCurrentName()) {
+                case ActionsJsonSerializer.MATCH:
+                    jsonToken.nextToken();
+                    action.setMatch(jsonToken.getValueAsString());
+                    break;
+                case ActionsJsonSerializer.NEW_STRING:
+                    jsonToken.nextToken();
+                    action.setNewString(jsonToken.getValueAsString());
+                    break;
+                default:
+                    break;
+            }
+
+            nextToken = jsonToken.nextToken();
+        } while (!JsonToken.END_ARRAY.equals(nextToken) && !JsonToken.END_OBJECT.equals(nextToken));
+        return action;
+    }
+
+    protected StartsWith processStartsWithJsonToken(JsonParser jsonToken) throws IOException {
+        StartsWith action = new StartsWith();
+
+        if (JsonToken.END_ARRAY.equals(jsonToken.currentToken())
+                || JsonToken.END_OBJECT.equals(jsonToken.currentToken())) {
+            return action;
+        }
+
+        JsonToken nextToken = null;
+        do {
+            if (JsonToken.START_OBJECT.equals(jsonToken.currentToken())) {
+                jsonToken.nextToken();
+            }
+            switch (jsonToken.getCurrentName()) {
+                case ActionsJsonSerializer.STRING:
+                    jsonToken.nextToken();
+                    action.setString(jsonToken.getValueAsString());
+                    break;
+                default:
+                    break;
             }
 
             nextToken = jsonToken.nextToken();
@@ -206,15 +686,15 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
                 jsonToken.nextToken();
             }
             switch (jsonToken.getCurrentName()) {
-            case "startIndex":
+            case ActionsJsonSerializer.START_INDEX:
                 jsonToken.nextToken();
                 action.setStartIndex(jsonToken.getIntValue());
                 break;
-            case "endIndex":
+            case ActionsJsonSerializer.END_INDEX:
                 jsonToken.nextToken();
                 action.setEndIndex(jsonToken.getIntValue());
                 break;
-            case "match":
+            case ActionsJsonSerializer.MATCH:
                 jsonToken.nextToken();
                 action.setMatch(jsonToken.getValueAsString());
                 break;
@@ -242,15 +722,15 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
                 jsonToken.nextToken();
             }
             switch (jsonToken.getCurrentName()) {
-            case "startIndex":
+            case ActionsJsonSerializer.START_INDEX:
                 jsonToken.nextToken();
                 action.setStartIndex(jsonToken.getIntValue());
                 break;
-            case "endIndex":
+            case ActionsJsonSerializer.END_INDEX:
                 jsonToken.nextToken();
                 action.setEndIndex(jsonToken.getIntValue());
                 break;
-            case "match":
+            case ActionsJsonSerializer.MATCH:
                 jsonToken.nextToken();
                 action.setMatch(jsonToken.getValueAsString());
                 break;
@@ -264,8 +744,8 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
         return action;
     }
 
-    protected PadStringLeft processPadStringLeftJsonToken(JsonParser jsonToken) throws IOException {
-        PadStringLeft action = new PadStringLeft();
+    protected SubString processSubStringJsonToken(JsonParser jsonToken) throws IOException {
+        SubString action = new SubString();
 
         if (JsonToken.END_ARRAY.equals(jsonToken.currentToken())
                 || JsonToken.END_OBJECT.equals(jsonToken.currentToken())) {
@@ -278,13 +758,13 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
                 jsonToken.nextToken();
             }
             switch (jsonToken.getCurrentName()) {
-            case "padCharacter":
+            case ActionsJsonSerializer.START_INDEX:
                 jsonToken.nextToken();
-                action.setPadCharacter(jsonToken.getValueAsString());
+                action.setStartIndex(jsonToken.getIntValue());
                 break;
-            case "padCount":
+            case ActionsJsonSerializer.END_INDEX:
                 jsonToken.nextToken();
-                action.setPadCount(jsonToken.getIntValue());
+                action.setEndIndex(jsonToken.getIntValue());
                 break;
             default:
                 break;
@@ -294,286 +774,4 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
         } while (!JsonToken.END_ARRAY.equals(nextToken) && !JsonToken.END_OBJECT.equals(nextToken));
         return action;
     }
-
-    protected PadStringRight processPadStringRightJsonToken(JsonParser jsonToken) throws IOException {
-        PadStringRight action = new PadStringRight();
-
-        if (JsonToken.END_ARRAY.equals(jsonToken.currentToken())
-                || JsonToken.END_OBJECT.equals(jsonToken.currentToken())) {
-            return action;
-        }
-
-        JsonToken nextToken = null;
-        do {
-            if (JsonToken.START_OBJECT.equals(jsonToken.currentToken())) {
-                jsonToken.nextToken();
-            }
-            switch (jsonToken.getCurrentName()) {
-            case "padCharacter":
-                jsonToken.nextToken();
-                action.setPadCharacter(jsonToken.getValueAsString());
-                break;
-            case "padCount":
-                jsonToken.nextToken();
-                action.setPadCount(jsonToken.getIntValue());
-                break;
-            default:
-                break;
-            }
-
-            nextToken = jsonToken.nextToken();
-        } while (!JsonToken.END_ARRAY.equals(nextToken) && !JsonToken.END_OBJECT.equals(nextToken));
-        return action;
-    }
-
-    protected CurrentDate processCurrentDateJsonToken(JsonParser jsonToken) throws IOException {
-        CurrentDate action = new CurrentDate();
-
-        if (JsonToken.END_ARRAY.equals(jsonToken.currentToken())
-                || JsonToken.END_OBJECT.equals(jsonToken.currentToken())) {
-            return action;
-        }
-
-        JsonToken nextToken = null;
-        do {
-            if (JsonToken.START_OBJECT.equals(jsonToken.currentToken())) {
-                jsonToken.nextToken();
-            }
-            switch (jsonToken.getCurrentName()) {
-            case "dateFormat":
-                jsonToken.nextToken();
-                action.setDateFormat(jsonToken.getValueAsString());
-                break;
-            default:
-                break;
-            }
-
-            nextToken = jsonToken.nextToken();
-        } while (!JsonToken.END_ARRAY.equals(nextToken) && !JsonToken.END_OBJECT.equals(nextToken));
-        return action;
-    }
-
-    protected CurrentTime processCurrentTimeJsonToken(JsonParser jsonToken) throws IOException {
-        CurrentTime action = new CurrentTime();
-
-        if (JsonToken.END_ARRAY.equals(jsonToken.currentToken())
-                || JsonToken.END_OBJECT.equals(jsonToken.currentToken())) {
-            return action;
-        }
-
-        JsonToken nextToken = null;
-        do {
-            if (JsonToken.START_OBJECT.equals(jsonToken.currentToken())) {
-                jsonToken.nextToken();
-            }
-            switch (jsonToken.getCurrentName()) {
-            case "dateFormat":
-                jsonToken.nextToken();
-                action.setDateFormat(jsonToken.getValueAsString());
-                break;
-            default:
-                break;
-            }
-
-            nextToken = jsonToken.nextToken();
-        } while (!JsonToken.END_ARRAY.equals(nextToken) && !JsonToken.END_OBJECT.equals(nextToken));
-        return action;
-    }
-
-    protected CurrentDateTime processCurrentDateTimeJsonToken(JsonParser jsonToken) throws IOException {
-        CurrentDateTime action = new CurrentDateTime();
-
-        if (JsonToken.END_ARRAY.equals(jsonToken.currentToken())
-                || JsonToken.END_OBJECT.equals(jsonToken.currentToken())) {
-            return action;
-        }
-
-        JsonToken nextToken = null;
-        do {
-            if (JsonToken.START_OBJECT.equals(jsonToken.currentToken())) {
-                jsonToken.nextToken();
-            }
-            switch (jsonToken.getCurrentName()) {
-            case "dateFormat":
-                jsonToken.nextToken();
-                action.setDateFormat(jsonToken.getValueAsString());
-                break;
-            default:
-                break;
-            }
-
-            nextToken = jsonToken.nextToken();
-        } while (!JsonToken.END_ARRAY.equals(nextToken) && !JsonToken.END_OBJECT.equals(nextToken));
-        return action;
-    }
-
-    protected CustomAction processCustomActionJsonToken(JsonParser jsonToken) throws IOException {
-        CustomAction action = new CustomAction();
-
-        if (JsonToken.END_ARRAY.equals(jsonToken.currentToken())
-                || JsonToken.END_OBJECT.equals(jsonToken.currentToken())) {
-            return action;
-        }
-
-        JsonToken nextToken = null;
-        do {
-            if (JsonToken.START_OBJECT.equals(jsonToken.currentToken())) {
-                jsonToken.nextToken();
-            }
-            switch (jsonToken.getCurrentName()) {
-            case "className":
-                jsonToken.nextToken();
-                action.setClassName(jsonToken.getValueAsString());
-                break;
-            case "methodName":
-                jsonToken.nextToken();
-                action.setClassName(jsonToken.getValueAsString());
-                break;
-            default:
-                break;
-            }
-
-            nextToken = jsonToken.nextToken();
-        } while (!JsonToken.END_ARRAY.equals(nextToken) && !JsonToken.END_OBJECT.equals(nextToken));
-        return action;
-    }
-
-    protected SumUp processSumUpJsonToken(JsonParser jsonToken) throws IOException {
-        SumUp action = new SumUp();
-
-        if (JsonToken.END_ARRAY.equals(jsonToken.currentToken())
-                || JsonToken.END_OBJECT.equals(jsonToken.currentToken())) {
-            return action;
-        }
-
-        JsonToken nextToken = null;
-        do {
-            if (JsonToken.START_OBJECT.equals(jsonToken.currentToken())) {
-                jsonToken.nextToken();
-            }
-            switch (jsonToken.getCurrentName()) {
-            case "numberType":
-                jsonToken.nextToken();
-                action.setNumberType(NumberType.fromValue(jsonToken.getValueAsString()));
-                break;
-            default:
-                break;
-            }
-
-            nextToken = jsonToken.nextToken();
-        } while (!JsonToken.END_ARRAY.equals(nextToken) && !JsonToken.END_OBJECT.equals(nextToken));
-
-        return action;
-    }
-
-    protected ConvertVolumeUnit processConvertVolumeUnitJsonToken(JsonParser jsonToken) throws IOException {
-        ConvertVolumeUnit action = new ConvertVolumeUnit();
-
-        if (JsonToken.END_ARRAY.equals(jsonToken.currentToken())
-                || JsonToken.END_OBJECT.equals(jsonToken.currentToken())) {
-            return action;
-        }
-
-        return action;
-    }
-
-    protected ConvertMassUnit processConvertMassUnitJsonToken(JsonParser jsonToken) throws IOException {
-        ConvertMassUnit action = new ConvertMassUnit();
-
-        if (JsonToken.END_ARRAY.equals(jsonToken.currentToken())
-                || JsonToken.END_OBJECT.equals(jsonToken.currentToken())) {
-            return action;
-        }
-
-        JsonToken nextToken = null;
-        do {
-            if (JsonToken.START_OBJECT.equals(jsonToken.currentToken())) {
-                jsonToken.nextToken();
-            }
-            switch (jsonToken.getCurrentName()) {
-            case "fromUnit":
-                jsonToken.nextToken();
-                action.setFromUnit(MassUnitType.fromValue(jsonToken.getValueAsString()));
-                break;
-            case "toUnit":
-                jsonToken.nextToken();
-                action.setToUnit(MassUnitType.fromValue(jsonToken.getValueAsString()));
-                break;
-            default:
-                break;
-            }
-
-            nextToken = jsonToken.nextToken();
-        } while (!JsonToken.END_ARRAY.equals(nextToken) && !JsonToken.END_OBJECT.equals(nextToken));
-
-        return action;
-
-    }
-
-    protected ConvertDistanceUnit processConvertDistanceUnitJsonToken(JsonParser jsonToken) throws IOException {
-        ConvertDistanceUnit action = new ConvertDistanceUnit();
-
-        if (JsonToken.END_ARRAY.equals(jsonToken.currentToken())
-                || JsonToken.END_OBJECT.equals(jsonToken.currentToken())) {
-            return action;
-        }
-
-        JsonToken nextToken = null;
-        do {
-            if (JsonToken.START_OBJECT.equals(jsonToken.currentToken())) {
-                jsonToken.nextToken();
-            }
-            switch (jsonToken.getCurrentName()) {
-            case "fromUnit":
-                jsonToken.nextToken();
-                action.setFromUnit(DistanceUnitType.fromValue(jsonToken.getValueAsString()));
-                break;
-            case "toUnit":
-                jsonToken.nextToken();
-                action.setToUnit(DistanceUnitType.fromValue(jsonToken.getValueAsString()));
-                break;
-            default:
-                break;
-            }
-
-            nextToken = jsonToken.nextToken();
-        } while (!JsonToken.END_ARRAY.equals(nextToken) && !JsonToken.END_OBJECT.equals(nextToken));
-
-        return action;
-
-    }
-
-    protected ConvertAreaUnit processConvertAreaUnitJsonToken(JsonParser jsonToken) throws IOException {
-        ConvertAreaUnit action = new ConvertAreaUnit();
-
-        if (JsonToken.END_ARRAY.equals(jsonToken.currentToken())
-                || JsonToken.END_OBJECT.equals(jsonToken.currentToken())) {
-            return action;
-        }
-
-        JsonToken nextToken = null;
-        do {
-            if (JsonToken.START_OBJECT.equals(jsonToken.currentToken())) {
-                jsonToken.nextToken();
-            }
-            switch (jsonToken.getCurrentName()) {
-            case "fromUnit":
-                jsonToken.nextToken();
-                action.setFromUnit(AreaUnitType.fromValue(jsonToken.getValueAsString()));
-                break;
-            case "toUnit":
-                jsonToken.nextToken();
-                action.setToUnit(AreaUnitType.fromValue(jsonToken.getValueAsString()));
-                break;
-            default:
-                break;
-            }
-
-            nextToken = jsonToken.nextToken();
-        } while (!JsonToken.END_ARRAY.equals(nextToken) && !JsonToken.END_OBJECT.equals(nextToken));
-
-        return action;
-
-    }
-
 }

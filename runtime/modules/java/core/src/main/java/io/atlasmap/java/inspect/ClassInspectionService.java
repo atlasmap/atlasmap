@@ -38,7 +38,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.atlasmap.api.AtlasConversionService;
-import io.atlasmap.core.PathUtil;
+import io.atlasmap.core.AtlasPath;
 import io.atlasmap.java.v2.AtlasJavaModelFactory;
 import io.atlasmap.java.v2.JavaClass;
 import io.atlasmap.java.v2.JavaEnumField;
@@ -331,7 +331,7 @@ public class ClassInspectionService {
 
         if (pathPrefix != null && pathPrefix.length() > 0) {
             field.setPath(
-                    pathPrefix + PathUtil.PATH_SEPARATOR + StringUtil.removeGetterAndLowercaseFirstLetter(m.getName()));
+                    pathPrefix + AtlasPath.PATH_SEPARATOR + StringUtil.removeGetterAndLowercaseFirstLetter(m.getName()));
         } else {
             field.setPath(StringUtil.removeGetterAndLowercaseFirstLetter(m.getName()));
         }
@@ -397,7 +397,7 @@ public class ClassInspectionService {
 
         if (pathPrefix != null && pathPrefix.length() > 0) {
             field.setPath(
-                    pathPrefix + PathUtil.PATH_SEPARATOR + StringUtil.removeSetterAndLowercaseFirstLetter(m.getName()));
+                    pathPrefix + AtlasPath.PATH_SEPARATOR + StringUtil.removeSetterAndLowercaseFirstLetter(m.getName()));
         } else {
             field.setPath(StringUtil.removeSetterAndLowercaseFirstLetter(m.getName()));
         }
@@ -469,7 +469,7 @@ public class ClassInspectionService {
         s.setName(f.getName());
 
         if (pathPrefix != null && pathPrefix.length() > 0) {
-            s.setPath(pathPrefix + PathUtil.PATH_SEPARATOR + f.getName());
+            s.setPath(pathPrefix + AtlasPath.PATH_SEPARATOR + f.getName());
         } else {
             s.setPath(f.getName());
         }

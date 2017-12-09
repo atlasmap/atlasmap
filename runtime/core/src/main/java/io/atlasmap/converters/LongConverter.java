@@ -30,18 +30,16 @@ public class LongConverter implements AtlasPrimitiveConverter<Long> {
      * @throws AtlasConversionException
      */
     @Override
-    @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.BOOLEAN, concerns = AtlasConversionConcern.RANGE)
+    @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.BOOLEAN, concerns = AtlasConversionConcern.CONVENTION)
     public Boolean convertToBoolean(Long value) throws AtlasConversionException {
         if (value == null) {
             return null;
         }
-        if (value == 0L || value == 1L) {
-            if (value == 1L) {
-                return Boolean.TRUE;
-            }
+        if (value == 0L) {
             return Boolean.FALSE;
+        } else {
+            return Boolean.TRUE;
         }
-        throw new AtlasConversionException(String.format("Long %s cannot be converted to a Boolean", value));
     }
 
     /**
@@ -70,7 +68,8 @@ public class LongConverter implements AtlasPrimitiveConverter<Long> {
      * @throws AtlasConversionException
      */
     @Override
-    @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.CHAR, concerns = AtlasConversionConcern.RANGE)
+    @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.CHAR, concerns = {
+            AtlasConversionConcern.RANGE, AtlasConversionConcern.CONVENTION })
     public Character convertToCharacter(Long value) throws AtlasConversionException {
         if (value == null) {
             return null;
@@ -81,7 +80,7 @@ public class LongConverter implements AtlasPrimitiveConverter<Long> {
                     .format("Long %s is greater than Character.MAX_VALUE  or less than Character.MIN_VALUE", value));
         }
 
-        return (char) value.intValue();
+        return Character.valueOf((char) value.intValue());
     }
 
     /**
@@ -103,9 +102,6 @@ public class LongConverter implements AtlasPrimitiveConverter<Long> {
     public Float convertToFloat(Long value) throws AtlasConversionException {
         if (value == null) {
             return null;
-        }
-        if (value.floatValue() == 0.0f || value.floatValue() == -0.0f) {
-            return value.floatValue();
         }
         return value.floatValue();
     }

@@ -39,11 +39,11 @@ public class XmlXmlMultiSourceTest extends AtlasMappingBaseTest {
                 .loadFileAsString("src/test/resources/xmlToXml/atlas-xml-contact-attribute.xml");
         String sourceAddress = AtlasTestUtil
                 .loadFileAsString("src/test/resources/xmlToXml/atlas-xml-address-attribute.xml");
-        session.setInput(sourceContact, "con");
-        session.setInput(sourceAddress, "addr");
+        session.setSourceDocument("con", sourceContact);
+        session.setSourceDocument("addr", sourceAddress);
         context.process(session);
 
-        Object object = session.getOutput();
+        Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof String);
         assertEquals(
@@ -60,11 +60,11 @@ public class XmlXmlMultiSourceTest extends AtlasMappingBaseTest {
                 .loadFileAsString("src/test/resources/xmlToXml/atlas-xml-contact-attribute.xml");
         String sourceAddress = AtlasTestUtil
                 .loadFileAsString("src/test/resources/xmlToXml/atlas-xml-address-attribute.xml");
-        session.setInput(sourceContact, "con");
-        session.setInput(sourceAddress, "addr");
+        session.setSourceDocument("con", sourceContact);
+        session.setSourceDocument("addr", sourceAddress);
         context.process(session);
 
-        Object object = session.getOutput();
+        Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof String);
         assertEquals(

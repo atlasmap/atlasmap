@@ -116,9 +116,9 @@ public class JsonMarshallerTest extends BaseMarshallerTest {
                 customAction.setInputFieldType(FieldType.STRING);
                 customAction.setOutputFieldType(FieldType.STRING);
             }
-            if (a instanceof Replace) {
-                Replace replace = (Replace) a;
-                replace.setOldString("test");
+            if (a instanceof ReplaceFirst) {
+                ReplaceFirst replace = (ReplaceFirst) a;
+                replace.setMatch("test");
                 replace.setNewString("h");
             }
             if (a instanceof SubString) {
@@ -167,10 +167,6 @@ public class JsonMarshallerTest extends BaseMarshallerTest {
                 ConvertVolumeUnit cvu = (ConvertVolumeUnit) a;
                 cvu.setFromUnit(VolumeUnitType.CUBIC_FOOT);
                 cvu.setToUnit(VolumeUnitType.CUBIC_METER);
-            }
-            if (a instanceof SumUp) {
-                SumUp su = (SumUp) a;
-                su.setNumberType(NumberType.DECIMAL);
             }
         }
         mapper.writeValue(new File("target/junit/" + testName.getMethodName() + "/" + "atlasmapping.json"),

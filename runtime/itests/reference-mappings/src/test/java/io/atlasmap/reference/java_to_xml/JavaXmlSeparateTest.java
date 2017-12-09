@@ -45,10 +45,10 @@ public class JavaXmlSeparateTest extends AtlasMappingBaseTest {
         BaseContact sourceContact = AtlasTestUtil.generateContact(SourceContact.class);
         sourceContact.setFirstName("Ozzie Smith");
         sourceContact.setLastName(null);
-        session.setInput(sourceContact);
+        session.setDefaultSourceDocument(sourceContact);
         context.process(session);
 
-        Object object = session.getOutput();
+        Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
 
         assertTrue(object instanceof String);
@@ -66,10 +66,10 @@ public class JavaXmlSeparateTest extends AtlasMappingBaseTest {
         BaseContact sourceContact = AtlasTestUtil.generateContact(SourceContact.class);
         sourceContact.setFirstName("Dr. Mr. Ozzie L. Smith Jr.");
         sourceContact.setLastName(null);
-        session.setInput(sourceContact);
+        session.setDefaultSourceDocument(sourceContact);
         context.process(session);
 
-        Object object = session.getOutput();
+        Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof String);
         JAXBElement<XmlContactAttribute> targetContact =
@@ -86,10 +86,10 @@ public class JavaXmlSeparateTest extends AtlasMappingBaseTest {
         BaseContact sourceContact = AtlasTestUtil.generateContact(SourceContact.class);
         sourceContact.setFirstName("Dr. Mr. Ozzie L. Smith Jr.");
         sourceContact.setLastName(null);
-        session.setInput(sourceContact);
+        session.setDefaultSourceDocument(sourceContact);
         context.process(session);
 
-        Object object = session.getOutput();
+        Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof String);
         JAXBElement<XmlContactAttribute> targetContact =
@@ -99,17 +99,17 @@ public class JavaXmlSeparateTest extends AtlasMappingBaseTest {
     }
 
     @Test
-    public void testProcessSeparateNotEnoughInput() throws Exception {
+    public void testProcessSeparateNotEnoughSource() throws Exception {
         AtlasContext context = atlasContextFactory
                 .createContext(new File("src/test/resources/javaToXml/atlasmapping-separate-inputshort.xml").toURI());
         AtlasSession session = context.createSession();
         BaseContact sourceContact = AtlasTestUtil.generateContact(SourceContact.class);
         sourceContact.setFirstName("Dr. Mr. Ozzie");
         sourceContact.setLastName(null);
-        session.setInput(sourceContact);
+        session.setDefaultSourceDocument(sourceContact);
         context.process(session);
 
-        Object object = session.getOutput();
+        Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
 
         assertTrue(object instanceof String);
@@ -120,22 +120,22 @@ public class JavaXmlSeparateTest extends AtlasMappingBaseTest {
         assertEquals(null, targetContact.getValue().getLastName());
         assertTrue(session.hasWarns());
         assertEquals(
-                "Separate returned fewer segments count=3 when outputField.path=/Contact/@lastName requested index=3",
+                "Separate returned fewer segments count=3 when targetField.path=/Contact/@lastName requested index=3",
                 session.getAudits().getAudit().get(0).getMessage());
     }
 
     @Test
-    public void testProcessSeparateNullInput() throws Exception {
+    public void testProcessSeparateNullSource() throws Exception {
         AtlasContext context = atlasContextFactory
                 .createContext(new File("src/test/resources/javaToXml/atlasmapping-separate-inputnull.xml").toURI());
         AtlasSession session = context.createSession();
         BaseContact sourceContact = AtlasTestUtil.generateContact(SourceContact.class);
         sourceContact.setFirstName(null);
         sourceContact.setLastName(null);
-        session.setInput(sourceContact);
+        session.setDefaultSourceDocument(sourceContact);
         context.process(session);
 
-        Object object = session.getOutput();
+        Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
 
         assertTrue(object instanceof String);

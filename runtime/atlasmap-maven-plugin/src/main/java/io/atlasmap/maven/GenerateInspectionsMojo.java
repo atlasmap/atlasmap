@@ -23,6 +23,7 @@ import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -78,11 +79,11 @@ public class GenerateInspectionsMojo extends AbstractMojo {
     private File outputFile;
 
     /**
-     * The {@code <groupId>:<artifactId>[:<extension>[:<classifier>]]:<version>} of
-     * the artifact to resolve.
+     * A list of {@code <groupId>:<artifactId>[:<extension>[:<classifier>]]:<version>} of
+     * the artifacts to resolve.
      */
-    @Parameter(property = "gav")
-    private String gav;
+    @Parameter
+    private List<String> artifacts;
 
     /**
      * The class name that should be inspected.
@@ -91,13 +92,9 @@ public class GenerateInspectionsMojo extends AbstractMojo {
     private String className;
 
     public static class Inspection {
-        private String gav;
+        private List<String> artifacts;
         private String className;
         private List<String> classNames;
-
-        public String getGav() {
-            return gav;
-        }
 
         public String getClassName() {
             return className;
@@ -107,16 +104,20 @@ public class GenerateInspectionsMojo extends AbstractMojo {
             return classNames;
         }
 
-        public void setGav(String gav) {
-            this.gav = gav;
-        }
-
         public void setClassName(String className) {
             this.className = className;
         }
 
         public void setClassNames(List<String> classNames) {
             this.classNames = classNames;
+        }
+
+        public List<String> getArtifacts() {
+            return artifacts;
+        }
+
+        public void setArtifacts(List<String> artifacts) {
+            this.artifacts = artifacts;
         }
     }
 
@@ -126,11 +127,15 @@ public class GenerateInspectionsMojo extends AbstractMojo {
      *     <configuration>
      *         <inspections>
      *             <inspection>
-     *                 <gav>io.atlasmap:atlas-java-generateInspection-test:1.1</gav>
+     *                 <artifacts>
+     *                     <artifact>io.atlasmap:atlas-java-generateInspection-test:1.1</artifact>
+     *                 </artifacts>
      *                 <className>org.some.JavaClass</className>
      *             </inspection>
      *             <inspection>
-     *                 <gav>io.atlasmap:other:1.1</gav>
+     *                 <artifacts>
+     *                     <artifact>io.atlasmap:other:1.1</artifact>
+     *                 </artifacts>
      *                 <classNames>
      *                     <className>org.some.JavaClass1</className>
      *                     <className>org.some.JavaClass2</className>
@@ -148,37 +153,45 @@ public class GenerateInspectionsMojo extends AbstractMojo {
         if (outputDir != null) {
             outputDir.mkdirs();
         }
-        if (this.gav != null && this.className != null) {
-            generateInspection(this.gav, Arrays.asList(className));
+        if (this.artifacts != null && this.className != null) {
+            generateInspection(this.artifacts, Arrays.asList(className));
         }
         if (inspections != null) {
             for (Inspection inspection : inspections) {
-                ArrayList<String> classNames = new ArrayList<String>(inspection.classNames);
-                if (inspection.className != null) {
+                ArrayList<String> classNames = new ArrayList<>();
+                if (inspection.classNames != null) {
+                    classNames.addAll(inspection.classNames);
+                } else if (inspection.className != null) {
                     classNames.add(inspection.className);
+                } else {
+                    throw new MojoExecutionException("None of classNames nor className was found in the inspection configuration");
                 }
-                generateInspection(inspection.gav, classNames);
+                generateInspection(inspection.artifacts, classNames);
             }
         }
     }
 
-    private void generateInspection(String gav, Collection<String> classNames)
+    private void generateInspection(List<String> artifacts, Collection<String> classNames)
             throws MojoFailureException, MojoExecutionException {
-        URL[] urls = resolveClasspath(gav);
 
+        List<URL> urls = artifacts == null ? Collections.emptyList() : resolveClasspath(artifacts);
+
+        ClassLoader origTccl = Thread.currentThread().getContextClassLoader();
         for (String className : classNames) {
             Class<?> clazz = null;
-            try {
-                // Not even this plugin will be available on this new URLClassLoader
-                URLClassLoader loader = new URLClassLoader(urls, null);
+            JavaClass c = null;
+            // Not even this plugin will be available on this new URLClassLoader
+            try (URLClassLoader loader = new URLClassLoader(urls.toArray(new URL[urls.size()]), origTccl)) {
+                Thread.currentThread().setContextClassLoader(loader);
                 clazz = loader.loadClass(className);
-            } catch (ClassNotFoundException e) {
+                ClassInspectionService classInspectionService = new ClassInspectionService();
+                classInspectionService.setConversionService(DefaultAtlasConversionService.getInstance());
+                c = classInspectionService.inspectClass(clazz);
+            } catch (ClassNotFoundException | IOException e) {
                 throw new MojoExecutionException(e.getMessage(), e);
+            } finally {
+                Thread.currentThread().setContextClassLoader(origTccl);
             }
-
-            ClassInspectionService classInspectionService = new ClassInspectionService();
-            classInspectionService.setConversionService(DefaultAtlasConversionService.getInstance());
-            JavaClass c = classInspectionService.inspectClass(clazz);
 
             try {
                 ObjectMapper objectMapper = AtlasJsonProvider.createObjectMapper();
@@ -196,34 +209,38 @@ public class GenerateInspectionsMojo extends AbstractMojo {
         }
     }
 
-    private URL[] resolveClasspath(String mavenGav) throws MojoFailureException {
+    private List<URL> resolveClasspath(List<String> artifacts) throws MojoFailureException {
+        final List<URL> urls = new ArrayList<>();
+
         try {
-            Artifact artifact = new DefaultArtifact(mavenGav);
+            for (String gav : artifacts) {
+                Artifact artifact = new DefaultArtifact(gav);
 
-            CollectRequest collectRequest = new CollectRequest();
-            collectRequest.setRoot(new Dependency(artifact, ""));
-            collectRequest.setRepositories(remoteRepos);
+                getLog().debug("Resolving dependencies for artifact: " + artifact);
 
-            DependencyRequest dependencyRequest = new DependencyRequest();
-            dependencyRequest.setCollectRequest(collectRequest);
-            DependencyResult dependencyResult = system.resolveDependencies(repoSession, dependencyRequest);
+                CollectRequest collectRequest = new CollectRequest();
+                collectRequest.setRoot(new Dependency(artifact, ""));
+                collectRequest.setRepositories(remoteRepos);
 
-            PreorderNodeListGenerator nlg = new PreorderNodeListGenerator();
-            dependencyResult.getRoot().accept(nlg);
+                DependencyRequest dependencyRequest = new DependencyRequest();
+                dependencyRequest.setCollectRequest(collectRequest);
+                DependencyResult dependencyResult = system.resolveDependencies(repoSession, dependencyRequest);
 
-            Iterator<DependencyNode> it = nlg.getNodes().iterator();
-            ArrayList<URL> urls = new ArrayList<URL>();
-            while (it.hasNext()) {
-                DependencyNode node = it.next();
-                if (node.getDependency() != null) {
-                    Artifact x = node.getDependency().getArtifact();
-                    if (x.getFile() != null) {
-                        urls.add(x.getFile().toURI().toURL());
+                PreorderNodeListGenerator nlg = new PreorderNodeListGenerator();
+                dependencyResult.getRoot().accept(nlg);
+
+                Iterator<DependencyNode> it = nlg.getNodes().iterator();
+                while (it.hasNext()) {
+                    DependencyNode node = it.next();
+                    if (node.getDependency() != null) {
+                        Artifact x = node.getDependency().getArtifact();
+                        if (x.getFile() != null) {
+                            getLog().debug("Found dependency: " + x + " for artifact: " + artifact);
+                            urls.add(x.getFile().toURI().toURL());
+                        }
                     }
                 }
             }
-            return urls.toArray(new URL[urls.size()]);
-
         } catch (IllegalArgumentException e) {
             throw new MojoFailureException(e.getMessage(), e);
         } catch (DependencyResolutionException e) {
@@ -231,6 +248,8 @@ public class GenerateInspectionsMojo extends AbstractMojo {
         } catch (MalformedURLException e) {
             throw new MojoFailureException(e.getMessage(), e);
         }
+
+        return urls;
     }
 
     public RepositorySystem getSystem() {
@@ -265,12 +284,12 @@ public class GenerateInspectionsMojo extends AbstractMojo {
         this.outputDir = outputDir;
     }
 
-    public String getGav() {
-        return gav;
+    public List<String> getArtifacts() {
+        return artifacts;
     }
 
-    public void setGav(String gav) {
-        this.gav = gav;
+    public void setArtifacts(List<String> artifacts) {
+        this.artifacts = artifacts;
     }
 
     public String getClassName() {

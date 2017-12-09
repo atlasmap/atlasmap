@@ -24,6 +24,7 @@ import io.atlasmap.core.BaseModuleValidationService;
 import io.atlasmap.json.v2.JsonField;
 import io.atlasmap.spi.AtlasModuleDetail;
 import io.atlasmap.spi.AtlasValidator;
+import io.atlasmap.spi.FieldDirection;
 import io.atlasmap.v2.Validation;
 import io.atlasmap.v2.ValidationScope;
 import io.atlasmap.v2.ValidationStatus;

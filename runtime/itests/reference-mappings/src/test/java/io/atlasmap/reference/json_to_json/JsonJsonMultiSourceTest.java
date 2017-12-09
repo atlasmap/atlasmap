@@ -16,6 +16,7 @@
 package io.atlasmap.reference.json_to_json;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -43,11 +44,11 @@ public class JsonJsonMultiSourceTest extends AtlasMappingBaseTest {
                 .loadFileAsString("src/test/resources/jsonToJson/atlas-json-contact-unrooted.json");
         String sourceAddress = AtlasTestUtil
                 .loadFileAsString("src/test/resources/jsonToJson/atlas-json-address-unrooted.json");
-        session.setInput(sourceContact, "con");
-        session.setInput(sourceAddress, "addr");
+        session.setSourceDocument("con", sourceContact);
+        session.setSourceDocument("addr", sourceAddress);
         context.process(session);
 
-        Object object = session.getOutput();
+        Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof String);
         AtlasJsonTestUnrootedMapper testMapper = new AtlasJsonTestUnrootedMapper();
@@ -67,11 +68,12 @@ public class JsonJsonMultiSourceTest extends AtlasMappingBaseTest {
                 .loadFileAsString("src/test/resources/jsonToJson/atlas-json-contact-unrooted.json");
         String sourceAddress = AtlasTestUtil
                 .loadFileAsString("src/test/resources/jsonToJson/atlas-json-address-unrooted.json");
-        session.setInput(sourceContact, "con");
-        session.setInput(sourceAddress, "addr");
+        session.setSourceDocument("con", sourceContact);
+        session.setSourceDocument("addr", sourceAddress);
         context.process(session);
 
-        Object object = session.getOutput();
+        assertFalse(printAudit(session), session.hasErrors());
+        Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof String);
         AtlasJsonTestUnrootedMapper testMapper = new AtlasJsonTestUnrootedMapper();

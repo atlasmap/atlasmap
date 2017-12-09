@@ -8,7 +8,7 @@
     <Mappings>
         <Mapping xsi:type="Mapping" mappingType="Map">
             <InputField xsi:type="ns2:JavaField" path="/intField" />
-            <OutputField xsi:type="ns3:JsonField" path="/charField" />
+            <OutputField xsi:type="ns3:JsonField" path="/byteField" />
         </Mapping>
         <Mapping xsi:type="Mapping" mappingType="Map">
             <InputField xsi:type="ns2:JavaField" path="/shortField" />
@@ -20,8 +20,7 @@
         </Mapping>
         <Mapping xsi:type="Mapping" mappingType="Map">
             <InputField xsi:type="ns2:JavaField" path="/doubleField" />
-            <OutputField xsi:type="ns3:JsonField" path="/longField"
-                fieldType="Long" />
+            <OutputField xsi:type="ns3:JsonField" path="/longField" fieldType="Long" />
         </Mapping>
         <Mapping xsi:type="Mapping" mappingType="Map">
             <InputField xsi:type="ns2:JavaField" path="/floatField" />
@@ -29,13 +28,15 @@
         </Mapping>
         <Mapping xsi:type="Mapping" mappingType="Map">
             <InputField xsi:type="ns2:JavaField" path="/booleanField" />
-            <OutputField xsi:type="ns3:JsonField" path="/floatField"
-                fieldType="Float" />
+            <OutputField xsi:type="ns3:JsonField" path="/floatField" fieldType="Float" />
         </Mapping>
         <Mapping xsi:type="Mapping" mappingType="Map">
             <InputField xsi:type="ns2:JavaField" path="/charField" />
-            <OutputField xsi:type="ns3:JsonField" path="/booleanField"
-                fieldType="Boolean" />
+            <OutputField xsi:type="ns3:JsonField" path="/booleanField" fieldType="Boolean" />
+        </Mapping>
+        <Mapping xsi:type="Mapping" mappingType="Map">
+            <InputField xsi:type="ns2:JavaField" path="/byteField" fieldType="Byte" />
+            <OutputField xsi:type="ns3:JsonField" path="/charField" fieldType="Char" />
         </Mapping>
     </Mappings>
     <LookupTables />

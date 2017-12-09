@@ -12,7 +12,7 @@ import java.util.List;
 
 import org.junit.Test;
 
-import io.atlasmap.core.PathUtil;
+import io.atlasmap.core.AtlasPath;
 import io.atlasmap.java.test.BaseOrder;
 import io.atlasmap.java.test.SourceAddress;
 import io.atlasmap.java.test.SourceContact;
@@ -111,7 +111,7 @@ public class ClassHelperTest {
     @Test
     public void testParentObjectForPathParamChecking() throws Exception {
         assertNull(ClassHelper.parentObjectForPath(null, null, true));
-        assertNull(ClassHelper.parentObjectForPath(null, new PathUtil("foo.bar"), true));
+        assertNull(ClassHelper.parentObjectForPath(null, new AtlasPath("foo.bar"), true));
 
         SourceContact targetObject = new SourceContact();
         Object parentObject = ClassHelper.parentObjectForPath(targetObject, null, true);
@@ -127,7 +127,7 @@ public class ClassHelperTest {
         SourceOrder sourceOrder = new SourceOrder();
         sourceOrder.setAddress(sourceAddress);
 
-        Object parentObject = ClassHelper.parentObjectForPath(sourceOrder, new PathUtil("/address/city"), true);
+        Object parentObject = ClassHelper.parentObjectForPath(sourceOrder, new AtlasPath("/address/city"), true);
         assertNotNull(parentObject);
         assertTrue(parentObject instanceof SourceAddress);
         assertEquals(sourceAddress, parentObject);
@@ -143,7 +143,7 @@ public class ClassHelperTest {
         SourceParentOrder sourceParentOrder = new SourceParentOrder();
         sourceParentOrder.setOrder(sourceOrder);
 
-        Object parentObject = ClassHelper.parentObjectForPath(sourceParentOrder, new PathUtil("/order/address/city"),
+        Object parentObject = ClassHelper.parentObjectForPath(sourceParentOrder, new AtlasPath("/order/address/city"),
                 true);
         assertNotNull(parentObject);
         assertTrue(parentObject instanceof SourceAddress);
@@ -162,7 +162,7 @@ public class ClassHelperTest {
 
         sourceOrderList.getOrders().add(sourceOrder);
 
-        Object parentObject = ClassHelper.parentObjectForPath(sourceOrderList, new PathUtil("orders<>"), true);
+        Object parentObject = ClassHelper.parentObjectForPath(sourceOrderList, new AtlasPath("orders<>"), true);
         assertNotNull(parentObject);
         assertTrue(parentObject instanceof List<?>);
         assertEquals(sourceOrders, parentObject);

@@ -36,6 +36,12 @@ import java.util.zip.ZipInputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.atlasmap.api.AtlasSession;
+import io.atlasmap.v2.Audit;
+import io.atlasmap.v2.AuditStatus;
+import io.atlasmap.v2.Validation;
+import io.atlasmap.v2.ValidationStatus;
+
 public class AtlasUtil {
     public static final int SPLIT_LIMIT = 4;
     public static final String NEW_LINE_CHARS = "(?m)$^|[\\r\\n]+\\z";
@@ -255,6 +261,41 @@ public class AtlasUtil {
         }
 
         return classes;
+    }
+
+    public static void addAudit(AtlasSession session, String docId, String message, String path, AuditStatus status,
+            String value) {
+        Audit audit = new Audit();
+        audit.setDocId(docId);
+        audit.setMessage(message);
+        audit.setPath(path);
+        audit.setStatus(status);
+        audit.setValue(value);
+        session.getAudits().getAudit().add(audit);
+    }
+
+    public static void addAudit(AtlasSession session, Validation validation) {
+        Audit audit = new Audit();
+        audit.setDocId(validation.getId());
+        audit.setMessage(validation.getMessage());
+        audit.setStatus(AtlasUtil.toAuditStatus(validation.getStatus()));
+    }
+
+    public static AuditStatus toAuditStatus(ValidationStatus vstatus) {
+        switch (vstatus) {
+        case ERROR:
+            return AuditStatus.ERROR;
+        case WARN:
+            return AuditStatus.WARN;
+        case INFO:
+            return AuditStatus.INFO;
+        case ALL:
+            return AuditStatus.ALL;
+        case NONE:
+            return AuditStatus.NONE;
+        default:
+            return null;
+        }
     }
 
     protected static URL getResource(String scannedPath) {

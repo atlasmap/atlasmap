@@ -7,7 +7,7 @@
     <Mappings>
         <Mapping xsi:type="Mapping" mappingType="Map">
             <InputField xsi:type="ns3:JsonField" path="/intField" />
-            <OutputField xsi:type="ns3:JsonField" path="/charField" />
+            <OutputField xsi:type="ns3:JsonField" path="/byteField" />
         </Mapping>
         <Mapping xsi:type="Mapping" mappingType="Map">
             <InputField xsi:type="ns3:JsonField" path="/shortField" />
@@ -19,22 +19,23 @@
         </Mapping>
         <Mapping xsi:type="Mapping" mappingType="Map">
             <InputField xsi:type="ns3:JsonField" path="/doubleField" />
-            <OutputField xsi:type="ns3:JsonField" path="/longField"
-                fieldType="Long" />
+            <OutputField xsi:type="ns3:JsonField" path="/longField" fieldType="Long" />
         </Mapping>
         <Mapping xsi:type="Mapping" mappingType="Map">
             <InputField xsi:type="ns3:JsonField" path="/floatField" />
             <OutputField xsi:type="ns3:JsonField" path="/doubleField" />
         </Mapping>
         <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns3:JsonField" path="/booleanField" />
-            <OutputField xsi:type="ns3:JsonField" path="/floatField"
-                fieldType="Float" />
+            <InputField xsi:type="ns3:JsonField" path="/booleanField" fieldType="Boolean" />
+            <OutputField xsi:type="ns3:JsonField" path="/floatField" fieldType="Float" />
         </Mapping>
         <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns3:JsonField" path="/charField" />
-            <OutputField xsi:type="ns3:JsonField" path="/booleanField"
-                fieldType="Boolean" />
+            <InputField xsi:type="ns3:JsonField" path="/charField" fieldType="Char" />
+            <OutputField xsi:type="ns3:JsonField" path="/booleanField" fieldType="Boolean" />
+        </Mapping>
+        <Mapping xsi:type="Mapping" mappingType="Map">
+            <InputField xsi:type="ns3:JsonField" path="/byteField" fieldType="Byte" />
+            <OutputField xsi:type="ns3:JsonField" path="/charField" fieldType="Char"/>
         </Mapping>
     </Mappings>
 </AtlasMapping>

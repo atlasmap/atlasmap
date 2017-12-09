@@ -7,13 +7,13 @@ import io.atlasmap.java.v2.JavaField;
 import io.atlasmap.reference.AtlasBaseActionsTest;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldType;
-import io.atlasmap.v2.StringLength;
+import io.atlasmap.v2.Length;
 
 public class JavaJavaFieldActionsTest extends AtlasBaseActionsTest {
 
     public JavaJavaFieldActionsTest() {
-        this.inputField = createField("/boxedStringField");
-        this.outputField = createField("/boxedStringField");
+        this.sourceField = createField("/boxedStringField");
+        this.targetField = createField("/boxedStringField");
         this.docURI = "atlas:java?className=io.atlasmap.java.test.TargetFlatPrimitiveClass";
     }
 
@@ -25,31 +25,32 @@ public class JavaJavaFieldActionsTest extends AtlasBaseActionsTest {
     }
 
     @Override
-    public void runStringLengthTest() throws Exception {
-        this.outputField = createField("/boxedIntField");
-        this.runActionTest(new StringLength(), "fname", new Integer(5), Integer.class);
-        this.outputField = createField("/boxedStringField");
+    public void runLengthTest() throws Exception {
+        this.targetField = createField("/boxedIntField");
+        this.runActionTest(new Length(), "fname", new Integer(5), Integer.class);
+        this.targetField = createField("/boxedStringField");
     }
 
     @Test
     public void runNoConversionTest() throws Exception {
-        this.outputField = createField("/boxedIntField");
+        this.targetField = createField("/boxedIntField");
         this.runActionTestList(null, "fname", null, String.class);
-        this.outputField = createField("/boxedStringField");
+        this.targetField = createField("/boxedStringField");
     }
 
     @Override
-    public Object createInput(String inputFirstName) {
+    public Object createSource(String sourceFirstName) {
         TargetFlatPrimitiveClass c = new TargetFlatPrimitiveClass();
-        c.setBoxedStringField(inputFirstName);
+        c.setBoxedStringField(sourceFirstName);
         return c;
     }
 
-    public Object getOutputValue(Object output, Class<?> outputClassExpected) {
-        System.out.println("Extracting output value from: " + output);
-        TargetFlatPrimitiveClass c = (TargetFlatPrimitiveClass) output;
+    @Override
+    public Object getTargetValue(Object target, Class<?> targetClassExpected) {
+        System.out.println("Extracting target value from: " + target);
+        TargetFlatPrimitiveClass c = (TargetFlatPrimitiveClass) target;
         Object result = c.getBoxedStringField();
-        if (this.outputField.getPath().equals("/boxedIntField")) {
+        if (this.targetField.getPath().equals("/boxedIntField")) {
             result = c.getBoxedIntField();
         }
         System.out.println("Output value extracted: " + result);

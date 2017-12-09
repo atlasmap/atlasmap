@@ -27,7 +27,7 @@
                             "name": "field1",
                             "path": "/field1",
                             "fieldType": "STRING",
-                            "docId": "Json",
+                            "docId": "Contact",
                             "userCreated": false
                         }
                     ],
@@ -37,7 +37,7 @@
                             "name": "field1",
                             "path": "/field1",
                             "fieldType": "STRING",
-                            "docId": "org.apache.camel.component.atlasmap.Pojo"
+                            "docId": "twitter4j.Status"
                         }
                     ]
                 }

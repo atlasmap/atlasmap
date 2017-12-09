@@ -44,16 +44,16 @@ public class JavaXmlCombineTest extends AtlasMappingBaseTest {
                 .createContext(new File("src/test/resources/javaToXml/atlasmapping-combine-simple.xml").toURI());
         AtlasSession session = context.createSession();
         BaseContact sourceContact = AtlasTestUtil.generateContact(SourceContact.class);
-        session.setInput(sourceContact);
+        session.setDefaultSourceDocument(sourceContact);
         context.process(session);
 
-        Object object = session.getOutput();
+        assertFalse(printAudit(session), session.hasErrors());
+        Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof String);
-        AtlasXmlTestHelper helper = new AtlasXmlTestHelper();
-        JAXBElement<XmlContactAttribute> targetContact = (JAXBElement<XmlContactAttribute>) helper
+        JAXBElement<XmlContactAttribute> targetContact = (JAXBElement<XmlContactAttribute>) AtlasXmlTestHelper
                 .unmarshal((String) object, XmlContactAttribute.class);
-        assertEquals("Ozzie Smith 5551212 81111", targetContact.getValue().getFirstName());
+        assertEquals("Ozzie    Smith   5551212                                                                                            81111", targetContact.getValue().getFirstName());
         assertNull(targetContact.getValue().getLastName());
         assertNull(targetContact.getValue().getPhoneNumber());
         assertNull(targetContact.getValue().getZipCode());
@@ -66,14 +66,14 @@ public class JavaXmlCombineTest extends AtlasMappingBaseTest {
                 .createContext(new File("src/test/resources/javaToXml/atlasmapping-combine-skip.xml").toURI());
         AtlasSession session = context.createSession();
         BaseContact sourceContact = AtlasTestUtil.generateContact(SourceContact.class);
-        session.setInput(sourceContact);
+        session.setDefaultSourceDocument(sourceContact);
         context.process(session);
 
-        Object object = session.getOutput();
+        assertFalse(printAudit(session), session.hasErrors());
+        Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof String);
-        AtlasXmlTestHelper helper = new AtlasXmlTestHelper();
-        JAXBElement<XmlContactAttribute> targetContact = (JAXBElement<XmlContactAttribute>) helper
+        JAXBElement<XmlContactAttribute> targetContact = (JAXBElement<XmlContactAttribute>) AtlasXmlTestHelper
                 .unmarshal((String) object, XmlContactAttribute.class);
         assertEquals("Ozzie Smith 5551212 81111", targetContact.getValue().getFirstName());
         assertNull(targetContact.getValue().getLastName());
@@ -88,14 +88,14 @@ public class JavaXmlCombineTest extends AtlasMappingBaseTest {
                 .createContext(new File("src/test/resources/javaToXml/atlasmapping-combine-outoforder.xml").toURI());
         AtlasSession session = context.createSession();
         BaseContact sourceContact = AtlasTestUtil.generateContact(SourceContact.class);
-        session.setInput(sourceContact);
+        session.setDefaultSourceDocument(sourceContact);
         context.process(session);
 
-        Object object = session.getOutput();
+        assertFalse(printAudit(session), session.hasErrors());
+        Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof String);
-        AtlasXmlTestHelper helper = new AtlasXmlTestHelper();
-        JAXBElement<XmlContactAttribute> targetContact = (JAXBElement<XmlContactAttribute>) helper
+        JAXBElement<XmlContactAttribute> targetContact = (JAXBElement<XmlContactAttribute>) AtlasXmlTestHelper
                 .unmarshal((String) object, XmlContactAttribute.class);
         assertEquals("Ozzie Smith 5551212 81111", targetContact.getValue().getFirstName());
         assertNull(targetContact.getValue().getLastName());
@@ -111,14 +111,14 @@ public class JavaXmlCombineTest extends AtlasMappingBaseTest {
         AtlasSession session = context.createSession();
         BaseContact sourceContact = AtlasTestUtil.generateContact(SourceContact.class);
         sourceContact.setLastName(null);
-        session.setInput(sourceContact);
+        session.setDefaultSourceDocument(sourceContact);
         context.process(session);
 
-        Object object = session.getOutput();
+        assertFalse(printAudit(session), session.hasErrors());
+        Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof String);
-        AtlasXmlTestHelper helper = new AtlasXmlTestHelper();
-        JAXBElement<XmlContactAttribute> targetContact = (JAXBElement<XmlContactAttribute>) helper
+        JAXBElement<XmlContactAttribute> targetContact = (JAXBElement<XmlContactAttribute>) AtlasXmlTestHelper
                 .unmarshal((String) object, XmlContactAttribute.class);
         assertNotNull(targetContact);
         assertEquals("Ozzie  5551212 81111", targetContact.getValue().getFirstName());

@@ -14,38 +14,35 @@
     <Mappings>
         <Mapping xsi:type="Mapping" mappingType="Map">
             <InputField xsi:type="ns3:XmlField" path="/XmlFPA/@intField" />
-            <OutputField xsi:type="ns3:XmlField"
-                path="/xt1:XmlFPE/xt1:booleanField" />
+            <OutputField xsi:type="ns3:XmlField" path="/xt1:XmlFPE/xt1:charField" />
         </Mapping>
         <Mapping xsi:type="Mapping" mappingType="Map">
             <InputField xsi:type="ns3:XmlField" path="/XmlFPA/@shortField" />
-            <OutputField xsi:type="ns3:XmlField"
-                path="/xt1:XmlFPE/xt1:charField" />
+            <OutputField xsi:type="ns3:XmlField" path="/xt1:XmlFPE/xt1:byteField" />
         </Mapping>
         <Mapping xsi:type="Mapping" mappingType="Map">
             <InputField xsi:type="ns3:XmlField" path="/XmlFPA/@longField" />
             <OutputField xsi:type="ns3:XmlField" path="/xt1:XmlFPE/xt1:intField" />
         </Mapping>
         <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns3:XmlField" path="/XmlFPA/@doubleField" />
-            <OutputField xsi:type="ns3:XmlField"
-                path="/xt1:XmlFPE/xt1:shortField" />
+            <InputField xsi:type="ns3:XmlField" path="/XmlFPA/@doubleField" fieldType="Double" />
+            <OutputField xsi:type="ns3:XmlField" path="/xt1:XmlFPE/xt1:shortField" fieldType="Short" />
         </Mapping>
         <Mapping xsi:type="Mapping" mappingType="Map">
             <InputField xsi:type="ns3:XmlField" path="/XmlFPA/@floatField" />
-            <OutputField xsi:type="ns3:XmlField"
-                path="/xt1:XmlFPE/xt1:longField" fieldType="Long" />
+            <OutputField xsi:type="ns3:XmlField" path="/xt1:XmlFPE/xt1:longField" fieldType="Long" />
         </Mapping>
         <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns3:XmlField" path="/XmlFPA/@booleanField" />
-            <OutputField xsi:type="ns3:XmlField"
-                path="/xt1:XmlFPE/xt1:doubleField" />
+            <InputField xsi:type="ns3:XmlField" path="/XmlFPA/@booleanField" fieldType="Boolean"/>
+            <OutputField xsi:type="ns3:XmlField" path="/xt1:XmlFPE/xt1:doubleField" fieldType="Double" />
         </Mapping>
         <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns3:XmlField" path="/XmlFPA/@charField"
-                fieldType="Char" />
-            <OutputField xsi:type="ns3:XmlField"
-                path="/xt1:XmlFPE/xt1:floatField" fieldType="Float" />
+            <InputField xsi:type="ns3:XmlField" path="/XmlFPA/@charField" fieldType="Char" />
+            <OutputField xsi:type="ns3:XmlField" path="/xt1:XmlFPE/xt1:floatField" fieldType="Float" />
+        </Mapping>
+        <Mapping xsi:type="Mapping" mappingType="Map">
+            <InputField xsi:type="ns3:XmlField" path="/XmlFPA/@byteField" fieldType="Byte" />
+            <OutputField xsi:type="ns3:XmlField" path="/xt1:XmlFPE/xt1:booleanField" fieldType="Boolean"/>
         </Mapping>
     </Mappings>
 </AtlasMapping>

@@ -27,6 +27,7 @@ import io.atlasmap.v2.DataSource;
 import io.atlasmap.v2.DataSourceType;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.GenerateUUID;
+import io.atlasmap.v2.Length;
 import io.atlasmap.v2.Lowercase;
 import io.atlasmap.v2.Mapping;
 import io.atlasmap.v2.MappingType;
@@ -35,7 +36,6 @@ import io.atlasmap.v2.PadStringLeft;
 import io.atlasmap.v2.PadStringRight;
 import io.atlasmap.v2.SeparateByDash;
 import io.atlasmap.v2.SeparateByUnderscore;
-import io.atlasmap.v2.StringLength;
 import io.atlasmap.v2.SubString;
 import io.atlasmap.v2.SubStringAfter;
 import io.atlasmap.v2.SubStringBefore;
@@ -46,8 +46,8 @@ import io.atlasmap.v2.Uppercase;
 
 public abstract class AtlasBaseActionsTest extends AtlasMappingBaseTest {
 
-    protected Field inputField = null;
-    protected Field outputField = null;
+    protected Field sourceField = null;
+    protected Field targetField = null;
     protected String docURI = null;
     protected boolean stringLengthTestResultIsInteger = false;
 
@@ -112,19 +112,19 @@ public abstract class AtlasBaseActionsTest extends AtlasMappingBaseTest {
                 .matches());
     }
 
-    public Object runActionTest(Action action, String inputFirstName, Object outputExpected, Class<?> ouputClassExpected) throws Exception {
-        return this.runActionTestList(Arrays.asList(action), inputFirstName, outputExpected, ouputClassExpected);
+    public Object runActionTest(Action action, String sourceFirstName, Object targetExpected, Class<?> targetClassExpected) throws Exception {
+        return this.runActionTestList(Arrays.asList(action), sourceFirstName, targetExpected, targetClassExpected);
     }
 
-    public Object runActionTestList(List<Action> actions, String inputFirstName, Object outputExpected, Class<?> outputClassExpected) throws Exception {
+    public Object runActionTestList(List<Action> actions, String sourceFirstName, Object targetExpected, Class<?> targetClassExpected) throws Exception {
         System.out.println("Now running test for actions: " + actions);
-        System.out.println("Input: " + inputFirstName);
-        System.out.println("Expected output: " + outputExpected);
+        System.out.println("Input: " + sourceFirstName);
+        System.out.println("Expected output: " + targetExpected);
 
         Mapping m = new Mapping();
         m.setMappingType(MappingType.MAP);
-        m.getInputField().add(this.inputField);
-        m.getOutputField().add(this.outputField);
+        m.getInputField().add(this.sourceField);
+        m.getOutputField().add(this.targetField);
         if (actions != null) {
             m.getOutputField().get(0).setActions(new Actions());
             m.getOutputField().get(0).getActions().getActions().addAll(actions);
@@ -151,25 +151,25 @@ public abstract class AtlasBaseActionsTest extends AtlasMappingBaseTest {
 
         AtlasContext context = atlasContextFactory.createContext(new File(tmpFile).toURI());
         AtlasSession session = context.createSession();
-        session.setInput(createInput(inputFirstName));
+        session.setDefaultSourceDocument(createSource(sourceFirstName));
         context.process(session);
 
-        Object outputActual = session.getOutput();
-        assertNotNull(outputActual);
-        outputActual = getOutputValue(outputActual, outputClassExpected);
-        if (outputExpected != null) {
-            assertEquals(outputExpected, outputActual);
+        Object targetActual = session.getDefaultTargetDocument();
+        assertNotNull(targetActual);
+        targetActual = getTargetValue(targetActual, targetClassExpected);
+        if (targetExpected != null) {
+            assertEquals(targetExpected, targetActual);
         }
 
-        return outputActual;
+        return targetActual;
     }
 
     @Test
-    public void runStringLengthTest() throws Exception {
-        this.runActionTest(new StringLength(), "fname", Integer.valueOf(5), Integer.class);
+    public void runLengthTest() throws Exception {
+        this.runActionTest(new Length(), "fname", Integer.valueOf(5), Integer.class);
     }
 
-    public abstract Object createInput(String inputFirstName);
+    public abstract Object createSource(String sourceFirstName);
 
-    public abstract Object getOutputValue(Object output, Class<?> outputClassExpected);
+    public abstract Object getTargetValue(Object target, Class<?> targetClassExpected);
 }

@@ -15,6 +15,7 @@
  */
 package io.atlasmap.reference.xml_to_json;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -74,15 +75,23 @@ public class XmlJsonAutoConversionTest extends AtlasMappingBaseTest {
                 "src/test/resources/xmlToJson/atlas-xml-flatprimitive-attribute-autoconversion.xml", 6);
     }
 
+    @Test
+    public void testProcessXmlJsonFlatFieldMappingAutoConversion7() throws Exception {
+        processXmlJsonFlatMappingAutoConversion(
+                "src/test/resources/xmlToJson/atlasmapping-flatprimitive-attribute-autoconversion-7.xml",
+                "src/test/resources/xmlToJson/atlas-xml-flatprimitive-attribute-autoconversion.xml", 7);
+    }
+
     protected void processXmlJsonFlatMappingAutoConversion(String mappingFile, String inputFile, int num)
             throws Exception {
         AtlasContext context = atlasContextFactory.createContext(new File(mappingFile).toURI());
         AtlasSession session = context.createSession();
         String source = AtlasTestUtil.loadFileAsString(inputFile);
-        session.setInput(source);
+        session.setDefaultSourceDocument(source);
         context.process(session);
 
-        Object object = session.getOutput();
+        assertFalse(printAudit(session), session.hasErrors());
+        Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof String);
         AtlasJsonTestUnrootedMapper testMapper = new AtlasJsonTestUnrootedMapper();
@@ -105,6 +114,9 @@ public class XmlJsonAutoConversionTest extends AtlasMappingBaseTest {
             break;
         case 6:
             AtlasTestUtil.validateJsonFlatPrimitivePrimitiveFieldAutoConversion6(targetObject);
+            break;
+        case 7:
+            AtlasTestUtil.validateJsonFlatPrimitivePrimitiveFieldAutoConversion7(targetObject);
             break;
         default:
             fail("Unexpected number: " + num);

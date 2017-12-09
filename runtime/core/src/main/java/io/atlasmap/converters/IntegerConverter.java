@@ -30,17 +30,16 @@ public class IntegerConverter implements AtlasPrimitiveConverter<Integer> {
      * @throws AtlasConversionException
      */
     @Override
-    @AtlasConversionInfo(sourceType = FieldType.INTEGER, targetType = FieldType.BOOLEAN, concerns = AtlasConversionConcern.RANGE)
+    @AtlasConversionInfo(sourceType = FieldType.INTEGER, targetType = FieldType.BOOLEAN, concerns = {
+            AtlasConversionConcern.CONVENTION })
     public Boolean convertToBoolean(Integer value) throws AtlasConversionException {
         if (value == null) {
             return null;
         }
-        // 1 == True, 0 == False
-        if (value == 0 || value == 1) {
-            return value == 1;
+        if (value == 0) {
+            return Boolean.FALSE;
         } else {
-            // any other value
-            throw new AtlasConversionException(String.format("Integer %s cannot be converted to a Boolean", value));
+            return Boolean.TRUE;
         }
     }
 
@@ -69,7 +68,8 @@ public class IntegerConverter implements AtlasPrimitiveConverter<Integer> {
      * @throws AtlasConversionException
      */
     @Override
-    @AtlasConversionInfo(sourceType = FieldType.INTEGER, targetType = FieldType.CHAR, concerns = AtlasConversionConcern.RANGE)
+    @AtlasConversionInfo(sourceType = FieldType.INTEGER, targetType = FieldType.CHAR, concerns = {
+            AtlasConversionConcern.RANGE, AtlasConversionConcern.CONVENTION })
     public Character convertToCharacter(Integer value) throws AtlasConversionException {
         if (value == null) {
             return null;
@@ -78,9 +78,7 @@ public class IntegerConverter implements AtlasPrimitiveConverter<Integer> {
             throw new AtlasConversionException(String
                     .format("Integer %s is greater than Character.MAX_VALUE or less than Character.MIN_VALUE", value));
         }
-
-        final int radix = 10;
-        return Character.forDigit(value.intValue(), radix);
+        return Character.valueOf((char) value.intValue());
     }
 
     /**
@@ -93,9 +91,6 @@ public class IntegerConverter implements AtlasPrimitiveConverter<Integer> {
     public Double convertToDouble(Integer value) throws AtlasConversionException {
         if (value == null) {
             return null;
-        }
-        if (value.doubleValue() == 0.0d || value.doubleValue() == -0.0d) {
-            return value.doubleValue();
         }
         return value.doubleValue();
     }
@@ -110,10 +105,6 @@ public class IntegerConverter implements AtlasPrimitiveConverter<Integer> {
     public Float convertToFloat(Integer value) throws AtlasConversionException {
         if (value == null) {
             return null;
-        }
-
-        if ((value.floatValue() == 0.0f) || (value.floatValue() == -0.0f)) {
-            return value.floatValue();
         }
         return value.floatValue();
     }

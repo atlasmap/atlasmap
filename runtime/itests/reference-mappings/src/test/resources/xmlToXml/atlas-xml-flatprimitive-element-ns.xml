@@ -10,4 +10,5 @@
     <intField>2</intField>
     <longField>30000</longField>
     <shortField>1</shortField>
+    <stringField>foobar</stringField>
 </ns:XmlFPE>

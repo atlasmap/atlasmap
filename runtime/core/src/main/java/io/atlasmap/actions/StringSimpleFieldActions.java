@@ -23,18 +23,31 @@ import io.atlasmap.v2.Action;
 import io.atlasmap.v2.CollectionType;
 import io.atlasmap.v2.FieldType;
 
+@SuppressWarnings("squid:S1118")
 public class StringSimpleFieldActions implements AtlasFieldAction {
 
     public static final String STRING_SEPARATOR_REGEX = "[\\s+\\:\\_\\+\\=\\-]+";
     public static final Pattern STRING_SEPARATOR_PATTERN = Pattern.compile(STRING_SEPARATOR_REGEX);
 
-    @AtlasFieldActionInfo(name = "Uppercase", sourceType = FieldType.STRING, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
-    public static String uppercase(Action action, String input) {
+    @AtlasFieldActionInfo(name = "Capitalize", sourceType = FieldType.STRING, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
+    public static String capitalize(Action action, String input) {
+        if (input == null || input.length() == 0) {
+            return input;
+        }
+        if (input.length() == 1) {
+            return String.valueOf(input.charAt(0)).toUpperCase();
+        }
+        return String.valueOf(input.charAt(0)).toUpperCase() + input.substring(1);
+    }
+
+    @AtlasFieldActionInfo(name = "FileExtension", sourceType = FieldType.STRING, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
+    public static String fileExtension(Action action, String input) {
         if (input == null) {
             return null;
         }
 
-        return input.toUpperCase();
+        int ndx = input.lastIndexOf('.');
+        return ndx < 0 ? null : input.substring(ndx + 1);
     }
 
     @AtlasFieldActionInfo(name = "Lowercase", sourceType = FieldType.STRING, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
@@ -44,6 +57,37 @@ public class StringSimpleFieldActions implements AtlasFieldAction {
         }
 
         return input.toLowerCase();
+    }
+
+    @AtlasFieldActionInfo(name = "Normalize", sourceType = FieldType.STRING, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
+    public static String normalize(Action action, String input) {
+        return input == null ? null : input.replaceAll("\\s+", " ").trim();
+    }
+
+    @AtlasFieldActionInfo(name = "RemoveFileExtension", sourceType = FieldType.STRING, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
+    public static String removeFileExtension(Action action, String input) {
+        if (input == null) {
+            return null;
+        }
+
+        int ndx = input.lastIndexOf('.');
+        return ndx < 0 ? input : input.substring(0, ndx);
+    }
+
+    @AtlasFieldActionInfo(name = "SeparateByDash", sourceType = FieldType.STRING, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
+    public static String separateByDash(Action action, String input) {
+        if (input == null || input.length() == 0) {
+            return input;
+        }
+        return STRING_SEPARATOR_PATTERN.matcher(input).replaceAll("-");
+    }
+
+    @AtlasFieldActionInfo(name = "SeparateByUnderscore", sourceType = FieldType.STRING, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
+    public static String separateByUnderscore(Action action, String input) {
+        if (input == null || input.length() == 0) {
+            return input;
+        }
+        return STRING_SEPARATOR_PATTERN.matcher(input).replaceAll("_");
     }
 
     @AtlasFieldActionInfo(name = "Trim", sourceType = FieldType.STRING, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
@@ -81,39 +125,12 @@ public class StringSimpleFieldActions implements AtlasFieldAction {
         return input.substring(0, i + 1);
     }
 
-    @AtlasFieldActionInfo(name = "Capitalize", sourceType = FieldType.STRING, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
-    public static String capitalize(Action action, String input) {
-        if (input == null || input.length() == 0) {
-            return input;
-        }
-        if (input.length() == 1) {
-            return String.valueOf(input.charAt(0)).toUpperCase();
-        }
-        return String.valueOf(input.charAt(0)).toUpperCase() + input.substring(1);
-    }
-
-    @AtlasFieldActionInfo(name = "StringLength", sourceType = FieldType.STRING, targetType = FieldType.INTEGER, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
-    public static Integer stringLength(Action action, String input) {
-        if (input == null || input.length() == 0) {
-            return new Integer(0);
+    @AtlasFieldActionInfo(name = "Uppercase", sourceType = FieldType.STRING, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
+    public static String uppercase(Action action, String input) {
+        if (input == null) {
+            return null;
         }
 
-        return input.length();
-    }
-
-    @AtlasFieldActionInfo(name = "SeparateByDash", sourceType = FieldType.STRING, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
-    public static String separateByDash(Action action, String input) {
-        if (input == null || input.length() == 0) {
-            return input;
-        }
-        return STRING_SEPARATOR_PATTERN.matcher(input).replaceAll("-");
-    }
-
-    @AtlasFieldActionInfo(name = "SeparateByUnderscore", sourceType = FieldType.STRING, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
-    public static String separateByUnderscore(Action action, String input) {
-        if (input == null || input.length() == 0) {
-            return input;
-        }
-        return STRING_SEPARATOR_PATTERN.matcher(input).replaceAll("_");
+        return input.toUpperCase();
     }
 }

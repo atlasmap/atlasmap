@@ -23,6 +23,22 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 
 public class ActionsJsonSerializer extends JsonSerializer<Actions> {
 
+    public static final String CLASS_NAME = "className";
+    public static final String DATE_FORMAT = "dateFormat";
+    public static final String DELIMITER = "delimiter";
+    public static final String END_INDEX = "endIndex";
+    public static final String FROM_UNIT = "fromUnit";
+    public static final String MATCH = "match";
+    public static final String METHOD_NAME = "methodName";
+    public static final String NEW_STRING = "newString";
+    public static final String PAD_CHARACTER = "padCharacter";
+    public static final String PAD_COUNT = "padCount";
+    public static final String START_INDEX = "startIndex";
+    public static final String STRING = "string";
+    public static final String TEMPLATE = "template";
+    public static final String TO_UNIT = "toUnit";
+    public static final String VALUE = "value";
+
     @Override
     public void serialize(Actions actions, JsonGenerator gen, SerializerProvider provider) throws IOException {
 
@@ -43,83 +59,138 @@ public class ActionsJsonSerializer extends JsonSerializer<Actions> {
     protected void writeActionField(JsonGenerator gen, Action action) throws IOException {
 
         switch (action.getClass().getSimpleName()) {
-        case "ConvertAreaUnit":
-            writeConvertAreaUnit(gen, (ConvertAreaUnit) action);
-            break;
-        case "ConvertDistanceUnit":
-            writeConvertDistanceUnit(gen, (ConvertDistanceUnit) action);
-            break;
-        case "ConvertMassUnit":
-            writeConvertMassUnit(gen, (ConvertMassUnit) action);
-            break;
-        case "ConvertVolumeUnit":
-            writeConvertVolumeUnit(gen, (ConvertVolumeUnit) action);
-            break;
-        case "CurrentDate":
-            writeCurrentDate(gen, (CurrentDate) action);
-            break;
-        case "CurrentDateTime":
-            writeCurrentDateTime(gen, (CurrentDateTime) action);
-            break;
-        case "CurrentTime":
-            writeCurrentTime(gen, (CurrentTime) action);
-            break;
-        case "CustomAction":
-            writeCustomAction(gen, (CustomAction) action);
-            break;
-        case "PadStringLeft":
-            writePadStringLeft(gen, (PadStringLeft) action);
-            break;
-        case "PadStringRight":
-            writePadStringRight(gen, (PadStringRight) action);
-            break;
-        case "Replace":
-            writeReplace(gen, (Replace) action);
-            break;
-        case "SubString":
-            writeSubString(gen, (SubString) action);
-            break;
-        case "SubStringAfter":
-            writeSubStringAfter(gen, (SubStringAfter) action);
-            break;
-        case "SubStringBefore":
-            writeSubStringBefore(gen, (SubStringBefore) action);
-            break;
-        case "SumUp":
-            writeSumUp(gen, (SumUp) action);
-            break;
-        default:
-            gen.writeStartObject();
-            gen.writeNullField(action.getClass().getSimpleName());
-            gen.writeEndObject();
-            break;
+            case "Concatenate":
+                writeConcatenate(gen, (Concatenate) action);
+                break;
+            case "Contains":
+                writeContains(gen, (Contains) action);
+                break;
+            case "ConvertAreaUnit":
+                writeConvertAreaUnit(gen, (ConvertAreaUnit) action);
+                break;
+            case "ConvertDistanceUnit":
+                writeConvertDistanceUnit(gen, (ConvertDistanceUnit) action);
+                break;
+            case "ConvertMassUnit":
+                writeConvertMassUnit(gen, (ConvertMassUnit) action);
+                break;
+            case "ConvertVolumeUnit":
+                writeConvertVolumeUnit(gen, (ConvertVolumeUnit) action);
+                break;
+            case "CurrentDate":
+                writeCurrentDate(gen, (CurrentDate) action);
+                break;
+            case "CurrentDateTime":
+                writeCurrentDateTime(gen, (CurrentDateTime) action);
+                break;
+            case "CurrentTime":
+                writeCurrentTime(gen, (CurrentTime) action);
+                break;
+            case "CustomAction":
+                writeCustomAction(gen, (CustomAction) action);
+                break;
+            case "EndsWith":
+                writeEndsWith(gen, (EndsWith) action);
+                break;
+            case "Equals":
+                writeEquals(gen, (Equals) action);
+                break;
+            case "Format":
+                writeFormat(gen, (Format) action);
+                break;
+            case "IndexOf":
+                writeIndexOf(gen, (IndexOf) action);
+                break;
+            case "LastIndexOf":
+                writeLastIndexOf(gen, (LastIndexOf) action);
+                break;
+            case "PadStringLeft":
+                writePadStringLeft(gen, (PadStringLeft) action);
+                break;
+            case "PadStringRight":
+                writePadStringRight(gen, (PadStringRight) action);
+                break;
+            case "ReplaceAll":
+                writeReplaceAll(gen, (ReplaceAll) action);
+                break;
+            case "ReplaceFirst":
+                writeReplaceFirst(gen, (ReplaceFirst) action);
+                break;
+            case "StartsWith":
+                writeStartsWith(gen, (StartsWith) action);
+                break;
+            case "SubString":
+                writeSubString(gen, (SubString) action);
+                break;
+            case "SubStringAfter":
+                writeSubStringAfter(gen, (SubStringAfter) action);
+                break;
+            case "SubStringBefore":
+                writeSubStringBefore(gen, (SubStringBefore) action);
+                break;
+            default:
+                gen.writeStartObject();
+                gen.writeNullField(action.getClass().getSimpleName());
+                gen.writeEndObject();
+                break;
         }
     }
 
-    protected void writeCustomAction(JsonGenerator gen, CustomAction customAction) throws IOException {
+    protected void writeConcatenate(JsonGenerator gen, Concatenate action) throws IOException {
         gen.writeStartObject();
-        gen.writeFieldName("CustomAction");
+        gen.writeFieldName("Concatenate");
+        gen.writeStartObject();
+        gen.writeStringField(DELIMITER, action.getDelimiter());
+        gen.writeEndObject();
+        gen.writeEndObject();
+    }
 
-        boolean objectStarted = false;
-        if (customAction.getClassName() != null && customAction.getClassName().trim().length() > 0) {
-            gen.writeStartObject();
-            gen.writeStringField("className", customAction.getClassName().trim());
-            gen.writeEndObject();
-            objectStarted = true;
-        }
+    protected void writeContains(JsonGenerator gen, Contains action) throws IOException {
+        gen.writeStartObject();
+        gen.writeFieldName("Contains");
+        gen.writeStartObject();
+        gen.writeStringField("value", action.getValue());
+        gen.writeEndObject();
+        gen.writeEndObject();
+    }
 
-        if (customAction.getMethodName() != null && customAction.getMethodName().trim().length() > 0) {
-            if (!objectStarted) {
-                gen.writeStartObject();
-            }
+    protected void writeConvertAreaUnit(JsonGenerator gen, ConvertAreaUnit action) throws IOException {
+        gen.writeStartObject();
+        gen.writeFieldName("ConvertAreaUnit");
+        gen.writeStartObject();
+        gen.writeStringField(FROM_UNIT, action.getFromUnit().value());
+        gen.writeStringField(TO_UNIT, action.getToUnit().value());
+        gen.writeEndObject();
+        gen.writeEndObject();
+    }
 
-            gen.writeStringField("methodName", customAction.getMethodName().trim());
+    protected void writeConvertDistanceUnit(JsonGenerator gen, ConvertDistanceUnit action) throws IOException {
+        gen.writeStartObject();
+        gen.writeFieldName("ConvertDistanceUnit");
+        gen.writeStartObject();
+        gen.writeStringField(FROM_UNIT, action.getFromUnit().value());
+        gen.writeStringField(TO_UNIT, action.getToUnit().value());
+        gen.writeEndObject();
+        gen.writeEndObject();
+    }
 
-            if (!objectStarted) {
-                gen.writeEndObject();
-            }
-        }
+    protected void writeConvertMassUnit(JsonGenerator gen, ConvertMassUnit action) throws IOException {
+        gen.writeStartObject();
+        gen.writeFieldName("ConvertMassUnit");
+        gen.writeStartObject();
+        gen.writeStringField(FROM_UNIT, action.getFromUnit().value());
+        gen.writeStringField(TO_UNIT, action.getToUnit().value());
+        gen.writeEndObject();
+        gen.writeEndObject();
+    }
 
+    protected void writeConvertVolumeUnit(JsonGenerator gen, ConvertVolumeUnit action) throws IOException {
+        gen.writeStartObject();
+        gen.writeFieldName("ConvertVolumeUnit");
+        gen.writeStartObject();
+        gen.writeStringField(FROM_UNIT, action.getFromUnit().value());
+        gen.writeStringField(TO_UNIT, action.getToUnit().value());
+        gen.writeEndObject();
         gen.writeEndObject();
     }
 
@@ -128,7 +199,7 @@ public class ActionsJsonSerializer extends JsonSerializer<Actions> {
         gen.writeFieldName("CurrentDate");
         if (currentDate.getDateFormat() != null && currentDate.getDateFormat().trim().length() > 0) {
             gen.writeStartObject();
-            gen.writeStringField("dateFormat", currentDate.getDateFormat().trim());
+            gen.writeStringField(DATE_FORMAT, currentDate.getDateFormat().trim());
             gen.writeEndObject();
         }
         gen.writeEndObject();
@@ -139,7 +210,7 @@ public class ActionsJsonSerializer extends JsonSerializer<Actions> {
         gen.writeFieldName("CurrentDateTime");
         if (currentDateTime.getDateFormat() != null && currentDateTime.getDateFormat().trim().length() > 0) {
             gen.writeStartObject();
-            gen.writeStringField("dateFormat", currentDateTime.getDateFormat().trim());
+            gen.writeStringField(DATE_FORMAT, currentDateTime.getDateFormat().trim());
             gen.writeEndObject();
         }
         gen.writeEndObject();
@@ -150,9 +221,81 @@ public class ActionsJsonSerializer extends JsonSerializer<Actions> {
         gen.writeFieldName("CurrentTime");
         if (currentTime.getDateFormat() != null && currentTime.getDateFormat().trim().length() > 0) {
             gen.writeStartObject();
-            gen.writeStringField("dateFormat", currentTime.getDateFormat().trim());
+            gen.writeStringField(DATE_FORMAT, currentTime.getDateFormat().trim());
             gen.writeEndObject();
         }
+        gen.writeEndObject();
+    }
+
+    protected void writeCustomAction(JsonGenerator gen, CustomAction customAction) throws IOException {
+        gen.writeStartObject();
+        gen.writeFieldName("CustomAction");
+
+        boolean objectStarted = false;
+        if (customAction.getClassName() != null && customAction.getClassName().trim().length() > 0) {
+            gen.writeStartObject();
+            gen.writeStringField(CLASS_NAME, customAction.getClassName().trim());
+            gen.writeEndObject();
+            objectStarted = true;
+        }
+
+        if (customAction.getMethodName() != null && customAction.getMethodName().trim().length() > 0) {
+            if (!objectStarted) {
+                gen.writeStartObject();
+            }
+
+            gen.writeStringField(METHOD_NAME, customAction.getMethodName().trim());
+
+            if (!objectStarted) {
+                gen.writeEndObject();
+            }
+        }
+
+        gen.writeEndObject();
+    }
+
+    protected void writeEndsWith(JsonGenerator gen, EndsWith action) throws IOException {
+        gen.writeStartObject();
+        gen.writeFieldName("EndsWith");
+        gen.writeStartObject();
+        gen.writeStringField(STRING, action.getString());
+        gen.writeEndObject();
+        gen.writeEndObject();
+    }
+
+    protected void writeEquals(JsonGenerator gen, Equals action) throws IOException {
+        gen.writeStartObject();
+        gen.writeFieldName("Equals");
+        gen.writeStartObject();
+        gen.writeStringField(VALUE, action.getValue());
+        gen.writeEndObject();
+        gen.writeEndObject();
+    }
+
+    protected void writeFormat(JsonGenerator gen, Format action) throws IOException {
+        gen.writeStartObject();
+        gen.writeFieldName("Format");
+        gen.writeStartObject();
+        gen.writeStringField(TEMPLATE, action.getTemplate());
+        gen.writeEndObject();
+        gen.writeEndObject();
+    }
+
+    protected void writeIndexOf(JsonGenerator gen, IndexOf action) throws IOException {
+        gen.writeStartObject();
+        gen.writeFieldName("IndexOf");
+        gen.writeStartObject();
+        gen.writeStringField(STRING, action.getString());
+        gen.writeEndObject();
+        gen.writeEndObject();
+    }
+
+    protected void writeLastIndexOf(JsonGenerator gen, LastIndexOf action) throws IOException {
+        gen.writeStartObject();
+        gen.writeFieldName("LastIndexOf");
+        gen.writeStartObject();
+        gen.writeStringField(STRING, action.getString());
+        gen.writeEndObject();
         gen.writeEndObject();
     }
 
@@ -160,8 +303,8 @@ public class ActionsJsonSerializer extends JsonSerializer<Actions> {
         gen.writeStartObject();
         gen.writeFieldName("PadStringLeft");
         gen.writeStartObject();
-        gen.writeStringField("padCharacter", padStringLeft.getPadCharacter());
-        gen.writeNumberField("padCount", padStringLeft.getPadCount());
+        gen.writeStringField(PAD_CHARACTER, padStringLeft.getPadCharacter());
+        gen.writeNumberField(PAD_COUNT, padStringLeft.getPadCount());
         gen.writeEndObject();
         gen.writeEndObject();
     }
@@ -170,20 +313,37 @@ public class ActionsJsonSerializer extends JsonSerializer<Actions> {
         gen.writeStartObject();
         gen.writeFieldName("PadStringRight");
         gen.writeStartObject();
-        gen.writeStringField("padCharacter", padStringRight.getPadCharacter());
-        gen.writeNumberField("padCount", padStringRight.getPadCount());
+        gen.writeStringField(PAD_CHARACTER, padStringRight.getPadCharacter());
+        gen.writeNumberField(PAD_COUNT, padStringRight.getPadCount());
         gen.writeEndObject();
         gen.writeEndObject();
     }
 
-    protected void writeReplace(JsonGenerator gen, Replace replace) throws IOException {
+    protected void writeReplaceAll(JsonGenerator gen, ReplaceAll action) throws IOException {
         gen.writeStartObject();
-        gen.writeFieldName("Replace");
+        gen.writeFieldName("ReplaceAll");
         gen.writeStartObject();
-        gen.writeStringField("oldString", replace.getOldString());
-        if (replace.getNewString() != null) {
-            gen.writeStringField("newString", replace.getNewString());
-        }
+        gen.writeStringField(MATCH, action.getMatch());
+        gen.writeStringField(NEW_STRING, action.getNewString());
+        gen.writeEndObject();
+        gen.writeEndObject();
+    }
+
+    protected void writeReplaceFirst(JsonGenerator gen, ReplaceFirst action) throws IOException {
+        gen.writeStartObject();
+        gen.writeFieldName("ReplaceFirst");
+        gen.writeStartObject();
+        gen.writeStringField(MATCH, action.getMatch());
+        gen.writeStringField(NEW_STRING, action.getNewString());
+        gen.writeEndObject();
+        gen.writeEndObject();
+    }
+
+    protected void writeStartsWith(JsonGenerator gen, StartsWith action) throws IOException {
+        gen.writeStartObject();
+        gen.writeFieldName("StartsWith");
+        gen.writeStartObject();
+        gen.writeStringField(STRING, action.getString());
         gen.writeEndObject();
         gen.writeEndObject();
     }
@@ -192,9 +352,9 @@ public class ActionsJsonSerializer extends JsonSerializer<Actions> {
         gen.writeStartObject();
         gen.writeFieldName("SubString");
         gen.writeStartObject();
-        gen.writeNumberField("startIndex", subString.getStartIndex());
+        gen.writeNumberField(START_INDEX, subString.getStartIndex());
         if (subString.getEndIndex() != null) {
-            gen.writeNumberField("endIndex", subString.getEndIndex());
+            gen.writeNumberField(END_INDEX, subString.getEndIndex());
         }
         gen.writeEndObject();
         gen.writeEndObject();
@@ -204,10 +364,10 @@ public class ActionsJsonSerializer extends JsonSerializer<Actions> {
         gen.writeStartObject();
         gen.writeFieldName("SubStringAfter");
         gen.writeStartObject();
-        gen.writeStringField("match", subStringAfter.getMatch());
-        gen.writeNumberField("startIndex", subStringAfter.getStartIndex());
+        gen.writeStringField(MATCH, subStringAfter.getMatch());
+        gen.writeNumberField(START_INDEX, subStringAfter.getStartIndex());
         if (subStringAfter.getEndIndex() != null) {
-            gen.writeNumberField("endIndex", subStringAfter.getEndIndex());
+            gen.writeNumberField(END_INDEX, subStringAfter.getEndIndex());
         }
         gen.writeEndObject();
         gen.writeEndObject();
@@ -217,63 +377,12 @@ public class ActionsJsonSerializer extends JsonSerializer<Actions> {
         gen.writeStartObject();
         gen.writeFieldName("SubStringBefore");
         gen.writeStartObject();
-        gen.writeStringField("match", subStringBefore.getMatch());
-        gen.writeNumberField("startIndex", subStringBefore.getStartIndex());
+        gen.writeStringField(MATCH, subStringBefore.getMatch());
+        gen.writeNumberField(START_INDEX, subStringBefore.getStartIndex());
         if (subStringBefore.getEndIndex() != null) {
-            gen.writeNumberField("endIndex", subStringBefore.getEndIndex());
+            gen.writeNumberField(END_INDEX, subStringBefore.getEndIndex());
         }
         gen.writeEndObject();
-        gen.writeEndObject();
-    }
-
-    protected void writeConvertAreaUnit(JsonGenerator gen, ConvertAreaUnit action) throws IOException {
-        gen.writeStartObject();
-        gen.writeFieldName("ConvertAreaUnit");
-        gen.writeStartObject();
-        gen.writeStringField("fromUnit", action.getFromUnit().value());
-        gen.writeStringField("toUnit", action.getToUnit().value());
-        gen.writeEndObject();
-        gen.writeEndObject();
-    }
-
-    protected void writeConvertDistanceUnit(JsonGenerator gen, ConvertDistanceUnit action) throws IOException {
-        gen.writeStartObject();
-        gen.writeFieldName("ConvertDistanceUnit");
-        gen.writeStartObject();
-        gen.writeStringField("fromUnit", action.getFromUnit().value());
-        gen.writeStringField("toUnit", action.getToUnit().value());
-        gen.writeEndObject();
-        gen.writeEndObject();
-    }
-
-    protected void writeConvertMassUnit(JsonGenerator gen, ConvertMassUnit action) throws IOException {
-        gen.writeStartObject();
-        gen.writeFieldName("ConvertMassUnit");
-        gen.writeStartObject();
-        gen.writeStringField("fromUnit", action.getFromUnit().value());
-        gen.writeStringField("toUnit", action.getToUnit().value());
-        gen.writeEndObject();
-        gen.writeEndObject();
-    }
-
-    protected void writeConvertVolumeUnit(JsonGenerator gen, ConvertVolumeUnit action) throws IOException {
-        gen.writeStartObject();
-        gen.writeFieldName("ConvertVolumeUnit");
-        gen.writeStartObject();
-        gen.writeStringField("fromUnit", action.getFromUnit().value());
-        gen.writeStringField("toUnit", action.getToUnit().value());
-        gen.writeEndObject();
-        gen.writeEndObject();
-    }
-
-    protected void writeSumUp(JsonGenerator gen, SumUp action) throws IOException {
-        gen.writeStartObject();
-        gen.writeFieldName("SumUp");
-        if (action.getNumberType() != null) {
-            gen.writeStartObject();
-            gen.writeStringField("numberType", action.getNumberType().value());
-            gen.writeEndObject();
-        }
         gen.writeEndObject();
     }
 }

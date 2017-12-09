@@ -32,6 +32,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.atlasmap.api.AtlasConstants;
 import io.atlasmap.core.AtlasMappingUtil;
 import io.atlasmap.core.DefaultAtlasConversionService;
 import io.atlasmap.java.v2.AtlasJavaModelFactory;
@@ -70,8 +71,10 @@ public class JavaValidationServiceTest {
 
         sourceValidationService = new JavaValidationService(DefaultAtlasConversionService.getInstance());
         sourceValidationService.setMode(AtlasModuleMode.SOURCE);
+        sourceValidationService.setDocId(AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID);
         targetValidationService = new JavaValidationService(DefaultAtlasConversionService.getInstance());
         targetValidationService.setMode(AtlasModuleMode.TARGET);
+        targetValidationService.setDocId(AtlasConstants.DEFAULT_TARGET_DOCUMENT_ID);
         validationHelper = new AtlasValidationTestHelper();
         validations = validationHelper.getValidation();
     }
@@ -92,9 +95,9 @@ public class JavaValidationServiceTest {
         mapping.setName("thisis_a_valid.name");
 
         mapping.getDataSource().add(generateDataSource("atlas:java?className=io.atlasmap.java.module.MockJavaClass",
-                DataSourceType.SOURCE));
+                DataSourceType.SOURCE, AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID));
         mapping.getDataSource().add(generateDataSource("atlas:java?className=io.atlasmap.java.module.MockJavaClass",
-                DataSourceType.TARGET));
+                DataSourceType.TARGET, AtlasConstants.DEFAULT_TARGET_DOCUMENT_ID));
 
         Mapping mapMapping = AtlasModelFactory.createMapping(MappingType.MAP);
         Mapping sepMapping = AtlasModelFactory.createMapping(MappingType.SEPARATE);
@@ -140,10 +143,11 @@ public class JavaValidationServiceTest {
         return mapping;
     }
 
-    protected DataSource generateDataSource(String uri, DataSourceType type) {
+    protected DataSource generateDataSource(String uri, DataSourceType type, String docId) {
         DataSource ds = new DataSource();
         ds.setUri(uri);
         ds.setDataSourceType(type);
+        ds.setId(docId);
         return ds;
     }
 
@@ -227,7 +231,7 @@ public class JavaValidationServiceTest {
     }
 
     @Test
-    public void testValidateMappingInvalidCombineInputFieldType() throws Exception {
+    public void testValidateMappingInvalidCombineSourceFieldType() throws Exception {
         AtlasMapping atlasMapping = getAtlasMappingFullValid();
 
         Mapping combineFieldMapping = AtlasModelFactory.createMapping(MappingType.COMBINE);
@@ -251,19 +255,12 @@ public class JavaValidationServiceTest {
         validations.addAll(targetValidationService.validateMapping(atlasMapping));
 
         assertTrue(validationHelper.hasErrors());
-        assertTrue(validationHelper.hasWarnings());
+        assertFalse(validationHelper.hasWarnings());
         assertFalse(validationHelper.hasInfos());
 
-        assertEquals(new Integer(2), new Integer(validationHelper.getCount()));
+        assertEquals(new Integer(1), new Integer(validationHelper.getCount()));
 
         Validation validation = validations.get(0);
-        assertNotNull(validation);
-        assertEquals(ValidationScope.MAPPING, validation.getScope());
-        assertEquals("combine.firstName.lastName", validation.getId());
-        assertEquals("Conversion from 'STRING' to 'BOOLEAN' can cause out of range exceptions",
-                validation.getMessage());
-        assertEquals(ValidationStatus.WARN, validation.getStatus());
-        validation = validations.get(1);
         assertNotNull(validation);
         assertEquals(ValidationScope.MAPPING, validation.getScope());
         assertEquals("combine.firstName.lastName", validation.getId());
@@ -276,8 +273,10 @@ public class JavaValidationServiceTest {
         AtlasMapping mapping = AtlasModelFactory.createAtlasMapping();
 
         mapping.setName("thisis_a_valid.name");
-        mapping.getDataSource().add(generateDataSource("atlas:xml", DataSourceType.SOURCE));
-        mapping.getDataSource().add(generateDataSource("atlas:xml", DataSourceType.TARGET));
+        mapping.getDataSource()
+                .add(generateDataSource("atlas:xml", DataSourceType.SOURCE, AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID));
+        mapping.getDataSource()
+                .add(generateDataSource("atlas:xml", DataSourceType.TARGET, AtlasConstants.DEFAULT_TARGET_DOCUMENT_ID));
 
         validations.addAll(sourceValidationService.validateMapping(mapping));
         validations.addAll(targetValidationService.validateMapping(mapping));
@@ -288,7 +287,7 @@ public class JavaValidationServiceTest {
     }
 
     @Test
-    public void testValidateMappingInvalidSeparateInputFieldType() throws Exception {
+    public void testValidateMappingInvalidSeparateSourceFieldType() throws Exception {
         AtlasMapping atlasMapping = getAtlasMappingFullValid();
 
         Mapping separateFieldMapping = AtlasModelFactory.createMapping(MappingType.SEPARATE);
@@ -314,9 +313,9 @@ public class JavaValidationServiceTest {
 
         assertTrue(validationHelper.hasErrors());
         assertFalse(validationHelper.hasWarnings());
-        assertTrue(validationHelper.hasInfos());
+        assertFalse(validationHelper.hasInfos());
 
-        assertEquals(new Integer(2), new Integer(validationHelper.getCount()));
+        assertEquals(new Integer(1), new Integer(validationHelper.getCount()));
 
         Validation validation = validations.get(0);
         assertNotNull(validation);
@@ -325,12 +324,6 @@ public class JavaValidationServiceTest {
         assertEquals("Input field 'firstName' must be of type 'STRING' for a Separate Mapping",
                 validation.getMessage());
         assertEquals(ValidationStatus.ERROR, validation.getStatus());
-        validation = validations.get(1);
-        assertNotNull(validation);
-        assertEquals(ValidationScope.MAPPING, validation.getScope());
-        assertEquals("separate.firstName.lastName", validation.getId());
-        assertEquals("Conversion from 'BOOLEAN' to 'STRING' is supported", validation.getMessage());
-        assertEquals(ValidationStatus.INFO, validation.getStatus());
     }
 
     @Test

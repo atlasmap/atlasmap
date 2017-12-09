@@ -134,7 +134,9 @@ export class ConfigModel {
     }
 
     public addJavaDocument(documentIdentifier: string, isSource: boolean): DocumentDefinition {
-        return this.createDocument(documentIdentifier, isSource, DocumentTypes.JAVA, null);
+        const docDef = this.createDocument(documentIdentifier, isSource, DocumentTypes.JAVA, null);
+        docDef.uri = 'atlas:java?className=' + documentIdentifier;
+        return docDef;
     }
 
     public addJSONDocument(documentIdentifier: string, documentContents: string, isSource: boolean): DocumentDefinition {
