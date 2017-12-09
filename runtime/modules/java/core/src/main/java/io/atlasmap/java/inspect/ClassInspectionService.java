@@ -186,11 +186,17 @@ public class ClassInspectionService {
     }
 
     public JavaClass inspectClass(String className) {
+        // Use a loader for this class for now
+        ClassLoader classLoader = getClass().getClassLoader();
+        return inspectClass(classLoader, className);
+    }
+
+    public JavaClass inspectClass(ClassLoader classLoader, String className) {
         JavaClass d = null;
         Class<?> clazz = null;
         try {
-            clazz = Class.forName(className);
-            d = inspectClass(clazz);
+            clazz = classLoader.loadClass(className);
+            d = inspectClass(classLoader, clazz);
         } catch (ClassNotFoundException cnfe) {
             d = AtlasJavaModelFactory.createJavaClass();
             d.setClassName(className);
@@ -211,7 +217,7 @@ public class ClassInspectionService {
         try {
             JarClassLoader jcl = new JarClassLoader(new String[] { "target/reference-jars" });
             Class<?> clazz = jcl.loadClass(className);
-            d = inspectClass(clazz);
+            d = inspectClass(jcl, clazz);
         } catch (ClassNotFoundException cnfe) {
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Class was not found: " + className);
@@ -228,12 +234,21 @@ public class ClassInspectionService {
             throw new IllegalArgumentException("Class must be specified");
         }
 
+        return inspectClass(clazz.getClassLoader(), clazz);
+    }
+
+    public JavaClass inspectClass(ClassLoader classLoader, Class<?> clazz) {
+        if (clazz == null) {
+            throw new IllegalArgumentException("Class must be specified");
+        }
+
         JavaClass javaClass = AtlasJavaModelFactory.createJavaClass();
-        inspectClass(clazz, javaClass, new HashSet<String>(), null);
+        inspectClass(classLoader, clazz, javaClass, new HashSet<String>(), null);
         return javaClass;
     }
 
-    protected void inspectClass(Class<?> clazz, JavaClass javaClass, Set<String> cachedClasses, String pathPrefix) {
+    protected void inspectClass(ClassLoader classLoader, Class<?> clazz,
+            JavaClass javaClass, Set<String> cachedClasses, String pathPrefix) {
 
         Class<?> clz = clazz;
         if (clazz.isArray()) {
@@ -277,14 +292,14 @@ public class ClassInspectionService {
                 }
                 superClazz = null;
             } else {
-                inspectClassFields(superClazz, javaClass, cachedClasses, pathPrefix);
-                inspectClassMethods(superClazz, javaClass, cachedClasses, pathPrefix);
+                inspectClassFields(classLoader, superClazz, javaClass, cachedClasses, pathPrefix);
+                inspectClassMethods(classLoader, superClazz, javaClass, cachedClasses, pathPrefix);
                 tmpClazz = superClazz;
                 superClazz = tmpClazz.getSuperclass();
             }
         }
 
-        inspectClassFields(clz, javaClass, cachedClasses, pathPrefix);
+        inspectClassFields(classLoader, clz, javaClass, cachedClasses, pathPrefix);
 
         Object[] enumConstants = clz.getEnumConstants();
         if (enumConstants != null) {
@@ -306,7 +321,7 @@ public class ClassInspectionService {
             javaClass.setEnumeration(false);
         }
 
-        inspectClassMethods(clz, javaClass, cachedClasses, pathPrefix);
+        inspectClassMethods(classLoader, clz, javaClass, cachedClasses, pathPrefix);
 
         if (javaClass.getModifiers() == null) {
             javaClass.setModifiers(new ModifierList());
@@ -324,7 +339,8 @@ public class ClassInspectionService {
         // return javaClass;
     }
 
-    protected JavaField inspectGetMethod(Method m, JavaField s, Set<String> cachedClasses, String pathPrefix) {
+    protected JavaField inspectGetMethod(ClassLoader classLoader, Method m, JavaField s,
+            Set<String> cachedClasses, String pathPrefix) {
         JavaField field = s;
 
         field.setName(StringUtil.removeGetterAndLowercaseFirstLetter(m.getName()));
@@ -373,9 +389,9 @@ public class ClassInspectionService {
                 field.setStatus(FieldStatus.UNSUPPORTED);
             } else if (!cachedClasses.contains(returnType.getCanonicalName())) {
                 try {
-                    complexClazz = Class.forName(returnType.getCanonicalName());
+                    complexClazz = classLoader.loadClass(returnType.getCanonicalName());
                     cachedClasses.add(returnType.getCanonicalName());
-                    inspectClass(complexClazz, tmpField, cachedClasses, field.getPath());
+                    inspectClass(classLoader, complexClazz, tmpField, cachedClasses, field.getPath());
                     if (tmpField.getStatus() == null) {
                         field.setStatus(FieldStatus.SUPPORTED);
                     }
@@ -390,7 +406,8 @@ public class ClassInspectionService {
         return field;
     }
 
-    protected JavaField inspectSetMethod(Method m, JavaField s, Set<String> cachedClasses, String pathPrefix) {
+    protected JavaField inspectSetMethod(ClassLoader classLoader, Method m, JavaField s,
+            Set<String> cachedClasses, String pathPrefix) {
         JavaField field = s;
 
         field.setName(StringUtil.removeSetterAndLowercaseFirstLetter(m.getName()));
@@ -445,9 +462,9 @@ public class ClassInspectionService {
                 field.setStatus(FieldStatus.UNSUPPORTED);
             } else if (!cachedClasses.contains(paramType.getCanonicalName())) {
                 try {
-                    complexClazz = Class.forName(paramType.getCanonicalName());
+                    complexClazz = classLoader.loadClass(paramType.getCanonicalName());
                     cachedClasses.add(paramType.getCanonicalName());
-                    inspectClass(complexClazz, tmpField, cachedClasses, field.getPath());
+                    inspectClass(classLoader, complexClazz, tmpField, cachedClasses, field.getPath());
                     if (tmpField.getStatus() == null) {
                         field.setStatus(FieldStatus.SUPPORTED);
                     }
@@ -462,7 +479,8 @@ public class ClassInspectionService {
         return field;
     }
 
-    protected JavaField inspectField(Field f, Set<String> cachedClasses, String pathPrefix) {
+    protected JavaField inspectField(ClassLoader classLoader, Field f,
+            Set<String> cachedClasses, String pathPrefix) {
 
         JavaField s = AtlasJavaModelFactory.createJavaField();
         Class<?> clazz = f.getType();
@@ -482,7 +500,7 @@ public class ClassInspectionService {
             s.setCollectionType(CollectionType.LIST);
             s.setCollectionClassName(clazz.getCanonicalName());
             try {
-                clazz = detectListClass(f);
+                clazz = detectListClass(classLoader, f);
                 if (clazz == null) {
                     s.setStatus(FieldStatus.ERROR);
                     return s;
@@ -513,9 +531,9 @@ public class ClassInspectionService {
                 s.setStatus(FieldStatus.UNSUPPORTED);
             } else if (!cachedClasses.contains(clazz.getCanonicalName())) {
                 try {
-                    complexClazz = Class.forName(clazz.getCanonicalName());
+                    complexClazz = classLoader.loadClass(clazz.getCanonicalName());
                     cachedClasses.add(clazz.getCanonicalName());
-                    inspectClass(complexClazz, tmpField, cachedClasses, s.getPath());
+                    inspectClass(classLoader, complexClazz, tmpField, cachedClasses, s.getPath());
                     if (tmpField.getStatus() == null) {
                         s.setStatus(FieldStatus.SUPPORTED);
                     }
@@ -553,48 +571,53 @@ public class ClassInspectionService {
             s.getParameterizedTypes().getString().addAll(pTypes);
         }
 
+        populateGetterSetter(clazz, f, s);
+        return s;
+    }
+
+    private void populateGetterSetter(Class<?> clazz, Field reflectionField, JavaField atlasField) {
         try {
-            String getterName = "get" + StringUtil.capitalizeFirstLetter(f.getName());
-            f.getDeclaringClass().getMethod(getterName);
-            s.setGetMethod(getterName);
+            String getterName = "get" + StringUtil.capitalizeFirstLetter(reflectionField.getName());
+            reflectionField.getDeclaringClass().getMethod(getterName);
+            atlasField.setGetMethod(getterName);
         } catch (NoSuchMethodException e) {
             if (LOG.isDebugEnabled()) {
-                LOG.debug("No 'get' method for field named: " + f.getName() + " in class: "
-                        + f.getDeclaringClass().getName());
+                LOG.debug("No 'get' method for field named: " + reflectionField.getName() + " in class: "
+                        + reflectionField.getDeclaringClass().getName());
             }
         }
-        if (s.getGetMethod() == null
-                && ("boolean".equals(s.getClassName()) || "java.lang.Boolean".equals(s.getClassName()))) {
+        if (atlasField.getGetMethod() == null
+                && ("boolean".equals(atlasField.getClassName())
+                        || "java.lang.Boolean".equals(atlasField.getClassName()))) {
             try {
-                String getterName = "is" + StringUtil.capitalizeFirstLetter(f.getName());
-                f.getDeclaringClass().getMethod(getterName);
-                s.setGetMethod(getterName);
+                String getterName = "is" + StringUtil.capitalizeFirstLetter(reflectionField.getName());
+                reflectionField.getDeclaringClass().getMethod(getterName);
+                atlasField.setGetMethod(getterName);
             } catch (NoSuchMethodException e) {
                 if (LOG.isDebugEnabled()) {
-                    LOG.debug("No 'is' method for field named: " + f.getName() + " in class: "
-                            + f.getDeclaringClass().getName());
+                    LOG.debug("No 'is' method for field named: " + reflectionField.getName() + " in class: "
+                            + reflectionField.getDeclaringClass().getName());
                 }
             }
         }
         try {
-            String setterName = "set" + StringUtil.capitalizeFirstLetter(f.getName());
-            f.getDeclaringClass().getMethod(setterName, clazz);
-            s.setSetMethod(setterName);
+            String setterName = "set" + StringUtil.capitalizeFirstLetter(reflectionField.getName());
+            reflectionField.getDeclaringClass().getMethod(setterName, clazz);
+            atlasField.setSetMethod(setterName);
         } catch (NoSuchMethodException e) {
             if (LOG.isDebugEnabled()) {
-                LOG.debug("No 'set' method for field named: " + f.getName() + " in class: "
-                        + f.getDeclaringClass().getName());
+                LOG.debug("No 'set' method for field named: " + reflectionField.getName() + " in class: "
+                        + reflectionField.getDeclaringClass().getName());
             }
         }
-        return s;
     }
 
-    protected void inspectClassFields(Class<?> clazz, JavaClass javaClass, Set<String> cachedClasses,
-            String pathPrefix) {
+    protected void inspectClassFields(ClassLoader classLoader, Class<?> clazz, JavaClass javaClass,
+            Set<String> cachedClasses, String pathPrefix) {
         Field[] fields = clazz.getDeclaredFields();
         if (fields != null && !javaClass.isEnumeration()) {
             for (Field f : fields) {
-                JavaField s = inspectField(f, cachedClasses, pathPrefix);
+                JavaField s = inspectField(classLoader, f, cachedClasses, pathPrefix);
 
                 if (getFieldBlacklist().contains(f.getName())) {
                     s.setStatus(FieldStatus.BLACK_LIST);
@@ -629,7 +652,7 @@ public class ClassInspectionService {
         }
     }
 
-    protected void inspectClassMethods(Class<?> clazz, JavaClass javaClass, Set<String> cachedClasses,
+    protected void inspectClassMethods(ClassLoader classLoader, Class<?> clazz, JavaClass javaClass, Set<String> cachedClasses,
             String pathPrefix) {
         Method[] methods = clazz.getDeclaredMethods();
         if (methods != null && !javaClass.isEnumeration()) {
@@ -647,11 +670,11 @@ public class ClassInspectionService {
                 }
 
                 if (m.getName().startsWith("get") || m.getName().startsWith("is")) {
-                    s = inspectGetMethod(m, s, cachedClasses, pathPrefix);
+                    s = inspectGetMethod(classLoader, m, s, cachedClasses, pathPrefix);
                 }
 
                 if (m.getName().startsWith("set")) {
-                    s = inspectSetMethod(m, s, cachedClasses, pathPrefix);
+                    s = inspectSetMethod(classLoader, m, s, cachedClasses, pathPrefix);
                 }
 
                 boolean found = false;
@@ -754,10 +777,10 @@ public class ClassInspectionService {
         return modifiers;
     }
 
-    protected Class<?> detectListClass(Field field) throws ClassNotFoundException {
+    protected Class<?> detectListClass(ClassLoader classLoader, Field field) throws ClassNotFoundException {
         List<String> types = detectParameterizedTypes(field, true);
         if (types != null && !types.isEmpty()) {
-            return Class.forName(types.get(0));
+            return classLoader.loadClass(types.get(0));
         }
         return null;
     }

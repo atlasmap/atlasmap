@@ -25,7 +25,7 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class JarClassLoader {
+public class JarClassLoader extends ClassLoader {
     private static final Logger LOG = LoggerFactory.getLogger(ClassInspectionService.class);
     private URLClassLoader loader;
 
@@ -57,6 +57,7 @@ public class JarClassLoader {
         }
     }
 
+    @Override
     public Class<?> loadClass(String name) throws ClassNotFoundException {
         return loader.loadClass(name);
     }
