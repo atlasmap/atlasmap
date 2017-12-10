@@ -82,8 +82,9 @@ export class InitializationService {
         }
 
         if (this.cfg.initCfg.addMockJavaSources || this.cfg.initCfg.addMockJavaSingleSource) {
-            this.cfg.addJavaDocument('io.atlasmap.java.test.TargetTestClass', true);
+            this.cfg.addJavaDocument('twitter4j.Status', true);
             if (this.cfg.initCfg.addMockJavaSources) {
+                this.cfg.addJavaDocument('io.atlasmap.java.test.TargetTestClass', true);
                 this.cfg.addJavaDocument('io.atlasmap.java.test.SourceContact', true);
                 this.cfg.addJavaDocument('io.atlasmap.java.test.SourceAddress', true);
                 this.cfg.addJavaDocument('io.atlasmap.java.test.TestListOrders', true);
