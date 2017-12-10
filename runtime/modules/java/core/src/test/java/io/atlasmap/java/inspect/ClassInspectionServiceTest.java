@@ -110,9 +110,7 @@ public class ClassInspectionServiceTest {
     @Test
     public void testDateTimeViaField() {
         JavaClass javaClass = classInspectionService.inspectClass(DateTimeField.class);
-        // FIXME java.time.Month is Enum - https://github.com/atlasmap/atlasmap-runtime/issues/251
-        // assertEquals(10, javaClass.getJavaFields().getJavaField().size());
-        assertEquals(9, javaClass.getJavaFields().getJavaField().size());
+        assertEquals(10, javaClass.getJavaFields().getJavaField().size());
         assertFalse(javaClass.getModifiers().getModifier().contains(Modifier.PRIVATE));
         assertFalse(javaClass.getModifiers().getModifier().contains(Modifier.PROTECTED));
         assertFalse(javaClass.getModifiers().getModifier().contains(Modifier.PUBLIC));
@@ -294,6 +292,31 @@ public class ClassInspectionServiceTest {
                 fail("Unsupported field was detected: " + field);
             }
         }
+    }
+
+    @Test
+    public void testEnum() {
+
+        JavaClass javaClass = classInspectionService.inspectClass(TestEnum.class);
+        assertNotNull(javaClass.getJavaFields());
+        assertEquals(2, javaClass.getJavaFields().getJavaField().size());
+
+        for (JavaField field : javaClass.getJavaFields().getJavaField()) {
+            if ("extendedStatus".equals(field.getName())) {
+                assertNotNull(((JavaClass) field).getJavaEnumFields());
+                assertEquals(4, ((JavaClass) field).getJavaEnumFields().getJavaEnumField().size());
+
+            } else if ("status".equals(field.getName())) {
+                assertNotNull(field.getGetMethod());
+                assertNotNull(field.getSetMethod());
+                assertNotNull(((JavaClass) field).getJavaEnumFields());
+                assertNotNull(((JavaClass) field).getJavaEnumFields());
+                assertEquals(2, ((JavaClass) field).getJavaEnumFields().getJavaEnumField().size());
+
+            }
+
+        }
+
     }
 
 }
