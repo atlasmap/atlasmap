@@ -594,9 +594,6 @@ public class ClassInspectionService {
         Field[] fields = clazz.getDeclaredFields();
         if (fields != null && !javaClass.isEnumeration()) {
             for (Field f : fields) {
-                if (Enum.class.isAssignableFrom(f.getType())) {
-                    continue;
-                }
                 JavaField s = inspectField(f, cachedClasses, pathPrefix);
 
                 if (getFieldBlacklist().contains(f.getName())) {
