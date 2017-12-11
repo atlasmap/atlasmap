@@ -10,7 +10,7 @@ ARGS="$@"
 
 # Display a help message.
 function displayHelp() {
-    echo "This script helps you build the syndesis monorepo."
+    echo "This script helps you build the AtlasMap monorepo."
     echo "The available options are:"
     echo " --skip-tests            Skips the test execution."
     echo " --skip-image-builds     Skips image builds."
@@ -19,6 +19,8 @@ function displayHelp() {
     echo " --resume-from           Resume build from module."
     echo " --clean                 Cleans up the projects."
     echo " --batch-mode            Runs mvn in batch mode."
+    echo " --release-version       Version number to be used for release."
+    echo " --development-version   Version number to be used for next development iteration."
     echo " --help                  Displays this help message."
 }
 
@@ -73,6 +75,9 @@ function init_options() {
   NAMESPACE=$(readopt --namespace $ARGS 2> /dev/null)
 
   HELP=$(hasflag --help $ARGS 2> /dev/null)
+
+  RELEASE_VERSION=$(hasflag --release-version $ARGS 2> /dev/null)
+  DEVELOPMENT_VERSION=$(hasflag --development-version $ARGS 2> /dev/null)
 
   # Internal variable default values
   OC_OPTS=""
@@ -166,3 +171,14 @@ do
   echo "=========================================================="
   eval "${module}"
 done
+
+if [ -n "$RELEASE_VERSION" ]; then
+  echo "=========================================================="
+  echo "Performing Maven Release ...."
+  echo "=========================================================="
+  "${MAVEN_CMD}" --batch-mode -Dtag=atlasmap-${RELEASE_VERSION} \
+                 -DreleaseVersion=${RELEASE_VERSION} \
+                 -DdevelopmentVersion=${DEVELOPMENT_VERSION} \
+                 -Pfabric8,ci,release,community-release \
+                 release:prepare release:perform release:clean
+fi
