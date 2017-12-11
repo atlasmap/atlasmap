@@ -55,12 +55,15 @@ public class ClassInspectionService {
     public static final int MAX_ARRAY_DIM_LIMIT = 256; // JVM specification
 
     private static final Logger LOG = LoggerFactory.getLogger(ClassInspectionService.class);
-                                                       // limit
+    // limit
 
     private List<String> listClasses = new ArrayList<String>(
             Arrays.asList("java.util.List", "java.util.ArrayList", "java.util.LinkedList", "java.util.Vector",
                     "java.util.Stack", "java.util.AbstractList", "java.util.AbstractSequentialList"));
-
+    private List<String> mapClasses = new ArrayList<String>(Arrays.asList("java.util.Map", "java.util.HashMap",
+            "java.util.TreeMap", "java.util.Hashtable", "java.util.IdentityHashMap", "java.util.LinkedHashMap",
+            "java.util.LinkedHashMap", "java.util.SortedMap", "java.util.WeakHashMap", "java.util.Properties",
+            "java.util.concurrent.ConcurrentHashMap", "java.util.concurrent.ConcurrentMap"));
     private AtlasConversionService atlasConversionService = null;
     private List<String> fieldBlacklist = new ArrayList<String>(Arrays.asList("serialVersionUID"));
     private List<String> classNameBlacklist = new ArrayList<String>();
@@ -69,6 +72,10 @@ public class ClassInspectionService {
     private Boolean disablePrivateOnlyFields = false;
     private Boolean disablePublicOnlyFields = false;
     private Boolean disablePublicGetterSetterFields = false;
+
+    public List<String> getMapClasses() {
+        return this.mapClasses;
+    }
 
     public List<String> getListClasses() {
         return this.listClasses;
@@ -244,6 +251,10 @@ public class ClassInspectionService {
             clz = clazz;
         }
 
+        if (isMapList(clz.getCanonicalName())) {
+            javaClass.setCollectionType(CollectionType.MAP);
+        }
+
         javaClass.setClassName(clz.getCanonicalName());
         javaClass.setPackageName((clz.getPackage() != null ? clz.getPackage().getName() : null));
         javaClass.setAnnotation(clz.isAnnotation());
@@ -330,8 +341,8 @@ public class ClassInspectionService {
         field.setName(StringUtil.removeGetterAndLowercaseFirstLetter(m.getName()));
 
         if (pathPrefix != null && pathPrefix.length() > 0) {
-            field.setPath(
-                    pathPrefix + AtlasPath.PATH_SEPARATOR + StringUtil.removeGetterAndLowercaseFirstLetter(m.getName()));
+            field.setPath(pathPrefix + AtlasPath.PATH_SEPARATOR
+                    + StringUtil.removeGetterAndLowercaseFirstLetter(m.getName()));
         } else {
             field.setPath(StringUtil.removeGetterAndLowercaseFirstLetter(m.getName()));
         }
@@ -396,8 +407,8 @@ public class ClassInspectionService {
         field.setName(StringUtil.removeSetterAndLowercaseFirstLetter(m.getName()));
 
         if (pathPrefix != null && pathPrefix.length() > 0) {
-            field.setPath(
-                    pathPrefix + AtlasPath.PATH_SEPARATOR + StringUtil.removeSetterAndLowercaseFirstLetter(m.getName()));
+            field.setPath(pathPrefix + AtlasPath.PATH_SEPARATOR
+                    + StringUtil.removeSetterAndLowercaseFirstLetter(m.getName()));
         } else {
             field.setPath(StringUtil.removeSetterAndLowercaseFirstLetter(m.getName()));
         }
@@ -474,6 +485,10 @@ public class ClassInspectionService {
             s.setPath(f.getName());
         }
 
+        if (isMapList(clazz.getCanonicalName())) {
+            s.setCollectionType(CollectionType.MAP);
+        }
+
         if (clazz.isArray()) {
             s.setCollectionType(CollectionType.ARRAY);
             s.setArrayDimensions(detectArrayDimensions(clazz));
@@ -488,8 +503,7 @@ public class ClassInspectionService {
                     return s;
                 }
             } catch (ClassCastException | ClassNotFoundException cce) {
-                LOG.debug("Error detecting inner listClass: " + cce.getMessage() + " for field: " + f.getName(),
-                        cce);
+                LOG.debug("Error detecting inner listClass: " + cce.getMessage() + " for field: " + f.getName(), cce);
                 s.setStatus(FieldStatus.ERROR);
                 return s;
             }
@@ -688,6 +702,10 @@ public class ClassInspectionService {
 
     protected boolean isFieldList(String fieldType) {
         return getListClasses().contains(fieldType);
+    }
+
+    protected boolean isMapList(String fieldType) {
+        return getMapClasses().contains(fieldType);
     }
 
     protected Integer detectArrayDimensions(Class<?> clazz) {
