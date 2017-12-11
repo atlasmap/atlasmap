@@ -16,7 +16,6 @@
 package io.atlasmap.json.module;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -41,7 +40,6 @@ import io.atlasmap.json.v2.AtlasJsonModelFactory;
 import io.atlasmap.json.v2.JsonField;
 import io.atlasmap.spi.AtlasInternalSession;
 import io.atlasmap.spi.AtlasModuleDetail;
-import io.atlasmap.spi.AtlasModuleMode;
 import io.atlasmap.v2.AuditStatus;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.LookupTable;
@@ -191,11 +189,6 @@ public class JsonModule extends BaseAtlasModule {
         if (LOG.isDebugEnabled()) {
             LOG.debug("{}: processPostTargetExecution completed", getDocId());
         }
-    }
-
-    @Override
-    public List<AtlasModuleMode> listSupportedModes() {
-        return Arrays.asList(AtlasModuleMode.SOURCE, AtlasModuleMode.TARGET);
     }
 
     @Override
