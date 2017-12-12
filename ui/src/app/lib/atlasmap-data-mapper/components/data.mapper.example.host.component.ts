@@ -97,15 +97,15 @@ export class DataMapperAppExampleHostComponent implements OnInit {
         c.initCfg.addMockJavaSources = true;
         c.initCfg.addMockJavaCachedSource = false;
         c.initCfg.addMockXMLInstanceSources = false;
-        c.initCfg.addMockXMLSchemaSources = false;
+        c.initCfg.addMockXMLSchemaSources = true;
         c.initCfg.addMockJSONSources = false;
         c.initCfg.addMockJSONInstanceSources = false;
         c.initCfg.addMockJSONSchemaSources = true;
 
-        c.initCfg.addMockJavaTarget = false;
+        c.initCfg.addMockJavaTarget = true;
         c.initCfg.addMockJavaCachedTarget = false;
         c.initCfg.addMockXMLInstanceTarget = false;
-        c.initCfg.addMockXMLSchemaTarget = false;
+        c.initCfg.addMockXMLSchemaTarget = true;
         c.initCfg.addMockJSONTarget = false;
         c.initCfg.addMockJSONInstanceTarget = false;
         c.initCfg.addMockJSONSchemaTarget = true;
