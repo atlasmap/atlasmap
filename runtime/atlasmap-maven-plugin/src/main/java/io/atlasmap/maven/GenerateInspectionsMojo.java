@@ -182,15 +182,12 @@ public class GenerateInspectionsMojo extends AbstractMojo {
             JavaClass c = null;
             // Not even this plugin will be available on this new URLClassLoader
             try (URLClassLoader loader = new URLClassLoader(urls.toArray(new URL[urls.size()]), origTccl)) {
-                Thread.currentThread().setContextClassLoader(loader);
                 clazz = loader.loadClass(className);
                 ClassInspectionService classInspectionService = new ClassInspectionService();
                 classInspectionService.setConversionService(DefaultAtlasConversionService.getInstance());
-                c = classInspectionService.inspectClass(clazz);
+                c = classInspectionService.inspectClass(loader, clazz);
             } catch (ClassNotFoundException | IOException e) {
                 throw new MojoExecutionException(e.getMessage(), e);
-            } finally {
-                Thread.currentThread().setContextClassLoader(origTccl);
             }
 
             try {
