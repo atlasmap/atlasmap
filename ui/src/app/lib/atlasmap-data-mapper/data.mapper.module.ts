@@ -50,6 +50,7 @@ import { MappingFieldActionComponent } from './components/mapping/mapping.field.
 import { MappingSelectionComponent, MappingSelectionSectionComponent } from './components/mapping/mapping.selection.component';
 import { LookupTableComponent } from './components/mapping/lookup.table.component';
 import { TransitionSelectionComponent } from './components/mapping/transition.selection.component';
+import { FocusDirective } from './common/focus.directive';
 
 // export services/types for consumers of this module
 export { ErrorHandlerService } from './services/error.handler.service';
@@ -102,6 +103,7 @@ export { DataMapperAppComponent } from './components/data.mapper.app.component';
         MappingListFieldComponent,
         NamespaceListComponent,
         TemplateEditComponent,
+        FocusDirective,
     ],
     exports: [
         DataMapperAppExampleHostComponent,

@@ -94,7 +94,7 @@ export class MappingListFieldComponent {
                     <div class="searchHeaderWrapper">
                         <div *ngIf="searchMode" class="searchBox">
                             <input type="text" #searchFilterBox id="search-filter-box" [(ngModel)]="searchFilter"
-                                (keyup)="search(searchFilterBox.value)" placeholder="Search" />
+                                (keyup)="search(searchFilterBox.value)" placeholder="Search" [focus]="true" />
                             <i class="fa fa-close searchBoxCloseIcon link" (click)="toggleSearch()"></i>
                             <div class="clear"></div>
                         </div>
