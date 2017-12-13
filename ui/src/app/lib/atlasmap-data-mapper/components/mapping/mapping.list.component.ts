@@ -127,8 +127,9 @@ export class MappingListFieldComponent {
                                     <div class="clear"></div>
                                 </div>
                                 <div class="error">
-                                    <span class="pficon pficon-error-circle-o"
-                                    *ngIf="mapping.validationErrors.length"></span>
+                                    <span class="pficon"
+                                          [ngClass]="mapping.validationErrors | toErrorIconClass"
+                                          *ngIf="mapping.validationErrors.length"></span>
                                 </div>
                                 <div class="clear"></div>
                             </div>
