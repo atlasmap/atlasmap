@@ -48,7 +48,7 @@ import { TransitionModel, FieldAction, FieldActionConfig } from '../../models/tr
                 </div>
             </div>
             <div *ngIf="actionsExistForField() && !isSource" class="linkContainer">
-                <a (click)="addTransformation()" class="small-primary">Add Transformation</a>
+                <button type="button" class="btn btn-primary" (click)="addTransformation()">Add Transformation</button>
             </div>
         </div>
     `,
