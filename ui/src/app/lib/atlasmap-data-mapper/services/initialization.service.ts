@@ -117,7 +117,13 @@ export class InitializationService {
 
         if (this.cfg.initCfg.addMockJavaTarget) {
             this.cfg.addJavaDocument('io.atlasmap.java.test.TargetTestClass', false);
-        }
+            this.cfg.addJavaDocument('io.atlasmap.java.test.SourceContact', false);
+            this.cfg.addJavaDocument('io.atlasmap.java.test.SourceAddress', false);
+            this.cfg.addJavaDocument('io.atlasmap.java.test.TestListOrders', false);
+            this.cfg.addJavaDocument('io.atlasmap.java.test.TargetOrderArray', false);
+            this.cfg.addJavaDocument('io.atlasmap.java.test.SourceFlatPrimitiveClass', false);
+            this.cfg.addJavaDocument('io.atlasmap.java.test.SourceOrder', false);
+      }
 
         if (this.cfg.initCfg.addMockJavaCachedTarget) {
             const docDef: DocumentDefinition = this.cfg.addJavaDocument('io.atlasmap.java.test.Name', false);
