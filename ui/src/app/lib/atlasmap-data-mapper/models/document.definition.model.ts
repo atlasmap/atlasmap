@@ -139,10 +139,10 @@ export class DocumentDefinition {
     public static getNoneField(): Field {
         if (DocumentDefinition.noneField == null) {
             DocumentDefinition.noneField = new Field();
-            DocumentDefinition.noneField.name = '[None]';
+            DocumentDefinition.noneField.name = '';
             DocumentDefinition.noneField.type = '';
-            DocumentDefinition.noneField.displayName = '[None]';
-            DocumentDefinition.noneField.path = '[None]';
+            DocumentDefinition.noneField.displayName = '';
+            DocumentDefinition.noneField.path = '';
         }
         return DocumentDefinition.noneField;
     }

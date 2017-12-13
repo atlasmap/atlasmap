@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 
 import { ConfigModel } from '../../models/config.model';
@@ -35,8 +35,8 @@ import { MappingModel, FieldMappingPair, MappedField } from '../../models/mappin
         <ng-template #tolTemplate>
             <div class="fieldDetailTooltip">
                 <label class="parentObjectName" *ngIf="displayParentObject()">
-                    <i [attr.class]="getSourceIconCSSClass()"></i>
-                    {{ getParentObjectName() }}
+                    <i [ngClass]="sourceIconCSSClass"></i>
+                    {{ parentObjectName }}
                 </label>
                 <label>{{ getFieldPath() }}</label>
                 <label *ngIf="displayParentObject() && mappedField.field.type">({{ mappedField.field.type }})</label>
@@ -44,34 +44,43 @@ import { MappingModel, FieldMappingPair, MappedField } from '../../models/mappin
             </div>
         </ng-template>
 
-        <div class='fieldDetail' style="margin-bottom:5px;" *ngIf="mappedField"
-            [tooltip]="tolTemplate" placement="left">
+        <div class="fieldDetail" style="margin-bottom:5px;" *ngIf="mappedField">
             <label class="parentObjectName" *ngIf="displayParentObject()">
-                <i [attr.class]="getSourceIconCSSClass()"></i>
-                {{ getParentObjectName() }}
+                <i [ngClass]="sourceIconCSSClass"></i>
+                {{ parentObjectName }}
+                <span class="pficon pficon-info" [tooltip]="tolTemplate" placement="left"></span>
             </label>
             <div style="width:100%;">
-                <input type="text" id="input-{{isSource?'source':'target'}}-{{mappedField.field.getFieldLabel(false)}}"
+                <input type="text" id="{{inputId}}"
                     [ngModel]="mappedField.field.getFieldLabel(false)" [typeahead]="dataSource"
                     typeaheadWaitMs="200" (typeaheadOnSelect)="selectionChanged($event)"
-                    typeaheadOptionField="displayName" [typeaheadItemTemplate]="typeaheadTemplate">
+                    typeaheadOptionField="displayName" [typeaheadItemTemplate]="typeaheadTemplate"
+                    placeholder="Search">
             </div>
         </div>
     `,
 })
 
-export class MappingFieldDetailComponent {
+export class MappingFieldDetailComponent implements OnInit {
+
     @Input() cfg: ConfigModel;
     @Input() fieldPair: FieldMappingPair;
     @Input() isSource: boolean;
     @Input() mappedField: MappedField;
 
-    public dataSource: Observable<any>;
+    dataSource: Observable<any>;
+    inputId: string;
+    sourceIconCSSClass: string;
+    parentObjectName: string;
 
     public constructor() {
         this.dataSource = Observable.create((observer: any) => {
             observer.next(this.executeSearch(observer.outerValue));
         });
+    }
+
+    ngOnInit() {
+        this.updateTemplateValues();
     }
 
     public getFieldPath(): string {
@@ -80,10 +89,6 @@ export class MappingFieldDetailComponent {
             return '[None]';
         }
         return this.mappedField.field.path;
-    }
-
-    public getSourceIconCSSClass(): string {
-        return this.isSource ? 'fa fa-hdd-o' : 'fa fa-download';
     }
 
     public displayParentObject(): boolean {
@@ -95,16 +100,10 @@ export class MappingFieldDetailComponent {
         return true;
     }
 
-    public getParentObjectName() {
-        if (this.mappedField == null || this.mappedField.field == null || this.mappedField.field.docDef == null) {
-            return '';
-        }
-        return this.mappedField.field.docDef.getName(true);
-    }
-
     public selectionChanged(event: any): void {
         this.mappedField.field = event.item['field'];
         this.cfg.mappingService.updateMappedField(this.fieldPair);
+        this.updateTemplateValues();
     }
 
     public executeSearch(filter: string): any[] {
@@ -130,4 +129,26 @@ export class MappingFieldDetailComponent {
         }
         return formattedFields;
     }
+
+    private updateTemplateValues(): void {
+        this.inputId = this.getInputId();
+        this.sourceIconCSSClass = this.getSourceIconCSSClass();
+        this.parentObjectName = this.getParentObjectName();
+    }
+
+    private getInputId(): string {
+        return 'input-' + (this.isSource ? 'source' : 'target') + '-' + this.mappedField.field.getFieldLabel(false);
+    }
+
+    private getSourceIconCSSClass(): string {
+        return this.isSource ? 'fa fa-hdd-o' : 'fa fa-download';
+    }
+
+    private getParentObjectName() {
+        if (this.mappedField == null || this.mappedField.field == null || this.mappedField.field.docDef == null) {
+            return '';
+        }
+        return this.mappedField.field.docDef.getName(true);
+    }
+
 }
