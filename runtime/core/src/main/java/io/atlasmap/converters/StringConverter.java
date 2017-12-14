@@ -37,16 +37,11 @@ public class StringConverter implements AtlasPrimitiveConverter<String> {
         if (value == null) {
             return null;
         }
-        if ("0".equals(value) || "f".equalsIgnoreCase(value) || "false".equalsIgnoreCase(value)) {
-            return Boolean.FALSE;
-        } else if ("1".equals(value) || "t".equalsIgnoreCase(value) || "true".equalsIgnoreCase(value)) {
+        if (value != null && ("1".equals(value) || "t".equalsIgnoreCase(value) || "y".equalsIgnoreCase(value)
+                || "true".equalsIgnoreCase(value) || "yes".equalsIgnoreCase(value))) {
             return Boolean.TRUE;
-        }
-        // fall back
-        if ("".equals(value)) {
-            return Boolean.FALSE;
         } else {
-            return Boolean.TRUE;
+            return Boolean.FALSE;
         }
     }
 

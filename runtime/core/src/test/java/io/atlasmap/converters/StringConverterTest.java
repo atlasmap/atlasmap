@@ -95,7 +95,7 @@ public class StringConverterTest {
         assertFalse(b);
 
         b = converter.convertToBoolean("junk");
-        assertTrue(b);
+        assertFalse(b);
     }
 
     @Test
