@@ -181,6 +181,16 @@ public class AtlasModelFactory {
         if (action instanceof Add) {
             return new Add();
         }
+        if (action instanceof AddDays) {
+            AddDays addDays = new AddDays();
+            addDays.setDays(((AddDays) action).getDays());
+            return addDays;
+        }
+        if (action instanceof AddSeconds) {
+            AddSeconds addSeconds = new AddSeconds();
+            addSeconds.setSeconds(((AddSeconds) action).getSeconds());
+            return addSeconds;
+        }
         if (action instanceof Average) {
             return new Average();
         }
@@ -251,6 +261,12 @@ public class AtlasModelFactory {
                 a.setOutputFieldType(FieldType.fromValue(((CustomAction) action).getOutputFieldType().value()));
             }
             return a;
+        }
+        if (action instanceof DayOfWeek) {
+            return new DayOfWeek();
+        }
+        if (action instanceof DayOfYear) {
+            return new DayOfYear();
         }
         if (action instanceof Divide) {
             return new Divide();

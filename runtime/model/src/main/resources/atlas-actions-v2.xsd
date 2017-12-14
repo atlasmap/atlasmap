@@ -30,6 +30,26 @@
         </complexType>
     </element>
 
+    <element name="AddDays">
+        <complexType>
+            <complexContent>
+                <extension base="atlas:Action">
+                    <attribute name="days" type="int" />
+                </extension>
+            </complexContent>
+        </complexType>
+    </element>
+
+    <element name="AddSeconds">
+        <complexType>
+            <complexContent>
+                <extension base="atlas:Action">
+                    <attribute name="seconds" type="int" />
+                </extension>
+            </complexContent>
+        </complexType>
+    </element>
+
     <element name="Average">
         <complexType>
             <complexContent>
@@ -142,10 +162,7 @@
     <element name="CurrentDate">
         <complexType>
             <complexContent>
-                <extension base="atlas:Action">
-                    <attribute name="dateFormat" type="string"
-                        default="yyyy-MM-dd" />
-                </extension>
+                <extension base="atlas:Action" />
             </complexContent>
         </complexType>
     </element>
@@ -153,10 +170,7 @@
     <element name="CurrentDateTime">
         <complexType>
             <complexContent>
-                <extension base="atlas:Action">
-                    <attribute name="dateFormat" type="string"
-                        default="yyyy-MM-dd'T'HH:mm'Z'" />
-                </extension>
+                <extension base="atlas:Action" />
             </complexContent>
         </complexType>
     </element>
@@ -164,10 +178,23 @@
     <element name="CurrentTime">
         <complexType>
             <complexContent>
-                <extension base="atlas:Action">
-                    <attribute name="dateFormat" type="string"
-                        default="HH:mm:ss" />
-                </extension>
+                <extension base="atlas:Action" />
+            </complexContent>
+        </complexType>
+    </element>
+
+    <element name="DayOfWeek">
+        <complexType>
+            <complexContent>
+                <extension base="atlas:Action" />
+            </complexContent>
+        </complexType>
+    </element>
+
+    <element name="DayOfYear">
+        <complexType>
+            <complexContent>
+                <extension base="atlas:Action" />
             </complexContent>
         </complexType>
     </element>
@@ -476,6 +503,8 @@
             <choice minOccurs="0" maxOccurs="unbounded">
                 <element ref="atlas:AbsoluteValue" />
                 <element ref="atlas:Add" />
+                <element ref="atlas:AddDays" />
+                <element ref="atlas:AddSeconds" />
                 <element ref="atlas:Average" />
                 <element ref="atlas:Camelize" />
                 <element ref="atlas:Capitalize" />
@@ -489,6 +518,8 @@
                 <element ref="atlas:CurrentDate" />
                 <element ref="atlas:CurrentDateTime" />
                 <element ref="atlas:CurrentTime" />
+                <element ref="atlas:DayOfWeek" />
+                <element ref="atlas:DayOfYear" />
                 <element ref="atlas:Divide" />
                 <element ref="atlas:EndsWith" />
                 <element ref="atlas:Equals" />

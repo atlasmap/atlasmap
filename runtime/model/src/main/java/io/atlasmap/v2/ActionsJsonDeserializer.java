@@ -67,6 +67,10 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
                 return new AbsoluteValue();
             case "Add":
                 return new Average();
+            case "AddDays":
+                return processAddDaysJsonToken(jsonToken);
+            case "AddSeconds":
+                return processAddSecondsJsonToken(jsonToken);
             case "Average":
                 return new Average();
             case "Camelize":
@@ -86,13 +90,17 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
             case "ConvertVolumeUnit":
                 return processConvertVolumeUnitJsonToken(jsonToken);
             case "CurrentDate":
-                return processCurrentDateJsonToken(jsonToken);
+                return new CurrentDate();
             case "CurrentDateTime":
-                return processCurrentDateTimeJsonToken(jsonToken);
+                return new CurrentDateTime();
             case "CurrentTime":
-                return processCurrentTimeJsonToken(jsonToken);
+                return new CurrentTime();
             case "CustomAction":
                 return processCustomActionJsonToken(jsonToken);
+            case "DayOfWeek":
+                return new DayOfWeek();
+            case "DayOfYear":
+                return new DayOfYear();
             case "Divide":
                 return new Divide();
             case "EndsWith":
@@ -162,6 +170,60 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
         }
 
         return null;
+    }
+
+    protected AddDays processAddDaysJsonToken(JsonParser jsonToken) throws IOException {
+        AddDays action = new AddDays();
+
+        if (JsonToken.END_ARRAY.equals(jsonToken.currentToken())
+                || JsonToken.END_OBJECT.equals(jsonToken.currentToken())) {
+            return action;
+        }
+
+        JsonToken nextToken = null;
+        do {
+            if (JsonToken.START_OBJECT.equals(jsonToken.currentToken())) {
+                jsonToken.nextToken();
+            }
+            switch (jsonToken.getCurrentName()) {
+            case ActionsJsonSerializer.DAYS:
+                jsonToken.nextToken();
+                action.setDays(jsonToken.getIntValue());
+                break;
+            default:
+                break;
+            }
+
+            nextToken = jsonToken.nextToken();
+        } while (!JsonToken.END_ARRAY.equals(nextToken) && !JsonToken.END_OBJECT.equals(nextToken));
+        return action;
+    }
+
+    protected AddSeconds processAddSecondsJsonToken(JsonParser jsonToken) throws IOException {
+        AddSeconds action = new AddSeconds();
+
+        if (JsonToken.END_ARRAY.equals(jsonToken.currentToken())
+                || JsonToken.END_OBJECT.equals(jsonToken.currentToken())) {
+            return action;
+        }
+
+        JsonToken nextToken = null;
+        do {
+            if (JsonToken.START_OBJECT.equals(jsonToken.currentToken())) {
+                jsonToken.nextToken();
+            }
+            switch (jsonToken.getCurrentName()) {
+            case ActionsJsonSerializer.SECONDS:
+                jsonToken.nextToken();
+                action.setSeconds(jsonToken.getIntValue());
+                break;
+            default:
+                break;
+            }
+
+            nextToken = jsonToken.nextToken();
+        } while (!JsonToken.END_ARRAY.equals(nextToken) && !JsonToken.END_OBJECT.equals(nextToken));
+        return action;
     }
 
     protected Concatenate processConcatenateJsonToken(JsonParser jsonToken) throws IOException {
@@ -298,87 +360,6 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
             return action;
         }
 
-        return action;
-    }
-
-    protected CurrentDate processCurrentDateJsonToken(JsonParser jsonToken) throws IOException {
-        CurrentDate action = new CurrentDate();
-
-        if (JsonToken.END_ARRAY.equals(jsonToken.currentToken())
-                || JsonToken.END_OBJECT.equals(jsonToken.currentToken())) {
-            return action;
-        }
-
-        JsonToken nextToken = null;
-        do {
-            if (JsonToken.START_OBJECT.equals(jsonToken.currentToken())) {
-                jsonToken.nextToken();
-            }
-            switch (jsonToken.getCurrentName()) {
-            case ActionsJsonSerializer.DATE_FORMAT:
-                jsonToken.nextToken();
-                action.setDateFormat(jsonToken.getValueAsString());
-                break;
-            default:
-                break;
-            }
-
-            nextToken = jsonToken.nextToken();
-        } while (!JsonToken.END_ARRAY.equals(nextToken) && !JsonToken.END_OBJECT.equals(nextToken));
-        return action;
-    }
-
-    protected CurrentDateTime processCurrentDateTimeJsonToken(JsonParser jsonToken) throws IOException {
-        CurrentDateTime action = new CurrentDateTime();
-
-        if (JsonToken.END_ARRAY.equals(jsonToken.currentToken())
-                || JsonToken.END_OBJECT.equals(jsonToken.currentToken())) {
-            return action;
-        }
-
-        JsonToken nextToken = null;
-        do {
-            if (JsonToken.START_OBJECT.equals(jsonToken.currentToken())) {
-                jsonToken.nextToken();
-            }
-            switch (jsonToken.getCurrentName()) {
-            case ActionsJsonSerializer.DATE_FORMAT:
-                jsonToken.nextToken();
-                action.setDateFormat(jsonToken.getValueAsString());
-                break;
-            default:
-                break;
-            }
-
-            nextToken = jsonToken.nextToken();
-        } while (!JsonToken.END_ARRAY.equals(nextToken) && !JsonToken.END_OBJECT.equals(nextToken));
-        return action;
-    }
-
-    protected CurrentTime processCurrentTimeJsonToken(JsonParser jsonToken) throws IOException {
-        CurrentTime action = new CurrentTime();
-
-        if (JsonToken.END_ARRAY.equals(jsonToken.currentToken())
-                || JsonToken.END_OBJECT.equals(jsonToken.currentToken())) {
-            return action;
-        }
-
-        JsonToken nextToken = null;
-        do {
-            if (JsonToken.START_OBJECT.equals(jsonToken.currentToken())) {
-                jsonToken.nextToken();
-            }
-            switch (jsonToken.getCurrentName()) {
-            case ActionsJsonSerializer.DATE_FORMAT:
-                jsonToken.nextToken();
-                action.setDateFormat(jsonToken.getValueAsString());
-                break;
-            default:
-                break;
-            }
-
-            nextToken = jsonToken.nextToken();
-        } while (!JsonToken.END_ARRAY.equals(nextToken) && !JsonToken.END_OBJECT.equals(nextToken));
         return action;
     }
 

@@ -25,6 +25,7 @@ public class ActionsJsonSerializer extends JsonSerializer<Actions> {
 
     public static final String CLASS_NAME = "className";
     public static final String DATE_FORMAT = "dateFormat";
+    public static final String DAYS = "days";
     public static final String DELIMITER = "delimiter";
     public static final String END_INDEX = "endIndex";
     public static final String FROM_UNIT = "fromUnit";
@@ -33,6 +34,7 @@ public class ActionsJsonSerializer extends JsonSerializer<Actions> {
     public static final String NEW_STRING = "newString";
     public static final String PAD_CHARACTER = "padCharacter";
     public static final String PAD_COUNT = "padCount";
+    public static final String SECONDS = "seconds";
     public static final String START_INDEX = "startIndex";
     public static final String STRING = "string";
     public static final String TEMPLATE = "template";
@@ -59,6 +61,12 @@ public class ActionsJsonSerializer extends JsonSerializer<Actions> {
     protected void writeActionField(JsonGenerator gen, Action action) throws IOException {
 
         switch (action.getClass().getSimpleName()) {
+            case "AddDays":
+                writeAddDays(gen, (AddDays) action);
+                break;
+            case "AddSeconds":
+                writeAddSeconds(gen, (AddSeconds) action);
+                break;
             case "Concatenate":
                 writeConcatenate(gen, (Concatenate) action);
                 break;
@@ -76,15 +84,6 @@ public class ActionsJsonSerializer extends JsonSerializer<Actions> {
                 break;
             case "ConvertVolumeUnit":
                 writeConvertVolumeUnit(gen, (ConvertVolumeUnit) action);
-                break;
-            case "CurrentDate":
-                writeCurrentDate(gen, (CurrentDate) action);
-                break;
-            case "CurrentDateTime":
-                writeCurrentDateTime(gen, (CurrentDateTime) action);
-                break;
-            case "CurrentTime":
-                writeCurrentTime(gen, (CurrentTime) action);
                 break;
             case "CustomAction":
                 writeCustomAction(gen, (CustomAction) action);
@@ -134,6 +133,28 @@ public class ActionsJsonSerializer extends JsonSerializer<Actions> {
                 gen.writeEndObject();
                 break;
         }
+    }
+
+    protected void writeAddDays(JsonGenerator gen, AddDays action) throws IOException {
+        gen.writeStartObject();
+        gen.writeFieldName("AddDays");
+        gen.writeStartObject();
+        if (action.getDays() != null) {
+            gen.writeNumberField(DAYS, action.getDays());
+        }
+        gen.writeEndObject();
+        gen.writeEndObject();
+    }
+
+    protected void writeAddSeconds(JsonGenerator gen, AddSeconds action) throws IOException {
+        gen.writeStartObject();
+        gen.writeFieldName("AddSeconds");
+        gen.writeStartObject();
+        if (action.getSeconds() != null) {
+            gen.writeNumberField(SECONDS, action.getSeconds());
+        }
+        gen.writeEndObject();
+        gen.writeEndObject();
     }
 
     protected void writeConcatenate(JsonGenerator gen, Concatenate action) throws IOException {
@@ -191,39 +212,6 @@ public class ActionsJsonSerializer extends JsonSerializer<Actions> {
         gen.writeStringField(FROM_UNIT, action.getFromUnit().value());
         gen.writeStringField(TO_UNIT, action.getToUnit().value());
         gen.writeEndObject();
-        gen.writeEndObject();
-    }
-
-    protected void writeCurrentDate(JsonGenerator gen, CurrentDate currentDate) throws IOException {
-        gen.writeStartObject();
-        gen.writeFieldName("CurrentDate");
-        if (currentDate.getDateFormat() != null && currentDate.getDateFormat().trim().length() > 0) {
-            gen.writeStartObject();
-            gen.writeStringField(DATE_FORMAT, currentDate.getDateFormat().trim());
-            gen.writeEndObject();
-        }
-        gen.writeEndObject();
-    }
-
-    protected void writeCurrentDateTime(JsonGenerator gen, CurrentDateTime currentDateTime) throws IOException {
-        gen.writeStartObject();
-        gen.writeFieldName("CurrentDateTime");
-        if (currentDateTime.getDateFormat() != null && currentDateTime.getDateFormat().trim().length() > 0) {
-            gen.writeStartObject();
-            gen.writeStringField(DATE_FORMAT, currentDateTime.getDateFormat().trim());
-            gen.writeEndObject();
-        }
-        gen.writeEndObject();
-    }
-
-    protected void writeCurrentTime(JsonGenerator gen, CurrentTime currentTime) throws IOException {
-        gen.writeStartObject();
-        gen.writeFieldName("CurrentTime");
-        if (currentTime.getDateFormat() != null && currentTime.getDateFormat().trim().length() > 0) {
-            gen.writeStartObject();
-            gen.writeStringField(DATE_FORMAT, currentTime.getDateFormat().trim());
-            gen.writeEndObject();
-        }
         gen.writeEndObject();
     }
 

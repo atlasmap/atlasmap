@@ -531,6 +531,8 @@ public abstract class BaseMarshallerTest {
         List<Action> actions = Arrays.asList(
                 new AbsoluteValue(),
                 new Add(),
+                new AddDays(),
+                new AddSeconds(),
                 new Average(),
                 new Camelize(),
                 new Capitalize(),
@@ -545,6 +547,8 @@ public abstract class BaseMarshallerTest {
                 new CurrentDateTime(),
                 new CurrentTime(),
                 new CustomAction(),
+                new DayOfWeek(),
+                new DayOfYear(),
                 new Divide(),
                 new EndsWith(),
                 new Equals(),
