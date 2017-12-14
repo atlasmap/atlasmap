@@ -76,8 +76,8 @@ function init_options() {
 
   HELP=$(hasflag --help $ARGS 2> /dev/null)
 
-  RELEASE_VERSION=$(hasflag --release-version $ARGS 2> /dev/null)
-  DEVELOPMENT_VERSION=$(hasflag --development-version $ARGS 2> /dev/null)
+  RELEASE_VERSION=$(readopt --release-version $ARGS 2> /dev/null)
+  DEVELOPMENT_VERSION=$(readopt --development-version $ARGS 2> /dev/null)
 
   # Internal variable default values
   OC_OPTS=""
@@ -176,9 +176,12 @@ if [ -n "$RELEASE_VERSION" ]; then
   echo "=========================================================="
   echo "Performing Maven Release ...."
   echo "=========================================================="
-  "${MAVEN_CMD}" --batch-mode -Dtag=atlasmap-${RELEASE_VERSION} \
+  "${MAVEN_CMD}" -Dtag=atlasmap-${RELEASE_VERSION} \
                  -DreleaseVersion=${RELEASE_VERSION} \
                  -DdevelopmentVersion=${DEVELOPMENT_VERSION} \
-                 -Pfabric8,ci,release,community-release \
-                 release:prepare release:perform release:clean
+                 -Pfabric8,release,community-release \
+                 -Darguments="-DskipTests -Dmaven.javadoc.skip=true" \
+                 release:prepare
+  git push origin atlasmap-${RELEASE_VERSION}
+  "${MAVEN_CMD}" release:perform
 fi
