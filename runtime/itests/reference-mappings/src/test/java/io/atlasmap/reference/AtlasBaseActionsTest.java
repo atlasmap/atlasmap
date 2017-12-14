@@ -20,9 +20,6 @@ import io.atlasmap.v2.ActionDetail;
 import io.atlasmap.v2.Actions;
 import io.atlasmap.v2.AtlasMapping;
 import io.atlasmap.v2.Capitalize;
-import io.atlasmap.v2.CurrentDate;
-import io.atlasmap.v2.CurrentDateTime;
-import io.atlasmap.v2.CurrentTime;
 import io.atlasmap.v2.DataSource;
 import io.atlasmap.v2.DataSourceType;
 import io.atlasmap.v2.Field;
@@ -96,18 +93,7 @@ public abstract class AtlasBaseActionsTest extends AtlasMappingBaseTest {
         pl.setPadCount(5);
         this.runActionTest(pl, "fname", "XXXXXfname", String.class);
 
-        String result = (String) runActionTest(new CurrentDate(), "fname", null, String.class);
-        assertTrue(Pattern.compile("20([1-9][0-9])-(0[0-9]|1[0-2])-(0[0-9]|1[0-9]|2[0-9]|3[0-1])").matcher(result)
-                .matches());
-
-        result = (String) runActionTest(new CurrentTime(), "fname", null, String.class);
-        assertTrue(Pattern.compile("([01]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]").matcher(result).matches());
-
-        result = (String) runActionTest(new CurrentDateTime(), "fname", null, String.class);
-        assertTrue(Pattern.compile("20([1-9][0-9])-(0[0-9]|1[0-2])-(0[0-9]|1[0-9]|2[0-9]|3[0-1])T[0-9]{2}:[0-9]{2}Z")
-                .matcher(result).matches());
-
-        result = (String) runActionTest(new GenerateUUID(), "fname", null, String.class);
+        String result = (String) runActionTest(new GenerateUUID(), "fname", null, String.class);
         assertTrue(Pattern.compile("[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}").matcher(result)
                 .matches());
     }

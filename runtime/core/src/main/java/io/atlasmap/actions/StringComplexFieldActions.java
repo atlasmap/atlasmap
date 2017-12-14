@@ -15,13 +15,9 @@
  */
 package io.atlasmap.actions;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Date;
 import java.util.Map;
-import java.util.TimeZone;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
@@ -88,26 +84,6 @@ public class StringComplexFieldActions implements AtlasFieldAction {
         return builder.toString();
     }
 
-    @AtlasFieldActionInfo(name = "CurrentDate", sourceType = FieldType.ALL, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
-    public static String currentDate(Action action, Object input) {
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-        return df.format(new Date());
-    }
-
-    @AtlasFieldActionInfo(name = "CurrentTime", sourceType = FieldType.ALL, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
-    public static String currentTime(Action action, Object input) {
-        DateFormat df = new SimpleDateFormat("HH:mm:ss");
-        return df.format(new Date());
-    }
-
-    @AtlasFieldActionInfo(name = "CurrentDateTime", sourceType = FieldType.ALL, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
-    public static String currentDateTime(Action action, Object input) {
-        TimeZone tz = TimeZone.getDefault();
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'");
-        df.setTimeZone(tz);
-        return df.format(new Date());
-    }
-
     @AtlasFieldActionInfo(name = "EndsWith", sourceType = FieldType.STRING, targetType = FieldType.BOOLEAN, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
     public static Boolean endsWith(Action action, String input) {
         if (action == null || !(action instanceof EndsWith)) {
@@ -123,8 +99,8 @@ public class StringComplexFieldActions implements AtlasFieldAction {
         return input == null ? false : input.endsWith(endsWith.getString());
     }
 
-    @AtlasFieldActionInfo(name = "Format", sourceType = FieldType.STRING, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
-    public static String format(Action action, String input) {
+    @AtlasFieldActionInfo(name = "Format", sourceType = FieldType.ALL, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
+    public static String format(Action action, Object input) {
         if (action == null || !(action instanceof Format)) {
             throw new IllegalArgumentException("Action must be an Format action");
         }

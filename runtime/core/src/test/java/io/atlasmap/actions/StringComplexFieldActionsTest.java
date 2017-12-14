@@ -30,9 +30,6 @@ import java.util.regex.Pattern;
 import org.junit.Test;
 
 import io.atlasmap.v2.Concatenate;
-import io.atlasmap.v2.CurrentDate;
-import io.atlasmap.v2.CurrentDateTime;
-import io.atlasmap.v2.CurrentTime;
 import io.atlasmap.v2.EndsWith;
 import io.atlasmap.v2.Format;
 import io.atlasmap.v2.GenerateUUID;
@@ -79,45 +76,6 @@ public class StringComplexFieldActionsTest {
     }
 
     @Test
-    public void testCurrentDate() {
-        validateCurrentDate(StringComplexFieldActions.currentDate(new CurrentDate(), null));
-        validateCurrentDate(StringComplexFieldActions.currentDate(new CurrentDate(), new Byte(Byte.parseByte("0"))));
-        validateCurrentDate(StringComplexFieldActions.currentDate(new CurrentDate(), new Character('a')));
-        validateCurrentDate(StringComplexFieldActions.currentDate(new CurrentDate(), new Double(14324d)));
-        validateCurrentDate(StringComplexFieldActions.currentDate(new CurrentDate(), new Float(234235235325f)));
-        validateCurrentDate(StringComplexFieldActions.currentDate(new CurrentDate(), new Integer(32523)));
-        validateCurrentDate(StringComplexFieldActions.currentDate(new CurrentDate(), new Long(235325L)));
-        validateCurrentDate(StringComplexFieldActions.currentDate(new CurrentDate(), new Short((short) 4323)));
-        validateCurrentDate(StringComplexFieldActions.currentDate(new CurrentDate(), ""));
-    }
-
-    @Test
-    public void testCurrentDateTime() {
-        validateCurrentDateTime(StringComplexFieldActions.currentDateTime(new CurrentDateTime(), null));
-        validateCurrentDateTime(StringComplexFieldActions.currentDateTime(new CurrentTime(), new Byte(Byte.parseByte("0"))));
-        validateCurrentDateTime(StringComplexFieldActions.currentDateTime(new CurrentTime(), new Character('a')));
-        validateCurrentDateTime(StringComplexFieldActions.currentDateTime(new CurrentTime(), new Double(14324d)));
-        validateCurrentDateTime(StringComplexFieldActions.currentDateTime(new CurrentTime(), new Float(234235235325f)));
-        validateCurrentDateTime(StringComplexFieldActions.currentDateTime(new CurrentTime(), new Integer(32523)));
-        validateCurrentDateTime(StringComplexFieldActions.currentDateTime(new CurrentTime(), new Long(235325L)));
-        validateCurrentDateTime(StringComplexFieldActions.currentDateTime(new CurrentTime(), new Short((short) 4323)));
-        validateCurrentDateTime(StringComplexFieldActions.currentDateTime(new CurrentTime(), ""));
-    }
-
-    @Test
-    public void testCurrentTime() {
-        validateCurrentTime(StringComplexFieldActions.currentTime(new CurrentTime(), null));
-        validateCurrentTime(StringComplexFieldActions.currentTime(new CurrentTime(), new Byte(Byte.parseByte("0"))));
-        validateCurrentTime(StringComplexFieldActions.currentTime(new CurrentTime(), new Character('a')));
-        validateCurrentTime(StringComplexFieldActions.currentTime(new CurrentTime(), new Double(14324d)));
-        validateCurrentTime(StringComplexFieldActions.currentTime(new CurrentTime(), new Float(234235235325f)));
-        validateCurrentTime(StringComplexFieldActions.currentTime(new CurrentTime(), new Integer(32523)));
-        validateCurrentTime(StringComplexFieldActions.currentTime(new CurrentTime(), new Long(235325L)));
-        validateCurrentTime(StringComplexFieldActions.currentTime(new CurrentTime(), new Short((short) 4323)));
-        validateCurrentTime(StringComplexFieldActions.currentTime(new CurrentTime(), ""));
-    }
-
-    @Test
     public void testEndsWith() {
         EndsWith action = new EndsWith();
         action.setString("");
@@ -155,6 +113,9 @@ public class StringComplexFieldActionsTest {
         assertEquals("foobarfoo", StringComplexFieldActions.format(action, "bar"));
         action.setTemplate("foo%1$sfoo%1$s");
         assertEquals("foobarfoobar", StringComplexFieldActions.format(action, "bar"));
+        action.setTemplate("%,.2f");
+        assertEquals("1,234.00", StringComplexFieldActions.format(action, 1234f));
+        assertEquals("0.05", StringComplexFieldActions.format(action, .05));
     }
 
     @Test(expected=IllegalArgumentException.class)

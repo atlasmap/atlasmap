@@ -2,3 +2,4 @@ io.atlasmap.actions.StringSimpleFieldActions
 io.atlasmap.actions.StringComplexFieldActions
 io.atlasmap.actions.NumberFieldActions
 io.atlasmap.actions.ObjectFieldActions
+io.atlasmap.actions.DateFieldActions
