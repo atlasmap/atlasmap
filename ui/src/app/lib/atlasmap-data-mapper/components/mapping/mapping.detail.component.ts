@@ -45,7 +45,7 @@ import { MappingSelectionComponent } from './mapping.selection.component';
             </div>
             <!-- add button -->
             <div class="linkContainer" *ngIf="isAddButtonVisible()">
-                <a (click)="addClicked()" class="small-primary">{{ getAddButtonLabel() }}</a>
+                <button type="button" class="btn btn-primary" (click)="addClicked()">{{ getAddButtonLabel() }}</button>
             </div>
         </div>
     `,
@@ -123,7 +123,7 @@ export class SimpleMappingComponent {
                     </div>
                     <!-- add button -->
                     <div class="linkContainer">
-                        <a (click)="addClicked()" class="small-primary">Add Mapping</a>
+                        <button type="button" class="btn btn-primary" (click)="addClicked()">Add Mapping</button>
                     </div>
                 </div>
                 <div style="float:left; width:50%; margin:0; padding:0" *ngIf="fieldPairForEditing">
