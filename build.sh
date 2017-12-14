@@ -183,5 +183,5 @@ if [ -n "$RELEASE_VERSION" ]; then
                  -Darguments="-DskipTests -Dmaven.javadoc.skip=true" \
                  release:prepare
   git push origin atlasmap-${RELEASE_VERSION}
-  "${MAVEN_CMD}" release:perform
+  "${MAVEN_CMD}" -Darguments="-DskipTests -Dmaven.javadoc.skip=true" release:perform
 fi
