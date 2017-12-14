@@ -164,6 +164,7 @@ if [ -n "$HELP" ]; then
    exit 0
 fi
 
+"${MAVEN_CMD}" -N install
 for module in $(modules_to_build)
 do
   echo "=========================================================="
@@ -183,5 +184,10 @@ if [ -n "$RELEASE_VERSION" ]; then
                  -Darguments="-DskipTests -Dmaven.javadoc.skip=true" \
                  release:prepare
   git push origin atlasmap-${RELEASE_VERSION}
-  "${MAVEN_CMD}" -Darguments="-DskipTests -Dmaven.javadoc.skip=true" release:perform
+  "${MAVEN_CMD}" -Dtag=atlasmap-${RELEASE_VERSION} \
+                 -DreleaseVersion=${RELEASE_VERSION} \
+                 -DdevelopmentVersion=${DEVELOPMENT_VERSION} \
+                 -Pfabric8,release,community-release \
+                 -Darguments="-DskipTests -Dmaven.javadoc.skip=true" \
+                 release:perform
 fi
