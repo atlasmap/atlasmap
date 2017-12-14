@@ -197,6 +197,16 @@
               </execution>
             </executions>
           </plugin>
+          <plugin>
+            <artifactId>maven-release-plugin</artifactId>
+            <configuration>
+              <checkModificationExcludes>
+                <exclude>**/package-lock.json</exclude>
+                <exclude>**/package.json</exclude>
+                <exclude>**/yarn.lock</exclude>
+              </checkModificationExcludes>
+            </configuration>
+          </plugin>
         </plugins>
       </build>
     </profile>
