@@ -74,7 +74,6 @@
     <module>parent</module>
     <module>runtime</module>
     <module>camel</module>
-    <module>ui</module>
     <!-- <module>app</module> -->
   </modules>
 
@@ -140,6 +139,15 @@
   </build>
 
   <profiles>
+    <profile>
+      <id>ui</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <modules>
+        <module>ui</module>
+      </modules>
+    </profile>
     <profile>
       <id>java8-doclint-disabled</id>
       <activation>
