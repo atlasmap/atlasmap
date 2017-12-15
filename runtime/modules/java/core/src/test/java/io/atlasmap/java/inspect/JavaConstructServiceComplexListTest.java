@@ -56,7 +56,7 @@ public class JavaConstructServiceComplexListTest {
 
     @Test
     public void testConstructSourceOrderList() throws Exception {
-        Object targetObject = constructService.constructClass(generateOrderList("Source"));
+        Object targetObject = constructService.constructClass(generateOrderList("Source"),null);
         assertNotNull(targetObject);
         assertTrue(targetObject instanceof SourceOrderList);
         SourceOrderList orderList = (SourceOrderList) targetObject;
@@ -68,7 +68,7 @@ public class JavaConstructServiceComplexListTest {
 
     @Test
     public void testConstructTargetOrderList() throws Exception {
-        Object targetObject = constructService.constructClass(generateOrderList("Target"));
+        Object targetObject = constructService.constructClass(generateOrderList("Target"),null);
         assertNotNull(targetObject);
         assertTrue(targetObject instanceof TargetOrderList);
         TargetOrderList orderList = (TargetOrderList) targetObject;
@@ -80,7 +80,7 @@ public class JavaConstructServiceComplexListTest {
 
     @Test
     public void testConstructPopulatedOrderList() throws Exception {
-        Object targetObject = constructService.constructClass(generateOrderList("PopulatedList"));
+        Object targetObject = constructService.constructClass(generateOrderList("PopulatedList"),null);
         assertNotNull(targetObject);
         assertTrue(targetObject instanceof PopulatedListOrderList);
         PopulatedListOrderList orderList = (PopulatedListOrderList) targetObject;
@@ -104,7 +104,7 @@ public class JavaConstructServiceComplexListTest {
 
     @Test(expected=InstantiationException.class)
     public void testConstructAbstractBaseOrderArray() throws Exception {
-        constructService.constructClass(generateOrderList("Base"));
+        constructService.constructClass(generateOrderList("Base"),null);
     }
 
     protected JavaClass generateOrderList(String prefix) {

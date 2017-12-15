@@ -22,7 +22,6 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import java.io.File;
 import java.util.List;
 import java.util.Map;
 
@@ -74,37 +73,6 @@ public class ClassInspectionServiceTest {
         assertEquals(String.class, classInspectionService.detectArrayClass(String[][].class));
         assertEquals(List.class, classInspectionService.detectArrayClass(List[][][].class));
         assertEquals(Map.class, classInspectionService.detectArrayClass(Map[][][][].class));
-    }
-
-    @Test
-    public void testClasspathToList() {
-        // Null
-        ClassInspectionService cis = new ClassInspectionService();
-        assertNull(cis.classpathStringToList(null));
-
-        // Zero
-        assertNotNull(cis.classpathStringToList(""));
-        assertEquals(new Integer(0), new Integer(cis.classpathStringToList("").size()));
-
-        // One
-        assertNotNull(cis.classpathStringToList("foo.jar"));
-        assertEquals(new Integer(1), new Integer(cis.classpathStringToList("foo.jar").size()));
-        assertEquals("foo.jar", cis.classpathStringToList("foo.jar").get(0));
-
-        // Several
-        assertNotNull(cis.classpathStringToList("foo.jar:bar.jar:blah.jar"));
-        assertEquals(new Integer(3), new Integer(cis.classpathStringToList("foo.jar:bar.jar:blah.jar").size()));
-        assertEquals("foo.jar", cis.classpathStringToList("foo.jar:bar.jar:blah.jar").get(0));
-        assertEquals("bar.jar", cis.classpathStringToList("foo.jar:bar.jar:blah.jar").get(1));
-        assertEquals("blah.jar", cis.classpathStringToList("foo.jar:bar.jar:blah.jar").get(2));
-
-        // Several
-        String tmpcp = File.separator + "foo.jar:" + File.separator + "bar.jar:" + File.separator + "blah.jar";
-        assertNotNull(cis.classpathStringToList(tmpcp));
-        assertEquals(new Integer(3), new Integer(cis.classpathStringToList(tmpcp).size()));
-        assertEquals(File.separator + "foo.jar", cis.classpathStringToList(tmpcp).get(0));
-        assertEquals(File.separator + "bar.jar", cis.classpathStringToList(tmpcp).get(1));
-        assertEquals(File.separator + "blah.jar", cis.classpathStringToList(tmpcp).get(2));
     }
 
     @Test

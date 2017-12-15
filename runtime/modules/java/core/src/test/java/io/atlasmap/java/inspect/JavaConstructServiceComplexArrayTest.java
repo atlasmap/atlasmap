@@ -59,7 +59,7 @@ public class JavaConstructServiceComplexArrayTest {
 
     @Test
     public void testConstructSourceOrderArray() throws Exception {
-        Object targetObject = constructService.constructClass(generateOrderArray("Source"));
+        Object targetObject = constructService.constructClass(generateOrderArray("Source"),null);
         assertNotNull(targetObject);
         assertTrue(targetObject instanceof SourceOrderArray);
         SourceOrderArray orderArray = (SourceOrderArray) targetObject;
@@ -89,7 +89,7 @@ public class JavaConstructServiceComplexArrayTest {
 
     @Test
     public void testConstructTargetOrderArray() throws Exception {
-        Object targetObject = constructService.constructClass(generateOrderArray("Target"));
+        Object targetObject = constructService.constructClass(generateOrderArray("Target"),null);
         assertNotNull(targetObject);
         assertTrue(targetObject instanceof TargetOrderArray);
         TargetOrderArray orderArray = (TargetOrderArray) targetObject;
@@ -145,7 +145,7 @@ public class JavaConstructServiceComplexArrayTest {
 
     @Test(expected=InstantiationException.class)
     public void testConstructAbstractBaseOrderArray() throws Exception {
-        constructService.constructClass(generateOrderArray("Base"));
+        constructService.constructClass(generateOrderArray("Base"),null);
     }
 
     protected JavaClass generateOrderArray(String prefix) {

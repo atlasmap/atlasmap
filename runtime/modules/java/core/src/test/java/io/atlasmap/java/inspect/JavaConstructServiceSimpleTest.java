@@ -46,7 +46,7 @@ public class JavaConstructServiceSimpleTest {
 
     @Test
     public void testConstructString() throws Exception {
-        Object targetObject = constructService.constructClass(generateJavaClass("java.lang.String"));
+        Object targetObject = constructService.constructClass(generateJavaClass("java.lang.String"),null);
         assertNotNull(targetObject);
         assertTrue(targetObject instanceof java.lang.String);
         assertEquals("", ((String) targetObject));
@@ -55,7 +55,7 @@ public class JavaConstructServiceSimpleTest {
 
     @Test
     public void testConstructSourceAddress() throws Exception {
-        Object targetObject = constructService.constructClass(generateJavaClass("io.atlasmap.java.test.SourceAddress"));
+        Object targetObject = constructService.constructClass(generateJavaClass("io.atlasmap.java.test.SourceAddress"),null);
         assertNotNull(targetObject);
         assertTrue(targetObject instanceof io.atlasmap.java.test.SourceAddress);
         SourceAddress source = (SourceAddress) targetObject;
@@ -68,7 +68,7 @@ public class JavaConstructServiceSimpleTest {
 
     @Test
     public void testConstructSourceContact() throws Exception {
-        Object targetObject = constructService.constructClass(generateJavaClass("io.atlasmap.java.test.SourceContact"));
+        Object targetObject = constructService.constructClass(generateJavaClass("io.atlasmap.java.test.SourceContact"),null);
         assertNotNull(targetObject);
         assertTrue(targetObject instanceof io.atlasmap.java.test.SourceContact);
         SourceContact source = (SourceContact) targetObject;
@@ -80,7 +80,7 @@ public class JavaConstructServiceSimpleTest {
 
     @Test(expected=InstantiationException.class)
     public void testConstructAbstractBaseContactMinimalData() throws Exception {
-        constructService.constructClass(generateJavaClass("io.atlasmap.java.test.BaseContact"));
+        constructService.constructClass(generateJavaClass("io.atlasmap.java.test.BaseContact"),null);
     }
 
     protected JavaClass generateJavaClass(String className) {

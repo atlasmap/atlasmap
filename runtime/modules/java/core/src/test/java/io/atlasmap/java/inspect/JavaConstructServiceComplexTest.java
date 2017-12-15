@@ -59,7 +59,7 @@ public class JavaConstructServiceComplexTest {
 
     @Test
     public void testConstructSourceOrder() throws Exception {
-        Object targetObject = constructService.constructClass(generateOrder("Source"));
+        Object targetObject = constructService.constructClass(generateOrder("Source"),null);
         assertNotNull(targetObject);
         assertTrue(targetObject instanceof SourceOrder);
         SourceOrder order = (SourceOrder) targetObject;
@@ -84,7 +84,7 @@ public class JavaConstructServiceComplexTest {
 
     @Test
     public void testConstructTargetOrder() throws Exception {
-        Object targetObject = constructService.constructClass(generateOrder("Target"));
+        Object targetObject = constructService.constructClass(generateOrder("Target"),null);
         assertNotNull(targetObject);
         assertTrue(targetObject instanceof TargetOrder);
         TargetOrder order = (TargetOrder) targetObject;
@@ -130,7 +130,7 @@ public class JavaConstructServiceComplexTest {
     @Test
     public void testConstructSourceParentOrder() throws Exception {
         JavaClass javaClass = generateParentOrder("Source");
-        Object targetObject = constructService.constructClass(javaClass);
+        Object targetObject = constructService.constructClass(javaClass,null);
         assertNotNull(targetObject);
         assertTrue(targetObject instanceof SourceParentOrder);
         SourceParentOrder parentOrder = (SourceParentOrder) targetObject;
@@ -159,7 +159,7 @@ public class JavaConstructServiceComplexTest {
     @Test
     public void testConstructTargetParentOrder() throws Exception {
         JavaClass javaClass = generateParentOrder("Target");
-        Object targetObject = constructService.constructClass(javaClass);
+        Object targetObject = constructService.constructClass(javaClass,null);
         assertNotNull(targetObject);
         assertTrue(targetObject instanceof TargetParentOrder);
         TargetParentOrder parentOrder = (TargetParentOrder) targetObject;
@@ -187,7 +187,7 @@ public class JavaConstructServiceComplexTest {
 
     @Test(expected=InstantiationException.class)
     public void testConstructAbstractBaseOrder() throws Exception {
-        constructService.constructClass(generateOrder("Base"));
+        constructService.constructClass(generateOrder("Base"),null);
     }
 
     protected JavaClass generateOrder(String prefix) {
