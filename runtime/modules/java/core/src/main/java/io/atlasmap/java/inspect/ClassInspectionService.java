@@ -57,7 +57,10 @@ public class ClassInspectionService {
     private List<String> listClasses = new ArrayList<String>(
             Arrays.asList("java.util.List", "java.util.ArrayList", "java.util.LinkedList", "java.util.Vector",
                     "java.util.Stack", "java.util.AbstractList", "java.util.AbstractSequentialList"));
-
+    private List<String> mapClasses = new ArrayList<String>(Arrays.asList("java.util.Map", "java.util.HashMap",
+            "java.util.TreeMap", "java.util.Hashtable", "java.util.IdentityHashMap", "java.util.LinkedHashMap",
+            "java.util.LinkedHashMap", "java.util.SortedMap", "java.util.WeakHashMap", "java.util.Properties",
+            "java.util.concurrent.ConcurrentHashMap", "java.util.concurrent.ConcurrentMap"));
     private AtlasConversionService atlasConversionService = null;
     private List<String> fieldBlacklist = new ArrayList<String>(Arrays.asList("serialVersionUID"));
     private Boolean disablePackagePrivateOnlyFields = false;
@@ -66,7 +69,11 @@ public class ClassInspectionService {
     private Boolean disablePublicOnlyFields = false;
     private Boolean disablePublicGetterSetterFields = false;
 
-    private List<String> getListClasses() {
+    public List<String> getMapClasses() {
+        return this.mapClasses;
+    }
+
+    public List<String> getListClasses() {
         return this.listClasses;
     }
 
@@ -74,7 +81,7 @@ public class ClassInspectionService {
         return this.fieldBlacklist;
     }
 
-    private Boolean getDisableProtectedOnlyFields() {
+    public Boolean getDisableProtectedOnlyFields() {
         return disableProtectedOnlyFields;
     }
 
@@ -82,11 +89,11 @@ public class ClassInspectionService {
         this.disableProtectedOnlyFields = disableProtectedOnlyFields;
     }
 
-    private Boolean getDisablePackagePrivateOnlyFields() {
+    public Boolean getDisablePackagePrivateOnlyFields() {
         return disablePackagePrivateOnlyFields;
     }
 
-    private Boolean getDisablePrivateOnlyFields() {
+    public Boolean getDisablePrivateOnlyFields() {
         return disablePrivateOnlyFields;
     }
 
@@ -94,7 +101,7 @@ public class ClassInspectionService {
         this.disablePrivateOnlyFields = disablePrivateOnlyFields;
     }
 
-    private Boolean getDisablePublicOnlyFields() {
+    public Boolean getDisablePublicOnlyFields() {
         return disablePublicOnlyFields;
     }
 
@@ -102,7 +109,7 @@ public class ClassInspectionService {
         this.disablePublicOnlyFields = disablePublicOnlyFields;
     }
 
-    private Boolean getDisablePublicGetterSetterFields() {
+    public Boolean getDisablePublicGetterSetterFields() {
         return disablePublicGetterSetterFields;
     }
 
@@ -182,6 +189,10 @@ public class ClassInspectionService {
             clz = detectArrayClass(clazz);
         } else {
             clz = clazz;
+        }
+
+        if (isMapList(clz.getCanonicalName())) {
+            javaClass.setCollectionType(CollectionType.MAP);
         }
 
         javaClass.setClassName(clz.getCanonicalName());
@@ -416,6 +427,10 @@ public class ClassInspectionService {
             s.setPath(f.getName());
         }
 
+        if (isMapList(clazz.getCanonicalName())) {
+            s.setCollectionType(CollectionType.MAP);
+        }
+
         if (clazz.isArray()) {
             s.setCollectionType(CollectionType.ARRAY);
             s.setArrayDimensions(detectArrayDimensions(clazz));
@@ -635,7 +650,11 @@ public class ClassInspectionService {
         return getListClasses().contains(fieldType);
     }
 
-    Integer detectArrayDimensions(Class<?> clazz) {
+    protected boolean isMapList(String fieldType) {
+        return getMapClasses().contains(fieldType);
+    }
+
+    private Integer detectArrayDimensions(Class<?> clazz) {
         Integer arrayDim = Integer.valueOf(0);
         if (clazz == null) {
             return null;
@@ -707,7 +726,7 @@ public class ClassInspectionService {
         return null;
     }
 
-    Class<?> detectArrayClass(Class<?> clazz) {
+    private Class<?> detectArrayClass(Class<?> clazz) {
         Integer arrayDim = new Integer(0);
         if (clazz == null) {
             return null;

@@ -540,12 +540,6 @@ public class JavaValidationServiceTest {
     }
 
     @Test
-    public void testDetectJavaCompiledVersion() throws Exception {
-        sourceValidationService.detectClassVersion("java.lang.String");
-        targetValidationService.detectClassVersion("java.lang.String");
-    }
-
-    @Test
     public void testIssue127() throws Exception {
         AtlasMapping mapping = mappingUtil.loadMapping("src/test/resources/mappings/Issue127Mapping.xml");
         assertNotNull(mapping);

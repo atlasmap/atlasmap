@@ -86,6 +86,11 @@ public class JavaValidationService extends BaseModuleValidationService<JavaField
         versionMap.put("1.1", 45);
     }
 
+    public void destroy() {
+        validatorMap.clear();
+        versionMap.clear();
+    }
+
     @Override
     protected AtlasModuleDetail getModuleDetail() {
         return moduleDetail;
@@ -103,10 +108,9 @@ public class JavaValidationService extends BaseModuleValidationService<JavaField
 
     protected void validateSourceAndTargetTypes(String mappingId, Field inputField, Field outField,
             List<Validation> validations) {
-        if ((inputField instanceof JavaField && outField instanceof JavaField)
-                && ((inputField.getFieldType() == null || outField.getFieldType() == null)
-                        || (inputField.getFieldType().compareTo(FieldType.COMPLEX) == 0
-                                || outField.getFieldType().compareTo(FieldType.COMPLEX) == 0))) {
+        if ((inputField instanceof JavaField && outField instanceof JavaField) && ((inputField.getFieldType() == null
+                || outField.getFieldType() == null)
+                || (inputField.getFieldType() == FieldType.COMPLEX || outField.getFieldType() == FieldType.COMPLEX))) {
             // making an assumption that anything marked as COMPLEX would require the use of
             // the class name to find a validator.
             validateClassConversion(mappingId, (JavaField) inputField, (JavaField) outField, validations);
@@ -199,7 +203,7 @@ public class JavaValidationService extends BaseModuleValidationService<JavaField
         }
     }
 
-    Integer detectClassVersion(String className) {
+    private Integer detectClassVersion(String className) {
         Integer major = null;
         InputStream in = null;
         try {
