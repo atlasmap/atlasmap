@@ -63,6 +63,7 @@ public class ClassInspectionService {
             "java.util.concurrent.ConcurrentHashMap", "java.util.concurrent.ConcurrentMap"));
     private AtlasConversionService atlasConversionService = null;
     private List<String> fieldBlacklist = new ArrayList<String>(Arrays.asList("serialVersionUID"));
+    private List<String> classNameBlacklist = new ArrayList<String>();
     private Boolean disablePackagePrivateOnlyFields = false;
     private Boolean disableProtectedOnlyFields = false;
     private Boolean disablePrivateOnlyFields = false;
@@ -75,6 +76,10 @@ public class ClassInspectionService {
 
     public List<String> getListClasses() {
         return this.listClasses;
+    }
+
+    public List<String> getClassNameBlacklist() {
+        return this.classNameBlacklist;
     }
 
     public List<String> getFieldBlacklist() {
@@ -91,6 +96,10 @@ public class ClassInspectionService {
 
     public Boolean getDisablePackagePrivateOnlyFields() {
         return disablePackagePrivateOnlyFields;
+    }
+
+    public void setDisablePackagePrivateOnlyFields(Boolean disablePackagePrivateOnlyFields) {
+        this.disablePackagePrivateOnlyFields = disablePackagePrivateOnlyFields;
     }
 
     public Boolean getDisablePrivateOnlyFields() {

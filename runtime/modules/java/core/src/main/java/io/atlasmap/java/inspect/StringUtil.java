@@ -24,7 +24,7 @@ public class StringUtil {
         return s == null || "".equals(s.trim());
     }
 
-    static String capitalizeFirstLetter(String sentence) {
+    public static String capitalizeFirstLetter(String sentence) {
         if (StringUtil.isEmpty(sentence)) {
             return sentence;
         }
@@ -34,7 +34,7 @@ public class StringUtil {
         return String.valueOf(sentence.charAt(0)).toUpperCase() + sentence.substring(1);
     }
 
-    static String removeGetterAndLowercaseFirstLetter(String getter) {
+    public static String removeGetterAndLowercaseFirstLetter(String getter) {
         if (StringUtil.isEmpty(getter)) {
             return getter;
         }
@@ -57,7 +57,7 @@ public class StringUtil {
         return String.valueOf(subGetter.charAt(0)).toLowerCase() + subGetter.substring(1);
     }
 
-    static String removeSetterAndLowercaseFirstLetter(String setter) {
+    public static String removeSetterAndLowercaseFirstLetter(String setter) {
         if (StringUtil.isEmpty(setter)) {
             return setter;
         }
@@ -75,7 +75,7 @@ public class StringUtil {
         return String.valueOf(subSetter.charAt(0)).toLowerCase() + subSetter.substring(1);
     }
 
-    static String formatTimeHMS(long milliseconds) {
+    public static String formatTimeHMS(long milliseconds) {
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss.SSS");
         sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
         return sdf.format(milliseconds);

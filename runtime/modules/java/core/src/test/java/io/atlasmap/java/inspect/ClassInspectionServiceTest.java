@@ -18,8 +18,12 @@ package io.atlasmap.java.inspect;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+
+import java.util.List;
+import java.util.Map;
 
 import org.junit.After;
 import org.junit.Before;
@@ -44,6 +48,31 @@ public class ClassInspectionServiceTest {
     @After
     public void tearDown() {
         classInspectionService = null;
+    }
+
+    @Test
+    public void testDetectArrayDimensions() {
+
+        assertNull(null, classInspectionService.inspectClass(String.class).getArrayDimensions());
+        assertEquals(new Integer(1), classInspectionService.inspectClass(int[].class).getArrayDimensions());
+        assertEquals(new Integer(2), classInspectionService.inspectClass(String[][].class).getArrayDimensions());
+        assertEquals(new Integer(3), classInspectionService.inspectClass(List[][][].class).getArrayDimensions());
+        assertEquals(new Integer(4), classInspectionService.inspectClass(Map[][][][].class).getArrayDimensions());
+        assertEquals(new Integer(64), classInspectionService.inspectClass(
+                int[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][].class)
+                .getArrayDimensions());
+        // MAX_DIM_LIMIT NOTE: 255 is the JVM Spec limit
+        assertEquals(new Integer(255), classInspectionService.inspectClass(
+                int[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][].class)
+                .getArrayDimensions());
+    }
+
+    @Test
+    public void testDetectArrayClass() {
+        assertEquals("int", classInspectionService.inspectClass(int[].class).getClassName());
+        assertEquals("java.lang.String", classInspectionService.inspectClass(String[][].class).getClassName());
+        assertEquals("java.util.List", classInspectionService.inspectClass(List[][][].class).getClassName());
+        assertEquals("java.util.Map", classInspectionService.inspectClass(Map[][][][].class).getClassName());
     }
 
     @Test
