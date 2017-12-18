@@ -72,4 +72,35 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+    
+    <build>
+    	<plugins>
+    		<plugin>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>copy</id>
+						<phase>test-compile</phase>
+						<goals>
+							<goal>copy</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<artifactItems>
+						<artifactItem>
+							<groupId>io.atlasmap</groupId>
+							<artifactId>atlas-model</artifactId>
+							<version>${project.version}</version>
+							<overWrite>true</overWrite>
+							<outputDirectory>${project.build.directory}/test-dependencies</outputDirectory>
+							<destFileName>atlas-model.jar</destFileName>
+						</artifactItem>
+					</artifactItems>
+					<overWriteReleases>false</overWriteReleases>
+					<overWriteSnapshots>true</overWriteSnapshots>
+				</configuration>
+			</plugin>
+    	</plugins>
+    </build>
 </project>

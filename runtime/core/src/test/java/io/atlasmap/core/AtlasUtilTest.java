@@ -23,12 +23,19 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.stream.Collectors;
 
 import org.junit.Test;
+
+import io.atlasmap.v2.ValidationStatus;
 
 public class AtlasUtilTest {
 
@@ -56,8 +63,7 @@ public class AtlasUtilTest {
         String uriJavaVer2WParm = "atlas:java::2?foo=bar";
         String uriJavaVer2WParams = "atlas:java::2?foo=bar&bar=blah";
 
-        List<String> javaUris = Arrays.asList(uriJavaNover, uriJavaNoverWParm, uriJavaNoverWParms,
-                uriJavaVer1, uriJavaVer2, uriJavaVer2WParm, uriJavaVer2WParams);
+        List<String> javaUris = Arrays.asList(uriJavaNover, uriJavaNoverWParm, uriJavaNoverWParms, uriJavaVer1, uriJavaVer2, uriJavaVer2WParm, uriJavaVer2WParams);
         List<String> noverUris = Arrays.asList(uriJavaNover, uriJavaNoverWParm, uriJavaNoverWParms);
         List<String> javaVer1Uris = Arrays.asList(uriJavaVer1);
         List<String> javaVer2Uris = Arrays.asList(uriJavaVer2, uriJavaVer2WParm, uriJavaVer2WParams);
@@ -110,7 +116,150 @@ public class AtlasUtilTest {
     public void testFindClassesForPackage() {
         List<Class<?>> classes = AtlasUtil.findClassesForPackage("io.atlasmap.v2");
         assertNotNull(classes);
-        assertThat(classes.stream().map(Class::getName).collect(Collectors.toList()), hasItems("io.atlasmap.v2.Field",
-                "io.atlasmap.v2.AtlasMapping", "io.atlasmap.v2.Action", "io.atlasmap.v2.Capitalize"));
+        assertThat(classes.stream().map(Class::getName).collect(Collectors.toList()), hasItems("io.atlasmap.v2.Field", "io.atlasmap.v2.AtlasMapping", "io.atlasmap.v2.Action", "io.atlasmap.v2.Capitalize"));
+    }
+
+    @Test
+    public void testGetUriDataType() {
+        assertEquals("util", AtlasUtil.getUriDataType("atlas:java:util?param1=value1&param2=value2"));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testFindClassesForPackageIllegalArgumentException() {
+        AtlasUtil.findClassesForPackage("io.atlasmapv2");
+    }
+
+    @Test
+    public void testFind() {
+        File file = Paths.get("src" + File.separator + "main" + File.separator + "java" + File.separator + "io" + File.separator + "atlasmap" + File.separator + "core").toFile();
+        assertEquals(0, AtlasUtil.find(file, ".").size());
+    }
+
+    @Test
+    public void testLoadPropertiesFromURL() throws Exception {
+        URL url = Paths.get("src" + File.separator + "test" + File.separator + "resources" + File.separator + "AtlasUtilTest.properties").toUri().toURL();
+
+        Properties properties = AtlasUtil.loadPropertiesFromURL(url);
+
+        assertNotNull(properties);
+        assertEquals("value1", properties.get("key1"));
+        assertEquals("value2", properties.get("key2"));
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testLoadPropertiesFromURLNullPointerException() throws Exception {
+        AtlasUtil.loadPropertiesFromURL(null);
+    }
+
+    @Test(expected = MalformedURLException.class)
+    public void testLoadPropertiesFromURLMalformedURLException() throws Exception {
+        AtlasUtil.loadPropertiesFromURL(new URL("invalid URL"));
+    }
+
+    @Test
+    public void testMatchUriModule() {
+        assertFalse(AtlasUtil.matchUriModule(null, null));
+        assertFalse(AtlasUtil.matchUriModule(null, "atlas:java"));
+        assertFalse(AtlasUtil.matchUriModule("atlas:java", null));
+
+        assertFalse(AtlasUtil.matchUriModule("", ""));
+        assertFalse(AtlasUtil.matchUriModule("atlas:java", ""));
+        assertFalse(AtlasUtil.matchUriModule("", "atlas:java"));
+
+        assertTrue(AtlasUtil.matchUriModule("atlas:java", "atlas:java"));
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void testValidateUriIllegalStateException() {
+        AtlasUtil.validateUri("java:atlas");
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void testValidateUriIllegalStateExceptionMultipleQuestionMark() {
+        AtlasUtil.validateUri("atlas:?java?");
+    }
+
+    @Test
+    public void testValidateUriSingleQuestionMark() {
+        AtlasUtil.validateUri("atlas:java?");
+    }
+
+    @Test
+    public void testValidateUri() {
+        AtlasUtil.validateUri("atlas:java");
+    }
+
+    @Test
+    public void testGetUriPartsAsArray() {
+        assertNull(AtlasUtil.getUriPartsAsArray(null));
+        assertEquals(2, AtlasUtil.getUriPartsAsArray("atlas:?java").size());
+        assertEquals(2, AtlasUtil.getUriPartsAsArray("atlas:?").size());
+        assertEquals(2, AtlasUtil.getUriPartsAsArray("atlas:").size());
+    }
+
+    @Test
+    public void testGetUriScheme() {
+        assertNull(AtlasUtil.getUriScheme(null));
+    }
+
+    @Test
+    public void testGetUriParameters() {
+        assertNull(AtlasUtil.getUriParameters(null));
+        assertEquals(0, AtlasUtil.getUriParameters("").size());
+        assertEquals(0, AtlasUtil.getUriParameters("atlas:").size());
+        assertEquals(0, AtlasUtil.getUriParameters("atlas:?").size());
+        assertEquals(2, AtlasUtil.getUriParameters("atlas:?param1=value1&param2=value2").size());
+        assertEquals(1, AtlasUtil.getUriParameters("atlas:?param1=value1&param2=").size());
+        assertEquals(1, AtlasUtil.getUriParameters("atlas:?param1=&param2=value2").size());
+        assertEquals(1, AtlasUtil.getUriParameters("atlas:?=&param2=value2").size());
+        assertEquals(0, AtlasUtil.getUriParameters("atlas:?=").size());
+        assertEquals(0, AtlasUtil.getUriParameters("atlas:?&").size());
+        assertEquals(0, AtlasUtil.getUriParameters("atlas:?p").size());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetUriParametersIllegalArgumentException() {
+        AtlasUtil.getUriParameters("atlas:?%%XX");
+    }
+
+    @Test
+    public void testGetUriParameterValue() {
+        assertNull(AtlasUtil.getUriParameterValue("atlas:?java", "java"));
+        assertEquals("value1", AtlasUtil.getUriParameterValue("atlas:?param1=value1&param2=value2", "param1"));
+        assertEquals("value1", AtlasUtil.getUriParameterValue("atlas:?param1=value1&param2=", "param1"));
+        assertEquals("value2", AtlasUtil.getUriParameterValue("atlas:?param1=&param2=value2", "param2"));
+        assertNull(AtlasUtil.getUriParameterValue("atlas:?", "java"));
+        assertNull(AtlasUtil.getUriParameterValue("atlas:?param", "java"));
+        assertNull(AtlasUtil.getUriParameterValue("atlas:?&", "java"));
+        assertNull(AtlasUtil.getUriParameterValue("atlas:?=", "java"));
+        assertNull(AtlasUtil.getUriParameterValue("atlas:? ", "java"));
+    }
+
+    @Test
+    public void testFindClassesFromJar() throws Exception {
+        URL jarFile = new File("target" + File.separator + "test-dependencies" + File.separator + "atlas-model.jar").toURI().toURL();
+        String urlString = "jar:file:" + jarFile.getPath() + "!/";
+        assertFalse(AtlasUtil.findClassesFromJar(new URL(urlString)).isEmpty());
+    }
+
+    @Test
+    public void testFindClassesFromJarFileNotFoundIOException() throws Exception {
+        String urlString = "jar:file:" + File.separator + "target" + File.separator + "test-dependencies" + File.separator + "atlas-model.jar!/";
+        assertEquals(0, AtlasUtil.findClassesFromJar(new URL(urlString)).size());
+    }
+
+    @Test(expected = ClassCastException.class)
+    public void testFindClassesFromJarClassCastException() throws Exception {
+        URL url = Paths.get("target" + File.separator + "test-dependencies" + File.separator + "atlas-model.jar").toUri().toURL();
+        AtlasUtil.findClassesFromJar(url);
+    }
+
+    @Test
+    public void testToAuditStatus() {
+        assertNotNull(AtlasUtil.toAuditStatus(ValidationStatus.ERROR));
+        assertNotNull(AtlasUtil.toAuditStatus(ValidationStatus.WARN));
+        assertNotNull(AtlasUtil.toAuditStatus(ValidationStatus.INFO));
+        assertNotNull(AtlasUtil.toAuditStatus(ValidationStatus.ALL));
+        assertNotNull(AtlasUtil.toAuditStatus(ValidationStatus.NONE));
     }
 }

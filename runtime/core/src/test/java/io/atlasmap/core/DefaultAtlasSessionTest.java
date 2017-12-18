@@ -11,7 +11,15 @@ import java.net.URI;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import io.atlasmap.api.AtlasConstants;
+import io.atlasmap.api.AtlasException;
+import io.atlasmap.spi.AtlasFieldReader;
+import io.atlasmap.spi.AtlasFieldWriter;
+import io.atlasmap.spi.AtlasInternalSession;
+import io.atlasmap.spi.AtlasInternalSession.Head;
 import io.atlasmap.v2.Audit;
 import io.atlasmap.v2.AuditStatus;
 import io.atlasmap.v2.Audits;
@@ -21,6 +29,7 @@ import io.atlasmap.v2.Validations;
 
 public class DefaultAtlasSessionTest {
 
+    private static final Logger LOG = LoggerFactory.getLogger(DefaultAtlasSessionTest.class);
     private DefaultAtlasSession session = null;
 
     @Before
@@ -102,7 +111,7 @@ public class DefaultAtlasSessionTest {
         session.setDefaultSourceDocument(new String("defaultInput"));
         assertNotNull(session.getDefaultSourceDocument());
         assertTrue(session.getDefaultSourceDocument() instanceof String);
-        assertEquals("defaultInput", (String) session.getDefaultSourceDocument());
+        assertEquals("defaultInput", session.getDefaultSourceDocument());
     }
 
     @Test
@@ -110,18 +119,25 @@ public class DefaultAtlasSessionTest {
         session.setDefaultSourceDocument(new String("defaultInput"));
         assertNotNull(session.getDefaultSourceDocument());
         assertTrue(session.getDefaultSourceDocument() instanceof String);
-        assertEquals("defaultInput", (String) session.getDefaultSourceDocument());
+        assertEquals("defaultInput", session.getDefaultSourceDocument());
+        assertNotNull(session.getSourceDocument(null));
+        assertNotNull(session.getSourceDocument(""));
+        assertNotNull(session.getSourceDocument("docId"));
 
         session.setSourceDocument("second", new String("secondInput"));
         assertNotNull(session.getDefaultSourceDocument());
         assertTrue(session.getDefaultSourceDocument() instanceof String);
-        assertEquals("defaultInput", (String) session.getDefaultSourceDocument());
+        assertEquals("defaultInput", session.getDefaultSourceDocument());
 
         assertTrue(session.hasSourceDocument("second"));
         assertFalse(session.hasSourceDocument("third"));
+        assertTrue(session.hasSourceDocument(null));
+        assertTrue(session.hasSourceDocument(""));
         assertNotNull(session.getSourceDocument("second"));
         assertTrue(session.getSourceDocument("second") instanceof String);
-        assertEquals("secondInput", (String) session.getSourceDocument("second"));
+        assertEquals("secondInput", session.getSourceDocument("second"));
+        assertNull(session.getSourceDocument("docId"));
+        assertNotNull(session.getSourceDocumentMap());
     }
 
     @Test
@@ -129,7 +145,7 @@ public class DefaultAtlasSessionTest {
         session.setDefaultTargetDocument(new String("defaultOutput"));
         assertNotNull(session.getDefaultTargetDocument());
         assertTrue(session.getDefaultTargetDocument() instanceof String);
-        assertEquals("defaultOutput", (String) session.getDefaultTargetDocument());
+        assertEquals("defaultOutput", session.getDefaultTargetDocument());
     }
 
     @Test
@@ -137,18 +153,23 @@ public class DefaultAtlasSessionTest {
         session.setDefaultTargetDocument(new String("defaultOutput"));
         assertNotNull(session.getDefaultTargetDocument());
         assertTrue(session.getDefaultTargetDocument() instanceof String);
-        assertEquals("defaultOutput", (String) session.getDefaultTargetDocument());
+        assertEquals("defaultOutput", session.getDefaultTargetDocument());
+        assertNotNull(session.getTargetDocument(null));
+        assertNotNull(session.getTargetDocument(""));
+        assertNotNull(session.getTargetDocument("second"));
 
         session.setTargetDocument("second", new String("secondOutput"));
         assertNotNull(session.getDefaultTargetDocument());
         assertTrue(session.getDefaultTargetDocument() instanceof String);
-        assertEquals("defaultOutput", (String) session.getDefaultTargetDocument());
+        assertEquals("defaultOutput", session.getDefaultTargetDocument());
 
         assertTrue(session.hasTargetDocument("second"));
         assertFalse(session.hasTargetDocument("third"));
         assertNotNull(session.getTargetDocument("second"));
         assertTrue(session.getTargetDocument("second") instanceof String);
-        assertEquals("secondOutput", (String) session.getTargetDocument("second"));
+        assertEquals("secondOutput", session.getTargetDocument("second"));
+        assertNull(session.getTargetDocument("docId"));
+        assertNotNull(session.getTargetDocumentMap());
     }
 
     @Test
@@ -159,7 +180,7 @@ public class DefaultAtlasSessionTest {
 
         session.getProperties().put("foo", "bar");
         assertTrue(session.getProperties().size() == 1);
-        assertEquals("bar", (String) session.getProperties().get("foo"));
+        assertEquals("bar", session.getProperties().get("foo"));
     }
 
     @Test
@@ -196,4 +217,103 @@ public class DefaultAtlasSessionTest {
         assertTrue(session.hasWarns());
     }
 
+    @Test
+    public void testSetTargetDocument() {
+        session.setTargetDocument("target", "defaultOutput");
+        session.setTargetDocument(null, "defaultOutput");
+        session.setTargetDocument("", "defaultOutput");
+        session.hasTargetDocument(null);
+        session.hasTargetDocument("");
+    }
+
+    @Test
+    public void testSetSourceDocument() {
+        session.setSourceDocument("source", "defaultInput");
+        session.setSourceDocument(null, "defaultInput");
+        session.setSourceDocument("", "defaultInput");
+    }
+
+    @Test
+    public void testGetFieldReader() {
+        AtlasFieldReader reader = new AtlasFieldReader() {
+            @Override
+            public void read(AtlasInternalSession session) throws AtlasException {
+                LOG.debug("read method");
+            }
+        };
+        session.setFieldReader(AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID, reader);
+        assertNotNull(session.getFieldReader(null));
+        assertNotNull(session.getFieldReader(""));
+        assertNotNull(session.getFieldReader(AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID));
+        assertNotNull(session.getFieldReader("", AtlasFieldReader.class));
+    }
+
+    @Test
+    public void testSetFieldReader() {
+        AtlasFieldReader reader = new AtlasFieldReader() {
+            @Override
+            public void read(AtlasInternalSession session) throws AtlasException {
+                LOG.debug("read method");
+            }
+        };
+        session.setFieldReader(null, reader);
+        session.setFieldReader("", reader);
+    }
+
+    @Test
+    public void testRemoveFieldReader() {
+        session.removeFieldReader(null);
+        session.removeFieldReader("");
+        session.removeFieldReader(AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID);
+    }
+
+    @Test
+    public void testGetFieldWriter() {
+        AtlasFieldWriter writer = new AtlasFieldWriter() {
+            @Override
+            public void write(AtlasInternalSession session) throws AtlasException {
+                LOG.debug("write method");
+            }
+        };
+        session.setFieldWriter(AtlasConstants.DEFAULT_TARGET_DOCUMENT_ID, writer);
+        assertNotNull(session.getFieldWriter(null));
+        assertNotNull(session.getFieldWriter(""));
+        assertNotNull(session.getFieldWriter(AtlasConstants.DEFAULT_TARGET_DOCUMENT_ID));
+        assertNotNull(session.getFieldWriter("", AtlasFieldWriter.class));
+    }
+
+    @Test
+    public void testSetFieldWriter() {
+        AtlasFieldWriter writer = new AtlasFieldWriter() {
+            @Override
+            public void write(AtlasInternalSession session) throws AtlasException {
+                LOG.debug("write method");
+            }
+        };
+        session.setFieldWriter(null, writer);
+        session.setFieldWriter("", writer);
+    }
+
+    @Test
+    public void testRemoveFieldWriter() {
+        session.removeFieldWriter(null);
+        session.removeFieldWriter("");
+        session.removeFieldWriter(AtlasConstants.DEFAULT_TARGET_DOCUMENT_ID);
+    }
+
+    @Test
+    public void testHead() {
+        Head head = session.head();
+        assertNotNull(head);
+        assertNull(head.getLookupTable());
+        assertNull(head.getMapping());
+        assertNull(head.getSourceField());
+        assertNull(head.getTargetField());
+        head.setLookupTable(null);
+        head.setMapping(null);
+        head.setSourceField(null);
+        head.setTargetField(null);
+        assertNotNull(head.unset());
+
+    }
 }
