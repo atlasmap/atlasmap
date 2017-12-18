@@ -19,6 +19,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
@@ -34,6 +35,7 @@ import io.atlasmap.v2.ValidationStatus;
 public class AtlasValidationHelperTest {
 
     private AtlasValidationHelper validations = null;
+    private AtlasValidationHelper atlasValidationHelper = null;
     private Validation error = null;
     private Validation warning = null;
     private Validation info = null;
@@ -60,6 +62,8 @@ public class AtlasValidationHelperTest {
         info.setMessage("Information message");
         info.setStatus(ValidationStatus.INFO);
         validations.addValidation(info);
+
+        atlasValidationHelper = new DefaultAtlasValidationsHelper();
     }
 
     @After
@@ -68,6 +72,7 @@ public class AtlasValidationHelperTest {
         error = null;
         warning = null;
         info = null;
+        atlasValidationHelper = null;
     }
 
     @Test
@@ -121,4 +126,38 @@ public class AtlasValidationHelperTest {
         assertFalse(error.equals(info));
     }
 
+    @Test
+    public void testGetAllValidations() {
+        assertNotNull(validations.getAllValidations());
+    }
+
+    @Test
+    public void testHasErrors() {
+        assertTrue(validations.hasErrors());
+        assertFalse(atlasValidationHelper.hasErrors());
+    }
+
+    @Test
+    public void testHasWarnings() {
+        assertTrue(validations.hasWarnings());
+        assertFalse(atlasValidationHelper.hasWarnings());
+    }
+
+    @Test
+    public void testHasInfos() {
+        assertTrue(validations.hasInfos());
+        assertFalse(atlasValidationHelper.hasInfos());
+    }
+
+    @Test
+    public void testGetCount() {
+        assertEquals(3, validations.getCount());
+        assertEquals(0, atlasValidationHelper.getCount());
+    }
+
+    @Test
+    public void testValidationToString() {
+        assertNotNull(DefaultAtlasValidationsHelper.validationToString(null));
+        assertNotNull(DefaultAtlasValidationsHelper.validationToString(info));
+    }
 }

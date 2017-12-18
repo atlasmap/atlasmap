@@ -396,4 +396,19 @@ public class StringConverterTest {
             }
         }
     }
+
+    @Test
+    public void testConvertToNumber() throws AtlasConversionException {
+        StringConverter converter = new StringConverter();
+        assertNull(converter.convertToNumber(null));
+        assertNull(converter.convertToNumber(" "));
+        assertNotNull(converter.convertToNumber("1"));
+        assertNotNull(converter.convertToNumber("1.99"));
+    }
+
+    @Test(expected = AtlasConversionException.class)
+    public void testConvertToNumberAtlasConversionException() throws AtlasConversionException {
+        StringConverter converter = new StringConverter();
+        assertNull(converter.convertToNumber("abc"));
+    }
 }

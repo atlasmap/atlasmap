@@ -1,0 +1,22 @@
+{
+  "AtlasMapping" : {
+    "jsonType" : "io.atlasmap.v2.AtlasMapping",
+    "dataSource" : [ ],
+    "mappings" : {
+      "mapping" : [ {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "alias" : "alias1",
+        "inputField" : [ ],
+        "outputField" : [ ],
+        "id" : "1"
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "alias" : "alias2",
+        "inputField" : [ ],
+        "outputField" : [ ],
+        "id" : "2"
+      } ]
+    },
+    "name" : "testname"
+  }
+}
