@@ -17,86 +17,86 @@
 
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>io.atlasmap</groupId>
-        <artifactId>atlas-parent</artifactId>
-        <version>1.32-SNAPSHOT</version>
-        <relativePath>../parent</relativePath>
-    </parent>
-
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
     <groupId>io.atlasmap</groupId>
-    <artifactId>atlas-runtime</artifactId>
+    <artifactId>atlas-parent</artifactId>
     <version>1.32-SNAPSHOT</version>
-    <packaging>pom</packaging>
-    <name>AtlasMap Runtime</name>
-    <description>AtlasMap runtime engine and design time services</description>
+    <relativePath>../parent</relativePath>
+  </parent>
 
-    <properties>
-        <!-- Controls Docker Image Generation -->
-        <from.image>registry.access.redhat.com/jboss-fuse-6/fis-java-openshift:2.0</from.image>
-        <docker.image>atlasmap/atlasmap:%l</docker.image>
-    </properties>
+  <groupId>io.atlasmap</groupId>
+  <artifactId>atlas-runtime</artifactId>
+  <version>1.32-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  <name>AtlasMap Runtime</name>
+  <description>AtlasMap runtime engine and design time services</description>
 
-    <modules>
-        <module>model</module>
-        <module>api</module>
-        <module>core</module>
-        <module>service</module>
-        <module>modules/java</module>
-        <module>modules/json</module>
-        <module>modules/xml</module>
-        <module>itests</module>
-        <module>atlasmap-maven-plugin</module>
-        <module>runtime</module>
-        <module>docs</module>
-    </modules>
+  <properties>
+    <!-- Controls Docker Image Generation -->
+    <from.image>registry.access.redhat.com/jboss-fuse-6/fis-java-openshift:2.0</from.image>
+    <docker.image>atlasmap/atlasmap:%l</docker.image>
+  </properties>
 
-    <profiles>
-        <profile>
-            <id>jacoco</id>
-            <properties>
-                <sonar.language>java</sonar.language>
-            </properties>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.jacoco</groupId>
-                        <artifactId>jacoco-maven-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>prepare-agent</id>
-                                <goals>
-                                    <goal>prepare-agent</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-surefire-plugin</artifactId>
-                        <configuration>
-                            <argLine>${argLine}</argLine>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
+  <modules>
+    <module>model</module>
+    <module>api</module>
+    <module>core</module>
+    <module>service</module>
+    <module>modules/java</module>
+    <module>modules/json</module>
+    <module>modules/xml</module>
+    <module>itests</module>
+    <module>atlasmap-maven-plugin</module>
+    <module>runtime</module>
+    <module>docs</module>
+  </modules>
 
-    <build>
+  <profiles>
+    <profile>
+      <id>jacoco</id>
+      <properties>
+        <sonar.language>java</sonar.language>
+      </properties>
+      <build>
         <plugins>
-            <plugin>
-                <artifactId>maven-checkstyle-plugin</artifactId>
-                <configuration>
-                    <sourceDirectory>${project.build.sourceDirectory}</sourceDirectory>
-                    <includeTestSourceDirectory>true</includeTestSourceDirectory>
-                    <configLocation>../checkstyle.xml</configLocation>
-                    <propertyExpansion>
-                        checkstyle.suppression.file=../checkstyle-suppressions.xml
-                    </propertyExpansion>
-                </configuration>
-            </plugin>
+          <plugin>
+            <groupId>org.jacoco</groupId>
+            <artifactId>jacoco-maven-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>prepare-agent</id>
+                <goals>
+                  <goal>prepare-agent</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <configuration>
+              <argLine>${argLine}</argLine>
+            </configuration>
+          </plugin>
         </plugins>
-    </build>
+      </build>
+    </profile>
+  </profiles>
+
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+        <configuration>
+          <sourceDirectory>${project.build.sourceDirectory}</sourceDirectory>
+          <includeTestSourceDirectory>true</includeTestSourceDirectory>
+          <configLocation>../checkstyle.xml</configLocation>
+          <propertyExpansion>
+            checkstyle.suppression.file=../checkstyle-suppressions.xml
+          </propertyExpansion>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 </project>
