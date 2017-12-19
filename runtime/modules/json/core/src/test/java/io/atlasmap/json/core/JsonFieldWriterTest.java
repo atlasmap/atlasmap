@@ -15,11 +15,14 @@
  */
 package io.atlasmap.json.core;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import org.hamcrest.core.Is;
@@ -28,21 +31,27 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.atlasmap.api.AtlasException;
+import io.atlasmap.core.DefaultAtlasConversionService;
 import io.atlasmap.json.v2.AtlasJsonModelFactory;
 import io.atlasmap.json.v2.JsonComplexType;
 import io.atlasmap.json.v2.JsonField;
 import io.atlasmap.json.v2.JsonFields;
 import io.atlasmap.spi.AtlasInternalSession;
 import io.atlasmap.spi.AtlasInternalSession.Head;
+import io.atlasmap.v2.AuditStatus;
+import io.atlasmap.v2.Audits;
 import io.atlasmap.v2.CollectionType;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldStatus;
 import io.atlasmap.v2.FieldType;
 
 public class JsonFieldWriterTest {
+    private static JsonFieldReader reader = new JsonFieldReader(DefaultAtlasConversionService.getInstance());
     private JsonFieldWriter writer = null;
 
     @Before
@@ -626,4 +635,796 @@ public class JsonFieldWriterTest {
         Object objJSON = objectMapper.readValue(json, Object.class);
         return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(objJSON);
     }
+
+    @Test
+    public void testJsonFieldDoubleMax() throws Exception {
+        Path path = Paths.get("target" + File.separator + "test-write-field-double-max.json");
+        String fieldPath = "/primitiveValue";
+        Object testObject = Double.MAX_VALUE;
+        FieldType fieldType = FieldType.DOUBLE;
+
+        write(path, fieldPath, testObject, fieldType);
+
+        AtlasInternalSession session = read(path, fieldType, fieldPath);
+        assertEquals(testObject, session.head().getSourceField().getValue());
+    }
+
+    @Test
+    public void testJsonFieldDoubleMin() throws Exception {
+        Path path = Paths.get("target" + File.separator + "test-write-field-double-min.json");
+        String fieldPath = "/primitiveValue";
+        Object testObject = Double.MIN_VALUE;
+        FieldType fieldType = FieldType.DOUBLE;
+
+        write(path, fieldPath, testObject, fieldType);
+
+        AtlasInternalSession session = read(path, fieldType, fieldPath);
+        assertEquals(testObject, session.head().getSourceField().getValue());
+    }
+
+    @Test
+    public void testJsonFieldFloatMax() throws Exception {
+        Path path = Paths.get("target" + File.separator + "test-write-field-float-max.json");
+        String fieldPath = "/primitiveValue";
+        Object testObject = Float.MAX_VALUE;
+        FieldType fieldType = FieldType.FLOAT;
+
+        write(path, fieldPath, testObject, fieldType);
+
+        AtlasInternalSession session = read(path, fieldType, fieldPath);
+        assertEquals(testObject, session.head().getSourceField().getValue());
+    }
+
+    @Test
+    public void testJsonFieldFloatMin() throws Exception {
+        Path path = Paths.get("target" + File.separator + "test-write-field-float-min.json");
+        String fieldPath = "/primitiveValue";
+        Object testObject = Float.MIN_VALUE;
+        FieldType fieldType = FieldType.FLOAT;
+
+        write(path, fieldPath, testObject, fieldType);
+
+        AtlasInternalSession session = read(path, fieldType, fieldPath);
+        assertEquals(testObject, session.head().getSourceField().getValue());
+    }
+
+    @Test
+    public void testJsonFieldLongMax() throws Exception {
+        Path path = Paths.get("target" + File.separator + "test-write-field-long-max.json");
+        String fieldPath = "/primitiveValue";
+        Object testObject = Long.MAX_VALUE;
+        FieldType fieldType = FieldType.LONG;
+
+        write(path, fieldPath, testObject, fieldType);
+
+        AtlasInternalSession session = read(path, fieldType, fieldPath);
+        assertEquals(testObject, session.head().getSourceField().getValue());
+    }
+
+    @Test
+    public void testJsonFieldLongMin() throws Exception {
+        Path path = Paths.get("target" + File.separator + "test-write-field-long-min.json");
+        String fieldPath = "/primitiveValue";
+        Object testObject = Long.MIN_VALUE;
+        FieldType fieldType = FieldType.LONG;
+
+        write(path, fieldPath, testObject, fieldType);
+
+        AtlasInternalSession session = read(path, fieldType, fieldPath);
+        assertEquals(testObject, session.head().getSourceField().getValue());
+    }
+
+    @Test
+    public void testJsonFieldIntegerMax() throws Exception {
+        Path path = Paths.get("target" + File.separator + "test-write-field-integer-max.json");
+        String fieldPath = "/primitiveValue";
+        Object testObject = Integer.MAX_VALUE;
+        FieldType fieldType = FieldType.INTEGER;
+
+        write(path, fieldPath, testObject, fieldType);
+
+        AtlasInternalSession session = read(path, fieldType, fieldPath);
+        assertEquals(testObject, session.head().getSourceField().getValue());
+    }
+
+    @Test
+    public void testJsonFieldIntegerMin() throws Exception {
+        Path path = Paths.get("target" + File.separator + "test-write-field-integer-min.json");
+        String fieldPath = "/primitiveValue";
+        Object testObject = Integer.MIN_VALUE;
+        FieldType fieldType = FieldType.INTEGER;
+
+        write(path, fieldPath, testObject, fieldType);
+
+        AtlasInternalSession session = read(path, fieldType, fieldPath);
+        assertEquals(testObject, session.head().getSourceField().getValue());
+    }
+
+    @Test
+    public void testJsonFieldShortMax() throws Exception {
+        Path path = Paths.get("target" + File.separator + "test-write-field-short-max.json");
+        String fieldPath = "/primitiveValue";
+        Object testObject = Short.MAX_VALUE;
+        FieldType fieldType = FieldType.SHORT;
+
+        write(path, fieldPath, testObject, fieldType);
+
+        AtlasInternalSession session = read(path, fieldType, fieldPath);
+        assertEquals(testObject, session.head().getSourceField().getValue());
+    }
+
+    @Test
+    public void testJsonFieldShortMin() throws Exception {
+        Path path = Paths.get("target" + File.separator + "test-write-field-short-min.json");
+        String fieldPath = "/primitiveValue";
+        Object testObject = Short.MIN_VALUE;
+        FieldType fieldType = FieldType.SHORT;
+
+        write(path, fieldPath, testObject, fieldType);
+
+        AtlasInternalSession session = read(path, fieldType, fieldPath);
+        assertEquals(testObject, session.head().getSourceField().getValue());
+    }
+
+    @Test
+    public void testJsonFieldChar() throws Exception {
+        Path path = Paths.get("target" + File.separator + "test-write-field-char.json");
+        String fieldPath = "/primitiveValue";
+        Object testObject = new Character((char) 127);
+        FieldType fieldType = FieldType.CHAR;
+
+        write(path, fieldPath, testObject, fieldType);
+
+        AtlasInternalSession session = read(path, fieldType, fieldPath);
+        assertEquals(testObject, session.head().getSourceField().getValue());
+    }
+
+    @Test
+    public void testJsonFieldCharMin() throws Exception {
+        Path path = Paths.get("target" + File.separator + "test-write-field-char-min.json");
+        String fieldPath = "/primitiveValue";
+        Object testObject = Character.MIN_VALUE;
+        FieldType fieldType = FieldType.CHAR;
+
+        write(path, fieldPath, testObject, fieldType);
+
+        AtlasInternalSession session = read(path, fieldType, fieldPath);
+        assertEquals(testObject, session.head().getSourceField().getValue());
+    }
+
+    @Test
+    public void testJsonFieldByteMax() throws Exception {
+        Path path = Paths.get("target" + File.separator + "test-write-field-byte-max.json");
+        String fieldPath = "/primitiveValue";
+        Object testObject = Byte.MAX_VALUE;
+        FieldType fieldType = FieldType.BYTE;
+
+        write(path, fieldPath, testObject, fieldType);
+
+        AtlasInternalSession session = read(path, fieldType, fieldPath);
+        assertEquals(testObject, session.head().getSourceField().getValue());
+    }
+
+    @Test
+    public void testJsonFieldByteMin() throws Exception {
+        Path path = Paths.get("target" + File.separator + "test-write-field-byte-min.json");
+        String fieldPath = "/primitiveValue";
+        Object testObject = Byte.MIN_VALUE;
+        FieldType fieldType = FieldType.BYTE;
+
+        write(path, fieldPath, testObject, fieldType);
+
+        AtlasInternalSession session = read(path, fieldType, fieldPath);
+        assertEquals(testObject, session.head().getSourceField().getValue());
+    }
+
+    @Test
+    public void testJsonFieldBooleanTrue() throws Exception {
+        Path path = Paths.get("target" + File.separator + "test-write-field-boolean-true.json");
+        String fieldPath = "/primitiveValue";
+        Object testObject = Boolean.TRUE;
+        FieldType fieldType = FieldType.BOOLEAN;
+
+        write(path, fieldPath, testObject, fieldType);
+
+        AtlasInternalSession session = read(path, fieldType, fieldPath);
+        assertEquals(testObject, session.head().getSourceField().getValue());
+    }
+
+    @Test
+    public void testJsonFieldBooleanFalse() throws Exception {
+        Path path = Paths.get("target" + File.separator + "test-write-field-boolean-false.json");
+        String fieldPath = "/primitiveValue";
+        Object testObject = Boolean.FALSE;
+        FieldType fieldType = FieldType.BOOLEAN;
+
+        write(path, fieldPath, testObject, fieldType);
+
+        AtlasInternalSession session = read(path, fieldType, fieldPath);
+        assertEquals(testObject, session.head().getSourceField().getValue());
+    }
+
+    @Test
+    public void testJsonFieldStringEmpty() throws Exception {
+        Path path = Paths.get("target" + File.separator + "test-write-field-string-empty.json");
+        String fieldPath = "/stringValue";
+        Object testObject = "";
+        FieldType fieldType = FieldType.STRING;
+
+        write(path, fieldPath, testObject, fieldType);
+
+        AtlasInternalSession session = read(path, fieldType, fieldPath);
+        assertEquals(testObject, session.head().getSourceField().getValue());
+    }
+
+    @Test
+    public void testJsonFieldStringNonEmpty() throws Exception {
+        Path path = Paths.get("target" + File.separator + "test-write-field-string-nonempty.json");
+        String fieldPath = "/stringValue";
+        Object testObject = "testString";
+        FieldType fieldType = FieldType.STRING;
+
+        write(path, fieldPath, testObject, fieldType);
+
+        AtlasInternalSession session = read(path, fieldType, fieldPath);
+        assertEquals(testObject, session.head().getSourceField().getValue());
+    }
+
+    @Test
+    public void testJsonFieldStringNull() throws Exception {
+        Path path = Paths.get("target" + File.separator + "test-write-field-string-null.json");
+        String fieldPath = "/stringValue";
+        Object testObject = null;
+        FieldType fieldType = FieldType.STRING;
+
+        write(path, fieldPath, testObject, fieldType);
+
+        AtlasInternalSession session = read(path, fieldType, fieldPath);
+        assertEquals(null, session.head().getSourceField().getValue());
+    }
+
+    private void write(Path path, String fieldPath, Object testObject, FieldType fieldType) throws Exception, IOException, JsonGenerationException, JsonMappingException {
+        JsonField field = AtlasJsonModelFactory.createJsonField();
+        field.setPath(fieldPath);
+        field.setValue(testObject);
+        field.setFieldType(fieldType);
+        write(field);
+        writer.getObjectMapper().writeValue(path.toFile(), writer.getRootNode());
+    }
+
+    private AtlasInternalSession read(Path path, FieldType outputFieldType, String fieldPath) throws IOException, AtlasException {
+        String document = new String(Files.readAllBytes(path));
+        reader.setDocument(document);
+        JsonField jsonField = AtlasJsonModelFactory.createJsonField();
+        jsonField.setPath(fieldPath);
+        jsonField.setFieldType(outputFieldType);
+        AtlasInternalSession session = mock(AtlasInternalSession.class);
+        when(session.head()).thenReturn(mock(Head.class));
+        when(session.head().getSourceField()).thenReturn(jsonField);
+
+        Audits audits = new Audits();
+        when(session.getAudits()).thenReturn(audits);
+        reader.read(session);
+        return session;
+    }
+
+    @Test
+    public void testJsonFieldDoubleMaxRangeOut() throws Exception {
+        Path path = Paths.get("target" + File.separator + "test-write-field-double-max-range-out.json");
+        String fieldPath = "/primitiveValue";
+        Object testObject = "1.7976931348623157E309";
+        FieldType inputFieldType = FieldType.STRING;
+        FieldType outputFieldType = FieldType.DOUBLE;
+
+        write(path, fieldPath, testObject, inputFieldType);
+
+        AtlasInternalSession session = read(path, outputFieldType, fieldPath);
+
+        assertEquals(null, session.head().getSourceField().getValue());
+        assertEquals(1, session.getAudits().getAudit().size());
+        assertEquals("Failed to convert field value '1.7976931348623157E309' into type 'DOUBLE'", session.getAudits().getAudit().get(0).getMessage());
+        assertEquals("1.7976931348623157E309", session.getAudits().getAudit().get(0).getValue());
+        assertEquals(AuditStatus.ERROR, session.getAudits().getAudit().get(0).getStatus());
+    }
+
+    @Test
+    public void testJsonFieldDoubleMinRangeOut() throws Exception {
+        Path path = Paths.get("target" + File.separator + "test-write-field-double-min-range-out.json");
+        String fieldPath = "/primitiveValue";
+        Object testObject = "4.9E-325";
+        FieldType inputFieldType = FieldType.STRING;
+        FieldType outputFieldType = FieldType.DOUBLE;
+
+        write(path, fieldPath, testObject, inputFieldType);
+
+        AtlasInternalSession session = read(path, outputFieldType, fieldPath);
+
+        assertEquals(0.0, session.head().getSourceField().getValue());
+        assertEquals(0, session.getAudits().getAudit().size());
+    }
+
+    @Test
+    public void testJsonFieldFloatMaxRangeOut() throws Exception {
+        Path path = Paths.get("target" + File.separator + "test-write-field-float-max-range-out.json");
+        String fieldPath = "/primitiveValue";
+        Object testObject = "3.4028235E39";
+        FieldType inputFieldType = FieldType.STRING;
+        FieldType outputFieldType = FieldType.FLOAT;
+
+        write(path, fieldPath, testObject, inputFieldType);
+
+        AtlasInternalSession session = read(path, outputFieldType, fieldPath);
+
+        assertEquals(null, session.head().getSourceField().getValue());
+        assertEquals(1, session.getAudits().getAudit().size());
+        assertEquals("Failed to convert field value '3.4028235E39' into type 'FLOAT'", session.getAudits().getAudit().get(0).getMessage());
+        assertEquals("3.4028235E39", session.getAudits().getAudit().get(0).getValue());
+        assertEquals(AuditStatus.ERROR, session.getAudits().getAudit().get(0).getStatus());
+    }
+
+    @Test
+    public void testJsonFieldFloatMinRangeOut() throws Exception {
+        Path path = Paths.get("target" + File.separator + "test-write-field-float-min-range-out.json");
+        String fieldPath = "/primitiveValue";
+        Object testObject = "1.4E-46";
+        FieldType inputFieldType = FieldType.STRING;
+        FieldType outputFieldType = FieldType.FLOAT;
+
+        write(path, fieldPath, testObject, inputFieldType);
+
+        AtlasInternalSession session = read(path, outputFieldType, fieldPath);
+
+        assertEquals(0.0f, session.head().getSourceField().getValue());
+        assertEquals(0, session.getAudits().getAudit().size());
+    }
+
+    @Test
+    public void testJsonFieldLongMaxRangeOut() throws Exception {
+        Path path = Paths.get("target" + File.separator + "test-write-field-long-max-range-out.json");
+        String fieldPath = "/primitiveValue";
+        Object testObject = "9223372036854775808";
+        FieldType inputFieldType = FieldType.STRING;
+        FieldType outputFieldType = FieldType.LONG;
+
+        write(path, fieldPath, testObject, inputFieldType);
+
+        AtlasInternalSession session = read(path, outputFieldType, fieldPath);
+
+        assertEquals(null, session.head().getSourceField().getValue());
+        assertEquals(1, session.getAudits().getAudit().size());
+        assertEquals("Failed to convert field value '9223372036854775808' into type 'LONG'", session.getAudits().getAudit().get(0).getMessage());
+        assertEquals("9223372036854775808", session.getAudits().getAudit().get(0).getValue());
+        assertEquals(AuditStatus.ERROR, session.getAudits().getAudit().get(0).getStatus());
+    }
+
+    @Test
+    public void testJsonFieldLongMinRangeOut() throws Exception {
+        Path path = Paths.get("target" + File.separator + "test-write-field-long-min-range-out.json");
+        String fieldPath = "/primitiveValue";
+        Object testObject = "-9223372036854775809";
+        FieldType inputFieldType = FieldType.STRING;
+        FieldType outputFieldType = FieldType.LONG;
+
+        write(path, fieldPath, testObject, inputFieldType);
+
+        AtlasInternalSession session = read(path, outputFieldType, fieldPath);
+
+        assertEquals(null, session.head().getSourceField().getValue());
+        assertEquals(1, session.getAudits().getAudit().size());
+        assertEquals("Failed to convert field value '-9223372036854775809' into type 'LONG'", session.getAudits().getAudit().get(0).getMessage());
+        assertEquals("-9223372036854775809", session.getAudits().getAudit().get(0).getValue());
+        assertEquals(AuditStatus.ERROR, session.getAudits().getAudit().get(0).getStatus());
+    }
+
+    @Test
+    public void testJsonFieldIntegerMaxRangeOut() throws Exception {
+        Path path = Paths.get("target" + File.separator + "test-write-field-integer-max-range-out.json");
+        String fieldPath = "/primitiveValue";
+        Object testObject = Long.MAX_VALUE;
+        FieldType inputFieldType = FieldType.LONG;
+        FieldType outputFieldType = FieldType.INTEGER;
+
+        write(path, fieldPath, testObject, inputFieldType);
+
+        AtlasInternalSession session = read(path, outputFieldType, fieldPath);
+
+        assertEquals(null, session.head().getSourceField().getValue());
+        assertEquals(1, session.getAudits().getAudit().size());
+        assertEquals("Failed to convert field value '9223372036854775807' into type 'INTEGER'", session.getAudits().getAudit().get(0).getMessage());
+        assertEquals("9223372036854775807", session.getAudits().getAudit().get(0).getValue());
+        assertEquals(AuditStatus.ERROR, session.getAudits().getAudit().get(0).getStatus());
+    }
+
+    @Test
+    public void testJsonFieldIntegerMinRangeOut() throws Exception {
+        Path path = Paths.get("target" + File.separator + "test-write-field-integer-min-range-out.json");
+        String fieldPath = "/primitiveValue";
+        Object testObject = Long.MIN_VALUE;
+        FieldType inputFieldType = FieldType.LONG;
+        FieldType outputFieldType = FieldType.INTEGER;
+
+        write(path, fieldPath, testObject, inputFieldType);
+
+        AtlasInternalSession session = read(path, outputFieldType, fieldPath);
+
+        assertEquals(null, session.head().getSourceField().getValue());
+        assertEquals(1, session.getAudits().getAudit().size());
+        assertEquals("Failed to convert field value '-9223372036854775808' into type 'INTEGER'", session.getAudits().getAudit().get(0).getMessage());
+        assertEquals("-9223372036854775808", session.getAudits().getAudit().get(0).getValue());
+        assertEquals(AuditStatus.ERROR, session.getAudits().getAudit().get(0).getStatus());
+    }
+
+    @Test
+    public void testJsonFieldShortMaxRangeOut() throws Exception {
+        Path path = Paths.get("target" + File.separator + "test-write-field-short-max-range-out.json");
+        String fieldPath = "/primitiveValue";
+        Object testObject = Long.MAX_VALUE;
+        FieldType inputFieldType = FieldType.LONG;
+        FieldType outputFieldType = FieldType.SHORT;
+
+        write(path, fieldPath, testObject, inputFieldType);
+
+        AtlasInternalSession session = read(path, outputFieldType, fieldPath);
+
+        assertEquals(null, session.head().getSourceField().getValue());
+        assertEquals(1, session.getAudits().getAudit().size());
+        assertEquals("Failed to convert field value '9223372036854775807' into type 'SHORT'", session.getAudits().getAudit().get(0).getMessage());
+        assertEquals("9223372036854775807", session.getAudits().getAudit().get(0).getValue());
+        assertEquals(AuditStatus.ERROR, session.getAudits().getAudit().get(0).getStatus());
+    }
+
+    @Test
+    public void testJsonFieldShortMinRangeOut() throws Exception {
+        Path path = Paths.get("target" + File.separator + "test-write-field-short-min-range-out.json");
+        String fieldPath = "/primitiveValue";
+        Object testObject = Long.MIN_VALUE;
+        FieldType inputFieldType = FieldType.LONG;
+        FieldType outputFieldType = FieldType.SHORT;
+
+        write(path, fieldPath, testObject, inputFieldType);
+
+        AtlasInternalSession session = read(path, outputFieldType, fieldPath);
+
+        assertEquals(null, session.head().getSourceField().getValue());
+        assertEquals(1, session.getAudits().getAudit().size());
+        assertEquals("Failed to convert field value '-9223372036854775808' into type 'SHORT'", session.getAudits().getAudit().get(0).getMessage());
+        assertEquals("-9223372036854775808", session.getAudits().getAudit().get(0).getValue());
+        assertEquals(AuditStatus.ERROR, session.getAudits().getAudit().get(0).getStatus());
+    }
+
+    @Test
+    public void testJsonFieldCharMaxRangeOut() throws Exception {
+        Path path = Paths.get("target" + File.separator + "test-write-field-char-max-range-out.json");
+        String fieldPath = "/primitiveValue";
+        Object testObject = Long.MAX_VALUE;
+        FieldType inputFieldType = FieldType.LONG;
+        FieldType outputFieldType = FieldType.CHAR;
+
+        write(path, fieldPath, testObject, inputFieldType);
+
+        AtlasInternalSession session = read(path, outputFieldType, fieldPath);
+
+        assertEquals(null, session.head().getSourceField().getValue());
+        assertEquals(1, session.getAudits().getAudit().size());
+        assertEquals("Failed to convert field value '9223372036854775807' into type 'CHAR'", session.getAudits().getAudit().get(0).getMessage());
+        assertEquals("9223372036854775807", session.getAudits().getAudit().get(0).getValue());
+        assertEquals(AuditStatus.ERROR, session.getAudits().getAudit().get(0).getStatus());
+    }
+
+    @Test
+    public void testJsonFieldCharMinRangeOut() throws Exception {
+        Path path = Paths.get("target" + File.separator + "test-write-field-char-min-range-out.json");
+        String fieldPath = "/primitiveValue";
+        Object testObject = Long.MIN_VALUE;
+        FieldType inputFieldType = FieldType.LONG;
+        FieldType outputFieldType = FieldType.CHAR;
+
+        write(path, fieldPath, testObject, inputFieldType);
+
+        AtlasInternalSession session = read(path, outputFieldType, fieldPath);
+
+        assertEquals(null, session.head().getSourceField().getValue());
+        assertEquals(1, session.getAudits().getAudit().size());
+        assertEquals("Failed to convert field value '-9223372036854775808' into type 'CHAR'", session.getAudits().getAudit().get(0).getMessage());
+        assertEquals("-9223372036854775808", session.getAudits().getAudit().get(0).getValue());
+        assertEquals(AuditStatus.ERROR, session.getAudits().getAudit().get(0).getStatus());
+    }
+
+    @Test
+    public void testJsonFieldByteMaxRangeOut() throws Exception {
+        Path path = Paths.get("target" + File.separator + "test-write-field-byte-max-range-out.json");
+        String fieldPath = "/primitiveValue";
+        Object testObject = Long.MAX_VALUE;
+        FieldType inputFieldType = FieldType.LONG;
+        FieldType outputFieldType = FieldType.BYTE;
+
+        write(path, fieldPath, testObject, inputFieldType);
+
+        AtlasInternalSession session = read(path, outputFieldType, fieldPath);
+
+        assertEquals(null, session.head().getSourceField().getValue());
+        assertEquals(1, session.getAudits().getAudit().size());
+        assertEquals("Failed to convert field value '9223372036854775807' into type 'BYTE'", session.getAudits().getAudit().get(0).getMessage());
+        assertEquals("9223372036854775807", session.getAudits().getAudit().get(0).getValue());
+        assertEquals(AuditStatus.ERROR, session.getAudits().getAudit().get(0).getStatus());
+    }
+
+    @Test
+    public void testJsonFieldByteMinRangeOut() throws Exception {
+        Path path = Paths.get("target" + File.separator + "test-write-field-byte-min-range-out.json");
+        String fieldPath = "/primitiveValue";
+        Object testObject = Long.MIN_VALUE;
+        FieldType inputFieldType = FieldType.LONG;
+        FieldType outputFieldType = FieldType.BYTE;
+
+        write(path, fieldPath, testObject, inputFieldType);
+
+        AtlasInternalSession session = read(path, outputFieldType, fieldPath);
+
+        assertEquals(null, session.head().getSourceField().getValue());
+        assertEquals(1, session.getAudits().getAudit().size());
+        assertEquals("Failed to convert field value '-9223372036854775808' into type 'BYTE'", session.getAudits().getAudit().get(0).getMessage());
+        assertEquals("-9223372036854775808", session.getAudits().getAudit().get(0).getValue());
+        assertEquals(AuditStatus.ERROR, session.getAudits().getAudit().get(0).getStatus());
+    }
+
+    @Test
+    public void testJsonFieldBooleanRangeOut() throws Exception {
+        Path path = Paths.get("target" + File.separator + "test-write-field-boolean-range-out.json");
+        String fieldPath = "/primitiveValue";
+        Object testObject = null;
+        FieldType inputFieldType = FieldType.NONE;
+        FieldType outputFieldType = FieldType.BOOLEAN;
+
+        write(path, fieldPath, testObject, inputFieldType);
+
+        AtlasInternalSession session = read(path, outputFieldType, fieldPath);
+
+        assertEquals(null, session.head().getSourceField().getValue());
+        assertEquals(0, session.getAudits().getAudit().size());
+    }
+
+    @Test
+    public void testJsonFieldLongDecimal() throws Exception {
+        Path path = Paths.get("target" + File.separator + "test-write-field-long-decimal.json");
+        String fieldPath = "/primitiveValue";
+        Object testObject = Double.valueOf("126.1234");
+        FieldType inputFieldType = FieldType.DOUBLE;
+        FieldType outputFieldType = FieldType.LONG;
+
+        write(path, fieldPath, testObject, inputFieldType);
+
+        AtlasInternalSession session = read(path, outputFieldType, fieldPath);
+
+        assertEquals(null, session.head().getSourceField().getValue());
+        assertEquals(1, session.getAudits().getAudit().size());
+        assertEquals("Failed to convert field value '126.1234' into type 'LONG'", session.getAudits().getAudit().get(0).getMessage());
+        assertEquals("126.1234", session.getAudits().getAudit().get(0).getValue());
+        assertEquals(AuditStatus.ERROR, session.getAudits().getAudit().get(0).getStatus());
+    }
+
+    @Test
+    public void testJsonFieldIntegerDecimal() throws Exception {
+        Path path = Paths.get("target" + File.separator + "test-write-field-integer-decimal.json");
+        String fieldPath = "/primitiveValue";
+        Object testObject = Double.valueOf("126.1234");
+        FieldType inputFieldType = FieldType.DOUBLE;
+        FieldType outputFieldType = FieldType.INTEGER;
+
+        write(path, fieldPath, testObject, inputFieldType);
+
+        AtlasInternalSession session = read(path, outputFieldType, fieldPath);
+
+        assertEquals(null, session.head().getSourceField().getValue());
+        assertEquals(1, session.getAudits().getAudit().size());
+        assertEquals("Failed to convert field value '126.1234' into type 'INTEGER'", session.getAudits().getAudit().get(0).getMessage());
+        assertEquals("126.1234", session.getAudits().getAudit().get(0).getValue());
+        assertEquals(AuditStatus.ERROR, session.getAudits().getAudit().get(0).getStatus());
+    }
+
+    @Test
+    public void testJsonFieldShortDecimal() throws Exception {
+        Path path = Paths.get("target" + File.separator + "test-write-field-short-decimal.json");
+        String fieldPath = "/primitiveValue";
+        Object testObject = Double.valueOf("126.1234");
+        FieldType inputFieldType = FieldType.DOUBLE;
+        FieldType outputFieldType = FieldType.SHORT;
+
+        write(path, fieldPath, testObject, inputFieldType);
+
+        AtlasInternalSession session = read(path, outputFieldType, fieldPath);
+
+        assertEquals(null, session.head().getSourceField().getValue());
+        assertEquals(1, session.getAudits().getAudit().size());
+        assertEquals("Failed to convert field value '126.1234' into type 'SHORT'", session.getAudits().getAudit().get(0).getMessage());
+        assertEquals("126.1234", session.getAudits().getAudit().get(0).getValue());
+        assertEquals(AuditStatus.ERROR, session.getAudits().getAudit().get(0).getStatus());
+    }
+
+    @Test
+    public void testJsonFieldCharDecimal() throws Exception {
+        Path path = Paths.get("target" + File.separator + "test-write-field-char-decimal.json");
+        String fieldPath = "/primitiveValue";
+        Object testObject = Double.valueOf("126.1234");
+        FieldType inputFieldType = FieldType.DOUBLE;
+        FieldType outputFieldType = FieldType.CHAR;
+
+        write(path, fieldPath, testObject, inputFieldType);
+
+        AtlasInternalSession session = read(path, outputFieldType, fieldPath);
+
+        assertEquals(null, session.head().getSourceField().getValue());
+        assertEquals(1, session.getAudits().getAudit().size());
+        assertEquals("Failed to convert field value '126.1234' into type 'CHAR'", session.getAudits().getAudit().get(0).getMessage());
+        assertEquals("126.1234", session.getAudits().getAudit().get(0).getValue());
+        assertEquals(AuditStatus.ERROR, session.getAudits().getAudit().get(0).getStatus());
+    }
+
+    @Test
+    public void testJsonFieldByteDecimal() throws Exception {
+        Path path = Paths.get("target" + File.separator + "test-write-field-byte-decimal.json");
+        String fieldPath = "/primitiveValue";
+        Object testObject = Double.valueOf("126.1234");
+        FieldType inputFieldType = FieldType.DOUBLE;
+        FieldType outputFieldType = FieldType.BYTE;
+
+        write(path, fieldPath, testObject, inputFieldType);
+
+        AtlasInternalSession session = read(path, outputFieldType, fieldPath);
+
+        assertEquals(null, session.head().getSourceField().getValue());
+        assertEquals(1, session.getAudits().getAudit().size());
+        assertEquals("Failed to convert field value '126.1234' into type 'BYTE'", session.getAudits().getAudit().get(0).getMessage());
+        assertEquals("126.1234", session.getAudits().getAudit().get(0).getValue());
+        assertEquals(AuditStatus.ERROR, session.getAudits().getAudit().get(0).getStatus());
+    }
+
+    @Test
+    public void testJsonFieldDoubleString() throws Exception {
+        Path path = Paths.get("target" + File.separator + "test-write-field-double-string.json");
+        String fieldPath = "/primitiveValue";
+        Object testObject = "abcd";
+        FieldType inputFieldType = FieldType.STRING;
+        FieldType outputFieldType = FieldType.DOUBLE;
+
+        write(path, fieldPath, testObject, inputFieldType);
+
+        AtlasInternalSession session = read(path, outputFieldType, fieldPath);
+
+        assertEquals(null, session.head().getSourceField().getValue());
+        assertEquals(1, session.getAudits().getAudit().size());
+        assertEquals("Failed to convert field value 'abcd' into type 'DOUBLE'", session.getAudits().getAudit().get(0).getMessage());
+        assertEquals("abcd", session.getAudits().getAudit().get(0).getValue());
+        assertEquals(AuditStatus.ERROR, session.getAudits().getAudit().get(0).getStatus());
+    }
+
+    @Test
+    public void testJsonFieldFloatString() throws Exception {
+        Path path = Paths.get("target" + File.separator + "test-write-field-float-string.json");
+        String fieldPath = "/primitiveValue";
+        Object testObject = "abcd";
+        FieldType inputFieldType = FieldType.STRING;
+        FieldType outputFieldType = FieldType.FLOAT;
+
+        write(path, fieldPath, testObject, inputFieldType);
+
+        AtlasInternalSession session = read(path, outputFieldType, fieldPath);
+
+        assertEquals(null, session.head().getSourceField().getValue());
+        assertEquals(1, session.getAudits().getAudit().size());
+        assertEquals("Failed to convert field value 'abcd' into type 'FLOAT'", session.getAudits().getAudit().get(0).getMessage());
+        assertEquals("abcd", session.getAudits().getAudit().get(0).getValue());
+        assertEquals(AuditStatus.ERROR, session.getAudits().getAudit().get(0).getStatus());
+    }
+
+    @Test
+    public void testJsonFieldLongString() throws Exception {
+        Path path = Paths.get("target" + File.separator + "test-write-field-long-string.json");
+        String fieldPath = "/primitiveValue";
+        Object testObject = "abcd";
+        FieldType inputFieldType = FieldType.STRING;
+        FieldType outputFieldType = FieldType.LONG;
+
+        write(path, fieldPath, testObject, inputFieldType);
+
+        AtlasInternalSession session = read(path, outputFieldType, fieldPath);
+
+        assertEquals(null, session.head().getSourceField().getValue());
+        assertEquals(1, session.getAudits().getAudit().size());
+        assertEquals("Failed to convert field value 'abcd' into type 'LONG'", session.getAudits().getAudit().get(0).getMessage());
+        assertEquals("abcd", session.getAudits().getAudit().get(0).getValue());
+        assertEquals(AuditStatus.ERROR, session.getAudits().getAudit().get(0).getStatus());
+    }
+
+    @Test
+    public void testJsonFieldIntegerString() throws Exception {
+        Path path = Paths.get("target" + File.separator + "test-write-field-integer-string.json");
+        String fieldPath = "/primitiveValue";
+        Object testObject = "abcd";
+        FieldType inputFieldType = FieldType.STRING;
+        FieldType outputFieldType = FieldType.INTEGER;
+
+        write(path, fieldPath, testObject, inputFieldType);
+
+        AtlasInternalSession session = read(path, outputFieldType, fieldPath);
+
+        assertEquals(null, session.head().getSourceField().getValue());
+        assertEquals(1, session.getAudits().getAudit().size());
+        assertEquals("Failed to convert field value 'abcd' into type 'INTEGER'", session.getAudits().getAudit().get(0).getMessage());
+        assertEquals("abcd", session.getAudits().getAudit().get(0).getValue());
+        assertEquals(AuditStatus.ERROR, session.getAudits().getAudit().get(0).getStatus());
+    }
+
+    @Test
+    public void testJsonFieldShortString() throws Exception {
+        Path path = Paths.get("target" + File.separator + "test-write-field-short-string.json");
+        String fieldPath = "/primitiveValue";
+        Object testObject = "abcd";
+        FieldType inputFieldType = FieldType.STRING;
+        FieldType outputFieldType = FieldType.SHORT;
+
+        write(path, fieldPath, testObject, inputFieldType);
+
+        AtlasInternalSession session = read(path, outputFieldType, fieldPath);
+
+        assertEquals(null, session.head().getSourceField().getValue());
+        assertEquals(1, session.getAudits().getAudit().size());
+        assertEquals("Failed to convert field value 'abcd' into type 'SHORT'", session.getAudits().getAudit().get(0).getMessage());
+        assertEquals("abcd", session.getAudits().getAudit().get(0).getValue());
+        assertEquals(AuditStatus.ERROR, session.getAudits().getAudit().get(0).getStatus());
+    }
+
+    @Test
+    public void testJsonFieldCharString() throws Exception {
+        Path path = Paths.get("target" + File.separator + "test-write-field-char-string.json");
+        String fieldPath = "/primitiveValue";
+        Object testObject = "abcd";
+        FieldType inputFieldType = FieldType.STRING;
+        FieldType outputFieldType = FieldType.CHAR;
+
+        write(path, fieldPath, testObject, inputFieldType);
+
+        AtlasInternalSession session = read(path, outputFieldType, fieldPath);
+
+        assertEquals(null, session.head().getSourceField().getValue());
+        assertEquals(1, session.getAudits().getAudit().size());
+        assertEquals("Failed to convert field value 'abcd' into type 'CHAR'", session.getAudits().getAudit().get(0).getMessage());
+        assertEquals("abcd", session.getAudits().getAudit().get(0).getValue());
+        assertEquals(AuditStatus.ERROR, session.getAudits().getAudit().get(0).getStatus());
+    }
+
+    @Test
+    public void testJsonFieldByteString() throws Exception {
+        Path path = Paths.get("target" + File.separator + "test-write-field-byte-string.json");
+        String fieldPath = "/primitiveValue";
+        Object testObject = "abcd";
+        FieldType inputFieldType = FieldType.STRING;
+        FieldType outputFieldType = FieldType.BYTE;
+
+        write(path, fieldPath, testObject, inputFieldType);
+
+        AtlasInternalSession session = read(path, outputFieldType, fieldPath);
+
+        assertEquals(null, session.head().getSourceField().getValue());
+        assertEquals(1, session.getAudits().getAudit().size());
+        assertEquals("Failed to convert field value 'abcd' into type 'BYTE'", session.getAudits().getAudit().get(0).getMessage());
+        assertEquals("abcd", session.getAudits().getAudit().get(0).getValue());
+        assertEquals(AuditStatus.ERROR, session.getAudits().getAudit().get(0).getStatus());
+    }
+
+    @Test
+    public void testJsonFieldBooleanString() throws Exception {
+        Path path = Paths.get("target" + File.separator + "test-write-field-byte-string.json");
+        String fieldPath = "/primitiveValue";
+        Object testObject = "abcd";
+        FieldType inputFieldType = FieldType.STRING;
+        FieldType outputFieldType = FieldType.BOOLEAN;
+
+        write(path, fieldPath, testObject, inputFieldType);
+
+        AtlasInternalSession session = read(path, outputFieldType, fieldPath);
+
+        assertEquals(true, session.head().getSourceField().getValue());
+    }
+
 }
