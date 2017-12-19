@@ -196,23 +196,6 @@
                     <artifactId>atlas-xml-service</artifactId>
                 </dependency>
 
-                <!-- Integration Tests -->
-                <dependency>
-                    <groupId>io.atlasmap</groupId>
-                    <artifactId>atlas-itests-concurrency</artifactId>
-                </dependency>
-                <dependency>
-                    <groupId>io.atlasmap</groupId>
-                    <artifactId>atlas-itests-core</artifactId>
-                </dependency>
-                <dependency>
-                    <groupId>io.atlasmap</groupId>
-                    <artifactId>atlas-itests-reference-mappings</artifactId>
-                </dependency>
-                <dependency>
-                    <groupId>io.atlasmap</groupId>
-                    <artifactId>atlas-itests-validation-mappings</artifactId>
-                </dependency>
             </dependencies>
         </profile>
     </profiles>
