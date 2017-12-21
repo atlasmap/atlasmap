@@ -50,6 +50,16 @@
         </complexType>
     </element>
 
+    <element name="Append">
+        <complexType>
+            <complexContent>
+                <extension base="atlas:Action">
+                    <attribute name="string" type="string" />
+                </extension>
+            </complexContent>
+        </complexType>
+    </element>
+
     <element name="Average">
         <complexType>
             <complexContent>
@@ -359,6 +369,16 @@
         </complexType>
     </element>
 
+    <element name="Prepend">
+        <complexType>
+            <complexContent>
+                <extension base="atlas:Action">
+                    <attribute name="string" type="string" />
+                </extension>
+            </complexContent>
+        </complexType>
+    </element>
+
     <element name="RemoveFileExtension">
         <complexType>
             <complexContent>
@@ -505,6 +525,7 @@
                 <element ref="atlas:Add" />
                 <element ref="atlas:AddDays" />
                 <element ref="atlas:AddSeconds" />
+                <element ref="atlas:Append" />
                 <element ref="atlas:Average" />
                 <element ref="atlas:Camelize" />
                 <element ref="atlas:Capitalize" />
@@ -538,6 +559,7 @@
                 <element ref="atlas:Normalize" />
                 <element ref="atlas:PadStringLeft" />
                 <element ref="atlas:PadStringRight" />
+                <element ref="atlas:Prepend" />
                 <element ref="atlas:RemoveFileExtension" />
                 <element ref="atlas:ReplaceAll" />
                 <element ref="atlas:ReplaceFirst" />

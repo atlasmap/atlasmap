@@ -149,7 +149,6 @@ public class AtlasModelFactory {
             f.setStatus(FieldStatus.fromValue(field.getStatus().value()));
         }
         // We can't clone so don't set value
-        // f.setValue(field.getValue());
         return f;
     }
 
@@ -190,6 +189,11 @@ public class AtlasModelFactory {
             AddSeconds addSeconds = new AddSeconds();
             addSeconds.setSeconds(((AddSeconds) action).getSeconds());
             return addSeconds;
+        }
+        if (action instanceof Append) {
+            Append append = new Append();
+            append.setString(((Append) action).getString());
+            return append;
         }
         if (action instanceof Average) {
             return new Average();
@@ -345,6 +349,11 @@ public class AtlasModelFactory {
                 a.setPadCount(((PadStringRight) action).getPadCount());
             }
             return a;
+        }
+        if (action instanceof Prepend) {
+            Prepend append = new Prepend();
+            append.setString(((Prepend) action).getString());
+            return append;
         }
         if (action instanceof RemoveFileExtension) {
             return new RemoveFileExtension();
