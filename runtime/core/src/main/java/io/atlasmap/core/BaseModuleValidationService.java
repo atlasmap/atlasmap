@@ -228,15 +228,15 @@ public abstract class BaseModuleValidationService<T extends Field> implements At
 
     @SuppressWarnings("unchecked")
     protected void validateField(String mappingId, Field field, FieldDirection direction, List<Validation> validations) {
-        if (field == null || !getFieldType().isAssignableFrom(field.getClass())) {
+        if (field == null) {
             Validation validation = new Validation();
             validation.setScope(ValidationScope.MAPPING);
             validation.setId(mappingId);
-            validation.setMessage(String.format("%s field %s is not supported by the %s",
-                    direction.value(), getFieldName(field), getModuleDetail().name()));
+            validation.setMessage(String.format("%s field %s is null",
+                    direction.value(), getFieldName(field)));
             validation.setStatus(ValidationStatus.ERROR);
             validations.add(validation);
-        } else {
+        } else if (getFieldType().isAssignableFrom(field.getClass())){
             validateModuleField(mappingId, (T)field, direction, validations);
         }
     }
