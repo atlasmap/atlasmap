@@ -16,6 +16,7 @@
 package io.atlasmap.xml.core;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
@@ -25,6 +26,9 @@ import static org.mockito.Mockito.when;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Map;
@@ -36,6 +40,9 @@ import io.atlasmap.api.AtlasException;
 import io.atlasmap.core.DefaultAtlasConversionService;
 import io.atlasmap.spi.AtlasInternalSession;
 import io.atlasmap.spi.AtlasInternalSession.Head;
+import io.atlasmap.v2.AuditStatus;
+import io.atlasmap.v2.Audits;
+import io.atlasmap.v2.FieldType;
 import io.atlasmap.xml.v2.AtlasXmlModelFactory;
 import io.atlasmap.xml.v2.XmlField;
 
@@ -358,5 +365,293 @@ public class XmlFieldReaderTest {
         fis.read(buf);
         fis.close();
         return new String(buf);
+    }
+
+    private void validateBoundaryValue(FieldType fieldType, String fileName, Object testObject) throws Exception {
+        Path path = Paths.get("src" + File.separator + "test" + File.separator + "resources" + File.separator + "xmlFields" + File.separator + fileName);
+
+        AtlasInternalSession session = readFromFile("/primitive/value", fieldType, path);
+
+        assertNotNull(session.head().getSourceField().getValue());
+        assertEquals(testObject, session.head().getSourceField().getValue());
+    }
+
+    @Test
+    public void testXmlFieldDoubleMax() throws Exception {
+        validateBoundaryValue(FieldType.DOUBLE, "test-read-field-double-max.xml", Double.MAX_VALUE);
+    }
+
+    @Test
+    public void testXmlFieldDoubleMin() throws Exception {
+        validateBoundaryValue(FieldType.DOUBLE, "test-read-field-double-min.xml", Double.MIN_VALUE);
+    }
+
+    @Test
+    public void testXmlFieldFloatMax() throws Exception {
+        validateBoundaryValue(FieldType.FLOAT, "test-read-field-float-max.xml", Float.MAX_VALUE);
+    }
+
+    @Test
+    public void testXmlFieldFloatMin() throws Exception {
+        validateBoundaryValue(FieldType.FLOAT, "test-read-field-float-min.xml", Float.MIN_VALUE);
+    }
+
+    @Test
+    public void testXmlFieldLongMax() throws Exception {
+        validateBoundaryValue(FieldType.LONG, "test-read-field-long-max.xml", Long.MAX_VALUE);
+    }
+
+    @Test
+    public void testXmlFieldLongMin() throws Exception {
+        validateBoundaryValue(FieldType.LONG, "test-read-field-long-min.xml", Long.MIN_VALUE);
+    }
+
+    @Test
+    public void testXmlFieldIntegerMax() throws Exception {
+        validateBoundaryValue(FieldType.INTEGER, "test-read-field-integer-max.xml", Integer.MAX_VALUE);
+    }
+
+    @Test
+    public void testXmlFieldIntegerMin() throws Exception {
+        validateBoundaryValue(FieldType.INTEGER, "test-read-field-integer-min.xml", Integer.MIN_VALUE);
+    }
+
+    @Test
+    public void testXmlFieldShortMax() throws Exception {
+        validateBoundaryValue(FieldType.SHORT, "test-read-field-short-max.xml", Short.MAX_VALUE);
+    }
+
+    @Test
+    public void testXmlFieldShortMin() throws Exception {
+        validateBoundaryValue(FieldType.SHORT, "test-read-field-short-min.xml", Short.MIN_VALUE);
+    }
+
+    @Test
+    public void testXmlFieldChar() throws Exception {
+        validateBoundaryValue(FieldType.CHAR, "test-read-field-char.xml", '\u0021');
+    }
+
+    @Test
+    public void testXmlFieldByteMax() throws Exception {
+        validateBoundaryValue(FieldType.BYTE, "test-read-field-byte-max.xml", Byte.MAX_VALUE);
+    }
+
+    @Test
+    public void testXmlFieldByteMin() throws Exception {
+        validateBoundaryValue(FieldType.BYTE, "test-read-field-byte-min.xml", Byte.MIN_VALUE);
+    }
+
+    @Test
+    public void testXmlFieldBooleanTrue() throws Exception {
+        validateBoundaryValue(FieldType.BOOLEAN, "test-read-field-boolean-true.xml", Boolean.TRUE);
+    }
+
+    @Test
+    public void testXmlFieldBooleanFalse() throws Exception {
+        validateBoundaryValue(FieldType.BOOLEAN, "test-read-field-boolean-false.xml", Boolean.FALSE);
+    }
+
+    @Test
+    public void testXmlFieldBooleanNumber1() throws Exception {
+        validateBoundaryValue(FieldType.BOOLEAN, "test-read-field-boolean-one.xml", Boolean.TRUE);
+    }
+
+    @Test
+    public void testXmlFieldBooleanNumber0() throws Exception {
+        validateBoundaryValue(FieldType.BOOLEAN, "test-read-field-boolean-zero.xml", Boolean.FALSE);
+    }
+
+    @Test
+    public void testXmlFieldBooleanLetterT() throws Exception {
+        validateBoundaryValue(FieldType.BOOLEAN, "test-read-field-boolean-letter-T.xml", Boolean.TRUE);
+    }
+
+    @Test
+    public void testXmlFieldBooleanLetterF() throws Exception {
+        validateBoundaryValue(FieldType.BOOLEAN, "test-read-field-boolean-letter-F.xml", Boolean.FALSE);
+    }
+
+    private AtlasInternalSession readFromFile(String fieldPath, FieldType fieldType, Path path) throws Exception {
+        String input = new String(Files.readAllBytes(path));
+        reader.setDocument(input, false);
+        XmlField xmlField = AtlasXmlModelFactory.createXmlField();
+        xmlField.setPath(fieldPath);
+        xmlField.setPrimitive(Boolean.TRUE);
+        xmlField.setFieldType(fieldType);
+        assertNull(xmlField.getValue());
+
+        AtlasInternalSession session = mock(AtlasInternalSession.class);
+        when(session.head()).thenReturn(mock(Head.class));
+        when(session.head().getSourceField()).thenReturn(xmlField);
+        Audits audits = new Audits();
+        when(session.getAudits()).thenReturn(audits);
+        reader.read(session);
+        return session;
+    }
+
+    private void validateRangeOutValue(FieldType fieldType, String fileName, String inputValue) throws Exception {
+        Path path = Paths.get("src" + File.separator + "test" + File.separator + "resources" + File.separator + "xmlFields" + File.separator + fileName);
+
+        AtlasInternalSession session = readFromFile("/primitive/value", fieldType, path);
+
+        assertEquals(null, session.head().getSourceField().getValue());
+        assertEquals(1, session.getAudits().getAudit().size());
+        assertEquals("Failed to convert field value '" + inputValue + "' into type '" + fieldType.value().toUpperCase() + "'", session.getAudits().getAudit().get(0).getMessage());
+        assertEquals(inputValue, session.getAudits().getAudit().get(0).getValue());
+        assertEquals(AuditStatus.ERROR, session.getAudits().getAudit().get(0).getStatus());
+    }
+
+    @Test
+    public void testXmlFieldDoubleMaxRangeOut() throws Exception {
+        validateRangeOutValue(FieldType.DOUBLE, "test-read-field-double-max-range-out.xml", "1.7976931348623157E309");
+    }
+
+    @Test
+    public void testXmlFieldDoubleMinRangeOut() throws Exception {
+        String fieldPath = "/primitive/value";
+        FieldType fieldType = FieldType.DOUBLE;
+        Path path = Paths.get("src" + File.separator + "test" + File.separator + "resources" + File.separator + "xmlFields" + File.separator + "test-read-field-double-min-range-out.xml");
+
+        AtlasInternalSession session = readFromFile(fieldPath, fieldType, path);
+
+        assertEquals(0.0, session.head().getSourceField().getValue());
+        assertEquals(0, session.getAudits().getAudit().size());
+    }
+
+    @Test
+    public void testXmlFieldFloatMaxRangeOut() throws Exception {
+        validateRangeOutValue(FieldType.FLOAT, "test-read-field-float-max-range-out.xml", "3.4028235E39");
+    }
+
+    @Test
+    public void testXmlFieldFloatMinRangeOut() throws Exception {
+        String fieldPath = "/primitive/value";
+        FieldType fieldType = FieldType.FLOAT;
+        Path path = Paths.get("src" + File.separator + "test" + File.separator + "resources" + File.separator + "xmlFields" + File.separator + "test-read-field-float-min-range-out.xml");
+
+        AtlasInternalSession session = readFromFile(fieldPath, fieldType, path);
+
+        assertEquals(0.0f, session.head().getSourceField().getValue());
+        assertEquals(0, session.getAudits().getAudit().size());
+    }
+
+    @Test
+    public void testXmlFieldLongMaxRangeOut() throws Exception {
+        validateRangeOutValue(FieldType.LONG, "test-read-field-long-max-range-out.xml", "9223372036854775808");
+    }
+
+    @Test
+    public void testXmlFieldLongMinRangeOut() throws Exception {
+        validateRangeOutValue(FieldType.LONG, "test-read-field-long-min-range-out.xml", "-9223372036854775809");
+    }
+
+    @Test
+    public void testXmlFieldIntegerMaxRangeOut() throws Exception {
+        validateRangeOutValue(FieldType.INTEGER, "test-read-field-integer-max-range-out.xml", "9223372036854775807");
+    }
+
+    @Test
+    public void testXmlFieldIntegerMinRangeOut() throws Exception {
+        validateRangeOutValue(FieldType.INTEGER, "test-read-field-integer-min-range-out.xml", "-9223372036854775808");
+    }
+
+    @Test
+    public void testXmlFieldShortMaxRangeOut() throws Exception {
+        validateRangeOutValue(FieldType.SHORT, "test-read-field-short-max-range-out.xml", "9223372036854775807");
+    }
+
+    @Test
+    public void testXmlFieldShortMinRangeOut() throws Exception {
+        validateRangeOutValue(FieldType.SHORT, "test-read-field-short-min-range-out.xml", "-9223372036854775808");
+    }
+
+    @Test
+    public void testXmlFieldCharMaxRangeOut() throws Exception {
+        validateRangeOutValue(FieldType.CHAR, "test-read-field-char-max-range-out.xml", "9223372036854775807");
+    }
+
+    @Test
+    public void testXmlFieldCharMinRangeOut() throws Exception {
+        validateRangeOutValue(FieldType.CHAR, "test-read-field-char-min-range-out.xml", "-9223372036854775808");
+    }
+
+    @Test
+    public void testXmlFieldByteMaxRangeOut() throws Exception {
+        validateRangeOutValue(FieldType.BYTE, "test-read-field-byte-max-range-out.xml", "9223372036854775807");
+    }
+
+    @Test
+    public void testXmlFieldByteMinRangeOut() throws Exception {
+        validateRangeOutValue(FieldType.BYTE, "test-read-field-byte-min-range-out.xml", "-9223372036854775808");
+    }
+
+    @Test
+    public void testXmlFieldBooleanRangeOut() throws Exception {
+        validateBoundaryValue(FieldType.BOOLEAN, "test-read-field-boolean-range-out.xml", Boolean.TRUE);
+    }
+
+    @Test
+    public void testXmlFieldBooleanDecimal() throws Exception {
+        validateBoundaryValue(FieldType.BOOLEAN, "test-read-field-boolean-decimal.xml", Boolean.TRUE);
+    }
+
+    @Test
+    public void testXmlFieldLongDecimal() throws Exception {
+        validateRangeOutValue(FieldType.LONG, "test-read-field-long-decimal.xml", "126.1234");
+    }
+
+    @Test
+    public void testXmlFieldIntegerDecimal() throws Exception {
+        validateRangeOutValue(FieldType.INTEGER, "test-read-field-integer-decimal.xml", "126.1234");
+    }
+
+    @Test
+    public void testXmlFieldShortDecimal() throws Exception {
+        validateRangeOutValue(FieldType.SHORT, "test-read-field-short-decimal.xml", "126.1234");
+    }
+
+    @Test
+    public void testXmlFieldCharDecimal() throws Exception {
+        validateRangeOutValue(FieldType.CHAR, "test-read-field-char-decimal.xml", "126.1234");
+    }
+
+    @Test
+    public void testXmlFieldByteDecimal() throws Exception {
+        validateRangeOutValue(FieldType.BYTE, "test-read-field-byte-decimal.xml", "126.1234");
+    }
+
+    @Test
+    public void testXmlFieldDoubleString() throws Exception {
+        validateRangeOutValue(FieldType.DOUBLE, "test-read-field-double-string.xml", "abcd");
+    }
+
+    @Test
+    public void testXmlFieldFloatString() throws Exception {
+        validateRangeOutValue(FieldType.FLOAT, "test-read-field-float-string.xml", "abcd");
+    }
+
+    @Test
+    public void testXmlFieldLongString() throws Exception {
+        validateRangeOutValue(FieldType.LONG, "test-read-field-long-string.xml", "abcd");
+    }
+
+    @Test
+    public void testXmlFieldIntegerString() throws Exception {
+        validateRangeOutValue(FieldType.INTEGER, "test-read-field-integer-string.xml", "abcd");
+    }
+
+    @Test
+    public void testXmlFieldShortString() throws Exception {
+        validateRangeOutValue(FieldType.SHORT, "test-read-field-short-string.xml", "abcd");
+    }
+
+    @Test
+    public void testXmlFieldCharString() throws Exception {
+        validateRangeOutValue(FieldType.CHAR, "test-read-field-char-string.xml", "abcd");
+    }
+
+    @Test
+    public void testXmlFieldByteString() throws Exception {
+        validateRangeOutValue(FieldType.BYTE, "test-read-field-byte-string.xml", "abcd");
     }
 }
