@@ -22,6 +22,7 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -34,6 +35,9 @@ import io.atlasmap.json.v2.AtlasJsonModelFactory;
 import io.atlasmap.json.v2.JsonField;
 import io.atlasmap.spi.AtlasInternalSession;
 import io.atlasmap.spi.AtlasInternalSession.Head;
+import io.atlasmap.v2.AuditStatus;
+import io.atlasmap.v2.Audits;
+import io.atlasmap.v2.FieldType;
 
 public class JsonFieldReaderTest {
 
@@ -747,5 +751,822 @@ public class JsonFieldReaderTest {
         field.setPath(null);
         field.setValue(null);
         field.setFieldType(null);
+    }
+
+    @Test
+    public void testJsonFieldDoubleMax() throws Exception {
+        String filePath = "src" + File.separator + "test" + File.separator + "resources"
+                + File.separator + "jsonFields" + File.separator + "field-double-max.json";
+        String document = new String(Files.readAllBytes(Paths.get(filePath)));
+        reader.setDocument(document);
+        JsonField field = AtlasJsonModelFactory.createJsonField();
+        field.setPath("/doubleValue");
+        field.setFieldType(FieldType.DOUBLE);
+        read(field);
+        assertEquals(Double.MAX_VALUE, field.getValue());
+    }
+
+    @Test
+    public void testJsonFieldDoubleMin() throws Exception {
+        String filePath = "src" + File.separator + "test" + File.separator + "resources"
+                + File.separator + "jsonFields" + File.separator + "field-double-min.json";
+        String document = new String(Files.readAllBytes(Paths.get(filePath)));
+        reader.setDocument(document);
+        JsonField field = AtlasJsonModelFactory.createJsonField();
+        field.setPath("/doubleValue");
+        field.setFieldType(FieldType.DOUBLE);
+        read(field);
+        assertEquals(Double.MIN_VALUE, field.getValue());
+    }
+
+    @Test
+    public void testJsonFieldFloatMax() throws Exception {
+        String filePath = "src" + File.separator + "test" + File.separator + "resources"
+                + File.separator + "jsonFields" + File.separator + "field-float-max.json";
+        String document = new String(Files.readAllBytes(Paths.get(filePath)));
+        reader.setDocument(document);
+        JsonField field = AtlasJsonModelFactory.createJsonField();
+        field.setPath("/floatValue");
+        field.setFieldType(FieldType.FLOAT);
+        read(field);
+        assertEquals(Float.MAX_VALUE, field.getValue());
+    }
+
+    @Test
+    public void testJsonFieldFloatMin() throws Exception {
+        String filePath = "src" + File.separator + "test" + File.separator + "resources"
+                + File.separator + "jsonFields" + File.separator + "field-float-min.json";
+        String document = new String(Files.readAllBytes(Paths.get(filePath)));
+        reader.setDocument(document);
+        JsonField field = AtlasJsonModelFactory.createJsonField();
+        field.setPath("/floatValue");
+        field.setFieldType(FieldType.FLOAT);
+        read(field);
+        assertEquals(Float.MIN_VALUE, field.getValue());
+    }
+
+    @Test
+    public void testJsonFieldLongMax() throws Exception {
+        String filePath = "src" + File.separator + "test" + File.separator + "resources"
+                + File.separator + "jsonFields" + File.separator + "field-long-max.json";
+        String document = new String(Files.readAllBytes(Paths.get(filePath)));
+        reader.setDocument(document);
+        JsonField field = AtlasJsonModelFactory.createJsonField();
+        field.setPath("/longValue");
+        field.setFieldType(FieldType.LONG);
+        read(field);
+        assertEquals(Long.MAX_VALUE, field.getValue());
+    }
+
+    @Test
+    public void testJsonFieldLongMin() throws Exception {
+        String filePath = "src" + File.separator + "test" + File.separator + "resources"
+                + File.separator + "jsonFields" + File.separator + "field-long-min.json";
+        String document = new String(Files.readAllBytes(Paths.get(filePath)));
+        reader.setDocument(document);
+        JsonField field = AtlasJsonModelFactory.createJsonField();
+        field.setPath("/longValue");
+        field.setFieldType(FieldType.LONG);
+        read(field);
+        assertEquals(Long.MIN_VALUE, field.getValue());
+    }
+
+    @Test
+    public void testJsonFieldIntegerMax() throws Exception {
+        String filePath = "src" + File.separator + "test" + File.separator + "resources"
+                + File.separator + "jsonFields" + File.separator + "field-integer-max.json";
+        String document = new String(Files.readAllBytes(Paths.get(filePath)));
+        reader.setDocument(document);
+        JsonField field = AtlasJsonModelFactory.createJsonField();
+        field.setPath("/integerValue");
+        field.setFieldType(FieldType.INTEGER);
+        read(field);
+        assertEquals(Integer.MAX_VALUE, field.getValue());
+    }
+
+    @Test
+    public void testJsonFieldIntegerMin() throws Exception {
+        String filePath = "src" + File.separator + "test" + File.separator + "resources"
+                + File.separator + "jsonFields" + File.separator + "field-integer-min.json";
+        String document = new String(Files.readAllBytes(Paths.get(filePath)));
+        reader.setDocument(document);
+        JsonField field = AtlasJsonModelFactory.createJsonField();
+        field.setPath("/integerValue");
+        field.setFieldType(FieldType.INTEGER);
+        read(field);
+        assertEquals(Integer.MIN_VALUE, field.getValue());
+    }
+
+    @Test
+    public void testJsonFieldShortMax() throws Exception {
+        String filePath = "src" + File.separator + "test" + File.separator + "resources"
+                + File.separator + "jsonFields" + File.separator + "field-short-max.json";
+        String document = new String(Files.readAllBytes(Paths.get(filePath)));
+        reader.setDocument(document);
+        JsonField field = AtlasJsonModelFactory.createJsonField();
+        field.setPath("/shortValue");
+        field.setFieldType(FieldType.SHORT);
+        read(field);
+        assertEquals(Short.MAX_VALUE, field.getValue());
+    }
+
+    @Test
+    public void testJsonFieldShortMin() throws Exception {
+        String filePath = "src" + File.separator + "test" + File.separator + "resources"
+                + File.separator + "jsonFields" + File.separator + "field-short-min.json";
+        String document = new String(Files.readAllBytes(Paths.get(filePath)));
+        reader.setDocument(document);
+        JsonField field = AtlasJsonModelFactory.createJsonField();
+        field.setPath("/shortValue");
+        field.setFieldType(FieldType.SHORT);
+        read(field);
+        assertEquals(Short.MIN_VALUE, field.getValue());
+    }
+
+    @Test
+    public void testJsonFieldCharMax() throws Exception {
+        String filePath = "src" + File.separator + "test" + File.separator + "resources"
+                + File.separator + "jsonFields" + File.separator + "field-char-max.json";
+        String document = new String(Files.readAllBytes(Paths.get(filePath)));
+        reader.setDocument(document);
+        JsonField field = AtlasJsonModelFactory.createJsonField();
+        field.setPath("/charValue");
+        field.setFieldType(FieldType.CHAR);
+        read(field);
+        assertEquals(Character.MAX_VALUE, field.getValue());
+    }
+
+    @Test
+    public void testJsonFieldCharMin() throws Exception {
+        String filePath = "src" + File.separator + "test" + File.separator + "resources"
+                + File.separator + "jsonFields" + File.separator + "field-char-min.json";
+        String document = new String(Files.readAllBytes(Paths.get(filePath)));
+        reader.setDocument(document);
+        JsonField field = AtlasJsonModelFactory.createJsonField();
+        field.setPath("/charValue");
+        field.setFieldType(FieldType.CHAR);
+        read(field);
+        assertEquals(Character.MIN_VALUE, field.getValue());
+    }
+
+    @Test
+    public void testJsonFieldByteMax() throws Exception {
+        String filePath = "src" + File.separator + "test" + File.separator + "resources"
+                + File.separator + "jsonFields" + File.separator + "field-byte-max.json";
+        String document = new String(Files.readAllBytes(Paths.get(filePath)));
+        reader.setDocument(document);
+        JsonField field = AtlasJsonModelFactory.createJsonField();
+        field.setPath("/byteValue");
+        field.setFieldType(FieldType.BYTE);
+        read(field);
+        assertEquals(Byte.MAX_VALUE, field.getValue());
+    }
+
+    @Test
+    public void testJsonFieldByteMin() throws Exception {
+        String filePath = "src" + File.separator + "test" + File.separator + "resources"
+                + File.separator + "jsonFields" + File.separator + "field-byte-min.json";
+        String document = new String(Files.readAllBytes(Paths.get(filePath)));
+        reader.setDocument(document);
+        JsonField field = AtlasJsonModelFactory.createJsonField();
+        field.setPath("/byteValue");
+        field.setFieldType(FieldType.BYTE);
+        read(field);
+        assertEquals(Byte.MIN_VALUE, field.getValue());
+    }
+
+    @Test
+    public void testJsonFieldBooleanTrue() throws Exception {
+        String filePath = "src" + File.separator + "test" + File.separator + "resources"
+                + File.separator + "jsonFields" + File.separator + "field-boolean-true.json";
+        String document = new String(Files.readAllBytes(Paths.get(filePath)));
+        reader.setDocument(document);
+        JsonField field = AtlasJsonModelFactory.createJsonField();
+        field.setPath("/booleanValue");
+        field.setFieldType(FieldType.BOOLEAN);
+        read(field);
+        assertEquals(Boolean.TRUE, field.getValue());
+    }
+
+    @Test
+    public void testJsonFieldBooleanFalse() throws Exception {
+        String filePath = "src" + File.separator + "test" + File.separator + "resources"
+                + File.separator + "jsonFields" + File.separator + "field-boolean-false.json";
+        String document = new String(Files.readAllBytes(Paths.get(filePath)));
+        reader.setDocument(document);
+        JsonField field = AtlasJsonModelFactory.createJsonField();
+        field.setPath("/booleanValue");
+        field.setFieldType(FieldType.BOOLEAN);
+        read(field);
+        assertEquals(Boolean.FALSE, field.getValue());
+    }
+
+    @Test
+    public void testJsonFieldStringNonEmpty() throws Exception {
+        String filePath = "src" + File.separator + "test" + File.separator + "resources"
+                + File.separator + "jsonFields" + File.separator + "field-string-nonempty.json";
+        String document = new String(Files.readAllBytes(Paths.get(filePath)));
+        reader.setDocument(document);
+        JsonField field = AtlasJsonModelFactory.createJsonField();
+        field.setPath("/stringValue");
+        field.setFieldType(FieldType.STRING);
+        read(field);
+        assertEquals("testString", field.getValue());
+    }
+
+    @Test
+    public void testJsonFieldStringNull() throws Exception {
+        String filePath = "src" + File.separator + "test" + File.separator + "resources"
+                + File.separator + "jsonFields" + File.separator + "field-string-null.json";
+        String document = new String(Files.readAllBytes(Paths.get(filePath)));
+        reader.setDocument(document);
+        JsonField field = AtlasJsonModelFactory.createJsonField();
+        field.setPath("/stringValue");
+        field.setFieldType(FieldType.STRING);
+        read(field);
+        assertEquals(null, field.getValue());
+    }
+
+    @Test
+    public void testJsonFieldStringEmpty() throws Exception {
+        String filePath = "src" + File.separator + "test" + File.separator + "resources"
+                + File.separator + "jsonFields" + File.separator + "field-string-empty.json";
+        String document = new String(Files.readAllBytes(Paths.get(filePath)));
+        reader.setDocument(document);
+        JsonField field = AtlasJsonModelFactory.createJsonField();
+        field.setPath("/stringValue");
+        field.setFieldType(FieldType.STRING);
+        read(field);
+        assertEquals("", field.getValue());
+    }
+
+    @Test
+    public void testJsonFieldStringNonExist() throws Exception {
+        String filePath = "src" + File.separator + "test" + File.separator + "resources"
+                + File.separator + "jsonFields" + File.separator + "field-string-nonexist.json";
+        String document = new String(Files.readAllBytes(Paths.get(filePath)));
+        reader.setDocument(document);
+        JsonField field = AtlasJsonModelFactory.createJsonField();
+        field.setPath("/stringValue");
+        field.setFieldType(FieldType.STRING);
+        read(field);
+        assertEquals(null, field.getValue());
+    }
+
+    private AtlasInternalSession read(JsonField field) throws AtlasException {
+        AtlasInternalSession session = mock(AtlasInternalSession.class);
+        when(session.head()).thenReturn(mock(Head.class));
+        when(session.head().getSourceField()).thenReturn(field);
+
+        Audits audits = new Audits();
+        when(session.getAudits()).thenReturn(audits);
+        reader.read(session);
+        return session;
+    }
+
+    @Test
+    public void testJsonFieldDoubleMaxRangeOut() throws Exception {
+        String filePath = "src" + File.separator + "test" + File.separator + "resources"
+                + File.separator + "jsonFields" + File.separator + "field-double-max-range-out.json";
+        String document = new String(Files.readAllBytes(Paths.get(filePath)));
+        reader.setDocument(document);
+        JsonField field = AtlasJsonModelFactory.createJsonField();
+        field.setPath("/doubleValue");
+        field.setFieldType(FieldType.DOUBLE);
+        AtlasInternalSession session = read(field);
+
+        assertEquals(null, field.getValue());
+        assertEquals(1, session.getAudits().getAudit().size());
+        assertEquals("Failed to convert field value 'Infinity' into type 'DOUBLE'", session.getAudits().getAudit().get(0).getMessage());
+        assertEquals("Infinity", session.getAudits().getAudit().get(0).getValue());
+        assertEquals(AuditStatus.ERROR, session.getAudits().getAudit().get(0).getStatus());
+    }
+
+    @Test
+    public void testJsonFieldDoubleMinRangeOut() throws Exception {
+        String filePath = "src" + File.separator + "test" + File.separator + "resources"
+                + File.separator + "jsonFields" + File.separator + "field-double-min-range-out.json";
+        String document = new String(Files.readAllBytes(Paths.get(filePath)));
+        reader.setDocument(document);
+        JsonField field = AtlasJsonModelFactory.createJsonField();
+        field.setPath("/doubleValue");
+        field.setFieldType(FieldType.DOUBLE);
+        AtlasInternalSession session = read(field);
+
+        assertEquals(0.0, field.getValue());
+        assertEquals(0, session.getAudits().getAudit().size());
+    }
+
+    @Test
+    public void testJsonFieldFloatMaxRangOut() throws Exception {
+        String filePath = "src" + File.separator + "test" + File.separator + "resources"
+                + File.separator + "jsonFields" + File.separator + "field-float-max-range-out.json";
+        String document = new String(Files.readAllBytes(Paths.get(filePath)));
+        reader.setDocument(document);
+        JsonField field = AtlasJsonModelFactory.createJsonField();
+        field.setPath("/floatValue");
+        field.setFieldType(FieldType.FLOAT);
+        AtlasInternalSession session = read(field);
+
+        assertEquals(null, field.getValue());
+        assertEquals(1, session.getAudits().getAudit().size());
+        assertEquals("Failed to convert field value '3.4028235E39' into type 'FLOAT'", session.getAudits().getAudit().get(0).getMessage());
+        assertEquals("3.4028235E39", session.getAudits().getAudit().get(0).getValue());
+        assertEquals(AuditStatus.ERROR, session.getAudits().getAudit().get(0).getStatus());
+    }
+
+    @Test
+    public void testJsonFieldFloatMinRangOut() throws Exception {
+        String filePath = "src" + File.separator + "test" + File.separator + "resources"
+                + File.separator + "jsonFields" + File.separator + "field-float-min-range-out.json";
+        String document = new String(Files.readAllBytes(Paths.get(filePath)));
+        reader.setDocument(document);
+        JsonField field = AtlasJsonModelFactory.createJsonField();
+        field.setPath("/floatValue");
+        field.setFieldType(FieldType.FLOAT);
+        AtlasInternalSession session = read(field);
+
+        assertEquals(0.0f, field.getValue());
+        assertEquals(0, session.getAudits().getAudit().size());
+    }
+
+    @Test
+    public void testJsonFieldLongMaxRangeOut() throws Exception {
+        String filePath = "src" + File.separator + "test" + File.separator + "resources"
+                + File.separator + "jsonFields" + File.separator + "field-long-max-range-out.json";
+        String document = new String(Files.readAllBytes(Paths.get(filePath)));
+        reader.setDocument(document);
+        JsonField field = AtlasJsonModelFactory.createJsonField();
+        field.setPath("/longValue");
+        field.setFieldType(FieldType.LONG);
+        AtlasInternalSession session = read(field);
+
+        assertEquals(null, field.getValue());
+        assertEquals(1, session.getAudits().getAudit().size());
+        assertEquals("Failed to convert field value '9223372036854775808' into type 'LONG'", session.getAudits().getAudit().get(0).getMessage());
+        assertEquals("9223372036854775808", session.getAudits().getAudit().get(0).getValue());
+        assertEquals(AuditStatus.ERROR, session.getAudits().getAudit().get(0).getStatus());
+    }
+
+    @Test
+    public void testJsonFieldLongMinRangeOut() throws Exception {
+        String filePath = "src" + File.separator + "test" + File.separator + "resources"
+                + File.separator + "jsonFields" + File.separator + "field-long-min-range-out.json";
+        String document = new String(Files.readAllBytes(Paths.get(filePath)));
+        reader.setDocument(document);
+        JsonField field = AtlasJsonModelFactory.createJsonField();
+        field.setPath("/longValue");
+        field.setFieldType(FieldType.LONG);
+        AtlasInternalSession session = read(field);
+
+        assertEquals(null, field.getValue());
+        assertEquals(1, session.getAudits().getAudit().size());
+        assertEquals("Failed to convert field value '-9223372036854775809' into type 'LONG'", session.getAudits().getAudit().get(0).getMessage());
+        assertEquals("-9223372036854775809", session.getAudits().getAudit().get(0).getValue());
+        assertEquals(AuditStatus.ERROR, session.getAudits().getAudit().get(0).getStatus());
+    }
+
+    @Test
+    public void testJsonFieldIntegerMaxRangeOut() throws Exception {
+        String filePath = "src" + File.separator + "test" + File.separator + "resources"
+                + File.separator + "jsonFields" + File.separator + "field-integer-max-range-out.json";
+        String document = new String(Files.readAllBytes(Paths.get(filePath)));
+        reader.setDocument(document);
+        JsonField field = AtlasJsonModelFactory.createJsonField();
+        field.setPath("/integerValue");
+        field.setFieldType(FieldType.INTEGER);
+        AtlasInternalSession session = read(field);
+
+        assertEquals(null, field.getValue());
+        assertEquals(1, session.getAudits().getAudit().size());
+        assertEquals("Failed to convert field value '2147483648' into type 'INTEGER'", session.getAudits().getAudit().get(0).getMessage());
+        assertEquals("2147483648", session.getAudits().getAudit().get(0).getValue());
+        assertEquals(AuditStatus.ERROR, session.getAudits().getAudit().get(0).getStatus());
+    }
+
+    @Test
+    public void testJsonFieldIntegerMinRangeOut() throws Exception {
+        String filePath = "src" + File.separator + "test" + File.separator + "resources"
+                + File.separator + "jsonFields" + File.separator + "field-integer-min-range-out.json";
+        String document = new String(Files.readAllBytes(Paths.get(filePath)));
+        reader.setDocument(document);
+        JsonField field = AtlasJsonModelFactory.createJsonField();
+        field.setPath("/integerValue");
+        field.setFieldType(FieldType.INTEGER);
+        AtlasInternalSession session = read(field);
+
+        assertEquals(null, field.getValue());
+        assertEquals(1, session.getAudits().getAudit().size());
+        assertEquals("Failed to convert field value '-2147483649' into type 'INTEGER'", session.getAudits().getAudit().get(0).getMessage());
+        assertEquals("-2147483649", session.getAudits().getAudit().get(0).getValue());
+        assertEquals(AuditStatus.ERROR, session.getAudits().getAudit().get(0).getStatus());
+    }
+
+    @Test
+    public void testJsonFieldShortMaxRangeOut() throws Exception {
+        String filePath = "src" + File.separator + "test" + File.separator + "resources"
+                + File.separator + "jsonFields" + File.separator + "field-short-max-range-out.json";
+        String document = new String(Files.readAllBytes(Paths.get(filePath)));
+        reader.setDocument(document);
+        JsonField field = AtlasJsonModelFactory.createJsonField();
+        field.setPath("/shortValue");
+        field.setFieldType(FieldType.SHORT);
+        AtlasInternalSession session = read(field);
+
+        assertEquals(null, field.getValue());
+        assertEquals(1, session.getAudits().getAudit().size());
+        assertEquals("Failed to convert field value '32768' into type 'SHORT'", session.getAudits().getAudit().get(0).getMessage());
+        assertEquals("32768", session.getAudits().getAudit().get(0).getValue());
+        assertEquals(AuditStatus.ERROR, session.getAudits().getAudit().get(0).getStatus());
+    }
+
+    @Test
+    public void testJsonFieldShortMinRangeOut() throws Exception {
+        String filePath = "src" + File.separator + "test" + File.separator + "resources"
+                + File.separator + "jsonFields" + File.separator + "field-short-min-range-out.json";
+        String document = new String(Files.readAllBytes(Paths.get(filePath)));
+        reader.setDocument(document);
+        JsonField field = AtlasJsonModelFactory.createJsonField();
+        field.setPath("/shortValue");
+        field.setFieldType(FieldType.SHORT);
+        AtlasInternalSession session = read(field);
+
+        assertEquals(null, field.getValue());
+        assertEquals(1, session.getAudits().getAudit().size());
+        assertEquals("Failed to convert field value '-32769' into type 'SHORT'", session.getAudits().getAudit().get(0).getMessage());
+        assertEquals("-32769", session.getAudits().getAudit().get(0).getValue());
+        assertEquals(AuditStatus.ERROR, session.getAudits().getAudit().get(0).getStatus());
+    }
+
+    @Test
+    public void testJsonFieldCharMaxRangeOut() throws Exception {
+        String filePath = "src" + File.separator + "test" + File.separator + "resources"
+                + File.separator + "jsonFields" + File.separator + "field-char-max-range-out.json";
+        String document = new String(Files.readAllBytes(Paths.get(filePath)));
+        reader.setDocument(document);
+        JsonField field = AtlasJsonModelFactory.createJsonField();
+        field.setPath("/charValue");
+        field.setFieldType(FieldType.CHAR);
+        AtlasInternalSession session = read(field);
+
+        assertEquals(null, field.getValue());
+        assertEquals(1, session.getAudits().getAudit().size());
+        assertEquals("Failed to convert field value '65536' into type 'CHAR'", session.getAudits().getAudit().get(0).getMessage());
+        assertEquals("65536", session.getAudits().getAudit().get(0).getValue());
+        assertEquals(AuditStatus.ERROR, session.getAudits().getAudit().get(0).getStatus());
+    }
+
+    @Test
+    public void testJsonFieldCharMinRangeOut() throws Exception {
+        String filePath = "src" + File.separator + "test" + File.separator + "resources"
+                + File.separator + "jsonFields" + File.separator + "field-char-min-range-out.json";
+        String document = new String(Files.readAllBytes(Paths.get(filePath)));
+        reader.setDocument(document);
+        JsonField field = AtlasJsonModelFactory.createJsonField();
+        field.setPath("/charValue");
+        field.setFieldType(FieldType.CHAR);
+        AtlasInternalSession session = read(field);
+
+        assertEquals(null, field.getValue());
+        assertEquals(1, session.getAudits().getAudit().size());
+        assertEquals("Failed to convert field value '-1' into type 'CHAR'", session.getAudits().getAudit().get(0).getMessage());
+        assertEquals("-1", session.getAudits().getAudit().get(0).getValue());
+        assertEquals(AuditStatus.ERROR, session.getAudits().getAudit().get(0).getStatus());
+    }
+
+    @Test
+    public void testJsonFieldByteMaxRangeOut() throws Exception {
+        String filePath = "src" + File.separator + "test" + File.separator + "resources"
+                + File.separator + "jsonFields" + File.separator + "field-byte-max-range-out.json";
+        String document = new String(Files.readAllBytes(Paths.get(filePath)));
+        reader.setDocument(document);
+        JsonField field = AtlasJsonModelFactory.createJsonField();
+        field.setPath("/byteValue");
+        field.setFieldType(FieldType.BYTE);
+        AtlasInternalSession session = read(field);
+
+        assertEquals(null, field.getValue());
+        assertEquals(1, session.getAudits().getAudit().size());
+        assertEquals("Failed to convert field value '128' into type 'BYTE'", session.getAudits().getAudit().get(0).getMessage());
+        assertEquals("128", session.getAudits().getAudit().get(0).getValue());
+        assertEquals(AuditStatus.ERROR, session.getAudits().getAudit().get(0).getStatus());
+    }
+
+    @Test
+    public void testJsonFieldByteMinRangeOut() throws Exception {
+        String filePath = "src" + File.separator + "test" + File.separator + "resources"
+                + File.separator + "jsonFields" + File.separator + "field-byte-min-range-out.json";
+        String document = new String(Files.readAllBytes(Paths.get(filePath)));
+        reader.setDocument(document);
+        JsonField field = AtlasJsonModelFactory.createJsonField();
+        field.setPath("/byteValue");
+        field.setFieldType(FieldType.BYTE);
+        AtlasInternalSession session = read(field);
+
+        assertEquals(null, field.getValue());
+        assertEquals(1, session.getAudits().getAudit().size());
+        assertEquals("Failed to convert field value '-129' into type 'BYTE'", session.getAudits().getAudit().get(0).getMessage());
+        assertEquals("-129", session.getAudits().getAudit().get(0).getValue());
+        assertEquals(AuditStatus.ERROR, session.getAudits().getAudit().get(0).getStatus());
+    }
+
+    @Test
+    public void testJsonFieldBooleanRangeOut() throws Exception {
+        String filePath = "src" + File.separator + "test" + File.separator + "resources"
+                + File.separator + "jsonFields" + File.separator + "field-boolean-range-out.json";
+        String document = new String(Files.readAllBytes(Paths.get(filePath)));
+        reader.setDocument(document);
+        JsonField field = AtlasJsonModelFactory.createJsonField();
+        field.setPath("/booleanValue");
+        field.setFieldType(FieldType.BOOLEAN);
+        read(field);
+
+        assertEquals(Boolean.TRUE, field.getValue());
+    }
+
+    @Test
+    public void testJsonFieldBooleanWithLetterF() throws Exception {
+        String filePath = "src" + File.separator + "test" + File.separator + "resources"
+                + File.separator + "jsonFields" + File.separator + "field-boolean-with-letterF.json";
+        String document = new String(Files.readAllBytes(Paths.get(filePath)));
+        reader.setDocument(document);
+        JsonField field = AtlasJsonModelFactory.createJsonField();
+        field.setPath("/booleanValue");
+        field.setFieldType(FieldType.BOOLEAN);
+        read(field);
+
+        assertEquals(Boolean.FALSE, field.getValue());
+    }
+
+    @Test
+    public void testJsonFieldBooleanWithBlankString() throws Exception {
+        String filePath = "src" + File.separator + "test" + File.separator + "resources"
+                + File.separator + "jsonFields" + File.separator + "field-boolean-with-blank-string.json";
+        String document = new String(Files.readAllBytes(Paths.get(filePath)));
+        reader.setDocument(document);
+        JsonField field = AtlasJsonModelFactory.createJsonField();
+        field.setPath("/booleanValue");
+        field.setFieldType(FieldType.BOOLEAN);
+        read(field);
+
+        assertEquals(Boolean.FALSE, field.getValue());
+    }
+
+    @Test
+    public void testJsonFieldBooleanWithNull() throws Exception {
+        String filePath = "src" + File.separator + "test" + File.separator + "resources"
+                + File.separator + "jsonFields" + File.separator + "field-boolean-with-null.json";
+        String document = new String(Files.readAllBytes(Paths.get(filePath)));
+        reader.setDocument(document);
+        JsonField field = AtlasJsonModelFactory.createJsonField();
+        field.setPath("/booleanValue");
+        field.setFieldType(FieldType.BOOLEAN);
+        read(field);
+
+        assertEquals(null, field.getValue());
+    }
+
+    @Test
+    public void testJsonFieldBooleanWithNumber0() throws Exception {
+        String filePath = "src" + File.separator + "test" + File.separator + "resources"
+                + File.separator + "jsonFields" + File.separator + "field-boolean-with-number0.json";
+        String document = new String(Files.readAllBytes(Paths.get(filePath)));
+        reader.setDocument(document);
+        JsonField field = AtlasJsonModelFactory.createJsonField();
+        field.setPath("/booleanValue");
+        field.setFieldType(FieldType.BOOLEAN);
+        read(field);
+
+        assertEquals(Boolean.FALSE, field.getValue());
+    }
+
+    @Test
+    public void testJsonFieldBooleanWithNumber1() throws Exception {
+        String filePath = "src" + File.separator + "test" + File.separator + "resources"
+                + File.separator + "jsonFields" + File.separator + "field-boolean-with-number1.json";
+        String document = new String(Files.readAllBytes(Paths.get(filePath)));
+        reader.setDocument(document);
+        JsonField field = AtlasJsonModelFactory.createJsonField();
+        field.setPath("/booleanValue");
+        field.setFieldType(FieldType.BOOLEAN);
+        read(field);
+
+        assertEquals(Boolean.TRUE, field.getValue());
+    }
+
+    @Test
+    public void testJsonFieldLongDecimal() throws Exception {
+        String filePath = "src" + File.separator + "test" + File.separator + "resources"
+                + File.separator + "jsonFields" + File.separator + "field-long-decimal.json";
+        String document = new String(Files.readAllBytes(Paths.get(filePath)));
+        reader.setDocument(document);
+        JsonField field = AtlasJsonModelFactory.createJsonField();
+        field.setPath("/longValue");
+        field.setFieldType(FieldType.LONG);
+        AtlasInternalSession session = read(field);
+
+        assertEquals(null, field.getValue());
+        assertEquals(1, session.getAudits().getAudit().size());
+        assertEquals("Failed to convert field value '9.223372036854776E18' into type 'LONG'", session.getAudits().getAudit().get(0).getMessage());
+        assertEquals("9.223372036854776E18", session.getAudits().getAudit().get(0).getValue());
+        assertEquals(AuditStatus.ERROR, session.getAudits().getAudit().get(0).getStatus());
+    }
+
+    @Test
+    public void testJsonFieldIntegerDecimal() throws Exception {
+        String filePath = "src" + File.separator + "test" + File.separator + "resources"
+                + File.separator + "jsonFields" + File.separator + "field-integer-decimal.json";
+        String document = new String(Files.readAllBytes(Paths.get(filePath)));
+        reader.setDocument(document);
+        JsonField field = AtlasJsonModelFactory.createJsonField();
+        field.setPath("/integerValue");
+        field.setFieldType(FieldType.INTEGER);
+        AtlasInternalSession session = read(field);
+
+        assertEquals(null, field.getValue());
+        assertEquals(1, session.getAudits().getAudit().size());
+        assertEquals("Failed to convert field value '2.1474836471234E9' into type 'INTEGER'", session.getAudits().getAudit().get(0).getMessage());
+        assertEquals("2.1474836471234E9", session.getAudits().getAudit().get(0).getValue());
+        assertEquals(AuditStatus.ERROR, session.getAudits().getAudit().get(0).getStatus());
+    }
+
+    @Test
+    public void testJsonFieldShortDecimal() throws Exception {
+        String filePath = "src" + File.separator + "test" + File.separator + "resources"
+                + File.separator + "jsonFields" + File.separator + "field-short-decimal.json";
+        String document = new String(Files.readAllBytes(Paths.get(filePath)));
+        reader.setDocument(document);
+        JsonField field = AtlasJsonModelFactory.createJsonField();
+        field.setPath("/shortValue");
+        field.setFieldType(FieldType.SHORT);
+        AtlasInternalSession session = read(field);
+
+        assertEquals(null, field.getValue());
+        assertEquals(1, session.getAudits().getAudit().size());
+        assertEquals("Failed to convert field value '32767.1234' into type 'SHORT'", session.getAudits().getAudit().get(0).getMessage());
+        assertEquals("32767.1234", session.getAudits().getAudit().get(0).getValue());
+        assertEquals(AuditStatus.ERROR, session.getAudits().getAudit().get(0).getStatus());
+    }
+
+    @Test
+    public void testJsonFieldCharDecimal() throws Exception {
+        String filePath = "src" + File.separator + "test" + File.separator + "resources"
+                + File.separator + "jsonFields" + File.separator + "field-char-decimal.json";
+        String document = new String(Files.readAllBytes(Paths.get(filePath)));
+        reader.setDocument(document);
+        JsonField field = AtlasJsonModelFactory.createJsonField();
+        field.setPath("/charValue");
+        field.setFieldType(FieldType.CHAR);
+        AtlasInternalSession session = read(field);
+
+        assertEquals(null, field.getValue());
+        assertEquals(1, session.getAudits().getAudit().size());
+        assertEquals("Failed to convert field value '65535.1234' into type 'CHAR'", session.getAudits().getAudit().get(0).getMessage());
+        assertEquals("65535.1234", session.getAudits().getAudit().get(0).getValue());
+        assertEquals(AuditStatus.ERROR, session.getAudits().getAudit().get(0).getStatus());
+    }
+
+    @Test
+    public void testJsonFieldByteDecimal() throws Exception {
+        String filePath = "src" + File.separator + "test" + File.separator + "resources"
+                + File.separator + "jsonFields" + File.separator + "field-byte-decimal.json";
+        String document = new String(Files.readAllBytes(Paths.get(filePath)));
+        reader.setDocument(document);
+        JsonField field = AtlasJsonModelFactory.createJsonField();
+        field.setPath("/byteValue");
+        field.setFieldType(FieldType.BYTE);
+        AtlasInternalSession session = read(field);
+
+        assertEquals(null, field.getValue());
+        assertEquals(1, session.getAudits().getAudit().size());
+        assertEquals("Failed to convert field value '127.1234' into type 'BYTE'", session.getAudits().getAudit().get(0).getMessage());
+        assertEquals("127.1234", session.getAudits().getAudit().get(0).getValue());
+        assertEquals(AuditStatus.ERROR, session.getAudits().getAudit().get(0).getStatus());
+    }
+
+    @Test
+    public void testJsonFieldDoubleString() throws Exception {
+        String filePath = "src" + File.separator + "test" + File.separator + "resources"
+                + File.separator + "jsonFields" + File.separator + "field-double-string.json";
+        String document = new String(Files.readAllBytes(Paths.get(filePath)));
+        reader.setDocument(document);
+        JsonField field = AtlasJsonModelFactory.createJsonField();
+        field.setPath("/doubleValue");
+        field.setFieldType(FieldType.DOUBLE);
+        AtlasInternalSession session = read(field);
+
+        assertEquals(null, field.getValue());
+        assertEquals(1, session.getAudits().getAudit().size());
+        assertEquals("Failed to convert field value 'abcd' into type 'DOUBLE'", session.getAudits().getAudit().get(0).getMessage());
+        assertEquals("abcd", session.getAudits().getAudit().get(0).getValue());
+        assertEquals(AuditStatus.ERROR, session.getAudits().getAudit().get(0).getStatus());
+    }
+
+    @Test
+    public void testJsonFieldFloatString() throws Exception {
+        String filePath = "src" + File.separator + "test" + File.separator + "resources"
+                + File.separator + "jsonFields" + File.separator + "field-float-string.json";
+        String document = new String(Files.readAllBytes(Paths.get(filePath)));
+        reader.setDocument(document);
+        JsonField field = AtlasJsonModelFactory.createJsonField();
+        field.setPath("/floatValue");
+        field.setFieldType(FieldType.FLOAT);
+        AtlasInternalSession session = read(field);
+
+        assertEquals(null, field.getValue());
+        assertEquals(1, session.getAudits().getAudit().size());
+        assertEquals("Failed to convert field value 'abcd' into type 'FLOAT'", session.getAudits().getAudit().get(0).getMessage());
+        assertEquals("abcd", session.getAudits().getAudit().get(0).getValue());
+        assertEquals(AuditStatus.ERROR, session.getAudits().getAudit().get(0).getStatus());
+    }
+
+    @Test
+    public void testJsonFieldLongString() throws Exception {
+        String filePath = "src" + File.separator + "test" + File.separator + "resources"
+                + File.separator + "jsonFields" + File.separator + "field-long-string.json";
+        String document = new String(Files.readAllBytes(Paths.get(filePath)));
+        reader.setDocument(document);
+        JsonField field = AtlasJsonModelFactory.createJsonField();
+        field.setPath("/longValue");
+        field.setFieldType(FieldType.LONG);
+        AtlasInternalSession session = read(field);
+
+        assertEquals(null, field.getValue());
+        assertEquals(1, session.getAudits().getAudit().size());
+        assertEquals("Failed to convert field value 'abcd' into type 'LONG'", session.getAudits().getAudit().get(0).getMessage());
+        assertEquals("abcd", session.getAudits().getAudit().get(0).getValue());
+        assertEquals(AuditStatus.ERROR, session.getAudits().getAudit().get(0).getStatus());
+    }
+
+    @Test
+    public void testJsonFieldIntegerString() throws Exception {
+        String filePath = "src" + File.separator + "test" + File.separator + "resources"
+                + File.separator + "jsonFields" + File.separator + "field-integer-string.json";
+        String document = new String(Files.readAllBytes(Paths.get(filePath)));
+        reader.setDocument(document);
+        JsonField field = AtlasJsonModelFactory.createJsonField();
+        field.setPath("/integerValue");
+        field.setFieldType(FieldType.INTEGER);
+        AtlasInternalSession session = read(field);
+
+        assertEquals(null, field.getValue());
+        assertEquals(1, session.getAudits().getAudit().size());
+        assertEquals("Failed to convert field value 'abcd' into type 'INTEGER'", session.getAudits().getAudit().get(0).getMessage());
+        assertEquals("abcd", session.getAudits().getAudit().get(0).getValue());
+        assertEquals(AuditStatus.ERROR, session.getAudits().getAudit().get(0).getStatus());
+    }
+
+    @Test
+    public void testJsonFieldShortString() throws Exception {
+        String filePath = "src" + File.separator + "test" + File.separator + "resources"
+                + File.separator + "jsonFields" + File.separator + "field-short-string.json";
+        String document = new String(Files.readAllBytes(Paths.get(filePath)));
+        reader.setDocument(document);
+        JsonField field = AtlasJsonModelFactory.createJsonField();
+        field.setPath("/shortValue");
+        field.setFieldType(FieldType.SHORT);
+        AtlasInternalSession session = read(field);
+
+        assertEquals(null, field.getValue());
+        assertEquals(1, session.getAudits().getAudit().size());
+        assertEquals("Failed to convert field value 'abcd' into type 'SHORT'", session.getAudits().getAudit().get(0).getMessage());
+        assertEquals("abcd", session.getAudits().getAudit().get(0).getValue());
+        assertEquals(AuditStatus.ERROR, session.getAudits().getAudit().get(0).getStatus());
+    }
+
+    @Test
+    public void testJsonFieldCharString() throws Exception {
+        String filePath = "src" + File.separator + "test" + File.separator + "resources"
+                + File.separator + "jsonFields" + File.separator + "field-char-string.json";
+        String document = new String(Files.readAllBytes(Paths.get(filePath)));
+        reader.setDocument(document);
+        JsonField field = AtlasJsonModelFactory.createJsonField();
+        field.setPath("/charValue");
+        field.setFieldType(FieldType.CHAR);
+        AtlasInternalSession session = read(field);
+
+        assertEquals(null, field.getValue());
+        assertEquals(1, session.getAudits().getAudit().size());
+        assertEquals("Failed to convert field value 'abcd' into type 'CHAR'", session.getAudits().getAudit().get(0).getMessage());
+        assertEquals("abcd", session.getAudits().getAudit().get(0).getValue());
+        assertEquals(AuditStatus.ERROR, session.getAudits().getAudit().get(0).getStatus());
+    }
+
+    @Test
+    public void testJsonFieldByteString() throws Exception {
+        String filePath = "src" + File.separator + "test" + File.separator + "resources"
+                + File.separator + "jsonFields" + File.separator + "field-byte-string.json";
+        String document = new String(Files.readAllBytes(Paths.get(filePath)));
+        reader.setDocument(document);
+        JsonField field = AtlasJsonModelFactory.createJsonField();
+        field.setPath("/byteValue");
+        field.setFieldType(FieldType.BYTE);
+        AtlasInternalSession session = read(field);
+
+        assertEquals(null, field.getValue());
+        assertEquals(1, session.getAudits().getAudit().size());
+        assertEquals("Failed to convert field value 'abcd' into type 'BYTE'", session.getAudits().getAudit().get(0).getMessage());
+        assertEquals("abcd", session.getAudits().getAudit().get(0).getValue());
+        assertEquals(AuditStatus.ERROR, session.getAudits().getAudit().get(0).getStatus());
     }
 }

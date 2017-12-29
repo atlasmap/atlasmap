@@ -17,10 +17,14 @@ package io.atlasmap.xml.core;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
@@ -30,9 +34,13 @@ import org.junit.Test;
 import org.w3c.dom.Document;
 
 import io.atlasmap.api.AtlasException;
+import io.atlasmap.core.DefaultAtlasConversionService;
 import io.atlasmap.spi.AtlasInternalSession;
 import io.atlasmap.spi.AtlasInternalSession.Head;
+import io.atlasmap.v2.AuditStatus;
+import io.atlasmap.v2.Audits;
 import io.atlasmap.v2.Field;
+import io.atlasmap.v2.FieldType;
 import io.atlasmap.xml.v2.AtlasXmlModelFactory;
 import io.atlasmap.xml.v2.XmlField;
 
@@ -43,6 +51,7 @@ public class XmlFieldWriterTest {
     private Document document = null;
     private String seedDocument = null;
     private Map<String, String> namespaces = new HashMap<>();
+    private XmlFieldReader reader = new XmlFieldReader(DefaultAtlasConversionService.getInstance());
 
     @Before
     public void setup() throws Exception {
@@ -58,7 +67,7 @@ public class XmlFieldWriterTest {
         assertNotNull(document);
     }
 
-    public void writeValue(String path, String value) throws Exception {
+    public void writeValue(String path, Object value) throws Exception {
         if (writer == null) {
             createWriter();
         }
@@ -282,6 +291,807 @@ public class XmlFieldWriterTest {
         when(session.head().getSourceField()).thenReturn(mock(Field.class));
         when(session.head().getTargetField()).thenReturn(field);
         writer.write(session);
+    }
+
+    @Test
+    public void testXmlFieldDoubleMax() throws Exception {
+        String fieldPath = "/primitive/value";
+        FieldType fieldType = FieldType.DOUBLE;
+        Path path = Paths.get("target" + File.separator + "test-write-field-double-max.xml");
+        Object testObject = Double.MAX_VALUE;
+
+        writeToFile(fieldPath, path, testObject);
+
+        AtlasInternalSession session = readFromFile(fieldPath, fieldType, path);
+
+        assertNotNull(session.head().getSourceField().getValue());
+        assertEquals(testObject, session.head().getSourceField().getValue());
+    }
+
+    @Test
+    public void testXmlFieldDoubleMin() throws Exception {
+        String fieldPath = "/primitive/value";
+        FieldType fieldType = FieldType.DOUBLE;
+        Path path = Paths.get("target" + File.separator + "test-write-field-double-min.xml");
+        Object testObject = Double.MIN_VALUE;
+
+        writeToFile(fieldPath, path, testObject);
+
+        AtlasInternalSession session = readFromFile(fieldPath, fieldType, path);
+
+        assertNotNull(session.head().getSourceField().getValue());
+        assertEquals(testObject, session.head().getSourceField().getValue());
+    }
+
+    @Test
+    public void testXmlFieldFloatMax() throws Exception {
+        String fieldPath = "/primitive/value";
+        FieldType fieldType = FieldType.FLOAT;
+        Path path = Paths.get("target" + File.separator + "test-write-field-float-max.xml");
+        Object testObject = Float.MAX_VALUE;
+
+        writeToFile(fieldPath, path, testObject);
+
+        AtlasInternalSession session = readFromFile(fieldPath, fieldType, path);
+
+        assertNotNull(session.head().getSourceField().getValue());
+        assertEquals(testObject, session.head().getSourceField().getValue());
+    }
+
+    @Test
+    public void testXmlFieldFloatMin() throws Exception {
+        String fieldPath = "/primitive/value";
+        FieldType fieldType = FieldType.FLOAT;
+        Path path = Paths.get("target" + File.separator + "test-write-field-float-min.xml");
+        Object testObject = Float.MIN_VALUE;
+
+        writeToFile(fieldPath, path, testObject);
+
+        AtlasInternalSession session = readFromFile(fieldPath, fieldType, path);
+
+        assertNotNull(session.head().getSourceField().getValue());
+        assertEquals(testObject, session.head().getSourceField().getValue());
+    }
+
+    @Test
+    public void testXmlFieldLongMax() throws Exception {
+        String fieldPath = "/primitive/value";
+        FieldType fieldType = FieldType.LONG;
+        Path path = Paths.get("target" + File.separator + "test-write-field-long-max.xml");
+        Object testObject = Long.MAX_VALUE;
+
+        writeToFile(fieldPath, path, testObject);
+
+        AtlasInternalSession session = readFromFile(fieldPath, fieldType, path);
+
+        assertNotNull(session.head().getSourceField().getValue());
+        assertEquals(testObject, session.head().getSourceField().getValue());
+    }
+
+    @Test
+    public void testXmlFieldLongMin() throws Exception {
+        String fieldPath = "/primitive/value";
+        FieldType fieldType = FieldType.LONG;
+        Path path = Paths.get("target" + File.separator + "test-write-field-long-min.xml");
+        Object testObject = Long.MIN_VALUE;
+
+        writeToFile(fieldPath, path, testObject);
+
+        AtlasInternalSession session = readFromFile(fieldPath, fieldType, path);
+
+        assertNotNull(session.head().getSourceField().getValue());
+        assertEquals(testObject, session.head().getSourceField().getValue());
+    }
+
+    @Test
+    public void testXmlFieldIntegerMax() throws Exception {
+        String fieldPath = "/primitive/value";
+        FieldType fieldType = FieldType.INTEGER;
+        Path path = Paths.get("target" + File.separator + "test-write-field-integer-max.xml");
+        Object testObject = Integer.MAX_VALUE;
+
+        writeToFile(fieldPath, path, testObject);
+
+        AtlasInternalSession session = readFromFile(fieldPath, fieldType, path);
+
+        assertNotNull(session.head().getSourceField().getValue());
+        assertEquals(testObject, session.head().getSourceField().getValue());
+    }
+
+    @Test
+    public void testXmlFieldIntegerMin() throws Exception {
+        String fieldPath = "/primitive/value";
+        FieldType fieldType = FieldType.INTEGER;
+        Path path = Paths.get("target" + File.separator + "test-write-field-integer-min.xml");
+        Object testObject = Integer.MIN_VALUE;
+
+        writeToFile(fieldPath, path, testObject);
+
+        AtlasInternalSession session = readFromFile(fieldPath, fieldType, path);
+
+        assertNotNull(session.head().getSourceField().getValue());
+        assertEquals(testObject, session.head().getSourceField().getValue());
+    }
+
+    @Test
+    public void testXmlFieldShortMax() throws Exception {
+        String fieldPath = "/primitive/value";
+        FieldType fieldType = FieldType.SHORT;
+        Path path = Paths.get("target" + File.separator + "test-write-field-short-max.xml");
+        Object testObject = Short.MAX_VALUE;
+
+        writeToFile(fieldPath, path, testObject);
+
+        AtlasInternalSession session = readFromFile(fieldPath, fieldType, path);
+
+        assertNotNull(session.head().getSourceField().getValue());
+        assertEquals(testObject, session.head().getSourceField().getValue());
+    }
+
+    @Test
+    public void testXmlFieldShortMin() throws Exception {
+        String fieldPath = "/primitive/value";
+        FieldType fieldType = FieldType.SHORT;
+        Path path = Paths.get("target" + File.separator + "test-write-field-short-min.xml");
+        Object testObject = Short.MIN_VALUE;
+
+        writeToFile(fieldPath, path, testObject);
+
+        AtlasInternalSession session = readFromFile(fieldPath, fieldType, path);
+
+        assertNotNull(session.head().getSourceField().getValue());
+        assertEquals(testObject, session.head().getSourceField().getValue());
+    }
+
+    @Test
+    public void testXmlFieldChar() throws Exception {
+        String fieldPath = "/primitive/value";
+        FieldType fieldType = FieldType.CHAR;
+        Path path = Paths.get("target" + File.separator + "test-write-field-char.xml");
+        Object testObject = '\u0021';
+
+        writeToFile(fieldPath, path, testObject);
+
+        AtlasInternalSession session = readFromFile(fieldPath, fieldType, path);
+
+        assertNotNull(session.head().getSourceField().getValue());
+        assertEquals(testObject, session.head().getSourceField().getValue());
+    }
+
+    @Test
+    public void testXmlFieldByteMax() throws Exception {
+        String fieldPath = "/primitive/value";
+        FieldType fieldType = FieldType.BYTE;
+        Path path = Paths.get("target" + File.separator + "test-write-field-byte-max.xml");
+        Object testObject = Byte.MAX_VALUE;
+
+        writeToFile(fieldPath, path, testObject);
+
+        AtlasInternalSession session = readFromFile(fieldPath, fieldType, path);
+
+        assertNotNull(session.head().getSourceField().getValue());
+        assertEquals(testObject, session.head().getSourceField().getValue());
+    }
+
+    @Test
+    public void testXmlFieldByteMin() throws Exception {
+        String fieldPath = "/primitive/value";
+        FieldType fieldType = FieldType.BYTE;
+        Path path = Paths.get("target" + File.separator + "test-write-field-byte-min.xml");
+        Object testObject = Byte.MIN_VALUE;
+
+        writeToFile(fieldPath, path, testObject);
+
+        AtlasInternalSession session = readFromFile(fieldPath, fieldType, path);
+
+        assertNotNull(session.head().getSourceField().getValue());
+        assertEquals(testObject, session.head().getSourceField().getValue());
+    }
+
+    @Test
+    public void testXmlFieldBooleanTrue() throws Exception {
+        String fieldPath = "/primitive/value";
+        FieldType fieldType = FieldType.BOOLEAN;
+        Path path = Paths.get("target" + File.separator + "test-write-field-boolean-true.xml");
+        Object testObject = Boolean.TRUE;
+
+        writeToFile(fieldPath, path, testObject);
+
+        AtlasInternalSession session = readFromFile(fieldPath, fieldType, path);
+
+        assertNotNull(session.head().getSourceField().getValue());
+        assertEquals(testObject, session.head().getSourceField().getValue());
+    }
+
+    @Test
+    public void testXmlFieldBooleanFalse() throws Exception {
+        String fieldPath = "/primitive/value";
+        FieldType fieldType = FieldType.BOOLEAN;
+        Path path = Paths.get("target" + File.separator + "test-write-field-boolean-false.xml");
+        Object testObject = Boolean.FALSE;
+
+        writeToFile(fieldPath, path, testObject);
+
+        AtlasInternalSession session = readFromFile(fieldPath, fieldType, path);
+
+        assertNotNull(session.head().getSourceField().getValue());
+        assertEquals(testObject, session.head().getSourceField().getValue());
+    }
+
+    @Test
+    public void testXmlFieldBooleanNumber1() throws Exception {
+        String fieldPath = "/primitive/value";
+        FieldType fieldType = FieldType.BOOLEAN;
+        Path path = Paths.get("target" + File.separator + "test-write-field-boolean-one.xml");
+        Object testObject = 1;
+
+        writeToFile(fieldPath, path, testObject);
+
+        AtlasInternalSession session = readFromFile(fieldPath, fieldType, path);
+
+        assertNotNull(session.head().getSourceField().getValue());
+        assertEquals(true, session.head().getSourceField().getValue());
+    }
+
+    @Test
+    public void testXmlFieldBooleanNumber0() throws Exception {
+        String fieldPath = "/primitive/value";
+        FieldType fieldType = FieldType.BOOLEAN;
+        Path path = Paths.get("target" + File.separator + "test-write-field-boolean-zero.xml");
+        Object testObject = 0;
+
+        writeToFile(fieldPath, path, testObject);
+
+        AtlasInternalSession session = readFromFile(fieldPath, fieldType, path);
+
+        assertNotNull(session.head().getSourceField().getValue());
+        assertEquals(false, session.head().getSourceField().getValue());
+    }
+
+    @Test
+    public void testXmlFieldBooleanLetterT() throws Exception {
+        String fieldPath = "/primitive/value";
+        FieldType fieldType = FieldType.BOOLEAN;
+        Path path = Paths.get("target" + File.separator + "test-write-field-boolean-letter-T.xml");
+        Object testObject = "T";
+
+        writeToFile(fieldPath, path, testObject);
+
+        AtlasInternalSession session = readFromFile(fieldPath, fieldType, path);
+
+        assertNotNull(session.head().getSourceField().getValue());
+        assertEquals(true, session.head().getSourceField().getValue());
+    }
+
+    @Test
+    public void testXmlFieldBooleanLetterF() throws Exception {
+        String fieldPath = "/primitive/value";
+        FieldType fieldType = FieldType.BOOLEAN;
+        Path path = Paths.get("target" + File.separator + "test-write-field-boolean-letter-F.xml");
+        Object testObject = "F";
+
+        writeToFile(fieldPath, path, testObject);
+
+        AtlasInternalSession session = readFromFile(fieldPath, fieldType, path);
+
+        assertNotNull(session.head().getSourceField().getValue());
+        assertEquals(false, session.head().getSourceField().getValue());
+    }
+
+    private void writeToFile(String fieldPath, Path path, Object testObject) throws Exception, AtlasException, IOException {
+        writeValue(fieldPath, testObject.toString());
+        String output = XmlIOHelper.writeDocumentToString(true, writer.getDocument());
+        Files.write(path, output.getBytes());
+    }
+
+    private AtlasInternalSession readFromFile(String fieldPath, FieldType fieldType, Path path) throws IOException, AtlasException {
+        String input = new String(Files.readAllBytes(path));
+        reader.setDocument(input, false);
+        XmlField xmlField = AtlasXmlModelFactory.createXmlField();
+        xmlField.setPath(fieldPath);
+        xmlField.setPrimitive(Boolean.TRUE);
+        xmlField.setFieldType(fieldType);
+        assertNull(xmlField.getValue());
+
+        AtlasInternalSession session = mock(AtlasInternalSession.class);
+        when(session.head()).thenReturn(mock(Head.class));
+        when(session.head().getSourceField()).thenReturn(xmlField);
+        Audits audits = new Audits();
+        when(session.getAudits()).thenReturn(audits);
+        reader.read(session);
+        return session;
+    }
+
+    @Test
+    public void testXmlFieldDoubleMaxRangeOut() throws Exception {
+        String fieldPath = "/primitive/value";
+        FieldType fieldType = FieldType.DOUBLE;
+        Path path = Paths.get("target" + File.separator + "test-write-field-double-max-range-out.xml");
+        Object testObject = "1.7976931348623157E309";
+
+        writeToFile(fieldPath, path, testObject);
+
+        AtlasInternalSession session = readFromFile(fieldPath, fieldType, path);
+
+        assertEquals(null, session.head().getSourceField().getValue());
+        assertEquals(1, session.getAudits().getAudit().size());
+        assertEquals("Failed to convert field value '1.7976931348623157E309' into type 'DOUBLE'", session.getAudits().getAudit().get(0).getMessage());
+        assertEquals("1.7976931348623157E309", session.getAudits().getAudit().get(0).getValue());
+        assertEquals(AuditStatus.ERROR, session.getAudits().getAudit().get(0).getStatus());
+    }
+
+    @Test
+    public void testXmlFieldDoubleMinRangeOut() throws Exception {
+        String fieldPath = "/primitive/value";
+        FieldType fieldType = FieldType.DOUBLE;
+        Path path = Paths.get("target" + File.separator + "test-write-field-double-min-range-out.xml");
+        Object testObject = "4.9E-325";
+
+        writeToFile(fieldPath, path, testObject);
+
+        AtlasInternalSession session = readFromFile(fieldPath, fieldType, path);
+
+        assertEquals(0.0, session.head().getSourceField().getValue());
+        assertEquals(0, session.getAudits().getAudit().size());
+    }
+
+    @Test
+    public void testXmlFieldFloatMaxRangeOut() throws Exception {
+        String fieldPath = "/primitive/value";
+        FieldType fieldType = FieldType.FLOAT;
+        Path path = Paths.get("target" + File.separator + "test-write-field-float-max-range-out.xml");
+        Object testObject = "3.4028235E39";
+
+        writeToFile(fieldPath, path, testObject);
+
+        AtlasInternalSession session = readFromFile(fieldPath, fieldType, path);
+
+        assertEquals(null, session.head().getSourceField().getValue());
+        assertEquals(1, session.getAudits().getAudit().size());
+        assertEquals("Failed to convert field value '3.4028235E39' into type 'FLOAT'", session.getAudits().getAudit().get(0).getMessage());
+        assertEquals("3.4028235E39", session.getAudits().getAudit().get(0).getValue());
+        assertEquals(AuditStatus.ERROR, session.getAudits().getAudit().get(0).getStatus());
+    }
+
+    @Test
+    public void testXmlFieldFloatMinRangeOut() throws Exception {
+        String fieldPath = "/primitive/value";
+        FieldType fieldType = FieldType.FLOAT;
+        Path path = Paths.get("target" + File.separator + "test-write-field-float-min-range-out.xml");
+        Object testObject = "1.4E-46";
+
+        writeToFile(fieldPath, path, testObject);
+
+        AtlasInternalSession session = readFromFile(fieldPath, fieldType, path);
+
+        assertEquals(0.0f, session.head().getSourceField().getValue());
+        assertEquals(0, session.getAudits().getAudit().size());
+    }
+
+    @Test
+    public void testXmlFieldLongMaxRangeOut() throws Exception {
+        String fieldPath = "/primitive/value";
+        FieldType fieldType = FieldType.LONG;
+        Path path = Paths.get("target" + File.separator + "test-write-field-long-max-range-out.xml");
+        Object testObject = "9223372036854775808";
+
+        writeToFile(fieldPath, path, testObject);
+
+        AtlasInternalSession session = readFromFile(fieldPath, fieldType, path);
+
+        assertEquals(null, session.head().getSourceField().getValue());
+        assertEquals(1, session.getAudits().getAudit().size());
+        assertEquals("Failed to convert field value '9223372036854775808' into type 'LONG'", session.getAudits().getAudit().get(0).getMessage());
+        assertEquals("9223372036854775808", session.getAudits().getAudit().get(0).getValue());
+        assertEquals(AuditStatus.ERROR, session.getAudits().getAudit().get(0).getStatus());
+    }
+
+    @Test
+    public void testXmlFieldLongMinRangeOut() throws Exception {
+        String fieldPath = "/primitive/value";
+        FieldType fieldType = FieldType.LONG;
+        Path path = Paths.get("target" + File.separator + "test-write-field-long-min-range-out.xml");
+        Object testObject = "-9223372036854775809";
+
+        writeToFile(fieldPath, path, testObject);
+
+        AtlasInternalSession session = readFromFile(fieldPath, fieldType, path);
+
+        assertEquals(null, session.head().getSourceField().getValue());
+        assertEquals(1, session.getAudits().getAudit().size());
+        assertEquals("Failed to convert field value '-9223372036854775809' into type 'LONG'", session.getAudits().getAudit().get(0).getMessage());
+        assertEquals("-9223372036854775809", session.getAudits().getAudit().get(0).getValue());
+        assertEquals(AuditStatus.ERROR, session.getAudits().getAudit().get(0).getStatus());
+    }
+
+    @Test
+    public void testXmlFieldIntegerMaxRangeOut() throws Exception {
+        String fieldPath = "/primitive/value";
+        FieldType fieldType = FieldType.INTEGER;
+        Path path = Paths.get("target" + File.separator + "test-write-field-integer-max-range-out.xml");
+        Object testObject = Long.MAX_VALUE;
+
+        writeToFile(fieldPath, path, testObject);
+
+        AtlasInternalSession session = readFromFile(fieldPath, fieldType, path);
+
+        assertEquals(null, session.head().getSourceField().getValue());
+        assertEquals(1, session.getAudits().getAudit().size());
+        assertEquals("Failed to convert field value '9223372036854775807' into type 'INTEGER'", session.getAudits().getAudit().get(0).getMessage());
+        assertEquals("9223372036854775807", session.getAudits().getAudit().get(0).getValue());
+        assertEquals(AuditStatus.ERROR, session.getAudits().getAudit().get(0).getStatus());
+    }
+
+    @Test
+    public void testXmlFieldIntegerMinRangeOut() throws Exception {
+        String fieldPath = "/primitive/value";
+        FieldType fieldType = FieldType.INTEGER;
+        Path path = Paths.get("target" + File.separator + "test-write-field-integer-min-range-out.xml");
+        Object testObject = Long.MIN_VALUE;
+
+        writeToFile(fieldPath, path, testObject);
+
+        AtlasInternalSession session = readFromFile(fieldPath, fieldType, path);
+
+        assertEquals(null, session.head().getSourceField().getValue());
+        assertEquals(1, session.getAudits().getAudit().size());
+        assertEquals("Failed to convert field value '-9223372036854775808' into type 'INTEGER'", session.getAudits().getAudit().get(0).getMessage());
+        assertEquals("-9223372036854775808", session.getAudits().getAudit().get(0).getValue());
+        assertEquals(AuditStatus.ERROR, session.getAudits().getAudit().get(0).getStatus());
+    }
+
+    @Test
+    public void testXmlFieldShortMaxRangeOut() throws Exception {
+        String fieldPath = "/primitive/value";
+        FieldType fieldType = FieldType.SHORT;
+        Path path = Paths.get("target" + File.separator + "test-write-field-short-max-range-out.xml");
+        Object testObject = Long.MAX_VALUE;
+
+        writeToFile(fieldPath, path, testObject);
+
+        AtlasInternalSession session = readFromFile(fieldPath, fieldType, path);
+
+        assertEquals(null, session.head().getSourceField().getValue());
+        assertEquals(1, session.getAudits().getAudit().size());
+        assertEquals("Failed to convert field value '9223372036854775807' into type 'SHORT'", session.getAudits().getAudit().get(0).getMessage());
+        assertEquals("9223372036854775807", session.getAudits().getAudit().get(0).getValue());
+        assertEquals(AuditStatus.ERROR, session.getAudits().getAudit().get(0).getStatus());
+    }
+
+    @Test
+    public void testXmlFieldShortMinRangeOut() throws Exception {
+        String fieldPath = "/primitive/value";
+        FieldType fieldType = FieldType.SHORT;
+        Path path = Paths.get("target" + File.separator + "test-write-field-short-min-range-out.xml");
+        Object testObject = Long.MIN_VALUE;
+
+        writeToFile(fieldPath, path, testObject);
+
+        AtlasInternalSession session = readFromFile(fieldPath, fieldType, path);
+
+        assertEquals(null, session.head().getSourceField().getValue());
+        assertEquals(1, session.getAudits().getAudit().size());
+        assertEquals("Failed to convert field value '-9223372036854775808' into type 'SHORT'", session.getAudits().getAudit().get(0).getMessage());
+        assertEquals("-9223372036854775808", session.getAudits().getAudit().get(0).getValue());
+        assertEquals(AuditStatus.ERROR, session.getAudits().getAudit().get(0).getStatus());
+    }
+
+    @Test
+    public void testXmlFieldCharMaxRangeOut() throws Exception {
+        String fieldPath = "/primitive/value";
+        FieldType fieldType = FieldType.CHAR;
+        Path path = Paths.get("target" + File.separator + "test-write-field-char-max-range-out.xml");
+        Object testObject = Long.MAX_VALUE;
+
+        writeToFile(fieldPath, path, testObject);
+
+        AtlasInternalSession session = readFromFile(fieldPath, fieldType, path);
+
+        assertEquals(null, session.head().getSourceField().getValue());
+        assertEquals(1, session.getAudits().getAudit().size());
+        assertEquals("Failed to convert field value '9223372036854775807' into type 'CHAR'", session.getAudits().getAudit().get(0).getMessage());
+        assertEquals("9223372036854775807", session.getAudits().getAudit().get(0).getValue());
+        assertEquals(AuditStatus.ERROR, session.getAudits().getAudit().get(0).getStatus());
+    }
+
+    @Test
+    public void testXmlFieldCharMinRangeOut() throws Exception {
+        String fieldPath = "/primitive/value";
+        FieldType fieldType = FieldType.CHAR;
+        Path path = Paths.get("target" + File.separator + "test-write-field-char-min-range-out.xml");
+        Object testObject = Long.MIN_VALUE;
+
+        writeToFile(fieldPath, path, testObject);
+
+        AtlasInternalSession session = readFromFile(fieldPath, fieldType, path);
+
+        assertEquals(null, session.head().getSourceField().getValue());
+        assertEquals(1, session.getAudits().getAudit().size());
+        assertEquals("Failed to convert field value '-9223372036854775808' into type 'CHAR'", session.getAudits().getAudit().get(0).getMessage());
+        assertEquals("-9223372036854775808", session.getAudits().getAudit().get(0).getValue());
+        assertEquals(AuditStatus.ERROR, session.getAudits().getAudit().get(0).getStatus());
+    }
+
+    @Test
+    public void testXmlFieldByteMaxRangeOut() throws Exception {
+        String fieldPath = "/primitive/value";
+        FieldType fieldType = FieldType.BYTE;
+        Path path = Paths.get("target" + File.separator + "test-write-field-byte-max-range-out.xml");
+        Object testObject = Long.MAX_VALUE;
+
+        writeToFile(fieldPath, path, testObject);
+
+        AtlasInternalSession session = readFromFile(fieldPath, fieldType, path);
+
+        assertEquals(null, session.head().getSourceField().getValue());
+        assertEquals(1, session.getAudits().getAudit().size());
+        assertEquals("Failed to convert field value '9223372036854775807' into type 'BYTE'", session.getAudits().getAudit().get(0).getMessage());
+        assertEquals("9223372036854775807", session.getAudits().getAudit().get(0).getValue());
+        assertEquals(AuditStatus.ERROR, session.getAudits().getAudit().get(0).getStatus());
+    }
+
+    @Test
+    public void testXmlFieldByteMinRangeOut() throws Exception {
+        String fieldPath = "/primitive/value";
+        FieldType fieldType = FieldType.BYTE;
+        Path path = Paths.get("target" + File.separator + "test-write-field-byte-min-range-out.xml");
+        Object testObject = Long.MIN_VALUE;
+
+        writeToFile(fieldPath, path, testObject);
+
+        AtlasInternalSession session = readFromFile(fieldPath, fieldType, path);
+
+        assertEquals(null, session.head().getSourceField().getValue());
+        assertEquals(1, session.getAudits().getAudit().size());
+        assertEquals("Failed to convert field value '-9223372036854775808' into type 'BYTE'", session.getAudits().getAudit().get(0).getMessage());
+        assertEquals("-9223372036854775808", session.getAudits().getAudit().get(0).getValue());
+        assertEquals(AuditStatus.ERROR, session.getAudits().getAudit().get(0).getStatus());
+    }
+
+    @Test
+    public void testXmlFieldBooleanRangeOut() throws Exception {
+        String fieldPath = "/primitive/value";
+        FieldType fieldType = FieldType.BOOLEAN;
+        Path path = Paths.get("target" + File.separator + "test-write-field-boolean-range-out.xml");
+        Object testObject = "abcd";
+
+        writeToFile(fieldPath, path, testObject);
+
+        AtlasInternalSession session = readFromFile(fieldPath, fieldType, path);
+
+        assertNotNull(session.head().getSourceField().getValue());
+        assertEquals(true, session.head().getSourceField().getValue());
+    }
+
+    @Test
+    public void testXmlFieldBooleanDecimal() throws Exception {
+        String fieldPath = "/primitive/value";
+        FieldType fieldType = FieldType.BOOLEAN;
+        Path path = Paths.get("target" + File.separator + "test-write-field-boolean-decimal.xml");
+        Object testObject = Double.valueOf("126.1234");
+
+        writeToFile(fieldPath, path, testObject);
+
+        AtlasInternalSession session = readFromFile(fieldPath, fieldType, path);
+
+        assertNotNull(session.head().getSourceField().getValue());
+        assertEquals(true, session.head().getSourceField().getValue());
+    }
+
+    @Test
+    public void testXmlFieldLongDecimal() throws Exception {
+        String fieldPath = "/primitive/value";
+        FieldType fieldType = FieldType.LONG;
+        Path path = Paths.get("target" + File.separator + "test-write-field-long-decimal.xml");
+        Object testObject = Double.valueOf("126.1234");
+
+        writeToFile(fieldPath, path, testObject);
+
+        AtlasInternalSession session = readFromFile(fieldPath, fieldType, path);
+
+        assertEquals(null, session.head().getSourceField().getValue());
+        assertEquals(1, session.getAudits().getAudit().size());
+        assertEquals("Failed to convert field value '126.1234' into type 'LONG'", session.getAudits().getAudit().get(0).getMessage());
+        assertEquals("126.1234", session.getAudits().getAudit().get(0).getValue());
+        assertEquals(AuditStatus.ERROR, session.getAudits().getAudit().get(0).getStatus());
+    }
+
+    @Test
+    public void testXmlFieldIntegerDecimal() throws Exception {
+        String fieldPath = "/primitive/value";
+        FieldType fieldType = FieldType.INTEGER;
+        Path path = Paths.get("target" + File.separator + "test-write-field-integer-decimal.xml");
+        Object testObject = Double.valueOf("126.1234");
+
+        writeToFile(fieldPath, path, testObject);
+
+        AtlasInternalSession session = readFromFile(fieldPath, fieldType, path);
+
+        assertEquals(null, session.head().getSourceField().getValue());
+        assertEquals(1, session.getAudits().getAudit().size());
+        assertEquals("Failed to convert field value '126.1234' into type 'INTEGER'", session.getAudits().getAudit().get(0).getMessage());
+        assertEquals("126.1234", session.getAudits().getAudit().get(0).getValue());
+        assertEquals(AuditStatus.ERROR, session.getAudits().getAudit().get(0).getStatus());
+    }
+
+    @Test
+    public void testXmlFieldShortDecimal() throws Exception {
+        String fieldPath = "/primitive/value";
+        FieldType fieldType = FieldType.SHORT;
+        Path path = Paths.get("target" + File.separator + "test-write-field-short-decimal.xml");
+        Object testObject = Double.valueOf("126.1234");
+
+        writeToFile(fieldPath, path, testObject);
+
+        AtlasInternalSession session = readFromFile(fieldPath, fieldType, path);
+
+        assertEquals(null, session.head().getSourceField().getValue());
+        assertEquals(1, session.getAudits().getAudit().size());
+        assertEquals("Failed to convert field value '126.1234' into type 'SHORT'", session.getAudits().getAudit().get(0).getMessage());
+        assertEquals("126.1234", session.getAudits().getAudit().get(0).getValue());
+        assertEquals(AuditStatus.ERROR, session.getAudits().getAudit().get(0).getStatus());
+    }
+
+    @Test
+    public void testXmlFieldCharDecimal() throws Exception {
+        String fieldPath = "/primitive/value";
+        FieldType fieldType = FieldType.CHAR;
+        Path path = Paths.get("target" + File.separator + "test-write-field-char-decimal.xml");
+        Object testObject = Double.valueOf("126.1234");
+
+        writeToFile(fieldPath, path, testObject);
+
+        AtlasInternalSession session = readFromFile(fieldPath, fieldType, path);
+
+        assertEquals(null, session.head().getSourceField().getValue());
+        assertEquals(1, session.getAudits().getAudit().size());
+        assertEquals("Failed to convert field value '126.1234' into type 'CHAR'", session.getAudits().getAudit().get(0).getMessage());
+        assertEquals("126.1234", session.getAudits().getAudit().get(0).getValue());
+        assertEquals(AuditStatus.ERROR, session.getAudits().getAudit().get(0).getStatus());
+    }
+
+    @Test
+    public void testXmlFieldByteDecimal() throws Exception {
+        String fieldPath = "/primitive/value";
+        FieldType fieldType = FieldType.BYTE;
+        Path path = Paths.get("target" + File.separator + "test-write-field-byte-decimal.xml");
+        Object testObject = Double.valueOf("126.1234");
+
+        writeToFile(fieldPath, path, testObject);
+
+        AtlasInternalSession session = readFromFile(fieldPath, fieldType, path);
+
+        assertEquals(null, session.head().getSourceField().getValue());
+        assertEquals(1, session.getAudits().getAudit().size());
+        assertEquals("Failed to convert field value '126.1234' into type 'BYTE'", session.getAudits().getAudit().get(0).getMessage());
+        assertEquals("126.1234", session.getAudits().getAudit().get(0).getValue());
+        assertEquals(AuditStatus.ERROR, session.getAudits().getAudit().get(0).getStatus());
+    }
+
+    @Test
+    public void testXmlFieldDoubleString() throws Exception {
+        String fieldPath = "/primitive/value";
+        FieldType fieldType = FieldType.DOUBLE;
+        Path path = Paths.get("target" + File.separator + "test-write-field-double-string.xml");
+        Object testObject = "abcd";
+
+        writeToFile(fieldPath, path, testObject);
+
+        AtlasInternalSession session = readFromFile(fieldPath, fieldType, path);
+
+        assertEquals(null, session.head().getSourceField().getValue());
+        assertEquals(1, session.getAudits().getAudit().size());
+        assertEquals("Failed to convert field value 'abcd' into type 'DOUBLE'", session.getAudits().getAudit().get(0).getMessage());
+        assertEquals("abcd", session.getAudits().getAudit().get(0).getValue());
+        assertEquals(AuditStatus.ERROR, session.getAudits().getAudit().get(0).getStatus());
+    }
+
+    @Test
+    public void testXmlFieldFloatString() throws Exception {
+        String fieldPath = "/primitive/value";
+        FieldType fieldType = FieldType.FLOAT;
+        Path path = Paths.get("target" + File.separator + "test-write-field-float-string.xml");
+        Object testObject = "abcd";
+
+        writeToFile(fieldPath, path, testObject);
+
+        AtlasInternalSession session = readFromFile(fieldPath, fieldType, path);
+
+        assertEquals(null, session.head().getSourceField().getValue());
+        assertEquals(1, session.getAudits().getAudit().size());
+        assertEquals("Failed to convert field value 'abcd' into type 'FLOAT'", session.getAudits().getAudit().get(0).getMessage());
+        assertEquals("abcd", session.getAudits().getAudit().get(0).getValue());
+        assertEquals(AuditStatus.ERROR, session.getAudits().getAudit().get(0).getStatus());
+    }
+
+    @Test
+    public void testXmlFieldLongString() throws Exception {
+        String fieldPath = "/primitive/value";
+        FieldType fieldType = FieldType.LONG;
+        Path path = Paths.get("target" + File.separator + "test-write-field-long-string.xml");
+        Object testObject = "abcd";
+
+        writeToFile(fieldPath, path, testObject);
+
+        AtlasInternalSession session = readFromFile(fieldPath, fieldType, path);
+
+        assertEquals(null, session.head().getSourceField().getValue());
+        assertEquals(1, session.getAudits().getAudit().size());
+        assertEquals("Failed to convert field value 'abcd' into type 'LONG'", session.getAudits().getAudit().get(0).getMessage());
+        assertEquals("abcd", session.getAudits().getAudit().get(0).getValue());
+        assertEquals(AuditStatus.ERROR, session.getAudits().getAudit().get(0).getStatus());
+    }
+
+    @Test
+    public void testXmlFieldIntegerString() throws Exception {
+        String fieldPath = "/primitive/value";
+        FieldType fieldType = FieldType.INTEGER;
+        Path path = Paths.get("target" + File.separator + "test-write-field-integer-string.xml");
+        Object testObject = "abcd";
+
+        writeToFile(fieldPath, path, testObject);
+
+        AtlasInternalSession session = readFromFile(fieldPath, fieldType, path);
+
+        assertEquals(null, session.head().getSourceField().getValue());
+        assertEquals(1, session.getAudits().getAudit().size());
+        assertEquals("Failed to convert field value 'abcd' into type 'INTEGER'", session.getAudits().getAudit().get(0).getMessage());
+        assertEquals("abcd", session.getAudits().getAudit().get(0).getValue());
+        assertEquals(AuditStatus.ERROR, session.getAudits().getAudit().get(0).getStatus());
+    }
+
+    @Test
+    public void testXmlFieldShortString() throws Exception {
+        String fieldPath = "/primitive/value";
+        FieldType fieldType = FieldType.SHORT;
+        Path path = Paths.get("target" + File.separator + "test-write-field-short-string.xml");
+        Object testObject = "abcd";
+
+        writeToFile(fieldPath, path, testObject);
+
+        AtlasInternalSession session = readFromFile(fieldPath, fieldType, path);
+
+        assertEquals(null, session.head().getSourceField().getValue());
+        assertEquals(1, session.getAudits().getAudit().size());
+        assertEquals("Failed to convert field value 'abcd' into type 'SHORT'", session.getAudits().getAudit().get(0).getMessage());
+        assertEquals("abcd", session.getAudits().getAudit().get(0).getValue());
+        assertEquals(AuditStatus.ERROR, session.getAudits().getAudit().get(0).getStatus());
+    }
+
+    @Test
+    public void testXmlFieldCharString() throws Exception {
+        String fieldPath = "/primitive/value";
+        FieldType fieldType = FieldType.CHAR;
+        Path path = Paths.get("target" + File.separator + "test-write-field-char-string.xml");
+        Object testObject = "abcd";
+
+        writeToFile(fieldPath, path, testObject);
+
+        AtlasInternalSession session = readFromFile(fieldPath, fieldType, path);
+
+        assertEquals(null, session.head().getSourceField().getValue());
+        assertEquals(1, session.getAudits().getAudit().size());
+        assertEquals("Failed to convert field value 'abcd' into type 'CHAR'", session.getAudits().getAudit().get(0).getMessage());
+        assertEquals("abcd", session.getAudits().getAudit().get(0).getValue());
+        assertEquals(AuditStatus.ERROR, session.getAudits().getAudit().get(0).getStatus());
+    }
+
+    @Test
+    public void testXmlFieldByteString() throws Exception {
+        String fieldPath = "/primitive/value";
+        FieldType fieldType = FieldType.BYTE;
+        Path path = Paths.get("target" + File.separator + "test-write-field-byte-string.xml");
+        Object testObject = "abcd";
+
+        writeToFile(fieldPath, path, testObject);
+
+        AtlasInternalSession session = readFromFile(fieldPath, fieldType, path);
+
+        assertEquals(null, session.head().getSourceField().getValue());
+        assertEquals(1, session.getAudits().getAudit().size());
+        assertEquals("Failed to convert field value 'abcd' into type 'BYTE'", session.getAudits().getAudit().get(0).getMessage());
+        assertEquals("abcd", session.getAudits().getAudit().get(0).getValue());
+        assertEquals(AuditStatus.ERROR, session.getAudits().getAudit().get(0).getStatus());
     }
 
 }
