@@ -24,6 +24,7 @@ import java.util.regex.Pattern;
 import io.atlasmap.api.AtlasFieldAction;
 import io.atlasmap.spi.AtlasFieldActionInfo;
 import io.atlasmap.v2.Action;
+import io.atlasmap.v2.Append;
 import io.atlasmap.v2.CollectionType;
 import io.atlasmap.v2.Concatenate;
 import io.atlasmap.v2.EndsWith;
@@ -33,6 +34,7 @@ import io.atlasmap.v2.IndexOf;
 import io.atlasmap.v2.LastIndexOf;
 import io.atlasmap.v2.PadStringLeft;
 import io.atlasmap.v2.PadStringRight;
+import io.atlasmap.v2.Prepend;
 import io.atlasmap.v2.ReplaceAll;
 import io.atlasmap.v2.ReplaceFirst;
 import io.atlasmap.v2.StartsWith;
@@ -51,9 +53,20 @@ public class StringComplexFieldActions implements AtlasFieldAction {
     public static final String STRING_SEPARATOR_REGEX = "^\\s+:_+=";
     public static final Pattern STRING_SEPARATOR_PATTERN = Pattern.compile(STRING_SEPARATOR_REGEX);
 
-    @AtlasFieldActionInfo(name = "GenerateUUID", sourceType = FieldType.ALL, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
-    public static String genareteUUID(Action action, Object input) {
-        return UUID.randomUUID().toString();
+    @AtlasFieldActionInfo(name = "Append", sourceType = FieldType.ALL, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
+    public static String append(Action action, Object input) {
+        if (!(action instanceof Append)) {
+            throw new IllegalArgumentException("Action must be an Append action");
+        }
+        Append append = (Append) action;
+        String string = append.getString();
+        if (input == null && string == null) {
+            return null;
+        }
+        if (string == null) {
+            return input.toString();
+        }
+        return input == null ? string : input.toString().concat(string);
     }
 
     @AtlasFieldActionInfo(name = "Concatenate", sourceType = FieldType.ALL, targetType = FieldType.STRING, sourceCollectionType = CollectionType.ALL, targetCollectionType = CollectionType.NONE)
@@ -112,6 +125,11 @@ public class StringComplexFieldActions implements AtlasFieldAction {
         }
 
         return String.format(format.getTemplate(), input);
+    }
+
+    @AtlasFieldActionInfo(name = "GenerateUUID", sourceType = FieldType.ALL, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
+    public static String genareteUUID(Action action, Object input) {
+        return UUID.randomUUID().toString();
     }
 
     @AtlasFieldActionInfo(name = "IndexOf", sourceType = FieldType.STRING, targetType = FieldType.NUMBER, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
@@ -182,6 +200,21 @@ public class StringComplexFieldActions implements AtlasFieldAction {
         }
 
         return builder.toString();
+    }
+
+    @AtlasFieldActionInfo(name = "Prepend", sourceType = FieldType.ALL, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
+    public static String prepend(Action action, Object input) {
+        if (!(action instanceof Prepend)) {
+            throw new IllegalArgumentException("Action must be a Prepend action");
+        }
+        String string = ((Prepend) action).getString();
+        if (input == null && string == null) {
+            return null;
+        }
+        if (string == null) {
+            return input.toString();
+        }
+        return input == null ? string : string.concat(input.toString());
     }
 
     @AtlasFieldActionInfo(name = "ReplaceAll", sourceType = FieldType.STRING, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)

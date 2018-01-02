@@ -67,6 +67,9 @@ public class ActionsJsonSerializer extends JsonSerializer<Actions> {
             case "AddSeconds":
                 writeAddSeconds(gen, (AddSeconds) action);
                 break;
+            case "Append":
+                writeAppend(gen, (Append) action);
+                break;
             case "Concatenate":
                 writeConcatenate(gen, (Concatenate) action);
                 break;
@@ -108,6 +111,9 @@ public class ActionsJsonSerializer extends JsonSerializer<Actions> {
                 break;
             case "PadStringRight":
                 writePadStringRight(gen, (PadStringRight) action);
+                break;
+            case "Prepend":
+                writePrepend(gen, (Prepend) action);
                 break;
             case "ReplaceAll":
                 writeReplaceAll(gen, (ReplaceAll) action);
@@ -157,6 +163,15 @@ public class ActionsJsonSerializer extends JsonSerializer<Actions> {
         gen.writeEndObject();
     }
 
+    protected void writeAppend(JsonGenerator gen, Append action) throws IOException {
+        gen.writeStartObject();
+        gen.writeFieldName("Append");
+        gen.writeStartObject();
+        gen.writeStringField(STRING, action.getString());
+        gen.writeEndObject();
+        gen.writeEndObject();
+    }
+
     protected void writeConcatenate(JsonGenerator gen, Concatenate action) throws IOException {
         gen.writeStartObject();
         gen.writeFieldName("Concatenate");
@@ -170,7 +185,7 @@ public class ActionsJsonSerializer extends JsonSerializer<Actions> {
         gen.writeStartObject();
         gen.writeFieldName("Contains");
         gen.writeStartObject();
-        gen.writeStringField("value", action.getValue());
+        gen.writeStringField(VALUE, action.getValue());
         gen.writeEndObject();
         gen.writeEndObject();
     }
@@ -303,6 +318,15 @@ public class ActionsJsonSerializer extends JsonSerializer<Actions> {
         gen.writeStartObject();
         gen.writeStringField(PAD_CHARACTER, padStringRight.getPadCharacter());
         gen.writeNumberField(PAD_COUNT, padStringRight.getPadCount());
+        gen.writeEndObject();
+        gen.writeEndObject();
+    }
+
+    protected void writePrepend(JsonGenerator gen, Prepend action) throws IOException {
+        gen.writeStartObject();
+        gen.writeFieldName("Prepend");
+        gen.writeStartObject();
+        gen.writeStringField(STRING, action.getString());
         gen.writeEndObject();
         gen.writeEndObject();
     }

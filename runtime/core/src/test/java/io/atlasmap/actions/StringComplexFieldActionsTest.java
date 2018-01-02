@@ -29,6 +29,7 @@ import java.util.regex.Pattern;
 
 import org.junit.Test;
 
+import io.atlasmap.v2.Append;
 import io.atlasmap.v2.Concatenate;
 import io.atlasmap.v2.EndsWith;
 import io.atlasmap.v2.Format;
@@ -37,6 +38,7 @@ import io.atlasmap.v2.IndexOf;
 import io.atlasmap.v2.LastIndexOf;
 import io.atlasmap.v2.PadStringLeft;
 import io.atlasmap.v2.PadStringRight;
+import io.atlasmap.v2.Prepend;
 import io.atlasmap.v2.ReplaceAll;
 import io.atlasmap.v2.ReplaceFirst;
 import io.atlasmap.v2.StartsWith;
@@ -45,6 +47,26 @@ import io.atlasmap.v2.SubStringAfter;
 import io.atlasmap.v2.SubStringBefore;
 
 public class StringComplexFieldActionsTest {
+
+    @Test
+    public void testAppend() {
+        Append action = new Append();
+        assertEquals(null, StringComplexFieldActions.append(action, null));
+        assertEquals("foo", StringComplexFieldActions.append(action, "foo"));
+        assertEquals("1", StringComplexFieldActions.append(action, 1));
+        action.setString("");
+        assertEquals("", StringComplexFieldActions.append(action, null));
+        assertEquals("foo", StringComplexFieldActions.append(action, "foo"));
+        action.setString("bar");
+        assertEquals("bar", StringComplexFieldActions.append(action, null));
+        assertEquals("foobar", StringComplexFieldActions.append(action, "foo"));
+        assertEquals("1bar", StringComplexFieldActions.append(action, 1));
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void testAppendNullAction() {
+        StringComplexFieldActions.append(null, null);
+    }
 
     @Test
     public void testConcatenate() {
@@ -274,6 +296,26 @@ public class StringComplexFieldActionsTest {
             fail("IllegalArgumentException expected");
         } catch (IllegalArgumentException e) {
         }
+    }
+
+    @Test
+    public void testPrepend() {
+        Prepend action = new Prepend();
+        assertEquals(null, StringComplexFieldActions.prepend(action, null));
+        assertEquals("foo", StringComplexFieldActions.prepend(action, "foo"));
+        assertEquals("1", StringComplexFieldActions.prepend(action, 1));
+        action.setString("");
+        assertEquals("", StringComplexFieldActions.prepend(action, null));
+        assertEquals("foo", StringComplexFieldActions.prepend(action, "foo"));
+        action.setString("bar");
+        assertEquals("bar", StringComplexFieldActions.prepend(action, null));
+        assertEquals("barfoo", StringComplexFieldActions.prepend(action, "foo"));
+        assertEquals("bar1", StringComplexFieldActions.prepend(action, 1));
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void testPrependNullAction() {
+        StringComplexFieldActions.prepend(null, null);
     }
 
     @Test
