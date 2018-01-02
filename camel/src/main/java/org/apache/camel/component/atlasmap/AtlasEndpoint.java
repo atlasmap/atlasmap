@@ -22,6 +22,7 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Properties;
 
 import org.apache.camel.Exchange;
@@ -83,73 +84,20 @@ public class AtlasEndpoint extends ResourceEndpoint {
         return "atlas:" + getResourceUri();
     }
 
-    private synchronized AtlasContextFactory getAtlasContextFactory() throws Exception {
-        if (atlasContextFactory == null) {
-
-            Properties properties = new Properties();
-
-            // load the properties from property file which may overrides the default ones
-            if (ObjectHelper.isNotEmpty(getPropertiesFile())) {
-                InputStream reader = ResourceHelper.resolveMandatoryResourceAsInputStream(getCamelContext(),
-                        getPropertiesFile());
-                try {
-                    properties.load(reader);
-                    log.info("Loaded the Atlas properties file " + getPropertiesFile());
-                } finally {
-                    IOHelper.close(reader, getPropertiesFile(), log);
-                }
-                log.debug("Initializing AtlasContextFactory with properties {}", properties);
-                atlasContextFactory = new DefaultAtlasContextFactory(properties);
-            } else {
-                atlasContextFactory = DefaultAtlasContextFactory.getInstance();
-            }
-        }
-        return atlasContextFactory;
+    public AtlasContextFactory getAtlasContextFactory() {
+        return this.atlasContextFactory;
     }
 
     public void setAtlasContextFactory(AtlasContextFactory atlasContextFactory) {
         this.atlasContextFactory = atlasContextFactory;
     }
 
-    private AtlasContext getAtlasContext(Message incomingMessage) throws Exception {
-        String path = getResourceUri();
-        ObjectHelper.notNull(path, "mappingUri");
+    public AtlasContext getAtlasContext() {
+        return this.atlasContext;
+    }
 
-        Reader reader;
-        String content = incomingMessage.getHeader(AtlasConstants.ATLAS_MAPPING, String.class);
-        if (content != null) {
-            // use content from header
-            reader = new StringReader(content);
-            if (log.isDebugEnabled()) {
-                log.debug("Atlas mapping content read from header {} for endpoint {}", AtlasConstants.ATLAS_MAPPING,
-                        getEndpointUri());
-            }
-            // remove the header to avoid it being propagated in the routing
-            incomingMessage.removeHeader(AtlasConstants.ATLAS_MAPPING);
-        } else if (atlasContext == null) {
-            if (log.isDebugEnabled()) {
-                log.debug("Atlas mapping content read from resourceUri: {} for endpoint {}",
-                        new Object[] { path, getEndpointUri() });
-            }
-            reader = getEncoding() != null ? new InputStreamReader(getResourceAsInputStream(), getEncoding())
-                    : new InputStreamReader(getResourceAsInputStream());
-        } else {
-            // no mapping specified in header, and found an existing context
-            return atlasContext;
-        }
-
-        AtlasMapping atlasMapping = null;
-
-        if (path != null && path.endsWith("json")) {
-            atlasMapping = ((DefaultAtlasContextFactory) getAtlasContextFactory()).getMappingService()
-                    .loadMapping(reader, AtlasMappingFormat.JSON);
-        } else {
-            atlasMapping = ((DefaultAtlasContextFactory) getAtlasContextFactory()).getMappingService()
-                    .loadMapping(reader, AtlasMappingFormat.XML);
-        }
-
-        atlasContext = ((DefaultAtlasContextFactory) getAtlasContextFactory()).createContext(atlasMapping);
-        return atlasContext;
+    public void setAtlasContext(AtlasContext atlasContext) {
+        this.atlasContext = atlasContext;
     }
 
     public boolean isLoaderCache() {
@@ -207,19 +155,17 @@ public class AtlasEndpoint extends ResourceEndpoint {
             return;
         }
 
-        AtlasSession atlasSession = getAtlasContext(incomingMessage).createSession();
-        boolean sourceIsXmlOrJson = isSourceXmlOrJson(atlasSession.getMapping());
+        AtlasSession atlasSession = getOrCreateAtlasContext(incomingMessage).createSession();
+        boolean convertToString = isStringConversionRequired(atlasSession.getMapping());
         Object body = incomingMessage.getBody();
-        if (sourceIsXmlOrJson && body instanceof InputStream) {
+        if (convertToString) {
             // read the whole stream into a String
             // the XML and JSON parsers expect that
             body = incomingMessage.getBody(String.class);
         }
 
-        // TODO Lookup multiple inputs and map with corresponding source docId
-        //      https://github.com/atlasmap/camel-atlasmap/issues/18
-        atlasSession.setDefaultSourceDocument(body);
-        atlasContext.process(atlasSession);
+        populateSourcePayload(atlasSession, body);
+        getAtlasContext().process(atlasSession);
 
         List<Audit> errors = new ArrayList<>();
         for (Audit audit : atlasSession.getAudits().getAudit()) {
@@ -243,25 +189,119 @@ public class AtlasEndpoint extends ResourceEndpoint {
 
         // now lets output the results to the exchange
         Message out = exchange.getOut();
-        out.setBody(atlasSession.getDefaultTargetDocument());
+        out.setBody(getTargetPayload(atlasSession));
         out.setHeaders(incomingMessage.getHeaders());
         out.setAttachments(incomingMessage.getAttachments());
     }
 
-    protected static boolean isSourceXmlOrJson(final AtlasMapping atlasMapping) {
-        final List<DataSource> dataSources = atlasMapping.getDataSource();
+    private AtlasContext getOrCreateAtlasContext(Message incomingMessage) throws Exception {
+        String path = getResourceUri();
+        ObjectHelper.notNull(path, "mappingUri");
+        AtlasMappingFormat mappingFormat = path.toLowerCase().endsWith("json")
+                ? AtlasMappingFormat.JSON : AtlasMappingFormat.XML;
 
-        for (final DataSource dataSource : dataSources) {
-            final DataSourceType dataSourceType = dataSource.getDataSourceType();
-            final String dataSourceUri = dataSource.getUri();
-
-            if (dataSourceType == DataSourceType.SOURCE && dataSourceUri != null
-                && (dataSourceUri.startsWith("atlas:json") || dataSourceUri.startsWith("atlas:xml"))) {
-                return true;
+        Reader reader;
+        String content = incomingMessage.getHeader(AtlasConstants.ATLAS_MAPPING, String.class);
+        if (content != null) {
+            // use content from header
+            reader = new StringReader(content);
+            if (log.isDebugEnabled()) {
+                log.debug("Atlas mapping content read from header {} for endpoint {}", AtlasConstants.ATLAS_MAPPING,
+                        getEndpointUri());
             }
+            // remove the header to avoid it being propagated in the routing
+            incomingMessage.removeHeader(AtlasConstants.ATLAS_MAPPING);
+            AtlasMapping mapping = ((DefaultAtlasContextFactory) getOrCreateAtlasContextFactory())
+                                    .getMappingService()
+                                    .loadMapping(reader, mappingFormat);
+            return ((DefaultAtlasContextFactory) getOrCreateAtlasContextFactory()).createContext(mapping);
+        } else if (getAtlasContext() != null) {
+            // no mapping specified in header, and found an existing context
+            return getAtlasContext();
         }
 
-        return false;
+        // No mapping in header, and no existing context. Create new one from resourceUri
+        if (log.isDebugEnabled()) {
+            log.debug("Atlas mapping content read from resourceUri: {} for endpoint {}",
+                    new Object[] { path, getEndpointUri() });
+        }
+        reader = getEncoding() != null ? new InputStreamReader(getResourceAsInputStream(), getEncoding())
+                : new InputStreamReader(getResourceAsInputStream());
+        AtlasMapping mapping = ((DefaultAtlasContextFactory) getOrCreateAtlasContextFactory())
+                .getMappingService()
+                .loadMapping(reader, mappingFormat);
+        atlasContext = ((DefaultAtlasContextFactory) getOrCreateAtlasContextFactory()).createContext(mapping);
+        return atlasContext;
+    }
+
+    private synchronized AtlasContextFactory getOrCreateAtlasContextFactory() throws Exception {
+        if (atlasContextFactory == null) {
+
+            Properties properties = new Properties();
+
+            // load the properties from property file which may overrides the default ones
+            if (ObjectHelper.isNotEmpty(getPropertiesFile())) {
+                InputStream reader = ResourceHelper.resolveMandatoryResourceAsInputStream(getCamelContext(),
+                        getPropertiesFile());
+                try {
+                    properties.load(reader);
+                    log.info("Loaded the Atlas properties file " + getPropertiesFile());
+                } finally {
+                    IOHelper.close(reader, getPropertiesFile(), log);
+                }
+                log.debug("Initializing AtlasContextFactory with properties {}", properties);
+                atlasContextFactory = new DefaultAtlasContextFactory(properties);
+            } else {
+                atlasContextFactory = DefaultAtlasContextFactory.getInstance();
+            }
+        }
+        return atlasContextFactory;
+    }
+
+    private void populateSourcePayload(AtlasSession session, Object body) {
+        // TODO handle headers docId - https://github.com/atlasmap/atlasmap/issues/67
+        String docId = null;
+        if (session.getMapping().getDataSource() != null) {
+            Optional<DataSource> first = session.getMapping().getDataSource().stream()
+                    .filter(ds -> ds.getDataSourceType() == DataSourceType.SOURCE)
+                    .findFirst();
+            docId = first.isPresent() ? first.get().getId() : null;
+        }
+        if (docId != null && !docId.isEmpty()) {
+            session.setSourceDocument(docId, body);
+        } else {
+            session.setDefaultSourceDocument(body);
+        }
+    }
+
+    private Object getTargetPayload(AtlasSession session) {
+        // TODO handle headers docId - https://github.com/atlasmap/atlasmap/issues/67
+        String docId = null;
+        if (session.getMapping().getDataSource() != null) {
+            Optional<DataSource> first = session.getMapping().getDataSource().stream()
+                    .filter(ds -> ds.getDataSourceType() == DataSourceType.TARGET)
+                    .findFirst();
+            docId = first.isPresent() ? first.get().getId() : null;
+        }
+        if (docId != null && !docId.isEmpty()) {
+            return session.getTargetDocument(docId);
+        } else {
+            return session.getDefaultTargetDocument();
+        }
+    }
+
+    private boolean isStringConversionRequired(final AtlasMapping atlasMapping) {
+        if (atlasMapping == null || atlasMapping.getDataSource() == null) {
+            return false;
+        }
+
+        // TODO handle headers docId - https://github.com/atlasmap/atlasmap/issues/67
+        Optional<DataSource> first = atlasMapping.getDataSource().stream()
+                .filter(ds -> ds.getDataSourceType() == DataSourceType.SOURCE)
+                .findFirst();
+        return first.isPresent() && first.get().getUri() != null
+                && !(first.get().getUri().startsWith("atlas:core")
+                        || first.get().getUri().startsWith("atlas:java"));
     }
 
 }
