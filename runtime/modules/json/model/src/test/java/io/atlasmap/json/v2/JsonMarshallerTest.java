@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.atlasmap.xml.v2;
+package io.atlasmap.json.v2;
 
 import static org.junit.Assert.assertNotNull;
 
@@ -56,7 +56,7 @@ public class JsonMarshallerTest extends BaseMarshallerTest {
     }
 
     @Test
-    public void testJsonMapXMLField() throws Exception {
+    public void testReferenceMapping() throws Exception {
         AtlasMapping atlasMapping = generateAtlasMapping();
 
         // Object to JSON in file
@@ -68,17 +68,4 @@ public class JsonMarshallerTest extends BaseMarshallerTest {
         validateAtlasMapping(uMapping);
     }
 
-    @Test
-    public void testJsonXmlInspectionRequest() throws Exception {
-        XmlInspectionRequest request = generateInspectionRequest();
-        // Object to JSON in file
-        mapper.writerWithDefaultPrettyPrinter().writeValue(new File("target" + File.separator + "junit" + File.separator
-                + testName.getMethodName() + File.separator + "atlasmapping-xmlinspection-request.json"), request);
-        XmlInspectionRequest uRequest = mapper
-                .readValue(
-                        new File("target" + File.separator + "junit" + File.separator + testName.getMethodName()
-                                + File.separator + "atlasmapping-xmlinspection-request.json"),
-                        XmlInspectionRequest.class);
-        assertNotNull(uRequest);
-    }
 }

@@ -15,13 +15,19 @@
  */
 package io.atlasmap.java.v2;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
 import java.io.IOException;
+import java.math.BigInteger;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.junit.After;
 import org.junit.Before;
@@ -37,7 +43,13 @@ import io.atlasmap.v2.Collection;
 import io.atlasmap.v2.CollectionType;
 import io.atlasmap.v2.ConstantField;
 import io.atlasmap.v2.DataSource;
+import io.atlasmap.v2.DataSourceType;
+import io.atlasmap.v2.Field;
+import io.atlasmap.v2.FieldStatus;
+import io.atlasmap.v2.FieldType;
 import io.atlasmap.v2.Length;
+import io.atlasmap.v2.LookupEntry;
+import io.atlasmap.v2.LookupTable;
 import io.atlasmap.v2.Lowercase;
 import io.atlasmap.v2.Mapping;
 import io.atlasmap.v2.MappingType;
@@ -98,39 +110,92 @@ public abstract class BaseMarshallerTest {
         AtlasMapping atlasMapping = AtlasModelFactory.createAtlasMapping();
         atlasMapping.setName("junit");
 
-        JavaField inputField = new JavaField();
-        inputField.setName("foo");
-        inputField.setValue("bar");
+        generateDataSource(atlasMapping);
 
-        JavaField outputField = new JavaField();
-        outputField.setName("woot");
-        outputField.setValue("blerg");
+        generateLookupTables(atlasMapping);
+
+        Actions actions = generateActions();
+
+        StringList annotations = generateAnnotations();
+
+        ModifierList modifierList = generateModifierList();
+
+        StringList parameterizedTypes = generateParameterizedTypes();
+
+        JavaField inputField = generateJavaField(actions, annotations, modifierList, parameterizedTypes);
+
+        JavaField outputField = generateJavaField(actions, annotations, modifierList, parameterizedTypes);
+
 
         Mapping fm = AtlasModelFactory.createMapping(MappingType.MAP);
         fm.getInputField().add(inputField);
         fm.getOutputField().add(outputField);
+        populateMapping(fm, MappingType.MAP, "MapPropertyFieldAlias", ",", ",");
+        populateMappingString(fm, "description", "id", "lookupTableName", "strategy", "strategyClassName");
 
         atlasMapping.getMappings().getMapping().add(fm);
+
+        generateProperties(atlasMapping);
+
         return atlasMapping;
+    }
+
+    private void populateMapping(Mapping mapping, MappingType mappingType, String alias, String delimiter, String delimiterString) {
+        if (mappingType != null) {
+            mapping.setMappingType(mappingType);
+        }
+        mapping.setAlias(alias);
+        mapping.setDelimiter(delimiter);
+        mapping.setDelimiterString(delimiterString);
+    }
+
+    private void populateMappingString(Mapping mapping, String description, String id, String lookupTableName, String strategy, String strategyClassName) {
+        mapping.setDescription(description);
+        mapping.setId(id);
+        mapping.setLookupTableName(lookupTableName);
+        mapping.setStrategy(strategy);
+        mapping.setStrategyClassName(strategyClassName);
+    }
+
+    private void generateLookupTables(AtlasMapping atlasMapping) {
+        LookupTable table = new LookupTable();
+        table.setName("lookupTable");
+        table.setDescription("lookupTableDescription");
+        LookupEntry l1 = new LookupEntry();
+        l1.setSourceType(FieldType.STRING);
+        l1.setSourceValue("Foo");
+        l1.setTargetType(FieldType.STRING);
+        l1.setTargetValue("Bar");
+
+        table.getLookupEntry().add(l1);
+        atlasMapping.getLookupTables().getLookupTable().add(table);
+    }
+
+    private void generateDataSource(AtlasMapping atlasMapping) {
+        DataSource src = generateDataSource("srcId", "srcUri", DataSourceType.SOURCE);
+        DataSource tgt = generateDataSource("tgtId", "tgtUri", DataSourceType.TARGET);
+
+        atlasMapping.getDataSource().add(src);
+        atlasMapping.getDataSource().add(tgt);
+    }
+
+    private DataSource generateDataSource(String id, String uri, DataSourceType type) {
+        DataSource dataSource = new DataSource();
+        dataSource.setId(id);
+        dataSource.setUri(uri);
+        dataSource.setDataSourceType(type);
+        return dataSource;
     }
 
     protected AtlasMapping generateActionMapping() {
         AtlasMapping mapping = generateAtlasMapping();
-        JavaField outputField = (JavaField) ((Mapping) mapping.getMappings().getMapping().get(0)).getOutputField()
-                .get(0);
+        JavaField outputField = (JavaField) ((Mapping) mapping.getMappings().getMapping().get(0)).getOutputField().get(0);
 
-        Actions actions = new Actions();
-        actions.getActions().add(new Camelize());
-        actions.getActions().add(new Capitalize());
-        actions.getActions().add(new Length());
-        actions.getActions().add(new Lowercase());
-        actions.getActions().add(new SeparateByDash());
-        actions.getActions().add(new SeparateByUnderscore());
-        actions.getActions().add(new Trim());
-        actions.getActions().add(new TrimLeft());
-        actions.getActions().add(new TrimRight());
-        actions.getActions().add(new Uppercase());
-        outputField.setActions(actions);
+        populateJavaField(outputField, generateAnnotations(), generateModifierList(), generateParameterizedTypes(), Boolean.FALSE, Boolean.TRUE);
+        populateJavaFieldString(outputField, "JavaField", "ArrayList", "getMethod", "setMethod", "foo");
+        populateFieldComplexObject(outputField, generateActions(),  CollectionType.ARRAY,  FieldStatus.SUPPORTED, FieldType.INTEGER);
+        populateFieldSimpleObject(outputField, 3, "docid", "/path", false, "bar");
+
         return mapping;
     }
 
@@ -139,15 +204,18 @@ public abstract class BaseMarshallerTest {
 
         PropertyField inputField = new PropertyField();
         inputField.setName("foo");
+        Actions actions = new Actions();
+        actions.getActions().add(new Trim());
+        populateFieldComplexObject(inputField, actions, CollectionType.ARRAY, FieldStatus.SUPPORTED, FieldType.INTEGER);
+        populateFieldSimpleObject(inputField, 3, "docid", "/path", false, "bar");
 
         Mapping fm = (Mapping) mapping.getMappings().getMapping().get(0);
         fm.getInputField().add(inputField);
+        fm.getOutputField().add(inputField);
+        populateMapping(fm, MappingType.MAP, "MapPropertyFieldAlias", ",", ",");
+        populateMappingString(fm, "description", "id", "lookupTableName", "strategy", "strategyClassName");
 
-        Property p = new Property();
-        p.setName("foo");
-        p.setValue("bar");
-        mapping.setProperties(new Properties());
-        mapping.getProperties().getProperty().add(p);
+        generateProperties(mapping);
         return mapping;
     }
 
@@ -155,11 +223,16 @@ public abstract class BaseMarshallerTest {
         AtlasMapping mapping = generateAtlasMapping();
 
         ConstantField inputField = new ConstantField();
-        inputField.setValue("foo");
+        Actions actions = new Actions();
+        actions.getActions().add(new Trim());
+        populateFieldComplexObject(inputField, actions, CollectionType.ARRAY, FieldStatus.SUPPORTED, FieldType.INTEGER);
+        populateFieldSimpleObject(inputField, 3, "docid", "/path", false, "bar");
 
         Mapping fm = (Mapping) mapping.getMappings().getMapping().get(0);
         fm.getInputField().add(inputField);
-
+        fm.getOutputField().add(inputField);
+        populateMapping(fm, MappingType.MAP, "MapPropertyFieldAlias", ",", ",");
+        populateMappingString(fm, "description", "id", "lookupTableName", "strategy", "strategyClassName");
         return mapping;
     }
 
@@ -173,6 +246,9 @@ public abstract class BaseMarshallerTest {
         cMapping.getMappings().getMapping().addAll(innerMapping1.getMappings().getMapping());
         cMapping.getMappings().getMapping().addAll(innerMapping2.getMappings().getMapping());
         cMapping.setCollectionType(CollectionType.LIST);
+        cMapping.setCollectionSize(new BigInteger("2"));
+        cMapping.setAlias("alias");
+        cMapping.setDescription("description");
 
         AtlasMapping mapping = generateAtlasMapping();
         mapping.getMappings().getMapping().clear();
@@ -181,84 +257,174 @@ public abstract class BaseMarshallerTest {
     }
 
     protected AtlasMapping generateCombineMapping() {
-        JavaField inputJavaField = new JavaField();
-        inputJavaField.setName("foo");
-        inputJavaField.setValue("bar");
-        inputJavaField.setIndex(4);
+        Actions actions = generateActions();
 
-        JavaField inputJavaFieldB = new JavaField();
-        inputJavaFieldB.setName("foo3");
-        inputJavaFieldB.setValue("bar3");
-        inputJavaFieldB.setIndex(3);
+        StringList annotations = generateAnnotations();
 
-        JavaField outputJavaFieldA = new JavaField();
-        outputJavaFieldA.setName("woot");
-        outputJavaFieldA.setValue("blerg");
+        ModifierList modifierList = generateModifierList();
+
+        StringList parameterizedTypes = generateParameterizedTypes();
+
+        JavaField inputJavaField = generateJavaField(actions, annotations, modifierList, parameterizedTypes);
+
+        JavaField inputJavaFieldB = generateJavaField(actions, annotations, modifierList, parameterizedTypes);
+
+        JavaField outputJavaFieldA = generateJavaField(actions, annotations, modifierList, parameterizedTypes);
 
         Mapping fm = (Mapping) AtlasModelFactory.createMapping(MappingType.COMBINE);
-        fm.setStrategy("SPACE");
 
         fm.getInputField().add(inputJavaField);
         fm.getInputField().add(inputJavaFieldB);
         fm.getOutputField().add(outputJavaFieldA);
 
+        populateMapping(fm, MappingType.COMBINE, "MapPropertyFieldAlias", ",", ",");
+        populateMappingString(fm, "description", "id", "lookupTableName", "strategy", "strategyClassName");
+
         AtlasMapping mapping = generateAtlasMapping();
         mapping.getMappings().getMapping().clear();
         mapping.getMappings().getMapping().add(fm);
+
+        generateProperties(mapping);
+
         return mapping;
+    }
+
+    private void generateProperties(AtlasMapping mapping) {
+        Property p = new Property();
+        p.setName("foo");
+        p.setValue("bar");
+        p.setFieldType(FieldType.INTEGER);
+        mapping.setProperties(new Properties());
+        mapping.getProperties().getProperty().add(p);
     }
 
     protected AtlasMapping generateMultiSourceMapping() {
         AtlasMapping mapping = generateSeparateAtlasMapping();
 
-        DataSource sourceA = new DataSource();
-        sourceA.setUri("someSourceURI:A");
-        sourceA.setId("sourceA");
+        DataSource sourceA = generateDataSource("srcId", "srcUri", DataSourceType.SOURCE);
         mapping.getDataSource().add(sourceA);
 
-        DataSource targetA = new DataSource();
-        targetA.setUri("someTargetURI:A");
-        targetA.setId("targetA");
+        DataSource targetA = generateDataSource("tgtId", "tgtUri", DataSourceType.TARGET);
         mapping.getDataSource().add(targetA);
 
-        DataSource targetB = new DataSource();
-        targetB.setUri("someTargetURI:B");
-        targetB.setId("targetB");
+        DataSource targetB = generateDataSource("tgtId", "tgtUri", DataSourceType.TARGET);
         mapping.getDataSource().add(targetB);
 
         Mapping fm = (Mapping) mapping.getMappings().getMapping().get(0);
-        fm.getInputField().get(0).setDocId("sourceA");
-        fm.getOutputField().get(0).setDocId("targetA");
-        fm.getOutputField().get(1).setDocId("targetB");
-
+        fm.getInputField().get(0).setDocId("docid");
+        fm.getOutputField().get(0).setDocId("docid");
+        fm.getOutputField().get(1).setDocId("docid");
+        populateMapping(fm, MappingType.MAP, "MapPropertyFieldAlias", ",", ",");
+        populateMappingString(fm, "description", "id", "lookupTableName", "strategy", "strategyClassName");
         return mapping;
     }
 
     protected AtlasMapping generateSeparateAtlasMapping() {
-        JavaField inputJavaField = new JavaField();
-        inputJavaField.setName("foo");
-        inputJavaField.setValue("bar");
 
-        JavaField outputJavaFieldA = new JavaField();
-        outputJavaFieldA.setIndex(4);
-        outputJavaFieldA.setName("woot");
-        outputJavaFieldA.setValue("blerg");
+        Actions actions = generateActions();
 
-        JavaField outputJavaFieldB = new JavaField();
-        outputJavaFieldA.setIndex(5);
-        outputJavaFieldA.setName("woot2");
-        outputJavaFieldA.setValue("blerg2");
+        StringList annotations = generateAnnotations();
+
+        ModifierList modifierList = generateModifierList();
+
+        StringList parameterizedTypes = generateParameterizedTypes();
+
+        JavaField inputJavaField = generateJavaField(actions, annotations, modifierList, parameterizedTypes);
+
+        JavaField outputJavaFieldA = generateJavaField(actions, annotations, modifierList, parameterizedTypes);
+
+        JavaField outputJavaFieldB = generateJavaField(actions, annotations, modifierList, parameterizedTypes);
 
         Mapping fm = (Mapping) AtlasModelFactory.createMapping(MappingType.SEPARATE);
 
         fm.getInputField().add(inputJavaField);
         fm.getOutputField().add(outputJavaFieldA);
         fm.getOutputField().add(outputJavaFieldB);
+        populateMapping(fm, MappingType.SEPARATE, "MapPropertyFieldAlias", ",", ",");
+        populateMappingString(fm, "description", "id", "lookupTableName", "strategy", "strategyClassName");
 
         AtlasMapping mapping = generateAtlasMapping();
         mapping.getMappings().getMapping().clear();
         mapping.getMappings().getMapping().add(fm);
         return mapping;
+    }
+
+    private StringList generateAnnotations() {
+        StringList annotations = new StringList();
+        annotations.getString().add("XmlAccessorType");
+        annotations.getString().add("XmlType");
+        return annotations;
+    }
+
+    private ModifierList generateModifierList() {
+        ModifierList modifierList = new ModifierList();
+        modifierList.getModifier().add(Modifier.PUBLIC);
+        modifierList.getModifier().add(Modifier.STATIC);
+        return modifierList;
+    }
+
+    private StringList generateParameterizedTypes() {
+        StringList parameterizedTypes = new StringList();
+        parameterizedTypes.getString().add("String");
+        parameterizedTypes.getString().add("Integer");
+        return parameterizedTypes;
+    }
+
+    private JavaField generateJavaField(Actions actions, StringList annotations, ModifierList modifierList, StringList parameterizedTypes) {
+        JavaField outputJavaFieldB = new JavaField();
+        populateJavaField(outputJavaFieldB, annotations, modifierList, parameterizedTypes, Boolean.FALSE, Boolean.TRUE);
+        populateJavaFieldString(outputJavaFieldB, "JavaField", "ArrayList", "getMethod", "setMethod", "foo");
+        populateFieldComplexObject(outputJavaFieldB, actions, CollectionType.ARRAY, FieldStatus.SUPPORTED, FieldType.INTEGER);
+        populateFieldSimpleObject(outputJavaFieldB, 3, "docid", "/path", false, "bar");
+        return outputJavaFieldB;
+    }
+
+    private void populateJavaField(JavaField javaField, StringList annotations, ModifierList modifierList, StringList parameterizedTypes, boolean isPrimitive, boolean isSynthetic) {
+        javaField.setAnnotations(annotations);
+        javaField.setModifiers(modifierList);
+        javaField.setParameterizedTypes(parameterizedTypes);
+        javaField.setPrimitive(isPrimitive);
+        javaField.setSynthetic(isSynthetic);
+    }
+
+    private void populateJavaFieldString(JavaField javaField, String className, String collectionClassName, String getMethod, String setMethod, String name) {
+        javaField.setClassName(className);
+        javaField.setCollectionClassName(collectionClassName);
+        javaField.setGetMethod(getMethod);
+        javaField.setSetMethod(setMethod);
+        javaField.setName(name);
+
+    }
+    private void populateFieldComplexObject(Field field, Actions actions, CollectionType collectionType, FieldStatus status, FieldType type) {
+        field.setActions(actions);
+        field.setCollectionType(collectionType);
+        field.setStatus(status);
+        field.setFieldType(type);
+    }
+
+    private void populateFieldSimpleObject(Field field, int n, String docid, String path, boolean isRequired, String value) {
+        field.setValue(value);
+        field.setIndex(n);
+        field.setArrayDimensions(n);
+        field.setArraySize(n);
+        field.setDocId(docid);
+        field.setPath(path);
+        field.setRequired(isRequired);
+    }
+
+    private Actions generateActions() {
+        Actions actions = new Actions();
+        actions.getActions().add(new Camelize());
+        actions.getActions().add(new Capitalize());
+        actions.getActions().add(new Length());
+        actions.getActions().add(new Lowercase());
+        actions.getActions().add(new SeparateByDash());
+        actions.getActions().add(new SeparateByUnderscore());
+        actions.getActions().add(new Trim());
+        actions.getActions().add(new TrimLeft());
+        actions.getActions().add(new TrimRight());
+        actions.getActions().add(new Uppercase());
+        return actions;
     }
 
     public MavenClasspathRequest generateMavenClasspathRequest() {
@@ -294,4 +460,319 @@ public abstract class BaseMarshallerTest {
                         + "\t\t\t<artifactId>jackson-core</artifactId>" + "\t\t\t<version>2.8.5</version>"
                         + "\t\t</dependency>" + "\t</dependencies>" + "</project>");
     }
+
+    protected void validateAtlasMapping(AtlasMapping atlasMapping) {
+        assertNotNull(atlasMapping);
+        assertEquals("junit", atlasMapping.getName());
+
+        assertEquals(2, atlasMapping.getDataSource().size());
+        valiateDataSource(atlasMapping.getDataSource().get(0), DataSourceType.SOURCE, "srcId", "srcUri");
+        valiateDataSource(atlasMapping.getDataSource().get(1), DataSourceType.TARGET, "tgtId", "tgtUri");
+
+        assertNotNull(atlasMapping.getLookupTables());
+        assertEquals(1, atlasMapping.getLookupTables().getLookupTable().size());
+        validateLookupTable(atlasMapping.getLookupTables().getLookupTable().get(0));
+
+        assertNotNull(atlasMapping.getMappings());
+        assertEquals(1, atlasMapping.getMappings().getMapping().size());
+        Mapping mapping = (Mapping) atlasMapping.getMappings().getMapping().get(0);
+        assertEquals(1, mapping.getInputField().size());
+        validateJavaField((JavaField) mapping.getInputField().get(0));
+        assertEquals(1, mapping.getOutputField().size());
+        validateJavaField((JavaField) mapping.getOutputField().get(0));
+
+        validateMapping(mapping, MappingType.MAP, generateMappingParams());
+
+        assertNotNull(atlasMapping.getProperties());
+        assertEquals(1, atlasMapping.getProperties().getProperty().size());
+        validateProperty(atlasMapping.getProperties().getProperty().get(0));
+
+    }
+
+    private Map<String, String> generateMappingParams() {
+        Map<String, String> params = new HashMap<>();
+        params.put("alias", "MapPropertyFieldAlias");
+        params.put("delimiter", ",");
+        params.put("delimiterString", ",");
+        params.put("description", "description");
+        params.put("id", "id");
+        params.put("lookupTableName", "lookupTableName");
+        params.put("strategy", "strategy");
+        params.put("strategyClassName", "strategyClassName");
+        return params;
+    }
+
+    private void validateLookupTable(LookupTable lookupTable) {
+        assertEquals("lookupTableDescription", lookupTable.getDescription());
+        assertEquals("lookupTable", lookupTable.getName());
+        assertEquals(FieldType.STRING, lookupTable.getLookupEntry().get(0).getSourceType());
+        assertEquals("Foo", lookupTable.getLookupEntry().get(0).getSourceValue());
+        assertEquals(FieldType.STRING, lookupTable.getLookupEntry().get(0).getTargetType());
+        assertEquals("Bar", lookupTable.getLookupEntry().get(0).getTargetValue());
+    }
+
+    private void validateMapping(Mapping mapping, MappingType mappingType, Map<String, String> params) {
+        assertEquals(params.get("alias"), mapping.getAlias());
+        assertEquals(mappingType, mapping.getMappingType());
+        assertEquals(params.get("delimiter"), mapping.getDelimiter());
+        assertEquals(params.get("delimiterString"), mapping.getDelimiterString());
+        assertEquals(params.get("description"), mapping.getDescription());
+        assertEquals(params.get("id"), mapping.getId());
+        assertEquals(params.get("lookupTableName"), mapping.getLookupTableName());
+        assertEquals(params.get("strategy"), mapping.getStrategy());
+        assertEquals(params.get("strategyClassName"), mapping.getStrategyClassName());
+    }
+
+    private void validateJavaField(JavaField field) {
+        assertEquals("XmlAccessorType", field.getAnnotations().getString().get(0));
+        assertEquals("XmlType", field.getAnnotations().getString().get(1));
+        assertEquals("JavaField", field.getClassName());
+        assertEquals("ArrayList", field.getCollectionClassName());
+        assertEquals("getMethod", field.getGetMethod());
+        assertEquals(2, field.getModifiers().getModifier().size());
+        assertEquals(Modifier.PUBLIC, field.getModifiers().getModifier().get(0));
+        assertEquals(Modifier.STATIC, field.getModifiers().getModifier().get(1));
+        assertEquals("foo", field.getName());
+        assertEquals("String", field.getParameterizedTypes().getString().get(0));
+        assertEquals("Integer", field.getParameterizedTypes().getString().get(1));
+        assertEquals(Boolean.FALSE, field.isPrimitive());
+        assertEquals("setMethod", field.getSetMethod());
+        assertEquals(Boolean.TRUE, field.isSynthetic());
+        validateField(field, 10);
+    }
+
+    private void validateField(Field field, int actionSize) {
+        assertEquals(actionSize, field.getActions().getActions().size());
+        assertEquals(Integer.valueOf(3), field.getArrayDimensions());
+        assertEquals(Integer.valueOf(3), field.getArraySize());
+        assertEquals(CollectionType.ARRAY, field.getCollectionType());
+        assertEquals("docid", field.getDocId());
+        assertEquals(FieldType.INTEGER, field.getFieldType());
+        assertEquals(Integer.valueOf(3), field.getIndex());
+        assertEquals("/path", field.getPath());
+        assertEquals(Boolean.FALSE, field.isRequired());
+        assertEquals(FieldStatus.SUPPORTED, field.getStatus());
+        assertEquals("bar", field.getValue());
+    }
+
+    private void validateProperty(Property p) {
+        assertEquals(FieldType.INTEGER, p.getFieldType());
+        assertEquals("foo", p.getName());
+        assertEquals("bar", p.getValue());
+    }
+
+    protected void validateSeparateAtlasMapping(AtlasMapping atlasMapping) {
+        assertNotNull(atlasMapping);
+        assertEquals("junit", atlasMapping.getName());
+
+        assertEquals(2, atlasMapping.getDataSource().size());
+        valiateDataSource(atlasMapping.getDataSource().get(0), DataSourceType.SOURCE, "srcId", "srcUri");
+        valiateDataSource(atlasMapping.getDataSource().get(1), DataSourceType.TARGET, "tgtId", "tgtUri");
+
+        assertNotNull(atlasMapping.getLookupTables());
+        assertEquals(1, atlasMapping.getLookupTables().getLookupTable().size());
+        validateLookupTable(atlasMapping.getLookupTables().getLookupTable().get(0));
+
+        assertNotNull(atlasMapping.getMappings());
+        assertEquals(1, atlasMapping.getMappings().getMapping().size());
+        validateSeparateMapping((Mapping) atlasMapping.getMappings().getMapping().get(0));
+
+        assertNotNull(atlasMapping.getProperties());
+        assertEquals(1, atlasMapping.getProperties().getProperty().size());
+        validateProperty(atlasMapping.getProperties().getProperty().get(0));
+    }
+
+    private void validateSeparateMapping(Mapping mapping) {
+        assertEquals(1, mapping.getInputField().size());
+        validateJavaField((JavaField) mapping.getInputField().get(0));
+        assertEquals(2, mapping.getOutputField().size());
+        validateJavaField((JavaField) mapping.getOutputField().get(0));
+        if (mapping.getOutputField().size() > 1) {
+            validateJavaField((JavaField) mapping.getOutputField().get(1));
+        }
+
+        validateMapping(mapping, MappingType.SEPARATE, generateMappingParams());
+    }
+
+    protected void validateCombineAtlasMapping(AtlasMapping atlasMapping) {
+        assertNotNull(atlasMapping);
+        assertEquals("junit", atlasMapping.getName());
+
+        assertEquals(2, atlasMapping.getDataSource().size());
+        valiateDataSource(atlasMapping.getDataSource().get(0), DataSourceType.SOURCE, "srcId", "srcUri");
+        valiateDataSource(atlasMapping.getDataSource().get(1), DataSourceType.TARGET, "tgtId", "tgtUri");
+
+        assertNotNull(atlasMapping.getLookupTables());
+        assertEquals(1, atlasMapping.getLookupTables().getLookupTable().size());
+        validateLookupTable(atlasMapping.getLookupTables().getLookupTable().get(0));
+
+        assertNotNull(atlasMapping.getMappings());
+        assertEquals(1, atlasMapping.getMappings().getMapping().size());
+        validateCombineMapping((Mapping) atlasMapping.getMappings().getMapping().get(0));
+
+        assertNotNull(atlasMapping.getProperties());
+        assertEquals(1, atlasMapping.getProperties().getProperty().size());
+        validateProperty(atlasMapping.getProperties().getProperty().get(0));
+    }
+
+    private void validateCombineMapping(Mapping mapping) {
+        assertEquals(2, mapping.getInputField().size());
+        validateJavaField((JavaField) mapping.getInputField().get(0));
+        validateJavaField((JavaField) mapping.getInputField().get(1));
+        assertEquals(1, mapping.getOutputField().size());
+        validateJavaField((JavaField) mapping.getOutputField().get(0));
+
+        validateMapping(mapping, MappingType.COMBINE, generateMappingParams());
+    }
+
+    protected void validatePropertyAtlasMapping(AtlasMapping atlasMapping) {
+        assertNotNull(atlasMapping);
+        assertEquals("junit", atlasMapping.getName());
+
+        assertEquals(2, atlasMapping.getDataSource().size());
+        valiateDataSource(atlasMapping.getDataSource().get(0), DataSourceType.SOURCE, "srcId", "srcUri");
+        valiateDataSource(atlasMapping.getDataSource().get(1), DataSourceType.TARGET, "tgtId", "tgtUri");
+
+        assertNotNull(atlasMapping.getLookupTables());
+        assertEquals(1, atlasMapping.getLookupTables().getLookupTable().size());
+        validateLookupTable(atlasMapping.getLookupTables().getLookupTable().get(0));
+
+        assertNotNull(atlasMapping.getMappings());
+        assertEquals(1, atlasMapping.getMappings().getMapping().size());
+        validatePropertyMapping((Mapping) atlasMapping.getMappings().getMapping().get(0));
+
+        assertNotNull(atlasMapping.getProperties());
+        assertEquals(1, atlasMapping.getProperties().getProperty().size());
+        validateProperty(atlasMapping.getProperties().getProperty().get(0));
+    }
+
+    private void validatePropertyMapping(Mapping mapping) {
+        assertEquals(2, mapping.getInputField().size());
+        validateJavaField((JavaField) mapping.getInputField().get(0));
+        validatePropertyField((PropertyField) mapping.getInputField().get(1));
+        assertEquals(2, mapping.getOutputField().size());
+        validateJavaField((JavaField) mapping.getOutputField().get(0));
+        validatePropertyField((PropertyField) mapping.getOutputField().get(1));
+
+        validateMapping(mapping, MappingType.MAP, generateMappingParams());
+    }
+
+    private void validatePropertyField(PropertyField field) {
+        assertEquals("foo", field.getName());
+        validateField(field, 1);
+    }
+
+    protected void validateConstantAtlasMapping(AtlasMapping atlasMapping) {
+        assertNotNull(atlasMapping);
+        assertEquals("junit", atlasMapping.getName());
+
+        assertEquals(2, atlasMapping.getDataSource().size());
+        valiateDataSource(atlasMapping.getDataSource().get(0), DataSourceType.SOURCE, "srcId", "srcUri");
+        valiateDataSource(atlasMapping.getDataSource().get(1), DataSourceType.TARGET, "tgtId", "tgtUri");
+
+        assertNotNull(atlasMapping.getLookupTables());
+        assertEquals(1, atlasMapping.getLookupTables().getLookupTable().size());
+        validateLookupTable(atlasMapping.getLookupTables().getLookupTable().get(0));
+
+        assertNotNull(atlasMapping.getMappings());
+        assertEquals(1, atlasMapping.getMappings().getMapping().size());
+        validateConstantMapping((Mapping) atlasMapping.getMappings().getMapping().get(0));
+
+        assertNotNull(atlasMapping.getProperties());
+        assertEquals(1, atlasMapping.getProperties().getProperty().size());
+        validateProperty(atlasMapping.getProperties().getProperty().get(0));
+    }
+
+    private void validateConstantMapping(Mapping mapping) {
+        assertEquals(2, mapping.getInputField().size());
+        validateJavaField((JavaField) mapping.getInputField().get(0));
+        validateField(mapping.getInputField().get(1), 1);
+        assertEquals(2, mapping.getOutputField().size());
+        validateJavaField((JavaField) mapping.getOutputField().get(0));
+        validateField(mapping.getOutputField().get(1), 1);
+
+        validateMapping(mapping, MappingType.MAP, generateMappingParams());
+    }
+
+    protected void validateMultisourceAtlasMapping(AtlasMapping atlasMapping) {
+        assertNotNull(atlasMapping);
+        assertEquals("junit", atlasMapping.getName());
+
+        assertEquals(5, atlasMapping.getDataSource().size());
+        valiateDataSource(atlasMapping.getDataSource().get(0), DataSourceType.SOURCE, "srcId", "srcUri");
+        valiateDataSource(atlasMapping.getDataSource().get(1), DataSourceType.TARGET, "tgtId", "tgtUri");
+        valiateDataSource(atlasMapping.getDataSource().get(2), DataSourceType.SOURCE, "srcId", "srcUri");
+        valiateDataSource(atlasMapping.getDataSource().get(3), DataSourceType.TARGET, "tgtId", "tgtUri");
+        valiateDataSource(atlasMapping.getDataSource().get(4), DataSourceType.TARGET, "tgtId", "tgtUri");
+
+        assertNotNull(atlasMapping.getLookupTables());
+        assertEquals(1, atlasMapping.getLookupTables().getLookupTable().size());
+        validateLookupTable(atlasMapping.getLookupTables().getLookupTable().get(0));
+
+        assertNotNull(atlasMapping.getMappings());
+        assertEquals(1, atlasMapping.getMappings().getMapping().size());
+        validateMultisourceMapping((Mapping) atlasMapping.getMappings().getMapping().get(0));
+
+        assertNotNull(atlasMapping.getProperties());
+        assertEquals(1, atlasMapping.getProperties().getProperty().size());
+        validateProperty(atlasMapping.getProperties().getProperty().get(0));
+    }
+
+    private void valiateDataSource(DataSource dataSource, DataSourceType dataSourceType, String id, String uri) {
+        assertEquals(dataSourceType, dataSource.getDataSourceType());
+        assertEquals(id, dataSource.getId());
+        assertEquals(uri, dataSource.getUri());
+    }
+
+    private void validateMultisourceMapping(Mapping mapping) {
+        assertEquals(1, mapping.getInputField().size());
+        validateJavaField((JavaField) mapping.getInputField().get(0));
+
+        assertEquals(2, mapping.getOutputField().size());
+        validateJavaField((JavaField) mapping.getOutputField().get(0));
+        validateJavaField((JavaField) mapping.getOutputField().get(1));
+
+        validateMapping(mapping, MappingType.MAP, generateMappingParams());
+    }
+
+    protected void validateCollectionAtlasMapping(AtlasMapping atlasMapping) {
+        assertNotNull(atlasMapping);
+        assertEquals("junit", atlasMapping.getName());
+
+        assertEquals(2, atlasMapping.getDataSource().size());
+        valiateDataSource(atlasMapping.getDataSource().get(0), DataSourceType.SOURCE, "srcId", "srcUri");
+        valiateDataSource(atlasMapping.getDataSource().get(1), DataSourceType.TARGET, "tgtId", "tgtUri");
+
+        assertNotNull(atlasMapping.getLookupTables());
+        assertEquals(1, atlasMapping.getLookupTables().getLookupTable().size());
+        validateLookupTable(atlasMapping.getLookupTables().getLookupTable().get(0));
+
+        assertNotNull(atlasMapping.getMappings());
+        assertEquals(1, atlasMapping.getMappings().getMapping().size());
+        validateCollectionMapping((Collection) atlasMapping.getMappings().getMapping().get(0));
+
+        assertNotNull(atlasMapping.getProperties());
+        assertEquals(1, atlasMapping.getProperties().getProperty().size());
+        validateProperty(atlasMapping.getProperties().getProperty().get(0));
+    }
+
+    private void validateCollectionMapping(Collection collection) {
+        assertEquals(new BigInteger("2"), collection.getCollectionSize());
+        assertEquals(CollectionType.LIST, collection.getCollectionType());
+        Mapping mapping = (Mapping) collection.getMappings().getMapping().get(0);
+
+        assertEquals(1, mapping.getInputField().size());
+        validateJavaField((JavaField) mapping.getInputField().get(0));
+        assertEquals(1, mapping.getOutputField().size());
+        validateJavaField((JavaField) mapping.getOutputField().get(0));
+        validateMapping(mapping, MappingType.MAP, generateMappingParams());
+
+        mapping = (Mapping) collection.getMappings().getMapping().get(1);
+        assertEquals(1, mapping.getInputField().size());
+        validateJavaField((JavaField) mapping.getInputField().get(0));
+        assertEquals(1, mapping.getOutputField().size());
+        validateJavaField((JavaField) mapping.getOutputField().get(0));
+        validateMapping(mapping, MappingType.MAP, generateMappingParams());
+    }
+
 }

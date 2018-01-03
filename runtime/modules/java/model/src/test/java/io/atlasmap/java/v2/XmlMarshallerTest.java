@@ -21,6 +21,7 @@ import java.io.File;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
+import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.transform.stream.StreamSource;
@@ -63,15 +64,58 @@ public class XmlMarshallerTest extends BaseMarshallerTest {
 
     @Test
     public void testXmlJavaField() throws Exception {
+        marshaller.marshal(generateAtlasMapping(), new File("target/junit/" + testName.getMethodName() + "/" + "atlasmapping.xml"));
+        validateAtlasMapping(readAtlasMapping().getValue());
+    }
 
-        marshaller.marshal(generateAtlasMapping(),
-                new File("target/junit/" + testName.getMethodName() + "/" + "atlasmapping.xml"));
+    @Test
+    public void testJsonSeparateJavaField() throws Exception {
+        marshaller.marshal(generateSeparateAtlasMapping(), new File("target/junit/" + testName.getMethodName() + "/" + "atlasmapping.xml"));
+        validateSeparateAtlasMapping(readAtlasMapping().getValue());
+    }
+
+    @Test
+    public void testJsonCombineJavaField() throws Exception {
+        marshaller.marshal(generateCombineMapping(), new File("target/junit/" + testName.getMethodName() + "/" + "atlasmapping.xml"));
+        validateCombineAtlasMapping(readAtlasMapping().getValue());
+    }
+
+    @Test
+    public void testJsonPropertyJavaField() throws Exception {
+        marshaller.marshal(generatePropertyReferenceMapping(), new File("target/junit/" + testName.getMethodName() + "/" + "atlasmapping.xml"));
+        validatePropertyAtlasMapping(readAtlasMapping().getValue());
+    }
+
+    @Test
+    public void testJsonConstantJavaField() throws Exception {
+        marshaller.marshal(generateConstantMapping(), new File("target/junit/" + testName.getMethodName() + "/" + "atlasmapping.xml"));
+        validateConstantAtlasMapping(readAtlasMapping().getValue());
+    }
+
+    @Test
+    public void testJsonMultisourceJavaField() throws Exception {
+        marshaller.marshal(generateMultiSourceMapping(), new File("target/junit/" + testName.getMethodName() + "/" + "atlasmapping.xml"));
+        validateMultisourceAtlasMapping(readAtlasMapping().getValue());
+    }
+
+    @Test
+    public void testJsonCollectionJavaField() throws Exception {
+        marshaller.marshal(generateCollectionMapping(), new File("target/junit/" + testName.getMethodName() + "/" + "atlasmapping.xml"));
+        validateCollectionAtlasMapping(readAtlasMapping().getValue());
+    }
+
+    @Test
+    public void testJsonActionJavaField() throws Exception {
+        marshaller.marshal(generateActionMapping(), new File("target/junit/" + testName.getMethodName() + "/" + "atlasmapping.xml"));
+        validateAtlasMapping(readAtlasMapping().getValue());
+    }
+
+    private JAXBElement<AtlasMapping> readAtlasMapping() throws JAXBException {
         StreamSource fileSource = new StreamSource(
                 new File("target/junit/" + testName.getMethodName() + "/" + "atlasmapping.xml"));
         JAXBElement<AtlasMapping> mappingElem = unmarshaller.unmarshal(fileSource, AtlasMapping.class);
         assertNotNull(mappingElem);
         assertNotNull(mappingElem.getValue());
-        // TODO: validateAtlasMapping(mappingElem.getValue());
+        return mappingElem;
     }
-
 }
