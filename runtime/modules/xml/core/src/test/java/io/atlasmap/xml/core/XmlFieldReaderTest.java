@@ -29,7 +29,6 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import io.atlasmap.api.AtlasException;
@@ -165,14 +164,10 @@ public class XmlFieldReaderTest {
         assertThat(xmlField.getValue(), is("b"));
     }
 
-    @Ignore("https://github.com/atlasmap/atlasmap/issues/141")
     @Test
     public void testReadDocumentElementWithMultipleNamespaceComplex() throws Exception {
         String doc = getDocumentString("src/test/resources/complex_example_multiple_ns.xml");
         reader.setDocument(doc, true);
-        // NB: the index is namespace aware, that is, if there are multiple namespaces,
-        // each namespace has an index starting at zero regardless of the element's
-        // indexed position in the document...
         XmlField xmlField = AtlasXmlModelFactory.createXmlField();
         xmlField.setPath("/orders/q:order/id/@y:custId");
         assertNull(xmlField.getValue());
@@ -190,29 +185,27 @@ public class XmlFieldReaderTest {
         assertNotNull(xmlField.getValue());
         assertThat(xmlField.getValue(), is("cx"));
 
-        xmlField = AtlasXmlModelFactory.createXmlField();
-        xmlField.setPath("/orders/order/id/@y:custId");
-        assertNull(xmlField.getValue());
+        XmlField xmlField2 = AtlasXmlModelFactory.createXmlField();
+        xmlField2.setPath("/orders/order/id/@y:custId");
+        assertNull(xmlField2.getValue());
+        when(session.head().getSourceField()).thenReturn(xmlField2);
         reader.read(session);
-        assertNotNull(xmlField.getValue());
-        assertThat(xmlField.getValue(), is("aa"));
+        assertNotNull(xmlField2.getValue());
+        assertThat(xmlField2.getValue(), is("aa"));
 
-        xmlField = AtlasXmlModelFactory.createXmlField();
-        xmlField.setPath("/orders/q:order[1]/id/@y:custId");
-        assertNull(xmlField.getValue());
+        XmlField xmlField3 = AtlasXmlModelFactory.createXmlField();
+        xmlField3.setPath("/orders/q:order[1]/id/@y:custId");
+        assertNull(xmlField3.getValue());
+        when(session.head().getSourceField()).thenReturn(xmlField3);
         reader.read(session);
-        assertNotNull(xmlField.getValue());
-        assertThat(xmlField.getValue(), is("ea"));
+        assertNotNull(xmlField3.getValue());
+        assertThat(xmlField3.getValue(), is("ea"));
     }
 
-    @Ignore("https://github.com/atlasmap/atlasmap/issues/141")
     @Test
     public void testReadDocumentElementWithMultipleNamespaceComplexConstructorArg() throws Exception {
         String doc = getDocumentString("src/test/resources/complex_example_multiple_ns.xml");
         reader.setDocument(doc, true);
-        // NB: the index is namespace aware, that is, if there are multiple namespaces,
-        // each namespace has an index starting at zero regardless of the element's
-        // indexed position in the document...
         XmlField xmlField = AtlasXmlModelFactory.createXmlField();
         xmlField.setPath("/orders/q:order/id/@y:custId");
         assertNull(xmlField.getValue());
@@ -222,20 +215,21 @@ public class XmlFieldReaderTest {
         namespaces.put("http://www.example.com/y/", "y");
         namespaces.put("http://www.example.com/x/", "");
 
-        reader = new XmlFieldReader(DefaultAtlasConversionService.getInstance(), namespaces);
-
+        XmlFieldReader multipleNamespacesReader = new XmlFieldReader(DefaultAtlasConversionService.getInstance(), namespaces);
+        multipleNamespacesReader.setDocument(doc, true);
         AtlasInternalSession session = mock(AtlasInternalSession.class);
         when(session.head()).thenReturn(mock(Head.class));
         when(session.head().getSourceField()).thenReturn(xmlField);
-        reader.read(session);
+        multipleNamespacesReader.read(session);
         assertNotNull(xmlField.getValue());
         assertThat(xmlField.getValue(), is("cx"));
-        xmlField = AtlasXmlModelFactory.createXmlField();
-        xmlField.setPath("/orders/order/id/@y:custId");
-        assertNull(xmlField.getValue());
-        reader.read(session);
-        assertNotNull(xmlField.getValue());
-        assertThat(xmlField.getValue(), is("aa"));
+        XmlField xmlField2 = AtlasXmlModelFactory.createXmlField();
+        xmlField2.setPath("/orders/order/id/@y:custId");
+        assertNull(xmlField2.getValue());
+        when(session.head().getSourceField()).thenReturn(xmlField2);
+        multipleNamespacesReader.read(session);
+        assertNotNull(xmlField2.getValue());
+        assertThat(xmlField2.getValue(), is("aa"));
     }
 
     @Test
