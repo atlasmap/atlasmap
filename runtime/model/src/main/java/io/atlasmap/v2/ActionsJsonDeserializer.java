@@ -66,7 +66,7 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
             case "AbsoluteValue":
                 return new AbsoluteValue();
             case "Add":
-                return new Average();
+                return new Add();
             case "AddDays":
                 return processAddDaysJsonToken(jsonToken);
             case "AddSeconds":
@@ -81,7 +81,7 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
                 return new Capitalize();
             case "Ceiling":
                 return new Ceiling();
-            case "Concatentate":
+            case "Concatenate":
                 return processConcatenateJsonToken(jsonToken);
             case "ConvertAreaUnit":
                 return processConvertAreaUnitJsonToken(jsonToken);
