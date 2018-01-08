@@ -82,6 +82,7 @@ public class AtlasModelFactory {
             clone.setDescription(mapping.getDescription());
             clone.setMappingType(mapping.getMappingType());
             if (deepClone) {
+                clone.setMappings(new Mappings());
                 for (BaseMapping m : mapping.getMappings().getMapping()) {
                     clone.getMappings().getMapping().add(cloneMapping(m, deepClone));
                 }
@@ -96,7 +97,9 @@ public class AtlasModelFactory {
         clone.setDelimiterString(mapping.getDelimiterString());
         clone.setDescription(mapping.getDescription());
         clone.setLookupTableName(mapping.getLookupTableName());
-        clone.setMappingType(MappingType.fromValue(mapping.getMappingType().value()));
+        if (mapping.getMappingType() != null) {
+            clone.setMappingType(MappingType.fromValue(mapping.getMappingType().value()));
+        }
         clone.setStrategy(mapping.getStrategy());
         clone.setStrategyClassName(mapping.getStrategyClassName());
         if (deepClone) {
@@ -258,10 +261,10 @@ public class AtlasModelFactory {
             if (((CustomAction) action).getMethodName() != null) {
                 a.setMethodName(((CustomAction) action).getMethodName());
             }
-            if (a.getInputFieldType() != null) {
+            if (((CustomAction) action).getInputFieldType() != null) {
                 a.setInputFieldType(FieldType.fromValue(((CustomAction) action).getInputFieldType().value()));
             }
-            if (a.getOutputFieldType() != null) {
+            if (((CustomAction) action).getOutputFieldType() != null) {
                 a.setOutputFieldType(FieldType.fromValue(((CustomAction) action).getOutputFieldType().value()));
             }
             return a;
