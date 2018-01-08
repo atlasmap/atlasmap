@@ -221,7 +221,7 @@ public class XmlValidationServiceTest {
         validations.addAll(sourceValidationService.validateMapping(mapping));
         validations.addAll(targetValidationService.validateMapping(mapping));
 
-        assertTrue(validationHelper.hasErrors());
+        assertFalse(validationHelper.hasErrors());
         assertFalse(validationHelper.hasWarnings());
         assertFalse(validationHelper.hasInfos());
     }
