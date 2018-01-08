@@ -19,9 +19,6 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.Consumes;
@@ -53,17 +50,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.atlasmap.api.AtlasContext;
-import io.atlasmap.api.AtlasConversionService;
-import io.atlasmap.api.AtlasConverter;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.api.AtlasSession;
 import io.atlasmap.core.DefaultAtlasContextFactory;
-import io.atlasmap.java.v2.JavaField;
 import io.atlasmap.v2.ActionDetails;
 import io.atlasmap.v2.AtlasMapping;
-import io.atlasmap.v2.Field;
-import io.atlasmap.v2.FieldType;
-import io.atlasmap.v2.Mapping;
 import io.atlasmap.v2.StringMap;
 import io.atlasmap.v2.StringMapEntry;
 import io.atlasmap.v2.Validations;
@@ -281,14 +272,6 @@ public class AtlasService extends Application {
         }
     }
 
-    @PUT
-    @Path("/fieldMapping/converterCheck")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response processConverterCheckRequest(Mapping mapping, @Context UriInfo uriInfo) {
-        return converterCheck(mapping, uriInfo);
-    }
-
 
     /**
      * Simple liveness check method used in liveness checks. Must not be protected via authetication.
@@ -319,67 +302,6 @@ public class AtlasService extends Application {
         if (temporaryMappingFile.exists() && !temporaryMappingFile.delete()) {
             LOG.warn("Failed to deleting temporary file: "
                     + (temporaryMappingFile != null ? temporaryMappingFile.toString() : null));
-        }
-
-        return Response.ok().header(ACCESS_CONTROL_ALLOW_ORIGIN, DEFAULT_ACCESS_CONTROL_ALLOW_ORIGIN)
-                .header(ACCESS_CONTROL_ALLOW_HEADERS, DEFAULT_ACCESS_CONTROL_ALLOW_HEADERS)
-                .header(ACCESS_CONTROL_ALLOW_METHODS, ACCESS_CONTROL_ALLOW_METHODS_GPPPD).entity(validations).build();
-    }
-
-    protected Response converterCheck(Mapping mapping, UriInfo uriInfo) {
-
-        if (mapping == null) {
-            throw new WebApplicationException("Mapping must be specified", Status.BAD_REQUEST);
-        }
-
-        AtlasConversionService conversionService = atlasContextFactory.getConversionService();
-
-        Validations validations = new Validations();
-        List<Field> inputFields = new ArrayList<>();
-        List<Field> outputFields = new ArrayList<>();
-
-        for (Field f : mapping.getInputField()) {
-            inputFields.add(f);
-        }
-
-        for (Field f : mapping.getOutputField()) {
-            inputFields.add(f);
-        }
-
-        // if(mapping.get)
-        // throw new AtlasException("Unsupported mapping type: " +
-        // mapping.getClass().getName());
-        // }
-
-        if (inputFields == null || inputFields.isEmpty() || outputFields == null || outputFields.isEmpty()) {
-            throw new WebApplicationException(
-                    "Must have one of inputField(s) and outputField(s) in order to check for available converter",
-                    Status.BAD_REQUEST);
-        }
-
-        FieldType inputType = null;
-        FieldType outputType = null;
-
-        // TODO: Needs to be addressed via GitHub issue #273
-        for (Field inputField : inputFields) {
-            if (inputField instanceof JavaField) {
-                inputType = ((JavaField) inputField).getFieldType();
-            }
-
-            for (Field outputField : outputFields) {
-                if (outputField instanceof JavaField) {
-                    outputType = ((JavaField) outputField).getFieldType();
-                }
-
-                Optional<AtlasConverter<?>> optionalConverter = conversionService.findMatchingConverter(inputType,
-                        outputType);
-                if (optionalConverter.isPresent()) {
-//                    AtlasConverter<?> converter = optionalConverter.get();
-                    // TODO: return "ok"
-                } else {
-                    // TODO: return "Converter needed"
-                }
-            }
         }
 
         return Response.ok().header(ACCESS_CONTROL_ALLOW_ORIGIN, DEFAULT_ACCESS_CONTROL_ALLOW_ORIGIN)
