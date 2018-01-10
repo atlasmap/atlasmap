@@ -288,7 +288,7 @@ public class StringComplexFieldActions implements AtlasFieldAction {
         if (action == null || !(action instanceof SubStringAfter) || ((SubStringAfter) action).getStartIndex() == null
                 || ((SubStringAfter) action).getStartIndex() < 0 || ((SubStringAfter) action).getMatch() == null
                 || (((SubStringAfter) action).getEndIndex() != null
-                        && ((SubStringAfter) action).getEndIndex() > ((SubStringAfter) action).getStartIndex())) {
+                        && ((SubStringAfter) action).getEndIndex() < ((SubStringAfter) action).getStartIndex())) {
             throw new IllegalArgumentException(
                     "SubStringAfter action must be specified with a positive startIndex and a string to match");
         }
@@ -312,7 +312,7 @@ public class StringComplexFieldActions implements AtlasFieldAction {
         if (action == null || !(action instanceof SubStringBefore) || ((SubStringBefore) action).getStartIndex() == null
                 || ((SubStringBefore) action).getStartIndex() < 0 || ((SubStringBefore) action).getMatch() == null
                 || (((SubStringBefore) action).getEndIndex() != null
-                        && ((SubStringBefore) action).getEndIndex() > ((SubStringBefore) action).getStartIndex())) {
+                        && ((SubStringBefore) action).getEndIndex() < ((SubStringBefore) action).getStartIndex())) {
             throw new IllegalArgumentException(
                     "SubStringBefore action must be specified with a positive startIndex and a string to match");
         }

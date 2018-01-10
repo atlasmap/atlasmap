@@ -444,6 +444,12 @@ public class StringComplexFieldActionsTest {
 
         assertEquals("barblah", StringComplexFieldActions.subStringAfter(action, "barblah"));
 
+        action.setEndIndex(7);
+        assertEquals("blah", StringComplexFieldActions.subStringAfter(action, "foobarblahfoo"));
+
+        action.setEndIndex(3);
+        assertEquals("", StringComplexFieldActions.subStringAfter(action, "foobarblahfoo"));
+
         try {
             StringComplexFieldActions.subStringAfter(null, "aa");
             fail("IllegalArgumentException expected");
@@ -492,6 +498,11 @@ public class StringComplexFieldActionsTest {
         assertEquals("bar", StringComplexFieldActions.subStringBefore(action, "foobarblah"));
         assertEquals("foobar", StringComplexFieldActions.subStringBefore(action, "foofoobarblahfoo"));
         assertEquals("", StringComplexFieldActions.subStringBefore(action, "barblah"));
+
+        action.setEndIndex(5);
+        assertEquals("ba", StringComplexFieldActions.subStringBefore(action, "foobarblah"));
+        action.setEndIndex(3);
+        assertEquals("", StringComplexFieldActions.subStringBefore(action, "foobarblah"));
 
         try {
             StringComplexFieldActions.subStringBefore(null, "aa");
