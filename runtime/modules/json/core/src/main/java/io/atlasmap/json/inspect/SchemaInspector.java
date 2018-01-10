@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import io.atlasmap.json.core.JsonComplexTypeFactory;
 import io.atlasmap.json.v2.AtlasJsonModelFactory;
 import io.atlasmap.json.v2.JsonComplexType;
 import io.atlasmap.json.v2.JsonDocument;
@@ -176,15 +177,15 @@ public class SchemaInspector implements JsonInspector {
         public JsonField build() {
             JsonField answer;
             if (type == FieldType.COMPLEX) {
-                JsonComplexType complex = new JsonComplexType();
+                JsonComplexType complex = JsonComplexTypeFactory.createJsonComlexField();
                 complex.setJsonFields(subFields);
                 answer = complex;
             } else {
                 answer = new JsonField();
+                answer.setFieldType(type);
             }
             answer.setName(name);
             answer.setPath(path);
-            answer.setFieldType(type);
             answer.setCollectionType(collectionType);
             answer.setStatus(status);
             return answer;
