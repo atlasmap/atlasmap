@@ -15,11 +15,14 @@
  */
 package io.atlasmap.json.core;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import org.hamcrest.core.Is;
@@ -28,21 +31,27 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.atlasmap.api.AtlasException;
+import io.atlasmap.core.DefaultAtlasConversionService;
 import io.atlasmap.json.v2.AtlasJsonModelFactory;
 import io.atlasmap.json.v2.JsonComplexType;
 import io.atlasmap.json.v2.JsonField;
 import io.atlasmap.json.v2.JsonFields;
 import io.atlasmap.spi.AtlasInternalSession;
 import io.atlasmap.spi.AtlasInternalSession.Head;
+import io.atlasmap.v2.AuditStatus;
+import io.atlasmap.v2.Audits;
 import io.atlasmap.v2.CollectionType;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldStatus;
 import io.atlasmap.v2.FieldType;
 
 public class JsonFieldWriterTest {
+    private static JsonFieldReader reader = new JsonFieldReader(DefaultAtlasConversionService.getInstance());
     private JsonFieldWriter writer = null;
 
     @Before
@@ -626,4 +635,309 @@ public class JsonFieldWriterTest {
         Object objJSON = objectMapper.readValue(json, Object.class);
         return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(objJSON);
     }
+
+    private void testBoundaryValue(String fileName, String fieldPath, Object testObject, FieldType fieldType) throws Exception {
+        Path path = Paths.get("target" + File.separator + fileName);
+        write(path, fieldPath, testObject, fieldType);
+
+        AtlasInternalSession session = read(path, fieldType, fieldPath);
+        assertEquals(testObject, session.head().getSourceField().getValue());
+    }
+
+    @Test
+    public void testJsonFieldDoubleMax() throws Exception {
+        testBoundaryValue("test-write-field-double-max.json", "/primitiveValue", Double.MAX_VALUE, FieldType.DOUBLE);
+    }
+
+    @Test
+    public void testJsonFieldDoubleMin() throws Exception {
+        testBoundaryValue("test-write-field-double-min.json", "/primitiveValue", Double.MIN_VALUE, FieldType.DOUBLE);
+    }
+
+
+    @Test
+    public void testJsonFieldFloatMax() throws Exception {
+        testBoundaryValue("test-write-field-float-max.json", "/primitiveValue", Float.MAX_VALUE, FieldType.FLOAT);
+    }
+
+    @Test
+    public void testJsonFieldFloatMin() throws Exception {
+        testBoundaryValue("test-write-field-float-min.json", "/primitiveValue", Float.MIN_VALUE, FieldType.FLOAT);
+    }
+
+    @Test
+    public void testJsonFieldLongMax() throws Exception {
+        testBoundaryValue("test-write-field-long-max.json", "/primitiveValue", Long.MAX_VALUE, FieldType.LONG);
+    }
+
+    @Test
+    public void testJsonFieldLongMin() throws Exception {
+        testBoundaryValue("test-write-field-long-min.json", "/primitiveValue", Long.MIN_VALUE, FieldType.LONG);
+    }
+
+    @Test
+    public void testJsonFieldIntegerMax() throws Exception {
+        testBoundaryValue("test-write-field-integer-max.json", "/primitiveValue", Integer.MAX_VALUE, FieldType.INTEGER);
+    }
+
+    @Test
+    public void testJsonFieldIntegerMin() throws Exception {
+        testBoundaryValue("test-write-field-integer-min.json", "/primitiveValue", Integer.MIN_VALUE, FieldType.INTEGER);
+    }
+
+    @Test
+    public void testJsonFieldShortMax() throws Exception {
+        testBoundaryValue("test-write-field-short-max.json", "/primitiveValue", Short.MAX_VALUE, FieldType.SHORT);
+    }
+
+    @Test
+    public void testJsonFieldShortMin() throws Exception {
+        testBoundaryValue("test-write-field-short-min.json", "/primitiveValue", Short.MIN_VALUE, FieldType.SHORT);
+    }
+
+    @Test
+    public void testJsonFieldChar() throws Exception {
+        testBoundaryValue("test-write-field-char.json", "/primitiveValue", new Character((char) 127), FieldType.CHAR);
+    }
+
+    @Test
+    public void testJsonFieldCharMin() throws Exception {
+        testBoundaryValue("test-write-field-char-min.json", "/primitiveValue", Character.MIN_VALUE, FieldType.CHAR);
+    }
+
+    @Test
+    public void testJsonFieldByteMax() throws Exception {
+        testBoundaryValue("test-write-field-byte-max.json", "/primitiveValue", Byte.MAX_VALUE, FieldType.BYTE);
+    }
+
+    @Test
+    public void testJsonFieldByteMin() throws Exception {
+        testBoundaryValue("test-write-field-byte-min.json", "/primitiveValue", Byte.MIN_VALUE, FieldType.BYTE);
+    }
+
+    @Test
+    public void testJsonFieldBooleanTrue() throws Exception {
+        testBoundaryValue("test-write-field-boolean-true.json", "/primitiveValue", Boolean.TRUE, FieldType.BOOLEAN);
+    }
+
+    @Test
+    public void testJsonFieldBooleanFalse() throws Exception {
+        testBoundaryValue("test-write-field-boolean-false.json", "/primitiveValue", Boolean.FALSE, FieldType.BOOLEAN);
+    }
+
+    @Test
+    public void testJsonFieldStringEmpty() throws Exception {
+        testBoundaryValue("test-write-field-string-empty.json", "/stringValue", "", FieldType.STRING);
+    }
+
+    @Test
+    public void testJsonFieldStringNonEmpty() throws Exception {
+        testBoundaryValue("test-write-field-string-nonempty.json", "/stringValue", "testString", FieldType.STRING);
+    }
+
+    @Test
+    public void testJsonFieldStringNull() throws Exception {
+        testBoundaryValue("test-write-field-string-null.json", "/stringValue", null, FieldType.STRING);
+    }
+
+    private void write(Path path, String fieldPath, Object testObject, FieldType fieldType) throws Exception, IOException, JsonGenerationException, JsonMappingException {
+        JsonField field = AtlasJsonModelFactory.createJsonField();
+        field.setPath(fieldPath);
+        field.setValue(testObject);
+        field.setFieldType(fieldType);
+        write(field);
+        writer.getObjectMapper().writeValue(path.toFile(), writer.getRootNode());
+    }
+
+    private AtlasInternalSession read(Path path, FieldType outputFieldType, String fieldPath) throws IOException, AtlasException {
+        String document = new String(Files.readAllBytes(path));
+        reader.setDocument(document);
+        JsonField jsonField = AtlasJsonModelFactory.createJsonField();
+        jsonField.setPath(fieldPath);
+        jsonField.setFieldType(outputFieldType);
+        AtlasInternalSession session = mock(AtlasInternalSession.class);
+        when(session.head()).thenReturn(mock(Head.class));
+        when(session.head().getSourceField()).thenReturn(jsonField);
+
+        Audits audits = new Audits();
+        when(session.getAudits()).thenReturn(audits);
+        reader.read(session);
+        return session;
+    }
+
+    private void testRangeOutValue(String fileName, String fieldPath, Object testObject, FieldType inputFieldType, FieldType outputFieldType)
+            throws Exception {
+        Path path = Paths.get("target" + File.separator + fileName);
+        write(path, fieldPath, testObject, inputFieldType);
+
+        AtlasInternalSession session = read(path, outputFieldType, fieldPath);
+
+        assertEquals(null, session.head().getSourceField().getValue());
+        assertEquals(1, session.getAudits().getAudit().size());
+        assertEquals("Failed to convert field value '" + testObject.toString() + "' into type '" + outputFieldType.value().toUpperCase() + "'", session.getAudits().getAudit().get(0).getMessage());
+        assertEquals(testObject.toString(), session.getAudits().getAudit().get(0).getValue());
+        assertEquals(AuditStatus.ERROR, session.getAudits().getAudit().get(0).getStatus());
+    }
+
+    @Test
+    public void testJsonFieldDoubleMaxRangeOut() throws Exception {
+        testRangeOutValue("test-write-field-double-max-range-out.json", "/primitiveValue", "1.7976931348623157E309", FieldType.STRING, FieldType.DOUBLE);
+    }
+
+    @Test
+    public void testJsonFieldDoubleMinRangeOut() throws Exception {
+        testMinRangeOutValue("test-write-field-double-min-range-out.json", "/primitiveValue", "4.9E-325", FieldType.STRING, FieldType.DOUBLE, 0.0);
+    }
+
+    private void testMinRangeOutValue(String fileName, String fieldPath, Object testObject, FieldType inputFieldType, FieldType outputFieldType, Object expectedValue)
+            throws Exception, IOException, JsonGenerationException, JsonMappingException, AtlasException {
+        Path path = Paths.get("target" + File.separator + fileName);
+        write(path, fieldPath, testObject, inputFieldType);
+
+        AtlasInternalSession session = read(path, outputFieldType, fieldPath);
+
+        assertEquals(expectedValue, session.head().getSourceField().getValue());
+        assertEquals(0, session.getAudits().getAudit().size());
+    }
+
+    @Test
+    public void testJsonFieldFloatMaxRangeOut() throws Exception {
+        testRangeOutValue("test-write-field-float-max-range-out.json", "/primitiveValue", "3.4028235E39", FieldType.STRING, FieldType.FLOAT);
+    }
+
+    @Test
+    public void testJsonFieldFloatMinRangeOut() throws Exception {
+        testMinRangeOutValue("test-write-field-float-min-range-out.json", "/primitiveValue", "1.4E-46", FieldType.STRING, FieldType.FLOAT, 0.0f);
+    }
+
+    @Test
+    public void testJsonFieldLongMaxRangeOut() throws Exception {
+        testRangeOutValue("test-write-field-long-max-range-out.json", "/primitiveValue", "9223372036854775808", FieldType.STRING, FieldType.LONG);
+    }
+
+    @Test
+    public void testJsonFieldLongMinRangeOut() throws Exception {
+        testRangeOutValue("test-write-field-long-min-range-out.json", "/primitiveValue", "-9223372036854775809", FieldType.STRING, FieldType.LONG);
+    }
+
+    @Test
+    public void testJsonFieldIntegerMaxRangeOut() throws Exception {
+        testRangeOutValue("test-write-field-integer-max-range-out.json", "/primitiveValue", Long.MAX_VALUE, FieldType.LONG, FieldType.INTEGER);
+    }
+
+    @Test
+    public void testJsonFieldIntegerMinRangeOut() throws Exception {
+        testRangeOutValue("test-write-field-integer-min-range-out.json", "/primitiveValue", Long.MIN_VALUE, FieldType.LONG, FieldType.INTEGER);
+    }
+
+    @Test
+    public void testJsonFieldShortMaxRangeOut() throws Exception {
+        testRangeOutValue("test-write-field-short-max-range-out.json", "/primitiveValue", Long.MAX_VALUE, FieldType.LONG, FieldType.SHORT);
+    }
+
+    @Test
+    public void testJsonFieldShortMinRangeOut() throws Exception {
+        testRangeOutValue("test-write-field-short-min-range-out.json", "/primitiveValue", Long.MIN_VALUE, FieldType.LONG, FieldType.SHORT);
+    }
+
+    @Test
+    public void testJsonFieldCharMaxRangeOut() throws Exception {
+        testRangeOutValue("test-write-field-char-max-range-out.json", "/primitiveValue", Long.MAX_VALUE, FieldType.LONG, FieldType.CHAR);
+    }
+
+    @Test
+    public void testJsonFieldCharMinRangeOut() throws Exception {
+        testRangeOutValue("test-write-field-char-min-range-out.json", "/primitiveValue", Long.MIN_VALUE, FieldType.LONG, FieldType.CHAR);
+    }
+
+    @Test
+    public void testJsonFieldByteMaxRangeOut() throws Exception {
+        testRangeOutValue("test-write-field-byte-max-range-out.json", "/primitiveValue", Long.MAX_VALUE, FieldType.LONG, FieldType.BYTE);
+    }
+
+    @Test
+    public void testJsonFieldByteMinRangeOut() throws Exception {
+        testRangeOutValue("test-write-field-byte-min-range-out.json", "/primitiveValue", Long.MIN_VALUE, FieldType.LONG, FieldType.BYTE);
+    }
+
+    @Test
+    public void testJsonFieldBooleanRangeOut() throws Exception {
+        testMinRangeOutValue("test-write-field-boolean-range-out.json", "/primitiveValue", null, FieldType.NONE, FieldType.BOOLEAN, null);
+    }
+
+    @Test
+    public void testJsonFieldLongDecimal() throws Exception {
+        testRangeOutValue("test-write-field-long-decimal.json", "/primitiveValue", Double.valueOf("126.1234"), FieldType.DOUBLE, FieldType.LONG);
+    }
+
+    @Test
+    public void testJsonFieldIntegerDecimal() throws Exception {
+        testRangeOutValue("test-write-field-integer-decimal.json", "/primitiveValue", Double.valueOf("126.1234"), FieldType.DOUBLE, FieldType.INTEGER);
+    }
+
+    @Test
+    public void testJsonFieldShortDecimal() throws Exception {
+        testRangeOutValue("test-write-field-short-decimal.json", "/primitiveValue", Double.valueOf("126.1234"), FieldType.DOUBLE, FieldType.SHORT);
+    }
+
+    @Test
+    public void testJsonFieldCharDecimal() throws Exception {
+        testRangeOutValue("test-write-field-char-decimal.json", "/primitiveValue", Double.valueOf("126.1234"), FieldType.DOUBLE, FieldType.CHAR);
+    }
+
+    @Test
+    public void testJsonFieldByteDecimal() throws Exception {
+        testRangeOutValue("test-write-field-byte-decimal.json", "/primitiveValue", Double.valueOf("126.1234"), FieldType.DOUBLE, FieldType.BYTE);
+    }
+
+    @Test
+    public void testJsonFieldDoubleString() throws Exception {
+        testRangeOutValue("test-write-field-double-string.json", "/primitiveValue", "abcd", FieldType.STRING, FieldType.DOUBLE);
+    }
+
+    @Test
+    public void testJsonFieldFloatString() throws Exception {
+        testRangeOutValue("test-write-field-float-string.json", "/primitiveValue", "abcd", FieldType.STRING, FieldType.FLOAT);
+    }
+
+    @Test
+    public void testJsonFieldLongString() throws Exception {
+        testRangeOutValue("test-write-field-long-string.json", "/primitiveValue", "abcd", FieldType.STRING, FieldType.LONG);
+    }
+
+    @Test
+    public void testJsonFieldIntegerString() throws Exception {
+        testRangeOutValue("test-write-field-integer-string.json", "/primitiveValue", "abcd", FieldType.STRING, FieldType.INTEGER);
+    }
+
+    @Test
+    public void testJsonFieldShortString() throws Exception {
+        testRangeOutValue("test-write-field-short-string.json", "/primitiveValue", "abcd", FieldType.STRING, FieldType.SHORT);
+    }
+
+    @Test
+    public void testJsonFieldCharString() throws Exception {
+        testRangeOutValue("test-write-field-char-string.json", "/primitiveValue", "abcd", FieldType.STRING, FieldType.CHAR);
+    }
+
+    @Test
+    public void testJsonFieldByteString() throws Exception {
+        testRangeOutValue("test-write-field-byte-string.json", "/primitiveValue", "abcd", FieldType.STRING, FieldType.BYTE);
+    }
+
+    @Test
+    public void testJsonFieldBooleanString() throws Exception {
+        Path path = Paths.get("target" + File.separator + "test-write-field-byte-string.json");
+        String fieldPath = "/primitiveValue";
+        Object testObject = "abcd";
+        FieldType inputFieldType = FieldType.STRING;
+        FieldType outputFieldType = FieldType.BOOLEAN;
+
+        write(path, fieldPath, testObject, inputFieldType);
+
+        AtlasInternalSession session = read(path, outputFieldType, fieldPath);
+
+        assertEquals(true, session.head().getSourceField().getValue());
+    }
+
 }
