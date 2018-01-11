@@ -296,16 +296,14 @@ public class JsonFieldWriterTest {
     // with nested arrays.
     public void testWriteHighlyComplexObject() throws Exception {
 
-        JsonComplexType items = new JsonComplexType();
+        JsonComplexType items = JsonComplexTypeFactory.createJsonComlexField();
         items.setPath("/items");
-        items.setFieldType(FieldType.COMPLEX);
         items.setJsonFields(new JsonFields());
         write(items);
 
-        JsonComplexType item = new JsonComplexType();
+        JsonComplexType item = JsonComplexTypeFactory.createJsonComlexField();
         item.setJsonFields(new JsonFields());
         item.setPath("/items/item");
-        item.setFieldType(FieldType.COMPLEX);
         item.setCollectionType(CollectionType.LIST);
         items.getJsonFields().getJsonField().add(item);
         write(item);
@@ -342,17 +340,15 @@ public class JsonFieldWriterTest {
         item.getJsonFields().getJsonField().add(ppu);
         write(ppu);
 
-        JsonComplexType batters = new JsonComplexType();
+        JsonComplexType batters = JsonComplexTypeFactory.createJsonComlexField();
         batters.setJsonFields(new JsonFields());
         batters.setPath("/items/item/batters");
-        batters.setFieldType(FieldType.COMPLEX);
         items.getJsonFields().getJsonField().add(batters);
         write(batters);
 
-        JsonComplexType batter = new JsonComplexType();
+        JsonComplexType batter = JsonComplexTypeFactory.createJsonComlexField();
         batter.setPath("/items/item/batters/batter");
         batter.setJsonFields(new JsonFields());
-        batter.setFieldType(FieldType.COMPLEX);
         batter.setStatus(FieldStatus.SUPPORTED);
         batter.setCollectionType(CollectionType.LIST);
         batters.getJsonFields().getJsonField().add(batter);
@@ -422,10 +418,9 @@ public class JsonFieldWriterTest {
         batter.getJsonFields().getJsonField().add(batter4Type);
         write(batter4Type);
 
-        JsonComplexType topping = new JsonComplexType();
+        JsonComplexType topping = JsonComplexTypeFactory.createJsonComlexField();
         topping.setJsonFields(new JsonFields());
         topping.setPath("/items/item/topping");
-        topping.setFieldType(FieldType.COMPLEX);
         topping.setCollectionType(CollectionType.ARRAY);
         items.getJsonFields().getJsonField().add(topping);
         write(topping);
@@ -544,10 +539,9 @@ public class JsonFieldWriterTest {
 
         // repeat complex
 
-        JsonComplexType item1 = new JsonComplexType();
+        JsonComplexType item1 = JsonComplexTypeFactory.createJsonComlexField();
         item1.setJsonFields(new JsonFields());
         item1.setPath("/items/item[1]");
-        item1.setFieldType(FieldType.COMPLEX);
         item1.setCollectionType(CollectionType.LIST);
         items.getJsonFields().getJsonField().add(item1);
         write(item1);
@@ -584,17 +578,15 @@ public class JsonFieldWriterTest {
         item.getJsonFields().getJsonField().add(ppu2);
         write(ppu2);
 
-        JsonComplexType batters1 = new JsonComplexType();
+        JsonComplexType batters1 = JsonComplexTypeFactory.createJsonComlexField();
         batters1.setJsonFields(new JsonFields());
         batters1.setPath("/items/item[1]/batters");
-        batters1.setFieldType(FieldType.COMPLEX);
         items.getJsonFields().getJsonField().add(batters1);
         write(batters1);
 
-        JsonComplexType batter1 = new JsonComplexType();
+        JsonComplexType batter1 = JsonComplexTypeFactory.createJsonComlexField();
         batter1.setPath("/items/item[1]/batters/batter");
         batter1.setJsonFields(new JsonFields());
-        batter1.setFieldType(FieldType.COMPLEX);
         batter1.setStatus(FieldStatus.SUPPORTED);
         batter1.setCollectionType(CollectionType.LIST);
         batters1.getJsonFields().getJsonField().add(batter1);

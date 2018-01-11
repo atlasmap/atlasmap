@@ -28,6 +28,7 @@ import io.atlasmap.v2.CollectionType;
 import io.atlasmap.v2.FieldStatus;
 import io.atlasmap.v2.FieldType;
 import io.atlasmap.v2.Fields;
+import io.atlasmap.xml.core.XmlComplexTypeFactory;
 import io.atlasmap.xml.v2.AtlasXmlModelFactory;
 import io.atlasmap.xml.v2.XmlComplexType;
 import io.atlasmap.xml.v2.XmlDocument;
@@ -221,8 +222,7 @@ public class InstanceInspector {
     }
 
     private XmlComplexType getXmlComplexType(Node childNode) {
-        XmlComplexType childComplexType = new XmlComplexType();
-        childComplexType.setFieldType(FieldType.COMPLEX);
+        XmlComplexType childComplexType = XmlComplexTypeFactory.createXmlComlexField();
         childComplexType.setXmlFields(new XmlFields());
         childComplexType.setName(childNode.getNodeName());
         StringBuffer stringBuffer = new StringBuffer();

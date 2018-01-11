@@ -47,6 +47,7 @@ import com.sun.xml.xsom.util.DomAnnotationParserFactory;
 import io.atlasmap.v2.CollectionType;
 import io.atlasmap.v2.FieldType;
 import io.atlasmap.v2.Fields;
+import io.atlasmap.xml.core.XmlComplexTypeFactory;
 import io.atlasmap.xml.v2.AtlasXmlModelFactory;
 import io.atlasmap.xml.v2.Restriction;
 import io.atlasmap.xml.v2.RestrictionType;
@@ -284,7 +285,7 @@ public class SchemaInspector {
     }
 
     private XmlComplexType getXmlComplexType() {
-        XmlComplexType rootComplexType = new XmlComplexType();
+        XmlComplexType rootComplexType = XmlComplexTypeFactory.createXmlComlexField();
         rootComplexType.setFieldType(FieldType.COMPLEX);
         rootComplexType.setXmlFields(new XmlFields());
         return rootComplexType;

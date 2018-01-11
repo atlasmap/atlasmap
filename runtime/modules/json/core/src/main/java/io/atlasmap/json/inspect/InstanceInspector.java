@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 
+import io.atlasmap.json.core.JsonComplexTypeFactory;
 import io.atlasmap.json.v2.AtlasJsonModelFactory;
 import io.atlasmap.json.v2.JsonComplexType;
 import io.atlasmap.json.v2.JsonDocument;
@@ -46,7 +47,8 @@ public class InstanceInspector implements JsonInspector {
             JsonNode rootNode = objectMapper.readTree(instance);
             if (rootNode.isArray()) {
                 // TODO how do we handle a topmost array
-                JsonComplexType field = new JsonComplexType();
+                JsonComplexType field = JsonComplexTypeFactory.createJsonComlexField();
+                field.setFieldType(null);
                 field.setJsonFields(new JsonFields());
                 field.setStatus(FieldStatus.UNSUPPORTED);
                 field.setCollectionType(CollectionType.ARRAY);
@@ -229,10 +231,9 @@ public class InstanceInspector implements JsonInspector {
     }
 
     private JsonComplexType getJsonComplexType(JsonComplexType parent, String aKey, int index) {
-        JsonComplexType jsonComplexType = new JsonComplexType();
+        JsonComplexType jsonComplexType = JsonComplexTypeFactory.createJsonComlexField();
         jsonComplexType.setJsonFields(new JsonFields());
         jsonComplexType.setName(aKey);
-        jsonComplexType.setFieldType(FieldType.COMPLEX);
         jsonComplexType.setStatus(FieldStatus.SUPPORTED);
         if (index > 0) {
             jsonComplexType
@@ -245,9 +246,8 @@ public class InstanceInspector implements JsonInspector {
     }
 
     private JsonComplexType getJsonComplexTypeFromEntry(Map.Entry<String, JsonNode> entry) {
-        JsonComplexType parent = new JsonComplexType();
+        JsonComplexType parent = JsonComplexTypeFactory.createJsonComlexField();
         parent.setJsonFields(new JsonFields());
-        parent.setFieldType(FieldType.COMPLEX);
         parent.setName(entry.getKey());
         parent.setStatus(FieldStatus.SUPPORTED);
         parent.setPath("/".concat(entry.getKey()));
