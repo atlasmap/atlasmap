@@ -47,7 +47,7 @@ import { ModalWindowComponent } from './modal.window.component';
                 <div *ngIf="searchMode" class="searchBox">
                     <input type="text" #searchFilterBox
                         id="search-filter-box" (keyup)="search(searchFilterBox.value)" placeholder="Search"
-                        [(ngModel)]="searchFilter" />
+                        [(ngModel)]="searchFilter" [focus]="true" />
                     <i class="fa fa-close searchBoxCloseIcon link" (click)="toggleSearch()"></i>
                     <div class="clear"></div>
                 </div>
