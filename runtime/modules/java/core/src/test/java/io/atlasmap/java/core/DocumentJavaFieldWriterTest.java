@@ -3,11 +3,11 @@ package io.atlasmap.java.core;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.LinkedList;
 
 import org.junit.FixMethodOrder;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
@@ -24,15 +24,14 @@ import io.atlasmap.java.test.TestListOrders;
 import io.atlasmap.java.v2.JavaField;
 import io.atlasmap.v2.FieldType;
 
-@Ignore("https://github.com/atlasmap/atlasmap/issues/143")
 @FixMethodOrder(MethodSorters.JVM)
 public class DocumentJavaFieldWriterTest extends BaseDocumentWriterTest {
 
     @Test
     public void testSimpleClassLookup() throws Exception {
-        // writer.addClassForFieldPath("/", TargetTestClass.class);
-        // writer.addClassForFieldPath("/address", TargetAddress.class);
-        write(createField("/address/addressLine1", "123 any street"));
+        addClassForFieldPath("/", TargetTestClass.class);
+        addClassForFieldPath("/address", TargetAddress.class);
+        write("/address/addressLine1", "123 any street");
         TargetTestClass o = (TargetTestClass) writer.getRootObject();
         ensureNotNullAndClass(o, TargetTestClass.class);
         ensureNotNullAndClass(o.getAddress(), TargetAddress.class);
@@ -92,15 +91,15 @@ public class DocumentJavaFieldWriterTest extends BaseDocumentWriterTest {
 
     @Test
     public void testPrimitiveArrayLookup() throws Exception {
-        // writer.addClassForFieldPath("/", TargetFlatPrimitiveClass.class);
-        write(createIntField("/intArrayField[10]", 3425));
+        addClassForFieldPath("/", TargetFlatPrimitiveClass.class);
+        write("/intArrayField[10]", 3425);
         TargetFlatPrimitiveClass o = (TargetFlatPrimitiveClass) writer.getRootObject();
         ensureNotNullAndClass(o, TargetFlatPrimitiveClass.class);
         ensureNotNullAndClass(o.getIntArrayField(), int[].class);
         assertEquals(11, o.getIntArrayField().length);
         assertEquals(3425, o.getIntArrayField()[10]);
 
-        write(createField("/boxedStringArrayField[10]", "boxedString"));
+        write("/boxedStringArrayField[10]", "boxedString");
         ensureNotNullAndClass(o.getBoxedStringArrayField(), String[].class);
         assertEquals(11, o.getBoxedStringArrayField().length);
         for (int i = 0; i < 10; i++) {
@@ -113,14 +112,14 @@ public class DocumentJavaFieldWriterTest extends BaseDocumentWriterTest {
 
     @Test(expected = AtlasException.class)
     public void testClassLookupAbstract() throws Exception {
-        // writer.addClassForFieldPath("/", TargetTestClass.class);
+        addClassForFieldPath("/", TargetTestClass.class);
         write(createField("/orders[4]/address/addressLine1", "hello world."));
     }
 
     @Test
     public void testClassLookupReflection() throws Exception {
-        // writer.addClassForFieldPath("/", TargetTestClass.class);
-        write(createField("/address/addressLine1", "123 any street"));
+        addClassForFieldPath("/", TargetTestClass.class);
+        write("/address/addressLine1", "123 any street");
         TargetTestClass o = (TargetTestClass) writer.getRootObject();
         ensureNotNullAndClass(o, TargetTestClass.class);
         ensureNotNullAndClass(o.getAddress(), TargetAddress.class);
@@ -129,7 +128,7 @@ public class DocumentJavaFieldWriterTest extends BaseDocumentWriterTest {
 
     @Test
     public void testSimpleWrite() throws Exception {
-        // writer.addClassForFieldPath("/", TargetAddress.class);
+        addClassForFieldPath("/", TargetAddress.class);
         write(createField("/addressLine1", "1234 some street."));
         write(createField("/addressLine2", "po box wherever"));
         write(createField("/city", "Round Rock"));
@@ -146,10 +145,10 @@ public class DocumentJavaFieldWriterTest extends BaseDocumentWriterTest {
 
     @Test
     public void testSimpleWriteCollectionList() throws Exception {
-        // writer.addClassForFieldPath("/", TestListOrders.class);
-        // writer.addClassForFieldPath("/orders<5>", TargetOrder.class);
-        // writer.addClassForFieldPath("/orders<5>/address", TargetAddress.class);
-        write(createField("/orders<4>/address/addressLine1", "hello world."));
+        addClassForFieldPath("/", TestListOrders.class);
+        addClassForFieldPath("/orders<5>", TargetOrder.class);
+        addClassForFieldPath("/orders<5>/address", TargetAddress.class);
+        write("/orders<4>/address/addressLine1", "hello world.");
         TestListOrders o = (TestListOrders) writer.getRootObject();
         ensureNotNullAndClass(o, TestListOrders.class);
         ensureNotNullAndClass(o.getOrders(), LinkedList.class);
@@ -168,10 +167,10 @@ public class DocumentJavaFieldWriterTest extends BaseDocumentWriterTest {
 
     @Test
     public void testSimpleWriteCollectionArray() throws Exception {
-        // writer.addClassForFieldPath("/", TargetOrderArray.class);
-        // writer.addClassForFieldPath("/orders[5]", TargetOrder.class);
-        // writer.addClassForFieldPath("/orders[5]/address", TargetAddress.class);
-        write(createField("/orders[4]/address/addressLine1", "hello world."));
+        addClassForFieldPath("/", TargetOrderArray.class);
+        addClassForFieldPath("/orders[5]", TargetOrder.class);
+        addClassForFieldPath("/orders[5]/address", TargetAddress.class);
+        write("/orders[4]/address/addressLine1", "hello world.");
         TargetOrderArray o = (TargetOrderArray) writer.getRootObject();
         ensureNotNullAndClass(o, TargetOrderArray.class);
         ensureNotNullAndClass(o.getOrders(), TargetOrder[].class);
@@ -190,12 +189,12 @@ public class DocumentJavaFieldWriterTest extends BaseDocumentWriterTest {
 
     @Test
     public void testExpandCollectionList() throws Exception {
-        // writer.addClassForFieldPath("/", TestListOrders.class);
-        // writer.addClassForFieldPath("/orders<5>", TargetOrder.class);
-        // writer.addClassForFieldPath("/orders<5>/address", TargetAddress.class);
-        write(createField("/orders<4>/address/addressLine1", "hello world1."));
-        write(createField("/orders<14>/address/addressLine1", "hello world2."));
-        write(createField("/orders<2>/address/addressLine1", "hello world3."));
+        addClassForFieldPath("/", TestListOrders.class);
+        addClassForFieldPath("/orders<5>", TargetOrder.class);
+        addClassForFieldPath("/orders<5>/address", TargetAddress.class);
+        write("/orders<4>/address/addressLine1", "hello world1.");
+        write("/orders<14>/address/addressLine1", "hello world2.");
+        write("/orders<2>/address/addressLine1", "hello world3.");
         TestListOrders o = (TestListOrders) writer.getRootObject();
         ensureNotNullAndClass(o, TestListOrders.class);
         ensureNotNullAndClass(o.getOrders(), LinkedList.class);
@@ -216,12 +215,12 @@ public class DocumentJavaFieldWriterTest extends BaseDocumentWriterTest {
 
     @Test
     public void testExpandCollectionArray() throws Exception {
-        // writer.addClassForFieldPath("/", TargetOrderArray.class);
-        // writer.addClassForFieldPath("/orders[5]", TargetOrder.class);
-        // writer.addClassForFieldPath("/orders[5]/address", TargetAddress.class);
-        write(createField("/orders[4]/address/addressLine1", "hello world1."));
-        write(createField("/orders[14]/address/addressLine1", "hello world2."));
-        write(createField("/orders[2]/address/addressLine1", "hello world3."));
+        addClassForFieldPath("/", TargetOrderArray.class);
+        addClassForFieldPath("/orders[5]", TargetOrder.class);
+        addClassForFieldPath("/orders[5]/address", TargetAddress.class);
+        write("/orders[4]/address/addressLine1", "hello world1.");
+        write("/orders[14]/address/addressLine1", "hello world2.");
+        write("/orders[2]/address/addressLine1", "hello world3.");
         TargetOrderArray o = (TargetOrderArray) writer.getRootObject();
         ensureNotNullAndClass(o, TargetOrderArray.class);
         ensureNotNullAndClass(o.getOrders(), TargetOrder[].class);
@@ -242,11 +241,11 @@ public class DocumentJavaFieldWriterTest extends BaseDocumentWriterTest {
 
     @Test
     public void testWritingPrimitiveArrays() throws Exception {
-        // writer.addClassForFieldPath("/", TargetFlatPrimitiveClass.class);
-        // writer.addClassForFieldPath("/intArrayField[34]", int.class);
-        // writer.addClassForFieldPath("/boxedStringArrayField[312]", String.class);
+        addClassForFieldPath("/", TargetFlatPrimitiveClass.class);
+        addClassForFieldPath("/intArrayField[34]", int.class);
+        addClassForFieldPath("/boxedStringArrayField[312]", String.class);
 
-        write(createIntField("/intArrayField[10]", 3425));
+        write("/intArrayField[10]", 3425);
 
         TargetFlatPrimitiveClass o = (TargetFlatPrimitiveClass) writer.getRootObject();
         ensureNotNullAndClass(o, TargetFlatPrimitiveClass.class);
@@ -254,7 +253,7 @@ public class DocumentJavaFieldWriterTest extends BaseDocumentWriterTest {
         assertEquals(11, o.getIntArrayField().length);
         assertEquals(3425, o.getIntArrayField()[10]);
 
-        write(createField("/boxedStringArrayField[10]", "boxedString"));
+        write("/boxedStringArrayField[10]", "boxedString");
         ensureNotNullAndClass(o.getBoxedStringArrayField(), String[].class);
         assertEquals(11, o.getBoxedStringArrayField().length);
         for (int i = 0; i < 10; i++) {
@@ -267,30 +266,30 @@ public class DocumentJavaFieldWriterTest extends BaseDocumentWriterTest {
 
     @Test
     public void testFullWrite() throws Exception {
-        // writer.addClassForFieldPath("/", TargetTestClass.class);
-        // writer.addClassForFieldPath("/address", TargetAddress.class);
-        // writer.addClassForFieldPath("/listOrders", TestListOrders.class);
-        // writer.addClassForFieldPath("/listOrders/orders<5>", TargetOrder.class);
-        // writer.addClassForFieldPath("/listOrders/orders<5>/address", TargetAddress.class);
-        // writer.addClassForFieldPath("/orderArray", TargetOrderArray.class);
-        // writer.addClassForFieldPath("/orderArray/orders[5]", TargetOrder.class);
-        // writer.addClassForFieldPath("/orderArray/orders[5]/contact", TargetContact.class);
-        // writer.addClassForFieldPath("/primitives", TargetFlatPrimitiveClass.class);
-        // writer.addClassForFieldPath("/primitives/intArrayField[]", int.class);
-        // writer.addClassForFieldPath("/primitives/boxedStringArrayField[19]", String.class);
-        // writer.addClassForFieldPath("/statesLong", StateEnumClassLong.class);
+        addClassForFieldPath("/", TargetTestClass.class);
+        addClassForFieldPath("/address", TargetAddress.class);
+        addClassForFieldPath("/listOrders", TestListOrders.class);
+        addClassForFieldPath("/listOrders/orders<5>", TargetOrder.class);
+        addClassForFieldPath("/listOrders/orders<5>/address", TargetAddress.class);
+        addClassForFieldPath("/orderArray", TargetOrderArray.class);
+        addClassForFieldPath("/orderArray/orders[5]", TargetOrder.class);
+        addClassForFieldPath("/orderArray/orders[5]/contact", TargetContact.class);
+        addClassForFieldPath("/primitives", TargetFlatPrimitiveClass.class);
+        addClassForFieldPath("/primitives/intArrayField[]", int.class);
+        addClassForFieldPath("/primitives/boxedStringArrayField[19]", String.class);
+        addClassForFieldPath("/statesLong", StateEnumClassLong.class);
 
-        write(createField("/name", "someName"));
+        write("/name", "someName");
 
         TargetTestClass o = (TargetTestClass) writer.getRootObject();
         ensureNotNullAndClass(o, TargetTestClass.class);
         assertEquals("someName", o.getName());
 
-        write(createField("/address/addressLine1", "123 any street"));
+        write("/address/addressLine1", "123 any street");
         ensureNotNullAndClass(o.getAddress(), TargetAddress.class);
         assertEquals("123 any street", o.getAddress().getAddressLine1());
 
-        write(createIntField("/listOrders/orders<5>/orderId", 1234));
+        write("/listOrders/orders<5>/orderId", 1234);
         ensureNotNullAndClass(o.getListOrders(), TestListOrders.class);
         ensureNotNullAndClass(o.getListOrders().getOrders(), LinkedList.class);
         assertEquals(6, o.getListOrders().getOrders().size());
@@ -307,7 +306,7 @@ public class DocumentJavaFieldWriterTest extends BaseDocumentWriterTest {
         BaseOrder order = o.getListOrders().getOrders().get(5);
         assertEquals((Integer) 1234, order.getOrderId());
 
-        write(createField("/listOrders/orders<2>/address/city", "Austin"));
+        write("/listOrders/orders<2>/address/city", "Austin");
         assertEquals(6, o.getListOrders().getOrders().size());
         // ensure earlier fields are ok
         order = o.getListOrders().getOrders().get(5);
@@ -317,11 +316,11 @@ public class DocumentJavaFieldWriterTest extends BaseDocumentWriterTest {
         ensureNotNullAndClass(order.getAddress(), TargetAddress.class);
         assertEquals("Austin", order.getAddress().getCity());
 
-        write(createIntField("/orderArray/numberOrders", 56));
+        write("/orderArray/numberOrders", 56);
         ensureNotNullAndClass(o.getOrderArray(), TargetOrderArray.class);
         assertEquals((Integer) 56, o.getOrderArray().getNumberOrders());
 
-        write(createField("/orderArray/orders[2]/contact/firstName", "fName"));
+        write("/orderArray/orders[2]/contact/firstName", "fName");
         ensureNotNullAndClass(o.getOrderArray().getOrders(), TargetOrder[].class);
         assertEquals(3, o.getOrderArray().getOrders().length);
         for (int i = 0; i < 3; i++) {
@@ -339,7 +338,7 @@ public class DocumentJavaFieldWriterTest extends BaseDocumentWriterTest {
         // ensure new field is ok
         assertEquals("fName", o.getOrderArray().getOrders()[2].getContact().getFirstName());
 
-        write(createField("/orderArray/orders[2]/contact/lastName", "lName"));
+        write("/orderArray/orders[2]/contact/lastName", "lName");
         // ensure previous fields are ok
         assertEquals((Integer) 56, o.getOrderArray().getNumberOrders());
         assertEquals("fName", o.getOrderArray().getOrders()[2].getContact().getFirstName());
@@ -347,13 +346,13 @@ public class DocumentJavaFieldWriterTest extends BaseDocumentWriterTest {
         assertEquals("lName", o.getOrderArray().getOrders()[2].getContact().getLastName());
 
         // test writing primitive array values
-        write(createIntField("/primitives/intArrayField[10]", 3425));
+        write("/primitives/intArrayField[10]", 3425);
         ensureNotNullAndClass(o.getPrimitives(), TargetFlatPrimitiveClass.class);
         ensureNotNullAndClass(o.getPrimitives().getIntArrayField(), int[].class);
         assertEquals(11, o.getPrimitives().getIntArrayField().length);
         assertEquals(3425, o.getPrimitives().getIntArrayField()[10]);
 
-        write(createField("/primitives/boxedStringArrayField[10]", "boxedString"));
+        write("/primitives/boxedStringArrayField[10]", "boxedString");
         ensureNotNullAndClass(o.getPrimitives().getBoxedStringArrayField(), String[].class);
         assertEquals(11, o.getPrimitives().getBoxedStringArrayField().length);
         for (int i = 0; i < 10; i++) {
@@ -364,47 +363,47 @@ public class DocumentJavaFieldWriterTest extends BaseDocumentWriterTest {
         assertEquals("boxedString", o.getPrimitives().getBoxedStringArrayField()[10]);
 
         // test writing enum values
-        write(createEnumField("/statesLong", StateEnumClassLong.Massachusetts));
+        write("/statesLong", StateEnumClassLong.Massachusetts);
         assertNotNull(o.getStatesLong());
         assertEquals(StateEnumClassLong.Massachusetts, o.getStatesLong());
 
         // test overwriting values
         assertEquals("123 any street", o.getAddress().getAddressLine1());
-        write(createField("/address/addressLine1", "123 any street (2)"));
+        write("/address/addressLine1", "123 any street (2)");
         assertEquals("123 any street (2)", o.getAddress().getAddressLine1());
 
         order = o.getListOrders().getOrders().get(5);
         assertEquals((Integer) 1234, order.getOrderId());
-        write(createIntField("/listOrders/orders<5>/orderId", 2221234));
+        write("/listOrders/orders<5>/orderId", 2221234);
         assertEquals((Integer) 2221234, order.getOrderId());
 
         order = o.getListOrders().getOrders().get(2);
         assertEquals("Austin", order.getAddress().getCity());
-        write(createField("/listOrders/orders<2>/address/city", "Austin (2)"));
+        write("/listOrders/orders<2>/address/city", "Austin (2)");
         assertEquals("Austin (2)", order.getAddress().getCity());
 
         assertEquals((Integer) 56, o.getOrderArray().getNumberOrders());
-        write(createIntField("/orderArray/numberOrders", 22256));
+        write("/orderArray/numberOrders", 22256);
         assertEquals((Integer) 22256, o.getOrderArray().getNumberOrders());
 
         assertEquals("fName", o.getOrderArray().getOrders()[2].getContact().getFirstName());
-        write(createField("/orderArray/orders[2]/contact/firstName", "fName (2)"));
+        write("/orderArray/orders[2]/contact/firstName", "fName (2)");
         assertEquals("fName (2)", o.getOrderArray().getOrders()[2].getContact().getFirstName());
 
         assertEquals("lName", o.getOrderArray().getOrders()[2].getContact().getLastName());
-        write(createField("/orderArray/orders[2]/contact/lastName", "lName (2)"));
+        write("/orderArray/orders[2]/contact/lastName", "lName (2)");
         assertEquals("lName (2)", o.getOrderArray().getOrders()[2].getContact().getLastName());
 
         assertEquals(3425, o.getPrimitives().getIntArrayField()[10]);
-        write(createIntField("/primitives/intArrayField[10]", 2223425));
+        write("/primitives/intArrayField[10]", 2223425);
         assertEquals(2223425, o.getPrimitives().getIntArrayField()[10]);
 
         assertEquals("boxedString", o.getPrimitives().getBoxedStringArrayField()[10]);
-        write(createField("/primitives/boxedStringArrayField[10]", "boxedString (2)"));
+        write("/primitives/boxedStringArrayField[10]", "boxedString (2)");
         assertEquals("boxedString (2)", o.getPrimitives().getBoxedStringArrayField()[10]);
 
         assertEquals(StateEnumClassLong.Massachusetts, o.getStatesLong());
-        write(createEnumField("/statesLong", StateEnumClassLong.Alabama));
+        write("/statesLong", StateEnumClassLong.Alabama);
         assertEquals(StateEnumClassLong.Alabama, o.getStatesLong());
 
     }
@@ -417,45 +416,39 @@ public class DocumentJavaFieldWriterTest extends BaseDocumentWriterTest {
     @Test
     public void testFindChildObject() throws Exception {
         setupPath("/contact");
-        // assertTrue(writer.findChildObject(field, lastSegmentContext, targetTestClassInstance) == targetTestClassInstance
-        //         .getContact());
+        assertTrue(findChildObject(field, lastSegmentContext, targetTestClassInstance) == targetTestClassInstance.getContact());
 
         reset();
         setupPath("/address");
-        // assertTrue(writer.findChildObject(field, lastSegmentContext, targetTestClassInstance) == targetTestClassInstance
-        //         .getAddress());
+        assertTrue(findChildObject(field, lastSegmentContext, targetTestClassInstance) == targetTestClassInstance.getAddress());
 
         reset();
         setupPath("/nothing");
-        // assertTrue(writer.findChildObject(field, lastSegmentContext, targetTestClassInstance) == null);
+        assertTrue(findChildObject(field, lastSegmentContext, targetTestClassInstance) == null);
 
         reset();
         setupPath("/orders<0>");
-        // assertTrue(writer.findChildObject(field, lastSegmentContext, targetOrderListInstance) == targetOrderListInstance
-        //         .getOrders().get(0));
+        assertTrue(findChildObject(field, lastSegmentContext, targetOrderListInstance) == targetOrderListInstance.getOrders().get(0));
 
         reset();
         setupPath("/orders<1>");
-        // assertTrue(writer.findChildObject(field, lastSegmentContext, targetOrderListInstance) == targetOrderListInstance
-        //         .getOrders().get(1));
+        assertTrue(findChildObject(field, lastSegmentContext, targetOrderListInstance) == targetOrderListInstance.getOrders().get(1));
 
         reset();
         setupPath("/orders<2>");
-        // assertTrue(writer.findChildObject(field, lastSegmentContext, targetOrderListInstance) == null);
+        assertTrue(findChildObject(field, lastSegmentContext, targetOrderListInstance) == null);
 
         reset();
         setupPath("/orders[0]");
-        // assertTrue(writer.findChildObject(field, lastSegmentContext,
-        //         targetOrderArrayInstance) == targetOrderArrayInstance.getOrders()[0]);
+        assertTrue(findChildObject(field, lastSegmentContext, targetOrderArrayInstance) == targetOrderArrayInstance.getOrders()[0]);
 
         reset();
         setupPath("/orders[1]");
-        // assertTrue(writer.findChildObject(field, lastSegmentContext,
-        //         targetOrderArrayInstance) == targetOrderArrayInstance.getOrders()[1]);
+        assertTrue(findChildObject(field, lastSegmentContext, targetOrderArrayInstance) == targetOrderArrayInstance.getOrders()[1]);
 
         reset();
         setupPath("/orders[2]");
-        // assertTrue(writer.findChildObject(field, lastSegmentContext, targetOrderArrayInstance) == null);
+        assertTrue(findChildObject(field, lastSegmentContext, targetOrderArrayInstance) == null);
     }
 
     /* these are less critical and are exercised by above tests for now */
