@@ -297,12 +297,13 @@ export class MappingModel {
     public uuid: string;
     public fieldMappings: FieldMappingPair[] = [];
     public currentFieldMapping: FieldMappingPair = null;
-    public validationErrors: ErrorInfo[] = [];
+    public validationErrors: ErrorInfo[] = []; // must be immutable
     public brandNewMapping = true;
 
     public constructor() {
         this.uuid = 'mapping.' + Math.floor((Math.random() * 1000000) + 1).toString();
         this.fieldMappings.push(new FieldMappingPair());
+        Object.freeze(this.validationErrors);
     }
 
     public getFirstFieldMapping(): FieldMappingPair {
@@ -325,12 +326,14 @@ export class MappingModel {
 
     public addValidationError(message: string) {
         const e = new ErrorInfo(message, ErrorLevel.VALIDATION_ERROR);
-        this.validationErrors.push(e);
-    }
+        this.validationErrors = [...this.validationErrors, e];
+        Object.freeze(this.validationErrors);
+      }
 
     public clearValidationErrors(): void {
         this.validationErrors = [];
-    }
+        Object.freeze(this.validationErrors);
+      }
 
     public getValidationErrors(): ErrorInfo[] {
         return this.validationErrors.filter(e => e.level >= ErrorLevel.ERROR);
@@ -341,13 +344,9 @@ export class MappingModel {
     }
 
     public removeError(identifier: string) {
-        for (let i = 0; i < this.validationErrors.length; i++) {
-            if (this.validationErrors[i].identifier == identifier) {
-                this.validationErrors.splice(i, 1);
-                return;
-            }
-        }
-    }
+        this.validationErrors = this.validationErrors.filter(e => e.identifier !== identifier);
+        Object.freeze(this.validationErrors);
+      }
 
     public getFirstCollectionField(isSource: boolean): Field {
         for (const f of this.getFields(isSource)) {

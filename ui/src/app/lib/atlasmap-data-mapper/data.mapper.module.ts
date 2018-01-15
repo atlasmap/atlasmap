@@ -63,6 +63,8 @@ export { ConfigModel } from './models/config.model';
 export { MappingModel } from './models/mapping.model';
 export { MappingSerializer } from './services/mapping.serializer';
 
+import { ToErrorIconClassPipe } from './common/to-error-icon-class.pipe';
+
 export { DataMapperAppComponent } from './components/data.mapper.app.component';
 
 @NgModule({
@@ -104,6 +106,7 @@ export { DataMapperAppComponent } from './components/data.mapper.app.component';
         NamespaceListComponent,
         TemplateEditComponent,
         FocusDirective,
+        ToErrorIconClassPipe
     ],
     exports: [
         DataMapperAppExampleHostComponent,
