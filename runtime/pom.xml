@@ -21,13 +21,13 @@
   <parent>
     <groupId>io.atlasmap</groupId>
     <artifactId>atlas-parent</artifactId>
-    <version>1.32.2</version>
+    <version>1.32.2.fuse-000001</version>
     <relativePath>../parent</relativePath>
   </parent>
 
   <groupId>io.atlasmap</groupId>
   <artifactId>atlas-runtime</artifactId>
-  <version>1.32.2</version>
+  <version>1.32.2.fuse-000001</version>
   <packaging>pom</packaging>
   <name>AtlasMap Runtime</name>
   <description>AtlasMap runtime engine and design time services</description>
