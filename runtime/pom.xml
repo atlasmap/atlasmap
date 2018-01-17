@@ -82,6 +82,61 @@
         </plugins>
       </build>
     </profile>
+    <profile>
+      <id>xml-format</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>xml-maven-plugin</artifactId>
+            <version>1.0.1</version>
+            <executions>
+              <execution>
+                <id>check-format-style</id>
+                <phase>validate</phase>
+                <goals>
+                  <goal>check-format</goal>
+                </goals>
+                <configuration>
+                  <formatFileSets>
+                    <formatFileSet>
+                      <directory>${project.basedir}/</directory>
+                      <excludes>
+                        <exclude>**/src/test/resources/**/*</exclude>
+                        <exclude>**/target/**/*</exclude>
+                        <exclude>**/*.java</exclude>
+                        <exclude>**/*.json</exclude>
+                        <exclude>**/.*</exclude>
+                        <exclude>**/*.jar</exclude>
+                        <exclude>**/*.properties</exclude>
+                        <exclude>**/*.prefs</exclude>
+                        <exclude>**/*.sh</exclude>
+                        <exclude>**/*.cache</exclude>
+                        <exclude>**/*.AtlasConverter</exclude>
+                        <exclude>**/*.AtlasFieldAction</exclude>
+                        <exclude>**/*.adoc</exclude>
+                        <exclude>**/*.md</exclude>
+                        <exclude>**/Jenkinsfile</exclude>
+                        <exclude>**/*.cat</exclude>
+                        <exclude>**/*.module</exclude>
+                        <exclude>**/*.jsd</exclude>
+                        <exclude>**/*.yml</exclude>
+                        <exclude>**/*.yaml</exclude>
+                        <exclude>**/*.xml2</exclude>
+                      </excludes>
+                    </formatFileSet>
+                  </formatFileSets>
+                  <indentSize>2</indentSize>
+                  <skip>false</skip>
+                  <useDefaultFormatFileSet>true</useDefaultFormatFileSet>
+                  <failOnFormatViolation>true</failOnFormatViolation>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>    
   </profiles>
 
   <build>

@@ -1,13 +1,22 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<AtlasMapping xmlns="http://atlasmap.io/v2" xmlns:ns2="http://atlasmap.io/java/v2" xmlns:ns3="http://atlasmap.io/xml/v2" xmlns:ns4="http://atlasmap.io/json/v2" name="UI.321383">
-    <DataSource id="ATLAS_DEFAULT_SOURCE_DOC" uri="atlas:java?className=io.atlasmap.java.module.MockJavaClass" dataSourceType="Source"/>
-    <DataSource id="ATLAS_DEFAULT_SOURCE_DOC" uri="atlas:java?className=io.atlasmap.java.module.MockJavaClass" dataSourceType="Target"/>
-    <Mappings>        
-        <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="Mapping" mappingType="Map" id="issue127-1">
-            <InputField xsi:type="ns2:JavaField" name="firstName" docId="ATLAS_DEFAULT_SOURCE_DOC" path="/firstName" fieldType="String"/>
-            <OutputField xsi:type="ns2:JavaField" name="id" docId="ATLAS_DEFAULT_TARGET_DOC" path="/id" fieldType="Integer"/>
-        </Mapping>
-    </Mappings>
-    <LookupTables/>
-    <Properties/>
+<AtlasMapping xmlns="http://atlasmap.io/v2" xmlns:ns2="http://atlasmap.io/java/v2"
+  xmlns:ns3="http://atlasmap.io/xml/v2" xmlns:ns4="http://atlasmap.io/json/v2"
+  name="UI.321383">
+  <DataSource id="ATLAS_DEFAULT_SOURCE_DOC"
+    uri="atlas:java?className=io.atlasmap.java.module.MockJavaClass"
+    dataSourceType="Source" />
+  <DataSource id="ATLAS_DEFAULT_SOURCE_DOC"
+    uri="atlas:java?className=io.atlasmap.java.module.MockJavaClass"
+    dataSourceType="Target" />
+  <Mappings>
+    <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:type="Mapping" mappingType="Map" id="issue127-1">
+      <InputField xsi:type="ns2:JavaField" name="firstName"
+        docId="ATLAS_DEFAULT_SOURCE_DOC" path="/firstName" fieldType="String" />
+      <OutputField xsi:type="ns2:JavaField" name="id"
+        docId="ATLAS_DEFAULT_TARGET_DOC" path="/id" fieldType="Integer" />
+    </Mapping>
+  </Mappings>
+  <LookupTables />
+  <Properties />
 </AtlasMapping>

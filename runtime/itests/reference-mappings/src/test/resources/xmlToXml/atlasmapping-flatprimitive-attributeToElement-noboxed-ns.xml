@@ -1,62 +1,55 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <AtlasMapping xmlns="http://atlasmap.io/v2" xmlns:ns2="http://atlasmap.io/xml/v2"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="XmlXmlFlatMapping">
-    <DataSource uri="atlas:xml?complexType=ns:XmlFlatPrimitiveAttribute"
-        dataSourceType="Source" />
-    <DataSource uri="atlas:xml?complexType=ns:XmlFlatPrimitiveElement"
-        dataSourceType="Target" xsi:type="ns2:XmlDataSource">
-        <ns2:XmlNamespaces>
-            <ns2:XmlNamespace alias="xt1"
-                uri="http://atlasmap.io/xml/test/v2" />
-        </ns2:XmlNamespaces>
-    </DataSource>
-    <Mappings>
-        <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-            xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns2:XmlField" path="/XmlFPA/@intField" />
-            <OutputField xsi:type="ns2:XmlField" path="/xt1:XmlFPE/xt1:intField" />
-        </Mapping>
-        <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-            xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns2:XmlField" path="/XmlFPA/@shortField" />
-            <OutputField xsi:type="ns2:XmlField"
-                path="/xt1:XmlFPE/xt1:shortField" />
-        </Mapping>
-        <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-            xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns2:XmlField" path="/XmlFPA/@longField" />
-            <OutputField xsi:type="ns2:XmlField"
-                path="/xt1:XmlFPE/xt1:longField" />
-        </Mapping>
-        <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-            xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns2:XmlField" path="/XmlFPA/@doubleField" />
-            <OutputField xsi:type="ns2:XmlField"
-                path="/xt1:XmlFPE/xt1:doubleField" />
-        </Mapping>
-        <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-            xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns2:XmlField" path="/XmlFPA/@floatField" />
-            <OutputField xsi:type="ns2:XmlField"
-                path="/xt1:XmlFPE/xt1:floatField" />
-        </Mapping>
-        <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-            xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns2:XmlField" path="/XmlFPA/@booleanField" />
-            <OutputField xsi:type="ns2:XmlField"
-                path="/xt1:XmlFPE/xt1:booleanField" />
-        </Mapping>
-        <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-            xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns2:XmlField" path="/XmlFPA/@charField" />
-            <OutputField xsi:type="ns2:XmlField"
-                path="/xt1:XmlFPE/xt1:charField" />
-        </Mapping>
-        <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-            xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns2:XmlField" path="/XmlFPA/@byteField" />
-            <OutputField xsi:type="ns2:XmlField"
-                path="/xt1:XmlFPE/xt1:byteField" />
-        </Mapping>
-    </Mappings>
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="XmlXmlFlatMapping">
+  <DataSource uri="atlas:xml?complexType=ns:XmlFlatPrimitiveAttribute"
+    dataSourceType="Source" />
+  <DataSource uri="atlas:xml?complexType=ns:XmlFlatPrimitiveElement"
+    dataSourceType="Target" xsi:type="ns2:XmlDataSource">
+    <ns2:XmlNamespaces>
+      <ns2:XmlNamespace alias="xt1"
+        uri="http://atlasmap.io/xml/test/v2" />
+    </ns2:XmlNamespaces>
+  </DataSource>
+  <Mappings>
+    <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="ns2:XmlField" path="/XmlFPA/@intField" />
+      <OutputField xsi:type="ns2:XmlField" path="/xt1:XmlFPE/xt1:intField" />
+    </Mapping>
+    <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="ns2:XmlField" path="/XmlFPA/@shortField" />
+      <OutputField xsi:type="ns2:XmlField" path="/xt1:XmlFPE/xt1:shortField" />
+    </Mapping>
+    <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="ns2:XmlField" path="/XmlFPA/@longField" />
+      <OutputField xsi:type="ns2:XmlField" path="/xt1:XmlFPE/xt1:longField" />
+    </Mapping>
+    <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="ns2:XmlField" path="/XmlFPA/@doubleField" />
+      <OutputField xsi:type="ns2:XmlField" path="/xt1:XmlFPE/xt1:doubleField" />
+    </Mapping>
+    <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="ns2:XmlField" path="/XmlFPA/@floatField" />
+      <OutputField xsi:type="ns2:XmlField" path="/xt1:XmlFPE/xt1:floatField" />
+    </Mapping>
+    <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="ns2:XmlField" path="/XmlFPA/@booleanField" />
+      <OutputField xsi:type="ns2:XmlField" path="/xt1:XmlFPE/xt1:booleanField" />
+    </Mapping>
+    <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="ns2:XmlField" path="/XmlFPA/@charField" />
+      <OutputField xsi:type="ns2:XmlField" path="/xt1:XmlFPE/xt1:charField" />
+    </Mapping>
+    <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="ns2:XmlField" path="/XmlFPA/@byteField" />
+      <OutputField xsi:type="ns2:XmlField" path="/xt1:XmlFPE/xt1:byteField" />
+    </Mapping>
+  </Mappings>
 </AtlasMapping>

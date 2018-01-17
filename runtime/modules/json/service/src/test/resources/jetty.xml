@@ -18,38 +18,37 @@
 -->
 <!DOCTYPE Configure PUBLIC "-//Jetty//Configure//EN" "http://www.eclipse.org/jetty/configure_9_3.dtd">
 <Configure id="Server" class="org.eclipse.jetty.server.Server">
-    <Call name="addConnector">
-        <Arg>
-            <New id="httpConnector" class="org.eclipse.jetty.server.ServerConnector">
-                <Arg name="server">
-                    <Ref refid="Server" />
-                </Arg>
-                <Set name="host">
-                    <Property name="jetty.http.host"
-                        deprecated="jetty.host" />
-                </Set>
-                <Set name="port">
-                    <Property name="jetty.http.port"
-                        deprecated="jetty.port" default="8585" />
-                </Set>
-                <Set name="idleTimeout">
-                    <Property name="jetty.http.idleTimeout"
-                        deprecated="http.timeout" default="10000" />
-                </Set>
-            </New>
+  <Call name="addConnector">
+    <Arg>
+      <New id="httpConnector" class="org.eclipse.jetty.server.ServerConnector">
+        <Arg name="server">
+          <Ref refid="Server" />
         </Arg>
-    </Call>
-    <Call id="MBeanServer" class="java.lang.management.ManagementFactory"
-        name="getPlatformMBeanServer" />
+        <Set name="host">
+          <Property name="jetty.http.host" deprecated="jetty.host" />
+        </Set>
+        <Set name="port">
+          <Property name="jetty.http.port" deprecated="jetty.port"
+            default="8585" />
+        </Set>
+        <Set name="idleTimeout">
+          <Property name="jetty.http.idleTimeout" deprecated="http.timeout"
+            default="10000" />
+        </Set>
+      </New>
+    </Arg>
+  </Call>
+  <Call id="MBeanServer" class="java.lang.management.ManagementFactory"
+    name="getPlatformMBeanServer" />
 
-    <Call name="addBean">
+  <Call name="addBean">
+    <Arg>
+      <New id="MBeanContainer" class="org.eclipse.jetty.jmx.MBeanContainer">
         <Arg>
-            <New id="MBeanContainer" class="org.eclipse.jetty.jmx.MBeanContainer">
-                <Arg>
-                    <Ref refid="MBeanServer" />
-                </Arg>
-            </New>
+          <Ref refid="MBeanServer" />
         </Arg>
-    </Call>
+      </New>
+    </Arg>
+  </Call>
 
 </Configure>

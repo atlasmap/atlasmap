@@ -1,11 +1,21 @@
 {
-    "$schema": "http://json-schema.org/schema#",
-    "type": "object",
-    "properties": {
-        "booleanField": { "type": "boolean" },
-        "stringField": { "type": "string" },
-        "numberField": { "type": "number" },
-        "intField": { "type": "integer" },
-        "nullField": { "type": "null" }
+  "$schema": "http://json-schema.org/schema#",
+  "type": "object",
+  "properties": {
+    "booleanField": {
+      "type": "boolean"
+    },
+    "stringField": {
+      "type": "string"
+    },
+    "numberField": {
+      "type": "number"
+    },
+    "intField": {
+      "type": "integer"
+    },
+    "nullField": {
+      "type": "null"
     }
+  }
 }

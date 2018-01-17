@@ -1,15 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<AtlasMapping xmlns="http://atlasmap.io/v2" xmlns:ns2="http://atlasmap.io/java/v2" xmlns:ns3="http://atlasmap.io/json/v2"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="JavaJavaCombineMapping">
-    <DataSource dataSourceType="Source" uri="atlas:json:SourceContact" />
-    <DataSource dataSourceType="Target" uri="atlas:java?className=io.atlasmap.java.test.TargetContact" />
-    <Mappings>
-        <Mapping xsi:type="Mapping" mappingType="Combine">
-            <InputField xsi:type="ns3:JsonField" fieldType="String" path="/zipCode" index="3" />
-            <InputField xsi:type="ns3:JsonField" fieldType="String" path="/lastName" index="1" />
-            <InputField xsi:type="ns3:JsonField" fieldType="String" path="/firstName" index="0" />
-            <InputField xsi:type="ns3:JsonField" fieldType="String" path="/phoneNumber" index="2" />
-            <OutputField xsi:type="ns2:JavaField" path="/firstName" />
-        </Mapping>
-    </Mappings>
+<AtlasMapping xmlns="http://atlasmap.io/v2" xmlns:ns2="http://atlasmap.io/java/v2"
+  xmlns:ns3="http://atlasmap.io/json/v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  name="JavaJavaCombineMapping">
+  <DataSource dataSourceType="Source" uri="atlas:json:SourceContact" />
+  <DataSource dataSourceType="Target"
+    uri="atlas:java?className=io.atlasmap.java.test.TargetContact" />
+  <Mappings>
+    <Mapping xsi:type="Mapping" mappingType="Combine">
+      <InputField xsi:type="ns3:JsonField" fieldType="String"
+        path="/zipCode" index="3" />
+      <InputField xsi:type="ns3:JsonField" fieldType="String"
+        path="/lastName" index="1" />
+      <InputField xsi:type="ns3:JsonField" fieldType="String"
+        path="/firstName" index="0" />
+      <InputField xsi:type="ns3:JsonField" fieldType="String"
+        path="/phoneNumber" index="2" />
+      <OutputField xsi:type="ns2:JavaField" path="/firstName" />
+    </Mapping>
+  </Mappings>
 </AtlasMapping>

@@ -101,8 +101,10 @@ public class JavaJavaComplexListTest extends AtlasMappingBaseTest {
 
         AtlasMappingService atlasMappingService = new AtlasMappingService(
                 Arrays.asList("io.atlasmap.v2", "io.atlasmap.java.v2", "io.atlasmap.xml.v2"));
+        File path = new File("target/reference-mappings/javaToJava");
+        path.mkdirs();
         atlasMappingService.saveMappingAsFile(a,
-                new File("src/test/resources/javaToJava/atlasmapping-complex-list-autodetect-base.xml"));
+                new File(path, "atlasmapping-complex-list-autodetect-base.xml"));
     }
 
     @Test
