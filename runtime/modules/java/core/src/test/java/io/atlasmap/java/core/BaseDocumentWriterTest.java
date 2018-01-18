@@ -3,8 +3,10 @@ package io.atlasmap.java.core;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.lang.reflect.Method;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Before;
 
@@ -12,6 +14,7 @@ import io.atlasmap.api.AtlasException;
 import io.atlasmap.core.AtlasPath;
 import io.atlasmap.core.AtlasPath.SegmentContext;
 import io.atlasmap.java.test.BaseOrder;
+import io.atlasmap.java.test.StateEnumClassLong;
 import io.atlasmap.java.test.TargetAddress;
 import io.atlasmap.java.test.TargetContact;
 import io.atlasmap.java.test.TargetOrder;
@@ -21,6 +24,7 @@ import io.atlasmap.java.test.TestListOrders;
 import io.atlasmap.java.v2.JavaEnumField;
 import io.atlasmap.java.v2.JavaField;
 import io.atlasmap.spi.AtlasInternalSession;
+import io.atlasmap.spi.AtlasInternalSession.Head;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldType;
 import io.atlasmap.v2.LookupTable;
@@ -67,11 +71,9 @@ public abstract class BaseDocumentWriterTest {
 
     public void setupPath(String fieldPath) {
         this.segmentContexts = new AtlasPath(fieldPath).getSegmentContexts(true);
-        /** BAD PRACTICE ** don't pollute with test only method
         for (SegmentContext ctx : this.segmentContexts) {
-            writer.addClassForFieldPath(ctx.getSegmentPath(), String.class);
+            addClassForFieldPath(ctx.getSegmentPath(), String.class);
         }
-        */
         this.lastSegmentContext = segmentContexts.get(segmentContexts.size() - 1);
         this.field = createField(fieldPath, DEFAULT_VALUE);
     }
@@ -108,7 +110,95 @@ public abstract class BaseDocumentWriterTest {
 
     protected void write(Field field) throws AtlasException {
         AtlasInternalSession session = mock(AtlasInternalSession.class);
+        when(session.head()).thenReturn(mock(Head.class));
         when(session.head().getTargetField()).thenReturn(field);
         writer.write(session);
+    }
+
+    protected void addClassForFieldPath(String fieldPath, Class<?> clz) {
+        String fieldPathTrimmed = AtlasPath.removeCollectionIndexes(fieldPath);
+        @SuppressWarnings("unchecked")
+        Map<String, Class<?>> classesForFields = (Map<String, Class<?>>) getInternalState(writer, "classesForFields");
+        classesForFields.put(fieldPathTrimmed, clz);
+        setInternalState(writer, "classesForFields", classesForFields);
+    }
+
+    private Object getInternalState(Object target, String field) {
+        Class<?> c = target.getClass();
+        try {
+            java.lang.reflect.Field f = getFieldFromHierarchy(c, field);
+            f.setAccessible(true);
+            return f.get(target);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Unable to get internal state on a private field.", e);
+        }
+    }
+
+    private void setInternalState(Object target, String field, Object value) {
+        Class<?> c = target.getClass();
+        try {
+            java.lang.reflect.Field f = getFieldFromHierarchy(c, field);
+            f.setAccessible(true);
+            f.set(target, value);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Unable to set internal state on a private field.", e);
+        }
+    }
+
+    private java.lang.reflect.Field getFieldFromHierarchy(Class<?> clazz, String field) {
+        java.lang.reflect.Field f = getField(clazz, field);
+        while (f == null && clazz != Object.class) {
+            Class<?> superClazz = clazz.getSuperclass();
+            f = getField(superClazz, field);
+        }
+        if (f == null) {
+            throw new IllegalArgumentException("This field: '" + field + "' on this class: '" + clazz.getSimpleName() + "' is not declared within hierarchy of this class!");
+        }
+        return f;
+    }
+
+    private java.lang.reflect.Field getField(Class<?> clazz, String field) {
+        try {
+            return clazz.getDeclaredField(field);
+        } catch (NoSuchFieldException e) {
+            return null;
+        }
+    }
+
+    private void setTargetValue(Object targetValue) {
+        writer.setTargetValueConverter(new TargetValueConverter(null) {
+            @Override
+            public Object convert(AtlasInternalSession session, LookupTable lookupTable, Field sourceField, Object parentObject, Field targetField) throws AtlasException {
+                return targetValue;
+            }
+        });
+    }
+
+    protected void write(String path, String targetValue) throws AtlasException {
+        Field field = createField(path, targetValue);
+        setTargetValue(targetValue);
+        write(field);
+    }
+
+    protected void write(String path, int targetValue) throws AtlasException {
+        Field field = createIntField(path, targetValue);
+        setTargetValue(targetValue);
+        write(field);
+    }
+
+    protected void write(String path, StateEnumClassLong targetValue) throws AtlasException {
+        Field field = createEnumField(path, targetValue);
+        setTargetValue(targetValue);
+        write(field);
+    }
+
+    protected Object findChildObject(Field field, SegmentContext segmentContext, Object parentObject) throws Exception {
+        Class<DocumentJavaFieldWriter> clazz = DocumentJavaFieldWriter.class;
+        Method method = clazz.getDeclaredMethod("findChildObject", Field.class, SegmentContext.class, Object.class);
+        boolean accessible = method.isAccessible();
+        if (!accessible) {
+            method.setAccessible(true);
+        }
+        return method.invoke(writer, field, segmentContext, parentObject);
     }
 }
