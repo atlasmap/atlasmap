@@ -42,11 +42,11 @@ public class DoubleConverterTest {
         Double df = 0.0;
         Double dt = 1.0;
 
-        Boolean b = converter.convertToBoolean(dt);
+        Boolean b = converter.convertToBoolean(dt, null, null);
         assertNotNull(b);
         assertTrue(b);
 
-        b = converter.convertToBoolean(df);
+        b = converter.convertToBoolean(df, null, null);
         assertNotNull(b);
         assertFalse(b);
 
@@ -55,14 +55,14 @@ public class DoubleConverterTest {
     @Test
     public void convertToBooleanNull() throws Exception {
         Double df = null;
-        Boolean b = converter.convertToBoolean(df);
+        Boolean b = converter.convertToBoolean(df, null, null);
         assertNull(b);
     }
 
     @Test
     public void convertToBooleanNegative() throws Exception {
         Double dt = -1.0;
-        Boolean b = converter.convertToBoolean(dt);
+        Boolean b = converter.convertToBoolean(dt, null, null);
         assertTrue(b);
     }
 
@@ -224,7 +224,7 @@ public class DoubleConverterTest {
     @Test
     public void convertToString() throws Exception {
         Double df = 0.0;
-        String s = converter.convertToString(df);
+        String s = converter.convertToString(df, null, null);
         assertNotNull(s);
         assertTrue("0.0".equals(s));
     }
@@ -232,7 +232,7 @@ public class DoubleConverterTest {
     @Test
     public void convertToStringNull() throws Exception {
         Double df = null;
-        String s = converter.convertToString(df);
+        String s = converter.convertToString(df, null, null);
         assertNull(s);
     }
 

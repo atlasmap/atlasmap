@@ -27,7 +27,7 @@
             <OutputField xsi:type="ns2:JavaField" path="/longField" />
         </Mapping>
         <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns3:JsonField" path="/booleanField" fieldType="Boolean" />
+            <InputField xsi:type="ns3:JsonField" path="/booleanField" />
             <OutputField xsi:type="ns2:JavaField" path="/doubleField" />
         </Mapping>
         <Mapping xsi:type="Mapping" mappingType="Map">

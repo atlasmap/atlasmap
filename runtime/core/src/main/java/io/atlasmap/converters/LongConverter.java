@@ -31,7 +31,8 @@ public class LongConverter implements AtlasPrimitiveConverter<Long> {
      */
     @Override
     @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.BOOLEAN, concerns = AtlasConversionConcern.CONVENTION)
-    public Boolean convertToBoolean(Long value) throws AtlasConversionException {
+    public Boolean convertToBoolean(Long value, String sourceFormat, String targetFormat)
+            throws AtlasConversionException {
         if (value == null) {
             return null;
         }
@@ -144,7 +145,8 @@ public class LongConverter implements AtlasPrimitiveConverter<Long> {
 
     @Override
     @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.STRING)
-    public String convertToString(Long value) throws AtlasConversionException {
+    public String convertToString(Long value, String sourceFormat, String targetFormat)
+            throws AtlasConversionException {
         if (value == null) {
             return null;
         }

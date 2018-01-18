@@ -15,7 +15,6 @@
  */
 package io.atlasmap.api;
 
-import java.lang.reflect.Method;
 import java.util.Optional;
 
 import io.atlasmap.v2.FieldType;
@@ -26,13 +25,15 @@ public interface AtlasConversionService {
 
     Optional<AtlasConverter<?>> findMatchingConverter(String sourceClassName, String targetClassName);
 
-    Optional<Method> findMatchingMethod(FieldType source, FieldType target, AtlasConverter<?> customConverter);
-
     Object copyPrimitive(Object sourceValue);
 
-    Object convertType(Object sourceValue, FieldType sourceType, FieldType targetType) throws AtlasConversionException;
+    Object convertType(Object sourceValue, FieldType origSourceType, FieldType targetType)
+            throws AtlasConversionException;
 
-    Object convertType(Object sourceValue, FieldType sourceType, FieldType targetType, String customClassName)
+    Object convertType(Object sourceValue, String sourceFormat, FieldType targetType, String targetFormat)
+            throws AtlasConversionException;
+
+    Object convertType(Object sourceValue, String sourceFormat, Class targetType, String targetFormat)
             throws AtlasConversionException;
 
     Class<?> boxOrUnboxPrimitive(Class<?> clazz);

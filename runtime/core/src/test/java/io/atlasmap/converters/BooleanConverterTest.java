@@ -40,8 +40,8 @@ public class BooleanConverterTest {
     public void convertToBoolean() throws Exception {
         Boolean t = Boolean.TRUE;
         Boolean f = Boolean.FALSE;
-        Boolean t2 = converter.convertToBoolean(t);
-        Boolean f2 = converter.convertToBoolean(f);
+        Boolean t2 = converter.convertToBoolean(t, null, null);
+        Boolean f2 = converter.convertToBoolean(f, null, null);
         assertNotNull(t2);
         assertNotSame(t2, t);
         assertTrue(t2);
@@ -53,7 +53,7 @@ public class BooleanConverterTest {
     @Test
     public void convertToBooleanNull() throws Exception {
         Boolean t = null;
-        Boolean t2 = converter.convertToBoolean(t);
+        Boolean t2 = converter.convertToBoolean(t, null, null);
         assertNull(t2);
     }
 
@@ -189,10 +189,10 @@ public class BooleanConverterTest {
     public void convertToString() throws Exception {
         Boolean t = Boolean.TRUE;
         Boolean f = Boolean.FALSE;
-        String s = converter.convertToString(t);
+        String s = converter.convertToString(t, null, null);
         assertNotNull(s);
         assertTrue("true".equals(s));
-        s = converter.convertToString(f);
+        s = converter.convertToString(f, null, null);
         assertNotNull(s);
         assertTrue("false".equals(s));
     }
@@ -200,7 +200,7 @@ public class BooleanConverterTest {
     @Test
     public void convertToStringNull() throws Exception {
         Boolean t = null;
-        String s = converter.convertToString(t);
+        String s = converter.convertToString(t, null, null);
         assertNull(s);
     }
 

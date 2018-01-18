@@ -43,23 +43,23 @@ public class IntegerConverterTest {
         int xTrue = 1;
         int xFalse = 0;
 
-        Boolean out = converter.convertToBoolean(xTrue);
+        Boolean out = converter.convertToBoolean(xTrue, null, null);
         assertNotNull(out);
         assertTrue(out);
-        out = converter.convertToBoolean(xFalse);
+        out = converter.convertToBoolean(xFalse, null, null);
         assertNotNull(out);
         assertFalse(out);
     }
 
     @Test
     public void convertToBooleanNull() throws Exception {
-        Boolean out = converter.convertToBoolean(null);
+        Boolean out = converter.convertToBoolean(null, null, null);
         assertNull(out);
     }
 
     @Test
     public void convertToBooleanHigh() throws Exception {
-        Boolean out = converter.convertToBoolean(10);
+        Boolean out = converter.convertToBoolean(10, null, null);
         assertTrue(out);
     }
 
@@ -196,17 +196,17 @@ public class IntegerConverterTest {
         int i = Integer.MAX_VALUE;
         int negI = Integer.MIN_VALUE;
 
-        String out = converter.convertToString(i);
+        String out = converter.convertToString(i, null, null);
         assertNotNull(out);
         assertEquals(Integer.toString(i), out);
-        out = converter.convertToString(negI);
+        out = converter.convertToString(negI, null, null);
         assertNotNull(out);
         assertEquals(Integer.toString(negI), out);
     }
 
     @Test
     public void convertToStringNull() throws Exception {
-        String out = converter.convertToString(null);
+        String out = converter.convertToString(null, null, null);
         assertNull(out);
     }
 

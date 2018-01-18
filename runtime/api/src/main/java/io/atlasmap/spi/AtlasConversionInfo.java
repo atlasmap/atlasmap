@@ -27,10 +27,6 @@ public @interface AtlasConversionInfo {
 
     FieldType targetType() default FieldType.ALL;
 
-    String sourceClassName() default "";
-
-    String targetClassName() default "";
-
     AtlasConversionConcern[] concerns() default { AtlasConversionConcern.NONE };
 
 }

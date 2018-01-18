@@ -31,7 +31,7 @@
             <OutputField xsi:type="ns2:JavaField" path="/floatField" />
         </Mapping>
         <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns3:JsonField" path="/charField" />
+            <InputField xsi:type="ns3:JsonField" path="/charField" fieldType="Char" />
             <OutputField xsi:type="ns2:JavaField" path="/booleanField" />
         </Mapping>
         <Mapping xsi:type="Mapping" mappingType="Map">

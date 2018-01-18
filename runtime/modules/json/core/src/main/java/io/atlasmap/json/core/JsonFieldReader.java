@@ -87,8 +87,8 @@ public class JsonFieldReader implements AtlasFieldReader {
         } else {
             if (jsonField.getFieldType() != null) { // mapping is overriding the fieldType
                 try {
-                    Object convertedValue = conversionService.convertType(valueNode.asText(), FieldType.STRING,
-                            jsonField.getFieldType());
+                    Object convertedValue = conversionService.convertType(valueNode.asText(), jsonField.getFormat(),
+                            jsonField.getFieldType(), null);
                     jsonField.setValue(convertedValue);
                 } catch (AtlasConversionException e) {
                     AtlasUtil.addAudit(session, jsonField.getDocId(),

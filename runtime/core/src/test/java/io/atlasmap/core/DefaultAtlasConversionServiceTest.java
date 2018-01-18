@@ -25,7 +25,6 @@ import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -75,11 +74,11 @@ public class DefaultAtlasConversionServiceTest {
         assertTrue(AtlasPrimitiveConverter.class.isAssignableFrom(atlasConverter.get().getClass()));
         AtlasPrimitiveConverter<String> primitiveConverter = (AtlasPrimitiveConverter<String>) atlasConverter.get();
         assertNotNull(primitiveConverter);
-        assertThat("io.atlasmap.core.MockPrimitiveConverter", is(atlasConverter.get().getClass().getCanonicalName()));
-        Boolean t = primitiveConverter.convertToBoolean("T");
+        assertThat("io.atlasmap.converters.StringConverter", is(atlasConverter.get().getClass().getCanonicalName()));
+        Boolean t = primitiveConverter.convertToBoolean("T", null, null);
         assertNotNull(t);
         assertTrue(t);
-        Boolean f = primitiveConverter.convertToBoolean("F");
+        Boolean f = primitiveConverter.convertToBoolean("F", null, null);
         assertNotNull(f);
         assertFalse(f);
         service.findMatchingConverter(null, FieldType.BOOLEAN);
@@ -95,7 +94,7 @@ public class DefaultAtlasConversionServiceTest {
         assertNotNull(atlasConverter);
         assertTrue(atlasConverter.isPresent());
         assertTrue(AtlasConverter.class.isAssignableFrom(atlasConverter.get().getClass()));
-        assertThat("io.atlasmap.core.MockCustomConverter", is(atlasConverter.get().getClass().getCanonicalName()));
+        assertThat("io.atlasmap.converters.StringConverter", is(atlasConverter.get().getClass().getCanonicalName()));
     }
 
     @Test
@@ -108,29 +107,20 @@ public class DefaultAtlasConversionServiceTest {
     @Test
     public void findMatchingConverterBySourceClass() throws Exception {
         assertNotNull(service);
-        Optional<AtlasConverter<?>> atlasConverter = service.findMatchingConverter("java.util.Date", "java.time.ZonedDateTime");
+        Optional<AtlasConverter<?>> atlasConverter = service.findMatchingConverter("java.util.Date",
+                "java.time.ZonedDateTime");
         assertNotNull(atlasConverter);
         assertTrue(atlasConverter.isPresent());
         assertTrue(AtlasConverter.class.isAssignableFrom(atlasConverter.get().getClass()));
-        assertThat("io.atlasmap.core.MockCustomConverter", is(atlasConverter.get().getClass().getCanonicalName()));
+        assertThat("io.atlasmap.converters.DateConverter", is(atlasConverter.get().getClass().getCanonicalName()));
     }
 
     @Test
     public void findMatchingConverterBySourceClassNoMatching() throws Exception {
         assertNotNull(service);
-        Optional<AtlasConverter<?>> atlasConverter = service.findMatchingConverter("java.util.Date", "java.time.CustomClass");
+        Optional<AtlasConverter<?>> atlasConverter = service.findMatchingConverter("java.util.Date",
+                "java.time.CustomClass");
         assertFalse(atlasConverter.isPresent());
-    }
-
-    @Test
-    public void findMatchingMethodByFieldTypes() throws Exception {
-        assertNotNull(service);
-        Optional<AtlasConverter<?>> atlasConverter = service.findMatchingConverter(FieldType.STRING, FieldType.BOOLEAN);
-        AtlasConverter<?> converter = atlasConverter.orElse(null);
-        assertNotNull(converter);
-        Optional<Method> methods = service.findMatchingMethod(FieldType.STRING, FieldType.BOOLEAN, atlasConverter.orElseGet(null));
-        Method method = methods.orElseGet(null);
-        assertNotNull(method);
     }
 
     @Test
@@ -437,7 +427,6 @@ public class DefaultAtlasConversionServiceTest {
 
     @Test
     public void testConvertType() throws AtlasConversionException {
-        assertNotNull(service.convertType(new Integer(1), null, FieldType.BOOLEAN));
         assertNotNull(service.convertType(new Integer(1), FieldType.INTEGER, FieldType.BOOLEAN));
         assertNotNull(service.convertType(new Integer(1), FieldType.INTEGER, FieldType.BYTE));
         assertNotNull(service.convertType(new Integer(1), FieldType.INTEGER, FieldType.CHAR));

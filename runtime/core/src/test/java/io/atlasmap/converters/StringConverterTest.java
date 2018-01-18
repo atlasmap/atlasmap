@@ -48,35 +48,35 @@ public class StringConverterTest {
         String strTrue = "true";
         String strFalse = "false";
 
-        Boolean b = converter.convertToBoolean(t);
+        Boolean b = converter.convertToBoolean(t, null, null);
         assertNotNull(b);
         assertTrue(b);
 
-        b = converter.convertToBoolean(f);
+        b = converter.convertToBoolean(f, null, null);
         assertNotNull(b);
         assertFalse(b);
 
-        b = converter.convertToBoolean(capitalT);
+        b = converter.convertToBoolean(capitalT, null, null);
         assertNotNull(b);
         assertTrue(b);
 
-        b = converter.convertToBoolean(capitalF);
+        b = converter.convertToBoolean(capitalF, null, null);
         assertNotNull(b);
         assertFalse(b);
 
-        b = converter.convertToBoolean(smallT);
+        b = converter.convertToBoolean(smallT, null, null);
         assertNotNull(b);
         assertTrue(b);
 
-        b = converter.convertToBoolean(smallF);
+        b = converter.convertToBoolean(smallF, null, null);
         assertNotNull(b);
         assertFalse(b);
 
-        b = converter.convertToBoolean(strTrue);
+        b = converter.convertToBoolean(strTrue, null, null);
         assertNotNull(b);
         assertTrue(b);
 
-        b = converter.convertToBoolean(strFalse);
+        b = converter.convertToBoolean(strFalse, null, null);
         assertNotNull(b);
         assertFalse(b);
 
@@ -84,18 +84,18 @@ public class StringConverterTest {
 
     @Test
     public void convertToBooleanNull() throws Exception {
-        Boolean b = converter.convertToBoolean(null);
+        Boolean b = converter.convertToBoolean(null, null, null);
         assertNull(b);
     }
 
     @Test
     public void convertToBooleanFallback() throws Exception {
         String s = "";
-        Boolean b = converter.convertToBoolean(s);
+        Boolean b = converter.convertToBoolean(s, null, null);
         assertFalse(b);
 
-        b = converter.convertToBoolean("junk");
-        assertTrue(b);
+        b = converter.convertToBoolean("junk", null, null);
+        assertFalse(b);
     }
 
     @Test
@@ -357,7 +357,7 @@ public class StringConverterTest {
     @Test
     public void convertToString() throws Exception {
         String zero = "0";
-        String converted = converter.convertToString(zero);
+        String converted = converter.convertToString(zero, null, null);
         assertNotNull(converted);
         assertNotSame(converted, zero);
         assertTrue("0".equals(converted));
@@ -365,7 +365,7 @@ public class StringConverterTest {
 
     @Test
     public void convertToStringNull() throws Exception {
-        String s = converter.convertToString(null);
+        String s = converter.convertToString(null, null, null);
         assertNull(s);
     }
 

@@ -32,7 +32,8 @@ public class DoubleConverter implements AtlasPrimitiveConverter<Double> {
     @Override
     @AtlasConversionInfo(sourceType = FieldType.DOUBLE, targetType = FieldType.BOOLEAN, concerns = {
             AtlasConversionConcern.CONVENTION })
-    public Boolean convertToBoolean(Double value) throws AtlasConversionException {
+    public Boolean convertToBoolean(Double value, String sourceFormat, String targetFormat)
+            throws AtlasConversionException {
         if (value == null) {
             return null;
         }
@@ -176,7 +177,8 @@ public class DoubleConverter implements AtlasPrimitiveConverter<Double> {
      */
     @Override
     @AtlasConversionInfo(sourceType = FieldType.DOUBLE, targetType = FieldType.STRING)
-    public String convertToString(Double value) throws AtlasConversionException {
+    public String convertToString(Double value, String sourceFormat, String targetFormat)
+            throws AtlasConversionException {
         if (value == null) {
             return null;
         }

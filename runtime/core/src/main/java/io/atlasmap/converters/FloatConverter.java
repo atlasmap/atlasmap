@@ -32,7 +32,8 @@ public class FloatConverter implements AtlasPrimitiveConverter<Float> {
     @Override
     @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.BOOLEAN, concerns = {
             AtlasConversionConcern.CONVENTION })
-    public Boolean convertToBoolean(Float value) throws AtlasConversionException {
+    public Boolean convertToBoolean(Float value, String sourceFormat, String targetFormat)
+            throws AtlasConversionException {
         if (value == null) {
             return null;
         }
@@ -180,7 +181,8 @@ public class FloatConverter implements AtlasPrimitiveConverter<Float> {
      */
     @Override
     @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.STRING)
-    public String convertToString(Float value) throws AtlasConversionException {
+    public String convertToString(Float value, String sourceFormat, String targetFormat)
+            throws AtlasConversionException {
         if (value == null) {
             return null;
         }

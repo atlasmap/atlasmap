@@ -31,7 +31,8 @@ public class ShortConverter implements AtlasPrimitiveConverter<Short> {
      */
     @Override
     @AtlasConversionInfo(sourceType = FieldType.SHORT, targetType = FieldType.BOOLEAN, concerns = AtlasConversionConcern.CONVENTION)
-    public Boolean convertToBoolean(Short value) throws AtlasConversionException {
+    public Boolean convertToBoolean(Short value, String sourceFormat, String targetFormat)
+            throws AtlasConversionException {
         if (value == null) {
             return null;
         }
@@ -160,7 +161,8 @@ public class ShortConverter implements AtlasPrimitiveConverter<Short> {
      */
     @Override
     @AtlasConversionInfo(sourceType = FieldType.SHORT, targetType = FieldType.STRING)
-    public String convertToString(Short value) throws AtlasConversionException {
+    public String convertToString(Short value, String sourceFormat, String targetFormat)
+            throws AtlasConversionException {
         if (value == null) {
             return null;
         }

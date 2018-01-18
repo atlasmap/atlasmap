@@ -32,7 +32,8 @@ public class IntegerConverter implements AtlasPrimitiveConverter<Integer> {
     @Override
     @AtlasConversionInfo(sourceType = FieldType.INTEGER, targetType = FieldType.BOOLEAN, concerns = {
             AtlasConversionConcern.CONVENTION })
-    public Boolean convertToBoolean(Integer value) throws AtlasConversionException {
+    public Boolean convertToBoolean(Integer value, String sourceFormat, String targetFormat)
+            throws AtlasConversionException {
         if (value == null) {
             return null;
         }
@@ -158,7 +159,8 @@ public class IntegerConverter implements AtlasPrimitiveConverter<Integer> {
      */
     @Override
     @AtlasConversionInfo(sourceType = FieldType.INTEGER, targetType = FieldType.STRING)
-    public String convertToString(Integer value) throws AtlasConversionException {
+    public String convertToString(Integer value, String sourceFormat, String targetFormat)
+            throws AtlasConversionException {
         if (value == null) {
             return null;
         }
