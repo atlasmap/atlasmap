@@ -83,32 +83,38 @@ export class FieldActionConfig {
     public name: string;
     public arguments: FieldActionArgument[] = [];
     public method: string;
-    public sourceType = 'STRING';
-    public targetType = 'STRING';
+    public sourceType = 'undefined';
+    public targetType = 'undefined';
     public serviceObject: any = new Object();
 
-    public appliesToField(field: Field, fieldPair: FieldMappingPair): boolean {
-        const type: string = (field == null) ? null : field.type;
-        if (type == null) {
+    public appliesToField(fieldPair: FieldMappingPair): boolean {
+
+        if (fieldPair == null || !fieldPair.isFullyMapped()) {
+            return false;
+        }
+        const sourceField: Field = fieldPair.getFields(true)[0];
+        const targetField: Field = fieldPair.getFields(false)[0];
+
+        if ((sourceField == null) || (targetField == null)) {
             return false;
         }
 
-        if (this.sourceType == 'STRING' && fieldPair.transition.isMapMode()
-            && fieldPair.hasMappedField(true)) {
-            const sourceField: Field = fieldPair.getFields(true)[0];
-            const sourceFieldIsString: boolean = (['STRING', 'CHAR'].indexOf(sourceField.type) != -1);
-            if (!sourceFieldIsString) {
-                return false;
-            }
+        // Check for string types.
+        if (this.sourceType == 'STRING' && this.targetType == 'STRING'
+            && fieldPair.transition.isMapMode()) {
+            return ((['STRING', 'CHAR'].indexOf(sourceField.type) != -1) &&
+                    (['STRING', 'CHAR'].indexOf(targetField.type) != -1));
         }
 
-        if (this.targetType == 'STRING') {
-            const fieldTypeIsString: boolean = (['STRING', 'CHAR'].indexOf(type) != -1);
-            return fieldTypeIsString;
+        // Check for numeric types.
+        if (this.sourceType == 'NUMBER' && this.targetType == 'NUMBER'
+            && fieldPair.transition.isMapMode()) {
+            return ((['LONG', 'INTEGER', 'FLOAT', 'DOUBLE', 'SHORT', 'BYTE', 'DECIMAL', 'NUMBER'].indexOf(sourceField.type) != -1) &&
+                    (['LONG', 'INTEGER', 'FLOAT', 'DOUBLE', 'SHORT', 'BYTE', 'DECIMAL', 'NUMBER'].indexOf(targetField.type) != -1));
         }
 
-        const typeIsNumber: boolean = (['LONG', 'INTEGER', 'FLOAT', 'DOUBLE'].indexOf(type) != -1);
-        return typeIsNumber;
+        // All other types just match the mapped field types with the field action types.
+        return ((sourceField.type == this.sourceType) && (targetField.type == this.targetType));
     }
 
     public populateFieldAction(action: FieldAction): void {
