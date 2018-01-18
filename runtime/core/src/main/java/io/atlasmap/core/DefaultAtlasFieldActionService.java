@@ -229,7 +229,7 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
                 }
 
                 if(method == null) {
-                    throw new AtlasException(String.format("Unable to locate field action className=%s method=%s sourceType=%s", actionDetail.getClassName(), actionDetail.getMethod(), actionDetail.getSourceType().value()));
+                    throw new AtlasException(String.format("Unable to locate field action className=%s method=%s sourceType=%s", actionDetail.getClassName(), actionDetail.getMethod(), actionDetail.getSourceType()));
                 }
 
                 if(Modifier.isStatic(method.getModifiers())) {
