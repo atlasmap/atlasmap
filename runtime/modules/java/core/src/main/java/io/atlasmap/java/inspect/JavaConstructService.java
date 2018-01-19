@@ -33,11 +33,6 @@ public class JavaConstructService {
     private static final Logger LOG = LoggerFactory.getLogger(JavaConstructService.class);
     private AtlasConversionService atlasConversionService = null;
 
-    public Object constructClass(JavaClass javaClass)
-            throws ConstructException, ClassNotFoundException, IllegalAccessException, InstantiationException {
-        return constructClass(javaClass, null);
-    }
-
     public Object constructClass(JavaClass javaClass, List<String> pathFilters)
             throws ConstructException, ClassNotFoundException, IllegalAccessException, InstantiationException {
         validateJavaClass(javaClass);
@@ -52,9 +47,9 @@ public class JavaConstructService {
             case ARRAY:
                 return instantiateArray(javaClass, pathFilters);
             case LIST:
-                return instantiateList(javaClass, pathFilters);
+                return instantiateList(javaClass);
             case MAP:
-                return instantiateMap(javaClass, pathFilters);
+                return instantiateMap(javaClass);
             default:
                 throw new ConstructUnsupportedException(
                         String.format("Unsupported collectionType for instantiation c=%s cType=%s",
@@ -65,7 +60,7 @@ public class JavaConstructService {
         return constructClassIgnoreCollection(javaClass, pathFilters);
     }
 
-    protected Object constructClassIgnoreCollection(JavaClass javaClass, List<String> pathFilters)
+    private Object constructClassIgnoreCollection(JavaClass javaClass, List<String> pathFilters)
             throws ConstructException, ClassNotFoundException, IllegalAccessException, InstantiationException {
         Object targetObject = instantiateClass(javaClass.getClassName());
         filterFields(javaClass, pathFilters);
@@ -133,13 +128,13 @@ public class JavaConstructService {
         return targetObject;
     }
 
-    protected Object instantiateClass(String className)
+    private Object instantiateClass(String className)
             throws ClassNotFoundException, IllegalAccessException, InstantiationException {
         Class<?> c = Class.forName(className);
         return c.newInstance();
     }
 
-    protected Object instantiateArray(JavaClass javaClass, List<String> pathFilters)
+    private Object instantiateArray(JavaClass javaClass, List<String> pathFilters)
             throws ConstructException, ClassNotFoundException, IllegalAccessException, InstantiationException {
         if (LOG.isDebugEnabled()) {
             LOG.debug(String.format("Constructing array c=%s size=%s", javaClass.getClassName(),
@@ -152,7 +147,7 @@ public class JavaConstructService {
         return objectArray;
     }
 
-    protected Object instantiateList(JavaClass javaClass, List<String> pathFilters)
+    private Object instantiateList(JavaClass javaClass)
             throws ConstructException, ClassNotFoundException, InstantiationException, IllegalAccessException {
         if (LOG.isDebugEnabled()) {
             LOG.debug(String.format("Constructing list c=%s", javaClass.getCollectionClassName()));
@@ -161,7 +156,7 @@ public class JavaConstructService {
         return collectionClass.newInstance();
     }
 
-    protected Object instantiateMap(JavaClass javaClass, List<String> pathFilters)
+    private Object instantiateMap(JavaClass javaClass)
             throws ConstructException, ClassNotFoundException, InstantiationException, IllegalAccessException {
         if (LOG.isDebugEnabled()) {
             LOG.debug(String.format("Constructing map c=%s", javaClass.getCollectionClassName()));
@@ -170,7 +165,7 @@ public class JavaConstructService {
         return collectionClass.newInstance();
     }
 
-    protected void validateJavaClass(JavaClass javaClass) throws ConstructException {
+    private void validateJavaClass(JavaClass javaClass) throws ConstructException {
         if (javaClass == null) {
             throw new ConstructInvalidException("JavaClass cannot be null");
         }
@@ -200,7 +195,7 @@ public class JavaConstructService {
         this.atlasConversionService = atlasConversionService;
     }
 
-    public static void filterFields(JavaClass javaClass, List<String> filteredPaths) {
+    private static void filterFields(JavaClass javaClass, List<String> filteredPaths) {
         if (filteredPaths == null || filteredPaths.size() == 0) {
             return;
         }

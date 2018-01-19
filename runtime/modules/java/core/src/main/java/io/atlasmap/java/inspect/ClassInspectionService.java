@@ -27,11 +27,8 @@ import java.lang.reflect.TypeVariable;
 import java.lang.reflect.WildcardType;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -129,76 +126,13 @@ public class ClassInspectionService {
         this.disablePublicGetterSetterFields = disablePublicGetterSetterFields;
     }
 
-    public Map<String, JavaClass> inspectPackage(String packageName)
-            throws ClassNotFoundException, InspectionException {
-        return inspectPackages(Arrays.asList(packageName), false);
-    }
-
-    public Map<String, JavaClass> inspectPackages(String packageName, boolean inspectChildren)
-            throws ClassNotFoundException, InspectionException {
-        return inspectPackages(Arrays.asList(packageName), inspectChildren);
-    }
-
-    public Map<String, JavaClass> inspectPackages(List<String> pkgs, boolean inspectChildren)
-            throws ClassNotFoundException, InspectionException {
-        List<String> packages = pkgs;
-        packages = inspectChildren ? findChildPackages(packages) : packages;
-        Map<String, JavaClass> classes = new HashMap<>();
-        for (String p : packages) {
-            classes.putAll(inspectClasses(findClassesForPackage(p)));
-        }
-        return classes;
-    }
-
-    public List<String> findClassesForPackage(String packageName) {
-        List<String> classNames = new LinkedList<>();
-        List<Class<?>> classes = ClassFinder.find(packageName);
-        if (classes != null) {
-            for (Class<?> clz : classes) {
-                classNames.add(clz.getCanonicalName());
-            }
-        }
-        return classNames;
-    }
-
-    public List<String> findChildPackages(List<String> packages) {
-        List<String> foundPackages = new LinkedList<>();
-        for (String p : packages) {
-            foundPackages.addAll(findChildPackages(p));
-        }
-        return foundPackages;
-    }
-
-    public List<String> findChildPackages(String packageName) {
-        List<String> packageNames = new LinkedList<>();
-        Package originalPackage = Package.getPackage(packageName);
-        Package[] allPackages = Package.getPackages();
-        if (allPackages != null) {
-            for (Package tmpPackage : allPackages) {
-                if (tmpPackage.getName().startsWith(originalPackage.getName())) {
-                    packageNames.add(tmpPackage.getName());
-                }
-            }
-        }
-        return packageNames;
-    }
-
-    public Map<String, JavaClass> inspectClasses(List<String> classNames) {
-        Map<String, JavaClass> classes = new HashMap<>();
-        for (String c : classNames) {
-            JavaClass d = inspectClass(c);
-            classes.put(d.getClassName(), d);
-        }
-        return classes;
-    }
-
     public JavaClass inspectClass(String className) {
         // Use a loader for this class for now
         ClassLoader classLoader = getClass().getClassLoader();
         return inspectClass(classLoader, className);
     }
 
-    public JavaClass inspectClass(ClassLoader classLoader, String className) {
+    private JavaClass inspectClass(ClassLoader classLoader, String className) {
         JavaClass d = null;
         Class<?> clazz = null;
         try {
@@ -254,8 +188,8 @@ public class ClassInspectionService {
         return javaClass;
     }
 
-    protected void inspectClass(ClassLoader classLoader, Class<?> clazz,
-            JavaClass javaClass, Set<String> cachedClasses, String pathPrefix) {
+    private void inspectClass(ClassLoader classLoader, Class<?> clazz, JavaClass javaClass, Set<String> cachedClasses,
+            String pathPrefix) {
 
         Class<?> clz = clazz;
         if (clazz.isArray()) {
@@ -350,8 +284,8 @@ public class ClassInspectionService {
         // return javaClass;
     }
 
-    protected JavaField inspectGetMethod(ClassLoader classLoader, Method m, JavaField s,
-            Set<String> cachedClasses, String pathPrefix) {
+    private JavaField inspectGetMethod(ClassLoader classLoader, Method m, JavaField s, Set<String> cachedClasses,
+            String pathPrefix) {
         JavaField field = s;
 
         field.setName(StringUtil.removeGetterAndLowercaseFirstLetter(m.getName()));
@@ -417,8 +351,8 @@ public class ClassInspectionService {
         return field;
     }
 
-    protected JavaField inspectSetMethod(ClassLoader classLoader, Method m, JavaField s,
-            Set<String> cachedClasses, String pathPrefix) {
+    private JavaField inspectSetMethod(ClassLoader classLoader, Method m, JavaField s, Set<String> cachedClasses,
+            String pathPrefix) {
         JavaField field = s;
 
         field.setName(StringUtil.removeSetterAndLowercaseFirstLetter(m.getName()));
@@ -490,8 +424,7 @@ public class ClassInspectionService {
         return field;
     }
 
-    protected JavaField inspectField(ClassLoader classLoader, Field f,
-            Set<String> cachedClasses, String pathPrefix) {
+    private JavaField inspectField(ClassLoader classLoader, Field f, Set<String> cachedClasses, String pathPrefix) {
 
         JavaField s = AtlasJavaModelFactory.createJavaField();
         Class<?> clazz = f.getType();
@@ -600,9 +533,8 @@ public class ClassInspectionService {
                         + reflectionField.getDeclaringClass().getName());
             }
         }
-        if (atlasField.getGetMethod() == null
-                && ("boolean".equals(atlasField.getClassName())
-                        || "java.lang.Boolean".equals(atlasField.getClassName()))) {
+        if (atlasField.getGetMethod() == null && ("boolean".equals(atlasField.getClassName())
+                || "java.lang.Boolean".equals(atlasField.getClassName()))) {
             try {
                 String getterName = "is" + StringUtil.capitalizeFirstLetter(reflectionField.getName());
                 reflectionField.getDeclaringClass().getMethod(getterName);
@@ -626,7 +558,7 @@ public class ClassInspectionService {
         }
     }
 
-    protected void inspectClassFields(ClassLoader classLoader, Class<?> clazz, JavaClass javaClass,
+    private void inspectClassFields(ClassLoader classLoader, Class<?> clazz, JavaClass javaClass,
             Set<String> cachedClasses, String pathPrefix) {
         Field[] fields = clazz.getDeclaredFields();
         if (fields != null && !javaClass.isEnumeration()) {
@@ -666,8 +598,8 @@ public class ClassInspectionService {
         }
     }
 
-    protected void inspectClassMethods(ClassLoader classLoader, Class<?> clazz, JavaClass javaClass, Set<String> cachedClasses,
-            String pathPrefix) {
+    private void inspectClassMethods(ClassLoader classLoader, Class<?> clazz, JavaClass javaClass,
+            Set<String> cachedClasses, String pathPrefix) {
         Method[] methods = clazz.getDeclaredMethods();
         if (methods != null && !javaClass.isEnumeration()) {
             for (Method m : methods) {
@@ -723,7 +655,7 @@ public class ClassInspectionService {
         }
     }
 
-    protected boolean isFieldList(String fieldType) {
+    private boolean isFieldList(String fieldType) {
         return getListClasses().contains(fieldType);
     }
 
@@ -731,7 +663,7 @@ public class ClassInspectionService {
         return getMapClasses().contains(fieldType);
     }
 
-    protected Integer detectArrayDimensions(Class<?> clazz) {
+    private Integer detectArrayDimensions(Class<?> clazz) {
         Integer arrayDim = Integer.valueOf(0);
         if (clazz == null) {
             return null;
@@ -751,7 +683,7 @@ public class ClassInspectionService {
         return arrayDim;
     }
 
-    protected List<io.atlasmap.java.v2.Modifier> detectModifiers(int m) {
+    private List<io.atlasmap.java.v2.Modifier> detectModifiers(int m) {
         List<io.atlasmap.java.v2.Modifier> modifiers = new ArrayList<io.atlasmap.java.v2.Modifier>();
         if (Modifier.isAbstract(m)) {
             modifiers.add(io.atlasmap.java.v2.Modifier.ABSTRACT);
@@ -795,7 +727,7 @@ public class ClassInspectionService {
         return modifiers;
     }
 
-    protected Class<?> detectListClass(ClassLoader classLoader, Field field) throws ClassNotFoundException {
+    private Class<?> detectListClass(ClassLoader classLoader, Field field) throws ClassNotFoundException {
         List<String> types = detectParameterizedTypes(field, true);
         if (types != null && !types.isEmpty()) {
             return classLoader.loadClass(types.get(0));
@@ -803,7 +735,7 @@ public class ClassInspectionService {
         return null;
     }
 
-    protected Class<?> detectArrayClass(Class<?> clazz) {
+    private Class<?> detectArrayClass(Class<?> clazz) {
         Integer arrayDim = new Integer(0);
         if (clazz == null) {
             return null;
@@ -823,7 +755,7 @@ public class ClassInspectionService {
         return tmpClazz;
     }
 
-    protected List<String> detectParameterizedTypes(Field field, boolean onlyClasses) {
+    private List<String> detectParameterizedTypes(Field field, boolean onlyClasses) {
         List<String> pTypes = null;
 
         if (field == null || field.getGenericType() == null || !(field.getGenericType() instanceof ParameterizedType)) {
@@ -868,7 +800,7 @@ public class ClassInspectionService {
         return pTypes;
     }
 
-    protected JavaClass convertJavaFieldToJavaClass(JavaField javaField) {
+    private JavaClass convertJavaFieldToJavaClass(JavaField javaField) {
         JavaClass javaClass = AtlasJavaModelFactory.createJavaClass();
         javaClass.setArrayDimensions(javaField.getArrayDimensions());
         javaClass.setArraySize(javaField.getArraySize());
@@ -895,32 +827,7 @@ public class ClassInspectionService {
         return javaClass;
     }
 
-    protected List<String> classpathStringToList(String classpath) {
-        if (classpath == null) {
-            return null;
-        }
-
-        List<String> jars = new ArrayList<String>();
-
-        if (classpath.isEmpty()) {
-            return jars;
-        }
-
-        if (!classpath.contains(":")) {
-            jars.add(classpath);
-            return jars;
-        }
-
-        String[] items = classpath.split(":", 256);
-        if (items == null) {
-            return jars;
-        }
-
-        jars.addAll(Arrays.asList(items));
-        return jars;
-    }
-
-    public AtlasConversionService getConversionService() {
+    private AtlasConversionService getConversionService() {
         return atlasConversionService;
     }
 

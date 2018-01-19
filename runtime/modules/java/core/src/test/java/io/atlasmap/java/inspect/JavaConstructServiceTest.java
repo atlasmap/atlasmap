@@ -51,7 +51,7 @@ public class JavaConstructServiceTest {
     @Test
     public void testConstructClassInvalid() {
         try {
-            constructService.constructClass(generateJavaClassInvalidNull());
+            constructService.constructClass(generateJavaClassInvalidNull(),null);
             fail("ConstructException expected");
         } catch (ConstructInvalidException e) {
             assertEquals("JavaClass cannot be null", e.getMessage());
@@ -59,7 +59,7 @@ public class JavaConstructServiceTest {
             fail("Expected ConstructException instead: " + e.getMessage());
         }
         try {
-            constructService.constructClass(generateJavaClassInvalidNullClassName());
+            constructService.constructClass(generateJavaClassInvalidNullClassName(),null);
             fail("ConstructException expected");
         } catch (ConstructInvalidException e) {
             assertEquals("JavaClass.className must be specified", e.getMessage());
@@ -67,7 +67,7 @@ public class JavaConstructServiceTest {
             fail("Expected ConstructException instead: " + e.getMessage());
         }
         try {
-            constructService.constructClass(generateJavaClassInvalidEmptyClassName());
+            constructService.constructClass(generateJavaClassInvalidEmptyClassName(),null);
             fail("ConstructException expected");
         } catch (ConstructInvalidException e) {
             assertEquals("JavaClass.className must be specified", e.getMessage());
@@ -82,7 +82,7 @@ public class JavaConstructServiceTest {
         Object object = null;
         for (String prim : DefaultAtlasConversionService.listPrimitiveClassNames()) {
             try {
-                object = constructService.constructClass(generatePrimitive(prim));
+                object = constructService.constructClass(generatePrimitive(prim),null);
                 fail("ConstructPrimitiveException expected");
             } catch (ConstructPrimitiveException e) {
                 assertEquals("Unable to instantiate a Java primitive: " + prim, e.getMessage());
@@ -97,7 +97,7 @@ public class JavaConstructServiceTest {
     @Test
     public void testConstructClassCollectionArray() throws Exception {
         Object stringArray = constructService.constructClass(
-                generateJavaClassCollection("java.lang.String", CollectionType.ARRAY, new Integer(1), new Integer(3)));
+                generateJavaClassCollection("java.lang.String", CollectionType.ARRAY, new Integer(1), new Integer(3)),null);
         assertNotNull(stringArray);
         assertTrue(stringArray instanceof java.lang.String[]);
         assertEquals(new Integer(3), new Integer(((String[]) stringArray).length));
@@ -107,7 +107,7 @@ public class JavaConstructServiceTest {
     public void testConstructClassCollectionList() throws Exception {
         JavaClass javaClass = generateJavaClassCollection("java.lang.String", CollectionType.LIST, null, null);
         javaClass.setCollectionClassName("java.util.ArrayList");
-        Object stringList = constructService.constructClass(javaClass);
+        Object stringList = constructService.constructClass(javaClass,null);
 
         assertNotNull(stringList);
         assertTrue(stringList instanceof ArrayList<?>);
@@ -118,7 +118,7 @@ public class JavaConstructServiceTest {
     public void testConstructClassCollectionMap() throws Exception {
         JavaClass javaClass = generateJavaClassCollection("java.lang.String", CollectionType.MAP, null, null);
         javaClass.setCollectionClassName("java.util.HashMap");
-        Object stringMap = constructService.constructClass(javaClass);
+        Object stringMap = constructService.constructClass(javaClass,null);
         assertNotNull(stringMap);
         assertTrue(stringMap instanceof HashMap<?, ?>);
         assertTrue(((HashMap<?, ?>) stringMap).isEmpty());
@@ -128,7 +128,7 @@ public class JavaConstructServiceTest {
     public void testConstructClassCollectionUnsupported() throws Exception {
         try {
             constructService
-                    .constructClass(generateJavaClassCollection("java.lang.String", CollectionType.ALL, null, null));
+                    .constructClass(generateJavaClassCollection("java.lang.String", CollectionType.ALL, null, null),null);
             fail("ConstructUnsupportedException expected");
         } catch (ConstructUnsupportedException e) {
             assertEquals(String.format("Unsupported collectionType for instantiation c=%s cType=%s", "java.lang.String",
@@ -139,7 +139,7 @@ public class JavaConstructServiceTest {
 
         try {
             constructService
-                    .constructClass(generateJavaClassCollection("java.lang.String", CollectionType.NONE, null, null));
+                    .constructClass(generateJavaClassCollection("java.lang.String", CollectionType.NONE, null, null),null);
             fail("ConstructUnsupportedException expected");
         } catch (ConstructUnsupportedException e) {
             assertEquals(String.format("Unsupported collectionType for instantiation c=%s cType=%s", "java.lang.String",

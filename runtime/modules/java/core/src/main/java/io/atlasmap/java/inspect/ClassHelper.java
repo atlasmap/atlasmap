@@ -33,10 +33,6 @@ public class ClassHelper {
         return opts;
     }
 
-    public static String setMethodNameFromFieldName(String fieldName) {
-        return "set" + StringUtil.capitalizeFirstLetter(fieldName);
-    }
-
     public static String getMethodNameFromFieldName(String fieldName) {
         return "get" + StringUtil.capitalizeFirstLetter(fieldName);
     }
@@ -124,11 +120,10 @@ public class ClassHelper {
 
         // Not as good of a match .. find one with a matching converter
         /*
-        for (Method candidate : candidates) {
-             if(candidate.getParameterTypes()[0].equals(String.class)) { return candidate;
-             }
-        }
-        */
+         * for (Method candidate : candidates) {
+         * if(candidate.getParameterTypes()[0].equals(String.class)) { return candidate;
+         * } }
+         */
 
         // Yikes! User should specify type, or provide a converter
         throw new NoSuchMethodException(String.format("Unable to auto-detect setter class=%s method=%s paramType=%s",
@@ -192,4 +187,5 @@ public class ClassHelper {
             throw new AtlasException(e);
         }
     }
+
 }
