@@ -249,7 +249,7 @@ export class FieldMappingPair {
             const actionsToRemove: FieldAction[] = [];
             for (const action of mappedField.actions) {
                 const actionConfig: FieldActionConfig = TransitionModel.getActionConfigForName(action.name);
-                if (actionConfig != null && !actionConfig.appliesToField(mappedField.field, this)) {
+                if (actionConfig != null && !actionConfig.appliesToField(this)) {
                     actionsToRemove.push(action);
                 }
             }

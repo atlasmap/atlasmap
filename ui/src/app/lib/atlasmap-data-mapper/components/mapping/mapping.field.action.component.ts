@@ -77,8 +77,12 @@ export class MappingFieldActionComponent {
 
     public getActionConfigs(): FieldActionConfig[] {
         const configs: FieldActionConfig[] = [];
+
+        // Start with the complete list of field actions.
         for (const config of TransitionModel.actionConfigs) {
-            if (config.appliesToField(this.mappedField.field, this.fieldPair)) {
+
+            // Filter down to those field actions that apply to the selected field pair.
+            if (config.appliesToField(this.fieldPair)) {
                 configs.push(config);
             }
         }
