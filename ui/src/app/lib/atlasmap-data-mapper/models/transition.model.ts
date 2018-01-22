@@ -87,9 +87,14 @@ export class FieldActionConfig {
     public targetType = 'undefined';
     public serviceObject: any = new Object();
 
+    /**
+     * Return true if the target field pair is numeric, string or the field pair types
+     * match the current field action types.
+     * @param fieldPair
+     */
     public appliesToField(fieldPair: FieldMappingPair): boolean {
 
-        if (fieldPair == null || !fieldPair.isFullyMapped()) {
+        if (fieldPair == null) {
             return false;
         }
         const sourceField: Field = fieldPair.getFields(true)[0];
@@ -99,21 +104,17 @@ export class FieldActionConfig {
             return false;
         }
 
-        // Check for string types.
-        if (this.sourceType == 'STRING' && this.targetType == 'STRING'
-            && fieldPair.transition.isMapMode()) {
-            return ((['STRING', 'CHAR'].indexOf(sourceField.type) != -1) &&
-                    (['STRING', 'CHAR'].indexOf(targetField.type) != -1));
+        // Check for target string types.
+        if (this.targetType == 'STRING') {
+            return (['STRING', 'CHAR'].indexOf(targetField.type) != -1);
         }
 
-        // Check for numeric types.
-        if (this.sourceType == 'NUMBER' && this.targetType == 'NUMBER'
-            && fieldPair.transition.isMapMode()) {
-            return ((['LONG', 'INTEGER', 'FLOAT', 'DOUBLE', 'SHORT', 'BYTE', 'DECIMAL', 'NUMBER'].indexOf(sourceField.type) != -1) &&
-                    (['LONG', 'INTEGER', 'FLOAT', 'DOUBLE', 'SHORT', 'BYTE', 'DECIMAL', 'NUMBER'].indexOf(targetField.type) != -1));
+        // Check for numeric target types.
+        if (this.targetType == 'NUMBER') {
+            return (['LONG', 'INTEGER', 'FLOAT', 'DOUBLE', 'SHORT', 'BYTE', 'DECIMAL', 'NUMBER'].indexOf(targetField.type) != -1);
         }
 
-        // All other types just match the mapped field types with the field action types.
+        // All other types must match the mapped field types with the field action types.
         return ((sourceField.type == this.sourceType) && (targetField.type == this.targetType));
     }
 
