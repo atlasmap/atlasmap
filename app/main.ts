@@ -68,11 +68,11 @@ function createWindow() {
 
 try {
   
-  var jarFile = __dirname+'/assets/runtime-1.20.0.jar';
+  var jarFile = __dirname+'/assets/runtime-1.32.2.jar';
   console.log("jarFile: ", jarFile);
   if( __dirname.endsWith("/app.asar") ) {    
     var data = fs.readFileSync(jarFile);
-    jarFile = os.homedir()+"/.atlasmap-runtime-1.20.0.jar"
+    jarFile = os.homedir()+"/.atlasmap-runtime-1.32.2.jar"
     console.log("unpacking to jarFile: ", jarFile);
     fs.writeFileSync(jarFile, data);
   }
