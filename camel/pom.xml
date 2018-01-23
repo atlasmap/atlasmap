@@ -65,6 +65,16 @@
 
         <!-- for testing -->
         <dependency>
+            <groupId>io.atlasmap</groupId>
+            <artifactId>atlas-java-test-model</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.atlasmap</groupId>
+            <artifactId>atlas-xml-test-model</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>

@@ -1,0 +1,109 @@
+package org.apache.camel.component.atlasmap;
+
+import static org.junit.Assert.assertEquals;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.xml.bind.JAXBElement;
+
+import org.apache.camel.CamelContext;
+import org.apache.camel.EndpointInject;
+import org.apache.camel.Exchange;
+import org.apache.camel.Message;
+import org.apache.camel.ProducerTemplate;
+import org.apache.camel.component.mock.MockEndpoint;
+import org.apache.camel.impl.DefaultMessage;
+import org.apache.camel.test.spring.CamelSpringRunner;
+import org.apache.camel.test.spring.CamelTestContextBootstrapper;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.BootstrapWith;
+import org.springframework.test.context.ContextConfiguration;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import io.atlasmap.java.test.SourceContact;
+import io.atlasmap.java.test.TargetContact;
+import io.atlasmap.xml.test.v2.AtlasXmlTestHelper;
+import io.atlasmap.xml.test.v2.XmlContactAttribute;
+
+@RunWith(CamelSpringRunner.class)
+@BootstrapWith(CamelTestContextBootstrapper.class)
+@ContextConfiguration
+public class AtlasMapMultiDocsTest {
+
+    private static final String JSON_SOURCE =
+            "{" +
+                    "\"firstName\": \"JsonFirstName\"," +
+                    "\"lastName\": \"JsonLastName\"," +
+                    "\"phoneNumber\": \"JsonPhoneNumber\"," +
+                    "\"zipCode\": \"JsonZipCode\"" +
+                    "}";
+
+    private static final String XML_SOURCE =
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+                    "<ns:Contact xmlns:ns=\"http://atlasmap.io/xml/test/v2\"\n" +
+                    "    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n" +
+                    "    firstName=\"XmlFirstName\" lastName=\"XmlLastName\"\n" +
+                    "    phoneNumber=\"XmlPhoneNumber\" zipCode=\"XmlZipCode\" />\n";
+
+    @Autowired
+    protected CamelContext camelContext;
+
+    @EndpointInject(uri = "mock:result")
+    protected MockEndpoint result;
+
+    @Test
+    @DirtiesContext
+    public void test() throws Exception {
+        result.setExpectedCount(1);
+
+        Map<String, Message> sourceMap = new HashMap<>();
+        SourceContact javaSource = new SourceContact();
+        javaSource.setFirstName("JavaFirstName");
+        javaSource.setLastName("JavaLastName");
+        javaSource.setPhoneNumber("JavaPhoneNumber");
+        javaSource.setZipCode("JavaZipCode");
+        Message msg = new DefaultMessage(camelContext);
+        msg.setBody(javaSource);
+        sourceMap.put("DOCID:JAVA:CONTACT:S", msg);
+        msg = new DefaultMessage(camelContext);
+        msg.setBody(JSON_SOURCE);
+        sourceMap.put("DOCID:JSON:CONTACT:S", msg);
+        msg = new DefaultMessage(camelContext);
+        msg.setBody(XML_SOURCE);
+        sourceMap.put("DOCID:XML:CONTACT:S", msg);
+
+        ProducerTemplate producerTemplate = camelContext.createProducerTemplate();
+        producerTemplate.sendBodyAndProperty("direct:start", null, "CAPTURED_OUT_MESSAGES_MAP", sourceMap);
+
+        MockEndpoint.assertIsSatisfied(camelContext);
+        Exchange exchange = result.getExchanges().get(0);
+        Map<String, Object> targetMap = exchange.getProperty(AtlasConstants.ATLAS_TARGET_MAP, Map.class);
+
+        TargetContact javaTarget = (TargetContact) targetMap.get("DOCID:JAVA:CONTACT:T");
+        assertEquals("JavaFirstName", javaTarget.getFirstName());
+        assertEquals("XmlLastName", javaTarget.getLastName());
+        assertEquals("JsonPhoneNumber", javaTarget.getPhoneNumber());
+
+        String jsonTarget = (String) targetMap.get("DOCID:JSON:CONTACT:T");
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode jsonTargetNode = mapper.readTree(jsonTarget);
+        assertEquals("JsonFirstName", jsonTargetNode.get("firstName").asText());
+        assertEquals("JavaLastName", jsonTargetNode.get("lastName").asText());
+        assertEquals("XmlPhoneNumber", jsonTargetNode.get("phoneNumber").asText());
+
+        String xmlTarget = (String) targetMap.get("DOCID:XML:CONTACT:T");
+        JAXBElement<XmlContactAttribute> xmlTargetJaxb = (JAXBElement<XmlContactAttribute>)
+                AtlasXmlTestHelper.unmarshal((String) xmlTarget, XmlContactAttribute.class);
+        XmlContactAttribute xmlTargetObj = xmlTargetJaxb.getValue();
+        assertEquals("XmlFirstName", xmlTargetObj.getFirstName());
+        assertEquals("JsonLastName", xmlTargetObj.getLastName());
+        assertEquals("JavaPhoneNumber", xmlTargetObj.getPhoneNumber());
+    }
+
+}

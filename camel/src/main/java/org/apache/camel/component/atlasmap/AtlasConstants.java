@@ -23,8 +23,10 @@ public final class AtlasConstants {
 
     public static final String ATLAS_RESOURCE_URI = "CamelAtlasResourceUri";
     public static final String ATLAS_MAPPING = "CamelAtlasMapping";
+    public static final String ATLAS_SOURCE_MAP = "CamelAtlasSourceMap";
+    public static final String ATLAS_TARGET_MAP = "CamelAtlasTargetMap";
 
     private AtlasConstants() {
-        // Utility class
     }
+
 }

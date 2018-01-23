@@ -21,8 +21,9 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 import java.util.Properties;
 
 import org.apache.camel.Exchange;
@@ -64,6 +65,10 @@ public class AtlasEndpoint extends ResourceEndpoint {
     private String encoding;
     @UriParam
     private String propertiesFile;
+    @UriParam
+    private String sourceMapName;
+    @UriParam
+    private String targetMapName;
 
     public AtlasEndpoint(String uri, AtlasComponent component, String resourceUri) {
         super(uri, component, resourceUri);
@@ -135,6 +140,32 @@ public class AtlasEndpoint extends ResourceEndpoint {
         return propertiesFile;
     }
 
+    /**
+     * The Exchange property name for a source message map which hold
+     * <code>java.util.Map<String, Message></code> where the key is AtlasMap Document ID.
+     * AtlasMap consumes Message bodies as source documents.
+     */
+    public void setSourceMapName(String name) {
+        this.sourceMapName = name;
+    }
+
+    public String getSourceMapName() {
+        return this.sourceMapName;
+    }
+
+    /**
+     * The Exchange property name for a target document map which hold
+     * <code>java.util.Map<String, Object></code> where the key is AtlasMap Document ID.
+     * AtlasMap populates multiple target documents into this map.
+     */
+    public void setTargetMapName(String name) {
+        this.targetMapName = name;
+    }
+
+    public String getTargetMapName() {
+        return this.targetMapName;
+    }
+
     public AtlasEndpoint findOrCreateEndpoint(String uri, String newResourceUri) {
         String newUri = uri.replace(getResourceUri(), newResourceUri);
         log.debug("Getting endpoint with URI: {}", newUri);
@@ -156,15 +187,7 @@ public class AtlasEndpoint extends ResourceEndpoint {
         }
 
         AtlasSession atlasSession = getOrCreateAtlasContext(incomingMessage).createSession();
-        boolean convertToString = isStringConversionRequired(atlasSession.getMapping());
-        Object body = incomingMessage.getBody();
-        if (convertToString) {
-            // read the whole stream into a String
-            // the XML and JSON parsers expect that
-            body = incomingMessage.getBody(String.class);
-        }
-
-        populateSourcePayload(atlasSession, body);
+        populateSourceDocuments(exchange, atlasSession);
         getAtlasContext().process(atlasSession);
 
         List<Audit> errors = new ArrayList<>();
@@ -187,11 +210,7 @@ public class AtlasEndpoint extends ResourceEndpoint {
             throw new AtlasException(buf.toString());
         }
 
-        // now lets output the results to the exchange
-        Message out = exchange.getOut();
-        out.setBody(getTargetPayload(atlasSession));
-        out.setHeaders(incomingMessage.getHeaders());
-        out.setAttachments(incomingMessage.getAttachments());
+        populateTargetDocuments(atlasSession, exchange);
     }
 
     private AtlasContext getOrCreateAtlasContext(Message incomingMessage) throws Exception {
@@ -258,50 +277,95 @@ public class AtlasEndpoint extends ResourceEndpoint {
         return atlasContextFactory;
     }
 
-    private void populateSourcePayload(AtlasSession session, Object body) {
-        // TODO handle headers docId - https://github.com/atlasmap/atlasmap/issues/67
-        String docId = null;
-        if (session.getMapping().getDataSource() != null) {
-            Optional<DataSource> first = session.getMapping().getDataSource().stream()
-                    .filter(ds -> ds.getDataSourceType() == DataSourceType.SOURCE)
-                    .findFirst();
-            docId = first.isPresent() ? first.get().getId() : null;
+    private void populateSourceDocuments(Exchange exchange, AtlasSession session) {
+        if (session.getMapping().getDataSource() == null) {
+            return;
         }
-        if (docId != null && !docId.isEmpty()) {
-            session.setSourceDocument(docId, body);
-        } else {
-            session.setDefaultSourceDocument(body);
-        }
-    }
-
-    private Object getTargetPayload(AtlasSession session) {
-        // TODO handle headers docId - https://github.com/atlasmap/atlasmap/issues/67
-        String docId = null;
-        if (session.getMapping().getDataSource() != null) {
-            Optional<DataSource> first = session.getMapping().getDataSource().stream()
-                    .filter(ds -> ds.getDataSourceType() == DataSourceType.TARGET)
-                    .findFirst();
-            docId = first.isPresent() ? first.get().getId() : null;
-        }
-        if (docId != null && !docId.isEmpty()) {
-            return session.getTargetDocument(docId);
-        } else {
-            return session.getDefaultTargetDocument();
-        }
-    }
-
-    private boolean isStringConversionRequired(final AtlasMapping atlasMapping) {
-        if (atlasMapping == null || atlasMapping.getDataSource() == null) {
-            return false;
-        }
-
-        // TODO handle headers docId - https://github.com/atlasmap/atlasmap/issues/67
-        Optional<DataSource> first = atlasMapping.getDataSource().stream()
+        DataSource[] sourceDataSources = session.getMapping().getDataSource().stream()
                 .filter(ds -> ds.getDataSourceType() == DataSourceType.SOURCE)
-                .findFirst();
-        return first.isPresent() && first.get().getUri() != null
-                && !(first.get().getUri().startsWith("atlas:core")
-                        || first.get().getUri().startsWith("atlas:java"));
+                .toArray(DataSource[]::new);
+        if (sourceDataSources.length == 0) {
+            session.setDefaultSourceDocument(exchange.getIn().getBody());
+            return;
+        }
+
+        if (sourceDataSources.length == 1) {
+            String docId = sourceDataSources[0].getId();
+            Object payload = extractPayload(sourceDataSources[0], exchange.getIn());
+            if (docId == null || docId.isEmpty()) {
+                session.setDefaultSourceDocument(payload);
+            } else {
+                session.setSourceDocument(docId, payload);
+            }
+            return;
+        }
+
+        // TODO handle headers docId - https://github.com/atlasmap/atlasmap/issues/67
+        @SuppressWarnings("unchecked")
+        Map<String, Message> sourceMessages = exchange.getProperty(sourceMapName, Map.class);
+        if (sourceMessages == null) {
+            return;
+        }
+        for (DataSource ds : sourceDataSources) {
+            String docId = ds.getId();
+            Object payload = extractPayload(ds, sourceMessages.get(docId));
+            if (docId == null || docId.isEmpty()) {
+                session.setDefaultSourceDocument(payload);
+            } else {
+                session.setSourceDocument(docId, payload);
+            }
+        }
+    }
+
+    private Object extractPayload(final DataSource dataSource, Message message) {
+        if (dataSource == null || message == null) {
+            return null;
+        }
+        if (dataSource != null && dataSource.getUri() != null
+                && !(dataSource.getUri().startsWith("atlas:core")
+                        || dataSource.getUri().startsWith("atlas:java"))) {
+            return message.getBody(String.class);
+        }
+        return message.getBody();
+    }
+
+    private void populateTargetDocuments(AtlasSession session, Exchange exchange) {
+        Message outMessage = exchange.getOut();
+        outMessage.setHeaders(exchange.getIn().getHeaders());
+        outMessage.setAttachments(exchange.getIn().getAttachments());
+
+        if (session.getMapping().getDataSource() == null) {
+            return;
+        }
+        DataSource[] targetDataSources = session.getMapping().getDataSource().stream()
+                .filter(ds -> ds.getDataSourceType() == DataSourceType.TARGET)
+                .toArray(DataSource[]::new);
+        if (targetDataSources.length == 0) {
+            outMessage.setBody(session.getDefaultTargetDocument());
+            return;
+        }
+
+        if (targetDataSources.length == 1) {
+            String docId = targetDataSources[0].getId();
+            if (docId == null || docId.isEmpty()) {
+                outMessage.setBody(session.getDefaultTargetDocument());
+            } else {
+                outMessage.setBody(session.getTargetDocument(docId));
+            }
+            return;
+        }
+
+        // TODO handle headers docId - https://github.com/atlasmap/atlasmap/issues/67
+        Map<String, Object> targetDocuments = new HashMap<>();
+        for (DataSource ds : targetDataSources) {
+            String docId = ds.getId();
+            if (docId == null || docId.isEmpty()) {
+                exchange.getOut().setBody(session.getDefaultTargetDocument());
+            } else {
+                targetDocuments.put(docId, session.getTargetDocument(docId));
+            }
+        }
+        exchange.setProperty(targetMapName, targetDocuments);
     }
 
 }
