@@ -56,7 +56,14 @@ export class NamespaceModel {
     }
 }
 
-export enum DocumentTypes { JAVA, XML, JSON, CSV, CONSTANT, PROPERTY}
+export enum DocumentTypes {
+    JAVA = 'Java',
+    XML = 'XML',
+    JSON = 'JSON',
+    CSV = 'CSV',
+    CONSTANT = 'Constants',
+    PROPERTY = 'Property'
+}
 
 export class DocumentType {
     public type: DocumentTypes = DocumentTypes.JAVA;
@@ -169,8 +176,10 @@ export class DocumentDefinition {
     public getName(includeType: boolean): string {
         let name: string = this.name;
         if (ConfigModel.getConfig().showTypes && !this.initCfg.type.isPropertyOrConstant()) {
-            const type: string = this.initCfg.type.isJava() ? ' (Java)' : ' (XML)';
-            name += type;
+            const type: string = this.initCfg.type.type;
+            if (type) {
+                name += ' (' + type + ')';
+            }
         }
         return name;
     }
