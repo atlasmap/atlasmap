@@ -464,16 +464,6 @@ export class DocumentDefinition {
                     + ' (' + cachedField.classIdentifier + ') children:' + cachedField.children.length + '\n';
             }
         }
-
-        //remove children more than one layer deep in root fields
-        for (const field of fields) {
-            for (const childField of field.children) {
-                if (field.isCollection || childField.isCollection) {
-                    continue;
-                }
-                childField.children = [];
-            }
-        }
     }
 
     private discoverComplexFields(fields: Field[]): void {
