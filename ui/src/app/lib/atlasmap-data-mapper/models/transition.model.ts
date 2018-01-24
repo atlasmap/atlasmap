@@ -121,7 +121,7 @@ export class FieldActionConfig {
     public populateFieldAction(action: FieldAction): void {
         action.name = this.name;
         action.config = this;
-        
+
         // Use the parsed values if present, otherwise set to '0'.
         if (action.argumentValues == null || action.argumentValues.length == 0) {
            action.argumentValues = [];
