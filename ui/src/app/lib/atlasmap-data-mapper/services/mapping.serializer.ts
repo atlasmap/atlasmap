@@ -21,7 +21,7 @@ import { Field } from '../models/field.model';
 import { MappingDefinition } from '../models/mapping.definition.model';
 import { DocumentDefinition, NamespaceModel } from '../models/document.definition.model';
 import { LookupTable, LookupTableEntry } from '../models/lookup.table.model';
-import { ConfigModel } from '../models/config.model';
+import { DocumentType, ConfigModel } from '../models/config.model';
 
 export class MappingSerializer {
 
@@ -105,7 +105,7 @@ export class MappingSerializer {
             const docType: string = doc.isSource ? 'SOURCE' : 'TARGET';
             const serializedDoc: any = {
                 'jsonType' : 'io.atlasmap.v2.DataSource',
-                'id': doc.initCfg.shortIdentifier,
+                'id': doc.id,
                 'uri': doc.uri,
                 'dataSourceType': docType,
             };
@@ -115,7 +115,7 @@ export class MappingSerializer {
             if (doc.locale != null) {
                 serializedDoc['locale'] = doc.locale;
             }
-            if (doc.initCfg.type.isXML()) {
+            if (doc.type == DocumentType.XML) {
                 serializedDoc['jsonType'] = 'io.atlasmap.xml.v2.XmlDataSource';
                 const namespaces: any[] = [];
                 for (const ns of doc.namespaces) {
@@ -130,7 +130,7 @@ export class MappingSerializer {
                     serializedDoc['template'] = mappingDefinition.templateText;
                 }
                 serializedDoc['xmlNamespaces'] = { 'xmlNamespace': namespaces };
-            } else if (doc.initCfg.type.isJSON()) {
+            } else if (doc.type == DocumentType.JSON) {
                 if (!doc.isSource) {
                     serializedDoc['template'] = mappingDefinition.templateText;
                 }
@@ -196,9 +196,9 @@ export class MappingSerializer {
                 'path': field.path,
                 'fieldType': field.type,
                 'value': field.value,
-                'docId': field.docDef.initCfg.shortIdentifier,
+                'docId': field.docDef.id,
             };
-            if (field.docDef.initCfg.type.isXML() || field.docDef.initCfg.type.isJSON()) {
+            if (field.docDef.type == DocumentType.XML || field.docDef.type == DocumentType.JSON) {
                 serializedField['userCreated'] = field.userCreated;
             }
             if (field.isProperty()) {
@@ -277,8 +277,8 @@ export class MappingSerializer {
         for (const docRef of json.AtlasMapping.dataSource) {
             const doc: DocumentDefinition = new DocumentDefinition();
             doc.isSource = (docRef.dataSourceType == 'SOURCE');
-            doc.initCfg.documentIdentifier = docRef.uri;
-            doc.initCfg.shortIdentifier = docRef.id;
+            doc.uri = docRef.uri;
+            doc.id = docRef.id;
             if (docRef.xmlNamespaces && docRef.xmlNamespaces.xmlNamespace) {
                 for (const svcNS of docRef.xmlNamespaces.xmlNamespace) {
                     const ns: NamespaceModel = new NamespaceModel();

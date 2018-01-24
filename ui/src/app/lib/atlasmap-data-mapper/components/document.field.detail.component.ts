@@ -17,7 +17,7 @@
 import { Component, Input, ElementRef, ViewChild, ViewChildren, QueryList } from '@angular/core';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 
-import { ConfigModel } from '../models/config.model';
+import { DocumentType, ConfigModel } from '../models/config.model';
 import { Field } from '../models/field.model';
 
 import { LineMachineComponent } from './line.machine.component';
@@ -134,7 +134,7 @@ export class DocumentFieldDetailComponent {
         if (this.field.isCollection) {
             return 'fa fa-list-ul';
         }
-        if (this.field.docDef.initCfg.type.isXML()) {
+        if (this.field.docDef.type == DocumentType.XML) {
             return this.field.isAttribute ? 'fa fa-at' : 'fa fa-code';
         }
         return 'fa fa-file-o';

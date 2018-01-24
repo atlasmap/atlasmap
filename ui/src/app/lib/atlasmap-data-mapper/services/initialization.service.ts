@@ -20,7 +20,7 @@ import 'rxjs/add/observable/forkJoin';
 import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Observable';
 
-import { ConfigModel } from '../models/config.model';
+import { DocumentType, InspectionType, DocumentInitializationModel, ConfigModel } from '../models/config.model';
 import { DocumentDefinition } from '../models/document.definition.model';
 import { MappingDefinition } from '../models/mapping.definition.model';
 
@@ -82,68 +82,76 @@ export class InitializationService {
         }
 
         if (this.cfg.initCfg.addMockJavaSources || this.cfg.initCfg.addMockJavaSingleSource) {
-            this.cfg.addJavaDocument('twitter4j.Status', true);
+            this.addJavaDocument('twitter4j.Status', true);
             if (this.cfg.initCfg.addMockJavaSources) {
-                this.cfg.addJavaDocument('io.atlasmap.java.test.TargetTestClass', true);
-                this.cfg.addJavaDocument('io.atlasmap.java.test.SourceContact', true);
-                this.cfg.addJavaDocument('io.atlasmap.java.test.SourceAddress', true);
-                this.cfg.addJavaDocument('io.atlasmap.java.test.TestListOrders', true);
-                this.cfg.addJavaDocument('io.atlasmap.java.test.TargetOrderArray', true);
-                this.cfg.addJavaDocument('io.atlasmap.java.test.SourceFlatPrimitiveClass', true);
-                this.cfg.addJavaDocument('io.atlasmap.java.test.SourceOrder', true);
+                this.addJavaDocument('io.atlasmap.java.test.TargetTestClass', true);
+                this.addJavaDocument('io.atlasmap.java.test.SourceContact', true);
+                this.addJavaDocument('io.atlasmap.java.test.SourceAddress', true);
+                this.addJavaDocument('io.atlasmap.java.test.TestListOrders', true);
+                this.addJavaDocument('io.atlasmap.java.test.TargetOrderArray', true);
+                this.addJavaDocument('io.atlasmap.java.test.SourceFlatPrimitiveClass', true);
+                this.addJavaDocument('io.atlasmap.java.test.SourceOrder', true);
             }
         }
 
         if (this.cfg.initCfg.addMockJavaCachedSource) {
-            const docDef: DocumentDefinition = this.cfg.addJavaDocument('io.atlasmap.java.test.Name', true);
-            docDef.initCfg.inspectionResultContents = DocumentManagementService.generateMockJavaDoc();
+            const docDef: DocumentDefinition = this.addJavaDocument('io.atlasmap.java.test.Name', true);
+            docDef.inspectionResult = DocumentManagementService.generateMockJavaDoc();
         }
 
         if (this.cfg.initCfg.addMockXMLInstanceSources) {
-            this.cfg.addXMLInstanceDocument('XMLInstanceSource', DocumentManagementService.generateMockInstanceXMLDoc(), true);
+            this.addNonJavaDocument('XMLInstanceSource', DocumentType.XML, InspectionType.INSTANCE,
+                    DocumentManagementService.generateMockInstanceXMLDoc(), true);
         }
 
         if (this.cfg.initCfg.addMockXMLSchemaSources) {
-            this.cfg.addXMLSchemaDocument('XMLSchemaSource', DocumentManagementService.generateMockSchemaXMLDoc(), true);
+            this.addNonJavaDocument('XMLSchemaSource', DocumentType.XML, InspectionType.SCHEMA,
+                    DocumentManagementService.generateMockSchemaXMLDoc(), true);
         }
 
         if (this.cfg.initCfg.addMockJSONSources || this.cfg.initCfg.addMockJSONInstanceSources) {
-            this.cfg.addJSONInstanceDocument('JSONInstanceSource', DocumentManagementService.generateMockJSONInstanceDoc(), true);
+            this.addNonJavaDocument('JSONInstanceSource', DocumentType.JSON, InspectionType.INSTANCE,
+                    DocumentManagementService.generateMockJSONInstanceDoc(), true);
         }
 
         if (this.cfg.initCfg.addMockJSONSchemaSources) {
-            this.cfg.addJSONSchemaDocument('JSONSchemaSource', DocumentManagementService.generateMockJSONSchemaDoc(), true);
+            this.addNonJavaDocument('JSONSchemaSource', DocumentType.JSON, InspectionType.SCHEMA,
+                    DocumentManagementService.generateMockJSONSchemaDoc(), true);
         }
 
         if (this.cfg.initCfg.addMockJavaTarget) {
-            this.cfg.addJavaDocument('io.atlasmap.java.test.TargetTestClass', false);
-            this.cfg.addJavaDocument('io.atlasmap.java.test.SourceContact', false);
-            this.cfg.addJavaDocument('io.atlasmap.java.test.SourceAddress', false);
-            this.cfg.addJavaDocument('io.atlasmap.java.test.TestListOrders', false);
-            this.cfg.addJavaDocument('io.atlasmap.java.test.TargetOrderArray', false);
-            this.cfg.addJavaDocument('io.atlasmap.java.test.SourceFlatPrimitiveClass', false);
-            this.cfg.addJavaDocument('io.atlasmap.java.test.SourceOrder', false);
+            this.addJavaDocument('io.atlasmap.java.test.TargetTestClass', false);
+            this.addJavaDocument('io.atlasmap.java.test.SourceContact', false);
+            this.addJavaDocument('io.atlasmap.java.test.SourceAddress', false);
+            this.addJavaDocument('io.atlasmap.java.test.TestListOrders', false);
+            this.addJavaDocument('io.atlasmap.java.test.TargetOrderArray', false);
+            this.addJavaDocument('io.atlasmap.java.test.SourceFlatPrimitiveClass', false);
+            this.addJavaDocument('io.atlasmap.java.test.SourceOrder', false);
       }
 
         if (this.cfg.initCfg.addMockJavaCachedTarget) {
-            const docDef: DocumentDefinition = this.cfg.addJavaDocument('io.atlasmap.java.test.Name', false);
-            docDef.initCfg.inspectionResultContents = DocumentManagementService.generateMockJavaDoc();
+            const docDef: DocumentDefinition = this.addJavaDocument('io.atlasmap.java.test.Name', false);
+            docDef.inspectionResult = DocumentManagementService.generateMockJavaDoc();
         }
 
         if (this.cfg.initCfg.addMockXMLInstanceTarget) {
-            this.cfg.addXMLInstanceDocument('XMLInstanceTarget', DocumentManagementService.generateMockInstanceXMLDoc(), false);
+            this.addNonJavaDocument('XMLInstanceTarget', DocumentType.XML, InspectionType.INSTANCE,
+                    DocumentManagementService.generateMockInstanceXMLDoc(), false);
         }
 
         if (this.cfg.initCfg.addMockXMLSchemaTarget) {
-            this.cfg.addXMLSchemaDocument('XMLSchemaTarget', DocumentManagementService.generateMockSchemaXMLDoc(), false);
+            this.addNonJavaDocument('XMLSchemaTarget', DocumentType.XML, InspectionType.SCHEMA,
+                    DocumentManagementService.generateMockSchemaXMLDoc(), false);
         }
 
         if (this.cfg.initCfg.addMockJSONTarget || this.cfg.initCfg.addMockJSONInstanceTarget) {
-            this.cfg.addJSONInstanceDocument('JSONInstanceTarget', DocumentManagementService.generateMockJSONInstanceDoc(), false);
+            this.addNonJavaDocument('JSONInstanceTarget', DocumentType.JSON, InspectionType.INSTANCE,
+                    DocumentManagementService.generateMockJSONInstanceDoc(), false);
         }
 
         if (this.cfg.initCfg.addMockJSONSchemaTarget) {
-            this.cfg.addJSONSchemaDocument('JSONSchemaTarget', DocumentManagementService.generateMockJSONSchemaDoc(), false);
+            this.addNonJavaDocument('JSONSchemaTarget', DocumentType.JSON, InspectionType.SCHEMA,
+                    DocumentManagementService.generateMockJSONSchemaDoc(), false);
         }
 
         //load field actions
@@ -182,29 +190,51 @@ export class InitializationService {
         }
     }
 
+    private addJavaDocument(className: string, isSource: boolean): DocumentDefinition {
+        const model: DocumentInitializationModel = new DocumentInitializationModel();
+        model.id = className;
+        model.type = DocumentType.JAVA;
+        model.inspectionType = InspectionType.JAVA_CLASS;
+        model.inspectionSource = className;
+        model.isSource = isSource;
+        return this.cfg.addDocument(model);
+    }
+
+    private addNonJavaDocument(
+            name: string, documentType: DocumentType, inspectionType: InspectionType,
+            inspectionSource: string, isSource: boolean): DocumentDefinition {
+        const model: DocumentInitializationModel = new DocumentInitializationModel();
+        model.id = name;
+        model.type = documentType;
+        model.inspectionType = inspectionType;
+        model.inspectionSource = inspectionSource;
+        model.isSource = isSource;
+        return this.cfg.addDocument(model);
+    }
+
     private fetchDocuments(): void {
         this.updateLoadingStatus('Loading source/target documents.');
         for (const docDef of this.cfg.getAllDocs()) {
             if (docDef == this.cfg.propertyDoc || docDef == this.cfg.constantDoc) {
-                docDef.initCfg.initialized = true;
+                docDef.initialized = true;
                 continue;
             }
 
-            const docName: string = docDef.initCfg.shortIdentifier;
+            const docName: string = docDef.shortName;
 
-            if (docDef.initCfg.type.isJava() && this.cfg.initCfg.baseJavaInspectionServiceUrl == null) {
+            if (docDef.type == DocumentType.JAVA && this.cfg.initCfg.baseJavaInspectionServiceUrl == null) {
                 this.cfg.errorService.warn('Java inspection service is not configured. Document will not be loaded: ' + docName, docDef);
-                docDef.initCfg.initialized = true;
+                docDef.initialized = true;
                 this.updateStatus();
                 continue;
-            } else if (docDef.initCfg.type.isXML() && this.cfg.initCfg.baseXMLInspectionServiceUrl == null) {
+            } else if (docDef.type == DocumentType.XML && this.cfg.initCfg.baseXMLInspectionServiceUrl == null) {
                 this.cfg.errorService.warn('XML inspection service is not configured. Document will not be loaded: ' + docName, docDef);
-                docDef.initCfg.initialized = true;
+                docDef.initialized = true;
                 this.updateStatus();
                 continue;
-            } else if (docDef.initCfg.type.isJSON() && this.cfg.initCfg.baseJSONInspectionServiceUrl == null) {
+            } else if (docDef.type == DocumentType.JSON && this.cfg.initCfg.baseJSONInspectionServiceUrl == null) {
                 this.cfg.errorService.warn('JSON inspection service is not configured. Document will not be loaded: ' + docName, docDef);
-                docDef.initCfg.initialized = true;
+                docDef.initialized = true;
                 this.updateStatus();
                 continue;
             }
@@ -214,7 +244,7 @@ export class InitializationService {
                     this.updateStatus();
                 },
                 (error: any) => { this.handleError("Could not load document '"
-                    + docDef.initCfg.documentIdentifier + "'.", error); },
+                    + docDef.id + "'.", error); },
             );
         }
     }
@@ -260,7 +290,7 @@ export class InitializationService {
         const documentCount: number = this.cfg.getAllDocs().length;
         let finishedDocCount = 0;
         for (const docDef of this.cfg.getAllDocs()) {
-            if (docDef.initCfg.initialized || docDef.initCfg.errorOccurred) {
+            if (docDef.initialized || docDef.errorOccurred) {
                 finishedDocCount++;
             }
         }

@@ -18,7 +18,7 @@ import { Component } from '@angular/core';
 
 import { DocumentDefinition, NamespaceModel } from '../models/document.definition.model';
 import { Field } from '../models/field.model';
-import { ConfigModel } from '../models/config.model';
+import { DocumentType, ConfigModel } from '../models/config.model';
 import { Observable } from 'rxjs/Observable';
 import { ModalWindowValidator } from './modal.window.component';
 import { DataMapperUtil } from '../common/data.mapper.util';
@@ -117,7 +117,7 @@ export class FieldEditComponent implements ModalWindowValidator {
         this.valueType = (this.field.type == null) ? 'STRING' : this.field.type;
         this.parentField = (this.field.parentField == null) ? DocumentDefinition.getNoneField() : this.field.parentField;
 
-        if (this.docDef.initCfg.type.isXML()) {
+        if (this.docDef.type == DocumentType.XML) {
             this.fieldType = this.field.isAttribute ? 'attribute' : 'element';
             this.parentField = (this.field.parentField == null) ? docDef.fields[0] : this.field.parentField;
             const unqualifiedNS: NamespaceModel = NamespaceModel.getUnqualifiedNamespace();
@@ -179,7 +179,7 @@ export class FieldEditComponent implements ModalWindowValidator {
     public executeSearch(filter: string): any[] {
         const formattedFields: any[] = [];
 
-        if (this.docDef.initCfg.type.isJSON()) {
+        if (this.docDef.type == DocumentType.JSON) {
             const noneField: Field = DocumentDefinition.getNoneField();
             formattedFields.push({ 'field': noneField, 'displayName': noneField.getFieldLabel(true) });
         }
@@ -207,7 +207,7 @@ export class FieldEditComponent implements ModalWindowValidator {
         this.field.type = this.valueType;
         this.field.userCreated = true;
         this.field.serviceObject.jsonType = 'io.atlasmap.json.v2.JsonField';
-        if (this.docDef.initCfg.type.isXML()) {
+        if (this.docDef.type == DocumentType.XML) {
             this.field.isAttribute = (this.fieldType == 'attribute');
             this.field.namespaceAlias = this.namespaceAlias;
             const unqualifiedNS: NamespaceModel = NamespaceModel.getUnqualifiedNamespace();

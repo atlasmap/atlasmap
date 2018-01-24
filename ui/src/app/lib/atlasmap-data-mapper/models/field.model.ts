@@ -15,7 +15,7 @@
 */
 
 import { DocumentDefinition } from './document.definition.model';
-import { ConfigModel } from '../models/config.model';
+import { DocumentType, ConfigModel } from '../models/config.model';
 
 export class EnumValue {
     name: string;
@@ -152,15 +152,15 @@ export class Field {
     }
 
     public isPropertyOrConstant(): boolean {
-        return (this.docDef == null) ? false : this.docDef.initCfg.type.isPropertyOrConstant();
+        return (this.docDef == null) ? false : this.docDef.isPropertyOrConstant();
     }
 
     public isProperty(): boolean {
-        return (this.docDef == null) ? false : this.docDef.initCfg.type.isProperty();
+        return (this.docDef == null) ? false : this.docDef.type == DocumentType.PROPERTY;
     }
 
     public isConstant(): boolean {
-        return (this.docDef == null) ? false : this.docDef.initCfg.type.isConstant();
+        return (this.docDef == null) ? false : this.docDef.type == DocumentType.CONSTANT;
     }
 
     public static fieldHasUnmappedChild(field: Field): boolean {
