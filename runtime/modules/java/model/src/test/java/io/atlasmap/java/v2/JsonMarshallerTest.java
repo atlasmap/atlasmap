@@ -65,22 +65,22 @@ public class JsonMarshallerTest extends BaseMarshallerTest {
         AtlasMapping uMapping = mapper.readValue(new File("target" + File.separator + "junit" + File.separator
                 + testName.getMethodName() + File.separator + "atlasmapping.json"), AtlasMapping.class);
         assertNotNull(uMapping);
-        // validateAtlasMapping(uMapping);
+        validateAtlasMapping(uMapping);
     }
 
-    // @Test
-    // public void testJsonSeparateJavaField() throws Exception {
-    // AtlasMapping atlasMapping = generateSeparateAtlasMapping();
-    // //Object to JSON in file
-    // mapper.writerWithDefaultPrettyPrinter().writeValue(new File("target" +
-    // File.separator + "junit" + File.separator + testName.getMethodName() +
-    // File.separator + "atlasmapping-separate.json"), atlasMapping);
-    // AtlasMapping uMapping = mapper.readValue(new File("target" + File.separator +
-    // "junit" + File.separator + testName.getMethodName() + File.separator +
-    // "atlasmapping-separate.json"), AtlasMapping.class);
-    // assertNotNull(uMapping);
-    // //validateSeparateAtlasMapping(uMapping);
-    // }
+     @Test
+     public void testJsonSeparateJavaField() throws Exception {
+        AtlasMapping atlasMapping = generateSeparateAtlasMapping();
+        // Object to JSON in file
+        mapper.writerWithDefaultPrettyPrinter().writeValue(new File("target" +
+                File.separator + "junit" + File.separator + testName.getMethodName() +
+                File.separator + "atlasmapping-separate.json"), atlasMapping);
+        AtlasMapping uMapping = mapper.readValue(new File("target" + File.separator +
+                "junit" + File.separator + testName.getMethodName() + File.separator +
+                "atlasmapping-separate.json"), AtlasMapping.class);
+        assertNotNull(uMapping);
+        validateSeparateAtlasMapping(uMapping);
+     }
 
     @Test
     public void testJsonMavenClasspathRequest() throws Exception {
@@ -118,6 +118,30 @@ public class JsonMarshallerTest extends BaseMarshallerTest {
         runJSONSerializationTest(generateCollectionMapping(), "atlasmapping-collection-request.json");
         runJSONSerializationTest(generateCombineMapping(), "atlasmapping-combine-request.json");
         runJSONSerializationTest(generateActionMapping(), "atlasmapping-field-action-request.json");
+
+        AtlasMapping action = mapper.readValue(new File("target" + File.separator + "junit" + File.separator + testName.getMethodName() + File.separator + "atlasmapping-field-action-request.json"), AtlasMapping.class);
+        assertNotNull(action);
+        validateAtlasMapping(action);
+
+        AtlasMapping collection = mapper.readValue(new File("target" + File.separator + "junit" + File.separator + testName.getMethodName() + File.separator + "atlasmapping-collection-request.json"), AtlasMapping.class);
+        assertNotNull(collection);
+        validateCollectionAtlasMapping(collection);
+
+        AtlasMapping multisource = mapper.readValue(new File("target" + File.separator + "junit" + File.separator + testName.getMethodName() + File.separator + "atlasmapping-multisource-request.json"), AtlasMapping.class);
+        assertNotNull(multisource);
+        validateMultisourceAtlasMapping(multisource);
+
+        AtlasMapping propertyMapping = mapper.readValue(new File("target" + File.separator + "junit" + File.separator + testName.getMethodName() + File.separator + "atlasmapping-property-request.json"), AtlasMapping.class);
+        assertNotNull(propertyMapping);
+        validatePropertyAtlasMapping(propertyMapping);
+
+        AtlasMapping constantMapping = mapper.readValue(new File("target" + File.separator + "junit" + File.separator + testName.getMethodName() + File.separator + "atlasmapping-constant-request.json"), AtlasMapping.class);
+        assertNotNull(constantMapping);
+        validateConstantAtlasMapping(constantMapping);
+
+        AtlasMapping combineAtlasMapping = mapper.readValue(new File("target" + File.separator + "junit" + File.separator + testName.getMethodName() + File.separator + "atlasmapping-combine-request.json"), AtlasMapping.class);
+        assertNotNull(combineAtlasMapping);
+        validateCombineAtlasMapping(combineAtlasMapping);
     }
 
     private void runJSONSerializationTest(Object object, String filename) throws Exception {
