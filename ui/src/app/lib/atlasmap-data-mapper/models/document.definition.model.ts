@@ -58,7 +58,7 @@ export class NamespaceModel {
 
 export class DocumentDefinition {
     public id: string;
-    public type: DocumentType;
+    public _type: DocumentType;
     public shortName: string;
     public fullName: string;
     public uri: string;
@@ -66,6 +66,7 @@ export class DocumentDefinition {
     public inspectionSource: string;
     public inspectionResult: string;
     public isSource: boolean;
+    public isPropertyOrConstant: boolean;
 
     public classPath: string;
     public initialized = false;
@@ -85,6 +86,15 @@ export class DocumentDefinition {
     public locale: string = null;
 
     private static noneField: Field = null;
+
+    set type(type: DocumentType) {
+        this._type = type;
+        this.isPropertyOrConstant = type == DocumentType.CONSTANT || type == DocumentType.PROPERTY;
+    }
+
+    get type(): DocumentType {
+        return this._type;
+    }
 
     public getComplexField(classIdentifier: string): Field {
         return this.complexFieldsByClassIdentifier[classIdentifier];
@@ -129,22 +139,14 @@ export class DocumentDefinition {
     }
 
     public getName(includeType: boolean): string {
-        let name: string = this.shortName;
-        if (ConfigModel.getConfig().showTypes && !this.isPropertyOrConstant()) {
-            const type: string = this.type;
+        let name = this.shortName;
+        if (ConfigModel.getConfig().showTypes && !this.isPropertyOrConstant) {
+            const type = this.type;
             if (type) {
                 name += ' (' + type + ')';
             }
         }
         return name;
-    }
-
-    public isPropertyOrConstant(): boolean {
-        const type: DocumentType = this.type;
-        if (!type) {
-            return false;
-        }
-        return type == DocumentType.CONSTANT || type == DocumentType.PROPERTY;
     }
 
     public getNamespaceForAlias(alias: string): NamespaceModel {
@@ -247,7 +249,7 @@ export class DocumentDefinition {
         Field.alphabetizeFields(this.fields);
         if (field.parentField == null
             || field.parentField == DocumentDefinition.getNoneField()
-            || this.isPropertyOrConstant()) {
+            || this.isPropertyOrConstant) {
             this.populateFieldParentPaths(field, null, 0);
         } else {
             const pathSeparator: string = this.pathSeparator;
@@ -265,7 +267,7 @@ export class DocumentDefinition {
     public addField(field: Field): void {
         if (field.parentField == null
             || field.parentField == DocumentDefinition.getNoneField()
-            || this.isPropertyOrConstant()) {
+            || this.isPropertyOrConstant) {
             this.fields.push(field);
             Field.alphabetizeFields(this.fields);
             this.populateFieldParentPaths(field, null, 0);

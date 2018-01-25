@@ -152,7 +152,7 @@ export class Field {
     }
 
     public isPropertyOrConstant(): boolean {
-        return (this.docDef == null) ? false : this.docDef.isPropertyOrConstant();
+        return (this.docDef == null) ? false : this.docDef.isPropertyOrConstant;
     }
 
     public isProperty(): boolean {
