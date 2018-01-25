@@ -261,7 +261,7 @@ export class DocumentDefinitionComponent {
                 field.visibleInCurrentDocumentSearch = defaultVisibility;
             }
             if (!searchIsEmpty) {
-                for (const field of docDef.getTerminalFields()) {
+                for (const field of docDef.getAllFields()) {
                     field.visibleInCurrentDocumentSearch = field.name.toLowerCase().includes(searchFilter.toLowerCase());
                     this.searchResultsExist = this.searchResultsExist || field.visibleInCurrentDocumentSearch;
                     if (field.visibleInCurrentDocumentSearch) {
