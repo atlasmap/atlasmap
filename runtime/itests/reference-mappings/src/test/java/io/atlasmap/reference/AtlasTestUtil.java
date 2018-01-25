@@ -38,7 +38,7 @@ public class AtlasTestUtil {
         newObject.setDoubleField(5d);
         newObject.setFloatField(6f);
         newObject.setBooleanField(true);
-        newObject.setCharField('8');
+        newObject.setCharField('1');
         newObject.setByteField((byte) 57);
 
         return newObject;
@@ -217,7 +217,7 @@ public class AtlasTestUtil {
         assertEquals(new Short((short) 5), new Short(targetObject.getShortField()));
         assertEquals(new Long(6L), new Long(targetObject.getLongField()));
         assertEquals(new Double(1.0d), new Double(targetObject.getDoubleField()));
-        assertEquals(new Float(56f), new Float(targetObject.getFloatField()));
+        assertEquals(new Float(49f), new Float(targetObject.getFloatField()));
         assertEquals(true, targetObject.isBooleanField());
         assertEquals(new Character('\u0002'), new Character(targetObject.getCharField()));
         assertEquals(new Byte((byte) 3), new Byte(targetObject.getByteField()));
@@ -230,7 +230,7 @@ public class AtlasTestUtil {
         assertEquals(new Integer(5), new Integer(targetObject.getIntField()));
         assertEquals(new Short((short) 6), new Short(targetObject.getShortField()));
         assertEquals(new Long(1L), new Long(targetObject.getLongField()));
-        assertEquals(new Double(56d), new Double(targetObject.getDoubleField()));
+        assertEquals(new Double(49d), new Double(targetObject.getDoubleField()));
         assertEquals(new Float(57.0f), new Float(targetObject.getFloatField()));
         assertEquals(true, targetObject.isBooleanField());
         assertEquals(new Character('\u0003'), new Character(targetObject.getCharField()));
@@ -243,7 +243,7 @@ public class AtlasTestUtil {
         assertNotNull(targetObject);
         assertEquals(new Integer(6), new Integer(targetObject.getIntField()));
         assertEquals(new Short((short) 1), new Short(targetObject.getShortField()));
-        assertEquals(new Long(56L), new Long(targetObject.getLongField()));
+        assertEquals(new Long(49L), new Long(targetObject.getLongField()));
         assertEquals(new Double(57.0d), new Double(targetObject.getDoubleField()));
         assertEquals(new Float(2.0f), new Float(targetObject.getFloatField()));
         assertEquals(true, targetObject.isBooleanField());
@@ -256,7 +256,7 @@ public class AtlasTestUtil {
     public static void validateFlatPrimitiveClassPrimitiveFieldAutoConversion5(BaseFlatPrimitiveClass targetObject) {
         assertNotNull(targetObject);
         assertEquals(new Integer(1), new Integer(targetObject.getIntField()));
-        assertEquals(new Short((short) 56), new Short(targetObject.getShortField()));
+        assertEquals(new Short((short) 49), new Short(targetObject.getShortField()));
         assertEquals(new Long(57L), new Long(targetObject.getLongField()));
         assertEquals(new Double(2.0d), new Double(targetObject.getDoubleField()));
         assertEquals(new Float(3.0f), new Float(targetObject.getFloatField()));
@@ -269,7 +269,7 @@ public class AtlasTestUtil {
 
     public static void validateFlatPrimitiveClassPrimitiveFieldAutoConversion6(BaseFlatPrimitiveClass targetObject) {
         assertNotNull(targetObject);
-        assertEquals(new Integer(56), new Integer(targetObject.getIntField()));
+        assertEquals(new Integer(49), new Integer(targetObject.getIntField()));
         assertEquals(new Short((short) 57), new Short(targetObject.getShortField()));
         assertEquals(new Long(2L), new Long(targetObject.getLongField()));
         assertEquals(new Double(3.0d), new Double(targetObject.getDoubleField()));
@@ -290,7 +290,7 @@ public class AtlasTestUtil {
         assertEquals(new Float(5.0f), new Float(targetObject.getFloatField()));
         assertEquals(true, targetObject.isBooleanField());
         assertEquals(new Character('\u0001'), new Character(targetObject.getCharField()));
-        assertEquals(new Byte((byte) 56), new Byte(targetObject.getByteField()));
+        assertEquals(new Byte((byte) 49), new Byte(targetObject.getByteField()));
 
         unusedPrimativeMappingAsserts(targetObject);
     }
@@ -463,7 +463,7 @@ public class AtlasTestUtil {
         assertEquals(new Short((short) 5), new Short(targetObject.getShortField().shortValue()));
         assertEquals(new Long(6L), new Long(targetObject.getLongField().longValue()));
         assertEquals(new Double(1.0d), new Double(targetObject.getDoubleField()));
-        assertEquals(new Float(56f), new Float(targetObject.getFloatField()));
+        assertEquals(new Float(49f), new Float(targetObject.getFloatField()));
         assertEquals(true, targetObject.getBooleanField());
 
         unusedJsonPrimativeMappingAsserts(targetObject);
@@ -475,7 +475,7 @@ public class AtlasTestUtil {
         assertEquals(new Integer(5), new Integer(targetObject.getIntField()));
         assertEquals(new Short((short) 6), new Short(targetObject.getShortField().shortValue()));
         assertEquals(new Long(1L), new Long(targetObject.getLongField().longValue()));
-        assertEquals(new Double(56.0d), new Double(targetObject.getDoubleField()));
+        assertEquals(new Double(49.0d), new Double(targetObject.getDoubleField()));
         assertEquals(new Float(57.0f), new Float(targetObject.getFloatField()));
         assertEquals(true, targetObject.getBooleanField());
         assertEquals(new Character('\u0003'), new Character(targetObject.getCharField().charAt(0)));
@@ -490,7 +490,7 @@ public class AtlasTestUtil {
         assertNotNull(targetObject);
         assertEquals(new Integer(6), new Integer(targetObject.getIntField()));
         assertEquals(new Short((short) 1), new Short(targetObject.getShortField().shortValue()));
-        assertEquals(new Long(56L), new Long(targetObject.getLongField().longValue()));
+        assertEquals(new Long(49L), new Long(targetObject.getLongField().longValue()));
         assertEquals(new Double(57.0d), new Double(targetObject.getDoubleField()));
         assertEquals(new Float(2.0f), new Float(targetObject.getFloatField()));
         assertEquals(true, targetObject.getBooleanField());
@@ -504,7 +504,7 @@ public class AtlasTestUtil {
             io.atlasmap.json.test.BaseFlatPrimitive targetObject) {
         assertNotNull(targetObject);
         assertEquals(new Integer(1), new Integer(targetObject.getIntField()));
-        assertEquals(new Short((short) 56), new Short(targetObject.getShortField().shortValue()));
+        assertEquals(new Short((short) 49), new Short(targetObject.getShortField().shortValue()));
         assertEquals(new Long(57L), new Long(targetObject.getLongField().longValue()));
         assertEquals(new Double(2.0d), new Double(targetObject.getDoubleField()));
         assertEquals(new Float(3.0f), new Float(targetObject.getFloatField()));
@@ -518,7 +518,7 @@ public class AtlasTestUtil {
     public static void validateJsonFlatPrimitivePrimitiveFieldAutoConversion6(
             io.atlasmap.json.test.BaseFlatPrimitive targetObject) {
         assertNotNull(targetObject);
-        assertEquals(new Integer(56), new Integer(targetObject.getIntField()));
+        assertEquals(new Integer(49), new Integer(targetObject.getIntField()));
         assertEquals(new Short((short) 57), new Short(targetObject.getShortField().shortValue()));
         assertEquals(new Long(2L), new Long(targetObject.getLongField().longValue()));
         assertEquals(new Double(3.0d), new Double(targetObject.getDoubleField()));
@@ -540,7 +540,7 @@ public class AtlasTestUtil {
         assertEquals(new Float(5.0f), new Float(targetObject.getFloatField()));
         assertEquals(true, targetObject.getBooleanField());
         assertEquals(new Character('\u0001'), new Character(targetObject.getCharField().charAt(0)));
-        assertEquals(new Byte((byte) 56), new Byte(targetObject.getByteField().toString()));
+        assertEquals(new Byte((byte) 49), new Byte(targetObject.getByteField().toString()));
 
         unusedJsonPrimativeMappingAsserts(targetObject);
     }
@@ -691,7 +691,7 @@ public class AtlasTestUtil {
         assertEquals(new Short((short) 5), new Short(targetObject.getShortField()));
         assertEquals(new Long(6L), new Long(targetObject.getLongField()));
         assertEquals(new Double(1.0d), new Double(targetObject.getDoubleField()));
-        assertEquals(new Float(56f), new Float(targetObject.getFloatField()));
+        assertEquals(new Float(49f), new Float(targetObject.getFloatField()));
         assertEquals(true, targetObject.isBooleanField());
         assertEquals(new Character('2'), new Character(targetObject.getCharField().charAt(0)));
         assertEquals(new Byte((byte) 3), new Byte(targetObject.getByteField()));
@@ -702,7 +702,7 @@ public class AtlasTestUtil {
         assertEquals(new Integer(5), new Integer(targetObject.getIntField()));
         assertEquals(new Short((short) 6), new Short(targetObject.getShortField()));
         assertEquals(new Long(0L), new Long(targetObject.getLongField()));
-        assertEquals(new Double(56d), new Double(targetObject.getDoubleField()));
+        assertEquals(new Double(49d), new Double(targetObject.getDoubleField()));
         assertEquals(new Float(57f), new Float(targetObject.getFloatField()));
         assertEquals(true, targetObject.isBooleanField());
         assertEquals(new Character('3'), new Character(targetObject.getCharField().charAt(0)));
@@ -713,7 +713,7 @@ public class AtlasTestUtil {
         assertNotNull(targetObject);
         assertEquals(new Integer(6), new Integer(targetObject.getIntField()));
         assertEquals(new Short((short) 1), new Short(targetObject.getShortField()));
-        assertEquals(new Long(56L), new Long(targetObject.getLongField()));
+        assertEquals(new Long(49L), new Long(targetObject.getLongField()));
         assertEquals(new Double(57.0d), new Double(targetObject.getDoubleField()));
         assertEquals(new Float(2.0f), new Float(targetObject.getFloatField()));
         assertEquals(true, targetObject.isBooleanField());
@@ -724,7 +724,7 @@ public class AtlasTestUtil {
     public static void validateXmlFlatPrimitivePrimitiveElementAutoConversion5(XmlFlatPrimitiveElement targetObject) {
         assertNotNull(targetObject);
         assertEquals(new Integer(1), new Integer(targetObject.getIntField()));
-        assertEquals(new Short((short) 56), new Short(targetObject.getShortField()));
+        assertEquals(new Short((short) 49), new Short(targetObject.getShortField()));
         assertEquals(new Long(57L), new Long(targetObject.getLongField()));
         assertEquals(new Double(2.0d), new Double(targetObject.getDoubleField()));
         assertEquals(new Float(3.0f), new Float(targetObject.getFloatField()));
@@ -735,7 +735,7 @@ public class AtlasTestUtil {
 
     public static void validateXmlFlatPrimitivePrimitiveElementAutoConversion6(XmlFlatPrimitiveElement targetObject) {
         assertNotNull(targetObject);
-        assertEquals(new Integer(56), new Integer(targetObject.getIntField()));
+        assertEquals(new Integer(49), new Integer(targetObject.getIntField()));
         assertEquals(new Short((short) 57), new Short(targetObject.getShortField()));
         assertEquals(new Long(2L), new Long(targetObject.getLongField()));
         assertEquals(new Double(3.0d), new Double(targetObject.getDoubleField()));
@@ -754,7 +754,7 @@ public class AtlasTestUtil {
         assertEquals(new Float(5.0f), new Float(targetObject.getFloatField()));
         assertEquals(true, targetObject.isBooleanField());
         assertEquals(new Character('t'), new Character(targetObject.getCharField().charAt(0)));
-        assertEquals(new Byte((byte) 56), new Byte(targetObject.getByteField()));
+        assertEquals(new Byte((byte) 49), new Byte(targetObject.getByteField()));
     }
 
     public static void validateXmlFlatPrimitiveBoxedPrimitiveElementFields(XmlFlatBoxedPrimitiveElement targetObject) {
