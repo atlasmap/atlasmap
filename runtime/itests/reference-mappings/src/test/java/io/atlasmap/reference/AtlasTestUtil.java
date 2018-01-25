@@ -204,7 +204,7 @@ public class AtlasTestUtil {
         assertEquals(new Long(5L), new Long(targetObject.getLongField()));
         assertEquals(new Double(6d), new Double(targetObject.getDoubleField()));
         assertEquals(new Float(1f), new Float(targetObject.getFloatField()));
-        assertEquals(true, targetObject.isBooleanField());
+        assertEquals(false, targetObject.isBooleanField());
         assertEquals(new Character('9'), new Character(targetObject.getCharField()));
         assertEquals(new Byte("2"), new Byte(targetObject.getByteField()));
 
@@ -449,7 +449,7 @@ public class AtlasTestUtil {
         assertEquals(new Long(5L), new Long(targetObject.getLongField().longValue()));
         assertEquals(new Double(6d), new Double(targetObject.getDoubleField()));
         assertEquals(new Float(1.0f), new Float(targetObject.getFloatField()));
-        // assertEquals(false, targetObject.getBooleanField());
+        assertEquals(false, targetObject.getBooleanField());
         assertEquals(new Character('9'), new Character(targetObject.getCharField().charAt(0)));
         assertEquals(new Byte((byte) 2), new Byte(targetObject.getByteField().toString()));
 
@@ -680,7 +680,7 @@ public class AtlasTestUtil {
         assertEquals(new Long(5L), new Long(targetObject.getLongField()));
         assertEquals(new Double(6d), new Double(targetObject.getDoubleField()));
         assertEquals(new Float(0f), new Float(targetObject.getFloatField()));
-        assertEquals(true, targetObject.isBooleanField());
+        assertEquals(false, targetObject.isBooleanField());
         assertEquals(new Character('9'), new Character(targetObject.getCharField().charAt(0)));
         assertEquals(new Byte((byte) 2), new Byte(targetObject.getByteField()));
     }

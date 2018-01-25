@@ -49,9 +49,7 @@ import io.atlasmap.v2.ValidationScope;
 import io.atlasmap.v2.ValidationStatus;
 import io.atlasmap.validators.AtlasValidationTestHelper;
 import io.atlasmap.xml.v2.AtlasXmlModelFactory;
-import io.atlasmap.xml.v2.XmlComplexType;
 import io.atlasmap.xml.v2.XmlField;
-import io.atlasmap.xml.v2.XmlFields;
 
 public class XmlValidationServiceTest {
 
@@ -339,39 +337,6 @@ public class XmlValidationServiceTest {
         assertFalse(validationHelper.hasErrors());
         assertFalse(validationHelper.hasWarnings());
         assertTrue(validationHelper.hasInfos());
-    }
-
-    @Test
-    public void testValidateAtlasMappingFileConversionRequired() throws Exception {
-        AtlasMapping mapping = mappingUtil.loadMapping("src/test/resources/mappings/HappyPathMapping.xml");
-        assertNotNull(mapping);
-
-        Mapping fieldMapping = (Mapping) mapping.getMappings().getMapping().get(0);
-
-        XmlComplexType complex = xmlModelFactory.createXmlComplexType();
-        complex.setFieldType(FieldType.COMPLEX);
-        XmlField in = (XmlField) fieldMapping.getInputField().get(0);
-        complex.setXmlFields(new XmlFields());
-        complex.setPath("/nest");
-        complex.setName("nest");
-        in.setPath("/nest/" + in.getPath());
-        complex.getXmlFields().getXmlField().add(in);
-        fieldMapping.getInputField().set(0, complex);
-
-        XmlField out = (XmlField) fieldMapping.getOutputField().get(0);
-        out.setFieldType(FieldType.STRING);
-
-        validations.addAll(sourceValidationService.validateMapping(mapping));
-        validations.addAll(targetValidationService.validateMapping(mapping));
-
-        assertFalse(validationHelper.hasErrors());
-        assertTrue(validationHelper.hasWarnings());
-        assertFalse(validationHelper.hasInfos());
-        assertThat(1, is(validationHelper.getCount()));
-        Validation v = validations.get(0);
-        assertEquals(ValidationScope.MAPPING, v.getScope());
-        assertEquals("map.firstName.firstName", v.getId());
-        assertEquals(ValidationStatus.WARN, v.getStatus());
     }
 
     @Test

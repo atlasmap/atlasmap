@@ -40,43 +40,36 @@ public class CharacterConverterTest {
     @Test
     public void convertToBoolean() throws Exception {
         Character c = Character.forDigit(1, 10);
-        Boolean t = converter.convertToBoolean(c);
+        Boolean t = converter.convertToBoolean(c, null, null);
         assertNotNull(t);
         assertTrue(t);
         c = "T".charAt(0);
-        Boolean t2 = converter.convertToBoolean(c);
+        Boolean t2 = converter.convertToBoolean(c, null, null);
         assertNotNull(t2);
         assertTrue(t2);
         c = "t".charAt(0);
-        Boolean t3 = converter.convertToBoolean(c);
+        Boolean t3 = converter.convertToBoolean(c, null, null);
         assertNotNull(t3);
         assertTrue(t3);
 
         c = Character.forDigit(0, 10);
-        Boolean f = converter.convertToBoolean(c);
+        Boolean f = converter.convertToBoolean(c, null, null);
         assertNotNull(f);
         assertFalse(f);
         c = "F".charAt(0);
-        Boolean f2 = converter.convertToBoolean(c);
+        Boolean f2 = converter.convertToBoolean(c, null, null);
         assertNotNull(f2);
         assertFalse(f2);
         c = "f".charAt(0);
-        Boolean f3 = converter.convertToBoolean(c);
+        Boolean f3 = converter.convertToBoolean(c, null, null);
         assertNotNull(f3);
         assertFalse(f3);
     }
 
     @Test
-    public void convertToBooleanrFallback() throws Exception {
-        Character c = "q".charAt(0);
-        Boolean t = converter.convertToBoolean(c);
-        assertTrue(t);
-    }
-
-    @Test
     public void convertToBooleanInvalid() throws Exception {
         Character c = null;
-        converter.convertToBoolean(c);
+        converter.convertToBoolean(c, null, null);
         assertNull(c);
     }
 
@@ -219,7 +212,7 @@ public class CharacterConverterTest {
     @Test
     public void convertToString() throws Exception {
         Character c = Character.forDigit(0, 10);
-        String s = converter.convertToString(c);
+        String s = converter.convertToString(c, null, null);
         assertNotNull(s);
         assertEquals("0", s);
     }
@@ -227,7 +220,7 @@ public class CharacterConverterTest {
     @Test
     public void convertToStringNull() throws Exception {
         Character c = null;
-        String s = converter.convertToString(c);
+        String s = converter.convertToString(c, null, null);
         assertNull(s);
     }
 

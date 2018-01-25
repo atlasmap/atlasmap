@@ -26,27 +26,28 @@ import io.atlasmap.v2.FieldType;
 
 public class StringConverter implements AtlasPrimitiveConverter<String> {
 
+    private static final String TRUE_REGEX = "true|TRUE|t|T|y|Y|1";
+
     /**
-     * @param value
-     * @return
+     * @param sourceFormat
+     *            the regex used to test the string value against
+     * @param targetFormat
+     *            not used
+     * @return the boolean conversion of the string value
      * @throws AtlasConversionException
      */
     @Override
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.BOOLEAN, concerns = AtlasConversionConcern.CONVENTION)
-    public Boolean convertToBoolean(String value) throws AtlasConversionException {
+    public Boolean convertToBoolean(String value, String sourceFormat, String targetFormat)
+            throws AtlasConversionException {
         if (value == null) {
             return null;
         }
-        if ("0".equals(value) || "f".equalsIgnoreCase(value) || "false".equalsIgnoreCase(value)) {
-            return Boolean.FALSE;
-        } else if ("1".equals(value) || "t".equalsIgnoreCase(value) || "true".equalsIgnoreCase(value)) {
+        String regex = sourceFormat != null && !"".equals(sourceFormat) ? sourceFormat : TRUE_REGEX;
+        if (value.matches(regex)) {
             return Boolean.TRUE;
-        }
-        // fall back
-        if ("".equals(value)) {
-            return Boolean.FALSE;
         } else {
-            return Boolean.TRUE;
+            return Boolean.FALSE;
         }
     }
 
@@ -252,7 +253,8 @@ public class StringConverter implements AtlasPrimitiveConverter<String> {
      */
     @Override
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.STRING)
-    public String convertToString(String value) throws AtlasConversionException {
+    public String convertToString(String value, String sourceFormat, String targetFormat)
+            throws AtlasConversionException {
         if (value == null) {
             return null;
         }

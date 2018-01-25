@@ -134,8 +134,8 @@ public class JsonModule extends BaseAtlasModule {
             targetValue = sourceField.getValue();
         } else if (sourceField.getValue() != null) {
             try {
-                targetValue = getConversionService().convertType(sourceField.getValue(), sourceField.getFieldType(),
-                        targetField.getFieldType());
+                targetValue = getConversionService().convertType(sourceField.getValue(), sourceField.getFormat(),
+                        targetField.getFieldType(), targetField.getFormat());
             } catch (AtlasConversionException e) {
                 AtlasUtil.addAudit(session, targetField.getDocId(),
                         String.format("Unable to auto-convert for sT=%s tT=%s tF=%s msg=%s", sourceField.getFieldType(),

@@ -296,7 +296,8 @@ public class XmlFieldWriterTest {
         validatePrimitiveValue(fieldType, fileName, testObject, testObject);
     }
 
-    private void validatePrimitiveValue(FieldType fieldType, String fileName, Object testObject, Object expectedObject) throws Exception {
+    private void validatePrimitiveValue(FieldType fieldType, String fileName, Object testObject, Object expectedObject)
+            throws Exception {
         Path path = Paths.get("target" + File.separator + fileName);
         AtlasInternalSession session = readSession(fieldType, path, testObject);
 
@@ -443,7 +444,8 @@ public class XmlFieldWriterTest {
         validateRangeOutMinValue(FieldType.FLOAT, "test-write-field-float-min-range-out.xml", "1.4E-46", 0.0f);
     }
 
-    private void validateRangeOutMinValue(FieldType fieldType, String fileName, Object testObject, Object expectedObject) throws Exception {
+    private void validateRangeOutMinValue(FieldType fieldType, String fileName, Object testObject,
+            Object expectedObject) throws Exception {
         Path path = Paths.get("target" + File.separator + fileName);
         AtlasInternalSession session = readSession(fieldType, path, testObject);
 
@@ -511,12 +513,13 @@ public class XmlFieldWriterTest {
 
     @Test
     public void testXmlFieldBooleanRangeOut() throws Exception {
-        validatePrimitiveValue(FieldType.BOOLEAN, "test-write-field-boolean-range-out.xml", "abcd", Boolean.TRUE);
+        validatePrimitiveValue(FieldType.BOOLEAN, "test-write-field-boolean-range-out.xml", "abcd", Boolean.FALSE);
     }
 
     @Test
     public void testXmlFieldBooleanDecimal() throws Exception {
-        validatePrimitiveValue(FieldType.BOOLEAN, "test-write-field-boolean-decimal.xml", Double.valueOf("126.1234"), Boolean.TRUE);
+        validatePrimitiveValue(FieldType.BOOLEAN, "test-write-field-boolean-decimal.xml", Double.valueOf("126.1234"),
+                Boolean.FALSE);
     }
 
     @Test
@@ -585,7 +588,8 @@ public class XmlFieldWriterTest {
 
         assertEquals(null, session.head().getSourceField().getValue());
         assertEquals(1, session.getAudits().getAudit().size());
-        assertEquals("Failed to convert field value '" + testObject.toString() + "' into type '" + fieldType.value().toUpperCase() + "'", session.getAudits().getAudit().get(0).getMessage());
+        assertEquals("Failed to convert field value '" + testObject.toString() + "' into type '"
+                + fieldType.value().toUpperCase() + "'", session.getAudits().getAudit().get(0).getMessage());
         assertEquals(testObject.toString(), session.getAudits().getAudit().get(0).getValue());
         assertEquals(AuditStatus.ERROR, session.getAudits().getAudit().get(0).getStatus());
     }

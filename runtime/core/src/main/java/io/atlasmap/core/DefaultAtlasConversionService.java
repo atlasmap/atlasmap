@@ -15,7 +15,12 @@
  */
 package io.atlasmap.core;
 
+import static java.util.Objects.hash;
+
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
@@ -26,7 +31,6 @@ import java.util.Optional;
 import java.util.ServiceLoader;
 import java.util.Set;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,7 +39,6 @@ import io.atlasmap.api.AtlasConversionException;
 import io.atlasmap.api.AtlasConversionService;
 import io.atlasmap.api.AtlasConverter;
 import io.atlasmap.spi.AtlasConversionInfo;
-import io.atlasmap.spi.AtlasPrimitiveConverter;
 import io.atlasmap.v2.FieldType;
 
 public class DefaultAtlasConversionService implements AtlasConversionService {
@@ -43,24 +46,74 @@ public class DefaultAtlasConversionService implements AtlasConversionService {
     private static final Logger LOG = LoggerFactory.getLogger(DefaultAtlasConversionService.class);
     private static final Set<String> PRIMITIVE_CLASSNAMES = Collections.unmodifiableSet(
             new HashSet<>(Arrays.asList("boolean", "byte", "char", "double", "float", "int", "long", "short")));
-    private static final Set<FieldType> PRIMITIVE_FIELDTYPES = Collections.unmodifiableSet(
-            new HashSet<>(Arrays.asList(FieldType.BOOLEAN, FieldType.BYTE, FieldType.CHAR,
-                    FieldType.DECIMAL, FieldType.DOUBLE, FieldType.FLOAT, FieldType.INTEGER,
-                    FieldType.LONG, FieldType.SHORT, FieldType.STRING)));
+    private static final Set<FieldType> PRIMITIVE_FIELDTYPES = Collections.unmodifiableSet(new HashSet<>(
+            Arrays.asList(FieldType.BOOLEAN, FieldType.BYTE, FieldType.CHAR, FieldType.DECIMAL, FieldType.DOUBLE,
+                    FieldType.FLOAT, FieldType.INTEGER, FieldType.LONG, FieldType.SHORT, FieldType.STRING)));
     private static final Set<String> BOXED_PRIMITIVE_CLASSNAMES = Collections.unmodifiableSet(new HashSet<>(
             Arrays.asList("java.lang.Boolean", "java.lang.Byte", "java.lang.Character", "java.lang.Double",
                     "java.lang.Float", "java.lang.Integer", "java.lang.Long", "java.lang.Short", "java.lang.String")));
 
     private static DefaultAtlasConversionService instance = null;
-    private Map<String, AtlasConverter<?>> converters = null;
+
+    private Map<ConverterKey, ConverterMethodHolder> converterMethods = null;
+    private Map<ConverterKey, ConverterMethodHolder> customConverterMethods = null;
+
+    // Used as the lookup key in the converter methods map
+    private class ConverterKey {
+        private String sourceClassName;
+        private String targetClassName;
+
+        public ConverterKey(String sourceClassName, String targetClassName) {
+            this.sourceClassName = sourceClassName;
+            this.targetClassName = targetClassName;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj != null && obj instanceof ConverterKey) {
+                ConverterKey s = (ConverterKey) obj;
+                return sourceClassName.equals(s.sourceClassName) && targetClassName.equals(s.targetClassName);
+            }
+            return false;
+        }
+
+        @Override
+        public int hashCode() {
+            return hash(sourceClassName, targetClassName);
+        }
+    }
+
+    // used to hold converter and method for future reflection use
+    private class ConverterMethodHolder {
+        private AtlasConverter<?> converter;
+        private Method method;
+        private boolean staticMethod;
+        private boolean containsFormat;
+
+        public ConverterMethodHolder(AtlasConverter<?> converter, Method method, boolean staticMethod,
+                boolean containsFormat) {
+            this.converter = converter;
+            this.method = method;
+            this.staticMethod = staticMethod;
+            this.containsFormat = containsFormat;
+        }
+
+        public AtlasConverter<?> getConverter() {
+            return converter;
+        }
+    }
 
     private DefaultAtlasConversionService() {
     }
 
     public static DefaultAtlasConversionService getInstance() {
         if (instance == null) {
-            instance = new DefaultAtlasConversionService();
-            instance.init();
+            synchronized (DefaultAtlasConversionService.class) {
+                if (instance == null) {
+                    instance = new DefaultAtlasConversionService();
+                    instance.init();
+                }
+            }
         }
         return instance;
     }
@@ -72,97 +125,27 @@ public class DefaultAtlasConversionService implements AtlasConversionService {
     @Override
     public Optional<AtlasConverter<?>> findMatchingConverter(FieldType source, FieldType target) {
 
-        List<AtlasPrimitiveConverter<?>> primitiveConverters = converters.values().stream()
-                .filter(p -> p instanceof AtlasPrimitiveConverter).map(p -> (AtlasPrimitiveConverter<?>) p)
-                .collect(Collectors.toList());
-        Optional<AtlasConverter<?>> primitiveConverter = checkPrimitiveConverters(primitiveConverters, source, target);
+        // get the default types
+        Class sourceClass = classFromFieldType(source);
+        Class targetClass = classFromFieldType(target);
 
-        List<AtlasConverter<?>> customConverters = converters.values().stream()
-                .filter(not(p -> p instanceof AtlasPrimitiveConverter)).collect(Collectors.toList());
-        Optional<AtlasConverter<?>> customConverter = checkCustomConverters(customConverters, source, target);
-
-        // prefer the custom converter over the primitive
-        if (primitiveConverter.isPresent() && !customConverter.isPresent()) {
-            return primitiveConverter;
+        if (sourceClass != null && targetClass != null) {
+            return findMatchingConverter(sourceClass.getCanonicalName(), targetClass.getCanonicalName());
+        } else {
+            return Optional.empty();
         }
-        return customConverter;
     }
 
     @Override
     public Optional<AtlasConverter<?>> findMatchingConverter(String sourceClassName, String targetClassName) {
-        // assuming only custom converters define sourceClassName / targetClassName and
-        // must match exactly.
-        List<AtlasConverter<?>> customConverters = converters.values().stream()
-                .filter(not(p -> p instanceof AtlasPrimitiveConverter)).collect(Collectors.toList());
-        for (AtlasConverter<?> converter : customConverters) {
-            if (findConverterByMethodAnnotationClassName(sourceClassName, targetClassName, converter)) {
-                return Optional.of(converter);
-            }
-        }
-        return Optional.empty();
-    }
-
-    @Override
-    public Optional<Method> findMatchingMethod(FieldType source, FieldType target, AtlasConverter<?> customConverter) {
-        Method[] methods = customConverter.getClass().getMethods();
-        // assuming only one
-        return Arrays.stream(methods)
-                .filter(method -> method.isAnnotationPresent(AtlasConversionInfo.class)
-                        && (method.getAnnotation(AtlasConversionInfo.class) != null)
-                        && (method.getAnnotation(AtlasConversionInfo.class).sourceType().compareTo(source) == 0)
-                        && (method.getAnnotation(AtlasConversionInfo.class).targetType().compareTo(target) == 0))
-                .findFirst();
-    }
-
-    private Optional<AtlasConverter<?>> checkCustomConverters(List<AtlasConverter<?>> customConverters, FieldType source,
-            FieldType target) {
-        if (source == null || target == null) {
-            // TODO: investigate how we handle when sType -> tType (null -> something and
-            // something -> null)
+        ConverterKey converterKey = new ConverterKey(sourceClassName, targetClassName);
+        if (customConverterMethods.containsKey(converterKey)) {
+            return Optional.of(customConverterMethods.get(converterKey).getConverter());
+        } else if (converterMethods.containsKey(converterKey)) {
+            return Optional.of(converterMethods.get(converterKey).getConverter());
+        } else {
             return Optional.empty();
         }
-
-        for (AtlasConverter<?> customConverter : customConverters) {
-            if (findConverterByMethodAnnotationSourceType(source, target, customConverter)) {
-                return Optional.of(customConverter);
-            }
-        }
-
-        return Optional.empty();
-    }
-
-    private Optional<AtlasConverter<?>> checkPrimitiveConverters(List<AtlasPrimitiveConverter<?>> primitiveConverters,
-            FieldType source, FieldType target) {
-        if (source == null || target == null) {
-            // TODO: investigate how we handle when sType -> tType (null -> something and
-            // something -> null)
-            return Optional.empty();
-        }
-        for (AtlasPrimitiveConverter<?> primitiveConverter : primitiveConverters) {
-            // get all the methods --> getAnnotations of Type AtlasConversionInfo
-            if (findConverterByMethodAnnotationSourceType(source, target, primitiveConverter)) {
-                return Optional.of(primitiveConverter);
-            }
-        }
-        return Optional.empty();
-    }
-
-    private boolean findConverterByMethodAnnotationSourceType(FieldType source, FieldType target,
-            AtlasConverter<?> customConverter) {
-        Method[] methods = customConverter.getClass().getMethods();
-        return Arrays.stream(methods).map(method -> method.getAnnotation(AtlasConversionInfo.class))
-                .anyMatch(atlasConversionInfo -> (atlasConversionInfo != null
-                        && atlasConversionInfo.sourceType().compareTo(source) == 0
-                        && atlasConversionInfo.targetType().compareTo(target) == 0));
-    }
-
-    private boolean findConverterByMethodAnnotationClassName(String sourceClassName, String targetClassName,
-            AtlasConverter<?> customConverter) {
-        Method[] methods = customConverter.getClass().getMethods();
-        return Arrays.stream(methods).map(method -> method.getAnnotation(AtlasConversionInfo.class))
-                .anyMatch(atlasConversionInfo -> (atlasConversionInfo != null
-                        && atlasConversionInfo.sourceClassName().equals(sourceClassName)
-                        && atlasConversionInfo.targetClassName().equals(targetClassName)));
     }
 
     private void init() {
@@ -174,15 +157,66 @@ public class DefaultAtlasConversionService implements AtlasConversionService {
         ClassLoader classLoader = this.getClass().getClassLoader();
         final ServiceLoader<AtlasConverter> converterServiceLoader = ServiceLoader.load(AtlasConverter.class,
                 classLoader);
-        Map<String, AtlasConverter<?>> tmp = new LinkedHashMap<>();
+
+        // used to load up methods first;
+        Map<ConverterKey, ConverterMethodHolder> methodsLoadMap = new LinkedHashMap<>();
+        Map<ConverterKey, ConverterMethodHolder> customMethodsLoadMap = new LinkedHashMap<>();
+
         for (final AtlasConverter<?> atlasConverter : converterServiceLoader) {
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Loading converter : " + atlasConverter.getClass().getCanonicalName());
             }
-            tmp.put(atlasConverter.getClass().getCanonicalName(), atlasConverter);
+
+            boolean inbuiltConverter = atlasConverter.getClass().getPackage().getName().startsWith("io.atlasmap");
+
+            Class<?> klass = atlasConverter.getClass();
+            // collect all the specific conversion methods on the class
+            while (klass != Object.class) {
+                final List<Method> allMethods = new ArrayList<Method>(Arrays.asList(klass.getDeclaredMethods()));
+                for (final Method method : allMethods) {
+                    if (method.isAnnotationPresent(AtlasConversionInfo.class) && method.getParameters().length > 0) {
+                        String sourceClassName = method.getParameters()[0].getType().getCanonicalName();
+                        ConverterKey coordinate = new ConverterKey(sourceClassName,
+                                method.getReturnType().getCanonicalName());
+                        // if the method has three arguments and the last two as strings then they used
+                        // as the format attributes
+                        boolean containsFormat = false;
+                        if (method.getParameters().length == 3 && method.getParameters()[1].getType() == String.class
+                                && method.getParameters()[2].getType() == String.class) {
+                            containsFormat = true;
+                        }
+
+                        boolean staticMethod = Modifier.isStatic(method.getModifiers());
+                        ConverterMethodHolder methodHolder = new ConverterMethodHolder(atlasConverter, method,
+                                staticMethod, containsFormat);
+                        if (inbuiltConverter) {
+                            if (!methodsLoadMap.containsKey(coordinate)) {
+                                methodsLoadMap.put(coordinate, methodHolder);
+                            } else {
+                                LOG.warn("Converter between " + sourceClassName + " and "
+                                        + method.getReturnType().getCanonicalName() + " aleady exists.");
+                            }
+                        } else {
+                            if (!customMethodsLoadMap.containsKey(coordinate)) {
+                                customMethodsLoadMap.put(coordinate, methodHolder);
+                            } else {
+                                LOG.warn("Custom converter between " + sourceClassName + " and "
+                                        + method.getReturnType().getCanonicalName() + " aleady exists.");
+                            }
+                        }
+                    }
+                }
+                // move to the upper class in the hierarchy in search for more methods
+                klass = klass.getSuperclass();
+            }
+
         }
-        if (!tmp.isEmpty()) {
-            converters = Collections.unmodifiableMap(tmp);
+
+        if (!methodsLoadMap.isEmpty()) {
+            converterMethods = Collections.unmodifiableMap(methodsLoadMap);
+        }
+        if (!methodsLoadMap.isEmpty()) {
+            customConverterMethods = Collections.unmodifiableMap(customMethodsLoadMap);
         }
     }
 
@@ -239,16 +273,64 @@ public class DefaultAtlasConversionService implements AtlasConversionService {
     }
 
     @Override
-    public Object convertType(Object sourceValue, FieldType sourceType, FieldType targetType, String customClassName)
-            throws AtlasConversionException {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @SuppressWarnings({ "rawtypes", "unchecked" })
-    @Override
     public Object convertType(Object sourceValue, FieldType origSourceType, FieldType targetType)
             throws AtlasConversionException {
+
+        if (origSourceType == null || targetType == null) {
+            throw new AtlasConversionException("FieldTypes must be specified on convertType method.");
+        }
+        if (origSourceType.equals(targetType)) {
+            return sourceValue;
+        } else {
+            return convertType(sourceValue, null, classFromFieldType(targetType), null);
+        }
+    }
+
+    @Override
+    public Object convertType(Object sourceValue, String sourceFormat, FieldType targetType, String targetFormat)
+            throws AtlasConversionException {
+        return convertType(sourceValue, sourceFormat, classFromFieldType(targetType), targetFormat);
+    }
+
+    @Override
+    public Object convertType(Object sourceValue, String sourceFormat, Class targetType, String targetFormat)
+            throws AtlasConversionException {
+
+        if (sourceValue == null || targetType == null) {
+            throw new AtlasConversionException("AutoConversion requires sourceValue and targetType to be specified");
+        }
+
+        if (sourceValue.getClass().equals(targetType)) {
+            return sourceValue;
+        }
+
+        ConverterKey converterKey = new ConverterKey(sourceValue.getClass().getCanonicalName(),
+                targetType.getCanonicalName());
+        // use custom converter first
+        ConverterMethodHolder methodHolder = customConverterMethods.get(converterKey);
+        if (methodHolder == null) {
+            // try the inbuilt defaults
+            methodHolder = converterMethods.get(converterKey);
+        }
+        if (methodHolder != null) {
+            try {
+                Object target = methodHolder.staticMethod ? null : methodHolder.converter;
+                if (methodHolder.containsFormat) {
+                    return methodHolder.method.invoke(target, sourceValue, sourceFormat, targetFormat);
+                } else {
+                    return methodHolder.method.invoke(target, sourceValue);
+                }
+            } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+                throw new AtlasConversionException("Invoking type convertor failed: " + e);
+            }
+        } else {
+            throw new AtlasConversionException("Type Conversion is not supported for sT="
+                    + sourceValue.getClass().getCanonicalName() + " tT=" + targetType.getCanonicalName());
+        }
+    }
+
+    public Object convertTypeOriginal(Object sourceValue, FieldType origSourceType, String sourceFormat,
+            FieldType targetType, String targetFormat) throws AtlasConversionException {
         FieldType sourceType = null;
 
         if (origSourceType == null && sourceValue != null) {
@@ -265,40 +347,24 @@ public class DefaultAtlasConversionService implements AtlasConversionService {
             return sourceValue;
         }
 
-        Optional<AtlasConverter<?>> converter = findMatchingConverter(sourceType, targetType);
-        if (!converter.isPresent()) {
-            throw new AtlasConversionException(
-                    "Converter not found for sourceType: " + sourceType + " targetType: " + targetType);
-        }
-
-        AtlasConverter<?> atlasConverter = converter.get();
-        if (isPrimitive(sourceType) && isPrimitive(targetType)) {
-            switch (targetType) {
-            case BOOLEAN:
-                return ((AtlasPrimitiveConverter) atlasConverter).convertToBoolean(sourceValue);
-            case BYTE:
-                return ((AtlasPrimitiveConverter) atlasConverter).convertToByte(sourceValue);
-            case CHAR:
-                return ((AtlasPrimitiveConverter) atlasConverter).convertToCharacter(sourceValue);
-            case DOUBLE:
-                return ((AtlasPrimitiveConverter) atlasConverter).convertToDouble(sourceValue);
-            case FLOAT:
-                return ((AtlasPrimitiveConverter) atlasConverter).convertToFloat(sourceValue);
-            case INTEGER:
-                return ((AtlasPrimitiveConverter) atlasConverter).convertToInteger(sourceValue);
-            case LONG:
-                return ((AtlasPrimitiveConverter) atlasConverter).convertToLong(sourceValue);
-            case SHORT:
-                return ((AtlasPrimitiveConverter) atlasConverter).convertToShort(sourceValue);
-            case STRING:
-                return ((AtlasPrimitiveConverter) atlasConverter).convertToString(sourceValue);
-            default:
-                throw new AtlasConversionException(
-                        "AutoConversion is not supported for sT=" + sourceType + " tT=" + targetType);
+        String targetClassname = classFromFieldType(targetType).getCanonicalName();
+        ConverterKey conveterKey = new ConverterKey(sourceValue.getClass().getCanonicalName(), targetClassname);
+        ConverterMethodHolder methodHolder = converterMethods.get(conveterKey);
+        if (methodHolder != null) {
+            try {
+                Object target = methodHolder.staticMethod ? null : methodHolder.converter;
+                if (methodHolder.containsFormat) {
+                    return methodHolder.method.invoke(target, sourceValue, sourceFormat, targetFormat);
+                } else {
+                    return methodHolder.method.invoke(target, sourceValue);
+                }
+            } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+                throw new AtlasConversionException("Invoking type convertor failed: " + e);
             }
+        } else {
+            throw new AtlasConversionException(
+                    "Type Conversion is not supported for sT=" + sourceType + " tT=" + targetType);
         }
-        // TODO: Support non-primitive auto conversion
-        throw new AtlasConversionException("AutoConversion of non-primitives is not supported");
     }
 
     @Override

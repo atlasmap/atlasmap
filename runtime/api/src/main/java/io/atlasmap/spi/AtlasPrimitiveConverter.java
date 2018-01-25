@@ -20,7 +20,7 @@ import io.atlasmap.api.AtlasConverter;
 
 public interface AtlasPrimitiveConverter<T> extends AtlasConverter<T> {
 
-    Boolean convertToBoolean(T value) throws AtlasConversionException;
+    Boolean convertToBoolean(T value, String sourceFormat, String targetFormat) throws AtlasConversionException;
 
     Byte convertToByte(T value) throws AtlasConversionException;
 
@@ -36,6 +36,6 @@ public interface AtlasPrimitiveConverter<T> extends AtlasConverter<T> {
 
     Short convertToShort(T value) throws AtlasConversionException;
 
-    String convertToString(T value) throws AtlasConversionException;
+    String convertToString(T value, String sourceFormat, String targetFormat) throws AtlasConversionException;
 
 }

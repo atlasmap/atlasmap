@@ -1,8 +1,25 @@
+/**
+ * Copyright (C) 2017 Red Hat, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package io.atlasmap.core;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
@@ -46,9 +63,6 @@ import io.atlasmap.v2.Mappings;
 import io.atlasmap.v2.MockField;
 import io.atlasmap.v2.Validations;
 
-/**
- * Created by mmelko on 01/11/2017.
- */
 public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
 
     @Test
@@ -58,8 +72,8 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
         populateSourceField(m, FieldType.STRING, "foo");
         prepareTargetField(m, "/target");
         context.process(session);
-        Assert.assertFalse(printAudit(session), session.hasErrors());
-        Assert.assertEquals("foo", writer.targets.get("/target"));
+        assertFalse(printAudit(session), session.hasErrors());
+        assertEquals("foo", writer.targets.get("/target"));
     }
 
     @Test
@@ -69,8 +83,9 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
         populateSourceField(m, "docId.not.existing", FieldType.STRING, "foo");
         prepareTargetField(m, "/target");
         context.process(session);
-        Assert.assertTrue(printAudit(session), session.hasErrors());
-        Assert.assertEquals(1, session.getAudits().getAudit().stream().filter(a -> a.getStatus() == AuditStatus.ERROR).count());
+        assertTrue(printAudit(session), session.hasErrors());
+        assertEquals(1,
+                session.getAudits().getAudit().stream().filter(a -> a.getStatus() == AuditStatus.ERROR).count());
     }
 
     @Test
@@ -91,8 +106,9 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
         populateSourceField(m, FieldType.UNSIGNED_INTEGER, 10, 10);// not listed as primitive type
         prepareTargetField(m, "/target");
         context.process(session);
-        Assert.assertFalse(printAudit(session), session.hasErrors());
-        Assert.assertEquals(new Date(0).toString() + ";1;2.0;3.0;true;5;6;string;8;9;10", writer.targets.get("/target"));
+        assertFalse(printAudit(session), session.hasErrors());
+        assertEquals(new Date(0).toInstant().toString() + ";1;2.0;3.0;true;5;6;string;8;9;10",
+                writer.targets.get("/target"));
     }
 
     @Test
@@ -104,8 +120,8 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
         populateUnsupportedSourceField(m, "bar", 1);
         prepareTargetField(m, "/target");
         context.process(session);
-        Assert.assertFalse(printAudit(session), session.hasErrors());
-        Assert.assertEquals("foo;bar", writer.targets.get("/target"));
+        assertFalse(printAudit(session), session.hasErrors());
+        assertEquals("foo;bar", writer.targets.get("/target"));
     }
 
     @Test
@@ -162,7 +178,9 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
 
     @Test
     public void testDefaultAtlasContext() throws AtlasException {
-        File file = Paths.get("src" + File.separator + "test" + File.separator + "resources" + File.separator + "atlasmapping.xml").toFile();
+        File file = Paths.get(
+                "src" + File.separator + "test" + File.separator + "resources" + File.separator + "atlasmapping.xml")
+                .toFile();
         DefaultAtlasContextFactory factory = new DefaultAtlasContextFactory();
         factory.init();
 
@@ -186,7 +204,9 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
 
     @Test(expected = AtlasException.class)
     public void testProcessValidationAtlasException() throws AtlasException {
-        File file = Paths.get("src" + File.separator + "test" + File.separator + "resources" + File.separator + "atlasmapping.xml").toFile();
+        File file = Paths.get(
+                "src" + File.separator + "test" + File.separator + "resources" + File.separator + "atlasmapping.xml")
+                .toFile();
         DefaultAtlasContextFactory factory = new DefaultAtlasContextFactory();
         factory.init();
 
@@ -200,7 +220,9 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
 
     @Test(expected = AtlasException.class)
     public void testProcessValidationAtlasExceptionOtherContext() throws AtlasException {
-        File file = Paths.get("src" + File.separator + "test" + File.separator + "resources" + File.separator + "atlasmapping.xml").toFile();
+        File file = Paths.get(
+                "src" + File.separator + "test" + File.separator + "resources" + File.separator + "atlasmapping.xml")
+                .toFile();
         DefaultAtlasContextFactory factory = new DefaultAtlasContextFactory();
         factory.init();
 
@@ -214,15 +236,20 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
 
         assertNotNull(context.createSession(mapping));
 
-        File file = Paths.get("src" + File.separator + "test" + File.separator + "resources" + File.separator + "atlasmapping.xml").toFile();
+        File file = Paths.get(
+                "src" + File.separator + "test" + File.separator + "resources" + File.separator + "atlasmapping.xml")
+                .toFile();
         DefaultAtlasContext ctx = new DefaultAtlasContext(file.toURI());
         assertNotNull(ctx.createSession());
     }
 
     @Test // (expected = AtlasException.class)
     public void testInit() throws AtlasException {
-        File file = Paths.get("src" + File.separator + "test" + File.separator + "resources" + File.separator + "atlasmapping.json").toFile();
-        DefaultAtlasContext ctx = new DefaultAtlasContext(DefaultAtlasContextFactory.getInstance(), file.toURI(), AtlasMappingFormat.JSON);
+        File file = Paths.get(
+                "src" + File.separator + "test" + File.separator + "resources" + File.separator + "atlasmapping.json")
+                .toFile();
+        DefaultAtlasContext ctx = new DefaultAtlasContext(DefaultAtlasContextFactory.getInstance(), file.toURI(),
+                AtlasMappingFormat.JSON);
         ctx.init();
 
         DataSource dataSource = new DataSource();
@@ -257,7 +284,8 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
 
         @SuppressWarnings("unchecked")
         Map<String, AtlasModule> targetModules = spy(Map.class);
-        when(targetModules.put(any(String.class), any(AtlasModule.class))).thenThrow(new RuntimeException("mockException"));
+        when(targetModules.put(any(String.class), any(AtlasModule.class)))
+                .thenThrow(new RuntimeException("mockException"));
         ctx.setTargetModules(targetModules);
         ctx.init();
     }

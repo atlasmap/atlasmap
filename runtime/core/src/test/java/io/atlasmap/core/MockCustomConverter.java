@@ -26,7 +26,7 @@ import io.atlasmap.v2.FieldType;
 
 public class MockCustomConverter implements AtlasConverter<Date> {
 
-    @AtlasConversionInfo(sourceType = FieldType.DATE, targetType = FieldType.COMPLEX, sourceClassName = "java.util.Date", targetClassName = "java.time.ZonedDateTime")
+    @AtlasConversionInfo(sourceType = FieldType.DATE, targetType = FieldType.COMPLEX)
     public ZonedDateTime convertToZonedDateTime(Date date) throws AtlasConversionException {
         return convertToZonedDateTime(date, ZoneId.systemDefault());
     }
@@ -35,7 +35,7 @@ public class MockCustomConverter implements AtlasConverter<Date> {
         return ZonedDateTime.ofInstant(date.toInstant(), zoneId);
     }
 
-    @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.STRING, sourceClassName = "java.lang.String", targetClassName = "java.lang.String")
+    @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.STRING)
     public String convertToString(String value) throws AtlasConversionException {
         return "aString";
     }

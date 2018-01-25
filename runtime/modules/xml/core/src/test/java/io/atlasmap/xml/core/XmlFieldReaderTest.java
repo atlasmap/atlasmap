@@ -222,7 +222,8 @@ public class XmlFieldReaderTest {
         namespaces.put("http://www.example.com/y/", "y");
         namespaces.put("http://www.example.com/x/", "");
 
-        XmlFieldReader multipleNamespacesReader = new XmlFieldReader(DefaultAtlasConversionService.getInstance(), namespaces);
+        XmlFieldReader multipleNamespacesReader = new XmlFieldReader(DefaultAtlasConversionService.getInstance(),
+                namespaces);
         multipleNamespacesReader.setDocument(doc, true);
         AtlasInternalSession session = mock(AtlasInternalSession.class);
         when(session.head()).thenReturn(mock(Head.class));
@@ -347,11 +348,6 @@ public class XmlFieldReaderTest {
         reader.read(session);
     }
 
-    @Test
-    public void testFieldTypeValueOf() {
-        System.out.println(Boolean.valueOf("Foo"));
-    }
-
     private String getDocumentString(String uri) throws IOException {
         File f = new File(uri);
         FileInputStream fis = new FileInputStream(f);
@@ -362,7 +358,8 @@ public class XmlFieldReaderTest {
     }
 
     private void validateBoundaryValue(FieldType fieldType, String fileName, Object testObject) throws Exception {
-        Path path = Paths.get("src" + File.separator + "test" + File.separator + "resources" + File.separator + "xmlFields" + File.separator + fileName);
+        Path path = Paths.get("src" + File.separator + "test" + File.separator + "resources" + File.separator
+                + "xmlFields" + File.separator + fileName);
 
         AtlasInternalSession session = readFromFile("/primitive/value", fieldType, path);
 
@@ -484,13 +481,15 @@ public class XmlFieldReaderTest {
     }
 
     private void validateRangeOutValue(FieldType fieldType, String fileName, String inputValue) throws Exception {
-        Path path = Paths.get("src" + File.separator + "test" + File.separator + "resources" + File.separator + "xmlFields" + File.separator + fileName);
+        Path path = Paths.get("src" + File.separator + "test" + File.separator + "resources" + File.separator
+                + "xmlFields" + File.separator + fileName);
 
         AtlasInternalSession session = readFromFile("/primitive/value", fieldType, path);
 
         assertEquals(null, session.head().getSourceField().getValue());
         assertEquals(1, session.getAudits().getAudit().size());
-        assertEquals("Failed to convert field value '" + inputValue + "' into type '" + fieldType.value().toUpperCase() + "'", session.getAudits().getAudit().get(0).getMessage());
+        assertEquals("Failed to convert field value '" + inputValue + "' into type '" + fieldType.value().toUpperCase()
+                + "'", session.getAudits().getAudit().get(0).getMessage());
         assertEquals(inputValue, session.getAudits().getAudit().get(0).getValue());
         assertEquals(AuditStatus.ERROR, session.getAudits().getAudit().get(0).getStatus());
     }
@@ -504,7 +503,8 @@ public class XmlFieldReaderTest {
     public void testXmlFieldDoubleMinRangeOut() throws Exception {
         String fieldPath = "/primitive/value";
         FieldType fieldType = FieldType.DOUBLE;
-        Path path = Paths.get("src" + File.separator + "test" + File.separator + "resources" + File.separator + "xmlFields" + File.separator + "test-read-field-double-min-range-out.xml");
+        Path path = Paths.get("src" + File.separator + "test" + File.separator + "resources" + File.separator
+                + "xmlFields" + File.separator + "test-read-field-double-min-range-out.xml");
 
         AtlasInternalSession session = readFromFile(fieldPath, fieldType, path);
 
@@ -521,7 +521,8 @@ public class XmlFieldReaderTest {
     public void testXmlFieldFloatMinRangeOut() throws Exception {
         String fieldPath = "/primitive/value";
         FieldType fieldType = FieldType.FLOAT;
-        Path path = Paths.get("src" + File.separator + "test" + File.separator + "resources" + File.separator + "xmlFields" + File.separator + "test-read-field-float-min-range-out.xml");
+        Path path = Paths.get("src" + File.separator + "test" + File.separator + "resources" + File.separator
+                + "xmlFields" + File.separator + "test-read-field-float-min-range-out.xml");
 
         AtlasInternalSession session = readFromFile(fieldPath, fieldType, path);
 
@@ -581,12 +582,12 @@ public class XmlFieldReaderTest {
 
     @Test
     public void testXmlFieldBooleanRangeOut() throws Exception {
-        validateBoundaryValue(FieldType.BOOLEAN, "test-read-field-boolean-range-out.xml", Boolean.TRUE);
+        validateBoundaryValue(FieldType.BOOLEAN, "test-read-field-boolean-range-out.xml", Boolean.FALSE);
     }
 
     @Test
     public void testXmlFieldBooleanDecimal() throws Exception {
-        validateBoundaryValue(FieldType.BOOLEAN, "test-read-field-boolean-decimal.xml", Boolean.TRUE);
+        validateBoundaryValue(FieldType.BOOLEAN, "test-read-field-boolean-decimal.xml", Boolean.FALSE);
     }
 
     @Test

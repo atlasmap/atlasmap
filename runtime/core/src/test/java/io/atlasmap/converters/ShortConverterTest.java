@@ -41,11 +41,11 @@ public class ShortConverterTest {
         Short f = 0;
         Short t = 1;
 
-        Boolean b = converter.convertToBoolean(t);
+        Boolean b = converter.convertToBoolean(t, null, null);
         assertNotNull(b);
         assertTrue(b);
 
-        b = converter.convertToBoolean(f);
+        b = converter.convertToBoolean(f, null, null);
         assertNotNull(b);
         assertFalse(b);
 
@@ -54,14 +54,14 @@ public class ShortConverterTest {
     @Test
     public void convertToBooleanNull() throws Exception {
         Short l = null;
-        Boolean b = converter.convertToBoolean(l);
+        Boolean b = converter.convertToBoolean(l, null, null);
         assertNull(b);
     }
 
     @Test
     public void convertToBooleanNegative() throws Exception {
         Short dt = -1;
-        Boolean b = converter.convertToBoolean(dt);
+        Boolean b = converter.convertToBoolean(dt, null, null);
         assertTrue(b);
     }
 
@@ -220,7 +220,7 @@ public class ShortConverterTest {
     @Test
     public void convertToString() throws Exception {
         Short l = 0;
-        String s = converter.convertToString(l);
+        String s = converter.convertToString(l, null, null);
         assertNotNull(s);
         assertTrue("0".equals(s));
     }
@@ -228,7 +228,7 @@ public class ShortConverterTest {
     @Test
     public void convertToStringNull() throws Exception {
         Short l = null;
-        String s = converter.convertToString(l);
+        String s = converter.convertToString(l, null, null);
         assertNull(s);
     }
 

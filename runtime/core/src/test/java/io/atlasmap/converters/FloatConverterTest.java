@@ -41,11 +41,11 @@ public class FloatConverterTest {
         Float df = 0.0f;
         Float dt = 1.0f;
 
-        Boolean b = converter.convertToBoolean(dt);
+        Boolean b = converter.convertToBoolean(dt, null, null);
         assertNotNull(b);
         assertTrue(b);
 
-        b = converter.convertToBoolean(df);
+        b = converter.convertToBoolean(df, null, null);
         assertNotNull(b);
         assertFalse(b);
 
@@ -54,14 +54,14 @@ public class FloatConverterTest {
     @Test
     public void convertToBooleanNull() throws Exception {
         Float df = null;
-        Boolean b = converter.convertToBoolean(df);
+        Boolean b = converter.convertToBoolean(df, null, null);
         assertNull(b);
     }
 
     @Test
     public void convertToBooleanNegative() throws Exception {
         Float dt = -1.0f;
-        Boolean b = converter.convertToBoolean(dt);
+        Boolean b = converter.convertToBoolean(dt, null, null);
         assertTrue(b);
     }
 
@@ -214,7 +214,7 @@ public class FloatConverterTest {
     @Test
     public void convertToString() throws Exception {
         Float df = 0.0f;
-        String s = converter.convertToString(df);
+        String s = converter.convertToString(df, null, null);
         assertNotNull(s);
         assertTrue("0.0".equals(s));
     }
@@ -222,7 +222,7 @@ public class FloatConverterTest {
     @Test
     public void convertToStringNull() throws Exception {
         Float df = null;
-        String s = converter.convertToString(df);
+        String s = converter.convertToString(df, null, null);
         assertNull(s);
     }
 

@@ -148,10 +148,11 @@ public class JavaValidationService extends BaseModuleValidationService<JavaField
             Method[] methods = atlasConverter.get().getClass().getMethods();
             conversionInfo = Arrays.stream(methods).map(method -> method.getAnnotation(AtlasConversionInfo.class))
                     .filter(atlasConversionInfo -> atlasConversionInfo != null)
-                    .filter(atlasConversionInfo -> atlasConversionInfo.sourceClassName()
-                            .equals(inputField.getClassName())
-                            && atlasConversionInfo.targetClassName().equals(outField.getClassName()))
+                    .filter(atlasConversionInfo -> atlasConversionInfo.sourceType()
+                            .compareTo(inputField.getFieldType()) == 0
+                            && atlasConversionInfo.targetType().compareTo(outField.getFieldType()) == 0)
                     .findFirst().orElse(null);
+
             if (conversionInfo != null) {
                 populateConversionConcerns(mappingId, conversionInfo, getFieldName(inputField), getFieldName(outField),
                         validations);

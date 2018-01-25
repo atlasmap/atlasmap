@@ -23,6 +23,8 @@ import io.atlasmap.v2.FieldType;
 
 public class BooleanConverter implements AtlasPrimitiveConverter<Boolean> {
 
+    private static final String STRING_VALUES = "true|false";
+
     /**
      * @param value
      * @return
@@ -30,7 +32,8 @@ public class BooleanConverter implements AtlasPrimitiveConverter<Boolean> {
      */
     @Override
     @AtlasConversionInfo(sourceType = FieldType.BOOLEAN, targetType = FieldType.BOOLEAN)
-    public Boolean convertToBoolean(Boolean value) throws AtlasConversionException {
+    public Boolean convertToBoolean(Boolean value, String sourceFormat, String targetFormat)
+            throws AtlasConversionException {
         if (value == null) {
             return null;
         }
@@ -145,11 +148,23 @@ public class BooleanConverter implements AtlasPrimitiveConverter<Boolean> {
     @Override
     @AtlasConversionInfo(sourceType = FieldType.BOOLEAN, targetType = FieldType.STRING, concerns = {
             AtlasConversionConcern.CONVENTION })
-    public String convertToString(Boolean value) throws AtlasConversionException {
+    public String convertToString(Boolean value, String sourceFormat, String targetFormat)
+            throws AtlasConversionException {
         if (value == null) {
             return null;
         }
-        return String.valueOf((value ? "true" : "false"));
+        // TODO optimize/save defaults
+        String format = targetFormat != null && !"".equals(targetFormat) ? targetFormat : STRING_VALUES;
+        String[] values = format.split("\\|");
+        String trueValue = "";
+        String falseValue = "";
+        if (values.length == 2) {
+            trueValue = values[0];
+            falseValue = values[1];
+        } else if (values.length == 1) {
+            trueValue = values[0];
+        }
+        return String.valueOf((value ? trueValue : falseValue));
     }
 
     @AtlasConversionInfo(sourceType = FieldType.BOOLEAN, targetType = FieldType.NUMBER)

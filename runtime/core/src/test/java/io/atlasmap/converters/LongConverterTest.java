@@ -41,11 +41,11 @@ public class LongConverterTest {
         Long aLong = 0L;
         Long l = 1L;
 
-        Boolean b = converter.convertToBoolean(l);
+        Boolean b = converter.convertToBoolean(l, null, null);
         assertNotNull(b);
         assertTrue(b);
 
-        b = converter.convertToBoolean(aLong);
+        b = converter.convertToBoolean(aLong, null, null);
         assertNotNull(b);
         assertFalse(b);
 
@@ -54,14 +54,14 @@ public class LongConverterTest {
     @Test
     public void convertToBooleanNull() throws Exception {
         Long l = null;
-        Boolean b = converter.convertToBoolean(l);
+        Boolean b = converter.convertToBoolean(l, null, null);
         assertNull(b);
     }
 
     @Test
     public void convertToBooleanNegative() throws Exception {
         Long dt = -1L;
-        Boolean b = converter.convertToBoolean(dt);
+        Boolean b = converter.convertToBoolean(dt, null, null);
         assertTrue(b);
     }
 
@@ -223,7 +223,7 @@ public class LongConverterTest {
     @Test
     public void convertToString() throws Exception {
         Long l = 0L;
-        String s = converter.convertToString(l);
+        String s = converter.convertToString(l, null, null);
         assertNotNull(s);
         assertTrue("0".equals(s));
     }
@@ -231,7 +231,7 @@ public class LongConverterTest {
     @Test
     public void convertToStringNull() throws Exception {
         Long l = null;
-        String s = converter.convertToString(l);
+        String s = converter.convertToString(l, null, null);
         assertNull(s);
     }
 

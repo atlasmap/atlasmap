@@ -142,8 +142,8 @@ public class XmlFieldReader extends XmlFieldTransformer implements AtlasFieldRea
                 } else {
                     Object convertedValue;
                     try {
-                        convertedValue = conversionService.convertType(value, FieldType.STRING,
-                                xmlField.getFieldType());
+                        convertedValue = conversionService.convertType(value, xmlField.getFormat(),
+                                xmlField.getFieldType(), null);
                         xmlField.setValue(convertedValue);
                     } catch (AtlasConversionException e) {
                         AtlasUtil.addAudit(session, xmlField.getDocId(),

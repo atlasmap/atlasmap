@@ -18,11 +18,11 @@ package io.atlasmap.spi;
 /**
  */
 public enum AtlasConversionConcern {
-    NONE("none", "Conversion from '%s' to '%s' is supported"),
-    RANGE("range", "Conversion from '%s' to '%s' can cause out of range exceptions"),
-    FORMAT("format", "Conversion from '%s' to '%s' can cause numeric format exceptions"),
-    CONVENTION("format", "Conversion from '%s' to '%s' uses a default convention for values"),
-    UNSUPPORTED("unsupported", "Conversions from '%s' to '%s' is not supported");
+    NONE("none", "Conversion from '%s' to '%s' is supported"), RANGE("range",
+            "Conversion from '%s' to '%s' can cause out of range exceptions"), FORMAT("format",
+                    "Conversion from '%s' to '%s' can cause numeric format exceptions"), CONVENTION("format",
+                            "Conversion from '%s' to '%s' uses a default convention for values"), UNSUPPORTED(
+                                    "unsupported", "Conversions from '%s' to '%s' is not supported");
 
     private String name;
     private String message;
@@ -37,11 +37,7 @@ public enum AtlasConversionConcern {
     }
 
     public String getMessage(AtlasConversionInfo converterAnno) {
-        String source = (converterAnno.sourceClassName() == null || converterAnno.sourceClassName().isEmpty())
-                ? converterAnno.sourceType().name() : converterAnno.sourceClassName();
-        String target = (converterAnno.targetClassName() == null || converterAnno.targetClassName().isEmpty())
-                ? converterAnno.targetType().name() : converterAnno.targetClassName();
-        return String.format(this.message, source, target);
+        return String.format(this.message, converterAnno.sourceType(), converterAnno.targetType());
     }
 
     public static AtlasConversionConcern fromValue(String v) {

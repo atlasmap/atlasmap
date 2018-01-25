@@ -32,7 +32,8 @@ public class ByteConverter implements AtlasPrimitiveConverter<Byte> {
     @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.BOOLEAN, concerns = {
             AtlasConversionConcern.CONVENTION })
 
-    public Boolean convertToBoolean(Byte value) throws AtlasConversionException {
+    public Boolean convertToBoolean(Byte value, String sourceFormat, String targetFormat)
+            throws AtlasConversionException {
         if (value == null) {
             return null;
         }
@@ -145,7 +146,8 @@ public class ByteConverter implements AtlasPrimitiveConverter<Byte> {
     @Override
     @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.STRING, concerns = {
             AtlasConversionConcern.CONVENTION })
-    public String convertToString(Byte value) throws AtlasConversionException {
+    public String convertToString(Byte value, String sourceFormat, String targetFormat)
+            throws AtlasConversionException {
         if (value == null) {
             return null;
         }

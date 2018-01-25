@@ -21,8 +21,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.Instant;
@@ -31,16 +29,11 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
 import org.junit.Test;
-
-import io.atlasmap.spi.AtlasConversionConcern;
-import io.atlasmap.spi.AtlasConversionInfo;
-import io.atlasmap.v2.FieldType;
 
 public class DateConverterTest {
 
@@ -48,7 +41,7 @@ public class DateConverterTest {
 
     @Test
     public void convertToZonedDateTime() throws Exception {
-        ZonedDateTime zonedDateTime = dateConverter.convertToZonedDateTime(new Date());
+        ZonedDateTime zonedDateTime = dateConverter.convertToZonedDateTime(new Date(), null);
         assertNotNull(zonedDateTime);
         assertThat(zonedDateTime, instanceOf(ZonedDateTime.class));
         assertTrue(zonedDateTime.getZone().getId().equals(ZoneId.systemDefault().getId()));
@@ -56,7 +49,7 @@ public class DateConverterTest {
 
     @Test
     public void convertToZonedDateTimeWithZoneId() throws Exception {
-        ZonedDateTime zonedDateTime = dateConverter.convertToZonedDateTime(new Date(), ZoneId.of("America/New_York"));
+        ZonedDateTime zonedDateTime = dateConverter.convertToZonedDateTime(new Date(), "America/New_York");
         assertNotNull(zonedDateTime);
         assertThat(zonedDateTime, instanceOf(ZonedDateTime.class));
         assertTrue(zonedDateTime.getZone().getId().equals("America/New_York"));
@@ -72,14 +65,14 @@ public class DateConverterTest {
 
     @Test
     public void convertToLocalDateTime() throws Exception {
-        LocalDateTime localDateTime = dateConverter.convertToLocalDateTime(new Date());
+        LocalDateTime localDateTime = dateConverter.convertToLocalDateTime(new Date(), null);
         assertNotNull(localDateTime);
         assertThat(localDateTime, instanceOf(LocalDateTime.class));
     }
 
     @Test
     public void convertToLocalDateTimeWithZoneId() throws Exception {
-        LocalDateTime localDateTime = dateConverter.convertToLocalDateTime(new Date(), ZoneId.of("America/New_York"));
+        LocalDateTime localDateTime = dateConverter.convertToLocalDateTime(new Date(), "America/New_York");
         assertNotNull(localDateTime);
         assertThat(localDateTime, instanceOf(LocalDateTime.class));
         assertTrue(localDateTime.atZone(ZoneId.of("America/New_York")).getZone().getId().equals("America/New_York"));
@@ -87,48 +80,48 @@ public class DateConverterTest {
 
     @Test
     public void convertFromLocalDateTime() throws Exception {
-        Date date = dateConverter.convertFromLocalDateTime(LocalDateTime.now());
+        Date date = dateConverter.convertFromLocalDateTime(LocalDateTime.now(), null);
         assertNotNull(date);
         assertEquals(date.getTime(), date.toInstant().toEpochMilli());
     }
 
     @Test
     public void convertToLocalTime() throws Exception {
-        LocalTime localTime = dateConverter.convertToLocalTime(new Date());
+        LocalTime localTime = dateConverter.convertToLocalTime(new Date(), null);
         assertNotNull(localTime);
         assertThat(localTime, instanceOf(LocalTime.class));
     }
 
     @Test
     public void convertToLocalTimeWithZoneId() throws Exception {
-        LocalTime localTime = dateConverter.convertToLocalTime(new Date(), ZoneId.of("America/New_York"));
+        LocalTime localTime = dateConverter.convertToLocalTime(new Date(), "America/New_York");
         assertNotNull(localTime);
         assertThat(localTime, instanceOf(LocalTime.class));
     }
 
     @Test
     public void convertFromLocalTime() throws Exception {
-        Date date = dateConverter.convertFromLocalTime(LocalTime.now());
+        Date date = dateConverter.convertFromLocalTime(LocalTime.now(), null);
         assertNotNull(date);
     }
 
     @Test
     public void convertToLocalDate() throws Exception {
-        LocalDate localDate = dateConverter.convertToLocalDate(new Date());
+        LocalDate localDate = dateConverter.convertToLocalDate(new Date(), null);
         assertNotNull(localDate);
         assertThat(localDate, instanceOf(LocalDate.class));
     }
 
     @Test
     public void convertToLocalDateWithZoneId() throws Exception {
-        LocalDate localDate = dateConverter.convertToLocalDate(new Date(), ZoneId.of("America/New_York"));
+        LocalDate localDate = dateConverter.convertToLocalDate(new Date(), "America/New_York");
         assertNotNull(localDate);
         assertThat(localDate, instanceOf(LocalDate.class));
     }
 
     @Test
     public void convertFromLocalDate() throws Exception {
-        Date date = dateConverter.convertFromLocalDate(LocalDate.now());
+        Date date = dateConverter.convertFromLocalDate(LocalDate.now(), null, null);
         assertNotNull(date);
     }
 
@@ -147,63 +140,61 @@ public class DateConverterTest {
 
     @Test
     public void convertToTime() throws Exception {
-        Time time = dateConverter.convertToTime(new Date());
+        Time time = dateConverter.convertToTime(new Date(), null);
         assertNotNull(time);
         assertThat(time, instanceOf(Time.class));
     }
 
     @Test
     public void convertToTimeWithZoneId() throws Exception {
-        Time time = dateConverter.convertToTime(new Date(), ZoneId.of("America/New_York"));
+        Time time = dateConverter.convertToTime(new Date(), "America/New_York");
         assertNotNull(time);
         assertThat(time, instanceOf(Time.class));
     }
 
     @Test
     public void convertFromTime() throws Exception {
-        Date date = dateConverter.convertFromTime(Time.valueOf(LocalTime.now()));
+        Date date = dateConverter.convertFromTime(Time.valueOf(LocalTime.now()), null);
         assertNotNull(date);
     }
 
     @Test
     public void convertFromTimeWithZoneId() throws Exception {
-        Date date = dateConverter.convertFromTime(Time.valueOf(LocalTime.now()), ZoneId.of("America/New_York"));
+        Date date = dateConverter.convertFromTime(Time.valueOf(LocalTime.now()), "America/New_York");
         assertNotNull(date);
     }
 
     @Test
     public void convertToSqlDate() throws Exception {
-        java.sql.Date date = dateConverter.convertToSqlDate(new Date());
+        java.sql.Date date = dateConverter.convertToSqlDate(new Date(), null);
         assertNotNull(date);
         assertThat(date, instanceOf(java.sql.Date.class));
     }
 
     @Test
     public void convertFromSqlDate() throws Exception {
-        Date date = dateConverter.convertFromSqlDate(java.sql.Date.valueOf(LocalDate.now()));
+        Date date = dateConverter.convertFromSqlDate(java.sql.Date.valueOf(LocalDate.now()), null);
         assertNotNull(date);
         assertThat(date, instanceOf(Date.class));
     }
 
     @Test
     public void convertFromSqlDateWithZoneId() throws Exception {
-        Date date = dateConverter.convertFromSqlDate(java.sql.Date.valueOf(LocalDate.now()),
-                ZoneId.of("America/New_York"));
+        Date date = dateConverter.convertFromSqlDate(java.sql.Date.valueOf(LocalDate.now()), "America/New_York");
         assertNotNull(date);
         assertThat(date, instanceOf(Date.class));
     }
 
     @Test
     public void convertToGregorianCalendar() throws Exception {
-        GregorianCalendar gregorianCalendar = dateConverter.convertToGregorianCalendar(new Date());
+        GregorianCalendar gregorianCalendar = dateConverter.convertToGregorianCalendar(new Date(), null);
         assertNotNull(gregorianCalendar);
         assertThat(gregorianCalendar, instanceOf(GregorianCalendar.class));
     }
 
     @Test
     public void convertToGregorianCalendarWithZoneId() throws Exception {
-        GregorianCalendar gregorianCalendar = dateConverter.convertToGregorianCalendar(new Date(),
-                ZoneId.of("America/New_York"));
+        GregorianCalendar gregorianCalendar = dateConverter.convertToGregorianCalendar(new Date(), "America/New_York");
         assertNotNull(gregorianCalendar);
         assertThat(gregorianCalendar, instanceOf(GregorianCalendar.class));
         assertTrue(gregorianCalendar.getTimeZone().getID().equals("America/New_York"));
@@ -236,25 +227,11 @@ public class DateConverterTest {
     }
 
     @Test
-    public void convertToStringWithFormatter() throws Exception {
-        String dateString = dateConverter.convertToString(new Date(), DateTimeFormatter.ISO_DATE_TIME);
-        assertNotNull(dateString);
-        dateString = dateConverter.convertToString(new Date(), DateTimeFormatter.ISO_DATE);
-        assertNotNull(dateString);
-        dateString = dateConverter.convertToString(new Date(), DateTimeFormatter.ISO_INSTANT);
-        assertNotNull(dateString);
-        dateString = dateConverter.convertToString(new Date(), DateTimeFormatter.ofPattern("MM/dd/yyyy"));
-        assertNotNull(dateString);
-
-        assertThat(dateString, instanceOf(String.class));
-    }
-
-    @Test
     public void convertFromString() throws Exception {
         // assumes a valid ISO 8601 date time string
-        Date date = dateConverter.convertFromString(Instant.now().toString());
+        Date date = dateConverter.convertFromString(Instant.now().toString(), null, null);
         assertNotNull(date);
-        date = dateConverter.convertFromString("2014-02-20T20:04:05.867Z");
+        date = dateConverter.convertFromString("2014-02-20T20:04:05.867Z", null, null);
         assertNotNull(date);
     }
 
@@ -275,60 +252,6 @@ public class DateConverterTest {
         assertNotNull(date);
         date = dateConverter.convertFromLong(Long.parseLong("0"));
         assertTrue(date.toInstant().toString().equals("1970-01-01T00:00:00Z"));
-    }
-
-    @Test
-    public void checkAnnotations() throws Exception {
-        Class<?> aClass = DateConverter.class;
-        Method[] methods = aClass.getMethods();
-        for (Method method : methods) {
-            if (method.isSynthetic()) {
-                // We are running in Eclipse or jacoco
-                continue;
-            }
-            if (method.getName().startsWith("convertTo") && method.getParameterCount() == 1) {
-                Annotation[] annotations = method.getDeclaredAnnotations();
-                assertNotNull(annotations);
-                assertTrue(annotations.length > 0);
-                for (Annotation annotation : annotations) {
-                    assertTrue(AtlasConversionInfo.class.isAssignableFrom(annotation.annotationType()));
-                    AtlasConversionInfo atlasConversionInfo = (AtlasConversionInfo) annotation;
-                    assertNotNull(atlasConversionInfo);
-                    if (!atlasConversionInfo.sourceClassName().isEmpty()) {
-                        assertNotNull(atlasConversionInfo.sourceClassName());
-                        assertTrue(atlasConversionInfo.sourceClassName().equals("java.util.Date"));
-                    } else {
-                        assertNotNull(atlasConversionInfo.sourceType());
-                        assertTrue(atlasConversionInfo.sourceType().compareTo(FieldType.DATE) == 0);
-                    }
-                    for (AtlasConversionConcern atlasConversionConcern : atlasConversionInfo.concerns()) {
-                        assertNotNull(atlasConversionConcern.getMessage(atlasConversionInfo));
-                        assertNotNull(atlasConversionConcern.value());
-                    }
-                }
-            }
-            if (method.getName().startsWith("convertFrom") && method.getParameterCount() == 1) {
-                Annotation[] annotations = method.getDeclaredAnnotations();
-                assertNotNull(annotations);
-                assertTrue(annotations.length > 0);
-                for (Annotation annotation : annotations) {
-                    assertTrue(AtlasConversionInfo.class.isAssignableFrom(annotation.annotationType()));
-                    AtlasConversionInfo atlasConversionInfo = (AtlasConversionInfo) annotation;
-                    assertNotNull(atlasConversionInfo);
-                    if (!atlasConversionInfo.targetClassName().isEmpty()) {
-                        assertNotNull(atlasConversionInfo.targetClassName());
-                        assertTrue(atlasConversionInfo.targetClassName().equals("java.util.Date"));
-                    } else {
-                        assertNotNull(atlasConversionInfo.targetType());
-                        assertTrue(atlasConversionInfo.targetType().compareTo(FieldType.DATE) == 0);
-                    }
-                    for (AtlasConversionConcern atlasConversionConcern : atlasConversionInfo.concerns()) {
-                        assertNotNull(atlasConversionConcern.getMessage(atlasConversionInfo));
-                        assertNotNull(atlasConversionConcern.value());
-                    }
-                }
-            }
-        }
     }
 
 }

@@ -35,9 +35,7 @@ import org.slf4j.LoggerFactory;
 import io.atlasmap.core.AtlasMappingUtil;
 import io.atlasmap.core.DefaultAtlasConversionService;
 import io.atlasmap.json.v2.AtlasJsonModelFactory;
-import io.atlasmap.json.v2.JsonComplexType;
 import io.atlasmap.json.v2.JsonField;
-import io.atlasmap.json.v2.JsonFields;
 import io.atlasmap.spi.AtlasModuleDetail;
 import io.atlasmap.spi.AtlasModuleMode;
 import io.atlasmap.v2.AtlasMapping;
@@ -339,39 +337,6 @@ public class JsonValidationServiceTest {
         assertFalse(validationHelper.hasErrors());
         assertFalse(validationHelper.hasWarnings());
         assertTrue(validationHelper.hasInfos());
-    }
-
-    @Test
-    public void testValidateAtlasMappingFileConversionRequired() throws Exception {
-        AtlasMapping mapping = mappingUtil.loadMapping("src/test/resources/mappings/HappyPathMapping.xml");
-        assertNotNull(mapping);
-
-        Mapping fieldMapping = (Mapping) mapping.getMappings().getMapping().get(0);
-
-        JsonComplexType complex = jsonModelFactory.createJsonComplexType();
-        complex.setFieldType(FieldType.COMPLEX);
-        JsonField in = (JsonField) fieldMapping.getInputField().get(0);
-        complex.setJsonFields(new JsonFields());
-        complex.setPath("/nest");
-        complex.setName("nest");
-        in.setPath("/nest/" + in.getPath());
-        complex.getJsonFields().getJsonField().add(in);
-        fieldMapping.getInputField().set(0, complex);
-
-        JsonField out = (JsonField) fieldMapping.getOutputField().get(0);
-        out.setFieldType(FieldType.STRING);
-
-        validations.addAll(sourceValidationService.validateMapping(mapping));
-        validations.addAll(targetValidationService.validateMapping(mapping));
-
-        assertFalse(validationHelper.hasErrors());
-        assertTrue(validationHelper.hasWarnings());
-        assertFalse(validationHelper.hasInfos());
-        assertThat(1, is(validationHelper.getCount()));
-        Validation v = validations.get(0);
-        assertEquals(ValidationScope.MAPPING, v.getScope());
-        assertEquals("map.firstName.firstName", v.getId());
-        assertEquals(ValidationStatus.WARN, v.getStatus());
     }
 
     @Test

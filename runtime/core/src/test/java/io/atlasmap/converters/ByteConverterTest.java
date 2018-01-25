@@ -41,13 +41,13 @@ public class ByteConverterTest {
     @Test()
     public void convertToBoolean() throws Exception {
         byte zero = 0;
-        assertFalse(byteConverter.convertToBoolean(new Byte(zero)));
-        assertTrue(byteConverter.convertToBoolean(Byte.MAX_VALUE));
+        assertFalse(byteConverter.convertToBoolean(new Byte(zero), null, null));
+        assertTrue(byteConverter.convertToBoolean(Byte.MAX_VALUE, null, null));
     }
 
     @Test
     public void convertToBooleanNull() throws Exception {
-        assertNull(byteConverter.convertToBoolean(null));
+        assertNull(byteConverter.convertToBoolean(null, null, null));
     }
 
     @Test
@@ -125,12 +125,12 @@ public class ByteConverterTest {
 
     @Test
     public void convertToString() throws Exception {
-        Assert.assertEquals(byteConverter.convertToString(Byte.parseByte("1")), "1");
+        Assert.assertEquals(byteConverter.convertToString(Byte.parseByte("1"), null, null), "1");
     }
 
     @Test
     public void convertToStringNull() throws Exception {
-        assertNull(byteConverter.convertToString(null));
+        assertNull(byteConverter.convertToString(null, null, null));
     }
 
     @Test

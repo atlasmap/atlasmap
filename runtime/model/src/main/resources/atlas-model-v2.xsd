@@ -152,6 +152,7 @@
         <attribute name="status" type="atlas:FieldStatus" use="optional" />
         <attribute name="fieldType" type="atlas:FieldType"
             use="optional" />
+        <attribute name="format" type="string" use="optional" />
     </complexType>
 
     <complexType name="SimpleField">

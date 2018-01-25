@@ -61,7 +61,6 @@ import io.atlasmap.xml.v2.XmlField;
 import io.atlasmap.xml.v2.XmlNamespace;
 import io.atlasmap.xml.v2.XmlNamespaces;
 
-
 @AtlasModuleDetail(name = "XmlModule", uri = "atlas:xml", modes = { "SOURCE", "TARGET" }, dataFormats = {
         "xml" }, configPackages = { "io.atlasmap.xml.v2" })
 public class XmlModule extends BaseAtlasModule {
@@ -153,7 +152,8 @@ public class XmlModule extends BaseAtlasModule {
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("{}: processSourceFieldMapping completed: SourceField:[docId={}, path={}, type={}, value={}]",
-                    getDocId(), sourceField.getDocId(), sourceField.getPath(), sourceField.getFieldType(), sourceField.getValue());
+                    getDocId(), sourceField.getDocId(), sourceField.getPath(), sourceField.getFieldType(),
+                    sourceField.getValue());
         }
     }
 
@@ -173,13 +173,13 @@ public class XmlModule extends BaseAtlasModule {
             outputValue = sourceField.getValue();
         } else if (sourceField.getValue() != null) {
             try {
-                outputValue = getConversionService().convertType(sourceField.getValue(), sourceField.getFieldType(),
-                        targetField.getFieldType());
+                outputValue = getConversionService().convertType(sourceField.getValue(), sourceField.getFormat(),
+                        targetField.getFieldType(), targetField.getFormat());
             } catch (AtlasConversionException e) {
                 AtlasUtil.addAudit(session, targetField.getDocId(),
-                        String.format("Unable to auto-convert for sT=%s tT=%s tF=%s msg=%s",
-                                sourceField.getFieldType(), targetField.getFieldType(), targetField.getPath(),
-                                e.getMessage()), targetField.getPath(), AuditStatus.ERROR, null);
+                        String.format("Unable to auto-convert for sT=%s tT=%s tF=%s msg=%s", sourceField.getFieldType(),
+                                targetField.getFieldType(), targetField.getPath(), e.getMessage()),
+                        targetField.getPath(), AuditStatus.ERROR, null);
                 return;
             }
         }
@@ -189,7 +189,8 @@ public class XmlModule extends BaseAtlasModule {
         if (lookupTable != null) {
             processLookupField(session, lookupTable, targetField.getValue(), targetField);
         }
-        if (isAutomaticallyProcessOutputFieldActions() && targetField.getActions() != null && targetField.getActions().getActions() != null) {
+        if (isAutomaticallyProcessOutputFieldActions() && targetField.getActions() != null
+                && targetField.getActions().getActions() != null) {
             getFieldActionService().processActions(targetField.getActions(), targetField);
         }
 
@@ -197,9 +198,11 @@ public class XmlModule extends BaseAtlasModule {
         writer.write(session);
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug("{}: processTargetFieldMapping completed: SourceField:[docId={}, path={}, type={}, value={}], TargetField:[docId={}, path={}, type={}, value={}]",
-                    getDocId(), sourceField.getDocId(), sourceField.getPath(), sourceField.getFieldType(), sourceField.getValue(),
-                    targetField.getDocId(), targetField.getPath(), targetField.getFieldType(), targetField.getValue());
+            LOG.debug(
+                    "{}: processTargetFieldMapping completed: SourceField:[docId={}, path={}, type={}, value={}], TargetField:[docId={}, path={}, type={}, value={}]",
+                    getDocId(), sourceField.getDocId(), sourceField.getPath(), sourceField.getFieldType(),
+                    sourceField.getValue(), targetField.getDocId(), targetField.getPath(), targetField.getFieldType(),
+                    targetField.getValue());
         }
     }
 
@@ -218,9 +221,9 @@ public class XmlModule extends BaseAtlasModule {
         if (writer != null && writer.getDocument() != null) {
             session.setTargetDocument(getDocId(), convertDocumentToString(writer.getDocument()));
         } else {
-            AtlasUtil.addAudit(session, getDocId(),
-                    String.format("No target document created for DataSource:[id=%s, uri=%s]",
-                            getDocId(), this.getUri()), null, AuditStatus.WARN, null);
+            AtlasUtil.addAudit(session, getDocId(), String
+                    .format("No target document created for DataSource:[id=%s, uri=%s]", getDocId(), this.getUri()),
+                    null, AuditStatus.WARN, null);
         }
         session.removeFieldWriter(getDocId());
 
