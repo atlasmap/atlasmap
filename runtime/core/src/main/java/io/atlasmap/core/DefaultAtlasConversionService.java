@@ -329,44 +329,6 @@ public class DefaultAtlasConversionService implements AtlasConversionService {
         }
     }
 
-    public Object convertTypeOriginal(Object sourceValue, FieldType origSourceType, String sourceFormat,
-            FieldType targetType, String targetFormat) throws AtlasConversionException {
-        FieldType sourceType = null;
-
-        if (origSourceType == null && sourceValue != null) {
-            sourceType = fieldTypeFromClass(sourceValue.getClass());
-        } else {
-            sourceType = FieldType.fromValue(origSourceType.value());
-        }
-
-        if (sourceType == null && targetType == null) {
-            throw new AtlasConversionException("AutoConversion requires sourceType and targetType be specified");
-        }
-
-        if (sourceType.equals(targetType)) {
-            return sourceValue;
-        }
-
-        String targetClassname = classFromFieldType(targetType).getCanonicalName();
-        ConverterKey conveterKey = new ConverterKey(sourceValue.getClass().getCanonicalName(), targetClassname);
-        ConverterMethodHolder methodHolder = converterMethods.get(conveterKey);
-        if (methodHolder != null) {
-            try {
-                Object target = methodHolder.staticMethod ? null : methodHolder.converter;
-                if (methodHolder.containsFormat) {
-                    return methodHolder.method.invoke(target, sourceValue, sourceFormat, targetFormat);
-                } else {
-                    return methodHolder.method.invoke(target, sourceValue);
-                }
-            } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-                throw new AtlasConversionException("Invoking type convertor failed: " + e);
-            }
-        } else {
-            throw new AtlasConversionException(
-                    "Type Conversion is not supported for sT=" + sourceType + " tT=" + targetType);
-        }
-    }
-
     @Override
     public Boolean isPrimitive(String className) {
         if (className == null) {
