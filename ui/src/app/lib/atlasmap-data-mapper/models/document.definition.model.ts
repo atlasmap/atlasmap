@@ -442,7 +442,7 @@ export class DocumentDefinition {
 
     private discoverComplexFields(fields: Field[]): void {
         for (const field of fields) {
-            if (field.type != 'COMPLEX') {
+            if (field.type != 'COMPLEX' && field.type != 'ARRAY[COMPLEX]' && field.type != 'LIST<COMPLEX>') {
                 continue;
             }
             if (field.serviceObject.status == 'SUPPORTED') {
