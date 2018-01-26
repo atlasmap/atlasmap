@@ -14,9 +14,9 @@
     limitations under the License.
 */
 
-import { Component, Input, ViewChildren, ElementRef, QueryList, ViewChild } from '@angular/core';
+import { Component, Input, ViewChildren, ElementRef, QueryList, ViewChild, OnInit } from '@angular/core';
 
-import { ConfigModel } from '../models/config.model';
+import { DocumentType, ConfigModel } from '../models/config.model';
 import { Field } from '../models/field.model';
 import { DocumentDefinition } from '../models/document.definition.model';
 
@@ -37,7 +37,7 @@ import { ModalWindowComponent } from './modal.window.component';
                     <h2 class="card-pf-title">
                         <div class="docName">
                             <i class="fa {{ isSource ? 'fa-hdd-o' : 'fa-download' }}"></i>
-                            <label>{{ getSourcesTargetsLabel() }}</label>
+                            <label>{{ sourcesTargetsLabel }}</label>
                         </div>
                         <i (click)="toggleSearch()" [attr.class]="getSearchIconCSSClass()"></i>
                         <div class="clear"></div>
@@ -53,8 +53,8 @@ import { ModalWindowComponent } from './modal.window.component';
                 </div>
                 <div [attr.class]="searchMode ? 'fieldListSearchOpen' : 'fieldList'" style="overflow:auto;"
                     (scroll)="handleScroll($event)">
-                    <div *ngFor="let docDef of cfg.getDocs(isSource)" #docDetail class="docIdentifier" [attr.id]='docDef.name'>
-                        <div class="card-pf-title documentHeader" tooltip="{{ docDef.fullyQualifiedName }}" placement="bottom"
+                    <div *ngFor="let docDef of documents" #docDetail class="docIdentifier" [attr.id]='docDef.shortName'>
+                        <div class="card-pf-title documentHeader" tooltip="{{ docDef.fullName }}" placement="bottom"
                             *ngIf="isDocNameVisible(docDef)" (click)="toggleFieldVisibility(docDef)">
                             <div style="float:left">
                                 <i class="fa fa-angle-right docCollapseIcon" *ngIf="!docDef.showFields"></i>
@@ -71,9 +71,9 @@ import { ModalWindowComponent } from './modal.window.component';
                             <document-field-detail #fieldDetail *ngFor="let f of docDef.fields" [modalWindow]="modalWindow"
                                 [field]="f" [cfg]="cfg" [lineMachine]="lineMachine"></document-field-detail>
                             <div class="FieldDetail"
-                                *ngIf="!searchMode && docDef.initCfg.type.isPropertyOrConstant() && !docDef.fields.length">
+                                *ngIf="!searchMode && docDef.isPropertyOrConstant && (!docDef.fields || !docDef.fields.length)">
                                 <label style="width:100%; padding:5px 16px; margin:0">
-                                    No {{ docDef.initCfg.type.isProperty() ? 'properties' : 'constants' }} exist.
+                                    No {{ docDef.type == 'Property' ? 'properties' : 'constants' }} exist.
                                 </label>
                             </div>
                         </div>
@@ -88,7 +88,7 @@ import { ModalWindowComponent } from './modal.window.component';
     `,
 })
 
-export class DocumentDefinitionComponent {
+export class DocumentDefinitionComponent implements OnInit {
     @Input() cfg: ConfigModel;
     @Input() isSource = false;
     @Input() lineMachine: LineMachineComponent;
@@ -103,9 +103,21 @@ export class DocumentDefinitionComponent {
     private scrollTop = 0;
     private searchResultsExist = false;
 
+    private sourcesTargetsLabel: string;
+    private documents: DocumentDefinition[];
+
+    ngOnInit(): void {
+        if (this.isSource) {
+            this.sourcesTargetsLabel = (this.cfg.sourceDocs.length > 1) ? 'Sources' : 'Source';
+        } else {
+            this.sourcesTargetsLabel = (this.cfg.targetDocs.length > 1) ? 'Targets' : 'Target';
+        }
+        this.documents = this.cfg.getDocs(this.isSource);
+    }
+
     getDocDefElementPosition(docDef: DocumentDefinition): any {
         for (const c of this.docElements.toArray()) {
-            if (c.nativeElement.id == docDef.name) {
+            if (c.nativeElement.id == docDef.shortName) {
                 const documentElementAbsPosition: any = this.getElementPositionForElement(c.nativeElement, false, true);
                 const myElement: any = this.documentDefinitionElement.nativeElement;
                 const myAbsPosition: any = this.getElementPositionForElement(myElement, false, false);
@@ -165,14 +177,6 @@ export class DocumentDefinitionComponent {
         return this.searchMode ? (cssClass + ' selectedIcon') : cssClass;
     }
 
-    getSourcesTargetsLabel(): string {
-        if (this.isSource) {
-            return 'Sources';
-        } else {
-            return (this.cfg.targetDocs.length > 1) ? 'Targets' : 'Target';
-        }
-    }
-
     getFieldCount(): number {
         let count = 0;
         for (const docDef of this.cfg.getDocs(this.isSource)) {
@@ -194,21 +198,21 @@ export class DocumentDefinitionComponent {
 
     addField(docDef: DocumentDefinition, event: any): void {
         event.stopPropagation();
-        const self: DocumentDefinitionComponent = this;
+        const self = this;
         this.modalWindow.reset();
         this.modalWindow.confirmButtonText = 'Save';
-        const isProperty: boolean = docDef.initCfg.type.isProperty();
-        const isConstant: boolean = docDef.initCfg.type.isConstant();
+        const isProperty = docDef.type == DocumentType.PROPERTY;
+        const isConstant = docDef.type == DocumentType.CONSTANT;
         this.modalWindow.headerText = isProperty ? 'Create Property' : (isConstant ? 'Create Constant' : 'Create Field');
         this.modalWindow.nestedComponentInitializedCallback = (mw: ModalWindowComponent) => {
             if (isProperty) {
-                const propertyComponent: PropertyFieldEditComponent = mw.nestedComponent as PropertyFieldEditComponent;
+                const propertyComponent = mw.nestedComponent as PropertyFieldEditComponent;
                 propertyComponent.initialize(null);
             } else if (isConstant) {
-                const constantComponent: ConstantFieldEditComponent = mw.nestedComponent as ConstantFieldEditComponent;
+                const constantComponent = mw.nestedComponent as ConstantFieldEditComponent;
                 constantComponent.initialize(null);
             } else {
-                const fieldComponent: FieldEditComponent = mw.nestedComponent as FieldEditComponent;
+                const fieldComponent = mw.nestedComponent as FieldEditComponent;
                 fieldComponent.isSource = this.isSource;
                 fieldComponent.initialize(null, docDef, true);
             }
@@ -217,13 +221,13 @@ export class DocumentDefinitionComponent {
             : (isConstant ? ConstantFieldEditComponent : FieldEditComponent);
         this.modalWindow.okButtonHandler = (mw: ModalWindowComponent) => {
             if (isProperty) {
-                const propertyComponent: PropertyFieldEditComponent = mw.nestedComponent as PropertyFieldEditComponent;
+                const propertyComponent = mw.nestedComponent as PropertyFieldEditComponent;
                 docDef.addField(propertyComponent.getField());
             } else if (isConstant) {
-                const constantComponent: ConstantFieldEditComponent = mw.nestedComponent as ConstantFieldEditComponent;
+                const constantComponent = mw.nestedComponent as ConstantFieldEditComponent;
                 docDef.addField(constantComponent.getField());
             } else {
-                const fieldComponent: FieldEditComponent = mw.nestedComponent as FieldEditComponent;
+                const fieldComponent = mw.nestedComponent as FieldEditComponent;
                 docDef.addField(fieldComponent.getField());
             }
             self.cfg.mappingService.saveCurrentMapping();
@@ -246,9 +250,9 @@ export class DocumentDefinitionComponent {
     }
 
     isAddFieldAvailable(docDef: DocumentDefinition): boolean {
-        return docDef.initCfg.type.isPropertyOrConstant()
-            || (!docDef.isSource && docDef.initCfg.type.isJSON())
-            || (!docDef.isSource && docDef.initCfg.type.isXML());
+        return docDef.isPropertyOrConstant
+            || (!docDef.isSource && docDef.type == DocumentType.JSON)
+            || (!docDef.isSource && docDef.type == DocumentType.XML);
     }
 
     private search(searchFilter: string): void {

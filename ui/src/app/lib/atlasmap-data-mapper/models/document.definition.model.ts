@@ -15,7 +15,7 @@
 */
 
 import { Field } from './field.model';
-import { ConfigModel } from '../models/config.model';
+import { DocumentType, InspectionType, ConfigModel } from '../models/config.model';
 import { MappingDefinition } from '../models/mapping.definition.model';
 import { DataMapperUtil } from '../common/data.mapper.util';
 
@@ -56,73 +56,45 @@ export class NamespaceModel {
     }
 }
 
-export enum DocumentTypes { JAVA, XML, JSON, CSV, CONSTANT, PROPERTY}
-
-export class DocumentType {
-    public type: DocumentTypes = DocumentTypes.JAVA;
-
-    public isJava(): boolean {
-        return this.type == DocumentTypes.JAVA;
-    }
-
-    public isXML(): boolean {
-        return this.type == DocumentTypes.XML;
-    }
-
-    public isJSON(): boolean {
-        return this.type == DocumentTypes.JSON;
-    }
-
-    public isCSV(): boolean {
-        return this.type == DocumentTypes.CSV;
-    }
-
-    public isConstant(): boolean {
-        return this.type == DocumentTypes.CONSTANT;
-    }
-
-    public isProperty(): boolean {
-        return this.type == DocumentTypes.PROPERTY;
-    }
-
-    public isPropertyOrConstant(): boolean {
-        return this.isProperty() || this.isConstant();
-    }
-}
-
-export class DocumentInitializationConfig {
-    public documentIdentifier: string;
-    public shortIdentifier: string;
-    public type: DocumentType = new DocumentType();
-    public classPath: string;
-    public initialized = false;
-    public errorOccurred = false;
-    public pathSeparator = '/';
-    public documentContents: string = null;
-    public inspectionResultContents: string = null;
-    public inspectionType: string = null;
-}
-
 export class DocumentDefinition {
-    public initCfg: DocumentInitializationConfig = new DocumentInitializationConfig();
-    public name: string;
-    public fullyQualifiedName: string;
-    public fields: Field[] = [];
-    public allFields: Field[] = [];
-    public terminalFields: Field[] = [];
-    public isSource: boolean;
-    public complexFieldsByClassIdentifier: { [key: string]: Field; } = {};
-    public enumFieldsByClassIdentifier: { [key: string]: Field; } = {};
-    public fieldsByPath: { [key: string]: Field; } = {};
-    public uri: string = null;
-    public fieldPaths: string[] = [];
-    public showFields = true;
-    public visibleInCurrentDocumentSearch = true;
-    public namespaces: NamespaceModel[] = [];
-    public characterEncoding: string = null;
-    public locale: string = null;
+    id: string;
+    _type: DocumentType;
+    shortName: string;
+    fullName: string;
+    uri: string;
+    inspectionType: InspectionType;
+    inspectionSource: string;
+    inspectionResult: string;
+    isSource: boolean;
+    isPropertyOrConstant: boolean;
+
+    classPath: string;
+    initialized = false;
+    errorOccurred = false;
+    pathSeparator = '/';
+    fields: Field[] = [];
+    allFields: Field[] = [];
+    terminalFields: Field[] = [];
+    complexFieldsByClassIdentifier: { [key: string]: Field; } = {};
+    enumFieldsByClassIdentifier: { [key: string]: Field; } = {};
+    fieldsByPath: { [key: string]: Field; } = {};
+    fieldPaths: string[] = [];
+    showFields = true;
+    visibleInCurrentDocumentSearch = true;
+    namespaces: NamespaceModel[] = [];
+    characterEncoding: string = null;
+    locale: string = null;
 
     private static noneField: Field = null;
+
+    set type(type: DocumentType) {
+        this._type = type;
+        this.isPropertyOrConstant = type == DocumentType.CONSTANT || type == DocumentType.PROPERTY;
+    }
+
+    get type(): DocumentType {
+        return this._type;
+    }
 
     public getComplexField(classIdentifier: string): Field {
         return this.complexFieldsByClassIdentifier[classIdentifier];
@@ -167,10 +139,12 @@ export class DocumentDefinition {
     }
 
     public getName(includeType: boolean): string {
-        let name: string = this.name;
-        if (ConfigModel.getConfig().showTypes && !this.initCfg.type.isPropertyOrConstant()) {
-            const type: string = this.initCfg.type.isJava() ? ' (Java)' : ' (XML)';
-            name += type;
+        let name = this.shortName;
+        if (ConfigModel.getConfig().showTypes && !this.isPropertyOrConstant) {
+            const type = this.type;
+            if (type) {
+                name += ' (' + type + ')';
+            }
         }
         return name;
     }
@@ -193,7 +167,7 @@ export class DocumentDefinition {
         }
         let field: Field = this.fieldsByPath[fieldPath];
         //if we can't find the field we're looking for, find parent fields and populate their children
-        const pathSeparator: string = this.initCfg.pathSeparator;
+        const pathSeparator: string = this.pathSeparator;
         let originalPath: string = fieldPath;
         //strip beginning path separator from path
         if (originalPath != null && originalPath.indexOf(pathSeparator) == 0) {
@@ -246,7 +220,7 @@ export class DocumentDefinition {
     }
 
     public initializeFromFields(): void {
-        if (this.initCfg.type.isJava()) {
+        if (this.type == DocumentType.JAVA) {
             this.prepareComplexFields();
         }
 
@@ -268,17 +242,17 @@ export class DocumentDefinition {
             }
         }
 
-        this.initCfg.initialized = true;
+        this.initialized = true;
     }
 
     public updateField(field: Field, oldPath: string): void {
         Field.alphabetizeFields(this.fields);
         if (field.parentField == null
             || field.parentField == DocumentDefinition.getNoneField()
-            || this.initCfg.type.isPropertyOrConstant()) {
+            || this.isPropertyOrConstant) {
             this.populateFieldParentPaths(field, null, 0);
         } else {
-            const pathSeparator: string = this.initCfg.pathSeparator;
+            const pathSeparator: string = this.pathSeparator;
             this.populateFieldParentPaths(field, field.parentField.path  + pathSeparator,
                 field.parentField.fieldDepth + 1);
         }
@@ -293,7 +267,7 @@ export class DocumentDefinition {
     public addField(field: Field): void {
         if (field.parentField == null
             || field.parentField == DocumentDefinition.getNoneField()
-            || this.initCfg.type.isPropertyOrConstant()) {
+            || this.isPropertyOrConstant) {
             this.fields.push(field);
             Field.alphabetizeFields(this.fields);
             this.populateFieldParentPaths(field, null, 0);
@@ -301,7 +275,7 @@ export class DocumentDefinition {
             this.populateChildren(field.parentField);
             field.parentField.children.push(field);
             Field.alphabetizeFields(field.parentField.children);
-            const pathSeparator: string = this.initCfg.pathSeparator;
+            const pathSeparator: string = this.pathSeparator;
             this.populateFieldParentPaths(field, field.parentField.path  + pathSeparator,
                 field.parentField.fieldDepth + 1);
         }
@@ -322,7 +296,7 @@ export class DocumentDefinition {
 
         //copy cached field children
         cachedField = cachedField.copy();
-        const pathSeparator: string = this.initCfg.pathSeparator;
+        const pathSeparator: string = this.pathSeparator;
         for (let childField of cachedField.children) {
             childField = childField.copy();
             childField.parentField = field;
@@ -381,12 +355,12 @@ export class DocumentDefinition {
         }
     }
 
-    public static getDocumentByIdentifier(documentIdentifier: string, docs: DocumentDefinition[]): DocumentDefinition {
-        if (documentIdentifier == null || docs == null || !docs.length) {
+    public static getDocumentByIdentifier(documentId: string, docs: DocumentDefinition[]): DocumentDefinition {
+        if (documentId == null || docs == null || !docs.length) {
             return null;
         }
         for (const doc of docs) {
-            if (doc.initCfg.documentIdentifier === documentIdentifier) {
+            if (doc.id === documentId) {
                 return doc;
             }
         }
@@ -396,7 +370,7 @@ export class DocumentDefinition {
 
     private populateFieldParentPaths(field: Field, parentPath: string, depth: number): void {
         if (parentPath == null) {
-            parentPath = this.initCfg.pathSeparator;
+            parentPath = this.pathSeparator;
         }
         field.path = parentPath + field.getNameWithNamespace();
         if (field.isCollection) {
@@ -409,7 +383,7 @@ export class DocumentDefinition {
             field.serviceObject.path = field.path;
         }
         field.fieldDepth = depth;
-        const pathSeparator: string = this.initCfg.pathSeparator;
+        const pathSeparator: string = this.pathSeparator;
         for (const childField of field.children) {
             childField.parentField = field;
             this.populateFieldParentPaths(childField, field.path + pathSeparator, depth + 1);

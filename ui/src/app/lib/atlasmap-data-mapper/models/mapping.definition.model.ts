@@ -199,8 +199,8 @@ export class MappingDefinition {
             }
         }
         for (const doc of cfg.getAllDocs()) {
-            if (doc.initCfg.shortIdentifier == null) {
-                doc.initCfg.shortIdentifier = 'DOC.' + doc.name + '.' + Math.floor((Math.random() * 1000000) + 1).toString();
+            if (doc.id == null) {
+                doc.id = 'DOC.' + doc.shortName + '.' + Math.floor((Math.random() * 1000000) + 1).toString();
             }
         }
     }
@@ -215,11 +215,11 @@ export class MappingDefinition {
                 continue;
             }
 
-            const doc = DocumentDefinition.getDocumentByIdentifier(parsedDoc.initCfg.documentIdentifier, docs);
+            const doc = DocumentDefinition.getDocumentByIdentifier(parsedDoc.id, docs);
             if (doc == null) {
-                cfg.errorService.error("Could not find document with identifier '" + parsedDoc.initCfg.documentIdentifier
+                cfg.errorService.error("Could not find document with identifier '" + parsedDoc.id
                     + "' for namespace override.",
-                    { 'identifier': parsedDoc.initCfg.documentIdentifier, 'parsedDoc': parsedDoc, 'docs': docs });
+                    { 'identifier': parsedDoc.id, 'parsedDoc': parsedDoc, 'docs': docs });
                 continue;
             }
 
@@ -287,7 +287,7 @@ export class MappingDefinition {
                     cfg.errorService.error('Could not find doc ID for mapped field.', mappedField);
                     continue;
                 }
-                doc.initCfg.shortIdentifier = mappedField.parsedData.parsedDocID;
+                doc.id = mappedField.parsedData.parsedDocID;
             }
             mappedField.field = null;
             if (!mappedField.parsedData.userCreated) {

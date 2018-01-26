@@ -16,7 +16,7 @@ limitations under the License.
 
 import { Component, Input } from '@angular/core';
 
-import { ConfigModel } from '../models/config.model';
+import { DocumentType, ConfigModel } from '../models/config.model';
 import { DocumentDefinition } from '../models/document.definition.model';
 
 import { LineMachineComponent } from './line.machine.component';
@@ -115,7 +115,7 @@ export class ToolbarComponent {
 
     public targetSupportsTemplate(): boolean {
         const targetDoc: DocumentDefinition = this.cfg.targetDocs[0];
-        return targetDoc.initCfg.type.isXML() || targetDoc.initCfg.type.isJSON();
+        return targetDoc.type == DocumentType.XML || targetDoc.type == DocumentType.JSON;
     }
 
     public toolbarButtonClicked(action: string, event: any): void {

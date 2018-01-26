@@ -15,7 +15,7 @@
 */
 
 import { MappingDefinition } from './mapping.definition.model';
-import { DocumentDefinition, DocumentTypes } from './document.definition.model';
+import { DocumentDefinition } from './document.definition.model';
 import { Field } from '../models/field.model';
 
 import { ErrorHandlerService } from '../services/error.handler.service';
@@ -24,104 +24,131 @@ import { MappingManagementService } from '../services/mapping.management.service
 import { InitializationService } from '../services/initialization.service';
 import { ErrorInfo } from '../models/error.model';
 
-export class DataMapperInitializationModel {
-    public dataMapperVersion = '0.9.2017.07.28';
-    public initialized = false;
-    public loadingStatus = 'Loading.';
-    public initializationErrorOccurred = false;
+export const enum DocumentType {
+    JAVA = 'Java',
+    XML = 'XML',
+    JSON = 'JSON',
+    CORE = 'Core',
+    CSV = 'CSV',
+    CONSTANT = 'Constants',
+    PROPERTY = 'Property'
+}
 
-    public baseJavaInspectionServiceUrl: string;
-    public baseXMLInspectionServiceUrl: string;
-    public baseJSONInspectionServiceUrl: string;
-    public baseMappingServiceUrl: string;
+export const enum InspectionType {
+    JAVA_CLASS = 'JAVA_CLASS',
+    SCHEMA = 'SCHEMA',
+    INSTANCE = 'INSTANCE'
+}
+
+export class DataMapperInitializationModel {
+    dataMapperVersion = '0.9.2017.07.28';
+    initialized = false;
+    loadingStatus = 'Loading.';
+    initializationErrorOccurred = false;
+
+    baseJavaInspectionServiceUrl: string;
+    baseXMLInspectionServiceUrl: string;
+    baseJSONInspectionServiceUrl: string;
+    baseMappingServiceUrl: string;
 
     /* class path fetching configuration */
-    public classPathFetchTimeoutInMilliseconds = 30000;
+    classPathFetchTimeoutInMilliseconds = 30000;
     // if classPath is specified, maven call to resolve pom will be skipped
-    public pomPayload: string;
+    pomPayload: string;
 
-    public classPath: string;
+    classPath: string;
 
     /* inspection service filtering flags */
-    public fieldNameBlacklist: string[] = [];
-    public classNameBlacklist: string[] = [];
-    public disablePrivateOnlyFields = false;
-    public disableProtectedOnlyFields = false;
-    public disablePublicOnlyFields = false;
-    public disablePublicGetterSetterFields = false;
+    fieldNameBlacklist: string[] = [];
+    classNameBlacklist: string[] = [];
+    disablePrivateOnlyFields = false;
+    disableProtectedOnlyFields = false;
+    disablePublicOnlyFields = false;
+    disablePublicGetterSetterFields = false;
 
     /* mock data configuration */
-    public discardNonMockSources = false;
-    public addMockJSONMappings = false;
-    public addMockJavaSingleSource = false;
-    public addMockJavaSources = false;
-    public addMockJavaCachedSource = false;
-    public addMockXMLInstanceSources = false;
-    public addMockXMLSchemaSources = false;
-    public addMockJSONSources = false;
-    public addMockJSONInstanceSources = false;
-    public addMockJSONSchemaSources = false;
+    discardNonMockSources = false;
+    addMockJSONMappings = false;
+    addMockJavaSingleSource = false;
+    addMockJavaSources = false;
+    addMockJavaCachedSource = false;
+    addMockXMLInstanceSources = false;
+    addMockXMLSchemaSources = false;
+    addMockJSONSources = false;
+    addMockJSONInstanceSources = false;
+    addMockJSONSchemaSources = false;
 
-    public addMockJavaTarget = false;
-    public addMockJavaCachedTarget = false;
-    public addMockXMLInstanceTarget = false;
-    public addMockXMLSchemaTarget = false;
-    public addMockJSONTarget = false;
-    public addMockJSONInstanceTarget = false;
-    public addMockJSONSchemaTarget = false;
+    addMockJavaTarget = false;
+    addMockJavaCachedTarget = false;
+    addMockXMLInstanceTarget = false;
+    addMockXMLSchemaTarget = false;
+    addMockJSONTarget = false;
+    addMockJSONInstanceTarget = false;
+    addMockJSONSchemaTarget = false;
 
     /* debug logging toggles */
-    public debugDocumentServiceCalls = false;
-    public debugDocumentParsing = false;
-    public debugMappingServiceCalls = false;
-    public debugClassPathServiceCalls = false;
-    public debugValidationServiceCalls = false;
-    public debugFieldActionServiceCalls = false;
+    debugDocumentServiceCalls = false;
+    debugDocumentParsing = false;
+    debugMappingServiceCalls = false;
+    debugClassPathServiceCalls = false;
+    debugValidationServiceCalls = false;
+    debugFieldActionServiceCalls = false;
 
-    public mappingInitialized = false;
-    public fieldActionsInitialized = false;
+    mappingInitialized = false;
+    fieldActionsInitialized = false;
+}
+
+export class DocumentInitializationModel {
+    id: string;
+    type: DocumentType;
+    shortName: string;
+    fullName: string;
+    isSource: boolean;
+    inspectionType: InspectionType;
+    inspectionSource: string;
+    inspectionResult: string;
 }
 
 export class ConfigModel {
-    public static mappingServicesPackagePrefix = 'io.atlasmap.v2';
-    public static javaServicesPackagePrefix = 'io.atlasmap.java.v2';
+    static mappingServicesPackagePrefix = 'io.atlasmap.v2';
+    static javaServicesPackagePrefix = 'io.atlasmap.java.v2';
 
-    public initCfg: DataMapperInitializationModel = new DataMapperInitializationModel;
+    initCfg: DataMapperInitializationModel = new DataMapperInitializationModel;
 
     /* current ui state config */
-    public showMappingDetailTray = false;
-    public showMappingTable = false;
-    public showNamespaceTable = false;
-    public showLinesAlways = true;
-    public showTypes = false;
-    public showMappedFields = true;
-    public showUnmappedFields = true;
-    public currentDraggedField: Field = null;
+    showMappingDetailTray = false;
+    showMappingTable = false;
+    showNamespaceTable = false;
+    showLinesAlways = true;
+    showTypes = false;
+    showMappedFields = true;
+    showUnmappedFields = true;
+    currentDraggedField: Field = null;
 
-    public documentService: DocumentManagementService;
-    public mappingService: MappingManagementService;
-    public errorService: ErrorHandlerService;
-    public initializationService: InitializationService;
+    documentService: DocumentManagementService;
+    mappingService: MappingManagementService;
+    errorService: ErrorHandlerService;
+    initializationService: InitializationService;
 
-    public sourceDocs: DocumentDefinition[] = [];
-    public targetDocs: DocumentDefinition[] = [];
-    public propertyDoc: DocumentDefinition = new DocumentDefinition();
-    public constantDoc: DocumentDefinition = new DocumentDefinition();
-    public mappingFiles: string[] = [];
+    sourceDocs: DocumentDefinition[] = [];
+    targetDocs: DocumentDefinition[] = [];
+    propertyDoc: DocumentDefinition = new DocumentDefinition();
+    constantDoc: DocumentDefinition = new DocumentDefinition();
+    mappingFiles: string[] = [];
 
-    public mappings: MappingDefinition = null;
+    mappings: MappingDefinition = null;
 
-    public errors: ErrorInfo[] = [];
-    public validationErrors: ErrorInfo[] = [];
+    errors: ErrorInfo[] = [];
+    validationErrors: ErrorInfo[] = [];
 
     private static cfg: ConfigModel = new ConfigModel();
 
     constructor() {
-        this.propertyDoc.initCfg.type.type = DocumentTypes.PROPERTY;
-        this.propertyDoc.name = 'Properties';
+        this.propertyDoc.type = DocumentType.PROPERTY;
+        this.propertyDoc.shortName = 'Properties';
         this.propertyDoc.isSource = true;
-        this.constantDoc.initCfg.type.type = DocumentTypes.CONSTANT;
-        this.constantDoc.name = 'Constants';
+        this.constantDoc.type = DocumentType.CONSTANT;
+        this.constantDoc.shortName = 'Constants';
         this.constantDoc.isSource = true;
     }
 
@@ -133,42 +160,35 @@ export class ConfigModel {
         ConfigModel.cfg = cfg;
     }
 
-    public addJavaDocument(documentIdentifier: string, isSource: boolean): DocumentDefinition {
-        const docDef = this.createDocument(documentIdentifier, isSource, DocumentTypes.JAVA, null);
-        docDef.uri = 'atlas:java?className=' + documentIdentifier;
+    public addDocument(docInitModel: DocumentInitializationModel): DocumentDefinition {
+        const docDef: DocumentDefinition = new DocumentDefinition();
+        docDef.id = docInitModel.id;
+        docDef.type = docInitModel.type;
+        docDef.shortName = docInitModel.shortName;
+        docDef.fullName = docInitModel.fullName;
+        docDef.isSource = docInitModel.isSource;
+        docDef.inspectionType = docInitModel.inspectionType;
+        docDef.inspectionSource = docInitModel.inspectionSource;
+        docDef.inspectionResult = docInitModel.inspectionResult;
+        docDef.uri = 'atlas:' + docDef.type.toLowerCase() + ':' + docDef.id;
+        if (docDef.type == DocumentType.JAVA) {
+            docDef.uri += '?className=' + docDef.inspectionSource;
+        }
+
+        if (docInitModel.isSource) {
+            this.sourceDocs.push(docDef);
+        } else {
+            this.targetDocs.push(docDef);
+        }
         return docDef;
     }
 
-    public addJSONDocument(documentIdentifier: string, documentContents: string, isSource: boolean): DocumentDefinition {
-        return this.createDocument(documentIdentifier, isSource, DocumentTypes.JSON, documentContents);
-    }
-
-    public addJSONInstanceDocument(documentIdentifier: string, documentContents: string, isSource: boolean): DocumentDefinition {
-        const docDef: DocumentDefinition = this.createDocument(documentIdentifier, isSource, DocumentTypes.JSON, documentContents);
-        docDef.initCfg.inspectionType = 'INSTANCE';
-        docDef.uri = 'atlas:json:' + documentIdentifier;
-        return docDef;
-    }
-
-    public addJSONSchemaDocument(documentIdentifier: string, documentContents: string, isSource: boolean): DocumentDefinition {
-        const docDef: DocumentDefinition = this.createDocument(documentIdentifier, isSource, DocumentTypes.JSON, documentContents);
-        docDef.initCfg.inspectionType = 'SCHEMA';
-        docDef.uri = 'atlas:json:' + documentIdentifier;
-        return docDef;
-    }
-
-    public addXMLInstanceDocument(documentIdentifier: string, documentContents: string, isSource: boolean): DocumentDefinition {
-        const docDef: DocumentDefinition = this.createDocument(documentIdentifier, isSource, DocumentTypes.XML, documentContents);
-        docDef.initCfg.inspectionType = 'INSTANCE';
-        docDef.uri = 'atlas:xml:' + documentIdentifier;
-        return docDef;
-    }
-
-    public addXMLSchemaDocument(documentIdentifier: string, documentContents: string, isSource: boolean): DocumentDefinition {
-        const docDef: DocumentDefinition = this.createDocument(documentIdentifier, isSource, DocumentTypes.XML, documentContents);
-        docDef.initCfg.inspectionType = 'SCHEMA';
-        docDef.uri = 'atlas:xml:' + documentIdentifier;
-        return docDef;
+    public addDocuments(docModels: DocumentInitializationModel[]): DocumentDefinition[] {
+        const docDefs: DocumentDefinition[] = [];
+        for (const docModel of docModels) {
+            docDefs.push(this.addDocument(docModel));
+        }
+        return docDefs;
     }
 
     public getDocsWithoutPropertyDoc(isSource: boolean): DocumentDefinition[] {
@@ -182,7 +202,7 @@ export class ConfigModel {
 
     public hasJavaDocuments(): boolean {
         for (const doc of this.getAllDocs()) {
-            if (doc.initCfg.type.isJava()) {
+            if (doc.type == DocumentType.JAVA) {
                 return true;
             }
         }
@@ -194,16 +214,16 @@ export class ConfigModel {
             return false;
         }
         for (const doc of this.getAllDocs()) {
-            if (doc.initCfg.type.isJava() && doc.initCfg.inspectionResultContents == null) {
+            if (doc.type == DocumentType.JAVA && doc.inspectionResult == null) {
                 return true;
             }
         }
         return false;
     }
 
-    public getDocForShortIdentifier(shortIdentifier: string, isSource: boolean): DocumentDefinition {
+    public getDocForIdentifier(documentId: string, isSource: boolean): DocumentDefinition {
         for (const d of this.getDocs(isSource)) {
-            if (d.initCfg.shortIdentifier == shortIdentifier) {
+            if (d.id == documentId) {
                 return d;
             }
         }
@@ -213,7 +233,7 @@ export class ConfigModel {
     public getFirstXmlDoc(isSource: boolean) {
         const docs: DocumentDefinition[] = this.getDocsWithoutPropertyDoc(isSource);
         for (const doc of docs) {
-            if (doc.initCfg.type.isXML()) {
+            if (doc.type == DocumentType.XML) {
                 return doc;
             }
         }
@@ -225,32 +245,12 @@ export class ConfigModel {
     }
 
     public documentsAreLoaded(): boolean {
-        for (const d of this.getAllDocs()) {
-            if (!d.initCfg.initialized) {
+        for (const doc of this.getAllDocs()) {
+            if (!doc.initialized) {
                 return false;
             }
         }
         return true;
-    }
-
-    private createDocument(documentIdentifier: string, isSource: boolean,
-                           docType: DocumentTypes, documentContents: string): DocumentDefinition {
-        const docDef: DocumentDefinition = new DocumentDefinition();
-        docDef.isSource = isSource;
-        docDef.initCfg.documentIdentifier = documentIdentifier;
-        docDef.initCfg.shortIdentifier = documentIdentifier;
-        docDef.uri = documentIdentifier;
-        docDef.name = documentIdentifier;
-        docDef.initCfg.type.type = docType;
-        docDef.initCfg.documentContents = documentContents;
-        docDef.initCfg.inspectionType = 'INSTANCE';
-        if (isSource) {
-            this.sourceDocs.push(docDef);
-        } else {
-            this.targetDocs.push(docDef);
-        }
-        return docDef;
-
     }
 
 }
