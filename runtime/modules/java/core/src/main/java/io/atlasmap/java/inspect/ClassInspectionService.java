@@ -184,7 +184,9 @@ public class ClassInspectionService {
         }
 
         JavaClass javaClass = AtlasJavaModelFactory.createJavaClass();
-        inspectClass(classLoader, clazz, javaClass, new HashSet<String>(), null);
+        Set<String> cachedClasses = new HashSet<String>();
+        cachedClasses.add(clazz.getCanonicalName()); // we cache ourself
+        inspectClass(classLoader, clazz, javaClass, cachedClasses, null);
         return javaClass;
     }
 
