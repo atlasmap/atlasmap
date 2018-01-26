@@ -1,10 +1,10 @@
-= Reference Mappings Overview =
+# Reference Mappings Overview #
 
-== Introduction == 
+## Introduction ##
 
 The itests/reference-mappings test cases were created with the intent of testing a competely exhaustive (CE) combination of field types and data formats.
 
-== The Tests ==
+## Test Scenarios ##
 
 The tests are broken up by big scenario use cases:
 
@@ -31,7 +31,7 @@ The sub-tests include coverage for:
 6. Rooted and un-rooted Json and Xml object types
 7. Fully qualified namespaced Xml and non-namespaced Xml documents
 
-== Target Audience ==
+## Target Audience ##
 
 The refrence-mappings are targeted to multiple user groups:
 
