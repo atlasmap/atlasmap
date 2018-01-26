@@ -6,7 +6,10 @@ The itests/reference-mappings test cases were created with the intent of testing
 
 ## Test Scenarios ##
 
-The tests are broken up by big scenario use cases:
+
+### Format to Format Testing ###
+
+The tests are broken up by high-level functional use cases based on source and target format
 
 For example:
 
@@ -15,11 +18,17 @@ For example:
 3. Xml to Java, Json and Xml mappings
 4. multidoc mappings
 
+### Test artifacts ###
+
 Within each of these high-level scenarios, the use cases are broken down into sub-test types. Each test scenario includes:
 
 1. A complete atlasmapping file
 2. Sample generated source document
 3. Validation routine to confirm the expected output is correct
+
+Note: For simplicity and the ability to re-use validation methods, many of the test objects share the same name and data shape
+
+### Data Type Coverage ###
 
 The sub-tests include coverage for:
 
@@ -31,7 +40,7 @@ The sub-tests include coverage for:
 6. Rooted and un-rooted Json and Xml object types
 7. Fully qualified namespaced Xml and non-namespaced Xml documents
 
-## Auto-Conversion and Auto-Detection Testing ##
+### Auto-Conversion and Auto-Detection Testing ###
 
 AtlasMap supports 2 advanced features to simplify the syntax and reduce the verbosity of mapping definition files.
 
