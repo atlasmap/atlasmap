@@ -21,20 +21,20 @@ import { ConfigModel } from '../models/config.model';
 
 @Injectable()
 export class ErrorHandlerService {
-    public cfg: ConfigModel = null;
+    cfg: ConfigModel = null;
 
-    public debug(message: string, error: any) { this.addError(message, ErrorLevel.DEBUG, error); }
-    public info(message: string, error: any) { this.addError(message, ErrorLevel.INFO, error); }
-    public warn(message: string, error: any) { this.addError(message, ErrorLevel.WARN, error); }
-    public error(message: string, error: any) { this.addError(message, ErrorLevel.ERROR, error); }
-    public validationError(message: string, error: any) { this.addValidationError(message, error); }
+    debug(message: string, error: any) { this.addError(message, ErrorLevel.DEBUG, error); }
+    info(message: string, error: any) { this.addError(message, ErrorLevel.INFO, error); }
+    warn(message: string, error: any) { this.addError(message, ErrorLevel.WARN, error); }
+    error(message: string, error: any) { this.addError(message, ErrorLevel.ERROR, error); }
+    validationError(message: string, error: any) { this.addValidationError(message, error); }
 
-    public removeError(identifier: string): void {
+    removeError(identifier: string): void {
         this.cfg.errors = this.cfg.errors.filter(e => e.identifier !== identifier);
         this.cfg.validationErrors = this.cfg.validationErrors.filter(e => e.identifier !== identifier);
     }
 
-    public clearValidationErrors(): void {
+    clearValidationErrors(): void {
         this.cfg.validationErrors = [];
     }
 

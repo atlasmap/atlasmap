@@ -18,26 +18,26 @@ import { Field } from './field.model';
 import { FieldMappingPair } from './mapping.model';
 
 export class FieldActionArgument {
-    public name: string = null;
-    public type = 'STRING';
-    public serviceObject: any = new Object();
+    name: string = null;
+    type = 'STRING';
+    serviceObject: any = new Object();
 }
 
 export class FieldActionArgumentValue {
-    public name: string = null;
-    public value: string = null;
+    name: string = null;
+    value: string = null;
 }
 
 export class FieldAction {
-    public static combineActionConfig: FieldActionConfig = null;
-    public static separateActionConfig: FieldActionConfig = null;
+    static combineActionConfig: FieldActionConfig = null;
+    static separateActionConfig: FieldActionConfig = null;
 
-    public isSeparateOrCombineMode = false;
-    public name: string;
-    public config: FieldActionConfig = null;
-    public argumentValues: FieldActionArgumentValue[] = [];
+    isSeparateOrCombineMode = false;
+    name: string;
+    config: FieldActionConfig = null;
+    argumentValues: FieldActionArgumentValue[] = [];
 
-    public getArgumentValue(argumentName: string): FieldActionArgumentValue {
+    getArgumentValue(argumentName: string): FieldActionArgumentValue {
         for (const argValue of this.argumentValues) {
             if (argValue.name == argumentName) {
                 return argValue;
@@ -50,11 +50,11 @@ export class FieldAction {
         return newArgValue;
     }
 
-    public setArgumentValue(argumentName: string, value: string): void {
+    setArgumentValue(argumentName: string, value: string): void {
         this.getArgumentValue(argumentName).value = value;
     }
 
-    public static createSeparateCombineFieldAction(separateMode: boolean, value: string) {
+    static createSeparateCombineFieldAction(separateMode: boolean, value: string) {
         if (FieldAction.combineActionConfig == null) {
             const argument: FieldActionArgument = new FieldActionArgument();
             argument.name = 'Index';
@@ -80,19 +80,19 @@ export class FieldAction {
 }
 
 export class FieldActionConfig {
-    public name: string;
-    public arguments: FieldActionArgument[] = [];
-    public method: string;
-    public sourceType = 'undefined';
-    public targetType = 'undefined';
-    public serviceObject: any = new Object();
+    name: string;
+    arguments: FieldActionArgument[] = [];
+    method: string;
+    sourceType = 'undefined';
+    targetType = 'undefined';
+    serviceObject: any = new Object();
 
     /**
      * Return true if the target field pair is numeric, string or the field pair types
      * match the current field action types.
      * @param fieldPair
      */
-    public appliesToField(fieldPair: FieldMappingPair): boolean {
+    appliesToField(fieldPair: FieldMappingPair): boolean {
 
         if (fieldPair == null) {
             return false;
@@ -118,7 +118,7 @@ export class FieldActionConfig {
         return ((sourceField.type == this.sourceType) && (targetField.type == this.targetType));
     }
 
-    public populateFieldAction(action: FieldAction): void {
+    populateFieldAction(action: FieldAction): void {
         action.name = this.name;
         action.config = this;
 
@@ -131,7 +131,7 @@ export class FieldActionConfig {
         }
     }
 
-    public getArgumentForName(name: string): FieldActionArgument {
+    getArgumentForName(name: string): FieldActionArgument {
         for (const argument of this.arguments) {
             if (argument.name == name) {
                 return argument;
@@ -145,11 +145,11 @@ export enum TransitionMode { MAP, SEPARATE, ENUM, COMBINE }
 export enum TransitionDelimiter { NONE, COLON, COMMA, MULTISPACE, SPACE }
 
 export class TransitionDelimiterModel {
-    public delimiter: TransitionDelimiter = TransitionDelimiter.SPACE;
-    public serializedValue: string = null;
-    public prettyName: string = null;
+    delimiter: TransitionDelimiter = TransitionDelimiter.SPACE;
+    serializedValue: string = null;
+    prettyName: string = null;
 
-    public constructor(delimiter: TransitionDelimiter, serializedValue: string, prettyName: string) {
+    constructor(delimiter: TransitionDelimiter, serializedValue: string, prettyName: string) {
         this.delimiter = delimiter;
         this.serializedValue = serializedValue;
         this.prettyName = prettyName;
@@ -157,14 +157,14 @@ export class TransitionDelimiterModel {
 }
 
 export class TransitionModel {
-    public static delimiterModels: TransitionDelimiterModel[] = [];
-    public static actionConfigs: FieldActionConfig[] = [];
+    static delimiterModels: TransitionDelimiterModel[] = [];
+    static actionConfigs: FieldActionConfig[] = [];
 
-    public mode: TransitionMode = TransitionMode.MAP;
-    public delimiter: TransitionDelimiter = TransitionDelimiter.SPACE;
-    public lookupTableName: string = null;
+    mode: TransitionMode = TransitionMode.MAP;
+    delimiter: TransitionDelimiter = TransitionDelimiter.SPACE;
+    lookupTableName: string = null;
 
-    public constructor() {
+    constructor() {
         if (TransitionModel.delimiterModels.length == 0) {
             const models: TransitionDelimiterModel[] = [];
             models.push(new TransitionDelimiterModel(TransitionDelimiter.NONE, null, '[None]'));
@@ -176,7 +176,7 @@ export class TransitionModel {
         }
     }
 
-    public static getActionConfigForName(actionName: string): FieldActionConfig {
+    static getActionConfigForName(actionName: string): FieldActionConfig {
         if (actionName == null) {
             return null;
         }
@@ -188,7 +188,7 @@ export class TransitionModel {
         return null;
     }
 
-    public static getTransitionDelimiterPrettyName(delimiter: TransitionDelimiter): string {
+    static getTransitionDelimiterPrettyName(delimiter: TransitionDelimiter): string {
         for (const m of TransitionModel.delimiterModels) {
             if (m.delimiter == delimiter) {
                 return m.prettyName;
@@ -197,7 +197,7 @@ export class TransitionModel {
         return null;
     }
 
-    public getSerializedDelimeter(): string {
+    getSerializedDelimeter(): string {
         for (const m of TransitionModel.delimiterModels) {
             if (m.delimiter == this.delimiter) {
                 return m.serializedValue;
@@ -206,7 +206,7 @@ export class TransitionModel {
         return null;
     }
 
-    public setSerializedDelimeterFromSerializedValue(value: string): void {
+    setSerializedDelimeterFromSerializedValue(value: string): void {
         for (const m of TransitionModel.delimiterModels) {
             if (m.serializedValue == value) {
                 this.delimiter = m.delimiter;
@@ -214,7 +214,7 @@ export class TransitionModel {
         }
     }
 
-    public getPrettyName() {
+    getPrettyName() {
         const delimiterDesc: string = TransitionModel.getTransitionDelimiterPrettyName(this.delimiter);
         if (this.mode == TransitionMode.SEPARATE) {
             return 'Separate (' + delimiterDesc + ')';
@@ -226,19 +226,19 @@ export class TransitionModel {
         return 'Map';
     }
 
-    public isSeparateMode(): boolean {
+    isSeparateMode(): boolean {
         return this.mode == TransitionMode.SEPARATE;
     }
 
-    public isMapMode(): boolean {
+    isMapMode(): boolean {
         return this.mode == TransitionMode.MAP;
     }
 
-    public isCombineMode(): boolean {
+    isCombineMode(): boolean {
         return this.mode == TransitionMode.COMBINE;
     }
 
-    public isEnumerationMode(): boolean {
+    isEnumerationMode(): boolean {
         return this.mode == TransitionMode.ENUM;
     }
 }

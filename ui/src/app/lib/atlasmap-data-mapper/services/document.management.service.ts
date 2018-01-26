@@ -28,7 +28,7 @@ import { DataMapperUtil } from '../common/data.mapper.util';
 
 @Injectable()
 export class DocumentManagementService {
-    public cfg: ConfigModel;
+    cfg: ConfigModel;
 
     private headers: Headers = new Headers();
 
@@ -36,7 +36,7 @@ export class DocumentManagementService {
         this.headers.append('Content-Type', 'application/json');
     }
 
-    public initialize(): void {
+    initialize(): void {
         this.cfg.mappingService.mappingUpdated$.subscribe(mappingDefinition => {
             for (const d of this.cfg.getAllDocs()) {
                 if (d.initialized) {
@@ -46,7 +46,7 @@ export class DocumentManagementService {
         });
     }
 
-    public fetchClassPath(): Observable<string> {
+    fetchClassPath(): Observable<string> {
         return new Observable<string>((observer: any) => {
             const requestBody = {
                 'MavenClasspathRequest': {
@@ -73,7 +73,7 @@ export class DocumentManagementService {
         });
     }
 
-    public fetchDocument(docDef: DocumentDefinition, classPath: string): Observable<DocumentDefinition> {
+    fetchDocument(docDef: DocumentDefinition, classPath: string): Observable<DocumentDefinition> {
         return new Observable<DocumentDefinition>((observer: any) => {
             if (docDef.inspectionResult) {
                 const responseJson: any = JSON.parse(docDef.inspectionResult);
@@ -399,7 +399,7 @@ export class DocumentManagementService {
         }
     }
 
-    public static generateMockInstanceXMLDoc(): string {
+    static generateMockInstanceXMLDoc(): string {
         // here we have a bunch of examples we can use.
         let mockDoc = `<data>
                 <intField a='1'>32000</intField><longField>12421</longField>
@@ -492,7 +492,7 @@ export class DocumentManagementService {
         return mockDoc;
     }
 
-    public static generateMockSchemaXMLDoc(): string {
+    static generateMockSchemaXMLDoc(): string {
         let mockDoc = `
             <xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified"
                      xmlns:xs="http://www.w3.org/2001/XMLSchema">
@@ -583,11 +583,11 @@ export class DocumentManagementService {
         return mockDoc;
     }
 
-    public static generateMockJSONDoc(): string {
+    static generateMockJSONDoc(): string {
         return DocumentManagementService.generateMockJSONInstanceDoc();
     }
 
-    public static generateMockJSONInstanceDoc(): string {
+    static generateMockJSONInstanceDoc(): string {
         const mockDoc = `   {
                 "order": {
                     "address": {
@@ -620,7 +620,7 @@ export class DocumentManagementService {
         return mockDoc;
     }
 
-    public static generateMockJSONSchemaDoc(): string {
+    static generateMockJSONSchemaDoc(): string {
         const mockDoc = `
             {
                 "$schema": "http://json-schema.org/schema#",
@@ -694,7 +694,7 @@ export class DocumentManagementService {
         return mockDoc;
     }
 
-    public static generateMockJavaDoc(): string {
+    static generateMockJavaDoc(): string {
         const mockDoc = `
             {
               "JavaClass": {

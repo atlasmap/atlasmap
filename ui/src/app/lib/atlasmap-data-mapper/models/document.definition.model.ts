@@ -20,15 +20,15 @@ import { MappingDefinition } from '../models/mapping.definition.model';
 import { DataMapperUtil } from '../common/data.mapper.util';
 
 export class NamespaceModel {
-    public alias: string = null;
-    public uri: string = null;
-    public locationUri: string = null;
-    public createdByUser = false;
-    public isTarget = false;
+    alias: string = null;
+    uri: string = null;
+    locationUri: string = null;
+    createdByUser = false;
+    isTarget = false;
 
     private static unqualifiedNamespace: NamespaceModel = null;
 
-    public static getUnqualifiedNamespace(): NamespaceModel {
+    static getUnqualifiedNamespace(): NamespaceModel {
         if (NamespaceModel.unqualifiedNamespace == null) {
             const ns: NamespaceModel = new NamespaceModel();
             ns.alias = 'Unqualified';
@@ -37,7 +37,7 @@ export class NamespaceModel {
         return NamespaceModel.unqualifiedNamespace;
     }
 
-    public getPrettyLabel(): string {
+    getPrettyLabel(): string {
         if (this == NamespaceModel.getUnqualifiedNamespace()) {
             return this.alias;
         }
@@ -45,13 +45,13 @@ export class NamespaceModel {
             + ' [' + (this.uri == null ? 'NO URI' : this.uri) + ']';
     }
 
-    public copy(): NamespaceModel {
+    copy(): NamespaceModel {
         const copy: NamespaceModel = new NamespaceModel();
         Object.assign(copy, this);
         return copy;
     }
 
-    public copyFrom(that: NamespaceModel ): void {
+    copyFrom(that: NamespaceModel ): void {
         Object.assign(this, that);
     }
 }
@@ -96,19 +96,19 @@ export class DocumentDefinition {
         return this._type;
     }
 
-    public getComplexField(classIdentifier: string): Field {
+    getComplexField(classIdentifier: string): Field {
         return this.complexFieldsByClassIdentifier[classIdentifier];
     }
 
-    public getEnumField(classIdentifier: string): Field {
+    getEnumField(classIdentifier: string): Field {
         return this.enumFieldsByClassIdentifier[classIdentifier];
     }
 
-    public getAllFields(): Field[] {
+    getAllFields(): Field[] {
         return [].concat(this.allFields);
     }
 
-    public static getNoneField(): Field {
+    static getNoneField(): Field {
         if (DocumentDefinition.noneField == null) {
             DocumentDefinition.noneField = new Field();
             DocumentDefinition.noneField.name = '';
@@ -119,7 +119,7 @@ export class DocumentDefinition {
         return DocumentDefinition.noneField;
     }
 
-    public isFieldsExist(fields: Field[]): boolean {
+    isFieldsExist(fields: Field[]): boolean {
         if (fields == null || fields.length == 0) {
             return true;
         }
@@ -127,7 +127,7 @@ export class DocumentDefinition {
         return (foundFields != null) && (fields.length == foundFields.length);
     }
 
-    public getFields(fieldPaths: string[]): Field[] {
+    getFields(fieldPaths: string[]): Field[] {
         const fields: Field[] = [];
         for (const fieldPath of fieldPaths) {
             const field: Field = this.getField(fieldPath);
@@ -138,7 +138,7 @@ export class DocumentDefinition {
         return fields;
     }
 
-    public getName(includeType: boolean): string {
+    getName(includeType: boolean): string {
         let name = this.shortName;
         if (ConfigModel.getConfig().showTypes && !this.isPropertyOrConstant) {
             const type = this.type;
@@ -149,7 +149,7 @@ export class DocumentDefinition {
         return name;
     }
 
-    public getNamespaceForAlias(alias: string): NamespaceModel {
+    getNamespaceForAlias(alias: string): NamespaceModel {
         for (const ns of this.namespaces) {
             if (alias == ns.alias) {
                 return ns;
@@ -158,7 +158,7 @@ export class DocumentDefinition {
         return null;
     }
 
-    public getField(fieldPath: string): Field {
+    getField(fieldPath: string): Field {
         if (fieldPath == DocumentDefinition.getNoneField().path) {
             return DocumentDefinition.getNoneField();
         }
@@ -193,17 +193,17 @@ export class DocumentDefinition {
         return field;
     }
 
-    public getTerminalFields(): Field[] {
+    getTerminalFields(): Field[] {
         return [].concat(this.terminalFields);
     }
 
-    public clearSelectedFields(): void {
+    clearSelectedFields(): void {
         for (const field of this.allFields) {
             field.selected = false;
         }
     }
 
-    public getSelectedFields(): Field[] {
+    getSelectedFields(): Field[] {
         const fields: Field[] = [];
         for (const field of this.allFields) {
             if (field.selected) {
@@ -213,13 +213,13 @@ export class DocumentDefinition {
         return fields;
     }
 
-    public static selectFields(fields: Field[]): void {
+    static selectFields(fields: Field[]): void {
         for (const field of fields) {
             field.selected = true;
         }
     }
 
-    public initializeFromFields(): void {
+    initializeFromFields(): void {
         if (this.type == DocumentType.JAVA) {
             this.prepareComplexFields();
         }
@@ -245,7 +245,7 @@ export class DocumentDefinition {
         this.initialized = true;
     }
 
-    public updateField(field: Field, oldPath: string): void {
+    updateField(field: Field, oldPath: string): void {
         Field.alphabetizeFields(this.fields);
         if (field.parentField == null
             || field.parentField == DocumentDefinition.getNoneField()
@@ -264,7 +264,7 @@ export class DocumentDefinition {
         this.fieldPaths.sort();
     }
 
-    public addField(field: Field): void {
+    addField(field: Field): void {
         if (field.parentField == null
             || field.parentField == DocumentDefinition.getNoneField()
             || this.isPropertyOrConstant) {
@@ -283,7 +283,7 @@ export class DocumentDefinition {
         this.fieldPaths.sort();
     }
 
-    public populateChildren(field: Field): void {
+    populateChildren(field: Field): void {
         //populate complex fields
         if (field.isTerminal() || (field.children.length > 0)) {
             return;
@@ -307,7 +307,7 @@ export class DocumentDefinition {
         this.fieldPaths.sort();
     }
 
-    public removeField(field: Field): void {
+    removeField(field: Field): void {
         if (field == null) {
             return;
         }
@@ -321,7 +321,7 @@ export class DocumentDefinition {
         }
     }
 
-    public updateFromMappings(mappingDefinition: MappingDefinition, cfg: ConfigModel): void {
+    updateFromMappings(mappingDefinition: MappingDefinition, cfg: ConfigModel): void {
         for (const field of this.allFields) {
             field.partOfMapping = false;
             field.hasUnmappedChildren = false;
@@ -355,7 +355,7 @@ export class DocumentDefinition {
         }
     }
 
-    public static getDocumentByIdentifier(documentId: string, docs: DocumentDefinition[]): DocumentDefinition {
+    static getDocumentByIdentifier(documentId: string, docs: DocumentDefinition[]): DocumentDefinition {
         if (documentId == null || docs == null || !docs.length) {
             return null;
         }

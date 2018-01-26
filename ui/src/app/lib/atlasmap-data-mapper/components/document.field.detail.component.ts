@@ -82,7 +82,7 @@ export class DocumentFieldDetailComponent {
 
     constructor(private sanitizer: DomSanitizer) {}
 
-    public startDrag(event: any): void {
+    startDrag(event: any): void {
         if (!this.field.isTerminal()) {
             // ignore drag event, it's coming from a child field who's already set on the drag event
             return;
@@ -94,7 +94,7 @@ export class DocumentFieldDetailComponent {
         this.cfg.currentDraggedField = this.field;
     }
 
-    public dragEnterLeave(event: any, entering: boolean): void {
+    dragEnterLeave(event: any, entering: boolean): void {
         if (!this.field.isTerminal() || (this.field.isSource() == this.cfg.currentDraggedField.isSource())) {
             this.isDragDropTarget = false;
             return;
@@ -102,7 +102,7 @@ export class DocumentFieldDetailComponent {
         this.isDragDropTarget = entering;
     }
 
-    public allowDrop(event: any): void {
+    allowDrop(event: any): void {
         if (!this.field.isTerminal() || (this.field.isSource() == this.cfg.currentDraggedField.isSource())) {
             this.isDragDropTarget = false;
             return;
@@ -111,7 +111,7 @@ export class DocumentFieldDetailComponent {
         this.isDragDropTarget = true;
     }
 
-    public endDrag(event: any): void {
+    endDrag(event: any): void {
         this.isDragDropTarget = false;
         if (!this.field.isTerminal() || (this.field.isSource() == this.cfg.currentDraggedField.isSource())) {
             return;
@@ -127,7 +127,7 @@ export class DocumentFieldDetailComponent {
 
     }
 
-    public getFieldTypeIcon(): string {
+    getFieldTypeIcon(): string {
         if (this.field.enumeration) {
             return 'fa fa-file-text-o';
         }
@@ -140,19 +140,19 @@ export class DocumentFieldDetailComponent {
         return 'fa fa-file-o';
     }
 
-    public fieldShouldBeVisible(): boolean {
+    fieldShouldBeVisible(): boolean {
         const partOfMapping: boolean = this.field.partOfMapping;
         return partOfMapping ? this.cfg.showMappedFields : this.cfg.showUnmappedFields;
     }
 
-    public getTransformationClass(): string {
+    getTransformationClass(): string {
         if (!this.field.partOfMapping || !this.field.partOfTransformation) {
             return 'partOfMappingIcon partOfMappingIconHidden';
         }
         return 'partOfMappingIcon fa fa-bolt';
     }
 
-    public getMappingClass(): string {
+    getMappingClass(): string {
         if (!this.field.partOfMapping) {
             return 'partOfMappingIcon partOfMappingIconHidden';
         }
@@ -163,7 +163,7 @@ export class DocumentFieldDetailComponent {
         return 'partOfMappingIcon ' + clz;
     }
 
-    public getCssClass(): string {
+    getCssClass(): string {
         let cssClass = 'fieldDetail';
         if (this.field.selected) {
             cssClass += ' selectedField';
@@ -180,7 +180,7 @@ export class DocumentFieldDetailComponent {
         return cssClass;
     }
 
-    public getElementPosition(): any {
+    getElementPosition(): any {
         let x = 0;
         let y = 0;
 
@@ -193,24 +193,24 @@ export class DocumentFieldDetailComponent {
         return { 'x': x, 'y': y };
     }
 
-    public handleMouseOver(event: MouseEvent): void {
+    handleMouseOver(event: MouseEvent): void {
         if (this.field.isTerminal()) {
             this.lineMachine.handleDocumentFieldMouseOver(this, event, this.field.isSource());
         }
     }
 
-    public getParentToggleClass() {
+    getParentToggleClass() {
         return 'arrow fa fa-angle-' + (this.field.collapsed ? 'right' : 'down');
     }
 
-    public handleMouseClick(event: MouseEvent): void {
+    handleMouseClick(event: MouseEvent): void {
         this.cfg.mappingService.fieldSelected(this.field);
         setTimeout(() => {
             this.lineMachine.redrawLinesForMappings();
         }, 10);
     }
 
-    public getFieldDetailComponent(field: Field): DocumentFieldDetailComponent {
+    getFieldDetailComponent(field: Field): DocumentFieldDetailComponent {
         if (this.field == field) {
             return this;
         }
@@ -223,7 +223,7 @@ export class DocumentFieldDetailComponent {
         return null;
     }
 
-    public editField(event: any): void {
+    editField(event: any): void {
         event.stopPropagation();
         const self: DocumentFieldDetailComponent = this;
         const oldPath: string = this.field.path;
@@ -268,7 +268,7 @@ export class DocumentFieldDetailComponent {
         this.modalWindow.show();
     }
 
-    public removeField(event: any): void {
+    removeField(event: any): void {
         event.stopPropagation();
         const self: DocumentFieldDetailComponent = this;
         this.modalWindow.reset();
@@ -287,7 +287,7 @@ export class DocumentFieldDetailComponent {
         this.modalWindow.show();
     }
 
-    public getSpacerWidth(): SafeStyle {
+    getSpacerWidth(): SafeStyle {
         const width: string = (this.field.fieldDepth * 30).toString();
         return this.sanitizer.bypassSecurityTrustStyle('display:inline; margin-left:' + width + 'px');
     }

@@ -25,12 +25,12 @@ import { DocumentDefinitionComponent } from './document.definition.component';
 import { DocumentFieldDetailComponent } from './document.field.detail.component';
 
 export class LineModel {
-    public sourceX: string;
-    public sourceY: string;
-    public targetX: string;
-    public targetY: string;
-    public stroke = 'url(#line-gradient-dormant)';
-    public style: SafeStyle;
+    sourceX: string;
+    sourceY: string;
+    targetX: string;
+    targetY: string;
+    stroke = 'url(#line-gradient-dormant)';
+    style: SafeStyle;
 }
 
 @Component({
@@ -68,10 +68,10 @@ export class LineMachineComponent implements OnInit {
     @Input() docDefInput: DocumentDefinitionComponent;
     @Input() docDefOutput: DocumentDefinitionComponent;
 
-    public lines: LineModel[] = [];
-    public lineBeingFormed: LineModel;
-    public drawingLine = false;
-    public svgStyle: SafeStyle;
+    lines: LineModel[] = [];
+    lineBeingFormed: LineModel;
+    drawingLine = false;
+    svgStyle: SafeStyle;
 
     @ViewChild('lineMachineElement') lineMachineElement: ElementRef;
 
@@ -85,7 +85,7 @@ export class LineMachineComponent implements OnInit {
         });
     }
 
-    public addLineFromParams(sourceX: string, sourceY: string, targetX: string, targetY: string, stroke: string): void {
+    addLineFromParams(sourceX: string, sourceY: string, targetX: string, targetY: string, stroke: string): void {
         const l: LineModel = new LineModel();
         l.sourceX = sourceX;
         l.sourceY = sourceY;
@@ -95,34 +95,34 @@ export class LineMachineComponent implements OnInit {
         this.addLine(l);
     }
 
-    public addLine(l: LineModel): void {
+    addLine(l: LineModel): void {
         this.createLineStyle(l);
         this.lines.push(l);
     }
 
-    public setLineBeingFormed(l: LineModel): void {
+    setLineBeingFormed(l: LineModel): void {
         if (l != null) {
             this.createLineStyle(l);
         }
         this.lineBeingFormed = l;
     }
 
-    public clearLines(): void {
+    clearLines(): void {
         this.lines = [];
     }
 
-    public drawLine(event: MouseEvent): void {
+    drawLine(event: MouseEvent): void {
         this.drawCurrentLine(event.offsetX.toString(), event.offsetY.toString());
     }
 
-    public drawCurrentLine(x: string, y: string): void {
+    drawCurrentLine(x: string, y: string): void {
         if (this.drawingLine && this.lineBeingFormed) {
             this.lineBeingFormed.targetX = x;
             this.lineBeingFormed.targetY = y;
         }
     }
 
-    public handleDocumentFieldMouseOver(component: DocumentFieldDetailComponent, event: any, isSource: boolean): void {
+    handleDocumentFieldMouseOver(component: DocumentFieldDetailComponent, event: any, isSource: boolean): void {
         if (!this.drawingLine) {
             return;
         }
@@ -133,7 +133,7 @@ export class LineMachineComponent implements OnInit {
         this.drawCurrentLine('100%', (targetY + this.yOffset).toString());
     }
 
-    public mappingChanged(): void {
+    mappingChanged(): void {
         const mappingIsNew = false;
         if (!mappingIsNew) {
             this.drawingLine = false;
@@ -169,7 +169,7 @@ export class LineMachineComponent implements OnInit {
         this.redrawLinesForMappings();
     }
 
-    public redrawLinesForMappings(): void {
+    redrawLinesForMappings(): void {
         if (!this.cfg.initCfg.initialized) {
             return;
         }

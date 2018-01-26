@@ -43,19 +43,19 @@ import { ConfigModel } from '../models/config.model';
 })
 
 export class DataMapperErrorComponent {
-    @Input() public errorService: ErrorHandlerService;
-    @Input() public isValidation = false;
+    @Input() errorService: ErrorHandlerService;
+    @Input() isValidation = false;
 
-    public getErrors(): ErrorInfo[] {
+    getErrors(): ErrorInfo[] {
         return this.isValidation ? ConfigModel.getConfig().validationErrors.filter(e => e.level >= ErrorLevel.ERROR)
             : ConfigModel.getConfig().errors;
     }
 
-    public getWarnings(): ErrorInfo[] {
+    getWarnings(): ErrorInfo[] {
         return this.isValidation ? ConfigModel.getConfig().validationErrors.filter(e => e.level === ErrorLevel.WARN) : ErrorInfo[0];
     }
 
-    public handleClick(event: any) {
+    handleClick(event: any) {
         const errorIdentifier: string = event.target.attributes.getNamedItem('errorIdentifier').value;
         this.errorService.removeError(errorIdentifier);
     }

@@ -68,10 +68,10 @@ export class ModalWindowComponent implements AfterViewInit {
     @Input() cancelButtonHandler: Function;
     @Input() cfg: ConfigModel;
 
-    public message: string = null;
-    public nestedComponent: Component;
-    public confirmButtonText = 'OK';
-    public visible = false;
+    message: string = null;
+    nestedComponent: Component;
+    confirmButtonText = 'OK';
+    visible = false;
 
     @ViewChildren('dyn_target', {read: ViewContainerRef}) myTarget: QueryList<ViewContainerRef>;
 
@@ -93,7 +93,7 @@ export class ModalWindowComponent implements AfterViewInit {
         });
     }
 
-    public loadComponent(): void {
+    loadComponent(): void {
         const viewContainerRef: ViewContainerRef = this.myTarget.toArray()[0];
         viewContainerRef.clear();
         const componentFactory = this.componentFactoryResolver.resolveComponentFactory(this.nestedComponentType);
@@ -103,13 +103,13 @@ export class ModalWindowComponent implements AfterViewInit {
         }
     }
 
-    public closeClicked(event: MouseEvent): void { this.buttonClicked(false); }
-    public close(): void { this.visible = false; }
-    public show(): void {
+    closeClicked(event: MouseEvent): void { this.buttonClicked(false); }
+    close(): void { this.visible = false; }
+    show(): void {
         this.visible = true;
     }
 
-    public reset(): void {
+    reset(): void {
         this.cfg.errorService.clearValidationErrors();
         this.nestedComponentInitializedCallback = null;
         this.confirmButtonText = 'OK';

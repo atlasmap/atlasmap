@@ -56,7 +56,7 @@ export class SimpleMappingComponent {
     @Input() isSource = false;
     @Input() fieldPair: FieldMappingPair;
 
-    public isAddButtonVisible(): boolean {
+    isAddButtonVisible(): boolean {
         if (this.isSource && this.fieldPair.transition.isCombineMode()) {
             return true;
         } else if (!this.isSource && this.fieldPair.transition.isSeparateMode()) {
@@ -65,24 +65,24 @@ export class SimpleMappingComponent {
         return false;
     }
 
-    public getTopFieldTypeLabel(): string {
+    getTopFieldTypeLabel(): string {
         return this.isSource ? 'Source' : 'Target';
     }
 
-    public getAddButtonLabel(): string {
+    getAddButtonLabel(): string {
         return this.isSource ? 'Add Source' : 'Add Target';
     }
 
-    public addClicked(): void {
+    addClicked(): void {
         this.fieldPair.addField(DocumentDefinition.getNoneField(), this.isSource);
         this.cfg.mappingService.updateMappedField(this.fieldPair);
     }
 
-    public removePair(): void {
+    removePair(): void {
         this.cfg.mappingService.removeMappedPair(this.fieldPair);
     }
 
-    public removeMappedField(mappedField: MappedField): void {
+    removeMappedField(mappedField: MappedField): void {
         this.fieldPair.removeMappedField(mappedField, this.isSource);
         if (this.fieldPair.getMappedFields(this.isSource).length == 0) {
             this.fieldPair.addField(DocumentDefinition.getNoneField(), this.isSource);
@@ -145,11 +145,11 @@ export class SimpleMappingComponent {
 
 export class CollectionMappingComponent {
     @Input() cfg: ConfigModel;
-    public fieldPairForEditing: FieldMappingPair = null;
+    fieldPairForEditing: FieldMappingPair = null;
     private animateLeft = false;
     private animateRight = false;
 
-    public getAnimationCSSClass(): string {
+    getAnimationCSSClass(): string {
         if (this.animateLeft) {
             return 'dm-swipe-left collectionSectionLeft';
         } else if (this.animateRight) {
@@ -158,29 +158,29 @@ export class CollectionMappingComponent {
         return '';
     }
 
-    public getFields(fieldPair: FieldMappingPair, isSource: boolean): Field[] {
+    getFields(fieldPair: FieldMappingPair, isSource: boolean): Field[] {
         const fields: Field[] = fieldPair.getFields(isSource);
         return (fields.length > 0) ? fields : [DocumentDefinition.getNoneField()];
     }
 
-    public addClicked(): void {
+    addClicked(): void {
         this.cfg.mappingService.addMappedPair();
     }
 
-    public editPair(fieldPair: FieldMappingPair): void {
+    editPair(fieldPair: FieldMappingPair): void {
         this.fieldPairForEditing = fieldPair;
         this.cfg.mappings.activeMapping.currentFieldMapping = fieldPair;
         this.animateLeft = true;
     }
 
-    public exitEditMode(): void {
+    exitEditMode(): void {
         this.fieldPairForEditing = null;
         this.animateLeft = false;
         this.animateRight = true;
         this.cfg.mappings.activeMapping.currentFieldMapping = null;
     }
 
-    public removePair(fieldPair: FieldMappingPair): void {
+    removePair(fieldPair: FieldMappingPair): void {
         this.cfg.mappingService.removeMappedPair(fieldPair);
     }
 }
@@ -208,11 +208,11 @@ export class MappingPairDetailComponent {
     @Input() modalWindow: ModalWindowComponent;
 
     @ViewChild('sourcesHeader')
-    public sourcesHeader: CollapsableHeaderComponent;
+    sourcesHeader: CollapsableHeaderComponent;
     @ViewChild('actionsHeader')
-    public actionsHeader: CollapsableHeaderComponent;
+    actionsHeader: CollapsableHeaderComponent;
     @ViewChild('targetsHeader')
-    public targetsHeader: CollapsableHeaderComponent;
+    targetsHeader: CollapsableHeaderComponent;
 }
 
 @Component({

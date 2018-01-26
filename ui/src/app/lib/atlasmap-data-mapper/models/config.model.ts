@@ -152,15 +152,15 @@ export class ConfigModel {
         this.constantDoc.isSource = true;
     }
 
-    public static getConfig(): ConfigModel {
+    static getConfig(): ConfigModel {
         return ConfigModel.cfg;
     }
 
-    public static setConfig(cfg: ConfigModel): void {
+    static setConfig(cfg: ConfigModel): void {
         ConfigModel.cfg = cfg;
     }
 
-    public addDocument(docInitModel: DocumentInitializationModel): DocumentDefinition {
+    addDocument(docInitModel: DocumentInitializationModel): DocumentDefinition {
         const docDef: DocumentDefinition = new DocumentDefinition();
         docDef.id = docInitModel.id;
         docDef.type = docInitModel.type;
@@ -183,7 +183,7 @@ export class ConfigModel {
         return docDef;
     }
 
-    public addDocuments(docModels: DocumentInitializationModel[]): DocumentDefinition[] {
+    addDocuments(docModels: DocumentInitializationModel[]): DocumentDefinition[] {
         const docDefs: DocumentDefinition[] = [];
         for (const docModel of docModels) {
             docDefs.push(this.addDocument(docModel));
@@ -191,16 +191,16 @@ export class ConfigModel {
         return docDefs;
     }
 
-    public getDocsWithoutPropertyDoc(isSource: boolean): DocumentDefinition[] {
+    getDocsWithoutPropertyDoc(isSource: boolean): DocumentDefinition[] {
         return [].concat(isSource ? this.sourceDocs : this.targetDocs);
     }
 
-    public getDocs(isSource: boolean): DocumentDefinition[] {
+    getDocs(isSource: boolean): DocumentDefinition[] {
         const docs: DocumentDefinition[] = this.getDocsWithoutPropertyDoc(isSource);
         return isSource ? docs.concat([this.propertyDoc, this.constantDoc]) : docs;
     }
 
-    public hasJavaDocuments(): boolean {
+    hasJavaDocuments(): boolean {
         for (const doc of this.getAllDocs()) {
             if (doc.type == DocumentType.JAVA) {
                 return true;
@@ -209,7 +209,7 @@ export class ConfigModel {
         return false;
     }
 
-    public isClassPathResolutionNeeded(): boolean {
+    isClassPathResolutionNeeded(): boolean {
         if (this.initCfg.classPath) {
             return false;
         }
@@ -221,7 +221,7 @@ export class ConfigModel {
         return false;
     }
 
-    public getDocForIdentifier(documentId: string, isSource: boolean): DocumentDefinition {
+    getDocForIdentifier(documentId: string, isSource: boolean): DocumentDefinition {
         for (const d of this.getDocs(isSource)) {
             if (d.id == documentId) {
                 return d;
@@ -230,7 +230,7 @@ export class ConfigModel {
         return null;
     }
 
-    public getFirstXmlDoc(isSource: boolean) {
+    getFirstXmlDoc(isSource: boolean) {
         const docs: DocumentDefinition[] = this.getDocsWithoutPropertyDoc(isSource);
         for (const doc of docs) {
             if (doc.type == DocumentType.XML) {
@@ -240,11 +240,11 @@ export class ConfigModel {
         return null;
     }
 
-    public getAllDocs(): DocumentDefinition[] {
+    getAllDocs(): DocumentDefinition[] {
         return [this.propertyDoc, this.constantDoc].concat(this.sourceDocs).concat(this.targetDocs);
     }
 
-    public documentsAreLoaded(): boolean {
+    documentsAreLoaded(): boolean {
         for (const doc of this.getAllDocs()) {
             if (!doc.initialized) {
                 return false;

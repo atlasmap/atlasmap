@@ -24,7 +24,7 @@ export class ErrorInfo {
     readonly error: any;
     private static errorIdentifierCounter = 0;
 
-    public constructor(message: string, level: ErrorLevel, error?: any) {
+    constructor(message: string, level: ErrorLevel, error?: any) {
         this.identifier = ErrorInfo.errorIdentifierCounter.toString();
         this.message = message;
         this.level = level;

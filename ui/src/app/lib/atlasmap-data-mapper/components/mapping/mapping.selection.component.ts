@@ -71,7 +71,7 @@ export class MappingSelectionSectionComponent {
     @Input() parentComponent: Component;
     @Input() isOddRow = false;
 
-    public getClass(): string {
+    getClass(): string {
         let cssClass = 'MappingSelectionSection';
         if (this.selected) {
             cssClass += ' SelectedMappingSelectionSection';
@@ -82,14 +82,14 @@ export class MappingSelectionSectionComponent {
         return cssClass;
     }
 
-    public getSourceTargetLabelText(isSource: boolean, fieldPair: FieldMappingPair): string {
+    getSourceTargetLabelText(isSource: boolean, fieldPair: FieldMappingPair): string {
         if (isSource) {
             return (fieldPair.sourceFields.length > 0) ? 'Sources' : 'Source';
         }
         return (fieldPair.targetFields.length > 0) ? 'Targets' : 'Target';
     }
 
-    public getFormattedOutputPath(path: string, nameOnly: boolean) {
+    getFormattedOutputPath(path: string, nameOnly: boolean) {
         if (path == null) {
             return '';
         }
@@ -100,7 +100,7 @@ export class MappingSelectionSectionComponent {
         return nameOnly ? fieldName : path;
     }
 
-    public handleMouseClick(event: MouseEvent) {
+    handleMouseClick(event: MouseEvent) {
         this.selectedCallback(this);
     }
 }
@@ -133,10 +133,10 @@ export class MappingSelectionSectionComponent {
 })
 
 export class MappingSelectionComponent {
-    public modalWindow: ModalWindowComponent;
-    public mappings: MappingModel[];
-    public selectedField: Field = null;
-    public cfg: ConfigModel;
+    modalWindow: ModalWindowComponent;
+    mappings: MappingModel[];
+    selectedField: Field = null;
+    cfg: ConfigModel;
 
     @ViewChildren('mappingSection') sectionComponents: QueryList<MappingSelectionSectionComponent>;
 
@@ -150,7 +150,7 @@ export class MappingSelectionComponent {
         self.selectedMappingComponent = c;
     }
 
-    public getFormattedOutputPath(path: string, nameOnly: boolean) {
+    getFormattedOutputPath(path: string, nameOnly: boolean) {
         path = path.replace('.', '/');
         const index: number = path.lastIndexOf('/');
         const fieldName: string = (index == -1) ? path : path.substr(path.lastIndexOf('/') + 1);
@@ -158,12 +158,12 @@ export class MappingSelectionComponent {
         return nameOnly ? fieldName : path;
     }
 
-    public addMapping() {
+    addMapping() {
         this.cfg.mappingService.addNewMapping(this.selectedField);
         this.modalWindow.close();
     }
 
-    public getSelectedMapping(): MappingModel {
+    getSelectedMapping(): MappingModel {
         return this.getSelectedMappingComponent().mapping;
     }
 

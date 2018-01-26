@@ -60,22 +60,22 @@ export class MappingFieldActionComponent {
     @Input() isSource: boolean;
     @Input() fieldPair: FieldMappingPair;
 
-    public getMappedFieldActions(): FieldAction[] {
+    getMappedFieldActions(): FieldAction[] {
         return this.mappedField.actions;
     }
 
-    public getActionDescription(fieldAction: FieldAction): string {
+    getActionDescription(fieldAction: FieldAction): string {
         if (fieldAction.isSeparateOrCombineMode) {
             return fieldAction.config.name;
         }
         return 'Transformation';
     }
 
-    public actionsExistForField(): boolean {
+    actionsExistForField(): boolean {
         return (this.getActionConfigs().length > 0);
     }
 
-    public getActionConfigs(): FieldActionConfig[] {
+    getActionConfigs(): FieldActionConfig[] {
         const configs: FieldActionConfig[] = [];
 
         // Start with the complete list of field actions.
@@ -89,15 +89,15 @@ export class MappingFieldActionComponent {
         return configs;
     }
 
-    public removeAction(action: FieldAction): void {
+    removeAction(action: FieldAction): void {
         this.mappedField.removeAction(action);
     }
 
-    public selectionChanged(event: MouseEvent): void {
+    selectionChanged(event: MouseEvent): void {
         this.cfg.mappingService.saveCurrentMapping();
     }
 
-    public addTransformation(): void {
+    addTransformation(): void {
         const actionConfig: FieldActionConfig = this.getActionConfigs()[0];
         const action: FieldAction = new FieldAction();
         actionConfig.populateFieldAction(action);

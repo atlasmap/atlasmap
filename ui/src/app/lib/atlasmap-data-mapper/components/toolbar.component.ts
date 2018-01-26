@@ -92,7 +92,7 @@ export class ToolbarComponent {
     @Input() lineMachine: LineMachineComponent;
     @Input() modalWindow: ModalWindowComponent;
 
-    public getCSSClass(action: string) {
+    getCSSClass(action: string) {
         if ('showDetails' == action) {
             return 'fa fa-exchange link' + (this.cfg.mappings.activeMapping ? ' selected' : '');
         } else if ('showLines' == action) {
@@ -113,12 +113,12 @@ export class ToolbarComponent {
         }
     }
 
-    public targetSupportsTemplate(): boolean {
+    targetSupportsTemplate(): boolean {
         const targetDoc: DocumentDefinition = this.cfg.targetDocs[0];
         return targetDoc.type == DocumentType.XML || targetDoc.type == DocumentType.JSON;
     }
 
-    public toolbarButtonClicked(action: string, event: any): void {
+    toolbarButtonClicked(action: string, event: any): void {
         event.preventDefault();
         if ('showDetails' == action) {
             if (this.cfg.mappings.activeMapping == null) {

@@ -6,7 +6,7 @@
     // ***************************************************
     // TypeScript linting Ruleset
     // ***************************************************
-    "member-access": false,
+    "member-access": [true, "no-public"],
     "no-empty": [true, "allow-empty-catch"],
     "no-conditional-assignment": true,
     "no-consecutive-blank-lines": [

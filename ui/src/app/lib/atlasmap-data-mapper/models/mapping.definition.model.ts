@@ -24,35 +24,35 @@ import { DocumentDefinition } from '../models/document.definition.model';
 import { DataMapperUtil } from '../common/data.mapper.util';
 
 export class MappingDefinition {
-    public name: string = null;
-    public mappings: MappingModel[] = [];
-    public activeMapping: MappingModel = null;
-    public parsedDocs: DocumentDefinition[] = [];
-    public templateText: string = null;
+    name: string = null;
+    mappings: MappingModel[] = [];
+    activeMapping: MappingModel = null;
+    parsedDocs: DocumentDefinition[] = [];
+    templateText: string = null;
 
     private tables: LookupTable[] = [];
     private tablesBySourceTargetKey: { [key: string]: LookupTable; } = {};
     private tablesByName: { [key: string]: LookupTable; } = {};
 
-    public constructor() {
+    constructor() {
         this.name = 'UI.' + Math.floor((Math.random() * 1000000) + 1).toString();
     }
 
-    public templateExists(): boolean {
+    templateExists(): boolean {
         return ((this.templateText != null) && (this.templateText != ''));
     }
 
-    public addTable(table: LookupTable): void {
+    addTable(table: LookupTable): void {
         this.tablesBySourceTargetKey[table.getInputOutputKey()] = table;
         this.tablesByName[table.name] = table;
         this.tables.push(table);
     }
 
-    public getTableByName(name: string): LookupTable {
+    getTableByName(name: string): LookupTable {
         return this.tablesByName[name];
     }
 
-    public detectTableIdentifiers() {
+    detectTableIdentifiers() {
         for (const t of this.getTables()) {
             if (t.sourceIdentifier && t.targetIdentifier) {
                 continue;
@@ -86,12 +86,12 @@ export class MappingDefinition {
         }
     }
 
-    public getTableBySourceTarget(sourceIdentifier: string, targetIdentifier: string): LookupTable {
+    getTableBySourceTarget(sourceIdentifier: string, targetIdentifier: string): LookupTable {
         const key: string = sourceIdentifier + ':' + targetIdentifier;
         return this.tablesBySourceTargetKey[key];
     }
 
-    public getTables(): LookupTable[] {
+    getTables(): LookupTable[] {
         const tables: LookupTable[] = [];
         for (const key in this.tablesByName) {
             if (!this.tablesByName.hasOwnProperty(key)) {
@@ -103,7 +103,7 @@ export class MappingDefinition {
         return tables;
     }
 
-    public getFirstMappingForLookupTable(lookupTableName: string): MappingModel {
+    getFirstMappingForLookupTable(lookupTableName: string): MappingModel {
         for (const m of this.mappings) {
             for (const fieldPair of m.fieldMappings) {
                 if (fieldPair.transition.lookupTableName == lookupTableName) {
@@ -114,7 +114,7 @@ export class MappingDefinition {
         return null;
     }
 
-    public removeStaleMappings(cfg: ConfigModel): void {
+    removeStaleMappings(cfg: ConfigModel): void {
         let index = 0;
         let sourceFieldPaths: string[] = [];
         for (const doc of cfg.getDocs(true)) {
@@ -135,7 +135,7 @@ export class MappingDefinition {
         }
     }
 
-    public isMappingStale(mapping: MappingModel, sourceFieldPaths: string[], targetSourcePaths: string[]): boolean {
+    isMappingStale(mapping: MappingModel, sourceFieldPaths: string[], targetSourcePaths: string[]): boolean {
         for (const field of mapping.getFields(true)) {
             if (sourceFieldPaths.indexOf(field.path) == -1) {
                 return true;
@@ -149,7 +149,7 @@ export class MappingDefinition {
         return false;
     }
 
-    public initializeMappingLookupTable(m: MappingModel): void {
+    initializeMappingLookupTable(m: MappingModel): void {
         for (const fieldPair of m.fieldMappings) {
             if (!(fieldPair.transition.mode == TransitionMode.ENUM
                 && fieldPair.transition.lookupTableName == null
@@ -183,7 +183,7 @@ export class MappingDefinition {
         }
     }
 
-    public updateMappingsFromDocuments(cfg: ConfigModel): void {
+    updateMappingsFromDocuments(cfg: ConfigModel): void {
         const sourceDocMap: any = {};
         for (const doc of cfg.getDocs(true)) {
             sourceDocMap[doc.uri] = doc;
@@ -205,7 +205,7 @@ export class MappingDefinition {
         }
     }
 
-    public updateDocumentNamespacesFromMappings(cfg: ConfigModel): void {
+    updateDocumentNamespacesFromMappings(cfg: ConfigModel): void {
         const docs: DocumentDefinition[] = cfg.getDocs(false);
         for (const parsedDoc of this.parsedDocs) {
             if (parsedDoc.isSource) {
@@ -227,7 +227,7 @@ export class MappingDefinition {
         }
     }
 
-    public getAllMappings(includeActiveMapping: boolean): MappingModel[] {
+    getAllMappings(includeActiveMapping: boolean): MappingModel[] {
         const mappings: MappingModel[] = [].concat(this.mappings);
         if (includeActiveMapping) {
             if (this.activeMapping == null) {
@@ -243,7 +243,7 @@ export class MappingDefinition {
         return mappings;
     }
 
-    public findMappingsForField(field: Field): MappingModel[] {
+    findMappingsForField(field: Field): MappingModel[] {
         const mappingsForField: MappingModel[] = [];
         for (const m of this.mappings) {
             if (m.isFieldMapped(field, field.isSource())) {
@@ -253,11 +253,11 @@ export class MappingDefinition {
         return mappingsForField;
     }
 
-    public removeMapping(m: MappingModel): boolean {
+    removeMapping(m: MappingModel): boolean {
         return DataMapperUtil.removeItemFromArray(m, this.mappings);
     }
 
-    public removeFieldFromAllMappings(field: Field): void {
+    removeFieldFromAllMappings(field: Field): void {
         for (const mapping of this.getAllMappings(true)) {
             for (const fieldPair of mapping.fieldMappings) {
                 const mappedField: MappedField = fieldPair.getMappedFieldForField(field, field.isSource());

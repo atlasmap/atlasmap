@@ -60,21 +60,21 @@ import { DataMapperUtil } from '../common/data.mapper.util';
 })
 
 export class ConstantFieldEditComponent implements ModalWindowValidator {
-    public field: Field = new Field();
-    public valueType: any = 'STRING';
+    field: Field = new Field();
+    valueType: any = 'STRING';
 
-    public initialize(field: Field): void {
+    initialize(field: Field): void {
         if (field != null) {
             this.valueType = field.type;
         }
         this.field = field == null ? new Field() : field.copy();
     }
 
-    public valueTypeSelectionChanged(event: any): void {
+    valueTypeSelectionChanged(event: any): void {
         this.valueType = event.target.selectedOptions.item(0).attributes.getNamedItem('value').value;
     }
 
-    public getField(): Field {
+    getField(): Field {
         this.field.displayName = this.field.value;
         this.field.name = this.field.value;
         this.field.path = this.field.value;
