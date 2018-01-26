@@ -41,105 +41,105 @@ export const enum InspectionType {
 }
 
 export class DataMapperInitializationModel {
-    public dataMapperVersion = '0.9.2017.07.28';
-    public initialized = false;
-    public loadingStatus = 'Loading.';
-    public initializationErrorOccurred = false;
+    dataMapperVersion = '0.9.2017.07.28';
+    initialized = false;
+    loadingStatus = 'Loading.';
+    initializationErrorOccurred = false;
 
-    public baseJavaInspectionServiceUrl: string;
-    public baseXMLInspectionServiceUrl: string;
-    public baseJSONInspectionServiceUrl: string;
-    public baseMappingServiceUrl: string;
+    baseJavaInspectionServiceUrl: string;
+    baseXMLInspectionServiceUrl: string;
+    baseJSONInspectionServiceUrl: string;
+    baseMappingServiceUrl: string;
 
     /* class path fetching configuration */
-    public classPathFetchTimeoutInMilliseconds = 30000;
+    classPathFetchTimeoutInMilliseconds = 30000;
     // if classPath is specified, maven call to resolve pom will be skipped
-    public pomPayload: string;
+    pomPayload: string;
 
-    public classPath: string;
+    classPath: string;
 
     /* inspection service filtering flags */
-    public fieldNameBlacklist: string[] = [];
-    public classNameBlacklist: string[] = [];
-    public disablePrivateOnlyFields = false;
-    public disableProtectedOnlyFields = false;
-    public disablePublicOnlyFields = false;
-    public disablePublicGetterSetterFields = false;
+    fieldNameBlacklist: string[] = [];
+    classNameBlacklist: string[] = [];
+    disablePrivateOnlyFields = false;
+    disableProtectedOnlyFields = false;
+    disablePublicOnlyFields = false;
+    disablePublicGetterSetterFields = false;
 
     /* mock data configuration */
-    public discardNonMockSources = false;
-    public addMockJSONMappings = false;
-    public addMockJavaSingleSource = false;
-    public addMockJavaSources = false;
-    public addMockJavaCachedSource = false;
-    public addMockXMLInstanceSources = false;
-    public addMockXMLSchemaSources = false;
-    public addMockJSONSources = false;
-    public addMockJSONInstanceSources = false;
-    public addMockJSONSchemaSources = false;
+    discardNonMockSources = false;
+    addMockJSONMappings = false;
+    addMockJavaSingleSource = false;
+    addMockJavaSources = false;
+    addMockJavaCachedSource = false;
+    addMockXMLInstanceSources = false;
+    addMockXMLSchemaSources = false;
+    addMockJSONSources = false;
+    addMockJSONInstanceSources = false;
+    addMockJSONSchemaSources = false;
 
-    public addMockJavaTarget = false;
-    public addMockJavaCachedTarget = false;
-    public addMockXMLInstanceTarget = false;
-    public addMockXMLSchemaTarget = false;
-    public addMockJSONTarget = false;
-    public addMockJSONInstanceTarget = false;
-    public addMockJSONSchemaTarget = false;
+    addMockJavaTarget = false;
+    addMockJavaCachedTarget = false;
+    addMockXMLInstanceTarget = false;
+    addMockXMLSchemaTarget = false;
+    addMockJSONTarget = false;
+    addMockJSONInstanceTarget = false;
+    addMockJSONSchemaTarget = false;
 
     /* debug logging toggles */
-    public debugDocumentServiceCalls = false;
-    public debugDocumentParsing = false;
-    public debugMappingServiceCalls = false;
-    public debugClassPathServiceCalls = false;
-    public debugValidationServiceCalls = false;
-    public debugFieldActionServiceCalls = false;
+    debugDocumentServiceCalls = false;
+    debugDocumentParsing = false;
+    debugMappingServiceCalls = false;
+    debugClassPathServiceCalls = false;
+    debugValidationServiceCalls = false;
+    debugFieldActionServiceCalls = false;
 
-    public mappingInitialized = false;
-    public fieldActionsInitialized = false;
+    mappingInitialized = false;
+    fieldActionsInitialized = false;
 }
 
 export class DocumentInitializationModel {
-    public id: string;
-    public type: DocumentType;
-    public shortName: string;
-    public fullName: string;
-    public isSource: boolean;
-    public inspectionType: InspectionType;
-    public inspectionSource: string;
-    public inspectionResult: string;
+    id: string;
+    type: DocumentType;
+    shortName: string;
+    fullName: string;
+    isSource: boolean;
+    inspectionType: InspectionType;
+    inspectionSource: string;
+    inspectionResult: string;
 }
 
 export class ConfigModel {
-    public static mappingServicesPackagePrefix = 'io.atlasmap.v2';
-    public static javaServicesPackagePrefix = 'io.atlasmap.java.v2';
+    static mappingServicesPackagePrefix = 'io.atlasmap.v2';
+    static javaServicesPackagePrefix = 'io.atlasmap.java.v2';
 
-    public initCfg: DataMapperInitializationModel = new DataMapperInitializationModel;
+    initCfg: DataMapperInitializationModel = new DataMapperInitializationModel;
 
     /* current ui state config */
-    public showMappingDetailTray = false;
-    public showMappingTable = false;
-    public showNamespaceTable = false;
-    public showLinesAlways = true;
-    public showTypes = false;
-    public showMappedFields = true;
-    public showUnmappedFields = true;
-    public currentDraggedField: Field = null;
+    showMappingDetailTray = false;
+    showMappingTable = false;
+    showNamespaceTable = false;
+    showLinesAlways = true;
+    showTypes = false;
+    showMappedFields = true;
+    showUnmappedFields = true;
+    currentDraggedField: Field = null;
 
-    public documentService: DocumentManagementService;
-    public mappingService: MappingManagementService;
-    public errorService: ErrorHandlerService;
-    public initializationService: InitializationService;
+    documentService: DocumentManagementService;
+    mappingService: MappingManagementService;
+    errorService: ErrorHandlerService;
+    initializationService: InitializationService;
 
-    public sourceDocs: DocumentDefinition[] = [];
-    public targetDocs: DocumentDefinition[] = [];
-    public propertyDoc: DocumentDefinition = new DocumentDefinition();
-    public constantDoc: DocumentDefinition = new DocumentDefinition();
-    public mappingFiles: string[] = [];
+    sourceDocs: DocumentDefinition[] = [];
+    targetDocs: DocumentDefinition[] = [];
+    propertyDoc: DocumentDefinition = new DocumentDefinition();
+    constantDoc: DocumentDefinition = new DocumentDefinition();
+    mappingFiles: string[] = [];
 
-    public mappings: MappingDefinition = null;
+    mappings: MappingDefinition = null;
 
-    public errors: ErrorInfo[] = [];
-    public validationErrors: ErrorInfo[] = [];
+    errors: ErrorInfo[] = [];
+    validationErrors: ErrorInfo[] = [];
 
     private static cfg: ConfigModel = new ConfigModel();
 

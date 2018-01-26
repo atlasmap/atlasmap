@@ -103,7 +103,7 @@ export class DocumentDefinitionComponent implements OnInit {
     private scrollTop = 0;
     private searchResultsExist = false;
 
-    private sourcesTargetsLabel: String;
+    private sourcesTargetsLabel: string;
     private documents: DocumentDefinition[];
 
     ngOnInit(): void {

@@ -57,33 +57,33 @@ export class NamespaceModel {
 }
 
 export class DocumentDefinition {
-    public id: string;
-    public _type: DocumentType;
-    public shortName: string;
-    public fullName: string;
-    public uri: string;
-    public inspectionType: InspectionType;
-    public inspectionSource: string;
-    public inspectionResult: string;
-    public isSource: boolean;
-    public isPropertyOrConstant: boolean;
+    id: string;
+    _type: DocumentType;
+    shortName: string;
+    fullName: string;
+    uri: string;
+    inspectionType: InspectionType;
+    inspectionSource: string;
+    inspectionResult: string;
+    isSource: boolean;
+    isPropertyOrConstant: boolean;
 
-    public classPath: string;
-    public initialized = false;
-    public errorOccurred = false;
-    public pathSeparator = '/';
-    public fields: Field[] = [];
-    public allFields: Field[] = [];
-    public terminalFields: Field[] = [];
-    public complexFieldsByClassIdentifier: { [key: string]: Field; } = {};
-    public enumFieldsByClassIdentifier: { [key: string]: Field; } = {};
-    public fieldsByPath: { [key: string]: Field; } = {};
-    public fieldPaths: string[] = [];
-    public showFields = true;
-    public visibleInCurrentDocumentSearch = true;
-    public namespaces: NamespaceModel[] = [];
-    public characterEncoding: string = null;
-    public locale: string = null;
+    classPath: string;
+    initialized = false;
+    errorOccurred = false;
+    pathSeparator = '/';
+    fields: Field[] = [];
+    allFields: Field[] = [];
+    terminalFields: Field[] = [];
+    complexFieldsByClassIdentifier: { [key: string]: Field; } = {};
+    enumFieldsByClassIdentifier: { [key: string]: Field; } = {};
+    fieldsByPath: { [key: string]: Field; } = {};
+    fieldPaths: string[] = [];
+    showFields = true;
+    visibleInCurrentDocumentSearch = true;
+    namespaces: NamespaceModel[] = [];
+    characterEncoding: string = null;
+    locale: string = null;
 
     private static noneField: Field = null;
 
