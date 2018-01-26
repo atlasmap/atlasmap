@@ -10,12 +10,12 @@ The tests are broken up by big scenario use cases:
 
 For example:
 
-1. Java to Java, Json and Xml
-2. Json to Java, Json and Xml
-3. Xml to Java, Json and Xml
-4. multidoc
+1. Java to Java, Json and Xml mappings
+2. Json to Java, Json and Xml mappings
+3. Xml to Java, Json and Xml mappings
+4. multidoc mappings
 
-Within each of this high-level scenarios, the use cases are broken down into sub-test types. Each test scenario includes:
+Within each of these high-level scenarios, the use cases are broken down into sub-test types. Each test scenario includes:
 
 1. A complete atlasmapping file
 2. Sample generated source document
@@ -30,6 +30,40 @@ The sub-tests include coverage for:
 5. Repeating complex types
 6. Rooted and un-rooted Json and Xml object types
 7. Fully qualified namespaced Xml and non-namespaced Xml documents
+
+## Auto-Conversion and Auto-Detection Testing ##
+
+AtlasMap supports 2 advanced features to simplify the syntax and reduce the verbosity of mapping definition files.
+
+ * AutoConversion: The ability to automatically convert between known base types (such as Integer -> String)
+ * AutoDetection: The ability to automatically detect source and target field types** (ie. { "foo": 123 } can safely be auto-detected to be a JSON integer)
+
+** There are scenarios where users will need to explicitely specify type in order to support large numbers and decimal precision.
+
+The reference mappings include comprehensive test cases for ensuring that Auto-Conversion and Auto-Detection work properly for all primitive field types and across all supported formats (Java, JSON and Xml)
+
+This is achieved through a series of tests that explicitely map between all type combinations.
+
+For example: 
+
+Reference mapping "flatprimitive-autoconversion1": 
+  * int -> byte
+  * short -> int
+  * long -> short
+  * double -> long
+  * float -> double
+  * boolean -> float
+  * char -> boolean
+  * byte -> char
+
+Reference mapping "flatprimitive-autoconversion2": 
+(shifts all the target-side fields down one)
+  * int -> char
+  * short -> byte
+  * long -> int
+  * etc..
+
+.. the autoconversion tests then continue for all combinations
 
 ## Target Audience ##
 
