@@ -38,7 +38,7 @@ import { DataMapperUtil } from '../common/data.mapper.util';
 
 @Injectable()
 export class MappingManagementService {
-    public cfg: ConfigModel;
+    cfg: ConfigModel;
 
     mappingUpdatedSource = new Subject<void>();
     mappingUpdated$ = this.mappingUpdatedSource.asObservable();
@@ -55,11 +55,11 @@ export class MappingManagementService {
         this.headers.append('Content-Type', 'application/json');
     }
 
-    public initialize(): void {
+    initialize(): void {
         return;
     }
 
-    public findMappingFiles(filter: string): Observable<string[]> {
+    findMappingFiles(filter: string): Observable<string[]> {
         return new Observable<string[]>((observer: any) => {
             const url = this.cfg.initCfg.baseMappingServiceUrl + 'mappings' + (filter == null ? '' : '?filter=' + filter);
             DataMapperUtil.debugLogJSON(null, 'Mapping List Response', this.cfg.initCfg.debugMappingServiceCalls, url);
@@ -83,7 +83,7 @@ export class MappingManagementService {
         });
     }
 
-    public fetchMappings(mappingFileNames: string[], mappingDefinition: MappingDefinition): Observable<boolean> {
+    fetchMappings(mappingFileNames: string[], mappingDefinition: MappingDefinition): Observable<boolean> {
         return new Observable<boolean>((observer: any) => {
             if (mappingFileNames.length == 0) {
                 observer.complete();
@@ -120,7 +120,7 @@ export class MappingManagementService {
         });
     }
 
-    public saveCurrentMapping(): void {
+    saveCurrentMapping(): void {
         const activeMapping: MappingModel = this.cfg.mappings.activeMapping;
         if ((activeMapping != null) && (this.cfg.mappings.mappings.indexOf(activeMapping) == -1)) {
             this.cfg.mappings.mappings.push(activeMapping);
@@ -138,11 +138,11 @@ export class MappingManagementService {
         this.saveMappingSource.next(null);
     }
 
-    public serializeMappingsToJSON(): any {
+    serializeMappingsToJSON(): any {
         return MappingSerializer.serializeMappings(this.cfg);
     }
 
-    public saveMappingToService(): void {
+    saveMappingToService(): void {
         const payload: any = this.serializeMappingsToJSON();
         const url = this.cfg.initCfg.baseMappingServiceUrl + 'mapping';
         DataMapperUtil.debugLogJSON(payload, 'Mapping Service Request', this.cfg.initCfg.debugMappingServiceCalls, url);
@@ -154,14 +154,14 @@ export class MappingManagementService {
         );
     }
 
-    public handleMappingSaveSuccess(saveHandler: Function): void {
+    handleMappingSaveSuccess(saveHandler: Function): void {
         if (saveHandler != null) {
             saveHandler();
         }
         this.notifyMappingUpdated();
     }
 
-    public removeMapping(mappingModel: MappingModel): void {
+    removeMapping(mappingModel: MappingModel): void {
         const mappingWasSaved: boolean = this.cfg.mappings.removeMapping(mappingModel);
         if (mappingWasSaved) {
             const saveHandler: Function = (() => {
@@ -173,7 +173,7 @@ export class MappingManagementService {
         }
     }
 
-    public removeMappedPair(fieldPair: FieldMappingPair): void {
+    removeMappedPair(fieldPair: FieldMappingPair): void {
         this.cfg.mappings.activeMapping.removeMappedPair(fieldPair);
         if (this.cfg.mappings.activeMapping.fieldMappings.length == 0) {
             this.deselectMapping();
@@ -183,7 +183,7 @@ export class MappingManagementService {
         this.saveCurrentMapping();
     }
 
-    public addMappedPair(): FieldMappingPair {
+    addMappedPair(): FieldMappingPair {
         const fieldPair: FieldMappingPair = new FieldMappingPair();
         this.cfg.mappings.activeMapping.fieldMappings.push(fieldPair);
         this.notifyMappingUpdated();
@@ -191,13 +191,13 @@ export class MappingManagementService {
         return fieldPair;
     }
 
-    public updateMappedField(fieldPair: FieldMappingPair): void {
+    updateMappedField(fieldPair: FieldMappingPair): void {
         fieldPair.updateTransition();
         this.notifyMappingUpdated();
         this.saveCurrentMapping();
     }
 
-    public fieldSelected(field: Field): void {
+    fieldSelected(field: Field): void {
         if (!field.isTerminal()) {
             field.docDef.populateChildren(field);
             field.docDef.updateFromMappings(this.cfg.mappings, this.cfg);
@@ -246,7 +246,7 @@ export class MappingManagementService {
         this.selectMapping(mapping);
     }
 
-    public addNewMapping(selectedField: Field): void {
+    addNewMapping(selectedField: Field): void {
         this.deselectMapping();
         const mapping: MappingModel = new MappingModel();
         mapping.brandNewMapping = false;
@@ -258,7 +258,7 @@ export class MappingManagementService {
         this.selectMapping(mapping);
     }
 
-    public selectMapping(mappingModel: MappingModel) {
+    selectMapping(mappingModel: MappingModel) {
         if (mappingModel == null) {
             this.deselectMapping();
             return;
@@ -273,7 +273,7 @@ export class MappingManagementService {
         this.notifyMappingUpdated();
     }
 
-    public deselectMapping(): void {
+    deselectMapping(): void {
         this.cfg.showMappingDetailTray = false;
         this.cfg.mappings.activeMapping = null;
         for (const doc of this.cfg.getAllDocs()) {
@@ -282,7 +282,7 @@ export class MappingManagementService {
         this.notifyMappingUpdated();
     }
 
-    public validateMappings(): void {
+    validateMappings(): void {
         if (this.cfg.initCfg.baseMappingServiceUrl == null) {
             //validation service not configured.
             return;
@@ -327,7 +327,7 @@ export class MappingManagementService {
         );
     }
 
-    public fetchFieldActions(): Observable<FieldActionConfig[]> {
+    fetchFieldActions(): Observable<FieldActionConfig[]> {
         return new Observable<FieldActionConfig[]>((observer: any) => {
             let actionConfigs: FieldActionConfig[] = [];
             const url: string = this.cfg.initCfg.baseMappingServiceUrl + 'fieldActions';
@@ -373,7 +373,7 @@ export class MappingManagementService {
         });
     }
 
-    public sortFieldActionConfigs(configs: FieldActionConfig[]): FieldActionConfig[] {
+    sortFieldActionConfigs(configs: FieldActionConfig[]): FieldActionConfig[] {
         const sortedActionConfigs: FieldActionConfig[] = [];
         if (configs == null || configs.length == 0) {
             return sortedActionConfigs;
@@ -399,7 +399,7 @@ export class MappingManagementService {
         return sortedActionConfigs;
     }
 
-    public notifyMappingUpdated(): void {
+    notifyMappingUpdated(): void {
         if (this.cfg.mappings.mappings.length > 0) {
             this.validateMappings();
         }

@@ -25,7 +25,7 @@ import { DocumentType, ConfigModel } from '../models/config.model';
 
 export class MappingSerializer {
 
-    public static serializeMappings(cfg: ConfigModel): any {
+    static serializeMappings(cfg: ConfigModel): any {
         const mappingDefinition: MappingDefinition = cfg.mappings;
         let jsonMappings: any[] = [];
         for (const mapping of mappingDefinition.mappings) {
@@ -258,7 +258,7 @@ export class MappingSerializer {
         return fieldsJson;
     }
 
-    public static deserializeMappingServiceJSON(json: any, mappingDefinition: MappingDefinition, cfg: ConfigModel): void {
+    static deserializeMappingServiceJSON(json: any, mappingDefinition: MappingDefinition, cfg: ConfigModel): void {
         if (json && json.AtlasMapping && json.AtlasMapping.name) {
             mappingDefinition.name = json.AtlasMapping.name;
         }
@@ -272,7 +272,7 @@ export class MappingSerializer {
         }
     }
 
-    public static deserializeDocs(json: any, mappingDefinition: MappingDefinition): DocumentDefinition[] {
+    static deserializeDocs(json: any, mappingDefinition: MappingDefinition): DocumentDefinition[] {
         const docs: DocumentDefinition[] = [];
         for (const docRef of json.AtlasMapping.dataSource) {
             const doc: DocumentDefinition = new DocumentDefinition();
@@ -298,7 +298,7 @@ export class MappingSerializer {
         return docs;
     }
 
-    public static deserializeMappings(json: any, cfg: ConfigModel): MappingModel[] {
+    static deserializeMappings(json: any, cfg: ConfigModel): MappingModel[] {
         const mappings: MappingModel[] = [];
         const docRefs: any = {};
         for (const docRef of json.AtlasMapping.dataSource) {
@@ -325,7 +325,7 @@ export class MappingSerializer {
         return mappings;
     }
 
-    public static deserializeFieldMapping(fieldMapping: any, docRefs: any, cfg: ConfigModel): FieldMappingPair {
+    static deserializeFieldMapping(fieldMapping: any, docRefs: any, cfg: ConfigModel): FieldMappingPair {
         const fieldPair: FieldMappingPair = new FieldMappingPair();
         fieldPair.sourceFields = [];
         fieldPair.targetFields = [];
@@ -355,7 +355,7 @@ export class MappingSerializer {
         return fieldPair;
     }
 
-    public static deserializeProperties(jsonMapping: any): Field[] {
+    static deserializeProperties(jsonMapping: any): Field[] {
         const fields: Field[] = [];
         if (!jsonMapping.AtlasMapping || !jsonMapping.AtlasMapping.properties
             || !jsonMapping.AtlasMapping.properties.property) {
@@ -372,7 +372,7 @@ export class MappingSerializer {
         return fields;
     }
 
-    public static deserializeLookupTables(jsonMapping: any): LookupTable[] {
+    static deserializeLookupTables(jsonMapping: any): LookupTable[] {
         const tables: LookupTable[] = [];
         if (!jsonMapping.AtlasMapping || !jsonMapping.AtlasMapping.lookupTables
             || !jsonMapping.AtlasMapping.lookupTables.lookupTable) {

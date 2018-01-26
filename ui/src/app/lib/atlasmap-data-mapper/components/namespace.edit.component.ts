@@ -48,10 +48,10 @@ import { DataMapperUtil } from '../common/data.mapper.util';
 })
 
 export class NamespaceEditComponent implements ModalWindowValidator {
-    public namespace: NamespaceModel = new NamespaceModel();
-    public targetEnabled = true;
+    namespace: NamespaceModel = new NamespaceModel();
+    targetEnabled = true;
 
-    public initialize(namespace: NamespaceModel, namespaces: NamespaceModel[]): void {
+    initialize(namespace: NamespaceModel, namespaces: NamespaceModel[]): void {
         this.namespace = (namespace == null) ? new NamespaceModel() : namespace.copy();
         if (!namespace.isTarget) {
             for (const ns of namespaces) {

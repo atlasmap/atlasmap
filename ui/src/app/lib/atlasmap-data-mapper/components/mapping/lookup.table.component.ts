@@ -45,14 +45,14 @@ export class LookupTableData {
 })
 
 export class LookupTableComponent {
-    public fieldPair: FieldMappingPair;
+    fieldPair: FieldMappingPair;
 
     table: LookupTable;
     data: LookupTableData[];
 
     @ViewChildren('outputSelect') outputSelects: QueryList<ElementRef>;
 
-    public initialize(cfg: ConfigModel, fieldPair: FieldMappingPair): void {
+    initialize(cfg: ConfigModel, fieldPair: FieldMappingPair): void {
         this.fieldPair = fieldPair;
 
         const targetField: Field = fieldPair.getFields(false)[0];
@@ -80,7 +80,7 @@ export class LookupTableComponent {
         this.data = d;
     }
 
-    public saveTable(): void {
+    saveTable(): void {
         this.table.entries = [];
         for (const c of this.outputSelects.toArray()) {
             const selectedOptions: any[] = c.nativeElement.selectedOptions;

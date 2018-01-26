@@ -90,27 +90,27 @@ import { DataMapperUtil } from '../common/data.mapper.util';
 })
 
 export class FieldEditComponent implements ModalWindowValidator {
-    public cfg: ConfigModel = ConfigModel.getConfig();
-    public field: Field = new Field();
-    public parentField: Field = DocumentDefinition.getNoneField();
-    public parentFieldName: String = null;
-    public isSource = false;
-    public fieldType: any = 'element';
-    public valueType: any = 'STRING';
-    public namespaceAlias = '';
-    public editMode = false;
-    public namespaces: NamespaceModel[] = [];
-    public docDef: DocumentDefinition = null;
+    cfg: ConfigModel = ConfigModel.getConfig();
+    field: Field = new Field();
+    parentField: Field = DocumentDefinition.getNoneField();
+    parentFieldName: String = null;
+    isSource = false;
+    fieldType: any = 'element';
+    valueType: any = 'STRING';
+    namespaceAlias = '';
+    editMode = false;
+    namespaces: NamespaceModel[] = [];
+    docDef: DocumentDefinition = null;
 
-    public dataSource: Observable<any>;
+    dataSource: Observable<any>;
 
-    public constructor() {
+    constructor() {
         this.dataSource = Observable.create((observer: any) => {
             observer.next(this.executeSearch(observer.outerValue));
         });
     }
 
-    public initialize(field: Field, docDef: DocumentDefinition, isAdd: boolean): void {
+    initialize(field: Field, docDef: DocumentDefinition, isAdd: boolean): void {
         this.docDef = docDef;
         this.editMode = !isAdd;
         this.field = field == null ? new Field() : field.copy();
@@ -149,11 +149,11 @@ export class FieldEditComponent implements ModalWindowValidator {
         this.parentFieldName = this.parentField.name;
     }
 
-    public handleOnBlur(event: any): void {
+    handleOnBlur(event: any): void {
         this.parentFieldName = this.parentField.name;
     }
 
-    public parentSelectionChanged(event: any): void {
+    parentSelectionChanged(event: any): void {
         const oldParentField: Field = this.parentField;
         this.parentField = event.item['field'];
         this.parentField = (this.parentField == null) ? oldParentField : this.parentField;
@@ -164,19 +164,19 @@ export class FieldEditComponent implements ModalWindowValidator {
         this.namespaceAlias = this.parentField.namespaceAlias == null ? unqualifiedNS.alias : this.parentField.namespaceAlias;
     }
 
-    public fieldTypeSelectionChanged(event: any): void {
+    fieldTypeSelectionChanged(event: any): void {
         this.fieldType = event.target.selectedOptions.item(0).attributes.getNamedItem('value').value;
     }
 
-    public valueTypeSelectionChanged(event: any): void {
+    valueTypeSelectionChanged(event: any): void {
         this.valueType = event.target.selectedOptions.item(0).attributes.getNamedItem('value').value;
     }
 
-    public namespaceSelectionChanged(event: any): void {
+    namespaceSelectionChanged(event: any): void {
         this.namespaceAlias = event.target.selectedOptions.item(0).attributes.getNamedItem('value').value;
     }
 
-    public executeSearch(filter: string): any[] {
+    executeSearch(filter: string): any[] {
         const formattedFields: any[] = [];
 
         if (this.docDef.type == DocumentType.JSON) {
@@ -201,7 +201,7 @@ export class FieldEditComponent implements ModalWindowValidator {
         return formattedFields;
     }
 
-    public getField(): Field {
+    getField(): Field {
         this.field.displayName = this.field.name;
         this.field.parentField = this.parentField;
         this.field.type = this.valueType;

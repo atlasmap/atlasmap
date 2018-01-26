@@ -17,7 +17,7 @@
 import { ConfigModel } from '../models/config.model';
 
 export class DataMapperUtil {
-    public static removeItemFromArray(item: any, items: any[]): boolean {
+    static removeItemFromArray(item: any, items: any[]): boolean {
         if (item == null || items == null || items.length == 0) {
             return false;
         }
@@ -34,7 +34,7 @@ export class DataMapperUtil {
         return itemWasRemoved;
     }
 
-    public static debugLogJSON(object: any, description: string, loggingEnabled: boolean, url: string): void {
+    static debugLogJSON(object: any, description: string, loggingEnabled: boolean, url: string): void {
         if (!loggingEnabled) {
             return;
         }
@@ -42,7 +42,7 @@ export class DataMapperUtil {
         url = (url == null) ? '[none]' : url;
     }
 
-    public static isRequiredFieldValid(value: string, fieldDescription: string): boolean {
+    static isRequiredFieldValid(value: string, fieldDescription: string): boolean {
         if (value == null || '' == value) {
             const errorMessage: string = fieldDescription + ' is required.';
             ConfigModel.getConfig().errorService.validationError(errorMessage, null);

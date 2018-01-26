@@ -33,7 +33,7 @@ import { TransitionModel, FieldActionConfig } from '../models/transition.model';
 
 @Injectable()
 export class InitializationService {
-    public cfg: ConfigModel = ConfigModel.getConfig();
+    cfg: ConfigModel = ConfigModel.getConfig();
 
     systemInitializedSource = new Subject<void>();
     systemInitialized$: Observable<void> = this.systemInitializedSource.asObservable();
@@ -50,7 +50,7 @@ export class InitializationService {
         this.cfg.mappingService.initialize();
     }
 
-    public resetConfig(): void {
+    resetConfig(): void {
         this.cfg = new ConfigModel();
         this.cfg.documentService = this.documentService;
         this.cfg.documentService.cfg = this.cfg;
@@ -62,7 +62,7 @@ export class InitializationService {
         ConfigModel.setConfig(this.cfg);
     }
 
-    public initialize(): void {
+    initialize(): void {
         if (this.cfg.mappingService == null) {
             this.cfg.errorService.warn('Mapping service is not configured, validation service will not be used.', null);
         } else if (this.cfg.initCfg.baseMappingServiceUrl == null) {
@@ -322,7 +322,7 @@ export class InitializationService {
         this.initializationStatusChangedSource.next();
     }
 
-    public static createExamplePom(): string {
+    static createExamplePom(): string {
         const pom = `
             <project xmlns="http://maven.apache.org/POM/4.0.0"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -363,7 +363,7 @@ export class InitializationService {
         return pom;
     }
 
-    public static createExampleMappingsJSON(): any {
+    static createExampleMappingsJSON(): any {
         const json: any = {
             'AtlasMapping': {
                 'jsonType': ConfigModel.mappingServicesPackagePrefix + '.AtlasMapping',

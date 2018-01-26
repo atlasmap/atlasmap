@@ -73,7 +73,7 @@ export class MappingFieldDetailComponent implements OnInit {
     sourceIconCSSClass: string;
     parentObjectName: string;
 
-    public constructor() {
+    constructor() {
         this.dataSource = Observable.create((observer: any) => {
             observer.next(this.executeSearch(observer.outerValue));
         });
@@ -83,7 +83,7 @@ export class MappingFieldDetailComponent implements OnInit {
         this.updateTemplateValues();
     }
 
-    public getFieldPath(): string {
+    getFieldPath(): string {
         if (this.mappedField == null || this.mappedField.field == null
             || (this.mappedField.field == DocumentDefinition.getNoneField())) {
             return '[None]';
@@ -91,7 +91,7 @@ export class MappingFieldDetailComponent implements OnInit {
         return this.mappedField.field.path;
     }
 
-    public displayParentObject(): boolean {
+    displayParentObject(): boolean {
         if (this.mappedField == null || this.mappedField.field == null
             || this.mappedField.field.docDef == null
             || (this.mappedField.field == DocumentDefinition.getNoneField())) {
@@ -100,13 +100,13 @@ export class MappingFieldDetailComponent implements OnInit {
         return true;
     }
 
-    public selectionChanged(event: any): void {
+    selectionChanged(event: any): void {
         this.mappedField.field = event.item['field'];
         this.cfg.mappingService.updateMappedField(this.fieldPair);
         this.updateTemplateValues();
     }
 
-    public executeSearch(filter: string): any[] {
+    executeSearch(filter: string): any[] {
         const formattedFields: any[] = [];
         let fields: Field[] = [DocumentDefinition.getNoneField()];
         for (const docDef of this.cfg.getDocs(this.isSource)) {

@@ -48,11 +48,11 @@ export class MappingListFieldComponent {
     @Input() isSource: boolean;
     @Input() cfg: ConfigModel;
 
-    public getSourceIconCSSClass(): string {
+    getSourceIconCSSClass(): string {
         return this.isSource ? 'fa fa-hdd-o' : 'fa fa-download';
     }
 
-    public getFieldPath(): string {
+    getFieldPath(): string {
         if (this.mappedField == null || this.mappedField.field == null
             || (this.mappedField.field == DocumentDefinition.getNoneField())) {
             return '[None]';
@@ -60,7 +60,7 @@ export class MappingListFieldComponent {
         return this.mappedField.field.getFieldLabel(true);
     }
 
-    public displayParentObject(): boolean {
+    displayParentObject(): boolean {
         if (this.mappedField == null || this.mappedField.field == null
             || this.mappedField.field.docDef == null
             || (this.mappedField.field == DocumentDefinition.getNoneField())) {
@@ -69,7 +69,7 @@ export class MappingListFieldComponent {
         return true;
     }
 
-    public getParentObjectName() {
+    getParentObjectName() {
         if (this.mappedField == null || this.mappedField.field == null || this.mappedField.field.docDef == null) {
             return '';
         }
@@ -150,22 +150,22 @@ export class MappingListFieldComponent {
 export class MappingListComponent {
     @Input() cfg: ConfigModel;
 
-    public searchMode = false;
+    searchMode = false;
     private searchFilter = '';
     private searchResults: MappingModel[] = [];
 
-    public getItemsCSSClass(): string {
+    getItemsCSSClass(): string {
         return 'items mappings' + (this.searchMode ? ' searchShown' : '');
     }
 
-    public searchResultsVisible(): boolean {
+    searchResultsVisible(): boolean {
         if (!this.searchMode || this.searchFilter == null || this.searchFilter == '') {
             return false;
         }
         return (this.searchResults.length == 0);
     }
 
-    public getMappingCSSClass(mapping: MappingModel, index: number): string {
+    getMappingCSSClass(mapping: MappingModel, index: number): string {
         let cssClass = 'item ';
         cssClass += (index % 2 == 1) ? ' even' : '';
         if (mapping == this.cfg.mappings.activeMapping) {
@@ -174,7 +174,7 @@ export class MappingListComponent {
         return cssClass;
     }
 
-    public selectMapping(mapping: MappingModel): void {
+    selectMapping(mapping: MappingModel): void {
         if (this.cfg.mappings.activeMapping == mapping) {
             this.cfg.mappingService.deselectMapping();
         } else {
@@ -182,19 +182,19 @@ export class MappingListComponent {
         }
     }
 
-    public getRowTitleCSSClass(): string {
+    getRowTitleCSSClass(): string {
         return this.searchMode ? 'rowTitles searchShown' : 'rowTitles';
     }
 
-    public getMappingRowsCSSClass(): string {
+    getMappingRowsCSSClass(): string {
         return this.searchMode ? 'rows searchShown' : 'rows';
     }
 
-    public getMappings(): MappingModel[] {
+    getMappings(): MappingModel[] {
         return this.searchMode ? this.searchResults : [].concat(this.cfg.mappings.getAllMappings(true));
     }
 
-    public getMappedFields(fieldPair: FieldMappingPair, isSource: boolean): MappedField[] {
+    getMappedFields(fieldPair: FieldMappingPair, isSource: boolean): MappedField[] {
         let fields: MappedField[] = fieldPair.getMappedFields(isSource);
         fields = MappedField.sortMappedFieldsByPath(fields, false);
         if (fields.length == 0) {
@@ -205,17 +205,17 @@ export class MappingListComponent {
         return fields;
     }
 
-    public toggleSearch(): void  {
+    toggleSearch(): void  {
         this.searchMode = !this.searchMode;
         this.search(this.searchFilter);
     }
 
-    public getSearchIconCSSClass(): string {
+    getSearchIconCSSClass(): string {
         const cssClass = 'fa fa-search searchBoxIcon link';
         return this.searchMode ? (cssClass + ' selectedIcon') : cssClass;
     }
 
-    public fieldPairMatchesSearch(fieldPair: FieldMappingPair): boolean {
+    fieldPairMatchesSearch(fieldPair: FieldMappingPair): boolean {
         if (!this.searchMode || this.searchFilter == null || this.searchFilter == '') {
             return true;
         }

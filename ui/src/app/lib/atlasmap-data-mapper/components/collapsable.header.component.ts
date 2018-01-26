@@ -29,11 +29,11 @@ export class CollapsableHeaderComponent {
     @Input() title: string;
     @Input() collapsed = false;
 
-    public handleMouseClick(event: MouseEvent): void {
+    handleMouseClick(event: MouseEvent): void {
         this.collapsed = !this.collapsed;
     }
 
-    public getCSSClass() {
+    getCSSClass() {
         return 'arrow fa fa-angle-' + (this.collapsed ? 'right' : 'down');
     }
 }

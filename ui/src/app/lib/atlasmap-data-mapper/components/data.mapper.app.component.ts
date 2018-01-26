@@ -44,11 +44,11 @@ export class DataMapperAppComponent implements OnInit {
     @ViewChild('mappingDetailComponent') mappingDetailComponent: MappingDetailComponent;
     @ViewChild('toolbarComponent') toolbarComponent: ToolbarComponent;
 
-    public loadingStatus = 'Loading.';
+    loadingStatus = 'Loading.';
 
     constructor(public detector: ChangeDetectorRef) {}
 
-    public getConfig(): ConfigModel {
+    getConfig(): ConfigModel {
         return ConfigModel.getConfig();
     }
 
@@ -65,7 +65,7 @@ export class DataMapperAppComponent implements OnInit {
         });
     }
 
-    public updateFromConfig(): void {
+    updateFromConfig(): void {
         // update the mapping line drawing after our fields have redrawn themselves
         // without this, the x/y from the field dom elements is messed up / misaligned.
         setTimeout(() => { this.lineMachine.redrawLinesForMappings(); }, 1);

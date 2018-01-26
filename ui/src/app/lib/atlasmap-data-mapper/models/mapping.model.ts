@@ -22,26 +22,26 @@ import { ErrorInfo, ErrorLevel } from '../models/error.model';
 import { DataMapperUtil } from '../common/data.mapper.util';
 
 export class MappedFieldParsingData {
-    public parsedName: string = null;
-    public parsedPath: string = null;
-    public parsedValue: string = null;
-    public parsedDocID: string = null;
-    public parsedDocURI: string = null;
-    public parsedIndex: string = null;
-    public fieldIsProperty = false;
-    public fieldIsConstant = false;
-    public parsedValueType: string = null;
-    public parsedActions: FieldAction[] = [];
-    public userCreated = false;
+    parsedName: string = null;
+    parsedPath: string = null;
+    parsedValue: string = null;
+    parsedDocID: string = null;
+    parsedDocURI: string = null;
+    parsedIndex: string = null;
+    fieldIsProperty = false;
+    fieldIsConstant = false;
+    parsedValueType: string = null;
+    parsedActions: FieldAction[] = [];
+    userCreated = false;
 }
 
 export class MappedField {
-    public parsedData: MappedFieldParsingData = new MappedFieldParsingData();
-    public field: Field = DocumentDefinition.getNoneField();
-    public actions: FieldAction[] = [];
+    parsedData: MappedFieldParsingData = new MappedFieldParsingData();
+    field: Field = DocumentDefinition.getNoneField();
+    actions: FieldAction[] = [];
 
-    public updateSeparateOrCombineIndex(separateMode: boolean, combineMode: boolean,
-                                        suggestedValue: string, isSource: boolean): void {
+    updateSeparateOrCombineIndex(separateMode: boolean, combineMode: boolean,
+                                 suggestedValue: string, isSource: boolean): void {
 
         //remove field action when neither combine or separate mode
         let removeField: boolean = (!separateMode && !combineMode);
@@ -62,14 +62,14 @@ export class MappedField {
         }
     }
 
-    public removeSeparateOrCombineAction(): void {
+    removeSeparateOrCombineAction(): void {
         const firstFieldAction: FieldAction = (this.actions.length > 0) ? this.actions[0] : null;
         if (firstFieldAction != null && firstFieldAction.isSeparateOrCombineMode) {
             DataMapperUtil.removeItemFromArray(firstFieldAction, this.actions);
         }
     }
 
-    public getSeparateOrCombineIndex(): string {
+    getSeparateOrCombineIndex(): string {
         const firstFieldAction: FieldAction = (this.actions.length > 0) ? this.actions[0] : null;
         if (firstFieldAction != null && firstFieldAction.isSeparateOrCombineMode) {
             return firstFieldAction.argumentValues[0].value;
@@ -77,11 +77,11 @@ export class MappedField {
         return null;
     }
 
-    public removeAction(action: FieldAction): void {
+    removeAction(action: FieldAction): void {
         DataMapperUtil.removeItemFromArray(action, this.actions);
     }
 
-    public static sortMappedFieldsByPath(mappedFields: MappedField[], allowNone: boolean): MappedField[] {
+    static sortMappedFieldsByPath(mappedFields: MappedField[], allowNone: boolean): MappedField[] {
         if (mappedFields == null || mappedFields.length == 0) {
             return [];
         }
@@ -106,27 +106,27 @@ export class MappedField {
         return result;
     }
 
-    public isMapped(): boolean {
+    isMapped(): boolean {
         return (this.field != null) && (this.field != DocumentDefinition.getNoneField());
     }
 }
 
 export class FieldMappingPair {
-    public sourceFields: MappedField[] = [new MappedField()];
-    public targetFields: MappedField[] = [new MappedField()];
-    public transition: TransitionModel = new TransitionModel();
+    sourceFields: MappedField[] = [new MappedField()];
+    targetFields: MappedField[] = [new MappedField()];
+    transition: TransitionModel = new TransitionModel();
 
-    public constructor() {
+    constructor() {
         return;
     }
 
-    public addField(field: Field, isSource: boolean): void {
+    addField(field: Field, isSource: boolean): void {
         const mappedField: MappedField = new MappedField();
         mappedField.field = field;
         this.getMappedFields(isSource).push(mappedField);
     }
 
-    public hasMappedField(isSource: boolean) {
+    hasMappedField(isSource: boolean) {
         const mappedFields: MappedField[] = isSource ? this.sourceFields : this.targetFields;
         for (const mappedField of mappedFields) {
             if (mappedField.isMapped()) {
@@ -136,19 +136,19 @@ export class FieldMappingPair {
         return false;
     }
 
-    public isFullyMapped(): boolean {
+    isFullyMapped(): boolean {
         return this.hasMappedField(true) && this.hasMappedField(false);
     }
 
-    public addMappedField(mappedField: MappedField, isSource: boolean): void {
+    addMappedField(mappedField: MappedField, isSource: boolean): void {
         this.getMappedFields(isSource).push(mappedField);
     }
 
-    public removeMappedField(mappedField: MappedField, isSource: boolean): void {
+    removeMappedField(mappedField: MappedField, isSource: boolean): void {
         DataMapperUtil.removeItemFromArray(mappedField, this.getMappedFields(isSource));
     }
 
-    public getMappedFieldForField(field: Field, isSource: boolean): MappedField {
+    getMappedFieldForField(field: Field, isSource: boolean): MappedField {
         for (const mappedField of this.getMappedFields(isSource)) {
             if (mappedField.field == field) {
                 return mappedField;
@@ -157,11 +157,11 @@ export class FieldMappingPair {
         return null;
     }
 
-    public getMappedFields(isSource: boolean): MappedField[] {
+    getMappedFields(isSource: boolean): MappedField[] {
         return isSource ? this.sourceFields : this.targetFields;
     }
 
-    public getLastMappedField(isSource: boolean): MappedField {
+    getLastMappedField(isSource: boolean): MappedField {
         const fields: MappedField[] = this.getMappedFields(isSource);
         if ((fields != null) && (fields.length > 0)) {
             return fields[fields.length - 1];
@@ -169,7 +169,7 @@ export class FieldMappingPair {
         return null;
     }
 
-    public getFields(isSource: boolean): Field[] {
+    getFields(isSource: boolean): Field[] {
         const fields: Field[] = [];
         for (const mappedField of this.getMappedFields(isSource)) {
             if (mappedField.field != null) {
@@ -179,7 +179,7 @@ export class FieldMappingPair {
         return fields;
     }
 
-    public getFieldNames(isSource: boolean): string[] {
+    getFieldNames(isSource: boolean): string[] {
         const fields: Field[] = this.getFields(isSource);
         Field.alphabetizeFields(fields);
         const names: string[] = [];
@@ -192,7 +192,7 @@ export class FieldMappingPair {
         return names;
     }
 
-    public getFieldPaths(isSource: boolean): string[] {
+    getFieldPaths(isSource: boolean): string[] {
         const fields: Field[] = this.getFields(isSource);
         Field.alphabetizeFields(fields);
         const paths: string[] = [];
@@ -205,7 +205,7 @@ export class FieldMappingPair {
         return paths;
     }
 
-    public hasFieldActions(): boolean {
+    hasFieldActions(): boolean {
         for (const mappedField of this.getAllMappedFields()) {
             if (mappedField.actions.length > 0) {
                 return true;
@@ -214,19 +214,19 @@ export class FieldMappingPair {
         return false;
     }
 
-    public getAllFields(): Field[] {
+    getAllFields(): Field[] {
         return this.getFields(true).concat(this.getFields(false));
     }
 
-    public getAllMappedFields(): MappedField[] {
+    getAllMappedFields(): MappedField[] {
         return this.getMappedFields(true).concat(this.getMappedFields(false));
     }
 
-    public isFieldMapped(field: Field): boolean {
+    isFieldMapped(field: Field): boolean {
         return this.getMappedFieldForField(field, field.isSource()) != null;
     }
 
-    public hasTransition(): boolean {
+    hasTransition(): boolean {
         const mappedFields: MappedField[] = this.getAllMappedFields();
         for (const mappedField of mappedFields) {
             if (mappedField.actions.length > 0) {
@@ -236,7 +236,7 @@ export class FieldMappingPair {
         return false;
     }
 
-    public updateTransition(): void {
+    updateTransition(): void {
         for (const field of this.getAllFields()) {
             if (field.enumeration) {
                 this.transition.mode = TransitionMode.ENUM;
@@ -294,61 +294,61 @@ export class FieldMappingPair {
 }
 
 export class MappingModel {
-    public uuid: string;
-    public fieldMappings: FieldMappingPair[] = [];
-    public currentFieldMapping: FieldMappingPair = null;
-    public validationErrors: ErrorInfo[] = []; // must be immutable
-    public brandNewMapping = true;
+    uuid: string;
+    fieldMappings: FieldMappingPair[] = [];
+    currentFieldMapping: FieldMappingPair = null;
+    validationErrors: ErrorInfo[] = []; // must be immutable
+    brandNewMapping = true;
 
-    public constructor() {
+    constructor() {
         this.uuid = 'mapping.' + Math.floor((Math.random() * 1000000) + 1).toString();
         this.fieldMappings.push(new FieldMappingPair());
         Object.freeze(this.validationErrors);
     }
 
-    public getFirstFieldMapping(): FieldMappingPair {
+    getFirstFieldMapping(): FieldMappingPair {
         if (this.fieldMappings == null || (this.fieldMappings.length == 0)) {
             return null;
         }
         return this.fieldMappings[0];
     }
 
-    public getLastFieldMapping(): FieldMappingPair {
+    getLastFieldMapping(): FieldMappingPair {
         if (this.fieldMappings == null || (this.fieldMappings.length == 0)) {
             return null;
         }
         return this.fieldMappings[this.fieldMappings.length - 1];
     }
 
-    public getCurrentFieldMapping(): FieldMappingPair {
+    getCurrentFieldMapping(): FieldMappingPair {
         return (this.currentFieldMapping == null) ? this.getLastFieldMapping() : this.currentFieldMapping;
     }
 
-    public addValidationError(message: string) {
+    addValidationError(message: string) {
         const e = new ErrorInfo(message, ErrorLevel.VALIDATION_ERROR);
         this.validationErrors = [...this.validationErrors, e];
         Object.freeze(this.validationErrors);
       }
 
-    public clearValidationErrors(): void {
+    clearValidationErrors(): void {
         this.validationErrors = [];
         Object.freeze(this.validationErrors);
       }
 
-    public getValidationErrors(): ErrorInfo[] {
+    getValidationErrors(): ErrorInfo[] {
         return this.validationErrors.filter(e => e.level >= ErrorLevel.ERROR);
     }
 
-    public getValidationWarnings(): ErrorInfo[] {
+    getValidationWarnings(): ErrorInfo[] {
         return this.validationErrors.filter(e => e.level == ErrorLevel.WARN);
     }
 
-    public removeError(identifier: string) {
+    removeError(identifier: string) {
         this.validationErrors = this.validationErrors.filter(e => e.identifier !== identifier);
         Object.freeze(this.validationErrors);
       }
 
-    public getFirstCollectionField(isSource: boolean): Field {
+    getFirstCollectionField(isSource: boolean): Field {
         for (const f of this.getFields(isSource)) {
             if (f.isInCollection()) {
                 return f;
@@ -357,12 +357,12 @@ export class MappingModel {
         return null;
     }
 
-    public isCollectionMode(): boolean {
+    isCollectionMode(): boolean {
         return (this.getFirstCollectionField(true) != null)
             || (this.getFirstCollectionField(false) != null);
     }
 
-    public isLookupMode(): boolean {
+    isLookupMode(): boolean {
         for (const f of this.getAllFields()) {
             if (f.enumeration) {
                 return true;
@@ -371,11 +371,11 @@ export class MappingModel {
         return false;
     }
 
-    public removeMappedPair(fieldPair: FieldMappingPair): void {
+    removeMappedPair(fieldPair: FieldMappingPair): void {
         DataMapperUtil.removeItemFromArray(fieldPair, this.fieldMappings);
     }
 
-    public getMappedFields(isSource: boolean): MappedField[] {
+    getMappedFields(isSource: boolean): MappedField[] {
         let fields: MappedField[] = [];
         for (const fieldPair of this.fieldMappings) {
             fields = fields.concat(fieldPair.getMappedFields(isSource));
@@ -383,11 +383,11 @@ export class MappingModel {
         return fields;
     }
 
-    public isFieldSelectable(field: Field): boolean {
+    isFieldSelectable(field: Field): boolean {
         return this.getFieldSelectionExclusionReason(field) == null;
     }
 
-    public getFieldSelectionExclusionReason(field: Field): string {
+    getFieldSelectionExclusionReason(field: Field): string {
         if (this.brandNewMapping) { // if mapping hasnt had a field selected yet, allow it
             return null;
         }
@@ -460,19 +460,19 @@ export class MappingModel {
         return null;
     }
 
-    public isFieldMapped(field: Field, isSource: boolean): boolean {
+    isFieldMapped(field: Field, isSource: boolean): boolean {
         return this.getFields(isSource).indexOf(field) != -1;
     }
 
-    public getAllMappedFields(): MappedField[] {
+    getAllMappedFields(): MappedField[] {
         return this.getMappedFields(true).concat(this.getMappedFields(false));
     }
 
-    public getAllFields(): Field[] {
+    getAllFields(): Field[] {
         return this.getFields(true).concat(this.getFields(false));
     }
 
-    public getFields(isSource: boolean): Field[] {
+    getFields(isSource: boolean): Field[] {
         let fields: Field[] = [];
         for (const fieldPair of this.fieldMappings) {
             fields = fields.concat(fieldPair.getFields(isSource));
@@ -480,7 +480,7 @@ export class MappingModel {
         return fields;
     }
 
-    public hasMappedFields(isSource: boolean): boolean {
+    hasMappedFields(isSource: boolean): boolean {
         for (const mappedField of this.getMappedFields(isSource)) {
             if (mappedField.isMapped()) {
                 return true;
@@ -489,7 +489,7 @@ export class MappingModel {
         return false;
     }
 
-    public hasFullyMappedPair(): boolean {
+    hasFullyMappedPair(): boolean {
         for (const pair of this.fieldMappings) {
             if (pair.isFullyMapped()) {
                 return true;

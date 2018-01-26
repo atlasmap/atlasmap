@@ -30,7 +30,7 @@ import { ModalWindowValidator } from './modal.window.component';
 })
 
 export class TemplateEditComponent implements ModalWindowValidator {
-    public templateText: string = null;
+    templateText: string = null;
 
     isDataValid(): boolean { return true; }
 }
