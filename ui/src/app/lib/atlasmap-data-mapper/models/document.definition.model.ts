@@ -59,8 +59,8 @@ export class NamespaceModel {
 export class DocumentDefinition {
     id: string;
     _type: DocumentType;
-    shortName: string;
-    fullName: string;
+    name: string;
+    description: string;
     uri: string;
     inspectionType: InspectionType;
     inspectionSource: string;
@@ -139,7 +139,7 @@ export class DocumentDefinition {
     }
 
     getName(includeType: boolean): string {
-        let name = this.shortName;
+        let name = this.name;
         if (ConfigModel.getConfig().showTypes && !this.isPropertyOrConstant) {
             const type = this.type;
             if (type) {

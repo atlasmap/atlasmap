@@ -200,7 +200,7 @@ export class MappingDefinition {
         }
         for (const doc of cfg.getAllDocs()) {
             if (doc.id == null) {
-                doc.id = 'DOC.' + doc.shortName + '.' + Math.floor((Math.random() * 1000000) + 1).toString();
+                doc.id = 'DOC.' + doc.name + '.' + Math.floor((Math.random() * 1000000) + 1).toString();
             }
         }
     }

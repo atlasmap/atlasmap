@@ -201,11 +201,11 @@ export class DocumentManagementService {
             jsonDocument = body.JsonDocument;
         }
 
-        if (!docDef.fullName) {
-            docDef.fullName = docDef.id;
+        if (!docDef.description) {
+            docDef.description = docDef.id;
         }
-        if (!docDef.shortName) {
-            docDef.shortName = docDef.fullName;
+        if (!docDef.name) {
+            docDef.name = docDef.description;
         }
 
         docDef.characterEncoding = jsonDocument.characterEncoding;
@@ -235,11 +235,11 @@ export class DocumentManagementService {
             xmlDocument = body.XmlDocument;
         }
 
-        if (!docDef.fullName) {
-            docDef.fullName = docDef.id;
+        if (!docDef.description) {
+            docDef.description = docDef.id;
         }
-        if (!docDef.shortName) {
-            docDef.shortName = docDef.fullName;
+        if (!docDef.name) {
+            docDef.name = docDef.description;
         }
 
         docDef.characterEncoding = xmlDocument.characterEncoding;
@@ -282,14 +282,14 @@ export class DocumentManagementService {
             return;
         }
 
-        if (!docDef.fullName) {
-            docDef.fullName = javaClass.className;
+        if (!docDef.description) {
+            docDef.description = javaClass.className;
         }
-        if (!docDef.shortName) {
-            docDef.shortName = javaClass.className;
+        if (!docDef.name) {
+            docDef.name = javaClass.className;
             //Make doc name the class name rather than fully qualified name
-            if (docDef.shortName && docDef.shortName.indexOf('.') != -1) {
-                docDef.shortName = docDef.shortName.substr(docDef.shortName.lastIndexOf('.') + 1);
+            if (docDef.name && docDef.name.indexOf('.') != -1) {
+                docDef.name = docDef.name.substr(docDef.name.lastIndexOf('.') + 1);
             }
         }
         if (!docDef.uri) {
@@ -320,7 +320,7 @@ export class DocumentManagementService {
     private parseFieldFromDocument(field: any, parentField: Field, docDef: DocumentDefinition): Field {
         if (field != null && field.status == 'NOT_FOUND') {
             this.cfg.errorService.warn('Ignoring unknown field: ' + field.name
-                + ' (' + field.className + '), parent class: ' + docDef.shortName, null);
+                + ' (' + field.className + '), parent class: ' + docDef.name, null);
             return null;
         } else if (field != null && field.status == 'BLACK_LIST') {
             return null;
