@@ -53,8 +53,8 @@ import { ModalWindowComponent } from './modal.window.component';
                 </div>
                 <div [attr.class]="searchMode ? 'fieldListSearchOpen' : 'fieldList'" style="overflow:auto;"
                     (scroll)="handleScroll($event)">
-                    <div *ngFor="let docDef of documents" #docDetail class="docIdentifier" [attr.id]='docDef.shortName'>
-                        <div class="card-pf-title documentHeader" tooltip="{{ docDef.fullName }}" placement="bottom"
+                    <div *ngFor="let docDef of documents" #docDetail class="docIdentifier" [attr.id]='docDef.name'>
+                        <div class="card-pf-title documentHeader" tooltip="{{ docDef.description }}" placement="bottom"
                             *ngIf="isDocNameVisible(docDef)" (click)="toggleFieldVisibility(docDef)">
                             <div style="float:left">
                                 <i class="fa fa-angle-right docCollapseIcon" *ngIf="!docDef.showFields"></i>
@@ -117,7 +117,7 @@ export class DocumentDefinitionComponent implements OnInit {
 
     getDocDefElementPosition(docDef: DocumentDefinition): any {
         for (const c of this.docElements.toArray()) {
-            if (c.nativeElement.id == docDef.shortName) {
+            if (c.nativeElement.id == docDef.name) {
                 const documentElementAbsPosition: any = this.getElementPositionForElement(c.nativeElement, false, true);
                 const myElement: any = this.documentDefinitionElement.nativeElement;
                 const myAbsPosition: any = this.getElementPositionForElement(myElement, false, false);

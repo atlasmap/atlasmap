@@ -220,7 +220,7 @@ export class InitializationService {
                 continue;
             }
 
-            const docName: string = docDef.shortName;
+            const docName: string = docDef.name;
 
             if (docDef.type == DocumentType.JAVA && this.cfg.initCfg.baseJavaInspectionServiceUrl == null) {
                 this.cfg.errorService.warn('Java inspection service is not configured. Document will not be loaded: ' + docName, docDef);

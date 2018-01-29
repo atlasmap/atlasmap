@@ -101,8 +101,8 @@ export class DataMapperInitializationModel {
 export class DocumentInitializationModel {
     id: string;
     type: DocumentType;
-    shortName: string;
-    fullName: string;
+    name: string;
+    description: string;
     isSource: boolean;
     inspectionType: InspectionType;
     inspectionSource: string;
@@ -145,10 +145,10 @@ export class ConfigModel {
 
     constructor() {
         this.propertyDoc.type = DocumentType.PROPERTY;
-        this.propertyDoc.shortName = 'Properties';
+        this.propertyDoc.name = 'Properties';
         this.propertyDoc.isSource = true;
         this.constantDoc.type = DocumentType.CONSTANT;
-        this.constantDoc.shortName = 'Constants';
+        this.constantDoc.name = 'Constants';
         this.constantDoc.isSource = true;
     }
 
@@ -164,8 +164,8 @@ export class ConfigModel {
         const docDef: DocumentDefinition = new DocumentDefinition();
         docDef.id = docInitModel.id;
         docDef.type = docInitModel.type;
-        docDef.shortName = docInitModel.shortName;
-        docDef.fullName = docInitModel.fullName;
+        docDef.name = docInitModel.name;
+        docDef.description = docInitModel.description;
         docDef.isSource = docInitModel.isSource;
         docDef.inspectionType = docInitModel.inspectionType;
         docDef.inspectionSource = docInitModel.inspectionSource;
