@@ -126,7 +126,7 @@ export class FieldActionConfig {
         if (action.argumentValues == null || action.argumentValues.length == 0) {
            action.argumentValues = [];
            for (const arg of this.arguments) {
-               action.setArgumentValue(arg.name, '0');
+               action.setArgumentValue(arg.name, '');
            }
         }
     }

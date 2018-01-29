@@ -111,6 +111,7 @@ export class MappingFieldActionComponent {
         const selectedActionIndex: any = attributes.getNamedItem('actionIndex').value;
         const action: FieldAction = this.getMappedFieldActions()[selectedActionIndex];
         if (action.name != selectedActionName) {
+            action.argumentValues = [];  // Invalidate the previously selected field action arguments.
             const fieldActionConfig: FieldActionConfig = TransitionModel.getActionConfigForName(selectedActionName);
             fieldActionConfig.populateFieldAction(action);
         }
