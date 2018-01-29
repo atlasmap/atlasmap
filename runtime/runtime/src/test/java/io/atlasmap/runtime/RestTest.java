@@ -42,7 +42,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ActiveProfiles("test")
 @ContextConfiguration(classes = {
     Application.class,
-    ServiceConfiguration.class,
     CorsConfiguration.class,
 })
 public class RestTest {

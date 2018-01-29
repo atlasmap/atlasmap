@@ -22,10 +22,13 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import io.atlasmap.v2.Json;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,6 +41,9 @@ import io.atlasmap.java.v2.JavaClass;
 import io.atlasmap.java.v2.MavenClasspathRequest;
 import io.atlasmap.java.v2.MavenClasspathResponse;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 // http://localhost:8585/v2/atlas/java/class?className=java.lang.String
 
 @ApplicationPath("/")
@@ -45,6 +51,22 @@ import io.atlasmap.java.v2.MavenClasspathResponse;
 public class JavaService extends Application {
 
     private static final Logger LOG = LoggerFactory.getLogger(JavaService.class);
+
+    protected byte[] toJson(Object value) {
+        try {
+            return Json.mapper().writeValueAsBytes(value);
+        } catch (JsonProcessingException e) {
+            throw new WebApplicationException(e, Response.Status.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    protected <T> T fromJson(InputStream value, Class<T>clazz) {
+        try {
+            return Json.mapper().readValue(value, clazz);
+        } catch (IOException e) {
+            throw new WebApplicationException(e, Response.Status.BAD_REQUEST);
+        }
+    }
 
     // example request: http://localhost:8181/rest/myresource?from=jason%20baker
     @GET
@@ -64,15 +86,15 @@ public class JavaService extends Application {
         classInspectionService.setConversionService(DefaultAtlasConversionService.getInstance());
         JavaClass c = classInspectionService.inspectClass(className);
         classInspectionService = null;
-        return Response.ok().entity(c).build();
+        return Response.ok().entity(toJson(c)).build();
     }
 
     @POST
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
     @Path("/mavenclasspath")
-    public Response generateClasspath(MavenClasspathRequest request) throws Exception {
-
+    public Response generateClasspath(InputStream requestIn) throws Exception {
+        MavenClasspathRequest request = fromJson(requestIn, MavenClasspathRequest.class);
         MavenClasspathResponse response = new MavenClasspathResponse();
         MavenClasspathHelper mavenClasspathHelper = null;
         try {
@@ -91,15 +113,15 @@ public class JavaService extends Application {
             response.setErrorMessage(e.getMessage());
         }
 
-        return Response.ok().entity(response).build();
+        return Response.ok().entity(toJson(response)).build();
     }
 
     @POST
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
     @Path("/class")
-    public Response inspectClass(ClassInspectionRequest request) throws Exception {
-
+    public Response inspectClass(InputStream requestIn) throws Exception {
+        ClassInspectionRequest request = fromJson(requestIn, ClassInspectionRequest.class);
         ClassInspectionResponse response = new ClassInspectionResponse();
         ClassInspectionService classInspectionService = new ClassInspectionService();
         classInspectionService.setConversionService(DefaultAtlasConversionService.getInstance());
@@ -122,7 +144,7 @@ public class JavaService extends Application {
             response.setExecutionTime(System.currentTimeMillis() - startTime);
         }
 
-        return Response.ok().entity(response).build();
+        return Response.ok().entity(toJson(response)).build();
     }
 
     protected void configureInspectionService(ClassInspectionService classInspectionService,

@@ -62,7 +62,7 @@ public class AtlasServiceTest {
     public void testListMappings() throws Exception {
         Response resp = service.listMappings(
                 generateTestUriInfo("http://localhost:8686/v2/atlas", "http://localhost:8686/v2/atlas/mappings"), null);
-        StringMap sMap = (StringMap) resp.getEntity();
+        StringMap sMap = Json.mapper().readValue((byte[])resp.getEntity(), StringMap.class);
         System.out.println("Found " + sMap.getStringMapEntry().size() + " objects");
         for (StringMapEntry s : sMap.getStringMapEntry()) {
             System.out.println("\t n: " + s.getName() + " v: " + s.getValue());
@@ -72,7 +72,7 @@ public class AtlasServiceTest {
     @Test
     public void testGetMapping() throws Exception {
         Response resp = service.getMappingRequest("junit3");
-        assertEquals(AtlasMapping.class, resp.getEntity().getClass());
+        assertEquals(byte[].class, resp.getEntity().getClass());
     }
 
     @Test

@@ -15,6 +15,8 @@
  */
 package io.atlasmap.xml.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import io.atlasmap.v2.Json;
 import io.atlasmap.xml.inspect.XmlDocumentInspectionService;
 import io.atlasmap.xml.v2.InspectionType;
 import io.atlasmap.xml.v2.XmlDocument;
@@ -30,10 +32,13 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 
 // http://localhost:8585/v2/atlas/xml/inspection
 
@@ -42,6 +47,22 @@ import java.io.File;
 public class XmlService extends Application {
 
     private static final Logger LOG = LoggerFactory.getLogger(XmlService.class);
+
+    protected byte[] toJson(Object value) {
+        try {
+            return Json.mapper().writeValueAsBytes(value);
+        } catch (JsonProcessingException e) {
+            throw new WebApplicationException(e, Response.Status.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    protected <T> T fromJson(InputStream value, Class<T>clazz) {
+        try {
+            return Json.mapper().readValue(value, clazz);
+        } catch (IOException e) {
+            throw new WebApplicationException(e, Response.Status.BAD_REQUEST);
+        }
+    }
 
     // example request: http://localhost:8181/rest/myresource?from=jason%20baker
     @GET
@@ -84,13 +105,17 @@ public class XmlService extends Application {
             endTime = System.currentTimeMillis() - startTime;
         }
 
-        return Response.ok().entity(d).build();
+        return Response.ok().entity(toJson(d)).build();
     }
 
     @POST
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
     @Path("/inspect")
+    public Response inspectClass(InputStream request) throws Exception {
+        return inspectClass(fromJson(request, XmlInspectionRequest.class));
+    }
+
     public Response inspectClass(XmlInspectionRequest request) throws Exception {
         long startTime = System.currentTimeMillis();
 
@@ -124,6 +149,6 @@ public class XmlService extends Application {
         }
 
         response.setXmlDocument(d);
-        return Response.ok().entity(response).build();
+        return Response.ok().entity(toJson(response)).build();
     }
 }

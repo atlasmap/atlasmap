@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import javax.ws.rs.core.Response;
 
+import io.atlasmap.v2.Json;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,8 +29,8 @@ public class JavaServiceTest {
     public void testGetClass() throws Exception {
         Response res = javaService.getClass(JavaService.class.getName());
         Object entity = res.getEntity();
-        assertEquals(JavaClass.class, entity.getClass());
-        JavaClass javaClass = (JavaClass) entity;
+        assertEquals(byte[].class, entity.getClass());
+        JavaClass javaClass = Json.mapper().readValue((byte[]) entity, JavaClass.class);
         assertEquals(JavaService.class.getName(), javaClass.getClassName());
     }
 }

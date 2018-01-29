@@ -15,12 +15,14 @@
  */
 package io.atlasmap.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.api.AtlasSession;
 import io.atlasmap.core.DefaultAtlasContextFactory;
 import io.atlasmap.v2.ActionDetails;
 import io.atlasmap.v2.AtlasMapping;
+import io.atlasmap.v2.Json;
 import io.atlasmap.v2.StringMap;
 import io.atlasmap.v2.StringMapEntry;
 import io.atlasmap.v2.Validations;
@@ -54,6 +56,7 @@ import javax.xml.transform.stream.StreamSource;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Paths;
 
 @ApplicationPath("/")
@@ -65,6 +68,22 @@ public class AtlasService extends Application {
     private final DefaultAtlasContextFactory atlasContextFactory = DefaultAtlasContextFactory.getInstance();
     private String baseFolder = "target/mappings";
 
+    protected byte[] toJson(Object value) {
+        try {
+            return Json.mapper().writeValueAsBytes(value);
+        } catch (JsonProcessingException e) {
+            throw new WebApplicationException(e, Status.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    protected <T> T fromJson(InputStream value, Class<T>clazz) {
+        try {
+            return Json.mapper().readValue(value, clazz);
+        } catch (IOException e) {
+            throw new WebApplicationException(e, Status.BAD_REQUEST);
+        }
+    }
+
 
     @GET
     @Path("/fieldActions")
@@ -73,11 +92,11 @@ public class AtlasService extends Application {
         ActionDetails details = new ActionDetails();
 
         if (atlasContextFactory == null || atlasContextFactory.getFieldActionService() == null) {
-            return Response.ok().entity(details).build();
+            return Response.ok().entity(toJson(details)).build();
         }
 
         details.getActionDetail().addAll(atlasContextFactory.getFieldActionService().listActionDetails());
-        return Response.ok().entity(details).build();
+        return Response.ok().entity(toJson(details)).build();
     }
 
     @GET
@@ -99,7 +118,7 @@ public class AtlasService extends Application {
         });
 
         if (mappings == null) {
-            return Response.ok().entity(sMap).build();
+            return Response.ok().entity(toJson(sMap)).build();
         }
 
         try {
@@ -117,7 +136,7 @@ public class AtlasService extends Application {
             throw new WebApplicationException(e.getMessage(), e, Status.INTERNAL_SERVER_ERROR);
         }
 
-        return Response.ok().entity(sMap).build();
+        return Response.ok().entity(toJson(sMap)).build();
     }
 
     @DELETE
@@ -160,32 +179,32 @@ public class AtlasService extends Application {
             LOG.error("Error retrieving mapping " + e.getMessage(), e);
         }
 
-        return Response.ok().entity(atlasMapping).build();
+        return Response.ok().entity(toJson(atlasMapping)).build();
     }
 
     @PUT
     @Path("/mapping")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createMappingRequest(AtlasMapping mapping, @Context UriInfo uriInfo) {
-        return saveMapping(mapping, uriInfo);
+    public Response createMappingRequest(InputStream mapping, @Context UriInfo uriInfo) {
+        return saveMapping(fromJson(mapping, AtlasMapping.class), uriInfo);
     }
 
     @POST
     @Path("/mapping/{mappingId}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateMappingRequest(AtlasMapping mapping, @Context UriInfo uriInfo) {
-        return saveMapping(mapping, uriInfo);
+    public Response updateMappingRequest(InputStream mapping, @Context UriInfo uriInfo) {
+        return saveMapping(fromJson(mapping, AtlasMapping.class), uriInfo);
     }
 
     @PUT
     @Path("/mapping/validate")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response validateMappingRequest(AtlasMapping mapping, @Context UriInfo uriInfo) {
+    public Response validateMappingRequest(InputStream mapping, @Context UriInfo uriInfo) {
         try {
-            return validateMapping(mapping, uriInfo);
+            return validateMapping(fromJson(mapping, AtlasMapping.class), uriInfo);
         } catch (AtlasException | IOException e) {
             throw new WebApplicationException(e.getMessage(), e, Status.INTERNAL_SERVER_ERROR);
         }
@@ -223,7 +242,7 @@ public class AtlasService extends Application {
                     + (temporaryMappingFile != null ? temporaryMappingFile.toString() : null));
         }
 
-        return Response.ok().entity(validations).build();
+        return Response.ok().entity(toJson(validations)).build();
     }
 
     protected Response saveMapping(AtlasMapping mapping, UriInfo uriInfo) {

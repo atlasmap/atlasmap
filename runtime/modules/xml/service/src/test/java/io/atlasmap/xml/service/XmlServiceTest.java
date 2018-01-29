@@ -5,6 +5,7 @@ import static org.junit.Assert.assertNotNull;
 
 import javax.ws.rs.core.Response;
 
+import io.atlasmap.v2.Json;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -48,8 +49,8 @@ public class XmlServiceTest {
         request.setXmlData(source);
         Response res = xmlService.inspectClass(request);
         Object entity = res.getEntity();
-        assertEquals(XmlInspectionResponse.class, entity.getClass());
-        XmlInspectionResponse inspectionResponse = (XmlInspectionResponse)entity;
+        assertEquals(byte[].class, entity.getClass());
+        XmlInspectionResponse inspectionResponse = Json.mapper().readValue((byte[])entity, XmlInspectionResponse.class);
         XmlDocument xmlDoc = inspectionResponse.getXmlDocument();
         assertEquals(1, xmlDoc.getFields().getField().size());
         XmlComplexType root = (XmlComplexType) xmlDoc.getFields().getField().get(0);
