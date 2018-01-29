@@ -31,7 +31,7 @@ import org.junit.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import io.atlasmap.v2.AtlasJsonMapper;
+import io.atlasmap.v2.Json;
 import io.atlasmap.v2.AtlasMapping;
 import io.atlasmap.v2.BaseMapping;
 import io.atlasmap.v2.Field;
@@ -49,7 +49,7 @@ public class AtlasServiceTest {
     @Before
     public void setUp() throws Exception {
         service = new AtlasService();
-        mapper = new AtlasJsonMapper();
+        mapper = Json.mapper();
     }
 
     @After

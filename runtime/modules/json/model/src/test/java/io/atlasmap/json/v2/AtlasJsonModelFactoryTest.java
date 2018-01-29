@@ -20,9 +20,10 @@ import static org.junit.Assert.assertNotNull;
 
 import java.io.File;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 
-import io.atlasmap.v2.AtlasJsonMapper;
+import io.atlasmap.v2.Json;
 
 public class AtlasJsonModelFactoryTest {
 
@@ -53,7 +54,7 @@ public class AtlasJsonModelFactoryTest {
                 + "    { \"id\": \"5003\", \"type\": \"Chocolate\" },\n"
                 + "    { \"id\": \"5004\", \"type\": \"Maple\" }\n" + "  ]\n" + "}\n" + "");
 
-        AtlasJsonMapper mapper = new AtlasJsonMapper();
+        ObjectMapper mapper = Json.mapper();
         mapper.writeValue(new File("target/json-inspection-request.json"), request);
     }
 }

@@ -22,30 +22,31 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import io.atlasmap.v2.Json;
 
 @Provider
 public class AtlasJsonProvider implements ContextResolver<ObjectMapper> {
 
-    private ObjectMapper objectMapper;
-
-    public AtlasJsonProvider() {
-        objectMapper = createObjectMapper();
-    }
-
-    public static ObjectMapper createObjectMapper() {
-        ObjectMapper om = new ObjectMapper();
-        om.configure(SerializationFeature.WRAP_ROOT_VALUE, true);
-        om.configure(DeserializationFeature.UNWRAP_ROOT_VALUE, true);
-        // Causes errors in serialization .. NPE in
-        // FilteringJacksonJaxbJsonProvider.writeTo(FilteringJacksonJaxbJsonProvider.java:130)
-        om.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
-        om.setSerializationInclusion(Include.NON_NULL);
-        return om;
-    }
+//    private ObjectMapper objectMapper;
+//
+//    public AtlasJsonProvider() {
+//        objectMapper = createObjectMapper();
+//    }
+//
+//    public static ObjectMapper createObjectMapper() {
+//        ObjectMapper om = new ObjectMapper();
+//        om.configure(SerializationFeature.WRAP_ROOT_VALUE, true);
+//        om.configure(DeserializationFeature.UNWRAP_ROOT_VALUE, true);
+//        // Causes errors in serialization .. NPE in
+//        // FilteringJacksonJaxbJsonProvider.writeTo(FilteringJacksonJaxbJsonProvider.java:130)
+//        om.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
+//        om.setSerializationInclusion(Include.NON_NULL);
+//        return om;
+//    }
 
     @Override
     public ObjectMapper getContext(Class<?> objectType) {
-        return objectMapper;
+        return Json.mapper();
     }
 
 }

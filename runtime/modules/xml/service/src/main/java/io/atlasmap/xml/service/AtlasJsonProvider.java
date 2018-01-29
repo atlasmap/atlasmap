@@ -20,20 +20,14 @@ import javax.ws.rs.ext.Provider;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import io.atlasmap.v2.AtlasJsonMapper;
+import io.atlasmap.v2.Json;
 
 @Provider
 public class AtlasJsonProvider implements ContextResolver<ObjectMapper> {
 
-    private ObjectMapper objectMapper;
-
-    public AtlasJsonProvider() {
-        objectMapper = new AtlasJsonMapper();
-    }
-
     @Override
     public ObjectMapper getContext(Class<?> objectType) {
-        return objectMapper;
+        return Json.mapper();
     }
 
 }
