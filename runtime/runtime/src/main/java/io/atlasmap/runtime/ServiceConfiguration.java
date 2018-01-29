@@ -81,9 +81,7 @@ public class ServiceConfiguration {
             MavenClasspathResponse response = new MavenClasspathResponse();
             response.setExecutionTime(0L);
             response.setClasspath("");
-            return Response.ok().header("Access-Control-Allow-Origin", "*")
-                    .header("Access-Control-Allow-Headers", "Content-Type")
-                    .header("Access-Control-Allow-Methods", "GET,PUT,POST,PATCH,DELETE").entity(response).build();
+            return Response.ok().entity(response).build();
         }
     }
 }

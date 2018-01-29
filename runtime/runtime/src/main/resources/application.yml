@@ -27,3 +27,6 @@ management:
 endpoints:
   health:
     sensitive: false
+
+cors:
+  allowedOrigins: "*"

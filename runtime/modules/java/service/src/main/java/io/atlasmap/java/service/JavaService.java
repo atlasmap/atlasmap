@@ -18,7 +18,6 @@ package io.atlasmap.java.service;
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
-import javax.ws.rs.OPTIONS;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -55,15 +54,6 @@ public class JavaService extends Application {
         return "Got it! " + from;
     }
 
-    @OPTIONS
-    @Path("/class")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response testJsonOptions() throws Exception {
-        return Response.ok().header("Access-Control-Allow-Origin", "*")
-                .header("Access-Control-Allow-Headers", "Content-Type")
-                .header("Access-Control-Allow-Methods", "GET,PUT,POST,PATCH,DELETE").build();
-    }
-
     // example from:
     // https://www.mkyong.com/webservices/jax-rs/json-example-with-jersey-jackson/
     @GET
@@ -74,18 +64,7 @@ public class JavaService extends Application {
         classInspectionService.setConversionService(DefaultAtlasConversionService.getInstance());
         JavaClass c = classInspectionService.inspectClass(className);
         classInspectionService = null;
-        return Response.ok().header("Access-Control-Allow-Origin", "*")
-                .header("Access-Control-Allow-Headers", "Content-Type")
-                .header("Access-Control-Allow-Methods", "GET,PUT,POST,PATCH,DELETE").entity(c).build();
-    }
-
-    @OPTIONS
-    @Path("/mavenclasspath")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response generateClasspathCORS() throws Exception {
-        return Response.ok().header("Access-Control-Allow-Origin", "*")
-                .header("Access-Control-Allow-Headers", "Content-Type")
-                .header("Access-Control-Allow-Methods", "GET,PUT,POST,PATCH,DELETE").build();
+        return Response.ok().entity(c).build();
     }
 
     @POST
@@ -112,9 +91,7 @@ public class JavaService extends Application {
             response.setErrorMessage(e.getMessage());
         }
 
-        return Response.ok().header("Access-Control-Allow-Origin", "*")
-                .header("Access-Control-Allow-Headers", "Content-Type")
-                .header("Access-Control-Allow-Methods", "GET,PUT,POST,PATCH,DELETE").entity(response).build();
+        return Response.ok().entity(response).build();
     }
 
     @POST
@@ -145,9 +122,7 @@ public class JavaService extends Application {
             response.setExecutionTime(System.currentTimeMillis() - startTime);
         }
 
-        return Response.ok().header("Access-Control-Allow-Origin", "*")
-                .header("Access-Control-Allow-Headers", "Content-Type")
-                .header("Access-Control-Allow-Methods", "GET,PUT,POST,PATCH,DELETE").entity(response).build();
+        return Response.ok().entity(response).build();
     }
 
     protected void configureInspectionService(ClassInspectionService classInspectionService,

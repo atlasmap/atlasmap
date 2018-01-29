@@ -54,7 +54,6 @@ public class RestTest {
     @LocalServerPort
     int port;
 
-
     @Test
     public void getFieldActions() throws IOException {
         Request request = new Request.Builder()

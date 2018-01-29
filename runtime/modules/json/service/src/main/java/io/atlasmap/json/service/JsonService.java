@@ -15,10 +15,17 @@
  */
 package io.atlasmap.json.service;
 
+import io.atlasmap.json.inspect.JsonDocumentInspectionService;
+import io.atlasmap.json.v2.InspectionType;
+import io.atlasmap.json.v2.JsonDocument;
+import io.atlasmap.json.v2.JsonInspectionRequest;
+import io.atlasmap.json.v2.JsonInspectionResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
-import javax.ws.rs.OPTIONS;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -26,15 +33,6 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import io.atlasmap.json.inspect.JsonDocumentInspectionService;
-import io.atlasmap.json.v2.InspectionType;
-import io.atlasmap.json.v2.JsonDocument;
-import io.atlasmap.json.v2.JsonInspectionRequest;
-import io.atlasmap.json.v2.JsonInspectionResponse;
 
 // http://localhost:8585/v2/atlas/xml/inspection
 
@@ -50,15 +48,6 @@ public class JsonService extends Application {
     @Produces(MediaType.TEXT_PLAIN)
     public String simpleHelloWorld(@QueryParam("from") String from) {
         return "Got it! " + from;
-    }
-
-    @OPTIONS
-    @Path("/inspect")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response testJsonOptions() throws Exception {
-        return Response.ok().header("Access-Control-Allow-Origin", "*")
-                .header("Access-Control-Allow-Headers", "Content-Type")
-                .header("Access-Control-Allow-Methods", "GET,PUT,POST,PATCH,DELETE").build();
     }
 
     @GET
@@ -92,9 +81,7 @@ public class JsonService extends Application {
             endTime = System.currentTimeMillis() - startTime;
         }
 
-        return Response.ok().header("Access-Control-Allow-Origin", "*")
-                .header("Access-Control-Allow-Headers", "Content-Type")
-                .header("Access-Control-Allow-Methods", "GET,PUT,POST,PATCH,DELETE").entity(d).build();
+        return Response.ok().entity(d).build();
     }
 
     @POST
@@ -140,9 +127,7 @@ public class JsonService extends Application {
         }
 
         response.setJsonDocument(d);
-        return Response.ok().header("Access-Control-Allow-Origin", "*")
-                .header("Access-Control-Allow-Headers", "Content-Type")
-                .header("Access-Control-Allow-Methods", "GET,PUT,POST,PATCH,DELETE").entity(response).build();
+        return Response.ok().entity(response).build();
     }
 
     protected boolean validJsonData(String jsonData) {
