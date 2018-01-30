@@ -43,7 +43,7 @@ import { DataMapperUtil } from '../common/data.mapper.util';
                 <label>Name</label>
                 <input name="value" type="text" [(ngModel)]="field.name"/>
             </div>
-            <div class="form-group" *ngIf="docDef.type == DocumentType.XML">
+            <div class="form-group" *ngIf="isXML">
                 <label>Namespace</label>
                 <select (change)="namespaceSelectionChanged($event);" [ngModel]="namespaceAlias">
                     <option *ngFor="let ns of namespaces" value="{{ns.alias}}" [selected]="namespaceAlias == ns.alias">
@@ -51,7 +51,7 @@ import { DataMapperUtil } from '../common/data.mapper.util';
                     </option>
                 </select>
             </div>
-            <div class="form-group" *ngIf="docDef.type == DocumentType.XML">
+            <div class="form-group" *ngIf="isXML">
                 <label>Field Type</label>
                 <select (change)="fieldTypeSelectionChanged($event);" [ngModel]="fieldType">
                     <option value="element">Element</option>
@@ -101,8 +101,8 @@ export class FieldEditComponent implements ModalWindowValidator {
     editMode = false;
     namespaces: NamespaceModel[] = [];
     docDef: DocumentDefinition = null;
-
     dataSource: Observable<any>;
+    isXML = false;
 
     constructor() {
         this.dataSource = Observable.create((observer: any) => {
@@ -118,6 +118,7 @@ export class FieldEditComponent implements ModalWindowValidator {
         this.parentField = (this.field.parentField == null) ? DocumentDefinition.getNoneField() : this.field.parentField;
 
         if (this.docDef.type == DocumentType.XML) {
+            this.isXML = true;
             this.fieldType = this.field.isAttribute ? 'attribute' : 'element';
             this.parentField = (this.field.parentField == null) ? docDef.fields[0] : this.field.parentField;
             const unqualifiedNS: NamespaceModel = NamespaceModel.getUnqualifiedNamespace();
