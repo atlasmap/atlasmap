@@ -196,11 +196,11 @@ public class AtlasMappingServiceTest {
 
     @Test
     public void testSaveMappingAsFileAtlasMappingFileAtlasMappingFormat() throws AtlasException {
-        File file = Paths.get("src" + File.separator + "test" + File.separator + "resources" + File.separator + "atlasmapping.xml").toFile();
+        File file = Paths.get("target" + File.separator + "generated-test-sources" + File.separator + "atlasmapping.xml").toFile();
         atlasMappingService.saveMappingAsFile(atlasMapping, file);
         atlasMappingService.saveMappingAsFile(atlasMapping, file, AtlasMappingFormat.XML);
 
-        file = Paths.get("src" + File.separator + "test" + File.separator + "resources" + File.separator + "atlasmapping.json").toFile();
+        file = Paths.get("target" + File.separator + "generated-test-sources" + File.separator + "atlasmapping.json").toFile();
         atlasMappingService.saveMappingAsFile(atlasMapping, file, AtlasMappingFormat.JSON);
     }
 

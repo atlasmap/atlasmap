@@ -1,49 +1,47 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <AtlasMapping xmlns="http://atlasmap.io/v2"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns3="http://atlasmap.io/json/v2"
-    name="JsonJsonRootedFlatMapping">
-    <DataSource dataSourceType="Source" uri="atlas:json" />
-    <DataSource dataSourceType="Target" uri="atlas:json" />
-    <Mappings>
-        <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns3:JsonField" path="/intField" />
-            <OutputField xsi:type="ns3:JsonField"
-                path="/TargetFlatPrimitive/intField" />
-        </Mapping>
-        <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns3:JsonField" path="/shortField" />
-            <OutputField xsi:type="ns3:JsonField"
-                path="/TargetFlatPrimitive/shortField" />
-        </Mapping>
-        <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns3:JsonField" path="/longField" />
-            <OutputField xsi:type="ns3:JsonField"
-                path="/TargetFlatPrimitive/longField" />
-        </Mapping>
-        <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns3:JsonField" path="/doubleField" />
-            <OutputField xsi:type="ns3:JsonField"
-                path="/TargetFlatPrimitive/doubleField" />
-        </Mapping>
-        <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns3:JsonField" path="/floatField" />
-            <OutputField xsi:type="ns3:JsonField"
-                path="/TargetFlatPrimitive/floatField" />
-        </Mapping>
-        <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns3:JsonField" path="/booleanField" />
-            <OutputField xsi:type="ns3:JsonField"
-                path="/TargetFlatPrimitive/booleanField" />
-        </Mapping>
-        <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns3:JsonField" path="/charField" />
-            <OutputField xsi:type="ns3:JsonField"
-                path="/TargetFlatPrimitive/charField" />
-        </Mapping>
-        <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns3:JsonField" path="/nullField" fieldType="String" />
-            <OutputField xsi:type="ns3:JsonField"
-                path="/TargetFlatPrimitive/boxedStringField" />
-        </Mapping>
-    </Mappings>
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns3="http://atlasmap.io/json/v2"
+  name="JsonJsonRootedFlatMapping">
+  <DataSource dataSourceType="Source" uri="atlas:json" />
+  <DataSource dataSourceType="Target" uri="atlas:json" />
+  <Mappings>
+    <Mapping xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="ns3:JsonField" path="/intField" />
+      <OutputField xsi:type="ns3:JsonField" path="/TargetFlatPrimitive/intField" />
+    </Mapping>
+    <Mapping xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="ns3:JsonField" path="/shortField" />
+      <OutputField xsi:type="ns3:JsonField"
+        path="/TargetFlatPrimitive/shortField" />
+    </Mapping>
+    <Mapping xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="ns3:JsonField" path="/longField" />
+      <OutputField xsi:type="ns3:JsonField" path="/TargetFlatPrimitive/longField" />
+    </Mapping>
+    <Mapping xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="ns3:JsonField" path="/doubleField" />
+      <OutputField xsi:type="ns3:JsonField"
+        path="/TargetFlatPrimitive/doubleField" />
+    </Mapping>
+    <Mapping xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="ns3:JsonField" path="/floatField" />
+      <OutputField xsi:type="ns3:JsonField"
+        path="/TargetFlatPrimitive/floatField" />
+    </Mapping>
+    <Mapping xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="ns3:JsonField" path="/booleanField" />
+      <OutputField xsi:type="ns3:JsonField"
+        path="/TargetFlatPrimitive/booleanField" />
+    </Mapping>
+    <Mapping xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="ns3:JsonField" path="/charField" />
+      <OutputField xsi:type="ns3:JsonField" path="/TargetFlatPrimitive/charField" />
+    </Mapping>
+    <Mapping xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="ns3:JsonField" path="/nullField"
+        fieldType="String" />
+      <OutputField xsi:type="ns3:JsonField"
+        path="/TargetFlatPrimitive/boxedStringField" />
+    </Mapping>
+  </Mappings>
 </AtlasMapping>

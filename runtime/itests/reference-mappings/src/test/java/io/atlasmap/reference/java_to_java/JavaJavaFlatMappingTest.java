@@ -197,8 +197,10 @@ public class JavaJavaFlatMappingTest extends AtlasMappingBaseTest {
         AtlasMapping atlasMapping = generateJavaJavaFlatMapping();
         AtlasMappingService atlasMappingService = new AtlasMappingService(
                 Arrays.asList("io.atlasmap.v2", "io.atlasmap.java.v2"));
+        File path = new File("target/reference-mappings/javaToJava");
+        path.mkdirs();
         atlasMappingService.saveMappingAsFile(atlasMapping,
-                new File("src/test/resources/javaToJava/atlasmapping-flatprimitive.xml"));
+                new File(path, "atlasmapping-flatprimitive.xml"));
     }
 
     @Test

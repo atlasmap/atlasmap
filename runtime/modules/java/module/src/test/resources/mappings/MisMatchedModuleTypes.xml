@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <AtlasMapping xmlns="http://atlasmap.io/v2" xmlns:ns2="http://atlasmap.io/java/v2"
-    name="thisis_a_valid.name">
-    <DataSource dataSourceType="Source" uri="atlas:java::2" />
-    <DataSource dataSourceType="Target" uri="atlas:java::3" />
-    <Mappings>
-        <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-            xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="MockField" name="input.name" />
-            <OutputField xsi:type="MockField" name="out.name" />
-        </Mapping>
-        <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-            xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="MockField" name="input.name" />
-            <OutputField xsi:type="MockField" name="out.name" />
-        </Mapping>
-        <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-            xsi:type="Mapping" mappingType="Separate">
-            <InputField xsi:type="MockField" />
-            <OutputField xsi:type="MockField" index="0" />
-        </Mapping>
-    </Mappings>
-    <LookupTables />
-    <Properties />
+  name="thisis_a_valid.name">
+  <DataSource dataSourceType="Source" uri="atlas:java::2" />
+  <DataSource dataSourceType="Target" uri="atlas:java::3" />
+  <Mappings>
+    <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="MockField" name="input.name" />
+      <OutputField xsi:type="MockField" name="out.name" />
+    </Mapping>
+    <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="MockField" name="input.name" />
+      <OutputField xsi:type="MockField" name="out.name" />
+    </Mapping>
+    <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:type="Mapping" mappingType="Separate">
+      <InputField xsi:type="MockField" />
+      <OutputField xsi:type="MockField" index="0" />
+    </Mapping>
+  </Mappings>
+  <LookupTables />
+  <Properties />
 </AtlasMapping>

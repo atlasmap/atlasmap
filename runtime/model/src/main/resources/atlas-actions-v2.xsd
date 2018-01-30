@@ -1,582 +1,582 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Copyright (C) 2017 Red Hat, Inc. Licensed under the Apache License,
-    Version 2.0 (the "License"); you may not use this file except in compliance
-    with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
-    Unless required by applicable law or agreed to in writing, software distributed
-    under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES
-    OR CONDITIONS OF ANY KIND, either express or implied. See the License for
-    the specific language governing permissions and limitations under the License. -->
+  Version 2.0 (the "License"); you may not use this file except in compliance
+  with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+  Unless required by applicable law or agreed to in writing, software distributed
+  under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES
+  OR CONDITIONS OF ANY KIND, either express or implied. See the License for
+  the specific language governing permissions and limitations under the License. -->
 <schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:atlas="http://atlasmap.io/v2"
-    targetNamespace="http://atlasmap.io/v2" elementFormDefault="qualified"
-    attributeFormDefault="unqualified">
+  targetNamespace="http://atlasmap.io/v2" elementFormDefault="qualified"
+  attributeFormDefault="unqualified">
 
-    <include schemaLocation="atlas-model-v2.xsd" />
+  <include schemaLocation="atlas-model-v2.xsd" />
 
-    <complexType name="Action" abstract="true" />
+  <complexType name="Action" abstract="true" />
 
-    <element name="AbsoluteValue">
-        <complexType>
-            <complexContent>
-                <extension base="atlas:Action" />
-            </complexContent>
-        </complexType>
-    </element>
-
-    <element name="Add">
-        <complexType>
-            <complexContent>
-                <extension base="atlas:Action" />
-            </complexContent>
-        </complexType>
-    </element>
-
-    <element name="AddDays">
-        <complexType>
-            <complexContent>
-                <extension base="atlas:Action">
-                    <attribute name="days" type="int" />
-                </extension>
-            </complexContent>
-        </complexType>
-    </element>
-
-    <element name="AddSeconds">
-        <complexType>
-            <complexContent>
-                <extension base="atlas:Action">
-                    <attribute name="seconds" type="int" />
-                </extension>
-            </complexContent>
-        </complexType>
-    </element>
-
-    <element name="Append">
-        <complexType>
-            <complexContent>
-                <extension base="atlas:Action">
-                    <attribute name="string" type="string" />
-                </extension>
-            </complexContent>
-        </complexType>
-    </element>
-
-    <element name="Average">
-        <complexType>
-            <complexContent>
-                <extension base="atlas:Action" />
-            </complexContent>
-        </complexType>
-    </element>
-
-    <element name="Camelize">
-        <complexType>
-            <complexContent>
-                <extension base="atlas:Action" />
-            </complexContent>
-        </complexType>
-    </element>
-
-    <element name="Capitalize">
-        <complexType>
-            <complexContent>
-                <extension base="atlas:Action" />
-            </complexContent>
-        </complexType>
-    </element>
-
-    <element name="Ceiling">
-        <complexType>
-            <complexContent>
-                <extension base="atlas:Action" />
-            </complexContent>
-        </complexType>
-    </element>
-
-    <element name="Concatenate">
-        <complexType>
-            <complexContent>
-                <extension base="atlas:Action">
-                    <attribute name="delimiter" type="string" />
-                </extension>
-            </complexContent>
-        </complexType>
-    </element>
-
-    <element name="Contains">
-        <complexType>
-            <complexContent>
-                <extension base="atlas:Action">
-                    <attribute name="value" type="string" />
-                </extension>
-            </complexContent>
-        </complexType>
-    </element>
-
-    <element name="ConvertAreaUnit">
-        <complexType>
-            <complexContent>
-                <extension base="atlas:Action">
-                    <attribute name="fromUnit" type="atlas:AreaUnitType" />
-                    <attribute name="toUnit" type="atlas:AreaUnitType" />
-                </extension>
-            </complexContent>
-        </complexType>
-    </element>
-
-    <element name="ConvertDistanceUnit">
-        <complexType>
-            <complexContent>
-                <extension base="atlas:Action">
-                    <attribute name="fromUnit" type="atlas:DistanceUnitType" />
-                    <attribute name="toUnit" type="atlas:DistanceUnitType" />
-                </extension>
-            </complexContent>
-        </complexType>
-    </element>
-
-    <element name="ConvertMassUnit">
-        <complexType>
-            <complexContent>
-                <extension base="atlas:Action">
-                    <attribute name="fromUnit" type="atlas:MassUnitType" />
-                    <attribute name="toUnit" type="atlas:MassUnitType" />
-                </extension>
-            </complexContent>
-        </complexType>
-    </element>
-
-    <element name="ConvertVolumeUnit">
-        <complexType>
-            <complexContent>
-                <extension base="atlas:Action">
-                    <attribute name="fromUnit" type="atlas:VolumeUnitType" />
-                    <attribute name="toUnit" type="atlas:VolumeUnitType" />
-                </extension>
-            </complexContent>
-        </complexType>
-    </element>
-
-    <element name="CustomAction">
-        <complexType>
-            <complexContent>
-                <extension base="atlas:Action">
-                    <attribute name="className" type="string" />
-                    <attribute name="methodName" type="string" />
-                    <attribute name="inputFieldType" type="atlas:FieldType" />
-                    <attribute name="outputFieldType" type="atlas:FieldType" />
-                </extension>
-            </complexContent>
-        </complexType>
-    </element>
-
-    <element name="CurrentDate">
-        <complexType>
-            <complexContent>
-                <extension base="atlas:Action" />
-            </complexContent>
-        </complexType>
-    </element>
-
-    <element name="CurrentDateTime">
-        <complexType>
-            <complexContent>
-                <extension base="atlas:Action" />
-            </complexContent>
-        </complexType>
-    </element>
-
-    <element name="CurrentTime">
-        <complexType>
-            <complexContent>
-                <extension base="atlas:Action" />
-            </complexContent>
-        </complexType>
-    </element>
-
-    <element name="DayOfWeek">
-        <complexType>
-            <complexContent>
-                <extension base="atlas:Action" />
-            </complexContent>
-        </complexType>
-    </element>
-
-    <element name="DayOfYear">
-        <complexType>
-            <complexContent>
-                <extension base="atlas:Action" />
-            </complexContent>
-        </complexType>
-    </element>
-
-    <element name="Divide">
-        <complexType>
-            <complexContent>
-                <extension base="atlas:Action" />
-            </complexContent>
-        </complexType>
-    </element>
-
-    <element name="EndsWith">
-        <complexType>
-            <complexContent>
-                <extension base="atlas:Action">
-                    <attribute name="string" type="string" />
-                </extension>
-            </complexContent>
-        </complexType>
-    </element>
-
-    <element name="Equals">
-        <complexType>
-            <complexContent>
-                <extension base="atlas:Action">
-                    <attribute name="value" type="string" />
-                </extension>
-            </complexContent>
-        </complexType>
-    </element>
-
-    <element name="FileExtension">
-        <complexType>
-            <complexContent>
-                <extension base="atlas:Action" />
-            </complexContent>
-        </complexType>
-    </element>
-
-    <element name="Floor">
-        <complexType>
-            <complexContent>
-                <extension base="atlas:Action" />
-            </complexContent>
-        </complexType>
-    </element>
-
-    <element name="Format">
-        <complexType>
-            <complexContent>
-                <extension base="atlas:Action">
-                    <attribute name="template" type="string" />
-                </extension>
-            </complexContent>
-        </complexType>
-    </element>
-
-    <element name="GenerateUUID">
-        <complexType>
-            <complexContent>
-                <extension base="atlas:Action" />
-            </complexContent>
-        </complexType>
-    </element>
-
-    <element name="IndexOf">
-        <complexType>
-            <complexContent>
-                <extension base="atlas:Action">
-                    <attribute name="string" type="string" />
-                </extension>
-            </complexContent>
-        </complexType>
-    </element>
-
-    <element name="IsNull">
-        <complexType>
-            <complexContent>
-                <extension base="atlas:Action" />
-            </complexContent>
-        </complexType>
-    </element>
-
-    <element name="LastIndexOf">
-        <complexType>
-            <complexContent>
-                <extension base="atlas:Action">
-                    <attribute name="string" type="string" />
-                </extension>
-            </complexContent>
-        </complexType>
-    </element>
-
-    <element name="Length">
-        <complexType>
-            <complexContent>
-                <extension base="atlas:Action" />
-            </complexContent>
-        </complexType>
-    </element>
-
-    <element name="Lowercase">
-        <complexType>
-            <complexContent>
-                <extension base="atlas:Action" />
-            </complexContent>
-        </complexType>
-    </element>
-
-    <element name="Maximum">
-        <complexType>
-            <complexContent>
-                <extension base="atlas:Action" />
-            </complexContent>
-        </complexType>
-    </element>
-
-    <element name="Minimum">
-        <complexType>
-            <complexContent>
-                <extension base="atlas:Action" />
-            </complexContent>
-        </complexType>
-    </element>
-
-    <element name="Multiply">
-        <complexType>
-            <complexContent>
-                <extension base="atlas:Action" />
-            </complexContent>
-        </complexType>
-    </element>
-
-    <element name="Normalize">
-        <complexType>
-            <complexContent>
-                <extension base="atlas:Action" />
-            </complexContent>
-        </complexType>
-    </element>
-
-    <element name="PadStringLeft">
-        <complexType>
-            <complexContent>
-                <extension base="atlas:Action">
-                    <attribute name="padCharacter" type="string" />
-                    <attribute name="padCount" type="int" />
-                </extension>
-            </complexContent>
-        </complexType>
-    </element>
-
-    <element name="PadStringRight">
-        <complexType>
-            <complexContent>
-                <extension base="atlas:Action">
-                    <attribute name="padCharacter" type="string" />
-                    <attribute name="padCount" type="int" />
-                </extension>
-            </complexContent>
-        </complexType>
-    </element>
-
-    <element name="Prepend">
-        <complexType>
-            <complexContent>
-                <extension base="atlas:Action">
-                    <attribute name="string" type="string" />
-                </extension>
-            </complexContent>
-        </complexType>
-    </element>
-
-    <element name="RemoveFileExtension">
-        <complexType>
-            <complexContent>
-                <extension base="atlas:Action" />
-            </complexContent>
-        </complexType>
-    </element>
-
-    <element name="ReplaceAll">
-        <complexType>
-            <complexContent>
-              <extension base="atlas:Action">
-                  <attribute name="match" type="string" />
-                  <attribute name="newString" type="string" />
-              </extension>
-            </complexContent>
-        </complexType>
-    </element>
-
-    <element name="ReplaceFirst">
-        <complexType>
-            <complexContent>
-              <extension base="atlas:Action">
-                  <attribute name="match" type="string" />
-                  <attribute name="newString" type="string" />
-              </extension>
-            </complexContent>
-        </complexType>
-    </element>
-
-    <element name="Round">
-        <complexType>
-            <complexContent>
-                <extension base="atlas:Action" />
-            </complexContent>
-        </complexType>
-    </element>
-
-    <element name="SeparateByDash">
-        <complexType>
-            <complexContent>
-                <extension base="atlas:Action" />
-            </complexContent>
-        </complexType>
-    </element>
-
-    <element name="SeparateByUnderscore">
-        <complexType>
-            <complexContent>
-                <extension base="atlas:Action" />
-            </complexContent>
-        </complexType>
-    </element>
-
-    <element name="StartsWith">
-        <complexType>
-            <complexContent>
-                <extension base="atlas:Action">
-                    <attribute name="string" type="string" />
-                </extension>
-            </complexContent>
-        </complexType>
-    </element>
-
-    <element name="SubString">
-        <complexType>
-            <complexContent>
-                <extension base="atlas:Action">
-                    <attribute name="startIndex" type="int" />
-                    <attribute name="endIndex" type="int" />
-                </extension>
-            </complexContent>
-        </complexType>
-    </element>
-
-    <element name="SubStringAfter">
-        <complexType>
-            <complexContent>
-                <extension base="atlas:Action">
-                    <attribute name="startIndex" type="int" />
-                    <attribute name="endIndex" type="int" />
-                    <attribute name="match" type="string" />
-                </extension>
-            </complexContent>
-        </complexType>
-    </element>
-
-    <element name="SubStringBefore">
-        <complexType>
-            <complexContent>
-                <extension base="atlas:Action">
-                    <attribute name="startIndex" type="int" />
-                    <attribute name="endIndex" type="int" />
-                    <attribute name="match" type="string" />
-                </extension>
-            </complexContent>
-        </complexType>
-    </element>
-
-    <element name="Subtract">
-        <complexType>
-            <complexContent>
-                <extension base="atlas:Action" />
-            </complexContent>
-        </complexType>
-    </element>
-
-    <element name="Trim">
-        <complexType>
-            <complexContent>
-                <extension base="atlas:Action" />
-            </complexContent>
-        </complexType>
-    </element>
-
-    <element name="TrimLeft">
-        <complexType>
-            <complexContent>
-                <extension base="atlas:Action" />
-            </complexContent>
-        </complexType>
-    </element>
-
-    <element name="TrimRight">
-        <complexType>
-            <complexContent>
-                <extension base="atlas:Action" />
-            </complexContent>
-        </complexType>
-    </element>
-
-    <element name="Uppercase">
-        <complexType>
-            <complexContent>
-                <extension base="atlas:Action" />
-            </complexContent>
-        </complexType>
-    </element>
-
-    <complexType name="Actions">
-        <sequence>
-            <choice minOccurs="0" maxOccurs="unbounded">
-                <element ref="atlas:AbsoluteValue" />
-                <element ref="atlas:Add" />
-                <element ref="atlas:AddDays" />
-                <element ref="atlas:AddSeconds" />
-                <element ref="atlas:Append" />
-                <element ref="atlas:Average" />
-                <element ref="atlas:Camelize" />
-                <element ref="atlas:Capitalize" />
-                <element ref="atlas:Ceiling" />
-                <element ref="atlas:Concatenate" />
-                <element ref="atlas:Contains" />
-                <element ref="atlas:ConvertAreaUnit" />
-                <element ref="atlas:ConvertDistanceUnit" />
-                <element ref="atlas:ConvertMassUnit" />
-                <element ref="atlas:ConvertVolumeUnit" />
-                <element ref="atlas:CurrentDate" />
-                <element ref="atlas:CurrentDateTime" />
-                <element ref="atlas:CurrentTime" />
-                <element ref="atlas:DayOfWeek" />
-                <element ref="atlas:DayOfYear" />
-                <element ref="atlas:Divide" />
-                <element ref="atlas:EndsWith" />
-                <element ref="atlas:Equals" />
-                <element ref="atlas:FileExtension" />
-                <element ref="atlas:Floor" />
-                <element ref="atlas:Format" />
-                <element ref="atlas:GenerateUUID" />
-                <element ref="atlas:IndexOf" />
-                <element ref="atlas:IsNull" />
-                <element ref="atlas:LastIndexOf" />
-                <element ref="atlas:Length" />
-                <element ref="atlas:Lowercase" />
-                <element ref="atlas:Maximum" />
-                <element ref="atlas:Minimum" />
-                <element ref="atlas:Multiply" />
-                <element ref="atlas:Normalize" />
-                <element ref="atlas:PadStringLeft" />
-                <element ref="atlas:PadStringRight" />
-                <element ref="atlas:Prepend" />
-                <element ref="atlas:RemoveFileExtension" />
-                <element ref="atlas:ReplaceAll" />
-                <element ref="atlas:ReplaceFirst" />
-                <element ref="atlas:Round" />
-                <element ref="atlas:SeparateByDash" />
-                <element ref="atlas:SeparateByUnderscore" />
-                <element ref="atlas:StartsWith" />
-                <element ref="atlas:SubString" />
-                <element ref="atlas:SubStringAfter" />
-                <element ref="atlas:SubStringBefore" />
-                <element ref="atlas:Subtract" />
-                <element ref="atlas:Trim" />
-                <element ref="atlas:TrimLeft" />
-                <element ref="atlas:TrimRight" />
-                <element ref="atlas:Uppercase" />
-            </choice>
-        </sequence>
+  <element name="AbsoluteValue">
+    <complexType>
+      <complexContent>
+        <extension base="atlas:Action" />
+      </complexContent>
     </complexType>
+  </element>
+
+  <element name="Add">
+    <complexType>
+      <complexContent>
+        <extension base="atlas:Action" />
+      </complexContent>
+    </complexType>
+  </element>
+
+  <element name="AddDays">
+    <complexType>
+      <complexContent>
+        <extension base="atlas:Action">
+          <attribute name="days" type="int" />
+        </extension>
+      </complexContent>
+    </complexType>
+  </element>
+
+  <element name="AddSeconds">
+    <complexType>
+      <complexContent>
+        <extension base="atlas:Action">
+          <attribute name="seconds" type="int" />
+        </extension>
+      </complexContent>
+    </complexType>
+  </element>
+
+  <element name="Append">
+    <complexType>
+      <complexContent>
+        <extension base="atlas:Action">
+          <attribute name="string" type="string" />
+        </extension>
+      </complexContent>
+    </complexType>
+  </element>
+
+  <element name="Average">
+    <complexType>
+      <complexContent>
+        <extension base="atlas:Action" />
+      </complexContent>
+    </complexType>
+  </element>
+
+  <element name="Camelize">
+    <complexType>
+      <complexContent>
+        <extension base="atlas:Action" />
+      </complexContent>
+    </complexType>
+  </element>
+
+  <element name="Capitalize">
+    <complexType>
+      <complexContent>
+        <extension base="atlas:Action" />
+      </complexContent>
+    </complexType>
+  </element>
+
+  <element name="Ceiling">
+    <complexType>
+      <complexContent>
+        <extension base="atlas:Action" />
+      </complexContent>
+    </complexType>
+  </element>
+
+  <element name="Concatenate">
+    <complexType>
+      <complexContent>
+        <extension base="atlas:Action">
+          <attribute name="delimiter" type="string" />
+        </extension>
+      </complexContent>
+    </complexType>
+  </element>
+
+  <element name="Contains">
+    <complexType>
+      <complexContent>
+        <extension base="atlas:Action">
+          <attribute name="value" type="string" />
+        </extension>
+      </complexContent>
+    </complexType>
+  </element>
+
+  <element name="ConvertAreaUnit">
+    <complexType>
+      <complexContent>
+        <extension base="atlas:Action">
+          <attribute name="fromUnit" type="atlas:AreaUnitType" />
+          <attribute name="toUnit" type="atlas:AreaUnitType" />
+        </extension>
+      </complexContent>
+    </complexType>
+  </element>
+
+  <element name="ConvertDistanceUnit">
+    <complexType>
+      <complexContent>
+        <extension base="atlas:Action">
+          <attribute name="fromUnit" type="atlas:DistanceUnitType" />
+          <attribute name="toUnit" type="atlas:DistanceUnitType" />
+        </extension>
+      </complexContent>
+    </complexType>
+  </element>
+
+  <element name="ConvertMassUnit">
+    <complexType>
+      <complexContent>
+        <extension base="atlas:Action">
+          <attribute name="fromUnit" type="atlas:MassUnitType" />
+          <attribute name="toUnit" type="atlas:MassUnitType" />
+        </extension>
+      </complexContent>
+    </complexType>
+  </element>
+
+  <element name="ConvertVolumeUnit">
+    <complexType>
+      <complexContent>
+        <extension base="atlas:Action">
+          <attribute name="fromUnit" type="atlas:VolumeUnitType" />
+          <attribute name="toUnit" type="atlas:VolumeUnitType" />
+        </extension>
+      </complexContent>
+    </complexType>
+  </element>
+
+  <element name="CustomAction">
+    <complexType>
+      <complexContent>
+        <extension base="atlas:Action">
+          <attribute name="className" type="string" />
+          <attribute name="methodName" type="string" />
+          <attribute name="inputFieldType" type="atlas:FieldType" />
+          <attribute name="outputFieldType" type="atlas:FieldType" />
+        </extension>
+      </complexContent>
+    </complexType>
+  </element>
+
+  <element name="CurrentDate">
+    <complexType>
+      <complexContent>
+        <extension base="atlas:Action" />
+      </complexContent>
+    </complexType>
+  </element>
+
+  <element name="CurrentDateTime">
+    <complexType>
+      <complexContent>
+        <extension base="atlas:Action" />
+      </complexContent>
+    </complexType>
+  </element>
+
+  <element name="CurrentTime">
+    <complexType>
+      <complexContent>
+        <extension base="atlas:Action" />
+      </complexContent>
+    </complexType>
+  </element>
+
+  <element name="DayOfWeek">
+    <complexType>
+      <complexContent>
+        <extension base="atlas:Action" />
+      </complexContent>
+    </complexType>
+  </element>
+
+  <element name="DayOfYear">
+    <complexType>
+      <complexContent>
+        <extension base="atlas:Action" />
+      </complexContent>
+    </complexType>
+  </element>
+
+  <element name="Divide">
+    <complexType>
+      <complexContent>
+        <extension base="atlas:Action" />
+      </complexContent>
+    </complexType>
+  </element>
+
+  <element name="EndsWith">
+    <complexType>
+      <complexContent>
+        <extension base="atlas:Action">
+          <attribute name="string" type="string" />
+        </extension>
+      </complexContent>
+    </complexType>
+  </element>
+
+  <element name="Equals">
+    <complexType>
+      <complexContent>
+        <extension base="atlas:Action">
+          <attribute name="value" type="string" />
+        </extension>
+      </complexContent>
+    </complexType>
+  </element>
+
+  <element name="FileExtension">
+    <complexType>
+      <complexContent>
+        <extension base="atlas:Action" />
+      </complexContent>
+    </complexType>
+  </element>
+
+  <element name="Floor">
+    <complexType>
+      <complexContent>
+        <extension base="atlas:Action" />
+      </complexContent>
+    </complexType>
+  </element>
+
+  <element name="Format">
+    <complexType>
+      <complexContent>
+        <extension base="atlas:Action">
+          <attribute name="template" type="string" />
+        </extension>
+      </complexContent>
+    </complexType>
+  </element>
+
+  <element name="GenerateUUID">
+    <complexType>
+      <complexContent>
+        <extension base="atlas:Action" />
+      </complexContent>
+    </complexType>
+  </element>
+
+  <element name="IndexOf">
+    <complexType>
+      <complexContent>
+        <extension base="atlas:Action">
+          <attribute name="string" type="string" />
+        </extension>
+      </complexContent>
+    </complexType>
+  </element>
+
+  <element name="IsNull">
+    <complexType>
+      <complexContent>
+        <extension base="atlas:Action" />
+      </complexContent>
+    </complexType>
+  </element>
+
+  <element name="LastIndexOf">
+    <complexType>
+      <complexContent>
+        <extension base="atlas:Action">
+          <attribute name="string" type="string" />
+        </extension>
+      </complexContent>
+    </complexType>
+  </element>
+
+  <element name="Length">
+    <complexType>
+      <complexContent>
+        <extension base="atlas:Action" />
+      </complexContent>
+    </complexType>
+  </element>
+
+  <element name="Lowercase">
+    <complexType>
+      <complexContent>
+        <extension base="atlas:Action" />
+      </complexContent>
+    </complexType>
+  </element>
+
+  <element name="Maximum">
+    <complexType>
+      <complexContent>
+        <extension base="atlas:Action" />
+      </complexContent>
+    </complexType>
+  </element>
+
+  <element name="Minimum">
+    <complexType>
+      <complexContent>
+        <extension base="atlas:Action" />
+      </complexContent>
+    </complexType>
+  </element>
+
+  <element name="Multiply">
+    <complexType>
+      <complexContent>
+        <extension base="atlas:Action" />
+      </complexContent>
+    </complexType>
+  </element>
+
+  <element name="Normalize">
+    <complexType>
+      <complexContent>
+        <extension base="atlas:Action" />
+      </complexContent>
+    </complexType>
+  </element>
+
+  <element name="PadStringLeft">
+    <complexType>
+      <complexContent>
+        <extension base="atlas:Action">
+          <attribute name="padCharacter" type="string" />
+          <attribute name="padCount" type="int" />
+        </extension>
+      </complexContent>
+    </complexType>
+  </element>
+
+  <element name="PadStringRight">
+    <complexType>
+      <complexContent>
+        <extension base="atlas:Action">
+          <attribute name="padCharacter" type="string" />
+          <attribute name="padCount" type="int" />
+        </extension>
+      </complexContent>
+    </complexType>
+  </element>
+
+  <element name="Prepend">
+    <complexType>
+      <complexContent>
+        <extension base="atlas:Action">
+          <attribute name="string" type="string" />
+        </extension>
+      </complexContent>
+    </complexType>
+  </element>
+
+  <element name="RemoveFileExtension">
+    <complexType>
+      <complexContent>
+        <extension base="atlas:Action" />
+      </complexContent>
+    </complexType>
+  </element>
+
+  <element name="ReplaceAll">
+    <complexType>
+      <complexContent>
+        <extension base="atlas:Action">
+          <attribute name="match" type="string" />
+          <attribute name="newString" type="string" />
+        </extension>
+      </complexContent>
+    </complexType>
+  </element>
+
+  <element name="ReplaceFirst">
+    <complexType>
+      <complexContent>
+        <extension base="atlas:Action">
+          <attribute name="match" type="string" />
+          <attribute name="newString" type="string" />
+        </extension>
+      </complexContent>
+    </complexType>
+  </element>
+
+  <element name="Round">
+    <complexType>
+      <complexContent>
+        <extension base="atlas:Action" />
+      </complexContent>
+    </complexType>
+  </element>
+
+  <element name="SeparateByDash">
+    <complexType>
+      <complexContent>
+        <extension base="atlas:Action" />
+      </complexContent>
+    </complexType>
+  </element>
+
+  <element name="SeparateByUnderscore">
+    <complexType>
+      <complexContent>
+        <extension base="atlas:Action" />
+      </complexContent>
+    </complexType>
+  </element>
+
+  <element name="StartsWith">
+    <complexType>
+      <complexContent>
+        <extension base="atlas:Action">
+          <attribute name="string" type="string" />
+        </extension>
+      </complexContent>
+    </complexType>
+  </element>
+
+  <element name="SubString">
+    <complexType>
+      <complexContent>
+        <extension base="atlas:Action">
+          <attribute name="startIndex" type="int" />
+          <attribute name="endIndex" type="int" />
+        </extension>
+      </complexContent>
+    </complexType>
+  </element>
+
+  <element name="SubStringAfter">
+    <complexType>
+      <complexContent>
+        <extension base="atlas:Action">
+          <attribute name="startIndex" type="int" />
+          <attribute name="endIndex" type="int" />
+          <attribute name="match" type="string" />
+        </extension>
+      </complexContent>
+    </complexType>
+  </element>
+
+  <element name="SubStringBefore">
+    <complexType>
+      <complexContent>
+        <extension base="atlas:Action">
+          <attribute name="startIndex" type="int" />
+          <attribute name="endIndex" type="int" />
+          <attribute name="match" type="string" />
+        </extension>
+      </complexContent>
+    </complexType>
+  </element>
+
+  <element name="Subtract">
+    <complexType>
+      <complexContent>
+        <extension base="atlas:Action" />
+      </complexContent>
+    </complexType>
+  </element>
+
+  <element name="Trim">
+    <complexType>
+      <complexContent>
+        <extension base="atlas:Action" />
+      </complexContent>
+    </complexType>
+  </element>
+
+  <element name="TrimLeft">
+    <complexType>
+      <complexContent>
+        <extension base="atlas:Action" />
+      </complexContent>
+    </complexType>
+  </element>
+
+  <element name="TrimRight">
+    <complexType>
+      <complexContent>
+        <extension base="atlas:Action" />
+      </complexContent>
+    </complexType>
+  </element>
+
+  <element name="Uppercase">
+    <complexType>
+      <complexContent>
+        <extension base="atlas:Action" />
+      </complexContent>
+    </complexType>
+  </element>
+
+  <complexType name="Actions">
+    <sequence>
+      <choice minOccurs="0" maxOccurs="unbounded">
+        <element ref="atlas:AbsoluteValue" />
+        <element ref="atlas:Add" />
+        <element ref="atlas:AddDays" />
+        <element ref="atlas:AddSeconds" />
+        <element ref="atlas:Append" />
+        <element ref="atlas:Average" />
+        <element ref="atlas:Camelize" />
+        <element ref="atlas:Capitalize" />
+        <element ref="atlas:Ceiling" />
+        <element ref="atlas:Concatenate" />
+        <element ref="atlas:Contains" />
+        <element ref="atlas:ConvertAreaUnit" />
+        <element ref="atlas:ConvertDistanceUnit" />
+        <element ref="atlas:ConvertMassUnit" />
+        <element ref="atlas:ConvertVolumeUnit" />
+        <element ref="atlas:CurrentDate" />
+        <element ref="atlas:CurrentDateTime" />
+        <element ref="atlas:CurrentTime" />
+        <element ref="atlas:DayOfWeek" />
+        <element ref="atlas:DayOfYear" />
+        <element ref="atlas:Divide" />
+        <element ref="atlas:EndsWith" />
+        <element ref="atlas:Equals" />
+        <element ref="atlas:FileExtension" />
+        <element ref="atlas:Floor" />
+        <element ref="atlas:Format" />
+        <element ref="atlas:GenerateUUID" />
+        <element ref="atlas:IndexOf" />
+        <element ref="atlas:IsNull" />
+        <element ref="atlas:LastIndexOf" />
+        <element ref="atlas:Length" />
+        <element ref="atlas:Lowercase" />
+        <element ref="atlas:Maximum" />
+        <element ref="atlas:Minimum" />
+        <element ref="atlas:Multiply" />
+        <element ref="atlas:Normalize" />
+        <element ref="atlas:PadStringLeft" />
+        <element ref="atlas:PadStringRight" />
+        <element ref="atlas:Prepend" />
+        <element ref="atlas:RemoveFileExtension" />
+        <element ref="atlas:ReplaceAll" />
+        <element ref="atlas:ReplaceFirst" />
+        <element ref="atlas:Round" />
+        <element ref="atlas:SeparateByDash" />
+        <element ref="atlas:SeparateByUnderscore" />
+        <element ref="atlas:StartsWith" />
+        <element ref="atlas:SubString" />
+        <element ref="atlas:SubStringAfter" />
+        <element ref="atlas:SubStringBefore" />
+        <element ref="atlas:Subtract" />
+        <element ref="atlas:Trim" />
+        <element ref="atlas:TrimLeft" />
+        <element ref="atlas:TrimRight" />
+        <element ref="atlas:Uppercase" />
+      </choice>
+    </sequence>
+  </complexType>
 
 </schema>

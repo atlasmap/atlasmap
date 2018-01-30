@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ns:XmlAE xmlns:ns="http://atlasmap.io/xml/test/v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://atlasmap.io/xml/test/v2 atlas-xml-test-model-v2.xsd ">
-    <ns:addressLine1>ns:addressLine1</ns:addressLine1>
-    <ns:addressLine2>ns:addressLine2</ns:addressLine2>
-    <ns:city>ns:city</ns:city>
-    <ns:state>ns:state</ns:state>
-    <ns:zipCode>ns:zipCode</ns:zipCode>
+  xsi:schemaLocation="http://atlasmap.io/xml/test/v2 atlas-xml-test-model-v2.xsd ">
+  <ns:addressLine1>ns:addressLine1</ns:addressLine1>
+  <ns:addressLine2>ns:addressLine2</ns:addressLine2>
+  <ns:city>ns:city</ns:city>
+  <ns:state>ns:state</ns:state>
+  <ns:zipCode>ns:zipCode</ns:zipCode>
 </ns:XmlAE>

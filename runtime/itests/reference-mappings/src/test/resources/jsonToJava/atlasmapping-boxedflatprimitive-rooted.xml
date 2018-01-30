@@ -1,57 +1,57 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <AtlasMapping xmlns="http://atlasmap.io/v2"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns2="http://atlasmap.io/java/v2"
-    xmlns:ns3="http://atlasmap.io/json/v2" name="JsonJavaFlatMapping">
-    <DataSource dataSourceType="Source" uri="atlas:json" />
-    <DataSource dataSourceType="Target"
-        uri="atlas:java?className=io.atlasmap.java.test.TargetFlatPrimitiveClass" />
-    <Mappings>
-        <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns3:JsonField"
-                path="/BoxedFlatPrimitive/boxedBooleanField" />
-            <OutputField xsi:type="ns2:JavaField" path="/boxedBooleanField" />
-        </Mapping>
-        <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns3:JsonField"
-                path="/BoxedFlatPrimitive/boxedByteField" />
-            <OutputField xsi:type="ns2:JavaField" path="/boxedByteField" />
-        </Mapping>
-        <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns3:JsonField"
-                path="/BoxedFlatPrimitive/boxedCharField" />
-            <OutputField xsi:type="ns2:JavaField" path="/boxedCharField" />
-        </Mapping>
-        <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns3:JsonField"
-                path="/BoxedFlatPrimitive/boxedDoubleField" />
-            <OutputField xsi:type="ns2:JavaField" path="/boxedDoubleField" />
-        </Mapping>
-        <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns3:JsonField"
-                path="/BoxedFlatPrimitive/boxedFloatField" />
-            <OutputField xsi:type="ns2:JavaField" path="/boxedFloatField" />
-        </Mapping>
-        <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns3:JsonField"
-                path="/BoxedFlatPrimitive/boxedIntField" />
-            <OutputField xsi:type="ns2:JavaField" path="/boxedIntField" />
-        </Mapping>
-        <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns3:JsonField"
-                path="/BoxedFlatPrimitive/boxedLongField" />
-            <OutputField xsi:type="ns2:JavaField" path="/boxedLongField" />
-        </Mapping>
-        <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns3:JsonField"
-                path="/BoxedFlatPrimitive/boxedShortField" />
-            <OutputField xsi:type="ns2:JavaField" path="/boxedShortField" />
-        </Mapping>
-        <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns3:JsonField"
-                path="/BoxedFlatPrimitive/boxedStringField" />
-            <OutputField xsi:type="ns2:JavaField" path="/boxedStringField" />
-        </Mapping>
-    </Mappings>
-    <LookupTables />
-    <Properties />
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns2="http://atlasmap.io/java/v2"
+  xmlns:ns3="http://atlasmap.io/json/v2" name="JsonJavaFlatMapping">
+  <DataSource dataSourceType="Source" uri="atlas:json" />
+  <DataSource dataSourceType="Target"
+    uri="atlas:java?className=io.atlasmap.java.test.TargetFlatPrimitiveClass" />
+  <Mappings>
+    <Mapping xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="ns3:JsonField"
+        path="/BoxedFlatPrimitive/boxedBooleanField" />
+      <OutputField xsi:type="ns2:JavaField" path="/boxedBooleanField" />
+    </Mapping>
+    <Mapping xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="ns3:JsonField"
+        path="/BoxedFlatPrimitive/boxedByteField" />
+      <OutputField xsi:type="ns2:JavaField" path="/boxedByteField" />
+    </Mapping>
+    <Mapping xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="ns3:JsonField"
+        path="/BoxedFlatPrimitive/boxedCharField" />
+      <OutputField xsi:type="ns2:JavaField" path="/boxedCharField" />
+    </Mapping>
+    <Mapping xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="ns3:JsonField"
+        path="/BoxedFlatPrimitive/boxedDoubleField" />
+      <OutputField xsi:type="ns2:JavaField" path="/boxedDoubleField" />
+    </Mapping>
+    <Mapping xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="ns3:JsonField"
+        path="/BoxedFlatPrimitive/boxedFloatField" />
+      <OutputField xsi:type="ns2:JavaField" path="/boxedFloatField" />
+    </Mapping>
+    <Mapping xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="ns3:JsonField"
+        path="/BoxedFlatPrimitive/boxedIntField" />
+      <OutputField xsi:type="ns2:JavaField" path="/boxedIntField" />
+    </Mapping>
+    <Mapping xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="ns3:JsonField"
+        path="/BoxedFlatPrimitive/boxedLongField" />
+      <OutputField xsi:type="ns2:JavaField" path="/boxedLongField" />
+    </Mapping>
+    <Mapping xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="ns3:JsonField"
+        path="/BoxedFlatPrimitive/boxedShortField" />
+      <OutputField xsi:type="ns2:JavaField" path="/boxedShortField" />
+    </Mapping>
+    <Mapping xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="ns3:JsonField"
+        path="/BoxedFlatPrimitive/boxedStringField" />
+      <OutputField xsi:type="ns2:JavaField" path="/boxedStringField" />
+    </Mapping>
+  </Mappings>
+  <LookupTables />
+  <Properties />
 </AtlasMapping>

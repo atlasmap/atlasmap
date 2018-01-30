@@ -1,32 +1,32 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <AtlasMapping xmlns="http://atlasmap.io/v2" xmlns:ns2="http://atlasmap.io/java/v2"
-    xmlns:ns3="http://atlasmap.io/xml/v2" xmlns:ns4="http://atlasmap.io/json/v2"
-    name="UI.456847">
-    <DataSource id="io.atlasmap.java.test.TargetTestClass"
-        uri="atlas:java?className=io.atlasmap.java.test.TargetTestClass"
-        dataSourceType="Source" />
-    <DataSource id="io.atlasmap.java.test.TargetTestClass"
-        uri="atlas:java?className=io.atlasmap.java.test.TargetTestClass"
-        dataSourceType="Target" />
-    <Mappings>
-        <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-            xsi:type="Mapping" lookupTableName="1501135445385-589143"
-            mappingType="Lookup">
-            <InputField xsi:type="ns2:JavaEnumField" name="statesLong"
-                docId="io.atlasmap.java.test.TargetTestClass" path="/statesLong"
-                fieldType="Complex" />
-            <OutputField xsi:type="ns2:JavaEnumField" name="statesShort"
-                docId="io.atlasmap.java.test.TargetTestClass" path="/statesShort"
-                fieldType="Complex" />
-        </Mapping>
-    </Mappings>
-    <LookupTables>
-        <LookupTable name="1501135445385-589143">
-            <LookupEntry sourceValue="Arizona" sourceType="String"
-                targetValue="AZ" targetType="String" />
-            <LookupEntry sourceValue="Colorado" sourceType="String"
-                targetValue="CO" targetType="String" />
-        </LookupTable>
-    </LookupTables>
-    <Properties />
+  xmlns:ns3="http://atlasmap.io/xml/v2" xmlns:ns4="http://atlasmap.io/json/v2"
+  name="UI.456847">
+  <DataSource id="io.atlasmap.java.test.TargetTestClass"
+    uri="atlas:java?className=io.atlasmap.java.test.TargetTestClass"
+    dataSourceType="Source" />
+  <DataSource id="io.atlasmap.java.test.TargetTestClass"
+    uri="atlas:java?className=io.atlasmap.java.test.TargetTestClass"
+    dataSourceType="Target" />
+  <Mappings>
+    <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:type="Mapping" lookupTableName="1501135445385-589143"
+      mappingType="Lookup">
+      <InputField xsi:type="ns2:JavaEnumField" name="statesLong"
+        docId="io.atlasmap.java.test.TargetTestClass" path="/statesLong"
+        fieldType="Complex" />
+      <OutputField xsi:type="ns2:JavaEnumField" name="statesShort"
+        docId="io.atlasmap.java.test.TargetTestClass" path="/statesShort"
+        fieldType="Complex" />
+    </Mapping>
+  </Mappings>
+  <LookupTables>
+    <LookupTable name="1501135445385-589143">
+      <LookupEntry sourceValue="Arizona" sourceType="String"
+        targetValue="AZ" targetType="String" />
+      <LookupEntry sourceValue="Colorado" sourceType="String"
+        targetValue="CO" targetType="String" />
+    </LookupTable>
+  </LookupTables>
+  <Properties />
 </AtlasMapping>

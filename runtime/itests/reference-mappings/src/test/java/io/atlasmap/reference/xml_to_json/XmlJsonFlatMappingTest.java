@@ -90,8 +90,10 @@ public class XmlJsonFlatMappingTest extends AtlasMappingBaseTest {
         AtlasMapping atlasMapping = generateXmlJsonFlatMapping();
         AtlasMappingService atlasMappingService = new AtlasMappingService(
                 Arrays.asList("io.atlasmap.v2", "io.atlasmap.json.v2", "io.atlasmap.xml.v2"));
+        File path = new File("target/reference-mappings/xmlToJson");
+        path.mkdirs();
         atlasMappingService.saveMappingAsFile(atlasMapping,
-                new File("src/test/resources/xmlToJson/atlasmapping-flatprimitive.xml"));
+                new File(path, "atlasmapping-flatprimitive.xml"));
     }
 
     @Test

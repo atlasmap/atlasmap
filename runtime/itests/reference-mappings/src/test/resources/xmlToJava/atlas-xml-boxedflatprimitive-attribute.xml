@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <XmlFBPA boxedBooleanField="true" boxedByteField="87"
-    boxedCharField="z" boxedDoubleField="90000000.0" boxedFloatField="70000000.0"
-    boxedIntField="5" boxedLongField="20000" boxedShortField="5"
-    boxedStringField="boxedStringValue"></XmlFBPA>
+  boxedCharField="z" boxedDoubleField="90000000.0" boxedFloatField="70000000.0"
+  boxedIntField="5" boxedLongField="20000" boxedShortField="5"
+  boxedStringField="boxedStringValue"></XmlFBPA>

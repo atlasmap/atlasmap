@@ -1,73 +1,91 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<AtlasMapping xmlns="http://atlasmap.io/v2" xmlns:ns2="http://atlasmap.io/java/v2" xmlns:ns3="http://atlasmap.io/json/v2" name="JsonJavaFlatMapping">
-    <DataSource dataSourceType="Source" uri="atlas:java?className=io.atlasmap.java.test.SourceFlatPrimitiveClass"/>
-    <DataSource dataSourceType="Target" uri="atlas:json"/>
-    <Mappings>
-        <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns2:JavaField" path="/intField"/>
-            <OutputField xsi:type="ns3:JsonField" path="/intField"/>
-        </Mapping>
-        <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns2:JavaField" path="/shortField"/>
-            <OutputField xsi:type="ns3:JsonField" path="/shortField"/>
-        </Mapping>
-        <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns2:JavaField" path="/longField"/>
-            <OutputField xsi:type="ns3:JsonField" path="/longField"/>
-        </Mapping>
-        <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns2:JavaField" path="/doubleField"/>
-            <OutputField xsi:type="ns3:JsonField" path="/doubleField"/>
-        </Mapping>
-        <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns2:JavaField" path="/floatField"/>
-            <OutputField xsi:type="ns3:JsonField" path="/floatField"/>
-        </Mapping>
-        <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns2:JavaField" path="/booleanField"/>
-            <OutputField xsi:type="ns3:JsonField" path="/booleanField"/>
-        </Mapping>
-        <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns2:JavaField" path="/charField"/>
-            <OutputField xsi:type="ns3:JsonField" path="/charField"/>
-        </Mapping>
-        <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns2:JavaField" path="/byteField"/>
-            <OutputField xsi:type="ns3:JsonField" path="/byteField"/>
-        </Mapping>
-        <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns2:JavaField" path="/boxedBooleanField"/>
-            <OutputField xsi:type="ns3:JsonField" path="/boxedBooleanField"/>
-        </Mapping>
-        <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns2:JavaField" path="/boxedByteField"/>
-            <OutputField xsi:type="ns3:JsonField" path="/boxedByteField"/>
-        </Mapping>
-        <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns2:JavaField" path="/boxedCharField"/>
-            <OutputField xsi:type="ns3:JsonField" path="/boxedCharField"/>
-        </Mapping>
-        <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns2:JavaField" path="/boxedDoubleField"/>
-            <OutputField xsi:type="ns3:JsonField" path="/boxedDoubleField"/>
-        </Mapping>
-        <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns2:JavaField" path="/boxedFloatField"/>
-            <OutputField xsi:type="ns3:JsonField" path="/boxedFloatField"/>
-        </Mapping>
-        <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns2:JavaField" path="/boxedIntField"/>
-            <OutputField xsi:type="ns3:JsonField" path="/boxedIntField"/>
-        </Mapping>
-        <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns2:JavaField" path="/boxedLongField"/>
-            <OutputField xsi:type="ns3:JsonField" path="/boxedLongField"/>
-        </Mapping>
-        <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns2:JavaField" path="/boxedStringField"/>
-            <OutputField xsi:type="ns3:JsonField" path="/boxedStringField"/>
-        </Mapping>
-    </Mappings>
-    <LookupTables/>
-    <Properties/>
+<AtlasMapping xmlns="http://atlasmap.io/v2" xmlns:ns2="http://atlasmap.io/java/v2"
+  xmlns:ns3="http://atlasmap.io/json/v2" name="JsonJavaFlatMapping">
+  <DataSource dataSourceType="Source"
+    uri="atlas:java?className=io.atlasmap.java.test.SourceFlatPrimitiveClass" />
+  <DataSource dataSourceType="Target" uri="atlas:json" />
+  <Mappings>
+    <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="ns2:JavaField" path="/intField" />
+      <OutputField xsi:type="ns3:JsonField" path="/intField" />
+    </Mapping>
+    <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="ns2:JavaField" path="/shortField" />
+      <OutputField xsi:type="ns3:JsonField" path="/shortField" />
+    </Mapping>
+    <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="ns2:JavaField" path="/longField" />
+      <OutputField xsi:type="ns3:JsonField" path="/longField" />
+    </Mapping>
+    <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="ns2:JavaField" path="/doubleField" />
+      <OutputField xsi:type="ns3:JsonField" path="/doubleField" />
+    </Mapping>
+    <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="ns2:JavaField" path="/floatField" />
+      <OutputField xsi:type="ns3:JsonField" path="/floatField" />
+    </Mapping>
+    <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="ns2:JavaField" path="/booleanField" />
+      <OutputField xsi:type="ns3:JsonField" path="/booleanField" />
+    </Mapping>
+    <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="ns2:JavaField" path="/charField" />
+      <OutputField xsi:type="ns3:JsonField" path="/charField" />
+    </Mapping>
+    <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="ns2:JavaField" path="/byteField" />
+      <OutputField xsi:type="ns3:JsonField" path="/byteField" />
+    </Mapping>
+    <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="ns2:JavaField" path="/boxedBooleanField" />
+      <OutputField xsi:type="ns3:JsonField" path="/boxedBooleanField" />
+    </Mapping>
+    <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="ns2:JavaField" path="/boxedByteField" />
+      <OutputField xsi:type="ns3:JsonField" path="/boxedByteField" />
+    </Mapping>
+    <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="ns2:JavaField" path="/boxedCharField" />
+      <OutputField xsi:type="ns3:JsonField" path="/boxedCharField" />
+    </Mapping>
+    <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="ns2:JavaField" path="/boxedDoubleField" />
+      <OutputField xsi:type="ns3:JsonField" path="/boxedDoubleField" />
+    </Mapping>
+    <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="ns2:JavaField" path="/boxedFloatField" />
+      <OutputField xsi:type="ns3:JsonField" path="/boxedFloatField" />
+    </Mapping>
+    <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="ns2:JavaField" path="/boxedIntField" />
+      <OutputField xsi:type="ns3:JsonField" path="/boxedIntField" />
+    </Mapping>
+    <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="ns2:JavaField" path="/boxedLongField" />
+      <OutputField xsi:type="ns3:JsonField" path="/boxedLongField" />
+    </Mapping>
+    <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="ns2:JavaField" path="/boxedStringField" />
+      <OutputField xsi:type="ns3:JsonField" path="/boxedStringField" />
+    </Mapping>
+  </Mappings>
+  <LookupTables />
+  <Properties />
 </AtlasMapping>

@@ -1,44 +1,46 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <AtlasMapping xmlns="http://atlasmap.io/v2"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns2="http://atlasmap.io/java/v2"
-    xmlns:ns3="http://atlasmap.io/json/v2" name="JsonJavaFlatMapping">
-    <DataSource dataSourceType="Source" uri="atlas:json" />
-    <DataSource dataSourceType="Target"
-        uri="atlas:java?className=io.atlasmap.java.test.TargetFlatPrimitiveClass" />
-    <Mappings>
-        <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns3:JsonField" path="/intField" />
-            <OutputField xsi:type="ns2:JavaField" path="/longField" />
-        </Mapping>
-        <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns3:JsonField" path="/shortField" />
-            <OutputField xsi:type="ns2:JavaField" path="/doubleField" />
-        </Mapping>
-        <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns3:JsonField" path="/longField" />
-            <OutputField xsi:type="ns2:JavaField" path="/floatField" />
-        </Mapping>
-        <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns3:JsonField" path="/doubleField" />
-            <OutputField xsi:type="ns2:JavaField" path="/booleanField" />
-        </Mapping>
-        <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns3:JsonField" path="/floatField" />
-            <OutputField xsi:type="ns2:JavaField" path="/charField" />
-        </Mapping>
-        <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns3:JsonField" path="/booleanField" />
-            <OutputField xsi:type="ns2:JavaField" path="/byteField" />
-        </Mapping>
-        <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns3:JsonField" path="/charField" fieldType="Char" />
-            <OutputField xsi:type="ns2:JavaField" path="/intField" />
-        </Mapping>
-	    <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns3:JsonField" path="/byteField" fieldType="Byte" />
-            <OutputField xsi:type="ns2:JavaField" path="/shortField" />
-        </Mapping>
-    </Mappings>
-    <LookupTables />
-    <Properties />
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns2="http://atlasmap.io/java/v2"
+  xmlns:ns3="http://atlasmap.io/json/v2" name="JsonJavaFlatMapping">
+  <DataSource dataSourceType="Source" uri="atlas:json" />
+  <DataSource dataSourceType="Target"
+    uri="atlas:java?className=io.atlasmap.java.test.TargetFlatPrimitiveClass" />
+  <Mappings>
+    <Mapping xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="ns3:JsonField" path="/intField" />
+      <OutputField xsi:type="ns2:JavaField" path="/longField" />
+    </Mapping>
+    <Mapping xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="ns3:JsonField" path="/shortField" />
+      <OutputField xsi:type="ns2:JavaField" path="/doubleField" />
+    </Mapping>
+    <Mapping xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="ns3:JsonField" path="/longField" />
+      <OutputField xsi:type="ns2:JavaField" path="/floatField" />
+    </Mapping>
+    <Mapping xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="ns3:JsonField" path="/doubleField" />
+      <OutputField xsi:type="ns2:JavaField" path="/booleanField" />
+    </Mapping>
+    <Mapping xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="ns3:JsonField" path="/floatField" />
+      <OutputField xsi:type="ns2:JavaField" path="/charField" />
+    </Mapping>
+    <Mapping xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="ns3:JsonField" path="/booleanField" />
+      <OutputField xsi:type="ns2:JavaField" path="/byteField" />
+    </Mapping>
+    <Mapping xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="ns3:JsonField" path="/charField"
+        fieldType="Char" />
+      <OutputField xsi:type="ns2:JavaField" path="/intField" />
+    </Mapping>
+    <Mapping xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="ns3:JsonField" path="/byteField"
+        fieldType="Byte" />
+      <OutputField xsi:type="ns2:JavaField" path="/shortField" />
+    </Mapping>
+  </Mappings>
+  <LookupTables />
+  <Properties />
 </AtlasMapping>

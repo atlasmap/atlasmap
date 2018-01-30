@@ -1,12 +1,12 @@
 {
-    "object1": {
-        "object2": {
-            "name": "object1-object2-name"
-        },
-        "name": "object1-name"
-    },
-    "name": "name",
+  "object1": {
     "object2": {
-        "name": "object2-name"
-    }
+      "name": "object1-object2-name"
+    },
+    "name": "object1-name"
+  },
+  "name": "name",
+  "object2": {
+    "name": "object2-name"
+  }
 }

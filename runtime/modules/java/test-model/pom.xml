@@ -15,30 +15,31 @@
     limitations under the License.
 
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>io.atlasmap</groupId>
-        <artifactId>atlas-java-parent</artifactId>
-        <version>1.33-SNAPSHOT</version>
-        <relativePath>..</relativePath>
-    </parent>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>io.atlasmap</groupId>
+    <artifactId>atlas-java-parent</artifactId>
+    <version>1.33-SNAPSHOT</version>
+    <relativePath>..</relativePath>
+  </parent>
 
-    <artifactId>atlas-java-test-model</artifactId>
-    <packaging>bundle</packaging>
-    <name>Atlas :: Java Object Test Model</name>
+  <artifactId>atlas-java-test-model</artifactId>
+  <packaging>bundle</packaging>
+  <name>Atlas :: Java Object Test Model</name>
 
-    <properties>
-        <osgi.export.pkg>io.atlasmap.java.test</osgi.export.pkg>
-        <osgi.import.pkg>*</osgi.import.pkg>
-    </properties>
+  <properties>
+    <osgi.export.pkg>io.atlasmap.java.test</osgi.export.pkg>
+    <osgi.import.pkg>*</osgi.import.pkg>
+  </properties>
 
-    <dependencies>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
 
 </project>

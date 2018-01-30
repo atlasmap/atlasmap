@@ -1,45 +1,45 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <AtlasMapping xmlns="http://atlasmap.io/v2"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns2="http://atlasmap.io/java/v2"
-    xmlns:ns3="http://atlasmap.io/xml/v2" name="XmlJavaFlatMapping">
-    <DataSource dataSourceType="Source"
-        uri="atlas:xml?complexType=ns:XmlFlatPrimitiveElement" />
-    <DataSource dataSourceType="Target"
-        uri="atlas:java?className=io.atlasmap.java.test.TargetFlatPrimitiveClass" />
-    <Mappings>
-        <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns3:XmlField" path="/ns:XmlFPE/intField" />
-            <OutputField xsi:type="ns2:JavaField" path="/intField" />
-        </Mapping>
-        <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns3:XmlField" path="/ns:XmlFPE/shortField" />
-            <OutputField xsi:type="ns2:JavaField" path="/shortField" />
-        </Mapping>
-        <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns3:XmlField" path="/ns:XmlFPE/longField" />
-            <OutputField xsi:type="ns2:JavaField" path="/longField" />
-        </Mapping>
-        <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns3:XmlField" path="/ns:XmlFPE/doubleField" />
-            <OutputField xsi:type="ns2:JavaField" path="/doubleField" />
-        </Mapping>
-        <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns3:XmlField" path="/ns:XmlFPE/floatField" />
-            <OutputField xsi:type="ns2:JavaField" path="/floatField" />
-        </Mapping>
-        <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns3:XmlField" path="/ns:XmlFPE/booleanField" />
-            <OutputField xsi:type="ns2:JavaField" path="/booleanField" />
-        </Mapping>
-        <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns3:XmlField" path="/ns:XmlFPE/charField" />
-            <OutputField xsi:type="ns2:JavaField" path="/charField" />
-        </Mapping>
-        <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns3:XmlField" path="/ns:XmlFPE/byteField" />
-            <OutputField xsi:type="ns2:JavaField" path="/byteField" />
-        </Mapping>
-    </Mappings>
-    <LookupTables />
-    <Properties />
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns2="http://atlasmap.io/java/v2"
+  xmlns:ns3="http://atlasmap.io/xml/v2" name="XmlJavaFlatMapping">
+  <DataSource dataSourceType="Source"
+    uri="atlas:xml?complexType=ns:XmlFlatPrimitiveElement" />
+  <DataSource dataSourceType="Target"
+    uri="atlas:java?className=io.atlasmap.java.test.TargetFlatPrimitiveClass" />
+  <Mappings>
+    <Mapping xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="ns3:XmlField" path="/ns:XmlFPE/intField" />
+      <OutputField xsi:type="ns2:JavaField" path="/intField" />
+    </Mapping>
+    <Mapping xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="ns3:XmlField" path="/ns:XmlFPE/shortField" />
+      <OutputField xsi:type="ns2:JavaField" path="/shortField" />
+    </Mapping>
+    <Mapping xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="ns3:XmlField" path="/ns:XmlFPE/longField" />
+      <OutputField xsi:type="ns2:JavaField" path="/longField" />
+    </Mapping>
+    <Mapping xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="ns3:XmlField" path="/ns:XmlFPE/doubleField" />
+      <OutputField xsi:type="ns2:JavaField" path="/doubleField" />
+    </Mapping>
+    <Mapping xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="ns3:XmlField" path="/ns:XmlFPE/floatField" />
+      <OutputField xsi:type="ns2:JavaField" path="/floatField" />
+    </Mapping>
+    <Mapping xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="ns3:XmlField" path="/ns:XmlFPE/booleanField" />
+      <OutputField xsi:type="ns2:JavaField" path="/booleanField" />
+    </Mapping>
+    <Mapping xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="ns3:XmlField" path="/ns:XmlFPE/charField" />
+      <OutputField xsi:type="ns2:JavaField" path="/charField" />
+    </Mapping>
+    <Mapping xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="ns3:XmlField" path="/ns:XmlFPE/byteField" />
+      <OutputField xsi:type="ns2:JavaField" path="/byteField" />
+    </Mapping>
+  </Mappings>
+  <LookupTables />
+  <Properties />
 </AtlasMapping>

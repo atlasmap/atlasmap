@@ -1,4 +1,3 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<XmlFPA intField="2" shortField="3" longField="4"
-    doubleField="5.0" floatField="6.0" 
-    booleanField="true" charField="8" byteField="57" />
+<XmlFPA intField="2" shortField="3" longField="4" doubleField="5.0"
+  floatField="6.0" booleanField="true" charField="8" byteField="57" />

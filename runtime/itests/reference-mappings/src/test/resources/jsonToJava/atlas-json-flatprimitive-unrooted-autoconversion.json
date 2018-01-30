@@ -1,10 +1,10 @@
 {
-    "intField": 2,
-    "shortField": 3,
-    "longField": 4,
-    "doubleField": 5.0,
-    "floatField": 6.0,
-    "booleanField": true,
-    "charField": "8",
-    "byteField": 57
+  "intField": 2,
+  "shortField": 3,
+  "longField": 4,
+  "doubleField": 5.0,
+  "floatField": 6.0,
+  "booleanField": true,
+  "charField": "8",
+  "byteField": 57
 }

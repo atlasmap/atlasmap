@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <x:orders xmlns:x="http://www.example.com/x/" totalCost="12525.00">
-    <order>
-        <id custId="a">12312</id>
-        <id custId="b">4423423</id>
-    </order>
+  <order>
+    <id custId="a">12312</id>
+    <id custId="b">4423423</id>
+  </order>
 </x:orders>

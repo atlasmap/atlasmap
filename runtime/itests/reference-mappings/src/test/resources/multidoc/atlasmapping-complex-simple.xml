@@ -1,59 +1,81 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <AtlasMapping xmlns="http://atlasmap.io/v2" xmlns:javav2="http://atlasmap.io/java/v2"
-    xmlns:jsonv2="http://atlasmap.io/json/v2" xmlns:xmlv2="http://atlasmap.io/xml/v2"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="MultidocFlatMapping">
-    <DataSource dataSourceType="Source" id="JavaSourceOrder"
-        uri="atlas:java?className=io.atlasmap.java.test.SourceOrder" />
-    <DataSource dataSourceType="Source" id="JsonSourceOrder" uri="atlas:json:SourceOrder" />
-    <DataSource dataSourceType="Source" id="XmlOrderAttribute" uri="atlas:xml?complexType=ns:XmlOrderAttribute" />
-    <DataSource dataSourceType="Target" id="JavaTargetTestClass"
-        uri="atlas:java?className=io.atlasmap.java.test.TargetTestClass" />
-    <DataSource dataSourceType="Target" id="JsonTargetOrder" uri="atlas:json:TargetOrder" />
-    <DataSource dataSourceType="Target" id="XmlOrderElement" uri="atlas:xml?complexType=ns:XmlOrderElement"
-        xsi:type="xmlv2:XmlDataSource">
-        <xmlv2:XmlNamespaces>
-            <xmlv2:XmlNamespace alias="ns" uri="http://atlasmap.io/xml/test/v2" />
-        </xmlv2:XmlNamespaces>
-    </DataSource>
+  xmlns:jsonv2="http://atlasmap.io/json/v2" xmlns:xmlv2="http://atlasmap.io/xml/v2"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="MultidocFlatMapping">
+  <DataSource dataSourceType="Source" id="JavaSourceOrder"
+    uri="atlas:java?className=io.atlasmap.java.test.SourceOrder" />
+  <DataSource dataSourceType="Source" id="JsonSourceOrder"
+    uri="atlas:json:SourceOrder" />
+  <DataSource dataSourceType="Source" id="XmlOrderAttribute"
+    uri="atlas:xml?complexType=ns:XmlOrderAttribute" />
+  <DataSource dataSourceType="Target" id="JavaTargetTestClass"
+    uri="atlas:java?className=io.atlasmap.java.test.TargetTestClass" />
+  <DataSource dataSourceType="Target" id="JsonTargetOrder"
+    uri="atlas:json:TargetOrder" />
+  <DataSource dataSourceType="Target" id="XmlOrderElement"
+    uri="atlas:xml?complexType=ns:XmlOrderElement" xsi:type="xmlv2:XmlDataSource">
+    <xmlv2:XmlNamespaces>
+      <xmlv2:XmlNamespace alias="ns"
+        uri="http://atlasmap.io/xml/test/v2" />
+    </xmlv2:XmlNamespaces>
+  </DataSource>
 
-    <Mappings>
-        <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="javav2:JavaField" docId="JavaSourceOrder" path="/orderId" />
-            <OutputField xsi:type="jsonv2:JsonField" docId="JsonTargetOrder" path="/orderId" />
-        </Mapping>
-        <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="javav2:JavaField" docId="JavaSourceOrder" path="/orderId" />
-            <OutputField xsi:type="xmlv2:XmlField" docId="XmlOrderElement" path="/ns:XmlOE/ns:orderId" />
-        </Mapping>
-        <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="jsonv2:JsonField" docId="JsonSourceOrder" path="/orderId" />
-            <OutputField xsi:type="javav2:JavaField" docId="JavaTargetTestClass" path="/Order/orderId" />
-        </Mapping>
-        <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="jsonv2:JsonField" docId="JsonSourceOrder" path="/contact/firstName" />
-            <OutputField xsi:type="xmlv2:XmlField" docId="XmlOrderElement" path="/ns:XmlOE/ns:Contact/ns:firstName" />
-        </Mapping>
-        <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="xmlv2:XmlField" docId="XmlOrderAttribute" path="/ns:XmlOA/ns:Contact/@firstName" />
-            <OutputField xsi:type="javav2:JavaField" docId="JavaTargetTestClass" path="/Contact/firstName" />
-        </Mapping>
-        <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="xmlv2:XmlField" docId="XmlOrderAttribute" path="/ns:XmlOA/ns:Contact/@firstName" />
-            <OutputField xsi:type="jsonv2:JsonField" docId="JsonTargetOrder" path="/contact/firstName" />
-        </Mapping>
-        <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="javav2:JavaField" docId="JavaSourceOrder" path="/Contact/lastName" />
-            <OutputField xsi:type="jsonv2:JsonField" docId="JsonTargetOrder" path="/contact/lastName" />
-        </Mapping>
-        <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="javav2:JavaField" docId="JavaSourceOrder" path="/Contact/lastName" />
-            <OutputField xsi:type="xmlv2:XmlField" docId="XmlOrderElement" path="/ns:XmlOE/ns:Contact/ns:lastName" />
-        </Mapping>
-        <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="jsonv2:JsonField" docId="JsonSourceOrder" path="/contact/lastName" />
-            <OutputField xsi:type="javav2:JavaField" docId="JavaTargetTestClass" path="/Contact/lastName" />
-        </Mapping>
-    </Mappings>
-    <LookupTables />
-    <Properties />
+  <Mappings>
+    <Mapping xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="javav2:JavaField" docId="JavaSourceOrder"
+        path="/orderId" />
+      <OutputField xsi:type="jsonv2:JsonField" docId="JsonTargetOrder"
+        path="/orderId" />
+    </Mapping>
+    <Mapping xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="javav2:JavaField" docId="JavaSourceOrder"
+        path="/orderId" />
+      <OutputField xsi:type="xmlv2:XmlField" docId="XmlOrderElement"
+        path="/ns:XmlOE/ns:orderId" />
+    </Mapping>
+    <Mapping xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="jsonv2:JsonField" docId="JsonSourceOrder"
+        path="/orderId" />
+      <OutputField xsi:type="javav2:JavaField" docId="JavaTargetTestClass"
+        path="/Order/orderId" />
+    </Mapping>
+    <Mapping xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="jsonv2:JsonField" docId="JsonSourceOrder"
+        path="/contact/firstName" />
+      <OutputField xsi:type="xmlv2:XmlField" docId="XmlOrderElement"
+        path="/ns:XmlOE/ns:Contact/ns:firstName" />
+    </Mapping>
+    <Mapping xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="xmlv2:XmlField" docId="XmlOrderAttribute"
+        path="/ns:XmlOA/ns:Contact/@firstName" />
+      <OutputField xsi:type="javav2:JavaField" docId="JavaTargetTestClass"
+        path="/Contact/firstName" />
+    </Mapping>
+    <Mapping xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="xmlv2:XmlField" docId="XmlOrderAttribute"
+        path="/ns:XmlOA/ns:Contact/@firstName" />
+      <OutputField xsi:type="jsonv2:JsonField" docId="JsonTargetOrder"
+        path="/contact/firstName" />
+    </Mapping>
+    <Mapping xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="javav2:JavaField" docId="JavaSourceOrder"
+        path="/Contact/lastName" />
+      <OutputField xsi:type="jsonv2:JsonField" docId="JsonTargetOrder"
+        path="/contact/lastName" />
+    </Mapping>
+    <Mapping xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="javav2:JavaField" docId="JavaSourceOrder"
+        path="/Contact/lastName" />
+      <OutputField xsi:type="xmlv2:XmlField" docId="XmlOrderElement"
+        path="/ns:XmlOE/ns:Contact/ns:lastName" />
+    </Mapping>
+    <Mapping xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="jsonv2:JsonField" docId="JsonSourceOrder"
+        path="/contact/lastName" />
+      <OutputField xsi:type="javav2:JavaField" docId="JavaTargetTestClass"
+        path="/Contact/lastName" />
+    </Mapping>
+  </Mappings>
+  <LookupTables />
+  <Properties />
 </AtlasMapping>

@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <AtlasMapping xmlns="http://atlasmap.io/v2" xmlns:ns2="http://atlasmap.io/xml/v2"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="XmlXmlMultiSourceBasic">
-    <DataSource dataSourceType="Source" uri="atlas:xml" id="con" />
-    <DataSource dataSourceType="Source" uri="atlas:xml" id="addr" />
-    <DataSource dataSourceType="Target" uri="atlas:xml" />
-    <Mappings>
-        <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns2:XmlField" path="/Contact/@firstName" docId="con" />
-            <OutputField xsi:type="ns2:XmlField" path="/Contact/@firstName" />
-        </Mapping>
-        <Mapping xsi:type="Mapping" mappingType="Map">
-            <InputField xsi:type="ns2:XmlField" path="/Address/@zipCode" docId="addr" />
-            <OutputField xsi:type="ns2:XmlField" path="/Contact/@zipCode" />
-        </Mapping>
-    </Mappings>
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="XmlXmlMultiSourceBasic">
+  <DataSource dataSourceType="Source" uri="atlas:xml" id="con" />
+  <DataSource dataSourceType="Source" uri="atlas:xml" id="addr" />
+  <DataSource dataSourceType="Target" uri="atlas:xml" />
+  <Mappings>
+    <Mapping xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="ns2:XmlField" path="/Contact/@firstName"
+        docId="con" />
+      <OutputField xsi:type="ns2:XmlField" path="/Contact/@firstName" />
+    </Mapping>
+    <Mapping xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="ns2:XmlField" path="/Address/@zipCode"
+        docId="addr" />
+      <OutputField xsi:type="ns2:XmlField" path="/Contact/@zipCode" />
+    </Mapping>
+  </Mappings>
 </AtlasMapping>

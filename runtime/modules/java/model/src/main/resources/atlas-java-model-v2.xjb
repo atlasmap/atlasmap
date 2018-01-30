@@ -1,51 +1,51 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <jaxb:bindings xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" xmlns:xs="http://www.w3.org/2001/XMLSchema"
-               xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-               xmlns:annox="http://annox.dev.java.net"
-               xsi:schemaLocation="http://java.sun.com/xml/ns/jaxb http://java.sun.com/xml/ns/jaxb/bindingschema_2_0.xsd"
-               jaxb:extensionBindingPrefixes="xjc annox"
-               version="2.1">
-        
-    <jaxb:globalBindings>
-        <!-- Force all classes implements Serializable -->
-        <xjc:serializable uid="1" />
-    </jaxb:globalBindings>
+   xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xmlns:annox="http://annox.dev.java.net"
+   xsi:schemaLocation="http://java.sun.com/xml/ns/jaxb http://java.sun.com/xml/ns/jaxb/bindingschema_2_0.xsd"
+   jaxb:extensionBindingPrefixes="xjc annox"
+   version="2.1">
+  
+  <jaxb:globalBindings>
+  <!-- Force all classes implements Serializable -->
+    <xjc:serializable uid="1" />
+  </jaxb:globalBindings>
  
-    <!-- Annotate the following classes with XmlRootElement -->
-    <jaxb:bindings schemaLocation="atlas-java-model-v2.xsd" node="/xs:schema">
-		<jaxb:bindings node="xs:complexType[@name='JavaField']">
-			<annox:annotate><annox:annotate annox:class="com.fasterxml.jackson.annotation.JsonTypeInfo" use="CLASS" include="PROPERTY" property="jsonType"></annox:annotate></annox:annotate>		
-        </jaxb:bindings>
-        <jaxb:bindings node="xs:complexType[@name='JavaEnumField']">
-			<annox:annotate><annox:annotate annox:class="com.fasterxml.jackson.annotation.JsonTypeInfo" use="CLASS" include="PROPERTY" property="jsonType"></annox:annotate></annox:annotate>		
-        </jaxb:bindings>
-		<jaxb:bindings node="xs:complexType[@name='JavaClass']">
-			<annox:annotate><annox:annotate annox:class="com.fasterxml.jackson.annotation.JsonTypeInfo" use="CLASS" include="PROPERTY" property="jsonType"></annox:annotate></annox:annotate>		
-        </jaxb:bindings>
-        <jaxb:bindings node="xs:complexType[@name='JavaDocument']">
-			<annox:annotate><annox:annotate annox:class="javax.xml.bind.annotation.XmlRootElement" name="JavaDocument" /></annox:annotate>
-			<annox:annotate><annox:annotate annox:class="com.fasterxml.jackson.annotation.JsonRootName">JavaDocument</annox:annotate></annox:annotate>
-			<annox:annotate><annox:annotate annox:class="com.fasterxml.jackson.annotation.JsonTypeInfo" use="CLASS" include="PROPERTY" property="jsonType"></annox:annotate></annox:annotate>		
-        </jaxb:bindings>
-		<jaxb:bindings node="xs:complexType[@name='ClassInspectionRequest']">
-			<annox:annotate><annox:annotate annox:class="javax.xml.bind.annotation.XmlRootElement" name="ClassInspectionRequest" /></annox:annotate>
-			<annox:annotate><annox:annotate annox:class="com.fasterxml.jackson.annotation.JsonRootName">ClassInspectionRequest</annox:annotate></annox:annotate>
-			<annox:annotate><annox:annotate annox:class="com.fasterxml.jackson.annotation.JsonTypeInfo" use="CLASS" include="PROPERTY" property="jsonType"></annox:annotate></annox:annotate>		
-        </jaxb:bindings>
-		<jaxb:bindings node="xs:complexType[@name='ClassInspectionResponse']">
-			<annox:annotate><annox:annotate annox:class="javax.xml.bind.annotation.XmlRootElement" name="ClassInspectionResponse" /></annox:annotate>
-			<annox:annotate><annox:annotate annox:class="com.fasterxml.jackson.annotation.JsonRootName">ClassInspectionResponse</annox:annotate></annox:annotate>
-			<annox:annotate><annox:annotate annox:class="com.fasterxml.jackson.annotation.JsonTypeInfo" use="CLASS" include="PROPERTY" property="jsonType"></annox:annotate></annox:annotate>		
-        </jaxb:bindings>
-        <jaxb:bindings node="xs:complexType[@name='MavenClasspathRequest']">
-			<annox:annotate><annox:annotate annox:class="javax.xml.bind.annotation.XmlRootElement" name="MavenClasspathRequest" /></annox:annotate>
-			<annox:annotate><annox:annotate annox:class="com.fasterxml.jackson.annotation.JsonRootName">MavenClasspathRequest</annox:annotate></annox:annotate>
-			<annox:annotate><annox:annotate annox:class="com.fasterxml.jackson.annotation.JsonTypeInfo" use="CLASS" include="PROPERTY" property="jsonType"></annox:annotate></annox:annotate>		
-        </jaxb:bindings>
-		<jaxb:bindings node="xs:complexType[@name='MavenClasspathResponse']">
-			<annox:annotate><annox:annotate annox:class="javax.xml.bind.annotation.XmlRootElement" name="MavenClasspathResponse" /></annox:annotate>
-			<annox:annotate><annox:annotate annox:class="com.fasterxml.jackson.annotation.JsonRootName">MavenClasspathResponse</annox:annotate></annox:annotate>
-			<annox:annotate><annox:annotate annox:class="com.fasterxml.jackson.annotation.JsonTypeInfo" use="CLASS" include="PROPERTY" property="jsonType"></annox:annotate></annox:annotate>		
-        </jaxb:bindings>
+  <!-- Annotate the following classes with XmlRootElement -->
+  <jaxb:bindings schemaLocation="atlas-java-model-v2.xsd" node="/xs:schema">
+    <jaxb:bindings node="xs:complexType[@name='JavaField']">
+      <annox:annotate><annox:annotate annox:class="com.fasterxml.jackson.annotation.JsonTypeInfo" use="CLASS" include="PROPERTY" property="jsonType"></annox:annotate></annox:annotate>    
     </jaxb:bindings>
+    <jaxb:bindings node="xs:complexType[@name='JavaEnumField']">
+      <annox:annotate><annox:annotate annox:class="com.fasterxml.jackson.annotation.JsonTypeInfo" use="CLASS" include="PROPERTY" property="jsonType"></annox:annotate></annox:annotate>    
+    </jaxb:bindings>
+    <jaxb:bindings node="xs:complexType[@name='JavaClass']">
+      <annox:annotate><annox:annotate annox:class="com.fasterxml.jackson.annotation.JsonTypeInfo" use="CLASS" include="PROPERTY" property="jsonType"></annox:annotate></annox:annotate>    
+    </jaxb:bindings>
+    <jaxb:bindings node="xs:complexType[@name='JavaDocument']">
+      <annox:annotate><annox:annotate annox:class="javax.xml.bind.annotation.XmlRootElement" name="JavaDocument" /></annox:annotate>
+      <annox:annotate><annox:annotate annox:class="com.fasterxml.jackson.annotation.JsonRootName">JavaDocument</annox:annotate></annox:annotate>
+      <annox:annotate><annox:annotate annox:class="com.fasterxml.jackson.annotation.JsonTypeInfo" use="CLASS" include="PROPERTY" property="jsonType"></annox:annotate></annox:annotate>    
+    </jaxb:bindings>
+    <jaxb:bindings node="xs:complexType[@name='ClassInspectionRequest']">
+      <annox:annotate><annox:annotate annox:class="javax.xml.bind.annotation.XmlRootElement" name="ClassInspectionRequest" /></annox:annotate>
+      <annox:annotate><annox:annotate annox:class="com.fasterxml.jackson.annotation.JsonRootName">ClassInspectionRequest</annox:annotate></annox:annotate>
+      <annox:annotate><annox:annotate annox:class="com.fasterxml.jackson.annotation.JsonTypeInfo" use="CLASS" include="PROPERTY" property="jsonType"></annox:annotate></annox:annotate>    
+    </jaxb:bindings>
+    <jaxb:bindings node="xs:complexType[@name='ClassInspectionResponse']">
+      <annox:annotate><annox:annotate annox:class="javax.xml.bind.annotation.XmlRootElement" name="ClassInspectionResponse" /></annox:annotate>
+      <annox:annotate><annox:annotate annox:class="com.fasterxml.jackson.annotation.JsonRootName">ClassInspectionResponse</annox:annotate></annox:annotate>
+      <annox:annotate><annox:annotate annox:class="com.fasterxml.jackson.annotation.JsonTypeInfo" use="CLASS" include="PROPERTY" property="jsonType"></annox:annotate></annox:annotate>    
+    </jaxb:bindings>
+    <jaxb:bindings node="xs:complexType[@name='MavenClasspathRequest']">
+      <annox:annotate><annox:annotate annox:class="javax.xml.bind.annotation.XmlRootElement" name="MavenClasspathRequest" /></annox:annotate>
+      <annox:annotate><annox:annotate annox:class="com.fasterxml.jackson.annotation.JsonRootName">MavenClasspathRequest</annox:annotate></annox:annotate>
+      <annox:annotate><annox:annotate annox:class="com.fasterxml.jackson.annotation.JsonTypeInfo" use="CLASS" include="PROPERTY" property="jsonType"></annox:annotate></annox:annotate>    
+    </jaxb:bindings>
+    <jaxb:bindings node="xs:complexType[@name='MavenClasspathResponse']">
+      <annox:annotate><annox:annotate annox:class="javax.xml.bind.annotation.XmlRootElement" name="MavenClasspathResponse" /></annox:annotate>
+      <annox:annotate><annox:annotate annox:class="com.fasterxml.jackson.annotation.JsonRootName">MavenClasspathResponse</annox:annotate></annox:annotate>
+      <annox:annotate><annox:annotate annox:class="com.fasterxml.jackson.annotation.JsonTypeInfo" use="CLASS" include="PROPERTY" property="jsonType"></annox:annotate></annox:annotate>
+    </jaxb:bindings>
+  </jaxb:bindings>
 </jaxb:bindings>
