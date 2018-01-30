@@ -164,15 +164,6 @@ if [ -n "$HELP" ]; then
    exit 0
 fi
 
-"${MAVEN_CMD}" -N install
-for module in $(modules_to_build)
-do
-  echo "=========================================================="
-  echo "Building ${module} ...."
-  echo "=========================================================="
-  eval "${module}"
-done
-
 if [ -n "$RELEASE_VERSION" ]; then
   echo "=========================================================="
   echo "Performing Maven Release ...."
@@ -181,13 +172,25 @@ if [ -n "$RELEASE_VERSION" ]; then
                  -DreleaseVersion=${RELEASE_VERSION} \
                  -DdevelopmentVersion=${DEVELOPMENT_VERSION} \
                  -Pfabric8,release,community-release \
-                 -Darguments="-DskipTests -Dmaven.javadoc.skip=true" \
                  release:prepare
-  git push origin atlasmap-${RELEASE_VERSION}
   "${MAVEN_CMD}" -Dtag=atlasmap-${RELEASE_VERSION} \
                  -DreleaseVersion=${RELEASE_VERSION} \
                  -DdevelopmentVersion=${DEVELOPMENT_VERSION} \
                  -Pfabric8,release,community-release \
-                 -Darguments="-DskipTests -Dmaven.javadoc.skip=true" \
                  release:perform
+
+  # Push the branch release changes and the tag.
+  git push origin HEAD
+  git push origin atlasmap-${RELEASE_VERSION}
+else
+
+  "${MAVEN_CMD}" -N install
+  for module in $(modules_to_build)
+  do
+    echo "=========================================================="
+    echo "Building ${module} ...."
+    echo "=========================================================="
+    eval "${module}"
+  done
+
 fi
