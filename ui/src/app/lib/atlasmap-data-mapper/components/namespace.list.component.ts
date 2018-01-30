@@ -31,7 +31,7 @@ import { DataMapperUtil } from '../common/data.mapper.util';
                     <h2 class="card-pf-title">
                         <div class="name">
                             <i class="fa fa-table"></i>
-                            <label>Namespaces for {{ cfg.getFirstXmlDoc(false).initCfg.shortIdentifier }}</label>
+                            <label>Namespaces for {{ cfg.getFirstXmlDoc(false).name }}</label>
                         </div>
                         <i (click)="toggleSearch()" [attr.class]="getSearchIconCSSClass()"></i>
                         <i (click)="addEditNamespace(null, $event)" class="fa fa-plus link"></i>

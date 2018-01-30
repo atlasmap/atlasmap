@@ -43,7 +43,7 @@ import { DataMapperUtil } from '../common/data.mapper.util';
                 <label>Name</label>
                 <input name="value" type="text" [(ngModel)]="field.name"/>
             </div>
-            <div class="form-group" *ngIf="docDef.initCfg.type.isXML()">
+            <div class="form-group" *ngIf="docDef.type == DocumentType.XML">
                 <label>Namespace</label>
                 <select (change)="namespaceSelectionChanged($event);" [ngModel]="namespaceAlias">
                     <option *ngFor="let ns of namespaces" value="{{ns.alias}}" [selected]="namespaceAlias == ns.alias">
@@ -51,7 +51,7 @@ import { DataMapperUtil } from '../common/data.mapper.util';
                     </option>
                 </select>
             </div>
-            <div class="form-group" *ngIf="docDef.initCfg.type.isXML()">
+            <div class="form-group" *ngIf="docDef.type == DocumentType.XML">
                 <label>Field Type</label>
                 <select (change)="fieldTypeSelectionChanged($event);" [ngModel]="fieldType">
                     <option value="element">Element</option>
