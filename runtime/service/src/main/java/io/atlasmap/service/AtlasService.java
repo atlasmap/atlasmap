@@ -15,19 +15,11 @@
  */
 package io.atlasmap.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import io.atlasmap.api.AtlasContext;
-import io.atlasmap.api.AtlasException;
-import io.atlasmap.api.AtlasSession;
-import io.atlasmap.core.DefaultAtlasContextFactory;
-import io.atlasmap.v2.ActionDetails;
-import io.atlasmap.v2.AtlasMapping;
-import io.atlasmap.v2.Json;
-import io.atlasmap.v2.StringMap;
-import io.atlasmap.v2.StringMapEntry;
-import io.atlasmap.v2.Validations;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.io.File;
+import java.io.FilenameFilter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Paths;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.Consumes;
@@ -40,7 +32,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Application;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -53,15 +44,26 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.transform.stream.StreamSource;
-import java.io.File;
-import java.io.FilenameFilter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Paths;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+
+import io.atlasmap.api.AtlasContext;
+import io.atlasmap.api.AtlasException;
+import io.atlasmap.api.AtlasSession;
+import io.atlasmap.core.DefaultAtlasContextFactory;
+import io.atlasmap.v2.ActionDetails;
+import io.atlasmap.v2.AtlasMapping;
+import io.atlasmap.v2.Json;
+import io.atlasmap.v2.StringMap;
+import io.atlasmap.v2.StringMapEntry;
+import io.atlasmap.v2.Validations;
 
 @ApplicationPath("/")
 @Path("v2/atlas")
-public class AtlasService extends Application {
+public class AtlasService {
 
     private static final Logger LOG = LoggerFactory.getLogger(AtlasService.class);
 

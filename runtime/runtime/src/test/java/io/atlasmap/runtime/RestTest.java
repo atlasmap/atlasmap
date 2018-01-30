@@ -15,11 +15,13 @@
  */
 package io.atlasmap.runtime;
 
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -30,12 +32,11 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -47,7 +48,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class RestTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(RestTest.class);
-    private static final OkHttpClient client = new OkHttpClient();
+    private static final OkHttpClient CLIENT = new OkHttpClient();
     private static final MediaType APPLICATION_JSON = MediaType.parse("application/json");
 
     @LocalServerPort
@@ -58,7 +59,7 @@ public class RestTest {
         Request request = new Request.Builder()
             .url("http://127.0.0.1:" + port + "/v2/atlas/fieldActions")
             .build();
-        try (Response response = client.newCall(request).execute()) {
+        try (Response response = CLIENT.newCall(request).execute()) {
             assertThat(response.isSuccessful()).isTrue();
             System.out.println(response.body().string());
         }
@@ -70,7 +71,7 @@ public class RestTest {
             .url("http://127.0.0.1:" + port + "/v2/atlas/json/inspect")
             .post(RequestBody.create(APPLICATION_JSON, resource("atlasmap-json-inspection.json")))
             .build();
-        try (Response response = client.newCall(request).execute()) {
+        try (Response response = CLIENT.newCall(request).execute()) {
             assertThat(response.isSuccessful()).isTrue();
             System.out.println(response.body().string());
         }

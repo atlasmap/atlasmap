@@ -15,15 +15,8 @@
  */
 package io.atlasmap.json.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import io.atlasmap.json.inspect.JsonDocumentInspectionService;
-import io.atlasmap.json.v2.InspectionType;
-import io.atlasmap.json.v2.JsonDocument;
-import io.atlasmap.json.v2.JsonInspectionRequest;
-import io.atlasmap.json.v2.JsonInspectionResponse;
-import io.atlasmap.v2.Json;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.io.IOException;
+import java.io.InputStream;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.Consumes;
@@ -33,17 +26,26 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.IOException;
-import java.io.InputStream;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+
+import io.atlasmap.json.inspect.JsonDocumentInspectionService;
+import io.atlasmap.json.v2.InspectionType;
+import io.atlasmap.json.v2.JsonDocument;
+import io.atlasmap.json.v2.JsonInspectionRequest;
+import io.atlasmap.json.v2.JsonInspectionResponse;
+import io.atlasmap.v2.Json;
 
 // http://localhost:8585/v2/atlas/xml/inspection
 
 @ApplicationPath("/")
 @Path("v2/atlas/json")
-public class JsonService extends Application {
+public class JsonService {
 
     private static final Logger LOG = LoggerFactory.getLogger(JsonService.class);
 

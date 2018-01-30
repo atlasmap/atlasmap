@@ -5,11 +5,11 @@ import static org.junit.Assert.assertNotNull;
 
 import javax.ws.rs.core.Response;
 
-import io.atlasmap.v2.Json;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import io.atlasmap.v2.Json;
 import io.atlasmap.xml.v2.InspectionType;
 import io.atlasmap.xml.v2.XmlComplexType;
 import io.atlasmap.xml.v2.XmlDocument;

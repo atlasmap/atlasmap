@@ -15,17 +15,7 @@
  */
 package io.atlasmap.runtime;
 
-import io.atlasmap.java.service.JavaService;
-import io.atlasmap.java.v2.MavenClasspathRequest;
-import io.atlasmap.java.v2.MavenClasspathResponse;
-import io.atlasmap.json.service.JsonService;
-import io.atlasmap.service.AtlasService;
-import io.atlasmap.xml.service.XmlService;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.web.support.SpringBootServletInitializer;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
+import java.io.InputStream;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -33,7 +23,18 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.InputStream;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.support.SpringBootServletInitializer;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+
+import io.atlasmap.java.service.JavaService;
+import io.atlasmap.java.v2.MavenClasspathResponse;
+import io.atlasmap.json.service.JsonService;
+import io.atlasmap.service.AtlasService;
+import io.atlasmap.xml.service.XmlService;
 
 @SpringBootApplication
 @ComponentScan(basePackageClasses = { Application.class, })

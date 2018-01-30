@@ -15,6 +15,9 @@
  */
 package io.atlasmap.java.service;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -23,14 +26,13 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import io.atlasmap.v2.Json;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 import io.atlasmap.core.DefaultAtlasConversionService;
 import io.atlasmap.java.inspect.ClassInspectionService;
@@ -40,15 +42,13 @@ import io.atlasmap.java.v2.ClassInspectionResponse;
 import io.atlasmap.java.v2.JavaClass;
 import io.atlasmap.java.v2.MavenClasspathRequest;
 import io.atlasmap.java.v2.MavenClasspathResponse;
-
-import java.io.IOException;
-import java.io.InputStream;
+import io.atlasmap.v2.Json;
 
 // http://localhost:8585/v2/atlas/java/class?className=java.lang.String
 
 @ApplicationPath("/")
 @Path("v2/atlas/java")
-public class JavaService extends Application {
+public class JavaService {
 
     private static final Logger LOG = LoggerFactory.getLogger(JavaService.class);
 

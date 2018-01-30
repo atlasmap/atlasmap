@@ -20,10 +20,12 @@ import static org.junit.Assert.assertNotNull;
 
 import java.io.File;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import io.atlasmap.v2.Json;
+
 
 public class AtlasJsonModelFactoryTest {
 
