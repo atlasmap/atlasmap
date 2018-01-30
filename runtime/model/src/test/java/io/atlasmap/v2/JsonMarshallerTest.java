@@ -37,7 +37,7 @@ public class JsonMarshallerTest extends BaseMarshallerTest {
 
         this.deleteTestFolders = false;
 
-        mapper = new AtlasJsonMapper();
+        mapper = Json.mapper();
     }
 
     @Override

@@ -15,20 +15,24 @@
  */
 package io.atlasmap.java.service;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
-import javax.ws.rs.OPTIONS;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Application;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 import io.atlasmap.core.DefaultAtlasConversionService;
 import io.atlasmap.java.inspect.ClassInspectionService;
@@ -38,14 +42,31 @@ import io.atlasmap.java.v2.ClassInspectionResponse;
 import io.atlasmap.java.v2.JavaClass;
 import io.atlasmap.java.v2.MavenClasspathRequest;
 import io.atlasmap.java.v2.MavenClasspathResponse;
+import io.atlasmap.v2.Json;
 
 // http://localhost:8585/v2/atlas/java/class?className=java.lang.String
 
 @ApplicationPath("/")
 @Path("v2/atlas/java")
-public class JavaService extends Application {
+public class JavaService {
 
     private static final Logger LOG = LoggerFactory.getLogger(JavaService.class);
+
+    protected byte[] toJson(Object value) {
+        try {
+            return Json.mapper().writeValueAsBytes(value);
+        } catch (JsonProcessingException e) {
+            throw new WebApplicationException(e, Response.Status.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    protected <T> T fromJson(InputStream value, Class<T>clazz) {
+        try {
+            return Json.mapper().readValue(value, clazz);
+        } catch (IOException e) {
+            throw new WebApplicationException(e, Response.Status.BAD_REQUEST);
+        }
+    }
 
     // example request: http://localhost:8181/rest/myresource?from=jason%20baker
     @GET
@@ -53,15 +74,6 @@ public class JavaService extends Application {
     @Produces(MediaType.TEXT_PLAIN)
     public String simpleHelloWorld(@QueryParam("from") String from) {
         return "Got it! " + from;
-    }
-
-    @OPTIONS
-    @Path("/class")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response testJsonOptions() throws Exception {
-        return Response.ok().header("Access-Control-Allow-Origin", "*")
-                .header("Access-Control-Allow-Headers", "Content-Type")
-                .header("Access-Control-Allow-Methods", "GET,PUT,POST,PATCH,DELETE").build();
     }
 
     // example from:
@@ -74,26 +86,15 @@ public class JavaService extends Application {
         classInspectionService.setConversionService(DefaultAtlasConversionService.getInstance());
         JavaClass c = classInspectionService.inspectClass(className);
         classInspectionService = null;
-        return Response.ok().header("Access-Control-Allow-Origin", "*")
-                .header("Access-Control-Allow-Headers", "Content-Type")
-                .header("Access-Control-Allow-Methods", "GET,PUT,POST,PATCH,DELETE").entity(c).build();
-    }
-
-    @OPTIONS
-    @Path("/mavenclasspath")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response generateClasspathCORS() throws Exception {
-        return Response.ok().header("Access-Control-Allow-Origin", "*")
-                .header("Access-Control-Allow-Headers", "Content-Type")
-                .header("Access-Control-Allow-Methods", "GET,PUT,POST,PATCH,DELETE").build();
+        return Response.ok().entity(toJson(c)).build();
     }
 
     @POST
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
     @Path("/mavenclasspath")
-    public Response generateClasspath(MavenClasspathRequest request) throws Exception {
-
+    public Response generateClasspath(InputStream requestIn) throws Exception {
+        MavenClasspathRequest request = fromJson(requestIn, MavenClasspathRequest.class);
         MavenClasspathResponse response = new MavenClasspathResponse();
         MavenClasspathHelper mavenClasspathHelper = null;
         try {
@@ -112,17 +113,15 @@ public class JavaService extends Application {
             response.setErrorMessage(e.getMessage());
         }
 
-        return Response.ok().header("Access-Control-Allow-Origin", "*")
-                .header("Access-Control-Allow-Headers", "Content-Type")
-                .header("Access-Control-Allow-Methods", "GET,PUT,POST,PATCH,DELETE").entity(response).build();
+        return Response.ok().entity(toJson(response)).build();
     }
 
     @POST
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
     @Path("/class")
-    public Response inspectClass(ClassInspectionRequest request) throws Exception {
-
+    public Response inspectClass(InputStream requestIn) throws Exception {
+        ClassInspectionRequest request = fromJson(requestIn, ClassInspectionRequest.class);
         ClassInspectionResponse response = new ClassInspectionResponse();
         ClassInspectionService classInspectionService = new ClassInspectionService();
         classInspectionService.setConversionService(DefaultAtlasConversionService.getInstance());
@@ -145,9 +144,7 @@ public class JavaService extends Application {
             response.setExecutionTime(System.currentTimeMillis() - startTime);
         }
 
-        return Response.ok().header("Access-Control-Allow-Origin", "*")
-                .header("Access-Control-Allow-Headers", "Content-Type")
-                .header("Access-Control-Allow-Methods", "GET,PUT,POST,PATCH,DELETE").entity(response).build();
+        return Response.ok().entity(toJson(response)).build();
     }
 
     protected void configureInspectionService(ClassInspectionService classInspectionService,

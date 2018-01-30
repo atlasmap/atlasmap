@@ -31,10 +31,10 @@ import org.junit.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import io.atlasmap.v2.AtlasJsonMapper;
 import io.atlasmap.v2.AtlasMapping;
 import io.atlasmap.v2.BaseMapping;
 import io.atlasmap.v2.Field;
+import io.atlasmap.v2.Json;
 import io.atlasmap.v2.Mapping;
 import io.atlasmap.v2.MappingType;
 import io.atlasmap.v2.Mappings;
@@ -49,7 +49,7 @@ public class AtlasServiceTest {
     @Before
     public void setUp() throws Exception {
         service = new AtlasService();
-        mapper = new AtlasJsonMapper();
+        mapper = Json.mapper();
     }
 
     @After
@@ -62,7 +62,7 @@ public class AtlasServiceTest {
     public void testListMappings() throws Exception {
         Response resp = service.listMappings(
                 generateTestUriInfo("http://localhost:8686/v2/atlas", "http://localhost:8686/v2/atlas/mappings"), null);
-        StringMap sMap = (StringMap) resp.getEntity();
+        StringMap sMap = Json.mapper().readValue((byte[])resp.getEntity(), StringMap.class);
         System.out.println("Found " + sMap.getStringMapEntry().size() + " objects");
         for (StringMapEntry s : sMap.getStringMapEntry()) {
             System.out.println("\t n: " + s.getName() + " v: " + s.getValue());
@@ -72,7 +72,7 @@ public class AtlasServiceTest {
     @Test
     public void testGetMapping() throws Exception {
         Response resp = service.getMappingRequest("junit3");
-        assertEquals(AtlasMapping.class, resp.getEntity().getClass());
+        assertEquals(byte[].class, resp.getEntity().getClass());
     }
 
     @Test

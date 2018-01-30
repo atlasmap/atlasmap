@@ -9,6 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import io.atlasmap.java.v2.JavaClass;
+import io.atlasmap.v2.Json;
 
 public class JavaServiceTest {
 
@@ -28,8 +29,8 @@ public class JavaServiceTest {
     public void testGetClass() throws Exception {
         Response res = javaService.getClass(JavaService.class.getName());
         Object entity = res.getEntity();
-        assertEquals(JavaClass.class, entity.getClass());
-        JavaClass javaClass = (JavaClass) entity;
+        assertEquals(byte[].class, entity.getClass());
+        JavaClass javaClass = Json.mapper().readValue((byte[]) entity, JavaClass.class);
         assertEquals(JavaService.class.getName(), javaClass.getClassName());
     }
 }

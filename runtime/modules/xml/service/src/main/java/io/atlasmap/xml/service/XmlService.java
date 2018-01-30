@@ -16,22 +16,26 @@
 package io.atlasmap.xml.service;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
-import javax.ws.rs.OPTIONS;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Application;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+
+import io.atlasmap.v2.Json;
 import io.atlasmap.xml.inspect.XmlDocumentInspectionService;
 import io.atlasmap.xml.v2.InspectionType;
 import io.atlasmap.xml.v2.XmlDocument;
@@ -42,9 +46,25 @@ import io.atlasmap.xml.v2.XmlInspectionResponse;
 
 @ApplicationPath("/")
 @Path("v2/atlas/xml")
-public class XmlService extends Application {
+public class XmlService {
 
     private static final Logger LOG = LoggerFactory.getLogger(XmlService.class);
+
+    protected byte[] toJson(Object value) {
+        try {
+            return Json.mapper().writeValueAsBytes(value);
+        } catch (JsonProcessingException e) {
+            throw new WebApplicationException(e, Response.Status.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    protected <T> T fromJson(InputStream value, Class<T>clazz) {
+        try {
+            return Json.mapper().readValue(value, clazz);
+        } catch (IOException e) {
+            throw new WebApplicationException(e, Response.Status.BAD_REQUEST);
+        }
+    }
 
     // example request: http://localhost:8181/rest/myresource?from=jason%20baker
     @GET
@@ -54,14 +74,6 @@ public class XmlService extends Application {
         return "Got it! " + from;
     }
 
-    @OPTIONS
-    @Path("/inspect")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response testJsonOptions() throws Exception {
-        return Response.ok().header("Access-Control-Allow-Origin", "*")
-                .header("Access-Control-Allow-Headers", "Content-Type")
-                .header("Access-Control-Allow-Methods", "GET,PUT,POST,PATCH,DELETE").build();
-    }
 
     @GET
     @Path("/inspect")
@@ -95,15 +107,17 @@ public class XmlService extends Application {
             endTime = System.currentTimeMillis() - startTime;
         }
 
-        return Response.ok().header("Access-Control-Allow-Origin", "*")
-                .header("Access-Control-Allow-Headers", "Content-Type")
-                .header("Access-Control-Allow-Methods", "GET,PUT,POST,PATCH,DELETE").entity(d).build();
+        return Response.ok().entity(toJson(d)).build();
     }
 
     @POST
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
     @Path("/inspect")
+    public Response inspectClass(InputStream request) throws Exception {
+        return inspectClass(fromJson(request, XmlInspectionRequest.class));
+    }
+
     public Response inspectClass(XmlInspectionRequest request) throws Exception {
         long startTime = System.currentTimeMillis();
 
@@ -137,8 +151,6 @@ public class XmlService extends Application {
         }
 
         response.setXmlDocument(d);
-        return Response.ok().header("Access-Control-Allow-Origin", "*")
-                .header("Access-Control-Allow-Headers", "Content-Type")
-                .header("Access-Control-Allow-Methods", "GET,PUT,POST,PATCH,DELETE").entity(response).build();
+        return Response.ok().entity(toJson(response)).build();
     }
 }

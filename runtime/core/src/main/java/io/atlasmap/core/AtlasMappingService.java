@@ -39,8 +39,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.api.AtlasValidationException;
-import io.atlasmap.v2.AtlasJsonMapper;
 import io.atlasmap.v2.AtlasMapping;
+import io.atlasmap.v2.Json;
+
 
 public class AtlasMappingService implements Serializable {
 
@@ -93,7 +94,7 @@ public class AtlasMappingService implements Serializable {
             }
         }
 
-        jsonMapper = new AtlasJsonMapper();
+        jsonMapper = Json.mapper();
     }
 
     public AtlasMapping loadMapping(File file) throws AtlasValidationException {

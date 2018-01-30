@@ -15,34 +15,55 @@
  */
 package io.atlasmap.json.service;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
-import javax.ws.rs.OPTIONS;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Application;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+
 import io.atlasmap.json.inspect.JsonDocumentInspectionService;
 import io.atlasmap.json.v2.InspectionType;
 import io.atlasmap.json.v2.JsonDocument;
 import io.atlasmap.json.v2.JsonInspectionRequest;
 import io.atlasmap.json.v2.JsonInspectionResponse;
+import io.atlasmap.v2.Json;
 
 // http://localhost:8585/v2/atlas/xml/inspection
 
 @ApplicationPath("/")
 @Path("v2/atlas/json")
-public class JsonService extends Application {
+public class JsonService {
 
     private static final Logger LOG = LoggerFactory.getLogger(JsonService.class);
+
+    protected byte[] toJson(Object value) {
+        try {
+            return Json.mapper().writeValueAsBytes(value);
+        } catch (JsonProcessingException e) {
+            throw new WebApplicationException(e, Response.Status.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    protected <T> T fromJson(InputStream value, Class<T>clazz) {
+        try {
+            return Json.mapper().readValue(value, clazz);
+        } catch (IOException e) {
+            throw new WebApplicationException(e, Response.Status.BAD_REQUEST);
+        }
+    }
 
     // example request: http://localhost:8181/rest/myresource?from=jason%20baker
     @GET
@@ -50,15 +71,6 @@ public class JsonService extends Application {
     @Produces(MediaType.TEXT_PLAIN)
     public String simpleHelloWorld(@QueryParam("from") String from) {
         return "Got it! " + from;
-    }
-
-    @OPTIONS
-    @Path("/inspect")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response testJsonOptions() throws Exception {
-        return Response.ok().header("Access-Control-Allow-Origin", "*")
-                .header("Access-Control-Allow-Headers", "Content-Type")
-                .header("Access-Control-Allow-Methods", "GET,PUT,POST,PATCH,DELETE").build();
     }
 
     @GET
@@ -92,16 +104,15 @@ public class JsonService extends Application {
             endTime = System.currentTimeMillis() - startTime;
         }
 
-        return Response.ok().header("Access-Control-Allow-Origin", "*")
-                .header("Access-Control-Allow-Headers", "Content-Type")
-                .header("Access-Control-Allow-Methods", "GET,PUT,POST,PATCH,DELETE").entity(d).build();
+        return Response.ok().entity(toJson(d)).build();
     }
 
     @POST
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
     @Path("/inspect")
-    public Response inspectClass(JsonInspectionRequest request) throws Exception {
+    public Response inspectClass(InputStream requestIn) throws Exception {
+        JsonInspectionRequest request = fromJson(requestIn, JsonInspectionRequest.class);
         long startTime = System.currentTimeMillis();
 
         JsonInspectionResponse response = new JsonInspectionResponse();
@@ -140,9 +151,7 @@ public class JsonService extends Application {
         }
 
         response.setJsonDocument(d);
-        return Response.ok().header("Access-Control-Allow-Origin", "*")
-                .header("Access-Control-Allow-Headers", "Content-Type")
-                .header("Access-Control-Allow-Methods", "GET,PUT,POST,PATCH,DELETE").entity(response).build();
+        return Response.ok().entity(toJson(response)).build();
     }
 
     protected boolean validJsonData(String jsonData) {

@@ -18,13 +18,13 @@ package io.atlasmap.service;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Paths;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
-import javax.ws.rs.OPTIONS;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -32,7 +32,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Application;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -49,87 +48,44 @@ import javax.xml.transform.stream.StreamSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+
 import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.api.AtlasSession;
 import io.atlasmap.core.DefaultAtlasContextFactory;
 import io.atlasmap.v2.ActionDetails;
 import io.atlasmap.v2.AtlasMapping;
+import io.atlasmap.v2.Json;
 import io.atlasmap.v2.StringMap;
 import io.atlasmap.v2.StringMapEntry;
 import io.atlasmap.v2.Validations;
 
 @ApplicationPath("/")
 @Path("v2/atlas")
-public class AtlasService extends Application {
+public class AtlasService {
 
     private static final Logger LOG = LoggerFactory.getLogger(AtlasService.class);
-
-    private static final String ACCESS_CONTROL_ALLOW_ORIGIN = "Access-Control-Allow-Origin";
-    private static final String DEFAULT_ACCESS_CONTROL_ALLOW_ORIGIN = "*";
-    private static final String ACCESS_CONTROL_ALLOW_HEADERS = "Access-Control-Allow-Headers";
-    private static final String DEFAULT_ACCESS_CONTROL_ALLOW_HEADERS = "Content-Type";
-    private static final String ACCESS_CONTROL_ALLOW_METHODS = "Access-Control-Allow-Methods";
-    private static final String DEFAULT_ACCESS_CONTROL_ALLOW_METHODS = "GET,PUT,POST,PATCH,DELETE,OPTIONS,HEAD";
-    private static final String ACCESS_CONTROL_ALLOW_METHODS_GPPPD = "GET,PUT,POST,PATCH,DELETE";
 
     private final DefaultAtlasContextFactory atlasContextFactory = DefaultAtlasContextFactory.getInstance();
     private String baseFolder = "target/mappings";
 
-    protected Response standardCORSResponse() {
-        return Response.ok().header(ACCESS_CONTROL_ALLOW_ORIGIN, DEFAULT_ACCESS_CONTROL_ALLOW_ORIGIN)
-                .header(ACCESS_CONTROL_ALLOW_HEADERS, DEFAULT_ACCESS_CONTROL_ALLOW_HEADERS)
-                .header(ACCESS_CONTROL_ALLOW_METHODS, DEFAULT_ACCESS_CONTROL_ALLOW_METHODS).build();
+    protected byte[] toJson(Object value) {
+        try {
+            return Json.mapper().writeValueAsBytes(value);
+        } catch (JsonProcessingException e) {
+            throw new WebApplicationException(e, Status.INTERNAL_SERVER_ERROR);
+        }
     }
 
-    @OPTIONS
-    @Path("/mapping")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getMappingOptions() {
-        return standardCORSResponse();
+    protected <T> T fromJson(InputStream value, Class<T>clazz) {
+        try {
+            return Json.mapper().readValue(value, clazz);
+        } catch (IOException e) {
+            throw new WebApplicationException(e, Status.BAD_REQUEST);
+        }
     }
 
-    @OPTIONS
-    @Path("/mapping/validate")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getMappingValidateOptions() {
-        return standardCORSResponse();
-    }
-
-    @OPTIONS
-    @Path("/mapping/validate/{mappingId}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getMappingValidateParameterizedOptions() {
-        return standardCORSResponse();
-    }
-
-    @OPTIONS
-    @Path("/fieldMapping/converterCheck")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getFieldMappingConverterCheckOptions() {
-        return standardCORSResponse();
-    }
-
-    @OPTIONS
-    @Path("/mapping/{mappingId}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getMappingParameterizedOptions() {
-        return standardCORSResponse();
-    }
-
-    @OPTIONS
-    @Path("/mappings")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getMappingsOptions() {
-        return standardCORSResponse();
-    }
-
-    @OPTIONS
-    @Path("/fieldActions")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getFieldActionsOptions() {
-        return standardCORSResponse();
-    }
 
     @GET
     @Path("/fieldActions")
@@ -138,15 +94,11 @@ public class AtlasService extends Application {
         ActionDetails details = new ActionDetails();
 
         if (atlasContextFactory == null || atlasContextFactory.getFieldActionService() == null) {
-            return Response.ok().header(ACCESS_CONTROL_ALLOW_ORIGIN, DEFAULT_ACCESS_CONTROL_ALLOW_ORIGIN)
-                    .header(ACCESS_CONTROL_ALLOW_HEADERS, DEFAULT_ACCESS_CONTROL_ALLOW_HEADERS)
-                    .header(ACCESS_CONTROL_ALLOW_METHODS, ACCESS_CONTROL_ALLOW_METHODS_GPPPD).entity(details).build();
+            return Response.ok().entity(toJson(details)).build();
         }
 
         details.getActionDetail().addAll(atlasContextFactory.getFieldActionService().listActionDetails());
-        return Response.ok().header(ACCESS_CONTROL_ALLOW_ORIGIN, DEFAULT_ACCESS_CONTROL_ALLOW_ORIGIN)
-                .header(ACCESS_CONTROL_ALLOW_HEADERS, DEFAULT_ACCESS_CONTROL_ALLOW_HEADERS)
-                .header(ACCESS_CONTROL_ALLOW_METHODS, ACCESS_CONTROL_ALLOW_METHODS_GPPPD).entity(details).build();
+        return Response.ok().entity(toJson(details)).build();
     }
 
     @GET
@@ -168,9 +120,7 @@ public class AtlasService extends Application {
         });
 
         if (mappings == null) {
-            return Response.ok().header(ACCESS_CONTROL_ALLOW_ORIGIN, DEFAULT_ACCESS_CONTROL_ALLOW_ORIGIN)
-                    .header(ACCESS_CONTROL_ALLOW_HEADERS, DEFAULT_ACCESS_CONTROL_ALLOW_HEADERS)
-                    .header(ACCESS_CONTROL_ALLOW_METHODS, ACCESS_CONTROL_ALLOW_METHODS_GPPPD).entity(sMap).build();
+            return Response.ok().entity(toJson(sMap)).build();
         }
 
         try {
@@ -188,9 +138,7 @@ public class AtlasService extends Application {
             throw new WebApplicationException(e.getMessage(), e, Status.INTERNAL_SERVER_ERROR);
         }
 
-        return Response.ok().header(ACCESS_CONTROL_ALLOW_ORIGIN, DEFAULT_ACCESS_CONTROL_ALLOW_ORIGIN)
-                .header(ACCESS_CONTROL_ALLOW_HEADERS, DEFAULT_ACCESS_CONTROL_ALLOW_HEADERS)
-                .header(ACCESS_CONTROL_ALLOW_METHODS, ACCESS_CONTROL_ALLOW_METHODS_GPPPD).entity(sMap).build();
+        return Response.ok().entity(toJson(sMap)).build();
     }
 
     @DELETE
@@ -203,18 +151,14 @@ public class AtlasService extends Application {
         File mappingFile = mappingFilePath.toFile();
 
         if (!mappingFile.exists()) {
-            return Response.noContent().header(ACCESS_CONTROL_ALLOW_ORIGIN, DEFAULT_ACCESS_CONTROL_ALLOW_ORIGIN)
-                    .header(ACCESS_CONTROL_ALLOW_HEADERS, DEFAULT_ACCESS_CONTROL_ALLOW_HEADERS)
-                    .header(ACCESS_CONTROL_ALLOW_METHODS, ACCESS_CONTROL_ALLOW_METHODS_GPPPD).build();
+            return Response.noContent().build();
         }
 
         if (mappingFile != null && !mappingFile.delete()) {
             LOG.warn("Unable to delete mapping file " + mappingFile.toString());
         }
 
-        return Response.ok().header(ACCESS_CONTROL_ALLOW_ORIGIN, DEFAULT_ACCESS_CONTROL_ALLOW_ORIGIN)
-                .header(ACCESS_CONTROL_ALLOW_HEADERS, DEFAULT_ACCESS_CONTROL_ALLOW_HEADERS)
-                .header(ACCESS_CONTROL_ALLOW_METHODS, ACCESS_CONTROL_ALLOW_METHODS_GPPPD).build();
+        return Response.ok().build();
     }
 
     @GET
@@ -227,9 +171,7 @@ public class AtlasService extends Application {
         File mappingFile = mappingFilePath.toFile();
 
         if (!mappingFile.exists()) {
-            return Response.noContent().header(ACCESS_CONTROL_ALLOW_ORIGIN, DEFAULT_ACCESS_CONTROL_ALLOW_ORIGIN)
-                    .header(ACCESS_CONTROL_ALLOW_HEADERS, DEFAULT_ACCESS_CONTROL_ALLOW_HEADERS)
-                    .header(ACCESS_CONTROL_ALLOW_METHODS, ACCESS_CONTROL_ALLOW_METHODS_GPPPD).build();
+            return Response.noContent().build();
         }
 
         AtlasMapping atlasMapping = null;
@@ -239,34 +181,32 @@ public class AtlasService extends Application {
             LOG.error("Error retrieving mapping " + e.getMessage(), e);
         }
 
-        return Response.ok().header(ACCESS_CONTROL_ALLOW_ORIGIN, DEFAULT_ACCESS_CONTROL_ALLOW_ORIGIN)
-                .header(ACCESS_CONTROL_ALLOW_HEADERS, DEFAULT_ACCESS_CONTROL_ALLOW_HEADERS)
-                .header(ACCESS_CONTROL_ALLOW_METHODS, ACCESS_CONTROL_ALLOW_METHODS_GPPPD).entity(atlasMapping).build();
+        return Response.ok().entity(toJson(atlasMapping)).build();
     }
 
     @PUT
     @Path("/mapping")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createMappingRequest(AtlasMapping mapping, @Context UriInfo uriInfo) {
-        return saveMapping(mapping, uriInfo);
+    public Response createMappingRequest(InputStream mapping, @Context UriInfo uriInfo) {
+        return saveMapping(fromJson(mapping, AtlasMapping.class), uriInfo);
     }
 
     @POST
     @Path("/mapping/{mappingId}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateMappingRequest(AtlasMapping mapping, @Context UriInfo uriInfo) {
-        return saveMapping(mapping, uriInfo);
+    public Response updateMappingRequest(InputStream mapping, @Context UriInfo uriInfo) {
+        return saveMapping(fromJson(mapping, AtlasMapping.class), uriInfo);
     }
 
     @PUT
     @Path("/mapping/validate")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response validateMappingRequest(AtlasMapping mapping, @Context UriInfo uriInfo) {
+    public Response validateMappingRequest(InputStream mapping, @Context UriInfo uriInfo) {
         try {
-            return validateMapping(mapping, uriInfo);
+            return validateMapping(fromJson(mapping, AtlasMapping.class), uriInfo);
         } catch (AtlasException | IOException e) {
             throw new WebApplicationException(e.getMessage(), e, Status.INTERNAL_SERVER_ERROR);
         }
@@ -304,9 +244,7 @@ public class AtlasService extends Application {
                     + (temporaryMappingFile != null ? temporaryMappingFile.toString() : null));
         }
 
-        return Response.ok().header(ACCESS_CONTROL_ALLOW_ORIGIN, DEFAULT_ACCESS_CONTROL_ALLOW_ORIGIN)
-                .header(ACCESS_CONTROL_ALLOW_HEADERS, DEFAULT_ACCESS_CONTROL_ALLOW_HEADERS)
-                .header(ACCESS_CONTROL_ALLOW_METHODS, ACCESS_CONTROL_ALLOW_METHODS_GPPPD).entity(validations).build();
+        return Response.ok().entity(toJson(validations)).build();
     }
 
     protected Response saveMapping(AtlasMapping mapping, UriInfo uriInfo) {
@@ -319,9 +257,7 @@ public class AtlasService extends Application {
         UriBuilder builder = uriInfo.getAbsolutePathBuilder();
         builder.path(mapping.getName());
 
-        return Response.ok().header(ACCESS_CONTROL_ALLOW_ORIGIN, DEFAULT_ACCESS_CONTROL_ALLOW_ORIGIN)
-                .header(ACCESS_CONTROL_ALLOW_HEADERS, DEFAULT_ACCESS_CONTROL_ALLOW_HEADERS)
-                .header(ACCESS_CONTROL_ALLOW_METHODS, ACCESS_CONTROL_ALLOW_METHODS_GPPPD).location(builder.build())
+        return Response.ok().location(builder.build())
                 .build();
     }
 

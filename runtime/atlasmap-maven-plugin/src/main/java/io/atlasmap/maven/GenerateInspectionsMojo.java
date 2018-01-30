@@ -51,8 +51,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.atlasmap.core.DefaultAtlasConversionService;
 import io.atlasmap.java.inspect.ClassInspectionService;
-import io.atlasmap.java.service.AtlasJsonProvider;
 import io.atlasmap.java.v2.JavaClass;
+import io.atlasmap.v2.Json;
 
 @Mojo(name = "generate-inspections")
 public class GenerateInspectionsMojo extends AbstractMojo {
@@ -191,7 +191,7 @@ public class GenerateInspectionsMojo extends AbstractMojo {
             }
 
             try {
-                ObjectMapper objectMapper = AtlasJsonProvider.createObjectMapper();
+                ObjectMapper objectMapper = Json.mapper();
                 File target = outputFile;
                 if (target == null) {
                     target = new File(outputDir, "atlasmap-inpection-" + className + ".json");
