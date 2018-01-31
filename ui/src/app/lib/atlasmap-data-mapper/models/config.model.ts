@@ -24,7 +24,7 @@ import { MappingManagementService } from '../services/mapping.management.service
 import { InitializationService } from '../services/initialization.service';
 import { ErrorInfo } from '../models/error.model';
 
-export const enum DocumentType {
+export enum DocumentType {
     JAVA = 'Java',
     XML = 'XML',
     JSON = 'JSON',
@@ -34,7 +34,7 @@ export const enum DocumentType {
     PROPERTY = 'Property'
 }
 
-export const enum InspectionType {
+export enum InspectionType {
     JAVA_CLASS = 'JAVA_CLASS',
     SCHEMA = 'SCHEMA',
     INSTANCE = 'INSTANCE'
