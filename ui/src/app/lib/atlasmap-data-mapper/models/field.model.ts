@@ -137,7 +137,7 @@ export class Field {
     }
 
     getCollectionType(): string {
-        return this.isCollection ? (this.isArray ? 'ARRAY' : 'LIST') : null;
+        return this.isCollection ? (this.isArray ? 'ARRAY' : null) : null;
     }
 
     getFieldLabel(includePath: boolean): string {
