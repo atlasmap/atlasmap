@@ -333,18 +333,16 @@ export class DocumentManagementService {
         parsedField.isPrimitive = field.fieldType != 'COMPLEX';
         parsedField.serviceObject = field;
 
-        if ('LIST' == field.collectionType || 'ARRAY' == field.collectionType) {
+        if ('ARRAY' == field.collectionType) {
             parsedField.isCollection = true;
-            if ('ARRAY' == field.collectionType) {
-                parsedField.isArray = true;
-                parsedField.type = 'ARRAY[' + parsedField.type + ']';
-            } else {
-                parsedField.type = 'LIST<' + parsedField.type + '>';
-            }
+            parsedField.isArray = true;
         }
 
         if (parentField != null) {
             parentField.children.push(parsedField);
+            if (parentField.type == 'COMPLEX') {
+               parsedField.isCollection = true;
+            }
         } else {
             docDef.fields.push(parsedField);
         }
