@@ -336,10 +336,7 @@ export class DocumentManagementService {
         if ('LIST' == field.collectionType || 'ARRAY' == field.collectionType) {
             parsedField.isCollection = true;
             if ('ARRAY' == field.collectionType) {
-                parsedField.isArray = true;
-                parsedField.type = 'ARRAY[' + parsedField.type + ']';
-            } else {
-                parsedField.type = 'LIST<' + parsedField.type + '>';
+                  parsedField.isArray = true;
             }
         }
 
