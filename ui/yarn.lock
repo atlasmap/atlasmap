@@ -302,9 +302,9 @@ amdefine@>=0.0.4:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/amdefine/-/amdefine-1.0.1.tgz#4a5282ac164729e93619bcfd3ad151f817ce91f5"
 
-angular-tree-component@^6.0.0:
-  version "6.1.0"
-  resolved "https://registry.yarnpkg.com/angular-tree-component/-/angular-tree-component-6.1.0.tgz#9d9a6b28a6881c2072cd6306b55229579e894071"
+"angular-tree-component@^6.0.0 || ^7.0.0":
+  version "7.0.1"
+  resolved "https://registry.yarnpkg.com/angular-tree-component/-/angular-tree-component-7.0.1.tgz#fc8d0e72d8c34b87131a3ba2bd32ad20945689ac"
   dependencies:
     lodash "4.17.4"
     mobx ">=3"
@@ -4130,13 +4130,9 @@ ng2-dragula@^1.5.0:
   dependencies:
     dragula "^3.7.2"
 
-ngx-bootstrap@2.0.0-rc.0:
-  version "2.0.0-rc.0"
-  resolved "https://registry.yarnpkg.com/ngx-bootstrap/-/ngx-bootstrap-2.0.0-rc.0.tgz#c423117f9a3b36a19514c531b7fd9a56217f060e"
-
-ngx-bootstrap@^1.8.0:
-  version "1.9.3"
-  resolved "https://registry.yarnpkg.com/ngx-bootstrap/-/ngx-bootstrap-1.9.3.tgz#28e75d14fb1beaee609383d7694de4eb3ba03b26"
+"ngx-bootstrap@^1.8.0 || ^2.0.0", ngx-bootstrap@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/ngx-bootstrap/-/ngx-bootstrap-2.0.2.tgz#6862b2ee4764bb6cfd34c66528873d0d050c2faa"
 
 no-case@^2.2.0:
   version "2.3.2"
@@ -4596,18 +4592,18 @@ patternfly-bootstrap-treeview@~2.1.0:
     bootstrap "3.3.x"
     jquery ">= 2.1.x"
 
-patternfly-ng@^2.1.2:
-  version "2.1.2"
-  resolved "https://registry.yarnpkg.com/patternfly-ng/-/patternfly-ng-2.1.2.tgz#9ce515007463563076974910460501d79e7956fb"
+patternfly-ng@^3.0.0:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/patternfly-ng/-/patternfly-ng-3.1.1.tgz#642fec9b476489328926aa04148015a60eab59eb"
   dependencies:
     lodash "^4.17.4"
-    ngx-bootstrap "^1.8.0"
     patternfly "^3.28.0"
   optionalDependencies:
     "@swimlane/ngx-datatable" "^11.1.7"
-    angular-tree-component "^6.0.0"
+    angular-tree-component "^6.0.0 || ^7.0.0"
     c3 "^0.4.15"
     ng2-dragula "^1.5.0"
+    ngx-bootstrap "^1.8.0 || ^2.0.0"
 
 patternfly@3.26.1:
   version "3.26.1"
