@@ -95,6 +95,9 @@
                 </episode>
               </episodes>
               <catalog>src/main/resources/catalog.cat</catalog>
+              <schemaExcludes>
+                <exclude>atlas-xml-schemaset-model-v2.xsd</exclude>
+              </schemaExcludes>
             </configuration>
           </execution>
         </executions>
