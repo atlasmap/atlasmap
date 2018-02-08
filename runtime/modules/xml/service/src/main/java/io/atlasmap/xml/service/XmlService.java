@@ -36,7 +36,7 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import io.atlasmap.v2.Json;
-import io.atlasmap.xml.inspect.XmlDocumentInspectionService;
+import io.atlasmap.xml.inspect.XmlInspectionService;
 import io.atlasmap.xml.v2.InspectionType;
 import io.atlasmap.xml.v2.XmlDocument;
 import io.atlasmap.xml.v2.XmlInspectionRequest;
@@ -89,11 +89,12 @@ public class XmlService {
                 throw new Exception("uri and type parameters must be specified");
             } else {
                 InspectionType inspectType = InspectionType.valueOf(type);
-                XmlDocumentInspectionService s = new XmlDocumentInspectionService();
+                XmlInspectionService s = new XmlInspectionService();
 
                 switch (inspectType) {
                 case INSTANCE:
-                    // d = s.inspectXmlDocument(new File(uri)); break;
+                    d = s.inspectXmlDocument(new File(uri));
+                    break;
                 case SCHEMA:
                     d = s.inspectSchema(new File(uri));
                     break;
@@ -129,7 +130,7 @@ public class XmlService {
             if (request.getType() == null) {
                 response.setErrorMessage("Instance or Schema type must be specified in request");
             } else {
-                XmlDocumentInspectionService s = new XmlDocumentInspectionService();
+                XmlInspectionService s = new XmlInspectionService();
 
                 switch (request.getType()) {
                 case INSTANCE:

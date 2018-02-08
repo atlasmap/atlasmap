@@ -17,6 +17,7 @@ package io.atlasmap.xml.inspect;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -29,7 +30,7 @@ import org.xml.sax.SAXException;
 
 import io.atlasmap.xml.v2.XmlDocument;
 
-public class XmlDocumentInspectionService {
+public class XmlInspectionService {
 
     public XmlDocument inspectXmlDocument(String sourceDocument) throws XmlInspectionException {
         if (sourceDocument == null || sourceDocument.isEmpty()) {
@@ -39,6 +40,19 @@ public class XmlDocumentInspectionService {
         try {
             document = getDocument(new ByteArrayInputStream(sourceDocument.getBytes()), true);
         } catch (ParserConfigurationException | SAXException | IOException e) {
+            throw new XmlInspectionException(e.getMessage(), e);
+        }
+        return inspectXmlDocument(document);
+    }
+
+    public XmlDocument inspectXmlDocument(File sourceDocument) throws XmlInspectionException {
+        if (sourceDocument == null) {
+            throw new IllegalArgumentException("Source must be specified");
+        }
+        Document document;
+        try {
+            document = getDocument(new FileInputStream(sourceDocument), true);
+        } catch (Exception e) {
             throw new XmlInspectionException(e.getMessage(), e);
         }
         return inspectXmlDocument(document);

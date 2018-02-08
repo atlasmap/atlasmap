@@ -16,22 +16,48 @@
 package io.atlasmap.xml.inspect;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
+import javax.xml.XMLConstants;
+import javax.xml.namespace.NamespaceContext;
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.SAXParserFactory;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathFactory;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.w3c.dom.Attr;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 
 import com.sun.xml.xsom.XSAttributeDecl;
 import com.sun.xml.xsom.XSAttributeUse;
 import com.sun.xml.xsom.XSComplexType;
+import com.sun.xml.xsom.XSDeclaration;
 import com.sun.xml.xsom.XSElementDecl;
 import com.sun.xml.xsom.XSModelGroup;
 import com.sun.xml.xsom.XSModelGroupDecl;
@@ -47,6 +73,7 @@ import com.sun.xml.xsom.util.DomAnnotationParserFactory;
 import io.atlasmap.v2.CollectionType;
 import io.atlasmap.v2.FieldType;
 import io.atlasmap.v2.Fields;
+import io.atlasmap.xml.core.AtlasXmlConstants;
 import io.atlasmap.xml.core.XmlComplexTypeFactory;
 import io.atlasmap.xml.v2.AtlasXmlModelFactory;
 import io.atlasmap.xml.v2.Restriction;
@@ -61,9 +88,11 @@ import io.atlasmap.xml.v2.XmlNamespaces;
 
 public class SchemaInspector {
 
-    private static final XmlDocument XML_DOCUMENT = AtlasXmlModelFactory.createXmlDocument();
+    private static final Logger LOG = LoggerFactory.getLogger(SchemaInspector.class);
     private static final Map<String, FieldType> XS_TYPE_TO_FIELD_TYPE_MAP;
     private static final Map<String, FieldType> BLACKLISTED_TYPES;
+    private static final String NS_PREFIX_XMLSCHEMA = "xs";
+    private static final String NS_PREFIX_SCHEMASET = "ss";
 
     static {
         XS_TYPE_TO_FIELD_TYPE_MAP = new HashMap<>();
@@ -99,79 +128,190 @@ public class SchemaInspector {
         BLACKLISTED_TYPES.put("QName", FieldType.UNSUPPORTED);
     }
 
+    private XmlDocument xmlDocument;
+    private AtlasXmlNamespaceContext namespaceContext;
+    private String rootNamespace;
+
     public XmlDocument getXmlDocument() {
-        return XML_DOCUMENT;
+        return xmlDocument;
     }
 
     public void inspect(File schemaFile) throws XmlInspectionException {
-        Fields fields = new Fields();
-        XML_DOCUMENT.setFields(fields);
-        XSOMParser parser = new XSOMParser(SAXParserFactory.newInstance());
-        parser.setAnnotationParser(new DomAnnotationParserFactory());
         try {
-            parser.parse(schemaFile);
-            XSSchemaSet schemaSet = parser.getResult();
-            printSchemaSet(schemaSet);
-        } catch (SAXException | IOException e) {
+            doInspect(new FileInputStream(schemaFile));
+        } catch (Exception e) {
             throw new XmlInspectionException(e);
         }
     }
 
     public void inspect(String schemaAsString) throws XmlInspectionException {
-        Fields fields = new Fields();
-        XML_DOCUMENT.setFields(fields);
-        XSOMParser parser = new XSOMParser(SAXParserFactory.newInstance());
-        ByteArrayInputStream is;
         try {
-            is = new ByteArrayInputStream(schemaAsString.getBytes("UTF-8"));
-            parser.setAnnotationParser(new DomAnnotationParserFactory());
-            parser.parse(is);
-            XSSchemaSet schemaSet = parser.getResult();
-            printSchemaSet(schemaSet);
-        } catch (SAXException | UnsupportedEncodingException e) {
+            doInspect(new ByteArrayInputStream(schemaAsString.getBytes("UTF-8")));
+        } catch (Exception e) {
             throw new XmlInspectionException(e);
         }
     }
 
-    private void printSchemaSet(XSSchemaSet schemaSet) throws XmlInspectionException {
+    private void doInspect(InputStream is) throws Exception {
+        xmlDocument = AtlasXmlModelFactory.createXmlDocument();
+        Fields fields = new Fields();
+        xmlDocument.setFields(fields);
+        namespaceContext = new AtlasXmlNamespaceContext();
+        rootNamespace = null;
+
+        XSOMParser parser = new XSOMParser(SAXParserFactory.newInstance());
+        parser.setAnnotationParser(new DomAnnotationParserFactory());
+        parser.setErrorHandler(new XSOMErrorHandler());
+        Transformer transformer = TransformerFactory.newInstance().newTransformer();
+
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        dbf.setNamespaceAware(true);
+        Document doc = dbf.newDocumentBuilder().parse(is);
+        Element root = doc.getDocumentElement();
+
+        if (root == null) {
+            throw new XmlInspectionException("XML schema document is empty");
+        } else if ("SchemaSet".equals(root.getLocalName())) {
+            XPath xpath = XPathFactory.newInstance().newXPath();
+            xpath.setNamespaceContext(namespaceContext);
+            NodeList schemas = (NodeList) xpath.evaluate(
+                    String.format("//%s:schema", NS_PREFIX_XMLSCHEMA), doc, XPathConstants.NODESET);
+
+            for (int i=0; i<schemas.getLength(); i++) {
+                Element e = (Element)schemas.item(i);
+                if ("SchemaSet".equals(e.getParentNode().getLocalName())) {
+                    rootNamespace = getTargetNamespace(e);
+                    inheritNamespaces(e, true);
+                } else {
+                    inheritNamespaces(e, false);
+                }
+                parser.parse(toInputStream(transformer, e));
+            }
+        } else if ("schema".equals(root.getLocalName())) {
+            parser.parse(toInputStream(transformer, root));
+            rootNamespace = getTargetNamespace(root);
+        } else {
+            throw new XmlInspectionException(String.format(
+                    "Unsupported document element '%s': root element must be 'schema' or 'SchemaSet'",
+                    root.getLocalName()));
+        }
+
+        XSSchemaSet schemaSet = parser.getResult();
+        printSchemaSet(schemaSet);
+        if (rootNamespace != null && !rootNamespace.isEmpty()) {
+            namespaceContext.add("tns", rootNamespace);
+        }
+        populateNamespaces();
+    }
+
+    private String getTargetNamespace(Node n) {
+        NamedNodeMap attributes = n.getAttributes();
+        if (attributes == null) {
+            return "";
+        }
+        Attr tns = (Attr)attributes.getNamedItem("targetNamespace");
+        return tns != null ? tns.getValue() : "";
+    }
+
+    private void inheritNamespaces(Element element, boolean updateContext) {
+        Node target = element.getParentNode();
+        while (target != null) {
+            NamedNodeMap attributes = target.getAttributes();
+            if (attributes != null) {
+                for (int i=0; i<attributes.getLength(); i++) {
+                    Attr attr = (Attr) attributes.item(i);
+                    if ("xmlns".equals(attr.getPrefix()) && !"xmlns".equals(attr.getLocalName())) {
+                        element.setAttribute(attr.getName(), attr.getValue());
+                        if (updateContext) {
+                            namespaceContext.add(attr.getLocalName(), attr.getValue());
+                        }
+                    }
+                }
+            }
+            target = target.getParentNode();
+        }
+    }
+
+    private ByteArrayInputStream toInputStream(Transformer transformer, Node n) throws Exception {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        transformer.transform(new DOMSource(n), new StreamResult(baos));
+        byte[] output = baos.toByteArray();
+        if (LOG.isTraceEnabled()) {
+            LOG.trace(">>> {}", new String(output));
+        }
+        return new ByteArrayInputStream(output);
+    }
+
+    private String getNameNS(XSDeclaration decl) throws Exception {
+        String targetNamespace = decl.getTargetNamespace();
+        if (targetNamespace == null || targetNamespace.isEmpty()) {
+            targetNamespace = decl.getOwnerSchema().getTargetNamespace();
+        }
+        if (targetNamespace != null && !targetNamespace.isEmpty() && !targetNamespace.equals(rootNamespace)) {
+            String prefix = namespaceContext.getPrefix(targetNamespace);
+            if (prefix == null || prefix.isEmpty()) {
+                prefix = namespaceContext.addWithIndex(targetNamespace);
+            }
+            return String.format("%s:%s", prefix, decl.getName());
+        } else {
+            return decl.getName();
+        }
+    }
+
+    private void populateNamespaces() {
+        for (Entry<String, String> entry : namespaceContext.getNamespaceMap().entrySet()) {
+            String prefix = entry.getKey();
+            String uri = entry.getValue();
+            if (XMLConstants.W3C_XML_SCHEMA_NS_URI.equals(uri)
+                    || AtlasXmlConstants.ATLAS_XML_SCHEMASET_NAMESPACE.equals(uri)) {
+                continue;
+            }
+
+            if (LOG.isTraceEnabled()) {
+                LOG.trace("adding a namespace >>> prefix={}, uri={}", prefix, uri);
+            }
+            if (xmlDocument.getXmlNamespaces() == null) {
+                xmlDocument.setXmlNamespaces(new XmlNamespaces());
+            }
+            XmlNamespace namespace = new XmlNamespace();
+            namespace.setAlias(prefix);
+            namespace.setUri(uri);
+            namespace.setTargetNamespace(rootNamespace != null && rootNamespace.equals(uri));
+            xmlDocument.getXmlNamespaces().getXmlNamespace().add(namespace);
+        }
+    }
+
+    private void printSchemaSet(XSSchemaSet schemaSet) throws Exception {
         if (schemaSet == null) {
             throw new XmlInspectionException("Schema set is null");
         }
-        Iterator<XSSchema> itr = schemaSet.iterateSchema();
-        while (itr.hasNext()) {
-            XSSchema s = itr.next();
-            // check the target namespace where null == default ("") and needs no mapping
-            if (s.getTargetNamespace() != null) {
-                XML_DOCUMENT.setXmlNamespaces(new XmlNamespaces());
-                XmlNamespace namespace = new XmlNamespace();
-                namespace.setUri(s.getTargetNamespace());
-                namespace.setAlias("tns");// default prefix for target namespace (is this the only one possible?)
-                XML_DOCUMENT.getXmlNamespaces().getXmlNamespace().add(namespace);
-            }
-            // we only care about declared elements...
-            Iterator<XSElementDecl> jtr = s.iterateElementDecls();
-            while (jtr.hasNext()) {
-                XSElementDecl e = jtr.next();
-                String rootName = "/".concat(e.getName());
-                if (e.getType().isComplexType()) {
-                    XmlComplexType rootComplexType = getXmlComplexType();
-                    rootComplexType.setName(e.getName());
-                    rootComplexType.setPath(rootName);
-                    rootComplexType.setFieldType(FieldType.COMPLEX);
-                    XML_DOCUMENT.getFields().getField().add(rootComplexType);
-                    printComplexType(e.getType().asComplexType(), rootName, rootComplexType);
-                } else if (e.getType().isSimpleType()) {
-                    XmlField xmlField = AtlasXmlModelFactory.createXmlField();
-                    xmlField.setName(e.getName());
-                    xmlField.setPath("/".concat(e.getName()));
-                    XML_DOCUMENT.getFields().getField().add(xmlField);
-                    printSimpleType(e.getType().asSimpleType(), xmlField);
-                }
+
+        XSSchema schema = rootNamespace != null ? schemaSet.getSchema(rootNamespace) : schemaSet.getSchema("");
+        // we only care about declared elements...
+        Iterator<XSElementDecl> jtr = schema.iterateElementDecls();
+        while (jtr.hasNext()) {
+            XSElementDecl e = jtr.next();
+            String rootName = getNameNS(e);
+
+            if (e.getType().isComplexType()) {
+                XmlComplexType rootComplexType = getXmlComplexType();
+                rootComplexType.setName(rootName);
+                rootComplexType.setPath("/" + rootName);
+                rootComplexType.setFieldType(FieldType.COMPLEX);
+                xmlDocument.getFields().getField().add(rootComplexType);
+                printComplexType(e.getType().asComplexType(), "/" + rootName, rootComplexType);
+            } else if (e.getType().isSimpleType()) {
+                XmlField xmlField = AtlasXmlModelFactory.createXmlField();
+                xmlField.setName(rootName);
+                xmlField.setPath("/" + rootName);
+                xmlDocument.getFields().getField().add(xmlField);
+                printSimpleType(e.getType().asSimpleType(), xmlField);
             }
         }
     }
 
-    private void printComplexType(XSComplexType complexType, String rootName, XmlComplexType xmlComplexType) {
+    private void printComplexType(XSComplexType complexType, String rootName, XmlComplexType xmlComplexType)
+            throws Exception {
         printAttributes(complexType, rootName, xmlComplexType);
         XSParticle particle = complexType.getContentType().asParticle();
         if (particle != null) {
@@ -179,7 +319,8 @@ public class SchemaInspector {
         }
     }
 
-    private void printParticle(XSParticle particle, String rootName, XmlComplexType xmlComplexType) {
+    private void printParticle(XSParticle particle, String rootName, XmlComplexType xmlComplexType)
+            throws Exception {
         XSTerm term = particle.getTerm();
         if (term.isModelGroup()) {
             XSModelGroup group = term.asModelGroup();
@@ -192,24 +333,26 @@ public class SchemaInspector {
         }
     }
 
-    private void printGroup(XSModelGroup modelGroup, String rootName, XmlComplexType xmlComplexType) {
+    private void printGroup(XSModelGroup modelGroup, String rootName, XmlComplexType xmlComplexType)
+            throws Exception {
         // this is the parent of the group
         for (XSParticle particle : modelGroup.getChildren()) {
             printParticle(particle, rootName, xmlComplexType);
         }
     }
 
-    private void printGroupDecl(XSModelGroupDecl modelGroupDecl, String rootName, XmlComplexType parentXmlComplexType) {
+    private void printGroupDecl(XSModelGroupDecl modelGroupDecl, String rootName, XmlComplexType parentXmlComplexType)
+            throws Exception {
         printGroup(modelGroupDecl.getModelGroup(), rootName, parentXmlComplexType);
     }
 
     private void printElement(XSElementDecl element, String root, XmlComplexType xmlComplexType,
-            CollectionType collectionType) {
+            CollectionType collectionType) throws Exception {
         String rootName = root;
         if (element.getType().isComplexType()) {
             XmlComplexType complexType = getXmlComplexType();
-            rootName = rootName + "/" + element.getName();
-            complexType.setName(element.getName());
+            rootName = rootName + "/" + getNameNS(element);
+            complexType.setName(getNameNS(element));
             complexType.setPath(rootName);
             complexType.setCollectionType(collectionType);
             xmlComplexType.getXmlFields().getXmlField().add(complexType);
@@ -217,8 +360,8 @@ public class SchemaInspector {
         } else {
             if (element.getType() != null && element.getType().asSimpleType() != null) {
                 XmlField xmlField = AtlasXmlModelFactory.createXmlField();
-                xmlField.setName(element.getName());
-                xmlField.setPath(rootName + "/" + element.getName());
+                xmlField.setName(getNameNS(element));
+                xmlField.setPath(rootName + "/" + getNameNS(element));
                 xmlComplexType.getXmlFields().getXmlField().add(xmlField);
                 if (element.getDefaultValue() != null) {
                     xmlField.setValue(element.getDefaultValue());
@@ -235,18 +378,19 @@ public class SchemaInspector {
         }
     }
 
-    private void printAttributes(XSComplexType xsComplexType, String rootName, XmlComplexType xmlComplexType) {
+    private void printAttributes(XSComplexType xsComplexType, String rootName, XmlComplexType xmlComplexType)
+            throws Exception {
         Collection<? extends XSAttributeUse> c = xsComplexType.getDeclaredAttributeUses();
         for (XSAttributeUse aC : c) {
             XmlField xmlField = AtlasXmlModelFactory.createXmlField();
             XSAttributeDecl attributeDecl = aC.getDecl();
-            xmlField.setName(attributeDecl.getName());
+            xmlField.setName(getNameNS(attributeDecl));
             if (attributeDecl.getDefaultValue() != null) {
                 xmlField.setValue(attributeDecl.getDefaultValue().value);
             } else if (attributeDecl.getFixedValue() != null) {
                 xmlField.setValue(attributeDecl.getFixedValue().value);
             }
-            xmlField.setPath(rootName + "/" + "@" + attributeDecl.getName());
+            xmlField.setPath(rootName + "/" + "@" + getNameNS(attributeDecl));
             FieldType attrType = getFieldType(attributeDecl.getType().getName());
             xmlField.setFieldType(attrType);
             if (xmlField.getFieldType() == null) {
@@ -339,4 +483,82 @@ public class SchemaInspector {
         }
         return false;
     }
+
+    private class AtlasXmlNamespaceContext implements NamespaceContext {
+        protected Map<String, String> nsMap = new HashMap<>();
+        private int nsIndex = 1;
+
+        public AtlasXmlNamespaceContext() {
+            nsMap.put(NS_PREFIX_XMLSCHEMA, XMLConstants.W3C_XML_SCHEMA_NS_URI);
+            nsMap.put(NS_PREFIX_SCHEMASET, AtlasXmlConstants.ATLAS_XML_SCHEMASET_NAMESPACE);
+        }
+
+        public void add(String prefix, String uri) {
+            nsMap.put(prefix, uri);
+        }
+
+        public String addWithIndex(String uri) {
+            String prefix = "ns" + nsIndex++;
+            while (!nsMap.containsKey(prefix)) {
+                prefix = "ns" + nsIndex++;
+            }
+            add(prefix, uri);
+            return prefix;
+        }
+
+        public Map<String, String> getNamespaceMap() {
+            return Collections.unmodifiableMap(nsMap);
+        }
+
+        @Override
+        public String getNamespaceURI(String prefix) {
+            return nsMap.get(prefix);
+        }
+
+        @Override
+        public String getPrefix(String namespaceURI) {
+            if (namespaceURI == null || namespaceURI.isEmpty()) {
+                return null;
+            }
+
+            Optional<Entry<String, String>> entry =
+                    nsMap.entrySet().stream()
+                        .filter(e -> namespaceURI.equals(e.getValue()))
+                        .findFirst();
+            return entry.isPresent() ? entry.get().getKey() : null;
+        }
+
+        @Override
+        public Iterator<?> getPrefixes(String namespaceURI) {
+            if (namespaceURI == null || namespaceURI.isEmpty()) {
+                return null;
+            }
+
+            return nsMap.entrySet().stream()
+                .filter(e -> namespaceURI.equals(e.getValue()))
+                .map(Entry::getKey)
+                .collect(Collectors.toList()).iterator();
+        }
+
+    }
+
+    private class XSOMErrorHandler implements ErrorHandler {
+
+        @Override
+        public void error(SAXParseException arg0) throws SAXException {
+            throw arg0;
+        }
+
+        @Override
+        public void fatalError(SAXParseException arg0) throws SAXException {
+            throw arg0;
+        }
+
+        @Override
+        public void warning(SAXParseException arg0) throws SAXException {
+            LOG.warn(arg0.getMessage(), arg0);
+        }
+
+    }
+
 }
