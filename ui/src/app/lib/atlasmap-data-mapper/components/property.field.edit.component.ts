@@ -16,10 +16,9 @@
 
 import { Component } from '@angular/core';
 
+import { ConfigModel } from '../models/config.model';
 import { Field } from '../models/field.model';
 import { ModalWindowValidator } from './modal.window.component';
-
-import { DataMapperUtil } from '../common/data.mapper.util';
 
 @Component({
     selector: 'property-field-edit',
@@ -88,6 +87,6 @@ export class PropertyFieldEditComponent implements ModalWindowValidator {
     }
 
     isDataValid(): boolean {
-        return DataMapperUtil.isRequiredFieldValid(this.field.name, 'Name');
+        return ConfigModel.getConfig().isRequiredFieldValid(this.field.name, 'Name');
     }
 }

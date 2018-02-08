@@ -16,9 +16,9 @@
 
 import { Component } from '@angular/core';
 
+import { ConfigModel } from '../models/config.model';
 import { NamespaceModel } from '../models/document.definition.model';
 import { ModalWindowValidator } from './modal.window.component';
-import { DataMapperUtil } from '../common/data.mapper.util';
 
 @Component({
     selector: 'namespace-edit',
@@ -69,8 +69,9 @@ export class NamespaceEditComponent implements ModalWindowValidator {
     }
 
     isDataValid(): boolean {
-        let dataIsValid: boolean = DataMapperUtil.isRequiredFieldValid(this.namespace.alias, 'Alias');
-        dataIsValid = DataMapperUtil.isRequiredFieldValid(this.namespace.uri, 'URI') && dataIsValid;
+        const configModel: ConfigModel = ConfigModel.getConfig();
+        let dataIsValid: boolean = configModel.isRequiredFieldValid(this.namespace.alias, 'Alias');
+        dataIsValid = configModel.isRequiredFieldValid(this.namespace.uri, 'URI') && dataIsValid;
         return dataIsValid;
     }
 }

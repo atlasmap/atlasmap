@@ -16,9 +16,9 @@
 
 import { Component } from '@angular/core';
 
+import { ConfigModel } from '../models/config.model';
 import { Field } from '../models/field.model';
 import { ModalWindowValidator } from './modal.window.component';
-import { DataMapperUtil } from '../common/data.mapper.util';
 
 @Component({
     selector: 'constant-field-edit',
@@ -84,6 +84,6 @@ export class ConstantFieldEditComponent implements ModalWindowValidator {
     }
 
     isDataValid(): boolean {
-        return DataMapperUtil.isRequiredFieldValid(this.field.value, 'Value');
+        return ConfigModel.getConfig().isRequiredFieldValid(this.field.value, 'Value');
     }
 }

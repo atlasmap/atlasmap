@@ -14,8 +14,6 @@
     limitations under the License.
 */
 
-import { ConfigModel } from '../models/config.model';
-
 export class DataMapperUtil {
     static removeItemFromArray(item: any, items: any[]): boolean {
         if (item == null || items == null || items.length == 0) {
@@ -40,14 +38,5 @@ export class DataMapperUtil {
         }
         object = (object == null) ? '[none]' : object;
         url = (url == null) ? '[none]' : url;
-    }
-
-    static isRequiredFieldValid(value: string, fieldDescription: string): boolean {
-        if (value == null || '' == value) {
-            const errorMessage: string = fieldDescription + ' is required.';
-            ConfigModel.getConfig().errorService.validationError(errorMessage, null);
-            return false;
-        }
-        return true;
     }
 }

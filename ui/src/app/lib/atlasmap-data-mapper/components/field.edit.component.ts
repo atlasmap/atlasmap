@@ -21,7 +21,6 @@ import { Field } from '../models/field.model';
 import { DocumentType, ConfigModel } from '../models/config.model';
 import { Observable } from 'rxjs/Observable';
 import { ModalWindowValidator } from './modal.window.component';
-import { DataMapperUtil } from '../common/data.mapper.util';
 
 @Component({
     selector: 'field-edit',
@@ -221,6 +220,6 @@ export class FieldEditComponent implements ModalWindowValidator {
     }
 
     isDataValid(): boolean {
-        return DataMapperUtil.isRequiredFieldValid(this.field.name, 'Name');
+        return ConfigModel.getConfig().isRequiredFieldValid(this.field.name, 'Name');
     }
 }
