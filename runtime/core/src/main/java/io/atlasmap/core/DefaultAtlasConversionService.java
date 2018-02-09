@@ -174,7 +174,10 @@ public class DefaultAtlasConversionService implements AtlasConversionService {
             while (klass != Object.class) {
                 final List<Method> allMethods = new ArrayList<Method>(Arrays.asList(klass.getDeclaredMethods()));
                 for (final Method method : allMethods) {
-                    if (method.isAnnotationPresent(AtlasConversionInfo.class) && method.getParameters().length > 0) {
+                    // we filter out methods which aren't annotated @AtlasconversionInfo and have to
+                    // also filter out methods which are synthetic methods to avoid duplicates
+                    if (method.isAnnotationPresent(AtlasConversionInfo.class) && method.getParameters().length > 0
+                            && !method.isSynthetic()) {
                         String sourceClassName = method.getParameters()[0].getType().getCanonicalName();
                         ConverterKey coordinate = new ConverterKey(sourceClassName,
                                 method.getReturnType().getCanonicalName());
