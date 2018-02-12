@@ -48,8 +48,13 @@ import { FieldEditComponent } from './field.edit.component';
                     <div *ngIf="field.isTerminal()" style="display:inline-block;">
                         <i [attr.class]="getFieldTypeIcon()"></i>
                     </div>
+                    </div>
+                    <div *ngIf="!field.docDef.populateChildren(field); else selectable" style="display:inline-block; color: gray;">
                         <label>{{ field.getFieldLabel(false) }}</label>
                     </div>
+                    <ng-template #selectable>
+                        <label>{{ field.getFieldLabel(false) }}</label>
+                    </ng-template>
                     <div style="float:right; width:24px; text-align:right;" *ngIf="field.isSource()">
                         <i [attr.class]='getTransformationClass()'></i>
                         <i [attr.class]='getMappingClass()'></i>

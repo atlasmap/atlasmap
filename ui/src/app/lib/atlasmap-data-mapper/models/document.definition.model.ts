@@ -283,18 +283,23 @@ export class DocumentDefinition {
         this.fieldPaths.sort();
     }
 
-    populateChildren(field: Field): void {
-        //populate complex fields
+    /**
+     * Return true if the passed field is terminal or children are detected, false otherwise.
+     * @param field - target field
+     */
+    populateChildren(field: Field): boolean {
+
+        // populate complex fields
         if (field.isTerminal() || (field.children.length > 0)) {
-            return;
+            return true;
         }
 
         let cachedField = this.getComplexField(field.classIdentifier);
         if (cachedField == null) {
-            return;
+            return false;
         }
 
-        //copy cached field children
+        // copy cached field children
         cachedField = cachedField.copy();
         const pathSeparator: string = this.pathSeparator;
         for (let childField of cachedField.children) {
@@ -304,7 +309,13 @@ export class DocumentDefinition {
             this.populateFieldData(childField);
             field.children.push(childField);
         }
-        this.fieldPaths.sort();
+
+        if (field.children.length > 0) {
+           this.fieldPaths.sort();
+           return true;
+        } else {
+           return false;
+        }
     }
 
     removeField(field: Field): void {
