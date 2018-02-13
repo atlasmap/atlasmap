@@ -12,6 +12,8 @@ ARGS="$@"
 function displayHelp() {
     echo "This script helps you build the AtlasMap monorepo."
     echo "The available options are:"
+    echo " --docker-user           Docker user for Docker Hub."
+    echo " --docker-password       Docker password for Docker Hub."
     echo " --skip-tests            Skips the test execution."
     echo " --skip-image-builds     Skips image builds."
     echo " --with-image-streams    Builds everything using image streams."
@@ -79,6 +81,9 @@ function init_options() {
   RELEASE_VERSION=$(readopt --release-version $ARGS 2> /dev/null)
   DEVELOPMENT_VERSION=$(readopt --development-version $ARGS 2> /dev/null)
 
+  DOCKER_USER=$(readopt --docker-user $ARGS 2> /dev/null)
+  DOCKER_PASSWORD=$(readopt --docker-password $ARGS 2> /dev/null)
+
   # Internal variable default values
   OC_OPTS=""
   MAVEN_PARAMETERS=""
@@ -123,6 +128,13 @@ function parent() {
   pushd parent
   "${MAVEN_CMD}" $MAVEN_CLEAN_GOAL install $MAVEN_PARAMETERS
   popd
+}
+
+docker_login() {
+    if [ -n "$DOCKER_USER" ] && [ -n "$DOCKER_PASSWORD" ]; then
+        echo "==== Login to Docker Hub"
+        docker login -u "$DOCKER_USER" -p "$DOCKER_PASSWORD"
+    fi
 }
 
 function runtime() {
@@ -182,6 +194,23 @@ if [ -n "$RELEASE_VERSION" ]; then
   # Push the branch release changes and the tag.
   git push origin HEAD
   git push origin atlasmap-${RELEASE_VERSION}
+
+  # tag the major/minor version and docker push it
+  if [ -n "$DOCKER_USER" ] && [ -n "$DOCKER_PASSWORD" ]; then
+    echo "=========================================================="
+    echo "Pushing docker images to Docker Hub...."
+    echo "=========================================================="
+    ATLASMAP_IMAGE="atlasmap/atlasmap"
+    MAJOR_MINOR_VERSION=$(echo $RELEASE_VERSION | cut -f1,2 -d'.')
+
+    docker_login
+
+    docker tag "${ATLASMAP_IMAGE}:${RELEASE_VERSION}" "${ATLASMAP_IMAGE}:${MAJOR_MINOR_VERSION}"
+    docker push "${ATLASMAP_IMAGE}:${RELEASE_VERSION}"
+    docker push "${ATLASMAP_IMAGE}:${MAJOR_MINOR_VERSION}"
+ fi
+
+
 else
 
   "${MAVEN_CMD}" -N install
