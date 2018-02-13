@@ -1,0 +1,34 @@
+<atlas:SchemaSet xmlns:atlas="http://atlasmap.io/xml/schemaset/v2" xmlns:xs="http://www.w3.org/2001/XMLSchema" >
+
+  <xs:schema targetNamespace="io.atlasmap.xml.test:Root">
+    <xs:element name="RootDocument">
+      <xs:complexType>
+        <xs:sequence>
+          <xs:element ref="OneElement" />
+        </xs:sequence>
+      </xs:complexType>
+    </xs:element>
+  </xs:schema>
+
+  <atlas:AdditionalSchemas>
+    <xs:schema>
+      <xs:element name="OneElement">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="FirstValue" type="xs:string" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:schema>
+    <xs:schema>
+      <xs:element name="OneElement">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="SecondValue" type="xs:string" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:schema>
+  </atlas:AdditionalSchemas>
+
+</atlas:SchemaSet>

@@ -174,22 +174,34 @@ public class SchemaInspector {
         } else if ("SchemaSet".equals(root.getLocalName())) {
             XPath xpath = XPathFactory.newInstance().newXPath();
             xpath.setNamespaceContext(namespaceContext);
-            NodeList schemas = (NodeList) xpath.evaluate(
-                    String.format("//%s:schema", NS_PREFIX_XMLSCHEMA), doc, XPathConstants.NODESET);
-
-            for (int i=0; i<schemas.getLength(); i++) {
-                Element e = (Element)schemas.item(i);
-                if ("SchemaSet".equals(e.getParentNode().getLocalName())) {
-                    rootNamespace = getTargetNamespace(e);
-                    inheritNamespaces(e, true);
-                } else {
-                    inheritNamespaces(e, false);
-                }
+            NodeList subSchemas = (NodeList) xpath.evaluate(
+                    String.format("/%s:SchemaSet/%s:AdditionalSchemas/%s:schema",
+                            NS_PREFIX_SCHEMASET, NS_PREFIX_SCHEMASET, NS_PREFIX_XMLSCHEMA),
+                    doc, XPathConstants.NODESET);
+            for (int i=0; i<subSchemas.getLength(); i++) {
+                Element e = (Element)subSchemas.item(i);
+                inheritNamespaces(e, false);
                 parser.parse(toInputStream(transformer, e));
             }
+
+            Element rootSchema = (Element) xpath.evaluate(
+                    String.format("/%s:SchemaSet/%s:schema", NS_PREFIX_SCHEMASET, NS_PREFIX_XMLSCHEMA),
+                    doc, XPathConstants.NODE);
+            if (rootSchema == null) {
+                throw new XmlInspectionException("The root schema '/SchemaSet/schema' must be specified once and only once");
+            }
+            rootNamespace = getTargetNamespace(rootSchema);
+            if (rootNamespace != null && !rootNamespace.isEmpty()) {
+                namespaceContext.add("tns", rootNamespace);
+            }
+            inheritNamespaces(rootSchema, true);
+            parser.parse(toInputStream(transformer, rootSchema));
         } else if ("schema".equals(root.getLocalName())) {
             parser.parse(toInputStream(transformer, root));
             rootNamespace = getTargetNamespace(root);
+            if (rootNamespace != null && !rootNamespace.isEmpty()) {
+                namespaceContext.add("tns", rootNamespace);
+            }
         } else {
             throw new XmlInspectionException(String.format(
                     "Unsupported document element '%s': root element must be 'schema' or 'SchemaSet'",
@@ -198,9 +210,6 @@ public class SchemaInspector {
 
         XSSchemaSet schemaSet = parser.getResult();
         printSchemaSet(schemaSet);
-        if (rootNamespace != null && !rootNamespace.isEmpty()) {
-            namespaceContext.add("tns", rootNamespace);
-        }
         populateNamespaces();
     }
 
@@ -247,7 +256,7 @@ public class SchemaInspector {
         if (targetNamespace == null || targetNamespace.isEmpty()) {
             targetNamespace = decl.getOwnerSchema().getTargetNamespace();
         }
-        if (targetNamespace != null && !targetNamespace.isEmpty() && !targetNamespace.equals(rootNamespace)) {
+        if (targetNamespace != null && !targetNamespace.isEmpty()) {
             String prefix = namespaceContext.getPrefix(targetNamespace);
             if (prefix == null || prefix.isEmpty()) {
                 prefix = namespaceContext.addWithIndex(targetNamespace);

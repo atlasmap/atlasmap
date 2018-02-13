@@ -169,75 +169,75 @@ public class XmlSchemaInspectionTest extends BaseXmlInspectionServiceTest {
         // orderDate
         XmlField orderDateAttr = purchaseOrder.getXmlFields().getXmlField().get(0);
         Assert.assertNotNull(orderDateAttr);
-        Assert.assertThat(orderDateAttr.getName(), Is.is("orderDate"));
+        Assert.assertThat(orderDateAttr.getName(), Is.is("tns:orderDate"));
         Assert.assertNull(orderDateAttr.getValue());
-        Assert.assertThat(orderDateAttr.getPath(), Is.is("/purchaseOrder/@orderDate"));
+        Assert.assertThat(orderDateAttr.getPath(), Is.is("/tns:purchaseOrder/@tns:orderDate"));
         Assert.assertThat(orderDateAttr.getFieldType(), Is.is(FieldType.DATE));
 
         // shipTo
         XmlField shipTo = purchaseOrder.getXmlFields().getXmlField().get(1);
         Assert.assertNotNull(shipTo);
-        Assert.assertThat(shipTo.getName(), Is.is("shipTo"));
+        Assert.assertThat(shipTo.getName(), Is.is("tns:shipTo"));
         Assert.assertNull(shipTo.getValue());
-        Assert.assertThat(shipTo.getPath(), Is.is("/purchaseOrder/shipTo"));
+        Assert.assertThat(shipTo.getPath(), Is.is("/tns:purchaseOrder/tns:shipTo"));
         Assert.assertThat(shipTo.getFieldType(), Is.is(FieldType.COMPLEX));
         Assert.assertThat(((XmlComplexType) shipTo).getXmlFields().getXmlField().size(), Is.is(6));
         // shipTo/@country
         XmlField shipToCountry = ((XmlComplexType) shipTo).getXmlFields().getXmlField().get(0);
         Assert.assertNotNull(shipTo);
-        Assert.assertThat(shipToCountry.getName(), Is.is("country"));
+        Assert.assertThat(shipToCountry.getName(), Is.is("tns:country"));
         Assert.assertThat(shipToCountry.getValue(), Is.is("US"));
-        Assert.assertThat(shipToCountry.getPath(), Is.is("/purchaseOrder/shipTo/@country"));
+        Assert.assertThat(shipToCountry.getPath(), Is.is("/tns:purchaseOrder/tns:shipTo/@tns:country"));
         Assert.assertThat(shipToCountry.getFieldType(), Is.is(FieldType.UNSUPPORTED));
 
         XmlField shipToName = ((XmlComplexType) shipTo).getXmlFields().getXmlField().get(1);
         Assert.assertNotNull(shipToName);
-        Assert.assertThat(shipToName.getName(), Is.is("name"));
+        Assert.assertThat(shipToName.getName(), Is.is("tns:name"));
         Assert.assertNull(shipToName.getValue());
-        Assert.assertThat(shipToName.getPath(), Is.is("/purchaseOrder/shipTo/name"));
+        Assert.assertThat(shipToName.getPath(), Is.is("/tns:purchaseOrder/tns:shipTo/tns:name"));
         Assert.assertThat(shipToName.getFieldType(), Is.is(FieldType.STRING));
 
         XmlField shipToStreet = ((XmlComplexType) shipTo).getXmlFields().getXmlField().get(2);
         Assert.assertNotNull(shipToStreet);
-        Assert.assertThat(shipToStreet.getName(), Is.is("street"));
+        Assert.assertThat(shipToStreet.getName(), Is.is("tns:street"));
         Assert.assertNull(shipToStreet.getValue());
-        Assert.assertThat(shipToStreet.getPath(), Is.is("/purchaseOrder/shipTo/street"));
+        Assert.assertThat(shipToStreet.getPath(), Is.is("/tns:purchaseOrder/tns:shipTo/tns:street"));
         Assert.assertThat(shipToStreet.getFieldType(), Is.is(FieldType.STRING));
 
         XmlField shipToCity = ((XmlComplexType) shipTo).getXmlFields().getXmlField().get(3);
         Assert.assertNotNull(shipToCity);
-        Assert.assertThat(shipToCity.getName(), Is.is("city"));
+        Assert.assertThat(shipToCity.getName(), Is.is("tns:city"));
         Assert.assertNull(shipToCity.getValue());
-        Assert.assertThat(shipToCity.getPath(), Is.is("/purchaseOrder/shipTo/city"));
+        Assert.assertThat(shipToCity.getPath(), Is.is("/tns:purchaseOrder/tns:shipTo/tns:city"));
         Assert.assertThat(shipToCity.getFieldType(), Is.is(FieldType.STRING));
 
         XmlField shipToState = ((XmlComplexType) shipTo).getXmlFields().getXmlField().get(4);
         Assert.assertNotNull(shipToState);
-        Assert.assertThat(shipToState.getName(), Is.is("state"));
+        Assert.assertThat(shipToState.getName(), Is.is("tns:state"));
         Assert.assertNull(shipToState.getValue());
-        Assert.assertThat(shipToState.getPath(), Is.is("/purchaseOrder/shipTo/state"));
+        Assert.assertThat(shipToState.getPath(), Is.is("/tns:purchaseOrder/tns:shipTo/tns:state"));
         Assert.assertThat(shipToState.getFieldType(), Is.is(FieldType.STRING));
 
         XmlField shipToZip = ((XmlComplexType) shipTo).getXmlFields().getXmlField().get(5);
         Assert.assertNotNull(shipToZip);
-        Assert.assertThat(shipToZip.getName(), Is.is("zip"));
+        Assert.assertThat(shipToZip.getName(), Is.is("tns:zip"));
         Assert.assertNull(shipToZip.getValue());
-        Assert.assertThat(shipToZip.getPath(), Is.is("/purchaseOrder/shipTo/zip"));
+        Assert.assertThat(shipToZip.getPath(), Is.is("/tns:purchaseOrder/tns:shipTo/tns:zip"));
         Assert.assertThat(shipToZip.getFieldType(), Is.is(FieldType.DECIMAL));
 
         // comment
         XmlField comment = purchaseOrder.getXmlFields().getXmlField().get(3);
         Assert.assertNotNull(comment);
-        Assert.assertThat(comment.getName(), Is.is("comment"));
+        Assert.assertThat(comment.getName(), Is.is("tns:comment"));
         Assert.assertNull(comment.getValue());
-        Assert.assertThat(comment.getPath(), Is.is("/purchaseOrder/comment"));
+        Assert.assertThat(comment.getPath(), Is.is("/tns:purchaseOrder/tns:comment"));
         Assert.assertThat(comment.getFieldType(), Is.is(FieldType.STRING));
         // items
         XmlField items = purchaseOrder.getXmlFields().getXmlField().get(4);
         Assert.assertNotNull(items);
-        Assert.assertThat(items.getName(), Is.is("items"));
+        Assert.assertThat(items.getName(), Is.is("tns:items"));
         Assert.assertNull(items.getValue());
-        Assert.assertThat(items.getPath(), Is.is("/purchaseOrder/items"));
+        Assert.assertThat(items.getPath(), Is.is("/tns:purchaseOrder/tns:items"));
         Assert.assertThat(items.getFieldType(), Is.is(FieldType.COMPLEX));
 
         Assert.assertThat(((XmlComplexType) items).getXmlFields().getXmlField().size(), Is.is(1));
@@ -245,9 +245,9 @@ public class XmlSchemaInspectionTest extends BaseXmlInspectionServiceTest {
         // items/item
         XmlComplexType item = (XmlComplexType) ((XmlComplexType) items).getXmlFields().getXmlField().get(0);
         Assert.assertNotNull(item);
-        Assert.assertThat(item.getName(), Is.is("item"));
+        Assert.assertThat(item.getName(), Is.is("tns:item"));
         Assert.assertNull(item.getValue());
-        Assert.assertThat(item.getPath(), Is.is("/purchaseOrder/items/item"));
+        Assert.assertThat(item.getPath(), Is.is("/tns:purchaseOrder/tns:items/tns:item"));
         Assert.assertThat(item.getFieldType(), Is.is(FieldType.COMPLEX));
         Assert.assertThat(item.getCollectionType(), Is.is(CollectionType.LIST));
         Assert.assertThat(item.getXmlFields().getXmlField().size(), Is.is(6));
@@ -255,26 +255,26 @@ public class XmlSchemaInspectionTest extends BaseXmlInspectionServiceTest {
         // partNum
         XmlField partNum = item.getXmlFields().getXmlField().get(0);
         Assert.assertNotNull(partNum);
-        Assert.assertThat(partNum.getName(), Is.is("partNum"));
+        Assert.assertThat(partNum.getName(), Is.is("tns:partNum"));
         Assert.assertNull(partNum.getValue());
-        Assert.assertThat(partNum.getPath(), Is.is("/purchaseOrder/items/item/@partNum"));
+        Assert.assertThat(partNum.getPath(), Is.is("/tns:purchaseOrder/tns:items/tns:item/@tns:partNum"));
         Assert.assertThat(partNum.getFieldType(), Is.is(FieldType.STRING));
         Assert.assertThat(partNum.getTypeName(), Is.is("SKU"));
 
         // productName
         XmlField productName = item.getXmlFields().getXmlField().get(1);
         Assert.assertNotNull(productName);
-        Assert.assertThat(productName.getName(), Is.is("productName"));
+        Assert.assertThat(productName.getName(), Is.is("tns:productName"));
         Assert.assertNull(productName.getValue());
-        Assert.assertThat(productName.getPath(), Is.is("/purchaseOrder/items/item/productName"));
+        Assert.assertThat(productName.getPath(), Is.is("/tns:purchaseOrder/tns:items/tns:item/tns:productName"));
         Assert.assertThat(productName.getFieldType(), Is.is(FieldType.STRING));
 
         // quantity
         XmlField quantity = item.getXmlFields().getXmlField().get(2);
         Assert.assertNotNull(quantity);
-        Assert.assertThat(quantity.getName(), Is.is("quantity"));
+        Assert.assertThat(quantity.getName(), Is.is("tns:quantity"));
         Assert.assertNull(quantity.getValue());
-        Assert.assertThat(quantity.getPath(), Is.is("/purchaseOrder/items/item/quantity"));
+        Assert.assertThat(quantity.getPath(), Is.is("/tns:purchaseOrder/tns:items/tns:item/tns:quantity"));
         Assert.assertThat(quantity.getFieldType(), Is.is(FieldType.INTEGER));
         Assert.assertNotNull(quantity.getRestrictions().getRestriction());
         Assert.assertThat(quantity.getRestrictions().getRestriction().size(), Is.is(1));
@@ -288,25 +288,25 @@ public class XmlSchemaInspectionTest extends BaseXmlInspectionServiceTest {
         // USPrice
         XmlField usPrice = item.getXmlFields().getXmlField().get(3);
         Assert.assertNotNull(usPrice);
-        Assert.assertThat(usPrice.getName(), Is.is("USPrice"));
+        Assert.assertThat(usPrice.getName(), Is.is("tns:USPrice"));
         Assert.assertNull(usPrice.getValue());
-        Assert.assertThat(usPrice.getPath(), Is.is("/purchaseOrder/items/item/USPrice"));
+        Assert.assertThat(usPrice.getPath(), Is.is("/tns:purchaseOrder/tns:items/tns:item/tns:USPrice"));
         Assert.assertThat(usPrice.getFieldType(), Is.is(FieldType.DECIMAL));
 
         // comment
         XmlField itemComment = item.getXmlFields().getXmlField().get(4);
         Assert.assertNotNull(itemComment);
-        Assert.assertThat(itemComment.getName(), Is.is("comment"));
+        Assert.assertThat(itemComment.getName(), Is.is("tns:comment"));
         Assert.assertNull(itemComment.getValue());
-        Assert.assertThat(itemComment.getPath(), Is.is("/purchaseOrder/items/item/comment"));
+        Assert.assertThat(itemComment.getPath(), Is.is("/tns:purchaseOrder/tns:items/tns:item/tns:comment"));
         Assert.assertThat(itemComment.getFieldType(), Is.is(FieldType.STRING));
 
         // shipDate
         XmlField shipDate = item.getXmlFields().getXmlField().get(5);
         Assert.assertNotNull(shipDate);
-        Assert.assertThat(shipDate.getName(), Is.is("shipDate"));
+        Assert.assertThat(shipDate.getName(), Is.is("tns:shipDate"));
         Assert.assertNull(shipDate.getValue());
-        Assert.assertThat(shipDate.getPath(), Is.is("/purchaseOrder/items/item/shipDate"));
+        Assert.assertThat(shipDate.getPath(), Is.is("/tns:purchaseOrder/tns:items/tns:item/tns:shipDate"));
         Assert.assertThat(shipDate.getFieldType(), Is.is(FieldType.DATE));
 
         // namespaces
