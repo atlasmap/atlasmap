@@ -32,7 +32,7 @@
     <complexType>
       <sequence>
         <element ref="xs:schema" minOccurs="1" maxOccurs="1" />
-        <element name="AdditionalSchemas" type="atlas:additionalSchemasType" />
+        <element name="AdditionalSchemas" type="atlas:additionalSchemasType" minOccurs="0" />
       </sequence>
     </complexType>
   </xs:element>
