@@ -20,7 +20,7 @@
   <parent>
     <groupId>io.atlasmap</groupId>
     <artifactId>atlas-json-parent</artifactId>
-    <version>1.33.3</version>
+    <version>1.33-SNAPSHOT</version>
     <relativePath>..</relativePath>
   </parent>
 
