@@ -35,7 +35,7 @@ template: `
             <i [attr.class]="getCSSClass('showMappingTable')" (click)="toolbarButtonClicked('showMappingTable', $event);"
                tooltip="Show / hide mapping table"></i>
             <i *ngIf="cfg.getFirstXmlDoc(false)" [attr.class]="getCSSClass('showNamespaceTable')"
-                (click)="toolbarButtonClicked('showNamespaceTable', $event);"></i>
+                (click)="toolbarButtonClicked('showNamespaceTable', $event);" tooltip="Show / hide namespace table"></i>
             <i [attr.class]="getCSSClass('showDetails')" (click)="toolbarButtonClicked('showDetails', $event);"
                 tooltip="Show / hide mapping details"></i>
             <div dropdown placement="bottom right" style="display:inline; position:relative;">
