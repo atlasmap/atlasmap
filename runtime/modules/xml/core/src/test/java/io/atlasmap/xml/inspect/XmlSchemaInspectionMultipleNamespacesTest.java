@@ -41,15 +41,15 @@ public class XmlSchemaInspectionMultipleNamespacesTest extends BaseXmlInspection
             switch (namespace.getAlias()) {
             case "tns":
                 Assert.assertEquals("io.atlasmap.xml.test:Root", namespace.getUri());
-                Assert.assertEquals(true, namespace.isTargetNamespace());
+                Assert.assertEquals(null, namespace.isTargetNamespace());
                 break;
             case "first":
                 Assert.assertEquals("io.atlasmap.xml.test:First", namespace.getUri());
-                Assert.assertEquals(false, namespace.isTargetNamespace());
+                Assert.assertEquals(null, namespace.isTargetNamespace());
                 break;
             case "second":
                 Assert.assertEquals("io.atlasmap.xml.test:Second", namespace.getUri());
-                Assert.assertEquals(false, namespace.isTargetNamespace());
+                Assert.assertEquals(null, namespace.isTargetNamespace());
                 break;
             default:
                 Assert.fail(String.format("Unknown alias '%s'", namespace.getAlias()));
@@ -127,7 +127,7 @@ public class XmlSchemaInspectionMultipleNamespacesTest extends BaseXmlInspection
         XmlNamespace namespace = answer.getXmlNamespaces().getXmlNamespace().get(0);
         Assert.assertEquals("tns", namespace.getAlias());
         Assert.assertEquals("io.atlasmap.xml.test:Root", namespace.getUri());
-        Assert.assertEquals(true, namespace.isTargetNamespace());
+        Assert.assertEquals(null, namespace.isTargetNamespace());
 
         Assert.assertEquals(1,  answer.getFields().getField().size());
         XmlComplexType complex = XmlComplexType.class.cast(answer.getFields().getField().get(0));
@@ -170,7 +170,7 @@ public class XmlSchemaInspectionMultipleNamespacesTest extends BaseXmlInspection
         XmlNamespace namespace = answer.getXmlNamespaces().getXmlNamespace().get(0);
         Assert.assertEquals("second", namespace.getAlias());
         Assert.assertEquals("io.atlasmap.xml.test:Second", namespace.getUri());
-        Assert.assertEquals(false, namespace.isTargetNamespace());
+        Assert.assertEquals(null, namespace.isTargetNamespace());
 
         // Note that the FirstElement also appears here as it's a top level element of namespace ""
         Assert.assertEquals(2,  answer.getFields().getField().size());
@@ -221,7 +221,7 @@ public class XmlSchemaInspectionMultipleNamespacesTest extends BaseXmlInspection
         XmlNamespace namespace = answer.getXmlNamespaces().getXmlNamespace().get(0);
         Assert.assertEquals("tns", namespace.getAlias());
         Assert.assertEquals("http://syndesis.io/v1/swagger-connector-template/request", namespace.getUri());
-        Assert.assertEquals(true, namespace.isTargetNamespace());
+        Assert.assertEquals(null, namespace.isTargetNamespace());
 
         List<Field> fields = answer.getFields().getField();
         Assert.assertEquals(1, fields.size());
