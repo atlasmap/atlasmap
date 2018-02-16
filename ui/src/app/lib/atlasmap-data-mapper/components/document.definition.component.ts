@@ -39,7 +39,8 @@ import { ModalWindowComponent } from './modal.window.component';
                             <i class="fa {{ isSource ? 'fa-hdd-o' : 'fa-download' }}"></i>
                             <label>{{ sourcesTargetsLabel }}</label>
                         </div>
-                        <i (click)="toggleSearch()" [attr.class]="getSearchIconCSSClass()"></i>
+                        <i (click)="toggleSearch()" [attr.class]="getSearchIconCSSClass()"
+                            tooltip="Toggle search window" placement="left"></i>
                         <div class="clear"></div>
                     </h2>
 
@@ -48,7 +49,8 @@ import { ModalWindowComponent } from './modal.window.component';
                     <input type="text" #searchFilterBox
                         id="search-filter-box" (keyup)="search(searchFilterBox.value)" placeholder="Search"
                         [(ngModel)]="searchFilter" [focus]="true" />
-                    <i class="fa fa-close searchBoxCloseIcon link" (click)="toggleSearch()"></i>
+                    <i class="fa fa-close searchBoxCloseIcon link" (click)="toggleSearch()"
+                        tooltip="Close search window" placement="left"></i>
                     <div class="clear"></div>
                 </div>
                 <div [attr.class]="searchMode ? 'fieldListSearchOpen' : 'fieldList'" style="overflow:auto;"

@@ -17,7 +17,8 @@
 /* general data mapper wide styles */
 .DataMapperUI { height:100%; width:100%; position:relative; }
 
-.DataMapperUI .tooltip-inner { max-width:600px; color:white; }
+.DataMapperUI .tooltip-inner { min-width: 160px; max-width:600px; color:white; text-align: center; }
+
 .DataMapperUI .clear { clear:both; height:0px; }
 
 .DataMapperUI .hidden { visibility:hidden; }

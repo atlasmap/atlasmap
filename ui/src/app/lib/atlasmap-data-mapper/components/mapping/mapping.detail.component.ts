@@ -34,7 +34,7 @@ import { MappingSelectionComponent } from './mapping.selection.component';
                 <div style="float:left;"><label>{{ getTopFieldTypeLabel() }}</label></div>
                 <div style="float:right; margin-right:5px;">
                     <i class="fa fa-trash link" aria-hidden="true"
-                        (click)="removeMappedField(mappedField)"></i>
+                        (click)="removeMappedField(mappedField)" tooltip="Remove mapping"></i>
                 </div>
                 <div class="clear"></div>
 
@@ -106,10 +106,11 @@ export class SimpleMappingComponent {
                                 <i class="fa fa-bolt" style="font-size:12px; vertical-align:baseline;"
                                     *ngIf="fieldPair.hasTransition()"></i>
                             </div>
-                            <div style="float:right; margin-right:5px; text-align:right">
+                            <div style="float:right; margin-right:5px; text-align:right; font-size:15px">
                                 <i class="fa fa-edit link" aria-hidden="true"
-                                    (click)="editPair(fieldPair)"></i>
-                                <i class="fa fa-trash link" aria-hidden="true" (click)="removePair(fieldPair)"></i>
+                                    (click)="editPair(fieldPair)" tooltip="Edit mapping"></i>
+                                <i class="fa fa-trash link" aria-hidden="true"
+                                    (click)="removePair(fieldPair)" tooltip="Remove mapping"></i>
                             </div>
                             <div class="clear"></div>
 
@@ -224,7 +225,8 @@ export class MappingPairDetailComponent {
                     <h2 class="card-pf-title">
                         <div style="float:left;">{{ getTitle() }}</div>
                         <div style="float:right; text-align:right;">
-                            <i class="fa fa-trash link" aria-hidden="true" (click)="removeMapping($event)"></i>
+                            <i class="fa fa-trash link" aria-hidden="true" (click)="removeMapping($event)"
+                                tooltip="Remove all repeating mappings"></i>
                         </div>
                         <div style="clear:both; height:0px;"></div>
                     </h2>
