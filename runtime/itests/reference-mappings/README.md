@@ -28,6 +28,32 @@ Within each of these high-level scenarios, the use cases are broken down into su
 
 Note: For simplicity and the ability to re-use validation methods, many of the test objects share the same name and data shape
 
+General filenaming convention
+
+Base folder structure: 
+ Java files: src/test/java/io/atlasmap/reference/${mapping source_to_target}/${source}${sarget}${scenario}Test.java
+ Mapping files: src/test/resources/${source}To{$Target}/atlasmapping-${data characteristics}-${scenario}-${index}.xml
+
+Example:
+ Java to Java AutoConversion test: 
+    src/test/java/io/atlasmap/reference/java_to_java/JavaJavaAutoConversionTest.java
+ method(s) / mapping file: 
+    testProcessJavaJavaFlatFieldMappingAutoConversion1() / src/test/resources/javaToJava/atlasmapping-flatprimitive-autoconversion-1.xml
+    testProcessJavaJavaFlatFieldMappingAutoConversion2() / src/test/resources/javaToJava/atlasmapping-flatprimitive-autoconversion-2.xml
+    testProcessJavaJavaFlatFieldMappingAutoConversion3() / src/test/resources/javaToJava/atlasmapping-flatprimitive-autoconversion-3.xml
+    ...
+
+Scenario Terminology: 
+   flatprimitive: An object that only contains 1 generation of child parameters (aka flat) that are all Java Primitives
+   boxedflatprimitive: An object that only contains 1 generation of child parameters (aka flat) that are all Java Boxed Primitives
+   complex: An object that contains other child objects 
+   combine: A mapping scenario that supports collecting multiple fields from a source document into one field in the target document
+   separate: A mapping scenario that supports splitting a single target field into multiple target fields
+   autodetect: A mapping where source and target FieldTypes are (for the most part) not specified in the mapping definition. This exercises the AutoDetection features.
+   autoconversion: A mapping where source and target fields are not of the same type, and no special field action or conversion is specified. This exercises the AutoConversion features.
+   rooted: An XML or JSON document that has a parent field that holds all the child fields in the object. 
+   unrooted: An XML or JSON document that does not have a parent field hold the object's child fields.
+
 ### Data Type Coverage ###
 
 The sub-tests include coverage for:
