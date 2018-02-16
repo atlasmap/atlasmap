@@ -285,7 +285,6 @@ public class SchemaInspector {
             XmlNamespace namespace = new XmlNamespace();
             namespace.setAlias(prefix);
             namespace.setUri(uri);
-            namespace.setTargetNamespace(rootNamespace != null && rootNamespace.equals(uri));
             xmlDocument.getXmlNamespaces().getXmlNamespace().add(namespace);
         }
     }
