@@ -577,6 +577,68 @@ export class DocumentManagementService {
             </xs:schema>
         `;
 
+        mockDoc = `
+        <d:SchemaSet xmlns:d="http://atlasmap.io/xml/schemaset/v2" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+          <xsd:schema targetNamespace="http://syndesis.io/v1/swagger-connector-template/request" elementFormDefault="qualified">
+            <xsd:element name="request">
+              <xsd:complexType>
+                <xsd:sequence>
+                  <xsd:element name="body">
+                    <xsd:complexType>
+                      <xsd:sequence>
+                        <xsd:element ref="Pet" />
+                      </xsd:sequence>
+                    </xsd:complexType>
+                  </xsd:element>
+                </xsd:sequence>
+              </xsd:complexType>
+            </xsd:element>
+          </xsd:schema>
+          <d:AdditionalSchemas>
+            <xsd:schema>
+              <xsd:element name="Pet">
+                <xsd:complexType>
+                  <xsd:sequence>
+                    <xsd:element name="id" type="xsd:decimal" />
+                    <xsd:element name="Category">
+                      <xsd:complexType>
+                        <xsd:sequence>
+                          <xsd:element name="id" type="xsd:decimal" />
+                          <xsd:element name="name" type="xsd:string" />
+                        </xsd:sequence>
+                      </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="name" type="xsd:string" />
+                    <xsd:element name="photoUrl">
+                      <xsd:complexType>
+                        <xsd:sequence>
+                          <xsd:element name="photoUrl" type="xsd:string" maxOccurs="unbounded" minOccurs="0" />
+                        </xsd:sequence>
+                      </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="tag">
+                      <xsd:complexType>
+                        <xsd:sequence>
+                          <xsd:element name="Tag" maxOccurs="unbounded" minOccurs="0">
+                            <xsd:complexType>
+                              <xsd:sequence>
+                                <xsd:element name="id" type="xsd:decimal" />
+                                <xsd:element name="name" type="xsd:string" />
+                              </xsd:sequence>
+                            </xsd:complexType>
+                          </xsd:element>
+                        </xsd:sequence>
+                      </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="status" type="xsd:string" />
+                  </xsd:sequence>
+                </xsd:complexType>
+              </xsd:element>
+            </xsd:schema>
+          </d:AdditionalSchemas>
+        </d:SchemaSet>
+        `;
+
         return mockDoc;
     }
 
