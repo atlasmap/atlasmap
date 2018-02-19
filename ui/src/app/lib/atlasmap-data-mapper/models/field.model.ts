@@ -58,7 +58,7 @@ export class Field {
     }
 
     getNameWithNamespace(): string {
-        if (!this.docDef || !this.namespaceAlias) {
+        if (!this.namespaceAlias) {
             return this.name;
         }
         return this.namespaceAlias + ':' + this.name;
