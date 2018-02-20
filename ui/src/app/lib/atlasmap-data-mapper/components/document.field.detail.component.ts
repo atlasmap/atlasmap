@@ -17,7 +17,8 @@
 import { Component, Input, ElementRef, ViewChild, ViewChildren, QueryList } from '@angular/core';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 
-import { DocumentType, ConfigModel } from '../models/config.model';
+import { DocumentType } from '../common/config.types';
+import { ConfigModel } from '../models/config.model';
 import { Field } from '../models/field.model';
 
 import { LineMachineComponent } from './line.machine.component';
@@ -50,10 +51,10 @@ import { FieldEditComponent } from './field.edit.component';
                     </div>
                     </div>
                     <div *ngIf="!field.docDef.populateChildren(field); else selectable" style="display:inline-block; color: gray;">
-                        <label>{{ field.getFieldLabel(false) }}</label>
+                        <label>{{ field.getFieldLabel(cfg.showTypes, false) }}</label>
                     </div>
                     <ng-template #selectable>
-                        <label>{{ field.getFieldLabel(false) }}</label>
+                        <label>{{ field.getFieldLabel(cfg.showTypes, false) }}</label>
                     </ng-template>
                     <div style="float:right; width:24px; text-align:right;" *ngIf="field.isSource()">
                         <i [attr.class]='getTransformationClass()'></i>

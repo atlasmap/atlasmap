@@ -24,21 +24,7 @@ import { MappingManagementService } from '../services/mapping.management.service
 import { InitializationService } from '../services/initialization.service';
 import { ErrorInfo } from '../models/error.model';
 
-export enum DocumentType {
-    JAVA = 'Java',
-    XML = 'XML',
-    JSON = 'JSON',
-    CORE = 'Core',
-    CSV = 'CSV',
-    CONSTANT = 'Constants',
-    PROPERTY = 'Property'
-}
-
-export enum InspectionType {
-    JAVA_CLASS = 'JAVA_CLASS',
-    SCHEMA = 'SCHEMA',
-    INSTANCE = 'INSTANCE'
-}
+import { DocumentType, InspectionType } from '../common/config.types';
 
 export class DataMapperInitializationModel {
     dataMapperVersion = '0.9.2017.07.28';

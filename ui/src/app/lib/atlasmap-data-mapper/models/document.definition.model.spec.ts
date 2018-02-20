@@ -2,7 +2,7 @@
 
 import { TestBed, async, inject } from '@angular/core/testing';
 import { NamespaceModel, DocumentDefinition  } from './document.definition.model';
-import { DocumentType  } from './config.model';
+import { DocumentType } from '../common/config.types';
 
 describe('DocumentDefinitionModel', () => {
   beforeEach(() => {

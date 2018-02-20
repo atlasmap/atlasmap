@@ -15,7 +15,8 @@
 */
 
 import { Field } from './field.model';
-import { DocumentType, InspectionType, ConfigModel } from '../models/config.model';
+import { DocumentType, InspectionType } from '../common/config.types';
+import { ConfigModel } from '../models/config.model';
 import { MappingDefinition } from '../models/mapping.definition.model';
 import { DataMapperUtil } from '../common/data.mapper.util';
 

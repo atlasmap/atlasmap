@@ -18,7 +18,8 @@ import { Component } from '@angular/core';
 
 import { DocumentDefinition, NamespaceModel } from '../models/document.definition.model';
 import { Field } from '../models/field.model';
-import { DocumentType, ConfigModel } from '../models/config.model';
+import { DocumentType } from '../common/config.types';
+import { ConfigModel } from '../models/config.model';
 import { Observable } from 'rxjs/Observable';
 import { ModalWindowValidator } from './modal.window.component';
 
@@ -181,14 +182,16 @@ export class FieldEditComponent implements ModalWindowValidator {
 
         if (this.docDef.type == DocumentType.JSON) {
             const noneField: Field = DocumentDefinition.getNoneField();
-            formattedFields.push({ 'field': noneField, 'displayName': noneField.getFieldLabel(true) });
+            formattedFields.push({ 'field': noneField,
+                                   'displayName': noneField.getFieldLabel(ConfigModel.getConfig().showTypes,
+                                   true) });
         }
 
         for (const field of this.docDef.getAllFields()) {
             if (!field.isParentField()) {
                 continue;
             }
-            const displayName = (field == null) ? '' : field.getFieldLabel(true);
+            const displayName = (field == null) ? '' : field.getFieldLabel(ConfigModel.getConfig().showTypes, true);
             const formattedField: any = { 'field': field, 'displayName': displayName };
             if (filter == null || filter == ''
                 || formattedField['displayName'].toLowerCase().indexOf(filter.toLowerCase()) != -1) {

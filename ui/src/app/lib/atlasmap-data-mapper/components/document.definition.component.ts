@@ -16,7 +16,8 @@
 
 import { Component, Input, ViewChildren, ElementRef, QueryList, ViewChild, OnInit } from '@angular/core';
 
-import { DocumentType, ConfigModel } from '../models/config.model';
+import { DocumentType } from '../common/config.types';
+import { ConfigModel } from '../models/config.model';
 import { Field } from '../models/field.model';
 import { DocumentDefinition } from '../models/document.definition.model';
 

@@ -16,7 +16,8 @@ limitations under the License.
 
 import { Component, Input } from '@angular/core';
 
-import { DocumentType, ConfigModel } from '../models/config.model';
+import { DocumentType } from '../common/config.types';
+import { ConfigModel } from '../models/config.model';
 import { DocumentDefinition } from '../models/document.definition.model';
 
 import { LineMachineComponent } from './line.machine.component';

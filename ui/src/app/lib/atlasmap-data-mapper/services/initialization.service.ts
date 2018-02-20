@@ -20,7 +20,8 @@ import 'rxjs/add/observable/forkJoin';
 import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Observable';
 
-import { DocumentType, InspectionType, DocumentInitializationModel, ConfigModel } from '../models/config.model';
+import { DocumentType, InspectionType } from '../common/config.types';
+import { DocumentInitializationModel, ConfigModel } from '../models/config.model';
 import { DocumentDefinition } from '../models/document.definition.model';
 import { MappingDefinition } from '../models/mapping.definition.model';
 
