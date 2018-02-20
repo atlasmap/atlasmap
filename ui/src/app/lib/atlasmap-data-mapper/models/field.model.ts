@@ -144,8 +144,7 @@ export class Field {
         let fieldPath = includePath ? this.path : this.getNameWithNamespace();
         if (showTypes && this.type && !this.isPropertyOrConstant()) {
             fieldPath += ' (' + this.type + ')';
-        }
-        else if (this.isProperty() && this.value != null) {
+        } else if (this.isProperty() && this.value != null) {
             fieldPath += ' = ' + this.value;
             if (showTypes && this.type) {
                 fieldPath += ' (' + this.type + ')';
