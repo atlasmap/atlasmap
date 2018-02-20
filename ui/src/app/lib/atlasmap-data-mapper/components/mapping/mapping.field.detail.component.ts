@@ -52,7 +52,7 @@ import { MappingModel, FieldMappingPair, MappedField } from '../../models/mappin
             </label>
             <div style="width:100%;">
                 <input type="text" id="{{inputId}}"
-                    [ngModel]="mappedField.field.getFieldLabel(false)" [typeahead]="dataSource"
+                    [ngModel]="mappedField.field.getFieldLabel(cfg.showTypes, false)" [typeahead]="dataSource"
                     typeaheadWaitMs="200" (typeaheadOnSelect)="selectionChanged($event)"
                     typeaheadOptionField="displayName" [typeaheadItemTemplate]="typeaheadTemplate"
                     placeholder="Search">
@@ -114,7 +114,7 @@ export class MappingFieldDetailComponent implements OnInit {
         }
         const activeMapping: MappingModel = this.cfg.mappings.activeMapping;
         for (const field of fields) {
-            const displayName = (field == null) ? '' : field.getFieldLabel(true);
+            const displayName = (field == null) ? '' : field.getFieldLabel(ConfigModel.getConfig().showTypes, true);
             const formattedField: any = { 'field': field, 'displayName': displayName };
             if (filter == null || filter == ''
                 || formattedField['displayName'].toLowerCase().indexOf(filter.toLowerCase()) != -1) {
@@ -137,7 +137,8 @@ export class MappingFieldDetailComponent implements OnInit {
     }
 
     private getInputId(): string {
-        return 'input-' + (this.isSource ? 'source' : 'target') + '-' + this.mappedField.field.getFieldLabel(false);
+        return 'input-' + (this.isSource ? 'source' : 'target') + '-' +
+           this.mappedField.field.getFieldLabel(ConfigModel.getConfig().showTypes, false);
     }
 
     private getSourceIconCSSClass(): string {

@@ -21,7 +21,8 @@ import { Field } from '../models/field.model';
 import { MappingDefinition } from '../models/mapping.definition.model';
 import { DocumentDefinition, NamespaceModel } from '../models/document.definition.model';
 import { LookupTable, LookupTableEntry } from '../models/lookup.table.model';
-import { DocumentType, ConfigModel } from '../models/config.model';
+import { DocumentType } from '../common/config.types';
+import { ConfigModel } from '../models/config.model';
 
 export class MappingSerializer {
 

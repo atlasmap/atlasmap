@@ -57,7 +57,7 @@ export class MappingListFieldComponent {
             || (this.mappedField.field == DocumentDefinition.getNoneField())) {
             return '[None]';
         }
-        return this.mappedField.field.getFieldLabel(true);
+        return this.mappedField.field.getFieldLabel(ConfigModel.getConfig().showTypes, true);
     }
 
     displayParentObject(): boolean {

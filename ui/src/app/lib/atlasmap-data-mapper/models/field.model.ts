@@ -14,8 +14,8 @@
     limitations under the License.
 */
 
+import { DocumentType } from '../common/config.types';
 import { DocumentDefinition } from './document.definition.model';
-import { DocumentType, ConfigModel } from '../models/config.model';
 
 export class EnumValue {
     name: string;
@@ -140,13 +140,15 @@ export class Field {
         return this.isCollection ? (this.isArray ? 'ARRAY' : 'LIST') : null;
     }
 
-    getFieldLabel(includePath: boolean): string {
+    getFieldLabel(showTypes: boolean, includePath: boolean): string {
         let fieldPath = includePath ? this.path : this.getNameWithNamespace();
-        if (this != DocumentDefinition.getNoneField() && ConfigModel.getConfig().showTypes && this.type && !this.isPropertyOrConstant()) {
-            fieldPath = fieldPath + ' (' + this.type + ')';
-        }
-        if (this.isProperty() && this.value != null) {
+        if (showTypes && this.type && !this.isPropertyOrConstant()) {
+            fieldPath += ' (' + this.type + ')';
+        } else if (this.isProperty() && this.value != null) {
             fieldPath += ' = ' + this.value;
+            if (showTypes && this.type) {
+                fieldPath += ' (' + this.type + ')';
+            }
         }
         return fieldPath;
     }

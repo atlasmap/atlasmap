@@ -20,7 +20,8 @@ import 'rxjs/add/operator/toPromise';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/forkJoin';
 
-import { DocumentType, ConfigModel } from '../models/config.model';
+import { DocumentType } from '../common/config.types';
+import { ConfigModel } from '../models/config.model';
 import { Field, EnumValue } from '../models/field.model';
 import { DocumentDefinition, NamespaceModel } from '../models/document.definition.model';
 
