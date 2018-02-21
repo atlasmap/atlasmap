@@ -21,8 +21,8 @@ import { Field } from '../models/field.model';
 import { ModalWindowValidator } from './modal.window.component';
 
 @Component({
-    selector: 'property-field-edit',
-    template: `
+  selector: 'property-field-edit',
+  template: `
         <div class="DataMapperEditComponent">
             <div class="form-group">
                 <label>Name:</label>
@@ -64,29 +64,29 @@ import { ModalWindowValidator } from './modal.window.component';
 })
 
 export class PropertyFieldEditComponent implements ModalWindowValidator {
-    field: Field = new Field();
-    valueType: any = 'STRING';
+  field: Field = new Field();
+  valueType: any = 'STRING';
 
-    initialize(field: Field): void {
-        if (field != null) {
-            this.valueType = field.type;
-        }
-        this.field = field == null ? new Field() : field.copy();
+  initialize(field: Field): void {
+    if (field != null) {
+      this.valueType = field.type;
     }
+    this.field = field == null ? new Field() : field.copy();
+  }
 
-    valueTypeSelectionChanged(event: any): void {
-        this.valueType = event.target.selectedOptions.item(0).attributes.getNamedItem('value').value;
-    }
+  valueTypeSelectionChanged(event: any): void {
+    this.valueType = event.target.selectedOptions.item(0).attributes.getNamedItem('value').value;
+  }
 
-    getField(): Field {
-        this.field.displayName = this.field.name;
-        this.field.path = this.field.name;
-        this.field.type = this.valueType;
-        this.field.userCreated = true;
-        return this.field;
-    }
+  getField(): Field {
+    this.field.displayName = this.field.name;
+    this.field.path = this.field.name;
+    this.field.type = this.valueType;
+    this.field.userCreated = true;
+    return this.field;
+  }
 
-    isDataValid(): boolean {
-        return ConfigModel.getConfig().isRequiredFieldValid(this.field.name, 'Name');
-    }
+  isDataValid(): boolean {
+    return ConfigModel.getConfig().isRequiredFieldValid(this.field.name, 'Name');
+  }
 }

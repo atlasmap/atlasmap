@@ -23,8 +23,8 @@ import { DocumentDefinition } from '../../models/document.definition.model';
 import { MappingModel, FieldMappingPair, MappedField } from '../../models/mapping.model';
 
 @Component({
-    selector: 'mapping-field-detail',
-    template: `
+  selector: 'mapping-field-detail',
+  template: `
         <!-- our template for type ahead -->
         <ng-template #typeaheadTemplate let-model="item" let-index="index">
             <h5 style="font-style:italic;">{{ model['field'].docDef == null ? '' : model['field'].docDef.name }}</h5>
@@ -63,93 +63,93 @@ import { MappingModel, FieldMappingPair, MappedField } from '../../models/mappin
 
 export class MappingFieldDetailComponent implements OnInit {
 
-    @Input() cfg: ConfigModel;
-    @Input() fieldPair: FieldMappingPair;
-    @Input() isSource: boolean;
-    @Input() mappedField: MappedField;
+  @Input() cfg: ConfigModel;
+  @Input() fieldPair: FieldMappingPair;
+  @Input() isSource: boolean;
+  @Input() mappedField: MappedField;
 
-    dataSource: Observable<any>;
-    inputId: string;
-    sourceIconCSSClass: string;
-    parentObjectName: string;
+  dataSource: Observable<any>;
+  inputId: string;
+  sourceIconCSSClass: string;
+  parentObjectName: string;
 
-    constructor() {
-        this.dataSource = Observable.create((observer: any) => {
-            observer.next(this.executeSearch(observer.outerValue));
-        });
+  constructor() {
+    this.dataSource = Observable.create((observer: any) => {
+      observer.next(this.executeSearch(observer.outerValue));
+    });
+  }
+
+  ngOnInit() {
+    this.updateTemplateValues();
+  }
+
+  getFieldPath(): string {
+    if (this.mappedField == null || this.mappedField.field == null
+      || (this.mappedField.field == DocumentDefinition.getNoneField())) {
+      return '[None]';
     }
+    return this.mappedField.field.path;
+  }
 
-    ngOnInit() {
-        this.updateTemplateValues();
+  displayParentObject(): boolean {
+    if (this.mappedField == null || this.mappedField.field == null
+      || this.mappedField.field.docDef == null
+      || (this.mappedField.field == DocumentDefinition.getNoneField())) {
+      return false;
     }
+    return true;
+  }
 
-    getFieldPath(): string {
-        if (this.mappedField == null || this.mappedField.field == null
-            || (this.mappedField.field == DocumentDefinition.getNoneField())) {
-            return '[None]';
+  selectionChanged(event: any): void {
+    this.mappedField.field = event.item['field'];
+    this.cfg.mappingService.updateMappedField(this.fieldPair);
+    this.updateTemplateValues();
+  }
+
+  executeSearch(filter: string): any[] {
+    const formattedFields: any[] = [];
+    let fields: Field[] = [DocumentDefinition.getNoneField()];
+    for (const docDef of this.cfg.getDocs(this.isSource)) {
+      fields = fields.concat(docDef.getTerminalFields());
+    }
+    const activeMapping: MappingModel = this.cfg.mappings.activeMapping;
+    for (const field of fields) {
+      const displayName = (field == null) ? '' : field.getFieldLabel(ConfigModel.getConfig().showTypes, true);
+      const formattedField: any = { 'field': field, 'displayName': displayName };
+      if (filter == null || filter == ''
+        || formattedField['displayName'].toLowerCase().indexOf(filter.toLowerCase()) != -1) {
+        if (!activeMapping.isFieldSelectable(field)) {
+          continue;
         }
-        return this.mappedField.field.path;
+        formattedFields.push(formattedField);
+      }
+      if (formattedFields.length > 9) {
+        break;
+      }
     }
+    return formattedFields;
+  }
 
-    displayParentObject(): boolean {
-        if (this.mappedField == null || this.mappedField.field == null
-            || this.mappedField.field.docDef == null
-            || (this.mappedField.field == DocumentDefinition.getNoneField())) {
-            return false;
-        }
-        return true;
-    }
+  private updateTemplateValues(): void {
+    this.inputId = this.getInputId();
+    this.sourceIconCSSClass = this.getSourceIconCSSClass();
+    this.parentObjectName = this.getParentObjectName();
+  }
 
-    selectionChanged(event: any): void {
-        this.mappedField.field = event.item['field'];
-        this.cfg.mappingService.updateMappedField(this.fieldPair);
-        this.updateTemplateValues();
-    }
+  private getInputId(): string {
+    return 'input-' + (this.isSource ? 'source' : 'target') + '-' +
+      this.mappedField.field.getFieldLabel(ConfigModel.getConfig().showTypes, false);
+  }
 
-    executeSearch(filter: string): any[] {
-        const formattedFields: any[] = [];
-        let fields: Field[] = [DocumentDefinition.getNoneField()];
-        for (const docDef of this.cfg.getDocs(this.isSource)) {
-            fields = fields.concat(docDef.getTerminalFields());
-        }
-        const activeMapping: MappingModel = this.cfg.mappings.activeMapping;
-        for (const field of fields) {
-            const displayName = (field == null) ? '' : field.getFieldLabel(ConfigModel.getConfig().showTypes, true);
-            const formattedField: any = { 'field': field, 'displayName': displayName };
-            if (filter == null || filter == ''
-                || formattedField['displayName'].toLowerCase().indexOf(filter.toLowerCase()) != -1) {
-                if (!activeMapping.isFieldSelectable(field)) {
-                    continue;
-                }
-                formattedFields.push(formattedField);
-            }
-            if (formattedFields.length > 9) {
-                break;
-            }
-        }
-        return formattedFields;
-    }
+  private getSourceIconCSSClass(): string {
+    return this.isSource ? 'fa fa-hdd-o' : 'fa fa-download';
+  }
 
-    private updateTemplateValues(): void {
-        this.inputId = this.getInputId();
-        this.sourceIconCSSClass = this.getSourceIconCSSClass();
-        this.parentObjectName = this.getParentObjectName();
+  private getParentObjectName() {
+    if (this.mappedField == null || this.mappedField.field == null || this.mappedField.field.docDef == null) {
+      return '';
     }
-
-    private getInputId(): string {
-        return 'input-' + (this.isSource ? 'source' : 'target') + '-' +
-           this.mappedField.field.getFieldLabel(ConfigModel.getConfig().showTypes, false);
-    }
-
-    private getSourceIconCSSClass(): string {
-        return this.isSource ? 'fa fa-hdd-o' : 'fa fa-download';
-    }
-
-    private getParentObjectName() {
-        if (this.mappedField == null || this.mappedField.field == null || this.mappedField.field.docDef == null) {
-            return '';
-        }
-        return this.mappedField.field.docDef.getName(ConfigModel.getConfig().showTypes);
-    }
+    return this.mappedField.field.docDef.getName(ConfigModel.getConfig().showTypes);
+  }
 
 }

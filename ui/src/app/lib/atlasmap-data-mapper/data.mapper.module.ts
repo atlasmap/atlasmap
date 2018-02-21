@@ -43,7 +43,7 @@ import { NamespaceEditComponent } from './components/namespace.edit.component';
 import { MappingListComponent, MappingListFieldComponent } from './components/mapping/mapping.list.component';
 import { NamespaceListComponent } from './components/namespace.list.component';
 import {
-    MappingDetailComponent, CollectionMappingComponent, SimpleMappingComponent, MappingPairDetailComponent
+  MappingDetailComponent, CollectionMappingComponent, SimpleMappingComponent, MappingPairDetailComponent
 } from './components/mapping/mapping.detail.component';
 import { MappingFieldDetailComponent } from './components/mapping/mapping.field.detail.component';
 import { MappingFieldActionComponent } from './components/mapping/mapping.field.action.component';
@@ -69,67 +69,67 @@ import { ToErrorIconClassPipe } from './common/to-error-icon-class.pipe';
 export { DataMapperAppComponent } from './components/data.mapper.app.component';
 
 @NgModule({
-    imports: [
-        CommonModule,
-        HttpModule,
-        FormsModule,
-        TypeaheadModule.forRoot(),
-        TooltipModule.forRoot(),
-        BsDropdownModule.forRoot(),
-    ],
-    declarations: [
-        DataMapperAppComponent,
-        DocumentDefinitionComponent,
-        MappingDetailComponent,
-        SimpleMappingComponent,
-        CollectionMappingComponent,
-        MappingPairDetailComponent,
-        ModalWindowComponent,
-        DataMapperAppExampleHostComponent,
-        MappingFieldActionComponent,
-        MappingFieldDetailComponent,
-        DocumentFieldDetailComponent,
-        DataMapperErrorComponent,
-        TransitionSelectionComponent,
-        LineMachineComponent,
-        MappingSelectionComponent,
-        MappingSelectionSectionComponent,
-        ToolbarComponent,
-        LookupTableComponent,
-        EmptyModalBodyComponent,
-        FieldEditComponent,
-        NamespaceEditComponent,
-        PropertyFieldEditComponent,
-        ConstantFieldEditComponent,
-        CollapsableHeaderComponent,
-        MappingListComponent,
-        MappingListFieldComponent,
-        NamespaceListComponent,
-        TemplateEditComponent,
-        FocusDirective,
-        ToErrorIconClassPipe
-    ],
-    exports: [
-        DataMapperAppExampleHostComponent,
-        ModalWindowComponent,
-        DataMapperAppComponent,
-    ],
-    providers: [
-        DocumentManagementService,
-        MappingManagementService,
-        ErrorHandlerService,
-        InitializationService,
-    ],
-    entryComponents: [
-        MappingSelectionComponent,
-        LookupTableComponent,
-        EmptyModalBodyComponent,
-        FieldEditComponent,
-        NamespaceEditComponent,
-        PropertyFieldEditComponent,
-        ConstantFieldEditComponent,
-        TemplateEditComponent,
-    ],
-    bootstrap: [ DataMapperAppExampleHostComponent ],
+  imports: [
+    CommonModule,
+    HttpModule,
+    FormsModule,
+    TypeaheadModule.forRoot(),
+    TooltipModule.forRoot(),
+    BsDropdownModule.forRoot(),
+  ],
+  declarations: [
+    DataMapperAppComponent,
+    DocumentDefinitionComponent,
+    MappingDetailComponent,
+    SimpleMappingComponent,
+    CollectionMappingComponent,
+    MappingPairDetailComponent,
+    ModalWindowComponent,
+    DataMapperAppExampleHostComponent,
+    MappingFieldActionComponent,
+    MappingFieldDetailComponent,
+    DocumentFieldDetailComponent,
+    DataMapperErrorComponent,
+    TransitionSelectionComponent,
+    LineMachineComponent,
+    MappingSelectionComponent,
+    MappingSelectionSectionComponent,
+    ToolbarComponent,
+    LookupTableComponent,
+    EmptyModalBodyComponent,
+    FieldEditComponent,
+    NamespaceEditComponent,
+    PropertyFieldEditComponent,
+    ConstantFieldEditComponent,
+    CollapsableHeaderComponent,
+    MappingListComponent,
+    MappingListFieldComponent,
+    NamespaceListComponent,
+    TemplateEditComponent,
+    FocusDirective,
+    ToErrorIconClassPipe
+  ],
+  exports: [
+    DataMapperAppExampleHostComponent,
+    ModalWindowComponent,
+    DataMapperAppComponent,
+  ],
+  providers: [
+    DocumentManagementService,
+    MappingManagementService,
+    ErrorHandlerService,
+    InitializationService,
+  ],
+  entryComponents: [
+    MappingSelectionComponent,
+    LookupTableComponent,
+    EmptyModalBodyComponent,
+    FieldEditComponent,
+    NamespaceEditComponent,
+    PropertyFieldEditComponent,
+    ConstantFieldEditComponent,
+    TemplateEditComponent,
+  ],
+  bootstrap: [DataMapperAppExampleHostComponent],
 })
 export class DataMapperModule { }

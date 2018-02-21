@@ -15,28 +15,28 @@
 */
 
 export class DataMapperUtil {
-    static removeItemFromArray(item: any, items: any[]): boolean {
-        if (item == null || items == null || items.length == 0) {
-            return false;
-        }
-        let i = 0;
-        let itemWasRemoved = false;
-        while (i < items.length) {
-            if (items[i] == item) {
-                items.splice(i, 1);
-                itemWasRemoved = true;
-            } else {
-                i++;
-            }
-        }
-        return itemWasRemoved;
+  static removeItemFromArray(item: any, items: any[]): boolean {
+    if (item == null || items == null || items.length == 0) {
+      return false;
     }
+    let i = 0;
+    let itemWasRemoved = false;
+    while (i < items.length) {
+      if (items[i] == item) {
+        items.splice(i, 1);
+        itemWasRemoved = true;
+      } else {
+        i++;
+      }
+    }
+    return itemWasRemoved;
+  }
 
-    static debugLogJSON(object: any, description: string, loggingEnabled: boolean, url: string): void {
-        if (!loggingEnabled) {
-            return;
-        }
-        object = (object == null) ? '[none]' : object;
-        url = (url == null) ? '[none]' : url;
+  static debugLogJSON(object: any, description: string, loggingEnabled: boolean, url: string): void {
+    if (!loggingEnabled) {
+      return;
     }
+    object = (object == null) ? '[none]' : object;
+    url = (url == null) ? '[none]' : url;
+  }
 }

@@ -21,8 +21,8 @@ import { NamespaceModel } from '../models/document.definition.model';
 import { ModalWindowValidator } from './modal.window.component';
 
 @Component({
-    selector: 'namespace-edit',
-    template: `
+  selector: 'namespace-edit',
+  template: `
         <div class="PropertyEditFieldComponent">
             <div class="form-group">
                 <label>Alias</label>
@@ -48,30 +48,30 @@ import { ModalWindowValidator } from './modal.window.component';
 })
 
 export class NamespaceEditComponent implements ModalWindowValidator {
-    namespace: NamespaceModel = new NamespaceModel();
-    targetEnabled = true;
+  namespace: NamespaceModel = new NamespaceModel();
+  targetEnabled = true;
 
-    initialize(namespace: NamespaceModel, namespaces: NamespaceModel[]): void {
-        this.namespace = (namespace == null) ? new NamespaceModel() : namespace.copy();
-        if (!namespace.isTarget) {
-            for (const ns of namespaces) {
-                if (ns.isTarget) {
-                    this.targetEnabled = false;
-                    break;
-                }
-            }
+  initialize(namespace: NamespaceModel, namespaces: NamespaceModel[]): void {
+    this.namespace = (namespace == null) ? new NamespaceModel() : namespace.copy();
+    if (!namespace.isTarget) {
+      for (const ns of namespaces) {
+        if (ns.isTarget) {
+          this.targetEnabled = false;
+          break;
         }
+      }
     }
+  }
 
-    targetToggled(): void {
-        this.namespace.isTarget = !this.namespace.isTarget;
-        this.namespace.alias = this.namespace.isTarget ? 'tns' : '';
-    }
+  targetToggled(): void {
+    this.namespace.isTarget = !this.namespace.isTarget;
+    this.namespace.alias = this.namespace.isTarget ? 'tns' : '';
+  }
 
-    isDataValid(): boolean {
-        const configModel: ConfigModel = ConfigModel.getConfig();
-        let dataIsValid: boolean = configModel.isRequiredFieldValid(this.namespace.alias, 'Alias');
-        dataIsValid = configModel.isRequiredFieldValid(this.namespace.uri, 'URI') && dataIsValid;
-        return dataIsValid;
-    }
+  isDataValid(): boolean {
+    const configModel: ConfigModel = ConfigModel.getConfig();
+    let dataIsValid: boolean = configModel.isRequiredFieldValid(this.namespace.alias, 'Alias');
+    dataIsValid = configModel.isRequiredFieldValid(this.namespace.uri, 'URI') && dataIsValid;
+    return dataIsValid;
+  }
 }

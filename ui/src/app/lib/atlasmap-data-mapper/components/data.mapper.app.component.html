@@ -1,45 +1,43 @@
 <div class="DataMapperUI">
-    <!-- <div class="DataMapperUIBackground"></div> -->
-    <!-- <div class="DataMapperUIBackgroundCover"></div> -->
-    <div [attr.class]="getConfig().initCfg.initialized ? 'dataMapperBody' : 'dataMapperBodyHidden'">
-        <div class="row">
-            <data-mapper-error #errorPanel [isValidation]="false" [errorService]="getConfig().errorService"></data-mapper-error>
+  <!-- <div class="DataMapperUIBackground"></div> -->
+  <!-- <div class="DataMapperUIBackgroundCover"></div> -->
+  <div [attr.class]="getConfig().initCfg.initialized ? 'dataMapperBody' : 'dataMapperBodyHidden'">
+    <div class="row">
+      <data-mapper-error #errorPanel [isValidation]="false" [errorService]="getConfig().errorService"></data-mapper-error>
+    </div>
+    <div class="row" style="min-height:0px;">
+      <modal-window #modalWindow [cfg]="getConfig()"></modal-window>
+    </div>
+    <div class="row">
+      <dm-toolbar #toolbarComponent [cfg]="getConfig()" [lineMachine]="lineMachine" [modalWindow]="modalWindow"></dm-toolbar>
+    </div>
+    <div class="row" style="height:calc(100% - 32px); position:relative; padding-top:10px;" *ngIf="hasSourceDoc && hasTargetDoc">
+      <div style='height:100%; padding:0;' [attr.class]="(getConfig().showMappingTable || getConfig().showNamespaceTable) ? 'col-md-9 hidden' : 'col-md-9'">
+        <div style="float:left; width:40%; height:100%;">
+          <document-definition #docDefInput [cfg]="getConfig()" [modalWindow]="modalWindow" [isSource]="true" [lineMachine]="lineMachine"></document-definition>
         </div>
-        <div class="row" style="min-height:0px;"><modal-window #modalWindow [cfg]="getConfig()"></modal-window></div>
-        <div class="row">
-            <dm-toolbar #toolbarComponent [cfg]="getConfig()" [lineMachine]="lineMachine" [modalWindow]="modalWindow"></dm-toolbar>
+        <div style="float:left; width:20%; height:100%; margin-left:-5px; margin-right:-5px;">
+          <line-machine #lineMachine [cfg]="getConfig()" [docDefInput]="docDefInput" [docDefOutput]="docDefOutput"></line-machine>
         </div>
-        <div class="row" style="height:calc(100% - 32px); position:relative; padding-top:10px;"
-            *ngIf="hasSourceDoc && hasTargetDoc">
-            <div style='height:100%; padding:0;' [attr.class]="(getConfig().showMappingTable || getConfig().showNamespaceTable) ? 'col-md-9 hidden' : 'col-md-9'">
-                <div style="float:left; width:40%; height:100%;">
-                    <document-definition #docDefInput [cfg]="getConfig()" [modalWindow]="modalWindow"
-                        [isSource]="true" [lineMachine]="lineMachine"></document-definition>
-                </div>
-                <div style="float:left; width:20%; height:100%; margin-left:-5px; margin-right:-5px;">
-                    <line-machine #lineMachine [cfg]="getConfig()"
-                        [docDefInput]="docDefInput" [docDefOutput]="docDefOutput"></line-machine>
-                </div>
-                <div style="float:left; width:40%; height:100%;">
-                    <document-definition #docDefOutput [cfg]="getConfig()" [modalWindow]="modalWindow"
-                        [isSource]="false" [lineMachine]="lineMachine"></document-definition>
-                </div>
-                <div class="clear"></div>
-            </div>
-            <div class="col-md-9" style='height:100%; padding:0;' *ngIf="getConfig().showMappingTable">
-                <mapping-list [cfg]="getConfig()"></mapping-list>
-            </div>
-            <div class="col-md-9" style='height:100%; padding:0;' *ngIf="getConfig().showNamespaceTable">
-                <namespace-list [cfg]="getConfig()" [modalWindow]="modalWindow"></namespace-list>
-            </div>
+        <div style="float:left; width:40%; height:100%;">
+          <document-definition #docDefOutput [cfg]="getConfig()" [modalWindow]="modalWindow" [isSource]="false" [lineMachine]="lineMachine"></document-definition>
+        </div>
+        <div class="clear"></div>
+      </div>
+      <div class="col-md-9" style='height:100%; padding:0;' *ngIf="getConfig().showMappingTable">
+        <mapping-list [cfg]="getConfig()"></mapping-list>
+      </div>
+      <div class="col-md-9" style='height:100%; padding:0;' *ngIf="getConfig().showNamespaceTable">
+        <namespace-list [cfg]="getConfig()" [modalWindow]="modalWindow"></namespace-list>
+      </div>
 
-            <div class="col-md-3" style="padding:0px; height:100%;">
-                <mapping-detail #mappingDetailComponent [cfg]="getConfig()" [modalWindow]="modalWindow"></mapping-detail>
-            </div>
-        </div>
+      <div class="col-md-3" style="padding:0px; height:100%;">
+        <mapping-detail #mappingDetailComponent [cfg]="getConfig()" [modalWindow]="modalWindow"></mapping-detail>
+      </div>
     </div>
-    <div class="DataMapperLoadingMessage" *ngIf="!getConfig().initCfg.initialized">
-        <label [attr.class]="getConfig().initCfg.initializationErrorOccurred ? 'error' : ''">{{ loadingStatus }}</label>
-        <span class="spinner spinner-xs spinner-inline" *ngIf="!getConfig().initCfg.initializationErrorOccurred"></span>
-    </div>
+  </div>
+  <div class="DataMapperLoadingMessage" *ngIf="!getConfig().initCfg.initialized">
+    <label [attr.class]="getConfig().initCfg.initializationErrorOccurred ? 'error' : ''">{{ loadingStatus }}</label>
+    <span class="spinner spinner-xs spinner-inline" *ngIf="!getConfig().initCfg.initializationErrorOccurred"></span>
+  </div>
 </div>

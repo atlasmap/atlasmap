@@ -23,8 +23,8 @@ import { Field } from '../../models/field.model';
 import { ModalWindowComponent } from '../modal.window.component';
 
 @Component({
-    selector: 'mapping-selection-section',
-    template: `
+  selector: 'mapping-selection-section',
+  template: `
         <div [attr.class]="getClass()" (click)="handleMouseClick($event)">
             <div class="numberWrapper"><div class="number">{{ outputNumber + 1 }}</div></div>
             <div class="pathContainer">
@@ -63,51 +63,51 @@ import { ModalWindowComponent } from '../modal.window.component';
 })
 
 export class MappingSelectionSectionComponent {
-    @Input() outputNumber: number;
-    @Input() mapping: MappingModel;
-    @Input() selectedCallback: Function;
-    @Input() selected = false;
-    @Input() selectedFieldIsSource = false;
-    @Input() parentComponent: Component;
-    @Input() isOddRow = false;
+  @Input() outputNumber: number;
+  @Input() mapping: MappingModel;
+  @Input() selectedCallback: Function;
+  @Input() selected = false;
+  @Input() selectedFieldIsSource = false;
+  @Input() parentComponent: Component;
+  @Input() isOddRow = false;
 
-    getClass(): string {
-        let cssClass = 'MappingSelectionSection';
-        if (this.selected) {
-            cssClass += ' SelectedMappingSelectionSection';
-        }
-        if (this.isOddRow) {
-            cssClass += ' odd';
-        }
-        return cssClass;
+  getClass(): string {
+    let cssClass = 'MappingSelectionSection';
+    if (this.selected) {
+      cssClass += ' SelectedMappingSelectionSection';
     }
+    if (this.isOddRow) {
+      cssClass += ' odd';
+    }
+    return cssClass;
+  }
 
-    getSourceTargetLabelText(isSource: boolean, fieldPair: FieldMappingPair): string {
-        if (isSource) {
-            return (fieldPair.sourceFields.length > 0) ? 'Sources' : 'Source';
-        }
-        return (fieldPair.targetFields.length > 0) ? 'Targets' : 'Target';
+  getSourceTargetLabelText(isSource: boolean, fieldPair: FieldMappingPair): string {
+    if (isSource) {
+      return (fieldPair.sourceFields.length > 0) ? 'Sources' : 'Source';
     }
+    return (fieldPair.targetFields.length > 0) ? 'Targets' : 'Target';
+  }
 
-    getFormattedOutputPath(path: string, nameOnly: boolean) {
-        if (path == null) {
-            return '';
-        }
-        path = path.replace('.', '/');
-        const index: number = path.lastIndexOf('/');
-        const fieldName: string = (index == -1) ? path : path.substr(path.lastIndexOf('/') + 1);
-        path = (index == -1) ? '' : path.substr(0, path.lastIndexOf('/') + 1);
-        return nameOnly ? fieldName : path;
+  getFormattedOutputPath(path: string, nameOnly: boolean) {
+    if (path == null) {
+      return '';
     }
+    path = path.replace('.', '/');
+    const index: number = path.lastIndexOf('/');
+    const fieldName: string = (index == -1) ? path : path.substr(path.lastIndexOf('/') + 1);
+    path = (index == -1) ? '' : path.substr(0, path.lastIndexOf('/') + 1);
+    return nameOnly ? fieldName : path;
+  }
 
-    handleMouseClick(event: MouseEvent) {
-        this.selectedCallback(this);
-    }
+  handleMouseClick(event: MouseEvent) {
+    this.selectedCallback(this);
+  }
 }
 
 @Component({
-    selector: 'mapping-selection',
-    template: `
+  selector: 'mapping-selection',
+  template: `
         <div class="MappingSelectionComponent" *ngIf="mappings">
             <div class="header">
                 <div class="sourceTargetHeader">{{ selectedField.isSource() ? 'Source' : 'Target' }}</div>
@@ -133,50 +133,50 @@ export class MappingSelectionSectionComponent {
 })
 
 export class MappingSelectionComponent {
-    modalWindow: ModalWindowComponent;
-    mappings: MappingModel[];
-    selectedField: Field = null;
-    cfg: ConfigModel;
+  modalWindow: ModalWindowComponent;
+  mappings: MappingModel[];
+  selectedField: Field = null;
+  cfg: ConfigModel;
 
-    @ViewChildren('mappingSection') sectionComponents: QueryList<MappingSelectionSectionComponent>;
+  @ViewChildren('mappingSection') sectionComponents: QueryList<MappingSelectionSectionComponent>;
 
-    private selectedMappingComponent: MappingSelectionSectionComponent = null;
+  private selectedMappingComponent: MappingSelectionSectionComponent = null;
 
-    selectionChanged(c: MappingSelectionSectionComponent) {
-        const self: MappingSelectionComponent = c.parentComponent as MappingSelectionComponent;
-        const oldSelectedItem: MappingSelectionSectionComponent = self.getSelectedMappingComponent();
-        oldSelectedItem.selected = false;
-        c.selected = true;
-        self.selectedMappingComponent = c;
-    }
+  selectionChanged(c: MappingSelectionSectionComponent) {
+    const self: MappingSelectionComponent = c.parentComponent as MappingSelectionComponent;
+    const oldSelectedItem: MappingSelectionSectionComponent = self.getSelectedMappingComponent();
+    oldSelectedItem.selected = false;
+    c.selected = true;
+    self.selectedMappingComponent = c;
+  }
 
-    getFormattedOutputPath(path: string, nameOnly: boolean) {
-        path = path.replace('.', '/');
-        const index: number = path.lastIndexOf('/');
-        const fieldName: string = (index == -1) ? path : path.substr(path.lastIndexOf('/') + 1);
-        path = (index == -1) ? '' : path.substr(0, path.lastIndexOf('/') + 1);
-        return nameOnly ? fieldName : path;
-    }
+  getFormattedOutputPath(path: string, nameOnly: boolean) {
+    path = path.replace('.', '/');
+    const index: number = path.lastIndexOf('/');
+    const fieldName: string = (index == -1) ? path : path.substr(path.lastIndexOf('/') + 1);
+    path = (index == -1) ? '' : path.substr(0, path.lastIndexOf('/') + 1);
+    return nameOnly ? fieldName : path;
+  }
 
-    addMapping() {
-        this.cfg.mappingService.addNewMapping(this.selectedField);
-        this.modalWindow.close();
-    }
+  addMapping() {
+    this.cfg.mappingService.addNewMapping(this.selectedField);
+    this.modalWindow.close();
+  }
 
-    getSelectedMapping(): MappingModel {
-        return this.getSelectedMappingComponent().mapping;
-    }
+  getSelectedMapping(): MappingModel {
+    return this.getSelectedMappingComponent().mapping;
+  }
 
-    private getSelectedMappingComponent(): MappingSelectionSectionComponent {
-        if (this.selectedMappingComponent == null) {
-            for (const c of this.sectionComponents.toArray()) {
-                if (c.selected) {
-                    this.selectedMappingComponent = c;
-                    break;
-                }
-            }
+  private getSelectedMappingComponent(): MappingSelectionSectionComponent {
+    if (this.selectedMappingComponent == null) {
+      for (const c of this.sectionComponents.toArray()) {
+        if (c.selected) {
+          this.selectedMappingComponent = c;
+          break;
         }
-        return this.selectedMappingComponent;
+      }
     }
+    return this.selectedMappingComponent;
+  }
 
 }

@@ -26,8 +26,8 @@ import { CollapsableHeaderComponent } from '../collapsable.header.component';
 import { MappingSelectionComponent } from './mapping.selection.component';
 
 @Component({
-    selector: 'simple-mapping',
-    template: `
+  selector: 'simple-mapping',
+  template: `
         <div class="mappingFieldContainer" *ngIf="fieldPair">
             <div *ngFor="let mappedField of fieldPair.getMappedFields(isSource)" class="MappingFieldSection">
                 <!-- header label / trash icon -->
@@ -52,48 +52,48 @@ import { MappingSelectionComponent } from './mapping.selection.component';
 })
 
 export class SimpleMappingComponent {
-    @Input() cfg: ConfigModel;
-    @Input() isSource = false;
-    @Input() fieldPair: FieldMappingPair;
+  @Input() cfg: ConfigModel;
+  @Input() isSource = false;
+  @Input() fieldPair: FieldMappingPair;
 
-    isAddButtonVisible(): boolean {
-        if (this.isSource && this.fieldPair.transition.isCombineMode()) {
-            return true;
-        } else if (!this.isSource && this.fieldPair.transition.isSeparateMode()) {
-            return true;
-        }
-        return false;
+  isAddButtonVisible(): boolean {
+    if (this.isSource && this.fieldPair.transition.isCombineMode()) {
+      return true;
+    } else if (!this.isSource && this.fieldPair.transition.isSeparateMode()) {
+      return true;
     }
+    return false;
+  }
 
-    getTopFieldTypeLabel(): string {
-        return this.isSource ? 'Source' : 'Target';
-    }
+  getTopFieldTypeLabel(): string {
+    return this.isSource ? 'Source' : 'Target';
+  }
 
-    getAddButtonLabel(): string {
-        return this.isSource ? 'Add Source' : 'Add Target';
-    }
+  getAddButtonLabel(): string {
+    return this.isSource ? 'Add Source' : 'Add Target';
+  }
 
-    addClicked(): void {
-        this.fieldPair.addField(DocumentDefinition.getNoneField(), this.isSource);
-        this.cfg.mappingService.updateMappedField(this.fieldPair);
-    }
+  addClicked(): void {
+    this.fieldPair.addField(DocumentDefinition.getNoneField(), this.isSource);
+    this.cfg.mappingService.updateMappedField(this.fieldPair);
+  }
 
-    removePair(): void {
-        this.cfg.mappingService.removeMappedPair(this.fieldPair);
-    }
+  removePair(): void {
+    this.cfg.mappingService.removeMappedPair(this.fieldPair);
+  }
 
-    removeMappedField(mappedField: MappedField): void {
-        this.fieldPair.removeMappedField(mappedField, this.isSource);
-        if (this.fieldPair.getMappedFields(this.isSource).length == 0) {
-            this.fieldPair.addField(DocumentDefinition.getNoneField(), this.isSource);
-        }
-        this.cfg.mappingService.updateMappedField(this.fieldPair);
+  removeMappedField(mappedField: MappedField): void {
+    this.fieldPair.removeMappedField(mappedField, this.isSource);
+    if (this.fieldPair.getMappedFields(this.isSource).length == 0) {
+      this.fieldPair.addField(DocumentDefinition.getNoneField(), this.isSource);
     }
+    this.cfg.mappingService.updateMappedField(this.fieldPair);
+  }
 }
 
 @Component({
-    selector: 'collection-mapping',
-    template: `
+  selector: 'collection-mapping',
+  template: `
         <div class="collectionSectionContainer">
             <div [attr.class]="'collectionSection ' + getAnimationCSSClass()">
                 <!-- collection field pairing detail -->
@@ -145,50 +145,50 @@ export class SimpleMappingComponent {
 })
 
 export class CollectionMappingComponent {
-    @Input() cfg: ConfigModel;
-    fieldPairForEditing: FieldMappingPair = null;
-    private animateLeft = false;
-    private animateRight = false;
+  @Input() cfg: ConfigModel;
+  fieldPairForEditing: FieldMappingPair = null;
+  private animateLeft = false;
+  private animateRight = false;
 
-    getAnimationCSSClass(): string {
-        if (this.animateLeft) {
-            return 'dm-swipe-left collectionSectionLeft';
-        } else if (this.animateRight) {
-            return 'dm-swipe-right';
-        }
-        return '';
+  getAnimationCSSClass(): string {
+    if (this.animateLeft) {
+      return 'dm-swipe-left collectionSectionLeft';
+    } else if (this.animateRight) {
+      return 'dm-swipe-right';
     }
+    return '';
+  }
 
-    getFields(fieldPair: FieldMappingPair, isSource: boolean): Field[] {
-        const fields: Field[] = fieldPair.getFields(isSource);
-        return (fields.length > 0) ? fields : [DocumentDefinition.getNoneField()];
-    }
+  getFields(fieldPair: FieldMappingPair, isSource: boolean): Field[] {
+    const fields: Field[] = fieldPair.getFields(isSource);
+    return (fields.length > 0) ? fields : [DocumentDefinition.getNoneField()];
+  }
 
-    addClicked(): void {
-        this.cfg.mappingService.addMappedPair();
-    }
+  addClicked(): void {
+    this.cfg.mappingService.addMappedPair();
+  }
 
-    editPair(fieldPair: FieldMappingPair): void {
-        this.fieldPairForEditing = fieldPair;
-        this.cfg.mappings.activeMapping.currentFieldMapping = fieldPair;
-        this.animateLeft = true;
-    }
+  editPair(fieldPair: FieldMappingPair): void {
+    this.fieldPairForEditing = fieldPair;
+    this.cfg.mappings.activeMapping.currentFieldMapping = fieldPair;
+    this.animateLeft = true;
+  }
 
-    exitEditMode(): void {
-        this.fieldPairForEditing = null;
-        this.animateLeft = false;
-        this.animateRight = true;
-        this.cfg.mappings.activeMapping.currentFieldMapping = null;
-    }
+  exitEditMode(): void {
+    this.fieldPairForEditing = null;
+    this.animateLeft = false;
+    this.animateRight = true;
+    this.cfg.mappings.activeMapping.currentFieldMapping = null;
+  }
 
-    removePair(fieldPair: FieldMappingPair): void {
-        this.cfg.mappingService.removeMappedPair(fieldPair);
-    }
+  removePair(fieldPair: FieldMappingPair): void {
+    this.cfg.mappingService.removeMappedPair(fieldPair);
+  }
 }
 
 @Component({
-    selector: 'mapping-pair-detail',
-    template: `
+  selector: 'mapping-pair-detail',
+  template: `
         <div>
             <collapsable-header title="Sources" #sourcesHeader class="sources"></collapsable-header>
             <simple-mapping [cfg]="cfg" [isSource]="true" *ngIf="!sourcesHeader.collapsed"
@@ -204,21 +204,21 @@ export class CollectionMappingComponent {
 })
 
 export class MappingPairDetailComponent {
-    @Input() cfg: ConfigModel;
-    @Input() fieldPair: FieldMappingPair;
-    @Input() modalWindow: ModalWindowComponent;
+  @Input() cfg: ConfigModel;
+  @Input() fieldPair: FieldMappingPair;
+  @Input() modalWindow: ModalWindowComponent;
 
-    @ViewChild('sourcesHeader')
-    sourcesHeader: CollapsableHeaderComponent;
-    @ViewChild('actionsHeader')
-    actionsHeader: CollapsableHeaderComponent;
-    @ViewChild('targetsHeader')
-    targetsHeader: CollapsableHeaderComponent;
+  @ViewChild('sourcesHeader')
+  sourcesHeader: CollapsableHeaderComponent;
+  @ViewChild('actionsHeader')
+  actionsHeader: CollapsableHeaderComponent;
+  @ViewChild('targetsHeader')
+  targetsHeader: CollapsableHeaderComponent;
 }
 
 @Component({
-    selector: 'mapping-detail',
-    template: `
+  selector: 'mapping-detail',
+  template: `
         <div class='fieldMappingDetail' *ngIf="cfg.mappings.activeMapping && cfg.showMappingDetailTray">
             <div class="card-pf">
                 <div class="card-pf-heading">
@@ -258,60 +258,60 @@ export class MappingPairDetailComponent {
 })
 
 export class MappingDetailComponent implements OnInit {
-    @Input() cfg: ConfigModel;
-    @Input() modalWindow: ModalWindowComponent;
+  @Input() cfg: ConfigModel;
+  @Input() modalWindow: ModalWindowComponent;
 
-    ngOnInit(): void {
-        this.cfg.mappingService.mappingSelectionRequired$.subscribe((field: Field) => {
-            this.selectMapping(field);
-        });
-    }
+  ngOnInit(): void {
+    this.cfg.mappingService.mappingSelectionRequired$.subscribe((field: Field) => {
+      this.selectMapping(field);
+    });
+  }
 
-    isMappingCollection(): boolean {
-        return this.cfg.mappings.activeMapping.isCollectionMode();
-    }
+  isMappingCollection(): boolean {
+    return this.cfg.mappings.activeMapping.isCollectionMode();
+  }
 
-    getTitle(): string {
-        if (this.cfg.mappings.activeMapping.isLookupMode()) {
-            return 'Lookup Mapping';
-        }
-        return this.isMappingCollection() ? 'Repeating Mapping' : 'Mapping Details';
+  getTitle(): string {
+    if (this.cfg.mappings.activeMapping.isLookupMode()) {
+      return 'Lookup Mapping';
     }
+    return this.isMappingCollection() ? 'Repeating Mapping' : 'Mapping Details';
+  }
 
-    removeMapping(event: MouseEvent): void {
-        this.modalWindow.reset();
-        this.modalWindow.confirmButtonText = 'Remove';
-        this.modalWindow.headerText = 'Remove Mapping?';
-        this.modalWindow.message = 'Are you sure you want to remove the current mapping?';
-        this.modalWindow.okButtonHandler = (mw: ModalWindowComponent) => {
-            this.cfg.mappingService.removeMapping(this.cfg.mappings.activeMapping);
-            this.cfg.showMappingDetailTray = false;
-        };
-        this.modalWindow.show();
-    }
+  removeMapping(event: MouseEvent): void {
+    this.modalWindow.reset();
+    this.modalWindow.confirmButtonText = 'Remove';
+    this.modalWindow.headerText = 'Remove Mapping?';
+    this.modalWindow.message = 'Are you sure you want to remove the current mapping?';
+    this.modalWindow.okButtonHandler = (mw: ModalWindowComponent) => {
+      this.cfg.mappingService.removeMapping(this.cfg.mappings.activeMapping);
+      this.cfg.showMappingDetailTray = false;
+    };
+    this.modalWindow.show();
+  }
 
-    private selectMapping(field: Field): void {
-        const mappingsForField: MappingModel[] = this.cfg.mappings.findMappingsForField(field);
-        const self: MappingDetailComponent = this;
-        this.modalWindow.reset();
-        this.modalWindow.confirmButtonText = 'Select';
-        this.modalWindow.headerText = 'Select Mapping';
-        this.modalWindow.nestedComponentInitializedCallback = (mw: ModalWindowComponent) => {
-            const c: MappingSelectionComponent = mw.nestedComponent as MappingSelectionComponent;
-            c.selectedField = field;
-            c.cfg = self.cfg;
-            c.mappings = mappingsForField;
-            c.modalWindow = this.modalWindow;
-        };
-        this.modalWindow.nestedComponentType = MappingSelectionComponent;
-        this.modalWindow.okButtonHandler = (mw: ModalWindowComponent) => {
-            const c: MappingSelectionComponent = mw.nestedComponent as MappingSelectionComponent;
-            const mapping: MappingModel = c.getSelectedMapping();
-            self.cfg.mappingService.selectMapping(mapping);
-        };
-        this.modalWindow.cancelButtonHandler = (mw: ModalWindowComponent) => {
-            self.cfg.mappingService.selectMapping(null);
-        };
-        this.modalWindow.show();
-    }
+  private selectMapping(field: Field): void {
+    const mappingsForField: MappingModel[] = this.cfg.mappings.findMappingsForField(field);
+    const self: MappingDetailComponent = this;
+    this.modalWindow.reset();
+    this.modalWindow.confirmButtonText = 'Select';
+    this.modalWindow.headerText = 'Select Mapping';
+    this.modalWindow.nestedComponentInitializedCallback = (mw: ModalWindowComponent) => {
+      const c: MappingSelectionComponent = mw.nestedComponent as MappingSelectionComponent;
+      c.selectedField = field;
+      c.cfg = self.cfg;
+      c.mappings = mappingsForField;
+      c.modalWindow = this.modalWindow;
+    };
+    this.modalWindow.nestedComponentType = MappingSelectionComponent;
+    this.modalWindow.okButtonHandler = (mw: ModalWindowComponent) => {
+      const c: MappingSelectionComponent = mw.nestedComponent as MappingSelectionComponent;
+      const mapping: MappingModel = c.getSelectedMapping();
+      self.cfg.mappingService.selectMapping(mapping);
+    };
+    this.modalWindow.cancelButtonHandler = (mw: ModalWindowComponent) => {
+      self.cfg.mappingService.selectMapping(null);
+    };
+    this.modalWindow.show();
+  }
 }

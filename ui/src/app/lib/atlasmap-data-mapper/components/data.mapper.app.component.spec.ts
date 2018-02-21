@@ -10,7 +10,7 @@ describe('DataMapperAppComponent', () => {
     TestBed.configureTestingModule({
       providers: [
         ChangeDetectorRef,
-      DataMapperAppComponent,
+        DataMapperAppComponent,
       ],
     });
   });

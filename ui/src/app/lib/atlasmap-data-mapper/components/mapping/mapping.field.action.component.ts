@@ -20,8 +20,8 @@ import { ConfigModel } from '../../models/config.model';
 import { TransitionModel, FieldAction, FieldActionConfig } from '../../models/transition.model';
 
 @Component({
-    selector: 'mapping-field-action',
-    template: `
+  selector: 'mapping-field-action',
+  template: `
         <div class="mappingFieldAction">
             <div class="actionContainer" *ngFor="let action of getMappedFieldActions(); let actionIndex = index">
                 <div class="form-group">
@@ -55,66 +55,66 @@ import { TransitionModel, FieldAction, FieldActionConfig } from '../../models/tr
 })
 
 export class MappingFieldActionComponent {
-    @Input() cfg: ConfigModel;
-    @Input() mappedField: MappedField;
-    @Input() isSource: boolean;
-    @Input() fieldPair: FieldMappingPair;
+  @Input() cfg: ConfigModel;
+  @Input() mappedField: MappedField;
+  @Input() isSource: boolean;
+  @Input() fieldPair: FieldMappingPair;
 
-    getMappedFieldActions(): FieldAction[] {
-        return this.mappedField.actions;
+  getMappedFieldActions(): FieldAction[] {
+    return this.mappedField.actions;
+  }
+
+  getActionDescription(fieldAction: FieldAction): string {
+    if (fieldAction.isSeparateOrCombineMode) {
+      return fieldAction.config.name;
     }
+    return 'Transformation';
+  }
 
-    getActionDescription(fieldAction: FieldAction): string {
-        if (fieldAction.isSeparateOrCombineMode) {
-            return fieldAction.config.name;
-        }
-        return 'Transformation';
+  actionsExistForField(): boolean {
+    return (this.getActionConfigs().length > 0);
+  }
+
+  getActionConfigs(): FieldActionConfig[] {
+    const configs: FieldActionConfig[] = [];
+
+    // Start with the complete list of field actions.
+    for (const config of TransitionModel.actionConfigs) {
+
+      // Filter down to those field actions that apply to the selected field pair.
+      if (config.appliesToField(this.fieldPair)) {
+        configs.push(config);
+      }
     }
+    return configs;
+  }
 
-    actionsExistForField(): boolean {
-        return (this.getActionConfigs().length > 0);
+  removeAction(action: FieldAction): void {
+    this.mappedField.removeAction(action);
+  }
+
+  selectionChanged(event: MouseEvent): void {
+    this.cfg.mappingService.saveCurrentMapping();
+  }
+
+  addTransformation(): void {
+    const actionConfig: FieldActionConfig = this.getActionConfigs()[0];
+    const action: FieldAction = new FieldAction();
+    actionConfig.populateFieldAction(action);
+    this.getMappedFieldActions().push(action);
+    this.cfg.mappingService.saveCurrentMapping();
+  }
+
+  configSelectionChanged(event: any) {
+    const attributes: any = event.target.selectedOptions.item(0).attributes;
+    const selectedActionName: any = attributes.getNamedItem('value').value;
+    const selectedActionIndex: any = attributes.getNamedItem('actionIndex').value;
+    const action: FieldAction = this.getMappedFieldActions()[selectedActionIndex];
+    if (action.name != selectedActionName) {
+      action.argumentValues = [];  // Invalidate the previously selected field action arguments.
+      const fieldActionConfig: FieldActionConfig = TransitionModel.getActionConfigForName(selectedActionName);
+      fieldActionConfig.populateFieldAction(action);
     }
-
-    getActionConfigs(): FieldActionConfig[] {
-        const configs: FieldActionConfig[] = [];
-
-        // Start with the complete list of field actions.
-        for (const config of TransitionModel.actionConfigs) {
-
-            // Filter down to those field actions that apply to the selected field pair.
-            if (config.appliesToField(this.fieldPair)) {
-                configs.push(config);
-            }
-        }
-        return configs;
-    }
-
-    removeAction(action: FieldAction): void {
-        this.mappedField.removeAction(action);
-    }
-
-    selectionChanged(event: MouseEvent): void {
-        this.cfg.mappingService.saveCurrentMapping();
-    }
-
-    addTransformation(): void {
-        const actionConfig: FieldActionConfig = this.getActionConfigs()[0];
-        const action: FieldAction = new FieldAction();
-        actionConfig.populateFieldAction(action);
-        this.getMappedFieldActions().push(action);
-        this.cfg.mappingService.saveCurrentMapping();
-    }
-
-    configSelectionChanged(event: any) {
-        const attributes: any = event.target.selectedOptions.item(0).attributes;
-        const selectedActionName: any = attributes.getNamedItem('value').value;
-        const selectedActionIndex: any = attributes.getNamedItem('actionIndex').value;
-        const action: FieldAction = this.getMappedFieldActions()[selectedActionIndex];
-        if (action.name != selectedActionName) {
-            action.argumentValues = [];  // Invalidate the previously selected field action arguments.
-            const fieldActionConfig: FieldActionConfig = TransitionModel.getActionConfigForName(selectedActionName);
-            fieldActionConfig.populateFieldAction(action);
-        }
-        this.cfg.mappingService.saveCurrentMapping();
-    }
+    this.cfg.mappingService.saveCurrentMapping();
+  }
 }

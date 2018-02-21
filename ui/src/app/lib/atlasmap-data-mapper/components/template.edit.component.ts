@@ -19,8 +19,8 @@ import { Component } from '@angular/core';
 import { ModalWindowValidator } from './modal.window.component';
 
 @Component({
-    selector: 'template-edit',
-    template: `
+  selector: 'template-edit',
+  template: `
         <div class="DataMapperEditComponent">
             <div class="form-group">
                 <textarea [(ngModel)]="templateText" rows="16" cols="100"></textarea>
@@ -30,7 +30,7 @@ import { ModalWindowValidator } from './modal.window.component';
 })
 
 export class TemplateEditComponent implements ModalWindowValidator {
-    templateText: string = null;
+  templateText: string = null;
 
-    isDataValid(): boolean { return true; }
+  isDataValid(): boolean { return true; }
 }
