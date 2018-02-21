@@ -1,1 +1,1 @@
-export * from './data.mapper.module';
+export * from './data-mapper.module';

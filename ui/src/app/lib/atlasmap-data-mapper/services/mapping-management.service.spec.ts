@@ -3,18 +3,12 @@
 import { TestBed, async, inject } from '@angular/core/testing';
 import { RequestOptions, BaseRequestOptions, Http } from '@angular/http';
 import { MockBackend } from '@angular/http/testing';
-import { DocumentManagementService } from './document-management.service';
-import { ErrorHandlerService } from './error-handler.service';
-import { InitializationService } from './initialization.service';
 import { MappingManagementService } from './mapping-management.service';
 
-describe('InitializationService', () => {
+describe('MappingManagementService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        DocumentManagementService,
-        ErrorHandlerService,
-        InitializationService,
         MappingManagementService,
         MockBackend,
         { provide: RequestOptions, useClass: BaseRequestOptions },
@@ -31,7 +25,7 @@ describe('InitializationService', () => {
 
   it(
     'should ...',
-    inject([InitializationService], (service: InitializationService) => {
+    inject([MappingManagementService], (service: MappingManagementService) => {
       expect(service).toBeTruthy();
     }),
   );

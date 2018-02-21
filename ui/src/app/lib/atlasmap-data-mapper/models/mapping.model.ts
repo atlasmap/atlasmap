@@ -16,10 +16,10 @@
 
 import { Field } from './field.model';
 import { TransitionModel, TransitionMode, FieldAction, FieldActionConfig } from './transition.model';
-import { DocumentDefinition } from '../models/document.definition.model';
+import { DocumentDefinition } from '../models/document-definition.model';
 import { ErrorInfo, ErrorLevel } from '../models/error.model';
 
-import { DataMapperUtil } from '../common/data.mapper.util';
+import { DataMapperUtil } from '../common/data-mapper-util';
 
 export class MappedFieldParsingData {
   parsedName: string = null;
