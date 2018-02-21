@@ -20,6 +20,8 @@ import static org.junit.Assert.assertNotNull;
 
 import org.apache.camel.CamelContext;
 import org.apache.camel.EndpointInject;
+import org.apache.camel.Exchange;
+import org.apache.camel.Message;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.test.spring.CamelSpringRunner;
@@ -53,7 +55,9 @@ public class AtlasMapComponentJavaToJsonTest {
         producerTemplate.sendBody("direct:start", Util.generateMockTwitterStatus());
 
         MockEndpoint.assertIsSatisfied(camelContext);
-        Object body = result.getExchanges().get(0).getIn().getBody();
+        Message msg = result.getExchanges().get(0).getIn();
+        assertEquals("application/json", msg.getHeader(Exchange.CONTENT_TYPE));
+        Object body = msg.getBody();
         assertEquals(String.class, body.getClass());
         ObjectMapper mapper = new ObjectMapper();
         JsonNode sfJson = mapper.readTree((String)body);
