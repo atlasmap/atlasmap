@@ -73,7 +73,7 @@ export class MappingListFieldComponent {
         if (this.mappedField == null || this.mappedField.field == null || this.mappedField.field.docDef == null) {
             return '';
         }
-        return this.mappedField.field.docDef.getName(true);
+        return this.mappedField.field.docDef.getName(ConfigModel.getConfig().showTypes);
     }
 }
 

@@ -41,7 +41,7 @@ export class DocumentManagementService {
         this.cfg.mappingService.mappingUpdated$.subscribe(mappingDefinition => {
             for (const d of this.cfg.getAllDocs()) {
                 if (d.initialized) {
-                    d.updateFromMappings(this.cfg.mappings, this.cfg);
+                    d.updateFromMappings(this.cfg.mappings);
                 }
             }
         });
@@ -180,7 +180,7 @@ export class DocumentManagementService {
                 this.handleError('Unknown XML inspection result format', responseJson);
             }
         }
-        docDef.initializeFromFields();
+        docDef.initializeFromFields(ConfigModel.getConfig().initCfg.debugDocumentParsing);
     }
 
     private extractJSONDocumentDefinitionFromInspectionResponse(responseJson: any, docDef: DocumentDefinition): void {

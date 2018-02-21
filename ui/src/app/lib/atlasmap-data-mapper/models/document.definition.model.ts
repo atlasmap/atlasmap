@@ -16,7 +16,6 @@
 
 import { Field } from './field.model';
 import { DocumentType, InspectionType } from '../common/config.types';
-import { ConfigModel } from '../models/config.model';
 import { MappingDefinition } from '../models/mapping.definition.model';
 import { DataMapperUtil } from '../common/data.mapper.util';
 
@@ -139,9 +138,9 @@ export class DocumentDefinition {
         return fields;
     }
 
-    getName(includeType: boolean): string {
+    getName(showTypes: boolean): string {
         let name = this.name;
-        if (ConfigModel.getConfig().showTypes && !this.isPropertyOrConstant) {
+        if (showTypes && !this.isPropertyOrConstant) {
             const type = this.type;
             if (type) {
                 name += ' (' + type + ')';
@@ -220,9 +219,9 @@ export class DocumentDefinition {
         }
     }
 
-    initializeFromFields(): void {
+    initializeFromFields(debugDocumentParsing: boolean): void {
         if (this.type == DocumentType.JAVA) {
-            this.prepareComplexFields();
+            this.prepareComplexFields(debugDocumentParsing);
         }
 
         Field.alphabetizeFields(this.fields);
@@ -234,7 +233,7 @@ export class DocumentDefinition {
 
         this.fieldPaths.sort();
 
-        if (ConfigModel.getConfig().initCfg.debugDocumentParsing) {
+        if (debugDocumentParsing) {
             let enumFields = 'Enum fields:\n';
             for (const field of this.allFields) {
                 if (field.enumeration) {
@@ -333,7 +332,7 @@ export class DocumentDefinition {
         }
     }
 
-    updateFromMappings(mappingDefinition: MappingDefinition, cfg: ConfigModel): void {
+    updateFromMappings(mappingDefinition: MappingDefinition): void {
         for (const field of this.allFields) {
             field.partOfMapping = false;
             field.hasUnmappedChildren = false;
@@ -419,7 +418,7 @@ export class DocumentDefinition {
         }
     }
 
-    private prepareComplexFields(): void {
+    private prepareComplexFields(debugDocumentParsing: boolean): void {
         const fields: Field[] = this.fields;
 
         //build complex field cache
@@ -439,7 +438,7 @@ export class DocumentDefinition {
         }
 
         // print cached complex fields
-        if (ConfigModel.getConfig().initCfg.debugDocumentParsing) {
+        if (debugDocumentParsing) {
             let result = 'Cached Fields: ';
             for (const key in this.complexFieldsByClassIdentifier) {
                 if (!this.complexFieldsByClassIdentifier.hasOwnProperty(key)) {

@@ -200,7 +200,7 @@ export class MappingManagementService {
     fieldSelected(field: Field): void {
         if (!field.isTerminal()) {
             field.docDef.populateChildren(field);
-            field.docDef.updateFromMappings(this.cfg.mappings, this.cfg);
+            field.docDef.updateFromMappings(this.cfg.mappings);
             field.collapsed = !field.collapsed;
             return;
         }
