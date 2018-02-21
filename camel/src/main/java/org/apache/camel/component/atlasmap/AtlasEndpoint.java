@@ -55,6 +55,9 @@ import io.atlasmap.v2.DataSourceType;
 @UriEndpoint(firstVersion = "2.19.0", scheme = "atlas", title = "AtlasMap", syntax = "atlas:resourceUri", producerOnly = true, label = "transformation")
 public class AtlasEndpoint extends ResourceEndpoint {
 
+    public static final String CONTENT_TYPE_JSON = "application/json";
+    public static final String CONTENT_TYPE_XML = "application/xml";
+
     private static final Logger LOG = LoggerFactory.getLogger(AtlasEndpoint.class);
     private AtlasContextFactory atlasContextFactory;
     private AtlasContext atlasContext;
@@ -352,6 +355,7 @@ public class AtlasEndpoint extends ResourceEndpoint {
             } else {
                 outMessage.setBody(session.getTargetDocument(docId));
             }
+            setContentType(targetDataSources[0], outMessage);
             return;
         }
 
@@ -360,7 +364,8 @@ public class AtlasEndpoint extends ResourceEndpoint {
         for (DataSource ds : targetDataSources) {
             String docId = ds.getId();
             if (docId == null || docId.isEmpty()) {
-                exchange.getOut().setBody(session.getDefaultTargetDocument());
+                outMessage.setBody(session.getDefaultTargetDocument());
+                setContentType(ds, outMessage);
             } else {
                 targetDocuments.put(docId, session.getTargetDocument(docId));
             }
@@ -368,4 +373,14 @@ public class AtlasEndpoint extends ResourceEndpoint {
         exchange.setProperty(targetMapName, targetDocuments);
     }
 
+    private void setContentType(DataSource ds, Message message) {
+        if (ds.getUri() == null) {
+            return;
+        }
+        if (ds.getUri().startsWith("atlas:json")) {
+            message.setHeader(Exchange.CONTENT_TYPE, CONTENT_TYPE_JSON);
+        } else if (ds.getUri().startsWith("atlas:xml")) {
+            message.setHeader(Exchange.CONTENT_TYPE, CONTENT_TYPE_XML);
+        }
+    }
 }

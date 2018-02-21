@@ -3,6 +3,7 @@ package org.apache.camel.component.atlasmap;
 import org.apache.camel.CamelContext;
 import org.apache.camel.EndpointInject;
 import org.apache.camel.Exchange;
+import org.apache.camel.Message;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.test.spring.CamelSpringRunner;
@@ -52,8 +53,9 @@ public class AtlasMapMultiNSTest {
         producerTemplate.sendBody("direct:start", c);
 
         MockEndpoint.assertIsSatisfied(camelContext);
-        Exchange exchange = result.getExchanges().get(0);
-        String out = exchange.getIn().getBody(String.class);
+        Message message = result.getExchanges().get(0).getIn();
+        Assert.assertEquals("application/xml", message.getHeader(Exchange.CONTENT_TYPE));
+        String out = message.getBody(String.class);
         Assert.assertNotNull(out);
         Diff d = DiffBuilder.compare(Input.fromString(XML_EXPECTED).build())
                 .withTest(Input.fromString(out).build())
