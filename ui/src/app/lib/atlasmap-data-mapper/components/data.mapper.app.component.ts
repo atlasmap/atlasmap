@@ -45,6 +45,8 @@ export class DataMapperAppComponent implements OnInit {
     @ViewChild('toolbarComponent') toolbarComponent: ToolbarComponent;
 
     loadingStatus = 'Loading.';
+    hasSourceDoc = false;
+    hasTargetDoc = false;
 
     constructor(public detector: ChangeDetectorRef) {}
 
@@ -63,6 +65,8 @@ export class DataMapperAppComponent implements OnInit {
                 this.detector.detectChanges();
             }, 10);
         });
+        this.hasSourceDoc = this.getConfig().sourceDocs && this.getConfig().sourceDocs.length > 0;
+        this.hasTargetDoc = this.getConfig().targetDocs && this.getConfig().targetDocs.length > 0;
     }
 
     updateFromConfig(): void {

@@ -9,7 +9,8 @@
         <div class="row">
             <dm-toolbar #toolbarComponent [cfg]="getConfig()" [lineMachine]="lineMachine" [modalWindow]="modalWindow"></dm-toolbar>
         </div>
-        <div class="row" style="height:calc(100% - 32px); position:relative; padding-top:10px;">
+        <div class="row" style="height:calc(100% - 32px); position:relative; padding-top:10px;"
+            *ngIf="hasSourceDoc && hasTargetDoc">
             <div style='height:100%; padding:0;' [attr.class]="(getConfig().showMappingTable || getConfig().showNamespaceTable) ? 'col-md-9 hidden' : 'col-md-9'">
                 <div style="float:left; width:40%; height:100%;">
                     <document-definition #docDefInput [cfg]="getConfig()" [modalWindow]="modalWindow"

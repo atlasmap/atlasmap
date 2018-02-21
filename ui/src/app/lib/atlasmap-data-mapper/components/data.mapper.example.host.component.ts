@@ -123,5 +123,12 @@ export class DataMapperAppExampleHostComponent implements OnInit {
             //After you've sucessfully saved you *MUST* call this (don't call on error)
             c.mappingService.handleMappingSaveSuccess(saveHandler);
         });
+
+        if (!c.sourceDocs || c.sourceDocs.length == 0) {
+            c.errorService.error('No source document was found', '');
+        }
+        if (!c.targetDocs || c.targetDocs.length == 0) {
+            c.errorService.error('No target document was found', '');
+        }
     }
 }
