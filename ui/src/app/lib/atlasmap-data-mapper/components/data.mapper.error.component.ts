@@ -21,8 +21,8 @@ import { ErrorHandlerService } from '../services/error.handler.service';
 import { ConfigModel } from '../models/config.model';
 
 @Component({
-    selector: 'data-mapper-error',
-    template: `
+  selector: 'data-mapper-error',
+  template: `
         <div class="DataMapperErrorComponent" *ngIf="errorService && getErrors().length">
             <div class="alert alert-danger" *ngFor="let e of getErrors()">
                 <a class="close" (click)="handleClick($event)">
@@ -43,20 +43,20 @@ import { ConfigModel } from '../models/config.model';
 })
 
 export class DataMapperErrorComponent {
-    @Input() errorService: ErrorHandlerService;
-    @Input() isValidation = false;
+  @Input() errorService: ErrorHandlerService;
+  @Input() isValidation = false;
 
-    getErrors(): ErrorInfo[] {
-        return this.isValidation ? ConfigModel.getConfig().validationErrors.filter(e => e.level >= ErrorLevel.ERROR)
-            : ConfigModel.getConfig().errors;
-    }
+  getErrors(): ErrorInfo[] {
+    return this.isValidation ? ConfigModel.getConfig().validationErrors.filter(e => e.level >= ErrorLevel.ERROR)
+      : ConfigModel.getConfig().errors;
+  }
 
-    getWarnings(): ErrorInfo[] {
-        return this.isValidation ? ConfigModel.getConfig().validationErrors.filter(e => e.level === ErrorLevel.WARN) : ErrorInfo[0];
-    }
+  getWarnings(): ErrorInfo[] {
+    return this.isValidation ? ConfigModel.getConfig().validationErrors.filter(e => e.level === ErrorLevel.WARN) : ErrorInfo[0];
+  }
 
-    handleClick(event: any) {
-        const errorIdentifier: string = event.target.attributes.getNamedItem('errorIdentifier').value;
-        this.errorService.removeError(errorIdentifier);
-    }
+  handleClick(event: any) {
+    const errorIdentifier: string = event.target.attributes.getNamedItem('errorIdentifier').value;
+    this.errorService.removeError(errorIdentifier);
+  }
 }

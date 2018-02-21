@@ -27,51 +27,51 @@ import { DocumentDefinitionComponent } from './document.definition.component';
 import { MappingDetailComponent } from './mapping/mapping.detail.component';
 
 @Component({
-    selector: 'data-mapper',
-    moduleId: module.id,
-    encapsulation: ViewEncapsulation.None,
-    templateUrl: './data.mapper.app.component.html',
-    styleUrls: ['data.mapper.app.component.css'],
+  selector: 'data-mapper',
+  moduleId: module.id,
+  encapsulation: ViewEncapsulation.None,
+  templateUrl: './data.mapper.app.component.html',
+  styleUrls: ['data.mapper.app.component.css'],
 })
 
 export class DataMapperAppComponent implements OnInit {
 
-    @ViewChild('lineMachine') lineMachine: LineMachineComponent;
-    @ViewChild('errorPanel') errorPanel: DataMapperErrorComponent;
-    @ViewChild('modalWindow') modalWindow: ModalWindowComponent;
-    @ViewChild('docDefInput') docDefInput: DocumentDefinitionComponent;
-    @ViewChild('docDefOutput') docDefOutput: DocumentDefinitionComponent;
-    @ViewChild('mappingDetailComponent') mappingDetailComponent: MappingDetailComponent;
-    @ViewChild('toolbarComponent') toolbarComponent: ToolbarComponent;
+  @ViewChild('lineMachine') lineMachine: LineMachineComponent;
+  @ViewChild('errorPanel') errorPanel: DataMapperErrorComponent;
+  @ViewChild('modalWindow') modalWindow: ModalWindowComponent;
+  @ViewChild('docDefInput') docDefInput: DocumentDefinitionComponent;
+  @ViewChild('docDefOutput') docDefOutput: DocumentDefinitionComponent;
+  @ViewChild('mappingDetailComponent') mappingDetailComponent: MappingDetailComponent;
+  @ViewChild('toolbarComponent') toolbarComponent: ToolbarComponent;
 
-    loadingStatus = 'Loading.';
-    hasSourceDoc = false;
-    hasTargetDoc = false;
+  loadingStatus = 'Loading.';
+  hasSourceDoc = false;
+  hasTargetDoc = false;
 
-    constructor(public detector: ChangeDetectorRef) {}
+  constructor(public detector: ChangeDetectorRef) { }
 
-    getConfig(): ConfigModel {
-        return ConfigModel.getConfig();
-    }
+  getConfig(): ConfigModel {
+    return ConfigModel.getConfig();
+  }
 
-    ngOnInit(): void {
-        this.getConfig().initializationService.systemInitialized$.subscribe(() => {
-            this.updateFromConfig();
-        });
+  ngOnInit(): void {
+    this.getConfig().initializationService.systemInitialized$.subscribe(() => {
+      this.updateFromConfig();
+    });
 
-        this.getConfig().initializationService.initializationStatusChanged$.subscribe(() => {
-            this.loadingStatus = this.getConfig().initCfg.loadingStatus;
-            setTimeout(() => {
-                this.detector.detectChanges();
-            }, 10);
-        });
-        this.hasSourceDoc = this.getConfig().sourceDocs && this.getConfig().sourceDocs.length > 0;
-        this.hasTargetDoc = this.getConfig().targetDocs && this.getConfig().targetDocs.length > 0;
-    }
+    this.getConfig().initializationService.initializationStatusChanged$.subscribe(() => {
+      this.loadingStatus = this.getConfig().initCfg.loadingStatus;
+      setTimeout(() => {
+        this.detector.detectChanges();
+      }, 10);
+    });
+    this.hasSourceDoc = this.getConfig().sourceDocs && this.getConfig().sourceDocs.length > 0;
+    this.hasTargetDoc = this.getConfig().targetDocs && this.getConfig().targetDocs.length > 0;
+  }
 
-    updateFromConfig(): void {
-        // update the mapping line drawing after our fields have redrawn themselves
-        // without this, the x/y from the field dom elements is messed up / misaligned.
-        setTimeout(() => { this.lineMachine.redrawLinesForMappings(); }, 1);
-    }
+  updateFromConfig(): void {
+    // update the mapping line drawing after our fields have redrawn themselves
+    // without this, the x/y from the field dom elements is messed up / misaligned.
+    setTimeout(() => { this.lineMachine.redrawLinesForMappings(); }, 1);
+  }
 }

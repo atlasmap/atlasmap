@@ -21,37 +21,37 @@ import { ConfigModel } from '../models/config.model';
 
 @Injectable()
 export class ErrorHandlerService {
-    cfg: ConfigModel = null;
+  cfg: ConfigModel = null;
 
-    debug(message: string, error: any) { this.addError(message, ErrorLevel.DEBUG, error); }
-    info(message: string, error: any) { this.addError(message, ErrorLevel.INFO, error); }
-    warn(message: string, error: any) { this.addError(message, ErrorLevel.WARN, error); }
-    error(message: string, error: any) { this.addError(message, ErrorLevel.ERROR, error); }
-    validationError(message: string, error: any) { this.addValidationError(message, error); }
+  debug(message: string, error: any) { this.addError(message, ErrorLevel.DEBUG, error); }
+  info(message: string, error: any) { this.addError(message, ErrorLevel.INFO, error); }
+  warn(message: string, error: any) { this.addError(message, ErrorLevel.WARN, error); }
+  error(message: string, error: any) { this.addError(message, ErrorLevel.ERROR, error); }
+  validationError(message: string, error: any) { this.addValidationError(message, error); }
 
-    removeError(identifier: string): void {
-        this.cfg.errors = this.cfg.errors.filter(e => e.identifier !== identifier);
-        this.cfg.validationErrors = this.cfg.validationErrors.filter(e => e.identifier !== identifier);
+  removeError(identifier: string): void {
+    this.cfg.errors = this.cfg.errors.filter(e => e.identifier !== identifier);
+    this.cfg.validationErrors = this.cfg.validationErrors.filter(e => e.identifier !== identifier);
+  }
+
+  clearValidationErrors(): void {
+    this.cfg.validationErrors = [];
+  }
+
+  private addError(message: string, level: ErrorLevel, error: any): void {
+    if (this.arrayDoesNotContainError(message)) {
+      const e = new ErrorInfo(message, level, error);
+      this.cfg.errors.push(e);
     }
+  }
 
-    clearValidationErrors(): void {
-        this.cfg.validationErrors = [];
-    }
+  private arrayDoesNotContainError(message: string) {
+    return this.cfg.errors.filter(e => e.message === message).length === 0;
+  }
 
-    private addError(message: string, level: ErrorLevel, error: any): void {
-        if (this.arrayDoesNotContainError(message)) {
-            const e = new ErrorInfo(message, level, error);
-            this.cfg.errors.push(e);
-        }
-    }
-
-    private arrayDoesNotContainError(message: string) {
-        return this.cfg.errors.filter(e => e.message === message).length === 0;
-    }
-
-    private addValidationError(message: string, error: any): void {
-        const e = new ErrorInfo(message, ErrorLevel.VALIDATION_ERROR, error);
-        this.cfg.validationErrors.push(e);
-    }
+  private addValidationError(message: string, error: any): void {
+    const e = new ErrorInfo(message, ErrorLevel.VALIDATION_ERROR, error);
+    this.cfg.validationErrors.push(e);
+  }
 
 }

@@ -15,17 +15,17 @@
 */
 
 export enum DocumentType {
-    JAVA = 'Java',
-    XML = 'XML',
-    JSON = 'JSON',
-    CORE = 'Core',
-    CSV = 'CSV',
-    CONSTANT = 'Constants',
-    PROPERTY = 'Property'
+  JAVA = 'Java',
+  XML = 'XML',
+  JSON = 'JSON',
+  CORE = 'Core',
+  CSV = 'CSV',
+  CONSTANT = 'Constants',
+  PROPERTY = 'Property'
 }
 
 export enum InspectionType {
-    JAVA_CLASS = 'JAVA_CLASS',
-    SCHEMA = 'SCHEMA',
-    INSTANCE = 'INSTANCE'
+  JAVA_CLASS = 'JAVA_CLASS',
+  SCHEMA = 'SCHEMA',
+  INSTANCE = 'INSTANCE'
 }

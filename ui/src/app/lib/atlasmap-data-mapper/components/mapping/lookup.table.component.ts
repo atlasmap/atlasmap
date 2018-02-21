@@ -15,7 +15,7 @@
     limitations under the License.
 */
 
-import { Component, ViewChildren, ElementRef, QueryList  } from '@angular/core';
+import { Component, ViewChildren, ElementRef, QueryList } from '@angular/core';
 
 import { LookupTable, LookupTableEntry } from '../../models/lookup.table.model';
 import { ConfigModel } from '../../models/config.model';
@@ -23,14 +23,14 @@ import { Field } from '../../models/field.model';
 import { FieldMappingPair } from '../../models/mapping.model';
 
 export class LookupTableData {
-    sourceEnumValue: string;
-    targetEnumValues: string[];
-    selectedTargetEnumValue: string;
+  sourceEnumValue: string;
+  targetEnumValues: string[];
+  selectedTargetEnumValue: string;
 }
 
 @Component({
-    selector: 'lookup-table',
-    template: `
+  selector: 'lookup-table',
+  template: `
         <div class="LookupTableComponent" *ngIf="data">
             <div class="lookupTableRow" *ngFor="let d of data">
                 <label>{{ d.sourceEnumValue }}</label>
@@ -45,55 +45,55 @@ export class LookupTableData {
 })
 
 export class LookupTableComponent {
-    fieldPair: FieldMappingPair;
+  fieldPair: FieldMappingPair;
 
-    table: LookupTable;
-    data: LookupTableData[];
+  table: LookupTable;
+  data: LookupTableData[];
 
-    @ViewChildren('outputSelect') outputSelects: QueryList<ElementRef>;
+  @ViewChildren('outputSelect') outputSelects: QueryList<ElementRef>;
 
-    initialize(cfg: ConfigModel, fieldPair: FieldMappingPair): void {
-        this.fieldPair = fieldPair;
+  initialize(cfg: ConfigModel, fieldPair: FieldMappingPair): void {
+    this.fieldPair = fieldPair;
 
-        const targetField: Field = fieldPair.getFields(false)[0];
-        const targetValues: string[] = [];
-        targetValues.push('[ None ]');
-        for (const e of targetField.enumValues) {
-            targetValues.push(e.name);
-        }
-
-        this.table = cfg.mappings.getTableByName(fieldPair.transition.lookupTableName);
-        if (this.table == null) {
-            cfg.errorService.error('Could not find enum lookup table for mapping.', fieldPair);
-        }
-
-        const d: LookupTableData[] = [];
-        const sourceField: Field = fieldPair.getFields(true)[0];
-        for (const e of sourceField.enumValues) {
-            const tableData: LookupTableData = new LookupTableData();
-            tableData.sourceEnumValue = e.name;
-            tableData.targetEnumValues = [].concat(targetValues);
-            const selected: LookupTableEntry = this.table.getEntryForSource(tableData.sourceEnumValue, false);
-            tableData.selectedTargetEnumValue = (selected == null) ? '[ None ]' : selected.targetValue;
-            d.push(tableData);
-        }
-        this.data = d;
+    const targetField: Field = fieldPair.getFields(false)[0];
+    const targetValues: string[] = [];
+    targetValues.push('[ None ]');
+    for (const e of targetField.enumValues) {
+      targetValues.push(e.name);
     }
 
-    saveTable(): void {
-        this.table.entries = [];
-        for (const c of this.outputSelects.toArray()) {
-            const selectedOptions: any[] = c.nativeElement.selectedOptions;
-            if (selectedOptions && selectedOptions.length) {
-                const targetValue: string = selectedOptions[0].label;
-                if (targetValue == '[ None ]') {
-                    continue;
-                }
-                const e: LookupTableEntry = new LookupTableEntry();
-                e.sourceValue = c.nativeElement.attributes['sourceValue'].value;
-                e.targetValue = targetValue;
-                this.table.entries.push(e);
-            }
-        }
+    this.table = cfg.mappings.getTableByName(fieldPair.transition.lookupTableName);
+    if (this.table == null) {
+      cfg.errorService.error('Could not find enum lookup table for mapping.', fieldPair);
     }
+
+    const d: LookupTableData[] = [];
+    const sourceField: Field = fieldPair.getFields(true)[0];
+    for (const e of sourceField.enumValues) {
+      const tableData: LookupTableData = new LookupTableData();
+      tableData.sourceEnumValue = e.name;
+      tableData.targetEnumValues = [].concat(targetValues);
+      const selected: LookupTableEntry = this.table.getEntryForSource(tableData.sourceEnumValue, false);
+      tableData.selectedTargetEnumValue = (selected == null) ? '[ None ]' : selected.targetValue;
+      d.push(tableData);
+    }
+    this.data = d;
+  }
+
+  saveTable(): void {
+    this.table.entries = [];
+    for (const c of this.outputSelects.toArray()) {
+      const selectedOptions: any[] = c.nativeElement.selectedOptions;
+      if (selectedOptions && selectedOptions.length) {
+        const targetValue: string = selectedOptions[0].label;
+        if (targetValue == '[ None ]') {
+          continue;
+        }
+        const e: LookupTableEntry = new LookupTableEntry();
+        e.sourceValue = c.nativeElement.attributes['sourceValue'].value;
+        e.targetValue = targetValue;
+        this.table.entries.push(e);
+      }
+    }
+  }
 }

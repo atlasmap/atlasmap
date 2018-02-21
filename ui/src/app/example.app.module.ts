@@ -25,18 +25,18 @@ import { AppComponent } from './app.component';
 import { DataMapperModule } from './lib/atlasmap-data-mapper/data.mapper.module';
 
 @NgModule({
-    declarations: [
-        AppComponent,
-    ],
-    imports: [
-        BrowserModule,
-        FormsModule,
-        HttpModule,
-        RouterModule.forRoot([]),
-        DataMapperModule,
-    ],
-    providers: [],
-    bootstrap: [AppComponent],
+  declarations: [
+    AppComponent,
+  ],
+  imports: [
+    BrowserModule,
+    FormsModule,
+    HttpModule,
+    RouterModule.forRoot([]),
+    DataMapperModule,
+  ],
+  providers: [],
+  bootstrap: [AppComponent],
 })
 
 export class ExampleAppModule { }
