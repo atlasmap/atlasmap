@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 import { DocumentType } from '../common/config.types';
 import { ConfigModel } from '../models/config.model';
@@ -31,7 +31,7 @@ template: `
         <div class="dm-toolbar-icons" style="float:right;">
             <i class="fa fa-plus link" (click)="toolbarButtonClicked('addMapping', $event);"
                 tooltip="Add new mapping"></i>
-            <i [attr.class]="getCSSClass('editTemplate')"  *ngIf="targetSupportsTemplate()"
+            <i [attr.class]="getCSSClass('editTemplate')"  *ngIf="targetSupportsTemplate"
                 (click)="toolbarButtonClicked('editTemplate', $event);"></i>
             <i [attr.class]="getCSSClass('showMappingTable')" (click)="toolbarButtonClicked('showMappingTable', $event);"
                tooltip="Show / hide mapping table"></i>
@@ -88,10 +88,11 @@ template: `
 `,
 })
 
-export class ToolbarComponent {
+export class ToolbarComponent implements OnInit {
     @Input() cfg: ConfigModel;
     @Input() lineMachine: LineMachineComponent;
     @Input() modalWindow: ModalWindowComponent;
+    targetSupportsTemplate = false;
 
     getCSSClass(action: string) {
         if ('showDetails' == action) {
@@ -112,11 +113,6 @@ export class ToolbarComponent {
         } else if ('editTemplate' == action) {
             return 'fa fa-file-text-o link' + (this.cfg.mappings.templateExists() ? ' selected' : '');
         }
-    }
-
-    targetSupportsTemplate(): boolean {
-        const targetDoc: DocumentDefinition = this.cfg.targetDocs[0];
-        return targetDoc.type == DocumentType.XML || targetDoc.type == DocumentType.JSON;
     }
 
     toolbarButtonClicked(action: string, event: any): void {
@@ -155,6 +151,11 @@ export class ToolbarComponent {
         setTimeout(() => {
             this.lineMachine.redrawLinesForMappings();
         }, 10);
+    }
+
+    ngOnInit() {
+        const targetDoc: DocumentDefinition = this.cfg.targetDocs[0];
+        this.targetSupportsTemplate = targetDoc && (targetDoc.type == DocumentType.XML || targetDoc.type == DocumentType.JSON);
     }
 
     private editTemplate(): void {
