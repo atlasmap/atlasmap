@@ -14,13 +14,13 @@
     limitations under the License.
 */
 
-import { MappingDefinition } from './mapping.definition.model';
-import { DocumentDefinition } from './document.definition.model';
+import { MappingDefinition } from './mapping-definition.model';
+import { DocumentDefinition } from './document-definition.model';
 import { Field } from '../models/field.model';
 
-import { ErrorHandlerService } from '../services/error.handler.service';
-import { DocumentManagementService } from '../services/document.management.service';
-import { MappingManagementService } from '../services/mapping.management.service';
+import { ErrorHandlerService } from '../services/error-handler.service';
+import { DocumentManagementService } from '../services/document-management.service';
+import { MappingManagementService } from '../services/mapping-management.service';
 import { InitializationService } from '../services/initialization.service';
 import { ErrorInfo } from '../models/error.model';
 

@@ -18,11 +18,11 @@ import { Component, Input, OnInit } from '@angular/core';
 
 import { DocumentType } from '../common/config.types';
 import { ConfigModel } from '../models/config.model';
-import { DocumentDefinition } from '../models/document.definition.model';
+import { DocumentDefinition } from '../models/document-definition.model';
 
-import { LineMachineComponent } from './line.machine.component';
-import { ModalWindowComponent } from './modal.window.component';
-import { TemplateEditComponent } from './template.edit.component';
+import { LineMachineComponent } from './line-machine.component';
+import { ModalWindowComponent } from './modal-window.component';
+import { TemplateEditComponent } from './template-edit.component';
 
 @Component({
   selector: 'dm-toolbar',

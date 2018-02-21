@@ -15,7 +15,7 @@
 */
 
 import { DocumentType } from '../common/config.types';
-import { DocumentDefinition } from './document.definition.model';
+import { DocumentDefinition } from './document-definition.model';
 
 export class EnumValue {
   name: string;

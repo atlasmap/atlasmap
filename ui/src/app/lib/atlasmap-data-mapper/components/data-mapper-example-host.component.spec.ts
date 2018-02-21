@@ -3,15 +3,18 @@
 import { TestBed, async, inject } from '@angular/core/testing';
 import { RequestOptions, BaseRequestOptions, Http } from '@angular/http';
 import { MockBackend } from '@angular/http/testing';
-import { DocumentManagementService } from './document-management.service';
-import { ErrorHandlerService } from './error-handler.service';
-import { InitializationService } from './initialization.service';
-import { MappingManagementService } from './mapping-management.service';
+import { DataMapperAppExampleHostComponent } from './data-mapper-example-host.component';
+import { DocumentManagementService } from '../services/document-management.service';
+import { ErrorHandlerService } from '../services/error-handler.service';
+import { InitializationService } from '../services/initialization.service';
+import { MappingManagementService } from '../services/mapping-management.service';
 
-describe('InitializationService', () => {
+describe('DataMapperAppExampleHostComponent', () => {
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
+        DataMapperAppExampleHostComponent,
         DocumentManagementService,
         ErrorHandlerService,
         InitializationService,
@@ -24,14 +27,13 @@ describe('InitializationService', () => {
             return new Http(backend, options);
           },
           deps: [MockBackend, RequestOptions],
-        },
-      ],
+        }],
     });
   });
 
   it(
     'should ...',
-    inject([InitializationService], (service: InitializationService) => {
+    inject([DataMapperAppExampleHostComponent], (service: DataMapperAppExampleHostComponent) => {
       expect(service).toBeTruthy();
     }),
   );

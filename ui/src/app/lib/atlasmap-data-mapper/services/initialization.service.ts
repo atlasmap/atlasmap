@@ -22,13 +22,13 @@ import { Observable } from 'rxjs/Observable';
 
 import { DocumentType, InspectionType } from '../common/config.types';
 import { DocumentInitializationModel, ConfigModel } from '../models/config.model';
-import { DocumentDefinition } from '../models/document.definition.model';
-import { MappingDefinition } from '../models/mapping.definition.model';
+import { DocumentDefinition } from '../models/document-definition.model';
+import { MappingDefinition } from '../models/mapping-definition.model';
 
-import { ErrorHandlerService } from './error.handler.service';
-import { DocumentManagementService } from '../services/document.management.service';
-import { MappingManagementService } from '../services/mapping.management.service';
-import { MappingSerializer } from '../services/mapping.serializer';
+import { ErrorHandlerService } from './error-handler.service';
+import { DocumentManagementService } from '../services/document-management.service';
+import { MappingManagementService } from '../services/mapping-management.service';
+import { MappingSerializer } from '../services/mapping-serializer.service';
 
 import { TransitionModel, FieldActionConfig } from '../models/transition.model';
 
