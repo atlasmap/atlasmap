@@ -301,7 +301,7 @@ export class InitializationService {
             this.cfg.mappings.updateDocumentNamespacesFromMappings(this.cfg);
             this.cfg.mappings.updateMappingsFromDocuments(this.cfg);
             for (const d of this.cfg.getAllDocs()) {
-                d.updateFromMappings(this.cfg.mappings, this.cfg);
+                d.updateFromMappings(this.cfg.mappings);
             }
             this.cfg.mappings.removeStaleMappings(this.cfg);
             this.updateLoadingStatus('Initialization complete.');
