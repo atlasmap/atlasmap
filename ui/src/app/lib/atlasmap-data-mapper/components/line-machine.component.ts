@@ -35,32 +35,7 @@ export class LineModel {
 
 @Component({
   selector: 'line-machine',
-  template: `
-        <div class="LineMachineComponent" #lineMachineElement on-mousemove="drawLine($event)" style="height:100%; margin-top:6%;">
-            <svg style="width:100%; height:100%;">
-                <defs>
-                    <linearGradient id='line-gradient-active' gradientUnits="userSpaceOnUse">
-                        <stop stop-color='#0088ce'/>
-                        <stop offset='100%' stop-color='#0088ce'/> <!-- was #bee1f4 -->
-                    </linearGradient>
-                    <linearGradient id='line-gradient-dormant' gradientUnits="userSpaceOnUse">
-                        <stop stop-color='#8b8d8f'/>
-                        <stop offset='100%' stop-color='#8b8d8f'/> <!-- was #EEEEEE -->
-                    </linearGradient>
-                </defs>
-                <svg:line *ngFor="let l of lines"
-                    [attr.x1]="l.sourceX" [attr.y1]="l.sourceY"
-                    [attr.x2]="l.targetX" [attr.y2]="l.targetY"
-                    shape-rendering="optimizeQuality"
-                    [attr.style]="l.style"></svg:line>
-                <svg:line *ngIf="lineBeingFormed && lineBeingFormed.targetY"
-                    [attr.x1]="lineBeingFormed.sourceX" [attr.y1]="lineBeingFormed.sourceY"
-                    [attr.x2]="lineBeingFormed.targetX" [attr.y2]="lineBeingFormed.targetY"
-                    shape-rendering="optimizeQuality"
-                    [attr.style]="lineBeingFormed.style"></svg:line>
-            </svg>
-        </div>
-    `,
+  templateUrl: './line-machine.component.html',
 })
 
 export class LineMachineComponent implements OnInit {

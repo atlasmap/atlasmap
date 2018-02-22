@@ -24,59 +24,7 @@ import { DataMapperUtil } from '../common/data-mapper-util';
 
 @Component({
   selector: 'namespace-list',
-  template: `
-        <div class="dataMapperItemList namespaceList">
-            <div class="card-pf">
-                <div class="card-pf-heading">
-                    <h2 class="card-pf-title">
-                        <div class="name">
-                            <i class="fa fa-table"></i>
-                            <label>Namespaces for {{ cfg.getFirstXmlDoc(false).name }}</label>
-                        </div>
-                        <i (click)="toggleSearch()" [attr.class]="getSearchIconCSSClass()"></i>
-                        <i (click)="addEditNamespace(null, $event)" class="fa fa-plus link"></i>
-                        <div class="clear"></div>
-                    </h2>
-                    <div class="searchHeaderWrapper">
-                        <div *ngIf="searchMode" class="searchBox">
-                            <input type="text" #searchFilterBox id="search-filter-box" [(ngModel)]="searchFilter"
-                                (keyup)="search(searchFilterBox.value)" placeholder="Search" [focus]="true" />
-                            <i class="fa fa-close searchBoxCloseIcon link" (click)="toggleSearch()"></i>
-                            <div class="clear"></div>
-                        </div>
-                        <div [attr.class]="getRowTitleCSSClass()">
-                            <label class="alias">Alias</label>
-                            <label class="uri">Uri</label>
-                            <label class="locationUri">Location URI</label>
-                            <div class="clear"></div>
-                        </div>
-                        <div class="clear"></div>
-                    </div>
-                </div>
-                <div [attr.class]="getItemsCSSClass()">
-                    <div [attr.class]="getRowsCSSClass()">
-                        <div *ngFor="let namespace of getNamespaces(); let index=index;"
-                            [attr.class]="getNamespaceCSSClass(namespace, index)" (click)="selectNamespace(namespace)">
-                            <label class="alias">{{ namespace.isTarget ? 'Target (tns)' : namespace.alias }}</label>
-                            <label class="uri">{{ namespace.uri }}</label>
-                            <label class="locationUri">{{ namespace.locationUri }}</label>
-                            <div class="actions" style="float:right">
-                                <i class="fa fa-edit link" aria-hidden="true" (click)="addEditNamespace(namespace, $event);"></i>
-                                <i class="fa fa-trash link" aria-hidden="true" (click)="removeNamespace(namespace, $event);"></i>
-                            </div>
-                            <div class="clear"></div>
-                        </div>
-                    </div>
-                    <div class="noSearchResults" *ngIf="searchResultsVisible()">
-                        <label>No search results.</label>
-                        <div class="clear"></div>
-                    </div>
-                </div>
-                <div class="card-pf-heading itemCount">{{ getNamespaces().length }} namespaces</div>
-                <div class="clear"></div>
-            </div>
-        </div>
-    `,
+  templateUrl: './namespace-list.component.html',
 })
 
 export class NamespaceListComponent {

@@ -25,67 +25,8 @@ import { ModalWindowComponent } from './modal-window.component';
 import { TemplateEditComponent } from './template-edit.component';
 
 @Component({
-  selector: 'dm-toolbar',
-  template: `
-    <div class="dm-toolbar">
-        <div class="dm-toolbar-icons" style="float:right;">
-            <i class="fa fa-plus link" (click)="toolbarButtonClicked('addMapping', $event);"
-                tooltip="Add new mapping"></i>
-            <i [attr.class]="getCSSClass('editTemplate')"  *ngIf="targetSupportsTemplate"
-                (click)="toolbarButtonClicked('editTemplate', $event);"></i>
-            <i [attr.class]="getCSSClass('showMappingTable')" (click)="toolbarButtonClicked('showMappingTable', $event);"
-               tooltip="Show / hide mapping table"></i>
-            <i *ngIf="cfg.getFirstXmlDoc(false)" [attr.class]="getCSSClass('showNamespaceTable')"
-                (click)="toolbarButtonClicked('showNamespaceTable', $event);" tooltip="Show / hide namespace table"></i>
-            <i [attr.class]="getCSSClass('showDetails')" (click)="toolbarButtonClicked('showDetails', $event);"
-                tooltip="Show / hide mapping details"></i>
-            <div dropdown placement="bottom right" style="display:inline; position:relative;">
-                <i [attr.class]="getCSSClass('advancedMode')" dropdownToggle (click)="false"
-                    tooltip="Editor settings"></i>
-                <!-- <a href dropdownToggle (click)="false">X</a> -->
-                <ul *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu">
-                    <li role="menuitem" (click)="toolbarButtonClicked('showTypes', $event);">
-                        <div style="float:left">
-                            <a class="dropdown-item" href="#">
-                                <i class="fa fa-tag"></i>Show Types
-                            </a>
-                        </div>
-                        <i class="fa fa-check" *ngIf="cfg.showTypes" style="float:right"></i>
-                        <div class="clear"></div>
-                    </li>
-                    <li role="menuitem" (click)="toolbarButtonClicked('showLines', $event);">
-                        <div style="float:left">
-                            <a class="dropdown-item" href="#">
-                                <i class="fa fa-share-alt"></i>Show Lines
-                            </a>
-                        </div>
-                        <i class="fa fa-check" *ngIf="cfg.showLinesAlways" style="float:right"></i>
-                        <div class="clear"></div>
-                    </li>
-                    <li role="menuitem" (click)="toolbarButtonClicked('showMappedFields', $event);">
-                        <div style="float:left">
-                            <a class="dropdown-item" href="#">
-                                <i class="fa fa-chain"></i>Show Mapped Fields
-                            </a>
-                        </div>
-                        <i class="fa fa-check" *ngIf="cfg.showMappedFields" style="float:right"></i>
-                        <div class="clear"></div>
-                    </li>
-                    <li role="menuitem" (click)="toolbarButtonClicked('showUnmappedFields', $event);">
-                        <div style="float:left">
-                            <a class="dropdown-item" href="#">
-                                <i class="fa fa-chain-broken"></i>Show Unmapped Fields
-                            </a>
-                        </div>
-                        <i class="fa fa-check" *ngIf="cfg.showUnmappedFields" style="float:right"></i>
-                        <div class="clear"></div>
-                    </li>
-                </ul>
-            </div>
-        </div>
-        <div style="clear:both; height:0px;"></div>
-    </div>
-`,
+  selector: 'toolbar',
+  templateUrl: './toolbar.component.html',
 })
 
 export class ToolbarComponent implements OnInit {

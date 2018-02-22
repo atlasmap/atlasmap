@@ -40,14 +40,17 @@ import { PropertyFieldEditComponent } from './components/property-field-edit.com
 import { ConstantFieldEditComponent } from './components/constant-field-edit.component';
 import { FieldEditComponent } from './components/field-edit.component';
 import { NamespaceEditComponent } from './components/namespace-edit.component';
-import { MappingListComponent, MappingListFieldComponent } from './components/mapping/mapping-list.component';
+import { MappingListComponent } from './components/mapping/mapping-list.component';
+import { MappingListFieldComponent } from './components/mapping/mapping-list-field.component';
 import { NamespaceListComponent } from './components/namespace-list.component';
-import {
-  MappingDetailComponent, CollectionMappingComponent, SimpleMappingComponent, MappingPairDetailComponent
-} from './components/mapping/mapping-detail.component';
+import { MappingDetailComponent } from './components/mapping/mapping-detail.component';
+import { CollectionMappingComponent } from './components/mapping/collection-mapping.component';
+import { SimpleMappingComponent } from './components/mapping/simple-mapping.component';
+import { MappingPairDetailComponent } from './components/mapping/mapping-pair-detail.component';
 import { MappingFieldDetailComponent } from './components/mapping/mapping-field-detail.component';
 import { MappingFieldActionComponent } from './components/mapping/mapping-field-action.component';
-import { MappingSelectionComponent, MappingSelectionSectionComponent } from './components/mapping/mapping-selection.component';
+import { MappingSelectionComponent } from './components/mapping/mapping-selection.component';
+import { MappingSelectionSectionComponent } from './components/mapping/mapping-selection-section.component';
 import { LookupTableComponent } from './components/mapping/lookup-table.component';
 import { TransitionSelectionComponent } from './components/mapping/transition-selection.component';
 import { FocusDirective } from './common/focus.directive';

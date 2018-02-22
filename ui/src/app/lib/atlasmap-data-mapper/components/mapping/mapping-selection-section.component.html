@@ -1,0 +1,36 @@
+<div [attr.class]="getClass()" (click)="handleMouseClick($event)">
+  <div class="numberWrapper">
+    <div class="number">{{ outputNumber + 1 }}</div>
+  </div>
+  <div class="pathContainer">
+    <div class="fieldPair" *ngFor="let fieldPair of mapping.fieldMappings">
+      <div class="sourceTargetSection sourcePaths">
+        <label>{{ getSourceTargetLabelText(true, fieldPair) }}</label>
+        <div class="paths" *ngFor="let sourceField of fieldPair.sourceFields">
+          <div class="path">
+            <div class="pathName">
+              <i class="fa fa-hdd-o" aria-hidden="true"></i>
+              {{ getFormattedOutputPath(sourceField.field.path, false) }}
+            </div>
+            <div class="fieldName">{{ getFormattedOutputPath(sourceField.field.path, true) }}</div>
+            <div class="clear"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sourceTargetSection targetPaths">
+        <label>{{ getSourceTargetLabelText(false, fieldPair) }}</label>
+        <div class="paths" *ngFor="let targetField of fieldPair.targetFields">
+          <div class="path">
+            <div class="pathName">
+              <i class="fa fa-download" aria-hidden="true"></i>
+              {{ getFormattedOutputPath(targetField.field.path, false) }}
+            </div>
+            <div class="fieldName">{{ getFormattedOutputPath(targetField.field.path, true) }}</div>
+            <div class="clear"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="clear"></div>
+</div>

@@ -1,0 +1,64 @@
+<div class="dataMapperItemList mappingList">
+  <div class="card-pf">
+    <div class="card-pf-heading">
+      <h2 class="card-pf-title">
+        <div class="name">
+          <i class="fa fa-table"></i>
+          <label>Mappings</label>
+        </div>
+        <i (click)="toggleSearch()" [attr.class]="getSearchIconCSSClass()"></i>
+        <div class="clear"></div>
+      </h2>
+      <div class="searchHeaderWrapper">
+        <div *ngIf="searchMode" class="searchBox">
+          <input type="text" #searchFilterBox id="search-filter-box" [(ngModel)]="searchFilter" (keyup)="search(searchFilterBox.value)"
+            placeholder="Search" [focus]="true" />
+          <i class="fa fa-close searchBoxCloseIcon link" (click)="toggleSearch()"></i>
+          <div class="clear"></div>
+        </div>
+        <div [attr.class]="getRowTitleCSSClass()">
+          <label class="sources">
+            <i class="fa fa-hdd-o"></i>Sources</label>
+          <label class="targets">
+            <i class="fa fa-download"></i>Targets</label>
+          <label class="type">
+            <i class="fa fa-sliders"></i>Type</label>
+          <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
+      </div>
+    </div>
+    <div [attr.class]="getItemsCSSClass()">
+      <div [attr.class]="getMappingRowsCSSClass()">
+        <div *ngFor="let mapping of getMappings(); let index=index;" [attr.class]="getMappingCSSClass(mapping, index)" (click)="selectMapping(mapping)">
+          <div *ngFor="let fieldPair of mapping.fieldMappings" class="itemRow">
+            <div class="sourceFieldNames fieldNames">
+              <mapping-list-field *ngFor="let mappedField of getMappedFields(fieldPair, true)" [mappedField]="mappedField" [isSource]="true"
+                [cfg]="cfg"></mapping-list-field>
+              <div class="clear"></div>
+            </div>
+            <div class="targetFieldNames fieldNames">
+              <mapping-list-field *ngFor="let mappedField of getMappedFields(fieldPair, false)" [mappedField]="mappedField" [isSource]="false"
+                [cfg]="cfg"></mapping-list-field>
+              <div class="clear"></div>
+            </div>
+            <div class="transition">
+              <label>{{ fieldPair.transition.getPrettyName() }}</label>
+              <div class="clear"></div>
+            </div>
+            <div class="error">
+              <span class="pficon" [ngClass]="mapping.validationErrors | toErrorIconClass" *ngIf="mapping.validationErrors.length"></span>
+            </div>
+            <div class="clear"></div>
+          </div>
+        </div>
+      </div>
+      <div class="noSearchResults" *ngIf="searchResultsVisible()">
+        <label>No search results.</label>
+        <div class="clear"></div>
+      </div>
+    </div>
+    <div class="card-pf-heading itemCount">{{ cfg.mappings.mappings.length }} mappings</div>
+    <div class="clear"></div>
+  </div>
+</div>

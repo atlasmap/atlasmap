@@ -1,0 +1,27 @@
+<div id="modalWindow" [attr.class]="visible ? 'modal fade in' : 'modal fade dm-out'" *ngIf="visible">
+  <div class="modalWindow">
+    <div class="modal-content">
+      <div class="modal-header">
+        <a (click)="closeClicked($event)">
+          <span class='close'>
+            <i class="fa fa-close"></i>
+          </span>
+        </a>
+        {{ headerText }}
+      </div>
+      <div class="modal-error">
+        <data-mapper-error [isValidation]="true" [errorService]="cfg.errorService"></data-mapper-error>
+      </div>
+      <div class="modal-body">
+        <div class="modal-message" *ngIf="message">{{ message }}</div>
+        <ng-template #dyn_target></ng-template>
+      </div>
+      <div class="modal-footer">
+        <div class="modal-buttons">
+          <button class="pull-right btn btn-primary" (click)="buttonClicked(true)">{{ confirmButtonText }}</button>
+          <button class="pull-right btn btn-cancel" (click)="buttonClicked(false)">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

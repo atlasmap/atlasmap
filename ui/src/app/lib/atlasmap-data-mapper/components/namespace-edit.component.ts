@@ -22,29 +22,7 @@ import { ModalWindowValidator } from './modal-window.component';
 
 @Component({
   selector: 'namespace-edit',
-  template: `
-        <div class="PropertyEditFieldComponent">
-            <div class="form-group">
-                <label>Alias</label>
-                <input type="text" [(ngModel)]="namespace.alias" disabled="{{namespace.isTarget || !namespace.createdByUser}}">
-            </div>
-            <div class="form-group">
-                <label>URI</label>
-                <input type="text" [(ngModel)]="namespace.uri"/>
-            </div>
-            <div class="form-group">
-                <label>Location URI</label>
-                <input type="text" [(ngModel)]="namespace.locationUri"/>
-            </div>
-            <div class="form-group">
-                <label>Type</label>
-                <input type="checkbox" [ngModel]="namespace.isTarget" style="width:20px; vertical-align:middle;"
-                    disabled="{{!targetEnabled}}" (click)="targetToggled()" />
-                <label [attr.class]="(targetEnabled ? '' : 'disabled')" style="width:105px; ">Target Namespace</label>
-                <div class="clear"></div>
-            </div>
-        </div>
-    `,
+  templateUrl: './namespace-edit.component.html',
 })
 
 export class NamespaceEditComponent implements ModalWindowValidator {

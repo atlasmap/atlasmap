@@ -31,64 +31,7 @@ import { ModalWindowComponent } from './modal-window.component';
 
 @Component({
   selector: 'document-definition',
-  template: `
-        <div #documentDefinitionElement class='docDef' *ngIf="cfg && cfg.initCfg.initialized">
-            <div class="card-pf">
-                <div class="card-pf-heading">
-                    <h2 class="card-pf-title">
-                        <div class="docName">
-                            <i class="fa {{ isSource ? 'fa-hdd-o' : 'fa-download' }}"></i>
-                            <label>{{ sourcesTargetsLabel }}</label>
-                        </div>
-                        <i (click)="toggleSearch()" [attr.class]="getSearchIconCSSClass()"
-                            tooltip="Toggle search window" placement="left"></i>
-                        <div class="clear"></div>
-                    </h2>
-
-                </div>
-                <div *ngIf="searchMode" class="searchBox">
-                    <input type="text" #searchFilterBox
-                        id="search-filter-box" (keyup)="search(searchFilterBox.value)" placeholder="Search"
-                        [(ngModel)]="searchFilter" [focus]="true" />
-                    <i class="fa fa-close searchBoxCloseIcon link" (click)="toggleSearch()"
-                        tooltip="Close search window" placement="left"></i>
-                    <div class="clear"></div>
-                </div>
-                <div [attr.class]="searchMode ? 'fieldListSearchOpen' : 'fieldList'" style="overflow:auto;"
-                    (scroll)="handleScroll($event)">
-                    <div *ngFor="let docDef of documents" #docDetail class="docIdentifier" [attr.id]='docDef.name'>
-                        <div class="card-pf-title documentHeader" tooltip="{{ docDef.description }}" placement="bottom"
-                            *ngIf="isDocNameVisible(docDef)" (click)="toggleFieldVisibility(docDef)">
-                            <div style="float:left">
-                                <i class="fa fa-angle-right docCollapseIcon" *ngIf="!docDef.showFields"></i>
-                                <i class="fa fa-angle-down docCollapseIcon" *ngIf="docDef.showFields"></i>
-                                <i class="fa {{ isSource ? 'fa-hdd-o' : 'fa-download' }}"></i>
-                                <label>{{ docDef.getName(cfg.showTypes) }}</label>
-                            </div>
-                            <div style="float:right;" *ngIf="isAddFieldAvailable(docDef)">
-                                <i class="fa fa-plus link" (click)="addField(docDef, $event)"></i>
-                            </div>
-                            <div class="clear"></div>
-                        </div>
-                        <div *ngIf="docDef.showFields">
-                            <document-field-detail #fieldDetail *ngFor="let f of docDef.fields" [modalWindow]="modalWindow"
-                                [field]="f" [cfg]="cfg" [lineMachine]="lineMachine"></document-field-detail>
-                            <div class="FieldDetail"
-                                *ngIf="!searchMode && docDef.isPropertyOrConstant && (!docDef.fields || !docDef.fields.length)">
-                                <label style="width:100%; padding:5px 16px; margin:0">
-                                    No {{ docDef.type == 'Property' ? 'properties' : 'constants' }} exist.
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="noSearchResults" *ngIf="searchMode && !searchResultsExist">
-                        <label>No search results.</label>
-                    </div>
-                </div>
-                <div class="card-pf-heading fieldsCount">{{ getFieldCount() }} fields</div>
-            </div>
-        </div>
-    `,
+  templateUrl: './document-definition.component.html',
 })
 
 export class DocumentDefinitionComponent implements OnInit {

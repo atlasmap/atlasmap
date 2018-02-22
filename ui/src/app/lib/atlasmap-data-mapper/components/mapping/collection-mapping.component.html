@@ -1,0 +1,45 @@
+<div class="collectionSectionContainer">
+  <div [attr.class]="'collectionSection ' + getAnimationCSSClass()">
+    <!-- collection field pairing detail -->
+    <div style="float:left; width:50%; padding-top:10px;" class="mappingFieldContainer">
+      <div *ngFor="let fieldPair of cfg.mappings.activeMapping.fieldMappings">
+        <div class="MappingFieldSection">
+          <!-- header label / trash icon -->
+          <div style="float:left;">
+            <label>Source</label>
+            <i class="fa fa-bolt" style="font-size:12px; vertical-align:baseline;" *ngIf="fieldPair.hasTransition()"></i>
+          </div>
+          <div style="float:right; margin-right:5px; text-align:right; font-size:15px">
+            <i class="fa fa-edit link" aria-hidden="true" (click)="editPair(fieldPair)" tooltip="Edit mapping"></i>
+            <i class="fa fa-trash link" aria-hidden="true" (click)="removePair(fieldPair)" tooltip="Remove mapping"></i>
+          </div>
+          <div class="clear"></div>
+
+          <mapping-field-detail *ngFor="let mappedField of fieldPair.getMappedFields(true)" [mappedField]="mappedField" [fieldPair]="fieldPair"
+            [cfg]="cfg" [isSource]="true"></mapping-field-detail>
+          <div style="float:left;">
+            <label>Target</label>
+          </div>
+          <div class="clear"></div>
+          <mapping-field-detail *ngFor="let mappedField of fieldPair.getMappedFields(false)" [mappedField]="mappedField" [fieldPair]="fieldPair"
+            [cfg]="cfg" [isSource]="false"></mapping-field-detail>
+        </div>
+      </div>
+      <!-- add button -->
+      <div class="linkContainer">
+        <button type="button" class="btn btn-primary" (click)="addClicked()">Add Mapping</button>
+      </div>
+    </div>
+    <div style="float:left; width:50%; margin:0; padding:0" *ngIf="fieldPairForEditing">
+      <div class="card-pf-title">
+        <div style="float:left">Edit Details</div>
+        <div style="float:right;">
+          <i class="fa fa-close link" aria-hidden="true" (click)="exitEditMode()"></i>
+        </div>
+        <div class="clear"></div>
+      </div>
+      <mapping-pair-detail [cfg]="cfg" [fieldPair]="fieldPairForEditing" [modalWindow]="modalWindow"></mapping-pair-detail>
+    </div>
+    <div class="clear"></div>
+  </div>
+</div>
