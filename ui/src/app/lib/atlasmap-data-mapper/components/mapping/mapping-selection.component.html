@@ -1,0 +1,20 @@
+<div class="MappingSelectionComponent" *ngIf="mappings">
+  <div class="header">
+    <div class="sourceTargetHeader">{{ selectedField.isSource() ? 'Source' : 'Target' }}</div>
+    <div class="pathHeader">
+      <div class="pathName">{{ getFormattedOutputPath(selectedField.path, false) }}</div>
+      <div class="fieldName">{{ getFormattedOutputPath(selectedField.path, true) }}</div>
+      <div class="clear"></div>
+    </div>
+    <div class="clear"></div>
+    <button class="btn btn-primary addButton" (click)="addMapping()">
+      <i class="fa fa-plus"></i>Add New Mapping
+    </button>
+  </div>
+  <div class="MappingSelectionOptions">
+    <mapping-selection-section *ngFor="let mapping of mappings; let i = index; let odd=odd; let even=even;" [mapping]="mapping"
+      [outputNumber]="i" [selected]="i == 0" [selectedCallback]="selectionChanged" [selectedFieldIsSource]="selectedField.isSource()"
+      [parentComponent]="this" [isOddRow]="odd" #mappingSection>
+    </mapping-selection-section>
+  </div>
+</div>

@@ -21,37 +21,7 @@ import { TransitionModel, FieldAction, FieldActionConfig } from '../../models/tr
 
 @Component({
   selector: 'mapping-field-action',
-  template: `
-        <div class="mappingFieldAction">
-            <div class="actionContainer" *ngFor="let action of getMappedFieldActions(); let actionIndex = index">
-                <div class="form-group">
-                    <label style="float:left;">{{ getActionDescription(action) }}</label>
-                    <div style="float:right; margin-right:5px;" *ngIf="!action.isSeparateOrCombineMode">
-                        <i class="fa fa-trash link" aria-hidden="true" (click)="removeAction(action)"></i>
-                    </div>
-                    <div class="clear"></div>
-
-                    <select (change)="configSelectionChanged($event);"
-                        [ngModel]="action.name" *ngIf="!action.isSeparateOrCombineMode">
-                        <option *ngFor="let actionConfig of getActionConfigs()"
-                            [attr.actionIndex]="actionIndex"
-                            [attr.value]="actionConfig.name">{{ actionConfig.name }}</option>
-                    </select>
-
-                    <div class="clear"></div>
-                </div>
-                <div class="form-group argument" *ngFor="let argConfig of action.config.arguments; let i = index">
-                    <label style="">{{ argConfig.name }}</label>
-                    <input type="text" class="input-{{argConfig.name}}"
-                        [(ngModel)]="action.getArgumentValue(argConfig.name).value" (change)="selectionChanged($event)"/>
-                    <div class="clear"></div>
-                </div>
-            </div>
-            <div *ngIf="actionsExistForField() && !isSource" class="linkContainer">
-                <button type="button" class="btn btn-primary" (click)="addTransformation()">Add Transformation</button>
-            </div>
-        </div>
-    `,
+  templateUrl: './mapping-field-action.component.html',
 })
 
 export class MappingFieldActionComponent {

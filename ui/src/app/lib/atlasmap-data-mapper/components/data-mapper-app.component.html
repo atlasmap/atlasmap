@@ -9,7 +9,7 @@
       <modal-window #modalWindow [cfg]="getConfig()"></modal-window>
     </div>
     <div class="row">
-      <dm-toolbar #toolbarComponent [cfg]="getConfig()" [lineMachine]="lineMachine" [modalWindow]="modalWindow"></dm-toolbar>
+      <toolbar #toolbarComponent [cfg]="getConfig()" [lineMachine]="lineMachine" [modalWindow]="modalWindow"></toolbar>
     </div>
     <div class="row" style="height:calc(100% - 32px); position:relative; padding-top:10px;" *ngIf="hasSourceDoc && hasTargetDoc">
       <div style='height:100%; padding:0;' [attr.class]="(getConfig().showMappingTable || getConfig().showNamespaceTable) ? 'col-md-9 hidden' : 'col-md-9'">

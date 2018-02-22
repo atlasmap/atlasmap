@@ -25,68 +25,7 @@ import { ModalWindowValidator } from './modal-window.component';
 
 @Component({
   selector: 'field-edit',
-  template: `
-        <!-- our template for type ahead -->
-        <ng-template #typeaheadTemplate let-model="item" let-index="index">
-            <h5 style="font-style:italic;" *ngIf="model['field'].docDef">{{ model['field'].docDef.name }}</h5>
-            <h5>{{ model['field'].path }}</h5>
-        </ng-template>
-
-        <div class="DataMapperEditComponent">
-            <div class="form-group">
-                <label>Parent</label>
-                <input type="text" [(ngModel)]="parentFieldName" [typeahead]="dataSource"
-                    typeaheadWaitMs="200" (typeaheadOnSelect)="parentSelectionChanged($event)" (blur)="handleOnBlur($event)"
-                    typeaheadOptionField="displayName" [typeaheadItemTemplate]="typeaheadTemplate" disabled="{{editMode}}">
-            </div>
-            <div class="form-group">
-                <label>Name</label>
-                <input name="value" type="text" [(ngModel)]="field.name"/>
-            </div>
-            <div class="form-group" *ngIf="isXML">
-                <label>Namespace</label>
-                <select (change)="namespaceSelectionChanged($event);" [ngModel]="namespaceAlias">
-                    <option *ngFor="let ns of namespaces" value="{{ns.alias}}" [selected]="namespaceAlias == ns.alias">
-                        {{ ns.getPrettyLabel() }}
-                    </option>
-                </select>
-            </div>
-            <div class="form-group" *ngIf="isXML">
-                <label>Field Type</label>
-                <select (change)="fieldTypeSelectionChanged($event);" [ngModel]="fieldType">
-                    <option value="element">Element</option>
-                    <option value="attribute">Attribute</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Value Type</label>
-                <select (change)="valueTypeSelectionChanged($event);" [ngModel]="valueType">
-                    <option value="BOOLEAN">Boolean</option>
-                    <option value="BYTE">Byte</option>
-                    <option value="BYTE_ARRAY">ByteArray</option>
-                    <option value="CHAR">Char</option>
-                    <option value="COMPLEX">Complex</option>
-                    <option value="DECIMAL">Decimal</option>
-                    <option value="DOUBLE">Double</option>
-                    <option value="FLOAT">Float</option>
-                    <option value="INTEGER">Integer</option>
-                    <option value="LONG">Long</option>
-                    <option value="SHORT">Short</option>
-                    <option value="STRING">String</option>
-                    <option value="TIME">Time</option>
-                    <option value="DATE">Date</option>
-                    <option value="DATE_TIME">DateTime</option>
-                    <option value="DATE_TZ">DateTZ</option>
-                    <option value="TIME_TZ">TimeTZ</option>
-                    <option value="DATE_TIME_TZ">DateTimeTZ</option>
-                    <option value="UNSIGNED_BYTE">Unsigned Byte</option>
-                    <option value="UNSIGNED_INTEGER">Unsigned Integer</option>
-                    <option value="UNSIGNED_LONG">Unsigned Long</option>
-                    <option value="UNSIGNED_SHORT">Unsigned Short</option>
-                </select>
-            </div>
-        </div>
-    `,
+  templateUrl: './field-edit.component.html',
 })
 
 export class FieldEditComponent implements ModalWindowValidator {

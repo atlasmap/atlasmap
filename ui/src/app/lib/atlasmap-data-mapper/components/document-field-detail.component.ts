@@ -30,49 +30,7 @@ import { FieldEditComponent } from './field-edit.component';
 
 @Component({
   selector: 'document-field-detail',
-  template: `
-        <div class="DocumentFieldDetailComponent" [attr.id]="field.name" #fieldDetailElement on-mouseover='handleMouseOver($event)'
-            *ngIf="fieldShouldBeVisible()" [attr.draggable]="field.isTerminal()" (dragstart)="startDrag($event)" (drop)="endDrag($event)"
-            (dragenter)="dragEnterLeave($event, true)" (dragleave)="dragEnterLeave($event, false)" (dragover)="allowDrop($event)">
-            <div [attr.class]='getCssClass()' (click)="handleMouseClick($event)" *ngIf="field.visibleInCurrentDocumentSearch">
-                <div style="float:left;">
-                    <div style="display:inline-block; width:24px;" *ngIf="!field.isSource()">
-                        <i [attr.class]='getMappingClass()'></i>
-                        <i [attr.class]='getTransformationClass()'></i>
-                    </div>
-                    <div class="spacer" [attr.style]="getSpacerWidth()">&nbsp;</div>
-                    <div *ngIf="!field.isTerminal()" style="display:inline-block;">
-                        <i [attr.class]="getParentToggleClass()"></i>
-                        <i *ngIf="!field.isCollection" class="fa fa-folder parentFolder"></i>
-                        <i *ngIf="field.isCollection" class="fa fa-list-ul parentFolder"></i>
-                    </div>
-                    <div *ngIf="field.isTerminal()" style="display:inline-block;">
-                        <i [attr.class]="getFieldTypeIcon()"></i>
-                    </div>
-                    </div>
-                    <div *ngIf="!field.docDef.populateChildren(field); else selectable" style="display:inline-block; color: gray;">
-                        <label>{{ field.getFieldLabel(cfg.showTypes, false) }}</label>
-                    </div>
-                    <ng-template #selectable>
-                        <label>{{ field.getFieldLabel(cfg.showTypes, false) }}</label>
-                    </ng-template>
-                    <div style="float:right; width:24px; text-align:right;" *ngIf="field.isSource()">
-                        <i [attr.class]='getTransformationClass()'></i>
-                        <i [attr.class]='getMappingClass()'></i>
-                    </div>
-                    <div class="propertyFieldIcons" style="float:right; text-align:right" *ngIf="field.userCreated">
-                        <i class="fa fa-edit link" aria-hidden="true" (click)="editField($event);"></i>
-                        <i class="fa fa-trash link" aria-hidden="true" (click)="removeField($event);"></i>
-                    </div>
-                    <div class="clear"></div>
-            </div>
-            <div class="childrenFields" *ngIf="!field.isTerminal() && !field.collapsed">
-                <document-field-detail #fieldDetail *ngFor="let f of field.children"
-                    [field]="f" [lineMachine]="lineMachine" [modalWindow]="modalWindow"
-                    [cfg]="cfg"></document-field-detail>
-            </div>
-        </div>
-    `,
+  templateUrl: './document-field-detail.component.html',
 })
 
 export class DocumentFieldDetailComponent {

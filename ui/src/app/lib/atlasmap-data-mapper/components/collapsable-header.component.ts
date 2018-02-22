@@ -18,11 +18,7 @@ import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'collapsable-header',
-  template: `
-        <div class="CollapsableCardHeader" (click)="handleMouseClick($event)">
-            <h2 class="card-pf-title"><i [attr.class]="getCSSClass()"></i>{{ title }}</h2>
-        </div>
-    `,
+  templateUrl: './collapsable-header.component.html',
 })
 
 export class CollapsableHeaderComponent {

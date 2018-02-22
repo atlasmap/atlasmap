@@ -1,0 +1,19 @@
+<div class="mappingFieldContainer" *ngIf="fieldPair">
+  <div *ngFor="let mappedField of fieldPair.getMappedFields(isSource)" class="MappingFieldSection">
+    <!-- header label / trash icon -->
+    <div style="float:left;">
+      <label>{{ getTopFieldTypeLabel() }}</label>
+    </div>
+    <div style="float:right; margin-right:5px;">
+      <i class="fa fa-trash link" aria-hidden="true" (click)="removeMappedField(mappedField)" tooltip="Remove mapping"></i>
+    </div>
+    <div class="clear"></div>
+
+    <mapping-field-detail [fieldPair]="fieldPair" [cfg]="cfg" [isSource]="isSource" [mappedField]="mappedField"></mapping-field-detail>
+    <mapping-field-action [mappedField]="mappedField" [cfg]="cfg" [isSource]="isSource" [fieldPair]="fieldPair"></mapping-field-action>
+  </div>
+  <!-- add button -->
+  <div class="linkContainer" *ngIf="isAddButtonVisible()">
+    <button type="button" class="btn btn-primary" (click)="addClicked()">{{ getAddButtonLabel() }}</button>
+  </div>
+</div>

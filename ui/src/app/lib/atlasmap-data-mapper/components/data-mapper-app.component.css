@@ -80,17 +80,17 @@
 .DataMapperLoadingMessage IMG { height:12px; width:12px; vertical-align:middle; }
 
 /* toolbar styles */
-.dm-toolbar { margin:1px 0px; padding:10px; }
-.dm-toolbar .dm-toolbar-icons I { font-size:20px; margin-left:10px; vertical-align:middle; }
-.dm-toolbar .dropdown-menu { margin-top:5px; }
-.dm-toolbar .dropdown-menu LI { background-color:transparent; width:200px; }
-.dm-toolbar .dropdown-menu LI A { color:rgb(54,54,54); }
-.dm-toolbar .dropdown-menu LI I { color:rgb(54,54,54); font-size:10px; margin-right:10px;
+.toolbar { margin:1px 0px; padding:10px; }
+.toolbar .toolbar-icons I { font-size:20px; margin-left:10px; vertical-align:middle; }
+.toolbar .dropdown-menu { margin-top:5px; }
+.toolbar .dropdown-menu LI { background-color:transparent; width:200px; }
+.toolbar .dropdown-menu LI A { color:rgb(54,54,54); }
+.toolbar .dropdown-menu LI I { color:rgb(54,54,54); font-size:10px; margin-right:10px;
         vertical-align:baseline; }
-.dm-toolbar .dropdown-menu LI I.fa-check { margin-top:3px; }
-.dm-toolbar .dropdown-menu LI:hover { background-color:rgba(92, 186, 223, 0.75); }
-.dm-toolbar .dropdown-menu LI:hover A { }
-.dm-toolbar .dropdown-menu LI:hover I { }
+.toolbar .dropdown-menu LI I.fa-check { margin-top:3px; }
+.toolbar .dropdown-menu LI:hover { background-color:rgba(92, 186, 223, 0.75); }
+.toolbar .dropdown-menu LI:hover A { }
+.toolbar .dropdown-menu LI:hover I { }
 
 /* document cards */
 .docDef { position:relative; border:1px solid #CAC9C9; height:100%; background-color:white; overflow:hidden; }
@@ -231,9 +231,9 @@ I.docCollapseIcon { width:10px; margin-left:5px; }
 .MappingFieldSection LABEL { color:#363636; }
 .MappingFieldSection .fieldDetailTooltip LABEL { color:white; }
 
-.TransitionSelector LABEL { width:100%; }
-.TransitionSelector .enumSection LABEL { width:calc(100% - 25px); margin-bottom:0; }
-.TransitionSelector SELECT { display:block; width:100%; }
+.TransitionSelection LABEL { width:100%; }
+.TransitionSelection .enumSection LABEL { width:calc(100% - 25px); margin-bottom:0; }
+.TransitionSelection SELECT { display:block; width:100%; }
 
 /* modal window */
 .DataMapperUI .modal { z-index:1000; width:100%; height:100%; overflow:auto; display:block; }

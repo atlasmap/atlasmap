@@ -1,0 +1,31 @@
+<!-- our template for type ahead -->
+<ng-template #typeaheadTemplate let-model="item" let-index="index">
+  <h5 style="font-style:italic;">{{ model['field'].docDef == null ? '' : model['field'].docDef.name }}</h5>
+  <h5>{{ model['field'].path }}</h5>
+</ng-template>
+
+<!-- our template for tooltip popover -->
+<ng-template #tolTemplate>
+  <div class="fieldDetailTooltip">
+    <label class="parentObjectName" *ngIf="displayParentObject()">
+      <i [ngClass]="sourceIconCSSClass"></i>
+      {{ parentObjectName }}
+    </label>
+    <label>{{ getFieldPath() }}</label>
+    <label *ngIf="displayParentObject() && mappedField.field.type">({{ mappedField.field.type }})</label>
+    <div class="clear"></div>
+  </div>
+</ng-template>
+
+<div class="fieldDetail" style="margin-bottom:5px;" *ngIf="mappedField">
+  <label class="parentObjectName" *ngIf="displayParentObject()">
+    <i [ngClass]="sourceIconCSSClass"></i>
+    {{ parentObjectName }}
+    <span class="pficon pficon-info" [tooltip]="tolTemplate" placement="left"></span>
+  </label>
+  <div style="width:100%;">
+    <input type="text" id="{{inputId}}" [ngModel]="mappedField.field.getFieldLabel(cfg.showTypes, false)" [typeahead]="dataSource"
+      typeaheadWaitMs="200" (typeaheadOnSelect)="selectionChanged($event)" typeaheadOptionField="displayName" [typeaheadItemTemplate]="typeaheadTemplate"
+      placeholder="Search">
+  </div>
+</div>

@@ -22,24 +22,7 @@ import { ConfigModel } from '../models/config.model';
 
 @Component({
   selector: 'data-mapper-error',
-  template: `
-        <div class="DataMapperErrorComponent" *ngIf="errorService && getErrors().length">
-            <div class="alert alert-danger" *ngFor="let e of getErrors()">
-                <a class="close" (click)="handleClick($event)">
-                    <i class="fa fa-close" attr.errorIdentifier="{{e.identifier}}"></i>
-                </a>
-                <span class="pficon pficon-error-circle-o"></span>
-                {{ e.message }}
-            </div>
-            <div class="alert alert-warning" *ngFor="let w of getWarnings()">
-                <a class="close" (click)="handleClick($event)">
-                    <i class="fa fa-close" attr.errorIdentifier="{{w.identifier}}"></i>
-                </a>
-                <span class="pficon pficon-warning-triangle-o"></span>
-                {{ w.message }}
-            </div>
-        </div>
-    `,
+  templateUrl: './data-mapper-error.component.html',
 })
 
 export class DataMapperErrorComponent {

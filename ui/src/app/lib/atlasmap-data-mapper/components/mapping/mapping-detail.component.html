@@ -1,0 +1,34 @@
+<div class='fieldMappingDetail' *ngIf="cfg.mappings.activeMapping && cfg.showMappingDetailTray">
+  <div class="card-pf">
+    <div class="card-pf-heading">
+      <h2 class="card-pf-title">
+        <div style="float:left;">{{ getTitle() }}</div>
+        <div style="float:right; text-align:right;">
+          <i class="fa fa-trash link" aria-hidden="true" (click)="removeMapping($event)" tooltip="Remove all repeating mappings"></i>
+        </div>
+        <div style="clear:both; height:0px;"></div>
+      </h2>
+    </div>
+    <div class="fieldMappingDetail-body">
+      <div class="alert alert-danger" *ngFor="let error of cfg.mappings.activeMapping.getValidationErrors()">
+        <a class="close" (click)="cfg.mappings.activeMapping.removeError(error.identifier)">
+          <i class="fa fa-close"></i>
+        </a>
+        <span class="pficon pficon-error-circle-o"></span>
+        <label>{{ error.message }}</label>
+      </div>
+      <div class="alert alert-warning" *ngFor="let warn of cfg.mappings.activeMapping.getValidationWarnings()">
+        <a class="close" (click)="cfg.mappings.activeMapping.removeError(warn.identifier)">
+          <i class="fa fa-close"></i>
+        </a>
+        <span class="pficon pficon-warning-triangle-o"></span>
+        <label>{{ warn.message }}</label>
+      </div>
+      <div *ngIf="!isMappingCollection()">
+        <mapping-pair-detail *ngFor="let fieldPair of cfg.mappings.activeMapping.fieldMappings" [cfg]="cfg" [fieldPair]="fieldPair"
+          [modalWindow]="modalWindow"></mapping-pair-detail>
+      </div>
+      <collection-mapping [cfg]="cfg" *ngIf="isMappingCollection()"></collection-mapping>
+    </div>
+  </div>
+</div>

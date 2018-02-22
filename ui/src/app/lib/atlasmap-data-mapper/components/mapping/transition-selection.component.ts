@@ -25,37 +25,8 @@ import { ModalWindowComponent } from '../modal-window.component';
 import { LookupTableComponent } from './lookup-table.component';
 
 @Component({
-  selector: 'transition-selector',
-  template: `
-        <div class="mappingFieldContainer TransitionSelector" *ngIf="cfg.mappings.activeMapping">
-            <div class="MappingFieldSection">
-                <div *ngIf="modeIsEnum()" class="enumSection">
-                    <label>{{ getMappedValueCount() }} values mapped</label>
-                    <i class="fa fa-edit link" (click)="showLookupTable()"></i>
-                </div>
-                <div *ngIf="!modeIsEnum()">
-                    <label>Action</label>
-                    <select  id="select-action" (change)="selectionChanged($event);" selector="mode"
-                        [ngModel]="fieldPair.transition.mode">
-                        <option value="{{modes.COMBINE}}">Combine</option>
-                        <option value="{{modes.MAP}}">Map</option>
-                        <option value="{{modes.SEPARATE}}">Separate</option>
-                    </select>
-                    <div class="clear"></div>
-                </div>
-                <div *ngIf="fieldPair.transition.isSeparateMode() || fieldPair.transition.isCombineMode()" style="margin-top:10px;">
-                    <label>Separator:</label>
-                    <select  id="select-separator" (change)="selectionChanged($event);" selector="separator"
-                        [ngModel]="fieldPair.transition.delimiter">
-                        <option value="{{delimeters.COLON}}">Colon</option>
-                        <option value="{{delimeters.COMMA}}">Comma</option>
-                        <option value="{{delimeters.MULTISPACE}}">Multispace</option>
-                        <option value="{{delimeters.SPACE}}">Space</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-    `,
+  selector: 'transition-selection',
+  templateUrl: './transition-selection.component.html',
 })
 
 export class TransitionSelectionComponent {

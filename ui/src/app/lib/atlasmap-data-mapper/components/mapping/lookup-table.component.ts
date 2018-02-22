@@ -30,18 +30,7 @@ export class LookupTableData {
 
 @Component({
   selector: 'lookup-table',
-  template: `
-        <div class="LookupTableComponent" *ngIf="data">
-            <div class="lookupTableRow" *ngFor="let d of data">
-                <label>{{ d.sourceEnumValue }}</label>
-                <select #outputSelect [ngModel]="d.selectedTargetEnumValue" [attr.sourceValue]="d.sourceEnumValue">
-                    <option *ngFor="let targetEnumValue of d.targetEnumValues" [ngValue]="targetEnumValue"
-                        [attr.enumvalue]="targetEnumValue">{{ targetEnumValue }}
-                    </option>
-                </select>
-            </div>
-        </div>
-    `,
+  templateUrl: './lookup-table.component.html',
 })
 
 export class LookupTableComponent {
