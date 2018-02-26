@@ -26,7 +26,6 @@ import { PropertyFieldEditComponent } from './property-field-edit.component';
 import { ConstantFieldEditComponent } from './constant-field-edit.component';
 import { FieldEditComponent } from './field-edit.component';
 
-import { LineMachineComponent } from './line-machine.component';
 import { ModalWindowComponent } from './modal-window.component';
 
 @Component({
@@ -37,18 +36,18 @@ import { ModalWindowComponent } from './modal-window.component';
 export class DocumentDefinitionComponent implements OnInit {
   @Input() cfg: ConfigModel;
   @Input() isSource = false;
-  @Input() lineMachine: LineMachineComponent;
   @Input() modalWindow: ModalWindowComponent;
 
   @ViewChild('documentDefinitionElement') documentDefinitionElement: ElementRef;
   @ViewChildren('fieldDetail') fieldComponents: QueryList<DocumentFieldDetailComponent>;
   @ViewChildren('docDetail') docElements: QueryList<ElementRef>;
 
+  private lineMachine: any = null;
+  private redrawMappingLinesEvent: CustomEvent = null;
   private searchMode = false;
   private searchFilter = '';
   private scrollTop = 0;
   private searchResultsExist = false;
-
   private sourcesTargetsLabel: string;
   private documents: DocumentDefinition[];
 
@@ -59,6 +58,14 @@ export class DocumentDefinitionComponent implements OnInit {
       this.sourcesTargetsLabel = (this.cfg.targetDocs.length > 1) ? 'Targets' : 'Target';
     }
     this.documents = this.cfg.getDocs(this.isSource);
+  }
+
+  getLineMachine(): any {
+      return this.lineMachine;
+  }
+
+  setLineMachine(lm: any): void {
+      this.lineMachine = lm;
   }
 
   getDocDefElementPosition(docDef: DocumentDefinition): any {
@@ -132,9 +139,16 @@ export class DocumentDefinitionComponent implements OnInit {
     }
     return count;
   }
+
+  /**
+   * Handle scrolling in this document definition instance.  Avoid a circular dependence with the
+   * LineMachineComponent by dispatching a custom mappings-line-redraw event.
+   * @param event
+   */
   handleScroll(event: any) {
     this.scrollTop = event.target.scrollTop;
-    this.lineMachine.redrawLinesForMappings();
+    this.redrawMappingLinesEvent = new CustomEvent('redrawMappingLines', {detail: this.lineMachine});
+    document.dispatchEvent(this.redrawMappingLinesEvent);
   }
 
   toggleSearch(): void {
@@ -190,9 +204,8 @@ export class DocumentDefinitionComponent implements OnInit {
 
   toggleFieldVisibility(docDef: DocumentDefinition): void {
     docDef.showFields = !docDef.showFields;
-    setTimeout(() => {
-      this.lineMachine.redrawLinesForMappings();
-    }, 10);
+    this.redrawMappingLinesEvent = new CustomEvent('redrawMappingLines', {detail: this.lineMachine});
+    document.dispatchEvent(this.redrawMappingLinesEvent);
   }
 
   isAddFieldAvailable(docDef: DocumentDefinition): boolean {

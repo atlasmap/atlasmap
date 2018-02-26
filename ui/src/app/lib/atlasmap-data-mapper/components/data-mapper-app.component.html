@@ -14,13 +14,13 @@
     <div class="row" style="height:calc(100% - 32px); position:relative; padding-top:10px;" *ngIf="hasSourceDoc && hasTargetDoc">
       <div style='height:100%; padding:0;' [attr.class]="(getConfig().showMappingTable || getConfig().showNamespaceTable) ? 'col-md-9 hidden' : 'col-md-9'">
         <div style="float:left; width:40%; height:100%;">
-          <document-definition #docDefInput [cfg]="getConfig()" [modalWindow]="modalWindow" [isSource]="true" [lineMachine]="lineMachine"></document-definition>
+          <document-definition #docDefInput [cfg]="getConfig()" [modalWindow]="modalWindow" [isSource]="true"></document-definition>
         </div>
         <div style="float:left; width:20%; height:100%; margin-left:-5px; margin-right:-5px;">
           <line-machine #lineMachine [cfg]="getConfig()" [docDefInput]="docDefInput" [docDefOutput]="docDefOutput"></line-machine>
         </div>
         <div style="float:left; width:40%; height:100%;">
-          <document-definition #docDefOutput [cfg]="getConfig()" [modalWindow]="modalWindow" [isSource]="false" [lineMachine]="lineMachine"></document-definition>
+          <document-definition #docDefOutput [cfg]="getConfig()" [modalWindow]="modalWindow" [isSource]="false"></document-definition>
         </div>
         <div class="clear"></div>
       </div>
