@@ -50,13 +50,21 @@ export class LineMachineComponent implements OnInit {
 
   @ViewChild('lineMachineElement') lineMachineElement: ElementRef;
 
-  private yOffset = 3;
+  redrawMappingLinesEventListener = document.addEventListener('redrawMappingLines', function(e: CustomEvent) {
+      const lmcInstance: LineMachineComponent = e.detail;
+      setTimeout(() => {
+          lmcInstance.redrawLinesForMappings();
+          }, 10);
+    }, false);
 
+  private yOffset = 3;
   constructor(private sanitizer: DomSanitizer, public detector: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.cfg.mappingService.mappingUpdated$.subscribe(() => {
       this.mappingChanged();
+      this.docDefInput.setLineMachine(this);
+      this.docDefOutput.setLineMachine(this);
     });
   }
 

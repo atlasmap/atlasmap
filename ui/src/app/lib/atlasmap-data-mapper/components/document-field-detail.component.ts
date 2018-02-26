@@ -158,7 +158,7 @@ export class DocumentFieldDetailComponent {
   }
 
   handleMouseOver(event: MouseEvent): void {
-    if (this.field.isTerminal()) {
+    if (this.field.isTerminal() && this.lineMachine != null) {
       this.lineMachine.handleDocumentFieldMouseOver(this, event, this.field.isSource());
     }
   }
