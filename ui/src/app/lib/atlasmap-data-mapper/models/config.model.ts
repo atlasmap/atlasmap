@@ -90,6 +90,7 @@ export class DocumentInitializationModel {
   name: string;
   description: string;
   isSource: boolean;
+  showFields = true;
   inspectionType: InspectionType;
   inspectionSource: string;
   inspectionResult: string;
@@ -153,6 +154,7 @@ export class ConfigModel {
     docDef.name = docInitModel.name;
     docDef.description = docInitModel.description;
     docDef.isSource = docInitModel.isSource;
+    docDef.showFields = docInitModel.showFields;
     docDef.inspectionType = docInitModel.inspectionType;
     docDef.inspectionSource = docInitModel.inspectionSource;
     docDef.inspectionResult = docInitModel.inspectionResult;
