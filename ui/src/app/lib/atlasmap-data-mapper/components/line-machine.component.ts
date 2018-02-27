@@ -17,7 +17,7 @@
 import { ChangeDetectorRef, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 
-import { ConfigModel } from '../models/config.model';
+import { ConfigModel, AdmRedrawMappingLinesEvent } from '../models/config.model';
 import { MappingModel } from '../models/mapping.model';
 import { Field } from '../models/field.model';
 
@@ -51,13 +51,19 @@ export class LineMachineComponent implements OnInit {
   @ViewChild('lineMachineElement') lineMachineElement: ElementRef;
 
   private yOffset = 3;
-
   constructor(private sanitizer: DomSanitizer, public detector: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.cfg.mappingService.mappingUpdated$.subscribe(() => {
       this.mappingChanged();
+      this.docDefInput.setLineMachine(this);
+      this.docDefOutput.setLineMachine(this);
     });
+  }
+
+  handleRedrawMappingLinesEvent(event: AdmRedrawMappingLinesEvent): void {
+    const lmcInstance: LineMachineComponent = event._lmcInstance;
+    lmcInstance.redrawLinesForMappings();
   }
 
   addLineFromParams(sourceX: string, sourceY: string, targetX: string, targetY: string, stroke: string): void {

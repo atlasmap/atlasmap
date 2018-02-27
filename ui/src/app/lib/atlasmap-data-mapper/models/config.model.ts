@@ -257,3 +257,10 @@ export class ConfigModel {
   }
 
 }
+
+/**
+ * Place all custom events here.
+ */
+export class AdmRedrawMappingLinesEvent {
+  _lmcInstance: any;
+}
