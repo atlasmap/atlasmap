@@ -14,10 +14,10 @@
     limitations under the License.
 */
 
-import { Component, Input, ViewChildren, ElementRef, QueryList, ViewChild, OnInit } from '@angular/core';
+import { Component, Input, ViewChildren, ElementRef, EventEmitter, QueryList, ViewChild, OnInit } from '@angular/core';
 
 import { DocumentType } from '../common/config.types';
-import { ConfigModel } from '../models/config.model';
+import { ConfigModel, AdmRedrawMappingLinesEvent } from '../models/config.model';
 import { Field } from '../models/field.model';
 import { DocumentDefinition } from '../models/document-definition.model';
 
@@ -37,18 +37,18 @@ import { ModalWindowComponent } from './modal-window.component';
 export class DocumentDefinitionComponent implements OnInit {
   @Input() cfg: ConfigModel;
   @Input() isSource = false;
-  @Input() lineMachine: LineMachineComponent;
   @Input() modalWindow: ModalWindowComponent;
 
   @ViewChild('documentDefinitionElement') documentDefinitionElement: ElementRef;
   @ViewChildren('fieldDetail') fieldComponents: QueryList<DocumentFieldDetailComponent>;
   @ViewChildren('docDetail') docElements: QueryList<ElementRef>;
 
+  private lineMachine: LineMachineComponent = null;
+  private redrawMappingLinesEvent = new EventEmitter<AdmRedrawMappingLinesEvent>(true);
   private searchMode = false;
   private searchFilter = '';
   private scrollTop = 0;
   private searchResultsExist = false;
-
   private sourcesTargetsLabel: string;
   private documents: DocumentDefinition[];
 
@@ -59,6 +59,16 @@ export class DocumentDefinitionComponent implements OnInit {
       this.sourcesTargetsLabel = (this.cfg.targetDocs.length > 1) ? 'Targets' : 'Target';
     }
     this.documents = this.cfg.getDocs(this.isSource);
+    this.redrawMappingLinesEvent.subscribe((event: AdmRedrawMappingLinesEvent) =>
+      this.lineMachine.handleRedrawMappingLinesEvent(event));
+  }
+
+  getLineMachine(): LineMachineComponent {
+    return this.lineMachine;
+  }
+
+  setLineMachine(lm: LineMachineComponent): void {
+    this.lineMachine = lm;
   }
 
   getDocDefElementPosition(docDef: DocumentDefinition): any {
@@ -132,9 +142,15 @@ export class DocumentDefinitionComponent implements OnInit {
     }
     return count;
   }
+
+  /**
+   * Handle scrolling in this document definition instance.  Avoid a circular dependence with the
+   * LineMachineComponent by dispatching a custom Angular mappings-line-redraw event.
+   * @param event
+   */
   handleScroll(event: any) {
     this.scrollTop = event.target.scrollTop;
-    this.lineMachine.redrawLinesForMappings();
+    this.redrawMappingLinesEvent.emit({_lmcInstance: this.lineMachine});
   }
 
   toggleSearch(): void {
@@ -190,9 +206,7 @@ export class DocumentDefinitionComponent implements OnInit {
 
   toggleFieldVisibility(docDef: DocumentDefinition): void {
     docDef.showFields = !docDef.showFields;
-    setTimeout(() => {
-      this.lineMachine.redrawLinesForMappings();
-    }, 10);
+    this.redrawMappingLinesEvent.emit({_lmcInstance: this.lineMachine});
   }
 
   isAddFieldAvailable(docDef: DocumentDefinition): boolean {
