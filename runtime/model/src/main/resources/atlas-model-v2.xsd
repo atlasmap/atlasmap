@@ -280,12 +280,17 @@
 
   <simpleType name="FieldType">
     <restriction base="string">
-      <enumeration value="All" />
+      <enumeration value="Any" />
+      <enumeration value="Big Integer" />
       <enumeration value="Boolean" />
       <enumeration value="Byte" />
       <enumeration value="ByteArray" />
       <enumeration value="Char" />
       <enumeration value="Complex" />
+      <enumeration value="Date" />
+      <enumeration value="DateTime" />
+      <enumeration value="DateTimeTZ" />
+      <enumeration value="DateTZ" />
       <enumeration value="Decimal" />
       <enumeration value="Double" />
       <enumeration value="Float" />
@@ -296,11 +301,7 @@
       <enumeration value="Short" />
       <enumeration value="String" />
       <enumeration value="Time" />
-      <enumeration value="Date" />
-      <enumeration value="DateTime" />
-      <enumeration value="DateTZ" />
       <enumeration value="TimeTZ" />
-      <enumeration value="DateTimeTZ" />
       <enumeration value="Unsigned Byte" />
       <enumeration value="Unsigned Integer" />
       <enumeration value="Unsigned Long" />

@@ -33,7 +33,7 @@ public interface AtlasConversionService {
     Object convertType(Object sourceValue, String sourceFormat, FieldType targetType, String targetFormat)
             throws AtlasConversionException;
 
-    Object convertType(Object sourceValue, String sourceFormat, Class targetType, String targetFormat)
+    Object convertType(Object sourceValue, String sourceFormat, Class<?> targetType, String targetFormat)
             throws AtlasConversionException;
 
     Class<?> boxOrUnboxPrimitive(Class<?> clazz);
@@ -51,5 +51,7 @@ public interface AtlasConversionService {
     Boolean isPrimitive(FieldType fieldType);
 
     Boolean isBoxedPrimitive(Class<?> clazz);
+
+    Boolean isAssignableFieldType(FieldType source, FieldType target);
 
 }

@@ -176,7 +176,7 @@ public class JsonFieldReader implements AtlasFieldReader {
             jsonField.setFieldType(FieldType.SHORT);
         } else if (valueNode.isBigInteger()) {
             jsonField.setValue(valueNode.bigIntegerValue());
-            jsonField.setFieldType(FieldType.NUMBER);
+            jsonField.setFieldType(FieldType.BIG_INTEGER);
         } else {
             jsonField.setValue(valueNode.numberValue());
             jsonField.setFieldType(FieldType.NUMBER);

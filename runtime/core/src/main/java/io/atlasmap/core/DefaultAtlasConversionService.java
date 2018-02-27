@@ -20,6 +20,7 @@ import static java.util.Objects.hash;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -30,7 +31,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.ServiceLoader;
 import java.util.Set;
-import java.util.function.Predicate;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -126,8 +126,8 @@ public class DefaultAtlasConversionService implements AtlasConversionService {
     public Optional<AtlasConverter<?>> findMatchingConverter(FieldType source, FieldType target) {
 
         // get the default types
-        Class sourceClass = classFromFieldType(source);
-        Class targetClass = classFromFieldType(target);
+        Class<?> sourceClass = classFromFieldType(source);
+        Class<?> targetClass = classFromFieldType(target);
 
         if (sourceClass != null && targetClass != null) {
             return findMatchingConverter(sourceClass.getCanonicalName(), targetClass.getCanonicalName());
@@ -223,10 +223,6 @@ public class DefaultAtlasConversionService implements AtlasConversionService {
         }
     }
 
-    private static <R> Predicate<R> not(Predicate<R> predicate) {
-        return predicate.negate();
-    }
-
     @Override
     public Object copyPrimitive(Object sourceValue) {
 
@@ -282,7 +278,7 @@ public class DefaultAtlasConversionService implements AtlasConversionService {
         if (origSourceType == null || targetType == null) {
             throw new AtlasConversionException("FieldTypes must be specified on convertType method.");
         }
-        if (origSourceType.equals(targetType)) {
+        if (isAssignableFieldType(origSourceType, targetType)) {
             return sourceValue;
         } else {
             return convertType(sourceValue, null, classFromFieldType(targetType), null);
@@ -296,14 +292,14 @@ public class DefaultAtlasConversionService implements AtlasConversionService {
     }
 
     @Override
-    public Object convertType(Object sourceValue, String sourceFormat, Class targetType, String targetFormat)
+    public Object convertType(Object sourceValue, String sourceFormat, Class<?> targetType, String targetFormat)
             throws AtlasConversionException {
 
         if (sourceValue == null || targetType == null) {
             throw new AtlasConversionException("AutoConversion requires sourceValue and targetType to be specified");
         }
 
-        if (sourceValue.getClass().equals(targetType)) {
+        if (targetType.isAssignableFrom(sourceValue.getClass())) {
             return sourceValue;
         }
 
@@ -422,40 +418,46 @@ public class DefaultAtlasConversionService implements AtlasConversionService {
     @Override
     public FieldType fieldTypeFromClass(String className) {
         if (className == null || className.isEmpty()) {
-            return null;
+            return FieldType.NONE;
         }
 
         switch (className) {
+        case "java.lang.Object":
+            return FieldType.ANY;
+        case "java.math.BigInteger":
+            return FieldType.BIG_INTEGER;
         case "boolean":
-            return FieldType.BOOLEAN;
         case "java.lang.Boolean":
             return FieldType.BOOLEAN;
         case "byte":
-            return FieldType.BYTE;
         case "java.lang.Byte":
             return FieldType.BYTE;
+        case "[B":
+        case "[Ljava.lang.Byte":
+            return FieldType.BYTE_ARRAY;
         case "char":
             return FieldType.CHAR;
         case "java.lang.Character":
             return FieldType.CHAR;
+        case "java.math.BigDecimal":
+            return FieldType.DECIMAL;
         case "double":
-            return FieldType.DOUBLE;
         case "java.lang.Double":
             return FieldType.DOUBLE;
         case "float":
-            return FieldType.FLOAT;
         case "java.lang.Float":
             return FieldType.FLOAT;
         case "int":
-            return FieldType.INTEGER;
         case "java.lang.Integer":
+        case "java.util.concurrent.atomic.AtomicInteger":
             return FieldType.INTEGER;
         case "long":
-            return FieldType.LONG;
         case "java.lang.Long":
+        case "java.util.concurrent.atomic.AtomicLong":
             return FieldType.LONG;
+        case "java.lang.Number":
+            return FieldType.NUMBER;
         case "short":
-            return FieldType.SHORT;
         case "java.lang.Short":
             return FieldType.SHORT;
         case "java.lang.String":
@@ -471,6 +473,7 @@ public class DefaultAtlasConversionService implements AtlasConversionService {
         case "java.time.LocalDateTime":
             return FieldType.DATE_TIME;
         case "java.sql.Date":
+        case "java.util.Calendar":
         case "java.util.Date":
         case "java.time.ZonedDateTime":
             return FieldType.DATE_TIME_TZ;
@@ -486,12 +489,31 @@ public class DefaultAtlasConversionService implements AtlasConversionService {
         }
 
         switch (fieldType) {
+        case ANY:
+            return Object.class;
+        case BIG_INTEGER:
+            return BigInteger.class;
         case BOOLEAN:
             return Boolean.class;
         case BYTE:
             return Byte.class;
+        case BYTE_ARRAY:
+            return Byte[].class;
         case CHAR:
             return java.lang.Character.class;
+        case COMPLEX:
+            // COMPLEX doesn't have representative class
+            return null;
+        case DATE:
+            return java.time.LocalDate.class;
+        case DATE_TIME:
+            return java.time.LocalDateTime.class;
+        case DATE_TZ:
+        case TIME_TZ:
+        case DATE_TIME_TZ:
+            return java.time.ZonedDateTime.class;
+        case DECIMAL:
+            return java.math.BigDecimal.class;
         case DOUBLE:
             return java.lang.Double.class;
         case FLOAT:
@@ -500,24 +522,38 @@ public class DefaultAtlasConversionService implements AtlasConversionService {
             return java.lang.Integer.class;
         case LONG:
             return java.lang.Long.class;
+        case NONE:
+            return null;
+        case NUMBER:
+            return java.lang.Number.class;
         case SHORT:
             return java.lang.Short.class;
         case STRING:
             return java.lang.String.class;
-        case DATE:
-            return java.time.LocalDate.class;
         case TIME:
             return java.time.LocalTime.class;
-        case DATE_TIME:
-            return java.time.LocalDateTime.class;
-        case DATE_TZ:
-        case TIME_TZ:
-        case DATE_TIME_TZ:
-            return java.time.ZonedDateTime.class;
-        // TODO: need to fix the default return type for non-primitive
         default:
-            return java.lang.Object.class;
+            throw new IllegalArgumentException(
+                    String.format("Unsupported field type '%s': corresponding Java class needs to be added in DefaultAtlasConversionService",
+                            fieldType));
         }
     }
 
+    public Boolean isAssignableFieldType(FieldType source, FieldType target) {
+        if (source == null || target == null) {
+            return Boolean.FALSE;
+        }
+        if (source.equals(target) || target == FieldType.ANY) {
+            return Boolean.TRUE;
+        }
+
+        // Check umbrella field types
+        if (target == FieldType.NUMBER) {
+            return source == FieldType.BIG_INTEGER || source == FieldType.BYTE || source == FieldType.DECIMAL
+                    || source == FieldType.DOUBLE || source == FieldType.FLOAT || source == FieldType.INTEGER
+                    || source == FieldType.LONG || source == FieldType.SHORT;
+        }
+
+        return Boolean.FALSE;
+    }
 }

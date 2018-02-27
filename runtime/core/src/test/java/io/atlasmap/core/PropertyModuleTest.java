@@ -47,7 +47,7 @@ public class PropertyModuleTest {
         when(session.head()).thenReturn(head);
 
         DefaultAtlasConversionService atlasConversionService = mock(DefaultAtlasConversionService.class);
-        when(atlasConversionService.fieldTypeFromClass(any(String.class))).thenReturn(FieldType.ALL);
+        when(atlasConversionService.fieldTypeFromClass(any(String.class))).thenReturn(FieldType.ANY);
 
         module.setConversionService(atlasConversionService);
         module.processSourceFieldMapping(session);

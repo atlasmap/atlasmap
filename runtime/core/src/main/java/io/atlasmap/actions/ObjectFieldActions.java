@@ -33,7 +33,7 @@ import io.atlasmap.v2.FieldType;
     "squid:S3358" })   // Extract nested ternary
 public class ObjectFieldActions implements AtlasFieldAction {
 
-    @AtlasFieldActionInfo(name = "Contains", sourceType = FieldType.ALL, targetType = FieldType.BOOLEAN, sourceCollectionType = CollectionType.ALL, targetCollectionType = CollectionType.NONE)
+    @AtlasFieldActionInfo(name = "Contains", sourceType = FieldType.ANY, targetType = FieldType.BOOLEAN, sourceCollectionType = CollectionType.ALL, targetCollectionType = CollectionType.NONE)
     public static Boolean contains(Action action, Object input) {
         if (!(action instanceof Contains)) {
             throw new IllegalArgumentException("Action must be a Contains action");
@@ -63,7 +63,7 @@ public class ObjectFieldActions implements AtlasFieldAction {
         return input.toString().contains(contains.getValue());
     }
 
-    @AtlasFieldActionInfo(name = "Equals", sourceType = FieldType.ALL, targetType = FieldType.BOOLEAN, sourceCollectionType = CollectionType.ALL, targetCollectionType = CollectionType.NONE)
+    @AtlasFieldActionInfo(name = "Equals", sourceType = FieldType.ANY, targetType = FieldType.BOOLEAN, sourceCollectionType = CollectionType.ALL, targetCollectionType = CollectionType.NONE)
     public static Boolean equals(Action action, Object input) {
         if (!(action instanceof Equals)) {
             throw new IllegalArgumentException("Action must be an Equals action");
@@ -81,12 +81,12 @@ public class ObjectFieldActions implements AtlasFieldAction {
         return input.toString().equals(equals.getValue());
     }
 
-    @AtlasFieldActionInfo(name = "IsNull", sourceType = FieldType.ALL, targetType = FieldType.INTEGER, sourceCollectionType = CollectionType.ALL, targetCollectionType = CollectionType.NONE)
+    @AtlasFieldActionInfo(name = "IsNull", sourceType = FieldType.ANY, targetType = FieldType.INTEGER, sourceCollectionType = CollectionType.ALL, targetCollectionType = CollectionType.NONE)
     public static Boolean isNull(Action action, Object input) {
         return input == null;
     }
 
-    @AtlasFieldActionInfo(name = "Length", sourceType = FieldType.ALL, targetType = FieldType.INTEGER, sourceCollectionType = CollectionType.ALL, targetCollectionType = CollectionType.NONE)
+    @AtlasFieldActionInfo(name = "Length", sourceType = FieldType.ANY, targetType = FieldType.INTEGER, sourceCollectionType = CollectionType.ALL, targetCollectionType = CollectionType.NONE)
     public static Integer length(Action action, Object input) {
         if (input == null) {
             return -1;

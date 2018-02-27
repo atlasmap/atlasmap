@@ -10,6 +10,8 @@
   <div class="form-group">
     <label>Value Type</label>
     <select (change)="valueTypeSelectionChanged($event);" [ngModel]="valueType">
+      <option value="ANY">ANY</option>
+      <option value="BIG_INTEGER">Big Integer</option>
       <option value="BOOLEAN">Boolean</option>
       <option value="BYTE">Byte</option>
       <option value="BYTE_ARRAY">ByteArray</option>

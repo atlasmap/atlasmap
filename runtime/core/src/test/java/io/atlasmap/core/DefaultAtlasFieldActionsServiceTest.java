@@ -79,7 +79,7 @@ public class DefaultAtlasFieldActionsServiceTest {
         actionDetail = fieldActionsService.findActionDetail("IndexOf", FieldType.STRING);
         assertNotNull(actionDetail);
 
-        actionDetail = fieldActionsService.findActionDetail("IndexOf", FieldType.ALL);
+        actionDetail = fieldActionsService.findActionDetail("IndexOf", FieldType.ANY);
         assertNotNull(actionDetail);
 
         actionDetail = fieldActionsService.findActionDetail("IndexOf", FieldType.NONE);
@@ -169,7 +169,7 @@ public class DefaultAtlasFieldActionsServiceTest {
         action = new GenerateUUID();
         actionDetail = new ActionDetail();
         actionDetail.setClassName("io.atlasmap.actions.StringComplexFieldActions");
-        actionDetail.setSourceType(FieldType.ALL);
+        actionDetail.setSourceType(FieldType.ANY);
         actionDetail.setMethod("genareteUUID");
         assertNotNull(fieldActionsService.processAction(action, actionDetail, sourceObject));
     }
