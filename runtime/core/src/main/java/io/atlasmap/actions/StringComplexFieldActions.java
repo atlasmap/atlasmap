@@ -53,7 +53,7 @@ public class StringComplexFieldActions implements AtlasFieldAction {
     public static final String STRING_SEPARATOR_REGEX = "^\\s+:_+=";
     public static final Pattern STRING_SEPARATOR_PATTERN = Pattern.compile(STRING_SEPARATOR_REGEX);
 
-    @AtlasFieldActionInfo(name = "Append", sourceType = FieldType.ALL, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
+    @AtlasFieldActionInfo(name = "Append", sourceType = FieldType.ANY, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
     public static String append(Action action, Object input) {
         if (!(action instanceof Append)) {
             throw new IllegalArgumentException("Action must be an Append action");
@@ -69,7 +69,7 @@ public class StringComplexFieldActions implements AtlasFieldAction {
         return input == null ? string : input.toString().concat(string);
     }
 
-    @AtlasFieldActionInfo(name = "Concatenate", sourceType = FieldType.ALL, targetType = FieldType.STRING, sourceCollectionType = CollectionType.ALL, targetCollectionType = CollectionType.NONE)
+    @AtlasFieldActionInfo(name = "Concatenate", sourceType = FieldType.ANY, targetType = FieldType.STRING, sourceCollectionType = CollectionType.ALL, targetCollectionType = CollectionType.NONE)
     public static String concatenate(Action action, Object input) {
         if (action == null || !(action instanceof Concatenate)) {
             throw new IllegalArgumentException("Action must be a Concatenate action");
@@ -112,7 +112,7 @@ public class StringComplexFieldActions implements AtlasFieldAction {
         return input == null ? false : input.endsWith(endsWith.getString());
     }
 
-    @AtlasFieldActionInfo(name = "Format", sourceType = FieldType.ALL, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
+    @AtlasFieldActionInfo(name = "Format", sourceType = FieldType.ANY, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
     public static String format(Action action, Object input) {
         if (action == null || !(action instanceof Format)) {
             throw new IllegalArgumentException("Action must be an Format action");
@@ -127,7 +127,7 @@ public class StringComplexFieldActions implements AtlasFieldAction {
         return String.format(format.getTemplate(), input);
     }
 
-    @AtlasFieldActionInfo(name = "GenerateUUID", sourceType = FieldType.ALL, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
+    @AtlasFieldActionInfo(name = "GenerateUUID", sourceType = FieldType.ANY, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
     public static String genareteUUID(Action action, Object input) {
         return UUID.randomUUID().toString();
     }
@@ -202,7 +202,7 @@ public class StringComplexFieldActions implements AtlasFieldAction {
         return builder.toString();
     }
 
-    @AtlasFieldActionInfo(name = "Prepend", sourceType = FieldType.ALL, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
+    @AtlasFieldActionInfo(name = "Prepend", sourceType = FieldType.ANY, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
     public static String prepend(Action action, Object input) {
         if (!(action instanceof Prepend)) {
             throw new IllegalArgumentException("Action must be a Prepend action");

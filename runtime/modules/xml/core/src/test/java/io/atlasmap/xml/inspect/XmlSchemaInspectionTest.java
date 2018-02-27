@@ -275,7 +275,7 @@ public class XmlSchemaInspectionTest extends BaseXmlInspectionServiceTest {
         Assert.assertThat(quantity.getName(), Is.is("tns:quantity"));
         Assert.assertNull(quantity.getValue());
         Assert.assertThat(quantity.getPath(), Is.is("/tns:purchaseOrder/tns:items/tns:item/tns:quantity"));
-        Assert.assertThat(quantity.getFieldType(), Is.is(FieldType.INTEGER));
+        Assert.assertThat(quantity.getFieldType(), Is.is(FieldType.BIG_INTEGER));
         Assert.assertNotNull(quantity.getRestrictions().getRestriction());
         Assert.assertThat(quantity.getRestrictions().getRestriction().size(), Is.is(1));
         Restriction qRestriction = quantity.getRestrictions().getRestriction().get(0);

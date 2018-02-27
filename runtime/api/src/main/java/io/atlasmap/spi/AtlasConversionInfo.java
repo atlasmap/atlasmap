@@ -23,9 +23,9 @@ import io.atlasmap.v2.FieldType;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface AtlasConversionInfo {
 
-    FieldType sourceType() default FieldType.ALL;
+    FieldType sourceType() default FieldType.ANY;
 
-    FieldType targetType() default FieldType.ALL;
+    FieldType targetType() default FieldType.ANY;
 
     AtlasConversionConcern[] concerns() default { AtlasConversionConcern.NONE };
 

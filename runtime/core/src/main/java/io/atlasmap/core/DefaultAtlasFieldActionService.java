@@ -1,9 +1,13 @@
 package io.atlasmap.core;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Parameter;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -131,7 +135,7 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
         case 0: return null;
         case 1: return matches.get(0);
         default:
-            if(sourceType != null && !Arrays.asList(FieldType.ALL, FieldType.NONE).contains(sourceType)) {
+            if(sourceType != null && !Arrays.asList(FieldType.ANY, FieldType.NONE).contains(sourceType)) {
                 for(ActionDetail actionDetail : matches) {
                     if(sourceType.equals(actionDetail.getSourceType())) {
                         return actionDetail;
@@ -188,7 +192,7 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
         FieldType currentType = sourceType;
         for(Action action : actions.getActions()) {
             ActionDetail detail = findActionDetail(action.getDisplayName(), currentType);
-            if(!detail.getSourceType().equals(currentType) && !FieldType.ALL.equals(detail.getSourceType())) {
+            if(!detail.getSourceType().equals(currentType) && !FieldType.ANY.equals(detail.getSourceType())) {
                 tmpSourceObject = getConversionService().convertType(sourceObject, currentType, detail.getSourceType());
             }
 
@@ -211,17 +215,23 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
                 Method method =  null;
                 if(actionDetail.getSourceType() != null) {
                     switch(actionDetail.getSourceType()) {
+                    case ANY: method = actionClazz.getMethod(actionDetail.getMethod(), Action.class, Object.class); break;
+                    case BIG_INTEGER: method = actionClazz.getMethod(actionDetail.getMethod(), Action.class, BigInteger.class); break;
                     case BOOLEAN: method = actionClazz.getMethod(actionDetail.getMethod(), Action.class, Boolean.class); break;
                     case BYTE: method = actionClazz.getMethod(actionDetail.getMethod(), Action.class, Byte.class); break;
                     case BYTE_ARRAY: method = actionClazz.getMethod(actionDetail.getMethod(), Action.class, Byte[].class); break;
                     case CHAR: method = actionClazz.getMethod(actionDetail.getMethod(), Action.class, Character.class); break;
+                    case DATE: method = actionClazz.getMethod(actionDetail.getMethod(), Action.class, LocalDate.class);
+                    case DATE_TIME: method = actionClazz.getMethod(actionDetail.getMethod(), Action.class, LocalDateTime.class); break;
+                    case DATE_TZ: case TIME_TZ: case DATE_TIME_TZ: method = actionClazz.getMethod(actionDetail.getMethod(), Action.class, ZonedDateTime.class); break;
+                    case DECIMAL: method = actionClazz.getMethod(actionDetail.getMethod(), Action.class, BigDecimal.class); break;
                     case DOUBLE: method = actionClazz.getMethod(actionDetail.getMethod(), Action.class, Double.class); break;
                     case FLOAT: method = actionClazz.getMethod(actionDetail.getMethod(), Action.class, Float.class); break;
                     case INTEGER: method = actionClazz.getMethod(actionDetail.getMethod(), Action.class, Integer.class); break;
                     case LONG: method = actionClazz.getMethod(actionDetail.getMethod(), Action.class, Long.class); break;
+                    case NUMBER: method = actionClazz.getMethod(actionDetail.getMethod(), Action.class, Number.class); break;
                     case SHORT: method = actionClazz.getMethod(actionDetail.getMethod(), Action.class, Short.class); break;
                     case STRING: method = actionClazz.getMethod(actionDetail.getMethod(), Action.class, String.class); break;
-                    case ALL: method = actionClazz.getMethod(actionDetail.getMethod(), Action.class, Object.class); break;
                     default:
                         LOG.warn(String.format("Unsupported sourceType=%s in actionClass=%s", actionDetail.getSourceType().value(), actionDetail.getClassName()));
                         break;
@@ -237,7 +247,7 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
                 } else {
                     targetObject = method.invoke(actionObject, action, sourceObject);
                 }
-            } catch (IllegalAccessException | InstantiationException | NoSuchMethodException | SecurityException | ClassNotFoundException | IllegalArgumentException | InvocationTargetException e) {
+            } catch (Throwable e) {
                 throw new AtlasException(String.format("Error processing action %s", actionDetail.getName()), e);
             }
             return targetObject;

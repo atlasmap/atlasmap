@@ -97,11 +97,11 @@ public class SchemaInspector {
     static {
         XS_TYPE_TO_FIELD_TYPE_MAP = new HashMap<>();
         XS_TYPE_TO_FIELD_TYPE_MAP.put("int", FieldType.INTEGER);
-        XS_TYPE_TO_FIELD_TYPE_MAP.put("integer", FieldType.INTEGER);
-        XS_TYPE_TO_FIELD_TYPE_MAP.put("negativeInteger", FieldType.INTEGER);
-        XS_TYPE_TO_FIELD_TYPE_MAP.put("nonNegativeInteger", FieldType.INTEGER);
-        XS_TYPE_TO_FIELD_TYPE_MAP.put("positiveInteger", FieldType.INTEGER);
-        XS_TYPE_TO_FIELD_TYPE_MAP.put("nonPositiveInteger", FieldType.INTEGER);
+        XS_TYPE_TO_FIELD_TYPE_MAP.put("integer", FieldType.BIG_INTEGER);
+        XS_TYPE_TO_FIELD_TYPE_MAP.put("negativeInteger", FieldType.BIG_INTEGER);
+        XS_TYPE_TO_FIELD_TYPE_MAP.put("nonNegativeInteger", FieldType.BIG_INTEGER);
+        XS_TYPE_TO_FIELD_TYPE_MAP.put("positiveInteger", FieldType.BIG_INTEGER);
+        XS_TYPE_TO_FIELD_TYPE_MAP.put("nonPositiveInteger", FieldType.BIG_INTEGER);
         XS_TYPE_TO_FIELD_TYPE_MAP.put("string", FieldType.STRING);
         XS_TYPE_TO_FIELD_TYPE_MAP.put("short", FieldType.SHORT);
         XS_TYPE_TO_FIELD_TYPE_MAP.put("long", FieldType.LONG);

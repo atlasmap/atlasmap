@@ -164,7 +164,7 @@ public class DefaultAtlasConversionServiceTest {
         assertTrue(service.isPrimitive(FieldType.STRING));
 
         // Negative testing
-        assertFalse(service.isPrimitive(FieldType.ALL));
+        assertFalse(service.isPrimitive(FieldType.ANY));
         assertFalse(service.isPrimitive(FieldType.BYTE_ARRAY));
         assertFalse(service.isPrimitive(FieldType.COMPLEX));
         assertFalse(service.isPrimitive(FieldType.DATE));
@@ -368,9 +368,9 @@ public class DefaultAtlasConversionServiceTest {
     @Test
     public void testFieldTypeFromClass() {
         String className = null;
-        assertNull(service.fieldTypeFromClass(className));
+        assertEquals(FieldType.NONE, service.fieldTypeFromClass(className));
         className = "";
-        assertNull(service.fieldTypeFromClass(className));
+        assertEquals(FieldType.NONE, service.fieldTypeFromClass(className));
         Class<String> klass = null;
         assertNull(service.fieldTypeFromClass(klass));
 
@@ -422,7 +422,7 @@ public class DefaultAtlasConversionServiceTest {
         assertNotNull(service.classFromFieldType(FieldType.DATE_TZ));
         assertNotNull(service.classFromFieldType(FieldType.TIME_TZ));
         assertNotNull(service.classFromFieldType(FieldType.DATE_TIME_TZ));
-        assertNotNull(service.classFromFieldType(FieldType.NONE));
+        assertNull(service.classFromFieldType(FieldType.NONE));
     }
 
     @Test
