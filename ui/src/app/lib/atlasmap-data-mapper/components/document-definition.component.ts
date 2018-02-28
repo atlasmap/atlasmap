@@ -59,8 +59,6 @@ export class DocumentDefinitionComponent implements OnInit {
       this.sourcesTargetsLabel = (this.cfg.targetDocs.length > 1) ? 'Targets' : 'Target';
     }
     this.documents = this.cfg.getDocs(this.isSource);
-    this.redrawMappingLinesEvent.subscribe((event: AdmRedrawMappingLinesEvent) =>
-      this.lineMachine.handleRedrawMappingLinesEvent(event));
   }
 
   getLineMachine(): LineMachineComponent {
@@ -69,6 +67,10 @@ export class DocumentDefinitionComponent implements OnInit {
 
   setLineMachine(lm: LineMachineComponent): void {
     this.lineMachine = lm;
+    if (this.redrawMappingLinesEvent.observers.length == 0) {
+      this.redrawMappingLinesEvent.subscribe((event: AdmRedrawMappingLinesEvent) =>
+        this.lineMachine.handleRedrawMappingLinesEvent(event));
+    }
   }
 
   getDocDefElementPosition(docDef: DocumentDefinition): any {
