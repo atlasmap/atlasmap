@@ -78,13 +78,15 @@ public class JsonModule extends BaseAtlasModule {
     public void processPreSourceExecution(AtlasInternalSession session) throws AtlasException {
         Object sourceDocument = session.getSourceDocument(getDocId());
         if (sourceDocument == null || !(sourceDocument instanceof String)) {
-            throw new AtlasException(String.format("Incompatible Source Document '%s'", sourceDocument));
+            AtlasUtil.addAudit(session, getDocId(), String.format(
+                    "Null or non-String source document: docId='%s'", getDocId()),
+                    null, AuditStatus.WARN, null);
+        } else {
+            String document = String.class.cast(sourceDocument);
+            JsonFieldReader fieldReader = new JsonFieldReader(getConversionService());
+            fieldReader.setDocument(document);
+            session.setFieldReader(getDocId(), fieldReader);
         }
-
-        String document = (String) sourceDocument;
-        JsonFieldReader fieldReader = new JsonFieldReader(getConversionService());
-        fieldReader.setDocument(document);
-        session.setFieldReader(getDocId(), fieldReader);
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("{} processPreSourceExcution completed", getDocId());
@@ -105,6 +107,12 @@ public class JsonModule extends BaseAtlasModule {
     public void processSourceFieldMapping(AtlasInternalSession session) throws AtlasException {
         Field sourceField = session.head().getSourceField();
         JsonFieldReader reader = session.getFieldReader(getDocId(), JsonFieldReader.class);
+        if (reader == null) {
+            AtlasUtil.addAudit(session, sourceField.getDocId(), String.format(
+                    "Source document '%s' doesn't exist", getDocId()),
+                    sourceField.getPath(), AuditStatus.ERROR, null);
+            return;
+        }
         reader.read(session);
 
         if (sourceField.getActions() != null && sourceField.getActions().getActions() != null) {
