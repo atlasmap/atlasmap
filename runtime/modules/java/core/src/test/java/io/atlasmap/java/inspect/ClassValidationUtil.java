@@ -330,7 +330,7 @@ public class ClassValidationUtil {
         assertNotNull(f);
         assertEquals("created", f.getName());
         assertEquals("java.util.Date", f.getClassName());
-        assertEquals(FieldType.DATE_TIME_TZ, f.getFieldType());
+        assertEquals(FieldType.DATE_TIME, f.getFieldType());
         assertEquals(false, f.isPrimitive());
         assertNull(f.getCollectionType());
         assertEquals(false, f.isSynthetic());
