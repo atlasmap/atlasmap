@@ -90,98 +90,98 @@ public class DateConverter implements AtlasConverter<Date> {
 
     // java.util.Date Converters
 
-    @AtlasConversionInfo(sourceType = FieldType.COMPLEX, targetType = FieldType.COMPLEX)
+    @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.DATE_TIME_TZ)
     public Time convertDateToTime(Date date, String sourceFormat, String targetFormat) throws AtlasConversionException {
         return convertToTime(date, targetFormat);
     }
 
-    @AtlasConversionInfo(sourceType = FieldType.COMPLEX, targetType = FieldType.DATE_TIME)
+    @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.DATE_TIME)
     public LocalDateTime convertDateToDateTime(Date date, String sourceFormat, String targetFormat)
             throws AtlasConversionException {
         return convertToLocalDateTime(date, targetFormat);
     }
 
-    @AtlasConversionInfo(sourceType = FieldType.COMPLEX, targetType = FieldType.DATE_TIME_TZ)
+    @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.DATE_TIME_TZ)
     public ZonedDateTime convertDateToZonedDateTime(Date date, String sourceFromat, String targetFormat)
             throws AtlasConversionException {
         return convertToZonedDateTime(date, targetFormat);
     }
 
-    @AtlasConversionInfo(sourceType = FieldType.COMPLEX, targetType = FieldType.TIME)
+    @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.TIME)
     public LocalTime convertToLocalTime(Date date, String sourceFormat, String targetFormat)
             throws AtlasConversionException {
         return convertToLocalTime(date, targetFormat);
     }
 
-    @AtlasConversionInfo(sourceType = FieldType.COMPLEX, targetType = FieldType.DATE)
+    @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.DATE)
     public LocalDate convertToLocalDate(Date date, String sourceFormat, String targetFormat)
             throws AtlasConversionException {
         return convertToLocalDate(date, targetFormat);
     }
 
-    @AtlasConversionInfo(sourceType = FieldType.COMPLEX, targetType = FieldType.COMPLEX)
+    @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.DATE_TIME_TZ)
     public Timestamp convertToTimestamp(Date date) throws AtlasConversionException {
         return Timestamp.from(date.toInstant());
     }
 
-    @AtlasConversionInfo(sourceType = FieldType.COMPLEX, targetType = FieldType.COMPLEX)
+    @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.DATE_TIME_TZ)
     public GregorianCalendar convertToGregorianCalendar(Date date, String sourceFormat, String targetFormat)
             throws AtlasConversionException {
         return convertToGregorianCalendar(date, sourceFormat);
     }
 
-    @AtlasConversionInfo(sourceType = FieldType.COMPLEX, targetType = FieldType.COMPLEX)
+    @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.DATE_TIME_TZ)
     public java.sql.Date convertToSqlDate(Date date, String sourceFormat, String targetFormat)
             throws AtlasConversionException {
         return convertToSqlDate(date, sourceFormat);
     }
 
-    @AtlasConversionInfo(sourceType = FieldType.COMPLEX, targetType = FieldType.COMPLEX)
+    @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.DATE_TIME_TZ)
     public Calendar convertToCalendar(Date date) throws AtlasConversionException {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(date.getTime());
         return calendar;
     }
 
-    @AtlasConversionInfo(sourceType = FieldType.COMPLEX, targetType = FieldType.STRING)
+    @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.STRING)
     public String convertToString(Date date) throws AtlasConversionException {
         // by default Instant.toString returns an ISO-8601 representation of the instant
         return date.toInstant().toString();
 
     }
 
-    @AtlasConversionInfo(sourceType = FieldType.COMPLEX, targetType = FieldType.LONG)
+    @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.LONG)
     public Long convertToLong(Date date) throws AtlasConversionException {
         return date.toInstant().toEpochMilli();
     }
 
-    @AtlasConversionInfo(sourceType = FieldType.COMPLEX, targetType = FieldType.COMPLEX)
+    @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.DATE_TIME_TZ)
     public Date convertFromTimestamp(Timestamp timestamp) throws AtlasConversionException {
         return Date.from(timestamp.toInstant());
     }
 
-    @AtlasConversionInfo(sourceType = FieldType.COMPLEX, targetType = FieldType.COMPLEX)
+    @AtlasConversionInfo(sourceType = FieldType.TIME, targetType = FieldType.DATE_TIME_TZ)
     public Date convertFromTime(Time time, String sourceFormat, String targetFormat) throws AtlasConversionException {
         return convertFromLocalTime(time.toLocalTime(), sourceFormat);
     }
 
-    @AtlasConversionInfo(sourceType = FieldType.COMPLEX, targetType = FieldType.COMPLEX)
+    @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.DATE_TIME_TZ)
     public Date convertFromSqlDate(java.sql.Date date, String sourceFormat, String targetFormat)
             throws AtlasConversionException {
         return convertFromSqlDate(date, sourceFormat);
     }
 
-    @AtlasConversionInfo(sourceType = FieldType.COMPLEX, targetType = FieldType.COMPLEX)
+    @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.DATE_TIME_TZ)
     public Date convertFromGregorianCalendar(GregorianCalendar gregorianCalendar) throws AtlasConversionException {
         return convertFromZonedDateTime(gregorianCalendar.toZonedDateTime());
     }
 
-    @AtlasConversionInfo(sourceType = FieldType.COMPLEX, targetType = FieldType.COMPLEX)
+    @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.DATE_TIME_TZ)
     public Date convertFromCalendar(Calendar calendar) throws AtlasConversionException {
         return calendar.getTime();
     }
 
-    @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.COMPLEX)
+    @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.DATE_TIME_TZ)
     public Date convertFromString(String date, String sourceFormat, String targetFormat)
             throws AtlasConversionException {
 
@@ -190,7 +190,7 @@ public class DateConverter implements AtlasConverter<Date> {
         return Date.from(ZonedDateTime.parse(date, formater).toInstant());
     }
 
-    @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.COMPLEX)
+    @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.DATE_TIME_TZ)
     public Date convertFromLong(Long date) throws AtlasConversionException {
         if (date >= Instant.MIN.getEpochSecond()) {
             return Date.from(Instant.ofEpochMilli(date));
@@ -199,26 +199,26 @@ public class DateConverter implements AtlasConverter<Date> {
         }
     }
 
-    @AtlasConversionInfo(sourceType = FieldType.TIME, targetType = FieldType.COMPLEX)
+    @AtlasConversionInfo(sourceType = FieldType.TIME, targetType = FieldType.DATE_TIME_TZ)
     public Date convertFromLocalTime(LocalTime localTime, String sourceFormat, String targetFormat)
             throws AtlasConversionException {
         return convertFromLocalTime(localTime, sourceFormat);
     }
 
-    @AtlasConversionInfo(sourceType = FieldType.DATE, targetType = FieldType.COMPLEX)
+    @AtlasConversionInfo(sourceType = FieldType.DATE, targetType = FieldType.DATE_TIME_TZ)
     public Date convertFromLocalDate(LocalDate localDate, String sourceFormat, String targetFormat)
             throws AtlasConversionException {
         ZoneId zoneId = sourceFormat != null ? ZoneId.of(sourceFormat) : ZoneId.systemDefault();
         return Date.from(localDate.atStartOfDay().atZone(zoneId).toInstant());
     }
 
-    @AtlasConversionInfo(sourceType = FieldType.DATE_TIME, targetType = FieldType.COMPLEX)
+    @AtlasConversionInfo(sourceType = FieldType.DATE_TIME, targetType = FieldType.DATE_TIME_TZ)
     public Date convertFromLocalDateTime(LocalDateTime localDateTime, String sourceFormat, String targetFormat)
             throws AtlasConversionException {
         return convertFromLocalDateTime(localDateTime, sourceFormat);
     }
 
-    @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.COMPLEX)
+    @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.DATE_TIME_TZ)
     public Date convertFromZonedDateTime(ZonedDateTime dateTime) throws AtlasConversionException {
         return Date.from(dateTime.toInstant());
     }

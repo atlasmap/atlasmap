@@ -382,11 +382,11 @@ public class JavaValidationServiceTest {
         Mapping fieldMapping = (Mapping) mapping.getMappings().getMapping().get(0);
 
         JavaField in = (JavaField) fieldMapping.getInputField().get(0);
-        in.setFieldType(FieldType.DATE);
+        in.setFieldType(FieldType.DATE_TIME_TZ);
         in.setClassName("java.util.Date");
 
         JavaField out = (JavaField) fieldMapping.getOutputField().get(0);
-        out.setFieldType(FieldType.COMPLEX);
+        out.setFieldType(FieldType.DATE_TIME_TZ);
         out.setClassName("java.time.ZonedDateTime");
 
         validations.addAll(sourceValidationService.validateMapping(mapping));
@@ -397,12 +397,8 @@ public class JavaValidationServiceTest {
         }
         assertFalse(validationHelper.hasErrors());
         assertFalse(validationHelper.hasWarnings());
-        assertTrue(validationHelper.hasInfos());
-        assertThat(1, is(validationHelper.getCount()));
-        Validation v = validations.get(0);
-        assertEquals(ValidationScope.MAPPING, v.getScope());
-        assertEquals("map.firstName.firstName", v.getId());
-        assertEquals(ValidationStatus.INFO, v.getStatus());
+        assertFalse(validationHelper.hasInfos());
+        assertThat(validationHelper.getCount(), is(0));
     }
 
     @Test
