@@ -30,23 +30,22 @@ import org.junit.Test;
 import io.atlasmap.api.AtlasConversionException;
 import io.atlasmap.spi.AtlasConversionConcern;
 import io.atlasmap.spi.AtlasConversionInfo;
-import io.atlasmap.spi.AtlasPrimitiveConverter;
 import io.atlasmap.v2.FieldType;
 
 public class DoubleConverterTest {
 
-    private AtlasPrimitiveConverter<Double> converter = new DoubleConverter();
+    private DoubleConverter converter = new DoubleConverter();
 
     @Test
     public void convertToBoolean() throws Exception {
         Double df = 0.0;
         Double dt = 1.0;
 
-        Boolean b = converter.convertToBoolean(dt, null, null);
+        Boolean b = converter.toBoolean(dt);
         assertNotNull(b);
         assertTrue(b);
 
-        b = converter.convertToBoolean(df, null, null);
+        b = converter.toBoolean(df);
         assertNotNull(b);
         assertFalse(b);
 
@@ -55,14 +54,14 @@ public class DoubleConverterTest {
     @Test
     public void convertToBooleanNull() throws Exception {
         Double df = null;
-        Boolean b = converter.convertToBoolean(df, null, null);
+        Boolean b = converter.toBoolean(df);
         assertNull(b);
     }
 
     @Test
     public void convertToBooleanNegative() throws Exception {
         Double dt = -1.0;
-        Boolean b = converter.convertToBoolean(dt, null, null);
+        Boolean b = converter.toBoolean(dt);
         assertTrue(b);
     }
 
@@ -70,23 +69,23 @@ public class DoubleConverterTest {
     public void convertToByte() throws Exception {
         Double df = 0.0;
         Byte value = (byte) 0;
-        assertEquals(value, converter.convertToByte(df));
+        assertEquals(value, converter.toByte(df));
     }
 
     @Test(expected = AtlasConversionException.class)
     public void convertToByteOutOfRange() throws Exception {
-        converter.convertToByte(Double.MAX_VALUE);
+        converter.toByte(Double.MAX_VALUE);
     }
 
     @Test
     public void convertToByteNull() throws Exception {
-        assertNull(converter.convertToByte(null));
+        assertNull(converter.toByte(null));
     }
 
     @Test
     public void convertToCharacter() throws Exception {
         Double df = 0.0;
-        Character c = converter.convertToCharacter(df);
+        Character c = converter.toCharacter(df);
         assertNotNull(c);
         assertEquals(0, c.charValue());
     }
@@ -94,26 +93,26 @@ public class DoubleConverterTest {
     @Test
     public void convertToCharacterNull() throws Exception {
         Double df = null;
-        Character c = converter.convertToCharacter(df);
+        Character c = converter.toCharacter(df);
         assertNull(c);
     }
 
     @Test(expected = AtlasConversionException.class)
     public void convertToCharacterMAX() throws Exception {
         Double df = 65556.00;
-        converter.convertToCharacter(df);
+        converter.toCharacter(df);
     }
 
     @Test(expected = AtlasConversionException.class)
     public void convertToCharacterMIN() throws Exception {
         Double df = -1.00;
-        converter.convertToCharacter(df);
+        converter.toCharacter(df);
     }
 
     @Test
     public void convertToDouble() throws Exception {
         Double df = 0.0;
-        Double d = converter.convertToDouble(df);
+        Double d = converter.toDouble(df);
         assertNotNull(d);
         assertNotSame(df, d);
         assertEquals(0.0, d, 0.0);
@@ -122,19 +121,19 @@ public class DoubleConverterTest {
     @Test
     public void convertToDoubleNull() throws Exception {
         Double df = null;
-        Double d = converter.convertToDouble(df);
+        Double d = converter.toDouble(df);
         assertNull(d);
     }
 
     @Test
     public void convertToFloat() throws Exception {
         Double df = 0.0d;
-        Float f = converter.convertToFloat(df);
+        Float f = converter.toFloat(df);
         assertNotNull(f);
         assertEquals(0.0, f, 0.0);
 
         df = 0.15;
-        f = converter.convertToFloat(df);
+        f = converter.toFloat(df);
         assertNotNull(f);
         assertEquals(0.15, f, 1.0);
     }
@@ -142,26 +141,26 @@ public class DoubleConverterTest {
     @Test
     public void convertToFloatNull() throws Exception {
         Double df = null;
-        Float f = converter.convertToFloat(df);
+        Float f = converter.toFloat(df);
         assertNull(f);
     }
 
     @Test(expected = AtlasConversionException.class)
     public void convertToFloatExceptionMAX() throws Exception {
         Double df = Double.MAX_VALUE;
-        converter.convertToFloat(df);
+        converter.toFloat(df);
     }
 
     @Test(expected = AtlasConversionException.class)
     public void convertToFloatExceptionMIN() throws Exception {
         Double df = Double.MIN_VALUE;
-        converter.convertToFloat(df);
+        converter.toFloat(df);
     }
 
     @Test
     public void convertToInteger() throws Exception {
         Double df = 0.15;
-        Integer i = converter.convertToInteger(df);
+        Integer i = converter.toInteger(df);
         assertNotNull(i);
         assertEquals(0, i, 0.0);
     }
@@ -169,20 +168,20 @@ public class DoubleConverterTest {
     @Test
     public void convertToIntegerNull() throws Exception {
         Double df = null;
-        Integer i = converter.convertToInteger(df);
+        Integer i = converter.toInteger(df);
         assertNull(i);
     }
 
     @Test(expected = AtlasConversionException.class)
     public void convertToIntegerExceptionMAX() throws Exception {
         Double df = Double.MAX_VALUE;
-        converter.convertToInteger(df);
+        converter.toInteger(df);
     }
 
     @Test
     public void convertToLong() throws Exception {
         Double df = 0.0;
-        Long l = converter.convertToLong(df);
+        Long l = converter.toLong(df);
         assertNotNull(l);
         assertEquals(0, l, 0.0);
     }
@@ -190,20 +189,20 @@ public class DoubleConverterTest {
     @Test
     public void convertToLongNull() throws Exception {
         Double df = null;
-        Long l = converter.convertToLong(df);
+        Long l = converter.toLong(df);
         assertNull(l);
     }
 
     @Test(expected = AtlasConversionException.class)
     public void convertToLongExceptionMAX() throws Exception {
         Double df = Double.MAX_VALUE;
-        converter.convertToLong(df);
+        converter.toLong(df);
     }
 
     @Test
     public void convertToShort() throws Exception {
         Double df = 0.0;
-        Short s = converter.convertToShort(df);
+        Short s = converter.toShort(df);
         assertNotNull(s);
         assertEquals(0, s, 0.0);
     }
@@ -211,20 +210,20 @@ public class DoubleConverterTest {
     @Test
     public void convertToShortNull() throws Exception {
         Double df = null;
-        Short s = converter.convertToShort(df);
+        Short s = converter.toShort(df);
         assertNull(s);
     }
 
     @Test(expected = AtlasConversionException.class)
     public void convertToShortExceptionMAX() throws Exception {
         Double df = Double.MAX_VALUE;
-        converter.convertToShort(df);
+        converter.toShort(df);
     }
 
     @Test
     public void convertToString() throws Exception {
         Double df = 0.0;
-        String s = converter.convertToString(df, null, null);
+        String s = converter.toString(df);
         assertNotNull(s);
         assertTrue("0.0".equals(s));
     }
@@ -232,7 +231,7 @@ public class DoubleConverterTest {
     @Test
     public void convertToStringNull() throws Exception {
         Double df = null;
-        String s = converter.convertToString(df, null, null);
+        String s = converter.toString(df);
         assertNull(s);
     }
 

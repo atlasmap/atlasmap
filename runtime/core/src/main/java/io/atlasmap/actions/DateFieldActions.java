@@ -34,7 +34,7 @@ import io.atlasmap.v2.FieldType;
     "squid:S3358" })   // Extract nested ternary
 public class DateFieldActions implements AtlasFieldAction {
 
-    @AtlasFieldActionInfo(name = "AddDays", sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.DATE_TIME_TZ, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
+    @AtlasFieldActionInfo(name = "AddDays", sourceType = FieldType.DATE_TIME, targetType = FieldType.DATE_TIME, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
     public static Date addDays(Action action, Date input) {
         if (action == null || !(action instanceof AddDays)) {
             throw new IllegalArgumentException("Action must be an AddDays action");
@@ -50,7 +50,7 @@ public class DateFieldActions implements AtlasFieldAction {
         return Date.from(dateTime.atZone(ZoneId.systemDefault()).toInstant());
     }
 
-    @AtlasFieldActionInfo(name = "AddSeconds", sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.DATE_TIME_TZ, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
+    @AtlasFieldActionInfo(name = "AddSeconds", sourceType = FieldType.DATE_TIME, targetType = FieldType.DATE_TIME, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
     public static Date addSeconds(Action action, Date input) {
         if (action == null || !(action instanceof AddSeconds)) {
             throw new IllegalArgumentException("Action must be an AddSeconds action");
@@ -66,22 +66,22 @@ public class DateFieldActions implements AtlasFieldAction {
         return Date.from(dateTime.atZone(ZoneId.systemDefault()).toInstant());
     }
 
-    @AtlasFieldActionInfo(name = "CurrentDate", sourceType = FieldType.ANY, targetType = FieldType.DATE_TZ, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
+    @AtlasFieldActionInfo(name = "CurrentDate", sourceType = FieldType.ANY, targetType = FieldType.DATE_TIME, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
     public static Date currentDate(Action action, Object input) {
         return Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant());
     }
 
-    @AtlasFieldActionInfo(name = "CurrentDateTime", sourceType = FieldType.ANY, targetType = FieldType.DATE_TIME_TZ, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
+    @AtlasFieldActionInfo(name = "CurrentDateTime", sourceType = FieldType.ANY, targetType = FieldType.DATE_TIME, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
     public static Date currentDateTime(Action action, Object input) {
         return Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant());
     }
 
-    @AtlasFieldActionInfo(name = "CurrentTime", sourceType = FieldType.ANY, targetType = FieldType.TIME_TZ, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
+    @AtlasFieldActionInfo(name = "CurrentTime", sourceType = FieldType.ANY, targetType = FieldType.DATE_TIME, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
     public static Date currentTime(Action action, Object input) {
         return currentDateTime(action, input);
     }
 
-    @AtlasFieldActionInfo(name = "DayOfWeek", sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.INTEGER, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
+    @AtlasFieldActionInfo(name = "DayOfWeek", sourceType = FieldType.DATE_TIME, targetType = FieldType.INTEGER, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
     public static Integer dayOfWeek(Action action, Date input) {
         if (input == null) {
             return null;
@@ -90,7 +90,7 @@ public class DateFieldActions implements AtlasFieldAction {
         return dateTime.getDayOfWeek().getValue();
     }
 
-    @AtlasFieldActionInfo(name = "DayOfYear", sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.INTEGER, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
+    @AtlasFieldActionInfo(name = "DayOfYear", sourceType = FieldType.DATE_TIME, targetType = FieldType.INTEGER, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
     public static Integer dayOfYear(Action action, Date input) {
         if (input == null) {
             return null;

@@ -17,48 +17,84 @@ package io.atlasmap.converters;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.text.NumberFormat;
+import java.text.ParseException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+import java.util.regex.Pattern;
 
 import io.atlasmap.api.AtlasConversionException;
+import io.atlasmap.api.AtlasConverter;
 import io.atlasmap.spi.AtlasConversionConcern;
 import io.atlasmap.spi.AtlasConversionInfo;
-import io.atlasmap.spi.AtlasPrimitiveConverter;
 import io.atlasmap.v2.FieldType;
 
-public class StringConverter implements AtlasPrimitiveConverter<String> {
+public class StringConverter implements AtlasConverter<String> {
 
-    private static final String TRUE_REGEX = "true|TRUE|t|T|y|Y|1";
+    private static final Pattern TRUE_PATTERN = Pattern.compile("true|t|yes|y", Pattern.CASE_INSENSITIVE);
 
-    /**
-     * @param sourceFormat
-     *            the regex used to test the string value against
-     * @param targetFormat
-     *            not used
-     * @return the boolean conversion of the string value
-     * @throws AtlasConversionException
-     */
-    @Override
+    @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.DECIMAL,
+            concerns = AtlasConversionConcern.FORMAT)
+    public BigDecimal toBigDecimal(String value) throws AtlasConversionException {
+        try {
+            return value != null ? new BigDecimal(value) : null;
+        } catch (NumberFormatException e) {
+            throw new AtlasConversionException(String
+                    .format("String %s cannont be converted to a BigDecimal as it is not in a valid format", value));
+        }
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.BIG_INTEGER,
+            concerns = AtlasConversionConcern.FORMAT)
+    public BigInteger toBigInteger(String value) throws AtlasConversionException {
+        try {
+            return value != null ? new BigInteger(value) : null;
+        } catch (NumberFormatException e) {
+            throw new AtlasConversionException(String
+                    .format("String %s cannont be converted to a BigInteger as it is not in a valid format", value));
+        }
+    }
+
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.BOOLEAN, concerns = AtlasConversionConcern.CONVENTION)
-    public Boolean convertToBoolean(String value, String sourceFormat, String targetFormat)
+    public Boolean toBoolean(String value, String sourceFormat, String targetFormat)
             throws AtlasConversionException {
         if (value == null) {
             return null;
         }
-        String regex = sourceFormat != null && !"".equals(sourceFormat) ? sourceFormat : TRUE_REGEX;
-        if (value.matches(regex)) {
-            return Boolean.TRUE;
+
+        // string expression of true?
+        Pattern pattern;
+        if (sourceFormat != null && !sourceFormat.isEmpty()) {
+            pattern = Pattern.compile(sourceFormat, Pattern.CASE_INSENSITIVE);
         } else {
-            return Boolean.FALSE;
+            pattern = TRUE_PATTERN;
         }
+        if (pattern.matcher(value).matches()) {
+            return Boolean.TRUE;
+        }
+
+        // then try C like numeric translation
+        try {
+            Number n = NumberFormat.getInstance().parse(value);
+            if (n.intValue() == 0) {
+                return Boolean.FALSE;
+            } else {
+                return Boolean.TRUE;
+            }
+        } catch (ParseException e) {
+            e.getMessage(); // ignore
+        }
+
+        // false by default
+        return Boolean.FALSE;
     }
 
-    /**
-     * @param value
-     * @return
-     * @throws AtlasConversionException
-     */
-    @Override
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.BYTE, concerns = AtlasConversionConcern.RANGE)
-    public Byte convertToByte(String value) throws AtlasConversionException {
+    public Byte toByte(String value) throws AtlasConversionException {
         if (value == null) {
             return null;
         }
@@ -70,14 +106,8 @@ public class StringConverter implements AtlasPrimitiveConverter<String> {
         }
     }
 
-    /**
-     * @param value
-     * @return
-     * @throws AtlasConversionException
-     */
-    @Override
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.CHAR, concerns = AtlasConversionConcern.RANGE)
-    public Character convertToCharacter(String value) throws AtlasConversionException {
+    public Character toCharacter(String value) throws AtlasConversionException {
         if (value == null) {
             return null;
         }
@@ -92,15 +122,18 @@ public class StringConverter implements AtlasPrimitiveConverter<String> {
         return value.charAt(0);
     }
 
-    /**
-     * @param value
-     * @return
-     * @throws AtlasConversionException
-     */
-    @Override
+    @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.DATE_TIME)
+    public Date toDate(String date, String sourceFormat, String targetFormat)
+            throws AtlasConversionException {
+
+        DateTimeFormatter formater = sourceFormat != null ? DateTimeFormatter.ofPattern(sourceFormat)
+                : DateTimeFormatter.ISO_ZONED_DATE_TIME;
+        return Date.from(ZonedDateTime.parse(date, formater).toInstant());
+    }
+
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.DOUBLE, concerns = {
             AtlasConversionConcern.FORMAT, AtlasConversionConcern.RANGE })
-    public Double convertToDouble(String value) throws AtlasConversionException {
+    public Double toDouble(String value) throws AtlasConversionException {
         if (value == null) {
             return null;
         }
@@ -122,15 +155,9 @@ public class StringConverter implements AtlasPrimitiveConverter<String> {
         return Double.valueOf(value);
     }
 
-    /**
-     * @param value
-     * @return
-     * @throws AtlasConversionException
-     */
-    @Override
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.FLOAT, concerns = {
             AtlasConversionConcern.FORMAT, AtlasConversionConcern.RANGE })
-    public Float convertToFloat(String value) throws AtlasConversionException {
+    public Float toFloat(String value) throws AtlasConversionException {
         if (value == null) {
             return null;
         }
@@ -156,15 +183,9 @@ public class StringConverter implements AtlasPrimitiveConverter<String> {
         return Float.valueOf(value);
     }
 
-    /**
-     * @param value
-     * @return
-     * @throws AtlasConversionException
-     */
-    @Override
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.INTEGER, concerns = {
             AtlasConversionConcern.FORMAT, AtlasConversionConcern.RANGE })
-    public Integer convertToInteger(String value) throws AtlasConversionException {
+    public Integer toInteger(String value) throws AtlasConversionException {
         if (value == null) {
             return null;
         }
@@ -190,15 +211,24 @@ public class StringConverter implements AtlasPrimitiveConverter<String> {
         return i;
     }
 
-    /**
-     * @param value
-     * @return
-     * @throws AtlasConversionException
-     */
-    @Override
+    @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.DATE)
+    public LocalDate toLocalDate(String value) {
+        return value != null ? LocalDate.parse(value) : null;
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.TIME)
+    public LocalTime toLocalTime(String value) {
+        return value != null ? LocalTime.parse(value) : null;
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.DATE_TIME)
+    public LocalDateTime toLocalDateTime(String value) {
+        return value != null ? LocalDateTime.parse(value) : null;
+    }
+
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.LONG, concerns = {
             AtlasConversionConcern.FORMAT, AtlasConversionConcern.RANGE })
-    public Long convertToLong(String value) throws AtlasConversionException {
+    public Long toLong(String value) throws AtlasConversionException {
         if (value == null) {
             return null;
         }
@@ -224,15 +254,9 @@ public class StringConverter implements AtlasPrimitiveConverter<String> {
         return l;
     }
 
-    /**
-     * @param value
-     * @return
-     * @throws AtlasConversionException
-     */
-    @Override
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.SHORT, concerns = {
             AtlasConversionConcern.FORMAT, AtlasConversionConcern.RANGE })
-    public Short convertToShort(String value) throws AtlasConversionException {
+    public Short toShort(String value) throws AtlasConversionException {
         if (value == null) {
             return null;
         }
@@ -246,14 +270,8 @@ public class StringConverter implements AtlasPrimitiveConverter<String> {
         return Short.valueOf(shortty);
     }
 
-    /**
-     * @param value
-     * @return
-     * @throws AtlasConversionException
-     */
-    @Override
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.STRING)
-    public String convertToString(String value, String sourceFormat, String targetFormat)
+    public String toString(String value, String sourceFormat, String targetFormat)
             throws AtlasConversionException {
         if (value == null) {
             return null;
@@ -264,7 +282,7 @@ public class StringConverter implements AtlasPrimitiveConverter<String> {
 
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.NUMBER, concerns = {
             AtlasConversionConcern.FORMAT })
-    public Number convertToNumber(String value) throws AtlasConversionException {
+    public Number toNumber(String value) throws AtlasConversionException {
         if (value == null || value.trim().isEmpty()) {
             return null;
         }
@@ -277,4 +295,10 @@ public class StringConverter implements AtlasPrimitiveConverter<String> {
             throw new AtlasConversionException(e);
         }
     }
+
+    @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.DATE_TIME_TZ)
+    public ZonedDateTime toZonedDateTime(String value) {
+        return value != null ? ZonedDateTime.parse(value) : null;
+    }
+
 }

@@ -29,108 +29,107 @@ import org.junit.Test;
 
 import io.atlasmap.spi.AtlasConversionConcern;
 import io.atlasmap.spi.AtlasConversionInfo;
-import io.atlasmap.spi.AtlasPrimitiveConverter;
 import io.atlasmap.v2.FieldType;
 
 public class ByteConverterTest {
 
     private static final byte DEFAULT_VALUE = 100;
 
-    private AtlasPrimitiveConverter<Byte> byteConverter = new ByteConverter();
+    private ByteConverter byteConverter = new ByteConverter();
 
     @Test()
     public void convertToBoolean() throws Exception {
-        byte zero = 0;
-        assertFalse(byteConverter.convertToBoolean(new Byte(zero), null, null));
-        assertTrue(byteConverter.convertToBoolean(Byte.MAX_VALUE, null, null));
+        assertTrue(byteConverter.toBoolean(new Byte((byte)1)));
+        assertFalse(byteConverter.toBoolean(new Byte((byte)0)));
+        assertTrue(byteConverter.toBoolean(Byte.MAX_VALUE));
     }
 
     @Test
     public void convertToBooleanNull() throws Exception {
-        assertNull(byteConverter.convertToBoolean(null, null, null));
+        assertNull(byteConverter.toBoolean(null));
     }
 
     @Test
     public void convertToByte() throws Exception {
-        byteConverter.convertToByte(Byte.MAX_VALUE);
+        byteConverter.toByte(Byte.MAX_VALUE);
     }
 
     @Test
     public void convertToByteNull() throws Exception {
-        assertNull(byteConverter.convertToByte(null));
+        assertNull(byteConverter.toByte(null));
     }
 
     @Test
     public void convertToCharacter() throws Exception {
         byte value = 0;
-        assertEquals('\u0000', byteConverter.convertToCharacter(new Byte(value)).charValue());
+        assertEquals('\u0000', byteConverter.toCharacter(new Byte(value)).charValue());
         value = 99;
-        assertEquals('c', byteConverter.convertToCharacter(new Byte(value)).charValue());
+        assertEquals('c', byteConverter.toCharacter(new Byte(value)).charValue());
     }
 
     @Test
     public void convertToCharacterNull() throws Exception {
-        assertNull(byteConverter.convertToCharacter(null));
+        assertNull(byteConverter.toCharacter(null));
     }
 
     @Test
     public void convertToDouble() throws Exception {
-        assertEquals(100, byteConverter.convertToDouble(DEFAULT_VALUE).doubleValue(), 0);
+        assertEquals(100, byteConverter.toDouble(DEFAULT_VALUE).doubleValue(), 0);
     }
 
     @Test
     public void convertToDoubleNull() throws Exception {
-        assertNull(byteConverter.convertToDouble(null));
+        assertNull(byteConverter.toDouble(null));
     }
 
     @Test
     public void convertToFloat() throws Exception {
-        assertEquals(100, byteConverter.convertToFloat(DEFAULT_VALUE).floatValue(), 0);
+        assertEquals(100, byteConverter.toFloat(DEFAULT_VALUE).floatValue(), 0);
     }
 
     @Test
     public void convertToFloatNull() throws Exception {
-        assertNull(byteConverter.convertToFloat(null));
+        assertNull(byteConverter.toFloat(null));
     }
 
     @Test
     public void convertToInteger() throws Exception {
-        assertEquals(100, byteConverter.convertToInteger(DEFAULT_VALUE).intValue());
+        assertEquals(100, byteConverter.toInteger(DEFAULT_VALUE).intValue());
     }
 
     @Test
     public void convertToIntegerNull() throws Exception {
-        assertNull(byteConverter.convertToInteger(null));
+        assertNull(byteConverter.toInteger(null));
     }
 
     @Test
     public void convertToLong() throws Exception {
-        assertEquals(100, byteConverter.convertToLong(DEFAULT_VALUE).longValue());
+        assertEquals(100, byteConverter.toLong(DEFAULT_VALUE).longValue());
     }
 
     @Test
     public void convertToLongNull() throws Exception {
-        assertNull(byteConverter.convertToLong(null));
+        assertNull(byteConverter.toLong(null));
     }
 
     @Test
     public void convertToShort() throws Exception {
-        assertEquals(100, byteConverter.convertToShort(DEFAULT_VALUE).shortValue());
+        assertEquals(100, byteConverter.toShort(DEFAULT_VALUE).shortValue());
     }
 
     @Test
     public void convertToIShortNull() throws Exception {
-        assertNull(byteConverter.convertToShort(null));
+        assertNull(byteConverter.toShort(null));
     }
 
     @Test
     public void convertToString() throws Exception {
-        Assert.assertEquals(byteConverter.convertToString(Byte.parseByte("1"), null, null), "1");
+        Assert.assertEquals(byteConverter.toString(Byte.parseByte("1")), "1");
     }
 
     @Test
     public void convertToStringNull() throws Exception {
-        assertNull(byteConverter.convertToString(null, null, null));
+        assertNull(byteConverter.toString(null));
     }
 
     @Test

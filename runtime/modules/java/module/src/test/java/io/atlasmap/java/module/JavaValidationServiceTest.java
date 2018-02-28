@@ -490,7 +490,7 @@ public class JavaValidationServiceTest {
         assertThat(validationHelper.getCount(), is(1));
 
         assertTrue(validations.stream()
-                .anyMatch(atlasMappingError -> atlasMappingError.getMessage().contains("no converter is")));
+                .anyMatch(atlasMappingError -> atlasMappingError.getMessage().contains("out of range")));
     }
 
     @Test

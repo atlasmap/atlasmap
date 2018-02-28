@@ -587,7 +587,7 @@ public class XmlFieldReaderTest {
 
     @Test
     public void testXmlFieldBooleanDecimal() throws Exception {
-        validateBoundaryValue(FieldType.BOOLEAN, "test-read-field-boolean-decimal.xml", Boolean.FALSE);
+        validateBoundaryValue(FieldType.BOOLEAN, "test-read-field-boolean-decimal.xml", Boolean.TRUE);
     }
 
     @Test

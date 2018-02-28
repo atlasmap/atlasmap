@@ -15,25 +15,39 @@
  */
 package io.atlasmap.converters;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.Date;
+
 import io.atlasmap.api.AtlasConversionException;
+import io.atlasmap.api.AtlasConverter;
 import io.atlasmap.api.AtlasUnsupportedException;
 import io.atlasmap.spi.AtlasConversionConcern;
 import io.atlasmap.spi.AtlasConversionInfo;
-import io.atlasmap.spi.AtlasPrimitiveConverter;
 import io.atlasmap.v2.FieldType;
 
-public class DoubleConverter implements AtlasPrimitiveConverter<Double> {
+public class DoubleConverter implements AtlasConverter<Double> {
 
-    /**
-     * @param value
-     * @return
-     * @throws AtlasConversionException
-     */
-    @Override
+    @AtlasConversionInfo(sourceType = FieldType.DOUBLE, targetType = FieldType.DECIMAL)
+    public BigDecimal toBigDecimal(Double value) {
+        return value != null ? BigDecimal.valueOf(value) : null;
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.DOUBLE, targetType = FieldType.BIG_INTEGER,
+            concerns = AtlasConversionConcern.FRACTIONAL_PART)
+    public BigInteger toBigInteger(Double value) {
+        return value != null ? BigDecimal.valueOf(value).toBigInteger() : null;
+    }
+
     @AtlasConversionInfo(sourceType = FieldType.DOUBLE, targetType = FieldType.BOOLEAN, concerns = {
             AtlasConversionConcern.CONVENTION })
-    public Boolean convertToBoolean(Double value, String sourceFormat, String targetFormat)
-            throws AtlasConversionException {
+    public Boolean toBoolean(Double value) throws AtlasConversionException {
         if (value == null) {
             return null;
         }
@@ -44,15 +58,9 @@ public class DoubleConverter implements AtlasPrimitiveConverter<Double> {
         }
     }
 
-    /**
-     * @param value
-     * @return
-     * @throws AtlasConversionException
-     * @throws AtlasUnsupportedException
-     */
-    @Override
-    @AtlasConversionInfo(sourceType = FieldType.DOUBLE, targetType = FieldType.BYTE, concerns = AtlasConversionConcern.RANGE)
-    public Byte convertToByte(Double value) throws AtlasConversionException {
+    @AtlasConversionInfo(sourceType = FieldType.DOUBLE, targetType = FieldType.BYTE,
+            concerns = {AtlasConversionConcern.RANGE, AtlasConversionConcern.FRACTIONAL_PART})
+    public Byte toByte(Double value) throws AtlasConversionException {
         if (value == null) {
             return null;
         }
@@ -65,15 +73,9 @@ public class DoubleConverter implements AtlasPrimitiveConverter<Double> {
         }
     }
 
-    /**
-     * @param value
-     * @return
-     * @throws AtlasConversionException
-     */
-    @Override
-    @AtlasConversionInfo(sourceType = FieldType.DOUBLE, targetType = FieldType.CHAR, concerns = {
-            AtlasConversionConcern.RANGE, AtlasConversionConcern.CONVENTION })
-    public Character convertToCharacter(Double value) throws AtlasConversionException {
+    @AtlasConversionInfo(sourceType = FieldType.DOUBLE, targetType = FieldType.CHAR,
+            concerns = {AtlasConversionConcern.RANGE, AtlasConversionConcern.FRACTIONAL_PART})
+    public Character toCharacter(Double value) throws AtlasConversionException {
         if (value == null) {
             return null;
         }
@@ -85,29 +87,27 @@ public class DoubleConverter implements AtlasPrimitiveConverter<Double> {
         return Character.valueOf((char) value.intValue());
     }
 
-    /**
-     * @param value
-     * @return
-     * @throws AtlasConversionException
-     */
-    @Override
-    @AtlasConversionInfo(sourceType = FieldType.DOUBLE, targetType = FieldType.DOUBLE)
-    public Double convertToDouble(Double value) throws AtlasConversionException {
+    @AtlasConversionInfo(sourceType = FieldType.DOUBLE, targetType = FieldType.DATE,
+            concerns = {AtlasConversionConcern.RANGE, AtlasConversionConcern.FRACTIONAL_PART})
+    public Date toDate(Double value) throws AtlasConversionException {
         if (value == null) {
             return null;
         }
-        // we want a copy of the value.
-        return Double.valueOf(value);
+        if (value < Long.MIN_VALUE || value > Long.MAX_VALUE) {
+            throw new AtlasConversionException(String
+                    .format("Double %s is greater than Long.MAX_VALUE or less than Long.MIN_VALUE", value));
+        }
+        return new Date(value.longValue());
     }
 
-    /**
-     * @param value
-     * @return
-     * @throws AtlasConversionException
-     */
-    @Override
-    @AtlasConversionInfo(sourceType = FieldType.DOUBLE, targetType = FieldType.FLOAT, concerns = AtlasConversionConcern.RANGE)
-    public Float convertToFloat(Double value) throws AtlasConversionException {
+    @AtlasConversionInfo(sourceType = FieldType.DOUBLE, targetType = FieldType.DOUBLE)
+    public Double toDouble(Double value) throws AtlasConversionException {
+        return value != null ? Double.valueOf(value) : null;
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.DOUBLE, targetType = FieldType.FLOAT,
+            concerns = AtlasConversionConcern.RANGE)
+    public Float toFloat(Double value) throws AtlasConversionException {
         if (value == null) {
             return null;
         }
@@ -118,48 +118,77 @@ public class DoubleConverter implements AtlasPrimitiveConverter<Double> {
         return value.floatValue();
     }
 
-    /**
-     * @param value
-     * @return
-     * @throws AtlasConversionException
-     */
-    @Override
-    @AtlasConversionInfo(sourceType = FieldType.DOUBLE, targetType = FieldType.INTEGER, concerns = AtlasConversionConcern.RANGE)
-    public Integer convertToInteger(Double value) throws AtlasConversionException {
+    @AtlasConversionInfo(sourceType = FieldType.DOUBLE, targetType = FieldType.INTEGER,
+            concerns = {AtlasConversionConcern.RANGE, AtlasConversionConcern.FRACTIONAL_PART})
+    public Integer toInteger(Double value) throws AtlasConversionException {
         if (value == null) {
             return null;
         }
-        if (value > Integer.MAX_VALUE) {
-            throw new AtlasConversionException(String.format("Double %s is greater than Integer.MAX_VALUE", value));
+        if (value < Integer.MIN_VALUE || value > Integer.MAX_VALUE) {
+            throw new AtlasConversionException(String.format(
+                    "Double %s is greater than Integer.MAX_VALUE or less than Integer.MIN_VALUE", value));
         }
         return value.intValue();
     }
 
-    /**
-     * @param value
-     * @return
-     * @throws AtlasConversionException
-     */
-    @Override
-    @AtlasConversionInfo(sourceType = FieldType.DOUBLE, targetType = FieldType.LONG, concerns = AtlasConversionConcern.RANGE)
-    public Long convertToLong(Double value) throws AtlasConversionException {
+    @AtlasConversionInfo(sourceType = FieldType.DOUBLE, targetType = FieldType.DATE,
+            concerns = {AtlasConversionConcern.RANGE, AtlasConversionConcern.FRACTIONAL_PART})
+    public LocalDate toLocalDate(Double value) throws AtlasConversionException {
         if (value == null) {
             return null;
         }
-        if (value > Long.MAX_VALUE) {
-            throw new AtlasConversionException(String.format("Double %s is greater than Long.MAX_VALUE", value));
+        if (value < Long.MIN_VALUE || value > Long.MAX_VALUE) {
+            throw new AtlasConversionException(String.format(
+                    "Double %s is greater than Long.MAX_VALUE or less than Long.MIN_VALUE", value));
+        }
+        return Instant.ofEpochMilli(value.longValue()).atZone(ZoneId.systemDefault()).toLocalDate();
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.DOUBLE, targetType = FieldType.TIME,
+            concerns = {AtlasConversionConcern.RANGE, AtlasConversionConcern.FRACTIONAL_PART})
+    public LocalTime toLocalTime(Double value) throws AtlasConversionException {
+        if (value == null) {
+            return null;
+        }
+        if (value < Long.MIN_VALUE || value > Long.MAX_VALUE) {
+            throw new AtlasConversionException(String.format(
+                    "Double %s is greater than Long.MAX_VALUE or less than Long.MIN_VALUE", value));
+        }
+        return Instant.ofEpochMilli(value.longValue()).atZone(ZoneId.systemDefault()).toLocalTime();
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.DOUBLE, targetType = FieldType.DATE_TIME,
+            concerns = {AtlasConversionConcern.RANGE, AtlasConversionConcern.FRACTIONAL_PART})
+    public LocalDateTime toLocalDateTime(Double value) throws AtlasConversionException {
+        if (value == null) {
+            return null;
+        }
+        if (value < Long.MIN_VALUE || value > Long.MAX_VALUE) {
+            throw new AtlasConversionException(String.format(
+                    "Double %s is greater than Long.MAX_VALUE or less than Long.MIN_VALUE", value));
+        }
+        return Instant.ofEpochMilli(value.longValue()).atZone(ZoneId.systemDefault()).toLocalDateTime();
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.DOUBLE, targetType = FieldType.LONG, concerns = AtlasConversionConcern.RANGE)
+    public Long toLong(Double value) throws AtlasConversionException {
+        if (value == null) {
+            return null;
+        }
+        if (value < Long.MIN_VALUE || value > Long.MAX_VALUE) {
+            throw new AtlasConversionException(String.format(
+                    "Double %s is greater than Long.MAX_VALUE or less than Long.MIN_VALUE", value));
         }
         return value.longValue();
     }
 
-    /**
-     * @param value
-     * @return
-     * @throws AtlasConversionException
-     */
-    @Override
+    @AtlasConversionInfo(sourceType = FieldType.DOUBLE, targetType = FieldType.NUMBER)
+    public Number toNumber(Double value) throws AtlasConversionException {
+        return value;
+    }
+
     @AtlasConversionInfo(sourceType = FieldType.DOUBLE, targetType = FieldType.SHORT, concerns = AtlasConversionConcern.RANGE)
-    public Short convertToShort(Double value) throws AtlasConversionException {
+    public Short toShort(Double value) throws AtlasConversionException {
         if (value == null) {
             return null;
         }
@@ -170,18 +199,22 @@ public class DoubleConverter implements AtlasPrimitiveConverter<Double> {
         return value.shortValue();
     }
 
-    /**
-     * @param value
-     * @return
-     * @throws AtlasConversionException
-     */
-    @Override
     @AtlasConversionInfo(sourceType = FieldType.DOUBLE, targetType = FieldType.STRING)
-    public String convertToString(Double value, String sourceFormat, String targetFormat)
-            throws AtlasConversionException {
+    public String toString(Double value) throws AtlasConversionException {
+        return value != null ? String.valueOf(value) : null;
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.DOUBLE, targetType = FieldType.DATE_TIME_TZ,
+            concerns = {AtlasConversionConcern.RANGE, AtlasConversionConcern.FRACTIONAL_PART})
+    public ZonedDateTime toZonedDateTime(Double value) throws AtlasConversionException {
         if (value == null) {
             return null;
         }
-        return String.valueOf(value);
+        if (value > Long.MAX_VALUE || value < Long.MIN_VALUE) {
+            throw new AtlasConversionException(String.format(
+                    "Double %s is greater than Long.MAX_VALUE or less than Long.MIN_VALUE", value));
+        }
+        return Instant.ofEpochMilli(value.longValue()).atZone(ZoneId.systemDefault());
     }
+
 }
