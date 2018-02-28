@@ -72,6 +72,8 @@ export class DataMapperAppComponent implements OnInit {
   updateFromConfig(): void {
     // update the mapping line drawing after our fields have redrawn themselves
     // without this, the x/y from the field dom elements is messed up / misaligned.
-    setTimeout(() => { this.lineMachine.redrawLinesForMappings(); }, 1);
+    if (this.lineMachine != null) {
+      setTimeout(() => { this.lineMachine.redrawLinesForMappings(); }, 1);
+    }
   }
 }
