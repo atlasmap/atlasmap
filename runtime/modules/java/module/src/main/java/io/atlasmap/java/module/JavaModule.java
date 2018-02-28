@@ -112,10 +112,17 @@ public class JavaModule extends BaseAtlasModule {
             javaInspectionService.setConversionService(getConversionService());
         }
 
-        DocumentJavaFieldReader reader = new DocumentJavaFieldReader();
-        reader.setConversionService(getConversionService());
-        reader.setDocument(atlasSession.getSourceDocument(getDocId()));
-        atlasSession.setFieldReader(getDocId(), reader);
+        Object sourceDocument = atlasSession.getSourceDocument(getDocId());
+        if (sourceDocument == null) {
+            AtlasUtil.addAudit(atlasSession, getDocId(), String.format(
+                    "Null source document: docId='%s'", getDocId()),
+                    null, AuditStatus.WARN, null);
+        } else {
+            DocumentJavaFieldReader reader = new DocumentJavaFieldReader();
+            reader.setConversionService(getConversionService());
+            reader.setDocument(sourceDocument);
+            atlasSession.setFieldReader(getDocId(), reader);
+        }
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("{}: processPreSourceExcution completed", getDocId());
@@ -160,6 +167,12 @@ public class JavaModule extends BaseAtlasModule {
     public void processSourceFieldMapping(AtlasInternalSession session) throws AtlasException {
         Field sourceField = session.head().getSourceField();
         DocumentJavaFieldReader reader = session.getFieldReader(getDocId(), DocumentJavaFieldReader.class);
+        if (reader == null) {
+            AtlasUtil.addAudit(session, sourceField.getDocId(), String.format(
+                    "Source document '%s' doesn't exist", getDocId()),
+                    sourceField.getPath(), AuditStatus.ERROR, null);
+            return;
+        }
         reader.read(session);
 
         if (sourceField.getActions() != null && sourceField.getActions().getActions() != null) {

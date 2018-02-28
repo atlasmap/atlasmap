@@ -91,23 +91,25 @@ public class XmlModule extends BaseAtlasModule {
     public void processPreSourceExecution(AtlasInternalSession session) throws AtlasException {
         Object sourceDocument = session.getSourceDocument(getDocId());
         if (sourceDocument == null || !(sourceDocument instanceof String)) {
-            throw new AtlasException(String.format("Unsupported source document '%s'", sourceDocument));
-        }
-
-        Map<String, String> sourceUriParams = AtlasUtil.getUriParameters(getUri());
-        boolean enableNamespaces = true;
-        for (String key : sourceUriParams.keySet()) {
-            if ("disableNamespaces".equals(key) && ("true".equals(sourceUriParams.get("disableNamespaces")))) {
-                if (LOG.isDebugEnabled()) {
-                    LOG.debug("Disabling namespace support");
+            AtlasUtil.addAudit(session, getDocId(), String.format(
+                    "Null or non-String source document: docId='%s'", getDocId()),
+                    null, AuditStatus.WARN, null);
+        } else {
+            Map<String, String> sourceUriParams = AtlasUtil.getUriParameters(getUri());
+            boolean enableNamespaces = true;
+            for (String key : sourceUriParams.keySet()) {
+                if ("disableNamespaces".equals(key) && ("true".equals(sourceUriParams.get("disableNamespaces")))) {
+                    if (LOG.isDebugEnabled()) {
+                        LOG.debug("Disabling namespace support");
+                    }
+                    enableNamespaces = false;
                 }
-                enableNamespaces = false;
             }
-        }
 
-        XmlFieldReader reader = new XmlFieldReader(getConversionService());
-        reader.setDocument(String.class.cast(sourceDocument), enableNamespaces);
-        session.setFieldReader(getDocId(), reader);
+            XmlFieldReader reader = new XmlFieldReader(getConversionService());
+            reader.setDocument(String.class.cast(sourceDocument), enableNamespaces);
+            session.setFieldReader(getDocId(), reader);
+        }
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("{}: processPreSourceExecution completed", getDocId());
@@ -144,6 +146,12 @@ public class XmlModule extends BaseAtlasModule {
     public void processSourceFieldMapping(AtlasInternalSession session) throws AtlasException {
         Field sourceField = session.head().getSourceField();
         XmlFieldReader reader = session.getFieldReader(getDocId(), XmlFieldReader.class);
+        if (reader == null) {
+            AtlasUtil.addAudit(session, sourceField.getDocId(), String.format(
+                    "Source document '%s' doesn't exist", getDocId()),
+                    sourceField.getPath(), AuditStatus.ERROR, null);
+            return;
+        }
         reader.read(session);
 
         if (sourceField.getActions() != null && sourceField.getActions().getActions() != null) {
