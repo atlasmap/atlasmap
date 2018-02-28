@@ -142,14 +142,14 @@ public class ClassInspectionServiceTest {
                 assertTrue(field.getModifiers().getModifier().contains(Modifier.PACKAGE_PRIVATE));
             } else if ("date".equals(field.getName())) {
                 assertEquals("java.util.Date", field.getClassName());
-                assertEquals(FieldType.DATE_TIME_TZ, field.getFieldType());
+                assertEquals(FieldType.DATE_TIME, field.getFieldType());
                 assertFalse(field.getModifiers().getModifier().contains(Modifier.PRIVATE));
                 assertFalse(field.getModifiers().getModifier().contains(Modifier.PROTECTED));
                 assertFalse(field.getModifiers().getModifier().contains(Modifier.PUBLIC));
                 assertTrue(field.getModifiers().getModifier().contains(Modifier.PACKAGE_PRIVATE));
             } else if ("sqlDate".equals(field.getName())) {
                 assertEquals("java.sql.Date", field.getClassName());
-                assertEquals(FieldType.DATE_TIME_TZ, field.getFieldType());
+                assertEquals(FieldType.DATE_TIME, field.getFieldType());
                 assertFalse(field.getModifiers().getModifier().contains(Modifier.PRIVATE));
                 assertFalse(field.getModifiers().getModifier().contains(Modifier.PROTECTED));
                 assertFalse(field.getModifiers().getModifier().contains(Modifier.PUBLIC));
@@ -199,11 +199,11 @@ public class ClassInspectionServiceTest {
                 assertEquals("getZonedDateTime", field.getGetMethod());
             } else if ("date".equals(field.getName())) {
                 assertEquals("java.util.Date", field.getClassName());
-                assertEquals(FieldType.DATE_TIME_TZ, field.getFieldType());
+                assertEquals(FieldType.DATE_TIME, field.getFieldType());
                 assertEquals("getDate", field.getGetMethod());
             } else if ("sqlDate".equals(field.getName())) {
                 assertEquals("java.sql.Date", field.getClassName());
-                assertEquals(FieldType.DATE_TIME_TZ, field.getFieldType());
+                assertEquals(FieldType.DATE_TIME, field.getFieldType());
                 assertEquals("getSqlDate", field.getGetMethod());
             } else {
                 fail("Unsupported field was detected: " + field);
@@ -250,11 +250,11 @@ public class ClassInspectionServiceTest {
                 assertEquals("setZonedDateTime", field.getSetMethod());
             } else if ("date".equals(field.getName())) {
                 assertEquals("java.util.Date", field.getClassName());
-                assertEquals(FieldType.DATE_TIME_TZ, field.getFieldType());
+                assertEquals(FieldType.DATE_TIME, field.getFieldType());
                 assertEquals("setDate", field.getSetMethod());
             } else if ("sqlDate".equals(field.getName())) {
                 assertEquals("java.sql.Date", field.getClassName());
-                assertEquals(FieldType.DATE_TIME_TZ, field.getFieldType());
+                assertEquals(FieldType.DATE_TIME, field.getFieldType());
                 assertEquals("setSqlDate", field.getSetMethod());
             } else {
                 fail("Unsupported field was detected: " + field);

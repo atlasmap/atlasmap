@@ -470,11 +470,13 @@ public class DefaultAtlasConversionService implements AtlasConversionService {
             return FieldType.DATE;
         case "java.time.LocalTime":
             return FieldType.TIME;
-        case "java.time.LocalDateTime":
-            return FieldType.DATE_TIME;
         case "java.sql.Date":
-        case "java.util.Calendar":
+        case "java.sql.Time":
+        case "java.sql.Timestamp":
+        case "java.time.LocalDateTime":
         case "java.util.Date":
+            return FieldType.DATE_TIME;
+        case "java.util.Calendar":
         case "java.time.ZonedDateTime":
             return FieldType.DATE_TIME_TZ;
         default:
@@ -507,7 +509,9 @@ public class DefaultAtlasConversionService implements AtlasConversionService {
         case DATE:
             return java.time.LocalDate.class;
         case DATE_TIME:
-            return java.time.LocalDateTime.class;
+            return java.util.Date.class;
+            // TODO do we prefer java.time.* at some point? - https://github.com/atlasmap/atlasmap/issues/312
+            // return java.time.LocalDateTime.class;
         case DATE_TZ:
         case TIME_TZ:
         case DATE_TIME_TZ:

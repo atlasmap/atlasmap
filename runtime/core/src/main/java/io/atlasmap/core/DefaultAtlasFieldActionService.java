@@ -6,10 +6,10 @@ import java.lang.reflect.Parameter;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.ServiceLoader;
 
@@ -222,7 +222,9 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
                     case BYTE_ARRAY: method = actionClazz.getMethod(actionDetail.getMethod(), Action.class, Byte[].class); break;
                     case CHAR: method = actionClazz.getMethod(actionDetail.getMethod(), Action.class, Character.class); break;
                     case DATE: method = actionClazz.getMethod(actionDetail.getMethod(), Action.class, LocalDate.class);
-                    case DATE_TIME: method = actionClazz.getMethod(actionDetail.getMethod(), Action.class, LocalDateTime.class); break;
+                    // TODO do we prefer java.time.* at some point? - https://github.com/atlasmap/atlasmap/issues/312
+                    // case DATE_TIME: method = actionClazz.getMethod(actionDetail.getMethod(), Action.class, LocalDateTime.class); break;
+                    case DATE_TIME: method = actionClazz.getMethod(actionDetail.getMethod(), Action.class, Date.class); break;
                     case DATE_TZ: case TIME_TZ: case DATE_TIME_TZ: method = actionClazz.getMethod(actionDetail.getMethod(), Action.class, ZonedDateTime.class); break;
                     case DECIMAL: method = actionClazz.getMethod(actionDetail.getMethod(), Action.class, BigDecimal.class); break;
                     case DOUBLE: method = actionClazz.getMethod(actionDetail.getMethod(), Action.class, Double.class); break;
