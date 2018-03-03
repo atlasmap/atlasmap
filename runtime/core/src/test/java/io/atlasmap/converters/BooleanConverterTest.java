@@ -18,7 +18,6 @@ package io.atlasmap.converters;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
@@ -29,55 +28,54 @@ import org.junit.Test;
 
 import io.atlasmap.spi.AtlasConversionConcern;
 import io.atlasmap.spi.AtlasConversionInfo;
-import io.atlasmap.spi.AtlasPrimitiveConverter;
 import io.atlasmap.v2.FieldType;
 
 public class BooleanConverterTest {
 
-    private AtlasPrimitiveConverter<Boolean> converter = new BooleanConverter();
+    private BooleanConverter converter = new BooleanConverter();
 
     @Test
     public void convertToBoolean() throws Exception {
         Boolean t = Boolean.TRUE;
         Boolean f = Boolean.FALSE;
-        Boolean t2 = converter.convertToBoolean(t, null, null);
-        Boolean f2 = converter.convertToBoolean(f, null, null);
+        Boolean t2 = converter.toBoolean(t, null, null);
+        Boolean f2 = converter.toBoolean(f, null, null);
         assertNotNull(t2);
-        assertNotSame(t2, t);
+        assertEquals(t2, t);
         assertTrue(t2);
         assertNotNull(f2);
-        assertNotSame(f2, f);
+        assertEquals(f2, f);
         assertFalse(f2);
     }
 
     @Test
     public void convertToBooleanNull() throws Exception {
         Boolean t = null;
-        Boolean t2 = converter.convertToBoolean(t, null, null);
+        Boolean t2 = converter.toBoolean(t, null, null);
         assertNull(t2);
     }
 
     @Test
     public void convertToByte() throws Exception {
         Byte trueValue = (byte) 1;
-        assertEquals(trueValue, converter.convertToByte(Boolean.TRUE));
+        assertEquals(trueValue, converter.toByte(Boolean.TRUE));
         Byte falseValue = (byte) 0;
-        assertEquals(falseValue, converter.convertToByte(Boolean.FALSE));
+        assertEquals(falseValue, converter.toByte(Boolean.FALSE));
     }
 
     @Test
     public void convertToByteNull() throws Exception {
-        assertNull(converter.convertToByte(null));
+        assertNull(converter.toByte(null));
     }
 
     @Test
     public void convertToCharacter() throws Exception {
         Boolean t = Boolean.TRUE;
         Boolean f = Boolean.FALSE;
-        Character c = converter.convertToCharacter(t);
+        Character c = converter.toCharacter(t);
         assertNotNull(c);
         assertEquals(1, c.charValue());
-        c = converter.convertToCharacter(f);
+        c = converter.toCharacter(f);
         assertNotNull(c);
         assertEquals(0, c.charValue());
     }
@@ -85,7 +83,7 @@ public class BooleanConverterTest {
     @Test
     public void convertToCharacterNull() throws Exception {
         Boolean t = null;
-        Character c = converter.convertToCharacter(t);
+        Character c = converter.toCharacter(t);
         assertNull(c);
     }
 
@@ -93,10 +91,10 @@ public class BooleanConverterTest {
     public void convertToDouble() throws Exception {
         Boolean t = Boolean.TRUE;
         Boolean f = Boolean.FALSE;
-        Double d = converter.convertToDouble(t);
+        Double d = converter.toDouble(t);
         assertNotNull(d);
         assertEquals(1, d, 0.0d);
-        d = converter.convertToDouble(f);
+        d = converter.toDouble(f);
         assertNotNull(d);
         assertEquals(0, d, 0.0d);
 
@@ -105,7 +103,7 @@ public class BooleanConverterTest {
     @Test
     public void convertToDoubleNull() throws Exception {
         Boolean t = null;
-        Double d = converter.convertToDouble(t);
+        Double d = converter.toDouble(t);
         assertNull(d);
     }
 
@@ -113,10 +111,10 @@ public class BooleanConverterTest {
     public void convertToFloat() throws Exception {
         Boolean t = Boolean.TRUE;
         Boolean f = Boolean.FALSE;
-        Float aFloat = converter.convertToFloat(t);
+        Float aFloat = converter.toFloat(t);
         assertNotNull(aFloat);
         assertEquals(1, aFloat, 0.0f);
-        aFloat = converter.convertToFloat(f);
+        aFloat = converter.toFloat(f);
         assertNotNull(aFloat);
         assertEquals(0, aFloat, 0.0f);
     }
@@ -124,7 +122,7 @@ public class BooleanConverterTest {
     @Test
     public void convertToFloatNull() throws Exception {
         Boolean t = null;
-        Float f = converter.convertToFloat(t);
+        Float f = converter.toFloat(t);
         assertNull(f);
     }
 
@@ -132,10 +130,10 @@ public class BooleanConverterTest {
     public void convertToInteger() throws Exception {
         Boolean t = Boolean.TRUE;
         Boolean f = Boolean.FALSE;
-        Integer i = converter.convertToInteger(t);
+        Integer i = converter.toInteger(t);
         assertNotNull(i);
         assertEquals(1, i.intValue());
-        i = converter.convertToInteger(f);
+        i = converter.toInteger(f);
         assertNotNull(i);
         assertEquals(0, i.intValue());
     }
@@ -143,7 +141,7 @@ public class BooleanConverterTest {
     @Test
     public void convertToIntegerNull() throws Exception {
         Boolean t = null;
-        Integer i = converter.convertToInteger(t);
+        Integer i = converter.toInteger(t);
         assertNull(i);
     }
 
@@ -151,10 +149,10 @@ public class BooleanConverterTest {
     public void convertToLong() throws Exception {
         Boolean t = Boolean.TRUE;
         Boolean f = Boolean.FALSE;
-        Long l = converter.convertToLong(t);
+        Long l = converter.toLong(t);
         assertNotNull(l);
         assertEquals(1, l.longValue());
-        l = converter.convertToLong(f);
+        l = converter.toLong(f);
         assertNotNull(l);
         assertEquals(0, l.longValue());
     }
@@ -162,7 +160,7 @@ public class BooleanConverterTest {
     @Test
     public void convertToLongNull() throws Exception {
         Boolean t = null;
-        Long l = converter.convertToLong(t);
+        Long l = converter.toLong(t);
         assertNull(l);
     }
 
@@ -170,10 +168,10 @@ public class BooleanConverterTest {
     public void convertToShort() throws Exception {
         Boolean t = Boolean.TRUE;
         Boolean f = Boolean.FALSE;
-        Short s = converter.convertToShort(t);
+        Short s = converter.toShort(t);
         assertNotNull(s);
         assertEquals(1, s.shortValue());
-        s = converter.convertToShort(f);
+        s = converter.toShort(f);
         assertNotNull(s);
         assertEquals(0, s.shortValue());
     }
@@ -181,7 +179,7 @@ public class BooleanConverterTest {
     @Test
     public void convertToShortNull() throws Exception {
         Boolean t = null;
-        Short s = converter.convertToShort(t);
+        Short s = converter.toShort(t);
         assertNull(s);
     }
 
@@ -189,10 +187,10 @@ public class BooleanConverterTest {
     public void convertToString() throws Exception {
         Boolean t = Boolean.TRUE;
         Boolean f = Boolean.FALSE;
-        String s = converter.convertToString(t, null, null);
+        String s = converter.toString(t, null, null);
         assertNotNull(s);
         assertTrue("true".equals(s));
-        s = converter.convertToString(f, null, null);
+        s = converter.toString(f, null, null);
         assertNotNull(s);
         assertTrue("false".equals(s));
     }
@@ -200,7 +198,7 @@ public class BooleanConverterTest {
     @Test
     public void convertToStringNull() throws Exception {
         Boolean t = null;
-        String s = converter.convertToString(t, null, null);
+        String s = converter.toString(t, null, null);
         assertNull(s);
     }
 

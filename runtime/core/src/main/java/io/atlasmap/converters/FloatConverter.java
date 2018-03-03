@@ -15,25 +15,39 @@
  */
 package io.atlasmap.converters;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.Date;
+
 import io.atlasmap.api.AtlasConversionException;
+import io.atlasmap.api.AtlasConverter;
 import io.atlasmap.api.AtlasUnsupportedException;
 import io.atlasmap.spi.AtlasConversionConcern;
 import io.atlasmap.spi.AtlasConversionInfo;
-import io.atlasmap.spi.AtlasPrimitiveConverter;
 import io.atlasmap.v2.FieldType;
 
-public class FloatConverter implements AtlasPrimitiveConverter<Float> {
+public class FloatConverter implements AtlasConverter<Float> {
 
-    /**
-     * @param value
-     * @return
-     * @throws AtlasConversionException
-     */
-    @Override
+    @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.DECIMAL)
+    public BigDecimal toBigDecimal(Float value) {
+        return value != null ? BigDecimal.valueOf(value) : null;
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.BIG_INTEGER,
+            concerns = AtlasConversionConcern.FRACTIONAL_PART)
+    public BigInteger toBigInteger(Float value) {
+        return value != null ? BigDecimal.valueOf(value).toBigInteger() : null;
+    }
+
     @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.BOOLEAN, concerns = {
             AtlasConversionConcern.CONVENTION })
-    public Boolean convertToBoolean(Float value, String sourceFormat, String targetFormat)
-            throws AtlasConversionException {
+    public Boolean toBoolean(Float value) throws AtlasConversionException {
         if (value == null) {
             return null;
         }
@@ -44,15 +58,9 @@ public class FloatConverter implements AtlasPrimitiveConverter<Float> {
         }
     }
 
-    /**
-     * @param value
-     * @return
-     * @throws AtlasConversionException
-     */
-    @Override
     @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.BYTE, concerns = {
             AtlasConversionConcern.RANGE })
-    public Byte convertToByte(Float value) throws AtlasConversionException {
+    public Byte toByte(Float value) throws AtlasConversionException {
         if (value == null) {
             return null;
         }
@@ -65,15 +73,9 @@ public class FloatConverter implements AtlasPrimitiveConverter<Float> {
         }
     }
 
-    /**
-     * @param value
-     * @return
-     * @throws AtlasConversionException
-     */
-    @Override
     @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.CHAR, concerns = {
             AtlasConversionConcern.RANGE, AtlasConversionConcern.CONVENTION })
-    public Character convertToCharacter(Float value) throws AtlasConversionException {
+    public Character toCharacter(Float value) throws AtlasConversionException {
         if (value == null) {
             return null;
         }
@@ -86,29 +88,29 @@ public class FloatConverter implements AtlasPrimitiveConverter<Float> {
         return Character.valueOf((char) value.intValue());
     }
 
-    /**
-     * @param value
-     * @return
-     * @throws AtlasConversionException
-     */
-    @Override
+    @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.DATE,
+            concerns = {AtlasConversionConcern.RANGE, AtlasConversionConcern.FRACTIONAL_PART})
+    public Date toDate(Float value) throws AtlasConversionException {
+        if (value == null) {
+            return null;
+        }
+        if (value < Long.MIN_VALUE || value > Long.MAX_VALUE) {
+            throw new AtlasConversionException(String
+                    .format("Float %s is greater than Long.MAX_VALUE or less than Long.MIN_VALUE", value));
+        }
+        return new Date(value.longValue());
+    }
+
     @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.DOUBLE)
-    public Double convertToDouble(Float value) throws AtlasConversionException {
+    public Double toDouble(Float value) throws AtlasConversionException {
         if (value == null) {
             return null;
         }
         return value.doubleValue();
     }
 
-    /**
-     *
-     * @param value
-     * @return
-     * @throws AtlasConversionException
-     */
-    @Override
     @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.FLOAT)
-    public Float convertToFloat(Float value) throws AtlasConversionException {
+    public Float toFloat(Float value) throws AtlasConversionException {
         if (value == null) {
             return null;
         }
@@ -116,15 +118,8 @@ public class FloatConverter implements AtlasPrimitiveConverter<Float> {
         return value.floatValue();
     }
 
-    /**
-     *
-     * @param value
-     * @return
-     * @throws AtlasConversionException
-     */
-    @Override
     @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.INTEGER, concerns = AtlasConversionConcern.RANGE)
-    public Integer convertToInteger(Float value) throws AtlasConversionException {
+    public Integer toInteger(Float value) throws AtlasConversionException {
         if (value == null) {
             return null;
         }
@@ -135,15 +130,48 @@ public class FloatConverter implements AtlasPrimitiveConverter<Float> {
         return value.intValue();
     }
 
-    /**
-     *
-     * @param value
-     * @return
-     * @throws AtlasConversionException
-     */
-    @Override
-    @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.LONG, concerns = AtlasConversionConcern.RANGE)
-    public Long convertToLong(Float value) throws AtlasConversionException {
+    @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.DATE,
+            concerns = {AtlasConversionConcern.RANGE, AtlasConversionConcern.FRACTIONAL_PART})
+    public LocalDate toLocalDate(Float value) throws AtlasConversionException {
+        if (value == null) {
+            return null;
+        }
+        if (value < Long.MIN_VALUE || value > Long.MAX_VALUE) {
+            throw new AtlasConversionException(String.format(
+                    "Float %s is greater than Long.MAX_VALUE or less than Long.MIN_VALUE", value));
+        }
+        return Instant.ofEpochMilli(value.longValue()).atZone(ZoneId.systemDefault()).toLocalDate();
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.TIME,
+            concerns = {AtlasConversionConcern.RANGE, AtlasConversionConcern.FRACTIONAL_PART})
+    public LocalTime toLocalTime(Float value) throws AtlasConversionException {
+        if (value == null) {
+            return null;
+        }
+        if (value < Long.MIN_VALUE || value > Long.MAX_VALUE) {
+            throw new AtlasConversionException(String.format(
+                    "Float %s is greater than Long.MAX_VALUE or less than Long.MIN_VALUE", value));
+        }
+        return Instant.ofEpochMilli(value.longValue()).atZone(ZoneId.systemDefault()).toLocalTime();
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.DATE_TIME,
+            concerns = {AtlasConversionConcern.RANGE, AtlasConversionConcern.FRACTIONAL_PART})
+    public LocalDateTime toLocalDateTime(Float value) throws AtlasConversionException {
+        if (value == null) {
+            return null;
+        }
+        if (value < Long.MIN_VALUE || value > Long.MAX_VALUE) {
+            throw new AtlasConversionException(String.format(
+                    "Float %s is greater than Long.MAX_VALUE or less than Long.MIN_VALUE", value));
+        }
+        return Instant.ofEpochMilli(value.longValue()).atZone(ZoneId.systemDefault()).toLocalDateTime();
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.LONG,
+            concerns = AtlasConversionConcern.RANGE)
+    public Long toLong(Float value) throws AtlasConversionException {
         if (value == null) {
             return null;
         }
@@ -154,15 +182,13 @@ public class FloatConverter implements AtlasPrimitiveConverter<Float> {
         return value.longValue();
     }
 
-    /**
-     *
-     * @param value
-     * @return
-     * @throws AtlasConversionException
-     */
-    @Override
+    @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.NUMBER)
+    public Number toNumber(Float value) throws AtlasConversionException {
+        return value;
+    }
+
     @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.SHORT, concerns = AtlasConversionConcern.RANGE)
-    public Short convertToShort(Float value) throws AtlasConversionException {
+    public Short toShort(Float value) throws AtlasConversionException {
         if (value == null) {
             return null;
         }
@@ -173,19 +199,22 @@ public class FloatConverter implements AtlasPrimitiveConverter<Float> {
         return value.shortValue();
     }
 
-    /**
-     *
-     * @param value
-     * @return
-     * @throws AtlasConversionException
-     */
-    @Override
     @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.STRING)
-    public String convertToString(Float value, String sourceFormat, String targetFormat)
-            throws AtlasConversionException {
+    public String toString(Float value) throws AtlasConversionException {
+        return value != null ? String.valueOf(value) : null;
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.DATE_TIME_TZ,
+            concerns = {AtlasConversionConcern.RANGE, AtlasConversionConcern.FRACTIONAL_PART})
+    public ZonedDateTime toZonedDateTime(Float value) throws AtlasConversionException {
         if (value == null) {
             return null;
         }
-        return String.valueOf(value);
+        if (value > Long.MAX_VALUE || value < Long.MIN_VALUE) {
+            throw new AtlasConversionException(String.format(
+                    "Float %s is greater than Long.MAX_VALUE or less than Long.MIN_VALUE", value));
+        }
+        return Instant.ofEpochMilli(value.longValue()).atZone(ZoneId.systemDefault());
     }
+
 }

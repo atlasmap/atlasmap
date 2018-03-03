@@ -43,7 +43,8 @@
     <Mapping xsi:type="Mapping" mappingType="Map">
       <InputField xsi:type="ns3:JsonField" path="/byteField"
         fieldType="Byte" />
-      <OutputField xsi:type="ns3:JsonField" path="/booleanField" />
+      <OutputField xsi:type="ns3:JsonField" path="/booleanField" 
+        fieldType="Boolean" />
     </Mapping>
   </Mappings>
 </AtlasMapping>

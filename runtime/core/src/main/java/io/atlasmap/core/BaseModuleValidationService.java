@@ -269,7 +269,7 @@ public abstract class BaseModuleValidationService<T extends Field> implements At
             validation.setMessage(String.format(
                     "Conversion from '%s' to '%s' is required but no converter is available",
                     inputField.getFieldType(), outField.getFieldType()));
-            validation.setStatus(ValidationStatus.WARN);
+            validation.setStatus(ValidationStatus.ERROR);
             validations.add(validation);
         } else {
             AtlasConversionInfo conversionInfo;
@@ -302,7 +302,9 @@ public abstract class BaseModuleValidationService<T extends Field> implements At
                 validation.setStatus(ValidationStatus.INFO);
                 validations.add(validation);
             } else  if (atlasConversionConcern.equals(AtlasConversionConcern.RANGE)
-                    || atlasConversionConcern.equals(AtlasConversionConcern.FORMAT)) {
+                    || atlasConversionConcern.equals(AtlasConversionConcern.FORMAT)
+                    || atlasConversionConcern.equals(AtlasConversionConcern.FRACTIONAL_PART)
+                    || atlasConversionConcern.equals(AtlasConversionConcern.TIMEZONE)) {
                 Validation validation = new Validation();
                 validation.setScope(ValidationScope.MAPPING);
                 validation.setId(mappingId);

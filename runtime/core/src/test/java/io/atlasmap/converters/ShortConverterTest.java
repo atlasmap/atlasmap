@@ -30,22 +30,21 @@ import org.junit.Test;
 import io.atlasmap.api.AtlasConversionException;
 import io.atlasmap.spi.AtlasConversionConcern;
 import io.atlasmap.spi.AtlasConversionInfo;
-import io.atlasmap.spi.AtlasPrimitiveConverter;
 import io.atlasmap.v2.FieldType;
 
 public class ShortConverterTest {
-    private AtlasPrimitiveConverter<Short> converter = new ShortConverter();
+    private ShortConverter converter = new ShortConverter();
 
     @Test
     public void convertToBoolean() throws Exception {
         Short f = 0;
         Short t = 1;
 
-        Boolean b = converter.convertToBoolean(t, null, null);
+        Boolean b = converter.toBoolean(t);
         assertNotNull(b);
         assertTrue(b);
 
-        b = converter.convertToBoolean(f, null, null);
+        b = converter.toBoolean(f);
         assertNotNull(b);
         assertFalse(b);
 
@@ -54,14 +53,14 @@ public class ShortConverterTest {
     @Test
     public void convertToBooleanNull() throws Exception {
         Short l = null;
-        Boolean b = converter.convertToBoolean(l, null, null);
+        Boolean b = converter.toBoolean(l);
         assertNull(b);
     }
 
     @Test
     public void convertToBooleanNegative() throws Exception {
         Short dt = -1;
-        Boolean b = converter.convertToBoolean(dt, null, null);
+        Boolean b = converter.toBoolean(dt);
         assertTrue(b);
     }
 
@@ -69,23 +68,23 @@ public class ShortConverterTest {
     public void convertToByte() throws Exception {
         Short l = 0;
         Byte value = (byte) 0;
-        assertEquals(value, converter.convertToByte(l));
+        assertEquals(value, converter.toByte(l));
     }
 
     @Test(expected = AtlasConversionException.class)
     public void convertToByteOutOfRange() throws Exception {
-        converter.convertToByte(Short.MAX_VALUE);
+        converter.toByte(Short.MAX_VALUE);
     }
 
     @Test
     public void convertToByteNull() throws Exception {
-        assertNull(converter.convertToByte(null));
+        assertNull(converter.toByte(null));
     }
 
     @Test
     public void convertToCharacter() throws Exception {
         Short shorty = new Short((short) 4);
-        Character character = converter.convertToCharacter(shorty);
+        Character character = converter.toCharacter(shorty);
         assertNotNull(character);
         assertEquals(Character.valueOf((char) shorty.shortValue()), character);
     }
@@ -93,14 +92,14 @@ public class ShortConverterTest {
     @Test
     public void convertToCharacterNull() throws Exception {
         Short s = null;
-        Character c = converter.convertToCharacter(s);
+        Character c = converter.toCharacter(s);
         assertNull(c);
     }
 
     @Test
     public void convertToCharacterMAX() throws Exception {
         Short s = Short.MAX_VALUE;
-        Character c = converter.convertToCharacter(s);
+        Character c = converter.toCharacter(s);
         assertNotNull(c);
         assertEquals(Character.valueOf((char) s.shortValue()), c);
     }
@@ -108,13 +107,13 @@ public class ShortConverterTest {
     @Test(expected = AtlasConversionException.class)
     public void convertToCharacterMIN() throws Exception {
         Short s = Short.MIN_VALUE;
-        converter.convertToCharacter(s);
+        converter.toCharacter(s);
     }
 
     @Test
     public void convertToDouble() throws Exception {
         Short s = 0;
-        Double d = converter.convertToDouble(s);
+        Double d = converter.toDouble(s);
         assertNotNull(d);
         assertEquals(0.0, d, 0.0);
     }
@@ -122,14 +121,14 @@ public class ShortConverterTest {
     @Test
     public void convertToDoubleNull() throws Exception {
         Short s = null;
-        Double d = converter.convertToDouble(s);
+        Double d = converter.toDouble(s);
         assertNull(d);
     }
 
     @Test
     public void convertToDoubleMAX() throws Exception {
         Short s = Short.MAX_VALUE;
-        Double d = converter.convertToDouble(s);
+        Double d = converter.toDouble(s);
         assertNotNull(d);
         assertEquals(Short.MAX_VALUE, s, 0.0);
     }
@@ -137,20 +136,20 @@ public class ShortConverterTest {
     @Test
     public void convertToFloat() throws Exception {
         Short s = 0;
-        Float f = converter.convertToFloat(s);
+        Float f = converter.toFloat(s);
         assertNotNull(f);
         assertEquals(0.0f, f, 0.0);
     }
 
     @Test
     public void convertToFloatNull() throws Exception {
-        assertNull(converter.convertToFloat(null));
+        assertNull(converter.toFloat(null));
     }
 
     @Test
     public void convertToFloatMAX() throws Exception {
         Short s = Short.MAX_VALUE;
-        Float f = converter.convertToFloat(s);
+        Float f = converter.toFloat(s);
         assertNotNull(f);
         assertEquals(Short.MAX_VALUE, s, 0.0);
     }
@@ -158,7 +157,7 @@ public class ShortConverterTest {
     @Test
     public void convertToInteger() throws Exception {
         Short s = 0;
-        Integer i = converter.convertToInteger(s);
+        Integer i = converter.toInteger(s);
         assertNotNull(i);
         assertEquals(0, i, 0.0);
     }
@@ -166,14 +165,14 @@ public class ShortConverterTest {
     @Test
     public void convertToIntegerNull() throws Exception {
         Short l = null;
-        Integer i = converter.convertToInteger(l);
+        Integer i = converter.toInteger(l);
         assertNull(i);
     }
 
     @Test
     public void convertToLong() throws Exception {
         Short s = 1;
-        Long l = converter.convertToLong(s);
+        Long l = converter.toLong(s);
         assertNotNull(l);
         assertEquals(1, l, 0.0);
     }
@@ -181,14 +180,14 @@ public class ShortConverterTest {
     @Test
     public void convertToLongNull() throws Exception {
         Short s = null;
-        Long l = converter.convertToLong(s);
+        Long l = converter.toLong(s);
         assertNull(l);
     }
 
     @Test
     public void convertToLongMAX() throws Exception {
         Short s = Short.MAX_VALUE;
-        Long l = converter.convertToLong(s);
+        Long l = converter.toLong(s);
         assertNotNull(l);
         assertEquals(32767.0, l, 0.0);
     }
@@ -196,7 +195,7 @@ public class ShortConverterTest {
     @Test
     public void convertToLongMIN() throws Exception {
         Short s = Short.MIN_VALUE;
-        Long l = converter.convertToLong(s);
+        Long l = converter.toLong(s);
         assertNotNull(l);
         assertEquals(-32768.0, l, 0.0);
     }
@@ -204,7 +203,7 @@ public class ShortConverterTest {
     @Test
     public void convertToShort() throws Exception {
         Short aShort = 0;
-        Short s = converter.convertToShort(aShort);
+        Short s = converter.toShort(aShort);
         assertNotNull(s);
         assertNotSame(aShort, s);
         assertEquals(0, s, 0.0);
@@ -213,14 +212,14 @@ public class ShortConverterTest {
     @Test
     public void convertToShortNull() throws Exception {
         Short l = null;
-        Short s = converter.convertToShort(l);
+        Short s = converter.toShort(l);
         assertNull(s);
     }
 
     @Test
     public void convertToString() throws Exception {
         Short l = 0;
-        String s = converter.convertToString(l, null, null);
+        String s = converter.toString(l);
         assertNotNull(s);
         assertTrue("0".equals(s));
     }
@@ -228,7 +227,7 @@ public class ShortConverterTest {
     @Test
     public void convertToStringNull() throws Exception {
         Short l = null;
-        String s = converter.convertToString(l, null, null);
+        String s = converter.toString(l);
         assertNull(s);
     }
 

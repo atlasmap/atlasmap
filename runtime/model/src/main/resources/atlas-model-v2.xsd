@@ -312,6 +312,7 @@
 
   <simpleType name="NumberType">
     <restriction base="string">
+      <enumeration value="Big Integer" />
       <enumeration value="Byte" />
       <enumeration value="Decimal" />
       <enumeration value="Double" />

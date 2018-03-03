@@ -320,7 +320,7 @@ public class DefaultAtlasConversionService implements AtlasConversionService {
                     return methodHolder.method.invoke(target, sourceValue);
                 }
             } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-                throw new AtlasConversionException("Invoking type convertor failed: " + e);
+                throw new AtlasConversionException("Invoking type convertor failed", e);
             }
         } else {
             throw new AtlasConversionException("Type Conversion is not supported for sT="

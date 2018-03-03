@@ -519,7 +519,7 @@ public class XmlFieldWriterTest {
     @Test
     public void testXmlFieldBooleanDecimal() throws Exception {
         validatePrimitiveValue(FieldType.BOOLEAN, "test-write-field-boolean-decimal.xml", Double.valueOf("126.1234"),
-                Boolean.FALSE);
+                Boolean.TRUE);
     }
 
     @Test

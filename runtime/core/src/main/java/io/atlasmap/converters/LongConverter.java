@@ -15,24 +15,38 @@
  */
 package io.atlasmap.converters;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.Date;
+
 import io.atlasmap.api.AtlasConversionException;
+import io.atlasmap.api.AtlasConverter;
 import io.atlasmap.api.AtlasUnsupportedException;
 import io.atlasmap.spi.AtlasConversionConcern;
 import io.atlasmap.spi.AtlasConversionInfo;
-import io.atlasmap.spi.AtlasPrimitiveConverter;
 import io.atlasmap.v2.FieldType;
 
-public class LongConverter implements AtlasPrimitiveConverter<Long> {
+public class LongConverter implements AtlasConverter<Long> {
 
-    /**
-     * @param value
-     * @return
-     * @throws AtlasConversionException
-     */
-    @Override
-    @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.BOOLEAN, concerns = AtlasConversionConcern.CONVENTION)
-    public Boolean convertToBoolean(Long value, String sourceFormat, String targetFormat)
-            throws AtlasConversionException {
+    @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.DECIMAL)
+    public BigDecimal toBigDecimal(Long value) {
+        return value != null ? BigDecimal.valueOf(value) : null;
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.BIG_INTEGER)
+    public BigInteger toBigInteger(Long value) {
+        return value != null ? BigInteger.valueOf(value) : null;
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.BOOLEAN,
+            concerns = AtlasConversionConcern.CONVENTION)
+    public Boolean toBoolean(Long value) throws AtlasConversionException {
         if (value == null) {
             return null;
         }
@@ -43,15 +57,9 @@ public class LongConverter implements AtlasPrimitiveConverter<Long> {
         }
     }
 
-    /**
-     * @param value
-     * @return
-     * @throws AtlasConversionException
-     * @throws AtlasUnsupportedException
-     */
-    @Override
-    @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.BYTE, concerns = AtlasConversionConcern.RANGE)
-    public Byte convertToByte(Long value) throws AtlasConversionException {
+    @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.BYTE,
+            concerns = AtlasConversionConcern.RANGE)
+    public Byte toByte(Long value) throws AtlasConversionException {
         if (value == null) {
             return null;
         }
@@ -63,15 +71,9 @@ public class LongConverter implements AtlasPrimitiveConverter<Long> {
         }
     }
 
-    /**
-     * @param value
-     * @return
-     * @throws AtlasConversionException
-     */
-    @Override
     @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.CHAR, concerns = {
             AtlasConversionConcern.RANGE, AtlasConversionConcern.CONVENTION })
-    public Character convertToCharacter(Long value) throws AtlasConversionException {
+    public Character toCharacter(Long value) throws AtlasConversionException {
         if (value == null) {
             return null;
         }
@@ -84,32 +86,33 @@ public class LongConverter implements AtlasPrimitiveConverter<Long> {
         return Character.valueOf((char) value.intValue());
     }
 
-    /**
-     * @param value
-     * @return
-     * @throws AtlasConversionException
-     */
-    @Override
+    @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.DATE_TIME_TZ)
+    public Date toDate(Long date) throws AtlasConversionException {
+        if (date >= Instant.MIN.getEpochSecond()) {
+            return Date.from(Instant.ofEpochMilli(date));
+        } else {
+            return new Date(date);
+        }
+    }
+
     @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.DOUBLE)
-    public Double convertToDouble(Long value) throws AtlasConversionException {
+    public Double toDouble(Long value) throws AtlasConversionException {
         if (value == null) {
             return null;
         }
         return value.doubleValue();
     }
 
-    @Override
     @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.FLOAT)
-    public Float convertToFloat(Long value) throws AtlasConversionException {
+    public Float toFloat(Long value) throws AtlasConversionException {
         if (value == null) {
             return null;
         }
         return value.floatValue();
     }
 
-    @Override
     @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.INTEGER, concerns = AtlasConversionConcern.RANGE)
-    public Integer convertToInteger(Long value) throws AtlasConversionException {
+    public Integer toInteger(Long value) throws AtlasConversionException {
         if (value == null) {
             return null;
         }
@@ -120,19 +123,28 @@ public class LongConverter implements AtlasPrimitiveConverter<Long> {
         return value.intValue();
     }
 
-    @Override
-    @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.LONG)
-    public Long convertToLong(Long value) throws AtlasConversionException {
-        if (value == null) {
-            return null;
-        }
-        // we want a copy of value
-        return new Long(value);
+    @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.DATE)
+    public LocalDate toLocalDate(Long value) {
+        return value != null ? Instant.ofEpochMilli(value).atZone(ZoneId.systemDefault()).toLocalDate() : null;
     }
 
-    @Override
+    @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.TIME)
+    public LocalTime toLocalTime(Long value) {
+        return value != null ? Instant.ofEpochMilli(value).atZone(ZoneId.systemDefault()).toLocalTime() : null;
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.DATE_TIME)
+    public LocalDateTime toLocalDateTime(Long value) {
+        return value != null ? Instant.ofEpochMilli(value).atZone(ZoneId.systemDefault()).toLocalDateTime() : null;
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.LONG)
+    public Long toLong(Long value) throws AtlasConversionException {
+        return value != null ? new Long(value) : null;
+    }
+
     @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.SHORT, concerns = AtlasConversionConcern.RANGE)
-    public Short convertToShort(Long value) throws AtlasConversionException {
+    public Short toShort(Long value) throws AtlasConversionException {
         if (value == null) {
             return null;
         }
@@ -143,13 +155,19 @@ public class LongConverter implements AtlasPrimitiveConverter<Long> {
         return value.shortValue();
     }
 
-    @Override
-    @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.STRING)
-    public String convertToString(Long value, String sourceFormat, String targetFormat)
-            throws AtlasConversionException {
-        if (value == null) {
-            return null;
-        }
-        return String.valueOf(value);
+    @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.NUMBER)
+    public Number toNumber(Long value) throws AtlasConversionException {
+        return value;
     }
+
+    @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.STRING)
+    public String toString(Long value) throws AtlasConversionException {
+        return value != null ? String.valueOf(value) : null;
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.DATE_TIME_TZ)
+    public ZonedDateTime toZonedDateTime(Long value) {
+        return value != null ? Instant.ofEpochMilli(value).atZone(ZoneId.systemDefault()) : null;
+    }
+
 }

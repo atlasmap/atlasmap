@@ -15,147 +15,119 @@
  */
 package io.atlasmap.converters;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.Date;
+
 import io.atlasmap.api.AtlasConversionException;
+import io.atlasmap.api.AtlasConverter;
 import io.atlasmap.spi.AtlasConversionConcern;
 import io.atlasmap.spi.AtlasConversionInfo;
-import io.atlasmap.spi.AtlasPrimitiveConverter;
 import io.atlasmap.v2.FieldType;
 
-public class ByteConverter implements AtlasPrimitiveConverter<Byte> {
+public class ByteConverter implements AtlasConverter<Byte> {
 
-    /**
-     * @param value
-     * @return
-     * @throws AtlasConversionException
-     */
-    @Override
-    @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.BOOLEAN, concerns = {
-            AtlasConversionConcern.CONVENTION })
+    @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.DECIMAL)
+    public BigDecimal toBigDecimal(Byte value) {
+        return value != null ? BigDecimal.valueOf(value) : null;
+    }
 
-    public Boolean convertToBoolean(Byte value, String sourceFormat, String targetFormat)
-            throws AtlasConversionException {
+    @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.BIG_INTEGER)
+    public BigInteger toBigInteger(Byte value) {
+        return value != null ? BigInteger.valueOf(value) : null;
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.BOOLEAN,
+            concerns = {AtlasConversionConcern.CONVENTION})
+    public Boolean toBoolean(Byte value) throws AtlasConversionException {
         if (value == null) {
             return null;
         }
         return value.byteValue() != 0;
     }
 
-    /**
-     * @param value
-     * @return
-     * @throws AtlasConversionException
-     */
-    @Override
     @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.BYTE)
-    public Byte convertToByte(Byte value) throws AtlasConversionException {
-        if (value == null) {
-            return null;
-        }
-        return new Byte(value);
+    public Byte toByte(Byte value) throws AtlasConversionException {
+        return value != null ? new Byte(value) : null;
     }
 
-    /**
-     * @param value
-     * @return
-     * @throws AtlasConversionException
-     */
-    @Override
     @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.CHAR)
-    public Character convertToCharacter(Byte value) throws AtlasConversionException {
+    public Character toCharacter(Byte value) throws AtlasConversionException {
+        return value != null ? (char) value.byteValue() : null;
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.DATE_TIME)
+    public Date toDate(Byte value) throws AtlasConversionException {
         if (value == null) {
             return null;
         }
-        return (char) value.byteValue();
+        if (value >= Instant.MIN.getEpochSecond()) {
+            return Date.from(Instant.ofEpochMilli(value));
+        } else {
+            return new Date(value);
+        }
     }
 
-    /**
-     * @param value
-     * @return
-     * @throws AtlasConversionException
-     */
-    @Override
     @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.DOUBLE)
-    public Double convertToDouble(Byte value) throws AtlasConversionException {
-        if (value == null) {
-            return null;
-        }
-        return (double) value;
+    public Double toDouble(Byte value) throws AtlasConversionException {
+        return value != null ? (double) value : null;
     }
 
-    /**
-     * @param value
-     * @return
-     * @throws AtlasConversionException
-     */
-    @Override
     @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.FLOAT)
-    public Float convertToFloat(Byte value) throws AtlasConversionException {
-        if (value == null) {
-            return null;
-        }
-        return (float) value;
+    public Float toFloat(Byte value) throws AtlasConversionException {
+        return value != null ? (float) value : null;
     }
 
-    /**
-     * @param value
-     * @return
-     * @throws AtlasConversionException
-     */
-    @Override
     @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.INTEGER)
-    public Integer convertToInteger(Byte value) throws AtlasConversionException {
-        if (value == null) {
-            return null;
-        }
-        return (int) value;
+    public Integer toInteger(Byte value) throws AtlasConversionException {
+        return value != null ? (int) value : null;
     }
 
-    /**
-     * @param value
-     * @return
-     * @throws AtlasConversionException
-     */
-    @Override
+    @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.DATE)
+    public LocalDate toLocalDate(Byte value) throws AtlasConversionException {
+        return value != null ? Instant.ofEpochMilli(value).atZone(ZoneId.systemDefault()).toLocalDate() : null;
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.TIME)
+    public LocalTime toLocalTime(Byte value) throws AtlasConversionException {
+        return value != null ? Instant.ofEpochMilli(value).atZone(ZoneId.systemDefault()).toLocalTime() : null;
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.DATE_TIME)
+    public LocalDateTime toLocalDateTime(Byte value) throws AtlasConversionException {
+        return value != null ? Instant.ofEpochMilli(value).atZone(ZoneId.systemDefault()).toLocalDateTime() : null;
+    }
+
     @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.LONG)
-    public Long convertToLong(Byte value) throws AtlasConversionException {
-        if (value == null) {
-            return null;
-        }
-        return (long) value;
-    }
-
-    /**
-     * @param value
-     * @return
-     * @throws AtlasConversionException
-     */
-    @Override
-    @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.SHORT)
-    public Short convertToShort(Byte value) throws AtlasConversionException {
-        if (value == null) {
-            return null;
-        }
-        return (short) value;
-    }
-
-    /**
-     * @param value
-     * @return
-     * @throws AtlasConversionException
-     */
-    @Override
-    @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.STRING, concerns = {
-            AtlasConversionConcern.CONVENTION })
-    public String convertToString(Byte value, String sourceFormat, String targetFormat)
-            throws AtlasConversionException {
-        if (value == null) {
-            return null;
-        }
-        return String.valueOf(value);
+    public Long toLong(Byte value) throws AtlasConversionException {
+        return value != null ? (long) value : null;
     }
 
     @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.NUMBER)
-    public Number convertToNumber(Byte value) throws AtlasConversionException {
-        return convertToShort(value);
+    public Number toNumber(Byte value) throws AtlasConversionException {
+        return toShort(value);
     }
+
+    @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.SHORT)
+    public Short toShort(Byte value) throws AtlasConversionException {
+        return value != null ? (short) value : null;
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.STRING,
+            concerns = {AtlasConversionConcern.CONVENTION})
+    public String toString(Byte value) throws AtlasConversionException {
+        return value != null ? String.valueOf(value) : null;
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.DATE_TIME_TZ)
+    public ZonedDateTime toZonedDateTime(Byte value) {
+        return Instant.ofEpochMilli(value).atZone(ZoneId.systemDefault());
+    }
+
 }

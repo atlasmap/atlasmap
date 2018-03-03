@@ -25,7 +25,13 @@ import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,7 +42,7 @@ import org.junit.Test;
 import io.atlasmap.api.AtlasConversionException;
 import io.atlasmap.api.AtlasConversionService;
 import io.atlasmap.api.AtlasConverter;
-import io.atlasmap.spi.AtlasPrimitiveConverter;
+import io.atlasmap.converters.StringConverter;
 import io.atlasmap.v2.AtlasMapping;
 import io.atlasmap.v2.FieldType;
 
@@ -65,20 +71,19 @@ public class DefaultAtlasConversionServiceTest {
     }
 
     @Test
-    @SuppressWarnings("unchecked")
     public void findMatchingConverterByFieldTypes() throws Exception {
         assertNotNull(service);
         Optional<AtlasConverter<?>> atlasConverter = service.findMatchingConverter(FieldType.STRING, FieldType.BOOLEAN);
         assertTrue(atlasConverter.isPresent());
         assertNotNull(atlasConverter);
-        assertTrue(AtlasPrimitiveConverter.class.isAssignableFrom(atlasConverter.get().getClass()));
-        AtlasPrimitiveConverter<String> primitiveConverter = (AtlasPrimitiveConverter<String>) atlasConverter.get();
-        assertNotNull(primitiveConverter);
+        assertEquals(StringConverter.class, atlasConverter.get().getClass());
+        StringConverter stringConverter = (StringConverter) atlasConverter.get();
+        assertNotNull(stringConverter);
         assertThat("io.atlasmap.converters.StringConverter", is(atlasConverter.get().getClass().getCanonicalName()));
-        Boolean t = primitiveConverter.convertToBoolean("T", null, null);
+        Boolean t = stringConverter.toBoolean("T", null, null);
         assertNotNull(t);
         assertTrue(t);
-        Boolean f = primitiveConverter.convertToBoolean("F", null, null);
+        Boolean f = stringConverter.toBoolean("F", null, null);
         assertNotNull(f);
         assertFalse(f);
         service.findMatchingConverter(null, FieldType.BOOLEAN);
@@ -407,6 +412,7 @@ public class DefaultAtlasConversionServiceTest {
     @Test
     public void testClassFromFieldType() {
         assertNull(service.classFromFieldType(null));
+        assertEquals(java.lang.Object.class, service.classFromFieldType(FieldType.ANY));
         assertNotNull(service.classFromFieldType(FieldType.BOOLEAN));
         assertNotNull(service.classFromFieldType(FieldType.BYTE));
         assertNotNull(service.classFromFieldType(FieldType.CHAR));
@@ -426,26 +432,353 @@ public class DefaultAtlasConversionServiceTest {
     }
 
     @Test
-    public void testConvertType() throws AtlasConversionException {
-        assertNotNull(service.convertType(new Integer(1), FieldType.INTEGER, FieldType.BOOLEAN));
-        assertNotNull(service.convertType(new Integer(1), FieldType.INTEGER, FieldType.BYTE));
-        assertNotNull(service.convertType(new Integer(1), FieldType.INTEGER, FieldType.CHAR));
-        assertNotNull(service.convertType(new Integer(1), FieldType.INTEGER, FieldType.DOUBLE));
-        assertNotNull(service.convertType(new Integer(1), FieldType.INTEGER, FieldType.FLOAT));
-        assertNotNull(service.convertType(new Integer(1), FieldType.INTEGER, FieldType.INTEGER));
-        assertNotNull(service.convertType(new Integer(1), FieldType.INTEGER, FieldType.LONG));
-        assertNotNull(service.convertType(new Integer(1), FieldType.INTEGER, FieldType.SHORT));
-        assertNotNull(service.convertType(new Integer(1), FieldType.INTEGER, FieldType.STRING));
+    public void testConvertTypeFromBigDecimal() throws AtlasConversionException {
+        assertEquals(BigInteger.valueOf(1), service.convertType(BigDecimal.valueOf(1), FieldType.DECIMAL, FieldType.BIG_INTEGER));
+        assertEquals(true, service.convertType(BigDecimal.valueOf(1), FieldType.DECIMAL, FieldType.BOOLEAN));
+        assertEquals((byte)1, service.convertType(BigDecimal.valueOf(1), FieldType.DECIMAL, FieldType.BYTE));
+        assertEquals((char)1, service.convertType(BigDecimal.valueOf(1), FieldType.DECIMAL, FieldType.CHAR));
+        assertEquals(LocalDate.class, service.convertType(BigDecimal.valueOf(1), FieldType.DECIMAL, FieldType.DATE).getClass());
+        assertEquals(Date.class, service.convertType(BigDecimal.valueOf(1), FieldType.DECIMAL, FieldType.DATE_TIME).getClass());
+        assertEquals(ZonedDateTime.class, service.convertType(BigDecimal.valueOf(1), FieldType.DECIMAL, FieldType.DATE_TZ).getClass());
+        assertEquals(ZonedDateTime.class, service.convertType(BigDecimal.valueOf(1), FieldType.DECIMAL, FieldType.TIME_TZ).getClass());
+        assertEquals(ZonedDateTime.class, service.convertType(BigDecimal.valueOf(1), FieldType.DECIMAL, FieldType.DATE_TIME_TZ).getClass());
+        assertEquals(BigDecimal.valueOf(1), service.convertType(BigDecimal.valueOf(1), FieldType.DECIMAL, FieldType.DECIMAL));
+        assertEquals(1.0d, service.convertType(BigDecimal.valueOf(1), FieldType.DECIMAL, FieldType.DOUBLE));
+        assertEquals(1.0f, service.convertType(BigDecimal.valueOf(1), FieldType.DECIMAL, FieldType.FLOAT));
+        assertEquals(1, service.convertType(BigDecimal.valueOf(1), FieldType.DECIMAL, FieldType.INTEGER));
+        assertEquals(1L, service.convertType(BigDecimal.valueOf(1), FieldType.DECIMAL, FieldType.LONG));
+        assertEquals(BigDecimal.valueOf(1), service.convertType(BigDecimal.valueOf(1), FieldType.DECIMAL, FieldType.NUMBER));
+        assertEquals((short)1, service.convertType(BigDecimal.valueOf(1), FieldType.DECIMAL, FieldType.SHORT));
+        assertEquals("1", service.convertType(BigDecimal.valueOf(1), FieldType.DECIMAL, FieldType.STRING));
+        assertEquals(LocalTime.class, service.convertType(BigDecimal.valueOf(1), FieldType.DECIMAL, FieldType.TIME).getClass());
+    }
+
+    @Test
+    public void testConvertTypeFromBigInteger() throws AtlasConversionException {
+        assertEquals(BigInteger.valueOf(1), service.convertType(BigInteger.valueOf(1), FieldType.BIG_INTEGER, FieldType.BIG_INTEGER));
+        assertEquals(true, service.convertType(BigInteger.valueOf(1), FieldType.BIG_INTEGER, FieldType.BOOLEAN));
+        assertEquals((byte)1, service.convertType(BigInteger.valueOf(1), FieldType.BIG_INTEGER, FieldType.BYTE));
+        assertEquals((char)1, service.convertType(BigInteger.valueOf(1), FieldType.BIG_INTEGER, FieldType.CHAR));
+        assertEquals(LocalDate.class, service.convertType(BigInteger.valueOf(1), FieldType.BIG_INTEGER, FieldType.DATE).getClass());
+        assertEquals(Date.class, service.convertType(BigInteger.valueOf(1), FieldType.BIG_INTEGER, FieldType.DATE_TIME).getClass());
+        assertEquals(ZonedDateTime.class, service.convertType(BigInteger.valueOf(1), FieldType.BIG_INTEGER, FieldType.DATE_TZ).getClass());
+        assertEquals(ZonedDateTime.class, service.convertType(BigInteger.valueOf(1), FieldType.BIG_INTEGER, FieldType.TIME_TZ).getClass());
+        assertEquals(ZonedDateTime.class, service.convertType(BigInteger.valueOf(1), FieldType.BIG_INTEGER, FieldType.DATE_TIME_TZ).getClass());
+        assertEquals(BigDecimal.valueOf(1), service.convertType(BigInteger.valueOf(1), FieldType.BIG_INTEGER, FieldType.DECIMAL));
+        assertEquals(1.0d, service.convertType(BigInteger.valueOf(1), FieldType.BIG_INTEGER, FieldType.DOUBLE));
+        assertEquals(1.0f, service.convertType(BigInteger.valueOf(1), FieldType.BIG_INTEGER, FieldType.FLOAT));
+        assertEquals(1, service.convertType(BigInteger.valueOf(1), FieldType.BIG_INTEGER, FieldType.INTEGER));
+        assertEquals(1L, service.convertType(BigInteger.valueOf(1), FieldType.BIG_INTEGER, FieldType.LONG));
+        assertEquals(BigInteger.valueOf(1), service.convertType(BigInteger.valueOf(1), FieldType.BIG_INTEGER, FieldType.NUMBER));
+        assertEquals((short)1, service.convertType(BigInteger.valueOf(1), FieldType.BIG_INTEGER, FieldType.SHORT));
+        assertEquals("1", service.convertType(BigInteger.valueOf(1), FieldType.BIG_INTEGER, FieldType.STRING));
+        assertEquals(LocalTime.class, service.convertType(BigInteger.valueOf(1), FieldType.BIG_INTEGER, FieldType.TIME).getClass());
+    }
+
+    @Test
+    public void testConvertTypeFromBoolean() throws AtlasConversionException {
+        assertEquals(BigInteger.valueOf(1), service.convertType(true, FieldType.BOOLEAN, FieldType.BIG_INTEGER));
+        assertEquals(true, service.convertType(true, FieldType.BOOLEAN, FieldType.BOOLEAN));
+        assertEquals((byte)1, service.convertType(true, FieldType.BOOLEAN, FieldType.BYTE));
+        assertEquals((char)1, service.convertType(true, FieldType.BOOLEAN, FieldType.CHAR));
+        assertEquals(BigDecimal.valueOf(1), service.convertType(true, FieldType.BOOLEAN, FieldType.DECIMAL));
+        assertEquals(1.0d, service.convertType(true, FieldType.BOOLEAN, FieldType.DOUBLE));
+        assertEquals(1.0f, service.convertType(true, FieldType.BOOLEAN, FieldType.FLOAT));
+        assertEquals(1, service.convertType(true, FieldType.BOOLEAN, FieldType.INTEGER));
+        assertEquals(1L, service.convertType(true, FieldType.BOOLEAN, FieldType.LONG));
+        assertEquals((short)1, service.convertType(true, FieldType.BOOLEAN, FieldType.NUMBER));
+        assertEquals((short)1, service.convertType(true, FieldType.BOOLEAN, FieldType.SHORT));
+        assertEquals("true", service.convertType(true, FieldType.BOOLEAN, FieldType.STRING));
+    }
+
+    @Test
+    public void testConvertTypeFromByte() throws AtlasConversionException {
+        assertEquals(BigInteger.valueOf(1), service.convertType(0x01, FieldType.BYTE, FieldType.BIG_INTEGER));
+        assertEquals(true, service.convertType(0x01, FieldType.BYTE, FieldType.BOOLEAN));
+        assertEquals(0x01, service.convertType(0x01, FieldType.BYTE, FieldType.BYTE));
+        assertEquals((char)1, service.convertType(0x01, FieldType.BYTE, FieldType.CHAR));
+        assertEquals(LocalDate.class, service.convertType(0x01, FieldType.BYTE, FieldType.DATE).getClass());
+        assertEquals(Date.class, service.convertType(0x01, FieldType.BYTE, FieldType.DATE_TIME).getClass());
+        assertEquals(ZonedDateTime.class, service.convertType(0x01, FieldType.BYTE, FieldType.DATE_TZ).getClass());
+        assertEquals(ZonedDateTime.class, service.convertType(0x01, FieldType.BYTE, FieldType.TIME_TZ).getClass());
+        assertEquals(ZonedDateTime.class, service.convertType(0x01, FieldType.BYTE, FieldType.DATE_TIME_TZ).getClass());
+        assertEquals(BigDecimal.valueOf(1), service.convertType(0x01, FieldType.BYTE, FieldType.DECIMAL));
+        assertEquals(1.0d, service.convertType(0x01, FieldType.BYTE, FieldType.DOUBLE));
+        assertEquals(1.0f, service.convertType(0x01, FieldType.BYTE, FieldType.FLOAT));
+        assertEquals(1, service.convertType(0x01, FieldType.BYTE, FieldType.INTEGER));
+        assertEquals(1L, service.convertType(0x01, FieldType.BYTE, FieldType.LONG));
+        assertEquals(1, service.convertType(0x01, FieldType.BYTE, FieldType.NUMBER));
+        assertEquals((short)1, service.convertType(0x01, FieldType.BYTE, FieldType.SHORT));
+        assertEquals("1", service.convertType(0x01, FieldType.BYTE, FieldType.STRING));
+        assertEquals(LocalTime.class, service.convertType(0x01, FieldType.BYTE, FieldType.TIME).getClass());
+    }
+
+    @Test
+    public void testConvertTypeFromCharacter() throws AtlasConversionException {
+        assertEquals(BigInteger.valueOf(97), service.convertType('a', FieldType.CHAR, FieldType.BIG_INTEGER));
+        assertEquals(false, service.convertType('a', FieldType.CHAR, FieldType.BOOLEAN));
+        assertEquals((byte)97, service.convertType('a', FieldType.CHAR, FieldType.BYTE));
+        assertEquals('a', service.convertType('a', FieldType.CHAR, FieldType.CHAR));
+        assertEquals(BigDecimal.valueOf(97), service.convertType('a', FieldType.CHAR, FieldType.DECIMAL));
+        assertEquals(97.0d, service.convertType('a', FieldType.CHAR, FieldType.DOUBLE));
+        assertEquals(97.0f, service.convertType('a', FieldType.CHAR, FieldType.FLOAT));
+        assertEquals(97, service.convertType('a', FieldType.CHAR, FieldType.INTEGER));
+        assertEquals(97L, service.convertType('a', FieldType.CHAR, FieldType.LONG));
+        assertEquals(97, service.convertType('a', FieldType.CHAR, FieldType.NUMBER));
+        assertEquals((short)97, service.convertType('a', FieldType.CHAR, FieldType.SHORT));
+        assertEquals("a", service.convertType('a', FieldType.CHAR, FieldType.STRING));
+    }
+
+    @Test
+    public void testConvertTypeFromDate() throws AtlasConversionException {
+        assertEquals(BigInteger.valueOf(new Date(1).getTime()), service.convertType(new Date(1), FieldType.DATE_TIME, FieldType.BIG_INTEGER));
+        assertEquals((byte)1, service.convertType(new Date(1), FieldType.DATE_TIME, FieldType.BYTE));
+        assertEquals(LocalDate.class, service.convertType(new Date(1), FieldType.DATE_TIME, FieldType.DATE).getClass());
+        assertEquals(Date.class, service.convertType(new Date(1), FieldType.DATE_TIME, FieldType.DATE_TIME).getClass());
+        assertEquals(ZonedDateTime.class, service.convertType(new Date(1), FieldType.DATE_TIME, FieldType.DATE_TZ).getClass());
+        assertEquals(ZonedDateTime.class, service.convertType(new Date(1), FieldType.DATE_TIME, FieldType.TIME_TZ).getClass());
+        assertEquals(ZonedDateTime.class, service.convertType(new Date(1), FieldType.DATE_TIME, FieldType.DATE_TIME_TZ).getClass());
+        assertEquals(BigDecimal.valueOf(1), service.convertType(new Date(1), FieldType.DATE_TIME, FieldType.DECIMAL));
+        assertEquals(1.0d, service.convertType(new Date(1), FieldType.DATE_TIME, FieldType.DOUBLE));
+        assertEquals(1.0f, service.convertType(new Date(1), FieldType.DATE_TIME, FieldType.FLOAT));
+        assertEquals(1, service.convertType(new Date(1), FieldType.DATE_TIME, FieldType.INTEGER));
+        assertEquals(1L, service.convertType(new Date(1), FieldType.DATE_TIME, FieldType.LONG));
+        assertEquals(1L, service.convertType(new Date(1), FieldType.DATE_TIME, FieldType.NUMBER));
+        assertEquals((short)1, service.convertType(new Date(1), FieldType.DATE_TIME, FieldType.SHORT));
+        assertEquals(String.class, service.convertType(new Date(1), FieldType.DATE_TIME, FieldType.STRING).getClass());
+        assertEquals(LocalTime.class, service.convertType(new Date(1), FieldType.DATE_TIME, FieldType.TIME).getClass());
+    }
+
+    @Test
+    public void testConvertTypeFromDouble() throws AtlasConversionException {
+        assertEquals(BigInteger.valueOf(1), service.convertType(new Double(1), FieldType.DOUBLE, FieldType.BIG_INTEGER));
+        assertEquals(true, service.convertType(new Double(1), FieldType.DOUBLE, FieldType.BOOLEAN));
+        assertEquals((byte)0x01, service.convertType(new Double(1), FieldType.DOUBLE, FieldType.BYTE));
+        assertEquals((char)1, service.convertType(new Double(1), FieldType.DOUBLE, FieldType.CHAR));
+        assertEquals(LocalDate.class, service.convertType(new Double(1), FieldType.DOUBLE, FieldType.DATE).getClass());
+        assertEquals(Date.class, service.convertType(new Double(1), FieldType.DOUBLE, FieldType.DATE_TIME).getClass());
+        assertEquals(ZonedDateTime.class, service.convertType(new Double(1), FieldType.DOUBLE, FieldType.DATE_TZ).getClass());
+        assertEquals(ZonedDateTime.class, service.convertType(new Double(1), FieldType.DOUBLE, FieldType.TIME_TZ).getClass());
+        assertEquals(ZonedDateTime.class, service.convertType(new Double(1), FieldType.DOUBLE, FieldType.DATE_TIME_TZ).getClass());
+        assertEquals(BigDecimal.valueOf(1.0), service.convertType(new Double(1), FieldType.DOUBLE, FieldType.DECIMAL));
+        assertEquals(1.0d, service.convertType(new Double(1), FieldType.DOUBLE, FieldType.DOUBLE));
+        assertEquals(1.0f, service.convertType(new Double(1), FieldType.DOUBLE, FieldType.FLOAT));
+        assertEquals(1, service.convertType(new Double(1), FieldType.DOUBLE, FieldType.INTEGER));
+        assertEquals(1L, service.convertType(new Double(1), FieldType.DOUBLE, FieldType.LONG));
+        assertEquals(1.0, service.convertType(new Double(1), FieldType.DOUBLE, FieldType.NUMBER));
+        assertEquals((short)1, service.convertType(new Double(1), FieldType.DOUBLE, FieldType.SHORT));
+        assertEquals("1.0", service.convertType(new Double(1), FieldType.DOUBLE, FieldType.STRING));
+        assertEquals(LocalTime.class, service.convertType(new Double(1), FieldType.DOUBLE, FieldType.TIME).getClass());
+    }
+
+    @Test
+    public void testConvertTypeFromFloat() throws AtlasConversionException {
+        assertEquals(BigInteger.valueOf(1), service.convertType(new Float(1), FieldType.FLOAT, FieldType.BIG_INTEGER));
+        assertEquals(true, service.convertType(new Float(1), FieldType.FLOAT, FieldType.BOOLEAN));
+        assertEquals((byte)0x01, service.convertType(new Float(1), FieldType.FLOAT, FieldType.BYTE));
+        assertEquals((char)1, service.convertType(new Float(1), FieldType.FLOAT, FieldType.CHAR));
+        assertEquals(LocalDate.class, service.convertType(new Float(1), FieldType.FLOAT, FieldType.DATE).getClass());
+        assertEquals(Date.class, service.convertType(new Float(1), FieldType.FLOAT, FieldType.DATE_TIME).getClass());
+        assertEquals(ZonedDateTime.class, service.convertType(new Float(1), FieldType.FLOAT, FieldType.DATE_TZ).getClass());
+        assertEquals(ZonedDateTime.class, service.convertType(new Float(1), FieldType.FLOAT, FieldType.TIME_TZ).getClass());
+        assertEquals(ZonedDateTime.class, service.convertType(new Float(1), FieldType.FLOAT, FieldType.DATE_TIME_TZ).getClass());
+        assertEquals(BigDecimal.valueOf(1.0), service.convertType(new Float(1), FieldType.FLOAT, FieldType.DECIMAL));
+        assertEquals(1.0d, service.convertType(new Float(1), FieldType.FLOAT, FieldType.DOUBLE));
+        assertEquals(1.0f, service.convertType(new Float(1), FieldType.FLOAT, FieldType.FLOAT));
+        assertEquals(1, service.convertType(new Float(1), FieldType.FLOAT, FieldType.INTEGER));
+        assertEquals(1L, service.convertType(new Float(1), FieldType.FLOAT, FieldType.LONG));
+        assertEquals(1.0f, service.convertType(new Float(1), FieldType.FLOAT, FieldType.NUMBER));
+        assertEquals((short)1, service.convertType(new Float(1), FieldType.FLOAT, FieldType.SHORT));
+        assertEquals("1.0", service.convertType(new Float(1), FieldType.FLOAT, FieldType.STRING));
+        assertEquals(LocalTime.class, service.convertType(new Float(1), FieldType.FLOAT, FieldType.TIME).getClass());
+    }
+
+    @Test
+    public void testConvertTypeFromInteger() throws AtlasConversionException {
+        assertEquals(BigInteger.valueOf(1), service.convertType(new Integer(1), FieldType.INTEGER, FieldType.BIG_INTEGER));
+        assertEquals(true, service.convertType(new Integer(1), FieldType.INTEGER, FieldType.BOOLEAN));
+        assertEquals((byte)0x01, service.convertType(new Integer(1), FieldType.INTEGER, FieldType.BYTE));
+        assertEquals((char)1, service.convertType(new Integer(1), FieldType.INTEGER, FieldType.CHAR));
+        assertEquals(LocalDate.class, service.convertType(new Integer(1), FieldType.INTEGER, FieldType.DATE).getClass());
+        assertEquals(Date.class, service.convertType(new Integer(1), FieldType.INTEGER, FieldType.DATE_TIME).getClass());
+        assertEquals(ZonedDateTime.class, service.convertType(new Integer(1), FieldType.INTEGER, FieldType.DATE_TZ).getClass());
+        assertEquals(ZonedDateTime.class, service.convertType(new Integer(1), FieldType.INTEGER, FieldType.TIME_TZ).getClass());
+        assertEquals(ZonedDateTime.class, service.convertType(new Integer(1), FieldType.INTEGER, FieldType.DATE_TIME_TZ).getClass());
+        assertEquals(BigDecimal.valueOf(1), service.convertType(new Integer(1), FieldType.INTEGER, FieldType.DECIMAL));
+        assertEquals(1.0d, service.convertType(new Integer(1), FieldType.INTEGER, FieldType.DOUBLE));
+        assertEquals(1.0f, service.convertType(new Integer(1), FieldType.INTEGER, FieldType.FLOAT));
+        assertEquals(1, service.convertType(new Integer(1), FieldType.INTEGER, FieldType.INTEGER));
+        assertEquals(1L, service.convertType(new Integer(1), FieldType.INTEGER, FieldType.LONG));
+        assertEquals(1, service.convertType(new Integer(1), FieldType.INTEGER, FieldType.NUMBER));
+        assertEquals((short)1, service.convertType(new Integer(1), FieldType.INTEGER, FieldType.SHORT));
+        assertEquals("1", service.convertType(new Integer(1), FieldType.INTEGER, FieldType.STRING));
+        assertEquals(LocalTime.class, service.convertType(new Integer(1), FieldType.INTEGER, FieldType.TIME).getClass());
+    }
+
+    @Test
+    public void testConvertTypeFromLocalDate() throws AtlasConversionException {
+        assertEquals(BigInteger.class, service.convertType(LocalDate.ofEpochDay(0), FieldType.DATE, FieldType.BIG_INTEGER).getClass());
+        assertEquals(LocalDate.class, service.convertType(LocalDate.ofEpochDay(0), FieldType.DATE, FieldType.DATE).getClass());
+        assertEquals(Date.class, service.convertType(LocalDate.ofEpochDay(0), FieldType.DATE, FieldType.DATE_TIME).getClass());
+        assertEquals(ZonedDateTime.class, service.convertType(LocalDate.ofEpochDay(0), FieldType.DATE, FieldType.DATE_TZ).getClass());
+        assertEquals(ZonedDateTime.class, service.convertType(LocalDate.ofEpochDay(0), FieldType.DATE, FieldType.TIME_TZ).getClass());
+        assertEquals(ZonedDateTime.class, service.convertType(LocalDate.ofEpochDay(0), FieldType.DATE, FieldType.DATE_TIME_TZ).getClass());
+        assertEquals(BigDecimal.class, service.convertType(LocalDate.ofEpochDay(0), FieldType.DATE, FieldType.DECIMAL).getClass());
+        assertEquals(Double.class, service.convertType(LocalDate.ofEpochDay(0), FieldType.DATE, FieldType.DOUBLE).getClass());
+        assertEquals(Float.class, service.convertType(LocalDate.ofEpochDay(0), FieldType.DATE, FieldType.FLOAT).getClass());
+        assertEquals(Long.class, service.convertType(LocalDate.ofEpochDay(0), FieldType.DATE, FieldType.LONG).getClass());
+        assertEquals(Long.class, service.convertType(LocalDate.ofEpochDay(0), FieldType.DATE, FieldType.NUMBER).getClass());
+        assertEquals(String.class, service.convertType(LocalDate.ofEpochDay(0), FieldType.DATE, FieldType.STRING).getClass());
+        assertEquals(LocalTime.class, service.convertType(LocalDate.ofEpochDay(0), FieldType.DATE, FieldType.TIME).getClass());
+    }
+
+    @Test
+    public void testConvertTypeFromLocalTime() throws AtlasConversionException {
+        assertEquals(BigInteger.class, service.convertType(LocalTime.ofSecondOfDay(0), FieldType.TIME, FieldType.BIG_INTEGER).getClass());
+        assertEquals(Date.class, service.convertType(LocalTime.ofSecondOfDay(0), FieldType.TIME, FieldType.DATE_TIME).getClass());
+        assertEquals(ZonedDateTime.class, service.convertType(LocalTime.ofSecondOfDay(0), FieldType.TIME, FieldType.DATE_TZ).getClass());
+        assertEquals(ZonedDateTime.class, service.convertType(LocalTime.ofSecondOfDay(0), FieldType.TIME, FieldType.TIME_TZ).getClass());
+        assertEquals(ZonedDateTime.class, service.convertType(LocalTime.ofSecondOfDay(0), FieldType.TIME, FieldType.DATE_TIME_TZ).getClass());
+        assertEquals(BigDecimal.class, service.convertType(LocalTime.ofSecondOfDay(0), FieldType.TIME, FieldType.DECIMAL).getClass());
+        assertEquals(Double.class, service.convertType(LocalTime.ofSecondOfDay(0), FieldType.TIME, FieldType.DOUBLE).getClass());
+        assertEquals(Float.class, service.convertType(LocalTime.ofSecondOfDay(0), FieldType.TIME, FieldType.FLOAT).getClass());
+        assertEquals(Long.class, service.convertType(LocalTime.ofSecondOfDay(0), FieldType.TIME, FieldType.LONG).getClass());
+        assertEquals(Long.class, service.convertType(LocalTime.ofSecondOfDay(0), FieldType.TIME, FieldType.NUMBER).getClass());
+        assertEquals(String.class, service.convertType(LocalTime.ofSecondOfDay(0), FieldType.TIME, FieldType.STRING).getClass());
+        assertEquals(LocalTime.class, service.convertType(LocalTime.ofSecondOfDay(0), FieldType.TIME, FieldType.TIME).getClass());
+    }
+
+    @Test
+    public void testConvertTypeFromLong() throws AtlasConversionException {
+        assertEquals(BigInteger.valueOf(1), service.convertType(new Long(1), FieldType.LONG, FieldType.BIG_INTEGER));
+        assertEquals(true, service.convertType(new Long(1), FieldType.LONG, FieldType.BOOLEAN));
+        assertEquals((byte)0x01, service.convertType(new Long(1), FieldType.LONG, FieldType.BYTE));
+        assertEquals((char)1, service.convertType(new Long(1), FieldType.LONG, FieldType.CHAR));
+        assertEquals(LocalDate.class, service.convertType(new Long(1), FieldType.LONG, FieldType.DATE).getClass());
+        assertEquals(Date.class, service.convertType(new Long(1), FieldType.LONG, FieldType.DATE_TIME).getClass());
+        assertEquals(ZonedDateTime.class, service.convertType(new Long(1), FieldType.LONG, FieldType.DATE_TZ).getClass());
+        assertEquals(ZonedDateTime.class, service.convertType(new Long(1), FieldType.LONG, FieldType.TIME_TZ).getClass());
+        assertEquals(ZonedDateTime.class, service.convertType(new Long(1), FieldType.LONG, FieldType.DATE_TIME_TZ).getClass());
+        assertEquals(BigDecimal.valueOf(1), service.convertType(new Long(1), FieldType.LONG, FieldType.DECIMAL));
+        assertEquals(1.0d, service.convertType(new Long(1), FieldType.LONG, FieldType.DOUBLE));
+        assertEquals(1.0f, service.convertType(new Long(1), FieldType.LONG, FieldType.FLOAT));
+        assertEquals(1, service.convertType(new Long(1), FieldType.LONG, FieldType.INTEGER));
+        assertEquals(1L, service.convertType(new Long(1), FieldType.LONG, FieldType.LONG));
+        assertEquals(1L, service.convertType(new Long(1), FieldType.LONG, FieldType.NUMBER));
+        assertEquals((short)1, service.convertType(new Long(1), FieldType.LONG, FieldType.SHORT));
+        assertEquals("1", service.convertType(new Long(1), FieldType.LONG, FieldType.STRING));
+        assertEquals(LocalTime.class, service.convertType(new Long(1), FieldType.LONG, FieldType.TIME).getClass());
+    }
+
+    @Test
+    public void testConvertTypeFromNumber() throws AtlasConversionException {
+        assertEquals(BigInteger.valueOf(1), service.convertType((Number)1, FieldType.NUMBER, FieldType.BIG_INTEGER));
+        assertEquals(true, service.convertType((Number)1, FieldType.NUMBER, FieldType.BOOLEAN));
+        assertEquals((byte)0x01, service.convertType((Number)1, FieldType.NUMBER, FieldType.BYTE));
+        assertEquals((char)1, service.convertType((Number)1, FieldType.NUMBER, FieldType.CHAR));
+        assertEquals(LocalDate.class, service.convertType((Number)1, FieldType.NUMBER, FieldType.DATE).getClass());
+        assertEquals(Date.class, service.convertType((Number)1, FieldType.NUMBER, FieldType.DATE_TIME).getClass());
+        assertEquals(ZonedDateTime.class, service.convertType((Number)1, FieldType.NUMBER, FieldType.DATE_TZ).getClass());
+        assertEquals(ZonedDateTime.class, service.convertType((Number)1, FieldType.NUMBER, FieldType.TIME_TZ).getClass());
+        assertEquals(ZonedDateTime.class, service.convertType((Number)1, FieldType.NUMBER, FieldType.DATE_TIME_TZ).getClass());
+        assertEquals(BigDecimal.valueOf(1), service.convertType((Number)1, FieldType.NUMBER, FieldType.DECIMAL));
+        assertEquals(1.0d, service.convertType((Number)1, FieldType.NUMBER, FieldType.DOUBLE));
+        assertEquals(1.0f, service.convertType((Number)1, FieldType.NUMBER, FieldType.FLOAT));
+        assertEquals(1, service.convertType((Number)1, FieldType.NUMBER, FieldType.INTEGER));
+        assertEquals(1L, service.convertType((Number)1, FieldType.NUMBER, FieldType.LONG));
+        assertEquals(1, service.convertType((Number)1, FieldType.NUMBER, FieldType.NUMBER));
+        assertEquals((short)1, service.convertType((Number)1, FieldType.NUMBER, FieldType.SHORT));
+        assertEquals("1", service.convertType((Number)1, FieldType.NUMBER, FieldType.STRING));
+        assertEquals(LocalTime.class, service.convertType((Number)1, FieldType.NUMBER, FieldType.TIME).getClass());
+    }
+
+    @Test
+    public void testConvertTypeFromShort() throws AtlasConversionException {
+        assertEquals(BigInteger.valueOf(1), service.convertType((short)1, FieldType.SHORT, FieldType.BIG_INTEGER));
+        assertEquals(true, service.convertType((short)1, FieldType.SHORT, FieldType.BOOLEAN));
+        assertEquals((byte)0x01, service.convertType((short)1, FieldType.SHORT, FieldType.BYTE));
+        assertEquals((char)1, service.convertType((short)1, FieldType.SHORT, FieldType.CHAR));
+        assertEquals(LocalDate.class, service.convertType((short)1, FieldType.SHORT, FieldType.DATE).getClass());
+        assertEquals(Date.class, service.convertType((short)1, FieldType.SHORT, FieldType.DATE_TIME).getClass());
+        assertEquals(ZonedDateTime.class, service.convertType((short)1, FieldType.SHORT, FieldType.DATE_TZ).getClass());
+        assertEquals(ZonedDateTime.class, service.convertType((short)1, FieldType.SHORT, FieldType.TIME_TZ).getClass());
+        assertEquals(ZonedDateTime.class, service.convertType((short)1, FieldType.SHORT, FieldType.DATE_TIME_TZ).getClass());
+        assertEquals(BigDecimal.valueOf(1), service.convertType((short)1, FieldType.SHORT, FieldType.DECIMAL));
+        assertEquals(1.0d, service.convertType((short)1, FieldType.SHORT, FieldType.DOUBLE));
+        assertEquals(1.0f, service.convertType((short)1, FieldType.SHORT, FieldType.FLOAT));
+        assertEquals(1, service.convertType((short)1, FieldType.SHORT, FieldType.INTEGER));
+        assertEquals(1L, service.convertType((short)1, FieldType.SHORT, FieldType.LONG));
+        assertEquals((short)1, service.convertType((short)1, FieldType.SHORT, FieldType.NUMBER));
+        assertEquals((short)1, service.convertType((short)1, FieldType.SHORT, FieldType.SHORT));
+        assertEquals("1", service.convertType((short)1, FieldType.SHORT, FieldType.STRING));
+        assertEquals(LocalTime.class, service.convertType((short)1, FieldType.SHORT, FieldType.TIME).getClass());
+    }
+
+    @Test
+    public void testConvertTypeFromString() throws AtlasConversionException {
+        assertEquals(BigInteger.valueOf(1), service.convertType("1", FieldType.STRING, FieldType.BIG_INTEGER));
+        assertEquals(true, service.convertType("1", FieldType.STRING, FieldType.BOOLEAN));
+        assertEquals((byte)0x01, service.convertType("1", FieldType.STRING, FieldType.BYTE));
+        assertEquals('1', service.convertType("1", FieldType.STRING, FieldType.CHAR));
+        assertEquals(LocalDate.class, service.convertType("1970-01-01", FieldType.STRING, FieldType.DATE).getClass());
+        assertEquals(Date.class, service.convertType("1970-01-01T00:00:00.000Z", FieldType.STRING, FieldType.DATE_TIME).getClass());
+        assertEquals(ZonedDateTime.class, service.convertType("1970-01-01T00:00:00.000Z", FieldType.STRING, FieldType.DATE_TZ).getClass());
+        assertEquals(ZonedDateTime.class, service.convertType("1970-01-01T00:00:00.000Z", FieldType.STRING, FieldType.TIME_TZ).getClass());
+        assertEquals(ZonedDateTime.class, service.convertType("1970-01-01T00:00:00.000Z", FieldType.STRING, FieldType.DATE_TIME_TZ).getClass());
+        assertEquals(BigDecimal.valueOf(1), service.convertType("1", FieldType.STRING, FieldType.DECIMAL));
+        assertEquals(1.0d, service.convertType("1", FieldType.STRING, FieldType.DOUBLE));
+        assertEquals(1.0f, service.convertType("1", FieldType.STRING, FieldType.FLOAT));
+        assertEquals(1, service.convertType("1", FieldType.STRING, FieldType.INTEGER));
+        assertEquals(1L, service.convertType("1", FieldType.STRING, FieldType.LONG));
+        assertEquals(BigInteger.valueOf(1), service.convertType("1", FieldType.STRING, FieldType.NUMBER));
+        assertEquals((short)1, service.convertType("1", FieldType.STRING, FieldType.SHORT));
+        assertEquals("1", service.convertType("1", FieldType.STRING, FieldType.STRING));
+        assertEquals(LocalTime.class, service.convertType("00:00:00.000", FieldType.STRING, FieldType.TIME).getClass());
+    }
+
+    @Test
+    public void testConvertTypeFromZonedDateTime() throws AtlasConversionException {
+        assertEquals(BigInteger.class, service.convertType(ZonedDateTime.now(), FieldType.DATE_TIME_TZ, FieldType.BIG_INTEGER).getClass());
+        assertEquals(LocalDate.class, service.convertType(ZonedDateTime.now(), FieldType.DATE_TIME_TZ, FieldType.DATE).getClass());
+        assertEquals(Date.class, service.convertType(ZonedDateTime.now(), FieldType.DATE_TIME_TZ, FieldType.DATE_TIME).getClass());
+        assertEquals(ZonedDateTime.class, service.convertType(ZonedDateTime.now(), FieldType.DATE_TIME_TZ, FieldType.DATE_TZ).getClass());
+        assertEquals(ZonedDateTime.class, service.convertType(ZonedDateTime.now(), FieldType.DATE_TIME_TZ, FieldType.TIME_TZ).getClass());
+        assertEquals(ZonedDateTime.class, service.convertType(ZonedDateTime.now(), FieldType.DATE_TIME_TZ, FieldType.DATE_TIME_TZ).getClass());
+        assertEquals(BigDecimal.class, service.convertType(ZonedDateTime.now(), FieldType.DATE_TIME_TZ, FieldType.DECIMAL).getClass());
+        assertEquals(Double.class, service.convertType(ZonedDateTime.now(), FieldType.DATE_TIME_TZ, FieldType.DOUBLE).getClass());
+        assertEquals(Float.class, service.convertType(ZonedDateTime.now(), FieldType.DATE_TIME_TZ, FieldType.FLOAT).getClass());
+        assertEquals(Long.class, service.convertType(ZonedDateTime.now(), FieldType.DATE_TIME_TZ, FieldType.LONG).getClass());
+        assertEquals(Long.class, service.convertType(ZonedDateTime.now(), FieldType.DATE_TIME_TZ, FieldType.NUMBER).getClass());
+        assertEquals(String.class, service.convertType(ZonedDateTime.now(), FieldType.DATE_TIME_TZ, FieldType.STRING).getClass());
+        assertEquals(LocalTime.class, service.convertType(ZonedDateTime.now(), FieldType.DATE_TIME_TZ, FieldType.TIME).getClass());
+    }
+
+    @Test
+    public void testConvertTypeToAny() throws AtlasConversionException {
+        assertEquals("passthrough", service.convertType("passthrough", FieldType.ANY, FieldType.ANY));
+        assertEquals("passthrough", service.convertType("passthrough", FieldType.BIG_INTEGER, FieldType.ANY));
+        assertEquals("passthrough", service.convertType("passthrough", FieldType.BOOLEAN, FieldType.ANY));
+        assertEquals("passthrough", service.convertType("passthrough", FieldType.BYTE, FieldType.ANY));
+        assertEquals("passthrough", service.convertType("passthrough", FieldType.CHAR, FieldType.ANY));
+        assertEquals("passthrough", service.convertType("passthrough", FieldType.DATE, FieldType.ANY));
+        assertEquals("passthrough", service.convertType("passthrough", FieldType.DATE_TIME, FieldType.ANY));
+        assertEquals("passthrough", service.convertType("passthrough", FieldType.DATE_TZ, FieldType.ANY));
+        assertEquals("passthrough", service.convertType("passthrough", FieldType.TIME_TZ, FieldType.ANY));
+        assertEquals("passthrough", service.convertType("passthrough", FieldType.DATE_TIME, FieldType.ANY));
+        assertEquals("passthrough", service.convertType("passthrough", FieldType.DECIMAL, FieldType.ANY));
+        assertEquals("passthrough", service.convertType("passthrough", FieldType.DOUBLE, FieldType.ANY));
+        assertEquals("passthrough", service.convertType("passthrough", FieldType.FLOAT, FieldType.ANY));
+        assertEquals("passthrough", service.convertType("passthrough", FieldType.INTEGER, FieldType.ANY));
+        assertEquals("passthrough", service.convertType("passthrough", FieldType.LONG, FieldType.ANY));
+        assertEquals("passthrough", service.convertType("passthrough", FieldType.NUMBER, FieldType.ANY));
+        assertEquals("passthrough", service.convertType("passthrough", FieldType.SHORT, FieldType.ANY));
+        assertEquals("passthrough", service.convertType("passthrough", FieldType.STRING, FieldType.ANY));
+        assertEquals("passthrough", service.convertType("passthrough", FieldType.TIME, FieldType.ANY));
     }
 
     @Test(expected = AtlasConversionException.class)
     public void testConvertTypeAtlasConversionException() throws AtlasConversionException {
         assertNotNull(service.convertType(new Object(), null, null));
-    }
-
-    @Test(expected = AtlasConversionException.class)
-    public void testConvertTypeAtlasConversionExceptionNotSupport() throws AtlasConversionException {
-        assertNotNull(service.convertType(1, FieldType.INTEGER, FieldType.DECIMAL));
     }
 
 }

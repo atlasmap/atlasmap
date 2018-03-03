@@ -15,25 +15,32 @@
  */
 package io.atlasmap.converters;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
+
 import io.atlasmap.api.AtlasConversionException;
+import io.atlasmap.api.AtlasConverter;
 import io.atlasmap.spi.AtlasConversionConcern;
 import io.atlasmap.spi.AtlasConversionInfo;
-import io.atlasmap.spi.AtlasPrimitiveConverter;
 import io.atlasmap.v2.FieldType;
 
-public class CharacterConverter implements AtlasPrimitiveConverter<Character> {
+public class CharacterConverter implements AtlasConverter<Character> {
 
-    private static final String TRUE_REGEX = "t|T|y|Y|1";
+    private static final String TRUE_REGEX = "t|T|y|Y|[1-9]";
 
-    /**
-     * @param value
-     * @return
-     * @throws AtlasConversionException
-     */
-    @Override
+    @AtlasConversionInfo(sourceType = FieldType.CHAR, targetType = FieldType.DECIMAL)
+    public BigDecimal toBigDecimal(Character value) throws AtlasConversionException {
+        return value != null ? BigDecimal.valueOf(value) : null;
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.CHAR, targetType = FieldType.BIG_INTEGER)
+    public BigInteger toBigInteger(Character value) throws AtlasConversionException {
+        return value != null ? BigInteger.valueOf(value) : null;
+    }
+
     @AtlasConversionInfo(sourceType = FieldType.CHAR, targetType = FieldType.BOOLEAN, concerns = {
             AtlasConversionConcern.CONVENTION })
-    public Boolean convertToBoolean(Character value, String sourceFormat, String targetFormat)
+    public Boolean toBoolean(Character value, String sourceFormat, String targetFormat)
             throws AtlasConversionException {
         if (value == null) {
             return null;
@@ -47,15 +54,9 @@ public class CharacterConverter implements AtlasPrimitiveConverter<Character> {
         }
     }
 
-    /**
-     * @param value
-     * @return
-     * @throws AtlasConversionException
-     */
-    @Override
     @AtlasConversionInfo(sourceType = FieldType.CHAR, targetType = FieldType.BYTE, concerns = {
             AtlasConversionConcern.RANGE })
-    public Byte convertToByte(Character value) throws AtlasConversionException {
+    public Byte toByte(Character value) throws AtlasConversionException {
         if (value == null) {
             return null;
         }
@@ -67,14 +68,8 @@ public class CharacterConverter implements AtlasPrimitiveConverter<Character> {
         }
     }
 
-    /**
-     * @param value
-     * @return
-     * @throws AtlasConversionException
-     */
-    @Override
     @AtlasConversionInfo(sourceType = FieldType.CHAR, targetType = FieldType.CHAR)
-    public Character convertToCharacter(Character value) throws AtlasConversionException {
+    public Character toCharacter(Character value) throws AtlasConversionException {
         if (value == null) {
             return null;
         }
@@ -82,71 +77,49 @@ public class CharacterConverter implements AtlasPrimitiveConverter<Character> {
         return new Character(value);
     }
 
-    /**
-     * @param value
-     * @return
-     * @throws AtlasConversionException
-     */
-    @Override
     @AtlasConversionInfo(sourceType = FieldType.CHAR, targetType = FieldType.DOUBLE)
-    public Double convertToDouble(Character value) throws AtlasConversionException {
+    public Double toDouble(Character value) throws AtlasConversionException {
         if (value == null) {
             return null;
         }
         return Double.valueOf(value);
     }
 
-    /**
-     * @param value
-     * @return
-     * @throws AtlasConversionException
-     */
-    @Override
     @AtlasConversionInfo(sourceType = FieldType.CHAR, targetType = FieldType.FLOAT)
-    public Float convertToFloat(Character value) throws AtlasConversionException {
+    public Float toFloat(Character value) throws AtlasConversionException {
         if (value == null) {
             return null;
         }
         return Float.valueOf(value);
     }
 
-    /**
-     * @param value
-     * @return
-     * @throws AtlasConversionException
-     */
-    @Override
     @AtlasConversionInfo(sourceType = FieldType.CHAR, targetType = FieldType.INTEGER)
-    public Integer convertToInteger(Character value) throws AtlasConversionException {
+    public Integer toInteger(Character value) throws AtlasConversionException {
         if (value == null) {
             return null;
         }
         return Integer.valueOf(value);
     }
 
-    /**
-     * @param value
-     * @return
-     * @throws AtlasConversionException
-     */
-    @Override
     @AtlasConversionInfo(sourceType = FieldType.CHAR, targetType = FieldType.LONG)
-    public Long convertToLong(Character value) throws AtlasConversionException {
+    public Long toLong(Character value) throws AtlasConversionException {
         if (value == null) {
             return null;
         }
         return Long.valueOf(value);
     }
 
-    /**
-     * @param value
-     * @return
-     * @throws AtlasConversionException
-     */
-    @Override
+    @AtlasConversionInfo(sourceType = FieldType.CHAR, targetType = FieldType.NUMBER)
+    public Number toNumber(Character value) throws AtlasConversionException {
+        if (value == null) {
+            return null;
+        }
+        return Integer.valueOf(value);
+    }
+
     @AtlasConversionInfo(sourceType = FieldType.CHAR, targetType = FieldType.SHORT, concerns = {
             AtlasConversionConcern.RANGE, AtlasConversionConcern.CONVENTION })
-    public Short convertToShort(Character value) throws AtlasConversionException {
+    public Short toShort(Character value) throws AtlasConversionException {
         if (value == null) {
             return null;
         }
@@ -157,14 +130,8 @@ public class CharacterConverter implements AtlasPrimitiveConverter<Character> {
         return (short) value.charValue();
     }
 
-    /**
-     * @param value
-     * @return
-     * @throws AtlasConversionException
-     */
-    @Override
     @AtlasConversionInfo(sourceType = FieldType.CHAR, targetType = FieldType.STRING)
-    public String convertToString(Character value, String sourceFormat, String targetFormat)
+    public String toString(Character value, String sourceFormat, String targetFormat)
             throws AtlasConversionException {
         if (value == null) {
             return null;
