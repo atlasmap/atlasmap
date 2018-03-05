@@ -24,6 +24,10 @@ class DateTimeField {
     java.time.LocalTime localTime;
     java.time.LocalDateTime localDateTime;
     java.time.ZonedDateTime zonedDateTime;
+    java.util.Calendar calendar;
     java.util.Date date;
+    java.util.GregorianCalendar gregorianCalendar;
     java.sql.Date sqlDate;
+    java.sql.Time sqlTime;
+    java.sql.Timestamp sqlTimestamp;
 }

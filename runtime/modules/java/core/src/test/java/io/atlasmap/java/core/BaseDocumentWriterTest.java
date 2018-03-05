@@ -10,9 +10,11 @@ import java.util.Map;
 
 import org.junit.Before;
 
+import io.atlasmap.api.AtlasConversionService;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.core.AtlasPath;
 import io.atlasmap.core.AtlasPath.SegmentContext;
+import io.atlasmap.core.DefaultAtlasConversionService;
 import io.atlasmap.java.test.BaseOrder;
 import io.atlasmap.java.test.StateEnumClassLong;
 import io.atlasmap.java.test.TargetAddress;
@@ -40,11 +42,14 @@ public abstract class BaseDocumentWriterTest {
     protected TestListOrders targetOrderListInstance = null;
     protected TargetOrderArray targetOrderArrayInstance = null;
     protected TargetValueConverter valueConverter = null;
+    protected AtlasConversionService conversionService = DefaultAtlasConversionService.getInstance();
+    protected ClassLoader classLoader;
 
     @Before
     public void reset() {
-        writer = new DocumentJavaFieldWriter();
-        writer.setTargetValueConverter(new TargetValueConverter(null) {
+        classLoader = Thread.currentThread().getContextClassLoader();
+        writer = new DocumentJavaFieldWriter(conversionService);
+        writer.setTargetValueConverter(new TargetValueConverter(classLoader, conversionService) {
             public Object convert(AtlasInternalSession session, LookupTable lookupTable, Field sourceField, Object parentObject, Field targetField) throws AtlasException {
                 return targetField.getValue();
             }
@@ -166,7 +171,7 @@ public abstract class BaseDocumentWriterTest {
     }
 
     private void setTargetValue(Object targetValue) {
-        writer.setTargetValueConverter(new TargetValueConverter(null) {
+        writer.setTargetValueConverter(new TargetValueConverter(classLoader, conversionService) {
             @Override
             public Object convert(AtlasInternalSession session, LookupTable lookupTable, Field sourceField, Object parentObject, Field targetField) throws AtlasException {
                 return targetValue;

@@ -112,7 +112,7 @@ public class DateConverterTest {
 
     @Test
     public void convertToTimestamp() throws Exception {
-        Timestamp timestamp = dateConverter.toTimestamp(new Date());
+        Timestamp timestamp = dateConverter.toSqlTimestamp(new Date());
         assertNotNull(timestamp);
         assertThat(timestamp, instanceOf(Timestamp.class));
     }

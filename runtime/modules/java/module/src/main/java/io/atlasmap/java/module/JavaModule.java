@@ -54,6 +54,7 @@ public class JavaModule extends BaseAtlasModule {
     private ClassInspectionService javaInspectionService = null;
     private JavaConstructService javaConstructService = null;
     private TargetValueConverter targetValueConverter = null;
+    private ClassLoader classLoader;
 
     public JavaModule() {
         this.setAutomaticallyProcessOutputFieldActions(false);
@@ -61,6 +62,8 @@ public class JavaModule extends BaseAtlasModule {
 
     @Override
     public void init() {
+        // TODO support non-flat class loader
+        this.classLoader = Thread.currentThread().getContextClassLoader();
         javaInspectionService = new ClassInspectionService();
         javaInspectionService.setConversionService(getConversionService());
         setJavaInspectionService(javaInspectionService);
@@ -69,7 +72,7 @@ public class JavaModule extends BaseAtlasModule {
         javaConstructService.setConversionService(getConversionService());
         setJavaConstructService(javaConstructService);
 
-        targetValueConverter = new TargetValueConverter(getConversionService());
+        targetValueConverter = new TargetValueConverter(classLoader, getConversionService());
     }
 
     @Override
@@ -153,7 +156,7 @@ public class JavaModule extends BaseAtlasModule {
             throw new AtlasException(e);
         }
 
-        DocumentJavaFieldWriter writer = new DocumentJavaFieldWriter();
+        DocumentJavaFieldWriter writer = new DocumentJavaFieldWriter(getConversionService());
         writer.setRootObject(rootObject);
         writer.setTargetValueConverter(targetValueConverter);
         atlasSession.setFieldWriter(getDocId(), writer);
@@ -319,4 +322,13 @@ public class JavaModule extends BaseAtlasModule {
     public Field cloneField(Field field) throws AtlasException {
         return AtlasJavaModelFactory.cloneJavaField((JavaField) field);
     }
+
+    public ClassLoader getClassLoader() {
+        return this.classLoader;
+    }
+
+    public void setClassLoader(ClassLoader loader) {
+        this.classLoader = loader;
+    }
+
 }

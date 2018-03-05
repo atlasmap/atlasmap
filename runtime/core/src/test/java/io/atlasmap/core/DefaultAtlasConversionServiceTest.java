@@ -28,7 +28,12 @@ import static org.junit.Assert.assertTrue;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.Month;
+import java.time.MonthDay;
+import java.time.Year;
+import java.time.YearMonth;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Date;
@@ -389,16 +394,16 @@ public class DefaultAtlasConversionServiceTest {
         assertNotNull(service.fieldTypeFromClass(Long.class));
         assertNotNull(service.fieldTypeFromClass(Short.class));
         assertNotNull(service.fieldTypeFromClass(String.class));
-        assertNotNull(service.fieldTypeFromClass(java.time.Year.class));
-        assertNotNull(service.fieldTypeFromClass(java.time.Month.class));
-        assertNotNull(service.fieldTypeFromClass(java.time.YearMonth.class));
-        assertNotNull(service.fieldTypeFromClass(java.time.MonthDay.class));
-        assertNotNull(service.fieldTypeFromClass(java.time.LocalDate.class));
-        assertNotNull(service.fieldTypeFromClass(java.time.LocalTime.class));
-        assertNotNull(service.fieldTypeFromClass(java.time.LocalDateTime.class));
+        assertNotNull(service.fieldTypeFromClass(Year.class));
+        assertNotNull(service.fieldTypeFromClass(Month.class));
+        assertNotNull(service.fieldTypeFromClass(YearMonth.class));
+        assertNotNull(service.fieldTypeFromClass(MonthDay.class));
+        assertNotNull(service.fieldTypeFromClass(LocalDate.class));
+        assertNotNull(service.fieldTypeFromClass(LocalTime.class));
+        assertNotNull(service.fieldTypeFromClass(LocalDateTime.class));
         assertNotNull(service.fieldTypeFromClass(java.sql.Date.class));
-        assertNotNull(service.fieldTypeFromClass(java.util.Date.class));
-        assertNotNull(service.fieldTypeFromClass(java.time.ZonedDateTime.class));
+        assertNotNull(service.fieldTypeFromClass(Date.class));
+        assertNotNull(service.fieldTypeFromClass(ZonedDateTime.class));
         assertNotNull(service.fieldTypeFromClass("boolean"));
         assertNotNull(service.fieldTypeFromClass("byte"));
         assertNotNull(service.fieldTypeFromClass("char"));
@@ -547,6 +552,7 @@ public class DefaultAtlasConversionServiceTest {
         assertEquals((short)1, service.convertType(new Date(1), FieldType.DATE_TIME, FieldType.SHORT));
         assertEquals(String.class, service.convertType(new Date(1), FieldType.DATE_TIME, FieldType.STRING).getClass());
         assertEquals(LocalTime.class, service.convertType(new Date(1), FieldType.DATE_TIME, FieldType.TIME).getClass());
+        assertEquals(LocalDateTime.class, service.convertType(new Date(1), null, LocalDateTime.class, null).getClass());
     }
 
     @Test

@@ -12,6 +12,7 @@ import java.util.Map;
 
 import org.slf4j.LoggerFactory;
 
+import io.atlasmap.api.AtlasConversionService;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.core.AtlasPath;
 import io.atlasmap.core.AtlasPath.SegmentContext;
@@ -33,6 +34,11 @@ public class DocumentJavaFieldWriter implements AtlasFieldWriter {
     private JavaWriterUtil writerUtil = new JavaWriterUtil(DefaultAtlasConversionService.getInstance());
     private List<String> processedPaths = new LinkedList<>();
     private TargetValueConverter converter;
+    private AtlasConversionService conversionService;
+
+    public DocumentJavaFieldWriter(AtlasConversionService conversion) {
+        this.conversionService = conversion;
+    }
 
     public void write(AtlasInternalSession session) throws AtlasException {
         LookupTable lookupTable = session.head().getLookupTable();
@@ -44,14 +50,14 @@ public class DocumentJavaFieldWriter implements AtlasFieldWriter {
                 throw new AtlasException(new IllegalArgumentException("Argument 'field' cannot be null"));
             }
 
+            String targetFieldClassName = (targetField instanceof JavaField) ? ((JavaField) targetField).getClassName()
+                    : ((JavaEnumField) targetField).getClassName();
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Now processing field: " + targetField);
                 LOG.debug("Field type: " + targetField.getFieldType());
                 LOG.debug("Field path: " + targetField.getPath());
                 LOG.debug("Field value: " + targetField.getValue());
-                String fieldClassName = (targetField instanceof JavaField) ? ((JavaField) targetField).getClassName()
-                        : ((JavaEnumField) targetField).getClassName();
-                LOG.debug("Field className: " + fieldClassName);
+                LOG.debug("Field className: " + targetFieldClassName);
             }
 
             processedPaths.add(targetField.getPath());
@@ -83,6 +89,12 @@ public class DocumentJavaFieldWriter implements AtlasFieldWriter {
                 // if we're on the last segment, the
                 boolean segmentIsLastSegment = (segmentContext.getNext() == null);
                 if (segmentIsLastSegment) {
+                    // detect field type from class name if exists
+                    if (targetField.getFieldType() == null && targetFieldClassName != null
+                            && (targetField instanceof JavaField)) {
+                        FieldType fieldTypeFromClass = conversionService.fieldTypeFromClass(targetFieldClassName);
+                        targetField.setFieldType(fieldTypeFromClass);
+                    }
                     if (FieldType.COMPLEX.equals(targetField.getFieldType())) {
                         segmentIsComplexSegment = true;
                     } else {

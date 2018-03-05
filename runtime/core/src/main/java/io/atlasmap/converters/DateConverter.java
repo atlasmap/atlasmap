@@ -138,13 +138,13 @@ public class DateConverter implements AtlasConverter<Date> {
         return longValue.shortValue();
     }
 
-    @AtlasConversionInfo(sourceType = FieldType.DATE_TIME, targetType = FieldType.DATE_TIME)
+    @AtlasConversionInfo(sourceType = FieldType.DATE_TIME, targetType = FieldType.DATE)
     public java.sql.Date toSqlDate(Date date, String sourceFormat, String targetFormat)
             throws AtlasConversionException {
         return DateTimeHelper.convertDateToSqlDate(date, sourceFormat);
     }
 
-    @AtlasConversionInfo(sourceType = FieldType.DATE_TIME, targetType = FieldType.DATE_TIME)
+    @AtlasConversionInfo(sourceType = FieldType.DATE_TIME, targetType = FieldType.TIME)
     public Time toSqlTime(Date date, String sourceFormat, String targetFormat) throws AtlasConversionException {
         return DateTimeHelper.convertDateToTime(date, targetFormat);
     }
@@ -157,7 +157,7 @@ public class DateConverter implements AtlasConverter<Date> {
     }
 
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME, targetType = FieldType.DATE_TIME)
-    public Timestamp toTimestamp(Date date) throws AtlasConversionException {
+    public Timestamp toSqlTimestamp(Date date) throws AtlasConversionException {
         return Timestamp.from(date.toInstant());
     }
 

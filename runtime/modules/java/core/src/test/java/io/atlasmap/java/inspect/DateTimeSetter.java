@@ -24,6 +24,10 @@ interface DateTimeSetter {
     void setLocalTime(java.time.LocalTime localTime);
     void setLocalDateTime(java.time.LocalDateTime localDateTime);
     void setZonedDateTime(java.time.ZonedDateTime zonedDateTime);
+    void setCalendar(java.util.Calendar calendar);
     void setDate(java.util.Date date);
+    void setGregorianCalendar(java.util.GregorianCalendar gregorianCalendar);
     void setSqlDate(java.sql.Date sqlDate);
+    void setSqlTime(java.sql.Time sqlTime);
+    void setSqlTimestamp(java.sql.Timestamp sqlTimestamp);
 }

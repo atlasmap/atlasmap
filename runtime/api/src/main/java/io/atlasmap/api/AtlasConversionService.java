@@ -27,12 +27,49 @@ public interface AtlasConversionService {
 
     Object copyPrimitive(Object sourceValue);
 
+    /**
+     * Perform type conversion with specifying {@link FieldType}. This method focuses on
+     * conversion between different field types with using AtlasMap field type representative classes.
+     * Use {@link #convertType(Object, String, Class, String)} to convert into specific Java class.
+     * @see {@link #convertType(Object, String, Class, String)}
+     *
+     * @param sourceValue source value to convert
+     * @param origSourceType {@link FieldType} of source field
+     * @param targetType {@link FieldType} of target field
+     * @return converted value
+     * @throws AtlasConversionException
+     */
     Object convertType(Object sourceValue, FieldType origSourceType, FieldType targetType)
             throws AtlasConversionException;
 
+    /**
+     * Perform type conversion with specifying {@link FieldType}. This method focuses on
+     * conversion between different field types with using AtlasMap field type representative classes.
+     * Use {@link #convertType(Object, String, Class, String)} to convert into specific Java class.
+     * @see {@link #convertType(Object, String, Class, String)}
+     *
+     * @param sourceValue source value to convert
+     * @param sourceFormat source value format
+     * @param origSourceType {@link FieldType} of source field
+     * @param targetType {@link FieldType} of target field
+     * @param targetFormat target value format
+     * @return converted value
+     * @throws AtlasConversionException
+     */
     Object convertType(Object sourceValue, String sourceFormat, FieldType targetType, String targetFormat)
             throws AtlasConversionException;
 
+    /**
+     * Perform type conversion with specifying target {@link Class} regardless of AtlasMap {@link FieldType}.
+     * @see {@link #convertType(Object, FieldType, FieldType)}
+     *
+     * @param sourceValue source value to convert
+     * @param sourceFormat source value format
+     * @param targetType {@link Class} of target value
+     * @param targetFormat target value format
+     * @return
+     * @throws AtlasConversionException
+     */
     Object convertType(Object sourceValue, String sourceFormat, Class<?> targetType, String targetFormat)
             throws AtlasConversionException;
 
