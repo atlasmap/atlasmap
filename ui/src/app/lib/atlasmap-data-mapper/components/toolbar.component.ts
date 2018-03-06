@@ -16,9 +16,9 @@ limitations under the License.
 
 import { Component, Input, OnInit } from '@angular/core';
 
-import { DocumentType } from '../common/config.types';
+// import { DocumentType } from '../common/config.types';
 import { ConfigModel } from '../models/config.model';
-import { DocumentDefinition } from '../models/document-definition.model';
+// import { DocumentDefinition } from '../models/document-definition.model';
 
 import { ModalWindowComponent } from './modal-window.component';
 import { TemplateEditComponent } from './template-edit.component';
@@ -94,8 +94,9 @@ export class ToolbarComponent implements OnInit {
   }
 
   ngOnInit() {
-    const targetDoc: DocumentDefinition = this.cfg.targetDocs[0];
-    this.targetSupportsTemplate = targetDoc && (targetDoc.type == DocumentType.XML || targetDoc.type == DocumentType.JSON);
+    // Disable template until runtime supports it - https://github.com/atlasmap/atlasmap/issues/329
+    // const targetDoc: DocumentDefinition = this.cfg.targetDocs[0];
+    // this.targetSupportsTemplate = targetDoc && (targetDoc.type == DocumentType.XML || targetDoc.type == DocumentType.JSON);
   }
 
   private editTemplate(): void {
