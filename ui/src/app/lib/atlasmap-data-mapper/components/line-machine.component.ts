@@ -158,6 +158,9 @@ export class LineMachineComponent implements OnInit {
       this.setLineBeingFormed(null);
     }
     this.clearLines();
+    if (!this.cfg.showMappedFields) {
+      return;
+    }
     const mappings: MappingModel[] = this.cfg.mappings.mappings;
     const activeMapping: MappingModel = this.cfg.mappings.activeMapping;
     let foundSelectedMapping = false;
