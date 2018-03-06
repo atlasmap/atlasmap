@@ -20,7 +20,6 @@ import { DocumentType } from '../common/config.types';
 import { ConfigModel } from '../models/config.model';
 import { DocumentDefinition } from '../models/document-definition.model';
 
-import { LineMachineComponent } from './line-machine.component';
 import { ModalWindowComponent } from './modal-window.component';
 import { TemplateEditComponent } from './template-edit.component';
 
@@ -31,7 +30,6 @@ import { TemplateEditComponent } from './template-edit.component';
 
 export class ToolbarComponent implements OnInit {
   @Input() cfg: ConfigModel;
-  @Input() lineMachine: LineMachineComponent;
   @Input() modalWindow: ModalWindowComponent;
   targetSupportsTemplate = false;
 
@@ -69,7 +67,6 @@ export class ToolbarComponent implements OnInit {
       this.editTemplate();
     } else if ('showLines' == action) {
       this.cfg.showLinesAlways = !this.cfg.showLinesAlways;
-      this.lineMachine.redrawLinesForMappings();
     } else if ('showTypes' == action) {
       this.cfg.showTypes = !this.cfg.showTypes;
     } else if ('showMappedFields' == action) {
@@ -89,9 +86,11 @@ export class ToolbarComponent implements OnInit {
         this.cfg.showMappingTable = false;
       }
     }
-    setTimeout(() => {
-      this.lineMachine.redrawLinesForMappings();
-    }, 10);
+
+    // Use the initialization service to trigger the observable updateFromConfig method
+    // in the parent data-mapper-app class.  This avoids materializing the lineMachine object
+    // post-check.
+    this.cfg.initializationService.systemInitializedSource.next();
   }
 
   ngOnInit() {
