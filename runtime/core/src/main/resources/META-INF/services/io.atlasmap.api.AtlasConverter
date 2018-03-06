@@ -15,6 +15,7 @@ io.atlasmap.converters.LocalTimeConverter
 io.atlasmap.converters.LongConverter
 io.atlasmap.converters.NumberConverter
 io.atlasmap.converters.ShortConverter
+io.atlasmap.converters.SqlDateConverter
 io.atlasmap.converters.SqlTimeConverter
 io.atlasmap.converters.SqlTimestampConverter
 io.atlasmap.converters.StringConverter

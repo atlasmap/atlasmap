@@ -21,7 +21,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZonedDateTime;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 import io.atlasmap.api.AtlasConversionException;
 import io.atlasmap.api.AtlasConverter;
@@ -58,6 +60,11 @@ public class ZonedDateTimeConverter implements AtlasConverter<ZonedDateTime> {
         }
     }
 
+    @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.DATE_TIME_TZ)
+    public Calendar toCalendar(ZonedDateTime value) throws AtlasConversionException {
+        return value != null ? GregorianCalendar.from(value) : null;
+    }
+
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.DATE_TIME,
             concerns = AtlasConversionConcern.TIMEZONE)
     public Date toDate(ZonedDateTime value) throws AtlasConversionException {
@@ -74,6 +81,11 @@ public class ZonedDateTimeConverter implements AtlasConverter<ZonedDateTime> {
             concerns = AtlasConversionConcern.TIMEZONE)
     public Float toFloat(ZonedDateTime value) throws AtlasConversionException {
         return value != null ? getEpochMilli(value).floatValue() : null;
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.DATE_TIME_TZ)
+    public GregorianCalendar toGregorianCalendar(ZonedDateTime value) throws AtlasConversionException {
+        return value != null ? GregorianCalendar.from(value) : null;
     }
 
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.INTEGER,
@@ -97,7 +109,7 @@ public class ZonedDateTimeConverter implements AtlasConverter<ZonedDateTime> {
 
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.DATE_TIME)
     public LocalDateTime toLocalDateTime(ZonedDateTime value) {
-        return value.toLocalDateTime();
+        return value != null ? value.toLocalDateTime() : null;
     }
 
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.TIME)
@@ -134,6 +146,21 @@ public class ZonedDateTimeConverter implements AtlasConverter<ZonedDateTime> {
             concerns = AtlasConversionConcern.TIMEZONE)
     public Number toNumber(ZonedDateTime value) {
         return value != null ? getEpochMilli(value) : null;
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.DATE)
+    public java.sql.Date toSqlDate(ZonedDateTime value) {
+        return value != null ? java.sql.Date.valueOf(value.toLocalDate()) : null;
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.TIME)
+    public java.sql.Time toSqlTime(ZonedDateTime value) {
+        return value != null ? java.sql.Time.valueOf(value.toLocalTime()) : null;
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.DATE_TIME)
+    public java.sql.Timestamp toSqlTimestamp(ZonedDateTime value) {
+        return value != null ? java.sql.Timestamp.valueOf(value.toLocalDateTime()) : null;
     }
 
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.DATE_TIME_TZ)

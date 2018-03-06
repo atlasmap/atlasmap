@@ -299,7 +299,7 @@ public class DefaultAtlasConversionService implements AtlasConversionService {
             throw new AtlasConversionException("AutoConversion requires sourceValue and targetType to be specified");
         }
 
-        if (targetType.isAssignableFrom(sourceValue.getClass())) {
+        if (targetType.isInstance(sourceValue)) {
             return sourceValue;
         }
 
@@ -462,22 +462,23 @@ public class DefaultAtlasConversionService implements AtlasConversionService {
             return FieldType.SHORT;
         case "java.lang.String":
             return FieldType.STRING;
-        case "java.time.Year":
-        case "java.time.Month":
-        case "java.time.YearMonth":
-        case "java.time.MonthDay":
+        case "java.sql.Date":
         case "java.time.LocalDate":
+        case "java.time.Month":
+        case "java.time.MonthDay":
+        case "java.time.Year":
+        case "java.time.YearMonth":
             return FieldType.DATE;
+        case "java.sql.Time":
         case "java.time.LocalTime":
             return FieldType.TIME;
-        case "java.sql.Date":
-        case "java.sql.Time":
         case "java.sql.Timestamp":
         case "java.time.LocalDateTime":
         case "java.util.Date":
             return FieldType.DATE_TIME;
-        case "java.util.Calendar":
         case "java.time.ZonedDateTime":
+        case "java.util.Calendar":
+        case "java.util.GregorianCalendar":
             return FieldType.DATE_TIME_TZ;
         default:
             return FieldType.COMPLEX;

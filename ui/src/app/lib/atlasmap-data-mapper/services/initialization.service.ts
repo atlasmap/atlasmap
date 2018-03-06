@@ -93,6 +93,7 @@ export class InitializationService {
         this.addJavaDocument('io.atlasmap.java.test.TargetOrderArray', true);
         this.addJavaDocument('io.atlasmap.java.test.SourceFlatPrimitiveClass', true);
         this.addJavaDocument('io.atlasmap.java.test.SourceOrder', true);
+        this.addJavaDocument('io.atlasmap.java.test.DateTimeClass', true);
       }
     }
 
@@ -129,6 +130,7 @@ export class InitializationService {
       this.addJavaDocument('io.atlasmap.java.test.TargetOrderArray', false);
       this.addJavaDocument('io.atlasmap.java.test.SourceFlatPrimitiveClass', false);
       this.addJavaDocument('io.atlasmap.java.test.SourceOrder', false);
+      this.addJavaDocument('io.atlasmap.java.test.DateTimeClass', false);
     }
 
     if (this.cfg.initCfg.addMockJavaCachedTarget) {

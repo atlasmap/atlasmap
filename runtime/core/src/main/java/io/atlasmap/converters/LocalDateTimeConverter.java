@@ -22,7 +22,9 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 import io.atlasmap.api.AtlasConversionException;
 import io.atlasmap.api.AtlasConverter;
@@ -57,6 +59,11 @@ public class LocalDateTimeConverter implements AtlasConverter<LocalDateTime> {
         }
     }
 
+    @AtlasConversionInfo(sourceType = FieldType.DATE_TIME, targetType = FieldType.DATE_TIME_TZ)
+    public Calendar toCalendar(LocalDateTime value) {
+        return value != null ? GregorianCalendar.from(value.atZone(ZoneId.systemDefault())) : null;
+    }
+
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME, targetType = FieldType.DATE_TIME)
     public Date toDate(LocalDateTime value) throws AtlasConversionException {
         return value != null ? new Date(getEpochMilli(value)) : null;
@@ -70,6 +77,11 @@ public class LocalDateTimeConverter implements AtlasConverter<LocalDateTime> {
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME, targetType = FieldType.FLOAT)
     public Float toFloat(LocalDateTime value) throws AtlasConversionException {
         return value != null ? getEpochMilli(value).floatValue() : null;
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.DATE_TIME, targetType = FieldType.DATE_TIME_TZ)
+    public GregorianCalendar toGregorianCalendar(LocalDateTime value) {
+        return value != null ? GregorianCalendar.from(value.atZone(ZoneId.systemDefault())) : null;
     }
 
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME, targetType = FieldType.INTEGER,
@@ -132,6 +144,21 @@ public class LocalDateTimeConverter implements AtlasConverter<LocalDateTime> {
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME, targetType = FieldType.NUMBER)
     public Number toNumber(LocalDateTime value) {
         return value != null ? getEpochMilli(value) : null;
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.DATE_TIME, targetType = FieldType.DATE)
+    public java.sql.Date toSqlDate(LocalDateTime value) {
+        return value != null ? java.sql.Date.valueOf(value.toLocalDate()) : null;
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.DATE_TIME, targetType = FieldType.TIME)
+    public java.sql.Time toSqlTime(LocalDateTime value) {
+        return value != null ? java.sql.Time.valueOf(value.toLocalTime()) : null;
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.DATE_TIME, targetType = FieldType.DATE_TIME)
+    public java.sql.Timestamp toSqlTimestamp(LocalDateTime value) {
+        return value != null ? java.sql.Timestamp.valueOf(value) : null;
     }
 
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME, targetType = FieldType.DATE_TIME_TZ)

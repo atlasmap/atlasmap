@@ -24,6 +24,10 @@ public interface DateTimeGetter {
     java.time.LocalTime getLocalTime();
     java.time.LocalDateTime getLocalDateTime();
     java.time.ZonedDateTime getZonedDateTime();
+    java.util.Calendar getCalendar();
     java.util.Date getDate();
+    java.util.GregorianCalendar getGregorianCalendar();
     java.sql.Date getSqlDate();
+    java.sql.Time getSqlTime();
+    java.sql.Timestamp getSqlTimestamp();
 }

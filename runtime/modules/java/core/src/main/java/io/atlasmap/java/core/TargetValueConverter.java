@@ -29,12 +29,15 @@ public class TargetValueConverter {
     private static final Logger LOG = LoggerFactory.getLogger(TargetValueConverter.class);
 
     private AtlasConversionService conversionService = null;
+    private ClassLoader classLoader;
 
-    public TargetValueConverter(AtlasConversionService conversionService) {
+    public TargetValueConverter(ClassLoader loader, AtlasConversionService conversionService) {
+        this.classLoader = loader;
         this.conversionService = conversionService;
     }
 
-    public Object convert(AtlasInternalSession session, LookupTable lookupTable, Field sourceField, Object parentObject, Field targetField) throws AtlasException {
+    public Object convert(AtlasInternalSession session, LookupTable lookupTable, Field sourceField,
+            Object parentObject, Field targetField) throws AtlasException {
         FieldType sourceType = sourceField.getFieldType();
         Object sourceValue = sourceField.getValue();
 
@@ -90,12 +93,33 @@ public class TargetValueConverter {
             return populateEnumValue(session, lookupTable, (JavaEnumField) sourceField, (JavaEnumField) targetField);
         }
 
+        Class<?> targetClazz = null;
+        if (targetClassName != null) {
+            try {
+                targetClazz = classLoader.loadClass(targetClassName);
+            } catch (ClassNotFoundException e) {
+                AtlasUtil.addAudit(session, targetField.getDocId(),
+                        String.format("Target field class '%s' was not found: sourceType=%s targetType=%s targetPath=%s msg=%s",
+                                ((JavaField)targetField).getClassName(), sourceType, targetType, targetField.getPath(), e.getMessage()),
+                        targetField.getPath(), AuditStatus.ERROR, targetValue != null ? targetValue.toString() : null);
+                return null;
+            }
+        }
+        if (targetClazz != null) {
+            targetValue = conversionService.convertType(sourceValue, null, targetClazz, null);
+        } else {
+            targetValue = sourceValue;
+        }
         AtlasFieldActionService fieldActionService = session.getAtlasContext().getContextFactory().getFieldActionService();
         try {
-            targetValue = fieldActionService.processActions(targetField.getActions(), sourceValue, targetType);
+            targetValue = fieldActionService.processActions(targetField.getActions(), targetValue, targetType);
             if (targetValue != null) {
-                FieldType conversionInputType = conversionService.fieldTypeFromClass(targetValue.getClass());
-                targetValue = conversionService.convertType(targetValue, conversionInputType, targetType);
+                if (targetClazz != null) {
+                    targetValue = conversionService.convertType(sourceValue, null, targetClazz, null);
+                } else {
+                    FieldType conversionInputType = conversionService.fieldTypeFromClass(targetValue.getClass());
+                    targetValue = conversionService.convertType(targetValue, conversionInputType, targetType);
+                }
             }
         } catch (AtlasConversionException e) {
             AtlasUtil.addAudit(session, targetField.getDocId(),
@@ -106,6 +130,10 @@ public class TargetValueConverter {
         }
 
         return targetValue;
+    }
+
+    public void setClassLoader(ClassLoader loader) {
+        this.classLoader = loader;
     }
 
     @SuppressWarnings("unchecked")
@@ -157,7 +185,7 @@ public class TargetValueConverter {
         }
     }
 
-    protected Method resolveTargetSetMethod(Object sourceObject, Field field, Class<?> targetType)
+    private Method resolveTargetSetMethod(Object sourceObject, Field field, Class<?> targetType)
             throws AtlasException {
 
         AtlasPath atlasPath = new AtlasPath(field.getPath());
