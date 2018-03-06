@@ -75,7 +75,7 @@ export class MappingManagementService {
           observer.next(mappingFileNames);
           observer.complete();
         })
-        .catch((error: any) => {
+        .catch((error: Response) => {
           observer.error(error);
           observer.complete();
         },
@@ -364,7 +364,7 @@ export class MappingManagementService {
           observer.next(actionConfigs);
           observer.complete();
         })
-        .catch((error: any) => {
+        .catch((error: Response) => {
           observer.error(error);
           observer.next(actionConfigs);
           observer.complete();

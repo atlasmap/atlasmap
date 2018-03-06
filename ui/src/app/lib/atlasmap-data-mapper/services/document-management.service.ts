@@ -66,7 +66,7 @@ export class DocumentManagementService {
           observer.next(classPath);
           observer.complete();
         })
-        .catch((error: any) => {
+        .catch((error: Response) => {
           observer.error(error);
           observer.complete();
         },
