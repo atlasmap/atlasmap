@@ -101,7 +101,7 @@ export class DocumentManagementService {
           observer.next(docDef);
           observer.complete();
         })
-        .catch((error: any) => {
+        .catch((error: Response) => {
           observer.error(error);
           docDef.errorOccurred = true;
           observer.next(docDef);
