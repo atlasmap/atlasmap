@@ -212,9 +212,10 @@ export class DocumentDefinitionComponent implements OnInit {
   }
 
   isAddFieldAvailable(docDef: DocumentDefinition): boolean {
-    return docDef.isPropertyOrConstant
-      || (!docDef.isSource && docDef.type == DocumentType.JSON)
-      || (!docDef.isSource && docDef.type == DocumentType.XML);
+    return docDef.isPropertyOrConstant;
+    // https://github.com/atlasmap/atlasmap/issues/332
+    //   || (!docDef.isSource && docDef.type == DocumentType.JSON)
+    //   || (!docDef.isSource && docDef.type == DocumentType.XML);
   }
 
   private search(searchFilter: string): void {
