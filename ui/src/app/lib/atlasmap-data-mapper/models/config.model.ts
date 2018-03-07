@@ -134,9 +134,11 @@ export class ConfigModel {
     this.propertyDoc.type = DocumentType.PROPERTY;
     this.propertyDoc.name = 'Properties';
     this.propertyDoc.isSource = true;
+    this.propertyDoc.showFields = false;
     this.constantDoc.type = DocumentType.CONSTANT;
     this.constantDoc.name = 'Constants';
     this.constantDoc.isSource = true;
+    this.constantDoc.showFields = false;
   }
 
   static getConfig(): ConfigModel {
@@ -185,7 +187,7 @@ export class ConfigModel {
 
   getDocs(isSource: boolean): DocumentDefinition[] {
     const docs: DocumentDefinition[] = this.getDocsWithoutPropertyDoc(isSource);
-    return isSource ? docs.concat([this.propertyDoc, this.constantDoc]) : docs;
+    return isSource ? [this.propertyDoc, this.constantDoc].concat(docs) : docs;
   }
 
   hasJavaDocuments(): boolean {
