@@ -16,7 +16,7 @@
 
 import { Component, Input } from '@angular/core';
 
-import { TransitionMode, TransitionDelimiter } from '../../models/transition.model';
+import { TransitionMode, TransitionDelimiter, TransitionModel, TransitionDelimiterModel } from '../../models/transition.model';
 import { ConfigModel } from '../../models/config.model';
 import { LookupTable } from '../../models/lookup-table.model';
 import { MappingModel, FieldMappingPair } from '../../models/mapping.model';
@@ -35,7 +35,12 @@ export class TransitionSelectionComponent {
   @Input() fieldPair: FieldMappingPair;
 
   modes = TransitionMode;
-  delimeters = TransitionDelimiter;
+  delimiters: TransitionDelimiterModel[];
+
+  constructor() {
+    TransitionModel.initialize();
+    this.delimiters = TransitionModel.delimiterModels;
+  }
 
   selectionChanged(event: any): void {
     const selectorIsMode: boolean = 'mode' == event.target.attributes.getNamedItem('selector').value;
@@ -84,5 +89,14 @@ export class TransitionSelectionComponent {
       this.cfg.mappingService.saveCurrentMapping();
     };
     this.modalWindow.show();
+  }
+
+  modeIsSupported(delimiterModel: TransitionDelimiterModel): boolean {
+    if (delimiterModel.delimiter === TransitionDelimiter.NONE) {
+      return false;
+    } else if (delimiterModel.delimiter === TransitionDelimiter.MULTI_SPACE) {
+      return this.fieldPair.transition.isSeparateMode();
+    }
+    return true;
   }
 }

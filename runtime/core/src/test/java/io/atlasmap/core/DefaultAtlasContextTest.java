@@ -35,17 +35,15 @@ import java.util.Map;
 import org.junit.Assert;
 import org.junit.Test;
 
-import io.atlasmap.api.AtlasContext;
-import io.atlasmap.api.AtlasConversionException;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.api.AtlasSession;
 import io.atlasmap.core.AtlasMappingService.AtlasMappingFormat;
 import io.atlasmap.spi.AtlasInternalSession;
 import io.atlasmap.spi.AtlasInternalSession.Head;
 import io.atlasmap.spi.AtlasModule;
+import io.atlasmap.spi.StringDelimiter;
 import io.atlasmap.v2.AtlasMapping;
 import io.atlasmap.v2.AtlasModelFactory;
-import io.atlasmap.v2.Audit;
 import io.atlasmap.v2.AuditStatus;
 import io.atlasmap.v2.Audits;
 import io.atlasmap.v2.BaseMapping;
@@ -60,13 +58,12 @@ import io.atlasmap.v2.LookupTable;
 import io.atlasmap.v2.Mapping;
 import io.atlasmap.v2.MappingType;
 import io.atlasmap.v2.Mappings;
-import io.atlasmap.v2.MockField;
 import io.atlasmap.v2.Validations;
 
 public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
 
     @Test
-    public void mapTest() throws AtlasException {
+    public void testMap() throws AtlasException {
         Mapping m = (Mapping) AtlasModelFactory.createMapping(MappingType.MAP);
         mapping.getMappings().getMapping().add(m);
         populateSourceField(m, FieldType.STRING, "foo");
@@ -77,7 +74,7 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
     }
 
     @Test
-    public void mapNotExistingDocIdTest() throws AtlasException {
+    public void testMapNotExistingDocId() throws AtlasException {
         Mapping m = (Mapping) AtlasModelFactory.createMapping(MappingType.MAP);
         mapping.getMappings().getMapping().add(m);
         populateSourceField(m, "docId.not.existing", FieldType.STRING, "foo");
@@ -89,10 +86,10 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
     }
 
     @Test
-    public void combineNonStringFieldsTest() throws AtlasException {
+    public void testCombineNonStringFields() throws AtlasException {
         Mapping m = (Mapping) AtlasModelFactory.createMapping(MappingType.COMBINE);
         mapping.getMappings().getMapping().add(m);
-        m.setDelimiter(";");
+        m.setDelimiter(StringDelimiter.SEMICOLON.getName());
         populateSourceField(m, FieldType.DATE_TIME, new Date(0), 0);
         populateSourceField(m, FieldType.INTEGER, 1, 1);
         populateSourceField(m, FieldType.DOUBLE, 2d, 2);
@@ -112,10 +109,10 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
     }
 
     @Test
-    public void combineNonSupportedObjects() throws AtlasException {
+    public void testCombineNonSupportedObjects() throws AtlasException {
         Mapping m = (Mapping) AtlasModelFactory.createMapping(MappingType.COMBINE);
         mapping.getMappings().getMapping().add(m);
-        m.setDelimiter(";");
+        m.setDelimiter(StringDelimiter.SEMICOLON.getName());
         populateUnsupportedSourceField(m, "foo", 0);
         populateUnsupportedSourceField(m, "bar", 1);
         prepareTargetField(m, "/target");
@@ -125,10 +122,10 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
     }
 
     @Test
-    public void separateTest() throws Exception {
+    public void testSeparate() throws Exception {
         Mapping m = (Mapping) AtlasModelFactory.createMapping(MappingType.SEPARATE);
         mapping.getMappings().getMapping().add(m);
-        m.setDelimiter(";");
+        m.setDelimiter(StringDelimiter.SEMICOLON.getName());
         populateSourceField(m, FieldType.STRING, new Date(0).toString() + ";1;2.0;3.0;true;5;6;string;8;9;10");
         prepareTargetField(m, "/target1", 1);
         prepareTargetField(m, "/target0", 0);
@@ -158,7 +155,7 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
     }
 
     @Test
-    public void lookupTableTest() throws Exception {
+    public void testLookupTable() throws Exception {
         LookupTable table = new LookupTable();
         table.setName("table");
         LookupEntry e = new LookupEntry();
@@ -387,33 +384,4 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
         context.process(session);
     }
 
-    @Test
-    public void testProcessSeparateField() throws AtlasException {
-        DefaultAtlasSession session = mock(DefaultAtlasSession.class);
-
-        AtlasContext atlasContext = mock(AtlasContext.class);
-        when(session.getAtlasContext()).thenReturn(atlasContext);
-
-        DefaultAtlasContextFactory factory = mock(DefaultAtlasContextFactory.class);
-        when(atlasContext.getContextFactory()).thenReturn(factory);
-
-        DefaultAtlasSeparateStrategy separateStrategy = mock(DefaultAtlasSeparateStrategy.class);
-        when(factory.getSeparateStrategy()).thenReturn(separateStrategy);
-
-        when(separateStrategy.separateValue(any(String.class))).thenReturn(null);
-
-        Audits audits = mock(Audits.class);
-        when(session.getAudits()).thenReturn(audits);
-        List<Audit> auditList = new ArrayList<>();
-        when(audits.getAudit()).thenReturn(auditList);
-        Mapping mapping = mock(Mapping.class);
-
-        MockField mockField = mock(MockField.class);
-        when(mockField.getValue()).thenReturn("mock field value");
-        when(mockField.getFieldType()).thenThrow(AtlasConversionException.class);
-        assertEquals(0, context.processSeparateField(session, mapping, mockField).size());
-
-        when(separateStrategy.separateValue(any(String.class))).thenReturn(new ArrayList<String>());
-        assertEquals(0, context.processSeparateField(session, mapping, mockField).size());
-    }
 }

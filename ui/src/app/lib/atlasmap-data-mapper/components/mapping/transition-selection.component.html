@@ -16,10 +16,9 @@
     <div *ngIf="fieldPair.transition.isSeparateMode() || fieldPair.transition.isCombineMode()" style="margin-top:10px;">
       <label>Separator:</label>
       <select id="select-separator" (change)="selectionChanged($event);" selector="separator" [ngModel]="fieldPair.transition.delimiter">
-        <option value="{{delimeters.COLON}}">Colon</option>
-        <option value="{{delimeters.COMMA}}">Comma</option>
-        <option value="{{delimeters.MULTISPACE}}">Multispace</option>
-        <option value="{{delimeters.SPACE}}">Space</option>
+        <ng-container *ngFor="let delimiter of delimiters">
+          <option *ngIf="modeIsSupported(delimiter)" value="{{delimiter.delimiter}}">{{ delimiter.prettyName }}</option>
+        </ng-container>
       </select>
     </div>
   </div>

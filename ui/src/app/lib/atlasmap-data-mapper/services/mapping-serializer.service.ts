@@ -50,10 +50,10 @@ export class MappingSerializer {
 
           if (fieldMappingPair.transition.isSeparateMode()) {
             jsonMapping['mappingType'] = 'SEPARATE';
-            jsonMapping['strategy'] = fieldMappingPair.transition.getSerializedDelimeter();
+            jsonMapping['delimiter'] = fieldMappingPair.transition.getSerializedDelimeter();
           } else if (fieldMappingPair.transition.isCombineMode()) {
             jsonMapping['mappingType'] = 'COMBINE';
-            jsonMapping['strategy'] = fieldMappingPair.transition.getSerializedDelimeter();
+            jsonMapping['delimiter'] = fieldMappingPair.transition.getSerializedDelimeter();
           } else if (fieldMappingPair.transition.isEnumerationMode()) {
             jsonMapping['mappingType'] = 'LOOKUP';
             jsonMapping['lookupTableName'] = fieldMappingPair.transition.lookupTableName;
@@ -348,10 +348,10 @@ export class MappingSerializer {
     }
     if (isSeparateMapping) {
       fieldPair.transition.mode = TransitionMode.SEPARATE;
-      fieldPair.transition.setSerializedDelimeterFromSerializedValue(fieldMapping.strategy);
+      fieldPair.transition.setSerializedDelimeterFromSerializedValue(fieldMapping.delimiter);
     } else if (isCombineMapping) {
       fieldPair.transition.mode = TransitionMode.COMBINE;
-      fieldPair.transition.setSerializedDelimeterFromSerializedValue(fieldMapping.strategy);
+      fieldPair.transition.setSerializedDelimeterFromSerializedValue(fieldMapping.delimiter);
     } else if (isLookupMapping) {
       fieldPair.transition.lookupTableName = fieldMapping.lookupTableName;
       fieldPair.transition.mode = TransitionMode.ENUM;

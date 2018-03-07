@@ -23,9 +23,9 @@ public interface AtlasCombineStrategy {
         return this.getClass().getSimpleName();
     }
 
-    String getDelimiter();
+    StringDelimiter getDelimiter();
 
-    void setDelimiter(String delimiter);
+    void setDelimiter(StringDelimiter delimiter);
 
     Integer getLimit();
 
@@ -33,7 +33,7 @@ public interface AtlasCombineStrategy {
 
     String combineValues(Map<Integer, String> values);
 
-    String combineValues(Map<Integer, String> values, String delimiter);
+    String combineValues(Map<Integer, String> values, StringDelimiter delimiter);
 
-    String combineValues(Map<Integer, String> values, String delimiter, Integer maxItems);
+    String combineValues(Map<Integer, String> values, StringDelimiter delimiter, Integer maxItems);
 }

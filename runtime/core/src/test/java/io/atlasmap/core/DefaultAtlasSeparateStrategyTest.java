@@ -12,6 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import io.atlasmap.spi.AtlasSeparateStrategy;
+import io.atlasmap.spi.StringDelimiter;
 
 public class DefaultAtlasSeparateStrategyTest {
 
@@ -39,8 +40,8 @@ public class DefaultAtlasSeparateStrategyTest {
         assertNotNull(separate.getDelimiter());
         assertEquals(DefaultAtlasSeparateStrategy.DEFAULT_SEPARATE_DELIMITER, separate.getDelimiter());
 
-        separate.setDelimiter(":");
-        assertEquals(":", separate.getDelimiter());
+        separate.setDelimiter(StringDelimiter.COLON);
+        assertEquals(StringDelimiter.COLON, separate.getDelimiter());
         List<String> values = separate.separateValue("a:b:c:d");
         assertNotNull(values);
         assertEquals(new Integer(4), new Integer(values.size()));
@@ -76,31 +77,6 @@ public class DefaultAtlasSeparateStrategyTest {
         assertEquals("d", values.get(3));
         assertEquals("e", values.get(4));
         assertEquals("f", values.get(5));
-    }
-
-    @Test
-    public void testSeparateValueDelimiter() {
-        assertNotNull(separate);
-        List<String> values = separate.separateValue("a1b1c1d1e1f", "1");
-        assertNotNull(values);
-        assertEquals(new Integer(6), new Integer(values.size()));
-        assertEquals("a", values.get(0));
-        assertEquals("b", values.get(1));
-        assertEquals("c", values.get(2));
-        assertEquals("d", values.get(3));
-        assertEquals("e", values.get(4));
-        assertEquals("f", values.get(5));
-    }
-
-    @Test
-    public void testSeparateValueDelimiterLimit() {
-        assertNotNull(separate);
-        List<String> values = separate.separateValue("a1b1c1d1e1f", "1", 3);
-        assertNotNull(values);
-        assertEquals(new Integer(3), new Integer(values.size()));
-        assertEquals("a", values.get(0));
-        assertEquals("b", values.get(1));
-        assertEquals("c1d1e1f", values.get(2));
     }
 
     @Test
