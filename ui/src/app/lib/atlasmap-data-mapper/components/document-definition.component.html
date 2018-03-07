@@ -18,31 +18,34 @@
       <div class="clear"></div>
     </div>
     <div [attr.class]="searchMode ? 'fieldListSearchOpen' : 'fieldList'" style="overflow:auto;" (scroll)="handleScroll($event)">
-      <div *ngFor="let docDef of documents" #docDetail class="docIdentifier" [attr.id]='docDef.name'>
-        <div class="card-pf-title documentHeader" tooltip="{{ docDef.description }}" placement="bottom" *ngIf="isDocNameVisible(docDef)"
-          (click)="toggleFieldVisibility(docDef)">
-          <div style="float:left">
-            <i class="fa fa-angle-right docCollapseIcon" *ngIf="!docDef.showFields"></i>
-            <i class="fa fa-angle-down docCollapseIcon" *ngIf="docDef.showFields"></i>
-            <i class="fa {{ isSource ? 'fa-hdd-o' : 'fa-download' }}"></i>
-            <label>{{ docDef.getName(cfg.showTypes) }}</label>
+      <div class="panel-group" id="accordion-markup">
+        <div *ngFor="let docDef of documents" #docDetail class="panel panel-default" [attr.id]='docDef.name'>
+          <div class="panel-heading" tooltip="{{ docDef.description }}" placement="bottom" *ngIf="isDocNameVisible(docDef)" (click)="toggleFieldVisibility(docDef)">
+            <h4 class="panel-title">
+              <div style="float:left">
+                <i class="fa fa-angle-right docCollapseIcon" *ngIf="!docDef.showFields"></i>
+                <i class="fa fa-angle-down docCollapseIcon" *ngIf="docDef.showFields"></i>
+                <i class="fa {{ isSource ? 'fa-hdd-o' : 'fa-download' }}"></i>
+                <label>{{ docDef.getName(cfg.showTypes) }}</label>
+              </div>
+            </h4>
+            <div style="float:right;" *ngIf="isAddFieldAvailable(docDef)">
+              <i class="fa fa-plus link" (click)="addField(docDef, $event)"></i>
+            </div>
+            <div class="clear"></div>
           </div>
-          <div style="float:right;" *ngIf="isAddFieldAvailable(docDef)">
-            <i class="fa fa-plus link" (click)="addField(docDef, $event)"></i>
+          <div class="panel-collapse collapse in" *ngIf="docDef.showFields">
+            <document-field-detail #fieldDetail *ngFor="let f of docDef.fields" [modalWindow]="modalWindow" [field]="f" [cfg]="cfg" [lineMachine]="lineMachine"></document-field-detail>
+            <div class="panel-body" *ngIf="!searchMode && docDef.isPropertyOrConstant && (!docDef.fields || !docDef.fields.length)">
+              <label style="width:100%; padding:5px 16px; margin:0">
+                No {{ docDef.type == 'Property' ? 'properties' : 'constants' }} exist.
+              </label>
+            </div>
           </div>
-          <div class="clear"></div>
         </div>
-        <div *ngIf="docDef.showFields">
-          <document-field-detail #fieldDetail *ngFor="let f of docDef.fields" [modalWindow]="modalWindow" [field]="f" [cfg]="cfg" [lineMachine]="lineMachine"></document-field-detail>
-          <div class="FieldDetail" *ngIf="!searchMode && docDef.isPropertyOrConstant && (!docDef.fields || !docDef.fields.length)">
-            <label style="width:100%; padding:5px 16px; margin:0">
-              No {{ docDef.type == 'Property' ? 'properties' : 'constants' }} exist.
-            </label>
-          </div>
+        <div class="panel panel-default" *ngIf="searchMode && !searchResultsExist">
+          <label>No search results.</label>
         </div>
-      </div>
-      <div class="noSearchResults" *ngIf="searchMode && !searchResultsExist">
-        <label>No search results.</label>
       </div>
     </div>
     <div class="card-pf-heading fieldsCount">{{ getFieldCount() }} fields</div>
