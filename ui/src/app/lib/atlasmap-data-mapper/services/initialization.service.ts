@@ -173,7 +173,13 @@ export class InitializationService {
           this.fetchDocuments();
           this.updateStatus();
         },
-        (error: any) => { this.handleError('could not load Maven class path.', error); },
+        (error: Response) => {
+          if (error.status === 0) {
+            this.handleError('Fatal network error: Could not connect to AtlasMap design runtime service.', error);
+          } else {
+            this.handleError('Could not load Maven class path: ' + error.status + ' ' + error.statusText, error);
+          }
+        },
       );
     }
 
@@ -188,7 +194,13 @@ export class InitializationService {
       } else {
         this.cfg.mappingService.findMappingFiles('UI').subscribe(
           (files: string[]) => { this.fetchMappings(files); },
-          (error: any) => { this.handleError('could not load mapping files.', error); },
+          (error: Response) => {
+            if (error.status === 0) {
+              this.handleError('Fatal network error: Could not connect to AtlasMap design runtime service.', error);
+            } else {
+              this.handleError('Could not load mapping files: ' + error.status + ' ' + error.statusText, error);
+            }
+          },
         );
       }
     }
@@ -247,9 +259,12 @@ export class InitializationService {
         (doc: DocumentDefinition) => {
           this.updateStatus();
         },
-        (error: any) => {
-          this.handleError("Could not load document '"
-            + docDef.id + "'.", error);
+        (error: Response) => {
+          if (error.status === 0) {
+            this.handleError('Fatal network error: Could not connect to AtlasMap design runtime service.', error);
+          } else {
+            this.handleError("Could not load document '" + docDef.id + "': " + error.status + ' ' + error.statusText, error);
+          }
         },
       );
     }
@@ -266,7 +281,13 @@ export class InitializationService {
         this.cfg.initCfg.mappingInitialized = true;
         this.updateStatus();
       },
-      (error: any) => { this.handleError('could not load mapping definitions.', error); },
+      (error: Response) => {
+        if (error.status === 0) {
+          this.handleError('Fatal network error: Could not connect to AtlasMap design runtime service.', error);
+        } else {
+          this.handleError('Could not load mapping definitions: ' + error.status + ' ' + error.statusText, error);
+        }
+      },
     );
   }
 
@@ -288,7 +309,13 @@ export class InitializationService {
         this.cfg.initCfg.fieldActionsInitialized = true;
         this.updateStatus();
       },
-      (error: any) => { this.handleError('Could not load field action configs.', error); },
+      (error: Response) => {
+        if (error.status === 0) {
+          this.handleError('Fatal network error: Could not connect to AtlasMap design runtime service.', error);
+        } else {
+          this.handleError('Could not load field action configs: ' + error.status + ' ' + error.statusText, error);
+        }
+      },
     );
   }
 
@@ -320,6 +347,7 @@ export class InitializationService {
     this.cfg.errorService.error(message, error);
     this.updateLoadingStatus(message);
     this.cfg.initCfg.initializationErrorOccurred = true;
+    this.cfg.initCfg.initialized = true;
     this.updateStatus();
   }
 
