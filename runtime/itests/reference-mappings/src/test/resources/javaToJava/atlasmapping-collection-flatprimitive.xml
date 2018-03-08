@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AtlasMapping xmlns="http://atlasmap.io/v2"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns2="http://atlasmap.io/java/v2"
+  name="JavaJavaFlatMapping">
+  <DataSource dataSourceType="Source"
+    uri="atlas:java?className=io.atlasmap.java.test.SourceFlatPrimitiveClass" />
+  <DataSource dataSourceType="Target"
+    uri="atlas:java?className=io.atlasmap.java.test.TargetFlatPrimitiveClass" />
+  <Mappings>
+    <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:type="Collection" mappingType="Collection">
+      <Mappings>
+        <Mapping xsi:type="Mapping" mappingType="Map">
+          <InputField xsi:type="ns2:JavaField" path="/boxedStringArrayField[]" fieldType="String" />
+          <OutputField xsi:type="ns2:JavaField" path="/boxedStringField" fieldType="String" />
+        </Mapping>
+      </Mappings>
+    </Mapping>
+    <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:type="Collection" mappingType="Collection">
+      <Mappings>
+        <Mapping xsi:type="Mapping" mappingType="Map">
+          <InputField xsi:type="ns2:JavaField" path="/boxedStringField" fieldType="String" />
+          <OutputField xsi:type="ns2:JavaField" path="/boxedStringArrayField[]" fieldType="String" />
+        </Mapping>
+      </Mappings>
+    </Mapping>
+  </Mappings>
+</AtlasMapping>

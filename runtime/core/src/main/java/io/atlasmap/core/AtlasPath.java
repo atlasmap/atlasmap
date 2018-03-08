@@ -44,7 +44,7 @@ public class AtlasPath {
                 for (String part : parts) {
                     getSegments().add(part);
                 }
-            } else {
+            } else if (!path.isEmpty()) {
                 getSegments().add(path);
             }
         }
@@ -155,6 +155,10 @@ public class AtlasPath {
             }
         }
         return false;
+    }
+
+    public Boolean isRoot() {
+        return segments.size() == 0;
     }
 
     public Boolean isCollectionRoot() {
