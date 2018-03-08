@@ -252,7 +252,7 @@ public class DefaultAtlasConversionServiceTest {
         assertNotEquals(short.class, service.boxOrUnboxPrimitive(short.class));
         assertNotEquals(String.class, service.boxOrUnboxPrimitive(List.class));
 
-        assertNull(service.boxOrUnboxPrimitive(null));
+        assertNull(service.boxOrUnboxPrimitive((Class<?>)null));
     }
 
     @Test

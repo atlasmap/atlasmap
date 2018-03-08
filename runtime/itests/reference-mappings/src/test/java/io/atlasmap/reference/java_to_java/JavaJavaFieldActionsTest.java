@@ -26,16 +26,12 @@ public class JavaJavaFieldActionsTest extends AtlasBaseActionsTest {
 
     @Override
     public void runLengthTest() throws Exception {
-        this.targetField = createField("/boxedIntField");
-        this.runActionTest(new Length(), "fname", new Integer(5), Integer.class);
-        this.targetField = createField("/boxedStringField");
+        this.runActionTest(new Length(), "fname", "5", String.class);
     }
 
     @Test
     public void runNoConversionTest() throws Exception {
-        this.targetField = createField("/boxedIntField");
         this.runActionTestList(null, "fname", null, String.class);
-        this.targetField = createField("/boxedStringField");
     }
 
     @Override

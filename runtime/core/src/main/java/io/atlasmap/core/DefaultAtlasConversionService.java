@@ -367,6 +367,11 @@ public class DefaultAtlasConversionService implements AtlasConversionService {
     }
 
     @Override
+    public Class<?> boxOrUnboxPrimitive(String clazzName) {
+        return classFromFieldType(fieldTypeFromClass(clazzName));
+    }
+
+    @Override
     public Class<?> boxOrUnboxPrimitive(Class<?> clazz) {
         if (clazz == null) {
             return clazz;
