@@ -135,8 +135,8 @@ public class DefaultAtlasPropertyStrategyTest {
         PropertyField propField = AtlasModelFactory.createPropertyField();
         propField.setName("dupe-string");
 
-        propStrategy.setPropertyOrderValue(Arrays.asList(AtlasPropertyType.RUNTIME_PROPERTIES.value(),
-                AtlasPropertyType.MAPPING_DEFINED_PROPERTIES.value()));
+        propStrategy.setPropertyOrderValue(Arrays.asList(AtlasPropertyType.MAPPING_DEFINED_PROPERTIES.value(),
+                AtlasPropertyType.RUNTIME_PROPERTIES.value()));
         propStrategy.processPropertyField(AtlasTestData.generateAtlasMapping(), propField,
                 AtlasTestData.generateRuntimeProperties());
 
@@ -307,10 +307,10 @@ public class DefaultAtlasPropertyStrategyTest {
         List<AtlasPropertyType> propTypes = propStrategy.getPropertyOrder();
         assertNotNull(propTypes);
         assertEquals(new Integer(4), new Integer(propTypes.size()));
-        assertEquals(AtlasPropertyType.ENVIRONMENT_VARIABLES, propTypes.get(0));
+        assertEquals(AtlasPropertyType.RUNTIME_PROPERTIES, propTypes.get(0));
         assertEquals(AtlasPropertyType.JAVA_SYSTEM_PROPERTIES, propTypes.get(1));
-        assertEquals(AtlasPropertyType.MAPPING_DEFINED_PROPERTIES, propTypes.get(2));
-        assertEquals(AtlasPropertyType.RUNTIME_PROPERTIES, propTypes.get(3));
+        assertEquals(AtlasPropertyType.ENVIRONMENT_VARIABLES, propTypes.get(2));
+        assertEquals(AtlasPropertyType.MAPPING_DEFINED_PROPERTIES, propTypes.get(3));
 
         propStrategy.setPropertyOrderValue(Arrays.asList(AtlasPropertyType.RUNTIME_PROPERTIES.value(),
                 AtlasPropertyType.MAPPING_DEFINED_PROPERTIES.value()));
@@ -326,10 +326,10 @@ public class DefaultAtlasPropertyStrategyTest {
         List<AtlasPropertyType> propTypes = propStrategy.getPropertyOrder();
         assertNotNull(propTypes);
         assertTrue(propTypes.size() == 4);
-        assertEquals(AtlasPropertyType.ENVIRONMENT_VARIABLES, propTypes.get(0));
+        assertEquals(AtlasPropertyType.RUNTIME_PROPERTIES, propTypes.get(0));
         assertEquals(AtlasPropertyType.JAVA_SYSTEM_PROPERTIES, propTypes.get(1));
-        assertEquals(AtlasPropertyType.MAPPING_DEFINED_PROPERTIES, propTypes.get(2));
-        assertEquals(AtlasPropertyType.RUNTIME_PROPERTIES, propTypes.get(3));
+        assertEquals(AtlasPropertyType.ENVIRONMENT_VARIABLES, propTypes.get(2));
+        assertEquals(AtlasPropertyType.MAPPING_DEFINED_PROPERTIES, propTypes.get(3));
 
         propStrategy.setPropertyOrderValue(Arrays.asList("foo", AtlasPropertyType.RUNTIME_PROPERTIES.value()));
         propTypes = propStrategy.getPropertyOrder();
@@ -371,10 +371,10 @@ public class DefaultAtlasPropertyStrategyTest {
         List<AtlasPropertyType> propTypes = propStrategy.getPropertyOrder();
         assertNotNull(propTypes);
         assertTrue(propTypes.size() == 4);
-        assertEquals(AtlasPropertyType.ENVIRONMENT_VARIABLES, propTypes.get(0));
+        assertEquals(AtlasPropertyType.RUNTIME_PROPERTIES, propTypes.get(0));
         assertEquals(AtlasPropertyType.JAVA_SYSTEM_PROPERTIES, propTypes.get(1));
-        assertEquals(AtlasPropertyType.MAPPING_DEFINED_PROPERTIES, propTypes.get(2));
-        assertEquals(AtlasPropertyType.RUNTIME_PROPERTIES, propTypes.get(3));
+        assertEquals(AtlasPropertyType.ENVIRONMENT_VARIABLES, propTypes.get(2));
+        assertEquals(AtlasPropertyType.MAPPING_DEFINED_PROPERTIES, propTypes.get(3));
 
         propStrategy.setPropertyOrder(
                 Arrays.asList(AtlasPropertyType.RUNTIME_PROPERTIES, AtlasPropertyType.MAPPING_DEFINED_PROPERTIES));
