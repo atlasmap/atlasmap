@@ -19,23 +19,24 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import io.atlasmap.spi.AtlasCombineStrategy;
+import io.atlasmap.spi.StringDelimiter;
 
 public class DefaultAtlasCombineStrategy implements AtlasCombineStrategy {
 
-    public static final String DEFAULT_COMBINE_DELIMITER = " ";
+    public static final StringDelimiter DEFAULT_COMBINE_DELIMITER = StringDelimiter.SPACE;
     public static final Integer DEFAULT_COMBINE_LIMIT = 512;
-    private String delimiter = DEFAULT_COMBINE_DELIMITER;
+    private StringDelimiter delimiter = DEFAULT_COMBINE_DELIMITER;
     private Integer limit = DEFAULT_COMBINE_LIMIT;
     private boolean disableAutoTrim = false;
     private boolean disableAddDelimiterOnNull = false;
 
     @Override
-    public String getDelimiter() {
+    public StringDelimiter getDelimiter() {
         return delimiter;
     }
 
     @Override
-    public void setDelimiter(String delimiter) {
+    public void setDelimiter(StringDelimiter delimiter) {
         this.delimiter = delimiter;
     }
 
@@ -71,12 +72,12 @@ public class DefaultAtlasCombineStrategy implements AtlasCombineStrategy {
     }
 
     @Override
-    public String combineValues(Map<Integer, String> values, String delimiter) {
+    public String combineValues(Map<Integer, String> values, StringDelimiter delimiter) {
         return combineValues(values, delimiter, getLimit());
     }
 
     @Override
-    public String combineValues(Map<Integer, String> values, String delimiter, Integer limit) {
+    public String combineValues(Map<Integer, String> values, StringDelimiter delimiter, Integer limit) {
         if (values == null || values.isEmpty()) {
             return null;
         }
@@ -106,13 +107,13 @@ public class DefaultAtlasCombineStrategy implements AtlasCombineStrategy {
             } else {
                 if (value == null) {
                     if (!disableAddDelimiterOnNull) {
-                        combinedString = combinedString.concat((delimiter != null ? delimiter : DEFAULT_COMBINE_DELIMITER));
+                        combinedString = combinedString.concat((delimiter != null ? delimiter.getValue() : DEFAULT_COMBINE_DELIMITER.getValue()));
                     }
                 } else if (isDisableAutoTrim()) {
-                    combinedString = combinedString.concat((delimiter != null ? delimiter : DEFAULT_COMBINE_DELIMITER))
+                    combinedString = combinedString.concat((delimiter != null ? delimiter.getValue() : DEFAULT_COMBINE_DELIMITER.getValue()))
                             .concat(value);
                 } else {
-                    combinedString = combinedString.concat((delimiter != null ? delimiter : DEFAULT_COMBINE_DELIMITER))
+                    combinedString = combinedString.concat((delimiter != null ? delimiter.getValue() : DEFAULT_COMBINE_DELIMITER.getValue()))
                             .concat(value.trim());
                 }
             }

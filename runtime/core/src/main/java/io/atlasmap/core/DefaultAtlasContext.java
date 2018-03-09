@@ -47,6 +47,7 @@ import io.atlasmap.spi.AtlasModuleInfo;
 import io.atlasmap.spi.AtlasModuleInfoRegistry;
 import io.atlasmap.spi.AtlasModuleMode;
 import io.atlasmap.spi.FieldDirection;
+import io.atlasmap.spi.StringDelimiter;
 import io.atlasmap.v2.AtlasMapping;
 import io.atlasmap.v2.AtlasModelFactory;
 import io.atlasmap.v2.AuditStatus;
@@ -528,9 +529,10 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
         }
 
         String combinedValue = null;
-        if (mapping.getDelimiter() != null) {
+        StringDelimiter delimiter = StringDelimiter.fromName(mapping.getDelimiter());
+        if (delimiter != null) {
             combinedValue = session.getAtlasContext().getContextFactory().getCombineStrategy()
-                    .combineValues(combineValues, mapping.getDelimiter());
+                    .combineValues(combineValues, delimiter);
         } else {
             combinedValue = session.getAtlasContext().getContextFactory().getCombineStrategy()
                     .combineValues(combineValues);
@@ -546,7 +548,7 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
         return answer;
     }
 
-    protected List<Field> processSeparateField(DefaultAtlasSession session, Mapping mapping, Field sourceField)
+    private List<Field> processSeparateField(DefaultAtlasSession session, Mapping mapping, Field sourceField)
             throws AtlasException {
         List<Field> answer = new ArrayList<>();
 
@@ -561,9 +563,10 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
             sourceValue = sourceField.getValue().toString();
         }
         List<String> separatedValues = null;
+        StringDelimiter delimiter = StringDelimiter.fromName(mapping.getDelimiter());
         if (mapping.getDelimiter() != null) {
             separatedValues = session.getAtlasContext().getContextFactory().getSeparateStrategy()
-                    .separateValue(sourceValue, mapping.getDelimiter());
+                    .separateValue(sourceValue, delimiter);
         } else {
             separatedValues = session.getAtlasContext().getContextFactory().getSeparateStrategy()
                     .separateValue(sourceValue);

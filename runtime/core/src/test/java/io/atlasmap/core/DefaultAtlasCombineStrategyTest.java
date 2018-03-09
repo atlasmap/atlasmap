@@ -14,6 +14,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import io.atlasmap.spi.AtlasCombineStrategy;
+import io.atlasmap.spi.StringDelimiter;
 
 public class DefaultAtlasCombineStrategyTest {
 
@@ -50,8 +51,8 @@ public class DefaultAtlasCombineStrategyTest {
         assertNotNull(combine.getDelimiter());
         assertEquals(DefaultAtlasCombineStrategy.DEFAULT_COMBINE_DELIMITER, combine.getDelimiter());
 
-        combine.setDelimiter(":");
-        assertEquals(":", combine.getDelimiter());
+        combine.setDelimiter(StringDelimiter.COLON);
+        assertEquals(StringDelimiter.COLON, combine.getDelimiter());
         String value = combine.combineValues(generateCombineMap(4));
         assertNotNull(value);
         assertEquals("a:b:c:d", value);
@@ -110,22 +111,6 @@ public class DefaultAtlasCombineStrategyTest {
         String value = combine.combineValues(generateCombineMap(6));
         assertNotNull(value);
         assertEquals("a b c d e f", value);
-    }
-
-    @Test
-    public void testCombineValuesDelimiter() {
-        assertNotNull(combine);
-        String value = combine.combineValues(generateCombineMap(6), "1");
-        assertNotNull(value);
-        assertEquals("a1b1c1d1e1f", value);
-    }
-
-    @Test
-    public void testCombineValuesDelimiterLimit() {
-        assertNotNull(combine);
-        String value = combine.combineValues(generateCombineMap(6), "1", 3);
-        assertNotNull(value);
-        assertEquals("a1b1c", value);
     }
 
     @Test

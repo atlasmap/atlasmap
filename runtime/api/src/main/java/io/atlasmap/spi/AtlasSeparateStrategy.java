@@ -23,9 +23,9 @@ public interface AtlasSeparateStrategy {
         return this.getClass().getSimpleName();
     }
 
-    String getDelimiter();
+    StringDelimiter getDelimiter();
 
-    void setDelimiter(String delimiter);
+    void setDelimiter(StringDelimiter delimiter);
 
     Integer getLimit();
 
@@ -33,7 +33,7 @@ public interface AtlasSeparateStrategy {
 
     List<String> separateValue(String value);
 
-    List<String> separateValue(String value, String delimiter);
+    List<String> separateValue(String value, StringDelimiter delimiter);
 
-    List<String> separateValue(String value, String delimiter, Integer limit);
+    List<String> separateValue(String value, StringDelimiter delimiter, Integer limit);
 }

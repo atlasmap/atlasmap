@@ -142,14 +142,18 @@ export class FieldActionConfig {
 }
 
 export enum TransitionMode { MAP, SEPARATE, ENUM, COMBINE }
-export enum TransitionDelimiter { NONE, COLON, COMMA, MULTISPACE, SPACE }
+export enum TransitionDelimiter {
+  NONE, AMPERSAND, AT_SIGN, BACKSLASH, COLON, COMMA, DASH, EQUAL, HASH,
+  MULTI_SPACE, PERIOD, PIPE, SEMICOLON, SLASH, SPACE, UNDERSCORE
+}
 
 export class TransitionDelimiterModel {
   delimiter: TransitionDelimiter = TransitionDelimiter.SPACE;
   serializedValue: string = null;
   prettyName: string = null;
 
-  constructor(delimiter: TransitionDelimiter, serializedValue: string, prettyName: string) {
+  constructor(
+    delimiter: TransitionDelimiter, serializedValue: string, prettyName: string) {
     this.delimiter = delimiter;
     this.serializedValue = serializedValue;
     this.prettyName = prettyName;
@@ -165,13 +169,28 @@ export class TransitionModel {
   lookupTableName: string = null;
 
   constructor() {
+    TransitionModel.initialize();
+  }
+
+  static initialize() {
     if (TransitionModel.delimiterModels.length == 0) {
       const models: TransitionDelimiterModel[] = [];
       models.push(new TransitionDelimiterModel(TransitionDelimiter.NONE, null, '[None]'));
-      models.push(new TransitionDelimiterModel(TransitionDelimiter.COLON, 'Colon', 'Colon'));
-      models.push(new TransitionDelimiterModel(TransitionDelimiter.COMMA, 'Comma', 'Comma'));
-      models.push(new TransitionDelimiterModel(TransitionDelimiter.MULTISPACE, 'MultiSpace', 'Multispace'));
-      models.push(new TransitionDelimiterModel(TransitionDelimiter.SPACE, 'Space', 'Space'));
+      models.push(new TransitionDelimiterModel(TransitionDelimiter.AMPERSAND, 'Ampersand', 'Ampersand [&]'));
+      models.push(new TransitionDelimiterModel(TransitionDelimiter.AT_SIGN, 'AtSign', 'At Sign [@]'));
+      models.push(new TransitionDelimiterModel(TransitionDelimiter.BACKSLASH, 'Backslash', 'Backslash [\\]'));
+      models.push(new TransitionDelimiterModel(TransitionDelimiter.COLON, 'Colon', 'Colon [:]'));
+      models.push(new TransitionDelimiterModel(TransitionDelimiter.COMMA, 'Comma', 'Comma [,]'));
+      models.push(new TransitionDelimiterModel(TransitionDelimiter.DASH, 'Dash', 'Dash [-]'));
+      models.push(new TransitionDelimiterModel(TransitionDelimiter.EQUAL, 'Equal', 'Equal [=]'));
+      models.push(new TransitionDelimiterModel(TransitionDelimiter.HASH, 'Hash', 'Hash [#]'));
+      models.push(new TransitionDelimiterModel(TransitionDelimiter.MULTI_SPACE, 'MultiSpace', 'Multi Spaces'));
+      models.push(new TransitionDelimiterModel(TransitionDelimiter.PERIOD, 'Period', 'Period [.]'));
+      models.push(new TransitionDelimiterModel(TransitionDelimiter.PIPE, 'Pipe', 'Pipe [|]'));
+      models.push(new TransitionDelimiterModel(TransitionDelimiter.SEMICOLON, 'Semicolon', 'Semicolon [;]'));
+      models.push(new TransitionDelimiterModel(TransitionDelimiter.SLASH, 'Slash', 'Slash [/]'));
+      models.push(new TransitionDelimiterModel(TransitionDelimiter.SPACE, 'Space', 'Space [ ]'));
+      models.push(new TransitionDelimiterModel(TransitionDelimiter.UNDERSCORE, 'Underscore', 'Underscore [_]'));
       TransitionModel.delimiterModels = models;
     }
   }

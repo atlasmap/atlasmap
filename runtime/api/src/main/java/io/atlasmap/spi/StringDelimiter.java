@@ -13,20 +13,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.atlasmap.core;
+package io.atlasmap.spi;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public enum StringDelimiter {
-    SPACE("Space", "\\s"), MULTISPACE("MultiSpace", "\\s+"), COMMA("Comma", ","), COLON("Colon", ":");
+    AMPERSAND("Ampersand", "&", "&"),
+    AT_SIGN("AtSign", "@", "@"),
+    BACKSLASH("Backslash", "\\\\", "\\"),
+    COLON("Colon", ":", ":"),
+    COMMA("Comma", ",", ","),
+    DASH("Dash", "-", "-"),
+    EQUAL("Equal", "=", "="),
+    HASH("Hash", "#", "#"),
+    MULTI_SPACE("MultiSpace", "\\s+", "    "),
+    PERIOD("Period", "\\.", "."),
+    PIPE("Pipe", "\\|", "|"),
+    SEMICOLON("Semicolon", ";", ";"),
+    SLASH("Slash", "/", "/"),
+    SPACE("Space", "\\s", " "),
+    UNDERSCORE("Underscore", "_", "_");
 
     private String name;
+    private String regex;
     private String value;
 
-    StringDelimiter(String name, String value) {
+    StringDelimiter(String name, String regex, String value) {
         this.name = name;
+        this.regex = regex;
         this.value = value;
     }
 
@@ -34,27 +49,34 @@ public enum StringDelimiter {
         return name;
     }
 
+    public String getRegex() {
+        return regex;
+    }
+
     public String getValue() {
         return value;
     }
 
-    public static List<StringDelimiter> getAll() {
-        return Arrays.asList(SPACE, MULTISPACE, COMMA, COLON);
+    public static StringDelimiter fromName(String name) {
+        for (StringDelimiter entry : values()) {
+            if (entry.getName().equals(name)) {
+                return entry;
+            }
+        }
+        return null;
     }
 
-    public static List<String> getAllValues() {
+    public static List<String> getAllRegexes() {
         List<String> values = new ArrayList<String>();
-        List<StringDelimiter> enums = getAll();
-        for (StringDelimiter en : enums) {
-            values.add(en.getValue());
+        for (StringDelimiter en : values()) {
+            values.add(en.getRegex());
         }
         return values;
     }
 
     public static List<String> getAllNames() {
         List<String> names = new ArrayList<String>();
-        List<StringDelimiter> enums = getAll();
-        for (StringDelimiter en : enums) {
+        for (StringDelimiter en : values()) {
             names.add(en.getName());
         }
         return names;
