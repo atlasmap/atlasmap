@@ -411,10 +411,7 @@ export class MappingModel {
       }
     }
     if (mapMode || separateMode || combineMode) {
-      //repeated fields and enums are not selectable in these modes
-      if (field.isInCollection()) {
-        return 'Repeated fields are not valid for this mapping';
-      }
+      //enums are not selectable in these modes
       if (field.enumeration) {
         return 'Enumeration fields are not valid for this mapping';
       }
