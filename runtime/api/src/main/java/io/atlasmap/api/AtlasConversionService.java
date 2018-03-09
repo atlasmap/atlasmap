@@ -75,6 +75,8 @@ public interface AtlasConversionService {
 
     Class<?> boxOrUnboxPrimitive(Class<?> clazz);
 
+    Class<?> boxOrUnboxPrimitive(String clazzName);
+
     Class<?> classFromFieldType(FieldType fieldType);
 
     FieldType fieldTypeFromClass(Class<?> clazz);

@@ -94,7 +94,18 @@ public class TargetValueConverter {
         }
 
         Class<?> targetClazz = null;
-        if (targetClassName != null) {
+        if (targetClassName == null) {
+            if (targetType != null) {
+                targetClazz = conversionService.classFromFieldType(targetType);
+            } else {
+                AtlasUtil.addAudit(session, targetField.getDocId(), String.format(
+                                "Target field doesn't have fieldType nor className: automatic conversion won't work: targetPath=%s",
+                                targetField.getPath()),
+                        targetField.getPath(), AuditStatus.WARN, sourceValue != null ? sourceValue.toString() : null);
+            }
+        } else if (conversionService.isPrimitive(targetClassName)) {
+            targetClazz = conversionService.boxOrUnboxPrimitive(targetClassName);
+        } else {
             try {
                 targetClazz = classLoader.loadClass(targetClassName);
             } catch (ClassNotFoundException e) {
@@ -105,17 +116,19 @@ public class TargetValueConverter {
                 return null;
             }
         }
+
         if (targetClazz != null) {
             targetValue = conversionService.convertType(sourceValue, null, targetClazz, null);
         } else {
             targetValue = sourceValue;
         }
+
         AtlasFieldActionService fieldActionService = session.getAtlasContext().getContextFactory().getFieldActionService();
         try {
             targetValue = fieldActionService.processActions(targetField.getActions(), targetValue, targetType);
             if (targetValue != null) {
                 if (targetClazz != null) {
-                    targetValue = conversionService.convertType(sourceValue, null, targetClazz, null);
+                    targetValue = conversionService.convertType(targetValue, null, targetClazz, null);
                 } else {
                     FieldType conversionInputType = conversionService.fieldTypeFromClass(targetValue.getClass());
                     targetValue = conversionService.convertType(targetValue, conversionInputType, targetType);

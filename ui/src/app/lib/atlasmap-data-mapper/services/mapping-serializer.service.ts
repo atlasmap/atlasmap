@@ -205,7 +205,7 @@ export class MappingSerializer {
       };
       if (field.docDef.type == DocumentType.XML || field.docDef.type == DocumentType.JSON) {
         serializedField['userCreated'] = field.userCreated;
-      } else if (field.docDef.type == DocumentType.JAVA) {
+      } else if (field.docDef.type == DocumentType.JAVA && !field.isPrimitive) {
         serializedField['className'] = field.classIdentifier;
       }
       if (field.isProperty()) {
