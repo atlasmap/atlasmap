@@ -20,9 +20,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Date;
+import java.time.ZonedDateTime;
 
 import org.junit.Test;
 
@@ -36,15 +35,14 @@ public class DateFieldActionsTest {
         AddDays action = new AddDays();
         action.setDays(2);
         assertNull(DateFieldActions.addDays(action, null));
-        LocalDateTime dateTime = LocalDateTime.now();
-        Date origDate = Date.from(dateTime.atZone(ZoneId.systemDefault()).toInstant());
-        Date laterDate = Date.from(dateTime.plusDays(2).atZone(ZoneId.systemDefault()).toInstant());
+        ZonedDateTime origDate = ZonedDateTime.now();
+        ZonedDateTime laterDate = origDate.plusDays(2);
         assertEquals(laterDate, DateFieldActions.addDays(action, origDate));
     }
 
     @Test(expected=IllegalArgumentException.class)
     public void testAddDaysWithNullAction() {
-        DateFieldActions.addDays(null, new Date());
+        DateFieldActions.addDays(null, ZonedDateTime.now());
     }
 
     @Test
@@ -52,15 +50,14 @@ public class DateFieldActionsTest {
         AddSeconds action = new AddSeconds();
         action.setSeconds(2);
         assertNull(DateFieldActions.addSeconds(action, null));
-        LocalDateTime dateTime = LocalDateTime.now();
-        Date origDate = Date.from(dateTime.atZone(ZoneId.systemDefault()).toInstant());
-        Date laterDate = Date.from(dateTime.plusSeconds(2).atZone(ZoneId.systemDefault()).toInstant());
+        ZonedDateTime origDate = ZonedDateTime.now();
+        ZonedDateTime laterDate = origDate.plusSeconds(2);
         assertEquals(laterDate, DateFieldActions.addSeconds(action, origDate));
     }
 
     @Test(expected=IllegalArgumentException.class)
     public void testAddSecondsWithNullAction() {
-        DateFieldActions.addSeconds(null, new Date());
+        DateFieldActions.addSeconds(null, ZonedDateTime.now());
     }
 
     @Test
@@ -81,17 +78,14 @@ public class DateFieldActionsTest {
     @Test
     public void testDayOfWeek() {
         assertNull(DateFieldActions.dayOfWeek(null, null));
-        LocalDate date = LocalDate.of(2017, 12, 14);
-        System.out.println(date);
-        Date origDate = Date.from(date.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
+        ZonedDateTime origDate = LocalDate.of(2017, 12, 14).atStartOfDay(ZoneId.systemDefault());
         assertEquals(Integer.valueOf(4), DateFieldActions.dayOfWeek(null, origDate));
     }
 
     @Test
     public void testDayOfYear() {
         assertNull(DateFieldActions.dayOfYear(null, null));
-        LocalDate date = LocalDate.of(2017, 12, 31);
-        Date origDate = Date.from(date.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
+        ZonedDateTime origDate = LocalDate.of(2017, 12, 31).atStartOfDay(ZoneId.systemDefault());
         assertEquals(Integer.valueOf(365), DateFieldActions.dayOfYear(null, origDate));
     }
 }

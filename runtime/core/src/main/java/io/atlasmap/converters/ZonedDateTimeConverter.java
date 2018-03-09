@@ -54,37 +54,36 @@ public class ZonedDateTimeConverter implements AtlasConverter<ZonedDateTime> {
         Long longValue = getEpochMilli(value);
         if (longValue >= Byte.MIN_VALUE && longValue <= Byte.MAX_VALUE) {
             return longValue.byteValue();
-        } else {
-            throw new AtlasConversionException(
-                    String.format("ZonedDateTime %s is greater than Byte.MAX_VALUE or less than Byte.MIN_VALUE", value));
         }
+        throw new AtlasConversionException(
+                String.format("ZonedDateTime %s is greater than Byte.MAX_VALUE or less than Byte.MIN_VALUE", value));
     }
 
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.DATE_TIME_TZ)
-    public Calendar toCalendar(ZonedDateTime value) throws AtlasConversionException {
+    public Calendar toCalendar(ZonedDateTime value) {
         return value != null ? GregorianCalendar.from(value) : null;
     }
 
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.DATE_TIME,
             concerns = AtlasConversionConcern.TIMEZONE)
-    public Date toDate(ZonedDateTime value) throws AtlasConversionException {
+    public Date toDate(ZonedDateTime value) {
         return value != null ? Date.from(value.toInstant()) : null;
     }
 
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.DOUBLE,
             concerns = AtlasConversionConcern.TIMEZONE)
-    public Double toDouble(ZonedDateTime value) throws AtlasConversionException {
+    public Double toDouble(ZonedDateTime value) {
         return value != null ? getEpochMilli(value).doubleValue() : null;
     }
 
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.FLOAT,
             concerns = AtlasConversionConcern.TIMEZONE)
-    public Float toFloat(ZonedDateTime value) throws AtlasConversionException {
+    public Float toFloat(ZonedDateTime value) {
         return value != null ? getEpochMilli(value).floatValue() : null;
     }
 
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.DATE_TIME_TZ)
-    public GregorianCalendar toGregorianCalendar(ZonedDateTime value) throws AtlasConversionException {
+    public GregorianCalendar toGregorianCalendar(ZonedDateTime value) {
         return value != null ? GregorianCalendar.from(value) : null;
     }
 
@@ -119,7 +118,7 @@ public class ZonedDateTimeConverter implements AtlasConverter<ZonedDateTime> {
 
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.LONG,
             concerns = AtlasConversionConcern.TIMEZONE)
-    public Long toLong(ZonedDateTime value) throws AtlasConversionException {
+    public Long toLong(ZonedDateTime value) {
         return value != null ? getEpochMilli(value) : null;
     }
 
@@ -138,7 +137,7 @@ public class ZonedDateTimeConverter implements AtlasConverter<ZonedDateTime> {
     }
 
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.STRING)
-    public String toString(ZonedDateTime value) throws AtlasConversionException {
+    public String toString(ZonedDateTime value) {
         return value != null ? value.toString() : null;
     }
 

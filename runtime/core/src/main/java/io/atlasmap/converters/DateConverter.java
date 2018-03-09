@@ -60,20 +60,20 @@ public class DateConverter implements AtlasConverter<Date> {
     }
 
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME, targetType = FieldType.DATE_TIME_TZ)
-    public Calendar toCalendar(Date date) throws AtlasConversionException {
+    public Calendar toCalendar(Date date) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(date.getTime());
         return calendar;
     }
 
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME, targetType = FieldType.DOUBLE)
-    public Double toDouble(Date value) throws AtlasConversionException {
-        return value != null ? new Long(value.getTime()).doubleValue() : null;
+    public Double toDouble(Date value) {
+        return value != null ? Double.valueOf(value.getTime()) : null;
     }
 
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME, targetType = FieldType.FLOAT)
-    public Float toFloat(Date value) throws AtlasConversionException {
-        return value != null ? new Long(value.getTime()).floatValue() : null;
+    public Float toFloat(Date value) {
+        return value != null ? Float.valueOf(value.getTime()) : null;
     }
 
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME, targetType = FieldType.INTEGER,
@@ -91,36 +91,32 @@ public class DateConverter implements AtlasConverter<Date> {
     }
 
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME, targetType = FieldType.DATE_TIME_TZ)
-    public GregorianCalendar toGregorianCalendar(Date date, String sourceFormat, String targetFormat)
-            throws AtlasConversionException {
+    public GregorianCalendar toGregorianCalendar(Date date, String sourceFormat, String targetFormat) {
         return DateTimeHelper.convertDateToGregorianCalendar(date, sourceFormat);
     }
 
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME, targetType = FieldType.DATE)
-    public LocalDate toLocalDate(Date date, String sourceFormat, String targetFormat)
-            throws AtlasConversionException {
+    public LocalDate toLocalDate(Date date, String sourceFormat, String targetFormat) {
         return DateTimeHelper.convertDateToLocalDate(date, targetFormat);
     }
 
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME, targetType = FieldType.DATE_TIME)
-    public LocalDateTime toLocalDateTime(Date date, String sourceFormat, String targetFormat)
-            throws AtlasConversionException {
+    public LocalDateTime toLocalDateTime(Date date, String sourceFormat, String targetFormat) {
         return DateTimeHelper.convertDateToLocalDateTime(date, targetFormat);
     }
 
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME, targetType = FieldType.TIME)
-    public LocalTime toLocalTime(Date date, String sourceFormat, String targetFormat)
-            throws AtlasConversionException {
+    public LocalTime toLocalTime(Date date, String sourceFormat, String targetFormat) {
         return DateTimeHelper.convertDateToLocalTime(date, targetFormat);
     }
 
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME, targetType = FieldType.LONG)
-    public Long toLong(Date date) throws AtlasConversionException {
+    public Long toLong(Date date) {
         return date.toInstant().toEpochMilli();
     }
 
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME, targetType = FieldType.NUMBER)
-    public Number toNumber(Date date) throws AtlasConversionException {
+    public Number toNumber(Date date) {
         return date.toInstant().toEpochMilli();
     }
 
@@ -139,32 +135,34 @@ public class DateConverter implements AtlasConverter<Date> {
     }
 
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME, targetType = FieldType.DATE)
-    public java.sql.Date toSqlDate(Date date, String sourceFormat, String targetFormat)
-            throws AtlasConversionException {
+    public java.sql.Date toSqlDate(Date date, String sourceFormat, String targetFormat) {
         return DateTimeHelper.convertDateToSqlDate(date, sourceFormat);
     }
 
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME, targetType = FieldType.TIME)
-    public Time toSqlTime(Date date, String sourceFormat, String targetFormat) throws AtlasConversionException {
+    public Time toSqlTime(Date date, String sourceFormat, String targetFormat) {
         return DateTimeHelper.convertDateToTime(date, targetFormat);
     }
 
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME, targetType = FieldType.STRING)
-    public String toString(Date date) throws AtlasConversionException {
+    public String toString(Date date) {
         // by default Instant.toString returns an ISO-8601 representation of the instant
         return date.toInstant().toString();
 
     }
 
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME, targetType = FieldType.DATE_TIME)
-    public Timestamp toSqlTimestamp(Date date) throws AtlasConversionException {
+    public Timestamp toSqlTimestamp(Date date) {
         return Timestamp.from(date.toInstant());
     }
 
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME, targetType = FieldType.DATE_TIME_TZ)
-    public ZonedDateTime toZonedDateTime(Date date, String sourceFromat, String targetFormat)
-            throws AtlasConversionException {
-        return DateTimeHelper.convertDateToZonedDateTime(date, targetFormat);
+    public ZonedDateTime toZonedDateTime(Date date, String sourceFormat, String targetFormat) {
+        return DateTimeHelper.toZonedDateTime(date, sourceFormat == null ? targetFormat : sourceFormat);
     }
 
+    @AtlasConversionInfo(sourceType = FieldType.DATE_TIME, targetType = FieldType.DATE_TIME_TZ)
+    public ZonedDateTime toZonedDateTime(Date date) {
+        return DateTimeHelper.toZonedDateTime(date, null);
+    }
 }

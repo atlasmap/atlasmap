@@ -39,30 +39,30 @@ public class DateConverterTest {
     private DateConverter dateConverter = new DateConverter();
 
     @Test
-    public void convertToZonedDateTime() throws Exception {
-        ZonedDateTime zonedDateTime = DateTimeHelper.convertDateToZonedDateTime(new Date(), null);
+    public void convertToZonedDateTime() {
+        ZonedDateTime zonedDateTime = DateTimeHelper.toZonedDateTime(new Date(), null);
         assertNotNull(zonedDateTime);
         assertThat(zonedDateTime, instanceOf(ZonedDateTime.class));
         assertTrue(zonedDateTime.getZone().getId().equals(ZoneId.systemDefault().getId()));
     }
 
     @Test
-    public void convertToZonedDateTimeWithZoneId() throws Exception {
-        ZonedDateTime zonedDateTime = DateTimeHelper.convertDateToZonedDateTime(new Date(), "America/New_York");
+    public void convertToZonedDateTimeWithZoneId() {
+        ZonedDateTime zonedDateTime = DateTimeHelper.toZonedDateTime(new Date(), "America/New_York");
         assertNotNull(zonedDateTime);
         assertThat(zonedDateTime, instanceOf(ZonedDateTime.class));
         assertTrue(zonedDateTime.getZone().getId().equals("America/New_York"));
     }
 
     @Test
-    public void convertToLocalDateTime() throws Exception {
+    public void convertToLocalDateTime() {
         LocalDateTime localDateTime = DateTimeHelper.convertDateToLocalDateTime(new Date(), null);
         assertNotNull(localDateTime);
         assertThat(localDateTime, instanceOf(LocalDateTime.class));
     }
 
     @Test
-    public void convertToLocalDateTimeWithZoneId() throws Exception {
+    public void convertToLocalDateTimeWithZoneId() {
         LocalDateTime localDateTime = DateTimeHelper.convertDateToLocalDateTime(new Date(), "America/New_York");
         assertNotNull(localDateTime);
         assertThat(localDateTime, instanceOf(LocalDateTime.class));
@@ -70,109 +70,109 @@ public class DateConverterTest {
     }
 
     @Test
-    public void convertFromLocalDateTime() throws Exception {
+    public void convertFromLocalDateTime() {
         Date date = DateTimeHelper.convertLocalDateTimeToDate(LocalDateTime.now(), null);
         assertNotNull(date);
         assertEquals(date.getTime(), date.toInstant().toEpochMilli());
     }
 
     @Test
-    public void convertToLocalTime() throws Exception {
+    public void convertToLocalTime() {
         LocalTime localTime = DateTimeHelper.convertDateToLocalTime(new Date(), null);
         assertNotNull(localTime);
         assertThat(localTime, instanceOf(LocalTime.class));
     }
 
     @Test
-    public void convertToLocalTimeWithZoneId() throws Exception {
+    public void convertToLocalTimeWithZoneId() {
         LocalTime localTime = DateTimeHelper.convertDateToLocalTime(new Date(), "America/New_York");
         assertNotNull(localTime);
         assertThat(localTime, instanceOf(LocalTime.class));
     }
 
     @Test
-    public void convertFromLocalTime() throws Exception {
+    public void convertFromLocalTime() {
         Date date = DateTimeHelper.convertLocalTimeToDate(LocalTime.now(), null);
         assertNotNull(date);
     }
 
     @Test
-    public void convertToLocalDate() throws Exception {
+    public void convertToLocalDate() {
         LocalDate localDate = DateTimeHelper.convertDateToLocalDate(new Date(), null);
         assertNotNull(localDate);
         assertThat(localDate, instanceOf(LocalDate.class));
     }
 
     @Test
-    public void convertToLocalDateWithZoneId() throws Exception {
+    public void convertToLocalDateWithZoneId() {
         LocalDate localDate = DateTimeHelper.convertDateToLocalDate(new Date(), "America/New_York");
         assertNotNull(localDate);
         assertThat(localDate, instanceOf(LocalDate.class));
     }
 
     @Test
-    public void convertToTimestamp() throws Exception {
+    public void convertToTimestamp() {
         Timestamp timestamp = dateConverter.toSqlTimestamp(new Date());
         assertNotNull(timestamp);
         assertThat(timestamp, instanceOf(Timestamp.class));
     }
 
     @Test
-    public void convertToTime() throws Exception {
+    public void convertToTime() {
         Time time = DateTimeHelper.convertDateToTime(new Date(), null);
         assertNotNull(time);
         assertThat(time, instanceOf(Time.class));
     }
 
     @Test
-    public void convertToTimeWithZoneId() throws Exception {
+    public void convertToTimeWithZoneId() {
         Time time = DateTimeHelper.convertDateToTime(new Date(), "America/New_York");
         assertNotNull(time);
         assertThat(time, instanceOf(Time.class));
     }
 
     @Test
-    public void convertFromTime() throws Exception {
+    public void convertFromTime() {
         Date date = DateTimeHelper.convertSqlTimeToDate(Time.valueOf(LocalTime.now()), null);
         assertNotNull(date);
     }
 
     @Test
-    public void convertFromTimeWithZoneId() throws Exception {
+    public void convertFromTimeWithZoneId() {
         Date date = DateTimeHelper.convertSqlTimeToDate(Time.valueOf(LocalTime.now()), "America/New_York");
         assertNotNull(date);
     }
 
     @Test
-    public void convertToSqlDate() throws Exception {
+    public void convertToSqlDate() {
         java.sql.Date date = DateTimeHelper.convertDateToSqlDate(new Date(), null);
         assertNotNull(date);
         assertThat(date, instanceOf(java.sql.Date.class));
     }
 
     @Test
-    public void convertFromSqlDate() throws Exception {
+    public void convertFromSqlDate() {
         Date date = DateTimeHelper.convertSqlDateToDate(java.sql.Date.valueOf(LocalDate.now()), null);
         assertNotNull(date);
         assertThat(date, instanceOf(Date.class));
     }
 
     @Test
-    public void convertFromSqlDateWithZoneId() throws Exception {
+    public void convertFromSqlDateWithZoneId() {
         Date date = DateTimeHelper.convertSqlDateToDate(java.sql.Date.valueOf(LocalDate.now()), "America/New_York");
         assertNotNull(date);
         assertThat(date, instanceOf(Date.class));
     }
 
     @Test
-    public void convertToGregorianCalendar() throws Exception {
+    public void convertToGregorianCalendar() {
         GregorianCalendar gregorianCalendar = DateTimeHelper.convertDateToGregorianCalendar(new Date(), null);
         assertNotNull(gregorianCalendar);
         assertThat(gregorianCalendar, instanceOf(GregorianCalendar.class));
     }
 
     @Test
-    public void convertToGregorianCalendarWithZoneId() throws Exception {
+    public void convertToGregorianCalendarWithZoneId() {
         GregorianCalendar gregorianCalendar = DateTimeHelper.convertDateToGregorianCalendar(new Date(), "America/New_York");
         assertNotNull(gregorianCalendar);
         assertThat(gregorianCalendar, instanceOf(GregorianCalendar.class));
@@ -180,26 +180,25 @@ public class DateConverterTest {
     }
 
     @Test
-    public void convertToCalendar() throws Exception {
+    public void convertToCalendar() {
         Calendar calendar = dateConverter.toCalendar(new Date());
         assertNotNull(calendar);
         assertThat(calendar, instanceOf(GregorianCalendar.class));
     }
 
     @Test
-    public void convertToString() throws Exception {
+    public void convertToString() {
         String dateString = dateConverter.toString(new Date());
         assertNotNull(dateString);
         assertThat(dateString, instanceOf(String.class));
     }
 
     @Test
-    public void convertToLong() throws Exception {
+    public void convertToLong() {
         Date now = new Date();
         Long dateAsLong = dateConverter.toLong(now);
         assertNotNull(dateAsLong);
         assertThat(dateAsLong, instanceOf(Long.class));
         assertTrue(now.getTime() == dateAsLong);
     }
-
 }

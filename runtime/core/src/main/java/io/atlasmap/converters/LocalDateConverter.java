@@ -53,10 +53,9 @@ public class LocalDateConverter implements AtlasConverter<LocalDate> {
         Long longValue = getStartEpochMilli(value);
         if (longValue >= Byte.MIN_VALUE && longValue <= Byte.MAX_VALUE) {
             return longValue.byteValue();
-        } else {
-            throw new AtlasConversionException(
-                    String.format("LocalDate %s is greater than Byte.MAX_VALUE or less than Byte.MIN_VALUE", value));
         }
+        throw new AtlasConversionException(
+                String.format("LocalDate %s is greater than Byte.MAX_VALUE or less than Byte.MIN_VALUE", value));
     }
 
     @AtlasConversionInfo(sourceType = FieldType.DATE, targetType = FieldType.DATE_TIME_TZ)
@@ -65,17 +64,17 @@ public class LocalDateConverter implements AtlasConverter<LocalDate> {
     }
 
     @AtlasConversionInfo(sourceType = FieldType.DATE, targetType = FieldType.DATE_TIME)
-    public Date toDate(LocalDate value) throws AtlasConversionException {
+    public Date toDate(LocalDate value) {
         return value != null ? new Date(getStartEpochMilli(value)) : null;
     }
 
     @AtlasConversionInfo(sourceType = FieldType.DATE, targetType = FieldType.DOUBLE)
-    public Double toDouble(LocalDate value) throws AtlasConversionException {
+    public Double toDouble(LocalDate value) {
         return value != null ? getStartEpochMilli(value).doubleValue() : null;
     }
 
     @AtlasConversionInfo(sourceType = FieldType.DATE, targetType = FieldType.FLOAT)
-    public Float toFloat(LocalDate value) throws AtlasConversionException {
+    public Float toFloat(LocalDate value) {
         return value != null ? getStartEpochMilli(value).floatValue() : null;
     }
 
@@ -114,7 +113,7 @@ public class LocalDateConverter implements AtlasConverter<LocalDate> {
     }
 
     @AtlasConversionInfo(sourceType = FieldType.DATE, targetType = FieldType.LONG)
-    public Long toLong(LocalDate value) throws AtlasConversionException {
+    public Long toLong(LocalDate value) {
         return value != null ? getStartEpochMilli(value) : null;
     }
 
@@ -133,7 +132,7 @@ public class LocalDateConverter implements AtlasConverter<LocalDate> {
     }
 
     @AtlasConversionInfo(sourceType = FieldType.DATE, targetType = FieldType.STRING)
-    public String toString(LocalDate value) throws AtlasConversionException {
+    public String toString(LocalDate value) {
         return value != null ? value.toString() : null;
     }
 
@@ -155,6 +154,11 @@ public class LocalDateConverter implements AtlasConverter<LocalDate> {
     @AtlasConversionInfo(sourceType = FieldType.DATE, targetType = FieldType.DATE_TIME_TZ)
     public ZonedDateTime toZonedDateTime(LocalDate value) {
         return value != null ? value.atStartOfDay(ZoneId.systemDefault()) : null;
+    }
+
+    @AtlasConversionInfo(sourceType = FieldType.DATE, targetType = FieldType.DATE_TIME_TZ)
+    public ZonedDateTime toZonedDateTime(LocalDate date, String sourceFormat, String targetFormat) {
+        return date == null ? null : DateTimeHelper.toZonedDateTime(date, sourceFormat == null ? targetFormat : sourceFormat);
     }
 
     private Long getStartEpochMilli(LocalDate value) {
