@@ -30,6 +30,7 @@ import io.atlasmap.spi.AtlasModuleDetail;
 import io.atlasmap.spi.AtlasModuleMode;
 import io.atlasmap.v2.ConstantField;
 import io.atlasmap.v2.Field;
+import io.atlasmap.v2.FieldType;
 
 @AtlasModuleDetail(name = "ConstantModule", uri = "", modes = { "SOURCE" }, dataFormats = {}, configPackages = {})
 public class ConstantModule implements AtlasModule {
@@ -61,9 +62,15 @@ public class ConstantModule implements AtlasModule {
     @Override
     public void processSourceFieldMapping(AtlasInternalSession session) throws AtlasException {
         Field sourceField = session.head().getSourceField();
-        if (sourceField instanceof ConstantField
-                && (sourceField.getFieldType() == null && sourceField.getValue() != null)) {
-            sourceField.setFieldType(getConversionService().fieldTypeFromClass(sourceField.getValue().getClass()));
+        if (!(sourceField instanceof ConstantField)) {
+            return;
+        }
+        if (getConversionService() != null && sourceField.getFieldType() != null
+                && sourceField.getValue() != null) {
+            sourceField.setValue(getConversionService().convertType(sourceField.getValue(),
+                    null, getConversionService().classFromFieldType(sourceField.getFieldType()), null));
+        } else if (sourceField.getFieldType() == null) {
+            sourceField.setFieldType(FieldType.STRING);
         }
         if (LOG.isDebugEnabled()) {
             LOG.debug("Processed source ConstantField sPath=" + sourceField.getPath() + " sV="
