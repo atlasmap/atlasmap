@@ -37,6 +37,8 @@ public abstract class AtlasMappingBaseTest {
             buf.append(a.getStatus());
             buf.append(", message=");
             buf.append(a.getMessage());
+            buf.append(", path=");
+            buf.append(a.getPath());
             buf.append("], ");
         }
         return buf.toString();
