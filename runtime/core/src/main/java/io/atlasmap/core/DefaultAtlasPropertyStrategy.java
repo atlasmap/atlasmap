@@ -42,9 +42,11 @@ public class DefaultAtlasPropertyStrategy implements AtlasPropertyStrategy {
     private boolean mappingDefinedPropertiesEnabled = true;
     private boolean runtimePropertiesEnabled = true;
 
-    private List<AtlasPropertyType> propertyOrder = Arrays.asList(AtlasPropertyType.ENVIRONMENT_VARIABLES,
-            AtlasPropertyType.JAVA_SYSTEM_PROPERTIES, AtlasPropertyType.MAPPING_DEFINED_PROPERTIES,
-            AtlasPropertyType.RUNTIME_PROPERTIES);
+    private List<AtlasPropertyType> propertyOrder = Arrays.asList(
+            AtlasPropertyType.RUNTIME_PROPERTIES,
+            AtlasPropertyType.JAVA_SYSTEM_PROPERTIES,
+            AtlasPropertyType.ENVIRONMENT_VARIABLES,
+            AtlasPropertyType.MAPPING_DEFINED_PROPERTIES);
 
     private AtlasConversionService atlasConversionService = null;
 
@@ -61,17 +63,25 @@ public class DefaultAtlasPropertyStrategy implements AtlasPropertyStrategy {
 
         for (AtlasPropertyType propType : getPropertyOrder()) {
             switch (propType) {
-            case ENVIRONMENT_VARIABLES:
-                processEnvironmentVariable(propertyField);
+            case RUNTIME_PROPERTIES:
+                if (processRuntimeProperties(propertyField, runtimeProperties)) {
+                    return;
+                }
                 break;
             case JAVA_SYSTEM_PROPERTIES:
-                processJavaSystemProperty(propertyField);
+                if (processJavaSystemProperty(propertyField)) {
+                    return;
+                }
+                break;
+            case ENVIRONMENT_VARIABLES:
+                if (processEnvironmentVariable(propertyField)) {
+                    return;
+                }
                 break;
             case MAPPING_DEFINED_PROPERTIES:
-                processMappingDefinedProperties(propertyField, atlasMapping);
-                break;
-            case RUNTIME_PROPERTIES:
-                processRuntimeProperties(propertyField, runtimeProperties);
+                if (processMappingDefinedProperties(propertyField, atlasMapping)) {
+                    return;
+                }
                 break;
             default:
                 throw new AtlasUnsupportedException(
@@ -81,57 +91,87 @@ public class DefaultAtlasPropertyStrategy implements AtlasPropertyStrategy {
         }
     }
 
-    protected void processEnvironmentVariable(PropertyField propertyField) {
+    protected boolean processEnvironmentVariable(PropertyField propertyField)
+        throws AtlasConversionException {
 
         if (!isEnvironmentPropertiesEnabled()) {
-            return;
+            return false;
         }
 
         try {
             if (System.getenv(propertyField.getName()) != null) {
-                propertyField.setValue(System.getenv(propertyField.getName()));
-                if (LOG.isDebugEnabled()) {
-                    LOG.debug(String.format("Assigned environment variable for property field name=%s value=%s",
-                            propertyField.getName(), propertyField.getValue()));
+                Object propertyValue = System.getenv(propertyField.getName());
+                if (getAtlasConversionService() != null && propertyField.getFieldType() != null) {
+                    propertyField.setValue(getAtlasConversionService().convertType(propertyValue,
+                            null, atlasConversionService.classFromFieldType(propertyField.getFieldType()), null));
+                    if (LOG.isDebugEnabled()) {
+                        LOG.debug(String.format(
+                                "Assigned environment variable property for property field name=%s value=%s",
+                                propertyField.getName(), propertyField.getValue()));
+                    }
+                } else {
+                    propertyField.setValue(propertyValue);
+                    if (LOG.isDebugEnabled()) {
+                        LOG.debug(String.format(
+                                "Assigned environment variable for property field name=%s value=%s",
+                                propertyField.getName(), propertyField.getValue()));
+                    }
                 }
+                return true;
             }
         } catch (SecurityException e) {
             LOG.error(String.format("SecurityException while processing environment variable for propertyField=%s",
                     AtlasModelFactory.toString(propertyField)), e);
         }
+        return false;
     }
 
-    protected void processJavaSystemProperty(PropertyField propertyField) {
+    protected boolean processJavaSystemProperty(PropertyField propertyField)
+        throws AtlasConversionException {
 
         if (!isSystemPropertiesEnabled()) {
-            return;
+            return false;
         }
 
         try {
             if (System.getProperty(propertyField.getName()) != null) {
-                propertyField.setValue(System.getProperty(propertyField.getName()));
-                if (LOG.isDebugEnabled()) {
-                    LOG.debug(String.format("Assigned Java system property for property field name=%s value=%s",
-                            propertyField.getName(), propertyField.getValue()));
+                Object propertyValue = System.getProperty(propertyField.getName());
+                if (getAtlasConversionService() != null && propertyField.getFieldType() != null) {
+                    propertyField.setValue(getAtlasConversionService().convertType(propertyValue,
+                            null, atlasConversionService.classFromFieldType(propertyField.getFieldType()), null));
+                    if (LOG.isDebugEnabled()) {
+                        LOG.debug(String.format(
+                                "Assigned Java system property for property field name=%s value=%s",
+                                propertyField.getName(), propertyField.getValue()));
+                    }
+                } else {
+                    propertyField.setValue(propertyValue);
+                    if (LOG.isDebugEnabled()) {
+                        LOG.debug(String.format(
+                                "Assigned Java system property for property field name=%s value=%s",
+                                propertyField.getName(), propertyField.getValue()));
+                    }
                 }
+                return true;
             }
         } catch (SecurityException e) {
             LOG.error(String.format("SecurityException while processing Java system property for propertyField=%s",
                     AtlasModelFactory.toString(propertyField)), e);
         }
+        return false;
     }
 
-    protected void processMappingDefinedProperties(PropertyField propertyField, AtlasMapping atlasMapping)
+    protected boolean processMappingDefinedProperties(PropertyField propertyField, AtlasMapping atlasMapping)
             throws AtlasConversionException {
 
         if (!isMappingDefinedPropertiesEnabled()) {
-            return;
+            return false;
         }
 
         if (atlasMapping == null || atlasMapping.getProperties() == null
                 || atlasMapping.getProperties().getProperty() == null
                 || atlasMapping.getProperties().getProperty().isEmpty()) {
-            return;
+            return false;
         }
 
         for (Property prop : atlasMapping.getProperties().getProperty()) {
@@ -146,7 +186,6 @@ public class DefaultAtlasPropertyStrategy implements AtlasPropertyStrategy {
                                 String.format("Assigned Mapping defined property for property field name=%s value=%s",
                                         propertyField.getName(), propertyField.getValue()));
                     }
-                    return;
                 } else {
                     propertyField.setValue(prop.getValue());
                     if (LOG.isDebugEnabled()) {
@@ -154,46 +193,42 @@ public class DefaultAtlasPropertyStrategy implements AtlasPropertyStrategy {
                                 String.format("Assigned Mapping defined property for property field name=%s value=%s",
                                         propertyField.getName(), propertyField.getValue()));
                     }
-                    return;
                 }
+                return true;
             }
         }
+        return false;
     }
 
-    protected void processRuntimeProperties(PropertyField propertyField, Map<String, Object> runtimeProperties)
+    protected boolean processRuntimeProperties(PropertyField propertyField, Map<String, Object> runtimeProperties)
             throws AtlasConversionException {
 
-        if (!isRuntimePropertiesEnabled()) {
-            return;
+        if (!isRuntimePropertiesEnabled() || runtimeProperties == null || runtimeProperties.isEmpty()) {
+            return false;
         }
 
-        if (runtimeProperties == null || runtimeProperties.isEmpty()) {
-            return;
+        String key = propertyField.getName();
+        if (key == null || key.isEmpty() || !runtimeProperties.containsKey(key)) {
+            return false;
         }
 
-        for (String key : runtimeProperties.keySet()) {
-            if (propertyField.getName().equals(key)) {
-                if (getAtlasConversionService() != null && propertyField.getFieldType() != null) {
-                    propertyField.setValue(getAtlasConversionService().convertType(runtimeProperties.get(key),
-                            getAtlasConversionService().fieldTypeFromClass(runtimeProperties.get(key).getClass()),
-                            propertyField.getFieldType()));
-                    if (LOG.isDebugEnabled()) {
-                        LOG.debug(
-                                String.format("Assigned Runtime defined property for property field name=%s value=%s",
-                                        propertyField.getName(), propertyField.getValue()));
-                    }
-                    return;
-                } else {
-                    propertyField.setValue(runtimeProperties.get(key));
-                    if (LOG.isDebugEnabled()) {
-                        LOG.debug(
-                                String.format("Assigned Runtime defined property for property field name=%s value=%s",
-                                        propertyField.getName(), propertyField.getValue()));
-                    }
-                    return;
-                }
+        if (getAtlasConversionService() != null && propertyField.getFieldType() != null) {
+            propertyField.setValue(getAtlasConversionService().convertType(runtimeProperties.get(key),
+                    null, atlasConversionService.classFromFieldType(propertyField.getFieldType()), null));
+            if (LOG.isDebugEnabled()) {
+                LOG.debug(String.format(
+                        "Assigned Runtime defined property for property field name=%s value=%s",
+                        propertyField.getName(), propertyField.getValue()));
+            }
+        } else {
+            propertyField.setValue(runtimeProperties.get(key));
+            if (LOG.isDebugEnabled()) {
+                LOG.debug(String.format(
+                        "Assigned Runtime defined property for property field name=%s value=%s",
+                        propertyField.getName(), propertyField.getValue()));
             }
         }
+        return true;
     }
 
     public void setPropertyOrderValue(List<String> propertyValues) {
