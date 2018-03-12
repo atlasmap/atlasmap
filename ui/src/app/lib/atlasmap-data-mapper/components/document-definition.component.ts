@@ -184,11 +184,29 @@ export class DocumentDefinitionComponent implements OnInit {
     this.modalWindow.nestedComponentType = isProperty ? PropertyFieldEditComponent
       : (isConstant ? ConstantFieldEditComponent : FieldEditComponent);
     this.modalWindow.okButtonHandler = (mw: ModalWindowComponent) => {
+      let candidateField: Field = null;
+
       if (isProperty) {
         const propertyComponent = mw.nestedComponent as PropertyFieldEditComponent;
+
+        // check if field name already exists in docDef
+        candidateField = propertyComponent.getField();
+        if (docDef.fieldExists(candidateField, DocumentType.PROPERTY)) {
+            this.cfg.errorService.error("Property name '" + candidateField.getFieldLabel(false, false) +
+              "' already exists.  Please select a unique name.", '');
+            return;
+        }
         docDef.addField(propertyComponent.getField());
       } else if (isConstant) {
         const constantComponent = mw.nestedComponent as ConstantFieldEditComponent;
+
+        // check if field name already exists in docDef
+        candidateField = constantComponent.getField();
+        if (docDef.fieldExists(candidateField, DocumentType.CONSTANT)) {
+            this.cfg.errorService.error("Constant '" + candidateField.getFieldLabel(false, false) +
+              "' already exists.", '');
+            return;
+        }
         docDef.addField(constantComponent.getField());
       } else {
         const fieldComponent = mw.nestedComponent as FieldEditComponent;
