@@ -121,7 +121,8 @@ public class XmlModule extends BaseAtlasModule {
         XmlNamespaces xmlNs = null;
         String template = null;
         for (DataSource ds : session.getMapping().getDataSource()) {
-            if (DataSourceType.TARGET.equals(ds.getDataSourceType()) && ds instanceof XmlDataSource) {
+            if (DataSourceType.TARGET.equals(ds.getDataSourceType()) && ds instanceof XmlDataSource
+                    && (ds.getId() == null || ds.getId().equals(getDocId()))) {
                 xmlNs = ((XmlDataSource) ds).getXmlNamespaces();
                 template = ((XmlDataSource) ds).getTemplate();
             }
