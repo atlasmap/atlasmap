@@ -16,8 +16,11 @@
 package io.atlasmap.converters;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Date;
 
 import org.junit.Test;
@@ -27,9 +30,22 @@ public class LocalDateConverterTest {
     private LocalDateConverter converter = new LocalDateConverter();
 
     @Test
-    public void toDate() throws Exception {
+    public void toDate() {
         Date date = converter.toDate(LocalDate.now());
         assertNotNull(date);
     }
 
+    @Test
+    public void toZonedDateTime() {
+        ZonedDateTime zonedDateTime = converter.toZonedDateTime(LocalDate.now());
+        assertNotNull(zonedDateTime);
+        assertTrue(zonedDateTime.getZone().getId().equals(ZoneId.systemDefault().getId()));
+    }
+
+    @Test
+    public void toZonedDateTimeWithZoneId() {
+        ZonedDateTime zonedDateTime = DateTimeHelper.toZonedDateTime(new Date(), "America/New_York");
+        assertNotNull(zonedDateTime);
+        assertTrue(zonedDateTime.getZone().getId().equals("America/New_York"));
+    }
 }

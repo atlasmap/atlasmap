@@ -17,6 +17,7 @@ package io.atlasmap.converters;
 
 import static org.junit.Assert.assertNotNull;
 
+import java.time.ZonedDateTime;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -27,9 +28,14 @@ public class CalendarConverterTest {
     private CalendarConverter converter = new CalendarConverter();
 
     @Test
-    public void convertFromCalendar() throws Exception {
+    public void toDate() {
         Date date = converter.toDate(Calendar.getInstance());
         assertNotNull(date);
     }
 
+    @Test
+    public void toZonedDateTime() {
+        ZonedDateTime date = converter.toZonedDateTime(Calendar.getInstance());
+        assertNotNull(date);
+    }
 }

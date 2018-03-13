@@ -28,12 +28,10 @@ public class ZonedDateTimeConverterTest {
     private ZonedDateTimeConverter converter = new ZonedDateTimeConverter();
 
     @Test
-    public void toDate() throws Exception {
+    public void toDate() {
         ZonedDateTime now = ZonedDateTime.now();
         Date date = converter.toDate(now);
         assertNotNull(date);
         assertEquals(date.getTime(), now.toInstant().toEpochMilli());
     }
-
-
 }

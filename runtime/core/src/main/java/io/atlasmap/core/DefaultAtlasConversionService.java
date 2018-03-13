@@ -24,6 +24,7 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -131,9 +132,8 @@ public class DefaultAtlasConversionService implements AtlasConversionService {
 
         if (sourceClass != null && targetClass != null) {
             return findMatchingConverter(sourceClass.getCanonicalName(), targetClass.getCanonicalName());
-        } else {
-            return Optional.empty();
         }
+        return Optional.empty();
     }
 
     @Override
@@ -172,7 +172,7 @@ public class DefaultAtlasConversionService implements AtlasConversionService {
             Class<?> klass = atlasConverter.getClass();
             // collect all the specific conversion methods on the class
             while (klass != Object.class) {
-                final List<Method> allMethods = new ArrayList<Method>(Arrays.asList(klass.getDeclaredMethods()));
+                final List<Method> allMethods = new ArrayList<>(Arrays.asList(klass.getDeclaredMethods()));
                 for (final Method method : allMethods) {
                     // we filter out methods which aren't annotated @AtlasconversionInfo and have to
                     // also filter out methods which are synthetic methods to avoid duplicates
@@ -280,9 +280,8 @@ public class DefaultAtlasConversionService implements AtlasConversionService {
         }
         if (isAssignableFieldType(origSourceType, targetType)) {
             return sourceValue;
-        } else {
-            return convertType(sourceValue, null, classFromFieldType(targetType), null);
         }
+        return convertType(sourceValue, null, classFromFieldType(targetType), null);
     }
 
     @Override
@@ -316,16 +315,14 @@ public class DefaultAtlasConversionService implements AtlasConversionService {
                 Object target = methodHolder.staticMethod ? null : methodHolder.converter;
                 if (methodHolder.containsFormat) {
                     return methodHolder.method.invoke(target, sourceValue, sourceFormat, targetFormat);
-                } else {
-                    return methodHolder.method.invoke(target, sourceValue);
                 }
+                return methodHolder.method.invoke(target, sourceValue);
             } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
                 throw new AtlasConversionException("Invoking type convertor failed", e);
             }
-        } else {
-            throw new AtlasConversionException("Type Conversion is not supported for sT="
-                    + sourceValue.getClass().getCanonicalName() + " tT=" + targetType.getCanonicalName());
         }
+        throw new AtlasConversionException("Type Conversion is not supported for sT="
+                + sourceValue.getClass().getCanonicalName() + " tT=" + targetType.getCanonicalName());
     }
 
     @Override
@@ -515,9 +512,7 @@ public class DefaultAtlasConversionService implements AtlasConversionService {
         case DATE:
             return java.time.LocalDate.class;
         case DATE_TIME:
-            return java.util.Date.class;
-            // TODO do we prefer java.time.* at some point? - https://github.com/atlasmap/atlasmap/issues/312
-            // return java.time.LocalDateTime.class;
+            return Date.class;
         case DATE_TZ:
         case TIME_TZ:
         case DATE_TIME_TZ:
@@ -549,6 +544,7 @@ public class DefaultAtlasConversionService implements AtlasConversionService {
         }
     }
 
+    @Override
     public Boolean isAssignableFieldType(FieldType source, FieldType target) {
         if (source == null || target == null) {
             return Boolean.FALSE;

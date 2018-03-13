@@ -21,64 +21,73 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import io.atlasmap.api.AtlasConversionException;
-
 public class DateTimeHelper {
 
-    public static GregorianCalendar convertDateToGregorianCalendar(Date date, String timeZone) throws AtlasConversionException {
-        return GregorianCalendar.from(DateTimeHelper.convertDateToZonedDateTime(date, timeZone));
+    public static GregorianCalendar convertDateToGregorianCalendar(Date date, String timeZone) {
+        return GregorianCalendar.from(DateTimeHelper.toZonedDateTime(date, timeZone));
     }
 
-    public static Date convertSqlDateToDate(java.sql.Date date, String timeZone) throws AtlasConversionException {
-        ZoneId zoneId = timeZone != null ? ZoneId.of(timeZone) : ZoneId.systemDefault();
-        return Date.from(date.toLocalDate().atStartOfDay(zoneId).toInstant());
+    public static Date convertSqlDateToDate(java.sql.Date date, String timeZone) {
+        return Date.from(date.toLocalDate().atStartOfDay(zoneId(timeZone)).toInstant());
     }
 
-    public static java.sql.Date convertDateToSqlDate(Date date, String timeZone) throws AtlasConversionException {
+    public static java.sql.Date convertDateToSqlDate(Date date, String timeZone) {
         return java.sql.Date.valueOf(DateTimeHelper.convertDateToLocalDate(date, timeZone));
     }
 
-    public static Date convertSqlTimeToDate(Time time, String timeZone) throws AtlasConversionException {
+    public static Date convertSqlTimeToDate(Time time, String timeZone) {
         return DateTimeHelper.convertLocalTimeToDate(time.toLocalTime(), timeZone); // ?
     }
 
-    public static LocalDate convertDateToLocalDate(Date date, String timeZone) throws AtlasConversionException {
-        ZoneId zoneId = timeZone != null ? ZoneId.of(timeZone) : ZoneId.systemDefault();
-        return LocalDateTime.ofInstant(date.toInstant(), zoneId).toLocalDate();
+    public static LocalDate convertDateToLocalDate(Date date, String timeZone) {
+        return LocalDateTime.ofInstant(date.toInstant(), zoneId(timeZone)).toLocalDate();
     }
 
-    public static Date convertLocalTimeToDate(LocalTime localTime, String timeZone) throws AtlasConversionException {
-        ZoneId zoneId = timeZone != null ? ZoneId.of(timeZone) : ZoneId.systemDefault();
-        return Date.from(localTime.atDate(LocalDate.now()).atZone(zoneId).toInstant());
+    public static Date convertLocalTimeToDate(LocalTime localTime, String timeZone) {
+        return Date.from(localTime.atDate(LocalDate.now()).atZone(zoneId(timeZone)).toInstant());
     }
 
-    public static LocalTime convertDateToLocalTime(Date date, String timeZone) throws AtlasConversionException {
-        ZoneId zoneId = timeZone != null ? ZoneId.of(timeZone) : ZoneId.systemDefault();
-        return LocalDateTime.ofInstant(date.toInstant(), zoneId).toLocalTime();
+    public static LocalTime convertDateToLocalTime(Date date, String timeZone) {
+        return LocalDateTime.ofInstant(date.toInstant(), zoneId(timeZone)).toLocalTime();
     }
 
-    public static Date convertLocalDateTimeToDate(LocalDateTime localDateTime, String timeZone)
-            throws AtlasConversionException {
-        ZoneId zoneId = timeZone != null ? ZoneId.of(timeZone) : ZoneId.systemDefault();
-        return Date.from(localDateTime.atZone(zoneId).toInstant());
+    public static Date convertLocalDateTimeToDate(LocalDateTime localDateTime, String timeZone) {
+        return Date.from(localDateTime.atZone(zoneId(timeZone)).toInstant());
     }
 
-    public static ZonedDateTime convertDateToZonedDateTime(Date date, String timeZone) throws AtlasConversionException {
-        ZoneId zoneId = timeZone != null ? ZoneId.of(timeZone) : ZoneId.systemDefault();
-        return ZonedDateTime.ofInstant(date.toInstant(), zoneId);
+    public static LocalDateTime convertDateToLocalDateTime(Date date, String timeZone) {
+        return LocalDateTime.ofInstant(date.toInstant(), zoneId(timeZone));
     }
 
-    public static LocalDateTime convertDateToLocalDateTime(Date date, String timeZone) throws AtlasConversionException {
-        ZoneId zoneId = timeZone != null ? ZoneId.of(timeZone) : ZoneId.systemDefault();
-        return LocalDateTime.ofInstant(date.toInstant(), zoneId);
+    public static Time convertDateToTime(Date date, String timeZone) {
+        return Time.valueOf(LocalDateTime.ofInstant(date.toInstant(), zoneId(timeZone)).toLocalTime());
     }
 
-    public static Time convertDateToTime(Date date, String timeZone) throws AtlasConversionException {
-        ZoneId zoneId = timeZone != null ? ZoneId.of(timeZone) : ZoneId.systemDefault();
-        return Time.valueOf(LocalDateTime.ofInstant(date.toInstant(), zoneId).toLocalTime());
+    public static ZonedDateTime toZonedDateTime(Calendar calendar) {
+        return ZonedDateTime.ofInstant(calendar.toInstant(), calendar.getTimeZone().toZoneId());
     }
 
+    public static ZonedDateTime toZonedDateTime(Date date, String timeZone) {
+        return ZonedDateTime.ofInstant(date.toInstant(), zoneId(timeZone));
+    }
+
+    public static ZonedDateTime toZonedDateTime(LocalDate date, String timeZone) {
+        return date.atStartOfDay(zoneId(timeZone));
+    }
+
+    public static ZonedDateTime toZonedDateTime(LocalTime time, String timeZone) {
+        return toZonedDateTime(time.atDate(LocalDate.now()), timeZone);
+    }
+
+    public static ZonedDateTime toZonedDateTime(LocalDateTime date, String timeZone) {
+        return date.atZone(zoneId(timeZone));
+    }
+
+    private static ZoneId zoneId(String timeZone) {
+        return timeZone != null ? ZoneId.of(timeZone) : ZoneId.systemDefault();
+    }
 }

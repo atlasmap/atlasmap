@@ -281,6 +281,7 @@
   <simpleType name="FieldType">
     <restriction base="string">
       <enumeration value="Any" />
+      <enumeration value="Any Date" />
       <enumeration value="Big Integer" />
       <enumeration value="Boolean" />
       <enumeration value="Byte" />

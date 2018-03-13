@@ -6,9 +6,12 @@ import java.lang.reflect.Parameter;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.ServiceLoader;
@@ -20,6 +23,7 @@ import io.atlasmap.api.AtlasConversionService;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.api.AtlasFieldAction;
 import io.atlasmap.api.AtlasFieldActionService;
+import io.atlasmap.converters.DateTimeHelper;
 import io.atlasmap.spi.AtlasFieldActionInfo;
 import io.atlasmap.v2.Action;
 import io.atlasmap.v2.ActionDetail;
@@ -124,7 +128,7 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
      */
     protected ActionDetail findActionDetail(String actionName, FieldType sourceType) {
 
-        List<ActionDetail> matches = new ArrayList<ActionDetail>();
+        List<ActionDetail> matches = new ArrayList<>();
         for(ActionDetail actionDetail : listActionDetails()) {
             if(actionDetail.getName().equals(actionName)) {
                 matches.add(actionDetail);
@@ -221,11 +225,28 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
                     case BYTE: method = actionClazz.getMethod(actionDetail.getMethod(), Action.class, Byte.class); break;
                     case BYTE_ARRAY: method = actionClazz.getMethod(actionDetail.getMethod(), Action.class, Byte[].class); break;
                     case CHAR: method = actionClazz.getMethod(actionDetail.getMethod(), Action.class, Character.class); break;
-                    case DATE: method = actionClazz.getMethod(actionDetail.getMethod(), Action.class, LocalDate.class);
-                    // TODO do we prefer java.time.* at some point? - https://github.com/atlasmap/atlasmap/issues/312
-                    // case DATE_TIME: method = actionClazz.getMethod(actionDetail.getMethod(), Action.class, LocalDateTime.class); break;
-                    case DATE_TIME: method = actionClazz.getMethod(actionDetail.getMethod(), Action.class, Date.class); break;
-                    case DATE_TZ: case TIME_TZ: case DATE_TIME_TZ: method = actionClazz.getMethod(actionDetail.getMethod(), Action.class, ZonedDateTime.class); break;
+                    case DATE:
+                    case DATE_TIME:
+                    case DATE_TZ:
+                    case TIME_TZ:
+                    case DATE_TIME_TZ:
+                    case ANY_DATE:
+                        if (sourceObject instanceof Calendar) {
+                            sourceObject = DateTimeHelper.toZonedDateTime((Calendar)sourceObject);
+                        } else if (sourceObject instanceof Date) {
+                            sourceObject = DateTimeHelper.toZonedDateTime((Date)sourceObject, null);
+                        } else if (sourceObject instanceof LocalDate) {
+                            sourceObject = DateTimeHelper.toZonedDateTime((LocalDate)sourceObject, null);
+                        } else if (sourceObject instanceof LocalTime) {
+                            sourceObject = DateTimeHelper.toZonedDateTime((LocalTime)sourceObject, null);
+                        } else if (sourceObject instanceof LocalDateTime) {
+                            sourceObject = DateTimeHelper.toZonedDateTime((LocalDateTime)sourceObject, null);
+                        } else if (!(sourceObject instanceof ZonedDateTime)) {
+                            LOG.warn(String.format("Unsupported sourceObject type=%s in actionClass=%s", sourceObject.getClass(), actionDetail.getClassName()));
+                            break;
+                        }
+                        method = actionClazz.getMethod(actionDetail.getMethod(), Action.class, ZonedDateTime.class);
+                        break;
                     case DECIMAL: method = actionClazz.getMethod(actionDetail.getMethod(), Action.class, BigDecimal.class); break;
                     case DOUBLE: method = actionClazz.getMethod(actionDetail.getMethod(), Action.class, Double.class); break;
                     case FLOAT: method = actionClazz.getMethod(actionDetail.getMethod(), Action.class, Float.class); break;

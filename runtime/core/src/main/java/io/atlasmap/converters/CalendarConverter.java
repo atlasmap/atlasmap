@@ -15,10 +15,10 @@
  */
 package io.atlasmap.converters;
 
+import java.time.ZonedDateTime;
 import java.util.Calendar;
 import java.util.Date;
 
-import io.atlasmap.api.AtlasConversionException;
 import io.atlasmap.api.AtlasConverter;
 import io.atlasmap.spi.AtlasConversionInfo;
 import io.atlasmap.v2.FieldType;
@@ -26,8 +26,12 @@ import io.atlasmap.v2.FieldType;
 public class CalendarConverter implements AtlasConverter<Calendar> {
 
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.DATE_TIME)
-    public Date toDate(Calendar calendar) throws AtlasConversionException {
+    public Date toDate(Calendar calendar) {
         return calendar != null ? calendar.getTime() : null;
     }
 
+    @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.DATE_TIME_TZ)
+    public ZonedDateTime toZonedDateTime(Calendar calendar) {
+        return calendar == null ? null : DateTimeHelper.toZonedDateTime(calendar);
+    }
 }

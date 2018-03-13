@@ -56,19 +56,19 @@ public class DefaultAtlasConversionServiceTest {
     private AtlasConversionService service = null;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         service = DefaultAtlasConversionService.getInstance();
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         if (service != null) {
             service = null;
         }
     }
 
     @Test
-    public void getservice() throws Exception {
+    public void getservice() {
         assertNotNull(service);
         DefaultAtlasConversionService service2 = DefaultAtlasConversionService.getInstance();
         assertNotNull(service2);
@@ -98,7 +98,7 @@ public class DefaultAtlasConversionServiceTest {
     }
 
     @Test
-    public void findMatchingConverterByFieldTypesCustomConverter() throws Exception {
+    public void findMatchingConverterByFieldTypesCustomConverter() {
         assertNotNull(service);
         Optional<AtlasConverter<?>> atlasConverter = service.findMatchingConverter(FieldType.STRING, FieldType.STRING);
         assertNotNull(atlasConverter);
@@ -108,14 +108,14 @@ public class DefaultAtlasConversionServiceTest {
     }
 
     @Test
-    public void findMatchingConverterByFieldTypesNoMatching() throws Exception {
+    public void findMatchingConverterByFieldTypesNoMatching() {
         assertNotNull(service);
         Optional<AtlasConverter<?>> atlasConverter = service.findMatchingConverter(FieldType.STRING, FieldType.COMPLEX);
         assertFalse(atlasConverter.isPresent());
     }
 
     @Test
-    public void findMatchingConverterBySourceClass() throws Exception {
+    public void findMatchingConverterBySourceClass() {
         assertNotNull(service);
         Optional<AtlasConverter<?>> atlasConverter = service.findMatchingConverter("java.util.Date",
                 "java.time.ZonedDateTime");
@@ -126,7 +126,7 @@ public class DefaultAtlasConversionServiceTest {
     }
 
     @Test
-    public void findMatchingConverterBySourceClassNoMatching() throws Exception {
+    public void findMatchingConverterBySourceClassNoMatching() {
         assertNotNull(service);
         Optional<AtlasConverter<?>> atlasConverter = service.findMatchingConverter("java.util.Date",
                 "java.time.CustomClass");
@@ -678,24 +678,25 @@ public class DefaultAtlasConversionServiceTest {
 
     @Test
     public void testConvertTypeFromNumber() throws AtlasConversionException {
-        assertEquals(BigInteger.valueOf(1), service.convertType((Number)1, FieldType.NUMBER, FieldType.BIG_INTEGER));
-        assertEquals(true, service.convertType((Number)1, FieldType.NUMBER, FieldType.BOOLEAN));
-        assertEquals((byte)0x01, service.convertType((Number)1, FieldType.NUMBER, FieldType.BYTE));
-        assertEquals((char)1, service.convertType((Number)1, FieldType.NUMBER, FieldType.CHAR));
-        assertEquals(LocalDate.class, service.convertType((Number)1, FieldType.NUMBER, FieldType.DATE).getClass());
-        assertEquals(Date.class, service.convertType((Number)1, FieldType.NUMBER, FieldType.DATE_TIME).getClass());
-        assertEquals(ZonedDateTime.class, service.convertType((Number)1, FieldType.NUMBER, FieldType.DATE_TZ).getClass());
-        assertEquals(ZonedDateTime.class, service.convertType((Number)1, FieldType.NUMBER, FieldType.TIME_TZ).getClass());
-        assertEquals(ZonedDateTime.class, service.convertType((Number)1, FieldType.NUMBER, FieldType.DATE_TIME_TZ).getClass());
-        assertEquals(BigDecimal.valueOf(1), service.convertType((Number)1, FieldType.NUMBER, FieldType.DECIMAL));
-        assertEquals(1.0d, service.convertType((Number)1, FieldType.NUMBER, FieldType.DOUBLE));
-        assertEquals(1.0f, service.convertType((Number)1, FieldType.NUMBER, FieldType.FLOAT));
-        assertEquals(1, service.convertType((Number)1, FieldType.NUMBER, FieldType.INTEGER));
-        assertEquals(1L, service.convertType((Number)1, FieldType.NUMBER, FieldType.LONG));
-        assertEquals(1, service.convertType((Number)1, FieldType.NUMBER, FieldType.NUMBER));
-        assertEquals((short)1, service.convertType((Number)1, FieldType.NUMBER, FieldType.SHORT));
-        assertEquals("1", service.convertType((Number)1, FieldType.NUMBER, FieldType.STRING));
-        assertEquals(LocalTime.class, service.convertType((Number)1, FieldType.NUMBER, FieldType.TIME).getClass());
+        Number number = 1;
+        assertEquals(BigInteger.valueOf(1), service.convertType(number, FieldType.NUMBER, FieldType.BIG_INTEGER));
+        assertEquals(true, service.convertType(number, FieldType.NUMBER, FieldType.BOOLEAN));
+        assertEquals((byte)0x01, service.convertType(number, FieldType.NUMBER, FieldType.BYTE));
+        assertEquals((char)1, service.convertType(number, FieldType.NUMBER, FieldType.CHAR));
+        assertEquals(LocalDate.class, service.convertType(number, FieldType.NUMBER, FieldType.DATE).getClass());
+        assertEquals(Date.class, service.convertType(number, FieldType.NUMBER, FieldType.DATE_TIME).getClass());
+        assertEquals(ZonedDateTime.class, service.convertType(number, FieldType.NUMBER, FieldType.DATE_TZ).getClass());
+        assertEquals(ZonedDateTime.class, service.convertType(number, FieldType.NUMBER, FieldType.TIME_TZ).getClass());
+        assertEquals(ZonedDateTime.class, service.convertType(number, FieldType.NUMBER, FieldType.DATE_TIME_TZ).getClass());
+        assertEquals(BigDecimal.valueOf(1), service.convertType(number, FieldType.NUMBER, FieldType.DECIMAL));
+        assertEquals(1.0d, service.convertType(number, FieldType.NUMBER, FieldType.DOUBLE));
+        assertEquals(1.0f, service.convertType(number, FieldType.NUMBER, FieldType.FLOAT));
+        assertEquals(1, service.convertType(number, FieldType.NUMBER, FieldType.INTEGER));
+        assertEquals(1L, service.convertType(number, FieldType.NUMBER, FieldType.LONG));
+        assertEquals(1, service.convertType(number, FieldType.NUMBER, FieldType.NUMBER));
+        assertEquals((short)1, service.convertType(number, FieldType.NUMBER, FieldType.SHORT));
+        assertEquals("1", service.convertType(number, FieldType.NUMBER, FieldType.STRING));
+        assertEquals(LocalTime.class, service.convertType(number, FieldType.NUMBER, FieldType.TIME).getClass());
     }
 
     @Test
