@@ -1,7 +1,6 @@
 package io.atlasmap.java.core;
 
 import java.lang.reflect.Array;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
@@ -198,7 +197,7 @@ class JavaWriterUtil {
     }
 
     protected Method resolveSetMethod(Object sourceObject, SegmentContext segmentContext, Class<?> targetType)
-            throws NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+            throws NoSuchMethodException {
         String setterMethodName = "set" + capitalizeFirstLetter(AtlasPath.cleanPathSegment(segmentContext.getSegment()));
 
         List<Class<?>> classTree = resolveMappableClasses(sourceObject.getClass());
@@ -266,7 +265,7 @@ class JavaWriterUtil {
     }
 
     protected List<Class<?>> resolveMappableClasses(Class<?> className) {
-        List<Class<?>> classTree = new ArrayList<Class<?>>();
+        List<Class<?>> classTree = new ArrayList<>();
         classTree.add(className);
         Class<?> superClazz = className.getSuperclass();
         while (superClazz != null) {

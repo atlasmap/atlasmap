@@ -96,9 +96,8 @@ public abstract class BaseMarshallerTest {
                     if (exc == null) {
                         Files.delete(dir);
                         return FileVisitResult.CONTINUE;
-                    } else {
-                        throw exc;
                     }
+                    throw exc;
                 }
             });
         }
@@ -479,24 +478,24 @@ public abstract class BaseMarshallerTest {
         XmlField m1 = (XmlField) fm.getInputField().get(0);
         assertNotNull(m1);
         assertNull(m1.getActions());
-        assertEquals("foo", ((XmlField) m1).getName());
+        assertEquals("foo", m1.getName());
         assertEquals("bar", m1.getValue());
-        assertNull(((XmlField) m1).getFieldType());
+        assertNull(m1.getFieldType());
 
         XmlField m2 = (XmlField) fm.getOutputField().get(0);
         assertNotNull(m2);
         assertNull(m2.getActions());
-        assertEquals("woot", ((XmlField) m2).getName());
+        assertEquals("woot", m2.getName());
         assertEquals("blerg", m2.getValue());
-        assertNull(((XmlField) m2).getFieldType());
+        assertNull(m2.getFieldType());
         assertEquals(new Integer(1), m2.getIndex());
 
         XmlField m3 = (XmlField) fm.getOutputField().get(0);
         assertNotNull(m3);
         assertNull(m3.getActions());
-        assertEquals("meow", ((XmlField) m3).getName());
+        assertEquals("meow", m3.getName());
         assertEquals("ruff", m3.getValue());
-        assertNull(((XmlField) m3).getFieldType());
+        assertNull(m3.getFieldType());
         assertEquals(new Integer(2), m3.getIndex());
 
     }

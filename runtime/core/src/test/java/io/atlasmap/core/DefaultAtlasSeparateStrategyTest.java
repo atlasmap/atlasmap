@@ -19,12 +19,12 @@ public class DefaultAtlasSeparateStrategyTest {
     private AtlasSeparateStrategy separate = null;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         separate = new DefaultAtlasSeparateStrategy();
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         separate = null;
     }
 

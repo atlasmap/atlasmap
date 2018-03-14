@@ -38,13 +38,13 @@ public class JavaConstructServiceTest {
     private JavaConstructService constructService = null;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         constructService = new JavaConstructService();
         constructService.setConversionService(DefaultAtlasConversionService.getInstance());
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         constructService = null;
     }
 
@@ -77,7 +77,7 @@ public class JavaConstructServiceTest {
     }
 
     @Test
-    public void testConstructClassPrimitives() throws Exception {
+    public void testConstructClassPrimitives() {
 
         Object object = null;
         for (String prim : DefaultAtlasConversionService.listPrimitiveClassNames()) {
@@ -125,7 +125,7 @@ public class JavaConstructServiceTest {
     }
 
     @Test
-    public void testConstructClassCollectionUnsupported() throws Exception {
+    public void testConstructClassCollectionUnsupported() {
         try {
             constructService
                     .constructClass(generateJavaClassCollection("java.lang.String", CollectionType.ALL, null, null),null);

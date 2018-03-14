@@ -31,7 +31,7 @@ public class ClassHelperTest {
     }
 
     @Test
-    public void testDetectGetterNotFound() throws Exception {
+    public void testDetectGetterNotFound() {
         try {
             Method setter = ClassHelper.detectGetterMethod(JavaGetterSetterModel.class, "getParam2");
             fail("NoSuchMethodException expected instead found=" + setter.getName());
@@ -72,7 +72,7 @@ public class ClassHelperTest {
     }
 
     @Test
-    public void testDetectSetterOverloadedNotPresentParamType() throws Exception {
+    public void testDetectSetterOverloadedNotPresentParamType() {
         try {
             Method setter = ClassHelper.detectSetterMethod(JavaGetterSetterModel.class, "setOverloadParam",
                     Short.class);
@@ -85,7 +85,7 @@ public class ClassHelperTest {
     }
 
     @Test
-    public void testDetectSetterOverloadedNoGetter() throws Exception {
+    public void testDetectSetterOverloadedNoGetter() {
         try {
             Method setter = ClassHelper.detectSetterMethod(JavaGetterSetterModel.class, "setOverloadParamNoGetter",
                     null);
@@ -97,7 +97,7 @@ public class ClassHelperTest {
     }
 
     @Test
-    public void testDetectSetterOverloadedNoMatch() throws Exception {
+    public void testDetectSetterOverloadedNoMatch() {
         try {
             Method setter = ClassHelper.detectSetterMethod(JavaGetterSetterModel.class, "setOverloadParamNoMatch",
                     null);
@@ -154,7 +154,7 @@ public class ClassHelperTest {
     public void testParentObjectForPathList() throws Exception {
 
         SourceOrderList sourceOrderList = new SourceOrderList();
-        List<BaseOrder> sourceOrders = new ArrayList<BaseOrder>();
+        List<BaseOrder> sourceOrders = new ArrayList<>();
         sourceOrderList.setOrders(sourceOrders);
         SourceAddress sourceAddress = new SourceAddress();
         SourceOrder sourceOrder = new SourceOrder();

@@ -72,35 +72,35 @@ public class AtlasValidationTestHelperTest {
     }
 
     @Test
-    public void testGetScope() throws Exception {
+    public void testGetScope() {
         assertEquals(ValidationScope.ALL, error.getScope());
         assertEquals(ValidationScope.DATA_SOURCE, warning.getScope());
         assertEquals(ValidationScope.MAPPING, info.getScope());
     }
 
     @Test
-    public void testGetRejectedValue() throws Exception {
+    public void testGetRejectedValue() {
         assertNull(error.getId());
         assertEquals("atlas:testDataSource", warning.getId());
         assertEquals("0001", info.getId());
     }
 
     @Test
-    public void testGetDefaultMessage() throws Exception {
+    public void testGetDefaultMessage() {
         assertTrue(error.getMessage().equals("Error message"));
         assertTrue(warning.getMessage().equals("Warning message"));
         assertTrue(info.getMessage().equals("Information message"));
     }
 
     @Test
-    public void testGetLevel() throws Exception {
+    public void testGetLevel() {
         assertTrue(error.getStatus().compareTo(ValidationStatus.ERROR) == 0);
         assertTrue(warning.getStatus().compareTo(ValidationStatus.WARN) == 0);
         assertTrue(info.getStatus().compareTo(ValidationStatus.INFO) == 0);
     }
 
     @Test
-    public void testToString() throws Exception {
+    public void testToString() {
         assertThat(error.getScope(), is(ValidationScope.ALL));
         assertThat(error.getId(), nullValue());
         assertThat(error.getMessage(), is("Error message"));
@@ -118,13 +118,13 @@ public class AtlasValidationTestHelperTest {
     }
 
     @Test
-    public void testEquals() throws Exception {
+    public void testEquals() {
         assertFalse(error.equals(info));
     }
 
     @Test
     @Ignore // Hashcode not consistent across instances
-    public void testHashCode() throws Exception {
+    public void testHashCode() {
         assertEquals(1000142829, error.hashCode());
         assertEquals(warning.hashCode(), -187767976);
         assertEquals(info.hashCode(), -1746235594);

@@ -51,7 +51,7 @@ public class JavaXmlCombineTest extends AtlasMappingBaseTest {
         Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof String);
-        JAXBElement<XmlContactAttribute> targetContact = (JAXBElement<XmlContactAttribute>) AtlasXmlTestHelper
+        JAXBElement<XmlContactAttribute> targetContact = AtlasXmlTestHelper
                 .unmarshal((String) object, XmlContactAttribute.class);
         assertEquals("Ozzie    Smith   5551212                                                                                            81111", targetContact.getValue().getFirstName());
         assertNull(targetContact.getValue().getLastName());
@@ -73,7 +73,7 @@ public class JavaXmlCombineTest extends AtlasMappingBaseTest {
         Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof String);
-        JAXBElement<XmlContactAttribute> targetContact = (JAXBElement<XmlContactAttribute>) AtlasXmlTestHelper
+        JAXBElement<XmlContactAttribute> targetContact = AtlasXmlTestHelper
                 .unmarshal((String) object, XmlContactAttribute.class);
         assertEquals("Ozzie Smith 5551212 81111", targetContact.getValue().getFirstName());
         assertNull(targetContact.getValue().getLastName());
@@ -95,7 +95,7 @@ public class JavaXmlCombineTest extends AtlasMappingBaseTest {
         Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof String);
-        JAXBElement<XmlContactAttribute> targetContact = (JAXBElement<XmlContactAttribute>) AtlasXmlTestHelper
+        JAXBElement<XmlContactAttribute> targetContact = AtlasXmlTestHelper
                 .unmarshal((String) object, XmlContactAttribute.class);
         assertEquals("Ozzie Smith 5551212 81111", targetContact.getValue().getFirstName());
         assertNull(targetContact.getValue().getLastName());
@@ -118,7 +118,7 @@ public class JavaXmlCombineTest extends AtlasMappingBaseTest {
         Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof String);
-        JAXBElement<XmlContactAttribute> targetContact = (JAXBElement<XmlContactAttribute>) AtlasXmlTestHelper
+        JAXBElement<XmlContactAttribute> targetContact = AtlasXmlTestHelper
                 .unmarshal((String) object, XmlContactAttribute.class);
         assertNotNull(targetContact);
         assertEquals("Ozzie  5551212 81111", targetContact.getValue().getFirstName());

@@ -76,7 +76,7 @@ public class DefaultAtlasConversionServiceTest {
     }
 
     @Test
-    public void findMatchingConverterByFieldTypes() throws Exception {
+    public void findMatchingConverterByFieldTypes() {
         assertNotNull(service);
         Optional<AtlasConverter<?>> atlasConverter = service.findMatchingConverter(FieldType.STRING, FieldType.BOOLEAN);
         assertTrue(atlasConverter.isPresent());

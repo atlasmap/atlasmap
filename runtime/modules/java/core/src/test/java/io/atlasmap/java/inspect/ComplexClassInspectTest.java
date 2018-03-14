@@ -48,7 +48,7 @@ public class ComplexClassInspectTest {
     }
 
     @Test
-    public void testComplexClassSourceOrder() throws Exception {
+    public void testComplexClassSourceOrder() {
         JavaClass c = classInspectionService.inspectClass(SourceOrder.class);
         assertNotNull(c);
         assertEquals("io.atlasmap.java.test.SourceOrder", c.getClassName());
@@ -57,7 +57,7 @@ public class ComplexClassInspectTest {
     }
 
     @Test
-    public void testComplexClassTargetOrder() throws Exception {
+    public void testComplexClassTargetOrder() {
         JavaClass c = classInspectionService.inspectClass(TargetOrder.class);
         assertNotNull(c);
         assertEquals("io.atlasmap.java.test.TargetOrder", c.getClassName());

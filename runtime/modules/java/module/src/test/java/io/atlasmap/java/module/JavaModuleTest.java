@@ -23,12 +23,12 @@ public class JavaModuleTest {
     private JavaModule module = null;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         module = new JavaModule();
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         module = null;
     }
 
@@ -39,7 +39,6 @@ public class JavaModuleTest {
         assertNull(module.getJavaInspectionService());
         module.setJavaInspectionService(cis);
         assertNotNull(module.getJavaInspectionService());
-        assertTrue(module.getJavaInspectionService() instanceof ClassInspectionService);
         assertSame(cis, module.getJavaInspectionService());
     }
 
@@ -50,7 +49,6 @@ public class JavaModuleTest {
         assertNull(module.getJavaConstructService());
         module.setJavaConstructService(jcs);
         assertNotNull(module.getJavaConstructService());
-        assertTrue(module.getJavaConstructService() instanceof JavaConstructService);
         assertSame(jcs, module.getJavaConstructService());
     }
 

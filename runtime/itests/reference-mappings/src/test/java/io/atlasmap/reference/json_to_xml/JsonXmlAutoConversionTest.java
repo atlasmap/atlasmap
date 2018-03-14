@@ -89,7 +89,7 @@ public class JsonXmlAutoConversionTest extends AtlasMappingBaseTest {
         Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof String);
-        JAXBElement<XmlFlatPrimitiveElement> xmlFPE = (JAXBElement<XmlFlatPrimitiveElement>) AtlasXmlTestHelper
+        JAXBElement<XmlFlatPrimitiveElement> xmlFPE = AtlasXmlTestHelper
                 .unmarshal((String) object, XmlFlatPrimitiveElement.class);
 
         switch (num) {

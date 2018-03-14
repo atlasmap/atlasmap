@@ -44,8 +44,7 @@ public class BigIntegerConverter implements AtlasConverter<BigInteger> {
     }
 
     @AtlasConversionInfo(sourceType = FieldType.BIG_INTEGER, targetType = FieldType.BOOLEAN)
-    public Boolean toBoolean(BigInteger value)
-            throws AtlasConversionException {
+    public Boolean toBoolean(BigInteger value) {
         if (value == null) {
             return null;
         }
@@ -91,9 +90,8 @@ public class BigIntegerConverter implements AtlasConverter<BigInteger> {
             long dateLong = date.longValueExact();
             if (dateLong >= Instant.MIN.getEpochSecond()) {
                 return Date.from(Instant.ofEpochMilli(dateLong));
-            } else {
-                return new Date(dateLong);
             }
+            return new Date(dateLong);
         } catch (ArithmeticException e) {
             throw new AtlasConversionException(String.format(
                     "BigInteger %s is greater than Long.MAX_VALUE or less than Long.MIN_VALUE", date));
@@ -221,7 +219,7 @@ public class BigIntegerConverter implements AtlasConverter<BigInteger> {
     }
 
     @AtlasConversionInfo(sourceType = FieldType.BIG_INTEGER, targetType = FieldType.STRING)
-    public String toString(BigInteger value) throws AtlasConversionException {
+    public String toString(BigInteger value) {
         return value != null ? value.toString() : null;
     }
 

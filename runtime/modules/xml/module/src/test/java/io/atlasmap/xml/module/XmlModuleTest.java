@@ -17,12 +17,12 @@ public class XmlModuleTest {
     private XmlModule module = null;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         module = new XmlModule();
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         module = null;
     }
 

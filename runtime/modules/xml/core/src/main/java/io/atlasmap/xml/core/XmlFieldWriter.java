@@ -54,6 +54,7 @@ public class XmlFieldWriter extends XmlFieldTransformer implements AtlasFieldWri
         seedDocumentNamespaces(document);
     }
 
+    @Override
     public void write(AtlasInternalSession session) throws AtlasException {
         Field targetField = session.head().getTargetField();
         if (targetField == null) {
@@ -245,7 +246,7 @@ public class XmlFieldWriter extends XmlFieldTransformer implements AtlasFieldWri
                 }
             }
             children = XmlIOHelper.getChildrenWithName(cleanedSegment, parentNode);
-            childNode = (Element) children.get(index);
+            childNode = children.get(index);
         } else {
             childNode = (Element) parentNode.appendChild(createElement(segment));
         }
@@ -285,7 +286,7 @@ public class XmlFieldWriter extends XmlFieldTransformer implements AtlasFieldWri
         return document.createElement(cleanedSegment);
     }
 
-    private String convertValue(Field field) throws AtlasException {
+    private String convertValue(Field field) {
         FieldType type = field.getFieldType();
         Object originalValue = field.getValue();
         String value = originalValue != null ? String.valueOf(originalValue) : null;

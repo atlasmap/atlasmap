@@ -42,7 +42,7 @@ public class JsonJsonCollectionConversionTest extends AtlasMappingBaseTest {
             output += (i == 2) ? "" : ",";
         }
         output += "]}";
-        assertEquals(output, (String) object);
+        assertEquals(output, object);
     }
 
     @Test
@@ -73,7 +73,7 @@ public class JsonJsonCollectionConversionTest extends AtlasMappingBaseTest {
             output += (i == 2) ? "" : ",";
         }
         output += "]}";
-        assertEquals(output, (String) object);
+        assertEquals(output, object);
     }
 
     @Test
@@ -99,7 +99,7 @@ public class JsonJsonCollectionConversionTest extends AtlasMappingBaseTest {
         assertTrue(object instanceof String);
 
         String output = "{\"contact\":{\"name\":\"name2\"}}";
-        assertEquals(output, (String) object);
+        assertEquals(output, object);
     }
 
     @Test
@@ -119,6 +119,6 @@ public class JsonJsonCollectionConversionTest extends AtlasMappingBaseTest {
         assertTrue(object instanceof String);
 
         String output = "{\"contact\":[{\"name\":\"name9\"}]}";
-        assertEquals(output, (String) object);
+        assertEquals(output, object);
     }
 }

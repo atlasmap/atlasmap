@@ -21,12 +21,12 @@ public class DefaultAtlasCombineStrategyTest {
     private AtlasCombineStrategy combine = null;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         combine = new DefaultAtlasCombineStrategy();
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         combine = null;
     }
 
@@ -38,7 +38,7 @@ public class DefaultAtlasCombineStrategyTest {
 
     protected Map<Integer, String> generateCombineMap(int count) {
         String combines = "abcdefghijklmnopqrstuvwxyz";
-        Map<Integer, String> cMap = new HashMap<Integer, String>();
+        Map<Integer, String> cMap = new HashMap<>();
         for (int i = 0; i < count; i++) {
             cMap.put(i, combines.substring(i, i + 1));
         }
@@ -162,7 +162,7 @@ public class DefaultAtlasCombineStrategyTest {
     @Test
     public void testSortByKeyOutOfOrder() {
 
-        Map<Integer, String> outOfOrder = new HashMap<Integer, String>();
+        Map<Integer, String> outOfOrder = new HashMap<>();
         outOfOrder.put(2, "c");
         outOfOrder.put(0, "a");
         outOfOrder.put(3, "d");
@@ -190,7 +190,7 @@ public class DefaultAtlasCombineStrategyTest {
     @Test
     public void testSortByKeyOutOfOrderGaps() {
 
-        Map<Integer, String> outOfOrder = new HashMap<Integer, String>();
+        Map<Integer, String> outOfOrder = new HashMap<>();
         outOfOrder.put(7, "c");
         outOfOrder.put(3, "a");
         outOfOrder.put(99, "d");

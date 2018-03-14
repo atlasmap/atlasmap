@@ -47,15 +47,11 @@ public class DoubleConverter implements AtlasConverter<Double> {
 
     @AtlasConversionInfo(sourceType = FieldType.DOUBLE, targetType = FieldType.BOOLEAN, concerns = {
             AtlasConversionConcern.CONVENTION })
-    public Boolean toBoolean(Double value) throws AtlasConversionException {
+    public Boolean toBoolean(Double value) {
         if (value == null) {
             return null;
         }
-        if (value == 0.0) {
-            return Boolean.FALSE;
-        } else {
-            return Boolean.TRUE;
-        }
+        return value == 0.0 ? Boolean.FALSE : Boolean.TRUE;
     }
 
     @AtlasConversionInfo(sourceType = FieldType.DOUBLE, targetType = FieldType.BYTE,
@@ -66,11 +62,10 @@ public class DoubleConverter implements AtlasConverter<Double> {
         }
         if (value % 1 == 0 && value >= Byte.MIN_VALUE && value <= Byte.MAX_VALUE) {
             return value.byteValue();
-        } else {
-            throw new AtlasConversionException(new AtlasUnsupportedException(String.format(
-                    "Double %s is greater than Byte.MAX_VALUE or less than Byte.MIN_VALUE or is not a whole number",
-                    value)));
         }
+        throw new AtlasConversionException(new AtlasUnsupportedException(String.format(
+                "Double %s is greater than Byte.MAX_VALUE or less than Byte.MIN_VALUE or is not a whole number",
+                value)));
     }
 
     @AtlasConversionInfo(sourceType = FieldType.DOUBLE, targetType = FieldType.CHAR,
@@ -101,7 +96,7 @@ public class DoubleConverter implements AtlasConverter<Double> {
     }
 
     @AtlasConversionInfo(sourceType = FieldType.DOUBLE, targetType = FieldType.DOUBLE)
-    public Double toDouble(Double value) throws AtlasConversionException {
+    public Double toDouble(Double value) {
         return value != null ? Double.valueOf(value) : null;
     }
 
@@ -183,7 +178,7 @@ public class DoubleConverter implements AtlasConverter<Double> {
     }
 
     @AtlasConversionInfo(sourceType = FieldType.DOUBLE, targetType = FieldType.NUMBER)
-    public Number toNumber(Double value) throws AtlasConversionException {
+    public Number toNumber(Double value) {
         return value;
     }
 
@@ -200,7 +195,7 @@ public class DoubleConverter implements AtlasConverter<Double> {
     }
 
     @AtlasConversionInfo(sourceType = FieldType.DOUBLE, targetType = FieldType.STRING)
-    public String toString(Double value) throws AtlasConversionException {
+    public String toString(Double value) {
         return value != null ? String.valueOf(value) : null;
     }
 

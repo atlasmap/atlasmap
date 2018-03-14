@@ -269,7 +269,7 @@ public class DocumentJavaFieldWriter implements AtlasFieldWriter {
             } else if (collectionObject.getClass().isArray()) {
                 if (Array.getLength(collectionObject) < (index + 1)) {
                     // resize the array to fit the item
-                    Object newArray = (Object) createObject(field, segmentContext, parentObject, true);
+                    Object newArray = createObject(field, segmentContext, parentObject, true);
                     // copy pre-existing items over to new array
                     for (int i = 0; i < Array.getLength(collectionObject); i++) {
                         Array.set(newArray, i, Array.get(collectionObject, i));

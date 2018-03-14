@@ -148,7 +148,7 @@ public class JavaConstructService {
     }
 
     private Object instantiateList(JavaClass javaClass)
-            throws ConstructException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+            throws ClassNotFoundException, InstantiationException, IllegalAccessException {
         if (LOG.isDebugEnabled()) {
             LOG.debug(String.format("Constructing list c=%s", javaClass.getCollectionClassName()));
         }
@@ -157,7 +157,7 @@ public class JavaConstructService {
     }
 
     private Object instantiateMap(JavaClass javaClass)
-            throws ConstructException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+            throws ClassNotFoundException, InstantiationException, IllegalAccessException {
         if (LOG.isDebugEnabled()) {
             LOG.debug(String.format("Constructing map c=%s", javaClass.getCollectionClassName()));
         }
@@ -205,7 +205,7 @@ public class JavaConstructService {
             return;
         }
 
-        List<JavaField> remove = new ArrayList<JavaField>();
+        List<JavaField> remove = new ArrayList<>();
         for (JavaField jf : javaClass.getJavaFields().getJavaField()) {
             if (!filteredPaths.contains(jf.getPath())) {
                 remove.add(jf);

@@ -38,25 +38,25 @@ public class SourceFlatClassInspectTest {
     }
 
     @Test
-    public void testSourceFlatPrimitiveClass() throws Exception {
+    public void testSourceFlatPrimitiveClass() {
         ClassValidationUtil.validateFlatPrimitiveClass(classInspectionService, SourceFlatPrimitiveClass.class,
                 "io.atlasmap.java.test.SourceFlatPrimitiveClass");
     }
 
     @Test
-    public void testSourceFlatPrimitiveClassArray() throws Exception {
+    public void testSourceFlatPrimitiveClassArray() {
         ClassValidationUtil.validateFlatPrimitiveClassArray(classInspectionService, SourceFlatPrimitiveClass[].class,
                 "io.atlasmap.java.test.SourceFlatPrimitiveClass");
     }
 
     @Test
-    public void testSourceFlatPrimitiveClassTwoDimArray() throws Exception {
+    public void testSourceFlatPrimitiveClassTwoDimArray() {
         ClassValidationUtil.validateFlatPrimitiveClassTwoDimArray(classInspectionService,
                 SourceFlatPrimitiveClass[][].class, "io.atlasmap.java.test.SourceFlatPrimitiveClass");
     }
 
     @Test
-    public void testSourceFlatPrimitiveClassThreeDimArray() throws Exception {
+    public void testSourceFlatPrimitiveClassThreeDimArray() {
         ClassValidationUtil.validateFlatPrimitiveClassThreeDimArray(classInspectionService,
                 SourceFlatPrimitiveClass[][][].class, "io.atlasmap.java.test.SourceFlatPrimitiveClass");
     }

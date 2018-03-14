@@ -48,7 +48,7 @@ public class XmlXmlMultiSourceTest extends AtlasMappingBaseTest {
         assertTrue(object instanceof String);
         assertEquals(
                 "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><Contact firstName=\"Ozzie\" zipCode=\"90210\"/>",
-                (String) object);
+                object);
     }
 
     @Test
@@ -69,6 +69,6 @@ public class XmlXmlMultiSourceTest extends AtlasMappingBaseTest {
         assertTrue(object instanceof String);
         assertEquals(
                 "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><XOA orderId=\"8765309\"><Contact firstName=\"Ozzie\" lastName=\"Smith\" phoneNumber=\"5551212\" zipCode=\"81111\"/><Address addressLine1=\"123 Main St\" addressLine2=\"Suite 42b\" city=\"Anytown\" state=\"NY\" zipCode=\"90210\"/></XOA>",
-                (String) object);
+                object);
     }
 }

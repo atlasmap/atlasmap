@@ -56,7 +56,7 @@ public class XmlXmlCollectionConverstionTest extends AtlasMappingBaseTest {
             output += "<contact><name>name" + i + "</name></contact>";
         }
         output += "</XmlOA>";
-        assertEquals(output, (String) object);
+        assertEquals(output, object);
     }
 
     @Test
@@ -88,7 +88,7 @@ public class XmlXmlCollectionConverstionTest extends AtlasMappingBaseTest {
         }
         output += "</XmlOA>";
 
-        assertEquals(output, (String) object);
+        assertEquals(output, object);
     }
 
     @Test
@@ -116,7 +116,7 @@ public class XmlXmlCollectionConverstionTest extends AtlasMappingBaseTest {
         output += "<XmlOA>";
         output += "<contact><name>name2</name></contact>";
         output += "</XmlOA>";
-        assertEquals(output, (String) object);
+        assertEquals(output, object);
     }
 
     @Test
@@ -143,6 +143,6 @@ public class XmlXmlCollectionConverstionTest extends AtlasMappingBaseTest {
         Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof String);
-        assertEquals(output, (String) object);
+        assertEquals(output, object);
     }
 }

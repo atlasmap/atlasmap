@@ -1,23 +1,11 @@
 package io.atlasmap.xml.test.v2;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
 public class AtlasXmlTestHelperTest {
 
-    @Before
-    public void setUp() throws Exception {
-        // no-op
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        // no-op
-    }
-
     @Test
-    public void testXmlFPE() throws Exception {
+    public void testXmlFPE() {
         XmlFlatPrimitiveElement xfpe = new XmlFlatPrimitiveElement();
         xfpe.setBooleanField(true);
         xfpe.setCharField("a");

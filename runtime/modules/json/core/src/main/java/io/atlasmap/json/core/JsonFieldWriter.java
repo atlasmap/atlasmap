@@ -118,8 +118,7 @@ public class JsonFieldWriter implements AtlasFieldWriter {
         }
     }
 
-    private void writeValue(ObjectNode parentNode, String parentSegment, String segment, Field field)
-            throws AtlasException {
+    private void writeValue(ObjectNode parentNode, String parentSegment, String segment, Field field) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("Writing field value '" + segment + "' in parent node '" + parentSegment + "', parentNode: "
                     + parentNode);
@@ -219,7 +218,7 @@ public class JsonFieldWriter implements AtlasFieldWriter {
         return childNode;
     }
 
-    private JsonNode createValueNode(Field jsonField) throws AtlasException {
+    private JsonNode createValueNode(Field jsonField) {
         FieldType type = jsonField.getFieldType();
         Object value = jsonField.getValue();
         JsonNode valueNode = null;

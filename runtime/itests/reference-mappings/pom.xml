@@ -35,43 +35,35 @@
     <dependency>
       <groupId>io.atlasmap</groupId>
       <artifactId>atlas-model</artifactId>
-      <version>${project.version}</version>
-    </dependency>
+      </dependency>
     <dependency>
       <groupId>io.atlasmap</groupId>
       <artifactId>atlas-core</artifactId>
-      <version>${project.version}</version>
-    </dependency>
+      </dependency>
     <dependency>
       <groupId>io.atlasmap</groupId>
       <artifactId>atlas-java-module</artifactId>
-      <version>${project.version}</version>
-    </dependency>
+      </dependency>
     <dependency>
       <groupId>io.atlasmap</groupId>
       <artifactId>atlas-json-module</artifactId>
-      <version>${project.version}</version>
-    </dependency>
+      </dependency>
     <dependency>
       <groupId>io.atlasmap</groupId>
       <artifactId>atlas-xml-module</artifactId>
-      <version>${project.version}</version>
-    </dependency>
+      </dependency>
     <dependency>
       <groupId>io.atlasmap</groupId>
       <artifactId>atlas-java-test-model</artifactId>
-      <version>${project.version}</version>
-    </dependency>
+      </dependency>
     <dependency>
       <groupId>io.atlasmap</groupId>
       <artifactId>atlas-json-test-model</artifactId>
-      <version>${project.version}</version>
-    </dependency>
+      </dependency>
     <dependency>
       <groupId>io.atlasmap</groupId>
       <artifactId>atlas-xml-test-model</artifactId>
-      <version>${project.version}</version>
-    </dependency>
+      </dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>

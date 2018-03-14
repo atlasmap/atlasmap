@@ -33,12 +33,12 @@ public class DefaultAtlasSessionTest {
     private DefaultAtlasSession session = null;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         session = new DefaultAtlasSession(AtlasTestData.generateAtlasMapping());
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         session = null;
     }
 

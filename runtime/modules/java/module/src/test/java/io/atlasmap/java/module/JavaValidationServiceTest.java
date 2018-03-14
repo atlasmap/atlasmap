@@ -89,7 +89,7 @@ public class JavaValidationServiceTest {
         validations = null;
     }
 
-    protected AtlasMapping getAtlasMappingFullValid() throws Exception {
+    protected AtlasMapping getAtlasMappingFullValid() {
         AtlasMapping mapping = AtlasModelFactory.createAtlasMapping();
 
         mapping.setName("thisis_a_valid.name");
@@ -190,7 +190,7 @@ public class JavaValidationServiceTest {
     // }
 
     @Test
-    public void testValidateMappingHappyPath() throws Exception {
+    public void testValidateMappingHappyPath() {
         AtlasMapping mapping = getAtlasMappingFullValid();
         assertNotNull(mapping);
         validations.addAll(sourceValidationService.validateMapping(mapping));
@@ -214,7 +214,7 @@ public class JavaValidationServiceTest {
     }
 
     @Test
-    public void testValidateMappingMismatchedFieldType() throws Exception {
+    public void testValidateMappingMismatchedFieldType() {
         AtlasMapping mapping = getAtlasMappingFullValid();
         assertNotNull(mapping);
         mapping.getMappings().getMapping().clear();
@@ -231,7 +231,7 @@ public class JavaValidationServiceTest {
     }
 
     @Test
-    public void testValidateMappingInvalidCombineSourceFieldType() throws Exception {
+    public void testValidateMappingInvalidCombineSourceFieldType() {
         AtlasMapping atlasMapping = getAtlasMappingFullValid();
 
         Mapping combineFieldMapping = AtlasModelFactory.createMapping(MappingType.COMBINE);
@@ -269,7 +269,7 @@ public class JavaValidationServiceTest {
     }
 
     @Test
-    public void testValidateMappingInvalidModuleType() throws Exception {
+    public void testValidateMappingInvalidModuleType() {
         AtlasMapping mapping = AtlasModelFactory.createAtlasMapping();
 
         mapping.setName("thisis_a_valid.name");
@@ -287,7 +287,7 @@ public class JavaValidationServiceTest {
     }
 
     @Test
-    public void testValidateMappingInvalidSeparateSourceFieldType() throws Exception {
+    public void testValidateMappingInvalidSeparateSourceFieldType() {
         AtlasMapping atlasMapping = getAtlasMappingFullValid();
 
         Mapping separateFieldMapping = AtlasModelFactory.createMapping(MappingType.SEPARATE);

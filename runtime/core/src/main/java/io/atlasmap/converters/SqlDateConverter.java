@@ -24,7 +24,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import io.atlasmap.api.AtlasConversionException;
 import io.atlasmap.api.AtlasConverter;
 import io.atlasmap.spi.AtlasConversionInfo;
 import io.atlasmap.v2.FieldType;
@@ -32,38 +31,37 @@ import io.atlasmap.v2.FieldType;
 public class SqlDateConverter implements AtlasConverter<java.sql.Date> {
 
     @AtlasConversionInfo(sourceType = FieldType.DATE, targetType = FieldType.DATE_TIME_TZ)
-    public Calendar toCalendar(java.sql.Date date) throws AtlasConversionException {
+    public Calendar toCalendar(java.sql.Date date) {
         return date != null ? GregorianCalendar.from(ZonedDateTime.ofInstant(Instant.ofEpochMilli(date.getTime()), ZoneId.systemDefault())) : null;
     }
 
     @AtlasConversionInfo(sourceType = FieldType.DATE, targetType = FieldType.DATE_TIME)
-    public Date toDate(java.sql.Date date, String sourceFormat, String targetFormat)
-            throws AtlasConversionException {
+    public Date toDate(java.sql.Date date, String sourceFormat, String targetFormat) {
         return date != null ? DateTimeHelper.convertSqlDateToDate(date, sourceFormat) : null;
     }
 
     @AtlasConversionInfo(sourceType = FieldType.DATE, targetType = FieldType.DATE_TIME_TZ)
-    public GregorianCalendar toGregorianCalendar(java.sql.Date date) throws AtlasConversionException {
+    public GregorianCalendar toGregorianCalendar(java.sql.Date date) {
         return date != null ? GregorianCalendar.from(ZonedDateTime.ofInstant(Instant.ofEpochMilli(date.getTime()), ZoneId.systemDefault())) : null;
     }
 
     @AtlasConversionInfo(sourceType = FieldType.DATE, targetType = FieldType.DATE)
-    public LocalDate toLocalDate(java.sql.Date date) throws AtlasConversionException {
+    public LocalDate toLocalDate(java.sql.Date date) {
         return date != null ? date.toLocalDate() : null;
     }
 
     @AtlasConversionInfo(sourceType = FieldType.DATE, targetType = FieldType.DATE_TIME)
-    public LocalDateTime toLocalDateTime(java.sql.Date date) throws AtlasConversionException {
+    public LocalDateTime toLocalDateTime(java.sql.Date date) {
         return date != null ? date.toLocalDate().atStartOfDay() : null;
     }
 
     @AtlasConversionInfo(sourceType = FieldType.DATE, targetType = FieldType.DATE_TIME)
-    public java.sql.Timestamp toSqlTimestamp(java.sql.Date date) throws AtlasConversionException {
+    public java.sql.Timestamp toSqlTimestamp(java.sql.Date date) {
         return date != null ? new java.sql.Timestamp(date.getTime()) : null;
     }
 
     @AtlasConversionInfo(sourceType = FieldType.DATE, targetType = FieldType.DATE_TIME_TZ)
-    public ZonedDateTime toZonedDateTime(java.sql.Date date) throws AtlasConversionException {
+    public ZonedDateTime toZonedDateTime(java.sql.Date date) {
         return date != null ? ZonedDateTime.ofInstant(Instant.ofEpochMilli(date.getTime()), ZoneId.systemDefault()) : null;
     }
 

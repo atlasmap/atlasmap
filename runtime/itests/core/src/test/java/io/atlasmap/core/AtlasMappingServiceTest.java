@@ -20,7 +20,7 @@ public class AtlasMappingServiceTest {
     private AtlasMappingService mappingService;
 
     @Before
-    public void before() throws Exception {
+    public void before() {
         mappingService = DefaultAtlasContextFactory.getInstance().getMappingService();
     }
 
@@ -74,7 +74,7 @@ public class AtlasMappingServiceTest {
                 .createContext(new File(url.toURI()), AtlasMappingFormat.JSON).createSession().getMapping());
     }
 
-    private void assertAtlasMapping(AtlasMapping mapping) throws Exception {
+    private void assertAtlasMapping(AtlasMapping mapping) {
         Assert.assertNotNull(mapping);
         Assert.assertEquals("core-unit-test", mapping.getName());
         Assert.assertNotNull(mapping.getMappings());

@@ -79,7 +79,7 @@ public class TestListOrdersTest {
                     ClassValidationUtil.validateSimpleTestContact(((JavaClass) c2f));
                     foundContact = true;
                 } else if ("java.util.Date".equals(((JavaClass) c2f).getClassName())) {
-                    ClassValidationUtil.validateCreated((JavaClass)c2f);
+                    ClassValidationUtil.validateCreated(c2f);
                     foundCreated = true;
                 } else {
                     fail("Unexpected class: " + ((JavaClass) c2f).getClassName());

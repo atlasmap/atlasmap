@@ -17,7 +17,7 @@ public class DefaultAtlasModuleInfoTest {
     private static DefaultAtlasModuleInfo module = null;
 
     @BeforeClass
-    public static void setUpBeforeClass() throws Exception {
+    public static void setUpBeforeClass() {
 
         List<String> formats = new ArrayList<>();
         formats.add("java");
@@ -28,7 +28,7 @@ public class DefaultAtlasModuleInfoTest {
     }
 
     @AfterClass
-    public static void tearDownAfterClass() throws Exception {
+    public static void tearDownAfterClass() {
         module = null;
     }
 

@@ -45,21 +45,21 @@ public class NonNullValidatorTest extends BaseValidatorTest {
     }
 
     @Test
-    public void testSupports() throws Exception {
+    public void testSupports() {
         assertTrue(validator.supports(String.class));
         assertTrue(validator.supports(Integer.class));
         assertTrue(validator.supports(Double.class));
     }
 
     @Test
-    public void testValidate() throws Exception {
+    public void testValidate() {
         String notNull = "notNull";
         validator.validate(notNull, validations, null);
         assertFalse(validationHelper.hasErrors());
     }
 
     @Test
-    public void testValidateInvalid() throws Exception {
+    public void testValidateInvalid() {
         validator.validate(null, validations, null);
         assertTrue(validationHelper.hasErrors());
         assertEquals(new Integer(1), new Integer(validationHelper.getCount()));

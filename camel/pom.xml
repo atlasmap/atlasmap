@@ -17,9 +17,7 @@
         <relativePath>../parent</relativePath>
     </parent>
 
-    <groupId>io.atlasmap</groupId>
     <artifactId>camel-atlasmap</artifactId>
-    <version>1.34-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>Camel :: AtlasMap</name>
     <description>Camel AtlasMap support</description>

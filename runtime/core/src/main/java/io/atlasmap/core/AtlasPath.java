@@ -29,7 +29,7 @@ public class AtlasPath {
     public static final String PATH_MAP_START = "{";
     public static final String PATH_MAP_END = "}";
 
-    private List<String> segments = new ArrayList<String>();
+    private List<String> segments = new ArrayList<>();
     private String originalPath = null;
 
     public AtlasPath(String p) {
@@ -98,9 +98,8 @@ public class AtlasPath {
     public String getLastSegment() {
         if (segments.isEmpty()) {
             return null;
-        } else {
-            return segments.get(segments.size() - 1);
         }
+        return segments.get(segments.size() - 1);
     }
 
     public boolean hasParent() {
@@ -347,6 +346,7 @@ public class AtlasPath {
         }
     }
 
+    @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
 

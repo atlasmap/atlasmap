@@ -42,12 +42,12 @@ public class DefaultAtlasModuleInfo implements AtlasModuleInfo, AtlasModuleInfoM
         this.packageNames = packageNames;
     }
 
+    @Override
     public String getModuleClassName() {
         if (moduleClass != null) {
             return moduleClass.getName();
-        } else {
-            return null;
         }
+        return null;
     }
 
     public Constructor<AtlasModule> getConstructor() {
@@ -67,9 +67,8 @@ public class DefaultAtlasModuleInfo implements AtlasModuleInfo, AtlasModuleInfoM
     public String[] getDataFormats() {
         if (formats != null) {
             return formats.toArray(new String[formats.size()]);
-        } else {
-            return new String[0];
         }
+        return new String[0];
     }
 
     @Override

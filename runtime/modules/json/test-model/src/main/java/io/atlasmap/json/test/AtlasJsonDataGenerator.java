@@ -16,7 +16,7 @@ public class AtlasJsonDataGenerator {
     private ObjectMapper mapper = null;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         mapper = new ObjectMapper();
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
         mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, true);
@@ -26,7 +26,7 @@ public class AtlasJsonDataGenerator {
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         mapper = null;
     }
 

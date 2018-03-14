@@ -38,7 +38,7 @@ public class IntegerConverterTest {
     private IntegerConverter converter = new IntegerConverter();
 
     @Test
-    public void convertToBoolean() throws Exception {
+    public void convertToBoolean() {
         int xTrue = 1;
         int xFalse = 0;
 
@@ -51,13 +51,13 @@ public class IntegerConverterTest {
     }
 
     @Test
-    public void convertToBooleanNull() throws Exception {
+    public void convertToBooleanNull() {
         Boolean out = converter.toBoolean(null);
         assertNull(out);
     }
 
     @Test
-    public void convertToBooleanHigh() throws Exception {
+    public void convertToBooleanHigh() {
         Boolean out = converter.toBoolean(10);
         assertTrue(out);
     }
@@ -90,7 +90,7 @@ public class IntegerConverterTest {
         Integer integer = new Integer(4);
         Character character = converter.toCharacter(integer);
         assertNotNull(character);
-        int revert = (char) character.charValue();
+        int revert = character.charValue();
         assertEquals(integer, new Integer(revert));
     }
 
@@ -107,7 +107,7 @@ public class IntegerConverterTest {
     }
 
     @Test
-    public void convertToDouble() throws Exception {
+    public void convertToDouble() {
         Integer integer = 0;
         Double d = converter.toDouble(integer);
         assertNotNull(d);
@@ -120,12 +120,12 @@ public class IntegerConverterTest {
     }
 
     @Test
-    public void convertToDoubleNull() throws Exception {
+    public void convertToDoubleNull() {
         assertNull(converter.toDouble(null));
     }
 
     @Test
-    public void convertToFloat() throws Exception {
+    public void convertToFloat() {
         Integer integer = 0;
         Float f = converter.toFloat(integer);
         assertNotNull(f);
@@ -138,7 +138,7 @@ public class IntegerConverterTest {
     }
 
     @Test
-    public void convertToFloatNull() throws Exception {
+    public void convertToFloatNull() {
         assertNull(converter.toFloat(null));
     }
 
@@ -172,7 +172,7 @@ public class IntegerConverterTest {
     }
 
     @Test
-    public void convertToLong() throws Exception {
+    public void convertToLong() {
         int i = Integer.MAX_VALUE;
         int negI = Integer.MIN_VALUE;
 
@@ -185,13 +185,13 @@ public class IntegerConverterTest {
     }
 
     @Test
-    public void convertToLongNull() throws Exception {
+    public void convertToLongNull() {
         Long out = converter.toLong(null);
         assertNull(out);
     }
 
     @Test
-    public void convertToString() throws Exception {
+    public void convertToString() {
         int i = Integer.MAX_VALUE;
         int negI = Integer.MIN_VALUE;
 
@@ -204,13 +204,13 @@ public class IntegerConverterTest {
     }
 
     @Test
-    public void convertToStringNull() throws Exception {
+    public void convertToStringNull() {
         String out = converter.toString(null);
         assertNull(out);
     }
 
     @Test
-    public void convertToInteger() throws Exception {
+    public void convertToInteger() {
         Integer foo = Integer.MAX_VALUE;
         Integer out = converter.toInteger(foo);
         foo++;
@@ -221,7 +221,7 @@ public class IntegerConverterTest {
     }
 
     @Test
-    public void convertToIntegerNull() throws Exception {
+    public void convertToIntegerNull() {
         Integer out = converter.toInteger(null);
         assertNull(out);
     }

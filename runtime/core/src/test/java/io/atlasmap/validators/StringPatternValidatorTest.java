@@ -33,19 +33,19 @@ public class StringPatternValidatorTest extends BaseValidatorTest {
     }
 
     @Test
-    public void testSupported() throws Exception {
+    public void testSupported() {
         validator = new StringPatternValidator(ValidationScope.ALL, "Must match .*", ".*");
         assertTrue(validator.supports(String.class));
     }
 
     @Test
-    public void testUnsupported() throws Exception {
+    public void testUnsupported() {
         validator = new StringPatternValidator(ValidationScope.DATA_SOURCE, "Must match [0-9_.]", "[0-9_.]");
         assertFalse(validator.supports(Double.class));
     }
 
     @Test
-    public void testValidate() throws Exception {
+    public void testValidate() {
         validator = new StringPatternValidator(ValidationScope.MAPPING, "Must match [^A-Za-z0-9_.]", "[^A-Za-z0-9_.]");
         validator.validate("This. &* should result in an error", validations, "testValidate");
         assertTrue(validationHelper.hasErrors());
@@ -56,7 +56,7 @@ public class StringPatternValidatorTest extends BaseValidatorTest {
     }
 
     @Test
-    public void testValidateUsingMatch() throws Exception {
+    public void testValidateUsingMatch() {
         validator = new StringPatternValidator(ValidationScope.LOOKUP_TABLE, "Must match [0-9]+", "[0-9]+", true);
         validator.validate("0333", validations, "testValidateUsingMatch");
         assertFalse(validationHelper.hasErrors());

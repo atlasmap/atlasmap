@@ -45,13 +45,13 @@ public class LookupTableNameValidatorTest extends BaseValidatorTest {
     }
 
     @Test
-    public void testSupportsLookupTables() throws Exception {
+    public void testSupportsLookupTables() {
         LookupTables lookupTables = makeLookupTables();
         assertTrue(validator.supports(lookupTables.getClass()));
     }
 
     @Test
-    public void testValidateDuplicatedNames() throws Exception {
+    public void testValidateDuplicatedNames() {
         LookupTables lookupTables = makeLookupTables();
         validator.validate(lookupTables, validations, null);
         assertTrue(validationHelper.hasErrors());
@@ -61,7 +61,7 @@ public class LookupTableNameValidatorTest extends BaseValidatorTest {
     }
 
     @Test
-    public void testValidateNoDuplicateNames() throws Exception {
+    public void testValidateNoDuplicateNames() {
         LookupTables lookupTables = makeLookupTables();
         lookupTables.getLookupTable().remove(2);
         validator.validate(lookupTables, validations, null);

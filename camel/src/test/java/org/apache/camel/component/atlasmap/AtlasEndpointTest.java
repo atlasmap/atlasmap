@@ -1,7 +1,7 @@
 package org.apache.camel.component.atlasmap;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.spy;
@@ -121,14 +121,16 @@ public class AtlasEndpointTest {
         when(exchange.getIn()).thenReturn(inMessage);
         if (sourceDocId == null) {
             doAnswer(new Answer<Void>() {
+                @Override
                 public Void answer(InvocationOnMock invocation) {
-                    LOG.debug("setDefaultSourceDocument({})", (String)invocation.getArgument(0).toString());
+                    LOG.debug("setDefaultSourceDocument({})", invocation.getArgument(0).toString());
                     assertEquals("{test}", invocation.getArgument(0).toString());
                     return null;
                 }
             }).when(session).setDefaultSourceDocument(any());
         } else {
             doAnswer(new Answer<Void>() {
+                @Override
                 public Void answer(InvocationOnMock invocation) {
                     LOG.debug("setSourceDocument({}, {})", invocation.getArgument(0), invocation.getArgument(1));
                     assertEquals(sourceDocId, invocation.getArgument(0));
@@ -139,8 +141,9 @@ public class AtlasEndpointTest {
         }
         final Message outMessage = spy(Message.class);
         doAnswer(new Answer<Void>() {
+            @Override
             public Void answer(InvocationOnMock invocation) {
-                LOG.debug("setBody({})", (String)invocation.getArgument(0));
+                LOG.debug("setBody({})", invocation.getArgument(0).toString());
                 assertEquals("<target/>", invocation.getArgument(0));
                 return null;
             }
@@ -149,6 +152,7 @@ public class AtlasEndpointTest {
         doNothing().when(outMessage).setAttachments(any());
         if (targetDocId == null) {
             when(session.getDefaultTargetDocument()).thenAnswer(new Answer<Object>() {
+                @Override
                 public Object answer(InvocationOnMock invocation) throws Throwable {
                     LOG.debug("getDefaultTargetDocument()");
                     return "<target/>";
@@ -156,8 +160,9 @@ public class AtlasEndpointTest {
             });
         } else {
             when(session.getTargetDocument(any())).thenAnswer(new Answer<Object>() {
+                @Override
                 public Object answer(InvocationOnMock invocation) throws Throwable {
-                    LOG.debug("getTargetDocument({})", (String)invocation.getArgument(0));
+                    LOG.debug("getTargetDocument({})", invocation.getArgument(0).toString());
                     assertEquals(targetDocId, invocation.getArgument(0));
                     return "<target/>";
                 }

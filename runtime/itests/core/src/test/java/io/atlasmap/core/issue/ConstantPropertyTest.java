@@ -22,7 +22,7 @@ public class ConstantPropertyTest {
     private AtlasMappingService mappingService;
 
     @Before
-    public void before() throws Exception {
+    public void before() {
         mappingService = DefaultAtlasContextFactory.getInstance().getMappingService();
     }
 

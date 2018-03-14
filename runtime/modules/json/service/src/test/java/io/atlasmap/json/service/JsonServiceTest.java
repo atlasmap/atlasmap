@@ -12,12 +12,12 @@ public class JsonServiceTest {
     private JsonService jsonService = null;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         jsonService = new JsonService();
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         jsonService = null;
     }
 

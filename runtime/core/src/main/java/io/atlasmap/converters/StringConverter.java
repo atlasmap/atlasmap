@@ -60,8 +60,7 @@ public class StringConverter implements AtlasConverter<String> {
     }
 
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.BOOLEAN, concerns = AtlasConversionConcern.CONVENTION)
-    public Boolean toBoolean(String value, String sourceFormat, String targetFormat)
-            throws AtlasConversionException {
+    public Boolean toBoolean(String value, String sourceFormat, String targetFormat) {
         if (value == null) {
             return null;
         }
@@ -82,9 +81,8 @@ public class StringConverter implements AtlasConverter<String> {
             Number n = NumberFormat.getInstance().parse(value);
             if (n.intValue() == 0) {
                 return Boolean.FALSE;
-            } else {
-                return Boolean.TRUE;
             }
+            return Boolean.TRUE;
         } catch (ParseException e) {
             e.getMessage(); // ignore
         }
@@ -123,8 +121,7 @@ public class StringConverter implements AtlasConverter<String> {
     }
 
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.DATE_TIME)
-    public Date toDate(String date, String sourceFormat, String targetFormat)
-            throws AtlasConversionException {
+    public Date toDate(String date, String sourceFormat, String targetFormat) {
 
         DateTimeFormatter formater = sourceFormat != null ? DateTimeFormatter.ofPattern(sourceFormat)
                 : DateTimeFormatter.ISO_ZONED_DATE_TIME;
@@ -271,8 +268,7 @@ public class StringConverter implements AtlasConverter<String> {
     }
 
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.STRING)
-    public String toString(String value, String sourceFormat, String targetFormat)
-            throws AtlasConversionException {
+    public String toString(String value, String sourceFormat, String targetFormat) {
         if (value == null) {
             return null;
         }

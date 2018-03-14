@@ -19,7 +19,6 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Date;
 
-import io.atlasmap.api.AtlasConversionException;
 import io.atlasmap.api.AtlasConverter;
 import io.atlasmap.spi.AtlasConversionInfo;
 import io.atlasmap.v2.FieldType;
@@ -27,16 +26,16 @@ import io.atlasmap.v2.FieldType;
 public class MockCustomConverter implements AtlasConverter<Date> {
 
     @AtlasConversionInfo(sourceType = FieldType.DATE, targetType = FieldType.COMPLEX)
-    public ZonedDateTime convertToZonedDateTime(Date date) throws AtlasConversionException {
+    public ZonedDateTime convertToZonedDateTime(Date date) {
         return convertToZonedDateTime(date, ZoneId.systemDefault());
     }
 
-    public ZonedDateTime convertToZonedDateTime(Date date, ZoneId zoneId) throws AtlasConversionException {
+    public ZonedDateTime convertToZonedDateTime(Date date, ZoneId zoneId) {
         return ZonedDateTime.ofInstant(date.toInstant(), zoneId);
     }
 
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.STRING)
-    public String convertToString(String value) throws AtlasConversionException {
+    public String convertToString(String value) {
         return "aString";
     }
 

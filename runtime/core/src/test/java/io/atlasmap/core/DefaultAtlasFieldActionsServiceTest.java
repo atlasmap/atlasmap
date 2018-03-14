@@ -28,13 +28,13 @@ public class DefaultAtlasFieldActionsServiceTest {
     private DefaultAtlasFieldActionService fieldActionsService = null;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         fieldActionsService = new DefaultAtlasFieldActionService(DefaultAtlasConversionService.getInstance());
         fieldActionsService.init();
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         fieldActionsService = null;
     }
 

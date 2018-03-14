@@ -61,7 +61,7 @@ public abstract class BaseValidatorTest {
         validations = null;
     }
 
-    protected AtlasMapping getAtlasMappingFullValid() throws Exception {
+    protected AtlasMapping getAtlasMappingFullValid() {
         AtlasMapping mapping = AtlasModelFactory.createAtlasMapping();
 
         mapping.setName("thisis_a_valid.name");
@@ -124,7 +124,7 @@ public abstract class BaseValidatorTest {
         mapping.getMappings().getMapping().add(mapFieldMapping);
     }
 
-    protected AtlasMapping getAtlasMappingWithLookupTables(String... names) throws Exception {
+    protected AtlasMapping getAtlasMappingWithLookupTables(String... names) {
         AtlasMapping mapping = this.getAtlasMappingFullValid();
         LookupTables lookupTables = new LookupTables();
         mapping.setLookupTables(lookupTables);

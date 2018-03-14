@@ -38,29 +38,29 @@ public class ByteConverterTest {
     private ByteConverter byteConverter = new ByteConverter();
 
     @Test()
-    public void convertToBoolean() throws Exception {
+    public void convertToBoolean() {
         assertTrue(byteConverter.toBoolean(new Byte((byte)1)));
         assertFalse(byteConverter.toBoolean(new Byte((byte)0)));
         assertTrue(byteConverter.toBoolean(Byte.MAX_VALUE));
     }
 
     @Test
-    public void convertToBooleanNull() throws Exception {
+    public void convertToBooleanNull() {
         assertNull(byteConverter.toBoolean(null));
     }
 
     @Test
-    public void convertToByte() throws Exception {
+    public void convertToByte() {
         byteConverter.toByte(Byte.MAX_VALUE);
     }
 
     @Test
-    public void convertToByteNull() throws Exception {
+    public void convertToByteNull() {
         assertNull(byteConverter.toByte(null));
     }
 
     @Test
-    public void convertToCharacter() throws Exception {
+    public void convertToCharacter() {
         byte value = 0;
         assertEquals('\u0000', byteConverter.toCharacter(new Byte(value)).charValue());
         value = 99;
@@ -68,57 +68,57 @@ public class ByteConverterTest {
     }
 
     @Test
-    public void convertToCharacterNull() throws Exception {
+    public void convertToCharacterNull() {
         assertNull(byteConverter.toCharacter(null));
     }
 
     @Test
-    public void convertToDouble() throws Exception {
+    public void convertToDouble() {
         assertEquals(100, byteConverter.toDouble(DEFAULT_VALUE).doubleValue(), 0);
     }
 
     @Test
-    public void convertToDoubleNull() throws Exception {
+    public void convertToDoubleNull() {
         assertNull(byteConverter.toDouble(null));
     }
 
     @Test
-    public void convertToFloat() throws Exception {
+    public void convertToFloat() {
         assertEquals(100, byteConverter.toFloat(DEFAULT_VALUE).floatValue(), 0);
     }
 
     @Test
-    public void convertToFloatNull() throws Exception {
+    public void convertToFloatNull() {
         assertNull(byteConverter.toFloat(null));
     }
 
     @Test
-    public void convertToInteger() throws Exception {
+    public void convertToInteger() {
         assertEquals(100, byteConverter.toInteger(DEFAULT_VALUE).intValue());
     }
 
     @Test
-    public void convertToIntegerNull() throws Exception {
+    public void convertToIntegerNull() {
         assertNull(byteConverter.toInteger(null));
     }
 
     @Test
-    public void convertToLong() throws Exception {
+    public void convertToLong() {
         assertEquals(100, byteConverter.toLong(DEFAULT_VALUE).longValue());
     }
 
     @Test
-    public void convertToLongNull() throws Exception {
+    public void convertToLongNull() {
         assertNull(byteConverter.toLong(null));
     }
 
     @Test
-    public void convertToShort() throws Exception {
+    public void convertToShort() {
         assertEquals(100, byteConverter.toShort(DEFAULT_VALUE).shortValue());
     }
 
     @Test
-    public void convertToIShortNull() throws Exception {
+    public void convertToIShortNull() {
         assertNull(byteConverter.toShort(null));
     }
 
@@ -128,7 +128,7 @@ public class ByteConverterTest {
     }
 
     @Test
-    public void convertToStringNull() throws Exception {
+    public void convertToStringNull() {
         assertNull(byteConverter.toString(null));
     }
 

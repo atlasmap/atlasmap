@@ -12,9 +12,8 @@ public class JsonDocumentInspectionService {
 
         if (cleanDocument.startsWith("{") || cleanDocument.startsWith("[")) {
             return InstanceInspector.instance().inspect(cleanDocument);
-        } else {
-            throw new JsonInspectionException("JSON data must begin with either '{' or '['");
         }
+        throw new JsonInspectionException("JSON data must begin with either '{' or '['");
     }
 
     public JsonDocument inspectJsonSchema(String jsonSchema) throws JsonInspectionException {
@@ -25,9 +24,8 @@ public class JsonDocumentInspectionService {
 
         if (cleanDocument.startsWith("{") || cleanDocument.startsWith("[")) {
             return SchemaInspector.instance().inspect(cleanDocument);
-        } else {
-            throw new JsonInspectionException("JSON schema must begin with either '{' or '['");
         }
+        throw new JsonInspectionException("JSON schema must begin with either '{' or '['");
     }
 
     protected String cleanJsonDocument(String sourceDocument) {

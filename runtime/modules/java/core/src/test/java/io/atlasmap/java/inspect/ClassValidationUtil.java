@@ -32,7 +32,7 @@ import io.atlasmap.v2.FieldType;
 public class ClassValidationUtil {
 
     public static void validateFlatPrimitiveClass(ClassInspectionService classInspectionService, Class<?> clazz,
-            String className) throws Exception {
+            String className) {
         JavaClass flatClass = classInspectionService.inspectClass(clazz);
         validateFlatClass(flatClass);
         assertEquals(null, flatClass.getCollectionType());
@@ -44,7 +44,7 @@ public class ClassValidationUtil {
     }
 
     public static void validateFlatPrimitiveClassArray(ClassInspectionService classInspectionService, Class<?> clazz,
-            String className) throws Exception {
+            String className) {
         JavaClass flatClass = classInspectionService.inspectClass(clazz);
         validateFlatClass(flatClass);
         assertEquals(CollectionType.ARRAY, flatClass.getCollectionType());
@@ -56,7 +56,7 @@ public class ClassValidationUtil {
     }
 
     public static void validateFlatPrimitiveClassTwoDimArray(ClassInspectionService classInspectionService,
-            Class<?> clazz, String className) throws Exception {
+            Class<?> clazz, String className) {
         JavaClass flatClass = classInspectionService.inspectClass(clazz);
         validateFlatClass(flatClass);
         assertEquals(CollectionType.ARRAY, flatClass.getCollectionType());
@@ -68,7 +68,7 @@ public class ClassValidationUtil {
     }
 
     public static void validateFlatPrimitiveClassThreeDimArray(ClassInspectionService classInspectionService,
-            Class<?> clazz, String className) throws Exception {
+            Class<?> clazz, String className) {
         JavaClass flatClass = classInspectionService.inspectClass(clazz);
         validateFlatClass(flatClass);
         assertEquals(CollectionType.ARRAY, flatClass.getCollectionType());
@@ -78,8 +78,7 @@ public class ClassValidationUtil {
         validateFlatPrimitiveFields(flatClass);
     }
 
-    public static void validateFlatPrimitiveInterface(ClassInspectionService classInspectionService, Class<?> clazz)
-            throws Exception {
+    public static void validateFlatPrimitiveInterface(ClassInspectionService classInspectionService, Class<?> clazz) {
         JavaClass flatClass = classInspectionService.inspectClass(clazz);
         validateFlatClass(flatClass);
         assertEquals("io.atlasmap.java.test.FlatPrimitiveInterface", flatClass.getClassName());
@@ -87,7 +86,7 @@ public class ClassValidationUtil {
     }
 
     public static void validateFlatPrimitiveInterfaceArray(ClassInspectionService classInspectionService,
-            Class<?> clazz) throws Exception {
+            Class<?> clazz) {
         JavaClass flatClass = classInspectionService.inspectClass(clazz);
         validateFlatClass(flatClass);
         assertEquals(CollectionType.ARRAY, flatClass.getCollectionType());
@@ -98,7 +97,7 @@ public class ClassValidationUtil {
     }
 
     public static void validateFlatPrimitiveInterfaceTwoDimArray(ClassInspectionService classInspectionService,
-            Class<?> clazz) throws Exception {
+            Class<?> clazz) {
         JavaClass flatClass = classInspectionService.inspectClass(clazz);
         validateFlatClass(flatClass);
         assertEquals(CollectionType.ARRAY, flatClass.getCollectionType());
@@ -109,7 +108,7 @@ public class ClassValidationUtil {
     }
 
     public static void validateFlatPrimitiveInterfaceThreeDimArray(ClassInspectionService classInspectionService,
-            Class<?> clazz) throws Exception {
+            Class<?> clazz) {
         JavaClass flatClass = classInspectionService.inspectClass(clazz);
         validateFlatClass(flatClass);
         assertEquals(CollectionType.ARRAY, flatClass.getCollectionType());
@@ -132,7 +131,7 @@ public class ClassValidationUtil {
         assertEquals(String.format(AtlasJavaModelFactory.URI_FORMAT, flatClass.getClassName()), flatClass.getUri());
     }
 
-    public static void validateFlatPrimitiveFields(JavaClass flatClass) throws Exception {
+    public static void validateFlatPrimitiveFields(JavaClass flatClass) {
         assertNotNull(flatClass.getPackageName());
         assertEquals("io.atlasmap.java.test", flatClass.getPackageName());
         assertNotNull(flatClass.getJavaFields());
@@ -145,7 +144,6 @@ public class ClassValidationUtil {
 
         for (JavaField f : flatClass.getJavaFields().getJavaField()) {
             assertNotNull(f);
-            assertTrue(f instanceof JavaField);
             JavaField j = f;
             assertNotNull(j.getName());
             switch (j.getFieldType()) {

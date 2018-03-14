@@ -47,7 +47,7 @@ public class CachedComplexClassInspectClassTest {
     }
 
     @Test
-    public void testCachedComplexClass() throws Exception {
+    public void testCachedComplexClass() {
         JavaClass c = classInspectionService.inspectClass(CachedComplexClass.class);
         assertNotNull(c);
         assertNull(c.getAnnotations());

@@ -36,7 +36,7 @@ public class FloatConverterTest {
     private FloatConverter converter = new FloatConverter();
 
     @Test
-    public void convertToBoolean() throws Exception {
+    public void convertToBoolean() {
         Float df = 0.0f;
         Float dt = 1.0f;
 
@@ -51,14 +51,14 @@ public class FloatConverterTest {
     }
 
     @Test
-    public void convertToBooleanNull() throws Exception {
+    public void convertToBooleanNull() {
         Float df = null;
         Boolean b = converter.toBoolean(df);
         assertNull(b);
     }
 
     @Test
-    public void convertToBooleanNegative() throws Exception {
+    public void convertToBooleanNegative() {
         Float dt = -1.0f;
         Boolean b = converter.toBoolean(dt);
         assertTrue(b);
@@ -110,7 +110,7 @@ public class FloatConverterTest {
     }
 
     @Test
-    public void convertToDouble() throws Exception {
+    public void convertToDouble() {
         Float df = 0.0f;
         Double d = converter.toDouble(df);
         assertNotNull(d);
@@ -125,14 +125,14 @@ public class FloatConverterTest {
     }
 
     @Test
-    public void convertToDoubleNull() throws Exception {
+    public void convertToDoubleNull() {
         Float df = null;
         Double d = converter.toDouble(df);
         assertNull(d);
     }
 
     @Test
-    public void convertToFloat() throws Exception {
+    public void convertToFloat() {
         Float df = 0.0f;
         Float d = converter.toFloat(df);
         assertNotNull(d);
@@ -141,7 +141,7 @@ public class FloatConverterTest {
     }
 
     @Test
-    public void convertToFloatNull() throws Exception {
+    public void convertToFloatNull() {
         Float df = null;
         Float d = converter.toFloat(df);
         assertNull(d);
@@ -211,7 +211,7 @@ public class FloatConverterTest {
     }
 
     @Test
-    public void convertToString() throws Exception {
+    public void convertToString() {
         Float df = 0.0f;
         String s = converter.toString(df);
         assertNotNull(s);
@@ -219,7 +219,7 @@ public class FloatConverterTest {
     }
 
     @Test
-    public void convertToStringNull() throws Exception {
+    public void convertToStringNull() {
         Float df = null;
         String s = converter.toString(df);
         assertNull(s);

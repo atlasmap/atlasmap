@@ -96,9 +96,8 @@ public abstract class BaseAtlasModule implements AtlasModule, AtlasModuleMXBean 
         if ((atlasModuleMode == AtlasModuleMode.SOURCE && AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID.equals(docId))
                 || (atlasModuleMode == AtlasModuleMode.TARGET && AtlasConstants.DEFAULT_TARGET_DOCUMENT_ID.equals(docId))) {
             return fieldDocId == null || fieldDocId.isEmpty() || fieldDocId.equals(docId);
-        } else {
-            return fieldDocId != null && !fieldDocId.isEmpty() && fieldDocId.equals(docId);
         }
+        return fieldDocId != null && !fieldDocId.isEmpty() && fieldDocId.equals(docId);
     }
 
     @Override
@@ -248,6 +247,7 @@ public abstract class BaseAtlasModule implements AtlasModule, AtlasModuleMXBean 
         return 0L;
     }
 
+    @Override
     public long getTargetErrorCount() {
         return 0L;
     }

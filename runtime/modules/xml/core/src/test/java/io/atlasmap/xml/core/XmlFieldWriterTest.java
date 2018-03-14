@@ -53,7 +53,7 @@ public class XmlFieldWriterTest {
     private XmlFieldReader reader = new XmlFieldReader(DefaultAtlasConversionService.getInstance());
 
     @Before
-    public void setup() throws Exception {
+    public void setup() {
         this.writer = null;
         this.document = null;
         this.seedDocument = null;

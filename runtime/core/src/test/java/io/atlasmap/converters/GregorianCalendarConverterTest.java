@@ -27,7 +27,7 @@ public class GregorianCalendarConverterTest {
     private GregorianCalendarConverter converter = new GregorianCalendarConverter();
 
     @Test
-    public void convertFromGregorianCalendar() throws Exception {
+    public void convertFromGregorianCalendar() {
         Date date = converter.toDate((GregorianCalendar) GregorianCalendar.getInstance());
         assertNotNull(date);
     }
