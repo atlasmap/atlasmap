@@ -40,7 +40,7 @@ public class JavaConstructServiceComplexListTest {
     private ClassInspectionService classInspectionService = null;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         constructService = new JavaConstructService();
         constructService.setConversionService(DefaultAtlasConversionService.getInstance());
 
@@ -49,7 +49,7 @@ public class JavaConstructServiceComplexListTest {
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         constructService = null;
         classInspectionService = null;
     }

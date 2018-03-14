@@ -68,7 +68,7 @@ public class MultidocFlatMappingTest extends AtlasMappingBaseTest {
         assertTrue(targetXml instanceof String);
         assertEquals(targetXml.toString(),
                 "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><XmlFPA booleanField=\"false\" byteField=\"99\" charField=\"a\" doubleField=\"5.0E7\" floatField=\"4.0E7\" intField=\"2\" longField=\"30000\" shortField=\"1\"/>",
-                (String) targetXml);
+                targetXml);
     }
 
     private BaseFlatPrimitiveClass generateFlatPrimitiveClass(Class<? extends BaseFlatPrimitiveClass> clazz)
@@ -78,7 +78,7 @@ public class MultidocFlatMappingTest extends AtlasMappingBaseTest {
 
         newObject.setBooleanField(false);
         newObject.setByteField((byte) 99);
-        newObject.setCharField((char) 'a');
+        newObject.setCharField('a');
         newObject.setDoubleField(50000000d);
         newObject.setFloatField(40000000f);
         newObject.setIntField(2);

@@ -16,9 +16,7 @@
 package io.atlasmap.java.inspect;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.AnnotatedType;
 import java.lang.reflect.Field;
-import java.lang.reflect.GenericDeclaration;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
@@ -54,16 +52,16 @@ public class ClassInspectionService {
     private static final Logger LOG = LoggerFactory.getLogger(ClassInspectionService.class);
     // limit
 
-    private List<String> listClasses = new ArrayList<String>(
+    private List<String> listClasses = new ArrayList<>(
             Arrays.asList("java.util.List", "java.util.ArrayList", "java.util.LinkedList", "java.util.Vector",
                     "java.util.Stack", "java.util.AbstractList", "java.util.AbstractSequentialList"));
-    private List<String> mapClasses = new ArrayList<String>(Arrays.asList("java.util.Map", "java.util.HashMap",
+    private List<String> mapClasses = new ArrayList<>(Arrays.asList("java.util.Map", "java.util.HashMap",
             "java.util.TreeMap", "java.util.Hashtable", "java.util.IdentityHashMap", "java.util.LinkedHashMap",
             "java.util.LinkedHashMap", "java.util.SortedMap", "java.util.WeakHashMap", "java.util.Properties",
             "java.util.concurrent.ConcurrentHashMap", "java.util.concurrent.ConcurrentMap"));
     private AtlasConversionService atlasConversionService = null;
-    private List<String> fieldBlacklist = new ArrayList<String>(Arrays.asList("serialVersionUID"));
-    private List<String> classNameBlacklist = new ArrayList<String>();
+    private List<String> fieldBlacklist = new ArrayList<>(Arrays.asList("serialVersionUID"));
+    private List<String> classNameBlacklist = new ArrayList<>();
     private Boolean disablePackagePrivateOnlyFields = false;
     private Boolean disableProtectedOnlyFields = false;
     private Boolean disablePrivateOnlyFields = false;
@@ -184,7 +182,7 @@ public class ClassInspectionService {
         }
 
         JavaClass javaClass = AtlasJavaModelFactory.createJavaClass();
-        Set<String> cachedClasses = new HashSet<String>();
+        Set<String> cachedClasses = new HashSet<>();
         cachedClasses.add(clazz.getCanonicalName()); // we cache ourself
         inspectClass(classLoader, clazz, javaClass, cachedClasses, null);
         return javaClass;
@@ -613,9 +611,8 @@ public class ClassInspectionService {
                     s.setStatus(FieldStatus.UNSUPPORTED);
                     LOG.warn("VarArg, Bridge, Synthetic or Default method " + m.getName() + " detected");
                     continue;
-                } else {
-                    s.setSynthetic(m.isSynthetic());
                 }
+                s.setSynthetic(m.isSynthetic());
 
                 if (m.getName().startsWith("get") || m.getName().startsWith("is")) {
                     s = inspectGetMethod(classLoader, m, s, cachedClasses, pathPrefix);
@@ -673,9 +670,8 @@ public class ClassInspectionService {
 
         if (!clazz.isArray()) {
             return arrayDim;
-        } else {
-            arrayDim++;
         }
+        arrayDim++;
 
         Class<?> tmpClazz = clazz.getComponentType();
         while (tmpClazz != null && tmpClazz.isArray() && arrayDim < MAX_ARRAY_DIM_LIMIT) {
@@ -686,7 +682,7 @@ public class ClassInspectionService {
     }
 
     private List<io.atlasmap.java.v2.Modifier> detectModifiers(int m) {
-        List<io.atlasmap.java.v2.Modifier> modifiers = new ArrayList<io.atlasmap.java.v2.Modifier>();
+        List<io.atlasmap.java.v2.Modifier> modifiers = new ArrayList<>();
         if (Modifier.isAbstract(m)) {
             modifiers.add(io.atlasmap.java.v2.Modifier.ABSTRACT);
         }
@@ -745,9 +741,8 @@ public class ClassInspectionService {
 
         if (!clazz.isArray()) {
             return clazz;
-        } else {
-            arrayDim++;
         }
+        arrayDim++;
 
         Class<?> tmpClazz = clazz.getComponentType();
         while (tmpClazz != null && tmpClazz.isArray() && arrayDim < MAX_ARRAY_DIM_LIMIT) {
@@ -770,15 +765,13 @@ public class ClassInspectionService {
 
         for (Type t : types) {
             if (pTypes == null) {
-                pTypes = new ArrayList<String>();
+                pTypes = new ArrayList<>();
             }
 
             if (!onlyClasses && t instanceof TypeVariable) {
                 TypeVariable<?> tv = (TypeVariable<?>) t;
                 // TODO: no current need, but we may want to have treatment for 'T'
                 // tv.getTypeName()
-                AnnotatedType[] annotatedBounds = tv.getAnnotatedBounds();
-                GenericDeclaration genericDeclaration = tv.getGenericDeclaration();
                 pTypes.add(((Class<?>) tv.getAnnotatedBounds()[0].getType()).getCanonicalName());
             }
 

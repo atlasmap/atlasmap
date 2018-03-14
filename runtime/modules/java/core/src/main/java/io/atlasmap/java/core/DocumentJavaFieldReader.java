@@ -140,22 +140,21 @@ public class DocumentJavaFieldReader implements AtlasFieldReader {
         return null;
     }
 
-    private Object getValueFromMemberField(AtlasInternalSession session, Object source, String fieldName) throws Exception {
+    private Object getValueFromMemberField(AtlasInternalSession session, Object source, String fieldName) throws IllegalArgumentException, IllegalAccessException {
         java.lang.reflect.Field reflectField = lookupJavaField(source, fieldName);
         if (reflectField != null) {
             reflectField.setAccessible(true);
             return reflectField.get(source);
-        } else {
-            Field sourceField = session.head().getSourceField();
-            AtlasUtil.addAudit(session, sourceField.getDocId(), String.format(
-                    "Field '%s' not found on object '%s'", fieldName, source),
-                    sourceField.getPath(), AuditStatus.ERROR, null);
-            return null;
         }
+        Field sourceField = session.head().getSourceField();
+        AtlasUtil.addAudit(session, sourceField.getDocId(), String.format(
+                "Field '%s' not found on object '%s'", fieldName, source),
+                sourceField.getPath(), AuditStatus.ERROR, null);
+        return null;
     }
 
     private List<Class<?>> resolveMappableClasses(Class<?> className) {
-        List<Class<?>> classTree = new ArrayList<Class<?>>();
+        List<Class<?>> classTree = new ArrayList<>();
         classTree.add(className);
 
         Class<?> superClazz = className.getSuperclass();

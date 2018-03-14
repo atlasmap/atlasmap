@@ -17,12 +17,12 @@ public class JsonModuleTest {
     private JsonModule module = null;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         module = new JsonModule();
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         module = null;
     }
 

@@ -34,8 +34,8 @@ import org.junit.Test;
 public class DynamicClassLoaderTest {
 
     @Test
-    public void testListClassesInJarFile() throws Exception {
-        List<String> classes = new ArrayList<String>();
+    public void testListClassesInJarFile() {
+        List<String> classes = new ArrayList<>();
         String folderName = "target/reference-jars";
 
         try (DirectoryStream<Path> stream = Files.newDirectoryStream(Paths.get(folderName))) {
@@ -66,7 +66,7 @@ public class DynamicClassLoaderTest {
     }
 
     @Test
-    public void testLoadInspectUnloadJar() throws Exception {
+    public void testLoadInspectUnloadJar() {
 
         Class<?> flatClazz = null;
 
@@ -98,7 +98,7 @@ public class DynamicClassLoaderTest {
         }
     }
 
-    public void testLoadUnloadNeverLoadedClass() throws Exception {
+    public void testLoadUnloadNeverLoadedClass() {
         try {
             this.getClass().getClassLoader().loadClass("io.atlasmap.java.test.BaseFlatPrimitiveClass");
             fail("ClassNotFoundException expected");

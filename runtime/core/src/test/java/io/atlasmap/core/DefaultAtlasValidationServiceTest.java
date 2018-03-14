@@ -54,7 +54,7 @@ public class DefaultAtlasValidationServiceTest extends BaseValidatorTest {
     }
 
     @Test
-    public void testValidateAtlasMappingFileHappyPath() throws Exception {
+    public void testValidateAtlasMappingFileHappyPath() {
         AtlasMapping mapping = getAtlasMappingFullValid();
         assertNotNull(mapping);
 
@@ -67,7 +67,7 @@ public class DefaultAtlasValidationServiceTest extends BaseValidatorTest {
     }
 
     @Test
-    public void testValidateAtlasMappingFileHappyPath2() throws Exception {
+    public void testValidateAtlasMappingFileHappyPath2() {
         AtlasMapping mapping = getAtlasMappingFullValid();
         assertNotNull(mapping);
 
@@ -80,7 +80,7 @@ public class DefaultAtlasValidationServiceTest extends BaseValidatorTest {
     }
 
     @Test
-    public void testValidateAtlasMappingFileInvalidName() throws Exception {
+    public void testValidateAtlasMappingFileInvalidName() {
         AtlasMapping mapping = new AtlasMapping();
         mapping.setName("thisis in_valid.name");
 
@@ -92,7 +92,7 @@ public class DefaultAtlasValidationServiceTest extends BaseValidatorTest {
     }
 
     @Test
-    public void testValidateAtlasMappingFileLookupTablesDuplicateNames() throws Exception {
+    public void testValidateAtlasMappingFileLookupTablesDuplicateNames() {
         AtlasMapping mapping = getAtlasMappingWithLookupTables("duplicate_name", "duplicate_name");
         validations.addAll(validationService.validateMapping(mapping));
 
@@ -103,7 +103,7 @@ public class DefaultAtlasValidationServiceTest extends BaseValidatorTest {
     }
 
     @Test
-    public void testValidateAtlasMappingFileLookupFieldMappingRefNonExistentNames() throws Exception {
+    public void testValidateAtlasMappingFileLookupFieldMappingRefNonExistentNames() {
         AtlasMapping mapping = getAtlasMappingWithLookupTables("table1", "table2");
 
         // add one that does not exists
@@ -126,7 +126,7 @@ public class DefaultAtlasValidationServiceTest extends BaseValidatorTest {
     }
 
     @Test
-    public void testValidateAtlasMappingFileLookupFieldMappingUnusedLookupTable() throws Exception {
+    public void testValidateAtlasMappingFileLookupFieldMappingUnusedLookupTable() {
         AtlasMapping mapping = getAtlasMappingFullValid();
         LookupTables lookupTables = new LookupTables();
         mapping.setLookupTables(lookupTables);
@@ -161,7 +161,7 @@ public class DefaultAtlasValidationServiceTest extends BaseValidatorTest {
     }
 
     @Test
-    public void testValidateAtlasMappingFileNoLookupFieldMappingsWithTablesDefined() throws Exception {
+    public void testValidateAtlasMappingFileNoLookupFieldMappingsWithTablesDefined() {
         AtlasMapping mapping = getAtlasMappingFullValid();
         LookupTables lookupTables = new LookupTables();
         mapping.setLookupTables(lookupTables);

@@ -46,24 +46,24 @@ public class StringLengthValidatorTest extends BaseValidatorTest {
     }
 
     @Test
-    public void testSupported() throws Exception {
+    public void testSupported() {
         assertTrue(validator.supports(String.class));
     }
 
     @Test
-    public void testUnsupported() throws Exception {
+    public void testUnsupported() {
         assertFalse(validator.supports(Integer.class));
     }
 
     @Test
-    public void testValidate() throws Exception {
+    public void testValidate() {
         String pass = "1112332";
         validator.validate(pass, validations, "testValidate");
         assertFalse(validationHelper.hasErrors());
     }
 
     @Test
-    public void testValidateInvalid() throws Exception {
+    public void testValidateInvalid() {
         String pass = "";
         validator.validate(pass, validations, "testValidateInvalid");
         assertTrue(validationHelper.hasErrors());

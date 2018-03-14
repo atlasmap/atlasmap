@@ -50,6 +50,7 @@ public class JsonFieldReader implements AtlasFieldReader {
         this.conversionService = conversionService;
     }
 
+    @Override
     public void read(AtlasInternalSession session) throws AtlasException {
         JsonField jsonField = JsonField.class.cast(session.head().getSourceField());
         if (rootNode == null) {
@@ -155,7 +156,7 @@ public class JsonFieldReader implements AtlasFieldReader {
         }
     }
 
-    private void handleNumberNode(JsonNode valueNode, JsonField jsonField) throws AtlasConversionException {
+    private void handleNumberNode(JsonNode valueNode, JsonField jsonField) {
         if (valueNode.isInt()) {
             jsonField.setValue(valueNode.intValue());
             jsonField.setFieldType(FieldType.INTEGER);

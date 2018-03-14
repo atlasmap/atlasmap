@@ -54,7 +54,7 @@ public class JavaJavaCollectionTest extends AtlasMappingBaseTest {
         assertEquals(TargetTestClass.class.getName(), object.getClass().getName());
         assertEquals(20, object.getContactList().size());
         for (int i = 0; i < 20; i++) {
-            TargetContact contact = (TargetContact) object.getContactList().get(i);
+            TargetContact contact = object.getContactList().get(i);
             if (i == 4 || i == 19) {
                 assertEquals("Ozzie", contact.getFirstName());
             } else {
@@ -78,7 +78,7 @@ public class JavaJavaCollectionTest extends AtlasMappingBaseTest {
         assertEquals(TargetTestClass.class.getName(), object.getClass().getName());
         assertEquals(20, object.getContactArray().length);
         for (int i = 0; i < 20; i++) {
-            TargetContact contact = (TargetContact) object.getContactArray()[i];
+            TargetContact contact = object.getContactArray()[i];
             if (i == 6 || i == 19) {
                 assertEquals("Ozzie", contact.getFirstName());
             } else {

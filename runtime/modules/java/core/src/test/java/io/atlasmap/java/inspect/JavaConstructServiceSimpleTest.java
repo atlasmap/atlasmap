@@ -34,13 +34,13 @@ public class JavaConstructServiceSimpleTest {
     private JavaConstructService constructService = null;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         constructService = new JavaConstructService();
         constructService.setConversionService(DefaultAtlasConversionService.getInstance());
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         constructService = null;
     }
 
@@ -49,7 +49,7 @@ public class JavaConstructServiceSimpleTest {
         Object targetObject = constructService.constructClass(generateJavaClass("java.lang.String"),null);
         assertNotNull(targetObject);
         assertTrue(targetObject instanceof java.lang.String);
-        assertEquals("", ((String) targetObject));
+        assertEquals("", targetObject);
         assertEquals(new Integer(0), new Integer(((String) targetObject).length()));
     }
 

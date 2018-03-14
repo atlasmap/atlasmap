@@ -36,7 +36,7 @@ public class ShortConverterTest {
     private ShortConverter converter = new ShortConverter();
 
     @Test
-    public void convertToBoolean() throws Exception {
+    public void convertToBoolean() {
         Short f = 0;
         Short t = 1;
 
@@ -51,14 +51,14 @@ public class ShortConverterTest {
     }
 
     @Test
-    public void convertToBooleanNull() throws Exception {
+    public void convertToBooleanNull() {
         Short l = null;
         Boolean b = converter.toBoolean(l);
         assertNull(b);
     }
 
     @Test
-    public void convertToBooleanNegative() throws Exception {
+    public void convertToBooleanNegative() {
         Short dt = -1;
         Boolean b = converter.toBoolean(dt);
         assertTrue(b);
@@ -111,7 +111,7 @@ public class ShortConverterTest {
     }
 
     @Test
-    public void convertToDouble() throws Exception {
+    public void convertToDouble() {
         Short s = 0;
         Double d = converter.toDouble(s);
         assertNotNull(d);
@@ -119,14 +119,14 @@ public class ShortConverterTest {
     }
 
     @Test
-    public void convertToDoubleNull() throws Exception {
+    public void convertToDoubleNull() {
         Short s = null;
         Double d = converter.toDouble(s);
         assertNull(d);
     }
 
     @Test
-    public void convertToDoubleMAX() throws Exception {
+    public void convertToDoubleMAX() {
         Short s = Short.MAX_VALUE;
         Double d = converter.toDouble(s);
         assertNotNull(d);
@@ -134,7 +134,7 @@ public class ShortConverterTest {
     }
 
     @Test
-    public void convertToFloat() throws Exception {
+    public void convertToFloat() {
         Short s = 0;
         Float f = converter.toFloat(s);
         assertNotNull(f);
@@ -142,12 +142,12 @@ public class ShortConverterTest {
     }
 
     @Test
-    public void convertToFloatNull() throws Exception {
+    public void convertToFloatNull() {
         assertNull(converter.toFloat(null));
     }
 
     @Test
-    public void convertToFloatMAX() throws Exception {
+    public void convertToFloatMAX() {
         Short s = Short.MAX_VALUE;
         Float f = converter.toFloat(s);
         assertNotNull(f);
@@ -155,7 +155,7 @@ public class ShortConverterTest {
     }
 
     @Test
-    public void convertToInteger() throws Exception {
+    public void convertToInteger() {
         Short s = 0;
         Integer i = converter.toInteger(s);
         assertNotNull(i);
@@ -163,14 +163,14 @@ public class ShortConverterTest {
     }
 
     @Test
-    public void convertToIntegerNull() throws Exception {
+    public void convertToIntegerNull() {
         Short l = null;
         Integer i = converter.toInteger(l);
         assertNull(i);
     }
 
     @Test
-    public void convertToLong() throws Exception {
+    public void convertToLong() {
         Short s = 1;
         Long l = converter.toLong(s);
         assertNotNull(l);
@@ -178,14 +178,14 @@ public class ShortConverterTest {
     }
 
     @Test
-    public void convertToLongNull() throws Exception {
+    public void convertToLongNull() {
         Short s = null;
         Long l = converter.toLong(s);
         assertNull(l);
     }
 
     @Test
-    public void convertToLongMAX() throws Exception {
+    public void convertToLongMAX() {
         Short s = Short.MAX_VALUE;
         Long l = converter.toLong(s);
         assertNotNull(l);
@@ -193,7 +193,7 @@ public class ShortConverterTest {
     }
 
     @Test
-    public void convertToLongMIN() throws Exception {
+    public void convertToLongMIN() {
         Short s = Short.MIN_VALUE;
         Long l = converter.toLong(s);
         assertNotNull(l);
@@ -201,7 +201,7 @@ public class ShortConverterTest {
     }
 
     @Test
-    public void convertToShort() throws Exception {
+    public void convertToShort() {
         Short aShort = 0;
         Short s = converter.toShort(aShort);
         assertNotNull(s);
@@ -210,14 +210,14 @@ public class ShortConverterTest {
     }
 
     @Test
-    public void convertToShortNull() throws Exception {
+    public void convertToShortNull() {
         Short l = null;
         Short s = converter.toShort(l);
         assertNull(s);
     }
 
     @Test
-    public void convertToString() throws Exception {
+    public void convertToString() {
         Short l = 0;
         String s = converter.toString(l);
         assertNotNull(s);
@@ -225,7 +225,7 @@ public class ShortConverterTest {
     }
 
     @Test
-    public void convertToStringNull() throws Exception {
+    public void convertToStringNull() {
         Short l = null;
         String s = converter.toString(l);
         assertNull(s);

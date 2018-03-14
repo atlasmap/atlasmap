@@ -58,7 +58,7 @@ public class XmlInspectionService {
         return inspectXmlDocument(document);
     }
 
-    public XmlDocument inspectXmlDocument(Document sourceDocument) throws XmlInspectionException {
+    public XmlDocument inspectXmlDocument(Document sourceDocument) {
         if (sourceDocument == null) {
             throw new IllegalArgumentException("Source must be specified");
         }

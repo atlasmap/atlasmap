@@ -35,7 +35,7 @@ public class BooleanConverterTest {
     private BooleanConverter converter = new BooleanConverter();
 
     @Test
-    public void convertToBoolean() throws Exception {
+    public void convertToBoolean() {
         Boolean t = Boolean.TRUE;
         Boolean f = Boolean.FALSE;
         Boolean t2 = converter.toBoolean(t, null, null);
@@ -49,14 +49,14 @@ public class BooleanConverterTest {
     }
 
     @Test
-    public void convertToBooleanNull() throws Exception {
+    public void convertToBooleanNull() {
         Boolean t = null;
         Boolean t2 = converter.toBoolean(t, null, null);
         assertNull(t2);
     }
 
     @Test
-    public void convertToByte() throws Exception {
+    public void convertToByte() {
         Byte trueValue = (byte) 1;
         assertEquals(trueValue, converter.toByte(Boolean.TRUE));
         Byte falseValue = (byte) 0;
@@ -64,12 +64,12 @@ public class BooleanConverterTest {
     }
 
     @Test
-    public void convertToByteNull() throws Exception {
+    public void convertToByteNull() {
         assertNull(converter.toByte(null));
     }
 
     @Test
-    public void convertToCharacter() throws Exception {
+    public void convertToCharacter() {
         Boolean t = Boolean.TRUE;
         Boolean f = Boolean.FALSE;
         Character c = converter.toCharacter(t);
@@ -81,14 +81,14 @@ public class BooleanConverterTest {
     }
 
     @Test
-    public void convertToCharacterNull() throws Exception {
+    public void convertToCharacterNull() {
         Boolean t = null;
         Character c = converter.toCharacter(t);
         assertNull(c);
     }
 
     @Test
-    public void convertToDouble() throws Exception {
+    public void convertToDouble() {
         Boolean t = Boolean.TRUE;
         Boolean f = Boolean.FALSE;
         Double d = converter.toDouble(t);
@@ -101,14 +101,14 @@ public class BooleanConverterTest {
     }
 
     @Test
-    public void convertToDoubleNull() throws Exception {
+    public void convertToDoubleNull() {
         Boolean t = null;
         Double d = converter.toDouble(t);
         assertNull(d);
     }
 
     @Test
-    public void convertToFloat() throws Exception {
+    public void convertToFloat() {
         Boolean t = Boolean.TRUE;
         Boolean f = Boolean.FALSE;
         Float aFloat = converter.toFloat(t);
@@ -120,14 +120,14 @@ public class BooleanConverterTest {
     }
 
     @Test
-    public void convertToFloatNull() throws Exception {
+    public void convertToFloatNull() {
         Boolean t = null;
         Float f = converter.toFloat(t);
         assertNull(f);
     }
 
     @Test
-    public void convertToInteger() throws Exception {
+    public void convertToInteger() {
         Boolean t = Boolean.TRUE;
         Boolean f = Boolean.FALSE;
         Integer i = converter.toInteger(t);
@@ -139,14 +139,14 @@ public class BooleanConverterTest {
     }
 
     @Test
-    public void convertToIntegerNull() throws Exception {
+    public void convertToIntegerNull() {
         Boolean t = null;
         Integer i = converter.toInteger(t);
         assertNull(i);
     }
 
     @Test
-    public void convertToLong() throws Exception {
+    public void convertToLong() {
         Boolean t = Boolean.TRUE;
         Boolean f = Boolean.FALSE;
         Long l = converter.toLong(t);
@@ -158,14 +158,14 @@ public class BooleanConverterTest {
     }
 
     @Test
-    public void convertToLongNull() throws Exception {
+    public void convertToLongNull() {
         Boolean t = null;
         Long l = converter.toLong(t);
         assertNull(l);
     }
 
     @Test
-    public void convertToShort() throws Exception {
+    public void convertToShort() {
         Boolean t = Boolean.TRUE;
         Boolean f = Boolean.FALSE;
         Short s = converter.toShort(t);
@@ -177,14 +177,14 @@ public class BooleanConverterTest {
     }
 
     @Test
-    public void convertToShortNull() throws Exception {
+    public void convertToShortNull() {
         Boolean t = null;
         Short s = converter.toShort(t);
         assertNull(s);
     }
 
     @Test
-    public void convertToString() throws Exception {
+    public void convertToString() {
         Boolean t = Boolean.TRUE;
         Boolean f = Boolean.FALSE;
         String s = converter.toString(t, null, null);
@@ -196,7 +196,7 @@ public class BooleanConverterTest {
     }
 
     @Test
-    public void convertToStringNull() throws Exception {
+    public void convertToStringNull() {
         Boolean t = null;
         String s = converter.toString(t, null, null);
         assertNull(s);

@@ -78,34 +78,29 @@ public class XmlService {
     @GET
     @Path("/inspect")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getClass(@QueryParam("uri") String uri, @QueryParam("type") String type) throws Exception {
-        long startTime = System.currentTimeMillis();
-        long endTime;
+    public Response getClass(@QueryParam("uri") String uri, @QueryParam("type") String type) {
         XmlDocument d = null;
 
         try {
 
             if (type == null) {
                 throw new Exception("uri and type parameters must be specified");
-            } else {
-                InspectionType inspectType = InspectionType.valueOf(type);
-                XmlInspectionService s = new XmlInspectionService();
+            }
+            InspectionType inspectType = InspectionType.valueOf(type);
+            XmlInspectionService s = new XmlInspectionService();
 
-                switch (inspectType) {
-                case INSTANCE:
-                    d = s.inspectXmlDocument(new File(uri));
-                    break;
-                case SCHEMA:
-                    d = s.inspectSchema(new File(uri));
-                    break;
-                default:
-                    throw new Exception("Unknown type specified: " + type);
-                }
+            switch (inspectType) {
+            case INSTANCE:
+                d = s.inspectXmlDocument(new File(uri));
+                break;
+            case SCHEMA:
+                d = s.inspectSchema(new File(uri));
+                break;
+            default:
+                throw new Exception("Unknown type specified: " + type);
             }
         } catch (Exception e) {
             LOG.error("Error inspecting xml: " + e.getMessage(), e);
-        } finally {
-            endTime = System.currentTimeMillis() - startTime;
         }
 
         return Response.ok().entity(toJson(d)).build();
@@ -115,11 +110,11 @@ public class XmlService {
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
     @Path("/inspect")
-    public Response inspectClass(InputStream request) throws Exception {
+    public Response inspectClass(InputStream request) {
         return inspectClass(fromJson(request, XmlInspectionRequest.class));
     }
 
-    public Response inspectClass(XmlInspectionRequest request) throws Exception {
+    public Response inspectClass(XmlInspectionRequest request) {
         long startTime = System.currentTimeMillis();
 
         XmlInspectionResponse response = new XmlInspectionResponse();

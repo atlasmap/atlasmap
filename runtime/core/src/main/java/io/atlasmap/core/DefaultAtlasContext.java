@@ -83,23 +83,22 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
     private Map<String, AtlasModule> targetModules = new HashMap<>();
     private Map<String, LookupTable> lookupTables = new HashMap<>();
 
-    public DefaultAtlasContext(URI atlasMappingUri) throws AtlasException {
+    public DefaultAtlasContext(URI atlasMappingUri) {
         this(DefaultAtlasContextFactory.getInstance(), atlasMappingUri, AtlasMappingFormat.XML);
     }
 
-    public DefaultAtlasContext(DefaultAtlasContextFactory factory, URI atlasMappingUri) throws AtlasException {
+    public DefaultAtlasContext(DefaultAtlasContextFactory factory, URI atlasMappingUri) {
         this(factory, atlasMappingUri, AtlasMappingFormat.XML);
     }
 
-    public DefaultAtlasContext(DefaultAtlasContextFactory factory, URI atlasMappingUri, AtlasMappingFormat format)
-            throws AtlasException {
+    public DefaultAtlasContext(DefaultAtlasContextFactory factory, URI atlasMappingUri, AtlasMappingFormat format) {
         this.factory = factory;
         this.uuid = UUID.randomUUID();
         this.atlasMappingUri = atlasMappingUri;
         this.atlasMappingFormat = format;
     }
 
-    public DefaultAtlasContext(DefaultAtlasContextFactory factory, AtlasMapping mapping) throws AtlasException {
+    public DefaultAtlasContext(DefaultAtlasContextFactory factory, AtlasMapping mapping) {
         this.factory = factory;
         this.uuid = UUID.randomUUID();
         this.mappingDefinition = mapping;
@@ -507,7 +506,7 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
 
             if (combineValues == null) {
                 // We need to support a sorted map w/ null values
-                combineValues = new HashMap<Integer, String>();
+                combineValues = new HashMap<>();
             }
 
             if ((sourceField.getFieldType() != null) || (sourceField.getValue() != null)) {

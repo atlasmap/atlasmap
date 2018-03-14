@@ -251,7 +251,7 @@ public class SchemaInspector {
         return new ByteArrayInputStream(output);
     }
 
-    private String getNameNS(XSDeclaration decl) throws Exception {
+    private String getNameNS(XSDeclaration decl) {
         String targetNamespace = decl.getTargetNamespace();
         if (targetNamespace == null || targetNamespace.isEmpty()) {
             targetNamespace = decl.getOwnerSchema().getTargetNamespace();
@@ -262,9 +262,8 @@ public class SchemaInspector {
                 prefix = namespaceContext.addWithIndex(targetNamespace);
             }
             return String.format("%s:%s", prefix, decl.getName());
-        } else {
-            return decl.getName();
         }
+        return decl.getName();
     }
 
     private void populateNamespaces() {
@@ -386,8 +385,7 @@ public class SchemaInspector {
         }
     }
 
-    private void printAttributes(XSComplexType xsComplexType, String rootName, XmlComplexType xmlComplexType)
-            throws Exception {
+    private void printAttributes(XSComplexType xsComplexType, String rootName, XmlComplexType xmlComplexType) {
         Collection<? extends XSAttributeUse> c = xsComplexType.getDeclaredAttributeUses();
         for (XSAttributeUse aC : c) {
             XmlField xmlField = AtlasXmlModelFactory.createXmlField();

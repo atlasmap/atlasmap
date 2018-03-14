@@ -67,7 +67,7 @@ public class DefaultAtlasSeparateStrategy implements AtlasSeparateStrategy {
             return values;
         }
 
-        values.addAll(Arrays.asList(((String) value).split((delimiter == null ? DEFAULT_SEPARATE_DELIMITER.getRegex() : delimiter.getRegex()),
+        values.addAll(Arrays.asList(value.split((delimiter == null ? DEFAULT_SEPARATE_DELIMITER.getRegex() : delimiter.getRegex()),
                 (limit == null ? DEFAULT_SEPARATE_LIMIT : limit))));
         return values;
     }

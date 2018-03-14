@@ -27,7 +27,7 @@ public class SqlTimestampConverterTest {
     private SqlTimestampConverter converter = new SqlTimestampConverter();
 
     @Test
-    public void convertFromTimestamp() throws Exception {
+    public void convertFromTimestamp() {
         Date date = converter.toDate(new Timestamp(System.nanoTime()));
         assertNotNull(date);
     }

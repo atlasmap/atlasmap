@@ -45,25 +45,25 @@ public class PositiveIntegerValidatorTest extends BaseValidatorTest {
     }
 
     @Test
-    public void testSupported() throws Exception {
+    public void testSupported() {
         assertTrue(validator.supports(Integer.class));
         assertTrue(validator.supports(String.class));
     }
 
     @Test
-    public void testUnsupported() throws Exception {
+    public void testUnsupported() {
         assertFalse(validator.supports(Boolean.class));
     }
 
     @Test
-    public void testValidate() throws Exception {
+    public void testValidate() {
         validator.validate(0, validations, null);
         validator.validate(1222, validations, null);
         assertFalse(validationHelper.hasErrors());
     }
 
     @Test
-    public void testValidateInvalid() throws Exception {
+    public void testValidateInvalid() {
         validator.validate(-1, validations, "testValidateInvalid");
         assertTrue(validationHelper.hasErrors());
         assertEquals(new Integer(1), new Integer(validationHelper.getCount()));
@@ -71,7 +71,7 @@ public class PositiveIntegerValidatorTest extends BaseValidatorTest {
     }
 
     @Test
-    public void testValidateInvalidWarn() throws Exception {
+    public void testValidateInvalidWarn() {
         validator.validate(-1, validations, "testValidateInvalidWarn", ValidationStatus.WARN);
         assertFalse(validationHelper.hasErrors());
         assertTrue(validationHelper.hasWarnings());
@@ -80,7 +80,7 @@ public class PositiveIntegerValidatorTest extends BaseValidatorTest {
     }
 
     @Test
-    public void testValidateInvalidInfo() throws Exception {
+    public void testValidateInvalidInfo() {
         validator.validate(-1, validations, "testValidateInvalidInfo", ValidationStatus.INFO);
         assertFalse(validationHelper.hasErrors());
         assertFalse(validationHelper.hasWarnings());
@@ -90,7 +90,7 @@ public class PositiveIntegerValidatorTest extends BaseValidatorTest {
     }
 
     @Test
-    public void testValidateWithErrorLevel() throws Exception {
+    public void testValidateWithErrorLevel() {
         validator.validate(0, validations, "testValidateWithErrorLevel", ValidationStatus.WARN);
         assertFalse(validationHelper.hasErrors());
         assertFalse(validationHelper.hasWarnings());

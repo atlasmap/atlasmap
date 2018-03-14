@@ -150,7 +150,7 @@ public class TargetValueConverter {
     }
 
     @SuppressWarnings("unchecked")
-    private Object populateEnumValue(AtlasInternalSession session, LookupTable lookupTable, JavaEnumField sourceField, JavaEnumField targetField) throws AtlasException {
+    private Object populateEnumValue(AtlasInternalSession session, LookupTable lookupTable, JavaEnumField sourceField, JavaEnumField targetField) {
         if (sourceField == null || sourceField.getValue() == null) {
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Input enum field or value is null, field: " + sourceField);
@@ -248,7 +248,7 @@ public class TargetValueConverter {
     }
 
     private List<Class<?>> resolveMappableClasses(Class<?> className) {
-        List<Class<?>> classTree = new ArrayList<Class<?>>();
+        List<Class<?>> classTree = new ArrayList<>();
         classTree.add(className);
 
         Class<?> superClazz = className.getSuperclass();

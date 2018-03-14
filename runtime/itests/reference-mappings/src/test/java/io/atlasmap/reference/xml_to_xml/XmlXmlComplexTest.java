@@ -52,7 +52,7 @@ public class XmlXmlComplexTest extends AtlasMappingBaseTest {
         assertTrue(object instanceof String);
         assertEquals(
                 "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><XmlOE><orderId>8765309</orderId><Contact><firstName>Ozzie</firstName><lastName>Smith</lastName><phoneNumber>5551212</phoneNumber><zipCode>81111</zipCode></Contact><Address><addressLine1>123 Main St</addressLine1><addressLine2>Suite 42b</addressLine2><city>Anytown</city><state>NY</state><zipCode>90210</zipCode></Address></XmlOE>",
-                (String) object);
+                object);
     }
 
     @Test
@@ -72,7 +72,7 @@ public class XmlXmlComplexTest extends AtlasMappingBaseTest {
         assertTrue(object instanceof String);
         assertEquals(
                 "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><XmlOA orderId=\"8765309\"><Contact firstName=\"Ozzie\" lastName=\"Smith\" phoneNumber=\"5551212\" zipCode=\"81111\"/><Address addressLine1=\"123 Main St\" addressLine2=\"Suite 42b\" city=\"Anytown\" state=\"NY\" zipCode=\"90210\"/></XmlOA>",
-                (String) object);
+                object);
     }
 
     @Test
@@ -90,7 +90,7 @@ public class XmlXmlComplexTest extends AtlasMappingBaseTest {
         Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof String);
-        JAXBElement<XmlOrderElement> xmlOE = (JAXBElement<XmlOrderElement>) AtlasXmlTestHelper
+        JAXBElement<XmlOrderElement> xmlOE = AtlasXmlTestHelper
                 .unmarshal((String) object, XmlOrderElement.class);
         AtlasTestUtil.validateXmlOrderElement(xmlOE.getValue());
     }
@@ -110,7 +110,7 @@ public class XmlXmlComplexTest extends AtlasMappingBaseTest {
         Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof String);
-        JAXBElement<XmlOrderAttribute> xmlOA = (JAXBElement<XmlOrderAttribute>) AtlasXmlTestHelper
+        JAXBElement<XmlOrderAttribute> xmlOA = AtlasXmlTestHelper
                 .unmarshal((String) object, XmlOrderAttribute.class);
         AtlasTestUtil.validateXmlOrderAttribute(xmlOA.getValue());
     }

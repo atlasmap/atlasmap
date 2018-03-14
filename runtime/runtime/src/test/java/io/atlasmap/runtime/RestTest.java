@@ -24,8 +24,6 @@ import java.nio.charset.StandardCharsets;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.embedded.LocalServerPort;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -47,7 +45,6 @@ import okhttp3.Response;
 })
 public class RestTest {
 
-    private static final Logger LOG = LoggerFactory.getLogger(RestTest.class);
     private static final OkHttpClient CLIENT = new OkHttpClient();
     private static final MediaType APPLICATION_JSON = MediaType.parse("application/json");
 

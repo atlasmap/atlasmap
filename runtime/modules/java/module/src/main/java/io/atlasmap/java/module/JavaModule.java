@@ -320,7 +320,7 @@ public class JavaModule extends BaseAtlasModule {
 
     @Override
     public Field cloneField(Field field) throws AtlasException {
-        return AtlasJavaModelFactory.cloneJavaField((JavaField) field);
+        return AtlasJavaModelFactory.cloneJavaField(field);
     }
 
     public ClassLoader getClassLoader() {

@@ -101,7 +101,7 @@ public class JsonJavaFlatMappingTest extends AtlasMappingBaseTest {
 
         newObject.setBooleanField(false);
         newObject.setByteField((byte) 99);
-        newObject.setCharField((char) 'a');
+        newObject.setCharField('a');
         newObject.setDoubleField(50000000d);
         newObject.setFloatField(40000000f);
         newObject.setIntField(2);
@@ -189,7 +189,7 @@ public class JsonJavaFlatMappingTest extends AtlasMappingBaseTest {
         assertNull(targetObject.getBoxedByteArrayField());
         assertTrue((byte) 0 == targetObject.getByteField());
         assertNull(targetObject.getBoxedCharArrayField());
-        assertTrue((char) '\u0000' == targetObject.getCharField());
+        assertTrue('\u0000' == targetObject.getCharField());
         assertNull(targetObject.getBoxedDoubleArrayField());
         assertTrue(0.0d == targetObject.getDoubleField());
         assertNull(targetObject.getBoxedFloatArrayField());

@@ -77,7 +77,7 @@ public class MultidocComplexTest extends AtlasMappingBaseTest {
         Object xmlOrderElement = session.getTargetDocument("XmlOrderElement");
         assertNotNull(xmlOrderElement);
         assertTrue(xmlOrderElement instanceof String);
-        XmlOrderElement xmlOE = (XmlOrderElement) AtlasXmlTestHelper
+        XmlOrderElement xmlOE = AtlasXmlTestHelper
                 .unmarshal((String) xmlOrderElement, XmlOrderElement.class).getValue();
         assertEquals("8765309", xmlOE.getOrderId());
         assertEquals("Ozzie", xmlOE.getContact().getFirstName());
@@ -121,7 +121,7 @@ public class MultidocComplexTest extends AtlasMappingBaseTest {
         Object xmlOrderElement = session.getTargetDocument("XmlOrderElement");
         assertNotNull(xmlOrderElement);
         assertTrue(xmlOrderElement instanceof String);
-        XmlOrderElement xmlOE = (XmlOrderElement) AtlasXmlTestHelper
+        XmlOrderElement xmlOE = AtlasXmlTestHelper
                 .unmarshal((String) xmlOrderElement, XmlOrderElement.class).getValue();
         assertEquals("8765309", xmlOE.getOrderId());
         assertEquals(null, xmlOE.getContact().getLastName());

@@ -46,15 +46,11 @@ public class LongConverter implements AtlasConverter<Long> {
 
     @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.BOOLEAN,
             concerns = AtlasConversionConcern.CONVENTION)
-    public Boolean toBoolean(Long value) throws AtlasConversionException {
+    public Boolean toBoolean(Long value) {
         if (value == null) {
             return null;
         }
-        if (value == 0L) {
-            return Boolean.FALSE;
-        } else {
-            return Boolean.TRUE;
-        }
+        return value == 0L ? Boolean.FALSE : Boolean.TRUE;
     }
 
     @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.BYTE,
@@ -65,10 +61,9 @@ public class LongConverter implements AtlasConverter<Long> {
         }
         if (value >= Byte.MIN_VALUE && value <= Byte.MAX_VALUE) {
             return value.byteValue();
-        } else {
-            throw new AtlasConversionException(new AtlasUnsupportedException(
-                    String.format("Long %s is greater than Byte.MAX_VALUE or less than Byte.MIN_VALUE", value)));
         }
+        throw new AtlasConversionException(new AtlasUnsupportedException(
+                String.format("Long %s is greater than Byte.MAX_VALUE or less than Byte.MIN_VALUE", value)));
     }
 
     @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.CHAR, concerns = {
@@ -87,16 +82,15 @@ public class LongConverter implements AtlasConverter<Long> {
     }
 
     @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.DATE_TIME_TZ)
-    public Date toDate(Long date) throws AtlasConversionException {
+    public Date toDate(Long date) {
         if (date >= Instant.MIN.getEpochSecond()) {
             return Date.from(Instant.ofEpochMilli(date));
-        } else {
-            return new Date(date);
         }
+        return new Date(date);
     }
 
     @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.DOUBLE)
-    public Double toDouble(Long value) throws AtlasConversionException {
+    public Double toDouble(Long value) {
         if (value == null) {
             return null;
         }
@@ -104,7 +98,7 @@ public class LongConverter implements AtlasConverter<Long> {
     }
 
     @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.FLOAT)
-    public Float toFloat(Long value) throws AtlasConversionException {
+    public Float toFloat(Long value) {
         if (value == null) {
             return null;
         }
@@ -139,7 +133,7 @@ public class LongConverter implements AtlasConverter<Long> {
     }
 
     @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.LONG)
-    public Long toLong(Long value) throws AtlasConversionException {
+    public Long toLong(Long value) {
         return value != null ? new Long(value) : null;
     }
 
@@ -156,12 +150,12 @@ public class LongConverter implements AtlasConverter<Long> {
     }
 
     @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.NUMBER)
-    public Number toNumber(Long value) throws AtlasConversionException {
+    public Number toNumber(Long value) {
         return value;
     }
 
     @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.STRING)
-    public String toString(Long value) throws AtlasConversionException {
+    public String toString(Long value) {
         return value != null ? String.valueOf(value) : null;
     }
 

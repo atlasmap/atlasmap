@@ -37,7 +37,7 @@ public class DoubleConverterTest {
     private DoubleConverter converter = new DoubleConverter();
 
     @Test
-    public void convertToBoolean() throws Exception {
+    public void convertToBoolean() {
         Double df = 0.0;
         Double dt = 1.0;
 
@@ -52,14 +52,14 @@ public class DoubleConverterTest {
     }
 
     @Test
-    public void convertToBooleanNull() throws Exception {
+    public void convertToBooleanNull() {
         Double df = null;
         Boolean b = converter.toBoolean(df);
         assertNull(b);
     }
 
     @Test
-    public void convertToBooleanNegative() throws Exception {
+    public void convertToBooleanNegative() {
         Double dt = -1.0;
         Boolean b = converter.toBoolean(dt);
         assertTrue(b);
@@ -110,7 +110,7 @@ public class DoubleConverterTest {
     }
 
     @Test
-    public void convertToDouble() throws Exception {
+    public void convertToDouble() {
         Double df = 0.0;
         Double d = converter.toDouble(df);
         assertNotNull(d);
@@ -119,7 +119,7 @@ public class DoubleConverterTest {
     }
 
     @Test
-    public void convertToDoubleNull() throws Exception {
+    public void convertToDoubleNull() {
         Double df = null;
         Double d = converter.toDouble(df);
         assertNull(d);
@@ -221,7 +221,7 @@ public class DoubleConverterTest {
     }
 
     @Test
-    public void convertToString() throws Exception {
+    public void convertToString() {
         Double df = 0.0;
         String s = converter.toString(df);
         assertNotNull(s);
@@ -229,7 +229,7 @@ public class DoubleConverterTest {
     }
 
     @Test
-    public void convertToStringNull() throws Exception {
+    public void convertToStringNull() {
         Double df = null;
         String s = converter.toString(df);
         assertNull(s);

@@ -38,7 +38,7 @@ public class StringConverterTest {
     private StringConverter converter = new StringConverter();
 
     @Test
-    public void convertToBoolean() throws Exception {
+    public void convertToBoolean() {
         String f = "0";
         String t = "1";
         String capitalT = "T";
@@ -84,13 +84,13 @@ public class StringConverterTest {
     }
 
     @Test
-    public void convertToBooleanNull() throws Exception {
+    public void convertToBooleanNull() {
         Boolean b = converter.toBoolean(null, null, null);
         assertNull(b);
     }
 
     @Test
-    public void convertToBooleanFallback() throws Exception {
+    public void convertToBooleanFallback() {
         String s = "";
         Boolean b = converter.toBoolean(s, null, null);
         assertFalse(b);
@@ -161,7 +161,7 @@ public class StringConverterTest {
     }
 
     @Test
-    public void convertToDate() throws Exception {
+    public void convertToDate() {
         // assumes a valid ISO 8601 date time string
         Date date = converter.toDate(Instant.now().toString(), null, null);
         assertNotNull(date);
@@ -365,7 +365,7 @@ public class StringConverterTest {
     }
 
     @Test
-    public void convertToString() throws Exception {
+    public void convertToString() {
         String zero = "0";
         String converted = converter.toString(zero, null, null);
         assertNotNull(converted);
@@ -374,7 +374,7 @@ public class StringConverterTest {
     }
 
     @Test
-    public void convertToStringNull() throws Exception {
+    public void convertToStringNull() {
         String s = converter.toString(null, null, null);
         assertNull(s);
     }

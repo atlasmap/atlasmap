@@ -83,7 +83,7 @@ public class AtlasMapMultiDocsTest {
 
         MockEndpoint.assertIsSatisfied(camelContext);
         Exchange exchange = result.getExchanges().get(0);
-        Map<String, Object> targetMap = exchange.getProperty(AtlasConstants.ATLAS_TARGET_MAP, Map.class);
+        Map<?, ?> targetMap = exchange.getProperty(AtlasConstants.ATLAS_TARGET_MAP, Map.class);
 
         TargetContact javaTarget = (TargetContact) targetMap.get("DOCID:JAVA:CONTACT:T");
         assertEquals("JavaFirstName", javaTarget.getFirstName());
@@ -98,8 +98,7 @@ public class AtlasMapMultiDocsTest {
         assertEquals("XmlPhoneNumber", jsonTargetNode.get("phoneNumber").asText());
 
         String xmlTarget = (String) targetMap.get("DOCID:XML:CONTACT:T");
-        JAXBElement<XmlContactAttribute> xmlTargetJaxb = (JAXBElement<XmlContactAttribute>)
-                AtlasXmlTestHelper.unmarshal((String) xmlTarget, XmlContactAttribute.class);
+        JAXBElement<XmlContactAttribute> xmlTargetJaxb = AtlasXmlTestHelper.unmarshal(xmlTarget, XmlContactAttribute.class);
         XmlContactAttribute xmlTargetObj = xmlTargetJaxb.getValue();
         assertEquals("XmlFirstName", xmlTargetObj.getFirstName());
         assertEquals("JsonLastName", xmlTargetObj.getLastName());

@@ -40,13 +40,13 @@ public class DefaultAtlasPropertyStrategyTest {
     private DefaultAtlasPropertyStrategy propStrategy = null;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         propStrategy = new DefaultAtlasPropertyStrategy();
         propStrategy.setAtlasConversionService(DefaultAtlasConversionService.getInstance());
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         propStrategy = null;
     }
 
@@ -100,7 +100,7 @@ public class DefaultAtlasPropertyStrategyTest {
         assertNotNull(propField);
         assertNotNull(propField.getValue());
         assertTrue(propField.getValue() instanceof String);
-        assertEquals("1.8", (String) propField.getValue());
+        assertEquals("1.8", propField.getValue());
     }
 
     @Test
@@ -127,7 +127,7 @@ public class DefaultAtlasPropertyStrategyTest {
         assertNotNull(propField);
         assertNotNull(propField.getValue());
         assertTrue(propField.getValue() instanceof String);
-        assertEquals("uh oh", (String) propField.getValue());
+        assertEquals("uh oh", propField.getValue());
     }
 
     @Test
@@ -143,7 +143,7 @@ public class DefaultAtlasPropertyStrategyTest {
         assertNotNull(propField);
         assertNotNull(propField.getValue());
         assertTrue(propField.getValue() instanceof String);
-        assertEquals("whatup", (String) propField.getValue());
+        assertEquals("whatup", propField.getValue());
     }
 
     @Test
@@ -272,7 +272,7 @@ public class DefaultAtlasPropertyStrategyTest {
         assertNotNull(propField);
         assertNotNull(propField.getValue());
         assertTrue(propField.getValue() instanceof String);
-        assertEquals(new Integer(Integer.MIN_VALUE).toString(), (String) propField.getValue());
+        assertEquals(new Integer(Integer.MIN_VALUE).toString(), propField.getValue());
     }
 
     @Test

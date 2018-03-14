@@ -19,7 +19,7 @@ public class JavaToXMLJSONMarshallingTest {
     public ObjectMapper mapper = null;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         mapper = new ObjectMapper();
         mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, true);
         mapper.configure(DeserializationFeature.UNWRAP_ROOT_VALUE, true);
@@ -28,7 +28,7 @@ public class JavaToXMLJSONMarshallingTest {
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         mapper = null;
     }
 

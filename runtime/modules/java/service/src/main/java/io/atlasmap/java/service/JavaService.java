@@ -81,7 +81,7 @@ public class JavaService {
     @GET
     @Path("/class")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getClass(@QueryParam("className") String className) throws Exception {
+    public Response getClass(@QueryParam("className") String className) {
         ClassInspectionService classInspectionService = new ClassInspectionService();
         classInspectionService.setConversionService(DefaultAtlasConversionService.getInstance());
         JavaClass c = classInspectionService.inspectClass(className);
@@ -93,7 +93,7 @@ public class JavaService {
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
     @Path("/mavenclasspath")
-    public Response generateClasspath(InputStream requestIn) throws Exception {
+    public Response generateClasspath(InputStream requestIn) {
         MavenClasspathRequest request = fromJson(requestIn, MavenClasspathRequest.class);
         MavenClasspathResponse response = new MavenClasspathResponse();
         MavenClasspathHelper mavenClasspathHelper = null;
@@ -120,7 +120,7 @@ public class JavaService {
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
     @Path("/class")
-    public Response inspectClass(InputStream requestIn) throws Exception {
+    public Response inspectClass(InputStream requestIn) {
         ClassInspectionRequest request = fromJson(requestIn, ClassInspectionRequest.class);
         ClassInspectionResponse response = new ClassInspectionResponse();
         ClassInspectionService classInspectionService = new ClassInspectionService();

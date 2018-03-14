@@ -8,9 +8,7 @@
     <relativePath>..</relativePath>
   </parent>
 
-  <groupId>io.atlasmap</groupId>
   <artifactId>atlasmap-ui</artifactId>
-  <version>1.33-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>Atlasmap UI</name>
   <description>Atlasmap :: ${project.artifactId}</description>

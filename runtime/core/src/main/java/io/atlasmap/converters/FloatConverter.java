@@ -47,15 +47,14 @@ public class FloatConverter implements AtlasConverter<Float> {
 
     @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.BOOLEAN, concerns = {
             AtlasConversionConcern.CONVENTION })
-    public Boolean toBoolean(Float value) throws AtlasConversionException {
+    public Boolean toBoolean(Float value) {
         if (value == null) {
             return null;
         }
         if (value == 0.0) {
             return Boolean.FALSE;
-        } else {
-            return Boolean.TRUE;
         }
+        return Boolean.TRUE;
     }
 
     @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.BYTE, concerns = {
@@ -66,11 +65,10 @@ public class FloatConverter implements AtlasConverter<Float> {
         }
         if (value % 1 == 0 && value >= Byte.MIN_VALUE && value <= Byte.MAX_VALUE) {
             return value.byteValue();
-        } else {
-            throw new AtlasConversionException(new AtlasUnsupportedException(String.format(
-                    "Float %s is greater than Byte.MAX_VALUE or less than Byte.MIN_VALUE or is not a whole number",
-                    value)));
         }
+        throw new AtlasConversionException(new AtlasUnsupportedException(String.format(
+                "Float %s is greater than Byte.MAX_VALUE or less than Byte.MIN_VALUE or is not a whole number",
+                value)));
     }
 
     @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.CHAR, concerns = {
@@ -102,7 +100,7 @@ public class FloatConverter implements AtlasConverter<Float> {
     }
 
     @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.DOUBLE)
-    public Double toDouble(Float value) throws AtlasConversionException {
+    public Double toDouble(Float value) {
         if (value == null) {
             return null;
         }
@@ -110,7 +108,7 @@ public class FloatConverter implements AtlasConverter<Float> {
     }
 
     @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.FLOAT)
-    public Float toFloat(Float value) throws AtlasConversionException {
+    public Float toFloat(Float value) {
         if (value == null) {
             return null;
         }
@@ -183,7 +181,7 @@ public class FloatConverter implements AtlasConverter<Float> {
     }
 
     @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.NUMBER)
-    public Number toNumber(Float value) throws AtlasConversionException {
+    public Number toNumber(Float value) {
         return value;
     }
 
@@ -200,7 +198,7 @@ public class FloatConverter implements AtlasConverter<Float> {
     }
 
     @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.STRING)
-    public String toString(Float value) throws AtlasConversionException {
+    public String toString(Float value) {
         return value != null ? String.valueOf(value) : null;
     }
 

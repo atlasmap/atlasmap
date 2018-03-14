@@ -280,7 +280,7 @@ public class XmlInstanceInspectionTest extends BaseXmlInspectionServiceTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testInspectXmlDocumentAsSourceNull() throws Exception {
+    public void testInspectXmlDocumentAsSourceNull() {
         XmlInspectionService service = new XmlInspectionService();
         Document xmlDocument = null;
         service.inspectXmlDocument(xmlDocument);

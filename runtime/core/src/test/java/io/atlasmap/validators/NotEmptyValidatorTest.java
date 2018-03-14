@@ -52,7 +52,7 @@ public class NotEmptyValidatorTest extends BaseValidatorTest {
     }
 
     @Test
-    public void testSupported() throws Exception {
+    public void testSupported() {
         assertTrue(validator.supports(Map.class));
         assertTrue(validator.supports(List.class));
         assertTrue(validator.supports(Set.class));
@@ -60,12 +60,12 @@ public class NotEmptyValidatorTest extends BaseValidatorTest {
     }
 
     @Test
-    public void testUnsupported() throws Exception {
+    public void testUnsupported() {
         assertFalse(validator.supports(HashMap.class));
     }
 
     @Test
-    public void testValidate() throws Exception {
+    public void testValidate() {
         List<String> stuff = new ArrayList<>();
         stuff.add("one");
         stuff.add("two");
@@ -78,7 +78,7 @@ public class NotEmptyValidatorTest extends BaseValidatorTest {
     }
 
     @Test
-    public void testValidateInvalid() throws Exception {
+    public void testValidateInvalid() {
         List<String> stuff = new ArrayList<>();
         validator.validate(stuff, validations, "testValidateInvalid");
         assertTrue(validationHelper.hasErrors());

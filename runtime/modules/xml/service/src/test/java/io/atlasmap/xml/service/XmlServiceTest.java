@@ -21,12 +21,12 @@ public class XmlServiceTest {
     private XmlService xmlService = null;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         xmlService = new XmlService();
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         xmlService = null;
     }
 

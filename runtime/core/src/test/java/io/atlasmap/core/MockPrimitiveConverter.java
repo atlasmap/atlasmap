@@ -28,31 +28,31 @@ public class MockPrimitiveConverter {
         throw new AtlasConversionException(new AtlasUnsupportedException("not supported"));
     }
 
-    public Character convertToCharacter(String value) throws AtlasConversionException {
+    public Character convertToCharacter(String value) {
         return 'a';
     }
 
-    public Double convertToDouble(String value) throws AtlasConversionException {
+    public Double convertToDouble(String value) {
         return Double.MAX_VALUE;
     }
 
-    public Float convertToFloat(String value) throws AtlasConversionException {
+    public Float convertToFloat(String value) {
         return Float.MAX_VALUE;
     }
 
-    public Integer convertToInteger(String value) throws AtlasConversionException {
+    public Integer convertToInteger(String value) {
         return Integer.MAX_VALUE;
     }
 
-    public Long convertToLong(String value) throws AtlasConversionException {
+    public Long convertToLong(String value) {
         return Long.MAX_VALUE;
     }
 
-    public Short convertToShort(String value) throws AtlasConversionException {
+    public Short convertToShort(String value) {
         return Short.MAX_VALUE;
     }
 
-    public String convertToString(String value) throws AtlasConversionException {
+    public String convertToString(String value) {
         return "aString";
     }
 }

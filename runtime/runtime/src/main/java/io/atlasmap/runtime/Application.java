@@ -80,7 +80,7 @@ public class Application extends SpringBootServletInitializer {
         @Consumes({ MediaType.APPLICATION_JSON })
         @Produces({ MediaType.APPLICATION_JSON })
         @Path("/mavenclasspath")
-        public Response generateClasspath(InputStream request) throws Exception {
+        public Response generateClasspath(InputStream request) {
             MavenClasspathResponse response = new MavenClasspathResponse();
             response.setExecutionTime(0L);
             response.setClasspath("");

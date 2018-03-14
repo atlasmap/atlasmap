@@ -47,13 +47,13 @@ public class AtlasServiceTest {
     private ObjectMapper mapper = null;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         service = new AtlasService();
         mapper = Json.mapper();
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         service = null;
         mapper = null;
     }
@@ -70,13 +70,13 @@ public class AtlasServiceTest {
     }
 
     @Test
-    public void testGetMapping() throws Exception {
+    public void testGetMapping() {
         Response resp = service.getMappingRequest("junit3");
         assertEquals(byte[].class, resp.getEntity().getClass());
     }
 
     @Test
-    public void testFilenameMatch() throws Exception {
+    public void testFilenameMatch() {
         String fileName = "atlasmapping-foo.xml";
         assertTrue(fileName.matches("atlasmapping-[a-zA-Z0-9]+.xml"));
     }

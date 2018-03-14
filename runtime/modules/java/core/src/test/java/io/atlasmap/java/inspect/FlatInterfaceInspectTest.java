@@ -38,23 +38,23 @@ public class FlatInterfaceInspectTest {
     }
 
     @Test
-    public void testFlatPrimitiveInterface() throws Exception {
+    public void testFlatPrimitiveInterface() {
         ClassValidationUtil.validateFlatPrimitiveInterface(classInspectionService, FlatPrimitiveInterface.class);
     }
 
     @Test
-    public void testFlatPrimitiveInterfaceArray() throws Exception {
+    public void testFlatPrimitiveInterfaceArray() {
         ClassValidationUtil.validateFlatPrimitiveInterfaceArray(classInspectionService, FlatPrimitiveInterface[].class);
     }
 
     @Test
-    public void testFlatPrimitiveInterfaceTwoDimArray() throws Exception {
+    public void testFlatPrimitiveInterfaceTwoDimArray() {
         ClassValidationUtil.validateFlatPrimitiveInterfaceTwoDimArray(classInspectionService,
                 FlatPrimitiveInterface[][].class);
     }
 
     @Test
-    public void testFlatPrimitiveInterfaceThreeDimArray() throws Exception {
+    public void testFlatPrimitiveInterfaceThreeDimArray() {
         ClassValidationUtil.validateFlatPrimitiveInterfaceThreeDimArray(classInspectionService,
                 FlatPrimitiveInterface[][][].class);
     }

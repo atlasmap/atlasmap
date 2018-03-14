@@ -23,7 +23,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import io.atlasmap.api.AtlasConversionException;
 import io.atlasmap.api.AtlasConverter;
 import io.atlasmap.spi.AtlasConversionInfo;
 import io.atlasmap.v2.FieldType;
@@ -33,47 +32,47 @@ public class GregorianCalendarConverter implements AtlasConverter<GregorianCalen
     private ZonedDateTimeConverter zdtConverter = new ZonedDateTimeConverter();
 
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.DATE_TIME_TZ)
-    public Calendar toCalendar(GregorianCalendar calendar) throws AtlasConversionException {
+    public Calendar toCalendar(GregorianCalendar calendar) {
         return calendar;
     }
 
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.DATE_TIME)
-    public Date toDate(GregorianCalendar calendar) throws AtlasConversionException {
+    public Date toDate(GregorianCalendar calendar) {
         return zdtConverter.toDate(calendar.toZonedDateTime());
     }
 
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.DATE)
-    public LocalDate toLocalDate(GregorianCalendar calendar) throws AtlasConversionException {
+    public LocalDate toLocalDate(GregorianCalendar calendar) {
         return zdtConverter.toLocalDate(calendar.toZonedDateTime());
     }
 
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.DATE_TIME)
-    public LocalDateTime toLocalDateTime(GregorianCalendar calendar) throws AtlasConversionException {
+    public LocalDateTime toLocalDateTime(GregorianCalendar calendar) {
         return zdtConverter.toLocalDateTime(calendar.toZonedDateTime());
     }
 
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.TIME)
-    public LocalTime toLocalTime(GregorianCalendar calendar) throws AtlasConversionException {
+    public LocalTime toLocalTime(GregorianCalendar calendar) {
         return zdtConverter.toLocalTime(calendar.toZonedDateTime());
     }
 
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.DATE)
-    public java.sql.Date toSqlDate(GregorianCalendar calendar) throws AtlasConversionException {
+    public java.sql.Date toSqlDate(GregorianCalendar calendar) {
         return zdtConverter.toSqlDate(calendar.toZonedDateTime());
     }
 
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.TIME)
-    public java.sql.Time toSqlTime(GregorianCalendar calendar) throws AtlasConversionException {
+    public java.sql.Time toSqlTime(GregorianCalendar calendar) {
         return zdtConverter.toSqlTime(calendar.toZonedDateTime());
     }
 
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.DATE_TIME)
-    public java.sql.Timestamp toSqlTimestamp(GregorianCalendar calendar) throws AtlasConversionException {
+    public java.sql.Timestamp toSqlTimestamp(GregorianCalendar calendar) {
         return zdtConverter.toSqlTimestamp(calendar.toZonedDateTime());
     }
 
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.DATE_TIME_TZ)
-    public ZonedDateTime toZoneDateTime(GregorianCalendar calendar) throws AtlasConversionException {
+    public ZonedDateTime toZoneDateTime(GregorianCalendar calendar) {
         return calendar.toZonedDateTime();
     }
 

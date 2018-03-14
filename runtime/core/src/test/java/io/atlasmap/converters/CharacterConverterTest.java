@@ -37,7 +37,7 @@ public class CharacterConverterTest {
     private CharacterConverter converter = new CharacterConverter();
 
     @Test
-    public void convertToBoolean() throws Exception {
+    public void convertToBoolean() {
         Character c = Character.forDigit(1, 10);
         Boolean t = converter.toBoolean(c, null, null);
         assertNotNull(t);
@@ -66,7 +66,7 @@ public class CharacterConverterTest {
     }
 
     @Test
-    public void convertToBooleanInvalid() throws Exception {
+    public void convertToBooleanInvalid() {
         Character c = null;
         converter.toBoolean(c, null, null);
         assertNull(c);
@@ -90,7 +90,7 @@ public class CharacterConverterTest {
     }
 
     @Test
-    public void convertToCharacter() throws Exception {
+    public void convertToCharacter() {
         Character c = (char) 0;
         Character c2 = converter.toCharacter(c);
         assertNotNull(c2);
@@ -99,14 +99,14 @@ public class CharacterConverterTest {
     }
 
     @Test
-    public void convertToCharacterNull() throws Exception {
+    public void convertToCharacterNull() {
         Character c = null;
         Character c2 = converter.toCharacter(c);
         assertNull(c2);
     }
 
     @Test
-    public void convertToDouble() throws Exception {
+    public void convertToDouble() {
         Character c = Character.forDigit(0, 10);
         Double d = converter.toDouble(c);
         assertNotNull(d);
@@ -119,14 +119,14 @@ public class CharacterConverterTest {
     }
 
     @Test
-    public void convertToDoubleNull() throws Exception {
+    public void convertToDoubleNull() {
         Character c = null;
         Double d = converter.toDouble(c);
         assertNull(d);
     }
 
     @Test
-    public void convertToFloat() throws Exception {
+    public void convertToFloat() {
         Character c = Character.forDigit(0, 10);
         Float f = converter.toFloat(c);
         assertNotNull(f);
@@ -139,14 +139,14 @@ public class CharacterConverterTest {
     }
 
     @Test
-    public void convertToFloatNull() throws Exception {
+    public void convertToFloatNull() {
         Character c = null;
         Float f = converter.toFloat(c);
         assertNull(f);
     }
 
     @Test
-    public void convertToInteger() throws Exception {
+    public void convertToInteger() {
         Character c = Character.forDigit(0, 10);
         Integer i = converter.toInteger(c);
         assertNotNull(i);
@@ -160,14 +160,14 @@ public class CharacterConverterTest {
     }
 
     @Test
-    public void convertToIntegerNull() throws Exception {
+    public void convertToIntegerNull() {
         Character c = null;
         Integer i = converter.toInteger(c);
         assertNull(i);
     }
 
     @Test
-    public void convertToLong() throws Exception {
+    public void convertToLong() {
 
         Character c = Character.forDigit(0, 10);
         Long l = converter.toLong(c);
@@ -182,7 +182,7 @@ public class CharacterConverterTest {
     }
 
     @Test
-    public void convertToLongNull() throws Exception {
+    public void convertToLongNull() {
         Long l = converter.toLong(null);
         assertNull(l);
     }
@@ -209,7 +209,7 @@ public class CharacterConverterTest {
     }
 
     @Test
-    public void convertToString() throws Exception {
+    public void convertToString() {
         Character c = Character.forDigit(0, 10);
         String s = converter.toString(c, null, null);
         assertNotNull(s);
@@ -217,7 +217,7 @@ public class CharacterConverterTest {
     }
 
     @Test
-    public void convertToStringNull() throws Exception {
+    public void convertToStringNull() {
         Character c = null;
         String s = converter.toString(c, null, null);
         assertNull(s);

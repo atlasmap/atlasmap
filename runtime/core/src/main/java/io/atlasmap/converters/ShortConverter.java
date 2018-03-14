@@ -45,15 +45,11 @@ public class ShortConverter implements AtlasConverter<Short> {
     }
 
     @AtlasConversionInfo(sourceType = FieldType.SHORT, targetType = FieldType.BOOLEAN, concerns = AtlasConversionConcern.CONVENTION)
-    public Boolean toBoolean(Short value) throws AtlasConversionException {
+    public Boolean toBoolean(Short value) {
         if (value == null) {
             return null;
         }
-        if (value == 0) {
-            return Boolean.FALSE;
-        } else {
-            return Boolean.TRUE;
-        }
+        return value == 0 ? Boolean.FALSE : Boolean.TRUE;
     }
 
     @AtlasConversionInfo(sourceType = FieldType.SHORT, targetType = FieldType.BYTE, concerns = AtlasConversionConcern.RANGE)
@@ -63,10 +59,9 @@ public class ShortConverter implements AtlasConverter<Short> {
         }
         if (value >= Byte.MIN_VALUE && value <= Byte.MAX_VALUE) {
             return value.byteValue();
-        } else {
-            throw new AtlasConversionException(new AtlasUnsupportedException(
-                    String.format("Short %s is greater than Byte.MAX_VALUE or less than Byte.MIN_VALUE", value)));
         }
+        throw new AtlasConversionException(new AtlasUnsupportedException(
+                String.format("Short %s is greater than Byte.MAX_VALUE or less than Byte.MIN_VALUE", value)));
     }
 
     @AtlasConversionInfo(sourceType = FieldType.SHORT, targetType = FieldType.CHAR, concerns = {
@@ -84,16 +79,15 @@ public class ShortConverter implements AtlasConverter<Short> {
     }
 
     @AtlasConversionInfo(sourceType = FieldType.SHORT, targetType = FieldType.DATE_TIME)
-    public Date toDate(Short value) throws AtlasConversionException {
+    public Date toDate(Short value) {
         if (value >= Instant.MIN.getEpochSecond()) {
             return Date.from(Instant.ofEpochMilli(value));
-        } else {
-            return new Date(value);
         }
+        return new Date(value);
     }
 
     @AtlasConversionInfo(sourceType = FieldType.SHORT, targetType = FieldType.DOUBLE)
-    public Double toDouble(Short value) throws AtlasConversionException {
+    public Double toDouble(Short value) {
         if (value == null) {
             return null;
         }
@@ -101,7 +95,7 @@ public class ShortConverter implements AtlasConverter<Short> {
     }
 
     @AtlasConversionInfo(sourceType = FieldType.SHORT, targetType = FieldType.FLOAT)
-    public Float toFloat(Short value) throws AtlasConversionException {
+    public Float toFloat(Short value) {
         if (value == null) {
             return null;
         }
@@ -109,7 +103,7 @@ public class ShortConverter implements AtlasConverter<Short> {
     }
 
     @AtlasConversionInfo(sourceType = FieldType.SHORT, targetType = FieldType.INTEGER)
-    public Integer toInteger(Short value) throws AtlasConversionException {
+    public Integer toInteger(Short value) {
         if (value == null) {
             return null;
         }
@@ -132,22 +126,22 @@ public class ShortConverter implements AtlasConverter<Short> {
     }
 
     @AtlasConversionInfo(sourceType = FieldType.SHORT, targetType = FieldType.LONG)
-    public Long toLong(Short value) throws AtlasConversionException {
+    public Long toLong(Short value) {
         return value != null ? value.longValue() : null;
     }
 
     @AtlasConversionInfo(sourceType = FieldType.SHORT, targetType = FieldType.NUMBER)
-    public Number toNumber(Short value) throws AtlasConversionException {
+    public Number toNumber(Short value) {
         return value;
     }
 
     @AtlasConversionInfo(sourceType = FieldType.SHORT, targetType = FieldType.SHORT)
-    public Short toShort(Short value) throws AtlasConversionException {
+    public Short toShort(Short value) {
         return value != null ? new Short(value) : null;
     }
 
     @AtlasConversionInfo(sourceType = FieldType.SHORT, targetType = FieldType.STRING)
-    public String toString(Short value) throws AtlasConversionException {
+    public String toString(Short value) {
         return value != null ? String.valueOf(value) : null;
     }
 

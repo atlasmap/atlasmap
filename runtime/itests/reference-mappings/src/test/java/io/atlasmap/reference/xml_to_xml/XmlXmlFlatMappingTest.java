@@ -53,7 +53,7 @@ public class XmlXmlFlatMappingTest extends AtlasMappingBaseTest {
         Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof String);
-        JAXBElement<XmlFlatPrimitiveElement> xmlFPE = (JAXBElement<XmlFlatPrimitiveElement>) AtlasXmlTestHelper
+        JAXBElement<XmlFlatPrimitiveElement> xmlFPE = AtlasXmlTestHelper
                 .unmarshal((String) object, XmlFlatPrimitiveElement.class);
         AtlasTestUtil.validateXmlFlatPrimitiveElement(xmlFPE.getValue());
     }
@@ -73,7 +73,7 @@ public class XmlXmlFlatMappingTest extends AtlasMappingBaseTest {
         Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof String);
-        JAXBElement<XmlFlatPrimitiveElement> xmlFPE = (JAXBElement<XmlFlatPrimitiveElement>) AtlasXmlTestHelper
+        JAXBElement<XmlFlatPrimitiveElement> xmlFPE = AtlasXmlTestHelper
                 .unmarshal((String) object, XmlFlatPrimitiveElement.class);
         AtlasTestUtil.validateXmlFlatPrimitiveElement(xmlFPE.getValue());
     }
@@ -93,7 +93,7 @@ public class XmlXmlFlatMappingTest extends AtlasMappingBaseTest {
         Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof String);
-        JAXBElement<XmlFlatPrimitiveAttribute> xmlFPA = (JAXBElement<XmlFlatPrimitiveAttribute>) AtlasXmlTestHelper
+        JAXBElement<XmlFlatPrimitiveAttribute> xmlFPA = AtlasXmlTestHelper
                 .unmarshal((String) object, XmlFlatPrimitiveAttribute.class);
         AtlasTestUtil.validateXmlFlatPrimitiveAttribute(xmlFPA.getValue());
     }
@@ -113,7 +113,7 @@ public class XmlXmlFlatMappingTest extends AtlasMappingBaseTest {
         Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof String);
-        JAXBElement<XmlFlatPrimitiveAttribute> xmlFPA = (JAXBElement<XmlFlatPrimitiveAttribute>) AtlasXmlTestHelper
+        JAXBElement<XmlFlatPrimitiveAttribute> xmlFPA = AtlasXmlTestHelper
                 .unmarshal((String) object, XmlFlatPrimitiveAttribute.class);
         AtlasTestUtil.validateXmlFlatPrimitiveAttribute(xmlFPA.getValue());
     }
@@ -135,7 +135,7 @@ public class XmlXmlFlatMappingTest extends AtlasMappingBaseTest {
         assertTrue(object instanceof String);
         assertEquals(
                 "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><XmlFPE><intField>2</intField><shortField>1</shortField><longField>30000</longField><doubleField>50000000.0</doubleField><floatField>40000000.0</floatField><booleanField>false</booleanField><charField>a</charField><byteField>99</byteField><boxedBooleanField/><boxedByteField/><boxedCharField/><boxedDoubleField/><boxedFloatField/><boxedIntField/><boxedLongField/><boxedStringField/></XmlFPE>",
-                (String) object);
+                object);
     }
 
     @Test
@@ -155,7 +155,7 @@ public class XmlXmlFlatMappingTest extends AtlasMappingBaseTest {
         assertTrue(object instanceof String);
         assertEquals(
                 "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><XmlFPE><intField>2</intField><shortField>1</shortField><longField>30000</longField><doubleField>50000000.0</doubleField><floatField>40000000.0</floatField><booleanField>false</booleanField><charField>a</charField><byteField>99</byteField></XmlFPE>",
-                (String) object);
+                object);
     }
 
     @Test
@@ -175,7 +175,7 @@ public class XmlXmlFlatMappingTest extends AtlasMappingBaseTest {
         assertTrue(object instanceof String);
         assertEquals(object.toString(),
                 "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><XmlFPA booleanField=\"false\" boxedBooleanField=\"false\" boxedByteField=\"99\" boxedCharField=\"a\" boxedDoubleField=\"50000000.0\" boxedFloatField=\"40000000.0\" boxedIntField=\"2\" boxedLongField=\"30000\" boxedStringField=\"foobar\" byteField=\"99\" charField=\"a\" doubleField=\"50000000.0\" floatField=\"40000000.0\" intField=\"2\" longField=\"30000\" shortField=\"1\"/>",
-                (String) object);
+                object);
     }
 
     @Test
@@ -195,7 +195,7 @@ public class XmlXmlFlatMappingTest extends AtlasMappingBaseTest {
         assertTrue(object instanceof String);
         assertEquals(
                 "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><XmlFPA booleanField=\"false\" byteField=\"99\" charField=\"a\" doubleField=\"50000000.0\" floatField=\"40000000.0\" intField=\"2\" longField=\"30000\" shortField=\"1\"/>",
-                (String) object);
+                object);
     }
 
     @Test
@@ -215,7 +215,7 @@ public class XmlXmlFlatMappingTest extends AtlasMappingBaseTest {
         assertTrue(object instanceof String);
         assertEquals(
                 "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><XmlFBPE><boxedIntField>5</boxedIntField><boxedShortField>5</boxedShortField><boxedLongField>20000</boxedLongField><boxedDoubleField>90000000.0</boxedDoubleField><boxedFloatField>70000000.0</boxedFloatField><boxedBooleanField>true</boxedBooleanField><boxedCharField>z</boxedCharField><boxedByteField>87</boxedByteField></XmlFBPE>",
-                (String) object);
+                object);
     }
 
     @Test
@@ -233,7 +233,7 @@ public class XmlXmlFlatMappingTest extends AtlasMappingBaseTest {
         Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof String);
-        JAXBElement<XmlFlatBoxedPrimitiveElement> xmlFPE = (JAXBElement<XmlFlatBoxedPrimitiveElement>) AtlasXmlTestHelper
+        JAXBElement<XmlFlatBoxedPrimitiveElement> xmlFPE = AtlasXmlTestHelper
                 .unmarshal((String) object, XmlFlatBoxedPrimitiveElement.class);
         AtlasTestUtil.validateXmlFlatPrimitiveBoxedPrimitiveElementFields(xmlFPE.getValue());
     }
@@ -255,7 +255,7 @@ public class XmlXmlFlatMappingTest extends AtlasMappingBaseTest {
         assertTrue(object instanceof String);
         assertEquals(
                 "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><XmlFBPA boxedBooleanField=\"true\" boxedByteField=\"87\" boxedCharField=\"z\" boxedDoubleField=\"90000000.0\" boxedFloatField=\"70000000.0\" boxedIntField=\"5\" boxedLongField=\"20000\" boxedShortField=\"5\"/>",
-                (String) object);
+                object);
     }
 
     @Test
@@ -273,7 +273,7 @@ public class XmlXmlFlatMappingTest extends AtlasMappingBaseTest {
         Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof String);
-        JAXBElement<XmlFlatBoxedPrimitiveAttribute> xmlFPE = (JAXBElement<XmlFlatBoxedPrimitiveAttribute>) AtlasXmlTestHelper
+        JAXBElement<XmlFlatBoxedPrimitiveAttribute> xmlFPE = AtlasXmlTestHelper
                 .unmarshal((String) object, XmlFlatBoxedPrimitiveAttribute.class);
         AtlasTestUtil.validateXmlFlatPrimitiveBoxedPrimitiveAttributeFields(xmlFPE.getValue());
     }

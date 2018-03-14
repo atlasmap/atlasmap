@@ -67,7 +67,7 @@ public class AtlasMappingService implements Serializable {
 
     public AtlasMappingService() {
         try {
-            List<String> tmp = new ArrayList<String>();
+            List<String> tmp = new ArrayList<>();
             tmp.add(CONFIG_V2_PACKAGE);
             initialize(tmp);
         } catch (Exception e) {
@@ -219,7 +219,7 @@ public class AtlasMappingService implements Serializable {
         }
     }
 
-    public void validate(AtlasMapping atlasMapping) throws AtlasValidationException {
+    public void validate(AtlasMapping atlasMapping) {
         // if(atlasMapping == null || atlasMapping.getName() == null) {
         // throw new AtlasValidationException("AtlasMapping and name must be
         // specified");

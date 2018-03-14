@@ -43,7 +43,7 @@ public abstract class BaseMappingTest {
     // io.atlasmap.java.v2.ObjectFactory();
     protected AtlasMappingUtil mappingUtil = new AtlasMappingUtil("io.atlasmap.v2");
 
-    protected AtlasMapping getAtlasMappingFullValid() throws Exception {
+    protected AtlasMapping getAtlasMappingFullValid() {
         AtlasMapping mapping = AtlasModelFactory.createAtlasMapping();
 
         mapping.setName("thisis_a_valid.name");
@@ -106,7 +106,7 @@ public abstract class BaseMappingTest {
         mapping.getMappings().getMapping().add(mapFieldMapping);
     }
 
-    protected AtlasMapping getAtlasMappingWithLookupTables(String... names) throws Exception {
+    protected AtlasMapping getAtlasMappingWithLookupTables(String... names) {
         AtlasMapping mapping = this.getAtlasMappingFullValid();
         LookupTables lookupTables = new LookupTables();
         mapping.setLookupTables(lookupTables);

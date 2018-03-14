@@ -16,12 +16,12 @@ public class JavaServiceTest {
     private JavaService javaService = null;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         javaService = new JavaService();
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         javaService = null;
     }
 

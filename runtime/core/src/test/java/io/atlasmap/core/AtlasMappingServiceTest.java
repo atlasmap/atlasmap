@@ -31,7 +31,7 @@ public class AtlasMappingServiceTest {
     private static AtlasMapping atlasMapping;
 
     @BeforeClass
-    public static void setUpBeforeClass() throws Exception {
+    public static void setUpBeforeClass() {
         atlasMappingService = new AtlasMappingService();
 
         atlasMapping = new AtlasMapping();
@@ -50,7 +50,7 @@ public class AtlasMappingServiceTest {
     }
 
     @AfterClass
-    public static void tearDownAfterClass() throws Exception {
+    public static void tearDownAfterClass() {
         atlasMappingService = null;
         atlasMapping = null;
     }

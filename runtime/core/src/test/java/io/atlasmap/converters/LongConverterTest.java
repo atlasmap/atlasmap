@@ -37,7 +37,7 @@ public class LongConverterTest {
     private LongConverter converter = new LongConverter();
 
     @Test
-    public void convertToBoolean() throws Exception {
+    public void convertToBoolean() {
         Long aLong = 0L;
         Long l = 1L;
 
@@ -52,14 +52,14 @@ public class LongConverterTest {
     }
 
     @Test
-    public void convertToBooleanNull() throws Exception {
+    public void convertToBooleanNull() {
         Long l = null;
         Boolean b = converter.toBoolean(l);
         assertNull(b);
     }
 
     @Test
-    public void convertToBooleanNegative() throws Exception {
+    public void convertToBooleanNegative() {
         Long dt = -1L;
         Boolean b = converter.toBoolean(dt);
         assertTrue(b);
@@ -120,7 +120,7 @@ public class LongConverterTest {
     }
 
     @Test
-    public void convertToDouble() throws Exception {
+    public void convertToDouble() {
         Long l = 0L;
         Double d = converter.toDouble(l);
         assertNotNull(d);
@@ -128,14 +128,14 @@ public class LongConverterTest {
     }
 
     @Test
-    public void convertToDoubleNull() throws Exception {
+    public void convertToDoubleNull() {
         Long l = null;
         Double d = converter.toDouble(l);
         assertNull(d);
     }
 
     @Test
-    public void convertToDoubleMAX() throws Exception {
+    public void convertToDoubleMAX() {
         Long l = Long.MAX_VALUE;
         Double d = converter.toDouble(l);
         assertNotNull(d);
@@ -143,7 +143,7 @@ public class LongConverterTest {
     }
 
     @Test
-    public void convertToFloat() throws Exception {
+    public void convertToFloat() {
         Long l = 0L;
         Float f = converter.toFloat(l);
         assertNotNull(f);
@@ -156,12 +156,12 @@ public class LongConverterTest {
     }
 
     @Test
-    public void convertToFloatNull() throws Exception {
+    public void convertToFloatNull() {
         assertNull(converter.toFloat(null));
     }
 
     @Test
-    public void convertToFloatMAX() throws Exception {
+    public void convertToFloatMAX() {
         Long l = Long.MAX_VALUE;
         Float f = converter.toFloat(l);
         assertNotNull(f);
@@ -194,7 +194,7 @@ public class LongConverterTest {
     }
 
     @Test
-    public void convertToLong() throws Exception {
+    public void convertToLong() {
         Long l = 1L;
         Long d = converter.toLong(l);
         assertNotNull(d);
@@ -203,7 +203,7 @@ public class LongConverterTest {
     }
 
     @Test
-    public void convertToLongNull() throws Exception {
+    public void convertToLongNull() {
         Long l = null;
         Long d = converter.toLong(l);
         assertNull(d);
@@ -231,7 +231,7 @@ public class LongConverterTest {
     }
 
     @Test
-    public void convertToString() throws Exception {
+    public void convertToString() {
         Long l = 0L;
         String s = converter.toString(l);
         assertNotNull(s);
@@ -239,7 +239,7 @@ public class LongConverterTest {
     }
 
     @Test
-    public void convertToStringNull() throws Exception {
+    public void convertToStringNull() {
         Long l = null;
         String s = converter.toString(l);
         assertNull(s);

@@ -14,13 +14,13 @@ public class ClassInspectionServiceITest {
     private ClassInspectionService classInspectionService = null;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         classInspectionService = new ClassInspectionService();
         classInspectionService.setConversionService(DefaultAtlasConversionService.getInstance());
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         classInspectionService = null;
     }
 
