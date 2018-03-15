@@ -119,6 +119,22 @@ export class DocumentDefinition {
     return DocumentDefinition.noneField;
   }
 
+  /**
+   * Return true is the specified field name already exists in the specified document definition,
+   * false otherwise.
+   * @param targetField
+   * @param targetFieldDocDefType
+   */
+  fieldExists(targetField: Field, targetFieldDocDefType: DocumentType): boolean {
+
+    for (const field of this.getAllFields()) {
+      if (field.name == targetField.name && field.docDef.type == targetFieldDocDefType) {
+          return true;
+      }
+    }
+    return false;
+  }
+
   isFieldsExist(fields: Field[]): boolean {
     if (fields == null || fields.length == 0) {
       return true;
