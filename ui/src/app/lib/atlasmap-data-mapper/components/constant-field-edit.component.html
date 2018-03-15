@@ -1,7 +1,10 @@
 <div class="DataMapperEditComponent">
   <div class="form-group">
-    <label>Value:</label>
-    <input name="value" type="text" [(ngModel)]="field.value" />
+    <label for="value">Value:</label>
+    <input name="value" type="text" [(ngModel)]="field.value" class="form-control" id="name" required/>
+    <small [hidden]="!valueExists()" class="text-danger">
+      Constant value already exists.
+    </small>
   </div>
   <div class="form-group">
     <label>Value Type</label>

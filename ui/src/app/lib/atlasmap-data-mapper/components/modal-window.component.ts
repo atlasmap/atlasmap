@@ -48,6 +48,7 @@ export class ModalWindowComponent implements AfterViewInit {
 
   message: string = null;
   nestedComponent: Component;
+  confirmButtonDisabled = false;
   confirmButtonText = 'OK';
   visible = false;
 
@@ -90,6 +91,7 @@ export class ModalWindowComponent implements AfterViewInit {
   reset(): void {
     this.cfg.errorService.clearValidationErrors();
     this.nestedComponentInitializedCallback = null;
+    this.confirmButtonDisabled = false;
     this.confirmButtonText = 'OK';
     this.message = '';
     this.headerText = '';

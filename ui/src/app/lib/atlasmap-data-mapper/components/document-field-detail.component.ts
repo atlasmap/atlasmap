@@ -199,10 +199,10 @@ export class DocumentFieldDetailComponent {
     this.modalWindow.nestedComponentInitializedCallback = (mw: ModalWindowComponent) => {
       if (isProperty) {
         const propertyComponent: PropertyFieldEditComponent = mw.nestedComponent as PropertyFieldEditComponent;
-        propertyComponent.initialize(self.field);
+        propertyComponent.initialize(self.field, this.field.docDef, this.modalWindow);
       } else if (isConstant) {
         const constantComponent: ConstantFieldEditComponent = mw.nestedComponent as ConstantFieldEditComponent;
-        constantComponent.initialize(self.field);
+        constantComponent.initialize(self.field, this.field.docDef, this.modalWindow);
       } else {
         const fieldComponent: FieldEditComponent = mw.nestedComponent as FieldEditComponent;
         fieldComponent.isSource = self.field.isSource();

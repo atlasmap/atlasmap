@@ -18,7 +18,8 @@
       </div>
       <div class="modal-footer">
         <div class="modal-buttons">
-          <button class="pull-right btn btn-primary" (click)="buttonClicked(true)">{{ confirmButtonText }}</button>
+          <button class="pull-right btn btn-primary" [disabled]="confirmButtonDisabled" 
+            (click)="buttonClicked(true)">{{ confirmButtonText }} </button>
           <button class="pull-right btn btn-cancel" (click)="buttonClicked(false)">Cancel</button>
         </div>
       </div>
