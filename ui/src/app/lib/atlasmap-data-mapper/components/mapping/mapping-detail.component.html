@@ -1,12 +1,9 @@
 <div class='fieldMappingDetail' *ngIf="cfg.mappings.activeMapping && cfg.showMappingDetailTray">
   <div class="card-pf">
     <div class="card-pf-heading">
-      <h2 class="card-pf-title">
-        <div style="float:left;">{{ getTitle() }}</div>
-        <div style="float:right; text-align:right;">
-          <i class="fa fa-trash link" aria-hidden="true" (click)="removeMapping($event)" tooltip="Remove all repeating mappings"></i>
-        </div>
-        <div style="clear:both; height:0px;"></div>
+      <h2 class="card-pf-title clearfix">
+        <div class="pull-left">{{ getTitle() }}</div>
+        <i class="fa fa-trash link pull-right" aria-hidden="true" (click)="removeMapping($event)" tooltip="Remove all repeating mappings" placement="left"></i>
       </h2>
     </div>
     <div class="fieldMappingDetail-body">
