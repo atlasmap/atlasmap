@@ -171,10 +171,10 @@ export class DocumentDefinitionComponent implements OnInit {
     this.modalWindow.nestedComponentInitializedCallback = (mw: ModalWindowComponent) => {
       if (isProperty) {
         const propertyComponent = mw.nestedComponent as PropertyFieldEditComponent;
-        propertyComponent.initialize(null);
+        propertyComponent.initialize(null, docDef, mw);
       } else if (isConstant) {
         const constantComponent = mw.nestedComponent as ConstantFieldEditComponent;
-        constantComponent.initialize(null);
+        constantComponent.initialize(null, docDef, mw);
       } else {
         const fieldComponent = mw.nestedComponent as FieldEditComponent;
         fieldComponent.isSource = this.isSource;
