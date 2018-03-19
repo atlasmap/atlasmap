@@ -23,6 +23,8 @@
         minOccurs="1" maxOccurs="1" />
       <element name="LookupTables" type="atlas:LookupTables"
         minOccurs="0" maxOccurs="1" />
+      <element name="Constants" type="atlas:Constants"
+        minOccurs="0" maxOccurs="1" />
       <element name="Properties" type="atlas:Properties"
         minOccurs="0" maxOccurs="1" />
     </sequence>
@@ -42,6 +44,20 @@
       <enumeration value="Target" />
     </restriction>
   </simpleType>
+
+  <complexType name="Constants">
+    <sequence>
+      <element name="Constant" type="atlas:Constant"
+        minOccurs="0" maxOccurs="unbounded" />
+    </sequence>
+  </complexType>
+
+  <complexType name="Constant">
+    <attribute name="name" type="string" use="optional" />
+    <attribute name="value" type="string" use="optional" />
+    <attribute name="fieldType" type="atlas:FieldType"
+      use="optional" />
+  </complexType>
 
   <complexType name="Properties">
     <sequence>
@@ -215,6 +231,7 @@
       <enumeration value="DataSource" />
       <enumeration value="Mapping" />
       <enumeration value="LookupTable" />
+      <enumeration value="Constant" />
       <enumeration value="Property" />
     </restriction>
   </simpleType>

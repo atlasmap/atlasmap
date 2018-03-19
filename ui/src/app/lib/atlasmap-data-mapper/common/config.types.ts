@@ -29,3 +29,8 @@ export enum InspectionType {
   SCHEMA = 'SCHEMA',
   INSTANCE = 'INSTANCE'
 }
+
+export const enum FieldMode {
+  CREATE,
+  EDIT
+}

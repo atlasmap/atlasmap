@@ -2,7 +2,7 @@
   <div class="form-group">
     <label for="name">Name:</label>
     <input name="name" type="text" [(ngModel)]="field.name" class="form-control" id="name" required/>
-    <small [hidden]="!nameExists()" class="text-danger">
+    <small [hidden]="!nameExistsOnCreation()" class="text-danger">
       Property name already exists, please select a unique name.
     </small>
   </div>
