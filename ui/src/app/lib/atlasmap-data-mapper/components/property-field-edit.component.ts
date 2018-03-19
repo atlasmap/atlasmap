@@ -16,7 +16,7 @@
 
 import { Component } from '@angular/core';
 
-import { DocumentType } from '../common/config.types';
+import { DocumentType, FieldMode } from '../common/config.types';
 
 import { ConfigModel } from '../models/config.model';
 import { DocumentDefinition } from '../models/document-definition.model';
@@ -30,6 +30,7 @@ import { ModalWindowComponent, ModalWindowValidator } from './modal-window.compo
 
 export class PropertyFieldEditComponent implements ModalWindowValidator {
   field: Field = new Field();
+  fieldMode: FieldMode;
   valueType: any = 'STRING';
   docDef: DocumentDefinition;
   modalWindowComponent: ModalWindowComponent;
@@ -37,7 +38,9 @@ export class PropertyFieldEditComponent implements ModalWindowValidator {
   initialize(field: Field, docDef: DocumentDefinition, mwc: ModalWindowComponent): void {
     if (field != null) {
       this.valueType = field.type;
-    }
+      this.fieldMode = FieldMode.EDIT;
+    } else { this.fieldMode = FieldMode.CREATE; }
+
     this.field = field == null ? new Field() : field.copy();
     this.docDef = docDef;
     this.modalWindowComponent = mwc;
@@ -61,11 +64,12 @@ export class PropertyFieldEditComponent implements ModalWindowValidator {
   }
 
   /**
-   * Return true and disable the save button if the candidate name already exists, return false and enable the
-   * save button otherwise.
+   * Return true and disable the save button if the candidate name already exists on creation, return false
+   * and enable the save button otherwise.
    */
-  nameExists(): boolean {
-    if (this.docDef != null && this.docDef.fieldExists(this.getField(), DocumentType.PROPERTY)) {
+  nameExistsOnCreation(): boolean {
+    if (this.fieldMode == FieldMode.CREATE && this.docDef != null &&
+        this.docDef.fieldExists(this.getField(), DocumentType.PROPERTY)) {
       this.modalWindowComponent.confirmButtonDisabled = true;
       return true;
     }

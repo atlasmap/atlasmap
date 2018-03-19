@@ -86,6 +86,7 @@ export class MappingSerializer {
     }
 
     const serializedLookupTables: any[] = MappingSerializer.serializeLookupTables(cfg.mappings);
+    const constantDescriptions: any[] = MappingSerializer.serializeConstants(cfg.constantDoc);
     const propertyDescriptions: any[] = MappingSerializer.serializeProperties(cfg.propertyDoc);
     const serializedDataSources: any = MappingSerializer.serializeDocuments(cfg.sourceDocs.concat(cfg.targetDocs), mappingDefinition);
 
@@ -96,6 +97,7 @@ export class MappingSerializer {
         'mappings': { 'mapping': jsonMappings },
         'name': cfg.mappings.name,
         'lookupTables': { 'lookupTable': serializedLookupTables },
+        'constants': { 'constant': constantDescriptions },
         'properties': { 'property': propertyDescriptions },
       },
     };
@@ -143,6 +145,17 @@ export class MappingSerializer {
       serializedDocs.push(serializedDoc);
     }
     return serializedDocs;
+  }
+
+  private static serializeConstants(docDef: DocumentDefinition): any[] {
+    const constantDescriptions: any[] = [];
+    for (const field of docDef.fields) {
+      // Use the constant value for the name.
+      constantDescriptions.push({
+        'name': field.value, 'value': field.value, 'fieldType': field.type
+      });
+    }
+    return constantDescriptions;
   }
 
   private static serializeProperties(docDef: DocumentDefinition): any[] {
@@ -274,6 +287,9 @@ export class MappingSerializer {
     for (const lookupTable of MappingSerializer.deserializeLookupTables(json)) {
       mappingDefinition.addTable(lookupTable);
     }
+    for (const field of MappingSerializer.deserializeConstants(json)) {
+      cfg.constantDoc.addField(field);
+    }
     for (const field of MappingSerializer.deserializeProperties(json)) {
       cfg.propertyDoc.addField(field);
     }
@@ -360,6 +376,23 @@ export class MappingSerializer {
     }
 
     return fieldPair;
+  }
+
+  static deserializeConstants(jsonMapping: any): Field[] {
+    const fields: Field[] = [];
+    if (!jsonMapping.AtlasMapping || !jsonMapping.AtlasMapping.constants
+      || !jsonMapping.AtlasMapping.constants.constant) {
+      return fields;
+    }
+    for (const constant of jsonMapping.AtlasMapping.constants.constant) {
+      const field: Field = new Field();
+      field.name = constant.name;
+      field.value = constant.value;
+      field.type = constant.fieldType;
+      field.userCreated = true;
+      fields.push(field);
+    }
+    return fields;
   }
 
   static deserializeProperties(jsonMapping: any): Field[] {
