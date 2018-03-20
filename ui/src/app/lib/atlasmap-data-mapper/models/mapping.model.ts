@@ -13,7 +13,7 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-
+import { ConfigModel } from '../models/config.model';
 import { Field } from './field.model';
 import { TransitionModel, TransitionMode, FieldAction, FieldActionConfig } from './transition.model';
 import { DocumentDefinition } from '../models/document-definition.model';
@@ -295,6 +295,7 @@ export class FieldMappingPair {
 }
 
 export class MappingModel {
+  cfg: ConfigModel;
   uuid: string;
   fieldMappings: FieldMappingPair[] = [];
   currentFieldMapping: FieldMappingPair = null;
@@ -304,6 +305,7 @@ export class MappingModel {
   constructor() {
     this.uuid = 'mapping.' + Math.floor((Math.random() * 1000000) + 1).toString();
     this.fieldMappings.push(new FieldMappingPair());
+    this.cfg = ConfigModel.getConfig();
     Object.freeze(this.validationErrors);
   }
 
@@ -388,13 +390,47 @@ export class MappingModel {
     return this.getFieldSelectionExclusionReason(field) == null;
   }
 
-  getFieldSelectionExclusionReason(field: Field): string {
-    if (this.brandNewMapping) { // if mapping hasnt had a field selected yet, allow it
+  /**
+   * Walk all target field mappings and return true if the specified field is already the target
+   * of a previous mapping, false otherwise.
+   *
+   * @param field
+   */
+  isMappedTarget(field: Field): boolean {
+    const mappings: MappingModel[] = this.cfg.mappings.mappings;
+
+    if (!field.isSource()) {
+      for (const m of mappings) {
+        for (const fieldPair of m.fieldMappings) {
+          if (fieldPair.targetFields.length == 0) {
+            continue;
+          }
+
+          for (const mappedOutputField of fieldPair.targetFields) {
+             if (mappedOutputField.field.name == field.name) {
+               if (!this.getCurrentFieldMapping().isFieldMapped(field)) {
+                 return true;
+               }
+             }
+          }
+        }
+      }
+    }
+    return false;
+  }
+
+  getFieldSelectionExclusionReason(field: Field ): string {
+    if (this.brandNewMapping) { // if mapping hasn't had a field selected yet, allow it
       return null;
     }
 
     if (!field.isTerminal()) {
       return 'field is a parent field';
+    }
+
+    // Target fields may only be mapped once.
+    if (this.isMappedTarget(field)) {
+      return 'as it is already the target of another mapping';
     }
 
     const repeatedMode: boolean = this.isCollectionMode();
