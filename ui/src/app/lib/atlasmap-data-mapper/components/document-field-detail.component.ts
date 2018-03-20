@@ -169,9 +169,9 @@ export class DocumentFieldDetailComponent {
 
   handleMouseClick(event: MouseEvent): void {
     this.cfg.mappingService.fieldSelected(this.field);
-    setTimeout(() => {
+    if (this.lineMachine != null) {
       this.lineMachine.redrawLinesForMappings();
-    }, 10);
+    }
   }
 
   getFieldDetailComponent(field: Field): DocumentFieldDetailComponent {
