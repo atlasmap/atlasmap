@@ -1,6 +1,6 @@
 {
   "name": "@atlasmap/atlasmap.data.mapper",
-  "version": "1.33.0-SNAPSHOT",
+  "version": "1.34.0-SNAPSHOT",
   "description": "Atlasmap Data Mapper UI module.",
   "author": "AtlasMap",
   "license": "Apache-2.0",
