@@ -167,7 +167,21 @@ export class DocumentFieldDetailComponent {
     return 'arrow fa fa-angle-' + (this.field.collapsed ? 'right' : 'down');
   }
 
+  /**
+   * Semantic support for a mouse click.
+   * * M1 - the field is selected
+   * * Ctrl-M1 - if the field is already selected then the field is de-selected;
+   *             if the field is not already selected then the field is selected
+   *
+   * @param event
+   */
   handleMouseClick(event: MouseEvent): void {
+    if (event.ctrlKey) {
+      if (this.field.selected) {
+        this.cfg.mappingService.deselectMapping();
+        return;
+      }
+    }
     this.cfg.mappingService.fieldSelected(this.field);
     if (this.lineMachine != null) {
       this.lineMachine.redrawLinesForMappings();
