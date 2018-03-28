@@ -81,7 +81,7 @@ public class ObjectFieldActions implements AtlasFieldAction {
         return input.toString().equals(equals.getValue());
     }
 
-    @AtlasFieldActionInfo(name = "IsNull", sourceType = FieldType.ANY, targetType = FieldType.INTEGER, sourceCollectionType = CollectionType.ALL, targetCollectionType = CollectionType.NONE)
+    @AtlasFieldActionInfo(name = "IsNull", sourceType = FieldType.ANY, targetType = FieldType.BOOLEAN, sourceCollectionType = CollectionType.ALL, targetCollectionType = CollectionType.NONE)
     public static Boolean isNull(Action action, Object input) {
         return input == null;
     }
