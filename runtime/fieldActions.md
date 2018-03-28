@@ -48,7 +48,7 @@ StartsWith | String | Boolean | string | Return true if a string starts with the
 Substring | String | String | startIndex \*</br>endIndex</br> | Retrieve the segment of a string from the supplied inclusive startIndex to the supplied exclusive endIndex. Both indexes start at zero. The default endIndex is the length of the string.
 SubstringAfter | String | String | startIndex \*</br>endIndex</br>match \*</br> | Retrieve the segment of a string after the supplied match string from the supplied inclusive startIndex to the supplied exclusive endIndex. Both indexes start at zero. The default endIndex is the length of the string after the supplied match string.
 SubstringBefore | String | String | startIndex \*</br>endIndex</br>match \*</br> | Retrieve the segment of a string before the supplied match string from the supplied inclusive startIndex to the supplied exclusive endIndex. Both indexes start at zero. The default endIndex is the length of the string before the supplied match string.
-Subtract | Collection &#124; Array &#124; Map | Number | n/a | Subtract each entry in a collection, array, or map's values by its previous entry (A "normal" subtraction would only involve 2 entries).
+Subtract | Collection &#124; Array &#124; Map | Number | n/a | Subtract each entry in a collection, array, or map's values from its previous entry (A "normal" subtraction would only involve 2 entries).
 Trim | String | String | n/a | Trim leading and trailing whitespace from a string.
 TrimLeft | String | String | n/a | Trim leading whitespace from a string.
 TrimRight | String | String | n/a | Trim trailing whitespace from a string.
