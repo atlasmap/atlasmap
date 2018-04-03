@@ -5,6 +5,7 @@
 /tmp
 /out-tsc
 /junit/*
+test-resources/inspected
 
 # dependencies
 /node_modules

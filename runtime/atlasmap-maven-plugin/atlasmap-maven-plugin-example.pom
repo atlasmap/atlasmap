@@ -3,7 +3,7 @@
 
   <groupId>io.atlasmap</groupId>
   <artifactId>atlasmap-maven-plugin-example</artifactId>
-  <version>1.33-SNAPSHOT</version>
+  <version>1.34-SNAPSHOT</version>
   <name>Atlas :: Maven Plugin :: Example</name>
   <packaging>jar</packaging>
 
@@ -28,6 +28,9 @@
                 <artifact>org.apache.camel:camel-twitter:2.20.1</artifact>
               </artifacts>
               <className>twitter4j.Status</className>
+            </inspection>
+            <inspection>
+                <fileName>src/test/resources</fileName>
             </inspection>
           </inspections>
         </configuration>

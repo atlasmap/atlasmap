@@ -45,6 +45,45 @@
         <groupId>com.github.eirslett</groupId>
         <artifactId>frontend-maven-plugin</artifactId>
       </plugin>
+      <plugin>
+        <groupId>io.atlasmap</groupId>
+        <artifactId>atlasmap-maven-plugin</artifactId>
+        <version>${project.version}</version>
+        <executions>
+          <execution>
+            <id>generate-inspections</id>
+            <goals>
+              <goal>generate-inspections</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <outputDir>test-resources/inspected</outputDir>
+          <inspections>
+            <inspection>
+              <artifacts>
+                <artifact>org.apache.camel:camel-twitter:2.20.1</artifact>
+              </artifacts>
+              <className>twitter4j.Status</className>
+            </inspection>
+            <inspection>
+                <fileName>test-resources/schema</fileName>
+            </inspection>
+          </inspections>
+        </configuration>
+        <dependencies>
+          <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-twitter</artifactId>
+            <version>2.20.1</version>
+          </dependency>
+          <dependency>
+            <groupId>javax.ws.rs</groupId>
+            <artifactId>javax.ws.rs-api</artifactId>
+            <version>2.0</version>
+          </dependency>
+        </dependencies>
+      </plugin>
     </plugins>
   </build>
 

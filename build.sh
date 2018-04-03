@@ -155,6 +155,7 @@ function ui() {
   yarn lint
   yarn build
   if [ -z "$SKIP_TESTS" ]; then
+    yarn inspect
     yarn test:coverage
   fi
   popd
