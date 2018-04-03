@@ -259,8 +259,16 @@ export class DocumentManagementService {
     }
 
     for (const field of xmlDocument.fields.field) {
-      this.parseXMLFieldFromDocument(field, null, docDef);
+      if (!docDef.selectedRoot || this.isSelectedRootElement(field, docDef)) {
+        this.parseXMLFieldFromDocument(field, null, docDef);
+        break;
+      }
     }
+  }
+
+  private isSelectedRootElement(field: any, docDef: DocumentDefinition): boolean {
+    return docDef.selectedRoot && field && field.name
+      && docDef.selectedRoot === (field.name.indexOf(':') != -1 ? field.name.split(':')[1] : field.name);
   }
 
   private extractJavaDocumentDefinitionFromInspectionResponse(responseJson: any, docDef: DocumentDefinition): void {
