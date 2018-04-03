@@ -94,6 +94,7 @@ export class DocumentInitializationModel {
   inspectionType: InspectionType;
   inspectionSource: string;
   inspectionResult: string;
+  selectedRoot: string;
 }
 
 export class ConfigModel {
@@ -160,6 +161,7 @@ export class ConfigModel {
     docDef.inspectionType = docInitModel.inspectionType;
     docDef.inspectionSource = docInitModel.inspectionSource;
     docDef.inspectionResult = docInitModel.inspectionResult;
+    docDef.selectedRoot = docInitModel.selectedRoot;
     docDef.uri = 'atlas:' + docDef.type.toLowerCase() + ':' + docDef.id;
     if (docDef.type == DocumentType.JAVA) {
       docDef.uri += '?className=' + docDef.inspectionSource;

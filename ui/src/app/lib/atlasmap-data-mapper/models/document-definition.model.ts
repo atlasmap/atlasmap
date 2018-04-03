@@ -67,6 +67,7 @@ export class DocumentDefinition {
   inspectionResult: string;
   isSource: boolean;
   isPropertyOrConstant: boolean;
+  selectedRoot: string;
 
   classPath: string;
   initialized = false;
