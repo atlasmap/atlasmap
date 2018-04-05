@@ -96,7 +96,7 @@ jobs:
             cd parent
             ../mvnw --batch-mode install | tee ../build_log.txt
             cd ../runtime
-            ../mvnw --batch-mode -Pjacoco -Dfabric8.mode=kubernetes clean checkstyle:check install | tee -a ../build_log.txt
+            ../mvnw --batch-mode -Pjacoco -Pfabric8 -Dfabric8.mode=kubernetes clean checkstyle:check install | tee -a ../build_log.txt
             cd ..
       - store_artifacts:
           path: build_log.txt
