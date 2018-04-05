@@ -55,11 +55,11 @@ push_images: &push_images
   deploy:
     name: Push Docker Image
     command: |
-      cd runtime
       if [ "${CIRCLE_PROJECT_USERNAME}" != "atlasmap" ]; then
         exit 0
       fi
 
+      cd runtime
       curl -fsSL https://get.docker.com/builds/Linux/x86_64/docker-${DOCKER_VERSION}.tgz | tar xz -C /usr/bin --strip-components 1
 
       if [ "${CIRCLE_BRANCH}" == "master" ]; then
@@ -79,6 +79,10 @@ publish_npm: &publish_npm
   deploy:
     name: Publish NPM Package
     command: |
+      if [ "${CIRCLE_PROJECT_USERNAME}" != "atlasmap" ]; then
+        exit 0
+      fi
+
       cd ui
       if [ "${CIRCLE_BRANCH}" == "master" ]; then
         NPM_TAG=`npm run version|sed '$!d'`.`date '+%Y%m%d%H%M%S'`
@@ -95,7 +99,20 @@ publish_npm: &publish_npm
       npm version ${NPM_TAG}
       echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
       npm publish
-    
+
+publish_docs: &publish_docs
+  deploy:
+    name: Publish Docs
+    command: |
+      if [ "${CIRCLE_PROJECT_USERNAME}" != "atlasmap" ]; then
+        exit 0
+      fi
+
+      if [ "${CIRCLE_BRANCH}" == "master" ]; then
+        cd runtime
+        sh docs/ci-docs.sh
+      fi
+
 jobs:
   runtime:
     <<: *job_defaults
@@ -141,12 +158,7 @@ jobs:
           paths:
           - ~/.m2
       - <<: *push_images
-      - run:
-          name: Publish docs
-          command: |
-            cd runtime
-            sh docs/ci-docs.sh
-            cd ..
+      - <<: *publish_docs
 
   camel-atlasmap:
     <<: *job_defaults

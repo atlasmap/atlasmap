@@ -84,7 +84,7 @@
     <spring-boot.version>1.5.2.RELEASE</spring-boot.version>
     <twitter4j.version>4.0.6</twitter4j.version>
     <woodstox.version>4.4.1</woodstox.version>
-    <xsom.version>20140925.0.0.redhat-1</xsom.version>
+    <xsom.version>20140925</xsom.version>
     <xmlunit.version>2.2.1</xmlunit.version>
   </properties>
 
