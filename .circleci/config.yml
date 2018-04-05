@@ -53,6 +53,7 @@ save_checkstyle: &save_checkstyle
 
 push_images: &push_images
   deploy:
+    name: Push Docker Image
     command: |
       cd runtime
       if [ "${CIRCLE_PROJECT_USERNAME}" != "atlasmap" ]; then
@@ -63,12 +64,8 @@ push_images: &push_images
 
       if [ "${CIRCLE_BRANCH}" == "master" ]; then
         DOCKER_IMAGE_TAG="latest"
-        cd ../ui
-        NPM_TAG=`npm run version|sed '$!d'`.`date '+%Y%m%d%H%M%S'`
-        cd ../runtime
       elif [[ "${CIRCLE_TAG}" =~ ^[0-9]+(\.[0-9]+){2} ]]; then
         DOCKER_IMAGE_TAG="${CIRCLE_TAG}"
-        NPM_TAG="${CIRCLE_TAG}"
       fi
 
       if [ -z "${DOCKER_IMAGE_TAG}" ]; then
@@ -78,6 +75,27 @@ push_images: &push_images
       docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
       docker push atlasmap/atlasmap:${DOCKER_IMAGE_TAG} | cat -
 
+publish_npm: &publish_npm
+  deploy:
+    name: Publish NPM Package
+    command: |
+      cd ui
+      if [ "${CIRCLE_BRANCH}" == "master" ]; then
+        NPM_TAG=`npm run version|sed '$!d'`.`date '+%Y%m%d%H%M%S'`
+      elif [[ "${CIRCLE_TAG}" =~ ^[0-9]+(\.[0-9]+){2} ]]; then
+        NPM_TAG="${CIRCLE_TAG}"
+      fi
+      if [ -z "${NPM_TAG}" ]; then
+        exit 0
+      fi
+      cd dist
+      echo "Publishing @atlasmap/atlasmap.data.mapper ${NPM_TAG}..."
+      git config --global user.name "AtlasMap CI"
+      git config --global user.email "tm.igarashi+atlasmapci@gmail.com"
+      npm version ${NPM_TAG}
+      echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
+      npm publish
+    
 jobs:
   runtime:
     <<: *job_defaults
@@ -228,16 +246,7 @@ jobs:
           key: atlasmap-yarn-{{ checksum "ui/yarn.lock" }}
           paths:
           - ~//usr/local/share/.cache/yarn/v1
-      - run:
-          name: Publish NPM package
-          command: |
-            cd ui/dist
-            echo "Publishing @atlasmap/atlasmap.data.mapper ${NPM_TAG}..."
-            git config --global user.name "AtlasMap CI"
-            git config --global user.email "tm.igarashi+atlasmapci@gmail.com"
-            npm version ${NPM_TAG}
-            echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
-            npm publish
+      - <<: *publish_npm
 
 
 workflows:
