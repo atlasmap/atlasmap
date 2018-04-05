@@ -22,6 +22,7 @@
     "build": "ng-packagr -p package.json",
     "build:app": "ng build --aot --progress=false",
     "e2e": "ng e2e",
+    "inspect": "../mvnw atlasmap:generate-inspections",
     "lint": "ng lint",
     "lint:fix": "ng lint --fix",
     "pretest": "rm -rf coverage junit",

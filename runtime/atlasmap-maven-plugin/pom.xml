@@ -38,6 +38,14 @@
       <groupId>io.atlasmap</groupId>
       <artifactId>atlas-java-service</artifactId>
     </dependency>
+    <dependency>
+      <groupId>io.atlasmap</groupId>
+      <artifactId>atlas-json-service</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.atlasmap</groupId>
+      <artifactId>atlas-xml-service</artifactId>
+    </dependency>
 
     <dependency>
       <groupId>javax.ws.rs</groupId>

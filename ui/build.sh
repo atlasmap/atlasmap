@@ -3,4 +3,5 @@
 yarn install
 yarn lint
 yarn build
+yarn inspect
 yarn test

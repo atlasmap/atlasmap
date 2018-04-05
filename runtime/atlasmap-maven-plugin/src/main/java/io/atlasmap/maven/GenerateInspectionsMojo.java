@@ -20,6 +20,9 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -52,7 +55,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.atlasmap.core.DefaultAtlasConversionService;
 import io.atlasmap.java.inspect.ClassInspectionService;
 import io.atlasmap.java.v2.JavaClass;
+import io.atlasmap.json.inspect.JsonDocumentInspectionService;
+import io.atlasmap.json.v2.JsonDocument;
 import io.atlasmap.v2.Json;
+import io.atlasmap.xml.inspect.XmlInspectionService;
+import io.atlasmap.xml.v2.XmlDocument;
 
 @Mojo(name = "generate-inspections")
 public class GenerateInspectionsMojo extends AbstractMojo {
@@ -95,6 +102,7 @@ public class GenerateInspectionsMojo extends AbstractMojo {
         private List<String> artifacts;
         private String className;
         private List<String> classNames;
+        private String fileName;
 
         public String getClassName() {
             return className;
@@ -119,6 +127,14 @@ public class GenerateInspectionsMojo extends AbstractMojo {
         public void setArtifacts(List<String> artifacts) {
             this.artifacts = artifacts;
         }
+
+        public String getFileName() {
+            return this.fileName;
+        }
+
+        public void setFileName(String fileName) {
+            this.fileName = fileName;
+        }
     }
 
     /**
@@ -141,6 +157,9 @@ public class GenerateInspectionsMojo extends AbstractMojo {
      *                     <className>org.some.JavaClass2</className>
      *                 </classNames>
      *             </inspection>
+     *             <inspection>
+     *                 <fileName>src/test/resources</fileName>
+     *             </inspection>
      *         </inspections>
      *     </configuration>
      *
@@ -154,7 +173,7 @@ public class GenerateInspectionsMojo extends AbstractMojo {
             outputDir.mkdirs();
         }
         if (this.artifacts != null && this.className != null) {
-            generateInspection(this.artifacts, Arrays.asList(className));
+            generateJavaInspection(this.artifacts, Arrays.asList(className));
         }
         if (inspections != null) {
             for (Inspection inspection : inspections) {
@@ -164,14 +183,14 @@ public class GenerateInspectionsMojo extends AbstractMojo {
                 } else if (inspection.className != null) {
                     classNames.add(inspection.className);
                 } else {
-                    throw new MojoExecutionException("None of classNames nor className was found in the inspection configuration");
+                    generateFileInspection(inspection);
                 }
-                generateInspection(inspection.artifacts, classNames);
+                generateJavaInspection(inspection.artifacts, classNames);
             }
         }
     }
 
-    private void generateInspection(List<String> artifacts, Collection<String> classNames)
+    private void generateJavaInspection(List<String> artifacts, Collection<String> classNames)
             throws MojoFailureException, MojoExecutionException {
 
         List<URL> urls = artifacts == null ? Collections.emptyList() : resolveClasspath(artifacts);
@@ -190,19 +209,23 @@ public class GenerateInspectionsMojo extends AbstractMojo {
                 throw new MojoExecutionException(e.getMessage(), e);
             }
 
-            try {
-                ObjectMapper objectMapper = Json.mapper();
-                File target = outputFile;
-                if (target == null) {
-                    target = new File(outputDir, "atlasmap-inpection-" + className + ".json");
-                }
-                objectMapper.writeValue(target, c);
-                getLog().info("Created: " + target);
-            } catch (JsonProcessingException e) {
-                throw new MojoExecutionException(e.getMessage(), e);
-            } catch (IOException e) {
-                throw new MojoExecutionException(e.getMessage(), e);
+            writeToFile(className, c);
+        }
+    }
+
+    private void writeToFile(String name, Object object) throws MojoExecutionException {
+        try {
+            ObjectMapper objectMapper = Json.mapper();
+            File target = outputFile;
+            if (target == null) {
+                target = new File(outputDir, "atlasmap-inspection-" + name + ".json");
             }
+            objectMapper.writeValue(target, object);
+            getLog().info("Created: " + target);
+        } catch (JsonProcessingException e) {
+            throw new MojoExecutionException(e.getMessage(), e);
+        } catch (IOException e) {
+            throw new MojoExecutionException(e.getMessage(), e);
         }
     }
 
@@ -247,6 +270,64 @@ public class GenerateInspectionsMojo extends AbstractMojo {
         }
 
         return urls;
+    }
+
+    private void generateFileInspection(Inspection inspection) throws MojoFailureException {
+        File file = new File(inspection.fileName);
+        if (!file.exists()) {
+            getLog().warn(String.format("Ignoring '%s'", inspection.fileName));
+            return;
+        }
+
+        if (file.isDirectory()) {
+            for (File child : file.listFiles()) {
+                if (!child.exists() || child.isDirectory()) {
+                    getLog().warn(String.format("Ignoring '%s'", child.getAbsolutePath()));
+                    continue;
+                }
+                if (child.getName().toLowerCase().endsWith(".json")) {
+                    generateJsonSchemaInspection(child.getAbsolutePath());
+                } else if (child.getName().toLowerCase().endsWith(".xsd")) {
+                    generateXmlSchemaInspection(child.getAbsolutePath());
+                } else {
+                    getLog().warn(String.format("Ignoring unsupported file type '%s'", child.getAbsolutePath()));
+                    continue;
+                }
+            }
+            return;
+        }
+
+        if (file.getName().toLowerCase().endsWith(".json")) {
+            generateJsonSchemaInspection(file.getAbsolutePath());
+        } else if (file.getName().toLowerCase().endsWith(".xsd")) {
+            generateXmlSchemaInspection(file.getAbsolutePath());
+        } else {
+            throw new MojoFailureException(String.format("Inspection type '%s' is not supported", inspection.getClass().getName()));
+        }
+    }
+
+    private void generateJsonSchemaInspection(String fileName) throws MojoFailureException {
+        try {
+            Path path = Paths.get(fileName);
+            String schema = new String(Files.readAllBytes(path));
+            JsonDocument d = new JsonDocumentInspectionService().inspectJsonSchema(schema);
+            String name = path.getFileName().toString();
+            String outputName = name.substring(0, name.length() - 5);
+            writeToFile(outputName, d);
+        } catch (Exception e) {
+            throw new MojoFailureException(e.getMessage(), e);
+        }
+    }
+
+    private void generateXmlSchemaInspection(String fileName) throws MojoFailureException {
+        try {
+            File f = new File(fileName);
+            XmlDocument d = new XmlInspectionService().inspectSchema(f);
+            String outputName = f.getName().substring(0, f.getName().length() - 4);
+            writeToFile(outputName, d);
+        } catch (Exception e) {
+            throw new MojoFailureException(e.getMessage(), e);
+        }
     }
 
     public RepositorySystem getSystem() {

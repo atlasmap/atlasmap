@@ -5,7 +5,7 @@ module.exports = function (config) {
   config.set({
     basePath: '',
     files: [
-      {pattern: 'test-resources/*', watched: true, served: true, included: false}
+      {pattern: 'test-resources/inspected/*', watched: true, served: true, included: false}
     ],
     frameworks: ['jasmine-jquery', 'jasmine', '@angular/cli'],
     plugins: [
