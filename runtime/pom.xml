@@ -47,7 +47,7 @@
     <module>itests</module>
     <module>atlasmap-maven-plugin</module>
     <module>runtime</module>
-    <module>docs</module>
+    <module>coverage-report</module>
   </modules>
 
   <profiles>

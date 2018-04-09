@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!--
 
     Copyright (C) 2017 Red Hat, Inc.
@@ -26,74 +25,22 @@
     <relativePath>..</relativePath>
   </parent>
 
-  <artifactId>atlas-docs</artifactId>
-  <name>Atlas :: Documentation</name>
+  <artifactId>coverage-report</artifactId>
+  <name>Unit Test Coverage Report</name>
+  <packaging>pom</packaging>
 
-  <!-- ==== HTML documentation ====================== -->
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <skipIfEmpty>true</skipIfEmpty>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
   <profiles>
-    <profile>
-      <id>html</id>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.asciidoctor</groupId>
-            <artifactId>asciidoctor-maven-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>output-html</id>
-                <phase>package</phase>
-                <goals>
-                  <goal>process-asciidoc</goal>
-                </goals>
-                <configuration>
-                  <sourceHighlighter>coderay</sourceHighlighter>
-                  <backend>html</backend>
-                  <sourceHighlighter>coderay</sourceHighlighter>
-                  <attributes>
-                    <toc>left</toc>
-                    <linkcss>false</linkcss>
-                  </attributes>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-      <activation>
-        <activeByDefault>true</activeByDefault>
-      </activation>
-    </profile>
-
-    <!-- ==== PDF documentation ====================== -->
-
-    <profile>
-      <id>pdf</id>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.asciidoctor</groupId>
-            <artifactId>asciidoctor-maven-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>output-pdf</id>
-                <phase>package</phase>
-                <goals>
-                  <goal>process-asciidoc</goal>
-                </goals>
-                <configuration>
-                  <backend>pdf</backend>
-                  <sourceHighlighter>rouge</sourceHighlighter>
-                  <attributes>
-                    <toc />
-                  </attributes>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-
     <!-- Jacoco Test Coverage -->
     <profile>
       <id>jacoco</id>
@@ -195,9 +142,7 @@
           <groupId>io.atlasmap</groupId>
           <artifactId>atlas-xml-service</artifactId>
         </dependency>
-
       </dependencies>
     </profile>
   </profiles>
-
 </project>

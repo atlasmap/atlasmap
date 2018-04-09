@@ -75,6 +75,7 @@
     <module>runtime</module>
     <module>camel</module>
     <!-- <module>app</module> -->
+    <module>docs</module>
   </modules>
 
   <build>

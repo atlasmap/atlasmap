@@ -1,0 +1,8 @@
+[[internal-design]]
+= Internal Design
+
+== Runtime
+include::internal/_runtime.adoc[]
+
+== UI
+include::internal/_ui.adoc[]

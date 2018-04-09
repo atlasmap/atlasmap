@@ -1,0 +1,16 @@
+[[camel-atlasmap]]
+= camel-atlasmap component
+
+camel-atlasmap is an http://camel.apache.org/[Apache Camel] Component for AtlasMap. This component executes AtlasMap mapping as a part of Camel route processing.
+
+Example usage:
+
+```xml
+<camelContext xmlns="http://camel.apache.org/schema/spring">
+    <route>
+        <from uri="direct:start" />
+        <to uri="atlas:atlasmapping.xml" />
+        <to uri="mock:result" />
+    </route>
+</camelContext>
+```

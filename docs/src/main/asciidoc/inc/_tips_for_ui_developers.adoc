@@ -1,0 +1,102 @@
+[[tips-for-ui-developers]]
+== Tips for UI developers
+
+=== Developing Within Syndesis UI
+
+The Data Mapper UI is referenced by Syndesis as a dependency. When the Syndesis UI's dependencies are installed during the **yarn install** step, the Data Mapper UI will be cloned from the NPM package repository into the **${SYNDESIS}/ui/node_modules/@atlasmap/atlasmap.data.mapper** directory. 
+
+You can point your local Syndesis UI's Data Mapper UI reference to your working copy of the Data Mapper by https://yarnpkg.com/lang/en/docs/cli/link/[yarn link]. You'll do something like this:
+
+```
+$ cd ${ATLASMAP}/ui
+$ yarn build
+$ cd dist
+$ yarn link
+$ cd ${SYNDESIS}/ui
+$ yarn link @atlasmap/atlasmap.data.mapper
+```
+
+Note that running `yarn install` in the Syndesis UI directory **will remove and redownload the ${SYNDESIS}/ui/node_modules/@atlasmap/atlasmap.data.mapper directory**, so you'd want to avoid doing it while you have `yarn link`. Instead you'd change ${ATLASMAP}/ui/src and run `yarn build` to make a change in AtlasMap UI and consume it within Syndesis UI.
+
+=== Debug Configuration
+
+The Data Mapper UI features several developer-friendly debug configuration options. These configuration fields are specified on the https://github.com/atlasmap/atlasmap/blob/master/ui/src/app/lib/atlasmap-data-mapper/models/config.model.ts[ConfigModel] class. 
+
+==== Service Endpoint Configuration
+
+1. **baseJavaInspectionServiceUrl** - URL for the Java Inspection Service provided by the AtlasMap Services.
+2. **baseXMLInspectionServiceUrl** - URL for the XML Inspection Service provided by the AtlasMap Services.
+3. **baseJSONInspectionServiceUrl** - URL for the JSON Inspection Service provided by the AtlasMap Services.
+4. **baseMappingServiceUrl** - URL for the Mapping Service provided by the AtlasMap Services.
+
+==== Mock Source/Target Document Configuration
+
+These flags control the UI automatically adding the specified mock documents to the system when the UI initializes.
+
+1. **addMockJavaSingleSource** - Add single Java source document.
+2. **addMockJavaSources** - Add multiple Java source documents.
+3. **addMockXMLInstanceSources** - Add multiple XML instance-based source documents.
+4. **addMockXMLSchemaSources** - Add multiple XML schema-based source documents.
+5. **addMockJSONSources** - Add multiple JSON source documents.
+6. **addMockJavaTarget** - Add a Java target document.
+7. **addMockXMLInstanceTarget** - Add a XML instance target document.
+8. **addMockXMLSchemaTarget** - Add a XML schema target document.
+9. **addMockJSONTarget** - Add a JSON target document.
+
+The code that initializes these mock documents is in the https://github.com/atlasmap/atlasmap/blob/master/ui/src/app/lib/atlasmap-data-mapper/services/initialization.service.ts[InitializationService].
+That service calls various static methods in the https://github.com/atlasmap/atlasmap/blob/master/ui/src/app/lib/atlasmap-data-mapper/services/document-management.service.ts[DocumentManagementService] to create example XML instance, XML schema, and JSON documents.
+Mock Java documents referenced are from the AtlasMap Services' https://github.com/atlasmap/atlasmap/tree/master/runtime/modules/java/test-model/src/main/java/io/atlasmap/java/test[Atlas Java Test Model Maven Module].
+
+==== Additional Debug Configuration
+
+1. **discardNonMockSources** - Automatically discard all user-specified (or Syndesis UI-specified) source/target documents before initializing. This is helpful if you're trying to test with mock documents alone.
+2. **addMockJSONMappings** - This flag bootstraps the UI's mappings from the provided JSON mapping definition. Useful for repeatedly debugging a particular scenario.
+3. **debugClassPathServiceCalls** - Log details about JSON request/responses to/from the class path resolution service.
+4. **debugDocumentServiceCalls** - Log details about JSON request/responses to/from the Java/XML/JSON inspection services.
+5. **debugMappingServiceCalls** - Log details about JSON request/responses to/from the mapping service.
+6. **debugValidationServiceCalls** - Log details about JSON request/responses to/from the mapping validation service.
+7. **debugFieldActionServiceCalls** - Log details about JSON request/responses to/from the mapping field action configuration service.
+8. **debugDocumentParsing** - Log details about parsing JSON responses from the inspection services.
+
+Data Mapper Debug Configuration within the Syndesis UI is defined within your **${SYNDESIS}/ui/src/config.json** file's data mapper section:
+
+```json
+{
+  "apiEndpoint": "https://syndesis-staging.b6ff.rh-idev.openshiftapps.com/api/v1",
+  "title": "Syndesis",
+  "datamapper": {
+    "baseJavaInspectionServiceUrl": "http://localhost:8585/v2/atlas/java/",
+    "baseXMLInspectionServiceUrl": "http://localhost:8585/v2/atlas/xml/",
+    "baseJSONInspectionServiceUrl": "http://localhost:8585/v2/atlas/json/",
+    "baseMappingServiceUrl": "http://localhost:8585/v2/atlas/",
+    "discardNonMockSources": true,
+    "addMockJSONMappings": false,
+    "addMockJavaSingleSource": true, 
+    "addMockJavaSources": false,
+    "addMockXMLInstanceSources": true,
+    "addMockXMLSchemaSources": true,
+    "addMockJSONSources": true,
+    "addMockJavaTarget": false,
+    "addMockXMLInstanceTarget": false,
+    "addMockXMLSchemaTarget": false,
+    "addMockJSONTarget": true,
+    "debugDocumentServiceCalls": true,
+    "debugMappingServiceCalls": true,
+    "debugClassPathServiceCalls": false,
+    "debugValidationServiceCalls": false,
+    "debugFieldActionServiceCalls": false,
+    "debugDocumentParsing": false
+  },
+  "oauth": {
+    "clientId": "syndesis-ui",
+    "scopes": ["openid"],
+    "oidc": true,
+    "hybrid": true,
+    "issuer": "https://syndesis-staging.b6ff.rh-idev.openshiftapps.com/auth/realms/syndesis",
+    "auto-link-github": true
+  }
+}
+```
+
+If you're running the Data Mapper UI locally outside of the Syndesis UI, the debug configuration is specified within the https://github.com/atlasmap/atlasmap/blob/master/ui/src/app/lib/atlasmap-data-mapper/components/data-mapper-example-host.component.ts[DataMapperAppExampleHostComponent].
+

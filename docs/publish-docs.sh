@@ -3,8 +3,7 @@ echo ================================
 echo Deploying AtlasMap documentation
 echo ================================
 
-cd docs && \
-../../mvnw -Phtml,pdf package && \
+../mvnw -Phtml,pdf package && \
 git clone -b gh-pages https://github.com/atlasmap/atlasmap.git gh-pages && \
 git config --global user.email "travis@atlasmap.io" && \
 git config --global user.name "Travis" && \
@@ -14,5 +13,4 @@ mv index.pdf atlasmap.pdf && \
 git add --ignore-errors * && \
 git commit -m "generated documentation" && \
 git push origin gh-pages && \
-cd .. && \
-rm -rf gh-pages target
+cd ..

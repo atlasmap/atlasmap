@@ -109,8 +109,9 @@ publish_docs: &publish_docs
       fi
 
       if [ "${CIRCLE_BRANCH}" == "master" ]; then
-        cd runtime
-        sh docs/ci-docs.sh
+        cd docs
+        sh publish-docs.sh
+        cd ..
       fi
 
 jobs:
@@ -145,7 +146,7 @@ jobs:
           name: Collect Coverage reports
           command: |
             mkdir /workspace/coverage/
-            cp -a ./runtime/docs/target/site/jacoco-aggregate/* /workspace/coverage
+            cp -a ./runtime/coverage-report/target/site/jacoco-aggregate/* /workspace/coverage
             java -cp ./.circleci/codacy-coverage-reporter-2.0.1-assembly.jar com.codacy.CodacyCoverageReporter -l Java -r /workspace/coverage/jacoco.xml
       - store_artifacts:
           path: /workspace/coverage
@@ -158,7 +159,6 @@ jobs:
           paths:
           - ~/.m2
       - <<: *push_images
-      - <<: *publish_docs
 
   camel-atlasmap:
     <<: *job_defaults
@@ -260,7 +260,23 @@ jobs:
           - ~//usr/local/share/.cache/yarn/v1
       - <<: *publish_npm
 
-
+  docs:
+    <<: *job_defaults
+    environment:
+      <<: *common_env
+    steps:
+      - checkout
+      - restore_cache:
+          key: atlasmap-mvn-docs-{{ checksum "docs/pom.xml" }}
+      - <<: *load_m2
+      - <<: *publish_docs
+      - store_artifacts:
+          path: docs/gh-pages
+      - save_cache:
+          key: atlasmap-mvn-docs-{{ checksum "docs/pom.xml" }}
+          paths:
+          - ~/.m2
+  
 workflows:
   version: 2
   AtlasMap:
@@ -281,3 +297,12 @@ workflows:
               ignore: gh-pages
           requires:
             - runtime
+      - docs:
+          filters:
+            branches:
+              only:
+                - master
+          requires:
+            - runtime
+            - camel-atlasmap
+            - UI
