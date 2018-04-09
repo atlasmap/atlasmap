@@ -40,26 +40,28 @@ export class MappedField {
   field: Field = DocumentDefinition.getNoneField();
   actions: FieldAction[] = [];
 
-  updateSeparateOrCombineIndex(
-    separateMode: boolean, combineMode: boolean,
-    suggestedValue: string, isSource: boolean): void {
+  updateSeparateOrCombineIndex(separateMode: boolean, combineMode: boolean, suggestedValue: string,
+                               isSource: boolean, compoundSelection: boolean): void {
 
-    //remove field action when neither combine or separate mode
-    let removeField: boolean = (!separateMode && !combineMode);
-    //remove field when combine and field is target
-    removeField = removeField || (combineMode && !isSource);
-    //remove field when separate and field is source
-    removeField = removeField || (separateMode && isSource);
-    if (removeField) {
+    // Remove field actions where appropriate.
+    if ((!separateMode && !combineMode) || (separateMode && isSource)) {
       this.removeSeparateOrCombineAction();
       return;
     }
 
     let firstFieldAction: FieldAction = (this.actions.length > 0) ? this.actions[0] : null;
     if (firstFieldAction == null || !firstFieldAction.isSeparateOrCombineMode) {
-      //add new separate/combine field action when there isn't one
+
+      // Create a new separate/combine field action if there isn't one.
       firstFieldAction = FieldAction.createSeparateCombineFieldAction(separateMode, suggestedValue);
       this.actions = [firstFieldAction].concat(this.actions);
+      return;
+    }
+
+    // Given a compound selection (ctrl-M1) create a new field action based on the suggested value.
+    if (compoundSelection) {
+      const currentFieldAction: FieldAction = FieldAction.createSeparateCombineFieldAction(separateMode, suggestedValue);
+      this.actions = [currentFieldAction];
     }
   }
 
@@ -73,7 +75,15 @@ export class MappedField {
   getSeparateOrCombineIndex(): string {
     const firstFieldAction: FieldAction = (this.actions.length > 0) ? this.actions[0] : null;
     if (firstFieldAction != null && firstFieldAction.isSeparateOrCombineMode) {
-      return firstFieldAction.argumentValues[0].value;
+      let maxIndex = 0;
+      for (const indexValue of firstFieldAction.argumentValues) {
+        const indexAsNumber = (indexValue.value == null) ? 0 : parseInt(indexValue.value, 10);
+        if (indexAsNumber > maxIndex) {
+          maxIndex = indexAsNumber;
+          break;
+        }
+      }
+      return maxIndex.toString();
     }
     return null;
   }
@@ -237,7 +247,34 @@ export class FieldMappingPair {
     return false;
   }
 
-  updateTransition(): void {
+  /**
+   * Normalize index fields for combine/ separate modes.
+   * @param combineMode
+   */
+  processIndices(combineMode: boolean): number {
+
+    // Remove indices from target fields in combine-mode if they exist or remove indices from
+    // source fields in separate-mode if they exist.
+    for (const mField of this.getMappedFields(!combineMode)) {
+      mField.removeSeparateOrCombineAction();
+    }
+
+    // Gather mapped fields.
+    const mappedFields = this.getMappedFields(combineMode);
+
+    // Find the max separator index from the existing fields.
+    let maxIndex = 0;
+    for (const mField of mappedFields) {
+      const index: string = mField.getSeparateOrCombineIndex();
+      const indexAsNumber = (index == null) ? 0 : parseInt(index, 10);
+      maxIndex = Math.max(maxIndex, indexAsNumber);
+    }
+
+    maxIndex += 1;
+    return maxIndex;
+  }
+
+  updateTransition(isSource: boolean, compoundSelection: boolean): void {
     for (const field of this.getAllFields()) {
       if (field.enumeration) {
         this.transition.mode = TransitionMode.ENUM;
@@ -261,32 +298,17 @@ export class FieldMappingPair {
 
     const separateMode: boolean = (this.transition.mode == TransitionMode.SEPARATE);
     const combineMode: boolean = (this.transition.mode == TransitionMode.COMBINE);
+    let maxIndex = 0;
 
-    if (separateMode || combineMode) {
-      const isSource: boolean = combineMode;
-      mappedFields = this.getMappedFields(isSource);
-      //remove indexes from targets in combine mode, from sources in seperate mode
-      for (const mappedField of this.getMappedFields(!isSource)) {
-        mappedField.removeSeparateOrCombineAction();
-      }
-      //find max seperator index from existing fields
-      let maxIndex = 0;
-      for (const mappedField of mappedFields) {
-        const index: string = mappedField.getSeparateOrCombineIndex();
-        const indexAsNumber = (index == null) ? 0 : parseInt(index, 10);
-        maxIndex = Math.max(maxIndex, indexAsNumber);
-      }
+    if (combineMode || separateMode) {
+      maxIndex = this.processIndices(combineMode);
+      mappedFields = this.getMappedFields(combineMode);
+      const mappedField: MappedField = mappedFields[mappedFields.length - 1];
+      mappedField.updateSeparateOrCombineIndex(separateMode, combineMode, maxIndex.toString(), isSource,
+                                               compoundSelection);
+    } else {
 
-      maxIndex += 1; //we want our next index to be one larger than previously found indexes
-      for (const mappedField of mappedFields) {
-        mappedField.updateSeparateOrCombineIndex(separateMode, combineMode, maxIndex.toString(), isSource);
-        //see if this field used the new index, if so, increment
-        const index: string = mappedField.getSeparateOrCombineIndex();
-        if (index == maxIndex.toString()) {
-          maxIndex += 1;
-        }
-      }
-    } else { //not separate mode
+      // Clear actions in non separate/combine modes.
       for (const mappedField of this.getAllMappedFields()) {
         mappedField.removeSeparateOrCombineAction();
       }

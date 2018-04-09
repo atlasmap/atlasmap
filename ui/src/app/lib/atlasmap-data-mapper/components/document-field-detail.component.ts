@@ -86,8 +86,8 @@ export class DocumentFieldDetailComponent {
       return;
     }
 
-    this.cfg.mappingService.addNewMapping(droppedField);
-    this.cfg.mappingService.fieldSelected(this.field);
+    this.cfg.mappingService.addNewMapping(droppedField, false);
+    this.cfg.mappingService.fieldSelected(this.field, false);
 
   }
 
@@ -170,19 +170,12 @@ export class DocumentFieldDetailComponent {
   /**
    * Semantic support for a mouse click.
    * * M1 - the field is selected
-   * * Ctrl-M1 - if the field is already selected then the field is de-selected;
-   *             if the field is not already selected then the field is selected
+   * * Ctrl-M1 - compound-select
    *
    * @param event
    */
   handleMouseClick(event: MouseEvent): void {
-    if (event.ctrlKey) {
-      if (this.field.selected) {
-        this.cfg.mappingService.deselectMapping();
-        return;
-      }
-    }
-    this.cfg.mappingService.fieldSelected(this.field);
+    this.cfg.mappingService.fieldSelected(this.field, event.ctrlKey);
     if (this.lineMachine != null) {
       this.lineMachine.redrawLinesForMappings();
     }

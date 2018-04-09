@@ -28,7 +28,7 @@ import { ConfigModel } from '../models/config.model';
 import { Field } from '../models/field.model';
 import { DocumentDefinition } from '../models/document-definition.model';
 import { MappingModel, FieldMappingPair, MappedField } from '../models/mapping.model';
-import { FieldActionConfig, FieldActionArgument } from '../models/transition.model';
+import { FieldActionConfig, FieldActionArgument, TransitionMode, TransitionModel } from '../models/transition.model';
 import { MappingDefinition } from '../models/mapping-definition.model';
 import { ErrorInfo, ErrorLevel } from '../models/error.model';
 
@@ -38,6 +38,7 @@ import { DataMapperUtil } from '../common/data-mapper-util';
 
 @Injectable()
 export class MappingManagementService {
+
   cfg: ConfigModel;
 
   mappingUpdatedSource = new Subject<void>();
@@ -191,13 +192,86 @@ export class MappingManagementService {
     return fieldPair;
   }
 
-  updateMappedField(fieldPair: FieldMappingPair): void {
-    fieldPair.updateTransition();
+  updateMappedField(fieldPair: FieldMappingPair, isSource: boolean): void {
+    fieldPair.updateTransition(isSource, false);
     this.notifyMappingUpdated();
     this.saveCurrentMapping();
   }
 
-  fieldSelected(field: Field): void {
+  /**
+   * Remove the specified field from a previously established and mapped field pair.
+   * @param fieldPair
+   * @param removeField
+   */
+  removeMappedFieldPairField(fieldPair: FieldMappingPair, removeField: Field, compoundSelection: boolean): void {
+    let fields: MappedField[] = null;
+    if (removeField.isSource()) {
+      fields = fieldPair.sourceFields;
+    } else {
+      fields = fieldPair.targetFields;
+    }
+    for (const mfield of fields) {
+      if (mfield.field.name == removeField.name) {
+        DataMapperUtil.removeItemFromArray(mfield, fields);
+        break;
+      }
+    }
+    fieldPair.updateTransition(removeField.isSource(), compoundSelection);
+    if (fields.length == 0 && compoundSelection) {
+      this.deselectMapping();
+    }
+  }
+
+  /**
+   * Add a compound-selected field to an existing mapping.  Needed for combine/ separate modes.
+   * A compound source selection in separate mode or a compound target selection in combine mode is an error.
+   * @param field
+   */
+  addActiveMappingField(field: Field): void {
+    const mappingPair: FieldMappingPair = this.cfg.mappings.activeMapping.getFirstFieldMapping();
+    const mfield: MappedField = mappingPair.sourceFields[0];
+    if (mappingPair.transition != null) {
+
+      if (field.isSource()) {
+
+        // Compound source mapping when not in Combine mode.
+        if (mappingPair.transition.mode != TransitionMode.COMBINE) {
+          this.cfg.errorService.warn('The selected mapping details action ' + TransitionModel.getActionName(mappingPair.transition.mode) +
+                                      ' is not applicable from compound source selections (' + field.name + ').', null);
+          return;
+        }
+      } else {
+
+        // Compound target mapping when not in Separate mode.
+        if (mappingPair.transition.mode != TransitionMode.SEPARATE) {
+          this.cfg.errorService.warn('The selected mapping details action ' + TransitionModel.getActionName(mappingPair.transition.mode) +
+                                     ' is not applicable to compound target selections (' + field.name + ').', null);
+          return;
+        }
+      }
+    }
+    const newMField = new MappedField;
+    newMField.field = field;
+    newMField.actions = mfield.actions;
+    if (field.isSource()) {
+      mappingPair.sourceFields.push(newMField);
+    } else {
+      mappingPair.targetFields.push(newMField);
+    }
+  }
+
+  /**
+   * Remove the specified field from the active mapping field pair.
+   * @param field
+   */
+  removeActiveMappingField(field: Field, compoundSelection: boolean): void {
+    const activeMapping: MappingModel = this.cfg.mappings.activeMapping;
+    const mappingPair: FieldMappingPair = activeMapping.getCurrentFieldMapping();
+    this.removeMappedFieldPairField(mappingPair, field, compoundSelection);
+  }
+
+  fieldSelected(field: Field, compoundSelection: boolean): void {
+    field.selected = true;
     if (!field.isTerminal()) {
       field.docDef.populateChildren(field);
       field.docDef.updateFromMappings(this.cfg.mappings);
@@ -206,11 +280,23 @@ export class MappingManagementService {
     }
 
     let mapping: MappingModel = this.cfg.mappings.activeMapping;
+    let fieldRemoved = false;
 
-    if (mapping != null
-      && mapping.hasMappedFields(field.isSource())
-      && !mapping.isFieldMapped(field, field.isSource())) {
-      mapping = null;
+    if (mapping != null && mapping.hasMappedFields(field.isSource())) {
+
+      // If the user has performed a compound selection (ctrl-m1) of a previously unselected field
+      // then add it to the active mapping; otherwise remove it.
+      if (compoundSelection) {
+          if (mapping.isFieldMapped(field, field.isSource()) && field.selected) {
+            this.removeActiveMappingField(field, compoundSelection);
+            field.selected = false;
+            fieldRemoved = true;
+          } else {
+            this.addActiveMappingField(field);
+          }
+      } else {
+        mapping = null;
+      }
     }
 
     if (mapping == null) {
@@ -224,11 +310,11 @@ export class MappingManagementService {
     }
 
     if (mapping == null) {
-      this.addNewMapping(field);
+      this.addNewMapping(field, compoundSelection);
       return;
     }
 
-    //check to see if field is a valid selection for this mapping
+    //check to see if the field is a valid selection for this mapping
     const exclusionReason: string = mapping.getFieldSelectionExclusionReason(field);
     if (exclusionReason != null) {
       this.cfg.errorService.warn("The field '" + field.displayName + "' cannot be selected, " + exclusionReason + '.', null);
@@ -239,21 +325,30 @@ export class MappingManagementService {
 
     const latestFieldPair: FieldMappingPair = mapping.getCurrentFieldMapping();
     const lastMappedField: MappedField = latestFieldPair.getLastMappedField(field.isSource());
-    if ((lastMappedField != null)) {
+    if (lastMappedField != null && lastMappedField.field.name.length == 0) {
       lastMappedField.field = field;
     }
-    latestFieldPair.updateTransition();
-    this.selectMapping(mapping);
+    if (!fieldRemoved) {
+      latestFieldPair.updateTransition(field.isSource(), compoundSelection);
+      this.selectMapping(mapping);
+    }
   }
 
-  addNewMapping(selectedField: Field): void {
-    this.deselectMapping();
+  /**
+   * Instantiate a new mapping model and associate the selected field with it.
+   * @param selectedField
+   * @param compoundSelection - indicates a compound-selection (ctrl-M1) if true, standard mouse click if false.
+   */
+  addNewMapping(selectedField: Field, compoundSelection: boolean): void {
+    if (!compoundSelection) {
+      this.deselectMapping();
+    }
     const mapping: MappingModel = new MappingModel();
     mapping.brandNewMapping = false;
     if (selectedField != null) {
       const fieldPair: FieldMappingPair = mapping.getFirstFieldMapping();
       fieldPair.getMappedFields(selectedField.isSource())[0].field = selectedField;
-      fieldPair.updateTransition();
+      fieldPair.updateTransition(selectedField.isSource(), false);
     }
     this.selectMapping(mapping);
   }

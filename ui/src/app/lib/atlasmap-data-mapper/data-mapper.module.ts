@@ -17,7 +17,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpModule } from '@angular/http';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BsDropdownModule, TooltipModule, TypeaheadModule } from 'ngx-bootstrap';
 
 import { DocumentManagementService } from './services/document-management.service';
@@ -76,6 +76,7 @@ export { DataMapperAppComponent } from './components/data-mapper-app.component';
     CommonModule,
     HttpModule,
     FormsModule,
+    ReactiveFormsModule,
     TypeaheadModule.forRoot(),
     TooltipModule.forRoot(),
     BsDropdownModule.forRoot(),
