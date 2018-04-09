@@ -68,7 +68,7 @@ export class MappingFieldDetailComponent implements OnInit {
 
   selectionChanged(event: any): void {
     this.mappedField.field = event.item['field'];
-    this.cfg.mappingService.updateMappedField(this.fieldPair);
+    this.cfg.mappingService.updateMappedField(this.fieldPair, this.mappedField.field.isSource());
     this.updateTemplateValues();
   }
 

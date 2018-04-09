@@ -58,7 +58,7 @@ export class ToolbarComponent implements OnInit {
     event.preventDefault();
     if ('showDetails' == action) {
       if (this.cfg.mappings.activeMapping == null) {
-        this.cfg.mappingService.addNewMapping(null);
+        this.cfg.mappingService.addNewMapping(null, false);
         this.cfg.mappings.activeMapping.brandNewMapping = true;
       } else {
         this.cfg.mappingService.deselectMapping();
@@ -74,7 +74,7 @@ export class ToolbarComponent implements OnInit {
     } else if ('showUnmappedFields' == action) {
       this.cfg.showUnmappedFields = !this.cfg.showUnmappedFields;
     } else if ('addMapping' == action) {
-      this.cfg.mappingService.addNewMapping(null);
+      this.cfg.mappingService.addNewMapping(null, false);
     } else if ('showMappingTable' == action) {
       this.cfg.showMappingTable = !this.cfg.showMappingTable;
       if (this.cfg.showMappingTable) {

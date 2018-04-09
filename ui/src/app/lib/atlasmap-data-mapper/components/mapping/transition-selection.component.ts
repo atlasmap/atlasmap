@@ -15,6 +15,7 @@
 */
 
 import { Component, Input } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 
 import { TransitionMode, TransitionDelimiter, TransitionModel, TransitionDelimiterModel } from '../../models/transition.model';
 import { ConfigModel } from '../../models/config.model';
@@ -34,23 +35,59 @@ export class TransitionSelectionComponent {
   @Input() modalWindow: ModalWindowComponent;
   @Input() fieldPair: FieldMappingPair;
 
+  selectActionForm: FormGroup;
   modes = TransitionMode;
   delimiters: TransitionDelimiterModel[];
 
   constructor() {
     TransitionModel.initialize();
     this.delimiters = TransitionModel.delimiterModels;
+    this.selectActionForm = new FormGroup({
+        selectAction: new FormControl(null)
+    });
+    this.selectActionForm.controls['selectAction'].setValue('Map', {onlySelf: true});
   }
 
+  /**
+   * Validate the user selected mode with the user selected field pairs.
+   * @param selectedMode
+   */
+  validModeTransition(selectedMode: TransitionMode): boolean {
+    const mappedSourceFields = this.fieldPair.getMappedFields(true);
+    const mappedTargetFields = this.fieldPair.getMappedFields(false);
+
+    if (mappedSourceFields.length > 1 && selectedMode != TransitionMode.COMBINE) {
+      this.cfg.errorService.warn('The selected mapping details action ' + TransitionModel.getActionName(selectedMode) +
+                                 ' is not applicable from compound source selections.', null);
+      return false;
+    } else if (mappedTargetFields.length > 1 && selectedMode != TransitionMode.SEPARATE) {
+      this.cfg.errorService.warn('The selected mapping details action ' + TransitionModel.getActionName(selectedMode) +
+                                 ' is not applicable to compound target selections.', null);
+      return false;
+    }
+    return true;
+  }
+
+  /**
+   * The user has selected a new mapping details action.  Validate it and update any mapped fields.
+   * @param event - contains the selected value
+   */
   selectionChanged(event: any): void {
     const selectorIsMode: boolean = 'mode' == event.target.attributes.getNamedItem('selector').value;
     const selectedValue: any = event.target.selectedOptions.item(0).attributes.getNamedItem('value').value;
     if (selectorIsMode) {
-      this.fieldPair.transition.mode = parseInt(selectedValue, 10);
+      const selectedMode: TransitionMode = parseInt(selectedValue, 10);
+      if (this.validModeTransition(selectedMode)) {
+        this.fieldPair.transition.mode = selectedMode;
+      } else {
+        // Bad selected mapping details action.  Reset the UI selection to the item before the user changed it.
+        this.selectActionForm.controls['selectAction'].setValue(this.fieldPair.transition.mode.toString(10), {onlySelf: true});
+        return;
+      }
     } else {
       this.fieldPair.transition.delimiter = parseInt(selectedValue, 10);
     }
-    this.cfg.mappingService.updateMappedField(this.fieldPair);
+    this.cfg.mappingService.updateMappedField(this.fieldPair, this.fieldPair.sourceFields.length > 0);
   }
 
   modeIsEnum(): boolean {

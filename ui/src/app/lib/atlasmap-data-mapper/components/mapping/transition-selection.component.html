@@ -6,15 +6,17 @@
     </div>
     <div *ngIf="!modeIsEnum()">
       <label>Action</label>
-      <select id="select-action" (change)="selectionChanged($event);" selector="mode" [ngModel]="fieldPair.transition.mode">
-        <option value="{{modes.COMBINE}}">Combine</option>
-        <option value="{{modes.MAP}}">Map</option>
-        <option value="{{modes.SEPARATE}}">Separate</option>
-      </select>
+      <form [formGroup]="selectActionForm">
+        <select id="selectAction" formControlName="selectAction" (change)="selectionChanged($event);" selector="mode" [ngModel]="fieldPair.transition.mode">
+          <option value="{{modes.COMBINE}}">Combine</option>
+          <option value="{{modes.MAP}}">Map</option>
+          <option value="{{modes.SEPARATE}}">Separate</option>
+        </select>
+      </form>
       <div class="clear"></div>
     </div>
     <div *ngIf="fieldPair.transition.isSeparateMode() || fieldPair.transition.isCombineMode()" style="margin-top:10px;">
-      <label>Separator:</label>
+      <label>Separator</label>
       <select id="select-separator" (change)="selectionChanged($event);" selector="separator" [ngModel]="fieldPair.transition.delimiter">
         <ng-container *ngFor="let delimiter of delimiters">
           <option *ngIf="modeIsSupported(delimiter)" value="{{delimiter.delimiter}}">{{ delimiter.prettyName }}</option>

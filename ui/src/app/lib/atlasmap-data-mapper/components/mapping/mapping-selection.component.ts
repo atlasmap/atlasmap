@@ -55,7 +55,7 @@ export class MappingSelectionComponent {
   }
 
   addMapping() {
-    this.cfg.mappingService.addNewMapping(this.selectedField);
+    this.cfg.mappingService.addNewMapping(this.selectedField, false);
     this.modalWindow.close();
   }
 

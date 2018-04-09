@@ -207,6 +207,38 @@ export class TransitionModel {
     return null;
   }
 
+  /**
+   * Translate an action mode number into a string.
+   * @param mode
+   */
+  static getActionName(mode: TransitionMode): string {
+    let actionName: string;
+
+    switch (mode) {
+      case TransitionMode.MAP: {
+         actionName = 'MAP';
+         break;
+      }
+      case TransitionMode.COMBINE: {
+         actionName = 'COMBINE';
+         break;
+      }
+      case TransitionMode.SEPARATE: {
+          actionName = 'SEPARATE';
+          break;
+      }
+      case TransitionMode.ENUM: {
+          actionName = 'ENUM';
+          break;
+      }
+      default: {
+         actionName = '';
+         break;
+      }
+    }
+    return actionName;
+  }
+
   static getTransitionDelimiterPrettyName(delimiter: TransitionDelimiter): string {
     for (const m of TransitionModel.delimiterModels) {
       if (m.delimiter == delimiter) {

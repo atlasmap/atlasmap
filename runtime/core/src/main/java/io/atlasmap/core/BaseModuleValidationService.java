@@ -112,7 +112,13 @@ public abstract class BaseModuleValidationService<T extends Field> implements At
         }
 
         List<Field> sourceFields = mapping.getInputField();
-        Field targetField = mapping.getOutputField() != null ? mapping.getOutputField().get(0) : null;
+
+        final List<Field> targetFields = mapping.getOutputField();
+        final Field targetField = (targetFields != null && !targetFields.isEmpty()) ? targetFields.get(0) : null;
+        if (targetField == null) {
+            return;
+        }
+
         String mappingId = mapping.getId();
 
         if (getMode() == AtlasModuleMode.TARGET && matchDocIdOrNull(targetField.getDocId())) {
@@ -192,7 +198,11 @@ public abstract class BaseModuleValidationService<T extends Field> implements At
             return;
         }
 
-        final Field sourceField = mapping.getInputField() != null ? mapping.getInputField().get(0) : null;
+        final List<Field> sourceFields = mapping.getInputField();
+        final Field sourceField = (sourceFields != null && !sourceFields.isEmpty()) ? sourceFields.get(0) : null;
+        if (sourceField == null) {
+            return;
+        }
         List<Field> targetFields = mapping.getOutputField();
         String mappingId = mapping.getId();
 

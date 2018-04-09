@@ -121,7 +121,7 @@ export class DocumentDefinition {
   }
 
   /**
-   * Return true is the specified field name already exists in the specified document definition,
+   * Return true if the specified field name already exists in the specified document definition,
    * false otherwise.
    * @param targetField
    * @param targetFieldDocDefType
