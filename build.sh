@@ -59,8 +59,8 @@ function readopt() {
 
 function modules_to_build() {
   # app needs some love...
-  # modules="parent runtime camel ui app"
-  modules="parent runtime camel ui"
+  # modules="parent runtime camel ui app docs"
+  modules="parent runtime camel ui docs"
   resume_from=$(readopt --resume-from $ARGS 2> /dev/null)
   if [ "x${resume_from}" != x ]; then
     modules=$(echo $modules | sed -e "s/^.*$resume_from/$resume_from/")
@@ -164,6 +164,12 @@ function ui() {
 function app() {
   pushd app
   yarn  
+  popd
+}
+
+function docs() {
+  pushd docs
+  "${MAVEN_CMD}" $MAVEN_CLEAN_GOAL install $MAVEN_PARAMETERS
   popd
 }
 

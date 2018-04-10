@@ -1,4 +1,4 @@
-= AtlasMap
+= AtlasMap Documentation
 The AtlasMap Team
 :revnumber: {version}
 :revdate: {localdate}
@@ -10,8 +10,6 @@ The AtlasMap Team
 
 ifndef::ebook-format[:leveloffset: 1]
 
-(C) 2017 The original authors.
-
 ifdef::basebackend-html[toc::[]]
 
 :numbered:
@@ -20,12 +18,22 @@ include::inc/_introduction.adoc[]
 
 <<<
 
+include::inc/_quickstart.adoc[]
+
+<<<
+
+include::inc/_camel.adoc[]
+
+<<<
+
+include::inc/_internal_design.adoc[]
+
+<<<
+
+[[Reference]]
+= Reference
+
+include::inc/_fieldActions.adoc[]
+
 include::inc/_terminology.adoc[]
 
-<<<
-
-include::inc/_userguide.adoc[]
-
-<<<
-
-include::inc/_releasenotes.adoc[]

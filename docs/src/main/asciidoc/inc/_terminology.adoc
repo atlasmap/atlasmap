@@ -1,6 +1,6 @@
 
 [[terminology]]
-= Terminology
+== Terminology
 
 AtlasMap terminology 
 
