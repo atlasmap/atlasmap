@@ -13,29 +13,34 @@ All developer releated documentation can be found at [AtlasMap Documentation](ht
 
 ## The shortest path to run standalone AtlasMap
 
-1. Build AtlasMap runtime
+1. Checkout AtlasMap repo from GitHub
 ```
-    cd ${ATLASMAP}/runtime
-    ../mvnw clean install
-```
-
-2. Run AtlasMap Services
-```
-    cd ${ATLASMAP}/runtime/runtime
-    ../../mvnw -Pitests spring-boot:run
+$ git clone https://github.com/atlasmap/atlasmap ${ATLASMAP}
 ```
 
-3. [Install Yarn](https://yarnpkg.com/lang/en/docs/install/)
-
-4. In another console, install Data Mapper UI's dependencies
+2. Build AtlasMap runtime
 ```
-    cd ${ATLASMAP}/ui
-    yarn install
+$ cd ${ATLASMAP}/runtime
+$ ../mvnw clean install
 ```
 
-5. Start Data Mapper UI
+3. Run AtlasMap Services
 ```
-    yarn start
+$ cd ${ATLASMAP}/runtime/runtime
+$ ../../mvnw -Pitests spring-boot:run
+```
+
+4. [Install Yarn](https://yarnpkg.com/lang/en/docs/install/)
+
+5. In another console, install Data Mapper UI's dependencies
+```
+$ cd ${ATLASMAP}/ui
+$ yarn install
+```
+
+6. Start Data Mapper UI
+```
+$ yarn start
 ```
 
 The **yarn start** command will attempt to automatically open your browser window, but if it doesn't, open it directy with this URL: <http://localhost:3000>.

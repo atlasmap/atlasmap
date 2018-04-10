@@ -10,7 +10,7 @@
 
 Bootstrapping the Data Mapper UI requires a bit of configuration. An example bootstrapping component is provided within the project:
 
-ui/src/app/lib/atlasmap-data-mapper/components/data.mapper.example.host.component.ts
+https://github.com/atlasmap/atlasmap/blob/master/ui/src/app/lib/atlasmap-data-mapper/components/data.mapper.example.host.component.ts
 
 === MODEL
 
@@ -28,7 +28,7 @@ A single MappingDefinition model in the ConfigModel object stores information ab
 
 === SERVICE
 
-When the Data Mapper UI Bootstraps, a series of service calls are made to the mapping service (MappingManagementService) and document service (DocumentManagementService). 
+When the Data Mapper UI Bootstraps, a series of service calls are made to the mapping service (https://github.com/atlasmap/atlasmap/blob/master/ui/src/app/lib/atlasmap-data-mapper/services/mapping-management.service.ts[MappingManagementService]) and document service (https://github.com/atlasmap/atlasmap/blob/master/ui/src/app/lib/atlasmap-data-mapper/services/document-management.service.ts[DocumentManagementService]). 
 
 The document service is used to fetch our source/target document information (name of doc, fields). After these are parsed from the service, they are stored in the ConfigModel's inputDoc and outputDoc DocumentDefinition models.
 
