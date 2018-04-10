@@ -41,7 +41,7 @@ export class MappedField {
   actions: FieldAction[] = [];
 
   updateSeparateOrCombineIndex(separateMode: boolean, combineMode: boolean, suggestedValue: string,
-                               isSource: boolean, compoundSelection: boolean): void {
+                               isSource: boolean, compoundSelection: boolean, fieldRemoved: boolean): void {
 
     // Remove field actions where appropriate.
     if ((!separateMode && !combineMode) || (separateMode && isSource)) {
@@ -59,7 +59,7 @@ export class MappedField {
     }
 
     // Given a compound selection (ctrl-M1) create a new field action based on the suggested value.
-    if (compoundSelection) {
+    if (compoundSelection && !fieldRemoved) {
       const currentFieldAction: FieldAction = FieldAction.createSeparateCombineFieldAction(separateMode, suggestedValue);
       this.actions = [currentFieldAction];
     }
@@ -274,7 +274,7 @@ export class FieldMappingPair {
     return maxIndex;
   }
 
-  updateTransition(isSource: boolean, compoundSelection: boolean): void {
+  updateTransition(isSource: boolean, compoundSelection: boolean, fieldRemoved: boolean): void {
     for (const field of this.getAllFields()) {
       if (field.enumeration) {
         this.transition.mode = TransitionMode.ENUM;
@@ -303,9 +303,11 @@ export class FieldMappingPair {
     if (combineMode || separateMode) {
       maxIndex = this.processIndices(combineMode);
       mappedFields = this.getMappedFields(combineMode);
-      const mappedField: MappedField = mappedFields[mappedFields.length - 1];
-      mappedField.updateSeparateOrCombineIndex(separateMode, combineMode, maxIndex.toString(), isSource,
-                                               compoundSelection);
+      if (mappedFields != null && mappedFields.length > 0) {
+        const mappedField: MappedField = mappedFields[mappedFields.length - 1];
+        mappedField.updateSeparateOrCombineIndex(separateMode, combineMode, maxIndex.toString(), isSource,
+                                                 compoundSelection, fieldRemoved);
+      }
     } else {
 
       // Clear actions in non separate/combine modes.
@@ -430,7 +432,7 @@ export class MappingModel {
 
           for (const mappedOutputField of fieldPair.targetFields) {
              if (mappedOutputField.field.name == field.name) {
-               if (!this.getCurrentFieldMapping().isFieldMapped(field)) {
+               if (!this.getCurrentFieldMapping().isFieldMapped(field) && field.partOfMapping) {
                  return true;
                }
              }
@@ -452,7 +454,8 @@ export class MappingModel {
 
     // Target fields may only be mapped once.
     if (this.isMappedTarget(field)) {
-      return 'as it is already the target of another mapping';
+      return 'it is already the target of another mapping. ' +
+        'Use ctrl-M1 to select multiple elements for \'Combine\' or \'Separate\' actions.';
     }
 
     const repeatedMode: boolean = this.isCollectionMode();
