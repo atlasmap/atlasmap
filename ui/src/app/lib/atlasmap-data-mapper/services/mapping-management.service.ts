@@ -193,7 +193,7 @@ export class MappingManagementService {
   }
 
   updateMappedField(fieldPair: FieldMappingPair, isSource: boolean): void {
-    fieldPair.updateTransition(isSource, false);
+    fieldPair.updateTransition(isSource, false, false);
     this.notifyMappingUpdated();
     this.saveCurrentMapping();
   }
@@ -216,9 +216,11 @@ export class MappingManagementService {
         break;
       }
     }
-    fieldPair.updateTransition(removeField.isSource(), compoundSelection);
+    fieldPair.updateTransition(removeField.isSource(), compoundSelection, true);
+
+    // If the removed field was the last field of this pairing then remove the field pair as well.
     if (fields.length == 0 && compoundSelection) {
-      this.deselectMapping();
+      this.removeMappedPair(fieldPair);
     }
   }
 
@@ -237,7 +239,8 @@ export class MappingManagementService {
         // Compound source mapping when not in Combine mode.
         if (mappingPair.transition.mode != TransitionMode.COMBINE) {
           this.cfg.errorService.warn('The selected mapping details action ' + TransitionModel.getActionName(mappingPair.transition.mode) +
-                                      ' is not applicable from compound source selections (' + field.name + ').', null);
+                                      ' is not applicable from compound source selections (' + field.name +
+                                      ').  Recommend using field action \'Combine\'.', null);
           return;
         }
       } else {
@@ -245,7 +248,8 @@ export class MappingManagementService {
         // Compound target mapping when not in Separate mode.
         if (mappingPair.transition.mode != TransitionMode.SEPARATE) {
           this.cfg.errorService.warn('The selected mapping details action ' + TransitionModel.getActionName(mappingPair.transition.mode) +
-                                     ' is not applicable to compound target selections (' + field.name + ').', null);
+                                     ' is not applicable to compound target selections (' + field.name +
+                                     ').  Recommend using field action \'Separate\'.', null);
           return;
         }
       }
@@ -324,13 +328,15 @@ export class MappingManagementService {
     mapping.brandNewMapping = false;
 
     const latestFieldPair: FieldMappingPair = mapping.getCurrentFieldMapping();
-    const lastMappedField: MappedField = latestFieldPair.getLastMappedField(field.isSource());
-    if (lastMappedField != null && lastMappedField.field.name.length == 0) {
-      lastMappedField.field = field;
-    }
-    if (!fieldRemoved) {
-      latestFieldPair.updateTransition(field.isSource(), compoundSelection);
-      this.selectMapping(mapping);
+    if (latestFieldPair != null) {
+      const lastMappedField: MappedField = latestFieldPair.getLastMappedField(field.isSource());
+      if (lastMappedField != null && lastMappedField.field.name.length == 0) {
+        lastMappedField.field = field;
+      }
+      if (!fieldRemoved) {
+        latestFieldPair.updateTransition(field.isSource(), compoundSelection, fieldRemoved);
+        this.selectMapping(mapping);
+      }
     }
   }
 
@@ -348,7 +354,7 @@ export class MappingManagementService {
     if (selectedField != null) {
       const fieldPair: FieldMappingPair = mapping.getFirstFieldMapping();
       fieldPair.getMappedFields(selectedField.isSource())[0].field = selectedField;
-      fieldPair.updateTransition(selectedField.isSource(), false);
+      fieldPair.updateTransition(selectedField.isSource(), false, false);
     }
     this.selectMapping(mapping);
   }
