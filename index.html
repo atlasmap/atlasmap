@@ -609,8 +609,8 @@ table.CodeRay td.code>pre{padding:0}
 <p>Build AtlasMap runtime</p>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code>    cd ${ATLASMAP}/runtime
-    ../mvnw clean install</code></pre>
+<pre class="CodeRay highlight"><code>$ cd ${ATLASMAP}/runtime
+$ ../mvnw clean install</code></pre>
 </div>
 </div>
 </li>
@@ -618,8 +618,8 @@ table.CodeRay td.code>pre{padding:0}
 <p>Run AtlasMap Services</p>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code>    cd ${ATLASMAP}/runtime/runtime
-    ../../mvnw -Pitests spring-boot:run</code></pre>
+<pre class="CodeRay highlight"><code>$ cd ${ATLASMAP}/runtime/runtime
+$ ../../mvnw -Pitests spring-boot:run</code></pre>
 </div>
 </div>
 </li>
@@ -630,8 +630,8 @@ table.CodeRay td.code>pre{padding:0}
 <p>In another console, install Data Mapper UI&#8217;s dependencies</p>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code>    cd ${ATLASMAP}/ui
-    yarn install</code></pre>
+<pre class="CodeRay highlight"><code>$ cd ${ATLASMAP}/ui
+$ yarn install</code></pre>
 </div>
 </div>
 </li>
@@ -639,7 +639,7 @@ table.CodeRay td.code>pre{padding:0}
 <p>Start Data Mapper UI</p>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code>    yarn start</code></pre>
+<pre class="CodeRay highlight"><code>$ yarn start</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -657,7 +657,7 @@ table.CodeRay td.code>pre{padding:0}
 <p>Building everything for standalone usage</p>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code>    ./build.sh --skip-image-builds</code></pre>
+<pre class="CodeRay highlight"><code>$ ./build.sh --skip-image-builds</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -665,7 +665,7 @@ table.CodeRay td.code>pre{padding:0}
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code>    ./build.sh --help</code></pre>
+<pre class="CodeRay highlight"><code>$ ./build.sh --help</code></pre>
 </div>
 </div>
 </li>
@@ -676,7 +676,7 @@ table.CodeRay td.code>pre{padding:0}
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code>    ./build.sh --skip-image-builds --resume-from ui</code></pre>
+<pre class="CodeRay highlight"><code>$ ./build.sh --skip-image-builds --resume-from ui</code></pre>
 </div>
 </div>
 </li>
@@ -687,7 +687,7 @@ table.CodeRay td.code>pre{padding:0}
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code>    ./build.sh --with-image-streams</code></pre>
+<pre class="CodeRay highlight"><code>$ ./build.sh --with-image-streams</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -908,7 +908,7 @@ Mock Java documents referenced are from the AtlasMap Services' <a href="https://
 <p>Bootstrapping the Data Mapper UI requires a bit of configuration. An example bootstrapping component is provided within the project:</p>
 </div>
 <div class="paragraph">
-<p>ui/src/app/lib/atlasmap-data-mapper/components/data.mapper.example.host.component.ts</p>
+<p><a href="https://github.com/atlasmap/atlasmap/blob/master/ui/src/app/lib/atlasmap-data-mapper/components/data.mapper.example.host.component.ts" class="bare">https://github.com/atlasmap/atlasmap/blob/master/ui/src/app/lib/atlasmap-data-mapper/components/data.mapper.example.host.component.ts</a></p>
 </div>
 </div>
 <div class="sect3">
@@ -942,7 +942,7 @@ Mock Java documents referenced are from the AtlasMap Services' <a href="https://
 <div class="sect3">
 <h4 id="service">4.2.3. SERVICE</h4>
 <div class="paragraph">
-<p>When the Data Mapper UI Bootstraps, a series of service calls are made to the mapping service (MappingManagementService) and document service (DocumentManagementService).</p>
+<p>When the Data Mapper UI Bootstraps, a series of service calls are made to the mapping service (<a href="https://github.com/atlasmap/atlasmap/blob/master/ui/src/app/lib/atlasmap-data-mapper/services/mapping-management.service.ts">MappingManagementService</a>) and document service (<a href="https://github.com/atlasmap/atlasmap/blob/master/ui/src/app/lib/atlasmap-data-mapper/services/document-management.service.ts">DocumentManagementService</a>).</p>
 </div>
 <div class="paragraph">
 <p>The document service is used to fetch our source/target document information (name of doc, fields). After these are parsed from the service, they are stored in the ConfigModel&#8217;s inputDoc and outputDoc DocumentDefinition models.</p>
@@ -1555,7 +1555,7 @@ string.</p></td>
 <div id="footer">
 <div id="footer-text">
 Version 1.34-SNAPSHOT<br>
-Last updated 2018-04-10 19:54:16 UTC
+Last updated 2018-04-10 20:22:53 UTC
 </div>
 </div>
 </body>
