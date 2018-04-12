@@ -137,6 +137,7 @@ export class MappingManagementService {
     this.cfg.mappings.mappings = newMappings;
 
     this.saveMappingSource.next(null);
+    this.notifyMappingUpdated();
   }
 
   serializeMappingsToJSON(): any {
@@ -178,8 +179,6 @@ export class MappingManagementService {
     this.cfg.mappings.activeMapping.removeMappedPair(fieldPair);
     if (this.cfg.mappings.activeMapping.fieldMappings.length == 0) {
       this.deselectMapping();
-    } else {
-      this.notifyMappingUpdated();
     }
     this.saveCurrentMapping();
   }
@@ -187,14 +186,12 @@ export class MappingManagementService {
   addMappedPair(): FieldMappingPair {
     const fieldPair: FieldMappingPair = new FieldMappingPair();
     this.cfg.mappings.activeMapping.fieldMappings.push(fieldPair);
-    this.notifyMappingUpdated();
     this.saveCurrentMapping();
     return fieldPair;
   }
 
   updateMappedField(fieldPair: FieldMappingPair, isSource: boolean): void {
     fieldPair.updateTransition(isSource, false, false);
-    this.notifyMappingUpdated();
     this.saveCurrentMapping();
   }
 
@@ -222,6 +219,7 @@ export class MappingManagementService {
     if (fields.length == 0 && compoundSelection) {
       this.removeMappedPair(fieldPair);
     }
+    this.saveCurrentMapping();
   }
 
   /**
@@ -336,6 +334,7 @@ export class MappingManagementService {
       if (!fieldRemoved) {
         latestFieldPair.updateTransition(field.isSource(), compoundSelection, fieldRemoved);
         this.selectMapping(mapping);
+        this.saveCurrentMapping();
       }
     }
   }
@@ -355,6 +354,7 @@ export class MappingManagementService {
       const fieldPair: FieldMappingPair = mapping.getFirstFieldMapping();
       fieldPair.getMappedFields(selectedField.isSource())[0].field = selectedField;
       fieldPair.updateTransition(selectedField.isSource(), false, false);
+      this.saveCurrentMapping();
     }
     this.selectMapping(mapping);
   }
@@ -371,7 +371,6 @@ export class MappingManagementService {
     }
     this.cfg.mappings.initializeMappingLookupTable(mappingModel);
     this.saveCurrentMapping();
-    this.notifyMappingUpdated();
   }
 
   deselectMapping(): void {
