@@ -64,6 +64,7 @@ export class MappingFieldActionComponent {
   }
 
   selectionChanged(event: MouseEvent): void {
+    this.mappedField.parsedData.userCreated = true;
     this.cfg.mappingService.saveCurrentMapping();
   }
 
