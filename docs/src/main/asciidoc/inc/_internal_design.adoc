@@ -1,8 +1,15 @@
 [[internal-design]]
 = Internal Design
 
-== Runtime
+== Overview
+AtlasMap consists of following 3 parts
+
+1. <<internal-ui,Data Mapper UI>>
+2. <<internal-design-time-services,Design Time Services>>
+3. <<internal-runtime-engine,Runtime Engine>>
+
+include::internal/_ui.adoc[]
+
 include::internal/_runtime.adoc[]
 
-== UI
-include::internal/_ui.adoc[]
+include::internal/_design_time_services.adoc[]

@@ -1,3 +1,6 @@
+[[internal-ui]]
+== UI
+
 //=== Overview
 
 //todo: list of project files w/ brief descriptions for each
@@ -10,7 +13,7 @@
 
 Bootstrapping the Data Mapper UI requires a bit of configuration. An example bootstrapping component is provided within the project:
 
-https://github.com/atlasmap/atlasmap/blob/master/ui/src/app/lib/atlasmap-data-mapper/components/data.mapper.example.host.component.ts
+https://github.com/atlasmap/atlasmap/blob/master/ui/src/app/lib/atlasmap-data-mapper/components/data-mapper-example-host.component.ts
 
 === MODEL
 
