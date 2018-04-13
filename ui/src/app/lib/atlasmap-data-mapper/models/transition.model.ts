@@ -114,6 +114,10 @@ export class FieldActionConfig {
       return (['LONG', 'INTEGER', 'FLOAT', 'DOUBLE', 'SHORT', 'BYTE', 'DECIMAL', 'NUMBER'].indexOf(targetField.type) != -1);
     }
 
+    if (this.targetType == 'ANY_DATE') {
+      return (['DATE', 'DATE_TIME', 'DATE_TIME_TZ', 'TIME'].indexOf(targetField.type) != -1);
+    }
+
     // All other types must match the mapped field types with the field action types.
     return ((sourceField.type == this.sourceType) && (targetField.type == this.targetType));
   }
@@ -126,7 +130,13 @@ export class FieldActionConfig {
     if (action.argumentValues == null || action.argumentValues.length == 0) {
       action.argumentValues = [];
       for (const arg of this.arguments) {
-        action.setArgumentValue(arg.name, '');
+
+        // Default the input field to 0 for numerics
+        if (['LONG', 'INTEGER', 'FLOAT', 'DOUBLE', 'SHORT', 'BYTE', 'DECIMAL', 'NUMBER'].indexOf(arg.type) != -1) {
+          action.setArgumentValue(arg.name, '0');
+        } else {
+          action.setArgumentValue(arg.name, '');
+        }
       }
     }
   }
