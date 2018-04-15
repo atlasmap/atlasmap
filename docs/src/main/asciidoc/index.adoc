@@ -4,7 +4,7 @@ The AtlasMap Team
 :revdate: {localdate}
 :toc: macro
 :toclevels: 3
-:toc-title: AtlasMap
+:toc-title: AtlasMap Developer Guide
 :doctype: book
 :icons: font
 
