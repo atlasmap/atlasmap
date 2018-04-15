@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.6.1">
 <meta name="author" content="The AtlasMap Team">
-<title>AtlasMap Documentation</title>
+<title>AtlasMap Developer Guide</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
@@ -520,17 +520,17 @@ table.CodeRay td.code>pre{padding:0}
 </head>
 <body class="book toc2 toc-left">
 <div id="header">
-<h1>AtlasMap Documentation</h1>
+<h1>AtlasMap Developer Guide</h1>
 <div class="details">
 <span id="author" class="author">The AtlasMap Team</span><br>
 <span id="revnumber">version 1.34-SNAPSHOT,</span>
-<span id="revdate">2018-04-13</span>
+<span id="revdate">2018-04-15</span>
 </div>
 <div id="toc" class="toc2">
-<div id="toctitle">AtlasMap</div>
+<div id="toctitle">AtlasMap Developer Guide</div>
 <ul class="sectlevel1">
 <li><a href="#introduction">1. Introduction</a></li>
-<li><a href="#quickstart">2. Developer Quickstart</a>
+<li><a href="#quickstart">2. Quickstart</a>
 <ul class="sectlevel2">
 <li><a href="#running-data-mapper-ui-within-syndesis">2.1. Running Data Mapper UI within Syndesis</a></li>
 <li><a href="#running-atlasmap-standalone">2.2. Running AtlasMap standalone</a></li>
@@ -546,14 +546,16 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#camel-atlasmap">3. camel-atlasmap component</a></li>
 <li><a href="#internal-design">4. Internal Design</a>
 <ul class="sectlevel2">
-<li><a href="#runtime">4.1. Runtime</a></li>
-<li><a href="#ui">4.2. UI</a>
+<li><a href="#overview">4.1. Overview</a></li>
+<li><a href="#internal-ui">4.2. UI</a>
 <ul class="sectlevel3">
 <li><a href="#bootstrapping">4.2.1. BOOTSTRAPPING</a></li>
 <li><a href="#model">4.2.2. MODEL</a></li>
 <li><a href="#service">4.2.3. SERVICE</a></li>
 </ul>
 </li>
+<li><a href="#internal-runtime-engine">4.3. Runtime Engine</a></li>
+<li><a href="#internal-design-time-services">4.4. Design Time Services</a></li>
 </ul>
 </li>
 <li><a href="#Reference">5. Reference</a>
@@ -575,22 +577,13 @@ table.CodeRay td.code>pre{padding:0}
 <h2 id="introduction">1. Introduction</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The AtlasMap is a data mapping solution with interactive web based user interface, that simplifies configuring integrations between Java, XML, and JSON data sources. You can design your data mapping on the AtlasMap Data Mapper UI canvas, and then run that data mapping via runtime engine. AtlasMap Data Mapper UI is primarily designed to work within the <a href="https://syndesis.io/">Syndesis UI</a>.</p>
-</div>
-<div class="paragraph">
-<p>In addition to the plain Java API provided by the runtime engine, AtlasMap also provides <a href="#camel-atlasmap">camel-atlasmap Component</a> to perform data mapping as a part of <a href="http://camel.apache.org/">Apache Camel</a> route.</p>
-</div>
-<div class="paragraph">
-<p><span class="image"><img src="images/datamapper.png" alt="datamapper"></span></p>
-</div>
-<div class="paragraph">
-<p><span class="image"><img src="images/mappinglist.png" alt="mappinglist"></span></p>
+<p>This document provides some information for the developers who is willing to contribute to AtlasMap code.</p>
 </div>
 <div style="page-break-after: always;"></div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="quickstart">2. Developer Quickstart</h2>
+<h2 id="quickstart">2. Quickstart</h2>
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="running-data-mapper-ui-within-syndesis">2.1. Running Data Mapper UI within Syndesis</h3>
@@ -895,20 +888,33 @@ Mock Java documents referenced are from the AtlasMap Services' <a href="https://
 <h2 id="internal-design">4. Internal Design</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="runtime">4.1. Runtime</h3>
+<h3 id="overview">4.1. Overview</h3>
 <div class="paragraph">
-<p>TBD</p>
+<p>AtlasMap consists of following 3 parts</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><a href="#internal-ui">Data Mapper UI</a></p>
+</li>
+<li>
+<p><a href="#internal-design-time-services">Design Time Services</a></p>
+</li>
+<li>
+<p><a href="#internal-runtime-engine">Runtime Engine</a></p>
+</li>
+</ol>
 </div>
 </div>
 <div class="sect2">
-<h3 id="ui">4.2. UI</h3>
+<h3 id="internal-ui">4.2. UI</h3>
 <div class="sect3">
 <h4 id="bootstrapping">4.2.1. BOOTSTRAPPING</h4>
 <div class="paragraph">
 <p>Bootstrapping the Data Mapper UI requires a bit of configuration. An example bootstrapping component is provided within the project:</p>
 </div>
 <div class="paragraph">
-<p><a href="https://github.com/atlasmap/atlasmap/blob/master/ui/src/app/lib/atlasmap-data-mapper/components/data.mapper.example.host.component.ts" class="bare">https://github.com/atlasmap/atlasmap/blob/master/ui/src/app/lib/atlasmap-data-mapper/components/data.mapper.example.host.component.ts</a></p>
+<p><a href="https://github.com/atlasmap/atlasmap/blob/master/ui/src/app/lib/atlasmap-data-mapper/components/data-mapper-example-host.component.ts" class="bare">https://github.com/atlasmap/atlasmap/blob/master/ui/src/app/lib/atlasmap-data-mapper/components/data-mapper-example-host.component.ts</a></p>
 </div>
 </div>
 <div class="sect3">
@@ -950,8 +956,15 @@ Mock Java documents referenced are from the AtlasMap Services' <a href="https://
 <div class="paragraph">
 <p>The mapping service is used to fetch our mappings for the fields mapped from the source to the target document. These mappings (and related lookup tables) are parsed by the management service and stored in the ConfigModel&#8217;s mappings MappingDefinition model.</p>
 </div>
-<div style="page-break-after: always;"></div>
 </div>
+</div>
+<div class="sect2">
+<h3 id="internal-runtime-engine">4.3. Runtime Engine</h3>
+
+</div>
+<div class="sect2">
+<h3 id="internal-design-time-services">4.4. Design Time Services</h3>
+<div style="page-break-after: always;"></div>
 </div>
 </div>
 </div>
@@ -1555,7 +1568,7 @@ string.</p></td>
 <div id="footer">
 <div id="footer-text">
 Version 1.34-SNAPSHOT<br>
-Last updated 2018-04-13 19:34:17 UTC
+Last updated 2018-04-15 18:58:33 UTC
 </div>
 </div>
 </body>
