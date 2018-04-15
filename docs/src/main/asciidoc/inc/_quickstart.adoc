@@ -1,6 +1,6 @@
 
 [[quickstart]]
-= Developer Quickstart
+= Quickstart
 
 == Running Data Mapper UI within Syndesis
 

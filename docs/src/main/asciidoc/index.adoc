@@ -1,4 +1,4 @@
-= AtlasMap Documentation
+= AtlasMap Developer Guide
 The AtlasMap Team
 :revnumber: {version}
 :revdate: {localdate}
