@@ -4,6 +4,11 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.time.Month;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.Date;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -17,9 +22,9 @@ import io.atlasmap.core.TestHelper;
 import io.atlasmap.v2.AtlasMapping;
 
 /**
- * https://github.com/atlasmap/atlasmap/issues/233
+ * https://github.com/atlasmap/atlasmap/issues/381
  */
-public class Atlasmap233Test {
+public class Atlasmap381Test {
 
     private AtlasMappingService mappingService;
 
@@ -30,16 +35,20 @@ public class Atlasmap233Test {
 
     @Test
     public void test() throws Exception {
-        URL url = Thread.currentThread().getContextClassLoader().getResource("mappings/issue/atlasmap-233-mapping.xml");
+        URL url = Thread.currentThread().getContextClassLoader().getResource("mappings/issue/atlasmap-381-mapping.xml");
         AtlasMapping mapping = mappingService.loadMapping(url, AtlasMappingFormat.XML);
         AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(mapping);
         AtlasSession session = context.createSession();
-        session.setSourceDocument("io.atlasmap.core.issue.SourceClass", new SourceClass().setSourceInteger(-1));
+        SimpleDateFormat dateFormat = new SimpleDateFormat("YYYY-MM-DD-HH-mm-ss.SSS");
+        Date sourceDate = dateFormat.parse("2001-01-01-01-01-01.001");
+        session.setSourceDocument("io.atlasmap.core.issue.SourceClass", new SourceClass().setSourceDate(sourceDate));
         context.process(session);
         assertFalse(TestHelper.printAudit(session), session.hasErrors());
         Object output = session.getTargetDocument("io.atlasmap.core.issue.TargetClass");
         assertEquals(TargetClass.class, output.getClass());
-        assertEquals(1, ((TargetClass)output).getTargetInteger());
+        Date targetDate = ((TargetClass)output).getTargetDate();
+        ZonedDateTime localTargetDate = ZonedDateTime.ofInstant(targetDate.toInstant(), ZoneId.systemDefault());
+        assertEquals(Month.FEBRUARY, localTargetDate.getMonth());
     }
 
 }

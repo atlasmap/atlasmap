@@ -196,7 +196,7 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
         FieldType currentType = sourceType;
         for(Action action : actions.getActions()) {
             ActionDetail detail = findActionDetail(action.getDisplayName(), currentType);
-            if(!detail.getSourceType().equals(currentType) && !FieldType.ANY.equals(detail.getSourceType())) {
+            if(!isAssignableFieldType(detail.getSourceType(), currentType)) {
                 tmpSourceObject = getConversionService().convertType(sourceObject, currentType, detail.getSourceType());
             }
 
@@ -206,6 +206,18 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
         }
 
         return processedField;
+    }
+
+    private boolean isAssignableFieldType(FieldType expected, FieldType actual) {
+        if (FieldType.ANY.equals(expected)) {
+            return true;
+        }
+        if (FieldType.ANY_DATE.equals(expected)) {
+            return FieldType.DATE.equals(actual) || FieldType.TIME.equals(actual)
+                    || FieldType.DATE_TIME.equals(actual) || FieldType.DATE_TIME_TZ.equals(actual)
+                    || FieldType.DATE_TZ.equals(actual) || FieldType.TIME_TZ.equals(actual);
+        }
+        return expected.equals(actual);
     }
 
     protected Object processAction(Action action, ActionDetail actionDetail, Object sourceObject) throws AtlasException {
