@@ -1,11 +1,14 @@
 package io.atlasmap.core.issue;
 
+import java.util.Date;
+
 public class TargetClass {
 
     private int targetInteger;
     private String targetFirstName;
     private String targetLastName;
     private String targetName;
+    private Date targetDate;
 
     public int getTargetInteger() {
         return targetInteger;
@@ -40,6 +43,15 @@ public class TargetClass {
 
     public TargetClass setTargetName(String targetName) {
         this.targetName = targetName;
+        return this;
+    }
+
+    public Date getTargetDate() {
+        return targetDate;
+    }
+
+    public TargetClass setTargetDate(Date targetDate) {
+        this.targetDate = targetDate;
         return this;
     }
 
