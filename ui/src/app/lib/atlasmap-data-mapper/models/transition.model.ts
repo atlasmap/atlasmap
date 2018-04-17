@@ -104,6 +104,27 @@ export class FieldActionConfig {
       return false;
     }
 
+    // Check if source/target collection types match
+    // Note, specifically not handling array, list, or map here since I don't believe we'll ever have functions that only apply to
+    // arrays or lists exclusively, and we don't currently see anyway to determine whether a map is even involved
+    if (this.serviceObject.sourceCollectionType == 'NONE' && sourceField.getCollectionType() != null) {
+      return false;
+    }
+    if (this.serviceObject.sourceCollectionType == 'ALL'
+        && this.sourceType != 'ANY'
+        && ['ARRAY', 'LIST'].indexOf(sourceField.getCollectionType()) == -1
+        && sourceField.type != 'STRING') {
+      return false;
+    }
+    if (this.serviceObject.targetCollectionType == 'NONE' && targetField.getCollectionType() != null) {
+      return false;
+    }
+    if (this.serviceObject.targetCollectionType == 'ALL'
+        && ['ARRAY', 'LIST'].indexOf(targetField.getCollectionType()) == -1
+        && targetField.type != 'STRING') {
+      return false;
+    }
+
     // Check for target string types.
     if (this.targetType == 'STRING') {
       return (['STRING', 'CHAR'].indexOf(targetField.type) != -1);
@@ -119,7 +140,7 @@ export class FieldActionConfig {
     }
 
     // All other types must match the mapped field types with the field action types.
-    return ((sourceField.type == this.sourceType) && (targetField.type == this.targetType));
+    return ((this.sourceType == 'ANY' || sourceField.type == this.sourceType) && (targetField.type == this.targetType));
   }
 
   populateFieldAction(action: FieldAction): void {
