@@ -80,17 +80,17 @@
 .DataMapperLoadingMessage IMG { height:12px; width:12px; vertical-align:middle; }
 
 /* toolbar styles */
-.toolbar { margin:1px 0px; padding:10px; }
-.toolbar .toolbar-icons I { font-size:20px; margin-left:10px; vertical-align:middle; }
-.toolbar .dropdown-menu { margin-top:5px; }
-.toolbar .dropdown-menu LI { background-color:transparent; width:200px; }
-.toolbar .dropdown-menu LI A { color:rgb(54,54,54); }
-.toolbar .dropdown-menu LI I { color:rgb(54,54,54); font-size:10px; margin-right:10px;
+.DataMapperUI .toolbar { margin:1px 0px; padding:10px; }
+.DataMapperUI .toolbar .toolbar-icons I { font-size:20px; margin-left:10px; vertical-align:middle; }
+.DataMapperUI .toolbar .dropdown-menu { margin-top:5px; }
+.DataMapperUI .toolbar .dropdown-menu LI { background-color:transparent; width:200px; }
+.DataMapperUI .toolbar .dropdown-menu LI A { color:rgb(54,54,54); }
+.DataMapperUI .toolbar .dropdown-menu LI I { color:rgb(54,54,54); font-size:10px; margin-right:10px;
         vertical-align:baseline; }
-.toolbar .dropdown-menu LI I.fa-check { margin-top:3px; }
-.toolbar .dropdown-menu LI:hover { background-color:rgba(92, 186, 223, 0.75); }
-.toolbar .dropdown-menu LI:hover A { }
-.toolbar .dropdown-menu LI:hover I { }
+.DataMapperUI .toolbar .dropdown-menu LI I.fa-check { margin-top:3px; }
+.DataMapperUI .toolbar .dropdown-menu LI:hover { background-color:rgba(92, 186, 223, 0.75); }
+.DataMapperUI .toolbar .dropdown-menu LI:hover A { }
+.DataMapperUI .toolbar .dropdown-menu LI:hover I { }
 
 /* document cards */
 .docDef { position:relative; border:1px solid #CAC9C9; height:100%; background-color:white; overflow:hidden; }
