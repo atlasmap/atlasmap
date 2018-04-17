@@ -87,7 +87,7 @@ export class TransitionSelectionComponent {
     } else {
       this.fieldPair.transition.delimiter = parseInt(selectedValue, 10);
     }
-    this.cfg.mappingService.updateMappedField(this.fieldPair, this.fieldPair.sourceFields.length > 0);
+    this.cfg.mappingService.updateMappedField(this.fieldPair, false);
   }
 
   modeIsEnum(): boolean {
