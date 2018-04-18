@@ -447,13 +447,14 @@ export class MappingManagementService {
               fieldActionConfig.method = svcConfig.method;
               fieldActionConfig.serviceObject = svcConfig;
 
-              if (svcConfig.parameters && svcConfig.parameters.property
-                && svcConfig.parameters.property.length) {
-                for (const svcProperty of svcConfig.parameters.property) {
+              if (svcConfig.parameters && svcConfig.parameters.parameter
+                && svcConfig.parameters.parameter.length) {
+                for (const svcParameter of svcConfig.parameters.parameter) {
                   const argumentConfig: FieldActionArgument = new FieldActionArgument();
-                  argumentConfig.name = svcProperty.name;
-                  argumentConfig.type = svcProperty.fieldType;
-                  argumentConfig.serviceObject = svcProperty;
+                  argumentConfig.name = svcParameter.name;
+                  argumentConfig.type = svcParameter.fieldType;
+                  argumentConfig.values = svcParameter.values;
+                  argumentConfig.serviceObject = svcParameter;
                   fieldActionConfig.arguments.push(argumentConfig);
                 }
               }

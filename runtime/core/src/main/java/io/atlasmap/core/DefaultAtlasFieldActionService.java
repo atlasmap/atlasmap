@@ -28,11 +28,11 @@ import io.atlasmap.spi.AtlasFieldActionInfo;
 import io.atlasmap.v2.Action;
 import io.atlasmap.v2.ActionDetail;
 import io.atlasmap.v2.ActionDetails;
+import io.atlasmap.v2.ActionParameter;
+import io.atlasmap.v2.ActionParameters;
 import io.atlasmap.v2.Actions;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldType;
-import io.atlasmap.v2.Properties;
-import io.atlasmap.v2.Property;
 import io.atlasmap.v2.SimpleField;
 
 public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
@@ -290,29 +290,42 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
         return sourceObject;
     }
 
-    protected Properties detectFieldActionParameters(String actionClassName) throws ClassNotFoundException {
+    protected ActionParameters detectFieldActionParameters(String actionClassName) throws ClassNotFoundException {
         Class<?> actionClazz = Class.forName(actionClassName);
 
-        Properties props = null;
+        ActionParameters params = null;
         for(Method method : actionClazz.getMethods()) {
             // Find setters to avoid the get / is confusion
             if(method.getParameterCount() == 1 && method.getName().startsWith("set")) {
                 // We have a parameter
-                if(props == null) {
-                    props = new Properties();
+                if(params == null) {
+                    params = new ActionParameters();
                 }
 
-                Property prop = null;
-                for(Parameter param : method.getParameters()) {
-                    prop = new Property();
-                    prop.setName(camelize(method.getName().substring("set".length())));
-                    prop.setFieldType(getConversionService().fieldTypeFromClass(param.getType()));
-                    props.getProperty().add(prop);
+                ActionParameter actionParam = null;
+                for(Parameter methodParam : method.getParameters()) {
+                    actionParam = new ActionParameter();
+                    actionParam.setName(camelize(method.getName().substring("set".length())));
+                    // TODO set displayName/description - https://github.com/atlasmap/atlasmap/issues/96
+                    actionParam.setFieldType(getConversionService().fieldTypeFromClass(methodParam.getType()));
+                    // TODO fix this dirty hack for https://github.com/atlasmap/atlasmap/issues/386
+                    if (methodParam.getType().isEnum()) {
+                        actionParam.setFieldType(FieldType.STRING);
+                        try {
+                            for (Object e : methodParam.getType().getEnumConstants()) {
+                                Method m = e.getClass().getDeclaredMethod("value", new Class[0]);
+                                actionParam.getValues().add(m.invoke(e, new Object[0]).toString());
+                            }
+                        } catch (Exception e) {
+                            LOG.debug("Failed to populate possible enum parameter values, ignoring...", e);
+                        }
+                    }
+                    params.getParameter().add(actionParam);
                 }
             }
         }
 
-        return props;
+        return params;
     }
 
     public AtlasConversionService getConversionService() {
