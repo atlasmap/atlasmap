@@ -1,13 +1,10 @@
 [[internal-ui]]
 == UI
 
-//=== Overview
+Data Mapper UI is a web based user interface to define a data mapping, built with https://angular.io/[Angular].
 
-//todo: list of project files w/ brief descriptions for each
+- https://github.com/atlasmap/atlasmap/blob/master/ui/
 
-//todo: brief overview of bootstrapping process
-
-//TODO: brief high level overview of what the ui does (service calls made, etc)
 
 === BOOTSTRAPPING
 

@@ -1,2 +1,0 @@
-[[internal-design-time-services]]
-== Design Time Services

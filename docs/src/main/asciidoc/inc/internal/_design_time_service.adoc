@@ -1,0 +1,24 @@
+[[internal-design-time-service]]
+== Design Time Service
+
+Design Time Service is a set of REST API which provide background services to be used by the Data Mapper UI behind the scene. There are 4 types of Design Time Service:
+
+=== Core Service
+https://github.com/atlasmap/atlasmap/blob/master/runtime/service
+
+NOTE: TODO
+
+=== Java Service
+https://github.com/atlasmap/atlasmap/blob/master/runtime/modules/java/service
+
+NOTE: TODO
+
+=== JSON Service
+https://github.com/atlasmap/atlasmap/blob/master/runtime/modules/json/service
+
+NOTE: TODO
+
+=== XML Service
+https://github.com/atlasmap/atlasmap/blob/master/runtime/modules/xml/service
+
+NOTE: TODO

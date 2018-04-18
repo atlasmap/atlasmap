@@ -4,7 +4,7 @@
 
 == Running Data Mapper UI within Syndesis
 
-The easiest way to install and run the Data Mapper UI is to install and run the https://syndesis.io[Syndesis]. Simply follow the https://doc.syndesis.io[Syndesis Developer Handbook] to install, and run the Syndesis UI. You will find the Data Mapper UI under the integrations panel after selecting or adding an integration with a data mapping step involved in the integration.
+The easiest way to install and run Data Mapper UI is to install and run https://syndesis.io[Syndesis]. Simply follow the https://doc.syndesis.io[Syndesis Developer Handbook] to install, and run Syndesis UI. You will find the Data Mapper UI under the integrations panel after selecting or adding an integration with a data mapping step involved in the integration.
 
 
 == Running AtlasMap standalone
@@ -18,7 +18,7 @@ $ cd ${ATLASMAP}/runtime
 $ ../mvnw clean install
 ```
 +
-2. Run AtlasMap Services
+2. Run AtlasMap Design Service
 +
 ```
 $ cd ${ATLASMAP}/runtime/runtime
@@ -76,4 +76,4 @@ $ ./build.sh --with-image-streams
 +
 Note that this assumes that you are using a template flavor that also supports image streams.
 
-include::_tips_for_ui_developers.adoc[]
+include::_tips_for_ui_developer.adoc[]

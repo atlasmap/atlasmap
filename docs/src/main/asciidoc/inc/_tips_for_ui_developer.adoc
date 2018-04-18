@@ -1,9 +1,9 @@
-[[tips-for-ui-developers]]
-== Tips for UI developers
+[[tips-for-ui-developer]]
+== Tips for UI developer
 
 === Developing Within Syndesis UI
 
-The Data Mapper UI is referenced by Syndesis as a dependency. When the Syndesis UI's dependencies are installed during the **yarn install** step, the Data Mapper UI will be cloned from the NPM package repository into the **${SYNDESIS}/ui/node_modules/@atlasmap/atlasmap.data.mapper** directory. 
+Data Mapper UI is referenced by Syndesis as a dependency. When Syndesis UI's dependencies are installed during **yarn install** step, Data Mapper UI will be cloned from the NPM package repository into **${SYNDESIS}/ui/node_modules/@atlasmap/atlasmap.data.mapper** directory. 
 
 You can point your local Syndesis UI's Data Mapper UI reference to your working copy of the Data Mapper by https://yarnpkg.com/lang/en/docs/cli/link/[yarn link]. You'll do something like this:
 

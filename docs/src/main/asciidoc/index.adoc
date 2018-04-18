@@ -22,18 +22,18 @@ include::inc/_quickstart.adoc[]
 
 <<<
 
-include::inc/_camel.adoc[]
+include::inc/_internal_design.adoc[]
 
 <<<
 
-include::inc/_internal_design.adoc[]
+include::inc/_camel.adoc[]
 
 <<<
 
 [[Reference]]
 = Reference
 
-include::inc/_fieldActions.adoc[]
+include::inc/_fieldAction.adoc[]
 
 include::inc/_terminology.adoc[]
 

@@ -1,6 +1,6 @@
-[[fieldActions]]
-== Transformations
-Transformations are a set of functions you can apply onto a field as a part of mapping. These performs a variety of transformations in the middle of processing mappings. This is called FieldAction internally.
+[[fieldAction]]
+== Transformation (FieldAction)
+Transformation is a function you can apply on a field value as a part of mapping. There are a variety of transformations you can apply in the middle of processing mappings. This is called FieldAction internally.
 
 [width="84%",cols="23%,18%,19%,21%,19%",options="header",]
 |=======================================================================

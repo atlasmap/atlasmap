@@ -1,15 +1,19 @@
 [[internal-design]]
 = Internal Design
 
-== Overview
-AtlasMap consists of following 3 parts
+AtlasMap consists of following 3 parts:
 
 1. <<internal-ui,Data Mapper UI>>
-2. <<internal-design-time-services,Design Time Services>>
+2. <<internal-design-time-service,Design Time Service>>
 3. <<internal-runtime-engine,Runtime Engine>>
+
+<<internal-ui,Data Mapper UI>> is an Angular based web browser application. <<internal-design-time-service,Design Time Service>> is a set of REST API which provide background services to be used by the Data Mapper UI behind the scene. Data Mapper UI eventually produces data mapping definition file in XML or JSON format. Then <<internal-runtime,Runtime Engine>> consumes that mapping definition as well as actual data payload and perform mapping.
+
+NOTE: There is also an overview document for the Data Mapper step in Syndesis, which might help if you look into AtlasMap within Syndesis context.
+https://github.com/syndesisio/syndesis/blob/master/app/server/docs/design/datamapper.md
 
 include::internal/_ui.adoc[]
 
-include::internal/_runtime.adoc[]
+include::internal/_design_time_service.adoc[]
 
-include::internal/_design_time_services.adoc[]
+include::internal/_runtime.adoc[]
