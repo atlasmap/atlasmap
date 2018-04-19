@@ -20,6 +20,7 @@ import { FieldMappingPair } from './mapping.model';
 export class FieldActionArgument {
   name: string = null;
   type = 'STRING';
+  values = null;
   serviceObject: any = new Object();
 }
 

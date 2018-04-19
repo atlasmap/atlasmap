@@ -16,10 +16,10 @@ import io.atlasmap.api.AtlasException;
 import io.atlasmap.v2.AbsoluteValue;
 import io.atlasmap.v2.Action;
 import io.atlasmap.v2.ActionDetail;
+import io.atlasmap.v2.ActionParameter;
 import io.atlasmap.v2.Actions;
 import io.atlasmap.v2.FieldType;
 import io.atlasmap.v2.GenerateUUID;
-import io.atlasmap.v2.Property;
 import io.atlasmap.v2.SimpleField;
 import io.atlasmap.v2.Trim;
 
@@ -52,9 +52,9 @@ public class DefaultAtlasFieldActionsServiceTest {
         for (ActionDetail d : actionDetails) {
             if (d.getParameters() != null) {
                 System.out.println("Action: " + d.getName());
-                for (Property prop : d.getParameters().getProperty()) {
-                    System.out.println("\t param: " + prop.getName());
-                    System.out.println("\t type: " + prop.getFieldType().value());
+                for (ActionParameter param : d.getParameters().getParameter()) {
+                    System.out.println("\t param: " + param.getName());
+                    System.out.println("\t type: " + param.getFieldType().value());
                 }
             }
         }

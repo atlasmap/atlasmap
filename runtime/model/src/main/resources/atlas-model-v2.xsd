@@ -343,7 +343,7 @@
 
   <simpleType name="MassUnitType">
     <restriction base="string">
-      <enumeration value="KiloGram" />
+      <enumeration value="Kilo Gram" />
       <enumeration value="Pound" />
     </restriction>
   </simpleType>
@@ -360,18 +360,18 @@
 
   <simpleType name="AreaUnitType">
     <restriction base="string">
-      <enumeration value="SquareMeter" />
-      <enumeration value="SquareMile" />
-      <enumeration value="SquareFoot" />
+      <enumeration value="Square Meter" />
+      <enumeration value="Square Mile" />
+      <enumeration value="Square Foot" />
     </restriction>
   </simpleType>
 
   <simpleType name="VolumeUnitType">
     <restriction base="string">
-      <enumeration value="CubicMeter" />
+      <enumeration value="Cubic Meter" />
       <enumeration value="Litter" />
-      <enumeration value="CubicFoot" />
-      <enumeration value="Gallon_US_Fluid" />
+      <enumeration value="Cubic Foot" />
+      <enumeration value="Gallon US Fluid" />
     </restriction>
   </simpleType>
 
@@ -422,7 +422,7 @@
 
   <complexType name="ActionDetail">
     <sequence>
-      <element name="Parameters" type="atlas:Properties"
+      <element name="Parameters" type="atlas:ActionParameters"
         minOccurs="0" maxOccurs="1" />
     </sequence>
     <attribute name="name" type="string" use="required" />
@@ -437,6 +437,24 @@
     <attribute name="targetCollectionType" type="atlas:CollectionType"
       use="optional" />
   </complexType>
+
+  <complexType name="ActionParameters">
+    <sequence>
+      <element name="parameter" type="atlas:ActionParameter"
+        minOccurs="0" maxOccurs="unbounded" />
+    </sequence>
+  </complexType>
+
+  <complexType name="ActionParameter">
+    <sequence>
+      <element name="values" type="string" minOccurs="0" maxOccurs="unbounded" />
+    </sequence>
+    <attribute name="name" type="string" use="required" />
+    <attribute name="displayName" type="string" use="optional" />
+    <attribute name="description" type="string" use="optional" />
+    <attribute name="fieldType" type="atlas:FieldType" use="optional" />
+  </complexType>
+
 
   <complexType name="ActionDetails">
     <sequence>
