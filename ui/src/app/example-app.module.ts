@@ -33,7 +33,7 @@ import { DataMapperModule } from './lib/atlasmap-data-mapper/data-mapper.module'
     FormsModule,
     HttpClientModule,
     RouterModule.forRoot([]),
-    DataMapperModule,
+    DataMapperModule.withInterceptor(),
   ],
   providers: [],
   bootstrap: [AppComponent],

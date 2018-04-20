@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-import { NgModule } from '@angular/core';
+import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule, HttpClientXsrfModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -127,11 +127,6 @@ export { DataMapperAppComponent } from './components/data-mapper-app.component';
     MappingManagementService,
     ErrorHandlerService,
     InitializationService,
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: ApiXsrfInterceptor,
-      multi: true
-    },
   ],
   entryComponents: [
     MappingSelectionComponent,
@@ -145,4 +140,21 @@ export { DataMapperAppComponent } from './components/data-mapper-app.component';
   ],
   bootstrap: [DataMapperAppExampleHostComponent],
 })
-export class DataMapperModule { }
+export class DataMapperModule {
+  static withInterceptor(): Array<ModuleWithProviders> {
+    return [{
+      ngModule: DataMapperModule,
+      providers: [
+        DocumentManagementService,
+        MappingManagementService,
+        ErrorHandlerService,
+        InitializationService,
+        {
+          provide: HTTP_INTERCEPTORS,
+          useClass: ApiXsrfInterceptor,
+          multi: true
+        },
+      ],
+    }];
+  }
+}
