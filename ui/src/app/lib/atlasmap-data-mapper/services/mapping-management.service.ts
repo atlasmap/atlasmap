@@ -480,22 +480,26 @@ export class MappingManagementService {
       return sortedActionConfigs;
     }
 
-    const configsByName: { [key: string]: FieldActionConfig; } = {};
+    const configsByName: { [key: string]: FieldActionConfig[]; } = {};
     const configNames: string[] = [];
     for (const fieldActionConfig of configs) {
       const name: string = fieldActionConfig.name;
-      //if field is a dupe, discard it
-      if (configsByName[name] != null) {
-        continue;
+      let sameNamedConfigs: FieldActionConfig[] = configsByName[name];
+      if (!sameNamedConfigs) {
+        sameNamedConfigs = [];
+        configNames.push(name);
       }
-      configsByName[name] = fieldActionConfig;
-      configNames.push(name);
+      sameNamedConfigs.push(fieldActionConfig);
+      configsByName[name] = sameNamedConfigs;
     }
 
     configNames.sort();
 
     for (const name of configNames) {
-      sortedActionConfigs.push(configsByName[name]);
+      const sameNamedConfigs: FieldActionConfig[] = configsByName[name];
+      for (const fieldActionConfig of sameNamedConfigs) {
+        sortedActionConfigs.push(fieldActionConfig);
+      }
     }
     return sortedActionConfigs;
   }

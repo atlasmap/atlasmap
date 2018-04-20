@@ -315,6 +315,14 @@
     </complexType>
   </element>
 
+  <element name="LowercaseChar">
+    <complexType>
+      <complexContent>
+        <extension base="atlas:Action" />
+      </complexContent>
+    </complexType>
+  </element>
+
   <element name="Maximum">
     <complexType>
       <complexContent>
@@ -518,6 +526,14 @@
     </complexType>
   </element>
 
+  <element name="UppercaseChar">
+    <complexType>
+      <complexContent>
+        <extension base="atlas:Action" />
+      </complexContent>
+    </complexType>
+  </element>
+
   <complexType name="Actions">
     <sequence>
       <choice minOccurs="0" maxOccurs="unbounded">
@@ -552,6 +568,7 @@
         <element ref="atlas:IsNull" />
         <element ref="atlas:LastIndexOf" />
         <element ref="atlas:Length" />
+        <element ref="atlas:LowercaseChar" />
         <element ref="atlas:Lowercase" />
         <element ref="atlas:Maximum" />
         <element ref="atlas:Minimum" />
@@ -575,6 +592,7 @@
         <element ref="atlas:TrimLeft" />
         <element ref="atlas:TrimRight" />
         <element ref="atlas:Uppercase" />
+        <element ref="atlas:UppercaseChar" />
       </choice>
     </sequence>
   </complexType>

@@ -109,7 +109,6 @@ export class FieldActionConfig {
     // Note, specifically not handling array, list, or map here since I don't believe we'll ever have functions that only apply to
     // arrays or lists exclusively, and I don't currently see anyway to determine whether a map is even involved
     if (this.serviceObject.sourceCollectionType == 'ALL'
-        && this.sourceType != 'ANY'
         && ['ARRAY', 'LIST'].indexOf(targetField.getCollectionType()) == -1
         && targetField.type != 'STRING') {
       return false;
@@ -117,20 +116,14 @@ export class FieldActionConfig {
     if (this.serviceObject.sourceCollectionType == 'NONE' && targetField.getCollectionType() != null) {
       return false;
     }
-    if (this.sourceType != 'ANY' && this.serviceObject.sourceCollectionType != this.serviceObject.targetCollectionType) {
+    if (this.serviceObject.sourceCollectionType != this.serviceObject.targetCollectionType) {
       return false;
     }
 
-    // Check for target string types.
-    if (this.targetType == 'STRING') {
-      return (['STRING', 'CHAR'].indexOf(targetField.type) != -1);
-    }
-
-    // Check for numeric target types.
+    // Check for matching types.
     if (this.targetType == 'NUMBER') {
       return (['LONG', 'INTEGER', 'FLOAT', 'DOUBLE', 'SHORT', 'BYTE', 'DECIMAL', 'NUMBER'].indexOf(targetField.type) != -1);
     }
-
     if (this.targetType == 'ANY_DATE') {
       return (['DATE', 'DATE_TIME', 'DATE_TIME_TZ', 'TIME'].indexOf(targetField.type) != -1);
     }
