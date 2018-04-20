@@ -16,10 +16,11 @@
 
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpModule } from '@angular/http';
+import { HttpClientModule, HttpClientXsrfModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BsDropdownModule, TooltipModule, TypeaheadModule } from 'ngx-bootstrap';
 
+import { environment } from '../../../environments/environment';
 import { DocumentManagementService } from './services/document-management.service';
 import { MappingManagementService } from './services/mapping-management.service';
 import { ErrorHandlerService } from './services/error-handler.service';
@@ -56,6 +57,7 @@ import { TransitionSelectionComponent } from './components/mapping/transition-se
 import { FocusDirective } from './common/focus.directive';
 
 // export services/types for consumers of this module
+export { ApiXsrfInterceptor } from './services/api-xsrf-interceptor.service';
 export { ErrorHandlerService } from './services/error-handler.service';
 export { DocumentManagementService } from './services/document-management.service';
 export { MappingManagementService } from './services/mapping-management.service';
@@ -68,18 +70,20 @@ export { MappingModel } from './models/mapping.model';
 export { MappingSerializer } from './services/mapping-serializer.service';
 
 import { ToErrorIconClassPipe } from './common/to-error-icon-class.pipe';
+import { ApiXsrfInterceptor } from './services/api-xsrf-interceptor.service';
 
 export { DataMapperAppComponent } from './components/data-mapper-app.component';
 
 @NgModule({
   imports: [
     CommonModule,
-    HttpModule,
+    HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
     TypeaheadModule.forRoot(),
     TooltipModule.forRoot(),
     BsDropdownModule.forRoot(),
+    HttpClientXsrfModule.withOptions(environment.xsrf)
   ],
   declarations: [
     DataMapperAppComponent,
@@ -123,6 +127,11 @@ export { DataMapperAppComponent } from './components/data-mapper-app.component';
     MappingManagementService,
     ErrorHandlerService,
     InitializationService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ApiXsrfInterceptor,
+      multi: true
+    },
   ],
   entryComponents: [
     MappingSelectionComponent,

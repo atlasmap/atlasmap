@@ -23,6 +23,7 @@ import { MappingManagementService } from '../services/mapping-management.service
 import { InitializationService } from '../services/initialization.service';
 
 import { DataMapperAppComponent } from './data-mapper-app.component';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'data-mapper-example-host',
@@ -48,6 +49,12 @@ export class DataMapperAppExampleHostComponent implements OnInit {
     c.initCfg.baseXMLInspectionServiceUrl = 'http://localhost:8585/v2/atlas/xml/';
     c.initCfg.baseJSONInspectionServiceUrl = 'http://localhost:8585/v2/atlas/json/';
     c.initCfg.baseMappingServiceUrl = 'http://localhost:8585/v2/atlas/';
+
+    if (environment.xsrf) {
+      c.initCfg.xsrfHeaderName = environment.xsrf.headerName;
+      c.initCfg.xsrfCookieName = environment.xsrf.cookieName;
+      c.initCfg.xsrfDefaultTokenValue = environment.xsrf.defaultTokenValue;
+    }
 
     //initialize data for our class path service call
     //note that quotes, newlines, and tabs are escaped

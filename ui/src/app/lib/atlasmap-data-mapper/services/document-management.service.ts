@@ -15,7 +15,7 @@
 */
 
 import { Injectable } from '@angular/core';
-import { Headers, Http, Response } from '@angular/http';
+import { HttpHeaders, HttpClient } from '@angular/common/http';
 import 'rxjs/add/operator/toPromise';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/forkJoin';
@@ -31,11 +31,9 @@ import { DataMapperUtil } from '../common/data-mapper-util';
 export class DocumentManagementService {
   cfg: ConfigModel;
 
-  private headers: Headers = new Headers();
+  private headers = new HttpHeaders({'Content-Type': 'application/json'});
 
-  constructor(private http: Http) {
-    this.headers.append('Content-Type', 'application/json');
-  }
+  constructor(private http: HttpClient) {}
 
   initialize(): void {
     this.cfg.mappingService.mappingUpdated$.subscribe(mappingDefinition => {
@@ -59,14 +57,13 @@ export class DocumentManagementService {
       const url: string = this.cfg.initCfg.baseJavaInspectionServiceUrl + 'mavenclasspath';
       DataMapperUtil.debugLogJSON(requestBody, 'Classpath Service Request', this.cfg.initCfg.debugClassPathServiceCalls, url);
       this.http.post(url, requestBody, { headers: this.headers }).toPromise()
-        .then((res: Response) => {
-          const body: any = res.json();
+        .then((body: any) => {
           DataMapperUtil.debugLogJSON(body, 'Classpath Service Response', this.cfg.initCfg.debugClassPathServiceCalls, url);
           const classPath: string = body.MavenClasspathResponse.classpath;
           observer.next(classPath);
           observer.complete();
         })
-        .catch((error: Response) => {
+        .catch((error: any) => {
           observer.error(error);
           observer.complete();
         },
@@ -94,14 +91,13 @@ export class DocumentManagementService {
       }
       DataMapperUtil.debugLogJSON(payload, 'Document Service Request', this.cfg.initCfg.debugDocumentServiceCalls, url);
       this.http.post(url, payload, { headers: this.headers }).toPromise()
-        .then((res: Response) => {
-          const responseJson: any = res.json();
+        .then((responseJson: any) => {
           DataMapperUtil.debugLogJSON(responseJson, 'Document Service Response', this.cfg.initCfg.debugDocumentServiceCalls, url);
           this.parseDocumentResponse(responseJson, docDef);
           observer.next(docDef);
           observer.complete();
         })
-        .catch((error: Response) => {
+        .catch((error: any) => {
           observer.error(error);
           docDef.errorOccurred = true;
           observer.next(docDef);

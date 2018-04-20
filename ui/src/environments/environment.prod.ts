@@ -1,3 +1,8 @@
 export const environment = {
-  production: true
+  production: true,
+  xsrf: {
+    headerName: 'ATLASMAP-XSRF-TOKEN',
+    cookieName: 'ATLASMAP-XSRF-COOKIE',
+    defaultTokenValue: 'awesome',
+  }
 };

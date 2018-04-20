@@ -173,7 +173,7 @@ export class InitializationService {
           this.fetchDocuments();
           this.updateStatus();
         },
-        (error: Response) => {
+        (error: any) => {
           if (error.status === 0) {
             this.handleError('Fatal network error: Could not connect to AtlasMap design runtime service.', error);
           } else {
@@ -194,7 +194,7 @@ export class InitializationService {
       } else {
         this.cfg.mappingService.findMappingFiles('UI').subscribe(
           (files: string[]) => { this.fetchMappings(files); },
-          (error: Response) => {
+          (error: any) => {
             if (error.status === 0) {
               this.handleError('Fatal network error: Could not connect to AtlasMap design runtime service.', error);
             } else {
@@ -259,7 +259,7 @@ export class InitializationService {
         (doc: DocumentDefinition) => {
           this.updateStatus();
         },
-        (error: Response) => {
+        (error: any) => {
           if (error.status === 0) {
             this.handleError('Fatal network error: Could not connect to AtlasMap design runtime service.', error);
           } else {
@@ -281,7 +281,7 @@ export class InitializationService {
         this.cfg.initCfg.mappingInitialized = true;
         this.updateStatus();
       },
-      (error: Response) => {
+      (error: any) => {
         if (error.status === 0) {
           this.handleError('Fatal network error: Could not connect to AtlasMap design runtime service.', error);
         } else {
@@ -309,7 +309,7 @@ export class InitializationService {
         this.cfg.initCfg.fieldActionsInitialized = true;
         this.updateStatus();
       },
-      (error: Response) => {
+      (error: any) => {
         if (error.status === 0) {
           this.handleError('Fatal network error: Could not connect to AtlasMap design runtime service.', error);
         } else {

@@ -14,6 +14,7 @@
     limitations under the License.
 */
 
+import { environment } from '../../../../environments/environment';
 import { MappingDefinition } from './mapping-definition.model';
 import { DocumentDefinition } from './document-definition.model';
 import { Field } from '../models/field.model';
@@ -36,6 +37,10 @@ export class DataMapperInitializationModel {
   baseXMLInspectionServiceUrl: string;
   baseJSONInspectionServiceUrl: string;
   baseMappingServiceUrl: string;
+
+  xsrfHeaderName: string;
+  xsrfCookieName: string;
+  xsrfDefaultTokenValue: string;
 
   /* class path fetching configuration */
   classPathFetchTimeoutInMilliseconds = 30000;
@@ -82,6 +87,15 @@ export class DataMapperInitializationModel {
 
   mappingInitialized = false;
   fieldActionsInitialized = false;
+
+  constructor() {
+    if (environment.xsrf) {
+      this.xsrfHeaderName = environment.xsrf.headerName;
+      this.xsrfCookieName = environment.xsrf.cookieName;
+      this.xsrfDefaultTokenValue = environment.xsrf.defaultTokenValue;
+    }
+  }
+
 }
 
 export class DocumentInitializationModel {
