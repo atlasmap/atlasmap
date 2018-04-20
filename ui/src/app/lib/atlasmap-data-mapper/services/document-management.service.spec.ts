@@ -1,8 +1,8 @@
 /* tslint:disable:no-unused-variable */
 
 import { TestBed, async, inject } from '@angular/core/testing';
-import { RequestOptions, BaseRequestOptions, Http } from '@angular/http';
-import { MockBackend } from '@angular/http/testing';
+import { HttpClientModule } from '@angular/common/http';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { DocumentManagementService } from './document-management.service';
 import { ErrorHandlerService } from './error-handler.service';
 import { InspectionType, DocumentType } from '../common/config.types';
@@ -12,18 +12,10 @@ import { ConfigModel } from '../models/config.model';
 describe('DocumentManagementService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
+      imports: [ HttpClientModule, HttpClientTestingModule ],
       providers: [
         DocumentManagementService,
         ErrorHandlerService,
-        MockBackend,
-        { provide: RequestOptions, useClass: BaseRequestOptions },
-        {
-          provide: Http,
-          useFactory: (backend: MockBackend, options: RequestOptions) => {
-            return new Http(backend, options);
-          },
-          deps: [MockBackend, RequestOptions],
-        },
       ],
     });
 

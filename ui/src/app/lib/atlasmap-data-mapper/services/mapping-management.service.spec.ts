@@ -1,24 +1,16 @@
 /* tslint:disable:no-unused-variable */
 
 import { TestBed, async, inject } from '@angular/core/testing';
-import { RequestOptions, BaseRequestOptions, Http } from '@angular/http';
-import { MockBackend } from '@angular/http/testing';
+import { HttpClientModule } from '@angular/common/http';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { MappingManagementService } from './mapping-management.service';
 
 describe('MappingManagementService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
+      imports: [ HttpClientModule, HttpClientTestingModule ],
       providers: [
         MappingManagementService,
-        MockBackend,
-        { provide: RequestOptions, useClass: BaseRequestOptions },
-        {
-          provide: Http,
-          useFactory: (backend: MockBackend, options: RequestOptions) => {
-            return new Http(backend, options);
-          },
-          deps: [MockBackend, RequestOptions],
-        },
       ],
     });
   });

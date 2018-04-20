@@ -1,8 +1,8 @@
 /* tslint:disable:no-unused-variable */
 
 import { TestBed, async, inject } from '@angular/core/testing';
-import { RequestOptions, BaseRequestOptions, Http } from '@angular/http';
-import { MockBackend } from '@angular/http/testing';
+import { HttpClientModule } from '@angular/common/http';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { DataMapperAppExampleHostComponent } from './data-mapper-example-host.component';
 import { DocumentManagementService } from '../services/document-management.service';
 import { ErrorHandlerService } from '../services/error-handler.service';
@@ -13,21 +13,14 @@ describe('DataMapperAppExampleHostComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
+      imports: [HttpClientModule, HttpClientTestingModule],
       providers: [
         DataMapperAppExampleHostComponent,
         DocumentManagementService,
         ErrorHandlerService,
         InitializationService,
         MappingManagementService,
-        MockBackend,
-        { provide: RequestOptions, useClass: BaseRequestOptions },
-        {
-          provide: Http,
-          useFactory: (backend: MockBackend, options: RequestOptions) => {
-            return new Http(backend, options);
-          },
-          deps: [MockBackend, RequestOptions],
-        }],
+      ],
     });
   });
 
