@@ -92,13 +92,12 @@ publish_npm: &publish_npm
       if [ -z "${NPM_TAG}" ]; then
         exit 0
       fi
-      cd dist
       echo "Publishing @atlasmap/atlasmap.data.mapper ${NPM_TAG}..."
       git config --global user.name "AtlasMap CI"
       git config --global user.email "tm.igarashi+atlasmapci@gmail.com"
       npm version ${NPM_TAG}
       echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
-      npm publish
+      npm publish dist.tgz
 
 publish_docs: &publish_docs
   deploy:
