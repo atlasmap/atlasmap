@@ -59,6 +59,15 @@ public class StringSimpleFieldActions implements AtlasFieldAction {
         return input.toLowerCase();
     }
 
+    @AtlasFieldActionInfo(name = "Lowercase", sourceType = FieldType.CHAR, targetType = FieldType.CHAR, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
+    public static Character lowercaseChar(Action action, Character input) {
+        if (input == null) {
+            return null;
+        }
+
+        return String.valueOf(input).toLowerCase().charAt(0);
+    }
+
     @AtlasFieldActionInfo(name = "Normalize", sourceType = FieldType.STRING, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
     public static String normalize(Action action, String input) {
         return input == null ? null : input.replaceAll("\\s+", " ").trim();
@@ -132,5 +141,14 @@ public class StringSimpleFieldActions implements AtlasFieldAction {
         }
 
         return input.toUpperCase();
+    }
+
+    @AtlasFieldActionInfo(name = "Uppercase", sourceType = FieldType.CHAR, targetType = FieldType.CHAR, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
+    public static Character uppercaseChar(Action action, Character input) {
+        if (input == null) {
+            return null;
+        }
+
+        return String.valueOf(input).toUpperCase().charAt(0);
     }
 }

@@ -633,6 +633,7 @@ public abstract class BaseMarshallerTest {
                 new LastIndexOf(),
                 new Length(),
                 new Lowercase(),
+                new LowercaseChar(),
                 new Maximum(),
                 new Minimum(),
                 new Multiply(),
@@ -654,7 +655,8 @@ public abstract class BaseMarshallerTest {
                 new Trim(),
                 new TrimLeft(),
                 new TrimRight(),
-                new Uppercase());
+                new Uppercase(),
+                new UppercaseChar());
         return actions;
     }
 

@@ -26,12 +26,14 @@ import org.junit.Test;
 
 import io.atlasmap.v2.Capitalize;
 import io.atlasmap.v2.Lowercase;
+import io.atlasmap.v2.LowercaseChar;
 import io.atlasmap.v2.SeparateByDash;
 import io.atlasmap.v2.SeparateByUnderscore;
 import io.atlasmap.v2.Trim;
 import io.atlasmap.v2.TrimLeft;
 import io.atlasmap.v2.TrimRight;
 import io.atlasmap.v2.Uppercase;
+import io.atlasmap.v2.UppercaseChar;
 
 public class StringSimpleFieldActionsTest {
 
@@ -68,6 +70,14 @@ public class StringSimpleFieldActionsTest {
         assertEquals("foo", StringSimpleFieldActions.lowercase(new Lowercase(), "foO"));
         assertEquals("foo", StringSimpleFieldActions.lowercase(new Lowercase(), "FOO"));
         assertEquals("foo bar", StringSimpleFieldActions.lowercase(new Lowercase(), "FOO BAR"));
+    }
+
+    @Test
+    public void testLowerCaseChar() {
+        assertNull(StringSimpleFieldActions.lowercaseChar(new LowercaseChar(), null));
+        assertEquals('\0', StringSimpleFieldActions.lowercaseChar(new LowercaseChar(), '\0').charValue());
+        assertEquals('f', StringSimpleFieldActions.lowercaseChar(new LowercaseChar(), 'f').charValue());
+        assertEquals('f', StringSimpleFieldActions.lowercaseChar(new LowercaseChar(), 'F').charValue());
     }
 
     @Test
@@ -182,4 +192,11 @@ public class StringSimpleFieldActionsTest {
         assertEquals("FOO BAR", StringSimpleFieldActions.uppercase(new Uppercase(), "foo bar"));
     }
 
+    @Test
+    public void testUpperCaseChar() {
+        assertNull(StringSimpleFieldActions.uppercaseChar(new UppercaseChar(), null));
+        assertEquals('\0', StringSimpleFieldActions.uppercaseChar(new UppercaseChar(), '\0').charValue());
+        assertEquals('F', StringSimpleFieldActions.uppercaseChar(new UppercaseChar(), 'f').charValue());
+        assertEquals('F', StringSimpleFieldActions.uppercaseChar(new UppercaseChar(), 'F').charValue());
+    }
 }

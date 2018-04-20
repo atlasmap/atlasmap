@@ -123,6 +123,8 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
                 return new Length();
             case "Lowercase":
                 return new Lowercase();
+            case "LowercaseChar":
+                return new LowercaseChar();
             case "Maximum":
                 return new Maximum();
             case "Minimum":
@@ -167,6 +169,8 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
                 return new TrimRight();
             case "Uppercase":
                 return new Uppercase();
+            case "UppercaseChar":
+                return new UppercaseChar();
             default:
                 // ref: https://github.com/atlasmap/atlasmap/issues/6
                 // TODO: Logger not required in model module

@@ -321,6 +321,9 @@ public class AtlasModelFactory {
         if (action instanceof Lowercase) {
             return new Lowercase();
         }
+        if (action instanceof LowercaseChar) {
+            return new LowercaseChar();
+        }
         if (action instanceof Maximum) {
             return new Maximum();
         }
@@ -439,6 +442,9 @@ public class AtlasModelFactory {
         }
         if (action instanceof Uppercase) {
             return new Uppercase();
+        }
+        if (action instanceof UppercaseChar) {
+            return new UppercaseChar();
         }
         return null;
     }
