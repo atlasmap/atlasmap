@@ -6,6 +6,7 @@
 /out-tsc
 /junit/*
 test-resources/inspected
+dist.tgz
 
 # dependencies
 /node_modules
