@@ -8,15 +8,20 @@
       <div class="clear"></div>
 
       <select (change)="configSelectionChanged($event);" [ngModel]="action.name" *ngIf="!action.isSeparateOrCombineMode">
-        <option *ngFor="let actionConfig of getActionConfigs()" [attr.actionIndex]="actionIndex" [attr.value]="actionConfig.name">{{ actionConfig.name }}</option>
+        <option *ngFor="let actionConfig of getActionConfigs()" [attr.actionIndex]="actionIndex"
+                        [attr.value]="actionConfig.name">{{ actionConfig.name }}</option>
       </select>
 
       <div class="clear"></div>
     </div>
-    <div class="form-group argument" *ngFor="let argConfig of action.config.arguments; let i = index">
-      <label style="">{{ argConfig.name }}</label>
-      <input type="text" class="input-{{argConfig.name}}" [(ngModel)]="action.getArgumentValue(argConfig.name).value" (change)="selectionChanged($event)"
-      />
+    <div class="form-group argument" *ngFor="let argConfig of action.config.arguments; let argValIndex = index">
+      <label style="">{{ getLabel(argConfig.name) }}</label>
+
+      <select (change)="actionConfigParamSelectionChanged($event);" [ngModel]="argConfig.values[argValIndex]">
+        <option *ngFor="let actionConfigParamVal of getActionConfigParamValues(argConfig)" [attr.argValIndex]="argValIndex"
+                       [attr.actionIndex]="actionIndex" [attr.value]="actionConfigParamVal">{{ actionConfigParamVal }}</option>
+      </select>
+
       <div class="clear"></div>
     </div>
   </div>

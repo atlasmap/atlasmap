@@ -146,75 +146,75 @@ public class NumberFieldActionsTest {
     @Test
     public void testConvertDistanceUnit() {
         ConvertDistanceUnit action = new ConvertDistanceUnit();
-        action.setFromUnit(DistanceUnitType.METER);
-        action.setToUnit(DistanceUnitType.METER);
+        action.setFromUnit(DistanceUnitType.METER_M);
+        action.setToUnit(DistanceUnitType.METER_M);
         assertEquals(1.0, NumberFieldActions.convertDistanceUnit(action, 1.0));
-        action.setToUnit(DistanceUnitType.FOOT);
+        action.setToUnit(DistanceUnitType.FOOT_FT);
         assertEquals(6.561679790026247, NumberFieldActions.convertDistanceUnit(action, 2.0));
-        action.setToUnit(DistanceUnitType.YARD);
+        action.setToUnit(DistanceUnitType.YARD_YD);
         assertEquals(3.2808398950131235, NumberFieldActions.convertDistanceUnit(action, 3.0));
-        action.setToUnit(DistanceUnitType.MILE);
+        action.setToUnit(DistanceUnitType.MILE_MI);
         assertEquals(2.4854847689493362, NumberFieldActions.convertDistanceUnit(action, 4000.0));
-        action.setToUnit(DistanceUnitType.INCH);
+        action.setToUnit(DistanceUnitType.INCH_IN);
         assertEquals(196.8503937007874, NumberFieldActions.convertDistanceUnit(action, 5.0));
 
-        action.setFromUnit(DistanceUnitType.FOOT);
-        action.setToUnit(DistanceUnitType.METER);
+        action.setFromUnit(DistanceUnitType.FOOT_FT);
+        action.setToUnit(DistanceUnitType.METER_M);
         assertEquals(1.8287999999999998, NumberFieldActions.convertDistanceUnit(action, 6.0));
-        action.setToUnit(DistanceUnitType.FOOT);
+        action.setToUnit(DistanceUnitType.FOOT_FT);
         assertEquals(7.0, NumberFieldActions.convertDistanceUnit(action, 7.0));
-        action.setToUnit(DistanceUnitType.YARD);
+        action.setToUnit(DistanceUnitType.YARD_YD);
         assertEquals(27.0, NumberFieldActions.convertDistanceUnit(action, 81.0));
-        action.setToUnit(DistanceUnitType.MILE);
+        action.setToUnit(DistanceUnitType.MILE_MI);
         assertEquals(1.7045454545454546, NumberFieldActions.convertDistanceUnit(action, 9000.0));
-        action.setToUnit(DistanceUnitType.INCH);
+        action.setToUnit(DistanceUnitType.INCH_IN);
         assertEquals(12.0, NumberFieldActions.convertDistanceUnit(action, 1.0));
 
-        action.setFromUnit(DistanceUnitType.YARD);
-        action.setToUnit(DistanceUnitType.METER);
+        action.setFromUnit(DistanceUnitType.YARD_YD);
+        action.setToUnit(DistanceUnitType.METER_M);
         assertEquals(22.86, NumberFieldActions.convertDistanceUnit(action, 25.0));
-        action.setToUnit(DistanceUnitType.FOOT);
+        action.setToUnit(DistanceUnitType.FOOT_FT);
         assertEquals(9.0, NumberFieldActions.convertDistanceUnit(action, 3.0));
-        action.setToUnit(DistanceUnitType.YARD);
+        action.setToUnit(DistanceUnitType.YARD_YD);
         assertEquals(4.0, NumberFieldActions.convertDistanceUnit(action, 4.0));
-        action.setToUnit(DistanceUnitType.MILE);
+        action.setToUnit(DistanceUnitType.MILE_MI);
         assertEquals(2.840909090909091, NumberFieldActions.convertDistanceUnit(action, 5000.0));
-        action.setToUnit(DistanceUnitType.INCH);
+        action.setToUnit(DistanceUnitType.INCH_IN);
         assertEquals(216.0, NumberFieldActions.convertDistanceUnit(action, 6.0));
 
-        action.setFromUnit(DistanceUnitType.MILE);
-        action.setToUnit(DistanceUnitType.METER);
+        action.setFromUnit(DistanceUnitType.MILE_MI);
+        action.setToUnit(DistanceUnitType.METER_M);
         assertEquals(11265.408, NumberFieldActions.convertDistanceUnit(action, 7.0));
-        action.setToUnit(DistanceUnitType.FOOT);
+        action.setToUnit(DistanceUnitType.FOOT_FT);
         assertEquals(42240.0, NumberFieldActions.convertDistanceUnit(action, 8.0));
-        action.setToUnit(DistanceUnitType.YARD);
+        action.setToUnit(DistanceUnitType.YARD_YD);
         assertEquals(15840.0, NumberFieldActions.convertDistanceUnit(action, 9.0));
-        action.setToUnit(DistanceUnitType.MILE);
+        action.setToUnit(DistanceUnitType.MILE_MI);
         assertEquals(1.0, NumberFieldActions.convertDistanceUnit(action, 1.0));
-        action.setToUnit(DistanceUnitType.INCH);
+        action.setToUnit(DistanceUnitType.INCH_IN);
         assertEquals(126720.0, NumberFieldActions.convertDistanceUnit(action, 2.0));
 
-        action.setFromUnit(DistanceUnitType.INCH);
-        action.setToUnit(DistanceUnitType.METER);
+        action.setFromUnit(DistanceUnitType.INCH_IN);
+        action.setToUnit(DistanceUnitType.METER_M);
         assertEquals(7.62, NumberFieldActions.convertDistanceUnit(action, 300.0));
-        action.setToUnit(DistanceUnitType.FOOT);
+        action.setToUnit(DistanceUnitType.FOOT_FT);
         assertEquals(3.5, NumberFieldActions.convertDistanceUnit(action, 42.0));
-        action.setToUnit(DistanceUnitType.YARD);
+        action.setToUnit(DistanceUnitType.YARD_YD);
         assertEquals(1.5, NumberFieldActions.convertDistanceUnit(action, 54.0));
-        action.setToUnit(DistanceUnitType.MILE);
+        action.setToUnit(DistanceUnitType.MILE_MI);
         assertEquals(9.469696969696969, NumberFieldActions.convertDistanceUnit(action, 600000.0));
-        action.setToUnit(DistanceUnitType.INCH);
+        action.setToUnit(DistanceUnitType.INCH_IN);
         assertEquals(6.0, NumberFieldActions.convertDistanceUnit(action, 6.0));
     }
 
     @Test
     public void testConvertMassUnit() {
         ConvertMassUnit action = new ConvertMassUnit();
-        action.setFromUnit(MassUnitType.KILO_GRAM);
-        action.setToUnit(MassUnitType.POUND);
+        action.setFromUnit(MassUnitType.KILOGRAM_KG);
+        action.setToUnit(MassUnitType.POUND_LB);
         assertEquals(11, NumberFieldActions.convertMassUnit(action, 5).intValue());
-        action.setFromUnit(MassUnitType.POUND);
-        action.setToUnit(MassUnitType.KILO_GRAM);
+        action.setFromUnit(MassUnitType.POUND_LB);
+        action.setToUnit(MassUnitType.KILOGRAM_KG);
         assertEquals(4.5359235f, NumberFieldActions.convertMassUnit(action, 10.0f).floatValue(), 0);
         assertEquals(0, NumberFieldActions.convertMassUnit(action, null).intValue());
     }
@@ -228,14 +228,14 @@ public class NumberFieldActionsTest {
     @Test(expected = IllegalArgumentException.class)
     public void testConvertMassUnitErrorNoFromSpecified() {
         ConvertMassUnit action = new ConvertMassUnit();
-        action.setToUnit(MassUnitType.POUND);
+        action.setToUnit(MassUnitType.POUND_LB);
         assertEquals(11, NumberFieldActions.convertMassUnit(action, 5));
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testConvertMassUnitErrorNoToSpecified() {
         ConvertMassUnit action = new ConvertMassUnit();
-        action.setFromUnit(MassUnitType.KILO_GRAM);
+        action.setFromUnit(MassUnitType.KILOGRAM_KG);
         assertEquals(11, NumberFieldActions.convertMassUnit(action, 5));
     }
 
@@ -245,17 +245,17 @@ public class NumberFieldActionsTest {
         action.setFromUnit(VolumeUnitType.CUBIC_METER);
         action.setToUnit(VolumeUnitType.CUBIC_METER);
         assertEquals(1.0, NumberFieldActions.convertVolumeUnit(action, 1.0));
-        action.setToUnit(VolumeUnitType.LITTER);
+        action.setToUnit(VolumeUnitType.LITER);
         assertEquals(2000.0, NumberFieldActions.convertVolumeUnit(action, 2.0));
         action.setToUnit(VolumeUnitType.CUBIC_FOOT);
         assertEquals(105.94400016446578, NumberFieldActions.convertVolumeUnit(action, 3.0));
         action.setToUnit(VolumeUnitType.GALLON_US_FLUID);
         assertEquals(1056.68820944, NumberFieldActions.convertVolumeUnit(action, 4.0));
 
-        action.setFromUnit(VolumeUnitType.LITTER);
+        action.setFromUnit(VolumeUnitType.LITER);
         action.setToUnit(VolumeUnitType.CUBIC_METER);
         assertEquals(5.0, NumberFieldActions.convertVolumeUnit(action, 5000.0));
-        action.setToUnit(VolumeUnitType.LITTER);
+        action.setToUnit(VolumeUnitType.LITER);
         assertEquals(6.0, NumberFieldActions.convertVolumeUnit(action, 6.0));
         action.setToUnit(VolumeUnitType.CUBIC_FOOT);
         assertEquals(2.4720266705042016, NumberFieldActions.convertVolumeUnit(action, 70.0));
@@ -265,7 +265,7 @@ public class NumberFieldActionsTest {
         action.setFromUnit(VolumeUnitType.CUBIC_FOOT);
         action.setToUnit(VolumeUnitType.CUBIC_METER);
         assertEquals(2.54851619328, NumberFieldActions.convertVolumeUnit(action, 90.0));
-        action.setToUnit(VolumeUnitType.LITTER);
+        action.setToUnit(VolumeUnitType.LITER);
         assertEquals(28.316846591999997, NumberFieldActions.convertVolumeUnit(action, 1.0));
         action.setToUnit(VolumeUnitType.CUBIC_FOOT);
         assertEquals(2.0, NumberFieldActions.convertVolumeUnit(action, 2.0));
@@ -275,7 +275,7 @@ public class NumberFieldActionsTest {
         action.setFromUnit(VolumeUnitType.GALLON_US_FLUID);
         action.setToUnit(VolumeUnitType.CUBIC_METER);
         assertEquals(1.5141647135893872, NumberFieldActions.convertVolumeUnit(action, 400.0));
-        action.setToUnit(VolumeUnitType.LITTER);
+        action.setToUnit(VolumeUnitType.LITER);
         assertEquals(18.92705891986734, NumberFieldActions.convertVolumeUnit(action, 5.0));
         action.setToUnit(VolumeUnitType.CUBIC_FOOT);
         assertEquals(8.020833333277116, NumberFieldActions.convertVolumeUnit(action, 60.0));

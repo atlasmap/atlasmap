@@ -343,18 +343,18 @@
 
   <simpleType name="MassUnitType">
     <restriction base="string">
-      <enumeration value="Kilo Gram" />
-      <enumeration value="Pound" />
+      <enumeration value="Kilogram (kg)" />
+      <enumeration value="Pound (lb)" />
     </restriction>
   </simpleType>
 
   <simpleType name="DistanceUnitType">
     <restriction base="string">
-      <enumeration value="Meter" />
-      <enumeration value="Mile" />
-      <enumeration value="Yard" />
-      <enumeration value="Foot" />
-      <enumeration value="Inch" />
+      <enumeration value="Meter (m)" />
+      <enumeration value="Mile (mi)" />
+      <enumeration value="Yard (yd)" />
+      <enumeration value="Foot (ft)" />
+      <enumeration value="Inch (in)" />
     </restriction>
   </simpleType>
 
@@ -369,9 +369,9 @@
   <simpleType name="VolumeUnitType">
     <restriction base="string">
       <enumeration value="Cubic Meter" />
-      <enumeration value="Litter" />
+      <enumeration value="Liter" />
       <enumeration value="Cubic Foot" />
-      <enumeration value="Gallon US Fluid" />
+      <enumeration value="Gallon (US Fluid)" />
     </restriction>
   </simpleType>
 
