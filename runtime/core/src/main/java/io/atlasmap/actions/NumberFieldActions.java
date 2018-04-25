@@ -52,7 +52,7 @@ public class NumberFieldActions implements AtlasFieldAction {
             .pow(YARDS_IN_A_MILE * FEET_IN_A_YARD * INCHES_IN_A_FOOT * METERS_IN_A_INCH, 2.0);
     private static final double SQUARE_FEET_IN_A_SQUARE_MILE = Math.pow(YARDS_IN_A_MILE * FEET_IN_A_YARD, 2.0);
     // 3D
-    private static final double LITTERS_IN_A_CUBIC_METER = 1000.0;
+    private static final double LITERS_IN_A_CUBIC_METER = 1000.0;
     private static final double CUBIC_FEET_IN_A_CUBIC_METER = Math.pow(1.0 / METERS_IN_A_INCH / INCHES_IN_A_FOOT, 3.0);
     private static final double GALLONS_US_FLUID_IN_A_CUBIC_METER = 264.17205236;
 
@@ -62,13 +62,13 @@ public class NumberFieldActions implements AtlasFieldAction {
     static {
         Map<MassUnitType, Map<MassUnitType, Double>> rootTable = new EnumMap<>(MassUnitType.class);
         Map<MassUnitType, Double> kgRates = new EnumMap<>(MassUnitType.class);
-        kgRates.put(MassUnitType.KILO_GRAM, 1.0);
-        kgRates.put(MassUnitType.POUND, 1.0 / KILO_GRAMS_IN_A_POUND);
-        rootTable.put(MassUnitType.KILO_GRAM, Collections.unmodifiableMap(kgRates));
+        kgRates.put(MassUnitType.KILOGRAM_KG, 1.0);
+        kgRates.put(MassUnitType.POUND_LB, 1.0 / KILO_GRAMS_IN_A_POUND);
+        rootTable.put(MassUnitType.KILOGRAM_KG, Collections.unmodifiableMap(kgRates));
         Map<MassUnitType, Double> lbsRates = new EnumMap<>(MassUnitType.class);
-        lbsRates.put(MassUnitType.KILO_GRAM, KILO_GRAMS_IN_A_POUND);
-        lbsRates.put(MassUnitType.POUND, 1.0);
-        rootTable.put(MassUnitType.POUND, Collections.unmodifiableMap(lbsRates));
+        lbsRates.put(MassUnitType.KILOGRAM_KG, KILO_GRAMS_IN_A_POUND);
+        lbsRates.put(MassUnitType.POUND_LB, 1.0);
+        rootTable.put(MassUnitType.POUND_LB, Collections.unmodifiableMap(lbsRates));
         massConvertionTable = Collections.unmodifiableMap(rootTable);
     }
 
@@ -76,40 +76,40 @@ public class NumberFieldActions implements AtlasFieldAction {
     static {
         Map<DistanceUnitType, Map<DistanceUnitType, Double>> rootTable = new EnumMap<>(DistanceUnitType.class);
         Map<DistanceUnitType, Double> mRates = new EnumMap<>(DistanceUnitType.class);
-        mRates.put(DistanceUnitType.METER, 1.0);
-        mRates.put(DistanceUnitType.FOOT, 1.0 / METERS_IN_A_INCH / INCHES_IN_A_FOOT);
-        mRates.put(DistanceUnitType.YARD, 1.0 / METERS_IN_A_INCH / INCHES_IN_A_FOOT / FEET_IN_A_YARD);
-        mRates.put(DistanceUnitType.MILE, 1.0 / METERS_IN_A_INCH / INCHES_IN_A_FOOT / FEET_IN_A_YARD / YARDS_IN_A_MILE);
-        mRates.put(DistanceUnitType.INCH, 1.0 / METERS_IN_A_INCH);
-        rootTable.put(DistanceUnitType.METER, Collections.unmodifiableMap(mRates));
+        mRates.put(DistanceUnitType.METER_M, 1.0);
+        mRates.put(DistanceUnitType.FOOT_FT, 1.0 / METERS_IN_A_INCH / INCHES_IN_A_FOOT);
+        mRates.put(DistanceUnitType.YARD_YD, 1.0 / METERS_IN_A_INCH / INCHES_IN_A_FOOT / FEET_IN_A_YARD);
+        mRates.put(DistanceUnitType.MILE_MI, 1.0 / METERS_IN_A_INCH / INCHES_IN_A_FOOT / FEET_IN_A_YARD / YARDS_IN_A_MILE);
+        mRates.put(DistanceUnitType.INCH_IN, 1.0 / METERS_IN_A_INCH);
+        rootTable.put(DistanceUnitType.METER_M, Collections.unmodifiableMap(mRates));
         Map<DistanceUnitType, Double> ftRates = new EnumMap<>(DistanceUnitType.class);
-        ftRates.put(DistanceUnitType.METER, INCHES_IN_A_FOOT * METERS_IN_A_INCH);
-        ftRates.put(DistanceUnitType.FOOT, 1.0);
-        ftRates.put(DistanceUnitType.YARD, 1.0 / FEET_IN_A_YARD);
-        ftRates.put(DistanceUnitType.MILE, 1.0 / FEET_IN_A_YARD / YARDS_IN_A_MILE);
-        ftRates.put(DistanceUnitType.INCH, INCHES_IN_A_FOOT);
-        rootTable.put(DistanceUnitType.FOOT, Collections.unmodifiableMap(ftRates));
+        ftRates.put(DistanceUnitType.METER_M, INCHES_IN_A_FOOT * METERS_IN_A_INCH);
+        ftRates.put(DistanceUnitType.FOOT_FT, 1.0);
+        ftRates.put(DistanceUnitType.YARD_YD, 1.0 / FEET_IN_A_YARD);
+        ftRates.put(DistanceUnitType.MILE_MI, 1.0 / FEET_IN_A_YARD / YARDS_IN_A_MILE);
+        ftRates.put(DistanceUnitType.INCH_IN, INCHES_IN_A_FOOT);
+        rootTable.put(DistanceUnitType.FOOT_FT, Collections.unmodifiableMap(ftRates));
         Map<DistanceUnitType, Double> ydRates = new EnumMap<>(DistanceUnitType.class);
-        ydRates.put(DistanceUnitType.METER, FEET_IN_A_YARD * INCHES_IN_A_FOOT * METERS_IN_A_INCH);
-        ydRates.put(DistanceUnitType.FOOT, FEET_IN_A_YARD);
-        ydRates.put(DistanceUnitType.YARD, 1.0);
-        ydRates.put(DistanceUnitType.MILE, 1.0 / YARDS_IN_A_MILE);
-        ydRates.put(DistanceUnitType.INCH, FEET_IN_A_YARD * INCHES_IN_A_FOOT);
-        rootTable.put(DistanceUnitType.YARD, Collections.unmodifiableMap(ydRates));
+        ydRates.put(DistanceUnitType.METER_M, FEET_IN_A_YARD * INCHES_IN_A_FOOT * METERS_IN_A_INCH);
+        ydRates.put(DistanceUnitType.FOOT_FT, FEET_IN_A_YARD);
+        ydRates.put(DistanceUnitType.YARD_YD, 1.0);
+        ydRates.put(DistanceUnitType.MILE_MI, 1.0 / YARDS_IN_A_MILE);
+        ydRates.put(DistanceUnitType.INCH_IN, FEET_IN_A_YARD * INCHES_IN_A_FOOT);
+        rootTable.put(DistanceUnitType.YARD_YD, Collections.unmodifiableMap(ydRates));
         Map<DistanceUnitType, Double> miRates = new EnumMap<>(DistanceUnitType.class);
-        miRates.put(DistanceUnitType.METER, YARDS_IN_A_MILE * FEET_IN_A_YARD * INCHES_IN_A_FOOT * METERS_IN_A_INCH);
-        miRates.put(DistanceUnitType.FOOT, YARDS_IN_A_MILE * FEET_IN_A_YARD);
-        miRates.put(DistanceUnitType.YARD, YARDS_IN_A_MILE);
-        miRates.put(DistanceUnitType.MILE, 1.0);
-        miRates.put(DistanceUnitType.INCH, YARDS_IN_A_MILE * FEET_IN_A_YARD * INCHES_IN_A_FOOT);
-        rootTable.put(DistanceUnitType.MILE, Collections.unmodifiableMap(miRates));
+        miRates.put(DistanceUnitType.METER_M, YARDS_IN_A_MILE * FEET_IN_A_YARD * INCHES_IN_A_FOOT * METERS_IN_A_INCH);
+        miRates.put(DistanceUnitType.FOOT_FT, YARDS_IN_A_MILE * FEET_IN_A_YARD);
+        miRates.put(DistanceUnitType.YARD_YD, YARDS_IN_A_MILE);
+        miRates.put(DistanceUnitType.MILE_MI, 1.0);
+        miRates.put(DistanceUnitType.INCH_IN, YARDS_IN_A_MILE * FEET_IN_A_YARD * INCHES_IN_A_FOOT);
+        rootTable.put(DistanceUnitType.MILE_MI, Collections.unmodifiableMap(miRates));
         Map<DistanceUnitType, Double> inRates = new EnumMap<>(DistanceUnitType.class);
-        inRates.put(DistanceUnitType.METER, METERS_IN_A_INCH);
-        inRates.put(DistanceUnitType.FOOT, 1.0 / INCHES_IN_A_FOOT);
-        inRates.put(DistanceUnitType.YARD, 1.0 / INCHES_IN_A_FOOT / FEET_IN_A_YARD);
-        inRates.put(DistanceUnitType.MILE, 1.0 / INCHES_IN_A_FOOT / FEET_IN_A_YARD / YARDS_IN_A_MILE);
-        inRates.put(DistanceUnitType.INCH, 1.0);
-        rootTable.put(DistanceUnitType.INCH, Collections.unmodifiableMap(inRates));
+        inRates.put(DistanceUnitType.METER_M, METERS_IN_A_INCH);
+        inRates.put(DistanceUnitType.FOOT_FT, 1.0 / INCHES_IN_A_FOOT);
+        inRates.put(DistanceUnitType.YARD_YD, 1.0 / INCHES_IN_A_FOOT / FEET_IN_A_YARD);
+        inRates.put(DistanceUnitType.MILE_MI, 1.0 / INCHES_IN_A_FOOT / FEET_IN_A_YARD / YARDS_IN_A_MILE);
+        inRates.put(DistanceUnitType.INCH_IN, 1.0);
+        rootTable.put(DistanceUnitType.INCH_IN, Collections.unmodifiableMap(inRates));
         distanceConvertionTable = Collections.unmodifiableMap(rootTable);
     }
 
@@ -139,27 +139,27 @@ public class NumberFieldActions implements AtlasFieldAction {
         Map<VolumeUnitType, Map<VolumeUnitType, Double>> rootTable = new EnumMap<>(VolumeUnitType.class);
         Map<VolumeUnitType, Double> m3Rates = new EnumMap<>(VolumeUnitType.class);
         m3Rates.put(VolumeUnitType.CUBIC_METER, 1.0);
-        m3Rates.put(VolumeUnitType.LITTER, LITTERS_IN_A_CUBIC_METER);
+        m3Rates.put(VolumeUnitType.LITER, LITERS_IN_A_CUBIC_METER);
         m3Rates.put(VolumeUnitType.CUBIC_FOOT, CUBIC_FEET_IN_A_CUBIC_METER);
         m3Rates.put(VolumeUnitType.GALLON_US_FLUID, GALLONS_US_FLUID_IN_A_CUBIC_METER);
         rootTable.put(VolumeUnitType.CUBIC_METER, Collections.unmodifiableMap(m3Rates));
-        Map<VolumeUnitType, Double> litterRates = new EnumMap<>(VolumeUnitType.class);
-        litterRates.put(VolumeUnitType.CUBIC_METER, 1.0 / LITTERS_IN_A_CUBIC_METER);
-        litterRates.put(VolumeUnitType.LITTER, 1.0);
-        litterRates.put(VolumeUnitType.CUBIC_FOOT, 1.0 / LITTERS_IN_A_CUBIC_METER * CUBIC_FEET_IN_A_CUBIC_METER);
-        litterRates.put(VolumeUnitType.GALLON_US_FLUID,
-                1.0 / LITTERS_IN_A_CUBIC_METER * GALLONS_US_FLUID_IN_A_CUBIC_METER);
-        rootTable.put(VolumeUnitType.LITTER, Collections.unmodifiableMap(litterRates));
+        Map<VolumeUnitType, Double> literRates = new EnumMap<>(VolumeUnitType.class);
+        literRates.put(VolumeUnitType.CUBIC_METER, 1.0 / LITERS_IN_A_CUBIC_METER);
+        literRates.put(VolumeUnitType.LITER, 1.0);
+        literRates.put(VolumeUnitType.CUBIC_FOOT, 1.0 / LITERS_IN_A_CUBIC_METER * CUBIC_FEET_IN_A_CUBIC_METER);
+        literRates.put(VolumeUnitType.GALLON_US_FLUID,
+                1.0 / LITERS_IN_A_CUBIC_METER * GALLONS_US_FLUID_IN_A_CUBIC_METER);
+        rootTable.put(VolumeUnitType.LITER, Collections.unmodifiableMap(literRates));
         Map<VolumeUnitType, Double> cftRates = new EnumMap<>(VolumeUnitType.class);
         cftRates.put(VolumeUnitType.CUBIC_METER, 1.0 / CUBIC_FEET_IN_A_CUBIC_METER);
-        cftRates.put(VolumeUnitType.LITTER, 1.0 / CUBIC_FEET_IN_A_CUBIC_METER * LITTERS_IN_A_CUBIC_METER);
+        cftRates.put(VolumeUnitType.LITER, 1.0 / CUBIC_FEET_IN_A_CUBIC_METER * LITERS_IN_A_CUBIC_METER);
         cftRates.put(VolumeUnitType.CUBIC_FOOT, 1.0);
         cftRates.put(VolumeUnitType.GALLON_US_FLUID,
                 1.0 / CUBIC_FEET_IN_A_CUBIC_METER * GALLONS_US_FLUID_IN_A_CUBIC_METER);
         rootTable.put(VolumeUnitType.CUBIC_FOOT, Collections.unmodifiableMap(cftRates));
         Map<VolumeUnitType, Double> galUsFluidRates = new EnumMap<>(VolumeUnitType.class);
         galUsFluidRates.put(VolumeUnitType.CUBIC_METER, 1.0 / GALLONS_US_FLUID_IN_A_CUBIC_METER);
-        galUsFluidRates.put(VolumeUnitType.LITTER, 1.0 / GALLONS_US_FLUID_IN_A_CUBIC_METER * LITTERS_IN_A_CUBIC_METER);
+        galUsFluidRates.put(VolumeUnitType.LITER, 1.0 / GALLONS_US_FLUID_IN_A_CUBIC_METER * LITERS_IN_A_CUBIC_METER);
         galUsFluidRates.put(VolumeUnitType.CUBIC_FOOT,
                 1.0 / GALLONS_US_FLUID_IN_A_CUBIC_METER * CUBIC_FEET_IN_A_CUBIC_METER);
         galUsFluidRates.put(VolumeUnitType.GALLON_US_FLUID, 1.0);

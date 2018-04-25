@@ -155,13 +155,13 @@ public class JsonMarshallerTest extends BaseMarshallerTest {
             }
             if (a instanceof ConvertDistanceUnit) {
                 ConvertDistanceUnit cdu = (ConvertDistanceUnit) a;
-                cdu.setFromUnit(DistanceUnitType.FOOT);
-                cdu.setToUnit(DistanceUnitType.METER);
+                cdu.setFromUnit(DistanceUnitType.FOOT_FT);
+                cdu.setToUnit(DistanceUnitType.METER_M);
             }
             if (a instanceof ConvertMassUnit) {
                 ConvertMassUnit cmu = (ConvertMassUnit) a;
-                cmu.setFromUnit(MassUnitType.KILO_GRAM);
-                cmu.setToUnit(MassUnitType.POUND);
+                cmu.setFromUnit(MassUnitType.KILOGRAM_KG);
+                cmu.setToUnit(MassUnitType.POUND_LB);
             }
             if (a instanceof ConvertVolumeUnit) {
                 ConvertVolumeUnit cvu = (ConvertVolumeUnit) a;

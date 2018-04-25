@@ -17,7 +17,8 @@
 import { Component, Input } from '@angular/core';
 import { FieldMappingPair, MappedField } from '../../models/mapping.model';
 import { ConfigModel } from '../../models/config.model';
-import { TransitionModel, FieldAction, FieldActionConfig } from '../../models/transition.model';
+import { TransitionModel, FieldAction, FieldActionArgument, FieldActionArgumentValue,
+         FieldActionConfig } from '../../models/transition.model';
 
 @Component({
   selector: 'mapping-field-action',
@@ -59,15 +60,53 @@ export class MappingFieldActionComponent {
     return configs;
   }
 
+  /**
+   * Return in a string array the parameter values for the specified field action argument.
+   * @param argConfig
+   */
+  getActionConfigParamValues(argConfig: FieldActionArgument): String[] {
+    const acpv: String[] = [];
+    for (const argument of argConfig.values) {
+      acpv.push(argument);
+    }
+    return acpv;
+  }
+
   removeAction(action: FieldAction): void {
     this.mappedField.removeAction(action);
   }
 
-  selectionChanged(event: MouseEvent): void {
+  /**
+   * Simply validate that the user isn't attempting a conversion to the original type.
+   * @param acp
+   */
+  validateActionConfigParamSelection(acp: FieldActionArgumentValue[]): void {
+    if (acp != null && acp.length == 2) {
+      if (acp[0].value == acp[1].value) {
+        this.cfg.errorService.warn('Please select differing \'from\' and \'to\' units in your conversion transformation.', null);
+      }
+    }
+  }
+
+  /**
+   * A mapping field action parameter selection has been made from a pull-down menu.
+   * @param event
+   */
+  actionConfigParamSelectionChanged(event: any): void {
     this.mappedField.parsedData.userCreated = true;
+    const attributes: any = event.target.selectedOptions.item(0).attributes;
+    const selectedArgValName: any = attributes.getNamedItem('value').value;
+    const argValIndex: any = attributes.getNamedItem('argValIndex').value;
+    const actionIndex: any = attributes.getNamedItem('actionIndex').value;
+    const action: FieldAction = this.mappedField.actions[actionIndex];
+    action.argumentValues[argValIndex].value = selectedArgValName;
+    this.validateActionConfigParamSelection(action.argumentValues);
     this.cfg.mappingService.saveCurrentMapping();
   }
 
+  /**
+   * The 'Add Transformation' button has been selected.  Establish a new field action.
+   */
   addTransformation(): void {
     const actionConfig: FieldActionConfig = this.getActionConfigs()[0];
     const action: FieldAction = new FieldAction();
@@ -76,6 +115,11 @@ export class MappingFieldActionComponent {
     this.cfg.mappingService.saveCurrentMapping();
   }
 
+  /**
+   * A mapping field action configuration selection has been made.  Note that action field arguments, if any,
+   * may be specified by either a text field or pull-down menu.
+   * @param event
+   */
   configSelectionChanged(event: any) {
     const attributes: any = event.target.selectedOptions.item(0).attributes;
     const selectedActionName: any = attributes.getNamedItem('value').value;
@@ -85,7 +129,27 @@ export class MappingFieldActionComponent {
       action.argumentValues = [];  // Invalidate the previously selected field action arguments.
       const fieldActionConfig: FieldActionConfig = TransitionModel.getActionConfigForName(selectedActionName);
       fieldActionConfig.populateFieldAction(action);
+
+      // If the field action configuration defines 2 or more choices then populate the fields with
+      // default values.  Needed to support pull-down menus in action argument definitions.
+      if (action.argumentValues.length > 1 && fieldActionConfig.arguments.length > 1) {
+        for (let i = 0; i < action.argumentValues.length; i++) {
+          action.argumentValues[i].value = fieldActionConfig.arguments[i].values[i];
+        }
+      }
     }
     this.cfg.mappingService.saveCurrentMapping();
+  }
+
+  /**
+   * Translate an internal label to a human legible form.
+   * @param paramName
+   */
+  getLabel(paramName: string): string {
+    switch (paramName) {
+      case 'fromUnit': return 'From Unit';
+      case 'toUnit': return 'To Unit';
+      default: return '';
+    }
   }
 }
