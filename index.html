@@ -524,7 +524,7 @@ table.CodeRay td.code>pre{padding:0}
 <div class="details">
 <span id="author" class="author">The AtlasMap Team</span><br>
 <span id="revnumber">version 1.35-SNAPSHOT,</span>
-<span id="revdate">2018-04-25</span>
+<span id="revdate">2018-04-26</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">AtlasMap Developer Guide</div>
@@ -535,7 +535,7 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#running-data-mapper-ui-within-syndesis">2.1. Running Data Mapper UI within Syndesis</a></li>
 <li><a href="#running-atlasmap-standalone">2.2. Running AtlasMap standalone</a></li>
 <li><a href="#running-atlasmap-full-build">2.3. Running AtlasMap full build</a></li>
-<li><a href="#tips-for-ui-developers">2.4. Tips for UI developers</a>
+<li><a href="#tips-for-ui-developer">2.4. Tips for UI developer</a>
 <ul class="sectlevel3">
 <li><a href="#developing-within-syndesis-ui">2.4.1. Developing Within Syndesis UI</a></li>
 <li><a href="#debug-configuration">2.4.2. Debug Configuration</a></li>
@@ -543,24 +543,30 @@ table.CodeRay td.code>pre{padding:0}
 </li>
 </ul>
 </li>
-<li><a href="#camel-atlasmap">3. camel-atlasmap component</a></li>
-<li><a href="#internal-design">4. Internal Design</a>
+<li><a href="#internal-design">3. Internal Design</a>
 <ul class="sectlevel2">
-<li><a href="#overview">4.1. Overview</a></li>
-<li><a href="#internal-ui">4.2. UI</a>
+<li><a href="#internal-ui">3.1. UI</a>
 <ul class="sectlevel3">
-<li><a href="#bootstrapping">4.2.1. BOOTSTRAPPING</a></li>
-<li><a href="#model">4.2.2. MODEL</a></li>
-<li><a href="#service">4.2.3. SERVICE</a></li>
+<li><a href="#bootstrapping">3.1.1. BOOTSTRAPPING</a></li>
+<li><a href="#model">3.1.2. MODEL</a></li>
+<li><a href="#service">3.1.3. SERVICE</a></li>
 </ul>
 </li>
-<li><a href="#internal-runtime-engine">4.3. Runtime Engine</a></li>
-<li><a href="#internal-design-time-services">4.4. Design Time Services</a></li>
+<li><a href="#internal-design-time-service">3.2. Design Time Service</a>
+<ul class="sectlevel3">
+<li><a href="#core-service">3.2.1. Core Service</a></li>
+<li><a href="#java-service">3.2.2. Java Service</a></li>
+<li><a href="#json-service">3.2.3. JSON Service</a></li>
+<li><a href="#xml-service">3.2.4. XML Service</a></li>
 </ul>
 </li>
+<li><a href="#internal-runtime-engine">3.3. Runtime Engine</a></li>
+</ul>
+</li>
+<li><a href="#camel-atlasmap">4. camel-atlasmap component</a></li>
 <li><a href="#Reference">5. Reference</a>
 <ul class="sectlevel2">
-<li><a href="#fieldActions">5.1. Transformations</a></li>
+<li><a href="#fieldAction">5.1. Transformation (FieldAction)</a></li>
 <li><a href="#terminology">5.2. Terminology</a></li>
 </ul>
 </li>
@@ -588,7 +594,7 @@ table.CodeRay td.code>pre{padding:0}
 <div class="sect2">
 <h3 id="running-data-mapper-ui-within-syndesis">2.1. Running Data Mapper UI within Syndesis</h3>
 <div class="paragraph">
-<p>The easiest way to install and run the Data Mapper UI is to install and run the <a href="https://syndesis.io">Syndesis</a>. Simply follow the <a href="https://doc.syndesis.io">Syndesis Developer Handbook</a> to install, and run the Syndesis UI. You will find the Data Mapper UI under the integrations panel after selecting or adding an integration with a data mapping step involved in the integration.</p>
+<p>The easiest way to install and run Data Mapper UI is to install and run <a href="https://syndesis.io">Syndesis</a>. Simply follow the <a href="https://doc.syndesis.io">Syndesis Developer Handbook</a> to install, and run Syndesis UI. You will find the Data Mapper UI under the integrations panel after selecting or adding an integration with a data mapping step involved in the integration.</p>
 </div>
 </div>
 <div class="sect2">
@@ -608,7 +614,7 @@ $ ../mvnw clean install</code></pre>
 </div>
 </li>
 <li>
-<p>Run AtlasMap Services</p>
+<p>Run AtlasMap Design Service</p>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code>$ cd ${ATLASMAP}/runtime/runtime
@@ -691,11 +697,11 @@ $ yarn install</code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="tips-for-ui-developers">2.4. Tips for UI developers</h3>
+<h3 id="tips-for-ui-developer">2.4. Tips for UI developer</h3>
 <div class="sect3">
 <h4 id="developing-within-syndesis-ui">2.4.1. Developing Within Syndesis UI</h4>
 <div class="paragraph">
-<p>The Data Mapper UI is referenced by Syndesis as a dependency. When the Syndesis UI&#8217;s dependencies are installed during the <strong>yarn install</strong> step, the Data Mapper UI will be cloned from the NPM package repository into the <strong>${SYNDESIS}/ui/node_modules/@atlasmap/atlasmap.data.mapper</strong> directory.</p>
+<p>Data Mapper UI is referenced by Syndesis as a dependency. When Syndesis UI&#8217;s dependencies are installed during <strong>yarn install</strong> step, Data Mapper UI will be cloned from the NPM package repository into <strong>${SYNDESIS}/ui/node_modules/@atlasmap/atlasmap.data.mapper</strong> directory.</p>
 </div>
 <div class="paragraph">
 <p>You can point your local Syndesis UI&#8217;s Data Mapper UI reference to your working copy of the Data Mapper by <a href="https://yarnpkg.com/lang/en/docs/cli/link/">yarn link</a>. You&#8217;ll do something like this:</p>
@@ -862,35 +868,10 @@ Mock Java documents referenced are from the AtlasMap Services' <a href="https://
 </div>
 </div>
 <div class="sect1">
-<h2 id="camel-atlasmap">3. camel-atlasmap component</h2>
+<h2 id="internal-design">3. Internal Design</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>camel-atlasmap is an <a href="http://camel.apache.org/">Apache Camel</a> Component for AtlasMap. This component executes AtlasMap mapping as a part of Camel route processing.</p>
-</div>
-<div class="paragraph">
-<p>Example usage:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;camelContext</span> <span class="attribute-name">xmlns</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">http://camel.apache.org/schema/spring</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
-    <span class="tag">&lt;route&gt;</span>
-        <span class="tag">&lt;from</span> <span class="attribute-name">uri</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">direct:start</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
-        <span class="tag">&lt;to</span> <span class="attribute-name">uri</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">atlas:atlasmapping.xml</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
-        <span class="tag">&lt;to</span> <span class="attribute-name">uri</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">mock:result</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
-    <span class="tag">&lt;/route&gt;</span>
-<span class="tag">&lt;/camelContext&gt;</span></code></pre>
-</div>
-</div>
-<div style="page-break-after: always;"></div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="internal-design">4. Internal Design</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="overview">4.1. Overview</h3>
-<div class="paragraph">
-<p>AtlasMap consists of following 3 parts</p>
+<p>AtlasMap consists of following 3 parts:</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
@@ -898,18 +879,43 @@ Mock Java documents referenced are from the AtlasMap Services' <a href="https://
 <p><a href="#internal-ui">Data Mapper UI</a></p>
 </li>
 <li>
-<p><a href="#internal-design-time-services">Design Time Services</a></p>
+<p><a href="#internal-design-time-service">Design Time Service</a></p>
 </li>
 <li>
 <p><a href="#internal-runtime-engine">Runtime Engine</a></p>
 </li>
 </ol>
 </div>
+<div class="paragraph">
+<p><a href="#internal-ui">Data Mapper UI</a> is an Angular based web browser application. <a href="#internal-design-time-service">Design Time Service</a> is a set of REST API which provide background services to be used by the Data Mapper UI behind the scene. Data Mapper UI eventually produces data mapping definition file in XML or JSON format. Then <a href="#internal-runtime">Runtime Engine</a> consumes that mapping definition as well as actual data payload and perform mapping.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+There is also an overview document for the Data Mapper step in Syndesis, which might help if you look into AtlasMap within Syndesis context.
+<a href="https://github.com/syndesisio/syndesis/blob/master/app/server/docs/design/datamapper.md" class="bare">https://github.com/syndesisio/syndesis/blob/master/app/server/docs/design/datamapper.md</a>
+</td>
+</tr>
+</table>
 </div>
 <div class="sect2">
-<h3 id="internal-ui">4.2. UI</h3>
+<h3 id="internal-ui">3.1. UI</h3>
+<div class="paragraph">
+<p>Data Mapper UI is a web based user interface to define a data mapping, built with <a href="https://angular.io/">Angular</a>.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://github.com/atlasmap/atlasmap/blob/master/ui/" class="bare">https://github.com/atlasmap/atlasmap/blob/master/ui/</a></p>
+</li>
+</ul>
+</div>
 <div class="sect3">
-<h4 id="bootstrapping">4.2.1. BOOTSTRAPPING</h4>
+<h4 id="bootstrapping">3.1.1. BOOTSTRAPPING</h4>
 <div class="paragraph">
 <p>Bootstrapping the Data Mapper UI requires a bit of configuration. An example bootstrapping component is provided within the project:</p>
 </div>
@@ -918,7 +924,7 @@ Mock Java documents referenced are from the AtlasMap Services' <a href="https://
 </div>
 </div>
 <div class="sect3">
-<h4 id="model">4.2.2. MODEL</h4>
+<h4 id="model">3.1.2. MODEL</h4>
 <div class="paragraph">
 <p>All application data and configuration is stored in a centralized ConfigModel object.</p>
 </div>
@@ -946,7 +952,7 @@ Mock Java documents referenced are from the AtlasMap Services' <a href="https://
 </div>
 </div>
 <div class="sect3">
-<h4 id="service">4.2.3. SERVICE</h4>
+<h4 id="service">3.1.3. SERVICE</h4>
 <div class="paragraph">
 <p>When the Data Mapper UI Bootstraps, a series of service calls are made to the mapping service (<a href="https://github.com/atlasmap/atlasmap/blob/master/ui/src/app/lib/atlasmap-data-mapper/services/mapping-management.service.ts">MappingManagementService</a>) and document service (<a href="https://github.com/atlasmap/atlasmap/blob/master/ui/src/app/lib/atlasmap-data-mapper/services/document-management.service.ts">DocumentManagementService</a>).</p>
 </div>
@@ -959,22 +965,141 @@ Mock Java documents referenced are from the AtlasMap Services' <a href="https://
 </div>
 </div>
 <div class="sect2">
-<h3 id="internal-runtime-engine">4.3. Runtime Engine</h3>
-
+<h3 id="internal-design-time-service">3.2. Design Time Service</h3>
+<div class="paragraph">
+<p>Design Time Service is a set of REST API which provide background services to be used by the Data Mapper UI behind the scene. There are 4 types of Design Time Service:</p>
+</div>
+<div class="sect3">
+<h4 id="core-service">3.2.1. Core Service</h4>
+<div class="paragraph">
+<p><a href="https://github.com/atlasmap/atlasmap/blob/master/runtime/service" class="bare">https://github.com/atlasmap/atlasmap/blob/master/runtime/service</a></p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+TODO
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="java-service">3.2.2. Java Service</h4>
+<div class="paragraph">
+<p><a href="https://github.com/atlasmap/atlasmap/blob/master/runtime/modules/java/service" class="bare">https://github.com/atlasmap/atlasmap/blob/master/runtime/modules/java/service</a></p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+TODO
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="json-service">3.2.3. JSON Service</h4>
+<div class="paragraph">
+<p><a href="https://github.com/atlasmap/atlasmap/blob/master/runtime/modules/json/service" class="bare">https://github.com/atlasmap/atlasmap/blob/master/runtime/modules/json/service</a></p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+TODO
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="xml-service">3.2.4. XML Service</h4>
+<div class="paragraph">
+<p><a href="https://github.com/atlasmap/atlasmap/blob/master/runtime/modules/xml/service" class="bare">https://github.com/atlasmap/atlasmap/blob/master/runtime/modules/xml/service</a></p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+TODO
+</td>
+</tr>
+</table>
+</div>
+</div>
 </div>
 <div class="sect2">
-<h3 id="internal-design-time-services">4.4. Design Time Services</h3>
+<h3 id="internal-runtime-engine">3.3. Runtime Engine</h3>
+<div class="paragraph">
+<p>AtlasMap runtime engine consumes mapping definition file created via <a href="#internal-ui">Data Mapper UI</a> as well as actual data payload and perform mapping.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://github.com/atlasmap/atlasmap/blob/master/runtime/" class="bare">https://github.com/atlasmap/atlasmap/blob/master/runtime/</a></p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+TODO
+</td>
+</tr>
+</table>
+</div>
 <div style="page-break-after: always;"></div>
 </div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="camel-atlasmap">4. camel-atlasmap component</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>camel-atlasmap is an <a href="http://camel.apache.org/">Apache Camel</a> Component for AtlasMap. This component executes AtlasMap mapping as a part of Camel route processing.</p>
+</div>
+<div class="paragraph">
+<p>Example usage:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;camelContext</span> <span class="attribute-name">xmlns</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">http://camel.apache.org/schema/spring</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+    <span class="tag">&lt;route&gt;</span>
+        <span class="tag">&lt;from</span> <span class="attribute-name">uri</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">direct:start</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
+        <span class="tag">&lt;to</span> <span class="attribute-name">uri</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">atlas:atlasmapping.xml</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
+        <span class="tag">&lt;to</span> <span class="attribute-name">uri</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">mock:result</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
+    <span class="tag">&lt;/route&gt;</span>
+<span class="tag">&lt;/camelContext&gt;</span></code></pre>
+</div>
+</div>
+<div style="page-break-after: always;"></div>
 </div>
 </div>
 <div class="sect1">
 <h2 id="Reference">5. Reference</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="fieldActions">5.1. Transformations</h3>
+<h3 id="fieldAction">5.1. Transformation (FieldAction)</h3>
 <div class="paragraph">
-<p>Transformations are a set of functions you can apply onto a field as a part of mapping. These performs a variety of transformations in the middle of processing mappings. This is called FieldAction internally.</p>
+<p>Transformation is a function you can apply on a field value as a part of mapping. There are a variety of transformations you can apply in the middle of processing mappings. This is called FieldAction internally.</p>
 </div>
 <table class="tableblock frame-all grid-all" style="width: 84%;">
 <colgroup>
@@ -1568,7 +1693,7 @@ string.</p></td>
 <div id="footer">
 <div id="footer-text">
 Version 1.35-SNAPSHOT<br>
-Last updated 2018-04-25 14:32:23 UTC
+Last updated 2018-04-26 20:14:18 UTC
 </div>
 </div>
 </body>
