@@ -387,13 +387,33 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
 
     }
 
-    protected ConvertVolumeUnit processConvertVolumeUnitJsonToken(JsonParser jsonToken) {
+    protected ConvertVolumeUnit processConvertVolumeUnitJsonToken(JsonParser jsonToken)  throws IOException {
         ConvertVolumeUnit action = new ConvertVolumeUnit();
-
         if (JsonToken.END_ARRAY.equals(jsonToken.currentToken())
                 || JsonToken.END_OBJECT.equals(jsonToken.currentToken())) {
             return action;
         }
+
+        JsonToken nextToken = null;
+        do {
+            if (JsonToken.START_OBJECT.equals(jsonToken.currentToken())) {
+                jsonToken.nextToken();
+            }
+            switch (jsonToken.getCurrentName()) {
+            case ActionsJsonSerializer.FROM_UNIT:
+                jsonToken.nextToken();
+                action.setFromUnit(VolumeUnitType.fromValue(jsonToken.getValueAsString()));
+                break;
+            case ActionsJsonSerializer.TO_UNIT:
+                jsonToken.nextToken();
+                action.setToUnit(VolumeUnitType.fromValue(jsonToken.getValueAsString()));
+                break;
+            default:
+                break;
+            }
+
+            nextToken = jsonToken.nextToken();
+        } while (!JsonToken.END_ARRAY.equals(nextToken) && !JsonToken.END_OBJECT.equals(nextToken));
 
         return action;
     }

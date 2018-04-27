@@ -152,4 +152,22 @@ export class MappingFieldActionComponent {
       default: return '';
     }
   }
+
+  /**
+   * Return a string representing the default value for the field action argument pull-down.  If a mapped
+   * field already exists for this component then use that to determine the displayed valued in the
+   * pull-down; otherwise use the sequential configuration value based on the argument value index.
+   *
+   * @param argConfig - argument configuration used if no mapped field exists
+   * @param actionIndex - used when multiple actions are specified
+   * @param argValIndex - index into the argument values for any one specific action.
+   */
+  getActionConfigParamVDefault(argConfig: FieldActionArgument, actionIndex: number, argValIndex: number): String {
+    const action: FieldAction = this.getMappedFieldActions()[actionIndex];
+    if (action != null && action.argumentValues.length > 0) {
+      return action.argumentValues[argValIndex].value;
+    } else {
+      return argConfig.values[argValIndex];
+    }
+  }
 }
