@@ -17,7 +17,7 @@
     <div class="form-group argument" *ngFor="let argConfig of action.config.arguments; let argValIndex = index">
       <label style="">{{ getLabel(argConfig.name) }}</label>
 
-      <select (change)="actionConfigParamSelectionChanged($event);" [ngModel]="argConfig.values[argValIndex]">
+      <select (change)="actionConfigParamSelectionChanged($event);" [ngModel]="getActionConfigParamVDefault(argConfig, actionIndex, argValIndex)">
         <option *ngFor="let actionConfigParamVal of getActionConfigParamValues(argConfig)" [attr.argValIndex]="argValIndex"
                        [attr.actionIndex]="actionIndex" [attr.value]="actionConfigParamVal">{{ actionConfigParamVal }}</option>
       </select>
