@@ -4,21 +4,22 @@
 Design Time Service is a set of REST API which provide background services to be used by the Data Mapper UI behind the scene. There are 4 types of Design Time Service:
 
 === Core Service
-https://github.com/atlasmap/atlasmap/blob/master/runtime/service
+* Code Location: https://github.com/atlasmap/atlasmap/blob/master/runtime/service
+* API Reference: <<inc/swagger/index#core,Core Service>>
 
-NOTE: TODO
 
 === Java Service
-https://github.com/atlasmap/atlasmap/blob/master/runtime/modules/java/service
+* Code Location: https://github.com/atlasmap/atlasmap/blob/master/runtime/modules/java/service
+* API Reference: <<inc/swagger/index#java,Java Service>>
 
-NOTE: TODO
 
 === JSON Service
-https://github.com/atlasmap/atlasmap/blob/master/runtime/modules/json/service
+* Code Location: https://github.com/atlasmap/atlasmap/blob/master/runtime/modules/json/service
+* API Reference: <<inc/swagger/index#json,JSON Service>>
 
-NOTE: TODO
 
 === XML Service
-https://github.com/atlasmap/atlasmap/blob/master/runtime/modules/xml/service
+* Code Location: https://github.com/atlasmap/atlasmap/blob/master/runtime/modules/xml/service
+* API Reference: <<inc/swagger/index#xml,XML Service>>
 
-NOTE: TODO
+

@@ -41,9 +41,14 @@ import io.atlasmap.xml.v2.InspectionType;
 import io.atlasmap.xml.v2.XmlDocument;
 import io.atlasmap.xml.v2.XmlInspectionRequest;
 import io.atlasmap.xml.v2.XmlInspectionResponse;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 
-// http://localhost:8585/v2/atlas/xml/inspection
-
+@Api
 @ApplicationPath("/")
 @Path("v2/atlas/xml")
 public class XmlService {
@@ -66,10 +71,11 @@ public class XmlService {
         }
     }
 
-    // example request: http://localhost:8181/rest/myresource?from=jason%20baker
     @GET
     @Path("/simple")
     @Produces(MediaType.TEXT_PLAIN)
+    @ApiOperation(value = "Simple", notes = "Simple hello service")
+    @ApiResponses(@ApiResponse(code = 200, response = String.class, message = "Return a response"))
     public String simpleHelloWorld(@QueryParam("from") String from) {
         return "Got it! " + from;
     }
@@ -78,6 +84,10 @@ public class XmlService {
     @GET
     @Path("/inspect")
     @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "Inspect XML via URI", notes = "Inspect a XML schema or instance located at specified URI and return a Document object")
+    @ApiImplicitParams(@ApiImplicitParam(
+            name = "type", value = "Inspection type, one of `instance` or `Schema`", dataType = "io.atlasmap.xml.v2.InspectionType"))
+    @ApiResponses(@ApiResponse(code = 200, response = XmlDocument.class, message = "Return a Document object represented by XmlDocument"))
     public Response getClass(@QueryParam("uri") String uri, @QueryParam("type") String type) {
         XmlDocument d = null;
 
@@ -110,6 +120,10 @@ public class XmlService {
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
     @Path("/inspect")
+    @ApiOperation(value = "Inspect XML", notes = "Inspect a XML schema or instance and return a Document object")
+    @ApiImplicitParams(@ApiImplicitParam(
+            name = "request", value = "XmlInspectionRequest object", dataType = "io.atlasmap.xml.v2.XmlInspectionRequest"))
+    @ApiResponses(@ApiResponse(code = 200, response = XmlInspectionResponse.class, message = "Return a Document object represented by XmlDocument"))
     public Response inspectClass(InputStream request) {
         return inspectClass(fromJson(request, XmlInspectionRequest.class));
     }

@@ -1,0 +1,280 @@
+
+[[_atlas-service-core-definitions]]
+== Definitions
+
+[[_atlas-service-core-actiondetail]]
+=== ActionDetail
+
+[options="header", cols=".^3a,.^4a"]
+|===
+|Name|Schema
+|**className** +
+__optional__|string
+|**method** +
+__optional__|string
+|**name** +
+__optional__|string
+|**parameters** +
+__optional__|<<_atlas-service-core-actionparameters,ActionParameters>>
+|**sourceCollectionType** +
+__optional__|enum (ALL, ARRAY, LIST, MAP, NONE)
+|**sourceType** +
+__optional__|enum (ANY, ANY_DATE, BIG_INTEGER, BOOLEAN, BYTE, BYTE_ARRAY, CHAR, COMPLEX, DATE, DATE_TIME, DATE_TIME_TZ, DATE_TZ, DECIMAL, DOUBLE, FLOAT, INTEGER, LONG, NONE, NUMBER, SHORT, STRING, TIME, TIME_TZ, UNSIGNED_BYTE, UNSIGNED_INTEGER, UNSIGNED_LONG, UNSIGNED_SHORT, UNSUPPORTED)
+|**targetCollectionType** +
+__optional__|enum (ALL, ARRAY, LIST, MAP, NONE)
+|**targetType** +
+__optional__|enum (ANY, ANY_DATE, BIG_INTEGER, BOOLEAN, BYTE, BYTE_ARRAY, CHAR, COMPLEX, DATE, DATE_TIME, DATE_TIME_TZ, DATE_TZ, DECIMAL, DOUBLE, FLOAT, INTEGER, LONG, NONE, NUMBER, SHORT, STRING, TIME, TIME_TZ, UNSIGNED_BYTE, UNSIGNED_INTEGER, UNSIGNED_LONG, UNSIGNED_SHORT, UNSUPPORTED)
+|===
+
+
+[[_atlas-service-core-actiondetails]]
+=== ActionDetails
+
+[options="header", cols=".^3a,.^4a"]
+|===
+|Name|Schema
+|**actionDetail** +
+__optional__|< <<_atlas-service-core-actiondetail,ActionDetail>> > array
+|===
+
+
+[[_atlas-service-core-actionparameter]]
+=== ActionParameter
+
+[options="header", cols=".^3a,.^4a"]
+|===
+|Name|Schema
+|**description** +
+__optional__|string
+|**displayName** +
+__optional__|string
+|**fieldType** +
+__optional__|enum (ANY, ANY_DATE, BIG_INTEGER, BOOLEAN, BYTE, BYTE_ARRAY, CHAR, COMPLEX, DATE, DATE_TIME, DATE_TIME_TZ, DATE_TZ, DECIMAL, DOUBLE, FLOAT, INTEGER, LONG, NONE, NUMBER, SHORT, STRING, TIME, TIME_TZ, UNSIGNED_BYTE, UNSIGNED_INTEGER, UNSIGNED_LONG, UNSIGNED_SHORT, UNSUPPORTED)
+|**name** +
+__optional__|string
+|**values** +
+__optional__|< string > array
+|===
+
+
+[[_atlas-service-core-actionparameters]]
+=== ActionParameters
+
+[options="header", cols=".^3a,.^4a"]
+|===
+|Name|Schema
+|**parameter** +
+__optional__|< <<_atlas-service-core-actionparameter,ActionParameter>> > array
+|===
+
+
+[[_atlas-service-core-atlasmapping]]
+=== AtlasMapping
+
+[options="header", cols=".^3a,.^4a"]
+|===
+|Name|Schema
+|**constants** +
+__optional__|<<_atlas-service-core-constants,Constants>>
+|**dataSource** +
+__required__|< <<_atlas-service-core-datasource,DataSource>> > array
+|**lookupTables** +
+__optional__|<<_atlas-service-core-lookuptables,LookupTables>>
+|**mappings** +
+__required__|<<_atlas-service-core-mappings,Mappings>>
+|**name** +
+__optional__|string
+|**properties** +
+__optional__|<<_atlas-service-core-properties,Properties>>
+|===
+
+
+[[_atlas-service-core-basemapping]]
+=== BaseMapping
+
+[options="header", cols=".^3a,.^4a"]
+|===
+|Name|Schema
+|**alias** +
+__optional__|string
+|**description** +
+__optional__|string
+|**mappingType** +
+__optional__|enum (ALL, COLLECTION, COMBINE, LOOKUP, MAP, SEPARATE, NONE)
+|===
+
+
+[[_atlas-service-core-constant]]
+=== Constant
+
+[options="header", cols=".^3a,.^4a"]
+|===
+|Name|Schema
+|**fieldType** +
+__optional__|enum (ANY, ANY_DATE, BIG_INTEGER, BOOLEAN, BYTE, BYTE_ARRAY, CHAR, COMPLEX, DATE, DATE_TIME, DATE_TIME_TZ, DATE_TZ, DECIMAL, DOUBLE, FLOAT, INTEGER, LONG, NONE, NUMBER, SHORT, STRING, TIME, TIME_TZ, UNSIGNED_BYTE, UNSIGNED_INTEGER, UNSIGNED_LONG, UNSIGNED_SHORT, UNSUPPORTED)
+|**name** +
+__optional__|string
+|**value** +
+__optional__|string
+|===
+
+
+[[_atlas-service-core-constants]]
+=== Constants
+
+[options="header", cols=".^3a,.^4a"]
+|===
+|Name|Schema
+|**constant** +
+__optional__|< <<_atlas-service-core-constant,Constant>> > array
+|===
+
+
+[[_atlas-service-core-datasource]]
+=== DataSource
+
+[options="header", cols=".^3a,.^4a"]
+|===
+|Name|Schema
+|**dataSourceType** +
+__optional__|enum (SOURCE, TARGET)
+|**id** +
+__optional__|string
+|**uri** +
+__optional__|string
+|===
+
+
+[[_atlas-service-core-lookupentry]]
+=== LookupEntry
+
+[options="header", cols=".^3a,.^4a"]
+|===
+|Name|Schema
+|**sourceType** +
+__optional__|enum (ANY, ANY_DATE, BIG_INTEGER, BOOLEAN, BYTE, BYTE_ARRAY, CHAR, COMPLEX, DATE, DATE_TIME, DATE_TIME_TZ, DATE_TZ, DECIMAL, DOUBLE, FLOAT, INTEGER, LONG, NONE, NUMBER, SHORT, STRING, TIME, TIME_TZ, UNSIGNED_BYTE, UNSIGNED_INTEGER, UNSIGNED_LONG, UNSIGNED_SHORT, UNSUPPORTED)
+|**sourceValue** +
+__optional__|string
+|**targetType** +
+__optional__|enum (ANY, ANY_DATE, BIG_INTEGER, BOOLEAN, BYTE, BYTE_ARRAY, CHAR, COMPLEX, DATE, DATE_TIME, DATE_TIME_TZ, DATE_TZ, DECIMAL, DOUBLE, FLOAT, INTEGER, LONG, NONE, NUMBER, SHORT, STRING, TIME, TIME_TZ, UNSIGNED_BYTE, UNSIGNED_INTEGER, UNSIGNED_LONG, UNSIGNED_SHORT, UNSUPPORTED)
+|**targetValue** +
+__optional__|string
+|===
+
+
+[[_atlas-service-core-lookuptable]]
+=== LookupTable
+
+[options="header", cols=".^3a,.^4a"]
+|===
+|Name|Schema
+|**description** +
+__optional__|string
+|**lookupEntry** +
+__optional__|< <<_atlas-service-core-lookupentry,LookupEntry>> > array
+|**name** +
+__optional__|string
+|===
+
+
+[[_atlas-service-core-lookuptables]]
+=== LookupTables
+
+[options="header", cols=".^3a,.^4a"]
+|===
+|Name|Schema
+|**lookupTable** +
+__optional__|< <<_atlas-service-core-lookuptable,LookupTable>> > array
+|===
+
+
+[[_atlas-service-core-mappings]]
+=== Mappings
+
+[options="header", cols=".^3a,.^4a"]
+|===
+|Name|Schema
+|**mapping** +
+__optional__|< <<_atlas-service-core-basemapping,BaseMapping>> > array
+|===
+
+
+[[_atlas-service-core-properties]]
+=== Properties
+
+[options="header", cols=".^3a,.^4a"]
+|===
+|Name|Schema
+|**property** +
+__optional__|< <<_atlas-service-core-property,Property>> > array
+|===
+
+
+[[_atlas-service-core-property]]
+=== Property
+
+[options="header", cols=".^3a,.^4a"]
+|===
+|Name|Schema
+|**fieldType** +
+__optional__|enum (ANY, ANY_DATE, BIG_INTEGER, BOOLEAN, BYTE, BYTE_ARRAY, CHAR, COMPLEX, DATE, DATE_TIME, DATE_TIME_TZ, DATE_TZ, DECIMAL, DOUBLE, FLOAT, INTEGER, LONG, NONE, NUMBER, SHORT, STRING, TIME, TIME_TZ, UNSIGNED_BYTE, UNSIGNED_INTEGER, UNSIGNED_LONG, UNSIGNED_SHORT, UNSUPPORTED)
+|**name** +
+__optional__|string
+|**value** +
+__optional__|string
+|===
+
+
+[[_atlas-service-core-stringmap]]
+=== StringMap
+
+[options="header", cols=".^3a,.^4a"]
+|===
+|Name|Schema
+|**stringMapEntry** +
+__optional__|< <<_atlas-service-core-stringmapentry,StringMapEntry>> > array
+|===
+
+
+[[_atlas-service-core-stringmapentry]]
+=== StringMapEntry
+
+[options="header", cols=".^3a,.^4a"]
+|===
+|Name|Schema
+|**name** +
+__optional__|string
+|**value** +
+__optional__|string
+|===
+
+
+[[_atlas-service-core-validation]]
+=== Validation
+
+[options="header", cols=".^3a,.^4a"]
+|===
+|Name|Schema
+|**id** +
+__optional__|string
+|**message** +
+__optional__|string
+|**scope** +
+__optional__|enum (ALL, DATA_SOURCE, MAPPING, LOOKUP_TABLE, CONSTANT, PROPERTY)
+|**status** +
+__optional__|enum (ALL, INFO, WARN, ERROR, NONE)
+|===
+
+
+[[_atlas-service-core-validations]]
+=== Validations
+
+[options="header", cols=".^3a,.^4a"]
+|===
+|Name|Schema
+|**validation** +
+__optional__|< <<_atlas-service-core-validation,Validation>> > array
+|===
+
+
+

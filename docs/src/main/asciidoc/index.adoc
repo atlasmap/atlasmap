@@ -33,6 +33,8 @@ include::inc/_camel.adoc[]
 [[Reference]]
 = Reference
 
+== <<inc/swagger/index#, Design Time Service API>>
+
 include::inc/_fieldAction.adoc[]
 
 include::inc/_terminology.adoc[]

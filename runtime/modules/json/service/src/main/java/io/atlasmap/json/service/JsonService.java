@@ -40,9 +40,15 @@ import io.atlasmap.json.v2.JsonDocument;
 import io.atlasmap.json.v2.JsonInspectionRequest;
 import io.atlasmap.json.v2.JsonInspectionResponse;
 import io.atlasmap.v2.Json;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 
-// http://localhost:8585/v2/atlas/xml/inspection
-
+@Api
 @ApplicationPath("/")
 @Path("v2/atlas/json")
 public class JsonService {
@@ -65,18 +71,25 @@ public class JsonService {
         }
     }
 
-    // example request: http://localhost:8181/rest/myresource?from=jason%20baker
     @GET
     @Path("/simple")
     @Produces(MediaType.TEXT_PLAIN)
-    public String simpleHelloWorld(@QueryParam("from") String from) {
+    @ApiOperation(value = "Simple", notes = "Simple hello service")
+    @ApiResponses(@ApiResponse(code = 200, response = String.class, message = "Return a response"))
+    public String simpleHelloWorld(@ApiParam("From") @QueryParam("from") String from) {
         return "Got it! " + from;
     }
 
     @GET
     @Path("/inspect")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getClass(@QueryParam("uri") String uri, @QueryParam("type") String type) {
+    @ApiOperation(value = "Inspect JSON via URI", notes = "*NOT IMPLEMENTED* Inspect a JSON schema or instance located at specified URI and return a Document object")
+    @ApiImplicitParams(@ApiImplicitParam(
+            name = "type", value = "Inspection type, one of `instance` or `Schema`", dataType = "io.atlasmap.json.v2.InspectionType"))
+    @ApiResponses(@ApiResponse(code = 200, response = JsonDocument.class, message = "Return a Document object represented by JsonDocument"))
+    public Response getClass(
+            @ApiParam("URI for JSON schema or instance") @QueryParam("uri") String uri,
+            @QueryParam("type") String type) {
         JsonDocument d = null;
 
         try {
@@ -102,9 +115,13 @@ public class JsonService {
     }
 
     @POST
+    @Path("/inspect")
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
-    @Path("/inspect")
+    @ApiOperation(value = "Inspect JSON", notes = "Inspect a JSON schema or instance and return a Document object")
+    @ApiImplicitParams(@ApiImplicitParam(
+            name = "requestIn", value = "JsonInspectionRequest object", dataType = "io.atlasmap.json.v2.JsonInspectionRequest"))
+    @ApiResponses(@ApiResponse(code = 200, response = JsonInspectionResponse.class, message = "Return a Document object represented by JsonDocument"))
     public Response inspectClass(InputStream requestIn) {
         JsonInspectionRequest request = fromJson(requestIn, JsonInspectionRequest.class);
         long startTime = System.currentTimeMillis();
