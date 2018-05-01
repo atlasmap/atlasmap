@@ -524,7 +524,7 @@ table.CodeRay td.code>pre{padding:0}
 <div class="details">
 <span id="author" class="author">The AtlasMap Team</span><br>
 <span id="revnumber">version 1.35-SNAPSHOT,</span>
-<span id="revdate">2018-04-27</span>
+<span id="revdate">2018-05-01</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">AtlasMap Developer Guide</div>
@@ -566,8 +566,9 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#camel-atlasmap">4. camel-atlasmap component</a></li>
 <li><a href="#Reference">5. Reference</a>
 <ul class="sectlevel2">
-<li><a href="#fieldAction">5.1. Transformation (FieldAction)</a></li>
-<li><a href="#terminology">5.2. Terminology</a></li>
+<li><a href="#a-href-inc-swagger-index-html-design-time-service-api-a">5.1. <a href="inc/swagger/index.html">Design Time Service API</a></a></li>
+<li><a href="#fieldAction">5.2. Transformation (FieldAction)</a></li>
+<li><a href="#terminology">5.3. Terminology</a></li>
 </ul>
 </li>
 </ul>
@@ -889,6 +890,38 @@ Mock Java documents referenced are from the AtlasMap Services' <a href="https://
 <div class="paragraph">
 <p><a href="#internal-ui">Data Mapper UI</a> is an Angular based web browser application. <a href="#internal-design-time-service">Design Time Service</a> is a set of REST API which provide background services to be used by the Data Mapper UI behind the scene. Data Mapper UI eventually produces data mapping definition file in XML or JSON format. Then <a href="#internal-runtime">Runtime Engine</a> consumes that mapping definition as well as actual data payload and perform mapping.</p>
 </div>
+<div class="paragraph">
+<p>When data formats are provided into Data Mapper UI, it requests an inspection to Design Time Service and receives a unified metadata, called Document. For example, if the data format is provided as a JSON schema, Data Mapper UI makes a JSON schema inspection request and receive a Document object. While JSON schema is a JSON specific schema to represent message payload, Document object is an AtlasMap internal, but data format agnostic metadata so that the Data Mapper UI can consume and provide an unified mapping experience.</p>
+</div>
+<div class="paragraph">
+<p>AtlasMap Document object defines a tree of fields. Defining a set of field-to-field mapping is all about the mappings in AtlasMap.</p>
+</div>
+<div class="paragraph">
+<p>Another thing to know for AtlasMap internal is the <a href="https://github.com/atlasmap/atlasmap/tree/master/runtime/modules">module</a>. Module in AtlasMap is a facility to plug-in an individual data format support like Java, JSON and XML. Each module implements roughly following 2 parts:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Inspection Design Time Service to convert the format specific metadata into AtlasMap Document object</p>
+</li>
+<li>
+<p>Runtime SPI to achieve actual mappings</p>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://github.com/atlasmap/atlasmap/blob/master/runtime/api/src/main/java/io/atlasmap/spi/AtlasModule.java">AtlasModule</a>: Several methods to be invoked during processing mappings</p>
+</li>
+<li>
+<p><a href="https://github.com/atlasmap/atlasmap/blob/master/runtime/api/src/main/java/io/atlasmap/spi/AtlasFieldReader.java">AtlasFieldReader</a>: Read a field value from source payload</p>
+</li>
+<li>
+<p><a href="https://github.com/atlasmap/atlasmap/blob/master/runtime/api/src/main/java/io/atlasmap/spi/AtlasFieldWriter.java">AtlasFieldWriter</a>: Write a field value into target payload</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -971,74 +1004,54 @@ There is also an overview document for the Data Mapper step in Syndesis, which m
 </div>
 <div class="sect3">
 <h4 id="core-service">3.2.1. Core Service</h4>
-<div class="paragraph">
-<p><a href="https://github.com/atlasmap/atlasmap/blob/master/runtime/service" class="bare">https://github.com/atlasmap/atlasmap/blob/master/runtime/service</a></p>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-TODO
-</td>
-</tr>
-</table>
+<div class="ulist">
+<ul>
+<li>
+<p>Code Location: <a href="https://github.com/atlasmap/atlasmap/blob/master/runtime/service" class="bare">https://github.com/atlasmap/atlasmap/blob/master/runtime/service</a></p>
+</li>
+<li>
+<p>API Reference: <a href="inc/swagger/index.html#core">Core Service</a></p>
+</li>
+</ul>
 </div>
 </div>
 <div class="sect3">
 <h4 id="java-service">3.2.2. Java Service</h4>
-<div class="paragraph">
-<p><a href="https://github.com/atlasmap/atlasmap/blob/master/runtime/modules/java/service" class="bare">https://github.com/atlasmap/atlasmap/blob/master/runtime/modules/java/service</a></p>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-TODO
-</td>
-</tr>
-</table>
+<div class="ulist">
+<ul>
+<li>
+<p>Code Location: <a href="https://github.com/atlasmap/atlasmap/blob/master/runtime/modules/java/service" class="bare">https://github.com/atlasmap/atlasmap/blob/master/runtime/modules/java/service</a></p>
+</li>
+<li>
+<p>API Reference: <a href="inc/swagger/index.html#java">Java Service</a></p>
+</li>
+</ul>
 </div>
 </div>
 <div class="sect3">
 <h4 id="json-service">3.2.3. JSON Service</h4>
-<div class="paragraph">
-<p><a href="https://github.com/atlasmap/atlasmap/blob/master/runtime/modules/json/service" class="bare">https://github.com/atlasmap/atlasmap/blob/master/runtime/modules/json/service</a></p>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-TODO
-</td>
-</tr>
-</table>
+<div class="ulist">
+<ul>
+<li>
+<p>Code Location: <a href="https://github.com/atlasmap/atlasmap/blob/master/runtime/modules/json/service" class="bare">https://github.com/atlasmap/atlasmap/blob/master/runtime/modules/json/service</a></p>
+</li>
+<li>
+<p>API Reference: <a href="inc/swagger/index.html#json">JSON Service</a></p>
+</li>
+</ul>
 </div>
 </div>
 <div class="sect3">
 <h4 id="xml-service">3.2.4. XML Service</h4>
-<div class="paragraph">
-<p><a href="https://github.com/atlasmap/atlasmap/blob/master/runtime/modules/xml/service" class="bare">https://github.com/atlasmap/atlasmap/blob/master/runtime/modules/xml/service</a></p>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-TODO
-</td>
-</tr>
-</table>
+<div class="ulist">
+<ul>
+<li>
+<p>Code Location: <a href="https://github.com/atlasmap/atlasmap/blob/master/runtime/modules/xml/service" class="bare">https://github.com/atlasmap/atlasmap/blob/master/runtime/modules/xml/service</a></p>
+</li>
+<li>
+<p>API Reference: <a href="inc/swagger/index.html#xml">XML Service</a></p>
+</li>
+</ul>
 </div>
 </div>
 </div>
@@ -1097,7 +1110,11 @@ TODO
 <h2 id="Reference">5. Reference</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="fieldAction">5.1. Transformation (FieldAction)</h3>
+<h3 id="a-href-inc-swagger-index-html-design-time-service-api-a">5.1. <a href="inc/swagger/index.html">Design Time Service API</a></h3>
+
+</div>
+<div class="sect2">
+<h3 id="fieldAction">5.2. Transformation (FieldAction)</h3>
 <div class="paragraph">
 <p>Transformation is a function you can apply on a field value as a part of mapping. There are a variety of transformations you can apply in the middle of processing mappings. This is called FieldAction internally.</p>
 </div>
@@ -1562,7 +1579,7 @@ string.</p></td>
 </table>
 </div>
 <div class="sect2">
-<h3 id="terminology">5.2. Terminology</h3>
+<h3 id="terminology">5.3. Terminology</h3>
 <div class="paragraph">
 <p>AtlasMap terminology</p>
 </div>
@@ -1693,7 +1710,7 @@ string.</p></td>
 <div id="footer">
 <div id="footer-text">
 Version 1.35-SNAPSHOT<br>
-Last updated 2018-04-27 18:03:31 UTC
+Last updated 2018-05-01 19:13:18 UTC
 </div>
 </div>
 </body>
