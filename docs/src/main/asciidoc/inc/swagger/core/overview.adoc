@@ -1,0 +1,12 @@
+= AtlasMap Design Time Service :: Core
+
+
+[[_atlas-service-core-overview]]
+== Overview
+
+=== Version information
+[%hardbreaks]
+__Version__ : 1.35-SNAPSHOT
+
+
+

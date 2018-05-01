@@ -1,0 +1,234 @@
+
+[[_atlas-service-java-definitions]]
+== Definitions
+
+[[_atlas-service-java-actions]]
+=== Actions
+__Type__ : object
+
+
+[[_atlas-service-java-javaclass]]
+=== JavaClass
+
+[options="header", cols=".^3a,.^4a"]
+|===
+|Name|Schema
+|**actions** +
+__optional__|<<_atlas-service-java-actions,Actions>>
+|**annonymous** +
+__optional__|boolean
+|**annotation** +
+__optional__|boolean
+|**annotations** +
+__optional__|<<_atlas-service-java-stringlist,StringList>>
+|**arrayDimensions** +
+__optional__|integer (int32)
+|**arraySize** +
+__optional__|integer (int32)
+|**className** +
+__optional__|string
+|**collectionClassName** +
+__optional__|string
+|**collectionType** +
+__optional__|enum (ALL, ARRAY, LIST, MAP, NONE)
+|**docId** +
+__optional__|string
+|**enumeration** +
+__optional__|boolean
+|**fieldType** +
+__optional__|enum (ANY, ANY_DATE, BIG_INTEGER, BOOLEAN, BYTE, BYTE_ARRAY, CHAR, COMPLEX, DATE, DATE_TIME, DATE_TIME_TZ, DATE_TZ, DECIMAL, DOUBLE, FLOAT, INTEGER, LONG, NONE, NUMBER, SHORT, STRING, TIME, TIME_TZ, UNSIGNED_BYTE, UNSIGNED_INTEGER, UNSIGNED_LONG, UNSIGNED_SHORT, UNSUPPORTED)
+|**format** +
+__optional__|string
+|**getMethod** +
+__optional__|string
+|**index** +
+__optional__|integer (int32)
+|**interface** +
+__optional__|boolean
+|**javaEnumFields** +
+__required__|<<_atlas-service-java-javaenumfields,JavaEnumFields>>
+|**javaFields** +
+__required__|<<_atlas-service-java-javafields,JavaFields>>
+|**localClass** +
+__optional__|boolean
+|**memberClass** +
+__optional__|boolean
+|**modifiers** +
+__required__|<<_atlas-service-java-modifierlist,ModifierList>>
+|**name** +
+__optional__|string
+|**packageName** +
+__optional__|string
+|**parameterizedTypes** +
+__optional__|<<_atlas-service-java-stringlist,StringList>>
+|**path** +
+__optional__|string
+|**primitive** +
+__optional__|boolean
+|**required** +
+__optional__|boolean
+|**setMethod** +
+__optional__|string
+|**status** +
+__optional__|enum (SUPPORTED, UNSUPPORTED, CACHED, ERROR, NOT_FOUND, BLACK_LIST)
+|**synthetic** +
+__optional__|boolean
+|**uri** +
+__optional__|string
+|**value** +
+__optional__|object
+|===
+
+
+[[_atlas-service-java-javaenumfield]]
+=== JavaEnumField
+
+[options="header", cols=".^3a,.^4a"]
+|===
+|Name|Schema
+|**actions** +
+__optional__|<<_atlas-service-java-actions,Actions>>
+|**arrayDimensions** +
+__optional__|integer (int32)
+|**arraySize** +
+__optional__|integer (int32)
+|**className** +
+__optional__|string
+|**collectionType** +
+__optional__|enum (ALL, ARRAY, LIST, MAP, NONE)
+|**docId** +
+__optional__|string
+|**fieldType** +
+__optional__|enum (ANY, ANY_DATE, BIG_INTEGER, BOOLEAN, BYTE, BYTE_ARRAY, CHAR, COMPLEX, DATE, DATE_TIME, DATE_TIME_TZ, DATE_TZ, DECIMAL, DOUBLE, FLOAT, INTEGER, LONG, NONE, NUMBER, SHORT, STRING, TIME, TIME_TZ, UNSIGNED_BYTE, UNSIGNED_INTEGER, UNSIGNED_LONG, UNSIGNED_SHORT, UNSUPPORTED)
+|**format** +
+__optional__|string
+|**index** +
+__optional__|integer (int32)
+|**name** +
+__optional__|string
+|**ordinal** +
+__optional__|integer (int32)
+|**path** +
+__optional__|string
+|**required** +
+__optional__|boolean
+|**status** +
+__optional__|enum (SUPPORTED, UNSUPPORTED, CACHED, ERROR, NOT_FOUND, BLACK_LIST)
+|**value** +
+__optional__|object
+|===
+
+
+[[_atlas-service-java-javaenumfields]]
+=== JavaEnumFields
+
+[options="header", cols=".^3a,.^4a"]
+|===
+|Name|Schema
+|**javaEnumField** +
+__optional__|< <<_atlas-service-java-javaenumfield,JavaEnumField>> > array
+|===
+
+
+[[_atlas-service-java-javafield]]
+=== JavaField
+
+[options="header", cols=".^3a,.^4a"]
+|===
+|Name|Schema
+|**actions** +
+__optional__|<<_atlas-service-java-actions,Actions>>
+|**annotations** +
+__optional__|<<_atlas-service-java-stringlist,StringList>>
+|**arrayDimensions** +
+__optional__|integer (int32)
+|**arraySize** +
+__optional__|integer (int32)
+|**className** +
+__optional__|string
+|**collectionClassName** +
+__optional__|string
+|**collectionType** +
+__optional__|enum (ALL, ARRAY, LIST, MAP, NONE)
+|**docId** +
+__optional__|string
+|**fieldType** +
+__optional__|enum (ANY, ANY_DATE, BIG_INTEGER, BOOLEAN, BYTE, BYTE_ARRAY, CHAR, COMPLEX, DATE, DATE_TIME, DATE_TIME_TZ, DATE_TZ, DECIMAL, DOUBLE, FLOAT, INTEGER, LONG, NONE, NUMBER, SHORT, STRING, TIME, TIME_TZ, UNSIGNED_BYTE, UNSIGNED_INTEGER, UNSIGNED_LONG, UNSIGNED_SHORT, UNSUPPORTED)
+|**format** +
+__optional__|string
+|**getMethod** +
+__optional__|string
+|**index** +
+__optional__|integer (int32)
+|**modifiers** +
+__required__|<<_atlas-service-java-modifierlist,ModifierList>>
+|**name** +
+__optional__|string
+|**parameterizedTypes** +
+__optional__|<<_atlas-service-java-stringlist,StringList>>
+|**path** +
+__optional__|string
+|**primitive** +
+__optional__|boolean
+|**required** +
+__optional__|boolean
+|**setMethod** +
+__optional__|string
+|**status** +
+__optional__|enum (SUPPORTED, UNSUPPORTED, CACHED, ERROR, NOT_FOUND, BLACK_LIST)
+|**synthetic** +
+__optional__|boolean
+|**value** +
+__optional__|object
+|===
+
+
+[[_atlas-service-java-javafields]]
+=== JavaFields
+
+[options="header", cols=".^3a,.^4a"]
+|===
+|Name|Schema
+|**javaField** +
+__optional__|< <<_atlas-service-java-javafield,JavaField>> > array
+|===
+
+
+[[_atlas-service-java-mavenclasspathresponse]]
+=== MavenClasspathResponse
+
+[options="header", cols=".^3a,.^4a"]
+|===
+|Name|Schema
+|**classpath** +
+__optional__|string
+|**errorMessage** +
+__optional__|string
+|**executionTime** +
+__optional__|integer (int64)
+|===
+
+
+[[_atlas-service-java-modifierlist]]
+=== ModifierList
+
+[options="header", cols=".^3a,.^4a"]
+|===
+|Name|Schema
+|**modifier** +
+__optional__|< enum (ALL, ABSTRACT, FINAL, INTERFACE, NATIVE, PACKAGE_PRIVATE, PUBLIC, PROTECTED, PRIVATE, STATIC, STRICT, SYNCHRONIZED, TRANSIENT, VOLATILE, NONE) > array
+|===
+
+
+[[_atlas-service-java-stringlist]]
+=== StringList
+
+[options="header", cols=".^3a,.^4a"]
+|===
+|Name|Schema
+|**string** +
+__optional__|< string > array
+|===
+
+
+

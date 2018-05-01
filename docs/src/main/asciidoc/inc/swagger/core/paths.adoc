@@ -1,0 +1,257 @@
+
+[[_atlas-service-core-paths]]
+== Paths
+
+[[_atlas-service-core-listfieldactions]]
+=== List FieldActions
+....
+GET /v2/atlas/fieldActions
+....
+
+
+==== Description
+Retrieves a list of available field action
+
+
+==== Responses
+
+[options="header", cols=".^2a,.^14a,.^4a"]
+|===
+|HTTP Code|Description|Schema
+|**200**|Return a list of field action detail|<<_atlas-service-core-actiondetails,ActionDetails>>
+|===
+
+
+==== Produces
+
+* `application/json`
+
+
+[[_atlas-service-core-createmappingrequest]]
+=== Create Mapping
+....
+PUT /v2/atlas/mapping
+....
+
+
+==== Description
+Save a mapping file on the server
+
+
+==== Responses
+
+[options="header", cols=".^2a,.^14a,.^4a"]
+|===
+|HTTP Code|Description|Schema
+|**200**|Succeeded|No Content
+|===
+
+
+==== Consumes
+
+* `application/json`
+
+
+==== Produces
+
+* `application/json`
+
+
+[[_atlas-service-core-validatemappingrequest]]
+=== Validate Mapping
+....
+PUT /v2/atlas/mapping/validate
+....
+
+
+==== Description
+Validate mapping file
+
+
+==== Responses
+
+[options="header", cols=".^2a,.^14a,.^4a"]
+|===
+|HTTP Code|Description|Schema
+|**200**|Return a validation result|<<_atlas-service-core-validations,Validations>>
+|===
+
+
+==== Consumes
+
+* `application/json`
+
+
+==== Produces
+
+* `application/json`
+
+
+[[_atlas-service-core-updatemappingrequest]]
+=== Update Mapping
+....
+POST /v2/atlas/mapping/{mappingId}
+....
+
+
+==== Description
+Update existing mapping file on the server
+
+
+==== Parameters
+
+[options="header", cols=".^2a,.^3a,.^9a,.^4a"]
+|===
+|Type|Name|Description|Schema
+|**Path**|**mappingId** +
+__required__|Mapping ID|string
+|===
+
+
+==== Responses
+
+[options="header", cols=".^2a,.^14a,.^4a"]
+|===
+|HTTP Code|Description|Schema
+|**200**|Succeeded|No Content
+|===
+
+
+==== Consumes
+
+* `application/json`
+
+
+==== Produces
+
+* `application/json`
+
+
+[[_atlas-service-core-getmappingrequest]]
+=== Get Mapping
+....
+GET /v2/atlas/mapping/{mappingId}
+....
+
+
+==== Description
+Retrieve a mapping file saved on the server
+
+
+==== Parameters
+
+[options="header", cols=".^2a,.^3a,.^9a,.^4a"]
+|===
+|Type|Name|Description|Schema
+|**Path**|**mappingId** +
+__required__|Mapping ID|string
+|===
+
+
+==== Responses
+
+[options="header", cols=".^2a,.^14a,.^4a"]
+|===
+|HTTP Code|Description|Schema
+|**200**|Return a mapping file content|<<_atlas-service-core-atlasmapping,AtlasMapping>>
+|**204**|Mapping file was not found|No Content
+|===
+
+
+==== Produces
+
+* `application/json`
+
+
+[[_atlas-service-core-removemappingrequest]]
+=== Remove Mapping
+....
+DELETE /v2/atlas/mapping/{mappingId}
+....
+
+
+==== Description
+Remove a mapping file saved on the server
+
+
+==== Parameters
+
+[options="header", cols=".^2a,.^3a,.^9a,.^4a"]
+|===
+|Type|Name|Description|Schema
+|**Path**|**mappingId** +
+__required__|Mapping ID|string
+|===
+
+
+==== Responses
+
+[options="header", cols=".^2a,.^14a,.^4a"]
+|===
+|HTTP Code|Description|Schema
+|**200**|Specified mapping file was removed successfully|No Content
+|**204**|Mapping file was not found|No Content
+|===
+
+
+==== Produces
+
+* `application/json`
+
+
+[[_atlas-service-core-listmappings]]
+=== List Mappings
+....
+GET /v2/atlas/mappings
+....
+
+
+==== Description
+Retrieves a list of mapping file name saved on the server
+
+
+==== Parameters
+
+[options="header", cols=".^2a,.^3a,.^4a"]
+|===
+|Type|Name|Schema
+|**Query**|**filter** +
+__optional__|string
+|===
+
+
+==== Responses
+
+[options="header", cols=".^2a,.^14a,.^4a"]
+|===
+|HTTP Code|Description|Schema
+|**200**|Return a list of a pair of mapping file name and content|<<_atlas-service-core-stringmap,StringMap>>
+|===
+
+
+==== Produces
+
+* `application/json`
+
+
+[[_atlas-service-core-ping]]
+=== Ping
+....
+GET /v2/atlas/ping
+....
+
+
+==== Description
+Simple liveness check method used in liveness checks. Must not be protected via authetication.
+
+
+==== Responses
+
+[options="header", cols=".^2a,.^14a,.^4a"]
+|===
+|HTTP Code|Description|Schema
+|**200**|Return 'pong'|string
+|===
+
+
+

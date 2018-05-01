@@ -1,0 +1,12 @@
+= AtlasMap Design Time Service :: XML
+
+
+[[_atlas-service-xml-overview]]
+== Overview
+
+=== Version information
+[%hardbreaks]
+__Version__ : 1.35-SNAPSHOT
+
+
+

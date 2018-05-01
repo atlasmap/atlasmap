@@ -1,0 +1,135 @@
+
+[[_atlas-service-java-paths]]
+== Paths
+
+[[_atlas-service-java-inspectclass]]
+=== Inspect Class
+....
+POST /v2/atlas/java/class
+....
+
+
+==== Description
+Inspect a Java Class with specified fully qualified class name and return a Document object
+
+
+==== Responses
+
+[options="header", cols=".^2a,.^14a,.^4a"]
+|===
+|HTTP Code|Description|Schema
+|**200**|Return a Document object represented by JavaClass|<<_atlas-service-java-javaclass,JavaClass>>
+|===
+
+
+==== Consumes
+
+* `application/json`
+
+
+==== Produces
+
+* `application/json`
+
+
+[[_atlas-service-java-getclass]]
+=== Inspect Class
+....
+GET /v2/atlas/java/class
+....
+
+
+==== Description
+Inspect a Java Class with specified fully qualified class name and return a Document object
+
+
+==== Parameters
+
+[options="header", cols=".^2a,.^3a,.^9a,.^4a"]
+|===
+|Type|Name|Description|Schema
+|**Query**|**className** +
+__optional__|The fully qualified class name to inspect|string
+|===
+
+
+==== Responses
+
+[options="header", cols=".^2a,.^14a,.^4a"]
+|===
+|HTTP Code|Description|Schema
+|**200**|Return a Document object represented by JavaClass|<<_atlas-service-java-javaclass,JavaClass>>
+|===
+
+
+==== Produces
+
+* `application/json`
+
+
+[[_atlas-service-java-generateclasspath]]
+=== Generate Maven Classpath
+....
+POST /v2/atlas/java/mavenclasspath
+....
+
+
+==== Description
+Retrieve a maven classpath string
+
+
+==== Responses
+
+[options="header", cols=".^2a,.^14a,.^4a"]
+|===
+|HTTP Code|Description|Schema
+|**200**|Return a MavenClasspathResponse object which contains classpath string|<<_atlas-service-java-mavenclasspathresponse,MavenClasspathResponse>>
+|===
+
+
+==== Consumes
+
+* `application/json`
+
+
+==== Produces
+
+* `application/json`
+
+
+[[_atlas-service-java-simplehelloworld]]
+=== Simple
+....
+GET /v2/atlas/java/simple
+....
+
+
+==== Description
+Simple hello service
+
+
+==== Parameters
+
+[options="header", cols=".^2a,.^3a,.^9a,.^4a"]
+|===
+|Type|Name|Description|Schema
+|**Query**|**from** +
+__optional__|From|string
+|===
+
+
+==== Responses
+
+[options="header", cols=".^2a,.^14a,.^4a"]
+|===
+|HTTP Code|Description|Schema
+|**200**|Return a response|string
+|===
+
+
+==== Produces
+
+* `text/plain`
+
+
+

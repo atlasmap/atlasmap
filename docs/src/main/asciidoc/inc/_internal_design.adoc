@@ -9,6 +9,18 @@ AtlasMap consists of following 3 parts:
 
 <<internal-ui,Data Mapper UI>> is an Angular based web browser application. <<internal-design-time-service,Design Time Service>> is a set of REST API which provide background services to be used by the Data Mapper UI behind the scene. Data Mapper UI eventually produces data mapping definition file in XML or JSON format. Then <<internal-runtime,Runtime Engine>> consumes that mapping definition as well as actual data payload and perform mapping.
 
+When data formats are provided into Data Mapper UI, it requests an inspection to Design Time Service and receives a unified metadata, called Document. For example, if the data format is provided as a JSON schema, Data Mapper UI makes a JSON schema inspection request and receive a Document object. While JSON schema is a JSON specific schema to represent message payload, Document object is an AtlasMap internal, but data format agnostic metadata so that the Data Mapper UI can consume and provide an unified mapping experience.
+
+AtlasMap Document object defines a tree of fields. Defining a set of field-to-field mapping is all about the mappings in AtlasMap.
+
+Another thing to know for AtlasMap internal is the https://github.com/atlasmap/atlasmap/tree/master/runtime/modules[module]. Module in AtlasMap is a facility to plug-in an individual data format support like Java, JSON and XML. Each module implements roughly following 2 parts:
+
+* Inspection Design Time Service to convert the format specific metadata into AtlasMap Document object
+* Runtime SPI to achieve actual mappings
+** https://github.com/atlasmap/atlasmap/blob/master/runtime/api/src/main/java/io/atlasmap/spi/AtlasModule.java[AtlasModule]: Several methods to be invoked during processing mappings
+** https://github.com/atlasmap/atlasmap/blob/master/runtime/api/src/main/java/io/atlasmap/spi/AtlasFieldReader.java[AtlasFieldReader]: Read a field value from source payload
+** https://github.com/atlasmap/atlasmap/blob/master/runtime/api/src/main/java/io/atlasmap/spi/AtlasFieldWriter.java[AtlasFieldWriter]: Write a field value into target payload
+
 NOTE: There is also an overview document for the Data Mapper step in Syndesis, which might help if you look into AtlasMap within Syndesis context.
 https://github.com/syndesisio/syndesis/blob/master/app/server/docs/design/datamapper.md
 

@@ -1,0 +1,52 @@
+= AtlasMap Design Time Service API Reference
+:revnumber: {version}
+:revdate: {localdate}
+:toc: macro
+:toclevels: 3
+:toc-title: Design Time Service
+:doctype: book
+:icons: font
+
+ifndef::ebook-format[:leveloffset: 1]
+
+ifdef::basebackend-html[toc::[]]
+
+:numbered:
+
+= Core
+
+include::inc/swagger/core/paths.adoc[]
+
+include::inc/swagger/core/definitions.adoc[]
+
+
+<<<
+
+
+= Java
+
+include::inc/swagger/java/paths.adoc[]
+
+include::inc/swagger/java/definitions.adoc[]
+
+
+<<<
+
+
+= JSON
+
+include::inc/swagger/json/paths.adoc[]
+
+include::inc/swagger/json/definitions.adoc[]
+
+
+<<<
+
+
+= XML
+
+include::inc/swagger/xml/paths.adoc[]
+
+include::inc/swagger/xml/definitions.adoc[]
+
+
