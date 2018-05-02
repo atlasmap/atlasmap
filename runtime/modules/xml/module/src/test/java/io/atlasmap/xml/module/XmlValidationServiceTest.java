@@ -389,12 +389,14 @@ public class XmlValidationServiceTest {
         assertFalse(validationHelper.hasErrors());
         assertTrue(validationHelper.hasWarnings());
         assertFalse(validationHelper.hasInfos());
-        assertThat(2, is(validationHelper.getCount()));
+        assertThat(3, is(validationHelper.getCount()));
 
         assertTrue(
                 validations.stream().anyMatch(atlasMappingError -> atlasMappingError.getMessage().contains("range")));
         assertTrue(
                 validations.stream().anyMatch(atlasMappingError -> atlasMappingError.getMessage().contains("format")));
+        assertTrue(
+                validations.stream().anyMatch(atlasMappingError -> atlasMappingError.getMessage().contains("fractional part")));
     }
 
     @Test

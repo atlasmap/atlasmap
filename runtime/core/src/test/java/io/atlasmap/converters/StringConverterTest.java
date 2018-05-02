@@ -115,21 +115,37 @@ public class StringConverterTest {
 
     }
 
+    @Test
+    public void convertToByteNull() throws Exception {
+        assertNull(converter.toByte(null));
+    }
+
+    @Test
+    public void convertToByteMAX() throws Exception {
+        String s = String.valueOf(Byte.MAX_VALUE);
+        Byte l = converter.toByte(s);
+        assertNotNull(l);
+        assertEquals(Byte.MAX_VALUE, l, 0.0);
+    }
+
+    @Test
+    public void convertToByteMIN() throws Exception {
+        String s = String.valueOf(Byte.MIN_VALUE);
+        Byte l = converter.toByte(s);
+        assertNotNull(l);
+        assertEquals(Byte.MIN_VALUE, l, 0.0);
+    }
+
     @Test(expected = AtlasConversionException.class)
-    public void convertToByteOutOfRange() throws Exception {
+    public void convertToByteGreaterThanMAX() throws Exception {
         String s = "128";
         converter.toByte(s);
     }
 
     @Test(expected = AtlasConversionException.class)
-    public void convertToByteOutOfRange2() throws Exception {
+    public void convertToByteLessThanMIN() throws Exception {
         String s = "-129";
         converter.toByte(s);
-    }
-
-    @Test
-    public void convertToByteNull() throws Exception {
-        assertNull(converter.toByte(null));
     }
 
     @Test
@@ -270,6 +286,10 @@ public class StringConverterTest {
         Integer i = converter.toInteger(s);
         assertNotNull(i);
         assertEquals(0, i, 0.0);
+        s = "3.5";
+        i = converter.toInteger(s);
+        assertNotNull(i);
+        assertEquals(3, i, 0.0);
     }
 
     @Test
@@ -302,6 +322,10 @@ public class StringConverterTest {
         Long l = converter.toLong(s);
         assertNotNull(l);
         assertEquals(1, l, 0.0);
+        s = "3.5";
+        l = converter.toLong(s);
+        assertNotNull(l);
+        assertEquals(3, l, 0.0);
     }
 
     @Test
@@ -356,6 +380,34 @@ public class StringConverterTest {
     public void convertToShortNull() throws Exception {
         Short s = converter.toShort(null);
         assertNull(s);
+    }
+
+    @Test
+    public void convertToShortMAX() throws Exception {
+        String s = String.valueOf(Short.MAX_VALUE);
+        Short l = converter.toShort(s);
+        assertNotNull(l);
+        assertEquals(Short.MAX_VALUE, l, 0.0);
+    }
+
+    @Test
+    public void convertToShortMIN() throws Exception {
+        String s = String.valueOf(Short.MIN_VALUE);
+        Short l = converter.toShort(s);
+        assertNotNull(l);
+        assertEquals(Short.MIN_VALUE, l, 0.0);
+    }
+
+    @Test(expected = AtlasConversionException.class)
+    public void convertToShortGreaterThanMAX() throws Exception {
+        String s = "9223372036854775808";
+        converter.toShort(s);
+    }
+
+    @Test(expected = AtlasConversionException.class)
+    public void convertToShortLessThanMIN() throws Exception {
+        String s = "-9223372036854775809";
+        converter.toShort(s);
     }
 
     @Test(expected = AtlasConversionException.class)
