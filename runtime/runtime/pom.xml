@@ -196,7 +196,7 @@
               <generator>
                 <config>
                   <spring-boot>
-                    <name>${docker-image}</name>
+                    <name>${docker.image}</name>
                     <from>${temporary-docker-image}</from>
                   </spring-boot>
                 </config>
