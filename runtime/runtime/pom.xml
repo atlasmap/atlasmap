@@ -34,6 +34,8 @@
     <maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
     <java-image.version>1.2</java-image.version>
     <fabric8.mode>kubernetes</fabric8.mode>
+    <temporary-docker-image>atlas-runtime-temporary</temporary-docker-image>
+    <docker.maven.plugin.version>0.23.0</docker.maven.plugin.version>
   </properties>
 
   <build>
@@ -184,6 +186,7 @@
             <executions>
               <execution>
                 <id>fmp</id>
+                <phase>package</phase>
                 <goals>
                   <goal>build</goal>
                 </goals>
@@ -193,12 +196,40 @@
               <generator>
                 <config>
                   <spring-boot>
-                    <name>${docker.image}</name>
-                    <from>${from.image}</from>
+                    <name>${docker-image}</name>
+                    <from>${temporary-docker-image}</from>
                   </spring-boot>
                 </config>
               </generator>
             </configuration>
+          </plugin>
+          <plugin>
+            <groupId>io.fabric8</groupId>
+            <artifactId>docker-maven-plugin</artifactId>
+            <version>${docker.maven.plugin.version}</version>
+            <configuration>
+              <images>
+                <image>
+                  <name>${temporary-docker-image}</name>
+                  <build>
+                    <from>${from.image}</from>
+                    <assembly>
+                      <basedir>/</basedir>
+                      <descriptor>${project.basedir}/src/main/resources/license-custom-assembly.xml</descriptor>
+                    </assembly>
+		  </build>
+	        </image>
+	      </images>
+            </configuration>
+            <executions>
+              <execution>
+                <id>docker-image</id>
+                <phase>compile</phase>
+                <goals>
+                  <goal>build</goal>
+                </goals>
+              </execution>
+            </executions>
           </plugin>
         </plugins>
       </build>
