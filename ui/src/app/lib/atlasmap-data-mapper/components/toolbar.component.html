@@ -1,14 +1,22 @@
 <div class="toolbar clearfix">
-  <div class="toolbar-icons text-right">
-    <i class="fa fa-plus link" (click)="toolbarButtonClicked('addMapping', $event);" tooltip="Add new mapping"></i>
+  <div class="toolbar-icons pull-right">
+    <i class="fa fa-plus link" (click)="toolbarButtonClicked('addMapping', $event);"
+       tooltip="Add new mapping" placement="bottom"></i>
+
     <i [attr.class]="getCSSClass('editTemplate')" *ngIf="targetSupportsTemplate" (click)="toolbarButtonClicked('editTemplate', $event);"></i>
-    <i [attr.class]="getCSSClass('showMappingTable')" (click)="toolbarButtonClicked('showMappingTable', $event);" tooltip="Show / hide mapping table"></i>
+    <i [attr.class]="getCSSClass('showMappingTable')" (click)="toolbarButtonClicked('showMappingTable', $event);"
+       tooltip="Show/hide mapping table" placement="bottom"></i>
+
     <i *ngIf="cfg.getFirstXmlDoc(false)" [attr.class]="getCSSClass('showNamespaceTable')" (click)="toolbarButtonClicked('showNamespaceTable', $event);"
-      tooltip="Show / hide namespace table"></i>
-    <i [attr.class]="getCSSClass('showDetails')" (click)="toolbarButtonClicked('showDetails', $event);" tooltip="Show / hide mapping details" placement="left"></i>
-    <div dropdown placement="bottom right" class="dropdown inline-block">
-      <i [attr.class]="getCSSClass('advancedMode')" dropdownToggle (click)="false" tooltip="Editor settings" placement="left"></i>
-      <!-- <a href dropdownToggle (click)="false">X</a> -->
+       tooltip="Show/hide namespace table" placement="bottom"></i>
+
+    <i [attr.class]="getCSSClass('showDetails')" (click)="toolbarButtonClicked('showDetails', $event);" container="body"
+       tooltip="Show/hide mapping details" placement="left"></i>
+
+    <div dropdown class="dropdown inline-block pull-right">
+      <i [attr.class]="getCSSClass('advancedMode')" dropdownToggle (click)="false"
+	 tooltip="Editor settings" placement="left"></i>
+
       <ul *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu">
         <li role="menuitem" (click)="toolbarButtonClicked('showTypes', $event);" class="clearfix">
           <div class="pull-left">
