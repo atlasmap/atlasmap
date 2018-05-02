@@ -455,12 +455,14 @@ public class JavaValidationServiceTest {
         assertFalse(validationHelper.hasErrors());
         assertTrue(validationHelper.hasWarnings());
         assertFalse(validationHelper.hasInfos());
-        assertThat(2, is(validationHelper.getCount()));
+        assertThat(3, is(validationHelper.getCount()));
 
         assertTrue(
                 validations.stream().anyMatch(atlasMappingError -> atlasMappingError.getMessage().contains("range")));
         assertTrue(
                 validations.stream().anyMatch(atlasMappingError -> atlasMappingError.getMessage().contains("format")));
+        assertTrue(
+                validations.stream().anyMatch(atlasMappingError -> atlasMappingError.getMessage().contains("fractional part")));
     }
 
     @Test
@@ -546,7 +548,7 @@ public class JavaValidationServiceTest {
         assertFalse(validationHelper.hasErrors());
         assertTrue(validationHelper.hasWarnings());
         assertFalse(validationHelper.hasInfos());
-        assertEquals(2, validations.size());
+        assertEquals(3, validations.size());
 
         Validation v = validations.get(0);
         assertEquals(ValidationScope.MAPPING, v.getScope());
@@ -560,6 +562,11 @@ public class JavaValidationServiceTest {
         assertEquals("Conversion from 'STRING' to 'INTEGER' can cause out of range exceptions", v.getMessage());
         assertEquals(ValidationStatus.WARN, v.getStatus());
 
+        v = validations.get(2);
+        assertEquals(ValidationScope.MAPPING, v.getScope());
+        assertEquals("issue127-1", v.getId());
+        assertEquals("Conversion from 'STRING' to 'INTEGER' can cause fractional part to be lost", v.getMessage());
+        assertEquals(ValidationStatus.WARN, v.getStatus());
     }
 
     public static <T> Collector<T, ?, T> singletonCollector() {

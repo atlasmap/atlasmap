@@ -614,29 +614,6 @@ public class JsonFieldWriterTest {
         System.out.println(prettyPrintJson(writer.getRootNode().toString()));
     }
 
-    private void write(Field field) throws Exception {
-        AtlasInternalSession session = mock(AtlasInternalSession.class);
-        when(session.head()).thenReturn(mock(Head.class));
-        when(session.head().getSourceField()).thenReturn(mock(Field.class));
-        when(session.head().getTargetField()).thenReturn(field);
-        writer.write(session);
-    }
-
-    private String prettyPrintJson(String json) throws IOException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        Object objJSON = objectMapper.readValue(json, Object.class);
-        return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(objJSON);
-    }
-
-    private void testBoundaryValue(String fileName, String fieldPath, Object testObject, FieldType fieldType)
-            throws Exception {
-        Path path = Paths.get("target" + File.separator + fileName);
-        write(path, fieldPath, testObject, fieldType);
-
-        AtlasInternalSession session = read(path, fieldType, fieldPath);
-        assertEquals(testObject, session.head().getSourceField().getValue());
-    }
-
     @Test
     public void testJsonFieldDoubleMax() throws Exception {
         testBoundaryValue("test-write-field-double-max.json", "/primitiveValue", Double.MAX_VALUE, FieldType.DOUBLE);
@@ -732,50 +709,6 @@ public class JsonFieldWriterTest {
         testBoundaryValue("test-write-field-string-null.json", "/stringValue", null, FieldType.STRING);
     }
 
-    private void write(Path path, String fieldPath, Object testObject, FieldType fieldType)
-            throws Exception, IOException, JsonGenerationException, JsonMappingException {
-        JsonField field = AtlasJsonModelFactory.createJsonField();
-        field.setPath(fieldPath);
-        field.setValue(testObject);
-        field.setFieldType(fieldType);
-        write(field);
-        writer.getObjectMapper().writeValue(path.toFile(), writer.getRootNode());
-    }
-
-    private AtlasInternalSession read(Path path, FieldType outputFieldType, String fieldPath)
-            throws IOException, AtlasException {
-        String document = new String(Files.readAllBytes(path));
-        reader.setDocument(document);
-        JsonField jsonField = AtlasJsonModelFactory.createJsonField();
-        jsonField.setPath(fieldPath);
-        jsonField.setFieldType(outputFieldType);
-        AtlasInternalSession session = mock(AtlasInternalSession.class);
-        when(session.head()).thenReturn(mock(Head.class));
-        when(session.head().getSourceField()).thenReturn(jsonField);
-
-        Audits audits = new Audits();
-        when(session.getAudits()).thenReturn(audits);
-        reader.read(session);
-        return session;
-    }
-
-    private void testRangeOutValue(String fileName, String fieldPath, Object testObject, FieldType inputFieldType,
-            FieldType outputFieldType) throws Exception {
-        Path path = Paths.get("target" + File.separator + fileName);
-        write(path, fieldPath, testObject, inputFieldType);
-
-        AtlasInternalSession session = read(path, outputFieldType, fieldPath);
-
-        assertEquals(null, session.head().getSourceField().getValue());
-        assertEquals(1, session.getAudits().getAudit().size());
-        assertEquals(
-                "Failed to convert field value '" + testObject.toString() + "' into type '"
-                        + outputFieldType.value().toUpperCase() + "'",
-                session.getAudits().getAudit().get(0).getMessage());
-        assertEquals(testObject.toString(), session.getAudits().getAudit().get(0).getValue());
-        assertEquals(AuditStatus.ERROR, session.getAudits().getAudit().get(0).getStatus());
-    }
-
     @Test
     public void testJsonFieldDoubleMaxRangeOut() throws Exception {
         testRangeOutValue("test-write-field-double-max-range-out.json", "/primitiveValue", "1.7976931348623157E309",
@@ -786,18 +719,6 @@ public class JsonFieldWriterTest {
     public void testJsonFieldDoubleMinRangeOut() throws Exception {
         testMinRangeOutValue("test-write-field-double-min-range-out.json", "/primitiveValue", "4.9E-325",
                 FieldType.STRING, FieldType.DOUBLE, 0.0);
-    }
-
-    private void testMinRangeOutValue(String fileName, String fieldPath, Object testObject, FieldType inputFieldType,
-            FieldType outputFieldType, Object expectedValue)
-            throws Exception, IOException, JsonGenerationException, JsonMappingException, AtlasException {
-        Path path = Paths.get("target" + File.separator + fileName);
-        write(path, fieldPath, testObject, inputFieldType);
-
-        AtlasInternalSession session = read(path, outputFieldType, fieldPath);
-
-        assertEquals(expectedValue, session.head().getSourceField().getValue());
-        assertEquals(0, session.getAudits().getAudit().size());
     }
 
     @Test
@@ -880,20 +801,20 @@ public class JsonFieldWriterTest {
 
     @Test
     public void testJsonFieldLongDecimal() throws Exception {
-        testRangeOutValue("test-write-field-long-decimal.json", "/primitiveValue", Double.valueOf("126.1234"),
-                FieldType.DOUBLE, FieldType.LONG);
+        testDecimalValue("test-write-field-long-decimal.json", "/primitiveValue", Double.valueOf("126.1234"),
+                FieldType.DOUBLE, FieldType.LONG, 126L);
     }
 
     @Test
     public void testJsonFieldIntegerDecimal() throws Exception {
-        testRangeOutValue("test-write-field-integer-decimal.json", "/primitiveValue", Double.valueOf("126.1234"),
-                FieldType.DOUBLE, FieldType.INTEGER);
+        testDecimalValue("test-write-field-integer-decimal.json", "/primitiveValue", Double.valueOf("126.1234"),
+                FieldType.DOUBLE, FieldType.INTEGER, 126);
     }
 
     @Test
     public void testJsonFieldShortDecimal() throws Exception {
-        testRangeOutValue("test-write-field-short-decimal.json", "/primitiveValue", Double.valueOf("126.1234"),
-                FieldType.DOUBLE, FieldType.SHORT);
+        testDecimalValue("test-write-field-short-decimal.json", "/primitiveValue", Double.valueOf("126.1234"),
+                FieldType.DOUBLE, FieldType.SHORT, (short)126);
     }
 
     @Test
@@ -904,8 +825,8 @@ public class JsonFieldWriterTest {
 
     @Test
     public void testJsonFieldByteDecimal() throws Exception {
-        testRangeOutValue("test-write-field-byte-decimal.json", "/primitiveValue", Double.valueOf("126.1234"),
-                FieldType.DOUBLE, FieldType.BYTE);
+        testDecimalValue("test-write-field-byte-decimal.json", "/primitiveValue", Double.valueOf("126.1234"),
+                FieldType.DOUBLE, FieldType.BYTE, (byte)126);
     }
 
     @Test
@@ -963,6 +884,96 @@ public class JsonFieldWriterTest {
         AtlasInternalSession session = read(path, outputFieldType, fieldPath);
 
         assertEquals(false, session.head().getSourceField().getValue());
+    }
+
+    private void write(Path path, String fieldPath, Object testObject, FieldType fieldType)
+            throws Exception, IOException, JsonGenerationException, JsonMappingException {
+        JsonField field = AtlasJsonModelFactory.createJsonField();
+        field.setPath(fieldPath);
+        field.setValue(testObject);
+        field.setFieldType(fieldType);
+        write(field);
+        writer.getObjectMapper().writeValue(path.toFile(), writer.getRootNode());
+    }
+
+    private AtlasInternalSession read(Path path, FieldType outputFieldType, String fieldPath)
+            throws IOException, AtlasException {
+        String document = new String(Files.readAllBytes(path));
+        reader.setDocument(document);
+        JsonField jsonField = AtlasJsonModelFactory.createJsonField();
+        jsonField.setPath(fieldPath);
+        jsonField.setFieldType(outputFieldType);
+        AtlasInternalSession session = mock(AtlasInternalSession.class);
+        when(session.head()).thenReturn(mock(Head.class));
+        when(session.head().getSourceField()).thenReturn(jsonField);
+
+        Audits audits = new Audits();
+        when(session.getAudits()).thenReturn(audits);
+        reader.read(session);
+        return session;
+    }
+
+    private void testRangeOutValue(String fileName, String fieldPath, Object testObject, FieldType inputFieldType,
+            FieldType outputFieldType) throws Exception {
+        Path path = Paths.get("target" + File.separator + fileName);
+        write(path, fieldPath, testObject, inputFieldType);
+
+        AtlasInternalSession session = read(path, outputFieldType, fieldPath);
+
+        assertEquals(null, session.head().getSourceField().getValue());
+        assertEquals(1, session.getAudits().getAudit().size());
+        assertEquals(
+                "Failed to convert field value '" + testObject.toString() + "' into type '"
+                        + outputFieldType.value().toUpperCase() + "'",
+                session.getAudits().getAudit().get(0).getMessage());
+        assertEquals(testObject.toString(), session.getAudits().getAudit().get(0).getValue());
+        assertEquals(AuditStatus.ERROR, session.getAudits().getAudit().get(0).getStatus());
+    }
+
+    private void write(Field field) throws Exception {
+        AtlasInternalSession session = mock(AtlasInternalSession.class);
+        when(session.head()).thenReturn(mock(Head.class));
+        when(session.head().getSourceField()).thenReturn(mock(Field.class));
+        when(session.head().getTargetField()).thenReturn(field);
+        writer.write(session);
+    }
+
+    private String prettyPrintJson(String json) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        Object objJSON = objectMapper.readValue(json, Object.class);
+        return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(objJSON);
+    }
+
+    private void testBoundaryValue(String fileName, String fieldPath, Object testObject, FieldType fieldType)
+            throws Exception {
+        Path path = Paths.get("target" + File.separator + fileName);
+        write(path, fieldPath, testObject, fieldType);
+
+        AtlasInternalSession session = read(path, fieldType, fieldPath);
+        assertEquals(testObject, session.head().getSourceField().getValue());
+    }
+
+    private void testMinRangeOutValue(String fileName, String fieldPath, Object testObject, FieldType inputFieldType,
+            FieldType outputFieldType, Object expectedValue)
+            throws Exception, IOException, JsonGenerationException, JsonMappingException, AtlasException {
+        Path path = Paths.get("target" + File.separator + fileName);
+        write(path, fieldPath, testObject, inputFieldType);
+
+        AtlasInternalSession session = read(path, outputFieldType, fieldPath);
+
+        assertEquals(expectedValue, session.head().getSourceField().getValue());
+        assertEquals(0, session.getAudits().getAudit().size());
+    }
+
+    private void testDecimalValue(String fileName, String fieldPath, Object testObject, FieldType inputFieldType,
+            FieldType outputFieldType, Object expectedValue) throws Exception {
+        Path path = Paths.get("target" + File.separator + fileName);
+        write(path, fieldPath, testObject, inputFieldType);
+
+        AtlasInternalSession session = read(path, outputFieldType, fieldPath);
+
+        assertEquals(expectedValue, session.head().getSourceField().getValue());
+        assertEquals(0, session.getAudits().getAudit().size());
     }
 
 }
