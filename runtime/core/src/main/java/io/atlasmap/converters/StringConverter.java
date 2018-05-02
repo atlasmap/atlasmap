@@ -91,7 +91,8 @@ public class StringConverter implements AtlasConverter<String> {
         return Boolean.FALSE;
     }
 
-    @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.BYTE, concerns = AtlasConversionConcern.RANGE)
+    @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.BYTE, concerns = {
+            AtlasConversionConcern.RANGE, AtlasConversionConcern.FORMAT, AtlasConversionConcern.FRACTIONAL_PART})
     public Byte toByte(String value) throws AtlasConversionException {
         if (value == null) {
             return null;
@@ -99,8 +100,18 @@ public class StringConverter implements AtlasConverter<String> {
         try {
             return Byte.parseByte(value);
         } catch (NumberFormatException nfex) {
-            throw new AtlasConversionException(String
-                    .format("String %s cannont be converted to a Byte as it is not in a numerical format", value));
+            try {
+                BigDecimal bd = new BigDecimal(value);
+                if (bd.compareTo(new BigDecimal(Byte.MIN_VALUE)) < 0
+                        || bd.compareTo(new BigDecimal(Byte.MAX_VALUE)) > 0) {
+                    throw new AtlasConversionException(String
+                            .format("String %s is greater than Byte.MAX_VALUE  or less than Byte.MIN_VALUE", value));
+                }
+                return bd.byteValue();
+            } catch (NumberFormatException nfe2) {
+                throw new AtlasConversionException(String
+                        .format("String %s cannont be converted to a Byte as it is not in a numerical format", value));
+            }
         }
     }
 
@@ -181,28 +192,27 @@ public class StringConverter implements AtlasConverter<String> {
     }
 
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.INTEGER, concerns = {
-            AtlasConversionConcern.FORMAT, AtlasConversionConcern.RANGE })
+            AtlasConversionConcern.FORMAT, AtlasConversionConcern.RANGE, AtlasConversionConcern.FRACTIONAL_PART })
     public Integer toInteger(String value) throws AtlasConversionException {
         if (value == null) {
             return null;
         }
 
-        BigDecimal bd = null;
         Integer i = null;
         try {
             i = Integer.parseInt(value);
         } catch (NumberFormatException nfe) {
             try {
-                bd = new BigDecimal(value);
+                BigDecimal bd = new BigDecimal(value);
+                if (bd.compareTo(new BigDecimal(Integer.MIN_VALUE)) < 0
+                        || bd.compareTo(new BigDecimal(Integer.MAX_VALUE)) > 0) {
+                    throw new AtlasConversionException(String
+                            .format("String %s is greater than Integer.MAX_VALUE  or less than Integer.MIN_VALUE", value));
+                }
                 i = bd.intValue();
             } catch (NumberFormatException nfe2) {
                 throw new AtlasConversionException(nfe);
             }
-        }
-
-        if (bd != null && bd.compareTo(BigDecimal.valueOf(i)) != 0) {
-            throw new AtlasConversionException(String
-                    .format("String %s is greater than Integer.MAX_VALUE  or less than Integer.MIN_VALUE", value));
         }
 
         return i;
@@ -224,47 +234,56 @@ public class StringConverter implements AtlasConverter<String> {
     }
 
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.LONG, concerns = {
-            AtlasConversionConcern.FORMAT, AtlasConversionConcern.RANGE })
+            AtlasConversionConcern.FORMAT, AtlasConversionConcern.RANGE, AtlasConversionConcern.FRACTIONAL_PART })
     public Long toLong(String value) throws AtlasConversionException {
         if (value == null) {
             return null;
         }
 
-        BigDecimal bd = null;
         Long l = null;
         try {
             l = Long.parseLong(value);
         } catch (NumberFormatException nfe) {
             try {
-                bd = new BigDecimal(value);
+                BigDecimal bd = new BigDecimal(value);
+                if (bd.compareTo(new BigDecimal(Long.MIN_VALUE)) < 0
+                        || bd.compareTo(new BigDecimal(Long.MAX_VALUE)) > 0) {
+                    throw new AtlasConversionException(String
+                            .format("String %s is greater than Long.MAX_VALUE  or less than Long.MIN_VALUE", value));
+                }
                 l = bd.longValue();
             } catch (NumberFormatException nfe2) {
                 throw new AtlasConversionException(nfe);
             }
         }
 
-        if (bd != null && bd.compareTo(BigDecimal.valueOf(l)) != 0) {
-            throw new AtlasConversionException(
-                    String.format("String %s is greater than Long.MAX_VALUE  or less than Long.MIN_VALUE", value));
-        }
-
         return l;
     }
 
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.SHORT, concerns = {
-            AtlasConversionConcern.FORMAT, AtlasConversionConcern.RANGE })
+            AtlasConversionConcern.FORMAT, AtlasConversionConcern.RANGE, AtlasConversionConcern.FRACTIONAL_PART })
     public Short toShort(String value) throws AtlasConversionException {
         if (value == null) {
             return null;
         }
-        // check we can make a short of the String
-        Short shortty;
+
+        Short shortty = null;
         try {
             shortty = Short.parseShort(value);
         } catch (NumberFormatException nfe) {
-            throw new AtlasConversionException(nfe);
+            try {
+                BigDecimal bd = new BigDecimal(value);
+                if (bd.compareTo(new BigDecimal(Short.MIN_VALUE)) < 0
+                        || bd.compareTo(new BigDecimal(Short.MAX_VALUE)) > 0) {
+                    throw new AtlasConversionException(String
+                            .format("String %s is greater than Short.MAX_VALUE  or less than Short.MIN_VALUE", value));
+                }
+                shortty = bd.shortValue();
+            } catch (NumberFormatException nfe2) {
+                throw new AtlasConversionException(nfe2);
+            }
         }
-        return Short.valueOf(shortty);
+        return shortty;
     }
 
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.STRING)

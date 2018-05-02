@@ -348,25 +348,6 @@ public class XmlFieldReaderTest {
         reader.read(session);
     }
 
-    private String getDocumentString(String uri) throws IOException {
-        File f = new File(uri);
-        FileInputStream fis = new FileInputStream(f);
-        byte[] buf = new byte[(int) f.length()];
-        fis.read(buf);
-        fis.close();
-        return new String(buf);
-    }
-
-    private void validateBoundaryValue(FieldType fieldType, String fileName, Object testObject) throws Exception {
-        Path path = Paths.get("src" + File.separator + "test" + File.separator + "resources" + File.separator
-                + "xmlFields" + File.separator + fileName);
-
-        AtlasInternalSession session = readFromFile("/primitive/value", fieldType, path);
-
-        assertNotNull(session.head().getSourceField().getValue());
-        assertEquals(testObject, session.head().getSourceField().getValue());
-    }
-
     @Test
     public void testXmlFieldDoubleMax() throws Exception {
         validateBoundaryValue(FieldType.DOUBLE, "test-read-field-double-max.xml", Double.MAX_VALUE);
@@ -460,38 +441,6 @@ public class XmlFieldReaderTest {
     @Test
     public void testXmlFieldBooleanLetterF() throws Exception {
         validateBoundaryValue(FieldType.BOOLEAN, "test-read-field-boolean-letter-F.xml", Boolean.FALSE);
-    }
-
-    private AtlasInternalSession readFromFile(String fieldPath, FieldType fieldType, Path path) throws Exception {
-        String input = new String(Files.readAllBytes(path));
-        reader.setDocument(input, false);
-        XmlField xmlField = AtlasXmlModelFactory.createXmlField();
-        xmlField.setPath(fieldPath);
-        xmlField.setPrimitive(Boolean.TRUE);
-        xmlField.setFieldType(fieldType);
-        assertNull(xmlField.getValue());
-
-        AtlasInternalSession session = mock(AtlasInternalSession.class);
-        when(session.head()).thenReturn(mock(Head.class));
-        when(session.head().getSourceField()).thenReturn(xmlField);
-        Audits audits = new Audits();
-        when(session.getAudits()).thenReturn(audits);
-        reader.read(session);
-        return session;
-    }
-
-    private void validateRangeOutValue(FieldType fieldType, String fileName, String inputValue) throws Exception {
-        Path path = Paths.get("src" + File.separator + "test" + File.separator + "resources" + File.separator
-                + "xmlFields" + File.separator + fileName);
-
-        AtlasInternalSession session = readFromFile("/primitive/value", fieldType, path);
-
-        assertEquals(null, session.head().getSourceField().getValue());
-        assertEquals(1, session.getAudits().getAudit().size());
-        assertEquals("Failed to convert field value '" + inputValue + "' into type '" + fieldType.value().toUpperCase()
-                + "'", session.getAudits().getAudit().get(0).getMessage());
-        assertEquals(inputValue, session.getAudits().getAudit().get(0).getValue());
-        assertEquals(AuditStatus.ERROR, session.getAudits().getAudit().get(0).getStatus());
     }
 
     @Test
@@ -592,17 +541,17 @@ public class XmlFieldReaderTest {
 
     @Test
     public void testXmlFieldLongDecimal() throws Exception {
-        validateRangeOutValue(FieldType.LONG, "test-read-field-long-decimal.xml", "126.1234");
+        validateDecimalValue(FieldType.LONG, "test-read-field-long-decimal.xml", 126L);
     }
 
     @Test
     public void testXmlFieldIntegerDecimal() throws Exception {
-        validateRangeOutValue(FieldType.INTEGER, "test-read-field-integer-decimal.xml", "126.1234");
+        validateDecimalValue(FieldType.INTEGER, "test-read-field-integer-decimal.xml", 126);
     }
 
     @Test
     public void testXmlFieldShortDecimal() throws Exception {
-        validateRangeOutValue(FieldType.SHORT, "test-read-field-short-decimal.xml", "126.1234");
+        validateDecimalValue(FieldType.SHORT, "test-read-field-short-decimal.xml", (short)126);
     }
 
     @Test
@@ -612,7 +561,7 @@ public class XmlFieldReaderTest {
 
     @Test
     public void testXmlFieldByteDecimal() throws Exception {
-        validateRangeOutValue(FieldType.BYTE, "test-read-field-byte-decimal.xml", "126.1234");
+        validateDecimalValue(FieldType.BYTE, "test-read-field-byte-decimal.xml", (byte)126);
     }
 
     @Test
@@ -649,4 +598,66 @@ public class XmlFieldReaderTest {
     public void testXmlFieldByteString() throws Exception {
         validateRangeOutValue(FieldType.BYTE, "test-read-field-byte-string.xml", "abcd");
     }
+
+    private String getDocumentString(String uri) throws IOException {
+        File f = new File(uri);
+        FileInputStream fis = new FileInputStream(f);
+        byte[] buf = new byte[(int) f.length()];
+        fis.read(buf);
+        fis.close();
+        return new String(buf);
+    }
+
+    private void validateBoundaryValue(FieldType fieldType, String fileName, Object testObject) throws Exception {
+        Path path = Paths.get("src" + File.separator + "test" + File.separator + "resources" + File.separator
+                + "xmlFields" + File.separator + fileName);
+
+        AtlasInternalSession session = readFromFile("/primitive/value", fieldType, path);
+
+        assertNotNull(session.head().getSourceField().getValue());
+        assertEquals(testObject, session.head().getSourceField().getValue());
+    }
+
+    private AtlasInternalSession readFromFile(String fieldPath, FieldType fieldType, Path path) throws Exception {
+        String input = new String(Files.readAllBytes(path));
+        reader.setDocument(input, false);
+        XmlField xmlField = AtlasXmlModelFactory.createXmlField();
+        xmlField.setPath(fieldPath);
+        xmlField.setPrimitive(Boolean.TRUE);
+        xmlField.setFieldType(fieldType);
+        assertNull(xmlField.getValue());
+
+        AtlasInternalSession session = mock(AtlasInternalSession.class);
+        when(session.head()).thenReturn(mock(Head.class));
+        when(session.head().getSourceField()).thenReturn(xmlField);
+        Audits audits = new Audits();
+        when(session.getAudits()).thenReturn(audits);
+        reader.read(session);
+        return session;
+    }
+
+    private void validateRangeOutValue(FieldType fieldType, String fileName, String inputValue) throws Exception {
+        Path path = Paths.get("src" + File.separator + "test" + File.separator + "resources" + File.separator
+                + "xmlFields" + File.separator + fileName);
+
+        AtlasInternalSession session = readFromFile("/primitive/value", fieldType, path);
+
+        assertEquals(null, session.head().getSourceField().getValue());
+        assertEquals(1, session.getAudits().getAudit().size());
+        assertEquals("Failed to convert field value '" + inputValue + "' into type '" + fieldType.value().toUpperCase()
+                + "'", session.getAudits().getAudit().get(0).getMessage());
+        assertEquals(inputValue, session.getAudits().getAudit().get(0).getValue());
+        assertEquals(AuditStatus.ERROR, session.getAudits().getAudit().get(0).getStatus());
+    }
+
+    private void validateDecimalValue(FieldType fieldType, String fileName, Object expectedValue) throws Exception {
+        Path path = Paths.get("src" + File.separator + "test" + File.separator + "resources" + File.separator
+                + "xmlFields" + File.separator + fileName);
+
+        AtlasInternalSession session = readFromFile("/primitive/value", fieldType, path);
+
+        assertEquals(expectedValue, session.head().getSourceField().getValue());
+        assertEquals(0, session.getAudits().getAudit().size());
+    }
+
 }

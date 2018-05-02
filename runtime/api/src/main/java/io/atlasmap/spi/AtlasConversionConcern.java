@@ -20,7 +20,7 @@ package io.atlasmap.spi;
 public enum AtlasConversionConcern {
     NONE("none", "Conversion from '%s' to '%s' is supported"),
     RANGE("range", "Conversion from '%s' to '%s' can cause out of range exceptions"),
-    FRACTIONAL_PART("fractional part", "Conversion from '%s' to '%s' causes fractional part to be lost"),
+    FRACTIONAL_PART("fractional part", "Conversion from '%s' to '%s' can cause fractional part to be lost"),
     TIMEZONE("timezone", "Conversion from '%s' to '%s' causes timezone part to be lost"),
     FORMAT("format", "Conversion from '%s' to '%s' can cause numeric format exceptions"),
     CONVENTION("format", "Conversion from '%s' to '%s' uses a default convention for values"),
