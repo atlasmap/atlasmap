@@ -107,7 +107,7 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
     /**
      * TODO: For dynamic re-load. This needs lock()
      *
-     * @throws AtlasException
+     * @throws AtlasException failed to initialize
      */
     protected void init() throws AtlasException {
 

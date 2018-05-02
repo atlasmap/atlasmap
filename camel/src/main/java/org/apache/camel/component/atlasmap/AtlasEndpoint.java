@@ -145,7 +145,7 @@ public class AtlasEndpoint extends ResourceEndpoint {
 
     /**
      * The Exchange property name for a source message map which hold
-     * <code>java.util.Map<String, Message></code> where the key is AtlasMap Document ID.
+     * <code>java.util.Map&lt;String, Message&gt;</code> where the key is AtlasMap Document ID.
      * AtlasMap consumes Message bodies as source documents.
      */
     public void setSourceMapName(String name) {
@@ -158,7 +158,7 @@ public class AtlasEndpoint extends ResourceEndpoint {
 
     /**
      * The Exchange property name for a target document map which hold
-     * <code>java.util.Map<String, Object></code> where the key is AtlasMap Document ID.
+     * <code>java.util.Map&lt;String, Object&gt;</code> where the key is AtlasMap Document ID.
      * AtlasMap populates multiple target documents into this map.
      */
     public void setTargetMapName(String name) {
