@@ -121,7 +121,8 @@ public class AtlasUtil {
      * if atlasUri is null, returns null. if empty or no scheme present, returns
      * empty. otherwise, the $scheme is returned
      *
-     * @return
+     *@param atlasUri URI string
+     * @return URI scheme
      *
      */
     public static String getUriScheme(String atlasUri) {

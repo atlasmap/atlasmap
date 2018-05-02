@@ -71,9 +71,8 @@ public class Application extends SpringBootServletInitializer {
         /**
          * Stub out mavenclasspath processing for now.
          *
-         * @param request
-         * @return
-         * @throws Exception
+         * @param request request body
+         * @return {@link MavenClasspathResponse} with empty classpath
          */
         @Override
         @POST

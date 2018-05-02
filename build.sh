@@ -170,6 +170,7 @@ function app() {
 function docs() {
   pushd docs
   "${MAVEN_CMD}" $MAVEN_CLEAN_GOAL install $MAVEN_PARAMETERS
+  "${MAVEN_CMD}" -f pom-javadoc.xml javadoc:aggregate
   popd
 }
 

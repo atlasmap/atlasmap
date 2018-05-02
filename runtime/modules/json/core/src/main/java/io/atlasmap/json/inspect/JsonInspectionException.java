@@ -43,7 +43,7 @@ public class JsonInspectionException extends Exception {
      * <tt>(cause==null ? null : cause.toString())</tt> (which typically contains
      * the class and detail message of <tt>cause</tt>). This constructor is useful
      * for exceptions that are little more than wrappers for other throwables (for
-     * example, {@link PrivilegedActionException}).
+     * example, {@link java.security.PrivilegedActionException}).
      *
      * @param cause
      *            the cause (which is saved for later retrieval by the

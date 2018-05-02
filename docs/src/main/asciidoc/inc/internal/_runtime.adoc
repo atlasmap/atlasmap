@@ -3,6 +3,14 @@
 
 AtlasMap runtime engine consumes mapping definition file created via <<internal-ui,Data Mapper UI>> as well as actual data payload and perform mapping.
 
-- https://github.com/atlasmap/atlasmap/blob/master/runtime/
+* Code Location: https://github.com/atlasmap/atlasmap/blob/master/runtime/
 
-NOTE: TODO
+Here is a shortest code to process a mapping using AtlasMap runtime engine:
+```java
+AtlasContextFactory factory = atlasContextFactory = DefaultAtlasContextFactory.getInstance();
+AtlasContext context = factory.createContext(new File("./my-mapping.xml"));
+AtlasSession session = context.createSession();
+session.setSourceDocument("myJsonSourceDoc", "{...}");
+context.process(session);
+Object targetDoc = session.getTargetDocument("myXmlTargetDoc");
+```
