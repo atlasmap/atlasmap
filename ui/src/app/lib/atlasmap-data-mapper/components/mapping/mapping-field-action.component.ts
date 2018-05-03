@@ -89,18 +89,23 @@ export class MappingFieldActionComponent {
   }
 
   /**
-   * A mapping field action parameter selection has been made from a pull-down menu.
+   * A mapping field action parameter selection has been made either from a pull-down menu
+   * or from user input to a text field.
    * @param event
    */
   actionConfigParamSelectionChanged(event: any): void {
     this.mappedField.parsedData.userCreated = true;
-    const attributes: any = event.target.selectedOptions.item(0).attributes;
-    const selectedArgValName: any = attributes.getNamedItem('value').value;
-    const argValIndex: any = attributes.getNamedItem('argValIndex').value;
-    const actionIndex: any = attributes.getNamedItem('actionIndex').value;
-    const action: FieldAction = this.mappedField.actions[actionIndex];
-    action.argumentValues[argValIndex].value = selectedArgValName;
-    this.validateActionConfigParamSelection(action.argumentValues);
+
+    // Identify the pull-down
+    if (event.target.selectedOptions != null) {
+      const attributes: any = event.target.selectedOptions.item(0).attributes;
+      const selectedArgValName: any = attributes.getNamedItem('value').value;
+      const argValIndex: any = attributes.getNamedItem('argValIndex').value;
+      const actionIndex: any = attributes.getNamedItem('actionIndex').value;
+      const action: FieldAction = this.mappedField.actions[actionIndex];
+      action.argumentValues[argValIndex].value = selectedArgValName;
+      this.validateActionConfigParamSelection(action.argumentValues);
+    }
     this.cfg.mappingService.saveCurrentMapping();
   }
 
@@ -130,9 +135,9 @@ export class MappingFieldActionComponent {
       const fieldActionConfig: FieldActionConfig = TransitionModel.getActionConfigForName(selectedActionName);
       fieldActionConfig.populateFieldAction(action);
 
-      // If the field action configuration defines 2 or more choices then populate the fields with
+      // If the field action configuration predefines argument values then populate the fields with
       // default values.  Needed to support pull-down menus in action argument definitions.
-      if (action.argumentValues.length > 1 && fieldActionConfig.arguments.length > 1) {
+      if (action.argumentValues.length > 0 && fieldActionConfig.arguments[0].values.length > 0) {
         for (let i = 0; i < action.argumentValues.length; i++) {
           action.argumentValues[i].value = fieldActionConfig.arguments[i].values[i];
         }
