@@ -44,7 +44,7 @@ export class MappedField {
                                isSource: boolean, compoundSelection: boolean, fieldRemoved: boolean): void {
 
     // Remove field actions where appropriate.
-    if ((!separateMode && !combineMode) || (separateMode && isSource)) {
+    if ((!separateMode && !combineMode) || (separateMode && isSource && compoundSelection)) {
       this.removeSeparateOrCombineAction();
       return;
     }
