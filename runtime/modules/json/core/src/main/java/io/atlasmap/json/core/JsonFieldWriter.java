@@ -235,7 +235,7 @@ public class JsonFieldWriter implements AtlasFieldWriter {
             valueNode = rootNode.booleanNode((Boolean) value);
         } else if (FieldType.INTEGER.equals(type)) {
             valueNode = rootNode.numberNode((Integer) value);
-        } else if (FieldType.DOUBLE.equals(type) || FieldType.FLOAT.equals(type)) {
+        } else if (FieldType.DOUBLE.equals(type) || FieldType.FLOAT.equals(type) || FieldType.NUMBER.equals(type)) {
             valueNode = rootNode.numberNode(new BigDecimal(String.valueOf(value)));
         } else if (FieldType.SHORT.equals(type)) {
             valueNode = rootNode.numberNode(Short.valueOf(String.valueOf(value)));

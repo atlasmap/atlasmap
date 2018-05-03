@@ -134,6 +134,13 @@ public class JsonFieldWriterTest {
         floatField.setStatus(FieldStatus.SUPPORTED);
         write(floatField);
 
+        JsonField numberField = AtlasJsonModelFactory.createJsonField();
+        numberField.setFieldType(FieldType.NUMBER);
+        numberField.setValue(-63988281.00);
+        numberField.setPath("/numberField");
+        numberField.setStatus(FieldStatus.SUPPORTED);
+        write(numberField);
+
         JsonField intField = AtlasJsonModelFactory.createJsonField();
         intField.setFieldType(FieldType.INTEGER);
         intField.setValue(8281);
@@ -156,7 +163,7 @@ public class JsonFieldWriterTest {
         write(longField);
 
         Assert.assertThat(writer.getRootNode().toString(), Is.is(
-                "{\"booleanField\":false,\"charField\":\"a\",\"doubleField\":-27152745.3422,\"floatField\":-63988281,\"intField\":8281,\"shortField\":81,\"longField\":3988281}"));
+                "{\"booleanField\":false,\"charField\":\"a\",\"doubleField\":-27152745.3422,\"floatField\":-63988281,\"numberField\":-63988281,\"intField\":8281,\"shortField\":81,\"longField\":3988281}"));
     }
 
     @Test
@@ -174,6 +181,13 @@ public class JsonFieldWriterTest {
         charField.setPath("/SourceFlatPrimitive/charField");
         charField.setStatus(FieldStatus.SUPPORTED);
         write(charField);
+
+        JsonField numberField = AtlasJsonModelFactory.createJsonField();
+        numberField.setFieldType(FieldType.DOUBLE);
+        numberField.setValue(-27152745.3422);
+        numberField.setPath("/SourceFlatPrimitive/doubleField");
+        numberField.setStatus(FieldStatus.SUPPORTED);
+        write(numberField);
 
         JsonField doubleField = AtlasJsonModelFactory.createJsonField();
         doubleField.setFieldType(FieldType.DOUBLE);
