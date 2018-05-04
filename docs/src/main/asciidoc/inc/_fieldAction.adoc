@@ -2,6 +2,8 @@
 == Transformation (FieldAction)
 Transformation is a function you can apply on a field value as a part of mapping. There are a variety of transformations you can apply in the middle of processing mappings. This is called FieldAction internally.
 
+NOTE: TODO: Generate this list automatically from annotation - https://github.com/atlasmap/atlasmap/issues/173
+
 [width="84%",cols="23%,18%,19%,21%,19%",options="header",]
 |=======================================================================
 |Field Action |Input Type |Output Type |Parameter(s) (*=required)

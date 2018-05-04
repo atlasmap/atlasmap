@@ -17,7 +17,7 @@ Another thing to know for AtlasMap internal is the https://github.com/atlasmap/a
 
 * Inspection Design Time Service to convert the format specific metadata into AtlasMap Document object
 * Runtime SPI to achieve actual mappings
-** https://github.com/atlasmap/atlasmap/blob/master/runtime/api/src/main/java/io/atlasmap/spi/AtlasModule.java[AtlasModule]: Several methods to be invoked during processing mappings
+** https://github.com/atlasmap/atlasmap/blob/master/runtime/api/src/main/java/io/atlasmap/spi/AtlasModule.java[AtlasModule]: Several methods to be invoked during processing mappings. We'll look into deeper in <<internal-runtime-atlasmodule,AtlasModule>> section.
 ** https://github.com/atlasmap/atlasmap/blob/master/runtime/api/src/main/java/io/atlasmap/spi/AtlasFieldReader.java[AtlasFieldReader]: Read a field value from source payload
 ** https://github.com/atlasmap/atlasmap/blob/master/runtime/api/src/main/java/io/atlasmap/spi/AtlasFieldWriter.java[AtlasFieldWriter]: Write a field value into target payload
 

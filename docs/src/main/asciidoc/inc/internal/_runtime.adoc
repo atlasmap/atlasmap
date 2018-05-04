@@ -1,16 +1,86 @@
 [[internal-runtime-engine]]
 == Runtime Engine
 
-AtlasMap runtime engine consumes mapping definition file created via <<internal-ui,Data Mapper UI>> as well as actual data payload and perform mapping.
-
 * Code Location: https://github.com/atlasmap/atlasmap/blob/master/runtime/
 
+AtlasMap runtime engine consumes mapping definition file created via <<internal-ui,Data Mapper UI>> as well as actual data payload and perform mapping.
+
 Here is a shortest code to process a mapping using AtlasMap runtime engine:
-```java
-AtlasContextFactory factory = atlasContextFactory = DefaultAtlasContextFactory.getInstance();
-AtlasContext context = factory.createContext(new File("./my-mapping.xml"));
-AtlasSession session = context.createSession();
-session.setSourceDocument("myJsonSourceDoc", "{...}");
-context.process(session);
-Object targetDoc = session.getTargetDocument("myXmlTargetDoc");
-```
+[source,java]
+--------------------------------------------------------------------
+AtlasContextFactory factory = atlasContextFactory = DefaultAtlasContextFactory.getInstance(); // <1>
+AtlasContext context = factory.createContext(new File("./my-mapping.xml")); // <2>
+AtlasSession session = context.createSession(); // <3>
+session.setSourceDocument("myJsonSourceDoc", "{...}"); // <4>
+context.process(session); // <5>
+Object targetDoc = session.getTargetDocument("myXmlTargetDoc"); // <6>
+--------------------------------------------------------------------
+<1> https://github.com/atlasmap/atlasmap/blob/master/runtime/api/src/main/java/io/atlasmap/api/AtlasContextFactory.java[AtlasContextFactory] is a singleton instance on JVM, which holds global configuration for the AtlasMap.
+<2> `AtlasContextFactory#createContext(File)` creates https://github.com/atlasmap/atlasmap/blob/master/runtime/api/src/main/java/io/atlasmap/api/AtlasContext.java[AtlasContext] which represents an AtlasMap mapping context for each mapping definitions by feeding a mapping definition file.
+<3> https://github.com/atlasmap/atlasmap/blob/master/runtime/api/src/main/java/io/atlasmap/api/AtlasSession.java[AtlasSession] represents a mapping processing session. `AtlasSession` should be created for each execution and should *NOT* be shared among multiple threads.
+<4> Put a source Document with a corresponding Document ID. Make sure Document ID matches with what is specified in the mapping definition.
+<5> Process a mapping by `AtlasContext#process(AtlasSession)`. This invocation also triggers <<internal-runtime-validation,mapping validation>> prior to actually perform a mapping.
+<6> Finally take the transformed document out from `AtlasSession` by specifying target Document ID.
+
+[[internal-runtime-atlasmodule]]
+=== AtlasModule and mapping process
+
+https://github.com/atlasmap/atlasmap/blob/master/runtime/api/src/main/java/io/atlasmap/spi/AtlasModule.java[AtlasModule] is a SPI to be implemented by each modules like
+https://github.com/atlasmap/atlasmap/tree/master/runtime/modules/java[Java], 
+https://github.com/atlasmap/atlasmap/tree/master/runtime/modules/json[JSON] and
+https://github.com/atlasmap/atlasmap/tree/master/runtime/modules/xml[XML]. The methods defined in `AtlasModule` are invoked from `AtlasContext` while `AtlasContext#process(AtlasSession)` is in progress.
+
+`AtlasContext#process(AtlasSession)` goes on in following order:
+
+. `AtlasContext#processValidation(AtlasSession)`
+.. `AtlasValidationService.validateMapping(AtlasMapping)` validates mapping definition
+.. `AtlasModule#processPreValidation(AtlasSession)` for each modules participated in the mapping, validates data format specific things
+. `AtlasModule#processPreSourceExecution(AtlasSession)` for each source modules
+. `AtlasModule#processPreTargetExecution(AtlasSession)` for each target modules
+. for each mapping entries:
+.. `AtlasModule#processSourceFieldMapping(AtlasSession)` for each source fields
+... Read source field values from source payload with using `FieldReader`
+... Apply <<internal-runtime-fieldaction,FieldAction>> if it's specified for the source field
+.. `AtlasModule#processTargetFieldMapping(AtlasSession)` for each target fields
+... Convert source field values into target field type with using <<internal-runtime-typeconverter,TypeConverter>> if needed
+... Copy source field values into target fields
+... Apply <<internal-runtime-fieldaction,FieldAction>> if it's specified for the target field
+... Write target field values into target payload with using `FieldWriter`
+. `AtlasModule#processPostValidation(AtlasSession)` for each modules
+. `AtlasModule#processPostSourceExecution(AtlasSession)` for each source modules
+. `AtlasModule#processPostTargetExecution(AtlasSession)` for each target modules
+
+[[internal-runtime-typeconverter]]
+=== TypeConverter
+
+TypeConverter converts one field value to the expected field type. This is automatically invoked during mapping when the actual value is not in expected type. AtlasMap runtime provides OOTB converters for the AtlasMap primitive types 
+https://github.com/atlasmap/atlasmap/tree/master/runtime/core/src/main/java/io/atlasmap/converters[here].
+
+[[internal-runtime-fieldaction]]
+=== FieldAction (Transformation)
+
+FieldAction is a function you can apply on a field value as a part of mapping. AtlasMap provides a variety of FieldActions you can apply in the middle of processing mappings
+https://github.com/atlasmap/atlasmap/tree/master/runtime/core/src/main/java/io/atlasmap/actions[here].
+Also There is a <<fieldAction,Reference>> for all available FieldAction.
+
+[[internal-runtime-fieldreader]]
+=== FieldReader
+
+Each module implements its own <<internal-runtime-fieldreader,FieldReader>> to read a field value from document specific payload.
+
+[[internal-runtime-fieldwriter]]
+=== FieldWriter
+
+Each module implements its own <<internal-runtime-fieldwriter,FieldWriter>> to write a field value into document specific payload.
+
+[[internal-runtime-validation]]
+=== Validation
+
+`AtlasContext#processValidation(AtlasSession)` validates a mapping definition associated with this context. After it's completed, you can retrieve a collection of `Validation` object which represents a validation log.
+
+`processValidation(AtlasSession)` is also invoked as a part of `AtlasContext#process(AtlasSession)` prior to actually perform a mapping. In this case, validation results are converted to <<internal-runtime-audit,Audit>>.
+
+[[internal-runtime-audit]]
+=== Audit
+
+`Audit` represents an audit log which is emitted from runtime engine during processing a mapping. After `AtlasContext#process(AtlasSession)` is completed, you can retrieve a collection of `Audit` object by invoking `AtlasSession.getAudits()`.
