@@ -6,7 +6,7 @@
   <fileSets>
     <fileSet>
       <directory>${project.basedir}/src/main/resources/licenses</directory>
-      <outputDirectory>/opt/licenses</outputDirectory>
+      <outputDirectory>/opt/ipaas/licenses</outputDirectory>
       <filtered>true</filtered>
       <includes>
         <include>**</include>
