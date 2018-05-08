@@ -13,13 +13,13 @@ When data formats are provided into Data Mapper UI, it requests an inspection to
 
 AtlasMap Document object defines a tree of fields. Defining a set of field-to-field mapping is all about the mappings in AtlasMap.
 
-Another thing to know for AtlasMap internal is the https://github.com/atlasmap/atlasmap/tree/master/runtime/modules[module]. Module in AtlasMap is a facility to plug-in an individual data format support like Java, JSON and XML. Each module implements roughly following 2 parts:
+Another thing to know for AtlasMap internal is the modules located https://github.com/atlasmap/atlasmap/tree/master/runtime/modules[here] in repository. Module in AtlasMap is a facility to plug-in an individual data format support like Java, JSON and XML. Each module implements roughly following 2 parts:
 
 * Inspection Design Time Service to convert the format specific metadata into AtlasMap Document object
 * Runtime SPI to achieve actual mappings
-** https://github.com/atlasmap/atlasmap/blob/master/runtime/api/src/main/java/io/atlasmap/spi/AtlasModule.java[AtlasModule]: Several methods to be invoked during processing mappings. We'll look into deeper in <<internal-runtime-atlasmodule,AtlasModule>> section.
-** https://github.com/atlasmap/atlasmap/blob/master/runtime/api/src/main/java/io/atlasmap/spi/AtlasFieldReader.java[AtlasFieldReader]: Read a field value from source payload
-** https://github.com/atlasmap/atlasmap/blob/master/runtime/api/src/main/java/io/atlasmap/spi/AtlasFieldWriter.java[AtlasFieldWriter]: Write a field value into target payload
+** <<internal-runtime-atlasmodule,AtlasModule>>: Several methods to be invoked during processing mappings. We'll look into deeper in <<internal-runtime-atlasmodule,AtlasModule>> section.
+** <<internal-runtime-fieldreader,AtlasFieldReader>>: Read a field value from source payload
+** <<internal-runtime-fieldwriter,AtlasFieldWriter>>: Write a field value into target payload
 
 NOTE: There is also an overview document for the Data Mapper step in Syndesis, which might help if you look into AtlasMap within Syndesis context.
 https://github.com/syndesisio/syndesis/blob/master/app/server/docs/design/datamapper.md
