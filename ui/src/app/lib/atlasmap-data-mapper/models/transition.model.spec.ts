@@ -1,7 +1,7 @@
 /* tslint:disable:no-unused-variable */
 
 import { TestBed, async, inject } from '@angular/core/testing';
-import { TransitionModel } from './transition.model';
+import { TransitionModel, FieldActionConfig } from './transition.model';
 
 describe('TransitionModel', () => {
   beforeEach(() => {
@@ -16,4 +16,15 @@ describe('TransitionModel', () => {
       expect(service).toBeTruthy();
     }),
   );
+});
+
+describe('FieldActionConfig.appliesToField', () => {
+    let cfg: FieldActionConfig;
+    beforeEach(() => {
+      cfg = new FieldActionConfig();
+    });
+
+    it('#appliesToField should return false', () => {
+      expect(cfg.appliesToField(null)).toBe(false);
+    });
 });
