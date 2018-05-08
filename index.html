@@ -560,7 +560,17 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#xml-service">3.2.4. XML Service</a></li>
 </ul>
 </li>
-<li><a href="#internal-runtime-engine">3.3. Runtime Engine</a></li>
+<li><a href="#internal-runtime-engine">3.3. Runtime Engine</a>
+<ul class="sectlevel3">
+<li><a href="#internal-runtime-atlasmodule">3.3.1. AtlasModule and mapping process</a></li>
+<li><a href="#internal-runtime-typeconverter">3.3.2. TypeConverter</a></li>
+<li><a href="#internal-runtime-fieldaction">3.3.3. FieldAction (Transformation)</a></li>
+<li><a href="#internal-runtime-fieldreader">3.3.4. FieldReader</a></li>
+<li><a href="#internal-runtime-fieldwriter">3.3.5. FieldWriter</a></li>
+<li><a href="#internal-runtime-validation">3.3.6. Validation</a></li>
+<li><a href="#internal-runtime-audit">3.3.7. Audit</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a href="#camel-atlasmap">4. camel-atlasmap component</a></li>
@@ -910,7 +920,7 @@ Mock Java documents referenced are from the AtlasMap Services' <a href="https://
 <div class="ulist">
 <ul>
 <li>
-<p><a href="https://github.com/atlasmap/atlasmap/blob/master/runtime/api/src/main/java/io/atlasmap/spi/AtlasModule.java">AtlasModule</a>: Several methods to be invoked during processing mappings</p>
+<p><a href="https://github.com/atlasmap/atlasmap/blob/master/runtime/api/src/main/java/io/atlasmap/spi/AtlasModule.java">AtlasModule</a>: Several methods to be invoked during processing mappings. We&#8217;ll look into deeper in <a href="#internal-runtime-atlasmodule">AtlasModule</a> section.</p>
 </li>
 <li>
 <p><a href="https://github.com/atlasmap/atlasmap/blob/master/runtime/api/src/main/java/io/atlasmap/spi/AtlasFieldReader.java">AtlasFieldReader</a>: Read a field value from source payload</p>
@@ -1070,9 +1080,6 @@ There is also an overview document for the Data Mapper step in Syndesis, which m
 </div>
 <div class="sect2">
 <h3 id="internal-runtime-engine">3.3. Runtime Engine</h3>
-<div class="paragraph">
-<p>AtlasMap runtime engine consumes mapping definition file created via <a href="#internal-ui">Data Mapper UI</a> as well as actual data payload and perform mapping.</p>
-</div>
 <div class="ulist">
 <ul>
 <li>
@@ -1081,19 +1088,175 @@ There is also an overview document for the Data Mapper step in Syndesis, which m
 </ul>
 </div>
 <div class="paragraph">
+<p>AtlasMap runtime engine consumes mapping definition file created via <a href="#internal-ui">Data Mapper UI</a> as well as actual data payload and perform mapping.</p>
+</div>
+<div class="paragraph">
 <p>Here is a shortest code to process a mapping using AtlasMap runtime engine:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">AtlasContextFactory factory = atlasContextFactory = DefaultAtlasContextFactory.getInstance();
-AtlasContext context = factory.createContext(<span class="keyword">new</span> <span class="predefined-type">File</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">./my-mapping.xml</span><span class="delimiter">&quot;</span></span>));
-AtlasSession session = context.createSession();
-session.setSourceDocument(<span class="string"><span class="delimiter">&quot;</span><span class="content">myJsonSourceDoc</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">{...}</span><span class="delimiter">&quot;</span></span>);
-context.process(session);
-<span class="predefined-type">Object</span> targetDoc = session.getTargetDocument(<span class="string"><span class="delimiter">&quot;</span><span class="content">myXmlTargetDoc</span><span class="delimiter">&quot;</span></span>);</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">AtlasContextFactory factory = atlasContextFactory = DefaultAtlasContextFactory.getInstance(); <i class="conum" data-value="1"></i><b>(1)</b>
+AtlasContext context = factory.createContext(<span class="keyword">new</span> <span class="predefined-type">File</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">./my-mapping.xml</span><span class="delimiter">&quot;</span></span>)); <i class="conum" data-value="2"></i><b>(2)</b>
+AtlasSession session = context.createSession(); <i class="conum" data-value="3"></i><b>(3)</b>
+session.setSourceDocument(<span class="string"><span class="delimiter">&quot;</span><span class="content">myJsonSourceDoc</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">{...}</span><span class="delimiter">&quot;</span></span>); <i class="conum" data-value="4"></i><b>(4)</b>
+context.process(session); <i class="conum" data-value="5"></i><b>(5)</b>
+<span class="predefined-type">Object</span> targetDoc = session.getTargetDocument(<span class="string"><span class="delimiter">&quot;</span><span class="content">myXmlTargetDoc</span><span class="delimiter">&quot;</span></span>); <i class="conum" data-value="6"></i><b>(6)</b></code></pre>
 </div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><a href="https://github.com/atlasmap/atlasmap/blob/master/runtime/api/src/main/java/io/atlasmap/api/AtlasContextFactory.java">AtlasContextFactory</a> is a singleton instance on JVM, which holds global configuration for the AtlasMap.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td><code>AtlasContextFactory#createContext(File)</code> creates <a href="https://github.com/atlasmap/atlasmap/blob/master/runtime/api/src/main/java/io/atlasmap/api/AtlasContext.java">AtlasContext</a> which represents an AtlasMap mapping context for each mapping definitions by feeding a mapping definition file.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td><a href="https://github.com/atlasmap/atlasmap/blob/master/runtime/api/src/main/java/io/atlasmap/api/AtlasSession.java">AtlasSession</a> represents a mapping processing session. <code>AtlasSession</code> should be created for each execution and should <strong>NOT</strong> be shared among multiple threads.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>Put a source Document with a corresponding Document ID. Make sure Document ID matches with what is specified in the mapping definition.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>Process a mapping by <code>AtlasContext#process(AtlasSession)</code>. This invocation also triggers <a href="#internal-runtime-validation">mapping validation</a> prior to actually perform a mapping.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>Finally take the transformed document out from <code>AtlasSession</code> by specifying target Document ID.</td>
+</tr>
+</table>
+</div>
+<div class="sect3">
+<h4 id="internal-runtime-atlasmodule">3.3.1. AtlasModule and mapping process</h4>
+<div class="paragraph">
+<p><a href="https://github.com/atlasmap/atlasmap/blob/master/runtime/api/src/main/java/io/atlasmap/spi/AtlasModule.java">AtlasModule</a> is a SPI to be implemented by each modules like
+<a href="https://github.com/atlasmap/atlasmap/tree/master/runtime/modules/java">Java</a>,
+<a href="https://github.com/atlasmap/atlasmap/tree/master/runtime/modules/json">JSON</a> and
+<a href="https://github.com/atlasmap/atlasmap/tree/master/runtime/modules/xml">XML</a>. The methods defined in <code>AtlasModule</code> are invoked from <code>AtlasContext</code> while <code>AtlasContext#process(AtlasSession)</code> is in progress.</p>
+</div>
+<div class="paragraph">
+<p><code>AtlasContext#process(AtlasSession)</code> goes on in following order:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><code>AtlasContext#processValidation(AtlasSession)</code></p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p><code>AtlasValidationService.validateMapping(AtlasMapping)</code> validates mapping definition</p>
+</li>
+<li>
+<p><code>AtlasModule#processPreValidation(AtlasSession)</code> for each modules participated in the mapping, validates data format specific things</p>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p><code>AtlasModule#processPreSourceExecution(AtlasSession)</code> for each source modules</p>
+</li>
+<li>
+<p><code>AtlasModule#processPreTargetExecution(AtlasSession)</code> for each target modules</p>
+</li>
+<li>
+<p>for each mapping entries:</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p><code>AtlasModule#processSourceFieldMapping(AtlasSession)</code> for each source fields</p>
+<div class="olist lowerroman">
+<ol class="lowerroman" type="i">
+<li>
+<p>Read source field values from source payload with using <code>FieldReader</code></p>
+</li>
+<li>
+<p>Apply <a href="#internal-runtime-fieldaction">FieldAction</a> if it&#8217;s specified for the source field</p>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p><code>AtlasModule#processTargetFieldMapping(AtlasSession)</code> for each target fields</p>
+<div class="olist lowerroman">
+<ol class="lowerroman" type="i">
+<li>
+<p>Convert source field values into target field type with using <a href="#internal-runtime-typeconverter">TypeConverter</a> if needed</p>
+</li>
+<li>
+<p>Copy source field values into target fields</p>
+</li>
+<li>
+<p>Apply <a href="#internal-runtime-fieldaction">FieldAction</a> if it&#8217;s specified for the target field</p>
+</li>
+<li>
+<p>Write target field values into target payload with using <code>FieldWriter</code></p>
+</li>
+</ol>
+</div>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p><code>AtlasModule#processPostValidation(AtlasSession)</code> for each modules</p>
+</li>
+<li>
+<p><code>AtlasModule#processPostSourceExecution(AtlasSession)</code> for each source modules</p>
+</li>
+<li>
+<p><code>AtlasModule#processPostTargetExecution(AtlasSession)</code> for each target modules</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect3">
+<h4 id="internal-runtime-typeconverter">3.3.2. TypeConverter</h4>
+<div class="paragraph">
+<p>TypeConverter converts one field value to the expected field type. This is automatically invoked during mapping when the actual value is not in expected type. AtlasMap runtime provides OOTB converters for the AtlasMap primitive types
+<a href="https://github.com/atlasmap/atlasmap/tree/master/runtime/core/src/main/java/io/atlasmap/converters">here</a>.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="internal-runtime-fieldaction">3.3.3. FieldAction (Transformation)</h4>
+<div class="paragraph">
+<p>FieldAction is a function you can apply on a field value as a part of mapping. AtlasMap provides a variety of FieldActions you can apply in the middle of processing mappings
+<a href="https://github.com/atlasmap/atlasmap/tree/master/runtime/core/src/main/java/io/atlasmap/actions">here</a>.
+Also There is a <a href="#fieldAction">Reference</a> for all available FieldAction.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="internal-runtime-fieldreader">3.3.4. FieldReader</h4>
+<div class="paragraph">
+<p>Each module implements its own <a href="#internal-runtime-fieldreader">FieldReader</a> to read a field value from document specific payload.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="internal-runtime-fieldwriter">3.3.5. FieldWriter</h4>
+<div class="paragraph">
+<p>Each module implements its own <a href="#internal-runtime-fieldwriter">FieldWriter</a> to write a field value into document specific payload.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="internal-runtime-validation">3.3.6. Validation</h4>
+<div class="paragraph">
+<p><code>AtlasContext#processValidation(AtlasSession)</code> validates a mapping definition associated with this context. After it&#8217;s completed, you can retrieve a collection of <code>Validation</code> object which represents a validation log.</p>
+</div>
+<div class="paragraph">
+<p><code>processValidation(AtlasSession)</code> is also invoked as a part of <code>AtlasContext#process(AtlasSession)</code> prior to actually perform a mapping. In this case, validation results are converted to <a href="#internal-runtime-audit">Audit</a>.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="internal-runtime-audit">3.3.7. Audit</h4>
+<div class="paragraph">
+<p><code>Audit</code> represents an audit log which is emitted from runtime engine during processing a mapping. After <code>AtlasContext#process(AtlasSession)</code> is completed, you can retrieve a collection of <code>Audit</code> object by invoking <code>AtlasSession.getAudits()</code>.</p>
 </div>
 <div style="page-break-after: always;"></div>
+</div>
 </div>
 </div>
 </div>
@@ -1131,6 +1294,18 @@ context.process(session);
 <h3 id="fieldAction">5.2. Transformation (FieldAction)</h3>
 <div class="paragraph">
 <p>Transformation is a function you can apply on a field value as a part of mapping. There are a variety of transformations you can apply in the middle of processing mappings. This is called FieldAction internally.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+TODO: Generate this list automatically from annotation - <a href="https://github.com/atlasmap/atlasmap/issues/173" class="bare">https://github.com/atlasmap/atlasmap/issues/173</a>
+</td>
+</tr>
+</table>
 </div>
 <table class="tableblock frame-all grid-all" style="width: 84%;">
 <colgroup>
@@ -1728,7 +1903,7 @@ string.</p></td>
 <div id="footer">
 <div id="footer-text">
 Version 1.35-SNAPSHOT<br>
-Last updated 2018-05-08 13:13:51 UTC
+Last updated 2018-05-08 19:14:18 UTC
 </div>
 </div>
 </body>
