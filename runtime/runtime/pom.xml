@@ -149,6 +149,10 @@
       <artifactId>spring-boot-starter-actuator</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-security</artifactId>
+    </dependency>
+    <dependency>
       <groupId>com.paypal.springboot</groupId>
       <artifactId>resteasy-spring-boot-starter</artifactId>
     </dependency>
@@ -217,9 +221,9 @@
                       <basedir>/</basedir>
                       <descriptor>${project.basedir}/src/main/resources/license-custom-assembly.xml</descriptor>
                     </assembly>
-		  </build>
-	        </image>
-	      </images>
+                  </build>
+                </image>
+              </images>
             </configuration>
             <executions>
               <execution>
