@@ -1,14 +1,54 @@
+/**
+ * Copyright (C) 2017 Red Hat, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package io.atlasmap.java.core;
 
+import java.beans.beancontext.BeanContext;
+import java.beans.beancontext.BeanContextServices;
+import java.beans.beancontext.BeanContextServicesSupport;
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.ArrayDeque;
 import java.util.Collection;
+import java.util.Deque;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.NavigableMap;
+import java.util.NavigableSet;
+import java.util.Queue;
+import java.util.Set;
+import java.util.SortedMap;
+import java.util.SortedSet;
+import java.util.TreeMap;
+import java.util.TreeSet;
+import java.util.concurrent.BlockingDeque;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.ConcurrentNavigableMap;
+import java.util.concurrent.ConcurrentSkipListMap;
+import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.LinkedTransferQueue;
+import java.util.concurrent.TransferQueue;
 
 import org.slf4j.LoggerFactory;
 
@@ -35,9 +75,27 @@ public class DocumentJavaFieldWriter implements AtlasFieldWriter {
     private List<String> processedPaths = new LinkedList<>();
     private TargetValueConverter converter;
     private AtlasConversionService conversionService;
+    private Map<Class<?>, Class<?>> defaultCollectionImplClasses = new HashMap<>();
 
     public DocumentJavaFieldWriter(AtlasConversionService conversion) {
         this.conversionService = conversion;
+        defaultCollectionImplClasses.put(BeanContext.class, BeanContextServicesSupport.class);
+        defaultCollectionImplClasses.put(BeanContextServices.class, BeanContextServicesSupport.class);
+        defaultCollectionImplClasses.put(BlockingDeque.class, LinkedBlockingDeque.class);
+        defaultCollectionImplClasses.put(BlockingQueue.class, LinkedBlockingQueue.class);
+        defaultCollectionImplClasses.put(Collection.class, LinkedList.class);
+        defaultCollectionImplClasses.put(ConcurrentMap.class, ConcurrentHashMap.class);
+        defaultCollectionImplClasses.put(ConcurrentNavigableMap.class, ConcurrentSkipListMap.class);
+        defaultCollectionImplClasses.put(Deque.class, ArrayDeque.class);
+        defaultCollectionImplClasses.put(List.class, LinkedList.class);
+        defaultCollectionImplClasses.put(Map.class, HashMap.class);
+        defaultCollectionImplClasses.put(NavigableSet.class, TreeSet.class);
+        defaultCollectionImplClasses.put(NavigableMap.class, TreeMap.class);
+        defaultCollectionImplClasses.put(Queue.class, LinkedList.class);
+        defaultCollectionImplClasses.put(Set.class, HashSet.class);
+        defaultCollectionImplClasses.put(SortedSet.class, TreeSet.class);
+        defaultCollectionImplClasses.put(SortedMap.class, TreeMap.class);
+        defaultCollectionImplClasses.put(TransferQueue.class, LinkedTransferQueue.class);
     }
 
     public void write(AtlasInternalSession session) throws AtlasException {
@@ -235,7 +293,8 @@ public class DocumentJavaFieldWriter implements AtlasFieldWriter {
                 LOG.debug("Cannot find pre-existing child collection for segment '" + segment
                         + "', creating the collection.");
             }
-            collectionObject = createCollectionWrapperObject(field, segmentContext, parentObject);
+            Class<?> collectionClass = writerUtil.resolveClassFromParent(field, parentObject, segmentContext);
+            collectionObject = createCollectionWrapperObject(field, segmentContext, parentObject, collectionClass);
         }
 
         if (LOG.isDebugEnabled()) {
@@ -259,10 +318,18 @@ public class DocumentJavaFieldWriter implements AtlasFieldWriter {
                 LOG.debug("Collection is not large enough for segment '" + segment + "', expanding the collection.");
             }
             int index = AtlasPath.indexOfSegment(segment);
-            if (collectionObject instanceof List) {
-                List list = (List) collectionObject;
-                while (list.size() < (index + 1)) {
-                    list.add(null);
+            if (collectionObject instanceof Collection) {
+                Collection collection = (Collection) collectionObject;
+                while (collection.size() < index) {
+                    int preSize = collection.size();
+                    collection.add(null);
+                    if (collection.size() == preSize) {
+                        LOG.warn(String.format(
+                                "This collection field doesn't allow filling with null - index will be ignored. "
+                                + "segment: %s \n\tparentObject: %s",
+                                segmentContext, parentObject));
+                        break;
+                    }
                 }
             } else if (collectionObject instanceof Map) {
                 throw new AtlasException("FIXME: Cannot yet handle adding children to maps");
@@ -285,20 +352,43 @@ public class DocumentJavaFieldWriter implements AtlasFieldWriter {
         return collectionObject;
     }
 
-    private Object createCollectionWrapperObject(Field field, SegmentContext segmentContext, Object parentObject)
-            throws AtlasException {
+    private Object createCollectionWrapperObject(Field field, SegmentContext segmentContext, Object parentObject,
+            Class<?> collectionClass) throws AtlasException {
         // create the "List" part of List<Contact>
         String segment = segmentContext.getSegment();
         if (AtlasPath.isArraySegment(segment)) {
             return createObject(field, segmentContext, parentObject, true);
-        } else if (AtlasPath.isListSegment(segment)) {
-            // TODO: look up field level or document level default list impl
-            return writerUtil.instantiateObject(LinkedList.class, segmentContext, false);
-        } else if (AtlasPath.isMapSegment(segment)) {
-            // TODO: look up field level or document level default map impl
-            return writerUtil.instantiateObject(HashMap.class, segmentContext, false);
         }
-        throw new AtlasException("Can't create collection object for segment: " + segment);
+
+        if (collectionClass == null) {
+            throw new AtlasException(String.format(
+                    "Null collection class is specified for segment: %s", segmentContext));
+        }
+
+        if (AtlasPath.isListSegment(segment)) {
+            return writerUtil.instantiateObject(
+                    resolveCollectionImplClass(collectionClass), segmentContext, false);
+        } else if (AtlasPath.isMapSegment(segment)) {
+            return writerUtil.instantiateObject(
+                    resolveCollectionImplClass(collectionClass), segmentContext, false);
+        }
+        throw new AtlasException("Can't create collection object for segment: " + segmentContext);
+    }
+
+    private Class<?> resolveCollectionImplClass(Class<?> collectionClass) throws AtlasException {
+        if (collectionClass.isInterface() || Modifier.isAbstract(collectionClass.getModifiers())) {
+            Class<?> implClass = this.defaultCollectionImplClasses.get(collectionClass);
+            if (implClass == null) {
+                throw new AtlasException(String.format(
+                        "Abstract collection class/interface %s can't be instantiated and default implementation class was not found",
+                        collectionClass.getCanonicalName()));
+            }
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Resolved default impl class: {} -> {}", collectionClass.getCanonicalName(), implClass.getCanonicalName());
+            }
+            return implClass;
+        }
+        return collectionClass;
     }
 
     private Class<?> getClassForField(Field field, SegmentContext segmentContext, Object parentObject,
@@ -448,7 +538,7 @@ public class DocumentJavaFieldWriter implements AtlasFieldWriter {
     private Object createObject(Field javaField, SegmentContext segmentContext, Object parentObject,
             boolean createWrapperArray) throws AtlasException {
         Class<?> clazz = getClassForField(javaField, segmentContext, parentObject, true);
-        // TODO https://github.com/atlasmap/atlasmap-runtime/issues/229
+        // TODO https://github.com/atlasmap/atlasmap/issues/48
         // - Allow default implementation for abstract target field
         return writerUtil.instantiateObject(clazz, segmentContext, createWrapperArray);
     }
@@ -459,7 +549,14 @@ public class DocumentJavaFieldWriter implements AtlasFieldWriter {
         if (AtlasPath.isArraySegment(segment)) {
             return Array.get(collection, index);
         } else if (AtlasPath.isListSegment(segment)) {
-            return ((List<?>) collection).get(index);
+            if (collection instanceof List) {
+                List<?> list = (List<?>)collection;
+                return list.size() > index ? list.get(index) : null;
+            } else {
+                throw new AtlasException(String.format(
+                        "%s doesn't support to take an element out by specifying an index, segment: " + segment,
+                        collection.getClass().getCanonicalName()));
+            }
         } else if (AtlasPath.isMapSegment(segment)) {
             throw new AtlasException("Maps are currently unhandled for segment: " + segment);
         }
@@ -471,6 +568,10 @@ public class DocumentJavaFieldWriter implements AtlasFieldWriter {
         int index = AtlasPath.indexOfSegment(segment);
         int size = getCollectionSize(collection);
         boolean result = size > index;
+        if (collection instanceof Collection) {
+            // some of Collection doesn't allow indexed insertion, i.e. need to add via Collection.add()
+            result = size >= index;
+        }
         if (LOG.isDebugEnabled()) {
             LOG.debug("collectionHasRoomForIndex: " + result + ", size: " + size + ", index: " + index);
         }
@@ -478,8 +579,8 @@ public class DocumentJavaFieldWriter implements AtlasFieldWriter {
     }
 
     private int getCollectionSize(Object collection) throws AtlasException {
-        if (collection instanceof List) {
-            return ((List<?>) collection).size();
+        if (collection instanceof Collection) {
+            return ((Collection<?>) collection).size();
         } else if (collection instanceof Map) {
             return ((Map<?, ?>) collection).size();
         } else if (collection.getClass().isArray()) {
@@ -506,13 +607,24 @@ public class DocumentJavaFieldWriter implements AtlasFieldWriter {
         if (parentIsCollection) {
             String segment = segmentContext.getSegment();
             int index = AtlasPath.indexOfSegment(segment);
-            if (parentObject instanceof List) {
-                List list = (List) parentObject;
-                if (index >= list.size()) {
-                    throw new AtlasException("Cannot fit item in list, list size: " + list.size() + ", item index: "
-                            + index + ", segment: " + segmentContext);
+            if (parentObject instanceof Collection) {
+                Collection collection = (Collection) parentObject;
+                if (index == collection.size()) {
+                    collection.add(childObject);
+                } else if (collection instanceof List) {
+                    if (index > collection.size()) {
+                        throw new AtlasException("Cannot fit item in list, list size: " + collection.size() + ", item index: "
+                                + index + ", segment: " + segmentContext);
+                    }
+                    List list = (List) collection;
+                    list.set(index, childObject);
+                } else {
+                    LOG.warn(String.format(
+                            "Writing into non-List collection - it will be added as a last element anyway. "
+                            + "segment: %s \n\tparentObject: %s\n\tchild: %s",
+                            segmentContext, parentObject, childObject));
+                    collection.add(childObject);
                 }
-                list.set(index, childObject);
             } else if (parentObject instanceof Map) {
                 throw new AtlasException("FIXME: Cannot yet handle adding children to maps");
             } else if (parentObject.getClass().isArray()) {
@@ -568,6 +680,10 @@ public class DocumentJavaFieldWriter implements AtlasFieldWriter {
 
     public void setTargetValueConverter(TargetValueConverter converter) {
         this.converter = converter;
+    }
+
+    public Map<Class<?>, Class<?>> getDefaultCollectionImplClasses() {
+        return this.defaultCollectionImplClasses;
     }
 
 }

@@ -15,6 +15,7 @@ import io.atlasmap.api.AtlasException;
 import io.atlasmap.java.test.BaseOrder;
 import io.atlasmap.java.test.StateEnumClassLong;
 import io.atlasmap.java.test.TargetAddress;
+import io.atlasmap.java.test.TargetCollectionsClass;
 import io.atlasmap.java.test.TargetContact;
 import io.atlasmap.java.test.TargetFlatPrimitiveClass;
 import io.atlasmap.java.test.TargetOrder;
@@ -163,6 +164,23 @@ public class DocumentJavaFieldWriterTest extends BaseDocumentWriterTest {
             }
         }
         assertEquals("hello world.", o.getOrders().get(4).getAddress().getAddressLine1());
+    }
+
+    @Test
+    public void testWriteCollectionImpls() throws Exception {
+        addClassForFieldPath("/", TargetCollectionsClass.class);
+        write("/list<0>", "list0");
+        write("/linkedList<1>", "linkedList1");
+        write("/arrayList<2>", "arrayList2");
+        write("/set<3>", "set3");
+        write("/hashSet<4>", "hashSet4");
+        TargetCollectionsClass tcc = (TargetCollectionsClass) writer.getRootObject();
+        ensureNotNullAndClass(tcc, TargetCollectionsClass.class);
+        assertTrue(tcc.getList().contains("list0"));
+        assertTrue(tcc.getLinkedList().contains("linkedList1"));
+        assertTrue(tcc.getArrayList().contains("arrayList2"));
+        assertTrue(tcc.getSet().contains("set3"));
+        assertTrue(tcc.getHashSet().contains("hashSet4"));
     }
 
     @Test

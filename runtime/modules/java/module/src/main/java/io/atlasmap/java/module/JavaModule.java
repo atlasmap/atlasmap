@@ -16,6 +16,7 @@
 package io.atlasmap.java.module;
 
 import java.lang.reflect.Array;
+import java.util.Collection;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -315,7 +316,7 @@ public class JavaModule extends BaseAtlasModule {
         if (collectionObject.getClass().isArray()) {
             return Array.getLength(collectionObject);
         }
-        return ((List) collectionObject).size();
+        return ((Collection) collectionObject).size();
     }
 
     @Override

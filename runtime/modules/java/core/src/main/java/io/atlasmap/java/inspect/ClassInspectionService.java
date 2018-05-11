@@ -25,6 +25,7 @@ import java.lang.reflect.TypeVariable;
 import java.lang.reflect.WildcardType;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -444,7 +445,7 @@ public class ClassInspectionService {
             s.setCollectionType(CollectionType.ARRAY);
             s.setArrayDimensions(detectArrayDimensions(clazz));
             clazz = detectArrayClass(clazz);
-        } else if (isFieldList(clazz.getCanonicalName())) {
+        } else if (Collection.class.isAssignableFrom(clazz)) {
             s.setCollectionType(CollectionType.LIST);
             s.setCollectionClassName(clazz.getCanonicalName());
             try {

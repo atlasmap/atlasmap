@@ -18,9 +18,15 @@ package io.atlasmap.reference.java_to_java;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 
 import org.junit.Test;
 
@@ -28,9 +34,11 @@ import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasSession;
 import io.atlasmap.java.test.BaseOrder;
 import io.atlasmap.java.test.SourceAddress;
+import io.atlasmap.java.test.SourceCollectionsClass;
 import io.atlasmap.java.test.SourceContact;
 import io.atlasmap.java.test.SourceFlatPrimitiveClass;
 import io.atlasmap.java.test.SourceOrder;
+import io.atlasmap.java.test.TargetCollectionsClass;
 import io.atlasmap.java.test.TargetContact;
 import io.atlasmap.java.test.TargetFlatPrimitiveClass;
 import io.atlasmap.java.test.TargetTestClass;
@@ -189,4 +197,89 @@ public class JavaJavaCollectionTest extends AtlasMappingBaseTest {
         assertEquals(1, target.getBoxedStringArrayField().length);
         assertEquals("fuga", target.getBoxedStringArrayField()[0]);
     }
+
+    @Test
+    public void testProcessCollectionImpls() throws Exception {
+        AtlasContext context = atlasContextFactory.createContext(
+                new File("src/test/resources/javaToJava/atlasmapping-collection-impls.xml").toURI());
+        SourceCollectionsClass source = new SourceCollectionsClass();
+        List<String> list = new LinkedList<>();
+        list.addAll(Arrays.asList(new String[] {"list0", "list1", "list2"}));
+        source.setList(list);
+        LinkedList<String> linkedList = new LinkedList<>();
+        linkedList.addAll(Arrays.asList(new String[] {"linkedList0", "linkedList1", "linkedList2"}));
+        source.setLinkedList(linkedList);
+        ArrayList<String> arrayList = new ArrayList<>();
+        arrayList.addAll(Arrays.asList(new String[] {"arrayList0", "arrayList1", "arrayList2"}));
+        source.setArrayList(arrayList);
+        Set<String> set = new HashSet<>();
+        set.addAll(Arrays.asList(new String[] {"set0", "set1", "set2"}));
+        source.setSet(new HashSet<>(set));
+        HashSet<String> hashSet = new HashSet<>();
+        hashSet.addAll(Arrays.asList(new String[] {"hashSet0", "hashSet1", "hashSet2"}));
+        source.setHashSet(hashSet);
+        AtlasSession session = context.createSession();
+        session.setSourceDocument("SourceCollectionsClass", source);
+
+        SourceFlatPrimitiveClass sfpc0 = new SourceFlatPrimitiveClass();
+        sfpc0.setBoxedStringField("sfpc0");
+        session.setSourceDocument("sfpc0", sfpc0);
+        SourceFlatPrimitiveClass sfpc1 = new SourceFlatPrimitiveClass();
+        sfpc1.setBoxedStringField("sfpc1");
+        session.setSourceDocument("sfpc1", sfpc1);
+        SourceFlatPrimitiveClass sfpc2 = new SourceFlatPrimitiveClass();
+        sfpc2.setBoxedStringField("sfpc2");
+        session.setSourceDocument("sfpc2", sfpc2);
+        SourceFlatPrimitiveClass sfpc3 = new SourceFlatPrimitiveClass();
+        sfpc3.setBoxedStringField("sfpc3");
+        session.setSourceDocument("sfpc3", sfpc3);
+        SourceFlatPrimitiveClass sfpc4 = new SourceFlatPrimitiveClass();
+        sfpc4.setBoxedStringField("sfpc4");
+        session.setSourceDocument("sfpc4", sfpc4);
+        context.process(session);
+
+        assertFalse(printAudit(session), session.hasErrors());
+        TargetCollectionsClass targetCollections = (TargetCollectionsClass) session.getTargetDocument("TargetCollectionsClass");
+        list = targetCollections.getList();
+        assertEquals(4, list.size());
+        assertTrue(list.contains("arrayList0"));
+        assertTrue(list.contains("arrayList1"));
+        assertTrue(list.contains("arrayList2"));
+        assertTrue(list.contains("sfpc0"));
+        linkedList = targetCollections.getLinkedList();
+        assertEquals(4, linkedList.size());
+        assertTrue(linkedList.contains("set0"));
+        assertTrue(linkedList.contains("set1"));
+        assertTrue(linkedList.contains("set2"));
+        assertTrue(linkedList.contains("sfpc1"));
+        arrayList = targetCollections.getArrayList();
+        assertEquals(4, arrayList.size());
+        assertTrue(arrayList.contains("hashSet0"));
+        assertTrue(arrayList.contains("hashSet1"));
+        assertTrue(arrayList.contains("hashSet2"));
+        assertTrue(arrayList.contains("sfpc2"));
+        set = targetCollections.getSet();
+        assertEquals(4, set.size());
+        assertTrue(set.contains("list0"));
+        assertTrue(set.contains("list1"));
+        assertTrue(set.contains("list2"));
+        assertTrue(set.contains("sfpc3"));
+        hashSet = targetCollections.getHashSet();
+        assertEquals(4, hashSet.size());
+        assertTrue(hashSet.contains("linkedList0"));
+        assertTrue(hashSet.contains("linkedList1"));
+        assertTrue(hashSet.contains("linkedList2"));
+        assertTrue(hashSet.contains("sfpc4"));
+        TargetFlatPrimitiveClass tfpc0 = (TargetFlatPrimitiveClass) session.getTargetDocument("tfpc0");
+        assertTrue(tfpc0.getBoxedStringField().startsWith("list"));
+        TargetFlatPrimitiveClass tfpc1 = (TargetFlatPrimitiveClass) session.getTargetDocument("tfpc1");
+        assertTrue(tfpc1.getBoxedStringField().startsWith("linkedList"));
+        TargetFlatPrimitiveClass tfpc2 = (TargetFlatPrimitiveClass) session.getTargetDocument("tfpc2");
+        assertTrue(tfpc2.getBoxedStringField().startsWith("arrayList"));
+        TargetFlatPrimitiveClass tfpc3 = (TargetFlatPrimitiveClass) session.getTargetDocument("tfpc3");
+        assertTrue(tfpc3.getBoxedStringField().startsWith("set"));
+        TargetFlatPrimitiveClass tfpc4 = (TargetFlatPrimitiveClass) session.getTargetDocument("tfpc4");
+        assertTrue(tfpc4.getBoxedStringField().startsWith("hashSet"));
+    }
+
 }
