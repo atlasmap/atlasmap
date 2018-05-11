@@ -164,11 +164,6 @@ public class LocalDateTimeConverter implements AtlasConverter<LocalDateTime> {
         return value != null ? value.atZone(ZoneId.systemDefault()) : null;
     }
 
-    @AtlasConversionInfo(sourceType = FieldType.DATE_TIME, targetType = FieldType.DATE_TIME_TZ)
-    public ZonedDateTime toZonedDateTime(LocalDateTime date, String sourceFormat, String targetFormat) {
-        return date == null ? null : DateTimeHelper.toZonedDateTime(date, sourceFormat == null ? targetFormat : sourceFormat);
-    }
-
     private Long getEpochMilli(LocalDateTime value) {
         return value.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
     }

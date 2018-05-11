@@ -157,11 +157,6 @@ public class LocalTimeConverter implements AtlasConverter<LocalTime> {
         return value != null ? value.atDate(LocalDate.now()).atZone(ZoneId.systemDefault()) : null;
     }
 
-    @AtlasConversionInfo(sourceType = FieldType.TIME, targetType = FieldType.DATE_TIME_TZ)
-    public ZonedDateTime toZonedDateTime(LocalTime time, String sourceFormat, String targetFormat) {
-        return time == null ? null : DateTimeHelper.toZonedDateTime(time, sourceFormat == null ? targetFormat : sourceFormat);
-    }
-
     private Long getTodaysEpochMilli(LocalTime value) {
         return value.atDate(LocalDate.now()).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
     }
