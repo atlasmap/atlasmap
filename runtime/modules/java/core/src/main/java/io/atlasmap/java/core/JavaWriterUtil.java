@@ -196,6 +196,22 @@ class JavaWriterUtil {
         }
     }
 
+    public Class<?> resolveClassFromParent(Field javaField, Object parentObject, SegmentContext segmentContext)
+            throws AtlasException {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Resolving class for path:'" + javaField.getPath() + "'.\n\tsegment: " + segmentContext
+                    + "\n\tparentObject: " + parentObject);
+        }
+
+        String setterMethodName = "set" + capitalizeFirstLetter(AtlasPath.cleanPathSegment(segmentContext.getSegment()));
+        try {
+            Method m = ClassHelper.detectSetterMethod(parentObject.getClass(), setterMethodName, null);
+            return m.getParameterTypes()[0];
+        } catch (Exception e) {
+            throw new AtlasException(e);
+        }
+    }
+
     protected Method resolveSetMethod(Object sourceObject, SegmentContext segmentContext, Class<?> targetType)
             throws NoSuchMethodException {
         String setterMethodName = "set" + capitalizeFirstLetter(AtlasPath.cleanPathSegment(segmentContext.getSegment()));
