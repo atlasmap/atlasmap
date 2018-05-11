@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-import { ChangeDetectorRef, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, Input, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 
 import { ConfigModel, AdmRedrawMappingLinesEvent } from '../models/config.model';
@@ -23,6 +23,7 @@ import { Field } from '../models/field.model';
 
 import { DocumentDefinitionComponent } from './document-definition.component';
 import { DocumentFieldDetailComponent } from './document-field-detail.component';
+import { Subscription } from 'rxjs/Subscription';
 
 export class LineModel {
   sourceX: string;
@@ -38,7 +39,7 @@ export class LineModel {
   templateUrl: './line-machine.component.html',
 })
 
-export class LineMachineComponent implements OnInit {
+export class LineMachineComponent implements OnInit, OnDestroy {
   @Input() cfg: ConfigModel;
   @Input() docDefInput: DocumentDefinitionComponent;
   @Input() docDefOutput: DocumentDefinitionComponent;
@@ -51,14 +52,20 @@ export class LineMachineComponent implements OnInit {
   @ViewChild('lineMachineElement') lineMachineElement: ElementRef;
 
   private yOffset = 3;
+  private mappingUpdatedSubscription: Subscription;
+
   constructor(private sanitizer: DomSanitizer, public detector: ChangeDetectorRef) { }
 
   ngOnInit(): void {
-    this.cfg.mappingService.mappingUpdated$.subscribe(() => {
+    this.mappingUpdatedSubscription = this.cfg.mappingService.mappingUpdated$.subscribe(() => {
       this.mappingChanged();
       this.docDefInput.setLineMachine(this);
       this.docDefOutput.setLineMachine(this);
     });
+  }
+
+  ngOnDestroy() {
+    this.mappingUpdatedSubscription.unsubscribe();
   }
 
   handleRedrawMappingLinesEvent(event: AdmRedrawMappingLinesEvent): void {

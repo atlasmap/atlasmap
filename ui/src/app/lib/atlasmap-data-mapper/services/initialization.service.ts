@@ -49,7 +49,6 @@ export class InitializationService {
     this.resetConfig();
 
     this.cfg.documentService.initialize();
-    this.cfg.mappingService.initialize();
   }
 
   resetConfig(): void {
@@ -167,20 +166,19 @@ export class InitializationService {
     } else {
       this.updateLoadingStatus('Loading Maven class path.');
       //fetch class path
-      this.cfg.documentService.fetchClassPath().subscribe(
-        (classPath: string) => {
+      this.cfg.documentService.fetchClassPath().toPromise()
+        .then((classPath: string) => {
           this.cfg.initCfg.classPath = classPath;
           this.fetchDocuments();
           this.updateStatus();
-        },
-        (error: any) => {
+        })
+        .catch((error: any) => {
           if (error.status === 0) {
             this.handleError('Fatal network error: Could not connect to AtlasMap design runtime service.', error);
           } else {
             this.handleError('Could not load Maven class path: ' + error.status + ' ' + error.statusText, error);
           }
-        },
-      );
+        });
     }
 
     //load mappings
@@ -192,8 +190,8 @@ export class InitializationService {
       if (this.cfg.mappingFiles.length > 0) {
         this.fetchMappings(this.cfg.mappingFiles);
       } else {
-        this.cfg.mappingService.findMappingFiles('UI').subscribe(
-          (files: string[]) => { this.fetchMappings(files); },
+        this.cfg.mappingService.findMappingFiles('UI').toPromise()
+          .then((files: string[]) => { this.fetchMappings(files); },
           (error: any) => {
             if (error.status === 0) {
               this.handleError('Fatal network error: Could not connect to AtlasMap design runtime service.', error);
@@ -255,18 +253,17 @@ export class InitializationService {
         continue;
       }
 
-      this.cfg.documentService.fetchDocument(docDef, this.cfg.initCfg.classPath).subscribe(
-        (doc: DocumentDefinition) => {
+      this.cfg.documentService.fetchDocument(docDef, this.cfg.initCfg.classPath).toPromise()
+        .then((doc: DocumentDefinition) => {
           this.updateStatus();
-        },
-        (error: any) => {
+        })
+        .catch((error: any) => {
           if (error.status === 0) {
             this.handleError('Fatal network error: Could not connect to AtlasMap design runtime service.', error);
           } else {
             this.handleError("Could not load document '" + docDef.id + "': " + error.status + ' ' + error.statusText, error);
           }
-        },
-      );
+        });
     }
   }
 
@@ -276,19 +273,17 @@ export class InitializationService {
       this.updateStatus();
       return;
     }
-    this.cfg.mappingService.fetchMappings(mappingFiles, this.cfg.mappings).subscribe(
-      (result: boolean) => {
+    this.cfg.mappingService.fetchMappings(mappingFiles, this.cfg.mappings).toPromise()
+      .then((result: boolean) => {
         this.cfg.initCfg.mappingInitialized = true;
         this.updateStatus();
-      },
-      (error: any) => {
+      }).catch((error: any) => {
         if (error.status === 0) {
           this.handleError('Fatal network error: Could not connect to AtlasMap design runtime service.', error);
         } else {
           this.handleError('Could not load mapping definitions: ' + error.status + ' ' + error.statusText, error);
         }
-      },
-    );
+      });
   }
 
   private fetchFieldActions(): void {
@@ -303,20 +298,18 @@ export class InitializationService {
       this.updateStatus();
       return;
     }
-    this.cfg.mappingService.fetchFieldActions().subscribe(
-      (actionConfigs: FieldActionConfig[]) => {
+    this.cfg.mappingService.fetchFieldActions().toPromise()
+      .then((actionConfigs: FieldActionConfig[]) => {
         TransitionModel.actionConfigs = actionConfigs;
         this.cfg.initCfg.fieldActionsInitialized = true;
         this.updateStatus();
-      },
-      (error: any) => {
+      }).catch((error: any) => {
         if (error.status === 0) {
           this.handleError('Fatal network error: Could not connect to AtlasMap design runtime service.', error);
         } else {
           this.handleError('Could not load field action configs: ' + error.status + ' ' + error.statusText, error);
         }
-      },
-    );
+      });
   }
 
   private updateStatus(): void {

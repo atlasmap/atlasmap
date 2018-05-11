@@ -157,11 +157,6 @@ public class DateConverter implements AtlasConverter<Date> {
     }
 
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME, targetType = FieldType.DATE_TIME_TZ)
-    public ZonedDateTime toZonedDateTime(Date date, String sourceFormat, String targetFormat) {
-        return DateTimeHelper.toZonedDateTime(date, sourceFormat == null ? targetFormat : sourceFormat);
-    }
-
-    @AtlasConversionInfo(sourceType = FieldType.DATE_TIME, targetType = FieldType.DATE_TIME_TZ)
     public ZonedDateTime toZonedDateTime(Date date) {
         return DateTimeHelper.toZonedDateTime(date, null);
     }

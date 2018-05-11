@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-import { Component, ViewChild, OnInit } from '@angular/core';
+import { Component, ViewChild, OnInit, OnDestroy } from '@angular/core';
 import { ConfigModel } from '../models/config.model';
 
 import { ErrorHandlerService } from '../services/error-handler.service';
@@ -24,6 +24,7 @@ import { InitializationService } from '../services/initialization.service';
 
 import { DataMapperAppComponent } from './data-mapper-app.component';
 import { environment } from '../../../../environments/environment';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'data-mapper-example-host',
@@ -31,10 +32,12 @@ import { environment } from '../../../../environments/environment';
   providers: [MappingManagementService, ErrorHandlerService, DocumentManagementService],
 })
 
-export class DataMapperAppExampleHostComponent implements OnInit {
+export class DataMapperAppExampleHostComponent implements OnInit, OnDestroy {
 
   @ViewChild('dataMapperComponent')
   dataMapperComponent: DataMapperAppComponent;
+
+  private saveMappingSubscription: Subscription;
 
   constructor(private initializationService: InitializationService) { }
 
@@ -119,7 +122,8 @@ export class DataMapperAppExampleHostComponent implements OnInit {
     this.initializationService.initialize();
 
     //save the mappings when the ui calls us back asking for save
-    c.mappingService.saveMappingOutput$.subscribe((saveHandler: Function) => {
+    this.saveMappingSubscription
+       = c.mappingService.saveMappingOutput$.subscribe((saveHandler: Function) => {
       //NOTE: the mapping definition being saved is currently stored in "this.cfg.mappings" until further notice.
 
       //This is an example callout to save the mapping to the mock java service
@@ -135,5 +139,9 @@ export class DataMapperAppExampleHostComponent implements OnInit {
     if (!c.targetDocs || c.targetDocs.length == 0) {
       c.errorService.error('No target document was found', '');
     }
+  }
+
+  ngOnDestroy() {
+    this.saveMappingSubscription.unsubscribe();
   }
 }

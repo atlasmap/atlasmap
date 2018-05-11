@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 
 import { ConfigModel } from '../../models/config.model';
 import { Field } from '../../models/field.model';
@@ -22,20 +22,27 @@ import { MappingModel } from '../../models/mapping.model';
 
 import { ModalWindowComponent } from '../modal-window.component';
 import { MappingSelectionComponent } from './mapping-selection.component';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'mapping-detail',
   templateUrl: './mapping-detail.component.html',
 })
 
-export class MappingDetailComponent implements OnInit {
+export class MappingDetailComponent implements OnInit, OnDestroy {
   @Input() cfg: ConfigModel;
   @Input() modalWindow: ModalWindowComponent;
 
+  private mappingSelectionRequiredSubscription: Subscription;
+
   ngOnInit(): void {
-    this.cfg.mappingService.mappingSelectionRequired$.subscribe((field: Field) => {
+    this.mappingSelectionRequiredSubscription = this.cfg.mappingService.mappingSelectionRequired$.subscribe((field: Field) => {
       this.selectMapping(field);
     });
+  }
+
+  ngOnDestroy(): void {
+    this.mappingSelectionRequiredSubscription.unsubscribe();
   }
 
   isMappingCollection(): boolean {
