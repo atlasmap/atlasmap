@@ -53,30 +53,23 @@ export class MappingManagementService {
 
   constructor(private http: HttpClient) {}
 
-  initialize(): void {
-    return;
-  }
-
   findMappingFiles(filter: string): Observable<string[]> {
     return new Observable<string[]>((observer: any) => {
       const url = this.cfg.initCfg.baseMappingServiceUrl + 'mappings' + (filter == null ? '' : '?filter=' + filter);
       DataMapperUtil.debugLogJSON(null, 'Mapping List Response', this.cfg.initCfg.debugMappingServiceCalls, url);
-      this.http.get(url, { headers: this.headers }).toPromise()
-        .then((body: any) => {
-          DataMapperUtil.debugLogJSON(body, 'Mapping List Response', this.cfg.initCfg.debugMappingServiceCalls, url);
-          const entries: any[] = body.StringMap.stringMapEntry;
-          const mappingFileNames: string[] = [];
-          for (const entry of entries) {
-            mappingFileNames.push(entry.name);
-          }
-          observer.next(mappingFileNames);
-          observer.complete();
-        })
-        .catch((error: any) => {
-          observer.error(error);
-          observer.complete();
-        },
-      );
+      this.http.get(url, { headers: this.headers }).toPromise().then((body: any) => {
+        DataMapperUtil.debugLogJSON(body, 'Mapping List Response', this.cfg.initCfg.debugMappingServiceCalls, url);
+        const entries: any[] = body.StringMap.stringMapEntry;
+        const mappingFileNames: string[] = [];
+        for (const entry of entries) {
+          mappingFileNames.push(entry.name);
+        }
+        observer.next(mappingFileNames);
+        observer.complete();
+      }).catch((error: any) => {
+        observer.error(error);
+        observer.complete();
+      });
     });
   }
 
@@ -88,14 +81,15 @@ export class MappingManagementService {
       }
 
       const baseURL: string = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/';
-      const operations: any[] = [];
+      const operations: Observable<any>[] = [];
       for (const mappingName of mappingFileNames) {
         const url: string = baseURL + mappingName;
         DataMapperUtil.debugLogJSON(null, 'Mapping Service Request', this.cfg.initCfg.debugMappingServiceCalls, url);
         const operation = this.http.get(url).map((res: any) => res);
         operations.push(operation);
       }
-      Observable.forkJoin(operations).subscribe((data: any[]) => {
+
+      Observable.forkJoin(operations).toPromise().then((data: any[]) => {
         if (!data) {
           observer.next(false);
           observer.complete();
@@ -109,8 +103,7 @@ export class MappingManagementService {
         this.notifyMappingUpdated();
         observer.next(true);
         observer.complete();
-      },
-        (error: any) => {
+      }).catch((error: any) => {
           observer.error(error);
           observer.complete();
         });
@@ -386,40 +379,37 @@ export class MappingManagementService {
     const payload: any = MappingSerializer.serializeMappings(this.cfg);
     const url: string = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/validate';
     DataMapperUtil.debugLogJSON(payload, 'Validation Service Request', this.cfg.initCfg.debugValidationServiceCalls, url);
-    this.http.put(url, payload, { headers: this.headers }).toPromise()
-      .then((body: any) => {
-        DataMapperUtil.debugLogJSON(body, 'Validation Service Response', this.cfg.initCfg.debugValidationServiceCalls, url);
-        const mapping: MappingModel = this.cfg.mappings.activeMapping;
-        const activeMappingErrors: ErrorInfo[] = [];
-        const globalErrors: ErrorInfo[] = [];
-        // Only update active mapping and global ones, since validateMappings() is always invoked when mapping is updated.
-        // This should be eventually turned into mapping entry level validation.
-        // https://github.com/atlasmap/atlasmap-ui/issues/116
-        if (body && body.Validations && body.Validations.validation) {
-          for (const validation of body.Validations.validation) {
-            let level: ErrorLevel = ErrorLevel.VALIDATION_ERROR;
-            if (validation.status === 'WARN') {
-              level = ErrorLevel.WARN;
-            } else if (validation.status === 'INFO') {
-              level = ErrorLevel.INFO;
-            }
-            const errorInfo = new ErrorInfo(validation.message, level);
-            if (!validation.scope || validation.scope != 'MAPPING' || !validation.id) {
-              globalErrors.push(errorInfo);
-            } else if (mapping && mapping.uuid && validation.id === mapping.uuid) {
-              activeMappingErrors.push(errorInfo);
-            }
+    this.http.put(url, payload, { headers: this.headers }).toPromise().then((body: any) => {
+      DataMapperUtil.debugLogJSON(body, 'Validation Service Response', this.cfg.initCfg.debugValidationServiceCalls, url);
+      const mapping: MappingModel = this.cfg.mappings.activeMapping;
+      const activeMappingErrors: ErrorInfo[] = [];
+      const globalErrors: ErrorInfo[] = [];
+      // Only update active mapping and global ones, since validateMappings() is always invoked when mapping is updated.
+      // This should be eventually turned into mapping entry level validation.
+      // https://github.com/atlasmap/atlasmap-ui/issues/116
+      if (body && body.Validations && body.Validations.validation) {
+        for (const validation of body.Validations.validation) {
+          let level: ErrorLevel = ErrorLevel.VALIDATION_ERROR;
+          if (validation.status === 'WARN') {
+            level = ErrorLevel.WARN;
+          } else if (validation.status === 'INFO') {
+            level = ErrorLevel.INFO;
+          }
+          const errorInfo = new ErrorInfo(validation.message, level);
+          if (!validation.scope || validation.scope != 'MAPPING' || !validation.id) {
+            globalErrors.push(errorInfo);
+          } else if (mapping && mapping.uuid && validation.id === mapping.uuid) {
+            activeMappingErrors.push(errorInfo);
           }
         }
-        this.cfg.validationErrors = globalErrors;
-        if (mapping) {
-          mapping.validationErrors = activeMappingErrors;
-        }
-      })
-      .catch((error: any) => {
-        this.cfg.errorService.error('Error fetching validation data.', { 'error': error, 'url': url, 'request': payload });
-      },
-    );
+      }
+      this.cfg.validationErrors = globalErrors;
+      if (mapping) {
+        mapping.validationErrors = activeMappingErrors;
+      }
+    }).catch((error: any) => {
+      this.cfg.errorService.error('Error fetching validation data.', { 'error': error, 'url': url, 'request': payload });
+    });
   }
 
   fetchFieldActions(): Observable<FieldActionConfig[]> {
@@ -427,44 +417,41 @@ export class MappingManagementService {
       let actionConfigs: FieldActionConfig[] = [];
       const url: string = this.cfg.initCfg.baseMappingServiceUrl + 'fieldActions';
       DataMapperUtil.debugLogJSON(null, 'Field Action Config Request', this.cfg.initCfg.debugFieldActionServiceCalls, url);
-      this.http.get(url, { headers: this.headers }).toPromise()
-        .then((body: any) => {
-          DataMapperUtil.debugLogJSON(body, 'Field Action Config Response', this.cfg.initCfg.debugFieldActionServiceCalls, url);
-          if (body && body.ActionDetails
-            && body.ActionDetails.actionDetail
-            && body.ActionDetails.actionDetail.length) {
-            for (const svcConfig of body.ActionDetails.actionDetail) {
-              const fieldActionConfig: FieldActionConfig = new FieldActionConfig();
-              fieldActionConfig.name = svcConfig.name;
-              fieldActionConfig.sourceType = svcConfig.sourceType;
-              fieldActionConfig.targetType = svcConfig.targetType;
-              fieldActionConfig.method = svcConfig.method;
-              fieldActionConfig.serviceObject = svcConfig;
+      this.http.get(url, { headers: this.headers }).toPromise().then((body: any) => {
+        DataMapperUtil.debugLogJSON(body, 'Field Action Config Response', this.cfg.initCfg.debugFieldActionServiceCalls, url);
+        if (body && body.ActionDetails
+          && body.ActionDetails.actionDetail
+          && body.ActionDetails.actionDetail.length) {
+          for (const svcConfig of body.ActionDetails.actionDetail) {
+            const fieldActionConfig: FieldActionConfig = new FieldActionConfig();
+            fieldActionConfig.name = svcConfig.name;
+            fieldActionConfig.sourceType = svcConfig.sourceType;
+            fieldActionConfig.targetType = svcConfig.targetType;
+            fieldActionConfig.method = svcConfig.method;
+            fieldActionConfig.serviceObject = svcConfig;
 
-              if (svcConfig.parameters && svcConfig.parameters.parameter
-                && svcConfig.parameters.parameter.length) {
-                for (const svcParameter of svcConfig.parameters.parameter) {
-                  const argumentConfig: FieldActionArgument = new FieldActionArgument();
-                  argumentConfig.name = svcParameter.name;
-                  argumentConfig.type = svcParameter.fieldType;
-                  argumentConfig.values = svcParameter.values;
-                  argumentConfig.serviceObject = svcParameter;
-                  fieldActionConfig.arguments.push(argumentConfig);
-                }
+            if (svcConfig.parameters && svcConfig.parameters.parameter
+              && svcConfig.parameters.parameter.length) {
+              for (const svcParameter of svcConfig.parameters.parameter) {
+                const argumentConfig: FieldActionArgument = new FieldActionArgument();
+                argumentConfig.name = svcParameter.name;
+                argumentConfig.type = svcParameter.fieldType;
+                argumentConfig.values = svcParameter.values;
+                argumentConfig.serviceObject = svcParameter;
+                fieldActionConfig.arguments.push(argumentConfig);
               }
-              actionConfigs.push(fieldActionConfig);
             }
+            actionConfigs.push(fieldActionConfig);
           }
-          actionConfigs = this.sortFieldActionConfigs(actionConfigs);
-          observer.next(actionConfigs);
-          observer.complete();
-        })
-        .catch((error: any) => {
-          observer.error(error);
-          observer.next(actionConfigs);
-          observer.complete();
-        },
-      );
+        }
+        actionConfigs = this.sortFieldActionConfigs(actionConfigs);
+        observer.next(actionConfigs);
+        observer.complete();
+      }).catch((error: any) => {
+        observer.error(error);
+        observer.next(actionConfigs);
+        observer.complete();
+      });
     });
   }
 

@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import 'rxjs/add/operator/toPromise';
 import { Observable } from 'rxjs/Observable';
@@ -26,23 +26,30 @@ import { Field, EnumValue } from '../models/field.model';
 import { DocumentDefinition, NamespaceModel } from '../models/document-definition.model';
 
 import { DataMapperUtil } from '../common/data-mapper-util';
+import { Subscription } from 'rxjs/Subscription';
 
 @Injectable()
-export class DocumentManagementService {
+export class DocumentManagementService implements OnDestroy {
   cfg: ConfigModel;
 
   private headers = new HttpHeaders({'Content-Type': 'application/json'});
+  private mappingUpdatedSubscription: Subscription;
 
   constructor(private http: HttpClient) {}
 
   initialize(): void {
-    this.cfg.mappingService.mappingUpdated$.subscribe(mappingDefinition => {
+    this.mappingUpdatedSubscription
+      = this.cfg.mappingService.mappingUpdated$.subscribe(mappingDefinition => {
       for (const d of this.cfg.getAllDocs()) {
         if (d.initialized) {
           d.updateFromMappings(this.cfg.mappings);
         }
       }
     });
+  }
+
+  ngOnDestroy() {
+    this.mappingUpdatedSubscription.unsubscribe();
   }
 
   fetchClassPath(): Observable<string> {

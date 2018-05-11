@@ -15,10 +15,11 @@
 */
 
 import {
-  Component, Input, ViewChildren, QueryList,
+  Component, Input, ViewChildren, QueryList, OnDestroy,
   ViewContainerRef, Type, ComponentFactoryResolver, AfterViewInit, ChangeDetectorRef
 } from '@angular/core';
 import { ConfigModel } from '../models/config.model';
+import { Subscription } from 'rxjs/Subscription';
 
 // source: http://www.w3schools.com/howto/howto_css_modals.asp
 
@@ -38,7 +39,7 @@ export class EmptyModalBodyComponent { }
   templateUrl: './modal-window.component.html',
 })
 
-export class ModalWindowComponent implements AfterViewInit {
+export class ModalWindowComponent implements AfterViewInit, OnDestroy {
   @Input() headerText = '';
   @Input() nestedComponentType: Type<any>;
   @Input() nestedComponentInitializedCallback: Function;
@@ -55,12 +56,17 @@ export class ModalWindowComponent implements AfterViewInit {
   @ViewChildren('dyn_target', { read: ViewContainerRef }) myTarget: QueryList<ViewContainerRef>;
 
   private componentLoaded = false;
+  private myTargetChangesSubscription: Subscription;
 
   constructor(private componentFactoryResolver: ComponentFactoryResolver, public detector: ChangeDetectorRef) { }
 
   ngAfterViewInit() {
+    if (this.myTargetChangesSubscription) {
+      this.myTargetChangesSubscription.unsubscribe();
+    }
+
     //from: http://stackoverflow.com/questions/40811809/add-component-dynamically-inside-an-ngif
-    this.myTarget.changes.subscribe(changes => {
+    this.myTargetChangesSubscription = this.myTarget.changes.subscribe(changes => {
       setTimeout(() => {
         if (!this.componentLoaded && this.visible && this.myTarget && (this.myTarget.toArray().length)) {
           this.loadComponent();
@@ -70,6 +76,10 @@ export class ModalWindowComponent implements AfterViewInit {
         }, 10);
       }, 10);
     });
+  }
+
+  ngOnDestroy() {
+    this.myTargetChangesSubscription.unsubscribe();
   }
 
   loadComponent(): void {

@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-import { Component, OnInit, ViewChild, ViewEncapsulation, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ViewEncapsulation, ChangeDetectorRef } from '@angular/core';
 import { ConfigModel } from '../models/config.model';
 
 import { ToolbarComponent } from './toolbar.component';
@@ -25,6 +25,7 @@ import { ModalWindowComponent } from './modal-window.component';
 import { DocumentDefinitionComponent } from './document-definition.component';
 
 import { MappingDetailComponent } from './mapping/mapping-detail.component';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'data-mapper',
@@ -34,7 +35,7 @@ import { MappingDetailComponent } from './mapping/mapping-detail.component';
   styleUrls: ['data-mapper-app.component.css'],
 })
 
-export class DataMapperAppComponent implements OnInit {
+export class DataMapperAppComponent implements OnInit, OnDestroy {
 
   @ViewChild('lineMachine') lineMachine: LineMachineComponent;
   @ViewChild('errorPanel') errorPanel: DataMapperErrorComponent;
@@ -48,6 +49,9 @@ export class DataMapperAppComponent implements OnInit {
   hasSourceDoc = false;
   hasTargetDoc = false;
 
+  private systemInitializedSubscription: Subscription;
+  private initializationStatusChangedSubscription: Subscription;
+
   constructor(public detector: ChangeDetectorRef) { }
 
   getConfig(): ConfigModel {
@@ -55,11 +59,13 @@ export class DataMapperAppComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getConfig().initializationService.systemInitialized$.subscribe(() => {
+    this.systemInitializedSubscription
+       = this.getConfig().initializationService.systemInitialized$.subscribe(() => {
       this.updateFromConfig();
     });
 
-    this.getConfig().initializationService.initializationStatusChanged$.subscribe(() => {
+    this.initializationStatusChangedSubscription
+      = this.getConfig().initializationService.initializationStatusChanged$.subscribe(() => {
       this.loadingStatus = this.getConfig().initCfg.loadingStatus;
       setTimeout(() => {
         this.detector.detectChanges();
@@ -67,6 +73,11 @@ export class DataMapperAppComponent implements OnInit {
     });
     this.hasSourceDoc = this.getConfig().sourceDocs && this.getConfig().sourceDocs.length > 0;
     this.hasTargetDoc = this.getConfig().targetDocs && this.getConfig().targetDocs.length > 0;
+  }
+
+  ngOnDestroy() {
+    this.systemInitializedSubscription.unsubscribe();
+    this.initializationStatusChangedSubscription.unsubscribe();
   }
 
   updateFromConfig(): void {
