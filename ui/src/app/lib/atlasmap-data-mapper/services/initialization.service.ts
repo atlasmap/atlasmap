@@ -15,10 +15,7 @@
 */
 
 import { Injectable } from '@angular/core';
-import 'rxjs/add/operator/toPromise';
-import 'rxjs/add/observable/forkJoin';
-import { Subject } from 'rxjs/Subject';
-import { Observable } from 'rxjs/Observable';
+import { Subject, Observable, forkJoin } from 'rxjs';
 
 import { DocumentType, InspectionType } from '../common/config.types';
 import { DocumentInitializationModel, ConfigModel } from '../models/config.model';
@@ -41,315 +38,6 @@ export class InitializationService {
 
   initializationStatusChangedSource = new Subject<void>();
   initializationStatusChanged$: Observable<void> = this.initializationStatusChangedSource.asObservable();
-
-  constructor(
-    private documentService: DocumentManagementService,
-    private mappingService: MappingManagementService,
-    private errorService: ErrorHandlerService) {
-    this.resetConfig();
-
-    this.cfg.documentService.initialize();
-  }
-
-  resetConfig(): void {
-    this.cfg = new ConfigModel();
-    this.cfg.documentService = this.documentService;
-    this.cfg.documentService.cfg = this.cfg;
-    this.cfg.mappingService = this.mappingService;
-    this.cfg.mappingService.cfg = this.cfg;
-    this.cfg.errorService = this.errorService;
-    this.cfg.errorService.cfg = this.cfg;
-    this.cfg.initializationService = this;
-    ConfigModel.setConfig(this.cfg);
-  }
-
-  initialize(): void {
-    if (this.cfg.mappingService == null) {
-      this.cfg.errorService.warn('Mapping service is not configured, validation service will not be used.', null);
-    } else if (this.cfg.initCfg.baseMappingServiceUrl == null) {
-      this.cfg.errorService.warn('Mapping service URL is not configured, validation service will not be used.', null);
-    }
-
-    if (this.cfg.initCfg.discardNonMockSources) {
-      this.cfg.sourceDocs = [];
-      this.cfg.targetDocs = [];
-    }
-
-    if (this.cfg.initCfg.addMockJSONMappings) {
-      const mappingDefinition: MappingDefinition = new MappingDefinition();
-      const mappingJSON: any = InitializationService.createExampleMappingsJSON();
-      MappingSerializer.deserializeMappingServiceJSON(mappingJSON, mappingDefinition, this.cfg);
-      this.cfg.mappings = mappingDefinition;
-    }
-
-    if (this.cfg.initCfg.addMockJavaSources || this.cfg.initCfg.addMockJavaSingleSource) {
-      this.addJavaDocument('twitter4j.Status', true);
-      if (this.cfg.initCfg.addMockJavaSources) {
-        this.addJavaDocument('io.atlasmap.java.test.TargetTestClass', true);
-        this.addJavaDocument('io.atlasmap.java.test.SourceContact', true);
-        this.addJavaDocument('io.atlasmap.java.test.SourceAddress', true);
-        this.addJavaDocument('io.atlasmap.java.test.TestListOrders', true);
-        this.addJavaDocument('io.atlasmap.java.test.TargetOrderArray', true);
-        this.addJavaDocument('io.atlasmap.java.test.SourceFlatPrimitiveClass', true);
-        this.addJavaDocument('io.atlasmap.java.test.SourceOrder', true);
-        this.addJavaDocument('io.atlasmap.java.test.DateTimeClass', true);
-        this.addJavaDocument('io.atlasmap.java.test.SourceCollectionsClass', true);
-      }
-    }
-
-    if (this.cfg.initCfg.addMockJavaCachedSource) {
-      const docDef: DocumentDefinition = this.addJavaDocument('io.atlasmap.java.test.Name', true);
-      docDef.inspectionResult = DocumentManagementService.generateMockJavaDoc();
-    }
-
-    if (this.cfg.initCfg.addMockXMLInstanceSources) {
-      this.addNonJavaDocument('XMLInstanceSource', DocumentType.XML, InspectionType.INSTANCE,
-        DocumentManagementService.generateMockInstanceXMLDoc(), true);
-    }
-
-    if (this.cfg.initCfg.addMockXMLSchemaSources) {
-      this.addNonJavaDocument('XMLSchemaSource', DocumentType.XML, InspectionType.SCHEMA,
-        DocumentManagementService.generateMockSchemaXMLDoc(), true);
-    }
-
-    if (this.cfg.initCfg.addMockJSONSources || this.cfg.initCfg.addMockJSONInstanceSources) {
-      this.addNonJavaDocument('JSONInstanceSource', DocumentType.JSON, InspectionType.INSTANCE,
-        DocumentManagementService.generateMockJSONInstanceDoc(), true);
-    }
-
-    if (this.cfg.initCfg.addMockJSONSchemaSources) {
-      this.addNonJavaDocument('JSONSchemaSource', DocumentType.JSON, InspectionType.SCHEMA,
-        DocumentManagementService.generateMockJSONSchemaDoc(), true);
-    }
-
-    if (this.cfg.initCfg.addMockJavaTarget) {
-      this.addJavaDocument('io.atlasmap.java.test.TargetTestClass', false);
-      this.addJavaDocument('io.atlasmap.java.test.SourceContact', false);
-      this.addJavaDocument('io.atlasmap.java.test.SourceAddress', false);
-      this.addJavaDocument('io.atlasmap.java.test.TestListOrders', false);
-      this.addJavaDocument('io.atlasmap.java.test.TargetOrderArray', false);
-      this.addJavaDocument('io.atlasmap.java.test.SourceFlatPrimitiveClass', false);
-      this.addJavaDocument('io.atlasmap.java.test.SourceOrder', false);
-      this.addJavaDocument('io.atlasmap.java.test.DateTimeClass', false);
-      this.addJavaDocument('io.atlasmap.java.test.TargetCollectionsClass', false);
-    }
-
-    if (this.cfg.initCfg.addMockJavaCachedTarget) {
-      const docDef: DocumentDefinition = this.addJavaDocument('io.atlasmap.java.test.Name', false);
-      docDef.inspectionResult = DocumentManagementService.generateMockJavaDoc();
-    }
-
-    if (this.cfg.initCfg.addMockXMLInstanceTarget) {
-      this.addNonJavaDocument('XMLInstanceTarget', DocumentType.XML, InspectionType.INSTANCE,
-        DocumentManagementService.generateMockInstanceXMLDoc(), false);
-    }
-
-    if (this.cfg.initCfg.addMockXMLSchemaTarget) {
-      this.addNonJavaDocument('XMLSchemaTarget', DocumentType.XML, InspectionType.SCHEMA,
-        DocumentManagementService.generateMockSchemaXMLDoc(), false);
-    }
-
-    if (this.cfg.initCfg.addMockJSONTarget || this.cfg.initCfg.addMockJSONInstanceTarget) {
-      this.addNonJavaDocument('JSONInstanceTarget', DocumentType.JSON, InspectionType.INSTANCE,
-        DocumentManagementService.generateMockJSONInstanceDoc(), false);
-    }
-
-    if (this.cfg.initCfg.addMockJSONSchemaTarget) {
-      this.addNonJavaDocument('JSONSchemaTarget', DocumentType.JSON, InspectionType.SCHEMA,
-        DocumentManagementService.generateMockJSONSchemaDoc(), false);
-    }
-
-    //load field actions
-    this.fetchFieldActions();
-
-    //load documents
-    if (!this.cfg.isClassPathResolutionNeeded()) {
-      this.fetchDocuments();
-    } else {
-      this.updateLoadingStatus('Loading Maven class path.');
-      //fetch class path
-      this.cfg.documentService.fetchClassPath().toPromise()
-        .then((classPath: string) => {
-          this.cfg.initCfg.classPath = classPath;
-          this.fetchDocuments();
-          this.updateStatus();
-        })
-        .catch((error: any) => {
-          if (error.status === 0) {
-            this.handleError('Fatal network error: Could not connect to AtlasMap design runtime service.', error);
-          } else {
-            this.handleError('Could not load Maven class path: ' + error.status + ' ' + error.statusText, error);
-          }
-        });
-    }
-
-    //load mappings
-    if (this.cfg.mappings != null) {
-      this.cfg.initCfg.mappingInitialized = true;
-      this.updateStatus();
-    } else {
-      this.cfg.mappings = new MappingDefinition();
-      if (this.cfg.mappingFiles.length > 0) {
-        this.fetchMappings(this.cfg.mappingFiles);
-      } else {
-        this.cfg.mappingService.findMappingFiles('UI').toPromise()
-          .then((files: string[]) => { this.fetchMappings(files); },
-          (error: any) => {
-            if (error.status === 0) {
-              this.handleError('Fatal network error: Could not connect to AtlasMap design runtime service.', error);
-            } else {
-              this.handleError('Could not load mapping files: ' + error.status + ' ' + error.statusText, error);
-            }
-          },
-        );
-      }
-    }
-  }
-
-  private addJavaDocument(className: string, isSource: boolean): DocumentDefinition {
-    const model: DocumentInitializationModel = new DocumentInitializationModel();
-    model.id = className;
-    model.type = DocumentType.JAVA;
-    model.inspectionType = InspectionType.JAVA_CLASS;
-    model.inspectionSource = className;
-    model.isSource = isSource;
-    return this.cfg.addDocument(model);
-  }
-
-  private addNonJavaDocument(
-    name: string, documentType: DocumentType, inspectionType: InspectionType,
-    inspectionSource: string, isSource: boolean): DocumentDefinition {
-    const model: DocumentInitializationModel = new DocumentInitializationModel();
-    model.id = name;
-    model.type = documentType;
-    model.inspectionType = inspectionType;
-    model.inspectionSource = inspectionSource;
-    model.isSource = isSource;
-    return this.cfg.addDocument(model);
-  }
-
-  private fetchDocuments(): void {
-    this.updateLoadingStatus('Loading source/target documents.');
-    for (const docDef of this.cfg.getAllDocs()) {
-      if (docDef == this.cfg.propertyDoc || docDef == this.cfg.constantDoc) {
-        docDef.initialized = true;
-        continue;
-      }
-
-      const docName: string = docDef.name;
-
-      if (docDef.type == DocumentType.JAVA && this.cfg.initCfg.baseJavaInspectionServiceUrl == null) {
-        this.cfg.errorService.warn('Java inspection service is not configured. Document will not be loaded: ' + docName, docDef);
-        docDef.initialized = true;
-        this.updateStatus();
-        continue;
-      } else if (docDef.type == DocumentType.XML && this.cfg.initCfg.baseXMLInspectionServiceUrl == null) {
-        this.cfg.errorService.warn('XML inspection service is not configured. Document will not be loaded: ' + docName, docDef);
-        docDef.initialized = true;
-        this.updateStatus();
-        continue;
-      } else if (docDef.type == DocumentType.JSON && this.cfg.initCfg.baseJSONInspectionServiceUrl == null) {
-        this.cfg.errorService.warn('JSON inspection service is not configured. Document will not be loaded: ' + docName, docDef);
-        docDef.initialized = true;
-        this.updateStatus();
-        continue;
-      }
-
-      this.cfg.documentService.fetchDocument(docDef, this.cfg.initCfg.classPath).toPromise()
-        .then((doc: DocumentDefinition) => {
-          this.updateStatus();
-        })
-        .catch((error: any) => {
-          if (error.status === 0) {
-            this.handleError('Fatal network error: Could not connect to AtlasMap design runtime service.', error);
-          } else {
-            this.handleError("Could not load document '" + docDef.id + "': " + error.status + ' ' + error.statusText, error);
-          }
-        });
-    }
-  }
-
-  private fetchMappings(mappingFiles: string[]): void {
-    if (mappingFiles.length == 0) {
-      this.cfg.initCfg.mappingInitialized = true;
-      this.updateStatus();
-      return;
-    }
-    this.cfg.mappingService.fetchMappings(mappingFiles, this.cfg.mappings).toPromise()
-      .then((result: boolean) => {
-        this.cfg.initCfg.mappingInitialized = true;
-        this.updateStatus();
-      }).catch((error: any) => {
-        if (error.status === 0) {
-          this.handleError('Fatal network error: Could not connect to AtlasMap design runtime service.', error);
-        } else {
-          this.handleError('Could not load mapping definitions: ' + error.status + ' ' + error.statusText, error);
-        }
-      });
-  }
-
-  private fetchFieldActions(): void {
-    if (this.cfg.mappingService == null) {
-      this.cfg.errorService.warn('Mapping service is not provided. Field Actions will not be used.', null);
-      this.cfg.initCfg.fieldActionsInitialized = true;
-      this.updateStatus();
-      return;
-    } else if (this.cfg.initCfg.baseMappingServiceUrl == null) {
-      this.cfg.errorService.warn('Mapping service URL is not provided. Field Actions will not be used.', null);
-      this.cfg.initCfg.fieldActionsInitialized = true;
-      this.updateStatus();
-      return;
-    }
-    this.cfg.mappingService.fetchFieldActions().toPromise()
-      .then((actionConfigs: FieldActionConfig[]) => {
-        TransitionModel.actionConfigs = actionConfigs;
-        this.cfg.initCfg.fieldActionsInitialized = true;
-        this.updateStatus();
-      }).catch((error: any) => {
-        if (error.status === 0) {
-          this.handleError('Fatal network error: Could not connect to AtlasMap design runtime service.', error);
-        } else {
-          this.handleError('Could not load field action configs: ' + error.status + ' ' + error.statusText, error);
-        }
-      });
-  }
-
-  private updateStatus(): void {
-    const documentCount: number = this.cfg.getAllDocs().length;
-    let finishedDocCount = 0;
-    for (const docDef of this.cfg.getAllDocs()) {
-      if (docDef.initialized || docDef.errorOccurred) {
-        finishedDocCount++;
-      }
-    }
-
-    if ((documentCount == finishedDocCount) && this.cfg.initCfg.mappingInitialized && this.cfg.initCfg.fieldActionsInitialized) {
-      this.cfg.mappings.detectTableIdentifiers();
-      this.cfg.mappings.updateDocumentNamespacesFromMappings(this.cfg);
-      this.cfg.mappings.updateMappingsFromDocuments(this.cfg);
-      for (const d of this.cfg.getAllDocs()) {
-        d.updateFromMappings(this.cfg.mappings);
-      }
-      this.cfg.mappings.removeStaleMappings(this.cfg);
-      this.updateLoadingStatus('Initialization complete.');
-      this.cfg.initCfg.initialized = true;
-      this.systemInitializedSource.next();
-    }
-  }
-
-  private handleError(message: string, error: any) {
-    message = 'Data Mapper UI Initialization Error: ' + message;
-    this.cfg.errorService.error(message, error);
-    this.updateLoadingStatus(message);
-    this.cfg.initCfg.initializationErrorOccurred = true;
-    this.cfg.initCfg.initialized = true;
-    this.updateStatus();
-  }
-
-  private updateLoadingStatus(status: string): void {
-    this.cfg.initCfg.loadingStatus = status;
-    this.initializationStatusChangedSource.next();
-  }
 
   static createExamplePom(): string {
     const pom = `
@@ -384,8 +72,8 @@ export class InitializationService {
             </project>
         `;
 
-    //pom = pom.replace(/\"/g, "\\\"");
-    /*
+    // pom = pom.replace(/\"/g, "\\\"");
+    /*xs
     pom = pom.replace(/\n/g, "\\n");
     pom = pom.replace(/\t/g, "\\t");
     */
@@ -559,4 +247,314 @@ export class InitializationService {
     };
     return json;
   }
+
+  constructor(
+    private documentService: DocumentManagementService,
+    private mappingService: MappingManagementService,
+    private errorService: ErrorHandlerService) {
+    this.resetConfig();
+
+    this.cfg.documentService.initialize();
+  }
+
+  resetConfig(): void {
+    this.cfg = new ConfigModel();
+    this.cfg.documentService = this.documentService;
+    this.cfg.documentService.cfg = this.cfg;
+    this.cfg.mappingService = this.mappingService;
+    this.cfg.mappingService.cfg = this.cfg;
+    this.cfg.errorService = this.errorService;
+    this.cfg.errorService.cfg = this.cfg;
+    this.cfg.initializationService = this;
+    ConfigModel.setConfig(this.cfg);
+  }
+
+  initialize(): void {
+    if (this.cfg.mappingService == null) {
+      this.cfg.errorService.warn('Mapping service is not configured, validation service will not be used.', null);
+    } else if (this.cfg.initCfg.baseMappingServiceUrl == null) {
+      this.cfg.errorService.warn('Mapping service URL is not configured, validation service will not be used.', null);
+    }
+
+    if (this.cfg.initCfg.discardNonMockSources) {
+      this.cfg.sourceDocs = [];
+      this.cfg.targetDocs = [];
+    }
+
+    if (this.cfg.initCfg.addMockJSONMappings) {
+      const mappingDefinition: MappingDefinition = new MappingDefinition();
+      const mappingJSON: any = InitializationService.createExampleMappingsJSON();
+      MappingSerializer.deserializeMappingServiceJSON(mappingJSON, mappingDefinition, this.cfg);
+      this.cfg.mappings = mappingDefinition;
+    }
+
+    if (this.cfg.initCfg.addMockJavaSources || this.cfg.initCfg.addMockJavaSingleSource) {
+      this.addJavaDocument('twitter4j.Status', true);
+      if (this.cfg.initCfg.addMockJavaSources) {
+        this.addJavaDocument('io.atlasmap.java.test.TargetTestClass', true);
+        this.addJavaDocument('io.atlasmap.java.test.SourceContact', true);
+        this.addJavaDocument('io.atlasmap.java.test.SourceAddress', true);
+        this.addJavaDocument('io.atlasmap.java.test.TestListOrders', true);
+        this.addJavaDocument('io.atlasmap.java.test.TargetOrderArray', true);
+        this.addJavaDocument('io.atlasmap.java.test.SourceFlatPrimitiveClass', true);
+        this.addJavaDocument('io.atlasmap.java.test.SourceOrder', true);
+        this.addJavaDocument('io.atlasmap.java.test.DateTimeClass', true);
+        this.addJavaDocument('io.atlasmap.java.test.SourceCollectionsClass', true);
+      }
+    }
+
+    if (this.cfg.initCfg.addMockJavaCachedSource) {
+      const docDef: DocumentDefinition = this.addJavaDocument('io.atlasmap.java.test.Name', true);
+      docDef.inspectionResult = DocumentManagementService.generateMockJavaDoc();
+    }
+
+    if (this.cfg.initCfg.addMockXMLInstanceSources) {
+      this.addNonJavaDocument('XMLInstanceSource', DocumentType.XML, InspectionType.INSTANCE,
+        DocumentManagementService.generateMockInstanceXMLDoc(), true);
+    }
+
+    if (this.cfg.initCfg.addMockXMLSchemaSources) {
+      this.addNonJavaDocument('XMLSchemaSource', DocumentType.XML, InspectionType.SCHEMA,
+        DocumentManagementService.generateMockSchemaXMLDoc(), true);
+    }
+
+    if (this.cfg.initCfg.addMockJSONSources || this.cfg.initCfg.addMockJSONInstanceSources) {
+      this.addNonJavaDocument('JSONInstanceSource', DocumentType.JSON, InspectionType.INSTANCE,
+        DocumentManagementService.generateMockJSONInstanceDoc(), true);
+    }
+
+    if (this.cfg.initCfg.addMockJSONSchemaSources) {
+      this.addNonJavaDocument('JSONSchemaSource', DocumentType.JSON, InspectionType.SCHEMA,
+        DocumentManagementService.generateMockJSONSchemaDoc(), true);
+    }
+
+    if (this.cfg.initCfg.addMockJavaTarget) {
+      this.addJavaDocument('io.atlasmap.java.test.TargetTestClass', false);
+      this.addJavaDocument('io.atlasmap.java.test.SourceContact', false);
+      this.addJavaDocument('io.atlasmap.java.test.SourceAddress', false);
+      this.addJavaDocument('io.atlasmap.java.test.TestListOrders', false);
+      this.addJavaDocument('io.atlasmap.java.test.TargetOrderArray', false);
+      this.addJavaDocument('io.atlasmap.java.test.SourceFlatPrimitiveClass', false);
+      this.addJavaDocument('io.atlasmap.java.test.SourceOrder', false);
+      this.addJavaDocument('io.atlasmap.java.test.DateTimeClass', false);
+      this.addJavaDocument('io.atlasmap.java.test.TargetCollectionsClass', false);
+    }
+
+    if (this.cfg.initCfg.addMockJavaCachedTarget) {
+      const docDef: DocumentDefinition = this.addJavaDocument('io.atlasmap.java.test.Name', false);
+      docDef.inspectionResult = DocumentManagementService.generateMockJavaDoc();
+    }
+
+    if (this.cfg.initCfg.addMockXMLInstanceTarget) {
+      this.addNonJavaDocument('XMLInstanceTarget', DocumentType.XML, InspectionType.INSTANCE,
+        DocumentManagementService.generateMockInstanceXMLDoc(), false);
+    }
+
+    if (this.cfg.initCfg.addMockXMLSchemaTarget) {
+      this.addNonJavaDocument('XMLSchemaTarget', DocumentType.XML, InspectionType.SCHEMA,
+        DocumentManagementService.generateMockSchemaXMLDoc(), false);
+    }
+
+    if (this.cfg.initCfg.addMockJSONTarget || this.cfg.initCfg.addMockJSONInstanceTarget) {
+      this.addNonJavaDocument('JSONInstanceTarget', DocumentType.JSON, InspectionType.INSTANCE,
+        DocumentManagementService.generateMockJSONInstanceDoc(), false);
+    }
+
+    if (this.cfg.initCfg.addMockJSONSchemaTarget) {
+      this.addNonJavaDocument('JSONSchemaTarget', DocumentType.JSON, InspectionType.SCHEMA,
+        DocumentManagementService.generateMockJSONSchemaDoc(), false);
+    }
+
+    // load field actions
+    this.fetchFieldActions();
+
+    // load documents
+    if (!this.cfg.isClassPathResolutionNeeded()) {
+      this.fetchDocuments();
+    } else {
+      this.updateLoadingStatus('Loading Maven class path.');
+      // fetch class path
+      this.cfg.documentService.fetchClassPath().toPromise()
+        .then((classPath: string) => {
+          this.cfg.initCfg.classPath = classPath;
+          this.fetchDocuments();
+          this.updateStatus();
+        })
+        .catch((error: any) => {
+          if (error.status === 0) {
+            this.handleError('Fatal network error: Could not connect to AtlasMap design runtime service.', error);
+          } else {
+            this.handleError('Could not load Maven class path: ' + error.status + ' ' + error.statusText, error);
+          }
+        });
+    }
+
+    // load mappings
+    if (this.cfg.mappings != null) {
+      this.cfg.initCfg.mappingInitialized = true;
+      this.updateStatus();
+    } else {
+      this.cfg.mappings = new MappingDefinition();
+      if (this.cfg.mappingFiles.length > 0) {
+        this.fetchMappings(this.cfg.mappingFiles);
+      } else {
+        this.cfg.mappingService.findMappingFiles('UI').toPromise()
+          .then((files: string[]) => { this.fetchMappings(files); },
+          (error: any) => {
+            if (error.status === 0) {
+              this.handleError('Fatal network error: Could not connect to AtlasMap design runtime service.', error);
+            } else {
+              this.handleError('Could not load mapping files: ' + error.status + ' ' + error.statusText, error);
+            }
+          },
+        );
+      }
+    }
+  }
+
+  private addJavaDocument(className: string, isSource: boolean): DocumentDefinition {
+    const model: DocumentInitializationModel = new DocumentInitializationModel();
+    model.id = className;
+    model.type = DocumentType.JAVA;
+    model.inspectionType = InspectionType.JAVA_CLASS;
+    model.inspectionSource = className;
+    model.isSource = isSource;
+    return this.cfg.addDocument(model);
+  }
+
+  private addNonJavaDocument(
+    name: string, documentType: DocumentType, inspectionType: InspectionType,
+    inspectionSource: string, isSource: boolean): DocumentDefinition {
+    const model: DocumentInitializationModel = new DocumentInitializationModel();
+    model.id = name;
+    model.type = documentType;
+    model.inspectionType = inspectionType;
+    model.inspectionSource = inspectionSource;
+    model.isSource = isSource;
+    return this.cfg.addDocument(model);
+  }
+
+  private fetchDocuments(): void {
+    this.updateLoadingStatus('Loading source/target documents.');
+    for (const docDef of this.cfg.getAllDocs()) {
+      if (docDef === this.cfg.propertyDoc || docDef === this.cfg.constantDoc) {
+        docDef.initialized = true;
+        continue;
+      }
+
+      const docName: string = docDef.name;
+
+      if (docDef.type === DocumentType.JAVA && this.cfg.initCfg.baseJavaInspectionServiceUrl == null) {
+        this.cfg.errorService.warn('Java inspection service is not configured. Document will not be loaded: ' + docName, docDef);
+        docDef.initialized = true;
+        this.updateStatus();
+        continue;
+      } else if (docDef.type === DocumentType.XML && this.cfg.initCfg.baseXMLInspectionServiceUrl == null) {
+        this.cfg.errorService.warn('XML inspection service is not configured. Document will not be loaded: ' + docName, docDef);
+        docDef.initialized = true;
+        this.updateStatus();
+        continue;
+      } else if (docDef.type === DocumentType.JSON && this.cfg.initCfg.baseJSONInspectionServiceUrl == null) {
+        this.cfg.errorService.warn('JSON inspection service is not configured. Document will not be loaded: ' + docName, docDef);
+        docDef.initialized = true;
+        this.updateStatus();
+        continue;
+      }
+
+      this.cfg.documentService.fetchDocument(docDef, this.cfg.initCfg.classPath).toPromise()
+        .then((doc: DocumentDefinition) => {
+          this.updateStatus();
+        })
+        .catch((error: any) => {
+          if (error.status === 0) {
+            this.handleError('Fatal network error: Could not connect to AtlasMap design runtime service.', error);
+          } else {
+            this.handleError('Could not load document \'' + docDef.id + '\': ' + error.status + ' ' + error.statusText, error);
+          }
+        });
+    }
+  }
+
+  private fetchMappings(mappingFiles: string[]): void {
+    if (mappingFiles.length === 0) {
+      this.cfg.initCfg.mappingInitialized = true;
+      this.updateStatus();
+      return;
+    }
+    this.cfg.mappingService.fetchMappings(mappingFiles, this.cfg.mappings).toPromise()
+      .then((result: boolean) => {
+        this.cfg.initCfg.mappingInitialized = true;
+        this.updateStatus();
+      }).catch((error: any) => {
+        if (error.status === 0) {
+          this.handleError('Fatal network error: Could not connect to AtlasMap design runtime service.', error);
+        } else {
+          this.handleError('Could not load mapping definitions: ' + error.status + ' ' + error.statusText, error);
+        }
+      });
+  }
+
+  private fetchFieldActions(): void {
+    if (this.cfg.mappingService == null) {
+      this.cfg.errorService.warn('Mapping service is not provided. Field Actions will not be used.', null);
+      this.cfg.initCfg.fieldActionsInitialized = true;
+      this.updateStatus();
+      return;
+    } else if (this.cfg.initCfg.baseMappingServiceUrl == null) {
+      this.cfg.errorService.warn('Mapping service URL is not provided. Field Actions will not be used.', null);
+      this.cfg.initCfg.fieldActionsInitialized = true;
+      this.updateStatus();
+      return;
+    }
+    this.cfg.mappingService.fetchFieldActions().toPromise()
+      .then((actionConfigs: FieldActionConfig[]) => {
+        TransitionModel.actionConfigs = actionConfigs;
+        this.cfg.initCfg.fieldActionsInitialized = true;
+        this.updateStatus();
+      }).catch((error: any) => {
+        if (error.status === 0) {
+          this.handleError('Fatal network error: Could not connect to AtlasMap design runtime service.', error);
+        } else {
+          this.handleError('Could not load field action configs: ' + error.status + ' ' + error.statusText, error);
+        }
+      });
+  }
+
+  private updateStatus(): void {
+    const documentCount: number = this.cfg.getAllDocs().length;
+    let finishedDocCount = 0;
+    for (const docDef of this.cfg.getAllDocs()) {
+      if (docDef.initialized || docDef.errorOccurred) {
+        finishedDocCount++;
+      }
+    }
+
+    if ((documentCount === finishedDocCount) && this.cfg.initCfg.mappingInitialized && this.cfg.initCfg.fieldActionsInitialized) {
+      this.cfg.mappings.detectTableIdentifiers();
+      this.cfg.mappings.updateDocumentNamespacesFromMappings(this.cfg);
+      this.cfg.mappings.updateMappingsFromDocuments(this.cfg);
+      for (const d of this.cfg.getAllDocs()) {
+        d.updateFromMappings(this.cfg.mappings);
+      }
+      this.cfg.mappings.removeStaleMappings(this.cfg);
+      this.updateLoadingStatus('Initialization complete.');
+      this.cfg.initCfg.initialized = true;
+      this.systemInitializedSource.next();
+    }
+  }
+
+  private handleError(message: string, error: any) {
+    message = 'Data Mapper UI Initialization Error: ' + message;
+    this.cfg.errorService.error(message, error);
+    this.updateLoadingStatus(message);
+    this.cfg.initCfg.initializationErrorOccurred = true;
+    this.cfg.initCfg.initialized = true;
+    this.updateStatus();
+  }
+
+  private updateLoadingStatus(status: string): void {
+    this.cfg.initCfg.loadingStatus = status;
+    this.initializationStatusChangedSource.next();
+  }
+
 }

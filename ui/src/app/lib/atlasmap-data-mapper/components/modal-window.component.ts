@@ -19,7 +19,7 @@ import {
   ViewContainerRef, Type, ComponentFactoryResolver, AfterViewInit, ChangeDetectorRef
 } from '@angular/core';
 import { ConfigModel } from '../models/config.model';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 // source: http://www.w3schools.com/howto/howto_css_modals.asp
 
@@ -65,7 +65,7 @@ export class ModalWindowComponent implements AfterViewInit, OnDestroy {
       this.myTargetChangesSubscription.unsubscribe();
     }
 
-    //from: http://stackoverflow.com/questions/40811809/add-component-dynamically-inside-an-ngif
+    // from: http://stackoverflow.com/questions/40811809/add-component-dynamically-inside-an-ngif
     this.myTargetChangesSubscription = this.myTarget.changes.subscribe(changes => {
       setTimeout(() => {
         if (!this.componentLoaded && this.visible && this.myTarget && (this.myTarget.toArray().length)) {

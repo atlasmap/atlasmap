@@ -6,7 +6,7 @@ import {
   HttpRequest,
   HttpXsrfTokenExtractor
 } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 import { ConfigModel } from '../models/config.model';
 

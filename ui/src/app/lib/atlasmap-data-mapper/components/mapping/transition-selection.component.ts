@@ -56,11 +56,11 @@ export class TransitionSelectionComponent {
     const mappedSourceFields = this.fieldPair.getMappedFields(true);
     const mappedTargetFields = this.fieldPair.getMappedFields(false);
 
-    if (mappedSourceFields.length > 1 && selectedMode != TransitionMode.COMBINE) {
+    if (mappedSourceFields.length > 1 && selectedMode !== TransitionMode.COMBINE) {
       this.cfg.errorService.warn('The selected mapping details action ' + TransitionModel.getActionName(selectedMode) +
                                  ' is not applicable from compound source selections.', null);
       return false;
-    } else if (mappedTargetFields.length > 1 && selectedMode != TransitionMode.SEPARATE) {
+    } else if (mappedTargetFields.length > 1 && selectedMode !== TransitionMode.SEPARATE) {
       this.cfg.errorService.warn('The selected mapping details action ' + TransitionModel.getActionName(selectedMode) +
                                  ' is not applicable to compound target selections.', null);
       return false;
@@ -73,7 +73,7 @@ export class TransitionSelectionComponent {
    * @param event - contains the selected value
    */
   selectionChanged(event: any): void {
-    const selectorIsMode: boolean = 'mode' == event.target.attributes.getNamedItem('selector').value;
+    const selectorIsMode: boolean = 'mode' === event.target.attributes.getNamedItem('selector').value;
     const selectedValue: any = event.target.selectedOptions.item(0).attributes.getNamedItem('value').value;
     if (selectorIsMode) {
       const selectedMode: TransitionMode = parseInt(selectedValue, 10);

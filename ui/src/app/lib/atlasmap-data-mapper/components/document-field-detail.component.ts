@@ -59,7 +59,7 @@ export class DocumentFieldDetailComponent {
   }
 
   dragEnterLeave(event: any, entering: boolean): void {
-    if (!this.field.isTerminal() || (this.field.isSource() == this.cfg.currentDraggedField.isSource())) {
+    if (!this.field.isTerminal() || (this.field.isSource() === this.cfg.currentDraggedField.isSource())) {
       this.isDragDropTarget = false;
       return;
     }
@@ -67,7 +67,7 @@ export class DocumentFieldDetailComponent {
   }
 
   allowDrop(event: any): void {
-    if (!this.field.isTerminal() || (this.field.isSource() == this.cfg.currentDraggedField.isSource())) {
+    if (!this.field.isTerminal() || (this.field.isSource() === this.cfg.currentDraggedField.isSource())) {
       this.isDragDropTarget = false;
       return;
     }
@@ -77,7 +77,7 @@ export class DocumentFieldDetailComponent {
 
   endDrag(event: any): void {
     this.isDragDropTarget = false;
-    if (!this.field.isTerminal() || (this.field.isSource() == this.cfg.currentDraggedField.isSource())) {
+    if (!this.field.isTerminal() || (this.field.isSource() === this.cfg.currentDraggedField.isSource())) {
       return;
     }
 
@@ -98,7 +98,7 @@ export class DocumentFieldDetailComponent {
     if (this.field.isCollection) {
       return 'fa fa-list-ul';
     }
-    if (this.field.docDef.type == DocumentType.XML) {
+    if (this.field.docDef.type === DocumentType.XML) {
       return this.field.isAttribute ? 'fa fa-at' : 'fa fa-code';
     }
     return 'fa fa-file-o';
@@ -182,7 +182,7 @@ export class DocumentFieldDetailComponent {
   }
 
   getFieldDetailComponent(field: Field): DocumentFieldDetailComponent {
-    if (this.field == field) {
+    if (this.field === field) {
       return this;
     }
     for (const c of this.fieldComponents.toArray()) {
@@ -249,7 +249,7 @@ export class DocumentFieldDetailComponent {
     } else {
       this.modalWindow.headerText = 'Remove field?';
     }
-    this.modalWindow.message = "Are you sure you want to remove '" + this.field.displayName + "'?";
+    this.modalWindow.message = 'Are you sure you want to remove \'' + this.field.displayName + '\'?';
     this.modalWindow.okButtonHandler = (mw: ModalWindowComponent) => {
       self.cfg.mappings.removeFieldFromAllMappings(self.field);
       self.field.docDef.removeField(self.field);

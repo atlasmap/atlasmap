@@ -153,7 +153,7 @@ function ui() {
   pushd ui
   yarn install --verbose --no-progress
   yarn lint
-  yarn build
+  yarn build:lib
   if [ -z "$SKIP_TESTS" ]; then
     yarn inspect
     yarn test:coverage

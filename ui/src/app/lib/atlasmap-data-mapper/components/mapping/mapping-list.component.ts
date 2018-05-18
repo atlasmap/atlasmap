@@ -38,23 +38,23 @@ export class MappingListComponent {
   }
 
   searchResultsVisible(): boolean {
-    if (!this.searchMode || this.searchFilter == null || this.searchFilter == '') {
+    if (!this.searchMode || this.searchFilter == null || this.searchFilter === '') {
       return false;
     }
-    return (this.searchResults.length == 0);
+    return (this.searchResults.length === 0);
   }
 
   getMappingCSSClass(mapping: MappingModel, index: number): string {
     let cssClass = 'item ';
-    cssClass += (index % 2 == 1) ? ' even' : '';
-    if (mapping == this.cfg.mappings.activeMapping) {
+    cssClass += (index % 2 === 1) ? ' even' : '';
+    if (mapping === this.cfg.mappings.activeMapping) {
       cssClass += ' active';
     }
     return cssClass;
   }
 
   selectMapping(mapping: MappingModel): void {
-    if (this.cfg.mappings.activeMapping == mapping) {
+    if (this.cfg.mappings.activeMapping === mapping) {
       this.cfg.mappingService.deselectMapping();
     } else {
       this.cfg.mappingService.selectMapping(mapping);
@@ -76,7 +76,7 @@ export class MappingListComponent {
   getMappedFields(fieldPair: FieldMappingPair, isSource: boolean): MappedField[] {
     let fields: MappedField[] = fieldPair.getMappedFields(isSource);
     fields = MappedField.sortMappedFieldsByPath(fields, false);
-    if (fields.length == 0) {
+    if (fields.length === 0) {
       const mappedField: MappedField = new MappedField();
       mappedField.field = DocumentDefinition.getNoneField();
       fields.push(mappedField);
@@ -95,7 +95,7 @@ export class MappingListComponent {
   }
 
   fieldPairMatchesSearch(fieldPair: FieldMappingPair): boolean {
-    if (!this.searchMode || this.searchFilter == null || this.searchFilter == '') {
+    if (!this.searchMode || this.searchFilter == null || this.searchFilter === '') {
       return true;
     }
     const filter: string = this.searchFilter.toLowerCase();
@@ -118,7 +118,7 @@ export class MappingListComponent {
   private search(searchFilter: string): void {
     this.searchFilter = searchFilter;
 
-    if (!this.searchMode || this.searchFilter == null || this.searchFilter == '') {
+    if (!this.searchMode || this.searchFilter == null || this.searchFilter === '') {
       this.searchResults = [].concat(this.cfg.mappings.getAllMappings(true));
       return;
     }

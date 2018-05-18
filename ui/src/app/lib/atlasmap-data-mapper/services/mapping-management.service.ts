@@ -17,11 +17,8 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-import { Observable } from 'rxjs/Observable';
-import { Subject } from 'rxjs/Subject';
-import 'rxjs/add/operator/toPromise';
-import 'rxjs/add/observable/forkJoin';
-import 'rxjs/add/operator/map';
+import { Observable, Subject, forkJoin } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { ConfigModel } from '../models/config.model';
 import { Field } from '../models/field.model';
@@ -75,7 +72,7 @@ export class MappingManagementService {
 
   fetchMappings(mappingFileNames: string[], mappingDefinition: MappingDefinition): Observable<boolean> {
     return new Observable<boolean>((observer: any) => {
-      if (mappingFileNames.length == 0) {
+      if (mappingFileNames.length === 0) {
         observer.complete();
         return;
       }
@@ -85,11 +82,11 @@ export class MappingManagementService {
       for (const mappingName of mappingFileNames) {
         const url: string = baseURL + mappingName;
         DataMapperUtil.debugLogJSON(null, 'Mapping Service Request', this.cfg.initCfg.debugMappingServiceCalls, url);
-        const operation = this.http.get(url).map((res: any) => res);
+        const operation = this.http.get(url).pipe(map((res: any) => res));
         operations.push(operation);
       }
 
-      Observable.forkJoin(operations).toPromise().then((data: any[]) => {
+      forkJoin(operations).toPromise().then((data: any[]) => {
         if (!data) {
           observer.next(false);
           observer.complete();
@@ -112,7 +109,7 @@ export class MappingManagementService {
 
   saveCurrentMapping(): void {
     const activeMapping: MappingModel = this.cfg.mappings.activeMapping;
-    if ((activeMapping != null) && (this.cfg.mappings.mappings.indexOf(activeMapping) == -1)) {
+    if ((activeMapping != null) && (this.cfg.mappings.mappings.indexOf(activeMapping) === -1)) {
       this.cfg.mappings.mappings.push(activeMapping);
     }
 
@@ -166,7 +163,7 @@ export class MappingManagementService {
 
   removeMappedPair(fieldPair: FieldMappingPair): void {
     this.cfg.mappings.activeMapping.removeMappedPair(fieldPair);
-    if (this.cfg.mappings.activeMapping.fieldMappings.length == 0) {
+    if (this.cfg.mappings.activeMapping.fieldMappings.length === 0) {
       this.deselectMapping();
     }
     this.saveCurrentMapping();
@@ -197,7 +194,7 @@ export class MappingManagementService {
       fields = fieldPair.targetFields;
     }
     for (const mfield of fields) {
-      if (mfield.field.name == removeField.name) {
+      if (mfield.field.name === removeField.name) {
         DataMapperUtil.removeItemFromArray(mfield, fields);
         break;
       }
@@ -205,7 +202,7 @@ export class MappingManagementService {
     fieldPair.updateTransition(removeField.isSource(), compoundSelection, true);
 
     // If the removed field was the last field of this pairing then remove the field pair as well.
-    if (fields.length == 0 && compoundSelection) {
+    if (fields.length === 0 && compoundSelection) {
       this.removeMappedPair(fieldPair);
     }
     this.saveCurrentMapping();
@@ -230,7 +227,7 @@ export class MappingManagementService {
     if (mappingPair.transition == null || field == null) {
       return;
     }
-    if (mappingPair.transition.mode == TransitionMode.COMBINE) {
+    if (mappingPair.transition.mode === TransitionMode.COMBINE) {
 
       // Compound source mapping when not in Combine mode
       if (!field.isSource()) {
@@ -241,7 +238,7 @@ export class MappingManagementService {
       }
       suggestedValue = mappingPair.sourceFields[mappingPair.sourceFields.length - 1].actions[0].argumentValues[0].value;
 
-    } else if (mappingPair.transition.mode == TransitionMode.SEPARATE) {
+    } else if (mappingPair.transition.mode === TransitionMode.SEPARATE) {
       if (field.isSource()) {
 
         // Compound target mapping when not in Separate mode.
@@ -254,8 +251,8 @@ export class MappingManagementService {
     }
     const newMField = new MappedField;
     newMField.field = field;
-    newMField.updateSeparateOrCombineFieldAction(mappingPair.transition.mode == TransitionMode.SEPARATE,
-      mappingPair.transition.mode == TransitionMode.COMBINE, suggestedValue, field.isSource(), true, false);
+    newMField.updateSeparateOrCombineFieldAction(mappingPair.transition.mode === TransitionMode.SEPARATE,
+      mappingPair.transition.mode === TransitionMode.COMBINE, suggestedValue, field.isSource(), true, false);
     if (field.isSource()) {
       mappingPair.sourceFields.push(newMField);
     } else {
@@ -307,7 +304,7 @@ export class MappingManagementService {
       if (mappingsForField && mappingsForField.length > 1) {
         this.mappingSelectionRequiredSource.next(field);
         return;
-      } else if (mappingsForField && mappingsForField.length == 1) {
+      } else if (mappingsForField && mappingsForField.length === 1) {
         mapping = mappingsForField[0];
       }
 
@@ -320,7 +317,7 @@ export class MappingManagementService {
     // Check to see if the field is a valid selection for this mapping
     const exclusionReason: string = mapping.getFieldSelectionExclusionReason(field);
     if (exclusionReason != null) {
-      this.cfg.errorService.warn("The field '" + field.displayName + "' cannot be selected, " + exclusionReason + '.', null);
+      this.cfg.errorService.warn('The field \'' + field.displayName + '\' cannot be selected, ' + exclusionReason + '.', null);
       return;
     }
 
@@ -329,14 +326,14 @@ export class MappingManagementService {
     const latestFieldPair: FieldMappingPair = mapping.getCurrentFieldMapping();
     if (latestFieldPair != null) {
       const lastMappedField: MappedField = latestFieldPair.getLastMappedField(field.isSource());
-      if (lastMappedField != null && lastMappedField.field.name.length == 0) {
+      if (lastMappedField != null && lastMappedField.field.name.length === 0) {
         lastMappedField.field = field;
       }
       if (!fieldRemoved) {
 
         // Auto-transition from MAP mode to either COMBINE or SEPARATE if the user has
         // compound-selected another field.
-        if (latestFieldPair.transition.mode == TransitionMode.MAP) {
+        if (latestFieldPair.transition.mode === TransitionMode.MAP) {
           const mappedFields: MappedField[] = latestFieldPair.getMappedFields(field.isSource());
           if (mappedFields.length > 1) {
             if (field.isSource()) {
@@ -407,7 +404,7 @@ export class MappingManagementService {
 
   validateMappings(): void {
     if (this.cfg.initCfg.baseMappingServiceUrl == null) {
-      //validation service not configured.
+      // validation service not configured.
       return;
     }
     const payload: any = MappingSerializer.serializeMappings(this.cfg);
@@ -430,7 +427,7 @@ export class MappingManagementService {
             level = ErrorLevel.INFO;
           }
           const errorInfo = new ErrorInfo(validation.message, level);
-          if (!validation.scope || validation.scope != 'MAPPING' || !validation.id) {
+          if (!validation.scope || validation.scope !== 'MAPPING' || !validation.id) {
             globalErrors.push(errorInfo);
           } else if (mapping && mapping.uuid && validation.id === mapping.uuid) {
             activeMappingErrors.push(errorInfo);
@@ -491,7 +488,7 @@ export class MappingManagementService {
 
   sortFieldActionConfigs(configs: FieldActionConfig[]): FieldActionConfig[] {
     const sortedActionConfigs: FieldActionConfig[] = [];
-    if (configs == null || configs.length == 0) {
+    if (configs == null || configs.length === 0) {
       return sortedActionConfigs;
     }
 

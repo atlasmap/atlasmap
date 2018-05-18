@@ -75,7 +75,7 @@ export class LookupTableComponent {
       const selectedOptions: any[] = c.nativeElement.selectedOptions;
       if (selectedOptions && selectedOptions.length) {
         const targetValue: string = selectedOptions[0].label;
-        if (targetValue == '[ None ]') {
+        if (targetValue === '[ None ]') {
           continue;
         }
         const e: LookupTableEntry = new LookupTableEntry();

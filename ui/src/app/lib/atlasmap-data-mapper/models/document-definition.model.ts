@@ -20,13 +20,13 @@ import { MappingDefinition } from '../models/mapping-definition.model';
 import { DataMapperUtil } from '../common/data-mapper-util';
 
 export class NamespaceModel {
+  private static unqualifiedNamespace: NamespaceModel = null;
+
   alias: string = null;
   uri: string = null;
   locationUri: string = null;
   createdByUser = false;
   isTarget = false;
-
-  private static unqualifiedNamespace: NamespaceModel = null;
 
   static getUnqualifiedNamespace(): NamespaceModel {
     if (NamespaceModel.unqualifiedNamespace == null) {
@@ -38,7 +38,7 @@ export class NamespaceModel {
   }
 
   getPrettyLabel(): string {
-    if (this == NamespaceModel.getUnqualifiedNamespace()) {
+    if (this === NamespaceModel.getUnqualifiedNamespace()) {
       return this.alias;
     }
     return (this.isTarget ? 'Target' : this.alias)
@@ -57,6 +57,8 @@ export class NamespaceModel {
 }
 
 export class DocumentDefinition {
+  private static noneField: Field = null;
+
   id: string;
   _type: DocumentType;
   name: string;
@@ -86,11 +88,39 @@ export class DocumentDefinition {
   characterEncoding: string = null;
   locale: string = null;
 
-  private static noneField: Field = null;
+  static getNoneField(): Field {
+    if (DocumentDefinition.noneField == null) {
+      DocumentDefinition.noneField = new Field();
+      DocumentDefinition.noneField.name = '';
+      DocumentDefinition.noneField.type = '';
+      DocumentDefinition.noneField.displayName = '';
+      DocumentDefinition.noneField.path = '';
+    }
+    return DocumentDefinition.noneField;
+  }
+
+  static selectFields(fields: Field[]): void {
+    for (const field of fields) {
+      field.selected = true;
+    }
+  }
+
+  static getDocumentByIdentifier(documentId: string, docs: DocumentDefinition[]): DocumentDefinition {
+    if (documentId == null || docs == null || !docs.length) {
+      return null;
+    }
+    for (const doc of docs) {
+      if (doc.id === documentId) {
+        return doc;
+      }
+    }
+    return null;
+
+  }
 
   set type(type: DocumentType) {
     this._type = type;
-    this.isPropertyOrConstant = type == DocumentType.CONSTANT || type == DocumentType.PROPERTY;
+    this.isPropertyOrConstant = type === DocumentType.CONSTANT || type === DocumentType.PROPERTY;
   }
 
   get type(): DocumentType {
@@ -109,17 +139,6 @@ export class DocumentDefinition {
     return [].concat(this.allFields);
   }
 
-  static getNoneField(): Field {
-    if (DocumentDefinition.noneField == null) {
-      DocumentDefinition.noneField = new Field();
-      DocumentDefinition.noneField.name = '';
-      DocumentDefinition.noneField.type = '';
-      DocumentDefinition.noneField.displayName = '';
-      DocumentDefinition.noneField.path = '';
-    }
-    return DocumentDefinition.noneField;
-  }
-
   /**
    * Return true if the specified field name already exists in the specified document definition,
    * false otherwise.
@@ -129,7 +148,7 @@ export class DocumentDefinition {
   fieldExists(targetField: Field, targetFieldDocDefType: DocumentType): boolean {
 
     for (const field of this.getAllFields()) {
-      if (field.name == targetField.name && field.docDef.type == targetFieldDocDefType) {
+      if (field.name === targetField.name && field.docDef.type === targetFieldDocDefType) {
           return true;
       }
     }
@@ -137,11 +156,11 @@ export class DocumentDefinition {
   }
 
   isFieldsExist(fields: Field[]): boolean {
-    if (fields == null || fields.length == 0) {
+    if (fields == null || fields.length === 0) {
       return true;
     }
     const foundFields: Field[] = this.getFields(Field.getFieldPaths(fields));
-    return (foundFields != null) && (fields.length == foundFields.length);
+    return (foundFields != null) && (fields.length === foundFields.length);
   }
 
   getFields(fieldPaths: string[]): Field[] {
@@ -168,7 +187,7 @@ export class DocumentDefinition {
 
   getNamespaceForAlias(alias: string): NamespaceModel {
     for (const ns of this.namespaces) {
-      if (alias == ns.alias) {
+      if (alias === ns.alias) {
         return ns;
       }
     }
@@ -176,32 +195,32 @@ export class DocumentDefinition {
   }
 
   getField(fieldPath: string): Field {
-    if (fieldPath == DocumentDefinition.getNoneField().path) {
+    if (fieldPath === DocumentDefinition.getNoneField().path) {
       return DocumentDefinition.getNoneField();
     }
     if (fieldPath == null) {
       return null;
     }
     let field: Field = this.fieldsByPath[fieldPath];
-    //if we can't find the field we're looking for, find parent fields and populate their children
+    // if we can't find the field we're looking for, find parent fields and populate their children
     const pathSeparator: string = this.pathSeparator;
     let originalPath: string = fieldPath;
-    //strip beginning path separator from path
-    if (originalPath != null && originalPath.indexOf(pathSeparator) == 0) {
+    // strip beginning path separator from path
+    if (originalPath != null && originalPath.indexOf(pathSeparator) === 0) {
       originalPath = originalPath.substring(1);
     }
-    if (field == null && (originalPath.indexOf(pathSeparator) != -1)) {
+    if (field == null && (originalPath.indexOf(pathSeparator) !== -1)) {
       let currentParentPath = '';
-      while (originalPath.indexOf(pathSeparator) != -1) {
+      while (originalPath.indexOf(pathSeparator) !== -1) {
         const currentPathSection: string = originalPath.substr(0, originalPath.indexOf(pathSeparator));
         currentParentPath += pathSeparator + currentPathSection;
         const parentField: Field = this.fieldsByPath[currentParentPath];
         if (parentField == null) {
-          throw new Error("Could not populate parent field with path '"
-            + currentParentPath + "' (for: " + fieldPath + ')');
+          throw new Error('Could not populate parent field with path \''
+            + currentParentPath + '\' (for: ' + fieldPath + ')');
         }
         this.populateChildren(parentField);
-        if (originalPath.indexOf(pathSeparator) != -1) {
+        if (originalPath.indexOf(pathSeparator) !== -1) {
           originalPath = originalPath.substr(originalPath.indexOf(pathSeparator) + 1);
         }
       }
@@ -230,14 +249,8 @@ export class DocumentDefinition {
     return fields;
   }
 
-  static selectFields(fields: Field[]): void {
-    for (const field of fields) {
-      field.selected = true;
-    }
-  }
-
   initializeFromFields(debugDocumentParsing: boolean): void {
-    if (this.type == DocumentType.JAVA) {
+    if (this.type === DocumentType.JAVA) {
       this.prepareComplexFields(debugDocumentParsing);
     }
 
@@ -265,7 +278,7 @@ export class DocumentDefinition {
   updateField(field: Field, oldPath: string): void {
     Field.alphabetizeFields(this.fields);
     if (field.parentField == null
-      || field.parentField == DocumentDefinition.getNoneField()
+      || field.parentField === DocumentDefinition.getNoneField()
       || this.isPropertyOrConstant) {
       this.populateFieldParentPaths(field, null, 0);
     } else {
@@ -283,7 +296,7 @@ export class DocumentDefinition {
 
   addField(field: Field): void {
     if (field.parentField == null
-      || field.parentField == DocumentDefinition.getNoneField()
+      || field.parentField === DocumentDefinition.getNoneField()
       || this.isPropertyOrConstant) {
       this.fields.push(field);
       Field.alphabetizeFields(this.fields);
@@ -357,9 +370,9 @@ export class DocumentDefinition {
       field.partOfTransformation = false;
     }
 
-    //FIXME: some of this work is happening N times for N source/target docs, should only happen once.
+    // FIXME: some of this work is happening N times for N source/target docs, should only happen once.
     for (const mapping of mappingDefinition.getAllMappings(true)) {
-      const mappingIsActive: boolean = (mapping == mappingDefinition.activeMapping);
+      const mappingIsActive: boolean = (mapping === mappingDefinition.activeMapping);
 
       let partOfTransformation = false;
       for (const fieldPair of mapping.fieldMappings) {
@@ -381,19 +394,6 @@ export class DocumentDefinition {
     for (const field of this.allFields) {
       field.hasUnmappedChildren = Field.fieldHasUnmappedChild(field);
     }
-  }
-
-  static getDocumentByIdentifier(documentId: string, docs: DocumentDefinition[]): DocumentDefinition {
-    if (documentId == null || docs == null || !docs.length) {
-      return null;
-    }
-    for (const doc of docs) {
-      if (doc.id === documentId) {
-        return doc;
-      }
-    }
-    return null;
-
   }
 
   private populateFieldParentPaths(field: Field, parentPath: string, depth: number): void {
@@ -438,7 +438,7 @@ export class DocumentDefinition {
   private prepareComplexFields(debugDocumentParsing: boolean): void {
     const fields: Field[] = this.fields;
 
-    //build complex field cache
+    // build complex field cache
     this.discoverComplexFields(fields);
 
     for (const key in this.complexFieldsByClassIdentifier) {
@@ -446,11 +446,11 @@ export class DocumentDefinition {
         continue;
       }
       const cachedField: Field = this.complexFieldsByClassIdentifier[key];
-      //remove children more than one level deep in cached fields
+      // remove children more than one level deep in cached fields
       for (const childField of cachedField.children) {
         childField.children = [];
       }
-      //alphebatize complex field's childrein
+      // alphebatize complex field's childrein
       Field.alphabetizeFields(cachedField.children);
     }
 
@@ -470,10 +470,10 @@ export class DocumentDefinition {
 
   private discoverComplexFields(fields: Field[]): void {
     for (const field of fields) {
-      if (field.type != 'COMPLEX') {
+      if (field.type !== 'COMPLEX') {
         continue;
       }
-      if (field.serviceObject.status == 'SUPPORTED') {
+      if (field.serviceObject.status === 'SUPPORTED') {
         this.complexFieldsByClassIdentifier[field.classIdentifier] = field.copy();
       }
       if (field.children) {
@@ -485,7 +485,7 @@ export class DocumentDefinition {
   private printDocumentFields(fields: Field[], indent: number): string {
     let result = '';
     for (const f of fields) {
-      if (f.type != 'COMPLEX') {
+      if (f.type !== 'COMPLEX') {
         continue;
       }
       for (let i = 0; i < indent; i++) {

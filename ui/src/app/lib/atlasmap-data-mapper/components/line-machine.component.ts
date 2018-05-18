@@ -23,7 +23,7 @@ import { Field } from '../models/field.model';
 
 import { DocumentDefinitionComponent } from './document-definition.component';
 import { DocumentFieldDetailComponent } from './document-field-detail.component';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 export class LineModel {
   sourceX: string;
@@ -172,7 +172,7 @@ export class LineMachineComponent implements OnInit, OnDestroy {
     const activeMapping: MappingModel = this.cfg.mappings.activeMapping;
     let foundSelectedMapping = false;
     for (const m of mappings) {
-      foundSelectedMapping = foundSelectedMapping || (m == activeMapping);
+      foundSelectedMapping = foundSelectedMapping || (m === activeMapping);
       this.drawLinesForMapping(m);
     }
     if (!foundSelectedMapping && activeMapping) {
@@ -184,7 +184,7 @@ export class LineMachineComponent implements OnInit, OnDestroy {
   }
 
   private createLineStyle(l: LineModel): void {
-    //angular2 will throw an error if we don't use this sanitizer to signal to angular2 that the css style value is ok.
+    // angular2 will throw an error if we don't use this sanitizer to signal to angular2 that the css style value is ok.
     l.style = this.sanitizer.bypassSecurityTrustStyle('stroke:' + l.stroke + '; stroke-width:4px;');
   }
 
@@ -192,7 +192,7 @@ export class LineMachineComponent implements OnInit, OnDestroy {
     const el: any = this.lineMachineElement.nativeElement;
     const lineMachineHeight: number = el.offsetHeight;
 
-    const isSelectedMapping: boolean = (this.cfg.mappings.activeMapping == m);
+    const isSelectedMapping: boolean = (this.cfg.mappings.activeMapping === m);
     const stroke: string = 'url(#line-gradient-' + (isSelectedMapping ? 'active' : 'dormant') + ')';
     for (const fieldPair of m.fieldMappings) {
       if (!fieldPair.sourceFields.length || !fieldPair.targetFields.length) {

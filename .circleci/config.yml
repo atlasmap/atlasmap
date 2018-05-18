@@ -23,7 +23,7 @@ common_env: &common_env
 job_default: &job_defaults
   working_directory: /workspace
   docker:
-    - image: wombat7/openjdk-node-docker
+    - image: openjdk:8-jdk
   
 load_m2: &load_m2
   attach_workspace:
@@ -92,8 +92,8 @@ publish_npm: &publish_npm
       if [ -z "${NPM_TAG}" ]; then
         exit 0
       fi
-      cd dist
-      echo "Publishing @atlasmap/atlasmap.data.mapper ${NPM_TAG}..."
+      cd dist/lib
+      echo "Publishing @atlasmap/atlasmap-data-mapper ${NPM_TAG}..."
       git config --global user.name "AtlasMap CI"
       git config --global user.email "tm.igarashi+atlasmapci@gmail.com"
       npm version ${NPM_TAG}
@@ -207,16 +207,18 @@ jobs:
       - checkout
       - <<: *load_m2
       - run:
+          name: Install Chromium
+          command: |
+            apt-get update -qq
+            apt-get install -qq -y wget curl
+            curl -sL https://deb.nodesource.com/setup_8.x | bash -
+            apt-get install -qq -y chromium libgconf2-4 libxss1 libgtk-3-0 nodejs
+      - run:
           name: Install yarn
           command: |
             rm -rf ~/.yarn
             curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.3.2
             echo 'export PATH="${HOME}/.yarn/bin:${PATH}"' >> $BASH_ENV
-      - run:
-          name: Install Chromium
-          command: |
-            apt-get update -qq
-            apt-get install -qq -y chromium libgconf2-4 libnss3-1d libxss1 libgtk-3-0
       - restore_cache:
           key: atlasmap-yarn-{{ checksum "ui/yarn.lock" }}
       - run:
@@ -227,7 +229,7 @@ jobs:
           command: cd ui; yarn lint | tee -a build_log.txt
       - run:
           name: yarn build
-          command: cd ui; yarn build | tee -a build_log.txt
+          command: cd ui; yarn build:lib | tee -a build_log.txt
       - run:
           name: yarn inspect
           command: cd ui; yarn inspect | tee -a build_log.txt

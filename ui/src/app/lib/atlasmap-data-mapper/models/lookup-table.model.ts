@@ -53,7 +53,7 @@ export class LookupTable {
 
   getEntryForSource(sourceValue: string, autocreate: boolean): LookupTableEntry {
     for (const entry of this.entries) {
-      if (entry.sourceValue == sourceValue) {
+      if (entry.sourceValue === sourceValue) {
         return entry;
       }
     }

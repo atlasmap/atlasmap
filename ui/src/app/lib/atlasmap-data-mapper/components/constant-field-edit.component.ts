@@ -69,7 +69,7 @@ export class ConstantFieldEditComponent implements ModalWindowValidator {
    * and enable the save button otherwise.
    */
   valueExistsOnCreation(): boolean {
-    if (this.fieldMode == FieldMode.CREATE && this.docDef != null &&
+    if (this.fieldMode === FieldMode.CREATE && this.docDef != null &&
         this.docDef.fieldExists(this.getField(), DocumentType.CONSTANT)) {
       this.modalWindowComponent.confirmButtonDisabled = true;
       return true;

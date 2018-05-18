@@ -20,7 +20,7 @@ import { DocumentDefinition, NamespaceModel } from '../models/document-definitio
 import { Field } from '../models/field.model';
 import { DocumentType } from '../common/config.types';
 import { ConfigModel } from '../models/config.model';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { ModalWindowValidator } from './modal-window.component';
 
 @Component({
@@ -56,7 +56,7 @@ export class FieldEditComponent implements ModalWindowValidator {
     this.valueType = (this.field.type == null) ? 'STRING' : this.field.type;
     this.parentField = (this.field.parentField == null) ? DocumentDefinition.getNoneField() : this.field.parentField;
 
-    if (this.docDef.type == DocumentType.XML) {
+    if (this.docDef.type === DocumentType.XML) {
       this.isXML = true;
       this.fieldType = this.field.isAttribute ? 'attribute' : 'element';
       this.parentField = (this.field.parentField == null) ? docDef.fields[0] : this.field.parentField;
@@ -75,7 +75,7 @@ export class FieldEditComponent implements ModalWindowValidator {
       // user to select if they desire to leave that bad namespace alias in place
       let namespaceFound = false;
       for (const ns of this.namespaces) {
-        if (ns.alias == this.namespaceAlias) {
+        if (ns.alias === this.namespaceAlias) {
           namespaceFound = true;
           break;
         }
@@ -119,7 +119,7 @@ export class FieldEditComponent implements ModalWindowValidator {
   executeSearch(filter: string): any[] {
     const formattedFields: any[] = [];
 
-    if (this.docDef.type == DocumentType.JSON) {
+    if (this.docDef.type === DocumentType.JSON) {
       const noneField: Field = DocumentDefinition.getNoneField();
       formattedFields.push({
         'field': noneField,
@@ -134,8 +134,8 @@ export class FieldEditComponent implements ModalWindowValidator {
       }
       const displayName = (field == null) ? '' : field.getFieldLabel(ConfigModel.getConfig().showTypes, true);
       const formattedField: any = { 'field': field, 'displayName': displayName };
-      if (filter == null || filter == ''
-        || formattedField['displayName'].toLowerCase().indexOf(filter.toLowerCase()) != -1) {
+      if (filter == null || filter === ''
+        || formattedField['displayName'].toLowerCase().indexOf(filter.toLowerCase()) !== -1) {
         formattedFields.push(formattedField);
       }
       if (formattedFields.length > 9) {
@@ -151,11 +151,11 @@ export class FieldEditComponent implements ModalWindowValidator {
     this.field.type = this.valueType;
     this.field.userCreated = true;
     this.field.serviceObject.jsonType = 'io.atlasmap.json.v2.JsonField';
-    if (this.docDef.type == DocumentType.XML) {
-      this.field.isAttribute = (this.fieldType == 'attribute');
+    if (this.docDef.type === DocumentType.XML) {
+      this.field.isAttribute = (this.fieldType === 'attribute');
       this.field.namespaceAlias = this.namespaceAlias;
       const unqualifiedNS: NamespaceModel = NamespaceModel.getUnqualifiedNamespace();
-      if (this.namespaceAlias == unqualifiedNS.alias) {
+      if (this.namespaceAlias === unqualifiedNS.alias) {
         this.field.namespaceAlias = null;
       }
       this.field.serviceObject.jsonType = 'io.atlasmap.xml.v2.XmlField';
