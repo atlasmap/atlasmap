@@ -17,7 +17,6 @@
 import { environment } from '../../../../environments/environment';
 import { MappingDefinition } from './mapping-definition.model';
 import { DocumentDefinition } from './document-definition.model';
-import { Field } from '../models/field.model';
 
 import { ErrorHandlerService } from '../services/error-handler.service';
 import { DocumentManagementService } from '../services/document-management.service';
@@ -125,7 +124,7 @@ export class ConfigModel {
   showTypes = false;
   showMappedFields = true;
   showUnmappedFields = true;
-  currentDraggedField: Field = null;
+  currentDraggedField: any = null;
 
   documentService: DocumentManagementService;
   mappingService: MappingManagementService;

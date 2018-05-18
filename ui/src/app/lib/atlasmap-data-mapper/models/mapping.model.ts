@@ -40,8 +40,22 @@ export class MappedField {
   field: Field = DocumentDefinition.getNoneField();
   actions: FieldAction[] = [];
 
-  updateSeparateOrCombineIndex(separateMode: boolean, combineMode: boolean, suggestedValue: string,
-                               isSource: boolean, compoundSelection: boolean, fieldRemoved: boolean): void {
+  isSource(): boolean {
+    return this.field.isSource();
+  }
+
+  /**
+   * Given a selection or de-selection of a component, update the appropriate field action.
+   *
+   * @param separateMode
+   * @param combineMode
+   * @param suggestedValue
+   * @param isSource
+   * @param compoundSelection
+   * @param fieldRemoved
+   */
+  updateSeparateOrCombineFieldAction(separateMode: boolean, combineMode: boolean, suggestedValue: string,
+                                     isSource: boolean, compoundSelection: boolean, fieldRemoved: boolean): void {
 
     // Remove field actions where appropriate.
     if ((!separateMode && !combineMode) || (separateMode && isSource && compoundSelection)) {
@@ -89,20 +103,6 @@ export class MappedField {
       return maxIndex.toString();
     }
     return null;
-  }
-
-  /**
-   * Set the field action index value of this mapped field in separate or combine mode.
-   * @param newIndexValue
-   */
-  setSeparateOrCombineIndex(newIndexValue: number): void {
-    const firstFieldAction: FieldAction = (this.actions.length > 0) ? this.actions[0] : null;
-    if (firstFieldAction != null && firstFieldAction.isSeparateOrCombineMode) {
-      const indexValue = firstFieldAction.argumentValues[0];
-      if (indexValue.value != null) {
-        firstFieldAction.setArgumentValue('Index', newIndexValue.toString(10));
-      }
-    }
   }
 
   removeAction(action: FieldAction): void {
@@ -265,10 +265,39 @@ export class FieldMappingPair {
   }
 
   /**
+   * Given an array of mapped fields, re-sequence the field action indices.  An optional mapped field may be
+   * specified to be inserted at a designated index.
+   *
+   * @param mappedFields
+   * @param insertedMappedField - optional user-selected mapped field which was just dragged/dropped
+   * @param inIndex - drop index location
+   */
+  resequenceFieldActionIndices(mappedFields: MappedField[], insertedMappedField: MappedField,
+                               inIndex: string): number {
+    let startIndex = 0;
+    if (insertedMappedField != null) {
+      startIndex = +insertedMappedField.actions[0].argumentValues[0].value - 1;
+      mappedFields.splice(startIndex, 1);
+      startIndex = +inIndex - 1;
+      mappedFields.splice(startIndex, 0, insertedMappedField);
+    }
+
+    // Now re-sequence the index on the ordinal position within the mapped fields array.
+    let index = 1;
+    for (const mField of mappedFields) {
+      if (mField.actions != null && mField.actions.length > 0) {
+        mField.actions[0].argumentValues[0].value = index.toString(10);  // Field action index is always first
+      }
+      index++;
+    }
+    return(index - 1);
+  }
+
+  /**
    * Normalize index fields for combine/ separate modes.
    * @param combineMode
    */
-  processIndices(combineMode: boolean, compoundSelection: boolean): number {
+  processIndices(combineMode: boolean): number {
 
     // Remove indices from target fields in combine-mode if they exist or remove indices from
     // source fields in separate-mode if they exist.
@@ -278,35 +307,7 @@ export class FieldMappingPair {
 
     // Gather mapped fields.
     const mappedFields = this.getMappedFields(combineMode);
-    let resequence = compoundSelection;
-
-    // Find the max separator index from the existing fields.
-    let maxIndex = 0;
-    for (const mField of mappedFields) {
-      const index: string = mField.getSeparateOrCombineIndex();
-      const indexAsNumber = (index == null) ? 0 : parseInt(index, 10);
-      maxIndex = Math.max(maxIndex, indexAsNumber);
-
-      // If any index is explicitly user modified then skip re-sequencing.
-      if (mField.parsedData.userCreated) {
-        resequence = false;
-      }
-    }
-    maxIndex += 1;
-
-    // Re-sequence the combine/ separate indices in the event of an element removal.
-    if (resequence) {
-
-      let index = 1;
-      for (const mField of mappedFields) {
-        mField.actions = [];
-        const currentFieldAction: FieldAction = FieldAction.createSeparateCombineFieldAction(!combineMode, index.toString(10));
-        mField.actions = [currentFieldAction];
-        index++;
-      }
-      maxIndex = index - 1;
-    }
-    return maxIndex;
+    return this.resequenceFieldActionIndices(mappedFields, null, '');
   }
 
   updateTransition(isSource: boolean, compoundSelection: boolean, fieldRemoved: boolean): void {
@@ -336,11 +337,11 @@ export class FieldMappingPair {
     let maxIndex = 0;
 
     if (combineMode || separateMode) {
-      maxIndex = this.processIndices(combineMode, compoundSelection);
+      maxIndex = this.processIndices(combineMode);
       mappedFields = this.getMappedFields(combineMode);
       if (mappedFields != null && mappedFields.length > 0) {
         const mappedField: MappedField = mappedFields[mappedFields.length - 1];
-        mappedField.updateSeparateOrCombineIndex(separateMode, combineMode, maxIndex.toString(), isSource,
+        mappedField.updateSeparateOrCombineFieldAction(separateMode, combineMode, maxIndex.toString(), isSource,
                                                  compoundSelection, fieldRemoved);
       }
     } else {

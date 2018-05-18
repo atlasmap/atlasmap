@@ -211,6 +211,14 @@ export class MappingManagementService {
     this.saveCurrentMapping();
   }
 
+  resequenceMappedField(fieldPair: FieldMappingPair, insertedMappedField: MappedField, targetIndex: string): void {
+    if (fieldPair != null) {
+      const mappedFields = fieldPair.getMappedFields(insertedMappedField.isSource());
+      fieldPair.resequenceFieldActionIndices(mappedFields, insertedMappedField, targetIndex);
+      this.saveCurrentMapping();
+    }
+  }
+
   /**
    * Add a compound-selected field to an existing mapping.  Needed for combine/ separate modes.
    * A compound source selection in separate mode or a compound target selection in combine mode is an error.
@@ -218,32 +226,36 @@ export class MappingManagementService {
    */
   addActiveMappingField(field: Field): void {
     const mappingPair: FieldMappingPair = this.cfg.mappings.activeMapping.getFirstFieldMapping();
-    const mfield: MappedField = mappingPair.sourceFields[0];
-    if (mappingPair.transition != null) {
+    let suggestedValue = '0';
+    if (mappingPair.transition == null || field == null) {
+      return;
+    }
+    if (mappingPair.transition.mode == TransitionMode.COMBINE) {
 
+      // Compound source mapping when not in Combine mode
+      if (!field.isSource()) {
+        this.cfg.errorService.warn('The selected mapping details action ' + TransitionModel.getActionName(mappingPair.transition.mode) +
+                ' is not applicable from compound source selections (' + field.name +
+                ').  Recommend using field action \'Combine\'.', null);
+        return;
+      }
+      suggestedValue = mappingPair.sourceFields[mappingPair.sourceFields.length - 1].actions[0].argumentValues[0].value;
+
+    } else if (mappingPair.transition.mode == TransitionMode.SEPARATE) {
       if (field.isSource()) {
 
-        // Compound source mapping when not in Combine mode.
-        if (mappingPair.transition.mode != TransitionMode.COMBINE) {
-          this.cfg.errorService.warn('The selected mapping details action ' + TransitionModel.getActionName(mappingPair.transition.mode) +
-                                      ' is not applicable from compound source selections (' + field.name +
-                                      ').  Recommend using field action \'Combine\'.', null);
-          return;
-        }
-      } else {
-
         // Compound target mapping when not in Separate mode.
-        if (mappingPair.transition.mode != TransitionMode.SEPARATE) {
-          this.cfg.errorService.warn('The selected mapping details action ' + TransitionModel.getActionName(mappingPair.transition.mode) +
-                                     ' is not applicable to compound target selections (' + field.name +
-                                     ').  Recommend using field action \'Separate\'.', null);
-          return;
-        }
+        this.cfg.errorService.warn('The selected mapping details action ' + TransitionModel.getActionName(mappingPair.transition.mode) +
+                ' is not applicable to compound target selections (' + field.name +
+                ').  Recommend using field action \'Separate\'.', null);
+        return;
       }
+      suggestedValue = mappingPair.targetFields[mappingPair.targetFields.length - 1].actions[0].argumentValues[0].value;
     }
     const newMField = new MappedField;
     newMField.field = field;
-    newMField.actions = mfield.actions;
+    newMField.updateSeparateOrCombineFieldAction(mappingPair.transition.mode == TransitionMode.SEPARATE,
+      mappingPair.transition.mode == TransitionMode.COMBINE, suggestedValue, field.isSource(), true, false);
     if (field.isSource()) {
       mappingPair.sourceFields.push(newMField);
     } else {

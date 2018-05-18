@@ -59,9 +59,13 @@ export class MappingFieldDetailComponent implements OnInit {
 
   displayParentObject(): boolean {
     if (this.mappedField == null || this.mappedField.field == null
+      || this.mappedField.field.name.length == 0
       || this.mappedField.field.docDef == null
       || (this.mappedField.field == DocumentDefinition.getNoneField())) {
       return false;
+    }
+    if (this.parentObjectName == null || this.parentObjectName.length == 0) {
+      this.updateTemplateValues();
     }
     return true;
   }
@@ -70,6 +74,26 @@ export class MappingFieldDetailComponent implements OnInit {
     this.mappedField.field = event.item['field'];
     this.cfg.mappingService.updateMappedField(this.fieldPair, this.mappedField.field.isSource());
     this.updateTemplateValues();
+  }
+
+  removeMappedField(mappedField: MappedField): void {
+    this.fieldPair.removeMappedField(mappedField, this.isSource);
+    if (this.fieldPair.getMappedFields(this.isSource).length == 0) {
+      this.fieldPair.addField(DocumentDefinition.getNoneField(), this.isSource);
+    }
+    this.cfg.mappingService.updateMappedField(this.fieldPair, this.isSource);
+  }
+
+  getActionIndex(mappedField: MappedField): string {
+    return mappedField.actions[0].argumentValues[0].value;
+  }
+
+  hasActionIndex(mappedField: MappedField): boolean {
+    if (mappedField.field.name.length > 0 && mappedField.actions != null &&
+        mappedField.actions.length > 0 && mappedField.actions[0].argumentValues != null &&
+        mappedField.actions[0].argumentValues.length > 0 && mappedField.actions[0].isSeparateOrCombineMode) {
+      return true;
+    } else { return false; }
   }
 
   executeSearch(filter: string): any[] {
