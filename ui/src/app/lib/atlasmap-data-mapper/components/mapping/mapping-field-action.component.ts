@@ -35,11 +35,8 @@ export class MappingFieldActionComponent {
     return this.mappedField.actions;
   }
 
-  getActionDescription(fieldAction: FieldAction): string {
-    if (fieldAction.isSeparateOrCombineMode) {
-      return fieldAction.config.name;
-    }
-    return 'Transformation';
+  isIndexArg(argVal: string, index: number): boolean {
+    return (argVal == 'Index' && index == 0);
   }
 
   actionsExistForField(): boolean {

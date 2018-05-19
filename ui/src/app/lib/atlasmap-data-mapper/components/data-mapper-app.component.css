@@ -214,9 +214,9 @@ I.docCollapseIcon { width:10px; margin-left:5px; }
 .mappingFieldAction .form-group LABEL { float:left; clear:left; width:30%; }
 .mappingFieldAction .form-group SELECT { float:left; clear:left; width:calc(100% - 3px); }
 .mappingFieldAction .form-group INPUT { float:left; width:69%; text-align:right; }
-.fieldMappingDetail .mappingFieldAction .linkContainer { padding-right:6px; padding-top:15px; padding-bottom:5px; }
+.fieldMappingDetail .mappingFieldAction .linkContainer { padding-right:6px; padding-top:15px; }
 .mappingFieldAction .actionContainer { box-shadow: 0 0 1px 1px rgba(51, 51, 51, 0.25); width:calc(100% - 7px);
-    padding:2px 10px; margin-left:1px; margin-top:15px; }
+    padding:2px 10px; margin-left:1px; }
 
 .CollapsableCardHeader {  border-top:1px solid #d1d1d1; }
 .CollapsableCardHeader .card-pf-heading { border-bottom:0; padding-left:5px; }
@@ -224,10 +224,10 @@ I.docCollapseIcon { width:10px; margin-left:5px; }
 .CollapsableCardHeader .card-pf-title { font-size:16px; }
 .CollapsableCardHeader I { margin-right:0px; vertical-align:middle; width:24px; font-size:20px; }
 
-.mappingFieldContainer { padding:0px 14px; }
-.fieldMappingDetail .linkContainer { width:100%; text-align:right; padding-bottom:15px; }
+.mappingFieldContainer { background-color:#d3d3d3; padding:14px 14px 6px 14px; }
+.fieldMappingDetail .linkContainer { position: relative; width:100%; text-align:right; }
 
-.MappingFieldSection { background-color:white; padding:10px; margin:0; margin-bottom:15px; box-shadow:0 0 1px 1px rgba(51, 51, 51, 0.25); }
+.MappingFieldSection { background-color:white; padding:10px; margin:0; margin-bottom:10px; box-shadow:0 0 1px 1px rgba(51, 51, 51, 0.25); }
 .MappingFieldSection LABEL { color:#363636; }
 .MappingFieldSection .fieldDetailTooltip LABEL { color:white; }
 
@@ -249,12 +249,12 @@ I.docCollapseIcon { width:10px; margin-left:5px; }
 
 .DataMapperUI .modal-message { padding:10px 20px; }
 
-.MappingSelectionComponent { margin-left:20px; margin-right:20px; margin-bottom:10px; width:500px; }
+.MappingSelectionComponent { margin-left:20px; margin-right:20px; width:500px; }
 .MappingSelectionComponent .MappingSelectionOptions { overflow:auto; max-height:300px; }
 .MappingSelectionComponent .inputFields,
     .MappingSelectionComponent .outputFields { width:200px; padding:5px; padding-left:10px; vertical-align:top; }
 
-.MappingSelectionSection { padding:0px 8px; margin-bottom:5px; border:1px solid #F6F6F6; }
+.MappingSelectionSection { padding:0px 8px; border:1px solid #F6F6F6; }
 .MappingSelectionSection .pathName, .MappingSelectionSection .pathContainer,
     .MappingSelectionSection .fieldName, .MappingSelectionSection .numberWrapper { display:inline; padding:0; margin:0; float:left; }
 .MappingSelectionSection .numberWrapper { width:30px; height:30px; text-align:center; color:#fafafa; background-color:#0088ce;

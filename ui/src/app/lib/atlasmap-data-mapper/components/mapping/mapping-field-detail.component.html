@@ -1,6 +1,6 @@
 <!-- our template for type ahead -->
 <ng-template #typeaheadTemplate let-model="item" let-index="index">
-  <h5 style="font-style:italic;">{{ model['field'].docDef == null ? '' : model['field'].docDef.name }}</h5>
+  <h5 style="font-style:italic;">{{ model['field'].docDef == null ? 'Not yet defined' : model['field'].docDef.name }}</h5>
   <h5>{{ model['field'].path }}</h5>
 </ng-template>
 
@@ -17,12 +17,22 @@
   </div>
 </ng-template>
 
-<div class="fieldDetail" style="margin-bottom:5px;" *ngIf="mappedField">
+<div class="fieldDetail" style="white-space:nowrap;" *ngIf="mappedField">
   <label class="parentObjectName" *ngIf="displayParentObject()">
     <i [ngClass]="sourceIconCSSClass"></i>
     {{ parentObjectName }}
     <span class="pficon pficon-info" [tooltip]="tolTemplate" placement="left"></span>
   </label>
+
+  <label style="float-right; padding-left:25px; font-style:italic;"
+    tooltip="To change index, drag and drop to the desired position"
+    *ngIf="hasActionIndex(mappedField)">Index:</label>
+  <label style="float-right; font-size:120%; font-weight:bold; color: green"
+    *ngIf="hasActionIndex(mappedField)">{{ getActionIndex(mappedField) }}</label>
+
+  <div class="pull-right" style="margin-right:5px;">
+    <i class="fa fa-trash link" aria-hidden="true" (click)="removeMappedField(mappedField)" tooltip="Remove mapping" placement="left"></i>
+  </div>
   <div style="width:100%;">
     <input type="text" id="{{inputId}}" [ngModel]="mappedField.field.getFieldLabel(cfg.showTypes, false)" [typeahead]="dataSource"
       typeaheadWaitMs="200" (typeaheadOnSelect)="selectionChanged($event)" typeaheadOptionField="displayName" [typeaheadItemTemplate]="typeaheadTemplate"

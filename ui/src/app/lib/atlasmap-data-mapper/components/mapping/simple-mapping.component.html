@@ -1,18 +1,13 @@
 <div class="mappingFieldContainer" *ngIf="fieldPair">
-  <div *ngFor="let mappedField of fieldPair.getMappedFields(isSource)" class="MappingFieldSection">
-    <!-- header label / trash icon -->
-    <div class="clearfix">
-      <div class="pull-left">
-        <label>{{ getTopFieldTypeLabel() }}</label>
-      </div>
-      <div class="pull-right" style="margin-right:5px;">
-        <i class="fa fa-trash link" aria-hidden="true" (click)="removeMappedField(mappedField)" tooltip="Remove mapping" placement="left"></i>
-      </div>
-    </div>
+  <div *ngFor="let mappedField of fieldPair.getMappedFields(isSource)" class="MappingFieldSection" on-mouseover='handleMouseOver($event)'
+    [attr.draggable]="true" (dragstart)="startDrag($event, mappedField)" (drop)="endDrag($event, mappedField)"
+    (dragenter)="dragEnterLeave($event, true)" (dragleave)="dragEnterLeave($event, false)" (dragover)="allowDrop($event)">
+
     <mapping-field-detail [fieldPair]="fieldPair" [cfg]="cfg" [isSource]="isSource" [mappedField]="mappedField"></mapping-field-detail>
-    <mapping-field-action [mappedField]="mappedField" [cfg]="cfg" [isSource]="isSource" [fieldPair]="fieldPair"></mapping-field-action>
+    <mapping-field-action [fieldPair]="fieldPair" [cfg]="cfg" [isSource]="isSource" [mappedField]="mappedField"></mapping-field-action>
   </div>
-  <!-- add button -->
+
+  <!-- 'Add Source/ Add Target' button -->
   <div class="linkContainer" *ngIf="isAddButtonVisible()">
     <button type="button" class="btn btn-primary" (click)="addClicked()">{{ getAddButtonLabel() }}</button>
   </div>

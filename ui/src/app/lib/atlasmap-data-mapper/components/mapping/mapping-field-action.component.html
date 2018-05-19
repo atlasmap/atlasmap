@@ -1,9 +1,9 @@
 <div class="mappingFieldAction">
   <div class="actionContainer" *ngFor="let action of getMappedFieldActions(); let actionIndex = index">
+
     <div class="form-group">
-      <label style="float:left;">{{ getActionDescription(action) }}</label>
       <div style="float:right; margin-right:5px;" *ngIf="!action.isSeparateOrCombineMode">
-        <i class="fa fa-trash link" aria-hidden="true" (click)="removeAction(action)"></i>
+        <i class="fa fa-trash link" aria-hidden="true" (click)="removeAction(action)" tooltip="Remove transformation"></i>
       </div>
       <div class="clear"></div>
 
@@ -14,19 +14,22 @@
 
       <div class="clear"></div>
     </div>
+
     <div class="form-group argument" *ngFor="let argConfig of action.config.arguments; let argValIndex = index">
-      <label style="">{{ getLabel(argConfig.name) }}</label>
-      <div *ngIf="argConfig.values != null && argConfig.values.length > 0; else textInput">
-        <select (change)="actionConfigParamSelectionChanged($event);" [ngModel]="getActionConfigParamVDefault(argConfig, actionIndex, argValIndex)">
-          <option *ngFor="let actionConfigParamVal of getActionConfigParamValues(argConfig)" [attr.argValIndex]="argValIndex"
-                         [attr.actionIndex]="actionIndex" [attr.value]="actionConfigParamVal">{{ actionConfigParamVal }}</option>
-        </select>
+      <div *ngIf="!isIndexArg(argConfig.name, argValIndex)">
+        <label style="">{{ getLabel(argConfig.name) }}</label>
+        <div *ngIf="argConfig.values != null && argConfig.values.length > 0; else textInput">
+          <select (change)="actionConfigParamSelectionChanged($event);" [ngModel]="getActionConfigParamVDefault(argConfig, actionIndex, argValIndex)">
+            <option *ngFor="let actionConfigParamVal of getActionConfigParamValues(argConfig)" [attr.argValIndex]="argValIndex"
+                           [attr.actionIndex]="actionIndex" [attr.value]="actionConfigParamVal">{{ actionConfigParamVal }}</option>
+          </select>
+        </div>
+        <ng-template #textInput>
+          <label style="">{{ argConfig.name }}</label>
+          <input type="text" class="input-{{argConfig.name}}" [(ngModel)]="action.getArgumentValue(argConfig.name).value"
+            (change)="actionConfigParamSelectionChanged($event)"/>
+        </ng-template>
       </div>
-      <ng-template #textInput>
-        <label style="">{{ argConfig.name }}</label>
-        <input type="text" class="input-{{argConfig.name}}" [(ngModel)]="action.getArgumentValue(argConfig.name).value" 
-          (change)="actionConfigParamSelectionChanged($event)"/>
-      </ng-template>
       <div class="clear"></div>
     </div>
   </div>
