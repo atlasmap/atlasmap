@@ -175,7 +175,7 @@ export class DocumentFieldDetailComponent {
    * @param event
    */
   handleMouseClick(event: MouseEvent): void {
-    this.cfg.mappingService.fieldSelected(this.field, event.ctrlKey);
+    this.cfg.mappingService.fieldSelected(this.field, event.ctrlKey || event.metaKey);
     if (this.lineMachine != null) {
       this.lineMachine.redrawLinesForMappings();
     }
