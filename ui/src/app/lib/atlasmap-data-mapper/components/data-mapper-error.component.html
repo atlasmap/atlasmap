@@ -1,4 +1,4 @@
-<div class="DataMapperErrorComponent" *ngIf="errorService && getErrors().length">
+<div class="DataMapperErrorComponent" *ngIf="errorService">
   <div class="alert alert-danger" *ngFor="let e of getErrors()">
     <a class="close" (click)="handleClick($event)">
       <i class="fa fa-close" attr.errorIdentifier="{{e.identifier}}"></i>
@@ -6,11 +6,18 @@
     <span class="pficon pficon-error-circle-o"></span>
     {{ e.message }}
   </div>
+
   <div class="alert alert-warning" *ngFor="let w of getWarnings()">
     <a class="close" (click)="handleClick($event)">
       <i class="fa fa-close" attr.errorIdentifier="{{w.identifier}}"></i>
     </a>
     <span class="pficon pficon-warning-triangle-o"></span>
     {{ w.message }}
-  </div>
+  </div>  
+
+  <alert *ngFor="let i of getInfos()" type="info" dismissOnTimeout="8000" (onClose)="handleAlertClose(i)">
+    <span class="pficon pficon-info"></span>
+    {{ i.message }}
+  </alert>
+
 </div>
