@@ -35,6 +35,7 @@ import java.util.Map;
 import org.junit.Assert;
 import org.junit.Test;
 
+import io.atlasmap.api.AtlasConstants;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.api.AtlasSession;
 import io.atlasmap.core.AtlasMappingService.AtlasMappingFormat;
@@ -381,6 +382,7 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
         when(mappingElement2.getOutputField()).thenReturn(mockOutputFieldList);
 
         context.getSourceModules().put(DefaultAtlasContext.CONSTANTS_DOCUMENT_ID, mockConstantModule);
+        context.getTargetModules().put(AtlasConstants.DEFAULT_TARGET_DOCUMENT_ID, mockConstantModule);
         context.process(session);
     }
 

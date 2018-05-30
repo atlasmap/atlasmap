@@ -1,6 +1,8 @@
 package io.atlasmap.core.issue;
 
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 
 public class SourceClass {
 
@@ -9,6 +11,7 @@ public class SourceClass {
     private String sourceLastName;
     private String sourceName;
     private Date sourceDate;
+    private List<Item> sourceList = new LinkedList<>();
 
     public int getSourceInteger() {
         return sourceInteger;
@@ -52,6 +55,15 @@ public class SourceClass {
 
     public SourceClass setSourceDate(Date sourceDate) {
         this.sourceDate = sourceDate;
+        return this;
+    }
+
+    public List<Item> getSourceList() {
+        return sourceList;
+    }
+
+    public SourceClass setSourceList(List<Item> sourceList) {
+        this.sourceList = sourceList;
         return this;
     }
 

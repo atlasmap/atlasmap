@@ -1,6 +1,8 @@
 package io.atlasmap.core.issue;
 
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 
 public class TargetClass {
 
@@ -9,6 +11,7 @@ public class TargetClass {
     private String targetLastName;
     private String targetName;
     private Date targetDate;
+    private List<Item> targetList = new LinkedList<>();
 
     public int getTargetInteger() {
         return targetInteger;
@@ -52,6 +55,15 @@ public class TargetClass {
 
     public TargetClass setTargetDate(Date targetDate) {
         this.targetDate = targetDate;
+        return this;
+    }
+
+    public List<Item> getTargetList() {
+        return targetList;
+    }
+
+    public TargetClass setTargetList(List<Item> targetList) {
+        this.targetList = targetList;
         return this;
     }
 
