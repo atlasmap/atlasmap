@@ -343,7 +343,8 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
                     cloneMapping.getInputField().add(clonedField);
                 }
                 for (Field f : mapping.getOutputField()) {
-                    Field clonedField = module.cloneField(f);
+                    AtlasModule targetModule = resolveModule(FieldDirection.TARGET, f);
+                    Field clonedField = targetModule.cloneField(f);
                     if (AtlasPath.isCollection(clonedField.getPath())) {
                         clonedField.setPath(AtlasPath.overwriteCollectionIndex(clonedField.getPath(), i));
                     }
