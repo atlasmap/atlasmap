@@ -29,17 +29,30 @@ export class DataMapperErrorComponent {
   @Input() errorService: ErrorHandlerService;
   @Input() isValidation = false;
 
+  isOpen = true;
+
   getErrors(): ErrorInfo[] {
     return this.isValidation ? ConfigModel.getConfig().validationErrors.filter(e => e.level >= ErrorLevel.ERROR)
-      : ConfigModel.getConfig().errors;
+      : ConfigModel.getConfig().errors.filter(e => e.level >= ErrorLevel.ERROR);
   }
 
   getWarnings(): ErrorInfo[] {
-    return this.isValidation ? ConfigModel.getConfig().validationErrors.filter(e => e.level === ErrorLevel.WARN) : ErrorInfo[0];
+    return this.isValidation ? ConfigModel.getConfig().validationErrors.filter(e => e.level == ErrorLevel.WARN)
+      : ConfigModel.getConfig().errors.filter(e => e.level == ErrorLevel.WARN);
+  }
+
+  getInfos(): ErrorInfo[] {
+    return this.isValidation ? ConfigModel.getConfig().validationErrors.filter(e => e.level == ErrorLevel.INFO)
+      : ConfigModel.getConfig().errors.filter(e => e.level == ErrorLevel.INFO);
   }
 
   handleClick(event: any) {
     const errorIdentifier: string = event.target.attributes.getNamedItem('errorIdentifier').value;
     this.errorService.removeError(errorIdentifier);
+  }
+
+  handleAlertClose(info: ErrorInfo): void {
+    this.isOpen = true;
+    this.errorService.removeError(info.identifier);
   }
 }

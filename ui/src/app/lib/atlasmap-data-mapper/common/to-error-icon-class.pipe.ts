@@ -9,6 +9,8 @@ export class ToErrorIconClassPipe implements PipeTransform {
       return 'pficon pficon-error-circle-o';
     } else if (value.some(e => e.level === ErrorLevel.WARN)) {
       return 'pficon pficon-warning-triangle-o';
+    } else if (value.some(e => e.level === ErrorLevel.INFO)) {
+      return 'pficon pficon-info';
     } else {
       return '';
     }

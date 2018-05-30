@@ -18,7 +18,7 @@ import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule, HttpClientXsrfModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { BsDropdownModule, TooltipModule, TypeaheadModule } from 'ngx-bootstrap';
+import { AlertModule, BsDropdownModule, TooltipModule, TypeaheadModule } from 'ngx-bootstrap';
 
 import { environment } from '../../../environments/environment';
 import { DocumentManagementService } from './services/document-management.service';
@@ -83,7 +83,8 @@ export { DataMapperAppComponent } from './components/data-mapper-app.component';
     TypeaheadModule.forRoot(),
     TooltipModule.forRoot(),
     BsDropdownModule.forRoot(),
-    HttpClientXsrfModule.withOptions(environment.xsrf)
+    HttpClientXsrfModule.withOptions(environment.xsrf),
+    AlertModule.forRoot()
   ],
   declarations: [
     DataMapperAppComponent,
@@ -121,6 +122,7 @@ export { DataMapperAppComponent } from './components/data-mapper-app.component';
     DataMapperAppExampleHostComponent,
     ModalWindowComponent,
     DataMapperAppComponent,
+    AlertModule
   ],
   providers: [
     DocumentManagementService,

@@ -310,14 +310,14 @@ export class MappingManagementService {
       } else if (mappingsForField && mappingsForField.length == 1) {
         mapping = mappingsForField[0];
       }
+
+      if (mapping == null) {
+        this.addNewMapping(field, compoundSelection);
+        return;
+      }
     }
 
-    if (mapping == null) {
-      this.addNewMapping(field, compoundSelection);
-      return;
-    }
-
-    //check to see if the field is a valid selection for this mapping
+    // Check to see if the field is a valid selection for this mapping
     const exclusionReason: string = mapping.getFieldSelectionExclusionReason(field);
     if (exclusionReason != null) {
       this.cfg.errorService.warn("The field '" + field.displayName + "' cannot be selected, " + exclusionReason + '.', null);
@@ -333,6 +333,28 @@ export class MappingManagementService {
         lastMappedField.field = field;
       }
       if (!fieldRemoved) {
+
+        // Auto-transition from MAP mode to either COMBINE or SEPARATE if the user has
+        // compound-selected another field.
+        if (latestFieldPair.transition.mode == TransitionMode.MAP) {
+          const mappedFields: MappedField[] = latestFieldPair.getMappedFields(field.isSource());
+          if (mappedFields.length > 1) {
+            if (field.isSource()) {
+              latestFieldPair.transition.mode = TransitionMode.COMBINE;
+              mappedFields[0].updateSeparateOrCombineFieldAction(false, true, '1', true, compoundSelection, false);
+              this.cfg.errorService.info(
+                'Note: Auto-transitioning to field action \'Combine\'.  ' +
+                'You may want to examine the separator character in the Action box of the Mapping Details section.', null);
+            } else {
+              latestFieldPair.transition.mode = TransitionMode.SEPARATE;
+              mappedFields[0].updateSeparateOrCombineFieldAction(true, false, '1', false, compoundSelection, false);
+              this.cfg.errorService.info(
+                'Note: Auto-transitioning to field action \'Separate\'.  ' +
+                'You may want to examine the separator character in the Action box of the Mapping Details section.', null);
+            }
+          }
+        }
+
         latestFieldPair.updateTransition(field.isSource(), compoundSelection, fieldRemoved);
         this.selectMapping(mapping);
         this.saveCurrentMapping();
