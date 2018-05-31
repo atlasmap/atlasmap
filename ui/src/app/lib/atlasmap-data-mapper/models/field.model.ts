@@ -23,6 +23,8 @@ export class EnumValue {
 }
 
 export class Field {
+  private static uuidCounter = 0;
+
   name: string = null;
   classIdentifier: string = null;
   displayName: string;
@@ -50,7 +52,73 @@ export class Field {
   docDef: DocumentDefinition = null;
   namespaceAlias: string = null;
 
-  private static uuidCounter = 0;
+  static fieldHasUnmappedChild(field: Field): boolean {
+    if (field == null) {
+      return false;
+    }
+    if (field.isTerminal()) {
+      return (field.partOfMapping === false);
+    }
+    for (const childField of field.children) {
+      if (childField.hasUnmappedChildren || Field.fieldHasUnmappedChild(childField)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  static getFieldPaths(fields: Field[]): string[] {
+    const paths: string[] = [];
+    for (const field of fields) {
+      paths.push(field.path);
+    }
+    return paths;
+  }
+
+  static getFieldNames(fields: Field[]): string[] {
+    const paths: string[] = [];
+    for (const field of fields) {
+      paths.push(field.name);
+    }
+    return paths;
+  }
+
+  static getField(fieldPath: string, fields: Field[]): Field {
+    for (const field of fields) {
+      if (fieldPath === field.path) {
+        return field;
+      }
+    }
+    return null;
+  }
+
+  static alphabetizeFields(fields: Field[]): void {
+    const fieldsByName: { [key: string]: Field; } = {};
+    const fieldNames: string[] = [];
+    for (const field of fields) {
+      let name: string = field.name;
+      const firstCharacter: string = name.charAt(0).toUpperCase();
+      name = firstCharacter + name.substring(1);
+      field.displayName = name;
+      // if field is a dupe, discard it
+      if (fieldsByName[name] != null) {
+        continue;
+      }
+      fieldsByName[name] = field;
+      fieldNames.push(name);
+    }
+    fieldNames.sort();
+    fields.length = 0;
+    for (const name of fieldNames) {
+      fields.push(fieldsByName[name]);
+    }
+
+    for (const field of fields) {
+      if (field.children && field.children.length) {
+        this.alphabetizeFields(field.children);
+      }
+    }
+  }
 
   constructor() {
     this.uuid = Field.uuidCounter.toString();
@@ -68,11 +136,11 @@ export class Field {
     if (this.isCollection && !this.isPrimitive) {
       return true;
     }
-    return (this.type == 'COMPLEX');
+    return (this.type === 'COMPLEX');
   }
 
   isStringField(): boolean {
-    return (this.type == 'STRING');
+    return (this.type === 'STRING');
   }
 
   isTerminal(): boolean {
@@ -82,14 +150,14 @@ export class Field {
     if (this.isCollection && !this.isPrimitive) {
       return false;
     }
-    return (this.type != 'COMPLEX');
+    return (this.type !== 'COMPLEX');
   }
 
   copy(): Field {
     const copy: Field = new Field();
     Object.assign(copy, this);
 
-    //make these pointers to the same object, not copies
+    // make these pointers to the same object, not copies
     copy.serviceObject = this.serviceObject;
     copy.parentField = this.parentField;
     copy.docDef = this.docDef;
@@ -98,14 +166,14 @@ export class Field {
     for (const childField of this.children) {
       copy.children.push(childField.copy());
     }
-    //console.log("Copied: " + this.name, { "src": this, "target": copy });
+    // console.log("Copied: " + this.name, { "src": this, "target": copy });
     return copy;
   }
 
   copyFrom(that: Field): void {
     Object.assign(this, that);
 
-    //make these pointers to the same object, not copies
+    // make these pointers to the same object, not copies
     this.serviceObject = that.serviceObject;
     this.parentField = that.parentField;
     this.docDef = that.docDef;
@@ -114,7 +182,6 @@ export class Field {
     for (const childField of that.children) {
       this.children.push(childField.copy());
     }
-    //console.log("Copied: " + that.name, { "src": that, "target": this });
   }
 
   getCollectionParentField(): Field {
@@ -158,78 +225,11 @@ export class Field {
   }
 
   isProperty(): boolean {
-    return (this.docDef == null) ? false : this.docDef.type == DocumentType.PROPERTY;
+    return (this.docDef == null) ? false : this.docDef.type === DocumentType.PROPERTY;
   }
 
   isConstant(): boolean {
-    return (this.docDef == null) ? false : this.docDef.type == DocumentType.CONSTANT;
+    return (this.docDef == null) ? false : this.docDef.type === DocumentType.CONSTANT;
   }
 
-  static fieldHasUnmappedChild(field: Field): boolean {
-    if (field == null) {
-      return false;
-    }
-    if (field.isTerminal()) {
-      return (field.partOfMapping == false);
-    }
-    for (const childField of field.children) {
-      if (childField.hasUnmappedChildren || Field.fieldHasUnmappedChild(childField)) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  static getFieldPaths(fields: Field[]): string[] {
-    const paths: string[] = [];
-    for (const field of fields) {
-      paths.push(field.path);
-    }
-    return paths;
-  }
-
-  static getFieldNames(fields: Field[]): string[] {
-    const paths: string[] = [];
-    for (const field of fields) {
-      paths.push(field.name);
-    }
-    return paths;
-  }
-
-  static getField(fieldPath: string, fields: Field[]): Field {
-    for (const field of fields) {
-      if (fieldPath == field.path) {
-        return field;
-      }
-    }
-    return null;
-  }
-
-  static alphabetizeFields(fields: Field[]): void {
-    const fieldsByName: { [key: string]: Field; } = {};
-    const fieldNames: string[] = [];
-    for (const field of fields) {
-      let name: string = field.name;
-      const firstCharacter: string = name.charAt(0).toUpperCase();
-      name = firstCharacter + name.substring(1);
-      field.displayName = name;
-      //if field is a dupe, discard it
-      if (fieldsByName[name] != null) {
-        continue;
-      }
-      fieldsByName[name] = field;
-      fieldNames.push(name);
-    }
-    fieldNames.sort();
-    fields.length = 0;
-    for (const name of fieldNames) {
-      fields.push(fieldsByName[name]);
-    }
-
-    for (const field of fields) {
-      if (field.children && field.children.length) {
-        this.alphabetizeFields(field.children);
-      }
-    }
-  }
 }

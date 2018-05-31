@@ -120,7 +120,7 @@ export class MappingSerializer {
       if (doc.locale != null) {
         serializedDoc['locale'] = doc.locale;
       }
-      if (doc.type == DocumentType.XML) {
+      if (doc.type === DocumentType.XML) {
         serializedDoc['jsonType'] = 'io.atlasmap.xml.v2.XmlDataSource';
         const namespaces: any[] = [];
         for (const ns of doc.namespaces) {
@@ -135,7 +135,7 @@ export class MappingSerializer {
           serializedDoc['template'] = mappingDefinition.templateText;
         }
         serializedDoc['xmlNamespaces'] = { 'xmlNamespace': namespaces };
-      } else if (doc.type == DocumentType.JSON) {
+      } else if (doc.type === DocumentType.JSON) {
         if (!doc.isSource) {
           serializedDoc['template'] = mappingDefinition.templateText;
         }
@@ -203,8 +203,8 @@ export class MappingSerializer {
     const fieldsJson: any[] = [];
     for (const mappedField of fields) {
       const field: Field = mappedField.field;
-      if (DocumentDefinition.getNoneField().path == field.path) {
-        //do not include "none" options from drop downs in mapping
+      if (DocumentDefinition.getNoneField().path === field.path) {
+        // do not include "none" options from drop downs in mapping
         continue;
       }
 
@@ -216,9 +216,9 @@ export class MappingSerializer {
         'value': field.value,
         'docId': field.docDef.id,
       };
-      if (field.docDef.type == DocumentType.XML || field.docDef.type == DocumentType.JSON) {
+      if (field.docDef.type === DocumentType.XML || field.docDef.type === DocumentType.JSON) {
         serializedField['userCreated'] = field.userCreated;
-      } else if (field.docDef.type == DocumentType.JAVA && !field.isPrimitive) {
+      } else if (field.docDef.type === DocumentType.JAVA && !field.isPrimitive) {
         serializedField['className'] = field.classIdentifier;
       }
       if (field.isProperty()) {
@@ -256,12 +256,12 @@ export class MappingSerializer {
               cfg.errorService.error('Cannot find action argument with name: ' + argValue.name, action);
               continue;
             }
-            if (argumentConfig.type == 'INTEGER') {
+            if (argumentConfig.type === 'INTEGER') {
               actionArguments[argValue.name] = parseInt(argValue.value, 10);
             }
           }
 
-          actionArguments = (Object.keys(actionArguments).length == 0) ? null : actionArguments;
+          actionArguments = (Object.keys(actionArguments).length === 0) ? null : actionArguments;
 
           const actionJson: any = {};
           actionJson[action.config.name] = actionArguments;
@@ -299,7 +299,7 @@ export class MappingSerializer {
     const docs: DocumentDefinition[] = [];
     for (const docRef of json.AtlasMapping.dataSource) {
       const doc: DocumentDefinition = new DocumentDefinition();
-      doc.isSource = (docRef.dataSourceType == 'SOURCE');
+      doc.isSource = (docRef.dataSourceType === 'SOURCE');
       doc.uri = docRef.uri;
       doc.id = docRef.id;
       if (docRef.xmlNamespaces && docRef.xmlNamespaces.xmlNamespace) {
@@ -334,7 +334,7 @@ export class MappingSerializer {
       }
       mappingModel.fieldMappings = [];
 
-      const isCollectionMapping = (fieldMapping.jsonType == ConfigModel.mappingServicesPackagePrefix + '.Collection');
+      const isCollectionMapping = (fieldMapping.jsonType === ConfigModel.mappingServicesPackagePrefix + '.Collection');
       if (isCollectionMapping) {
         for (const innerFieldMapping of fieldMapping.mappings.mapping) {
           mappingModel.fieldMappings.push(MappingSerializer.deserializeFieldMapping(innerFieldMapping, docRefs, cfg));
@@ -353,9 +353,9 @@ export class MappingSerializer {
     fieldPair.sourceFields = [];
     fieldPair.targetFields = [];
 
-    const isSeparateMapping = (fieldMapping.mappingType == 'SEPARATE');
-    const isLookupMapping = (fieldMapping.mappingType == 'LOOKUP');
-    const isCombineMapping = (fieldMapping.mappingType == 'COMBINE');
+    const isSeparateMapping = (fieldMapping.mappingType === 'SEPARATE');
+    const isLookupMapping = (fieldMapping.mappingType === 'LOOKUP');
+    const isCombineMapping = (fieldMapping.mappingType === 'COMBINE');
     for (const field of fieldMapping.inputField) {
       MappingSerializer.addFieldIfDoesntExist(fieldPair, field, true, docRefs, cfg);
     }
@@ -444,11 +444,11 @@ export class MappingSerializer {
     if (field.index != null) {
       mappedField.parsedData.parsedIndex = (field.index + 1).toString();
     }
-    if (field.jsonType == (ConfigModel.mappingServicesPackagePrefix + '.PropertyField')) {
+    if (field.jsonType === (ConfigModel.mappingServicesPackagePrefix + '.PropertyField')) {
       mappedField.parsedData.parsedName = field.name;
       mappedField.parsedData.parsedPath = field.name;
       mappedField.parsedData.fieldIsProperty = true;
-    } else if (field.jsonType == (ConfigModel.mappingServicesPackagePrefix + '.ConstantField')) {
+    } else if (field.jsonType === (ConfigModel.mappingServicesPackagePrefix + '.ConstantField')) {
       mappedField.parsedData.fieldIsConstant = true;
       mappedField.parsedData.parsedValue = field.value;
       mappedField.parsedData.parsedPath = field.path;

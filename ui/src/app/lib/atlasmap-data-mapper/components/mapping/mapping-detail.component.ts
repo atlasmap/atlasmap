@@ -22,7 +22,7 @@ import { MappingModel } from '../../models/mapping.model';
 
 import { ModalWindowComponent } from '../modal-window.component';
 import { MappingSelectionComponent } from './mapping-selection.component';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'mapping-detail',

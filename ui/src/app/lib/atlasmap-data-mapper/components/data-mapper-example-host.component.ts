@@ -24,7 +24,7 @@ import { InitializationService } from '../services/initialization.service';
 
 import { DataMapperAppComponent } from './data-mapper-app.component';
 import { environment } from '../../../../environments/environment';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'data-mapper-example-host',
@@ -45,9 +45,9 @@ export class DataMapperAppExampleHostComponent implements OnInit, OnDestroy {
     // initialize config information before initializing services
     const c: ConfigModel = this.initializationService.cfg;
 
-    //store references to our services in our config model
+    // store references to our services in our config model
 
-    //initialize base urls for our service calls
+    // initialize base urls for our service calls
     c.initCfg.baseJavaInspectionServiceUrl = 'http://localhost:8585/v2/atlas/java/';
     c.initCfg.baseXMLInspectionServiceUrl = 'http://localhost:8585/v2/atlas/xml/';
     c.initCfg.baseJSONInspectionServiceUrl = 'http://localhost:8585/v2/atlas/json/';
@@ -59,8 +59,8 @@ export class DataMapperAppExampleHostComponent implements OnInit, OnDestroy {
       c.initCfg.xsrfDefaultTokenValue = environment.xsrf.defaultTokenValue;
     }
 
-    //initialize data for our class path service call
-    //note that quotes, newlines, and tabs are escaped
+    // initialize data for our class path service call
+    // note that quotes, newlines, and tabs are escaped
     c.initCfg.pomPayload = InitializationService.createExamplePom();
     c.initCfg.classPathFetchTimeoutInMilliseconds = 30000;
     // if classPath is specified, maven call to resolve pom will be skipped
@@ -89,7 +89,7 @@ export class DataMapperAppExampleHostComponent implements OnInit, OnDestroy {
      *
      */
 
-    //enable debug logging options as needed
+    // enable debug logging options as needed
     c.initCfg.debugDocumentServiceCalls = true;
     c.initCfg.debugDocumentParsing = false;
     c.initCfg.debugMappingServiceCalls = false;
@@ -97,10 +97,10 @@ export class DataMapperAppExampleHostComponent implements OnInit, OnDestroy {
     c.initCfg.debugValidationServiceCalls = false;
     c.initCfg.debugFieldActionServiceCalls = false;
 
-    //enable mock mappings loading, example code is shown in the InitializationService for this
+    // enable mock mappings loading, example code is shown in the InitializationService for this
     c.initCfg.addMockJSONMappings = false;
 
-    //enable mock source/target documents as needed
+    // enable mock source/target documents as needed
     c.initCfg.addMockJavaSingleSource = false;
     c.initCfg.addMockJavaSources = true;
     c.initCfg.addMockJavaCachedSource = false;
@@ -118,25 +118,25 @@ export class DataMapperAppExampleHostComponent implements OnInit, OnDestroy {
     c.initCfg.addMockJSONInstanceTarget = false;
     c.initCfg.addMockJSONSchemaTarget = true;
 
-    //initialize system
+    // initialize system
     this.initializationService.initialize();
 
-    //save the mappings when the ui calls us back asking for save
+    // save the mappings when the ui calls us back asking for save
     this.saveMappingSubscription
        = c.mappingService.saveMappingOutput$.subscribe((saveHandler: Function) => {
-      //NOTE: the mapping definition being saved is currently stored in "this.cfg.mappings" until further notice.
+      // NOTE: the mapping definition being saved is currently stored in "this.cfg.mappings" until further notice.
 
-      //This is an example callout to save the mapping to the mock java service
+      // This is an example callout to save the mapping to the mock java service
       c.mappingService.saveMappingToService();
 
-      //After you've sucessfully saved you *MUST* call this (don't call on error)
+      // After you've sucessfully saved you *MUST* call this (don't call on error)
       c.mappingService.handleMappingSaveSuccess(saveHandler);
     });
 
-    if (!c.sourceDocs || c.sourceDocs.length == 0) {
+    if (!c.sourceDocs || c.sourceDocs.length === 0) {
       c.errorService.error('No source document was found', '');
     }
-    if (!c.targetDocs || c.targetDocs.length == 0) {
+    if (!c.targetDocs || c.targetDocs.length === 0) {
       c.errorService.error('No target document was found', '');
     }
   }

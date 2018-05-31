@@ -36,7 +36,7 @@ export class MappingFieldActionComponent {
   }
 
   isIndexArg(argVal: string, index: number): boolean {
-    return (argVal == 'Index' && index == 0);
+    return (argVal === 'Index' && index === 0);
   }
 
   actionsExistForField(): boolean {
@@ -78,8 +78,8 @@ export class MappingFieldActionComponent {
    * @param acp
    */
   validateActionConfigParamSelection(acp: FieldActionArgumentValue[]): void {
-    if (acp != null && acp.length == 2) {
-      if (acp[0].value == acp[1].value) {
+    if (acp != null && acp.length === 2) {
+      if (acp[0].value === acp[1].value) {
         this.cfg.errorService.warn('Please select differing \'from\' and \'to\' units in your conversion transformation.', null);
       }
     }
@@ -127,7 +127,7 @@ export class MappingFieldActionComponent {
     const selectedActionName: any = attributes.getNamedItem('value').value;
     const selectedActionIndex: any = attributes.getNamedItem('actionIndex').value;
     const action: FieldAction = this.getMappedFieldActions()[selectedActionIndex];
-    if (action.name != selectedActionName) {
+    if (action.name !== selectedActionName) {
       action.argumentValues = [];  // Invalidate the previously selected field action arguments.
       const fieldActionConfig: FieldActionConfig = TransitionModel.getActionConfigForName(selectedActionName);
       fieldActionConfig.populateFieldAction(action);

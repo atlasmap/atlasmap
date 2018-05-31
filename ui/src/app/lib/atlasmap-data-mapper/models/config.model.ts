@@ -113,6 +113,7 @@ export class DocumentInitializationModel {
 export class ConfigModel {
   static mappingServicesPackagePrefix = 'io.atlasmap.v2';
   static javaServicesPackagePrefix = 'io.atlasmap.java.v2';
+  private static cfg: ConfigModel = new ConfigModel();
 
   initCfg: DataMapperInitializationModel = new DataMapperInitializationModel;
 
@@ -141,8 +142,6 @@ export class ConfigModel {
 
   errors: ErrorInfo[] = [];
   validationErrors: ErrorInfo[] = [];
-
-  private static cfg: ConfigModel = new ConfigModel();
 
   constructor() {
     this.propertyDoc.type = DocumentType.PROPERTY;
@@ -176,7 +175,7 @@ export class ConfigModel {
     docDef.inspectionResult = docInitModel.inspectionResult;
     docDef.selectedRoot = docInitModel.selectedRoot;
     docDef.uri = 'atlas:' + docDef.type.toLowerCase() + ':' + docDef.id;
-    if (docDef.type == DocumentType.JAVA) {
+    if (docDef.type === DocumentType.JAVA) {
       docDef.uri += '?className=' + docDef.inspectionSource;
     }
 
@@ -207,7 +206,7 @@ export class ConfigModel {
 
   hasJavaDocuments(): boolean {
     for (const doc of this.getAllDocs()) {
-      if (doc.type == DocumentType.JAVA) {
+      if (doc.type === DocumentType.JAVA) {
         return true;
       }
     }
@@ -219,7 +218,7 @@ export class ConfigModel {
       return false;
     }
     for (const doc of this.getAllDocs()) {
-      if (doc.type == DocumentType.JAVA && doc.inspectionResult == null) {
+      if (doc.type === DocumentType.JAVA && doc.inspectionResult == null) {
         return true;
       }
     }
@@ -228,7 +227,7 @@ export class ConfigModel {
 
   getDocForIdentifier(documentId: string, isSource: boolean): DocumentDefinition {
     for (const d of this.getDocs(isSource)) {
-      if (d.id == documentId) {
+      if (d.id === documentId) {
         return d;
       }
     }
@@ -238,7 +237,7 @@ export class ConfigModel {
   getFirstXmlDoc(isSource: boolean) {
     const docs: DocumentDefinition[] = this.getDocsWithoutPropertyDoc(isSource);
     for (const doc of docs) {
-      if (doc.type == DocumentType.XML) {
+      if (doc.type === DocumentType.XML) {
         return doc;
       }
     }
@@ -265,7 +264,7 @@ export class ConfigModel {
    */
   isRequiredFieldValid(value: string, fieldDescription: string): boolean {
 
-    if (value == null || '' == value) {
+    if (value == null || '' === value) {
       const errorMessage: string = fieldDescription + ' is required.';
       this.errorService.validationError(errorMessage, null);
       return false;

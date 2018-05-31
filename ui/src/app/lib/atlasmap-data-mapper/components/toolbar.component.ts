@@ -34,53 +34,53 @@ export class ToolbarComponent implements OnInit {
   targetSupportsTemplate = false;
 
   getCSSClass(action: string) {
-    if ('showDetails' == action) {
+    if ('showDetails' === action) {
       return 'fa fa-exchange link' + (this.cfg.mappings.activeMapping ? ' selected' : '');
-    } else if ('showLines' == action) {
+    } else if ('showLines' === action) {
       return 'fa fa-share-alt link' + (this.cfg.showLinesAlways ? ' selected' : '');
-    } else if ('advancedMode' == action) {
+    } else if ('advancedMode' === action) {
       let clz = 'fa fa-cog link ';
       if (this.cfg.showLinesAlways || this.cfg.showTypes
         || !this.cfg.showMappedFields || !this.cfg.showUnmappedFields) {
         clz += 'selected';
       }
       return clz;
-    } else if ('showMappingTable' == action) {
+    } else if ('showMappingTable' === action) {
       return 'fa fa-table link' + (this.cfg.showMappingTable ? ' selected' : '');
-    } else if ('showNamespaceTable' == action) {
+    } else if ('showNamespaceTable' === action) {
       return 'fa fa-code link' + (this.cfg.showNamespaceTable ? ' selected' : '');
-    } else if ('editTemplate' == action) {
+    } else if ('editTemplate' === action) {
       return 'fa fa-file-text-o link' + (this.cfg.mappings.templateExists() ? ' selected' : '');
     }
   }
 
   toolbarButtonClicked(action: string, event: any): void {
     event.preventDefault();
-    if ('showDetails' == action) {
+    if ('showDetails' === action) {
       if (this.cfg.mappings.activeMapping == null) {
         this.cfg.mappingService.addNewMapping(null, false);
         this.cfg.mappings.activeMapping.brandNewMapping = true;
       } else {
         this.cfg.mappingService.deselectMapping();
       }
-    } else if ('editTemplate' == action) {
+    } else if ('editTemplate' === action) {
       this.editTemplate();
-    } else if ('showLines' == action) {
+    } else if ('showLines' === action) {
       this.cfg.showLinesAlways = !this.cfg.showLinesAlways;
-    } else if ('showTypes' == action) {
+    } else if ('showTypes' === action) {
       this.cfg.showTypes = !this.cfg.showTypes;
-    } else if ('showMappedFields' == action) {
+    } else if ('showMappedFields' === action) {
       this.cfg.showMappedFields = !this.cfg.showMappedFields;
-    } else if ('showUnmappedFields' == action) {
+    } else if ('showUnmappedFields' === action) {
       this.cfg.showUnmappedFields = !this.cfg.showUnmappedFields;
-    } else if ('addMapping' == action) {
+    } else if ('addMapping' === action) {
       this.cfg.mappingService.addNewMapping(null, false);
-    } else if ('showMappingTable' == action) {
+    } else if ('showMappingTable' === action) {
       this.cfg.showMappingTable = !this.cfg.showMappingTable;
       if (this.cfg.showMappingTable) {
         this.cfg.showNamespaceTable = false;
       }
-    } else if ('showNamespaceTable' == action) {
+    } else if ('showNamespaceTable' === action) {
       this.cfg.showNamespaceTable = !this.cfg.showNamespaceTable;
       if (this.cfg.showNamespaceTable) {
         this.cfg.showMappingTable = false;

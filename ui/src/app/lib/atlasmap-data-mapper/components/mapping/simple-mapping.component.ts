@@ -131,7 +131,7 @@ export class SimpleMappingComponent {
 
   removeMappedField(mappedField: MappedField): void {
     this.fieldPair.removeMappedField(mappedField, this.isSource);
-    if (this.fieldPair.getMappedFields(this.isSource).length == 0) {
+    if (this.fieldPair.getMappedFields(this.isSource).length === 0) {
       this.fieldPair.addField(DocumentDefinition.getNoneField(), this.isSource);
     }
     this.cfg.mappingService.updateMappedField(this.fieldPair, this.isSource);

@@ -15,7 +15,7 @@
 */
 
 import { Component, Input, OnInit } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 import { ConfigModel } from '../../models/config.model';
 import { Field } from '../../models/field.model';
@@ -51,7 +51,7 @@ export class MappingFieldDetailComponent implements OnInit {
 
   getFieldPath(): string {
     if (this.mappedField == null || this.mappedField.field == null
-      || (this.mappedField.field == DocumentDefinition.getNoneField())) {
+      || (this.mappedField.field === DocumentDefinition.getNoneField())) {
       return '[None]';
     }
     return this.mappedField.field.path;
@@ -59,12 +59,12 @@ export class MappingFieldDetailComponent implements OnInit {
 
   displayParentObject(): boolean {
     if (this.mappedField == null || this.mappedField.field == null
-      || this.mappedField.field.name.length == 0
+      || this.mappedField.field.name.length === 0
       || this.mappedField.field.docDef == null
-      || (this.mappedField.field == DocumentDefinition.getNoneField())) {
+      || (this.mappedField.field === DocumentDefinition.getNoneField())) {
       return false;
     }
-    if (this.parentObjectName == null || this.parentObjectName.length == 0) {
+    if (this.parentObjectName == null || this.parentObjectName.length === 0) {
       this.updateTemplateValues();
     }
     return true;
@@ -78,7 +78,7 @@ export class MappingFieldDetailComponent implements OnInit {
 
   removeMappedField(mappedField: MappedField): void {
     this.fieldPair.removeMappedField(mappedField, this.isSource);
-    if (this.fieldPair.getMappedFields(this.isSource).length == 0) {
+    if (this.fieldPair.getMappedFields(this.isSource).length === 0) {
       this.fieldPair.addField(DocumentDefinition.getNoneField(), this.isSource);
     }
     this.cfg.mappingService.updateMappedField(this.fieldPair, this.isSource);
@@ -106,8 +106,8 @@ export class MappingFieldDetailComponent implements OnInit {
     for (const field of fields) {
       const displayName = (field == null) ? '' : field.getFieldLabel(ConfigModel.getConfig().showTypes, true);
       const formattedField: any = { 'field': field, 'displayName': displayName };
-      if (filter == null || filter == ''
-        || formattedField['displayName'].toLowerCase().indexOf(filter.toLowerCase()) != -1) {
+      if (filter == null || filter === ''
+        || formattedField['displayName'].toLowerCase().indexOf(filter.toLowerCase()) !== -1) {
         if (!activeMapping.isFieldSelectable(field)) {
           continue;
         }

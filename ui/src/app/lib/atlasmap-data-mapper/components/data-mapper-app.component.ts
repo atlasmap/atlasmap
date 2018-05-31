@@ -25,7 +25,7 @@ import { ModalWindowComponent } from './modal-window.component';
 import { DocumentDefinitionComponent } from './document-definition.component';
 
 import { MappingDetailComponent } from './mapping/mapping-detail.component';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'data-mapper',

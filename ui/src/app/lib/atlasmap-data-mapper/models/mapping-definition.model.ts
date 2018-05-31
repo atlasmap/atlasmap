@@ -39,7 +39,7 @@ export class MappingDefinition {
   }
 
   templateExists(): boolean {
-    return ((this.templateText != null) && (this.templateText != ''));
+    return ((this.templateText != null) && (this.templateText !== ''));
   }
 
   addTable(table: LookupTable): void {
@@ -106,7 +106,7 @@ export class MappingDefinition {
   getFirstMappingForLookupTable(lookupTableName: string): MappingModel {
     for (const m of this.mappings) {
       for (const fieldPair of m.fieldMappings) {
-        if (fieldPair.transition.lookupTableName == lookupTableName) {
+        if (fieldPair.transition.lookupTableName === lookupTableName) {
           return m;
         }
       }
@@ -137,12 +137,12 @@ export class MappingDefinition {
 
   isMappingStale(mapping: MappingModel, sourceFieldPaths: string[], targetSourcePaths: string[]): boolean {
     for (const field of mapping.getFields(true)) {
-      if (sourceFieldPaths.indexOf(field.path) == -1) {
+      if (sourceFieldPaths.indexOf(field.path) === -1) {
         return true;
       }
     }
     for (const field of mapping.getFields(false)) {
-      if (targetSourcePaths.indexOf(field.path) == -1) {
+      if (targetSourcePaths.indexOf(field.path) === -1) {
         return true;
       }
     }
@@ -151,10 +151,10 @@ export class MappingDefinition {
 
   initializeMappingLookupTable(m: MappingModel): void {
     for (const fieldPair of m.fieldMappings) {
-      if (!(fieldPair.transition.mode == TransitionMode.ENUM
+      if (!(fieldPair.transition.mode === TransitionMode.ENUM
         && fieldPair.transition.lookupTableName == null
-        && fieldPair.getFields(true).length == 1
-        && fieldPair.getFields(false).length == 1)) {
+        && fieldPair.getFields(true).length === 1
+        && fieldPair.getFields(false).length === 1)) {
         return;
       }
       let inputClassIdentifier: string = null;
@@ -211,14 +211,14 @@ export class MappingDefinition {
       if (parsedDoc.isSource) {
         continue;
       }
-      if (parsedDoc.namespaces.length == 0) {
+      if (parsedDoc.namespaces.length === 0) {
         continue;
       }
 
       const doc = DocumentDefinition.getDocumentByIdentifier(parsedDoc.id, docs);
       if (doc == null) {
-        cfg.errorService.error("Could not find document with identifier '" + parsedDoc.id
-          + "' for namespace override.",
+        cfg.errorService.error('Could not find document with identifier \'' + parsedDoc.id
+          + '\' for namespace override.',
           { 'identifier': parsedDoc.id, 'parsedDoc': parsedDoc, 'docs': docs });
         continue;
       }
@@ -234,7 +234,7 @@ export class MappingDefinition {
         return mappings;
       }
       for (const mapping of mappings) {
-        if (mapping == this.activeMapping) {
+        if (mapping === this.activeMapping) {
           return mappings;
         }
       }
@@ -316,16 +316,16 @@ export class MappingDefinition {
           const lastSeparator: number = path.lastIndexOf('/');
 
           const parentPath: string = (lastSeparator > 0) ? path.substring(0, lastSeparator) : null;
-          let fieldName: string = (lastSeparator == -1) ? path : path.substring(lastSeparator + 1);
+          let fieldName: string = (lastSeparator === -1) ? path : path.substring(lastSeparator + 1);
           let namespaceAlias: string = null;
-          if (fieldName.indexOf(':') != -1) {
+          if (fieldName.indexOf(':') !== -1) {
             namespaceAlias = fieldName.split(':')[0];
             fieldName = fieldName.split(':')[1];
           }
 
           mappedField.field.name = fieldName;
           mappedField.field.displayName = fieldName;
-          mappedField.field.isAttribute = (fieldName.indexOf('@') != -1);
+          mappedField.field.isAttribute = (fieldName.indexOf('@') !== -1);
           mappedField.field.namespaceAlias = namespaceAlias;
 
           if (parentPath != null) {
@@ -347,7 +347,7 @@ export class MappingDefinition {
         for (const action of mappedField.parsedData.parsedActions) {
           const actionConfig: FieldActionConfig = TransitionModel.getActionConfigForName(action.name);
           if (actionConfig == null) {
-            cfg.errorService.error("Could not find field action config for action name '" + action.name + "'", null);
+            cfg.errorService.error('Could not find field action config for action name \'' + action.name + '\'', null);
             continue;
           }
           actionConfig.populateFieldAction(action);

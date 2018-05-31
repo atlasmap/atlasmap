@@ -67,7 +67,7 @@ export class DocumentDefinitionComponent implements OnInit {
 
   setLineMachine(lm: LineMachineComponent): void {
     this.lineMachine = lm;
-    if (this.redrawMappingLinesEvent.observers.length == 0) {
+    if (this.redrawMappingLinesEvent.observers.length === 0) {
       this.redrawMappingLinesEvent.subscribe((event: AdmRedrawMappingLinesEvent) =>
         this.lineMachine.handleRedrawMappingLinesEvent(event));
     }
@@ -75,7 +75,7 @@ export class DocumentDefinitionComponent implements OnInit {
 
   getDocDefElementPosition(docDef: DocumentDefinition): any {
     for (const c of this.docElements.toArray()) {
-      if (c.nativeElement.id == docDef.name) {
+      if (c.nativeElement.id === docDef.name) {
         const documentElementAbsPosition: any = this.getElementPositionForElement(c.nativeElement, false, true);
         const myElement: any = this.documentDefinitionElement.nativeElement;
         const myAbsPosition: any = this.getElementPositionForElement(myElement, false, false);
@@ -165,8 +165,8 @@ export class DocumentDefinitionComponent implements OnInit {
     const self = this;
     this.modalWindow.reset();
     this.modalWindow.confirmButtonText = 'Save';
-    const isProperty = docDef.type == DocumentType.PROPERTY;
-    const isConstant = docDef.type == DocumentType.CONSTANT;
+    const isProperty = docDef.type === DocumentType.PROPERTY;
+    const isConstant = docDef.type === DocumentType.CONSTANT;
     this.modalWindow.headerText = isProperty ? 'Create Property' : (isConstant ? 'Create Constant' : 'Create Field');
     this.modalWindow.nestedComponentInitializedCallback = (mw: ModalWindowComponent) => {
       if (isProperty) {
@@ -220,7 +220,7 @@ export class DocumentDefinitionComponent implements OnInit {
 
   private search(searchFilter: string): void {
     this.searchResultsExist = false;
-    const searchIsEmpty: boolean = (searchFilter == null) || ('' == searchFilter);
+    const searchIsEmpty: boolean = (searchFilter == null) || ('' === searchFilter);
     const defaultVisibility: boolean = searchIsEmpty ? true : false;
     for (const docDef of this.cfg.getDocs(this.isSource)) {
       docDef.visibleInCurrentDocumentSearch = defaultVisibility;

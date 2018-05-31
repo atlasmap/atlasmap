@@ -56,8 +56,8 @@ export class MappingSelectionSectionComponent {
     }
     path = path.replace('.', '/');
     const index: number = path.lastIndexOf('/');
-    const fieldName: string = (index == -1) ? path : path.substr(path.lastIndexOf('/') + 1);
-    path = (index == -1) ? '' : path.substr(0, path.lastIndexOf('/') + 1);
+    const fieldName: string = (index === -1) ? path : path.substr(path.lastIndexOf('/') + 1);
+    path = (index === -1) ? '' : path.substr(0, path.lastIndexOf('/') + 1);
     return nameOnly ? fieldName : path;
   }
 

@@ -2,6 +2,6 @@
 
 yarn install
 yarn lint
-yarn build
+yarn build:lib
 yarn inspect
 yarn test

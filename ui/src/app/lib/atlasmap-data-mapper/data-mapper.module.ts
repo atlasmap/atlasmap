@@ -74,6 +74,7 @@ import { ApiXsrfInterceptor } from './services/api-xsrf-interceptor.service';
 
 export { DataMapperAppComponent } from './components/data-mapper-app.component';
 
+// @dynamic
 @NgModule({
   imports: [
     CommonModule,

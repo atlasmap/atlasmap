@@ -17,12 +17,12 @@
 export enum ErrorLevel { DEBUG, INFO, WARN, ERROR, VALIDATION_ERROR }
 
 export class ErrorInfo {
+  private static errorIdentifierCounter = 0;
 
   readonly identifier: string;
   readonly message: string;
   readonly level: ErrorLevel;
   readonly error: any;
-  private static errorIdentifierCounter = 0;
 
   constructor(message: string, level: ErrorLevel, error?: any) {
     this.identifier = ErrorInfo.errorIdentifierCounter.toString();
@@ -31,4 +31,5 @@ export class ErrorInfo {
     this.error = error;
     ErrorInfo.errorIdentifierCounter++;
   }
+
 }

@@ -68,7 +68,7 @@ export class PropertyFieldEditComponent implements ModalWindowValidator {
    * and enable the save button otherwise.
    */
   nameExistsOnCreation(): boolean {
-    if (this.fieldMode == FieldMode.CREATE && this.docDef != null &&
+    if (this.fieldMode === FieldMode.CREATE && this.docDef != null &&
         this.docDef.fieldExists(this.getField(), DocumentType.PROPERTY)) {
       this.modalWindowComponent.confirmButtonDisabled = true;
       return true;

@@ -40,6 +40,31 @@ export class MappedField {
   field: Field = DocumentDefinition.getNoneField();
   actions: FieldAction[] = [];
 
+  static sortMappedFieldsByPath(mappedFields: MappedField[], allowNone: boolean): MappedField[] {
+    if (mappedFields == null || mappedFields.length === 0) {
+      return [];
+    }
+    const fieldsByPath: { [key: string]: MappedField; } = {};
+    const fieldPaths: string[] = [];
+    for (const mappedField of mappedFields) {
+      if (mappedField == null || mappedField.field == null) {
+        continue;
+      }
+      if (!allowNone && mappedField.field === DocumentDefinition.getNoneField()) {
+        continue;
+      }
+      const path: string = mappedField.field.path;
+      fieldsByPath[path] = mappedField;
+      fieldPaths.push(path);
+    }
+    fieldPaths.sort();
+    const result: MappedField[] = [];
+    for (const name of fieldPaths) {
+      result.push(fieldsByPath[name]);
+    }
+    return result;
+  }
+
   isSource(): boolean {
     return this.field.isSource();
   }
@@ -55,7 +80,7 @@ export class MappedField {
    * @param fieldRemoved
    */
   updateSeparateOrCombineFieldAction(separateMode: boolean, combineMode: boolean, suggestedValue: string,
-                                     isSource: boolean, compoundSelection: boolean, fieldRemoved: boolean): void {
+                               isSource: boolean, compoundSelection: boolean, fieldRemoved: boolean): void {
 
     // Remove field actions where appropriate.
     if ((!separateMode && !combineMode) || (separateMode && isSource && compoundSelection)) {
@@ -109,33 +134,8 @@ export class MappedField {
     DataMapperUtil.removeItemFromArray(action, this.actions);
   }
 
-  static sortMappedFieldsByPath(mappedFields: MappedField[], allowNone: boolean): MappedField[] {
-    if (mappedFields == null || mappedFields.length == 0) {
-      return [];
-    }
-    const fieldsByPath: { [key: string]: MappedField; } = {};
-    const fieldPaths: string[] = [];
-    for (const mappedField of mappedFields) {
-      if (mappedField == null || mappedField.field == null) {
-        continue;
-      }
-      if (!allowNone && mappedField.field == DocumentDefinition.getNoneField()) {
-        continue;
-      }
-      const path: string = mappedField.field.path;
-      fieldsByPath[path] = mappedField;
-      fieldPaths.push(path);
-    }
-    fieldPaths.sort();
-    const result: MappedField[] = [];
-    for (const name of fieldPaths) {
-      result.push(fieldsByPath[name]);
-    }
-    return result;
-  }
-
   isMapped(): boolean {
-    return (this.field != null) && (this.field != DocumentDefinition.getNoneField());
+    return (this.field != null) && (this.field !== DocumentDefinition.getNoneField());
   }
 }
 
@@ -178,7 +178,7 @@ export class FieldMappingPair {
 
   getMappedFieldForField(field: Field, isSource: boolean): MappedField {
     for (const mappedField of this.getMappedFields(isSource)) {
-      if (mappedField.field == field) {
+      if (mappedField.field === field) {
         return mappedField;
       }
     }
@@ -212,7 +212,7 @@ export class FieldMappingPair {
     Field.alphabetizeFields(fields);
     const names: string[] = [];
     for (const field of fields) {
-      if (field == DocumentDefinition.getNoneField()) {
+      if (field === DocumentDefinition.getNoneField()) {
         continue;
       }
       names.push(field.name);
@@ -225,7 +225,7 @@ export class FieldMappingPair {
     Field.alphabetizeFields(fields);
     const paths: string[] = [];
     for (const field of fields) {
-      if (field == DocumentDefinition.getNoneField()) {
+      if (field === DocumentDefinition.getNoneField()) {
         continue;
       }
       paths.push(field.path);
@@ -332,8 +332,8 @@ export class FieldMappingPair {
       }
     }
 
-    const separateMode: boolean = (this.transition.mode == TransitionMode.SEPARATE);
-    const combineMode: boolean = (this.transition.mode == TransitionMode.COMBINE);
+    const separateMode: boolean = (this.transition.mode === TransitionMode.SEPARATE);
+    const combineMode: boolean = (this.transition.mode === TransitionMode.COMBINE);
     let maxIndex = 0;
 
     if (combineMode || separateMode) {
@@ -370,14 +370,14 @@ export class MappingModel {
   }
 
   getFirstFieldMapping(): FieldMappingPair {
-    if (this.fieldMappings == null || (this.fieldMappings.length == 0)) {
+    if (this.fieldMappings == null || (this.fieldMappings.length === 0)) {
       return null;
     }
     return this.fieldMappings[0];
   }
 
   getLastFieldMapping(): FieldMappingPair {
-    if (this.fieldMappings == null || (this.fieldMappings.length == 0)) {
+    if (this.fieldMappings == null || (this.fieldMappings.length === 0)) {
       return null;
     }
     return this.fieldMappings[this.fieldMappings.length - 1];
@@ -403,7 +403,7 @@ export class MappingModel {
   }
 
   getValidationWarnings(): ErrorInfo[] {
-    return this.validationErrors.filter(e => e.level == ErrorLevel.WARN);
+    return this.validationErrors.filter(e => e.level === ErrorLevel.WARN);
   }
 
   removeError(identifier: string) {
@@ -462,12 +462,12 @@ export class MappingModel {
     if (!field.isSource()) {
       for (const m of mappings) {
         for (const fieldPair of m.fieldMappings) {
-          if (fieldPair.targetFields.length == 0) {
+          if (fieldPair.targetFields.length === 0) {
             continue;
           }
 
           for (const mappedOutputField of fieldPair.targetFields) {
-             if (mappedOutputField.field.name == field.name) {
+             if (mappedOutputField.field.name === field.name) {
                const currentFieldMapping = this.getCurrentFieldMapping();
                if (currentFieldMapping != null && !currentFieldMapping.isFieldMapped(field) && field.partOfMapping) {
                  return true;
@@ -509,12 +509,12 @@ export class MappingModel {
       }
     }
     if (mapMode || separateMode || combineMode) {
-      //enums are not selectable in these modes
+      // enums are not selectable in these modes
       if (field.enumeration) {
         return 'Enumeration fields are not valid for this mapping';
       }
 
-      //separate mode sources must be string
+      // separate mode sources must be string
       if (separateMode && !field.isStringField() && field.isSource()) {
         return 'source fields for this mapping must be type String';
       }
@@ -523,32 +523,32 @@ export class MappingModel {
         return 'only Enumeration fields are valid for this mapping';
       }
     } else if (repeatedMode) {
-      //enumeration fields are not allowed in repeated mappings
+      // enumeration fields are not allowed in repeated mappings
       if (field.enumeration) {
         return 'Enumeration fields are not valid for this mapping';
       }
 
-      //if no fields for this isSource has been selected yet, everything is open to selection
+      // if no fields for this isSource has been selected yet, everything is open to selection
       if (!this.hasMappedFields(field.isSource())) {
         return null;
       }
 
       const collectionField: Field = this.getFirstCollectionField(field.isSource());
       if (collectionField == null) {
-        //only primitive fields (not in collections) are selectable
+        // only primitive fields (not in collections) are selectable
         if (field.isInCollection()) {
           const fieldTypeDesc: string = field.isSource ? 'source' : 'target';
           return fieldTypeDesc + ' fields cannot be repeated fields for this mapping.';
         }
-      } else { //collection field exists in this mapping for isSource
+      } else { // collection field exists in this mapping for isSource
         const parentCollectionField: Field = collectionField.getCollectionParentField();
-        //primitive fields are not selectable when collection field is already selected
+        // primitive fields are not selectable when collection field is already selected
         if (!field.isInCollection()) {
           return 'field is not selectable, it is not a child of ' + parentCollectionField.displayName;
         }
 
-        //children of collections are only selectable if this field is in the same collection
-        if (field.getCollectionParentField() != parentCollectionField) {
+        // children of collections are only selectable if this field is in the same collection
+        if (field.getCollectionParentField() !== parentCollectionField) {
           return 'field is not selectable, it is not a child of ' + parentCollectionField.displayName;
         }
       }
@@ -557,7 +557,7 @@ export class MappingModel {
   }
 
   isFieldMapped(field: Field, isSource: boolean): boolean {
-    return this.getFields(isSource).indexOf(field) != -1;
+    return this.getFields(isSource).indexOf(field) !== -1;
   }
 
   getAllMappedFields(): MappedField[] {

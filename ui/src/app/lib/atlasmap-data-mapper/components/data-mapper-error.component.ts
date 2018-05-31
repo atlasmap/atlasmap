@@ -37,13 +37,13 @@ export class DataMapperErrorComponent {
   }
 
   getWarnings(): ErrorInfo[] {
-    return this.isValidation ? ConfigModel.getConfig().validationErrors.filter(e => e.level == ErrorLevel.WARN)
-      : ConfigModel.getConfig().errors.filter(e => e.level == ErrorLevel.WARN);
+    return this.isValidation ? ConfigModel.getConfig().validationErrors.filter(e => e.level === ErrorLevel.WARN)
+      : ConfigModel.getConfig().errors.filter(e => e.level === ErrorLevel.WARN);
   }
 
   getInfos(): ErrorInfo[] {
-    return this.isValidation ? ConfigModel.getConfig().validationErrors.filter(e => e.level == ErrorLevel.INFO)
-      : ConfigModel.getConfig().errors.filter(e => e.level == ErrorLevel.INFO);
+    return this.isValidation ? ConfigModel.getConfig().validationErrors.filter(e => e.level === ErrorLevel.INFO)
+      : ConfigModel.getConfig().errors.filter(e => e.level === ErrorLevel.INFO);
   }
 
   handleClick(event: any) {

@@ -38,22 +38,22 @@ export class NamespaceListComponent {
 
   getNamespaceCSSClass(namespace: NamespaceModel, index: number): string {
     let cssClass = 'item itemRow ';
-    cssClass += (index % 2 == 1) ? ' even' : '';
-    if (namespace == this.selectedNamespace) {
+    cssClass += (index % 2 === 1) ? ' even' : '';
+    if (namespace === this.selectedNamespace) {
       cssClass += ' active';
     }
     return cssClass;
   }
 
   searchResultsVisible(): boolean {
-    if (!this.searchMode || this.searchFilter == null || this.searchFilter == '') {
+    if (!this.searchMode || this.searchFilter == null || this.searchFilter === '') {
       return false;
     }
-    return (this.searchResults.length == 0);
+    return (this.searchResults.length === 0);
   }
 
   selectNamespace(ns: NamespaceModel): void {
-    this.selectedNamespace = (this.selectedNamespace == ns) ? null : ns;
+    this.selectedNamespace = (this.selectedNamespace === ns) ? null : ns;
   }
 
   getItemsCSSClass(): string {
@@ -112,7 +112,7 @@ export class NamespaceListComponent {
   }
 
   namespaceMatchesSearch(ns: NamespaceModel): boolean {
-    if (!this.searchMode || this.searchFilter == null || this.searchFilter == '') {
+    if (!this.searchMode || this.searchFilter == null || this.searchFilter === '') {
       return true;
     }
     const filter: string = this.searchFilter.toLowerCase();
@@ -136,7 +136,7 @@ export class NamespaceListComponent {
     this.modalWindow.reset();
     this.modalWindow.confirmButtonText = 'Remove';
     this.modalWindow.headerText = 'Remove Namespace?';
-    this.modalWindow.message = "Are you sure you want to remove '" + ns.alias + "' ?";
+    this.modalWindow.message = 'Are you sure you want to remove \'' + ns.alias + '\' ?';
     this.modalWindow.okButtonHandler = (mw: ModalWindowComponent) => {
       DataMapperUtil.removeItemFromArray(ns, this.cfg.getFirstXmlDoc(false).namespaces);
       this.selectedNamespace = null;
@@ -146,7 +146,7 @@ export class NamespaceListComponent {
   }
 
   private search(searchFilter: string): void {
-    if (!this.searchMode || this.searchFilter == null || this.searchFilter == '') {
+    if (!this.searchMode || this.searchFilter == null || this.searchFilter === '') {
       this.searchResults = [].concat(this.cfg.getFirstXmlDoc(false).namespaces);
       return;
     }
