@@ -21,6 +21,8 @@ import { ConfigModel } from '../../models/config.model';
 import { Field } from '../../models/field.model';
 import { DocumentDefinition } from '../../models/document-definition.model';
 import { MappingModel, FieldMappingPair, MappedField } from '../../models/mapping.model';
+import { FieldAction, FieldActionConfig } from '../../models/transition.model';
+import { MappingFieldActionComponent } from './mapping-field-action.component';
 
 @Component({
   selector: 'mapping-field-detail',
@@ -47,6 +49,19 @@ export class MappingFieldDetailComponent implements OnInit {
 
   ngOnInit() {
     this.updateTemplateValues();
+  }
+
+  /**
+   * The add transformation icon has been selected.  Add a field action to the current
+   * mapped field.
+   */
+  addTransformation(): void {
+    const actionConfig: FieldActionConfig =
+      MappingFieldActionComponent.getFieldActions(this.fieldPair)[0];
+    const action: FieldAction = new FieldAction();
+    actionConfig.populateFieldAction(action);
+    this.mappedField.actions.push(action);
+    this.cfg.mappingService.saveCurrentMapping();
   }
 
   getFieldPath(): string {

@@ -31,6 +31,24 @@ export class MappingFieldActionComponent {
   @Input() isSource: boolean;
   @Input() fieldPair: FieldMappingPair;
 
+  /**
+   * Return the field actions applicable to the specified field mapping pair.
+   * @param fieldPair
+   */
+  static getFieldActions(fieldPair: FieldMappingPair): FieldActionConfig[] {
+    const configs: FieldActionConfig[] = [];
+
+    // Start with the complete list of field actions.
+    for (const config of TransitionModel.actionConfigs) {
+
+      // Filter down to those field actions that apply to the selected field pair.
+      if (config.appliesToField(fieldPair)) {
+        configs.push(config);
+      }
+    }
+    return configs;
+  }
+
   getMappedFieldActions(): FieldAction[] {
     return this.mappedField.actions;
   }
@@ -40,21 +58,11 @@ export class MappingFieldActionComponent {
   }
 
   actionsExistForField(): boolean {
-    return (this.getActionConfigs().length > 0);
+    return (MappingFieldActionComponent.getFieldActions(this.fieldPair).length > 0);
   }
 
   getActionConfigs(): FieldActionConfig[] {
-    const configs: FieldActionConfig[] = [];
-
-    // Start with the complete list of field actions.
-    for (const config of TransitionModel.actionConfigs) {
-
-      // Filter down to those field actions that apply to the selected field pair.
-      if (config.appliesToField(this.fieldPair)) {
-        configs.push(config);
-      }
-    }
-    return configs;
+    return MappingFieldActionComponent.getFieldActions(this.fieldPair);
   }
 
   /**
@@ -69,8 +77,14 @@ export class MappingFieldActionComponent {
     return acpv;
   }
 
+  /**
+   * Remove the specified field action (transformation) from the current mapped field's
+   * actions.
+   * @param action
+   */
   removeAction(action: FieldAction): void {
     this.mappedField.removeAction(action);
+    this.cfg.mappingService.saveCurrentMapping();
   }
 
   /**
@@ -103,17 +117,6 @@ export class MappingFieldActionComponent {
       action.argumentValues[argValIndex].value = selectedArgValName;
       this.validateActionConfigParamSelection(action.argumentValues);
     }
-    this.cfg.mappingService.saveCurrentMapping();
-  }
-
-  /**
-   * The 'Add Transformation' button has been selected.  Establish a new field action.
-   */
-  addTransformation(): void {
-    const actionConfig: FieldActionConfig = this.getActionConfigs()[0];
-    const action: FieldAction = new FieldAction();
-    actionConfig.populateFieldAction(action);
-    this.getMappedFieldActions().push(action);
     this.cfg.mappingService.saveCurrentMapping();
   }
 
