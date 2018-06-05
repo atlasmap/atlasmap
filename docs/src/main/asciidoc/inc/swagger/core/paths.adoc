@@ -57,6 +57,37 @@ Save a mapping file on the server
 * `application/json`
 
 
+[[_atlas-service-core-processmappingrequest]]
+=== Process Mapping
+....
+PUT /v2/atlas/mapping/process
+....
+
+
+==== Description
+Process Mapping by feeding input data
+
+
+==== Responses
+
+[options="header", cols=".^2a,.^14a,.^4a"]
+|===
+|HTTP Code|Description|Schema
+|**200**|Return a mapping result|<<_atlas-service-core-processmappingresponse,ProcessMappingResponse>>
+|**204**|Skipped empty mapping execution|No Content
+|===
+
+
+==== Consumes
+
+* `application/json`
+
+
+==== Produces
+
+* `application/json`
+
+
 [[_atlas-service-core-validatemappingrequest]]
 === Validate Mapping
 ....

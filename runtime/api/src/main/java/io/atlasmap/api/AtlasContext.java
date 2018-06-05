@@ -15,6 +15,9 @@
  */
 package io.atlasmap.api;
 
+import io.atlasmap.v2.Audits;
+import io.atlasmap.v2.Mapping;
+
 public interface AtlasContext {
 
     AtlasContextFactory getContextFactory();
@@ -24,4 +27,7 @@ public interface AtlasContext {
     void process(AtlasSession session) throws AtlasException;
 
     void processValidation(AtlasSession session) throws AtlasException;
+
+    Audits processPreview(Mapping mapping);
+
 }

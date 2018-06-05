@@ -23,7 +23,6 @@ import javax.management.openmbean.TabularData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.atlasmap.api.AtlasConstants;
 import io.atlasmap.api.AtlasConversionService;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.api.AtlasFieldActionService;
@@ -89,15 +88,6 @@ public abstract class BaseAtlasModule implements AtlasModule, AtlasModuleMXBean 
         }
 
         targetField.setValue(targetValue);
-    }
-
-    protected boolean isDocIdMatched(Field field) {
-        String fieldDocId = field.getDocId();
-        if ((atlasModuleMode == AtlasModuleMode.SOURCE && AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID.equals(docId))
-                || (atlasModuleMode == AtlasModuleMode.TARGET && AtlasConstants.DEFAULT_TARGET_DOCUMENT_ID.equals(docId))) {
-            return fieldDocId == null || fieldDocId.isEmpty() || fieldDocId.equals(docId);
-        }
-        return fieldDocId != null && !fieldDocId.isEmpty() && fieldDocId.equals(docId);
     }
 
     @Override

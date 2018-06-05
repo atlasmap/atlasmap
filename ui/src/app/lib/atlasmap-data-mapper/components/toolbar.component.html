@@ -50,6 +50,17 @@
           </div>
           <i class="fa fa-check" *ngIf="cfg.showUnmappedFields" class="pull-right"></i>
         </li>
+
+        <!-- TODO reflect UXD outcome  -->
+        <li *ngIf="!cfg.initCfg.disableMappingPreviewMode" role="menuitem" (click)="toolbarButtonClicked('showMappingPreview', $event);" class="clearfix">
+          <div class="pull-left">
+            <a class="dropdown-item" href="#">
+              <i class="fa fa-eye"></i>Show Mapping Preview
+            </a>
+          </div>
+          <i class="fa fa-check" *ngIf="cfg.showMappingPreview" class="pull-right"></i>
+        </li>
+
       </ul>
     </div>
   </div>

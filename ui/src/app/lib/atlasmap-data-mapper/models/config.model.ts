@@ -56,6 +56,9 @@ export class DataMapperInitializationModel {
   disablePublicOnlyFields = false;
   disablePublicGetterSetterFields = false;
 
+  /* mapping preview mode (experimental) */
+  disableMappingPreviewMode = true;
+
   /* mock data configuration */
   discardNonMockSources = false;
   addMockJSONMappings = false;
@@ -83,6 +86,7 @@ export class DataMapperInitializationModel {
   debugClassPathServiceCalls = false;
   debugValidationServiceCalls = false;
   debugFieldActionServiceCalls = false;
+  debugProcessMappingPreviewCalls = false;
 
   mappingInitialized = false;
   fieldActionsInitialized = false;
@@ -125,6 +129,7 @@ export class ConfigModel {
   showTypes = false;
   showMappedFields = true;
   showUnmappedFields = true;
+  _showMappingPreview = false;
   currentDraggedField: any = null;
 
   documentService: DocumentManagementService;
@@ -160,6 +165,19 @@ export class ConfigModel {
 
   static setConfig(cfg: ConfigModel): void {
     ConfigModel.cfg = cfg;
+  }
+
+  set showMappingPreview(show: boolean) {
+    if (show && !this._showMappingPreview) {
+      this.mappingService.enableMappingPreview();
+    } else if (!show && this._showMappingPreview) {
+      this.mappingService.disableMappingPreview();
+    }
+    this._showMappingPreview = show;
+  }
+
+  get showMappingPreview(): boolean {
+    return this._showMappingPreview;
   }
 
   addDocument(docInitModel: DocumentInitializationModel): DocumentDefinition {
