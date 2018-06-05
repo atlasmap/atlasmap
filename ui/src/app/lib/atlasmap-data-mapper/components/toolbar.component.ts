@@ -85,6 +85,8 @@ export class ToolbarComponent implements OnInit {
       if (this.cfg.showNamespaceTable) {
         this.cfg.showMappingTable = false;
       }
+    } else if ('showMappingPreview' === action) {
+      this.cfg.showMappingPreview = !this.cfg.showMappingPreview;
     }
 
     // Use the initialization service to trigger the observable updateFromConfig method

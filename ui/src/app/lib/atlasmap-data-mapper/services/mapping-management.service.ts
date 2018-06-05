@@ -46,7 +46,16 @@ export class MappingManagementService {
   mappingSelectionRequiredSource = new Subject<Field>();
   mappingSelectionRequired$ = this.mappingSelectionRequiredSource.asObservable();
 
+  mappingPreviewInputSource = new Subject<FieldMappingPair>();
+  mappingPreviewInput$ = this.mappingPreviewInputSource.asObservable();
+  mappingPreviewOutputSource = new Subject<FieldMappingPair>();
+  mappingPreviewOutput$ = this.mappingPreviewOutputSource.asObservable();
+  mappingPreviewErrorSource = new Subject<ErrorInfo[]>();
+  mappingPreviewError$ = this.mappingPreviewErrorSource.asObservable();
+
   private headers = new HttpHeaders({'Content-Type': 'application/json'});
+  private mappingPreviewInputSubscription;
+  private mappingUpdatedSubscription;
 
   constructor(private http: HttpClient) {}
 
@@ -400,6 +409,84 @@ export class MappingManagementService {
       doc.clearSelectedFields();
     }
     this.notifyMappingUpdated();
+  }
+
+  enableMappingPreview(): void {
+    if (this.cfg.initCfg.baseMappingServiceUrl == null) {
+      // process mapping service not configured.
+      return;
+    }
+
+    this.mappingPreviewInputSubscription = this.mappingPreviewInput$.subscribe(inputFieldMapping => {
+      if (!inputFieldMapping || !inputFieldMapping.isFullyMapped()) {
+        return;
+      }
+      const payload: any = {
+        'ProcessMappingRequest': {
+          'jsonType': ConfigModel.mappingServicesPackagePrefix + '.ProcessMappingRequest',
+          'mapping': MappingSerializer.serializeFieldMapping(this.cfg, inputFieldMapping, 'preview', false)
+        }
+      };
+      const docRefs: any = {};
+      for (const docRef of this.cfg.targetDocs) {
+        docRefs[docRef.id] = docRef.uri;
+      }
+
+      const url: string = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/process';
+      DataMapperUtil.debugLogJSON(payload, 'Process Mapping Preview Request', this.cfg.initCfg.debugProcessMappingPreviewCalls, url);
+      this.http.put(url, payload, { headers: this.headers }).toPromise().then((body: any) => {
+        DataMapperUtil.debugLogJSON(body, 'Process Mapping Preview  Response', this.cfg.initCfg.debugProcessMappingPreviewCalls, url);
+        const answer = MappingSerializer.deserializeFieldMapping(body.ProcessMappingResponse.mapping, docRefs, this.cfg, false);
+        for (const toWrite of inputFieldMapping.targetFields) {
+          for (const toRead of answer.targetFields) {
+            if (toWrite.field.docDef.id === toRead.parsedData.parsedDocID
+                && toWrite.field.path === toRead.parsedData.parsedPath) {
+              // TODO let field component subscribe mappingPreviewOutputSource instead of doing this
+              toWrite.field.value = toRead.parsedData.parsedValue;
+              const index = answer.targetFields.indexOf(toRead);
+              if (index !== -1) {
+                answer.targetFields.splice(index, 1);
+                break;
+              }
+            }
+          }
+        }
+        this.mappingPreviewOutputSource.next(answer);
+        const audits = MappingSerializer.deserializeAudits(body.ProcessMappingResponse.audits);
+        if (this.cfg.mappings.activeMapping.getCurrentFieldMapping() === inputFieldMapping) {
+          // TODO let error service subscribe mappingPreviewErrorSource instead of doing this
+          this.cfg.mappings.activeMapping.previewErrors = audits;
+        }
+        this.mappingPreviewErrorSource.next(audits);
+      }).catch((error: any) => {
+        if (this.cfg.mappings.activeMapping.getCurrentFieldMapping() === inputFieldMapping) {
+          // TODO let error service subscribe mappingPreviewErrorSource instead of doing this
+          this.cfg.mappings.activeMapping.previewErrors = [new ErrorInfo(error, ErrorLevel.ERROR, null)];
+        }
+        this.mappingPreviewErrorSource.next([new ErrorInfo(error, ErrorLevel.ERROR, null)]);
+      });
+    });
+
+    this.mappingUpdatedSubscription = this.mappingUpdated$.subscribe(() => {
+      if (!this.cfg || !this.cfg.mappings || !this.cfg.mappings.activeMapping) {
+        return;
+      }
+      const activePair = this.cfg.mappings.activeMapping.getCurrentFieldMapping();
+      if (activePair && activePair.isFullyMapped()) {
+        this.mappingPreviewInputSource.next(activePair);
+      }
+    });
+  }
+
+  disableMappingPreview(): void {
+    if (this.mappingUpdatedSubscription) {
+      this.mappingUpdatedSubscription.complete();
+      this.mappingUpdatedSubscription = undefined;
+    }
+    if (this.mappingPreviewInputSubscription) {
+      this.mappingPreviewInputSubscription.complete();
+      this.mappingPreviewInputSubscription = undefined;
+    }
   }
 
   validateMappings(): void {

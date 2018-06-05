@@ -47,7 +47,7 @@ public class AtlasServiceTest {
     private ObjectMapper mapper = null;
 
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {
         service = new AtlasService();
         mapper = Json.mapper();
     }

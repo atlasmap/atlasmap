@@ -56,7 +56,11 @@ import io.atlasmap.api.AtlasSession;
 import io.atlasmap.core.DefaultAtlasContextFactory;
 import io.atlasmap.v2.ActionDetails;
 import io.atlasmap.v2.AtlasMapping;
+import io.atlasmap.v2.Audits;
 import io.atlasmap.v2.Json;
+import io.atlasmap.v2.Mapping;
+import io.atlasmap.v2.ProcessMappingRequest;
+import io.atlasmap.v2.ProcessMappingResponse;
 import io.atlasmap.v2.StringMap;
 import io.atlasmap.v2.StringMapEntry;
 import io.atlasmap.v2.Validations;
@@ -76,22 +80,12 @@ public class AtlasService {
     private static final Logger LOG = LoggerFactory.getLogger(AtlasService.class);
 
     private final DefaultAtlasContextFactory atlasContextFactory = DefaultAtlasContextFactory.getInstance();
+    private final AtlasContext defaultContext;
+
     private String baseFolder = "target/mappings";
 
-    protected byte[] toJson(Object value) {
-        try {
-            return Json.mapper().writeValueAsBytes(value);
-        } catch (JsonProcessingException e) {
-            throw new WebApplicationException(e, Status.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    protected <T> T fromJson(InputStream value, Class<T>clazz) {
-        try {
-            return Json.mapper().readValue(value, clazz);
-        } catch (IOException e) {
-            throw new WebApplicationException(e, Status.BAD_REQUEST);
-        }
+    public AtlasService() throws AtlasException {
+        this.defaultContext = atlasContextFactory.createContext(new AtlasMapping());
     }
 
     @GET
@@ -246,6 +240,34 @@ public class AtlasService {
         }
     }
 
+    @PUT
+    @Path("/mapping/process")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "Process Mapping", notes = "Process Mapping by feeding input data")
+    @ApiImplicitParams(@ApiImplicitParam(
+            name = "request", value = "ProcessMappingRequest object", dataType = "io.atlasmap.v2.ProcessMappingRequest"))
+    @ApiResponses({
+        @ApiResponse(code = 200, response = ProcessMappingResponse.class, message = "Return a mapping result"),
+        @ApiResponse(code = 204, message = "Skipped empty mapping execution") })
+    public Response processMappingRequest(InputStream request, @Context UriInfo uriInfo) {
+        ProcessMappingRequest pmr = fromJson(request, ProcessMappingRequest.class);
+        if (pmr.getAtlasMapping() != null) {
+            throw new WebApplicationException("Whole mapping execution is not yet supported");
+        }
+        Mapping mapping = pmr.getMapping();
+        if (mapping == null) {
+            return Response.noContent().build();
+        }
+
+        Audits audits = defaultContext.processPreview(mapping);
+        ProcessMappingResponse response = new ProcessMappingResponse();
+        response.setMapping(mapping);
+        if (audits != null) {
+            response.setAudits(audits);
+        }
+        return Response.ok().entity(toJson(response)).build();
+    }
 
     @GET
     @Path("/ping")
@@ -334,4 +356,21 @@ public class AtlasService {
     protected String generateMappingFileName(String mappingName) {
         return String.format("atlasmapping-%s.xml", mappingName);
     }
+
+    protected byte[] toJson(Object value) {
+        try {
+            return Json.mapper().writeValueAsBytes(value);
+        } catch (JsonProcessingException e) {
+            throw new WebApplicationException(e, Status.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    protected <T> T fromJson(InputStream value, Class<T>clazz) {
+        try {
+            return Json.mapper().readValue(value, clazz);
+        } catch (IOException e) {
+            throw new WebApplicationException(e, Status.BAD_REQUEST);
+        }
+    }
+
 }

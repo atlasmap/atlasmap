@@ -90,6 +90,24 @@
     <jaxb:bindings node="xs:complexType[@name='ActionDetails']">
       <annox:annotate><annox:annotate annox:class="javax.xml.bind.annotation.XmlRootElement" name="ActionDetails" /></annox:annotate>
       <annox:annotate><annox:annotate annox:class="com.fasterxml.jackson.annotation.JsonRootName">ActionDetails</annox:annotate></annox:annotate>
+    </jaxb:bindings>
+    <jaxb:bindings node="xs:complexType[@name='ProcessMappingRequest']">
+      <annox:annotate><annox:annotate annox:class="javax.xml.bind.annotation.XmlRootElement" name="ProcessMappingRequest" /></annox:annotate>
+      <annox:annotate><annox:annotate annox:class="com.fasterxml.jackson.annotation.JsonRootName">ProcessMappingRequest</annox:annotate></annox:annotate>
+      <annox:annotate><annox:annotate annox:class="com.fasterxml.jackson.annotation.JsonTypeInfo" use="CLASS" include="PROPERTY" property="jsonType"></annox:annotate></annox:annotate>        
+    </jaxb:bindings>
+    <jaxb:bindings node="xs:complexType[@name='ProcessMappingResponse']">
+      <annox:annotate><annox:annotate annox:class="javax.xml.bind.annotation.XmlRootElement" name="ProcessMappingResponse" /></annox:annotate>
+      <annox:annotate><annox:annotate annox:class="com.fasterxml.jackson.annotation.JsonRootName">ProcessMappingResponse</annox:annotate></annox:annotate>
+      <annox:annotate><annox:annotate annox:class="com.fasterxml.jackson.annotation.JsonTypeInfo" use="CLASS" include="PROPERTY" property="jsonType"></annox:annotate></annox:annotate>        
+    </jaxb:bindings>   
+    <jaxb:bindings node="xs:complexType[@name='AtlasMappingResult']">
+      <annox:annotate><annox:annotate annox:class="javax.xml.bind.annotation.XmlRootElement" name="AtlasMappingResult" /></annox:annotate>
+      <annox:annotate><annox:annotate annox:class="com.fasterxml.jackson.annotation.JsonRootName">AtlasMappingResult</annox:annotate></annox:annotate>
+    </jaxb:bindings>   
+    <jaxb:bindings node="xs:complexType[@name='TargetDocument']">
+      <annox:annotate><annox:annotate annox:class="javax.xml.bind.annotation.XmlRootElement" name="TargetDocument" /></annox:annotate>
+      <annox:annotate><annox:annotate annox:class="com.fasterxml.jackson.annotation.JsonRootName">TargetDocument</annox:annotate></annox:annotate>
     </jaxb:bindings>   
   </jaxb:bindings>
 </jaxb:bindings>

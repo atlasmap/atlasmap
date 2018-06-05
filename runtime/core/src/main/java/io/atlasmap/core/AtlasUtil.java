@@ -375,4 +375,17 @@ public class AtlasUtil {
         }
         return classNames;
     }
+
+    public static String getChainedMessage(Throwable t) {
+        StringBuilder buf = new StringBuilder();
+        buf.append(t.getMessage());
+        Throwable target = t;
+        while((target = target.getCause()) != null) {
+            if (target.getMessage() != null && !target.getMessage().isEmpty()) {
+                buf.append(" - ");
+                buf.append(target.getMessage());
+            }
+        }
+        return buf.toString();
+    }
 }

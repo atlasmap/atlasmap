@@ -68,6 +68,11 @@ __optional__|< <<_atlas-service-core-actionparameter,ActionParameter>> > array
 |===
 
 
+[[_atlas-service-core-actions]]
+=== Actions
+__Type__ : object
+
+
 [[_atlas-service-core-atlasmapping]]
 === AtlasMapping
 
@@ -86,6 +91,49 @@ __required__|<<_atlas-service-core-mappings,Mappings>>
 __optional__|string
 |**properties** +
 __optional__|<<_atlas-service-core-properties,Properties>>
+|===
+
+
+[[_atlas-service-core-atlasmappingresult]]
+=== AtlasMappingResult
+
+[options="header", cols=".^3a,.^4a"]
+|===
+|Name|Schema
+|**audits** +
+__optional__|<<_atlas-service-core-audits,Audits>>
+|**targetDocuments** +
+__optional__|< <<_atlas-service-core-targetdocument,TargetDocument>> > array
+|===
+
+
+[[_atlas-service-core-audit]]
+=== Audit
+
+[options="header", cols=".^3a,.^4a"]
+|===
+|Name|Schema
+|**docId** +
+__optional__|string
+|**message** +
+__optional__|string
+|**path** +
+__optional__|string
+|**status** +
+__optional__|enum (ALL, INFO, WARN, ERROR, NONE)
+|**value** +
+__optional__|string
+|===
+
+
+[[_atlas-service-core-audits]]
+=== Audits
+
+[options="header", cols=".^3a,.^4a"]
+|===
+|Name|Schema
+|**audit** +
+__optional__|< <<_atlas-service-core-audit,Audit>> > array
 |===
 
 
@@ -145,6 +193,39 @@ __optional__|string
 |===
 
 
+[[_atlas-service-core-field]]
+=== Field
+
+[options="header", cols=".^3a,.^4a"]
+|===
+|Name|Schema
+|**actions** +
+__optional__|<<_atlas-service-core-actions,Actions>>
+|**arrayDimensions** +
+__optional__|integer (int32)
+|**arraySize** +
+__optional__|integer (int32)
+|**collectionType** +
+__optional__|enum (ALL, ARRAY, LIST, MAP, NONE)
+|**docId** +
+__optional__|string
+|**fieldType** +
+__optional__|enum (ANY, ANY_DATE, BIG_INTEGER, BOOLEAN, BYTE, BYTE_ARRAY, CHAR, COMPLEX, DATE, DATE_TIME, DATE_TIME_TZ, DATE_TZ, DECIMAL, DOUBLE, FLOAT, INTEGER, LONG, NONE, NUMBER, SHORT, STRING, TIME, TIME_TZ, UNSIGNED_BYTE, UNSIGNED_INTEGER, UNSIGNED_LONG, UNSIGNED_SHORT, UNSUPPORTED)
+|**format** +
+__optional__|string
+|**index** +
+__optional__|integer (int32)
+|**path** +
+__optional__|string
+|**required** +
+__optional__|boolean
+|**status** +
+__optional__|enum (SUPPORTED, UNSUPPORTED, CACHED, ERROR, NOT_FOUND, BLACK_LIST)
+|**value** +
+__optional__|object
+|===
+
+
 [[_atlas-service-core-lookupentry]]
 === LookupEntry
 
@@ -188,6 +269,37 @@ __optional__|< <<_atlas-service-core-lookuptable,LookupTable>> > array
 |===
 
 
+[[_atlas-service-core-mapping]]
+=== Mapping
+
+[options="header", cols=".^3a,.^4a"]
+|===
+|Name|Schema
+|**alias** +
+__optional__|string
+|**delimiter** +
+__optional__|string
+|**delimiterString** +
+__optional__|string
+|**description** +
+__optional__|string
+|**id** +
+__optional__|string
+|**inputField** +
+__optional__|< <<_atlas-service-core-field,Field>> > array
+|**lookupTableName** +
+__optional__|string
+|**mappingType** +
+__optional__|enum (ALL, COLLECTION, COMBINE, LOOKUP, MAP, SEPARATE, NONE)
+|**outputField** +
+__optional__|< <<_atlas-service-core-field,Field>> > array
+|**strategy** +
+__optional__|string
+|**strategyClassName** +
+__optional__|string
+|===
+
+
 [[_atlas-service-core-mappings]]
 === Mappings
 
@@ -196,6 +308,21 @@ __optional__|< <<_atlas-service-core-lookuptable,LookupTable>> > array
 |Name|Schema
 |**mapping** +
 __optional__|< <<_atlas-service-core-basemapping,BaseMapping>> > array
+|===
+
+
+[[_atlas-service-core-processmappingresponse]]
+=== ProcessMappingResponse
+
+[options="header", cols=".^3a,.^4a"]
+|===
+|Name|Schema
+|**atlasMappingResult** +
+__optional__|<<_atlas-service-core-atlasmappingresult,AtlasMappingResult>>
+|**audits** +
+__optional__|<<_atlas-service-core-audits,Audits>>
+|**mapping** +
+__optional__|<<_atlas-service-core-mapping,Mapping>>
 |===
 
 
@@ -245,6 +372,19 @@ __optional__|< <<_atlas-service-core-stringmapentry,StringMapEntry>> > array
 |**name** +
 __optional__|string
 |**value** +
+__optional__|string
+|===
+
+
+[[_atlas-service-core-targetdocument]]
+=== TargetDocument
+
+[options="header", cols=".^3a,.^4a"]
+|===
+|Name|Schema
+|**body** +
+__optional__|string
+|**docId** +
 __optional__|string
 |===
 
