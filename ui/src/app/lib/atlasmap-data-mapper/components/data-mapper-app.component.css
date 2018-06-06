@@ -93,41 +93,41 @@
 .DataMapperUI .toolbar .dropdown-menu LI:hover I { }
 
 /* document cards */
-.docDef { position:relative; border:1px solid #CAC9C9; height:100%; background-color:white; overflow:hidden; }
-.docDef .docName { overflow:hidden; display:inline-block; width:calc(100% - 45px); margin-left:3px; float:left; }
-.docDef .docName I { margin-right:5px; vertical-align:baseline; margin-bottom:4px; }
-.docDef I.searchBoxIcon { float:right; }
-.searchBox { position:relative; }
-.searchBox INPUT { width:100%; border:1px solid #FBFBFB; border-bottom:1px solid #CAC9C9; padding:5px 10px; float:left;}
-.searchBox INPUT:placeholder-shown { font-style:italic; }
-.searchBoxCloseIcon { position:absolute; right:10px; top:10px; }
-.docDef .fieldList { height:calc(100% - 90px); }
-.docDef .fieldListSearchOpen { height:calc(100% - 122px); }
-.docDef .fieldsCount { padding:5px; font-size:10px; font-weight:bold;
+.DataMapperUI .docDef { position:relative; border:1px solid #CAC9C9; height:100%; background-color:white; overflow:hidden; }
+.DataMapperUI .docDef .docName { overflow:hidden; display:inline-block; width:calc(100% - 45px); margin-left:3px; float:left; }
+.DataMapperUI .docDef .docName I { margin-right:5px; vertical-align:baseline; margin-bottom:4px; }
+.DataMapperUI .docDef I.searchBoxIcon { float:right; }
+.DataMapperUI .searchBox { position:relative; }
+.DataMapperUI .searchBox INPUT { width:100%; border:1px solid #FBFBFB; border-bottom:1px solid #CAC9C9; padding:5px 10px; float:left;}
+.DataMapperUI .searchBox INPUT:placeholder-shown { font-style:italic; }
+.DataMapperUI .searchBoxCloseIcon { position:absolute; right:10px; top:10px; }
+.DataMapperUI .docDef .fieldList { height:calc(100% - 90px); }
+.DataMapperUI .docDef .fieldListSearchOpen { height:calc(100% - 122px); }
+.DataMapperUI .docDef .fieldsCount { padding:5px; font-size:10px; font-weight:bold;
     text-align:right; margin:0; width:100%; border-top:1px solid #CAC9C9; padding-right:12px;
     border-bottom:0px solid black; }
-.docDef .documentHeader { color:white; background-image:linear-gradient(to bottom, rgb(125,125,125), rgb(54,54,54));
+.DataMapperUI .docDef .documentHeader { color:white; background-image:linear-gradient(to bottom, rgb(125,125,125), rgb(54,54,54));
     font-size:16px; padding-top:5px; margin:0px; overflow:hidden; }
-.docDef .documentHeader I.link:hover { color:rgb(54,54,54); }
-I.docCollapseIcon { width:10px; margin-left:5px; }
+.DataMapperUI .docDef .documentHeader I.link:hover { color:rgb(54,54,54); }
+.DataMapperUI I.docCollapseIcon { width:10px; margin-left:5px; }
 
-.noSearchResults { width:100%; padding:10px; text-align:center; }
+.DataMapperUI .noSearchResults { width:100%; padding:10px; text-align:center; }
 
-.DocumentFieldDetailComponent { width:100%; margin:0px; }
-.DocumentFieldDetailComponent .fieldDetail { padding:5px 10px; border-bottom:1px solid #d1d1d1; }
-.DocumentFieldDetailComponent LABEL { padding:0; margin:0; margin-bottom:1px; vertical-align:middle; }
-.DocumentFieldDetailComponent .selectedField { background-color:#02A2D8; color:white; }
-.DocumentFieldDetailComponent .selectedField I { color:white; }
-.DocumentFieldDetailComponent .dragHover { background-color:#02A2D8; color:white; }
-.DocumentFieldDetailComponent .dragHover I { color:white; }
-.docDef .DocumentFieldDetailComponent I { text-shadow:0 1px 2px rgba(3, 3, 3, 0.24); margin-right:2px; font-size:10px; }
-.DocumentFieldDetailComponent I.partOfMappingIcon { color:#0088ce; }
-.DocumentFieldDetailComponent I.arrow { text-shadow:none; width:8px; font-size:14px; margin-bottom:2px; margin-right:3px; }
-.DocumentFieldDetailComponent I.parentFolder { color:#363636; text-shadow:none; margin-right:2px; font-size:12px; }
-.DocumentFieldDetailComponent .selectedField I.partOfMappingIcon { color:white; }
-.DocumentFieldDetailComponent I.partOfMappingIconHidden { visibility:hidden; }
-.DocumentFieldDetailComponent .disableSelection LABEL { text-decoration:line-through; color: rgb(220,220,220); }
-.DocumentFieldDetailComponent .propertyFieldIcons I { font-size:12px; vertical-align:middle; text-shadow:none; }
+.DataMapperUI .DocumentFieldDetailComponent { width:100%; margin:0px; }
+.DataMapperUI .DocumentFieldDetailComponent .fieldDetail { padding:5px 10px; border-bottom:1px solid #d1d1d1; }
+.DataMapperUI .DocumentFieldDetailComponent LABEL { padding:0; margin:0; margin-bottom:1px; vertical-align:middle; }
+.DataMapperUI .DocumentFieldDetailComponent .selectedField { background-color:#02A2D8; color:white; }
+.DataMapperUI .DocumentFieldDetailComponent .selectedField I { color:white; }
+.DataMapperUI .DocumentFieldDetailComponent .dragHover { background-color:#02A2D8; color:white; }
+.DataMapperUI .DocumentFieldDetailComponent .dragHover I { color:white; }
+.DataMapperUI .docDef .DocumentFieldDetailComponent I { text-shadow:0 1px 2px rgba(3, 3, 3, 0.24); margin-right:2px; font-size:10px; }
+.DataMapperUI .DocumentFieldDetailComponent I.partOfMappingIcon { color:#0088ce; }
+.DataMapperUI .DocumentFieldDetailComponent I.arrow { text-shadow:none; width:8px; font-size:14px; margin-bottom:2px; margin-right:3px; }
+.DataMapperUI .DocumentFieldDetailComponent I.parentFolder { color:#363636; text-shadow:none; margin-right:2px; font-size:12px; }
+.DataMapperUI .DocumentFieldDetailComponent .selectedField I.partOfMappingIcon { color:white; }
+.DataMapperUI .DocumentFieldDetailComponent I.partOfMappingIconHidden { visibility:hidden; }
+.DataMapperUI .DocumentFieldDetailComponent .disableSelection LABEL { text-decoration:line-through; color: rgb(220,220,220); }
+.DataMapperUI .DocumentFieldDetailComponent .propertyFieldIcons I { font-size:12px; vertical-align:middle; text-shadow:none; }
 
 .DataMapperEditComponent INPUT, .DataMapperEditComponent .form-group SELECT { width:300px; }
 .DataMapperEditComponent .form-group TEXTAREA { margin:auto; }
@@ -171,9 +171,9 @@ I.docCollapseIcon { width:10px; margin-left:5px; }
 .mappingList .error { float:right; font-size:14px; }
 .mappingList .rowTitles LABEL.type { width:calc(15% - 20px); }
 
-.namespaceList LABEL.alias { width:calc(15% - 0px); }
-.namespaceList LABEL.uri { width:calc(30% - 0px); }
-.namespaceList LABEL.locationUri { width:calc(30% - 0px); }
+.DataMapperUI .namespaceList LABEL.alias { width:calc(15% - 0px); }
+.DataMapperUI .namespaceList LABEL.uri { width:calc(30% - 0px); }
+.DataMapperUI .namespaceList LABEL.locationUri { width:calc(30% - 0px); }
 
 /* mapping detail panel */
 .fieldMappingDetail { border-left:1px solid #d1d1d1; height:100%; background-color:#d1d1d1; border:1px solid #CAC9C9; }
@@ -211,19 +211,19 @@ I.docCollapseIcon { width:10px; margin-left:5px; }
 .fieldMappingDetail .alert LABEL { width:calc(100% - 60px); margin-left:28px; margin-bottom:0; }
 .fieldMappingDetail .alert .close { margin-right:5px; }
 
-.alert { font-size:14px; }
-.alert-info { color: green; }
+.DataMapperUI .alert { font-size:12px; }
+.DataMapperUI .alert-info { color: green; }
 
 .mappingFieldAction .form-group LABEL { float:left; clear:left; width:30%; }
 .mappingFieldAction .form-group SELECT { float:left; clear:left; width:calc(100% - 3px); }
 .mappingFieldAction .form-group INPUT { float:left; width:69%; text-align:right; }
 .fieldMappingDetail .mappingFieldAction .linkContainer { padding-right:6px; padding-top:15px; }
 
-.CollapsableCardHeader {  border-top:1px solid #d1d1d1; }
-.CollapsableCardHeader .card-pf-heading { border-bottom:0; padding-left:5px; }
-.sources .CollapsableCardHeader .card-pf-heading { border-top:0; }
-.CollapsableCardHeader .card-pf-title { font-size:16px; }
-.CollapsableCardHeader I { margin-right:0px; vertical-align:middle; width:24px; font-size:20px; }
+.DataMapperUI .CollapsableCardHeader {  border-top:1px solid #d1d1d1; }
+.DataMapperUI .CollapsableCardHeader .card-pf-heading { border-bottom:0; padding-left:5px; }
+.DataMapperUI .sources .CollapsableCardHeader .card-pf-heading { border-top:0; }
+.DataMapperUI .CollapsableCardHeader .card-pf-title { font-size:16px; }
+.DataMapperUI .CollapsableCardHeader I { margin-right:0px; vertical-align:middle; width:24px; font-size:20px; }
 
 .mappingFieldContainer { background-color:#d3d3d3; padding:14px 14px 6px 14px; }
 .fieldMappingDetail .linkContainer { position: relative; width:100%; text-align:right; }
@@ -232,9 +232,9 @@ I.docCollapseIcon { width:10px; margin-left:5px; }
 .MappingFieldSection LABEL { color:#363636; }
 .MappingFieldSection .fieldDetailTooltip LABEL { color:white; }
 
-.TransitionSelection LABEL { width:100%; }
-.TransitionSelection .enumSection LABEL { width:calc(100% - 25px); margin-bottom:0; }
-.TransitionSelection SELECT { display:block; width:100%; }
+.DataMapperUI .TransitionSelection LABEL { width:100%; }
+.DataMapperUI .TransitionSelection .enumSection LABEL { width:calc(100% - 25px); margin-bottom:0; }
+.DataMapperUI .TransitionSelection SELECT { display:block; width:100%; }
 
 /* modal window */
 .DataMapperUI .modal { z-index:1000; width:100%; height:100%; overflow:auto; display:block; }
@@ -287,6 +287,6 @@ I.docCollapseIcon { width:10px; margin-left:5px; }
 .MappingSelectionComponent .header { margin-bottom:20px; }
 
 /* enum lookup table creation */
-.LookupTableComponent .lookupTableRow { margin:0px 10px 10px 5px; padding:5px 0px; }
-.LookupTableComponent LABEL { width:150px; margin-right:20px; overflow:hidden; vertical-align:bottom; }
-.LookupTableComponent SELECT { width:200px; vertical-align:super; }
+.DataMapperUI .LookupTableComponent .lookupTableRow { margin:0px 10px 10px 5px; padding:5px 0px; }
+.DataMapperUI .LookupTableComponent LABEL { width:150px; margin-right:20px; overflow:hidden; vertical-align:bottom; }
+.DataMapperUI .LookupTableComponent SELECT { width:200px; vertical-align:super; }
