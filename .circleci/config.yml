@@ -18,7 +18,7 @@ version: 2
 common_env: &common_env
   MAVEN_OPTS: -Xmx1G
   CHROME_BIN: /usr/bin/chromium
-  DOCKER_VERSION: 17.04.0-ce
+  DOCKER_VERSION: 17.12.1-ce
 
 job_default: &job_defaults
   working_directory: /workspace
@@ -60,7 +60,7 @@ push_images: &push_images
       fi
 
       cd runtime
-      curl -fsSL https://get.docker.com/builds/Linux/x86_64/docker-${DOCKER_VERSION}.tgz | tar xz -C /usr/bin --strip-components 1
+      curl -fsSL https://download.docker.com/linux/static/stable/x86_64/docker-${DOCKER_VERSION}.tgz | tar xz -C /usr/bin --strip-components 1
 
       if [ "${CIRCLE_BRANCH}" == "master" ]; then
         DOCKER_IMAGE_TAG="latest"

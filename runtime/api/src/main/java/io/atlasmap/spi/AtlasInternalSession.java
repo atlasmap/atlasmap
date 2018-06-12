@@ -15,7 +15,11 @@
  */
 package io.atlasmap.spi;
 
+import java.util.List;
+
 import io.atlasmap.api.AtlasSession;
+import io.atlasmap.v2.Audit;
+import io.atlasmap.v2.AuditStatus;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.LookupTable;
 import io.atlasmap.v2.Mapping;
@@ -59,6 +63,12 @@ public interface AtlasInternalSession extends AtlasSession {
         Head setTargetField(Field targetField);
 
         Head unset();
+
+        boolean hasError();
+
+        Head addAudit(AuditStatus status, String docId, String path, String format);
+
+        List<Audit> getAudits();
 
     }
 

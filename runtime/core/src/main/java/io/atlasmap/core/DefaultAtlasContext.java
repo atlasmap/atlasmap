@@ -261,15 +261,40 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
                 }
 
                 if (mapping.getInputField() == null || mapping.getInputField().isEmpty()) {
-                    AtlasUtil.addAudit(session, null,
-                            String.format("Mapping does not contain at least one source field: alias=%s desc=%s",
-                                    mapping.getAlias(), mapping.getDescription()),
-                            null, AuditStatus.WARN, null);
+                    session.head().addAudit(AuditStatus.WARN, null, null, String.format(
+                            "Mapping does not contain at least one source field: alias=%s desc=%s",
+                            mapping.getAlias(), mapping.getDescription()));
                 } else {
-                    processSourceFieldMappings(session, mapping.getInputField());
+                    try {
+                        processSourceFieldMappings(session, mapping.getInputField());
+                    }catch (Throwable t) {
+                        Field sourceField = session.head().getSourceField();
+                        String docId = sourceField != null ? sourceField.getDocId() : null;
+                        String path =  sourceField != null ? sourceField.getPath() : null;
+                        session.head().addAudit(AuditStatus.ERROR, docId, path, String.format(
+                                "Unexpected exception is thrown while reading source field: %s", t.getMessage()));
+                        if (LOG.isDebugEnabled()) {
+                            LOG.error("", t);
+                        }
+                    }
                 }
 
-                processTargetFieldMappings(session, mapping);
+                if (!session.head().hasError()) {
+                    try {
+                        processTargetFieldMappings(session, mapping);
+                    } catch (Throwable t) {
+                        Field targetField = session.head().getTargetField();
+                        String docId = targetField != null ? targetField.getDocId() : null;
+                        String path = targetField != null ? targetField.getPath() : null;
+                        session.head().addAudit(AuditStatus.ERROR, docId, path, String.format(
+                                "Unexpected exception is thrown while populating target field: %s", t.getMessage()));
+                        if (LOG.isDebugEnabled()) {
+                            LOG.error("", t);
+                        }
+                    }
+                }
+                session.getAudits().getAudit().addAll(session.head().getAudits());
+                session.head().getAudits().clear();
             }
         }
 
