@@ -266,13 +266,17 @@ public class AtlasUtil {
 
     public static void addAudit(AtlasSession session, String docId, String message, String path, AuditStatus status,
             String value) {
+        session.getAudits().getAudit().add(createAudit(status, docId, path, value, message));
+    }
+
+    public static Audit createAudit(AuditStatus status, String docId, String path, String value, String message) {
         Audit audit = new Audit();
         audit.setDocId(docId);
         audit.setMessage(message);
         audit.setPath(path);
         audit.setStatus(status);
         audit.setValue(value);
-        session.getAudits().getAudit().add(audit);
+        return audit;
     }
 
     public static void addAudit(AtlasSession session, Validation validation) {

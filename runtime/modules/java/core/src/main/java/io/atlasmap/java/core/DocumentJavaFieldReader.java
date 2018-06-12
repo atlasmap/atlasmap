@@ -171,8 +171,8 @@ public class DocumentJavaFieldReader implements AtlasFieldReader {
     }
 
     private java.lang.reflect.Field lookupJavaField(Object source, String fieldName) {
-        Class<?> targetClazz = source.getClass();
-        while (targetClazz != Object.class) {
+        Class<?> targetClazz = source != null ? source.getClass() : null;
+        while (targetClazz != null && targetClazz != Object.class) {
             try {
                 return targetClazz.getDeclaredField(fieldName);
             } catch (Exception e) {

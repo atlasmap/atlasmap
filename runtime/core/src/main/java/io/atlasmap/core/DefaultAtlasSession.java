@@ -17,6 +17,8 @@ package io.atlasmap.core;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -319,6 +321,7 @@ public class DefaultAtlasSession implements AtlasInternalSession {
         private LookupTable lookupTable;
         private Field sourceField;
         private Field targetField;
+        private List<Audit> audits = new LinkedList<Audit>();
 
         @Override
         public Mapping getMapping() {
@@ -371,6 +374,28 @@ public class DefaultAtlasSession implements AtlasInternalSession {
             this.sourceField = null;
             this.targetField = null;
             return this;
+        }
+
+        @Override
+        public boolean hasError() {
+            for(Audit audit : audits) {
+                if (audit.getStatus() == AuditStatus.ERROR) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        @Override
+        public Head addAudit(AuditStatus status, String docId, String path, String message) {
+            Audit audit = AtlasUtil.createAudit(status, docId, path, null, message);
+            this.audits.add(audit);
+            return this;
+        }
+
+        @Override
+        public List<Audit> getAudits() {
+            return this.audits;
         }
 
     }
