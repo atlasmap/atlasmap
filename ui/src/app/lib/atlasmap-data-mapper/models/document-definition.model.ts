@@ -58,6 +58,7 @@ export class NamespaceModel {
 
 export class DocumentDefinition {
   private static noneField: Field = null;
+  private static padField: Field = null;
 
   id: string;
   _type: DocumentType;
@@ -97,6 +98,21 @@ export class DocumentDefinition {
       DocumentDefinition.noneField.path = '';
     }
     return DocumentDefinition.noneField;
+  }
+
+  /**
+   * Return a generic padding field for use in combine/separate modes.
+   */
+  static getPadField(): Field {
+    if (DocumentDefinition.padField == null) {
+      DocumentDefinition.padField = new Field();
+      DocumentDefinition.padField.name = '<padding field>';
+      DocumentDefinition.padField.classIdentifier = '<padding field>';
+      DocumentDefinition.padField.type = '';
+      DocumentDefinition.padField.displayName = '<padding field>';
+      DocumentDefinition.padField.path = '';
+    }
+    return DocumentDefinition.padField;
   }
 
   static selectFields(fields: Field[]): void {

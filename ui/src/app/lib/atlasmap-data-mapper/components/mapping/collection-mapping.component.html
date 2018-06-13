@@ -11,13 +11,13 @@
               <i class="fa fa-bolt" style="font-size:12px; vertical-align:baseline;" *ngIf="fieldPair.hasTransition()"></i>
             </div>
             <div class="pull-right text-right" style="margin-right:5px; font-size:15px">
-              <i class="fa fa-edit link" aria-hidden="true" (click)="editPair(fieldPair)" tooltip="Edit mapping" placement="left"></i>
+              <i class="fa fa-edit link" aria-hidden="true" style="margin-right:5px" (click)="editPair(fieldPair)" tooltip="Edit mapping" placement="left"></i>
               <i class="fa fa-trash link" aria-hidden="true" (click)="removePair(fieldPair)" tooltip="Remove mapping" placement="left"></i>
             </div>
           </div>
           <mapping-field-detail *ngFor="let mappedField of fieldPair.getMappedFields(true)" [mappedField]="mappedField" [fieldPair]="fieldPair"
             [cfg]="cfg" [isSource]="true"></mapping-field-detail>
-          <div class="pull-left">
+          <div class="pull-left" style="margin-top:15px">
             <label>Target</label>
           </div>
           <div class="clear"></div>

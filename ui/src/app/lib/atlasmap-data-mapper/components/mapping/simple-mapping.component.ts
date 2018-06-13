@@ -122,7 +122,7 @@ export class SimpleMappingComponent {
 
   addClicked(): void {
     this.fieldPair.addField(DocumentDefinition.getNoneField(), this.isSource);
-    this.cfg.mappingService.updateMappedField(this.fieldPair, this.isSource);
+    this.cfg.mappingService.updateMappedField(this.fieldPair, this.isSource, false);
   }
 
   removePair(): void {
@@ -134,6 +134,6 @@ export class SimpleMappingComponent {
     if (this.fieldPair.getMappedFields(this.isSource).length === 0) {
       this.fieldPair.addField(DocumentDefinition.getNoneField(), this.isSource);
     }
-    this.cfg.mappingService.updateMappedField(this.fieldPair, this.isSource);
+    this.cfg.mappingService.updateMappedField(this.fieldPair, this.isSource, true);
   }
 }

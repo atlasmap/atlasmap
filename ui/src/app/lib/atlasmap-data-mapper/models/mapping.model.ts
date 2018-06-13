@@ -39,6 +39,7 @@ export class MappedField {
   parsedData: MappedFieldParsingData = new MappedFieldParsingData();
   field: Field = DocumentDefinition.getNoneField();
   actions: FieldAction[] = [];
+  private padField = false;
 
   static sortMappedFieldsByPath(mappedFields: MappedField[], allowNone: boolean): MappedField[] {
     if (mappedFields == null || mappedFields.length === 0) {
@@ -63,6 +64,37 @@ export class MappedField {
       result.push(fieldsByPath[name]);
     }
     return result;
+  }
+
+  isPadField(): boolean {
+    return this.padField;
+  }
+
+  setIsPadField(): void {
+    this.padField = true;
+  }
+
+  /**
+   * Given an index range, fill in the field-pair mappings gap with place-holder fields.
+   *
+   * @param lowIndex
+   * @param highIndex
+   * @param fieldPair
+   */
+  addPlaceholders(lowIndex: number, highIndex: number, fieldPair: FieldMappingPair) {
+    let padField = null;
+    for (let i = lowIndex; i < highIndex; i++) {
+      padField = new MappedField;
+      padField.field = DocumentDefinition.getPadField();
+      padField.setIsPadField();
+      padField.updateSeparateOrCombineFieldAction(fieldPair.transition.mode === TransitionMode.SEPARATE,
+        fieldPair.transition.mode === TransitionMode.COMBINE, i.toString(10), this.isSource(), true, false);
+      if (this.isSource()) {
+          fieldPair.sourceFields.push(padField);
+      } else {
+          fieldPair.targetFields.push(padField);
+      }
+    }
   }
 
   isSource(): boolean {
@@ -148,10 +180,11 @@ export class FieldMappingPair {
     return;
   }
 
-  addField(field: Field, isSource: boolean): void {
+  addField(field: Field, isSource: boolean): MappedField {
     const mappedField: MappedField = new MappedField();
     mappedField.field = field;
     this.getMappedFields(isSource).push(mappedField);
+    return mappedField;
   }
 
   hasMappedField(isSource: boolean) {
@@ -265,39 +298,129 @@ export class FieldMappingPair {
   }
 
   /**
-   * Given an array of mapped fields, re-sequence the field action indices.  An optional mapped field may be
-   * specified to be inserted at a designated index.
+   * Return the maximum index value in the specified mapped fields.
+   * @param mappedFields
+   */
+  getMaxIndex(mappedFields: MappedField[]): number {
+    let maxIndex = 0;
+    for (const mField of mappedFields) {
+      if (mField.actions != null && mField.actions.length > 0) {
+        if (+mField.actions[0].argumentValues[0].value > maxIndex) {
+          maxIndex = +mField.actions[0].argumentValues[0].value;
+        }
+      }
+    }
+    return maxIndex;
+  }
+
+  /**
+   * Given an array of mapped fields, fill the gaps in the action indices by adding place-holders.
+   * If a field was removed just re-sequence the indices based on their existing position.
+   * @param mappedFields
+   * @param fieldRemoved
+   */
+  resequenceRemovalsAndGaps(mappedFields: MappedField[], fieldRemoved: boolean): number {
+      let lastIndex = 0;
+      let tempIndex = 0;
+      for (const mField of mappedFields) {
+        if (mField.actions != null && mField.actions.length > 0) {
+          if (fieldRemoved) {
+            mField.actions[0].argumentValues[0].value = (++lastIndex).toString(10);
+            continue;
+          }
+          tempIndex = +mField.actions[0].argumentValues[0].value;
+          if (tempIndex > lastIndex + 1) {
+            mField.addPlaceholders(++lastIndex, tempIndex, this);
+            break;
+          } else if (tempIndex === lastIndex) {
+            tempIndex++;
+            mField.actions[0].argumentValues[0].value = tempIndex.toString(10);
+          }
+          lastIndex = +mField.actions[0].argumentValues[0].value;
+        } else {
+          lastIndex++;
+        }
+      }
+      this.sortFieldActionFields(mappedFields);
+      return lastIndex;
+  }
+  /**
+   * Given an array of mapped fields, re-sequence the field action indices accounting for any gaps
+   * due to user index editing or element removal.  An optional mapped field may be specified to be
+   * inserted at a designated index.
    *
    * @param mappedFields
    * @param insertedMappedField - optional user-selected mapped field which was just dragged/dropped
    * @param inIndex - drop index location
+   * @param fieldRemoved
    */
   resequenceFieldActionIndices(mappedFields: MappedField[], insertedMappedField: MappedField,
-                               inIndex: string): number {
+                               inIndex: string, fieldRemoved: boolean): number {
+    let index = 1;
     let startIndex = 0;
     if (insertedMappedField != null) {
       startIndex = +insertedMappedField.actions[0].argumentValues[0].value - 1;
       mappedFields.splice(startIndex, 1);
       startIndex = +inIndex - 1;
       mappedFields.splice(startIndex, 0, insertedMappedField);
+
+      // Now re-sequence the index on the ordinal position within the mapped fields array.
+      for (const mField of mappedFields) {
+        if (mField.actions != null && mField.actions.length > 0) {
+          mField.actions[0].argumentValues[0].value = index.toString(10);  // Field action index is always first
+        }
+        index++;
+      }
+      return(index - 1);
     }
 
-    // Now re-sequence the index on the ordinal position within the mapped fields array.
-    let index = 1;
-    for (const mField of mappedFields) {
-      if (mField.actions != null && mField.actions.length > 0) {
-        mField.actions[0].argumentValues[0].value = index.toString(10);  // Field action index is always first
+    const maxIndex = this.getMaxIndex(mappedFields);
+    let lastIndex = 0;
+    while (lastIndex < maxIndex) {
+      lastIndex = this.resequenceRemovalsAndGaps(mappedFields, fieldRemoved);
+      if (fieldRemoved) {
+        break;
       }
-      index++;
     }
-    return(index - 1);
+
+    return(lastIndex);
+  }
+
+  /**
+   * Given an array of mapped fields, sort the field action fields themselves. based on their index.
+   *
+   * @param mappedFields
+   */
+  sortFieldActionFields(mappedFields: MappedField[]): void {
+    let done = false;
+
+    while (!done) {
+      let tempField: MappedField = null;
+      let lastField: MappedField = null;
+      let index = 0;
+      done = true;
+
+      for (const mField of mappedFields) {
+        if (mField.actions != null && mField.actions.length > 0 && lastField != null) {
+
+          if (+mField.actions[0].argumentValues[0].value < +lastField.actions[0].argumentValues[0].value) {
+            tempField = mappedFields[index - 1];
+            mappedFields[index - 1] = mField;
+            mappedFields[index] = tempField;
+            done = false;
+          }
+        }
+        index++;
+        lastField = mField;
+      }
+    }
   }
 
   /**
    * Normalize index fields for combine/ separate modes.
    * @param combineMode
    */
-  processIndices(combineMode: boolean): number {
+  processIndices(combineMode: boolean, fieldRemoved: boolean): number {
 
     // Remove indices from target fields in combine-mode if they exist or remove indices from
     // source fields in separate-mode if they exist.
@@ -307,7 +430,7 @@ export class FieldMappingPair {
 
     // Gather mapped fields.
     const mappedFields = this.getMappedFields(combineMode);
-    return this.resequenceFieldActionIndices(mappedFields, null, '');
+    return this.resequenceFieldActionIndices(mappedFields, null, '', fieldRemoved);
   }
 
   updateTransition(isSource: boolean, compoundSelection: boolean, fieldRemoved: boolean): void {
@@ -337,7 +460,7 @@ export class FieldMappingPair {
     let maxIndex = 0;
 
     if (combineMode || separateMode) {
-      maxIndex = this.processIndices(combineMode);
+      maxIndex = this.processIndices(combineMode, fieldRemoved);
       mappedFields = this.getMappedFields(combineMode);
       if (mappedFields != null && mappedFields.length > 0) {
         const mappedField: MappedField = mappedFields[mappedFields.length - 1];
