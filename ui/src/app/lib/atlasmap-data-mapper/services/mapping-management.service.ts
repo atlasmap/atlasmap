@@ -176,8 +176,8 @@ export class MappingManagementService {
     return fieldPair;
   }
 
-  updateMappedField(fieldPair: FieldMappingPair, isSource: boolean): void {
-    fieldPair.updateTransition(isSource, false, false);
+  updateMappedField(fieldPair: FieldMappingPair, isSource: boolean, fieldRemoved: boolean): void {
+    fieldPair.updateTransition(isSource, false, fieldRemoved);
     this.saveCurrentMapping();
   }
 
@@ -211,7 +211,7 @@ export class MappingManagementService {
   resequenceMappedField(fieldPair: FieldMappingPair, insertedMappedField: MappedField, targetIndex: string): void {
     if (fieldPair != null) {
       const mappedFields = fieldPair.getMappedFields(insertedMappedField.isSource());
-      fieldPair.resequenceFieldActionIndices(mappedFields, insertedMappedField, targetIndex);
+      fieldPair.resequenceFieldActionIndices(mappedFields, insertedMappedField, targetIndex, false);
       this.saveCurrentMapping();
     }
   }

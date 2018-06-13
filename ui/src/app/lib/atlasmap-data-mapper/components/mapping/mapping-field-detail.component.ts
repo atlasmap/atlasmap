@@ -21,7 +21,7 @@ import { ConfigModel } from '../../models/config.model';
 import { Field } from '../../models/field.model';
 import { DocumentDefinition } from '../../models/document-definition.model';
 import { MappingModel, FieldMappingPair, MappedField } from '../../models/mapping.model';
-import { FieldAction, FieldActionConfig } from '../../models/transition.model';
+import { FieldAction, FieldActionConfig, TransitionMode, TransitionModel } from '../../models/transition.model';
 import { MappingFieldActionComponent } from './mapping-field-action.component';
 
 @Component({
@@ -58,6 +58,9 @@ export class MappingFieldDetailComponent implements OnInit {
   addTransformation(): void {
     const actionConfig: FieldActionConfig =
       MappingFieldActionComponent.getFieldActions(this.fieldPair)[0];
+    if (actionConfig == null) {
+      return;
+    }
     const action: FieldAction = new FieldAction();
     actionConfig.populateFieldAction(action);
     this.mappedField.actions.push(action);
@@ -73,6 +76,10 @@ export class MappingFieldDetailComponent implements OnInit {
   }
 
   displayParentObject(): boolean {
+    if (this.mappedField != null && this.mappedField.isPadField()) {
+      this.parentObjectName = '<padding field>';
+      return true;
+    }
     if (this.mappedField == null || this.mappedField.field == null
       || this.mappedField.field.name.length === 0
       || this.mappedField.field.docDef == null
@@ -85,9 +92,33 @@ export class MappingFieldDetailComponent implements OnInit {
     return true;
   }
 
+  /**
+   * The user has hand-edited the index value of a mapped field.  Perform the following:
+   *   - Add place-holders for each index value between the updated value and its previous value.
+   *   - Re-sequence the field action indices.
+   *   - Sort the mapped fields array to get then back into numerical order.
+   * @param event
+   * @param mappedField
+   */
+  indexSelectionChanged(event: any, mappedField: MappedField): void {
+    const mappedFields = this.fieldPair.getMappedFields(mappedField.isSource());
+    const insertionIndex = +event.target.value;
+    const maxIndex = this.fieldPair.getMaxIndex(mappedFields);
+
+    if (insertionIndex > maxIndex) {
+      // Add place-holders for each index value between the previous max index and the insertion index.
+      mappedField.addPlaceholders(maxIndex, insertionIndex, this.fieldPair);
+    }
+    this.fieldPair.resequenceFieldActionIndices(mappedFields, mappedField, insertionIndex.toString(10), false);
+
+    // Sort the mapped fields array to get then back into numerical order.
+    this.fieldPair.sortFieldActionFields(mappedFields);
+    this.cfg.mappingService.saveCurrentMapping();
+  }
+
   selectionChanged(event: any): void {
     this.mappedField.field = event.item['field'];
-    this.cfg.mappingService.updateMappedField(this.fieldPair, this.mappedField.field.isSource());
+    this.cfg.mappingService.updateMappedField(this.fieldPair, this.mappedField.field.isSource(), false);
     this.updateTemplateValues();
   }
 
@@ -96,7 +127,7 @@ export class MappingFieldDetailComponent implements OnInit {
     if (this.fieldPair.getMappedFields(this.isSource).length === 0) {
       this.fieldPair.addField(DocumentDefinition.getNoneField(), this.isSource);
     }
-    this.cfg.mappingService.updateMappedField(this.fieldPair, this.isSource);
+    this.cfg.mappingService.updateMappedField(this.fieldPair, this.isSource, true);
   }
 
   getActionIndex(mappedField: MappedField): string {

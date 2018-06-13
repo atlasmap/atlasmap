@@ -114,7 +114,7 @@
 .DataMapperUI .noSearchResults { width:100%; padding:10px; text-align:center; }
 
 .DataMapperUI .DocumentFieldDetailComponent { width:100%; margin:0px; }
-.DataMapperUI .DocumentFieldDetailComponent .fieldDetail { padding:5px 10px; border-bottom:1px solid #d1d1d1; }
+.DataMapperUI .DocumentFieldDetailComponent .fieldDetail { padding:5px 5px; border-bottom:1px solid #d1d1d1; }
 .DataMapperUI .DocumentFieldDetailComponent LABEL { padding:0; margin:0; margin-bottom:1px; vertical-align:middle; }
 .DataMapperUI .DocumentFieldDetailComponent .selectedField { background-color:#02A2D8; color:white; }
 .DataMapperUI .DocumentFieldDetailComponent .selectedField I { color:white; }
@@ -181,7 +181,7 @@
 .fieldDetailTooltip LABEL { color:white; float:left; clear:left; }
 .fieldDetailTooltip LABEL.parentObjectName { color:white; font-style:italic; }
 .fieldDetailTooltip LABEL.parentObjectName I { vertical-align:baseline; }
-.fieldMappingDetail .fieldDetail INPUT { padding:2px 4px; width:calc(100% - 5px);
+.fieldMappingDetail .fieldDetail INPUT { padding:2px 2px; width:calc(100% - 5px);
     color: #4d5258; box-shadow: inset 0 2px 2px 0 rgba(0, 0, 0, 0.08); border:solid 1px #bbbbbb; }
 .fieldMappingDetail .fieldDetail .dropdown { width:calc(100% - 71px);}
 .fieldMappingDetail .fieldDetail .dropdown-menu { padding:0px; width:100%; }
@@ -195,10 +195,10 @@
 .fieldMappingDetail A.button I { margin-right:5px; font-size:10px; }
 .fieldMappingDetail A.button { margin:10px; margin-left:0px; border:1px solid #02A2D7; padding:5px 10px; border-radius:5px; }
 .fieldMappingDetail A.button:hover { border:1px solid #363636; }
-.fieldMappingDetail HR { margin-top:15px; margin-bottom:15px; border-top:1px solid #d1d1d1; }
+.fieldMappingDetail HR { margin-top:2px; margin-bottom:2px; border-top:1px solid #d1d1d1; }
 .fieldMappingDetail .sectionHeader { font-weight:bold; }
 .fieldMappingDetail .fieldMappingDetail-body { height:calc(100% - 65px); overflow:auto; }
-.fieldMappingDetail A.small-primary { padding:5px 15px; border-radius:1px; border:solid 1px #00659c;
+.fieldMappingDetail A.small-primary { padding:5px 5px; border-radius:1px; border:solid 1px #00659c;
     background-image:linear-gradient(to bottom, #39a5dc, #0088ce); box-shadow:0 2px 3px 0 rgba(3, 3, 3, 0.1);
     text-align:center; color:#ffffff; }
 .fieldMappingDetail A.small-primary:active { background-image:linear-gradient(to bottom, #0088ce, #39a5dc); }
