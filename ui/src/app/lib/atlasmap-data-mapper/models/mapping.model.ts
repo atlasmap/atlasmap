@@ -461,6 +461,12 @@ export class FieldMappingPair {
 
     if (combineMode || separateMode) {
       maxIndex = this.processIndices(combineMode, fieldRemoved);
+
+      // If the user used the action pull-down to manually transfer out of MAP mode then
+      // default maxIndex to 1.
+      if (maxIndex === 0) {
+        maxIndex = 1;
+      }
       mappedFields = this.getMappedFields(combineMode);
       if (mappedFields != null && mappedFields.length > 0) {
         const mappedField: MappedField = mappedFields[mappedFields.length - 1];
