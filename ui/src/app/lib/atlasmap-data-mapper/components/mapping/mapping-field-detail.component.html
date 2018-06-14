@@ -47,7 +47,7 @@
       tooltip="Remove mapping" placement="left"></i>
   </div>
 
-  <div style="float: right; padding-right: 5px;" *ngIf="!isSource && !mappedField.isPadField()">
+  <div style="float: right; padding-right: 5px;" *ngIf="!isSource && !mappedField.isPadField() && hasActionIndex(mappedField)">
     <i class="fa fa-long-arrow-right" aria-hidden="true" (click)="addTransformation()"
       tooltip="Add transformation"></i>
   </div>
