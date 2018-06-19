@@ -54,17 +54,6 @@ export class FieldActionConfig {
       return false;
     }
 
-    // Check if target collection type matches action collection type (since currently all actions are performed on target)
-    // Note, specifically not handling array, list, or map here since I don't believe we'll ever have functions that only apply to
-    // arrays or lists exclusively, and I don't currently see anyway to determine whether a map is even involved
-    if (this.serviceObject.sourceCollectionType === 'ALL'
-        && ['ARRAY', 'LIST'].indexOf(targetField.getCollectionType()) === -1
-        && targetField.type !== 'STRING') {
-      return false;
-    }
-    if (this.serviceObject.sourceCollectionType === 'NONE' && targetField.getCollectionType() != null) {
-      return false;
-    }
     if (this.serviceObject.sourceCollectionType !== this.serviceObject.targetCollectionType) {
       return false;
     }
