@@ -32,13 +32,15 @@
 	*ngIf="hasActionIndex(mappedField)">
     <div *ngIf="mappedField.isPadField(); else textInput">
       <label style="font-size: 110%; color: dark-gray;
-        text-align: right;" tooltip="This pad field has been automatically created to represent indexing gaps.">{{ getActionIndex(mappedField) }}</label>
+        text-align: right;"
+        tooltip="This pad field has been automatically created to represent indexing gaps.">{{ getActionIndex(mappedField) }}</label>
     </div>
     <ng-template #textInput>
       <input type="text" id="{{inputId}}" placement="right"
 	    style="font-size: 110%; font-weight: bold; color: green; text-align: right; height: 20px"
-        [ngModel]="getActionIndex(mappedField)" [typeahead]="dataSource" typeaheadWaitMs="400"
-        (change)="indexSelectionChanged($event, mappedField)" tooltip="You may edit the index for this element directly.  Placeholders may be automatically inserted to account for any gaps in the indexing.">
+        [ngModel]="getActionIndex(mappedField)" typeaheadWaitMs="400"
+        (change)="indexSelectionChanged($event, mappedField)"
+        tooltip="You may edit the index for this element directly.  Placeholders may be automatically inserted to account for any gaps in the indexing.">
     </ng-template>
   </div>
 
