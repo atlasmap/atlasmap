@@ -105,8 +105,11 @@ export class MappingFieldDetailComponent implements OnInit {
    * @param mappedField
    */
   indexSelectionChanged(event: any, mappedField: MappedField): void {
+    const insertionIndex = Number(event.target.value) || 0;
+    if (insertionIndex == 0) {
+      return;
+    }
     const mappedFields = this.fieldPair.getMappedFields(mappedField.isSource());
-    const insertionIndex = +event.target.value;
     const maxIndex = this.fieldPair.getMaxIndex(mappedFields);
 
     if (insertionIndex > maxIndex) {
