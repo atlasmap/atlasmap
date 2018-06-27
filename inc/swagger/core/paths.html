@@ -526,6 +526,7 @@ table.CodeRay td.code>pre{padding:0}
 <ul class="sectlevel2">
 <li><a href="#_atlas-service-core-listfieldactions">List FieldActions</a></li>
 <li><a href="#_atlas-service-core-createmappingrequest">Create Mapping</a></li>
+<li><a href="#_atlas-service-core-processmappingrequest">Process Mapping</a></li>
 <li><a href="#_atlas-service-core-validatemappingrequest">Validate Mapping</a></li>
 <li><a href="#_atlas-service-core-updatemappingrequest">Update Mapping</a></li>
 <li><a href="#_atlas-service-core-getmappingrequest">Get Mapping</a></li>
@@ -660,6 +661,81 @@ table.CodeRay td.code>pre{padding:0}
 </div>
 </div>
 <div class="sect2">
+<h3 id="_atlas-service-core-processmappingrequest">Process Mapping</h3>
+<div class="literalblock">
+<div class="content">
+<pre>PUT /v2/atlas/mapping/process</pre>
+</div>
+</div>
+<div class="sect3">
+<h4 id="description-3">Description</h4>
+<div class="paragraph">
+<p>Process Mapping by feeding input data</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="responses-3">Responses</h4>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 10%;">
+<col style="width: 70%;">
+<col style="width: 20%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-middle">HTTP Code</th>
+<th class="tableblock halign-left valign-middle">Description</th>
+<th class="tableblock halign-left valign-middle">Schema</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p><strong>200</strong></p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p>Return a mapping result</p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p><a href="#_atlas-service-core-processmappingresponse">ProcessMappingResponse</a></p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p><strong>204</strong></p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p>Skipped empty mapping execution</p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p>No Content</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="consumes-2">Consumes</h4>
+<div class="ulist">
+<ul>
+<li>
+<p><code>application/json</code></p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="produces-3">Produces</h4>
+<div class="ulist">
+<ul>
+<li>
+<p><code>application/json</code></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect2">
 <h3 id="_atlas-service-core-validatemappingrequest">Validate Mapping</h3>
 <div class="literalblock">
 <div class="content">
@@ -667,13 +743,13 @@ table.CodeRay td.code>pre{padding:0}
 </div>
 </div>
 <div class="sect3">
-<h4 id="description-3">Description</h4>
+<h4 id="description-4">Description</h4>
 <div class="paragraph">
 <p>Validate mapping file</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="responses-3">Responses</h4>
+<h4 id="responses-4">Responses</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 10%;">
@@ -703,106 +779,6 @@ table.CodeRay td.code>pre{padding:0}
 </table>
 </div>
 <div class="sect3">
-<h4 id="consumes-2">Consumes</h4>
-<div class="ulist">
-<ul>
-<li>
-<p><code>application/json</code></p>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect3">
-<h4 id="produces-3">Produces</h4>
-<div class="ulist">
-<ul>
-<li>
-<p><code>application/json</code></p>
-</li>
-</ul>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_atlas-service-core-updatemappingrequest">Update Mapping</h3>
-<div class="literalblock">
-<div class="content">
-<pre>POST /v2/atlas/mapping/{mappingId}</pre>
-</div>
-</div>
-<div class="sect3">
-<h4 id="description-4">Description</h4>
-<div class="paragraph">
-<p>Update existing mapping file on the server</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="parameters">Parameters</h4>
-<table class="tableblock frame-all grid-all spread">
-<colgroup>
-<col style="width: 11.1111%;">
-<col style="width: 16.6666%;">
-<col style="width: 50%;">
-<col style="width: 22.2223%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-middle">Type</th>
-<th class="tableblock halign-left valign-middle">Name</th>
-<th class="tableblock halign-left valign-middle">Description</th>
-<th class="tableblock halign-left valign-middle">Schema</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
-<p><strong>Path</strong></p>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
-<p><strong>mappingId</strong><br>
-<em>required</em></p>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
-<p>Mapping ID</p>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
-<p>string</p>
-</div></div></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect3">
-<h4 id="responses-4">Responses</h4>
-<table class="tableblock frame-all grid-all spread">
-<colgroup>
-<col style="width: 10%;">
-<col style="width: 70%;">
-<col style="width: 20%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-middle">HTTP Code</th>
-<th class="tableblock halign-left valign-middle">Description</th>
-<th class="tableblock halign-left valign-middle">Schema</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
-<p><strong>200</strong></p>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
-<p>Succeeded</p>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
-<p>No Content</p>
-</div></div></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect3">
 <h4 id="consumes-3">Consumes</h4>
 <div class="ulist">
 <ul>
@@ -824,20 +800,20 @@ table.CodeRay td.code>pre{padding:0}
 </div>
 </div>
 <div class="sect2">
-<h3 id="_atlas-service-core-getmappingrequest">Get Mapping</h3>
+<h3 id="_atlas-service-core-updatemappingrequest">Update Mapping</h3>
 <div class="literalblock">
 <div class="content">
-<pre>GET /v2/atlas/mapping/{mappingId}</pre>
+<pre>POST /v2/atlas/mapping/{mappingId}</pre>
 </div>
 </div>
 <div class="sect3">
 <h4 id="description-5">Description</h4>
 <div class="paragraph">
-<p>Retrieve a mapping file saved on the server</p>
+<p>Update existing mapping file on the server</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="parameters-2">Parameters</h4>
+<h4 id="parameters">Parameters</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 11.1111%;">
@@ -893,18 +869,7 @@ table.CodeRay td.code>pre{padding:0}
 <p><strong>200</strong></p>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><div><div class="paragraph">
-<p>Return a mapping file content</p>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
-<p><a href="#_atlas-service-core-atlasmapping">AtlasMapping</a></p>
-</div></div></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
-<p><strong>204</strong></p>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
-<p>Mapping file was not found</p>
+<p>Succeeded</p>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><div><div class="paragraph">
 <p>No Content</p>
@@ -912,6 +877,16 @@ table.CodeRay td.code>pre{padding:0}
 </tr>
 </tbody>
 </table>
+</div>
+<div class="sect3">
+<h4 id="consumes-4">Consumes</h4>
+<div class="ulist">
+<ul>
+<li>
+<p><code>application/json</code></p>
+</li>
+</ul>
+</div>
 </div>
 <div class="sect3">
 <h4 id="produces-5">Produces</h4>
@@ -925,20 +900,20 @@ table.CodeRay td.code>pre{padding:0}
 </div>
 </div>
 <div class="sect2">
-<h3 id="_atlas-service-core-removemappingrequest">Remove Mapping</h3>
+<h3 id="_atlas-service-core-getmappingrequest">Get Mapping</h3>
 <div class="literalblock">
 <div class="content">
-<pre>DELETE /v2/atlas/mapping/{mappingId}</pre>
+<pre>GET /v2/atlas/mapping/{mappingId}</pre>
 </div>
 </div>
 <div class="sect3">
 <h4 id="description-6">Description</h4>
 <div class="paragraph">
-<p>Remove a mapping file saved on the server</p>
+<p>Retrieve a mapping file saved on the server</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="parameters-3">Parameters</h4>
+<h4 id="parameters-2">Parameters</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 11.1111%;">
@@ -994,10 +969,10 @@ table.CodeRay td.code>pre{padding:0}
 <p><strong>200</strong></p>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><div><div class="paragraph">
-<p>Specified mapping file was removed successfully</p>
+<p>Return a mapping file content</p>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><div><div class="paragraph">
-<p>No Content</p>
+<p><a href="#_atlas-service-core-atlasmapping">AtlasMapping</a></p>
 </div></div></td>
 </tr>
 <tr>
@@ -1026,6 +1001,107 @@ table.CodeRay td.code>pre{padding:0}
 </div>
 </div>
 <div class="sect2">
+<h3 id="_atlas-service-core-removemappingrequest">Remove Mapping</h3>
+<div class="literalblock">
+<div class="content">
+<pre>DELETE /v2/atlas/mapping/{mappingId}</pre>
+</div>
+</div>
+<div class="sect3">
+<h4 id="description-7">Description</h4>
+<div class="paragraph">
+<p>Remove a mapping file saved on the server</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="parameters-3">Parameters</h4>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 11.1111%;">
+<col style="width: 16.6666%;">
+<col style="width: 50%;">
+<col style="width: 22.2223%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-middle">Type</th>
+<th class="tableblock halign-left valign-middle">Name</th>
+<th class="tableblock halign-left valign-middle">Description</th>
+<th class="tableblock halign-left valign-middle">Schema</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p><strong>Path</strong></p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p><strong>mappingId</strong><br>
+<em>required</em></p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p>Mapping ID</p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p>string</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="responses-7">Responses</h4>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 10%;">
+<col style="width: 70%;">
+<col style="width: 20%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-middle">HTTP Code</th>
+<th class="tableblock halign-left valign-middle">Description</th>
+<th class="tableblock halign-left valign-middle">Schema</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p><strong>200</strong></p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p>Specified mapping file was removed successfully</p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p>No Content</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p><strong>204</strong></p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p>Mapping file was not found</p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p>No Content</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="produces-7">Produces</h4>
+<div class="ulist">
+<ul>
+<li>
+<p><code>application/json</code></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect2">
 <h3 id="_atlas-service-core-listmappings">List Mappings</h3>
 <div class="literalblock">
 <div class="content">
@@ -1033,7 +1109,7 @@ table.CodeRay td.code>pre{padding:0}
 </div>
 </div>
 <div class="sect3">
-<h4 id="description-7">Description</h4>
+<h4 id="description-8">Description</h4>
 <div class="paragraph">
 <p>Retrieves a list of mapping file name saved on the server</p>
 </div>
@@ -1070,7 +1146,7 @@ table.CodeRay td.code>pre{padding:0}
 </table>
 </div>
 <div class="sect3">
-<h4 id="responses-7">Responses</h4>
+<h4 id="responses-8">Responses</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 10%;">
@@ -1100,7 +1176,7 @@ table.CodeRay td.code>pre{padding:0}
 </table>
 </div>
 <div class="sect3">
-<h4 id="produces-7">Produces</h4>
+<h4 id="produces-8">Produces</h4>
 <div class="ulist">
 <ul>
 <li>
@@ -1118,13 +1194,13 @@ table.CodeRay td.code>pre{padding:0}
 </div>
 </div>
 <div class="sect3">
-<h4 id="description-8">Description</h4>
+<h4 id="description-9">Description</h4>
 <div class="paragraph">
 <p>Simple liveness check method used in liveness checks. Must not be protected via authetication.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="responses-8">Responses</h4>
+<h4 id="responses-9">Responses</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 10%;">
@@ -1159,7 +1235,7 @@ table.CodeRay td.code>pre{padding:0}
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2018-06-25 21:16:28 UTC
+Last updated 2018-06-27 22:03:49 UTC
 </div>
 </div>
 </body>
