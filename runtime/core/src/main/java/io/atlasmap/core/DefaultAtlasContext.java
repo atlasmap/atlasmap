@@ -214,12 +214,21 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
         List<Field> sourceFields = mapping.getInputField();
         List<Field> targetFields = mapping.getOutputField();
 
-        targetFields.forEach(tf -> tf.setValue(null));
+        if (sourceFields.isEmpty() || targetFields.isEmpty()) {
+            return session.getAudits();
+        }
         for (Field sf : sourceFields) {
+            if (sf.getFieldType() == null || sf.getValue() == null) {
+                continue;
+            }
+            if (sf.getValue() instanceof String && ((String)sf.getValue()).isEmpty()) {
+                continue;
+            }
             if (!restoreSourceFieldType(session, sf)) {
                 return session.getAudits();
             }
         }
+        targetFields.forEach(tf -> tf.setValue(null));
 
         Field sourceField;
         Field targetField;
@@ -306,9 +315,6 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
     }
 
     private boolean restoreSourceFieldType(DefaultAtlasSession session, Field sourceField) {
-        if (sourceField.getFieldType() == null || sourceField.getValue() == null) {
-            return true;
-        }
         try {
             Object sourceValue = factory.getConversionService().convertType(
                     sourceField.getValue(), null, sourceField.getFieldType(), null);
