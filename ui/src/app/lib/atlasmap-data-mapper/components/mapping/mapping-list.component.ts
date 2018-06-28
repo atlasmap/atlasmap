@@ -54,11 +54,7 @@ export class MappingListComponent {
   }
 
   selectMapping(mapping: MappingModel): void {
-    if (this.cfg.mappings.activeMapping === mapping) {
-      this.cfg.mappingService.deselectMapping();
-    } else {
-      this.cfg.mappingService.selectMapping(mapping);
-    }
+    this.cfg.mappingService.selectMapping(mapping);
   }
 
   getRowTitleCSSClass(): string {
