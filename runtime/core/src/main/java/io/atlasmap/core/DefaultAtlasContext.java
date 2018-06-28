@@ -213,7 +213,13 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
         MappingType mappingType = mapping.getMappingType();
         List<Field> sourceFields = mapping.getInputField();
         List<Field> targetFields = mapping.getOutputField();
+
         targetFields.forEach(tf -> tf.setValue(null));
+        for (Field sf : sourceFields) {
+            if (!restoreSourceFieldType(session, sf)) {
+                return session.getAudits();
+            }
+        }
 
         Field sourceField;
         Field targetField;
@@ -297,6 +303,26 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
                     null, AuditStatus.ERROR, null);
         }
         return session.getAudits();
+    }
+
+    private boolean restoreSourceFieldType(DefaultAtlasSession session, Field sourceField) {
+        if (sourceField.getFieldType() == null || sourceField.getValue() == null) {
+            return true;
+        }
+        try {
+            Object sourceValue = factory.getConversionService().convertType(
+                    sourceField.getValue(), null, sourceField.getFieldType(), null);
+            sourceField.setValue(sourceValue);
+        } catch (AtlasConversionException e) {
+            AtlasUtil.addAudit(session, sourceField.getDocId(), String.format(
+                    "Wrong format for source value : %s", AtlasUtil.getChainedMessage(e)),
+                    sourceField.getPath(), AuditStatus.ERROR, null);
+            if (LOG.isDebugEnabled()) {
+                LOG.error("", e);
+            }
+            return false;
+        }
+        return true;
     }
 
     private boolean convertSourceToTarget(DefaultAtlasSession session, Field sourceField, Field targetField) {
