@@ -214,6 +214,7 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
         List<Field> sourceFields = mapping.getInputField();
         List<Field> targetFields = mapping.getOutputField();
 
+        targetFields.forEach(tf -> tf.setValue(null));
         if (sourceFields.isEmpty() || targetFields.isEmpty()) {
             return session.getAudits();
         }
@@ -228,7 +229,6 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
                 return session.getAudits();
             }
         }
-        targetFields.forEach(tf -> tf.setValue(null));
 
         Field sourceField;
         Field targetField;
