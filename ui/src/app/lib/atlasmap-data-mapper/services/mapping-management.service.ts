@@ -428,7 +428,7 @@ export class MappingManagementService {
         }
       };
       const docRefs: any = {};
-      for (const docRef of this.cfg.targetDocs) {
+      for (const docRef of this.cfg.getAllDocs()) {
         docRefs[docRef.id] = docRef.uri;
       }
 
