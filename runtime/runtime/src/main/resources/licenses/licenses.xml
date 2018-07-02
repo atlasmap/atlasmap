@@ -27,7 +27,7 @@
     <dependency>
       <groupId>io.atlasmap</groupId>
       <artifactId>atlas-json-service</artifactId>
-      <version>1.34-SNAPSHOT</version>
+      <version>1.34.5-SNAPSHOT</version>
       <licenses>
         <license>
           <name>Apache License, Version 2.0</name>
@@ -51,7 +51,7 @@
     <dependency>
       <groupId>io.atlasmap</groupId>
       <artifactId>atlas-xml-test-model</artifactId>
-      <version>1.34-SNAPSHOT</version>
+      <version>1.34.5-SNAPSHOT</version>
       <licenses>
         <license>
           <name>Apache License, Version 2.0</name>
@@ -112,7 +112,7 @@
     <dependency>
       <groupId>io.atlasmap</groupId>
       <artifactId>atlas-json-module</artifactId>
-      <version>1.34-SNAPSHOT</version>
+      <version>1.34.5-SNAPSHOT</version>
       <licenses>
         <license>
           <name>Apache License, Version 2.0</name>
@@ -200,7 +200,7 @@
     <dependency>
       <groupId>io.atlasmap</groupId>
       <artifactId>atlas-api</artifactId>
-      <version>1.34-SNAPSHOT</version>
+      <version>1.34.5-SNAPSHOT</version>
       <licenses>
         <license>
           <name>Apache License, Version 2.0</name>
@@ -212,7 +212,7 @@
     <dependency>
       <groupId>io.atlasmap</groupId>
       <artifactId>atlas-java-service</artifactId>
-      <version>1.34-SNAPSHOT</version>
+      <version>1.34.5-SNAPSHOT</version>
       <licenses>
         <license>
           <name>Apache License, Version 2.0</name>
@@ -283,7 +283,7 @@
     <dependency>
       <groupId>io.atlasmap</groupId>
       <artifactId>atlas-java-test-model</artifactId>
-      <version>1.34-SNAPSHOT</version>
+      <version>1.34.5-SNAPSHOT</version>
       <licenses>
         <license>
           <name>Apache License, Version 2.0</name>
@@ -323,7 +323,7 @@
     <dependency>
       <groupId>io.atlasmap</groupId>
       <artifactId>atlas-java-model</artifactId>
-      <version>1.34-SNAPSHOT</version>
+      <version>1.34.5-SNAPSHOT</version>
       <licenses>
         <license>
           <name>Apache License, Version 2.0</name>
@@ -420,7 +420,7 @@
     <dependency>
       <groupId>io.atlasmap</groupId>
       <artifactId>atlas-core</artifactId>
-      <version>1.34-SNAPSHOT</version>
+      <version>1.34.5-SNAPSHOT</version>
       <licenses>
         <license>
           <name>Apache License, Version 2.0</name>
@@ -564,7 +564,7 @@
     <dependency>
       <groupId>io.atlasmap</groupId>
       <artifactId>atlas-json-core</artifactId>
-      <version>1.34-SNAPSHOT</version>
+      <version>1.34.5-SNAPSHOT</version>
       <licenses>
         <license>
           <name>Apache License, Version 2.0</name>
@@ -879,7 +879,7 @@
     <dependency>
       <groupId>io.atlasmap</groupId>
       <artifactId>atlas-xml-core</artifactId>
-      <version>1.34-SNAPSHOT</version>
+      <version>1.34.5-SNAPSHOT</version>
       <licenses>
         <license>
           <name>Apache License, Version 2.0</name>
@@ -915,7 +915,7 @@
     <dependency>
       <groupId>io.atlasmap</groupId>
       <artifactId>atlas-java-module</artifactId>
-      <version>1.34-SNAPSHOT</version>
+      <version>1.34.5-SNAPSHOT</version>
       <licenses>
         <license>
           <name>Apache License, Version 2.0</name>
@@ -1176,7 +1176,7 @@
     <dependency>
       <groupId>io.atlasmap</groupId>
       <artifactId>atlas-xml-model</artifactId>
-      <version>1.34-SNAPSHOT</version>
+      <version>1.34.5-SNAPSHOT</version>
       <licenses>
         <license>
           <name>Apache License, Version 2.0</name>
@@ -1188,7 +1188,7 @@
     <dependency>
       <groupId>io.atlasmap</groupId>
       <artifactId>atlas-service</artifactId>
-      <version>1.34-SNAPSHOT</version>
+      <version>1.34.5-SNAPSHOT</version>
       <licenses>
         <license>
           <name>Apache License, Version 2.0</name>
@@ -1297,7 +1297,7 @@
     <dependency>
       <groupId>io.atlasmap</groupId>
       <artifactId>atlas-java-core</artifactId>
-      <version>1.34-SNAPSHOT</version>
+      <version>1.34.5-SNAPSHOT</version>
       <licenses>
         <license>
           <name>Apache License, Version 2.0</name>
@@ -1777,7 +1777,7 @@
     <dependency>
       <groupId>io.atlasmap</groupId>
       <artifactId>atlas-xml-module</artifactId>
-      <version>1.34-SNAPSHOT</version>
+      <version>1.34.5-SNAPSHOT</version>
       <licenses>
         <license>
           <name>Apache License, Version 2.0</name>
@@ -1789,7 +1789,7 @@
     <dependency>
       <groupId>io.atlasmap</groupId>
       <artifactId>atlas-xml-service</artifactId>
-      <version>1.34-SNAPSHOT</version>
+      <version>1.34.5-SNAPSHOT</version>
       <licenses>
         <license>
           <name>Apache License, Version 2.0</name>
@@ -1849,7 +1849,7 @@
     <dependency>
       <groupId>io.atlasmap</groupId>
       <artifactId>atlas-json-test-model</artifactId>
-      <version>1.34-SNAPSHOT</version>
+      <version>1.34.5-SNAPSHOT</version>
       <licenses>
         <license>
           <name>Apache License, Version 2.0</name>
@@ -1934,7 +1934,7 @@
     <dependency>
       <groupId>io.atlasmap</groupId>
       <artifactId>atlas-model</artifactId>
-      <version>1.34-SNAPSHOT</version>
+      <version>1.34.5-SNAPSHOT</version>
       <licenses>
         <license>
           <name>Apache License, Version 2.0</name>
@@ -1946,7 +1946,7 @@
     <dependency>
       <groupId>io.atlasmap</groupId>
       <artifactId>atlas-json-model</artifactId>
-      <version>1.34-SNAPSHOT</version>
+      <version>1.34.5-SNAPSHOT</version>
       <licenses>
         <license>
           <name>Apache License, Version 2.0</name>

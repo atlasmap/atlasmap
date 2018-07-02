@@ -23,7 +23,7 @@
   <parent>
     <groupId>io.atlasmap</groupId>
     <artifactId>atlas-runtime</artifactId>
-    <version>1.34-SNAPSHOT</version>
+    <version>1.34.5-SNAPSHOT</version>
     <relativePath>..</relativePath>
   </parent>
 
