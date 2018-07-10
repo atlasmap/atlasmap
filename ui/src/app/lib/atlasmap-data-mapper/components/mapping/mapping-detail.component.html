@@ -8,19 +8,36 @@
     </div>
     <div class="fieldMappingDetail-body">
       <div class="alert alert-danger" *ngFor="let error of cfg.mappings.activeMapping.getValidationErrors()">
-        <a class="close" (click)="cfg.mappings.activeMapping.removeError(error.identifier)">
+        <a class="close" (click)="cfg.mappings.activeMapping.removeValidationError(error.identifier)">
           <i class="fa fa-close"></i>
         </a>
         <span class="pficon pficon-error-circle-o"></span>
         <label>{{ error.message }}</label>
       </div>
       <div class="alert alert-warning" *ngFor="let warn of cfg.mappings.activeMapping.getValidationWarnings()">
-        <a class="close" (click)="cfg.mappings.activeMapping.removeError(warn.identifier)">
+        <a class="close" (click)="cfg.mappings.activeMapping.removeValidationError(warn.identifier)">
           <i class="fa fa-close"></i>
         </a>
         <span class="pficon pficon-warning-triangle-o"></span>
         <label>{{ warn.message }}</label>
       </div>
+
+      <!-- TODO reflect UXD outcome -->
+      <div class="alert alert-danger" *ngFor="let error of cfg.mappings.activeMapping.getPreviewErrors()">
+        <a class="close" (click)="cfg.mappings.activeMapping.removePreviewError(error.identifier)">
+          <i class="fa fa-close"></i>
+        </a>
+        <span class="pficon pficon-error-circle-o"></span>
+        <label>{{ error.message }}</label>
+      </div>
+      <div class="alert alert-warning" *ngFor="let warn of cfg.mappings.activeMapping.getPreviewWarnings()">
+        <a class="close" (click)="cfg.mappings.activeMapping.removePreviewError(warn.identifier)">
+          <i class="fa fa-close"></i>
+        </a>
+        <span class="pficon pficon-warning-triangle-o"></span>
+        <label>{{ warn.message }}</label>
+      </div>
+
       <div *ngIf="!isMappingCollection()">
         <mapping-pair-detail *ngFor="let fieldPair of cfg.mappings.activeMapping.fieldMappings" [cfg]="cfg" [fieldPair]="fieldPair"
           [modalWindow]="modalWindow"></mapping-pair-detail>

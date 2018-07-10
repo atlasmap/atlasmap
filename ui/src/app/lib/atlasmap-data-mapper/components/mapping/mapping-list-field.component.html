@@ -10,7 +10,17 @@
   </div>
 </ng-template>
 
-<label class="fieldPath" [tooltip]="tolTemplate" placement="bottom" [isDisabled]="!displayParentObject()">
-  {{ getFieldPath() }}
-  <i class="fa fa-bolt" *ngIf="mappedField.actions.length != 0"></i>
-</label>
+<div class="float-left">
+  <label class="fieldPath" [tooltip]="tolTemplate" placement="bottom" [isDisabled]="!displayParentObject()">
+    {{ getFieldPath() }}
+    <i class="fa fa-bolt" *ngIf="mappedField.actions.length != 0"></i>
+  </label>
+</div>
+
+<!-- TODO relect UXD outcome  -->
+<div style="display:inline-block;" *ngIf="cfg.showMappingPreview && mappedField.field.selected">
+  <input *ngIf="isSource" id="preview-source" class="form-control" type="text" [(ngModel)]='mappedField.field.value' (blur)="cfg.mappingService.notifyMappingUpdated()" />
+  <input *ngIf="!isSource" id="preview-target" class="form-control" type="text" [(ngModel)]='mappedField.field.value' readonly style="background-color: aqua" />
+</div>
+
+

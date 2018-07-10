@@ -489,6 +489,7 @@ export class MappingModel {
   fieldMappings: FieldMappingPair[] = [];
   currentFieldMapping: FieldMappingPair = null;
   validationErrors: ErrorInfo[] = []; // must be immutable
+  previewErrors: ErrorInfo[] = []; // must be immutable
   brandNewMapping = true;
 
   constructor() {
@@ -535,9 +536,22 @@ export class MappingModel {
     return this.validationErrors.filter(e => e.level === ErrorLevel.WARN);
   }
 
-  removeError(identifier: string) {
+  removeValidationError(identifier: string) {
     this.validationErrors = this.validationErrors.filter(e => e.identifier !== identifier);
     Object.freeze(this.validationErrors);
+  }
+
+  getPreviewErrors(): ErrorInfo[] {
+    return this.previewErrors.filter(e => e.level >= ErrorLevel.ERROR);
+  }
+
+  getPreviewWarnings(): ErrorInfo[] {
+    return this.previewErrors.filter(e => e.level === ErrorLevel.WARN);
+  }
+
+  removePreviewError(identifier: string) {
+    this.previewErrors = this.previewErrors.filter(e => e.identifier !== identifier);
+    Object.freeze(this.previewErrors);
   }
 
   getFirstCollectionField(isSource: boolean): Field {

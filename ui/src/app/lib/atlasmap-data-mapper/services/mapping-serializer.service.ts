@@ -25,6 +25,7 @@ import { DocumentDefinition, NamespaceModel } from '../models/document-definitio
 import { LookupTable, LookupTableEntry } from '../models/lookup-table.model';
 import { DocumentType } from '../common/config.types';
 import { ConfigModel } from '../models/config.model';
+import { ErrorInfo, ErrorLevel } from '../models/error.model';
 
 export class MappingSerializer {
 
@@ -37,28 +38,7 @@ export class MappingSerializer {
         let jsonMapping: any;
 
         for (const fieldMappingPair of mapping.fieldMappings) {
-          const serializedInputFields: any[] = MappingSerializer.serializeFields(fieldMappingPair, true, cfg);
-          const serializedOutputFields: any[] = MappingSerializer.serializeFields(fieldMappingPair, false, cfg);
-
-          jsonMapping = {
-            'jsonType': 'io.atlasmap.v2.Mapping',
-            'mappingType': 'MAP',
-            'id': mapping.uuid,
-            'inputField': serializedInputFields,
-            'outputField': serializedOutputFields,
-          };
-
-          if (fieldMappingPair.transition.isSeparateMode()) {
-            jsonMapping['mappingType'] = 'SEPARATE';
-            jsonMapping['delimiter'] = fieldMappingPair.transition.getSerializedDelimeter();
-          } else if (fieldMappingPair.transition.isCombineMode()) {
-            jsonMapping['mappingType'] = 'COMBINE';
-            jsonMapping['delimiter'] = fieldMappingPair.transition.getSerializedDelimeter();
-          } else if (fieldMappingPair.transition.isEnumerationMode()) {
-            jsonMapping['mappingType'] = 'LOOKUP';
-            jsonMapping['lookupTableName'] = fieldMappingPair.transition.lookupTableName;
-          }
-          fieldMappingsForThisMapping.push(jsonMapping);
+          fieldMappingsForThisMapping.push(MappingSerializer.serializeFieldMapping(cfg, fieldMappingPair, mapping.uuid));
         }
 
         if (mapping.isCollectionMode()) {
@@ -102,6 +82,33 @@ export class MappingSerializer {
       },
     };
     return payload;
+  }
+
+  static serializeFieldMapping(
+    cfg: ConfigModel, fieldMappingPair: FieldMappingPair,
+    id: string, ignoreValue: boolean = true): any {
+    const serializedInputFields: any[] = MappingSerializer.serializeFields(fieldMappingPair, true, cfg, ignoreValue);
+    const serializedOutputFields: any[] = MappingSerializer.serializeFields(fieldMappingPair, false, cfg, ignoreValue);
+
+    const jsonMapping = {
+      'jsonType': ConfigModel.mappingServicesPackagePrefix + '.Mapping',
+      'mappingType': 'MAP',
+      'id': id,
+      'inputField': serializedInputFields,
+      'outputField': serializedOutputFields,
+    };
+
+    if (fieldMappingPair.transition.isSeparateMode()) {
+      jsonMapping['mappingType'] = 'SEPARATE';
+      jsonMapping['delimiter'] = fieldMappingPair.transition.getSerializedDelimeter();
+    } else if (fieldMappingPair.transition.isCombineMode()) {
+      jsonMapping['mappingType'] = 'COMBINE';
+      jsonMapping['delimiter'] = fieldMappingPair.transition.getSerializedDelimeter();
+    } else if (fieldMappingPair.transition.isEnumerationMode()) {
+      jsonMapping['mappingType'] = 'LOOKUP';
+      jsonMapping['lookupTableName'] = fieldMappingPair.transition.lookupTableName;
+    }
+    return jsonMapping;
   }
 
   private static serializeDocuments(docs: DocumentDefinition[], mappingDefinition: MappingDefinition): any[] {
@@ -198,7 +205,9 @@ export class MappingSerializer {
     return serializedTables;
   }
 
-  private static serializeFields(fieldPair: FieldMappingPair, isSource: boolean, cfg: ConfigModel): any[] {
+  private static serializeFields(
+    fieldPair: FieldMappingPair, isSource: boolean,
+    cfg: ConfigModel, ignoreValue: boolean = false): any[] {
     const fields: MappedField[] = fieldPair.getMappedFields(isSource);
     const fieldsJson: any[] = [];
     for (const mappedField of fields) {
@@ -213,9 +222,11 @@ export class MappingSerializer {
         'name': field.name,
         'path': field.path,
         'fieldType': field.type,
-        'value': field.value,
         'docId': field.docDef.id,
       };
+      if (!ignoreValue) {
+        serializedField['value'] = field.value;
+      }
       if (field.docDef.type === DocumentType.XML || field.docDef.type === DocumentType.JSON) {
         serializedField['userCreated'] = field.userCreated;
       } else if (field.docDef.type === DocumentType.JAVA && !field.isPrimitive) {
@@ -229,8 +240,6 @@ export class MappingSerializer {
         delete (serializedField['name']);
       } else if (field.enumeration) {
         serializedField['jsonType'] = 'io.atlasmap.java.v2.JavaEnumField';
-      } else {
-        delete (serializedField['value']);
       }
 
       let includeIndexes: boolean = fieldPair.transition.isSeparateMode() && !isSource;
@@ -348,7 +357,8 @@ export class MappingSerializer {
     return mappings;
   }
 
-  static deserializeFieldMapping(fieldMapping: any, docRefs: any, cfg: ConfigModel): FieldMappingPair {
+  static deserializeFieldMapping(
+    fieldMapping: any, docRefs: any, cfg: ConfigModel, ignoreValue: boolean = true): FieldMappingPair {
     const fieldPair: FieldMappingPair = new FieldMappingPair();
     fieldPair.sourceFields = [];
     fieldPair.targetFields = [];
@@ -357,10 +367,10 @@ export class MappingSerializer {
     const isLookupMapping = (fieldMapping.mappingType === 'LOOKUP');
     const isCombineMapping = (fieldMapping.mappingType === 'COMBINE');
     for (const field of fieldMapping.inputField) {
-      MappingSerializer.addFieldIfDoesntExist(fieldPair, field, true, docRefs, cfg);
+      MappingSerializer.addFieldIfDoesntExist(fieldPair, field, true, docRefs, cfg, ignoreValue);
     }
     for (const field of fieldMapping.outputField) {
-      MappingSerializer.addFieldIfDoesntExist(fieldPair, field, false, docRefs, cfg);
+      MappingSerializer.addFieldIfDoesntExist(fieldPair, field, false, docRefs, cfg, ignoreValue);
     }
     if (isSeparateMapping) {
       fieldPair.transition.mode = TransitionMode.SEPARATE;
@@ -434,9 +444,29 @@ export class MappingSerializer {
     return tables;
   }
 
+  static deserializeAudits(audits: any): ErrorInfo[] {
+    const errors: ErrorInfo[] = [];
+    if (!audits) {
+      return errors;
+    }
+    for (const audit of audits.audit) {
+      let errorLevel: ErrorLevel;
+      if (audit.status === 'ERROR') {
+        errorLevel = ErrorLevel.ERROR;
+      } else if (audit.status === 'WARN') {
+        errorLevel = ErrorLevel.WARN;
+      }
+      if (errorLevel) {
+        const msg = audit.status + '[' + audit.path + ']: ' + audit.message;
+        errors.push(new ErrorInfo(msg, errorLevel, audit.value));
+      }
+    }
+    return errors;
+  }
+
   private static addFieldIfDoesntExist(
-    fieldPair: FieldMappingPair, field: any,
-    isSource: boolean, docRefs: any, cfg: ConfigModel): MappedField {
+    fieldPair: FieldMappingPair, field: any, isSource: boolean,
+    docRefs: any, cfg: ConfigModel, ignoreValue: boolean = true): MappedField {
     const mappedField: MappedField = new MappedField();
 
     mappedField.parsedData.parsedValueType = field.fieldType;
@@ -456,6 +486,9 @@ export class MappingSerializer {
       if (field.docId == null) {
         cfg.errorService.error('Parsed mapping field does not have document id, dropping.', field);
         return null;
+      }
+      if (!ignoreValue) {
+        mappedField.parsedData.parsedValue = field.value;
       }
       mappedField.parsedData.parsedName = field.name;
       mappedField.parsedData.parsedPath = field.path;

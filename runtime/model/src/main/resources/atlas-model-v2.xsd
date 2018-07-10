@@ -463,6 +463,37 @@
     </sequence>
   </complexType>
 
+  <complexType name="ProcessMappingRequest">
+    <choice>
+      <element name="Mapping" type="atlas:Mapping" minOccurs="0" maxOccurs="1"/>
+      <element name="AtlasMapping" type="atlas:AtlasMapping" minOccurs="0" maxOccurs="1"/>
+    </choice>
+  </complexType>
+
+  <complexType name="ProcessMappingResponse">
+    <choice>
+      <sequence>
+        <element name="Mapping" type="atlas:Mapping" minOccurs="0" maxOccurs="1"/>
+        <element name="Audits" type="atlas:Audits" minOccurs="0" maxOccurs="1"/>
+      </sequence>
+      <element name="AtlasMappingResult" type="atlas:AtlasMappingResult" minOccurs="0" maxOccurs="1"/>
+    </choice>
+  </complexType>
+
+  <complexType name="AtlasMappingResult">
+    <sequence>
+      <element name="TargetDocuments" type="atlas:TargetDocument" minOccurs="0" maxOccurs="unbounded"/>
+      <element name="Audits" type="atlas:Audits" minOccurs="0" maxOccurs="1"/>
+    </sequence>
+  </complexType>
+
+  <complexType name="TargetDocument">
+    <sequence>
+      <element name="body" type="string" minOccurs="0" maxOccurs="1"/>
+    </sequence>
+    <attribute name="docId" type="string" use="required"/>
+  </complexType>
+
 </schema>
 
 <!-- Atlasmap: ${project.version} -->

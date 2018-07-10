@@ -21,8 +21,10 @@
             <label>Target</label>
           </div>
           <div class="clear"></div>
-          <mapping-field-detail *ngFor="let mappedField of fieldPair.getMappedFields(false)" [mappedField]="mappedField" [fieldPair]="fieldPair"
-            [cfg]="cfg" [isSource]="false"></mapping-field-detail>
+          <div *ngFor="let mappedField of fieldPair.getMappedFields(false)" class="MappingFieldSection">
+            <mapping-field-detail [fieldPair]="fieldPair" [cfg]="cfg" [isSource]="false" [mappedField]="mappedField"></mapping-field-detail>
+            <mapping-field-action [fieldPair]="fieldPair" [cfg]="cfg" [isSource]="false" [mappedField]="mappedField"></mapping-field-action>
+          </div>
         </div>
       </div>
       <!-- add button -->

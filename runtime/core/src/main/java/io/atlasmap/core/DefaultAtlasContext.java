@@ -202,6 +202,177 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
     }
 
     /**
+     * Process single mapping entry in preview mode. Since modules don't participate
+     * in preview mode, any document format specific function won't be applied.
+     *
+     * @param mapping A @link{Mapping} entry to process
+     */
+    @Override
+    public Audits processPreview(Mapping mapping) {
+        DefaultAtlasSession session = new DefaultAtlasSession(null);
+        MappingType mappingType = mapping.getMappingType();
+        List<Field> sourceFields = mapping.getInputField();
+        List<Field> targetFields = mapping.getOutputField();
+
+        targetFields.forEach(tf -> tf.setValue(null));
+        if (sourceFields.isEmpty() || targetFields.isEmpty()) {
+            return session.getAudits();
+        }
+        for (Field sf : sourceFields) {
+            if (sf.getFieldType() == null || sf.getValue() == null) {
+                continue;
+            }
+            if (sf.getValue() instanceof String && ((String)sf.getValue()).isEmpty()) {
+                continue;
+            }
+            if (!restoreSourceFieldType(session, sf)) {
+                return session.getAudits();
+            }
+        }
+
+        Field sourceField;
+        Field targetField;
+        switch (mappingType) {
+
+        case MAP:
+            sourceField = sourceFields.get(0);
+            targetField = targetFields.get(0);
+            applyFieldActions(session, sourceField);
+            if (!convertSourceToTarget(session, sourceField, targetField)) {
+                break;
+            }
+            applyFieldActions(session, targetField);
+            break;
+
+        case COMBINE:
+            targetField = targetFields.get(0);
+            sourceFields.forEach(sf -> applyFieldActions(session, sf));
+            Field combined;
+            try {
+                combined = processCombineField(session, mapping, sourceFields, targetField);
+            } catch (AtlasException e) {
+                AtlasUtil.addAudit(session, sourceFields.get(0).getDocId(), String.format(
+                        "Failed to combine fields: %s", AtlasUtil.getChainedMessage(e)),
+                        sourceFields.get(0).getPath(), AuditStatus.ERROR, null);
+                if (LOG.isDebugEnabled()) {
+                    LOG.error("", e);
+                }
+                break;
+            }
+            if (!convertSourceToTarget(session, combined, targetField)) {
+                break;
+            }
+            applyFieldActions(session, targetField);
+            break;
+
+        case SEPARATE:
+            sourceField = sourceFields.get(0);
+            applyFieldActions(session, sourceField);
+            List<Field> separatedFields;
+            try {
+                separatedFields = processSeparateField(session, mapping, sourceField);
+            } catch (AtlasException e) {
+                AtlasUtil.addAudit(session, sourceField.getDocId(), String.format(
+                        "Failed to separate field: %s", AtlasUtil.getChainedMessage(e)),
+                        sourceField.getPath(), AuditStatus.ERROR, null);
+                if (LOG.isDebugEnabled()) {
+                    LOG.error("", e);
+                }
+                break;
+            }
+            if (separatedFields == null) {
+                break;
+            }
+            for (Field f : targetFields) {
+                targetField = f;
+                if (targetField.getIndex() == null || targetField.getIndex() < 0) {
+                    AtlasUtil.addAudit(session, targetField.getDocId(), String.format(
+                            "Separate requires zero or positive Index value to be set on targetField targetField.path=%s",
+                            targetField.getPath()), targetField.getPath(), AuditStatus.WARN, null);
+                    continue;
+                }
+                if (separatedFields.size() <= targetField.getIndex()) {
+                    String errorMessage = String.format(
+                            "Separate returned fewer segments count=%s when targetField.path=%s requested index=%s",
+                            separatedFields.size(), targetField.getPath(), targetField.getIndex());
+                    AtlasUtil.addAudit(session, targetField.getDocId(), errorMessage, targetField.getPath(),
+                            AuditStatus.WARN, null);
+                    break;
+                }
+                if (!convertSourceToTarget(session, separatedFields.get(targetField.getIndex()), targetField)) {
+                    break;
+                }
+                applyFieldActions(session, targetField);
+            }
+            break;
+
+        default:
+            AtlasUtil.addAudit(session, null, String.format(
+                    "Unsupported mappingType=%s detected", mapping.getMappingType()),
+                    null, AuditStatus.ERROR, null);
+        }
+        return session.getAudits();
+    }
+
+    private boolean restoreSourceFieldType(DefaultAtlasSession session, Field sourceField) {
+        try {
+            Object sourceValue = factory.getConversionService().convertType(
+                    sourceField.getValue(), null, sourceField.getFieldType(), null);
+            sourceField.setValue(sourceValue);
+        } catch (AtlasConversionException e) {
+            AtlasUtil.addAudit(session, sourceField.getDocId(), String.format(
+                    "Wrong format for source value : %s", AtlasUtil.getChainedMessage(e)),
+                    sourceField.getPath(), AuditStatus.ERROR, null);
+            if (LOG.isDebugEnabled()) {
+                LOG.error("", e);
+            }
+            return false;
+        }
+        return true;
+    }
+
+    private boolean convertSourceToTarget(DefaultAtlasSession session, Field sourceField, Field targetField) {
+        Object targetValue = null;
+        if (sourceField.getFieldType() != null && sourceField.getFieldType().equals(targetField.getFieldType())) {
+            targetValue = sourceField.getValue();
+        } else if (sourceField.getValue() != null) {
+            try {
+                targetValue = factory.getConversionService().convertType(sourceField.getValue(), sourceField.getFormat(),
+                        targetField.getFieldType(), targetField.getFormat());
+            } catch (AtlasConversionException e) {
+                AtlasUtil.addAudit(session, targetField.getDocId(), String.format(
+                        "Failed to convert source value to target type: %s", AtlasUtil.getChainedMessage(e)),
+                        targetField.getPath(), AuditStatus.ERROR, null);
+                if (LOG.isDebugEnabled()) {
+                    LOG.error("", e);
+                }
+                return false;
+            }
+        }
+
+        targetField.setValue(targetValue);
+        return true;
+    }
+
+    private boolean applyFieldActions(DefaultAtlasSession session, Field field) {
+        if (field.getActions() == null) {
+            return true;
+        }
+        try {
+            factory.getFieldActionService().processActions(field.getActions(), field);
+        } catch (AtlasException e) {
+            AtlasUtil.addAudit(session, field.getDocId(), String.format(
+                    "Failed to apply field action: %s", AtlasUtil.getChainedMessage(e)),
+                    field.getPath(), AuditStatus.ERROR, null);
+            if (LOG.isDebugEnabled()) {
+                LOG.error("", e);
+            }
+            return false;
+        }
+        return true;
+    }
+
+    /**
      * Process session lifecycle
      *
      */
@@ -458,17 +629,11 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
             return;
 
         case SEPARATE:
-            Field sourceFieldsep = sourceFields.get(0);
-            if ((sourceFieldsep.getFieldType() != null && !FieldType.STRING.equals(sourceFieldsep.getFieldType())
-                    || (sourceFieldsep.getValue() == null
-                            || !sourceFieldsep.getValue().getClass().isAssignableFrom(String.class)))) {
-                AtlasUtil.addAudit(session, sourceFieldsep.getDocId(),
-                        String.format("Separate requires String field type for sourceField.path=%s",
-                                sourceFieldsep.getPath()),
-                        sourceFieldsep.getPath(), AuditStatus.WARN, null);
+            List<Field> separatedFields = processSeparateField(session, mapping, sourceFields.get(0));
+            if (separatedFields == null) {
                 return;
             }
-            List<Field> separatedFields = processSeparateField(session, mapping, sourceFields.get(0));
+
             for (Field f : targetFields) {
                 targetField = f;
                 module = resolveModule(FieldDirection.TARGET, targetField);
@@ -556,11 +721,9 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
         String combinedValue = null;
         StringDelimiter delimiter = StringDelimiter.fromName(mapping.getDelimiter());
         if (delimiter != null) {
-            combinedValue = session.getAtlasContext().getContextFactory().getCombineStrategy()
-                    .combineValues(combineValues, delimiter);
+            combinedValue = factory.getCombineStrategy().combineValues(combineValues, delimiter);
         } else {
-            combinedValue = session.getAtlasContext().getContextFactory().getCombineStrategy()
-                    .combineValues(combineValues);
+            combinedValue = factory.getCombineStrategy().combineValues(combineValues);
         }
 
         Field answer = AtlasModelFactory.cloneFieldToSimpleField(sourceFields.get(0));
@@ -575,6 +738,19 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
 
     private List<Field> processSeparateField(DefaultAtlasSession session, Mapping mapping, Field sourceField)
             throws AtlasException {
+        if (sourceField.getValue() == null) {
+            AtlasUtil.addAudit(session, sourceField.getDocId(),
+                    String.format("null value can't be separated for sourceField.path=%s",
+                            sourceField.getPath()),
+                    sourceField.getPath(), AuditStatus.WARN, null);
+            return null;
+        }
+        if (!sourceField.getValue().getClass().isAssignableFrom(String.class)) {
+            Object converted = factory.getConversionService().convertType(
+                    sourceField.getValue(), sourceField.getFormat(), FieldType.STRING, null);
+            sourceField.setValue(converted);
+        }
+
         List<Field> answer = new ArrayList<>();
 
         String sourceValue;
@@ -589,12 +765,10 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
         }
         List<String> separatedValues = null;
         StringDelimiter delimiter = StringDelimiter.fromName(mapping.getDelimiter());
-        if (mapping.getDelimiter() != null) {
-            separatedValues = session.getAtlasContext().getContextFactory().getSeparateStrategy()
-                    .separateValue(sourceValue, delimiter);
+        if (delimiter != null) {
+            separatedValues = factory.getSeparateStrategy().separateValue(sourceValue, delimiter);
         } else {
-            separatedValues = session.getAtlasContext().getContextFactory().getSeparateStrategy()
-                    .separateValue(sourceValue);
+            separatedValues = factory.getSeparateStrategy().separateValue(sourceValue);
         }
 
         if (separatedValues == null || separatedValues.isEmpty()) {

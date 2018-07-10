@@ -43,6 +43,7 @@ import io.atlasmap.spi.AtlasInternalSession;
 import io.atlasmap.spi.AtlasInternalSession.Head;
 import io.atlasmap.spi.AtlasModule;
 import io.atlasmap.spi.StringDelimiter;
+import io.atlasmap.v2.Actions;
 import io.atlasmap.v2.AtlasMapping;
 import io.atlasmap.v2.AtlasModelFactory;
 import io.atlasmap.v2.AuditStatus;
@@ -59,6 +60,8 @@ import io.atlasmap.v2.LookupTable;
 import io.atlasmap.v2.Mapping;
 import io.atlasmap.v2.MappingType;
 import io.atlasmap.v2.Mappings;
+import io.atlasmap.v2.SimpleField;
+import io.atlasmap.v2.Uppercase;
 import io.atlasmap.v2.Validations;
 
 public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
@@ -386,4 +389,97 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
         context.process(session);
     }
 
+    @Test
+    public void testProcessPreviewConverter() throws Exception {
+        Mapping m = new Mapping();
+        m.setMappingType(MappingType.MAP);
+        Field source = new SimpleField();
+        source.setFieldType(FieldType.STRING);
+        source.setValue("404");
+        Field target = new SimpleField();
+        target.setFieldType(FieldType.INTEGER);
+        m.getInputField().add(source);
+        m.getOutputField().add(target);
+        context.processPreview(m);
+        assertEquals(Integer.class, target.getValue().getClass());
+        assertEquals(404, target.getValue());
+    }
+
+    @Test
+    public void testProcessPreviewSourceFieldAction() throws Exception {
+        Mapping m = new Mapping();
+        m.setMappingType(MappingType.MAP);
+        Field source = new SimpleField();
+        source.setFieldType(FieldType.STRING);
+        source.setValue("abc");
+        Actions actions = new Actions();
+        actions.getActions().add(new Uppercase());
+        source.setActions(actions);
+        Field target = new SimpleField();
+        target.setFieldType(FieldType.STRING);
+        m.getInputField().add(source);
+        m.getOutputField().add(target);
+        context.processPreview(m);
+        assertEquals("ABC", target.getValue());
+    }
+
+    @Test
+    public void testProcessPreviewTargetFieldAction() throws Exception {
+        Mapping m = new Mapping();
+        m.setMappingType(MappingType.MAP);
+        Field source = new SimpleField();
+        source.setFieldType(FieldType.STRING);
+        source.setValue("abc");
+        Field target = new SimpleField();
+        target.setFieldType(FieldType.STRING);
+        Actions actions = new Actions();
+        actions.getActions().add(new Uppercase());
+        target.setActions(actions);
+        m.getInputField().add(source);
+        m.getOutputField().add(target);
+        context.processPreview(m);
+        assertEquals("ABC", target.getValue());
+    }
+
+    @Test
+    public void testProcessPreviewCombine() throws Exception {
+        Mapping m = new Mapping();
+        m.setMappingType(MappingType.COMBINE);
+        Field source1 = new SimpleField();
+        source1.setFieldType(FieldType.STRING);
+        source1.setIndex(0);
+        source1.setValue("1");
+        Field source2 = new SimpleField();
+        source2.setFieldType(FieldType.STRING);
+        source2.setIndex(1);
+        source2.setValue("2");
+        Field target = new SimpleField();
+        target.setFieldType(FieldType.STRING);
+        m.getInputField().add(source1);
+        m.getInputField().add(source2);
+        m.getOutputField().add(target);
+        context.processPreview(m);
+        assertEquals("1 2", target.getValue());
+    }
+
+    @Test
+    public void testProcessPreviewSeparate() throws Exception {
+        Mapping m = new Mapping();
+        m.setMappingType(MappingType.SEPARATE);
+        Field source = new SimpleField();
+        source.setFieldType(FieldType.STRING);
+        source.setValue("1 2");
+        Field target1 = new SimpleField();
+        target1.setFieldType(FieldType.STRING);
+        target1.setIndex(0);
+        Field target2 = new SimpleField();
+        target2.setFieldType(FieldType.STRING);
+        target2.setIndex(1);
+        m.getInputField().add(source);
+        m.getOutputField().add(target1);
+        m.getOutputField().add(target2);
+        context.processPreview(m);
+        assertEquals("1", target1.getValue());
+        assertEquals("2", target2.getValue());
+    }
 }
