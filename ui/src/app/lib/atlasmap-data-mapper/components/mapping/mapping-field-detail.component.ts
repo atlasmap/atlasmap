@@ -51,13 +51,17 @@ export class MappingFieldDetailComponent implements OnInit {
     this.updateTemplateValues();
   }
 
+  isTransformCapable() {
+    return (!this.mappedField.isPadField() && this.mappedField.field.name.length > 0);
+  }
+
   /**
    * The add transformation icon has been selected.  Add a field action to the current
    * mapped field.
    */
   addTransformation(): void {
     const actionConfig: FieldActionConfig =
-      MappingFieldActionComponent.getFieldActions(this.fieldPair)[0];
+      MappingFieldActionComponent.getFieldActions(this.fieldPair, this.isSource)[0];
     if (actionConfig == null) {
       return;
     }

@@ -35,14 +35,14 @@ export class MappingFieldActionComponent {
    * Return the field actions applicable to the specified field mapping pair.
    * @param fieldPair
    */
-  static getFieldActions(fieldPair: FieldMappingPair): FieldActionConfig[] {
+  static getFieldActions(fieldPair: FieldMappingPair, isSource: boolean): FieldActionConfig[] {
     const configs: FieldActionConfig[] = [];
 
     // Start with the complete list of field actions.
     for (const config of TransitionModel.actionConfigs) {
 
       // Filter down to those field actions that apply to the selected field pair.
-      if (config.appliesToField(fieldPair)) {
+      if (config.appliesToField(fieldPair, isSource)) {
         configs.push(config);
       }
     }
@@ -58,11 +58,11 @@ export class MappingFieldActionComponent {
   }
 
   actionsExistForField(): boolean {
-    return (MappingFieldActionComponent.getFieldActions(this.fieldPair).length > 0);
+    return (MappingFieldActionComponent.getFieldActions(this.fieldPair, this.isSource).length > 0);
   }
 
   getActionConfigs(): FieldActionConfig[] {
-    return MappingFieldActionComponent.getFieldActions(this.fieldPair);
+    return MappingFieldActionComponent.getFieldActions(this.fieldPair, this.isSource);
   }
 
   /**
