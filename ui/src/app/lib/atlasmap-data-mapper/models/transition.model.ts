@@ -38,11 +38,11 @@ export class FieldActionConfig {
   serviceObject: any = new Object();
 
   /**
-   * Return true if the target field pair is numeric, string or the field pair types
-   * match the current field action types.
+   * Return true if the action's source/target types and collection types matches the respective source/target field properties
+   *             for source transformations, or matches the respective target field properties only if for a target transformation
    * @param fieldPair
    */
-  appliesToField(fieldPair: FieldMappingPair): boolean {
+  appliesToField(fieldPair: FieldMappingPair, isSource: boolean): boolean {
 
     if (fieldPair == null) {
       return false;
@@ -54,20 +54,61 @@ export class FieldActionConfig {
       return false;
     }
 
-    if (this.serviceObject.sourceCollectionType !== this.serviceObject.targetCollectionType) {
-      return false;
-    }
+    if (isSource) {
+      if (this.serviceObject.sourceCollectionType === 'NONE' && sourceField.getCollectionType() != null) {
+        return false;
+      }
+      if (this.serviceObject.sourceCollectionType === 'ALL'
+          && this.sourceType !== 'ANY'
+          && ['ARRAY', 'LIST', 'MAP'].indexOf(sourceField.getCollectionType()) === -1
+          && sourceField.type !== 'STRING') {
+        return false;
+      }
+      if (this.serviceObject.targetCollectionType === 'NONE' && targetField.getCollectionType() != null) {
+        return false;
+      }
+      if (this.serviceObject.targetCollectionType === 'ALL'
+          && ['ARRAY', 'LIST', 'MAP'].indexOf(targetField.getCollectionType()) === -1
+          && targetField.type !== 'STRING') {
+        return false;
+      }
 
-    // Check for matching types.
-    if (this.targetType === 'NUMBER') {
-      return (['LONG', 'INTEGER', 'FLOAT', 'DOUBLE', 'SHORT', 'BYTE', 'DECIMAL', 'NUMBER'].indexOf(targetField.type) !== -1);
-    }
-    if (this.targetType === 'ANY_DATE') {
-      return (['DATE', 'DATE_TIME', 'DATE_TIME_TZ', 'TIME'].indexOf(targetField.type) !== -1);
-    }
+      // Check for matching types.
+      if (this.sourceType === 'NUMBER'
+          && ['LONG', 'INTEGER', 'FLOAT', 'DOUBLE', 'SHORT', 'BYTE', 'DECIMAL', 'NUMBER'].indexOf(sourceField.type) === -1) {
+        return false;
+      }
+      if (this.sourceType === 'ANY_DATE' && ['DATE', 'DATE_TIME', 'DATE_TIME_TZ', 'TIME'].indexOf(sourceField.type) === -1) {
+        return false;
+      }
+      if (this.targetType === 'NUMBER') {
+        return ['LONG', 'INTEGER', 'FLOAT', 'DOUBLE', 'SHORT', 'BYTE', 'DECIMAL', 'NUMBER'].indexOf(targetField.type) !== -1;
+      }
+      if (this.targetType === 'ANY_DATE') {
+        return ['DATE', 'DATE_TIME', 'DATE_TIME_TZ', 'TIME'].indexOf(targetField.type) !== -1;
+      }
 
-    // All other types must match the mapped field types with the field action types.
-    return ((this.sourceType === 'ANY' || targetField.type === this.sourceType) && (targetField.type === this.targetType));
+      // All other types must match the mapped field types with the field action types.
+      if (this.sourceType !== 'ANY' && sourceField.type !== this.sourceType) {
+        return false;
+      }
+      return targetField.type === this.targetType;
+    } else { // target transformation
+      if (this.serviceObject.sourceCollectionType !== this.serviceObject.targetCollectionType) {
+        return false;
+      }
+
+      // Check for matching types.
+      if (this.targetType === 'NUMBER') {
+        return (['LONG', 'INTEGER', 'FLOAT', 'DOUBLE', 'SHORT', 'BYTE', 'DECIMAL', 'NUMBER'].indexOf(targetField.type) !== -1);
+      }
+      if (this.targetType === 'ANY_DATE') {
+        return (['DATE', 'DATE_TIME', 'DATE_TIME_TZ', 'TIME'].indexOf(targetField.type) !== -1);
+      }
+
+      // All other types must match the mapped field types with the field action types.
+      return targetField.type === this.sourceType && targetField.type === this.targetType;
+    }
   }
 
   populateFieldAction(action: FieldAction): void {

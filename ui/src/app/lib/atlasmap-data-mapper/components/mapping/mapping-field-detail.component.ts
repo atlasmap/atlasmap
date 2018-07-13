@@ -52,7 +52,7 @@ export class MappingFieldDetailComponent implements OnInit {
   }
 
   isTransformCapable() {
-    return (!this.isSource && !this.mappedField.isPadField() && this.mappedField.field.name.length > 0);
+    return (!this.mappedField.isPadField() && this.mappedField.field.name.length > 0);
   }
 
   /**
@@ -61,7 +61,7 @@ export class MappingFieldDetailComponent implements OnInit {
    */
   addTransformation(): void {
     const actionConfig: FieldActionConfig =
-      MappingFieldActionComponent.getFieldActions(this.fieldPair)[0];
+      MappingFieldActionComponent.getFieldActions(this.fieldPair, this.isSource)[0];
     if (actionConfig == null) {
       return;
     }
