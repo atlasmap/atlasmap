@@ -113,6 +113,21 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
     }
 
     @Test
+    public void testTemplateCombine() throws AtlasException {
+        DefaultAtlasContextFactory.getInstance().setCombineStrategy(new TemplateCombineStrategy());
+        Mapping mapping = (Mapping) AtlasModelFactory.createMapping(MappingType.COMBINE);
+        this.mapping.getMappings().getMapping().add(mapping);
+        populateSourceField(mapping, FieldType.STRING, "string", 0);
+        populateSourceField(mapping, FieldType.INTEGER, 1, 1);
+        populateSourceField(mapping, FieldType.DOUBLE, 2d, 2);
+        prepareTargetField(mapping, "/target");
+        mapping.setDelimiterString("String: {1}, Integer: {2}, Double: {3}, String again: {1}");
+        context.process(session);
+        assertFalse(printAudit(session), session.hasErrors());
+        assertEquals("String: string, Integer: 1, Double: 2.0, String again: string", writer.targets.get("/target"));
+    }
+
+    @Test
     public void testCombineNonSupportedObjects() throws AtlasException {
         Mapping m = (Mapping) AtlasModelFactory.createMapping(MappingType.COMBINE);
         mapping.getMappings().getMapping().add(m);
@@ -390,7 +405,7 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
     }
 
     @Test
-    public void testProcessPreviewConverter() throws Exception {
+    public void testProcessPreviewConverter() {
         Mapping m = new Mapping();
         m.setMappingType(MappingType.MAP);
         Field source = new SimpleField();
@@ -406,7 +421,7 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
     }
 
     @Test
-    public void testProcessPreviewSourceFieldAction() throws Exception {
+    public void testProcessPreviewSourceFieldAction() {
         Mapping m = new Mapping();
         m.setMappingType(MappingType.MAP);
         Field source = new SimpleField();
@@ -424,7 +439,7 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
     }
 
     @Test
-    public void testProcessPreviewTargetFieldAction() throws Exception {
+    public void testProcessPreviewTargetFieldAction() {
         Mapping m = new Mapping();
         m.setMappingType(MappingType.MAP);
         Field source = new SimpleField();
@@ -442,7 +457,7 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
     }
 
     @Test
-    public void testProcessPreviewCombine() throws Exception {
+    public void testProcessPreviewCombine() {
         Mapping m = new Mapping();
         m.setMappingType(MappingType.COMBINE);
         Field source1 = new SimpleField();
@@ -463,7 +478,7 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
     }
 
     @Test
-    public void testProcessPreviewSeparate() throws Exception {
+    public void testProcessPreviewSeparate() {
         Mapping m = new Mapping();
         m.setMappingType(MappingType.SEPARATE);
         Field source = new SimpleField();

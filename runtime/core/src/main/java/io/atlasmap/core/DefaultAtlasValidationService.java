@@ -141,12 +141,12 @@ public class DefaultAtlasValidationService implements AtlasValidationService {
 
         public AtlasValidator get() {
             return validator;
-        };
+        }
     }
 
     @Override
     public List<Validation> validateMapping(AtlasMapping mapping) {
-        List<Validation> validations = new ArrayList<Validation>();
+        List<Validation> validations = new ArrayList<>();
         Validators.MAPPING_NAME.get().validate(mapping.getName(), validations, null);
 
         List<DataSource> dataSources = mapping.getDataSource();

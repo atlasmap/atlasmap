@@ -36,4 +36,6 @@ public interface AtlasCombineStrategy {
     String combineValues(Map<Integer, String> values, StringDelimiter delimiter);
 
     String combineValues(Map<Integer, String> values, StringDelimiter delimiter, Integer maxItems);
+
+    String combineValues(Map<Integer, String> values, String delimiter);
 }

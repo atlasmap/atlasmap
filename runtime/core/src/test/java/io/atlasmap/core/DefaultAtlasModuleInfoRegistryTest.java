@@ -18,7 +18,7 @@ public class DefaultAtlasModuleInfoRegistryTest {
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
         DefaultAtlasContextFactory factory = new DefaultAtlasContextFactory();
-        factory.setObjectName("DefaultAtlasContextFactory");
+        factory.setObjectName();
         atlasModuleInfoRegistry = new DefaultAtlasModuleInfoRegistry(factory);
     }
 
