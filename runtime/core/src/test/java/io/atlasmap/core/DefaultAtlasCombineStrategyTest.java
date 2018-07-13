@@ -92,7 +92,7 @@ public class DefaultAtlasCombineStrategyTest {
         Map<Integer, String> cMap = generateCombineMap(3);
         cMap.put(0, cMap.get(0) + " ");
         cMap.put(2, "  " + cMap.get(2));
-        String value = combine.combineValues(cMap, null);
+        String value = combine.combineValues(cMap, null, null);
         assertNotNull(value);
         assertEquals("a  b   c", value);
     }

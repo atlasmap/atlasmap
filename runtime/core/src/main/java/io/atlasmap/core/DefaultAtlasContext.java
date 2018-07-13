@@ -178,8 +178,8 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
                 }
                 module.setDocId(docId);
                 module.init();
-            } catch (Throwable t) {
-                LOG.error("Unable to initialize {} module: {}", ds.getDataSourceType(), moduleInfo.toString());
+            } catch (Exception t) {
+                LOG.error("Unable to initialize {} module: {}", ds.getDataSourceType(), moduleInfo);
                 LOG.error(t.getMessage(), t);
                 throw new AtlasException(String.format("Unable to initialize %s module: %s", ds.getDataSourceType(),
                         moduleInfo.toString()), t);
@@ -195,7 +195,7 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Registered AtlasContext {} with JMX", context.getUuid());
             }
-        } catch (Throwable t) {
+        } catch (Exception t) {
             LOG.warn("Failed to register AtlasContext {} with JMX", context.getUuid());
             LOG.warn(t.getMessage(), t);
         }
@@ -247,18 +247,7 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
         case COMBINE:
             targetField = targetFields.get(0);
             sourceFields.forEach(sf -> applyFieldActions(session, sf));
-            Field combined;
-            try {
-                combined = processCombineField(session, mapping, sourceFields, targetField);
-            } catch (AtlasException e) {
-                AtlasUtil.addAudit(session, sourceFields.get(0).getDocId(), String.format(
-                        "Failed to combine fields: %s", AtlasUtil.getChainedMessage(e)),
-                        sourceFields.get(0).getPath(), AuditStatus.ERROR, null);
-                if (LOG.isDebugEnabled()) {
-                    LOG.error("", e);
-                }
-                break;
-            }
+            Field combined = processCombineField(session, mapping, sourceFields, targetField);
             if (!convertSourceToTarget(session, combined, targetField)) {
                 break;
             }
@@ -438,7 +427,7 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
                 } else {
                     try {
                         processSourceFieldMappings(session, mapping.getInputField());
-                    }catch (Throwable t) {
+                    }catch (Exception t) {
                         Field sourceField = session.head().getSourceField();
                         String docId = sourceField != null ? sourceField.getDocId() : null;
                         String path =  sourceField != null ? sourceField.getPath() : null;
@@ -453,7 +442,7 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
                 if (!session.head().hasError()) {
                     try {
                         processTargetFieldMappings(session, mapping);
-                    } catch (Throwable t) {
+                    } catch (Exception t) {
                         Field targetField = session.head().getTargetField();
                         String docId = targetField != null ? targetField.getDocId() : null;
                         String path = targetField != null ? targetField.getPath() : null;
@@ -685,7 +674,7 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
     }
 
     private Field processCombineField(DefaultAtlasSession session, Mapping mapping, List<Field> sourceFields,
-            Field targetField) throws AtlasException {
+            Field targetField) {
         Map<Integer, String> combineValues = null;
         for (Field sourceField : sourceFields) {
             if (sourceField.getIndex() == null || sourceField.getIndex() < 0) {
@@ -714,7 +703,6 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
                     sourceValue = sourceField.getValue() != null ? sourceField.getValue().toString() : null;
                 }
                 combineValues.put(sourceField.getIndex(), sourceValue);
-                continue;
             }
         }
 
@@ -722,14 +710,16 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
         StringDelimiter delimiter = StringDelimiter.fromName(mapping.getDelimiter());
         if (delimiter != null) {
             combinedValue = factory.getCombineStrategy().combineValues(combineValues, delimiter);
+        } else if (mapping.getDelimiterString() != null && !mapping.getDelimiterString().isEmpty()) {
+            combinedValue = factory.getCombineStrategy().combineValues(combineValues, mapping.getDelimiterString());
         } else {
             combinedValue = factory.getCombineStrategy().combineValues(combineValues);
         }
 
         Field answer = AtlasModelFactory.cloneFieldToSimpleField(sourceFields.get(0));
         if (combinedValue == null || combinedValue.trim().isEmpty()) {
-            LOG.debug(String.format("Empty combined string for Combine mapping targetField.path=%s",
-                    targetField.getPath()));
+            LOG.debug("Empty combined string for Combine mapping targetField.path={}",
+                      targetField.getPath());
         } else {
             answer.setValue(combinedValue);
         }
@@ -772,7 +762,7 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
         }
 
         if (separatedValues == null || separatedValues.isEmpty()) {
-            LOG.debug(String.format("Empty string for Separate mapping sourceField.path=%s", sourceField.getPath()));
+            LOG.debug("Empty string for Separate mapping sourceField.path={}", sourceField.getPath());
         } else {
             for (String separatedValue : separatedValues) {
                 SimpleField simpleField = AtlasModelFactory.cloneFieldToSimpleField(sourceField);
@@ -795,7 +785,7 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
 
         DefaultAtlasSession session = (DefaultAtlasSession) userSession;
         if (LOG.isDebugEnabled()) {
-            LOG.debug("Begin processValidation {}", session == null ? null : session.toString());
+            LOG.debug("Begin processValidation {}", session);
         }
 
         List<Validation> validations = getContextFactory().getValidationService().validateMapping(session.getMapping());
@@ -804,7 +794,7 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
         }
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug("Detected {} core validation notices", validations.size());
+            LOG.debug("Detected {} core validation notices", validations == null ? 0 : validations.size());
         }
 
         for (AtlasModule module : getSourceModules().values()) {
@@ -815,7 +805,7 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
         }
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug("End processValidation {}", session == null ? null : session.toString());
+            LOG.debug("End processValidation {}", session);
         }
     }
 

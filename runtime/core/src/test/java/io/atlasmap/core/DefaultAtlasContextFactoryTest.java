@@ -20,6 +20,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
 
 import java.io.File;
 import java.net.URI;
@@ -38,6 +39,7 @@ import io.atlasmap.api.AtlasConversionService;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.api.AtlasFieldActionService;
 import io.atlasmap.core.AtlasMappingService.AtlasMappingFormat;
+import io.atlasmap.spi.AtlasCombineStrategy;
 import io.atlasmap.spi.AtlasInternalSession;
 import io.atlasmap.spi.AtlasModule;
 import io.atlasmap.spi.AtlasModuleDetail;
@@ -167,6 +169,9 @@ public class DefaultAtlasContextFactoryTest {
         assertNull(contextFactory.getVersion());
         assertNotNull(contextFactory);
         assertNotNull(contextFactory.getProperties());
+        AtlasCombineStrategy strategy = new TemplateCombineStrategy();
+        contextFactory.setCombineStrategy(strategy);
+        assertSame(strategy, contextFactory.getCombineStrategy());
     }
 
     @Test

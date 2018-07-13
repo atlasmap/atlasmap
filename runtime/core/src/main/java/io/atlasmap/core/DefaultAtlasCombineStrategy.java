@@ -82,7 +82,7 @@ public class DefaultAtlasCombineStrategy implements AtlasCombineStrategy {
             return null;
         }
 
-        String combinedString = new String();
+        String combinedString = "";
         if (values.size() == 1) {
             combinedString = values.get(0);
             return combinedString;
@@ -125,6 +125,11 @@ public class DefaultAtlasCombineStrategy implements AtlasCombineStrategy {
         }
 
         return combinedString;
+    }
+
+    @Override
+    public String combineValues(Map<Integer, String> values, String delimiter) {
+        return null;
     }
 
     protected static Map<Integer, String> sortByKey(Map<Integer, String> map) {
