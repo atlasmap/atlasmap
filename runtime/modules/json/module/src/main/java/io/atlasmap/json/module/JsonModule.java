@@ -22,7 +22,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -50,6 +49,8 @@ import io.atlasmap.v2.Validations;
         "json" }, configPackages = { "io.atlasmap.json.v2" })
 public class JsonModule extends BaseAtlasModule {
     private static final Logger LOG = LoggerFactory.getLogger(JsonModule.class);
+
+    private static final ObjectMapper MAPPER = new ObjectMapper();
 
     @Override
     public void processPreValidation(AtlasInternalSession atlasSession) throws AtlasException {
@@ -213,10 +214,8 @@ public class JsonModule extends BaseAtlasModule {
         Object document = session.getSourceDocument(getDocId());
         // make this a JSON document
         JsonFactory jsonFactory = new JsonFactory();
-        ObjectMapper objectMapper = new ObjectMapper();
         try {
-            JsonParser parser = jsonFactory.createParser(document.toString());
-            JsonNode rootNode = objectMapper.readTree(parser);
+            JsonNode rootNode = MAPPER.readTree(document.toString());
             ObjectNode parentNode = (ObjectNode) rootNode;
             String parentSegment = "[root node]";
             for (SegmentContext sc : new AtlasPath(field.getPath()).getSegmentContexts(false)) {

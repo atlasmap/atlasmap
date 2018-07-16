@@ -477,7 +477,7 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
         }
     }
 
-    private List<Mapping> extractCollectionMappings(DefaultAtlasSession session, BaseMapping baseMapping)
+    protected final List<Mapping> extractCollectionMappings(DefaultAtlasSession session, BaseMapping baseMapping)
             throws AtlasException {
         if (LOG.isDebugEnabled()) {
             LOG.debug("Generating Source Mappings from mapping: {}", baseMapping);
@@ -541,8 +541,6 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
         if (LOG.isDebugEnabled()) {
             LOG.debug("Generated {} mappings from mapping: {}", mappings.size(), baseMapping);
         }
-        ((Collection) baseMapping).getMappings().getMapping().clear();
-        ((Collection) baseMapping).getMappings().getMapping().addAll(mappings);
 
         return mappings;
     }
