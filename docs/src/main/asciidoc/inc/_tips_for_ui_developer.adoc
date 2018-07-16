@@ -3,20 +3,20 @@
 
 === Developing Within Syndesis UI
 
-Data Mapper UI is referenced by Syndesis as a dependency. When Syndesis UI's dependencies are installed during **yarn install** step, Data Mapper UI will be cloned from the NPM package repository into **${SYNDESIS}/ui/node_modules/@atlasmap/atlasmap.data.mapper** directory. 
+Data Mapper UI is referenced by Syndesis as a dependency. When Syndesis UI's dependencies are installed during **yarn install** step, Data Mapper UI will be cloned from the NPM package repository into **${SYNDESIS}/app/ui/node_modules/@atlasmap/atlasmap-data-mapper** directory.
 
 You can point your local Syndesis UI's Data Mapper UI reference to your working copy of the Data Mapper by https://yarnpkg.com/lang/en/docs/cli/link/[yarn link]. You'll do something like this:
 
 ```
 $ cd ${ATLASMAP}/ui
-$ yarn build
-$ cd dist
+$ yarn build:lib
+$ cd dist/lib
 $ yarn link
-$ cd ${SYNDESIS}/ui
-$ yarn link @atlasmap/atlasmap.data.mapper
+$ cd ${SYNDESIS}/app/ui
+$ yarn link @atlasmap/atlasmap-data-mapper
 ```
 
-Note that running `yarn install` in the Syndesis UI directory **will remove and redownload the ${SYNDESIS}/ui/node_modules/@atlasmap/atlasmap.data.mapper directory**, so you'd want to avoid doing it while you have `yarn link`. Instead you'd change ${ATLASMAP}/ui/src and run `yarn build` to make a change in AtlasMap UI and consume it within Syndesis UI.
+Note that running `yarn install` in the Syndesis UI directory **will remove and redownload the ${SYNDESIS}/app/ui/node_modules/@atlasmap/atlasmap-data-mapper directory**, so you'd want to avoid doing it while you have `yarn link`. Instead you'd change ${ATLASMAP}/ui/src and run `yarn build:lib` to make a change in AtlasMap UI and consume it within Syndesis UI.
 
 === Debug Configuration
 
