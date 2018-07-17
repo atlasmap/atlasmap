@@ -21,10 +21,10 @@ import java.util.Map;
 
 /**
  * A template-based combine strategy that uses a template in place of a delimiter to combine the input using
- * {@link MessageFormat#format(String, Object...))}.
+ * {@link MessageFormat#format(String, Object...)}.
  * <p>
  * <strong>Warning:</strong> The indexes in the template must be one-based, unlike the
- * {@link MessageFormat#format(String, Object...))} method, which expects zero-based indexes.
+ * {@link MessageFormat#format(String, Object...)} method, which expects zero-based indexes.
  * </p>
  */
 public class TemplateCombineStrategy extends DefaultAtlasCombineStrategy {
