@@ -524,7 +524,7 @@ table.CodeRay td.code>pre{padding:0}
 <div class="details">
 <span id="author" class="author">The AtlasMap Team</span><br>
 <span id="revnumber">version 1.35.5-SNAPSHOT,</span>
-<span id="revdate">2018-07-04</span>
+<span id="revdate">2018-07-17</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">AtlasMap Developer Guide</div>
@@ -721,7 +721,7 @@ $ yarn install</code></pre>
 <div class="sect3">
 <h4 id="developing-within-syndesis-ui">2.4.1. Developing Within Syndesis UI</h4>
 <div class="paragraph">
-<p>Data Mapper UI is referenced by Syndesis as a dependency. When Syndesis UI&#8217;s dependencies are installed during <strong>yarn install</strong> step, Data Mapper UI will be cloned from the NPM package repository into <strong>${SYNDESIS}/ui/node_modules/@atlasmap/atlasmap.data.mapper</strong> directory.</p>
+<p>Data Mapper UI is referenced by Syndesis as a dependency. When Syndesis UI&#8217;s dependencies are installed during <strong>yarn install</strong> step, Data Mapper UI will be cloned from the NPM package repository into <strong>${SYNDESIS}/app/ui/node_modules/@atlasmap/atlasmap-data-mapper</strong> directory.</p>
 </div>
 <div class="paragraph">
 <p>You can point your local Syndesis UI&#8217;s Data Mapper UI reference to your working copy of the Data Mapper by <a href="https://yarnpkg.com/lang/en/docs/cli/link/">yarn link</a>. You&#8217;ll do something like this:</p>
@@ -729,15 +729,15 @@ $ yarn install</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code>$ cd ${ATLASMAP}/ui
-$ yarn build
-$ cd dist
+$ yarn build:lib
+$ cd dist/lib
 $ yarn link
-$ cd ${SYNDESIS}/ui
-$ yarn link @atlasmap/atlasmap.data.mapper</code></pre>
+$ cd ${SYNDESIS}/app/ui
+$ yarn link @atlasmap/atlasmap-data-mapper</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Note that running <code>yarn install</code> in the Syndesis UI directory <strong>will remove and redownload the ${SYNDESIS}/ui/node_modules/@atlasmap/atlasmap.data.mapper directory</strong>, so you&#8217;d want to avoid doing it while you have <code>yarn link</code>. Instead you&#8217;d change ${ATLASMAP}/ui/src and run <code>yarn build</code> to make a change in AtlasMap UI and consume it within Syndesis UI.</p>
+<p>Note that running <code>yarn install</code> in the Syndesis UI directory <strong>will remove and redownload the ${SYNDESIS}/app/ui/node_modules/@atlasmap/atlasmap-data-mapper directory</strong>, so you&#8217;d want to avoid doing it while you have <code>yarn link</code>. Instead you&#8217;d change ${ATLASMAP}/ui/src and run <code>yarn build:lib</code> to make a change in AtlasMap UI and consume it within Syndesis UI.</p>
 </div>
 </div>
 <div class="sect3">
@@ -1911,7 +1911,7 @@ string.</p></td>
 <div id="footer">
 <div id="footer-text">
 Version 1.35.5-SNAPSHOT<br>
-Last updated 2018-07-04 03:10:12 UTC
+Last updated 2018-07-17 00:51:46 UTC
 </div>
 </div>
 </body>
