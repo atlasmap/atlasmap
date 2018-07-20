@@ -103,6 +103,18 @@ export class MappingDefinition {
     return tables;
   }
 
+  removeTableByName(name: string) {
+    if (name) {
+      const table = this.tablesByName[name];
+      const iokey = table.getInputOutputKey();
+      if (this.tablesByName[name]) {
+        delete this.tables[this.tables.indexOf(table)];
+        delete this.tablesByName[name];
+        delete this.tablesBySourceTargetKey[iokey];
+      }
+    }
+  }
+
   getFirstMappingForLookupTable(lookupTableName: string): MappingModel {
     for (const m of this.mappings) {
       for (const fieldPair of m.fieldMappings) {
