@@ -129,7 +129,7 @@ export class MappedField {
       return;
     }
 
-    // Given a compound selection (ctrl-M1) create a new field action based on the suggested value.
+    // Given a compound selection (ctrl/cmd-M1) create a new field action based on the suggested value.
     if (compoundSelection && !fieldRemoved) {
       const currentFieldAction: FieldAction = FieldAction.createSeparateCombineFieldAction(separateMode, suggestedValue);
       this.actions = [currentFieldAction];
@@ -634,8 +634,9 @@ export class MappingModel {
 
     // Target fields may only be mapped once.
     if (this.isMappedTarget(field)) {
+      const macPlatform: boolean = /(MacPPC|MacIntel|Mac_PowerPC|Macintosh|Mac OS X)/.test(navigator.userAgent);
       return 'it is already the target of another mapping. ' +
-        'Use ctrl-M1 to select multiple elements for \'Combine\' or \'Separate\' actions.';
+        'Use ' + (macPlatform ? 'CMD' : 'CTRL') + '-M1 to select multiple elements for \'Combine\' or \'Separate\' actions.';
     }
 
     const repeatedMode: boolean = this.isCollectionMode();

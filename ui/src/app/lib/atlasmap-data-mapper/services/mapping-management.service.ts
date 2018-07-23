@@ -293,7 +293,7 @@ export class MappingManagementService {
 
     if (mapping != null && mapping.hasMappedFields(field.isSource())) {
 
-      // If the user has performed a compound selection (ctrl-m1) of a previously unselected field
+      // If the user has performed a compound selection (ctrl/cmd-m1) of a previously unselected field
       // then add it to the active mapping; otherwise remove it.
       if (compoundSelection) {
           if (mapping.isFieldMapped(field, field.isSource()) && field.selected) {
@@ -371,7 +371,7 @@ export class MappingManagementService {
   /**
    * Instantiate a new mapping model and associate the selected field with it.
    * @param selectedField
-   * @param compoundSelection - indicates a compound-selection (ctrl-M1) if true, standard mouse click if false.
+   * @param compoundSelection - indicates a compound-selection (ctrl/cmd-M1) if true, standard mouse click if false.
    */
   addNewMapping(selectedField: Field, compoundSelection: boolean): void {
     if (!compoundSelection) {
