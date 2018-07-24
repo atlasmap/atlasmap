@@ -20,7 +20,7 @@
   <parent>
     <groupId>io.atlasmap</groupId>
     <artifactId>atlas-java-parent</artifactId>
-    <version>1.35.6-SNAPSHOT</version>
+    <version>1.35.6</version>
     <relativePath>..</relativePath>
   </parent>
 
