@@ -6,7 +6,7 @@
 
 === Version information
 [%hardbreaks]
-__Version__ : 1.35.6-SNAPSHOT
+__Version__ : 1.35.7-SNAPSHOT
 
 
 
