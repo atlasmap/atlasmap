@@ -28,13 +28,27 @@ export class ErrorHandlerService {
   warn(message: string, error: any) { this.addError(message, ErrorLevel.WARN, error); }
   error(message: string, error: any) { this.addError(message, ErrorLevel.ERROR, error); }
   validationError(message: string, error: any) { this.addValidationError(message, error); }
+  mappingError(message: string, error: any) { this.addError(message, ErrorLevel.MAPPING_ERROR, error); }
 
   removeError(identifier: string): void {
     this.cfg.errors = this.cfg.errors.filter(e => e.identifier !== identifier);
     this.cfg.validationErrors = this.cfg.validationErrors.filter(e => e.identifier !== identifier);
   }
 
+  clearMappingErrors(): void {
+    for (const e of this.cfg.errors) {
+      if (e.level === ErrorLevel.MAPPING_ERROR) {
+        this.removeError(e.identifier);
+      }
+    }
+  }
+
   clearValidationErrors(): void {
+    for (const e of this.cfg.errors) {
+      if (e.level === ErrorLevel.VALIDATION_ERROR) {
+        this.removeError(e.identifier);
+      }
+    }
     this.cfg.validationErrors = [];
   }
 
