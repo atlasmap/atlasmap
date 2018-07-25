@@ -57,11 +57,11 @@ export class TransitionSelectionComponent {
     const mappedTargetFields = this.fieldPair.getMappedFields(false);
 
     if (mappedSourceFields.length > 1 && selectedMode !== TransitionMode.COMBINE) {
-      this.cfg.errorService.warn('The selected mapping details action ' + TransitionModel.getActionName(selectedMode) +
+        this.cfg.errorService.info('The selected mapping details action ' + TransitionModel.getActionName(selectedMode) +
                                  ' is not applicable from compound source selections.', null);
       return false;
     } else if (mappedTargetFields.length > 1 && selectedMode !== TransitionMode.SEPARATE) {
-      this.cfg.errorService.warn('The selected mapping details action ' + TransitionModel.getActionName(selectedMode) +
+        this.cfg.errorService.info('The selected mapping details action ' + TransitionModel.getActionName(selectedMode) +
                                  ' is not applicable to compound target selections.', null);
       return false;
     }
@@ -108,8 +108,10 @@ export class TransitionSelectionComponent {
 
   showLookupTable(): void {
     const mapping: MappingModel = this.cfg.mappings.activeMapping;
+    this.cfg.errorService.clearMappingErrors();
+
     if (!mapping.hasMappedFields(true) || !mapping.hasMappedFields(false)) {
-      this.cfg.errorService.warn('Please select source and target fields before mapping values.', null);
+      this.cfg.errorService.mappingError('Please select source and target fields before mapping values.', null);
       return;
     }
     this.modalWindow.reset();

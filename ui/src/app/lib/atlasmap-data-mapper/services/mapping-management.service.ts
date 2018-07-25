@@ -240,7 +240,7 @@ export class MappingManagementService {
 
       // Compound source mapping when not in Combine mode
       if (!field.isSource()) {
-        this.cfg.errorService.warn('The selected mapping details action ' + TransitionModel.getActionName(mappingPair.transition.mode) +
+        this.cfg.errorService.info('The selected mapping details action ' + TransitionModel.getActionName(mappingPair.transition.mode) +
                 ' is not applicable from compound source selections (' + field.name +
                 ').  Recommend using field action \'Combine\'.', null);
         return;
@@ -251,7 +251,7 @@ export class MappingManagementService {
       if (field.isSource()) {
 
         // Compound target mapping when not in Separate mode.
-        this.cfg.errorService.warn('The selected mapping details action ' + TransitionModel.getActionName(mappingPair.transition.mode) +
+        this.cfg.errorService.info('The selected mapping details action ' + TransitionModel.getActionName(mappingPair.transition.mode) +
                 ' is not applicable to compound target selections (' + field.name +
                 ').  Recommend using field action \'Separate\'.', null);
         return;
@@ -281,6 +281,10 @@ export class MappingManagementService {
 
   fieldSelected(field: Field, compoundSelection: boolean): void {
     field.selected = true;
+
+    // Start out with a clean slate.
+    this.cfg.errorService.clearMappingErrors();
+
     if (!field.isTerminal()) {
       field.docDef.populateChildren(field);
       field.docDef.updateFromMappings(this.cfg.mappings);
@@ -326,7 +330,7 @@ export class MappingManagementService {
     // Check to see if the field is a valid selection for this mapping
     const exclusionReason: string = mapping.getFieldSelectionExclusionReason(field);
     if (exclusionReason != null) {
-      this.cfg.errorService.warn('The field \'' + field.displayName + '\' cannot be selected, ' + exclusionReason + '.', null);
+      this.cfg.errorService.mappingError('The field \'' + field.displayName + '\' cannot be selected, ' + exclusionReason + '.', null);
       return;
     }
 
@@ -611,6 +615,6 @@ export class MappingManagementService {
   }
 
   private handleError(message: string, error: any): void {
-    this.cfg.errorService.error(message, error);
+    this.cfg.errorService.mappingError(message, error);
   }
 }
