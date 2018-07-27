@@ -10,17 +10,28 @@
   </div>
 </ng-template>
 
-<div class="float-left">
-  <label class="fieldPath" [tooltip]="tolTemplate" placement="bottom" [isDisabled]="!displayParentObject()">
-    {{ getFieldPath() }}
-    <i class="fa fa-bolt" *ngIf="mappedField.actions.length != 0"></i>
-  </label>
-</div>
+<table style="width:100%; margin-top:3px; margin-bottom:3px">
+  <tr>
+    <td>
+      <div class="float-left">
+        <label class="fieldPath" [tooltip]="tolTemplate" placement="bottom" [isDisabled]="!displayParentObject()">
+          {{ getFieldPath() }}
+          <i class="fa fa-bolt" *ngIf="mappedField.actions.length != 0"></i>
+        </label>
+      </div>
+    </td>
+  </tr>
 
-<!-- TODO relect UXD outcome  -->
-<div style="display:inline-block;" *ngIf="cfg.showMappingPreview && mappedField.field.selected">
-  <input *ngIf="isSource" id="preview-source" class="form-control" type="text" [(ngModel)]='mappedField.field.value' (blur)="cfg.mappingService.notifyMappingUpdated()" />
-  <input *ngIf="!isSource" id="preview-target" class="form-control" type="text" [(ngModel)]='mappedField.field.value' readonly style="background-color: aqua" />
-</div>
-
-
+  <tr>
+    <td>
+      <div *ngIf="cfg.showMappingPreview && mappedField.field.selected" style="width:97%;">
+        <textarea class="form-control previewSourceTextarea" rows="1" *ngIf="isSource" id="preview-source" [(ngModel)]='mappedField.field.value'
+          (blur)="cfg.mappingService.notifyMappingUpdated()" placeholder="Type sample data here"></textarea>
+        <div *ngIf="!isSource" class="previewResultContainer">
+          <textarea id="preview-target" class="form-control" [(ngModel)]='mappedField.field.value' placeholder="Results will be displayed here"
+            readonly></textarea>
+        </div>
+      </div>
+    </td>
+  </tr>
+</table>
