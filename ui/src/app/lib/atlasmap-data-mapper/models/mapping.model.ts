@@ -604,7 +604,7 @@ export class MappingModel {
    *
    * @param field
    */
-  isMappedTarget(field: Field): boolean {
+  getMappedTarget(field: Field): string {
     const mappings: MappingModel[] = this.cfg.mappings.mappings;
 
     if (!field.isSource()) {
@@ -618,14 +618,14 @@ export class MappingModel {
              if (mappedOutputField.field.name === field.name) {
                const currentFieldMapping = this.getCurrentFieldMapping();
                if (currentFieldMapping != null && !currentFieldMapping.isFieldMapped(field) && field.partOfMapping) {
-                 return true;
+                 return fieldPair.sourceFields[0].field.name;
                }
              }
           }
         }
       }
     }
-    return false;
+    return null;
   }
 
   getFieldSelectionExclusionReason(field: Field ): string {
@@ -638,9 +638,10 @@ export class MappingModel {
     }
 
     // Target fields may only be mapped once.
-    if (this.isMappedTarget(field)) {
+    const existingMappedField = this.getMappedTarget(field);
+    if (existingMappedField != null) {
       const macPlatform: boolean = /(MacPPC|MacIntel|Mac_PowerPC|Macintosh|Mac OS X)/.test(navigator.userAgent);
-      return 'it is already the target of another mapping. ' +
+      return 'it is already the target of another mapping (' + existingMappedField + '). ' +
         'Use ' + (macPlatform ? 'CMD' : 'CTRL') + '-M1 to select multiple elements for \'Combine\' or \'Separate\' actions.';
     }
 
