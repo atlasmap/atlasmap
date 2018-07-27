@@ -9,6 +9,13 @@
     "@angular-devkit/core" "0.6.3"
     rxjs "^6.0.0"
 
+"@angular-devkit/architect@0.6.7":
+  version "0.6.7"
+  resolved "https://registry.yarnpkg.com/@angular-devkit/architect/-/architect-0.6.7.tgz#ef1182dde3fc97ed20be7f5abe96cbb7d00c30ff"
+  dependencies:
+    "@angular-devkit/core" "0.6.7"
+    rxjs "^6.0.0"
+
 "@angular-devkit/build-angular@~0.6.3":
   version "0.6.3"
   resolved "https://registry.yarnpkg.com/@angular-devkit/build-angular/-/build-angular-0.6.3.tgz#9b714f2f7fdd7422f990991c79444436d99898e3"
@@ -93,22 +100,31 @@
     rxjs "^6.0.0"
     source-map "^0.5.6"
 
-"@angular-devkit/schematics@0.6.3":
-  version "0.6.3"
-  resolved "https://registry.yarnpkg.com/@angular-devkit/schematics/-/schematics-0.6.3.tgz#70e22690ec5f3f0b94b846f280491aee559feff8"
+"@angular-devkit/core@0.6.7":
+  version "0.6.7"
+  resolved "https://registry.yarnpkg.com/@angular-devkit/core/-/core-0.6.7.tgz#421ed3de40c6f203bc6a30cf5a13b57483230df2"
   dependencies:
-    "@angular-devkit/core" "0.6.3"
+    ajv "~6.4.0"
+    chokidar "^2.0.3"
+    rxjs "^6.0.0"
+    source-map "^0.5.6"
+
+"@angular-devkit/schematics@0.6.7":
+  version "0.6.7"
+  resolved "https://registry.yarnpkg.com/@angular-devkit/schematics/-/schematics-0.6.7.tgz#7bd3c1d707cb04162bc199feacfbb1fb2ec6a5ab"
+  dependencies:
+    "@angular-devkit/core" "0.6.7"
     rxjs "^6.0.0"
 
-"@angular/cli@6.0.3":
-  version "6.0.3"
-  resolved "https://registry.yarnpkg.com/@angular/cli/-/cli-6.0.3.tgz#a7a2defdaa2a9f2914aadb7e0a25d9a43d8346c4"
+"@angular/cli@6.0.7":
+  version "6.0.7"
+  resolved "https://registry.yarnpkg.com/@angular/cli/-/cli-6.0.7.tgz#e4dc676c681cb875bc7196d9eff20aa865d7f2ea"
   dependencies:
-    "@angular-devkit/architect" "0.6.3"
-    "@angular-devkit/core" "0.6.3"
-    "@angular-devkit/schematics" "0.6.3"
-    "@schematics/angular" "0.6.3"
-    "@schematics/update" "0.6.3"
+    "@angular-devkit/architect" "0.6.7"
+    "@angular-devkit/core" "0.6.7"
+    "@angular-devkit/schematics" "0.6.7"
+    "@schematics/angular" "0.6.7"
+    "@schematics/update" "0.6.7"
     opn "~5.3.0"
     resolve "^1.1.7"
     rxjs "^6.0.0"
@@ -184,28 +200,28 @@
     tree-kill "^1.0.0"
     webpack-sources "^1.1.0"
 
-"@schematics/angular@0.6.3":
-  version "0.6.3"
-  resolved "https://registry.yarnpkg.com/@schematics/angular/-/angular-0.6.3.tgz#49f52ed83b161a80414cf9f0fddb0080fd551044"
+"@schematics/angular@0.6.7":
+  version "0.6.7"
+  resolved "https://registry.yarnpkg.com/@schematics/angular/-/angular-0.6.7.tgz#21e74f4e9ce3854923b347e97f30a285b3c22fe7"
   dependencies:
-    "@angular-devkit/core" "0.6.3"
-    "@angular-devkit/schematics" "0.6.3"
+    "@angular-devkit/core" "0.6.7"
+    "@angular-devkit/schematics" "0.6.7"
     typescript ">=2.6.2 <2.8"
 
-"@schematics/update@0.6.3":
-  version "0.6.3"
-  resolved "https://registry.yarnpkg.com/@schematics/update/-/update-0.6.3.tgz#5c7ba919aa4f472338a4a63969de84fc9264cdcd"
+"@schematics/update@0.6.7":
+  version "0.6.7"
+  resolved "https://registry.yarnpkg.com/@schematics/update/-/update-0.6.7.tgz#38995daf573a834a02a428b26a50e1f0cd06c95f"
   dependencies:
-    "@angular-devkit/core" "0.6.3"
-    "@angular-devkit/schematics" "0.6.3"
+    "@angular-devkit/core" "0.6.7"
+    "@angular-devkit/schematics" "0.6.7"
     npm-registry-client "^8.5.1"
     rxjs "^6.0.0"
     semver "^5.3.0"
     semver-intersect "^1.1.2"
 
-"@swimlane/ngx-datatable@^11.1.7":
-  version "11.3.2"
-  resolved "https://registry.yarnpkg.com/@swimlane/ngx-datatable/-/ngx-datatable-11.3.2.tgz#cefeda7f75a6f69394e4f8e05b197942584f054d"
+"@swimlane/ngx-datatable@^13.0.0":
+  version "13.0.1"
+  resolved "https://registry.yarnpkg.com/@swimlane/ngx-datatable/-/ngx-datatable-13.0.1.tgz#6e949e19130b2054e2715d30d158751c4fbaa502"
 
 "@types/c3@^0.6.0":
   version "0.6.0"
@@ -652,14 +668,6 @@ align-text@^0.1.1, align-text@^0.1.3:
 amdefine@>=0.0.4:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/amdefine/-/amdefine-1.0.1.tgz#4a5282ac164729e93619bcfd3ad151f817ce91f5"
-
-"angular-tree-component@^6.0.0 || ^7.0.0":
-  version "7.1.0"
-  resolved "https://registry.yarnpkg.com/angular-tree-component/-/angular-tree-component-7.1.0.tgz#53674ea944f7147647c7e48931f5fad66237a632"
-  dependencies:
-    lodash "^4.17.5"
-    mobx "^3.6.2"
-    mobx-angular "2.1.1"
 
 ansi-align@^2.0.0:
   version "2.0.0"
@@ -4868,6 +4876,10 @@ lodash@^4.0.0, lodash@^4.13.1, lodash@^4.14.0, lodash@^4.16.4, lodash@^4.17.3, l
   version "4.17.5"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.5.tgz#99a92d65c0272debe8c96b6057bc8fbfa3bed511"
 
+lodash@^4.17.10:
+  version "4.17.10"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.10.tgz#1b7793cf7259ea38fb3661d4d38b3260af8ae4e7"
+
 lodash@~0.9.1:
   version "0.9.2"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-0.9.2.tgz#8f3499c5245d346d682e5b0d3b40767e09f1a92c"
@@ -5243,14 +5255,6 @@ mkpath@~0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/mkpath/-/mkpath-0.1.0.tgz#7554a6f8d871834cc97b5462b122c4c124d6de91"
 
-mobx-angular@2.1.1:
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/mobx-angular/-/mobx-angular-2.1.1.tgz#d5e36539acb200186dd5a1170806b4776b9a8b88"
-
-mobx@^3.6.2:
-  version "3.6.2"
-  resolved "https://registry.yarnpkg.com/mobx/-/mobx-3.6.2.tgz#fb9f5ff5090539a1ad54e75dc4c098b602693320"
-
 moment-timezone@^0.4.0, moment-timezone@^0.4.1:
   version "0.4.1"
   resolved "https://registry.yarnpkg.com/moment-timezone/-/moment-timezone-0.4.1.tgz#81f598c3ad5e22cdad796b67ecd8d88d0f5baa06"
@@ -5392,10 +5396,6 @@ ng2-dragula@^1.5.0:
   resolved "https://registry.yarnpkg.com/ng2-dragula/-/ng2-dragula-1.5.0.tgz#12a221d7a34fc629cc74dc98efb26448290eb6e5"
   dependencies:
     dragula "^3.7.2"
-
-"ngx-bootstrap@^1.8.0 || ^2.0.0":
-  version "2.0.4"
-  resolved "https://registry.yarnpkg.com/ngx-bootstrap/-/ngx-bootstrap-2.0.4.tgz#26be0eb1b9a5dc133caa93b39ae221d6872c8b55"
 
 ngx-bootstrap@^3.0.0:
   version "3.0.0"
@@ -6073,22 +6073,21 @@ patternfly-bootstrap-treeview@~2.1.0:
     bootstrap "3.3.x"
     jquery ">= 2.1.x"
 
-patternfly-ng@^3.0.0:
-  version "3.1.3"
-  resolved "https://registry.yarnpkg.com/patternfly-ng/-/patternfly-ng-3.1.3.tgz#30811bac41d6e82ee40f626e03e3f3a1c2861821"
+patternfly-ng@^4.0.0:
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/patternfly-ng/-/patternfly-ng-4.0.1.tgz#9f960d21e2723430a952eccbabb29e3a31137a86"
   dependencies:
-    lodash "^4.17.4"
+    lodash "^4.17.10"
     patternfly "^3.28.0"
   optionalDependencies:
-    "@swimlane/ngx-datatable" "^11.1.7"
-    angular-tree-component "^6.0.0 || ^7.0.0"
+    "@swimlane/ngx-datatable" "^13.0.0"
     c3 "^0.4.15"
     ng2-dragula "^1.5.0"
-    ngx-bootstrap "^1.8.0 || ^2.0.0"
+    ngx-bootstrap "^3.0.0"
 
-patternfly@3.48.1:
-  version "3.48.1"
-  resolved "https://registry.yarnpkg.com/patternfly/-/patternfly-3.48.1.tgz#e00fb8f3cb9e53385085eaa81ed1c5a4226ec8d3"
+patternfly@3.51.2:
+  version "3.51.2"
+  resolved "https://registry.yarnpkg.com/patternfly/-/patternfly-3.51.2.tgz#6a2cf76377495ebea8f1f17329bcf87e07f2f61a"
   dependencies:
     bootstrap "~3.3.7"
     font-awesome "^4.7.0"
@@ -7012,15 +7011,14 @@ rx@^2.2.27:
   version "2.5.3"
   resolved "https://registry.yarnpkg.com/rx/-/rx-2.5.3.tgz#21adc7d80f02002af50dae97fd9dbf248755f566"
 
-rxjs-tslint@^0.1.4:
-  version "0.1.4"
-  resolved "https://registry.yarnpkg.com/rxjs-tslint/-/rxjs-tslint-0.1.4.tgz#40e6700b8445c1f37df8a739639b9ba5397450a5"
+rxjs-tslint@^0.1.5:
+  version "0.1.5"
+  resolved "https://registry.yarnpkg.com/rxjs-tslint/-/rxjs-tslint-0.1.5.tgz#9cddba80633e155fb47f7f0a25a6e33971f7dbf9"
   dependencies:
     chalk "^2.4.0"
     optimist "^0.6.1"
     tslint "^5.9.1"
     tsutils "^2.25.0"
-    typescript "^2.8.3"
 
 rxjs@^6.0.0:
   version "6.1.0"
@@ -8113,10 +8111,6 @@ typedarray@^0.0.6:
 typescript@2.7.2, "typescript@>=2.6.2 <2.8", typescript@~2.7.2:
   version "2.7.2"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.7.2.tgz#2d615a1ef4aee4f574425cdff7026edf81919836"
-
-typescript@^2.8.3:
-  version "2.8.3"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.8.3.tgz#5d817f9b6f31bb871835f4edf0089f21abe6c170"
 
 uglify-es@^3.3.4:
   version "3.3.9"

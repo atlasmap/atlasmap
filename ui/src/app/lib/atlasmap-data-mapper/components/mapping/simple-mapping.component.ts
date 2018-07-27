@@ -56,6 +56,8 @@ export class SimpleMappingComponent {
   }
 
   startDrag(event: any, draggedMappedField: MappedField): void {
+    event = event || window.event;
+    event.dataTransfer.setData('text', '');  // firefox bug
     this.cfg.currentDraggedField = draggedMappedField;
     /* this code does correctly constrain the drag movement to the vertical area of
      * the mapping details section. It couldn't correctly identify the on-drop target
@@ -84,7 +86,12 @@ export class SimpleMappingComponent {
   }
 
   allowDrop(event: any): void {
-    event.preventDefault();
+    if (event.preventDefault) {
+      event.preventDefault();
+    }
+    if (event.stopPropagation) {
+      event.stopPropagation();
+    }
     this.isDragDropTarget = true;
   }
 

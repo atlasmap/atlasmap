@@ -170,7 +170,7 @@ export class DocumentFieldDetailComponent {
   /**
    * Semantic support for a mouse click.
    * * M1 - the field is selected
-   * * Ctrl-M1 - compound-select
+   * * Ctrl/Cmd-M1 - compound-select
    *
    * @param event
    */

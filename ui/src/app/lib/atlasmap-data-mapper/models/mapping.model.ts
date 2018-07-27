@@ -15,7 +15,7 @@
 */
 import { ConfigModel } from '../models/config.model';
 import { Field } from './field.model';
-import { TransitionModel, TransitionMode, FieldAction, FieldActionConfig } from './transition.model';
+import { TransitionModel, TransitionMode, FieldAction, FieldActionConfig, FieldActionArgumentValue } from './transition.model';
 import { DocumentDefinition } from '../models/document-definition.model';
 import { ErrorInfo, ErrorLevel } from '../models/error.model';
 
@@ -40,7 +40,6 @@ export class MappedField {
   field: Field = DocumentDefinition.getNoneField();
   actions: FieldAction[] = [];
   private padField = false;
-
   static sortMappedFieldsByPath(mappedFields: MappedField[], allowNone: boolean): MappedField[] {
     if (mappedFields == null || mappedFields.length === 0) {
       return [];
@@ -86,6 +85,7 @@ export class MappedField {
     for (let i = lowIndex; i < highIndex; i++) {
       padField = new MappedField;
       padField.field = DocumentDefinition.getPadField();
+      padField.field.docDef = this.field.docDef;
       padField.setIsPadField();
       padField.updateSeparateOrCombineFieldAction(fieldPair.transition.mode === TransitionMode.SEPARATE,
         fieldPair.transition.mode === TransitionMode.COMBINE, i.toString(10), this.isSource(), true, false);
@@ -129,7 +129,7 @@ export class MappedField {
       return;
     }
 
-    // Given a compound selection (ctrl-M1) create a new field action based on the suggested value.
+    // Given a compound selection (ctrl/cmd-M1) create a new field action based on the suggested value.
     if (compoundSelection && !fieldRemoved) {
       const currentFieldAction: FieldAction = FieldAction.createSeparateCombineFieldAction(separateMode, suggestedValue);
       this.actions = [currentFieldAction];
@@ -398,12 +398,17 @@ export class FieldMappingPair {
       let tempField: MappedField = null;
       let lastField: MappedField = null;
       let index = 0;
+      let indexArgValue: FieldActionArgumentValue[];
       done = true;
 
       for (const mField of mappedFields) {
         if (mField.actions != null && mField.actions.length > 0 && lastField != null) {
+          indexArgValue = mField.actions[0].argumentValues;
+          if (indexArgValue == null) {
+            break;
+          }
 
-          if (+mField.actions[0].argumentValues[0].value < +lastField.actions[0].argumentValues[0].value) {
+          if (+indexArgValue[0].value < +lastField.actions[0].argumentValues[0].value) {
             tempField = mappedFields[index - 1];
             mappedFields[index - 1] = mField;
             mappedFields[index] = tempField;
@@ -634,8 +639,9 @@ export class MappingModel {
 
     // Target fields may only be mapped once.
     if (this.isMappedTarget(field)) {
+      const macPlatform: boolean = /(MacPPC|MacIntel|Mac_PowerPC|Macintosh|Mac OS X)/.test(navigator.userAgent);
       return 'it is already the target of another mapping. ' +
-        'Use ctrl-M1 to select multiple elements for \'Combine\' or \'Separate\' actions.';
+        'Use ' + (macPlatform ? 'CMD' : 'CTRL') + '-M1 to select multiple elements for \'Combine\' or \'Separate\' actions.';
     }
 
     const repeatedMode: boolean = this.isCollectionMode();

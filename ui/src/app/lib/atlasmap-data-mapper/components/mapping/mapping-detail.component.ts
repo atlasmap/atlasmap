@@ -62,7 +62,13 @@ export class MappingDetailComponent implements OnInit, OnDestroy {
     this.modalWindow.headerText = 'Remove Mapping?';
     this.modalWindow.message = 'Are you sure you want to remove the current mapping?';
     this.modalWindow.okButtonHandler = (mw: ModalWindowComponent) => {
-      this.cfg.mappingService.removeMapping(this.cfg.mappings.activeMapping);
+      const activeMapping = this.cfg.mappings.activeMapping;
+      if (activeMapping.isLookupMode) {
+        activeMapping.fieldMappings.forEach(fieldMapping => {
+          this.cfg.mappings.removeTableByName(fieldMapping.transition.lookupTableName);
+        });
+      }
+      this.cfg.mappingService.removeMapping(activeMapping);
       this.cfg.showMappingDetailTray = false;
     };
     this.modalWindow.show();

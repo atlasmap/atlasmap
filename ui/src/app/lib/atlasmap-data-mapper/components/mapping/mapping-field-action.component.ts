@@ -92,9 +92,10 @@ export class MappingFieldActionComponent {
    * @param acp
    */
   validateActionConfigParamSelection(acp: FieldActionArgumentValue[]): void {
+    this.cfg.errorService.clearMappingErrors();
     if (acp != null && acp.length === 2) {
       if (acp[0].value === acp[1].value) {
-        this.cfg.errorService.warn('Please select differing \'from\' and \'to\' units in your conversion transformation.', null);
+        this.cfg.errorService.mappingError('Please select differing \'from\' and \'to\' units in your conversion transformation.', null);
       }
     }
   }

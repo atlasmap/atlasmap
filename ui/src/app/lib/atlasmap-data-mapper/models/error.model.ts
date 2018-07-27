@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-export enum ErrorLevel { DEBUG, INFO, WARN, ERROR, VALIDATION_ERROR }
+export enum ErrorLevel { DEBUG, INFO, WARN, ERROR, VALIDATION_ERROR, MAPPING_ERROR }
 
 export class ErrorInfo {
   private static errorIdentifierCounter = 0;
