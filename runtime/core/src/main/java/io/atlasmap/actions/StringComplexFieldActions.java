@@ -42,12 +42,6 @@ import io.atlasmap.v2.SubString;
 import io.atlasmap.v2.SubStringAfter;
 import io.atlasmap.v2.SubStringBefore;
 
-@SuppressWarnings({"squid:S1118", // Add private constructor
-    "squid:S1226", // Introduce new variable
-    "squid:S1301", // Replace switch with if
-    "squid:S1479", // Reduce number of switch cases
-    "squid:S3358", // Extract nested ternary
-    "squid:S3776", }) // Cognitive complexity of method
 public class StringComplexFieldActions implements AtlasFieldAction {
 
     public static final String STRING_SEPARATOR_REGEX = "^\\s+:_+=";
@@ -71,7 +65,7 @@ public class StringComplexFieldActions implements AtlasFieldAction {
 
     @AtlasFieldActionInfo(name = "Concatenate", sourceType = FieldType.ANY, targetType = FieldType.STRING, sourceCollectionType = CollectionType.ALL, targetCollectionType = CollectionType.NONE)
     public static String concatenate(Action action, Object input) {
-        if (action == null || !(action instanceof Concatenate)) {
+        if (!(action instanceof Concatenate)) {
             throw new IllegalArgumentException("Action must be a Concatenate action");
         }
 
@@ -99,7 +93,7 @@ public class StringComplexFieldActions implements AtlasFieldAction {
 
     @AtlasFieldActionInfo(name = "EndsWith", sourceType = FieldType.STRING, targetType = FieldType.BOOLEAN, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
     public static Boolean endsWith(Action action, String input) {
-        if (action == null || !(action instanceof EndsWith)) {
+        if (!(action instanceof EndsWith)) {
             throw new IllegalArgumentException("Action must be an EndsWith action");
         }
 
@@ -114,7 +108,7 @@ public class StringComplexFieldActions implements AtlasFieldAction {
 
     @AtlasFieldActionInfo(name = "Format", sourceType = FieldType.ANY, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
     public static String format(Action action, Object input) {
-        if (action == null || !(action instanceof Format)) {
+        if (!(action instanceof Format)) {
             throw new IllegalArgumentException("Action must be an Format action");
         }
 
@@ -134,7 +128,7 @@ public class StringComplexFieldActions implements AtlasFieldAction {
 
     @AtlasFieldActionInfo(name = "IndexOf", sourceType = FieldType.STRING, targetType = FieldType.NUMBER, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
     public static Number indexOf(Action action, String input) {
-        if (action == null || !(action instanceof IndexOf)) {
+        if (!(action instanceof IndexOf)) {
             throw new IllegalArgumentException("Action must be an IndexOf action");
         }
 
@@ -149,7 +143,7 @@ public class StringComplexFieldActions implements AtlasFieldAction {
 
     @AtlasFieldActionInfo(name = "LastIndexOf", sourceType = FieldType.STRING, targetType = FieldType.NUMBER, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
     public static Number lastIndexOf(Action action, String input) {
-        if (action == null || !(action instanceof LastIndexOf)) {
+        if (!(action instanceof LastIndexOf)) {
             throw new IllegalArgumentException("Action must be a LastIndexOf action");
         }
 
@@ -164,7 +158,7 @@ public class StringComplexFieldActions implements AtlasFieldAction {
 
     @AtlasFieldActionInfo(name = "PadStringRight", sourceType = FieldType.STRING, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
     public static String padStringRight(Action action, String input) {
-        if (action == null || !(action instanceof PadStringRight) || ((PadStringRight) action).getPadCharacter() == null
+        if (!(action instanceof PadStringRight) || ((PadStringRight) action).getPadCharacter() == null
                 || ((PadStringRight) action).getPadCount() == null) {
             throw new IllegalArgumentException("PadStringRight must be specfied with padCharacter and padCount");
         }
@@ -184,7 +178,7 @@ public class StringComplexFieldActions implements AtlasFieldAction {
 
     @AtlasFieldActionInfo(name = "PadStringLeft", sourceType = FieldType.STRING, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
     public static String padStringLeft(Action action, String input) {
-        if (action == null || !(action instanceof PadStringLeft) || ((PadStringLeft) action).getPadCharacter() == null
+        if (!(action instanceof PadStringLeft) || ((PadStringLeft) action).getPadCharacter() == null
                 || ((PadStringLeft) action).getPadCount() == null) {
             throw new IllegalArgumentException("PadStringLeft must be specfied with padCharacter and padCount");
         }
@@ -219,7 +213,7 @@ public class StringComplexFieldActions implements AtlasFieldAction {
 
     @AtlasFieldActionInfo(name = "ReplaceAll", sourceType = FieldType.STRING, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
     public static String replaceAll(Action action, String input) {
-        if (action == null || !(action instanceof ReplaceAll)) {
+        if (!(action instanceof ReplaceAll)) {
             throw new IllegalArgumentException("Action must be a ReplaceAll action");
         }
 
@@ -235,7 +229,7 @@ public class StringComplexFieldActions implements AtlasFieldAction {
 
     @AtlasFieldActionInfo(name = "ReplaceFirst", sourceType = FieldType.STRING, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
     public static String replaceFirst(Action action, String input) {
-        if (action == null || !(action instanceof ReplaceFirst)) {
+        if (!(action instanceof ReplaceFirst)) {
             throw new IllegalArgumentException("Action must be a ReplaceFirst action");
         }
 
@@ -251,7 +245,7 @@ public class StringComplexFieldActions implements AtlasFieldAction {
 
     @AtlasFieldActionInfo(name = "StartsWith", sourceType = FieldType.STRING, targetType = FieldType.BOOLEAN, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
     public static Boolean startsWith(Action action, String input) {
-        if (action == null || !(action instanceof StartsWith)) {
+        if (!(action instanceof StartsWith)) {
             throw new IllegalArgumentException("Action must be an StartsWith action");
         }
 
@@ -270,7 +264,7 @@ public class StringComplexFieldActions implements AtlasFieldAction {
             return input;
         }
 
-        if (action == null || !(action instanceof SubString) || ((SubString) action).getStartIndex() == null
+        if (!(action instanceof SubString) || ((SubString) action).getStartIndex() == null
                 || ((SubString) action).getStartIndex() < 0) {
             throw new IllegalArgumentException("SubString action must be specified with a positive startIndex");
         }
@@ -285,7 +279,7 @@ public class StringComplexFieldActions implements AtlasFieldAction {
             return input;
         }
 
-        if (action == null || !(action instanceof SubStringAfter) || ((SubStringAfter) action).getStartIndex() == null
+        if (!(action instanceof SubStringAfter) || ((SubStringAfter) action).getStartIndex() == null
                 || ((SubStringAfter) action).getStartIndex() < 0 || ((SubStringAfter) action).getMatch() == null
                 || (((SubStringAfter) action).getEndIndex() != null
                         && ((SubStringAfter) action).getEndIndex() < ((SubStringAfter) action).getStartIndex())) {
@@ -309,7 +303,7 @@ public class StringComplexFieldActions implements AtlasFieldAction {
             return input;
         }
 
-        if (action == null || !(action instanceof SubStringBefore) || ((SubStringBefore) action).getStartIndex() == null
+        if (!(action instanceof SubStringBefore) || ((SubStringBefore) action).getStartIndex() == null
                 || ((SubStringBefore) action).getStartIndex() < 0 || ((SubStringBefore) action).getMatch() == null
                 || (((SubStringBefore) action).getEndIndex() != null
                         && ((SubStringBefore) action).getEndIndex() < ((SubStringBefore) action).getStartIndex())) {
