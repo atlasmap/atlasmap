@@ -107,7 +107,7 @@ export class FieldActionConfig {
       }
 
       // All other types must match the mapped field types with the field action types.
-      return targetField.type === this.sourceType && targetField.type === this.targetType;
+      return (this.sourceType === 'ANY' || targetField.type === this.sourceType) && targetField.type === this.targetType;
     }
   }
 
