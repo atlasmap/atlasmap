@@ -2,7 +2,6 @@ package io.atlasmap.core.v3;
 
 import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.assertThat;
@@ -22,11 +21,6 @@ public class ContextTest {
 
     private static final String DATA_HANDLERS_PREFIX = Context.DATA_HANDLER_META_FILE_PATH + '.';
     private static final String TRANSFORMATIONS_PREFIX = Context.TRANSFORMATIONS_META_FILE_PATH + '.';
-
-    @Test
-    public void testMappingFile() throws AtlasException {
-        assertThat(context().mappingFile, is(new File("test.json")));
-    }
 
     @Test
     public void testMappingDocument() throws AtlasException {
@@ -90,7 +84,7 @@ public class ContextTest {
             context().loadTransformations(TRANSFORMATIONS_PREFIX + "badConstructor");
             fail();
         } catch (AtlasRuntimeException e) {
-            assertThat(e.getMessage(), startsWith("Unable to create transformation"));
+            assertThat(e.getMessage(), startsWith("No default constructor found for"));
         }
     }
 

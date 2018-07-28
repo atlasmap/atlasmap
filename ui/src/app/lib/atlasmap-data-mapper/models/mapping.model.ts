@@ -638,7 +638,8 @@ export class MappingModel {
     }
 
     // Target fields may only be mapped once.
-    if (this.isMappedTarget(field)) {
+    const existingMappedField = this.getMappedTarget(field);
+    if (existingMappedField != null) {
       const macPlatform: boolean = /(MacPPC|MacIntel|Mac_PowerPC|Macintosh|Mac OS X)/.test(navigator.userAgent);
       return 'it is already the target of another mapping. ' +
         'Use ' + (macPlatform ? 'CMD' : 'CTRL') + '-M1 to select multiple elements for \'Combine\' or \'Separate\' actions.';

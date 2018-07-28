@@ -24,10 +24,12 @@ import java.util.NavigableSet;
 import java.util.TreeMap;
 
 import io.atlasmap.api.v3.Mapping;
+import io.atlasmap.api.v3.Message.Scope;
+import io.atlasmap.api.v3.Message.Status;
 import io.atlasmap.api.v3.Parameter;
-import io.atlasmap.api.v3.ParameterRole;
+import io.atlasmap.api.v3.Parameter.Role;
 import io.atlasmap.api.v3.Transformation;
-import io.atlasmap.api.v3.TransformationDescriptor;
+import io.atlasmap.api.v3.Transformation.Descriptor;
 import io.atlasmap.spi.v3.BaseParameter;
 import io.atlasmap.spi.v3.BaseTransformation;
 import io.atlasmap.spi.v3.DataHandler;
@@ -35,6 +37,7 @@ import io.atlasmap.spi.v3.MappingSupport;
 import io.atlasmap.spi.v3.util.AtlasException;
 import io.atlasmap.spi.v3.util.AtlasRuntimeException;
 import io.atlasmap.spi.v3.util.I18n;
+import io.atlasmap.spi.v3.util.MessageImpl;
 import io.atlasmap.spi.v3.util.VerifyArgument;
 
 public class MappingImpl implements Mapping {
@@ -45,14 +48,15 @@ public class MappingImpl implements Mapping {
     final NavigableMap<String, BaseParameter> parametersByOutputName = new TreeMap<>();
     final SerializedImage serializedImage = new SerializedImage();
     private final Context context;
-    private final MappingDocumentImpl mappingDocument;
     private String name = NAME;
     private String description;
+    // TODO Verify only one transformation has target parameters that reference target fields
+    private Transformation targetFieldTransformation = null;
 
-    MappingImpl(Context context, MappingDocumentImpl mappingDocument) {
+    MappingImpl(Context context) {
         this.context = context;
-        this.mappingDocument = mappingDocument;
         serializedImage.name = name;
+        validate();
     }
 
     /**
@@ -73,7 +77,7 @@ public class MappingImpl implements Mapping {
     public void setName(String name) {
         this.name = name == null || name.trim().isEmpty() ? NAME : I18n.localize(name.trim());
         serializedImage.name = this.name;
-        mappingDocument.autoSave();
+        context.mappingDocument.autoSaveOrSetUnsaved();
     }
 
     /**
@@ -91,23 +95,23 @@ public class MappingImpl implements Mapping {
     public void setDescription(String description) {
         this.description = description == null || description.trim().isEmpty() ? null : I18n.localize(description);
         serializedImage.description = this.description;
-        mappingDocument.autoSave();
+        context.mappingDocument.autoSaveOrSetUnsaved();
     }
 
     /**
-     * @see Mapping#addTransformation(TransformationDescriptor)
+     * @see Mapping#addTransformation(Descriptor)
      */
     @Override
-    public Transformation addTransformation(TransformationDescriptor descriptor) {
+    public Transformation addTransformation(Descriptor descriptor) {
         VerifyArgument.isNotNull("descriptor", descriptor);
         BaseTransformation transformation = addTransformation(descriptor, 0);
         if (transformations.size() > 1) {
-            boolean origAutoSaves = mappingDocument.autoSaves();
-            mappingDocument.setAutoSaves(false);
+            boolean origAutoSaves = context.mappingDocument.autoSaves();
+            context.mappingDocument.setAutoSaves(false);
             try {
                 int outputName = 1;
                 for (Parameter parameter : transformation.parameters()) {
-                    if (parameter.role() == ParameterRole.OUTPUT) {
+                    if (parameter.role() == Role.OUTPUT) {
                         for (Entry<String, BaseParameter> entry : parametersByOutputName.entrySet()) {
                             try {
                                 if (Integer.parseInt(entry.getKey()) == outputName) {
@@ -125,10 +129,11 @@ public class MappingImpl implements Mapping {
                     }
                 }
             } finally {
-                mappingDocument.setAutoSaves(origAutoSaves);
+                context.mappingDocument.setAutoSaves(origAutoSaves);
             }
         }
-        mappingDocument.autoSave();
+        context.mappingDocument.autoSaveOrSetUnsaved();
+        validate();
         return transformation;
     }
 
@@ -140,7 +145,8 @@ public class MappingImpl implements Mapping {
         transformations.remove(transformation);
         serializedImage.transformations.remove(((BaseTransformation)transformation).serializedImage());
         // TODO remove output names and references to those (ask how to handle dependencies; add answer type as parameter to remove)
-        mappingDocument.autoSave();
+        context.mappingDocument.autoSaveOrSetUnsaved();
+        validate();
     }
 
     /**
@@ -149,7 +155,7 @@ public class MappingImpl implements Mapping {
     @Override
     public void moveTransformationBefore(Transformation transformation, Transformation beforeTransformation) {
         // TODO implement
-        mappingDocument.autoSave();
+        context.mappingDocument.autoSaveOrSetUnsaved();
     }
 
     /**
@@ -158,7 +164,8 @@ public class MappingImpl implements Mapping {
     @Override
     public void replaceTransformation(Transformation transformation, Transformation withTransformation) {
         // TODO implement
-        mappingDocument.autoSave();
+        context.mappingDocument.autoSaveOrSetUnsaved();
+        validate();
     }
 
     /**
@@ -177,16 +184,24 @@ public class MappingImpl implements Mapping {
         return Collections.unmodifiableNavigableSet(parametersByOutputName.navigableKeySet());
     }
 
-    BaseTransformation addTransformation(TransformationDescriptor descriptor, int index) {
+    BaseTransformation addTransformation(Descriptor descriptor, int index) {
         Class<? extends BaseTransformation> transformationClass = ((TransformationDescriptorImpl)descriptor).transformationClass;
         try {
             BaseTransformation transformation = transformationClass.newInstance();
             transformation.setSupport(new Support());
             transformations.add(index, transformation);
             serializedImage.transformations.add(index, transformation.serializedImage());
+            validate();
             return transformation;
         } catch (InstantiationException | IllegalAccessException e) {
             throw new AtlasRuntimeException(e, "Unable to create transformation %s", transformationClass);
+        }
+    }
+
+    private void validate() {
+        context.messages.removeIf(message -> message.scope() == Scope.MAPPING);
+        if (transformations.isEmpty()) {
+            context.messages.add(new MessageImpl(Status.ERROR, Scope.MAPPING, this, "No transformations have been added to this mapping"));
         }
     }
 
@@ -200,11 +215,12 @@ public class MappingImpl implements Mapping {
 
         @Override
         public void autoSave() {
-            mappingDocument.autoSave();
+            context.mappingDocument.autoSaveOrSetUnsaved();
         }
 
         @Override
         public DataHandler handler(String id) {
+            VerifyArgument.isNotEmpty("id", id);
             for (DataDocumentDescriptor descriptor : context.dataDocumentDescriptors) {
                 if (descriptor.id().equals(id)) {
                     return descriptor.handler;
@@ -218,6 +234,7 @@ public class MappingImpl implements Mapping {
          */
         @Override
         public Object value(String propertyName) {
+            VerifyArgument.isNotEmpty("propertyName", propertyName);
             return parametersByOutputName.get(propertyName).value();
         }
 
@@ -226,6 +243,7 @@ public class MappingImpl implements Mapping {
          */
         @Override
         public BaseParameter parameterWithOutputName(String outputName) {
+            VerifyArgument.isNotEmpty("outputName", outputName);
             return parametersByOutputName.get(outputName);
         }
 
@@ -234,8 +252,27 @@ public class MappingImpl implements Mapping {
          */
         @Override
         public void setOutputProperty(String outputName, BaseParameter parameter) {
+            VerifyArgument.isNotEmpty("outputName", outputName);
+            VerifyArgument.isNotNull("parameter", parameter);
             // TODO handle replacing output name
             parametersByOutputName.put(outputName, parameter);
+        }
+
+        /**
+         * @see MappingSupport#clearExecutionMessages(Object)
+         */
+        @Override
+        public void clearExecutionMessages(Object context) {
+            VerifyArgument.isNotNull("context", context);
+            MappingImpl.this.context.messages.removeIf(message -> message.scope() == Scope.EXECUTION && message.context() == context);
+        }
+
+        /**
+         * @see MappingSupport#addMessage(Status, Scope, Object, String, Object[])
+         */
+        @Override
+        public void addMessage(Status status, Scope scope, Object context, String message, Object... arguments) {
+            MappingImpl.this.context.messages.add(new MessageImpl(status, scope, context, message, arguments));
         }
     }
 }

@@ -15,7 +15,7 @@
  */
 package io.atlasmap.core.transformation;
 
-import io.atlasmap.api.v3.ParameterRole;
+import io.atlasmap.api.v3.Parameter.Role;
 import io.atlasmap.api.v3.ValueType;
 import io.atlasmap.spi.v3.BaseParameter;
 import io.atlasmap.spi.v3.BaseTransformation;
@@ -34,9 +34,9 @@ public class MapTransformation extends BaseTransformation {
 
     public MapTransformation() {
         super(NAME, "Maps a source field, property, or constant to a target field");
-        fromParameter = addParameter(new BaseParameter(this, FROM_PARAMETER, ParameterRole.INPUT, ValueType.ANY, false, false,
+        fromParameter = addParameter(new BaseParameter(this, FROM_PARAMETER, Role.INPUT, ValueType.ANY, false, false,
                                                        "A source field, property, or constant from which to map"));
-        toParameter = addParameter(new BaseParameter(this, TO_PARAMETER, ParameterRole.OUTPUT, ValueType.ANY, false, false,
+        toParameter = addParameter(new BaseParameter(this, TO_PARAMETER, Role.OUTPUT, ValueType.ANY, false, false,
                                                      "A target field or property to which to map"));
     }
 

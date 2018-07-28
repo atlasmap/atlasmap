@@ -15,6 +15,7 @@
  */
 package io.atlasmap.core.v3;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -31,12 +32,14 @@ import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
-import io.atlasmap.api.v3.DocumentRole;
 import io.atlasmap.api.v3.Mapping;
 import io.atlasmap.api.v3.MappingDocument;
+import io.atlasmap.api.v3.Message;
+import io.atlasmap.api.v3.Message.Scope;
+import io.atlasmap.api.v3.Message.Status;
 import io.atlasmap.api.v3.Parameter;
 import io.atlasmap.api.v3.Transformation;
-import io.atlasmap.api.v3.TransformationDescriptor;
+import io.atlasmap.api.v3.Transformation.Descriptor;
 import io.atlasmap.core.transformation.MapTransformation;
 import io.atlasmap.spi.v3.BaseParameter;
 import io.atlasmap.spi.v3.BaseTransformation;
@@ -44,6 +47,7 @@ import io.atlasmap.spi.v3.DataHandler;
 import io.atlasmap.spi.v3.util.AtlasException;
 import io.atlasmap.spi.v3.util.AtlasRuntimeException;
 import io.atlasmap.spi.v3.util.I18n;
+import io.atlasmap.spi.v3.util.MessageImpl;
 import io.atlasmap.spi.v3.util.VerifyArgument;
 
 /**
@@ -56,23 +60,34 @@ public class MappingDocumentImpl implements MappingDocument {
                                                                .setVisibility(PropertyAccessor.FIELD, Visibility.ANY)
                                                                .setSerializationInclusion(Include.NON_NULL);
 
+    private final File file;
     private final Context context;
     private final List<Mapping> mappings = new ArrayList<>();
     private boolean autoSaves = true;
+    private boolean unsaved;
     private final SerializedImage serializedImage = new SerializedImage();
+    // TODO Verify each target field only appears once in any target parameters
+    private final Set<String> mappedTargetFields = new HashSet<>();
 
-    MappingDocumentImpl(Context context) throws AtlasException {
+    MappingDocumentImpl(Context context, File file) {
         this.context = context;
-        if (context.mappingFile.exists()) {
-            load();
-        }
+        this.file = file;
+        validate();
     }
 
     /**
-     * @see MappingDocument#availableDataFormats(DocumentRole)
+     * @see MappingDocument#file()
      */
     @Override
-    public String[] availableDataFormats(DocumentRole type) {
+    public File file() {
+        return file;
+    }
+
+    /**
+     * @see MappingDocument#availableDataFormats(DataDocumentRole)
+     */
+    @Override
+    public String[] availableDataFormats(DataDocumentRole type) {
         Set<String> formats = new HashSet<>();
         for (Class<? extends DataHandler> handlerClass : context.dataHandlerClasses) {
             try {
@@ -87,10 +102,10 @@ public class MappingDocumentImpl implements MappingDocument {
     }
 
     /**
-     * @see MappingDocument#addDataDocument(String, DocumentRole, String, Object)
+     * @see MappingDocument#addDataDocument(String, DataDocumentRole, String, Object)
      */
     @Override
-    public void addDataDocument(String id, DocumentRole role, String dataFormat, Object document) throws AtlasException {
+    public void addDataDocument(String id, DataDocumentRole role, String dataFormat, Object document) throws AtlasException {
         VerifyArgument.isNotEmpty("id", id);
         VerifyArgument.isNotNull("role", role);
         VerifyArgument.isNotEmpty("dataFormat", dataFormat);
@@ -105,19 +120,21 @@ public class MappingDocumentImpl implements MappingDocument {
                 }
             }
         }
-        autoSave();
+        autoSaveOrSetUnsaved();
+        validate();
     }
 
     /**
-     * @see MappingDocument#removeDataDocument(String, DocumentRole)
+     * @see MappingDocument#removeDataDocument(String, DataDocumentRole)
      */
     @Override
-    public void removeDataDocument(String id, DocumentRole role) {
+    public void removeDataDocument(String id, DataDocumentRole role) {
         for (DataDocumentDescriptor descriptor : context.dataDocumentDescriptors) {
             if (descriptor.id().equals(id) && descriptor.role().equals(role)) {
                 context.dataDocumentDescriptors.remove(descriptor);
                 serializedImage.dataDocumentDescriptors.remove(descriptor.serializedImage);
-                autoSave();
+                autoSaveOrSetUnsaved();
+                validate();
                 return;
             }
         }
@@ -129,10 +146,10 @@ public class MappingDocumentImpl implements MappingDocument {
      */
     @Override
     public Mapping addMapping() {
-        MappingImpl mapping = new MappingImpl(context, this);
+        MappingImpl mapping = new MappingImpl(context);
         mappings.add(mapping);
         serializedImage.mappings.add(mapping.serializedImage);
-        autoSave();
+        autoSaveOrSetUnsaved();
         return mapping;
     }
 
@@ -145,8 +162,8 @@ public class MappingDocumentImpl implements MappingDocument {
         autoSaves = false;
         try {
             MappingImpl mapping = (MappingImpl)addMapping();
-            TransformationDescriptor mapDescriptor = null;
-            for (TransformationDescriptor descriptor : availableTransformationDescriptors()) {
+            Descriptor mapDescriptor = null;
+            for (Descriptor descriptor : availableTransformationDescriptors()) {
                 if (((TransformationDescriptorImpl)descriptor).transformationClass == MapTransformation.class) {
                     mapDescriptor = descriptor;
                     break;
@@ -163,7 +180,7 @@ public class MappingDocumentImpl implements MappingDocument {
             return mapping;
         } finally {
             autoSaves = origAutoSaves;
-            autoSave();
+            autoSaveOrSetUnsaved();
         }
     }
 
@@ -176,7 +193,7 @@ public class MappingDocumentImpl implements MappingDocument {
             throw new AtlasRuntimeException("Mapping does not exist: %s", mapping);
         }
         serializedImage.mappings.remove(((MappingImpl)mapping).serializedImage);
-        autoSave();
+        autoSaveOrSetUnsaved();
     }
 
     /**
@@ -191,7 +208,7 @@ public class MappingDocumentImpl implements MappingDocument {
      * @see MappingDocument#availableTransformationDescriptors()
      */
     @Override
-    public Set<TransformationDescriptor> availableTransformationDescriptors() {
+    public Set<Descriptor> availableTransformationDescriptors() {
         return Collections.unmodifiableSet(new TreeSet<>(context.transformationDescriptors));
     }
 
@@ -213,35 +230,118 @@ public class MappingDocumentImpl implements MappingDocument {
     }
 
     /**
+     * @see io.atlasmap.api.v3.MappingDocument#unsaved()
+     */
+    @Override
+    public boolean unsaved() {
+        return unsaved;
+    }
+
+    /**
      * @see MappingDocument#save()
      */
     @Override
     public void save() {
         try {
-            JSON.writeValue(context.mappingFile, serializedImage);
+            JSON.writeValue(file, serializedImage);
         } catch (IOException e) {
-            throw new AtlasRuntimeException(e, "Unable to save mapping file %s", context.mappingFile);
+            throw new AtlasRuntimeException(e, "Unable to save mapping file %s", file);
         }
+        unsaved = false;
     }
 
-    void autoSave() {
+    /**
+     * @see MappingDocument#messages()
+     */
+    @Override
+    public Set<Message> messages() {
+        return Collections.unmodifiableSet(context.messages);
+    }
+
+    /**
+     * @see MappingDocument#hasErrors()
+     */
+    @Override
+    public boolean hasErrors() {
+        return context.messages.stream().anyMatch(message -> message.status() == Status.ERROR);
+    }
+
+    /**
+     * @see MappingDocument#hasWarnings()
+     */
+    @Override
+    public boolean hasWarnings() {
+        return context.messages.stream().anyMatch(message -> message.status() == Status.WARNING);
+    }
+
+    void autoSaveOrSetUnsaved() {
         if (autoSaves) {
             save();
+        } else {
+            unsaved = true;
         }
     }
 
-    private DataHandler handler(DocumentRole role, String dataFormat) {
+    void load() throws AtlasException {
+        boolean origAutoSaves = autoSaves;
+        autoSaves = false;
+        try {
+            SerializedImage image = JSON.readValue(file, SerializedImage.class);
+            if (!VERSION.equals(image.version)) {
+                throw new AtlasRuntimeException("Version %s is not supported for mapping file %s", image.version, file);
+            }
+            for (DataDocumentDescriptor.SerializedImage descriptorImage : image.dataDocumentDescriptors) {
+                addDataDocument(descriptorImage.id, descriptorImage.role, descriptorImage.dataFormat);
+            }
+            for (MappingImpl.SerializedImage mappingImage : image.mappings) {
+                Mapping mapping = addMapping();
+                mapping.setName(mappingImage.name);
+                mapping.setDescription(mappingImage.description);
+                for (BaseTransformation.SerializedImage transformationImage : mappingImage.transformations) {
+                    Descriptor transformationDescriptor = null;
+                    for (Descriptor descriptor : availableTransformationDescriptors()) {
+                        TransformationDescriptorImpl availableDescriptor = (TransformationDescriptorImpl)descriptor;
+                        if (availableDescriptor.transformationClass.getName().equals(transformationImage.className)) {
+                            transformationDescriptor = descriptor;
+                            break;
+                        }
+                    }
+                    if (transformationDescriptor == null) {
+                        throw new AtlasException("Unable to find transformation class %s loading mapping file %s",
+                                                 transformationImage.className, file);
+                    }
+                    BaseTransformation transformation
+                        = ((MappingImpl)mapping).addTransformation(transformationDescriptor, mapping.transformations().size());
+                    for (BaseParameter.SerializedImage parameterImage : transformationImage.parameters) {
+                        Parameter parameter = parameter(transformation, parameterImage);
+                        if (parameter == null) {
+                            throw new AtlasException("Unable to find parameter %s in transformation class %s loading mapping file %s",
+                                                     parameterImage.name, transformationImage.className, file);
+                        }
+                        parameter.setStringValue(parameterImage.stringValue);
+                    }
+                }
+            }
+            validate();
+        } catch (IOException e) {
+            throw new AtlasException(e, "Unable to load mapping file %s", file);
+        } finally {
+            autoSaves = origAutoSaves;
+        }
+    }
+
+    private DataHandler handler(DataDocumentRole role, String dataFormat) {
         for (Class<? extends DataHandler> handlerClass : context.dataHandlerClasses) {
             try {
                 DataHandler handler = handlerClass.getDeclaredConstructor().newInstance();
                 for (String supportedFormat : handler.supportedDataFormats()) {
                     if (supportedFormat.equals(dataFormat)) {
-                        DocumentRole[] roles = handler.supportedRoles();
+                        DataDocumentRole[] roles = handler.supportedRoles();
                         // If no roles are specified, then it is assumed all are supported
                         if (roles == null || roles.length == 0) {
                             return handler;
                         }
-                        for (DocumentRole supportedRoll : roles) {
+                        for (DataDocumentRole supportedRoll : roles) {
                             if (supportedRoll == role) {
                                 return handler;
                             }
@@ -254,52 +354,6 @@ public class MappingDocumentImpl implements MappingDocument {
             }
         }
         return null;
-    }
-
-    private void load() throws AtlasException {
-        boolean origAutoSaves = autoSaves;
-        autoSaves = false;
-        try {
-            SerializedImage image = JSON.readValue(context.mappingFile, SerializedImage.class);
-            if (!VERSION.equals(image.version)) {
-                throw new AtlasRuntimeException("Version %s is not supported for mapping file %s", image.version, context.mappingFile);
-            }
-            for (DataDocumentDescriptor.SerializedImage descriptorImage : image.dataDocumentDescriptors) {
-                addDataDocument(descriptorImage.id, descriptorImage.role, descriptorImage.dataFormat);
-            }
-            for (MappingImpl.SerializedImage mappingImage : image.mappings) {
-                Mapping mapping = addMapping();
-                mapping.setName(mappingImage.name);
-                mapping.setDescription(mappingImage.description);
-                for (BaseTransformation.SerializedImage transformationImage : mappingImage.transformations) {
-                    TransformationDescriptor transformationDescriptor = null;
-                    for (TransformationDescriptor descriptor : availableTransformationDescriptors()) {
-                        TransformationDescriptorImpl availableDescriptor = (TransformationDescriptorImpl)descriptor;
-                        if (availableDescriptor.transformationClass.getName().equals(transformationImage.className)) {
-                            transformationDescriptor = descriptor;
-                            break;
-                        }
-                    }
-                    if (transformationDescriptor == null) {
-                        throw new AtlasException("Unable to find transformation class %s loading mapping file %s",
-                                                 transformationImage.className, context.mappingFile);
-                    }
-                    BaseTransformation transformation = ((MappingImpl)mapping).addTransformation(transformationDescriptor, mapping.transformations().size());
-                    for (BaseParameter.SerializedImage parameterImage : transformationImage.parameters) {
-                        Parameter parameter = parameter(transformation, parameterImage);
-                        if (parameter == null) {
-                            throw new AtlasException("Unable to find parameter %s in transformation class %s loading mapping file %s",
-                                                     parameterImage.name, transformationImage.className, context.mappingFile);
-                        }
-                        parameter.setStringValue(parameterImage.stringValue);
-                    }
-                }
-            }
-        } catch (IOException e) {
-            throw new AtlasException(e, "Unable to load mapping file %s", context.mappingFile);
-        } finally {
-            autoSaves = origAutoSaves;
-        }
     }
 
     private Parameter parameter(Transformation transformation, BaseParameter.SerializedImage parameterImage) throws AtlasException {
@@ -315,11 +369,11 @@ public class MappingDocumentImpl implements MappingDocument {
                     if (parameterImage.cloned == Boolean.TRUE) {
                         throw new AtlasException("Unable to find additional parameter %s"
                                                  + " in transformation class %s loading mapping file %s",
-                                                 parameterImage.name, transformation.getClass().getName(), context.mappingFile);
+                                                 parameterImage.name, transformation.getClass().getName(), file);
                     }
                     if (!parameter.cloneable()) {
                         throw new AtlasException("Unable to clone parameter %s in transformation class %s loading mapping file %s",
-                                                 parameterImage.name, transformation.getClass().getName(), context.mappingFile);
+                                                 parameterImage.name, transformation.getClass().getName(), file);
                     }
                     return transformation.cloneParameter(parameter);
                 }
@@ -329,7 +383,7 @@ public class MappingDocumentImpl implements MappingDocument {
         return null;
     }
 
-    private DataDocumentDescriptor addDataDocument(String id, DocumentRole role, String dataFormat) {
+    private DataDocumentDescriptor addDataDocument(String id, DataDocumentRole role, String dataFormat) {
         DataHandler handler = handler(role, dataFormat);
         if (handler == null) {
             throw new AtlasRuntimeException("The %s data format is not supported for a %s document",
@@ -340,6 +394,26 @@ public class MappingDocumentImpl implements MappingDocument {
         context.dataDocumentDescriptors.add(descriptor);
         serializedImage.dataDocumentDescriptors.add(descriptor.serializedImage);
         return descriptor;
+    }
+
+    private void validate() {
+        context.messages.removeIf(message -> message.scope() == Scope.DOCUMENT);
+        boolean sourceDocFound = false;
+        boolean targetDocFound = false;
+        for (DataDocumentDescriptor descriptor : context.dataDocumentDescriptors) {
+            if (descriptor.role() == DataDocumentRole.SOURCE) {
+                sourceDocFound = true;
+            } else if (descriptor.role() == DataDocumentRole.TARGET) {
+                targetDocFound = true;
+            }
+        }
+        if (!sourceDocFound) {
+            context.messages.add(new MessageImpl(Status.ERROR, Scope.DOCUMENT, this, "No source documents found"));
+        }
+        if (!targetDocFound) {
+            context.messages.add(new MessageImpl(Status.ERROR, Scope.DOCUMENT, this, "No target documents found"));
+        }
+        // TODO Warn if any target fields are unmapped
     }
 
     static class SerializedImage {

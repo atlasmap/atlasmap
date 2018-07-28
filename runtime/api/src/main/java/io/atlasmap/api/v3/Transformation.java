@@ -37,4 +37,14 @@ public interface Transformation {
     Parameter cloneParameter(Parameter parameter);
 
     boolean complete();
+
+    /**
+     *
+     */
+    public interface Descriptor {
+
+        String name();
+
+        String description();
+    }
 }

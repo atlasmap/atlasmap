@@ -16,7 +16,7 @@
 package io.atlasmap.core.transformation;
 
 import io.atlasmap.api.v3.Parameter;
-import io.atlasmap.api.v3.ParameterRole;
+import io.atlasmap.api.v3.Parameter.Role;
 import io.atlasmap.api.v3.ValueType;
 import io.atlasmap.spi.v3.BaseParameter;
 import io.atlasmap.spi.v3.BaseTransformation;
@@ -36,11 +36,11 @@ public class AddTransformation extends BaseTransformation {
 
     public AddTransformation() {
         super(NAME, "Adds one or more numberic values");
-        addParameter(new BaseParameter(this, OPERAND_PARAMETER, ParameterRole.INPUT, ValueType.NUMBER, false, false,
+        addParameter(new BaseParameter(this, OPERAND_PARAMETER, Role.INPUT, ValueType.NUMBER, false, false,
                                        "A numberic source field, property, or constant to add"));
-        addParameter(new BaseParameter(this, OPERAND_PARAMETER, ParameterRole.INPUT, ValueType.NUMBER, false, true,
+        addParameter(new BaseParameter(this, OPERAND_PARAMETER, Role.INPUT, ValueType.NUMBER, false, true,
                                        "A numberic source field, property, or constant to add"));
-        sumParameter = addParameter(new BaseParameter(this, SUM_PARAMETER, ParameterRole.OUTPUT, ValueType.ANY, false, false,
+        sumParameter = addParameter(new BaseParameter(this, SUM_PARAMETER, Role.OUTPUT, ValueType.ANY, false, false,
                                                       "A target field or property to which to add the sum of the operands"));
     }
 

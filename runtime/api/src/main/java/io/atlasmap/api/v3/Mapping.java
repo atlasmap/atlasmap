@@ -18,6 +18,8 @@ package io.atlasmap.api.v3;
 import java.util.List;
 import java.util.NavigableSet;
 
+import io.atlasmap.api.v3.Transformation.Descriptor;
+
 /**
  *
  */
@@ -31,7 +33,7 @@ public interface Mapping {
 
     void setDescription(String description);
 
-    Transformation addTransformation(TransformationDescriptor descriptor);
+    Transformation addTransformation(Descriptor descriptor);
 
     void removeTransformation(Transformation transformation);
 

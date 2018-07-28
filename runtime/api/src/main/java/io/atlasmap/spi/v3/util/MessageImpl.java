@@ -13,38 +13,60 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.atlasmap.core.v3;
+package io.atlasmap.spi.v3.util;
 
 import io.atlasmap.api.v3.Message;
-import io.atlasmap.api.v3.MessageStatus;
-import io.atlasmap.spi.v3.util.I18n;
 
 /**
  * A localized message
  */
 public class MessageImpl implements Message {
 
-    private final MessageStatus status;
+    private final Status status;
+    private final Scope scope;
+    private final Object context;
     private final String message;
 
-    public MessageImpl(MessageStatus status, String message, Object... arguments) {
+    public MessageImpl(Status status, Scope scope, Object context, String message, Object... arguments) {
+        VerifyArgument.isNotNull("status", status);
+        VerifyArgument.isNotNull("scope", scope);
+        VerifyArgument.isNotNull("context", context);
+        VerifyArgument.isNotEmpty("message", message);
         this.status = status;
+        this.scope = scope;
+        this.context = context;
         this.message = I18n.localize(message, arguments);
     }
 
     /**
-     * @see io.atlasmap.api.v3.Message#message()
+     * @see Message#status()
+     */
+    @Override
+    public Status status() {
+        return status;
+    }
+
+    /**
+     * @see Message#scope()
+     */
+    @Override
+    public Scope scope() {
+        return scope;
+    }
+
+    /**
+     * @see Message#context()
+     */
+    @Override
+    public Object context() {
+        return context;
+    }
+
+    /**
+     * @see Message#message()
      */
     @Override
     public String message() {
         return message;
-    }
-
-    /**
-     * @see io.atlasmap.api.v3.Message#status()
-     */
-    @Override
-    public MessageStatus status() {
-        return status;
     }
 }

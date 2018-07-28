@@ -20,7 +20,31 @@ package io.atlasmap.api.v3;
  */
 public interface Message {
 
+    Status status();
+
+    Scope scope();
+
+    Object context();
+
     String message();
 
-    MessageStatus status();
+    /**
+     *
+     */
+    public enum Status {
+        INFO,
+        WARNING,
+        ERROR
+    }
+
+    /**
+     *
+     */
+    public enum Scope {
+        DOCUMENT,
+        MAPPING,
+        TRANSFORMATION,
+        PARAMETER,
+        EXECUTION
+    }
 }
