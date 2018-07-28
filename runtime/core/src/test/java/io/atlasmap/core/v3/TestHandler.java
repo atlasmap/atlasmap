@@ -15,7 +15,7 @@
  */
 package io.atlasmap.core.v3;
 
-import io.atlasmap.api.v3.DocumentRole;
+import io.atlasmap.api.v3.MappingDocument.DataDocumentRole;
 import io.atlasmap.spi.v3.DataHandler;
 import io.atlasmap.spi.v3.util.AtlasRuntimeException;
 import io.atlasmap.spi.v3.util.VerifyArgument;
@@ -37,8 +37,8 @@ public class TestHandler extends DataHandler {
      * @see DataHandler#supportedRoles()
      */
     @Override
-    public DocumentRole[] supportedRoles() {
-        return new DocumentRole[] {DocumentRole.SOURCE};
+    public DataDocumentRole[] supportedRoles() {
+        return new DataDocumentRole[] {DataDocumentRole.SOURCE};
     }
 
     /**

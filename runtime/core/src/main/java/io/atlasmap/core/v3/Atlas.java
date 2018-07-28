@@ -18,17 +18,17 @@ package io.atlasmap.core.v3;
 import java.io.File;
 
 import io.atlasmap.api.v3.MappingDocument;
-import io.atlasmap.api.v3.Session;
 import io.atlasmap.spi.v3.util.AtlasException;
 import io.atlasmap.spi.v3.util.VerifyArgument;
 
 // TODO GUI
 
 // TODO validation warnings for narrowing or other type auto-conversion by handler
-// TODO verify exactly one transformation to field(s) is to target field(s), not property
+// TODO verify exactly one transformation in a mapping has target parameter(s) to target field(s), not property
 // TODO verify all results used
 // TODO verify target fields appear only once in all output parameters
 // TODO clear previous target field & transformation dependencies before changing string value
+// TODO don't call autosave if not really modified
 // TODO combine/split
 // TODO mark validation warnings as ignored
 
@@ -55,15 +55,7 @@ public class Atlas {
         context = new Context(mappingFile);
     }
 
-    public File mappingFile() {
-        return context.mappingFile;
-    }
-
     public MappingDocument mappingDocument() {
         return context.mappingDocument;
-    }
-
-    public Session createSession() {
-        return new SessionImpl(context);
     }
 }

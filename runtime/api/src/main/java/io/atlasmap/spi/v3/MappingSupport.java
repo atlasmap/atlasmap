@@ -15,6 +15,9 @@
  */
 package io.atlasmap.spi.v3;
 
+import io.atlasmap.api.v3.Message.Scope;
+import io.atlasmap.api.v3.Message.Status;
+
 /**
  *
  */
@@ -29,4 +32,8 @@ public interface MappingSupport {
     BaseParameter parameterWithOutputName(String outputName);
 
     void setOutputProperty(String outputName, BaseParameter parameter);
+
+    void clearExecutionMessages(Object context);
+
+    void addMessage(Status status, Scope scope, Object context, String message, Object... arguments);
 }

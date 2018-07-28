@@ -20,6 +20,7 @@ public class I18n {
     private I18n() {}
 
     public static String localize(String text, Object... arguments) {
+        VerifyArgument.isNotEmpty("text", text);
         return String.format(text, arguments);
     }
 }

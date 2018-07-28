@@ -21,8 +21,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import io.atlasmap.api.v3.Message.Scope;
+import io.atlasmap.api.v3.Message.Status;
 import io.atlasmap.api.v3.Parameter;
-import io.atlasmap.api.v3.ParameterRole;
+import io.atlasmap.api.v3.Parameter.Role;
 import io.atlasmap.api.v3.Transformation;
 import io.atlasmap.spi.v3.BaseParameter.StringValueType;
 import io.atlasmap.spi.v3.util.AtlasException;
@@ -183,13 +185,13 @@ public abstract class BaseTransformation implements Transformation {
         }
         execute();
         for (Parameter parameter : parameters) {
-            if (parameter.role() == ParameterRole.OUTPUT) {
+            if (parameter.role() == Role.OUTPUT) {
                 BaseParameter targetParameter = (BaseParameter)parameter;
                 if (targetParameter.dataHandler() != null) {
                     targetParameter.dataHandler().setValue(targetParameter.path(), targetParameter.value());
                 } else if (targetParameter.stringValueType() == StringValueType.PROPERTY_REFERENCE) {
                     for (BaseParameter dependentParameter : dependents) {
-                        if (dependentParameter.role() == ParameterRole.INPUT
+                        if (dependentParameter.role() == Role.INPUT
                             && dependentParameter.stringValueType() == StringValueType.PROPERTY_REFERENCE
                             && dependentParameter.stringValue().equals(parameter.stringValue())) {
                             dependentParameter.setValue(parameter.value());
@@ -214,6 +216,14 @@ public abstract class BaseTransformation implements Transformation {
 
     void setOutputProperty(String outputName, BaseParameter parameter) {
         support.setOutputProperty(outputName, parameter);
+    }
+
+    void clearExecutionMessages(Object context) {
+        support.clearExecutionMessages(context);
+    }
+
+    void addMessage(Status status, Scope scope, Object context, String message, Object... arguments) {
+        support.addMessage(status, scope, context, message, arguments);
     }
 
     public static class SerializedImage {

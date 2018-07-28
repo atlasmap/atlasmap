@@ -26,8 +26,9 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
 
+import io.atlasmap.api.v3.Message;
 import io.atlasmap.api.v3.Parameter;
-import io.atlasmap.api.v3.ParameterRole;
+import io.atlasmap.api.v3.Parameter.Role;
 import io.atlasmap.spi.v3.BaseTransformation;
 import io.atlasmap.spi.v3.DataHandler;
 import io.atlasmap.spi.v3.util.AtlasException;
@@ -42,17 +43,19 @@ class Context {
     static final String DATA_HANDLER_META_FILE_PATH = META_FILE_PATH_PREFIX + "datahandler";
     static final String TRANSFORMATIONS_META_FILE_PATH = META_FILE_PATH_PREFIX + "transformations";
 
-    final File mappingFile;
+    final Set<Message> messages = new HashSet<>();
     final Set<Class<? extends DataHandler>> dataHandlerClasses = new HashSet<>();
     final MappingDocumentImpl mappingDocument;
     final Set<TransformationDescriptorImpl> transformationDescriptors = new TreeSet<>();
     final Set<DataDocumentDescriptor> dataDocumentDescriptors = new HashSet<>();
 
     Context(File mappingFile) throws AtlasException {
-        this.mappingFile = mappingFile;
         loadDataHandlers(DATA_HANDLER_META_FILE_PATH);
         loadTransformations(TRANSFORMATIONS_META_FILE_PATH);
-        mappingDocument = new MappingDocumentImpl(this);
+        mappingDocument = new MappingDocumentImpl(this, mappingFile);
+        if (mappingFile.exists()) {
+            mappingDocument.load();
+        }
     }
 
     void loadDataHandlers(String metaFilePath) {
@@ -85,8 +88,10 @@ class Context {
                             if (formats == null || formats.length == 0) {
                                 throw new AtlasRuntimeException("Data handler %s supports no data formats", handlerClass);
                             }
+                        } catch (NoSuchMethodException e) {
+                            throw new AtlasRuntimeException(e, "No default constructor found for data handler %s", handlerClass);
                         } catch (InstantiationException | IllegalAccessException | IllegalArgumentException
-                                | InvocationTargetException | NoSuchMethodException | SecurityException e) {
+                                | InvocationTargetException | SecurityException e) {
                             throw new AtlasRuntimeException(e, "Unable to create data handler %s", handlerClass);
                         }
                         dataHandlerClasses.add(handlerClass);
@@ -129,20 +134,22 @@ class Context {
                             // Verify transformation has at least one parameter with a target role
                             boolean targetRoleFound = false;
                             for (Parameter parameter : transformation.parameters()) {
-                                if (parameter.role() == ParameterRole.OUTPUT) {
+                                if (parameter.role() == Role.OUTPUT) {
                                     targetRoleFound = true;
                                     break;
                                 }
                             }
                             if (!targetRoleFound) {
                                 throw new AtlasRuntimeException("Class %s in meta file %s does not have a parameter with a %s role",
-                                                                transformationClass, url, ParameterRole.OUTPUT);
+                                                                transformationClass, url, Role.OUTPUT);
                             }
                             transformationDescriptors.add(new TransformationDescriptorImpl(transformation.name(),
                                                                                            transformation.description(),
                                                                                            transformationClass));
+                        } catch (NoSuchMethodException e) {
+                            throw new AtlasRuntimeException(e, "No default constructor found for transformation %s", transformationClass);
                         } catch (InstantiationException | IllegalAccessException | IllegalArgumentException
-                                | InvocationTargetException | NoSuchMethodException | SecurityException e) {
+                                | InvocationTargetException | SecurityException e) {
                             throw new AtlasRuntimeException(e, "Unable to create transformation: %s", transformationClass);
                         }
                     } catch (ClassNotFoundException e) {

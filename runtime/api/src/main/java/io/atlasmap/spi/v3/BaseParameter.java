@@ -16,7 +16,6 @@
 package io.atlasmap.spi.v3;
 
 import io.atlasmap.api.v3.Parameter;
-import io.atlasmap.api.v3.ParameterRole;
 import io.atlasmap.api.v3.ValueType;
 import io.atlasmap.spi.v3.util.AtlasException;
 import io.atlasmap.spi.v3.util.AtlasRuntimeException;
@@ -35,7 +34,7 @@ public class BaseParameter implements Parameter {
     final BaseTransformation transformation;
     final SerializedImage serializedImage = new SerializedImage();
     private final String name;
-    private final ParameterRole role;
+    private final Role role;
     private final ValueType valueType;
     private final boolean valueRequired;
     private String stringValue;
@@ -58,12 +57,12 @@ public class BaseParameter implements Parameter {
      * @param cloneable
      * @param description
      */
-    public BaseParameter(BaseTransformation transformation, String name, ParameterRole role, ValueType valueType, boolean valueRequired,
+    public BaseParameter(BaseTransformation transformation, String name, Role role, ValueType valueType, boolean valueRequired,
                          boolean cloneable, String description) {
         this(transformation, name, role, valueType, valueRequired, cloneable, description, null);
     }
 
-    private BaseParameter(BaseTransformation transformation, String name, ParameterRole role, ValueType valueType, boolean valueRequired,
+    private BaseParameter(BaseTransformation transformation, String name, Role role, ValueType valueType, boolean valueRequired,
                           boolean cloneable, String description, Boolean cloned) {
         VerifyArgument.isNotNull("transformation", transformation);
         VerifyArgument.isNotEmpty("name", name);
@@ -74,7 +73,7 @@ public class BaseParameter implements Parameter {
         this.name = I18n.localize(name);
         this.role = role;
         this.valueType = valueType;
-        this.valueRequired = role == ParameterRole.OUTPUT || valueRequired;
+        this.valueRequired = role == Role.OUTPUT || valueRequired;
         this.description = I18n.localize(description);
         this.cloneable = cloneable;
         this.cloned = cloned;
@@ -152,7 +151,7 @@ public class BaseParameter implements Parameter {
      * @see io.atlasmap.api.v3.Parameter#role()
      */
     @Override
-    public ParameterRole role() {
+    public Role role() {
         return role;
     }
 
@@ -177,8 +176,8 @@ public class BaseParameter implements Parameter {
     }
 
     public void setOutputValue(Object value) {
-        if (role != ParameterRole.OUTPUT) {
-            throw new AtlasRuntimeException("setOutputValue() may only be called on a parameter with role $s" + ParameterRole.OUTPUT);
+        if (role != Role.OUTPUT) {
+            throw new AtlasRuntimeException("setOutputValue() may only be called on a parameter with role $s" + Role.OUTPUT);
         }
         this.value = value;
     }
@@ -217,7 +216,7 @@ public class BaseParameter implements Parameter {
                 stringValueType = StringValueType.PROPERTY_REFERENCE;
             }
         }
-        if (stringValueType == StringValueType.CONSTANT && role == ParameterRole.OUTPUT) {
+        if (stringValueType == StringValueType.CONSTANT && role == Role.OUTPUT) {
             throw new AtlasException("Constant '%s' may not be set on output parameter %s", stringValue, name);
         }
     }
@@ -264,13 +263,13 @@ public class BaseParameter implements Parameter {
             throw new AtlasException("The field reference contains a reference to an invalid data document: %s in %s", docId, stringValue);
         }
         path = stringValue.substring(ndx + 1);
-        if (role == ParameterRole.INPUT) {
+        if (role == Role.INPUT) {
             value = handler.value(path);
         }
     }
 
     private void setPropertyReference(String stringValue) {
-        if (role == ParameterRole.INPUT) {
+        if (role == Role.INPUT) {
             value = transformation.result(stringValue);
             transformation.addDependency(stringValue, this);
         } else {

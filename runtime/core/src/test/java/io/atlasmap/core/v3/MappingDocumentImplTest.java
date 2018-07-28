@@ -14,8 +14,8 @@ import java.io.File;
 import org.junit.Before;
 import org.junit.Test;
 
-import io.atlasmap.api.v3.DocumentRole;
 import io.atlasmap.api.v3.Mapping;
+import io.atlasmap.api.v3.MappingDocument.DataDocumentRole;
 import io.atlasmap.core.transformation.MapTransformation;
 import io.atlasmap.spi.v3.util.AtlasException;
 import io.atlasmap.spi.v3.util.AtlasRuntimeException;
@@ -32,12 +32,12 @@ public class MappingDocumentImplTest {
         context = new Context(mappingFile);
         context.loadDataHandlers(Context.DATA_HANDLER_META_FILE_PATH + ".good");
         context.loadTransformations(Context.TRANSFORMATIONS_META_FILE_PATH + ".good");
-        doc = new MappingDocumentImpl(context);
+        doc = context.mappingDocument;
     }
 
     @Test
     public void testAvailableFormats() {
-        String[] formats = doc.availableDataFormats(DocumentRole.SOURCE);
+        String[] formats = doc.availableDataFormats(DataDocumentRole.SOURCE);
         assertThat(formats, notNullValue());
         assertThat(formats.length, is(1));
     }
@@ -45,7 +45,7 @@ public class MappingDocumentImplTest {
     @Test
     public void testAddDataDocumentWithEmptyId() throws AtlasException {
         try {
-            doc.addDataDocument("", DocumentRole.SOURCE, "test", "test");
+            doc.addDataDocument("", DataDocumentRole.SOURCE, "test", "test");
             fail();
         } catch (AtlasRuntimeException e) {
             assertThat(e.getMessage(), startsWith("The 'id' argument must not be empty"));
@@ -65,7 +65,7 @@ public class MappingDocumentImplTest {
     @Test
     public void testAddDataDocumentWithEmptyDataFormat() throws AtlasException {
         try {
-            doc.addDataDocument("id", DocumentRole.SOURCE, "", "test");
+            doc.addDataDocument("id", DataDocumentRole.SOURCE, "", "test");
             fail();
         } catch (AtlasRuntimeException e) {
             assertThat(e.getMessage(), startsWith("The 'dataFormat' argument must not be empty"));
@@ -75,7 +75,7 @@ public class MappingDocumentImplTest {
     @Test
     public void testAddDataDocumentWithNullDocument() throws AtlasException {
         try {
-            doc.addDataDocument("id", DocumentRole.SOURCE, "test", null);
+            doc.addDataDocument("id", DataDocumentRole.SOURCE, "test", null);
             fail();
         } catch (AtlasRuntimeException e) {
             assertThat(e.getMessage(), startsWith("The 'document' argument must not be null"));
@@ -85,7 +85,7 @@ public class MappingDocumentImplTest {
     @Test
     public void testAddDataDocumentWithUnsupportedDataFormat() throws AtlasException {
         try {
-            doc.addDataDocument("id", DocumentRole.SOURCE, "java", "test");
+            doc.addDataDocument("id", DataDocumentRole.SOURCE, "java", "test");
             fail();
         } catch (AtlasRuntimeException e) {
             assertThat(e.getMessage(), startsWith("The java data format is not supported for a source document"));
@@ -95,7 +95,7 @@ public class MappingDocumentImplTest {
     @Test
     public void testAddDataDocumentWithUnsupportedDocumentType() throws AtlasException {
         try {
-            doc.addDataDocument("id", DocumentRole.TARGET, "test", "test");
+            doc.addDataDocument("id", DataDocumentRole.TARGET, "test", "test");
             fail();
         } catch (AtlasRuntimeException e) {
             assertThat(e.getMessage(), startsWith("The test data format is not supported for a target document"));
@@ -105,7 +105,7 @@ public class MappingDocumentImplTest {
     @Test
     public void testAddDataDocumentUnsupportedDocument() throws AtlasException {
         try {
-            doc.addDataDocument("id", DocumentRole.SOURCE, "test", "");
+            doc.addDataDocument("id", DataDocumentRole.SOURCE, "test", "");
             fail();
         } catch (AtlasRuntimeException e) {
             assertThat(e.getMessage(), is("Must be 'test'"));
@@ -114,13 +114,13 @@ public class MappingDocumentImplTest {
 
     @Test
     public void testAddDataDocument() throws AtlasException {
-        doc.addDataDocument("id", DocumentRole.SOURCE, "test", "test");
+        doc.addDataDocument("id", DataDocumentRole.SOURCE, "test", "test");
         assertThat(context.dataDocumentDescriptors, not(empty()));
     }
 
     @Test(expected = AtlasRuntimeException.class)
     public void testRemoveDataDocumentWithNullId() {
-        doc.removeDataDocument(null, DocumentRole.SOURCE);
+        doc.removeDataDocument(null, DataDocumentRole.SOURCE);
     }
 
     @Test(expected = AtlasRuntimeException.class)
@@ -130,20 +130,20 @@ public class MappingDocumentImplTest {
 
     @Test(expected = AtlasRuntimeException.class)
     public void testRemoveDataDocumentNotFound() {
-        doc.removeDataDocument("id", DocumentRole.SOURCE);
+        doc.removeDataDocument("id", DataDocumentRole.SOURCE);
     }
 
     @Test
     public void testRemoveDataDocument() throws AtlasException {
-        doc.addDataDocument("id", DocumentRole.SOURCE, "test", "test");
+        doc.addDataDocument("id", DataDocumentRole.SOURCE, "test", "test");
         assertThat(context.dataDocumentDescriptors, not(empty()));
-        doc.removeDataDocument("id", DocumentRole.SOURCE);
+        doc.removeDataDocument("id", DataDocumentRole.SOURCE);
         assertThat(context.dataDocumentDescriptors, empty());
     }
 
     @Test
     public void testAddMapping() throws AtlasException {
-        doc.addDataDocument("id", DocumentRole.SOURCE, "test", "test");
+        doc.addDataDocument("id", DataDocumentRole.SOURCE, "test", "test");
         Mapping mapping = doc.addMapping("test", "/id/test");
         assertThat(doc.mappings(), not(empty()));
         assertThat(mapping, notNullValue());
@@ -158,7 +158,7 @@ public class MappingDocumentImplTest {
 
     @Test
     public void testRemoveMapping() throws AtlasException {
-        doc.addDataDocument("id", DocumentRole.SOURCE, "test", "test");
+        doc.addDataDocument("id", DataDocumentRole.SOURCE, "test", "test");
         Mapping mapping = doc.addMapping("test", "/id/test");
         assertThat(doc.mappings(), not(empty()));
         doc.removeMapping(mapping);
@@ -167,6 +167,6 @@ public class MappingDocumentImplTest {
 
     @Test(expected = UnsupportedOperationException.class)
     public void testMappingsUnmodifiable() {
-        doc.mappings().add(new MappingImpl(context, doc));
+        doc.mappings().add(new MappingImpl(context));
     }
 }

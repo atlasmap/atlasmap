@@ -15,9 +15,11 @@
  */
 package io.atlasmap.api.v3;
 
+import java.io.File;
 import java.util.List;
 import java.util.Set;
 
+import io.atlasmap.api.v3.Transformation.Descriptor;
 import io.atlasmap.spi.v3.util.AtlasException;
 
 /**
@@ -25,11 +27,13 @@ import io.atlasmap.spi.v3.util.AtlasException;
  */
 public interface MappingDocument {
 
-    String[] availableDataFormats(DocumentRole role);
+    File file();
 
-    void addDataDocument(String id, DocumentRole role, String dataFormat, Object document) throws AtlasException;
+    String[] availableDataFormats(DataDocumentRole role);
 
-    void removeDataDocument(String id, DocumentRole role);
+    void addDataDocument(String id, DataDocumentRole role, String dataFormat, Object document) throws AtlasException;
+
+    void removeDataDocument(String id, DataDocumentRole role);
 
     Mapping addMapping();
 
@@ -39,11 +43,27 @@ public interface MappingDocument {
 
     List<Mapping> mappings();
 
-    Set<TransformationDescriptor> availableTransformationDescriptors();
+    Set<Descriptor> availableTransformationDescriptors();
 
     boolean autoSaves();
 
     MappingDocument setAutoSaves(boolean autoSaves);
 
+    boolean unsaved();
+
     void save();
+
+    Set<Message> messages();
+
+    boolean hasErrors();
+
+    boolean hasWarnings();
+
+    /**
+     *
+     */
+    public enum DataDocumentRole {
+        SOURCE,
+        TARGET
+    }
 }

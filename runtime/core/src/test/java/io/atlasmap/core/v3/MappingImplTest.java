@@ -24,7 +24,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import io.atlasmap.api.v3.DocumentRole;
+import io.atlasmap.api.v3.MappingDocument.DataDocumentRole;
 import io.atlasmap.api.v3.Transformation;
 import io.atlasmap.core.transformation.MapTransformation;
 import io.atlasmap.spi.v3.util.AtlasException;
@@ -34,19 +34,17 @@ import io.atlasmap.spi.v3.util.AtlasException;
  */
 public class MappingImplTest {
 
-    Context context;
-    MappingDocumentImpl doc;
     MappingImpl mapping;
 
     @Before
     public void before() throws AtlasException {
         File mappingFile = new File("target/" + getClass().getSimpleName() + ".json");
         mappingFile.delete();
-        context = new Context(mappingFile);
+        Context context = new Context(mappingFile);
         context.loadDataHandlers(Context.DATA_HANDLER_META_FILE_PATH + ".good");
         context.loadTransformations(Context.TRANSFORMATIONS_META_FILE_PATH + ".good");
-        doc = new MappingDocumentImpl(context);
-        doc.addDataDocument("id", DocumentRole.SOURCE, "test", "test");
+        MappingDocumentImpl doc = context.mappingDocument;
+        doc.addDataDocument("id", DataDocumentRole.SOURCE, "test", "test");
         mapping = (MappingImpl)doc.addMapping("test", "/id/test");
     }
 

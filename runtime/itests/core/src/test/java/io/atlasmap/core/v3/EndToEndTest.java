@@ -23,11 +23,11 @@ import java.io.File;
 import org.junit.Before;
 import org.junit.Test;
 
-import io.atlasmap.api.v3.DocumentRole;
 import io.atlasmap.api.v3.Mapping;
 import io.atlasmap.api.v3.MappingDocument;
+import io.atlasmap.api.v3.MappingDocument.DataDocumentRole;
 import io.atlasmap.api.v3.Transformation;
-import io.atlasmap.api.v3.TransformationDescriptor;
+import io.atlasmap.api.v3.Transformation.Descriptor;
 import io.atlasmap.core.transformation.AddTransformation;
 import io.atlasmap.core.transformation.MapTransformation;
 import io.atlasmap.spi.v3.util.AtlasException;
@@ -54,8 +54,8 @@ public class EndToEndTest {
         mappingFile.delete();
         Atlas atlas = new Atlas(mappingFile);
         mappingDoc = atlas.mappingDocument();
-        mappingDoc.addDataDocument("SourceClass", DocumentRole.SOURCE, "java", sourceClass);
-        mappingDoc.addDataDocument("TargetClass", DocumentRole.TARGET, "java", targetClass);
+        mappingDoc.addDataDocument("SourceClass", DataDocumentRole.SOURCE, "java", sourceClass);
+        mappingDoc.addDataDocument("TargetClass", DataDocumentRole.TARGET, "java", targetClass);
     }
 
     @Test
@@ -88,14 +88,14 @@ public class EndToEndTest {
         Atlas atlas = new Atlas(mappingFile);
         mappingDoc = atlas.mappingDocument();
         assertThat(mappingDoc.mappings().isEmpty(), is(false));
-        mappingDoc.addDataDocument("SourceClass", DocumentRole.SOURCE, "java", sourceClass);
-        mappingDoc.addDataDocument("TargetClass", DocumentRole.TARGET, "java", targetClass);
+        mappingDoc.addDataDocument("SourceClass", DataDocumentRole.SOURCE, "java", sourceClass);
+        mappingDoc.addDataDocument("TargetClass", DataDocumentRole.TARGET, "java", targetClass);
         assertThat(targetClass.getTargetName(), is("2"));
 }
 
     private Transformation addTransformation(Mapping mapping, Class<? extends Transformation> transformationClass) {
-        TransformationDescriptor newDescriptor = null;
-        for (TransformationDescriptor descriptor : mappingDoc.availableTransformationDescriptors()) {
+        Descriptor newDescriptor = null;
+        for (Descriptor descriptor : mappingDoc.availableTransformationDescriptors()) {
             if (((TransformationDescriptorImpl)descriptor).transformationClass == transformationClass) {
                 newDescriptor = descriptor;
                 break;

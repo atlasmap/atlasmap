@@ -34,11 +34,19 @@ public interface Parameter {
 
     String description();
 
-    ParameterRole role();
+    Role role();
 
     Object value();
 
     boolean cloneable();
 
     boolean cloned();
+
+    /**
+     *
+     */
+    public enum Role {
+        INPUT,
+        OUTPUT
+    }
 }

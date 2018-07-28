@@ -15,13 +15,13 @@
  */
 package io.atlasmap.core.v3;
 
-import io.atlasmap.api.v3.TransformationDescriptor;
+import io.atlasmap.api.v3.Transformation.Descriptor;
 import io.atlasmap.spi.v3.BaseTransformation;
 
 /**
  *
  */
-class TransformationDescriptorImpl implements TransformationDescriptor, Comparable<TransformationDescriptorImpl> {
+class TransformationDescriptorImpl implements Descriptor, Comparable<TransformationDescriptorImpl> {
 
     final Class<? extends BaseTransformation> transformationClass;
     private final String name;
@@ -34,7 +34,7 @@ class TransformationDescriptorImpl implements TransformationDescriptor, Comparab
     }
 
     /**
-     * @see io.atlasmap.api.v3.TransformationDescriptor#name()
+     * @see Descriptor#name()
      */
     @Override
     public String name() {
@@ -42,7 +42,7 @@ class TransformationDescriptorImpl implements TransformationDescriptor, Comparab
     }
 
     /**
-     * @see io.atlasmap.api.v3.TransformationDescriptor#description()
+     * @see Descriptor#description()
      */
     @Override
     public String description() {
@@ -50,7 +50,7 @@ class TransformationDescriptorImpl implements TransformationDescriptor, Comparab
     }
 
     /**
-     * @see java.lang.Object#hashCode()
+     * @see Object#hashCode()
      */
     @Override
     public int hashCode() {
@@ -62,7 +62,7 @@ class TransformationDescriptorImpl implements TransformationDescriptor, Comparab
     }
 
     /**
-     * @see java.lang.Object#equals(java.lang.Object)
+     * @see Object#equals(Object)
      */
     @Override
     public boolean equals(Object obj) {

@@ -15,7 +15,7 @@
  */
 package io.atlasmap.spi.v3;
 
-import io.atlasmap.api.v3.DocumentRole;
+import io.atlasmap.api.v3.MappingDocument.DataDocumentRole;
 import io.atlasmap.spi.v3.util.AtlasException;
 
 /**
@@ -30,7 +30,7 @@ public abstract class DataHandler {
     /**
      * @return The document roles supported by this module. The default is to support all roles.
      */
-    public DocumentRole[] supportedRoles() {
+    public DataDocumentRole[] supportedRoles() {
         return null;
     }
 

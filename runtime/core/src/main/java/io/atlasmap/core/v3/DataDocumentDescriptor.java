@@ -15,7 +15,7 @@
  */
 package io.atlasmap.core.v3;
 
-import io.atlasmap.api.v3.DocumentRole;
+import io.atlasmap.api.v3.MappingDocument.DataDocumentRole;
 import io.atlasmap.spi.v3.DataHandler;
 
 /**
@@ -24,13 +24,13 @@ import io.atlasmap.spi.v3.DataHandler;
 class DataDocumentDescriptor {
 
     private final String id;
-    private final DocumentRole role;
+    private final DataDocumentRole role;
     private final String dataFormat;
     final DataHandler handler;
     Object dataDocument;
     final SerializedImage serializedImage = new SerializedImage();
 
-    DataDocumentDescriptor(String id, DocumentRole role, String dataFormat, DataHandler handler, Object dataDocument) {
+    DataDocumentDescriptor(String id, DataDocumentRole role, String dataFormat, DataHandler handler, Object dataDocument) {
         this.id = id;
         this.role = role;
         this.dataFormat = dataFormat;
@@ -45,7 +45,7 @@ class DataDocumentDescriptor {
         return id;
     }
 
-    DocumentRole role() {
+    DataDocumentRole role() {
         return role;
     }
 
@@ -92,7 +92,7 @@ class DataDocumentDescriptor {
 
     static class SerializedImage {
         String id;
-        DocumentRole role;
+        DataDocumentRole role;
         String dataFormat;
 
         /**
