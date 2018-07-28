@@ -78,7 +78,10 @@
     <module name="UnusedImports" />
 
     <!-- Modifier Checks                                    -->
+    <!-- Broken due to failure to skip constants with forward references
+         Latest version of checkstyle has fix, so we need to upgrade  
     <module name="DeclarationOrder"/>
+    -->
     <!-- See http://checkstyle.sf.net/config_modifiers.html -->
     <module name="ModifierOrder"/>
 
