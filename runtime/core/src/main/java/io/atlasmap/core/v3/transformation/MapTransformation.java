@@ -13,13 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.atlasmap.core.transformation;
+package io.atlasmap.core.v3.transformation;
 
 import io.atlasmap.api.v3.Parameter.Role;
-import io.atlasmap.api.v3.ValueType;
 import io.atlasmap.spi.v3.BaseParameter;
 import io.atlasmap.spi.v3.BaseTransformation;
-import io.atlasmap.spi.v3.util.AtlasException;
 import io.atlasmap.spi.v3.util.I18n;
 
 public class MapTransformation extends BaseTransformation {
@@ -34,9 +32,9 @@ public class MapTransformation extends BaseTransformation {
 
     public MapTransformation() {
         super(NAME, "Maps a source field, property, or constant to a target field");
-        fromParameter = addParameter(new BaseParameter(this, FROM_PARAMETER, Role.INPUT, ValueType.ANY, false, false,
+        fromParameter = addParameter(new BaseParameter(this, FROM_PARAMETER, Role.INPUT, false, false,
                                                        "A source field, property, or constant from which to map"));
-        toParameter = addParameter(new BaseParameter(this, TO_PARAMETER, Role.OUTPUT, ValueType.ANY, false, false,
+        toParameter = addParameter(new BaseParameter(this, TO_PARAMETER, Role.OUTPUT, false, false,
                                                      "A target field or property to which to map"));
     }
 
@@ -44,7 +42,7 @@ public class MapTransformation extends BaseTransformation {
      * @see BaseTransformation#execute()
      */
     @Override
-    protected void execute() throws AtlasException {
+    protected void execute() {
         toParameter.setOutputValue(fromParameter.value());
     }
 }

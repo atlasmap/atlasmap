@@ -17,13 +17,19 @@ package io.atlasmap.core.v3;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.NavigableMap;
 import java.util.NavigableSet;
+import java.util.Set;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 import io.atlasmap.api.v3.Mapping;
+import io.atlasmap.api.v3.Message;
 import io.atlasmap.api.v3.Message.Scope;
 import io.atlasmap.api.v3.Message.Status;
 import io.atlasmap.api.v3.Parameter;
@@ -31,9 +37,10 @@ import io.atlasmap.api.v3.Parameter.Role;
 import io.atlasmap.api.v3.Transformation;
 import io.atlasmap.api.v3.Transformation.Descriptor;
 import io.atlasmap.spi.v3.BaseParameter;
+import io.atlasmap.spi.v3.BaseParameter.StringValueType;
 import io.atlasmap.spi.v3.BaseTransformation;
 import io.atlasmap.spi.v3.DataHandler;
-import io.atlasmap.spi.v3.MappingSupport;
+import io.atlasmap.spi.v3.TransformationSupport;
 import io.atlasmap.spi.v3.util.AtlasException;
 import io.atlasmap.spi.v3.util.AtlasRuntimeException;
 import io.atlasmap.spi.v3.util.I18n;
@@ -44,13 +51,14 @@ public class MappingImpl implements Mapping {
     static final String NAME = I18n.localize("Mapping");
 
     final List<Transformation> transformations = new ArrayList<>();
-    final NavigableMap<String, BaseParameter> parametersByOutputName = new TreeMap<>();
+    // TODO support cross-mapping property refs
+    final NavigableMap<String, BaseParameter> parametersByOutputPropertyName = new TreeMap<>();
+    final Map<String, Set<Parameter>> dependentParametersByOutputPropertyName = new HashMap<>();
     final SerializedImage serializedImage = new SerializedImage();
     private final Context context;
     private String name = NAME;
     private String description;
-    // TODO Verify only one transformation has target parameters that reference target fields
-    private Transformation targetFieldTransformation = null;
+    private final Support support = new Support();
 
     MappingImpl(Context context) {
         this.context = context;
@@ -103,37 +111,7 @@ public class MappingImpl implements Mapping {
     @Override
     public Transformation addTransformation(Descriptor descriptor) {
         VerifyArgument.isNotNull("descriptor", descriptor);
-        BaseTransformation transformation = addTransformation(descriptor, 0);
-        if (transformations.size() > 1) {
-            boolean origAutoSaves = context.mappingDocument.autoSaves();
-            context.mappingDocument.setAutoSaves(false);
-            try {
-                int outputName = 1;
-                for (Parameter parameter : transformation.parameters()) {
-                    if (parameter.role() == Role.OUTPUT) {
-                        for (Entry<String, BaseParameter> entry : parametersByOutputName.entrySet()) {
-                            try {
-                                if (Integer.parseInt(entry.getKey()) == outputName) {
-                                    outputName++;
-                                }
-                            } catch (NumberFormatException ignored) {}
-                        }
-                        try {
-                            parameter.setStringValue(BaseParameter.PROPERTY_REFERENCE_INDICATOR + String.valueOf(outputName));
-                        } catch (AtlasException e) {
-                            throw new AtlasRuntimeException(e, "Unable to set output property %s for %s parameter in %s transformation",
-                                                            outputName, parameter.name(), transformation.name());
-                        }
-                        outputName++;
-                    }
-                }
-            } finally {
-                context.mappingDocument.setAutoSaves(origAutoSaves);
-            }
-        }
-        context.mappingDocument.autoSaveOrSetUnsaved();
-        validate();
-        return transformation;
+        return createOutputPropertyNames(addTransformation(descriptor, 0));
     }
 
     /**
@@ -141,6 +119,7 @@ public class MappingImpl implements Mapping {
      */
     @Override
     public void removeTransformation(Transformation transformation) {
+        verifyTransformationInMapping("transformation", transformation);
         transformations.remove(transformation);
         serializedImage.transformations.remove(((BaseTransformation)transformation).serializedImage());
         // TODO remove output names and references to those (ask how to handle dependencies; add answer type as parameter to remove)
@@ -152,19 +131,31 @@ public class MappingImpl implements Mapping {
      * @see Mapping#moveTransformationBefore(Transformation, Transformation)
      */
     @Override
-    public void moveTransformationBefore(Transformation transformation, Transformation beforeTransformation) {
-        // TODO implement
+    public void moveTransformationBefore(Transformation movingTransformation, Transformation transformation) {
+        verifyTransformationInMapping("movingTransformation", movingTransformation);
+        verifyTransformationInMapping("transformation", transformation);
+        transformations.set(transformations.indexOf(transformation), movingTransformation);
         context.mappingDocument.autoSaveOrSetUnsaved();
     }
 
     /**
-     * @see Mapping#replaceTransformation(Transformation, Transformation)
+     * @see Mapping#moveTransformationAfter(Transformation, Transformation)
      */
     @Override
-    public void replaceTransformation(Transformation transformation, Transformation withTransformation) {
-        // TODO implement
+    public void moveTransformationAfter(Transformation movingTransformation, Transformation transformation) {
+        verifyTransformationInMapping("movingTransformation", movingTransformation);
+        verifyTransformationInMapping("transformation", transformation);
+        transformations.set(transformations.indexOf(transformation) + 1, movingTransformation);
         context.mappingDocument.autoSaveOrSetUnsaved();
-        validate();
+    }
+
+    /**
+     * @see Mapping#replaceTransformation(Transformation, Descriptor)
+     */
+    @Override
+    public Transformation replaceTransformation(Transformation transformation, Descriptor descriptor) {
+        int index = transformations.indexOf(transformation);
+        return createOutputPropertyNames(addTransformation(descriptor, index));
     }
 
     /**
@@ -176,18 +167,56 @@ public class MappingImpl implements Mapping {
     }
 
     /**
-     * @see Mapping#properties()
+     * @see Mapping#outputPropertyNames()
      */
     @Override
-    public NavigableSet<String> properties() {
-        return Collections.unmodifiableNavigableSet(parametersByOutputName.navigableKeySet());
+    public NavigableSet<String> outputPropertyNames() {
+        return Collections.unmodifiableNavigableSet(parametersByOutputPropertyName.navigableKeySet());
+    }
+
+    /**
+     * @see io.atlasmap.api.v3.Mapping#dependentParametersByOutputPropertyName()
+     */
+    @Override
+    public Map<String, Set<Parameter>> dependentParametersByOutputPropertyName() {
+        return Collections.unmodifiableMap(dependentParametersByOutputPropertyName);
+    }
+
+    /**
+     * @see Mapping#messages()
+     */
+    @Override
+    public Set<Message> messages() {
+        Set<Message> messages = context.messages.stream().filter(message -> message.scope() == Scope.MAPPING
+                                                                            && message.context() == this)
+                                                         .collect(Collectors.toSet());
+        for (Transformation transformation : transformations) {
+            messages.addAll(transformation.messages());
+        }
+        return Collections.unmodifiableSet(messages);
+    }
+
+    /**
+     * @see Mapping#hasErrors()
+     */
+    @Override
+    public boolean hasErrors() {
+        return messages().stream().anyMatch(message -> message.status() == Status.ERROR);
+    }
+
+    /**
+     * @see Mapping#hasWarnings()
+     */
+    @Override
+    public boolean hasWarnings() {
+        return messages().stream().anyMatch(message -> message.status() == Status.WARNING);
     }
 
     BaseTransformation addTransformation(Descriptor descriptor, int index) {
         Class<? extends BaseTransformation> transformationClass = ((TransformationDescriptorImpl)descriptor).transformationClass;
         try {
             BaseTransformation transformation = transformationClass.newInstance();
-            transformation.setSupport(new Support());
+            transformation.setSupport(support);
             transformations.add(index, transformation);
             serializedImage.transformations.add(index, transformation.serializedImage());
             validate();
@@ -197,10 +226,76 @@ public class MappingImpl implements Mapping {
         }
     }
 
+    private BaseTransformation createOutputPropertyNames(BaseTransformation transformation) {
+        boolean origAutoSaves = context.mappingDocument.autoSaves();
+        context.mappingDocument.setAutoSaves(false);
+        try {
+            int outputName = 1;
+            for (Parameter parameter : transformation.parameters()) {
+                if (parameter.role() == Role.OUTPUT) {
+                    for (Entry<String, BaseParameter> entry : parametersByOutputPropertyName.entrySet()) {
+                        try {
+                            if (Integer.parseInt(entry.getKey()) == outputName) {
+                                outputName++;
+                            }
+                        } catch (NumberFormatException ignored) {}
+                    }
+                    try {
+                        parameter.setStringValue(BaseParameter.PROPERTY_REFERENCE_INDICATOR + String.valueOf(outputName));
+                    } catch (AtlasException e) {
+                        throw new AtlasRuntimeException(e, "Unable to set output property %s for %s parameter in %s transformation",
+                                                        outputName, parameter.name(), transformation.name());
+                    }
+                    outputName++;
+                }
+            }
+        } finally {
+            context.mappingDocument.setAutoSaves(origAutoSaves);
+        }
+        validate();
+        context.mappingDocument.autoSaveOrSetUnsaved();
+        return transformation;
+    }
+
     private void validate() {
-        context.messages.removeIf(message -> message.scope() == Scope.MAPPING);
+        context.messages.removeIf(message -> message.scope() == Scope.MAPPING && message.context() == this);
         if (transformations.isEmpty()) {
-            context.messages.add(new MessageImpl(Status.ERROR, Scope.MAPPING, this, "No transformations have been added to this mapping"));
+            context.messages.add(new MessageImpl(Status.ERROR, Scope.MAPPING, this,
+                                                 "No transformations have been added"));
+        }
+        // Verify a transformation exists that maps to a target field
+        // and that all results are used TODO move to document level once cross-mapping property refs are supported
+        boolean fieldRefFound = false;
+        Set<String> unusedOutputNames = new HashSet<>(parametersByOutputPropertyName.keySet());
+        for (Transformation transformation : transformations()) {
+            for (Parameter parameter : transformation.parameters()) {
+                StringValueType type = ((BaseParameter)parameter).stringValueType();
+                if (parameter.role() == Role.INPUT) {
+                    if (type == StringValueType.PROPERTY_REFERENCE) {
+                        // TODO handle indexes
+                        unusedOutputNames.remove(parameter.stringValue());
+                    }
+                } else if (type == StringValueType.FIELD_REFERENCE) {
+                    fieldRefFound = true;
+                }
+            }
+        }
+        if (!fieldRefFound) {
+            context.messages.add(new MessageImpl(Status.ERROR, Scope.MAPPING, this,
+                                                 "None of the transformations in this mapping map to a target field"));
+        }
+        for (String name : unusedOutputNames) {
+            context.messages.add(new MessageImpl(Status.ERROR, Scope.MAPPING, this,
+                                                 "Result %s for the %s transformation is never used in this mapping",
+                                                 name, parametersByOutputPropertyName.get(name).transformation().name()));
+        }
+        context.mappingDocument.validate();
+    }
+
+    private void verifyTransformationInMapping(String name, Transformation transformation) {
+        VerifyArgument.isNotNull(name, transformation);
+        if (transformation.mapping() != this) {
+            throw new AtlasRuntimeException("Mapping %s does not contain the %s transformation", name, transformation.name());
         }
     }
 
@@ -210,7 +305,12 @@ public class MappingImpl implements Mapping {
         final List<BaseTransformation.SerializedImage> transformations = new ArrayList<>();
     }
 
-    private class Support implements MappingSupport {
+    private class Support implements TransformationSupport {
+
+        @Override
+        public Mapping mapping() {
+            return MappingImpl.this;
+        }
 
         @Override
         public void autoSave() {
@@ -219,7 +319,6 @@ public class MappingImpl implements Mapping {
 
         @Override
         public DataHandler handler(String id) {
-            VerifyArgument.isNotEmpty("id", id);
             for (DataDocumentDescriptor descriptor : context.dataDocumentDescriptors) {
                 if (descriptor.id().equals(id)) {
                     return descriptor.handler;
@@ -228,50 +327,45 @@ public class MappingImpl implements Mapping {
             return null;
         }
 
-        /**
-         * @see MappingSupport#value(String)
-         */
         @Override
-        public Object value(String propertyName) {
-            VerifyArgument.isNotEmpty("propertyName", propertyName);
-            return parametersByOutputName.get(propertyName).value();
+        public BaseParameter parameterWithOutputPropertyName(String outputPropertyName) {
+            return parametersByOutputPropertyName.get(outputPropertyName);
         }
 
-        /**
-         * @see MappingSupport#parameterWithOutputName(String)
-         */
         @Override
-        public BaseParameter parameterWithOutputName(String outputName) {
-            VerifyArgument.isNotEmpty("outputName", outputName);
-            return parametersByOutputName.get(outputName);
-        }
-
-        /**
-         * @see MappingSupport#setOutputProperty(String, BaseParameter)
-         */
-        @Override
-        public void setOutputProperty(String outputName, BaseParameter parameter) {
-            VerifyArgument.isNotEmpty("outputName", outputName);
-            VerifyArgument.isNotNull("parameter", parameter);
+        public void setOutputProperty(String outputPropertyName, BaseParameter parameter) {
             // TODO handle replacing output name
-            parametersByOutputName.put(outputName, parameter);
+            parametersByOutputPropertyName.put(outputPropertyName, parameter);
+            Set<Parameter> parameters = dependentParametersByOutputPropertyName.get(outputPropertyName);
+            if (parameters == null) {
+                parameters = new HashSet<>();
+                MappingImpl.this.dependentParametersByOutputPropertyName.put(outputPropertyName, parameters);
+            }
         }
 
-        /**
-         * @see MappingSupport#clearExecutionMessages(Object)
-         */
         @Override
-        public void clearExecutionMessages(Object context) {
-            VerifyArgument.isNotNull("context", context);
-            MappingImpl.this.context.messages.removeIf(message -> message.scope() == Scope.EXECUTION && message.context() == context);
+        public void clearMessages(Scope scope, Object context) {
+            MappingImpl.this.context.messages.removeIf(message -> message.scope() == scope && message.context() == context);
         }
 
-        /**
-         * @see MappingSupport#addMessage(Status, Scope, Object, String, Object[])
-         */
         @Override
         public void addMessage(Status status, Scope scope, Object context, String message, Object... arguments) {
             MappingImpl.this.context.messages.add(new MessageImpl(status, scope, context, message, arguments));
+        }
+
+        @Override
+        public Set<Message> documentMessages() {
+            return MappingImpl.this.context.messages;
+        }
+
+        @Override
+        public void setTargetField(String targetFieldPath, BaseParameter parameter) throws AtlasException {
+            context.mappingDocument.setTargetField(targetFieldPath, parameter);
+        }
+
+        @Override
+        public void validate() {
+            MappingImpl.this.validate();
         }
     }
 }

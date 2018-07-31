@@ -16,10 +16,8 @@
 package io.atlasmap.core.v3;
 
 import io.atlasmap.api.v3.Parameter.Role;
-import io.atlasmap.api.v3.ValueType;
 import io.atlasmap.spi.v3.BaseParameter;
 import io.atlasmap.spi.v3.BaseTransformation;
-import io.atlasmap.spi.v3.util.AtlasException;
 
 /**
  *
@@ -28,13 +26,13 @@ public class TestTransformation extends BaseTransformation {
 
     public TestTransformation() {
         super("test", "test");
-        addParameter(new BaseParameter(this, "test", Role.OUTPUT, ValueType.ANY, false, false, "test"));
+        addParameter(new BaseParameter(this, "test", Role.OUTPUT, false, false, "test"));
     }
 
     /**
      * @see io.atlasmap.spi.v3.BaseTransformation#execute()
      */
     @Override
-    protected void execute() throws AtlasException {
+    protected void execute() {
     }
 }

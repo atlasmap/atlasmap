@@ -16,7 +16,6 @@
 package io.atlasmap.core.v3;
 
 import io.atlasmap.spi.v3.BaseTransformation;
-import io.atlasmap.spi.v3.util.AtlasException;
 
 /**
  *
@@ -31,6 +30,6 @@ public class TestTransformationNoOutputRole extends BaseTransformation {
      * @see io.atlasmap.spi.v3.BaseTransformation#execute()
      */
     @Override
-    protected void execute() throws AtlasException {
+    protected void execute() {
     }
 }

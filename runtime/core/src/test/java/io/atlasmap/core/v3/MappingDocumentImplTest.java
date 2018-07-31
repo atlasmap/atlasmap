@@ -16,7 +16,7 @@ import org.junit.Test;
 
 import io.atlasmap.api.v3.Mapping;
 import io.atlasmap.api.v3.MappingDocument.DataDocumentRole;
-import io.atlasmap.core.transformation.MapTransformation;
+import io.atlasmap.core.v3.transformation.MapTransformation;
 import io.atlasmap.spi.v3.util.AtlasException;
 import io.atlasmap.spi.v3.util.AtlasRuntimeException;
 

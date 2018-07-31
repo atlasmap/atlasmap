@@ -16,6 +16,7 @@
 package io.atlasmap.core.v3;
 
 import io.atlasmap.api.v3.MappingDocument.DataDocumentRole;
+import io.atlasmap.api.v3.Parameter;
 import io.atlasmap.spi.v3.DataHandler;
 import io.atlasmap.spi.v3.util.AtlasRuntimeException;
 import io.atlasmap.spi.v3.util.VerifyArgument;
@@ -61,9 +62,9 @@ public class TestHandler extends DataHandler {
     }
 
     /**
-     * @see io.atlasmap.spi.v3.DataHandler#setValue(java.lang.String, java.lang.Object)
+     * @see DataHandler#setValue(String, Object, Parameter)
      */
     @Override
-    public void setValue(String path, Object value) {
+    public void setValue(String path, Object value, Parameter parameter) {
     }
 }

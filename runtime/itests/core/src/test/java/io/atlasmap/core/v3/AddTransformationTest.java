@@ -26,17 +26,15 @@ import org.junit.Test;
 import io.atlasmap.api.v3.Mapping;
 import io.atlasmap.api.v3.MappingDocument;
 import io.atlasmap.api.v3.MappingDocument.DataDocumentRole;
-import io.atlasmap.api.v3.Message;
 import io.atlasmap.api.v3.Transformation;
 import io.atlasmap.api.v3.Transformation.Descriptor;
 import io.atlasmap.core.v3.transformation.AddTransformation;
-import io.atlasmap.core.v3.transformation.MapTransformation;
 import io.atlasmap.spi.v3.util.AtlasException;
 
 /**
  *
  */
-public class EndToEndTest {
+public class AddTransformationTest {
 
     TestClass sourceClass;
     TestClass targetClass;
@@ -60,25 +58,8 @@ public class EndToEndTest {
 
     @Test
     public void test() throws AtlasException {
-        Mapping mapping = mappingDoc.addMapping("/SourceClass/string", "/TargetClass/string");
-        assertThat(mappingDoc.mappings().isEmpty(), is(false));
-        assertThat(targetClass.getString(), is("string"));
-        assertThat(mapping.transformations().isEmpty(), is(false));
-        assertThat(mapping.messages().isEmpty(), is(false));
-        Message msg = mapping.messages().iterator().next();
-//        assertThat(msg.message(), is(""));
-        Transformation mapTransformation = mapping.transformations().get(0);
-        assertThat(mapTransformation.name(), is(MapTransformation.NAME));
+        Mapping mapping = mappingDoc.addMapping();
         Transformation addTransformation = addTransformation(mapping, AddTransformation.class);
-        assertThat(mapping.outputPropertyNames().isEmpty(), is(false));
-        assertThat(mapping.outputPropertyNames().contains(":1"), is(true));
-        mapTransformation.parameter(MapTransformation.FROM_PARAMETER).setStringValue(":1");
-        addTransformation.parameters().get(0).setStringValue("/SourceClass/integerPrimitive");
-        addTransformation.parameters().get(1).setStringValue("/SourceClass/integerPrimitive");
-        assertThat(targetClass.getString(), is("6"));
-
-        mapping = mappingDoc.addMapping();
-        addTransformation = addTransformation(mapping, AddTransformation.class);
         addTransformation.parameters().get(0).setStringValue("/SourceClass/integerPrimitive");
         addTransformation.parameters().get(1).setStringValue("/SourceClass/integerPrimitive");
         addTransformation.parameters().get(2).setStringValue("/TargetClass/doublePrimitive");
@@ -86,14 +67,6 @@ public class EndToEndTest {
         addTransformation.parameters().get(1).setStringValue("/SourceClass/doublePrimitive");
         addTransformation.parameters().get(2).setStringValue("/TargetClass/integerPrimitive");
         assertThat(targetClass.integerPrimitive(), is(9));
-
-        targetClass = new TestClass();
-        Atlas atlas = new Atlas(mappingFile);
-        mappingDoc = atlas.mappingDocument();
-        assertThat(mappingDoc.mappings().isEmpty(), is(false));
-        mappingDoc.addDataDocument("SourceClass", DataDocumentRole.SOURCE, "java", sourceClass);
-        mappingDoc.addDataDocument("TargetClass", DataDocumentRole.TARGET, "java", targetClass);
-        assertThat(targetClass.getString(), is("6"));
 }
 
     private Transformation addTransformation(Mapping mapping, Class<? extends Transformation> transformationClass) {

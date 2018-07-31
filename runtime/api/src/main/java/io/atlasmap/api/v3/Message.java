@@ -45,6 +45,6 @@ public interface Message {
         MAPPING,
         TRANSFORMATION,
         PARAMETER,
-        EXECUTION
+        DATA_HANDLER
     }
 }

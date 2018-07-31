@@ -13,21 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.atlasmap.api.v3;
+package io.atlasmap.spi.v3;
+
+import io.atlasmap.api.v3.Message.Scope;
+import io.atlasmap.api.v3.Message.Status;
 
 /**
  *
  */
-public enum ValueType {
+public interface DataHandlerSupport {
 
-    ANY,
-    BOOLEAN,
-    NUMBER,
-    STRING,
-    TIME,
-    COLLECTION,
-    MAP,
-    ITERABLE, // STRING, COLLECTION, or MAP
-    ENUMERATION,
-    ADDRESS,
+    void clearMessages(Scope scope, Object context);
+
+    void addMessage(Status status, Scope scope, Object context, String message, Object... arguments);
 }

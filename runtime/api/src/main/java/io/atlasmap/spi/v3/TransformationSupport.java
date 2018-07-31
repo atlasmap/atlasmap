@@ -15,25 +15,44 @@
  */
 package io.atlasmap.spi.v3;
 
-import io.atlasmap.api.v3.Message.Scope;
-import io.atlasmap.api.v3.Message.Status;
+import java.util.Set;
+
+import io.atlasmap.api.v3.Mapping;
+import io.atlasmap.api.v3.Message;
+import io.atlasmap.spi.v3.util.AtlasException;
 
 /**
  *
  */
-public interface MappingSupport {
+public interface TransformationSupport extends DataHandlerSupport {
+
+    /**
+     * @return the mapping that provided this support
+     */
+    Mapping mapping();
 
     void autoSave();
 
     DataHandler handler(String id);
 
-    Object value(String propertyName);
-
-    BaseParameter parameterWithOutputName(String outputName);
+    BaseParameter parameterWithOutputPropertyName(String outputName);
 
     void setOutputProperty(String outputName, BaseParameter parameter);
 
-    void clearExecutionMessages(Object context);
+    /**
+     * @return all messages in this mapping's mapping document
+     */
+    Set<Message> documentMessages();
 
-    void addMessage(Status status, Scope scope, Object context, String message, Object... arguments);
+    /**
+     * @param targetFieldPath
+     * @param parameter
+     * @throws AtlasException
+     */
+    void setTargetField(String targetFieldPath, BaseParameter parameter) throws AtlasException;
+
+    /**
+     *
+     */
+    void validate();
 }

@@ -15,8 +15,15 @@
  */
 package io.atlasmap.spi.v3;
 
+import java.util.Collections;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import io.atlasmap.api.v3.Message;
+import io.atlasmap.api.v3.Message.Scope;
+import io.atlasmap.api.v3.Message.Status;
 import io.atlasmap.api.v3.Parameter;
-import io.atlasmap.api.v3.ValueType;
+import io.atlasmap.api.v3.Transformation;
 import io.atlasmap.spi.v3.util.AtlasException;
 import io.atlasmap.spi.v3.util.AtlasRuntimeException;
 import io.atlasmap.spi.v3.util.I18n;
@@ -31,11 +38,10 @@ public class BaseParameter implements Parameter {
     public static final char PROPERTY_REFERENCE_INDICATOR = ':';
     public static final char ESCAPE_CHAR = FIELD_REFERENCE_INDICATOR;
 
-    final BaseTransformation transformation;
     final SerializedImage serializedImage = new SerializedImage();
+    private final BaseTransformation transformation;
     private final String name;
     private final Role role;
-    private final ValueType valueType;
     private final boolean valueRequired;
     private String stringValue;
     private StringValueType stringValueType;
@@ -52,27 +58,24 @@ public class BaseParameter implements Parameter {
      * @param transformation
      * @param name
      * @param role
-     * @param valueType
      * @param valueRequired
      * @param cloneable
      * @param description
      */
-    public BaseParameter(BaseTransformation transformation, String name, Role role, ValueType valueType, boolean valueRequired,
-                         boolean cloneable, String description) {
-        this(transformation, name, role, valueType, valueRequired, cloneable, description, null);
+    public BaseParameter(BaseTransformation transformation, String name, Role role, boolean valueRequired, boolean cloneable,
+                         String description) {
+        this(transformation, name, role, valueRequired, cloneable, description, null);
     }
 
-    private BaseParameter(BaseTransformation transformation, String name, Role role, ValueType valueType, boolean valueRequired,
-                          boolean cloneable, String description, Boolean cloned) {
+    private BaseParameter(BaseTransformation transformation, String name, Role role, boolean valueRequired, boolean cloneable,
+                          String description, Boolean cloned) {
         VerifyArgument.isNotNull("transformation", transformation);
         VerifyArgument.isNotEmpty("name", name);
         VerifyArgument.isNotNull("role", role);
-        VerifyArgument.isNotNull("valueType", valueType);
         VerifyArgument.isNotEmpty("description", description);
         this.transformation = transformation;
         this.name = I18n.localize(name);
         this.role = role;
-        this.valueType = valueType;
         this.valueRequired = role == Role.OUTPUT || valueRequired;
         this.description = I18n.localize(description);
         this.cloneable = cloneable;
@@ -87,14 +90,6 @@ public class BaseParameter implements Parameter {
     @Override
     public String name() {
         return name;
-    }
-
-    /**
-     * @see Parameter#valueType()
-     */
-    @Override
-    public ValueType valueType() {
-        return valueType;
     }
 
     /**
@@ -119,6 +114,7 @@ public class BaseParameter implements Parameter {
     @Override
     public void setStringValue(String stringValue) throws AtlasException {
         setStringValueType(stringValue);
+        // TODO clear previous target field, property, & transformation dependencies before changing string value
         if (stringValueType == StringValueType.CONSTANT) {
             setConstant(stringValue);
         } else if (stringValueType == StringValueType.FIELD_REFERENCE) {
@@ -128,6 +124,7 @@ public class BaseParameter implements Parameter {
         }
         this.stringValue = stringValue;
         serializedImage.stringValue = stringValue;
+        validate();
         transformation.executeIfComplete();
     }
 
@@ -171,6 +168,42 @@ public class BaseParameter implements Parameter {
         return cloned;
     }
 
+    /**
+     * @see Parameter#transformation()
+     */
+    @Override
+    public Transformation transformation() {
+        return transformation;
+    }
+
+    /**
+     * @see Parameter#messages()
+     */
+    @Override
+    public Set<Message> messages() {
+        Set<Message> messages = transformation.documentMessages().stream().filter(message -> (message.scope() == Scope.PARAMETER
+                                                                                              || message.scope() == Scope.DATA_HANDLER)
+                                                                                             && message.context() == this)
+                                                                          .collect(Collectors.toSet());
+        return Collections.unmodifiableSet(messages);
+    }
+
+    /**
+     * @see Parameter#hasErrors()
+     */
+    @Override
+    public boolean hasErrors() {
+        return messages().stream().anyMatch(message -> message.status() == Status.ERROR);
+    }
+
+    /**
+     * @see Parameter#hasWarnings()
+     */
+    @Override
+    public boolean hasWarnings() {
+        return messages().stream().anyMatch(message -> message.status() == Status.WARNING);
+    }
+
     public DataHandler dataHandler() {
         return handler;
     }
@@ -182,20 +215,29 @@ public class BaseParameter implements Parameter {
         this.value = value;
     }
 
+    public StringValueType stringValueType() {
+        return stringValueType;
+    }
+
     String path() {
         return path;
     }
 
     BaseParameter cloneParameter(BaseTransformation transformation) {
-        return new BaseParameter(transformation, name, role, valueType, false, cloneable, description, true);
-    }
-
-    StringValueType stringValueType() {
-        return stringValueType;
+        return new BaseParameter(transformation, name, role, false, cloneable, description, true);
     }
 
     void setValue(Object value) {
         this.value = value;
+    }
+
+    void validate() {
+        transformation.clearMessages(Scope.PARAMETER, this);
+        if (valueRequired() && (stringValue() == null || stringValue().isEmpty())) {
+            transformation.addMessage(Status.ERROR, Scope.PARAMETER, this,
+                                      "A value is required");
+        }
+        transformation.validate();
     }
 
     private void setStringValueType(String stringValue) throws AtlasException {
@@ -222,37 +264,10 @@ public class BaseParameter implements Parameter {
     }
 
     private void setConstant(String stringValue) {
-        switch (valueType) {
-            case BOOLEAN:
-                if (stringValue == null) {
-                    value = (valueRequired ? Boolean.FALSE : null);
-                    break;
-                }
-                switch (stringValue.trim().toLowerCase()) {
-                    case "false":
-                    case "f":
-                    case "no":
-                    case "n":
-                        value = Boolean.FALSE;
-                        break;
-                    default:
-                        try {
-                            value = Double.valueOf(stringValue).intValue() != 0;
-                        } catch (NumberFormatException e) {
-                            value = Boolean.TRUE;
-                        }
-                }
-                break;
-            case NUMBER:
-                break;
-            default: // ANY
-                break;
-        }
         value = stringValue;
     }
 
     private void setFieldReference(String stringValue) throws AtlasException {
-        // Value must be a reference
         int ndx = stringValue.indexOf('/', 1);
         if (ndx < 2) {
             throw new AtlasException("The field reference must start with a data document ID, followed by a field reference: %s", stringValue);
@@ -263,21 +278,29 @@ public class BaseParameter implements Parameter {
             throw new AtlasException("The field reference contains a reference to an invalid data document: %s in %s", docId, stringValue);
         }
         path = stringValue.substring(ndx + 1);
+        handler.clearMessages(Scope.DATA_HANDLER, this);
         if (role == Role.INPUT) {
             value = handler.value(path);
+            validate();
+        } else {
+            transformation.setTargetField(stringValue, this);
         }
     }
 
-    private void setPropertyReference(String stringValue) {
+    private void setPropertyReference(String stringValue) throws AtlasException {
         if (role == Role.INPUT) {
-            value = transformation.result(stringValue);
+            BaseParameter parameter = transformation.parameterWithOutputPropertyName(stringValue);
+            if (parameter == null) {
+                throw new AtlasException("No output property exists named %s", stringValue);
+            }
+            value = parameter.value;
             transformation.addDependency(stringValue, this);
         } else {
             transformation.setOutputProperty(stringValue, this);
         }
     }
 
-    enum StringValueType {
+    public enum StringValueType {
         CONSTANT,
         PROPERTY_REFERENCE,
         FIELD_REFERENCE

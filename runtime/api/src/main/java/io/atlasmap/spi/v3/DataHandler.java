@@ -16,6 +16,9 @@
 package io.atlasmap.spi.v3;
 
 import io.atlasmap.api.v3.MappingDocument.DataDocumentRole;
+import io.atlasmap.api.v3.Message.Scope;
+import io.atlasmap.api.v3.Message.Status;
+import io.atlasmap.api.v3.Parameter;
 import io.atlasmap.spi.v3.util.AtlasException;
 
 /**
@@ -24,6 +27,7 @@ import io.atlasmap.spi.v3.util.AtlasException;
 public abstract class DataHandler {
 
     private Object document;
+    private DataHandlerSupport support;
 
     public abstract String[] supportedDataFormats();
 
@@ -34,15 +38,26 @@ public abstract class DataHandler {
         return null;
     }
 
-    protected Object document() {
-        return document;
+    /**
+     * <strong>Warning:</strong> Must never be called by subclasses
+     *
+     * @param support
+     */
+    public void setSupport(DataHandlerSupport support) {
+        this.support = support;
     }
 
     /**
+     * <strong>Warning:</strong> Must never be called by subclasses
+     *
      * @param document
      */
     public void setDocument(Object document) {
         this.document = document;
+    }
+
+    protected Object document() {
+        return document;
     }
 
     /**
@@ -50,12 +65,21 @@ public abstract class DataHandler {
      * @return the value at <code>path</code>
      * @throws AtlasException if <code>path</code> is invalid
      */
-    public abstract Object value(String path) throws AtlasException;
+    protected abstract Object value(String path) throws AtlasException;
 
     /**
      * @param path
      * @param value
+     * @param parameter
      * @throws AtlasException if <code>path</code> is invalid or <code>value</code> is invalid for the last field in <code>path</code>
      */
-    public abstract void setValue(String path, Object value) throws AtlasException;
+    protected abstract void setValue(String path, Object value, Parameter parameter) throws AtlasException;
+
+    protected void addMessage(Status status, Scope scope, Object context, String message, Object... arguments) {
+        support.addMessage(status, scope, context, message, arguments);
+    }
+
+    void clearMessages(Scope scope, Object context) {
+        support.clearMessages(scope, context);
+    }
 }
