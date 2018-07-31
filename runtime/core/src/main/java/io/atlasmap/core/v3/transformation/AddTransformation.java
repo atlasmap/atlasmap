@@ -13,14 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.atlasmap.core.transformation;
+package io.atlasmap.core.v3.transformation;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import io.atlasmap.api.v3.Message.Scope;
+import io.atlasmap.api.v3.Message.Status;
 import io.atlasmap.api.v3.Parameter;
 import io.atlasmap.api.v3.Parameter.Role;
-import io.atlasmap.api.v3.ValueType;
 import io.atlasmap.spi.v3.BaseParameter;
 import io.atlasmap.spi.v3.BaseTransformation;
-import io.atlasmap.spi.v3.util.AtlasException;
 import io.atlasmap.spi.v3.util.I18n;
 
 /**
@@ -36,11 +39,11 @@ public class AddTransformation extends BaseTransformation {
 
     public AddTransformation() {
         super(NAME, "Adds one or more numberic values");
-        addParameter(new BaseParameter(this, OPERAND_PARAMETER, Role.INPUT, ValueType.NUMBER, false, false,
+        addParameter(new BaseParameter(this, OPERAND_PARAMETER, Role.INPUT, false, false,
                                        "A numberic source field, property, or constant to add"));
-        addParameter(new BaseParameter(this, OPERAND_PARAMETER, Role.INPUT, ValueType.NUMBER, false, true,
+        addParameter(new BaseParameter(this, OPERAND_PARAMETER, Role.INPUT, false, true,
                                        "A numberic source field, property, or constant to add"));
-        sumParameter = addParameter(new BaseParameter(this, SUM_PARAMETER, Role.OUTPUT, ValueType.ANY, false, false,
+        sumParameter = addParameter(new BaseParameter(this, SUM_PARAMETER, Role.OUTPUT, false, false,
                                                       "A target field or property to which to add the sum of the operands"));
     }
 
@@ -48,7 +51,7 @@ public class AddTransformation extends BaseTransformation {
      * @see BaseTransformation#execute()
      */
     @Override
-    protected void execute() throws AtlasException {
+    protected void execute() {
         double sum = 0;
         int sumSize = 8;
         boolean sumIsDecimal = false;
@@ -58,14 +61,7 @@ public class AddTransformation extends BaseTransformation {
                 if (value == null) {
                     continue;
                 }
-                if (value instanceof Boolean) {
-                    if (Boolean.TRUE.equals(value)) {
-                        sum += 1;
-                    }
-                } else if (value instanceof Character) {
-                    sumSize = 16;
-                    sum += (char)value;
-                } else if (value instanceof Number) {
+                if (value instanceof Number) {
                     sum += ((Number)value).doubleValue();
                     if (value instanceof Short) {
                         sumSize = Math.max(sumSize, 16);
@@ -81,42 +77,57 @@ public class AddTransformation extends BaseTransformation {
                         sumIsDecimal = true;
                     }
                 } else {
-                    if (!(value instanceof String)) {
-                        System.out.println(value + ": " + value.getClass());
-                    }
-                    String operand = value.toString().trim().toLowerCase();
-                    int radix = 10;
-                    if (operand.startsWith("0x")) {
-                        radix = 16;
-                    } else if (operand.startsWith("0b")) {
-                        radix = 2;
-                    }
-                    try {
-                        sum += Byte.parseByte(operand, radix);
-                    } catch (NumberFormatException notByte) {
+                    addMessage(Status.WARNING, Scope.PARAMETER, parameter,
+                               "The %s %s was automatically converted to a number",
+                               value.getClass().getSimpleName(), value);
+                    if (value instanceof Boolean) {
+                        if (Boolean.TRUE.equals(value)) {
+                            sum += 1;
+                        }
+                    } else if (value instanceof Character) {
+                        sumSize = 16;
+                        sum += (char)value;
+                    } else {
+                        String operand = value.toString().trim().toLowerCase();
+                        if (operand.isEmpty()) {
+                            continue;
+                        }
+                        Matcher matcher = Pattern.compile(NUMBER_REGEX).matcher(operand);
+                        if (matcher.find()) {
+                            operand = matcher.group(1);
+                        }
+                        int radix = 10;
+                        if (operand.startsWith("0x")) {
+                            radix = 16;
+                        } else if (operand.startsWith("0b")) {
+                            radix = 2;
+                        }
                         try {
-                            sum += Short.parseShort(operand, radix);
-                            sumSize = Math.max(sumSize, 16);
-                        } catch (NumberFormatException notShort) {
+                            sum += Byte.parseByte(operand, radix);
+                        } catch (NumberFormatException notByte) {
                             try {
-                                sum += Integer.parseInt(operand, radix);
-                                sumSize = Math.max(sumSize, 32);
-                            } catch (NumberFormatException notInteger) {
+                                sum += Short.parseShort(operand, radix);
+                                sumSize = Math.max(sumSize, 16);
+                            } catch (NumberFormatException notShort) {
                                 try {
-                                    sum += Long.parseLong(operand, radix);
-                                    sumSize = Math.max(sumSize, 64);
-                                } catch (NumberFormatException notLong) {
+                                    sum += Integer.parseInt(operand, radix);
+                                    sumSize = Math.max(sumSize, 32);
+                                } catch (NumberFormatException notInteger) {
                                     try {
-                                        sum += Float.parseFloat(operand);
-                                        sumSize = 32;
-                                        sumIsDecimal = true;
-                                    } catch (NumberFormatException notFloat) {
+                                        sum += Long.parseLong(operand, radix);
+                                        sumSize = Math.max(sumSize, 64);
+                                    } catch (NumberFormatException notLong) {
                                         try {
-                                            sum += Double.parseDouble(operand);
-                                            sumSize = 64;
+                                            sum += Float.parseFloat(operand);
+                                            sumSize = 32;
                                             sumIsDecimal = true;
-                                        } catch (NumberFormatException ignored) {
-                                            // TODO check if starts with digits or sign, followed by other digits or decimal
+                                        } catch (NumberFormatException notFloat) {
+                                            try {
+                                                sum += Double.parseDouble(operand);
+                                                sumSize = 64;
+                                                sumIsDecimal = true;
+                                            } catch (NumberFormatException ignored) {
+                                            }
                                         }
                                     }
                                 }

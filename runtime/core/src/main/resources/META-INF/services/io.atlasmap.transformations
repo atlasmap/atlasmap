@@ -1,2 +1,2 @@
-io.atlasmap.core.transformation.MapTransformation
-io.atlasmap.core.transformation.AddTransformation
+io.atlasmap.core.v3.transformation.MapTransformation
+io.atlasmap.core.v3.transformation.AddTransformation

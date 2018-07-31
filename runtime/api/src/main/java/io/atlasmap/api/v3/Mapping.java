@@ -16,7 +16,9 @@
 package io.atlasmap.api.v3;
 
 import java.util.List;
+import java.util.Map;
 import java.util.NavigableSet;
+import java.util.Set;
 
 import io.atlasmap.api.v3.Transformation.Descriptor;
 
@@ -37,11 +39,38 @@ public interface Mapping {
 
     void removeTransformation(Transformation transformation);
 
-    void moveTransformationBefore(Transformation transformation, Transformation beforeTransformation);
+    /**
+     * @param movingTransformation
+     * @param transformation
+     */
+    void moveTransformationBefore(Transformation movingTransformation, Transformation transformation);
 
-    void replaceTransformation(Transformation transformation, Transformation withTransformation);
+    /**
+     * @param movingTransformation
+     * @param transformation
+     */
+    void moveTransformationAfter(Transformation movingTransformation, Transformation transformation);
+
+    Transformation replaceTransformation(Transformation transformation, Descriptor descriptor);
 
     List<Transformation> transformations();
 
-    NavigableSet<String> properties();
+    NavigableSet<String> outputPropertyNames();
+
+    Map<String, Set<Parameter>> dependentParametersByOutputPropertyName();
+
+    /**
+     * @return all messages associated with this mapping
+     */
+    Set<Message> messages();
+
+    /**
+     * @return <code>true</code> if this mapping has any errors
+     */
+    boolean hasErrors();
+
+    /**
+     * @return <code>true</code> if this mapping has any warnings
+     */
+    boolean hasWarnings();
 }

@@ -21,8 +21,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -38,12 +40,14 @@ import io.atlasmap.api.v3.Message;
 import io.atlasmap.api.v3.Message.Scope;
 import io.atlasmap.api.v3.Message.Status;
 import io.atlasmap.api.v3.Parameter;
+import io.atlasmap.api.v3.Parameter.Role;
 import io.atlasmap.api.v3.Transformation;
 import io.atlasmap.api.v3.Transformation.Descriptor;
-import io.atlasmap.core.transformation.MapTransformation;
+import io.atlasmap.core.v3.transformation.MapTransformation;
 import io.atlasmap.spi.v3.BaseParameter;
 import io.atlasmap.spi.v3.BaseTransformation;
 import io.atlasmap.spi.v3.DataHandler;
+import io.atlasmap.spi.v3.DataHandlerSupport;
 import io.atlasmap.spi.v3.util.AtlasException;
 import io.atlasmap.spi.v3.util.AtlasRuntimeException;
 import io.atlasmap.spi.v3.util.I18n;
@@ -54,7 +58,7 @@ import io.atlasmap.spi.v3.util.VerifyArgument;
  */
 public class MappingDocumentImpl implements MappingDocument {
 
-    private static final String VERSION = "1.0.0";
+    private static final String VERSION = "3";
     private static final ObjectMapper JSON = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT)
                                                                .setVisibility(PropertyAccessor.FIELD, Visibility.ANY)
                                                                .setSerializationInclusion(Include.NON_NULL);
@@ -65,8 +69,8 @@ public class MappingDocumentImpl implements MappingDocument {
     private boolean autoSaves = true;
     private boolean unsaved;
     private final SerializedImage serializedImage = new SerializedImage();
-    // TODO Verify each target field only appears once in any target parameters
-    private final Set<String> mappedTargetFields = new HashSet<>();
+    private Map<String, BaseParameter> parametersByTargetFieldPath = new HashMap<>();
+    private final Support support = new Support();
 
     MappingDocumentImpl(Context context, File file) {
         this.context = context;
@@ -132,8 +136,8 @@ public class MappingDocumentImpl implements MappingDocument {
             if (descriptor.id().equals(id) && descriptor.role().equals(role)) {
                 context.dataDocumentDescriptors.remove(descriptor);
                 serializedImage.dataDocumentDescriptors.remove(descriptor.serializedImage);
-                autoSaveOrSetUnsaved();
                 validate();
+                autoSaveOrSetUnsaved();
                 return;
             }
         }
@@ -148,6 +152,7 @@ public class MappingDocumentImpl implements MappingDocument {
         MappingImpl mapping = new MappingImpl(context);
         mappings.add(mapping);
         serializedImage.mappings.add(mapping.serializedImage);
+        validate();
         autoSaveOrSetUnsaved();
         return mapping;
     }
@@ -176,6 +181,7 @@ public class MappingDocumentImpl implements MappingDocument {
                     parameter.setStringValue(to);
                 }
             }
+            validate();
             return mapping;
         } finally {
             autoSaves = origAutoSaves;
@@ -192,6 +198,7 @@ public class MappingDocumentImpl implements MappingDocument {
             throw new AtlasRuntimeException("Mapping does not exist: %s", mapping);
         }
         serializedImage.mappings.remove(((MappingImpl)mapping).serializedImage);
+        validate();
         autoSaveOrSetUnsaved();
     }
 
@@ -329,10 +336,39 @@ public class MappingDocumentImpl implements MappingDocument {
         }
     }
 
+    void setTargetField(String targetFieldPath, BaseParameter parameter) throws AtlasException {
+        // TODO indexes in paths
+        BaseParameter existingParameter = parametersByTargetFieldPath.putIfAbsent(targetFieldPath, parameter);
+        if (existingParameter != null && existingParameter != parameter) {
+            throw new AtlasException("Target field %s is already being mapped to by the %s parameter in the % transformation", targetFieldPath, existingParameter.name(), existingParameter.transformation().name());
+        }
+    }
+
+    void validate() {
+        context.messages.removeIf(message -> message.scope() == Scope.DOCUMENT);
+        boolean sourceDocFound = false;
+        boolean targetDocFound = false;
+        for (DataDocumentDescriptor descriptor : context.dataDocumentDescriptors) {
+            if (descriptor.role() == DataDocumentRole.SOURCE) {
+                sourceDocFound = true;
+            } else if (descriptor.role() == DataDocumentRole.TARGET) {
+                targetDocFound = true;
+            }
+        }
+        if (!sourceDocFound) {
+            context.messages.add(new MessageImpl(Status.ERROR, Scope.DOCUMENT, this, "No source documents found"));
+        }
+        if (!targetDocFound) {
+            context.messages.add(new MessageImpl(Status.ERROR, Scope.DOCUMENT, this, "No target documents found"));
+        }
+        // TODO Warn if any target fields are unmapped, requires a model visitor (by handler for now)
+    }
+
     private DataHandler handler(DataDocumentRole role, String dataFormat) {
         for (Class<? extends DataHandler> handlerClass : context.dataHandlerClasses) {
             try {
                 DataHandler handler = handlerClass.getDeclaredConstructor().newInstance();
+                handler.setSupport(support);
                 for (String supportedFormat : handler.supportedDataFormats()) {
                     if (supportedFormat.equals(dataFormat)) {
                         DataDocumentRole[] roles = handler.supportedRoles();
@@ -364,7 +400,7 @@ public class MappingDocumentImpl implements MappingDocument {
                        && ndx + 1 < parameters.size() && parameters.get(ndx + 1).name().equals(parameterImage.name)) {
                     parameter = parameters.get(++ndx);
                 }
-                if (parameter.stringValue() != null) {
+                if (parameter.role() == Role.INPUT && parameter.stringValue() != null) {
                     if (parameterImage.cloned == Boolean.TRUE) {
                         throw new AtlasException("Unable to find additional parameter %s"
                                                  + " in transformation class %s loading mapping file %s",
@@ -395,30 +431,23 @@ public class MappingDocumentImpl implements MappingDocument {
         return descriptor;
     }
 
-    private void validate() {
-        context.messages.removeIf(message -> message.scope() == Scope.DOCUMENT);
-        boolean sourceDocFound = false;
-        boolean targetDocFound = false;
-        for (DataDocumentDescriptor descriptor : context.dataDocumentDescriptors) {
-            if (descriptor.role() == DataDocumentRole.SOURCE) {
-                sourceDocFound = true;
-            } else if (descriptor.role() == DataDocumentRole.TARGET) {
-                targetDocFound = true;
-            }
-        }
-        if (!sourceDocFound) {
-            context.messages.add(new MessageImpl(Status.ERROR, Scope.DOCUMENT, this, "No source documents found"));
-        }
-        if (!targetDocFound) {
-            context.messages.add(new MessageImpl(Status.ERROR, Scope.DOCUMENT, this, "No target documents found"));
-        }
-        // TODO Warn if any target fields are unmapped
-    }
-
     static class SerializedImage {
 
         String version = VERSION;
         Set<DataDocumentDescriptor.SerializedImage> dataDocumentDescriptors = new HashSet<>();
         List<MappingImpl.SerializedImage> mappings = new ArrayList<>();
+    }
+
+    class Support implements DataHandlerSupport {
+
+        @Override
+        public void clearMessages(Scope scope, Object context) {
+            MappingDocumentImpl.this.context.messages.removeIf(message -> message.scope() == scope && message.context() == context);
+        }
+
+        @Override
+        public void addMessage(Status status, Scope scope, Object context, String message, Object... arguments) {
+            MappingDocumentImpl.this.context.messages.add(new MessageImpl(status, scope, context, message, arguments));
+        }
     }
 }

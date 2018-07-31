@@ -17,10 +17,12 @@ package io.atlasmap.spi.v3;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
+import io.atlasmap.api.v3.Mapping;
+import io.atlasmap.api.v3.Message;
 import io.atlasmap.api.v3.Message.Scope;
 import io.atlasmap.api.v3.Message.Status;
 import io.atlasmap.api.v3.Parameter;
@@ -40,11 +42,23 @@ public abstract class BaseTransformation implements Transformation {
     private final String name;
     private final String description;
     private final List<Parameter> parameters = new ArrayList<>();
-    private MappingSupport support;
-    private boolean complete;
-    private final Set<BaseParameter> dependencies = new HashSet<>();
-    private final Set<BaseParameter> dependents = new HashSet<>();
+    private TransformationSupport support;
     private final SerializedImage serializedImage = new SerializedImage();
+
+    private static final String DIGITS = "(\\p{Digit}+)";
+    private static final String BINARY_DIGITS = "([01_]+)";
+    private static final String HEX_DIGITS = "(\\p{XDigit}+)";
+    private static final String EXP = "[eE][+-]?"+DIGITS;
+    protected static final String NUMBER_REGEX =
+         "([+-]?(" +
+         "((("+DIGITS+"(\\.)?("+DIGITS+"?)("+EXP+")?)|" +
+         "(\\.("+DIGITS+")("+EXP+")?)|" +
+         "((" +
+         "(0[xX]" + HEX_DIGITS + "(\\.)?)|" +
+         "(0[xX]" + HEX_DIGITS + "?(\\.)" + HEX_DIGITS + ")" +
+         ")[pP][+-]?" + DIGITS + "))|" +
+         "(0[bB]" + BINARY_DIGITS + ")|" +
+         "[fFdD]?)))";
 
     /**
      * Note: {@link I18n} is automatically performed on name.
@@ -125,11 +139,41 @@ public abstract class BaseTransformation implements Transformation {
     }
 
     /**
-     * @see Transformation#complete()
+     * @see Transformation#mapping()
      */
     @Override
-    public boolean complete() {
-        return complete;
+    public Mapping mapping() {
+        return support.mapping();
+    }
+
+    /**
+     * @see Transformation#messages()
+     */
+    @Override
+    public Set<Message> messages() {
+        Set<Message> messages = support.documentMessages().stream().filter(message -> message.scope() == Scope.TRANSFORMATION
+                                                                                      && message.context() == this)
+                                                                   .collect(Collectors.toSet());
+        for (Parameter parameter : parameters) {
+            messages.addAll(parameter.messages());
+        }
+        return Collections.unmodifiableSet(messages);
+    }
+
+    /**
+     * @see Transformation#hasErrors()
+     */
+    @Override
+    public boolean hasErrors() {
+        return messages().stream().anyMatch(message -> message.status() == Status.ERROR);
+    }
+
+    /**
+     * @see Transformation#hasWarnings()
+     */
+    @Override
+    public boolean hasWarnings() {
+        return messages().stream().anyMatch(message -> message.status() == Status.WARNING);
     }
 
     /**
@@ -147,8 +191,15 @@ public abstract class BaseTransformation implements Transformation {
         return builder.toString();
     }
 
-    public void setSupport(MappingSupport support) {
+    /**
+     * <strong>Warning:</strong> Must never be called by subclasses
+     *
+     * @param support
+     */
+    public void setSupport(TransformationSupport support) {
         this.support = support;
+        validate();
+        parameters.forEach(parameter -> ((BaseParameter)parameter).validate());
     }
 
     /**
@@ -170,32 +221,30 @@ public abstract class BaseTransformation implements Transformation {
 
     protected abstract void execute() throws AtlasException;
 
+    protected void addMessage(Status status, Scope scope, Object context, String message, Object... arguments) {
+        support.addMessage(status, scope, context, message, arguments);
+    }
+
     DataHandler handler(String id) {
         return support.handler(id);
     }
 
     void executeIfComplete() throws AtlasException {
-        complete = true;
-        for (Parameter parameter : parameters) {
-            if (parameter.valueRequired() && parameter.stringValue() == null) {
-                complete = false;
-                support.autoSave();
-                return;
-            }
-        }
-        execute();
-        for (Parameter parameter : parameters) {
-            if (parameter.role() == Role.OUTPUT) {
-                BaseParameter targetParameter = (BaseParameter)parameter;
-                if (targetParameter.dataHandler() != null) {
-                    targetParameter.dataHandler().setValue(targetParameter.path(), targetParameter.value());
-                } else if (targetParameter.stringValueType() == StringValueType.PROPERTY_REFERENCE) {
-                    for (BaseParameter dependentParameter : dependents) {
-                        if (dependentParameter.role() == Role.INPUT
-                            && dependentParameter.stringValueType() == StringValueType.PROPERTY_REFERENCE
-                            && dependentParameter.stringValue().equals(parameter.stringValue())) {
-                            dependentParameter.setValue(parameter.value());
-                            dependentParameter.transformation.executeIfComplete();
+        if (hasErrors()) {
+            parameters.stream()
+                      .filter(parameter -> parameter.role() == Role.OUTPUT)
+                      .forEach(parameter -> ((BaseParameter)parameter).setOutputValue(null));
+        } else {
+            execute();
+            for (Parameter parameter : parameters) {
+                if (parameter.role() == Role.OUTPUT) {
+                    BaseParameter outputParameter = (BaseParameter)parameter;
+                    if (outputParameter.dataHandler() != null) {
+                        outputParameter.dataHandler().setValue(outputParameter.path(), outputParameter.value(), outputParameter);
+                    } else if (outputParameter.stringValueType() == StringValueType.PROPERTY_REFERENCE) {
+                        for (Parameter dependentParameter : mapping().dependentParametersByOutputPropertyName().get(outputParameter.stringValue())) {
+                            ((BaseParameter)dependentParameter).setValue(parameter.value());
+                            ((BaseTransformation)dependentParameter.transformation()).executeIfComplete();
                         }
                     }
                 }
@@ -204,26 +253,40 @@ public abstract class BaseTransformation implements Transformation {
         support.autoSave();
     }
 
-    Object result(String propertyName) {
-        return support.value(propertyName);
+    BaseParameter parameterWithOutputPropertyName(String outputPropertyName) {
+        return support.parameterWithOutputPropertyName(outputPropertyName);
     }
 
-    void addDependency(String propertyName, BaseParameter dependentParameter) {
-        BaseParameter parameter = support.parameterWithOutputName(propertyName);
-        dependencies.add(parameter);
-        parameter.transformation.dependents.add(dependentParameter);
+    void addDependency(String outputPropertyName, BaseParameter dependentParameter) {
+        mapping().dependentParametersByOutputPropertyName().get(outputPropertyName).add(dependentParameter);
     }
 
     void setOutputProperty(String outputName, BaseParameter parameter) {
         support.setOutputProperty(outputName, parameter);
     }
 
-    void clearExecutionMessages(Object context) {
-        support.clearExecutionMessages(context);
+    void setTargetField(String targetFieldPath, BaseParameter parameter) throws AtlasException {
+        support.setTargetField(targetFieldPath, parameter);
     }
 
-    void addMessage(Status status, Scope scope, Object context, String message, Object... arguments) {
-        support.addMessage(status, scope, context, message, arguments);
+    void clearMessages(Scope scope, Object context) {
+        support.clearMessages(scope, context);
+    }
+
+    Set<Message> documentMessages() {
+        return support.documentMessages();
+    }
+
+    void validate() {
+        support.clearMessages(Scope.TRANSFORMATION, this);
+        for (Parameter parameter : parameters) {
+            if (parameter.valueRequired() && (parameter.stringValue() == null || parameter.stringValue().isEmpty())) {
+                addMessage(Status.ERROR, Scope.PARAMETER, parameter,
+                           "A value is required for the %s parameter",
+                           parameter.name());
+            }
+        }
+        support.validate();
     }
 
     public static class SerializedImage {

@@ -15,9 +15,7 @@
  */
 package io.atlasmap.spi.v3.util;
 
-public class I18n {
-
-    private I18n() {}
+public interface I18n {
 
     public static String localize(String text, Object... arguments) {
         VerifyArgument.isNotEmpty("text", text);

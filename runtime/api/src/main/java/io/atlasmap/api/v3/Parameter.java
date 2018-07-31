@@ -15,6 +15,8 @@
  */
 package io.atlasmap.api.v3;
 
+import java.util.Set;
+
 import io.atlasmap.spi.v3.util.AtlasException;
 
 /**
@@ -23,8 +25,6 @@ import io.atlasmap.spi.v3.util.AtlasException;
 public interface Parameter {
 
     String name();
-
-    ValueType valueType();
 
     boolean valueRequired();
 
@@ -41,6 +41,23 @@ public interface Parameter {
     boolean cloneable();
 
     boolean cloned();
+
+    Transformation transformation();
+
+    /**
+     * @return all messages associated with this parameter
+     */
+    Set<Message> messages();
+
+    /**
+     * @return <code>true</code> if this parameter has any errors
+     */
+    boolean hasErrors();
+
+    /**
+     * @return <code>true</code> if this parameter has any warnings
+     */
+    boolean hasWarnings();
 
     /**
      *

@@ -16,6 +16,7 @@
 package io.atlasmap.api.v3;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -36,7 +37,22 @@ public interface Transformation {
 
     Parameter cloneParameter(Parameter parameter);
 
-    boolean complete();
+    Mapping mapping();
+
+    /**
+     * @return all messages associated with this transformation
+     */
+    Set<Message> messages();
+
+    /**
+     * @return <code>true</code> if this transformation has any errors
+     */
+    boolean hasErrors();
+
+    /**
+     * @return <code>true</code> if this transformation has any warnings
+     */
+    boolean hasWarnings();
 
     /**
      *
