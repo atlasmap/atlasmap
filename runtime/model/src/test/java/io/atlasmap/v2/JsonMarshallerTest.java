@@ -111,6 +111,7 @@ public class JsonMarshallerTest extends BaseMarshallerTest {
         for (Action a : ((Mapping) fm).getOutputField().get(0).getActions().getActions()) {
             if (a instanceof CustomAction) {
                 CustomAction customAction = (CustomAction) a;
+                customAction.setName("Bar");
                 customAction.setClassName("io.foo.Bar");
                 customAction.setMethodName("doStuff");
                 customAction.setInputFieldType(FieldType.STRING);

@@ -20,6 +20,12 @@
               <goal>generate-inspections</goal>
             </goals>
           </execution>
+          <execution>
+            <id>generate-field-actions</id>
+            <goals>
+              <goal>generate-field-actions</goal>
+            </goals>
+          </execution>
         </executions>
         <configuration>
           <inspections>
@@ -33,6 +39,13 @@
                 <fileName>src/test/resources</fileName>
             </inspection>
           </inspections>
+          <fieldActions>
+            <fieldAction>
+              <jars>
+                <jar>target/atlasmap-maven-plugin-${project.version}-tests.jar</jar>
+              </jars>
+            </fieldAction>
+          </fieldActions>
         </configuration>
         <dependencies>
           <dependency>

@@ -426,6 +426,7 @@
         minOccurs="0" maxOccurs="1" />
     </sequence>
     <attribute name="name" type="string" use="required" />
+    <attribute name="custom" type="boolean" use="optional" />
     <attribute name="className" type="string" use="optional" />
     <attribute name="method" type="string" use="optional" />
     <attribute name="sourceType" type="atlas:FieldType"

@@ -16,7 +16,7 @@
     "build:lib": "ng build @atlasmap/atlasmap-data-mapper-lib",
     "build:app": "ng build --aot --progress=false @atlasmap/atlasmap-data-mapper",
     "e2e": "ng e2e",
-    "inspect": "../mvnw atlasmap:generate-inspections",
+    "inspect": "rm -f test-resources/inspected/*; ../mvnw atlasmap:generate-inspections",
     "lint": "ng lint @atlasmap/atlasmap-data-mapper",
     "lint:fix": "ng lint @atlasmap/atlasmap-data-mapper --fix",
     "pretest": "rm -rf coverage junit",
