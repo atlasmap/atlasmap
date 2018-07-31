@@ -13,8 +13,8 @@
     <i [attr.class]="getCSSClass('showDetails')" (click)="toolbarButtonClicked('showDetails', $event);" container="body"
        tooltip="Show/hide mapping details" placement="left"></i>
 
-    <div dropdown class="dropdown inline-block pull-right">
-      <i [attr.class]="getCSSClass('advancedMode')" dropdownToggle (click)="false"
+    <div dropdown #dropdown="bs-dropdown" class="dropdown inline-block pull-right">
+      <i [attr.class]="getEditorSettingsCSSClass(dropdown.isOpen)" dropdownToggle (click)="false"
 	 tooltip="Editor settings" placement="left"></i>
 
       <ul *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu">
@@ -51,7 +51,6 @@
           <i class="fa fa-check" *ngIf="cfg.showUnmappedFields" class="pull-right"></i>
         </li>
 
-        <!-- TODO reflect UXD outcome  -->
         <li *ngIf="!cfg.initCfg.disableMappingPreviewMode" role="menuitem" (click)="toolbarButtonClicked('showMappingPreview', $event);" class="clearfix">
           <div class="pull-left">
             <a class="dropdown-item" href="#">

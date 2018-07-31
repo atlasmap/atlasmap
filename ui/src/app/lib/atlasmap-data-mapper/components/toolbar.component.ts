@@ -38,13 +38,6 @@ export class ToolbarComponent implements OnInit {
       return 'fa fa-exchange link' + (this.cfg.mappings.activeMapping ? ' selected' : '');
     } else if ('showLines' === action) {
       return 'fa fa-share-alt link' + (this.cfg.showLinesAlways ? ' selected' : '');
-    } else if ('advancedMode' === action) {
-      let clz = 'fa fa-cog link ';
-      if (this.cfg.showLinesAlways || this.cfg.showTypes
-        || !this.cfg.showMappedFields || !this.cfg.showUnmappedFields) {
-        clz += 'selected';
-      }
-      return clz;
     } else if ('showMappingTable' === action) {
       return 'fa fa-table link' + (this.cfg.showMappingTable ? ' selected' : '');
     } else if ('showNamespaceTable' === action) {
@@ -52,6 +45,10 @@ export class ToolbarComponent implements OnInit {
     } else if ('editTemplate' === action) {
       return 'fa fa-file-text-o link' + (this.cfg.mappings.templateExists() ? ' selected' : '');
     }
+  }
+
+  getEditorSettingsCSSClass(open: boolean) {
+    return 'fa fa-cog link ' + (open ? ' selected' : '');
   }
 
   toolbarButtonClicked(action: string, event: any): void {
