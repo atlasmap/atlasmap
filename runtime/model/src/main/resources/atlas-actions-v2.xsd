@@ -160,6 +160,7 @@
     <complexType>
       <complexContent>
         <extension base="atlas:Action">
+          <attribute name="name" type="string" />
           <attribute name="className" type="string" />
           <attribute name="methodName" type="string" />
           <attribute name="inputFieldType" type="atlas:FieldType" />

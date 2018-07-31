@@ -97,8 +97,6 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
                 return new CurrentDateTime();
             case "CurrentTime":
                 return new CurrentTime();
-            case "CustomAction":
-                return processCustomActionJsonToken(jsonToken);
             case "DayOfWeek":
                 return new DayOfWeek();
             case "DayOfYear":
@@ -172,12 +170,9 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
             case "UppercaseChar":
                 return new UppercaseChar();
             default:
-                // ref: https://github.com/atlasmap/atlasmap/issues/6
-                // TODO: Logger not required in model module
-                // logger.warn("Unsupported action named: " + jsonToken.getCurrentName());
+                return processCustomActionJsonToken(jsonToken);
         }
 
-        return null;
     }
 
     protected AddDays processAddDaysJsonToken(JsonParser jsonToken) throws IOException {
@@ -420,6 +415,7 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
 
     protected CustomAction processCustomActionJsonToken(JsonParser jsonToken) throws IOException {
         CustomAction action = new CustomAction();
+        action.setName(jsonToken.getCurrentName());
 
         if (JsonToken.END_ARRAY.equals(jsonToken.currentToken())
                 || JsonToken.END_OBJECT.equals(jsonToken.currentToken())) {

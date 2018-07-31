@@ -23,6 +23,7 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 
 public class ActionsJsonSerializer extends JsonSerializer<Actions> {
 
+    public static final String NAME = "name";
     public static final String CLASS_NAME = "className";
     public static final String DATE_FORMAT = "dateFormat";
     public static final String DAYS = "days";
@@ -237,18 +238,26 @@ public class ActionsJsonSerializer extends JsonSerializer<Actions> {
         boolean objectStarted = false;
         if (customAction.getClassName() != null && customAction.getClassName().trim().length() > 0) {
             gen.writeStartObject();
-            gen.writeStringField(CLASS_NAME, customAction.getClassName().trim());
+            gen.writeStringField(NAME, customAction.getName().trim());
             gen.writeEndObject();
             objectStarted = true;
+        }
+
+        if (customAction.getClassName() != null && customAction.getClassName().trim().length() > 0) {
+            if (!objectStarted) {
+                gen.writeStartObject();
+            }
+            gen.writeStringField(CLASS_NAME, customAction.getClassName().trim());
+            if (!objectStarted) {
+                gen.writeEndObject();
+            }
         }
 
         if (customAction.getMethodName() != null && customAction.getMethodName().trim().length() > 0) {
             if (!objectStarted) {
                 gen.writeStartObject();
             }
-
             gen.writeStringField(METHOD_NAME, customAction.getMethodName().trim());
-
             if (!objectStarted) {
                 gen.writeEndObject();
             }

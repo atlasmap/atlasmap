@@ -17,7 +17,6 @@ package io.atlasmap.maven;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Files;
@@ -27,63 +26,25 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 
-import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
-import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
-import org.eclipse.aether.RepositorySystem;
-import org.eclipse.aether.RepositorySystemSession;
-import org.eclipse.aether.artifact.Artifact;
-import org.eclipse.aether.artifact.DefaultArtifact;
-import org.eclipse.aether.collection.CollectRequest;
-import org.eclipse.aether.graph.Dependency;
-import org.eclipse.aether.graph.DependencyNode;
-import org.eclipse.aether.repository.RemoteRepository;
-import org.eclipse.aether.resolution.DependencyRequest;
-import org.eclipse.aether.resolution.DependencyResolutionException;
-import org.eclipse.aether.resolution.DependencyResult;
-import org.eclipse.aether.util.graph.visitor.PreorderNodeListGenerator;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.atlasmap.core.DefaultAtlasConversionService;
 import io.atlasmap.java.inspect.ClassInspectionService;
 import io.atlasmap.java.v2.JavaClass;
 import io.atlasmap.json.inspect.JsonDocumentInspectionService;
 import io.atlasmap.json.v2.JsonDocument;
-import io.atlasmap.v2.Json;
 import io.atlasmap.xml.inspect.XmlInspectionService;
 import io.atlasmap.xml.v2.XmlDocument;
 
 @Mojo(name = "generate-inspections")
-public class GenerateInspectionsMojo extends AbstractMojo {
+public class GenerateInspectionsMojo extends AbstractAtlasMapMojo {
 
-    @Component
-    private RepositorySystem system;
-
-    @Parameter(defaultValue = "${project.remoteProjectRepositories}", readonly = true)
-    private List<RemoteRepository> remoteRepos;
-
-    @Parameter(defaultValue = "${repositorySystemSession}", readonly = true)
-    private RepositorySystemSession repoSession;
-
-    /**
-     * The directory where inspections get generated to.
-     */
-    @Parameter(defaultValue = "${project.build.directory}/generated-sources/atlasmap")
-    private File outputDir;
-
-    /**
-     * The file name to generate.
-     */
-    @Parameter()
-    private File outputFile;
+    public static final String DEFAULT_OUTPUT_FILE_PREFIX = "atlasmap-inspection";
 
     /**
      * A list of {@code <groupId>:<artifactId>[:<extension>[:<classifier>]]:<version>} of
@@ -97,6 +58,37 @@ public class GenerateInspectionsMojo extends AbstractMojo {
      */
     @Parameter(property = "className")
     private String className;
+
+    /**
+     * Allows you to configure the plugin with: <code>
+     *
+     *     <configuration>
+     *         <inspections>
+     *             <inspection>
+     *                 <artifacts>
+     *                     <artifact>io.atlasmap:atlas-java-generateInspection-test:1.1</artifact>
+     *                 </artifacts>
+     *                 <className>org.some.JavaClass</className>
+     *             </inspection>
+     *             <inspection>
+     *                 <artifacts>
+     *                     <artifact>io.atlasmap:other:1.1</artifact>
+     *                 </artifacts>
+     *                 <classNames>
+     *                     <className>org.some.JavaClass1</className>
+     *                     <className>org.some.JavaClass2</className>
+     *                 </classNames>
+     *             </inspection>
+     *             <inspection>
+     *                 <fileName>src/test/resources</fileName>
+     *             </inspection>
+     *         </inspections>
+     *     </configuration>
+     *
+     * </code>
+     */
+    @Parameter()
+    private List<Inspection> inspections;
 
     public static class Inspection {
         private List<String> artifacts;
@@ -137,40 +129,9 @@ public class GenerateInspectionsMojo extends AbstractMojo {
         }
     }
 
-    /**
-     * Allows you to configure the plugin with: <code>
-     *
-     *     <configuration>
-     *         <inspections>
-     *             <inspection>
-     *                 <artifacts>
-     *                     <artifact>io.atlasmap:atlas-java-generateInspection-test:1.1</artifact>
-     *                 </artifacts>
-     *                 <className>org.some.JavaClass</className>
-     *             </inspection>
-     *             <inspection>
-     *                 <artifacts>
-     *                     <artifact>io.atlasmap:other:1.1</artifact>
-     *                 </artifacts>
-     *                 <classNames>
-     *                     <className>org.some.JavaClass1</className>
-     *                     <className>org.some.JavaClass2</className>
-     *                 </classNames>
-     *             </inspection>
-     *             <inspection>
-     *                 <fileName>src/test/resources</fileName>
-     *             </inspection>
-     *         </inspections>
-     *     </configuration>
-     *
-     * </code>
-     */
-    @Parameter()
-    private List<Inspection> inspections;
-
     public void execute() throws MojoExecutionException, MojoFailureException {
-        if (outputDir != null) {
-            outputDir.mkdirs();
+        if (getOutputDir() != null) {
+            getOutputDir().mkdirs();
         }
         if (this.artifacts != null && this.className != null) {
             generateJavaInspection(this.artifacts, Arrays.asList(className));
@@ -209,67 +170,8 @@ public class GenerateInspectionsMojo extends AbstractMojo {
                 throw new MojoExecutionException(e.getMessage(), e);
             }
 
-            writeToFile(className, c);
+            writeToJsonFile(DEFAULT_OUTPUT_FILE_PREFIX + "-" + className, c);
         }
-    }
-
-    private void writeToFile(String name, Object object) throws MojoExecutionException {
-        try {
-            ObjectMapper objectMapper = Json.mapper();
-            File target = outputFile;
-            if (target == null) {
-                target = new File(outputDir, "atlasmap-inspection-" + name + ".json");
-            }
-            objectMapper.writeValue(target, object);
-            getLog().info("Created: " + target);
-        } catch (JsonProcessingException e) {
-            throw new MojoExecutionException(e.getMessage(), e);
-        } catch (IOException e) {
-            throw new MojoExecutionException(e.getMessage(), e);
-        }
-    }
-
-    private List<URL> resolveClasspath(List<String> artifacts) throws MojoFailureException {
-        final List<URL> urls = new ArrayList<>();
-
-        try {
-            for (String gav : artifacts) {
-                Artifact artifact = new DefaultArtifact(gav);
-
-                getLog().debug("Resolving dependencies for artifact: " + artifact);
-
-                CollectRequest collectRequest = new CollectRequest();
-                collectRequest.setRoot(new Dependency(artifact, ""));
-                collectRequest.setRepositories(remoteRepos);
-
-                DependencyRequest dependencyRequest = new DependencyRequest();
-                dependencyRequest.setCollectRequest(collectRequest);
-                DependencyResult dependencyResult = system.resolveDependencies(repoSession, dependencyRequest);
-
-                PreorderNodeListGenerator nlg = new PreorderNodeListGenerator();
-                dependencyResult.getRoot().accept(nlg);
-
-                Iterator<DependencyNode> it = nlg.getNodes().iterator();
-                while (it.hasNext()) {
-                    DependencyNode node = it.next();
-                    if (node.getDependency() != null) {
-                        Artifact x = node.getDependency().getArtifact();
-                        if (x.getFile() != null) {
-                            getLog().debug("Found dependency: " + x + " for artifact: " + artifact);
-                            urls.add(x.getFile().toURI().toURL());
-                        }
-                    }
-                }
-            }
-        } catch (IllegalArgumentException e) {
-            throw new MojoFailureException(e.getMessage(), e);
-        } catch (DependencyResolutionException e) {
-            throw new MojoFailureException(e.getMessage(), e);
-        } catch (MalformedURLException e) {
-            throw new MojoFailureException(e.getMessage(), e);
-        }
-
-        return urls;
     }
 
     private void generateFileInspection(Inspection inspection) throws MojoFailureException {
@@ -313,7 +215,7 @@ public class GenerateInspectionsMojo extends AbstractMojo {
             JsonDocument d = new JsonDocumentInspectionService().inspectJsonSchema(schema);
             String name = path.getFileName().toString();
             String outputName = name.substring(0, name.length() - 5);
-            writeToFile(outputName, d);
+            writeToJsonFile(DEFAULT_OUTPUT_FILE_PREFIX + "-" + outputName, d);
         } catch (Exception e) {
             throw new MojoFailureException(e.getMessage(), e);
         }
@@ -324,42 +226,10 @@ public class GenerateInspectionsMojo extends AbstractMojo {
             File f = new File(fileName);
             XmlDocument d = new XmlInspectionService().inspectSchema(f);
             String outputName = f.getName().substring(0, f.getName().length() - 4);
-            writeToFile(outputName, d);
+            writeToJsonFile(DEFAULT_OUTPUT_FILE_PREFIX + "-" + outputName, d);
         } catch (Exception e) {
             throw new MojoFailureException(e.getMessage(), e);
         }
-    }
-
-    public RepositorySystem getSystem() {
-        return system;
-    }
-
-    public void setSystem(RepositorySystem system) {
-        this.system = system;
-    }
-
-    public List<RemoteRepository> getRemoteRepos() {
-        return remoteRepos;
-    }
-
-    public void setRemoteRepos(List<RemoteRepository> remoteRepos) {
-        this.remoteRepos = remoteRepos;
-    }
-
-    public RepositorySystemSession getRepoSession() {
-        return repoSession;
-    }
-
-    public void setRepoSession(RepositorySystemSession repoSession) {
-        this.repoSession = repoSession;
-    }
-
-    public File getOutputDir() {
-        return outputDir;
-    }
-
-    public void setOutputDir(File outputDir) {
-        this.outputDir = outputDir;
     }
 
     public List<String> getArtifacts() {
@@ -386,11 +256,4 @@ public class GenerateInspectionsMojo extends AbstractMojo {
         this.inspections = inspections;
     }
 
-    public File getOutputFile() {
-        return outputFile;
-    }
-
-    public void setOutputFile(File outputFile) {
-        this.outputFile = outputFile;
-    }
 }

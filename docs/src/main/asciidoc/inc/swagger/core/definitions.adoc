@@ -10,6 +10,8 @@
 |Name|Schema
 |**className** +
 __optional__|string
+|**custom** +
+__optional__|boolean
 |**method** +
 __optional__|string
 |**name** +
