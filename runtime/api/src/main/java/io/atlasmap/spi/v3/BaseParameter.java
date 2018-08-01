@@ -113,8 +113,22 @@ public class BaseParameter implements Parameter {
      */
     @Override
     public void setStringValue(String stringValue) throws AtlasException {
+        if (!stringValue.equals(this.stringValue)) {
+            if (stringValueType == StringValueType.PROPERTY_REFERENCE) {
+                if (role == Role.INPUT) {
+                    transformation.support.removeReferenceToOutputPropertyReference(this.stringValue, this);
+                } else {
+                    transformation.support.removeOutputProperty(this.stringValue);
+                }
+            } else if (stringValueType == StringValueType.FIELD_REFERENCE && role == Role.OUTPUT) {
+                handler.clearMessages(this);
+                handler.setValue(path, null, this); // TODO set to whatever 'unaltered' value is instead
+                path = null;
+                value = null;
+                transformation.support.removeTargetFieldReference(stringValue, this);
+            }
+        }
         setStringValueType(stringValue);
-        // TODO clear previous target field, property, & transformation dependencies before changing string value
         if (stringValueType == StringValueType.CONSTANT) {
             setConstant(stringValue);
         } else if (stringValueType == StringValueType.FIELD_REFERENCE) {
@@ -181,10 +195,11 @@ public class BaseParameter implements Parameter {
      */
     @Override
     public Set<Message> messages() {
-        Set<Message> messages = transformation.documentMessages().stream().filter(message -> (message.scope() == Scope.PARAMETER
-                                                                                              || message.scope() == Scope.DATA_HANDLER)
-                                                                                             && message.context() == this)
-                                                                          .collect(Collectors.toSet());
+        Set<Message> messages = transformation.support.documentMessages().stream()
+                                                                         .filter(message -> (message.scope() == Scope.PARAMETER
+                                                                                             || message.scope() == Scope.DATA_HANDLER)
+                                                                                            && message.context() == this)
+                                                                         .collect(Collectors.toSet());
         return Collections.unmodifiableSet(messages);
     }
 
@@ -232,10 +247,10 @@ public class BaseParameter implements Parameter {
     }
 
     void validate() {
-        transformation.clearMessages(Scope.PARAMETER, this);
+        transformation.support.clearMessages(Scope.PARAMETER, this);
         if (valueRequired() && (stringValue() == null || stringValue().isEmpty())) {
-            transformation.addMessage(Status.ERROR, Scope.PARAMETER, this,
-                                      "A value is required");
+            transformation.support.addMessage(Status.ERROR, Scope.PARAMETER, this,
+                                              "A value is required");
         }
         transformation.validate();
     }
@@ -273,30 +288,29 @@ public class BaseParameter implements Parameter {
             throw new AtlasException("The field reference must start with a data document ID, followed by a field reference: %s", stringValue);
         }
         String docId = stringValue.substring(1, ndx);
-        handler = transformation.handler(docId);
+        handler = transformation.support.handler(docId);
         if (handler == null) {
             throw new AtlasException("The field reference contains a reference to an invalid data document: %s in %s", docId, stringValue);
         }
         path = stringValue.substring(ndx + 1);
-        handler.clearMessages(Scope.DATA_HANDLER, this);
+        handler.clearMessages(this);
         if (role == Role.INPUT) {
             value = handler.value(path);
-            validate();
         } else {
-            transformation.setTargetField(stringValue, this);
+            transformation.support.addTargetFieldReference(stringValue, this);
         }
     }
 
     private void setPropertyReference(String stringValue) throws AtlasException {
         if (role == Role.INPUT) {
-            BaseParameter parameter = transformation.parameterWithOutputPropertyName(stringValue);
+            BaseParameter parameter = transformation.support.parameterWithOutputProperty(stringValue);
             if (parameter == null) {
                 throw new AtlasException("No output property exists named %s", stringValue);
             }
             value = parameter.value;
-            transformation.addDependency(stringValue, this);
+            transformation.support.addReferenceToOutputProperty(stringValue, this);
         } else {
-            transformation.setOutputProperty(stringValue, this);
+            transformation.support.addOutputProperty(stringValue, this);
         }
     }
 

@@ -15,7 +15,7 @@
  */
 package io.atlasmap.api.v3;
 
-import java.util.Set;
+import java.util.Collection;
 
 import io.atlasmap.spi.v3.util.AtlasException;
 
@@ -47,7 +47,7 @@ public interface Parameter {
     /**
      * @return all messages associated with this parameter
      */
-    Set<Message> messages();
+    Collection<Message> messages();
 
     /**
      * @return <code>true</code> if this parameter has any errors

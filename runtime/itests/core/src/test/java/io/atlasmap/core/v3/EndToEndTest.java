@@ -26,7 +26,6 @@ import org.junit.Test;
 import io.atlasmap.api.v3.Mapping;
 import io.atlasmap.api.v3.MappingDocument;
 import io.atlasmap.api.v3.MappingDocument.DataDocumentRole;
-import io.atlasmap.api.v3.Message;
 import io.atlasmap.api.v3.Transformation;
 import io.atlasmap.api.v3.Transformation.Descriptor;
 import io.atlasmap.core.v3.transformation.AddTransformation;
@@ -64,28 +63,31 @@ public class EndToEndTest {
         assertThat(mappingDoc.mappings().isEmpty(), is(false));
         assertThat(targetClass.getString(), is("string"));
         assertThat(mapping.transformations().isEmpty(), is(false));
-        assertThat(mapping.messages().isEmpty(), is(false));
-        Message msg = mapping.messages().iterator().next();
-//        assertThat(msg.message(), is(""));
+        assertThat(mapping.messages().isEmpty(), is(true));
         Transformation mapTransformation = mapping.transformations().get(0);
         assertThat(mapTransformation.name(), is(MapTransformation.NAME));
         Transformation addTransformation = addTransformation(mapping, AddTransformation.class);
         assertThat(mapping.outputPropertyNames().isEmpty(), is(false));
         assertThat(mapping.outputPropertyNames().contains(":1"), is(true));
+        assertThat(mapping.messages().isEmpty(), is(false));
         mapTransformation.parameter(MapTransformation.FROM_PARAMETER).setStringValue(":1");
+        assertThat(mapping.messages().isEmpty(), is(true));
         addTransformation.parameters().get(0).setStringValue("/SourceClass/integerPrimitive");
+        assertThat(mapping.messages().isEmpty(), is(true));
         addTransformation.parameters().get(1).setStringValue("/SourceClass/integerPrimitive");
-        assertThat(targetClass.getString(), is("6"));
+        assertThat(mapping.messages().isEmpty(), is(true));
+        assertThat(targetClass.getString(), is("4294967294"));
+        assertThat(mapping.messages().isEmpty(), is(true));
 
         mapping = mappingDoc.addMapping();
         addTransformation = addTransformation(mapping, AddTransformation.class);
         addTransformation.parameters().get(0).setStringValue("/SourceClass/integerPrimitive");
         addTransformation.parameters().get(1).setStringValue("/SourceClass/integerPrimitive");
         addTransformation.parameters().get(2).setStringValue("/TargetClass/doublePrimitive");
-        assertThat(targetClass.getDoublePrimitive(), is(6.0));
+        assertThat(targetClass.getDoublePrimitive(), is(4.294967294E9));
         addTransformation.parameters().get(1).setStringValue("/SourceClass/doublePrimitive");
         addTransformation.parameters().get(2).setStringValue("/TargetClass/integerPrimitive");
-        assertThat(targetClass.integerPrimitive(), is(9));
+        assertThat(targetClass.integerPrimitive(), is(2147483647));
 
         targetClass = new TestClass();
         Atlas atlas = new Atlas(mappingFile);
@@ -93,7 +95,7 @@ public class EndToEndTest {
         assertThat(mappingDoc.mappings().isEmpty(), is(false));
         mappingDoc.addDataDocument("SourceClass", DataDocumentRole.SOURCE, "java", sourceClass);
         mappingDoc.addDataDocument("TargetClass", DataDocumentRole.TARGET, "java", targetClass);
-        assertThat(targetClass.getString(), is("6"));
+        assertThat(targetClass.getString(), is("4294967294"));
 }
 
     private Transformation addTransformation(Mapping mapping, Class<? extends Transformation> transformationClass) {

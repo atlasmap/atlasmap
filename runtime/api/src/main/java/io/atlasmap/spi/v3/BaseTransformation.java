@@ -39,12 +39,6 @@ import io.atlasmap.spi.v3.util.VerifyArgument;
  */
 public abstract class BaseTransformation implements Transformation {
 
-    private final String name;
-    private final String description;
-    private final List<Parameter> parameters = new ArrayList<>();
-    private TransformationSupport support;
-    private final SerializedImage serializedImage = new SerializedImage();
-
     private static final String DIGITS = "(\\p{Digit}+)";
     private static final String BINARY_DIGITS = "([01_]+)";
     private static final String HEX_DIGITS = "(\\p{XDigit}+)";
@@ -59,6 +53,12 @@ public abstract class BaseTransformation implements Transformation {
          ")[pP][+-]?" + DIGITS + "))|" +
          "(0[bB]" + BINARY_DIGITS + ")|" +
          "[fFdD]?)))";
+
+    TransformationSupport support;
+    private final String name;
+    private final String description;
+    private final List<Parameter> parameters = new ArrayList<>();
+    private final SerializedImage serializedImage = new SerializedImage();
 
     /**
      * Note: {@link I18n} is automatically performed on name.
@@ -122,6 +122,7 @@ public abstract class BaseTransformation implements Transformation {
      */
     @Override
     public Parameter cloneParameter(Parameter parameter) {
+        verifyParameterInTransformation("parameter", parameter);
         if (!parameter.cloneable()) {
             throw new AtlasRuntimeException("The %s parameter is not cloneable", parameter.name());
         }
@@ -135,7 +136,23 @@ public abstract class BaseTransformation implements Transformation {
         int ndx = parameters.indexOf(parameter) + 1;
         parameters.add(ndx, clone);
         serializedImage.parameters.add(ndx, clone.serializedImage);
+        validate();
+        support.autoSave();
         return clone;
+    }
+
+    /**
+     * @see io.atlasmap.api.v3.Transformation#removeClonedParameter(io.atlasmap.api.v3.Parameter)
+     */
+    @Override
+    public void removeClonedParameter(Parameter parameter) throws AtlasException {
+        verifyParameterInTransformation("parameter", parameter);
+        if (!parameter.cloned()) {
+            throw new AtlasException("The %s parameter is not a clone", parameter.name());
+        }
+        removeParameter(parameter);
+        validate();
+        support.autoSave();
     }
 
     /**
@@ -198,7 +215,6 @@ public abstract class BaseTransformation implements Transformation {
      */
     public void setSupport(TransformationSupport support) {
         this.support = support;
-        validate();
         parameters.forEach(parameter -> ((BaseParameter)parameter).validate());
     }
 
@@ -213,6 +229,17 @@ public abstract class BaseTransformation implements Transformation {
         return serializedImage;
     }
 
+    public void removeParameter(Parameter parameter) {
+        try {
+            parameter.setStringValue(null);
+        } catch (AtlasException e) {
+            // This should never occur
+            throw new AtlasRuntimeException(e, "Unable to remove the %s parameter", parameter.name());
+        }
+        parameters.remove(parameter);
+        serializedImage.parameters.remove(((BaseParameter)parameter).serializedImage);
+    }
+
     protected BaseParameter addParameter(BaseParameter parameter) {
         parameters.add(parameter);
         serializedImage.parameters.add(parameter.serializedImage);
@@ -221,12 +248,11 @@ public abstract class BaseTransformation implements Transformation {
 
     protected abstract void execute() throws AtlasException;
 
-    protected void addMessage(Status status, Scope scope, Object context, String message, Object... arguments) {
-        support.addMessage(status, scope, context, message, arguments);
-    }
-
-    DataHandler handler(String id) {
-        return support.handler(id);
+    protected void addMessage(Status status, Object context, String message, Object... arguments) {
+        VerifyArgument.isNotNull("status", status);
+        VerifyArgument.isNotNull("context", context);
+        VerifyArgument.isNotEmpty("message", message);
+        support.addMessage(status, Scope.TRANSFORMATION, context, message, arguments);
     }
 
     void executeIfComplete() throws AtlasException {
@@ -235,14 +261,21 @@ public abstract class BaseTransformation implements Transformation {
                       .filter(parameter -> parameter.role() == Role.OUTPUT)
                       .forEach(parameter -> ((BaseParameter)parameter).setOutputValue(null));
         } else {
+            support.clearMessages(Scope.TRANSFORMATION, this);
+            for (Parameter parameter : parameters) {
+                support.clearMessages(Scope.TRANSFORMATION, parameter);
+            }
             execute();
             for (Parameter parameter : parameters) {
                 if (parameter.role() == Role.OUTPUT) {
                     BaseParameter outputParameter = (BaseParameter)parameter;
                     if (outputParameter.dataHandler() != null) {
+                        outputParameter.dataHandler().clearMessages(outputParameter);
                         outputParameter.dataHandler().setValue(outputParameter.path(), outputParameter.value(), outputParameter);
                     } else if (outputParameter.stringValueType() == StringValueType.PROPERTY_REFERENCE) {
-                        for (Parameter dependentParameter : mapping().dependentParametersByOutputPropertyName().get(outputParameter.stringValue())) {
+                        Set<Parameter> dependentParameters
+                            = mapping().dependentParametersByOutputProperty().get(outputParameter.stringValue());
+                        for (Parameter dependentParameter : dependentParameters) {
                             ((BaseParameter)dependentParameter).setValue(parameter.value());
                             ((BaseTransformation)dependentParameter.transformation()).executeIfComplete();
                         }
@@ -253,40 +286,23 @@ public abstract class BaseTransformation implements Transformation {
         support.autoSave();
     }
 
-    BaseParameter parameterWithOutputPropertyName(String outputPropertyName) {
-        return support.parameterWithOutputPropertyName(outputPropertyName);
-    }
-
-    void addDependency(String outputPropertyName, BaseParameter dependentParameter) {
-        mapping().dependentParametersByOutputPropertyName().get(outputPropertyName).add(dependentParameter);
-    }
-
-    void setOutputProperty(String outputName, BaseParameter parameter) {
-        support.setOutputProperty(outputName, parameter);
-    }
-
-    void setTargetField(String targetFieldPath, BaseParameter parameter) throws AtlasException {
-        support.setTargetField(targetFieldPath, parameter);
-    }
-
-    void clearMessages(Scope scope, Object context) {
-        support.clearMessages(scope, context);
-    }
-
-    Set<Message> documentMessages() {
-        return support.documentMessages();
-    }
-
     void validate() {
         support.clearMessages(Scope.TRANSFORMATION, this);
         for (Parameter parameter : parameters) {
             if (parameter.valueRequired() && (parameter.stringValue() == null || parameter.stringValue().isEmpty())) {
-                addMessage(Status.ERROR, Scope.PARAMETER, parameter,
-                           "A value is required for the %s parameter",
-                           parameter.name());
+                support.addMessage(Status.ERROR, Scope.PARAMETER, parameter,
+                                   "A value is required for the %s parameter",
+                                   parameter.name());
             }
         }
         support.validate();
+    }
+
+    private void verifyParameterInTransformation(String name, Parameter parameter) {
+        VerifyArgument.isNotNull(name, parameter);
+        if (parameter.transformation() != this) {
+            throw new AtlasRuntimeException("The %s transformation does not contain the %s parameter", name, parameter.name());
+        }
     }
 
     public static class SerializedImage {

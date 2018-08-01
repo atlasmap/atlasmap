@@ -18,7 +18,6 @@ package io.atlasmap.core.v3.transformation;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import io.atlasmap.api.v3.Message.Scope;
 import io.atlasmap.api.v3.Message.Status;
 import io.atlasmap.api.v3.Parameter;
 import io.atlasmap.api.v3.Parameter.Role;
@@ -39,9 +38,9 @@ public class AddTransformation extends BaseTransformation {
 
     public AddTransformation() {
         super(NAME, "Adds one or more numberic values");
-        addParameter(new BaseParameter(this, OPERAND_PARAMETER, Role.INPUT, false, false,
+        addParameter(new BaseParameter(this, OPERAND_PARAMETER + 1, Role.INPUT, false, false,
                                        "A numberic source field, property, or constant to add"));
-        addParameter(new BaseParameter(this, OPERAND_PARAMETER, Role.INPUT, false, true,
+        addParameter(new BaseParameter(this, OPERAND_PARAMETER + 2, Role.INPUT, false, true,
                                        "A numberic source field, property, or constant to add"));
         sumParameter = addParameter(new BaseParameter(this, SUM_PARAMETER, Role.OUTPUT, false, false,
                                                       "A target field or property to which to add the sum of the operands"));
@@ -52,81 +51,61 @@ public class AddTransformation extends BaseTransformation {
      */
     @Override
     protected void execute() {
-        double sum = 0;
-        int sumSize = 8;
+        Double sum = 0.0;
         boolean sumIsDecimal = false;
         for (Parameter parameter : parameters()) {
-            if (parameter.name().equals(OPERAND_PARAMETER)) {
+            if (parameter.name().startsWith(OPERAND_PARAMETER)) {
                 Object value = parameter.value();
                 if (value == null) {
                     continue;
                 }
                 if (value instanceof Number) {
                     sum += ((Number)value).doubleValue();
-                    if (value instanceof Short) {
-                        sumSize = Math.max(sumSize, 16);
-                    } else if (value instanceof Integer) {
-                        sumSize = Math.max(sumSize, 32);
-                    } else if (value instanceof Long) {
-                        sumSize = Math.max(sumSize, 64);
-                    } else if (value instanceof Float) {
-                        sumSize = Math.max(sumSize, 32);
-                        sumIsDecimal = true;
-                    } else if (value instanceof Double) {
-                        sumSize = Math.max(sumSize, 64);
+                    if (value instanceof Float || value instanceof Double) {
                         sumIsDecimal = true;
                     }
                 } else {
-                    addMessage(Status.WARNING, Scope.PARAMETER, parameter,
-                               "The %s %s was automatically converted to a number",
-                               value.getClass().getSimpleName(), value);
+                    Number convertedNumber = 0;
                     if (value instanceof Boolean) {
                         if (Boolean.TRUE.equals(value)) {
-                            sum += 1;
+                            convertedNumber = 1;
                         }
                     } else if (value instanceof Character) {
-                        sumSize = 16;
-                        sum += (char)value;
+                        convertedNumber = Integer.valueOf((Character)value);
                     } else {
                         String operand = value.toString().trim().toLowerCase();
-                        if (operand.isEmpty()) {
-                            continue;
-                        }
-                        Matcher matcher = Pattern.compile(NUMBER_REGEX).matcher(operand);
-                        if (matcher.find()) {
-                            operand = matcher.group(1);
-                        }
-                        int radix = 10;
-                        if (operand.startsWith("0x")) {
-                            radix = 16;
-                        } else if (operand.startsWith("0b")) {
-                            radix = 2;
-                        }
-                        try {
-                            sum += Byte.parseByte(operand, radix);
-                        } catch (NumberFormatException notByte) {
+                        if (!operand.isEmpty()) {
+                            Matcher matcher = Pattern.compile(NUMBER_REGEX).matcher(operand);
+                            if (matcher.find()) {
+                                operand = matcher.group(1);
+                            }
+                            int radix = 10;
+                            if (operand.startsWith("0x")) {
+                                radix = 16;
+                            } else if (operand.startsWith("0b")) {
+                                radix = 2;
+                            }
                             try {
-                                sum += Short.parseShort(operand, radix);
-                                sumSize = Math.max(sumSize, 16);
-                            } catch (NumberFormatException notShort) {
+                                convertedNumber = Byte.parseByte(operand, radix);
+                            } catch (NumberFormatException notByte) {
                                 try {
-                                    sum += Integer.parseInt(operand, radix);
-                                    sumSize = Math.max(sumSize, 32);
-                                } catch (NumberFormatException notInteger) {
+                                    convertedNumber = Short.parseShort(operand, radix);
+                                } catch (NumberFormatException notShort) {
                                     try {
-                                        sum += Long.parseLong(operand, radix);
-                                        sumSize = Math.max(sumSize, 64);
-                                    } catch (NumberFormatException notLong) {
+                                        convertedNumber = Integer.parseInt(operand, radix);
+                                    } catch (NumberFormatException notInteger) {
                                         try {
-                                            sum += Float.parseFloat(operand);
-                                            sumSize = 32;
-                                            sumIsDecimal = true;
-                                        } catch (NumberFormatException notFloat) {
+                                            convertedNumber = Long.parseLong(operand, radix);
+                                        } catch (NumberFormatException notLong) {
                                             try {
-                                                sum += Double.parseDouble(operand);
-                                                sumSize = 64;
+                                                convertedNumber = Float.parseFloat(operand);
                                                 sumIsDecimal = true;
-                                            } catch (NumberFormatException ignored) {
+                                            } catch (NumberFormatException notFloat) {
+                                                try {
+                                                    convertedNumber = Double.parseDouble(operand);
+                                                    sumIsDecimal = true;
+                                                } catch (NumberFormatException ignored) {
+                                                }
                                             }
                                         }
                                     }
@@ -134,23 +113,29 @@ public class AddTransformation extends BaseTransformation {
                             }
                         }
                     }
+                    addMessage(Status.WARNING, parameter, "The %s %s was automatically converted to the %s %s",
+                               value.getClass().getSimpleName().toLowerCase(), value instanceof String ? "'" + value + "'": value,
+                               convertedNumber.getClass().getSimpleName().toLowerCase(), convertedNumber);
+                    sum += convertedNumber.doubleValue();
                 }
             }
         }
-        if (sumSize == 8) {
-            sumParameter.setOutputValue((byte)sum);
-        } else if (sumSize == 16) {
-            sumParameter.setOutputValue((short)sum);
-        } else if (sumSize == 32) {
-            if (sumIsDecimal) {
-                sumParameter.setOutputValue((float)sum);
+        if (sumIsDecimal) {
+            if (sum.doubleValue() == sum.floatValue()) {
+                sumParameter.setOutputValue(sum.floatValue());
             } else {
-                sumParameter.setOutputValue((int)sum);
+                sumParameter.setOutputValue(sum);
             }
-        } else if (sumIsDecimal) {
-            sumParameter.setOutputValue(sum);
         } else {
-            sumParameter.setOutputValue((long)sum);
+            if (sum.doubleValue() == sum.byteValue()) {
+                sumParameter.setOutputValue(sum.byteValue());
+            } else if (sum.doubleValue() == sum.shortValue()) {
+                sumParameter.setOutputValue(sum.shortValue());
+            } else if (sum.doubleValue() == sum.intValue()) {
+                sumParameter.setOutputValue(sum.intValue());
+            } else {
+                sumParameter.setOutputValue(sum.longValue());
+            }
         }
     }
 

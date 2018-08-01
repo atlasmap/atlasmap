@@ -15,8 +15,10 @@
  */
 package io.atlasmap.api.v3;
 
+import java.util.Collection;
 import java.util.List;
-import java.util.Set;
+
+import io.atlasmap.spi.v3.util.AtlasException;
 
 /**
  *
@@ -37,12 +39,14 @@ public interface Transformation {
 
     Parameter cloneParameter(Parameter parameter);
 
+    void removeClonedParameter(Parameter parameter) throws AtlasException;
+
     Mapping mapping();
 
     /**
      * @return all messages associated with this transformation
      */
-    Set<Message> messages();
+    Collection<Message> messages();
 
     /**
      * @return <code>true</code> if this transformation has any errors

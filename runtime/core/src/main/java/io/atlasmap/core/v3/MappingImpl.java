@@ -50,14 +50,14 @@ public class MappingImpl implements Mapping {
 
     static final String NAME = I18n.localize("Mapping");
 
-    final List<Transformation> transformations = new ArrayList<>();
-    // TODO support cross-mapping property refs
-    final NavigableMap<String, BaseParameter> parametersByOutputPropertyName = new TreeMap<>();
-    final Map<String, Set<Parameter>> dependentParametersByOutputPropertyName = new HashMap<>();
     final SerializedImage serializedImage = new SerializedImage();
     private final Context context;
     private String name = NAME;
     private String description;
+    private final List<Transformation> transformations = new ArrayList<>();
+    // TODO support cross-mapping property refs
+    private final NavigableMap<String, BaseParameter> parametersByOutputProperty = new TreeMap<>();
+    private final Map<String, Set<Parameter>> dependentParametersByOutputProperty = new HashMap<>();
     private final Support support = new Support();
 
     MappingImpl(Context context) {
@@ -120,9 +120,12 @@ public class MappingImpl implements Mapping {
     @Override
     public void removeTransformation(Transformation transformation) {
         verifyTransformationInMapping("transformation", transformation);
+        BaseTransformation baseTransformation = (BaseTransformation)transformation;
+        for (Parameter parameter : transformation.parameters()) {
+            baseTransformation.removeParameter(parameter);
+        }
         transformations.remove(transformation);
         serializedImage.transformations.remove(((BaseTransformation)transformation).serializedImage());
-        // TODO remove output names and references to those (ask how to handle dependencies; add answer type as parameter to remove)
         context.mappingDocument.autoSaveOrSetUnsaved();
         validate();
     }
@@ -171,15 +174,15 @@ public class MappingImpl implements Mapping {
      */
     @Override
     public NavigableSet<String> outputPropertyNames() {
-        return Collections.unmodifiableNavigableSet(parametersByOutputPropertyName.navigableKeySet());
+        return Collections.unmodifiableNavigableSet(parametersByOutputProperty.navigableKeySet());
     }
 
     /**
-     * @see io.atlasmap.api.v3.Mapping#dependentParametersByOutputPropertyName()
+     * @see io.atlasmap.api.v3.Mapping#dependentParametersByOutputProperty()
      */
     @Override
-    public Map<String, Set<Parameter>> dependentParametersByOutputPropertyName() {
-        return Collections.unmodifiableMap(dependentParametersByOutputPropertyName);
+    public Map<String, Set<Parameter>> dependentParametersByOutputProperty() {
+        return Collections.unmodifiableMap(dependentParametersByOutputProperty);
     }
 
     /**
@@ -233,7 +236,7 @@ public class MappingImpl implements Mapping {
             int outputName = 1;
             for (Parameter parameter : transformation.parameters()) {
                 if (parameter.role() == Role.OUTPUT) {
-                    for (Entry<String, BaseParameter> entry : parametersByOutputPropertyName.entrySet()) {
+                    for (Entry<String, BaseParameter> entry : parametersByOutputProperty.entrySet()) {
                         try {
                             if (Integer.parseInt(entry.getKey()) == outputName) {
                                 outputName++;
@@ -263,10 +266,10 @@ public class MappingImpl implements Mapping {
             context.messages.add(new MessageImpl(Status.ERROR, Scope.MAPPING, this,
                                                  "No transformations have been added"));
         }
-        // Verify a transformation exists that maps to a target field
-        // and that all results are used TODO move to document level once cross-mapping property refs are supported
+        // Verify a transformation exists that maps to a target field and that all results are used
+        // TODO move to document level once cross-mapping property refs are supported
         boolean fieldRefFound = false;
-        Set<String> unusedOutputNames = new HashSet<>(parametersByOutputPropertyName.keySet());
+        Set<String> unusedOutputNames = new HashSet<>(parametersByOutputProperty.keySet());
         for (Transformation transformation : transformations()) {
             for (Parameter parameter : transformation.parameters()) {
                 StringValueType type = ((BaseParameter)parameter).stringValueType();
@@ -285,9 +288,11 @@ public class MappingImpl implements Mapping {
                                                  "None of the transformations in this mapping map to a target field"));
         }
         for (String name : unusedOutputNames) {
+            Parameter parameter = parametersByOutputProperty.get(name);
             context.messages.add(new MessageImpl(Status.ERROR, Scope.MAPPING, this,
-                                                 "Result %s for the %s transformation is never used in this mapping",
-                                                 name, parametersByOutputPropertyName.get(name).transformation().name()));
+                                                 "Output property %s for the %s parameter of the %s transformation"
+                                                 + " is never used in this mapping",
+                                                 name, parameter.name(), parameter.transformation().name()));
         }
         context.mappingDocument.validate();
     }
@@ -328,19 +333,39 @@ public class MappingImpl implements Mapping {
         }
 
         @Override
-        public BaseParameter parameterWithOutputPropertyName(String outputPropertyName) {
-            return parametersByOutputPropertyName.get(outputPropertyName);
+        public BaseParameter parameterWithOutputProperty(String outputProperty) {
+            return parametersByOutputProperty.get(outputProperty);
         }
 
         @Override
-        public void setOutputProperty(String outputPropertyName, BaseParameter parameter) {
-            // TODO handle replacing output name
-            parametersByOutputPropertyName.put(outputPropertyName, parameter);
-            Set<Parameter> parameters = dependentParametersByOutputPropertyName.get(outputPropertyName);
-            if (parameters == null) {
-                parameters = new HashSet<>();
-                MappingImpl.this.dependentParametersByOutputPropertyName.put(outputPropertyName, parameters);
+        public void addOutputProperty(String outputProperty, BaseParameter parameter) {
+            parametersByOutputProperty.put(outputProperty, parameter);
+            dependentParametersByOutputProperty.computeIfAbsent(outputProperty, reference -> new HashSet<>());
+        }
+
+        @Override
+        public void removeOutputProperty(String outputProperty) {
+            for (Parameter parameter : dependentParametersByOutputProperty.get(outputProperty)) {
+                try {
+                    parameter.setStringValue(null);
+                } catch (AtlasException e) {
+                    // This should never occur
+                    throw new AtlasRuntimeException(e, "Unable to remove the %s parameter as having a dependency to the %s property",
+                                                    parameter.name(), outputProperty);
+                }
             }
+            parametersByOutputProperty.remove(outputProperty);
+            dependentParametersByOutputProperty.remove(outputProperty);
+        }
+
+        @Override
+        public void addReferenceToOutputProperty(String outputProperty, BaseParameter parameter) {
+            dependentParametersByOutputProperty.get(outputProperty).add(parameter);
+        }
+
+        @Override
+        public void removeReferenceToOutputPropertyReference(String outputProperty, BaseParameter parameter) {
+            dependentParametersByOutputProperty.get(outputProperty).remove(parameter);
         }
 
         @Override
@@ -355,12 +380,17 @@ public class MappingImpl implements Mapping {
 
         @Override
         public Set<Message> documentMessages() {
-            return MappingImpl.this.context.messages;
+            return context.messages;
         }
 
         @Override
-        public void setTargetField(String targetFieldPath, BaseParameter parameter) throws AtlasException {
-            context.mappingDocument.setTargetField(targetFieldPath, parameter);
+        public void addTargetFieldReference(String targetFieldReference, BaseParameter parameter) throws AtlasException {
+            context.mappingDocument.addTargetFieldReference(targetFieldReference, parameter);
+        }
+
+        @Override
+        public void removeTargetFieldReference(String targetFieldPath, BaseParameter parameter) {
+            context.mappingDocument.removeTargetFieldReference(targetFieldPath, parameter);
         }
 
         @Override

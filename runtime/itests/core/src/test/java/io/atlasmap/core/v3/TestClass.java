@@ -12,6 +12,14 @@ import java.util.Map;
 
 public class TestClass {
 
+    Boolean nullBooleanWrapper;
+    Byte nullByteWrapper;
+    Short nullShortWrapper;
+    Integer nullIntegerWrapper;
+    Long nullLongWrapper;
+    Float nullFloatWrapper;
+    Double nullDoubleWrapper;
+    Character nullCharacterWrapper;
     Boolean booleanWrapper = Boolean.TRUE;
     Byte byteWrapper = 1;
     Short shortWrapper = 2;
@@ -20,6 +28,12 @@ public class TestClass {
     Float floatWrapper = 5.5f;
     Double doubleWrapper = 6.9;
     Character characterWrapper = 'a';
+    Time nullTime;
+    LocalDate nullLocalDate;
+    ZonedDateTime nullZonedDateTime;
+    TestItem[] nullArray;
+    Collection<TestItem> nullSet;
+    Map<String, TestItem> nullMap;
     Time time = Time.valueOf("12:00:00");
     LocalDate localDate = LocalDate.now();
     ZonedDateTime zonedDateTime = ZonedDateTime.now();
@@ -28,14 +42,16 @@ public class TestClass {
     Map<String, TestItem> map = new HashMap<>();
     Collection<Collection<TestItem>> collectionOfCollections = new ArrayList<>();
     Map<String, Map<String, TestItem>> mapOfmaps = new HashMap<>();
+    String numberString = "16MHz";
+    double integerDouble = 7.0;
     private boolean booleanPrimitive = Boolean.TRUE;
     private byte bytePrimitive = 1;
-    private short shortPrimitive = 2;
-    private int integerPrimitive = 3;
-    private long longPrimitive = 4L;
-    private float floatPrimitive = 5.5f;
-    private double doublePrimitive = 6.9;
-    private char characterPrimitive = 'a';
+    private short shortPrimitive = Short.MAX_VALUE;
+    private int integerPrimitive = Integer.MAX_VALUE;
+    private long longPrimitive = Long.MAX_VALUE;
+    private float floatPrimitive = Float.MAX_VALUE;
+    private double doublePrimitive = Double.MAX_VALUE;
+    private char characterPrimitive = 0xFFFF;
     private String string = "string";
     private Date date = new Date();
     private Collection<TestItem> list = new ArrayList<>();

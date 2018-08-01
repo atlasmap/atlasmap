@@ -79,7 +79,7 @@ public abstract class DataHandler {
         support.addMessage(status, scope, context, message, arguments);
     }
 
-    void clearMessages(Scope scope, Object context) {
-        support.clearMessages(scope, context);
+    void clearMessages(Parameter parameter) {
+        support.clearMessages(Scope.DATA_HANDLER, parameter);
     }
 }

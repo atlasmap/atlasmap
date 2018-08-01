@@ -35,21 +35,44 @@ public interface TransformationSupport extends DataHandlerSupport {
 
     DataHandler handler(String id);
 
-    BaseParameter parameterWithOutputPropertyName(String outputName);
-
-    void setOutputProperty(String outputName, BaseParameter parameter);
+    BaseParameter parameterWithOutputProperty(String outputProperty);
 
     /**
      * @return all messages in this mapping's mapping document
      */
     Set<Message> documentMessages();
 
+    void addOutputProperty(String outputProperty, BaseParameter parameter);
+
     /**
-     * @param targetFieldPath
+     * @param outputProperty
+     */
+    void removeOutputProperty(String outputProperty);
+
+    /**
+     * @param outputProperty
+     * @param parameter
+     */
+    void addReferenceToOutputProperty(String outputProperty, BaseParameter parameter);
+
+    /**
+     * @param outputProperty
+     * @param parameter
+     */
+    void removeReferenceToOutputPropertyReference(String outputProperty, BaseParameter parameter);
+
+    /**
+     * @param targetFieldReference
      * @param parameter
      * @throws AtlasException
      */
-    void setTargetField(String targetFieldPath, BaseParameter parameter) throws AtlasException;
+    void addTargetFieldReference(String targetFieldReference, BaseParameter parameter) throws AtlasException;
+
+    /**
+     * @param targetFieldReference
+     * @param parameter
+     */
+    void removeTargetFieldReference(String targetFieldReference, BaseParameter parameter);
 
     /**
      *

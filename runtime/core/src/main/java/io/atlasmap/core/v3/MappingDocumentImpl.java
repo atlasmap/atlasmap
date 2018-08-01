@@ -336,12 +336,18 @@ public class MappingDocumentImpl implements MappingDocument {
         }
     }
 
-    void setTargetField(String targetFieldPath, BaseParameter parameter) throws AtlasException {
+    void addTargetFieldReference(String targetFieldReference, BaseParameter parameter) throws AtlasException {
         // TODO indexes in paths
-        BaseParameter existingParameter = parametersByTargetFieldPath.putIfAbsent(targetFieldPath, parameter);
+        BaseParameter existingParameter = parametersByTargetFieldPath.putIfAbsent(targetFieldReference, parameter);
         if (existingParameter != null && existingParameter != parameter) {
-            throw new AtlasException("Target field %s is already being mapped to by the %s parameter in the % transformation", targetFieldPath, existingParameter.name(), existingParameter.transformation().name());
+            throw new AtlasException("Target field %s is already being mapped to by the %s parameter in the % transformation",
+                                     targetFieldReference, existingParameter.name(), existingParameter.transformation().name());
         }
+    }
+
+    void removeTargetFieldReference(String targetFieldReference, BaseParameter parameter) {
+        // TODO indexes in paths
+        parametersByTargetFieldPath.remove(targetFieldReference, parameter);
     }
 
     void validate() {

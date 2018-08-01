@@ -15,9 +15,9 @@
  */
 package io.atlasmap.api.v3;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.NavigableSet;
 import java.util.Set;
 
 import io.atlasmap.api.v3.Transformation.Descriptor;
@@ -55,14 +55,14 @@ public interface Mapping {
 
     List<Transformation> transformations();
 
-    NavigableSet<String> outputPropertyNames();
+    Collection<String> outputPropertyNames();
 
-    Map<String, Set<Parameter>> dependentParametersByOutputPropertyName();
+    Map<String, Set<Parameter>> dependentParametersByOutputProperty();
 
     /**
      * @return all messages associated with this mapping
      */
-    Set<Message> messages();
+    Collection<Message> messages();
 
     /**
      * @return <code>true</code> if this mapping has any errors

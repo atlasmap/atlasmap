@@ -16,8 +16,8 @@
 package io.atlasmap.api.v3;
 
 import java.io.File;
+import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 import io.atlasmap.api.v3.Transformation.Descriptor;
 import io.atlasmap.spi.v3.util.AtlasException;
@@ -43,7 +43,7 @@ public interface MappingDocument {
 
     List<Mapping> mappings();
 
-    Set<Descriptor> availableTransformationDescriptors();
+    Collection<Descriptor> availableTransformationDescriptors();
 
     boolean autoSaves();
 
@@ -53,7 +53,7 @@ public interface MappingDocument {
 
     void save();
 
-    Set<Message> messages();
+    Collection<Message> messages();
 
     boolean hasErrors();
 
