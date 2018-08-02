@@ -59,6 +59,61 @@ export class MappingManagementService {
 
   constructor(private http: HttpClient) {}
 
+  // TODO consider extracting these utilities into separated class...
+  // put these model parser kind of guys together
+  static extractFieldActionConfig(actionDetail: any): FieldActionConfig {
+    const fieldActionConfig: FieldActionConfig = new FieldActionConfig();
+    fieldActionConfig.name = actionDetail.name;
+    fieldActionConfig.isCustom = actionDetail.custom;
+    fieldActionConfig.sourceType = actionDetail.sourceType;
+    fieldActionConfig.targetType = actionDetail.targetType;
+    fieldActionConfig.method = actionDetail.method;
+    fieldActionConfig.serviceObject = actionDetail;
+
+    if (actionDetail.parameters && actionDetail.parameters.parameter
+      && actionDetail.parameters.parameter.length) {
+      for (const actionParameter of actionDetail.parameters.parameter) {
+        const argumentConfig: FieldActionArgument = new FieldActionArgument();
+        argumentConfig.name = actionParameter.name;
+        argumentConfig.type = actionParameter.fieldType;
+        argumentConfig.values = actionParameter.values;
+        argumentConfig.serviceObject = actionParameter;
+        fieldActionConfig.arguments.push(argumentConfig);
+      }
+    }
+    return fieldActionConfig;
+  }
+
+  static sortFieldActionConfigs(configs: FieldActionConfig[]): FieldActionConfig[] {
+    const sortedActionConfigs: FieldActionConfig[] = [];
+    if (configs == null || configs.length === 0) {
+      return sortedActionConfigs;
+    }
+
+    const configsByName: { [key: string]: FieldActionConfig[]; } = {};
+    const configNames: string[] = [];
+    for (const fieldActionConfig of configs) {
+      const name: string = fieldActionConfig.name;
+      let sameNamedConfigs: FieldActionConfig[] = configsByName[name];
+      if (!sameNamedConfigs) {
+        sameNamedConfigs = [];
+        configNames.push(name);
+      }
+      sameNamedConfigs.push(fieldActionConfig);
+      configsByName[name] = sameNamedConfigs;
+    }
+
+    configNames.sort();
+
+    for (const name of configNames) {
+      const sameNamedConfigs: FieldActionConfig[] = configsByName[name];
+      for (const fieldActionConfig of sameNamedConfigs) {
+        sortedActionConfigs.push(fieldActionConfig);
+      }
+    }
+    return sortedActionConfigs;
+  }
+
   findMappingFiles(filter: string): Observable<string[]> {
     return new Observable<string[]>((observer: any) => {
       const url = this.cfg.initCfg.baseMappingServiceUrl + 'mappings' + (filter == null ? '' : '?filter=' + filter);
@@ -544,29 +599,12 @@ export class MappingManagementService {
         if (body && body.ActionDetails
           && body.ActionDetails.actionDetail
           && body.ActionDetails.actionDetail.length) {
-          for (const svcConfig of body.ActionDetails.actionDetail) {
-            const fieldActionConfig: FieldActionConfig = new FieldActionConfig();
-            fieldActionConfig.name = svcConfig.name;
-            fieldActionConfig.sourceType = svcConfig.sourceType;
-            fieldActionConfig.targetType = svcConfig.targetType;
-            fieldActionConfig.method = svcConfig.method;
-            fieldActionConfig.serviceObject = svcConfig;
-
-            if (svcConfig.parameters && svcConfig.parameters.parameter
-              && svcConfig.parameters.parameter.length) {
-              for (const svcParameter of svcConfig.parameters.parameter) {
-                const argumentConfig: FieldActionArgument = new FieldActionArgument();
-                argumentConfig.name = svcParameter.name;
-                argumentConfig.type = svcParameter.fieldType;
-                argumentConfig.values = svcParameter.values;
-                argumentConfig.serviceObject = svcParameter;
-                fieldActionConfig.arguments.push(argumentConfig);
-              }
-            }
+          for (const actionDetail of body.ActionDetails.actionDetail) {
+            const fieldActionConfig = MappingManagementService.extractFieldActionConfig(actionDetail);
             actionConfigs.push(fieldActionConfig);
           }
         }
-        actionConfigs = this.sortFieldActionConfigs(actionConfigs);
+        actionConfigs = MappingManagementService.sortFieldActionConfigs(actionConfigs);
         observer.next(actionConfigs);
         observer.complete();
       }).catch((error: any) => {
@@ -575,36 +613,6 @@ export class MappingManagementService {
         observer.complete();
       });
     });
-  }
-
-  sortFieldActionConfigs(configs: FieldActionConfig[]): FieldActionConfig[] {
-    const sortedActionConfigs: FieldActionConfig[] = [];
-    if (configs == null || configs.length === 0) {
-      return sortedActionConfigs;
-    }
-
-    const configsByName: { [key: string]: FieldActionConfig[]; } = {};
-    const configNames: string[] = [];
-    for (const fieldActionConfig of configs) {
-      const name: string = fieldActionConfig.name;
-      let sameNamedConfigs: FieldActionConfig[] = configsByName[name];
-      if (!sameNamedConfigs) {
-        sameNamedConfigs = [];
-        configNames.push(name);
-      }
-      sameNamedConfigs.push(fieldActionConfig);
-      configsByName[name] = sameNamedConfigs;
-    }
-
-    configNames.sort();
-
-    for (const name of configNames) {
-      const sameNamedConfigs: FieldActionConfig[] = configsByName[name];
-      for (const fieldActionConfig of sameNamedConfigs) {
-        sortedActionConfigs.push(fieldActionConfig);
-      }
-    }
-    return sortedActionConfigs;
   }
 
   notifyMappingUpdated(): void {

@@ -31,6 +31,7 @@ export class FieldActionArgumentValue {
 
 export class FieldActionConfig {
   name: string;
+  isCustom: boolean;
   arguments: FieldActionArgument[] = [];
   method: string;
   sourceType = 'undefined';

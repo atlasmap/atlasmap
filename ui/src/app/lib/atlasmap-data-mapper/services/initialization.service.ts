@@ -495,6 +495,19 @@ export class InitializationService {
   }
 
   private fetchFieldActions(): void {
+    if (this.cfg.fieldActionMetadata) {
+      const actionConfigs: FieldActionConfig[] = [];
+      for (const actionDetail of this.cfg.fieldActionMetadata.ActionDetails.actionDetail) {
+        const fieldActionConfig = MappingManagementService.extractFieldActionConfig(actionDetail);
+        actionConfigs.push(fieldActionConfig);
+      }
+      MappingManagementService.sortFieldActionConfigs(actionConfigs);
+      TransitionModel.actionConfigs = actionConfigs;
+      this.cfg.initCfg.fieldActionsInitialized = true;
+      this.updateStatus();
+      return;
+    }
+
     if (this.cfg.mappingService == null) {
       this.cfg.errorService.warn('Mapping service is not provided. Field Actions will not be used.', null);
       this.cfg.initCfg.fieldActionsInitialized = true;
@@ -507,8 +520,8 @@ export class InitializationService {
       return;
     }
     this.cfg.mappingService.fetchFieldActions().toPromise()
-      .then((actionConfigs: FieldActionConfig[]) => {
-        TransitionModel.actionConfigs = actionConfigs;
+      .then((fetchedActionConfigs: FieldActionConfig[]) => {
+        TransitionModel.actionConfigs = fetchedActionConfigs;
         this.cfg.initCfg.fieldActionsInitialized = true;
         this.updateStatus();
       }).catch((error: any) => {

@@ -145,6 +145,8 @@ export class ConfigModel {
 
   mappings: MappingDefinition = null;
 
+  fieldActionMetadata: any;
+
   errors: ErrorInfo[] = [];
   validationErrors: ErrorInfo[] = [];
 
