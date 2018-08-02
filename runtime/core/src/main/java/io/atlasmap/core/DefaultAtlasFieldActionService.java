@@ -31,7 +31,6 @@ import io.atlasmap.v2.ActionDetails;
 import io.atlasmap.v2.ActionParameter;
 import io.atlasmap.v2.ActionParameters;
 import io.atlasmap.v2.Actions;
-import io.atlasmap.v2.CustomAction;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldType;
 import io.atlasmap.v2.SimpleField;
@@ -49,7 +48,7 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
     public void init() {
         listActionDetails().addAll(loadFieldActions());
         // TODO load custom field actions in application bundles
-        // under hierarchical class loader for runtime
+        // on hierarchical class loader environment
     }
 
     public List<ActionDetail> loadFieldActions() {
@@ -85,12 +84,15 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
                 try {
                     actionClazz = Class.forName("io.atlasmap.v2." + annotation.name());
                 } catch (Exception e) {
-                    actionClazz = CustomAction.class;
+                    actionClazz = clazz;
                     det.setCustom(true);
                 }
 
                 try {
-                    det.setParameters(detectFieldActionParameters(actionClazz));
+                    // TODO https://github.com/atlasmap/atlasmap/issues/538
+                    if (det.isCustom() == null || !det.isCustom()) {
+                        det.setParameters(detectFieldActionParameters(actionClazz));
+                    }
                 } catch (ClassNotFoundException e) {
                     LOG.error(String.format("Error detecting parameters for field action=%s msg=%s", annotation.name(), e.getMessage()), e);
                 }
