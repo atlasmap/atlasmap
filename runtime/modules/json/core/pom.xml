@@ -15,6 +15,10 @@
   <dependencies>
     <dependency>
       <groupId>io.atlasmap</groupId>
+      <artifactId>atlas-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.atlasmap</groupId>
       <artifactId>atlas-json-model</artifactId>
     </dependency>
     <dependency>
