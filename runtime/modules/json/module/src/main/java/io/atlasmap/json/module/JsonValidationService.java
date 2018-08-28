@@ -19,9 +19,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import io.atlasmap.api.AtlasConversionService;
 import io.atlasmap.core.BaseModuleValidationService;
 import io.atlasmap.json.v2.JsonField;
+import io.atlasmap.spi.AtlasConversionService;
 import io.atlasmap.spi.AtlasModuleDetail;
 import io.atlasmap.spi.AtlasValidator;
 import io.atlasmap.spi.FieldDirection;

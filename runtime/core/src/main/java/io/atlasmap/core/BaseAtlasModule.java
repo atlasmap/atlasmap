@@ -23,15 +23,18 @@ import javax.management.openmbean.TabularData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.atlasmap.api.AtlasConversionService;
+import io.atlasmap.api.AtlasConversionException;
 import io.atlasmap.api.AtlasException;
-import io.atlasmap.api.AtlasFieldActionService;
 import io.atlasmap.mxbean.AtlasModuleMXBean;
+import io.atlasmap.spi.AtlasConversionService;
+import io.atlasmap.spi.AtlasFieldActionService;
 import io.atlasmap.spi.AtlasInternalSession;
 import io.atlasmap.spi.AtlasModule;
 import io.atlasmap.spi.AtlasModuleDetail;
 import io.atlasmap.spi.AtlasModuleMode;
+import io.atlasmap.v2.AuditStatus;
 import io.atlasmap.v2.Field;
+import io.atlasmap.v2.FieldGroup;
 import io.atlasmap.v2.FieldType;
 import io.atlasmap.v2.LookupEntry;
 import io.atlasmap.v2.LookupTable;
@@ -64,6 +67,32 @@ public abstract class BaseAtlasModule implements AtlasModule, AtlasModuleMXBean 
         }
     }
 
+    protected void populateTargetFieldValue(AtlasInternalSession session) throws AtlasException {
+        Field sourceField = session.head().getSourceField();
+        Field targetField = session.head().getTargetField();
+        Object targetValue = null;
+        if (sourceField.getFieldType() != null && sourceField.getFieldType().equals(targetField.getFieldType())) {
+            targetValue = sourceField.getValue();
+        } else if (sourceField.getValue() != null) {
+            try {
+                targetValue = getConversionService().convertType(sourceField.getValue(), sourceField.getFormat(),
+                        targetField.getFieldType(), targetField.getFormat());
+            } catch (AtlasConversionException e) {
+                AtlasUtil.addAudit(session, targetField.getDocId(),
+                        String.format("Unable to auto-convert for sT=%s tT=%s tF=%s msg=%s", sourceField.getFieldType(),
+                                targetField.getFieldType(), targetField.getPath(), e.getMessage()),
+                        targetField.getPath(), AuditStatus.ERROR, null);
+                return;
+            }
+        }
+        targetField.setValue(targetValue);
+
+        LookupTable lookupTable = session.head().getLookupTable();
+        if (lookupTable != null) {
+            processLookupField(session, lookupTable, targetField.getValue(), targetField);
+        }
+    }
+
     protected void processLookupField(AtlasInternalSession session, LookupTable lookupTable, Object sourceValue,
             Field targetField) throws AtlasException {
         String lookupValue = null;
@@ -88,6 +117,23 @@ public abstract class BaseAtlasModule implements AtlasModule, AtlasModuleMXBean 
         }
 
         targetField.setValue(targetValue);
+    }
+
+    protected Field applyTargetFieldActions(AtlasInternalSession session) throws AtlasException {
+        Field field = session.head().getTargetField();
+        if (isAutomaticallyProcessOutputFieldActions() && field.getActions() != null
+                && field.getActions().getActions() != null) {
+            return getFieldActionService().processActions(session, field);
+        }
+        return field;
+    }
+
+    protected Field applySourceFieldActions(AtlasInternalSession session) throws AtlasException {
+        Field field = session.head().getSourceField();
+        if (field.getActions() != null && field.getActions().getActions() != null) {
+            return getFieldActionService().processActions(session, field);
+        }
+        return field;
     }
 
     @Override
@@ -284,7 +330,7 @@ public abstract class BaseAtlasModule implements AtlasModule, AtlasModuleMXBean 
 
     @Override
     public Boolean isSupportedField(Field field) {
-        return field instanceof SimpleField;
+        return field instanceof SimpleField || field instanceof FieldGroup;
     }
 
 }

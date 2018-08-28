@@ -15,9 +15,9 @@
  */
 package io.atlasmap.java.module;
 
-import java.lang.reflect.Array;
-import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +31,6 @@ import io.atlasmap.core.BaseAtlasModule;
 import io.atlasmap.java.core.DocumentJavaFieldReader;
 import io.atlasmap.java.core.DocumentJavaFieldWriter;
 import io.atlasmap.java.core.TargetValueConverter;
-import io.atlasmap.java.inspect.ClassHelper;
 import io.atlasmap.java.inspect.ClassInspectionService;
 import io.atlasmap.java.inspect.JavaConstructService;
 import io.atlasmap.java.v2.AtlasJavaModelFactory;
@@ -40,9 +39,11 @@ import io.atlasmap.java.v2.JavaEnumField;
 import io.atlasmap.java.v2.JavaField;
 import io.atlasmap.spi.AtlasInternalSession;
 import io.atlasmap.spi.AtlasModuleDetail;
+import io.atlasmap.v2.AtlasModelFactory;
 import io.atlasmap.v2.AuditStatus;
 import io.atlasmap.v2.BaseMapping;
 import io.atlasmap.v2.Field;
+import io.atlasmap.v2.FieldGroup;
 import io.atlasmap.v2.Mapping;
 import io.atlasmap.v2.Validation;
 
@@ -178,10 +179,8 @@ public class JavaModule extends BaseAtlasModule {
             return;
         }
         reader.read(session);
-
-        if (sourceField.getActions() != null && sourceField.getActions().getActions() != null) {
-            getFieldActionService().processActions(sourceField.getActions(), sourceField);
-        }
+        sourceField = applySourceFieldActions(session);
+        session.head().setSourceField(sourceField);
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("{}: processSourceFieldMapping completed: SourceField:[docId={}, path={}, type={}, value={}]",
@@ -191,12 +190,77 @@ public class JavaModule extends BaseAtlasModule {
 
     @Override
     public void processTargetFieldMapping(AtlasInternalSession session) throws AtlasException {
+        Field sourceField = session.head().getSourceField();
+        Field targetField = session.head().getTargetField();
+        AtlasPath path = new AtlasPath(targetField.getPath());
+        FieldGroup targetFieldGroup = null;
+        if  (path.hasCollection() && !path.isIndexedCollection()) {
+            targetFieldGroup = AtlasModelFactory.createFieldGroupFrom(targetField);
+            session.head().setTargetField(targetFieldGroup);
+        }
+
         DocumentJavaFieldWriter writer = session.getFieldWriter(getDocId(), DocumentJavaFieldWriter.class);
-        writer.write(session);
+        Map<Field, Object> parentObjects = new HashMap<>();
+        if (targetFieldGroup == null) {
+            if (sourceField instanceof FieldGroup) {
+                List<Field> subFields = ((FieldGroup)sourceField).getField();
+                if (subFields == null || subFields.size() == 0) {
+                    return;
+                }
+                // The last one wins for compatibility
+                sourceField = subFields.get(subFields.size() - 1);
+                session.head().setSourceField(sourceField);
+            }
+            Object parentObject = writer.getParentObject(session);
+            if (parentObject != null) {
+                writer.populateTargetFieldValue(session, parentObject);
+                parentObjects.put(targetField, parentObject);
+            }
+        } else if (sourceField instanceof FieldGroup) {
+            for (int i=0; i<((FieldGroup)sourceField).getField().size(); i++) {
+                Field sourceSubField = ((FieldGroup)sourceField).getField().get(i);
+                Field targetSubField = targetField instanceof JavaEnumField ? new JavaEnumField() : new JavaField();
+                AtlasJavaModelFactory.copyField(targetField, targetSubField, false);
+                AtlasPath subPath = new AtlasPath(targetField.getPath());
+                subPath.setVacantCollectionIndex(i);
+                targetSubField.setPath(subPath.toString());
+                targetFieldGroup.getField().add(targetSubField);
+                session.head().setSourceField(sourceSubField);
+                session.head().setTargetField(targetSubField);
+                Object parentObject = writer.getParentObject(session);
+                if (parentObject != null) {
+                    writer.populateTargetFieldValue(session, parentObject);
+                    parentObjects.put(targetSubField, parentObject);
+                }
+            }
+            session.head().setSourceField(sourceField);
+            session.head().setTargetField(targetFieldGroup);
+        } else {
+            Field targetSubField = targetField instanceof JavaEnumField ? new JavaEnumField() : new JavaField();
+            AtlasJavaModelFactory.copyField(targetField, targetSubField, false);
+            path.setVacantCollectionIndex(0);
+            targetSubField.setPath(path.toString());
+            targetFieldGroup.getField().add(targetSubField);
+            session.head().setTargetField(targetSubField);
+            Object parentObject = writer.getParentObject(session);
+            if (parentObject != null) {
+                writer.populateTargetFieldValue(session, parentObject);
+                parentObjects.put(targetSubField, parentObject);
+            }
+            session.head().setTargetField(targetFieldGroup);
+        }
+
+        // While Java field writer applies field actions as well,
+        // we need to do it here for collection field
+        if (targetFieldGroup != null) {
+            session.head().setTargetField(applyTargetFieldActions(session));
+        }
+        for (Map.Entry<Field,Object> e : parentObjects.entrySet()) {
+            session.head().setTargetField(e.getKey());
+            writer.write(session, e.getValue());
+        }
 
         if (LOG.isDebugEnabled()) {
-            Field sourceField = session.head().getSourceField();
-            Field targetField = session.head().getTargetField();
             LOG.debug("{}: processTargetFieldMapping completed: SourceField:[docId={}, path={}, type={}, value={}], TargetField:[docId={}, path={}, type={}, value={}]",
                     getDocId(), sourceField.getDocId(), sourceField.getPath(), sourceField.getFieldType(), sourceField.getValue(),
                     targetField.getDocId(), targetField.getPath(), targetField.getFieldType(), targetField.getValue());
@@ -301,22 +365,6 @@ public class JavaModule extends BaseAtlasModule {
             return true;
         }
         return field instanceof JavaField || field instanceof JavaEnumField;
-    }
-
-    @SuppressWarnings("rawtypes")
-    @Override
-    public int getCollectionSize(AtlasInternalSession session, Field field) throws AtlasException {
-        // TODO could this use FieldReader?
-        Object document = session.getSourceDocument(getDocId());
-        Object collectionObject = ClassHelper.parentObjectForPath(document, new AtlasPath(field.getPath()), false);
-        if (collectionObject == null) {
-            throw new AtlasException(String.format("Cannot find collection on sourceObject %s for path: %s",
-                    document.getClass().getName(), field.getPath()));
-        }
-        if (collectionObject.getClass().isArray()) {
-            return Array.getLength(collectionObject);
-        }
-        return ((Collection) collectionObject).size();
     }
 
     @Override

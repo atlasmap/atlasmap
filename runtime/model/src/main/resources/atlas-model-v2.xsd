@@ -194,6 +194,17 @@
     </complexContent>
   </complexType>
 
+  <complexType name="FieldGroup">
+    <complexContent>
+      <extension base="atlas:Field">
+        <sequence>
+          <element name="Field" type="atlas:Field" minOccurs="0"
+            maxOccurs="unbounded" />
+        </sequence>
+      </extension>
+    </complexContent>
+  </complexType>
+
   <complexType name="MockDocument">
     <complexContent>
       <extension base="atlas:Document" />

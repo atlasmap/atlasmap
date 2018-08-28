@@ -15,6 +15,7 @@
  */
 package io.atlasmap.java.v2;
 
+import io.atlasmap.v2.AtlasModelFactory;
 import io.atlasmap.v2.Field;
 
 public class AtlasJavaModelFactory {
@@ -35,64 +36,44 @@ public class AtlasJavaModelFactory {
     }
 
     public static Field cloneJavaField(Field field) {
+        Field clone = field instanceof JavaEnumField ? new JavaEnumField() : new JavaField();
+        copyField(field, clone, true);
+        return clone;
+    }
 
-        if (field instanceof JavaField) {
-            JavaField that = (JavaField) field;
-            JavaField clone = new JavaField();
+    public static void copyField(Field from, Field to, boolean withActions) {
+        AtlasModelFactory.copyField(from, to, withActions);
 
-            // generic from Field
-            clone.setActions(that.getActions());
-            clone.setArrayDimensions(that.getArrayDimensions());
-            clone.setArraySize(that.getArraySize());
-            clone.setCollectionType(that.getCollectionType());
-            clone.setDocId(that.getDocId());
-            clone.setFieldType(that.getFieldType());
-            clone.setIndex(that.getIndex());
-            clone.setPath(that.getPath());
-            clone.setRequired(that.isRequired());
-            clone.setStatus(that.getStatus());
-            clone.setValue(that.getValue());
+        if (from instanceof JavaField && to instanceof JavaField) {
+            JavaField fromJava = (JavaField) from;
+            JavaField toJava = (JavaField)to;
 
             // defined by JavaField
-            clone.setAnnotations(that.getAnnotations());
-            clone.setClassName(that.getClassName());
-            clone.setCollectionClassName(that.getCollectionClassName());
-            clone.setGetMethod(that.getGetMethod());
-            clone.setModifiers(that.getModifiers());
-            clone.setName(that.getName());
-            clone.setParameterizedTypes(that.getParameterizedTypes());
-            clone.setPrimitive(that.isPrimitive());
-            clone.setSetMethod(that.getSetMethod());
-            clone.setSynthetic(that.isSynthetic());
-
-            return clone;
-        } else if (field instanceof JavaEnumField) {
-            JavaEnumField that = (JavaEnumField) field;
-            JavaEnumField clone = new JavaEnumField();
-
-            // generic from Field
-            clone.setActions(that.getActions());
-            clone.setArrayDimensions(that.getArrayDimensions());
-            clone.setArraySize(that.getArraySize());
-            clone.setCollectionType(that.getCollectionType());
-            clone.setDocId(that.getDocId());
-            clone.setFieldType(that.getFieldType());
-            clone.setIndex(that.getIndex());
-            clone.setPath(that.getPath());
-            clone.setRequired(that.isRequired());
-            clone.setStatus(that.getStatus());
-            clone.setValue(that.getValue());
+            toJava.setAnnotations(fromJava.getAnnotations());
+            toJava.setClassName(fromJava.getClassName());
+            toJava.setCollectionClassName(fromJava.getCollectionClassName());
+            toJava.setGetMethod(fromJava.getGetMethod());
+            toJava.setModifiers(fromJava.getModifiers());
+            toJava.setName(fromJava.getName());
+            toJava.setParameterizedTypes(fromJava.getParameterizedTypes());
+            toJava.setPrimitive(fromJava.isPrimitive());
+            toJava.setSetMethod(fromJava.getSetMethod());
+            toJava.setSynthetic(fromJava.isSynthetic());
+            return;
+        }
+        if (from instanceof JavaEnumField && to instanceof JavaEnumField) {
+            JavaEnumField fromEnum = (JavaEnumField) from;
+            JavaEnumField toEnum = (JavaEnumField)to;
 
             // defined by JavaEnumField
-            clone.setClassName(that.getClassName());
-            clone.setName(that.getName());
-            clone.setOrdinal(that.getOrdinal());
-
-            return clone;
-
+            toEnum.setClassName(fromEnum.getClassName());
+            toEnum.setName(fromEnum.getName());
+            toEnum.setOrdinal(fromEnum.getOrdinal());
+            return;
         }
         // TODO: needs to be atlasexception, but that's not a dependency for some reason
         // on this project.
-        throw new RuntimeException("Unsupported field type to clone: " + field);
+        throw new RuntimeException(String.format(
+                "Unsupported field type to copy: from=%s, to=%s", from, to));
     }
 }

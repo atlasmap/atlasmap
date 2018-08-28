@@ -39,13 +39,13 @@ import org.slf4j.LoggerFactory;
 
 import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasContextFactory;
-import io.atlasmap.api.AtlasConversionService;
 import io.atlasmap.api.AtlasException;
-import io.atlasmap.api.AtlasFieldActionService;
 import io.atlasmap.api.AtlasValidationService;
 import io.atlasmap.core.AtlasMappingService.AtlasMappingFormat;
 import io.atlasmap.mxbean.AtlasContextFactoryMXBean;
 import io.atlasmap.spi.AtlasCombineStrategy;
+import io.atlasmap.spi.AtlasConversionService;
+import io.atlasmap.spi.AtlasFieldActionService;
 import io.atlasmap.spi.AtlasModule;
 import io.atlasmap.spi.AtlasModuleDetail;
 import io.atlasmap.spi.AtlasModuleInfo;

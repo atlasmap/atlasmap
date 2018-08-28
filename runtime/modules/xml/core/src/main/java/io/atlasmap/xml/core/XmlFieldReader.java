@@ -16,6 +16,8 @@
 package io.atlasmap.xml.core;
 
 import java.io.ByteArrayInputStream;
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -28,14 +30,16 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import io.atlasmap.api.AtlasConversionException;
-import io.atlasmap.api.AtlasConversionService;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.core.AtlasPath.SegmentContext;
 import io.atlasmap.core.AtlasUtil;
+import io.atlasmap.spi.AtlasConversionService;
 import io.atlasmap.spi.AtlasFieldReader;
 import io.atlasmap.spi.AtlasInternalSession;
+import io.atlasmap.v2.AtlasModelFactory;
 import io.atlasmap.v2.AuditStatus;
 import io.atlasmap.v2.Field;
+import io.atlasmap.v2.FieldGroup;
 import io.atlasmap.v2.FieldType;
 import io.atlasmap.xml.v2.XmlField;
 
@@ -59,7 +63,7 @@ public class XmlFieldReader extends XmlFieldTransformer implements AtlasFieldRea
         this.conversionService = conversionService;
     }
 
-    public void read(AtlasInternalSession session) throws AtlasException {
+    public Field read(AtlasInternalSession session) throws AtlasException {
         if (document == null) {
             throw new AtlasException(new IllegalArgumentException("'document' cannot be null"));
         }
@@ -74,17 +78,13 @@ public class XmlFieldReader extends XmlFieldTransformer implements AtlasFieldRea
         if (LOG.isDebugEnabled()) {
             LOG.debug("Reading source value for field: " + xmlField.getPath());
         }
-        if (document == null) {
-            throw new AtlasException(new IllegalArgumentException("Argument 'document' cannot be null"));
-        }
-        if (xmlField == null) {
-            throw new AtlasException(new IllegalArgumentException("Argument 'xmlField' cannot be null"));
-        }
-        Element parentNode = document.getDocumentElement();
+
+        SegmentContext lastSegment = null;
+        List<Element> parentNodes = Arrays.asList(document.getDocumentElement());
         for (SegmentContext sc : new XmlPath(xmlField.getPath()).getSegmentContexts(false)) {
+            lastSegment = sc;
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Now processing segment: " + sc.getSegment());
-                LOG.debug("Parent element is currently: " + XmlIOHelper.writeDocumentToString(true, parentNode));
             }
             if (sc.getPrev() == null) {
                 if (LOG.isDebugEnabled()) {
@@ -94,63 +94,110 @@ public class XmlFieldReader extends XmlFieldTransformer implements AtlasFieldRea
                 // "/XOA/contact<>/firstName", skip.
                 continue;
             }
+            parentNodes = extractSegment(parentNodes, sc);
+        }
+        if (lastSegment != null) {
+            readValue(session, parentNodes, lastSegment, xmlField);
+        }
+        return session.head().getSourceField();
+    }
 
-            if (!XmlPath.isAttributeSegment(sc.getSegment())) {
-                String childrenElementName = XmlPath.cleanPathSegment(sc.getSegment());
-                String namespaceAlias = XmlPath.getNamespace(sc.getSegment());
-                if (namespaceAlias != null && !"".equals(namespaceAlias)) {
-                    childrenElementName = namespaceAlias + ":" + childrenElementName;
-                }
-                if (LOG.isDebugEnabled()) {
-                    LOG.debug("Looking for children elements with name: " + childrenElementName);
-                }
-                List<Element> children = XmlIOHelper.getChildrenWithName(childrenElementName, parentNode);
-                if (children == null || children.isEmpty()) {
-                    if (LOG.isDebugEnabled()) {
-                        LOG.debug("Skipping source value set, couldn't find children with name '" + childrenElementName
-                                + "', for segment: " + sc);
-                    }
-                    return;
-                }
-                parentNode = children.get(0);
-                if (XmlPath.isCollectionSegment(sc.getSegment())) {
-                    int index = XmlPath.indexOfSegment(sc.getSegment());
-                    if (index >= children.size()) {
-                        if (LOG.isDebugEnabled()) {
-                            LOG.debug("Skipping source value set, children list can't fit index " + index
-                                    + ", children list size: " + children.size());
-                        }
-                        return;
-                    }
-                    parentNode = children.get(index);
-                }
+    private List<Element> extractSegment(List<Element> parentNodes, SegmentContext sc) throws AtlasException {
+        List<Element> answer = new LinkedList<>();
+        for (Element parentNode : parentNodes) {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Parent element is currently: " + XmlIOHelper.writeDocumentToString(true, parentNode));
             }
-            if (sc.getNext() == null) { // last segment.
-                String value = parentNode.getTextContent();
-                if (XmlPath.isAttributeSegment(sc.getSegment())) {
-                    String attributeName = XmlPath.getAttribute(sc.getSegment());
-                    value = parentNode.getAttribute(attributeName);
-                }
+            if (XmlPath.isAttributeSegment(sc.getSegment())) {
+                answer.add(parentNode);
+                continue;
+            }
 
-                if (value == null) {
-                    return;
+            String childrenElementName = XmlPath.cleanPathSegment(sc.getSegment());
+            String namespaceAlias = XmlPath.getNamespace(sc.getSegment());
+            if (namespaceAlias != null && !"".equals(namespaceAlias)) {
+                childrenElementName = namespaceAlias + ":" + childrenElementName;
+            }
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Looking for children elements with name: " + childrenElementName);
+            }
+            List<Element> children = XmlIOHelper.getChildrenWithName(childrenElementName, parentNode);
+            if (children == null || children.isEmpty()) {
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Skipping source value set, couldn't find children with name '" + childrenElementName
+                            + "', for segment: " + sc);
                 }
-
-                if (xmlField.getFieldType() == null) {
-                    xmlField.setValue(value);
-                    xmlField.setFieldType(FieldType.STRING);
-                } else {
-                    Object convertedValue;
-                    try {
-                        convertedValue = conversionService.convertType(value, xmlField.getFormat(),
-                                xmlField.getFieldType(), null);
-                        xmlField.setValue(convertedValue);
-                    } catch (AtlasConversionException e) {
-                        AtlasUtil.addAudit(session, xmlField.getDocId(),
-                                String.format("Failed to convert field value '%s' into type '%s'", value,
-                                        xmlField.getFieldType()),
-                                xmlField.getPath(), AuditStatus.ERROR, value);
+                continue;
+            }
+            if (XmlPath.isCollectionSegment(sc.getSegment())) {
+                Integer index = XmlPath.indexOfSegment(sc.getSegment());
+                if (index == null) {
+                    // TODO process collection
+                    answer.addAll(children);
+                    continue;
+                }
+                if (index >= children.size()) {
+                    if (LOG.isDebugEnabled()) {
+                        LOG.debug("Skipping source value set, children list can't fit index " + index
+                                + ", children list size: " + children.size());
                     }
+                    continue;
+                }
+                answer.add(children.get(index));
+            } else {
+                answer.add(children.get(0));
+            }
+        }
+        return answer;
+    }
+
+    private void readValue(AtlasInternalSession session, List<Element> parentNodes, SegmentContext sc, XmlField xmlField) {
+        if (xmlField.getFieldType() == null) {
+            xmlField.setFieldType(FieldType.STRING);
+        }
+
+        XmlPath path = new XmlPath(xmlField.getPath());
+        FieldGroup fieldGroup = null;
+        if (path.hasCollection() && !path.isIndexedCollection()) {
+            fieldGroup = AtlasModelFactory.createFieldGroupFrom(xmlField);
+            session.head().setSourceField(fieldGroup);
+        }
+
+        for (int i=0; i<parentNodes.size(); i++) {
+            Element parentNode = parentNodes.get(i);
+            XmlField targetField = xmlField;
+            if (fieldGroup != null) {
+                targetField = new XmlField();
+                AtlasModelFactory.copyField(xmlField, targetField, false);
+                XmlPath subPath = new XmlPath(targetField.getPath());
+                subPath.setVacantCollectionIndex(i);
+                targetField.setPath(subPath.toString());
+                fieldGroup.getField().add(targetField);
+            }
+
+            String value = parentNode.getTextContent();
+            if (XmlPath.isAttributeSegment(sc.getSegment())) {
+                String attributeName = XmlPath.getAttribute(sc.getSegment());
+                value = parentNode.getAttribute(attributeName);
+            }
+
+            if (value == null) {
+                return;
+            }
+
+            if (targetField.getFieldType() == FieldType.STRING) {
+                targetField.setValue(value);
+            } else {
+                Object convertedValue;
+                try {
+                    convertedValue = conversionService.convertType(value, targetField.getFormat(),
+                            targetField.getFieldType(), null);
+                    targetField.setValue(convertedValue);
+                } catch (AtlasConversionException e) {
+                    AtlasUtil.addAudit(session, targetField.getDocId(),
+                            String.format("Failed to convert field value '%s' into type '%s'", value,
+                                    targetField.getFieldType()),
+                            targetField.getPath(), AuditStatus.ERROR, value);
                 }
             }
         }

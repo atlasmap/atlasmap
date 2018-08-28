@@ -16,10 +16,7 @@
 package io.atlasmap.json.v2;
 
 import io.atlasmap.v2.AtlasModelFactory;
-import io.atlasmap.v2.CollectionType;
 import io.atlasmap.v2.Field;
-import io.atlasmap.v2.FieldStatus;
-import io.atlasmap.v2.FieldType;
 import io.atlasmap.v2.Fields;
 
 public class AtlasJsonModelFactory {
@@ -46,48 +43,24 @@ public class AtlasJsonModelFactory {
                 + ", fieldType=" + f.getFieldType() + "]";
     }
 
-    public static Field cloneField(Field field) {
+    public static JsonField cloneField(Field field) {
         JsonField clone = new JsonField();
-        JsonField that = (JsonField) field;
-
-        // generic from Field
-        if (field.getActions() != null) {
-            clone.setActions(AtlasModelFactory.cloneFieldActions(field.getActions()));
-        }
-        if (field.getArrayDimensions() != null) {
-            clone.setArrayDimensions(Integer.valueOf(field.getArrayDimensions()));
-        }
-        if (field.getArraySize() != null) {
-            clone.setArraySize(Integer.valueOf(field.getArraySize()));
-        }
-        if (field.getCollectionType() != null) {
-            clone.setCollectionType(CollectionType.fromValue(field.getCollectionType().value()));
-        }
-        if (field.getDocId() != null) {
-            clone.setDocId(new String(field.getDocId()));
-        }
-        if (field.getFieldType() != null) {
-            clone.setFieldType(FieldType.fromValue(field.getFieldType().value()));
-        }
-        if (field.getIndex() != null) {
-            clone.setIndex(Integer.valueOf(field.getIndex()));
-        }
-        if (field.getPath() != null) {
-            clone.setPath(new String(field.getPath()));
-        }
-        if (field.isRequired() != null) {
-            clone.setRequired(Boolean.valueOf(field.isRequired()));
-        }
-        if (field.getStatus() != null) {
-            clone.setStatus(FieldStatus.fromValue(field.getStatus().value()));
-        }
-
-        // json specific
-        clone.setName(that.getName());
-        clone.setPrimitive(that.isPrimitive());
-        clone.setTypeName(that.getTypeName());
-        clone.setUserCreated(that.isUserCreated());
-
+        copyField(field, clone, true);
         return clone;
     }
+
+    public static void copyField(Field from, Field to, boolean withActions) {
+        AtlasModelFactory.copyField(from, to, withActions);
+
+        // json specific
+        if (from instanceof JsonField && to instanceof JsonField) {
+            JsonField fromJson = (JsonField)from;
+            JsonField toJson = (JsonField)to;
+            toJson.setName(fromJson.getName());
+            toJson.setPrimitive(fromJson.isPrimitive());
+            toJson.setTypeName(fromJson.getTypeName());
+            toJson.setUserCreated(fromJson.isUserCreated());
+        }
+    }
+
 }

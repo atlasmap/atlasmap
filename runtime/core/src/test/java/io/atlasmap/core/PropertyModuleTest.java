@@ -1,6 +1,5 @@
 package io.atlasmap.core;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -121,11 +120,6 @@ public class PropertyModuleTest {
     @Test
     public void testCloneField() throws AtlasException {
         assertNull(module.cloneField(new MockField()));
-    }
-
-    @Test
-    public void testGetCollectionSize() throws AtlasException {
-        assertEquals(0, module.getCollectionSize(null, null));
     }
 
     @Test

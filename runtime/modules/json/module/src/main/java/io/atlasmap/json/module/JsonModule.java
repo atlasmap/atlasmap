@@ -15,22 +15,14 @@
  */
 package io.atlasmap.json.module;
 
-import java.io.IOException;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-
-import io.atlasmap.api.AtlasConversionException;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.api.AtlasValidationException;
 import io.atlasmap.core.AtlasPath;
-import io.atlasmap.core.AtlasPath.SegmentContext;
 import io.atlasmap.core.AtlasUtil;
 import io.atlasmap.core.BaseAtlasModule;
 import io.atlasmap.json.core.JsonFieldReader;
@@ -39,9 +31,10 @@ import io.atlasmap.json.v2.AtlasJsonModelFactory;
 import io.atlasmap.json.v2.JsonField;
 import io.atlasmap.spi.AtlasInternalSession;
 import io.atlasmap.spi.AtlasModuleDetail;
+import io.atlasmap.v2.AtlasModelFactory;
 import io.atlasmap.v2.AuditStatus;
 import io.atlasmap.v2.Field;
-import io.atlasmap.v2.LookupTable;
+import io.atlasmap.v2.FieldGroup;
 import io.atlasmap.v2.Validation;
 import io.atlasmap.v2.Validations;
 
@@ -49,8 +42,6 @@ import io.atlasmap.v2.Validations;
         "json" }, configPackages = { "io.atlasmap.json.v2" })
 public class JsonModule extends BaseAtlasModule {
     private static final Logger LOG = LoggerFactory.getLogger(JsonModule.class);
-
-    private static final ObjectMapper MAPPER = new ObjectMapper();
 
     @Override
     public void processPreValidation(AtlasInternalSession atlasSession) throws AtlasException {
@@ -115,10 +106,8 @@ public class JsonModule extends BaseAtlasModule {
             return;
         }
         reader.read(session);
-
-        if (sourceField.getActions() != null && sourceField.getActions().getActions() != null) {
-            getFieldActionService().processActions(sourceField.getActions(), sourceField);
-        }
+        sourceField = applySourceFieldActions(session);
+        session.head().setSourceField(sourceField);
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("{}: processSourceFieldMapping completed: SourceField:[docId={}, path={}, type={}, value={}]",
@@ -131,42 +120,73 @@ public class JsonModule extends BaseAtlasModule {
     public void processTargetFieldMapping(AtlasInternalSession session) throws AtlasException {
         Field sourceField = session.head().getSourceField();
         Field targetField = session.head().getTargetField();
+        AtlasPath path = new AtlasPath(targetField.getPath());
+        FieldGroup targetFieldGroup = null;
+        if (path.hasCollection() && !path.isIndexedCollection()) {
+            targetFieldGroup = AtlasModelFactory.createFieldGroupFrom(targetField);
+            session.head().setTargetField(targetFieldGroup);
+        }
+
         // Attempt to Auto-detect field type based on input value
         if (targetField.getFieldType() == null && sourceField.getValue() != null) {
             targetField.setFieldType(getConversionService().fieldTypeFromClass(sourceField.getValue().getClass()));
         }
 
-        Object targetValue = null;
-
-        // Do auto-conversion
-        if (sourceField.getFieldType() != null && sourceField.getFieldType().equals(targetField.getFieldType())) {
-            targetValue = sourceField.getValue();
-        } else if (sourceField.getValue() != null) {
-            try {
-                targetValue = getConversionService().convertType(sourceField.getValue(), sourceField.getFormat(),
-                        targetField.getFieldType(), targetField.getFormat());
-            } catch (AtlasConversionException e) {
-                AtlasUtil.addAudit(session, targetField.getDocId(),
-                        String.format("Unable to auto-convert for sT=%s tT=%s tF=%s msg=%s", sourceField.getFieldType(),
-                                targetField.getFieldType(), targetField.getPath(), e.getMessage()),
-                        targetField.getPath(), AuditStatus.ERROR, null);
-                return;
+        if (targetFieldGroup == null) {
+            if (sourceField instanceof FieldGroup) {
+                List<Field> subFields = ((FieldGroup)sourceField).getField();
+                if (subFields != null && subFields.size() > 0) {
+                    // The last one wins for compatibility
+                    sourceField = subFields.get(subFields.size() - 1);
+                    session.head().setSourceField(sourceField);
+                }
             }
+            populateTargetFieldValue(session);
+        } else if (sourceField instanceof FieldGroup) {
+            for (int i=0; i<((FieldGroup)sourceField).getField().size(); i++) {
+                Field sourceSubField = ((FieldGroup)sourceField).getField().get(i);
+                JsonField targetSubField = new JsonField();
+                AtlasJsonModelFactory.copyField(targetField, targetSubField, false);
+                AtlasPath subPath = new AtlasPath(targetField.getPath());
+                subPath.setVacantCollectionIndex(i);
+                targetSubField.setPath(subPath.toString());
+                targetFieldGroup.getField().add(targetSubField);
+                session.head().setSourceField(sourceSubField);
+                session.head().setTargetField(targetSubField);
+                populateTargetFieldValue(session);
+            }
+            session.head().setSourceField(sourceField);
+            session.head().setTargetField(targetFieldGroup);
+        } else {
+            JsonField targetSubField = new JsonField();
+            AtlasJsonModelFactory.copyField(targetField, targetSubField, false);
+            path.setVacantCollectionIndex(0);
+            targetSubField.setPath(path.toString());
+            targetFieldGroup.getField().add(targetSubField);
+            session.head().setTargetField(targetSubField);
+            populateTargetFieldValue(session);
+            session.head().setTargetField(targetFieldGroup);
         }
 
-        targetField.setValue(targetValue);
-        LookupTable lookupTable = session.head().getLookupTable();
-        if (lookupTable != null) {
-            processLookupField(session, lookupTable, targetField.getValue(), targetField);
-        }
-
-        if (isAutomaticallyProcessOutputFieldActions() && targetField.getActions() != null
-                && targetField.getActions().getActions() != null) {
-            getFieldActionService().processActions(targetField.getActions(), targetField);
-        }
+        session.head().setTargetField(applyTargetFieldActions(session));
 
         JsonFieldWriter writer = session.getFieldWriter(getDocId(), JsonFieldWriter.class);
-        writer.write(session);
+        if (targetFieldGroup != null) {
+            for (Field f : targetFieldGroup.getField()) {
+                session.head().setTargetField(f);
+                writer.write(session);
+            }
+        } else {
+            writer.write(session);
+        }
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug(
+                    "{}: processTargetFieldMapping completed: SourceField:[docId={}, path={}, type={}, value={}], TargetField:[docId={}, path={}, type={}, value={}]",
+                    getDocId(), sourceField.getDocId(), sourceField.getPath(), sourceField.getFieldType(),
+                    sourceField.getValue(), targetField.getDocId(), targetField.getPath(), targetField.getFieldType(),
+                    targetField.getValue());
+        }
     }
 
     @Override
@@ -206,35 +226,6 @@ public class JsonModule extends BaseAtlasModule {
             return true;
         }
         return field instanceof JsonField;
-    }
-
-    @Override
-    public int getCollectionSize(AtlasInternalSession session, Field field) throws AtlasException {
-        // TODO could this use FieldReader?
-        Object document = session.getSourceDocument(getDocId());
-        // make this a JSON document
-        JsonFactory jsonFactory = new JsonFactory();
-        try {
-            JsonNode rootNode = MAPPER.readTree(document.toString());
-            ObjectNode parentNode = (ObjectNode) rootNode;
-            String parentSegment = "[root node]";
-            for (SegmentContext sc : new AtlasPath(field.getPath()).getSegmentContexts(false)) {
-                JsonNode currentNode = JsonFieldWriter.getChildNode(parentNode, parentSegment, sc.getSegment());
-                if (currentNode == null) {
-                    return 0;
-                }
-                if (AtlasPath.isCollectionSegment(sc.getSegment())) {
-                    if (currentNode != null && currentNode.isArray()) {
-                        return currentNode.size();
-                    }
-                    return 0;
-                }
-                parentNode = (ObjectNode) currentNode;
-            }
-        } catch (IOException e) {
-            throw new AtlasException(e.getMessage(), e);
-        }
-        return 0;
     }
 
     @Override

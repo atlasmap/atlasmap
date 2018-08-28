@@ -52,7 +52,6 @@ import java.util.concurrent.TransferQueue;
 
 import org.slf4j.LoggerFactory;
 
-import io.atlasmap.api.AtlasConversionService;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.core.AtlasPath;
 import io.atlasmap.core.AtlasPath.SegmentContext;
@@ -60,6 +59,7 @@ import io.atlasmap.core.DefaultAtlasConversionService;
 import io.atlasmap.java.inspect.ClassHelper;
 import io.atlasmap.java.v2.JavaEnumField;
 import io.atlasmap.java.v2.JavaField;
+import io.atlasmap.spi.AtlasConversionService;
 import io.atlasmap.spi.AtlasFieldWriter;
 import io.atlasmap.spi.AtlasInternalSession;
 import io.atlasmap.v2.Field;
@@ -99,8 +99,28 @@ public class DocumentJavaFieldWriter implements AtlasFieldWriter {
     }
 
     public void write(AtlasInternalSession session) throws AtlasException {
-        LookupTable lookupTable = session.head().getLookupTable();
+        Object parentObject = getParentObject(session);
+        populateTargetFieldValue(session, parentObject);
+        write(session, parentObject);
+    }
+
+    public void populateTargetFieldValue(AtlasInternalSession session, Object parentObject) throws AtlasException {
         Field sourceField = session.head().getSourceField();
+        Field targetField = session.head().getTargetField();
+        LookupTable lookupTable = session.head().getLookupTable();
+        converter.convert(session, lookupTable, sourceField, parentObject, targetField);
+    }
+
+    public void write(AtlasInternalSession session, Object parentObject) throws AtlasException {
+        if (parentObject != null) {
+            Field targetField = session.head().getTargetField();
+            AtlasPath path = new AtlasPath(targetField.getPath());
+            List<SegmentContext> segmentContexts = path.getSegmentContexts(true);
+            addChildObject(targetField, segmentContexts.get(segmentContexts.size() - 1), parentObject, targetField.getValue());
+        }
+    }
+
+    public Object getParentObject(AtlasInternalSession session) throws AtlasException {
         Field targetField = session.head().getTargetField();
 
         try {
@@ -110,6 +130,12 @@ public class DocumentJavaFieldWriter implements AtlasFieldWriter {
 
             String targetFieldClassName = (targetField instanceof JavaField) ? ((JavaField) targetField).getClassName()
                     : ((JavaEnumField) targetField).getClassName();
+            // detect field type from class name if exists
+            if (targetField.getFieldType() == null && targetFieldClassName != null
+                    && (targetField instanceof JavaField)) {
+                FieldType fieldTypeFromClass = conversionService.fieldTypeFromClass(targetFieldClassName);
+                targetField.setFieldType(fieldTypeFromClass);
+            }
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Now processing field: " + targetField);
                 LOG.debug("Field type: " + targetField.getFieldType());
@@ -147,12 +173,6 @@ public class DocumentJavaFieldWriter implements AtlasFieldWriter {
                 // if we're on the last segment, the
                 boolean segmentIsLastSegment = (segmentContext.getNext() == null);
                 if (segmentIsLastSegment) {
-                    // detect field type from class name if exists
-                    if (targetField.getFieldType() == null && targetFieldClassName != null
-                            && (targetField instanceof JavaField)) {
-                        FieldType fieldTypeFromClass = conversionService.fieldTypeFromClass(targetFieldClassName);
-                        targetField.setFieldType(fieldTypeFromClass);
-                    }
                     if (FieldType.COMPLEX.equals(targetField.getFieldType())) {
                         segmentIsComplexSegment = true;
                     } else {
@@ -183,10 +203,10 @@ public class DocumentJavaFieldWriter implements AtlasFieldWriter {
                     if (AtlasPath.isCollectionSegment(segmentContext.getSegment())) {
                         parentObject = findOrCreateOrExpandParentCollectionObject(targetField, parentObject, segmentContext);
                     }
-                    Object value = converter.convert(session, lookupTable, sourceField, parentObject, targetField);
-                    addChildObject(targetField, segmentContext, parentObject, value);
+                    return parentObject;
                 }
             }
+            return null;
         } catch (Throwable t) {
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Error occured while writing field: " + targetField.getPath(), t);
@@ -318,19 +338,16 @@ public class DocumentJavaFieldWriter implements AtlasFieldWriter {
                 LOG.debug("Collection is not large enough for segment '" + segment + "', expanding the collection.");
             }
             int index = AtlasPath.indexOfSegment(segment);
-            if (collectionObject instanceof Collection) {
-                Collection collection = (Collection) collectionObject;
+            if (collectionObject instanceof List) {
+                List collection = (List) collectionObject;
                 while (collection.size() < index) {
-                    int preSize = collection.size();
                     collection.add(null);
-                    if (collection.size() == preSize) {
-                        LOG.warn(String.format(
-                                "This collection field doesn't allow filling with null - index will be ignored. "
-                                + "segment: %s \n\tparentObject: %s",
-                                segmentContext, parentObject));
-                        break;
-                    }
                 }
+            } else if (collectionObject instanceof Collection) {
+                LOG.warn(String.format(
+                        "Java collection other than List doesn't support indexed insertion - index will be ignored. "
+                        + "segment: %s \n\tparentObject: %s",
+                        segmentContext, parentObject));
             } else if (collectionObject instanceof Map) {
                 throw new AtlasException("FIXME: Cannot yet handle adding children to maps");
             } else if (collectionObject.getClass().isArray()) {

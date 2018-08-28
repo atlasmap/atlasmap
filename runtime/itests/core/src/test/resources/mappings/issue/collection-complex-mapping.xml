@@ -28,7 +28,7 @@
           <OutputField xsi:type="ns2:JavaField" name="targetList" docId="TargetClass" path="/targetList&lt;&gt;/name" fieldType="String"/>
         </Mapping>
         <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="Mapping" mappingType="Map">
-          <InputField xsi:type="ns3:JsonField" name="sourceList" docId="SourceJson" path="/sourceList&lt;&gt;/name" fieldType="String"/>
+          <InputField xsi:type="ns3:JsonField" name="sourceList" docId="SourceJson" path="/sourceList&lt;&gt;" fieldType="String"/>
           <OutputField xsi:type="ns4:XmlField" name="jsonList" docId="TargetXml" path="/root/jsonList&lt;&gt;/name" fieldType="String"/>
         </Mapping>
 
@@ -37,8 +37,8 @@
           <OutputField xsi:type="ns2:JavaField" name="targetName" docId="TargetClass" path="/targetName" fieldType="String"/>
         </Mapping>
         <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="Mapping" mappingType="Map">
-          <InputField xsi:type="ns4:XmlField" name="sourceList" docId="SourceXml" path="/sourceList&lt;&gt;" fieldType="String"/>
-          <OutputField xsi:type="ns3:JsonField" name="xmlList" docId="TargetJson" path="/root/xmlList&lt;&gt;" fieldType="String"/>
+          <InputField xsi:type="ns4:XmlField" name="sourceList" docId="SourceXml" path="/root/sourceList&lt;&gt;/name" fieldType="String"/>
+          <OutputField xsi:type="ns3:JsonField" name="xmlList" docId="TargetJson" path="/xmlList&lt;&gt;" fieldType="String"/>
         </Mapping>
       </Mappings>
     </Mapping>

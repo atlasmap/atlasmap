@@ -33,7 +33,7 @@ public abstract class BaseDefaultAtlasContextTest {
     protected BaseAtlasModule sourceModule = null;
     protected BaseAtlasModule targetModule = null;
     protected AtlasMapping mapping = null;
-    protected AtlasInternalSession session = null;
+    protected DefaultAtlasSession session = null;
     protected MockFieldReader reader = null;
     protected MockFieldWriter writer = null;
 
@@ -47,11 +47,19 @@ public abstract class BaseDefaultAtlasContextTest {
         targetModule.setMode(AtlasModuleMode.TARGET);
         context.getSourceModules().put(AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID, sourceModule);
         context.getTargetModules().put(AtlasConstants.DEFAULT_TARGET_DOCUMENT_ID, targetModule);
-        session = (AtlasInternalSession) context.createSession();
-        reader = new MockFieldReader();
-        session.setFieldReader(AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID, reader);
-        writer = new MockFieldWriter();
-        session.setFieldWriter(AtlasConstants.DEFAULT_TARGET_DOCUMENT_ID, writer);
+        recreateSession();
+    }
+
+    protected void recreateSession() throws AtlasException {
+        session = (DefaultAtlasSession) context.createSession();
+        if (reader == null) {
+            reader = new MockFieldReader();
+            session.setFieldReader(AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID, reader);
+        }
+        if (writer == null) {
+            writer = new MockFieldWriter();
+            session.setFieldWriter(AtlasConstants.DEFAULT_TARGET_DOCUMENT_ID, writer);
+        }
     }
 
     private BaseAtlasModule mockAtlasModule() throws AtlasException {
@@ -155,9 +163,10 @@ public abstract class BaseDefaultAtlasContextTest {
     protected class MockFieldReader implements AtlasFieldReader {
         protected Map<String, Object> sources = new HashMap<>();
         @Override
-        public void read(AtlasInternalSession session) throws AtlasException {
+        public Field read(AtlasInternalSession session) throws AtlasException {
             Field field = session.head().getSourceField();
             field.setValue(sources.get(field.getPath()));
+            return field;
         }
     }
 

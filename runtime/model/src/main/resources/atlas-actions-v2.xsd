@@ -556,6 +556,7 @@
         <element ref="atlas:CurrentDate" />
         <element ref="atlas:CurrentDateTime" />
         <element ref="atlas:CurrentTime" />
+        <element ref="atlas:CustomAction" />
         <element ref="atlas:DayOfWeek" />
         <element ref="atlas:DayOfYear" />
         <element ref="atlas:Divide" />

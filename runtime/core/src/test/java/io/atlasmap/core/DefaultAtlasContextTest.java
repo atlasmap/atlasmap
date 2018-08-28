@@ -39,7 +39,6 @@ import io.atlasmap.api.AtlasConstants;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.api.AtlasSession;
 import io.atlasmap.core.AtlasMappingService.AtlasMappingFormat;
-import io.atlasmap.spi.AtlasInternalSession;
 import io.atlasmap.spi.AtlasInternalSession.Head;
 import io.atlasmap.spi.AtlasModule;
 import io.atlasmap.spi.StringDelimiter;
@@ -70,8 +69,10 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
     public void testMap() throws AtlasException {
         Mapping m = (Mapping) AtlasModelFactory.createMapping(MappingType.MAP);
         mapping.getMappings().getMapping().add(m);
+        recreateSession();
         populateSourceField(m, FieldType.STRING, "foo");
         prepareTargetField(m, "/target");
+        recreateSession();
         context.process(session);
         assertFalse(printAudit(session), session.hasErrors());
         assertEquals("foo", writer.targets.get("/target"));
@@ -83,6 +84,7 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
         mapping.getMappings().getMapping().add(m);
         populateSourceField(m, "docId.not.existing", FieldType.STRING, "foo");
         prepareTargetField(m, "/target");
+        recreateSession();
         context.process(session);
         assertTrue(printAudit(session), session.hasErrors());
         assertEquals(1,
@@ -106,6 +108,7 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
         populateSourceField(m, FieldType.CHAR, '9', 9);
         populateSourceField(m, FieldType.UNSIGNED_INTEGER, 10, 10);// not listed as primitive type
         prepareTargetField(m, "/target");
+        recreateSession();
         context.process(session);
         assertFalse(printAudit(session), session.hasErrors());
         assertEquals(new Date(0).toInstant().toString() + ";1;2.0;3.0;true;5;6;string;8;9;10",
@@ -122,6 +125,7 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
         populateSourceField(mapping, FieldType.DOUBLE, 2d, 2);
         prepareTargetField(mapping, "/target");
         mapping.setDelimiterString("String: {1}, Integer: {2}, Double: {3}, String again: {1}");
+        recreateSession();
         context.process(session);
         assertFalse(printAudit(session), session.hasErrors());
         assertEquals("String: string, Integer: 1, Double: 2.0, String again: string", writer.targets.get("/target"));
@@ -135,6 +139,7 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
         populateUnsupportedSourceField(m, "foo", 0);
         populateUnsupportedSourceField(m, "bar", 1);
         prepareTargetField(m, "/target");
+        recreateSession();
         context.process(session);
         assertFalse(printAudit(session), session.hasErrors());
         assertEquals("foo;bar", writer.targets.get("/target"));
@@ -157,6 +162,7 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
         prepareTargetField(m, "/target4", 4);
         prepareTargetField(m, "/target3", 3);
         prepareTargetField(m, "/target2", 2);
+        recreateSession();
         context.process(session);
 
         Assert.assertFalse(printAudit(session), session.hasErrors());
@@ -187,6 +193,7 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
         m.setLookupTableName("table");
         populateSourceField(m, FieldType.STRING, "foo");
         prepareTargetField(m, "/target");
+        recreateSession();
         context.process(session);
         Assert.assertFalse(printAudit(session), session.hasErrors());
         Assert.assertEquals("bar", writer.targets.get("/target"));
@@ -244,7 +251,7 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
 
         DefaultAtlasContext context = new DefaultAtlasContext(factory, file.toURI());
         context.init();
-        context.processValidation(session);
+        context.processValidation(new DefaultAtlasSession(new DefaultAtlasContext(factory, file.toURI())));
     }
 
     @Test
@@ -314,9 +321,9 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
 
     @Test(expected = AtlasException.class)
     public void testProcessAtlasExceptionOtherContext() throws AtlasException {
-        AtlasSession session = new DefaultAtlasSession(mapping);
-        session.setAtlasContext(new DefaultAtlasContext(DefaultAtlasContextFactory.getInstance(), mapping));
-        context.process(session);
+        DefaultAtlasContext context = new DefaultAtlasContext(DefaultAtlasContextFactory.getInstance(), mapping);
+        AtlasSession session = new DefaultAtlasSession(context);
+        new DefaultAtlasContext(DefaultAtlasContextFactory.getInstance(), mapping).process(session);
     }
 
     @Test
@@ -382,7 +389,6 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
 
         when(mappingElement2.getInputField()).thenReturn(sourceFieldList2);
         ConstantModule mockConstantModule = mock(ConstantModule.class);
-        when(mockConstantModule.getCollectionSize(any(AtlasInternalSession.class), any(Field.class))).thenReturn(1);
         ConstantField clonedField = mock(ConstantField.class);
         when(clonedField.getPath()).thenReturn("cloned[1]");
         when(mockConstantModule.cloneField(any(Field.class))).thenReturn(clonedField);
@@ -405,7 +411,7 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
     }
 
     @Test
-    public void testProcessPreviewConverter() {
+    public void testProcessPreviewConverter() throws AtlasException {
         Mapping m = new Mapping();
         m.setMappingType(MappingType.MAP);
         Field source = new SimpleField();
@@ -421,7 +427,7 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
     }
 
     @Test
-    public void testProcessPreviewSourceFieldAction() {
+    public void testProcessPreviewSourceFieldAction() throws AtlasException {
         Mapping m = new Mapping();
         m.setMappingType(MappingType.MAP);
         Field source = new SimpleField();
@@ -439,7 +445,7 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
     }
 
     @Test
-    public void testProcessPreviewTargetFieldAction() {
+    public void testProcessPreviewTargetFieldAction() throws AtlasException {
         Mapping m = new Mapping();
         m.setMappingType(MappingType.MAP);
         Field source = new SimpleField();
@@ -457,7 +463,7 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
     }
 
     @Test
-    public void testProcessPreviewCombine() {
+    public void testProcessPreviewCombine() throws AtlasException {
         Mapping m = new Mapping();
         m.setMappingType(MappingType.COMBINE);
         Field source1 = new SimpleField();
@@ -478,7 +484,7 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
     }
 
     @Test
-    public void testProcessPreviewSeparate() {
+    public void testProcessPreviewSeparate() throws AtlasException {
         Mapping m = new Mapping();
         m.setMappingType(MappingType.SEPARATE);
         Field source = new SimpleField();

@@ -20,6 +20,8 @@ import java.net.URI;
 import java.util.Map;
 
 import io.atlasmap.spi.AtlasCombineStrategy;
+import io.atlasmap.spi.AtlasConversionService;
+import io.atlasmap.spi.AtlasFieldActionService;
 import io.atlasmap.spi.AtlasPropertyStrategy;
 import io.atlasmap.spi.AtlasSeparateStrategy;
 

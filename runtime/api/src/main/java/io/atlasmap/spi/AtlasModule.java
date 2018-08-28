@@ -17,9 +17,7 @@ package io.atlasmap.spi;
 
 import java.util.List;
 
-import io.atlasmap.api.AtlasConversionService;
 import io.atlasmap.api.AtlasException;
-import io.atlasmap.api.AtlasFieldActionService;
 import io.atlasmap.v2.Field;
 
 public interface AtlasModule {
@@ -73,7 +71,5 @@ public interface AtlasModule {
     Boolean isSupportedField(Field field);
 
     Field cloneField(Field field) throws AtlasException;
-
-    int getCollectionSize(AtlasInternalSession session, Field field) throws AtlasException;
 
 }

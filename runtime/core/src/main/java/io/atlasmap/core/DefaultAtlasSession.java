@@ -22,8 +22,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
+import javax.xml.bind.util.JAXBSource;
+import javax.xml.namespace.QName;
+
 import io.atlasmap.api.AtlasConstants;
 import io.atlasmap.api.AtlasContext;
+import io.atlasmap.api.AtlasException;
 import io.atlasmap.spi.AtlasFieldReader;
 import io.atlasmap.spi.AtlasFieldWriter;
 import io.atlasmap.spi.AtlasInternalSession;
@@ -43,21 +49,38 @@ public class DefaultAtlasSession implements AtlasInternalSession {
     private Audits audits;
     private Validations validations;
     private Map<String, Object> properties;
-    private Map<String, Object> sourceMap = new HashMap<>();
-    private Map<String, Object> targetMap = new HashMap<>();
-    private Map<String, AtlasFieldReader> fieldReaderMap = new HashMap<>();
-    private Map<String, AtlasFieldWriter> fieldWriterMap = new HashMap<>();
+    private Map<String, Object> sourceMap;
+    private Map<String, Object> targetMap;
+    private Map<String, AtlasFieldReader> fieldReaderMap;
+    private Map<String, AtlasFieldWriter> fieldWriterMap;
     private Head head = new HeadImpl();
 
-    public DefaultAtlasSession(AtlasMapping mapping) {
+    public DefaultAtlasSession(DefaultAtlasContext context) throws AtlasException {
+        this.atlasContext = context;
         initialize();
-        this.mapping = mapping;
+        if (context.getMapping() == null) {
+            this.mapping = null;
+            return;
+        }
+
+        try {
+            JAXBContext jaxbContext = ((DefaultAtlasContextFactory)atlasContext.getContextFactory()).getMappingService().getJAXBContext();
+            JAXBElement<AtlasMapping> element = new JAXBElement<>(new QName("http://atlasmap.io/v2", "AtlasMapping"), AtlasMapping.class, context.getMapping());
+            JAXBSource source = new JAXBSource(jaxbContext, element);
+            this.mapping = jaxbContext.createUnmarshaller().unmarshal(source, AtlasMapping.class).getValue();
+        } catch (Exception e) {
+            throw new AtlasException("Failed to create a copy of AtlasMapping object", e);
+        }
     }
 
     protected void initialize() {
         properties = new ConcurrentHashMap<String, Object>();
         validations = new Validations();
         audits = new Audits();
+        sourceMap = new HashMap<>();
+        targetMap = new HashMap<>();
+        fieldReaderMap = new HashMap<>();
+        fieldWriterMap = new HashMap<>();
         head.unset();
     }
 

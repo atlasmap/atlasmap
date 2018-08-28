@@ -28,11 +28,11 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.atlasmap.api.AtlasConversionService;
 import io.atlasmap.api.AtlasConverter;
 import io.atlasmap.core.BaseModuleValidationService;
 import io.atlasmap.java.v2.JavaField;
 import io.atlasmap.spi.AtlasConversionInfo;
+import io.atlasmap.spi.AtlasConversionService;
 import io.atlasmap.spi.AtlasModuleDetail;
 import io.atlasmap.spi.AtlasValidator;
 import io.atlasmap.spi.FieldDirection;

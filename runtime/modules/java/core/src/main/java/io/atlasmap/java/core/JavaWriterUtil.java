@@ -8,13 +8,13 @@ import java.util.List;
 
 import org.slf4j.LoggerFactory;
 
-import io.atlasmap.api.AtlasConversionService;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.core.AtlasPath;
 import io.atlasmap.core.AtlasPath.SegmentContext;
 import io.atlasmap.java.inspect.ClassHelper;
 import io.atlasmap.java.inspect.JdkPackages;
 import io.atlasmap.java.inspect.StringUtil;
+import io.atlasmap.spi.AtlasConversionService;
 import io.atlasmap.v2.Field;
 
 class JavaWriterUtil {

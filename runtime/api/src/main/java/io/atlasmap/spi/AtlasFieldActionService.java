@@ -13,19 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.atlasmap.api;
+package io.atlasmap.spi;
 
 import java.util.List;
 
+import io.atlasmap.api.AtlasException;
 import io.atlasmap.v2.ActionDetail;
-import io.atlasmap.v2.Actions;
 import io.atlasmap.v2.Field;
-import io.atlasmap.v2.FieldType;
 
 public interface AtlasFieldActionService {
 
     List<ActionDetail> listActionDetails();
-    void processActions(Actions actions, Field field) throws AtlasException;
-    Object processActions(Actions actions, Object sourceValue, FieldType targetType) throws AtlasException;
+    Field processActions(AtlasInternalSession session, Field field) throws AtlasException;
 
 }
