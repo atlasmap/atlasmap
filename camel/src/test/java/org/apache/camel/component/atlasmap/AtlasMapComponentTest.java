@@ -49,6 +49,7 @@ public class AtlasMapComponentTest {
         assertEquals("Vila", outJson.get("LastName").asText());
         assertEquals("bobvila1982", outJson.get("Title").asText());
         assertEquals("Let's build a house!", outJson.get("Description").asText());
+        assertEquals("const foobar", outJson.get("Constant").asText());
     }
 
     @Test
