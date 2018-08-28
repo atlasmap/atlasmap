@@ -224,7 +224,7 @@ export class MappingSerializer {
         'fieldType': field.type,
         'docId': field.docDef.id,
       };
-      if (!ignoreValue) {
+      if (!ignoreValue || field.isPropertyOrConstant()) {
         serializedField['value'] = field.value;
       }
       if (field.docDef.type === DocumentType.XML || field.docDef.type === DocumentType.JSON) {

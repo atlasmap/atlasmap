@@ -45,6 +45,13 @@
             <OutputField xsi:type="ns3:JsonField" name="Title"
                 path="/Title" fieldType="String" />
         </Mapping>
+        <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:type="Mapping" mappingType="Map">
+            <InputField xsi:type="ConstantField" docId="DOC.Constants.973849" path="/foobar" fieldType="String">
+                <value xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">const foobar</value>
+            </InputField>
+            <OutputField xsi:type="ns3:JsonField" name="Constant" path="/Constant" fieldType="String" />
+        </Mapping>
     </Mappings>
     <LookupTables />
     <Properties />
