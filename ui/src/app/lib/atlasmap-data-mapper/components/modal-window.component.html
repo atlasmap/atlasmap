@@ -6,10 +6,10 @@
         <div class="modal-header">
           <a (click)="closeClicked($event)">
             <span class='close'>
-              <i class="fa fa-close"></i>
+              <span class="pficon pficon-close"></span>
             </span>
           </a>
-          {{ headerText }}
+          <h4 class="modal-title">{{ headerText }}</h4>
         </div>
         <div class="modal-error">
           <data-mapper-error [isValidation]="true" [errorService]="cfg.errorService"></data-mapper-error>
