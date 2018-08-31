@@ -237,16 +237,9 @@
 .DataMapperUI .TransitionSelection SELECT { display:block; width:100%; }
 
 /* modal window */
-.DataMapperUI .modal { z-index:1000; width:100%; height:100%; overflow:auto; display:block; }
-
-.DataMapperUI .modal-content { position:fixed; top:50%; left:50%; transform:translate(-50%, -50%);
-    -webkit-animation-name:dm-animatetop; -webkit-animation-duration:0.8s;
-    animation-name:dm-animatetop; animation-duration:0.8s }
+.DataMapperUI .modal { width:100%; height:100%; overflow:auto; }
 .DataMapperUI .modal-footer .btn { margin-left:10px; }
 .DataMapperUI .modal-footer { margin:0; }
-
-@-webkit-keyframes dm-animatetop { from {top:-300px; opacity:0}  to {top:50%; opacity:1} }
-@keyframes dm-animatetop { from {top:-300px; opacity:0} to {top:50%; opacity:1} }
 
 .DataMapperUI .modal-message { padding:10px 20px; }
 

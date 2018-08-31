@@ -52,6 +52,7 @@ export class ModalWindowComponent implements AfterViewInit, OnDestroy {
   confirmButtonDisabled = false;
   confirmButtonText = 'OK';
   visible = false;
+  fade = false;
 
   @ViewChildren('dyn_target', { read: ViewContainerRef }) myTarget: QueryList<ViewContainerRef>;
 
@@ -93,9 +94,17 @@ export class ModalWindowComponent implements AfterViewInit, OnDestroy {
   }
 
   closeClicked(event: MouseEvent): void { this.buttonClicked(false); }
-  close(): void { this.visible = false; }
+  close(): void {
+    this.fade = false;
+    setTimeout(() => {
+      this.visible = false;
+    }, 300);
+  }
   show(): void {
     this.visible = true;
+    setTimeout(() => {
+      this.fade = true;
+    }, 100);
   }
 
   reset(): void {
