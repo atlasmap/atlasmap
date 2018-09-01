@@ -114,7 +114,7 @@ public class AtlasModelFactory {
     }
 
     public static Field cloneField(Field f) {
-        return null;
+        throw new IllegalArgumentException("Use module specific factories to clone fields");
     }
 
     public static SimpleField cloneFieldToSimpleField(Field field) {
@@ -123,36 +123,48 @@ public class AtlasModelFactory {
         }
 
         SimpleField f = new SimpleField();
-        f.setActions(cloneFieldActions(field.getActions()));
-        if (field.getArrayDimensions() != null) {
-            f.setArrayDimensions(Integer.valueOf(field.getArrayDimensions()));
+        copyField(field, f, true);
+        return f;
+    }
+
+    public static void copyField(Field from, Field to, boolean withActions) {
+        if (withActions) {
+            to.setActions(cloneFieldActions(from.getActions()));
         }
-        if (field.getArraySize() != null) {
-            f.setArraySize(Integer.valueOf(field.getArraySize()));
+        if (from.getArrayDimensions() != null) {
+            to.setArrayDimensions(Integer.valueOf(from.getArrayDimensions()));
         }
-        if (field.getCollectionType() != null) {
-            f.setCollectionType(CollectionType.fromValue(field.getCollectionType().value()));
+        if (from.getArraySize() != null) {
+            to.setArraySize(Integer.valueOf(from.getArraySize()));
         }
-        if (field.getDocId() != null) {
-            f.setDocId(field.getDocId());
+        if (from.getCollectionType() != null) {
+            to.setCollectionType(CollectionType.fromValue(from.getCollectionType().value()));
         }
-        if (field.getFieldType() != null) {
-            f.setFieldType(FieldType.fromValue(field.getFieldType().value()));
+        if (from.getDocId() != null) {
+            to.setDocId(from.getDocId());
         }
-        if (field.getIndex() != null) {
-            f.setIndex(Integer.valueOf(field.getIndex()));
+        if (from.getFieldType() != null) {
+            to.setFieldType(FieldType.fromValue(from.getFieldType().value()));
         }
-        if (field.getPath() != null) {
-            f.setPath(field.getPath());
+        if (from.getIndex() != null) {
+            to.setIndex(Integer.valueOf(from.getIndex()));
         }
-        if (field.isRequired() != null) {
-            f.setRequired(Boolean.valueOf(field.isRequired()));
+        if (from.getPath() != null) {
+            to.setPath(from.getPath());
         }
-        if (field.getStatus() != null) {
-            f.setStatus(FieldStatus.fromValue(field.getStatus().value()));
+        if (from.isRequired() != null) {
+            to.setRequired(Boolean.valueOf(from.isRequired()));
+        }
+        if (from.getStatus() != null) {
+            to.setStatus(FieldStatus.fromValue(from.getStatus().value()));
         }
         // We can't clone so don't set value
-        return f;
+    }
+
+    public static FieldGroup createFieldGroupFrom(Field field) {
+        FieldGroup answer = new FieldGroup();
+        copyField(field, answer, true);
+        return answer;
     }
 
     public static Actions cloneFieldActions(Actions actions) {

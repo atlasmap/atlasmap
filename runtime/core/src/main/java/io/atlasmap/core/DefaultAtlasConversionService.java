@@ -37,9 +37,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.atlasmap.api.AtlasConversionException;
-import io.atlasmap.api.AtlasConversionService;
 import io.atlasmap.api.AtlasConverter;
 import io.atlasmap.spi.AtlasConversionInfo;
+import io.atlasmap.spi.AtlasConversionService;
 import io.atlasmap.v2.FieldType;
 
 public class DefaultAtlasConversionService implements AtlasConversionService {

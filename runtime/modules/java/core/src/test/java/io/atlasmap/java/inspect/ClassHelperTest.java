@@ -110,24 +110,28 @@ public class ClassHelperTest {
 
     @Test
     public void testParentObjectForPathParamChecking() throws Exception {
-        assertNull(ClassHelper.parentObjectForPath(null, null, true));
-        assertNull(ClassHelper.parentObjectForPath(null, new AtlasPath("foo.bar"), true));
+        assertNull(ClassHelper.parentObjectsForPath(null, null));
+        assertNull(ClassHelper.parentObjectsForPath(null, new AtlasPath("foo.bar")));
 
         SourceContact targetObject = new SourceContact();
-        Object parentObject = ClassHelper.parentObjectForPath(targetObject, null, true);
+        List<Object> parentObjects = ClassHelper.parentObjectsForPath(targetObject, null);
+        assertEquals(1, parentObjects.size());
+        Object parentObject = parentObjects.get(0);
         assertNotNull(parentObject);
         assertTrue(parentObject instanceof SourceContact);
         assertEquals(targetObject, parentObject);
     }
 
     @Test
-    public void testParentObjectForPath() throws Exception {
+    public void testParentObjectsForPath() throws Exception {
 
         SourceAddress sourceAddress = new SourceAddress();
         SourceOrder sourceOrder = new SourceOrder();
         sourceOrder.setAddress(sourceAddress);
 
-        Object parentObject = ClassHelper.parentObjectForPath(sourceOrder, new AtlasPath("/address/city"), true);
+        List<Object> parentObjects = ClassHelper.parentObjectsForPath(sourceOrder, new AtlasPath("/address/city"));
+        assertEquals(1, parentObjects.size());
+        Object parentObject = parentObjects.get(0);
         assertNotNull(parentObject);
         assertTrue(parentObject instanceof SourceAddress);
         assertEquals(sourceAddress, parentObject);
@@ -143,8 +147,9 @@ public class ClassHelperTest {
         SourceParentOrder sourceParentOrder = new SourceParentOrder();
         sourceParentOrder.setOrder(sourceOrder);
 
-        Object parentObject = ClassHelper.parentObjectForPath(sourceParentOrder, new AtlasPath("/order/address/city"),
-                true);
+        List<Object> parentObjects = ClassHelper.parentObjectsForPath(sourceParentOrder, new AtlasPath("/order/address/city"));
+        assertEquals(1, parentObjects.size());
+        Object parentObject = parentObjects.get(0);
         assertNotNull(parentObject);
         assertTrue(parentObject instanceof SourceAddress);
         assertEquals(sourceAddress, parentObject);
@@ -162,9 +167,11 @@ public class ClassHelperTest {
 
         sourceOrderList.getOrders().add(sourceOrder);
 
-        Object parentObject = ClassHelper.parentObjectForPath(sourceOrderList, new AtlasPath("orders<>"), true);
+        List<Object> parentObjects = ClassHelper.parentObjectsForPath(sourceOrderList, new AtlasPath("orders<>"));
+        assertEquals(1, parentObjects.size());
+        Object parentObject = parentObjects.get(0);
         assertNotNull(parentObject);
-        assertTrue(parentObject instanceof List<?>);
-        assertEquals(sourceOrders, parentObject);
+        assertTrue(parentObject.getClass().getName(), parentObject instanceof SourceOrder);
+        assertEquals(sourceOrder, parentObject);
     }
 }

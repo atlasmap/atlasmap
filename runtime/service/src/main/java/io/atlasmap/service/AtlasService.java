@@ -260,7 +260,12 @@ public class AtlasService {
             return Response.noContent().build();
         }
 
-        Audits audits = defaultContext.processPreview(mapping);
+        Audits audits = null;
+        try {
+            audits = defaultContext.processPreview(mapping);
+        } catch (AtlasException e) {
+            throw new WebApplicationException("Unable to process mapping preview", e);
+        }
         ProcessMappingResponse response = new ProcessMappingResponse();
         response.setMapping(mapping);
         if (audits != null) {

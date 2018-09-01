@@ -337,6 +337,7 @@ public class JsonFieldReaderTest {
         AtlasInternalSession session = mock(AtlasInternalSession.class);
         when(session.head()).thenReturn(mock(Head.class));
         when(session.head().getSourceField()).thenReturn(field);
+        when(session.getAudits()).thenReturn(new Audits());
         reader.read(session);
         assertNotNull(field.getValue());
         assertThat(field.getValue(), Is.is("0001"));

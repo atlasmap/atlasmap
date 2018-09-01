@@ -21,9 +21,9 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.atlasmap.api.AtlasConversionService;
 import io.atlasmap.api.AtlasException;
-import io.atlasmap.api.AtlasFieldActionService;
+import io.atlasmap.spi.AtlasConversionService;
+import io.atlasmap.spi.AtlasFieldActionService;
 import io.atlasmap.spi.AtlasInternalSession;
 import io.atlasmap.spi.AtlasModule;
 import io.atlasmap.spi.AtlasModuleMode;
@@ -164,11 +164,6 @@ public class PropertyModule implements AtlasModule {
     @Override
     public Field cloneField(Field field) throws AtlasException {
         return null;
-    }
-
-    @Override
-    public int getCollectionSize(AtlasInternalSession session, Field field) throws AtlasException {
-        return 0;
     }
 
     @Override

@@ -208,8 +208,8 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
      * @param mapping A @link{Mapping} entry to process
      */
     @Override
-    public Audits processPreview(Mapping mapping) {
-        DefaultAtlasSession session = new DefaultAtlasSession(null);
+    public Audits processPreview(Mapping mapping) throws AtlasException {
+        DefaultAtlasSession session = new DefaultAtlasSession(this);
         MappingType mappingType = mapping.getMappingType();
         List<Field> sourceFields = mapping.getInputField();
         List<Field> targetFields = mapping.getOutputField();
@@ -338,7 +338,6 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
                 return false;
             }
         }
-
         targetField.setValue(targetValue);
         return true;
     }
@@ -348,7 +347,7 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
             return true;
         }
         try {
-            factory.getFieldActionService().processActions(field.getActions(), field);
+            factory.getFieldActionService().processActions(session, field);
         } catch (AtlasException e) {
             AtlasUtil.addAudit(session, field.getDocId(), String.format(
                     "Failed to apply field action: %s", AtlasUtil.getChainedMessage(e)),
@@ -409,7 +408,7 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
         }
 
         for (BaseMapping baseMapping : session.getMapping().getMappings().getMapping()) {
-            for (Mapping mapping : extractCollectionMappings(session, baseMapping)) {
+            for (Mapping mapping : unwrapCollectionMappings(session, baseMapping)) {
                 session.head().setMapping(mapping).setLookupTable(lookupTables.get(mapping.getLookupTableName()));
 
                 if (mapping.getOutputField() == null || mapping.getOutputField().isEmpty()) {
@@ -454,7 +453,7 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
                     }
                 }
                 session.getAudits().getAudit().addAll(session.head().getAudits());
-                session.head().getAudits().clear();
+                session.head().unset();
             }
         }
 
@@ -477,71 +476,19 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
         }
     }
 
-    protected final List<Mapping> extractCollectionMappings(DefaultAtlasSession session, BaseMapping baseMapping)
-            throws AtlasException {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Generating Source Mappings from mapping: {}", baseMapping);
-        }
+    // just unwrap collection mappings to be compatible with older UI
+    protected final List<Mapping> unwrapCollectionMappings(DefaultAtlasSession session, BaseMapping baseMapping) {
         if (!baseMapping.getMappingType().equals(MappingType.COLLECTION)) {
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Mapping is not a collection mapping, not cloning: {}", baseMapping);
             }
             return Arrays.asList((Mapping) baseMapping);
         }
+
         List<Mapping> mappings = new LinkedList<>();
-        for (BaseMapping m : ((Collection) baseMapping).getMappings().getMapping()) {
-            Mapping mapping = (Mapping) m;
-            Field sourceField = mapping.getInputField().get(0);
-            boolean sourceIsCollection = AtlasPath.isCollection(sourceField.getPath());
-            if (!sourceIsCollection) {
-                // this is a input non-collection to output collection, ie: contact.firstName ->
-                // contact[].firstName
-                // this will be expanded later by generateOutputMappings, for input processing,
-                // just copy it over
-                if (LOG.isDebugEnabled()) {
-                    LOG.debug("Internal mapping's source field is not a collection, not cloning: {}", mapping);
-                }
-
-                // this is a output collection such as contact<>.firstName, but input is non
-                // collection such as contact.firstName
-                // so just set the output collection field path to be contact<0>.firstName,
-                // which will cause at least one
-                // output object to be created for our copied firstName value
-                for (Field f : mapping.getOutputField()) {
-                    f.setPath(AtlasPath.overwriteCollectionIndex(f.getPath(), 0));
-                }
-                mappings.add(mapping);
-                continue;
-            }
-
-            AtlasModule module = resolveModule(FieldDirection.SOURCE, sourceField);
-            int sourceCollectionSize = module.getCollectionSize(session, sourceField);
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("Internal mapping's source field is a collection. Cloning it for each item ({} clones): {}",
-                        sourceCollectionSize, mapping);
-            }
-            for (int i = 0; i < sourceCollectionSize; i++) {
-                Mapping cloneMapping = (Mapping) AtlasModelFactory.cloneMapping(mapping, false);
-                for (Field f : mapping.getInputField()) {
-                    Field clonedField = module.cloneField(f);
-                    clonedField.setPath(AtlasPath.overwriteCollectionIndex(clonedField.getPath(), i));
-                    cloneMapping.getInputField().add(clonedField);
-                }
-                for (Field f : mapping.getOutputField()) {
-                    AtlasModule targetModule = resolveModule(FieldDirection.TARGET, f);
-                    Field clonedField = targetModule.cloneField(f);
-                    if (AtlasPath.isCollection(clonedField.getPath())) {
-                        clonedField.setPath(AtlasPath.overwriteCollectionIndex(clonedField.getPath(), i));
-                    }
-                    cloneMapping.getOutputField().add(clonedField);
-                }
-                mappings.add(cloneMapping);
-            }
+        for(BaseMapping m : ((Collection) baseMapping).getMappings().getMapping()) {
+            mappings.add((Mapping) m);
         }
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Generated {} mappings from mapping: {}", mappings.size(), baseMapping);
-        }
-
         return mappings;
     }
 
@@ -835,8 +782,8 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
         return doCreateSession();
     }
 
-    private AtlasSession doCreateSession() {
-        AtlasSession session = new DefaultAtlasSession(mappingDefinition);
+    private AtlasSession doCreateSession() throws AtlasException {
+        AtlasSession session = new DefaultAtlasSession(this);
         session.setAtlasContext(this);
         session.setAudits(new Audits());
         session.setValidations(new Validations());

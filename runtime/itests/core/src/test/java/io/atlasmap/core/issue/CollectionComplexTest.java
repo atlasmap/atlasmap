@@ -43,10 +43,12 @@ public class CollectionComplexTest {
         assertEquals(TargetClass.class, targetJava.getClass());
         assertEquals("xml3", ((TargetClass)targetJava).getTargetName());
         Object targetJson = session.getTargetDocument("TargetJson");
-        assertEquals("{\"javaList\":[{\"name\":\"java1\"},{\"name\":\"java2\"},{\"name\":\"java3\"}]}",
+        assertEquals("{\"javaList\":[{\"name\":\"java1\"},{\"name\":\"java2\"},{\"name\":\"java3\"}],\"xmlList\":[\"xml1\",\"xml2\",\"xml3\"]}",
                 targetJson);
         Object targetXml = session.getTargetDocument("TargetXml");
-        assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><root><javaList><name>java1</name></javaList><javaList><name>java2</name></javaList><javaList><name>java3</name></javaList><jsonList/><jsonList/><jsonList/></root>",
+        assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><root>"
+                + "<javaList><name>java1</name></javaList><javaList><name>java2</name></javaList><javaList><name>java3</name></javaList>"
+                + "<jsonList><name>json1</name></jsonList><jsonList><name>json2</name></jsonList><jsonList><name>json3</name></jsonList></root>",
                 targetXml);
     }
 

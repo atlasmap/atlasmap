@@ -28,6 +28,6 @@ public interface AtlasContext {
 
     void processValidation(AtlasSession session) throws AtlasException;
 
-    Audits processPreview(Mapping mapping);
+    Audits processPreview(Mapping mapping) throws AtlasException;
 
 }

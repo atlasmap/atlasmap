@@ -18,6 +18,7 @@ package io.atlasmap.core;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class AtlasPath {
     public static final String PATH_SEPARATOR = "/";
@@ -28,6 +29,10 @@ public class AtlasPath {
     public static final String PATH_LIST_END = ">";
     public static final String PATH_MAP_START = "{";
     public static final String PATH_MAP_END = "}";
+
+    private static final Pattern PATTERN_INDEXED_COLLECTION = Pattern.compile(
+            ".*[\\" + PATH_ARRAY_START + PATH_LIST_START + PATH_MAP_START + "][0-9]+"
+            + "[\\" + PATH_ARRAY_END + PATH_LIST_END + PATH_MAP_END + "]$");
 
     private List<String> segments = new ArrayList<>();
     private String originalPath = null;
@@ -148,12 +153,16 @@ public class AtlasPath {
     }
 
     public Boolean isIndexedCollection() {
+        boolean hasCollection = false;
         for (String seg : getSegments()) {
-            if (isCollectionSegment(seg) && indexOfSegment(seg) != null) {
-                return true;
+            if (isCollectionSegment(seg)) {
+                hasCollection = true;
+                if (indexOfSegment(seg) == null) {
+                    return false;
+                }
             }
         }
-        return false;
+        return hasCollection;
     }
 
     public Boolean isRoot() {
@@ -215,6 +224,14 @@ public class AtlasPath {
         return j;
     }
 
+    /**
+     * Remove all decoration other than path name from path segment expression.
+     * This removes namespace prefixes and leading @ symbol for attributes, as well as
+     * collection suffixes like [], [1], &lt;&gt; and etc.
+     *
+     * @param pathSeg path segment expression string
+     * @return stripped segment name
+     */
     public static String cleanPathSegment(String pathSeg) {
         String pathSegment = pathSeg;
         if (pathSegment == null) {
@@ -266,10 +283,22 @@ public class AtlasPath {
         return pathSegment.contains(PATH_MAP_START) && pathSegment.endsWith(PATH_MAP_END);
     }
 
+    public static Boolean isIndexedCollectionSegment(String pathSegment) {
+        return PATTERN_INDEXED_COLLECTION.matcher(pathSegment).matches();
+    }
+
     public static Boolean isAttributeSegment(String pathSegment) {
         return pathSegment != null && pathSegment.startsWith("@");
     }
 
+    /**
+     * Return collection index in the path segment expression passed in as an argument.
+     * This returns <code>null</code> if specified path segment expression doesn't have an index, or not
+     * a collection.
+     *
+     * @param pathSegment path segment expression
+     * @return collection index of specified path segment
+     */
     public static Integer indexOfSegment(String pathSegment) {
         if (pathSegment == null) {
             return null;
@@ -346,6 +375,24 @@ public class AtlasPath {
         }
     }
 
+    public void setVacantCollectionIndex(Integer index) {
+        // TODO need rework for nested collection
+        // https://github.com/atlasmap/atlasmap/issues/435
+        for (int i=0; i<getSegments().size(); i++) {
+            String segment = getSegments().get(i);
+            if (AtlasPath.isCollection(segment) && !AtlasPath.isIndexedCollectionSegment(segment)) {
+                if (segment.contains(PATH_ARRAY_START) && segment.contains(PATH_ARRAY_END)) {
+                    getSegments().set(i, cleanPathSegment(segment) + PATH_ARRAY_START + index + PATH_ARRAY_END);
+                } else if (segment.contains(PATH_LIST_START) && segment.contains(PATH_LIST_END)) {
+                    getSegments().set(i, cleanPathSegment(segment) + PATH_LIST_START + index + PATH_LIST_END);
+                } else {
+                    throw new IllegalArgumentException(String.format(
+                            "segment '%s' is not a List or Array segment", segment));
+                }
+            }
+        }
+    }
+
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
@@ -370,14 +417,32 @@ public class AtlasPath {
         return originalPath;
     }
 
+    /**
+     * Returns true if specified path segment is array segment, otherwise false.
+     *
+     * @param segment path segment expression
+     * @return true for array segment, otherwise false
+     */
     public static boolean isArraySegment(String segment) {
         return isCollectionSegment(segment) && segment.contains(PATH_ARRAY_START);
     }
 
+    /**
+     * Returns true if specified path segment is list segment, otherwise false.
+     *
+     * @param segment path segment expression
+     * @return true for list segment, otherwise false
+     */
     public static boolean isListSegment(String segment) {
         return isCollectionSegment(segment) && segment.contains(PATH_LIST_START);
     }
 
+    /**
+     * Returns true if specified path segment is map segment, otherwise false.
+     *
+     * @param segment path segment expression
+     * @return true for map segment, otherwise false
+     */
     public static boolean isMapSegment(String segment) {
         return isCollectionSegment(segment) && segment.contains(PATH_MAP_START);
     }

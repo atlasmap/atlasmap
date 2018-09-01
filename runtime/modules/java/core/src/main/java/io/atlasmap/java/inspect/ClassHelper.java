@@ -19,6 +19,8 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 
 import io.atlasmap.api.AtlasException;
@@ -130,7 +132,7 @@ public class ClassHelper {
                 clazz.getName(), methodName, paramTypeClassName));
     }
 
-    public static Object parentObjectForPath(Object targetObject, AtlasPath pathUtil, boolean skipCollectionWrapper)
+    public static List<Object> parentObjectsForPath(Object targetObject, AtlasPath pathUtil)
             throws AtlasException {
         try {
             if (targetObject == null) {
@@ -138,26 +140,26 @@ public class ClassHelper {
             }
 
             if (pathUtil == null) {
-                return targetObject;
+                return Arrays.asList(targetObject);
             }
 
             if (!pathUtil.hasParent() && !pathUtil.hasCollection()) {
-                return targetObject;
+                return Arrays.asList(targetObject);
             }
 
-            Object parentObject = targetObject;
             AtlasPath parentPath = pathUtil.getLastSegmentParentPath();
-
             if (parentPath == null) {
                 parentPath = pathUtil;
             }
 
+            List<Object> parents = new LinkedList<>();
+            parents.add(targetObject);
             for (String segment : parentPath.getSegments()) {
                 List<String> getters = getterMethodNames(AtlasPath.cleanPathSegment(segment));
                 Method getterMethod = null;
                 for (String getter : getters) {
                     try {
-                        getterMethod = detectGetterMethod(parentObject.getClass(), getter);
+                        getterMethod = detectGetterMethod(parents.get(0).getClass(), getter);
                         break;
                     } catch (NoSuchMethodException e) {
                         // exhaust options
@@ -169,20 +171,32 @@ public class ClassHelper {
                 }
 
                 getterMethod.setAccessible(true);
-                parentObject = getterMethod.invoke(parentObject);
-
-                if (skipCollectionWrapper) {
-                    if (AtlasPath.isListSegment(segment) && pathUtil.isIndexedCollection()) {
-                        int index = AtlasPath.indexOfSegment(segment);
-                        parentObject = ((List<?>) parentObject).get(index);
-                    } else if (AtlasPath.isArraySegment(segment)) {
-                        int index = AtlasPath.indexOfSegment(segment);
-                        parentObject = Array.get(parentObject, index);
+                List<Object> children = new LinkedList<>();
+                for (Object parentObject : parents) {
+                    Object child = getterMethod.invoke(parentObject);
+                    if (!AtlasPath.isCollectionSegment(segment)) {
+                        children.add(child);
+                    } else {
+                        Integer index = AtlasPath.indexOfSegment(segment);
+                        if (index == null) {
+                            if (child instanceof Collection) {
+                                children.addAll((Collection<?>)child);
+                            } else if (child.getClass().isArray()) {
+                                children = Arrays.asList(child);
+                            } else {
+                                children.add(child);
+                            }
+                        } else if (AtlasPath.isListSegment(segment)) {
+                            children.add(((List<?>) parentObject).get(index));
+                        } else if (AtlasPath.isArraySegment(segment)) {
+                            children.add(Array.get(parentObject, index));
+                        }
                     }
                 }
+                parents = children;
             }
 
-            return parentObject;
+            return parents;
         } catch (Exception e) {
             throw new AtlasException(e);
         }

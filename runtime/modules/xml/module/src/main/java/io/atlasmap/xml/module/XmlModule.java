@@ -15,16 +15,12 @@
  */
 package io.atlasmap.xml.module;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
@@ -34,26 +30,22 @@ import javax.xml.transform.stream.StreamResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.xml.sax.SAXException;
 
-import io.atlasmap.api.AtlasConversionException;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.api.AtlasValidationException;
-import io.atlasmap.core.AtlasPath.SegmentContext;
 import io.atlasmap.core.AtlasUtil;
 import io.atlasmap.core.BaseAtlasModule;
 import io.atlasmap.spi.AtlasInternalSession;
 import io.atlasmap.spi.AtlasModuleDetail;
+import io.atlasmap.v2.AtlasModelFactory;
 import io.atlasmap.v2.AuditStatus;
 import io.atlasmap.v2.DataSource;
 import io.atlasmap.v2.DataSourceType;
 import io.atlasmap.v2.Field;
-import io.atlasmap.v2.LookupTable;
+import io.atlasmap.v2.FieldGroup;
 import io.atlasmap.v2.Validation;
 import io.atlasmap.xml.core.XmlFieldReader;
 import io.atlasmap.xml.core.XmlFieldWriter;
-import io.atlasmap.xml.core.XmlIOHelper;
 import io.atlasmap.xml.core.XmlPath;
 import io.atlasmap.xml.v2.AtlasXmlModelFactory;
 import io.atlasmap.xml.v2.XmlDataSource;
@@ -154,10 +146,8 @@ public class XmlModule extends BaseAtlasModule {
             return;
         }
         reader.read(session);
-
-        if (sourceField.getActions() != null && sourceField.getActions().getActions() != null) {
-            getFieldActionService().processActions(sourceField.getActions(), sourceField);
-        }
+        sourceField = applySourceFieldActions(session);
+        session.head().setSourceField(sourceField);
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("{}: processSourceFieldMapping completed: SourceField:[docId={}, path={}, type={}, value={}]",
@@ -170,41 +160,65 @@ public class XmlModule extends BaseAtlasModule {
     public void processTargetFieldMapping(AtlasInternalSession session) throws AtlasException {
         Field sourceField = session.head().getSourceField();
         Field targetField = session.head().getTargetField();
+        XmlPath path = new XmlPath(targetField.getPath());
+        FieldGroup targetFieldGroup = null;
+        if (path.hasCollection() && !path.isIndexedCollection()) {
+            targetFieldGroup = AtlasModelFactory.createFieldGroupFrom(targetField);
+            session.head().setTargetField(targetFieldGroup);
+        }
+
         // Attempt to Auto-detect field type based on input value
         if (targetField.getFieldType() == null && sourceField.getValue() != null) {
             targetField.setFieldType(getConversionService().fieldTypeFromClass(sourceField.getValue().getClass()));
         }
 
-        Object outputValue = null;
-
-        // Do auto-conversion
-        if (sourceField.getFieldType() != null && sourceField.getFieldType().equals(targetField.getFieldType())) {
-            outputValue = sourceField.getValue();
-        } else if (sourceField.getValue() != null) {
-            try {
-                outputValue = getConversionService().convertType(sourceField.getValue(), sourceField.getFormat(),
-                        targetField.getFieldType(), targetField.getFormat());
-            } catch (AtlasConversionException e) {
-                AtlasUtil.addAudit(session, targetField.getDocId(),
-                        String.format("Unable to auto-convert for sT=%s tT=%s tF=%s msg=%s", sourceField.getFieldType(),
-                                targetField.getFieldType(), targetField.getPath(), e.getMessage()),
-                        targetField.getPath(), AuditStatus.ERROR, null);
-                return;
+        if (targetFieldGroup == null) {
+            if (sourceField instanceof FieldGroup) {
+                List<Field> subFields = ((FieldGroup)sourceField).getField();
+                if (subFields != null && subFields.size() > 0) {
+                    // The last one wins for compatibility
+                    sourceField = subFields.get(subFields.size() - 1);
+                    session.head().setSourceField(sourceField);
+                }
             }
+            populateTargetFieldValue(session);
+        } else if (sourceField instanceof FieldGroup) {
+            for (int i=0; i<((FieldGroup)sourceField).getField().size(); i++) {
+                Field sourceSubField = ((FieldGroup)sourceField).getField().get(i);
+                XmlField targetSubField = new XmlField();
+                AtlasXmlModelFactory.copyField(targetField, targetSubField, false);
+                XmlPath subPath = new XmlPath(targetField.getPath());
+                subPath.setVacantCollectionIndex(i);
+                targetSubField.setPath(subPath.toString());
+                targetFieldGroup.getField().add(targetSubField);
+                session.head().setSourceField(sourceSubField);
+                session.head().setTargetField(targetSubField);
+                populateTargetFieldValue(session);
+            }
+            session.head().setSourceField(sourceField);
+            session.head().setTargetField(targetFieldGroup);
+        } else {
+            XmlField targetSubField = new XmlField();
+            AtlasXmlModelFactory.copyField(targetField, targetSubField, false);
+            path.setVacantCollectionIndex(0);
+            targetSubField.setPath(path.toString());
+            targetFieldGroup.getField().add(targetSubField);
+            session.head().setTargetField(targetSubField);
+            populateTargetFieldValue(session);
+            session.head().setTargetField(targetFieldGroup);
         }
-        targetField.setValue(outputValue);
 
-        LookupTable lookupTable = session.head().getLookupTable();
-        if (lookupTable != null) {
-            processLookupField(session, lookupTable, targetField.getValue(), targetField);
-        }
-        if (isAutomaticallyProcessOutputFieldActions() && targetField.getActions() != null
-                && targetField.getActions().getActions() != null) {
-            getFieldActionService().processActions(targetField.getActions(), targetField);
-        }
+        session.head().setTargetField(applyTargetFieldActions(session));
 
         XmlFieldWriter writer = session.getFieldWriter(getDocId(), XmlFieldWriter.class);
-        writer.write(session);
+        if (targetFieldGroup != null) {
+            for (Field f : targetFieldGroup.getField()) {
+                session.head().setTargetField(f);
+                writer.write(session);
+            }
+        } else {
+            writer.write(session);
+        }
 
         if (LOG.isDebugEnabled()) {
             LOG.debug(
@@ -265,47 +279,6 @@ public class XmlModule extends BaseAtlasModule {
         } catch (TransformerException e) {
             LOG.error(String.format("Error converting Xml document to string msg=%s", e.getMessage()), e);
             throw new AtlasException(e.getMessage(), e);
-        }
-    }
-
-    private Document getDocument(String data, boolean namespaced)
-            throws ParserConfigurationException, SAXException, IOException {
-        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        dbf.setNamespaceAware(namespaced); // this must be done to use namespaces
-        DocumentBuilder b = dbf.newDocumentBuilder();
-        return b.parse(new ByteArrayInputStream(data.getBytes("UTF-8")));
-    }
-
-    @Override
-    public int getCollectionSize(AtlasInternalSession session, Field field) throws AtlasException {
-        // TODO could this use FieldReader?
-        try {
-            Object sourceObject = session.getSourceDocument(getDocId());
-            Document document = getDocument((String) sourceObject, false);
-            Element parentNode = document.getDocumentElement();
-            for (SegmentContext sc : new XmlPath(field.getPath()).getSegmentContexts(false)) {
-                if (sc.getPrev() == null) {
-                    // processing root node part of path such as the "XOA" part of
-                    // "/XOA/contact<>/firstName", skip.
-                    continue;
-                }
-                String childrenElementName = XmlPath.cleanPathSegment(sc.getSegment());
-                String namespaceAlias = XmlPath.getNamespace(sc.getSegment());
-                if (namespaceAlias != null && !"".equals(namespaceAlias)) {
-                    childrenElementName = namespaceAlias + ":" + childrenElementName;
-                }
-                List<Element> children = XmlIOHelper.getChildrenWithName(childrenElementName, parentNode);
-                if (children == null || children.isEmpty()) {
-                    return 0;
-                }
-                if (XmlPath.isCollectionSegment(sc.getSegment())) {
-                    return children.size();
-                }
-                parentNode = children.get(0);
-            }
-            return 0;
-        } catch (Exception e) {
-            throw new AtlasException(e);
         }
     }
 

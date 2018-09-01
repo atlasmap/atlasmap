@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
 
 import java.util.List;
 
@@ -13,13 +14,16 @@ import org.junit.Test;
 
 import io.atlasmap.api.AtlasConversionException;
 import io.atlasmap.api.AtlasException;
+import io.atlasmap.spi.AtlasInternalSession;
 import io.atlasmap.v2.AbsoluteValue;
 import io.atlasmap.v2.Action;
 import io.atlasmap.v2.ActionDetail;
 import io.atlasmap.v2.ActionParameter;
 import io.atlasmap.v2.Actions;
+import io.atlasmap.v2.Add;
 import io.atlasmap.v2.FieldType;
 import io.atlasmap.v2.GenerateUUID;
+import io.atlasmap.v2.IndexOf;
 import io.atlasmap.v2.SimpleField;
 import io.atlasmap.v2.Trim;
 
@@ -61,11 +65,11 @@ public class DefaultAtlasFieldActionsServiceTest {
     }
 
     @Test
-    public void testFindActionDetail() {
-        ActionDetail actionDetail = fieldActionsService.findActionDetail("IndexOf", FieldType.STRING);
+    public void testFindActionDetail() throws Exception {
+        ActionDetail actionDetail = fieldActionsService.findActionDetail(new IndexOf(), FieldType.STRING);
         assertNotNull(actionDetail);
 
-        actionDetail = fieldActionsService.findActionDetail("Index", FieldType.STRING);
+        actionDetail = fieldActionsService.findActionDetail(new Action() {}, FieldType.STRING);
         assertNull(actionDetail);
 
         ActionDetail ad = new ActionDetail();
@@ -73,48 +77,49 @@ public class DefaultAtlasFieldActionsServiceTest {
         ad.setSourceType(FieldType.INTEGER);
         fieldActionsService.listActionDetails().add(ad);
 
-        actionDetail = fieldActionsService.findActionDetail("IndexOf", null);
+        actionDetail = fieldActionsService.findActionDetail(new IndexOf(), null);
         assertNotNull(actionDetail);
 
-        actionDetail = fieldActionsService.findActionDetail("IndexOf", FieldType.STRING);
+        actionDetail = fieldActionsService.findActionDetail(new IndexOf(), FieldType.STRING);
         assertNotNull(actionDetail);
 
-        actionDetail = fieldActionsService.findActionDetail("IndexOf", FieldType.ANY);
+        actionDetail = fieldActionsService.findActionDetail(new IndexOf(), FieldType.ANY);
         assertNotNull(actionDetail);
 
-        actionDetail = fieldActionsService.findActionDetail("IndexOf", FieldType.NONE);
+        actionDetail = fieldActionsService.findActionDetail(new IndexOf(), FieldType.NONE);
         assertNotNull(actionDetail);
 
-        actionDetail = fieldActionsService.findActionDetail("IndexOf", FieldType.BOOLEAN);
+        actionDetail = fieldActionsService.findActionDetail(new IndexOf(), FieldType.BOOLEAN);
         assertNotNull(actionDetail);
     }
 
     @Test(expected = AtlasConversionException.class)
     public void testProcessActionsActionsFieldAtlasConversionException() throws AtlasException {
-        Actions actions = null;
-
         SimpleField field = new SimpleField();
         Object value = new Object();
         field.setValue(value);
         field.setFieldType(FieldType.INTEGER);
-        fieldActionsService.processActions(actions, field);
+        Actions actions = new Actions();
+        actions.getActions().add(new Add());
+        field.setActions(actions);
+        fieldActionsService.processActions(mock(AtlasInternalSession.class), field);
     }
 
     @Test
     public void testProcessActionsActionsField() throws AtlasException {
-        Actions actions = null;
         SimpleField field = new SimpleField();
 
         field.setFieldType(FieldType.COMPLEX);
-        fieldActionsService.processActions(actions, field);
+        field.setActions(null);
+        fieldActionsService.processActions(mock(AtlasInternalSession.class), field);
 
         field.setValue(null);
         field.setFieldType(FieldType.INTEGER);
-        fieldActionsService.processActions(actions, field);
+        fieldActionsService.processActions(mock(AtlasInternalSession.class), field);
 
         field.setValue(new Integer(0));
         field.setFieldType(FieldType.INTEGER);
-        fieldActionsService.processActions(actions, field);
+        fieldActionsService.processActions(mock(AtlasInternalSession.class), field);
 
         @SuppressWarnings("serial")
         class MockActions extends Actions {
@@ -123,40 +128,33 @@ public class DefaultAtlasFieldActionsServiceTest {
                 return null;
             }
         }
-        fieldActionsService.processActions(new MockActions(), field);
+        field.setActions(new MockActions());
+        fieldActionsService.processActions(mock(AtlasInternalSession.class), field);
 
-        actions = new Actions();
-        fieldActionsService.processActions(actions, field);
+        field.setActions(new Actions());
+        fieldActionsService.processActions(mock(AtlasInternalSession.class), field);
 
-        actions.getActions().add(new Trim());
+        field.getActions().getActions().add(new Trim());
         field.setValue("testString");
         field.setFieldType(FieldType.STRING);
-        fieldActionsService.processActions(actions, field);
+        fieldActionsService.processActions(mock(AtlasInternalSession.class), field);
 
         field.setValue(new Integer(8));
         field.setFieldType(FieldType.NUMBER);
-        fieldActionsService.processActions(actions, field);
+        fieldActionsService.processActions(mock(AtlasInternalSession.class), field);
 
     }
 
     @Test(expected = AtlasConversionException.class)
     public void testprocessActionsActionsObjectFieldTypeAtlasConversionException() throws AtlasException {
-        Actions actions = null;
-
         SimpleField field = new SimpleField();
         Object value = new Object();
         field.setValue(value);
         field.setFieldType(FieldType.INTEGER);
-        fieldActionsService.processActions(actions, field);
-    }
-
-    @Test
-    public void testprocessActionsActionsObjectFieldType() throws AtlasException {
         Actions actions = new Actions();
-
-        assertNotNull(fieldActionsService.processActions(actions, "testString", FieldType.STRING));
-
-        assertNotNull(fieldActionsService.processActions(actions, new Integer(8), FieldType.STRING));
+        actions.getActions().add(new Add());
+        field.setActions(actions);
+        fieldActionsService.processActions(mock(AtlasInternalSession.class), field);
     }
 
     @Test

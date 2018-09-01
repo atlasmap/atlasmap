@@ -10,7 +10,6 @@ import java.util.Map;
 
 import org.junit.Before;
 
-import io.atlasmap.api.AtlasConversionService;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.core.AtlasPath;
 import io.atlasmap.core.AtlasPath.SegmentContext;
@@ -25,6 +24,7 @@ import io.atlasmap.java.test.TargetTestClass;
 import io.atlasmap.java.test.TestListOrders;
 import io.atlasmap.java.v2.JavaEnumField;
 import io.atlasmap.java.v2.JavaField;
+import io.atlasmap.spi.AtlasConversionService;
 import io.atlasmap.spi.AtlasInternalSession;
 import io.atlasmap.spi.AtlasInternalSession.Head;
 import io.atlasmap.v2.Field;
@@ -50,8 +50,8 @@ public abstract class BaseDocumentWriterTest {
         classLoader = Thread.currentThread().getContextClassLoader();
         writer = new DocumentJavaFieldWriter(conversionService);
         writer.setTargetValueConverter(new TargetValueConverter(classLoader, conversionService) {
-            public Object convert(AtlasInternalSession session, LookupTable lookupTable, Field sourceField, Object parentObject, Field targetField) throws AtlasException {
-                return targetField.getValue();
+            public void convert(AtlasInternalSession session, LookupTable lookupTable, Field sourceField, Object parentObject, Field targetField) throws AtlasException {
+                return;
             }
         });
         field = null;
@@ -173,8 +173,9 @@ public abstract class BaseDocumentWriterTest {
     private void setTargetValue(Object targetValue) {
         writer.setTargetValueConverter(new TargetValueConverter(classLoader, conversionService) {
             @Override
-            public Object convert(AtlasInternalSession session, LookupTable lookupTable, Field sourceField, Object parentObject, Field targetField) throws AtlasException {
-                return targetValue;
+            public void convert(AtlasInternalSession session, LookupTable lookupTable, Field sourceField, Object parentObject, Field targetField) throws AtlasException {
+                targetField.setValue(targetValue);
+                return;
             }
         });
     }

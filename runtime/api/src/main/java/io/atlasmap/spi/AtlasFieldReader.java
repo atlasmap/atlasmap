@@ -16,9 +16,10 @@
 package io.atlasmap.spi;
 
 import io.atlasmap.api.AtlasException;
+import io.atlasmap.v2.Field;
 
 public interface AtlasFieldReader {
 
-    void read(AtlasInternalSession session) throws AtlasException;
+    Field read(AtlasInternalSession session) throws AtlasException;
 
 }

@@ -282,4 +282,22 @@ public class JavaJavaCollectionTest extends AtlasMappingBaseTest {
         assertTrue(tfpc4.getBoxedStringField().startsWith("hashSet"));
     }
 
+    @Test
+    public void testProcessCollectionFieldAction() throws Exception {
+        AtlasContext context = atlasContextFactory.createContext(
+                new File("src/test/resources/javaToJava/atlasmapping-collection-fieldaction.xml").toURI());
+        SourceCollectionsClass source = new SourceCollectionsClass();
+        LinkedList<String> list = new LinkedList<>();
+        list.addAll(Arrays.asList(new String[] {"linkedList0", "linkedList1", "linkedList2"}));
+        source.setLinkedList(list);
+        AtlasSession session = context.createSession();
+        session.setSourceDocument("SourceCollectionsClass", source);
+        context.process(session);
+
+        assertFalse(printAudit(session), session.hasErrors());
+        TargetCollectionsClass targetCollections = (TargetCollectionsClass) session.getTargetDocument("TargetCollectionsClass");
+        ArrayList<String> result = targetCollections.getArrayList();
+        assertEquals(1, result.size());
+        assertEquals("linkedList0-linkedList1-linkedList2", result.get(0));
+    }
 }

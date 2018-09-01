@@ -23,6 +23,7 @@ import io.atlasmap.spi.AtlasInternalSession.Head;
 import io.atlasmap.v2.Audit;
 import io.atlasmap.v2.AuditStatus;
 import io.atlasmap.v2.Audits;
+import io.atlasmap.v2.Field;
 import io.atlasmap.v2.Validation;
 import io.atlasmap.v2.ValidationScope;
 import io.atlasmap.v2.Validations;
@@ -33,8 +34,9 @@ public class DefaultAtlasSessionTest {
     private DefaultAtlasSession session = null;
 
     @Before
-    public void setUp() {
-        session = new DefaultAtlasSession(AtlasTestData.generateAtlasMapping());
+    public void setUp() throws Exception {
+        DefaultAtlasContext context = new DefaultAtlasContext(DefaultAtlasContextFactory.getInstance(), AtlasTestData.generateAtlasMapping());
+        session = new DefaultAtlasSession(context);
     }
 
     @After
@@ -46,7 +48,7 @@ public class DefaultAtlasSessionTest {
     public void testInitializeDefaultAtlasSession() {
         assertNotNull(session);
         assertNotNull(session.getMapping());
-        assertNull(session.getAtlasContext());
+        assertNotNull(session.getAtlasContext());
         assertNotNull(session.getAudits());
         assertNotNull(session.getProperties());
         assertNotNull(session.getValidations());
@@ -237,8 +239,9 @@ public class DefaultAtlasSessionTest {
     public void testGetFieldReader() {
         AtlasFieldReader reader = new AtlasFieldReader() {
             @Override
-            public void read(AtlasInternalSession session) throws AtlasException {
+            public Field read(AtlasInternalSession session) throws AtlasException {
                 LOG.debug("read method");
+                return session.head().getSourceField();
             }
         };
         session.setFieldReader(AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID, reader);
@@ -252,8 +255,9 @@ public class DefaultAtlasSessionTest {
     public void testSetFieldReader() {
         AtlasFieldReader reader = new AtlasFieldReader() {
             @Override
-            public void read(AtlasInternalSession session) throws AtlasException {
+            public Field read(AtlasInternalSession session) throws AtlasException {
                 LOG.debug("read method");
+                return session.head().getSourceField();
             }
         };
         session.setFieldReader(null, reader);
