@@ -442,6 +442,16 @@
     </complexType>
   </element>
 
+  <element name="Split">
+    <complexType>
+      <complexContent>
+        <extension base="atlas:Action">
+          <attribute name="delimiter" type="string" />
+        </extension>
+      </complexContent>
+    </complexType>
+  </element>
+
   <element name="StartsWith">
     <complexType>
       <complexContent>
@@ -585,6 +595,7 @@
         <element ref="atlas:Round" />
         <element ref="atlas:SeparateByDash" />
         <element ref="atlas:SeparateByUnderscore" />
+        <element ref="atlas:Split" />
         <element ref="atlas:StartsWith" />
         <element ref="atlas:SubString" />
         <element ref="atlas:SubStringAfter" />

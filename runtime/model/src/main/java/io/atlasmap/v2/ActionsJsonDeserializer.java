@@ -149,6 +149,8 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
                 return new SeparateByDash();
             case "SeparateByUnderscore":
                 return new SeparateByUnderscore();
+            case "Split":
+                return processSplitWithJsonToken(jsonToken);
             case "StartsWith":
                 return processStartsWithJsonToken(jsonToken);
             case "SubString":
@@ -694,6 +696,33 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
                 case ActionsJsonSerializer.NEW_STRING:
                     jsonToken.nextToken();
                     action.setNewString(jsonToken.getValueAsString());
+                    break;
+                default:
+                    break;
+            }
+
+            nextToken = jsonToken.nextToken();
+        } while (!JsonToken.END_ARRAY.equals(nextToken) && !JsonToken.END_OBJECT.equals(nextToken));
+        return action;
+    }
+
+    protected Split processSplitWithJsonToken(JsonParser jsonToken) throws IOException {
+        Split action = new Split();
+
+        if (JsonToken.END_ARRAY.equals(jsonToken.currentToken())
+                || JsonToken.END_OBJECT.equals(jsonToken.currentToken())) {
+            return action;
+        }
+
+        JsonToken nextToken = null;
+        do {
+            if (JsonToken.START_OBJECT.equals(jsonToken.currentToken())) {
+                jsonToken.nextToken();
+            }
+            switch (jsonToken.getCurrentName()) {
+                case ActionsJsonSerializer.DELIMITER:
+                    jsonToken.nextToken();
+                    action.setDelimiter(jsonToken.getValueAsString());
                     break;
                 default:
                     break;

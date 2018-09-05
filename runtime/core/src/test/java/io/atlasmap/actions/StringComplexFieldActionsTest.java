@@ -15,6 +15,7 @@
  */
 package io.atlasmap.actions;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -41,6 +42,7 @@ import io.atlasmap.v2.PadStringRight;
 import io.atlasmap.v2.Prepend;
 import io.atlasmap.v2.ReplaceAll;
 import io.atlasmap.v2.ReplaceFirst;
+import io.atlasmap.v2.Split;
 import io.atlasmap.v2.StartsWith;
 import io.atlasmap.v2.SubString;
 import io.atlasmap.v2.SubStringAfter;
@@ -386,6 +388,20 @@ public class StringComplexFieldActionsTest {
     public void testReplaceAllNullOldString() {
         ReplaceAll replaceAll = new ReplaceAll();
         StringComplexFieldActions.replaceAll(replaceAll, " ");
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void testSplitNoDelimiter() {
+        Split action = new Split();
+        StringComplexFieldActions.split(action, "foobar");
+    }
+
+    @Test
+    public void testSplit() {
+        Split action = new Split();
+        action.setDelimiter(",");
+        assertArrayEquals(null, StringComplexFieldActions.split(action, null));
+        assertArrayEquals(new String[] {"1", "2", "3"}, StringComplexFieldActions.split(action, "1,2,3"));
     }
 
     @Test
