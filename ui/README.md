@@ -9,7 +9,7 @@
 The AtlasMap is a data mapping solution with interactive web based user interface, that simplifies configuring integrations between Java, XML, and JSON data sources. You can design your data mapping on the AtlasMap Data Mapper UI canvas, and then run that data mapping via runtime engine. AtlasMap Data Mapper UI is primarily designed to work within the [Syndesis UI](https://syndesis.io/).
 
 ## [AtlasMap Documentation](http://docs.atlasmap.io/)
-All developer releated documentation can be found at [AtlasMap Documentation](http://docs.atlasmap.io/)
+All developer related documentation can be found at [AtlasMap Documentation](http://docs.atlasmap.io/)
 
 ## The shortest path to run standalone AtlasMap
 
@@ -43,4 +43,4 @@ $ yarn install
 $ yarn start
 ```
 
-The **yarn start** command will attempt to automatically open your browser window, but if it doesn't, open it directy with this URL: <http://localhost:3000>.
+The **yarn start** command will attempt to automatically open your browser window, but if it doesn't, open it directly with this URL: <http://localhost:3000>.
