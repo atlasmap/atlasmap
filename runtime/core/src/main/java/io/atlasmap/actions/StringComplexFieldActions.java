@@ -37,6 +37,7 @@ import io.atlasmap.v2.PadStringRight;
 import io.atlasmap.v2.Prepend;
 import io.atlasmap.v2.ReplaceAll;
 import io.atlasmap.v2.ReplaceFirst;
+import io.atlasmap.v2.Split;
 import io.atlasmap.v2.StartsWith;
 import io.atlasmap.v2.SubString;
 import io.atlasmap.v2.SubStringAfter;
@@ -241,6 +242,21 @@ public class StringComplexFieldActions implements AtlasFieldAction {
 
         String newString = replaceFirst.getNewString();
         return input == null ? null : input.replaceFirst(match, newString == null ? "" : newString);
+    }
+
+    @AtlasFieldActionInfo(name = "Split", sourceType = FieldType.STRING, targetType = FieldType.ANY, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.ALL)
+    public static String[] split(Action action, String input) {
+        if (!(action instanceof Split)) {
+            throw new IllegalArgumentException("Action must be an Split action");
+        }
+
+        Split split = (Split) action;
+
+        if (split.getDelimiter() == null) {
+            throw new IllegalArgumentException("Split must be specified with a delimiter");
+        }
+
+        return input == null ? null : input.split(split.getDelimiter());
     }
 
     @AtlasFieldActionInfo(name = "StartsWith", sourceType = FieldType.STRING, targetType = FieldType.BOOLEAN, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)

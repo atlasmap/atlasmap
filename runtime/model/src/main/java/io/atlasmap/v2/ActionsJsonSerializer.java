@@ -122,6 +122,9 @@ public class ActionsJsonSerializer extends JsonSerializer<Actions> {
             case "ReplaceFirst":
                 writeReplaceFirst(gen, (ReplaceFirst) action);
                 break;
+            case "Split":
+                writeSplit(gen, (Split) action);
+                break;
             case "StartsWith":
                 writeStartsWith(gen, (StartsWith) action);
                 break;
@@ -356,6 +359,15 @@ public class ActionsJsonSerializer extends JsonSerializer<Actions> {
         gen.writeStartObject();
         gen.writeStringField(MATCH, action.getMatch());
         gen.writeStringField(NEW_STRING, action.getNewString());
+        gen.writeEndObject();
+        gen.writeEndObject();
+    }
+
+    protected void writeSplit(JsonGenerator gen, Split action) throws IOException {
+        gen.writeStartObject();
+        gen.writeFieldName("Split");
+        gen.writeStartObject();
+        gen.writeStringField(STRING, action.getDelimiter());
         gen.writeEndObject();
         gen.writeEndObject();
     }
