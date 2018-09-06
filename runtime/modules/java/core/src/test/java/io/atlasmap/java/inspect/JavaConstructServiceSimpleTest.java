@@ -57,7 +57,7 @@ public class JavaConstructServiceSimpleTest {
     public void testConstructSourceAddress() throws Exception {
         Object targetObject = constructService.constructClass(generateJavaClass("io.atlasmap.java.test.SourceAddress"),null);
         assertNotNull(targetObject);
-        assertTrue(targetObject instanceof io.atlasmap.java.test.SourceAddress);
+        assertTrue(targetObject instanceof SourceAddress);
         SourceAddress source = (SourceAddress) targetObject;
         assertNull(source.getAddressLine1());
         assertNull(source.getAddressLine2());
@@ -70,7 +70,7 @@ public class JavaConstructServiceSimpleTest {
     public void testConstructSourceContact() throws Exception {
         Object targetObject = constructService.constructClass(generateJavaClass("io.atlasmap.java.test.SourceContact"),null);
         assertNotNull(targetObject);
-        assertTrue(targetObject instanceof io.atlasmap.java.test.SourceContact);
+        assertTrue(targetObject instanceof SourceContact);
         SourceContact source = (SourceContact) targetObject;
         assertNull(source.getFirstName());
         assertNull(source.getLastName());

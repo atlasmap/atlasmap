@@ -24,7 +24,6 @@ import static org.junit.Assert.assertTrue;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 import io.atlasmap.spi.AtlasConversionConcern;
@@ -124,7 +123,7 @@ public class ByteConverterTest {
 
     @Test
     public void convertToString() throws Exception {
-        Assert.assertEquals(byteConverter.toString(Byte.parseByte("1")), "1");
+        assertEquals(byteConverter.toString(Byte.parseByte("1")), "1");
     }
 
     @Test
