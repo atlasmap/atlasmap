@@ -32,7 +32,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 import io.atlasmap.api.AtlasConstants;
@@ -165,18 +164,18 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
         recreateSession();
         context.process(session);
 
-        Assert.assertFalse(printAudit(session), session.hasErrors());
-        Assert.assertEquals(new Date(0).toString(), writer.targets.get("/target0"));
-        Assert.assertEquals("1", writer.targets.get("/target1"));
-        Assert.assertEquals("2.0", writer.targets.get("/target2"));
-        Assert.assertEquals("3.0", writer.targets.get("/target3"));
-        Assert.assertEquals("true", writer.targets.get("/target4"));
-        Assert.assertEquals("5", writer.targets.get("/target5"));
-        Assert.assertEquals("6", writer.targets.get("/target6"));
-        Assert.assertEquals("string", writer.targets.get("/target7"));
-        Assert.assertEquals("8", writer.targets.get("/target8"));
-        Assert.assertEquals("9", writer.targets.get("/target9"));
-        Assert.assertEquals("10", writer.targets.get("/target10"));
+        assertFalse(printAudit(session), session.hasErrors());
+        assertEquals(new Date(0).toString(), writer.targets.get("/target0"));
+        assertEquals("1", writer.targets.get("/target1"));
+        assertEquals("2.0", writer.targets.get("/target2"));
+        assertEquals("3.0", writer.targets.get("/target3"));
+        assertEquals("true", writer.targets.get("/target4"));
+        assertEquals("5", writer.targets.get("/target5"));
+        assertEquals("6", writer.targets.get("/target6"));
+        assertEquals("string", writer.targets.get("/target7"));
+        assertEquals("8", writer.targets.get("/target8"));
+        assertEquals("9", writer.targets.get("/target9"));
+        assertEquals("10", writer.targets.get("/target10"));
     }
 
     @Test
@@ -195,8 +194,8 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
         prepareTargetField(m, "/target");
         recreateSession();
         context.process(session);
-        Assert.assertFalse(printAudit(session), session.hasErrors());
-        Assert.assertEquals("bar", writer.targets.get("/target"));
+        assertFalse(printAudit(session), session.hasErrors());
+        assertEquals("bar", writer.targets.get("/target"));
     }
 
     @Test
