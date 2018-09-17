@@ -56,8 +56,7 @@ export class DataMapperInitializationModel {
   disablePublicOnlyFields = false;
   disablePublicGetterSetterFields = false;
 
-  /* mapping preview mode (experimental) */
-  disableMappingPreviewMode = true;
+  disableMappingPreviewMode = false;
 
   /* mock data configuration */
   discardNonMockSources = false;
