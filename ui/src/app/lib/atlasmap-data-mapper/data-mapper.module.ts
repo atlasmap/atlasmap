@@ -74,6 +74,12 @@ import { ApiXsrfInterceptor } from './services/api-xsrf-interceptor.service';
 
 export { DataMapperAppComponent } from './components/data-mapper-app.component';
 
+export const typeaheadModuleForRoot: ModuleWithProviders = TypeaheadModule.forRoot();
+export const tooltipModuleForRoot: ModuleWithProviders = TooltipModule.forRoot();
+export const bsDropdownModuleForRoot: ModuleWithProviders = BsDropdownModule.forRoot();
+export const httpClientXsrfModuleForRoot: ModuleWithProviders = HttpClientXsrfModule.withOptions(environment.xsrf);
+export const alertModuleForRoot: ModuleWithProviders = AlertModule.forRoot();
+
 // @dynamic
 @NgModule({
   imports: [
@@ -81,11 +87,11 @@ export { DataMapperAppComponent } from './components/data-mapper-app.component';
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-    TypeaheadModule.forRoot(),
-    TooltipModule.forRoot(),
-    BsDropdownModule.forRoot(),
-    HttpClientXsrfModule.withOptions(environment.xsrf),
-    AlertModule.forRoot()
+    typeaheadModuleForRoot,
+    tooltipModuleForRoot,
+    bsDropdownModuleForRoot,
+    httpClientXsrfModuleForRoot,
+    alertModuleForRoot
   ],
   declarations: [
     DataMapperAppComponent,
