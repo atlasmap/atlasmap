@@ -16,7 +16,7 @@
 
 import { Component, Input, ViewChildren, ElementRef, EventEmitter, QueryList, ViewChild, OnInit } from '@angular/core';
 
-import { DocumentType } from '../common/config.types';
+import { DocumentType, InspectionType } from '../common/config.types';
 import { ConfigModel, AdmRedrawMappingLinesEvent } from '../models/config.model';
 import { Field } from '../models/field.model';
 import { DocumentDefinition } from '../models/document-definition.model';
@@ -50,7 +50,6 @@ export class DocumentDefinitionComponent implements OnInit {
   private scrollTop = 0;
   private searchResultsExist = false;
   private sourcesTargetsLabel: string;
-  private documents: DocumentDefinition[];
 
   ngOnInit(): void {
     if (this.isSource) {
@@ -58,7 +57,10 @@ export class DocumentDefinitionComponent implements OnInit {
     } else {
       this.sourcesTargetsLabel = (this.cfg.targetDocs.length > 1) ? 'Targets' : 'Target';
     }
-    this.documents = this.cfg.getDocs(this.isSource);
+  }
+
+  getDocs() {
+    return this.cfg.getDocs(this.isSource);
   }
 
   getLineMachine(): LineMachineComponent {
@@ -130,6 +132,35 @@ export class DocumentDefinitionComponent implements OnInit {
     return { 'x': (fieldElementAbsPosition.x - myAbsPosition.x), 'y': (fieldElementAbsPosition.y - myAbsPosition.y) };
   }
 
+  getImportIconCSSClass(): string {
+    return'pficon pficon-import importExportIcon link';
+  }
+
+  getExportIconCSSClass(): string {
+    return'pficon pficon-export importExportIcon link';
+  }
+
+  /**
+   * Using the specified event, determine and read the selected file and call the document service to
+   * process it.
+   *
+   * @param event
+   */
+  async processDoc(event) {
+    const selectedFile = event.target.files[0];
+    this.cfg.documentService.processDocument(selectedFile, InspectionType.UNKNOWN, this.isSource);
+  }
+
+
+  getFileSuffix() {
+    return '.json,.xml';
+  }
+
+  exportFile(): string {
+    console.log('exportFile');
+    return '';
+  }
+
   getSearchIconCSSClass(): string {
     const cssClass = 'fa fa-search searchBoxIcon link';
     return this.searchMode ? (cssClass + ' selectedIcon') : cssClass;
@@ -162,6 +193,7 @@ export class DocumentDefinitionComponent implements OnInit {
 
   addField(docDef: DocumentDefinition, event: any): void {
     event.stopPropagation();
+    this.getDocs().push(docDef);
     const self = this;
     this.modalWindow.reset();
     this.modalWindow.confirmButtonText = 'Save';

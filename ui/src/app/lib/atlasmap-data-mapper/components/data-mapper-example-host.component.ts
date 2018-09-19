@@ -66,6 +66,12 @@ export class DataMapperAppExampleHostComponent implements OnInit, OnDestroy {
     // if classPath is specified, maven call to resolve pom will be skipped
     c.initCfg.classPath = null;
 
+    // enable mapping preview mode for standalone
+    c.initCfg.disableMappingPreviewMode = false;
+
+    // enable the navigation bar and import/export for stand-alone
+    c.initCfg.disableNavbar = false;
+
     /*
      * The following examples demonstrate adding source/target documents to the Data Mapper's configuration.
      * Note that multiple source documents are supported, but multiple target documents are not supported.

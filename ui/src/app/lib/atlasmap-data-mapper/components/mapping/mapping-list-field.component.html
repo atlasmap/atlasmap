@@ -24,7 +24,7 @@
 
   <tr>
     <td>
-      <div *ngIf="cfg.showMappingPreview && mappedField.field.path && mappedField.field.selected" style="width:97%;">
+      <div *ngIf="cfg.showMappingPreview && mappedField.field.selected" style="width:97%;">
         <textarea class="form-control previewSourceTextarea" rows="1" *ngIf="isSource" id="preview-source" [(ngModel)]='mappedField.field.value'
           (blur)="cfg.mappingService.notifyMappingUpdated()" placeholder="Type sample data here"></textarea>
         <div *ngIf="!isSource" class="previewResultContainer">

@@ -379,6 +379,11 @@ export class DocumentDefinition {
   }
 
   updateFromMappings(mappingDefinition: MappingDefinition): void {
+
+    if (mappingDefinition === null) {
+      return;
+    }
+
     for (const field of this.allFields) {
       field.partOfMapping = false;
       field.hasUnmappedChildren = false;

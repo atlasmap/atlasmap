@@ -32,6 +32,7 @@
     "chart.js": "^2.5.0",
     "classlist.js": "^1.1.20150312",
     "core-js": "^2.5.5",
+    "file-saver": "1.3.8",
     "font-awesome": "4.7.0",
     "jquery": "^3.3.0",
     "jquery-match-height": "^0.7.2",
@@ -40,6 +41,7 @@
     "ncp": "^2.0.0",
     "ngx-bootstrap": "^3.0.0",
     "opn-cli": "^3.1.0",
+    "pako": "^1.0.5",
     "patternfly-ng": "^4.0.0",
     "rxjs": "^6.2.0",
     "zone.js": "^0.8.26"

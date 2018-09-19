@@ -21,12 +21,14 @@ import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 
 import { AppComponent } from './app.component';
+import { AtlasmapNavbarComponent } from './atlasmap-navbar.component';
 
 import { DataMapperModule } from './lib/atlasmap-data-mapper/data-mapper.module';
 
 @NgModule({
   declarations: [
     AppComponent,
+    AtlasmapNavbarComponent
   ],
   imports: [
     BrowserModule,
@@ -36,7 +38,10 @@ import { DataMapperModule } from './lib/atlasmap-data-mapper/data-mapper.module'
     DataMapperModule.withInterceptor(),
   ],
   providers: [],
-  bootstrap: [AppComponent],
+  bootstrap: [
+    AppComponent,
+    AtlasmapNavbarComponent,
+  ],
 })
 
 export class ExampleAppModule { }

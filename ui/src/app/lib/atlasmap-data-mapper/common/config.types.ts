@@ -27,7 +27,8 @@ export enum DocumentType {
 export enum InspectionType {
   JAVA_CLASS = 'JAVA_CLASS',
   SCHEMA = 'SCHEMA',
-  INSTANCE = 'INSTANCE'
+  INSTANCE = 'INSTANCE',
+  UNKNOWN = 'UNKNOWN'
 }
 
 export const enum FieldMode {

@@ -71,8 +71,10 @@ public class AtlasServiceTest {
 
     @Test
     public void testGetMapping() {
-        Response resp = service.getMappingRequest("junit3");
+        Response resp = service.getMappingRequest("JSON", "junit3");
         assertEquals(byte[].class, resp.getEntity().getClass());
+        resp = service.getMappingRequest("XML", "junit3");
+        assertEquals(java.lang.String.class, resp.getEntity().getClass());
     }
 
     @Test

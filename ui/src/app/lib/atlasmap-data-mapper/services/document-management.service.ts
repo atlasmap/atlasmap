@@ -18,7 +18,7 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Observable, forkJoin } from 'rxjs';
 
-import { DocumentType } from '../common/config.types';
+import { DocumentType, InspectionType } from '../common/config.types';
 import { ConfigModel } from '../models/config.model';
 import { Field, EnumValue } from '../models/field.model';
 import { DocumentDefinition, NamespaceModel } from '../models/document-definition.model';
@@ -279,6 +279,66 @@ export class DocumentManagementService implements OnDestroy {
     return mockDoc;
   }
 
+  /**
+   * Restrict JSON parsing to the document management service.
+   * @param buffer
+   */
+  static getMappingsInfo(buffer: string): any {
+    return JSON.parse(buffer);
+  }
+
+  /**
+   * Capture the specified user mappings into a general catalog JSON buffer (exportMappings).
+   * @param buffer
+   */
+  static generateExportMappings(buffer: string): string {
+    if (buffer === null || buffer.length === 0) {
+      return '';
+    }
+    // Globally replace double-quotes embedded in the source docs.
+    buffer = buffer.replace(/\"/g, '\\\"');
+
+    // Globally replace new-lines with \n (JSON does not allow multi-line strings).
+    buffer = buffer.replace(/\n/g, '\\n');
+
+    const metaStr = `   "exportMappings":
+    {
+       \"value\": \"` + buffer + `\"
+    },\n`;
+    // comma is not needed if no non-java docs
+    return metaStr;
+  }
+
+  /**
+   * Capture the specified user JSON or XML document buffer into a general catalog JSON buffer.
+   * @param buffer
+   */
+  static generateExportBlockData(buffer: string): string {
+    if (buffer === null || buffer.length === 0) {
+        return '';
+    }
+    const metaStr = `
+          {
+             \"value\": \"` + buffer + `\"
+          }`;
+    return metaStr;
+  }
+
+/**
+ * Capture the specified user document definition meta data into a general catalog JSON buffer.
+ * @param docDef
+ */
+  static generateExportMetaStr(docDef: DocumentDefinition): string {
+    const metaStr = `
+       {
+          \"name\": \"` + docDef.name + `\",
+          \"documentType\": \"` + docDef.type + `\",
+          \"inspectionType\": \"` + docDef.inspectionType + `\",
+          \"isSource\": \"` + docDef.isSource + `\"
+       }`;
+    return metaStr;
+  }
+
   static generateMockJSONDoc(): string {
     return DocumentManagementService.generateMockJSONInstanceDoc();
   }
@@ -521,6 +581,62 @@ export class DocumentManagementService implements OnDestroy {
         },
       );
     });
+  }
+
+/**
+ * Read the selected file and parse it with the format defined by the specified inspection type.  Call the
+ * initialization service to update the sources/ targets in both the runtime and the UI.  The runtime will
+ * parse/ validate the file.
+ *
+ * @param selectedFile
+ * @param inspectionType
+ * @param isSource
+ */
+  async processDocument(selectedFile: any, inspectionType: InspectionType, isSource: boolean) {
+
+      let fileText = '';
+      const reader = new FileReader();
+
+      // Wait for the async read of the selected document to be completed.
+      try {
+        fileText = await DataMapperUtil.readFile(selectedFile, reader);
+      } catch (error) {
+        this.cfg.errorService.mappingError('Unable to import the specified schema document.', error);
+        return;
+      }
+
+      this.cfg.errorService.clearValidationErrors();
+
+      const schemaFile = selectedFile.name.split('.')[0];
+      const schemaFileSuffix: string = selectedFile.name.split('.')[1].toUpperCase();
+
+      // Derive the format if not already defined.
+      if (inspectionType === InspectionType.UNKNOWN) {
+
+        // Scan the text buffer to determine if it's a schema or schema-instance.
+        if ((fileText.search('SchemaSet') === -1) || (fileText.search('\"\$schema\"') === -1)) {
+          inspectionType = InspectionType.INSTANCE;
+        } else {
+          inspectionType = InspectionType.SCHEMA;
+        }
+      }
+      switch (schemaFileSuffix) {
+
+      case DocumentType.JSON:
+        this.cfg.initializationService.initializeUserDoc(fileText, schemaFile, DocumentType.JSON,
+          inspectionType, isSource);
+        break;
+
+      case 'java':
+        this.cfg.initializationService.initializeUserDoc(fileText, schemaFile, DocumentType.JAVA,
+          inspectionType, isSource);
+        break;
+
+      case DocumentType.XML:
+        this.cfg.initializationService.initializeUserDoc(fileText, schemaFile, DocumentType.XML,
+          inspectionType, isSource);
+        break;
+      }
   }
 
   private createDocumentFetchRequest(docDef: DocumentDefinition, classPath: string): any {

@@ -1,0 +1,129 @@
+<div class='atlasmapNavbar' >
+
+  <nav class="navbar navbar-default navbar-pf" role="navigation">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="/">
+        <strong>AtlasMap</strong> Data Mapper UI</a>
+    </div>
+
+    <div class="collapse navbar-collapse navbar-collapse-1">
+      <ul class="nav navbar-nav navbar-utility">
+
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" (click)="clearCheckboxes()">
+            <span class="pficon pficon-import"></span> Import
+            <b class="caret"></b>
+          </a>
+          <ul class="dropdown-menu" role="menu">
+            <div>
+              <li role="menuitem" style="width:230px; text-align:left; font-size:14px; border: 1px solid #808080; margin-bottom:2px;">
+                <a  class="dropdown-item" href="#">
+                  <label for="usermappingsfile">AtlasMap Mappings</label>
+		          <input type="file" accept=".adm" name="usermappingsfile" style="display:none"
+		            id="usermappingsfile" (change)="processMappingsCatalog($event)">
+	            </a>
+              </li>
+              <li role="menuitem" style="width:230px; text-align:left; font-size:14px; border: 1px solid #808080; margin-bottom:2px;">
+                <a class="dropdown-item" href="#">
+                  <label>Schema Document</label>
+                  <div class="dropdown-content-schema" style="font-size:12px;">
+                    <label>
+                      <input type="checkbox" value="sources-panel" name="schema-sources-panel" 
+                        style="width:30px;margin-left:20px;" (click)="handlePanelClick(SCHEMA_SOURCES_PANEL)"
+                        (change)="handleSchemaDoc($event)"/></label>
+                        <label class="sources">
+                          <i class="fa fa-hdd-o"></i> Sources</label>
+                    <label>
+                      <input type="checkbox" value="targets-panel" name="schema-targets-panel" 
+                        style="width:30px;margin-left:10px;" (click)="handlePanelClick(SCHEMA_TARGETS_PANEL)"
+                        (change)="handleSchemaDoc($event)"/></label>
+                        <label class="targets">
+                          <i class="fa fa-download"></i> Targets</label>
+
+                    <div class='AtlasmapNavbarComponent' *ngIf="schemaDoc">
+                      <li>
+                        <a href="#">
+                          <label for="userschemafile" class="btn" 
+                          style="width:60px; border: 1px solid #808080; margin-left:60px; text-align:center; vertical-align:middle; font-size:12px;margin-bottom:4px;"
+                            >Import</label>
+		                    <input type="file" accept="{{ getFileSuffix() }}" name="userschemafile" style="display:none"
+		                      id="userschemafile" (change)="processSchemaDoc($event)">
+		                  <label class="btn" style="width:60px; margin-left:4px; border: 1px solid #808080; text-align:center; vertical-align:middle; font-size:12px;margin-bottom:4px;"
+		                    (click)="handleSchemaCancel()">Cancel</label><BR>
+	                    </a>
+                      </li>
+                    </div>
+                  </div>
+	            </a>
+              </li>
+              <li role="menuitem" style="width:230px; text-align:left; font-size:14px; border: 1px solid #808080;">
+                <a  class="dropdown-item" href="#">
+                  <label>Instance Document</label>
+                  <div class="dropdown-content-instance" style="font-size:12px;">
+                    <label>
+                      <input ng-model="checkboxvalue" type="checkbox" value="sources-panel" name="instance-sources-panel" 
+                        style="width:30px;margin-left:20px;" (click)="handlePanelClick(INSTANCE_SOURCES_PANEL)"
+                        (change)="handleInstanceDoc($event)"/></label>
+                        <label class="sources">
+                          <i class="fa fa-hdd-o"></i> Sources</label>
+                    <label>
+                      <input ng-model="checkboxvalue" type="checkbox" value="targets-panel" name="instance-targets-panel" 
+                        style="width:30px;margin-left:10px;" (click)="handlePanelClick(INSTANCE_TARGETS_PANEL)"
+                        (change)="handleInstanceDoc($event)"/></label>
+                        <label class="targets">
+                          <i class="fa fa-download"></i> Targets</label>
+
+                    <div class='AtlasmapNavbarComponent' *ngIf="instanceDoc">
+                      <li>
+                        <a href="#">
+                          <label for="userinstancefile" class="btn" 
+                          style="width:60px; border: 1px solid #808080; margin-left:60px; text-align:center; vertical-align:middle; font-size:12px;margin-bottom:4px;"
+                            >Import</label>
+		                    <input type="file" accept="{{ getFileSuffix() }}" name="userinstancefile" style="display:none"
+		                      id="userinstancefile" (change)="processInstanceDoc($event)">
+		                  <label class="btn" style="width:60px; margin-left:4px; border: 1px solid #808080; text-align:center; vertical-align:middle; font-size:12px;margin-bottom:4px;"
+		                    (click)="handleInstanceCancel()">Cancel</label><BR>
+	                    </a>
+                      </li>
+                    </div>
+                  </div>
+	            </a>
+              </li>
+            </div>
+          </ul>
+        </li>
+
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            <span class="pficon pficon-export"></span> Export
+            <b class="caret"></b>
+	      </a>
+          <ul class="dropdown-menu">
+            <div style="font-size:14px; width:426px;">
+              <li>
+                <a href="#">
+                  <div style="margin-left:8px; margin-right:8px;">Current mapping
+                    <input type="text" (change)="handleMappingsInstanceName($event)" placeholder="atlasmap-mapping.adm"/>
+                      <button type="button" style="margin-left:7px; margin-right:4px;" (click)="handleExportMapping($event)">OK</button>
+                      <button type="button" (click)="handleExportMappingCancel()">Cancel</button>
+                  </div>
+                </a>
+              </li>
+              <!--
+              <li>
+                <a href="#">
+                  <label class="btn" style="font-size:14px; text-align:left;">All Instance and Schema Documents</label>
+                </a>
+              </li>
+              -->
+            </div>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </nav>
+</div>
