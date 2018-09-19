@@ -32,6 +32,7 @@ export class ToolbarComponent implements OnInit {
   @Input() cfg: ConfigModel;
   @Input() modalWindow: ModalWindowComponent;
   targetSupportsTemplate = false;
+  private mappingsFileName: string;
 
   getCSSClass(action: string) {
     if ('showDetails' === action) {
@@ -44,6 +45,8 @@ export class ToolbarComponent implements OnInit {
       return 'fa fa-code link' + (this.cfg.showNamespaceTable ? ' selected' : '');
     } else if ('editTemplate' === action) {
       return 'fa fa-file-text-o link' + (this.cfg.mappings.templateExists() ? ' selected' : '');
+    } else if ('exportMappings' === action) {
+      return 'pficon pficon-export link';
     }
   }
 
@@ -85,7 +88,6 @@ export class ToolbarComponent implements OnInit {
     } else if ('showMappingPreview' === action) {
       this.cfg.showMappingPreview = !this.cfg.showMappingPreview;
     }
-
     // Use the initialization service to trigger the observable updateFromConfig method
     // in the parent data-mapper-app class.  This avoids materializing the lineMachine object
     // post-check.
@@ -93,6 +95,8 @@ export class ToolbarComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.mappingsFileName = '';
+
     // Disable template until runtime supports it - https://github.com/atlasmap/atlasmap/issues/329
     // const targetDoc: DocumentDefinition = this.cfg.targetDocs[0];
     // this.targetSupportsTemplate = targetDoc && (targetDoc.type == DocumentType.XML || targetDoc.type == DocumentType.JSON);
@@ -114,5 +118,40 @@ export class ToolbarComponent implements OnInit {
       self.cfg.mappingService.saveCurrentMapping();
     };
     this.modalWindow.show();
+  }
+
+  /**
+   * The user has specified an AtlasMap mappings catalog file name into which the current live mappings and
+   * support documents will be exported.
+   *
+   * @param event
+   */
+  handleMappingsInstanceName(event) {
+      let filename = event.target.value;
+      if (filename !== null || filename.length > 0) {
+
+        // Tack on a .adm suffix if one wasn't already specified.
+        if (filename.split('.').pop() !== 'adm') {
+          filename = filename.concat('.adm');
+        }
+        this.mappingsFileName = filename;
+      }
+    }
+
+  /**
+   * The user has requested their current mappings be exported.  Use the mapping management
+   * service to establish the file content and to push it down to the server.
+   *
+   * @param event
+   */
+  handleExportMapping(event) {
+    this.cfg.mappingService.exportMappingsCatalog(this.mappingsFileName);
+  }
+
+  /**
+   * Cancel button - Export > Current Mapping
+   */
+  handleExportMappingCancel(): void {
+    this.mappingsFileName = '';
   }
 }

@@ -13,11 +13,12 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-
 import { Injectable } from '@angular/core';
+import { deflate, inflate, gzip } from 'pako';
 import { Subject, Observable, forkJoin } from 'rxjs';
 
 import { DocumentType, InspectionType } from '../common/config.types';
+import { DataMapperUtil } from '../common/data-mapper-util';
 import { DocumentInitializationModel, ConfigModel } from '../models/config.model';
 import { DocumentDefinition } from '../models/document-definition.model';
 import { MappingDefinition } from '../models/mapping-definition.model';
@@ -269,7 +270,63 @@ export class InitializationService {
     ConfigModel.setConfig(this.cfg);
   }
 
+  /**
+   * Initialize a user-import schema or schema-instance document.
+   *
+   * @param docText
+   * @param docName
+   * @param docType
+   * @param inspectionType
+   * @param isSource
+   */
+  initializeUserDoc(docText: string, docName: string, docType: DocumentType, inspectionType: InspectionType, isSource: boolean): void {
+    let docdef: DocumentDefinition = null;
+    if (this.cfg.mappingService == null) {
+      this.cfg.errorService.warn('Mapping service is not configured, validation service will not be used.', null);
+    } else if (this.cfg.initCfg.baseMappingServiceUrl == null) {
+      this.cfg.errorService.warn('Mapping service URL is not configured, validation service will not be used.', null);
+    }
+    if (docdef = this.cfg.getDocForIdentifier(docName, isSource)) {
+      if (isSource) {
+        DataMapperUtil.removeItemFromArray(docdef, this.cfg.sourceDocs);
+      } else {
+        DataMapperUtil.removeItemFromArray(docdef, this.cfg.targetDocs);
+      }
+    }
+    docdef = this.addNonJavaDocument(docName, docType, inspectionType, docText, isSource);
+    docdef.name = docName;
+    docdef.updateFromMappings(this.cfg.mappings);
+
+    // load field actions
+    this.fetchFieldActions();
+
+    this.cfg.documentService.fetchClassPath().toPromise()
+      .then((classPath: string) => {
+        this.cfg.initCfg.classPath = classPath;
+        this.cfg.documentService.fetchDocument(docdef, this.cfg.initCfg.classPath).toPromise()
+        .then((doc: DocumentDefinition) => {
+          this.updateStatus();
+        })
+        .catch((error: any) => {
+          if (error.status === 0) {
+            this.handleError('Fatal network error: Could not connect to AtlasMap design runtime service.', error);
+          } else {
+            this.handleError('Could not load document \'' + docdef.id + '\': ' + error.status + ' ' + error.statusText, error);
+          }
+        });
+      })
+      .catch((error: any) => {
+        if (error.status === 0) {
+          this.handleError('Fatal network error: Could not connect to AtlasMap design runtime service.', error);
+        } else {
+          this.handleError('Could not load Maven class path: ' + error.status + ' ' + error.statusText, error);
+        }
+      });
+    this.cfg.mappingService.validateMappings();
+  }
+
   initialize(): void {
+
     if (this.cfg.mappingService == null) {
       this.cfg.errorService.warn('Mapping service is not configured, validation service will not be used.', null);
     } else if (this.cfg.initCfg.baseMappingServiceUrl == null) {
@@ -389,6 +446,15 @@ export class InitializationService {
         });
     }
 
+    this.cfg.mappingService.getCurrentMappingCatalog().subscribe((value: Uint8Array) => {
+
+      // If value is null then no compressed mappings catalog is available on the server.
+      if (value === null) {
+        return;
+      }
+      this.processMappingsCatalog(value);
+    });
+
     // load mappings
     if (this.cfg.mappings != null) {
       this.cfg.initCfg.mappingInitialized = true;
@@ -399,7 +465,9 @@ export class InitializationService {
         this.fetchMappings(this.cfg.mappingFiles);
       } else {
         this.cfg.mappingService.findMappingFiles('UI').toPromise()
-          .then((files: string[]) => { this.fetchMappings(files); },
+          .then((files: string[]) => {
+              this.fetchMappings(files);
+          },
           (error: any) => {
             if (error.status === 0) {
               this.handleError('Fatal network error: Could not connect to AtlasMap design runtime service.', error);
@@ -409,6 +477,66 @@ export class InitializationService {
           },
         );
       }
+    }
+  }
+
+  processMetaChars(metaBuffer: any): string {
+    let fragData = metaBuffer.replace(/\\\"/g, '\"');
+    fragData = fragData.replace(/\\\n/g, '\n');
+    return fragData;
+  }
+
+  processMappingsDocuments(mappingsSchemaAggregate: string): any {
+    let mInfo: any = null;
+    try {
+      mInfo = DocumentManagementService.getMappingsInfo(mappingsSchemaAggregate);
+    } catch (error) {
+      this.cfg.errorService.mappingError('Unable to process mapping information from the data mappings file. ' +
+        '\n' + error.message, error);
+      return null;
+    }
+
+    this.cfg.errorService.clearValidationErrors();
+
+    let metaFragment: any = null;
+    let fragData = '';
+    let fragIndex = 0;
+
+    // Reinitialize the model documents.
+    for (metaFragment of mInfo.exportMeta) {
+      fragData = this.processMetaChars(mInfo.exportBlockData[fragIndex].value);
+      this.cfg.initializationService.initializeUserDoc(fragData, metaFragment.name, metaFragment.documentType,
+        metaFragment.inspectionType, (metaFragment.isSource === 'true'));
+      fragIndex++;
+    }
+    this.cfg.mappingService.validateMappings();
+    return mInfo;
+  }
+
+  /**
+   * The compressed binary content (gzip) from either an imported '.adm' file or from the DM runtime
+   * is presented to update the canvas.
+   *
+   * @param compressedContent - gzip binary buffer
+   */
+  processMappingsCatalog(compressedContent: Uint8Array) {
+    try {
+
+      // Inflate the compressed content.
+      const decompress = inflate(compressedContent);
+      const mappingsCatalog =
+        new Uint8Array(decompress).reduce((data, byte) => data + String.fromCharCode(byte), '');
+      const mInfo = this.processMappingsDocuments(mappingsCatalog);
+
+      // Reinitialize the model mappings.
+      if (mInfo && mInfo.exportMappings) {
+        this.cfg.mappingService.setMappingToService(mInfo.exportMappings.value);
+      }
+      const fileContent: Blob = new Blob([compressedContent], {type: 'application/octet-stream'});
+      this.cfg.mappingService.setCompressedMappingToService(fileContent);
+    } catch (error) {
+      this.cfg.errorService.mappingError('Unable to decompress the aggregate mappings catalog buffer.\n', error);
+      return;
     }
   }
 
@@ -475,7 +603,7 @@ export class InitializationService {
     }
   }
 
-  private fetchMappings(mappingFiles: string[]): void {
+  fetchMappings(mappingFiles: string[]): void {
     if (mappingFiles.length === 0) {
       this.cfg.initCfg.mappingInitialized = true;
       this.updateStatus();

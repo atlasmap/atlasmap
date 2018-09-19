@@ -14,23 +14,25 @@
     limitations under the License.
 */
 
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { deflate, inflate, gzip } from 'pako';
 
 import { Observable, Subject, forkJoin } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { ConfigModel } from '../models/config.model';
+import { DataMapperUtil } from '../common/data-mapper-util';
+import { DocumentType, InspectionType } from '../common/config.types';
 import { Field } from '../models/field.model';
 import { DocumentDefinition } from '../models/document-definition.model';
+import { DocumentManagementService } from '../services/document-management.service';
 import { MappingModel, FieldMappingPair, MappedField } from '../models/mapping.model';
 import { FieldActionConfig, FieldActionArgument, TransitionMode, TransitionModel } from '../models/transition.model';
 import { MappingDefinition } from '../models/mapping-definition.model';
 import { ErrorInfo, ErrorLevel } from '../models/error.model';
 
 import { MappingSerializer } from './mapping-serializer.service';
-
-import { DataMapperUtil } from '../common/data-mapper-util';
 
 @Injectable()
 export class MappingManagementService {
@@ -53,9 +55,12 @@ export class MappingManagementService {
   mappingPreviewErrorSource = new Subject<ErrorInfo[]>();
   mappingPreviewError$ = this.mappingPreviewErrorSource.asObservable();
 
-  private headers = new HttpHeaders({'Content-Type': 'application/json'});
+  private headers = new HttpHeaders(
+    {'Content-Type': 'application/json; application/xml; application/octet-stream',
+     'Accept':       'application/json; application/xml; application/octet-stream'});
   private mappingPreviewInputSubscription;
   private mappingUpdatedSubscription;
+  private xmlBuffer: string;
 
   constructor(private http: HttpClient) {}
 
@@ -134,14 +139,38 @@ export class MappingManagementService {
     });
   }
 
+  /**
+   * Retrieve the current user data mappings catalog from the server as a compressed byte array buffer.
+   */
+  getCurrentMappingCatalog(): Observable<Uint8Array> {
+    const atlasmapCatalogName = 'atlasmap-catalog.adm';
+    return new Observable<Uint8Array>((observer: any) => {
+      const baseURL: string = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/GZ/';
+      const url: string = baseURL + atlasmapCatalogName;
+      DataMapperUtil.debugLogJSON(null, 'Mapping Catalog Response', this.cfg.initCfg.debugMappingServiceCalls, url);
+      const catHeaders = new HttpHeaders(
+        { 'Content-Type':  'application/octet-stream',
+          'Accept':        'application/octet-stream',
+          'Response-Type': 'application/octet-stream'
+        });
+      this.http.get(url, { headers: catHeaders, responseType: 'arraybuffer' }).toPromise().then((body: any) => {
+        DataMapperUtil.debugLogJSON(body, 'Mapping Catalog Response', this.cfg.initCfg.debugMappingServiceCalls, url);
+        observer.next(body);
+        observer.complete();
+      }).catch((error: any) => {
+        // Error is okay - there is no compressed file available.
+        observer.complete();
+      });
+    });
+  }
+
   fetchMappings(mappingFileNames: string[], mappingDefinition: MappingDefinition): Observable<boolean> {
     return new Observable<boolean>((observer: any) => {
       if (mappingFileNames.length === 0) {
         observer.complete();
         return;
       }
-
-      const baseURL: string = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/';
+      const baseURL: string = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/JSON/';
       const operations: Observable<any>[] = [];
       for (const mappingName of mappingFileNames) {
         const url: string = baseURL + mappingName;
@@ -183,9 +212,7 @@ export class MappingManagementService {
         newMappings.push(mapping);
       }
     }
-
     this.cfg.mappings.mappings = newMappings;
-
     this.saveMappingSource.next(null);
     this.notifyMappingUpdated();
   }
@@ -194,9 +221,85 @@ export class MappingManagementService {
     return MappingSerializer.serializeMappings(this.cfg);
   }
 
+  /**
+   * Retrieve the current user ATlasMap data mappings from the server as an XML buffer.
+   */
+  getCurrentMappingXML(): Observable<string> {
+    const mappingFileNames: string[] = this.cfg.mappingFiles;
+    const mappingDefinition: MappingDefinition = this.cfg.mappings;
+    return new Observable<string>((observer: any) => {
+      const baseURL: string = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/XML/';
+      const operations: Observable<any>[] = [];
+      for (const mappingName of mappingFileNames) {
+        const url: string = baseURL + mappingName;
+        DataMapperUtil.debugLogJSON(null, 'Mapping Service Request', this.cfg.initCfg.debugMappingServiceCalls, url);
+        const xmlHeaders = new HttpHeaders(
+          { 'Content-Type':  'application/xml',
+            'Accept':        'application/xml',
+            'Response-Type': 'application/xml'
+          });
+        const operation = this.http.get(url, { headers: xmlHeaders, responseType: 'text' }).pipe(map((res: any) => res ));
+        operations.push(operation);
+      }
+
+      forkJoin(operations).toPromise().then((data: string[]) => {
+        if (!data) {
+          observer.next('no data');
+          observer.complete();
+          return;
+        }
+        DataMapperUtil.debugLogJSON(data, 'Mapping Service Response', this.cfg.initCfg.debugMappingServiceCalls, null);
+        this.notifyMappingUpdated();
+        observer.next(data);
+        observer.complete();
+      }).catch((error: any) => {
+        observer.error(error);
+        observer.complete();
+      });
+    });
+  }
+
+ /**
+  * The user has specified an XML file to be loaded into their runtime model.  Use the mapping
+  * service to get the runtime server to translate the XML into JSON and trigger a new mapping.
+  *
+  * @param buffer - XML content
+  */
+  setMappingToService(XMLbuffer: string): void {
+    const url = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/XML';
+    DataMapperUtil.debugLogJSON(null, 'Mapping Service Request', this.cfg.initCfg.debugMappingServiceCalls, url);
+    this.http.put(url, XMLbuffer, { headers: this.headers }).toPromise().then((res: any) => {
+        DataMapperUtil.debugLogJSON(res, 'Mapping Service Response', this.cfg.initCfg.debugMappingServiceCalls, url);
+      })
+      .catch((error: any) => {
+        this.handleError('Error occurred while establishing mappings from an imported XML.', error); },
+    );
+  }
+
+  /**
+   * The user has either exported their mappings or we're saving them for them on the server.
+   *
+   * @param compressedBuffer
+   */
+   setCompressedMappingToService(compressedBuffer: any): void {
+     const url = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/GZ';
+     const cmHeaders = new HttpHeaders(
+       { 'Content-Type':  'application/octet-stream',
+         'Accept':        'application/octet-stream',
+         'Response-Type': 'application/octet-stream'
+       });
+     DataMapperUtil.debugLogJSON(null, 'Set Compressed Mapping Service Request', this.cfg.initCfg.debugMappingServiceCalls, url);
+     this.http.put(url, compressedBuffer, { headers: this.headers }).toPromise().then((res: any) => {
+         DataMapperUtil.debugLogJSON(res, 'Set Compressed Mapping Service Response', this.cfg.initCfg.debugMappingServiceCalls, url);
+       })
+       .catch((error: any) => {
+         this.handleError('Error occurred while establishing mappings from a compressed mappings file.', error); },
+     );
+   }
+
   saveMappingToService(): void {
     const payload: any = this.serializeMappingsToJSON();
-    const url = this.cfg.initCfg.baseMappingServiceUrl + 'mapping';
+    const url = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/JSON';
     DataMapperUtil.debugLogJSON(payload, 'Mapping Service Request', this.cfg.initCfg.debugMappingServiceCalls, url);
     this.http.put(url, JSON.stringify(payload), { headers: this.headers }).toPromise()
       .then((res: any) => {
@@ -622,7 +725,145 @@ export class MappingManagementService {
     this.mappingUpdatedSource.next();
   }
 
+  /**
+   * Validate and push the active mapping to the server.
+   */
+  setMappingInstance(): void {
+    if (this.cfg.initCfg.baseMappingServiceUrl == null) {
+      // validation service not configured.
+      return;
+    }
+    const payload: any = MappingSerializer.serializeMappings(this.cfg);
+    const url: string = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/setinstance';
+    DataMapperUtil.debugLogJSON(payload, 'Validation Service Request', this.cfg.initCfg.debugValidationServiceCalls, url);
+    this.http.put(url, payload, { headers: this.headers }).toPromise().then((body: any) => {
+      DataMapperUtil.debugLogJSON(body, 'Validation Service Response', this.cfg.initCfg.debugValidationServiceCalls, url);
+      const mapping: MappingModel = this.cfg.mappings.activeMapping;
+      const activeMappingErrors: ErrorInfo[] = [];
+      const globalErrors: ErrorInfo[] = [];
+      // Only update active mapping and global ones, since validateMappings() is always invoked when mapping is updated.
+      // This should be eventually turned into mapping entry level validation.
+      // https://github.com/atlasmap/atlasmap-ui/issues/116
+      if (body && body.Validations && body.Validations.validation) {
+        for (const validation of body.Validations.validation) {
+          let level: ErrorLevel = ErrorLevel.VALIDATION_ERROR;
+          if (validation.status === 'WARN') {
+            level = ErrorLevel.WARN;
+          } else if (validation.status === 'INFO') {
+            level = ErrorLevel.INFO;
+          }
+          const errorInfo = new ErrorInfo(validation.message, level);
+          if (!validation.scope || validation.scope !== 'MAPPING' || !validation.id) {
+            globalErrors.push(errorInfo);
+          } else if (mapping && mapping.uuid && validation.id === mapping.uuid) {
+            activeMappingErrors.push(errorInfo);
+          }
+        }
+      }
+      this.cfg.validationErrors = globalErrors;
+      if (mapping) {
+        mapping.validationErrors = activeMappingErrors;
+      }
+    }).catch((error: any) => {
+      this.cfg.errorService.error('Error fetching validation data.', { 'error': error, 'url': url, 'request': payload });
+    });
+  }
+
   private handleError(message: string, error: any): void {
     this.cfg.errorService.mappingError(message, error);
+  }
+
+  /**
+   * Asynchronously retrieve the current user-defined AtlasMap mappings from the runtime server as an XML buffer.
+   */
+  async getXMLbuf(): Promise<boolean> {
+    return new Promise<boolean>((resolve, reject) => {
+      this.cfg.mappingFiles[0] = this.cfg.mappings.name;
+      this.cfg.mappingService.getCurrentMappingXML().toPromise().then((result: string) => {
+        resolve(true);
+        this.xmlBuffer = result;
+      }).catch((error: any) => {
+        if (error.status === 0) {
+          this.cfg.errorService.mappingError(
+            'Fatal network error: Unable to connect to the AtlasMap design runtime service.', error);
+        } else {
+          this.cfg.errorService.mappingError(
+            'Unable to access current mapping definitions: ' + error.status + ' ' + error.statusText, error);
+        }
+        resolve(false);
+      });
+    });
+  }
+  /**
+   * Export the current mappings catalog.  Establish the file content in JSON format (mappings + schema +
+   * instance-schema) and compress it.
+   *
+   * @param event
+   */
+  async exportMappingsCatalog(mappingsFileName: string) {
+    let aggregateBuffer = '   {\n';
+    try {
+      if (mappingsFileName === null || mappingsFileName.length === 0) {
+        mappingsFileName = 'atlasmap-mapping.adm';
+      }
+
+      // Retrieve the XML mappings buffer from the server.
+      if (!await this.getXMLbuf()) {
+        this.cfg.errorService.mappingError('Unable to retrieve the current data mappings.', null);
+      }
+
+      // Start with the user mappings (XML).
+      aggregateBuffer += DocumentManagementService.generateExportMappings(this.xmlBuffer[0]);
+
+      let buffer = '';
+      let exportMeta = '   "exportMeta": [\n';
+      let exportBlockData = '      "exportBlockData": [\n';
+      let docCount = 0;
+
+      // Establish two string arrays:
+      //   exportMeta - meta-data describing the instance or schema documents.
+      //   exportBlockData - the actual source of the instance or schema documents.
+      for (const doc of this.cfg.getAllDocs()) {
+        if (doc.inspectionSource && doc.inspectionSource !== null &&
+             (doc.inspectionType === InspectionType.INSTANCE) || (doc.inspectionType === InspectionType.SCHEMA)) {
+          if (docCount > 0) {
+            exportMeta += ',\n';
+            exportBlockData += ',\n';
+          }
+          exportMeta += DocumentManagementService.generateExportMetaStr(doc);
+
+          // Globally replace double-quotes embedded in the source docs.
+          buffer = doc.inspectionSource.replace(/\"/g, '\\\"');
+
+          // Globally replace new-lines with \n (JSON does not allow multi-line strings).
+          buffer = buffer.replace(/\n/g, '\\n');
+          exportBlockData += DocumentManagementService.generateExportBlockData(buffer);
+          docCount++;
+        }
+      }
+      exportMeta += '   ],\n';
+      exportBlockData += '   ]\n';
+      aggregateBuffer += exportMeta;
+      aggregateBuffer += exportBlockData;
+      aggregateBuffer += '   }\n';
+
+      // Compress the JSON buffer - write out as binary.
+      const binBuffer = DataMapperUtil.str2bytes(aggregateBuffer);
+      try {
+        const compress = deflate(binBuffer, {gzip: true});
+        const fileContent: Blob = new Blob([compress], {type: 'application/octet-stream'});
+        if (!await DataMapperUtil.writeFile(fileContent, mappingsFileName)) {
+          this.cfg.errorService.mappingError('Unable to save the current data mappings.', null);
+        }
+        // Reinitialize the model mappings.
+        this.cfg.mappingService.setCompressedMappingToService(fileContent);
+      } catch (error1) {
+        this.cfg.errorService.mappingError('Unable to compress the current data mappings.\n', error1);
+        return;
+      }
+    } catch (error) {
+      this.cfg.errorService.mappingError('Unable to export the current data mappings.', error);
+      return;
+    }
   }
 }

@@ -58,6 +58,9 @@ export class DataMapperInitializationModel {
 
   disableMappingPreviewMode = false;
 
+  /* enable the navigation bar and import/export */
+  disableNavbar = true;
+
   /* mock data configuration */
   discardNonMockSources = false;
   addMockJSONMappings = false;

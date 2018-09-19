@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-import { NgModule, ModuleWithProviders } from '@angular/core';
+import { NgModule, ModuleWithProviders, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule, HttpClientXsrfModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -142,6 +142,7 @@ export { DataMapperAppComponent } from './components/data-mapper-app.component';
     TemplateEditComponent,
   ],
   bootstrap: [DataMapperAppExampleHostComponent],
+  schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 })
 export class DataMapperModule {
   static withInterceptor(): Array<ModuleWithProviders> {

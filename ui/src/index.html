@@ -11,45 +11,12 @@
 </head>
 
 <body>
-  <nav class="navbar navbar-default navbar-pf" role="navigation">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse-1">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="/">
-        <strong>AtlasMap</strong> Data Mapper UI</a>
-    </div>
-    <div class="collapse navbar-collapse navbar-collapse-1">
-      <ul class="nav navbar-nav navbar-utility">
-        <li>
-          <a href="#">Status</a>
-        </li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-            <span class="pficon pficon-user"></span>Brian Johnson
-            <b class="caret"></b>
-          </a>
-        </li>
-      </ul>
-    </div>
-  </nav>
-
-  <div class="row toolbar-pf">
-    <ol class="breadcrumb">
-      <li>
-        <a href="#">Dashboard</a>
-      </li>
-      <li>
-        <a href="#">Create an integration</a>
-      </li>
-      <li class="active">
-        <strong>Data Mapping Canvas</strong>
-      </li>
-    </ol>
+  <div class='atlasmapNavbar'>
+    <atlasmap-navbar></atlasmap-navbar>
   </div>
+
   <div class="atlasmap__root">
-    <atlasmap-dev-root></atlasmap-dev-root>
+    <atlasmap-dev-root></atlasmap-dev-root> 
   </div>
 </body>
 
