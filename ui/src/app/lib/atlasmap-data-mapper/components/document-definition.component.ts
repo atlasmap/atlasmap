@@ -153,7 +153,7 @@ export class DocumentDefinitionComponent implements OnInit {
 
 
   getFileSuffix() {
-    return '.json,.xml';
+    return '.json,.xml,.xsd';
   }
 
   exportFile(): string {
