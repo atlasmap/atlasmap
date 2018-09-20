@@ -28,7 +28,7 @@
   },
   "peerDependencies": {
     "@angular/animations": "6.0.3",
-    "bootstrap": "^3.3.7",
+    "bootstrap": "^4.1.2",
     "chart.js": "^2.5.0",
     "classlist.js": "^1.1.20150312",
     "core-js": "^2.5.5",
@@ -62,7 +62,7 @@
     "@types/jasminewd2": "~2.0.2",
     "@types/node": "^8.10.17",
     "@types/webpack-env": "^1.13.6",
-    "bootstrap": "^3.3.7",
+    "bootstrap": "^4.1.2",
     "canonical-path": "0.0.2",
     "chart.js": "^2.5.0",
     "classlist.js": "^1.1.20150312",
