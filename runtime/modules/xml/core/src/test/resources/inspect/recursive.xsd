@@ -1,0 +1,12 @@
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  targetNamespace="http://atlasmap.io/xml/v2/test/recursive"
+  xmlns:tns="http://atlasmap.io/xml/v2/test/recursive">
+
+  <xs:complexType name="Extension">
+    <xs:element name="extension" type="tns:Extension"/>
+  </xs:complexType>
+
+  <xs:element name="extension" type="tns:Extension">
+  </xs:element>
+
+</xs:schema>
