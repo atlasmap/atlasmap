@@ -559,10 +559,9 @@ export class DocumentManagementService implements OnDestroy {
 
       const payload: any = this.createDocumentFetchRequest(docDef, classPath);
       let url: string = this.cfg.initCfg.baseJavaInspectionServiceUrl + 'class';
-      if (docDef.type === DocumentType.XML) {
+      if ((docDef.type === DocumentType.XML) || (docDef.type === DocumentType.XSD)) {
         url = this.cfg.initCfg.baseXMLInspectionServiceUrl + 'inspect';
-      }
-      if (docDef.type === DocumentType.JSON) {
+      } else if (docDef.type === DocumentType.JSON) {
         url = this.cfg.initCfg.baseJSONInspectionServiceUrl + 'inspect';
       }
       DataMapperUtil.debugLogJSON(payload, 'Document Service Request', this.cfg.initCfg.debugDocumentServiceCalls, url);
@@ -633,14 +632,15 @@ export class DocumentManagementService implements OnDestroy {
         break;
 
       case DocumentType.XML:
-        this.cfg.initializationService.initializeUserDoc(fileText, schemaFile, DocumentType.XML,
+      case DocumentType.XSD:
+        this.cfg.initializationService.initializeUserDoc(fileText, schemaFile, schemaFileSuffix,
           inspectionType, isSource);
         break;
       }
   }
 
   private createDocumentFetchRequest(docDef: DocumentDefinition, classPath: string): any {
-    if (docDef.type === DocumentType.XML) {
+    if ((docDef.type === DocumentType.XML) || (docDef.type === DocumentType.XSD)) {
       return {
         'XmlInspectionRequest': {
           'jsonType': 'io.atlasmap.xml.v2.XmlInspectionRequest',

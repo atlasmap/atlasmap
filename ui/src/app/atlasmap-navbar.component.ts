@@ -241,6 +241,6 @@ export class AtlasmapNavbarComponent implements OnInit {
    * Return a string representing valid suffixes for importable schema and schema-instance documents.
    */
   getFileSuffix() {
-    return '.json,.xml';
+    return '.json,.xml,.xsd';
   }
 }

@@ -17,6 +17,7 @@
 export enum DocumentType {
   JAVA = 'Java',
   XML = 'XML',
+  XSD = 'XSD',
   JSON = 'JSON',
   CORE = 'Core',
   CSV = 'CSV',
