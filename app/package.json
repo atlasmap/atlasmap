@@ -44,7 +44,7 @@
     "@angular/router": "4.4.5",
     "@atlasmap/atlasmap.data.mapper": ">=1.32.0-SNAPSHOT",
     "angular-in-memory-web-api": ">=0.3.2",
-    "bootstrap": "^3.3.7",
+    "bootstrap": "^4.1.2",
     "core-js": "^2.4.1",
     "enhanced-resolve": "3.3.0",
     "font-awesome": "4.7.0",
