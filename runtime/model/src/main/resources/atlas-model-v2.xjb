@@ -109,5 +109,8 @@
       <annox:annotate><annox:annotate annox:class="javax.xml.bind.annotation.XmlRootElement" name="TargetDocument" /></annox:annotate>
       <annox:annotate><annox:annotate annox:class="com.fasterxml.jackson.annotation.JsonRootName">TargetDocument</annox:annotate></annox:annotate>
     </jaxb:bindings>   
+    <jaxb:bindings node="xs:simpleType[@name='MappingType']">
+      <annox:annotate><annox:annotate annox:class="java.lang.Deprecated" /></annox:annotate>
+    </jaxb:bindings>   
   </jaxb:bindings>
 </jaxb:bindings>

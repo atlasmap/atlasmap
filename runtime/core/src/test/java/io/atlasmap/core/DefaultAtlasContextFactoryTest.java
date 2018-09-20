@@ -297,12 +297,17 @@ public class DefaultAtlasContextFactoryTest {
         }
 
         @Override
-        public void processSourceFieldMapping(AtlasInternalSession session) throws AtlasException {
+        public void readSourceValue(AtlasInternalSession session) throws AtlasException {
             LOG.debug("processSourceFieldMapping method");
         }
 
         @Override
-        public void processTargetFieldMapping(AtlasInternalSession session) throws AtlasException {
+        public void populateTargetField(AtlasInternalSession session) throws AtlasException {
+            LOG.debug("populateTargetField method");
+        }
+
+        @Override
+        public void writeTargetValue(AtlasInternalSession session) throws AtlasException {
             LOG.debug("processTargetFieldMapping method");
         }
 

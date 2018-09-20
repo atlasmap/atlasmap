@@ -74,7 +74,7 @@ public abstract class BaseDefaultAtlasContextTest {
                 field.setValue(reader.sources.get(field.getPath()));
                 return null;
             }
-        }).when(module).processSourceFieldMapping(any());
+        }).when(module).readSourceValue(any());
         doAnswer(new Answer<Void>() {
             @Override
             public Void answer(InvocationOnMock invocation) throws Throwable {
@@ -91,10 +91,17 @@ public abstract class BaseDefaultAtlasContextTest {
                     }
                 }
                 target.setValue(value);
+                return null;
+            }
+        }).when(module).populateTargetField(any());
+        doAnswer(new Answer<Void>() {
+            @Override
+            public Void answer(InvocationOnMock invocation) throws Throwable {
+                AtlasInternalSession session = (AtlasInternalSession) invocation.getArguments()[0];
                 writer.write(session);
                 return null;
             }
-        }).when(module).processTargetFieldMapping(any());
+        }).when(module).writeTargetValue(any());
         return module;
     }
 

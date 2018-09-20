@@ -27,6 +27,7 @@ import io.atlasmap.java.v2.JavaField;
 import io.atlasmap.spi.AtlasConversionService;
 import io.atlasmap.spi.AtlasInternalSession;
 import io.atlasmap.spi.AtlasInternalSession.Head;
+import io.atlasmap.v2.Audits;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldType;
 import io.atlasmap.v2.LookupTable;
@@ -44,13 +45,14 @@ public abstract class BaseDocumentWriterTest {
     protected TargetValueConverter valueConverter = null;
     protected AtlasConversionService conversionService = DefaultAtlasConversionService.getInstance();
     protected ClassLoader classLoader;
+    protected Audits audits;
 
     @Before
     public void reset() {
         classLoader = Thread.currentThread().getContextClassLoader();
         writer = new DocumentJavaFieldWriter(conversionService);
         writer.setTargetValueConverter(new TargetValueConverter(classLoader, conversionService) {
-            public void convert(AtlasInternalSession session, LookupTable lookupTable, Field sourceField, Object parentObject, Field targetField) throws AtlasException {
+            public void populateTargetField(AtlasInternalSession session, LookupTable lookupTable, Field sourceField, Object parentObject, Field targetField) throws AtlasException {
                 return;
             }
         });
@@ -72,6 +74,7 @@ public abstract class BaseDocumentWriterTest {
         targetOrderArrayInstance.getOrders()[0] = new TargetOrder();
         targetOrderArrayInstance.getOrders()[1] = new TargetOrder();
         targetTestClassInstance.setOrderArray(targetOrderArrayInstance);
+        audits = new Audits();
     }
 
     public void setupPath(String fieldPath) {
@@ -115,8 +118,10 @@ public abstract class BaseDocumentWriterTest {
 
     protected void write(Field field) throws AtlasException {
         AtlasInternalSession session = mock(AtlasInternalSession.class);
+        when(session.getAudits()).thenReturn(audits);
         when(session.head()).thenReturn(mock(Head.class));
         when(session.head().getTargetField()).thenReturn(field);
+        when(session.head().getSourceField()).thenReturn(field);
         writer.write(session);
     }
 
@@ -173,7 +178,7 @@ public abstract class BaseDocumentWriterTest {
     private void setTargetValue(Object targetValue) {
         writer.setTargetValueConverter(new TargetValueConverter(classLoader, conversionService) {
             @Override
-            public void convert(AtlasInternalSession session, LookupTable lookupTable, Field sourceField, Object parentObject, Field targetField) throws AtlasException {
+            public void populateTargetField(AtlasInternalSession session, LookupTable lookupTable, Field sourceField, Object parentObject, Field targetField) throws AtlasException {
                 targetField.setValue(targetValue);
                 return;
             }

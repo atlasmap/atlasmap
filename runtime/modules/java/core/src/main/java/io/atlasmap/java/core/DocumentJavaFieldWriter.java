@@ -31,6 +31,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.NavigableMap;
 import java.util.NavigableSet;
 import java.util.Queue;
@@ -76,6 +77,7 @@ public class DocumentJavaFieldWriter implements AtlasFieldWriter {
     private TargetValueConverter converter;
     private AtlasConversionService conversionService;
     private Map<Class<?>, Class<?>> defaultCollectionImplClasses = new HashMap<>();
+    private Map<Field, Object> fieldParentQueue = new HashMap<>();
 
     public DocumentJavaFieldWriter(AtlasConversionService conversion) {
         this.conversionService = conversion;
@@ -101,23 +103,20 @@ public class DocumentJavaFieldWriter implements AtlasFieldWriter {
     public void write(AtlasInternalSession session) throws AtlasException {
         Object parentObject = getParentObject(session);
         populateTargetFieldValue(session, parentObject);
-        write(session, parentObject);
+        if (parentObject != null) {
+            Field targetField = session.head().getTargetField();
+            AtlasPath path = new AtlasPath(targetField.getPath());
+            List<SegmentContext> segmentContexts = path.getSegmentContexts(true);
+            converter.convertTargetValue(session, parentObject, targetField);
+            addChildObject(targetField, segmentContexts.get(segmentContexts.size() - 1), parentObject, targetField.getValue());
+        }
     }
 
     public void populateTargetFieldValue(AtlasInternalSession session, Object parentObject) throws AtlasException {
         Field sourceField = session.head().getSourceField();
         Field targetField = session.head().getTargetField();
         LookupTable lookupTable = session.head().getLookupTable();
-        converter.convert(session, lookupTable, sourceField, parentObject, targetField);
-    }
-
-    public void write(AtlasInternalSession session, Object parentObject) throws AtlasException {
-        if (parentObject != null) {
-            Field targetField = session.head().getTargetField();
-            AtlasPath path = new AtlasPath(targetField.getPath());
-            List<SegmentContext> segmentContexts = path.getSegmentContexts(true);
-            addChildObject(targetField, segmentContexts.get(segmentContexts.size() - 1), parentObject, targetField.getValue());
-        }
+        converter.populateTargetField(session, lookupTable, sourceField, parentObject, targetField);
     }
 
     public Object getParentObject(AtlasInternalSession session) throws AtlasException {
@@ -137,11 +136,8 @@ public class DocumentJavaFieldWriter implements AtlasFieldWriter {
                 targetField.setFieldType(fieldTypeFromClass);
             }
             if (LOG.isDebugEnabled()) {
-                LOG.debug("Now processing field: " + targetField);
-                LOG.debug("Field type: " + targetField.getFieldType());
-                LOG.debug("Field path: " + targetField.getPath());
-                LOG.debug("Field value: " + targetField.getValue());
-                LOG.debug("Field className: " + targetFieldClassName);
+                LOG.debug("Now processing Java target field:[type={}, path={}, value={}, className={}]",
+                        targetField.getFieldType(), targetField.getPath(), targetField.getValue(), targetFieldClassName);
             }
 
             processedPaths.add(targetField.getPath());
@@ -215,6 +211,23 @@ public class DocumentJavaFieldWriter implements AtlasFieldWriter {
                 throw (AtlasException) t;
             }
             throw new AtlasException(t);
+        }
+    }
+
+    public void enqueueFieldAndParent(Field field, Object parentObject) {
+        this.fieldParentQueue.put(field, parentObject);
+    }
+
+    public void commitWriting(AtlasInternalSession session) throws AtlasException {
+        for (Entry<Field, Object> e : this.fieldParentQueue.entrySet()) {
+            Object parentObject = e.getValue();
+            if (parentObject != null) {
+                Field targetField = e.getKey();
+                AtlasPath path = new AtlasPath(targetField.getPath());
+                List<SegmentContext> segmentContexts = path.getSegmentContexts(true);
+                converter.convertTargetValue(session, parentObject, targetField);
+                addChildObject(targetField, segmentContexts.get(segmentContexts.size() - 1), parentObject, targetField.getValue());
+            }
         }
     }
 

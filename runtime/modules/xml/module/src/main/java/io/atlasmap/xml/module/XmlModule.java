@@ -136,7 +136,7 @@ public class XmlModule extends BaseAtlasModule {
     }
 
     @Override
-    public void processSourceFieldMapping(AtlasInternalSession session) throws AtlasException {
+    public void readSourceValue(AtlasInternalSession session) throws AtlasException {
         Field sourceField = session.head().getSourceField();
         XmlFieldReader reader = session.getFieldReader(getDocId(), XmlFieldReader.class);
         if (reader == null) {
@@ -146,8 +146,6 @@ public class XmlModule extends BaseAtlasModule {
             return;
         }
         reader.read(session);
-        sourceField = applySourceFieldActions(session);
-        session.head().setSourceField(sourceField);
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("{}: processSourceFieldMapping completed: SourceField:[docId={}, path={}, type={}, value={}]",
@@ -157,7 +155,7 @@ public class XmlModule extends BaseAtlasModule {
     }
 
     @Override
-    public void processTargetFieldMapping(AtlasInternalSession session) throws AtlasException {
+    public void populateTargetField(AtlasInternalSession session) throws AtlasException {
         Field sourceField = session.head().getSourceField();
         Field targetField = session.head().getTargetField();
         XmlPath path = new XmlPath(targetField.getPath());
@@ -176,12 +174,25 @@ public class XmlModule extends BaseAtlasModule {
             if (sourceField instanceof FieldGroup) {
                 List<Field> subFields = ((FieldGroup)sourceField).getField();
                 if (subFields != null && subFields.size() > 0) {
-                    // The last one wins for compatibility
-                    sourceField = subFields.get(subFields.size() - 1);
+                    Integer index = targetField.getIndex();
+                    if (index != null) {
+                        if (subFields.size() > index) {
+                            sourceField = subFields.get(index);
+                        } else {
+                            AtlasUtil.addAudit(session, getDocId(), String.format(
+                                    "The number of source fields (%s) is smaller than target index (%s) - ignoring",
+                                    subFields.size(), index),
+                                    null, AuditStatus.WARN, null);
+                            return;
+                        }
+                    } else {
+                        // The last one wins for compatibility
+                        sourceField = subFields.get(subFields.size() - 1);
+                    }
                     session.head().setSourceField(sourceField);
                 }
             }
-            populateTargetFieldValue(session);
+            super.populateTargetField(session);
         } else if (sourceField instanceof FieldGroup) {
             for (int i=0; i<((FieldGroup)sourceField).getField().size(); i++) {
                 Field sourceSubField = ((FieldGroup)sourceField).getField().get(i);
@@ -193,7 +204,7 @@ public class XmlModule extends BaseAtlasModule {
                 targetFieldGroup.getField().add(targetSubField);
                 session.head().setSourceField(sourceSubField);
                 session.head().setTargetField(targetSubField);
-                populateTargetFieldValue(session);
+                super.populateTargetField(session);
             }
             session.head().setSourceField(sourceField);
             session.head().setTargetField(targetFieldGroup);
@@ -204,20 +215,8 @@ public class XmlModule extends BaseAtlasModule {
             targetSubField.setPath(path.toString());
             targetFieldGroup.getField().add(targetSubField);
             session.head().setTargetField(targetSubField);
-            populateTargetFieldValue(session);
+            super.populateTargetField(session);
             session.head().setTargetField(targetFieldGroup);
-        }
-
-        session.head().setTargetField(applyTargetFieldActions(session));
-
-        XmlFieldWriter writer = session.getFieldWriter(getDocId(), XmlFieldWriter.class);
-        if (targetFieldGroup != null) {
-            for (Field f : targetFieldGroup.getField()) {
-                session.head().setTargetField(f);
-                writer.write(session);
-            }
-        } else {
-            writer.write(session);
         }
 
         if (LOG.isDebugEnabled()) {
@@ -226,6 +225,20 @@ public class XmlModule extends BaseAtlasModule {
                     getDocId(), sourceField.getDocId(), sourceField.getPath(), sourceField.getFieldType(),
                     sourceField.getValue(), targetField.getDocId(), targetField.getPath(), targetField.getFieldType(),
                     targetField.getValue());
+        }
+    }
+
+    @Override
+    public void writeTargetValue(AtlasInternalSession session) throws AtlasException {
+        XmlFieldWriter writer = session.getFieldWriter(getDocId(), XmlFieldWriter.class);
+        if (session.head().getTargetField() instanceof FieldGroup) {
+            FieldGroup targetFieldGroup = (FieldGroup) session.head().getTargetField();
+            for (Field f : targetFieldGroup.getField()) {
+                session.head().setTargetField(f);
+                writer.write(session);
+            }
+        } else {
+            writer.write(session);
         }
     }
 

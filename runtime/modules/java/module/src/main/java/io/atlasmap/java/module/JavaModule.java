@@ -15,9 +15,7 @@
  */
 package io.atlasmap.java.module;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -169,7 +167,7 @@ public class JavaModule extends BaseAtlasModule {
     }
 
     @Override
-    public void processSourceFieldMapping(AtlasInternalSession session) throws AtlasException {
+    public void readSourceValue(AtlasInternalSession session) throws AtlasException {
         Field sourceField = session.head().getSourceField();
         DocumentJavaFieldReader reader = session.getFieldReader(getDocId(), DocumentJavaFieldReader.class);
         if (reader == null) {
@@ -179,8 +177,6 @@ public class JavaModule extends BaseAtlasModule {
             return;
         }
         reader.read(session);
-        sourceField = applySourceFieldActions(session);
-        session.head().setSourceField(sourceField);
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("{}: processSourceFieldMapping completed: SourceField:[docId={}, path={}, type={}, value={}]",
@@ -189,7 +185,7 @@ public class JavaModule extends BaseAtlasModule {
     }
 
     @Override
-    public void processTargetFieldMapping(AtlasInternalSession session) throws AtlasException {
+    public void populateTargetField(AtlasInternalSession session) throws AtlasException {
         Field sourceField = session.head().getSourceField();
         Field targetField = session.head().getTargetField();
         AtlasPath path = new AtlasPath(targetField.getPath());
@@ -200,21 +196,33 @@ public class JavaModule extends BaseAtlasModule {
         }
 
         DocumentJavaFieldWriter writer = session.getFieldWriter(getDocId(), DocumentJavaFieldWriter.class);
-        Map<Field, Object> parentObjects = new HashMap<>();
         if (targetFieldGroup == null) {
             if (sourceField instanceof FieldGroup) {
                 List<Field> subFields = ((FieldGroup)sourceField).getField();
                 if (subFields == null || subFields.size() == 0) {
                     return;
                 }
-                // The last one wins for compatibility
-                sourceField = subFields.get(subFields.size() - 1);
+                Integer index = targetField.getIndex();
+                if (index != null) {
+                    if (subFields.size() > index) {
+                        sourceField = subFields.get(index);
+                    } else {
+                        AtlasUtil.addAudit(session, getDocId(), String.format(
+                                "The number of source fields (%s) is smaller than target index (%s) - ignoring",
+                                subFields.size(), index),
+                                null, AuditStatus.WARN, null);
+                        return;
+                    }
+                } else {
+                    // The last one wins for compatibility
+                    sourceField = subFields.get(subFields.size() - 1);
+                }
                 session.head().setSourceField(sourceField);
             }
             Object parentObject = writer.getParentObject(session);
             if (parentObject != null) {
                 writer.populateTargetFieldValue(session, parentObject);
-                parentObjects.put(targetField, parentObject);
+                writer.enqueueFieldAndParent(targetField, parentObject);
             }
         } else if (sourceField instanceof FieldGroup) {
             for (int i=0; i<((FieldGroup)sourceField).getField().size(); i++) {
@@ -230,7 +238,7 @@ public class JavaModule extends BaseAtlasModule {
                 Object parentObject = writer.getParentObject(session);
                 if (parentObject != null) {
                     writer.populateTargetFieldValue(session, parentObject);
-                    parentObjects.put(targetSubField, parentObject);
+                    writer.enqueueFieldAndParent(targetSubField, parentObject);
                 }
             }
             session.head().setSourceField(sourceField);
@@ -245,19 +253,9 @@ public class JavaModule extends BaseAtlasModule {
             Object parentObject = writer.getParentObject(session);
             if (parentObject != null) {
                 writer.populateTargetFieldValue(session, parentObject);
-                parentObjects.put(targetSubField, parentObject);
+                writer.enqueueFieldAndParent(targetSubField, parentObject);
             }
             session.head().setTargetField(targetFieldGroup);
-        }
-
-        // While Java field writer applies field actions as well,
-        // we need to do it here for collection field
-        if (targetFieldGroup != null) {
-            session.head().setTargetField(applyTargetFieldActions(session));
-        }
-        for (Map.Entry<Field,Object> e : parentObjects.entrySet()) {
-            session.head().setTargetField(e.getKey());
-            writer.write(session, e.getValue());
         }
 
         if (LOG.isDebugEnabled()) {
@@ -265,6 +263,12 @@ public class JavaModule extends BaseAtlasModule {
                     getDocId(), sourceField.getDocId(), sourceField.getPath(), sourceField.getFieldType(), sourceField.getValue(),
                     targetField.getDocId(), targetField.getPath(), targetField.getFieldType(), targetField.getValue());
         }
+    }
+
+    @Override
+    public void writeTargetValue(AtlasInternalSession session) throws AtlasException {
+        DocumentJavaFieldWriter writer = session.getFieldWriter(getDocId(), DocumentJavaFieldWriter.class);
+        writer.commitWriting(session);
     }
 
     @Override
