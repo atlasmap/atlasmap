@@ -348,6 +348,7 @@ public class SchemaInspector {
             throws Exception {
         // this is the parent of the group
         for (XSParticle particle : modelGroup.getChildren()) {
+            // Don't cache siblings to avoid https://github.com/atlasmap/atlasmap/issues/255
             Set<String> cachedTypeCopy = new HashSet<>(cachedComplexType);
             printParticle(particle, rootName, xmlComplexType, cachedTypeCopy);
         }
