@@ -45,6 +45,30 @@ export class AtlasmapNavbarComponent implements OnInit {
     this.schemaDoc = false;
   }
 
+  get instanceSourcesPanel(): string {
+    return this.INSTANCE_SOURCES_PANEL;
+  }
+
+  get instanceTargetsPanel(): string {
+    return this.INSTANCE_SOURCES_PANEL;
+  }
+
+  get schemaSourcesPanel(): string {
+    return this.SCHEMA_SOURCES_PANEL;
+  }
+
+  get schemaTargetsPanel(): string {
+    return this.SCHEMA_TARGETS_PANEL;
+  }
+
+  get getInstanceDoc(): boolean {
+    return this.instanceDoc;
+  }
+
+  get getSchemaDoc(): boolean {
+    return this.schemaDoc;
+  }
+
   private clearPanelCheckbox(boxName: string) {
     const fields: any = document.getElementsByName(boxName);
     if (fields != null && fields.length > 0) {

@@ -32,22 +32,22 @@
                   <label>Schema Document</label>
                   <div class="dropdown-content-schema" style="font-size:12px;">
                     <label>
-                      <input type="checkbox" value="sources-panel" name="schema-sources-panel" 
-                        style="width:30px;margin-left:20px;" (click)="handlePanelClick(SCHEMA_SOURCES_PANEL)"
+                      <input type="checkbox" value="sources-panel" name="schema-sources-panel"
+                        style="width:30px;margin-left:20px;" (click)="handlePanelClick(schemaSourcesPanel)"
                         (change)="handleSchemaDoc($event)"/></label>
                         <label class="sources">
                           <i class="fa fa-hdd-o"></i> Sources</label>
                     <label>
-                      <input type="checkbox" value="targets-panel" name="schema-targets-panel" 
-                        style="width:30px;margin-left:10px;" (click)="handlePanelClick(SCHEMA_TARGETS_PANEL)"
+                      <input type="checkbox" value="targets-panel" name="schema-targets-panel"
+                        style="width:30px;margin-left:10px;" (click)="handlePanelClick(schemaTargetsPanel)"
                         (change)="handleSchemaDoc($event)"/></label>
                         <label class="targets">
                           <i class="fa fa-download"></i> Targets</label>
 
-                    <div class='AtlasmapNavbarComponent' *ngIf="schemaDoc">
+                    <div class='AtlasmapNavbarComponent' *ngIf="getSchemaDoc">
                       <li>
                         <a href="#">
-                          <label for="userschemafile" class="btn" 
+                          <label for="userschemafile" class="btn"
                           style="width:60px; border: 1px solid #808080; margin-left:60px; text-align:center; vertical-align:middle; font-size:12px;margin-bottom:4px;"
                             >Import</label>
 		                    <input type="file" accept="{{ getFileSuffix() }}" name="userschemafile" style="display:none"
@@ -65,22 +65,22 @@
                   <label>Instance Document</label>
                   <div class="dropdown-content-instance" style="font-size:12px;">
                     <label>
-                      <input ng-model="checkboxvalue" type="checkbox" value="sources-panel" name="instance-sources-panel" 
-                        style="width:30px;margin-left:20px;" (click)="handlePanelClick(INSTANCE_SOURCES_PANEL)"
+                      <input ng-model="checkboxvalue" type="checkbox" value="sources-panel" name="instance-sources-panel"
+                        style="width:30px;margin-left:20px;" (click)="handlePanelClick(instanceSourcesPanel)"
                         (change)="handleInstanceDoc($event)"/></label>
                         <label class="sources">
                           <i class="fa fa-hdd-o"></i> Sources</label>
                     <label>
-                      <input ng-model="checkboxvalue" type="checkbox" value="targets-panel" name="instance-targets-panel" 
-                        style="width:30px;margin-left:10px;" (click)="handlePanelClick(INSTANCE_TARGETS_PANEL)"
+                      <input ng-model="checkboxvalue" type="checkbox" value="targets-panel" name="instance-targets-panel"
+                        style="width:30px;margin-left:10px;" (click)="handlePanelClick(instanceTargetsPanel)"
                         (change)="handleInstanceDoc($event)"/></label>
                         <label class="targets">
                           <i class="fa fa-download"></i> Targets</label>
 
-                    <div class='AtlasmapNavbarComponent' *ngIf="instanceDoc">
+                    <div class='AtlasmapNavbarComponent' *ngIf="getInstanceDoc">
                       <li>
                         <a href="#">
-                          <label for="userinstancefile" class="btn" 
+                          <label for="userinstancefile" class="btn"
                           style="width:60px; border: 1px solid #808080; margin-left:60px; text-align:center; vertical-align:middle; font-size:12px;margin-bottom:4px;"
                             >Import</label>
 		                    <input type="file" accept="{{ getFileSuffix() }}" name="userinstancefile" style="display:none"
