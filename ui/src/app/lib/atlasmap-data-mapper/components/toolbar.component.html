@@ -1,26 +1,29 @@
 <div class="toolbar clearfix">
   <div class="toolbar-icons pull-right">
 
-    <div *ngIf="!cfg.initCfg.disableNavbar" dropdown class="dropdown inline-block pull-left">
-      <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-        <span>
-          <i [attr.class]="getCSSClass('exportMappings')" style="color: black;"
-            tooltip="Export the current mappings." placement="top"></i>
-        </span>
-	  </a>
-      <ul class="dropdown-menu dropdown-menu-right">
-        <div style="font-size:14px; width:426px;">
-          <a href="#">
-            <div style="margin-left:8px; margin-right:8px;">Current mapping
-              <input type="text" (change)="handleMappingsInstanceName($event)" placeholder="atlasmap-mapping.adm"/>
-                <button type="button" style="margin-left:7px; margin-right:4px;" (click)="handleExportMapping($event)">OK</button>
-                <button type="button" (click)="handleExportMappingCancel()">Cancel</button>
+    <nav class="navbar navbar-default navbar-pf inline-block pull-left">
+      <ul class="nav navbar-nav navbar-utility">
+        <div *ngIf="!cfg.initCfg.disableNavbar" dropdown class="dropdown inline-block pull-left">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            <span>
+              <i [attr.class]="getCSSClass('exportMappings')" style="margin-top:-6px;color: black;"
+                tooltip="Export the current mappings." placement="bottom"></i>
+            </span>
+	      </a>
+          <ul class="dropdown-menu dropdown-menu-right">
+            <div style="font-size:14px; width:426px;">
+              <a href="#">
+                <div style="margin-left:8px; margin-right:8px;">Export mappings
+                  <input type="text" (change)="handleMappingsInstanceName($event)" placeholder="atlasmap-mapping.adm"/>
+                    <button type="button" style="margin-left:7px; margin-right:4px;" (click)="handleExportMapping($event)">OK</button>
+                    <button type="button" (click)="handleExportMappingCancel()">Cancel</button>
+                </div>
+              </a>
             </div>
-          </a>
+          </ul>
         </div>
-      </ul> 
-    </div>
-
+      </ul>
+    </nav>
     <i class="fa fa-plus link" (click)="toolbarButtonClicked('addMapping', $event);"
        tooltip="Add new mapping" placement="bottom"></i>
 
@@ -71,7 +74,6 @@
           </div>
           <i class="fa fa-check" *ngIf="cfg.showUnmappedFields" class="pull-right"></i>
         </li>
-
         <li *ngIf="!cfg.initCfg.disableMappingPreviewMode" role="menuitem" (click)="toolbarButtonClicked('showMappingPreview', $event);" class="clearfix">
           <div class="pull-left">
             <a class="dropdown-item" href="#">
@@ -80,7 +82,6 @@
           </div>
           <i class="fa fa-check" *ngIf="cfg.showMappingPreview" class="pull-right"></i>
         </li>
-
       </ul>
     </div>
   </div>

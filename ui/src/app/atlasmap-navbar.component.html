@@ -18,16 +18,16 @@
             <span class="pficon pficon-import"></span> Import
             <b class="caret"></b>
           </a>
-          <ul class="dropdown-menu" role="menu">
+          <ul class="dropdown-menu dropdown-menu-right" role="menu">
             <div>
-              <li role="menuitem" style="width:230px; text-align:left; font-size:14px; border: 1px solid #808080; margin-bottom:2px;">
-                <a  class="dropdown-item" href="#">
+              <li role="menuitem" style="width:230px; text-align:left; font-size:14px; border: 1px solid #d1d1d1; margin-bottom:2px;">
+                <a  class="dropdown-item" href="#" style="position: relative">
                   <label for="usermappingsfile">AtlasMap Mappings</label>
 		          <input type="file" accept=".adm" name="usermappingsfile" style="display:none"
 		            id="usermappingsfile" (change)="processMappingsCatalog($event)">
 	            </a>
               </li>
-              <li role="menuitem" style="width:230px; text-align:left; font-size:14px; border: 1px solid #808080; margin-bottom:2px;">
+              <li role="menuitem" style="width:230px; text-align:left; font-size:14px; border: 1px solid #d1d1d1; margin-bottom:2px;">
                 <a class="dropdown-item" href="#">
                   <label>Schema Document</label>
                   <div class="dropdown-content-schema" style="font-size:12px;">
@@ -48,11 +48,11 @@
                       <li>
                         <a href="#">
                           <label for="userschemafile" class="btn"
-                          style="width:60px; border: 1px solid #808080; margin-left:60px; text-align:center; vertical-align:middle; font-size:12px;margin-bottom:4px;"
+                          style="width:60px; border: 1px solid #d1d1d1; margin-left:60px; text-align:center; vertical-align:middle; font-size:12px;margin-bottom:4px;"
                             >Import</label>
 		                    <input type="file" accept="{{ getFileSuffix() }}" name="userschemafile" style="display:none"
 		                      id="userschemafile" (change)="processSchemaDoc($event)">
-		                  <label class="btn" style="width:60px; margin-left:4px; border: 1px solid #808080; text-align:center; vertical-align:middle; font-size:12px;margin-bottom:4px;"
+		                  <label class="btn" style="width:60px; margin-left:4px; border: 1px solid #d1d1d1; text-align:center; vertical-align:middle; font-size:12px;margin-bottom:4px;"
 		                    (click)="handleSchemaCancel()">Cancel</label><BR>
 	                    </a>
                       </li>
@@ -60,7 +60,7 @@
                   </div>
 	            </a>
               </li>
-              <li role="menuitem" style="width:230px; text-align:left; font-size:14px; border: 1px solid #808080;">
+              <li role="menuitem" style="width:230px; text-align:left; font-size:14px; border: 1px solid #d1d1d1;">
                 <a  class="dropdown-item" href="#">
                   <label>Instance Document</label>
                   <div class="dropdown-content-instance" style="font-size:12px;">
@@ -81,11 +81,11 @@
                       <li>
                         <a href="#">
                           <label for="userinstancefile" class="btn"
-                          style="width:60px; border: 1px solid #808080; margin-left:60px; text-align:center; vertical-align:middle; font-size:12px;margin-bottom:4px;"
+                          style="width:60px; border: 1px solid #d1d1d1; margin-left:60px; text-align:center; vertical-align:middle; font-size:12px;margin-bottom:4px;"
                             >Import</label>
 		                    <input type="file" accept="{{ getFileSuffix() }}" name="userinstancefile" style="display:none"
 		                      id="userinstancefile" (change)="processInstanceDoc($event)">
-		                  <label class="btn" style="width:60px; margin-left:4px; border: 1px solid #808080; text-align:center; vertical-align:middle; font-size:12px;margin-bottom:4px;"
+		                  <label class="btn" style="width:60px; margin-left:4px; border: 1px solid #d1d1d1; text-align:center; vertical-align:middle; font-size:12px;margin-bottom:4px;"
 		                    (click)="handleInstanceCancel()">Cancel</label><BR>
 	                    </a>
                       </li>
@@ -102,11 +102,11 @@
             <span class="pficon pficon-export"></span> Export
             <b class="caret"></b>
 	      </a>
-          <ul class="dropdown-menu">
+          <ul class="dropdown-menu dropdown-menu-right" role="menu">
             <div style="font-size:14px; width:426px;">
               <li>
                 <a href="#">
-                  <div style="margin-left:8px; margin-right:8px;">Current mapping
+                  <div style="margin-left:8px; margin-right:8px;">Export mappings
                     <input type="text" (change)="handleMappingsInstanceName($event)" placeholder="atlasmap-mapping.adm"/>
                       <button type="button" style="margin-left:7px; margin-right:4px;" (click)="handleExportMapping($event)">OK</button>
                       <button type="button" (click)="handleExportMappingCancel()">Cancel</button>
