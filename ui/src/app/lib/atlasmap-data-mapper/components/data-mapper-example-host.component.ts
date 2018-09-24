@@ -110,18 +110,18 @@ export class DataMapperAppExampleHostComponent implements OnInit, OnDestroy {
     c.initCfg.addMockJavaSingleSource = false;
     c.initCfg.addMockJavaSources = true;
     c.initCfg.addMockJavaCachedSource = false;
-    c.initCfg.addMockXMLInstanceSources = false;
+    c.initCfg.addMockXMLInstanceSources = true;
     c.initCfg.addMockXMLSchemaSources = true;
     c.initCfg.addMockJSONSources = false;
-    c.initCfg.addMockJSONInstanceSources = false;
+    c.initCfg.addMockJSONInstanceSources = true;
     c.initCfg.addMockJSONSchemaSources = true;
 
     c.initCfg.addMockJavaTarget = true;
     c.initCfg.addMockJavaCachedTarget = false;
-    c.initCfg.addMockXMLInstanceTarget = false;
+    c.initCfg.addMockXMLInstanceTarget = true;
     c.initCfg.addMockXMLSchemaTarget = true;
     c.initCfg.addMockJSONTarget = false;
-    c.initCfg.addMockJSONInstanceTarget = false;
+    c.initCfg.addMockJSONInstanceTarget = true;
     c.initCfg.addMockJSONSchemaTarget = true;
 
     // initialize system

@@ -1,0 +1,12 @@
+{"address": [
+  {
+    "use": "home",
+    "type": "physical",
+    "line": [
+      "Test line"
+    ],
+    "city": "WESTBOROUGH",
+    "postalCode": "01581",
+    "country": "USA"
+  }
+]}
