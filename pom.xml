@@ -78,6 +78,13 @@
     <module>docs</module>
   </modules>
 
+  <repositories>
+    <repository>
+      <id>jboss-fuse</id>
+      <url>https://repository.jboss.org/nexus/content/groups/ea</url>
+    </repository>
+  </repositories>
+
   <build>
     <pluginManagement>
       <plugins>
