@@ -34,6 +34,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.atlasmap.core.AtlasPath;
+import io.atlasmap.core.AtlasUtil;
 import io.atlasmap.java.v2.AtlasJavaModelFactory;
 import io.atlasmap.java.v2.JavaClass;
 import io.atlasmap.java.v2.JavaEnumField;
@@ -184,7 +185,7 @@ public class ClassInspectionService {
 
         JavaClass javaClass = AtlasJavaModelFactory.createJavaClass();
         Set<String> cachedClasses = new HashSet<>();
-        cachedClasses.add(clazz.getCanonicalName()); // we cache ourself
+        cachedClasses.add(clazz.getName()); // we cache ourself
         inspectClass(classLoader, clazz, javaClass, cachedClasses, null);
         return javaClass;
     }
@@ -201,11 +202,12 @@ public class ClassInspectionService {
             clz = clazz;
         }
 
-        if (isMapList(clz.getCanonicalName())) {
+        if (isMapList(clz.getName())) {
             javaClass.setCollectionType(CollectionType.MAP);
         }
 
-        javaClass.setClassName(clz.getCanonicalName());
+        javaClass.setClassName(clz.getName());
+        javaClass.setCanonicalClassName(clz.getCanonicalName());
         javaClass.setPackageName((clz.getPackage() != null ? clz.getPackage().getName() : null));
         javaClass.setAnnotation(clz.isAnnotation());
         javaClass.setAnnonymous(clz.isAnonymousClass());
@@ -217,7 +219,7 @@ public class ClassInspectionService {
         javaClass.setSynthetic(clz.isSynthetic());
 
         if (javaClass.getUri() == null) {
-            javaClass.setUri(String.format(AtlasJavaModelFactory.URI_FORMAT, clz.getCanonicalName()));
+            javaClass.setUri(String.format(AtlasJavaModelFactory.URI_FORMAT, AtlasUtil.escapeForUri(clz.getName())));
         }
 
         if (clz.isPrimitive() || JdkPackages.contains(clz.getPackage().getName())) {
@@ -259,7 +261,7 @@ public class ClassInspectionService {
                     javaClass.getJavaEnumFields().getJavaEnumField().add(out);
                     out.setStatus(FieldStatus.SUPPORTED);
                 } else {
-                    out.setClassName(o.getClass().getCanonicalName());
+                    out.setClassName(o.getClass().getName());
                     out.setStatus(FieldStatus.ERROR);
                 }
             }
@@ -315,7 +317,8 @@ public class ClassInspectionService {
             returnType = detectArrayClass(returnType);
         }
 
-        field.setClassName(returnType.getCanonicalName());
+        field.setClassName(returnType.getName());
+        field.setCanonicalClassName(returnType.getCanonicalName());
         field.setGetMethod(m.getName());
         field.setFieldType(getConversionService().fieldTypeFromClass(returnType));
         if (getConversionService().isPrimitive(returnType) || getConversionService().isBoxedPrimitive(returnType)) {
@@ -331,12 +334,12 @@ public class ClassInspectionService {
             JavaClass tmpField = convertJavaFieldToJavaClass(field);
             field = tmpField;
 
-            if (returnType.getCanonicalName() == null) {
+            if (returnType.getName() == null) {
                 field.setStatus(FieldStatus.UNSUPPORTED);
-            } else if (!cachedClasses.contains(returnType.getCanonicalName())) {
+            } else if (!cachedClasses.contains(returnType.getName())) {
                 try {
-                    complexClazz = classLoader.loadClass(returnType.getCanonicalName());
-                    cachedClasses.add(returnType.getCanonicalName());
+                    complexClazz = classLoader.loadClass(returnType.getName());
+                    cachedClasses.add(returnType.getName());
                     inspectClass(classLoader, complexClazz, tmpField, cachedClasses, field.getPath());
                     if (tmpField.getStatus() == null) {
                         field.setStatus(FieldStatus.SUPPORTED);
@@ -388,7 +391,8 @@ public class ClassInspectionService {
             paramType = detectArrayClass(paramType);
         }
 
-        field.setClassName(paramType.getCanonicalName());
+        field.setClassName(paramType.getName());
+        field.setCanonicalClassName(paramType.getCanonicalName());
         field.setSetMethod(m.getName());
         field.setFieldType(getConversionService().fieldTypeFromClass(paramType));
         if (getConversionService().isPrimitive(paramType) || getConversionService().isBoxedPrimitive(paramType)) {
@@ -404,12 +408,12 @@ public class ClassInspectionService {
             JavaClass tmpField = convertJavaFieldToJavaClass(field);
             field = tmpField;
 
-            if (paramType.getCanonicalName() == null) {
+            if (paramType.getName() == null) {
                 field.setStatus(FieldStatus.UNSUPPORTED);
-            } else if (!cachedClasses.contains(paramType.getCanonicalName())) {
+            } else if (!cachedClasses.contains(paramType.getName())) {
                 try {
-                    complexClazz = classLoader.loadClass(paramType.getCanonicalName());
-                    cachedClasses.add(paramType.getCanonicalName());
+                    complexClazz = classLoader.loadClass(paramType.getName());
+                    cachedClasses.add(paramType.getName());
                     inspectClass(classLoader, complexClazz, tmpField, cachedClasses, field.getPath());
                     if (tmpField.getStatus() == null) {
                         field.setStatus(FieldStatus.SUPPORTED);
@@ -437,7 +441,7 @@ public class ClassInspectionService {
             s.setPath(f.getName());
         }
 
-        if (isMapList(clazz.getCanonicalName())) {
+        if (isMapList(clazz.getName())) {
             s.setCollectionType(CollectionType.MAP);
         }
 
@@ -447,7 +451,7 @@ public class ClassInspectionService {
             clazz = detectArrayClass(clazz);
         } else if (Collection.class.isAssignableFrom(clazz)) {
             s.setCollectionType(CollectionType.LIST);
-            s.setCollectionClassName(clazz.getCanonicalName());
+            s.setCollectionClassName(clazz.getName());
             try {
                 clazz = detectListClass(classLoader, f);
                 if (clazz == null) {
@@ -475,12 +479,12 @@ public class ClassInspectionService {
             JavaClass tmpField = convertJavaFieldToJavaClass(s);
             s = tmpField;
 
-            if (clazz.getCanonicalName() == null) {
+            if (clazz.getName() == null) {
                 s.setStatus(FieldStatus.UNSUPPORTED);
-            } else if (!cachedClasses.contains(clazz.getCanonicalName())) {
+            } else if (!cachedClasses.contains(clazz.getName())) {
                 try {
-                    complexClazz = classLoader.loadClass(clazz.getCanonicalName());
-                    cachedClasses.add(clazz.getCanonicalName());
+                    complexClazz = classLoader.loadClass(clazz.getName());
+                    cachedClasses.add(clazz.getName());
                     inspectClass(classLoader, complexClazz, tmpField, cachedClasses, s.getPath());
                     if (tmpField.getStatus() == null) {
                         s.setStatus(FieldStatus.SUPPORTED);
@@ -493,7 +497,8 @@ public class ClassInspectionService {
             }
         }
 
-        s.setClassName(clazz.getCanonicalName());
+        s.setClassName(clazz.getName());
+        s.setCanonicalClassName(clazz.getCanonicalName());
         s.setSynthetic(f.isSynthetic());
 
         Annotation[] annotations = f.getAnnotations();
@@ -502,7 +507,7 @@ public class ClassInspectionService {
                 if (s.getAnnotations() == null) {
                     s.setAnnotations(new StringList());
                 }
-                s.getAnnotations().getString().add(a.annotationType().getCanonicalName());
+                s.getAnnotations().getString().add(a.annotationType().getName());
             }
         }
 
@@ -773,7 +778,7 @@ public class ClassInspectionService {
                 TypeVariable<?> tv = (TypeVariable<?>) t;
                 // TODO: no current need, but we may want to have treatment for 'T'
                 // tv.getTypeName()
-                pTypes.add(((Class<?>) tv.getAnnotatedBounds()[0].getType()).getCanonicalName());
+                pTypes.add(((Class<?>) tv.getAnnotatedBounds()[0].getType()).getName());
             }
 
             if (!onlyClasses && t instanceof WildcardType) {
@@ -783,14 +788,14 @@ public class ClassInspectionService {
                 // TODO: No current need, but we may want to have treatment for '?'
                 // wc.getTypeName()
                 if (upperBounds != null && upperBounds.length > 0) {
-                    pTypes.add(wc.getUpperBounds()[0].getClass().getCanonicalName());
+                    pTypes.add(wc.getUpperBounds()[0].getClass().getName());
                 } else if (lowerBounds != null && lowerBounds.length > 0) {
-                    pTypes.add(wc.getLowerBounds()[0].getClass().getCanonicalName());
+                    pTypes.add(wc.getLowerBounds()[0].getClass().getName());
                 }
             }
 
             if (t instanceof Class) {
-                pTypes.add(((Class<?>) t).getCanonicalName());
+                pTypes.add(((Class<?>) t).getName());
             }
         }
         return pTypes;
@@ -814,7 +819,7 @@ public class ClassInspectionService {
         javaClass.setStatus(javaField.getStatus());
         javaClass.setFieldType(javaField.getFieldType());
         if (javaField.getClassName() != null) {
-            javaClass.setUri(String.format(AtlasJavaModelFactory.URI_FORMAT, javaField.getClassName()));
+            javaClass.setUri(String.format(AtlasJavaModelFactory.URI_FORMAT, AtlasUtil.escapeForUri(javaField.getClassName())));
         }
         javaClass.setValue(javaField.getValue());
         javaClass.setAnnotations(javaField.getAnnotations());

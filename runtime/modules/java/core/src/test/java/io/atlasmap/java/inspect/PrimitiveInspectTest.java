@@ -37,7 +37,7 @@ public class PrimitiveInspectTest {
     }
 
     @Test
-    public void testPrimitives() {
+    public void testPrimitives() throws Exception {
         PrimitiveValidationUtil.validatePrimitive(classInspectionService.inspectClass(boolean.class), "boolean");
         PrimitiveValidationUtil.validatePrimitive(classInspectionService.inspectClass(byte.class), "byte");
         PrimitiveValidationUtil.validatePrimitive(classInspectionService.inspectClass(char.class), "char");
@@ -49,7 +49,7 @@ public class PrimitiveInspectTest {
     }
 
     @Test
-    public void testPrimitiveArrays() {
+    public void testPrimitiveArrays() throws Exception {
         PrimitiveValidationUtil.validatePrimitiveArray(classInspectionService.inspectClass(boolean[].class), "boolean",
                 1);
         PrimitiveValidationUtil.validatePrimitiveArray(classInspectionService.inspectClass(byte[].class), "byte", 1);
@@ -63,7 +63,7 @@ public class PrimitiveInspectTest {
     }
 
     @Test
-    public void testPrimitiveTwoDimArrays() {
+    public void testPrimitiveTwoDimArrays() throws Exception {
         PrimitiveValidationUtil.validatePrimitiveArray(classInspectionService.inspectClass(boolean[][].class),
                 "boolean", 2);
         PrimitiveValidationUtil.validatePrimitiveArray(classInspectionService.inspectClass(byte[][].class), "byte", 2);
@@ -79,7 +79,7 @@ public class PrimitiveInspectTest {
     }
 
     @Test
-    public void testPrimitiveThreeDimArrays() {
+    public void testPrimitiveThreeDimArrays() throws Exception {
         PrimitiveValidationUtil.validatePrimitiveArray(classInspectionService.inspectClass(boolean[][][].class),
                 "boolean", 3);
         PrimitiveValidationUtil.validatePrimitiveArray(classInspectionService.inspectClass(byte[][][].class), "byte",

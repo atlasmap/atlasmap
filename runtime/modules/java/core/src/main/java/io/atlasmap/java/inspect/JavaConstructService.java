@@ -16,6 +16,7 @@
 package io.atlasmap.java.inspect;
 
 import java.lang.reflect.Array;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -34,7 +35,7 @@ public class JavaConstructService {
     private AtlasConversionService atlasConversionService = null;
 
     public Object constructClass(JavaClass javaClass, List<String> pathFilters)
-            throws ConstructException, ClassNotFoundException, IllegalAccessException, InstantiationException {
+            throws ConstructException, ClassNotFoundException, IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
         validateJavaClass(javaClass);
 
         if (getConversionService().isPrimitive(javaClass.getClassName())) {
@@ -61,7 +62,7 @@ public class JavaConstructService {
     }
 
     private Object constructClassIgnoreCollection(JavaClass javaClass, List<String> pathFilters)
-            throws ConstructException, ClassNotFoundException, IllegalAccessException, InstantiationException {
+            throws ConstructException, ClassNotFoundException, IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
         Object targetObject = instantiateClass(javaClass.getClassName());
         filterFields(javaClass, pathFilters);
 
@@ -129,13 +130,15 @@ public class JavaConstructService {
     }
 
     private Object instantiateClass(String className)
-            throws ClassNotFoundException, IllegalAccessException, InstantiationException {
+            throws ClassNotFoundException, IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
         Class<?> c = Class.forName(className);
-        return c.newInstance();
+        Constructor<?> constructor = c.getDeclaredConstructor(new Class[0]);
+        constructor.setAccessible(true);
+        return constructor.newInstance(new Object[0]);
     }
 
     private Object instantiateArray(JavaClass javaClass, List<String> pathFilters)
-            throws ConstructException, ClassNotFoundException, IllegalAccessException, InstantiationException {
+            throws ConstructException, ClassNotFoundException, IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
         if (LOG.isDebugEnabled()) {
             LOG.debug(String.format("Constructing array c=%s size=%s", javaClass.getClassName(),
                     javaClass.getArraySize()));

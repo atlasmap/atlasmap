@@ -17,6 +17,7 @@ package io.atlasmap.java.inspect;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -329,6 +330,17 @@ public class ClassValidationUtil {
         assertEquals("created", f.getName());
         assertEquals("java.util.Date", f.getClassName());
         assertEquals(FieldType.DATE_TIME, f.getFieldType());
+        assertEquals(false, f.isPrimitive());
+        assertNull(f.getCollectionType());
+        assertEquals(false, f.isSynthetic());
+    }
+
+    public static void validateSomeStaticClass(JavaField f) {
+        assertNotNull(f);
+        assertEquals("someStaticClass", f.getName());
+        assertEquals("io.atlasmap.java.test.BaseOrder$SomeStaticClass", f.getClassName());
+        assertEquals(FieldType.COMPLEX, f.getFieldType());
+        assertNotEquals(FieldStatus.NOT_FOUND, f.getStatus());
         assertEquals(false, f.isPrimitive());
         assertNull(f.getCollectionType());
         assertEquals(false, f.isSynthetic());

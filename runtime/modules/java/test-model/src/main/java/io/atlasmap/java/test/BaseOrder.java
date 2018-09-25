@@ -26,6 +26,17 @@ public abstract class BaseOrder implements Serializable {
     private BaseAddress address;
     private Integer orderId;
     private Date created;
+    private SomeStaticClass someStaticClass;
+
+    public static class SomeStaticClass {
+        private String someField;
+        public void setSomeField(String v) {
+            this.someField = v;
+        }
+        public String getSomeField() {
+            return this.someField;
+        }
+    }
 
     public Integer getOrderId() {
         return orderId;
@@ -101,5 +112,13 @@ public abstract class BaseOrder implements Serializable {
     public String toString() {
         return getClass().getName() + " [orderId=" + orderId + " contact=" + (contact == null ? "" : contact.toString())
                 + ", address=" + (address == null ? "" : address.toString()) + "]";
+    }
+
+    public SomeStaticClass getSomeStaticClass() {
+        return someStaticClass;
+    }
+
+    public void setSomeStaticClass(SomeStaticClass someStaticClass) {
+        this.someStaticClass = someStaticClass;
     }
 }

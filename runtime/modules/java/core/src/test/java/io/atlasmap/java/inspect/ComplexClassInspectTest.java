@@ -65,7 +65,7 @@ public class ComplexClassInspectTest {
         validateComplexClass(c);
     }
 
-    public void validateComplexClass(JavaClass c) {
+    private void validateComplexClass(JavaClass c) {
         assertNull(c.getAnnotations());
         assertNull(c.getArrayDimensions());
         assertNull(c.getGetMethod());
@@ -82,7 +82,7 @@ public class ComplexClassInspectTest {
         assertNull(c.getValue());
 
         // Two serialVersionUID fields due to inheritance
-        assertEquals(new Integer(6), new Integer(c.getJavaFields().getJavaField().size()));
+        assertEquals(new Integer(7), new Integer(c.getJavaFields().getJavaField().size()));
 
         Integer validated = 0;
         for (JavaField f : c.getJavaFields().getJavaField()) {
@@ -110,6 +110,11 @@ public class ComplexClassInspectTest {
 
             if ("java.util.Date".equals(f.getClassName())) {
                 ClassValidationUtil.validateCreated(f);
+                validated++;
+            }
+
+            if ("someStaticClass".equals(f.getName())) {
+                ClassValidationUtil.validateSomeStaticClass(f);
                 validated++;
             }
         }

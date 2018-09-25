@@ -25,6 +25,8 @@ __optional__|<<_atlas-service-java-stringlist,StringList>>
 __optional__|integer (int32)
 |**arraySize** +
 __optional__|integer (int32)
+|**canonicalClassName** +
+__optional__|string
 |**className** +
 __optional__|string
 |**collectionClassName** +
@@ -144,6 +146,8 @@ __optional__|<<_atlas-service-java-stringlist,StringList>>
 __optional__|integer (int32)
 |**arraySize** +
 __optional__|integer (int32)
+|**canonicalClassName** +
+__optional__|string
 |**className** +
 __optional__|string
 |**collectionClassName** +

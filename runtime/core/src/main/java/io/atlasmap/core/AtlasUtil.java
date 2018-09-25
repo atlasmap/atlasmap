@@ -30,6 +30,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -387,5 +388,53 @@ public class AtlasUtil {
             }
         }
         return buf.toString();
+    }
+
+    public static String escapeForUri(String source) {
+        if (source == null) {
+            return null;
+        }
+        return source.replaceAll(Pattern.quote("!"), "%21")
+                     .replaceAll(Pattern.quote("#"), "%23")
+                     .replaceAll(Pattern.quote("$"), "%24")
+                     .replaceAll(Pattern.quote("&"), "%26")
+                     .replaceAll(Pattern.quote("'"), "%27")
+                     .replaceAll(Pattern.quote("("), "%28")
+                     .replaceAll(Pattern.quote(")"), "%29")
+                     .replaceAll(Pattern.quote("*"), "%2A")
+                     .replaceAll(Pattern.quote("+"), "%2B")
+                     .replaceAll(Pattern.quote(","), "%2C")
+                     .replaceAll(Pattern.quote("/"), "%2F")
+                     .replaceAll(Pattern.quote(":"), "%3A")
+                     .replaceAll(Pattern.quote(";"), "%3B")
+                     .replaceAll(Pattern.quote("="), "%3D")
+                     .replaceAll(Pattern.quote("?"), "%3F")
+                     .replaceAll(Pattern.quote("@"), "%40")
+                     .replaceAll(Pattern.quote("["), "%5B")
+                     .replaceAll(Pattern.quote("]"), "%5D");
+    }
+
+    public static String unescapeFromUri(String uri) {
+        if (uri == null) {
+            return null;
+        }
+        return uri.replaceAll("%21", "!")
+                  .replaceAll("%23", "#")
+                  .replaceAll("%24", "$")
+                  .replaceAll("%26", "&")
+                  .replaceAll("%27", "'")
+                  .replaceAll("%28", "(")
+                  .replaceAll("%29", ")")
+                  .replaceAll("%2A", "*")
+                  .replaceAll("%2B", "+")
+                  .replaceAll("%2C", ",")
+                  .replaceAll("%2F", "/")
+                  .replaceAll("%3A", ":")
+                  .replaceAll("%3B", ";")
+                  .replaceAll("%3D", "=")
+                  .replaceAll("%3F", "?")
+                  .replaceAll("%40", "@")
+                  .replaceAll("%5B", "[")
+                  .replaceAll("%5D", "]");
     }
 }

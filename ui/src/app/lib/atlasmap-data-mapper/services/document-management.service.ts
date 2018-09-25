@@ -845,7 +845,7 @@ export class DocumentManagementService implements OnDestroy {
         docDef.name = docDef.name.substr(docDef.name.lastIndexOf('.') + 1);
       }
     }
-    if (!docDef.uri) {
+    if (javaClass.uri) {
       docDef.uri = javaClass.uri;
     }
 

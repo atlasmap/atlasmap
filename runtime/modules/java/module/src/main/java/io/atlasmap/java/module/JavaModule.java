@@ -146,7 +146,7 @@ public class JavaModule extends BaseAtlasModule {
 
         List<BaseMapping> mapping = atlasSession.getMapping().getMappings().getMapping();
         Object rootObject;
-        String targetClassName = AtlasUtil.getUriParameterValue(getUri(), "className");
+        String targetClassName = AtlasUtil.unescapeFromUri(AtlasUtil.getUriParameterValue(getUri(), "className"));
         JavaClass inspectClass = getJavaInspectionService().inspectClass(targetClassName);
         merge(inspectClass, mapping);
         List<String> targetPaths = AtlasModuleSupport.listTargetPaths(mapping);
