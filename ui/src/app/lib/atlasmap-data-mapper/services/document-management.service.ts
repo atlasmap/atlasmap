@@ -280,7 +280,22 @@ export class DocumentManagementService implements OnDestroy {
   }
 
   /**
+   * Use the JSON utility to translate the specified buffer into a JSON buffer - then replace any
+   * non-ascii character encodings with unicode escape sequences.
+   *
+   * @param buffer
+   */
+  private static sanitizeJSON(buffer: string): string {
+    let jsonBuffer = JSON.stringify(buffer);
+    jsonBuffer = jsonBuffer.replace(/[\u007F-\uFFFF]/g, function(chr) {
+      return '\\u' + ('0000' + chr.charCodeAt(0).toString(16)).substr(-4);
+    });
+    return jsonBuffer;
+  }
+
+  /**
    * Restrict JSON parsing to the document management service.
+   *
    * @param buffer
    */
   static getMappingsInfo(buffer: string): any {
@@ -292,42 +307,39 @@ export class DocumentManagementService implements OnDestroy {
    * @param buffer
    */
   static generateExportMappings(buffer: string): string {
+
     if (buffer === null || buffer.length === 0) {
       return '';
     }
-    // Globally replace double-quotes embedded in the source docs.
-    buffer = buffer.replace(/\"/g, '\\\"');
-
-    // Globally replace new-lines with \n (JSON does not allow multi-line strings).
-    buffer = buffer.replace(/\n/g, '\\n');
-
     const metaStr = `   "exportMappings":
     {
-       \"value\": \"` + buffer + `\"
+       \"value\": ` + this.sanitizeJSON(buffer) + `
     },\n`;
-    // comma is not needed if no non-java docs
+
     return metaStr;
   }
 
   /**
    * Capture the specified user JSON or XML document buffer into a general catalog JSON buffer.
+   *
    * @param buffer
    */
   static generateExportBlockData(buffer: string): string {
+
     if (buffer === null || buffer.length === 0) {
         return '';
     }
     const metaStr = `
           {
-             \"value\": \"` + buffer + `\"
+             \"value\": ` + this.sanitizeJSON(buffer) + `
           }`;
     return metaStr;
   }
 
-/**
- * Capture the specified user document definition meta data into a general catalog JSON buffer.
- * @param docDef
- */
+  /**
+   * Capture the specified user document definition meta data into a general catalog JSON buffer.
+   * @param docDef
+   */
   static generateExportMetaStr(docDef: DocumentDefinition): string {
     const metaStr = `
        {
@@ -612,8 +624,9 @@ export class DocumentManagementService implements OnDestroy {
       // Derive the format if not already defined.
       if (inspectionType === InspectionType.UNKNOWN) {
 
-        // Scan the text buffer to determine if it's a schema or schema-instance.
-        if ((fileText.search('SchemaSet') === -1) || (fileText.search('\"\$schema\"') === -1)) {
+        if (schemaFileSuffix === DocumentType.XSD) {
+          inspectionType = InspectionType.SCHEMA;
+        } else if ((fileText.search('SchemaSet') === -1) || (fileText.search('\"\$schema\"') === -1)) {
           inspectionType = InspectionType.INSTANCE;
         } else {
           inspectionType = InspectionType.SCHEMA;
@@ -636,6 +649,9 @@ export class DocumentManagementService implements OnDestroy {
         this.cfg.initializationService.initializeUserDoc(fileText, schemaFile, schemaFileSuffix,
           inspectionType, isSource);
         break;
+
+      default:
+        this.handleError('Unrecognized document suffix (' + schemaFileSuffix + ')', null);
       }
   }
 

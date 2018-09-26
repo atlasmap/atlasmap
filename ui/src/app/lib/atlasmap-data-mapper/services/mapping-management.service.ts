@@ -815,7 +815,6 @@ export class MappingManagementService {
       // Start with the user mappings (XML).
       aggregateBuffer += DocumentManagementService.generateExportMappings(this.xmlBuffer[0]);
 
-      let buffer = '';
       let exportMeta = '   "exportMeta": [\n';
       let exportBlockData = '      "exportBlockData": [\n';
       let docCount = 0;
@@ -831,13 +830,7 @@ export class MappingManagementService {
             exportBlockData += ',\n';
           }
           exportMeta += DocumentManagementService.generateExportMetaStr(doc);
-
-          // Globally replace double-quotes embedded in the source docs.
-          buffer = doc.inspectionSource.replace(/\"/g, '\\\"');
-
-          // Globally replace new-lines with \n (JSON does not allow multi-line strings).
-          buffer = buffer.replace(/\n/g, '\\n');
-          exportBlockData += DocumentManagementService.generateExportBlockData(buffer);
+          exportBlockData += DocumentManagementService.generateExportBlockData(doc.inspectionSource);
           docCount++;
         }
       }

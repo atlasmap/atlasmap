@@ -305,6 +305,16 @@ export class InitializationService {
         this.cfg.initCfg.classPath = classPath;
         this.cfg.documentService.fetchDocument(docdef, this.cfg.initCfg.classPath).toPromise()
         .then((doc: DocumentDefinition) => {
+          if (doc.fields.length === 0) {
+            this.cfg.errorService.error('The specified schema \'' + docName + '\' did not specify any elements.', null);
+            if (isSource) {
+              DataMapperUtil.removeItemFromArray(docdef, this.cfg.sourceDocs);
+            } else {
+              DataMapperUtil.removeItemFromArray(docdef, this.cfg.targetDocs);
+            }
+            return;
+          }
+          this.cfg.mappingService.validateMappings();
           this.updateStatus();
         })
         .catch((error: any) => {
@@ -322,7 +332,6 @@ export class InitializationService {
           this.handleError('Could not load Maven class path: ' + error.status + ' ' + error.statusText, error);
         }
       });
-    this.cfg.mappingService.validateMappings();
   }
 
   initialize(): void {
@@ -480,12 +489,6 @@ export class InitializationService {
     }
   }
 
-  processMetaChars(metaBuffer: any): string {
-    let fragData = metaBuffer.replace(/\\\"/g, '\"');
-    fragData = fragData.replace(/\\\n/g, '\n');
-    return fragData;
-  }
-
   processMappingsDocuments(mappingsSchemaAggregate: string): any {
     let mInfo: any = null;
     try {
@@ -504,7 +507,7 @@ export class InitializationService {
 
     // Reinitialize the model documents.
     for (metaFragment of mInfo.exportMeta) {
-      fragData = this.processMetaChars(mInfo.exportBlockData[fragIndex].value);
+      fragData = mInfo.exportBlockData[fragIndex].value;
       this.cfg.initializationService.initializeUserDoc(fragData, metaFragment.name, metaFragment.documentType,
         metaFragment.inspectionType, (metaFragment.isSource === 'true'));
       fragIndex++;
@@ -604,6 +607,9 @@ export class InitializationService {
   }
 
   fetchMappings(mappingFiles: string[]): void {
+    if (mappingFiles == null) {
+      return;
+    }
     if (mappingFiles.length === 0) {
       this.cfg.initCfg.mappingInitialized = true;
       this.updateStatus();
