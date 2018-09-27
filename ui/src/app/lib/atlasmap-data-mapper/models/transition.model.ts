@@ -39,8 +39,26 @@ export class FieldActionConfig {
   serviceObject: any = new Object();
 
   /**
-   * Return true if the action's source/target types and collection types matches the respective source/target field properties
-   *             for source transformations, or matches the respective target field properties only if for a target transformation
+   * Return the first non-padding field in either the source or target mappings.
+   *
+   * @param fieldPair
+   * @param isSource
+   */
+  private getActualField(fieldPair: FieldMappingPair, isSource: boolean): Field {
+    let targetField: Field = null;
+    for (targetField of fieldPair.getFields(isSource)) {
+      if (targetField.name !== '<padding field>') {
+        break;
+      }
+    }
+    return targetField;
+  }
+
+  /**
+   * Return true if the action's source/target types and collection types matches the respective source/target
+   * field properties for source transformations, or matches the respective target field properties only if for
+   * a target transformation.
+   *
    * @param fieldPair
    */
   appliesToField(fieldPair: FieldMappingPair, isSource: boolean): boolean {
@@ -48,8 +66,8 @@ export class FieldActionConfig {
     if (fieldPair == null) {
       return false;
     }
-    const sourceField: Field = fieldPair.getFields(true)[0];
-    const targetField: Field = fieldPair.getFields(false)[0];
+    const sourceField: Field = this.getActualField(fieldPair, true);
+    const targetField: Field = this.getActualField(fieldPair, false);
 
     if (sourceField == null || targetField == null) {
       return false;
