@@ -93,6 +93,14 @@ export class AtlasmapNavbarComponent implements OnInit {
   }
 
   /**
+   * Schema import button click.  Disable initialization to trigger the loading icon.
+   */
+  processClick(loadingStatus: string) {
+    this.cfg.initCfg.initialized = false;
+    this.cfg.initializationService.updateLoadingStatus(loadingStatus);
+  }
+
+  /**
    * The user has specified (or we have defaulted) an AtlasMap mappings catalog file name into which the current
    * live mappings and support documents will be exported.
    *

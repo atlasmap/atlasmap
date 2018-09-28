@@ -24,7 +24,7 @@
                 <a  class="dropdown-item" href="#" style="position: relative">
                   <label for="usermappingsfile">AtlasMap Mappings</label>
 		          <input type="file" accept=".adm" name="usermappingsfile" style="display:none"
-		            id="usermappingsfile" (change)="processMappingsCatalog($event)">
+		            id="usermappingsfile" (click)="processClick('Importing AtlasMap Mappings')" (change)="processMappingsCatalog($event)">
 	            </a>
               </li>
               <li role="menuitem" style="width:230px; text-align:left; font-size:14px;  margin-left:4px; border: 1px solid #d1d1d1; margin-bottom:2px;">
@@ -51,12 +51,13 @@
                           style="width:60px; border: 1px solid #d1d1d1; margin-left:60px; text-align:center; vertical-align:middle; font-size:12px;margin-bottom:4px;"
                             >Import</label>
 		                    <input type="file" accept="{{ getFileSuffix() }}" name="userschemafile" style="display:none"
-		                      id="userschemafile" (change)="processSchemaDoc($event)">
+		                      id="userschemafile" (click)="processClick('Importing Schema Document')" (change)="processSchemaDoc($event)">
 		                  <label class="btn" style="width:60px; margin-left:4px; border: 1px solid #d1d1d1; text-align:center; vertical-align:middle; font-size:12px;margin-bottom:4px;"
 		                    (click)="handleSchemaCancel()">Cancel</label><BR>
 	                    </a>
                       </li>
                     </div>
+
                   </div>
 	            </a>
               </li>
@@ -84,7 +85,7 @@
                           style="width:60px; border: 1px solid #d1d1d1; margin-left:60px; text-align:center; vertical-align:middle; font-size:12px;margin-bottom:4px;"
                             >Import</label>
 		                    <input type="file" accept="{{ getFileSuffix() }}" name="userinstancefile" style="display:none"
-		                      id="userinstancefile" (change)="processInstanceDoc($event)">
+		                      id="userinstancefile" (click)="processClick('Importing Instance Document')" (change)="processInstanceDoc($event)">
 		                  <label class="btn" style="width:60px; margin-left:4px; border: 1px solid #d1d1d1; text-align:center; vertical-align:middle; font-size:12px;margin-bottom:4px;"
 		                    (click)="handleInstanceCancel()">Cancel</label><BR>
 	                    </a>
