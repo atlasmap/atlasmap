@@ -148,9 +148,10 @@ export class DocumentDefinitionComponent implements OnInit {
    */
   async processDoc(event) {
     const selectedFile = event.target.files[0];
+    this.cfg.initCfg.initialized = false;
+    this.cfg.initializationService.updateLoadingStatus('Importing Document');
     this.cfg.documentService.processDocument(selectedFile, InspectionType.UNKNOWN, this.isSource);
   }
-
 
   getFileSuffix() {
     return '.json,.xml,.xsd';

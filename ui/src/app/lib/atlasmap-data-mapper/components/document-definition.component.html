@@ -4,8 +4,8 @@
       <h2 class="card-pf-title">
         <div class="docName">
           <i class="fa {{ isSource ? 'fa-hdd-o' : 'fa-download' }}"></i>
-          <label>{{ sourcesTargetsLabel }}</label>
-          <label *ngIf="!cfg.initCfg.disableNavbar" id="userfile" [attr.class]="getImportIconCSSClass()" style="float:right"
+          <label for="userfile">{{ sourcesTargetsLabel }}</label>
+          <label *ngIf="!cfg.initCfg.disableNavbar" [attr.class]="getImportIconCSSClass()" style="float:right"
             tooltip="Import instance or schema file" placement="left" style="float:right; margin-right:5px">
             <input type="file" accept="{{ getFileSuffix() }}" name="userfile" style="display:none" id="userfile"
               (change)="processDoc($event)" placement="left">

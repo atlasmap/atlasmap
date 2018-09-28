@@ -699,7 +699,7 @@ export class InitializationService {
     this.updateStatus();
   }
 
-  private updateLoadingStatus(status: string): void {
+  updateLoadingStatus(status: string): void {
     this.cfg.initCfg.loadingStatus = status;
     this.initializationStatusChangedSource.next();
   }
