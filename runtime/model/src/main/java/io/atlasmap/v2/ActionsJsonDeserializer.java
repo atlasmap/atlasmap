@@ -97,6 +97,8 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
                 return new CurrentDateTime();
             case "CurrentTime":
                 return new CurrentTime();
+            case "DayOfMonth":
+                return new DayOfMonth();
             case "DayOfWeek":
                 return new DayOfWeek();
             case "DayOfYear":
@@ -115,6 +117,8 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
                 return new GenerateUUID();
             case "IndexOf":
                 return processIndexOfJsonToken(jsonToken);
+            case "ItemAt":
+                return processItemAtJsonToken(jsonToken);
             case "LastIndexOf":
                 return processLastIndexOfJsonToken(jsonToken);
             case "Length":
@@ -518,6 +522,33 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
                 case ActionsJsonSerializer.STRING:
                     jsonToken.nextToken();
                     action.setString(jsonToken.getValueAsString());
+                    break;
+                default:
+                    break;
+            }
+
+            nextToken = jsonToken.nextToken();
+        } while (!JsonToken.END_ARRAY.equals(nextToken) && !JsonToken.END_OBJECT.equals(nextToken));
+        return action;
+    }
+
+    protected ItemAt processItemAtJsonToken(JsonParser jsonToken) throws IOException {
+        ItemAt action = new ItemAt();
+
+        if (JsonToken.END_ARRAY.equals(jsonToken.currentToken())
+                || JsonToken.END_OBJECT.equals(jsonToken.currentToken())) {
+            return action;
+        }
+
+        JsonToken nextToken = null;
+        do {
+            if (JsonToken.START_OBJECT.equals(jsonToken.currentToken())) {
+                jsonToken.nextToken();
+            }
+            switch (jsonToken.getCurrentName()) {
+                case ActionsJsonSerializer.INDEX:
+                    jsonToken.nextToken();
+                    action.setIndex(jsonToken.getValueAsInt());
                     break;
                 default:
                     break;
