@@ -522,7 +522,7 @@ table.CodeRay td.code>pre{padding:0}
 <h1>AtlasMap Design Time Service API Reference</h1>
 <div class="details">
 <span id="revnumber">version 1.38.0-SNAPSHOT,</span>
-<span id="revdate">2018-10-02</span>
+<span id="revdate">2018-10-03</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Design Time Service</div>
@@ -558,19 +558,20 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_atlas-service-core-constants">1.2.12. Constants</a></li>
 <li><a href="#_atlas-service-core-datasource">1.2.13. DataSource</a></li>
 <li><a href="#_atlas-service-core-field">1.2.14. Field</a></li>
-<li><a href="#_atlas-service-core-lookupentry">1.2.15. LookupEntry</a></li>
-<li><a href="#_atlas-service-core-lookuptable">1.2.16. LookupTable</a></li>
-<li><a href="#_atlas-service-core-lookuptables">1.2.17. LookupTables</a></li>
-<li><a href="#_atlas-service-core-mapping">1.2.18. Mapping</a></li>
-<li><a href="#_atlas-service-core-mappings">1.2.19. Mappings</a></li>
-<li><a href="#_atlas-service-core-processmappingresponse">1.2.20. ProcessMappingResponse</a></li>
-<li><a href="#_atlas-service-core-properties">1.2.21. Properties</a></li>
-<li><a href="#_atlas-service-core-property">1.2.22. Property</a></li>
-<li><a href="#_atlas-service-core-stringmap">1.2.23. StringMap</a></li>
-<li><a href="#_atlas-service-core-stringmapentry">1.2.24. StringMapEntry</a></li>
-<li><a href="#_atlas-service-core-targetdocument">1.2.25. TargetDocument</a></li>
-<li><a href="#_atlas-service-core-validation">1.2.26. Validation</a></li>
-<li><a href="#_atlas-service-core-validations">1.2.27. Validations</a></li>
+<li><a href="#_atlas-service-core-fieldgroup">1.2.15. FieldGroup</a></li>
+<li><a href="#_atlas-service-core-lookupentry">1.2.16. LookupEntry</a></li>
+<li><a href="#_atlas-service-core-lookuptable">1.2.17. LookupTable</a></li>
+<li><a href="#_atlas-service-core-lookuptables">1.2.18. LookupTables</a></li>
+<li><a href="#_atlas-service-core-mapping">1.2.19. Mapping</a></li>
+<li><a href="#_atlas-service-core-mappings">1.2.20. Mappings</a></li>
+<li><a href="#_atlas-service-core-processmappingresponse">1.2.21. ProcessMappingResponse</a></li>
+<li><a href="#_atlas-service-core-properties">1.2.22. Properties</a></li>
+<li><a href="#_atlas-service-core-property">1.2.23. Property</a></li>
+<li><a href="#_atlas-service-core-stringmap">1.2.24. StringMap</a></li>
+<li><a href="#_atlas-service-core-stringmapentry">1.2.25. StringMapEntry</a></li>
+<li><a href="#_atlas-service-core-targetdocument">1.2.26. TargetDocument</a></li>
+<li><a href="#_atlas-service-core-validation">1.2.27. Validation</a></li>
+<li><a href="#_atlas-service-core-validations">1.2.28. Validations</a></li>
 </ul>
 </li>
 </ul>
@@ -2106,7 +2107,141 @@ table.CodeRay td.code>pre{padding:0}
 </table>
 </div>
 <div class="sect3">
-<h4 id="_atlas-service-core-lookupentry">1.2.15. LookupEntry</h4>
+<h4 id="_atlas-service-core-fieldgroup">1.2.15. FieldGroup</h4>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 42.8571%;">
+<col style="width: 57.1429%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-middle">Name</th>
+<th class="tableblock halign-left valign-middle">Schema</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p><strong>actions</strong><br>
+<em>optional</em></p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p><a href="#_atlas-service-core-actions">Actions</a></p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p><strong>arrayDimensions</strong><br>
+<em>optional</em></p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p>integer (int32)</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p><strong>arraySize</strong><br>
+<em>optional</em></p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p>integer (int32)</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p><strong>collectionType</strong><br>
+<em>optional</em></p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p>enum (ALL, ARRAY, LIST, MAP, NONE)</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p><strong>docId</strong><br>
+<em>optional</em></p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p>string</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p><strong>field</strong><br>
+<em>optional</em></p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p>&lt; <a href="#_atlas-service-core-field">Field</a> &gt; array</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p><strong>fieldType</strong><br>
+<em>optional</em></p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p>enum (ANY, ANY_DATE, BIG_INTEGER, BOOLEAN, BYTE, BYTE_ARRAY, CHAR, COMPLEX, DATE, DATE_TIME, DATE_TIME_TZ, DATE_TZ, DECIMAL, DOUBLE, FLOAT, INTEGER, LONG, NONE, NUMBER, SHORT, STRING, TIME, TIME_TZ, UNSIGNED_BYTE, UNSIGNED_INTEGER, UNSIGNED_LONG, UNSIGNED_SHORT, UNSUPPORTED)</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p><strong>format</strong><br>
+<em>optional</em></p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p>string</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p><strong>index</strong><br>
+<em>optional</em></p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p>integer (int32)</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p><strong>path</strong><br>
+<em>optional</em></p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p>string</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p><strong>required</strong><br>
+<em>optional</em></p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p>boolean</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p><strong>status</strong><br>
+<em>optional</em></p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p>enum (SUPPORTED, UNSUPPORTED, CACHED, ERROR, NOT_FOUND, BLACK_LIST)</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p><strong>value</strong><br>
+<em>optional</em></p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p>object</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_atlas-service-core-lookupentry">1.2.16. LookupEntry</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 42.8571%;">
@@ -2159,7 +2294,7 @@ table.CodeRay td.code>pre{padding:0}
 </table>
 </div>
 <div class="sect3">
-<h4 id="_atlas-service-core-lookuptable">1.2.16. LookupTable</h4>
+<h4 id="_atlas-service-core-lookuptable">1.2.17. LookupTable</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 42.8571%;">
@@ -2203,7 +2338,7 @@ table.CodeRay td.code>pre{padding:0}
 </table>
 </div>
 <div class="sect3">
-<h4 id="_atlas-service-core-lookuptables">1.2.17. LookupTables</h4>
+<h4 id="_atlas-service-core-lookuptables">1.2.18. LookupTables</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 42.8571%;">
@@ -2229,7 +2364,7 @@ table.CodeRay td.code>pre{padding:0}
 </table>
 </div>
 <div class="sect3">
-<h4 id="_atlas-service-core-mapping">1.2.18. Mapping</h4>
+<h4 id="_atlas-service-core-mapping">1.2.19. Mapping</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 42.8571%;">
@@ -2298,6 +2433,15 @@ table.CodeRay td.code>pre{padding:0}
 </tr>
 <tr>
 <td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p><strong>inputFieldGroup</strong><br>
+<em>optional</em></p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p><a href="#_atlas-service-core-fieldgroup">FieldGroup</a></p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
 <p><strong>lookupTableName</strong><br>
 <em>optional</em></p>
 </div></div></td>
@@ -2345,7 +2489,7 @@ table.CodeRay td.code>pre{padding:0}
 </table>
 </div>
 <div class="sect3">
-<h4 id="_atlas-service-core-mappings">1.2.19. Mappings</h4>
+<h4 id="_atlas-service-core-mappings">1.2.20. Mappings</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 42.8571%;">
@@ -2371,7 +2515,7 @@ table.CodeRay td.code>pre{padding:0}
 </table>
 </div>
 <div class="sect3">
-<h4 id="_atlas-service-core-processmappingresponse">1.2.20. ProcessMappingResponse</h4>
+<h4 id="_atlas-service-core-processmappingresponse">1.2.21. ProcessMappingResponse</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 42.8571%;">
@@ -2415,7 +2559,7 @@ table.CodeRay td.code>pre{padding:0}
 </table>
 </div>
 <div class="sect3">
-<h4 id="_atlas-service-core-properties">1.2.21. Properties</h4>
+<h4 id="_atlas-service-core-properties">1.2.22. Properties</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 42.8571%;">
@@ -2441,7 +2585,7 @@ table.CodeRay td.code>pre{padding:0}
 </table>
 </div>
 <div class="sect3">
-<h4 id="_atlas-service-core-property">1.2.22. Property</h4>
+<h4 id="_atlas-service-core-property">1.2.23. Property</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 42.8571%;">
@@ -2485,7 +2629,7 @@ table.CodeRay td.code>pre{padding:0}
 </table>
 </div>
 <div class="sect3">
-<h4 id="_atlas-service-core-stringmap">1.2.23. StringMap</h4>
+<h4 id="_atlas-service-core-stringmap">1.2.24. StringMap</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 42.8571%;">
@@ -2511,7 +2655,7 @@ table.CodeRay td.code>pre{padding:0}
 </table>
 </div>
 <div class="sect3">
-<h4 id="_atlas-service-core-stringmapentry">1.2.24. StringMapEntry</h4>
+<h4 id="_atlas-service-core-stringmapentry">1.2.25. StringMapEntry</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 42.8571%;">
@@ -2546,7 +2690,7 @@ table.CodeRay td.code>pre{padding:0}
 </table>
 </div>
 <div class="sect3">
-<h4 id="_atlas-service-core-targetdocument">1.2.25. TargetDocument</h4>
+<h4 id="_atlas-service-core-targetdocument">1.2.26. TargetDocument</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 42.8571%;">
@@ -2581,7 +2725,7 @@ table.CodeRay td.code>pre{padding:0}
 </table>
 </div>
 <div class="sect3">
-<h4 id="_atlas-service-core-validation">1.2.26. Validation</h4>
+<h4 id="_atlas-service-core-validation">1.2.27. Validation</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 42.8571%;">
@@ -2634,7 +2778,7 @@ table.CodeRay td.code>pre{padding:0}
 </table>
 </div>
 <div class="sect3">
-<h4 id="_atlas-service-core-validations">1.2.27. Validations</h4>
+<h4 id="_atlas-service-core-validations">1.2.28. Validations</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 42.8571%;">
@@ -4881,7 +5025,7 @@ table.CodeRay td.code>pre{padding:0}
 <div id="footer">
 <div id="footer-text">
 Version 1.38.0-SNAPSHOT<br>
-Last updated 2018-10-02 15:28:30 UTC
+Last updated 2018-10-03 19:12:22 UTC
 </div>
 </div>
 </body>

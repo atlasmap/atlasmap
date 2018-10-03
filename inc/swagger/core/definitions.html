@@ -538,6 +538,7 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_atlas-service-core-constants">Constants</a></li>
 <li><a href="#_atlas-service-core-datasource">DataSource</a></li>
 <li><a href="#_atlas-service-core-field">Field</a></li>
+<li><a href="#_atlas-service-core-fieldgroup">FieldGroup</a></li>
 <li><a href="#_atlas-service-core-lookupentry">LookupEntry</a></li>
 <li><a href="#_atlas-service-core-lookuptable">LookupTable</a></li>
 <li><a href="#_atlas-service-core-lookuptables">LookupTables</a></li>
@@ -1256,6 +1257,140 @@ table.CodeRay td.code>pre{padding:0}
 </table>
 </div>
 <div class="sect2">
+<h3 id="_atlas-service-core-fieldgroup">FieldGroup</h3>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 42.8571%;">
+<col style="width: 57.1429%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-middle">Name</th>
+<th class="tableblock halign-left valign-middle">Schema</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p><strong>actions</strong><br>
+<em>optional</em></p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p><a href="#_atlas-service-core-actions">Actions</a></p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p><strong>arrayDimensions</strong><br>
+<em>optional</em></p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p>integer (int32)</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p><strong>arraySize</strong><br>
+<em>optional</em></p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p>integer (int32)</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p><strong>collectionType</strong><br>
+<em>optional</em></p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p>enum (ALL, ARRAY, LIST, MAP, NONE)</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p><strong>docId</strong><br>
+<em>optional</em></p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p>string</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p><strong>field</strong><br>
+<em>optional</em></p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p>&lt; <a href="#_atlas-service-core-field">Field</a> &gt; array</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p><strong>fieldType</strong><br>
+<em>optional</em></p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p>enum (ANY, ANY_DATE, BIG_INTEGER, BOOLEAN, BYTE, BYTE_ARRAY, CHAR, COMPLEX, DATE, DATE_TIME, DATE_TIME_TZ, DATE_TZ, DECIMAL, DOUBLE, FLOAT, INTEGER, LONG, NONE, NUMBER, SHORT, STRING, TIME, TIME_TZ, UNSIGNED_BYTE, UNSIGNED_INTEGER, UNSIGNED_LONG, UNSIGNED_SHORT, UNSUPPORTED)</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p><strong>format</strong><br>
+<em>optional</em></p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p>string</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p><strong>index</strong><br>
+<em>optional</em></p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p>integer (int32)</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p><strong>path</strong><br>
+<em>optional</em></p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p>string</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p><strong>required</strong><br>
+<em>optional</em></p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p>boolean</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p><strong>status</strong><br>
+<em>optional</em></p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p>enum (SUPPORTED, UNSUPPORTED, CACHED, ERROR, NOT_FOUND, BLACK_LIST)</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p><strong>value</strong><br>
+<em>optional</em></p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p>object</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
 <h3 id="_atlas-service-core-lookupentry">LookupEntry</h3>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
@@ -1444,6 +1579,15 @@ table.CodeRay td.code>pre{padding:0}
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><div><div class="paragraph">
 <p>&lt; <a href="#_atlas-service-core-field">Field</a> &gt; array</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p><strong>inputFieldGroup</strong><br>
+<em>optional</em></p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p><a href="#_atlas-service-core-fieldgroup">FieldGroup</a></p>
 </div></div></td>
 </tr>
 <tr>
@@ -1814,7 +1958,7 @@ table.CodeRay td.code>pre{padding:0}
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2018-10-02 15:29:31 UTC
+Last updated 2018-10-03 19:12:41 UTC
 </div>
 </div>
 </body>
