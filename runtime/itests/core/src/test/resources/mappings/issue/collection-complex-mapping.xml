@@ -24,7 +24,7 @@
         </Mapping>
 
         <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="Mapping" mappingType="Map">
-          <InputField xsi:type="ns3:JsonField" name="sourceList" docId="SourceJson" path="/sourceList&lt;&gt;/name" fieldType="String"/>
+          <InputField xsi:type="ns3:JsonField" name="sourceList" docId="SourceJson" path="/sourceList&lt;&gt;" fieldType="String"/>
           <OutputField xsi:type="ns2:JavaField" name="targetList" docId="TargetClass" path="/targetList&lt;&gt;/name" fieldType="String"/>
         </Mapping>
         <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="Mapping" mappingType="Map">

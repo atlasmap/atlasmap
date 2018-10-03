@@ -91,8 +91,12 @@
     <complexContent>
       <extension base="atlas:BaseMapping">
         <sequence>
-          <element name="InputField" type="atlas:Field"
-            minOccurs="0" maxOccurs="unbounded" />
+          <choice>
+            <element name="InputFieldGroup" type="atlas:FieldGroup"
+              minOccurs="0" maxOccurs="1" />
+            <element name="InputField" type="atlas:Field"
+              minOccurs="0" maxOccurs="unbounded" />
+          </choice>
           <element name="OutputField" type="atlas:Field"
             minOccurs="0" maxOccurs="unbounded" />
         </sequence>
@@ -121,6 +125,7 @@
     </restriction>
   </simpleType>
 
+  <!-- DEPRECATED -->
   <complexType name="Collection">
     <complexContent>
       <extension base="atlas:BaseMapping">

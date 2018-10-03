@@ -20,6 +20,10 @@ import java.util.List;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.v2.Field;
 
+/**
+ * A SPI contract between AtlasMap core and modules. AtlasMap core engine invokes those
+ * methods while processing mappings.
+ */
 public interface AtlasModule {
 
     void init();
@@ -32,9 +36,30 @@ public interface AtlasModule {
 
     void processPreTargetExecution(AtlasInternalSession session) throws AtlasException;
 
-    void processSourceFieldMapping(AtlasInternalSession session) throws AtlasException;
+    /**
+     * Read source field value from source document and store into source field object.
+     *
+     * @param session current session
+     * @throws AtlasException failed to read source value
+     */
+    void readSourceValue(AtlasInternalSession session) throws AtlasException;
 
-    void processTargetFieldMapping(AtlasInternalSession session) throws AtlasException;
+    /**
+     * Populate target field value, usually by just copy from source field value.
+     * Also apply type converters where it's needed.
+     *
+     * @param session current session
+     * @throws AtlasException failed to populate target field value
+     */
+    void populateTargetField(AtlasInternalSession session) throws AtlasException;
+
+    /**
+     * Write target field value into target document.
+     *
+     * @param session current session
+     * @throws AtlasException faield to write target field value
+     */
+    void writeTargetValue(AtlasInternalSession session) throws AtlasException;
 
     void processPostSourceExecution(AtlasInternalSession session) throws AtlasException;
 

@@ -50,7 +50,7 @@ public class ConstantModuleTest {
         when(atlasConversionService.fieldTypeFromClass(any(String.class))).thenReturn(FieldType.ANY);
 
         module.setConversionService(atlasConversionService);
-        module.processSourceFieldMapping(session);
+        module.readSourceValue(session);
     }
 
     @Test
@@ -65,7 +65,7 @@ public class ConstantModuleTest {
 
     @Test(expected = UnsupportedOperationException.class)
     public void testProcessTargetFieldMapping() throws AtlasException {
-        module.processTargetFieldMapping(null);
+        module.writeTargetValue(null);
     }
 
     @Test(expected = UnsupportedOperationException.class)

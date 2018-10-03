@@ -60,7 +60,7 @@ public class ConstantModule implements AtlasModule {
     }
 
     @Override
-    public void processSourceFieldMapping(AtlasInternalSession session) throws AtlasException {
+    public void readSourceValue(AtlasInternalSession session) throws AtlasException {
         Field sourceField = session.head().getSourceField();
         if (!(sourceField instanceof ConstantField)) {
             return;
@@ -89,7 +89,12 @@ public class ConstantModule implements AtlasModule {
     }
 
     @Override
-    public void processTargetFieldMapping(AtlasInternalSession session) throws AtlasException {
+    public void populateTargetField(AtlasInternalSession session) throws AtlasException {
+        throw new UnsupportedOperationException("ConstantField cannot be placed as a target field");
+    }
+
+    @Override
+    public void writeTargetValue(AtlasInternalSession session) throws AtlasException {
         throw new UnsupportedOperationException("ConstantField cannot be placed as a target field");
     }
 

@@ -41,7 +41,12 @@ public class CollectionComplexTest {
         assertFalse(TestHelper.printAudit(session), session.hasErrors());
         Object targetJava = session.getTargetDocument("TargetClass");
         assertEquals(TargetClass.class, targetJava.getClass());
-        assertEquals("xml3", ((TargetClass)targetJava).getTargetName());
+        TargetClass targetClass = (TargetClass)targetJava;
+        assertEquals("xml3", targetClass.getTargetName());
+        assertEquals(3, targetClass.getTargetList().size());
+        assertEquals("json1", targetClass.getTargetList().get(0).getName());
+        assertEquals("json2", targetClass.getTargetList().get(1).getName());
+        assertEquals("json3", targetClass.getTargetList().get(2).getName());
         Object targetJson = session.getTargetDocument("TargetJson");
         assertEquals("{\"javaList\":[{\"name\":\"java1\"},{\"name\":\"java2\"},{\"name\":\"java3\"}],\"xmlList\":[\"xml1\",\"xml2\",\"xml3\"]}",
                 targetJson);

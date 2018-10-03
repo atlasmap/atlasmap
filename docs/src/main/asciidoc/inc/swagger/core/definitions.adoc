@@ -228,6 +228,41 @@ __optional__|object
 |===
 
 
+[[_atlas-service-core-fieldgroup]]
+=== FieldGroup
+
+[options="header", cols=".^3a,.^4a"]
+|===
+|Name|Schema
+|**actions** +
+__optional__|<<_atlas-service-core-actions,Actions>>
+|**arrayDimensions** +
+__optional__|integer (int32)
+|**arraySize** +
+__optional__|integer (int32)
+|**collectionType** +
+__optional__|enum (ALL, ARRAY, LIST, MAP, NONE)
+|**docId** +
+__optional__|string
+|**field** +
+__optional__|< <<_atlas-service-core-field,Field>> > array
+|**fieldType** +
+__optional__|enum (ANY, ANY_DATE, BIG_INTEGER, BOOLEAN, BYTE, BYTE_ARRAY, CHAR, COMPLEX, DATE, DATE_TIME, DATE_TIME_TZ, DATE_TZ, DECIMAL, DOUBLE, FLOAT, INTEGER, LONG, NONE, NUMBER, SHORT, STRING, TIME, TIME_TZ, UNSIGNED_BYTE, UNSIGNED_INTEGER, UNSIGNED_LONG, UNSIGNED_SHORT, UNSUPPORTED)
+|**format** +
+__optional__|string
+|**index** +
+__optional__|integer (int32)
+|**path** +
+__optional__|string
+|**required** +
+__optional__|boolean
+|**status** +
+__optional__|enum (SUPPORTED, UNSUPPORTED, CACHED, ERROR, NOT_FOUND, BLACK_LIST)
+|**value** +
+__optional__|object
+|===
+
+
 [[_atlas-service-core-lookupentry]]
 === LookupEntry
 
@@ -289,6 +324,8 @@ __optional__|string
 __optional__|string
 |**inputField** +
 __optional__|< <<_atlas-service-core-field,Field>> > array
+|**inputFieldGroup** +
+__optional__|<<_atlas-service-core-fieldgroup,FieldGroup>>
 |**lookupTableName** +
 __optional__|string
 |**mappingType** +

@@ -67,7 +67,8 @@ public abstract class BaseAtlasModule implements AtlasModule, AtlasModuleMXBean 
         }
     }
 
-    protected void populateTargetFieldValue(AtlasInternalSession session) throws AtlasException {
+    @Override
+    public void populateTargetField(AtlasInternalSession session) throws AtlasException {
         Field sourceField = session.head().getSourceField();
         Field targetField = session.head().getTargetField();
         Object targetValue = null;
