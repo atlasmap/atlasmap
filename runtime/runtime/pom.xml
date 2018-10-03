@@ -53,7 +53,7 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
         <configuration>
-          <jvmArguments>-server -Xms256m -Xmx512m</jvmArguments>
+          <jvmArguments>-server -Xms256m -Xmx1024m</jvmArguments>
         </configuration>
         <executions>
           <execution>
@@ -247,7 +247,7 @@
             <artifactId>spring-boot-maven-plugin</artifactId>
             <configuration>
               <jvmArguments>-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=8000
-              -server -Xms256m -Xmx512m</jvmArguments>
+              -server -Xms256m -Xmx1024m</jvmArguments>
             </configuration>
           </plugin>
         </plugins>
@@ -270,7 +270,7 @@
                 <argument>--logging.file=target/atlasmap-spring-boot.log</argument>
               </arguments>
               <jvmArguments>-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8000
-              -server -Xms256m -Xmx512m</jvmArguments>
+              -server -Xms256m -Xmx1024m</jvmArguments>
             </configuration>
           </plugin>
           <plugin>

@@ -30,6 +30,7 @@ export class DataMapperInitializationModel {
   dataMapperVersion = '0.9.2017.07.28';
   initialized = false;
   loadingStatus = 'Loading.';
+  admHttpTimeout = 30000;  // 30 seconds
   initializationErrorOccurred = false;
 
   baseJavaInspectionServiceUrl: string;

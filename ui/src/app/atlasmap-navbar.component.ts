@@ -50,7 +50,7 @@ export class AtlasmapNavbarComponent implements OnInit {
   }
 
   get instanceTargetsPanel(): string {
-    return this.INSTANCE_SOURCES_PANEL;
+    return this.INSTANCE_TARGETS_PANEL;
   }
 
   get schemaSourcesPanel(): string {
