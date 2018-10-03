@@ -19,7 +19,7 @@ import { Injectable } from '@angular/core';
 import { deflate, inflate, gzip } from 'pako';
 
 import { Observable, Subject, forkJoin } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, timeout } from 'rxjs/operators';
 
 import { ConfigModel } from '../models/config.model';
 import { DataMapperUtil } from '../common/data-mapper-util';
@@ -136,7 +136,7 @@ export class MappingManagementService {
         observer.error(error);
         observer.complete();
       });
-    });
+    }).pipe(timeout(this.cfg.initCfg.admHttpTimeout));
   }
 
   /**
@@ -161,7 +161,7 @@ export class MappingManagementService {
         // Error is okay - there is no compressed file available.
         observer.complete();
       });
-    });
+    }).pipe(timeout(this.cfg.initCfg.admHttpTimeout));
   }
 
   fetchMappings(mappingFileNames: string[], mappingDefinition: MappingDefinition): Observable<boolean> {
@@ -197,7 +197,7 @@ export class MappingManagementService {
           observer.error(error);
           observer.complete();
         });
-    });
+    }).pipe(timeout(this.cfg.initCfg.admHttpTimeout));
   }
 
   saveCurrentMapping(): void {
