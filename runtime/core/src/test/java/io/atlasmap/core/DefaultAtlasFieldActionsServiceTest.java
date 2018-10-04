@@ -21,11 +21,14 @@ import io.atlasmap.v2.ActionDetail;
 import io.atlasmap.v2.ActionParameter;
 import io.atlasmap.v2.Actions;
 import io.atlasmap.v2.Add;
+import io.atlasmap.v2.Field;
+import io.atlasmap.v2.FieldGroup;
 import io.atlasmap.v2.FieldType;
 import io.atlasmap.v2.GenerateUUID;
 import io.atlasmap.v2.IndexOf;
 import io.atlasmap.v2.SimpleField;
 import io.atlasmap.v2.Trim;
+import io.atlasmap.v2.Uppercase;
 
 public class DefaultAtlasFieldActionsServiceTest {
 
@@ -207,5 +210,29 @@ public class DefaultAtlasFieldActionsServiceTest {
     public void testCamelize() {
         assertNull(DefaultAtlasFieldActionService.camelize(null));
         assertEquals("", DefaultAtlasFieldActionService.camelize(""));
+    }
+
+    @Test
+    public void testProcessActionForEachCollectionItem() throws Exception {
+        DefaultAtlasSession session = mock(DefaultAtlasSession.class);
+        FieldGroup fieldGroup = new FieldGroup();
+        Field field1 = new SimpleField();
+        field1.setValue("one");
+        fieldGroup.getField().add(field1);
+        Field field2 = new SimpleField();
+        field2.setValue("two");
+        fieldGroup.getField().add(field2);
+        Field field3 = new SimpleField();
+        field3.setValue("three");
+        fieldGroup.getField().add(field3);
+        Action action = new Uppercase();
+        fieldGroup.setActions(new Actions());
+        fieldGroup.getActions().getActions().add(action);
+        Field answer = fieldActionsService.processActions(session, fieldGroup);
+        assertEquals(FieldGroup.class, answer.getClass());
+        FieldGroup answerGroup = (FieldGroup)answer;
+        assertEquals("ONE", answerGroup.getField().get(0).getValue());
+        assertEquals("TWO", answerGroup.getField().get(1).getValue());
+        assertEquals("THREE", answerGroup.getField().get(2).getValue());
     }
 }
