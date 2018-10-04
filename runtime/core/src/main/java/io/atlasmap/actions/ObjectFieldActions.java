@@ -26,6 +26,7 @@ import io.atlasmap.v2.CollectionType;
 import io.atlasmap.v2.Contains;
 import io.atlasmap.v2.Equals;
 import io.atlasmap.v2.FieldType;
+import io.atlasmap.v2.ItemAt;
 
 @SuppressWarnings({"squid:S3776",     // Cognitive complexity of method
     "squid:S1118",     // Add private constructor
@@ -86,6 +87,27 @@ public class ObjectFieldActions implements AtlasFieldAction {
         return input == null;
     }
 
+    @AtlasFieldActionInfo(name = "ItemAt", sourceType = FieldType.ANY, targetType = FieldType.ANY, sourceCollectionType = CollectionType.ALL, targetCollectionType = CollectionType.NONE)
+    public static Object itemAt(Action action, Object input) {
+        if (!(action instanceof ItemAt)) {
+            throw new IllegalArgumentException("Action must be a ItemAt action");
+        }
+
+        if (input == null) {
+            return null;
+        }
+
+        ItemAt itemAt = (ItemAt) action;
+        Integer index = itemAt.getIndex() == null ? 0 : itemAt.getIndex();
+        Object[] array = collection(input).toArray(new Object[0]);
+        if (array.length > index) {
+            return array[index];
+        } else {
+            throw new ArrayIndexOutOfBoundsException(String.format(
+                    "Collection '%s' has fewer (%s) than expected (%s)", array, array.length, index));
+        }
+    }
+
     @AtlasFieldActionInfo(name = "Length", sourceType = FieldType.ANY, targetType = FieldType.INTEGER, sourceCollectionType = CollectionType.ALL, targetCollectionType = CollectionType.NONE)
     public static Integer length(Action action, Object input) {
         if (input == null) {
@@ -101,6 +123,20 @@ public class ObjectFieldActions implements AtlasFieldAction {
             return ((Map<?, ?>)input).size();
         }
         return input.toString().length();
+    }
+
+    private static Collection<?> collection(Object input) {
+        if (input instanceof Collection) {
+            return (Collection<?>) input;
+        }
+        if (input instanceof Map) {
+            return ((Map<?, ?>) input).values();
+        }
+        if (input.getClass().isArray()) {
+            return Arrays.asList((Object[]) input);
+        }
+        throw new IllegalArgumentException(
+                "Illegal input[" + input + "]. Input must be a Collection, Map or array");
     }
 
     private static boolean collectionContains(Collection<?> collection, Contains contains) {

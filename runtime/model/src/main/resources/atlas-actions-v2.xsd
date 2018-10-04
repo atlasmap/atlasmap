@@ -194,6 +194,14 @@
     </complexType>
   </element>
 
+  <element name="DayOfMonth">
+    <complexType>
+      <complexContent>
+        <extension base="atlas:Action" />
+      </complexContent>
+    </complexType>
+  </element>
+
   <element name="DayOfWeek">
     <complexType>
       <complexContent>
@@ -286,6 +294,16 @@
     <complexType>
       <complexContent>
         <extension base="atlas:Action" />
+      </complexContent>
+    </complexType>
+  </element>
+
+  <element name="ItemAt">
+    <complexType>
+      <complexContent>
+        <extension base="atlas:Action">
+          <attribute name="index" type="int" />
+        </extension>
       </complexContent>
     </complexType>
   </element>
@@ -567,6 +585,7 @@
         <element ref="atlas:CurrentDateTime" />
         <element ref="atlas:CurrentTime" />
         <element ref="atlas:CustomAction" />
+        <element ref="atlas:DayOfMonth" />
         <element ref="atlas:DayOfWeek" />
         <element ref="atlas:DayOfYear" />
         <element ref="atlas:Divide" />
@@ -578,6 +597,7 @@
         <element ref="atlas:GenerateUUID" />
         <element ref="atlas:IndexOf" />
         <element ref="atlas:IsNull" />
+        <element ref="atlas:ItemAt" />
         <element ref="atlas:LastIndexOf" />
         <element ref="atlas:Length" />
         <element ref="atlas:LowercaseChar" />

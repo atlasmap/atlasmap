@@ -41,6 +41,7 @@ public class ActionsJsonSerializer extends JsonSerializer<Actions> {
     public static final String TEMPLATE = "template";
     public static final String TO_UNIT = "toUnit";
     public static final String VALUE = "value";
+    public static final String INDEX = "index";
 
     @Override
     public void serialize(Actions actions, JsonGenerator gen, SerializerProvider provider) throws IOException {
@@ -103,6 +104,9 @@ public class ActionsJsonSerializer extends JsonSerializer<Actions> {
                 break;
             case "IndexOf":
                 writeIndexOf(gen, (IndexOf) action);
+                break;
+            case "ItemAt":
+                writeItemAt(gen, (ItemAt) action);
                 break;
             case "LastIndexOf":
                 writeLastIndexOf(gen, (LastIndexOf) action);
@@ -301,6 +305,15 @@ public class ActionsJsonSerializer extends JsonSerializer<Actions> {
         gen.writeFieldName("IndexOf");
         gen.writeStartObject();
         gen.writeStringField(STRING, action.getString());
+        gen.writeEndObject();
+        gen.writeEndObject();
+    }
+
+    protected void writeItemAt(JsonGenerator gen, ItemAt action) throws IOException {
+        gen.writeStartObject();
+        gen.writeFieldName("ItemAt");
+        gen.writeStartObject();
+        gen.writeNumberField(INDEX, action.getIndex());
         gen.writeEndObject();
         gen.writeEndObject();
     }

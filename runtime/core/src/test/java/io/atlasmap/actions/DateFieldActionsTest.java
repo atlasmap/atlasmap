@@ -76,6 +76,13 @@ public class DateFieldActionsTest {
     }
 
     @Test
+    public void testDayOfMonth() {
+        assertNull(DateFieldActions.dayOfMonth(null, null));
+        ZonedDateTime origDate = LocalDate.of(2018,  10,  3).atStartOfDay(ZoneId.systemDefault());
+        assertEquals(Integer.valueOf(3), DateFieldActions.dayOfMonth(null, origDate));
+    }
+
+    @Test
     public void testDayOfWeek() {
         assertNull(DateFieldActions.dayOfWeek(null, null));
         ZonedDateTime origDate = LocalDate.of(2017, 12, 14).atStartOfDay(ZoneId.systemDefault());

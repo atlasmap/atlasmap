@@ -29,6 +29,7 @@ import org.junit.Test;
 
 import io.atlasmap.v2.Contains;
 import io.atlasmap.v2.Equals;
+import io.atlasmap.v2.ItemAt;
 import io.atlasmap.v2.Length;
 
 public class ObjectFieldActionsTest {
@@ -123,6 +124,22 @@ public class ObjectFieldActionsTest {
         assertTrue(ObjectFieldActions.isNull(null, null));
         assertFalse(ObjectFieldActions.isNull(null, ""));
         assertFalse(ObjectFieldActions.isNull(null, new Object[0]));
+    }
+
+    @Test
+    public void testItemAt() {
+        ItemAt action = new ItemAt();
+        action.setIndex(0);
+        assertEquals("one", ObjectFieldActions.itemAt(action, new String[] {"one", "two"}));
+        action.setIndex(1);
+        assertEquals("two", ObjectFieldActions.itemAt(action, new String[] {"one", "two"}));
+    }
+
+    @Test(expected = ArrayIndexOutOfBoundsException.class)
+    public void testItemAtOutOfBounds() {
+        ItemAt action = new ItemAt();
+        action.setIndex(2);
+        ObjectFieldActions.itemAt(action, new String[] {"one", "two"});
     }
 
     @Test

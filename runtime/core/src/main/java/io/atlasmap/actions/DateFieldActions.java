@@ -77,6 +77,11 @@ public class DateFieldActions implements AtlasFieldAction {
         return LocalTime.now().atDate(LocalDate.now()).atZone(ZoneId.systemDefault());
     }
 
+    @AtlasFieldActionInfo(name = "DayOfMonth", sourceType = FieldType.ANY_DATE, targetType = FieldType.INTEGER, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
+    public static Integer dayOfMonth(Action action, ZonedDateTime input) {
+        return input == null ? null : input.getDayOfMonth();
+    }
+
     @AtlasFieldActionInfo(name = "DayOfWeek", sourceType = FieldType.ANY_DATE, targetType = FieldType.INTEGER, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
     public static Integer dayOfWeek(Action action, ZonedDateTime input) {
         return input == null ? null : input.getDayOfWeek().getValue();
