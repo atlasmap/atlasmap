@@ -241,18 +241,23 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
         }
 
         Object sourceObject = field.getValue();
+        FieldType sourceType = (sourceObject != null ? getConversionService().fieldTypeFromClass(sourceObject.getClass()) : FieldType.NONE);
         FieldGroup fieldGroup = null;
         if (field instanceof FieldGroup) {
             fieldGroup = (FieldGroup)field;
-            List<Object> values = new LinkedList<>();
+            List<Object> values = new ArrayList<>();
             for (Field subField : fieldGroup.getField()) {
                 values.add(subField.getValue());
             }
             sourceObject = values;
+            if (values.size() > 0) {
+                sourceType = getConversionService().fieldTypeFromClass(values.get(0).getClass());
+            } else {
+                sourceType = FieldType.NONE;
+            }
         }
 
         Object tmpSourceObject = sourceObject;
-        FieldType sourceType = (sourceObject != null ? getConversionService().fieldTypeFromClass(sourceObject.getClass()) : FieldType.NONE);
 
         FieldType currentType = sourceType;
         for(Action action : actions.getActions()) {
@@ -263,21 +268,29 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
                         field.getPath(), AuditStatus.WARN, null);
                 continue;
             }
+
+            CollectionType sourceCollectionType = detail.getSourceCollectionType() != null ? detail.getSourceCollectionType() : CollectionType.NONE;
             if (tmpSourceObject instanceof List) {
                 List<Object> tmpSourceList = (List<Object>)tmpSourceObject;
                 for (int i=0; i<tmpSourceList.size(); i++) {
                     Object subValue = tmpSourceList.get(i);
                     FieldType subType = (subValue != null ? getConversionService().fieldTypeFromClass(subValue.getClass()) : FieldType.NONE);
-                    if(!isAssignableFieldType(detail.getSourceType(), subType)) {
+                    if(subValue != null && !isAssignableFieldType(detail.getSourceType(), subType)) {
                         subValue = getConversionService().convertType(subValue, subType, detail.getSourceType());
+                        tmpSourceList.set(i, subValue);
+                    }
+                    if (sourceCollectionType == CollectionType.NONE) {
+                        subValue = processAction(action, detail, subValue);
                         tmpSourceList.set(i, subValue);
                     }
                 }
             } else if(!isAssignableFieldType(detail.getSourceType(), currentType)) {
                 tmpSourceObject = getConversionService().convertType(sourceObject, currentType, detail.getSourceType());
             }
+            if (!(tmpSourceObject instanceof List) || sourceCollectionType != CollectionType.NONE) {
+                tmpSourceObject = processAction(action, detail, tmpSourceObject);
+            }
 
-            tmpSourceObject = processAction(action, detail, tmpSourceObject);
             currentType = detail.getTargetType();
             if (tmpSourceObject != null && tmpSourceObject.getClass().isArray()) {
                 tmpSourceObject = Arrays.asList((Object[])tmpSourceObject);
