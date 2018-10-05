@@ -82,10 +82,10 @@
 /* toolbar styles */
 .DataMapperUI .toolbar { margin:1px 0px; padding:10px; }
 .DataMapperUI .toolbar .toolbar-icons I { font-size:20px; margin-left:10px; vertical-align:middle; }
-.DataMapperUI .toolbar .dropdown-menu { margin-top:5px; }
-.DataMapperUI .toolbar .dropdown-menu LI { background-color:transparent; width:200px; }
+.DataMapperUI .toolbar .dropdown-menu .dropdown-item { margin-top:5px; margin-left:7px; font-size:14px; }
+.DataMapperUI .toolbar .dropdown-menu LI { background-color:transparent; width:220px; }
 .DataMapperUI .toolbar .dropdown-menu LI A { color:rgb(54,54,54); }
-.DataMapperUI .toolbar .dropdown-menu LI I { color:rgb(54,54,54); font-size:10px; margin-right:10px;
+.DataMapperUI .toolbar .dropdown-menu LI I { color:rgb(54,54,54); font-size:14px; margin-right:10px;
         vertical-align:baseline; }
 .DataMapperUI .toolbar .dropdown-menu LI I.fa-check { margin-top:3px; }
 .DataMapperUI .toolbar .dropdown-menu LI:hover { background-color:rgba(92, 186, 223, 0.75); }
