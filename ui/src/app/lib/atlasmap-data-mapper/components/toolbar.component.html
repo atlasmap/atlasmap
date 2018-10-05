@@ -45,7 +45,13 @@
         <li role="menuitem" (click)="toolbarButtonClicked('showTypes', $event);" class="clearfix">
           <div class="pull-left">
             <a class="dropdown-item" href="#">
-              <i class="fa fa-tag"></i>Show Types
+              <label>
+                <input *ngIf="cfg.showTypes" type="checkbox" (click)="toolbarButtonClicked('showTypes', $event);"
+                  checked="true"/>
+                <input *ngIf="!cfg.showTypes" type="checkbox" (click)="toolbarButtonClicked('showTypes', $event);"/>
+              </label>
+              <label>
+                <i class="fa fa-tag"></i>Show Types</label>
             </a>
           </div>
           <i class="fa fa-check" *ngIf="cfg.showTypes" class="pull-right"></i>
@@ -53,7 +59,13 @@
         <li role="menuitem" (click)="toolbarButtonClicked('showLines', $event);" class="clearfix">
           <div class="pull-left">
             <a class="dropdown-item" href="#">
-              <i class="fa fa-share-alt"></i>Show Lines
+              <label>
+                <input *ngIf="cfg.showLinesAlways" type="checkbox" (click)="toolbarButtonClicked('showLines', $event);"
+                  checked="true"/>
+                <input *ngIf="!cfg.showLinesAlways" type="checkbox" (click)="toolbarButtonClicked('showLines', $event);"/>
+              </label>
+              <label>
+                <i class="fa fa-share-alt"></i>Show Lines</label>
             </a>
           </div>
           <i class="fa fa-check" *ngIf="cfg.showLinesAlways" class="pull-right"></i>
@@ -61,7 +73,13 @@
         <li role="menuitem" (click)="toolbarButtonClicked('showMappedFields', $event);" class="clearfix">
           <div class="pull-left">
             <a class="dropdown-item" href="#">
-              <i class="fa fa-chain"></i>Show Mapped Fields
+              <label>
+                <input *ngIf="cfg.showMappedFields" type="checkbox" (click)="toolbarButtonClicked('showMappedFields', $event);"
+                  checked="true"/>
+                <input *ngIf="!cfg.showMappedFields" type="checkbox" (click)="toolbarButtonClicked('showMappedFields', $event);"/>
+              </label>
+              <label>
+                <i class="fa fa-chain"></i>Show Mapped Fields</label>
             </a>
           </div>
           <i class="fa fa-check" *ngIf="cfg.showMappedFields" class="pull-right"></i>
@@ -69,7 +87,13 @@
         <li role="menuitem" (click)="toolbarButtonClicked('showUnmappedFields', $event);" class="clearfix">
           <div class="pull-left">
             <a class="dropdown-item" href="#">
-              <i class="fa fa-chain-broken"></i>Show Unmapped Fields
+              <label>
+                <input *ngIf="cfg.showUnmappedFields" type="checkbox" (click)="toolbarButtonClicked('showUnmappedFields', $event);"
+                  checked="true"/>
+                <input *ngIf="!cfg.showUnmappedFields" type="checkbox" (click)="toolbarButtonClicked('showUnmappedFields', $event);"/>
+              </label>
+              <label>
+                <i class="fa fa-chain-broken"></i>Show Unmapped Fields</label>
             </a>
           </div>
           <i class="fa fa-check" *ngIf="cfg.showUnmappedFields" class="pull-right"></i>
@@ -77,7 +101,13 @@
         <li *ngIf="!cfg.initCfg.disableMappingPreviewMode" role="menuitem" (click)="toolbarButtonClicked('showMappingPreview', $event);" class="clearfix">
           <div class="pull-left">
             <a class="dropdown-item" href="#">
-              <i class="fa fa-eye"></i>Show Mapping Preview
+              <label>
+                <input *ngIf="cfg.showMappingPreview" type="checkbox" (click)="toolbarButtonClicked('showMappingPreview', $event);"
+                  checked="true"/>
+                <input *ngIf="!cfg.showMappingPreview" type="checkbox" (click)="toolbarButtonClicked('showMappingPreview', $event);"/>
+              </label>
+              <label>
+                <i class="fa fa-eye"></i>Show Mapping Preview</label>
             </a>
           </div>
           <i class="fa fa-check" *ngIf="cfg.showMappingPreview" class="pull-right"></i>
