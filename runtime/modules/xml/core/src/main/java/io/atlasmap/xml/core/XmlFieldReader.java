@@ -20,6 +20,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -36,12 +37,18 @@ import io.atlasmap.core.AtlasUtil;
 import io.atlasmap.spi.AtlasConversionService;
 import io.atlasmap.spi.AtlasFieldReader;
 import io.atlasmap.spi.AtlasInternalSession;
+import io.atlasmap.v2.AtlasMapping;
 import io.atlasmap.v2.AtlasModelFactory;
 import io.atlasmap.v2.AuditStatus;
+import io.atlasmap.v2.DataSource;
+import io.atlasmap.v2.DataSourceType;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldGroup;
 import io.atlasmap.v2.FieldType;
+import io.atlasmap.xml.v2.XmlDataSource;
 import io.atlasmap.xml.v2.XmlField;
+import io.atlasmap.xml.v2.XmlNamespace;
+import io.atlasmap.xml.v2.XmlNamespaces;
 
 public class XmlFieldReader extends XmlFieldTransformer implements AtlasFieldReader {
 
@@ -78,7 +85,7 @@ public class XmlFieldReader extends XmlFieldTransformer implements AtlasFieldRea
         if (LOG.isDebugEnabled()) {
             LOG.debug("Reading source value for field: " + xmlField.getPath());
         }
-
+        Optional<XmlNamespaces> xmlNamespaces = getSourceNamespaces(session, xmlField);
         SegmentContext lastSegment = null;
         List<Element> parentNodes = Arrays.asList(document.getDocumentElement());
         for (SegmentContext sc : new XmlPath(xmlField.getPath()).getSegmentContexts(false)) {
@@ -94,7 +101,7 @@ public class XmlFieldReader extends XmlFieldTransformer implements AtlasFieldRea
                 // "/XOA/contact<>/firstName", skip.
                 continue;
             }
-            parentNodes = extractSegment(parentNodes, sc);
+            parentNodes = extractSegment(parentNodes, sc, xmlNamespaces);
         }
         if (lastSegment != null) {
             readValue(session, parentNodes, lastSegment, xmlField);
@@ -102,7 +109,7 @@ public class XmlFieldReader extends XmlFieldTransformer implements AtlasFieldRea
         return session.head().getSourceField();
     }
 
-    private List<Element> extractSegment(List<Element> parentNodes, SegmentContext sc) throws AtlasException {
+    private List<Element> extractSegment(List<Element> parentNodes, SegmentContext sc, Optional<XmlNamespaces> xmlNamespaces) throws AtlasException {
         List<Element> answer = new LinkedList<>();
         for (Element parentNode : parentNodes) {
             if (LOG.isDebugEnabled()) {
@@ -115,13 +122,11 @@ public class XmlFieldReader extends XmlFieldTransformer implements AtlasFieldRea
 
             String childrenElementName = XmlPath.cleanPathSegment(sc.getSegment());
             String namespaceAlias = XmlPath.getNamespace(sc.getSegment());
-            if (namespaceAlias != null && !"".equals(namespaceAlias)) {
-                childrenElementName = namespaceAlias + ":" + childrenElementName;
-            }
+            Optional<String> namespace = getNamespace(xmlNamespaces, namespaceAlias);
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Looking for children elements with name: " + childrenElementName);
             }
-            List<Element> children = XmlIOHelper.getChildrenWithName(childrenElementName, parentNode);
+            List<Element> children = XmlIOHelper.getChildrenWithNameStripAlias(childrenElementName, namespace, parentNode);
             if (children == null || children.isEmpty()) {
                 if (LOG.isDebugEnabled()) {
                     LOG.debug("Skipping source value set, couldn't find children with name '" + childrenElementName
@@ -212,6 +217,43 @@ public class XmlFieldReader extends XmlFieldTransformer implements AtlasFieldRea
         } catch (Exception e) {
             throw new AtlasException(e);
         }
+    }
+
+    private Optional<XmlNamespaces> getSourceNamespaces(AtlasInternalSession session, XmlField xmlField) {
+        DataSource dataSource = null;
+        AtlasMapping mapping = session.getMapping();
+        // this is to simplify tests which uses mocks
+        if (mapping == null || mapping.getDataSource() == null || xmlField.getDocId() == null) {
+            return Optional.empty();
+        }
+        List<DataSource> dataSources = mapping.getDataSource();
+        for (DataSource source : dataSources) {
+            if (!source.getDataSourceType().equals(DataSourceType.SOURCE)) {
+                continue;
+            }
+            if (xmlField.getDocId().equals(source.getId())) {
+                dataSource = source;
+                break;
+            }
+        }
+        if (dataSource == null || !XmlDataSource.class.isInstance(dataSource)) {
+            return Optional.empty();
+        }
+        XmlDataSource xmlDataSource = XmlDataSource.class.cast(dataSource);
+        return Optional.of(xmlDataSource.getXmlNamespaces());
+    }
+
+    private Optional<String> getNamespace(Optional<XmlNamespaces> xmlNamespaces, String namespaceAlias) {
+        Optional<String> namespace = Optional.empty();
+        if (xmlNamespaces.isPresent()) {
+            for (XmlNamespace xmlNamespace : xmlNamespaces.get().getXmlNamespace()) {
+                if (xmlNamespace.getAlias().equals(namespaceAlias)) {
+                    namespace = Optional.of(xmlNamespace.getUri());
+                    break;
+                }
+            }
+        }
+        return namespace;
     }
 
 }

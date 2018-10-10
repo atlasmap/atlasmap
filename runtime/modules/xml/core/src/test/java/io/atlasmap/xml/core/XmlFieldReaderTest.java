@@ -29,8 +29,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import org.junit.Test;
@@ -39,11 +41,17 @@ import io.atlasmap.api.AtlasException;
 import io.atlasmap.core.DefaultAtlasConversionService;
 import io.atlasmap.spi.AtlasInternalSession;
 import io.atlasmap.spi.AtlasInternalSession.Head;
+import io.atlasmap.v2.AtlasMapping;
 import io.atlasmap.v2.AuditStatus;
 import io.atlasmap.v2.Audits;
+import io.atlasmap.v2.DataSource;
+import io.atlasmap.v2.DataSourceType;
 import io.atlasmap.v2.FieldType;
 import io.atlasmap.xml.v2.AtlasXmlModelFactory;
+import io.atlasmap.xml.v2.XmlDataSource;
 import io.atlasmap.xml.v2.XmlField;
+import io.atlasmap.xml.v2.XmlNamespace;
+import io.atlasmap.xml.v2.XmlNamespaces;
 
 public class XmlFieldReaderTest {
     private XmlFieldReader reader = new XmlFieldReader(DefaultAtlasConversionService.getInstance());
@@ -177,6 +185,8 @@ public class XmlFieldReaderTest {
         reader.setDocument(doc, true);
         XmlField xmlField = AtlasXmlModelFactory.createXmlField();
         xmlField.setPath("/orders/q:order/id/@y:custId");
+        String docId = "docId";
+        xmlField.setDocId(docId);
         assertNull(xmlField.getValue());
 
         Map<String, String> namespaces = new LinkedHashMap<>();
@@ -186,6 +196,7 @@ public class XmlFieldReaderTest {
         reader.setNamespaces(namespaces);
 
         AtlasInternalSession session = mock(AtlasInternalSession.class);
+        mockDataSources(docId, session);
         when(session.head()).thenReturn(mock(Head.class));
         when(session.head().getSourceField()).thenReturn(xmlField);
         reader.read(session);
@@ -193,6 +204,7 @@ public class XmlFieldReaderTest {
         assertThat(xmlField.getValue(), is("cx"));
 
         XmlField xmlField2 = AtlasXmlModelFactory.createXmlField();
+        xmlField2.setDocId(docId);
         xmlField2.setPath("/orders/order/id/@y:custId");
         assertNull(xmlField2.getValue());
         when(session.head().getSourceField()).thenReturn(xmlField2);
@@ -201,6 +213,7 @@ public class XmlFieldReaderTest {
         assertThat(xmlField2.getValue(), is("aa"));
 
         XmlField xmlField3 = AtlasXmlModelFactory.createXmlField();
+        xmlField3.setDocId(docId);
         xmlField3.setPath("/orders/q:order[1]/id/@y:custId");
         assertNull(xmlField3.getValue());
         when(session.head().getSourceField()).thenReturn(xmlField3);
@@ -215,6 +228,8 @@ public class XmlFieldReaderTest {
         reader.setDocument(doc, true);
         XmlField xmlField = AtlasXmlModelFactory.createXmlField();
         xmlField.setPath("/orders/q:order/id/@y:custId");
+        String docId = "docId";
+        xmlField.setDocId(docId);
         assertNull(xmlField.getValue());
 
         Map<String, String> namespaces = new LinkedHashMap<>();
@@ -226,6 +241,7 @@ public class XmlFieldReaderTest {
                 namespaces);
         multipleNamespacesReader.setDocument(doc, true);
         AtlasInternalSession session = mock(AtlasInternalSession.class);
+        mockDataSources(docId, session);
         when(session.head()).thenReturn(mock(Head.class));
         when(session.head().getSourceField()).thenReturn(xmlField);
         multipleNamespacesReader.read(session);
@@ -658,6 +674,36 @@ public class XmlFieldReaderTest {
 
         assertEquals(expectedValue, session.head().getSourceField().getValue());
         assertEquals(0, session.getAudits().getAudit().size());
+    }
+
+
+    private void mockDataSources(String docId, AtlasInternalSession session) {
+        AtlasMapping atlasMapping = mock(AtlasMapping.class);
+        List<DataSource> dataSources = new ArrayList<>();
+        XmlDataSource xmlDataSource = new XmlDataSource();
+        xmlDataSource.setId(docId);
+        xmlDataSource.setDataSourceType(DataSourceType.SOURCE);
+        XmlNamespaces atlasNamespaces = new XmlNamespaces();
+
+        XmlNamespace xmlNamespaceQ = new XmlNamespace();
+        xmlNamespaceQ.setAlias("q");
+        xmlNamespaceQ.setUri("http://www.example.com/q/");
+
+        XmlNamespace xmlNamespaceX = new XmlNamespace();
+        xmlNamespaceX.setAlias("");
+        xmlNamespaceX.setUri("http://www.example.com/x/");
+
+        XmlNamespace xmlNamespaceY = new XmlNamespace();
+        xmlNamespaceY.setAlias("y");
+        xmlNamespaceY.setUri("http://www.example.com/y/");
+
+        atlasNamespaces.getXmlNamespace().add(xmlNamespaceQ);
+        atlasNamespaces.getXmlNamespace().add(xmlNamespaceX);
+        atlasNamespaces.getXmlNamespace().add(xmlNamespaceY);
+        xmlDataSource.setXmlNamespaces(atlasNamespaces);
+        dataSources.add(xmlDataSource);
+        when(atlasMapping.getDataSource()).thenReturn(dataSources);
+        when(session.getMapping()).thenReturn(atlasMapping);
     }
 
 }
