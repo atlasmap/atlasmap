@@ -21,27 +21,28 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import io.atlasmap.core.AtlasUtil;
 import io.atlasmap.java.v2.AtlasJavaModelFactory;
 import io.atlasmap.java.v2.JavaClass;
 import io.atlasmap.v2.CollectionType;
 
 public class PrimitiveValidationUtil {
 
-    public static void validatePrimitive(JavaClass j, String name) {
+    public static void validatePrimitive(JavaClass j, String name) throws Exception {
         validatePrimitiveCommon(j);
         assertEquals(name, j.getClassName());
         assertNull(j.getCollectionType());
         assertNull(j.getArrayDimensions());
     }
 
-    public static void validatePrimitiveArray(JavaClass j, String name, int dim) {
+    public static void validatePrimitiveArray(JavaClass j, String name, int dim) throws Exception {
         validatePrimitiveCommon(j);
         assertEquals(name, j.getClassName());
         assertEquals(new Integer(dim), j.getArrayDimensions());
         assertEquals(CollectionType.ARRAY, j.getCollectionType());
     }
 
-    protected static void validatePrimitiveCommon(JavaClass j) {
+    protected static void validatePrimitiveCommon(JavaClass j) throws Exception {
         assertNotNull(j);
         assertFalse(j.isAnnonymous());
         assertFalse(j.isAnnotation());
@@ -59,6 +60,7 @@ public class PrimitiveValidationUtil {
         assertTrue(j.getJavaEnumFields().getJavaEnumField().size() == 0);
         assertNull(j.getPackageName());
         assertNotNull(j.getUri());
-        assertEquals(String.format(AtlasJavaModelFactory.URI_FORMAT, j.getClassName()), j.getUri());
+        assertEquals(String.format(AtlasJavaModelFactory.URI_FORMAT,
+                AtlasUtil.escapeForUri(j.getClassName())), j.getUri());
     }
 }

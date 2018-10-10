@@ -175,6 +175,7 @@ class JavaWriterUtil {
             }
 
             if (targetMethod != null) {
+                targetMethod.setAccessible(true);
                 targetMethod.invoke(targetObject, childObject);
                 javaField.setValue(childObject);
             } else {
