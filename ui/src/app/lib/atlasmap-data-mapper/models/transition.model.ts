@@ -55,9 +55,44 @@ export class FieldActionConfig {
   }
 
   /**
-   * Return true if the action's source/target types and collection types matches the respective source/target
-   * field properties for source transformations, or matches the respective target field properties only if for
+   * Return true if the specified field mapping pair has multiple transformations specified, false otherwise.
+   *
+   * @param fieldPair
+   */
+  private multipleTransformations(fieldPair: FieldMappingPair): boolean {
+    return fieldPair.sourceFields[0].actions.length > 1;
+  }
+
+  /**
+   * Return true if the candidate type and selected type are generically a date, false otherwise.
+   *
+   * @param candidateType
+   * @param selectedType
+   */
+  private matchesDate(candidateType: string, selectedType: string): boolean {
+    return ((selectedType === '') || (candidateType === 'ANY') ||
+      (candidateType === 'ANY_DATE' &&
+        ['DATE', 'DATE_TIME', 'DATE_TIME_TZ', 'TIME'].indexOf(selectedType) !== -1));
+  }
+
+  /**
+   * Return true if the candidate type and selected type are generically numeric, false otherwise.
+   *
+   * @param candidateType
+   * @param selectedType
+   */
+  private matchesNumeric(candidateType: string, selectedType: string): boolean {
+    return ((selectedType === '') || (candidateType === 'ANY') ||
+      (candidateType === 'NUMBER' &&
+        ['LONG', 'INTEGER', 'FLOAT', 'DOUBLE', 'SHORT', 'BYTE', 'DECIMAL', 'NUMBER'].indexOf(selectedType) !== -1));
+  }
+
+  /**
+   * Return true if the action's source/target types and collection types match the respective source/target
+   * field properties for source transformations, or matches the respective target field properties only for
    * a target transformation.
+   *
+   * Note - source-side only transformations are permitted so the target field may be undefined.
    *
    * @param fieldPair
    */
@@ -66,67 +101,87 @@ export class FieldActionConfig {
     if (fieldPair == null) {
       return false;
     }
-    const sourceField: Field = this.getActualField(fieldPair, true);
-    const targetField: Field = this.getActualField(fieldPair, false);
+    const selectedSourceField: Field = this.getActualField(fieldPair, true);
+    const selectedTargetField: Field = this.getActualField(fieldPair, false);
 
-    if (sourceField == null || targetField == null) {
+    if (selectedSourceField == null) {
       return false;
     }
 
     if (isSource) {
-      if (this.serviceObject.sourceCollectionType === 'NONE' && sourceField.getCollectionType() != null) {
-        return false;
-      }
+
+      // If the selected source element is a collection then the candidate source service object must be a collection.
       if (this.serviceObject.sourceCollectionType === 'ALL'
-          && this.sourceType !== 'ANY'
-          && ['ARRAY', 'LIST', 'MAP'].indexOf(sourceField.getCollectionType()) === -1
-          && sourceField.type !== 'STRING') {
+          && ['ARRAY', 'LIST', 'MAP'].indexOf(selectedSourceField.getCollectionType()) === -1) {
         return false;
       }
-      if (this.serviceObject.targetCollectionType === 'NONE' && targetField.getCollectionType() != null) {
-        return false;
-      }
+
+      // If the selected target element is a collection then the candidate target service object must be a collection.
       if (this.serviceObject.targetCollectionType === 'ALL'
-          && ['ARRAY', 'LIST', 'MAP'].indexOf(targetField.getCollectionType()) === -1
-          && targetField.type !== 'STRING') {
+          && ['ARRAY', 'LIST', 'MAP'].indexOf(selectedTargetField.getCollectionType()) === -1) {
         return false;
       }
 
-      // Check for matching types.
-      if (this.sourceType === 'NUMBER'
-          && ['LONG', 'INTEGER', 'FLOAT', 'DOUBLE', 'SHORT', 'BYTE', 'DECIMAL', 'NUMBER'].indexOf(sourceField.type) === -1) {
-        return false;
+      // Check for matching types - date.
+      if (this.matchesDate(this.sourceType, selectedSourceField.type)) {
+        if ((this.multipleTransformations(fieldPair)) || (this.matchesDate(this.targetType, selectedTargetField.type))) {
+          return true;
+        }
       }
-      if (this.sourceType === 'ANY_DATE' && ['DATE', 'DATE_TIME', 'DATE_TIME_TZ', 'TIME'].indexOf(sourceField.type) === -1) {
-        return false;
+
+      // Check for matching types - numeric.
+      if (this.matchesNumeric(this.sourceType, selectedSourceField.type)) {
+        if ((this.multipleTransformations(fieldPair)) || (this.matchesNumeric(this.targetType, selectedTargetField.type))) {
+          return true;
+        }
       }
+
       if (this.targetType === 'NUMBER') {
-        return ['LONG', 'INTEGER', 'FLOAT', 'DOUBLE', 'SHORT', 'BYTE', 'DECIMAL', 'NUMBER'].indexOf(targetField.type) !== -1;
-      }
-      if (this.targetType === 'ANY_DATE') {
-        return ['DATE', 'DATE_TIME', 'DATE_TIME_TZ', 'TIME'].indexOf(targetField.type) !== -1;
-      }
-
-      // All other types must match the mapped field types with the field action types.
-      if (this.sourceType !== 'ANY' && sourceField.type !== this.sourceType) {
+        if ((['STRING'].indexOf(selectedSourceField.type) !== -1) &&
+          ((this.name === 'IndexOf') || (this.name === 'LastIndexOf'))) {
+          return true;
+        }
         return false;
       }
-      return targetField.type === this.targetType;
-    } else { // target transformation
+
+      // First check if the source types match.
+     if ((this.sourceType === 'ANY') || (selectedSourceField.type === this.sourceType)) {
+
+       // If no target type is selected then we match (source-side transformation).
+       if ((this.multipleTransformations(fieldPair)) || (selectedTargetField.type === '')) {
+         return true;
+       }
+
+       // Now the target types must match.
+       return (selectedTargetField.type === this.targetType);
+     }
+
+     return false;
+
+    // Target transformation - target type may not change
+    } else {
+
+      if (selectedTargetField == null) {
+        return false;
+      }
+
       if (this.serviceObject.sourceCollectionType !== this.serviceObject.targetCollectionType) {
         return false;
       }
 
-      // Check for matching types.
-      if (this.targetType === 'NUMBER') {
-        return (['LONG', 'INTEGER', 'FLOAT', 'DOUBLE', 'SHORT', 'BYTE', 'DECIMAL', 'NUMBER'].indexOf(targetField.type) !== -1);
-      }
+      // Check for matching types - date.
       if (this.targetType === 'ANY_DATE') {
-        return (['DATE', 'DATE_TIME', 'DATE_TIME_TZ', 'TIME'].indexOf(targetField.type) !== -1);
+        return (this.matchesDate(this.targetType, selectedTargetField.type));
       }
 
-      // All other types must match the mapped field types with the field action types.
-      return (this.sourceType === 'ANY' || targetField.type === this.sourceType) && targetField.type === this.targetType;
+      // Check for matching types - numeric.
+      if (this.targetType === 'NUMBER') {
+        return (this.matchesNumeric(this.targetType, selectedTargetField.type));
+      }
+
+      // All other types must match the selected field types with the candidate field action types.
+      return ((this.sourceType === 'ANY' || selectedTargetField.type === this.sourceType) &&
+              (this.targetType === 'ANY' || selectedTargetField.type === this.targetType));
     }
   }
 

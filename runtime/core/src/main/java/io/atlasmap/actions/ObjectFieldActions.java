@@ -108,7 +108,7 @@ public class ObjectFieldActions implements AtlasFieldAction {
         }
     }
 
-    @AtlasFieldActionInfo(name = "Length", sourceType = FieldType.ANY, targetType = FieldType.INTEGER, sourceCollectionType = CollectionType.ALL, targetCollectionType = CollectionType.NONE)
+    @AtlasFieldActionInfo(name = "Length", sourceType = FieldType.STRING, targetType = FieldType.INTEGER, sourceCollectionType = CollectionType.ALL, targetCollectionType = CollectionType.NONE)
     public static Integer length(Action action, Object input) {
         if (input == null) {
             return -1;
