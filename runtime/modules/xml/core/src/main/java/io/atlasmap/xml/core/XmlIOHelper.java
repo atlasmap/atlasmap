@@ -18,6 +18,7 @@ package io.atlasmap.xml.core;
 import java.io.StringWriter;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
@@ -48,6 +49,26 @@ public final class XmlIOHelper {
         return children;
     }
 
+    public static List<Element> getChildrenWithNameStripAlias(String name, Optional<String> namespace, Element parentNode) {
+        List<Element> children = new LinkedList<>();
+        if (parentNode == null) {
+            return children;
+        }
+        NodeList nodeChildren = parentNode.getChildNodes();
+        for (int i = 0; i < nodeChildren.getLength(); i++) {
+            Node child = nodeChildren.item(i);
+            String nodeName = getNodeNameWithoutNamespaceAlias(child);
+            if ((child instanceof Element) && nodeName.equals(name)) {
+                if (!namespace.isPresent()) {
+                    children.add((Element) child);
+                } else if (namespace.get().equals(child.getNamespaceURI())) {
+                    children.add((Element) child);
+                }
+            }
+        }
+        return children;
+    }
+
     public static String writeDocumentToString(boolean stripSpaces, Node node) throws AtlasException {
         try {
             if (node == null) {
@@ -68,6 +89,15 @@ public final class XmlIOHelper {
         } catch (Exception e) {
             throw new AtlasException(e);
         }
+    }
+
+    private static String getNodeNameWithoutNamespaceAlias(Node child) {
+        String nodeName = child.getNodeName();
+        int index = nodeName.indexOf(":");
+        if (index >= 0) {
+            nodeName = nodeName.substring(index + 1);
+        }
+        return nodeName;
     }
 
 }
