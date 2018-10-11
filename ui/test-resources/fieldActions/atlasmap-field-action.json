@@ -556,9 +556,9 @@
       "name" : "Length",
       "className" : "io.atlasmap.actions.ObjectFieldActions",
       "method" : "length",
-      "sourceType" : "ANY",
+      "sourceType" : "STRING",
       "targetType" : "INTEGER",
-      "sourceCollectionType" : "ALL",
+      "sourceCollectionType" : "NONE",
       "targetCollectionType" : "NONE"
     }, {
       "parameters" : {

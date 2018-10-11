@@ -83,16 +83,28 @@ describe('FieldActionConfig.appliesToField()', () => {
       expect(action.appliesToField(pair, false)).toBe(false);
     });
 
-    it('should return if action source type matches target field type, and action target type matches target type',
+    it('should return true if action source type STRING matches target field type STRING, and action target type matches target type',
        () => {
+      source.type = 'STRING';
       target.type = 'STRING';
       action.targetType = 'STRING';
       action.sourceType = 'STRING';
       expect(action.appliesToField(pair, false)).toBe(true);
-      action.sourceType = 'CHAR';
-      expect(action.appliesToField(pair, false)).toBe(false);
-      action.sourceType = 'STRING';
-      target.type = 'CHAR';
-      expect(action.appliesToField(pair, false)).toBe(false);
+    });
+
+    it('should return false if action source type CHAR matches target field type STRING, and action target type matches target type',
+        () => {
+       target.type = 'STRING';
+       action.targetType = 'STRING';
+       action.sourceType = 'CHAR';
+       expect(action.appliesToField(pair, false)).toBe(false);
+    });
+
+    it('should return false if action source type STRING matches target field type CHAR, and action target type does not match target type',
+        () => {
+       target.type = 'CHAR';
+       action.targetType = 'STRING';
+       action.sourceType = 'STRING';
+       expect(action.appliesToField(pair, false)).toBe(false);
     });
 });

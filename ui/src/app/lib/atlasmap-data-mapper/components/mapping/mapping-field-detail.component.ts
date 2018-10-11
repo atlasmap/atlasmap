@@ -63,6 +63,7 @@ export class MappingFieldDetailComponent implements OnInit {
     const actionConfig: FieldActionConfig =
       MappingFieldActionComponent.getFieldActions(this.fieldPair, this.isSource)[0];
     if (actionConfig == null) {
+      this.cfg.errorService.info('The selected field has no applicable transformation actions.', null);
       return;
     }
     const action: FieldAction = new FieldAction();
