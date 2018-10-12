@@ -124,7 +124,9 @@ export class FieldActionConfig {
 
       // Check for matching types - date.
       if (this.matchesDate(this.sourceType, selectedSourceField.type)) {
-        if ((this.multipleTransformations(fieldPair)) || (this.matchesDate(this.targetType, selectedTargetField.type))) {
+        if ((this.multipleTransformations(fieldPair)) || (this.matchesDate(this.targetType, selectedTargetField.type)) ||
+            ((this.targetType === 'INTEGER') && ((this.name === 'DayOfWeek') || (this.name === 'DayOfMonth')) ||
+             (this.name === 'DayOfYear'))) {
           return true;
         }
       }
