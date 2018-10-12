@@ -55,6 +55,8 @@ export class DocumentFieldDetailComponent {
     // event's data transfer store isn't available during dragenter/dragleave/dragover, so we need
     // to store this info in a global somewhere since those methods depend on knowing if the
     // dragged field is source/target
+    event = event || window.event;
+    event.dataTransfer.setData('text', '');  // firefox bug
     this.cfg.currentDraggedField = this.field;
   }
 
@@ -71,7 +73,12 @@ export class DocumentFieldDetailComponent {
       this.isDragDropTarget = false;
       return;
     }
-    event.preventDefault();
+    if (event.preventDefault) {
+      event.preventDefault();
+    }
+    if (event.stopPropagation) {
+      event.stopPropagation();
+    }
     this.isDragDropTarget = true;
   }
 
