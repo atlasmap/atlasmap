@@ -13,12 +13,10 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-
 import { Component, Input, OnInit } from '@angular/core';
 
-// import { DocumentType } from '../common/config.types';
 import { ConfigModel } from '../models/config.model';
-// import { DocumentDefinition } from '../models/document-definition.model';
+import { InitializationService } from '../services/initialization.service';
 
 import { ModalWindowComponent } from './modal-window.component';
 import { TemplateEditComponent } from './template-edit.component';
@@ -32,7 +30,60 @@ export class ToolbarComponent implements OnInit {
   @Input() cfg: ConfigModel;
   @Input() modalWindow: ModalWindowComponent;
   targetSupportsTemplate = false;
+
+  private fileData: any;
   private mappingsFileName: string;
+  private reader: FileReader;
+
+  /**
+   * Perform an asynchronous read of a local file, returning a byte array for the file content.
+   *
+   * @param fileContent
+   */
+  async readFile(fileContent: Blob): Promise<Uint8Array> {
+    return new Promise<Uint8Array>((resolve, reject) => {
+      this.reader.onload = (event: any) => {
+        const arrayBuffer = this.reader.result;
+        const bytes = new Uint8Array(arrayBuffer);
+        resolve(bytes);
+      };
+      this.reader.readAsArrayBuffer(fileContent);
+    });
+  }
+
+  /**
+   * Schema import button click.  Disable initialization to trigger the loading icon.
+   */
+  processClick(loadingStatus: string) {
+    this.cfg.initCfg.initialized = false;
+    this.cfg.initializationService.updateLoadingStatus(loadingStatus);
+  }
+
+  /* A user has selected a compressed mappings catalog file to be imported into the canvas.
+  *
+  * @param event
+  */
+  async processMappingsCatalog(event) {
+
+    // Wait for the async read of the selected mappings doc to be completed.
+    try {
+      this.fileData = await this.readFile(new Blob([event.target.files[0]]));
+    } catch (error) {
+      this.cfg.errorService.mappingError('Unable to import the specified data mappings file: ' +
+        event.target.files[0].name + '\n' + error.message, error);
+      return;
+    }
+
+    // Inflate the buffer and push it to the server.
+    try {
+      this.cfg.initializationService.processMappingsCatalog(this.fileData);
+      window.location.reload(true);
+    } catch (error) {
+      this.cfg.errorService.mappingError('Unable to decompress the aggregate mappings file: \n' + event.target.files[0].name +
+       '\n' + error.message, error);
+      return;
+    }
+  }
 
   getCSSClass(action: string) {
     if ('showDetails' === action) {
@@ -45,6 +96,8 @@ export class ToolbarComponent implements OnInit {
       return 'fa fa-code link' + (this.cfg.showNamespaceTable ? ' selected' : '');
     } else if ('editTemplate' === action) {
       return 'fa fa-file-text-o link' + (this.cfg.mappings.templateExists() ? ' selected' : '');
+    } else if ('importMappings' === action) {
+      return 'pficon pficon-import link';
     } else if ('exportMappings' === action) {
       return 'pficon pficon-export link';
     }
@@ -96,7 +149,8 @@ export class ToolbarComponent implements OnInit {
 
   ngOnInit() {
     this.mappingsFileName = '';
-
+    this.fileData = null;
+    this.reader = new FileReader();
     // Disable template until runtime supports it - https://github.com/atlasmap/atlasmap/issues/329
     // const targetDoc: DocumentDefinition = this.cfg.targetDocs[0];
     // this.targetSupportsTemplate = targetDoc && (targetDoc.type == DocumentType.XML || targetDoc.type == DocumentType.JSON);
