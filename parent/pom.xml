@@ -44,7 +44,7 @@
     <jackson.version>2.8.11</jackson.version>
     <jackson.version.range>[2.6,3)</jackson.version.range>
     <jackson-module-jaxb-annotations.version>2.8.6</jackson-module-jaxb-annotations.version>
-    <jacoco-maven-plugin.version>0.7.9</jacoco-maven-plugin.version>
+    <jacoco-maven-plugin.version>0.8.2</jacoco-maven-plugin.version>
     <javax.ws.rs.version>2.0</javax.ws.rs.version>
     <jaxb-api.version>2.2.12</jaxb-api.version>
     <jaxb-impl.version>2.1</jaxb-impl.version>

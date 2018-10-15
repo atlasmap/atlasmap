@@ -36,7 +36,6 @@
     <docker.image>atlasmap/atlasmap:%l</docker.image>
     <license.dir>${project.basedir}/src/main/resources/license</license.dir>
     <license.output.dir>${project.build.directory}/licenses</license.output.dir>
-    <argLine>-Xmx512m -XX:MaxMetaspaceSize=256m</argLine>
   </properties>
 
   <modules>
