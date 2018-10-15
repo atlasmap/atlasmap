@@ -124,24 +124,18 @@ export class FieldActionConfig {
 
       // Check for matching types - date.
       if (this.matchesDate(this.sourceType, selectedSourceField.type)) {
-        if ((this.multipleTransformations(fieldPair)) || (this.matchesDate(this.targetType, selectedTargetField.type))) {
+        if ((this.multipleTransformations(fieldPair)) || (this.matchesDate(this.targetType, selectedTargetField.type)) ||
+            (this.targetType === selectedTargetField.type)) {
           return true;
         }
       }
 
       // Check for matching types - numeric.
       if (this.matchesNumeric(this.sourceType, selectedSourceField.type)) {
-        if ((this.multipleTransformations(fieldPair)) || (this.matchesNumeric(this.targetType, selectedTargetField.type))) {
+        if ((this.multipleTransformations(fieldPair)) || (this.matchesNumeric(this.targetType, selectedTargetField.type)) ||
+            (this.targetType === selectedTargetField.type)) {
           return true;
         }
-      }
-
-      if (this.targetType === 'NUMBER') {
-        if ((['STRING'].indexOf(selectedSourceField.type) !== -1) &&
-          ((this.name === 'IndexOf') || (this.name === 'LastIndexOf'))) {
-          return true;
-        }
-        return false;
       }
 
       // First check if the source types match.
@@ -153,7 +147,7 @@ export class FieldActionConfig {
        }
 
        // Now the target types must match.
-       return (selectedTargetField.type === this.targetType);
+       return ((selectedTargetField.type === this.targetType) || (this.matchesNumeric(this.targetType, selectedTargetField.type)));
      }
 
      return false;
