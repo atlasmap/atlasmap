@@ -147,7 +147,7 @@ jobs:
           command: |
             mkdir /workspace/coverage/
             cp -a ./runtime/coverage-report/target/site/jacoco-aggregate/* /workspace/coverage
-            java -cp ./.circleci/codacy-coverage-reporter-2.0.1-assembly.jar com.codacy.CodacyCoverageReporter -l Java -r /workspace/coverage/jacoco.xml
+            java -cp ./.circleci/codacy-coverage-reporter-4.0.3-assembly.jar com.codacy.CodacyCoverageReporter report -l Java -r /workspace/coverage/jacoco.xml
       - store_artifacts:
           path: /workspace/coverage
       - <<: *save_checkstyle
