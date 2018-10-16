@@ -4,20 +4,21 @@
 
     <div *ngIf="!cfg.initCfg.disableNavbar" class="inline-block pull-left">
       <label [attr.class]="getCSSClass('importMappings')" *ngIf="!cfg.initCfg.disableNavbar"
-        tooltip="Import an AtlasMap mappings file (.adm)." placement="bottom" style="font-size:20px;">
+        tooltip="Import an AtlasMap mappings file (.adm)." placement="bottom" style="font-size:20px;margin-top:2px;">
         <input type="file" accept=".adm" name="usermappingsfile" style="display:none" id="usermappingsfile"
           (click)="processClick('Importing AtlasMap Mappings')" (change)="processMappingsCatalog($event)">
       </label>
     </div>
 
     <div *ngIf="!cfg.initCfg.disableNavbar" dropdown #dropdown="bs-dropdown" class="dropdown inline-block pull-left">
-      <i [attr.class]="getCSSClass('exportMappings')" dropdownToggle (click)="false" style="float:left;color: black;"
+      <i [attr.class]="getCSSClass('exportMappings')" dropdownToggle (click)="false" style="float:left;color: black;margin-top:2px;"
         tooltip="Export the current mappings and support files." placement="bottom"></i>
       <ul *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu">
         <div style="font-size:14px; width:426px;">
           <a href="#">
             <div style="margin-left:8px; margin-right:8px;">Export mappings
-              <input type="text" (change)="handleMappingsInstanceName($event)" placeholder="atlasmap-mapping.adm"/>
+              <input type="text" (change)="handleMappingsInstanceName($event)" placeholder="atlasmap-mapping.adm"
+                (click)="handleExportClick($event)"/>
                 <button type="button" style="margin-left:7px; margin-right:4px;" (click)="handleExportMapping($event)">OK</button>
                 <button type="button" (click)="handleExportMappingCancel()">Cancel</button>
             </div>
@@ -25,6 +26,8 @@
         </div>
       </ul>
     </div>
+
+    <i *ngIf="!cfg.initCfg.disableNavbar" class="fa" style="font-size:24px; color:gray;">|</i>
 
     <i class="fa fa-plus link" (click)="toolbarButtonClicked('addMapping', $event);"
        tooltip="Add new mapping" placement="bottom"></i>
@@ -42,7 +45,7 @@
       tooltip="Show/hide mapping details" placement="left"></i>
 
     <div dropdown #dropdown="bs-dropdown" class="dropdown inline-block pull-right">
-      <i [attr.class]="getEditorSettingsCSSClass(dropdown.isOpen)" dropdownToggle (click)="false"
+      <i [attr.class]="getEditorSettingsCSSClass(dropdown.isOpen)" dropdownToggle (click)="false" style="margin-top:2px;"
         tooltip="Editor settings" placement="left"></i>
 
       <ul *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu">

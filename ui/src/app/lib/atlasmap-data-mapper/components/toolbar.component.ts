@@ -175,6 +175,20 @@ export class ToolbarComponent implements OnInit {
   }
 
   /**
+   * The user has clicked in the export file text wudget.
+   *
+   * @param event
+   */
+  handleExportClick(event) {
+    if (event.preventDefault) {
+        event.preventDefault();
+    }
+    if (event.stopPropagation) {
+      event.stopPropagation();
+    }
+  }
+
+  /**
    * The user has specified an AtlasMap mappings catalog file name into which the current live mappings and
    * support documents will be exported.
    *
