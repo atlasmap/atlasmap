@@ -110,18 +110,6 @@ export class FieldActionConfig {
 
     if (isSource) {
 
-      // If the selected source element is a collection then the candidate source service object must be a collection.
-      if (this.serviceObject.sourceCollectionType === 'ALL'
-          && ['ARRAY', 'LIST', 'MAP'].indexOf(selectedSourceField.getCollectionType()) === -1) {
-        return false;
-      }
-
-      // If the selected target element is a collection then the candidate target service object must be a collection.
-      if (this.serviceObject.targetCollectionType === 'ALL'
-          && ['ARRAY', 'LIST', 'MAP'].indexOf(selectedTargetField.getCollectionType()) === -1) {
-        return false;
-      }
-
       // Check for matching types - date.
       if (this.matchesDate(this.sourceType, selectedSourceField.type)) {
         if ((this.multipleTransformations(fieldPair)) || (this.matchesDate(this.targetType, selectedTargetField.type)) ||

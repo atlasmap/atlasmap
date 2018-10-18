@@ -1,10 +1,12 @@
 <div class="collectionSectionContainer">
   <div [attr.class]="'collectionSection clearfix ' + getAnimationCSSClass()">
     <!-- collection field pairing detail -->
+
     <div style="width:50%; padding-top:10px;" class="pull-left mappingFieldContainer">
+      <!--
       <div *ngFor="let fieldPair of cfg.mappings.activeMapping.fieldMappings">
         <div class="MappingFieldSection">
-          <!-- header label / trash icon -->
+          <!-- header label / trash icon - - >
           <div class="clearfix">
             <div class="pull-left">
               <label>Source</label>
@@ -27,6 +29,7 @@
           </div>
         </div>
       </div>
+      -->
       <!-- add button -->
       <div class="linkContainer">
         <button type="button" class="btn btn-primary" (click)="addClicked()">Add Mapping</button>
