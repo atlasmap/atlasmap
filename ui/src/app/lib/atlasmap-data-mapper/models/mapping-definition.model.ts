@@ -282,6 +282,15 @@ export class MappingDefinition {
 
   private updateMappedFieldsFromDocuments(fieldPair: FieldMappingPair, cfg: ConfigModel, docMap: any, isSource: boolean): void {
     const mappedFields: MappedField[] = fieldPair.getMappedFields(isSource);
+
+    if (mappedFields.length === 0) {
+      const mappedField: MappedField = new MappedField();
+      mappedField.field = DocumentDefinition.getNoneField();
+      mappedFields.push(mappedField);
+      fieldPair.addMappedField(mappedField, isSource);
+      return;
+    }
+
     for (const mappedField of mappedFields) {
       let doc: DocumentDefinition = null;
       if (mappedField.parsedData.fieldIsProperty) {

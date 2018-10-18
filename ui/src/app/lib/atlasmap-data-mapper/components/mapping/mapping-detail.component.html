@@ -14,13 +14,12 @@
         <span class="pficon pficon-error-circle-o"></span>
         <label>{{ error.message }}</label>
       </div>
-      <div class="alert alert-warning" *ngFor="let warn of cfg.mappings.activeMapping.getValidationWarnings()">
-        <a class="close" (click)="cfg.mappings.activeMapping.removeValidationError(warn.identifier)">
-          <i class="fa fa-close"></i>
-        </a>
+
+      <alert *ngFor="let warn of cfg.mappings.activeMapping.getValidationWarnings()" type="warn" dismissOnTimeout="8000"
+        (onClose)="cfg.mappings.activeMapping.removeValidationError(warn.identifier)">
         <span class="pficon pficon-warning-triangle-o"></span>
         <label>{{ warn.message }}</label>
-      </div>
+      </alert>
 
       <!-- TODO reflect UXD outcome -->
       <div class="alert alert-danger" *ngFor="let error of cfg.mappings.activeMapping.getPreviewErrors()">
@@ -30,18 +29,17 @@
         <span class="pficon pficon-error-circle-o"></span>
         <label>{{ error.message }}</label>
       </div>
-      <div class="alert alert-warning" *ngFor="let warn of cfg.mappings.activeMapping.getPreviewWarnings()">
-        <a class="close" (click)="cfg.mappings.activeMapping.removePreviewError(warn.identifier)">
-          <i class="fa fa-close"></i>
-        </a>
+
+      <alert *ngFor="let warn of cfg.mappings.activeMapping.getPreviewWarnings()" type="warn" dismissOnTimeout="8000"
+        (onClose)="cfg.mappings.activeMapping.removePreviewError(warn.identifier)">
         <span class="pficon pficon-warning-triangle-o"></span>
         <label>{{ warn.message }}</label>
-      </div>
+      </alert>
 
-      <div *ngIf="!isMappingCollection()">
+      <!-- <div *ngIf="!isMappingCollection()"> -->
         <mapping-pair-detail *ngFor="let fieldPair of cfg.mappings.activeMapping.fieldMappings" [cfg]="cfg" [fieldPair]="fieldPair"
           [modalWindow]="modalWindow"></mapping-pair-detail>
-      </div>
+      <!-- </div> -->
       <collection-mapping [cfg]="cfg" *ngIf="isMappingCollection()"></collection-mapping>
     </div>
   </div>

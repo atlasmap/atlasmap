@@ -743,4 +743,17 @@ export class MappingModel {
     }
     return false;
   }
+
+  /**
+   * Return true if the current mapping instance has any field action/transformation, false otherwise.
+   */
+  hasFieldAction(): boolean {
+    for (const pair of this.fieldMappings) {
+      if (pair.hasFieldActions()) {
+        return true;
+      }
+    }
+    return false;
+  }
+
 }

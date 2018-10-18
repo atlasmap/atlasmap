@@ -200,6 +200,10 @@ export class MappingManagementService {
     }).pipe(timeout(this.cfg.initCfg.admHttpTimeout));
   }
 
+  /**
+   * Save the current active mappings to the UI configuration mappings.  Restrict the saved mappings
+   * to fully mapped pairs (source/target) and source-side mappings with a transformation/ field action.
+   */
   saveCurrentMapping(): void {
     const activeMapping: MappingModel = this.cfg.mappings.activeMapping;
     if ((activeMapping != null) && (this.cfg.mappings.mappings.indexOf(activeMapping) === -1)) {
@@ -208,7 +212,7 @@ export class MappingManagementService {
 
     const newMappings: MappingModel[] = [];
     for (const mapping of this.cfg.mappings.mappings) {
-      if (mapping.hasFullyMappedPair()) {
+      if (mapping.hasFullyMappedPair() || mapping.hasFieldAction()) {
         newMappings.push(mapping);
       }
     }
@@ -481,7 +485,7 @@ export class MappingManagementService {
 
       if (mapping == null) {
         this.addNewMapping(field, compoundSelection);
-        return;
+        mapping = this.cfg.mappings.activeMapping;
       }
     }
 
