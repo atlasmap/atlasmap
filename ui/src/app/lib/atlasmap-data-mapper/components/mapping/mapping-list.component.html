@@ -34,12 +34,12 @@
           <div *ngFor="let fieldPair of mapping.fieldMappings" class="itemRow">
             <div class="sourceFieldNames fieldNames">
               <mapping-list-field *ngFor="let mappedField of getMappedFields(fieldPair, true)" [mappedField]="mappedField" [isSource]="true"
-                [cfg]="cfg"></mapping-list-field>
+                [isActive]="isActiveMapping(mapping)" [cfg]="cfg"></mapping-list-field>
               <div class="clear"></div>
             </div>
             <div class="targetFieldNames fieldNames">
               <mapping-list-field *ngFor="let mappedField of getMappedFields(fieldPair, false)" [mappedField]="mappedField" [isSource]="false"
-                [cfg]="cfg"></mapping-list-field>
+                [isActive]="isActiveMapping(mapping)" [cfg]="cfg"></mapping-list-field>
               <div class="clear"></div>
             </div>
             <div class="transition">

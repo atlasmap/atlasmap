@@ -18,7 +18,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { deflate, inflate, gzip } from 'pako';
 
-import { Observable, Subject, forkJoin } from 'rxjs';
+import { Observable, Subscription, Subject, forkJoin } from 'rxjs';
 import { map, timeout } from 'rxjs/operators';
 
 import { ConfigModel } from '../models/config.model';
@@ -58,8 +58,8 @@ export class MappingManagementService {
   private headers = new HttpHeaders(
     {'Content-Type': 'application/json; application/xml; application/octet-stream',
      'Accept':       'application/json; application/xml; application/octet-stream'});
-  private mappingPreviewInputSubscription;
-  private mappingUpdatedSubscription;
+  private mappingPreviewInputSubscription: Subscription;
+  private mappingUpdatedSubscription: Subscription;
   private xmlBuffer: string;
 
   constructor(private http: HttpClient) {}
@@ -442,8 +442,6 @@ export class MappingManagementService {
   }
 
   fieldSelected(field: Field, compoundSelection: boolean): void {
-    field.selected = true;
-
     // Start out with a clean slate.
     this.cfg.errorService.clearMappingErrors();
 
@@ -462,9 +460,8 @@ export class MappingManagementService {
       // If the user has performed a compound selection (ctrl/cmd-m1) of a previously unselected field
       // then add it to the active mapping; otherwise remove it.
       if (compoundSelection) {
-          if (mapping.isFieldMapped(field, field.isSource()) && field.selected) {
+          if (mapping.isFieldMapped(field, field.isSource())) {
             this.removeActiveMappingField(field, compoundSelection);
-            field.selected = false;
             fieldRemoved = true;
           } else {
             this.addActiveMappingField(field);
@@ -561,9 +558,6 @@ export class MappingManagementService {
     }
     this.cfg.mappings.activeMapping = mappingModel;
     this.cfg.showMappingDetailTray = true;
-    for (const fieldPair of mappingModel.fieldMappings) {
-      DocumentDefinition.selectFields(fieldPair.getAllFields());
-    }
     this.cfg.mappings.initializeMappingLookupTable(mappingModel);
     this.saveCurrentMapping();
   }
@@ -571,9 +565,6 @@ export class MappingManagementService {
   deselectMapping(): void {
     this.cfg.showMappingDetailTray = false;
     this.cfg.mappings.activeMapping = null;
-    for (const doc of this.cfg.getAllDocs()) {
-      doc.clearSelectedFields();
-    }
     this.notifyMappingUpdated();
   }
 
@@ -646,11 +637,11 @@ export class MappingManagementService {
 
   disableMappingPreview(): void {
     if (this.mappingUpdatedSubscription) {
-      this.mappingUpdatedSubscription.complete();
+      this.mappingUpdatedSubscription.unsubscribe();
       this.mappingUpdatedSubscription = undefined;
     }
     if (this.mappingPreviewInputSubscription) {
-      this.mappingPreviewInputSubscription.complete();
+      this.mappingPreviewInputSubscription.unsubscribe();
       this.mappingPreviewInputSubscription = undefined;
     }
   }

@@ -36,7 +36,6 @@ export class Field {
   partOfMapping = false;
   partOfTransformation = false;
   visibleInCurrentDocumentSearch = true;
-  selected = false;
   enumeration = false;
   enumValues: EnumValue[] = [];
   children: Field[] = [];

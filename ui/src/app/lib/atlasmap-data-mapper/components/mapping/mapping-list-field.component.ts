@@ -28,6 +28,7 @@ import { DocumentDefinition } from '../../models/document-definition.model';
 export class MappingListFieldComponent {
   @Input() mappedField: MappedField;
   @Input() isSource: boolean;
+  @Input() isActive: boolean;
   @Input() cfg: ConfigModel;
 
   getSourceIconCSSClass(): string {
