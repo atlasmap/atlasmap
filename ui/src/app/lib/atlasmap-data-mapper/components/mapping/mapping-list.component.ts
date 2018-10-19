@@ -110,6 +110,10 @@ export class MappingListComponent {
     return false;
   }
 
+  isActiveMapping(mapping: MappingModel): boolean {
+    return this.cfg.mappings.activeMapping === mapping;
+  }
+
   private search(searchFilter: string): void {
     this.searchFilter = searchFilter;
 

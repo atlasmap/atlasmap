@@ -136,7 +136,7 @@ export class DocumentFieldDetailComponent {
 
   getCssClass(): string {
     let cssClass = 'fieldDetail';
-    if (this.field.selected) {
+    if (this.selected) {
       cssClass += ' selectedField';
     }
     if (!this.field.isTerminal()) {
@@ -269,4 +269,12 @@ export class DocumentFieldDetailComponent {
     const width: string = (this.field.fieldDepth * 30).toString();
     return this.sanitizer.bypassSecurityTrustStyle('display:inline; margin-left:' + width + 'px');
   }
+
+  get selected(): boolean {
+    if (this.cfg.mappings.activeMapping) {
+      return this.cfg.mappings.activeMapping.getFields(this.field.isSource()).includes(this.field);
+    }
+    return false;
+  }
+
 }

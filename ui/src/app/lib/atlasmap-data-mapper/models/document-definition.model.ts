@@ -115,12 +115,6 @@ export class DocumentDefinition {
     return DocumentDefinition.padField;
   }
 
-  static selectFields(fields: Field[]): void {
-    for (const field of fields) {
-      field.selected = true;
-    }
-  }
-
   static getDocumentByIdentifier(documentId: string, docs: DocumentDefinition[]): DocumentDefinition {
     if (documentId == null || docs == null || !docs.length) {
       return null;
@@ -249,22 +243,6 @@ export class DocumentDefinition {
     return [].concat(this.terminalFields);
   }
 
-  clearSelectedFields(): void {
-    for (const field of this.allFields) {
-      field.selected = false;
-    }
-  }
-
-  getSelectedFields(): Field[] {
-    const fields: Field[] = [];
-    for (const field of this.allFields) {
-      if (field.selected) {
-        fields.push(field);
-      }
-    }
-    return fields;
-  }
-
   initializeFromFields(debugDocumentParsing: boolean): void {
     if (this.type === DocumentType.JAVA) {
       this.prepareComplexFields(debugDocumentParsing);
@@ -387,7 +365,6 @@ export class DocumentDefinition {
     for (const field of this.allFields) {
       field.partOfMapping = false;
       field.hasUnmappedChildren = false;
-      field.selected = false;
       field.partOfTransformation = false;
     }
 
@@ -404,7 +381,6 @@ export class DocumentDefinition {
       }
       for (const field of mapping.getAllFields()) {
         let parentField: Field = field;
-        field.selected = mappingIsActive && field.isTerminal();
         while (parentField != null) {
           parentField.partOfMapping = true;
           parentField.partOfTransformation = parentField.partOfTransformation || partOfTransformation;
