@@ -192,6 +192,12 @@ export class DocumentFieldDetailComponent {
     if (this.field === field) {
       return this;
     }
+
+    // Matching name and doc definition is a match
+    if ((this.field.name === field.name) && (this.field.docDef === field.docDef)) {
+      this.field = field;
+      return this;
+    }
     for (const c of this.fieldComponents.toArray()) {
       const returnedComponent: DocumentFieldDetailComponent = c.getFieldDetailComponent(field);
       if (returnedComponent != null) {
