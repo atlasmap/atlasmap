@@ -194,7 +194,7 @@ export class DocumentFieldDetailComponent {
     }
 
     // Matching name and doc definition is a match
-    if ((this.field.name === field.name) && (this.field.docDef === field.docDef)) {
+    if ((this.field.path === field.path) && (this.field.docDef === field.docDef)) {
       this.field = field;
       return this;
     }
