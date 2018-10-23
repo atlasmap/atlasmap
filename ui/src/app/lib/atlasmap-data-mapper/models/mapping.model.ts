@@ -40,6 +40,7 @@ export class MappedField {
   field: Field = DocumentDefinition.getNoneField();
   actions: FieldAction[] = [];
   private padField = false;
+  private transformationCount = 0;
   static sortMappedFieldsByPath(mappedFields: MappedField[], allowNone: boolean): MappedField[] {
     if (mappedFields == null || mappedFields.length === 0) {
       return [];
@@ -71,6 +72,20 @@ export class MappedField {
 
   setIsPadField(): void {
     this.padField = true;
+  }
+
+  incTransformationCount(): void {
+    this.transformationCount++;
+  }
+
+  reduceTransformationCount(): void {
+    if (this.transformationCount > 0) {
+      this.transformationCount--;
+    }
+  }
+
+  getTransformationCount(): number {
+    return this.transformationCount;
   }
 
   /**
@@ -290,7 +305,7 @@ export class FieldMappingPair {
   hasTransition(): boolean {
     const mappedFields: MappedField[] = this.getAllMappedFields();
     for (const mappedField of mappedFields) {
-      if (mappedField.actions.length > 0) {
+      if (mappedField.getTransformationCount() > 0) {
         return true;
       }
     }

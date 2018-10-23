@@ -373,6 +373,7 @@ export class MappingDefinition {
           }
           actionConfig.populateFieldAction(action);
           mappedField.actions.push(action);
+          mappedField.incTransformationCount();
         }
       }
 
