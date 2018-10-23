@@ -70,7 +70,7 @@ export class MappingListComponent {
   }
 
   getMappedFields(fieldPair: FieldMappingPair, isSource: boolean): MappedField[] {
-    const fields: MappedField[] = fieldPair.getMappedFields(isSource);
+    const fields: MappedField[] = fieldPair.getUserMappedFields(isSource);
     if (fields.length === 0) {
       const mappedField: MappedField = new MappedField();
       mappedField.field = DocumentDefinition.getNoneField();

@@ -233,6 +233,25 @@ export class FieldMappingPair {
     return null;
   }
 
+  /**
+   * Return an array of user mapped fields for the specified panel in this field pair instance.  No
+   * data-mapper generated padding fields will be included.
+   *
+   * @param isSource - true source panel, false target panel
+   */
+  getUserMappedFields(isSource: boolean): MappedField[] {
+    const workingFields = isSource ? this.sourceFields : this.targetFields;
+    const resultFields: MappedField[] = [new MappedField()];
+
+    for (const mappedField of workingFields) {
+      if (!mappedField.isPadField()) {
+        resultFields.push(mappedField);
+      }
+    }
+    resultFields.shift();
+    return resultFields;
+  }
+
   getMappedFields(isSource: boolean): MappedField[] {
     return isSource ? this.sourceFields : this.targetFields;
   }
