@@ -6,7 +6,7 @@
       <label [attr.class]="getCSSClass('importMappings')" *ngIf="!cfg.initCfg.disableNavbar"
         tooltip="Import an AtlasMap mappings file (.adm)." placement="bottom" style="font-size:20px;margin-top:2px;">
         <input type="file" accept=".adm" name="usermappingsfile" style="display:none" id="usermappingsfile"
-          (click)="processClick('Importing AtlasMap Mappings')" (change)="processMappingsCatalog($event)">
+          (change)="processMappingsCatalog($event)">
       </label>
     </div>
 
