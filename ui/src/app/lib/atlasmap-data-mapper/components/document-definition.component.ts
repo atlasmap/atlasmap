@@ -219,9 +219,11 @@ export class DocumentDefinitionComponent implements OnInit {
     this.modalWindow.okButtonHandler = (mw: ModalWindowComponent) => {
       if (isProperty) {
         const propertyComponent = mw.nestedComponent as PropertyFieldEditComponent;
+        propertyComponent.isClosing = true;
         docDef.addField(propertyComponent.getField());
       } else if (isConstant) {
         const constantComponent = mw.nestedComponent as ConstantFieldEditComponent;
+        constantComponent.isClosing = true;
         docDef.addField(constantComponent.getField());
       } else {
         const fieldComponent = mw.nestedComponent as FieldEditComponent;
