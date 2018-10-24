@@ -51,19 +51,13 @@ export class ToolbarComponent implements OnInit {
     });
   }
 
-  /**
-   * Schema import button click.  Disable initialization to trigger the loading icon.
-   */
-  processClick(loadingStatus: string) {
-    this.cfg.initCfg.initialized = false;
-    this.cfg.initializationService.updateLoadingStatus(loadingStatus);
-  }
-
   /* A user has selected a compressed mappings catalog file to be imported into the canvas.
   *
   * @param event
   */
   async processMappingsCatalog(event) {
+    this.cfg.initCfg.initialized = false;
+    this.cfg.initializationService.updateLoadingStatus('Importing AtlasMap Mappings');
 
     // Wait for the async read of the selected mappings doc to be completed.
     try {
