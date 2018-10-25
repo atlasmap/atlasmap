@@ -34,6 +34,7 @@ export class PropertyFieldEditComponent implements ModalWindowValidator {
   valueType: any = 'STRING';
   docDef: DocumentDefinition;
   modalWindowComponent: ModalWindowComponent;
+  isClosing: boolean;
 
   initialize(field: Field, docDef: DocumentDefinition, mwc: ModalWindowComponent): void {
     if (field != null) {
@@ -44,6 +45,7 @@ export class PropertyFieldEditComponent implements ModalWindowValidator {
     this.field = field == null ? new Field() : field.copy();
     this.docDef = docDef;
     this.modalWindowComponent = mwc;
+    this.isClosing = false;
   }
 
   valueTypeSelectionChanged(event: any): void {
@@ -68,6 +70,9 @@ export class PropertyFieldEditComponent implements ModalWindowValidator {
    * and enable the save button otherwise.
    */
   nameExistsOnCreation(): boolean {
+    if (this.isClosing) {
+      return false;
+    }
     if (this.fieldMode === FieldMode.CREATE && this.docDef != null &&
         this.docDef.fieldExists(this.getField(), DocumentType.PROPERTY)) {
       this.modalWindowComponent.confirmButtonDisabled = true;
