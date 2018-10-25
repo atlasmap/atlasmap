@@ -753,7 +753,7 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
                 combineValues = new HashMap<>();
             }
 
-            if ((sourceField.getFieldType() != null) || (sourceField.getValue() != null)) {
+            if (sourceField.getValue() != null) {
                 String sourceValue;
                 try {
                     sourceValue = (String) factory.getConversionService().convertType(sourceField.getValue(),
