@@ -300,12 +300,13 @@ export class MappingDefinition {
       } else {
         doc = docMap[mappedField.parsedData.parsedDocURI] as DocumentDefinition;
         if (doc == null) {
-          cfg.errorService.error('Could not find doc for mapped field.', mappedField);
+          cfg.errorService.error('Could not find document for mapped field \'' + mappedField.parsedData.parsedName +
+            '\' at URI ' + mappedField.parsedData.parsedDocURI, null);
           continue;
         }
 
         if (mappedField.parsedData.parsedDocID == null) {
-          cfg.errorService.error('Could not find doc ID for mapped field.', mappedField);
+          cfg.errorService.error('Could not find doc ID for mapped field ' + mappedField.parsedData.parsedName, null);
           continue;
         }
         doc.id = mappedField.parsedData.parsedDocID;
@@ -358,7 +359,7 @@ export class MappingDefinition {
 
           doc.addField(mappedField.field);
         } else {
-          cfg.errorService.error('Could not find field from doc for mapped field.',
+          cfg.errorService.error('Could not find field from document for mapped field \'' + mappedField.parsedData.parsedName + '\'',
             { 'mappedField': mappedField, 'doc': doc });
           mappedField.field = DocumentDefinition.getNoneField();
           return;
