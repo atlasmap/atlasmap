@@ -14,18 +14,17 @@
     limitations under the License.
 */
 
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { deflate, inflate, gzip } from 'pako';
+import { deflate } from 'pako';
 
 import { Observable, Subscription, Subject, forkJoin } from 'rxjs';
 import { map, timeout } from 'rxjs/operators';
 
 import { ConfigModel } from '../models/config.model';
 import { DataMapperUtil } from '../common/data-mapper-util';
-import { DocumentType, InspectionType } from '../common/config.types';
+import { InspectionType } from '../common/config.types';
 import { Field } from '../models/field.model';
-import { DocumentDefinition } from '../models/document-definition.model';
 import { DocumentManagementService } from '../services/document-management.service';
 import { MappingModel, FieldMappingPair, MappedField } from '../models/mapping.model';
 import { FieldActionConfig, FieldActionArgument, TransitionMode, TransitionModel } from '../models/transition.model';
@@ -578,6 +577,17 @@ export class MappingManagementService {
       if (!inputFieldMapping || !inputFieldMapping.isFullyMapped()) {
         return;
       }
+      let hasValue = false;
+      for (const sourceField of inputFieldMapping.getFields(true)) {
+        if (sourceField.value) {
+          hasValue = true;
+          break;
+        }
+      }
+      if (!hasValue) {
+        return;
+      }
+
       const payload: any = {
         'ProcessMappingRequest': {
           'jsonType': ConfigModel.mappingServicesPackagePrefix + '.ProcessMappingRequest',
