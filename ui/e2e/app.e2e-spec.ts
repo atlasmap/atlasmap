@@ -7,8 +7,8 @@ describe('atlasmap-data-mapper App', () => {
     page = new AppPage();
   });
 
-  it('should display welcome message', () => {
+  it('should display app name', () => {
     page.navigateTo();
-    expect(page.getParagraphText()).toEqual('Welcome to app!');
+    expect(page.getBrandText()).toEqual('AtlasMap Data Mapper UI');
   });
 });

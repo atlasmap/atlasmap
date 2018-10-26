@@ -43,7 +43,7 @@ export class ToolbarComponent implements OnInit {
   async readFile(fileContent: Blob): Promise<Uint8Array> {
     return new Promise<Uint8Array>((resolve, reject) => {
       this.reader.onload = (event: any) => {
-        const arrayBuffer = this.reader.result;
+        const arrayBuffer: any = this.reader.result;
         const bytes = new Uint8Array(arrayBuffer);
         resolve(bytes);
       };
