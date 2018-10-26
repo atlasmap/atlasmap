@@ -108,63 +108,83 @@ export class FieldActionConfig {
       return false;
     }
 
-    if (isSource) {
+    return isSource ? this.appliesToSourceField(fieldPair, selectedSourceField, selectedTargetField)
+     : this.appliesToTargetField(fieldPair, selectedTargetField);
+  }
 
-      // Check for matching types - date.
-      if (this.matchesDate(this.sourceType, selectedSourceField.type)) {
-        if ((this.multipleTransformations(fieldPair)) || (this.matchesDate(this.targetType, selectedTargetField.type)) ||
-            (this.targetType === selectedTargetField.type)) {
-          return true;
-        }
-      }
-
-      // Check for matching types - numeric.
-      if (this.matchesNumeric(this.sourceType, selectedSourceField.type)) {
-        if ((this.multipleTransformations(fieldPair)) || (this.matchesNumeric(this.targetType, selectedTargetField.type)) ||
-            (this.targetType === selectedTargetField.type)) {
-          return true;
-        }
-      }
-
-      // First check if the source types match.
-     if ((this.sourceType === 'ANY') || (selectedSourceField.type === this.sourceType)) {
-
-       // If no target type is selected then we match (source-side transformation).
-       if ((this.multipleTransformations(fieldPair)) || (selectedTargetField.type === '')) {
-         return true;
-       }
-
-       // Now the target types must match.
-       return ((selectedTargetField.type === this.targetType) || (this.matchesNumeric(this.targetType, selectedTargetField.type)));
-     }
-
-     return false;
-
-    // Target transformation - target type may not change
-    } else {
-
-      if (selectedTargetField == null) {
+  /**
+   * Check if it could be applied to source field.
+   * @param fieldPair FieldMappingPair
+   * @param selectedSourceField selected source field
+   * @param selectedTargetField selected target field
+   */
+  private appliesToSourceField(fieldPair: FieldMappingPair, selectedSourceField: Field, selectedTargetField: Field): boolean {
+    // Collection field action only applies to collection field or FieldGroup
+    if (this.serviceObject.sourceCollectionType && this.serviceObject.sourceCollectionType !== 'NONE') {
+      // TODO: handle FieldGroup - https://github.com/atlasmap/atlasmap/issues/551
+      if (!selectedSourceField.isInCollection()) {
         return false;
       }
-
-      if (this.serviceObject.sourceCollectionType !== this.serviceObject.targetCollectionType) {
-        return false;
-      }
-
-      // Check for matching types - date.
-      if (this.targetType === 'ANY_DATE') {
-        return (this.matchesDate(this.targetType, selectedTargetField.type));
-      }
-
-      // Check for matching types - numeric.
-      if (this.targetType === 'NUMBER') {
-        return (this.matchesNumeric(this.targetType, selectedTargetField.type));
-      }
-
-      // All other types must match the selected field types with the candidate field action types.
-      return ((this.sourceType === 'ANY' || selectedTargetField.type === this.sourceType) &&
-              (this.targetType === 'ANY' || selectedTargetField.type === this.targetType));
     }
+
+    // Check for matching types - date.
+    if (this.matchesDate(this.sourceType, selectedSourceField.type)) {
+      if ((this.multipleTransformations(fieldPair)) || (this.matchesDate(this.targetType, selectedTargetField.type)) ||
+        (this.targetType === selectedTargetField.type)) {
+        return true;
+      }
+    }
+
+    // Check for matching types - numeric.
+    if (this.matchesNumeric(this.sourceType, selectedSourceField.type)) {
+      if ((this.multipleTransformations(fieldPair)) || (this.matchesNumeric(this.targetType, selectedTargetField.type)) ||
+        (this.targetType === selectedTargetField.type)) {
+        return true;
+      }
+    }
+
+    // First check if the source types match.
+    if ((this.sourceType === 'ANY') || (selectedSourceField.type === this.sourceType)) {
+
+      // If no target type is selected then we match (source-side transformation).
+      if ((this.multipleTransformations(fieldPair)) || (selectedTargetField.type === '')) {
+        return true;
+      }
+
+      // Now the target types must match.
+      return ((selectedTargetField.type === this.targetType) || (this.matchesNumeric(this.targetType, selectedTargetField.type)));
+    }
+
+    return false;
+  }
+
+  /**
+   * Check if it could be applied for target field. Target type may not change.
+   * @param fieldPair FieldMappingPair
+   * @param selectedTargetField selected target field
+   */
+  private appliesToTargetField(fieldPair: FieldMappingPair, selectedTargetField: Field): boolean {
+    if (selectedTargetField == null) {
+      return false;
+    }
+
+    if (this.serviceObject.sourceCollectionType !== this.serviceObject.targetCollectionType) {
+      return false;
+    }
+
+    // Check for matching types - date.
+    if (this.targetType === 'ANY_DATE') {
+      return (this.matchesDate(this.targetType, selectedTargetField.type));
+    }
+
+    // Check for matching types - numeric.
+    if (this.targetType === 'NUMBER') {
+      return (this.matchesNumeric(this.targetType, selectedTargetField.type));
+    }
+
+    // All other types must match the selected field types with the candidate field action types.
+    return ((this.sourceType === 'ANY' || selectedTargetField.type === this.sourceType) &&
+      (this.targetType === 'ANY' || selectedTargetField.type === this.targetType));
   }
 
   populateFieldAction(action: FieldAction): void {
