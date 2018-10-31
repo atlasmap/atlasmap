@@ -134,6 +134,8 @@ export class ToolbarComponent implements OnInit {
       }
     } else if ('showMappingPreview' === action) {
       this.cfg.showMappingPreview = !this.cfg.showMappingPreview;
+    } else if ('resetAll' === action) {
+      this.resetAll();
     }
     // Use the initialization service to trigger the observable updateFromConfig method
     // in the parent data-mapper-app class.  This avoids materializing the lineMachine object
@@ -148,6 +150,32 @@ export class ToolbarComponent implements OnInit {
     // Disable template until runtime supports it - https://github.com/atlasmap/atlasmap/issues/329
     // const targetDoc: DocumentDefinition = this.cfg.targetDocs[0];
     // this.targetSupportsTemplate = targetDoc && (targetDoc.type == DocumentType.XML || targetDoc.type == DocumentType.JSON);
+  }
+
+  /**
+   * Establish a modal window popup and if confirmed remove all mapping files from the server and restart the DM.
+   */
+  private resetAll(): void {
+    this.modalWindow.reset();
+    this.modalWindow.confirmButtonText = 'Reset';
+    this.modalWindow.headerText = 'Reset All Mappings and Imports?';
+    this.modalWindow.message = 'Are you sure you want to reset all mappings and clear all imported documents?';
+    this.modalWindow.okButtonHandler = (mw: ModalWindowComponent) => {
+
+      this.cfg.mappingService.resetAll().toPromise().then((result: boolean) => {
+        this.cfg.initCfg.initialized = false;
+        this.cfg.initCfg.mappingInitialized = true;
+        this.cfg.showMappingDetailTray = false;
+        window.location.reload(true);
+      }).catch((error: any) => {
+        if (error.status === 0) {
+          this.cfg.errorService.error('Fatal network error: Could not connect to AtlasMap design runtime service.', error);
+        } else {
+          this.cfg.errorService.error('Could not reset mapping definitions.', error);
+        }
+      });
+    };
+    this.modalWindow.show();
   }
 
   private editTemplate(): void {

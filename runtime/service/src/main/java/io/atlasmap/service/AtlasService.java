@@ -173,6 +173,38 @@ public class AtlasService {
         return Response.ok().build();
     }
 
+    @DELETE
+    @Path("/mapping/RESET")
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "Remove All Mappings", notes = "Remove all mapping files saved on the server")
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "All mapping files were removed successfully"),
+        @ApiResponse(code = 204, message = "Unable to remove all mapping files")})
+    public Response resetMappings() {
+        LOG.debug("resetMappings");
+
+        StringMap sMap = new StringMap();
+        java.nio.file.Path mappingFolder = Paths.get(baseFolder);
+        File[] mappings = mappingFolder.toFile().listFiles();
+
+        if (mappings == null) {
+            return Response.ok().entity(toJson(sMap)).build();
+        }
+
+        try {
+            for (File mappingFile : mappings) {
+                if (mappingFile.exists()) {
+                    if (!mappingFile.delete()) {
+                        LOG.warn("Unable to delete mapping file " + mappingFile.toString());
+                    }
+                }
+            }
+        } catch (Exception e) {
+            throw new WebApplicationException(e.getMessage(), e, Status.INTERNAL_SERVER_ERROR);
+        }
+        return Response.ok().build();
+    }
+
     @GET
     @Path("/mapping/{mappingFormat}/{mappingId}")
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML,MediaType.APPLICATION_OCTET_STREAM})
