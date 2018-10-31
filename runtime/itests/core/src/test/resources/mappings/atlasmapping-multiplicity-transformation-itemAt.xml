@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AtlasMapping xmlns="http://atlasmap.io/v2" xmlns:ns2="http://atlasmap.io/java/v2"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="core-unit-test">
+  <DataSource dataSourceType="Source" id="io.atlasmap.core.issue.SourceClass"
+    uri="atlas:java?className=io.atlasmap.core.issue.SourceClass" />
+  <DataSource dataSourceType="Target" id="io.atlasmap.core.issue.TargetClass"
+    uri="atlas:java?className=io.atlasmap.core.issue.TargetClass" />
+  <Mappings>
+    <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="Mapping">
+      <InputField xsi:type="ns2:JavaField" name="sourceStringList" docId="io.atlasmap.core.issue.SourceClass" path="/sourceStringList&lt;&gt;" fieldType="String">
+        <Actions>
+          <ItemAt index="1" />
+        </Actions>
+      </InputField>
+      <OutputField xsi:type="ns2:JavaField" name="targetString" docId="io.atlasmap.core.issue.TargetClass" path="/targetString" fieldType="String" />
+    </Mapping>
+  </Mappings>
+</AtlasMapping>

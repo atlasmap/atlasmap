@@ -13,6 +13,9 @@ public class TargetClass {
     private Date targetDate;
     private List<Item> targetList = new LinkedList<>();
 
+    private String targetString;
+    private List<String> targetStringList = new LinkedList<>();
+
     public int getTargetInteger() {
         return targetInteger;
     }
@@ -65,6 +68,23 @@ public class TargetClass {
     public TargetClass setTargetList(List<Item> targetList) {
         this.targetList = targetList;
         return this;
+    }
+
+    public String getTargetString() {
+        return targetString;
+    }
+
+    public TargetClass setTargetString(String targetString) {
+        this.targetString = targetString;
+        return this;
+    }
+
+    public List<String> getTargetStringList() {
+        return targetStringList;
+    }
+
+    public void setTargetStringList(List<String> targetStringList) {
+        this.targetStringList = targetStringList;
     }
 
 }
