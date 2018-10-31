@@ -46,7 +46,7 @@
 
     <div dropdown #dropdown="bs-dropdown" class="dropdown inline-block pull-right">
       <i [attr.class]="getEditorSettingsCSSClass(dropdown.isOpen)" dropdownToggle (click)="false" style="margin-top:2px;"
-        tooltip="Editor settings" placement="left"></i>
+        tooltip="Panel settings" placement="left"></i>
 
       <ul *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu">
         <li role="menuitem" (click)="toolbarButtonClicked('showTypes', $event);" class="clearfix">
@@ -118,6 +118,18 @@
             </a>
           </div>
           <i class="fa fa-check" *ngIf="cfg.showMappingPreview" class="pull-right"></i>
+        </li>
+        <i class="fa fa-check" *ngIf="cfg.showUnmappedFields" class="pull-right"></i>
+        <li role="menuitem" *ngIf="!cfg.initCfg.disableNavbar" (click)="toolbarButtonClicked('resetAll', $event);" class="clearfix">
+          <div class="pull-left">
+            <a class="dropdown-item" href="#"tooltip="Reset all mappings and clear all imported documents." placement="bottom">
+              <label>
+                <i class="pficon pficon-restart" (click)="toolbarButtonClicked('resetAll', $event);"
+                  style="margin-left:22px;"></i>Reset All
+              </label>
+            </a>
+          </div>
+
         </li>
       </ul>
     </div>

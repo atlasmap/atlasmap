@@ -225,7 +225,7 @@ export class MappingManagementService {
   }
 
   /**
-   * Retrieve the current user ATlasMap data mappings from the server as an XML buffer.
+   * Retrieve the current user AtlasMap data mappings from the server as an XML buffer.
    */
   getCurrentMappingXML(): Observable<string> {
     const mappingFileNames: string[] = this.cfg.mappingFiles;
@@ -260,6 +260,24 @@ export class MappingManagementService {
         observer.complete();
       });
     });
+  }
+
+  /**
+   * Establish an observable function to delete mapping files on the runtime.
+   */
+  resetAll(): Observable<boolean> {
+    return new Observable<boolean>((observer: any) => {
+      const url = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/RESET';
+      DataMapperUtil.debugLogJSON(null, 'Mapping Service Request - Reset', this.cfg.initCfg.debugMappingServiceCalls, url);
+      this.http.delete(url, { headers: this.headers }).toPromise().then((res: any) => {
+          DataMapperUtil.debugLogJSON(res, 'Mapping Service Response - Reset', this.cfg.initCfg.debugMappingServiceCalls, url);
+          observer.complete();
+          return res;
+        })
+        .catch((error: any) => {
+          this.handleError('Error occurred while resetting mappings.', error); },
+      );
+    }).pipe(timeout(this.cfg.initCfg.admHttpTimeout));
   }
 
  /**
