@@ -20,10 +20,22 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertNull;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map.Entry;
+
+import javax.xml.parsers.SAXParserFactory;
 
 import org.junit.Test;
+import org.xml.sax.ErrorHandler;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
+
+import com.sun.xml.xsom.XSElementDecl;
+import com.sun.xml.xsom.XSSchema;
+import com.sun.xml.xsom.parser.XSOMParser;
+import com.sun.xml.xsom.util.DomAnnotationParserFactory;
 
 public class AtlasModelFactoryTest {
 
@@ -85,18 +97,39 @@ public class AtlasModelFactoryTest {
     }
 
     @Test
-    public void testCloneAction() {
-        List<Action> actions = Arrays.asList(new Camelize(), new Capitalize(), new CurrentDate(),
-                new CurrentDateTime(), new CurrentTime(), new CustomAction(), new GenerateUUID(),
-                new Lowercase(), new LowercaseChar(), new PadStringLeft(), new PadStringRight(),
-                new SeparateByDash(), new SeparateByUnderscore(), new Length(), new SubString(),
-                new SubStringAfter(), new SubStringBefore(), new Trim(), new TrimLeft(),new TrimRight(),
-                new Uppercase(), new UppercaseChar());
-        for (Action a : actions) {
-            Action b = AtlasModelFactory.cloneAction(a);
-            assertNotNull(b);
-            assertNotSame(a, b);
-            assertEquals(a.getClass().getCanonicalName(), b.getClass().getCanonicalName());
+    public void testCloneAction() throws Exception {
+        XSOMParser parser = new XSOMParser(SAXParserFactory.newInstance());
+        parser.setErrorHandler(new ErrorHandler() {
+            @Override
+            public void error(SAXParseException arg0) throws SAXException {
+                throw arg0;
+            }
+            @Override
+            public void fatalError(SAXParseException arg0) throws SAXException {
+                throw arg0;
+            }
+            @Override
+            public void warning(SAXParseException arg0) throws SAXException {
+                throw arg0;
+            }
+        });
+        parser.setAnnotationParser(new DomAnnotationParserFactory());
+        parser.parse(new File("target/classes/atlas-actions-v2.xsd"));
+        parser.parse(new File("target/classes/atlas-model-v2.xsd"));
+        XSSchema schema = parser.getResult().getSchema("http://atlasmap.io/v2");
+
+        for (Entry<String, XSElementDecl> entry : schema.getElementDecls().entrySet()) {
+            String name = entry.getKey();
+            XSElementDecl element = entry.getValue();
+            if ("Action".equals(element.getType().getBaseType().getName())) {
+                Class<?> clazz = Class.forName("io.atlasmap.v2." + name);
+                Object a = clazz.newInstance();
+                assertNotNull(a);
+                Action b = AtlasModelFactory.cloneAction((Action)a);
+                assertNotNull(String.format("Add %s to AtlasModelFactory#cloneAction()", a.getClass().getSimpleName()), b);
+                assertNotSame(a, b);
+                assertEquals(a.getClass().getCanonicalName(), b.getClass().getCanonicalName());
+            }
         }
     }
 

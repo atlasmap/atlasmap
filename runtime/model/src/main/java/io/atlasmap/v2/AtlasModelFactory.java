@@ -184,6 +184,7 @@ public class AtlasModelFactory {
         return n;
     }
 
+    // FIXME: https://github.com/atlasmap/atlasmap/issues/536
     public static Action cloneAction(Action action) {
         if (action == null) {
             return null;
@@ -281,6 +282,9 @@ public class AtlasModelFactory {
             }
             return a;
         }
+        if (action instanceof DayOfMonth) {
+            return new DayOfMonth();
+        }
         if (action instanceof DayOfWeek) {
             return new DayOfWeek();
         }
@@ -321,6 +325,11 @@ public class AtlasModelFactory {
         }
         if (action instanceof IsNull) {
             return new IsNull();
+        }
+        if (action instanceof ItemAt) {
+            ItemAt itemAt = new ItemAt();
+            itemAt.setIndex(((ItemAt) action).getIndex());
+            return itemAt;
         }
         if (action instanceof LastIndexOf) {
             LastIndexOf lastIndexOf = new LastIndexOf();
@@ -404,6 +413,11 @@ public class AtlasModelFactory {
         }
         if (action instanceof SeparateByUnderscore) {
             return new SeparateByUnderscore();
+        }
+        if (action instanceof Split) {
+            Split split = new Split();
+            split.setDelimiter(((Split) action).getDelimiter());
+            return split;
         }
         if (action instanceof StartsWith) {
             StartsWith startsWith = new StartsWith();

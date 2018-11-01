@@ -13,6 +13,9 @@ public class SourceClass {
     private Date sourceDate;
     private List<Item> sourceList = new LinkedList<>();
 
+    private String sourceString;
+    private List<String> sourceStringList = new LinkedList<>();
+
     public int getSourceInteger() {
         return sourceInteger;
     }
@@ -64,6 +67,24 @@ public class SourceClass {
 
     public SourceClass setSourceList(List<Item> sourceList) {
         this.sourceList = sourceList;
+        return this;
+    }
+
+    public String getSourceString() {
+        return sourceString;
+    }
+
+    public SourceClass setSourceString(String sourceString) {
+        this.sourceString = sourceString;
+        return this;
+    }
+
+    public List<String> getSourceStringList() {
+        return sourceStringList;
+    }
+
+    public SourceClass setSourceStringList(List<String> sourceStringList) {
+        this.sourceStringList = sourceStringList;
         return this;
     }
 
