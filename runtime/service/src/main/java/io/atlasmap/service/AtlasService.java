@@ -183,12 +183,11 @@ public class AtlasService {
     public Response resetMappings() {
         LOG.debug("resetMappings");
 
-        StringMap sMap = new StringMap();
         java.nio.file.Path mappingFolder = Paths.get(baseFolder);
         File[] mappings = mappingFolder.toFile().listFiles();
 
         if (mappings == null) {
-            return Response.ok().entity(toJson(sMap)).build();
+            return Response.ok().build();
         }
 
         try {

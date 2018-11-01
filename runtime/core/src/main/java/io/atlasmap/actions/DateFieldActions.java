@@ -62,17 +62,17 @@ public class DateFieldActions implements AtlasFieldAction {
         return input.plusSeconds(addSeconds.getSeconds() == null ? 0L : addSeconds.getSeconds());
     }
 
-    @AtlasFieldActionInfo(name = "CurrentDate", sourceType = FieldType.ANY, targetType = FieldType.ANY_DATE, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
+    @AtlasFieldActionInfo(name = "CurrentDate", sourceType = FieldType.ANY_DATE, targetType = FieldType.ANY_DATE, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
     public static ZonedDateTime currentDate(Action action, Object input) {
         return LocalDate.now().atStartOfDay(ZoneId.systemDefault());
     }
 
-    @AtlasFieldActionInfo(name = "CurrentDateTime", sourceType = FieldType.ANY, targetType = FieldType.ANY_DATE, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
+    @AtlasFieldActionInfo(name = "CurrentDateTime", sourceType = FieldType.ANY_DATE, targetType = FieldType.ANY_DATE, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
     public static ZonedDateTime currentDateTime(Action action, Object input) {
         return LocalDate.now().atStartOfDay(ZoneId.systemDefault());
     }
 
-    @AtlasFieldActionInfo(name = "CurrentTime", sourceType = FieldType.ANY, targetType = FieldType.DATE_TIME, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
+    @AtlasFieldActionInfo(name = "CurrentTime", sourceType = FieldType.ANY_DATE, targetType = FieldType.DATE_TIME, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
     public static ZonedDateTime currentTime(Action action, Object input) {
         return LocalTime.now().atDate(LocalDate.now()).atZone(ZoneId.systemDefault());
     }

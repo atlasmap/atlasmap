@@ -675,6 +675,7 @@ export class MappingManagementService {
   }
 
   validateMappings(): void {
+      console.log('validateMappings');
     if (this.cfg.initCfg.baseMappingServiceUrl == null) {
       // validation service not configured.
       return;
@@ -742,7 +743,7 @@ export class MappingManagementService {
   }
 
   notifyMappingUpdated(): void {
-    if (this.cfg.mappings.mappings.length > 0) {
+    if (this.cfg.mappings.activeMapping != null && this.cfg.mappings.activeMapping.hasFullyMappedPair()) {
       this.validateMappings();
     }
     this.mappingUpdatedSource.next();
