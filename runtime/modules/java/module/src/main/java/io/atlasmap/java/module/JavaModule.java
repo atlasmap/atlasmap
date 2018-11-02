@@ -88,7 +88,7 @@ public class JavaModule extends BaseAtlasModule {
             throw new AtlasValidationException("Invalid session");
         }
 
-        JavaValidationService javaValidator = new JavaValidationService(getConversionService());
+        JavaValidationService javaValidator = new JavaValidationService(getConversionService(), getFieldActionService());
         javaValidator.setMode(getMode());
         javaValidator.setDocId(getDocId());
         List<Validation> javaValidations = javaValidator.validateMapping(atlasSession.getMapping());

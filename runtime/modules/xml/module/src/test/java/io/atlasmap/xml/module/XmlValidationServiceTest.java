@@ -34,6 +34,7 @@ import org.slf4j.LoggerFactory;
 
 import io.atlasmap.core.AtlasMappingUtil;
 import io.atlasmap.core.DefaultAtlasConversionService;
+import io.atlasmap.core.DefaultAtlasFieldActionService;
 import io.atlasmap.spi.AtlasModuleDetail;
 import io.atlasmap.spi.AtlasModuleMode;
 import io.atlasmap.v2.AtlasMapping;
@@ -56,6 +57,7 @@ public class XmlValidationServiceTest {
     private static final Logger LOG = LoggerFactory.getLogger(XmlValidationServiceTest.class);
     protected io.atlasmap.xml.v2.ObjectFactory xmlModelFactory = null;
     protected AtlasMappingUtil mappingUtil = null;
+    protected DefaultAtlasFieldActionService fieldActionService;
     protected XmlValidationService sourceValidationService = null;
     protected XmlValidationService targetValidationService = null;
     protected AtlasValidationTestHelper validationHelper = null;
@@ -68,9 +70,11 @@ public class XmlValidationServiceTest {
         mappingUtil = new AtlasMappingUtil("io.atlasmap.v2:io.atlasmap.xml.v2");
         moduleDetail = XmlModule.class.getAnnotation(AtlasModuleDetail.class);
 
-        sourceValidationService = new XmlValidationService(DefaultAtlasConversionService.getInstance());
+        fieldActionService = new DefaultAtlasFieldActionService(DefaultAtlasConversionService.getInstance());
+        fieldActionService.init();
+        sourceValidationService = new XmlValidationService(DefaultAtlasConversionService.getInstance(), fieldActionService);
         sourceValidationService.setMode(AtlasModuleMode.SOURCE);
-        targetValidationService = new XmlValidationService(DefaultAtlasConversionService.getInstance());
+        targetValidationService = new XmlValidationService(DefaultAtlasConversionService.getInstance(), fieldActionService);
         targetValidationService.setMode(AtlasModuleMode.TARGET);
         validationHelper = new AtlasValidationTestHelper();
         validations = validationHelper.getValidation();
@@ -258,7 +262,7 @@ public class XmlValidationServiceTest {
         assertNotNull(validation);
         assertEquals(ValidationScope.MAPPING, validation.getScope());
         assertEquals("combine.firstName.lastName", validation.getId());
-        assertEquals("Output field 'lastName' must be of type 'STRING' for a Combine Mapping", validation.getMessage());
+        assertEquals("Target field 'lastName' must be of type 'STRING' for a Combine Mapping", validation.getMessage());
         assertEquals(ValidationStatus.ERROR, validation.getStatus());
     }
 
@@ -313,7 +317,7 @@ public class XmlValidationServiceTest {
         assertNotNull(validation);
         assertEquals(ValidationScope.MAPPING, validation.getScope());
         assertEquals("separate.firstName.lastName", validation.getId());
-        assertEquals("Input field 'firstName' must be of type 'STRING' for a Separate Mapping",
+        assertEquals("Source field 'firstName' must be of type 'STRING' for a Separate Mapping",
                 validation.getMessage());
         assertEquals(ValidationStatus.ERROR, validation.getStatus());
     }

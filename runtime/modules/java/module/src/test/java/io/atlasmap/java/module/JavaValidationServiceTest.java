@@ -35,6 +35,7 @@ import org.slf4j.LoggerFactory;
 import io.atlasmap.api.AtlasConstants;
 import io.atlasmap.core.AtlasMappingUtil;
 import io.atlasmap.core.DefaultAtlasConversionService;
+import io.atlasmap.core.DefaultAtlasFieldActionService;
 import io.atlasmap.java.v2.AtlasJavaModelFactory;
 import io.atlasmap.java.v2.JavaField;
 import io.atlasmap.spi.AtlasModuleDetail;
@@ -57,6 +58,7 @@ public class JavaValidationServiceTest {
     private static final Logger LOG = LoggerFactory.getLogger(JavaValidationServiceTest.class);
     protected io.atlasmap.java.v2.ObjectFactory javaModelFactory = null;
     protected AtlasMappingUtil mappingUtil = null;
+    protected DefaultAtlasFieldActionService fieldActionService;
     protected JavaValidationService sourceValidationService = null;
     protected JavaValidationService targetValidationService = null;
     protected AtlasValidationTestHelper validationHelper = null;
@@ -69,10 +71,12 @@ public class JavaValidationServiceTest {
         mappingUtil = new AtlasMappingUtil("io.atlasmap.v2:io.atlasmap.java.v2");
         moduleDetail = JavaModule.class.getAnnotation(AtlasModuleDetail.class);
 
-        sourceValidationService = new JavaValidationService(DefaultAtlasConversionService.getInstance());
+        fieldActionService = new DefaultAtlasFieldActionService(DefaultAtlasConversionService.getInstance());
+        fieldActionService.init();
+        sourceValidationService = new JavaValidationService(DefaultAtlasConversionService.getInstance(), fieldActionService);
         sourceValidationService.setMode(AtlasModuleMode.SOURCE);
         sourceValidationService.setDocId(AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID);
-        targetValidationService = new JavaValidationService(DefaultAtlasConversionService.getInstance());
+        targetValidationService = new JavaValidationService(DefaultAtlasConversionService.getInstance(), fieldActionService);
         targetValidationService.setMode(AtlasModuleMode.TARGET);
         targetValidationService.setDocId(AtlasConstants.DEFAULT_TARGET_DOCUMENT_ID);
         validationHelper = new AtlasValidationTestHelper();
@@ -264,7 +268,7 @@ public class JavaValidationServiceTest {
         assertNotNull(validation);
         assertEquals(ValidationScope.MAPPING, validation.getScope());
         assertEquals("combine.firstName.lastName", validation.getId());
-        assertEquals("Output field 'lastName' must be of type 'STRING' for a Combine Mapping", validation.getMessage());
+        assertEquals("Target field 'lastName' must be of type 'STRING' for a Combine Mapping", validation.getMessage());
         assertEquals(ValidationStatus.ERROR, validation.getStatus());
     }
 
@@ -321,7 +325,7 @@ public class JavaValidationServiceTest {
         assertNotNull(validation);
         assertEquals(ValidationScope.MAPPING, validation.getScope());
         assertEquals("separate.firstName.lastName", validation.getId());
-        assertEquals("Input field 'firstName' must be of type 'STRING' for a Separate Mapping",
+        assertEquals("Source field 'firstName' must be of type 'STRING' for a Separate Mapping",
                 validation.getMessage());
         assertEquals(ValidationStatus.ERROR, validation.getStatus());
     }
@@ -535,6 +539,19 @@ public class JavaValidationServiceTest {
         assertTrue(validationHelper.hasErrors());
         assertFalse(validationHelper.hasWarnings());
         assertFalse(validationHelper.hasInfos());
+    }
+
+    @Test
+    public void testValidateMappingTransformation() throws Exception {
+        AtlasMapping mapping = mappingUtil.loadMapping("src/test/resources/mappings/HappyPathMappingTransformation.xml");
+        assertNotNull(mapping);
+
+        validations.addAll(sourceValidationService.validateMapping(mapping));
+        validations.addAll(targetValidationService.validateMapping(mapping));
+
+        assertFalse(validationHelper.hasErrors());
+        assertFalse(validationHelper.hasWarnings());
+        assertTrue(validationHelper.hasInfos());
     }
 
     @Test
