@@ -52,7 +52,6 @@
     <jaxb2-basics.version>0.11.1</jaxb2-basics.version>
     <jaxb2-basics-annotate.version>1.0.2</jaxb2-basics-annotate.version>
     <jaxb2-basics-namespace-prefix.version>1.2</jaxb2-basics-namespace-prefix.version>
-    <jersey.version>2.25.1</jersey.version>
     <!-- Does this fix the NPE problem ?? <jetty-maven-plugin.version>9.4.2.v20170220</jetty-maven-plugin.version> -->
     <jetty-maven-plugin.version>9.4.5.v20170502</jetty-maven-plugin.version>
     <jsonschema2pojo-maven-plugin.version>0.4.37</jsonschema2pojo-maven-plugin.version>
@@ -60,6 +59,7 @@
     <keytool-maven-plugin.version>1.5</keytool-maven-plugin.version>
     <license-maven-plugin.version>3.0</license-maven-plugin.version>
     <log4j2.version>2.8.1</log4j2.version>
+    <resteasy.version>3.6.1.Final</resteasy.version>
     <maven-version>3.5.0</maven-version>
     <maven-bundle-plugin.version>3.2.0</maven-bundle-plugin.version>
     <maven-checkstyle-plugin.version>2.17</maven-checkstyle-plugin.version>
@@ -392,40 +392,22 @@
         <version>${woodstox.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.glassfish.jersey.core</groupId>
-        <artifactId>jersey-server</artifactId>
-        <version>${jersey.version}</version>
-        <scope>test</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.glassfish.jersey.core</groupId>
-        <artifactId>jersey-common</artifactId>
-        <version>${jersey.version}</version>
-        <scope>test</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.glassfish.jersey.containers</groupId>
-        <artifactId>jersey-container-servlet</artifactId>
-        <version>${jersey.version}</version>
-        <scope>test</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.glassfish.jersey.core</groupId>
-        <artifactId>jersey-client</artifactId>
-        <version>${jersey.version}</version>
-        <scope>test</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.glassfish.jersey.media</groupId>
-        <artifactId>jersey-media-json-jackson</artifactId>
-        <version>${jersey.version}</version>
-        <scope>test</scope>
-      </dependency>
-      <dependency>
         <groupId>org.hamcrest</groupId>
         <artifactId>hamcrest-all</artifactId>
         <version>${hamcrest.version}</version>
       </dependency>
+      <dependency>
+        <groupId>org.jboss.resteasy</groupId>
+        <artifactId>resteasy-jaxrs</artifactId>
+        <version>${resteasy.version}</version>
+        <scope>provided</scope>
+       </dependency>
+       <dependency>
+         <groupId>org.jboss.resteasy</groupId>
+         <artifactId>resteasy-client</artifactId>
+         <version>${resteasy.version}</version>
+         <scope>provided</scope>
+   </dependency>
       <dependency>
         <groupId>org.jvnet.jaxb2_commons</groupId>
         <artifactId>jaxb2-basics</artifactId>
