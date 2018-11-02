@@ -176,20 +176,21 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
         return null;
     }
 
-    /*
+    /**
      * 1. Find FieldAction by name
      * 2. If multiple matches are found, return the best one based on FieldType sourceType
      * 3. If there is not an exact match to sourceType, return the first FieldAction
      * 4. If no matches found, return null
      *
      *
-     * @param actionName The name of the FieldAction
+     * @param action The name of the FieldAction
      * @param sourceType A hint used to determine which FieldAction to use
      *                   when multiple FieldActions exist with the same name
      *
      * @return ActionDetail
      */
-    protected ActionDetail findActionDetail(Action action, FieldType sourceType) throws AtlasException {
+    @Override
+    public ActionDetail findActionDetail(Action action, FieldType sourceType) throws AtlasException {
         String actionName = action.getDisplayName();
         CustomAction customAction = null;
         if (action instanceof CustomAction) {

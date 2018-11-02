@@ -21,14 +21,21 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import io.atlasmap.api.AtlasConverter;
+import io.atlasmap.api.AtlasException;
 import io.atlasmap.api.AtlasValidationService;
 import io.atlasmap.spi.AtlasConversionConcern;
 import io.atlasmap.spi.AtlasConversionInfo;
 import io.atlasmap.spi.AtlasConversionService;
+import io.atlasmap.spi.AtlasFieldActionService;
 import io.atlasmap.spi.AtlasModuleDetail;
 import io.atlasmap.spi.AtlasModuleMode;
 import io.atlasmap.spi.FieldDirection;
+import io.atlasmap.v2.Action;
+import io.atlasmap.v2.ActionDetail;
 import io.atlasmap.v2.AtlasMapping;
 import io.atlasmap.v2.BaseMapping;
 import io.atlasmap.v2.DataSource;
@@ -42,16 +49,21 @@ import io.atlasmap.v2.ValidationStatus;
 
 public abstract class BaseModuleValidationService<T extends Field> implements AtlasValidationService {
 
+    private static final Logger LOG = LoggerFactory.getLogger(BaseModuleValidationService.class);
+
     private AtlasConversionService conversionService;
+    private AtlasFieldActionService fieldActionService;
     private AtlasModuleMode mode;
     private String docId;
 
     public BaseModuleValidationService() {
         this.conversionService = DefaultAtlasConversionService.getInstance();
+        this.fieldActionService = new DefaultAtlasFieldActionService(this.conversionService);
     }
 
-    public BaseModuleValidationService(AtlasConversionService conversionService) {
+    public BaseModuleValidationService(AtlasConversionService conversionService, AtlasFieldActionService fieldActionService) {
         this.conversionService = conversionService;
+        this.fieldActionService = fieldActionService;
     }
 
     public void setMode(AtlasModuleMode mode) {
@@ -136,7 +148,7 @@ public abstract class BaseModuleValidationService<T extends Field> implements At
                 validation.setScope(ValidationScope.MAPPING);
                 validation.setId(mappingId);
                 validation.setMessage(String.format(
-                        "Output field '%s' must be of type '%s' for a Combine Mapping",
+                        "Target field '%s' must be of type '%s' for a Combine Mapping",
                         getFieldName(targetField), FieldType.STRING));
                 validation.setStatus(ValidationStatus.ERROR);
                 validations.add(validation);
@@ -207,13 +219,13 @@ public abstract class BaseModuleValidationService<T extends Field> implements At
         String mappingId = mapping.getId();
 
         if (getMode() == AtlasModuleMode.SOURCE && matchDocIdOrNull(sourceField.getDocId())) {
-            // check that the input field is of type String else error
+            // check that the source field is of type String else error
             if (sourceField.getFieldType() != FieldType.STRING) {
                 Validation validation = new Validation();
                 validation.setScope(ValidationScope.MAPPING);
                 validation.setId(mapping.getId());
                 validation.setMessage(String.format(
-                        "Input field '%s' must be of type '%s' for a Separate Mapping",
+                        "Source field '%s' must be of type '%s' for a Separate Mapping",
                         getFieldName(sourceField), FieldType.STRING));
                 validation.setStatus(ValidationStatus.ERROR);
                 validations.add(validation);
@@ -255,8 +267,8 @@ public abstract class BaseModuleValidationService<T extends Field> implements At
 
     protected abstract void validateModuleField(String mappingId, T field, FieldDirection direction, List<Validation> validation);
 
-    protected void validateSourceAndTargetTypes(String mappingId, Field inputField, Field outField, List<Validation> validations) {
-        if (inputField.getFieldType() != outField.getFieldType()) {
+    protected void validateSourceAndTargetTypes(String mappingId, Field sourceField, Field targetField, List<Validation> validations) {
+        if (sourceField.getFieldType() != targetField.getFieldType()) {
             // is this check superseded by the further checks using the AtlasConversionInfo
             // annotations?
 
@@ -264,40 +276,63 @@ public abstract class BaseModuleValidationService<T extends Field> implements At
             // inputField.getType().value() + " --> " + outField.getType().value(), "Output
             // field type does not match input field type, may require a converter.",
             // AtlasMappingError.Level.WARN));
-            validateFieldTypeConversion(mappingId, inputField, outField, validations);
+            validateFieldTypeConversion(mappingId, sourceField, targetField, validations);
         }
     }
 
-    protected void validateFieldTypeConversion(String mappingId, Field inputField, Field outField, List<Validation> validations) {
-        FieldType inFieldType = inputField.getFieldType();
-        FieldType outFieldType = outField.getFieldType();
-        Optional<AtlasConverter<?>> atlasConverter = conversionService.findMatchingConverter(inFieldType, outFieldType);
+    protected void validateFieldTypeConversion(String mappingId, Field sourceField, Field targetField, List<Validation> validations) {
+        FieldType sourceFieldType = sourceField.getFieldType();
+        if (sourceField.getActions() != null && sourceField.getActions().getActions().size() > 0) {
+            Action lastAction = sourceField.getActions().getActions().get(sourceField.getActions().getActions().size()-1);
+            ActionDetail detail = null;
+            try {
+                detail = this.fieldActionService.findActionDetail(lastAction, sourceField.getFieldType());
+            } catch (AtlasException e) {
+                if (LOG.isDebugEnabled()) {
+                    LOG.error("ActionDetail not found", e);
+                }
+            }
+            if (detail == null) {
+                Validation validation = new Validation();
+                validation.setScope(ValidationScope.MAPPING);
+                validation.setId(mappingId);
+                validation.setMessage(String.format(
+                        "Couldn't find a metadata for transformation '%s'", lastAction.getDisplayName()));
+                validation.setStatus(ValidationStatus.ERROR);
+                validations.add(validation);
+                return;
+            }
+            sourceFieldType = detail.getTargetType();
+        }
+        FieldType targetFieldType = targetField.getFieldType();
+        Optional<AtlasConverter<?>> atlasConverter = conversionService.findMatchingConverter(sourceFieldType, targetFieldType);
         if (!atlasConverter.isPresent()) {
             Validation validation = new Validation();
             validation.setScope(ValidationScope.MAPPING);
             validation.setId(mappingId);
             validation.setMessage(String.format(
                     "Conversion from '%s' to '%s' is required but no converter is available",
-                    inputField.getFieldType(), outField.getFieldType()));
+                    sourceField.getFieldType(), targetField.getFieldType()));
             validation.setStatus(ValidationStatus.ERROR);
             validations.add(validation);
         } else {
             AtlasConversionInfo conversionInfo;
             // find the method that does the conversion
+            FieldType sft = sourceFieldType;
             Method[] methods = atlasConverter.get().getClass().getMethods();
             conversionInfo = Arrays.stream(methods).map(method -> method.getAnnotation(AtlasConversionInfo.class))
                     .filter(atlasConversionInfo -> atlasConversionInfo != null)
-                    .filter(atlasConversionInfo -> (atlasConversionInfo.sourceType().compareTo(inFieldType) == 0
-                    && atlasConversionInfo.targetType().compareTo(outFieldType) == 0))
+                    .filter(atlasConversionInfo -> (atlasConversionInfo.sourceType().compareTo(sft) == 0
+                    && atlasConversionInfo.targetType().compareTo(targetFieldType) == 0))
                     .findFirst().orElse(null);
             if (conversionInfo != null) {
-                populateConversionConcerns(mappingId, conversionInfo, getFieldName(inputField), getFieldName(outField), validations);
+                populateConversionConcerns(mappingId, conversionInfo, getFieldName(sourceField), getFieldName(targetField), validations);
             }
         }
     }
 
     protected void populateConversionConcerns(String mappingId, AtlasConversionInfo converterAnno,
-            String inputFieldName, String outFieldName, List<Validation> validations) {
+            String sourceFieldName, String targetFieldName, List<Validation> validations) {
         if (converterAnno == null || converterAnno.concerns() == null) {
             return;
         }

@@ -18,12 +18,15 @@ package io.atlasmap.spi;
 import java.util.List;
 
 import io.atlasmap.api.AtlasException;
+import io.atlasmap.v2.Action;
 import io.atlasmap.v2.ActionDetail;
 import io.atlasmap.v2.Field;
+import io.atlasmap.v2.FieldType;
 
 public interface AtlasFieldActionService {
 
     List<ActionDetail> listActionDetails();
+    ActionDetail findActionDetail(Action action, FieldType type) throws AtlasException;
     Field processActions(AtlasInternalSession session, Field field) throws AtlasException;
 
 }

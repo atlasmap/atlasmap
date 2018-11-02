@@ -21,6 +21,7 @@ import java.util.Map;
 
 import io.atlasmap.core.BaseModuleValidationService;
 import io.atlasmap.spi.AtlasConversionService;
+import io.atlasmap.spi.AtlasFieldActionService;
 import io.atlasmap.spi.AtlasModuleDetail;
 import io.atlasmap.spi.AtlasValidator;
 import io.atlasmap.spi.FieldDirection;
@@ -35,8 +36,8 @@ public class XmlValidationService extends BaseModuleValidationService<XmlField> 
     private static Map<String, AtlasValidator> validatorMap = new HashMap<>();
     private AtlasModuleDetail moduleDetail = XmlModule.class.getAnnotation(AtlasModuleDetail.class);
 
-    public XmlValidationService(AtlasConversionService conversionService) {
-        super(conversionService);
+    public XmlValidationService(AtlasConversionService conversionService, AtlasFieldActionService fieldActionService) {
+        super(conversionService, fieldActionService);
         init();
     }
 

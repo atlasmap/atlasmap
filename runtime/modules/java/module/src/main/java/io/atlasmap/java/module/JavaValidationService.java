@@ -33,6 +33,7 @@ import io.atlasmap.core.BaseModuleValidationService;
 import io.atlasmap.java.v2.JavaField;
 import io.atlasmap.spi.AtlasConversionInfo;
 import io.atlasmap.spi.AtlasConversionService;
+import io.atlasmap.spi.AtlasFieldActionService;
 import io.atlasmap.spi.AtlasModuleDetail;
 import io.atlasmap.spi.AtlasValidator;
 import io.atlasmap.spi.FieldDirection;
@@ -55,8 +56,8 @@ public class JavaValidationService extends BaseModuleValidationService<JavaField
         init();
     }
 
-    public JavaValidationService(AtlasConversionService conversionService) {
-        super(conversionService);
+    public JavaValidationService(AtlasConversionService conversionService, AtlasFieldActionService fieldActionService) {
+        super(conversionService, fieldActionService);
         init();
     }
 

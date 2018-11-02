@@ -27,6 +27,32 @@ Retrieves a list of available field action
 * `application/json`
 
 
+[[_atlas-service-core-resetmappings]]
+=== Remove All Mappings
+....
+DELETE /v2/atlas/mapping/RESET
+....
+
+
+==== Description
+Remove all mapping files saved on the server
+
+
+==== Responses
+
+[options="header", cols=".^2a,.^14a,.^4a"]
+|===
+|HTTP Code|Description|Schema
+|**200**|All mapping files were removed successfully|No Content
+|**204**|Unable to remove all mapping files|No Content
+|===
+
+
+==== Produces
+
+* `application/json`
+
+
 [[_atlas-service-core-processmappingrequest]]
 === Process Mapping
 ....

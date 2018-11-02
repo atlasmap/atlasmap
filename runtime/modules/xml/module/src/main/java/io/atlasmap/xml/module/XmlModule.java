@@ -65,7 +65,7 @@ public class XmlModule extends BaseAtlasModule {
             throw new AtlasValidationException("Invalid session");
         }
 
-        XmlValidationService xmlValidationService = new XmlValidationService(getConversionService());
+        XmlValidationService xmlValidationService = new XmlValidationService(getConversionService(), getFieldActionService());
         xmlValidationService.setDocId(getDocId());
         List<Validation> xmlValidations = xmlValidationService.validateMapping(atlasSession.getMapping());
         atlasSession.getValidations().getValidation().addAll(xmlValidations);

@@ -34,6 +34,7 @@ import org.slf4j.LoggerFactory;
 
 import io.atlasmap.core.AtlasMappingUtil;
 import io.atlasmap.core.DefaultAtlasConversionService;
+import io.atlasmap.core.DefaultAtlasFieldActionService;
 import io.atlasmap.json.v2.AtlasJsonModelFactory;
 import io.atlasmap.json.v2.JsonField;
 import io.atlasmap.spi.AtlasModuleDetail;
@@ -56,6 +57,7 @@ public class JsonValidationServiceTest {
     private static final Logger LOG = LoggerFactory.getLogger(JsonValidationServiceTest.class);
     protected io.atlasmap.json.v2.ObjectFactory jsonModelFactory = null;
     protected AtlasMappingUtil mappingUtil = null;
+    protected DefaultAtlasFieldActionService fieldActionService;
     protected JsonValidationService sourceValidationService = null;
     protected JsonValidationService targetValidationService = null;
     protected AtlasValidationTestHelper validationHelper = null;
@@ -68,9 +70,11 @@ public class JsonValidationServiceTest {
         mappingUtil = new AtlasMappingUtil("io.atlasmap.v2:io.atlasmap.json.v2");
         moduleDetail = JsonModule.class.getAnnotation(AtlasModuleDetail.class);
 
-        sourceValidationService = new JsonValidationService(DefaultAtlasConversionService.getInstance());
+        fieldActionService = new DefaultAtlasFieldActionService(DefaultAtlasConversionService.getInstance());
+        fieldActionService.init();
+        sourceValidationService = new JsonValidationService(DefaultAtlasConversionService.getInstance(), fieldActionService);
         sourceValidationService.setMode(AtlasModuleMode.SOURCE);
-        targetValidationService = new JsonValidationService(DefaultAtlasConversionService.getInstance());
+        targetValidationService = new JsonValidationService(DefaultAtlasConversionService.getInstance(), fieldActionService);
         targetValidationService.setMode(AtlasModuleMode.TARGET);
         validationHelper = new AtlasValidationTestHelper();
         validations = validationHelper.getValidation();
@@ -258,7 +262,7 @@ public class JsonValidationServiceTest {
         assertNotNull(validation);
         assertEquals(ValidationScope.MAPPING, validation.getScope());
         assertEquals("combine.firstName.lastName", validation.getId());
-        assertEquals("Output field 'lastName' must be of type 'STRING' for a Combine Mapping", validation.getMessage());
+        assertEquals("Target field 'lastName' must be of type 'STRING' for a Combine Mapping", validation.getMessage());
         assertEquals(ValidationStatus.ERROR, validation.getStatus());
     }
 
@@ -313,7 +317,7 @@ public class JsonValidationServiceTest {
         assertNotNull(validation);
         assertEquals(ValidationScope.MAPPING, validation.getScope());
         assertEquals("separate.firstName.lastName", validation.getId());
-        assertEquals("Input field 'firstName' must be of type 'STRING' for a Separate Mapping",
+        assertEquals("Source field 'firstName' must be of type 'STRING' for a Separate Mapping",
                 validation.getMessage());
         assertEquals(ValidationStatus.ERROR, validation.getStatus());
     }
