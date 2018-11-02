@@ -2,12 +2,12 @@ package io.atlasmap.reference;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+// import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
-import java.util.regex.Pattern;
+// import java.util.regex.Pattern;
 
 import org.junit.Test;
 
@@ -23,7 +23,7 @@ import io.atlasmap.v2.Capitalize;
 import io.atlasmap.v2.DataSource;
 import io.atlasmap.v2.DataSourceType;
 import io.atlasmap.v2.Field;
-import io.atlasmap.v2.GenerateUUID;
+// import io.atlasmap.v2.GenerateUUID;
 import io.atlasmap.v2.Length;
 import io.atlasmap.v2.Lowercase;
 import io.atlasmap.v2.Mapping;
@@ -93,9 +93,11 @@ public abstract class AtlasBaseActionsTest extends AtlasMappingBaseTest {
         pl.setPadCount(5);
         this.runActionTest(pl, "fname", "XXXXXfname", String.class);
 
+        /* ref https://github.com/atlasmap/atlasmap/issues/674
         String result = (String) runActionTest(new GenerateUUID(), "fname", null, String.class);
         assertTrue(Pattern.compile("[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}").matcher(result)
                 .matches());
+        */
     }
 
     public Object runActionTest(Action action, String sourceFirstName, Object targetExpected, Class<?> targetClassExpected) throws Exception {

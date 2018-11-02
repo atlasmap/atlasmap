@@ -64,6 +64,7 @@ describe('FieldActionConfig.appliesToField()', () => {
     });
 
     it('should return if action target type is NUMBER and target field type is numeric', () => {
+      action.sourceType = 'NUMBER';
       action.targetType = 'NUMBER';
       target.type = 'SHORT';
       expect(action.appliesToField(pair, false)).toBe(true);
@@ -74,6 +75,7 @@ describe('FieldActionConfig.appliesToField()', () => {
     });
 
     it('should return if action target type is ANY_DATE and target field type is a date/time', () => {
+      action.sourceType = 'ANY_DATE';
       action.targetType = 'ANY_DATE';
       target.type = 'DATE';
       expect(action.appliesToField(pair, false)).toBe(true);
