@@ -72,20 +72,20 @@ public class DefaultAtlasValidationService implements AtlasValidationService {
         ),
 
         COMBINE_INPUT_NOT_NULL (() ->
-            new NonNullValidator(ValidationScope.MAPPING, "Input element should not be null")
+            new NonNullValidator(ValidationScope.MAPPING, "Source field should not be null")
         ),
         COMBINE_INPUT_FIELD_NOT_EMPTY (() ->
-            new NotEmptyValidator(ValidationScope.MAPPING, "Input field element should not be empty")
+            new NotEmptyValidator(ValidationScope.MAPPING, "Source field should not be empty")
         ),
         COMBINE_OUTPUT_NOT_NULL (() ->
-            new NonNullValidator(ValidationScope.MAPPING, "Output element must not be null")
+            new NonNullValidator(ValidationScope.MAPPING, "Target element must not be null")
         ),
         COMBINE_OUTPUT_FIELD_NOT_EMPTY (() ->
-            new NotEmptyValidator(ValidationScope.MAPPING, "Output field element must not be empty")
+            new NotEmptyValidator(ValidationScope.MAPPING, "Target field must not be empty")
         ),
         COMBINE_INPUT_FIELD_NOT_NULL (() ->
             new NonNullValidator(
-                ValidationScope.MAPPING, "Input field elements should not be null")
+                ValidationScope.MAPPING, "Source fields should not be null")
         ),
         COMBINE_INPUT_FIELD_FIELD_ACTION_INDEX_POSITIVE (() ->
             new PositiveIntegerValidator(
@@ -93,35 +93,35 @@ public class DefaultAtlasValidationService implements AtlasValidationService {
         ),
 
         MAP_INPUT_NOT_NULL (() ->
-            new NonNullValidator(ValidationScope.MAPPING, "Input element must not be null")
+            new NonNullValidator(ValidationScope.MAPPING, "Source field must not be null")
         ),
         MAP_INPUT_FIELD_NOT_EMPTY (() ->
-            new NotEmptyValidator(ValidationScope.MAPPING, "Input field element must not be empty")
+            new NotEmptyValidator(ValidationScope.MAPPING, "Source field must not be empty")
         ),
         MAP_OUTPUT_NOT_NULL (() ->
-            new NonNullValidator(ValidationScope.MAPPING, "Output element should not be null")
+            new NonNullValidator(ValidationScope.MAPPING, "Target field should not be null")
         ),
         MAP_OUTPUT_FIELD_NOT_EMPTY (() ->
-            new NotEmptyValidator(ValidationScope.MAPPING, "Output field element should not be empty")
+            new NotEmptyValidator(ValidationScope.MAPPING, "Target field should not be empty")
         ),
 
         SEPARATE_INPUT_NOT_NULL (() ->
-            new NonNullValidator(ValidationScope.MAPPING, "Input element must not be null")
+            new NonNullValidator(ValidationScope.MAPPING, "Source field must not be null")
         ),
         SEPARATE_INPUT_FIELD_NOT_NULL (() ->
-            new NonNullValidator(ValidationScope.MAPPING, "Input field element must not be null")
+            new NonNullValidator(ValidationScope.MAPPING, "Source field must not be null")
         ),
         SEPARATE_INPUT_FIELD_NOT_EMPTY (() ->
-            new NotEmptyValidator(ValidationScope.MAPPING, "Input field element must not be empty")
+            new NotEmptyValidator(ValidationScope.MAPPING, "Source field must not be empty")
         ),
         SEPARATE_OUTPUT_NOT_NULL (() ->
-            new NonNullValidator(ValidationScope.MAPPING, "Output element should not be null")
+            new NonNullValidator(ValidationScope.MAPPING, "Target field should not be null")
         ),
         SEPARATE_OUTPUT_FIELD_NOT_NULL (() ->
-            new NonNullValidator(ValidationScope.MAPPING, "Output field elements should not be null")
+            new NonNullValidator(ValidationScope.MAPPING, "Target fields should not be null")
         ),
         SEPARATE_OUTPUT_FIELD_NOT_EMPTY (() ->
-            new NotEmptyValidator(ValidationScope.MAPPING, "Output field elements should not be empty")
+            new NotEmptyValidator(ValidationScope.MAPPING, "Target fields should not be empty")
         ),
         SEPARATE_OUTPUT_FIELD_FIELD_ACTION_NOT_EMPTY (() ->
             new NotEmptyValidator(ValidationScope.MAPPING, "Field actions cannot be null or empty")
