@@ -17,14 +17,28 @@ package io.atlasmap.service;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.net.URI;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.jar.JarEntry;
+import java.util.jar.JarOutputStream;
 
+import javax.tools.JavaCompiler;
+import javax.tools.ToolProvider;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
+import org.jboss.resteasy.plugins.providers.multipart.InputPart;
+import org.jboss.resteasy.plugins.providers.multipart.MultipartInput;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -100,6 +114,63 @@ public class AtlasServiceTest {
                 }
             }
         }
+    }
+
+    @Test
+    public void testJarUpload() throws Exception {
+        new File("target/tmp").mkdirs();
+        JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+        int answer = compiler.run(System.in, System.out, System.err,
+                "-d", "target/tmp",
+                "src/test/resources/upload/io/atlasmap/service/my/MyFieldActions.java");
+        assertEquals(0, answer);
+        JarOutputStream jarOut = new JarOutputStream(new FileOutputStream("target/tmp/my.jar"));
+        jarOut.putNextEntry(new JarEntry("io/"));
+        jarOut.closeEntry();
+        jarOut.putNextEntry(new JarEntry("io/atlasmap/"));
+        jarOut.closeEntry();
+        jarOut.putNextEntry(new JarEntry("io/atlasmap/service/"));
+        jarOut.closeEntry();
+        jarOut.putNextEntry(new JarEntry("io/atlasmap/service/my/"));
+        jarOut.closeEntry();
+        JarEntry classEntry = new JarEntry("io/atlasmap/service/my/MyFieldActions.class");
+        jarOut.putNextEntry(classEntry);
+        byte[] buffer = new byte[1024];
+        BufferedInputStream in = new BufferedInputStream(new FileInputStream("target/tmp/io/atlasmap/service/my/MyFieldActions.class"));
+        int count = -1;
+        while ((count = in.read(buffer)) != -1) {
+            jarOut.write(buffer, 0, count);
+        }
+        in.close();
+        jarOut.closeEntry();
+
+        jarOut.putNextEntry(new JarEntry("META-INF/"));
+        jarOut.closeEntry();
+        jarOut.putNextEntry(new JarEntry("META-INF/services/"));
+        jarOut.closeEntry();
+        JarEntry svcEntry = new JarEntry("META-INF/services/io.atlasmap.api.AtlasFieldAction");
+        jarOut.putNextEntry(svcEntry);
+        in = new BufferedInputStream(new FileInputStream("src/test/resources/upload/META-INF/services/io.atlasmap.api.AtlasFieldAction"));
+        while ((count = in.read(buffer)) != -1) {
+            jarOut.write(buffer, 0, count);
+        }
+        in.close();
+        jarOut.closeEntry();
+        jarOut.close();
+        FileInputStream jarIn = new FileInputStream("target/tmp/my.jar");
+        MultipartInput requestIn = mock(MultipartInput.class);
+        List<InputPart> parts = new LinkedList<>();
+        InputPart jarPart = mock(InputPart.class);
+        parts.add(jarPart);
+        when(requestIn.getParts()).thenReturn(parts);
+        when(jarPart.getBody(InputStream.class, null)).thenReturn(jarIn);
+        when(jarPart.getMediaType()).thenReturn(MediaType.APPLICATION_OCTET_STREAM_TYPE);
+        Response resUL = service.uploadLibrary(requestIn);
+        assertEquals(200, resUL.getStatus());
+        Response resFA = service.listFieldActions(null);
+        assertEquals(200, resFA.getStatus());
+        String responseJson = new String((byte[])resFA.getEntity());
+        assertTrue(responseJson, responseJson.contains("MyCustomFieldAction"));
     }
 
     protected UriInfo generateTestUriInfo(String baseUri, String absoluteUri) throws Exception {

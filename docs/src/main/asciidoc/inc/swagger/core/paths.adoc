@@ -27,6 +27,31 @@ Retrieves a list of available field action
 * `application/json`
 
 
+[[_atlas-service-core-uploadlibrary]]
+=== Upload Library
+....
+POST /v2/atlas/library
+....
+
+
+==== Description
+Upload library jar files
+
+
+==== Responses
+
+[options="header", cols=".^2a,.^14a,.^4a"]
+|===
+|HTTP Code|Description|Schema
+|**200**|Succeeded to upload library|No Content
+|===
+
+
+==== Consumes
+
+* `multipart/mixed`
+
+
 [[_atlas-service-core-resetmappings]]
 === Remove All Mappings
 ....

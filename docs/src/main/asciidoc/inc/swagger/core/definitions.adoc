@@ -75,6 +75,19 @@ __optional__|< <<_atlas-service-core-actionparameter,ActionParameter>> > array
 __Type__ : object
 
 
+[[_atlas-service-core-atlaslibraryloader]]
+=== AtlasLibraryLoader
+
+[options="header", cols=".^3a,.^4a"]
+|===
+|Name|Schema
+|**empty** +
+__optional__|boolean
+|**parent** +
+__optional__|<<_atlas-service-core-classloader,ClassLoader>>
+|===
+
+
 [[_atlas-service-core-atlasmapping]]
 === AtlasMapping
 
@@ -151,6 +164,17 @@ __optional__|string
 __optional__|string
 |**mappingType** +
 __optional__|enum (ALL, COLLECTION, COMBINE, LOOKUP, MAP, SEPARATE, NONE)
+|===
+
+
+[[_atlas-service-core-classloader]]
+=== ClassLoader
+
+[options="header", cols=".^3a,.^4a"]
+|===
+|Name|Schema
+|**parent** +
+__optional__|<<_atlas-service-core-classloader,ClassLoader>>
 |===
 
 

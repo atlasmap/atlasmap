@@ -132,7 +132,7 @@ public class ClassInspectionService {
         return inspectClass(classLoader, className);
     }
 
-    private JavaClass inspectClass(ClassLoader classLoader, String className) {
+    public JavaClass inspectClass(ClassLoader classLoader, String className) {
         JavaClass d = null;
         Class<?> clazz = null;
         try {
