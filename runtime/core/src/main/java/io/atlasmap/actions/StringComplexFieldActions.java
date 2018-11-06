@@ -127,7 +127,7 @@ public class StringComplexFieldActions implements AtlasFieldAction {
         return UUID.randomUUID().toString();
     }
 
-    @AtlasFieldActionInfo(name = "IndexOf", sourceType = FieldType.STRING, targetType = FieldType.NUMBER, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
+    @AtlasFieldActionInfo(name = "IndexOf", sourceType = FieldType.STRING, targetType = FieldType.INTEGER, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
     public static Number indexOf(Action action, String input) {
         if (!(action instanceof IndexOf)) {
             throw new IllegalArgumentException("Action must be an IndexOf action");
@@ -142,7 +142,7 @@ public class StringComplexFieldActions implements AtlasFieldAction {
         return input == null ? -1 : input.indexOf(indexOf.getString());
     }
 
-    @AtlasFieldActionInfo(name = "LastIndexOf", sourceType = FieldType.STRING, targetType = FieldType.NUMBER, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
+    @AtlasFieldActionInfo(name = "LastIndexOf", sourceType = FieldType.STRING, targetType = FieldType.INTEGER, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
     public static Number lastIndexOf(Action action, String input) {
         if (!(action instanceof LastIndexOf)) {
             throw new IllegalArgumentException("Action must be a LastIndexOf action");

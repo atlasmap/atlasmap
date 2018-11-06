@@ -16,12 +16,15 @@
       </h2>
 
     </div>
+
     <div *ngIf="searchMode" class="searchBox">
-      <input type="text" #searchFilterBox id="search-filter-box" (keyup)="search(searchFilterBox.value)" placeholder="Search" [(ngModel)]="searchFilter"
-        [focus]="true" />
+      <input type="text" #searchFilterBox id="search-filter-box" [(ngModel)]="searchFilter" [focus]="true"
+        [typeahead]="dataSource" typeaheadWaitMs="900" (typeaheadOnSelect)="selectionChanged($event)"
+        (typeaheadNoResults)="selectionNoResults($event)" placeholder="Search">
       <i class="fa fa-close searchBoxCloseIcon link" (click)="toggleSearch()" tooltip="Close search window" placement="left"></i>
       <div class="clear"></div>
     </div>
+
     <div [attr.class]="searchMode ? 'fieldListSearchOpen' : 'fieldList'" style="overflow:auto;" (scroll)="handleScroll($event)">
       <div class="panel-group" id="accordion-markup">
         <div *ngFor="let docDef of getDocs()" #docDetail class="panel panel-default" [attr.id]='docDef.name'>
