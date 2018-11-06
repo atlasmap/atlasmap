@@ -15,6 +15,7 @@
 */
 
 import { Component, Input, ViewChildren, ElementRef, EventEmitter, QueryList, ViewChild, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
 
 import { DocumentType, InspectionType } from '../common/config.types';
 import { ConfigModel, AdmRedrawMappingLinesEvent } from '../models/config.model';
@@ -43,6 +44,8 @@ export class DocumentDefinitionComponent implements OnInit {
   @ViewChildren('fieldDetail') fieldComponents: QueryList<DocumentFieldDetailComponent>;
   @ViewChildren('docDetail') docElements: QueryList<ElementRef>;
 
+  dataSource: Observable<any>;
+
   private lineMachine: LineMachineComponent = null;
   private redrawMappingLinesEvent = new EventEmitter<AdmRedrawMappingLinesEvent>(true);
   private searchMode = false;
@@ -50,6 +53,12 @@ export class DocumentDefinitionComponent implements OnInit {
   private scrollTop = 0;
   private searchResultsExist = false;
   private sourcesTargetsLabel: string;
+
+  constructor() {
+    this.dataSource = Observable.create((observer: any) => {
+      observer.next(this.search(this.searchFilter));
+    });
+  }
 
   ngOnInit(): void {
     if (this.isSource) {
@@ -253,7 +262,29 @@ export class DocumentDefinitionComponent implements OnInit {
     //   || (!docDef.isSource && docDef.type == DocumentType.XML);
   }
 
-  private search(searchFilter: string): void {
+  /**
+   * Callback function to track search box user input.
+   *
+   * @param event
+   */
+  selectionChanged(event: any): void {
+    this.search(event.item['field']);
+  }
+
+  /**
+   * The selectionChanged function is not called when going from one search character to none.  This function
+   * however is called.
+   *
+   * @param event
+   */
+  selectionNoResults(event: any): void {
+    if (!event) {
+      this.search(this.searchFilter);
+    }
+  }
+
+  private search(searchFilter: string): any[] {
+    const formattedFields: any[] = [];
     this.searchResultsExist = false;
     const searchIsEmpty: boolean = (searchFilter == null) || ('' === searchFilter);
     const defaultVisibility: boolean = searchIsEmpty ? true : false;
@@ -278,5 +309,6 @@ export class DocumentDefinitionComponent implements OnInit {
         }
       }
     }
+    return formattedFields;  // required by typeahead - not used
   }
 }
