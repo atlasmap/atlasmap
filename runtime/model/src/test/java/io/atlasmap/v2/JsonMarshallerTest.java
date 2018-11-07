@@ -15,6 +15,7 @@
  */
 package io.atlasmap.v2;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.io.File;
@@ -116,65 +117,65 @@ public class JsonMarshallerTest extends BaseMarshallerTest {
                 customAction.setMethodName("doStuff");
                 customAction.setInputFieldType(FieldType.STRING);
                 customAction.setOutputFieldType(FieldType.STRING);
-            }
-            if (a instanceof ReplaceFirst) {
+            } else if (a instanceof ReplaceFirst) {
                 ReplaceFirst replace = (ReplaceFirst) a;
                 replace.setMatch("test");
                 replace.setNewString("h");
-            }
-            if (a instanceof SubString) {
+            } else if (a instanceof SubString) {
                 SubString subString = (SubString) a;
                 subString.setEndIndex(5);
                 subString.setStartIndex(2);
-            }
-            if (a instanceof SubStringAfter) {
+            } else if (a instanceof SubStringAfter) {
                 SubStringAfter subStringAfter = (SubStringAfter) a;
                 subStringAfter.setMatch("a");
                 subStringAfter.setEndIndex(5);
                 subStringAfter.setStartIndex(2);
-            }
-            if (a instanceof SubStringBefore) {
+            } else if (a instanceof SubStringBefore) {
                 SubStringBefore subStringBefore = (SubStringBefore) a;
                 subStringBefore.setMatch("z");
                 subStringBefore.setEndIndex(5);
                 subStringBefore.setStartIndex(2);
-            }
-            if (a instanceof PadStringLeft) {
+            } else if (a instanceof PadStringLeft) {
                 PadStringLeft psl = (PadStringLeft) a;
                 psl.setPadCharacter("a");
                 psl.setPadCount(25);
-            }
-            if (a instanceof PadStringRight) {
+            } else if (a instanceof PadStringRight) {
                 PadStringRight psr = (PadStringRight) a;
                 psr.setPadCharacter("z");
                 psr.setPadCount(25);
-            }
-            if (a instanceof ConvertAreaUnit) {
+            } else if (a instanceof ConvertAreaUnit) {
                 ConvertAreaUnit cau = (ConvertAreaUnit) a;
                 cau.setFromUnit(AreaUnitType.SQUARE_FOOT);
                 cau.setToUnit(AreaUnitType.SQUARE_METER);
-            }
-            if (a instanceof ConvertDistanceUnit) {
+            } else if (a instanceof ConvertDistanceUnit) {
                 ConvertDistanceUnit cdu = (ConvertDistanceUnit) a;
                 cdu.setFromUnit(DistanceUnitType.FOOT_FT);
                 cdu.setToUnit(DistanceUnitType.METER_M);
-            }
-            if (a instanceof ConvertMassUnit) {
+            } else if (a instanceof ConvertMassUnit) {
                 ConvertMassUnit cmu = (ConvertMassUnit) a;
                 cmu.setFromUnit(MassUnitType.KILOGRAM_KG);
                 cmu.setToUnit(MassUnitType.POUND_LB);
-            }
-            if (a instanceof ConvertVolumeUnit) {
+            } else if (a instanceof ConvertVolumeUnit) {
                 ConvertVolumeUnit cvu = (ConvertVolumeUnit) a;
                 cvu.setFromUnit(VolumeUnitType.CUBIC_FOOT);
                 cvu.setToUnit(VolumeUnitType.CUBIC_METER);
             }
         }
+
         mapper.writeValue(new File("target/junit/" + testName.getMethodName() + "/" + "atlasmapping.json"),
                 atlasMapping);
-
-        mapper.readValue(
+        AtlasMapping generatedMapping = mapper.readValue(
                 new File("target/junit/" + testName.getMethodName() + "/" + "atlasmapping.json"), AtlasMapping.class);
+
+        List<Action> generatedActions = ((Mapping) generatedMapping.getMappings().getMapping().get(0))
+                                            .getOutputField().get(0).getActions().getActions();
+        assertEquals(actionsList.size(), generatedActions.size());
+        for (int i=0; i<actionsList.size(); i++) {
+            assertEquals(String.format(
+                    "Did you forget to add '%s' in ActionsJsonDeserializer/ActionsJsonSerializer?",
+                    actionsList.get(i).getClass().getName()),
+                    actionsList.get(i).getClass().getName(), generatedActions.get(i).getClass().getName());
+        }
     }
 
     //

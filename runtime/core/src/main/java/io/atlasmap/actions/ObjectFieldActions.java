@@ -22,6 +22,7 @@ import java.util.Map;
 import io.atlasmap.api.AtlasFieldAction;
 import io.atlasmap.spi.AtlasFieldActionInfo;
 import io.atlasmap.v2.Action;
+import io.atlasmap.v2.CollectionSize;
 import io.atlasmap.v2.CollectionType;
 import io.atlasmap.v2.Contains;
 import io.atlasmap.v2.Equals;
@@ -33,6 +34,18 @@ import io.atlasmap.v2.ItemAt;
     "squid:S1226",     // Introduce new variable
     "squid:S3358" })   // Extract nested ternary
 public class ObjectFieldActions implements AtlasFieldAction {
+
+    @AtlasFieldActionInfo(name = "CollectionSize", sourceType = FieldType.ANY, targetType = FieldType.INTEGER, sourceCollectionType = CollectionType.ALL, targetCollectionType = CollectionType.NONE)
+    public static Integer collectionSize(Action action, Object input) {
+        if (!(action instanceof CollectionSize)) {
+            throw new IllegalArgumentException("Action must be a CollectionSize action");
+        }
+        if (input == null) {
+            return 0;
+        }
+        Object[] array = collection(input).toArray(new Object[0]);
+        return array.length;
+    }
 
     @AtlasFieldActionInfo(name = "Contains", sourceType = FieldType.ANY, targetType = FieldType.BOOLEAN, sourceCollectionType = CollectionType.ALL, targetCollectionType = CollectionType.NONE)
     public static Boolean contains(Action action, Object input) {
@@ -64,7 +77,7 @@ public class ObjectFieldActions implements AtlasFieldAction {
         return input.toString().contains(contains.getValue());
     }
 
-    @AtlasFieldActionInfo(name = "Equals", sourceType = FieldType.ANY, targetType = FieldType.BOOLEAN, sourceCollectionType = CollectionType.ALL, targetCollectionType = CollectionType.NONE)
+    @AtlasFieldActionInfo(name = "Equals", sourceType = FieldType.ANY, targetType = FieldType.BOOLEAN, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
     public static Boolean equals(Action action, Object input) {
         if (!(action instanceof Equals)) {
             throw new IllegalArgumentException("Action must be an Equals action");
@@ -76,13 +89,10 @@ public class ObjectFieldActions implements AtlasFieldAction {
             return equals.getValue() == null;
         }
 
-        if (input.getClass().isArray()) {
-            return Arrays.asList((Object[])input).toString().equals(equals.getValue());
-        }
         return input.toString().equals(equals.getValue());
     }
 
-    @AtlasFieldActionInfo(name = "IsNull", sourceType = FieldType.ANY, targetType = FieldType.BOOLEAN, sourceCollectionType = CollectionType.ALL, targetCollectionType = CollectionType.NONE)
+    @AtlasFieldActionInfo(name = "IsNull", sourceType = FieldType.ANY, targetType = FieldType.BOOLEAN, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
     public static Boolean isNull(Action action, Object input) {
         return input == null;
     }
@@ -108,19 +118,10 @@ public class ObjectFieldActions implements AtlasFieldAction {
         }
     }
 
-    @AtlasFieldActionInfo(name = "Length", sourceType = FieldType.STRING, targetType = FieldType.INTEGER, sourceCollectionType = CollectionType.ALL, targetCollectionType = CollectionType.NONE)
+    @AtlasFieldActionInfo(name = "Length", sourceType = FieldType.ANY, targetType = FieldType.INTEGER, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
     public static Integer length(Action action, Object input) {
         if (input == null) {
             return -1;
-        }
-        if (input instanceof Collection) {
-            return ((Collection<?>)input).size();
-        }
-        if (input.getClass().isArray()) {
-            return ((Object[])input).length;
-        }
-        if (input instanceof Map<?, ?>) {
-            return ((Map<?, ?>)input).size();
         }
         return input.toString().length();
     }

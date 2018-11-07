@@ -92,6 +92,14 @@
     </complexType>
   </element>
 
+  <element name="CollectionSize">
+    <complexType>
+      <complexContent>
+        <extension base="atlas:Action" />
+      </complexContent>
+    </complexType>
+  </element>
+
   <element name="Concatenate">
     <complexType>
       <complexContent>
@@ -575,6 +583,7 @@
         <element ref="atlas:Camelize" />
         <element ref="atlas:Capitalize" />
         <element ref="atlas:Ceiling" />
+        <element ref="atlas:CollectionSize" />
         <element ref="atlas:Concatenate" />
         <element ref="atlas:Contains" />
         <element ref="atlas:ConvertAreaUnit" />

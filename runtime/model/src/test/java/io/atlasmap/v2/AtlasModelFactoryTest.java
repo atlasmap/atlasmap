@@ -20,22 +20,14 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertNull;
 
-import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map.Entry;
 
-import javax.xml.parsers.SAXParserFactory;
-
 import org.junit.Test;
-import org.xml.sax.ErrorHandler;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
 
 import com.sun.xml.xsom.XSElementDecl;
 import com.sun.xml.xsom.XSSchema;
-import com.sun.xml.xsom.parser.XSOMParser;
-import com.sun.xml.xsom.util.DomAnnotationParserFactory;
 
 public class AtlasModelFactoryTest {
 
@@ -98,26 +90,7 @@ public class AtlasModelFactoryTest {
 
     @Test
     public void testCloneAction() throws Exception {
-        XSOMParser parser = new XSOMParser(SAXParserFactory.newInstance());
-        parser.setErrorHandler(new ErrorHandler() {
-            @Override
-            public void error(SAXParseException arg0) throws SAXException {
-                throw arg0;
-            }
-            @Override
-            public void fatalError(SAXParseException arg0) throws SAXException {
-                throw arg0;
-            }
-            @Override
-            public void warning(SAXParseException arg0) throws SAXException {
-                throw arg0;
-            }
-        });
-        parser.setAnnotationParser(new DomAnnotationParserFactory());
-        parser.parse(new File("target/classes/atlas-actions-v2.xsd"));
-        parser.parse(new File("target/classes/atlas-model-v2.xsd"));
-        XSSchema schema = parser.getResult().getSchema("http://atlasmap.io/v2");
-
+        XSSchema schema = ModelTestUtil.getCoreSchema();
         for (Entry<String, XSElementDecl> entry : schema.getElementDecls().entrySet()) {
             String name = entry.getKey();
             XSElementDecl element = entry.getValue();
