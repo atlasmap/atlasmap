@@ -22,17 +22,32 @@ import static org.junit.Assert.assertTrue;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.junit.Test;
 
+import io.atlasmap.v2.CollectionSize;
 import io.atlasmap.v2.Contains;
 import io.atlasmap.v2.Equals;
 import io.atlasmap.v2.ItemAt;
 import io.atlasmap.v2.Length;
 
 public class ObjectFieldActionsTest {
+
+    @Test
+    public void testCollectionSize() {
+        assertEquals(new Integer(0), ObjectFieldActions.collectionSize(new CollectionSize(), new Boolean[0]));
+        assertEquals(new Integer(0), ObjectFieldActions.collectionSize(new CollectionSize(), new ArrayList<>()));
+        assertEquals(new Integer(0), ObjectFieldActions.collectionSize(new CollectionSize(), new HashMap<>()));
+        Object[] array = new Object[] {false, "foo", 2};
+        assertEquals(new Integer(3), ObjectFieldActions.collectionSize(new CollectionSize(), array));
+        assertEquals(new Integer(3), ObjectFieldActions.collectionSize(new CollectionSize(), Arrays.asList(array)));
+        Map<Object, Object> map = new HashMap<>();
+        for (Object obj : array) {
+            map.put(obj, obj);
+        }
+        assertEquals(new Integer(3), ObjectFieldActions.collectionSize(new CollectionSize(), map));
+    }
 
     @Test
     public void testContains() {
@@ -78,28 +93,6 @@ public class ObjectFieldActionsTest {
     public void testEquals() {
         Equals action = new Equals();
         assertTrue(ObjectFieldActions.equals(action, null));
-        Object[] array = new Object[] {false, null, "foo", 2};
-        assertFalse(ObjectFieldActions.equals(action, array));
-        assertFalse(ObjectFieldActions.equals(action, Arrays.asList(array)));
-        Map<Object, Object> map = new LinkedHashMap<>();
-        for (Object obj : array) {
-            map.put("key-" + obj, obj);
-        }
-        assertFalse(ObjectFieldActions.equals(action, map));
-        System.out.println(Arrays.asList(array));
-        action.setValue("[false, null, foo, 2]");
-        assertTrue(ObjectFieldActions.equals(action, array));
-        assertTrue(ObjectFieldActions.equals(action, Arrays.asList(array)));
-        action.setValue("{key-false=false, key-null=null, key-foo=foo, key-2=2}");
-        assertTrue(ObjectFieldActions.equals(action, map));
-        action.setValue("foo");
-        assertFalse(ObjectFieldActions.equals(action, null));
-        assertFalse(ObjectFieldActions.equals(action, ""));
-        assertFalse(ObjectFieldActions.equals(action, "foobar"));
-        assertTrue(ObjectFieldActions.equals(action, "foo"));
-        assertFalse(ObjectFieldActions.equals(action, array));
-        assertFalse(ObjectFieldActions.equals(action, Arrays.asList(array)));
-        assertFalse(ObjectFieldActions.equals(action, map));
         action.setValue("6");
         assertFalse(ObjectFieldActions.equals(action, 169));
         action.setValue("169");
@@ -149,16 +142,5 @@ public class ObjectFieldActionsTest {
         assertEquals(new Integer(5), ObjectFieldActions.length(new Length(), " foo "));
         assertEquals(new Integer(4), ObjectFieldActions.length(new Length(), true));
         assertEquals(new Integer(3), ObjectFieldActions.length(new Length(), 169));
-        assertEquals(new Integer(0), ObjectFieldActions.length(new Length(), new Boolean[0]));
-        assertEquals(new Integer(0), ObjectFieldActions.length(new Length(), new ArrayList<>()));
-        assertEquals(new Integer(0), ObjectFieldActions.length(new Length(), new HashMap<>()));
-        Object[] array = new Object[] {false, "foo", 2};
-        assertEquals(new Integer(3), ObjectFieldActions.length(new Length(), array));
-        assertEquals(new Integer(3), ObjectFieldActions.length(new Length(), Arrays.asList(array)));
-        Map<Object, Object> map = new HashMap<>();
-        for (Object obj : array) {
-            map.put(obj, obj);
-        }
-        assertEquals(new Integer(3), ObjectFieldActions.length(new Length(), map));
     }
 }

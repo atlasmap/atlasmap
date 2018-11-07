@@ -245,31 +245,29 @@ public class ActionsJsonSerializer extends JsonSerializer<Actions> {
         boolean objectStarted = false;
         if (customAction.getClassName() != null && customAction.getClassName().trim().length() > 0) {
             gen.writeStartObject();
-            gen.writeStringField(NAME, customAction.getName().trim());
-            gen.writeEndObject();
             objectStarted = true;
+            gen.writeStringField(NAME, customAction.getName().trim());
         }
 
         if (customAction.getClassName() != null && customAction.getClassName().trim().length() > 0) {
             if (!objectStarted) {
                 gen.writeStartObject();
+                objectStarted = true;
             }
             gen.writeStringField(CLASS_NAME, customAction.getClassName().trim());
-            if (!objectStarted) {
-                gen.writeEndObject();
-            }
         }
 
         if (customAction.getMethodName() != null && customAction.getMethodName().trim().length() > 0) {
             if (!objectStarted) {
                 gen.writeStartObject();
+                objectStarted = true;
             }
             gen.writeStringField(METHOD_NAME, customAction.getMethodName().trim());
-            if (!objectStarted) {
-                gen.writeEndObject();
-            }
         }
 
+        if (objectStarted) {
+            gen.writeEndObject();
+        }
         gen.writeEndObject();
     }
 
@@ -313,7 +311,9 @@ public class ActionsJsonSerializer extends JsonSerializer<Actions> {
         gen.writeStartObject();
         gen.writeFieldName("ItemAt");
         gen.writeStartObject();
-        gen.writeNumberField(INDEX, action.getIndex());
+        if (action.getIndex() != null) {
+            gen.writeNumberField(INDEX, action.getIndex());
+        }
         gen.writeEndObject();
         gen.writeEndObject();
     }
@@ -332,7 +332,9 @@ public class ActionsJsonSerializer extends JsonSerializer<Actions> {
         gen.writeFieldName("PadStringLeft");
         gen.writeStartObject();
         gen.writeStringField(PAD_CHARACTER, padStringLeft.getPadCharacter());
-        gen.writeNumberField(PAD_COUNT, padStringLeft.getPadCount());
+        if (padStringLeft.getPadCount() != null) {
+            gen.writeNumberField(PAD_COUNT, padStringLeft.getPadCount());
+        }
         gen.writeEndObject();
         gen.writeEndObject();
     }
@@ -342,7 +344,9 @@ public class ActionsJsonSerializer extends JsonSerializer<Actions> {
         gen.writeFieldName("PadStringRight");
         gen.writeStartObject();
         gen.writeStringField(PAD_CHARACTER, padStringRight.getPadCharacter());
-        gen.writeNumberField(PAD_COUNT, padStringRight.getPadCount());
+        if (padStringRight.getPadCount() != null) {
+            gen.writeNumberField(PAD_COUNT, padStringRight.getPadCount());
+        }
         gen.writeEndObject();
         gen.writeEndObject();
     }
@@ -398,7 +402,9 @@ public class ActionsJsonSerializer extends JsonSerializer<Actions> {
         gen.writeStartObject();
         gen.writeFieldName("SubString");
         gen.writeStartObject();
-        gen.writeNumberField(START_INDEX, subString.getStartIndex());
+        if (subString.getStartIndex() != null) {
+            gen.writeNumberField(START_INDEX, subString.getStartIndex());
+        }
         if (subString.getEndIndex() != null) {
             gen.writeNumberField(END_INDEX, subString.getEndIndex());
         }

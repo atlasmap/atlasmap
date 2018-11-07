@@ -223,6 +223,9 @@ public class AtlasModelFactory {
         if (action instanceof Ceiling) {
             return new Ceiling();
         }
+        if (action instanceof CollectionSize) {
+            return new CollectionSize();
+        }
         if (action instanceof Concatenate) {
             Concatenate concat = new Concatenate();
             concat.setDelimiter(((Concatenate) action).getDelimiter());

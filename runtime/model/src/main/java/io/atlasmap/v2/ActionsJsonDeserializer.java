@@ -81,8 +81,12 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
                 return new Capitalize();
             case "Ceiling":
                 return new Ceiling();
+            case "CollectionSize":
+                return new CollectionSize();
             case "Concatenate":
                 return processConcatenateJsonToken(jsonToken);
+            case "Contains":
+                return processContainsJsonToken(jsonToken);
             case "ConvertAreaUnit":
                 return processConvertAreaUnitJsonToken(jsonToken);
             case "ConvertDistanceUnit":
@@ -107,6 +111,8 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
                 return new Divide();
             case "EndsWith":
                 return processEndsWithJsonToken(jsonToken);
+            case "Equals":
+                return processEquals(jsonToken);
             case "FileExtension":
                 return new FileExtension();
             case "Floor":
@@ -117,6 +123,8 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
                 return new GenerateUUID();
             case "IndexOf":
                 return processIndexOfJsonToken(jsonToken);
+            case "IsNull":
+                return new IsNull();
             case "ItemAt":
                 return processItemAtJsonToken(jsonToken);
             case "LastIndexOf":
@@ -279,6 +287,33 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
             case ActionsJsonSerializer.DELIMITER:
                 jsonToken.nextToken();
                 action.setDelimiter(jsonToken.getValueAsString());
+                break;
+            default:
+                break;
+            }
+
+            nextToken = jsonToken.nextToken();
+        } while (!JsonToken.END_ARRAY.equals(nextToken) && !JsonToken.END_OBJECT.equals(nextToken));
+        return action;
+    }
+
+    protected Contains processContainsJsonToken(JsonParser jsonToken) throws IOException {
+        Contains action = new Contains();
+
+        if (JsonToken.END_ARRAY.equals(jsonToken.currentToken())
+                || JsonToken.END_OBJECT.equals(jsonToken.currentToken())) {
+            return action;
+        }
+
+        JsonToken nextToken = null;
+        do {
+            if (JsonToken.START_OBJECT.equals(jsonToken.currentToken())) {
+                jsonToken.nextToken();
+            }
+            switch (jsonToken.getCurrentName()) {
+            case ActionsJsonSerializer.DELIMITER:
+                jsonToken.nextToken();
+                action.setValue(jsonToken.getValueAsString());
                 break;
             default:
                 break;
@@ -468,6 +503,33 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
                 case ActionsJsonSerializer.STRING:
                     jsonToken.nextToken();
                     action.setString(jsonToken.getValueAsString());
+                    break;
+                default:
+                    break;
+            }
+
+            nextToken = jsonToken.nextToken();
+        } while (!JsonToken.END_ARRAY.equals(nextToken) && !JsonToken.END_OBJECT.equals(nextToken));
+        return action;
+    }
+
+    protected Equals processEquals(JsonParser jsonToken) throws IOException {
+        Equals action = new Equals();
+
+        if (JsonToken.END_ARRAY.equals(jsonToken.currentToken())
+                || JsonToken.END_OBJECT.equals(jsonToken.currentToken())) {
+            return action;
+        }
+
+        JsonToken nextToken = null;
+        do {
+            if (JsonToken.START_OBJECT.equals(jsonToken.currentToken())) {
+                jsonToken.nextToken();
+            }
+            switch (jsonToken.getCurrentName()) {
+                case ActionsJsonSerializer.VALUE:
+                    jsonToken.nextToken();
+                    action.setValue(jsonToken.getValueAsString());
                     break;
                 default:
                     break;
