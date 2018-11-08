@@ -151,7 +151,7 @@ export class DocumentDefinitionComponent implements OnInit {
 
   /**
    * Using the specified event, determine and read the selected file and call the document service to
-   * process it.
+   * process it.  Also update the runtime catalog.
    *
    * @param event
    */
@@ -160,6 +160,8 @@ export class DocumentDefinitionComponent implements OnInit {
     this.cfg.initCfg.initialized = false;
     this.cfg.initializationService.updateLoadingStatus('Importing Document');
     this.cfg.documentService.processDocument(selectedFile, InspectionType.UNKNOWN, this.isSource);
+
+    this.cfg.mappingService.exportMappingsCatalog(null);
   }
 
   getFileSuffix() {

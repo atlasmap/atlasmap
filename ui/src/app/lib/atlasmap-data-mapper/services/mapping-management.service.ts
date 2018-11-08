@@ -825,9 +825,11 @@ export class MappingManagementService {
    */
   async exportMappingsCatalog(mappingsFileName: string) {
     let aggregateBuffer = '   {\n';
+    let userExport = true;
     try {
       if (mappingsFileName === null || mappingsFileName.length === 0) {
         mappingsFileName = 'atlasmap-mapping.adm';
+        userExport = false;
       }
 
       // Retrieve the XML mappings buffer from the server.
@@ -868,10 +870,14 @@ export class MappingManagementService {
       try {
         const compress = deflate(binBuffer, {gzip: true});
         const fileContent: Blob = new Blob([compress], {type: 'application/octet-stream'});
-        if (!await DataMapperUtil.writeFile(fileContent, mappingsFileName)) {
-          this.cfg.errorService.mappingError('Unable to save the current data mappings.', null);
+
+        // User export gets written to the local downloads area.
+        if (userExport) {
+          if (!await DataMapperUtil.writeFile(fileContent, mappingsFileName)) {
+            this.cfg.errorService.mappingError('Unable to save the current data mappings.', null);
+          }
         }
-        // Reinitialize the model mappings.
+        // Reinitialize the model mappings to the runtime.
         this.cfg.mappingService.setCompressedMappingToService(fileContent);
       } catch (error1) {
         this.cfg.errorService.mappingError('Unable to compress the current data mappings.\n', error1);
