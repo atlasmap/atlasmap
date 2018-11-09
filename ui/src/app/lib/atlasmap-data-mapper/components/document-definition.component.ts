@@ -46,7 +46,9 @@ export class DocumentDefinitionComponent implements OnInit {
 
   dataSource: Observable<any>;
 
+  private searchFieldCount = 0;
   private lineMachine: LineMachineComponent = null;
+  private maxSearchMatch = 10000;
   private redrawMappingLinesEvent = new EventEmitter<AdmRedrawMappingLinesEvent>(true);
   private searchMode = false;
   private searchFilter = '';
@@ -285,6 +287,23 @@ export class DocumentDefinitionComponent implements OnInit {
     }
   }
 
+  /**
+   * Mark all children of the specified field as visible and not collapsed.
+   *
+   * @param field
+   */
+  markChildrenVisible(field: Field): void {
+    field.visibleInCurrentDocumentSearch = true;
+    field.collapsed = false;
+    if (this.searchFieldCount++ >= this.maxSearchMatch) {
+      throw new Error('The maximum number of fields matching the specified search filter has beeen exceeded  ' +
+        'Try using a longer field filter.');
+    }
+    for (const childField of field.children) {
+      this.markChildrenVisible(childField);
+    }
+  }
+
   private search(searchFilter: string): any[] {
     const formattedFields: any[] = [];
     this.searchResultsExist = false;
@@ -296,16 +315,42 @@ export class DocumentDefinitionComponent implements OnInit {
         field.visibleInCurrentDocumentSearch = defaultVisibility;
       }
       if (!searchIsEmpty) {
+        this.searchFieldCount = 0;
         for (const field of docDef.getAllFields()) {
+
+          // Skip this field if it's already determined to be visible.
+          if (field.visibleInCurrentDocumentSearch && !field.collapsed) {
+            continue;
+          }
           field.visibleInCurrentDocumentSearch = field.name.toLowerCase().includes(searchFilter.toLowerCase());
           this.searchResultsExist = this.searchResultsExist || field.visibleInCurrentDocumentSearch;
+
+          // The current field matches the user-specified filter.
           if (field.visibleInCurrentDocumentSearch) {
             docDef.visibleInCurrentDocumentSearch = true;
             let parentField = field.parentField;
+
+            // Direct lineage is then visible.
             while (parentField != null) {
               parentField.visibleInCurrentDocumentSearch = true;
               parentField.collapsed = false;
               parentField = parentField.parentField;
+              this.searchFieldCount++;
+            }
+
+            // All fields below the matching field are also visible.
+            try {
+              this.markChildrenVisible(field);
+            } catch (error) {
+              this.cfg.errorService.info(error.message, null);
+              break;
+            }
+
+            // The total number of matches is limited to allow the UI to perform.
+            if (this.searchFieldCount++ >= this.maxSearchMatch) {
+              this.cfg.errorService.info('The maximum number of fields matching the specified search filter has beeen exceeded  ' +
+                'Try using a longer field filter.', null);
+              break;
             }
           }
         }
