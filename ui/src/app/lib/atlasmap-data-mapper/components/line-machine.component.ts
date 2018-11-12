@@ -32,6 +32,7 @@ export class LineModel {
   targetY: string;
   stroke = 'url(#line-gradient-dormant)';
   style: SafeStyle;
+  targetField: Field;
 }
 
 @Component({
@@ -73,13 +74,51 @@ export class LineMachineComponent implements OnInit, OnDestroy {
     lmcInstance.redrawLinesForMappings();
   }
 
-  addLineFromParams(sourceX: string, sourceY: string, targetX: string, targetY: string, stroke: string): void {
+  /**
+   * Match the line geometry of a selected line to determine the matching line model array element.  Return
+   * the target field from that array element.
+   *
+   * @param selectedLineAttrs
+   */
+  private getTargetFieldFromLine(selectedLineAttrs: NamedNodeMap): Field {
+    for (const line of this.lines) {
+      if ((selectedLineAttrs[1].nodeValue === line.sourceX) &&
+          (selectedLineAttrs[2].nodeValue === line.sourceY) &&
+          (selectedLineAttrs[3].nodeValue === line.targetX) &&
+          (selectedLineAttrs[4].nodeValue === line.targetY)) {
+        return line.targetField;
+      }
+    }
+    return null;
+  }
+
+  /**
+   * The user has selected between the panels.  This is likely a line - verify it and select the fields
+   * associated with the line.
+   *
+   * @param event
+   */
+  handleLineClick(event) {
+    const selectedElement = event.target;
+    if (selectedElement !== null && selectedElement.nodeName === 'line') {
+      const targetField: Field = this.getTargetFieldFromLine(selectedElement.attributes);
+      if (targetField != null) {
+        this.cfg.mappingService.fieldSelected(targetField, false);
+        setTimeout(() => {
+          this.redrawLinesForMappings();
+        }, 1);
+      }
+    }
+  }
+
+  addLineFromParams(sourceX: string, sourceY: string, targetX: string, targetY: string, stroke: string, targetField: Field): void {
     const l: LineModel = new LineModel();
     l.sourceX = sourceX;
     l.sourceY = sourceY;
     l.targetX = targetX;
     l.targetY = targetY;
     l.stroke = stroke;
+    l.targetField = targetField;
     this.addLine(l);
   }
 
@@ -231,7 +270,7 @@ export class LineMachineComponent implements OnInit, OnDestroy {
 
           if (isSelectedMapping || (this.cfg.showLinesAlways)) {
             this.addLineFromParams('0', (sourceY + this.yOffset).toString(),
-              '100%', (targetY + this.yOffset).toString(), stroke);
+              '100%', (targetY + this.yOffset).toString(), stroke, outputField);
           }
         }
       }
