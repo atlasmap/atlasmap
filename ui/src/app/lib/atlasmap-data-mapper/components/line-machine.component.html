@@ -1,4 +1,5 @@
-<div class="LineMachineComponent" #lineMachineElement on-mousemove="drawLine($event)" style="height:100%; margin-top:6%;">
+<div class="LineMachineComponent" #lineMachineElement on-mousemove="drawLine($event)"
+  on-click="handleLineClick($event)" style="height:100%; margin-top:6%;">
   <svg style="width:100%; height:100%;">
     <defs>
       <linearGradient id='line-gradient-active' gradientUnits="userSpaceOnUse">
