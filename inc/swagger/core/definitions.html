@@ -529,11 +529,13 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_atlas-service-core-actionparameter">ActionParameter</a></li>
 <li><a href="#_atlas-service-core-actionparameters">ActionParameters</a></li>
 <li><a href="#_atlas-service-core-actions">Actions</a></li>
+<li><a href="#_atlas-service-core-atlaslibraryloader">AtlasLibraryLoader</a></li>
 <li><a href="#_atlas-service-core-atlasmapping">AtlasMapping</a></li>
 <li><a href="#_atlas-service-core-atlasmappingresult">AtlasMappingResult</a></li>
 <li><a href="#_atlas-service-core-audit">Audit</a></li>
 <li><a href="#_atlas-service-core-audits">Audits</a></li>
 <li><a href="#_atlas-service-core-basemapping">BaseMapping</a></li>
+<li><a href="#_atlas-service-core-classloader">ClassLoader</a></li>
 <li><a href="#_atlas-service-core-constant">Constant</a></li>
 <li><a href="#_atlas-service-core-constants">Constants</a></li>
 <li><a href="#_atlas-service-core-datasource">DataSource</a></li>
@@ -780,6 +782,41 @@ table.CodeRay td.code>pre{padding:0}
 </div>
 </div>
 <div class="sect2">
+<h3 id="_atlas-service-core-atlaslibraryloader">AtlasLibraryLoader</h3>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 42.8571%;">
+<col style="width: 57.1429%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-middle">Name</th>
+<th class="tableblock halign-left valign-middle">Schema</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p><strong>empty</strong><br>
+<em>optional</em></p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p>boolean</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p><strong>parent</strong><br>
+<em>optional</em></p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p><a href="#_atlas-service-core-classloader">ClassLoader</a></p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
 <h3 id="_atlas-service-core-atlasmapping">AtlasMapping</h3>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
@@ -1012,6 +1049,32 @@ table.CodeRay td.code>pre{padding:0}
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><div><div class="paragraph">
 <p>enum (ALL, COLLECTION, COMBINE, LOOKUP, MAP, SEPARATE, NONE)</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_atlas-service-core-classloader">ClassLoader</h3>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 42.8571%;">
+<col style="width: 57.1429%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-middle">Name</th>
+<th class="tableblock halign-left valign-middle">Schema</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p><strong>parent</strong><br>
+<em>optional</em></p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p><a href="#_atlas-service-core-classloader">ClassLoader</a></p>
 </div></div></td>
 </tr>
 </tbody>
@@ -1958,7 +2021,7 @@ table.CodeRay td.code>pre{padding:0}
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2018-11-13 01:26:13 UTC
+Last updated 2018-11-13 17:30:49 UTC
 </div>
 </div>
 </body>
