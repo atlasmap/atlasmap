@@ -26,6 +26,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.container.ResourceContext;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -42,6 +44,7 @@ import io.atlasmap.java.v2.ClassInspectionResponse;
 import io.atlasmap.java.v2.JavaClass;
 import io.atlasmap.java.v2.MavenClasspathRequest;
 import io.atlasmap.java.v2.MavenClasspathResponse;
+import io.atlasmap.service.AtlasService;
 import io.atlasmap.v2.Json;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -57,6 +60,9 @@ import io.swagger.annotations.ApiResponses;
 public class JavaService {
 
     private static final Logger LOG = LoggerFactory.getLogger(JavaService.class);
+
+    @Context
+    private ResourceContext resourceContext;
 
     protected byte[] toJson(Object value) {
         try {
@@ -150,7 +156,8 @@ public class JavaService {
         try {
             JavaClass c = null;
             if (request.getClasspath() == null || request.getClasspath().isEmpty()) {
-                c = classInspectionService.inspectClass(request.getClassName());
+                AtlasService atlasService = resourceContext.getResource(AtlasService.class);
+                c = classInspectionService.inspectClass(atlasService.getLibraryLoader(), request.getClassName());
             } else {
                 c = classInspectionService.inspectClass(request.getClassName(), request.getClasspath());
             }

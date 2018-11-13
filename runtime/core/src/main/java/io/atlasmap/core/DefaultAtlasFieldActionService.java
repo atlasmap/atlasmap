@@ -53,11 +53,16 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
     }
 
     public void init() {
+        listActionDetails().clear();
         listActionDetails().addAll(loadFieldActions());
         // TODO load custom field actions in application bundles
         // on hierarchical class loader environment
     }
 
+    public void init(ClassLoader classLoader) {
+        listActionDetails().clear();
+        listActionDetails().addAll(loadFieldActions(classLoader));
+    }
     public List<ActionDetail> loadFieldActions() {
         return loadFieldActions(this.getClass().getClassLoader());
     }

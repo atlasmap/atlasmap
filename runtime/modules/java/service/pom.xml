@@ -34,6 +34,10 @@
   <dependencies>
     <dependency>
       <groupId>io.atlasmap</groupId>
+      <artifactId>atlas-service</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.atlasmap</groupId>
       <artifactId>atlas-java-core</artifactId>
     </dependency>
     <dependency>

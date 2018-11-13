@@ -48,6 +48,8 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.transform.stream.StreamSource;
 
+import org.jboss.resteasy.plugins.providers.multipart.InputPart;
+import org.jboss.resteasy.plugins.providers.multipart.MultipartInput;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,6 +59,8 @@ import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.api.AtlasSession;
 import io.atlasmap.core.DefaultAtlasContextFactory;
+import io.atlasmap.core.DefaultAtlasFieldActionService;
+import io.atlasmap.service.AtlasLibraryLoader.AtlasLibraryLoaderListener;
 import io.atlasmap.v2.ActionDetails;
 import io.atlasmap.v2.AtlasMapping;
 import io.atlasmap.v2.Audits;
@@ -86,10 +90,22 @@ public class AtlasService {
     private final AtlasContext defaultContext;
 
     private String atlasmapCatalogName = "atlasmap-catalog.adm";
-    private String baseFolder = "target/mappings";
+    private String baseFolder = "target";
+    private String mappingFolder = baseFolder + File.separator + "mappings";
+    private String libFolder = baseFolder + File.separator + "lib";
+    private AtlasLibraryLoader libraryLoader;
 
     public AtlasService() throws AtlasException {
         this.defaultContext = atlasContextFactory.createContext(new AtlasMapping());
+        this.libraryLoader = new AtlasLibraryLoader(libFolder);
+        // Add atlas-core in case it runs on modular class loader
+        this.libraryLoader.addAlternativeLoader(DefaultAtlasFieldActionService.class.getClassLoader());
+        this.libraryLoader.addListener(new AtlasLibraryLoaderListener() {
+            @Override
+            public void onUpdate(AtlasLibraryLoader loader) {
+                ((DefaultAtlasFieldActionService)atlasContextFactory.getFieldActionService()).init(libraryLoader);
+            }
+        });
     }
 
     @GET
@@ -116,8 +132,8 @@ public class AtlasService {
     public Response listMappings(@Context UriInfo uriInfo, @QueryParam("filter") final String filter) {
         StringMap sMap = new StringMap();
         LOG.debug("listMappings with filter '{}'", filter);
-        java.nio.file.Path mappingFolder = Paths.get(baseFolder);
-        File[] mappings = mappingFolder.toFile().listFiles(new FilenameFilter() {
+        java.nio.file.Path mappingFolderPath = Paths.get(mappingFolder);
+        File[] mappings = mappingFolderPath.toFile().listFiles(new FilenameFilter() {
 
             @Override
             public boolean accept(File dir, String name) {
@@ -159,7 +175,7 @@ public class AtlasService {
     public Response removeMappingRequest(@ApiParam("Mapping ID") @PathParam("mappingId") String mappingId) {
 
         java.nio.file.Path mappingFilePath = Paths
-                .get(baseFolder + File.separator + generateMappingFileName(mappingId));
+                .get(mappingFolder + File.separator + generateMappingFileName(mappingId));
         File mappingFile = mappingFilePath.toFile();
 
         if (!mappingFile.exists()) {
@@ -183,8 +199,8 @@ public class AtlasService {
     public Response resetMappings() {
         LOG.debug("resetMappings");
 
-        java.nio.file.Path mappingFolder = Paths.get(baseFolder);
-        File[] mappings = mappingFolder.toFile().listFiles();
+        java.nio.file.Path mappingFolderPath = Paths.get(mappingFolder);
+        File[] mappings = mappingFolderPath.toFile().listFiles();
 
         if (mappings == null) {
             return Response.ok().build();
@@ -359,6 +375,39 @@ public class AtlasService {
         return "pong";
     }
 
+    @POST
+    @Path("/library")
+    @ApiOperation(value = "Upload Library", notes = "Upload library jar files")
+    @Consumes({ "multipart/mixed" })
+    @ApiResponses(@ApiResponse(
+            code = 200, message = "Succeeded to upload library"))
+    public Response uploadLibrary(MultipartInput requestIn) {
+        if (requestIn == null || requestIn.getParts() == null || requestIn.getParts().isEmpty()) {
+            throw new WebApplicationException("No library file is found in request body");
+        }
+
+        for (InputPart part : requestIn.getParts()) {
+            MediaType type = part.getMediaType();
+            if (!MediaType.APPLICATION_OCTET_STREAM_TYPE.equals(type)) {
+                throw new WebApplicationException(String.format("Unsupported media type ''", type.getType()));
+            }
+
+            try {
+                libraryLoader.addJarFromStream(part.getBody(InputStream.class, null));
+            } catch (Exception e) {
+                if (LOG.isDebugEnabled()) {
+                    LOG.error("", e);
+                }
+                throw new WebApplicationException("Could not read file part: " + e.getMessage());
+            }
+        }
+        return Response.ok().build();
+    }
+
+    public AtlasLibraryLoader getLibraryLoader() {
+        return this.libraryLoader;
+    }
+
     protected Response validateMapping(AtlasMapping mapping, UriInfo uriInfo) throws IOException, AtlasException {
 
         File temporaryMappingFile = File.createTempFile("atlas-mapping", "xml");
@@ -443,21 +492,21 @@ public class AtlasService {
     }
 
     private File createMappingFile(String mappingName) {
-        File dir = new File(baseFolder);
+        File dir = new File(mappingFolder);
         if (!dir.exists()) {
             dir.mkdirs();
         }
-        String fileName = baseFolder + File.separator + generateMappingFileName(mappingName);
+        String fileName = mappingFolder + File.separator + generateMappingFileName(mappingName);
         LOG.debug("Creating mapping file '{}'", fileName);
         return new File(fileName);
     }
 
     private void createBinaryMappingFile(String fileName, InputStream mapping) throws IOException {
-        File dir = new File(baseFolder);
+        File dir = new File(mappingFolder);
         if (!dir.exists()) {
             dir.mkdirs();
         }
-        String filePath = baseFolder + File.separator + fileName;
+        String filePath = mappingFolder + File.separator + fileName;
         LOG.debug("Creating binary mapping file '{}'", filePath);
         FileOutputStream outputStream = new FileOutputStream(filePath);
         int length = 0;
@@ -483,10 +532,10 @@ public class AtlasService {
         java.nio.file.Path mappingFilePath = null;
 
         if (mappingFormat.equals("JSON") || mappingFormat.equals("XML")) {
-            mappingFilePath = Paths.get(baseFolder + File.separator + generateMappingFileName(mappingId));
+            mappingFilePath = Paths.get(mappingFolder + File.separator + generateMappingFileName(mappingId));
         }
         else {
-            mappingFilePath = Paths.get(baseFolder + File.separator + atlasmapCatalogName);
+            mappingFilePath = Paths.get(mappingFolder + File.separator + atlasmapCatalogName);
         }
 
         mappingFile = mappingFilePath.toFile();

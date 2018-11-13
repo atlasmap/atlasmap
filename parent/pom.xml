@@ -401,13 +401,19 @@
         <artifactId>resteasy-jaxrs</artifactId>
         <version>${resteasy.version}</version>
         <scope>provided</scope>
-       </dependency>
-       <dependency>
-         <groupId>org.jboss.resteasy</groupId>
-         <artifactId>resteasy-client</artifactId>
-         <version>${resteasy.version}</version>
-         <scope>provided</scope>
-   </dependency>
+      </dependency>
+      <dependency>
+        <groupId>org.jboss.resteasy</groupId>
+        <artifactId>resteasy-client</artifactId>
+        <version>${resteasy.version}</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.jboss.resteasy</groupId>
+        <artifactId>resteasy-multipart-provider</artifactId>
+        <version>${resteasy.version}</version>
+        <scope>provided</scope>
+      </dependency>
       <dependency>
         <groupId>org.jvnet.jaxb2_commons</groupId>
         <artifactId>jaxb2-basics</artifactId>
