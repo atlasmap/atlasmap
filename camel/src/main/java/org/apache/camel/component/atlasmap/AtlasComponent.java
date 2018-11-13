@@ -47,8 +47,8 @@ public class AtlasComponent extends DefaultComponent {
 
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
         boolean cache = getAndRemoveParameter(parameters, "contentCache", Boolean.class, Boolean.TRUE);
-        String sourceMapName = getAndRemoveParameter(parameters, "sourceMapName", String.class, AtlasConstants.ATLAS_SOURCE_MAP);
-        String targetMapName = getAndRemoveParameter(parameters, "targetMapName", String.class, AtlasConstants.ATLAS_TARGET_MAP);
+        String sourceMapName = getAndRemoveParameter(parameters, "sourceMapName", String.class);
+        String targetMapName = getAndRemoveParameter(parameters, "targetMapName", String.class);
 
         AtlasEndpoint endpoint = new AtlasEndpoint(uri, this, remaining);
         setProperties(endpoint, parameters);

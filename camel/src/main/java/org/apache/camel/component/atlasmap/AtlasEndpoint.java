@@ -304,14 +304,23 @@ public class AtlasEndpoint extends ResourceEndpoint {
         }
 
         // TODO handle headers docId - https://github.com/atlasmap/atlasmap/issues/67
-        @SuppressWarnings("unchecked")
-        Map<String, Message> sourceMessages = exchange.getProperty(sourceMapName, Map.class);
+        Map<String, Message> sourceMessages = null;
+        Map<String, Object> sourceDocuments = null;
+        if (sourceMapName != null) {
+            sourceMessages = exchange.getProperty(sourceMapName, Map.class);
+        }
         if (sourceMessages == null) {
-            return;
+            Object body = exchange.getIn().getBody();
+            if (body instanceof Map) {
+                sourceDocuments = (Map<String, Object>)body;
+            } else {
+                return;
+            }
         }
         for (DataSource ds : sourceDataSources) {
             String docId = ds.getId();
-            Object payload = extractPayload(ds, sourceMessages.get(docId));
+            Object payload = sourceMessages != null ? extractPayload(ds, sourceMessages.get(docId))
+                    : sourceDocuments.get(docId);
             if (docId == null || docId.isEmpty()) {
                 session.setDefaultSourceDocument(payload);
             } else {
@@ -364,13 +373,19 @@ public class AtlasEndpoint extends ResourceEndpoint {
         for (DataSource ds : targetDataSources) {
             String docId = ds.getId();
             if (docId == null || docId.isEmpty()) {
+                targetDocuments.put(io.atlasmap.api.AtlasConstants.DEFAULT_TARGET_DOCUMENT_ID,
+                        session.getDefaultTargetDocument());
                 outMessage.setBody(session.getDefaultTargetDocument());
                 setContentType(ds, outMessage);
             } else {
                 targetDocuments.put(docId, session.getTargetDocument(docId));
             }
         }
-        exchange.setProperty(targetMapName, targetDocuments);
+        if (targetMapName != null) {
+            exchange.setProperty(targetMapName, targetDocuments);
+        } else {
+            outMessage.setBody(targetDocuments);
+        }
     }
 
     private void setContentType(DataSource ds, Message message) {
