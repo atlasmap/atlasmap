@@ -20,19 +20,29 @@ $ git clone https://github.com/atlasmap/atlasmap ${ATLASMAP}
 
 2. Build AtlasMap runtime
 ```
-$ cd ${ATLASMAP}/runtime
-$ ../mvnw clean install
+$ cd ${ATLASMAP}
+$ ./mvnw clean install
+```
+or you can skip tests to get the build little bit faster
+```
+$ ./mvnw clean install -DskipTests
 ```
 
-3. Run AtlasMap Services
+3. Run AtlasMap standalone
 ```
-$ cd ${ATLASMAP}/runtime/runtime
-$ ../../mvnw -Pitests spring-boot:run
+$ cd ${ATLASMAP}/standalone
+$ ../mvnw -Pitests spring-boot:run
 ```
 
-4. [Install Yarn](https://yarnpkg.com/lang/en/docs/install/)
+Then AtlasMap UI is available at http://127.0.0.1:8585/ by default.
 
-5. In another console, install Data Mapper UI's dependencies
+## Live update for UI development
+
+While standalone AtlasMap is running by following above, you can also run an another AtlasMap UI instance at different port by `yarn start`. This enables live update for UI code so you can see the outcome of your UI code change without build&restart manually.
+
+1. [Install Yarn](https://yarnpkg.com/lang/en/docs/install/)
+
+2. Install Data Mapper UI's dependencies
 ```
 $ cd ${ATLASMAP}/ui
 $ yarn install

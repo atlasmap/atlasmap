@@ -10,4 +10,10 @@ export const environment = {
     cookieName: 'ATLASMAP-XSRF-COOKIE',
     defaultTokenValue: 'awesome',
   },
+  backendUrls: {
+    atlasServiceUrl: '/v2/atlas/',
+    javaInspectionServiceUrl: '/v2/atlas/java/',
+    xmlInspectionServiceUrl: '/v2/atlas/xml/',
+    jsonInspectionServiceUrl: '/v2/atlas/json/',
+  },
 };

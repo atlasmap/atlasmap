@@ -16,7 +16,7 @@
 version: 2
 
 common_env: &common_env
-  MAVEN_OPTS: -Xmx512m
+  MAVEN_OPTS: -Xmx1024m
   CHROME_BIN: /usr/bin/chromium
   DOCKER_VERSION: 17.12.1-ce
 
@@ -59,7 +59,7 @@ push_images: &push_images
         exit 0
       fi
 
-      cd runtime
+      cd standalone
       curl -fsSL https://download.docker.com/linux/static/stable/x86_64/docker-${DOCKER_VERSION}.tgz | tar xz -C /usr/bin --strip-components 1
 
       if [ "${CIRCLE_BRANCH}" == "master" ]; then
@@ -115,7 +115,7 @@ publish_docs: &publish_docs
       fi
 
 jobs:
-  runtime:
+  build:
     <<: *job_defaults
     environment:
       <<: *common_env
@@ -123,90 +123,7 @@ jobs:
       - setup_remote_docker
       - checkout
       - restore_cache:
-          key: atlasmap-mvn-runtime-{{ checksum "runtime/pom.xml" }}
-      - <<: *load_m2
-      - run:
-          name: Build Runtime
-          command: |
-            ./mvnw -N install
-            cd parent
-            ../mvnw --batch-mode install | tee ../build_log.txt
-            cd ../runtime
-            ../mvnw --batch-mode -Pjacoco -Pfabric8 -Dfabric8.mode=kubernetes clean checkstyle:check install | tee -a ../build_log.txt
-            cd ..
-      - store_artifacts:
-          path: build_log.txt
-      - <<: *save_junit
-      - store_test_results:
-          path: /workspace/junit
-      - store_artifacts:
-          path: /workspace/junit
-      - run:
-          when: always
-          name: Collect Coverage reports
-          command: |
-            mkdir /workspace/coverage/
-            cp -a ./runtime/coverage-report/target/site/jacoco-aggregate/* /workspace/coverage
-            if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              java -cp ./.circleci/codacy-coverage-reporter-4.0.3-assembly.jar com.codacy.CodacyCoverageReporter report -l Java -r /workspace/coverage/jacoco.xml
-            fi
-      - store_artifacts:
-          path: /workspace/coverage
-      - <<: *save_checkstyle
-      - store_artifacts:
-          path: /workspace/checkstyle
-      - <<: *save_m2
-      - save_cache:
-          key: atlasmap-mvn-runtime-{{ checksum "runtime/pom.xml" }}
-          paths:
-          - ~/.m2
-      - <<: *push_images
-
-  camel-atlasmap:
-    <<: *job_defaults
-    environment:
-      <<: *common_env
-    steps:
-      - checkout
-      - restore_cache:
-          key: atlasmap-mvn-camel-{{ checksum "camel/pom.xml" }}
-      - <<: *load_m2
-      - run:
-          name: Build camel-atlasmap
-          command: |
-            cd camel
-            ../mvnw --batch-mode -Pjacoco clean checkstyle:check install | tee ../build_log.txt
-            cd ..
-      - store_artifacts:
-          path: build_log.txt
-      - <<: *save_junit
-      - store_test_results:
-          path: /workspace/junit
-      - store_artifacts:
-          path: /workspace/junit
-      - run:
-          when: always
-          name: Collect Coverage reports
-          command: |
-            mkdir /workspace/coverage/
-            cp -a ./camel/target/site/jacoco/* /workspace/coverage
-      - store_artifacts:
-          path: /workspace/coverage
-      - <<: *save_checkstyle
-      - store_artifacts:
-          path: /workspace/checkstyle
-      - <<: *save_m2
-      - save_cache:
-          key: atlasmap-mvn-camel-{{ checksum "camel/pom.xml" }}
-          paths:
-          - ~/.m2
-    
-  UI:
-    <<: *job_defaults
-    environment:
-      <<: *common_env
-    steps:
-      - checkout
+          key: atlasmap-mvn-{{ checksum "pom.xml" }}
       - <<: *load_m2
       - run:
           name: Install Chromium
@@ -221,48 +138,39 @@ jobs:
             rm -rf ~/.yarn
             curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.3.2
             echo 'export PATH="${HOME}/.yarn/bin:${PATH}"' >> $BASH_ENV
-      - restore_cache:
-          key: atlasmap-yarn-{{ checksum "ui/yarn.lock" }}
       - run:
-          name: yarn install
-          command: cd ui; yarn install | tee build_log.txt
-      - run:
-          name: yarn lint
-          command: cd ui; yarn lint | tee -a build_log.txt
-      - run:
-          name: yarn build
-          command: cd ui; yarn build:lib | tee -a build_log.txt
-      - run:
-          name: yarn inspect
-          command: cd ui; yarn inspect | tee -a build_log.txt
-      - run:
-          name: yarn test
-          command: cd ui; yarn test:coverage | tee -a build_log.txt
+          name: Build AtlasMap
+          command: |
+            ./mvnw --batch-mode -Pcoverage,fabric8 -Dfabric8.mode=kubernetes clean install | tee -a build_log.txt
       - store_artifacts:
           path: build_log.txt
-      - run:
-          name: Collect unit test report
-          when: always
-          command: |
-            mkdir -p /workspace/junit
-            find ui/junit -type f -regex  ".*xml" -exec cp {} /workspace/junit/ \;
+      - <<: *save_junit
       - store_test_results:
           path: /workspace/junit
       - store_artifacts:
           path: /workspace/junit
       - run:
-          name: Collect Coverage reports
           when: always
+          name: Collect Coverage reports
           command: |
-            mkdir -p /workspace/coverage/
+            mkdir /workspace/coverage/
+            cp -a ./coverage-report/target/site/jacoco-aggregate/* /workspace/coverage
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              java -cp ./.circleci/codacy-coverage-reporter-4.0.3-assembly.jar com.codacy.CodacyCoverageReporter report -l Java -r /workspace/coverage/jacoco.xml
+            fi
             cp -a ui/coverage/* /workspace/coverage
       - store_artifacts:
           path: /workspace/coverage
+      - <<: *save_checkstyle
+      - store_artifacts:
+          path: /workspace/checkstyle
+      - <<: *save_m2
       - save_cache:
-          key: atlasmap-yarn-{{ checksum "ui/yarn.lock" }}
+          key: atlasmap-mvn-{{ checksum "pom.xml" }}
           paths:
-          - ~//usr/local/share/.cache/yarn/v1
-      - <<: *publish_npm
+          - ~/.m2
+      - <<: *push_images
+      # - <<: *publish_npm
 
   docs:
     <<: *job_defaults
@@ -280,33 +188,19 @@ jobs:
           key: atlasmap-mvn-docs-{{ checksum "docs/pom.xml" }}
           paths:
           - ~/.m2
-  
+
 workflows:
   version: 2
   AtlasMap:
     jobs:
-      - runtime:
+      - build:
           filters:
             branches:
               ignore: gh-pages
-      - camel-atlasmap:
-          filters:
-            branches:
-              ignore: gh-pages
-          requires:
-            - runtime
-      - UI:
-          filters:
-            branches:
-              ignore: gh-pages
-          requires:
-            - runtime
       - docs:
           filters:
             branches:
               only:
                 - master
           requires:
-            - runtime
-            - camel-atlasmap
-            - UI
+            - build

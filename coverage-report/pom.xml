@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+
+    Copyright (C) 2017 Red Hat, Inc.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+            http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>io.atlasmap</groupId>
+    <artifactId>atlas-parent</artifactId>
+    <version>1.39.0-SNAPSHOT</version>
+    <relativePath>../parent</relativePath>
+  </parent>
+
+  <artifactId>coverage-report</artifactId>
+  <name>Unit Test Coverage Report</name>
+  <packaging>pom</packaging>
+
+  <properties>
+    <checkstyle.skip>true</checkstyle.skip>
+  </properties>
+
+  <profiles>
+    <!-- Jacoco Test Coverage -->
+    <profile>
+      <id>coverage</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.jacoco</groupId>
+            <artifactId>jacoco-maven-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>report-aggregate</id>
+                <phase>prepare-package</phase>
+                <goals>
+                  <goal>report-aggregate</goal>
+                </goals>
+                <configuration>
+                  <includes>
+                    <include>**/*.class</include>
+                  </includes>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+      <dependencies>
+        <!-- AtlasMap Core -->
+        <dependency>
+          <groupId>io.atlasmap</groupId>
+          <artifactId>atlas-api</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>io.atlasmap</groupId>
+          <artifactId>atlas-core</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>io.atlasmap</groupId>
+          <artifactId>atlas-model</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>io.atlasmap</groupId>
+          <artifactId>atlas-service</artifactId>
+        </dependency>
+
+        <!-- AtlasMap Java -->
+        <dependency>
+          <groupId>io.atlasmap</groupId>
+          <artifactId>atlas-java-core</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>io.atlasmap</groupId>
+          <artifactId>atlas-java-model</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>io.atlasmap</groupId>
+          <artifactId>atlas-java-module</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>io.atlasmap</groupId>
+          <artifactId>atlas-java-service</artifactId>
+        </dependency>
+
+        <!-- AtlasMap JSON -->
+        <dependency>
+          <groupId>io.atlasmap</groupId>
+          <artifactId>atlas-json-core</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>io.atlasmap</groupId>
+          <artifactId>atlas-json-model</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>io.atlasmap</groupId>
+          <artifactId>atlas-json-module</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>io.atlasmap</groupId>
+          <artifactId>atlas-json-service</artifactId>
+        </dependency>
+
+        <!-- AtlasMap XML -->
+        <dependency>
+          <groupId>io.atlasmap</groupId>
+          <artifactId>atlas-xml-core</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>io.atlasmap</groupId>
+          <artifactId>atlas-xml-model</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>io.atlasmap</groupId>
+          <artifactId>atlas-xml-module</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>io.atlasmap</groupId>
+          <artifactId>atlas-xml-service</artifactId>
+        </dependency>
+
+        <!-- Others -->
+        <dependency>
+          <groupId>io.atlasmap</groupId>
+          <artifactId>atlasmap-maven-plugin</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>io.atlasmap</groupId>
+          <artifactId>camel-atlasmap</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>io.atlasmap</groupId>
+          <artifactId>atlasmap-standalone</artifactId>
+        </dependency>
+      </dependencies>
+    </profile>
+  </profiles>
+</project>

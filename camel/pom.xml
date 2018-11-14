@@ -19,8 +19,8 @@
 
     <artifactId>camel-atlasmap</artifactId>
     <packaging>jar</packaging>
-    <name>Camel :: AtlasMap</name>
-    <description>Camel AtlasMap support</description>
+    <name>camel-atlasmap</name>
+    <description>Camel component to perform AtlasMap data mapping as a part of Camel route</description>
     <properties>
         <camel.osgi.import.before.defaults>com.sun.xml.bind.marshaller;resolution:=optional</camel.osgi.import.before.defaults>
         <camel.osgi.export.pkg>org.apache.camel.component.atlasmap.*</camel.osgi.export.pkg>
@@ -215,18 +215,5 @@
                 </plugin>
             </plugins>
         </pluginManagement>
-        <plugins>
-            <plugin>
-                <artifactId>maven-checkstyle-plugin</artifactId>
-                <configuration>
-                    <sourceDirectory>${project.build.sourceDirectory}</sourceDirectory>
-                    <includeTestSourceDirectory>true</includeTestSourceDirectory>
-                    <configLocation>../checkstyle.xml</configLocation>
-                    <propertyExpansion>
-                        checkstyle.suppression.file=../checkstyle-suppressions.xml
-                    </propertyExpansion>
-                </configuration>
-            </plugin>
-        </plugins>
     </build>
 </project>

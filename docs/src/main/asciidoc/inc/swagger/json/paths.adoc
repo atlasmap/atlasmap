@@ -5,7 +5,7 @@
 [[_atlas-service-json-inspectclass]]
 === Inspect JSON
 ....
-POST /v2/atlas/json/inspect
+POST /json/inspect
 ....
 
 
@@ -35,7 +35,7 @@ Inspect a JSON schema or instance and return a Document object
 [[_atlas-service-json-getclass]]
 === Inspect JSON via URI
 ....
-GET /v2/atlas/json/inspect
+GET /json/inspect
 ....
 
 
@@ -72,7 +72,7 @@ __optional__|URI for JSON schema or instance|string
 [[_atlas-service-json-simplehelloworld]]
 === Simple
 ....
-GET /v2/atlas/json/simple
+GET /json/simple
 ....
 
 
