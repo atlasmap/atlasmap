@@ -1,0 +1,4 @@
+**
+!Dockerfile
+!runtime/runtime/target/runtime.jar
+!ui/dist/app/**
