@@ -203,21 +203,34 @@ export class MappingManagementService {
    * Save the current active mappings to the UI configuration mappings.  Restrict the saved mappings
    * to fully mapped pairs (source/target) and source-side mappings with a transformation/ field action.
    */
-  saveCurrentMapping(): void {
-    const activeMapping: MappingModel = this.cfg.mappings.activeMapping;
-    if ((activeMapping != null) && (this.cfg.mappings.mappings.indexOf(activeMapping) === -1)) {
-      this.cfg.mappings.mappings.push(activeMapping);
-    }
-
-    const newMappings: MappingModel[] = [];
-    for (const mapping of this.cfg.mappings.mappings) {
-      if (mapping.hasFullyMappedPair() || mapping.hasFieldAction()) {
-        newMappings.push(mapping);
+  async saveCurrentMapping(): Promise<boolean> {
+    return new Promise<boolean>((resolve, reject) => {
+      const activeMapping: MappingModel = this.cfg.mappings.activeMapping;
+      if ((activeMapping != null) && (this.cfg.mappings.mappings.indexOf(activeMapping) === -1)) {
+        this.cfg.mappings.mappings.push(activeMapping);
       }
-    }
-    this.cfg.mappings.mappings = newMappings;
-    this.saveMappingSource.next(null);
-    this.notifyMappingUpdated();
+      const newMappings: MappingModel[] = [];
+      for (const mapping of this.cfg.mappings.mappings) {
+        if (mapping.hasFullyMappedPair() || mapping.hasFieldAction()) {
+          newMappings.push(mapping);
+        }
+      }
+      this.cfg.mappings.mappings = newMappings;
+      this.saveMappingToService().toPromise().then(() => {
+        this.saveMappingSource.next(null);
+        this.notifyMappingUpdated();
+        resolve(true);
+      }).catch((error: any) => {
+        if (error.status === 0) {
+          this.cfg.errorService.mappingError(
+            'Fatal network error: Unable to connect to the AtlasMap design runtime service.', error);
+        } else {
+          this.cfg.errorService.mappingError(
+            'Unable to save current mapping definitions: ' + error.status + ' ' + error.statusText, error);
+        }
+        resolve(false);
+      });
+    });
   }
 
   serializeMappingsToJSON(): any {
@@ -304,11 +317,6 @@ export class MappingManagementService {
    */
    setCompressedMappingToService(compressedBuffer: any): void {
      const url = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/GZ';
-     const cmHeaders = new HttpHeaders(
-       { 'Content-Type':  'application/octet-stream',
-         'Accept':        'application/octet-stream',
-         'Response-Type': 'application/octet-stream'
-       });
      DataMapperUtil.debugLogJSON(null, 'Set Compressed Mapping Service Request', this.cfg.initCfg.debugMappingServiceCalls, url);
      this.http.put(url, compressedBuffer, { headers: this.headers }).toPromise().then((res: any) => {
          DataMapperUtil.debugLogJSON(res, 'Set Compressed Mapping Service Response', this.cfg.initCfg.debugMappingServiceCalls, url);
@@ -318,16 +326,22 @@ export class MappingManagementService {
      );
    }
 
-  saveMappingToService(): void {
-    const payload: any = this.serializeMappingsToJSON();
-    const url = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/JSON';
-    DataMapperUtil.debugLogJSON(payload, 'Mapping Service Request', this.cfg.initCfg.debugMappingServiceCalls, url);
-    this.http.put(url, JSON.stringify(payload), { headers: this.headers }).toPromise()
-      .then((res: any) => {
-        DataMapperUtil.debugLogJSON(res, 'Mapping Service Response', this.cfg.initCfg.debugMappingServiceCalls, url);
-      })
-      .catch((error: any) => { this.handleError('Error occurred while saving mapping.', error); },
-    );
+  saveMappingToService(): Observable<boolean> {
+    return new Observable<boolean>((observer: any) => {
+      const payload: any = this.serializeMappingsToJSON();
+      const url = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/JSON';
+      DataMapperUtil.debugLogJSON(payload, 'Mapping Service Request', this.cfg.initCfg.debugMappingServiceCalls, url);
+      this.http.put(url, JSON.stringify(payload), { headers: this.headers }).toPromise()
+        .then((res: any) => {
+          DataMapperUtil.debugLogJSON(res, 'Mapping Service Response', this.cfg.initCfg.debugMappingServiceCalls, url);
+          observer.complete();
+        })
+      .catch((error: any) => {
+        this.handleError('Error occurred while saving mapping.', error);
+        observer.error(error);
+        observer.complete();
+      });
+    });
   }
 
   handleMappingSaveSuccess(saveHandler: Function): void {
@@ -337,16 +351,25 @@ export class MappingManagementService {
     this.notifyMappingUpdated();
   }
 
-  removeMapping(mappingModel: MappingModel): void {
-    const mappingWasSaved: boolean = this.cfg.mappings.removeMapping(mappingModel);
-    if (mappingWasSaved) {
-      const saveHandler: Function = (() => {
+  /**
+   * Remove the specified mapping model from the mappings array and update the runtime.
+   *
+   * @param mappingModel
+   */
+  removeMapping(mappingModel: MappingModel): Promise<boolean> {
+    return new Promise<boolean>((resolve) => {
+      const mappingWasRemoved: boolean = this.cfg.mappings.removeMapping(mappingModel);
+      if (mappingWasRemoved) {
+        const saveHandler: Function = (async() => {
+          this.deselectMapping();
+          await this.saveCurrentMapping();
+        });
+        this.saveMappingSource.next(saveHandler);
+      } else {
         this.deselectMapping();
-      });
-      this.saveMappingSource.next(saveHandler);
-    } else {
-      this.deselectMapping();
-    }
+      }
+      resolve(true);
+    });
   }
 
   removeMappedPair(fieldPair: FieldMappingPair): void {
@@ -803,8 +826,8 @@ export class MappingManagementService {
     return new Promise<boolean>((resolve, reject) => {
       this.cfg.mappingFiles[0] = this.cfg.mappings.name;
       this.cfg.mappingService.getCurrentMappingXML().toPromise().then((result: string) => {
-        resolve(true);
         this.xmlBuffer = result;
+        resolve(true);
       }).catch((error: any) => {
         if (error.status === 0) {
           this.cfg.errorService.mappingError(
@@ -826,6 +849,7 @@ export class MappingManagementService {
   async exportMappingsCatalog(mappingsFileName: string) {
     let aggregateBuffer = '   {\n';
     let userExport = true;
+
     try {
       if (mappingsFileName === null || mappingsFileName.length === 0) {
         mappingsFileName = 'atlasmap-mapping.adm';
@@ -839,7 +863,6 @@ export class MappingManagementService {
 
       // Start with the user mappings (XML).
       aggregateBuffer += DocumentManagementService.generateExportMappings(this.xmlBuffer[0]);
-
       let exportMeta = '   "exportMeta": [\n';
       let exportBlockData = '      "exportBlockData": [\n';
       let docCount = 0;

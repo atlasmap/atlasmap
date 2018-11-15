@@ -70,7 +70,7 @@ export class ToolbarComponent implements OnInit {
 
     // Inflate the buffer and push it to the server.
     try {
-      this.cfg.initializationService.processMappingsCatalog(this.fileData);
+      this.cfg.initializationService.processMappingsCatalog(this.fileData, true);
       window.location.reload(true);
     } catch (error) {
       this.cfg.errorService.mappingError('Unable to decompress the aggregate mappings file: \n' + event.target.files[0].name +

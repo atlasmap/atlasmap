@@ -462,7 +462,7 @@ export class InitializationService {
       if (value === null) {
         return;
       }
-      this.processMappingsCatalog(value);
+      this.processMappingsCatalog(value, false);
     });
 
     // load mappings
@@ -523,7 +523,7 @@ export class InitializationService {
    *
    * @param compressedContent - gzip binary buffer
    */
-  processMappingsCatalog(compressedContent: Uint8Array) {
+  processMappingsCatalog(compressedContent: Uint8Array, useCatalogMappings: boolean) {
     try {
 
       // Inflate the compressed content.
@@ -533,7 +533,7 @@ export class InitializationService {
       const mInfo = this.processMappingsDocuments(mappingsCatalog);
 
       // Reinitialize the model mappings.
-      if (mInfo && mInfo.exportMappings) {
+      if (mInfo && mInfo.exportMappings && useCatalogMappings) {
         this.cfg.mappingService.setMappingToService(mInfo.exportMappings.value);
       }
       const fileContent: Blob = new Blob([compressedContent], {type: 'application/octet-stream'});

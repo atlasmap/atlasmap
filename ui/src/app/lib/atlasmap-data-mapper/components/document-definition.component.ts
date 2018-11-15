@@ -18,6 +18,8 @@ import { Component, Input, ViewChildren, ElementRef, EventEmitter, QueryList, Vi
 import { Observable } from 'rxjs';
 
 import { DocumentType, InspectionType } from '../common/config.types';
+import { DataMapperUtil } from '../common/data-mapper-util';
+
 import { ConfigModel, AdmRedrawMappingLinesEvent } from '../models/config.model';
 import { Field } from '../models/field.model';
 import { DocumentDefinition } from '../models/document-definition.model';
@@ -203,6 +205,32 @@ export class DocumentDefinitionComponent implements OnInit {
   toggleSearch(): void {
     this.searchMode = !this.searchMode;
     this.search(this.searchMode ? this.searchFilter : '');
+  }
+
+  /**
+   * Remove an instance or schema document from a panel along with any associated mappings.
+   * Display a confirmation dialog before removing the document definition.
+   *
+   * @param docDef
+   * @param event
+   */
+  removeDocument(docDef: DocumentDefinition, event: any): void {
+    event.stopPropagation();
+    this.modalWindow.reset();
+    this.modalWindow.confirmButtonText = 'Remove';
+    this.modalWindow.headerText = 'Remove selected document?';
+    this.modalWindow.message = 'Are you sure you want to remove the selected document and any associated mappings?';
+    this.modalWindow.okButtonHandler = async() => {
+      this.cfg.mappings.removeDocumentReferenceFromAllMappings(docDef.id);
+      if (docDef.isSource) {
+        DataMapperUtil.removeItemFromArray(docDef, this.cfg.sourceDocs);
+      } else {
+        DataMapperUtil.removeItemFromArray(docDef, this.cfg.targetDocs);
+      }
+      await this.cfg.mappingService.saveCurrentMapping();
+      this.cfg.mappingService.exportMappingsCatalog(null);
+    };
+    this.modalWindow.show();
   }
 
   addField(docDef: DocumentDefinition, event: any): void {

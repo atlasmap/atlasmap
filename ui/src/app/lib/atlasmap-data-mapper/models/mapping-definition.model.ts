@@ -280,6 +280,24 @@ export class MappingDefinition {
     }
   }
 
+  /**
+   * Remove any mappings referencing the specified document ID.
+   *
+   * @param docId - Specified document ID
+   */
+  removeDocumentReferenceFromAllMappings(docId: string) {
+    for (const mapping of this.getAllMappings(true)) {
+      for (const fieldPair of mapping.fieldMappings) {
+        for (const mappedField of fieldPair.getAllFields()) {
+          if (mappedField.docDef.id === docId) {
+            this.removeFieldFromAllMappings(mappedField);
+            this.removeMapping(mapping);
+          }
+        }
+      }
+    }
+  }
+
   private updateMappedFieldsFromDocuments(fieldPair: FieldMappingPair, cfg: ConfigModel, docMap: any, isSource: boolean): void {
     const mappedFields: MappedField[] = fieldPair.getMappedFields(isSource);
 
