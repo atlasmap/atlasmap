@@ -48,10 +48,10 @@ export class DataMapperAppExampleHostComponent implements OnInit, OnDestroy {
     // store references to our services in our config model
 
     // initialize base urls for our service calls
-    c.initCfg.baseJavaInspectionServiceUrl = 'http://localhost:8585/v2/atlas/java/';
-    c.initCfg.baseXMLInspectionServiceUrl = 'http://localhost:8585/v2/atlas/xml/';
-    c.initCfg.baseJSONInspectionServiceUrl = 'http://localhost:8585/v2/atlas/json/';
-    c.initCfg.baseMappingServiceUrl = 'http://localhost:8585/v2/atlas/';
+    c.initCfg.baseJavaInspectionServiceUrl = '/v2/atlas/java/';
+    c.initCfg.baseXMLInspectionServiceUrl = '/v2/atlas/xml/';
+    c.initCfg.baseJSONInspectionServiceUrl = '/v2/atlas/json/';
+    c.initCfg.baseMappingServiceUrl = '/v2/atlas/';
 
     if (environment.xsrf) {
       c.initCfg.xsrfHeaderName = environment.xsrf.headerName;
