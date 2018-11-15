@@ -35,6 +35,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Application;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -80,9 +81,8 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
 @Api
-@ApplicationPath("/")
-@Path("v2/atlas")
-public class AtlasService {
+@ApplicationPath("/v2/atlas")
+public class AtlasService extends Application {
 
     private static final Logger LOG = LoggerFactory.getLogger(AtlasService.class);
 
