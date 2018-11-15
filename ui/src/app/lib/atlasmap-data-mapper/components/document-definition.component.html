@@ -1,11 +1,11 @@
-<div #documentDefinitionElement class='docDef' *ngIf="cfg && cfg.initCfg.initialized">
+<div #documentDefinitionElement class="docDef" *ngIf="cfg && cfg.initCfg.initialized">
   <div class="card-pf">
     <div class="card-pf-heading">
       <h2 class="card-pf-title">
         <div class="docName">
           <i class="fa {{ isSource ? 'fa-hdd-o' : 'fa-download' }}"></i>
           <label for="userfile">{{ sourcesTargetsLabel }}</label>
-          <label *ngIf="!cfg.initCfg.disableNavbar" [attr.class]="getImportIconCSSClass()" style="float:right"
+          <label *ngIf="!cfg.initCfg.disableNavbar" [attr.class]="getImportIconCSSClass()"
             tooltip="Import instance or schema file" placement="left" style="float:right; margin-right:5px">
             <input type="file" accept="{{ getFileSuffix() }}" name="userfile" style="display:none" id="userfile"
               (change)="processDoc($event)" placement="left">
@@ -27,8 +27,9 @@
 
     <div [attr.class]="searchMode ? 'fieldListSearchOpen' : 'fieldList'" style="overflow:auto;" (scroll)="handleScroll($event)">
       <div class="panel-group" id="accordion-markup">
-        <div *ngFor="let docDef of getDocs()" #docDetail class="panel panel-default" [attr.id]='docDef.name'>
-          <div class="panel-heading" tooltip="{{ docDef.description }}" placement="bottom" *ngIf="isDocNameVisible(docDef)" (click)="toggleFieldVisibility(docDef)">
+        <div *ngFor="let docDef of getDocs()" #docDetail class="panel panel-default" [attr.id]="docDef.name">
+          <div class="panel-heading" *ngIf="isDocNameVisible(docDef)"
+            (click)="toggleFieldVisibility(docDef)">
             <h4 class="panel-title">
               <div style="float:left">
                 <i class="fa fa-angle-right docCollapseIcon" *ngIf="!docDef.showFields"></i>
@@ -36,6 +37,10 @@
                 <i class="fa {{ isSource ? 'fa-hdd-o' : 'fa-download' }}"></i>
                 <div style="display:inline-block; width:5px">&nbsp;</div>
                 <label>{{ docDef.getName(cfg.showTypes) }}</label>
+              </div>
+              <div style="float:right; font-size:16px;" *ngIf="!cfg.initCfg.disableNavbar && !isAddFieldAvailable(docDef)">
+                <i class="fa fa-trash link pull-right" (click)="removeDocument(docDef, $event)" container="body"
+                  tooltip="Remove instance or schema file {{ docDef.description }}" placement="left"></i>
               </div>
             </h4>
             <div style="float:right;" *ngIf="isAddFieldAvailable(docDef)">
