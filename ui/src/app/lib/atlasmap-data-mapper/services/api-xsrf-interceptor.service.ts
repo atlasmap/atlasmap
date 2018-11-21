@@ -17,7 +17,7 @@ export class ApiXsrfInterceptor implements HttpInterceptor {
   constructor(private tokenExtractor: HttpXsrfTokenExtractor) { }
 
   intercept(httpRequest: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    if (this.cfg.initCfg.xsrfHeaderName && httpRequest.url.startsWith('http')) {
+    if (this.cfg.initCfg.xsrfHeaderName) {
       const token = this.tokenExtractor.getToken() || this.cfg.initCfg.xsrfDefaultTokenValue;
       const headerName = this.cfg.initCfg.xsrfHeaderName;
 

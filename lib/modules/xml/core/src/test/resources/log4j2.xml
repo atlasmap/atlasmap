@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO">
+  <Appenders>
+    <Console name="Console" target="SYSTEM_OUT">
+      <PatternLayout pattern="%d [%-15.15t] %-5p %-30.30c{1} - %m%n" />
+    </Console>
+    <File name="File" fileName="target/atlas-xml-core.log">
+      <PatternLayout pattern="%d [%-15.15t] %-5p %-30.30c{1} - %m%n" />
+    </File>
+  </Appenders>
+  <Loggers>
+    <Logger name="io.atlasmap" level="info" additivity="false">
+      <AppenderRef ref="Console" />
+      <AppenderRef ref="File" />
+    </Logger>
+    <Root level="info">
+      <AppenderRef ref="Console" />
+      <AppenderRef ref="File" />
+    </Root>
+  </Loggers>
+</Configuration>

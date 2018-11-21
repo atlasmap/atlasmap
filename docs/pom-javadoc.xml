@@ -31,8 +31,10 @@
   <packaging>pom</packaging>
 
   <modules>
-    <module>../runtime</module>
+    <module>../lib</module>
+    <module>../atlasmap-maven-plugin</module>
     <module>../camel</module>
+    <module>../standalone</module>
   </modules>
 
   <build>

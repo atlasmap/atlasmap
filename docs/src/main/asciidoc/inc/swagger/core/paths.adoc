@@ -5,7 +5,7 @@
 [[_atlas-service-core-listfieldactions]]
 === List FieldActions
 ....
-GET /v2/atlas/fieldActions
+GET /fieldActions
 ....
 
 
@@ -30,7 +30,7 @@ Retrieves a list of available field action
 [[_atlas-service-core-uploadlibrary]]
 === Upload Library
 ....
-POST /v2/atlas/library
+POST /library
 ....
 
 
@@ -55,7 +55,7 @@ Upload library jar files
 [[_atlas-service-core-resetmappings]]
 === Remove All Mappings
 ....
-DELETE /v2/atlas/mapping/RESET
+DELETE /mapping/RESET
 ....
 
 
@@ -81,7 +81,7 @@ Remove all mapping files saved on the server
 [[_atlas-service-core-processmappingrequest]]
 === Process Mapping
 ....
-PUT /v2/atlas/mapping/process
+PUT /mapping/process
 ....
 
 
@@ -112,7 +112,7 @@ Process Mapping by feeding input data
 [[_atlas-service-core-validatemappingrequest]]
 === Validate Mapping
 ....
-PUT /v2/atlas/mapping/validate
+PUT /mapping/validate
 ....
 
 
@@ -142,7 +142,7 @@ Validate mapping file
 [[_atlas-service-core-createmappingrequest]]
 === Create Mapping
 ....
-PUT /v2/atlas/mapping/{mappingFormat}
+PUT /mapping/{mappingFormat}
 ....
 
 
@@ -184,7 +184,7 @@ __required__|Mapping Format|string
 [[_atlas-service-core-getmappingrequest]]
 === Get Mapping
 ....
-GET /v2/atlas/mapping/{mappingFormat}/{mappingId}
+GET /mapping/{mappingFormat}/{mappingId}
 ....
 
 
@@ -224,7 +224,7 @@ __required__|Mapping ID|string
 [[_atlas-service-core-updatemappingrequest]]
 === Update Mapping
 ....
-POST /v2/atlas/mapping/{mappingId}
+POST /mapping/{mappingId}
 ....
 
 
@@ -264,7 +264,7 @@ __required__|Mapping ID|string
 [[_atlas-service-core-removemappingrequest]]
 === Remove Mapping
 ....
-DELETE /v2/atlas/mapping/{mappingId}
+DELETE /mapping/{mappingId}
 ....
 
 
@@ -300,7 +300,7 @@ __required__|Mapping ID|string
 [[_atlas-service-core-listmappings]]
 === List Mappings
 ....
-GET /v2/atlas/mappings
+GET /mappings
 ....
 
 
@@ -335,7 +335,7 @@ __optional__|string
 [[_atlas-service-core-ping]]
 === Ping
 ....
-GET /v2/atlas/ping
+GET /ping
 ....
 
 

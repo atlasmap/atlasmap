@@ -7,6 +7,7 @@
 /junit/*
 test-resources/inspected
 dist.tgz
+package-lock.json
 
 # dependencies
 /node_modules
