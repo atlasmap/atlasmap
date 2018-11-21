@@ -158,7 +158,8 @@ jobs:
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
               java -cp ./.circleci/codacy-coverage-reporter-4.0.3-assembly.jar com.codacy.CodacyCoverageReporter report -l Java -r /workspace/coverage/jacoco.xml
             fi
-            cp -a ui/coverage/* /workspace/coverage
+            mkdir /workspace/coverage/ui
+            cp -a ui/coverage/* /workspace/coverage/ui/
       - store_artifacts:
           path: /workspace/coverage
       - <<: *save_checkstyle
