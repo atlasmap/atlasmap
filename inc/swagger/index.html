@@ -522,7 +522,7 @@ table.CodeRay td.code>pre{padding:0}
 <h1>AtlasMap Design Time Service API Reference</h1>
 <div class="details">
 <span id="revnumber">version 1.39.0-SNAPSHOT,</span>
-<span id="revdate">2018-11-15</span>
+<span id="revdate">2018-11-21</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Design Time Service</div>
@@ -665,7 +665,7 @@ table.CodeRay td.code>pre{padding:0}
 <h4 id="_atlas-service-core-listfieldactions">1.1.1. List FieldActions</h4>
 <div class="literalblock">
 <div class="content">
-<pre>GET /v2/atlas/fieldActions</pre>
+<pre>GET /fieldActions</pre>
 </div>
 </div>
 <div class="sect4">
@@ -719,7 +719,7 @@ table.CodeRay td.code>pre{padding:0}
 <h4 id="_atlas-service-core-uploadlibrary">1.1.2. Upload Library</h4>
 <div class="literalblock">
 <div class="content">
-<pre>POST /v2/atlas/library</pre>
+<pre>POST /library</pre>
 </div>
 </div>
 <div class="sect4">
@@ -773,7 +773,7 @@ table.CodeRay td.code>pre{padding:0}
 <h4 id="_atlas-service-core-resetmappings">1.1.3. Remove All Mappings</h4>
 <div class="literalblock">
 <div class="content">
-<pre>DELETE /v2/atlas/mapping/RESET</pre>
+<pre>DELETE /mapping/RESET</pre>
 </div>
 </div>
 <div class="sect4">
@@ -838,7 +838,7 @@ table.CodeRay td.code>pre{padding:0}
 <h4 id="_atlas-service-core-processmappingrequest">1.1.4. Process Mapping</h4>
 <div class="literalblock">
 <div class="content">
-<pre>PUT /v2/atlas/mapping/process</pre>
+<pre>PUT /mapping/process</pre>
 </div>
 </div>
 <div class="sect4">
@@ -913,7 +913,7 @@ table.CodeRay td.code>pre{padding:0}
 <h4 id="_atlas-service-core-validatemappingrequest">1.1.5. Validate Mapping</h4>
 <div class="literalblock">
 <div class="content">
-<pre>PUT /v2/atlas/mapping/validate</pre>
+<pre>PUT /mapping/validate</pre>
 </div>
 </div>
 <div class="sect4">
@@ -977,7 +977,7 @@ table.CodeRay td.code>pre{padding:0}
 <h4 id="_atlas-service-core-createmappingrequest">1.1.6. Create Mapping</h4>
 <div class="literalblock">
 <div class="content">
-<pre>PUT /v2/atlas/mapping/{mappingFormat}</pre>
+<pre>PUT /mapping/{mappingFormat}</pre>
 </div>
 </div>
 <div class="sect4">
@@ -1083,7 +1083,7 @@ table.CodeRay td.code>pre{padding:0}
 <h4 id="_atlas-service-core-getmappingrequest">1.1.7. Get Mapping</h4>
 <div class="literalblock">
 <div class="content">
-<pre>GET /v2/atlas/mapping/{mappingFormat}/{mappingId}</pre>
+<pre>GET /mapping/{mappingFormat}/{mappingId}</pre>
 </div>
 </div>
 <div class="sect4">
@@ -1205,7 +1205,7 @@ table.CodeRay td.code>pre{padding:0}
 <h4 id="_atlas-service-core-updatemappingrequest">1.1.8. Update Mapping</h4>
 <div class="literalblock">
 <div class="content">
-<pre>POST /v2/atlas/mapping/{mappingId}</pre>
+<pre>POST /mapping/{mappingId}</pre>
 </div>
 </div>
 <div class="sect4">
@@ -1305,7 +1305,7 @@ table.CodeRay td.code>pre{padding:0}
 <h4 id="_atlas-service-core-removemappingrequest">1.1.9. Remove Mapping</h4>
 <div class="literalblock">
 <div class="content">
-<pre>DELETE /v2/atlas/mapping/{mappingId}</pre>
+<pre>DELETE /mapping/{mappingId}</pre>
 </div>
 </div>
 <div class="sect4">
@@ -1406,7 +1406,7 @@ table.CodeRay td.code>pre{padding:0}
 <h4 id="_atlas-service-core-listmappings">1.1.10. List Mappings</h4>
 <div class="literalblock">
 <div class="content">
-<pre>GET /v2/atlas/mappings</pre>
+<pre>GET /mappings</pre>
 </div>
 </div>
 <div class="sect4">
@@ -1491,7 +1491,7 @@ table.CodeRay td.code>pre{padding:0}
 <h4 id="_atlas-service-core-ping">1.1.11. Ping</h4>
 <div class="literalblock">
 <div class="content">
-<pre>GET /v2/atlas/ping</pre>
+<pre>GET /ping</pre>
 </div>
 </div>
 <div class="sect4">
@@ -3000,7 +3000,7 @@ table.CodeRay td.code>pre{padding:0}
 <h4 id="_atlas-service-java-inspectclass">2.1.1. Inspect Class</h4>
 <div class="literalblock">
 <div class="content">
-<pre>POST /v2/atlas/java/class</pre>
+<pre>POST /java/class</pre>
 </div>
 </div>
 <div class="sect4">
@@ -3064,7 +3064,7 @@ table.CodeRay td.code>pre{padding:0}
 <h4 id="_atlas-service-java-getclass">2.1.2. Inspect Class</h4>
 <div class="literalblock">
 <div class="content">
-<pre>GET /v2/atlas/java/class</pre>
+<pre>GET /java/class</pre>
 </div>
 </div>
 <div class="sect4">
@@ -3154,7 +3154,7 @@ table.CodeRay td.code>pre{padding:0}
 <h4 id="_atlas-service-java-generateclasspath">2.1.3. Generate Maven Classpath</h4>
 <div class="literalblock">
 <div class="content">
-<pre>POST /v2/atlas/java/mavenclasspath</pre>
+<pre>POST /java/mavenclasspath</pre>
 </div>
 </div>
 <div class="sect4">
@@ -3218,7 +3218,7 @@ table.CodeRay td.code>pre{padding:0}
 <h4 id="_atlas-service-java-simplehelloworld">2.1.4. Simple</h4>
 <div class="literalblock">
 <div class="content">
-<pre>GET /v2/atlas/java/simple</pre>
+<pre>GET /java/simple</pre>
 </div>
 </div>
 <div class="sect4">
@@ -4164,7 +4164,7 @@ table.CodeRay td.code>pre{padding:0}
 <h4 id="_atlas-service-json-inspectclass">3.1.1. Inspect JSON</h4>
 <div class="literalblock">
 <div class="content">
-<pre>POST /v2/atlas/json/inspect</pre>
+<pre>POST /json/inspect</pre>
 </div>
 </div>
 <div class="sect4">
@@ -4228,7 +4228,7 @@ table.CodeRay td.code>pre{padding:0}
 <h4 id="_atlas-service-json-getclass">3.1.2. Inspect JSON via URI</h4>
 <div class="literalblock">
 <div class="content">
-<pre>GET /v2/atlas/json/inspect</pre>
+<pre>GET /json/inspect</pre>
 </div>
 </div>
 <div class="sect4">
@@ -4331,7 +4331,7 @@ table.CodeRay td.code>pre{padding:0}
 <h4 id="_atlas-service-json-simplehelloworld">3.1.3. Simple</h4>
 <div class="literalblock">
 <div class="content">
-<pre>GET /v2/atlas/json/simple</pre>
+<pre>GET /json/simple</pre>
 </div>
 </div>
 <div class="sect4">
@@ -4660,7 +4660,7 @@ table.CodeRay td.code>pre{padding:0}
 <h4 id="_atlas-service-xml-inspectclass">4.1.1. Inspect XML</h4>
 <div class="literalblock">
 <div class="content">
-<pre>POST /v2/atlas/xml/inspect</pre>
+<pre>POST /xml/inspect</pre>
 </div>
 </div>
 <div class="sect4">
@@ -4724,7 +4724,7 @@ table.CodeRay td.code>pre{padding:0}
 <h4 id="_atlas-service-xml-getclass">4.1.2. Inspect XML via URI</h4>
 <div class="literalblock">
 <div class="content">
-<pre>GET /v2/atlas/xml/inspect</pre>
+<pre>GET /xml/inspect</pre>
 </div>
 </div>
 <div class="sect4">
@@ -4821,7 +4821,7 @@ table.CodeRay td.code>pre{padding:0}
 <h4 id="_atlas-service-xml-simplehelloworld">4.1.3. Simple</h4>
 <div class="literalblock">
 <div class="content">
-<pre>GET /v2/atlas/xml/simple</pre>
+<pre>GET /xml/simple</pre>
 </div>
 </div>
 <div class="sect4">
@@ -5227,7 +5227,7 @@ table.CodeRay td.code>pre{padding:0}
 <div id="footer">
 <div id="footer-text">
 Version 1.39.0-SNAPSHOT<br>
-Last updated 2018-11-15 16:56:17 UTC
+Last updated 2018-11-21 18:08:35 UTC
 </div>
 </div>
 </body>

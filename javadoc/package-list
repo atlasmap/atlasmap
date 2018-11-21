@@ -17,9 +17,9 @@ io.atlasmap.json.test
 io.atlasmap.json.v2
 io.atlasmap.maven
 io.atlasmap.mxbean
-io.atlasmap.runtime
 io.atlasmap.service
 io.atlasmap.spi
+io.atlasmap.standalone
 io.atlasmap.v2
 io.atlasmap.validators
 io.atlasmap.xml.core
