@@ -26,8 +26,8 @@ import io.atlasmap.core.AtlasModuleSupport;
 import io.atlasmap.core.AtlasPath;
 import io.atlasmap.core.AtlasUtil;
 import io.atlasmap.core.BaseAtlasModule;
-import io.atlasmap.java.core.DocumentJavaFieldReader;
-import io.atlasmap.java.core.DocumentJavaFieldWriter;
+import io.atlasmap.java.core.JavaFieldReader;
+import io.atlasmap.java.core.JavaFieldWriter;
 import io.atlasmap.java.core.TargetValueConverter;
 import io.atlasmap.java.inspect.ClassInspectionService;
 import io.atlasmap.java.inspect.JavaConstructService;
@@ -121,7 +121,7 @@ public class JavaModule extends BaseAtlasModule {
                     "Null source document: docId='%s'", getDocId()),
                     null, AuditStatus.WARN, null);
         } else {
-            DocumentJavaFieldReader reader = new DocumentJavaFieldReader();
+            JavaFieldReader reader = new JavaFieldReader();
             reader.setConversionService(getConversionService());
             reader.setDocument(sourceDocument);
             atlasSession.setFieldReader(getDocId(), reader);
@@ -156,7 +156,7 @@ public class JavaModule extends BaseAtlasModule {
             throw new AtlasException(e);
         }
 
-        DocumentJavaFieldWriter writer = new DocumentJavaFieldWriter(getConversionService());
+        JavaFieldWriter writer = new JavaFieldWriter(getConversionService());
         writer.setRootObject(rootObject);
         writer.setTargetValueConverter(targetValueConverter);
         atlasSession.setFieldWriter(getDocId(), writer);
@@ -169,7 +169,7 @@ public class JavaModule extends BaseAtlasModule {
     @Override
     public void readSourceValue(AtlasInternalSession session) throws AtlasException {
         Field sourceField = session.head().getSourceField();
-        DocumentJavaFieldReader reader = session.getFieldReader(getDocId(), DocumentJavaFieldReader.class);
+        JavaFieldReader reader = session.getFieldReader(getDocId(), JavaFieldReader.class);
         if (reader == null) {
             AtlasUtil.addAudit(session, sourceField.getDocId(), String.format(
                     "Source document '%s' doesn't exist", getDocId()),
@@ -195,7 +195,7 @@ public class JavaModule extends BaseAtlasModule {
             session.head().setTargetField(targetFieldGroup);
         }
 
-        DocumentJavaFieldWriter writer = session.getFieldWriter(getDocId(), DocumentJavaFieldWriter.class);
+        JavaFieldWriter writer = session.getFieldWriter(getDocId(), JavaFieldWriter.class);
         if (targetFieldGroup == null) {
             if (sourceField instanceof FieldGroup) {
                 List<Field> subFields = ((FieldGroup)sourceField).getField();
@@ -267,7 +267,7 @@ public class JavaModule extends BaseAtlasModule {
 
     @Override
     public void writeTargetValue(AtlasInternalSession session) throws AtlasException {
-        DocumentJavaFieldWriter writer = session.getFieldWriter(getDocId(), DocumentJavaFieldWriter.class);
+        JavaFieldWriter writer = session.getFieldWriter(getDocId(), JavaFieldWriter.class);
         writer.commitWriting(session);
     }
 
@@ -282,7 +282,7 @@ public class JavaModule extends BaseAtlasModule {
 
     @Override
     public void processPostTargetExecution(AtlasInternalSession session) throws AtlasException {
-        DocumentJavaFieldWriter writer = session.getFieldWriter(getDocId(), DocumentJavaFieldWriter.class);
+        JavaFieldWriter writer = session.getFieldWriter(getDocId(), JavaFieldWriter.class);
         if (writer != null && writer.getRootObject() != null) {
             session.setTargetDocument(getDocId(), writer.getRootObject());
         } else {

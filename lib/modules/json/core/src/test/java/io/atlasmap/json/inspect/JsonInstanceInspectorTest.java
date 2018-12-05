@@ -22,9 +22,9 @@ import io.atlasmap.v2.Fields;
 
 /**
  */
-public class JsonDocumentInspectionServiceTest {
+public class JsonInstanceInspectorTest {
 
-    private final JsonDocumentInspectionService inspectionService = new JsonDocumentInspectionService();
+    private final JsonInspectionService inspectionService = new JsonInspectionService();
 
     @Test(expected = IllegalArgumentException.class)
     public void inspectJsonDocumentEmpty() throws Exception {
@@ -93,7 +93,7 @@ public class JsonDocumentInspectionServiceTest {
         assertEquals(FieldStatus.SUPPORTED, jsonField.getStatus());
         assertEquals(CollectionType.LIST, jsonField.getCollectionType());
         assertEquals(FieldType.INTEGER, jsonField.getFieldType());
-        assertEquals(null, jsonField.getName());
+        assertEquals("", jsonField.getName());
         assertEquals("/<>", jsonField.getPath());
         // printDocument(document);
     }
@@ -108,7 +108,7 @@ public class JsonDocumentInspectionServiceTest {
         assertEquals(FieldStatus.SUPPORTED, jsonField.getStatus());
         assertEquals(CollectionType.LIST, jsonField.getCollectionType());
         assertEquals(FieldType.INTEGER, jsonField.getFieldType());
-        assertEquals(null, jsonField.getName());
+        assertEquals("", jsonField.getName());
         assertEquals("/<>", jsonField.getPath());
     }
 
@@ -124,7 +124,7 @@ public class JsonDocumentInspectionServiceTest {
         assertEquals(FieldStatus.SUPPORTED, jsonField.getStatus());
         assertEquals(CollectionType.LIST, jsonField.getCollectionType());
         assertEquals(FieldType.COMPLEX, jsonField.getFieldType());
-        assertEquals(null, jsonField.getName());
+        assertEquals("", jsonField.getName());
         assertEquals("/<>", jsonField.getPath());
         JsonComplexType complexType = (JsonComplexType)jsonField;
         assertEquals(2, complexType.getJsonFields().getJsonField().size());

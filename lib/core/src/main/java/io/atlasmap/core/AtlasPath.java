@@ -49,7 +49,7 @@ public class AtlasPath {
                 for (String part : parts) {
                     getSegments().add(part);
                 }
-            } else if (!path.isEmpty()) {
+            } else {
                 getSegments().add(path);
             }
         }
@@ -166,11 +166,15 @@ public class AtlasPath {
     }
 
     public Boolean isRoot() {
-        return segments.size() == 0;
+        return segments.size() == 1 && cleanPathSegment(segments.get(0)).isEmpty();
     }
 
     public Boolean isCollectionRoot() {
-        return isCollectionSegment(getLastSegment());
+        return isRoot() && isCollectionSegment(getLastSegment());
+    }
+
+    public Boolean hasCollectionRoot() {
+        return cleanPathSegment(segments.get(0)).isEmpty() && isCollectionSegment(segments.get(0));
     }
 
     public String getLastSegmentParent() {

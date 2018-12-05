@@ -57,7 +57,6 @@ public class JsonFieldWriterTest {
     @Before
     public void setupWriter() {
         this.writer = new JsonFieldWriter();
-        Assert.assertNotNull(writer.getRootNode());
     }
 
     @Test(expected = AtlasException.class)
@@ -898,6 +897,52 @@ public class JsonFieldWriterTest {
         AtlasInternalSession session = read(path, outputFieldType, fieldPath);
 
         assertEquals(false, session.head().getSourceField().getValue());
+    }
+
+    @Test
+    public void testJsonFieldTopmostArraySimple() throws Exception {
+        JsonField field = AtlasJsonModelFactory.createJsonField();
+        field.setPath("/<1>");
+        field.setValue(300);
+        field.setFieldType(FieldType.INTEGER);
+        write(field);
+        field = AtlasJsonModelFactory.createJsonField();
+        field.setPath("/<3>");
+        field.setValue(500);
+        field.setFieldType(FieldType.INTEGER);
+        write(field);
+
+        Assert.assertNotNull(writer.getRootNode());
+        Assert.assertThat(writer.getRootNode().toString(), Is.is("[null,300,null,500]"));
+    }
+
+    @Test
+    public void testJsonFieldTopmostArrayObject() throws Exception {
+        JsonField field = AtlasJsonModelFactory.createJsonField();
+        field.setPath("/<1>/color");
+        field.setValue("red");
+        field.setFieldType(FieldType.STRING);
+        write(field);
+        field = AtlasJsonModelFactory.createJsonField();
+        field.setPath("/<2>/value");
+        field.setValue("foobar");
+        field.setFieldType(FieldType.STRING);
+        write(field);
+        field = AtlasJsonModelFactory.createJsonField();
+        field.setPath("/<5>/color");
+        field.setValue("black");
+        field.setFieldType(FieldType.STRING);
+        write(field);
+        field = AtlasJsonModelFactory.createJsonField();
+        field.setPath("/<5>/value");
+        field.setValue("123");
+        field.setFieldType(FieldType.STRING);
+        write(field);
+
+        Assert.assertNotNull(writer.getRootNode());
+        Assert.assertThat(writer.getRootNode().toString(),
+                Is.is("[{},{\"color\":\"red\"},{\"value\":\"foobar\"},{},{},{\"color\":\"black\",\"value\":\"123\"}]"));
+        
     }
 
     private void write(Path path, String fieldPath, Object testObject, FieldType fieldType)

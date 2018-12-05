@@ -18,7 +18,7 @@ import io.atlasmap.java.test.TargetAddress;
 import io.atlasmap.java.test.TargetContact;
 import io.atlasmap.java.test.TargetOrder;
 
-public class JavaWriterUtilTest extends BaseDocumentWriterTest {
+public class JavaWriterUtilTest extends BaseJavaFieldWriterTest {
     @Test
     public void testGetObjectFromParent() throws Exception {
         JavaWriterUtil writerUtil = new JavaWriterUtil(DefaultAtlasConversionService.getInstance());

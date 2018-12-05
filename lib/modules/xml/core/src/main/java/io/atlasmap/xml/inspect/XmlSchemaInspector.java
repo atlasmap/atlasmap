@@ -89,9 +89,9 @@ import io.atlasmap.xml.v2.XmlFields;
 import io.atlasmap.xml.v2.XmlNamespace;
 import io.atlasmap.xml.v2.XmlNamespaces;
 
-public class SchemaInspector {
+public class XmlSchemaInspector {
 
-    private static final Logger LOG = LoggerFactory.getLogger(SchemaInspector.class);
+    private static final Logger LOG = LoggerFactory.getLogger(XmlSchemaInspector.class);
     private static final Map<String, FieldType> XS_TYPE_TO_FIELD_TYPE_MAP;
     private static final Map<String, FieldType> BLACKLISTED_TYPES;
     private static final String NS_PREFIX_XMLSCHEMA = "xs";

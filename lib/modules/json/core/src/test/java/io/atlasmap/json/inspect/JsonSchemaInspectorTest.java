@@ -22,9 +22,9 @@ import io.atlasmap.v2.FieldType;
 
 /**
  */
-public class SchemaInspectorTest {
+public class JsonSchemaInspectorTest {
 
-    private final JsonDocumentInspectionService inspectionService = new JsonDocumentInspectionService();
+    private final JsonInspectionService inspectionService = new JsonInspectionService();
 
     @Test(expected = IllegalArgumentException.class)
     public void inspectJsonSchemaEmpty() throws Exception {

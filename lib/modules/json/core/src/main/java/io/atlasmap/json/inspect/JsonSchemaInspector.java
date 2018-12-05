@@ -26,15 +26,15 @@ import io.atlasmap.v2.FieldType;
 
 /**
  */
-public class SchemaInspector implements JsonInspector {
+public class JsonSchemaInspector implements JsonInspector {
 
-    private static final Logger LOG = LoggerFactory.getLogger(SchemaInspector.class);
-    private static SchemaInspector myself = new SchemaInspector();
+    private static final Logger LOG = LoggerFactory.getLogger(JsonSchemaInspector.class);
+    private static JsonSchemaInspector myself = new JsonSchemaInspector();
 
-    private SchemaInspector() {
+    private JsonSchemaInspector() {
     }
 
-    public static SchemaInspector instance() {
+    public static JsonSchemaInspector instance() {
         return myself;
     }
 

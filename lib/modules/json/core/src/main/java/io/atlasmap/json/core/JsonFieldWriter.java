@@ -23,6 +23,7 @@ import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ContainerNode;
 import com.fasterxml.jackson.databind.node.JsonNodeType;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
@@ -40,20 +41,18 @@ public class JsonFieldWriter implements AtlasFieldWriter {
     private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(JsonFieldWriter.class);
 
     private ObjectMapper objectMapper = null;
-    private ObjectNode rootNode = null;
+    private ContainerNode<?> rootNode = null;
 
     public JsonFieldWriter() {
         this.objectMapper = new ObjectMapper();
         objectMapper.setDefaultPrettyPrinter(new DefaultPrettyPrinter());
-        rootNode = objectMapper.createObjectNode();
     }
 
     public JsonFieldWriter(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
-        this.rootNode = objectMapper.createObjectNode();
     }
 
-    public ObjectNode getRootNode() {
+    public ContainerNode<?> getRootNode() {
         return rootNode;
     }
 
@@ -74,14 +73,29 @@ public class JsonFieldWriter implements AtlasFieldWriter {
         }
         AtlasPath path = new AtlasPath(targetField.getPath());
         String lastSegment = path.getLastSegment();
-        ObjectNode parentNode = this.rootNode;
+
+        if (this.rootNode == null) {
+            if (path.hasCollectionRoot()) {
+                this.rootNode = objectMapper.createArrayNode();
+            } else {
+                this.rootNode = objectMapper.createObjectNode();
+            }
+        }
+        ContainerNode<?> parentNode = this.rootNode;
+
         String parentSegment = null;
         for (String segment : path.getSegments()) {
             if (!segment.equals(lastSegment)) { // this is a parent node.
                 if (LOG.isDebugEnabled()) {
                     LOG.debug("Now processing parent segment: " + segment);
                 }
-                JsonNode childNode = getChildNode(parentNode, parentSegment, segment);
+                JsonNode childNode;
+                if (parentNode.equals(this.rootNode) && parentNode instanceof ArrayNode) {
+                    // taking care of topmost collection
+                    childNode = parentNode;
+                } else {
+                    childNode = getChildNode(parentNode, parentSegment, segment);
+                }
                 if (childNode == null) {
                     childNode = createParentNode(parentNode, parentSegment, segment);
                 } else if (childNode instanceof ArrayNode) {
@@ -118,7 +132,8 @@ public class JsonFieldWriter implements AtlasFieldWriter {
         }
     }
 
-    private void writeValue(ObjectNode parentNode, String parentSegment, String segment, Field field) {
+    private void writeValue(ContainerNode<?> parentNode, String parentSegment, String segment, Field field)
+            throws AtlasException {
         if (LOG.isDebugEnabled()) {
             LOG.debug("Writing field value '" + segment + "' in parent node '" + parentSegment + "', parentNode: "
                     + parentNode);
@@ -137,9 +152,22 @@ public class JsonFieldWriter implements AtlasFieldWriter {
                         + "': " + parentNode);
             }
 
-            ArrayNode arrayChild = (ArrayNode) getChildNode(parentNode, parentSegment, segment);
+            ArrayNode arrayChild;
+            if (parentSegment == null && cleanedSegment.isEmpty() && this.rootNode instanceof ArrayNode) {
+                // taking care of topmost collection
+                arrayChild = (ArrayNode)parentNode;
+            } else {
+                arrayChild = (ArrayNode) getChildNode(parentNode, parentSegment, segment);
+            }
             if (arrayChild == null) {
-                arrayChild = parentNode.putArray(cleanedSegment);
+                if (parentNode instanceof ObjectNode) {
+                    arrayChild = ((ObjectNode)parentNode).putArray(cleanedSegment);
+                } else if (parentNode instanceof ArrayNode) {
+                    arrayChild = ((ArrayNode)parentNode).addArray();
+                } else {
+                    throw new AtlasException(String.format("Unknown JsonNode type '%s' for segment '%s'",
+                            parentNode.getClass(), segment));
+                }
                 if (LOG.isDebugEnabled()) {
                     LOG.debug("Could not find array to place value in, created it in parent: " + parentNode);
                 }
@@ -170,8 +198,14 @@ public class JsonFieldWriter implements AtlasFieldWriter {
             // set the value in the array
             arrayChild.set(index, valueNode);
         } else {
-            // on a regular primitive value, just set it in the object node parent
-            parentNode.replace(cleanedSegment, valueNode);
+            if (parentNode instanceof ArrayNode) {
+                ((ArrayNode)parentNode).add(valueNode);
+            } else if (parentNode instanceof ObjectNode) {
+                ((ObjectNode)parentNode).replace(cleanedSegment, valueNode);
+            } else {
+                throw new AtlasException(String.format("Unknown JsonNode type '%s' for segment '%s'",
+                        parentNode.getClass(), segment));
+            }
         }
 
         if (LOG.isDebugEnabled()) {
@@ -179,7 +213,8 @@ public class JsonFieldWriter implements AtlasFieldWriter {
         }
     }
 
-    private ObjectNode createParentNode(ObjectNode parentNode, String parentSegment, String segment) {
+    private ObjectNode createParentNode(ContainerNode<?> parentNode, String parentSegment, String segment)
+            throws AtlasException {
         if (LOG.isDebugEnabled()) {
             LOG.debug("Creating parent node '" + segment + "' under previous parent '" + parentSegment + "' ("
                     + parentNode.getClass().getName() + ")");
@@ -187,7 +222,15 @@ public class JsonFieldWriter implements AtlasFieldWriter {
         ObjectNode childNode = null;
         String cleanedSegment = AtlasPath.cleanPathSegment(segment);
         if (AtlasPath.isCollectionSegment(segment)) {
-            ArrayNode arrayChild = parentNode.putArray(cleanedSegment);
+            ArrayNode arrayChild;
+            if (parentNode instanceof ObjectNode) {
+                arrayChild = ((ObjectNode)parentNode).putArray(cleanedSegment);
+            } else if (parentNode instanceof ArrayNode) {
+                arrayChild = ((ArrayNode)parentNode).addArray();
+            } else {
+                throw new AtlasException(String.format("Unknown JsonNode type '%s' for segment '%s'",
+                        parentNode.getClass(), segment));
+            }
             int index = AtlasPath.indexOfSegment(segment);
 
             if (arrayChild.size() < (index + 1)) {
@@ -209,7 +252,14 @@ public class JsonFieldWriter implements AtlasFieldWriter {
             }
             childNode = (ObjectNode) arrayChild.get(index);
         } else {
-            childNode = parentNode.putObject(cleanedSegment);
+            if (parentNode instanceof ObjectNode) {
+                childNode = ((ObjectNode)parentNode).putObject(cleanedSegment);
+            } else if (parentNode instanceof ArrayNode) {
+                childNode = ((ArrayNode) parentNode).addObject();
+            } else {
+                throw new AtlasException(String.format("Unknown JsonNode type '%s' for segment '%s'",
+                        parentNode.getClass(), segment));
+            }
         }
         if (LOG.isDebugEnabled()) {
             LOG.debug("Parent Node '" + parentSegment + "' after adding child parent node '" + segment + "':"
@@ -253,7 +303,7 @@ public class JsonFieldWriter implements AtlasFieldWriter {
         return valueNode;
     }
 
-    public static JsonNode getChildNode(ObjectNode parentNode, String parentSegment, String segment) {
+    public static JsonNode getChildNode(ContainerNode<?> parentNode, String parentSegment, String segment) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("Looking for child node '" + segment + "' in parent '" + parentSegment + "': " + parentNode);
         }

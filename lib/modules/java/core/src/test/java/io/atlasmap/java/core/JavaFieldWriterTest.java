@@ -26,7 +26,7 @@ import io.atlasmap.java.v2.JavaField;
 import io.atlasmap.v2.FieldType;
 
 @FixMethodOrder(MethodSorters.JVM)
-public class DocumentJavaFieldWriterTest extends BaseDocumentWriterTest {
+public class JavaFieldWriterTest extends BaseJavaFieldWriterTest {
 
     @Test
     public void testSimpleClassLookup() throws Exception {

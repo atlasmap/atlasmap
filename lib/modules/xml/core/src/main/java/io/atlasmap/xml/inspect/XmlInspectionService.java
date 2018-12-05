@@ -62,7 +62,7 @@ public class XmlInspectionService {
         if (sourceDocument == null) {
             throw new IllegalArgumentException("Source must be specified");
         }
-        InstanceInspector inspector = new InstanceInspector();
+        XmlInstanceInspector inspector = new XmlInstanceInspector();
         inspector.inspect(sourceDocument);
         return inspector.getXmlDocument();
     }
@@ -71,7 +71,7 @@ public class XmlInspectionService {
         if (schemaSource == null || schemaSource.isEmpty()) {
             throw new IllegalArgumentException("Source must be specified");
         }
-        SchemaInspector inspector = new SchemaInspector();
+        XmlSchemaInspector inspector = new XmlSchemaInspector();
         inspector.inspect(schemaSource);
         return inspector.getXmlDocument();
     }
@@ -80,7 +80,7 @@ public class XmlInspectionService {
         if (schemaFile == null || !schemaFile.exists()) {
             throw new IllegalArgumentException("Source must be specified and available");
         }
-        SchemaInspector inspector = new SchemaInspector();
+        XmlSchemaInspector inspector = new XmlSchemaInspector();
         inspector.inspect(schemaFile);
         return inspector.getXmlDocument();
     }

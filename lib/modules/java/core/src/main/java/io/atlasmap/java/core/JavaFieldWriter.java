@@ -67,8 +67,8 @@ import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldType;
 import io.atlasmap.v2.LookupTable;
 
-public class DocumentJavaFieldWriter implements AtlasFieldWriter {
-    private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(DocumentJavaFieldWriter.class);
+public class JavaFieldWriter implements AtlasFieldWriter {
+    private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(JavaFieldWriter.class);
 
     private Object rootObject = null;
     private Map<String, Class<?>> classesForFields = new HashMap<>();
@@ -79,7 +79,7 @@ public class DocumentJavaFieldWriter implements AtlasFieldWriter {
     private Map<Class<?>, Class<?>> defaultCollectionImplClasses = new HashMap<>();
     private Map<Field, Object> fieldParentQueue = new HashMap<>();
 
-    public DocumentJavaFieldWriter(AtlasConversionService conversion) {
+    public JavaFieldWriter(AtlasConversionService conversion) {
         this.conversionService = conversion;
         defaultCollectionImplClasses.put(BeanContext.class, BeanContextServicesSupport.class);
         defaultCollectionImplClasses.put(BeanContextServices.class, BeanContextServicesSupport.class);

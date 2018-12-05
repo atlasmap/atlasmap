@@ -26,8 +26,8 @@ import io.atlasmap.v2.AuditStatus;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldGroup;
 
-public class DocumentJavaFieldReader implements AtlasFieldReader {
-    private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(DocumentJavaFieldReader.class);
+public class JavaFieldReader implements AtlasFieldReader {
+    private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(JavaFieldReader.class);
 
     private AtlasConversionService conversionService;
     private Object sourceDocument;

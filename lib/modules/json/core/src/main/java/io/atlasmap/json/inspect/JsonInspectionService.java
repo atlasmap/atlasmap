@@ -2,7 +2,7 @@ package io.atlasmap.json.inspect;
 
 import io.atlasmap.json.v2.JsonDocument;
 
-public class JsonDocumentInspectionService {
+public class JsonInspectionService {
 
     public JsonDocument inspectJsonDocument(String sourceDocument) throws JsonInspectionException {
         if (sourceDocument == null || sourceDocument.isEmpty() || (sourceDocument.trim().length() == 0)) {
@@ -11,7 +11,7 @@ public class JsonDocumentInspectionService {
         String cleanDocument = cleanJsonDocument(sourceDocument);
 
         if (cleanDocument.startsWith("{") || cleanDocument.startsWith("[")) {
-            return InstanceInspector.instance().inspect(cleanDocument);
+            return JsonInstanceInspector.instance().inspect(cleanDocument);
         }
         throw new JsonInspectionException("JSON data must begin with either '{' or '['");
     }
@@ -23,7 +23,7 @@ public class JsonDocumentInspectionService {
         String cleanDocument = cleanJsonDocument(jsonSchema);
 
         if (cleanDocument.startsWith("{") || cleanDocument.startsWith("[")) {
-            return SchemaInspector.instance().inspect(cleanDocument);
+            return JsonSchemaInspector.instance().inspect(cleanDocument);
         }
         throw new JsonInspectionException("JSON schema must begin with either '{' or '['");
     }
