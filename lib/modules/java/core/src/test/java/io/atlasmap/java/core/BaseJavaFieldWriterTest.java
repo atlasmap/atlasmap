@@ -32,10 +32,10 @@ import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldType;
 import io.atlasmap.v2.LookupTable;
 
-public abstract class BaseDocumentWriterTest {
+public abstract class BaseJavaFieldWriterTest {
     protected static final String DEFAULT_VALUE = "Some string.";
 
-    protected DocumentJavaFieldWriter writer = null;
+    protected JavaFieldWriter writer = null;
     protected List<SegmentContext> segmentContexts = new LinkedList<>();
     protected SegmentContext lastSegmentContext = null;
     protected JavaField field = null;
@@ -50,7 +50,7 @@ public abstract class BaseDocumentWriterTest {
     @Before
     public void reset() {
         classLoader = Thread.currentThread().getContextClassLoader();
-        writer = new DocumentJavaFieldWriter(conversionService);
+        writer = new JavaFieldWriter(conversionService);
         writer.setTargetValueConverter(new TargetValueConverter(classLoader, conversionService) {
             public void populateTargetField(AtlasInternalSession session, LookupTable lookupTable, Field sourceField, Object parentObject, Field targetField) throws AtlasException {
                 return;
@@ -204,7 +204,7 @@ public abstract class BaseDocumentWriterTest {
     }
 
     protected Object findChildObject(Field field, SegmentContext segmentContext, Object parentObject) throws Exception {
-        Class<DocumentJavaFieldWriter> clazz = DocumentJavaFieldWriter.class;
+        Class<JavaFieldWriter> clazz = JavaFieldWriter.class;
         Method method = clazz.getDeclaredMethod("findChildObject", Field.class, SegmentContext.class, Object.class);
         boolean accessible = method.isAccessible();
         if (!accessible) {

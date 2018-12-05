@@ -33,7 +33,7 @@ import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
-import io.atlasmap.json.inspect.JsonDocumentInspectionService;
+import io.atlasmap.json.inspect.JsonInspectionService;
 import io.atlasmap.json.v2.InspectionType;
 import io.atlasmap.json.v2.JsonDocument;
 import io.atlasmap.json.v2.JsonInspectionRequest;
@@ -133,7 +133,7 @@ public class JsonService {
                 response.setErrorMessage(
                         "Json data and Instance or Schema inspection type must be specified in request");
             } else {
-                JsonDocumentInspectionService s = new JsonDocumentInspectionService();
+                JsonInspectionService s = new JsonInspectionService();
 
                 String jsonData = cleanJsonData(request.getJsonData());
                 if (!validJsonData(jsonData)) {

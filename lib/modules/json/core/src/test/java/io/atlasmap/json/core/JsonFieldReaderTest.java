@@ -37,6 +37,8 @@ import io.atlasmap.spi.AtlasInternalSession;
 import io.atlasmap.spi.AtlasInternalSession.Head;
 import io.atlasmap.v2.AuditStatus;
 import io.atlasmap.v2.Audits;
+import io.atlasmap.v2.Field;
+import io.atlasmap.v2.FieldGroup;
 import io.atlasmap.v2.FieldType;
 
 public class JsonFieldReaderTest {
@@ -1083,6 +1085,62 @@ public class JsonFieldReaderTest {
     public void testJsonFieldByteString() throws Exception {
         testRangeOutValue("field-byte-string.json", "/byteValue", FieldType.BYTE,
                 "Failed to convert field value 'abcd' into type 'BYTE'", "abcd");
+    }
+
+    @Test
+    public void testJsonFieldTopmostArraySimple() throws Exception {
+        final String document = "[ 100, 500, 300, 200, 400 ]";
+        reader.setDocument(document);
+        JsonField field = AtlasJsonModelFactory.createJsonField();
+        field.setPath("/<1>");
+        AtlasInternalSession session = mock(AtlasInternalSession.class);
+        when(session.head()).thenReturn(mock(Head.class));
+        when(session.head().getSourceField()).thenReturn(field);
+        reader.read(session);
+        assertNotNull(field.getValue());
+        assertThat(field.getValue(), Is.is(500));
+
+        field.setFieldType(null);
+        field.setPath("/<>");
+        Field readField = reader.read(session);
+        assertEquals(FieldGroup.class, readField.getClass());
+        FieldGroup readFieldGroup = (FieldGroup)readField;
+        assertEquals(5, readFieldGroup.getField().size());
+        assertEquals(100, readFieldGroup.getField().get(0).getValue());
+        assertEquals(500, readFieldGroup.getField().get(1).getValue());
+        assertEquals(300, readFieldGroup.getField().get(2).getValue());
+        assertEquals(200, readFieldGroup.getField().get(3).getValue());
+        assertEquals(400, readFieldGroup.getField().get(4).getValue());
+    }
+
+    @Test
+    public void testJsonFieldTopmostArrayObject() throws Exception {
+        final String document = "[\n" + "\t{\n" + "\t\t\"color\": \"red\",\n" + "\t\t\"value\": \"#f00\"\n" + "\t},\n"
+                + "\t{\n" + "\t\t\"color\": \"green\",\n" + "\t\t\"value\": \"#0f0\"\n" + "\t},\n" + "\t{\n"
+                + "\t\t\"color\": \"blue\",\n" + "\t\t\"value\": \"#00f\"\n" + "\t}]";
+        reader.setDocument(document);
+        JsonField field = AtlasJsonModelFactory.createJsonField();
+        field.setPath("/<0>/color");
+        AtlasInternalSession session = mock(AtlasInternalSession.class);
+        when(session.head()).thenReturn(mock(Head.class));
+        when(session.head().getSourceField()).thenReturn(field);
+        reader.read(session);
+        assertNotNull(field.getValue());
+        assertThat(field.getValue(), Is.is("red"));
+        field.setPath("/<1>/value");
+        reader.read(session);
+        assertNotNull(field.getValue());
+        assertThat(field.getValue(), Is.is("#0f0"));
+
+        field.setFieldType(null);
+        field.setPath("/<>/color");
+        Field readField = reader.read(session);
+        assertEquals(FieldGroup.class, readField.getClass());
+        FieldGroup readFieldGroup = (FieldGroup)readField;
+        assertEquals(3, readFieldGroup.getField().size());
+        assertEquals("red", readFieldGroup.getField().get(0).getValue());
+        assertEquals("green", readFieldGroup.getField().get(1).getValue());
+        assertEquals("blue", readFieldGroup.getField().get(2).getValue());
     }
 
 }

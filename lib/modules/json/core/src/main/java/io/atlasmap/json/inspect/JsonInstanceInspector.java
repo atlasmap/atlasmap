@@ -27,16 +27,16 @@ import io.atlasmap.v2.FieldType;
  * JSON instance document inspector. It consumes JSON instance document as an example
  * and build a AtlasMap Document model object from it.
  */
-public class InstanceInspector implements JsonInspector {
+public class JsonInstanceInspector implements JsonInspector {
 
 
-    private static final Logger LOG = LoggerFactory.getLogger(InstanceInspector.class);
-    private static InstanceInspector myself = new InstanceInspector();
+    private static final Logger LOG = LoggerFactory.getLogger(JsonInstanceInspector.class);
+    private static JsonInstanceInspector myself = new JsonInstanceInspector();
 
-    private InstanceInspector() {
+    private JsonInstanceInspector() {
     }
 
-    public static InstanceInspector instance() {
+    public static JsonInstanceInspector instance() {
         return myself;
     }
 
@@ -67,7 +67,7 @@ public class InstanceInspector implements JsonInspector {
                     }
                 }
             } else if (rootNode.isArray()) {
-                handleArrayNode(jsonDocument, null, null, (ArrayNode)rootNode);
+                handleArrayNode(jsonDocument, null, "", (ArrayNode)rootNode);
             } else {
                 throw new IllegalArgumentException("JSON root must be object or array");
             }

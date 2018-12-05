@@ -14,7 +14,7 @@ import io.atlasmap.v2.AuditStatus;
 import io.atlasmap.v2.FieldType;
 
 @FixMethodOrder(MethodSorters.JVM)
-public class DocumentJavaFieldReaderTest extends BaseDocumentReaderTest {
+public class JavaFieldReaderTest extends BaseJavaFieldReaderTest {
 
     @Test
     public void testRead() throws Exception {

@@ -36,7 +36,7 @@ import org.apache.maven.plugins.annotations.Parameter;
 import io.atlasmap.core.DefaultAtlasConversionService;
 import io.atlasmap.java.inspect.ClassInspectionService;
 import io.atlasmap.java.v2.JavaClass;
-import io.atlasmap.json.inspect.JsonDocumentInspectionService;
+import io.atlasmap.json.inspect.JsonInspectionService;
 import io.atlasmap.json.v2.JsonDocument;
 import io.atlasmap.xml.inspect.XmlInspectionService;
 import io.atlasmap.xml.v2.XmlDocument;
@@ -212,7 +212,7 @@ public class GenerateInspectionsMojo extends AbstractAtlasMapMojo {
         try {
             Path path = Paths.get(fileName);
             String schema = new String(Files.readAllBytes(path));
-            JsonDocument d = new JsonDocumentInspectionService().inspectJsonSchema(schema);
+            JsonDocument d = new JsonInspectionService().inspectJsonSchema(schema);
             String name = path.getFileName().toString();
             String outputName = name.substring(0, name.length() - 5);
             writeToJsonFile(DEFAULT_OUTPUT_FILE_PREFIX + "-" + outputName, d);

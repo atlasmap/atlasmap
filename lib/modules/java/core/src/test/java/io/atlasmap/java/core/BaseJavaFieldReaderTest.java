@@ -18,16 +18,16 @@ import io.atlasmap.v2.Audits;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldType;
 
-public abstract class BaseDocumentReaderTest {
+public abstract class BaseJavaFieldReaderTest {
 
-    protected DocumentJavaFieldReader reader = null;
+    protected JavaFieldReader reader = null;
     protected List<Audit> audits = null;
     protected JavaField field = null;
 
     @Before
     public void reset() {
         audits = new LinkedList<>();
-        reader = new DocumentJavaFieldReader();
+        reader = new JavaFieldReader();
         reader.setConversionService(DefaultAtlasConversionService.getInstance());
     }
 

@@ -37,7 +37,7 @@ import io.atlasmap.xml.v2.XmlFields;
 import io.atlasmap.xml.v2.XmlNamespace;
 import io.atlasmap.xml.v2.XmlNamespaces;
 
-public class InstanceInspector {
+public class XmlInstanceInspector {
 
     private XmlDocument xmlDocument = AtlasXmlModelFactory.createXmlDocument();
 

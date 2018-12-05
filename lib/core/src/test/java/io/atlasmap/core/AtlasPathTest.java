@@ -328,6 +328,15 @@ public class AtlasPathTest {
         AtlasPath p = new AtlasPath("/order/contact/firstName");
         assertFalse(p.isCollectionRoot());
 
+        p = new AtlasPath("/order/contact/phone<>");
+        assertFalse(p.isCollectionRoot());
+
+        p = new AtlasPath("/order<>/contact/phone");
+        assertFalse(p.isCollectionRoot());
+
+        p = new AtlasPath("/<>/order/contact/phone");
+        assertFalse(p.isCollectionRoot());
+
         p = new AtlasPath("[1,2]");
         assertTrue(p.isCollectionRoot());
     }

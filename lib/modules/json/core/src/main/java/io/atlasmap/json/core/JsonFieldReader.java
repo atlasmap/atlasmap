@@ -116,12 +116,38 @@ public class JsonFieldReader implements AtlasFieldReader {
         boolean isCollection = false;
         String strippedNodeName = nodeName;
         Integer index = null;
+        List<JsonNode> answer = new LinkedList<>();
+
         if (AtlasPath.isCollection(nodeName)) {
             isCollection = true;
             index = AtlasPath.indexOfSegment(nodeName);
             strippedNodeName = AtlasPath.cleanPathSegment(nodeName);
+            if (strippedNodeName.isEmpty()) {
+                for (JsonNode parent : parents) {
+                    if (parent == null) {
+                        continue;
+                    }
+                    if (!parent.isArray()) {
+                        answer.add(parent);
+                        continue;
+                    }
+                    if (index == null) {
+                        for (int i=0; i<parent.size(); i++) {
+                            answer.add(parent.get(i));
+                        }
+                    } else if (index >= 0 && index < parent.size()) {
+                        answer.add(parent.get(index));
+                    } else {
+                        AtlasUtil.addAudit(session, field.getDocId(),
+                                String.format("Detected out of range index for field p=%s, ignoring...", nodeName),
+                                field.getPath(), AuditStatus.WARN, parent.asText());
+                        LOG.warn(String.format("", nodeName));
+                    }
+                }
+                return answer;
+            }
         }
-        List<JsonNode> answer = new LinkedList<>();
+
         for (JsonNode parent : parents) {
             if (parent == null) {
                 continue;
