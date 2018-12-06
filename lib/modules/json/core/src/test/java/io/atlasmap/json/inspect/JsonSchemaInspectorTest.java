@@ -2,7 +2,6 @@ package io.atlasmap.json.inspect;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.nio.file.Files;
@@ -65,7 +64,7 @@ public class JsonSchemaInspectorTest {
     }
 
     @Test
-    public void inspectJsonSchemaSimpleArray() throws Exception {
+    public void inspectJsonSchemaTopmostArraySimple() throws Exception {
         final String schema =
                 "{\"$schema\": \"http://json-schema.org/\","
                         + " \"type\": \"array\","
@@ -74,11 +73,38 @@ public class JsonSchemaInspectorTest {
         assertNotNull(document);
         assertEquals(1, document.getFields().getField().size());
         JsonField jsonField = (JsonField) document.getFields().getField().get(0);
-        assertEquals(FieldStatus.UNSUPPORTED, jsonField.getStatus());
+        assertEquals(FieldStatus.SUPPORTED, jsonField.getStatus());
         assertEquals(CollectionType.LIST, jsonField.getCollectionType());
         assertEquals(FieldType.INTEGER, jsonField.getFieldType());
-        assertNull(jsonField.getName());
-        assertNull(jsonField.getPath());
+        assertEquals("", jsonField.getName());
+        assertEquals("/<>", jsonField.getPath());
+    }
+
+    @Test
+    public void inspectJsonSchemaTopmostArrayObject() throws Exception {
+        final String schema = new String(
+                Files.readAllBytes(Paths.get("src/test/resources/inspect/schema/topmost-array-object.json")));
+        JsonDocument document = inspectionService.inspectJsonSchema(schema);
+        assertNotNull(document);
+        assertEquals(1, document.getFields().getField().size());
+        JsonField jsonField = (JsonField) document.getFields().getField().get(0);
+        assertEquals(FieldStatus.SUPPORTED, jsonField.getStatus());
+        assertEquals(CollectionType.LIST, jsonField.getCollectionType());
+        assertEquals(FieldType.COMPLEX, jsonField.getFieldType());
+        assertEquals("", jsonField.getName());
+        assertEquals("/<>", jsonField.getPath());
+        JsonComplexType root = JsonComplexType.class.cast(jsonField);
+        assertEquals(2, root.getJsonFields().getJsonField().size());
+        JsonField color = (JsonField) root.getJsonFields().getJsonField().get(0);
+        assertEquals(FieldStatus.SUPPORTED, color.getStatus());
+        assertEquals(FieldType.STRING, color.getFieldType());
+        assertEquals("color", color.getName());
+        assertEquals("/<>/color", color.getPath());
+        JsonField value = (JsonField) root.getJsonFields().getJsonField().get(1);
+        assertEquals(FieldStatus.SUPPORTED, value.getStatus());
+        assertEquals(FieldType.STRING, value.getFieldType());
+        assertEquals("value", value.getName());
+        assertEquals("/<>/value", value.getPath());
     }
 
     @Test
@@ -91,8 +117,8 @@ public class JsonSchemaInspectorTest {
         JsonField jsonField = (JsonField) document.getFields().getField().get(0);
         assertTrue(jsonField.getStatus().compareTo(FieldStatus.SUPPORTED) == 0);
         assertEquals(FieldType.STRING, jsonField.getFieldType());
-        assertNull(jsonField.getName());
-        assertNull(jsonField.getPath());
+        assertEquals("", jsonField.getName());
+        assertEquals("/", jsonField.getPath());
     }
 
     @Test
@@ -387,40 +413,40 @@ public class JsonSchemaInspectorTest {
         assertNotNull(address);
         assertEquals(5, address.getJsonFields().getJsonField().size());
         assertEquals("address", address.getName());
-        assertEquals("/SourceOrderList/orders/address", address.getPath());
+        assertEquals("/SourceOrderList/orders<>/address", address.getPath());
 
         JsonField addressLine1 = address.getJsonFields().getJsonField().get(0);
         assertNotNull(addressLine1);
         assertEquals("addressLine1", addressLine1.getName());
-        assertEquals("/SourceOrderList/orders/address/addressLine1", addressLine1.getPath());
+        assertEquals("/SourceOrderList/orders<>/address/addressLine1", addressLine1.getPath());
         assertEquals(FieldType.STRING, addressLine1.getFieldType());
         assertEquals(FieldStatus.SUPPORTED, addressLine1.getStatus());
 
         JsonField addressLine2 = address.getJsonFields().getJsonField().get(1);
         assertNotNull(addressLine2);
         assertEquals("addressLine2", addressLine2.getName());
-        assertEquals("/SourceOrderList/orders/address/addressLine2", addressLine2.getPath());
+        assertEquals("/SourceOrderList/orders<>/address/addressLine2", addressLine2.getPath());
         assertEquals(FieldType.STRING, addressLine2.getFieldType());
         assertEquals(FieldStatus.SUPPORTED, addressLine2.getStatus());
 
         JsonField city = address.getJsonFields().getJsonField().get(2);
         assertNotNull(city);
         assertEquals("city", city.getName());
-        assertEquals("/SourceOrderList/orders/address/city", city.getPath());
+        assertEquals("/SourceOrderList/orders<>/address/city", city.getPath());
         assertEquals(FieldType.STRING, city.getFieldType());
         assertEquals(FieldStatus.SUPPORTED, city.getStatus());
 
         JsonField state = address.getJsonFields().getJsonField().get(3);
         assertNotNull(state);
         assertEquals("state", state.getName());
-        assertEquals("/SourceOrderList/orders/address/state", state.getPath());
+        assertEquals("/SourceOrderList/orders<>/address/state", state.getPath());
         assertEquals(FieldType.STRING, state.getFieldType());
         assertEquals(FieldStatus.SUPPORTED, state.getStatus());
 
         JsonField postalCode = address.getJsonFields().getJsonField().get(4);
         assertNotNull(postalCode);
         assertEquals("zipCode", postalCode.getName());
-        assertEquals("/SourceOrderList/orders/address/zipCode", postalCode.getPath());
+        assertEquals("/SourceOrderList/orders<>/address/zipCode", postalCode.getPath());
         assertEquals(FieldType.STRING, postalCode.getFieldType());
         assertEquals(FieldStatus.SUPPORTED, postalCode.getStatus());
 
@@ -428,40 +454,40 @@ public class JsonSchemaInspectorTest {
         assertNotNull(contact);
         assertEquals(4, contact.getJsonFields().getJsonField().size());
         assertEquals("contact", contact.getName());
-        assertEquals("/SourceOrderList/orders/contact", contact.getPath());
+        assertEquals("/SourceOrderList/orders<>/contact", contact.getPath());
 
         JsonField firstName = contact.getJsonFields().getJsonField().get(0);
         assertNotNull(firstName);
         assertEquals("firstName", firstName.getName());
-        assertEquals("/SourceOrderList/orders/contact/firstName", firstName.getPath());
+        assertEquals("/SourceOrderList/orders<>/contact/firstName", firstName.getPath());
         assertEquals(FieldType.STRING, firstName.getFieldType());
         assertEquals(FieldStatus.SUPPORTED, firstName.getStatus());
 
         JsonField lastName = contact.getJsonFields().getJsonField().get(1);
         assertNotNull(lastName);
         assertEquals("lastName", lastName.getName());
-        assertEquals("/SourceOrderList/orders/contact/lastName", lastName.getPath());
+        assertEquals("/SourceOrderList/orders<>/contact/lastName", lastName.getPath());
         assertEquals(FieldType.STRING, lastName.getFieldType());
         assertEquals(FieldStatus.SUPPORTED, lastName.getStatus());
 
         JsonField phoneNumber = contact.getJsonFields().getJsonField().get(2);
         assertNotNull(phoneNumber);
         assertEquals("phoneNumber", phoneNumber.getName());
-        assertEquals("/SourceOrderList/orders/contact/phoneNumber", phoneNumber.getPath());
+        assertEquals("/SourceOrderList/orders<>/contact/phoneNumber", phoneNumber.getPath());
         assertEquals(FieldType.STRING, phoneNumber.getFieldType());
         assertEquals(FieldStatus.SUPPORTED, phoneNumber.getStatus());
 
         JsonField zipCode = contact.getJsonFields().getJsonField().get(3);
         assertNotNull(zipCode);
         assertEquals("zipCode", zipCode.getName());
-        assertEquals("/SourceOrderList/orders/contact/zipCode", zipCode.getPath());
+        assertEquals("/SourceOrderList/orders<>/contact/zipCode", zipCode.getPath());
         assertEquals(FieldType.STRING, zipCode.getFieldType());
         assertEquals(FieldStatus.SUPPORTED, zipCode.getStatus());
 
         JsonField orderId = orders.getJsonFields().getJsonField().get(2);
         assertNotNull(orderId);
         assertEquals("orderId", orderId.getName());
-        assertEquals("/SourceOrderList/orders/orderId", orderId.getPath());
+        assertEquals("/SourceOrderList/orders<>/orderId", orderId.getPath());
         assertEquals(FieldType.INTEGER, orderId.getFieldType());
         assertEquals(FieldStatus.SUPPORTED, orderId.getStatus());
     }
@@ -698,17 +724,17 @@ public class JsonSchemaInspectorTest {
         assertEquals(FieldType.STRING, f.getFieldType());
         f = (JsonField) fields.get(3);
         assertEquals("additionalName", f.getName());
-        assertEquals("/additionalName", f.getPath());
+        assertEquals("/additionalName<>", f.getPath());
         assertEquals(FieldType.STRING, f.getFieldType());
         assertEquals(CollectionType.LIST, f.getCollectionType());
         f = (JsonField) fields.get(4);
         assertEquals("honorificPrefix", f.getName());
-        assertEquals("/honorificPrefix", f.getPath());
+        assertEquals("/honorificPrefix<>", f.getPath());
         assertEquals(FieldType.STRING, f.getFieldType());
         assertEquals(CollectionType.LIST, f.getCollectionType());
         f = (JsonField) fields.get(5);
         assertEquals("honorificSuffix", f.getName());
-        assertEquals("/honorificSuffix", f.getPath());
+        assertEquals("/honorificSuffix<>", f.getPath());
         assertEquals(FieldType.STRING, f.getFieldType());
         assertEquals(CollectionType.LIST, f.getCollectionType());
         f = (JsonField) fields.get(6);

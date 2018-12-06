@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import io.atlasmap.core.AtlasPath;
 import io.atlasmap.json.core.JsonComplexTypeFactory;
 import io.atlasmap.json.v2.AtlasJsonModelFactory;
 import io.atlasmap.json.v2.JsonComplexType;
@@ -50,18 +51,16 @@ public class JsonSchemaInspector implements JsonInspector {
 
             Map<String, JsonNode> definitionMap = new HashMap<>();
             populateDefinitions(rootNode, definitionMap);
-            JsonField rootNodeType = getJsonFieldBuilder(null, rootNode, null, definitionMap).build();
+            JsonField rootNodeType = getJsonFieldBuilder("", rootNode, null, definitionMap, false).build();
 
-            if (rootNodeType.getCollectionType() == CollectionType.LIST) {
-                LOG.warn("Topmost array is not supported");
-                if (rootNodeType instanceof JsonComplexType) {
-                    ((JsonComplexType)rootNodeType).getJsonFields().getJsonField().clear();
-                }
-                rootNodeType.setStatus(FieldStatus.UNSUPPORTED);
-                jsonDocument.getFields().getField().add(rootNodeType);
-            } else if (rootNodeType instanceof JsonComplexType
+            if (rootNodeType instanceof JsonComplexType
                     && ((JsonComplexType)rootNodeType).getJsonFields().getJsonField().size() != 0) {
-                jsonDocument.getFields().getField().addAll(((JsonComplexType)rootNodeType).getJsonFields().getJsonField());
+                if (rootNodeType.getCollectionType() == null || rootNodeType.getCollectionType() == CollectionType.NONE) {
+                    jsonDocument.getFields().getField().addAll(((JsonComplexType)rootNodeType).getJsonFields().getJsonField());
+                } else {
+                    // taking care of topmost collection
+                    jsonDocument.getFields().getField().add(rootNodeType);
+                }
             } else if (rootNodeType.getFieldType() == FieldType.COMPLEX) {
                 LOG.warn("No simple type nor property is defined for the root node. It's going to be empty");
             } else {
@@ -111,18 +110,23 @@ public class JsonSchemaInspector implements JsonInspector {
                 LOG.warn("Ignoring non-object field '{}'", entry);
                 continue;
             }
-            JsonField type = getJsonFieldBuilder(entry.getKey(), entry.getValue(), parentPath, definitionMap).build();
+            JsonField type = getJsonFieldBuilder(entry.getKey(), entry.getValue(), parentPath, definitionMap, false).build();
             answer.add(type);
         }
         return answer;
     }
 
-    private JsonFieldBuilder getJsonFieldBuilder(String name, JsonNode value, String parentPath, Map<String, JsonNode> definitionMap) throws JsonInspectionException {
+    private JsonFieldBuilder getJsonFieldBuilder(String name, JsonNode value, String parentPath, Map<String, JsonNode> definitionMap, boolean isArray) throws JsonInspectionException {
         LOG.trace("--> Field:[name=[{}], value=[{}], parentPath=[{}]", name, value, parentPath);
         JsonFieldBuilder builder = new JsonFieldBuilder();
         if (name != null) {
             builder.name = name;
-            builder.path = (parentPath != null ? parentPath.concat("/") : "/").concat(name);
+            builder.path = (parentPath != null && !parentPath.equals("/")
+                    ? parentPath.concat("/") : "/").concat(name);
+        }
+        if (isArray) {
+            builder.path += "<>";
+            builder.collectionType = CollectionType.LIST;
         }
         builder.status = FieldStatus.SUPPORTED;
 
@@ -139,11 +143,9 @@ public class JsonSchemaInspector implements JsonInspector {
             JsonNode arrayItems = nodeValue.get("items");
             if (arrayItems == null || !arrayItems.fields().hasNext()) {
                 LOG.warn("'{}' is an array node, but no 'items' found in it. It will be ignored", name);
-                builder.collectionType = CollectionType.LIST;
                 builder.status = FieldStatus.UNSUPPORTED;
             } else {
-                builder = getJsonFieldBuilder(name, nodeValue.get("items"), parentPath, definitionMap);
-                builder.collectionType = CollectionType.LIST;
+                builder = getJsonFieldBuilder(name, arrayItems, parentPath, definitionMap, true);
             }
         } else if ("boolean".equals(fieldType.asText())) {
             builder.type = FieldType.BOOLEAN;
