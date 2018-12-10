@@ -30,7 +30,9 @@ import io.atlasmap.java.test.TargetOrder;
 import io.atlasmap.java.v2.AtlasJavaModelFactory;
 import io.atlasmap.java.v2.JavaClass;
 import io.atlasmap.java.v2.JavaField;
+import io.atlasmap.v2.CollectionType;
 import io.atlasmap.v2.FieldStatus;
+import io.atlasmap.v2.FieldType;
 
 public class ComplexClassInspectTest {
 
@@ -49,7 +51,7 @@ public class ComplexClassInspectTest {
 
     @Test
     public void testComplexClassSourceOrder() {
-        JavaClass c = classInspectionService.inspectClass(SourceOrder.class);
+        JavaClass c = classInspectionService.inspectClass(SourceOrder.class, CollectionType.NONE, null);
         assertNotNull(c);
         assertEquals("io.atlasmap.java.test.SourceOrder", c.getClassName());
         assertEquals(String.format(AtlasJavaModelFactory.URI_FORMAT, "io.atlasmap.java.test.SourceOrder"), c.getUri());
@@ -58,11 +60,39 @@ public class ComplexClassInspectTest {
 
     @Test
     public void testComplexClassTargetOrder() {
-        JavaClass c = classInspectionService.inspectClass(TargetOrder.class);
+        JavaClass c = classInspectionService.inspectClass(TargetOrder.class, CollectionType.NONE, null);
         assertNotNull(c);
         assertEquals("io.atlasmap.java.test.TargetOrder", c.getClassName());
         assertEquals(String.format(AtlasJavaModelFactory.URI_FORMAT, "io.atlasmap.java.test.TargetOrder"), c.getUri());
         validateComplexClass(c);
+    }
+
+    @Test
+    public void testComplexTopmostList() {
+        JavaClass javaClass = classInspectionService.inspectClass(SourceOrder.class, CollectionType.LIST, null);
+        assertEquals(SourceOrder.class.getName(), javaClass.getClassName());
+        assertEquals(CollectionType.LIST, javaClass.getCollectionType());
+        assertNull(javaClass.getCollectionClassName());
+        assertEquals("/<>", javaClass.getPath());
+        validateComplexClass(javaClass);
+    }
+
+    @Test
+    public void testComplexTopmostArray() {
+        JavaClass javaClass = classInspectionService.inspectClass(SourceOrder.class, CollectionType.ARRAY, null);
+        assertEquals(SourceOrder.class.getName(), javaClass.getClassName());
+        assertEquals(CollectionType.ARRAY, javaClass.getCollectionType());
+        assertNull(javaClass.getCollectionClassName());
+        assertEquals("/[]", javaClass.getPath());
+        javaClass.setArrayDimensions(null); // skip dimension check
+        validateComplexClass(javaClass);
+        javaClass = classInspectionService.inspectClass(SourceOrder[].class, CollectionType.NONE, null);
+        assertEquals(SourceOrder.class.getName(), javaClass.getClassName());
+        assertEquals(CollectionType.ARRAY, javaClass.getCollectionType());
+        assertNull(javaClass.getCollectionClassName());
+        assertEquals("/[]", javaClass.getPath());
+        javaClass.setArrayDimensions(null); // skip dimension check
+        validateComplexClass(javaClass);
     }
 
     private void validateComplexClass(JavaClass c) {
@@ -77,7 +107,7 @@ public class ComplexClassInspectTest {
         assertNull(c.getName());
         assertEquals("io.atlasmap.java.test", c.getPackageName());
         assertNull(c.getSetMethod());
-        assertNull(c.getFieldType());
+        assertEquals(FieldType.COMPLEX, c.getFieldType());
         assertNotNull(c.getUri());
         assertNull(c.getValue());
 

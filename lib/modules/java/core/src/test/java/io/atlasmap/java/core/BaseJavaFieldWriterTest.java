@@ -3,10 +3,8 @@ package io.atlasmap.java.core;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import java.lang.reflect.Method;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import org.junit.Before;
 
@@ -30,11 +28,11 @@ import io.atlasmap.spi.AtlasInternalSession.Head;
 import io.atlasmap.v2.Audits;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldType;
-import io.atlasmap.v2.LookupTable;
 
 public abstract class BaseJavaFieldWriterTest {
     protected static final String DEFAULT_VALUE = "Some string.";
 
+    protected JavaFieldWriterUtil writerUtil = null;
     protected JavaFieldWriter writer = null;
     protected List<SegmentContext> segmentContexts = new LinkedList<>();
     protected SegmentContext lastSegmentContext = null;
@@ -50,12 +48,9 @@ public abstract class BaseJavaFieldWriterTest {
     @Before
     public void reset() {
         classLoader = Thread.currentThread().getContextClassLoader();
-        writer = new JavaFieldWriter(conversionService);
-        writer.setTargetValueConverter(new TargetValueConverter(classLoader, conversionService) {
-            public void populateTargetField(AtlasInternalSession session, LookupTable lookupTable, Field sourceField, Object parentObject, Field targetField) throws AtlasException {
-                return;
-            }
-        });
+        writerUtil = new JavaFieldWriterUtil(conversionService);
+        writer = new JavaFieldWriter(writerUtil);
+        writer.setTargetValueConverter(new TargetValueConverter(classLoader, conversionService, writerUtil));
         field = null;
         segmentContexts = new LinkedList<>();
 
@@ -78,10 +73,8 @@ public abstract class BaseJavaFieldWriterTest {
     }
 
     public void setupPath(String fieldPath) {
-        this.segmentContexts = new AtlasPath(fieldPath).getSegmentContexts(true);
-        for (SegmentContext ctx : this.segmentContexts) {
-            addClassForFieldPath(ctx.getSegmentPath(), String.class);
-        }
+        AtlasPath path = new AtlasPath(fieldPath);
+        this.segmentContexts = path.getSegments(true);
         this.lastSegmentContext = segmentContexts.get(segmentContexts.size() - 1);
         this.field = createField(fieldPath, DEFAULT_VALUE);
     }
@@ -125,91 +118,23 @@ public abstract class BaseJavaFieldWriterTest {
         writer.write(session);
     }
 
-    protected void addClassForFieldPath(String fieldPath, Class<?> clz) {
-        String fieldPathTrimmed = AtlasPath.removeCollectionIndexes(fieldPath);
-        @SuppressWarnings("unchecked")
-        Map<String, Class<?>> classesForFields = (Map<String, Class<?>>) getInternalState(writer, "classesForFields");
-        classesForFields.put(fieldPathTrimmed, clz);
-        setInternalState(writer, "classesForFields", classesForFields);
-    }
-
-    private Object getInternalState(Object target, String field) {
-        Class<?> c = target.getClass();
-        try {
-            java.lang.reflect.Field f = getFieldFromHierarchy(c, field);
-            f.setAccessible(true);
-            return f.get(target);
-        } catch (Exception e) {
-            throw new IllegalArgumentException("Unable to get internal state on a private field.", e);
-        }
-    }
-
-    private void setInternalState(Object target, String field, Object value) {
-        Class<?> c = target.getClass();
-        try {
-            java.lang.reflect.Field f = getFieldFromHierarchy(c, field);
-            f.setAccessible(true);
-            f.set(target, value);
-        } catch (Exception e) {
-            throw new IllegalArgumentException("Unable to set internal state on a private field.", e);
-        }
-    }
-
-    private java.lang.reflect.Field getFieldFromHierarchy(Class<?> clazz, String field) {
-        java.lang.reflect.Field f = getField(clazz, field);
-        while (f == null && clazz != Object.class) {
-            Class<?> superClazz = clazz.getSuperclass();
-            f = getField(superClazz, field);
-        }
-        if (f == null) {
-            throw new IllegalArgumentException("This field: '" + field + "' on this class: '" + clazz.getSimpleName() + "' is not declared within hierarchy of this class!");
-        }
-        return f;
-    }
-
-    private java.lang.reflect.Field getField(Class<?> clazz, String field) {
-        try {
-            return clazz.getDeclaredField(field);
-        } catch (NoSuchFieldException e) {
-            return null;
-        }
-    }
-
-    private void setTargetValue(Object targetValue) {
-        writer.setTargetValueConverter(new TargetValueConverter(classLoader, conversionService) {
-            @Override
-            public void populateTargetField(AtlasInternalSession session, LookupTable lookupTable, Field sourceField, Object parentObject, Field targetField) throws AtlasException {
-                targetField.setValue(targetValue);
-                return;
-            }
-        });
-    }
-
     protected void write(String path, String targetValue) throws AtlasException {
         Field field = createField(path, targetValue);
-        setTargetValue(targetValue);
         write(field);
     }
 
     protected void write(String path, int targetValue) throws AtlasException {
         Field field = createIntField(path, targetValue);
-        setTargetValue(targetValue);
         write(field);
     }
 
     protected void write(String path, StateEnumClassLong targetValue) throws AtlasException {
         Field field = createEnumField(path, targetValue);
-        setTargetValue(targetValue);
         write(field);
     }
 
-    protected Object findChildObject(Field field, SegmentContext segmentContext, Object parentObject) throws Exception {
-        Class<JavaFieldWriter> clazz = JavaFieldWriter.class;
-        Method method = clazz.getDeclaredMethod("findChildObject", Field.class, SegmentContext.class, Object.class);
-        boolean accessible = method.isAccessible();
-        if (!accessible) {
-            method.setAccessible(true);
-        }
-        return method.invoke(writer, field, segmentContext, parentObject);
+    protected void writeComplex(String path, Object targetValue) throws AtlasException {
+        Field field = createField(path, targetValue, FieldType.COMPLEX);
+        write(field);
     }
 }

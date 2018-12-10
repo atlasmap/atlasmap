@@ -44,6 +44,7 @@ import io.atlasmap.java.v2.JavaClass;
 import io.atlasmap.java.v2.MavenClasspathRequest;
 import io.atlasmap.java.v2.MavenClasspathResponse;
 import io.atlasmap.service.AtlasService;
+import io.atlasmap.v2.CollectionType;
 import io.atlasmap.v2.Json;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -95,7 +96,7 @@ public class JavaService {
     public Response getClass(@ApiParam("The fully qualified class name to inspect") @QueryParam("className") String className) {
         ClassInspectionService classInspectionService = new ClassInspectionService();
         classInspectionService.setConversionService(DefaultAtlasConversionService.getInstance());
-        JavaClass c = classInspectionService.inspectClass(className);
+        JavaClass c = classInspectionService.inspectClass(className, CollectionType.NONE, null);
         classInspectionService = null;
         return Response.ok().entity(toJson(c)).build();
     }
@@ -155,9 +156,13 @@ public class JavaService {
             JavaClass c = null;
             if (request.getClasspath() == null || request.getClasspath().isEmpty()) {
                 AtlasService atlasService = resourceContext.getResource(AtlasService.class);
-                c = classInspectionService.inspectClass(atlasService.getLibraryLoader(), request.getClassName());
+                c = classInspectionService.inspectClass(
+                        atlasService.getLibraryLoader(),
+                        request.getClassName(),
+                        request.getCollectionType(),
+                        request.getCollectionClassName());
             } else {
-                c = classInspectionService.inspectClass(request.getClassName(), request.getClasspath());
+                c = classInspectionService.inspectClass(request.getClassName(), request.getCollectionType(), request.getClasspath());
             }
             response.setJavaClass(c);
         } catch (Exception e) {

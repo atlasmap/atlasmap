@@ -31,7 +31,7 @@ public class PrimitiveValidationUtil {
     public static void validatePrimitive(JavaClass j, String name) throws Exception {
         validatePrimitiveCommon(j);
         assertEquals(name, j.getClassName());
-        assertNull(j.getCollectionType());
+        assertEquals(CollectionType.NONE, j.getCollectionType());
         assertNull(j.getArrayDimensions());
     }
 

@@ -32,8 +32,10 @@ import org.w3c.dom.Node;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.spi.AtlasFieldWriter;
 import io.atlasmap.spi.AtlasInternalSession;
+import io.atlasmap.v2.CollectionType;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldType;
+import io.atlasmap.xml.core.XmlPath.XmlSegmentContext;
 
 public class XmlFieldWriter extends XmlFieldTransformer implements AtlasFieldWriter {
     private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(XmlFieldWriter.class);
@@ -62,15 +64,15 @@ public class XmlFieldWriter extends XmlFieldTransformer implements AtlasFieldWri
         }
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug("Now processing field p={} t={} v={}", targetField.getPath(), targetField.getFieldType(),
+            LOG.debug("Now processing field path={} type={} value={}", targetField.getPath(), targetField.getFieldType(),
                     targetField.getValue());
         }
 
         XmlPath path = new XmlPath(targetField.getPath());
-        String lastSegment = path.getLastSegment();
+        XmlSegmentContext lastSegment = path.getLastSegment();
         Element parentNode = null;
-        String parentSegment = null;
-        for (String segment : path.getSegments()) {
+        XmlSegmentContext parentSegment = null;
+        for (XmlSegmentContext segment : path.getXmlSegments(false)) {
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Now processing segment: {}", segment);
                 LOG.debug("Parent element is currently: {}", XmlIOHelper.writeDocumentToString(true, parentNode));
@@ -78,21 +80,20 @@ public class XmlFieldWriter extends XmlFieldTransformer implements AtlasFieldWri
             if (parentNode == null) {
                 // processing root node
                 parentNode = document.getDocumentElement();
-                String cleanedSegment = XmlPath.cleanPathSegment(segment);
                 if (parentNode == null) {
                     if (LOG.isDebugEnabled()) {
-                        LOG.debug("Creating root element with name: {}", cleanedSegment);
+                        LOG.debug("Creating root element with name: {}", segment.getName());
                     }
                     // no root node exists yet, create root node with this segment name;
                     Element rootNode = createElement(segment);
                     addNamespacesToElement(rootNode, namespaces);
                     document.appendChild(rootNode);
                     parentNode = rootNode;
-                } else if (!(parentNode.getNodeName().equals(segment))) {
+                } else if (!(parentNode.getNodeName().equals(segment.getQName()))) {
                     // make sure root element's name matches.
                     throw new AtlasException(String.format(
                             "Root element name '%s' does not match expected name '%s' from path: %s",
-                            parentNode.getNodeName(), segment, targetField.getPath()));
+                            parentNode.getNodeName(), segment.getName(), targetField.getPath()));
                 }
                 parentSegment = segment;
             } else {
@@ -108,7 +109,7 @@ public class XmlFieldWriter extends XmlFieldTransformer implements AtlasFieldWri
                     break;
                 }
 
-                if (!XmlPath.isAttributeSegment(segment)) {
+                if (!segment.isAttribute()) {
                     // if current segment of path isn't attribute, it refers to a child element,
                     // find it or create it..
                     Element childNode = getChildNode(parentNode, parentSegment, segment);
@@ -137,22 +138,21 @@ public class XmlFieldWriter extends XmlFieldTransformer implements AtlasFieldWri
         }
     }
 
-    private void writeValue(Element parentNode, String segment, Field field) throws AtlasException {
+    private void writeValue(Element parentNode, XmlSegmentContext segment, Field field) throws AtlasException {
         if (LOG.isDebugEnabled()) {
             LOG.debug("Writing field value in parent node '{}', parentNode: {}",
                     segment, XmlIOHelper.writeDocumentToString(true, parentNode));
         }
         String value = convertValue(field);
-        if (XmlPath.isAttributeSegment(segment)) {
-            String cleanedSegment = XmlPath.cleanPathSegment(segment);
+        if (segment.isAttribute()) {
             if (this.enableAttributeNamespaces) {
                 if (LOG.isDebugEnabled()) {
                     LOG.debug("Attribute namespaces are enabled, determining namespace.");
                 }
                 String namespaceAlias = null;
                 String namespaceUri = null;
-                if (XmlPath.isNamespaceSegment(segment)) {
-                    namespaceAlias = XmlPath.getNamespace(segment);
+                if (segment.getNamespace() != null) {
+                    namespaceAlias = segment.getNamespace();
                     namespaceUri = this.namespaces.get(namespaceAlias);
                     LOG.debug("Parsed namespace alias '{}', from segment '{}', namespaceUri: {}",
                             namespaceAlias, segment, namespaceUri);
@@ -163,12 +163,12 @@ public class XmlFieldWriter extends XmlFieldTransformer implements AtlasFieldWri
                             segment, this.namespaces));
                 }
                 if (namespaceUri != null) {
-                    parentNode.setAttributeNS(namespaceUri, namespaceAlias + ":" + cleanedSegment, value);
+                    parentNode.setAttributeNS(namespaceUri, namespaceAlias + ":" + segment.getName(), value);
                 } else {
-                    parentNode.setAttribute(cleanedSegment, value);
+                    parentNode.setAttribute(segment.getName(), value);
                 }
             } else {
-                parentNode.setAttribute(cleanedSegment, value);
+                parentNode.setAttribute(segment.getName(), value);
             }
         } else { // set element value
             parentNode.setTextContent(value);
@@ -179,7 +179,7 @@ public class XmlFieldWriter extends XmlFieldTransformer implements AtlasFieldWri
         }
     }
 
-    private Element getChildNode(Element parentNode, String parentSegment, String segment) throws AtlasException {
+    private Element getChildNode(Element parentNode, XmlSegmentContext parentSegment, XmlSegmentContext segment) throws AtlasException {
         if (LOG.isDebugEnabled()) {
             LOG.debug("Looking for child node '{}' in parent '{}': {}",
                     segment, parentSegment, XmlIOHelper.writeDocumentToString(true, parentNode));
@@ -187,19 +187,19 @@ public class XmlFieldWriter extends XmlFieldTransformer implements AtlasFieldWri
         if (parentNode == null) {
             return null;
         }
-        String cleanedSegment = XmlPath.cleanPathSegment(segment);
-        String namespaceAlias = XmlPath.getNamespace(segment);
+        String cleanedSegmentName = segment.getName();
+        String namespaceAlias = segment.getNamespace();
         if (namespaceAlias != null && !namespaceAlias.isEmpty()) {
-            cleanedSegment = namespaceAlias + ":" + cleanedSegment;
+            cleanedSegmentName = namespaceAlias + ":" + cleanedSegmentName;
         }
-        List<Element> children = XmlIOHelper.getChildrenWithName(cleanedSegment, parentNode);
+        List<Element> children = XmlIOHelper.getChildrenWithName(cleanedSegmentName, parentNode);
         if (LOG.isDebugEnabled()) {
             LOG.debug("Found {} children in '{}' with the name '{}'",
-                    children.size(), parentSegment, cleanedSegment);
+                    children.size(), parentSegment, cleanedSegmentName);
         }
         Element childNode = children.size() > 0 ? children.get(0) : null;
-        if (children.size() > 0 && XmlPath.isCollectionSegment(segment)) {
-            int index = XmlPath.indexOfSegment(segment);
+        if (children.size() > 0 && segment.getCollectionType() != CollectionType.NONE) {
+            int index = segment.getCollectionIndex();
             childNode = null;
             if (children.size() > index) {
                 childNode = children.get(index);
@@ -216,20 +216,20 @@ public class XmlFieldWriter extends XmlFieldTransformer implements AtlasFieldWri
         return childNode;
     }
 
-    private Element createParentNode(Element parentNode, String parentSegment, String segment) throws AtlasException {
+    private Element createParentNode(Element parentNode, XmlSegmentContext parentSegment, XmlSegmentContext segment) throws AtlasException {
         if (LOG.isDebugEnabled()) {
             LOG.debug("Creating parent node '{}' under previous parent '{}'.", segment, parentSegment);
         }
         Element childNode = null;
-        String cleanedSegment = XmlPath.cleanPathSegment(segment);
-        if (XmlPath.isCollectionSegment(segment)) {
-            int index = XmlPath.indexOfSegment(segment);
-            String namespaceAlias = XmlPath.getNamespace(segment);
+        String cleanedSegmentName = segment.getName();
+        if (segment.getCollectionType() != CollectionType.NONE) {
+            Integer index = segment.getCollectionIndex();
+            String namespaceAlias = segment.getNamespace();
             if (namespaceAlias != null && !"".equals(namespaceAlias)) {
-                cleanedSegment = namespaceAlias + ":" + cleanedSegment;
+                cleanedSegmentName = namespaceAlias + ":" + cleanedSegmentName;
             }
 
-            List<Element> children = XmlIOHelper.getChildrenWithName(cleanedSegment, parentNode);
+            List<Element> children = XmlIOHelper.getChildrenWithName(cleanedSegmentName, parentNode);
 
             if (children.size() < (index + 1)) {
                 if (LOG.isDebugEnabled()) {
@@ -245,7 +245,7 @@ public class XmlFieldWriter extends XmlFieldTransformer implements AtlasFieldWri
                     LOG.debug("Child Element Array after resizing: {}", children);
                 }
             }
-            children = XmlIOHelper.getChildrenWithName(cleanedSegment, parentNode);
+            children = XmlIOHelper.getChildrenWithName(cleanedSegmentName, parentNode);
             childNode = children.get(index);
         } else {
             childNode = (Element) parentNode.appendChild(createElement(segment));
@@ -257,8 +257,7 @@ public class XmlFieldWriter extends XmlFieldTransformer implements AtlasFieldWri
         return childNode;
     }
 
-    private Element createElement(String segment) throws AtlasException {
-        String cleanedSegment = XmlPath.cleanPathSegment(segment);
+    private Element createElement(XmlSegmentContext segment) throws AtlasException {
         if (LOG.isDebugEnabled()) {
             LOG.debug("Creating element for segment '{}'.", segment);
         }
@@ -268,8 +267,8 @@ public class XmlFieldWriter extends XmlFieldTransformer implements AtlasFieldWri
             }
             String namespaceAlias = null;
             String namespaceUri = null;
-            if (XmlPath.isNamespaceSegment(segment)) {
-                namespaceAlias = XmlPath.getNamespace(segment);
+            if (segment.getNamespace() != null) {
+                namespaceAlias = segment.getNamespace();
                 namespaceUri = this.namespaces.get(namespaceAlias);
                 LOG.debug("Parsed namespace alias '{}', from segment '{}', namespaceUri: {}, known namespaces: {}",
                         namespaceAlias, segment, namespaceUri, this.namespaces);
@@ -280,10 +279,10 @@ public class XmlFieldWriter extends XmlFieldTransformer implements AtlasFieldWri
                         segment, this.namespaces));
             }
             if (namespaceUri != null) {
-                return document.createElementNS(namespaceUri, namespaceAlias + ":" + cleanedSegment);
+                return document.createElementNS(namespaceUri, namespaceAlias + ":" + segment.getName());
             }
         }
-        return document.createElement(cleanedSegment);
+        return document.createElement(segment.getName());
     }
 
     private String convertValue(Field field) {

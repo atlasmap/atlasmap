@@ -29,9 +29,11 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.core.AtlasPath;
+import io.atlasmap.core.AtlasPath.SegmentContext;
 import io.atlasmap.spi.AtlasFieldWriter;
 import io.atlasmap.spi.AtlasInternalSession;
 import io.atlasmap.v2.AtlasModelFactory;
+import io.atlasmap.v2.CollectionType;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldType;
 
@@ -72,7 +74,7 @@ public class JsonFieldWriter implements AtlasFieldWriter {
                     + targetField.getValue());
         }
         AtlasPath path = new AtlasPath(targetField.getPath());
-        String lastSegment = path.getLastSegment();
+        SegmentContext lastSegment = path.getLastSegment();
 
         if (this.rootNode == null) {
             if (path.hasCollectionRoot()) {
@@ -83,23 +85,28 @@ public class JsonFieldWriter implements AtlasFieldWriter {
         }
         ContainerNode<?> parentNode = this.rootNode;
 
-        String parentSegment = null;
-        for (String segment : path.getSegments()) {
+        SegmentContext parentSegment = null;
+        for (SegmentContext segment : path.getSegments(true)) {
             if (!segment.equals(lastSegment)) { // this is a parent node.
                 if (LOG.isDebugEnabled()) {
                     LOG.debug("Now processing parent segment: " + segment);
                 }
                 JsonNode childNode;
-                if (parentNode.equals(this.rootNode) && parentNode instanceof ArrayNode) {
-                    // taking care of topmost collection
-                    childNode = parentNode;
+                if (segment.isRoot()) {
+                    if (parentNode instanceof ArrayNode) {
+                        // taking care of topmost collection
+                        childNode = parentNode;
+                    } else {
+                        parentSegment = segment;
+                        continue;
+                    }
                 } else {
                     childNode = getChildNode(parentNode, parentSegment, segment);
                 }
                 if (childNode == null) {
                     childNode = createParentNode(parentNode, parentSegment, segment);
                 } else if (childNode instanceof ArrayNode) {
-                    int index = AtlasPath.indexOfSegment(segment);
+                    Integer index = segment.getCollectionIndex();
                     ArrayNode arrayChild = (ArrayNode) childNode;
                     if (arrayChild.size() < (index + 1)) {
                         if (LOG.isDebugEnabled()) {
@@ -132,7 +139,7 @@ public class JsonFieldWriter implements AtlasFieldWriter {
         }
     }
 
-    private void writeValue(ContainerNode<?> parentNode, String parentSegment, String segment, Field field)
+    private void writeValue(ContainerNode<?> parentNode, SegmentContext parentSegment, SegmentContext segment, Field field)
             throws AtlasException {
         if (LOG.isDebugEnabled()) {
             LOG.debug("Writing field value '" + segment + "' in parent node '" + parentSegment + "', parentNode: "
@@ -142,8 +149,8 @@ public class JsonFieldWriter implements AtlasFieldWriter {
         if (LOG.isDebugEnabled()) {
             LOG.debug("Value to write: " + valueNode);
         }
-        String cleanedSegment = AtlasPath.cleanPathSegment(segment);
-        if (AtlasPath.isCollectionSegment(segment)) {
+        String cleanedSegment = segment.getName();
+        if (segment.getCollectionType() != CollectionType.NONE) {
             // if this field is a collection, we need to place our value in an array
 
             // get or construct the array the value will be placed in
@@ -178,7 +185,7 @@ public class JsonFieldWriter implements AtlasFieldWriter {
             }
 
             // determine where in the array our value will go
-            int index = AtlasPath.indexOfSegment(segment);
+            Integer index = segment.getCollectionIndex();
 
             if (arrayChild.size() < (index + 1)) {
                 if (LOG.isDebugEnabled()) {
@@ -213,15 +220,15 @@ public class JsonFieldWriter implements AtlasFieldWriter {
         }
     }
 
-    private ObjectNode createParentNode(ContainerNode<?> parentNode, String parentSegment, String segment)
+    private ObjectNode createParentNode(ContainerNode<?> parentNode, SegmentContext parentSegment, SegmentContext segment)
             throws AtlasException {
         if (LOG.isDebugEnabled()) {
             LOG.debug("Creating parent node '" + segment + "' under previous parent '" + parentSegment + "' ("
                     + parentNode.getClass().getName() + ")");
         }
         ObjectNode childNode = null;
-        String cleanedSegment = AtlasPath.cleanPathSegment(segment);
-        if (AtlasPath.isCollectionSegment(segment)) {
+        String cleanedSegment = segment.getName();
+        if (segment.getCollectionType() != CollectionType.NONE) {
             ArrayNode arrayChild;
             if (parentNode instanceof ObjectNode) {
                 arrayChild = ((ObjectNode)parentNode).putArray(cleanedSegment);
@@ -231,7 +238,7 @@ public class JsonFieldWriter implements AtlasFieldWriter {
                 throw new AtlasException(String.format("Unknown JsonNode type '%s' for segment '%s'",
                         parentNode.getClass(), segment));
             }
-            int index = AtlasPath.indexOfSegment(segment);
+            Integer index = segment.getCollectionIndex();
 
             if (arrayChild.size() < (index + 1)) {
                 if (LOG.isDebugEnabled()) {
@@ -303,11 +310,11 @@ public class JsonFieldWriter implements AtlasFieldWriter {
         return valueNode;
     }
 
-    public static JsonNode getChildNode(ContainerNode<?> parentNode, String parentSegment, String segment) {
+    private JsonNode getChildNode(ContainerNode<?> parentNode, SegmentContext parentSegment, SegmentContext segment) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("Looking for child node '" + segment + "' in parent '" + parentSegment + "': " + parentNode);
         }
-        String cleanedSegment = AtlasPath.cleanPathSegment(segment);
+        String cleanedSegment = segment.getName();
         JsonNode childNode = parentNode.path(cleanedSegment);
         if (JsonNodeType.MISSING.equals(childNode.getNodeType())) {
             childNode = null;

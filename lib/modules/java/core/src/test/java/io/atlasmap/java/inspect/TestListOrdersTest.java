@@ -16,6 +16,7 @@ import io.atlasmap.java.v2.AtlasJavaModelFactory;
 import io.atlasmap.java.v2.JavaClass;
 import io.atlasmap.java.v2.JavaField;
 import io.atlasmap.v2.CollectionType;
+import io.atlasmap.v2.FieldType;
 
 public class TestListOrdersTest {
 
@@ -34,13 +35,13 @@ public class TestListOrdersTest {
 
     @Test
     public void testInspectJavaList() {
-        JavaClass c = classInspectionService.inspectClass(TestListOrders.class);
+        JavaClass c = classInspectionService.inspectClass(TestListOrders.class, CollectionType.NONE, null);
         assertNotNull(c);
         assertNull(c.getAnnotations());
         assertNull(c.getArrayDimensions());
         assertEquals("io.atlasmap.java.test.TestListOrders", c.getClassName());
         assertNull(c.getCollectionClassName());
-        assertNull(c.getCollectionType());
+        assertEquals(CollectionType.NONE, c.getCollectionType());
         assertNull(c.getGetMethod());
         assertNotNull(c.getJavaEnumFields());
         assertNotNull(c.getJavaEnumFields().getJavaEnumField());
@@ -50,7 +51,7 @@ public class TestListOrdersTest {
         assertNull(c.getName());
         assertEquals("io.atlasmap.java.test", c.getPackageName());
         assertNull(c.getSetMethod());
-        assertNull(c.getFieldType());
+        assertEquals(FieldType.COMPLEX, c.getFieldType());
         assertNotNull(c.getUri());
         assertEquals(String.format(AtlasJavaModelFactory.URI_FORMAT, "io.atlasmap.java.test.TestListOrders"),
                 c.getUri());

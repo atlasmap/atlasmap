@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.atlasmap.java.inspect;
+package io.atlasmap.java.core;
 
 import java.util.ArrayList;
 import java.util.Arrays;

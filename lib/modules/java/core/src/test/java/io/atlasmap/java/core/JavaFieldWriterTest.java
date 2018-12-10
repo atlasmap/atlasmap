@@ -5,7 +5,9 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -30,8 +32,7 @@ public class JavaFieldWriterTest extends BaseJavaFieldWriterTest {
 
     @Test
     public void testSimpleClassLookup() throws Exception {
-        addClassForFieldPath("/", TargetTestClass.class);
-        addClassForFieldPath("/address", TargetAddress.class);
+        this.writer.setRootObject(new TargetTestClass());
         write("/address/addressLine1", "123 any street");
         TargetTestClass o = (TargetTestClass) writer.getRootObject();
         ensureNotNullAndClass(o, TargetTestClass.class);
@@ -41,14 +42,10 @@ public class JavaFieldWriterTest extends BaseJavaFieldWriterTest {
 
     @Test
     public void testClassLookupFromField() throws Exception {
-        JavaField f = createField("/", null);
-        f.setClassName(TestListOrders.class.getName());
-        f.setFieldType(FieldType.COMPLEX);
-        write(f);
-        TestListOrders o = (TestListOrders) writer.getRootObject();
-        ensureNotNullAndClass(o, TestListOrders.class);
+        TestListOrders o = new TestListOrders();
+        writer.setRootObject(o);
 
-        f = createField("/orders<4>", null);
+        JavaField f = createField("/orders<4>", null);
         f.setClassName(TargetOrder.class.getName());
         f.setFieldType(FieldType.COMPLEX);
         write(f);
@@ -92,7 +89,7 @@ public class JavaFieldWriterTest extends BaseJavaFieldWriterTest {
 
     @Test
     public void testPrimitiveArrayLookup() throws Exception {
-        addClassForFieldPath("/", TargetFlatPrimitiveClass.class);
+        writer.setRootObject(new TargetFlatPrimitiveClass());
         write("/intArrayField[10]", 3425);
         TargetFlatPrimitiveClass o = (TargetFlatPrimitiveClass) writer.getRootObject();
         ensureNotNullAndClass(o, TargetFlatPrimitiveClass.class);
@@ -113,13 +110,13 @@ public class JavaFieldWriterTest extends BaseJavaFieldWriterTest {
 
     @Test(expected = AtlasException.class)
     public void testClassLookupAbstract() throws Exception {
-        addClassForFieldPath("/", TargetTestClass.class);
+        writer.setRootObject(new TargetTestClass());
         write(createField("/orders[4]/address/addressLine1", "hello world."));
     }
 
     @Test
     public void testClassLookupReflection() throws Exception {
-        addClassForFieldPath("/", TargetTestClass.class);
+        writer.setRootObject(new TargetTestClass());
         write("/address/addressLine1", "123 any street");
         TargetTestClass o = (TargetTestClass) writer.getRootObject();
         ensureNotNullAndClass(o, TargetTestClass.class);
@@ -129,7 +126,7 @@ public class JavaFieldWriterTest extends BaseJavaFieldWriterTest {
 
     @Test
     public void testSimpleWrite() throws Exception {
-        addClassForFieldPath("/", TargetAddress.class);
+        writer.setRootObject(new TargetAddress());
         write(createField("/addressLine1", "1234 some street."));
         write(createField("/addressLine2", "po box wherever"));
         write(createField("/city", "Round Rock"));
@@ -146,9 +143,9 @@ public class JavaFieldWriterTest extends BaseJavaFieldWriterTest {
 
     @Test
     public void testSimpleWriteCollectionList() throws Exception {
-        addClassForFieldPath("/", TestListOrders.class);
-        addClassForFieldPath("/orders<5>", TargetOrder.class);
-        addClassForFieldPath("/orders<5>/address", TargetAddress.class);
+        writer.setRootObject(new TestListOrders());
+        writeComplex("/orders<4>", new TargetOrder());
+        writeComplex("/orders<4>/address", new TargetAddress());
         write("/orders<4>/address/addressLine1", "hello world.");
         TestListOrders o = (TestListOrders) writer.getRootObject();
         ensureNotNullAndClass(o, TestListOrders.class);
@@ -168,7 +165,7 @@ public class JavaFieldWriterTest extends BaseJavaFieldWriterTest {
 
     @Test
     public void testWriteCollectionImpls() throws Exception {
-        addClassForFieldPath("/", TargetCollectionsClass.class);
+        writer.setRootObject(new TargetCollectionsClass());
         write("/list<0>", "list0");
         write("/linkedList<1>", "linkedList1");
         write("/arrayList<2>", "arrayList2");
@@ -185,13 +182,13 @@ public class JavaFieldWriterTest extends BaseJavaFieldWriterTest {
 
     @Test
     public void testSimpleWriteCollectionArray() throws Exception {
-        addClassForFieldPath("/", TargetOrderArray.class);
-        addClassForFieldPath("/orders[5]", TargetOrder.class);
-        addClassForFieldPath("/orders[5]/address", TargetAddress.class);
+        writer.setRootObject(new TargetOrderArray());
+        writeComplex("/orders[4]", new TargetOrder());
+        writeComplex("/orders[4]/address", new TargetAddress());
         write("/orders[4]/address/addressLine1", "hello world.");
         TargetOrderArray o = (TargetOrderArray) writer.getRootObject();
         ensureNotNullAndClass(o, TargetOrderArray.class);
-        ensureNotNullAndClass(o.getOrders(), TargetOrder[].class);
+        ensureNotNullAndClass(o.getOrders(), BaseOrder[].class);
         assertEquals(5, o.getOrders().length);
         for (int i = 0; i < 5; i++) {
             System.out.println("Checking #" + i);
@@ -207,11 +204,15 @@ public class JavaFieldWriterTest extends BaseJavaFieldWriterTest {
 
     @Test
     public void testExpandCollectionList() throws Exception {
-        addClassForFieldPath("/", TestListOrders.class);
-        addClassForFieldPath("/orders<5>", TargetOrder.class);
-        addClassForFieldPath("/orders<5>/address", TargetAddress.class);
+        writer.setRootObject(new TestListOrders());
+        writeComplex("/orders<4>", new TargetOrder());
+        writeComplex("/orders<4>/address", new TargetAddress());
         write("/orders<4>/address/addressLine1", "hello world1.");
+        writeComplex("/orders<14>", new TargetOrder());
+        writeComplex("/orders<14>/address", new TargetAddress());
         write("/orders<14>/address/addressLine1", "hello world2.");
+        writeComplex("/orders<2>", new TargetOrder());
+        writeComplex("/orders<2>/address", new TargetAddress());
         write("/orders<2>/address/addressLine1", "hello world3.");
         TestListOrders o = (TestListOrders) writer.getRootObject();
         ensureNotNullAndClass(o, TestListOrders.class);
@@ -233,15 +234,19 @@ public class JavaFieldWriterTest extends BaseJavaFieldWriterTest {
 
     @Test
     public void testExpandCollectionArray() throws Exception {
-        addClassForFieldPath("/", TargetOrderArray.class);
-        addClassForFieldPath("/orders[5]", TargetOrder.class);
-        addClassForFieldPath("/orders[5]/address", TargetAddress.class);
+        writer.setRootObject(new TargetOrderArray());
+        writeComplex("/orders[4]", new TargetOrder());
+        writeComplex("/orders[4]/address", new TargetAddress());
         write("/orders[4]/address/addressLine1", "hello world1.");
+        writeComplex("/orders[14]", new TargetOrder());
+        writeComplex("/orders[14]/address", new TargetAddress());
         write("/orders[14]/address/addressLine1", "hello world2.");
+        writeComplex("/orders[2]", new TargetOrder());
+        writeComplex("/orders[2]/address", new TargetAddress());
         write("/orders[2]/address/addressLine1", "hello world3.");
         TargetOrderArray o = (TargetOrderArray) writer.getRootObject();
         ensureNotNullAndClass(o, TargetOrderArray.class);
-        ensureNotNullAndClass(o.getOrders(), TargetOrder[].class);
+        ensureNotNullAndClass(o.getOrders(), BaseOrder[].class);
         assertEquals(15, o.getOrders().length);
         for (int i = 0; i < 15; i++) {
             System.out.println("Checking #" + i);
@@ -259,10 +264,7 @@ public class JavaFieldWriterTest extends BaseJavaFieldWriterTest {
 
     @Test
     public void testWritingPrimitiveArrays() throws Exception {
-        addClassForFieldPath("/", TargetFlatPrimitiveClass.class);
-        addClassForFieldPath("/intArrayField[34]", int.class);
-        addClassForFieldPath("/boxedStringArrayField[312]", String.class);
-
+        writer.setRootObject(new TargetFlatPrimitiveClass());
         write("/intArrayField[10]", 3425);
 
         TargetFlatPrimitiveClass o = (TargetFlatPrimitiveClass) writer.getRootObject();
@@ -284,29 +286,19 @@ public class JavaFieldWriterTest extends BaseJavaFieldWriterTest {
 
     @Test
     public void testFullWrite() throws Exception {
-        addClassForFieldPath("/", TargetTestClass.class);
-        addClassForFieldPath("/address", TargetAddress.class);
-        addClassForFieldPath("/listOrders", TestListOrders.class);
-        addClassForFieldPath("/listOrders/orders<5>", TargetOrder.class);
-        addClassForFieldPath("/listOrders/orders<5>/address", TargetAddress.class);
-        addClassForFieldPath("/orderArray", TargetOrderArray.class);
-        addClassForFieldPath("/orderArray/orders[5]", TargetOrder.class);
-        addClassForFieldPath("/orderArray/orders[5]/contact", TargetContact.class);
-        addClassForFieldPath("/primitives", TargetFlatPrimitiveClass.class);
-        addClassForFieldPath("/primitives/intArrayField[]", int.class);
-        addClassForFieldPath("/primitives/boxedStringArrayField[19]", String.class);
-        addClassForFieldPath("/statesLong", StateEnumClassLong.class);
-
+        writer.setRootObject(new TargetTestClass());
         write("/name", "someName");
 
         TargetTestClass o = (TargetTestClass) writer.getRootObject();
         ensureNotNullAndClass(o, TargetTestClass.class);
         assertEquals("someName", o.getName());
 
+        writeComplex("/address", new TargetAddress());
         write("/address/addressLine1", "123 any street");
         ensureNotNullAndClass(o.getAddress(), TargetAddress.class);
         assertEquals("123 any street", o.getAddress().getAddressLine1());
 
+        writeComplex("/listOrders/orders<5>", new TargetOrder());
         write("/listOrders/orders<5>/orderId", 1234);
         ensureNotNullAndClass(o.getListOrders(), TestListOrders.class);
         ensureNotNullAndClass(o.getListOrders().getOrders(), LinkedList.class);
@@ -324,6 +316,8 @@ public class JavaFieldWriterTest extends BaseJavaFieldWriterTest {
         BaseOrder order = o.getListOrders().getOrders().get(5);
         assertEquals((Integer) 1234, order.getOrderId());
 
+        writeComplex("/listOrders/orders<2>", new TargetOrder());
+        writeComplex("/listOrders/orders<2>/address", new TargetAddress());
         write("/listOrders/orders<2>/address/city", "Austin");
         assertEquals(6, o.getListOrders().getOrders().size());
         // ensure earlier fields are ok
@@ -338,8 +332,10 @@ public class JavaFieldWriterTest extends BaseJavaFieldWriterTest {
         ensureNotNullAndClass(o.getOrderArray(), TargetOrderArray.class);
         assertEquals((Integer) 56, o.getOrderArray().getNumberOrders());
 
+        writeComplex("/orderArray/orders[2]", new TargetOrder());
+        writeComplex("/orderArray/orders[2]/contact", new TargetContact());
         write("/orderArray/orders[2]/contact/firstName", "fName");
-        ensureNotNullAndClass(o.getOrderArray().getOrders(), TargetOrder[].class);
+        ensureNotNullAndClass(o.getOrderArray().getOrders(), BaseOrder[].class);
         assertEquals(3, o.getOrderArray().getOrders().length);
         for (int i = 0; i < 3; i++) {
             System.out.println("Checking #" + i);
@@ -432,114 +428,52 @@ public class JavaFieldWriterTest extends BaseJavaFieldWriterTest {
     }
 
     @Test
-    public void testFindChildObject() throws Exception {
-        setupPath("/contact");
-        assertTrue(findChildObject(field, lastSegmentContext, targetTestClassInstance) == targetTestClassInstance.getContact());
-
-        reset();
-        setupPath("/address");
-        assertTrue(findChildObject(field, lastSegmentContext, targetTestClassInstance) == targetTestClassInstance.getAddress());
-
-        reset();
-        setupPath("/nothing");
-        assertTrue(findChildObject(field, lastSegmentContext, targetTestClassInstance) == null);
-
-        reset();
-        setupPath("/orders<0>");
-        assertTrue(findChildObject(field, lastSegmentContext, targetOrderListInstance) == targetOrderListInstance.getOrders().get(0));
-
-        reset();
-        setupPath("/orders<1>");
-        assertTrue(findChildObject(field, lastSegmentContext, targetOrderListInstance) == targetOrderListInstance.getOrders().get(1));
-
-        reset();
-        setupPath("/orders<2>");
-        assertTrue(findChildObject(field, lastSegmentContext, targetOrderListInstance) == null);
-
-        reset();
-        setupPath("/orders[0]");
-        assertTrue(findChildObject(field, lastSegmentContext, targetOrderArrayInstance) == targetOrderArrayInstance.getOrders()[0]);
-
-        reset();
-        setupPath("/orders[1]");
-        assertTrue(findChildObject(field, lastSegmentContext, targetOrderArrayInstance) == targetOrderArrayInstance.getOrders()[1]);
-
-        reset();
-        setupPath("/orders[2]");
-        assertTrue(findChildObject(field, lastSegmentContext, targetOrderArrayInstance) == null);
+    public void testTopmostArrayString() throws Exception {
+        writer.setRootObject(new String[0]);
+        write("/[0]", "zero");
+        write("/[1]", "one");
+        String[] o = (String[]) writer.getRootObject();
+        ensureNotNullAndClass(o, String[].class);
+        assertEquals("zero", o[0]);
+        assertEquals("one", o[1]);
     }
 
-    /* these are less critical and are exercised by above tests for now */
+    @Test
+    public void testTopmostListString() throws Exception {
+        writer.setRootObject(new ArrayList<String>());
+        write("/<0>", "zero");
+        write("/<1>", "one");
+        List<String> o = (List<String>) writer.getRootObject();
+        ensureNotNullAndClass(o, ArrayList.class);
+        assertEquals("zero", o.get(0));
+        assertEquals("one", o.get(1));
+    }
 
-    /*
-     * @Test(expected=AtlasException.class) public void testFindChildObjectError()
-     * throws Exception { throw new Exception("Not implemented yet."); }
-     *
-     * @Test public void testCreateObject() throws Exception { }
-     *
-     * @Test(expected=AtlasException.class) public void testCreateObjectError()
-     * throws Exception { }
-     *
-     * @Test(expected=AtlasException.class) public void testWriteError() throws
-     * Exception { throw new Exception("Not implemented yet."); }
-     *
-     * @Test public void testCreateParentObject() throws Exception { throw new
-     * Exception("Not implemented yet."); }
-     *
-     * @Test(expected=AtlasException.class) public void
-     * testCreateParentObjectError() throws Exception { throw new
-     * Exception("Not implemented yet."); }
-     *
-     * @Test public void testExpandCollectionToFitItem() throws Exception { throw
-     * new Exception("Not implemented yet."); }
-     *
-     * @Test(expected=AtlasException.class) public void
-     * testExpandCollectionToFitItemError() throws Exception { throw new
-     * Exception("Not implemented yet."); }
-     *
-     * @Test public void testAddChildObject() throws Exception { throw new
-     * Exception("Not implemented yet."); }
-     *
-     * @Test(expected=AtlasException.class) public void testAddChildObjectError()
-     * throws Exception { throw new Exception("Not implemented yet."); }
-     *
-     * @Test(expected=AtlasException.class) public void
-     * testGetObjectFromParentError() throws Exception { throw new
-     * Exception("Not implemented yet."); }
-     *
-     * @Test(expected=AtlasException.class) public void testSetObjectOnParentError()
-     * throws Exception { throw new Exception("Not implemented yet."); }
-     *
-     * @Test public void testConvertValue() throws Exception { throw new
-     * Exception("Not implemented yet."); }
-     *
-     * @Test(expected=AtlasException.class) public void testConvertValueError()
-     * throws Exception { throw new Exception("Not implemented yet."); }
-     *
-     * @Test public void testGetCollectionSize() throws Exception { throw new
-     * Exception("Not implemented yet."); }
-     *
-     * @Test(expected=AtlasException.class) public void testGetCollectionSizeError()
-     * throws Exception { throw new Exception("Not implemented yet."); }
-     *
-     * @Test public void testCreateCollectionWrapperObject() throws Exception {
-     * throw new Exception("Not implemented yet."); }
-     *
-     * @Test(expected=AtlasException.class) public void
-     * testCreateCollectionWrapperObjectError() throws Exception { throw new
-     * Exception("Not implemented yet."); }
-     *
-     * @Test public void testGetCollectionItem() throws Exception { throw new
-     * Exception("Not implemented yet."); }
-     *
-     * @Test(expected=AtlasException.class) public void testGetCollectionItemError()
-     * throws Exception { throw new Exception("Not implemented yet."); }
-     *
-     * @Test public void testCollectionHasRoomForIndex() throws Exception { throw
-     * new Exception("Not implemented yet."); }
-     *
-     * @Test(expected=AtlasException.class) public void
-     * testCollectionHasRoomForIndexError() throws Exception { throw new
-     * Exception("Not implemented yet."); }
-     */
+    @Test
+    public void testTopmostArrayComplex() throws Exception {
+        writer.setRootObject(new TargetTestClass[0]);
+        writer.setCollectionItemClass(TargetTestClass.class);
+        writeComplex("/[0]/address", new TargetAddress());
+        write("/[0]/address/addressLine1", "zero");
+        writeComplex("/[1]/address", new TargetAddress());
+        write("/[1]/address/addressLine1", "one");
+        TargetTestClass[] o = (TargetTestClass[]) writer.getRootObject();
+        ensureNotNullAndClass(o, TargetTestClass[].class);
+        assertEquals("zero", o[0].getAddress().getAddressLine1());
+        assertEquals("one", o[1].getAddress().getAddressLine1());
+    }
+
+    @Test
+    public void testTopmostListComplex() throws Exception {
+        writer.setRootObject(new ArrayList<TargetTestClass>());
+        writer.setCollectionItemClass(TargetTestClass.class);
+        writeComplex("/<0>/address", new TargetAddress());
+        write("/<0>/address/addressLine1", "zero");
+        writeComplex("/<1>/address", new TargetAddress());
+        write("/<1>/address/addressLine1", "one");
+        List<TargetTestClass> o = (List<TargetTestClass>) writer.getRootObject();
+        ensureNotNullAndClass(o, ArrayList.class);
+        assertEquals("zero", o.get(0).getAddress().getAddressLine1());
+        assertEquals("one", o.get(1).getAddress().getAddressLine1());
+    }
 }

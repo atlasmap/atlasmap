@@ -74,6 +74,8 @@ public interface AtlasConversionService {
     Object convertType(Object sourceValue, String sourceFormat, Class<?> targetType, String targetFormat)
             throws AtlasConversionException;
 
+    boolean isConvertionAvailableFor(Object sourceValue, Class<?> targetType);
+
     Class<?> boxOrUnboxPrimitive(Class<?> clazz);
 
     Class<?> boxOrUnboxPrimitive(String clazzName);

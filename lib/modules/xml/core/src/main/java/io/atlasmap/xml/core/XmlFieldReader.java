@@ -32,7 +32,6 @@ import org.w3c.dom.Element;
 
 import io.atlasmap.api.AtlasConversionException;
 import io.atlasmap.api.AtlasException;
-import io.atlasmap.core.AtlasPath.SegmentContext;
 import io.atlasmap.core.AtlasUtil;
 import io.atlasmap.spi.AtlasConversionService;
 import io.atlasmap.spi.AtlasFieldReader;
@@ -40,11 +39,13 @@ import io.atlasmap.spi.AtlasInternalSession;
 import io.atlasmap.v2.AtlasMapping;
 import io.atlasmap.v2.AtlasModelFactory;
 import io.atlasmap.v2.AuditStatus;
+import io.atlasmap.v2.CollectionType;
 import io.atlasmap.v2.DataSource;
 import io.atlasmap.v2.DataSourceType;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldGroup;
 import io.atlasmap.v2.FieldType;
+import io.atlasmap.xml.core.XmlPath.XmlSegmentContext;
 import io.atlasmap.xml.v2.XmlDataSource;
 import io.atlasmap.xml.v2.XmlField;
 import io.atlasmap.xml.v2.XmlNamespace;
@@ -86,14 +87,15 @@ public class XmlFieldReader extends XmlFieldTransformer implements AtlasFieldRea
             LOG.debug("Reading source value for field: " + xmlField.getPath());
         }
         Optional<XmlNamespaces> xmlNamespaces = getSourceNamespaces(session, xmlField);
-        SegmentContext lastSegment = null;
+        XmlSegmentContext lastSegment = null;
         List<Element> parentNodes = Arrays.asList(document.getDocumentElement());
-        for (SegmentContext sc : new XmlPath(xmlField.getPath()).getSegmentContexts(false)) {
+        XmlPath path = new XmlPath(xmlField.getPath());
+        for (XmlSegmentContext sc : path.getXmlSegments(false)) {
             lastSegment = sc;
             if (LOG.isDebugEnabled()) {
-                LOG.debug("Now processing segment: " + sc.getSegment());
+                LOG.debug("Now processing segment: " + sc.getName());
             }
-            if (sc.getPrev() == null) {
+            if (path.getParentSegmentOf(sc) == null || path.getParentSegmentOf(sc).isRoot()) {
                 if (LOG.isDebugEnabled()) {
                     LOG.debug("Skipping root segment: " + sc);
                 }
@@ -109,19 +111,19 @@ public class XmlFieldReader extends XmlFieldTransformer implements AtlasFieldRea
         return session.head().getSourceField();
     }
 
-    private List<Element> extractSegment(List<Element> parentNodes, SegmentContext sc, Optional<XmlNamespaces> xmlNamespaces) throws AtlasException {
+    private List<Element> extractSegment(List<Element> parentNodes, XmlSegmentContext sc, Optional<XmlNamespaces> xmlNamespaces) throws AtlasException {
         List<Element> answer = new LinkedList<>();
         for (Element parentNode : parentNodes) {
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Parent element is currently: " + XmlIOHelper.writeDocumentToString(true, parentNode));
             }
-            if (XmlPath.isAttributeSegment(sc.getSegment())) {
+            if (sc.isAttribute()) {
                 answer.add(parentNode);
                 continue;
             }
 
-            String childrenElementName = XmlPath.cleanPathSegment(sc.getSegment());
-            String namespaceAlias = XmlPath.getNamespace(sc.getSegment());
+            String childrenElementName = sc.getName();
+            String namespaceAlias = sc.getNamespace();
             Optional<String> namespace = getNamespace(xmlNamespaces, namespaceAlias);
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Looking for children elements with name: " + childrenElementName);
@@ -134,8 +136,8 @@ public class XmlFieldReader extends XmlFieldTransformer implements AtlasFieldRea
                 }
                 continue;
             }
-            if (XmlPath.isCollectionSegment(sc.getSegment())) {
-                Integer index = XmlPath.indexOfSegment(sc.getSegment());
+            if (sc.getCollectionType() != CollectionType.NONE) {
+                Integer index = sc.getCollectionIndex();
                 if (index == null) {
                     // TODO process collection
                     answer.addAll(children);
@@ -156,7 +158,7 @@ public class XmlFieldReader extends XmlFieldTransformer implements AtlasFieldRea
         return answer;
     }
 
-    private void readValue(AtlasInternalSession session, List<Element> parentNodes, SegmentContext sc, XmlField xmlField) {
+    private void readValue(AtlasInternalSession session, List<Element> parentNodes, XmlSegmentContext sc, XmlField xmlField) {
         if (xmlField.getFieldType() == null) {
             xmlField.setFieldType(FieldType.STRING);
         }
@@ -181,8 +183,8 @@ public class XmlFieldReader extends XmlFieldTransformer implements AtlasFieldRea
             }
 
             String value = parentNode.getTextContent();
-            if (XmlPath.isAttributeSegment(sc.getSegment())) {
-                String attributeName = XmlPath.getAttribute(sc.getSegment());
+            if (sc.isAttribute()) {
+                String attributeName = sc.getQName();
                 value = parentNode.getAttribute(attributeName);
             }
 

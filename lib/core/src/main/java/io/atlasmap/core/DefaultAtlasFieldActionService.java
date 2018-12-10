@@ -331,11 +331,21 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
                 tmpSourceObject = processAction(action, detail, tmpSourceObject);
             }
 
-            currentType = detail.getTargetType();
             if (tmpSourceObject != null && tmpSourceObject.getClass().isArray()) {
                 tmpSourceObject = Arrays.asList((Object[]) tmpSourceObject);
             } else if ((tmpSourceObject instanceof java.util.Collection) && !(tmpSourceObject instanceof List)) {
                 tmpSourceObject = Arrays.asList(((java.util.Collection<?>) tmpSourceObject).toArray());
+            }
+            currentType = null;
+            if (tmpSourceObject instanceof List) {
+                for (Object item : ((List<?>)tmpSourceObject)) {
+                    if (item != null) {
+                        currentType = conversionService.fieldTypeFromClass(item.getClass());
+                        break;
+                    }
+                }
+            } else if (tmpSourceObject != null) {
+                currentType = conversionService.fieldTypeFromClass(tmpSourceObject.getClass());
             }
         }
 

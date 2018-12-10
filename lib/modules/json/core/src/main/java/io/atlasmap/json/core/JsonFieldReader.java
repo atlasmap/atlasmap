@@ -30,6 +30,7 @@ import io.atlasmap.api.AtlasConversionException;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.core.AtlasPath;
 import io.atlasmap.core.AtlasUtil;
+import io.atlasmap.core.AtlasPath.SegmentContext;
 import io.atlasmap.json.v2.JsonField;
 import io.atlasmap.spi.AtlasConversionService;
 import io.atlasmap.spi.AtlasFieldReader;
@@ -71,24 +72,24 @@ public class JsonFieldReader implements AtlasFieldReader {
         }
 
         List<JsonNode> valueNodes = new LinkedList<>();
-        if (path.getSegments().size() >= 1) {
-            JsonNode valueNode = null;
-            if (rootNode.size() == 1 && !path.getSegments().get(0).startsWith(rootNode.fieldNames().next())) {
+        if (path.getSegments(true).size() >= 1) {
+            if (rootNode.size() == 1 && !path.hasCollectionRoot()
+                     && !path.getSegments(false).get(0).getExpression().startsWith(rootNode.fieldNames().next())) {
                 // peel off a rooted object
-                valueNode = rootNode.elements().next();
+                valueNodes.add(rootNode.elements().next());
+            } else if (path.hasCollectionRoot()) {
+                valueNodes.add(rootNode);
+                valueNodes = getValueNode(session, field, valueNodes, path.getRootSegment());
             } else {
-                valueNode = rootNode;
+                valueNodes.add(rootNode);
             }
 
-            if (valueNode !=null) {
-                valueNodes.add(valueNode);
-            }
             // need to walk the path....
-            for (String nodeName : path.getSegments()) {
+            for (SegmentContext segmentContext : path.getSegments(false)) {
                 if (valueNodes.size() == 0) {
                     break;
                 }
-                valueNodes = getValueNode(session, field, valueNodes, nodeName);
+                valueNodes = getValueNode(session, field, valueNodes, segmentContext);
             }
         }
         if (fieldGroup != null) {
@@ -112,16 +113,15 @@ public class JsonFieldReader implements AtlasFieldReader {
         return field;
     }
 
-    private List<JsonNode> getValueNode(AtlasInternalSession session, Field field, List<JsonNode> parents, String nodeName) {
+    private List<JsonNode> getValueNode(AtlasInternalSession session, Field field, List<JsonNode> parents, SegmentContext segmentContext) {
         boolean isCollection = false;
-        String strippedNodeName = nodeName;
+        String strippedNodeName = segmentContext.getName();
         Integer index = null;
         List<JsonNode> answer = new LinkedList<>();
 
-        if (AtlasPath.isCollection(nodeName)) {
+        if (segmentContext.getCollectionType() != CollectionType.NONE) {
             isCollection = true;
-            index = AtlasPath.indexOfSegment(nodeName);
-            strippedNodeName = AtlasPath.cleanPathSegment(nodeName);
+            index = segmentContext.getCollectionIndex();
             if (strippedNodeName.isEmpty()) {
                 for (JsonNode parent : parents) {
                     if (parent == null) {
@@ -138,10 +138,9 @@ public class JsonFieldReader implements AtlasFieldReader {
                     } else if (index >= 0 && index < parent.size()) {
                         answer.add(parent.get(index));
                     } else {
-                        AtlasUtil.addAudit(session, field.getDocId(),
-                                String.format("Detected out of range index for field p=%s, ignoring...", nodeName),
-                                field.getPath(), AuditStatus.WARN, parent.asText());
-                        LOG.warn(String.format("", nodeName));
+                        String formatted = String.format("Detected out of range index for field p=%s, ignoring...", segmentContext.getExpression());
+                        AtlasUtil.addAudit(session, field.getDocId(), formatted, field.getPath(), AuditStatus.WARN, parent.asText());
+                        LOG.warn(formatted);
                     }
                 }
                 return answer;
@@ -176,10 +175,9 @@ public class JsonFieldReader implements AtlasFieldReader {
             } else if (index >= 0 && index < node.size()) {
                 answer.add(node.get(index));
             } else {
-                AtlasUtil.addAudit(session, field.getDocId(),
-                        String.format("Detected out of range index for field p=%s, ignoring...", nodeName),
-                        field.getPath(), AuditStatus.WARN, node.asText());
-                LOG.warn(String.format("", nodeName));
+                String formatted = String.format("Detected out of range index for field p=%s, ignoring...", segmentContext.getExpression());
+                AtlasUtil.addAudit(session, field.getDocId(), formatted, field.getPath(), AuditStatus.WARN, node.asText());
+                LOG.warn(formatted);
             }
         }
         return answer;
@@ -189,6 +187,16 @@ public class JsonFieldReader implements AtlasFieldReader {
         if (valueNode.isNull()) {
             return null;
             // we can't detect field type if it's null node
+        }
+        if (valueNode.isObject()) {
+            jsonField.setFieldType(FieldType.COMPLEX);
+            return null;
+        }
+        if (valueNode.isArray()) {
+            AtlasUtil.addAudit(session, jsonField.getDocId(),
+                    String.format("Unexpected array node is detected: '%s'", valueNode.asText()),
+                    jsonField.getPath(), AuditStatus.ERROR, valueNode.asText());
+            return null;
         }
 
         if (jsonField.getFieldType() != null) { // mapping is overriding the fieldType

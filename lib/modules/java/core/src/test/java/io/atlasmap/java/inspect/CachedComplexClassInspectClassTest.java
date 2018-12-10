@@ -29,7 +29,9 @@ import io.atlasmap.java.test.CachedComplexClass;
 import io.atlasmap.java.v2.AtlasJavaModelFactory;
 import io.atlasmap.java.v2.JavaClass;
 import io.atlasmap.java.v2.JavaField;
+import io.atlasmap.v2.CollectionType;
 import io.atlasmap.v2.FieldStatus;
+import io.atlasmap.v2.FieldType;
 
 public class CachedComplexClassInspectClassTest {
 
@@ -48,7 +50,7 @@ public class CachedComplexClassInspectClassTest {
 
     @Test
     public void testCachedComplexClass() {
-        JavaClass c = classInspectionService.inspectClass(CachedComplexClass.class);
+        JavaClass c = classInspectionService.inspectClass(CachedComplexClass.class, CollectionType.NONE, null);
         assertNotNull(c);
         assertNull(c.getAnnotations());
         assertNull(c.getArrayDimensions());
@@ -62,7 +64,7 @@ public class CachedComplexClassInspectClassTest {
         assertNull(c.getName());
         assertEquals("io.atlasmap.java.test", c.getPackageName());
         assertNull(c.getSetMethod());
-        assertNull(c.getFieldType());
+        assertEquals(FieldType.COMPLEX, c.getFieldType());
         assertNotNull(c.getUri());
         assertEquals(String.format(AtlasJavaModelFactory.URI_FORMAT, "io.atlasmap.java.test.CachedComplexClass"),
                 c.getUri());

@@ -34,7 +34,7 @@ public class AtlasPathTest {
     public void testOneClass() {
         AtlasPath foo = new AtlasPath("");
         foo.appendField("user");
-        assertEquals("user", foo.toString());
+        assertEquals("/user", foo.toString());
     }
 
     @Test
@@ -48,131 +48,73 @@ public class AtlasPathTest {
 
     @Test
     public void testCleanPathSegment() {
-        assertNull(AtlasPath.cleanPathSegment(null));
-        assertEquals("", AtlasPath.cleanPathSegment(""));
-        assertEquals("foo", AtlasPath.cleanPathSegment("foo"));
-        assertEquals("foo", AtlasPath.cleanPathSegment("foo[]"));
-        assertEquals("foo", AtlasPath.cleanPathSegment("foo<>"));
-        assertEquals("foo", AtlasPath.cleanPathSegment("foo{}"));
+        assertEquals("", new SegmentContext("").getName());
+        assertEquals("foo", new SegmentContext("foo").getName());
+        assertEquals("foo", new SegmentContext("foo[]").getName());
+        assertEquals("foo", new SegmentContext("foo<>").getName());
+        assertEquals("foo", new SegmentContext("foo{}").getName());
 
-        assertEquals("foo", AtlasPath.cleanPathSegment("foo"));
-        assertEquals("foo", AtlasPath.cleanPathSegment("foo[0]"));
-        assertEquals("foo", AtlasPath.cleanPathSegment("foo<1234>"));
-        assertEquals("foo", AtlasPath.cleanPathSegment("foo{bar}"));
+        assertEquals("foo", new SegmentContext("foo[0]").getName());
+        assertEquals("foo", new SegmentContext("foo<1234>").getName());
+        assertEquals("foo", new SegmentContext("foo{bar}").getName());
 
         // We do not try to outsmart busted paths
-        assertEquals("foo[0", AtlasPath.cleanPathSegment("foo[0"));
-        assertEquals("foo1234>", AtlasPath.cleanPathSegment("foo1234>"));
-        assertEquals("foo}", AtlasPath.cleanPathSegment("foo}"));
+        assertEquals("foo[0", new SegmentContext("foo[0").getName());
+        assertEquals("foo1234>", new SegmentContext("foo1234>").getName());
+        assertEquals("foo}", new SegmentContext("foo}").getName());
 
-        assertEquals("bar", AtlasPath.cleanPathSegment("foo:bar"));
-        assertEquals("bar", AtlasPath.cleanPathSegment("foo:@bar"));
-        assertEquals("bar", AtlasPath.cleanPathSegment("@bar"));
+        assertEquals("bar", new SegmentContext("foo:bar").getName());
+        assertEquals("bar", new SegmentContext("foo:@bar").getName());
+        assertEquals("bar", new SegmentContext("@bar").getName());
     }
 
     @Test
     public void testGetLastSegmentParent() {
         AtlasPath p = new AtlasPath("/orders/contact/firstName");
-        assertEquals("contact", p.getLastSegmentParent());
-        assertNull(new AtlasPath("orders").getLastSegmentParent());
+        assertEquals("contact", p.getLastSegmentParent().getName());
+        assertTrue(new AtlasPath("orders").getLastSegmentParent().isRoot());
     }
 
     @Test
     public void testGetLastSegmentParentPath() {
         AtlasPath p = new AtlasPath("/orders[]/contact/firstName");
         assertEquals("/orders[]/contact", p.getLastSegmentParentPath().toString());
-        assertNull(new AtlasPath("orders").getLastSegmentParentPath());
-    }
-
-    @Test
-    public void testDeParentify() {
-        AtlasPath p = new AtlasPath("/orders[]/contact/firstName");
-        assertEquals("/contact/firstName", p.deParentify().toString());
-
-        p = new AtlasPath("/orders/contact[]/firstName");
-        assertEquals("/contact[]/firstName", p.deParentify().toString());
-        assertNull(new AtlasPath("").deParentify());
-    }
-
-    @Test
-    public void testDeCollectionfy() {
-        AtlasPath p = new AtlasPath("/orders[]/contact/firstName");
-        assertEquals("/contact/firstName", p.deCollectionify("orders").toString());
-        assertEquals("/contact/firstName", p.deCollectionify("orders[]").toString());
-        assertEquals("/contact/firstName", p.deCollectionify("orders[3]").toString());
-
-        p = new AtlasPath("/orders/contact[]/firstName");
-        assertEquals("firstName", p.deCollectionify("contact").toString());
-        assertEquals("firstName", p.deCollectionify("contact[]").toString());
-        assertEquals("firstName", p.deCollectionify("contact[3]").toString());
-
-        p = new AtlasPath("/orders<>/contact/firstName");
-        assertEquals("/contact/firstName", p.deCollectionify("orders").toString());
-        assertEquals("/contact/firstName", p.deCollectionify("orders<>").toString());
-        assertEquals("/contact/firstName", p.deCollectionify("orders<3>").toString());
-
-        p = new AtlasPath("/orders/contact<>/firstName");
-        assertEquals("firstName", p.deCollectionify("contact").toString());
-        assertEquals("firstName", p.deCollectionify("contact<>").toString());
-        assertEquals("firstName", p.deCollectionify("contact<3>").toString());
-        assertNull(new AtlasPath("").deCollectionify("contact"));
+        assertEquals("/", new AtlasPath("orders").getLastSegmentParentPath().toString());
     }
 
     @Test
     public void testCollectionIndexHandling() {
-        assertNull(AtlasPath.indexOfSegment(null));
-        assertNull(AtlasPath.indexOfSegment(""));
-        assertNull(AtlasPath.indexOfSegment("foo"));
-        assertNull(AtlasPath.indexOfSegment("foo[]"));
-        assertNull(AtlasPath.indexOfSegment("foo<>"));
-        assertNull(AtlasPath.indexOfSegment("foo{}"));
+        assertNull(new SegmentContext("").getCollectionIndex());
+        assertNull(new SegmentContext("foo").getCollectionIndex());
+        assertNull(new SegmentContext("foo[]").getCollectionIndex());
+        assertNull(new SegmentContext("foo<>").getCollectionIndex());
+        assertNull(new SegmentContext("foo{}").getCollectionIndex());
 
-        assertEquals(new Integer(0), AtlasPath.indexOfSegment("foo[0]"));
-        assertEquals(new Integer(1234), AtlasPath.indexOfSegment("foo<1234>"));
-        assertNull(AtlasPath.indexOfSegment("foo{bar}"));
+        assertEquals(new Integer(0), new SegmentContext("foo[0]").getCollectionIndex());
+        assertEquals(new Integer(1234), new SegmentContext("foo<1234>").getCollectionIndex());
+        assertNull(new SegmentContext("foo{bar}").getCollectionIndex());
 
         AtlasPath p = new AtlasPath("/orders[4]/contact/firstName");
-        p.setCollectionIndex("orders[4]", 5);
+        p.setCollectionIndex(1, 5);
         assertEquals("/orders[5]/contact/firstName", p.toString());
-        assertEquals(new Integer(5), AtlasPath.indexOfSegment("orders[5]"));
+        assertEquals(new Integer(5), p.getSegments(true).get(1).getCollectionIndex());
 
         try {
-            p.setCollectionIndex("orders<>", -3);
-            fail("Exception expected");
-        } catch (IllegalArgumentException e) {
-        }
-        try {
-            p.setCollectionIndex("orders{}", 3);
-            fail("Exception expected");
-        } catch (IllegalArgumentException e) {
-        }
-        try {
-            p.setCollectionIndex("orders", 3);
-            fail("Exception expected");
-        } catch (IllegalArgumentException e) {
-        }
-        try {
-            p.setCollectionIndex("/orders/contact/foo", 3);
-            fail("Exception expected");
-        } catch (IllegalArgumentException e) {
-        }
-        try {
-            p.setCollectionIndex(null, 3);
+            p.setCollectionIndex(1, -3);
             fail("Exception expected");
         } catch (IllegalArgumentException e) {
         }
 
         AtlasPath q = new AtlasPath("/orders<4>/contact/firstName");
-        q.setCollectionIndex("orders<7>", 6);
+        q.setCollectionIndex(1, 6);
         assertEquals("/orders<6>/contact/firstName", q.toString());
-        assertEquals(new Integer(5), AtlasPath.indexOfSegment("orders<5>"));
+        assertEquals(new Integer(6), q.getSegments(true).get(1).getCollectionIndex());
 
         AtlasPath r = new AtlasPath("/orders<>/contact/firstName");
-        assertEquals("orders<>", r.getCollectionSegment());
-        r.setCollectionIndex("orders<>", 6);
+        assertEquals("orders<>", r.getSegments(true).get(1).getExpression());
+        r.setCollectionIndex(1, 6);
         assertEquals("/orders<6>/contact/firstName", r.toString());
-        assertEquals(new Integer(6), AtlasPath.indexOfSegment(r.getCollectionSegment()));
-        assertNull(new AtlasPath("").getCollectionSegment());
+        assertEquals(new Integer(6), r.getSegments(false).get(0).getCollectionIndex());
     }
 
     @Test
@@ -221,106 +163,19 @@ public class AtlasPathTest {
     }
 
     @Test
-    public void testRemoveCollectionIndexes() {
-        // no collection cases
-        assertEquals(null, AtlasPath.removeCollectionIndex(null));
-        assertEquals("blah", AtlasPath.removeCollectionIndex("blah"));
-        assertEquals("@blah", AtlasPath.removeCollectionIndex("@blah"));
-        assertEquals("@x:blah", AtlasPath.removeCollectionIndex("@x:blah"));
-
-        // cases with already empty collections
-        assertEquals("blah[]", AtlasPath.removeCollectionIndex("blah[]"));
-        assertEquals("@blah[]", AtlasPath.removeCollectionIndex("@blah[]"));
-        assertEquals("@x:blah[]", AtlasPath.removeCollectionIndex("@x:blah[]"));
-        assertEquals("blah<>", AtlasPath.removeCollectionIndex("blah<>"));
-        assertEquals("@blah<>", AtlasPath.removeCollectionIndex("@blah<>"));
-        assertEquals("@x:blah<>", AtlasPath.removeCollectionIndex("@x:blah<>"));
-        assertEquals("blah{}", AtlasPath.removeCollectionIndex("blah{}"));
-        assertEquals("@blah{}", AtlasPath.removeCollectionIndex("@blah{}"));
-        assertEquals("@x:blah{}", AtlasPath.removeCollectionIndex("@x:blah{}"));
-
-        // cases with stuff in collections
-        assertEquals("blah[]", AtlasPath.removeCollectionIndex("blah[8]"));
-        assertEquals("@blah[]", AtlasPath.removeCollectionIndex("@blah[955]"));
-        assertEquals("@x:blah[]", AtlasPath.removeCollectionIndex("@x:blah[800]"));
-        assertEquals("blah<>", AtlasPath.removeCollectionIndex("blah<5>"));
-        assertEquals("@blah<>", AtlasPath.removeCollectionIndex("@blah<6>"));
-        assertEquals("@x:blah<>", AtlasPath.removeCollectionIndex("@x:blah<75555>"));
-        assertEquals("blah{}", AtlasPath.removeCollectionIndex("blah{5}"));
-        assertEquals("@blah{}", AtlasPath.removeCollectionIndex("@blah{6}"));
-        assertEquals("@x:blah{}", AtlasPath.removeCollectionIndex("@x:blah{65565657}"));
-
-        // strange cases with malformed collections
-        testMalformed("blah");
-        testMalformed("@blah");
-        testMalformed("@x:blah");
-
-        assertEquals("/a/b[]/c/d[]/e{}/f<>/g[112/x{/z>>11",
-                AtlasPath.removeCollectionIndexes("/a/b[]/c/d[15]/e{11}/f<111>/g[112/x{/z>>11"));
-    }
-
-    public void testMalformed(String var) {
-        assertEquals(var + "[", AtlasPath.removeCollectionIndex(var + "["));
-        assertEquals(var + "]", AtlasPath.removeCollectionIndex(var + "]"));
-        assertEquals(var + "<", AtlasPath.removeCollectionIndex(var + "<"));
-        assertEquals(var + ">", AtlasPath.removeCollectionIndex(var + ">"));
-        assertEquals(var + "{", AtlasPath.removeCollectionIndex(var + "{"));
-        assertEquals(var + "}", AtlasPath.removeCollectionIndex(var + "}"));
-        assertEquals(var + "{{", AtlasPath.removeCollectionIndex(var + "{{"));
-        assertEquals(var + "}}", AtlasPath.removeCollectionIndex(var + "}}"));
-    }
-
-    @Test
     public void testGetLastSegment() {
         AtlasPath p = new AtlasPath("/order/contact/firstName");
-        assertEquals("firstName", p.getLastSegment());
+        assertEquals("firstName", p.getLastSegment().getName());
+        assertEquals("firstName", p.getLastSegment().getExpression());
 
-        assertNull((new AtlasPath("")).getLastSegment());
+        assertTrue((new AtlasPath("")).getLastSegment().isRoot());
         assertNotNull(p.getOriginalPath());
-    }
-
-    @Test
-    public void testHasParent() {
-        AtlasPath p = new AtlasPath("/order/contact/firstName");
-        assertTrue(p.hasParent());
-
-        p = new AtlasPath("orders");
-        assertFalse(p.hasParent());
-    }
-
-    @Test
-    public void testIsCollectionSegment() {
-        assertFalse(AtlasPath.isCollectionSegment(null));
-
-        assertTrue(AtlasPath.isArraySegment(AtlasPath.PATH_ARRAY_START + AtlasPath.PATH_ARRAY_END));
-        assertFalse(AtlasPath.isArraySegment(AtlasPath.PATH_ARRAY_END));
-        assertTrue(AtlasPath.isCollectionSegment(AtlasPath.PATH_ARRAY_START + AtlasPath.PATH_ARRAY_END));
-        assertFalse(AtlasPath.isCollectionSegment(AtlasPath.PATH_ARRAY_START));
-        assertFalse(AtlasPath.isCollectionSegment(AtlasPath.PATH_ARRAY_END));
-
-        assertTrue(AtlasPath.isListSegment(AtlasPath.PATH_LIST_START + AtlasPath.PATH_LIST_END));
-        assertFalse(AtlasPath.isListSegment(AtlasPath.PATH_LIST_END));
-        assertTrue(AtlasPath.isCollectionSegment(AtlasPath.PATH_LIST_START + AtlasPath.PATH_LIST_END));
-        assertFalse(AtlasPath.isCollectionSegment(AtlasPath.PATH_LIST_START));
-        assertFalse(AtlasPath.isCollectionSegment(AtlasPath.PATH_LIST_END));
-
-        assertTrue(AtlasPath.isMapSegment(AtlasPath.PATH_MAP_START + AtlasPath.PATH_MAP_END));
-        assertFalse(AtlasPath.isMapSegment(AtlasPath.PATH_MAP_END));
-        assertTrue(AtlasPath.isCollectionSegment(AtlasPath.PATH_MAP_START + AtlasPath.PATH_MAP_END));
-        assertFalse(AtlasPath.isCollectionSegment(AtlasPath.PATH_MAP_START));
-        assertFalse(AtlasPath.isCollectionSegment(AtlasPath.PATH_MAP_END));
-
-        assertFalse(AtlasPath.isCollectionSegment(""));
     }
 
     @Test
     public void testHasCollection() {
         AtlasPath p = new AtlasPath("/order/contact/firstName");
         assertFalse(p.hasCollection());
-
-        p = new AtlasPath("[1,2]");
-        assertTrue(p.hasCollection());
-        assertTrue(AtlasPath.isCollection("[1,2]"));
     }
 
     @Test
@@ -336,63 +191,52 @@ public class AtlasPathTest {
 
         p = new AtlasPath("/<>/order/contact/phone");
         assertFalse(p.isCollectionRoot());
-
-        p = new AtlasPath("[1,2]");
-        assertTrue(p.isCollectionRoot());
-    }
-
-    @Test
-    public void testGetAttribute() {
-        assertNotNull(AtlasPath.getAttribute("@attribute"));
     }
 
     @Test
     public void testIsAttributeSegment() {
-        assertFalse(AtlasPath.isAttributeSegment(null));
-        assertFalse(AtlasPath.isAttributeSegment("order"));
-        assertTrue(AtlasPath.isAttributeSegment("@order"));
+        assertFalse(new AtlasPath(null).getSegments(true).get(0).isAttribute());
+        assertFalse(new AtlasPath("order").getSegments(false).get(0).isAttribute());
+        assertTrue(new AtlasPath("@order").getSegments(false).get(0).isAttribute());
     }
 
     @Test
     public void testGetCollectionIndex() {
         AtlasPath p = new AtlasPath("orders/order[1]");
-        assertEquals(new Integer(1), p.getCollectionIndex("order"));
+        assertEquals(new Integer(1), p.getSegments(false).get(1).getCollectionIndex());
 
         p = new AtlasPath("order");
-        assertEquals(null, p.getCollectionIndex("order"));
+        assertEquals(null, p.getSegments(false).get(0).getCollectionIndex());
 
         p = new AtlasPath("orders/order<2>");
-        assertEquals(new Integer(2), p.getCollectionIndex("order"));
+        assertEquals(new Integer(2), p.getSegments(false).get(1).getCollectionIndex());
     }
 
     @Test
-    public void testGetSegmentContexts() {
+    public void testGetSegments() {
         AtlasPath path = new AtlasPath("/orders");
-        assertNotNull(path.getSegmentContexts(true));
+        assertNotNull(path.getSegments(true));
 
-        List<SegmentContext> segmentContexts = path.getSegmentContexts(false);
+        List<SegmentContext> segmentContexts = path.getSegments(true);
         assertNotNull(segmentContexts);
         assertEquals(2, segmentContexts.size());
 
-        SegmentContext segmentContext = segmentContexts.get(1);
-        assertNotNull(segmentContext.getSegment());
-        assertNotNull(segmentContext.getSegmentIndex());
-        assertNotNull(segmentContext.getSegmentPath());
-        assertNull(segmentContext.getNext());
-        assertNotNull(segmentContext.getPrev());
-        assertNotNull(segmentContext.getPathUtil());
-        assertNotNull(segmentContext.toString());
-        assertFalse(segmentContext.hasChild());
-        assertTrue(segmentContext.hasParent());
-
-        segmentContext = segmentContexts.get(0);
-        assertTrue(segmentContext.hasChild());
-        assertFalse(segmentContext.hasParent());
+        SegmentContext sc = segmentContexts.get(1);
+        assertEquals("orders", sc.getName());
+        assertNull(sc.getCollectionIndex());
+        assertEquals("orders", sc.getExpression());
+        assertNotNull(sc.toString());
     }
 
     @Test
-    public void testOverwriteCollectionIndex() {
-        assertEquals("/orders[5]", AtlasPath.overwriteCollectionIndex("/orders[4]", 5));
-        assertEquals("/orders<5>", AtlasPath.overwriteCollectionIndex("/orders<4>", 5));
+    public void testGetParentSegmentOf() throws Exception {
+        AtlasPath path = new AtlasPath("/orders/order<4>/product<6>/name");
+        List<SegmentContext> segments = path.getSegments(true);
+        assertEquals(null, path.getParentSegmentOf(segments.get(0)));
+        assertEquals(segments.get(0), path.getParentSegmentOf(segments.get(1)));
+        assertEquals(segments.get(1), path.getParentSegmentOf(segments.get(2)));
+        assertEquals(segments.get(2), path.getParentSegmentOf(segments.get(3)));
+        assertEquals(segments.get(3), path.getParentSegmentOf(segments.get(4)));
     }
+
 }

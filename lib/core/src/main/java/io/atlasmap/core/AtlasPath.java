@@ -16,12 +16,14 @@
 package io.atlasmap.core;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
+import java.util.Collections;
 import java.util.List;
-import java.util.regex.Pattern;
+
+import io.atlasmap.v2.CollectionType;
 
 public class AtlasPath {
     public static final String PATH_SEPARATOR = "/";
+    public static final char PATH_SEPARATOR_CHAR = '/';
     public static final String PATH_SEPARATOR_ESCAPED = "/";
     public static final String PATH_ARRAY_START = "[";
     public static final String PATH_ARRAY_END = "]";
@@ -29,12 +31,10 @@ public class AtlasPath {
     public static final String PATH_LIST_END = ">";
     public static final String PATH_MAP_START = "{";
     public static final String PATH_MAP_END = "}";
+    public static final String PATH_ATTRIBUTE_PREFIX = "@";
+    public static final String PATH_NAMESPACE_SEPARATOR = ":";
 
-    private static final Pattern PATTERN_INDEXED_COLLECTION = Pattern.compile(
-            ".*[\\" + PATH_ARRAY_START + PATH_LIST_START + PATH_MAP_START + "][0-9]+"
-            + "[\\" + PATH_ARRAY_END + PATH_LIST_END + PATH_MAP_END + "]$");
-
-    private List<String> segments = new ArrayList<>();
+    protected List<SegmentContext> segmentContexts = new ArrayList<>();
     private String originalPath = null;
 
     public AtlasPath(String p) {
@@ -47,500 +47,317 @@ public class AtlasPath {
             if (path.contains(PATH_SEPARATOR)) {
                 String[] parts = path.split(PATH_SEPARATOR_ESCAPED, 512);
                 for (String part : parts) {
-                    getSegments().add(part);
+                    this.segmentContexts.add(createSegmentContext(part));
                 }
             } else {
-                getSegments().add(path);
+                this.segmentContexts.add(createSegmentContext(path));
             }
         }
+        if (this.segmentContexts.isEmpty() || !this.segmentContexts.get(0).isRoot()) {
+            // add root segment if there's not
+            this.segmentContexts.add(0, createSegmentContext(""));
+        }
+    }
+
+    protected SegmentContext createSegmentContext(String expression) {
+        return new SegmentContext(expression);
     }
 
     private AtlasPath() {
     }
 
-    public List<SegmentContext> getSegmentContexts(boolean includeLeadingSlashSegment) {
-        List<SegmentContext> contexts = new LinkedList<>();
-        String segmentPath = "";
-        SegmentContext previousContext = null;
-        int index = 0;
-
-        List<String> newSegments = this.getSegments();
-        if (includeLeadingSlashSegment) {
-            newSegments.add(0, "");
-        }
-
-        for (String s : newSegments) {
-            SegmentContext c = new SegmentContext();
-            segmentPath += PATH_SEPARATOR + s;
-            c.setPathUtil(this);
-            c.setSegment(s);
-            c.setSegmentIndex(index);
-            c.setSegmentPath(segmentPath);
-            if (previousContext != null) {
-                c.setPrev(previousContext);
-                previousContext.setNext(c);
-
-            }
-            contexts.add(c);
-            previousContext = c;
-            if (index == 0 && includeLeadingSlashSegment) {
-                segmentPath = "";
-            }
-            index++;
-        }
-        return contexts;
-    }
-
-    public AtlasPath appendField(String fieldName) {
-        this.segments.add(fieldName);
+    public AtlasPath appendField(String fieldExpression) {
+        this.segmentContexts.add(createSegmentContext(fieldExpression));
         return this;
     }
 
-    public List<String> getSegments() {
-        return this.segments;
+    public List<SegmentContext> getSegments(boolean includeRoot) {
+        if (includeRoot) {
+            return Collections.unmodifiableList(this.segmentContexts);
+        }
+        if (this.segmentContexts.size() > 1) {
+            return Collections.unmodifiableList(this.segmentContexts.subList(1, this.segmentContexts.size()));
+        }
+        return Collections.emptyList();
     }
 
-    public String getLastSegment() {
-        if (segments.isEmpty()) {
+    public Boolean isRoot() {
+        return this.segmentContexts.size() == 1 && this.segmentContexts.get(0).isRoot();
+    }
+
+    public SegmentContext getRootSegment() {
+        return this.segmentContexts.get(0);
+    }
+
+    public Boolean isCollectionRoot() {
+        return this.segmentContexts.size() == 1 && this.segmentContexts.get(0).getCollectionType() != CollectionType.NONE;
+    }
+
+    public Boolean hasCollectionRoot() {
+        return this.segmentContexts.get(0).getCollectionType() != CollectionType.NONE;
+    }
+
+    public SegmentContext getLastSegment() {
+        return this.segmentContexts.get(this.segmentContexts.size()-1);
+    }
+
+    public SegmentContext getLastSegmentParent() {
+        if (this.segmentContexts.isEmpty() || this.segmentContexts.size() == 1) {
             return null;
         }
-        return segments.get(segments.size() - 1);
+
+        return this.segmentContexts.get(this.segmentContexts.size() - 2);
     }
 
-    public boolean hasParent() {
-        return segments.size() > 1;
-    }
-
-    public static String removeCollectionIndexes(String path) {
-        AtlasPath pathUtil = new AtlasPath(path);
-        String cleanedPath = "";
-        for (String s : pathUtil.getSegments()) {
-            cleanedPath += PATH_SEPARATOR + removeCollectionIndex(s);
-        }
-        return cleanedPath;
-    }
-
-    public static String removeCollectionIndex(String segment) {
-        if (segment == null) {
+    public AtlasPath getLastSegmentParentPath() {
+        if (this.segmentContexts.isEmpty() || this.segmentContexts.size() == 1) {
             return null;
         }
 
-        if (segment.contains(PATH_ARRAY_START) && segment.contains(PATH_ARRAY_END)) {
-            return segment.substring(0, segment.indexOf(PATH_ARRAY_START) + 1)
-                    + segment.substring(segment.indexOf(PATH_ARRAY_END));
+        AtlasPath parentPath = new AtlasPath();
+        for (int i = 0; i < this.segmentContexts.size() - 1; i++) {
+            parentPath.appendField(this.segmentContexts.get(i).getExpression());
         }
+        return parentPath;
+    }
 
-        if (segment.contains(PATH_LIST_START) && segment.contains(PATH_LIST_END)) {
-            return segment.substring(0, segment.indexOf(PATH_LIST_START) + 1)
-                    + segment.substring(segment.indexOf(PATH_LIST_END));
+    public SegmentContext getParentSegmentOf(SegmentContext sc) {
+        for (int i=0; i<this.segmentContexts.size(); i++) {
+            if (this.segmentContexts.get(i) == sc) {
+                if (sc.isRoot()) {
+                    return null;
+                }
+                return this.segmentContexts.get(i-1);
+            }
         }
-
-        if (segment.contains(PATH_MAP_START) && segment.contains(PATH_MAP_END)) {
-            return segment.substring(0, segment.indexOf(PATH_MAP_START) + 1)
-                    + segment.substring(segment.indexOf(PATH_MAP_END));
-        }
-
-        return segment;
+        return null;
     }
 
     public boolean hasCollection() {
-        for (String seg : getSegments()) {
-            if (isCollectionSegment(seg)) {
+        for (SegmentContext sc : this.segmentContexts) {
+            if (sc.getCollectionType() != CollectionType.NONE) {
                 return true;
             }
         }
         return false;
     }
 
-    public Boolean isIndexedCollection() {
-        boolean hasCollection = false;
-        for (String seg : getSegments()) {
-            if (isCollectionSegment(seg)) {
-                hasCollection = true;
-                if (indexOfSegment(seg) == null) {
+    public boolean isIndexedCollection() {
+        boolean hasIndexedCollection = false;
+        for (SegmentContext sc : this.segmentContexts) {
+            if (sc.getCollectionType() != CollectionType.NONE) {
+                if (sc.getCollectionIndex() == null) {
                     return false;
                 }
+                hasIndexedCollection = true;
             }
         }
-        return hasCollection;
+        return hasIndexedCollection;
     }
 
-    public Boolean isRoot() {
-        return segments.size() == 1 && cleanPathSegment(segments.get(0)).isEmpty();
+    public SegmentContext setCollectionIndex(int segmentIndex, Integer collectionIndex) {
+        if (collectionIndex != null && collectionIndex < 0) {
+            throw new IllegalArgumentException(String.format(
+                    "Cannnot set negative collection index %s for the path %s",
+                    collectionIndex, this.toString()));
+        }
+        SegmentContext sc = this.segmentContexts.get(segmentIndex);
+        sc.collectionIndex = collectionIndex;
+        return this.segmentContexts.set(segmentIndex, sc.rebuild());
     }
 
-    public Boolean isCollectionRoot() {
-        return isRoot() && isCollectionSegment(getLastSegment());
+    // FIXME need to rework for nested collection - https://github.com/atlasmap/atlasmap/issues/435
+    public SegmentContext setVacantCollectionIndex(Integer collectionIndex) {
+        for (int i=0; i<this.segmentContexts.size(); i++) {
+            SegmentContext sc = segmentContexts.get(i);
+            if (sc.getCollectionType() != CollectionType.NONE && sc.getCollectionIndex() == null) {
+                return setCollectionIndex(i, collectionIndex);
+            }
+        }
+        throw new IllegalArgumentException("No Vacant index on collection segments in the path " + this.toString());
     }
 
-    public Boolean hasCollectionRoot() {
-        return cleanPathSegment(segments.get(0)).isEmpty() && isCollectionSegment(segments.get(0));
-    }
-
-    public String getLastSegmentParent() {
-        if (segments.isEmpty() || segments.size() == 1) {
+    public String getSegmentPath(SegmentContext sc) {
+        int toIndex = this.segmentContexts.indexOf(sc);
+        if (toIndex == -1) {
             return null;
         }
-
-        return segments.get(segments.size() - 2);
-    }
-
-    public AtlasPath getLastSegmentParentPath() {
-        if (segments.isEmpty() || segments.size() == 1) {
-            return null;
+        StringBuilder builder = new StringBuilder().append(PATH_SEPARATOR_CHAR);
+        if (!this.segmentContexts.get(0).getExpression().isEmpty()) {
+            builder.append(this.segmentContexts.get(0).getExpression());
         }
-
-        AtlasPath parentPath = new AtlasPath();
-        for (int i = 0; i < segments.size() - 1; i++) {
-            parentPath.appendField(segments.get(i));
-        }
-        return parentPath;
-    }
-
-    public AtlasPath deCollectionify(String collectionSegment) {
-        if (segments.isEmpty() || segments.size() == 1) {
-            return null;
-        }
-
-        AtlasPath j = new AtlasPath();
-        boolean collectionFound = false;
-        for (String part : segments) {
-            if (collectionFound) {
-                j.appendField(part);
+        for (int i=1; i<=toIndex; i++) {
+            if (!(builder.charAt(builder.length()-1) == PATH_SEPARATOR_CHAR)) {
+                builder.append(PATH_SEPARATOR_CHAR);
             }
-            String cleanedPart = cleanPathSegment(part);
-            if (cleanedPart != null && cleanedPart.equals(cleanPathSegment(collectionSegment))) {
-                collectionFound = true;
-            }
+            builder.append(this.segmentContexts.get(i).getExpression());
         }
-        return j;
-    }
-
-    public AtlasPath deParentify() {
-        if (segments.isEmpty() || segments.size() == 1) {
-            return null;
-        }
-
-        AtlasPath j = new AtlasPath();
-        for (int i = 1; i < segments.size(); i++) {
-            j.appendField(segments.get(i));
-        }
-        return j;
-    }
-
-    /**
-     * Remove all decoration other than path name from path segment expression.
-     * This removes namespace prefixes and leading @ symbol for attributes, as well as
-     * collection suffixes like [], [1], &lt;&gt; and etc.
-     *
-     * @param pathSeg path segment expression string
-     * @return stripped segment name
-     */
-    public static String cleanPathSegment(String pathSeg) {
-        String pathSegment = pathSeg;
-        if (pathSegment == null) {
-            return null;
-        }
-
-        // strip namespace if there is one
-        if (pathSegment.contains(":")) {
-            pathSegment = pathSegment.substring(pathSegment.indexOf(":") + 1);
-        }
-
-        // strip leading @ symbol if there is one
-        if (pathSegment.startsWith("@")) {
-            pathSegment = pathSegment.substring(1);
-        }
-
-        if (pathSegment.contains(PATH_ARRAY_START) && pathSegment.endsWith(PATH_ARRAY_END)) {
-            return pathSegment.substring(0, pathSegment.indexOf(PATH_ARRAY_START, 0));
-        }
-
-        if (pathSegment.contains(PATH_LIST_START) && pathSegment.endsWith(PATH_LIST_END)) {
-            return pathSegment.substring(0, pathSegment.indexOf(PATH_LIST_START, 0));
-        }
-
-        if (pathSegment.contains(PATH_MAP_START) && pathSegment.endsWith(PATH_MAP_END)) {
-            return pathSegment.substring(0, pathSegment.indexOf(PATH_MAP_START, 0));
-        }
-
-        return pathSegment;
-    }
-
-    public static String getAttribute(String pathSeg) {
-        return pathSeg.substring(1);
-    }
-
-    public static Boolean isCollectionSegment(String pathSegment) {
-        if (pathSegment == null) {
-            return false;
-        }
-
-        if (pathSegment.contains(PATH_ARRAY_START) && pathSegment.endsWith(PATH_ARRAY_END)) {
-            return true;
-        }
-
-        if (pathSegment.contains(PATH_LIST_START) && pathSegment.endsWith(PATH_LIST_END)) {
-            return true;
-        }
-
-        return pathSegment.contains(PATH_MAP_START) && pathSegment.endsWith(PATH_MAP_END);
-    }
-
-    public static Boolean isIndexedCollectionSegment(String pathSegment) {
-        return PATTERN_INDEXED_COLLECTION.matcher(pathSegment).matches();
-    }
-
-    public static Boolean isAttributeSegment(String pathSegment) {
-        return pathSegment != null && pathSegment.startsWith("@");
-    }
-
-    /**
-     * Return collection index in the path segment expression passed in as an argument.
-     * This returns <code>null</code> if specified path segment expression doesn't have an index, or not
-     * a collection.
-     *
-     * @param pathSegment path segment expression
-     * @return collection index of specified path segment
-     */
-    public static Integer indexOfSegment(String pathSegment) {
-        if (pathSegment == null) {
-            return null;
-        }
-
-        if (pathSegment.contains(PATH_ARRAY_START) && pathSegment.endsWith(PATH_ARRAY_END)) {
-            int start = pathSegment.indexOf(PATH_ARRAY_START, 0) + 1;
-            String index = pathSegment.substring(start, pathSegment.indexOf(PATH_ARRAY_END, start));
-            if (index != null && index.length() > 0) {
-                return Integer.valueOf(index);
-            }
-            return null;
-        }
-
-        if (pathSegment.contains(PATH_LIST_START) && pathSegment.endsWith(PATH_LIST_END)) {
-            int start = pathSegment.indexOf(PATH_LIST_START, 0) + 1;
-            String index = pathSegment.substring(start, pathSegment.indexOf(PATH_LIST_END, start));
-            if (index != null && index.length() > 0) {
-                return Integer.valueOf(index);
-            }
-            return null;
-        }
-
-        return null;
-    }
-
-    public Integer getCollectionIndex(String segment) {
-        for (String part : getSegments()) {
-            String cleanedPart = cleanPathSegment(part);
-            if (cleanedPart != null && cleanedPart.equals(cleanPathSegment(segment))
-                    && ((part.contains(PATH_ARRAY_START) && part.contains(PATH_ARRAY_END))
-                            || (part.contains(PATH_LIST_START) && (part.contains(PATH_LIST_END))))) {
-                return indexOfSegment(part);
-            }
-        }
-
-        return null;
-    }
-
-    public String getCollectionSegment() {
-        for (String part : getSegments()) {
-            if (AtlasPath.isCollectionSegment(part)) {
-                return part;
-            }
-        }
-        return null;
-    }
-
-    public void setCollectionIndex(String segment, Integer index) {
-        if (segment == null) {
-            throw new IllegalArgumentException("PathUtil segment cannot be null");
-        }
-
-        if (index < 0) {
-            throw new IllegalArgumentException("PathUtil index must be a positive integer");
-        }
-
-        if (segment.contains(PATH_ARRAY_START) && segment.contains(PATH_ARRAY_END)) {
-            for (int i = 0; i < getSegments().size(); i++) {
-                String part = cleanPathSegment(getSegments().get(i));
-                if (part != null && part.equals(cleanPathSegment(segment))) {
-                    getSegments().set(i, cleanPathSegment(segment) + PATH_ARRAY_START + index + PATH_ARRAY_END);
-                }
-            }
-        } else if (segment.contains(PATH_LIST_START) && segment.contains(PATH_LIST_END)) {
-            for (int i = 0; i < getSegments().size(); i++) {
-                String part = cleanPathSegment(getSegments().get(i));
-                if (part != null && part.equals(cleanPathSegment(segment))) {
-                    getSegments().set(i, cleanPathSegment(segment) + PATH_LIST_START + index + PATH_LIST_END);
-                }
-            }
-        } else {
-            throw new IllegalArgumentException("PathUtil segment is not a List or Array segment");
-        }
-    }
-
-    public void setVacantCollectionIndex(Integer index) {
-        // TODO need rework for nested collection
-        // https://github.com/atlasmap/atlasmap/issues/435
-        for (int i=0; i<getSegments().size(); i++) {
-            String segment = getSegments().get(i);
-            if (AtlasPath.isCollection(segment) && !AtlasPath.isIndexedCollectionSegment(segment)) {
-                if (segment.contains(PATH_ARRAY_START) && segment.contains(PATH_ARRAY_END)) {
-                    getSegments().set(i, cleanPathSegment(segment) + PATH_ARRAY_START + index + PATH_ARRAY_END);
-                } else if (segment.contains(PATH_LIST_START) && segment.contains(PATH_LIST_END)) {
-                    getSegments().set(i, cleanPathSegment(segment) + PATH_LIST_START + index + PATH_LIST_END);
-                } else {
-                    throw new IllegalArgumentException(String.format(
-                            "segment '%s' is not a List or Array segment", segment));
-                }
-            }
-        }
+        return builder.toString();
     }
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
-
-        int i = 0;
-
-        if (getSegments().size() > 1) {
-            builder.append(PATH_SEPARATOR);
-        }
-
-        for (String part : getSegments()) {
-            builder.append(part);
-            if (i < (getSegments().size() - 1)) {
-                builder.append(PATH_SEPARATOR);
-            }
-            i++;
-        }
-        return builder.toString();
+        return getSegmentPath(getLastSegment());
     }
 
     public String getOriginalPath() {
         return originalPath;
     }
 
-    /**
-     * Returns true if specified path segment is array segment, otherwise false.
-     *
-     * @param segment path segment expression
-     * @return true for array segment, otherwise false
-     */
-    public static boolean isArraySegment(String segment) {
-        return isCollectionSegment(segment) && segment.contains(PATH_ARRAY_START);
-    }
-
-    /**
-     * Returns true if specified path segment is list segment, otherwise false.
-     *
-     * @param segment path segment expression
-     * @return true for list segment, otherwise false
-     */
-    public static boolean isListSegment(String segment) {
-        return isCollectionSegment(segment) && segment.contains(PATH_LIST_START);
-    }
-
-    /**
-     * Returns true if specified path segment is map segment, otherwise false.
-     *
-     * @param segment path segment expression
-     * @return true for map segment, otherwise false
-     */
-    public static boolean isMapSegment(String segment) {
-        return isCollectionSegment(segment) && segment.contains(PATH_MAP_START);
-    }
-
     public static class SegmentContext {
 
-        protected String segment;
-        protected String segmentPath;
-        protected int segmentIndex;
+        private String name;
+        private String expression;
+        private CollectionType collectionType;
+        private Integer collectionIndex;
+        private String mapKey;
+        private boolean isAttribute;
+        private boolean isRoot;
 
-        protected SegmentContext prev;
-        protected SegmentContext next;
-        protected AtlasPath pathUtil;
-
-        public String getSegment() {
-            return segment;
+        public SegmentContext(String expression) {
+            this.expression = expression;
+            if (this.expression.startsWith(PATH_SEPARATOR)) {
+                this.expression = this.expression.replaceFirst(PATH_SEPARATOR, "");
+            }
+            this.name = cleanPathSegment(expression);
+            if (expression.contains(PATH_MAP_START)) {
+                this.collectionType = CollectionType.MAP;
+            } else if (expression.contains(PATH_ARRAY_START)) {
+                this.collectionType = CollectionType.ARRAY;
+            } else if (expression.contains(PATH_LIST_START)) {
+                this.collectionType = CollectionType.LIST;
+            } else {
+                this.collectionType = CollectionType.NONE;
+            }
+            if (this.collectionType == CollectionType.MAP) {
+                this.mapKey = getMapKey(expression);
+            } else {
+                this.collectionIndex = getCollectionIndex(expression);
+            }
+            this.isAttribute = expression.startsWith(PATH_ATTRIBUTE_PREFIX);
+            this.isRoot = this.name.isEmpty();
         }
 
-        public void setSegment(String segment) {
-            this.segment = segment;
+        public String getName() {
+            return name;
         }
 
-        public String getSegmentPath() {
-            return segmentPath;
+        public String getExpression() {
+            return expression;
         }
 
-        public void setSegmentPath(String segmentPath) {
-            this.segmentPath = segmentPath;
+        public CollectionType getCollectionType() {
+            return this.collectionType;
         }
 
-        public int getSegmentIndex() {
-            return segmentIndex;
+        public Integer getCollectionIndex() {
+            return this.collectionIndex;
         }
 
-        public void setSegmentIndex(int segmentIndex) {
-            this.segmentIndex = segmentIndex;
+        public String getMapKey() {
+            return this.mapKey;
         }
 
-        public SegmentContext getPrev() {
-            return prev;
+        public boolean isAttribute() {
+            return isAttribute;
         }
 
-        public void setPrev(SegmentContext prev) {
-            this.prev = prev;
+        public boolean isRoot() {
+            return isRoot;
         }
 
-        public SegmentContext getNext() {
-            return next;
-        }
-
-        public void setNext(SegmentContext next) {
-            this.next = next;
-        }
-
-        public void setPathUtil(AtlasPath pathUtil) {
-            this.pathUtil = pathUtil;
-        }
-
-        public AtlasPath getPathUtil() {
-            return pathUtil;
-        }
-
-        public boolean hasParent() {
-            return this.prev != null;
-        }
-
-        public boolean hasChild() {
-            return this.next != null;
+        private SegmentContext rebuild() {
+            StringBuilder buf = new StringBuilder();
+            if (this.isAttribute) {
+                buf.append(PATH_ATTRIBUTE_PREFIX);
+            }
+            buf.append(name);
+            String index = collectionIndex != null ? collectionIndex.toString() : "";
+            if (this.collectionType == CollectionType.ARRAY) {
+                buf.append(PATH_ARRAY_START).append(index).append(PATH_ARRAY_END);
+            } else if (this.collectionType == CollectionType.LIST) {
+                buf.append(PATH_LIST_START).append(index).append(PATH_LIST_END);
+            } else if (this.collectionType == CollectionType.MAP) {
+                buf.append(PATH_LIST_START).append(mapKey).append(PATH_LIST_END);
+            }
+            return new SegmentContext(buf.toString());
         }
 
         @Override
         public String toString() {
-            return "SegmentContext [segment=" + segment + ", segmentPath=" + segmentPath + ", segmentIndex="
-                    + segmentIndex + "]";
+            return collectionType == CollectionType.MAP
+                ? String.format("SegmentContext [name=%s, expression=%s, collectionType=%s, mapKey=%s]",
+                    name, expression, collectionType, mapKey)
+                : String.format(
+                    "SegmentContext [name=%s, expression=%s, collectionType=%s, collectionIndex=%s]",
+                    name, expression, collectionType, collectionIndex);
         }
-    }
 
-    public static boolean isCollection(String path) {
-        return new AtlasPath(path).hasCollection();
-    }
-
-    public static String overwriteCollectionIndex(String path, int index) {
-        String newPath = "";
-        for (SegmentContext sg : new AtlasPath(path).getSegmentContexts(false)) {
-            String segment = sg.getSegment();
-            if (AtlasPath.isCollection(segment)) {
-                if (segment.contains(PATH_ARRAY_START) && segment.contains(PATH_ARRAY_END)) {
-                    segment = cleanPathSegment(segment) + PATH_ARRAY_START + index + PATH_ARRAY_END;
-                } else if (segment.contains(PATH_LIST_START) && segment.contains(PATH_LIST_END)) {
-                    segment = cleanPathSegment(segment) + PATH_LIST_START + index + PATH_LIST_END;
-                }
+        private String cleanPathSegment(String expression) {
+            String answer = expression;
+            if (answer == null) {
+                return null;
             }
-            newPath += PATH_SEPARATOR + segment;
+
+            // strip namespace if there is one
+            if (answer.contains(PATH_NAMESPACE_SEPARATOR)) {
+                answer = answer.substring(answer.indexOf(PATH_NAMESPACE_SEPARATOR) + 1);
+            }
+
+            // strip leading @ symbol if there is one
+            if (answer.startsWith(PATH_ATTRIBUTE_PREFIX)) {
+                answer = answer.substring(1);
+            }
+
+            if (answer.contains(PATH_ARRAY_START) && answer.endsWith(PATH_ARRAY_END)) {
+                return answer.substring(0, answer.indexOf(PATH_ARRAY_START, 0));
+            }
+
+            if (answer.contains(PATH_LIST_START) && answer.endsWith(PATH_LIST_END)) {
+                return answer.substring(0, answer.indexOf(PATH_LIST_START, 0));
+            }
+
+            if (answer.contains(PATH_MAP_START) && answer.endsWith(PATH_MAP_END)) {
+                return answer.substring(0, answer.indexOf(PATH_MAP_START, 0));
+            }
+
+            return answer;
         }
-        return newPath;
+
+        private Integer getCollectionIndex(String expression) {
+            if (expression == null) {
+                return null;
+            }
+
+            if (expression.contains(PATH_ARRAY_START) && expression.endsWith(PATH_ARRAY_END)) {
+                int start = expression.indexOf(PATH_ARRAY_START, 0) + 1;
+                String index = expression.substring(start, expression.indexOf(PATH_ARRAY_END, start));
+                if (index != null && index.length() > 0) {
+                    return Integer.valueOf(index);
+                }
+                return null;
+            }
+
+            if (expression.contains(PATH_LIST_START) && expression.endsWith(PATH_LIST_END)) {
+                int start = expression.indexOf(PATH_LIST_START, 0) + 1;
+                String index = expression.substring(start, expression.indexOf(PATH_LIST_END, start));
+                if (index != null && index.length() > 0) {
+                    return Integer.valueOf(index);
+                }
+                return null;
+            }
+
+            return null;
+        }
+
+        private String getMapKey(String expression) {
+            int start = expression.indexOf(PATH_MAP_START, 0) + 1;
+            String key = expression.substring(start, expression.indexOf(PATH_MAP_END, start));
+            if (key != null && key.length() > 0) {
+                return key;
+            }
+            return null;
+        }
     }
+
 }

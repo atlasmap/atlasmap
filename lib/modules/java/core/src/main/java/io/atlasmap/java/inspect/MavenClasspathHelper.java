@@ -32,6 +32,8 @@ import java.util.stream.Stream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.atlasmap.java.core.StringUtil;
+
 public class MavenClasspathHelper {
 
     public static final String WORKING_FOLDER_PREFIX = "atlas-mapping-mvn-";
