@@ -33,8 +33,8 @@ import { ModalWindowComponent, EmptyModalBodyComponent } from './components/moda
 import { ToolbarComponent } from './components/toolbar.component';
 import { TemplateEditComponent } from './components/template-edit.component';
 import { LineMachineComponent } from './components/line-machine.component';
+import { ClassNameComponent } from './components/class-name.component';
 import { CollapsableHeaderComponent } from './components/collapsable-header.component';
-
 import { DocumentDefinitionComponent } from './components/document-definition.component';
 import { DocumentFieldDetailComponent } from './components/document-field-detail.component';
 import { PropertyFieldEditComponent } from './components/property-field-edit.component';
@@ -95,6 +95,7 @@ export const alertModuleForRoot: ModuleWithProviders = AlertModule.forRoot();
   ],
   declarations: [
     DataMapperAppComponent,
+    ClassNameComponent,
     DocumentDefinitionComponent,
     MappingDetailComponent,
     SimpleMappingComponent,
@@ -144,6 +145,7 @@ export const alertModuleForRoot: ModuleWithProviders = AlertModule.forRoot();
     FieldEditComponent,
     NamespaceEditComponent,
     PropertyFieldEditComponent,
+    ClassNameComponent,
     ConstantFieldEditComponent,
     TemplateEditComponent,
   ],

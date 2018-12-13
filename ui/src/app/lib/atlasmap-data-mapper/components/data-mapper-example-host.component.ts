@@ -108,7 +108,7 @@ export class DataMapperAppExampleHostComponent implements OnInit, OnDestroy {
 
     // enable mock source/target documents as needed
     c.initCfg.addMockJavaSingleSource = false;
-    c.initCfg.addMockJavaSources = true;
+    c.initCfg.addMockJavaSources = false;
     c.initCfg.addMockJavaCachedSource = false;
     c.initCfg.addMockXMLInstanceSources = true;
     c.initCfg.addMockXMLSchemaSources = true;
@@ -116,7 +116,7 @@ export class DataMapperAppExampleHostComponent implements OnInit, OnDestroy {
     c.initCfg.addMockJSONInstanceSources = true;
     c.initCfg.addMockJSONSchemaSources = true;
 
-    c.initCfg.addMockJavaTarget = true;
+    c.initCfg.addMockJavaTarget = false;
     c.initCfg.addMockJavaCachedTarget = false;
     c.initCfg.addMockXMLInstanceTarget = true;
     c.initCfg.addMockXMLSchemaTarget = true;

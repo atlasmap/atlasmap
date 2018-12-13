@@ -24,6 +24,7 @@ import { ConfigModel, AdmRedrawMappingLinesEvent } from '../models/config.model'
 import { Field } from '../models/field.model';
 import { DocumentDefinition } from '../models/document-definition.model';
 
+import { ClassNameComponent } from './class-name.component';
 import { DocumentFieldDetailComponent } from './document-field-detail.component';
 import { PropertyFieldEditComponent } from './property-field-edit.component';
 import { ConstantFieldEditComponent } from './constant-field-edit.component';
@@ -153,6 +154,10 @@ export class DocumentDefinitionComponent implements OnInit {
     return'pficon pficon-export importExportIcon link';
   }
 
+  getPlusSquareIconCSSClass(): string {
+    return 'fa fa-plus-square';
+  }
+
   /**
    * Using the specified event, determine and read the selected file and call the document service to
    * process it.  Also update the runtime catalog.
@@ -162,7 +167,7 @@ export class DocumentDefinitionComponent implements OnInit {
   async processDoc(event) {
     const selectedFile = event.target.files[0];
     this.cfg.initCfg.initialized = false;
-    this.cfg.initializationService.updateLoadingStatus('Importing Document');
+    this.cfg.initializationService.updateLoadingStatus('Importing Document ' + selectedFile.name);
     this.cfg.documentService.processDocument(selectedFile, InspectionType.UNKNOWN, this.isSource);
 
     this.cfg.mappingService.exportMappingsCatalog(null);
@@ -173,7 +178,6 @@ export class DocumentDefinitionComponent implements OnInit {
   }
 
   exportFile(): string {
-    console.log('exportFile');
     return '';
   }
 
@@ -208,6 +212,78 @@ export class DocumentDefinitionComponent implements OnInit {
   }
 
   /**
+   * Establish a dialog where the user will specify a class name to be made available in the
+   * targeted panel for use in field mapping or custom transformations.  The user must have
+   * previously imported the JAR file containing the class. The user-defined class will establish
+   * either an instance of mappable fields or custom transformation methods.
+   *
+   * @param event
+   */
+  queryClassName(event: any): void {
+    const docDefs = this.getDocs();
+    const docDef = docDefs[0];
+    event.stopPropagation();
+    this.getDocs().push(docDef);
+    const self = this;
+    this.modalWindow.reset();
+    this.modalWindow.headerText = 'Establish your class in the ' + (this.isSource ? 'Sources' : 'Targets') + ' panel.';
+    this.modalWindow.nestedComponentType = ClassNameComponent;
+
+    this.modalWindow.nestedComponentInitializedCallback = (mw: ModalWindowComponent) => {
+      const classNameComponent = mw.nestedComponent as ClassNameComponent;
+      classNameComponent.isSource = this.isSource;
+      classNameComponent.initialize(null, docDef, true);
+    };
+
+    this.modalWindow.okButtonHandler = (mw: ModalWindowComponent) => {
+      const classNameComponent = mw.nestedComponent as ClassNameComponent;
+      const docdef = self.cfg.initializationService.addJavaDocument(classNameComponent.userClassName, self.isSource);
+      docdef.name = classNameComponent.userClassName;
+      docDef.isSource = self.isSource;
+      docdef.updateFromMappings(this.cfg.mappings);
+
+      this.cfg.documentService.fetchClassPath().toPromise()
+        .then((classPath: string) => {
+          this.cfg.initCfg.classPath = classPath;
+            this.cfg.documentService.fetchDocument(docdef, this.cfg.initCfg.classPath).toPromise()
+            .then(async (doc: DocumentDefinition) => {
+
+              // No fields indicate the user is attempting to enable a custom field action class.  Remove
+              // the document from the panel since it has no fields.
+              if (doc.fields.length === 0) {
+
+                // Make any custom field actions active.
+                self.cfg.initializationService.fetchFieldActions();
+
+                if (doc.isSource) {
+                  DataMapperUtil.removeItemFromArray(doc, this.cfg.sourceDocs);
+                } else {
+                  DataMapperUtil.removeItemFromArray(doc, this.cfg.targetDocs);
+                }
+              }
+              await self.cfg.mappingService.saveCurrentMapping();
+              self.cfg.mappingService.exportMappingsCatalog(null);
+            })
+            .catch((error: any) => {
+              if (error.status === 0) {
+                self.cfg.errorService.error('Unable to fetch the Java class document ' + docdef.name + ' from the runtime service.', error);
+              } else {
+                self.cfg.errorService.error('Could not load the Java class document \'' + docdef.id + '\'', error);
+              }
+            });
+        })
+        .catch((error: any) => {
+          if (error.status === 0) {
+            self.cfg.errorService.error('Fatal network error: Could not connect to AtlasMap design runtime service.', error);
+          } else {
+            self.cfg.errorService.error('Could not load the Java class path.', error);
+          }
+        });
+    };
+    this.modalWindow.show();
+  }
+
+  /**
    * Remove an instance or schema document from a panel along with any associated mappings.
    * Display a confirmation dialog before removing the document definition.
    *
@@ -215,7 +291,9 @@ export class DocumentDefinitionComponent implements OnInit {
    * @param event
    */
   removeDocument(docDef: DocumentDefinition, event: any): void {
-    event.stopPropagation();
+    if (event !== null) {
+      event.stopPropagation();
+    }
     this.modalWindow.reset();
     this.modalWindow.confirmButtonText = 'Remove';
     this.modalWindow.headerText = 'Remove selected document?';
@@ -385,5 +463,8 @@ export class DocumentDefinitionComponent implements OnInit {
       }
     }
     return formattedFields;  // required by typeahead - not used
+  }
+  valueExistsOnCreation(): boolean {
+    return false;
   }
 }

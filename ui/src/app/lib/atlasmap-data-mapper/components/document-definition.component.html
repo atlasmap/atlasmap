@@ -5,8 +5,14 @@
         <div class="docName">
           <i class="fa {{ isSource ? 'fa-hdd-o' : 'fa-download' }}"></i>
           <label for="userfile">{{ sourcesTargetsLabel }}</label>
+          <div style="float:right;" *ngIf="!cfg.initCfg.disableNavbar">
+            <i [attr.class]="getPlusSquareIconCSSClass()" (click)="queryClassName($event)"
+              tooltip="Enable specific Java classes from your previously imported Java archive."
+              container="body" placement="left">
+            </i>
+          </div>
           <label *ngIf="!cfg.initCfg.disableNavbar" [attr.class]="getImportIconCSSClass()"
-            tooltip="Import instance or schema file" placement="left" style="float:right; margin-right:5px">
+            tooltip="Import instance or schema file" placement="left" style="float:right; margin-right:10px; margin-top:1px;">
             <input type="file" accept="{{ getFileSuffix() }}" name="userfile" style="display:none" id="userfile"
               (change)="processDoc($event)" placement="left">
           </label>
@@ -14,7 +20,6 @@
         <i (click)="toggleSearch()" [attr.class]="getSearchIconCSSClass()" tooltip="Toggle search window" placement="left"></i>
         <div class="clear"></div>
       </h2>
-
     </div>
 
     <div *ngIf="searchMode" class="searchBox">

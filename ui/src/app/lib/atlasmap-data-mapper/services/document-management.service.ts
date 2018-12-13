@@ -16,7 +16,7 @@
 
 import { Injectable, OnDestroy } from '@angular/core';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
-import { Observable, forkJoin } from 'rxjs';
+import { Observable } from 'rxjs';
 
 import { DocumentType, InspectionType } from '../common/config.types';
 import { ConfigModel } from '../models/config.model';
@@ -122,7 +122,6 @@ export class DocumentManagementService implements OnDestroy {
             </ns:Contact>
             </ns:XmlOE>
         `;
-
     return mockDoc;
   }
 
@@ -275,7 +274,6 @@ export class DocumentManagementService implements OnDestroy {
           </d:AdditionalSchemas>
         </d:SchemaSet>
         `;
-
     return mockDoc;
   }
 
@@ -285,8 +283,9 @@ export class DocumentManagementService implements OnDestroy {
    *
    * @param buffer
    */
-  private static sanitizeJSON(buffer: string): string {
-    let jsonBuffer = JSON.stringify(buffer);
+  static sanitizeJSON(buffer: string): string {
+    let jsonBuffer = buffer;
+    jsonBuffer = JSON.stringify(buffer);
     jsonBuffer = jsonBuffer.replace(/[\u007F-\uFFFF]/g, function(chr) {
       return '\\u' + ('0000' + chr.charCodeAt(0).toString(16)).substr(-4);
     });
@@ -384,7 +383,6 @@ export class DocumentManagementService implements OnDestroy {
                 ]
             }
         `;
-
     return mockDoc;
   }
 
@@ -458,7 +456,6 @@ export class DocumentManagementService implements OnDestroy {
                 }
             }
         `;
-
     return mockDoc;
   }
 
@@ -594,6 +591,25 @@ export class DocumentManagementService implements OnDestroy {
     });
   }
 
+  /**
+   * Push a user-defined Java archive file (binary buffer) to the runtime.
+   *
+   * @param binaryBuffer
+   */
+   setLibraryToService(binaryBuffer: any): void {
+     const serviceHeaders = new HttpHeaders(
+       {'Content-Type': 'application/octet-stream'});
+     const url = this.cfg.initCfg.baseMappingServiceUrl + 'library';
+     DataMapperUtil.debugLogJSON(null, 'Set Library Service Request', this.cfg.initCfg.debugMappingServiceCalls, url);
+     const fileContent: Blob = new Blob([binaryBuffer], {type: 'application/octet-stream'});
+     this.http.put(url, fileContent, { headers: serviceHeaders }).toPromise().then((res: any) => {
+         DataMapperUtil.debugLogJSON(res, 'Set Library Service Response', this.cfg.initCfg.debugMappingServiceCalls, url);
+       })
+       .catch((error: any) => {
+         this.handleError('Error occurred while uploading a JAR file to the server.', error); },
+     );
+   }
+
 /**
  * Read the selected file and parse it with the format defined by the specified inspection type.  Call the
  * initialization service to update the sources/ targets in both the runtime and the UI.  The runtime will
@@ -604,27 +620,21 @@ export class DocumentManagementService implements OnDestroy {
  * @param isSource
  */
   async processDocument(selectedFile: any, inspectionType: InspectionType, isSource: boolean) {
-
+      let fileBin = null;
       let fileText = '';
       const reader = new FileReader();
 
-      // Wait for the async read of the selected document to be completed.
-      try {
-        fileText = await DataMapperUtil.readFile(selectedFile, reader);
-      } catch (error) {
-        this.cfg.errorService.mappingError('Unable to import the specified schema document.', error);
-        return;
-      }
-
       this.cfg.errorService.clearValidationErrors();
 
-      const schemaFile = selectedFile.name.split('.')[0];
-      const schemaFileSuffix: string = selectedFile.name.split('.')[1].toUpperCase();
+      const userFileComps = selectedFile.name.split('.');
+      const userFile = userFileComps[0];
+      const userFileSuffix: string = userFileComps[userFileComps.length - 1].toUpperCase();
 
       // Derive the format if not already defined.
       if (inspectionType === InspectionType.UNKNOWN) {
-
-        if (schemaFileSuffix === DocumentType.XSD) {
+        if (userFileSuffix === DocumentType.JAVA_ARCHIVE) {
+          inspectionType = InspectionType.JAVA_CLASS;
+        } else if (userFileSuffix === DocumentType.XSD) {
           inspectionType = InspectionType.SCHEMA;
         } else if ((fileText.search('SchemaSet') === -1) || (fileText.search('\"\$schema\"') === -1)) {
           inspectionType = InspectionType.INSTANCE;
@@ -632,27 +642,57 @@ export class DocumentManagementService implements OnDestroy {
           inspectionType = InspectionType.SCHEMA;
         }
       }
-      switch (schemaFileSuffix) {
+
+      if (userFileSuffix === DocumentType.JAVA_ARCHIVE) {
+
+        // Wait for the async read of the selected binary document to be completed.
+        try {
+          fileBin = await DataMapperUtil.readBinaryFile(selectedFile, reader);
+        } catch (error) {
+          this.cfg.errorService.mappingError('Unable to import the specified schema document.', error);
+          return;
+        }
+      } else {
+
+        // Wait for the async read of the selected ascii document to be completed.
+        try {
+          fileText = await DataMapperUtil.readFile(selectedFile, reader);
+        } catch (error) {
+          this.cfg.errorService.mappingError('Unable to import the specified schema document.', error);
+          return;
+        }
+      }
+
+      switch (userFileSuffix) {
 
       case DocumentType.JSON:
-        this.cfg.initializationService.initializeUserDoc(fileText, schemaFile, DocumentType.JSON,
+        this.cfg.initializationService.initializeUserDoc(fileText, userFile, DocumentType.JSON,
           inspectionType, isSource);
         break;
 
+      case DocumentType.JAVA_ARCHIVE:
+        this.cfg.initializationService.initializeUserDoc(fileBin, userFile, DocumentType.JAVA_ARCHIVE,
+          inspectionType, isSource);
+        this.cfg.errorService.info(selectedFile.name +
+          ' import complete.  Select the plus icon on the Sources/Targets panel to enable specific classes.', null);
+        return;
+
       case 'java':
-        this.cfg.initializationService.initializeUserDoc(fileText, schemaFile, DocumentType.JAVA,
+        this.cfg.initializationService.initializeUserDoc(fileText, userFile, DocumentType.JAVA,
           inspectionType, isSource);
         break;
 
       case DocumentType.XML:
       case DocumentType.XSD:
-        this.cfg.initializationService.initializeUserDoc(fileText, schemaFile, schemaFileSuffix,
+        this.cfg.initializationService.initializeUserDoc(fileText, userFile, userFileSuffix,
           inspectionType, isSource);
         break;
 
       default:
-        this.handleError('Unrecognized document suffix (' + schemaFileSuffix + ')', null);
+        this.handleError('Unrecognized document suffix (' + userFileSuffix + ')', null);
       }
+      this.cfg.errorService.info(selectedFile.name + ' ' + userFileSuffix +
+        ' import complete.', null);
   }
 
   private createDocumentFetchRequest(docDef: DocumentDefinition, classPath: string): any {
@@ -695,7 +735,7 @@ export class DocumentManagementService implements OnDestroy {
     return payload;
   }
 
-  private parseDocumentResponse(responseJson: any, docDef: DocumentDefinition): void {
+  parseDocumentResponse(responseJson: any, docDef: DocumentDefinition): void {
     if (docDef.type === DocumentType.JAVA) {
       if (typeof responseJson.ClassInspectionResponse !== 'undefined') {
         this.extractJavaDocumentDefinitionFromInspectionResponse(responseJson, docDef);
@@ -772,7 +812,7 @@ export class DocumentManagementService implements OnDestroy {
     this.extractXMLDocumentDefinition(body, docDef);
   }
 
-  private extractXMLDocumentDefinition(body: any, docDef: DocumentDefinition): void {
+  extractXMLDocumentDefinition(body: any, docDef: DocumentDefinition): void {
     let xmlDocument: any;
     if (typeof body.xmlDocument !== 'undefined') {
       xmlDocument = body.xmlDocument;

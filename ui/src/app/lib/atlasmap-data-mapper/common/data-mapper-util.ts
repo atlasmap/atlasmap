@@ -98,6 +98,22 @@ export class DataMapperUtil {
   }
 
   /**
+   *  Perform an asynchronous binary read of the specified file name with the specified reader object.
+   *
+   * @param fileName - file to read
+   * @param reader - reader object
+   */
+  static async readBinaryFile(fileName: any, reader: any): Promise<Int8Array> {
+    return new Promise<Int8Array>((resolve, reject) => {
+      reader.onload = (event: any) => {
+        const fileBody = new Int8Array(reader.result);
+        resolve(fileBody);
+      };
+      reader.readAsArrayBuffer(fileName);
+    });
+  }
+
+  /**
    * Asynchronously write the specified file content (Blob) to the specified file name.  It will appear
    * in the user's local Downloads directory (or equivalent).
    *

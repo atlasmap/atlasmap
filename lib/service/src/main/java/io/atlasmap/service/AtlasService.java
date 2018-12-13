@@ -15,14 +15,20 @@
  */
 package io.atlasmap.service;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -47,8 +53,6 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.transform.stream.StreamSource;
 
-import org.jboss.resteasy.plugins.providers.multipart.InputPart;
-import org.jboss.resteasy.plugins.providers.multipart.MultipartInput;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,6 +61,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.api.AtlasSession;
+import io.atlasmap.core.AtlasUtil;
 import io.atlasmap.core.DefaultAtlasContextFactory;
 import io.atlasmap.core.DefaultAtlasFieldActionService;
 import io.atlasmap.service.AtlasLibraryLoader.AtlasLibraryLoaderListener;
@@ -88,6 +93,7 @@ public class AtlasService {
     private final AtlasContext defaultContext;
 
     private String atlasmapCatalogName = "atlasmap-catalog.adm";
+    private String atlasmapCatalogFilesName = "adm-catalog-files.gz";
     private String baseFolder = "target";
     private String mappingFolder = baseFolder + File.separator + "mappings";
     private String libFolder = baseFolder + File.separator + "lib";
@@ -212,6 +218,8 @@ public class AtlasService {
                     }
                 }
             }
+            java.nio.file.Path libFolderPath = Paths.get(libFolder);
+            AtlasUtil.deleteDirectoryContents(libFolderPath.toFile());
         } catch (Exception e) {
             throw new WebApplicationException(e.getMessage(), e, Status.INTERNAL_SERVER_ERROR);
         }
@@ -228,6 +236,7 @@ public class AtlasService {
     public Response getMappingRequest(
       @ApiParam("Mapping Format") @PathParam("mappingFormat") String mappingFormat,
       @ApiParam("Mapping ID") @PathParam("mappingId") String mappingId) {
+        LOG.debug("getMappingRequest: {} '{}'", mappingFormat, mappingId);
         File mappingFile = getMappingFile(mappingFormat, mappingId);
 
         if (mappingFile == null) {
@@ -253,12 +262,13 @@ public class AtlasService {
             }
             return Response.ok().entity(toJson(atlasMapping)).build();
         case "GZ":
+        case "ZIP":
             byte[] binData = null;
             try {
-                FileInputStream inputStream = new FileInputStream(mappingFile);
+                FileInputStream inputStream = new FileInputStream(mappingFilePath);
                 int length = inputStream.available();
                 binData = new byte[length];
-                int bytesRead = inputStream.read(binData);
+                inputStream.read(binData);
                 inputStream.close();
             } catch (Exception e) {
                 LOG.error("Error getting compressed mapping documents.\n" + e.getMessage(), e);
@@ -280,20 +290,36 @@ public class AtlasService {
     public Response createMappingRequest(InputStream mapping,
       @ApiParam("Mapping Format") @PathParam("mappingFormat") String mappingFormat,
       @Context UriInfo uriInfo) {
-        LOG.debug("createMappingRequest with format '{}'", mappingFormat);
+        LOG.debug("createMappingRequest (save) with format '{}'", mappingFormat);
+        UriBuilder builder = uriInfo.getAbsolutePathBuilder();
+        File mappingDir = new File(mappingFolder);
+        if (!mappingDir.exists()) {
+            mappingDir.mkdirs();
+        }
+
         switch (mappingFormat) {
         case "XML":
            return saveMapping(fromXml(mapping, AtlasMapping.class), uriInfo);
         case "JSON":
            return saveMapping(fromJson(mapping, AtlasMapping.class), uriInfo);
         case "GZ":
-            LOG.debug("saveCompressedMappingRequest '{}'", atlasmapCatalogName);
+            LOG.debug("  saveCompressedMappingRequest '{}'", atlasmapCatalogFilesName);
             try {
-                createBinaryMappingFile(atlasmapCatalogName, mapping);
+                createMappingFile(atlasmapCatalogFilesName, mapping);
+                createCompressedCatalog();
             } catch (Exception e) {
                 LOG.error("Error saving compressed mapping documents.\n" + e.getMessage(), e);
             }
-            UriBuilder builder = uriInfo.getAbsolutePathBuilder();
+            builder.path(atlasmapCatalogFilesName);
+            return Response.ok().location(builder.build()).build();
+        case "ZIP":
+            LOG.debug("  saveCompressedADMRequest '{}'", atlasmapCatalogName);
+            try {
+                createMappingFile(atlasmapCatalogName, mapping);
+                extractCompressedCatalog();
+            } catch (Exception e) {
+                LOG.error("Error saving compressed mapping documents.\n" + e.getMessage(), e);
+            }
             builder.path(atlasmapCatalogName);
             return Response.ok().location(builder.build()).build();
         default:
@@ -373,31 +399,24 @@ public class AtlasService {
         return "pong";
     }
 
-    @POST
+    @PUT
     @Path("/library")
-    @ApiOperation(value = "Upload Library", notes = "Upload library jar files")
-    @Consumes({ "multipart/mixed" })
+    @ApiOperation(value = "Upload Library", notes = "Upload a Java library archive file")
+    @Consumes({MediaType.APPLICATION_OCTET_STREAM})
     @ApiResponses(@ApiResponse(
-            code = 200, message = "Succeeded to upload library"))
-    public Response uploadLibrary(MultipartInput requestIn) {
-        if (requestIn == null || requestIn.getParts() == null || requestIn.getParts().isEmpty()) {
-            throw new WebApplicationException("No library file is found in request body");
+            code = 200, message = "Library upload successful."))
+    public Response uploadLibrary(InputStream requestIn) {
+        if (requestIn == null) {
+            throw new WebApplicationException("No library file found in request body");
         }
 
-        for (InputPart part : requestIn.getParts()) {
-            MediaType type = part.getMediaType();
-            if (!MediaType.APPLICATION_OCTET_STREAM_TYPE.equals(type)) {
-                throw new WebApplicationException(String.format("Unsupported media type ''", type.getType()));
+        try {
+            libraryLoader.addJarFromStream(requestIn);
+        } catch (Exception e) {
+            if (LOG.isDebugEnabled()) {
+                LOG.error("", e);
             }
-
-            try {
-                libraryLoader.addJarFromStream(part.getBody(InputStream.class, null));
-            } catch (Exception e) {
-                if (LOG.isDebugEnabled()) {
-                    LOG.error("", e);
-                }
-                throw new WebApplicationException("Could not read file part: " + e.getMessage());
-            }
+            throw new WebApplicationException("Could not read file part: " + e.getMessage());
         }
         return Response.ok().build();
     }
@@ -499,24 +518,156 @@ public class AtlasService {
         return new File(fileName);
     }
 
-    private void createBinaryMappingFile(String fileName, InputStream mapping) throws IOException {
-        File dir = new File(mappingFolder);
-        if (!dir.exists()) {
-            dir.mkdirs();
+    /**
+     * Write to the specified ZIP output stream the specified local file.
+     *
+     * @param zipOut
+     * @param fileToZip
+     *
+     * @throws IOException
+     */
+    private void addFileAsZip(ZipOutputStream zipOut, String fileToZip) throws IOException {
+        byte[] buffer = new byte[2048];
+        BufferedInputStream in = new BufferedInputStream(new FileInputStream(fileToZip));
+        int count = -1;
+        while ((count = in.read(buffer)) != -1) {
+            zipOut.write(buffer, 0, count);
         }
-        String filePath = mappingFolder + File.separator + fileName;
-        LOG.debug("Creating binary mapping file '{}'", filePath);
-        FileOutputStream outputStream = new FileOutputStream(filePath);
+        in.close();
+    }
+
+    /**
+     * Create a compressed (ZIP) ADM catalog.  The contents are:
+     *
+     *   - the user-specified instance/schema files (JSON/XML) and mappings (XML) captured in a JSON
+     *     document, compressed (GZIP).
+     *   - the user-specified Java archives (JAR).
+     *
+     * @param mappingDir
+     * @throws IOException
+     */
+    private void createCompressedCatalog() throws IOException {
+        String compressedCatalogName = mappingFolder + File.separator + atlasmapCatalogName;
+        String compressedCatalogFilesName = mappingFolder + File.separator + atlasmapCatalogFilesName;
+
+        try {
+
+            // Binary, compressed instance/schema/mappings + java libraries : target/mappings/atlasmap-catalog.adm
+           ZipOutputStream zipOut = new ZipOutputStream(new FileOutputStream(compressedCatalogName));
+           LOG.debug("Creating compressed catalog ADM file '{}'", compressedCatalogName);
+
+           zipOut.putNextEntry(new ZipEntry("cat-files/"));
+           zipOut.closeEntry();
+           ZipEntry catEntry = new ZipEntry("cat-files/" + atlasmapCatalogFilesName);
+           zipOut.putNextEntry(catEntry);
+
+           LOG.debug("  Creating compressed catalog files '{}'", compressedCatalogFilesName);
+           addFileAsZip(zipOut, compressedCatalogFilesName);
+           zipOut.closeEntry();
+
+           zipOut.putNextEntry(new ZipEntry("lib/"));
+           zipOut.closeEntry();
+
+           // .../target/lib
+           java.nio.file.Path libFolderPath = Paths.get(libFolder);
+
+           // User class libraries.
+           File[] jars = libFolderPath.toFile().listFiles(new FilenameFilter() {
+               @Override
+               public boolean accept(File dir, String libName) {
+                   if (libName != null) {
+                       return true;
+                   }
+                   return false;
+                }
+           });
+
+           try {
+               for (File jarFile : jars) {
+                   LOG.debug("  Creating zip file entry '{}'", "lib/" + jarFile.getName());
+                   ZipEntry libEntry = new ZipEntry("lib/" + jarFile.getName());
+                   zipOut.putNextEntry(libEntry);
+                   addFileAsZip(zipOut, libFolderPath.toString() + File.separator  + jarFile.getName());
+                   zipOut.closeEntry();
+               }
+           } catch (IOException e) {
+               throw new IOException(e.getMessage());
+           }
+
+           zipOut.close();
+       } catch (FileNotFoundException e) {
+           throw new WebApplicationException("Error creating ADM catalog. " + e.getMessage(), e);
+       }
+    }
+
+    /**
+     * Unzip the ADM catalog file into its constituent parts:
+     *
+     * - target/mappings/adm-catalog-files.gz
+     * - target/lib/...jar
+     *
+     * @throws IOException
+     */
+    private void extractCompressedCatalog() throws IOException {
+        byte[] buffer = new byte[2048];
+        String catalogName = mappingFolder + File.separator + atlasmapCatalogName;
+        String catEntryname;
+
+        try {
+            ZipInputStream zipIn = new ZipInputStream(new FileInputStream(catalogName));
+            ZipEntry catEntry;
+            BufferedOutputStream out;
+
+            while ((catEntry = zipIn.getNextEntry()) != null) {
+                catEntryname = catEntry.getName();
+                if (catEntryname.contains(atlasmapCatalogFilesName)) {
+                    out = new BufferedOutputStream(new FileOutputStream(mappingFolder + File.separator + atlasmapCatalogFilesName));
+                }
+                else if (catEntryname.contains(".jar")) {
+                    out = new BufferedOutputStream(new FileOutputStream(baseFolder + File.separator + catEntryname));
+                }
+                else {
+                    continue;
+                }
+                LOG.debug("  Extracting ADM file entry '{}'", catEntryname);
+                try {
+                    int len = 0;
+                    while ((len = zipIn.read(buffer)) > 0) {
+                        out.write(buffer, 0, len);
+                    }
+                }
+                finally {
+                    if (out != null) out.close();
+                }
+            }
+            zipIn.close();
+
+        } catch (IOException e) {
+            throw new IOException(e.getMessage());
+        }
+    }
+
+    /**
+     * Create a file in the mapping folder based on the specified file name containing the specified stream.
+     *
+     * @param fileName
+     * @param mapping
+     * @throws IOException
+     */
+    private void createMappingFile(String fileName, InputStream mapping) throws IOException {
+        String outputFilePath = mappingFolder + File.separator + fileName;
+        LOG.debug("Creating mapping file '{}'", outputFilePath);
+        FileOutputStream outputStream = new FileOutputStream(outputFilePath);
+
         int length = 0;
         byte[] data = null;
-        int bytesRead = 0;
         do {
             length = mapping.available();
             if (length <= 0) {
                 break;
             }
             data = new byte[length];
-            if ((bytesRead = mapping.read(data)) == -1) {
+            if ((mapping.read(data)) == -1) {
                 break;
             }
             outputStream.write(data);
@@ -525,6 +676,13 @@ public class AtlasService {
         mapping.close();
     }
 
+    /**
+     * Return a File object based on the specified format and ID.
+     *
+     * @param mappingFormat
+     * @param mappingId
+     * @return
+     */
     private File getMappingFile(String mappingFormat, String mappingId) {
         File mappingFile = null;
         java.nio.file.Path mappingFilePath = null;
@@ -533,7 +691,7 @@ public class AtlasService {
             mappingFilePath = Paths.get(mappingFolder + File.separator + generateMappingFileName(mappingId));
         }
         else {
-            mappingFilePath = Paths.get(mappingFolder + File.separator + atlasmapCatalogName);
+            mappingFilePath = Paths.get(mappingFolder + File.separator + mappingId);
         }
 
         mappingFile = mappingFilePath.toFile();

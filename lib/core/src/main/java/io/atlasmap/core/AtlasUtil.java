@@ -437,4 +437,28 @@ public class AtlasUtil {
                   .replaceAll("%5B", "[")
                   .replaceAll("%5D", "]");
     }
+
+    public static void deleteDirectory(File targetDir) {
+        File[] allContents = targetDir.listFiles();
+        if (allContents != null) {
+            for (File file : allContents) {
+                file.delete();
+            }
+        }
+        targetDir.delete();
+        return;
+    }
+
+    public static void deleteDirectoryContents(File targetDir) {
+        File[] allContents = targetDir.listFiles();
+        if (allContents != null) {
+            for (File element : allContents) {
+                if (element.isFile())
+                    element.delete();
+                else if (element.isDirectory())
+                    deleteDirectory(element);
+            }
+        }
+        return;
+    }
 }

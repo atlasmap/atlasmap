@@ -15,6 +15,7 @@ limitations under the License.
 */
 import { Component, Input, OnInit } from '@angular/core';
 
+import { InspectionType } from '../common/config.types';
 import { ConfigModel } from '../models/config.model';
 import { InitializationService } from '../services/initialization.service';
 
@@ -51,32 +52,37 @@ export class ToolbarComponent implements OnInit {
     });
   }
 
-  /* A user has selected a compressed mappings catalog file to be imported into the canvas.
-  *
-  * @param event
-  */
-  async processMappingsCatalog(event) {
+  /**
+   * The user has imported a file (mapping catalog or Java archive).  Process accordingly.
+   *
+   * @param event
+   */
+  processImportedFile(event) {
+    const userFileComps = event.target.files[0].name.split('.');
+    const userFile = userFileComps[0];
+    const userFileSuffix: string = userFileComps[userFileComps.length - 1].toUpperCase();
+
+    if (userFileSuffix === 'ADM') {
+      this.processMappingsCatalog(event.target.files[0]);
+    } else if (userFileSuffix === 'JAR') {
+      this.cfg.documentService.processDocument(event.target.files[0], InspectionType.JAVA_CLASS, false);
+    }
+  }
+
+  /**
+   * A user has selected a compressed mappings catalog (ZIP) file to be imported into the canvas.
+   *
+   * @param selectedFile
+   */
+  async processMappingsCatalog(selectedFile: any) {
     this.cfg.initCfg.initialized = false;
-    this.cfg.initializationService.updateLoadingStatus('Importing AtlasMap Mappings');
+    this.cfg.initializationService.updateLoadingStatus('Importing AtlasMap Catalog');
+    await this.cfg.mappingService.importADMCatalog(selectedFile);
 
-    // Wait for the async read of the selected mappings doc to be completed.
-    try {
-      this.fileData = await this.readFile(new Blob([event.target.files[0]]));
-    } catch (error) {
-      this.cfg.errorService.mappingError('Unable to import the specified data mappings file: ' +
-        event.target.files[0].name + '\n' + error.message, error);
-      return;
-    }
+  }
 
-    // Inflate the buffer and push it to the server.
-    try {
-      this.cfg.initializationService.processMappingsCatalog(this.fileData, true);
-      window.location.reload(true);
-    } catch (error) {
-      this.cfg.errorService.mappingError('Unable to decompress the aggregate mappings file: \n' + event.target.files[0].name +
-       '\n' + error.message, error);
-      return;
-    }
+  getFileSuffix() {
+    return '.adm,.jar';
   }
 
   getCSSClass(action: string) {
@@ -153,7 +159,8 @@ export class ToolbarComponent implements OnInit {
   }
 
   /**
-   * Establish a modal window popup and if confirmed remove all mapping files from the server and restart the DM.
+   * Establish a modal window popup and if confirmed remove all mapping files and imported JARs from
+   * the server and restart the DM.
    */
   private resetAll(): void {
     this.modalWindow.reset();

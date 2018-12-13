@@ -60,6 +60,9 @@ export class DocumentDefinition {
   private static noneField: Field = null;
   private static padField: Field = null;
 
+  LEFT_BRACKET = '\x5b';
+  RIGHT_BRACKET = '\x5d';
+
   id: string;
   _type: DocumentType;
   name: string;
@@ -152,6 +155,7 @@ export class DocumentDefinition {
   /**
    * Return true if the specified field name already exists in the specified document definition,
    * false otherwise.
+   *
    * @param targetField
    * @param targetFieldDocDefType
    */
@@ -399,7 +403,7 @@ export class DocumentDefinition {
     }
     field.path = parentPath + field.getNameWithNamespace();
     if (field.isCollection) {
-      field.path += field.isArray ? '[]' : '<>';
+      field.path += field.isArray ? (this.LEFT_BRACKET + this.RIGHT_BRACKET) : '<>';
     }
     if (field.isAttribute) {
       field.path = parentPath += '@' + field.name;

@@ -30,12 +30,12 @@ Retrieves a list of available field action
 [[_atlas-service-core-uploadlibrary]]
 === Upload Library
 ....
-POST /library
+PUT /library
 ....
 
 
 ==== Description
-Upload library jar files
+Upload a Java library archive file
 
 
 ==== Responses
@@ -43,13 +43,13 @@ Upload library jar files
 [options="header", cols=".^2a,.^14a,.^4a"]
 |===
 |HTTP Code|Description|Schema
-|**200**|Succeeded to upload library|No Content
+|**200**|Library upload successful.|No Content
 |===
 
 
 ==== Consumes
 
-* `multipart/mixed`
+* `application/octet-stream`
 
 
 [[_atlas-service-core-resetmappings]]

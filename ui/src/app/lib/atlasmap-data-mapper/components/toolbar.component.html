@@ -4,15 +4,15 @@
 
     <div *ngIf="!cfg.initCfg.disableNavbar" class="inline-block pull-left">
       <label [attr.class]="getCSSClass('importMappings')" *ngIf="!cfg.initCfg.disableNavbar"
-        tooltip="Import an AtlasMap mappings file (.adm)." placement="bottom" style="font-size:20px;margin-top:2px;">
-        <input type="file" accept=".adm" name="usermappingsfile" style="display:none" id="usermappingsfile"
-          (change)="processMappingsCatalog($event)">
+        tooltip="Import an AtlasMap mappings catalog file (.adm) or Java archive (.jar)." placement="bottom" style="font-size:20px;margin-top:2px;">
+        <input type="file" accept="{{ getFileSuffix() }}" name="usermappingsfile" style="display:none" id="usermappingsfile"
+          (change)="processImportedFile($event)">
       </label>
     </div>
 
     <div *ngIf="!cfg.initCfg.disableNavbar" dropdown #dropdown="bs-dropdown" class="dropdown inline-block pull-left">
       <i [attr.class]="getCSSClass('exportMappings')" dropdownToggle (click)="false" style="float:left;color: black;margin-top:2px;"
-        tooltip="Export the current mappings and support files." placement="bottom"></i>
+        tooltip="Export the current mappings and support files into a catalog (.adm) file." placement="bottom"></i>
       <ul *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu">
         <div style="font-size:14px; width:426px;">
           <a href="#">
