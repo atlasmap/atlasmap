@@ -318,8 +318,10 @@ export class MappingDefinition {
       } else {
         doc = docMap[mappedField.parsedData.parsedDocURI] as DocumentDefinition;
         if (doc == null) {
-          cfg.errorService.error('Could not find document for mapped field \'' + mappedField.parsedData.parsedName +
-            '\' at URI ' + mappedField.parsedData.parsedDocURI, null);
+          if (mappedField.parsedData.parsedName != null) {
+            cfg.errorService.error('Could not find document for mapped field \'' + mappedField.parsedData.parsedName +
+              '\' at URI ' + mappedField.parsedData.parsedDocURI, null);
+          }
           continue;
         }
 

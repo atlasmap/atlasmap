@@ -106,6 +106,9 @@
 .DataMapperUI .docDef .fieldsCount { padding:5px; font-size:10px; font-weight:bold;
     text-align:right; margin:0; width:100%; border-top:1px solid #CAC9C9; padding-right:12px;
     border-bottom:0px solid black; }
+.DataMapperUI .ClassNameComponent INPUT, DataMapperUI .ClassNameComponent .form-group SELECT { width:300px; }
+.DataMapperUI .ClassNameComponent .form-group LABEL { width:300px; }
+.DataMapperUI .ClassNameComponent .form-group TEXTAREA { margin:auto; }
 .DataMapperUI .docDef .documentHeader { color:white; background-image:linear-gradient(to bottom, rgb(125,125,125), rgb(54,54,54));
     font-size:16px; padding-top:5px; margin:0px; overflow:hidden; }
 .DataMapperUI .docDef .documentHeader I.link:hover { color:rgb(54,54,54); }

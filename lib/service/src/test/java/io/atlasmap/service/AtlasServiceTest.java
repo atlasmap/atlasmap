@@ -158,14 +158,7 @@ public class AtlasServiceTest {
         jarOut.closeEntry();
         jarOut.close();
         FileInputStream jarIn = new FileInputStream("target/tmp/my.jar");
-        MultipartInput requestIn = mock(MultipartInput.class);
-        List<InputPart> parts = new LinkedList<>();
-        InputPart jarPart = mock(InputPart.class);
-        parts.add(jarPart);
-        when(requestIn.getParts()).thenReturn(parts);
-        when(jarPart.getBody(InputStream.class, null)).thenReturn(jarIn);
-        when(jarPart.getMediaType()).thenReturn(MediaType.APPLICATION_OCTET_STREAM_TYPE);
-        Response resUL = service.uploadLibrary(requestIn);
+        Response resUL = service.uploadLibrary(jarIn);
         assertEquals(200, resUL.getStatus());
         Response resFA = service.listFieldActions(null);
         assertEquals(200, resFA.getStatus());

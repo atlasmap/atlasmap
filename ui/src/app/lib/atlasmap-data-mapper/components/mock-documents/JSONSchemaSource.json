@@ -1,0 +1,67 @@
+  {
+    "$schema": "http://json-schema.org/schema#",
+    "description": "Order",
+    "type": "object",
+    "properties": {
+      "order": {
+        "type": "object",
+        "properties": {
+          "address": {
+          "type": "object",
+          "properties": {
+            "street": { "type": "string" },
+            "city": { "type": "string" },
+            "state": { "type": "string" },
+            "zip": { "type": "string" }
+          }
+        },
+        "contact": {
+          "type": "object",
+          "properties": {
+            "firstName": { "type": "string" },
+            "lastName": { "type": "string" },
+            "phone": { "type": "string" }
+          }
+        },
+        "orderId": { "type": "string" }
+      }
+    },
+    "primitives": {
+      "type": "object",
+      "properties": {
+        "stringPrimitive": { "type": "string" },
+        "booleanPrimitive": { "type": "boolean" },
+        "numberPrimitive": { "type": "number" }
+      }
+    },
+    "primitiveArrays": {
+      "type": "object",
+      "properties": {
+        "stringArray": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "booleanArray": {
+          "type": "array",
+          "items": { "type": "boolean" }
+        },
+        "numberArray": {
+          "type": "array",
+          "items": { "type": "number" }
+        }
+      }
+    },
+    "addressList": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "street": { "type": "string" },
+          "city": { "type": "string" },
+          "state": { "type": "string" },
+          "zip": { "type": "string" }
+        }
+      }
+    }
+    }
+  }
