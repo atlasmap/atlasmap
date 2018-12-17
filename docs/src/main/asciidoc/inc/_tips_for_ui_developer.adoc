@@ -45,7 +45,7 @@ These flags control the UI automatically adding the specified mock documents to 
 
 The code that initializes these mock documents is in the https://github.com/atlasmap/atlasmap/blob/master/ui/src/app/lib/atlasmap-data-mapper/services/initialization.service.ts[InitializationService].
 That service calls various static methods in the https://github.com/atlasmap/atlasmap/blob/master/ui/src/app/lib/atlasmap-data-mapper/services/document-management.service.ts[DocumentManagementService] to create example XML instance, XML schema, and JSON documents.
-Mock Java documents referenced are from the AtlasMap Services' https://github.com/atlasmap/atlasmap/tree/master/runtime/modules/java/test-model/src/main/java/io/atlasmap/java/test[Atlas Java Test Model Maven Module].
+Mock Java documents referenced are from the AtlasMap Services' https://github.com/atlasmap/atlasmap/tree/master/lib/modules/java/test-model/src/main/java/io/atlasmap/java/test[Atlas Java Test Model Maven Module].
 
 ==== Additional Debug Configuration
 
