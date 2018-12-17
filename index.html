@@ -524,7 +524,7 @@ table.CodeRay td.code>pre{padding:0}
 <div class="details">
 <span id="author" class="author">The AtlasMap Team</span><br>
 <span id="revnumber">version 1.39.0-SNAPSHOT,</span>
-<span id="revdate">2018-12-14</span>
+<span id="revdate">2018-12-17</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">AtlasMap Developer Guide</div>
@@ -803,7 +803,7 @@ $ yarn link @atlasmap/atlasmap-data-mapper</code></pre>
 <div class="paragraph">
 <p>The code that initializes these mock documents is in the <a href="https://github.com/atlasmap/atlasmap/blob/master/ui/src/app/lib/atlasmap-data-mapper/services/initialization.service.ts">InitializationService</a>.
 That service calls various static methods in the <a href="https://github.com/atlasmap/atlasmap/blob/master/ui/src/app/lib/atlasmap-data-mapper/services/document-management.service.ts">DocumentManagementService</a> to create example XML instance, XML schema, and JSON documents.
-Mock Java documents referenced are from the AtlasMap Services' <a href="https://github.com/atlasmap/atlasmap/tree/master/runtime/modules/java/test-model/src/main/java/io/atlasmap/java/test">Atlas Java Test Model Maven Module</a>.</p>
+Mock Java documents referenced are from the AtlasMap Services' <a href="https://github.com/atlasmap/atlasmap/tree/master/lib/modules/java/test-model/src/main/java/io/atlasmap/java/test">Atlas Java Test Model Maven Module</a>.</p>
 </div>
 </div>
 <div class="sect4">
@@ -916,7 +916,7 @@ Mock Java documents referenced are from the AtlasMap Services' <a href="https://
 <p>AtlasMap Document object defines a tree of fields. Defining a set of field-to-field mapping is all about the mappings in AtlasMap.</p>
 </div>
 <div class="paragraph">
-<p>Another thing to know for AtlasMap internal is the modules located <a href="https://github.com/atlasmap/atlasmap/tree/master/runtime/modules">here</a> in repository. Module in AtlasMap is a facility to plug-in an individual data format support like Java, JSON and XML. Each module implements roughly following 2 parts:</p>
+<p>Another thing to know for AtlasMap internal is the modules located <a href="https://github.com/atlasmap/atlasmap/tree/master/lib/modules">here</a> in repository. Module in AtlasMap is a facility to plug-in an individual data format support like Java, JSON and XML. Each module implements roughly following 2 parts:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -1026,7 +1026,7 @@ There is also an overview document for the Data Mapper step in Syndesis, which m
 <div class="ulist">
 <ul>
 <li>
-<p>Code Location: <a href="https://github.com/atlasmap/atlasmap/blob/master/runtime/service" class="bare">https://github.com/atlasmap/atlasmap/blob/master/runtime/service</a></p>
+<p>Code Location: <a href="https://github.com/atlasmap/atlasmap/blob/master/lib/service" class="bare">https://github.com/atlasmap/atlasmap/blob/master/lib/service</a></p>
 </li>
 <li>
 <p>API Reference: <a href="inc/swagger/index.html#core">Core Service</a></p>
@@ -1042,7 +1042,7 @@ There is also an overview document for the Data Mapper step in Syndesis, which m
 <div class="ulist">
 <ul>
 <li>
-<p>Code Location: <a href="https://github.com/atlasmap/atlasmap/blob/master/runtime/modules/java/service" class="bare">https://github.com/atlasmap/atlasmap/blob/master/runtime/modules/java/service</a></p>
+<p>Code Location: <a href="https://github.com/atlasmap/atlasmap/blob/master/lib/modules/java/service" class="bare">https://github.com/atlasmap/atlasmap/blob/master/lib/modules/java/service</a></p>
 </li>
 <li>
 <p>API Reference: <a href="inc/swagger/index.html#java">Java Service</a></p>
@@ -1058,7 +1058,7 @@ There is also an overview document for the Data Mapper step in Syndesis, which m
 <div class="ulist">
 <ul>
 <li>
-<p>Code Location: <a href="https://github.com/atlasmap/atlasmap/blob/master/runtime/modules/json/service" class="bare">https://github.com/atlasmap/atlasmap/blob/master/runtime/modules/json/service</a></p>
+<p>Code Location: <a href="https://github.com/atlasmap/atlasmap/blob/master/lib/modules/json/service" class="bare">https://github.com/atlasmap/atlasmap/blob/master/lib/modules/json/service</a></p>
 </li>
 <li>
 <p>API Reference: <a href="inc/swagger/index.html#json">JSON Service</a></p>
@@ -1074,7 +1074,7 @@ There is also an overview document for the Data Mapper step in Syndesis, which m
 <div class="ulist">
 <ul>
 <li>
-<p>Code Location: <a href="https://github.com/atlasmap/atlasmap/blob/master/runtime/modules/xml/service" class="bare">https://github.com/atlasmap/atlasmap/blob/master/runtime/modules/xml/service</a></p>
+<p>Code Location: <a href="https://github.com/atlasmap/atlasmap/blob/master/lib/modules/xml/service" class="bare">https://github.com/atlasmap/atlasmap/blob/master/lib/modules/xml/service</a></p>
 </li>
 <li>
 <p>API Reference: <a href="inc/swagger/index.html#xml">XML Service</a></p>
@@ -1091,7 +1091,7 @@ There is also an overview document for the Data Mapper step in Syndesis, which m
 <div class="ulist">
 <ul>
 <li>
-<p>Code Location: <a href="https://github.com/atlasmap/atlasmap/blob/master/runtime/" class="bare">https://github.com/atlasmap/atlasmap/blob/master/runtime/</a></p>
+<p>Code Location: <a href="https://github.com/atlasmap/atlasmap/blob/master/lib/" class="bare">https://github.com/atlasmap/atlasmap/blob/master/lib/</a></p>
 </li>
 </ul>
 </div>
@@ -1115,15 +1115,15 @@ context.process(session); <i class="conum" data-value="5"></i><b>(5)</b>
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td><a href="https://github.com/atlasmap/atlasmap/blob/master/runtime/api/src/main/java/io/atlasmap/api/AtlasContextFactory.java">AtlasContextFactory</a> is a singleton instance on JVM, which holds global configuration for the AtlasMap.</td>
+<td><a href="https://github.com/atlasmap/atlasmap/blob/master/lib/api/src/main/java/io/atlasmap/api/AtlasContextFactory.java">AtlasContextFactory</a> is a singleton instance on JVM, which holds global configuration for the AtlasMap.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
-<td><code>AtlasContextFactory#createContext(File)</code> creates <a href="https://github.com/atlasmap/atlasmap/blob/master/runtime/api/src/main/java/io/atlasmap/api/AtlasContext.java">AtlasContext</a> which represents an AtlasMap mapping context for each mapping definitions by feeding a mapping definition file.</td>
+<td><code>AtlasContextFactory#createContext(File)</code> creates <a href="https://github.com/atlasmap/atlasmap/blob/master/lib/api/src/main/java/io/atlasmap/api/AtlasContext.java">AtlasContext</a> which represents an AtlasMap mapping context for each mapping definitions by feeding a mapping definition file.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="3"></i><b>3</b></td>
-<td><a href="https://github.com/atlasmap/atlasmap/blob/master/runtime/api/src/main/java/io/atlasmap/api/AtlasSession.java">AtlasSession</a> represents a mapping processing session. <code>AtlasSession</code> should be created for each execution and should <strong>NOT</strong> be shared among multiple threads.</td>
+<td><a href="https://github.com/atlasmap/atlasmap/blob/master/lib/api/src/main/java/io/atlasmap/api/AtlasSession.java">AtlasSession</a> represents a mapping processing session. <code>AtlasSession</code> should be created for each execution and should <strong>NOT</strong> be shared among multiple threads.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="4"></i><b>4</b></td>
@@ -1142,10 +1142,10 @@ context.process(session); <i class="conum" data-value="5"></i><b>(5)</b>
 <div class="sect3">
 <h4 id="internal-runtime-atlasmodule">3.3.1. AtlasModule and mapping process</h4>
 <div class="paragraph">
-<p><a href="https://github.com/atlasmap/atlasmap/blob/master/runtime/api/src/main/java/io/atlasmap/spi/AtlasModule.java">AtlasModule</a> is a SPI to be implemented by each modules like
-<a href="https://github.com/atlasmap/atlasmap/tree/master/runtime/modules/java">Java</a>,
-<a href="https://github.com/atlasmap/atlasmap/tree/master/runtime/modules/json">JSON</a> and
-<a href="https://github.com/atlasmap/atlasmap/tree/master/runtime/modules/xml">XML</a>. The methods defined in <code>AtlasModule</code> are invoked from <code>AtlasContext</code> while <code>AtlasContext#process(AtlasSession)</code> is in progress.</p>
+<p><a href="https://github.com/atlasmap/atlasmap/blob/master/lib/api/src/main/java/io/atlasmap/spi/AtlasModule.java">AtlasModule</a> is a SPI to be implemented by each modules like
+<a href="https://github.com/atlasmap/atlasmap/tree/master/lib/modules/java">Java</a>,
+<a href="https://github.com/atlasmap/atlasmap/tree/master/lib/modules/json">JSON</a> and
+<a href="https://github.com/atlasmap/atlasmap/tree/master/lib/modules/xml">XML</a>. The methods defined in <code>AtlasModule</code> are invoked from <code>AtlasContext</code> while <code>AtlasContext#process(AtlasSession)</code> is in progress.</p>
 </div>
 <div class="paragraph">
 <p><code>AtlasContext#process(AtlasSession)</code> goes on in following order:</p>
@@ -1226,14 +1226,14 @@ context.process(session); <i class="conum" data-value="5"></i><b>(5)</b>
 <h4 id="internal-runtime-typeconverter">3.3.2. TypeConverter</h4>
 <div class="paragraph">
 <p>TypeConverter converts one field value to the expected field type. This is automatically invoked during mapping when the actual value is not in expected type. AtlasMap runtime provides OOTB converters for the AtlasMap primitive types
-<a href="https://github.com/atlasmap/atlasmap/tree/master/runtime/core/src/main/java/io/atlasmap/converters">here</a>.</p>
+<a href="https://github.com/atlasmap/atlasmap/tree/master/lib/core/src/main/java/io/atlasmap/converters">here</a>.</p>
 </div>
 </div>
 <div class="sect3">
 <h4 id="internal-runtime-fieldaction">3.3.3. FieldAction (Transformation)</h4>
 <div class="paragraph">
 <p>FieldAction is a function you can apply on a field value as a part of mapping. AtlasMap provides a variety of FieldActions you can apply in the middle of processing mappings
-<a href="https://github.com/atlasmap/atlasmap/tree/master/runtime/core/src/main/java/io/atlasmap/actions">here</a>.
+<a href="https://github.com/atlasmap/atlasmap/tree/master/lib/core/src/main/java/io/atlasmap/actions">here</a>.
 Also There is a <a href="#fieldAction">Reference</a> for all available FieldAction.</p>
 </div>
 </div>
@@ -1911,7 +1911,7 @@ string.</p></td>
 <div id="footer">
 <div id="footer-text">
 Version 1.39.0-SNAPSHOT<br>
-Last updated 2018-12-14 11:23:15 UTC
+Last updated 2018-12-17 14:51:17 UTC
 </div>
 </div>
 </body>
