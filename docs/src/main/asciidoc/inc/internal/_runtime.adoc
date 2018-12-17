@@ -1,7 +1,7 @@
 [[internal-runtime-engine]]
 == Runtime Engine
 
-* Code Location: https://github.com/atlasmap/atlasmap/blob/master/runtime/
+* Code Location: https://github.com/atlasmap/atlasmap/blob/master/lib/
 
 AtlasMap runtime engine consumes mapping definition file created via <<internal-ui,Data Mapper UI>> as well as actual data payload and perform mapping.
 
@@ -15,9 +15,9 @@ session.setSourceDocument("myJsonSourceDoc", "{...}"); // <4>
 context.process(session); // <5>
 Object targetDoc = session.getTargetDocument("myXmlTargetDoc"); // <6>
 --------------------------------------------------------------------
-<1> https://github.com/atlasmap/atlasmap/blob/master/runtime/api/src/main/java/io/atlasmap/api/AtlasContextFactory.java[AtlasContextFactory] is a singleton instance on JVM, which holds global configuration for the AtlasMap.
-<2> `AtlasContextFactory#createContext(File)` creates https://github.com/atlasmap/atlasmap/blob/master/runtime/api/src/main/java/io/atlasmap/api/AtlasContext.java[AtlasContext] which represents an AtlasMap mapping context for each mapping definitions by feeding a mapping definition file.
-<3> https://github.com/atlasmap/atlasmap/blob/master/runtime/api/src/main/java/io/atlasmap/api/AtlasSession.java[AtlasSession] represents a mapping processing session. `AtlasSession` should be created for each execution and should *NOT* be shared among multiple threads.
+<1> https://github.com/atlasmap/atlasmap/blob/master/lib/api/src/main/java/io/atlasmap/api/AtlasContextFactory.java[AtlasContextFactory] is a singleton instance on JVM, which holds global configuration for the AtlasMap.
+<2> `AtlasContextFactory#createContext(File)` creates https://github.com/atlasmap/atlasmap/blob/master/lib/api/src/main/java/io/atlasmap/api/AtlasContext.java[AtlasContext] which represents an AtlasMap mapping context for each mapping definitions by feeding a mapping definition file.
+<3> https://github.com/atlasmap/atlasmap/blob/master/lib/api/src/main/java/io/atlasmap/api/AtlasSession.java[AtlasSession] represents a mapping processing session. `AtlasSession` should be created for each execution and should *NOT* be shared among multiple threads.
 <4> Put a source Document with a corresponding Document ID. Make sure Document ID matches with what is specified in the mapping definition.
 <5> Process a mapping by `AtlasContext#process(AtlasSession)`. This invocation also triggers <<internal-runtime-validation,mapping validation>> prior to actually perform a mapping.
 <6> Finally take the transformed document out from `AtlasSession` by specifying target Document ID.
@@ -25,10 +25,10 @@ Object targetDoc = session.getTargetDocument("myXmlTargetDoc"); // <6>
 [[internal-runtime-atlasmodule]]
 === AtlasModule and mapping process
 
-https://github.com/atlasmap/atlasmap/blob/master/runtime/api/src/main/java/io/atlasmap/spi/AtlasModule.java[AtlasModule] is a SPI to be implemented by each modules like
-https://github.com/atlasmap/atlasmap/tree/master/runtime/modules/java[Java], 
-https://github.com/atlasmap/atlasmap/tree/master/runtime/modules/json[JSON] and
-https://github.com/atlasmap/atlasmap/tree/master/runtime/modules/xml[XML]. The methods defined in `AtlasModule` are invoked from `AtlasContext` while `AtlasContext#process(AtlasSession)` is in progress.
+https://github.com/atlasmap/atlasmap/blob/master/lib/api/src/main/java/io/atlasmap/spi/AtlasModule.java[AtlasModule] is a SPI to be implemented by each modules like
+https://github.com/atlasmap/atlasmap/tree/master/lib/modules/java[Java], 
+https://github.com/atlasmap/atlasmap/tree/master/lib/modules/json[JSON] and
+https://github.com/atlasmap/atlasmap/tree/master/lib/modules/xml[XML]. The methods defined in `AtlasModule` are invoked from `AtlasContext` while `AtlasContext#process(AtlasSession)` is in progress.
 
 `AtlasContext#process(AtlasSession)` goes on in following order:
 
@@ -54,13 +54,13 @@ https://github.com/atlasmap/atlasmap/tree/master/runtime/modules/xml[XML]. The m
 === TypeConverter
 
 TypeConverter converts one field value to the expected field type. This is automatically invoked during mapping when the actual value is not in expected type. AtlasMap runtime provides OOTB converters for the AtlasMap primitive types 
-https://github.com/atlasmap/atlasmap/tree/master/runtime/core/src/main/java/io/atlasmap/converters[here].
+https://github.com/atlasmap/atlasmap/tree/master/lib/core/src/main/java/io/atlasmap/converters[here].
 
 [[internal-runtime-fieldaction]]
 === FieldAction (Transformation)
 
 FieldAction is a function you can apply on a field value as a part of mapping. AtlasMap provides a variety of FieldActions you can apply in the middle of processing mappings
-https://github.com/atlasmap/atlasmap/tree/master/runtime/core/src/main/java/io/atlasmap/actions[here].
+https://github.com/atlasmap/atlasmap/tree/master/lib/core/src/main/java/io/atlasmap/actions[here].
 Also There is a <<fieldAction,Reference>> for all available FieldAction.
 
 [[internal-runtime-fieldreader]]
