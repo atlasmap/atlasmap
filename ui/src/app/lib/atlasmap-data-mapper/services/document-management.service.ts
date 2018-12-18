@@ -630,19 +630,6 @@ export class DocumentManagementService implements OnDestroy {
       const userFile = userFileComps[0];
       const userFileSuffix: string = userFileComps[userFileComps.length - 1].toUpperCase();
 
-      // Derive the format if not already defined.
-      if (inspectionType === InspectionType.UNKNOWN) {
-        if (userFileSuffix === DocumentType.JAVA_ARCHIVE) {
-          inspectionType = InspectionType.JAVA_CLASS;
-        } else if (userFileSuffix === DocumentType.XSD) {
-          inspectionType = InspectionType.SCHEMA;
-        } else if ((fileText.search('SchemaSet') === -1) || (fileText.search('\"\$schema\"') === -1)) {
-          inspectionType = InspectionType.INSTANCE;
-        } else {
-          inspectionType = InspectionType.SCHEMA;
-        }
-      }
-
       if (userFileSuffix === DocumentType.JAVA_ARCHIVE) {
 
         // Wait for the async read of the selected binary document to be completed.
@@ -652,6 +639,9 @@ export class DocumentManagementService implements OnDestroy {
           this.cfg.errorService.mappingError('Unable to import the specified schema document.', error);
           return;
         }
+        if (inspectionType === InspectionType.UNKNOWN) {
+          inspectionType = InspectionType.JAVA_CLASS;
+        }
       } else {
 
         // Wait for the async read of the selected ascii document to be completed.
@@ -660,6 +650,17 @@ export class DocumentManagementService implements OnDestroy {
         } catch (error) {
           this.cfg.errorService.mappingError('Unable to import the specified schema document.', error);
           return;
+        }
+
+        // Derive the format if not already defined.
+        if (inspectionType === InspectionType.UNKNOWN) {
+          if ((userFileSuffix === DocumentType.XSD) ||
+              (fileText.search('SchemaSet') > -1) ||
+              (fileText.search('\\$schema') > -1)) {
+            inspectionType = InspectionType.SCHEMA;
+          } else {
+            inspectionType = InspectionType.INSTANCE;
+          }
         }
       }
 
