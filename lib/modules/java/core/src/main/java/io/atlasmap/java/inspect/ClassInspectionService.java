@@ -778,7 +778,12 @@ public class ClassInspectionService {
                 TypeVariable<?> tv = (TypeVariable<?>) t;
                 // TODO: no current need, but we may want to have treatment for 'T'
                 // tv.getTypeName()
-                pTypes.add(((Class<?>) tv.getAnnotatedBounds()[0].getType()).getName());
+                Type type = tv.getAnnotatedBounds()[0].getType();
+                if (type instanceof Class) {
+                    pTypes.add(((Class<?>) type).getName());
+                } else {
+                    pTypes.add(type.getTypeName());
+                }
             }
 
             if (!onlyClasses && t instanceof WildcardType) {
