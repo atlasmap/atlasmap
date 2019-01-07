@@ -3,8 +3,6 @@ package io.atlasmap.core;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Parameter;
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -12,14 +10,19 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.ServiceLoader;
+
+import javax.xml.bind.annotation.XmlTransient;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.atlasmap.api.AtlasConversionException;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.api.AtlasFieldAction;
 import io.atlasmap.converters.DateTimeHelper;
@@ -29,7 +32,6 @@ import io.atlasmap.spi.AtlasFieldActionService;
 import io.atlasmap.spi.AtlasInternalSession;
 import io.atlasmap.v2.Action;
 import io.atlasmap.v2.ActionDetail;
-import io.atlasmap.v2.ActionDetails;
 import io.atlasmap.v2.ActionParameter;
 import io.atlasmap.v2.ActionParameters;
 import io.atlasmap.v2.Actions;
@@ -45,7 +47,7 @@ import io.atlasmap.v2.SimpleField;
 public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
 
     private static final Logger LOG = LoggerFactory.getLogger(DefaultAtlasFieldActionService.class);
-    private ActionDetails actionDetails = new ActionDetails();
+    private List<ActionDetailImpl> actionDetails = new ArrayList<>();
     private AtlasConversionService conversionService = null;
 
     public DefaultAtlasFieldActionService(AtlasConversionService conversionService) {
@@ -53,23 +55,53 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
     }
 
     public void init() {
-        listActionDetails().clear();
-        listActionDetails().addAll(loadFieldActions());
+        actionDetails.clear();
+        actionDetails.addAll(loadFieldActions());
         // TODO load custom field actions in application bundles
         // on hierarchical class loader environment
     }
 
     public void init(ClassLoader classLoader) {
-        listActionDetails().clear();
-        listActionDetails().addAll(loadFieldActions(classLoader));
+        actionDetails.clear();
+        actionDetails.addAll(loadFieldActions(classLoader));
     }
-    public List<ActionDetail> loadFieldActions() {
+
+    public List<ActionDetailImpl> loadFieldActions() {
         return loadFieldActions(this.getClass().getClassLoader());
     }
 
-    public List<ActionDetail> loadFieldActions(ClassLoader classLoader) {
-        final ServiceLoader<AtlasFieldAction> fieldActionServiceLoader = ServiceLoader.load(AtlasFieldAction.class, classLoader);
-        List<ActionDetail> answer = new ArrayList<>();
+    class ActionDetailImpl extends ActionDetail {
+        private static final long serialVersionUID = -1L;
+
+        @XmlTransient
+        @JsonIgnore
+        private Class<?> classInstance;
+
+        @XmlTransient
+        @JsonIgnore
+        private Method methodInstance;
+
+        public Class<?> getClassInstance() {
+            return classInstance;
+        }
+
+        public void setClassInstance(Class<?> c) {
+            this.classInstance = c;
+        }
+
+        public Method getMethodInstance() {
+            return methodInstance;
+        }
+
+        public void setMethodInstance(Method m) {
+            this.methodInstance = m;
+        }
+    }
+
+    public List<ActionDetailImpl> loadFieldActions(ClassLoader classLoader) {
+        final ServiceLoader<AtlasFieldAction> fieldActionServiceLoader = ServiceLoader.load(AtlasFieldAction.class,
+                classLoader);
+        List<ActionDetailImpl> answer = new ArrayList<>();
         for (final AtlasFieldAction atlasFieldAction : fieldActionServiceLoader) {
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Loading FieldAction class: " + atlasFieldAction.getClass().getCanonicalName());
@@ -83,7 +115,9 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
                     continue;
                 }
 
-                ActionDetail det = new ActionDetail();
+                ActionDetailImpl det = new ActionDetailImpl();
+                det.setClassInstance(clazz);
+                det.setMethodInstance(method);
                 det.setClassName(clazz.getName());
                 det.setMethod(method.getName());
                 det.setName(annotation.name());
@@ -124,16 +158,16 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
 
     private ActionParameters detectFieldActionParameters(Class<?> actionClazz) throws ClassNotFoundException {
         ActionParameters params = null;
-        for(Method method : actionClazz.getMethods()) {
+        for (Method method : actionClazz.getMethods()) {
             // Find setters to avoid the get / is confusion
-            if(method.getParameterCount() == 1 && method.getName().startsWith("set")) {
+            if (method.getParameterCount() == 1 && method.getName().startsWith("set")) {
                 // We have a parameter
-                if(params == null) {
+                if (params == null) {
                     params = new ActionParameters();
                 }
 
                 ActionParameter actionParam = null;
-                for(Parameter methodParam : method.getParameters()) {
+                for (Parameter methodParam : method.getParameters()) {
                     actionParam = new ActionParameter();
                     actionParam.setName(camelize(method.getName().substring("set".length())));
                     // TODO set displayName/description - https://github.com/atlasmap/atlasmap/issues/96
@@ -160,7 +194,7 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
 
     @Override
     public List<ActionDetail> listActionDetails() {
-        return actionDetails.getActionDetail();
+        return Collections.unmodifiableList(actionDetails);
     }
 
     /*
@@ -172,8 +206,8 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
      */
     @Deprecated
     protected ActionDetail getActionDetailByActionName(String actionName) {
-        for(ActionDetail actionDetail : listActionDetails()) {
-            if(actionDetail.getName().equals(actionName)) {
+        for (ActionDetail actionDetail : listActionDetails()) {
+            if (actionDetail.getName().equals(actionName)) {
                 return actionDetail;
             }
         }
@@ -188,24 +222,24 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
      * 4. If no matches found, return null
      *
      *
-     * @param action The name of the FieldAction
-     * @param sourceType A hint used to determine which FieldAction to use
-     *                   when multiple FieldActions exist with the same name
+     * @param action     The name of the FieldAction
+     * @param sourceType A hint used to determine which FieldAction to use when
+     *                   multiple FieldActions exist with the same name
      *
      * @return ActionDetail
      */
     @Override
-    public ActionDetail findActionDetail(Action action, FieldType sourceType) throws AtlasException {
+    public ActionDetailImpl findActionDetail(Action action, FieldType sourceType) throws AtlasException {
         String actionName = action.getDisplayName();
         CustomAction customAction = null;
         if (action instanceof CustomAction) {
-            customAction = (CustomAction)action;
+            customAction = (CustomAction) action;
             if (customAction.getClassName() == null || customAction.getMethodName() == null) {
                 throw new AtlasException("The class name and method name must be specified for custom FieldAction: " + customAction.getName());
             }
         }
-        List<ActionDetail> matches = new ArrayList<>();
-        for(ActionDetail actionDetail : listActionDetails()) {
+        List<ActionDetailImpl> matches = new ArrayList<>();
+        for (ActionDetailImpl actionDetail : actionDetails) {
             if (customAction != null) {
                 if (customAction.getClassName().equals(actionDetail.getClassName())
                         && customAction.getMethodName().equals(actionDetail.getMethod())) {
@@ -213,7 +247,7 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
                     break;
                 }
                 actionDetail.getClassName();
-            } else if(actionDetail.getName().equals(actionName)) {
+            } else if (actionDetail.getName().equals(actionName)) {
                 matches.add(actionDetail);
             }
         }
@@ -222,9 +256,9 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
         case 0: return null;
         case 1: return matches.get(0);
         default:
-            if(sourceType != null && !Arrays.asList(FieldType.ANY, FieldType.NONE).contains(sourceType)) {
-                for(ActionDetail actionDetail : matches) {
-                    if(sourceType.equals(actionDetail.getSourceType())) {
+            if (sourceType != null && !Arrays.asList(FieldType.ANY, FieldType.NONE).contains(sourceType)) {
+                for (ActionDetailImpl actionDetail : matches) {
+                    if (sourceType.equals(actionDetail.getSourceType())) {
                         return actionDetail;
                     }
                 }
@@ -238,11 +272,11 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
         Actions actions = field.getActions();
         FieldType targetType = field.getFieldType();
 
-        if(actions == null || actions.getActions() == null || actions.getActions().isEmpty()) {
+        if (actions == null || actions.getActions() == null || actions.getActions().isEmpty()) {
             return field;
         }
 
-        if(FieldType.COMPLEX.equals(targetType)) {
+        if (FieldType.COMPLEX.equals(targetType)) {
             return field;
         }
 
@@ -250,7 +284,7 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
         FieldType sourceType = (sourceObject != null ? getConversionService().fieldTypeFromClass(sourceObject.getClass()) : FieldType.NONE);
         FieldGroup fieldGroup = null;
         if (field instanceof FieldGroup) {
-            fieldGroup = (FieldGroup)field;
+            fieldGroup = (FieldGroup) field;
             List<Object> values = new ArrayList<>();
             for (Field subField : fieldGroup.getField()) {
                 values.add(subField.getValue());
@@ -266,8 +300,8 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
         Object tmpSourceObject = sourceObject;
 
         FieldType currentType = sourceType;
-        for(Action action : actions.getActions()) {
-            ActionDetail detail = findActionDetail(action, currentType);
+        for (Action action : actions.getActions()) {
+            ActionDetailImpl detail = findActionDetail(action, currentType);
             if (detail == null) {
                 AtlasUtil.addAudit(session, field.getDocId(), String.format(
                         "Couldn't find metadata for a FieldAction '%s', ignoring...", action.getDisplayName()),
@@ -277,8 +311,8 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
 
             CollectionType sourceCollectionType = detail.getSourceCollectionType() != null ? detail.getSourceCollectionType() : CollectionType.NONE;
             if (tmpSourceObject instanceof List) {
-                List<Object> tmpSourceList = (List<Object>)tmpSourceObject;
-                for (int i=0; i<tmpSourceList.size(); i++) {
+                List<Object> tmpSourceList = (List<Object>) tmpSourceObject;
+                for (int i = 0; i < tmpSourceList.size(); i++) {
                     Object subValue = tmpSourceList.get(i);
                     FieldType subType = (subValue != null ? getConversionService().fieldTypeFromClass(subValue.getClass()) : FieldType.NONE);
                     if(subValue != null && !isAssignableFieldType(detail.getSourceType(), subType)) {
@@ -290,7 +324,7 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
                         tmpSourceList.set(i, subValue);
                     }
                 }
-            } else if(!isAssignableFieldType(detail.getSourceType(), currentType)) {
+            } else if (!isAssignableFieldType(detail.getSourceType(), currentType)) {
                 tmpSourceObject = getConversionService().convertType(sourceObject, currentType, detail.getSourceType());
             }
             if (!(tmpSourceObject instanceof List) || sourceCollectionType != CollectionType.NONE) {
@@ -299,25 +333,25 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
 
             currentType = detail.getTargetType();
             if (tmpSourceObject != null && tmpSourceObject.getClass().isArray()) {
-                tmpSourceObject = Arrays.asList((Object[])tmpSourceObject);
+                tmpSourceObject = Arrays.asList((Object[]) tmpSourceObject);
             } else if ((tmpSourceObject instanceof java.util.Collection) && !(tmpSourceObject instanceof List)) {
-                tmpSourceObject = Arrays.asList(((java.util.Collection<?>)tmpSourceObject).toArray());
+                tmpSourceObject = Arrays.asList(((java.util.Collection<?>) tmpSourceObject).toArray());
             }
         }
 
         if (fieldGroup != null) {
             if (tmpSourceObject instanceof List) {
                 // n -> n - reuse passed-in FieldGroup
-                List<?> sourceList = (List<?>)tmpSourceObject;
-                for (int i=0; i<sourceList.size(); i++) {
+                List<?> sourceList = (List<?>) tmpSourceObject;
+                for (int i = 0; i < sourceList.size(); i++) {
                     if (fieldGroup.getField().size() > i) {
                         Field subField = fieldGroup.getField().get(i);
                         subField.setValue(sourceList.get(i));
                         subField.setFieldType(currentType);
                     } else {
                         AtlasUtil.addAudit(session, fieldGroup.getDocId(),
-                                "FieldAction created more values than expected, ignoring",
-                                fieldGroup.getPath(), AuditStatus.WARN, sourceList.get(i).toString());
+                                "FieldAction created more values than expected, ignoring", fieldGroup.getPath(),
+                                AuditStatus.WARN, sourceList.get(i).toString());
                     }
                 }
                 field = fieldGroup;
@@ -332,7 +366,7 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
         } else if (tmpSourceObject instanceof List) {
             // 1 -> n - create new FieldGroup
             fieldGroup = AtlasModelFactory.createFieldGroupFrom(field);
-            for (Object subValue : (List<?>)tmpSourceObject) {
+            for (Object subValue : (List<?>) tmpSourceObject) {
                 Field subField = new SimpleField();
                 AtlasModelFactory.copyField(field, subField, false);
                 subField.setValue(subValue);
@@ -360,149 +394,62 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
         return expected.equals(actual);
     }
 
-    protected Object processAction(Action action, ActionDetail actionDetail, Object sourceObject) throws AtlasException {
-        Object targetObject = null;
-        if(actionDetail != null) {
-            Object actionObject = null;
-            try {
-                Class<?> actionClazz = Class.forName(actionDetail.getClassName());
-                actionObject = actionClazz.newInstance();
-
-                Method method =  null;
-                if (actionDetail.getSourceType() != null) {
-                    List<Class<?>> paramTypes = new LinkedList<>();
-                    if (actionDetail.isCustom() == null || !actionDetail.isCustom()) {
-                        // TODO eliminate this Action parameter even for OOTB
-                        // we can use annotation also for the parameters instead
-                        // cf. https://github.com/atlasmap/atlasmap/issues/536
-                        paramTypes.add(Action.class);
-                    }
-                    CollectionType sourceCollectionType = actionDetail.getSourceCollectionType();
-                    if (sourceCollectionType != null && sourceCollectionType != CollectionType.NONE) {
-                        // TODO allow array/collection as a parameter type
-                        paramTypes.add(Object.class);
-                        method = actionClazz.getMethod(actionDetail.getMethod(), paramTypes.toArray(new Class[0]));
-                    } else {
-                        switch(actionDetail.getSourceType()) {
-                        case ANY:
-                            paramTypes.add(Object.class);
-                            method = actionClazz.getMethod(actionDetail.getMethod(), paramTypes.toArray(new Class[0]));
-                            break;
-                        case BIG_INTEGER:
-                            paramTypes.add(BigInteger.class);
-                            method = actionClazz.getMethod(actionDetail.getMethod(), paramTypes.toArray(new Class[0]));
-                            break;
-                        case BOOLEAN:
-                            paramTypes.add(Boolean.class);
-                            method = actionClazz.getMethod(actionDetail.getMethod(), paramTypes.toArray(new Class[0]));
-                            break;
-                        case BYTE:
-                            paramTypes.add(Byte.class);
-                            method = actionClazz.getMethod(actionDetail.getMethod(), paramTypes.toArray(new Class[0]));
-                            break;
-                        case BYTE_ARRAY:
-                            paramTypes.add(Byte[].class);
-                            method = actionClazz.getMethod(actionDetail.getMethod(), paramTypes.toArray(new Class[0]));
-                            break;
-                        case CHAR:
-                            paramTypes.add(Character.class);
-                            method = actionClazz.getMethod(actionDetail.getMethod(), paramTypes.toArray(new Class[0]));
-                            break;
-                        case DATE:
-                        case DATE_TIME:
-                        case DATE_TZ:
-                        case TIME_TZ:
-                        case DATE_TIME_TZ:
-                        case ANY_DATE:
-                            if (sourceObject instanceof Calendar) {
-                                sourceObject = DateTimeHelper.toZonedDateTime((Calendar)sourceObject);
-                            } else if (sourceObject instanceof Date) {
-                                sourceObject = DateTimeHelper.toZonedDateTime((Date)sourceObject, null);
-                            } else if (sourceObject instanceof LocalDate) {
-                                sourceObject = DateTimeHelper.toZonedDateTime((LocalDate)sourceObject, null);
-                            } else if (sourceObject instanceof LocalTime) {
-                                sourceObject = DateTimeHelper.toZonedDateTime((LocalTime)sourceObject, null);
-                            } else if (sourceObject instanceof LocalDateTime) {
-                                sourceObject = DateTimeHelper.toZonedDateTime((LocalDateTime)sourceObject, null);
-                            } else if (!(sourceObject instanceof ZonedDateTime)) {
-                                LOG.warn(String.format("Unsupported sourceObject type=%s in actionClass=%s", sourceObject.getClass(), actionDetail.getClassName()));
-                                break;
-                            }
-                            paramTypes.add(ZonedDateTime.class);
-                            method = actionClazz.getMethod(actionDetail.getMethod(), paramTypes.toArray(new Class[0]));
-                            break;
-                        case DECIMAL:
-                            paramTypes.add(BigDecimal.class);
-                            method = actionClazz.getMethod(actionDetail.getMethod(), paramTypes.toArray(new Class[0]));
-                            break;
-                        case DOUBLE:
-                            paramTypes.add(Double.class);
-                            method = actionClazz.getMethod(actionDetail.getMethod(), paramTypes.toArray(new Class[0]));
-                            break;
-                        case FLOAT:
-                            paramTypes.add(Float.class);
-                            method = actionClazz.getMethod(actionDetail.getMethod(), paramTypes.toArray(new Class[0]));
-                            break;
-                        case INTEGER:
-                            paramTypes.add(Integer.class);
-                            method = actionClazz.getMethod(actionDetail.getMethod(), paramTypes.toArray(new Class[0]));
-                            break;
-                        case LONG:
-                            paramTypes.add(Long.class);
-                            method = actionClazz.getMethod(actionDetail.getMethod(), paramTypes.toArray(new Class[0]));
-                            break;
-                        case NUMBER:
-                            paramTypes.add(Number.class);
-                            method = actionClazz.getMethod(actionDetail.getMethod(), paramTypes.toArray(new Class[0]));
-                            break;
-                        case SHORT:
-                            paramTypes.add(Short.class);
-                            method = actionClazz.getMethod(actionDetail.getMethod(), paramTypes.toArray(new Class[0]));
-                            break;
-                        case STRING:
-                            paramTypes.add(String.class);
-                            method = actionClazz.getMethod(actionDetail.getMethod(), paramTypes.toArray(new Class[0]));
-                            break;
-                        default:
-                            LOG.warn(String.format("Unsupported sourceType=%s in actionClass=%s", actionDetail.getSourceType().value(), actionDetail.getClassName()));
-                            break;
-                        }
-                    }
-                }
-
-                if(method == null) {
-                    throw new AtlasException(String.format("Unable to locate field action className=%s method=%s sourceType=%s", actionDetail.getClassName(), actionDetail.getMethod(), actionDetail.getSourceType()));
-                }
-
-                if(Modifier.isStatic(method.getModifiers())) {
-                    // TODO eliminate Action parameter even for OOTB
-                    // we can use annotation also for the parameters instead
-                    // cf. https://github.com/atlasmap/atlasmap/issues/536
-                    if (actionDetail.isCustom() != null && actionDetail.isCustom()) {
-                        targetObject = method.invoke(null, sourceObject);
-                    } else {
-                        targetObject = method.invoke(null, action, sourceObject);
-                    }
-                } else {
-                    if (actionDetail.isCustom() != null && actionDetail.isCustom()) {
-                        targetObject = method.invoke(actionObject, sourceObject);
-                    } else {
-                        targetObject = method.invoke(actionObject, action, sourceObject);
-                    }
-                }
-            } catch (Throwable e) {
-                throw new AtlasException(String.format("Error processing action %s", actionDetail.getName()), e);
-            }
-            return targetObject;
+    protected Object processAction(Action action, ActionDetailImpl actionDetail, Object sourceObject) throws AtlasException {
+        if (actionDetail == null) {
+            return sourceObject;
         }
-        return sourceObject;
+
+        Object targetObject = null;
+        try {
+            Method method = actionDetail.getMethodInstance();
+            Object convertedSourceObject = convertSourceObject(actionDetail, sourceObject);
+
+            if (Modifier.isStatic(method.getModifiers())) {
+                // TODO eliminate Action parameter even for OOTB
+                // we can use annotation also for the parameters instead
+                // cf. https://github.com/atlasmap/atlasmap/issues/536
+                if (actionDetail.isCustom() != null && actionDetail.isCustom()) {
+                    targetObject = method.invoke(null, convertedSourceObject);
+                } else {
+                    targetObject = method.invoke(null, action, convertedSourceObject);
+                }
+            } else {
+                Class<?> actionClazz = actionDetail.getClassInstance();
+                Object actionObject = actionClazz.newInstance();
+                if (actionDetail.isCustom() != null && actionDetail.isCustom()) {
+                    targetObject = method.invoke(actionObject, convertedSourceObject);
+                } else {
+                    targetObject = method.invoke(actionObject, action, convertedSourceObject);
+                }
+            }
+        } catch (Throwable e) {
+            throw new AtlasException(String.format("Error processing action %s", actionDetail.getName()), e);
+        }
+        return targetObject;
+    }
+
+    private Object convertSourceObject(ActionDetailImpl actionDetail, Object sourceObject) throws AtlasConversionException {
+        Method m = actionDetail.getMethodInstance();
+        Class<?> paramType;
+        // TODO eliminate Action parameter even for OOTB
+        // we can use annotation also for the parameters instead
+        // cf. https://github.com/atlasmap/atlasmap/issues/536
+        if (actionDetail.isCustom() != null && actionDetail.isCustom()) {
+            paramType = m.getParameterTypes()[0];
+        } else {
+            paramType = m.getParameterTypes()[1];
+        }
+        if (paramType.isInstance(sourceObject)) {
+            return sourceObject;
+        }
+        return conversionService.convertType(sourceObject, null, paramType, null);
     }
 
     public AtlasConversionService getConversionService() {
         return this.conversionService;
     }
 
-    public static String camelize(String parameter) {
+    private String camelize(String parameter) {
         if (parameter == null || parameter.length() == 0) {
             return parameter;
         }
