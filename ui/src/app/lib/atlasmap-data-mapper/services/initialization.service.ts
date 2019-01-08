@@ -571,7 +571,7 @@ export class InitializationService {
 
       // Update .../target/mappings/adm-catalog-files.gz
       const fileContent: Blob = new Blob([compressedContent], {type: 'application/octet-stream'});
-      this.cfg.mappingService.setBinaryFileToService(fileContent, this.cfg.initCfg.baseMappingServiceUrl + 'mapping/GZ').toPromise()
+      this.cfg.mappingService.setBinaryFileToService(fileContent, this.cfg.initCfg.baseMappingServiceUrl + 'mapping/GZ/0').toPromise()
         .then(async(result: boolean) => {
       }).catch((error: any) => {
         if (error.status === 0) {

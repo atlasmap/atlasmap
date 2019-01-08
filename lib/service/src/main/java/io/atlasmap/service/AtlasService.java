@@ -94,6 +94,7 @@ public class AtlasService {
 
     private String atlasmapCatalogName = "atlasmap-catalog.adm";
     private String atlasmapCatalogFilesName = "adm-catalog-files.gz";
+    private String atlasmapGenericMappingsName = "atlasmapping.xml";
     private String baseFolder = "target";
     private String mappingFolder = baseFolder + File.separator + "mappings";
     private String libFolder = baseFolder + File.separator + "lib";
@@ -280,7 +281,7 @@ public class AtlasService {
     }
 
     @PUT
-    @Path("/mapping/{mappingFormat}")
+    @Path("/mapping/{mappingFormat}/{mappingId}")
     @Consumes({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML,MediaType.APPLICATION_OCTET_STREAM})
     @Produces(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "Create Mapping", notes = "Save a mapping file on the server")
@@ -289,6 +290,7 @@ public class AtlasService {
     @ApiResponses(@ApiResponse(code = 200, message = "Succeeded"))
     public Response createMappingRequest(InputStream mapping,
       @ApiParam("Mapping Format") @PathParam("mappingFormat") String mappingFormat,
+      @ApiParam("Mapping ID") @PathParam("mappingId") String mappingId,
       @Context UriInfo uriInfo) {
         LOG.debug("createMappingRequest (save) with format '{}'", mappingFormat);
         UriBuilder builder = uriInfo.getAbsolutePathBuilder();
@@ -303,10 +305,10 @@ public class AtlasService {
         case "JSON":
            return saveMapping(fromJson(mapping, AtlasMapping.class), uriInfo);
         case "GZ":
-            LOG.debug("  saveCompressedMappingRequest '{}'", atlasmapCatalogFilesName);
+            LOG.debug("  saveCompressedMappingRequest '{}' - ID: {}", atlasmapCatalogFilesName, mappingId);
             try {
                 createMappingFile(atlasmapCatalogFilesName, mapping);
-                createCompressedCatalog();
+                createCompressedCatalog(mappingId);
             } catch (Exception e) {
                 LOG.error("Error saving compressed mapping documents.\n" + e.getMessage(), e);
             }
@@ -541,27 +543,39 @@ public class AtlasService {
      *
      *   - the user-specified instance/schema files (JSON/XML) and mappings (XML) captured in a JSON
      *     document, compressed (GZIP).
+     *   - the atlasmapping.xml file (separate for camel runtime support)
      *   - the user-specified Java archives (JAR).
      *
-     * @param mappingDir
+     * @param mappingId
      * @throws IOException
      */
-    private void createCompressedCatalog() throws IOException {
+    private void createCompressedCatalog(String mappingId) throws IOException {
         String compressedCatalogName = mappingFolder + File.separator + atlasmapCatalogName;
         String compressedCatalogFilesName = mappingFolder + File.separator + atlasmapCatalogFilesName;
 
         try {
 
-            // Binary, compressed instance/schema/mappings + java libraries : target/mappings/atlasmap-catalog.adm
-           ZipOutputStream zipOut = new ZipOutputStream(new FileOutputStream(compressedCatalogName));
+           // AtlasMap mapping XML + Binary, compressed instance/schema/mappings + java libraries ->
+           //   target/mappings/atlasmap-catalog.adm
            LOG.debug("Creating compressed catalog ADM file '{}'", compressedCatalogName);
+           ZipOutputStream zipOut = new ZipOutputStream(new FileOutputStream(compressedCatalogName));
 
-           zipOut.putNextEntry(new ZipEntry("cat-files/"));
-           zipOut.closeEntry();
-           ZipEntry catEntry = new ZipEntry("cat-files/" + atlasmapCatalogFilesName);
+           // atlasmapping.xml
+           LOG.debug("  Creating compressed catalog files '{}'", atlasmapGenericMappingsName);
+           ZipEntry catEntry = new ZipEntry(atlasmapGenericMappingsName);
            zipOut.putNextEntry(catEntry);
+           File mappingFile = getMappingFile("XML", mappingId);
 
+           if (mappingFile != null) {
+               String mappingFilePath = mappingFile.getAbsolutePath();
+               addFileAsZip(zipOut, mappingFilePath);
+               zipOut.closeEntry();
+           }
+
+           // adm-catalog-files.gz
            LOG.debug("  Creating compressed catalog files '{}'", compressedCatalogFilesName);
+           catEntry = new ZipEntry(atlasmapCatalogFilesName);
+           zipOut.putNextEntry(catEntry);
            addFileAsZip(zipOut, compressedCatalogFilesName);
            zipOut.closeEntry();
 
