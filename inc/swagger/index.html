@@ -522,7 +522,7 @@ table.CodeRay td.code>pre{padding:0}
 <h1>AtlasMap Design Time Service API Reference</h1>
 <div class="details">
 <span id="revnumber">version 1.39.0-SNAPSHOT,</span>
-<span id="revdate">2018-12-20</span>
+<span id="revdate">2019-01-08</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Design Time Service</div>
@@ -536,8 +536,8 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_atlas-service-core-resetmappings">1.1.3. Remove All Mappings</a></li>
 <li><a href="#_atlas-service-core-processmappingrequest">1.1.4. Process Mapping</a></li>
 <li><a href="#_atlas-service-core-validatemappingrequest">1.1.5. Validate Mapping</a></li>
-<li><a href="#_atlas-service-core-createmappingrequest">1.1.6. Create Mapping</a></li>
-<li><a href="#_atlas-service-core-getmappingrequest">1.1.7. Get Mapping</a></li>
+<li><a href="#_atlas-service-core-getmappingrequest">1.1.6. Get Mapping</a></li>
+<li><a href="#_atlas-service-core-createmappingrequest">1.1.7. Create Mapping</a></li>
 <li><a href="#_atlas-service-core-updatemappingrequest">1.1.8. Update Mapping</a></li>
 <li><a href="#_atlas-service-core-removemappingrequest">1.1.9. Remove Mapping</a></li>
 <li><a href="#_atlas-service-core-listmappings">1.1.10. List Mappings</a></li>
@@ -974,16 +974,16 @@ table.CodeRay td.code>pre{padding:0}
 </div>
 </div>
 <div class="sect3">
-<h4 id="_atlas-service-core-createmappingrequest">1.1.6. Create Mapping</h4>
+<h4 id="_atlas-service-core-getmappingrequest">1.1.6. Get Mapping</h4>
 <div class="literalblock">
 <div class="content">
-<pre>PUT /mapping/{mappingFormat}</pre>
+<pre>GET /mapping/{mappingFormat}/{mappingId}</pre>
 </div>
 </div>
 <div class="sect4">
 <h5 id="description-6">Description</h5>
 <div class="paragraph">
-<p>Save a mapping file on the server</p>
+<p>Retrieve a mapping file saved on the server</p>
 </div>
 </div>
 <div class="sect4">
@@ -1019,6 +1019,21 @@ table.CodeRay td.code>pre{padding:0}
 <p>string</p>
 </div></div></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p><strong>Path</strong></p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p><strong>mappingId</strong><br>
+<em>required</em></p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p>Mapping ID</p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p>string</p>
+</div></div></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -1043,7 +1058,18 @@ table.CodeRay td.code>pre{padding:0}
 <p><strong>200</strong></p>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><div><div class="paragraph">
-<p>Succeeded</p>
+<p>Return a mapping file content</p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p><a href="#_atlas-service-core-atlasmapping">AtlasMapping</a></p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p><strong>204</strong></p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p>Mapping file was not found</p>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><div><div class="paragraph">
 <p>No Content</p>
@@ -1053,7 +1079,7 @@ table.CodeRay td.code>pre{padding:0}
 </table>
 </div>
 <div class="sect4">
-<h5 id="consumes-4">Consumes</h5>
+<h5 id="produces-5">Produces</h5>
 <div class="ulist">
 <ul>
 <li>
@@ -1068,28 +1094,18 @@ table.CodeRay td.code>pre{padding:0}
 </ul>
 </div>
 </div>
-<div class="sect4">
-<h5 id="produces-5">Produces</h5>
-<div class="ulist">
-<ul>
-<li>
-<p><code>application/json</code></p>
-</li>
-</ul>
-</div>
-</div>
 </div>
 <div class="sect3">
-<h4 id="_atlas-service-core-getmappingrequest">1.1.7. Get Mapping</h4>
+<h4 id="_atlas-service-core-createmappingrequest">1.1.7. Create Mapping</h4>
 <div class="literalblock">
 <div class="content">
-<pre>GET /mapping/{mappingFormat}/{mappingId}</pre>
+<pre>PUT /mapping/{mappingFormat}/{mappingId}</pre>
 </div>
 </div>
 <div class="sect4">
 <h5 id="description-7">Description</h5>
 <div class="paragraph">
-<p>Retrieve a mapping file saved on the server</p>
+<p>Save a mapping file on the server</p>
 </div>
 </div>
 <div class="sect4">
@@ -1164,18 +1180,7 @@ table.CodeRay td.code>pre{padding:0}
 <p><strong>200</strong></p>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><div><div class="paragraph">
-<p>Return a mapping file content</p>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
-<p><a href="#_atlas-service-core-atlasmapping">AtlasMapping</a></p>
-</div></div></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
-<p><strong>204</strong></p>
-</div></div></td>
-<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
-<p>Mapping file was not found</p>
+<p>Succeeded</p>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><div><div class="paragraph">
 <p>No Content</p>
@@ -1185,7 +1190,7 @@ table.CodeRay td.code>pre{padding:0}
 </table>
 </div>
 <div class="sect4">
-<h5 id="produces-6">Produces</h5>
+<h5 id="consumes-4">Consumes</h5>
 <div class="ulist">
 <ul>
 <li>
@@ -1196,6 +1201,16 @@ table.CodeRay td.code>pre{padding:0}
 </li>
 <li>
 <p><code>application/octet-stream</code></p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect4">
+<h5 id="produces-6">Produces</h5>
+<div class="ulist">
+<ul>
+<li>
+<p><code>application/json</code></p>
 </li>
 </ul>
 </div>
@@ -5227,7 +5242,7 @@ table.CodeRay td.code>pre{padding:0}
 <div id="footer">
 <div id="footer-text">
 Version 1.39.0-SNAPSHOT<br>
-Last updated 2018-12-20 13:49:05 UTC
+Last updated 2019-01-08 18:05:55 UTC
 </div>
 </div>
 </body>
