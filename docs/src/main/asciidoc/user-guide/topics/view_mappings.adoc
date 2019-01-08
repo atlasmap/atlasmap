@@ -1,0 +1,17 @@
+[id='view-mappings']
+= View the mappings
+
+While you are using the data mapper UI, you can view the mappings
+that are already defined. This lets you check whether the
+correct mappings are in place.
+
+.Prerequisites
+The data mapper canvas is visible.
+
+.Procedure
+. In the upper right, click
+image:images/grid.png[title="Grid"] to display a list of the
+defined mappings.
+
+. To dismiss the list of mappings and redisplay the source and
+target fields, click image:images/grid.png[title="Grid"] again.
