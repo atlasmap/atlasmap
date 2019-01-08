@@ -1,0 +1,38 @@
+:imagesdir: topics
+
+[id='mapping-data']
+= Using the AtlasMap Data Mapper UI
+
+AtlasMap is a data mapper with an interactive web based user interface.
+It simplifies configuration of an integration that handles different
+types of data, such as  Java, XML, or JSON data. You design your data
+mapping in the AtlasMap Data Mapper UI canvas, and then run that data mapping
+by means of a runtime engine.
+
+Details for mapping data fields are in the following topics:
+
+* <<find-the-field-you-want-to-map>>
+* <<map-one-source-field-to-one-target-field>>
+* <<example-missing-unwanted-data>>
+* <<combine-multiple-source-fields-into-one-target-field>>
+* <<separate-one-source-field-into-multiple-target-fields>>
+* <<transform-target-data>>
+* <<view-mappings>>
+* <<available-transformations>>
+
+
+include::topics/find_data_field_you_want_to_map.adoc[leveloffset=+1]
+
+include::topics/map_one_source_field_to_one_target_field.adoc[leveloffset=+1]
+
+include::topics/example_missing_unwanted_data.adoc[leveloffset=+1]
+
+include::topics/combine_multiple_source_fields_into_one_target_field.adoc[leveloffset=+1]
+
+include::topics/separate_one_source_field_into_multiple_target_fields.adoc[leveloffset=+1]
+
+include::topics/transform_target_data.adoc[leveloffset=+1]
+
+include::topics/view_mappings.adoc[leveloffset=+1]
+
+include::topics/available_transformations.adoc[leveloffset=+1]
