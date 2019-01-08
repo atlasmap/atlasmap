@@ -75,11 +75,6 @@ public class DefaultAtlasFieldActionsServiceTest {
         actionDetail = fieldActionsService.findActionDetail(new Action() {}, FieldType.STRING);
         assertNull(actionDetail);
 
-        ActionDetail ad = new ActionDetail();
-        ad.setName("IndexOf");
-        ad.setSourceType(FieldType.INTEGER);
-        fieldActionsService.listActionDetails().add(ad);
-
         actionDetail = fieldActionsService.findActionDetail(new IndexOf(), null);
         assertNotNull(actionDetail);
 
@@ -162,41 +157,22 @@ public class DefaultAtlasFieldActionsServiceTest {
 
     @Test
     public void testProcessActionWithActionActionDetailObject() throws AtlasException {
-        ActionDetail actionDetail = null;
+        DefaultAtlasFieldActionService.ActionDetailImpl actionDetail = null;
         Object sourceObject = "String";
         Action action = new Trim();
         assertEquals(sourceObject, fieldActionsService.processAction(action, actionDetail, sourceObject));
 
         action = new GenerateUUID();
-        actionDetail = new ActionDetail();
-        actionDetail.setClassName("io.atlasmap.actions.StringComplexFieldActions");
-        actionDetail.setSourceType(FieldType.ANY);
-        actionDetail.setMethod("genareteUUID");
+        actionDetail = fieldActionsService.findActionDetail(action, FieldType.NONE);
         assertNotNull(fieldActionsService.processAction(action, actionDetail, sourceObject));
     }
 
-    @Test(expected = AtlasException.class)
-    public void testProcessActionWithActionActionDetailObjectAtlasException() throws AtlasException {
+    @Test
+    public void testProcessActionWithActionActionDetailObjectAssignableType() throws AtlasException {
         Action action = new AbsoluteValue();
         Object sourceObject = new Integer("1");
-        ActionDetail actionDetail = new ActionDetail();
-        actionDetail.setClassName("io.atlasmap.actions.NumberFieldActions");
-        actionDetail.setSourceType(FieldType.INTEGER);
-        actionDetail.setMethod("absoluteValue");
-
-        fieldActionsService.processAction(action, actionDetail, sourceObject);
-    }
-
-    @Test(expected = AtlasException.class)
-    public void testProcessActionWithActionActionDetailObjectAtlasExceptionNoMethod() throws AtlasException {
-        Action action = new AbsoluteValue();
-        Object sourceObject = new Integer("1");
-        ActionDetail actionDetail = new ActionDetail();
-        actionDetail.setClassName("io.atlasmap.actions.NumberFieldActions");
-        actionDetail.setSourceType(FieldType.NUMBER);
-        // actionDetail.setMethod("absolute");
-
-        fieldActionsService.processAction(action, actionDetail, sourceObject);
+        DefaultAtlasFieldActionService.ActionDetailImpl actionDetail = fieldActionsService.findActionDetail(action, FieldType.NUMBER);
+        assertEquals(1L, fieldActionsService.processAction(action, actionDetail, sourceObject));
     }
 
     @Test
@@ -204,12 +180,6 @@ public class DefaultAtlasFieldActionsServiceTest {
     public void testGetActionDetailByActionName() {
         assertNotNull(fieldActionsService.getActionDetailByActionName("Add"));
         assertNull(fieldActionsService.getActionDetailByActionName("AtlasAdd"));
-    }
-
-    @Test
-    public void testCamelize() {
-        assertNull(DefaultAtlasFieldActionService.camelize(null));
-        assertEquals("", DefaultAtlasFieldActionService.camelize(""));
     }
 
     @Test

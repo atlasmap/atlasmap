@@ -39,8 +39,10 @@ checkstyle.cache
 .c9/
 *.launch
 .settings/
+.factorypath
 
 # IDE - VSCode
+.vscode
 .vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
