@@ -138,6 +138,10 @@ export class MappingManagementService {
     }).pipe(timeout(this.cfg.initCfg.admHttpTimeout));
   }
 
+  getMappingId(): string {
+    return (this.cfg.mappingFiles.length > 0) ? this.cfg.mappingFiles[0] : '0';
+  }
+
   /**
    * Retrieve the current user data mappings catalog from the server as a GZIP compressed byte array buffer.
    */
@@ -324,7 +328,7 @@ export class MappingManagementService {
   */
   setMappingToService(XMLbuffer: string): Observable<boolean> {
     return new Observable<boolean>((observer: any) => {
-      const url = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/XML';
+      const url = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/XML/' + this.getMappingId();
       DataMapperUtil.debugLogJSON(null, 'Mapping Service Request', this.cfg.initCfg.debugMappingServiceCalls, url);
       this.http.put(url, XMLbuffer, { headers: this.headers }).toPromise().then((res: any) => {
         DataMapperUtil.debugLogJSON(res, 'Mapping Service Response', this.cfg.initCfg.debugMappingServiceCalls, url);
@@ -363,7 +367,7 @@ export class MappingManagementService {
   saveMappingToService(): Observable<boolean> {
     return new Observable<boolean>((observer: any) => {
       const payload: any = this.serializeMappingsToJSON();
-      const url = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/JSON';
+      const url = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/JSON/' + this.getMappingId();
       DataMapperUtil.debugLogJSON(payload, 'Mapping Service Request', this.cfg.initCfg.debugMappingServiceCalls, url);
       this.http.put(url, JSON.stringify(payload), { headers: this.headers }).toPromise()
         .then((res: any) => {
@@ -875,6 +879,7 @@ export class MappingManagementService {
       });
     });
   }
+
   /**
    * Update the current mapping files and export the current mappings catalog (ADM).
    *
@@ -934,7 +939,8 @@ export class MappingManagementService {
         let fileContent: Blob = new Blob([compress], {type: 'application/octet-stream'});
 
         // Save the model mappings to the runtime.
-        this.setBinaryFileToService(fileContent, this.cfg.initCfg.baseMappingServiceUrl + 'mapping/GZ').toPromise()
+        this.setBinaryFileToService(fileContent,
+          this.cfg.initCfg.baseMappingServiceUrl + 'mapping/GZ/' + this.getMappingId()).toPromise()
           .then(async(result: boolean) => {
 
 
@@ -999,7 +1005,7 @@ export class MappingManagementService {
 
     // Push the binary stream to the runtime.
     this.setBinaryFileToService(fileContent, this.cfg.initCfg.baseMappingServiceUrl +
-      'mapping/ZIP').toPromise().then((result: boolean) => {
+      'mapping/ZIP/' + this.getMappingId()).toPromise().then((result: boolean) => {
 
         // Retrieve the extracted mappings file catalog (GZIP).
         this.getCurrentMappingCatalog().subscribe(async(value: Uint8Array) => {
