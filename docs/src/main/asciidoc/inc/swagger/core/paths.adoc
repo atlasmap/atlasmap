@@ -169,6 +169,7 @@ __required__|Mapping ID|string
 |HTTP Code|Description|Schema
 |**200**|Return a mapping file content|<<_atlas-service-core-atlasmapping,AtlasMapping>>
 |**204**|Mapping file was not found|No Content
+|**500**|Mapping file access error|No Content
 |===
 
 
@@ -208,6 +209,7 @@ __required__|Mapping ID|string
 |===
 |HTTP Code|Description|Schema
 |**200**|Succeeded|No Content
+|**500**|Mapping file save error|No Content
 |===
 
 
