@@ -49,6 +49,7 @@
       <plugin>
         <artifactId>maven-assembly-plugin</artifactId>
         <configuration>
+          <appendAssemblyId>false</appendAssemblyId>
           <descriptors>
             <descriptor>maven-assembly.xml</descriptor>
           </descriptors>
@@ -186,7 +187,17 @@
             <artifactId>frontend-maven-plugin</artifactId>
             <executions>
               <execution>
-                <id>yarn build</id>
+                <id>yarn build app</id>
+                <phase>compile</phase>
+                <goals>
+                  <goal>yarn</goal>
+                </goals>
+                <configuration>
+                  <arguments>build:app</arguments>
+                </configuration>
+              </execution>
+              <execution>
+                <id>yarn build lib</id>
                 <phase>compile</phase>
                 <goals>
                   <goal>yarn</goal>
