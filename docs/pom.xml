@@ -22,7 +22,7 @@
   <parent>
     <groupId>io.atlasmap</groupId>
     <artifactId>atlas-parent</artifactId>
-    <version>1.39.0-SNAPSHOT</version>
+    <version>1.39.0</version>
     <relativePath>../parent</relativePath>
   </parent>
 
@@ -78,7 +78,7 @@
             </goals>
             <configuration>
               <tasks>
-                <mkdir dir="${project.build.directory}/classes"/>
+                <mkdir dir="${project.build.directory}/classes" />
               </tasks>
             </configuration>
           </execution>
