@@ -119,6 +119,6 @@ echo "=========================================================="
 echo "Publishing NPM package of AtlasMap UI...."
 echo "=========================================================="
 pushd ui/dist/lib
-npm version ${ RELEASE_VERSION}
+npm version ${RELEASE_VERSION}
 npm publish
 popd
