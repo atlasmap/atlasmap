@@ -205,6 +205,29 @@ export class MappingSerializer {
     return serializedTables;
   }
 
+  /**
+   * Serialize field action arguments.
+   *
+   * @param action
+   * @param cfg
+   */
+  private static processActionArguments(action: any, cfg: ConfigModel): any {
+    let actionArguments: any = {};
+    for (const argValue of action.argumentValues) {
+      actionArguments[argValue.name] = argValue.value;
+      const argumentConfig: FieldActionArgument = action.config.getArgumentForName(argValue.name);
+      if (argumentConfig == null) {
+        cfg.errorService.error('Cannot find action argument with name: ' + argValue.name, action);
+         continue;
+      }
+      if (argumentConfig.type === 'INTEGER') {
+        actionArguments[argValue.name] = parseInt(argValue.value, 10);
+      }
+    }
+    actionArguments = (Object.keys(actionArguments).length === 0) ? null : actionArguments;
+    return actionArguments;
+  }
+
   private static serializeFields(
     fieldPair: FieldMappingPair, isSource: boolean,
     cfg: ConfigModel, ignoreValue: boolean = false): any[] {
@@ -257,21 +280,21 @@ export class MappingSerializer {
             continue;
           }
 
-          let actionArguments: any = {};
-          for (const argValue of action.argumentValues) {
-            actionArguments[argValue.name] = argValue.value;
-            const argumentConfig: FieldActionArgument = action.config.getArgumentForName(argValue.name);
-            if (argumentConfig == null) {
-              cfg.errorService.error('Cannot find action argument with name: ' + argValue.name, action);
+          // Serialize custom field actions.
+          if (action.config.isCustom) {
+              const customActionJson: any = {};
+              let customActionBody = {};
+              customActionBody['name'] = action.config.serviceObject.name;
+              customActionBody['className'] = action.config.serviceObject.className;
+              customActionBody['methodName'] = action.config.serviceObject.method;
+              customActionBody = (Object.keys(customActionBody).length === 0) ? null : customActionBody;
+              customActionJson['CustomAction'] = customActionBody;
+              actions.push(customActionJson);
               continue;
-            }
-            if (argumentConfig.type === 'INTEGER') {
-              actionArguments[argValue.name] = parseInt(argValue.value, 10);
-            }
           }
 
-          actionArguments = (Object.keys(actionArguments).length === 0) ? null : actionArguments;
-
+          let actionArguments: any = {};
+          actionArguments = MappingSerializer.processActionArguments(action, cfg);
           const actionJson: any = {};
           actionJson[action.config.name] = actionArguments;
           actions.push(actionJson);

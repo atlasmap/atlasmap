@@ -35,9 +35,6 @@ import { MappingSerializer } from './mapping-serializer.service';
 
 @Injectable()
 export class MappingManagementService {
-
-  HTTP_NO_CONTENT = 200;
-
   cfg: ConfigModel;
 
   mappingUpdatedSource = new Subject<void>();
@@ -134,7 +131,7 @@ export class MappingManagementService {
         observer.next(mappingFileNames);
         observer.complete();
       }).catch((error: any) => {
-        if (error.status !== this.HTTP_NO_CONTENT) {
+        if (error.status !== DataMapperUtil.HTTP_STATUS_NO_CONTENT) {
           this.handleError('Error occurred while accessing the current mapping files from the runtime service.', error);
           observer.error(error);
         }
@@ -166,7 +163,7 @@ export class MappingManagementService {
         observer.next(body);
         observer.complete();
       }).catch((error: any) => {
-        if (error.status !== this.HTTP_NO_CONTENT) {
+        if (error.status !== DataMapperUtil.HTTP_STATUS_NO_CONTENT) {
           this.handleError('Error occurred while accessing the current mappings catalog from the runtime service.', error);
           observer.error(error);
         }
@@ -191,7 +188,7 @@ export class MappingManagementService {
         observer.next(body);
         observer.complete();
       }).catch((error: any) => {
-        if (error.status !== this.HTTP_NO_CONTENT) {
+        if (error.status !== DataMapperUtil.HTTP_STATUS_NO_CONTENT) {
           this.handleError('Error occurred while accessing the ADM catalog from the runtime service.', error);
           observer.error(error);
         }

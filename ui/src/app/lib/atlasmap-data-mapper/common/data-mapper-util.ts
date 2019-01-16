@@ -17,6 +17,9 @@ import { saveAs } from 'file-saver';
 
 export class DataMapperUtil {
 
+  static HTTP_STATUS_OK = 200;
+  static HTTP_STATUS_NO_CONTENT = 204;
+
   static removeItemFromArray(item: any, items: any[]): boolean {
     if (item == null || items == null || items.length === 0) {
       return false;
