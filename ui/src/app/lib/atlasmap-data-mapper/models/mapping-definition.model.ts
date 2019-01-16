@@ -18,7 +18,8 @@ import { MappingModel, MappedField, FieldMappingPair } from './mapping.model';
 import { LookupTable } from '../models/lookup-table.model';
 import { ConfigModel } from '../models/config.model';
 import { Field } from '../models/field.model';
-import { TransitionModel, TransitionMode, FieldActionConfig } from './transition.model';
+import { TransitionModel, TransitionMode, FieldAction, FieldActionConfig,  FieldActionArgument,
+         FieldActionArgumentValue } from './transition.model';
 import { DocumentDefinition } from '../models/document-definition.model';
 
 import { DataMapperUtil } from '../common/data-mapper-util';
@@ -298,6 +299,27 @@ export class MappingDefinition {
     }
   }
 
+  /**
+   * Process a user-defined custom field action.
+   *
+   * @param mappedField
+   * @param action
+   */
+  private processCustomFieldAction(mappedField: MappedField, action: FieldAction) {
+    const customBody: FieldActionArgumentValue[] = action.argumentValues;
+    const customActionConfig: FieldActionConfig = new FieldActionConfig();
+    customActionConfig.name = customBody[0].value;
+    customActionConfig.isCustom = true;
+    customActionConfig.serviceObject.name = customBody[0].value;
+    customActionConfig.serviceObject.className = customBody[1].value;
+    customActionConfig.serviceObject.method = customBody[2].value;
+    action.config = customActionConfig;
+    action.argumentValues = [];
+    action.name = customBody[0].value;
+    mappedField.actions.push(action);
+    mappedField.incTransformationCount();
+  }
+
   private updateMappedFieldsFromDocuments(fieldPair: FieldMappingPair, cfg: ConfigModel, docMap: any, isSource: boolean): void {
     const mappedFields: MappedField[] = fieldPair.getMappedFields(isSource);
 
@@ -385,11 +407,19 @@ export class MappingDefinition {
           return;
         }
       }
+
+      // Process field actions.
       if (mappedField.parsedData.parsedActions.length > 0) {
+
         for (const action of mappedField.parsedData.parsedActions) {
+
+          if (action.name === 'CustomAction') {
+            this.processCustomFieldAction(mappedField, action);
+            continue;
+          }
           const actionConfig: FieldActionConfig = TransitionModel.getActionConfigForName(action.name);
           if (actionConfig == null) {
-            cfg.errorService.error('Could not find field action config for action name \'' + action.name + '\'', null);
+            cfg.errorService.error('Could not find field action configuration for action \'' + action.name + '\'', null);
             continue;
           }
           actionConfig.populateFieldAction(action);

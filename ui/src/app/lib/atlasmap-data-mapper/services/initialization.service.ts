@@ -341,8 +341,6 @@ export class InitializationService {
             }
           });
         }
-        this.cfg.mappingService.validateMappings();
-        this.updateStatus();
       })
       .catch((error: any) => {
         if (error.status === 0) {
@@ -486,16 +484,15 @@ export class InitializationService {
 
     // load mappings
     if (this.cfg.mappings != null) {
-      this.cfg.initCfg.mappingInitialized = true;
       this.updateStatus();
     } else {
       this.cfg.mappings = new MappingDefinition();
       if (this.cfg.mappingFiles.length > 0) {
-        this.fetchMappings(this.cfg.mappingFiles);
+        this.initMappings(this.cfg.mappingFiles);
       } else {
         this.cfg.mappingService.findMappingFiles('UI').toPromise()
           .then((files: string[]) => {
-              this.fetchMappings(files);
+              this.initMappings(files);
           },
           (error: any) => {
             if (error.status === 0) {
@@ -507,6 +504,10 @@ export class InitializationService {
         );
       }
     }
+  }
+
+  async initMappings(mappingFiles: string[]) {
+      return (await this.fetchMappings(mappingFiles));
   }
 
   processMappingsDocuments(mappingsSchemaAggregate: string): any {
@@ -653,26 +654,31 @@ export class InitializationService {
     }
   }
 
-  fetchMappings(mappingFiles: string[]): void {
-    if (mappingFiles == null) {
-      return;
-    }
-    if (mappingFiles.length === 0) {
-      this.cfg.initCfg.mappingInitialized = true;
-      this.updateStatus();
-      return;
-    }
-    this.cfg.mappingService.fetchMappings(mappingFiles, this.cfg.mappings).toPromise()
-      .then((result: boolean) => {
+  /**
+   * Fetch mapping files and initialize user mappings in the canvas.
+   *
+   * @param mappingFiles
+   */
+  async fetchMappings(mappingFiles: string[]): Promise<boolean> {
+    return new Promise<boolean>((resolve, reject) => {
+      if (mappingFiles == null || mappingFiles.length === 0) {
+        resolve(false);
+      }
+
+      this.cfg.mappingService.fetchMappings(mappingFiles, this.cfg.mappings).toPromise()
+        .then((result: boolean) => {
         this.cfg.initCfg.mappingInitialized = true;
         this.updateStatus();
+        resolve(true);
       }).catch((error: any) => {
         if (error.status === 0) {
           this.handleError('Fatal network error: Could not connect to AtlasMap design runtime service.', error);
         } else {
           this.handleError('Could not load mapping definitions.', error);
         }
+        resolve(false);
       });
+    });
   }
 
  fetchFieldActions(): void {
@@ -685,26 +691,22 @@ export class InitializationService {
       MappingManagementService.sortFieldActionConfigs(actionConfigs);
       TransitionModel.actionConfigs = actionConfigs;
       this.cfg.initCfg.fieldActionsInitialized = true;
-      this.updateStatus();
       return;
     }
 
     if (this.cfg.mappingService == null) {
       this.cfg.errorService.warn('Mapping service is not provided. Field Actions will not be used.', null);
       this.cfg.initCfg.fieldActionsInitialized = true;
-      this.updateStatus();
       return;
     } else if (this.cfg.initCfg.baseMappingServiceUrl == null) {
       this.cfg.errorService.warn('Mapping service URL is not provided. Field Actions will not be used.', null);
       this.cfg.initCfg.fieldActionsInitialized = true;
-      this.updateStatus();
       return;
     }
     this.cfg.mappingService.fetchFieldActions().toPromise()
       .then((fetchedActionConfigs: FieldActionConfig[]) => {
         TransitionModel.actionConfigs = fetchedActionConfigs;
         this.cfg.initCfg.fieldActionsInitialized = true;
-        this.updateStatus();
       }).catch((error: any) => {
         if (error.status === 0) {
           this.handleError('Fatal network error: Could not connect to AtlasMap design runtime service.', error);
@@ -723,7 +725,7 @@ export class InitializationService {
       }
     }
 
-    if ((documentCount === finishedDocCount) && this.cfg.initCfg.mappingInitialized && this.cfg.initCfg.fieldActionsInitialized) {
+    if ((documentCount === finishedDocCount) && this.cfg.initCfg.fieldActionsInitialized) {
       this.cfg.mappings.detectTableIdentifiers();
       this.cfg.mappings.updateDocumentNamespacesFromMappings(this.cfg);
       this.cfg.mappings.updateMappingsFromDocuments(this.cfg);

@@ -42,7 +42,6 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
                 if (jsonToken == JsonToken.END_ARRAY) {
                     break;
                 }
-
                 Action action = processActionJsonToken(jp);
                 if (action != null) {
                     actions.getActions().add(action);
@@ -50,7 +49,7 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
             }
         } else {
             throw new IOException(
-                    "Invalid JSON where array expected: " + (jp != null ? jp.getCurrentToken().asString() : null));
+                "Invalid JSON structure, array expected: " + (jp != null ? jp.getCurrentToken().asString() : null));
         }
 
         return actions;
@@ -101,6 +100,8 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
                 return new CurrentDateTime();
             case "CurrentTime":
                 return new CurrentTime();
+            case "CustomAction":
+                return processCustomActionJsonToken(jsonToken);
             case "DayOfMonth":
                 return new DayOfMonth();
             case "DayOfWeek":
@@ -184,7 +185,8 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
             case "UppercaseChar":
                 return new UppercaseChar();
             default:
-                return processCustomActionJsonToken(jsonToken);
+                throw new IOException(
+                    "Invalid action identifier detected: " + jsonToken.getCurrentName());
         }
 
     }
@@ -457,7 +459,6 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
     protected CustomAction processCustomActionJsonToken(JsonParser jsonToken) throws IOException {
         CustomAction action = new CustomAction();
         action.setName(jsonToken.getCurrentName());
-
         if (JsonToken.END_ARRAY.equals(jsonToken.currentToken())
                 || JsonToken.END_OBJECT.equals(jsonToken.currentToken())) {
             return action;
@@ -477,7 +478,12 @@ public class ActionsJsonDeserializer extends JsonDeserializer<Actions> {
                 jsonToken.nextToken();
                 action.setMethodName(jsonToken.getValueAsString());
                 break;
+            case ActionsJsonSerializer.NAME:
+                jsonToken.nextToken();
+                action.setName(jsonToken.getValueAsString());
+                break;
             default:
+                jsonToken.nextToken();
                 break;
             }
 
