@@ -4,7 +4,7 @@
   <parent>
     <groupId>io.atlasmap</groupId>
     <artifactId>atlasmapio</artifactId>
-    <version>1.39.0-SNAPSHOT</version>
+    <version>1.38.1.fuse-730001</version>
     <relativePath>..</relativePath>
   </parent>
 
