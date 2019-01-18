@@ -279,7 +279,7 @@ export class DocumentFieldDetailComponent {
   }
 
   get selected(): boolean {
-    if (this.cfg.mappings.activeMapping) {
+    if (this.cfg.mappings && this.cfg.mappings.activeMapping) {
       return this.cfg.mappings.activeMapping.getFields(this.field.isSource()).includes(this.field);
     }
     return false;

@@ -86,16 +86,19 @@ export class ToolbarComponent implements OnInit {
   }
 
   getCSSClass(action: string) {
-    if ('showDetails' === action) {
-      return 'fa fa-exchange link' + (this.cfg.mappings.activeMapping ? ' selected' : '');
-    } else if ('showLines' === action) {
+    if (this.cfg.mappings !== null) {
+      if ('showDetails' === action) {
+        return 'fa fa-exchange link' + (this.cfg.mappings.activeMapping ? ' selected' : '');
+      } else if ('editTemplate' === action) {
+          return 'fa fa-file-text-o link' + (this.cfg.mappings.templateExists() ? ' selected' : '');
+      }
+    }
+    if ('showLines' === action) {
       return 'fa fa-share-alt link' + (this.cfg.showLinesAlways ? ' selected' : '');
     } else if ('showMappingTable' === action) {
       return 'fa fa-table link' + (this.cfg.showMappingTable ? ' selected' : '');
     } else if ('showNamespaceTable' === action) {
       return 'fa fa-code link' + (this.cfg.showNamespaceTable ? ' selected' : '');
-    } else if ('editTemplate' === action) {
-      return 'fa fa-file-text-o link' + (this.cfg.mappings.templateExists() ? ' selected' : '');
     } else if ('importMappings' === action) {
       return 'pficon pficon-import link';
     } else if ('exportMappings' === action) {

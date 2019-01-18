@@ -74,7 +74,8 @@ export class DataMapperAppExampleHostComponent implements OnInit, OnDestroy {
 
     /*
      * The following examples demonstrate adding source/target documents to the Data Mapper's configuration.
-     * Note that multiple source documents are supported, but multiple target documents are not supported.
+     * Note - use the import button in the Sources/ Targets panel to import XML or JSON instance/ schema
+     * documents or the toolbar import button for ADM files and java archives.
      *
      * example java source document configuration:
      *
@@ -110,19 +111,19 @@ export class DataMapperAppExampleHostComponent implements OnInit, OnDestroy {
     c.initCfg.addMockJavaSingleSource = false;
     c.initCfg.addMockJavaSources = false;
     c.initCfg.addMockJavaCachedSource = false;
-    c.initCfg.addMockXMLInstanceSources = true;
-    c.initCfg.addMockXMLSchemaSources = true;
+    c.initCfg.addMockXMLInstanceSources = false;
+    c.initCfg.addMockXMLSchemaSources = false;
     c.initCfg.addMockJSONSources = false;
-    c.initCfg.addMockJSONInstanceSources = true;
-    c.initCfg.addMockJSONSchemaSources = true;
+    c.initCfg.addMockJSONInstanceSources = false;
+    c.initCfg.addMockJSONSchemaSources = false;
 
     c.initCfg.addMockJavaTarget = false;
     c.initCfg.addMockJavaCachedTarget = false;
-    c.initCfg.addMockXMLInstanceTarget = true;
-    c.initCfg.addMockXMLSchemaTarget = true;
+    c.initCfg.addMockXMLInstanceTarget = false;
+    c.initCfg.addMockXMLSchemaTarget = false;
     c.initCfg.addMockJSONTarget = false;
-    c.initCfg.addMockJSONInstanceTarget = true;
-    c.initCfg.addMockJSONSchemaTarget = true;
+    c.initCfg.addMockJSONInstanceTarget = false;
+    c.initCfg.addMockJSONSchemaTarget = false;
 
     // initialize system
     this.initializationService.initialize();
@@ -139,12 +140,6 @@ export class DataMapperAppExampleHostComponent implements OnInit, OnDestroy {
       c.mappingService.handleMappingSaveSuccess(saveHandler);
     });
 
-    if (!c.sourceDocs || c.sourceDocs.length === 0) {
-      c.errorService.error('No source document was found', '');
-    }
-    if (!c.targetDocs || c.targetDocs.length === 0) {
-      c.errorService.error('No target document was found', '');
-    }
   }
 
   ngOnDestroy() {
