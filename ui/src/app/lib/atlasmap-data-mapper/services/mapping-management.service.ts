@@ -239,6 +239,9 @@ export class MappingManagementService {
    */
   async saveCurrentMapping(): Promise<boolean> {
     return new Promise<boolean>((resolve, reject) => {
+      if (!this.cfg.mappings) {
+        resolve(false);
+      }
       const activeMapping: MappingModel = this.cfg.mappings.activeMapping;
       if ((activeMapping != null) && (this.cfg.mappings.mappings.indexOf(activeMapping) === -1)) {
         this.cfg.mappings.mappings.push(activeMapping);
@@ -745,8 +748,8 @@ export class MappingManagementService {
   }
 
   validateMappings(): void {
-    if (this.cfg.initCfg.baseMappingServiceUrl == null) {
-      // validation service not configured.
+    if (this.cfg.initCfg.baseMappingServiceUrl === null || this.cfg.mappings === null) {
+      // validation service not configured or required
       return;
     }
     const payload: any = MappingSerializer.serializeMappings(this.cfg);
@@ -871,6 +874,9 @@ export class MappingManagementService {
    */
   async getXMLbuf(): Promise<boolean> {
     return new Promise<boolean>((resolve, reject) => {
+      if (this.cfg.mappings === null) {
+        resolve(false);
+      }
       this.cfg.mappingFiles[0] = this.cfg.mappings.name;
       this.getCurrentMappingXML().toPromise().then((result: string) => {
         this.xmlBuffer = result;
@@ -908,12 +914,10 @@ export class MappingManagementService {
       }
 
       // Retrieve the XML mappings buffer from the server.
-      if (!await this.getXMLbuf()) {
-        this.cfg.errorService.mappingError('Unable to retrieve the current data mappings.', null);
+      if (await this.getXMLbuf()) {
+        aggregateBuffer += DocumentManagementService.generateExportMappings(this.xmlBuffer[0]);
       }
 
-      // Start with the user mappings (XML).
-      aggregateBuffer += DocumentManagementService.generateExportMappings(this.xmlBuffer[0]);
       let exportMeta = '   "exportMeta": [\n';
       let exportBlockData = '      "exportBlockData": [\n';
       let docCount = 0;

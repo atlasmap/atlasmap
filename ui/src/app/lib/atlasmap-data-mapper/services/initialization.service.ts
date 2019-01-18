@@ -492,15 +492,13 @@ export class InitializationService {
       } else {
         this.cfg.mappingService.findMappingFiles('UI').toPromise()
           .then((files: string[]) => {
-              this.initMappings(files);
+            this.initMappings(files);
           },
           (error: any) => {
             if (error.status === 0) {
               this.handleError('Fatal network error: Could not connect to AtlasMap design runtime service.', error);
-            } else {
-              this.handleError('Could not load mapping files: ' + error.status + ' ' + error.statusText, error);
             }
-          },
+          }
         );
       }
     }
@@ -703,6 +701,8 @@ export class InitializationService {
       this.cfg.initCfg.fieldActionsInitialized = true;
       return;
     }
+
+    // Fetch the field actions from the runtime service.
     this.cfg.mappingService.fetchFieldActions().toPromise()
       .then((fetchedActionConfigs: FieldActionConfig[]) => {
         TransitionModel.actionConfigs = fetchedActionConfigs;
@@ -726,13 +726,15 @@ export class InitializationService {
     }
 
     if ((documentCount === finishedDocCount) && this.cfg.initCfg.fieldActionsInitialized) {
-      this.cfg.mappings.detectTableIdentifiers();
-      this.cfg.mappings.updateDocumentNamespacesFromMappings(this.cfg);
-      this.cfg.mappings.updateMappingsFromDocuments(this.cfg);
-      for (const d of this.cfg.getAllDocs()) {
-        d.updateFromMappings(this.cfg.mappings);
+      if (this.cfg.mappings) {
+        this.cfg.mappings.detectTableIdentifiers();
+        this.cfg.mappings.updateDocumentNamespacesFromMappings(this.cfg);
+        this.cfg.mappings.updateMappingsFromDocuments(this.cfg);
+        for (const d of this.cfg.getAllDocs()) {
+          d.updateFromMappings(this.cfg.mappings);
+        }
+        this.cfg.mappings.removeStaleMappings(this.cfg);
       }
-      this.cfg.mappings.removeStaleMappings(this.cfg);
       this.updateLoadingStatus('Initialization complete.');
       this.cfg.initCfg.initialized = true;
       this.systemInitializedSource.next();

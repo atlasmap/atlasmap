@@ -67,6 +67,8 @@
         </div>
       </div>
     </div>
-    <div class="card-pf-heading fieldsCount">{{ getFieldCount() }} fields</div>
+    <div class="card-pf-heading fieldsCount" *ngIf="!getFieldCount()" 
+      style="float:left; font-size:12px;font-style:italic;">No documents specified</div>
+    <div class="card-pf-heading fieldsCount" *ngIf="getFieldCount()">{{ getFieldCount() }} fields</div>
   </div>
 </div>
