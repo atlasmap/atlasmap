@@ -707,12 +707,14 @@ export class InitializationService {
       .then((fetchedActionConfigs: FieldActionConfig[]) => {
         TransitionModel.actionConfigs = fetchedActionConfigs;
         this.cfg.initCfg.fieldActionsInitialized = true;
+        this.updateStatus();
       }).catch((error: any) => {
         if (error.status === 0) {
           this.handleError('Fatal network error: Could not connect to AtlasMap design runtime service.', error);
         } else {
           this.handleError('Could not load field action configs: ' + error.status + ' ' + error.statusText, error);
         }
+        this.updateStatus();
       });
   }
 
