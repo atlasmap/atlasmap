@@ -16,6 +16,7 @@
  */
 package org.apache.camel.component.atlasmap;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -25,6 +26,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
@@ -61,6 +64,7 @@ public class AtlasEndpoint extends ResourceEndpoint {
     private static final Logger LOG = LoggerFactory.getLogger(AtlasEndpoint.class);
     private AtlasContextFactory atlasContextFactory;
     private AtlasContext atlasContext;
+    private String atlasmapGenericMappingsName = "atlasmapping.xml";
 
     @UriParam(defaultValue = "true")
     private boolean loaderCache = true;
@@ -175,6 +179,51 @@ public class AtlasEndpoint extends ResourceEndpoint {
         return getCamelContext().getEndpoint(newUri, AtlasEndpoint.class);
     }
 
+    /**
+     * Extract the AtlasMap mappings file (XML) from the specified catalog file stream (ADM/ZIP)
+     * and return it as a String.
+     *
+     * @param in - Live input stream to the ADM catalog file via the resource URI.
+     * @param admCatalogPath - used for diagnostics only
+     * @return the extracted mappings XML content
+     *
+     * @throws Exception
+     */
+    private String extractMappingsFromADM(InputStream in, String admCatalogPath) throws Exception {
+        byte[] buffer = new byte[2048];
+        StringBuilder extractedMappoings = new StringBuilder();
+        String catEntryname;
+        ZipInputStream zipIn = new ZipInputStream(in);
+
+        try {
+            ZipEntry catEntry;
+            while ((catEntry = zipIn.getNextEntry()) != null) {
+                catEntryname = catEntry.getName();
+                if (catEntryname.contains(atlasmapGenericMappingsName)) {
+                    break;
+                }
+                else {
+                    continue;
+                }
+            }
+            if (zipIn != null) {
+                int len = 0;
+                while ((len = zipIn.read(buffer)) > 0) {
+                    extractedMappoings.append(new String(buffer, 0, len));
+                }
+                zipIn.close();
+            }
+            if (log.isDebugEnabled()) {
+                log.debug("Atlas mapping content extracted from AtlasMap catalog: {}",
+                    new Object[] { admCatalogPath });
+            }
+        } catch (IOException e) {
+            throw new IOException("Error extracting mappings file from ADM catalog " + admCatalogPath + ".\n" +
+                e.getMessage());
+        }
+        return extractedMappoings.toString();
+    }
+
     @Override
     protected void onExchange(Exchange exchange) throws Exception {
         Message incomingMessage = exchange.getIn();
@@ -191,6 +240,10 @@ public class AtlasEndpoint extends ResourceEndpoint {
 
         AtlasSession atlasSession = getOrCreateAtlasContext(incomingMessage).createSession();
         populateSourceDocuments(exchange, atlasSession);
+        AtlasContext atlasContext = getAtlasContext();
+        if (atlasContext == null) {
+            throw new AtlasException("Error establishing an Atlas context within the Atlas session.");
+        }
         getAtlasContext().process(atlasSession);
 
         List<Audit> errors = new ArrayList<>();
@@ -219,10 +272,17 @@ public class AtlasEndpoint extends ResourceEndpoint {
     private AtlasContext getOrCreateAtlasContext(Message incomingMessage) throws Exception {
         String path = getResourceUri();
         ObjectHelper.notNull(path, "mappingUri");
-        AtlasMappingFormat mappingFormat = path.toLowerCase().endsWith("json")
-                ? AtlasMappingFormat.JSON : AtlasMappingFormat.XML;
+        Reader reader = null;
+        AtlasMappingFormat mappingFormat = null;
 
-        Reader reader;
+        if (path.toLowerCase().endsWith("adm")) {
+            mappingFormat = AtlasMappingFormat.XML;
+            reader = new StringReader(extractMappingsFromADM(getResourceAsInputStream(), path));
+        }
+        else {
+            mappingFormat = path.toLowerCase().endsWith("json")
+                ? AtlasMappingFormat.JSON : AtlasMappingFormat.XML;
+        }
         String content = incomingMessage.getHeader(AtlasConstants.ATLAS_MAPPING, String.class);
         if (content != null) {
             // use content from header
@@ -247,8 +307,10 @@ public class AtlasEndpoint extends ResourceEndpoint {
             log.debug("Atlas mapping content read from resourceUri: {} for endpoint {}",
                     new Object[] { path, getEndpointUri() });
         }
-        reader = getEncoding() != null ? new InputStreamReader(getResourceAsInputStream(), getEncoding())
+        if (reader == null) {
+            reader = getEncoding() != null ? new InputStreamReader(getResourceAsInputStream(), getEncoding())
                 : new InputStreamReader(getResourceAsInputStream());
+        }
         AtlasMapping mapping = ((DefaultAtlasContextFactory) getOrCreateAtlasContextFactory())
                 .getMappingService()
                 .loadMapping(reader, mappingFormat);
