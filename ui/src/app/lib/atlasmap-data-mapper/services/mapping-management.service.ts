@@ -867,6 +867,7 @@ export class MappingManagementService {
 
   private handleError(message: string, error: any): void {
     this.cfg.errorService.mappingError(message, error);
+    this.cfg.initCfg.initialized = true;
   }
 
   /**
