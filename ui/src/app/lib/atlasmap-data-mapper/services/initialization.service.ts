@@ -749,7 +749,7 @@ export class InitializationService {
     this.updateLoadingStatus(message);
     this.cfg.initCfg.initializationErrorOccurred = true;
     this.cfg.initCfg.initialized = true;
-    this.updateStatus();
+    this.systemInitializedSource.next();
   }
 
   updateLoadingStatus(status: string): void {
