@@ -273,16 +273,9 @@ public class AtlasEndpoint extends ResourceEndpoint {
         String path = getResourceUri();
         ObjectHelper.notNull(path, "mappingUri");
         Reader reader = null;
-        AtlasMappingFormat mappingFormat = null;
-
-        if (path.toLowerCase().endsWith("adm")) {
-            mappingFormat = AtlasMappingFormat.XML;
-            reader = new StringReader(extractMappingsFromADM(getResourceAsInputStream(), path));
-        }
-        else {
-            mappingFormat = path.toLowerCase().endsWith("json")
+        AtlasMappingFormat mappingFormat = path.toLowerCase().endsWith("json")
                 ? AtlasMappingFormat.JSON : AtlasMappingFormat.XML;
-        }
+
         String content = incomingMessage.getHeader(AtlasConstants.ATLAS_MAPPING, String.class);
         if (content != null) {
             // use content from header
@@ -307,7 +300,11 @@ public class AtlasEndpoint extends ResourceEndpoint {
             log.debug("Atlas mapping content read from resourceUri: {} for endpoint {}",
                     new Object[] { path, getEndpointUri() });
         }
-        if (reader == null) {
+        if (path.toLowerCase().endsWith("adm")) {
+            mappingFormat = AtlasMappingFormat.XML;
+            reader = new StringReader(extractMappingsFromADM(getResourceAsInputStream(), path));
+        }
+        else {
             reader = getEncoding() != null ? new InputStreamReader(getResourceAsInputStream(), getEncoding())
                 : new InputStreamReader(getResourceAsInputStream());
         }
