@@ -314,6 +314,7 @@ public class AtlasEndpoint extends ResourceEndpoint {
             if (body instanceof Map) {
                 sourceDocuments = (Map<String, Object>)body;
             } else {
+                session.setDefaultSourceDocument(body);
                 return;
             }
         }
