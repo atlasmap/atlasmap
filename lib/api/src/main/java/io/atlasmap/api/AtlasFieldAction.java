@@ -16,5 +16,4 @@
 package io.atlasmap.api;
 
 public interface AtlasFieldAction {
-
 }

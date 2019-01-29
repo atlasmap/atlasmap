@@ -3,29 +3,22 @@ package io.atlasmap.core;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Parameter;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.ServiceLoader;
 
 import javax.xml.bind.annotation.XmlTransient;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import io.atlasmap.api.AtlasConversionException;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.api.AtlasFieldAction;
-import io.atlasmap.converters.DateTimeHelper;
 import io.atlasmap.spi.AtlasConversionService;
 import io.atlasmap.spi.AtlasFieldActionInfo;
 import io.atlasmap.spi.AtlasFieldActionService;
@@ -42,6 +35,8 @@ import io.atlasmap.v2.CustomAction;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldGroup;
 import io.atlasmap.v2.FieldType;
+import io.atlasmap.v2.Properties;
+import io.atlasmap.v2.Property;
 import io.atlasmap.v2.SimpleField;
 
 public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
@@ -321,6 +316,7 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
                     }
                     if (sourceCollectionType == CollectionType.NONE) {
                         subValue = processAction(action, detail, subValue);
+                        storeResultInVariable(session, detail, subValue);
                         tmpSourceList.set(i, subValue);
                     }
                 }
@@ -329,6 +325,7 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
             }
             if (!(tmpSourceObject instanceof List) || sourceCollectionType != CollectionType.NONE) {
                 tmpSourceObject = processAction(action, detail, tmpSourceObject);
+                storeResultInVariable(session, detail, tmpSourceObject);
             }
 
             currentType = detail.getTargetType();
@@ -456,5 +453,41 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
         char c[] = parameter.toCharArray();
         c[0] = Character.toLowerCase(c[0]);
         return new String(c);
+    }
+
+    private void storeResultInVariable(AtlasInternalSession session, ActionDetailImpl detail, Object result) {
+        if (session.getMapping() == null) {
+            return;
+        }
+
+        // Find next available variable name
+        Properties propsContainer = session.getMapping().getProperties();
+        if (propsContainer == null) {
+            propsContainer = new Properties();
+            session.getMapping().setProperties(propsContainer);
+        }
+        List<Property> props = session.getMapping().getProperties().getProperty();
+        int ndx = 1;
+        String varName = "$" + ndx + "$";
+        boolean exists;
+        do {
+            exists = false;
+            for (Property prop : props) {
+                if (prop.getName().equals(varName)) {
+                    exists = true;
+                    break;
+                }
+            }
+            if (exists) {
+                varName = "$" + ++ndx + "$";
+            }
+        } while (exists);
+
+        Property prop = new Property();
+        prop.setName(varName);
+
+        prop.setValue(result.toString());
+        prop.setFieldType(detail.getTargetType());
+        props.add(prop);
     }
 }

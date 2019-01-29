@@ -22,9 +22,11 @@ import java.util.UUID;
 import java.util.regex.Pattern;
 
 import io.atlasmap.api.AtlasFieldAction;
+import io.atlasmap.core.DefaultAtlasContext;
 import io.atlasmap.spi.AtlasFieldActionInfo;
 import io.atlasmap.v2.Action;
 import io.atlasmap.v2.Append;
+import io.atlasmap.v2.AtlasMapping;
 import io.atlasmap.v2.CollectionType;
 import io.atlasmap.v2.Concatenate;
 import io.atlasmap.v2.EndsWith;
@@ -35,6 +37,8 @@ import io.atlasmap.v2.LastIndexOf;
 import io.atlasmap.v2.PadStringLeft;
 import io.atlasmap.v2.PadStringRight;
 import io.atlasmap.v2.Prepend;
+import io.atlasmap.v2.Properties;
+import io.atlasmap.v2.Property;
 import io.atlasmap.v2.ReplaceAll;
 import io.atlasmap.v2.ReplaceFirst;
 import io.atlasmap.v2.Split;
@@ -61,6 +65,7 @@ public class StringComplexFieldActions implements AtlasFieldAction {
         if (string == null) {
             return input.toString();
         }
+        string = resolveVariables(string);
         return input == null ? string : input.toString().concat(string);
     }
 
@@ -357,5 +362,50 @@ public class StringComplexFieldActions implements AtlasFieldAction {
         }
 
         return input.substring(startIndex, endIndex);
+    }
+
+    private static String resolveVariables(String string) {
+        AtlasMapping activeMappingRoot = DefaultAtlasContext.activeMappingRoot;
+        if (activeMappingRoot == null) {
+            return string;
+        }
+        Properties propsContainer = activeMappingRoot.getProperties();
+        if (propsContainer == null) {
+            return string;
+        }
+        StringBuilder builder = new StringBuilder();
+        int startIndex = 0;
+        while (startIndex < string.length()) {
+            int index = string.indexOf('$', startIndex);
+            if (index >= 0) {
+                builder.append(string.substring(startIndex, index));
+                if (string.charAt(index + 1) == '$') {
+                    startIndex += 2;
+                    continue;
+                }
+                int endIndex = string.indexOf('$', index + 1);
+                if (endIndex < 0) {
+                    builder.append(string.substring(index));
+                    break;
+                }
+                String varName = string.substring(index, endIndex + 1);
+                boolean varFound = false;
+                for (Property prop : propsContainer.getProperty()) {
+                    if (prop.getName().equals(varName)) {
+                        builder.append(prop.getValue());
+                        varFound = true;
+                        break;
+                    }
+                }
+                if (!varFound) {
+                    builder.append(varName);
+                }
+                startIndex = endIndex + 1;
+            } else {
+                builder.append(string.substring(startIndex));
+                break;
+            }
+        }
+        return builder.toString();
     }
 }

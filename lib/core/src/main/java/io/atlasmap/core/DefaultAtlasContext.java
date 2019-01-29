@@ -73,6 +73,8 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
     public static final String CONSTANTS_DOCUMENT_ID = "io.atlasmap.core.DefaultAtlasContext.constants.docId";
     public static final String PROPERTIES_DOCUMENT_ID = "io.atlasmap.core.DefaultAtlasContext.properties.docId";
 
+    public static AtlasMapping activeMappingRoot;
+
     private static final Logger LOG = LoggerFactory.getLogger(DefaultAtlasContext.class);
     private ObjectName jmxObjectName;
     private final UUID uuid;
@@ -211,6 +213,10 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
     @Override
     public Audits processPreview(Mapping mapping) throws AtlasException {
         DefaultAtlasSession session = new DefaultAtlasSession(this);
+
+        // Set active mapping so transformations can reference properties
+        activeMappingRoot = session.getMapping();
+
         MappingType mappingType = mapping.getMappingType();
         List<Field> sourceFields = mapping.getInputField();
         List<Field> targetFields = mapping.getOutputField();
@@ -426,6 +432,9 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
         if (LOG.isDebugEnabled()) {
             LOG.debug("Begin process {}", (session == null ? null : session.toString()));
         }
+
+        // Set active mapping so transformations can reference properties
+        activeMappingRoot = session.getMapping();
 
         session.head().unset();
         session.getAudits().getAudit().clear();
