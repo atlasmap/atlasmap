@@ -302,14 +302,7 @@ public class DefaultAtlasConversionService implements AtlasConversionService {
             return sourceValue;
         }
 
-        ConverterKey converterKey = new ConverterKey(sourceValue.getClass().getCanonicalName(),
-                targetType.getCanonicalName());
-        // use custom converter first
-        ConverterMethodHolder methodHolder = customConverterMethods.get(converterKey);
-        if (methodHolder == null) {
-            // try the inbuilt defaults
-            methodHolder = converterMethods.get(converterKey);
-        }
+        ConverterMethodHolder methodHolder = getConverter(sourceValue, targetType);
         if (methodHolder != null) {
             try {
                 Object target = methodHolder.staticMethod ? null : methodHolder.converter;
@@ -323,6 +316,32 @@ public class DefaultAtlasConversionService implements AtlasConversionService {
         }
         throw new AtlasConversionException("Type Conversion is not supported for sT="
                 + sourceValue.getClass().getCanonicalName() + " tT=" + targetType.getCanonicalName());
+    }
+
+    @Override
+    public boolean isConvertionAvailableFor(Object sourceValue, Class<?> targetType) {
+        return targetType.isInstance(sourceValue) || getConverter(sourceValue, targetType) != null;
+    }
+
+    private ConverterMethodHolder getConverter(Object sourceValue, Class<?> targetType) {
+        Class<?> boxedSourceClass = sourceValue.getClass();
+        if (sourceValue.getClass().isPrimitive()) {
+            boxedSourceClass = boxOrUnboxPrimitive(boxedSourceClass);
+        }
+        Class<?> boxedTargetClass = targetType;
+        if (targetType.isPrimitive()) {
+            boxedTargetClass = boxOrUnboxPrimitive(boxedTargetClass);
+        }
+
+        ConverterKey converterKey = new ConverterKey(boxedSourceClass.getCanonicalName(),
+                boxedTargetClass.getCanonicalName());
+        // use custom converter first
+        ConverterMethodHolder methodHolder = customConverterMethods.get(converterKey);
+        if (methodHolder == null) {
+            // try the inbuilt defaults
+            methodHolder = converterMethods.get(converterKey);
+        }
+        return methodHolder;
     }
 
     @Override

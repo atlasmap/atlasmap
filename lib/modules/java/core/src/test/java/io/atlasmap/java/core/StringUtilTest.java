@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.atlasmap.java.inspect;
+package io.atlasmap.java.core;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -26,15 +26,15 @@ public class StringUtilTest {
 
     @Test
     public void testRemoveGetterAndLowercaseFirstLetter() {
-        assertNull(StringUtil.removeGetterAndLowercaseFirstLetter(null));
-        assertEquals("", StringUtil.removeGetterAndLowercaseFirstLetter(""));
-        assertEquals("g", StringUtil.removeGetterAndLowercaseFirstLetter("g"));
-        assertEquals("ge", StringUtil.removeGetterAndLowercaseFirstLetter("ge"));
-        assertEquals("get", StringUtil.removeGetterAndLowercaseFirstLetter("get"));
-        assertEquals("i", StringUtil.removeGetterAndLowercaseFirstLetter("i"));
-        assertEquals("is", StringUtil.removeGetterAndLowercaseFirstLetter("is"));
-        assertEquals("abc", StringUtil.removeGetterAndLowercaseFirstLetter("getAbc"));
-        assertEquals("abc", StringUtil.removeGetterAndLowercaseFirstLetter("isAbc"));
+        assertNull(StringUtil.getFieldNameFromGetter(null));
+        assertEquals("", StringUtil.getFieldNameFromGetter(""));
+        assertEquals("g", StringUtil.getFieldNameFromGetter("g"));
+        assertEquals("ge", StringUtil.getFieldNameFromGetter("ge"));
+        assertEquals("get", StringUtil.getFieldNameFromGetter("get"));
+        assertEquals("i", StringUtil.getFieldNameFromGetter("i"));
+        assertEquals("is", StringUtil.getFieldNameFromGetter("is"));
+        assertEquals("abc", StringUtil.getFieldNameFromGetter("getAbc"));
+        assertEquals("abc", StringUtil.getFieldNameFromGetter("isAbc"));
     }
 
     @Test

@@ -12,10 +12,8 @@ import org.slf4j.LoggerFactory;
 
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.core.AtlasPath;
+import io.atlasmap.core.AtlasPath.SegmentContext;
 import io.atlasmap.core.AtlasUtil;
-import io.atlasmap.java.inspect.ClassHelper;
-import io.atlasmap.java.inspect.JdkPackages;
-import io.atlasmap.java.inspect.StringUtil;
 import io.atlasmap.java.v2.JavaEnumField;
 import io.atlasmap.java.v2.JavaField;
 import io.atlasmap.spi.AtlasConversionService;
@@ -23,6 +21,7 @@ import io.atlasmap.spi.AtlasFieldReader;
 import io.atlasmap.spi.AtlasInternalSession;
 import io.atlasmap.v2.AtlasModelFactory;
 import io.atlasmap.v2.AuditStatus;
+import io.atlasmap.v2.CollectionType;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldGroup;
 
@@ -39,7 +38,7 @@ public class JavaFieldReader implements AtlasFieldReader {
             Method getter = null;
             if (sourceField.getFieldType() == null
                     && (sourceField instanceof JavaField || sourceField instanceof JavaEnumField)) {
-                getter = resolveGetMethod(sourceDocument, sourceField);
+                getter = resolveGetMethod(session, sourceDocument, sourceField);
                 if (getter == null) {
                     AtlasUtil.addAudit(session, sourceField.getDocId(), String.format(
                             "Unable to auto-detect sourceField type path=%s docId=%s",
@@ -78,16 +77,42 @@ public class JavaFieldReader implements AtlasFieldReader {
 
         List<Object> parents = Arrays.asList(source);
         if (atlasPath.isRoot()) {
-            processField(fieldGroup, field, source);
+            if (atlasPath.getLastSegment().getCollectionType() == CollectionType.NONE) {
+                processField(fieldGroup, field, source);
+            } else {
+                if (atlasPath.getLastSegment().getCollectionIndex() != null) {
+                    processField(fieldGroup, field, extractFromCollection(session, source, atlasPath));
+                } else {
+                    if (source instanceof Collection) {
+                        for (Object item : ((Collection<?>)source).toArray()) {
+                            processField(fieldGroup, field, item);
+                        }
+                    } else if (source.getClass().isArray()) {
+                        for (int i=0; i<Array.getLength(source); i++) {
+                            processField(fieldGroup, field, Array.get(source, i));
+                        }
+                    } else {
+                        processField(fieldGroup, field, source);
+                    }
+                }
+            }
             return;
         }
 
-        if (atlasPath.hasParent()) {
-            parents = ClassHelper.parentObjectsForPath(source, atlasPath);
+        if (!atlasPath.isRoot()) {
+            parents = ClassHelper.getParentObjectsForPath(session, source, atlasPath);
         }
-        String cleanedLastSegment = AtlasPath.cleanPathSegment(atlasPath.getLastSegment());
-        getter = (getter == null) ? resolveGetMethod(source, field) : getter;
+        String cleanedLastSegment = atlasPath.getLastSegment().getName();
+        getter = (getter == null) ? resolveGetMethod(session, source, field) : getter;
         for (Object parent : parents) {
+            if (parent == null) {
+                processField(fieldGroup, field, null);
+                Field updated = fieldGroup != null ? fieldGroup.getField().get(fieldGroup.getField().size()-1) : field;
+                AtlasUtil.addAudit(session, updated.getDocId(), String.format(
+                        "Assigning null value for path path=%s docId=%s due to null parent", updated.getPath(), updated.getDocId()),
+                        updated.getPath(), AuditStatus.WARN, null);
+                continue;
+            }
             Object child = null;
             if (getter != null) {
                 child = getter.invoke(parent);
@@ -97,10 +122,10 @@ public class JavaFieldReader implements AtlasFieldReader {
             if (child == null) {
                 continue;
             }
-            if (!AtlasPath.isCollection(atlasPath.getLastSegment())) {
+            if (atlasPath.getLastSegment().getCollectionType() == CollectionType.NONE) {
                 processField(fieldGroup, field, child);
             } else {
-                if (AtlasPath.isIndexedCollectionSegment(atlasPath.getLastSegment())) {
+                if (atlasPath.getLastSegment().getCollectionIndex() != null) {
                     processField(fieldGroup, field, extractFromCollection(session, child, atlasPath));
                 } else {
                     if (child instanceof Collection) {
@@ -137,14 +162,14 @@ public class JavaFieldReader implements AtlasFieldReader {
         field.setValue(value);
     }
 
-    private Method resolveGetMethod(Object sourceObject, Field field)
+    private Method resolveGetMethod(AtlasInternalSession session, Object sourceObject, Field field)
             throws AtlasException {
         Object parentObject = sourceObject;
         AtlasPath atlasPath = new AtlasPath(field.getPath());
         Method getter = null;
 
-        if (atlasPath.hasParent()) {
-            List<Object> parents = ClassHelper.parentObjectsForPath(sourceObject, atlasPath);
+        if (!atlasPath.isRoot()) {
+            List<Object> parents = ClassHelper.getParentObjectsForPath(session, sourceObject, atlasPath);
             parentObject = parents != null && parents.size() > 0 ? parents.get(0) : null;
         }
         if (parentObject == null) {
@@ -165,8 +190,7 @@ public class JavaFieldReader implements AtlasFieldReader {
             }
 
             for (String m : Arrays.asList("get", "is")) {
-                String cleanedLastSegment = AtlasPath.cleanPathSegment(atlasPath.getLastSegment());
-                String getterMethod = m + capitalizeFirstLetter(cleanedLastSegment);
+                String getterMethod = m + capitalizeFirstLetter(atlasPath.getLastSegment().getName());
                 try {
                     getter = clazz.getMethod(getterMethod);
                     getter.setAccessible(true);
@@ -237,17 +261,18 @@ public class JavaFieldReader implements AtlasFieldReader {
             return null;
         }
 
-        String lastSegment = atlasPath.getLastSegment();
-        if (!AtlasPath.isIndexedCollectionSegment(lastSegment)) {
+        SegmentContext lastSegment = atlasPath.getLastSegment();
+        CollectionType collectionType = lastSegment.getCollectionType();
+        Integer index = lastSegment.getCollectionIndex();
+        if (collectionType == CollectionType.NONE || index == null) {
             return source;
         }
 
-        Integer index = atlasPath.getCollectionIndex(atlasPath.getLastSegment());
-        if (AtlasPath.isArraySegment(lastSegment)) {
+        if (collectionType == CollectionType.ARRAY) {
             return Array.get(source, index);
-        } else if (AtlasPath.isListSegment(lastSegment)) {
+        } else if (collectionType == CollectionType.LIST) {
             return Collection.class.cast(source).toArray()[index];
-        } else if (AtlasPath.isMapSegment(lastSegment)) {
+        } else if (collectionType == CollectionType.MAP) {
             // TODO support map key
             String key = index.toString();
             return Map.class.cast(source).get(key);

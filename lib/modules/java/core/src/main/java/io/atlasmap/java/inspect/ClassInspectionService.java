@@ -35,6 +35,8 @@ import org.slf4j.LoggerFactory;
 
 import io.atlasmap.core.AtlasPath;
 import io.atlasmap.core.AtlasUtil;
+import io.atlasmap.java.core.JdkPackages;
+import io.atlasmap.java.core.StringUtil;
 import io.atlasmap.java.v2.AtlasJavaModelFactory;
 import io.atlasmap.java.v2.JavaClass;
 import io.atlasmap.java.v2.JavaEnumField;
@@ -126,18 +128,18 @@ public class ClassInspectionService {
         this.disablePublicGetterSetterFields = disablePublicGetterSetterFields;
     }
 
-    public JavaClass inspectClass(String className) {
+    public JavaClass inspectClass(String className, CollectionType collectionType, String collectionClassName) {
         // Use a loader for this class for now
         ClassLoader classLoader = getClass().getClassLoader();
-        return inspectClass(classLoader, className);
+        return inspectClass(classLoader, className, collectionType, collectionClassName);
     }
 
-    public JavaClass inspectClass(ClassLoader classLoader, String className) {
+    public JavaClass inspectClass(ClassLoader classLoader, String className, CollectionType collectionType, String collectionClassName) {
         JavaClass d = null;
         Class<?> clazz = null;
         try {
             clazz = classLoader.loadClass(className);
-            d = inspectClass(classLoader, clazz);
+            d = inspectClass(classLoader, clazz, collectionType, collectionClassName);
         } catch (ClassNotFoundException cnfe) {
             d = AtlasJavaModelFactory.createJavaClass();
             d.setClassName(className);
@@ -146,7 +148,7 @@ public class ClassInspectionService {
         return d;
     }
 
-    public JavaClass inspectClass(String className, String classpath) throws InspectionException {
+    public JavaClass inspectClass(String className, CollectionType collectionType, String collectionClassName, String classpath) throws InspectionException {
         if (LOG.isDebugEnabled()) {
             LOG.debug("Inspecting class: " + className + ", classPath: " + classpath);
         }
@@ -158,7 +160,7 @@ public class ClassInspectionService {
         try {
             JarClassLoader jcl = new JarClassLoader(new String[] { "target/reference-jars" });
             Class<?> clazz = jcl.loadClass(className);
-            d = inspectClass(jcl, clazz);
+            d = inspectClass(jcl, clazz, collectionType, collectionClassName);
         } catch (ClassNotFoundException cnfe) {
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Class was not found: " + className);
@@ -170,23 +172,37 @@ public class ClassInspectionService {
         return d;
     }
 
-    public JavaClass inspectClass(Class<?> clazz) {
+    public JavaClass inspectClass(Class<?> clazz, CollectionType collectionType, String collectionClassName) {
         if (clazz == null) {
             throw new IllegalArgumentException("Class must be specified");
         }
 
-        return inspectClass(clazz.getClassLoader(), clazz);
+        return inspectClass(clazz.getClassLoader(), clazz, collectionType, collectionClassName);
     }
 
-    public JavaClass inspectClass(ClassLoader classLoader, Class<?> clazz) {
+    public JavaClass inspectClass(ClassLoader classLoader, Class<?> clazz, CollectionType collectionType, String collectionClassName) {
         if (clazz == null) {
             throw new IllegalArgumentException("Class must be specified");
         }
 
         JavaClass javaClass = AtlasJavaModelFactory.createJavaClass();
+        javaClass.setCollectionType(collectionType);
+        String rootPath = AtlasPath.PATH_SEPARATOR;
+        if (collectionType == CollectionType.LIST || collectionType == CollectionType.LIST) {
+            rootPath += AtlasPath.PATH_LIST_START + AtlasPath.PATH_LIST_END;
+        } else if (collectionType == CollectionType.ARRAY) {
+            rootPath += AtlasPath.PATH_ARRAY_START + AtlasPath.PATH_ARRAY_END;
+        } else if (collectionType == CollectionType.MAP) {
+            rootPath += AtlasPath.PATH_MAP_START + AtlasPath.PATH_MAP_END;
+        }
+        if (collectionClassName != null && !collectionClassName.isEmpty()) {
+            javaClass.setCollectionClassName(collectionClassName);
+        }
+        javaClass.setPath(rootPath);
         Set<String> cachedClasses = new HashSet<>();
         cachedClasses.add(clazz.getName()); // we cache ourself
-        inspectClass(classLoader, clazz, javaClass, cachedClasses, null);
+        inspectClass(classLoader, clazz, javaClass, cachedClasses, rootPath);
+        javaClass.setFieldType(getConversionService().fieldTypeFromClass(javaClass.getClassName()));
         return javaClass;
     }
 
@@ -198,11 +214,14 @@ public class ClassInspectionService {
             javaClass.setArrayDimensions(detectArrayDimensions(clazz));
             javaClass.setCollectionType(CollectionType.ARRAY);
             clz = detectArrayClass(clazz);
+            if (!javaClass.getPath().endsWith(AtlasPath.PATH_ARRAY_END)) {
+                javaClass.setPath(javaClass.getPath() + AtlasPath.PATH_ARRAY_START + AtlasPath.PATH_ARRAY_END);
+            }
         } else {
             clz = clazz;
         }
 
-        if (isMapList(clz.getName())) {
+        if (isFieldMap(clz.getName())) {
             javaClass.setCollectionType(CollectionType.MAP);
         }
 
@@ -291,13 +310,13 @@ public class ClassInspectionService {
             String pathPrefix) {
         JavaField field = s;
 
-        field.setName(StringUtil.removeGetterAndLowercaseFirstLetter(m.getName()));
+        field.setName(StringUtil.getFieldNameFromGetter(m.getName()));
 
         if (pathPrefix != null && pathPrefix.length() > 0) {
             field.setPath(pathPrefix + AtlasPath.PATH_SEPARATOR
-                    + StringUtil.removeGetterAndLowercaseFirstLetter(m.getName()));
+                    + StringUtil.getFieldNameFromGetter(m.getName()));
         } else {
-            field.setPath(StringUtil.removeGetterAndLowercaseFirstLetter(m.getName()));
+            field.setPath(StringUtil.getFieldNameFromGetter(m.getName()));
         }
 
         if (m.getParameterCount() != 0) {
@@ -359,13 +378,13 @@ public class ClassInspectionService {
             String pathPrefix) {
         JavaField field = s;
 
-        field.setName(StringUtil.removeSetterAndLowercaseFirstLetter(m.getName()));
+        field.setName(StringUtil.getFieldNameFromSetter(m.getName()));
 
         if (pathPrefix != null && pathPrefix.length() > 0) {
             field.setPath(pathPrefix + AtlasPath.PATH_SEPARATOR
-                    + StringUtil.removeSetterAndLowercaseFirstLetter(m.getName()));
+                    + StringUtil.getFieldNameFromSetter(m.getName()));
         } else {
-            field.setPath(StringUtil.removeSetterAndLowercaseFirstLetter(m.getName()));
+            field.setPath(StringUtil.getFieldNameFromSetter(m.getName()));
         }
 
         if (m.getParameterCount() != 1) {
@@ -436,12 +455,12 @@ public class ClassInspectionService {
         s.setName(f.getName());
 
         if (pathPrefix != null && pathPrefix.length() > 0) {
-            s.setPath(pathPrefix + AtlasPath.PATH_SEPARATOR + f.getName());
+            s.setPath(pathPrefix + (pathPrefix.endsWith("/") ? "" : AtlasPath.PATH_SEPARATOR) + f.getName());
         } else {
             s.setPath(f.getName());
         }
 
-        if (isMapList(clazz.getName())) {
+        if (isFieldMap(clazz.getName())) {
             s.setCollectionType(CollectionType.MAP);
         }
 
@@ -660,11 +679,7 @@ public class ClassInspectionService {
         }
     }
 
-    private boolean isFieldList(String fieldType) {
-        return getListClasses().contains(fieldType);
-    }
-
-    protected boolean isMapList(String fieldType) {
+    protected boolean isFieldMap(String fieldType) {
         return getMapClasses().contains(fieldType);
     }
 

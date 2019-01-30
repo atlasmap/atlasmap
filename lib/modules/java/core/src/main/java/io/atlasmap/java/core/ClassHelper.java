@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.atlasmap.java.inspect;
+package io.atlasmap.java.core;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
@@ -25,6 +25,11 @@ import java.util.List;
 
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.core.AtlasPath;
+import io.atlasmap.core.AtlasPath.SegmentContext;
+import io.atlasmap.core.AtlasUtil;
+import io.atlasmap.spi.AtlasInternalSession;
+import io.atlasmap.v2.AuditStatus;
+import io.atlasmap.v2.CollectionType;
 
 public class ClassHelper {
 
@@ -132,7 +137,7 @@ public class ClassHelper {
                 clazz.getName(), methodName, paramTypeClassName));
     }
 
-    public static List<Object> parentObjectsForPath(Object targetObject, AtlasPath pathUtil)
+    public static List<Object> getParentObjectsForPath(AtlasInternalSession session, Object targetObject, AtlasPath pathUtil)
             throws AtlasException {
         try {
             if (targetObject == null) {
@@ -143,7 +148,7 @@ public class ClassHelper {
                 return Arrays.asList(targetObject);
             }
 
-            if (!pathUtil.hasParent() && !pathUtil.hasCollection()) {
+            if (pathUtil.isRoot() && !pathUtil.hasCollectionRoot()) {
                 return Arrays.asList(targetObject);
             }
 
@@ -154,8 +159,29 @@ public class ClassHelper {
 
             List<Object> parents = new LinkedList<>();
             parents.add(targetObject);
-            for (String segment : parentPath.getSegments()) {
-                List<String> getters = getterMethodNames(AtlasPath.cleanPathSegment(segment));
+            if (pathUtil.hasCollectionRoot()) {
+                // handling topmost collection
+                SegmentContext rootSegment = pathUtil.getRootSegment();
+                List<Object> children = new LinkedList<>();
+                Integer index = rootSegment.getCollectionIndex();
+                if (index == null) {
+                    if (targetObject instanceof Collection) {
+                        children.addAll((Collection<?>)targetObject);
+                    } else if (targetObject.getClass().isArray()) {
+                        children = Arrays.asList((Object[])targetObject);
+                    } else {
+                        children.add(targetObject);
+                    }
+                } else if (rootSegment.getCollectionType() == CollectionType.LIST) {
+                    children.add(((Collection<?>) targetObject).toArray(new Object[0])[index]);
+                } else if (rootSegment.getCollectionType() == CollectionType.ARRAY) {
+                    children.add(Array.get(targetObject, index));
+                }
+                parents = children;
+            }
+
+            for (SegmentContext segment : parentPath.getSegments(false)) {
+                List<String> getters = getterMethodNames(segment.getName());
                 Method getterMethod = null;
                 for (String getter : getters) {
                     try {
@@ -173,11 +199,18 @@ public class ClassHelper {
                 getterMethod.setAccessible(true);
                 List<Object> children = new LinkedList<>();
                 for (Object parentObject : parents) {
+                    if (parentObject == null) {
+                        children.add(null);
+                        AtlasUtil.addAudit(session, null, String.format(
+                                "Assigning null value for path=%s due to null parent", pathUtil),
+                                pathUtil.toString(), AuditStatus.WARN, null);
+                        continue;
+                    }
                     Object child = getterMethod.invoke(parentObject);
-                    if (!AtlasPath.isCollectionSegment(segment)) {
+                    if (segment.getCollectionType() == CollectionType.NONE) {
                         children.add(child);
                     } else {
-                        Integer index = AtlasPath.indexOfSegment(segment);
+                        Integer index = segment.getCollectionIndex();
                         if (index == null) {
                             if (child instanceof Collection) {
                                 children.addAll((Collection<?>)child);
@@ -186,9 +219,9 @@ public class ClassHelper {
                             } else {
                                 children.add(child);
                             }
-                        } else if (AtlasPath.isListSegment(segment)) {
-                            children.add(((List<?>) parentObject).get(index));
-                        } else if (AtlasPath.isArraySegment(segment)) {
+                        } else if (segment.getCollectionType() == CollectionType.ARRAY) {
+                            children.add(((Collection<?>) parentObject).toArray(new Object[0])[index]);
+                        } else if (segment.getCollectionType() == CollectionType.LIST) {
                             children.add(Array.get(parentObject, index));
                         }
                     }

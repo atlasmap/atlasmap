@@ -20,6 +20,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import io.atlasmap.core.DefaultAtlasConversionService;
+import io.atlasmap.v2.CollectionType;
 
 public class PrimitiveInspectTest {
 
@@ -38,62 +39,62 @@ public class PrimitiveInspectTest {
 
     @Test
     public void testPrimitives() throws Exception {
-        PrimitiveValidationUtil.validatePrimitive(classInspectionService.inspectClass(boolean.class), "boolean");
-        PrimitiveValidationUtil.validatePrimitive(classInspectionService.inspectClass(byte.class), "byte");
-        PrimitiveValidationUtil.validatePrimitive(classInspectionService.inspectClass(char.class), "char");
-        PrimitiveValidationUtil.validatePrimitive(classInspectionService.inspectClass(double.class), "double");
-        PrimitiveValidationUtil.validatePrimitive(classInspectionService.inspectClass(float.class), "float");
-        PrimitiveValidationUtil.validatePrimitive(classInspectionService.inspectClass(int.class), "int");
-        PrimitiveValidationUtil.validatePrimitive(classInspectionService.inspectClass(long.class), "long");
-        PrimitiveValidationUtil.validatePrimitive(classInspectionService.inspectClass(short.class), "short");
+        PrimitiveValidationUtil.validatePrimitive(classInspectionService.inspectClass(boolean.class, CollectionType.NONE, null), "boolean");
+        PrimitiveValidationUtil.validatePrimitive(classInspectionService.inspectClass(byte.class, CollectionType.NONE, null), "byte");
+        PrimitiveValidationUtil.validatePrimitive(classInspectionService.inspectClass(char.class, CollectionType.NONE, null), "char");
+        PrimitiveValidationUtil.validatePrimitive(classInspectionService.inspectClass(double.class, CollectionType.NONE, null), "double");
+        PrimitiveValidationUtil.validatePrimitive(classInspectionService.inspectClass(float.class, CollectionType.NONE, null), "float");
+        PrimitiveValidationUtil.validatePrimitive(classInspectionService.inspectClass(int.class, CollectionType.NONE, null), "int");
+        PrimitiveValidationUtil.validatePrimitive(classInspectionService.inspectClass(long.class, CollectionType.NONE, null), "long");
+        PrimitiveValidationUtil.validatePrimitive(classInspectionService.inspectClass(short.class, CollectionType.NONE, null), "short");
     }
 
     @Test
     public void testPrimitiveArrays() throws Exception {
-        PrimitiveValidationUtil.validatePrimitiveArray(classInspectionService.inspectClass(boolean[].class), "boolean",
+        PrimitiveValidationUtil.validatePrimitiveArray(classInspectionService.inspectClass(boolean[].class, CollectionType.NONE, null), "boolean",
                 1);
-        PrimitiveValidationUtil.validatePrimitiveArray(classInspectionService.inspectClass(byte[].class), "byte", 1);
-        PrimitiveValidationUtil.validatePrimitiveArray(classInspectionService.inspectClass(char[].class), "char", 1);
-        PrimitiveValidationUtil.validatePrimitiveArray(classInspectionService.inspectClass(double[].class), "double",
+        PrimitiveValidationUtil.validatePrimitiveArray(classInspectionService.inspectClass(byte[].class, CollectionType.ARRAY, null), "byte", 1);
+        PrimitiveValidationUtil.validatePrimitiveArray(classInspectionService.inspectClass(char[].class, CollectionType.ARRAY, null), "char", 1);
+        PrimitiveValidationUtil.validatePrimitiveArray(classInspectionService.inspectClass(double[].class, CollectionType.ARRAY, null), "double",
                 1);
-        PrimitiveValidationUtil.validatePrimitiveArray(classInspectionService.inspectClass(float[].class), "float", 1);
-        PrimitiveValidationUtil.validatePrimitiveArray(classInspectionService.inspectClass(int[].class), "int", 1);
-        PrimitiveValidationUtil.validatePrimitiveArray(classInspectionService.inspectClass(long[].class), "long", 1);
-        PrimitiveValidationUtil.validatePrimitiveArray(classInspectionService.inspectClass(short[].class), "short", 1);
+        PrimitiveValidationUtil.validatePrimitiveArray(classInspectionService.inspectClass(float[].class, CollectionType.ARRAY, null), "float", 1);
+        PrimitiveValidationUtil.validatePrimitiveArray(classInspectionService.inspectClass(int[].class, CollectionType.ARRAY, null), "int", 1);
+        PrimitiveValidationUtil.validatePrimitiveArray(classInspectionService.inspectClass(long[].class, CollectionType.ARRAY, null), "long", 1);
+        PrimitiveValidationUtil.validatePrimitiveArray(classInspectionService.inspectClass(short[].class, CollectionType.ARRAY, null), "short", 1);
     }
 
     @Test
     public void testPrimitiveTwoDimArrays() throws Exception {
-        PrimitiveValidationUtil.validatePrimitiveArray(classInspectionService.inspectClass(boolean[][].class),
+        PrimitiveValidationUtil.validatePrimitiveArray(classInspectionService.inspectClass(boolean[][].class, CollectionType.ARRAY, null),
                 "boolean", 2);
-        PrimitiveValidationUtil.validatePrimitiveArray(classInspectionService.inspectClass(byte[][].class), "byte", 2);
-        PrimitiveValidationUtil.validatePrimitiveArray(classInspectionService.inspectClass(char[][].class), "char", 2);
-        PrimitiveValidationUtil.validatePrimitiveArray(classInspectionService.inspectClass(double[][].class), "double",
+        PrimitiveValidationUtil.validatePrimitiveArray(classInspectionService.inspectClass(byte[][].class, CollectionType.ARRAY, null), "byte", 2);
+        PrimitiveValidationUtil.validatePrimitiveArray(classInspectionService.inspectClass(char[][].class, CollectionType.ARRAY, null), "char", 2);
+        PrimitiveValidationUtil.validatePrimitiveArray(classInspectionService.inspectClass(double[][].class, CollectionType.ARRAY, null), "double",
                 2);
-        PrimitiveValidationUtil.validatePrimitiveArray(classInspectionService.inspectClass(float[][].class), "float",
+        PrimitiveValidationUtil.validatePrimitiveArray(classInspectionService.inspectClass(float[][].class, CollectionType.ARRAY, null), "float",
                 2);
-        PrimitiveValidationUtil.validatePrimitiveArray(classInspectionService.inspectClass(int[][].class), "int", 2);
-        PrimitiveValidationUtil.validatePrimitiveArray(classInspectionService.inspectClass(long[][].class), "long", 2);
-        PrimitiveValidationUtil.validatePrimitiveArray(classInspectionService.inspectClass(short[][].class), "short",
+        PrimitiveValidationUtil.validatePrimitiveArray(classInspectionService.inspectClass(int[][].class, CollectionType.ARRAY, null), "int", 2);
+        PrimitiveValidationUtil.validatePrimitiveArray(classInspectionService.inspectClass(long[][].class, CollectionType.ARRAY, null), "long", 2);
+        PrimitiveValidationUtil.validatePrimitiveArray(classInspectionService.inspectClass(short[][].class, CollectionType.ARRAY, null), "short",
                 2);
     }
 
     @Test
     public void testPrimitiveThreeDimArrays() throws Exception {
-        PrimitiveValidationUtil.validatePrimitiveArray(classInspectionService.inspectClass(boolean[][][].class),
+        PrimitiveValidationUtil.validatePrimitiveArray(classInspectionService.inspectClass(boolean[][][].class, CollectionType.ARRAY, null),
                 "boolean", 3);
-        PrimitiveValidationUtil.validatePrimitiveArray(classInspectionService.inspectClass(byte[][][].class), "byte",
+        PrimitiveValidationUtil.validatePrimitiveArray(classInspectionService.inspectClass(byte[][][].class, CollectionType.ARRAY, null), "byte",
                 3);
-        PrimitiveValidationUtil.validatePrimitiveArray(classInspectionService.inspectClass(char[][][].class), "char",
+        PrimitiveValidationUtil.validatePrimitiveArray(classInspectionService.inspectClass(char[][][].class, CollectionType.ARRAY, null), "char",
                 3);
-        PrimitiveValidationUtil.validatePrimitiveArray(classInspectionService.inspectClass(double[][][].class),
+        PrimitiveValidationUtil.validatePrimitiveArray(classInspectionService.inspectClass(double[][][].class, CollectionType.ARRAY, null),
                 "double", 3);
-        PrimitiveValidationUtil.validatePrimitiveArray(classInspectionService.inspectClass(float[][][].class), "float",
+        PrimitiveValidationUtil.validatePrimitiveArray(classInspectionService.inspectClass(float[][][].class, CollectionType.ARRAY, null), "float",
                 3);
-        PrimitiveValidationUtil.validatePrimitiveArray(classInspectionService.inspectClass(int[][][].class), "int", 3);
-        PrimitiveValidationUtil.validatePrimitiveArray(classInspectionService.inspectClass(long[][][].class), "long",
+        PrimitiveValidationUtil.validatePrimitiveArray(classInspectionService.inspectClass(int[][][].class, CollectionType.ARRAY, null), "int", 3);
+        PrimitiveValidationUtil.validatePrimitiveArray(classInspectionService.inspectClass(long[][][].class, CollectionType.ARRAY, null), "long",
                 3);
-        PrimitiveValidationUtil.validatePrimitiveArray(classInspectionService.inspectClass(short[][][].class), "short",
+        PrimitiveValidationUtil.validatePrimitiveArray(classInspectionService.inspectClass(short[][][].class, CollectionType.ARRAY, null), "short",
                 3);
     }
 }

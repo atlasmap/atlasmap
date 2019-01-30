@@ -13,7 +13,7 @@ public class XmlPathTest {
     public void testOneClass() {
         XmlPath foo = new XmlPath("");
         foo.appendField("user");
-        assertEquals("user", foo.toString());
+        assertEquals("/user", foo.toString());
     }
 
     @Test
@@ -23,19 +23,19 @@ public class XmlPathTest {
         namespacesToReplace.put("x", "z");
         namespacesToReplace.put("y", "z");
         XmlPath path = new XmlPath("/orders/x:order/id/@y:custId", namespacesToReplace);
-        assertEquals("orders", path.getSegments().get(0));
-        assertEquals("z:order", path.getSegments().get(1));
-        assertEquals("id", path.getSegments().get(2));
-        assertEquals("@z:custId", path.getSegments().get(3));
+        assertEquals("orders", path.getSegments(false).get(0).getExpression());
+        assertEquals("z:order", path.getSegments(false).get(1).getExpression());
+        assertEquals("id", path.getSegments(false).get(2).getExpression());
+        assertEquals("@z:custId", path.getSegments(false).get(3).getExpression());
 
         namespacesToReplace = new HashMap<String, String>();
         namespacesToReplace.put("a", "z");
         namespacesToReplace.put("b", "z");
         path = new XmlPath("/orders/x:order/id/@y:custId", namespacesToReplace);
-        assertEquals("orders", path.getSegments().get(0));
-        assertEquals("x:order", path.getSegments().get(1));
-        assertEquals("id", path.getSegments().get(2));
-        assertEquals("@y:custId", path.getSegments().get(3));
+        assertEquals("orders", path.getSegments(false).get(0).getExpression());
+        assertEquals("x:order", path.getSegments(false).get(1).getExpression());
+        assertEquals("id", path.getSegments(false).get(2).getExpression());
+        assertEquals("@y:custId", path.getSegments(false).get(3).getExpression());
 
     }
 

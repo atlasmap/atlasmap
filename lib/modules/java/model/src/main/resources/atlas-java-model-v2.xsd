@@ -131,6 +131,8 @@
         maxOccurs="1" />
     </sequence>
     <attribute name="className" type="string" use="optional" />
+    <attribute name="collectionType" type="atlas:CollectionType" use="optional" />
+    <attribute name="collectionClassName" type="string" use="optional" />
     <attribute name="disablePrivateOnlyFields" type="boolean"
       use="optional" />
     <attribute name="disableProtectedOnlyFields" type="boolean"

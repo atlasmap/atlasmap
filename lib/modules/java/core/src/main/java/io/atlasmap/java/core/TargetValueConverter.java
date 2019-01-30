@@ -1,74 +1,97 @@
 package io.atlasmap.java.core;
 
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
+import java.lang.reflect.Modifier;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.core.AtlasPath;
+import io.atlasmap.core.AtlasPath.SegmentContext;
 import io.atlasmap.core.AtlasUtil;
-import io.atlasmap.java.inspect.ClassHelper;
-import io.atlasmap.java.inspect.JdkPackages;
-import io.atlasmap.java.inspect.StringUtil;
 import io.atlasmap.java.v2.JavaEnumField;
 import io.atlasmap.java.v2.JavaField;
 import io.atlasmap.spi.AtlasConversionService;
 import io.atlasmap.spi.AtlasInternalSession;
 import io.atlasmap.v2.AuditStatus;
+import io.atlasmap.v2.CollectionType;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldType;
 import io.atlasmap.v2.LookupEntry;
 import io.atlasmap.v2.LookupTable;
 
+/**
+ * TODO consolidate with JavaFieldWriterUtil - https://github.com/atlasmap/atlasmap/issues/730
+ */
 public class TargetValueConverter {
     private static final Logger LOG = LoggerFactory.getLogger(TargetValueConverter.class);
 
     private AtlasConversionService conversionService = null;
+    private JavaFieldWriterUtil writerUtil = null;
     private ClassLoader classLoader;
 
-    public TargetValueConverter(ClassLoader loader, AtlasConversionService conversionService) {
+    public TargetValueConverter(ClassLoader loader, AtlasConversionService conversionService, JavaFieldWriterUtil writerUtil) {
         this.classLoader = loader;
         this.conversionService = conversionService;
+        this.writerUtil = writerUtil;
     }
 
     public void populateTargetField(AtlasInternalSession session, LookupTable lookupTable, Field sourceField,
             Object parentObject, Field targetField) throws AtlasException {
-        FieldType sourceType = sourceField.getFieldType();
         Object sourceValue = sourceField.getValue();
-        FieldType targetType = targetField.getFieldType();
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug("processTargetMapping iPath=" + sourceField.getPath() + " iV=" + sourceValue + " iT=" + sourceType
-                    + " oPath=" + targetField.getPath() + " docId: " + targetField.getDocId());
-        }
-
-        if (sourceValue == null) {
-            AtlasUtil.addAudit(session, targetField.getDocId(), String.format(
-                    "Null sourceValue for targetDocId=%s, targetPath=%s", targetField.getDocId(), targetField.getPath()),
-                    targetField.getPath(), AuditStatus.WARN, sourceValue != null ? sourceValue.toString() : null);
-            targetField.setValue(null);
-            return;
+            LOG.debug("processTargetMapping srcPath={} srcVal={} srcType={}  tgtPath={} tgtdocId={}",
+                sourceField.getPath(), sourceField.getValue(), sourceField.getFieldType(),
+                targetField.getPath(), targetField.getDocId());
         }
 
         String targetClassName = (targetField instanceof JavaField) ? ((JavaField) targetField).getClassName() : null;
         targetClassName = (targetField instanceof JavaEnumField) ? ((JavaEnumField) targetField).getClassName()
                 : targetClassName;
-        if (targetType == null || targetClassName == null) {
-            detectTargetFieldType(parentObject, targetField);
+        if (targetClassName == null && parentObject != null) {
+            SegmentContext segment = new AtlasPath(targetField.getPath()).getLastSegment();
+            Class<?> clazz = segment.getCollectionType() == CollectionType.NONE
+                    ? writerUtil.resolveChildClass(parentObject, segment)
+                    : writerUtil.resolveCollectionItemClass(parentObject, segment);
+            if (targetField.getFieldType() == null) {
+                targetField.setFieldType(conversionService.fieldTypeFromClass(clazz));
+            }
+            if (targetField.getFieldType() == FieldType.COMPLEX) {
+                targetClassName = clazz != null && !Modifier.isAbstract(clazz.getModifiers()) ? clazz.getName() : null;
+                if (targetField instanceof JavaField) {
+                    ((JavaField)targetField).setClassName(targetClassName);
+                } else {
+                    ((JavaEnumField)targetField).setClassName(targetClassName);
+                }
+            }
         }
 
         if (sourceField instanceof JavaEnumField || targetField instanceof JavaEnumField) {
             if (!(sourceField instanceof JavaEnumField) || !(targetField instanceof JavaEnumField)) {
                 AtlasUtil.addAudit(session, targetField.getDocId(), String.format(
                         "Value conversion between enum fields and non-enum fields is not yet supported: sourceType=%s targetType=%s targetPath=%s msg=%s",
-                        sourceType, targetType, targetField.getPath()),
+                        sourceField.getFieldType(), targetField.getFieldType(), targetField.getPath()),
                         targetField.getPath(), AuditStatus.ERROR, sourceValue != null ? sourceValue.toString() : null);
             }
             populateEnumValue(session, lookupTable, (JavaEnumField) sourceField, (JavaEnumField) targetField);
             return;
+        }
+
+        JavaField javaTargetField = (JavaField) targetField;
+        if (sourceValue == null) {
+            if (targetField.getFieldType() != FieldType.COMPLEX) {
+                AtlasUtil.addAudit(session, targetField.getDocId(), String.format(
+                        "Null sourceValue for targetDocId=%s, targetPath=%s", targetField.getDocId(), targetField.getPath()),
+                        targetField.getPath(), AuditStatus.WARN, sourceValue != null ? sourceValue.toString() : null);
+                targetField.setValue(null);
+                return;
+            }
+            if (javaTargetField.getClassName() != null) {
+                Object created = writerUtil.instantiateObject(writerUtil.loadClass(javaTargetField.getClassName()));
+                javaTargetField.setValue(created);
+                return;
+            }
         }
 
         Object targetValue = doConvertTargetValue(session, sourceValue, targetClassName, targetField);
@@ -77,43 +100,15 @@ public class TargetValueConverter {
 
     public void convertTargetValue(AtlasInternalSession session,
             Object parentObject, Field targetField) throws AtlasException {
-        FieldType targetType = targetField.getFieldType();
         String targetClassName = (targetField instanceof JavaField) ? ((JavaField) targetField).getClassName() : null;
         targetClassName = (targetField instanceof JavaEnumField) ? ((JavaEnumField) targetField).getClassName()
                 : targetClassName;
-        if (targetType == null || targetClassName == null) {
-            detectTargetFieldType(parentObject, targetField);
-        }
         Object targetValue = doConvertTargetValue(session, targetField.getValue(), targetClassName, targetField);
         targetField.setValue(targetValue);
     }
 
     public void setClassLoader(ClassLoader loader) {
         this.classLoader = loader;
-    }
-
-    private void detectTargetFieldType(Object parentObject, Field targetField) {
-        FieldType targetType = targetField.getFieldType();
-        try {
-            Method setter = resolveTargetSetMethod(parentObject, targetField, null);
-            if (setter != null && setter.getParameterCount() == 1) {
-                if (targetField instanceof JavaField) {
-                    ((JavaField) targetField).setClassName(setter.getParameterTypes()[0].getName());
-                } else if (targetField instanceof JavaEnumField) {
-                    ((JavaEnumField) targetField).setClassName(setter.getParameterTypes()[0].getName());
-                }
-
-                targetType = conversionService.fieldTypeFromClass(setter.getParameterTypes()[0]);
-                targetField.setFieldType(targetType);
-                if (LOG.isTraceEnabled()) {
-                    LOG.trace("Auto-detected targetType as {} for class={} path={}", targetType,
-                            parentObject.toString(), targetField.getPath());
-                }
-            }
-        } catch (Exception e) {
-            LOG.debug("Unable to auto-detect targetType for class={} path={}", parentObject.toString(),
-                    targetField.getPath());
-        }
     }
 
     private Object doConvertTargetValue(AtlasInternalSession session, Object sourceValue,
@@ -149,7 +144,14 @@ public class TargetValueConverter {
         }
 
         if (targetClazz != null) {
-            return conversionService.convertType(sourceValue, null, targetClazz, null);
+            if (targetField.getFieldType() == null) {
+                targetField.setFieldType(conversionService.fieldTypeFromClass(targetClazz));
+            }
+            if (conversionService.isConvertionAvailableFor(sourceValue, targetClazz)) {
+                return conversionService.convertType(sourceValue, null, targetClazz, null);
+            } else {
+                return null;
+            }
         } else {
             return sourceValue;
         }
@@ -186,7 +188,7 @@ public class TargetValueConverter {
         @SuppressWarnings("rawtypes")
         Class enumClass = null;
         try {
-            enumClass = Class.forName(targetField.getClassName());
+            enumClass = this.classLoader.loadClass(targetField.getClassName());
         } catch (Exception e) {
             AtlasUtil.addAudit(session, targetField.getDocId(),
                     String.format("Could not find class for output field class '%s': %s", targetField.getClassName(), e.getMessage()),
@@ -204,82 +206,6 @@ public class TargetValueConverter {
                     targetField.getPath(), AuditStatus.ERROR, targetValue);
             return null;
         }
-    }
-
-    private Method resolveTargetSetMethod(Object sourceObject, Field field, Class<?> targetType)
-            throws AtlasException {
-
-        AtlasPath atlasPath = new AtlasPath(field.getPath());
-        Object parentObject = sourceObject;
-
-        List<Class<?>> classTree = resolveMappableClasses(parentObject.getClass());
-
-        if (field instanceof JavaField) {
-            JavaField javaField = (JavaField) field;
-            for (Class<?> clazz : classTree) {
-                try {
-                    String setterMethodName = javaField.getSetMethod();
-                    if (setterMethodName == null) {
-                        setterMethodName = "set" + capitalizeFirstLetter(atlasPath.getLastSegment());
-                    }
-                    return ClassHelper.detectSetterMethod(clazz, setterMethodName, targetType);
-                } catch (NoSuchMethodException e) {
-                    // method does not exist
-                }
-
-                // Try the boxUnboxed version
-                if (conversionService.isPrimitive(targetType) || conversionService.isBoxedPrimitive(targetType)) {
-                    try {
-                        String setterMethodName = javaField.getSetMethod();
-                        if (setterMethodName == null) {
-                            setterMethodName = "set" + capitalizeFirstLetter(atlasPath.getLastSegment());
-                        }
-                        return ClassHelper.detectSetterMethod(clazz, setterMethodName,
-                                conversionService.boxOrUnboxPrimitive(targetType));
-                    } catch (NoSuchMethodException e) {
-                        // method does not exist
-                    }
-                }
-            }
-        } else if (field instanceof JavaEnumField) {
-            for (Class<?> clazz : classTree) {
-                try {
-                    String setterMethodName = "set" + capitalizeFirstLetter(atlasPath.getLastSegment());
-                    return ClassHelper.detectSetterMethod(clazz, setterMethodName, targetType);
-                } catch (NoSuchMethodException e) {
-                    // method does not exist
-                }
-            }
-        }
-
-        throw new AtlasException(String.format("Unable to resolve setter for path=%s", field.getPath()));
-    }
-
-    private List<Class<?>> resolveMappableClasses(Class<?> className) {
-        List<Class<?>> classTree = new ArrayList<>();
-        classTree.add(className);
-
-        Class<?> superClazz = className.getSuperclass();
-        while (superClazz != null) {
-            if (JdkPackages.contains(superClazz.getPackage().getName())) {
-                superClazz = null;
-            } else {
-                classTree.add(superClazz);
-                superClazz = superClazz.getSuperclass();
-            }
-        }
-
-        return classTree;
-    }
-
-    private String capitalizeFirstLetter(String sentence) {
-        if (StringUtil.isEmpty(sentence)) {
-            return sentence;
-        }
-        if (sentence.length() == 1) {
-            return String.valueOf(sentence.charAt(0)).toUpperCase();
-        }
-        return String.valueOf(sentence.charAt(0)).toUpperCase() + sentence.substring(1);
     }
 
 }

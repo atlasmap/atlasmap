@@ -34,9 +34,9 @@ public class ClassValidationUtil {
 
     public static void validateFlatPrimitiveClass(ClassInspectionService classInspectionService, Class<?> clazz,
             String className) {
-        JavaClass flatClass = classInspectionService.inspectClass(clazz);
+        JavaClass flatClass = classInspectionService.inspectClass(clazz, CollectionType.NONE, null);
         validateFlatClass(flatClass);
-        assertEquals(null, flatClass.getCollectionType());
+        assertEquals(CollectionType.NONE, flatClass.getCollectionType());
         assertEquals(null, flatClass.getArrayDimensions());
         assertEquals(null, flatClass.getArraySize());
         assertFalse(flatClass.isInterface());
@@ -46,7 +46,7 @@ public class ClassValidationUtil {
 
     public static void validateFlatPrimitiveClassArray(ClassInspectionService classInspectionService, Class<?> clazz,
             String className) {
-        JavaClass flatClass = classInspectionService.inspectClass(clazz);
+        JavaClass flatClass = classInspectionService.inspectClass(clazz, CollectionType.NONE, null);
         validateFlatClass(flatClass);
         assertEquals(CollectionType.ARRAY, flatClass.getCollectionType());
         assertEquals(new Integer(1), flatClass.getArrayDimensions());
@@ -58,7 +58,7 @@ public class ClassValidationUtil {
 
     public static void validateFlatPrimitiveClassTwoDimArray(ClassInspectionService classInspectionService,
             Class<?> clazz, String className) {
-        JavaClass flatClass = classInspectionService.inspectClass(clazz);
+        JavaClass flatClass = classInspectionService.inspectClass(clazz, CollectionType.NONE, null);
         validateFlatClass(flatClass);
         assertEquals(CollectionType.ARRAY, flatClass.getCollectionType());
         assertEquals(new Integer(2), flatClass.getArrayDimensions());
@@ -70,7 +70,7 @@ public class ClassValidationUtil {
 
     public static void validateFlatPrimitiveClassThreeDimArray(ClassInspectionService classInspectionService,
             Class<?> clazz, String className) {
-        JavaClass flatClass = classInspectionService.inspectClass(clazz);
+        JavaClass flatClass = classInspectionService.inspectClass(clazz, CollectionType.NONE, null);
         validateFlatClass(flatClass);
         assertEquals(CollectionType.ARRAY, flatClass.getCollectionType());
         assertEquals(new Integer(3), flatClass.getArrayDimensions());
@@ -80,7 +80,7 @@ public class ClassValidationUtil {
     }
 
     public static void validateFlatPrimitiveInterface(ClassInspectionService classInspectionService, Class<?> clazz) {
-        JavaClass flatClass = classInspectionService.inspectClass(clazz);
+        JavaClass flatClass = classInspectionService.inspectClass(clazz, CollectionType.NONE, null);
         validateFlatClass(flatClass);
         assertEquals("io.atlasmap.java.test.FlatPrimitiveInterface", flatClass.getClassName());
         validateFlatPrimitiveFields(flatClass);
@@ -88,7 +88,7 @@ public class ClassValidationUtil {
 
     public static void validateFlatPrimitiveInterfaceArray(ClassInspectionService classInspectionService,
             Class<?> clazz) {
-        JavaClass flatClass = classInspectionService.inspectClass(clazz);
+        JavaClass flatClass = classInspectionService.inspectClass(clazz, CollectionType.NONE, null);
         validateFlatClass(flatClass);
         assertEquals(CollectionType.ARRAY, flatClass.getCollectionType());
         assertEquals(new Integer(1), flatClass.getArrayDimensions());
@@ -99,7 +99,7 @@ public class ClassValidationUtil {
 
     public static void validateFlatPrimitiveInterfaceTwoDimArray(ClassInspectionService classInspectionService,
             Class<?> clazz) {
-        JavaClass flatClass = classInspectionService.inspectClass(clazz);
+        JavaClass flatClass = classInspectionService.inspectClass(clazz, CollectionType.NONE, null);
         validateFlatClass(flatClass);
         assertEquals(CollectionType.ARRAY, flatClass.getCollectionType());
         assertEquals(new Integer(2), flatClass.getArrayDimensions());
@@ -110,7 +110,7 @@ public class ClassValidationUtil {
 
     public static void validateFlatPrimitiveInterfaceThreeDimArray(ClassInspectionService classInspectionService,
             Class<?> clazz) {
-        JavaClass flatClass = classInspectionService.inspectClass(clazz);
+        JavaClass flatClass = classInspectionService.inspectClass(clazz, CollectionType.NONE, null);
         validateFlatClass(flatClass);
         assertEquals(CollectionType.ARRAY, flatClass.getCollectionType());
         assertEquals(new Integer(3), flatClass.getArrayDimensions());

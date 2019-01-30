@@ -184,7 +184,7 @@ public class XmlFieldReaderTest {
         String doc = getDocumentString("src/test/resources/complex_example_multiple_ns.xml");
         reader.setDocument(doc, true);
         XmlField xmlField = AtlasXmlModelFactory.createXmlField();
-        xmlField.setPath("/orders/q:order/id/@y:custId");
+        xmlField.setPath("/orders/q:order[0]/id[0]/@y:custId");
         String docId = "docId";
         xmlField.setDocId(docId);
         assertNull(xmlField.getValue());

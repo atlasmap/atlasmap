@@ -33,6 +33,7 @@ import io.atlasmap.core.DefaultAtlasConversionService;
 import io.atlasmap.java.v2.JavaClass;
 import io.atlasmap.java.v2.JavaField;
 import io.atlasmap.java.v2.Modifier;
+import io.atlasmap.v2.CollectionType;
 import io.atlasmap.v2.FieldType;
 
 public class ClassInspectionServiceTest {
@@ -53,31 +54,31 @@ public class ClassInspectionServiceTest {
     @Test
     public void testDetectArrayDimensions() {
 
-        assertNull(null, classInspectionService.inspectClass(String.class).getArrayDimensions());
-        assertEquals(new Integer(1), classInspectionService.inspectClass(int[].class).getArrayDimensions());
-        assertEquals(new Integer(2), classInspectionService.inspectClass(String[][].class).getArrayDimensions());
-        assertEquals(new Integer(3), classInspectionService.inspectClass(List[][][].class).getArrayDimensions());
-        assertEquals(new Integer(4), classInspectionService.inspectClass(Map[][][][].class).getArrayDimensions());
+        assertNull(null, classInspectionService.inspectClass(String.class, CollectionType.NONE, null).getArrayDimensions());
+        assertEquals(new Integer(1), classInspectionService.inspectClass(int[].class, CollectionType.ARRAY, null).getArrayDimensions());
+        assertEquals(new Integer(2), classInspectionService.inspectClass(String[][].class, CollectionType.ARRAY, null).getArrayDimensions());
+        assertEquals(new Integer(3), classInspectionService.inspectClass(List[][][].class, CollectionType.ARRAY, null).getArrayDimensions());
+        assertEquals(new Integer(4), classInspectionService.inspectClass(Map[][][][].class, CollectionType.ARRAY, null).getArrayDimensions());
         assertEquals(new Integer(64), classInspectionService.inspectClass(
-                int[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][].class)
+                int[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][].class, CollectionType.ARRAY, null)
                 .getArrayDimensions());
         // MAX_DIM_LIMIT NOTE: 255 is the JVM Spec limit
         assertEquals(new Integer(255), classInspectionService.inspectClass(
-                int[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][].class)
+                int[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][].class, CollectionType.ARRAY, null)
                 .getArrayDimensions());
     }
 
     @Test
     public void testDetectArrayClass() {
-        assertEquals("int", classInspectionService.inspectClass(int[].class).getClassName());
-        assertEquals("java.lang.String", classInspectionService.inspectClass(String[][].class).getClassName());
-        assertEquals("java.util.List", classInspectionService.inspectClass(List[][][].class).getClassName());
-        assertEquals("java.util.Map", classInspectionService.inspectClass(Map[][][][].class).getClassName());
+        assertEquals("int", classInspectionService.inspectClass(int[].class, CollectionType.ARRAY, null).getClassName());
+        assertEquals("java.lang.String", classInspectionService.inspectClass(String[][].class, CollectionType.ARRAY, null).getClassName());
+        assertEquals("java.util.List", classInspectionService.inspectClass(List[][][].class, CollectionType.ARRAY, null).getClassName());
+        assertEquals("java.util.Map", classInspectionService.inspectClass(Map[][][][].class, CollectionType.ARRAY, null).getClassName());
     }
 
     @Test
     public void testDateTimeViaField() {
-        JavaClass javaClass = classInspectionService.inspectClass(DateTimeField.class);
+        JavaClass javaClass = classInspectionService.inspectClass(DateTimeField.class, CollectionType.NONE, null);
         assertEquals(14, javaClass.getJavaFields().getJavaField().size());
         assertFalse(javaClass.getModifiers().getModifier().contains(Modifier.PRIVATE));
         assertFalse(javaClass.getModifiers().getModifier().contains(Modifier.PROTECTED));
@@ -190,7 +191,7 @@ public class ClassInspectionServiceTest {
 
     @Test
     public void testDateTimeViaGetter() {
-        JavaClass javaClass = classInspectionService.inspectClass(DateTimeGetter.class);
+        JavaClass javaClass = classInspectionService.inspectClass(DateTimeGetter.class, CollectionType.NONE, null);
         assertEquals(14, javaClass.getJavaFields().getJavaField().size());
         for (JavaField field : javaClass.getJavaFields().getJavaField()) {
             if ("year".equals(field.getName())) {
@@ -257,7 +258,7 @@ public class ClassInspectionServiceTest {
 
     @Test
     public void testDateTimeViaSetter() {
-        JavaClass javaClass = classInspectionService.inspectClass(DateTimeSetter.class);
+        JavaClass javaClass = classInspectionService.inspectClass(DateTimeSetter.class, CollectionType.NONE, null);
         assertEquals(14, javaClass.getJavaFields().getJavaField().size());
         for (JavaField field : javaClass.getJavaFields().getJavaField()) {
             if ("year".equals(field.getName())) {
@@ -325,7 +326,7 @@ public class ClassInspectionServiceTest {
     @Test
     public void testEnum() {
 
-        JavaClass javaClass = classInspectionService.inspectClass(TestEnum.class);
+        JavaClass javaClass = classInspectionService.inspectClass(TestEnum.class, CollectionType.NONE, null);
         assertNotNull(javaClass.getJavaFields());
         assertEquals(2, javaClass.getJavaFields().getJavaField().size());
 
@@ -345,6 +346,38 @@ public class ClassInspectionServiceTest {
 
         }
 
+    }
+
+    @Test
+    public void testTopmostListString() {
+        JavaClass javaClass = classInspectionService.inspectClass(String.class, CollectionType.LIST, null);
+        assertEquals("java.lang.String", javaClass.getClassName());
+        assertEquals(CollectionType.LIST, javaClass.getCollectionType());
+        assertNull(javaClass.getCollectionClassName());
+        assertEquals("/<>", javaClass.getPath());
+        assertEquals(FieldType.STRING, javaClass.getFieldType());
+        assertEquals(0, javaClass.getJavaFields().getJavaField().size());
+        assertEquals(0, javaClass.getJavaEnumFields().getJavaEnumField().size());
+    }
+
+    @Test
+    public void testTopmostArrayString() {
+        JavaClass javaClass = classInspectionService.inspectClass(String.class, CollectionType.ARRAY, null);
+        assertEquals("java.lang.String", javaClass.getClassName());
+        assertEquals(CollectionType.ARRAY, javaClass.getCollectionType());
+        assertNull(javaClass.getCollectionClassName());
+        assertEquals("/[]", javaClass.getPath());
+        assertEquals(FieldType.STRING, javaClass.getFieldType());
+        assertEquals(0, javaClass.getJavaFields().getJavaField().size());
+        assertEquals(0, javaClass.getJavaEnumFields().getJavaEnumField().size());
+        javaClass = classInspectionService.inspectClass(String[].class, CollectionType.NONE, null);
+        assertEquals("java.lang.String", javaClass.getClassName());
+        assertEquals(CollectionType.ARRAY, javaClass.getCollectionType());
+        assertNull(javaClass.getCollectionClassName());
+        assertEquals("/[]", javaClass.getPath());
+        assertEquals(FieldType.STRING, javaClass.getFieldType());
+        assertEquals(0, javaClass.getJavaFields().getJavaField().size());
+        assertEquals(0, javaClass.getJavaEnumFields().getJavaEnumField().size());
     }
 
 }

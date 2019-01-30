@@ -15,6 +15,7 @@
  */
 package io.atlasmap.java.module;
 
+import java.lang.reflect.Array;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -22,27 +23,24 @@ import org.slf4j.LoggerFactory;
 
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.api.AtlasValidationException;
-import io.atlasmap.core.AtlasModuleSupport;
 import io.atlasmap.core.AtlasPath;
 import io.atlasmap.core.AtlasUtil;
 import io.atlasmap.core.BaseAtlasModule;
 import io.atlasmap.java.core.JavaFieldReader;
 import io.atlasmap.java.core.JavaFieldWriter;
+import io.atlasmap.java.core.JavaFieldWriterUtil;
 import io.atlasmap.java.core.TargetValueConverter;
-import io.atlasmap.java.inspect.ClassInspectionService;
-import io.atlasmap.java.inspect.JavaConstructService;
 import io.atlasmap.java.v2.AtlasJavaModelFactory;
-import io.atlasmap.java.v2.JavaClass;
 import io.atlasmap.java.v2.JavaEnumField;
 import io.atlasmap.java.v2.JavaField;
 import io.atlasmap.spi.AtlasInternalSession;
 import io.atlasmap.spi.AtlasModuleDetail;
 import io.atlasmap.v2.AtlasModelFactory;
 import io.atlasmap.v2.AuditStatus;
-import io.atlasmap.v2.BaseMapping;
+import io.atlasmap.v2.CollectionType;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldGroup;
-import io.atlasmap.v2.Mapping;
+
 import io.atlasmap.v2.Validation;
 
 @AtlasModuleDetail(name = "JavaModule", uri = "atlas:java", modes = { "SOURCE", "TARGET" }, dataFormats = {
@@ -51,9 +49,8 @@ public class JavaModule extends BaseAtlasModule {
     public static final String DEFAULT_LIST_CLASS = "java.util.ArrayList";
     private static final Logger LOG = LoggerFactory.getLogger(JavaModule.class);
 
-    private ClassInspectionService javaInspectionService = null;
-    private JavaConstructService javaConstructService = null;
     private TargetValueConverter targetValueConverter = null;
+    private JavaFieldWriterUtil writerUtil = null;
     private ClassLoader classLoader;
 
     public JavaModule() {
@@ -64,21 +61,14 @@ public class JavaModule extends BaseAtlasModule {
     public void init() {
         // TODO support non-flat class loader
         this.classLoader = Thread.currentThread().getContextClassLoader();
-        javaInspectionService = new ClassInspectionService();
-        javaInspectionService.setConversionService(getConversionService());
-        setJavaInspectionService(javaInspectionService);
-
-        javaConstructService = new JavaConstructService();
-        javaConstructService.setConversionService(getConversionService());
-        setJavaConstructService(javaConstructService);
-
-        targetValueConverter = new TargetValueConverter(classLoader, getConversionService());
+        writerUtil = new JavaFieldWriterUtil(getConversionService());
+        targetValueConverter = new TargetValueConverter(classLoader, getConversionService(), writerUtil);
     }
 
     @Override
     public void destroy() {
-        javaInspectionService = null;
-        javaConstructService = null;
+        targetValueConverter = null;
+        writerUtil = null;
     }
 
     @Override
@@ -110,11 +100,6 @@ public class JavaModule extends BaseAtlasModule {
             throw new AtlasException("AtlasSession not properly intialized with a mapping that contains field mappings");
         }
 
-        if (javaInspectionService == null) {
-            javaInspectionService = new ClassInspectionService();
-            javaInspectionService.setConversionService(getConversionService());
-        }
-
         Object sourceDocument = atlasSession.getSourceDocument(getDocId());
         if (sourceDocument == null) {
             AtlasUtil.addAudit(atlasSession, getDocId(), String.format(
@@ -139,24 +124,27 @@ public class JavaModule extends BaseAtlasModule {
             throw new AtlasException("AtlasSession not properly intialized with a mapping that contains field mappings");
         }
 
-        if (javaInspectionService == null) {
-            javaInspectionService = new ClassInspectionService();
-            javaInspectionService.setConversionService(getConversionService());
-        }
-
-        List<BaseMapping> mapping = atlasSession.getMapping().getMappings().getMapping();
         Object rootObject;
         String targetClassName = AtlasUtil.unescapeFromUri(AtlasUtil.getUriParameterValue(getUri(), "className"));
-        JavaClass inspectClass = getJavaInspectionService().inspectClass(targetClassName);
-        merge(inspectClass, mapping);
-        List<String> targetPaths = AtlasModuleSupport.listTargetPaths(mapping);
-        try {
-            rootObject = getJavaConstructService().constructClass(inspectClass, targetPaths);
-        } catch (Exception e) {
-            throw new AtlasException(e);
-        }
+        String collectionTypeStr = AtlasUtil.unescapeFromUri(AtlasUtil.getUriParameterValue(getUri(), "collectionType"));
+        CollectionType collectionType = collectionTypeStr != null ? CollectionType.fromValue(collectionTypeStr) : CollectionType.NONE;
+        String collectionClassName = AtlasUtil.unescapeFromUri(AtlasUtil.getUriParameterValue(getUri(), "collectionClassName"));
 
-        JavaFieldWriter writer = new JavaFieldWriter(getConversionService());
+        JavaFieldWriter writer = new JavaFieldWriter(this.writerUtil);
+        Class<?> clazz = writerUtil.loadClass(targetClassName);
+        writer.setCollectionType(collectionType);
+        if (collectionType == CollectionType.ARRAY) {
+            rootObject = Array.newInstance(clazz, 0);
+        } else if (collectionType != CollectionType.NONE) {
+            if (collectionClassName != null) {
+                rootObject = writerUtil.instantiateObject(writerUtil.loadClass(collectionClassName));
+            } else {
+                rootObject = writerUtil.instantiateObject(writerUtil.getDefaultCollectionImplClass(collectionType));
+            }
+            writer.setCollectionItemClass(clazz);
+        } else {
+            rootObject = writerUtil.instantiateObject(clazz);
+        }
         writer.setRootObject(rootObject);
         writer.setTargetValueConverter(targetValueConverter);
         atlasSession.setFieldWriter(getDocId(), writer);
@@ -219,7 +207,7 @@ public class JavaModule extends BaseAtlasModule {
                 }
                 session.head().setSourceField(sourceField);
             }
-            Object parentObject = writer.getParentObject(session);
+            Object parentObject = writer.prepareParentObject(session);
             if (parentObject != null) {
                 writer.populateTargetFieldValue(session, parentObject);
                 writer.enqueueFieldAndParent(targetField, parentObject);
@@ -235,7 +223,7 @@ public class JavaModule extends BaseAtlasModule {
                 targetFieldGroup.getField().add(targetSubField);
                 session.head().setSourceField(sourceSubField);
                 session.head().setTargetField(targetSubField);
-                Object parentObject = writer.getParentObject(session);
+                Object parentObject = writer.prepareParentObject(session);
                 if (parentObject != null) {
                     writer.populateTargetFieldValue(session, parentObject);
                     writer.enqueueFieldAndParent(targetSubField, parentObject);
@@ -250,7 +238,7 @@ public class JavaModule extends BaseAtlasModule {
             targetSubField.setPath(path.toString());
             targetFieldGroup.getField().add(targetSubField);
             session.head().setTargetField(targetSubField);
-            Object parentObject = writer.getParentObject(session);
+            Object parentObject = writer.prepareParentObject(session);
             if (parentObject != null) {
                 writer.populateTargetFieldValue(session, parentObject);
                 writer.enqueueFieldAndParent(targetSubField, parentObject);
@@ -295,72 +283,6 @@ public class JavaModule extends BaseAtlasModule {
         if (LOG.isDebugEnabled()) {
             LOG.debug("{}: processPostTargetExecution completed", getDocId());
         }
-    }
-
-    private void merge(JavaClass inspectionClass, List<BaseMapping> mappings) {
-        if (inspectionClass == null || inspectionClass.getJavaFields() == null
-                || inspectionClass.getJavaFields().getJavaField() == null) {
-            return;
-        }
-
-        if (mappings == null || mappings.size() == 0) {
-            return;
-        }
-
-        for (BaseMapping fm : mappings) {
-            if (fm instanceof Mapping && (((Mapping) fm).getOutputField() != null)) {
-                Field f = ((Mapping) fm).getOutputField().get(0);
-                if (f.getPath() != null) {
-                    Field inspectField = findFieldByPath(inspectionClass, f.getPath());
-                    if (inspectField != null && f instanceof JavaField && inspectField instanceof JavaField) {
-                        String overrideClassName = ((JavaField) f).getClassName();
-                        JavaField javaInspectField = (JavaField) inspectField;
-                        // Support mapping overrides className
-                        if (overrideClassName != null
-                                && !overrideClassName.equals(javaInspectField.getClassName())) {
-                            javaInspectField.setClassName(overrideClassName);
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    private JavaField findFieldByPath(JavaClass javaClass, String javaPath) {
-        if (javaClass == null || javaClass.getJavaFields() == null
-                || javaClass.getJavaFields().getJavaField() == null) {
-            return null;
-        }
-
-        for (JavaField jf : javaClass.getJavaFields().getJavaField()) {
-            if (jf.getPath().equals(javaPath)) {
-                return jf;
-            }
-            if (jf instanceof JavaClass) {
-                JavaField childJavaField = findFieldByPath((JavaClass) jf, javaPath);
-                if (childJavaField != null) {
-                    return childJavaField;
-                }
-            }
-        }
-
-        return null;
-    }
-
-    public ClassInspectionService getJavaInspectionService() {
-        return javaInspectionService;
-    }
-
-    public void setJavaInspectionService(ClassInspectionService javaInspectionService) {
-        this.javaInspectionService = javaInspectionService;
-    }
-
-    public JavaConstructService getJavaConstructService() {
-        return javaConstructService;
-    }
-
-    public void setJavaConstructService(JavaConstructService javaConstructService) {
-        this.javaConstructService = javaConstructService;
     }
 
     @Override

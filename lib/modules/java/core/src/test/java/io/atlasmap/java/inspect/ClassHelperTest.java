@@ -5,6 +5,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import static org.mockito.Mockito.mock;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -13,12 +14,14 @@ import java.util.List;
 import org.junit.Test;
 
 import io.atlasmap.core.AtlasPath;
+import io.atlasmap.java.core.ClassHelper;
 import io.atlasmap.java.test.BaseOrder;
 import io.atlasmap.java.test.SourceAddress;
 import io.atlasmap.java.test.SourceContact;
 import io.atlasmap.java.test.SourceOrder;
 import io.atlasmap.java.test.SourceOrderList;
 import io.atlasmap.java.test.SourceParentOrder;
+import io.atlasmap.spi.AtlasInternalSession;
 
 public class ClassHelperTest {
 
@@ -110,11 +113,11 @@ public class ClassHelperTest {
 
     @Test
     public void testParentObjectForPathParamChecking() throws Exception {
-        assertNull(ClassHelper.parentObjectsForPath(null, null));
-        assertNull(ClassHelper.parentObjectsForPath(null, new AtlasPath("foo.bar")));
+        assertNull(ClassHelper.getParentObjectsForPath(null, null, null));
+        assertNull(ClassHelper.getParentObjectsForPath(null, null, new AtlasPath("foo.bar")));
 
         SourceContact targetObject = new SourceContact();
-        List<Object> parentObjects = ClassHelper.parentObjectsForPath(targetObject, null);
+        List<Object> parentObjects = ClassHelper.getParentObjectsForPath(mock(AtlasInternalSession.class), targetObject, null);
         assertEquals(1, parentObjects.size());
         Object parentObject = parentObjects.get(0);
         assertNotNull(parentObject);
@@ -129,7 +132,7 @@ public class ClassHelperTest {
         SourceOrder sourceOrder = new SourceOrder();
         sourceOrder.setAddress(sourceAddress);
 
-        List<Object> parentObjects = ClassHelper.parentObjectsForPath(sourceOrder, new AtlasPath("/address/city"));
+        List<Object> parentObjects = ClassHelper.getParentObjectsForPath(mock(AtlasInternalSession.class), sourceOrder, new AtlasPath("/address/city"));
         assertEquals(1, parentObjects.size());
         Object parentObject = parentObjects.get(0);
         assertNotNull(parentObject);
@@ -147,7 +150,7 @@ public class ClassHelperTest {
         SourceParentOrder sourceParentOrder = new SourceParentOrder();
         sourceParentOrder.setOrder(sourceOrder);
 
-        List<Object> parentObjects = ClassHelper.parentObjectsForPath(sourceParentOrder, new AtlasPath("/order/address/city"));
+        List<Object> parentObjects = ClassHelper.getParentObjectsForPath(mock(AtlasInternalSession.class), sourceParentOrder, new AtlasPath("/order/address/city"));
         assertEquals(1, parentObjects.size());
         Object parentObject = parentObjects.get(0);
         assertNotNull(parentObject);
@@ -167,11 +170,11 @@ public class ClassHelperTest {
 
         sourceOrderList.getOrders().add(sourceOrder);
 
-        List<Object> parentObjects = ClassHelper.parentObjectsForPath(sourceOrderList, new AtlasPath("orders<>"));
+        List<Object> parentObjects = ClassHelper.getParentObjectsForPath(mock(AtlasInternalSession.class), sourceOrderList, new AtlasPath("orders<>"));
         assertEquals(1, parentObjects.size());
         Object parentObject = parentObjects.get(0);
         assertNotNull(parentObject);
-        assertTrue(parentObject.getClass().getName(), parentObject instanceof SourceOrder);
-        assertEquals(sourceOrder, parentObject);
+        assertTrue(parentObject.getClass().getName(), parentObject instanceof SourceOrderList);
+        assertEquals(sourceOrderList, parentObject);
     }
 }

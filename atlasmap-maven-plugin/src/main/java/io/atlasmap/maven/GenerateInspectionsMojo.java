@@ -38,6 +38,7 @@ import io.atlasmap.java.inspect.ClassInspectionService;
 import io.atlasmap.java.v2.JavaClass;
 import io.atlasmap.json.inspect.JsonInspectionService;
 import io.atlasmap.json.v2.JsonDocument;
+import io.atlasmap.v2.CollectionType;
 import io.atlasmap.xml.inspect.XmlInspectionService;
 import io.atlasmap.xml.v2.XmlDocument;
 
@@ -58,6 +59,18 @@ public class GenerateInspectionsMojo extends AbstractAtlasMapMojo {
      */
     @Parameter(property = "className")
     private String className;
+
+    /**
+     * The collection type that should be inspected.
+     */
+    @Parameter(property = "collectionType")
+    private String collectionType;
+
+    /**
+     * The class name that should be inspected.
+     */
+    @Parameter(property = "collectionClassName")
+    private String collectionClassName;
 
     /**
      * Allows you to configure the plugin with: <code>
@@ -93,6 +106,8 @@ public class GenerateInspectionsMojo extends AbstractAtlasMapMojo {
     public static class Inspection {
         private List<String> artifacts;
         private String className;
+        private String collectionType;
+        private String collectionClassName;
         private List<String> classNames;
         private String fileName;
 
@@ -110,6 +125,22 @@ public class GenerateInspectionsMojo extends AbstractAtlasMapMojo {
 
         public void setClassNames(List<String> classNames) {
             this.classNames = classNames;
+        }
+
+        public String getCollectionType() {
+            return collectionType;
+        }
+
+        public void setCollectionType(String collectionType) {
+            this.collectionType = collectionType;
+        }
+
+        public String getCollectionClassName() {
+            return collectionClassName;
+        }
+
+        public void setCollectionClassName(String collectionClassName) {
+            this.collectionClassName = collectionClassName;
         }
 
         public List<String> getArtifacts() {
@@ -133,8 +164,12 @@ public class GenerateInspectionsMojo extends AbstractAtlasMapMojo {
         if (getOutputDir() != null) {
             getOutputDir().mkdirs();
         }
+        CollectionType collectionType = CollectionType.NONE;
+        if (this.collectionType != null) {
+            collectionType = CollectionType.valueOf(this.collectionType);
+        }
         if (this.artifacts != null && this.className != null) {
-            generateJavaInspection(this.artifacts, Arrays.asList(className));
+            generateJavaInspection(this.artifacts, Arrays.asList(className), collectionType, collectionClassName);
         }
         if (inspections != null) {
             for (Inspection inspection : inspections) {
@@ -146,13 +181,17 @@ public class GenerateInspectionsMojo extends AbstractAtlasMapMojo {
                 } else {
                     generateFileInspection(inspection);
                 }
-                generateJavaInspection(inspection.artifacts, classNames);
+                collectionType = CollectionType.NONE;
+                if (inspection.collectionType != null) {
+                    collectionType = CollectionType.valueOf(inspection.collectionType);
+                }
+                generateJavaInspection(inspection.artifacts, classNames, collectionType, inspection.collectionClassName);
             }
         }
     }
 
-    private void generateJavaInspection(List<String> artifacts, Collection<String> classNames)
-            throws MojoFailureException, MojoExecutionException {
+    private void generateJavaInspection(List<String> artifacts, Collection<String> classNames,
+            CollectionType collectionType, String collectionClassName) throws MojoFailureException, MojoExecutionException {
 
         List<URL> urls = artifacts == null ? Collections.emptyList() : resolveClasspath(artifacts);
 
@@ -165,7 +204,7 @@ public class GenerateInspectionsMojo extends AbstractAtlasMapMojo {
                 clazz = loader.loadClass(className);
                 ClassInspectionService classInspectionService = new ClassInspectionService();
                 classInspectionService.setConversionService(DefaultAtlasConversionService.getInstance());
-                c = classInspectionService.inspectClass(loader, clazz);
+                c = classInspectionService.inspectClass(loader, clazz, collectionType, collectionClassName);
             } catch (ClassNotFoundException | IOException e) {
                 throw new MojoExecutionException(e.getMessage(), e);
             }

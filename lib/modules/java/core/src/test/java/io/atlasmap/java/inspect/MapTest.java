@@ -28,6 +28,7 @@ import io.atlasmap.core.DefaultAtlasConversionService;
 import io.atlasmap.java.test.TestMapOrders;
 import io.atlasmap.java.v2.JavaClass;
 import io.atlasmap.java.v2.JavaField;
+import io.atlasmap.v2.CollectionType;
 
 public class MapTest {
 
@@ -46,7 +47,7 @@ public class MapTest {
 
     @Test
     public void testInspectJavaMapField() {
-        JavaClass c = classInspectionService.inspectClass(TestMapOrders.class);
+        JavaClass c = classInspectionService.inspectClass(TestMapOrders.class, CollectionType.NONE, null);
         assertNotNull(c);
         assertEquals("io.atlasmap.java.test.TestMapOrders", c.getClassName());
         assertNotNull(c.getJavaFields().getJavaField());
@@ -58,7 +59,7 @@ public class MapTest {
     @Test
     public void testInspectJavaMapRoot() {
 
-        JavaClass c = classInspectionService.inspectClass(Map.class);
+        JavaClass c = classInspectionService.inspectClass(Map.class, CollectionType.MAP, null);
         assertEquals("java.util.Map", c.getClassName());
         assertEquals(c.getCollectionType().value(), "Map");
 

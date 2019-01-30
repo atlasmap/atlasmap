@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.atlasmap.java.inspect;
+package io.atlasmap.java.core;
 
 import java.text.SimpleDateFormat;
 import java.util.TimeZone;
@@ -34,7 +34,7 @@ public class StringUtil {
         return String.valueOf(sentence.charAt(0)).toUpperCase() + sentence.substring(1);
     }
 
-    public static String removeGetterAndLowercaseFirstLetter(String getter) {
+    public static String getFieldNameFromGetter(String getter) {
         if (StringUtil.isEmpty(getter)) {
             return getter;
         }
@@ -57,7 +57,7 @@ public class StringUtil {
         return String.valueOf(subGetter.charAt(0)).toLowerCase() + subGetter.substring(1);
     }
 
-    public static String removeSetterAndLowercaseFirstLetter(String setter) {
+    public static String getFieldNameFromSetter(String setter) {
         if (StringUtil.isEmpty(setter)) {
             return setter;
         }
