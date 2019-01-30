@@ -47,10 +47,13 @@ export class DocumentFieldDetailComponent {
   constructor(private sanitizer: DomSanitizer) { }
 
   startDrag(event: any): void {
+
     if (!this.field.isTerminal()) {
       // ignore drag event, it's coming from a child field who's already set on the drag event
       return;
     }
+
+    this.cfg.currentDraggedField = null;
 
     // event's data transfer store isn't available during dragenter/dragleave/dragover, so we need
     // to store this info in a global somewhere since those methods depend on knowing if the
@@ -93,9 +96,7 @@ export class DocumentFieldDetailComponent {
       return;
     }
 
-    this.cfg.mappingService.addNewMapping(droppedField, false);
     this.cfg.mappingService.fieldSelected(this.field, false);
-
   }
 
   getFieldTypeIcon(): string {
