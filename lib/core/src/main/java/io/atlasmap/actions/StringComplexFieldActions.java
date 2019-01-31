@@ -17,6 +17,7 @@ package io.atlasmap.actions;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 import java.util.regex.Pattern;
@@ -119,7 +120,7 @@ public class StringComplexFieldActions implements AtlasFieldAction {
             throw new IllegalArgumentException("Format must be specfied with a template");
         }
 
-        return String.format(format.getTemplate(), input);
+        return String.format(Locale.ROOT, format.getTemplate(), input);
     }
 
     @AtlasFieldActionInfo(name = "GenerateUUID", sourceType = FieldType.NONE, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
