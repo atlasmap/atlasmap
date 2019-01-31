@@ -102,7 +102,7 @@ public class StringComplexFieldActions implements AtlasFieldAction {
         EndsWith endsWith = (EndsWith) action;
 
         if (endsWith.getString() == null) {
-            throw new IllegalArgumentException("EndsWith must be specfied with a string");
+            throw new IllegalArgumentException("EndsWith must be specified with a string");
         }
 
         return input == null ? false : input.endsWith(endsWith.getString());
@@ -117,7 +117,7 @@ public class StringComplexFieldActions implements AtlasFieldAction {
         Format format = (Format) action;
 
         if (format.getTemplate() == null) {
-            throw new IllegalArgumentException("Format must be specfied with a template");
+            throw new IllegalArgumentException("Format must be specified with a template");
         }
 
         return String.format(Locale.ROOT, format.getTemplate(), input);
@@ -137,7 +137,7 @@ public class StringComplexFieldActions implements AtlasFieldAction {
         IndexOf indexOf = (IndexOf) action;
 
         if (indexOf.getString() == null) {
-            throw new IllegalArgumentException("IndexOf must be specfied with a string");
+            throw new IllegalArgumentException("IndexOf must be specified with a string");
         }
 
         return input == null ? -1 : input.indexOf(indexOf.getString());
@@ -152,7 +152,7 @@ public class StringComplexFieldActions implements AtlasFieldAction {
         LastIndexOf lastIndexOf = (LastIndexOf) action;
 
         if (lastIndexOf.getString() == null) {
-            throw new IllegalArgumentException("LastIndexOf must be specfied with a string");
+            throw new IllegalArgumentException("LastIndexOf must be specified with a string");
         }
 
         return input == null ? -1 : input.lastIndexOf(lastIndexOf.getString());
@@ -162,7 +162,7 @@ public class StringComplexFieldActions implements AtlasFieldAction {
     public static String padStringRight(Action action, String input) {
         if (!(action instanceof PadStringRight) || ((PadStringRight) action).getPadCharacter() == null
                 || ((PadStringRight) action).getPadCount() == null) {
-            throw new IllegalArgumentException("PadStringRight must be specfied with padCharacter and padCount");
+            throw new IllegalArgumentException("PadStringRight must be specified with padCharacter and padCount");
         }
 
         PadStringRight padStringRight = (PadStringRight) action;
@@ -182,7 +182,7 @@ public class StringComplexFieldActions implements AtlasFieldAction {
     public static String padStringLeft(Action action, String input) {
         if (!(action instanceof PadStringLeft) || ((PadStringLeft) action).getPadCharacter() == null
                 || ((PadStringLeft) action).getPadCount() == null) {
-            throw new IllegalArgumentException("PadStringLeft must be specfied with padCharacter and padCount");
+            throw new IllegalArgumentException("PadStringLeft must be specified with padCharacter and padCount");
         }
 
         PadStringLeft padStringLeft = (PadStringLeft) action;
@@ -269,7 +269,7 @@ public class StringComplexFieldActions implements AtlasFieldAction {
         StartsWith startsWith = (StartsWith) action;
 
         if (startsWith.getString() == null) {
-            throw new IllegalArgumentException("StartsWith must be specfied with a string");
+            throw new IllegalArgumentException("StartsWith must be specified with a string");
         }
 
         return input == null ? false : input.startsWith(startsWith.getString());
