@@ -231,7 +231,7 @@ public class NumberFieldActions implements AtlasFieldAction {
 
         if (action == null || !(action instanceof ConvertMassUnit) || ((ConvertMassUnit) action).getFromUnit() == null
                 || ((ConvertMassUnit) action).getToUnit() == null) {
-            throw new IllegalArgumentException("ConvertMassUnit must be specfied  with fromUnit and toUnit");
+            throw new IllegalArgumentException("ConvertMassUnit must be specified  with fromUnit and toUnit");
         }
 
         MassUnitType fromUnit = ((ConvertMassUnit) action).getFromUnit();
@@ -249,7 +249,7 @@ public class NumberFieldActions implements AtlasFieldAction {
         if (action == null || !(action instanceof ConvertDistanceUnit)
                 || ((ConvertDistanceUnit) action).getFromUnit() == null
                 || ((ConvertDistanceUnit) action).getToUnit() == null) {
-            throw new IllegalArgumentException("ConvertDistanceUnit must be specfied  with fromUnit and toUnit");
+            throw new IllegalArgumentException("ConvertDistanceUnit must be specified  with fromUnit and toUnit");
         }
 
         DistanceUnitType fromUnit = ((ConvertDistanceUnit) action).getFromUnit();
@@ -266,7 +266,7 @@ public class NumberFieldActions implements AtlasFieldAction {
 
         if (action == null || !(action instanceof ConvertAreaUnit) || ((ConvertAreaUnit) action).getFromUnit() == null
                 || ((ConvertAreaUnit) action).getToUnit() == null) {
-            throw new IllegalArgumentException("ConvertAreaUnit must be specfied  with fromUnit and toUnit");
+            throw new IllegalArgumentException("ConvertAreaUnit must be specified  with fromUnit and toUnit");
         }
 
         AreaUnitType fromUnit = ((ConvertAreaUnit) action).getFromUnit();
@@ -284,7 +284,7 @@ public class NumberFieldActions implements AtlasFieldAction {
         if (action == null || !(action instanceof ConvertVolumeUnit)
                 || ((ConvertVolumeUnit) action).getFromUnit() == null
                 || ((ConvertVolumeUnit) action).getToUnit() == null) {
-            throw new IllegalArgumentException("ConvertVolumeUnit must be specfied  with fromUnit and toUnit");
+            throw new IllegalArgumentException("ConvertVolumeUnit must be specified  with fromUnit and toUnit");
         }
 
         VolumeUnitType fromUnit = ((ConvertVolumeUnit) action).getFromUnit();
