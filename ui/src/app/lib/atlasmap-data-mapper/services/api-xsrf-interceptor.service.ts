@@ -17,15 +17,19 @@ export class ApiXsrfInterceptor implements HttpInterceptor {
   constructor(private tokenExtractor: HttpXsrfTokenExtractor) { }
 
   intercept(httpRequest: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    /*
+      ADM doesn't need/use cookies so we'll use the default token value initialized from the environment when
+      adding the XSRF header to HTTP requests.  This will avoid the need to read cookies from local storage.
+    */
     if (this.cfg.initCfg.xsrfHeaderName) {
-      const token = this.tokenExtractor.getToken() || this.cfg.initCfg.xsrfDefaultTokenValue;
+      // const token = this.tokenExtractor.getToken() || this.cfg.initCfg.xsrfDefaultTokenValue;
+      const token = this.cfg.initCfg.xsrfDefaultTokenValue;
       const headerName = this.cfg.initCfg.xsrfHeaderName;
 
       if (!httpRequest.headers.has(headerName)) {
         httpRequest = httpRequest.clone({ headers: httpRequest.headers.set(headerName, token) });
       }
     }
-
     return next.handle(httpRequest);
   }
 }
