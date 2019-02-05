@@ -84,7 +84,11 @@ export class DataMapperAppComponent implements OnInit, OnDestroy {
     // update the mapping line drawing after our fields have redrawn themselves
     // without this, the x/y from the field dom elements is messed up / misaligned.
     if (this.lineMachine != null) {
-      setTimeout(() => { this.lineMachine.redrawLinesForMappings(); }, 1);
+      setTimeout(() => {
+        if (this.lineMachine != null) {
+          this.lineMachine.redrawLinesForMappings();
+        }
+      }, 1);
     }
   }
 }
