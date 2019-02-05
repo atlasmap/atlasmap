@@ -16,7 +16,8 @@
 
 import { NgModule, ModuleWithProviders, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpClientModule, HttpClientXsrfModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClientModule, HttpClientXsrfModule, HttpXsrfTokenExtractor, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpXsrfInterceptor } from '@angular/common/http/src/xsrf';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AlertModule, BsDropdownModule, TooltipModule, TypeaheadModule } from 'ngx-bootstrap';
 
@@ -57,7 +58,7 @@ import { TransitionSelectionComponent } from './components/mapping/transition-se
 import { FocusDirective } from './common/focus.directive';
 
 // export services/types for consumers of this module
-export { ApiXsrfInterceptor } from './services/api-xsrf-interceptor.service';
+export { ApiXsrfInterceptor, ApiHttpXsrfTokenExtractor } from './services/api-xsrf.service';
 export { ErrorHandlerService } from './services/error-handler.service';
 export { DocumentManagementService } from './services/document-management.service';
 export { MappingManagementService } from './services/mapping-management.service';
@@ -70,7 +71,7 @@ export { MappingModel } from './models/mapping.model';
 export { MappingSerializer } from './services/mapping-serializer.service';
 
 import { ToErrorIconClassPipe } from './common/to-error-icon-class.pipe';
-import { ApiXsrfInterceptor } from './services/api-xsrf-interceptor.service';
+import { ApiXsrfInterceptor, ApiHttpXsrfTokenExtractor } from './services/api-xsrf.service';
 
 export { DataMapperAppComponent } from './components/data-mapper-app.component';
 
@@ -152,21 +153,36 @@ export const alertModuleForRoot: ModuleWithProviders = AlertModule.forRoot();
   bootstrap: [DataMapperAppExampleHostComponent],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 })
+
 export class DataMapperModule {
   static withInterceptor(): Array<ModuleWithProviders> {
-    return [{
-      ngModule: DataMapperModule,
-      providers: [
-        DocumentManagementService,
-        MappingManagementService,
-        ErrorHandlerService,
-        InitializationService,
-        {
-          provide: HTTP_INTERCEPTORS,
-          useClass: ApiXsrfInterceptor,
-          multi: true
-        },
-      ],
-    }];
+    return [
+      { ngModule: DataMapperModule,
+        providers: [
+          DocumentManagementService,
+          MappingManagementService,
+          ErrorHandlerService,
+          InitializationService,
+          {
+            provide: HTTP_INTERCEPTORS,
+            useClass: ApiXsrfInterceptor,
+            multi: true
+          },
+        ],
+      },
+      { ngModule: DataMapperModule,
+        providers: [
+          DocumentManagementService,
+          MappingManagementService,
+          ErrorHandlerService,
+          InitializationService,
+          {
+            provide: HttpXsrfTokenExtractor,
+            useClass: ApiHttpXsrfTokenExtractor,
+            multi: false
+          },
+        ],
+      }
+    ];
   }
 }
