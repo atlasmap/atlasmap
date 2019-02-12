@@ -21,14 +21,14 @@ $ git clone https://github.com/atlasmap/atlasmap ${ATLASMAP}
 +
 ```
 $ cd ${ATLASMAP}
-$ sh build.sh --skip-tests
+$ ./mvnw clean install -DskipTests
 ```
 +
-3. Run AtlasMap Design Service
+3. Run AtlasMap standalone
 +
 ```
-$ cd ${ATLASMAP}/runtime/runtime
-$ ../../mvnw -Pitests spring-boot:run
+$ cd ${ATLASMAP}/standalone
+$ ../mvnw -Pitests spring-boot:run
 ```
 +
 4. https://yarnpkg.com/lang/en/docs/install/[Install Yarn]
