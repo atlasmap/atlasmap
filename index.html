@@ -524,7 +524,7 @@ table.CodeRay td.code>pre{padding:0}
 <div class="details">
 <span id="author" class="author">The AtlasMap Team</span><br>
 <span id="revnumber">version 1.40.0-SNAPSHOT,</span>
-<span id="revdate">2019-02-06</span>
+<span id="revdate">2019-02-12</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">AtlasMap Developer Guide</div>
@@ -629,16 +629,16 @@ table.CodeRay td.code>pre{padding:0}
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code>$ cd ${ATLASMAP}
-$ sh build.sh --skip-tests</code></pre>
+$ ./mvnw clean install -DskipTests</code></pre>
 </div>
 </div>
 </li>
 <li>
-<p>Run AtlasMap Design Service</p>
+<p>Run AtlasMap standalone</p>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code>$ cd ${ATLASMAP}/runtime/runtime
-$ ../../mvnw -Pitests spring-boot:run</code></pre>
+<pre class="CodeRay highlight"><code>$ cd ${ATLASMAP}/standalone
+$ ../mvnw -Pitests spring-boot:run</code></pre>
 </div>
 </div>
 </li>
@@ -1911,7 +1911,7 @@ string.</p></td>
 <div id="footer">
 <div id="footer-text">
 Version 1.40.0-SNAPSHOT<br>
-Last updated 2019-02-06 15:27:53 UTC
+Last updated 2019-02-12 14:13:04 UTC
 </div>
 </div>
 </body>
