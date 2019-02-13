@@ -9,7 +9,7 @@
 
       <select (change)="configSelectionChanged($event);" [ngModel]="action.name" *ngIf="!action.isSeparateOrCombineMode">
         <option *ngFor="let actionConfig of getActionConfigs()" [attr.actionIndex]="actionIndex"
-                        [attr.value]="actionConfig.name">{{ actionConfig.name }}</option>
+                        [attr.value]="actionConfig.name">{{ getLabel(actionConfig.name) }}</option>
       </select>
 
       <div class="clear"></div>
@@ -17,7 +17,7 @@
 
     <div class="form-group argument" *ngFor="let argConfig of action.config.arguments; let argValIndex = index">
       <div *ngIf="!isIndexArg(argConfig.name, argValIndex)">
-        <label style="">{{ getLabel(argConfig.name) }}</label>
+        <label style=""></label>
         <div *ngIf="argConfig.values != null && argConfig.values.length > 0; else textInput">
           <select (change)="actionConfigParamSelectionChanged($event);" [ngModel]="getActionConfigParamVDefault(argConfig, actionIndex, argValIndex)">
             <option *ngFor="let actionConfigParamVal of getActionConfigParamValues(argConfig)" [attr.argValIndex]="argValIndex"
@@ -25,7 +25,7 @@
           </select>
         </div>
         <ng-template #textInput>
-          <label style="">{{ argConfig.name }}</label>
+          <label style="">{{ getLabel(argConfig.name) }}</label>
           <input type="text" class="input-{{argConfig.name}}" [(ngModel)]="action.getArgumentValue(argConfig.name).value"
             (change)="actionConfigParamSelectionChanged($event)"/>
         </ng-template>

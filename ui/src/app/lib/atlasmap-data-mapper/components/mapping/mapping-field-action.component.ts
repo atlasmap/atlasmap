@@ -154,11 +154,22 @@ export class MappingFieldActionComponent {
    * @param paramName
    */
   getLabel(paramName: string): string {
-    switch (paramName) {
-      case 'fromUnit': return 'From Unit';
-      case 'toUnit': return 'To Unit';
-      default: return '';
+    return this.toDisplayable(paramName);
+  }
+
+  private toDisplayable(camelCaseString: string): string {
+    if (typeof camelCaseString === 'undefined' || !camelCaseString || camelCaseString.indexOf(' ') >= 0) {
+      return camelCaseString;
     }
+    let displayableString: string = camelCaseString.charAt(0).toUpperCase();
+    for (let index = 1; index < camelCaseString.length; index++) {
+      const chr: string = camelCaseString.charAt(index);
+      if (chr !== chr.toLowerCase()) {
+        displayableString += ' ';
+      }
+      displayableString += chr;
+    }
+    return displayableString;
   }
 
   /**
