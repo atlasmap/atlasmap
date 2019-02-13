@@ -167,6 +167,7 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
 
             try {
                 AtlasModule module = moduleInfo.getModuleClass().newInstance();
+                module.setClassLoader(factory.getClassLoader());
                 module.setConversionService(factory.getConversionService());
                 module.setFieldActionService(factory.getFieldActionService());
                 module.setUri(ds.getUri());
@@ -532,7 +533,7 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
     }
 
     // just unwrap collection mappings to be compatible with older UI
-    protected final List<Mapping> unwrapCollectionMappings(DefaultAtlasSession session, BaseMapping baseMapping) {
+    private final List<Mapping> unwrapCollectionMappings(DefaultAtlasSession session, BaseMapping baseMapping) {
         if (baseMapping.getMappingType() == null || !baseMapping.getMappingType().equals(MappingType.COLLECTION)) {
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Mapping is not a collection mapping, not cloning: {}", baseMapping);

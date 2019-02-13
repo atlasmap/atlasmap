@@ -30,7 +30,6 @@
 
   <properties>
     <osgi.export.pkg>io.atlasmap.java.test</osgi.export.pkg>
-    <osgi.import.pkg>*</osgi.import.pkg>
   </properties>
 
   <dependencies>

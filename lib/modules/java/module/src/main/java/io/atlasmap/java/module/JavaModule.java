@@ -51,7 +51,6 @@ public class JavaModule extends BaseAtlasModule {
 
     private TargetValueConverter targetValueConverter = null;
     private JavaFieldWriterUtil writerUtil = null;
-    private ClassLoader classLoader;
 
     public JavaModule() {
         this.setAutomaticallyProcessOutputFieldActions(false);
@@ -59,10 +58,8 @@ public class JavaModule extends BaseAtlasModule {
 
     @Override
     public void init() {
-        // TODO support non-flat class loader
-        this.classLoader = Thread.currentThread().getContextClassLoader();
-        writerUtil = new JavaFieldWriterUtil(getConversionService());
-        targetValueConverter = new TargetValueConverter(classLoader, getConversionService(), writerUtil);
+        writerUtil = new JavaFieldWriterUtil(getClassLoader(), getConversionService());
+        targetValueConverter = new TargetValueConverter(getClassLoader(), getConversionService(), writerUtil);
     }
 
     @Override
@@ -296,14 +293,6 @@ public class JavaModule extends BaseAtlasModule {
     @Override
     public Field cloneField(Field field) throws AtlasException {
         return AtlasJavaModelFactory.cloneJavaField(field);
-    }
-
-    public ClassLoader getClassLoader() {
-        return this.classLoader;
-    }
-
-    public void setClassLoader(ClassLoader loader) {
-        this.classLoader = loader;
     }
 
 }

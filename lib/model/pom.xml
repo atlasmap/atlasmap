@@ -34,7 +34,6 @@
     <xsd.folder>src/main/resources</xsd.folder>
     <xsd.file>atlas-model-v2.xsd</xsd.file>
     <osgi.export.pkg>io.atlasmap.v2</osgi.export.pkg>
-    <osgi.import.pkg>com.fasterxml.jackson.annotation;version="[2.6,3)",javax.xml.bind;version="[2.2,3)",javax.xml.bind.annotation;version="[2.2,3)",javax.xml.namespace</osgi.import.pkg>
   </properties>
 
   <dependencies>

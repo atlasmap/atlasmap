@@ -60,7 +60,7 @@ public class DefaultAtlasContextFactoryTest {
 
     @Test
     public void testInitDestroy() {
-        factory = new DefaultAtlasContextFactory();
+        factory = DefaultAtlasContextFactory.getInstance();
         factory.init();
 
         assertNotNull(factory);
@@ -83,7 +83,7 @@ public class DefaultAtlasContextFactoryTest {
 
     @Test
     public void testInitDestroyInitDestroy() {
-        factory = new DefaultAtlasContextFactory();
+        factory = DefaultAtlasContextFactory.getInstance();
         factory.init();
         String origUuid = factory.getUuid();
 
@@ -146,16 +146,11 @@ public class DefaultAtlasContextFactoryTest {
     }
 
     @Test
-    public void testDefaultAtlasContextFactoryMap() {
-        Map<String, String> map = new HashMap<>();
-        assertNotNull(new DefaultAtlasContextFactory(map));
-    }
-
-    @Test
     public void testDefaultAtlasContextFactoryProperties() {
-        Properties properties = new Properties();
+        Map<String, String> properties = new HashMap<>();
         properties.put("key1", "value1");
-        DefaultAtlasContextFactory contextFactory = new DefaultAtlasContextFactory(properties);
+        DefaultAtlasContextFactory contextFactory = DefaultAtlasContextFactory.getInstance();
+        contextFactory.setProperties(properties);
         contextFactory.setThreadName("threadName");
         contextFactory.setModuleInfoRegistry(null);
         contextFactory.setCombineStrategy(null);
@@ -177,7 +172,7 @@ public class DefaultAtlasContextFactoryTest {
     @Test
     public void testCreateContextWithFile() throws AtlasException {
         File file = Paths.get("src" + File.separator + "test" + File.separator + "resources" + File.separator + "atlasmapping.xml").toFile();
-        factory = new DefaultAtlasContextFactory();
+        factory = DefaultAtlasContextFactory.getInstance();
         factory.init();
         assertNotNull(factory.createContext(file));
     }
@@ -185,14 +180,14 @@ public class DefaultAtlasContextFactoryTest {
     @Test
     public void testCreateContextWithAtlasMapping() throws AtlasException {
         AtlasMapping atlasMapping = new AtlasMapping();
-        factory = new DefaultAtlasContextFactory();
+        factory = DefaultAtlasContextFactory.getInstance();
         factory.init();
         assertNotNull(factory.createContext(atlasMapping));
     }
 
     @Test(expected = AtlasException.class)
     public void testCreateContextWithFileAtlasMappingFormat() throws AtlasException {
-        factory = new DefaultAtlasContextFactory();
+        factory = DefaultAtlasContextFactory.getInstance();
         factory.init();
         File file = null;
         assertNotNull(factory.createContext(file, AtlasMappingFormat.XML));
@@ -201,34 +196,22 @@ public class DefaultAtlasContextFactoryTest {
     @Test
     public void testCreateContextWithURI() throws AtlasException {
         File file = Paths.get("src" + File.separator + "test" + File.separator + "resources" + File.separator + "atlasmapping.xml").toFile();
-        factory = new DefaultAtlasContextFactory();
+        factory = DefaultAtlasContextFactory.getInstance();
         factory.init();
         assertNotNull(factory.createContext(file.toURI()));
     }
 
     @Test(expected = AtlasException.class)
     public void testCreateContextWithURIAtlasExceptionNoUri() throws AtlasException {
-        factory = new DefaultAtlasContextFactory();
+        factory = DefaultAtlasContextFactory.getInstance();
         factory.init();
         URI uri = null;
         assertNotNull(factory.createContext(uri, AtlasMappingFormat.XML));
     }
 
-    @Test(expected = AtlasException.class)
-    public void testCreateContextWithURIAtlasExceptionNoAtlasMappingService() throws AtlasException {
-        factory = new DefaultAtlasContextFactory();
-        File file = Paths.get("src" + File.separator + "test" + File.separator + "resources" + File.separator + "atlasmapping.xml").toFile();
-        assertNotNull(factory.createContext(file.toURI(), AtlasMappingFormat.XML));
-    }
-
-    @Test
-    public void testGetFactory() {
-        assertNull(DefaultAtlasContextFactory.getFactory());
-    }
-
     @Test
     public void testIsClassAtlasModule() {
-        factory = new DefaultAtlasContextFactory();
+        factory = DefaultAtlasContextFactory.getInstance();
         assertFalse(factory.isClassAtlasModule(null, null));
 
         assertFalse(factory.isClassAtlasModule(AtlasModuleDetail.class, AtlasModule.class));
@@ -238,38 +221,40 @@ public class DefaultAtlasContextFactoryTest {
 
     @Test
     public void testGetModuleName() {
-        factory = new DefaultAtlasContextFactory();
+        factory = DefaultAtlasContextFactory.getInstance();
         assertNotNull(factory.getModuleName(Object.class));
     }
 
     @Test
     public void testRegisterFactoryJmx() {
-        factory = new DefaultAtlasContextFactory();
+        factory = DefaultAtlasContextFactory.getInstance();
         factory.registerFactoryJmx(null);
     }
 
     @Test
     public void testGetModuleUri() {
-        factory = new DefaultAtlasContextFactory();
+        factory = DefaultAtlasContextFactory.getInstance();
         assertEquals("UNDEFINED", factory.getModuleUri(Object.class));
     }
 
     @Test
     public void testGetConfigPackages() {
-        factory = new DefaultAtlasContextFactory();
+        factory = DefaultAtlasContextFactory.getInstance();
 
         assertNotNull(factory.getConfigPackages(MockModule.class));
     }
 
     @Test
     public void testGetSupportedDataFormats() {
-        factory = new DefaultAtlasContextFactory();
+        factory = DefaultAtlasContextFactory.getInstance();
 
         assertNotNull(factory.getSupportedDataFormats(MockModule.class));
     }
 
     @AtlasModuleDetail(name = "ConstantModule", uri = "", modes = { "SOURCE" }, dataFormats = { "xml", "json" }, configPackages = { "io.atlasmap.core" })
     private class MockModule implements AtlasModule {
+
+        private ClassLoader classLoader;
 
         @Override
         public void init() {
@@ -279,6 +264,16 @@ public class DefaultAtlasContextFactoryTest {
         @Override
         public void destroy() {
             LOG.debug("destroy method");
+        }
+
+        @Override
+        public void setClassLoader(ClassLoader classLoader) {
+            this.classLoader = classLoader;
+        }
+
+        @Override
+        public ClassLoader getClassLoader() {
+            return this.classLoader;
         }
 
         @Override

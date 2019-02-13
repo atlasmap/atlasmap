@@ -58,16 +58,13 @@ public class XmlFieldReader extends XmlFieldTransformer implements AtlasFieldRea
     private AtlasConversionService conversionService;
     private Document document;
 
-    @SuppressWarnings("unused")
-    private XmlFieldReader() {
-    }
-
-    public XmlFieldReader(AtlasConversionService conversionService) {
+    public XmlFieldReader(ClassLoader cl, AtlasConversionService conversionService) {
+        super(cl);
         this.conversionService = conversionService;
     }
 
-    public XmlFieldReader(AtlasConversionService conversionService, Map<String, String> namespaces) {
-        super(namespaces);
+    public XmlFieldReader(ClassLoader cl, AtlasConversionService conversionService, Map<String, String> namespaces) {
+        super(cl, namespaces);
         this.conversionService = conversionService;
     }
 
@@ -115,7 +112,7 @@ public class XmlFieldReader extends XmlFieldTransformer implements AtlasFieldRea
         List<Element> answer = new LinkedList<>();
         for (Element parentNode : parentNodes) {
             if (LOG.isDebugEnabled()) {
-                LOG.debug("Parent element is currently: " + XmlIOHelper.writeDocumentToString(true, parentNode));
+                LOG.debug("Parent element is currently: " + xmlHelper.writeDocumentToString(true, parentNode));
             }
             if (sc.isAttribute()) {
                 answer.add(parentNode);

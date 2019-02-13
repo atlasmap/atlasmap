@@ -49,6 +49,7 @@ public abstract class BaseAtlasModule implements AtlasModule, AtlasModuleMXBean 
     private AtlasModuleMode atlasModuleMode = AtlasModuleMode.UNSET;
     private String docId;
     private String uri;
+    private ClassLoader classLoader;
 
     @Override
     public void init() {
@@ -58,6 +59,16 @@ public abstract class BaseAtlasModule implements AtlasModule, AtlasModuleMXBean 
     @Override
     public void destroy() {
         // no-op now
+    }
+
+    @Override
+    public void setClassLoader(ClassLoader classLoader) {
+        this.classLoader = classLoader;
+    }
+
+    @Override
+    public ClassLoader getClassLoader() {
+        return this.classLoader;
     }
 
     @Override

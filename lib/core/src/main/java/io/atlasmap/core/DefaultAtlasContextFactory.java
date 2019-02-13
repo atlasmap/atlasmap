@@ -71,21 +71,9 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
     private AtlasValidationService atlasValidationService = new DefaultAtlasValidationService();
     private AtlasModuleInfoRegistry moduleInfoRegistry;
     private Map<String, String> properties = null;
+    private CompoundClassLoader classLoader = null;
 
-    public DefaultAtlasContextFactory() {
-    }
-
-    public DefaultAtlasContextFactory(Map<String, String> properties) {
-        this.properties = properties;
-        init();
-    }
-
-    public DefaultAtlasContextFactory(Properties properties) {
-        Map<String, String> tmpProps = new HashMap<>();
-        for (final String name : properties.stringPropertyNames()) {
-            tmpProps.put(name, properties.getProperty(name));
-        }
-        setProperties(tmpProps);
+    private DefaultAtlasContextFactory() {
     }
 
     public static DefaultAtlasContextFactory getInstance() {
@@ -100,9 +88,11 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
     public void init() {
         this.uuid = UUID.randomUUID().toString();
         this.threadName = Thread.currentThread().getName();
+        this.classLoader = new CompoundClassLoader();
+        this.classLoader.add(AtlasMapping.class.getClassLoader());
         this.atlasConversionService = DefaultAtlasConversionService.getInstance();
         this.atlasFieldActionService = new DefaultAtlasFieldActionService(this.atlasConversionService);
-        this.atlasFieldActionService.init();
+        this.atlasFieldActionService.init(this.classLoader);
         registerFactoryJmx(this);
         this.moduleInfoRegistry = new DefaultAtlasModuleInfoRegistry(this);
         loadModules("moduleClass", AtlasModule.class);
@@ -112,6 +102,12 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
     @Override
     public void setProperties(Map<String, String> properties) {
         this.properties = properties;
+    }
+
+    @Override
+    public void setProperties(Properties properties) {
+        this.properties = new HashMap<>();
+        properties.forEach((key, value) -> this.properties.put(key.toString(), value.toString()));
     }
 
     @Override
@@ -141,6 +137,7 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
         this.atlasConversionService = null;
         this.atlasPropertyStrategy = null;
         this.moduleInfoRegistry = null;
+        this.classLoader = null;
         this.threadName = null;
         factory = null;
     }
@@ -271,20 +268,30 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
         this.atlasValidationService = atlasValidationService;
     }
 
+    public CompoundClassLoader getClassLoader() {
+        return this.classLoader;
+    }
+
+    public void addClassLoader(ClassLoader cl) {
+        this.classLoader.add(cl);
+    }
+
     protected void loadModules(String moduleClassProperty, Class<?> moduleInterface) {
         Class<?> moduleClass = null;
         String moduleClassName = null;
         Set<String> serviceClasses = new HashSet<>();
 
-        ClassLoader classLoader = this.getClass().getClassLoader();
         try {
             Enumeration<URL> urls = classLoader.getResources("META-INF/services/atlas/module/atlas.module");
             while (urls.hasMoreElements()) {
                 URL tmp = urls.nextElement();
                 Properties prop = AtlasUtil.loadPropertiesFromURL(tmp);
                 String serviceClassPropertyValue = (String) prop.get(moduleClassProperty);
-                if (!AtlasUtil.isEmpty(serviceClassPropertyValue)) {
-                    serviceClasses.add((serviceClassPropertyValue));
+                String[] splitted = serviceClassPropertyValue != null ? serviceClassPropertyValue.split(",") : new String[0];
+                for (String entry : splitted) {
+                    if (!AtlasUtil.isEmpty(entry)) {
+                        serviceClasses.add((entry));
+                    }
                 }
             }
         } catch (Exception e) {
@@ -293,7 +300,7 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
 
         for (String clazz : serviceClasses) {
             try {
-                moduleClass = Class.forName(clazz);
+                moduleClass = classLoader.loadClass(clazz);
                 moduleClassName = moduleClass.getName();
 
                 if (isClassAtlasModule(moduleClass, moduleInterface)) {
@@ -463,7 +470,4 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
         this.objectName = new ObjectName(String.format("io.atlasmap:type=AtlasServiceFactory,factoryUuid=%s", getUuid()));
     }
 
-    protected static DefaultAtlasContextFactory getFactory() {
-        return factory;
-    }
 }

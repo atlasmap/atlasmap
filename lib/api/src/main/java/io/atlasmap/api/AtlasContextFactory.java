@@ -18,6 +18,7 @@ package io.atlasmap.api;
 import java.io.File;
 import java.net.URI;
 import java.util.Map;
+import java.util.Properties;
 
 import io.atlasmap.spi.AtlasCombineStrategy;
 import io.atlasmap.spi.AtlasConversionService;
@@ -48,6 +49,8 @@ public interface AtlasContextFactory {
     AtlasValidationService getValidationService() throws AtlasException;
 
     void setProperties(Map<String, String> properties);
+
+    void setProperties(Properties properties);
 
     Map<String, String> getProperties();
 

@@ -37,8 +37,9 @@
     <asciidoctorj.version>1.5.6</asciidoctorj.version>
     <asciidoctorj-pdf.version>1.5.0-alpha.16</asciidoctorj-pdf.version>
     <atlas.version.range>[1,3)</atlas.version.range>
+    <bcel-bundle-version>5.2_4</bcel-bundle-version>
     <build-helper-maven-plugin.version>3.0.0</build-helper-maven-plugin.version>
-    <camel.version>2.21.2</camel.version>
+    <camel.version>2.21.5</camel.version>
     <fabric8-maven-plugin.version>3.2.30</fabric8-maven-plugin.version>
     <hamcrest.version>1.3</hamcrest.version>
     <jackson.version>2.8.11</jackson.version>
@@ -57,10 +58,12 @@
     <jetty-maven-plugin.version>9.4.5.v20170502</jetty-maven-plugin.version>
     <jsonschema2pojo-maven-plugin.version>0.4.37</jsonschema2pojo-maven-plugin.version>
     <junit.version>4.12</junit.version>
+    <karaf.version>4.1.7</karaf.version>
     <keytool-maven-plugin.version>1.5</keytool-maven-plugin.version>
     <license-maven-plugin.version>3.0</license-maven-plugin.version>
     <lifecycle-mapping.version>1.0.0</lifecycle-mapping.version>
     <log4j2.version>2.8.1</log4j2.version>
+    <osgi.include.resource>{maven-resources}</osgi.include.resource>
     <resteasy.version>3.6.1.Final</resteasy.version>
     <maven-version>3.5.0</maven-version>
     <maven-bundle-plugin.version>3.2.0</maven-bundle-plugin.version>
@@ -73,6 +76,7 @@
     <maven-surefire-plugin.version>2.22.1</maven-surefire-plugin.version>
     <mockito.version>2.8.47</mockito.version>
     <osgi.symbolic.name>${project.artifactId}</osgi.symbolic.name>
+    <osgi.import.pkg>*</osgi.import.pkg>
     <resteasy-spring-boot-starter.version>1.0.1.Final</resteasy-spring-boot-starter.version>
     <slf4j.version>1.7.23</slf4j.version>
     <spring.version>4.3.20.RELEASE</spring.version>
@@ -83,6 +87,7 @@
     <swagger2markup-maven-plugin.version>1.3.7</swagger2markup-maven-plugin.version>
     <twitter4j.version>4.0.6</twitter4j.version>
     <woodstox.version>4.4.1</woodstox.version>
+    <xalan-bundle-version>2.7.2_3</xalan-bundle-version>
     <xsom.version>20140925</xsom.version>
     <xmlunit.version>2.2.1</xmlunit.version>
   </properties>
@@ -190,6 +195,11 @@
       <dependency>
         <groupId>io.atlasmap</groupId>
         <artifactId>atlas-itests-core</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.atlasmap</groupId>
+        <artifactId>atlas-itests-fieldaction-override</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>
@@ -332,6 +342,11 @@
       </dependency>
       <dependency>
         <groupId>org.apache.camel</groupId>
+        <artifactId>camel-blueprint</artifactId>
+        <version>${camel.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.camel</groupId>
         <artifactId>camel-core</artifactId>
         <version>${camel.version}</version>
       </dependency>
@@ -352,8 +367,24 @@
       </dependency>
       <dependency>
         <groupId>org.apache.camel</groupId>
+        <artifactId>camel-test-karaf</artifactId>
+        <version>${camel.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.camel</groupId>
         <artifactId>camel-test-spring</artifactId>
         <version>${camel.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.karaf</groupId>
+        <artifactId>apache-karaf</artifactId>
+        <type>tar.gz</type>
+        <version>${karaf.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.karaf.features</groupId>
+        <artifactId>org.apache.karaf.features.core</artifactId>
+        <version>${karaf.version}</version>
       </dependency>
       <dependency>
         <groupId>org.apache.logging.log4j</groupId>
@@ -734,9 +765,6 @@
         <inherited>true</inherited>
         <extensions>true</extensions>
         <configuration>
-          <versions>
-            <md.osgi.version>${project.version}</md.osgi.version>
-          </versions>
           <excludeDependencies>${osgi.exclude.dependencies}</excludeDependencies>
           <instructions>
             <Bundle-Name>${project.name}</Bundle-Name>
@@ -744,15 +772,12 @@
             <Bundle-DocURL>${project.url}</Bundle-DocURL>
             <Export-Package>${osgi.export.pkg}</Export-Package>
             <Import-Package>${osgi.import.pkg}</Import-Package>
+            <Export-Service>${osgi.export.service}</Export-Service> 
             <Implementation-Title>${project.description}</Implementation-Title>
             <Implementation-Version>${project.version}</Implementation-Version>
             <Embed-Dependency>${osgi.embed.dependency}</Embed-Dependency>
             <Embed-Transitive>${osgi.embed.transitive}</Embed-Transitive>
-            <!-- <Private-Package>${md.osgi.private.pkg}</Private-Package> 
-              <Bundle-Activator>${md.osgi.activator}</Bundle-Activator> <DynamicImport-Package>${md.osgi.dynamic}</DynamicImport-Package> 
-              <Include-Resource>${md.osgi.resource}</Include-Resource> <_versionpolicy>${md.osgi.import.default.version}</_versionpolicy> 
-              <_failok>${md.osgi.failok}</_failok> <Export-Service>${md.osgi.services.export}</Export-Service> 
-              <Service-Component>${md.osgi.service.component}</Service-Component> -->
+            <Include-Resource>${osgi.include.resource}</Include-Resource>
           </instructions>
         </configuration>
       </plugin>

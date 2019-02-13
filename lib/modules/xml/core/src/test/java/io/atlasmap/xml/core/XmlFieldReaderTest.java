@@ -54,7 +54,7 @@ import io.atlasmap.xml.v2.XmlNamespace;
 import io.atlasmap.xml.v2.XmlNamespaces;
 
 public class XmlFieldReaderTest {
-    private XmlFieldReader reader = new XmlFieldReader(DefaultAtlasConversionService.getInstance());
+    private XmlFieldReader reader = new XmlFieldReader(XmlFieldReader.class.getClassLoader(), DefaultAtlasConversionService.getInstance());
 
     @Test
     public void testReadDocumentSetElementValueAsString() throws Exception {
@@ -237,8 +237,7 @@ public class XmlFieldReaderTest {
         namespaces.put("http://www.example.com/y/", "y");
         namespaces.put("http://www.example.com/x/", "");
 
-        XmlFieldReader multipleNamespacesReader = new XmlFieldReader(DefaultAtlasConversionService.getInstance(),
-                namespaces);
+        XmlFieldReader multipleNamespacesReader = new XmlFieldReader(XmlFieldReader.class.getClassLoader(), DefaultAtlasConversionService.getInstance(), namespaces);
         multipleNamespacesReader.setDocument(doc, true);
         AtlasInternalSession session = mock(AtlasInternalSession.class);
         mockDataSources(docId, session);

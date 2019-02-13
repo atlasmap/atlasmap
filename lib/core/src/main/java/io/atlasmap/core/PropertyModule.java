@@ -37,6 +37,7 @@ public class PropertyModule implements AtlasModule {
     private AtlasPropertyStrategy propertyStrategy;
     private AtlasConversionService conversionService;
     private AtlasFieldActionService fieldActionService;
+    private ClassLoader classLoader;
 
     public PropertyModule(AtlasPropertyStrategy propertyStrategy) {
         this.propertyStrategy = propertyStrategy;
@@ -50,6 +51,16 @@ public class PropertyModule implements AtlasModule {
     @Override
     public void destroy() {
         // no-op
+    }
+
+    @Override
+    public void setClassLoader(ClassLoader classLoader) {
+        this.classLoader = classLoader;
+    }
+
+    @Override
+    public ClassLoader getClassLoader() {
+        return this.classLoader;
     }
 
     @Override

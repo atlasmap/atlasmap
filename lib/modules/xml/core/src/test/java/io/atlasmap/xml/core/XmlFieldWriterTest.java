@@ -50,7 +50,8 @@ public class XmlFieldWriterTest {
     private Document document = null;
     private String seedDocument = null;
     private Map<String, String> namespaces = new HashMap<>();
-    private XmlFieldReader reader = new XmlFieldReader(DefaultAtlasConversionService.getInstance());
+    private XmlFieldReader reader = new XmlFieldReader(XmlFieldReader.class.getClassLoader(), DefaultAtlasConversionService.getInstance());
+    private XmlIOHelper xmlHelper = new XmlIOHelper(XmlIOHelper.class.getClassLoader());
 
     @Before
     public void setup() {
@@ -61,7 +62,7 @@ public class XmlFieldWriterTest {
     }
 
     public void createWriter() throws Exception {
-        writer = new XmlFieldWriter(namespaces, seedDocument);
+        writer = new XmlFieldWriter(XmlFieldWriter.class.getClassLoader(), namespaces, seedDocument);
         this.document = writer.getDocument();
         assertNotNull(document);
     }
@@ -187,7 +188,7 @@ public class XmlFieldWriterTest {
          * document)).ignoreWhitespace().build(); assertFalse(diff.toString(),
          * diff.hasDifferences());
          */
-        String actual = XmlIOHelper.writeDocumentToString(true, writer.getDocument());
+        String actual = xmlHelper.writeDocumentToString(true, writer.getDocument());
         expected = expected.replaceAll("\n|\r", "");
         expected = expected.replaceAll("> *?<", "><");
         expected = expected.replace("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>", "");
@@ -543,7 +544,7 @@ public class XmlFieldWriterTest {
 
     private void writeToFile(String fieldPath, Path path, Object testObject) throws Exception {
         writeValue(fieldPath, testObject.toString());
-        String output = XmlIOHelper.writeDocumentToString(true, writer.getDocument());
+        String output = xmlHelper.writeDocumentToString(true, writer.getDocument());
         Files.write(path, output.getBytes());
     }
 

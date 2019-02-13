@@ -31,8 +31,7 @@
   <name>Atlas :: Java Core</name>
 
   <properties>
-    <osgi.export.pkg>io.atlasmap.java.inspect</osgi.export.pkg>
-    <osgi.import.pkg>io.atlasmap.java.v2;version="[1.1,2)"</osgi.import.pkg>
+    <osgi.export.pkg>io.atlasmap.java.core,io.atlasmap.java.inspect</osgi.export.pkg>
   </properties>
 
   <dependencies>

@@ -46,11 +46,12 @@ public class XmlFieldWriter extends XmlFieldTransformer implements AtlasFieldWri
     private boolean ignoreMissingNamespaces = true;
 
     public XmlFieldWriter() throws AtlasException {
-        this(new HashMap<>(), null);
+        this(XmlFieldWriter.class.getClassLoader(), new HashMap<>(), null);
     }
 
-    public XmlFieldWriter(Map<String, String> namespaces, String seedDocument) throws AtlasException {
-        super(namespaces);
+    public XmlFieldWriter(ClassLoader classLoader, Map<String, String> namespaces, String seedDocument) throws AtlasException {
+        super(classLoader, namespaces);
+        this.classLoader = classLoader;
         this.document = createDocument(namespaces, seedDocument);
         // check to see if the seed document has namespaces
         seedDocumentNamespaces(document);
@@ -75,7 +76,7 @@ public class XmlFieldWriter extends XmlFieldTransformer implements AtlasFieldWri
         for (XmlSegmentContext segment : path.getXmlSegments(false)) {
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Now processing segment: {}", segment);
-                LOG.debug("Parent element is currently: {}", XmlIOHelper.writeDocumentToString(true, parentNode));
+                LOG.debug("Parent element is currently: {}", xmlHelper.writeDocumentToString(true, parentNode));
             }
             if (parentNode == null) {
                 // processing root node
@@ -141,7 +142,7 @@ public class XmlFieldWriter extends XmlFieldTransformer implements AtlasFieldWri
     private void writeValue(Element parentNode, XmlSegmentContext segment, Field field) throws AtlasException {
         if (LOG.isDebugEnabled()) {
             LOG.debug("Writing field value in parent node '{}', parentNode: {}",
-                    segment, XmlIOHelper.writeDocumentToString(true, parentNode));
+                    segment, xmlHelper.writeDocumentToString(true, parentNode));
         }
         String value = convertValue(field);
         if (segment.isAttribute()) {
@@ -175,14 +176,14 @@ public class XmlFieldWriter extends XmlFieldTransformer implements AtlasFieldWri
         }
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug("Parent node after value written: {}", XmlIOHelper.writeDocumentToString(true, parentNode));
+            LOG.debug("Parent node after value written: {}", xmlHelper.writeDocumentToString(true, parentNode));
         }
     }
 
     private Element getChildNode(Element parentNode, XmlSegmentContext parentSegment, XmlSegmentContext segment) throws AtlasException {
         if (LOG.isDebugEnabled()) {
             LOG.debug("Looking for child node '{}' in parent '{}': {}",
-                    segment, parentSegment, XmlIOHelper.writeDocumentToString(true, parentNode));
+                    segment, parentSegment, xmlHelper.writeDocumentToString(true, parentNode));
         }
         if (parentNode == null) {
             return null;
@@ -210,7 +211,7 @@ public class XmlFieldWriter extends XmlFieldTransformer implements AtlasFieldWri
                 LOG.debug("Could not find child node '{}' in parent '{}'", segment, parentSegment);
             } else {
                 LOG.debug("Found child node '{}' in parent '{}', class: {}, node: {}",
-                        segment, parentSegment, childNode.getClass().getName(), XmlIOHelper.writeDocumentToString(true, childNode));
+                        segment, parentSegment, childNode.getClass().getName(), xmlHelper.writeDocumentToString(true, childNode));
             }
         }
         return childNode;
@@ -252,7 +253,7 @@ public class XmlFieldWriter extends XmlFieldTransformer implements AtlasFieldWri
         }
         if (LOG.isDebugEnabled()) {
             LOG.debug("Parent Node '{}' after adding child parent node '{}': {}",
-                    parentSegment, segment, XmlIOHelper.writeDocumentToString(true, parentNode));
+                    parentSegment, segment, xmlHelper.writeDocumentToString(true, parentNode));
         }
         return childNode;
     }

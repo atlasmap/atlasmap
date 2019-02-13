@@ -4,7 +4,7 @@
   <DataSource dataSourceType="Source"
     uri="atlas:java?className=io.atlasmap.java.test.SourceOrderList" />
   <DataSource dataSourceType="Target"
-    uri="atlas:java?className=io.atlasmap.reference.NoAbstractTargetOrderList" />
+    uri="atlas:java?className=io.atlasmap.itests.reference.NoAbstractTargetOrderList" />
   <Mappings>
     <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:type="Mapping" mappingType="Map">
