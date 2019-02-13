@@ -330,7 +330,7 @@ export class InitializationService {
               this.fetchFieldActions();
             }
 
-            this.cfg.mappingService.validateMappings();
+            this.cfg.mappingService.notifyMappingUpdated();
             this.updateStatus();
           })
           .catch((error: any) => {
@@ -351,161 +351,179 @@ export class InitializationService {
       });
   }
 
-  initialize(): void {
-
-    if (this.cfg.mappingService == null) {
-      this.cfg.errorService.warn('Mapping service is not configured, validation service will not be used.', null);
-    } else if (this.cfg.initCfg.baseMappingServiceUrl == null) {
-      this.cfg.errorService.warn('Mapping service URL is not configured, validation service will not be used.', null);
-    }
-
-    if (this.cfg.initCfg.discardNonMockSources) {
-      this.cfg.sourceDocs = [];
-      this.cfg.targetDocs = [];
-    }
-
-    if (this.cfg.initCfg.addMockJSONMappings) {
-      const mappingDefinition: MappingDefinition = new MappingDefinition();
-      const mappingJSON: any = InitializationService.createExampleMappingsJSON();
-      MappingSerializer.deserializeMappingServiceJSON(mappingJSON, mappingDefinition, this.cfg);
-      this.cfg.mappings = mappingDefinition;
-    }
-
-    if (this.cfg.initCfg.addMockJavaSources || this.cfg.initCfg.addMockJavaSingleSource) {
-      this.addJavaDocument('twitter4j.Status', true);
-      if (this.cfg.initCfg.addMockJavaSources) {
-        this.addJavaDocument('io.atlasmap.java.test.TargetTestClass', true);
-        this.addJavaDocument('io.atlasmap.java.test.SourceContact', true);
-        this.addJavaDocument('io.atlasmap.java.test.SourceAddress', true);
-        this.addJavaDocument('io.atlasmap.java.test.TestListOrders', true);
-        this.addJavaDocument('io.atlasmap.java.test.TargetOrderArray', true);
-        this.addJavaDocument('io.atlasmap.java.test.SourceFlatPrimitiveClass', true);
-        this.addJavaDocument('io.atlasmap.java.test.SourceOrder', true);
-        this.addJavaDocument('io.atlasmap.java.test.DateTimeClass', true);
-        this.addJavaDocument('io.atlasmap.java.test.SourceCollectionsClass', true);
-        this.addJavaDocument('io.atlasmap.java.test.BaseOrder$SomeStaticClass', true);
+  async initialize(): Promise<boolean> {
+    return new Promise<boolean>((resolve, reject) => {
+      this.cfg.fieldActionMetadata = null;
+      if (this.cfg.mappingService == null) {
+        this.cfg.errorService.warn('Mapping service is not configured, validation service will not be used.', null);
+      } else if (this.cfg.initCfg.baseMappingServiceUrl == null) {
+        this.cfg.errorService.warn('Mapping service URL is not configured, validation service will not be used.', null);
       }
-    }
 
-    if (this.cfg.initCfg.addMockJavaCachedSource) {
-      const docDef: DocumentDefinition = this.addJavaDocument('io.atlasmap.java.test.Name', true);
-      docDef.inspectionResult = DocumentManagementService.generateMockJavaDoc();
-    }
-
-    if (this.cfg.initCfg.addMockXMLInstanceSources) {
-      this.addNonJavaDocument('XMLInstanceSource', DocumentType.XML, InspectionType.INSTANCE,
-        DocumentManagementService.generateMockInstanceXMLDoc(), true);
-    }
-
-    if (this.cfg.initCfg.addMockXMLSchemaSources) {
-      this.addNonJavaDocument('XMLSchemaSource', DocumentType.XML, InspectionType.SCHEMA,
-        DocumentManagementService.generateMockSchemaXMLDoc(), true);
-    }
-
-    if (this.cfg.initCfg.addMockJSONSources || this.cfg.initCfg.addMockJSONInstanceSources) {
-      this.addNonJavaDocument('JSONInstanceSource', DocumentType.JSON, InspectionType.INSTANCE,
-        DocumentManagementService.generateMockJSONInstanceDoc(), true);
-    }
-
-    if (this.cfg.initCfg.addMockJSONSchemaSources) {
-      this.addNonJavaDocument('JSONSchemaSource', DocumentType.JSON, InspectionType.SCHEMA,
-        DocumentManagementService.generateMockJSONSchemaDoc(), true);
-    }
-
-    if (this.cfg.initCfg.addMockJavaTarget) {
-      this.addJavaDocument('io.atlasmap.java.test.TargetTestClass', false);
-      this.addJavaDocument('io.atlasmap.java.test.SourceContact', false);
-      this.addJavaDocument('io.atlasmap.java.test.SourceAddress', false);
-      this.addJavaDocument('io.atlasmap.java.test.TestListOrders', false);
-      this.addJavaDocument('io.atlasmap.java.test.TargetOrderArray', false);
-      this.addJavaDocument('io.atlasmap.java.test.SourceFlatPrimitiveClass', false);
-      this.addJavaDocument('io.atlasmap.java.test.SourceOrder', false);
-      this.addJavaDocument('io.atlasmap.java.test.DateTimeClass', false);
-      this.addJavaDocument('io.atlasmap.java.test.TargetCollectionsClass', false);
-    }
-
-    if (this.cfg.initCfg.addMockJavaCachedTarget) {
-      const docDef: DocumentDefinition = this.addJavaDocument('io.atlasmap.java.test.Name', false);
-      docDef.inspectionResult = DocumentManagementService.generateMockJavaDoc();
-    }
-
-    if (this.cfg.initCfg.addMockXMLInstanceTarget) {
-      this.addNonJavaDocument('XMLInstanceTarget', DocumentType.XML, InspectionType.INSTANCE,
-        DocumentManagementService.generateMockInstanceXMLDoc(), false);
-    }
-
-    if (this.cfg.initCfg.addMockXMLSchemaTarget) {
-      this.addNonJavaDocument('XMLSchemaTarget', DocumentType.XML, InspectionType.SCHEMA,
-        DocumentManagementService.generateMockSchemaXMLDoc(), false);
-    }
-
-    if (this.cfg.initCfg.addMockJSONTarget || this.cfg.initCfg.addMockJSONInstanceTarget) {
-      this.addNonJavaDocument('JSONInstanceTarget', DocumentType.JSON, InspectionType.INSTANCE,
-        DocumentManagementService.generateMockJSONInstanceDoc(), false);
-    }
-
-    if (this.cfg.initCfg.addMockJSONSchemaTarget) {
-      this.addNonJavaDocument('JSONSchemaTarget', DocumentType.JSON, InspectionType.SCHEMA,
-        DocumentManagementService.generateMockJSONSchemaDoc(), false);
-    }
-
-    // load field actions
-    this.fetchFieldActions();
-
-    // load documents
-    if (!this.cfg.isClassPathResolutionNeeded()) {
-      this.fetchDocuments();
-    } else {
-      this.updateLoadingStatus('Loading Maven class path.');
-      // fetch class path
-      this.cfg.documentService.fetchClassPath().toPromise()
-        .then((classPath: string) => {
-          this.cfg.initCfg.classPath = classPath;
-          this.fetchDocuments();
-          this.updateStatus();
-        })
-        .catch((error: any) => {
-          if (error.status === 0) {
-            this.handleError('Fatal network error: Could not connect to AtlasMap design runtime service.', error);
-          } else {
-            this.handleError('Could not load Maven class path: ' + error.status + ' ' + error.statusText, error);
-          }
-        });
-    }
-
-    this.cfg.mappingService.getCurrentMappingCatalog().subscribe((value: Uint8Array) => {
-
-      // If value is null then no compressed mappings catalog is available on the server.
-      if (value === null) {
-        return;
+      if (this.cfg.initCfg.discardNonMockSources) {
+        this.cfg.sourceDocs = [];
+        this.cfg.targetDocs = [];
       }
-      this.processMappingsCatalogFiles(value, true);
-    });
 
-    // load mappings
-    if (this.cfg.mappings != null) {
-      this.updateStatus();
-    } else {
-      this.cfg.mappings = new MappingDefinition();
-      if (this.cfg.mappingFiles.length > 0) {
-        this.initMappings(this.cfg.mappingFiles);
+      if (this.cfg.initCfg.addMockJSONMappings) {
+        const mappingDefinition: MappingDefinition = new MappingDefinition();
+        const mappingJSON: any = InitializationService.createExampleMappingsJSON();
+        MappingSerializer.deserializeMappingServiceJSON(mappingJSON, mappingDefinition, this.cfg);
+        this.cfg.mappings = mappingDefinition;
+      }
+
+      if (this.cfg.initCfg.addMockJavaSources || this.cfg.initCfg.addMockJavaSingleSource) {
+        this.addJavaDocument('twitter4j.Status', true);
+        if (this.cfg.initCfg.addMockJavaSources) {
+          this.addJavaDocument('io.atlasmap.java.test.TargetTestClass', true);
+          this.addJavaDocument('io.atlasmap.java.test.SourceContact', true);
+          this.addJavaDocument('io.atlasmap.java.test.SourceAddress', true);
+          this.addJavaDocument('io.atlasmap.java.test.TestListOrders', true);
+          this.addJavaDocument('io.atlasmap.java.test.TargetOrderArray', true);
+          this.addJavaDocument('io.atlasmap.java.test.SourceFlatPrimitiveClass', true);
+          this.addJavaDocument('io.atlasmap.java.test.SourceOrder', true);
+          this.addJavaDocument('io.atlasmap.java.test.DateTimeClass', true);
+          this.addJavaDocument('io.atlasmap.java.test.SourceCollectionsClass', true);
+          this.addJavaDocument('io.atlasmap.java.test.BaseOrder$SomeStaticClass', true);
+        }
+      }
+
+      if (this.cfg.initCfg.addMockJavaCachedSource) {
+        const docDef: DocumentDefinition = this.addJavaDocument('io.atlasmap.java.test.Name', true);
+        docDef.inspectionResult = DocumentManagementService.generateMockJavaDoc();
+      }
+
+      if (this.cfg.initCfg.addMockXMLInstanceSources) {
+        this.addNonJavaDocument('XMLInstanceSource', DocumentType.XML, InspectionType.INSTANCE,
+          DocumentManagementService.generateMockInstanceXMLDoc(), true);
+      }
+
+      if (this.cfg.initCfg.addMockXMLSchemaSources) {
+        this.addNonJavaDocument('XMLSchemaSource', DocumentType.XML, InspectionType.SCHEMA,
+          DocumentManagementService.generateMockSchemaXMLDoc(), true);
+      }
+
+      if (this.cfg.initCfg.addMockJSONSources || this.cfg.initCfg.addMockJSONInstanceSources) {
+        this.addNonJavaDocument('JSONInstanceSource', DocumentType.JSON, InspectionType.INSTANCE,
+          DocumentManagementService.generateMockJSONInstanceDoc(), true);
+      }
+
+      if (this.cfg.initCfg.addMockJSONSchemaSources) {
+        this.addNonJavaDocument('JSONSchemaSource', DocumentType.JSON, InspectionType.SCHEMA,
+          DocumentManagementService.generateMockJSONSchemaDoc(), true);
+      }
+
+      if (this.cfg.initCfg.addMockJavaTarget) {
+        this.addJavaDocument('io.atlasmap.java.test.TargetTestClass', false);
+        this.addJavaDocument('io.atlasmap.java.test.SourceContact', false);
+        this.addJavaDocument('io.atlasmap.java.test.SourceAddress', false);
+        this.addJavaDocument('io.atlasmap.java.test.TestListOrders', false);
+        this.addJavaDocument('io.atlasmap.java.test.TargetOrderArray', false);
+        this.addJavaDocument('io.atlasmap.java.test.SourceFlatPrimitiveClass', false);
+        this.addJavaDocument('io.atlasmap.java.test.SourceOrder', false);
+        this.addJavaDocument('io.atlasmap.java.test.DateTimeClass', false);
+        this.addJavaDocument('io.atlasmap.java.test.TargetCollectionsClass', false);
+      }
+
+      if (this.cfg.initCfg.addMockJavaCachedTarget) {
+        const docDef: DocumentDefinition = this.addJavaDocument('io.atlasmap.java.test.Name', false);
+        docDef.inspectionResult = DocumentManagementService.generateMockJavaDoc();
+      }
+
+      if (this.cfg.initCfg.addMockXMLInstanceTarget) {
+        this.addNonJavaDocument('XMLInstanceTarget', DocumentType.XML, InspectionType.INSTANCE,
+          DocumentManagementService.generateMockInstanceXMLDoc(), false);
+      }
+
+      if (this.cfg.initCfg.addMockXMLSchemaTarget) {
+        this.addNonJavaDocument('XMLSchemaTarget', DocumentType.XML, InspectionType.SCHEMA,
+          DocumentManagementService.generateMockSchemaXMLDoc(), false);
+      }
+
+      if (this.cfg.initCfg.addMockJSONTarget || this.cfg.initCfg.addMockJSONInstanceTarget) {
+        this.addNonJavaDocument('JSONInstanceTarget', DocumentType.JSON, InspectionType.INSTANCE,
+          DocumentManagementService.generateMockJSONInstanceDoc(), false);
+      }
+
+      if (this.cfg.initCfg.addMockJSONSchemaTarget) {
+        this.addNonJavaDocument('JSONSchemaTarget', DocumentType.JSON, InspectionType.SCHEMA,
+          DocumentManagementService.generateMockJSONSchemaDoc(), false);
+      }
+
+      // load field actions
+      this.fetchFieldActions();
+
+      // load documents
+      if (!this.cfg.isClassPathResolutionNeeded()) {
+        this.fetchDocuments();
       } else {
-        this.cfg.mappingService.findMappingFiles('UI').toPromise()
-          .then((files: string[]) => {
-            this.initMappings(files);
-          },
-          (error: any) => {
+        this.updateLoadingStatus('Loading Maven class path.');
+        // fetch class path
+        this.cfg.documentService.fetchClassPath().toPromise()
+          .then((classPath: string) => {
+            this.cfg.initCfg.classPath = classPath;
+            this.fetchDocuments();
+            this.updateStatus();
+          })
+          .catch((error: any) => {
             if (error.status === 0) {
               this.handleError('Fatal network error: Could not connect to AtlasMap design runtime service.', error);
+            } else {
+              this.handleError('Could not load Maven class path: ' + error.status + ' ' + error.statusText, error);
             }
-          }
-        );
+            resolve(false);
+          });
       }
-    }
+
+      this.cfg.mappingService.getCurrentMappingCatalog().subscribe( async(value: Uint8Array) => {
+
+        // If value is null then no compressed mappings catalog is available on the server.
+        if (value === null) {
+          if (this.cfg.mappings === null) {
+            this.cfg.mappings = new MappingDefinition();
+          }
+          resolve(true);
+          return;
+        }
+        await this.processMappingsCatalogFiles(value, true);
+
+        // load mappings
+        if (this.cfg.mappings != null) {
+          this.updateStatus();
+        } else {
+          this.cfg.mappings = new MappingDefinition();
+          if (this.cfg.mappingFiles.length > 0) {
+            await this.initMappings(this.cfg.mappingFiles);
+            resolve(true);
+          } else {
+            this.cfg.mappingService.findMappingFiles('UI').toPromise()
+              .then(async(files: string[]) => {
+                await this.initMappings(files);
+                resolve(true);
+              },
+              (error: any) => {
+                if (error.status === 0) {
+                  this.handleError('Fatal network error: Could not connect to AtlasMap design runtime service.', error);
+                  resolve(false);
+                }
+              }
+            );
+          }
+        }
+      });
+    });
   }
 
-  async initMappings(mappingFiles: string[]) {
-      return (await this.fetchMappings(mappingFiles));
+  /**
+   * Fetch and initialize user mappings from the runtime service.
+   *
+   * @param mappingFiles
+   */
+  async initMappings(mappingFiles: string[]): Promise<boolean> {
+    return new Promise<boolean>( async(resolve, reject) => {
+      await this.fetchMappings(mappingFiles);
+      resolve(true);
+    });
   }
 
   processMappingsDocuments(mappingsSchemaAggregate: string): any {
@@ -531,7 +549,7 @@ export class InitializationService {
         metaFragment.inspectionType, (metaFragment.isSource === 'true'));
       fragIndex++;
     }
-    this.cfg.mappingService.validateMappings();
+    this.cfg.mappingService.notifyMappingUpdated();
     return mInfo;
   }
 
@@ -541,7 +559,8 @@ export class InitializationService {
    *
    * @param compressedContent - gzip binary buffer
    */
-  async processMappingsCatalogFiles(compressedContent: Uint8Array, useCatalogMappings: boolean) {
+  async processMappingsCatalogFiles(compressedContent: Uint8Array, useCatalogMappings: boolean): Promise<boolean> {
+    return new Promise<boolean>((resolve, reject) => {
     try {
 
       // Inflate the compressed content.
@@ -556,7 +575,7 @@ export class InitializationService {
         // Update .../target/mappings/atlasmapping-UI.nnnnnn.xml
         this.cfg.mappingService.setMappingToService(mInfo.exportMappings.value).toPromise()
           .then(async(result: boolean) => {
-          }).catch((error: any) => {
+        }).catch((error: any) => {
             if (error.status === 0) {
               this.cfg.errorService.mappingError(
                 'Fatal network error: Unable to connect to the AtlasMap design runtime service.', error);
@@ -565,6 +584,7 @@ export class InitializationService {
                 'Unable to update the mappings file to the AtlasMap design runtime service.  ' +
                    error.status + ' ' + error.statusText, error);
             }
+            resolve(false);
           });
       }
 
@@ -572,6 +592,7 @@ export class InitializationService {
       const fileContent: Blob = new Blob([compressedContent], {type: 'application/octet-stream'});
       this.cfg.mappingService.setBinaryFileToService(fileContent, this.cfg.initCfg.baseMappingServiceUrl + 'mapping/GZ/0').toPromise()
         .then(async(result: boolean) => {
+        resolve(true);
       }).catch((error: any) => {
         if (error.status === 0) {
           this.cfg.errorService.mappingError(
@@ -582,11 +603,11 @@ export class InitializationService {
               error.status + ' ' + error.statusText, error);
         }
       });
-
     } catch (error) {
       this.cfg.errorService.mappingError('Unable to decompress the aggregate mappings catalog buffer.\n', error);
-      return;
+      resolve(false);
     }
+    });
   }
 
   addJavaDocument(className: string, isSource: boolean): DocumentDefinition {

@@ -815,7 +815,8 @@ export class MappingManagementService {
   }
 
   notifyMappingUpdated(): void {
-    if (this.cfg.mappings.activeMapping != null && this.cfg.mappings.activeMapping.hasFullyMappedPair()) {
+    if (this.cfg.mappings != null && this.cfg.mappings.activeMapping != null &&
+      this.cfg.mappings.activeMapping.hasFullyMappedPair()) {
       this.validateMappings();
     }
     this.mappingUpdatedSource.next();
@@ -1031,7 +1032,11 @@ export class MappingManagementService {
           await this.cfg.initializationService.processMappingsCatalogFiles(value, true);
 
           try {
-            window.location.reload(true);
+            this.cfg.initCfg.initialized = false;
+            this.cfg.initCfg.mappingInitialized = false;
+            this.cfg.mappings = null;
+            this.cfg.initCfg.discardNonMockSources = true;
+            await this.cfg.initializationService.initialize();
           } catch (error) {
             this.cfg.errorService.mappingError('Unable to import the catalog file: \n' + mappingsFileName +
               '\n' + error.message, error);
@@ -1047,6 +1052,5 @@ export class MappingManagementService {
             'Unable to send the ADM file to the runtime service.  ' + error.status + ' ' + error.statusText, error);
         }
       });
-
   }
 }

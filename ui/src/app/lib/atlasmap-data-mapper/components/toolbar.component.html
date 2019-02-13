@@ -4,9 +4,10 @@
 
     <div *ngIf="!cfg.initCfg.disableNavbar" class="dropdown inline-block pull-left">
       <label [attr.class]="getCSSClass('importMappings')" *ngIf="!cfg.initCfg.disableNavbar"
-        tooltip="Import an AtlasMap mappings catalog file (.adm) or Java archive (.jar)." placement="bottom" style="font-size:20px;margin-top:2px;">
-        <input type="file" accept="{{ getFileSuffix() }}" name="usermappingsfile" style="display:none" id="usermappingsfile"
-          (change)="processImportedFile($event)">
+        tooltip="Import an AtlasMap mappings catalog file (.adm) or Java archive (.jar)." placement="bottom"
+          style="font-size:20px;margin-top:2px;">
+        <input type="file" accept="{{ getFileSuffix() }}" name="usermappingsfile" style="display:none"
+         id="usermappingsfile" (change)="processImportedFile($event)">
       </label>
     </div>
 
