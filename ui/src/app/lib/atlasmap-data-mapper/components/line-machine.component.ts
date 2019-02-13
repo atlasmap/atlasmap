@@ -198,6 +198,7 @@ export class LineMachineComponent implements OnInit, OnDestroy {
 
   redrawLinesForMappings(): void {
     if (!this.cfg.initCfg.initialized || !this.cfg.mappings) {
+      this.clearLines();
       return;
     }
     if (!this.cfg.mappings.activeMapping) {

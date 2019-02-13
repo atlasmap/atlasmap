@@ -18,7 +18,6 @@ import { Component, Input, OnInit } from '@angular/core';
 import { InspectionType } from '../common/config.types';
 import { ConfigModel } from '../models/config.model';
 import { InitializationService } from '../services/initialization.service';
-
 import { ModalWindowComponent } from './modal-window.component';
 import { TemplateEditComponent } from './template-edit.component';
 
@@ -67,6 +66,7 @@ export class ToolbarComponent implements OnInit {
     } else if (userFileSuffix === 'JAR') {
       this.cfg.documentService.processDocument(event.target.files[0], InspectionType.JAVA_CLASS, false);
     }
+    event.srcElement.value = null;
   }
 
   /**
@@ -163,7 +163,7 @@ export class ToolbarComponent implements OnInit {
 
   /**
    * Establish a modal window popup and if confirmed remove all mapping files and imported JARs from
-   * the server and restart the DM.
+   * the server and reinitialize the DM.
    */
   private resetAll(): void {
     this.modalWindow.reset();
@@ -172,11 +172,12 @@ export class ToolbarComponent implements OnInit {
     this.modalWindow.message = 'Are you sure you want to reset all mappings and clear all imported documents?';
     this.modalWindow.okButtonHandler = (mw: ModalWindowComponent) => {
 
-      this.cfg.mappingService.resetAll().toPromise().then((result: boolean) => {
+      this.cfg.mappingService.resetAll().toPromise().then( async(result: boolean) => {
         this.cfg.initCfg.initialized = false;
-        this.cfg.initCfg.mappingInitialized = true;
-        this.cfg.showMappingDetailTray = false;
-        window.location.reload(true);
+        this.cfg.initCfg.mappingInitialized = false;
+        this.cfg.mappings = null;
+        this.cfg.initCfg.discardNonMockSources = true;
+        await this.cfg.initializationService.initialize();
       }).catch((error: any) => {
         if (error.status === 0) {
           this.cfg.errorService.error('Fatal network error: Could not connect to AtlasMap design runtime service.', error);
