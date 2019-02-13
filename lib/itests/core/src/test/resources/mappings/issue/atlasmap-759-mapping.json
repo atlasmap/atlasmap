@@ -1,0 +1,102 @@
+{
+  "AtlasMapping": {
+    "jsonType":"io.atlasmap.v2.AtlasMapping","dataSource": [
+        {
+            "jsonType":"io.atlasmap.json.v2.JsonDataSource","id":"-LYbkepiv8lNqAFpXmwF","uri":"atlas:json:-LYbkepiv8lNqAFpXmwF","dataSourceType":"SOURCE"
+        },
+        {
+            "jsonType":"io.atlasmap.json.v2.JsonDataSource","id":"-LYbkkbvv8lNqAFpXmwF","uri":"atlas:json:-LYbkkbvv8lNqAFpXmwF","dataSourceType":"TARGET","template":null
+        }
+    ],
+    "mappings": {
+        "mapping": [
+            {
+                "jsonType":"io.atlasmap.v2.Collection","mappingType":"COLLECTION","collectionType":null,"mappings":
+                {
+                    "mapping":
+                    [
+                        {
+                            "jsonType":"io.atlasmap.v2.Mapping","mappingType":"MAP","id":"mapping.802827",
+                            "inputField": [
+                                {
+                                    "jsonType":"io.atlasmap.json.v2.JsonField","name":"first_name","path":"/<>/first_name","fieldType":"STRING","docId":"-LYbkepiv8lNqAFpXmwF","userCreated":false
+                                }
+                            ],
+                            "outputField": [
+                                {
+                                    "jsonType":"io.atlasmap.json.v2.JsonField","name":"A","path":"/<>/A","fieldType":"STRING","docId":"-LYbkkbvv8lNqAFpXmwF","userCreated":false
+                                }
+                            ]
+                        }
+                    ]
+                }
+            },
+            {
+                "jsonType":"io.atlasmap.v2.Collection","mappingType":"COLLECTION","collectionType":null,
+                "mappings": {
+                    "mapping": [
+                        {
+                            "jsonType":"io.atlasmap.v2.Mapping","mappingType":"MAP","id":"mapping.898813",
+                            "inputField": [
+                                {
+                                    "jsonType":"io.atlasmap.json.v2.JsonField","name":"last_name","path":"/<>/last_name","fieldType":"STRING","docId":"-LYbkepiv8lNqAFpXmwF","userCreated":false
+                                }
+                            ],"outputField": [
+                                {
+                                    "jsonType":"io.atlasmap.json.v2.JsonField","name":"B","path":"/<>/B","fieldType":"STRING","docId":"-LYbkkbvv8lNqAFpXmwF","userCreated":false
+                                }
+                            ]
+                        }
+                    ]
+                }
+            },
+            {
+                "jsonType":"io.atlasmap.v2.Collection","mappingType":"COLLECTION","collectionType":null,"mappings": {
+                    "mapping": [
+                        {
+                            "jsonType":"io.atlasmap.v2.Mapping","mappingType":"MAP","id":"mapping.3234",
+                            "inputField": [
+                                {
+                                    "jsonType":"io.atlasmap.json.v2.JsonField","name":"company","path":"/<>/company","fieldType":"STRING","docId":"-LYbkepiv8lNqAFpXmwF","userCreated":false
+                                }
+                            ],"outputField": [
+                                {
+                                    "jsonType":"io.atlasmap.json.v2.JsonField","name":"C","path":"/<>/C","fieldType":"STRING","docId":"-LYbkkbvv8lNqAFpXmwF","userCreated":false
+                                }
+                            ]
+                        }
+                    ]
+                }
+            },
+            {
+                "jsonType":"io.atlasmap.v2.Collection","mappingType":"COLLECTION","collectionType":null,
+                "mappings": {
+                    "mapping": [
+                        {
+                            "jsonType":"io.atlasmap.v2.Mapping","mappingType":"MAP","id":"mapping.948488",
+                            "inputField": [
+                                {
+                                    "jsonType":"io.atlasmap.json.v2.JsonField","name":"create_date","path":"/<>/create_date","fieldType":"STRING","docId":"-LYbkepiv8lNqAFpXmwF","userCreated":false
+                                }
+                            ],"outputField": [
+                                {
+                                    "jsonType":"io.atlasmap.json.v2.JsonField","name":"D","path":"/<>/D","fieldType":"STRING","docId":"-LYbkkbvv8lNqAFpXmwF","userCreated":false
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+        ]
+    },"name":"UI.659774",
+    "lookupTables":{
+      "lookupTable":[]
+    },
+    "constants":{
+      "constant":[]
+    },
+    "properties":{
+      "property":[]
+    }
+  }
+}
