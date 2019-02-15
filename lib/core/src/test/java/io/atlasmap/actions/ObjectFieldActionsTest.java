@@ -29,6 +29,7 @@ import org.junit.Test;
 import io.atlasmap.v2.CollectionSize;
 import io.atlasmap.v2.Contains;
 import io.atlasmap.v2.Equals;
+import io.atlasmap.v2.IsNull;
 import io.atlasmap.v2.ItemAt;
 import io.atlasmap.v2.Length;
 
@@ -36,111 +37,104 @@ public class ObjectFieldActionsTest {
 
     @Test
     public void testCollectionSize() {
-        assertEquals(new Integer(0), ObjectFieldActions.collectionSize(new CollectionSize(), new Boolean[0]));
-        assertEquals(new Integer(0), ObjectFieldActions.collectionSize(new CollectionSize(), new ArrayList<>()));
-        assertEquals(new Integer(0), ObjectFieldActions.collectionSize(new CollectionSize(), new HashMap<>()));
+        CollectionSize action = new CollectionSize();
+        assertEquals(new Integer(0), action.collectionSize(new Boolean[0]));
+        assertEquals(new Integer(0), action.collectionSize(new ArrayList<>()));
+        assertEquals(new Integer(0), action.collectionSize(new HashMap<>()));
         Object[] array = new Object[] {false, "foo", 2};
-        assertEquals(new Integer(3), ObjectFieldActions.collectionSize(new CollectionSize(), array));
-        assertEquals(new Integer(3), ObjectFieldActions.collectionSize(new CollectionSize(), Arrays.asList(array)));
+        assertEquals(new Integer(3), action.collectionSize(array));
+        assertEquals(new Integer(3), action.collectionSize(Arrays.asList(array)));
         Map<Object, Object> map = new HashMap<>();
         for (Object obj : array) {
             map.put(obj, obj);
         }
-        assertEquals(new Integer(3), ObjectFieldActions.collectionSize(new CollectionSize(), map));
+        assertEquals(new Integer(3), action.collectionSize(map));
     }
 
     @Test
     public void testContains() {
         Contains action = new Contains();
-        assertTrue(ObjectFieldActions.contains(action, null));
-        assertFalse(ObjectFieldActions.contains(action, ""));
+        assertTrue(action.contains(null));
+        assertFalse(action.contains(""));
         Object[] array = new Object[] {false, "foo", 2};
         Object[] arrayWithNull = new Object[] {false, null, "foo", 2};
-        assertFalse(ObjectFieldActions.contains(action, array));
-        assertTrue(ObjectFieldActions.contains(action, arrayWithNull));
-        assertFalse(ObjectFieldActions.contains(action, Arrays.asList(array)));
-        assertTrue(ObjectFieldActions.contains(action, Arrays.asList(arrayWithNull)));
+        assertFalse(action.contains(array));
+        assertTrue(action.contains(arrayWithNull));
+        assertFalse(action.contains(Arrays.asList(array)));
+        assertTrue(action.contains(Arrays.asList(arrayWithNull)));
         Map<Object, Object> map = new HashMap<>();
         for (Object obj : array) {
             map.put("key-" + obj, obj);
         }
-        assertFalse(ObjectFieldActions.contains(action, map));
+        assertFalse(action.contains(map));
         for (Object obj : arrayWithNull) {
             map.put("key-" + obj, obj);
         }
-        assertTrue(ObjectFieldActions.contains(action, map));
+        assertTrue(action.contains(map));
         action.setValue("foo");
-        assertFalse(ObjectFieldActions.contains(action, null));
-        assertFalse(ObjectFieldActions.contains(action, ""));
-        assertTrue(ObjectFieldActions.contains(action, "foobar"));
-        assertTrue(ObjectFieldActions.contains(action, array));
-        assertTrue(ObjectFieldActions.contains(action, Arrays.asList(array)));
-        assertTrue(ObjectFieldActions.contains(action, map));
+        assertFalse(action.contains(null));
+        assertFalse(action.contains(""));
+        assertTrue(action.contains("foobar"));
+        assertTrue(action.contains(array));
+        assertTrue(action.contains(Arrays.asList(array)));
+        assertTrue(action.contains(map));
         action.setValue("key-foo");
-        assertTrue(ObjectFieldActions.contains(action, map));
+        assertTrue(action.contains(map));
         action.setValue("6");
-        assertTrue(ObjectFieldActions.contains(action, 169));
+        assertTrue(action.contains(169));
         action.setValue("ru");
-        assertTrue(ObjectFieldActions.contains(action, true));
-    }
-
-    @Test(expected=IllegalArgumentException.class)
-    public void testContainsWithNullAction() {
-        ObjectFieldActions.contains(null, "");
+        assertTrue(action.contains(true));
     }
 
     @Test
     public void testEquals() {
         Equals action = new Equals();
-        assertTrue(ObjectFieldActions.equals(action, null));
+        assertTrue(action.execute(null));
         action.setValue("6");
-        assertFalse(ObjectFieldActions.equals(action, 169));
+        assertFalse(action.execute(169));
         action.setValue("169");
-        assertTrue(ObjectFieldActions.equals(action, 169));
+        assertTrue(action.execute(169));
         action.setValue("ru");
-        assertFalse(ObjectFieldActions.equals(action, true));
+        assertFalse(action.execute(true));
         action.setValue("true");
-        assertTrue(ObjectFieldActions.equals(action, true));
+        assertTrue(action.execute(true));
         action.setValue("b");
-        assertFalse(ObjectFieldActions.equals(action, 'a'));
+        assertFalse(action.execute('a'));
         action.setValue("a");
-        assertTrue(ObjectFieldActions.equals(action, 'a'));
-    }
-
-    @Test(expected=IllegalArgumentException.class)
-    public void testEqualsWithNullAction() {
-        ObjectFieldActions.equals(null, "");
+        assertTrue(action.execute('a'));
     }
 
     @Test
     public void testIsNull() {
-        assertTrue(ObjectFieldActions.isNull(null, null));
-        assertFalse(ObjectFieldActions.isNull(null, ""));
-        assertFalse(ObjectFieldActions.isNull(null, new Object[0]));
+        IsNull action = new IsNull();
+        assertTrue(action.isNull(null));
+        assertFalse(action.isNull(""));
+        assertFalse(action.isNull(new Object[0]));
     }
 
     @Test
     public void testItemAt() {
         ItemAt action = new ItemAt();
         action.setIndex(0);
-        assertEquals("one", ObjectFieldActions.itemAt(action, new String[] {"one", "two"}));
+        assertEquals("one", action.itemAt(new String[] {"one", "two"}));
         action.setIndex(1);
-        assertEquals("two", ObjectFieldActions.itemAt(action, new String[] {"one", "two"}));
+        assertEquals("two", action.itemAt(new String[] {"one", "two"}));
     }
 
     @Test(expected = ArrayIndexOutOfBoundsException.class)
     public void testItemAtOutOfBounds() {
         ItemAt action = new ItemAt();
         action.setIndex(2);
-        ObjectFieldActions.itemAt(action, new String[] {"one", "two"});
+        action.itemAt(new String[] {"one", "two"});
     }
 
     @Test
     public void testLength() {
-        assertEquals(new Integer(-1), ObjectFieldActions.length(new Length(), null));
-        assertEquals(new Integer(0), ObjectFieldActions.length(new Length(), ""));
-        assertEquals(new Integer(5), ObjectFieldActions.length(new Length(), " foo "));
-        assertEquals(new Integer(4), ObjectFieldActions.length(new Length(), true));
-        assertEquals(new Integer(3), ObjectFieldActions.length(new Length(), 169));
+        Length action = new Length();
+        assertEquals(new Integer(-1), action.length(null));
+        assertEquals(new Integer(0), action.length(""));
+        assertEquals(new Integer(5), action.length(" foo "));
+        assertEquals(new Integer(4), action.length(true));
+        assertEquals(new Integer(3), action.length(169));
     }
 }

@@ -24,9 +24,13 @@ import java.util.regex.Pattern;
 
 import org.junit.Test;
 
+import io.atlasmap.v2.ActionUtil;
 import io.atlasmap.v2.Capitalize;
+import io.atlasmap.v2.FileExtension;
 import io.atlasmap.v2.Lowercase;
 import io.atlasmap.v2.LowercaseChar;
+import io.atlasmap.v2.Normalize;
+import io.atlasmap.v2.RemoveFileExtension;
 import io.atlasmap.v2.SeparateByDash;
 import io.atlasmap.v2.SeparateByUnderscore;
 import io.atlasmap.v2.Trim;
@@ -39,100 +43,107 @@ public class StringSimpleFieldActionsTest {
 
     @Test
     public void testCapitalize() {
-        assertNull(StringSimpleFieldActions.capitalize(new Capitalize(), null));
-        assertEquals("", StringSimpleFieldActions.capitalize(new Capitalize(), ""));
-        assertEquals(" foo ", StringSimpleFieldActions.capitalize(new Capitalize(), " foo "));
-        assertEquals("   Foo", StringSimpleFieldActions.capitalize(new Capitalize(), "   Foo"));
-        assertEquals("FOo   ", StringSimpleFieldActions.capitalize(new Capitalize(), "fOo   "));
-        assertEquals("    foO   ", StringSimpleFieldActions.capitalize(new Capitalize(), "    foO   "));
-        assertEquals("\t\n   FOO", StringSimpleFieldActions.capitalize(new Capitalize(), "\t\n   FOO"));
-        assertEquals("\t\n   FOO\f\r", StringSimpleFieldActions.capitalize(new Capitalize(), "\t\n   FOO\f\r"));
+        Capitalize action = new Capitalize();
+        assertNull(action.capitalize(null));
+        assertEquals("", action.capitalize(""));
+        assertEquals(" foo ", action.capitalize(" foo "));
+        assertEquals("   Foo", action.capitalize("   Foo"));
+        assertEquals("FOo   ", action.capitalize("fOo   "));
+        assertEquals("    foO   ", action.capitalize("    foO   "));
+        assertEquals("\t\n   FOO", action.capitalize("\t\n   FOO"));
+        assertEquals("\t\n   FOO\f\r", action.capitalize("\t\n   FOO\f\r"));
     }
 
     @Test
     public void testFileExtension() {
-        assertNull(StringSimpleFieldActions.fileExtension(null, null));
-        assertNull(StringSimpleFieldActions.fileExtension(null, ""));
-        assertNull(StringSimpleFieldActions.fileExtension(null, "foo"));
-        assertEquals("", StringSimpleFieldActions.fileExtension(null, "."));
-        assertEquals("", StringSimpleFieldActions.fileExtension(null, "foo."));
-        assertEquals("bar", StringSimpleFieldActions.fileExtension(null, "foo.bar"));
-        assertEquals("bar", StringSimpleFieldActions.fileExtension(null, "foo.foo.bar"));
+        FileExtension action = new FileExtension();
+        assertNull(action.fileExtension(null));
+        assertNull(action.fileExtension(""));
+        assertNull(action.fileExtension("foo"));
+        assertEquals("", action.fileExtension("."));
+        assertEquals("", action.fileExtension("foo."));
+        assertEquals("bar", action.fileExtension("foo.bar"));
+        assertEquals("bar", action.fileExtension("foo.foo.bar"));
     }
 
     @Test
     public void testLowerCase() {
-        assertNull(StringSimpleFieldActions.lowercase(new Lowercase(), null));
-        assertEquals("", StringSimpleFieldActions.lowercase(new Lowercase(), ""));
-        assertEquals("foo", StringSimpleFieldActions.lowercase(new Lowercase(), "foo"));
-        assertEquals("foo", StringSimpleFieldActions.lowercase(new Lowercase(), "Foo"));
-        assertEquals("foo", StringSimpleFieldActions.lowercase(new Lowercase(), "fOo"));
-        assertEquals("foo", StringSimpleFieldActions.lowercase(new Lowercase(), "foO"));
-        assertEquals("foo", StringSimpleFieldActions.lowercase(new Lowercase(), "FOO"));
-        assertEquals("foo bar", StringSimpleFieldActions.lowercase(new Lowercase(), "FOO BAR"));
+        Lowercase action = new Lowercase();
+        assertNull(action.lowercase(null));
+        assertEquals("", action.lowercase(""));
+        assertEquals("foo", action.lowercase("foo"));
+        assertEquals("foo", action.lowercase("Foo"));
+        assertEquals("foo", action.lowercase("fOo"));
+        assertEquals("foo", action.lowercase("foO"));
+        assertEquals("foo", action.lowercase("FOO"));
+        assertEquals("foo bar", action.lowercase("FOO BAR"));
     }
 
     @Test
     public void testLowerCaseChar() {
-        assertNull(StringSimpleFieldActions.lowercaseChar(new LowercaseChar(), null));
-        assertEquals('\0', StringSimpleFieldActions.lowercaseChar(new LowercaseChar(), '\0').charValue());
-        assertEquals('f', StringSimpleFieldActions.lowercaseChar(new LowercaseChar(), 'f').charValue());
-        assertEquals('f', StringSimpleFieldActions.lowercaseChar(new LowercaseChar(), 'F').charValue());
+        LowercaseChar action = new LowercaseChar();
+        assertNull(action.lowercaseChar(null));
+        assertEquals('\0', action.lowercaseChar('\0').charValue());
+        assertEquals('f', action.lowercaseChar('f').charValue());
+        assertEquals('f', action.lowercaseChar('F').charValue());
     }
 
     @Test
     public void testNormalize() {
-        assertNull(StringSimpleFieldActions.normalize(null, null));
-        assertEquals("", StringSimpleFieldActions.normalize(null, ""));
-        assertEquals("foo bar", StringSimpleFieldActions.normalize(null, " foo bar "));
-        assertEquals("Foo Bar", StringSimpleFieldActions.normalize(null, "   Foo Bar   "));
-        assertEquals("fOo bar", StringSimpleFieldActions.normalize(null, "fOo   bar"));
-        assertEquals("foO bar", StringSimpleFieldActions.normalize(null, "    foO   bar   "));
-        assertEquals("FOO BAR", StringSimpleFieldActions.normalize(null, "\t\n   FOO \f\t BAR "));
-        assertEquals("FOO BAR", StringSimpleFieldActions.normalize(null, "\t\n   FOO \f\r BAR\f\r"));
+        Normalize action = new Normalize();
+        assertNull(action.normalize(null));
+        assertEquals("", action.normalize(""));
+        assertEquals("foo bar", action.normalize(" foo bar "));
+        assertEquals("Foo Bar", action.normalize("   Foo Bar   "));
+        assertEquals("fOo bar", action.normalize("fOo   bar"));
+        assertEquals("foO bar", action.normalize("    foO   bar   "));
+        assertEquals("FOO BAR", action.normalize("\t\n   FOO \f\t BAR "));
+        assertEquals("FOO BAR", action.normalize("\t\n   FOO \f\r BAR\f\r"));
     }
 
     @Test
     public void testRemoveFileExtension() {
-        assertNull(StringSimpleFieldActions.removeFileExtension(null, null));
-        assertEquals("", StringSimpleFieldActions.removeFileExtension(null, ""));
-        assertEquals("foo", StringSimpleFieldActions.removeFileExtension(null, "foo"));
-        assertEquals("", StringSimpleFieldActions.removeFileExtension(null, "."));
-        assertEquals("foo", StringSimpleFieldActions.removeFileExtension(null, "foo."));
-        assertEquals("foo", StringSimpleFieldActions.removeFileExtension(null, "foo.bar"));
-        assertEquals("foo.foo", StringSimpleFieldActions.removeFileExtension(null, "foo.foo.bar"));
+        RemoveFileExtension action = new RemoveFileExtension();
+        assertNull(action.removeFileExtension(null));
+        assertEquals("", action.removeFileExtension(""));
+        assertEquals("foo", action.removeFileExtension("foo"));
+        assertEquals("", action.removeFileExtension("."));
+        assertEquals("foo", action.removeFileExtension("foo."));
+        assertEquals("foo", action.removeFileExtension("foo.bar"));
+        assertEquals("foo.foo", action.removeFileExtension("foo.foo.bar"));
     }
 
     @Test
     public void testSeparateByDash() {
-        assertNull(StringSimpleFieldActions.separateByDash(new SeparateByDash(), null));
-        assertEquals("", StringSimpleFieldActions.separateByDash(new SeparateByDash(), ""));
-        assertEquals("-", StringSimpleFieldActions.separateByDash(new SeparateByDash(), "-"));
-        assertEquals("foo", StringSimpleFieldActions.separateByDash(new SeparateByDash(), "foo"));
-        assertEquals("foo-bar", StringSimpleFieldActions.separateByDash(new SeparateByDash(), "foo bar"));
-        assertEquals("foo-bar", StringSimpleFieldActions.separateByDash(new SeparateByDash(), "foo+bar"));
-        assertEquals("foo-bar", StringSimpleFieldActions.separateByDash(new SeparateByDash(), "foo=bar"));
-        assertEquals("foo-bar", StringSimpleFieldActions.separateByDash(new SeparateByDash(), "foo:bar"));
-        assertEquals("f-o-o-b-a-r", StringSimpleFieldActions.separateByDash(new SeparateByDash(), "f:o:o:b:a:r"));
+        SeparateByDash action = new SeparateByDash();
+        assertNull(action.separateByDash(null));
+        assertEquals("", action.separateByDash(""));
+        assertEquals("-", action.separateByDash("-"));
+        assertEquals("foo", action.separateByDash("foo"));
+        assertEquals("foo-bar", action.separateByDash("foo bar"));
+        assertEquals("foo-bar", action.separateByDash("foo+bar"));
+        assertEquals("foo-bar", action.separateByDash("foo=bar"));
+        assertEquals("foo-bar", action.separateByDash("foo:bar"));
+        assertEquals("f-o-o-b-a-r", action.separateByDash("f:o:o:b:a:r"));
     }
 
     @Test
     public void testSeparateByUnderscore() {
-        assertNull(StringSimpleFieldActions.separateByUnderscore(new SeparateByUnderscore(), null));
-        assertEquals("", StringSimpleFieldActions.separateByUnderscore(new SeparateByUnderscore(), ""));
-        assertEquals("_", StringSimpleFieldActions.separateByUnderscore(new SeparateByUnderscore(), "-"));
-        assertEquals("foo", StringSimpleFieldActions.separateByUnderscore(new SeparateByUnderscore(), "foo"));
-        assertEquals("foo_bar", StringSimpleFieldActions.separateByUnderscore(new SeparateByUnderscore(), "foo bar"));
-        assertEquals("foo_bar", StringSimpleFieldActions.separateByUnderscore(new SeparateByUnderscore(), "foo+bar"));
-        assertEquals("foo_bar", StringSimpleFieldActions.separateByUnderscore(new SeparateByUnderscore(), "foo=bar"));
-        assertEquals("foo_bar", StringSimpleFieldActions.separateByUnderscore(new SeparateByUnderscore(), "foo:bar"));
-        assertEquals("f_o_o_b_a_r",
-                StringSimpleFieldActions.separateByUnderscore(new SeparateByUnderscore(), "f:o:o:b:a:r"));
+        SeparateByUnderscore action = new SeparateByUnderscore();
+        assertNull(action.separateByUnderscore(null));
+        assertEquals("", action.separateByUnderscore(""));
+        assertEquals("_", action.separateByUnderscore("-"));
+        assertEquals("foo", action.separateByUnderscore("foo"));
+        assertEquals("foo_bar", action.separateByUnderscore("foo bar"));
+        assertEquals("foo_bar", action.separateByUnderscore("foo+bar"));
+        assertEquals("foo_bar", action.separateByUnderscore("foo=bar"));
+        assertEquals("foo_bar", action.separateByUnderscore("foo:bar"));
+        assertEquals("f_o_o_b_a_r", action.separateByUnderscore("f:o:o:b:a:r"));
     }
 
     @Test
     public void testSeparatorRegex() {
-        Pattern pattern = Pattern.compile(StringSimpleFieldActions.STRING_SEPARATOR_REGEX);
+        Pattern pattern = Pattern.compile(ActionUtil.STRING_SEPARATOR_REGEX);
         assertFalse(pattern.matcher("foo").find());
         assertFalse(pattern.matcher("").find());
         assertTrue(pattern.matcher("f o").find());
@@ -146,57 +157,62 @@ public class StringSimpleFieldActionsTest {
 
     @Test
     public void testTrim() {
-        assertNull(StringSimpleFieldActions.trim(new Trim(), null));
-        assertEquals("", StringSimpleFieldActions.trim(new Trim(), ""));
-        assertEquals("foo", StringSimpleFieldActions.trim(new Trim(), " foo "));
-        assertEquals("Foo", StringSimpleFieldActions.trim(new Trim(), "   Foo"));
-        assertEquals("fOo", StringSimpleFieldActions.trim(new Trim(), "fOo   "));
-        assertEquals("foO", StringSimpleFieldActions.trim(new Trim(), "    foO   "));
-        assertEquals("FOO", StringSimpleFieldActions.trim(new Trim(), "\t\n   FOO"));
-        assertEquals("FOO", StringSimpleFieldActions.trim(new Trim(), "\t\n   FOO\f\r"));
+        Trim action = new Trim();
+        assertNull(action.trim(null));
+        assertEquals("", action.trim(""));
+        assertEquals("foo", action.trim(" foo "));
+        assertEquals("Foo", action.trim("   Foo"));
+        assertEquals("fOo", action.trim("fOo   "));
+        assertEquals("foO", action.trim("    foO   "));
+        assertEquals("FOO", action.trim("\t\n   FOO"));
+        assertEquals("FOO", action.trim("\t\n   FOO\f\r"));
     }
 
     @Test
     public void testTrimLeft() {
-        assertNull(StringSimpleFieldActions.trimLeft(new TrimLeft(), null));
-        assertEquals("", StringSimpleFieldActions.trimLeft(new TrimLeft(), ""));
-        assertEquals("foo ", StringSimpleFieldActions.trimLeft(new TrimLeft(), " foo "));
-        assertEquals("Foo", StringSimpleFieldActions.trimLeft(new TrimLeft(), "   Foo"));
-        assertEquals("fOo   ", StringSimpleFieldActions.trimLeft(new TrimLeft(), "fOo   "));
-        assertEquals("foO   ", StringSimpleFieldActions.trimLeft(new TrimLeft(), "    foO   "));
-        assertEquals("FOO", StringSimpleFieldActions.trimLeft(new TrimLeft(), "\t\n   FOO"));
-        assertEquals("FOO\f\r", StringSimpleFieldActions.trimLeft(new TrimLeft(), "\t\n   FOO\f\r"));
+        TrimLeft action = new TrimLeft();
+        assertNull(action.trimLeft(null));
+        assertEquals("", action.trimLeft(""));
+        assertEquals("foo ", action.trimLeft(" foo "));
+        assertEquals("Foo", action.trimLeft("   Foo"));
+        assertEquals("fOo   ", action.trimLeft("fOo   "));
+        assertEquals("foO   ", action.trimLeft("    foO   "));
+        assertEquals("FOO", action.trimLeft("\t\n   FOO"));
+        assertEquals("FOO\f\r", action.trimLeft("\t\n   FOO\f\r"));
     }
 
     @Test
     public void testTrimRight() {
-        assertNull(StringSimpleFieldActions.trimRight(new TrimRight(), null));
-        assertEquals("", StringSimpleFieldActions.trimRight(new TrimRight(), ""));
-        assertEquals(" foo", StringSimpleFieldActions.trimRight(new TrimRight(), " foo "));
-        assertEquals("   Foo", StringSimpleFieldActions.trimRight(new TrimRight(), "   Foo"));
-        assertEquals("fOo", StringSimpleFieldActions.trimRight(new TrimRight(), "fOo   "));
-        assertEquals("    foO", StringSimpleFieldActions.trimRight(new TrimRight(), "    foO   "));
-        assertEquals("\t\n   FOO", StringSimpleFieldActions.trimRight(new TrimRight(), "\t\n   FOO"));
-        assertEquals("\t\n   FOO", StringSimpleFieldActions.trimRight(new TrimRight(), "\t\n   FOO\f\r"));
+        TrimRight action = new TrimRight();
+        assertNull(action.trimRight(null));
+        assertEquals("", action.trimRight(""));
+        assertEquals(" foo", action.trimRight(" foo "));
+        assertEquals("   Foo", action.trimRight("   Foo"));
+        assertEquals("fOo", action.trimRight("fOo   "));
+        assertEquals("    foO", action.trimRight("    foO   "));
+        assertEquals("\t\n   FOO", action.trimRight("\t\n   FOO"));
+        assertEquals("\t\n   FOO", action.trimRight("\t\n   FOO\f\r"));
     }
 
     @Test
     public void testUpperCase() {
-        assertNull(StringSimpleFieldActions.uppercase(new Uppercase(), null));
-        assertEquals("", StringSimpleFieldActions.uppercase(new Uppercase(), ""));
-        assertEquals("FOO", StringSimpleFieldActions.uppercase(new Uppercase(), "foo"));
-        assertEquals("FOO", StringSimpleFieldActions.uppercase(new Uppercase(), "Foo"));
-        assertEquals("FOO", StringSimpleFieldActions.uppercase(new Uppercase(), "fOo"));
-        assertEquals("FOO", StringSimpleFieldActions.uppercase(new Uppercase(), "foO"));
-        assertEquals("FOO", StringSimpleFieldActions.uppercase(new Uppercase(), "FOO"));
-        assertEquals("FOO BAR", StringSimpleFieldActions.uppercase(new Uppercase(), "foo bar"));
+        Uppercase action = new Uppercase();
+        assertNull(action.uppercase(null));
+        assertEquals("", action.uppercase(""));
+        assertEquals("FOO", action.uppercase("foo"));
+        assertEquals("FOO", action.uppercase("Foo"));
+        assertEquals("FOO", action.uppercase("fOo"));
+        assertEquals("FOO", action.uppercase("foO"));
+        assertEquals("FOO", action.uppercase("FOO"));
+        assertEquals("FOO BAR", action.uppercase("foo bar"));
     }
 
     @Test
     public void testUpperCaseChar() {
-        assertNull(StringSimpleFieldActions.uppercaseChar(new UppercaseChar(), null));
-        assertEquals('\0', StringSimpleFieldActions.uppercaseChar(new UppercaseChar(), '\0').charValue());
-        assertEquals('F', StringSimpleFieldActions.uppercaseChar(new UppercaseChar(), 'f').charValue());
-        assertEquals('F', StringSimpleFieldActions.uppercaseChar(new UppercaseChar(), 'F').charValue());
+        UppercaseChar action = new UppercaseChar();
+        assertNull(action.uppercaseChar(null));
+        assertEquals('\0', action.uppercaseChar('\0').charValue());
+        assertEquals('F', action.uppercaseChar('f').charValue());
+        assertEquals('F', action.uppercaseChar('F').charValue());
     }
 }

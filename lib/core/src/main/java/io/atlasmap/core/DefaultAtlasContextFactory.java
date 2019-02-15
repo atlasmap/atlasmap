@@ -34,8 +34,6 @@ import java.util.UUID;
 import javax.management.MalformedObjectNameException;
 import javax.management.ObjectName;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -95,7 +93,7 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
         this.uuid = UUID.randomUUID().toString();
         this.threadName = Thread.currentThread().getName();
         this.classLoader = new CompoundClassLoader();
-        this.classLoader.add(AtlasMapping.class.getClassLoader());
+        this.classLoader.add(getClass().getClassLoader());
         this.atlasConversionService = DefaultAtlasConversionService.getInstance();
         this.atlasFieldActionService = new DefaultAtlasFieldActionService(this.atlasConversionService);
         this.atlasFieldActionService.init(this.classLoader);

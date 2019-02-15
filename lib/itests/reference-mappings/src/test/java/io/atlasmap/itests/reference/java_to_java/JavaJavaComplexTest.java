@@ -27,6 +27,8 @@ import org.junit.Test;
 
 import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasSession;
+import io.atlasmap.itests.reference.AtlasMappingBaseTest;
+import io.atlasmap.itests.reference.AtlasTestUtil;
 import io.atlasmap.java.test.BaseOrder;
 import io.atlasmap.java.test.SourceAddress;
 import io.atlasmap.java.test.SourceContact;
@@ -36,8 +38,6 @@ import io.atlasmap.java.test.StateEnumClassShort;
 import io.atlasmap.java.test.TargetContact;
 import io.atlasmap.java.test.TargetOrder;
 import io.atlasmap.java.test.TargetTestClass;
-import io.atlasmap.itests.reference.AtlasMappingBaseTest;
-import io.atlasmap.itests.reference.AtlasTestUtil;
 
 public class JavaJavaComplexTest extends AtlasMappingBaseTest {
 
@@ -186,7 +186,7 @@ public class JavaJavaComplexTest extends AtlasMappingBaseTest {
         assertTrue(object instanceof TargetOrder);
         // ensure our Uppercase action on first name did the right thing
         assertEquals("OZZIE", ((TargetOrder) object).getContact().getFirstName());
-        assertEquals("smith", ((TargetOrder) object).getContact().getLastName());
+        assertEquals("SmithXXX", ((TargetOrder) object).getContact().getLastName());
         // set values to normalized pre-action-processing state so rest of validation
         // passes..
         ((TargetOrder) object).getContact().setFirstName("Ozzie");

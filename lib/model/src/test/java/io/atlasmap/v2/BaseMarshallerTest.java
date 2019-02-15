@@ -227,9 +227,6 @@ public abstract class BaseMarshallerTest {
 
             int i = 0;
             for (Action a : f2.getActions().getActions()) {
-                if (a instanceof Camelize) {
-                    i++;
-                }
                 if (a instanceof Capitalize) {
                     i++;
                 }

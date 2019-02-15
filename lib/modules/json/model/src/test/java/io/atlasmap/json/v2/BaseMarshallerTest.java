@@ -34,7 +34,6 @@ import org.junit.rules.TestName;
 import io.atlasmap.v2.Actions;
 import io.atlasmap.v2.AtlasMapping;
 import io.atlasmap.v2.AtlasModelFactory;
-import io.atlasmap.v2.Camelize;
 import io.atlasmap.v2.Capitalize;
 import io.atlasmap.v2.CollectionType;
 import io.atlasmap.v2.DataSource;
@@ -177,7 +176,6 @@ public abstract class BaseMarshallerTest {
 
     private void generateActions(JsonField inputField) {
         Actions actions = new Actions();
-        actions.getActions().add(new Camelize());
         actions.getActions().add(new Capitalize());
         actions.getActions().add(new Length());
         actions.getActions().add(new Lowercase());
@@ -270,7 +268,7 @@ public abstract class BaseMarshallerTest {
     }
 
     private void validateJsonField(JsonField field) {
-        assertEquals(10, field.getActions().getActions().size());
+        assertEquals(9, field.getActions().getActions().size());
         assertEquals(Integer.valueOf(3), field.getArrayDimensions());
         assertEquals(Integer.valueOf(3), field.getArraySize());
         assertEquals(CollectionType.ARRAY, field.getCollectionType());

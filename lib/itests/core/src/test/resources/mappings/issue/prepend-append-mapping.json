@@ -27,11 +27,11 @@
           "jsonType" : "io.atlasmap.java.v2.JavaField",
           "actions" : [ {
             "Prepend" : {
-              "string" : "prepend-"
+              "prefix" : "prepend-"
             }
           }, {
             "Append" : {
-              "string" : "-append"
+              "suffix" : "-append"
             }
           } ],
           "docId" : "io.atlasmap.itests.core.issue.TargetClass",

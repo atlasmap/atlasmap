@@ -53,207 +53,169 @@ public class StringComplexFieldActionsTest {
     @Test
     public void testAppend() {
         Append action = new Append();
-        assertEquals(null, StringComplexFieldActions.append(action, null));
-        assertEquals("foo", StringComplexFieldActions.append(action, "foo"));
-        assertEquals("1", StringComplexFieldActions.append(action, 1));
-        action.setString("");
-        assertEquals("", StringComplexFieldActions.append(action, null));
-        assertEquals("foo", StringComplexFieldActions.append(action, "foo"));
-        action.setString("bar");
-        assertEquals("bar", StringComplexFieldActions.append(action, null));
-        assertEquals("foobar", StringComplexFieldActions.append(action, "foo"));
-        assertEquals("1bar", StringComplexFieldActions.append(action, 1));
-    }
-
-    @Test(expected=IllegalArgumentException.class)
-    public void testAppendNullAction() {
-        StringComplexFieldActions.append(null, null);
+        assertEquals(null, action.append(null));
+        assertEquals("foo", action.append("foo"));
+        assertEquals("1", action.append(1));
+        action.setSuffix("");
+        assertEquals("", action.append(null));
+        assertEquals("foo", action.append("foo"));
+        action.setSuffix("bar");
+        assertEquals("bar", action.append(null));
+        assertEquals("foobar", action.append("foo"));
+        assertEquals("1bar", action.append(1));
     }
 
     @Test
     public void testConcatenate() {
         Concatenate action = new Concatenate();
-
-        assertEquals(null, StringComplexFieldActions.concatenate(action, null));
-        assertEquals("1true2.0", StringComplexFieldActions.concatenate(action, new Object[] {1, true, 2.0}));
-        assertEquals("1true2.0", StringComplexFieldActions.concatenate(action, Arrays.asList(1, true, 2.0)));
+        assertEquals(null, action.concatenate(null));
+        assertEquals("1true2.0", action.concatenate(new Object[] {1, true, 2.0}));
+        assertEquals("1true2.0", action.concatenate(Arrays.asList(1, true, 2.0)));
         Map<Object, Object> map = new LinkedHashMap<>();
         map.put(1, 1);
         map.put(true, true);
         map.put(2.0, 2.0);
-        assertEquals("1true2.0", StringComplexFieldActions.concatenate(action, map));
+        assertEquals("1true2.0", action.concatenate(map));
         action.setDelimiter("-");
-        assertEquals(null, StringComplexFieldActions.concatenate(action, null));
-        assertEquals("1-true-2.0", StringComplexFieldActions.concatenate(action, new Object[] {1, true, 2.0}));
-        assertEquals("1-true-2.0", StringComplexFieldActions.concatenate(action, Arrays.asList(1, true, 2.0)));
-        assertEquals("1-true-2.0", StringComplexFieldActions.concatenate(action, map));
+        assertEquals(null, action.concatenate(null));
+        assertEquals("1-true-2.0", action.concatenate(new Object[] {1, true, 2.0}));
+        assertEquals("1-true-2.0", action.concatenate(Arrays.asList(1, true, 2.0)));
+        assertEquals("1-true-2.0", action.concatenate(map));
     }
 
     @Test(expected=IllegalArgumentException.class)
     public void testConcatenateNonCollection() {
-        StringComplexFieldActions.concatenate(new Concatenate(), "");
-    }
-
-    @Test(expected=IllegalArgumentException.class)
-    public void testConcatenateNullAction() {
-        StringComplexFieldActions.concatenate(null, null);
+        Concatenate action = new Concatenate();
+        action.concatenate("");
     }
 
     @Test
     public void testEndsWith() {
         EndsWith action = new EndsWith();
         action.setString("");
-        assertFalse(StringComplexFieldActions.endsWith(action, null));
-        assertTrue(StringComplexFieldActions.endsWith(action, ""));
-        assertTrue(StringComplexFieldActions.endsWith(action, "foo"));
+        assertFalse(action.endsWith(null));
+        assertTrue(action.endsWith(""));
+        assertTrue(action.endsWith("foo"));
         action.setString("bar");
-        assertFalse(StringComplexFieldActions.endsWith(action, null));
-        assertFalse(StringComplexFieldActions.endsWith(action, ""));
-        assertFalse(StringComplexFieldActions.endsWith(action, "foo"));
-        assertTrue(StringComplexFieldActions.endsWith(action, "foobar"));
-        assertFalse(StringComplexFieldActions.endsWith(action, "barfoo"));
-    }
-
-    @Test(expected=IllegalArgumentException.class)
-    public void testEndsWithNullAction() {
-        StringComplexFieldActions.endsWith(null, null);
+        assertFalse(action.endsWith(null));
+        assertFalse(action.endsWith(""));
+        assertFalse(action.endsWith("foo"));
+        assertTrue(action.endsWith("foobar"));
+        assertFalse(action.endsWith("barfoo"));
     }
 
     @Test(expected=IllegalArgumentException.class)
     public void testEndsWithNullString() {
-        StringComplexFieldActions.endsWith(new EndsWith(), null);
+        EndsWith action = new EndsWith();
+        action.endsWith(null);
     }
 
     @Test
     public void testFormat() {
         Format action = new Format();
         action.setTemplate("foofoo");
-        assertEquals("foofoo", StringComplexFieldActions.format(action, null));
-        assertEquals("foofoo", StringComplexFieldActions.format(action, ""));
-        assertEquals("foofoo", StringComplexFieldActions.format(action, "bar"));
+        assertEquals("foofoo", action.format(null));
+        assertEquals("foofoo", action.format(""));
+        assertEquals("foofoo", action.format("bar"));
         action.setTemplate("foo%sfoo");
-        assertEquals("foonullfoo", StringComplexFieldActions.format(action, null));
-        assertEquals("foofoo", StringComplexFieldActions.format(action, ""));
-        assertEquals("foobarfoo", StringComplexFieldActions.format(action, "bar"));
+        assertEquals("foonullfoo", action.format(null));
+        assertEquals("foofoo", action.format(""));
+        assertEquals("foobarfoo", action.format("bar"));
         action.setTemplate("foo%1$sfoo%1$s");
-        assertEquals("foobarfoobar", StringComplexFieldActions.format(action, "bar"));
+        assertEquals("foobarfoobar", action.format("bar"));
         action.setTemplate("%,.2f");
-        assertEquals("1,234.00", StringComplexFieldActions.format(action, 1234f));
-        assertEquals("0.05", StringComplexFieldActions.format(action, .05));
-    }
-
-    @Test(expected=IllegalArgumentException.class)
-    public void testFormatNullAction() {
-        StringComplexFieldActions.format(null, null);
+        assertEquals("1,234.00", action.format(1234f));
+        assertEquals("0.05", action.format(.05));
     }
 
     @Test(expected=IllegalArgumentException.class)
     public void testFormatNullTemplate() {
-        StringComplexFieldActions.format(new Format(), null);
+        Format action = new Format();
+        action.format(null);
     }
 
     @Test
-    public void testGenareteUUID() {
-        validateGeneratedUUID(StringComplexFieldActions.genareteUUID(new GenerateUUID(), null));
-        validateGeneratedUUID(
-                StringComplexFieldActions.genareteUUID(new GenerateUUID(), new Byte(Byte.parseByte("0"))));
-        validateGeneratedUUID(StringComplexFieldActions.genareteUUID(new GenerateUUID(), new Character('a')));
-        validateGeneratedUUID(StringComplexFieldActions.genareteUUID(new GenerateUUID(), new Double(14324d)));
-        validateGeneratedUUID(StringComplexFieldActions.genareteUUID(new GenerateUUID(), new Float(234235235325f)));
-        validateGeneratedUUID(StringComplexFieldActions.genareteUUID(new GenerateUUID(), new Integer(32523)));
-        validateGeneratedUUID(StringComplexFieldActions.genareteUUID(new GenerateUUID(), new Long(235325L)));
-        validateGeneratedUUID(StringComplexFieldActions.genareteUUID(new GenerateUUID(), new Short((short) 4323)));
-        validateGeneratedUUID(StringComplexFieldActions.genareteUUID(new GenerateUUID(), ""));
+    public void testGenerateUUID() {
+        GenerateUUID action = new GenerateUUID();
+        validateGeneratedUUID(action.genareteUUID(null));
+        validateGeneratedUUID(action.genareteUUID(new Byte(Byte.parseByte("0"))));
+        validateGeneratedUUID(action.genareteUUID(new Character('a')));
+        validateGeneratedUUID(action.genareteUUID(new Double(14324d)));
+        validateGeneratedUUID(action.genareteUUID(new Float(234235235325f)));
+        validateGeneratedUUID(action.genareteUUID(new Integer(32523)));
+        validateGeneratedUUID(action.genareteUUID(new Long(235325L)));
+        validateGeneratedUUID(action.genareteUUID(new Short((short) 4323)));
+        validateGeneratedUUID(action.genareteUUID(""));
     }
 
     @Test
     public void testIndexOf() {
         IndexOf action = new IndexOf();
         action.setString("");
-        assertEquals(-1, StringComplexFieldActions.indexOf(action, null));
-        assertEquals(0, StringComplexFieldActions.indexOf(action, ""));
-        assertEquals(0, StringComplexFieldActions.indexOf(action, "foo"));
+        assertEquals(-1, action.indexOf(null));
+        assertEquals(0, action.indexOf(""));
+        assertEquals(0, action.indexOf("foo"));
         action.setString("bar");
-        assertEquals(-1, StringComplexFieldActions.indexOf(action, null));
-        assertEquals(-1, StringComplexFieldActions.indexOf(action, ""));
-        assertEquals(-1, StringComplexFieldActions.indexOf(action, "foo"));
-        assertEquals(3, StringComplexFieldActions.indexOf(action, "foobar"));
-        assertEquals(3, StringComplexFieldActions.indexOf(action, "foobarbar"));
-    }
-
-    @Test(expected=IllegalArgumentException.class)
-    public void testIndexOfNullAction() {
-        StringComplexFieldActions.indexOf(null, null);
+        assertEquals(-1, action.indexOf(null));
+        assertEquals(-1, action.indexOf(""));
+        assertEquals(-1, action.indexOf("foo"));
+        assertEquals(3, action.indexOf("foobar"));
+        assertEquals(3, action.indexOf("foobarbar"));
     }
 
     @Test(expected=IllegalArgumentException.class)
     public void testIndexOfNullString() {
-        StringComplexFieldActions.indexOf(new IndexOf(), null);
+        IndexOf action = new IndexOf();
+        action.indexOf(null);
     }
 
     @Test
     public void testLastIndexOf() {
         LastIndexOf action = new LastIndexOf();
         action.setString("");
-        assertEquals(-1, StringComplexFieldActions.lastIndexOf(action, null));
-        assertEquals(0, StringComplexFieldActions.lastIndexOf(action, ""));
-        assertEquals(3, StringComplexFieldActions.lastIndexOf(action, "foo"));
+        assertEquals(-1, action.lastIndexOf(null));
+        assertEquals(0, action.lastIndexOf(""));
+        assertEquals(3, action.lastIndexOf("foo"));
         action.setString("bar");
-        assertEquals(-1, StringComplexFieldActions.lastIndexOf(action, null));
-        assertEquals(-1, StringComplexFieldActions.lastIndexOf(action, ""));
-        assertEquals(-1, StringComplexFieldActions.lastIndexOf(action, "foo"));
-        assertEquals(3, StringComplexFieldActions.lastIndexOf(action, "foobar"));
-        assertEquals(6, StringComplexFieldActions.lastIndexOf(action, "foobarbar"));
-    }
-
-    @Test(expected=IllegalArgumentException.class)
-    public void testLastIndexOfNullAction() {
-        StringComplexFieldActions.lastIndexOf(null, null);
+        assertEquals(-1, action.lastIndexOf(null));
+        assertEquals(-1, action.lastIndexOf(""));
+        assertEquals(-1, action.lastIndexOf("foo"));
+        assertEquals(3, action.lastIndexOf("foobar"));
+        assertEquals(6, action.lastIndexOf("foobarbar"));
     }
 
     @Test(expected=IllegalArgumentException.class)
     public void testLastIndexOfNullString() {
-        StringComplexFieldActions.lastIndexOf(new LastIndexOf(), null);
+        LastIndexOf action = new LastIndexOf();
+        action.lastIndexOf(null);
     }
 
     @Test
     public void testPadStringLeft() {
-        PadStringLeft padStringLeft = new PadStringLeft();
-        padStringLeft.setPadCharacter("a");
-        padStringLeft.setPadCount(3);
+        PadStringLeft action = new PadStringLeft();
+        action.setPadCharacter("a");
+        action.setPadCount(3);
 
-        assertEquals("aaa", StringComplexFieldActions.padStringLeft(padStringLeft, null));
-        assertEquals("aaa", StringComplexFieldActions.padStringLeft(padStringLeft, ""));
-        assertEquals("aaaa", StringComplexFieldActions.padStringLeft(padStringLeft, "a"));
-        assertEquals("aaab", StringComplexFieldActions.padStringLeft(padStringLeft, "b"));
+        assertEquals("aaa", action.padStringLeft(null));
+        assertEquals("aaa", action.padStringLeft(""));
+        assertEquals("aaaa", action.padStringLeft("a"));
+        assertEquals("aaab", action.padStringLeft("b"));
 
         try {
-            StringComplexFieldActions.padStringLeft(null, "aa");
+            new PadStringLeft().padStringLeft("aa");
             fail("IllegalArgumentException expected");
         } catch (IllegalArgumentException e) {
             assertTrue(true);
         }
 
-        try {
-            StringComplexFieldActions.padStringLeft(new PadStringLeft(), "aa");
-            fail("IllegalArgumentException expected");
-        } catch (IllegalArgumentException e) {
-            assertTrue(true);
-        }
-
-        try {
-            PadStringLeft incomplete = new PadStringLeft();
-            incomplete.setPadCharacter("f");
-            StringComplexFieldActions.padStringLeft(incomplete, "aa");
-            fail("IllegalArgumentException expected");
-        } catch (IllegalArgumentException e) {
-            assertTrue(true);
-        }
+        action.setPadCharacter("f");
+        action.setPadCount(null);
+        assertEquals("aa", action.padStringLeft("aa"));
 
         try {
             PadStringLeft incomplete = new PadStringLeft();
             incomplete.setPadCount(3);
-            StringComplexFieldActions.padStringLeft(incomplete, "aa");
+            incomplete.padStringLeft("aa");
             fail("IllegalArgumentException expected");
         } catch (IllegalArgumentException e) {
             assertTrue(true);
@@ -262,39 +224,29 @@ public class StringComplexFieldActionsTest {
 
     @Test
     public void testPadStringRight() {
-        PadStringRight padStringRight = new PadStringRight();
-        padStringRight.setPadCharacter("a");
-        padStringRight.setPadCount(3);
+        PadStringRight action = new PadStringRight();
+        action.setPadCharacter("a");
+        action.setPadCount(3);
 
-        assertEquals("aaa", StringComplexFieldActions.padStringRight(padStringRight, null));
-        assertEquals("aaa", StringComplexFieldActions.padStringRight(padStringRight, ""));
-        assertEquals("aaaa", StringComplexFieldActions.padStringRight(padStringRight, "a"));
-        assertEquals("baaa", StringComplexFieldActions.padStringRight(padStringRight, "b"));
+        assertEquals("aaa", action.padStringRight(null));
+        assertEquals("aaa", action.padStringRight(""));
+        assertEquals("aaaa", action.padStringRight("a"));
+        assertEquals("baaa", action.padStringRight("b"));
 
         try {
-            StringComplexFieldActions.padStringRight(null, "aa");
+            new PadStringRight().padStringRight("aa");
             fail("IllegalArgumentException expected");
         } catch (IllegalArgumentException e) {
         }
 
-        try {
-            StringComplexFieldActions.padStringRight(new PadStringRight(), "aa");
-            fail("IllegalArgumentException expected");
-        } catch (IllegalArgumentException e) {
-        }
-
-        try {
-            PadStringRight incomplete = new PadStringRight();
-            incomplete.setPadCharacter("f");
-            StringComplexFieldActions.padStringRight(incomplete, "aa");
-            fail("IllegalArgumentException expected");
-        } catch (IllegalArgumentException e) {
-        }
+        action.setPadCharacter("f");
+        action.setPadCount(null);
+        assertEquals("aa", action.padStringRight("aa"));
 
         try {
             PadStringRight incomplete = new PadStringRight();
             incomplete.setPadCount(3);
-            StringComplexFieldActions.padStringRight(incomplete, "aa");
+            incomplete.padStringRight("aa");
             fail("IllegalArgumentException expected");
         } catch (IllegalArgumentException e) {
         }
@@ -303,130 +255,111 @@ public class StringComplexFieldActionsTest {
     @Test
     public void testPrepend() {
         Prepend action = new Prepend();
-        assertEquals(null, StringComplexFieldActions.prepend(action, null));
-        assertEquals("foo", StringComplexFieldActions.prepend(action, "foo"));
-        assertEquals("1", StringComplexFieldActions.prepend(action, 1));
-        action.setString("");
-        assertEquals("", StringComplexFieldActions.prepend(action, null));
-        assertEquals("foo", StringComplexFieldActions.prepend(action, "foo"));
-        action.setString("bar");
-        assertEquals("bar", StringComplexFieldActions.prepend(action, null));
-        assertEquals("barfoo", StringComplexFieldActions.prepend(action, "foo"));
-        assertEquals("bar1", StringComplexFieldActions.prepend(action, 1));
-    }
-
-    @Test(expected=IllegalArgumentException.class)
-    public void testPrependNullAction() {
-        StringComplexFieldActions.prepend(null, null);
+        assertEquals(null, action.prepend(null));
+        assertEquals("foo", action.prepend("foo"));
+        assertEquals("1", action.prepend(1));
+        action.setPrefix("");
+        assertEquals("", action.prepend(null));
+        assertEquals("foo", action.prepend("foo"));
+        action.setPrefix("bar");
+        assertEquals("bar", action.prepend(null));
+        assertEquals("barfoo", action.prepend("foo"));
+        assertEquals("bar1", action.prepend(1));
     }
 
     @Test
     public void testReplaceFirst() {
-        ReplaceFirst replaceFirst = new ReplaceFirst();
-        replaceFirst.setMatch(" ");
-        assertNull(StringComplexFieldActions.replaceFirst(replaceFirst, null));
-        assertEquals("", StringComplexFieldActions.replaceFirst(replaceFirst, ""));
-        assertEquals("test", StringComplexFieldActions.replaceFirst(replaceFirst, "test"));
-        replaceFirst.setMatch("e");
-        assertEquals("tst", StringComplexFieldActions.replaceFirst(replaceFirst, "test"));
-        replaceFirst.setMatch("t");
-        replaceFirst.setNewString("h");
-        assertEquals("hest", StringComplexFieldActions.replaceFirst(replaceFirst, "test"));
-        replaceFirst.setMatch("is");
-        replaceFirst.setNewString("at");
-        assertEquals("That is a test", StringComplexFieldActions.replaceFirst(replaceFirst, "This is a test"));
+        ReplaceFirst action = new ReplaceFirst();
+        action.setMatch(" ");
+        assertNull(action.replaceFirst(null));
+        assertEquals("", action.replaceFirst(""));
+        assertEquals("test", action.replaceFirst("test"));
+        action.setMatch("e");
+        assertEquals("tst", action.replaceFirst("test"));
+        action.setMatch("t");
+        action.setNewString("h");
+        assertEquals("hest", action.replaceFirst("test"));
+        action.setMatch("is");
+        action.setNewString("at");
+        assertEquals("That is a test", action.replaceFirst("This is a test"));
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testReplaceFirstEmptyMatch() {
-        ReplaceFirst replaceFirst = new ReplaceFirst();
-        replaceFirst.setMatch("");
-        StringComplexFieldActions.replaceFirst(replaceFirst, " ");
-    }
-
-    @Test(expected=IllegalArgumentException.class)
-    public void testReplaceFirstNullAction() {
-        StringComplexFieldActions.replaceFirst(null, null);
+        ReplaceFirst action = new ReplaceFirst();
+        action.setMatch("");
+        action.replaceFirst(" ");
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testReplaceFirstNullMatch() {
-        ReplaceFirst replaceFirst = new ReplaceFirst();
-        StringComplexFieldActions.replaceFirst(replaceFirst, " ");
+        ReplaceFirst action = new ReplaceFirst();
+        action.replaceFirst(" ");
     }
 
     @Test
     public void testReplaceAll() {
-        ReplaceAll replaceAll = new ReplaceAll();
-        replaceAll.setMatch(" ");
-        assertNull(StringComplexFieldActions.replaceAll(replaceAll, null));
-        assertEquals("", StringComplexFieldActions.replaceAll(replaceAll, ""));
-        assertEquals("test", StringComplexFieldActions.replaceAll(replaceAll, "test"));
-        replaceAll.setMatch("e");
-        assertEquals("tst", StringComplexFieldActions.replaceAll(replaceAll, "test"));
-        replaceAll.setMatch("t");
-        replaceAll.setNewString("h");
-        assertEquals("hesh", StringComplexFieldActions.replaceAll(replaceAll, "test"));
-        replaceAll.setMatch("is");
-        replaceAll.setNewString("at");
-        assertEquals("That at a test", StringComplexFieldActions.replaceAll(replaceAll, "This is a test"));
+        ReplaceAll action = new ReplaceAll();
+        action.setMatch(" ");
+        assertNull(action.replaceAll(null));
+        assertEquals("", action.replaceAll(""));
+        assertEquals("test", action.replaceAll("test"));
+        action.setMatch("e");
+        assertEquals("tst", action.replaceAll("test"));
+        action.setMatch("t");
+        action.setNewString("h");
+        assertEquals("hesh", action.replaceAll("test"));
+        action.setMatch("is");
+        action.setNewString("at");
+        assertEquals("That at a test", action.replaceAll("This is a test"));
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testReplaceAllEmptyMatch() {
-        ReplaceAll replaceAll = new ReplaceAll();
-        replaceAll.setMatch("");
-        StringComplexFieldActions.replaceAll(replaceAll, " ");
-    }
-
-    @Test(expected=IllegalArgumentException.class)
-    public void testReplaceAllNullAction() {
-        StringComplexFieldActions.replaceAll(null, null);
+        ReplaceAll action = new ReplaceAll();
+        action.setMatch("");
+        action.replaceAll(" ");
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testReplaceAllNullOldString() {
-        ReplaceAll replaceAll = new ReplaceAll();
-        StringComplexFieldActions.replaceAll(replaceAll, " ");
+        ReplaceAll action = new ReplaceAll();
+        action.replaceAll(" ");
     }
 
     @Test(expected=IllegalArgumentException.class)
     public void testSplitNoDelimiter() {
         Split action = new Split();
-        StringComplexFieldActions.split(action, "foobar");
+        action.split("foobar");
     }
 
     @Test
     public void testSplit() {
         Split action = new Split();
         action.setDelimiter(",");
-        assertArrayEquals(null, StringComplexFieldActions.split(action, null));
-        assertArrayEquals(new String[] {"1", "2", "3"}, StringComplexFieldActions.split(action, "1,2,3"));
+        assertArrayEquals(null, action.split(null));
+        assertArrayEquals(new String[] {"1", "2", "3"}, action.split("1,2,3"));
     }
 
     @Test
     public void testStartsWith() {
         StartsWith action = new StartsWith();
         action.setString("");
-        assertFalse(StringComplexFieldActions.startsWith(action, null));
-        assertTrue(StringComplexFieldActions.startsWith(action, ""));
-        assertTrue(StringComplexFieldActions.startsWith(action, "foo"));
+        assertFalse(action.startsWith(null));
+        assertTrue(action.startsWith(""));
+        assertTrue(action.startsWith("foo"));
         action.setString("foo");
-        assertFalse(StringComplexFieldActions.startsWith(action, null));
-        assertFalse(StringComplexFieldActions.startsWith(action, ""));
-        assertTrue(StringComplexFieldActions.startsWith(action, "foo"));
-        assertTrue(StringComplexFieldActions.startsWith(action, "foobar"));
-        assertFalse(StringComplexFieldActions.startsWith(action, "barfoo"));
-    }
-
-    @Test(expected=IllegalArgumentException.class)
-    public void testStartsWithNullAction() {
-        StringComplexFieldActions.startsWith(null, null);
+        assertFalse(action.startsWith(null));
+        assertFalse(action.startsWith(""));
+        assertTrue(action.startsWith("foo"));
+        assertTrue(action.startsWith("foobar"));
+        assertFalse(action.startsWith("barfoo"));
     }
 
     @Test(expected=IllegalArgumentException.class)
     public void testStartsWithNullString() {
-        StringComplexFieldActions.startsWith(new StartsWith(), null);
+        StartsWith action = new StartsWith();
+        action.startsWith(null);
     }
 
     @Test
@@ -435,15 +368,8 @@ public class StringComplexFieldActionsTest {
         action.setStartIndex(2);
         action.setEndIndex(4);
 
-        assertNull(StringComplexFieldActions.subString(action, null));
-        assertEquals("", StringComplexFieldActions.subString(action, ""));
-
-        try {
-            StringComplexFieldActions.subString(null, "aa");
-            fail("IllegalArgumentException expected");
-        } catch (IllegalArgumentException e) {
-            assertTrue(true);
-        }
+        assertNull(action.subString(null));
+        assertEquals("", action.subString(""));
     }
 
     @Test
@@ -453,29 +379,22 @@ public class StringComplexFieldActionsTest {
         action.setEndIndex(null);
         action.setMatch("foo");
 
-        assertNull(StringComplexFieldActions.subStringAfter(action, null));
-        assertEquals("", StringComplexFieldActions.subStringAfter(action, ""));
-        assertEquals("blah", StringComplexFieldActions.subStringAfter(action, "foobarblah"));
-        assertEquals("blahfoo", StringComplexFieldActions.subStringAfter(action, "foobarblahfoo"));
+        assertNull(action.subStringAfter(null));
+        assertEquals("", action.subStringAfter(""));
+        assertEquals("blah", action.subStringAfter("foobarblah"));
+        assertEquals("blahfoo", action.subStringAfter("foobarblahfoo"));
 
-        assertEquals("barblah", StringComplexFieldActions.subStringAfter(action, "barblah"));
+        assertEquals("barblah", action.subStringAfter("barblah"));
 
         action.setEndIndex(7);
-        assertEquals("blah", StringComplexFieldActions.subStringAfter(action, "foobarblahfoo"));
+        assertEquals("blah", action.subStringAfter("foobarblahfoo"));
 
         action.setEndIndex(3);
-        assertEquals("", StringComplexFieldActions.subStringAfter(action, "foobarblahfoo"));
-
-        try {
-            StringComplexFieldActions.subStringAfter(null, "aa");
-            fail("IllegalArgumentException expected");
-        } catch (IllegalArgumentException e) {
-            assertTrue(true);
-        }
+        assertEquals("", action.subStringAfter("foobarblahfoo"));
 
         try {
             SubStringAfter err = new SubStringAfter();
-            StringComplexFieldActions.subStringAfter(err, "aa");
+            err.subStringAfter("aa");
             fail("IllegalArgumentException expected");
         } catch (IllegalArgumentException e) {
             assertTrue(true);
@@ -485,7 +404,7 @@ public class StringComplexFieldActionsTest {
             SubStringAfter err = new SubStringAfter();
             err.setEndIndex(5);
             err.setStartIndex(0);
-            StringComplexFieldActions.subStringAfter(err, "aa");
+            err.subStringAfter("aa");
             fail("IllegalArgumentException expected");
         } catch (IllegalArgumentException e) {
             assertTrue(true);
@@ -495,7 +414,7 @@ public class StringComplexFieldActionsTest {
             SubStringAfter err = new SubStringAfter();
             err.setEndIndex(0);
             err.setStartIndex(5);
-            StringComplexFieldActions.subStringAfter(err, "aa");
+            err.subStringAfter("aa");
             fail("IllegalArgumentException expected");
         } catch (IllegalArgumentException e) {
             assertTrue(true);
@@ -509,27 +428,20 @@ public class StringComplexFieldActionsTest {
         action.setEndIndex(null);
         action.setMatch("blah");
 
-        assertNull(StringComplexFieldActions.subStringBefore(action, null));
-        assertEquals("", StringComplexFieldActions.subStringBefore(action, ""));
-        assertEquals("bar", StringComplexFieldActions.subStringBefore(action, "foobarblah"));
-        assertEquals("foobar", StringComplexFieldActions.subStringBefore(action, "foofoobarblahfoo"));
-        assertEquals("", StringComplexFieldActions.subStringBefore(action, "barblah"));
+        assertNull(action.subStringBefore(null));
+        assertEquals("", action.subStringBefore(""));
+        assertEquals("bar", action.subStringBefore("foobarblah"));
+        assertEquals("foobar", action.subStringBefore("foofoobarblahfoo"));
+        assertEquals("", action.subStringBefore("barblah"));
 
         action.setEndIndex(5);
-        assertEquals("ba", StringComplexFieldActions.subStringBefore(action, "foobarblah"));
+        assertEquals("ba", action.subStringBefore("foobarblah"));
         action.setEndIndex(3);
-        assertEquals("", StringComplexFieldActions.subStringBefore(action, "foobarblah"));
-
-        try {
-            StringComplexFieldActions.subStringBefore(null, "aa");
-            fail("IllegalArgumentException expected");
-        } catch (IllegalArgumentException e) {
-            assertTrue(true);
-        }
+        assertEquals("", action.subStringBefore("foobarblah"));
 
         try {
             SubStringBefore err = new SubStringBefore();
-            StringComplexFieldActions.subStringBefore(err, "aa");
+            err.subStringBefore("aa");
             fail("IllegalArgumentException expected");
         } catch (IllegalArgumentException e) {
             assertTrue(true);
@@ -539,7 +451,7 @@ public class StringComplexFieldActionsTest {
             SubStringBefore err = new SubStringBefore();
             err.setEndIndex(5);
             err.setStartIndex(0);
-            StringComplexFieldActions.subStringBefore(err, "aa");
+            err.subStringBefore("aa");
             fail("IllegalArgumentException expected");
         } catch (IllegalArgumentException e) {
             assertTrue(true);
@@ -549,7 +461,7 @@ public class StringComplexFieldActionsTest {
             SubStringBefore err = new SubStringBefore();
             err.setEndIndex(0);
             err.setStartIndex(5);
-            StringComplexFieldActions.subStringBefore(err, "aa");
+            err.subStringBefore("aa");
             fail("IllegalArgumentException expected");
         } catch (IllegalArgumentException e) {
             assertTrue(true);

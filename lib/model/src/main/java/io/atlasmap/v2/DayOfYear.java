@@ -1,9 +1,16 @@
 package io.atlasmap.v2;
 
-import java.io.Serializable;
+import java.time.ZonedDateTime;
 
-public class DayOfYear extends Action implements Serializable {
+import io.atlasmap.api.AtlasFieldAction;
+import io.atlasmap.spi.AtlasFieldActionInfo;
 
-    private final static long serialVersionUID = 1L;
+public class DayOfYear extends Action implements AtlasFieldAction {
 
+    private static final long serialVersionUID = 1L;
+
+    @AtlasFieldActionInfo(name = "DayOfYear", sourceType = FieldType.ANY_DATE, targetType = FieldType.INTEGER, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
+    public Integer dayOfYear(ZonedDateTime input) {
+        return input == null ? null : input.getDayOfYear();
+    }
 }

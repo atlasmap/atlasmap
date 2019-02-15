@@ -1,34 +1,49 @@
 package io.atlasmap.v2;
 
-import java.io.Serializable;
-public class Prepend extends Action implements Serializable {
+import io.atlasmap.api.AtlasFieldAction;
+import io.atlasmap.spi.AtlasFieldActionInfo;
+import io.atlasmap.spi.AtlasFieldActionParameter;
+
+public class Prepend extends Action implements AtlasFieldAction {
 
     private final static long serialVersionUID = 1L;
 
-    protected String string;
+    @AtlasFieldActionParameter
+    private String prefix;
 
-    /**
-     * Gets the value of the string property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getString() {
-        return string;
+    @AtlasFieldActionInfo(name = "Prepend", sourceType = FieldType.STRING, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
+    public String prepend(Object input) {
+        if (input == null && getPrefix() == null) {
+            return null;
+        }
+        if (getPrefix() == null) {
+            return input.toString();
+        }
+        return input == null ? getPrefix() : getPrefix().concat(input.toString());
     }
 
     /**
-     * Sets the value of the string property.
-     * 
-     * @param value
+     * Gets the value of the prefix property.
+     *
+     * @return
+     *     possible object is
+     *     {@link String }
+     *
+     */
+    public String getPrefix() {
+        return prefix;
+    }
+
+    /**
+     * Sets the value of the prefix property.
+     *
+     * @param prefix
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
-    public void setString(String value) {
-        this.string = value;
+    public void setPrefix(String prefix) {
+        this.prefix = prefix;
     }
 
 }

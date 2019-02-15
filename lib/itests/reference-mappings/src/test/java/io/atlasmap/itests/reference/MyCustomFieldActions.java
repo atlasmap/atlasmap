@@ -20,13 +20,16 @@ import java.util.List;
 
 import io.atlasmap.api.AtlasFieldAction;
 import io.atlasmap.spi.AtlasFieldActionInfo;
+import io.atlasmap.v2.Action;
 import io.atlasmap.v2.CollectionType;
 import io.atlasmap.v2.FieldType;
 
-public class MyCustomFieldActions implements AtlasFieldAction {
+public class MyCustomFieldActions extends Action implements AtlasFieldAction {
+
+    private static final long serialVersionUID = 1L;
 
     @AtlasFieldActionInfo(name = "Concat", sourceType = FieldType.STRING, targetType = FieldType.STRING, sourceCollectionType = CollectionType.ALL, targetCollectionType = CollectionType.NONE)
-    public static String concat(Object input) {
+    public String concat(Object input) {
         @SuppressWarnings("unchecked")
         Iterator<String> list = ((List<String>)input).iterator();
         StringBuilder buf = new StringBuilder();

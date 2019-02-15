@@ -1,7 +1,6 @@
 package io.atlasmap.core;
 
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.lang.reflect.Parameter;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,27 +10,28 @@ import java.util.ServiceLoader;
 
 import javax.xml.bind.annotation.XmlTransient;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import io.atlasmap.api.AtlasConversionException;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.api.AtlasFieldAction;
 import io.atlasmap.spi.AtlasConversionService;
 import io.atlasmap.spi.AtlasFieldActionInfo;
+import io.atlasmap.spi.AtlasFieldActionParameter;
 import io.atlasmap.spi.AtlasFieldActionService;
 import io.atlasmap.spi.AtlasInternalSession;
 import io.atlasmap.v2.Action;
 import io.atlasmap.v2.ActionDetail;
 import io.atlasmap.v2.ActionParameter;
 import io.atlasmap.v2.ActionParameters;
+import io.atlasmap.v2.ActionUtil;
 import io.atlasmap.v2.Actions;
 import io.atlasmap.v2.AtlasModelFactory;
 import io.atlasmap.v2.AuditStatus;
 import io.atlasmap.v2.CollectionType;
-import io.atlasmap.v2.CustomAction;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldGroup;
 import io.atlasmap.v2.FieldType;
@@ -127,14 +127,7 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
                     det.setCustom(true);
                 }
 
-                try {
-                    // TODO https://github.com/atlasmap/atlasmap/issues/538
-                    if (det.isCustom() == null || !det.isCustom()) {
-                        det.setParameters(detectFieldActionParameters(actionClazz));
-                    }
-                } catch (ClassNotFoundException e) {
-                    LOG.error(String.format("Error detecting parameters for field action=%s msg=%s", annotation.name(), e.getMessage()), e);
-                }
+                det.setParameters(detectFieldActionParameters(actionClazz));
 
                 if (LOG.isTraceEnabled()) {
                     LOG.trace("Loaded FieldAction: " + det.getName());
@@ -149,35 +142,66 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
         return answer;
     }
 
-    private ActionParameters detectFieldActionParameters(Class<?> actionClazz) throws ClassNotFoundException {
+    private ActionParameters detectFieldActionParameters(Class<?> actionClazz) {
         ActionParameters params = null;
-        for (Method method : actionClazz.getMethods()) {
-            // Find setters to avoid the get / is confusion
-            if (method.getParameterCount() == 1 && method.getName().startsWith("set")) {
-                // We have a parameter
-                if (params == null) {
-                    params = new ActionParameters();
-                }
+        for (java.lang.reflect.Field field : ActionUtil.declaredFields(actionClazz)) {
+            AtlasFieldActionParameter anno = field.getAnnotation(AtlasFieldActionParameter.class);
+            if (anno == null) {
+                continue;
+            }
 
-                ActionParameter actionParam = null;
-                for (Parameter methodParam : method.getParameters()) {
-                    actionParam = new ActionParameter();
-                    actionParam.setName(camelize(method.getName().substring("set".length())));
-                    // TODO set displayName/description - https://github.com/atlasmap/atlasmap/issues/96
-                    actionParam.setFieldType(getConversionService().fieldTypeFromClass(methodParam.getType()));
-                    // TODO fix this dirty hack for https://github.com/atlasmap/atlasmap/issues/386
-                    if (methodParam.getType().isEnum()) {
-                        actionParam.setFieldType(FieldType.STRING);
-                        try {
-                            for (Object e : methodParam.getType().getEnumConstants()) {
-                                Method m = e.getClass().getDeclaredMethod("value", new Class[0]);
-                                actionParam.getValues().add(m.invoke(e, new Object[0]).toString());
-                            }
-                        } catch (Exception e) {
-                            LOG.debug("Failed to populate possible enum parameter values, ignoring...", e);
-                        }
+            // We have a parameter
+            if (params == null) {
+                params = new ActionParameters();
+            }
+
+            ActionParameter actionParam = new ActionParameter();
+            actionParam.setName(camelize(field.getName()));
+            if (anno.enumType().isEnum()) {
+                actionParam.setFieldType(FieldType.STRING);
+                try {
+                    for (Object e : anno.enumType().getEnumConstants()) {
+                        Method m = e.getClass().getDeclaredMethod("value");
+                        actionParam.getValues().add(m.invoke(e).toString());
                     }
-                    params.getParameter().add(actionParam);
+                } catch (Exception e) {
+                    LOG.debug("Failed to populate possible enum parameter values, ignoring...", e);
+                }
+            } else {
+                actionParam.setFieldType(anno.type());
+            }
+            params.getParameter().add(actionParam);
+        }
+
+        if (params == null) {
+            for (Method method : actionClazz.getMethods()) {
+                // Find setters to avoid the get / is confusion
+                if (method.getParameterCount() == 1 && method.getName().startsWith("set")) {
+                    // We have a parameter
+                    if (params == null) {
+                        params = new ActionParameters();
+                    }
+
+                    ActionParameter actionParam = null;
+                    for (Parameter methodParam : method.getParameters()) {
+                        actionParam = new ActionParameter();
+                        actionParam.setName(camelize(method.getName().substring("set".length())));
+                        // TODO set displayName/description - https://github.com/atlasmap/atlasmap/issues/96
+                        actionParam.setFieldType(getConversionService().fieldTypeFromClass(methodParam.getType()));
+                        // TODO fix this dirty hack for https://github.com/atlasmap/atlasmap/issues/386
+                        if (methodParam.getType().isEnum()) {
+                            actionParam.setFieldType(FieldType.STRING);
+                            try {
+                                for (Object e : methodParam.getType().getEnumConstants()) {
+                                    Method m = e.getClass().getDeclaredMethod("value", new Class[0]);
+                                    actionParam.getValues().add(m.invoke(e, new Object[0]).toString());
+                                }
+                            } catch (Exception e) {
+                                LOG.debug("Failed to populate possible enum parameter values, ignoring...", e);
+                            }
+                        }
+                        params.getParameter().add(actionParam);
+                    }
                 }
             }
         }
@@ -224,23 +248,9 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
     @Override
     public ActionDetailImpl findActionDetail(Action action, FieldType sourceType) throws AtlasException {
         String actionName = action.getDisplayName();
-        CustomAction customAction = null;
-        if (action instanceof CustomAction) {
-            customAction = (CustomAction) action;
-            if (customAction.getClassName() == null || customAction.getMethodName() == null) {
-                throw new AtlasException("The class name and method name must be specified for custom FieldAction: " + customAction.getName());
-            }
-        }
         List<ActionDetailImpl> matches = new ArrayList<>();
         for (ActionDetailImpl actionDetail : actionDetails) {
-            if (customAction != null) {
-                if (customAction.getClassName().equals(actionDetail.getClassName())
-                        && customAction.getMethodName().equals(actionDetail.getMethod())) {
-                    matches.add(actionDetail);
-                    break;
-                }
-                actionDetail.getClassName();
-            } else if (actionDetail.getName().equals(actionName)) {
+            if (actionDetail.getName().equals(actionName)) {
                 matches.add(actionDetail);
             }
         }
@@ -406,25 +416,7 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
         try {
             Method method = actionDetail.getMethodInstance();
             Object convertedSourceObject = convertSourceObject(actionDetail, sourceObject);
-
-            if (Modifier.isStatic(method.getModifiers())) {
-                // TODO eliminate Action parameter even for OOTB
-                // we can use annotation also for the parameters instead
-                // cf. https://github.com/atlasmap/atlasmap/issues/536
-                if (actionDetail.isCustom() != null && actionDetail.isCustom()) {
-                    targetObject = method.invoke(null, convertedSourceObject);
-                } else {
-                    targetObject = method.invoke(null, action, convertedSourceObject);
-                }
-            } else {
-                Class<?> actionClazz = actionDetail.getClassInstance();
-                Object actionObject = actionClazz.newInstance();
-                if (actionDetail.isCustom() != null && actionDetail.isCustom()) {
-                    targetObject = method.invoke(actionObject, convertedSourceObject);
-                } else {
-                    targetObject = method.invoke(actionObject, action, convertedSourceObject);
-                }
-            }
+            targetObject = method.invoke(action, convertedSourceObject);
         } catch (Throwable e) {
             throw new AtlasException(String.format("Error processing action %s", actionDetail.getName()), e);
         }
@@ -433,15 +425,7 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
 
     private Object convertSourceObject(ActionDetailImpl actionDetail, Object sourceObject) throws AtlasConversionException {
         Method m = actionDetail.getMethodInstance();
-        Class<?> paramType;
-        // TODO eliminate Action parameter even for OOTB
-        // we can use annotation also for the parameters instead
-        // cf. https://github.com/atlasmap/atlasmap/issues/536
-        if (actionDetail.isCustom() != null && actionDetail.isCustom()) {
-            paramType = m.getParameterTypes()[0];
-        } else {
-            paramType = m.getParameterTypes()[1];
-        }
+        Class<?> paramType = m.getParameterTypes()[0];
         if (paramType.isInstance(sourceObject)) {
             return sourceObject;
         }

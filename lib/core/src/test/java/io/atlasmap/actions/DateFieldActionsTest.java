@@ -27,6 +27,12 @@ import org.junit.Test;
 
 import io.atlasmap.v2.AddDays;
 import io.atlasmap.v2.AddSeconds;
+import io.atlasmap.v2.CurrentDate;
+import io.atlasmap.v2.CurrentDateTime;
+import io.atlasmap.v2.CurrentTime;
+import io.atlasmap.v2.DayOfMonth;
+import io.atlasmap.v2.DayOfWeek;
+import io.atlasmap.v2.DayOfYear;
 
 public class DateFieldActionsTest {
 
@@ -34,65 +40,61 @@ public class DateFieldActionsTest {
     public void testAddDays() {
         AddDays action = new AddDays();
         action.setDays(2);
-        assertNull(DateFieldActions.addDays(action, null));
+        assertNull(action.addDays(null));
         ZonedDateTime origDate = ZonedDateTime.now();
         ZonedDateTime laterDate = origDate.plusDays(2);
-        assertEquals(laterDate, DateFieldActions.addDays(action, origDate));
-    }
-
-    @Test(expected=IllegalArgumentException.class)
-    public void testAddDaysWithNullAction() {
-        DateFieldActions.addDays(null, ZonedDateTime.now());
+        assertEquals(laterDate, action.addDays(origDate));
     }
 
     @Test
     public void testAddSeconds() {
         AddSeconds action = new AddSeconds();
         action.setSeconds(2);
-        assertNull(DateFieldActions.addSeconds(action, null));
+        assertNull(action.addSeconds(null));
         ZonedDateTime origDate = ZonedDateTime.now();
         ZonedDateTime laterDate = origDate.plusSeconds(2);
-        assertEquals(laterDate, DateFieldActions.addSeconds(action, origDate));
-    }
-
-    @Test(expected=IllegalArgumentException.class)
-    public void testAddSecondsWithNullAction() {
-        DateFieldActions.addSeconds(null, ZonedDateTime.now());
+        assertEquals(laterDate, action.addSeconds(origDate));
     }
 
     @Test
     public void testCurrentDate() {
-        assertNotNull(DateFieldActions.currentDate(null, null));
+        CurrentDate action = new CurrentDate();
+        assertNotNull(action.currentDate(null));
     }
 
     @Test
     public void testCurrentDateTime() {
-        assertNotNull(DateFieldActions.currentDateTime(null, null));
+        CurrentDateTime action = new CurrentDateTime();
+        assertNotNull(action.currentDateTime(null));
     }
 
     @Test
     public void testCurrentTime() {
-        assertNotNull(DateFieldActions.currentTime(null, null));
+        CurrentTime action = new CurrentTime();
+        assertNotNull(action.currentTime(null));
     }
 
     @Test
     public void testDayOfMonth() {
-        assertNull(DateFieldActions.dayOfMonth(null, null));
+        DayOfMonth action = new DayOfMonth();
+        assertNull(action.dayOfMonth(null));
         ZonedDateTime origDate = LocalDate.of(2018,  10,  3).atStartOfDay(ZoneId.systemDefault());
-        assertEquals(Integer.valueOf(3), DateFieldActions.dayOfMonth(null, origDate));
+        assertEquals(Integer.valueOf(3), action.dayOfMonth(origDate));
     }
 
     @Test
     public void testDayOfWeek() {
-        assertNull(DateFieldActions.dayOfWeek(null, null));
+        DayOfWeek action = new DayOfWeek();
+        assertNull(action.dayOfWeek(null));
         ZonedDateTime origDate = LocalDate.of(2017, 12, 14).atStartOfDay(ZoneId.systemDefault());
-        assertEquals(Integer.valueOf(4), DateFieldActions.dayOfWeek(null, origDate));
+        assertEquals(Integer.valueOf(4), action.dayOfWeek(origDate));
     }
 
     @Test
     public void testDayOfYear() {
-        assertNull(DateFieldActions.dayOfYear(null, null));
+        DayOfYear action = new DayOfYear();
+        assertNull(action.dayOfYear(null));
         ZonedDateTime origDate = LocalDate.of(2017, 12, 31).atStartOfDay(ZoneId.systemDefault());
-        assertEquals(Integer.valueOf(365), DateFieldActions.dayOfYear(null, origDate));
+        assertEquals(Integer.valueOf(365), action.dayOfYear(origDate));
     }
 }

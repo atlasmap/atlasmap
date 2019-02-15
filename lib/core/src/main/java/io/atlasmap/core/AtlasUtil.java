@@ -29,6 +29,7 @@ import java.net.URLDecoder;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -104,7 +105,7 @@ public class AtlasUtil {
             pass1 = atlasUri.split("\\?", 2);
         }
 
-        List<String> parts = new ArrayList<String>();
+        List<String> parts = new ArrayList<>();
         if (pass1 != null && pass1.length >= 1) {
             parts.addAll(Arrays.asList(pass1[0].split(":", 4)));
         } else {
@@ -180,7 +181,7 @@ public class AtlasUtil {
             return null;
         }
 
-        Map<String, String> params = new HashMap<String, String>();
+        Map<String, String> params = new HashMap<>();
         if (AtlasUtil.isEmpty(atlasUri)) {
             return params;
         }
@@ -242,27 +243,34 @@ public class AtlasUtil {
     }
 
     public static List<Class<?>> findClassesForPackage(String scannedPackage) {
-        String scannedPath = scannedPackage.replace('.', '/');
-        URL scannedUrl = getResource(scannedPath);
+        List<Class<?>> classes = new ArrayList<>();
 
-        if (scannedUrl == null) {
+        String scannedPath = scannedPackage.replace('.', '/');
+        Enumeration<URL> scannedUrls = null;
+        try {
+            scannedUrls = getResources(scannedPath);
+        } catch (IOException e) {
+            throw new IllegalArgumentException(String.format("Unable to detect resources for url='%s' for package='%s'",
+                    scannedPath, scannedPackage), e);
+        }
+        if (scannedUrls == null || !scannedUrls.hasMoreElements()) {
             throw new IllegalArgumentException(String.format("Unable to detect resources for url='%s' for package='%s'",
                     scannedPath, scannedPackage));
         }
 
-        if ("jar".equals(scannedUrl.getProtocol())) {
-            return findClassesFromJar(scannedUrl);
-        }
+        while (scannedUrls.hasMoreElements()) {
+            URL scannedUrl = scannedUrls.nextElement();
+            if ("jar".equals(scannedUrl.getProtocol())) {
+                classes.addAll(findClassesFromJar(scannedUrl));
+                continue;
+            }
 
-        File scannedFd = new File(scannedUrl.getFile());
-        List<Class<?>> classes = new ArrayList<Class<?>>();
-
-        if (scannedFd.listFiles() == null) {
-            return classes;
-        }
-
-        for (File file : scannedFd.listFiles()) {
-            classes.addAll(find(file, scannedPackage));
+            File scannedFd = new File(scannedUrl.getFile());
+            if (scannedFd.listFiles() != null) {
+                for (File file : scannedFd.listFiles()) {
+                    classes.addAll(find(file, scannedPackage));
+                }
+            }
         }
 
         return classes;
@@ -308,26 +316,24 @@ public class AtlasUtil {
         }
     }
 
-    protected static URL getResource(String scannedPath) {
-        URL url = null;
-
+    protected static Enumeration<URL> getResources(String scannedPath) throws IOException {
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         if (classLoader == null) {
             classLoader = AtlasUtil.class.getClassLoader();
         }
 
         if (classLoader != null) {
-            url = classLoader.getResource(scannedPath);
-            if (url != null) {
-                return url;
+            Enumeration<URL> iter = classLoader.getResources(scannedPath);
+            if (iter != null) {
+                return iter;
             }
         }
 
-        return ClassLoader.getSystemResource(scannedPath);
+        return ClassLoader.getSystemResources(scannedPath);
     }
 
     protected static List<Class<?>> find(File file, String scannedPackage) {
-        List<Class<?>> classes = new ArrayList<Class<?>>();
+        List<Class<?>> classes = new ArrayList<>();
         String resource = scannedPackage + '.' + file.getName();
         if (file.isDirectory()) {
             for (File child : file.listFiles()) {
@@ -345,7 +351,7 @@ public class AtlasUtil {
     }
 
     protected static List<Class<?>> findClassesFromJar(URL jarFileUrl) {
-        List<Class<?>> classNames = new ArrayList<Class<?>>();
+        List<Class<?>> classNames = new ArrayList<>();
 
         JarURLConnection connection = null;
 

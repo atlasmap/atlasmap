@@ -37,7 +37,6 @@ import org.junit.rules.TestName;
 import io.atlasmap.v2.Actions;
 import io.atlasmap.v2.AtlasMapping;
 import io.atlasmap.v2.AtlasModelFactory;
-import io.atlasmap.v2.Camelize;
 import io.atlasmap.v2.Capitalize;
 import io.atlasmap.v2.Collection;
 import io.atlasmap.v2.CollectionType;
@@ -414,7 +413,6 @@ public abstract class BaseMarshallerTest {
 
     private Actions generateActions() {
         Actions actions = new Actions();
-        actions.getActions().add(new Camelize());
         actions.getActions().add(new Capitalize());
         actions.getActions().add(new Length());
         actions.getActions().add(new Lowercase());
@@ -538,7 +536,7 @@ public abstract class BaseMarshallerTest {
         assertEquals(Boolean.FALSE, field.isPrimitive());
         assertEquals("setMethod", field.getSetMethod());
         assertEquals(Boolean.TRUE, field.isSynthetic());
-        validateField(field, 10);
+        validateField(field, 9);
     }
 
     private void validateField(Field field, int actionSize) {

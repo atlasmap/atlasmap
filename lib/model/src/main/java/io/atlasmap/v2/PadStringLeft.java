@@ -1,62 +1,26 @@
 package io.atlasmap.v2;
 
-import java.io.Serializable;
+import io.atlasmap.spi.AtlasFieldActionInfo;
 
-public class PadStringLeft extends Action implements Serializable
+public class PadStringLeft extends BasePadString
 {
-
     private final static long serialVersionUID = 1L;
 
-    protected String padCharacter;
+    @AtlasFieldActionInfo(name = "PadStringLeft", sourceType = FieldType.STRING, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
+    public String padStringLeft(String input) {
+        if (getPadCharacter() == null) {
+            throw new IllegalArgumentException("PadStringLeft must be specified with a padCharacter");
+        }
 
-    protected Integer padCount;
+        StringBuilder builder = new StringBuilder();
+        int count = getPadCount() == null ? 0 : getPadCount();
+        for (int i = 0; i < count; i++) {
+            builder.append(getPadCharacter());
+        }
+        if (input != null) {
+            builder.append(input);
+        }
 
-    /**
-     * Gets the value of the padCharacter property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getPadCharacter() {
-        return padCharacter;
+        return builder.toString();
     }
-
-    /**
-     * Sets the value of the padCharacter property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setPadCharacter(String value) {
-        this.padCharacter = value;
-    }
-
-    /**
-     * Gets the value of the padCount property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Integer }
-     *     
-     */
-    public Integer getPadCount() {
-        return padCount;
-    }
-
-    /**
-     * Sets the value of the padCount property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Integer }
-     *     
-     */
-    public void setPadCount(Integer value) {
-        this.padCount = value;
-    }
-
 }

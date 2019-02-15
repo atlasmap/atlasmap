@@ -35,7 +35,6 @@ import org.junit.rules.TestName;
 import io.atlasmap.v2.Actions;
 import io.atlasmap.v2.AtlasMapping;
 import io.atlasmap.v2.AtlasModelFactory;
-import io.atlasmap.v2.Camelize;
 import io.atlasmap.v2.Capitalize;
 import io.atlasmap.v2.Collection;
 import io.atlasmap.v2.CollectionType;
@@ -184,7 +183,6 @@ public abstract class BaseMarshallerTest {
 
     private Actions generateActions() {
         Actions actions = new Actions();
-        actions.getActions().add(new Camelize());
         actions.getActions().add(new Capitalize());
         actions.getActions().add(new Length());
         actions.getActions().add(new Lowercase());
@@ -396,7 +394,7 @@ public abstract class BaseMarshallerTest {
     }
 
     private void validateXmlField(XmlField field) {
-        assertEquals(10, field.getActions().getActions().size());
+        assertEquals(9, field.getActions().getActions().size());
         assertEquals("XmlAccessorType", field.getAnnotations().getString().get(0));
         assertEquals("XmlType", field.getAnnotations().getString().get(1));
         assertEquals(Integer.valueOf(3), field.getArrayDimensions());

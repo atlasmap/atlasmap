@@ -7,18 +7,21 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class ModelTestUtil {
 
-    public static List<Action> getAllOOTBActions() throws Exception {
-        List<Action> answer = new ArrayList<>();
+    public static Set<Action> getAllOOTBActions() throws Exception {
+        Set<Action> answer = new HashSet<>();
         ClassLoader cl = Action.class.getClassLoader();
         Enumeration<URL> resources = cl.getResources("io/atlasmap/v2");
         while(resources.hasMoreElements()) {
             URL resource = resources.nextElement();
+            if (!"file".equals(resource.getProtocol())) {
+                continue;
+            }
             Path p = Paths.get(resource.toURI());
             if (!Files.isDirectory(p)) {
                 continue;
@@ -35,12 +38,12 @@ public class ModelTestUtil {
                                 answer.add((Action)clazz.newInstance());
                             }
                         }
-                    } catch (Exception e) {}
+                    } catch (Exception e) {
+                    }
                     return FileVisitResult.CONTINUE;
                 }
             });
         }
-
         return answer;
     }
 

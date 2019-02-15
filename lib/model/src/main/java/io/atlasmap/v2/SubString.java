@@ -1,61 +1,21 @@
 package io.atlasmap.v2;
 
-import java.io.Serializable;
+import io.atlasmap.spi.AtlasFieldActionInfo;
 
-public class SubString extends Action implements Serializable {
+public class SubString extends BaseSubString {
 
     private final static long serialVersionUID = 1L;
 
-    protected Integer startIndex;
+    @AtlasFieldActionInfo(name = "SubString", sourceType = FieldType.STRING, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
+    public String subString(String input) {
+        if (input == null || input.length() == 0) {
+            return input;
+        }
 
-    protected Integer endIndex;
+        if (getStartIndex() == null || getStartIndex() < 0) {
+            throw new IllegalArgumentException("SubString action must be specified with a positive startIndex");
+        }
 
-    /**
-     * Gets the value of the startIndex property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Integer }
-     *     
-     */
-    public Integer getStartIndex() {
-        return startIndex;
+        return subString(input, getStartIndex(), getEndIndex());
     }
-
-    /**
-     * Sets the value of the startIndex property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Integer }
-     *     
-     */
-    public void setStartIndex(Integer value) {
-        this.startIndex = value;
-    }
-
-    /**
-     * Gets the value of the endIndex property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Integer }
-     *     
-     */
-    public Integer getEndIndex() {
-        return endIndex;
-    }
-
-    /**
-     * Sets the value of the endIndex property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Integer }
-     *     
-     */
-    public void setEndIndex(Integer value) {
-        this.endIndex = value;
-    }
-
 }

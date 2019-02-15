@@ -14,6 +14,7 @@ import org.junit.Test;
 
 import io.atlasmap.api.AtlasConversionException;
 import io.atlasmap.api.AtlasException;
+import io.atlasmap.api.AtlasFieldAction;
 import io.atlasmap.spi.AtlasInternalSession;
 import io.atlasmap.v2.AbsoluteValue;
 import io.atlasmap.v2.Action;
@@ -72,7 +73,12 @@ public class DefaultAtlasFieldActionsServiceTest {
         ActionDetail actionDetail = fieldActionsService.findActionDetail(new IndexOf(), FieldType.STRING);
         assertNotNull(actionDetail);
 
-        actionDetail = fieldActionsService.findActionDetail(new Action() {}, FieldType.STRING);
+        class MockAction extends Action implements AtlasFieldAction {
+
+            private static final long serialVersionUID = 1L;
+        }
+
+        actionDetail = fieldActionsService.findActionDetail(new MockAction(), FieldType.STRING);
         assertNull(actionDetail);
 
         actionDetail = fieldActionsService.findActionDetail(new IndexOf(), null);

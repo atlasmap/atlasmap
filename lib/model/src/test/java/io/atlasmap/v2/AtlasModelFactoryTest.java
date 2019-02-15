@@ -71,8 +71,8 @@ public class AtlasModelFactoryTest {
 
     @Test
     public void testCloneActions() {
-        List<Action> actionsList = Arrays.asList(new Camelize(), new Capitalize(), new CurrentDate(),
-                new CurrentDateTime(), new CurrentTime(), new CustomAction(), new GenerateUUID(),
+        List<Action> actionsList = Arrays.asList(new Capitalize(), new CurrentDate(),
+                new CurrentDateTime(), new CurrentTime(), new GenerateUUID(),
                 new Lowercase(), new LowercaseChar(), new PadStringLeft(), new PadStringRight(),
                 new SeparateByDash(), new SeparateByUnderscore(), new Length(), new SubString(),
                 new SubStringAfter(), new SubStringBefore(), new Trim(), new TrimLeft(), new TrimRight(),
@@ -88,7 +88,7 @@ public class AtlasModelFactoryTest {
     public void testCloneAction() throws Exception {
         for (Action a : ModelTestUtil.getAllOOTBActions()) {
             assertNotNull(a);
-            Action b = AtlasModelFactory.cloneAction((Action)a);
+            Action b = AtlasModelFactory.cloneAction(a);
             assertNotNull(String.format("Add %s to AtlasModelFactory#cloneAction()", a.getClass().getSimpleName()), b);
             assertNotSame(a, b);
             assertEquals(a.getClass().getCanonicalName(), b.getClass().getCanonicalName());

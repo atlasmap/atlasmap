@@ -51,67 +51,73 @@ public class NumberFieldActionsTest {
 
     @Test
     public void testAbsoluteValue() {
-        assertEquals(0, NumberFieldActions.absoluteValue(new AbsoluteValue(), null));
-        assertEquals(BigDecimal.valueOf(1), NumberFieldActions.absoluteValue(new AbsoluteValue(), BigDecimal.valueOf(-1)));
-        assertEquals(1.0, NumberFieldActions.absoluteValue(new AbsoluteValue(), -1.0));
-        assertEquals(1.0, NumberFieldActions.absoluteValue(new AbsoluteValue(), -1F));
-        assertEquals(1L, NumberFieldActions.absoluteValue(new AbsoluteValue(), new AtomicLong(-1L)));
-        assertEquals(1L, NumberFieldActions.absoluteValue(new AbsoluteValue(), -1L));
-        assertEquals(1L, NumberFieldActions.absoluteValue(new AbsoluteValue(), new AtomicInteger(-1)));
-        assertEquals(1L, NumberFieldActions.absoluteValue(new AbsoluteValue(), -1));
-        assertEquals(1L, NumberFieldActions.absoluteValue(new AbsoluteValue(), (byte) -1));
+        AbsoluteValue action = new AbsoluteValue();
+        assertEquals(0, action.absoluteValue(null));
+        assertEquals(BigDecimal.valueOf(1), action.absoluteValue(BigDecimal.valueOf(-1)));
+        assertEquals(1.0, action.absoluteValue(-1.0));
+        assertEquals(1.0, action.absoluteValue(-1F));
+        assertEquals(1L, action.absoluteValue(new AtomicLong(-1L)));
+        assertEquals(1L, action.absoluteValue(-1L));
+        assertEquals(1L, action.absoluteValue(new AtomicInteger(-1)));
+        assertEquals(1L, action.absoluteValue(-1));
+        assertEquals(1L, action.absoluteValue((byte) -1));
     }
 
     @Test
     public void testAdd() {
-        assertEquals(BigDecimal.valueOf(10.0), NumberFieldActions.add(new Add(), new BigDecimal[] { BigDecimal.valueOf(1), BigDecimal.valueOf(2), BigDecimal.valueOf(3), BigDecimal.valueOf(4) }));
-        assertEquals(10.0, NumberFieldActions.add(new Add(), new double[] { 1.0, 2.0, 3.0, 4.0 }));
-        assertEquals(10L, NumberFieldActions.add(new Add(), new int[] { 1, 2, 3, 4 }));
-        assertEquals(10L, NumberFieldActions.add(new Add(), Arrays.asList(1, 2, 3, 4)));
+        Add action = new Add();
+        assertEquals(BigDecimal.valueOf(10.0), action.add(new BigDecimal[] { BigDecimal.valueOf(1), BigDecimal.valueOf(2), BigDecimal.valueOf(3), BigDecimal.valueOf(4) }));
+        assertEquals(10.0, action.add(new double[] { 1.0, 2.0, 3.0, 4.0 }));
+        assertEquals(10L, action.add(new int[] { 1, 2, 3, 4 }));
+        assertEquals(10L, action.add(Arrays.asList(1, 2, 3, 4)));
         Map<String, Integer> map = new HashMap<>();
         map.put("1", 1);
         map.put("2", 2);
         map.put("3", 3);
         map.put("4", 4);
-        assertEquals(10L, NumberFieldActions.add(new Add(), map));
-        assertEquals(0, NumberFieldActions.add(new Add(), null));
+        assertEquals(10L, action.add(map));
+        assertEquals(0, action.add(null));
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testAddOfNonNumber() {
-        NumberFieldActions.add(new Add(), Arrays.asList(new Object[] { "1", "2", "3" }));
+        Add action = new Add();
+        action.add(Arrays.asList(new Object[] { "1", "2", "3" }));
     }
 
     @Test
     public void testAverage() {
-        assertEquals(2.5, NumberFieldActions.average(new Average(), new double[] { 1.0, 2.0, 3.0, 4.0 }));
-        assertEquals(2.5, NumberFieldActions.average(new Average(), new int[] { 1, 2, 3, 4 }));
-        assertEquals(2.5, NumberFieldActions.average(new Average(), Arrays.asList(1, 2, 3, 4)));
+        Average action = new Average();
+        assertEquals(2.5, action.average(new double[] { 1.0, 2.0, 3.0, 4.0 }));
+        assertEquals(2.5, action.average(new int[] { 1, 2, 3, 4 }));
+        assertEquals(2.5, action.average(Arrays.asList(1, 2, 3, 4)));
         Map<String, Integer> map = new HashMap<>();
         map.put("1", 1);
         map.put("2", 2);
         map.put("3", 3);
         map.put("4", 4);
-        assertEquals(2.5, NumberFieldActions.average(new Average(), map));
-        assertEquals(0, NumberFieldActions.average(new Average(), null));
+        assertEquals(2.5, action.average(map));
+        assertEquals(0, action.average(null));
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testAverageOfNonNumber() {
-        NumberFieldActions.average(new AbsoluteValue(), Arrays.asList(new Object[] { "1", "2", "3" }));
+        Average action = new Average();
+        action.average(Arrays.asList(new Object[] { "1", "2", "3" }));
     }
 
     @Test
     public void testCeiling() {
-        assertEquals(0L, NumberFieldActions.ceiling(new Ceiling(), null));
-        assertEquals(2L, NumberFieldActions.ceiling(new Ceiling(), BigDecimal.valueOf(1.1)));
-        assertEquals(2L, NumberFieldActions.ceiling(new Ceiling(), 1.1));
-        assertEquals(2L, NumberFieldActions.ceiling(new Ceiling(), 1.1F));
-        assertEquals(2L, NumberFieldActions.ceiling(new Ceiling(), new AtomicLong(2L)));
-        assertEquals(2L, NumberFieldActions.ceiling(new Ceiling(), 2L));
-        assertEquals(2L, NumberFieldActions.ceiling(new Ceiling(), new AtomicInteger(2)));
-        assertEquals(2L, NumberFieldActions.ceiling(new Ceiling(), 2));
-        assertEquals(2L, NumberFieldActions.ceiling(new Ceiling(), (byte) 2));
+        Ceiling action = new Ceiling();
+        assertEquals(0L, action.ceiling(null));
+        assertEquals(2L, action.ceiling(BigDecimal.valueOf(1.1)));
+        assertEquals(2L, action.ceiling(1.1));
+        assertEquals(2L, action.ceiling(1.1F));
+        assertEquals(2L, action.ceiling(new AtomicLong(2L)));
+        assertEquals(2L, action.ceiling(2L));
+        assertEquals(2L, action.ceiling(new AtomicInteger(2)));
+        assertEquals(2L, action.ceiling(2));
+        assertEquals(2L, action.ceiling((byte) 2));
     }
 
     @Test
@@ -119,28 +125,28 @@ public class NumberFieldActionsTest {
         ConvertAreaUnit action = new ConvertAreaUnit();
         action.setFromUnit(AreaUnitType.SQUARE_METER);
         action.setToUnit(AreaUnitType.SQUARE_METER);
-        assertEquals(1.0, NumberFieldActions.convertAreaUnit(action, 1.0));
+        assertEquals(1.0, action.convertAreaUnit(1.0));
         action.setToUnit(AreaUnitType.SQUARE_FOOT);
-        assertEquals(21.527820833419447, NumberFieldActions.convertAreaUnit(action, 2.0));
+        assertEquals(21.527820833419447, action.convertAreaUnit(2.0));
         action.setToUnit(AreaUnitType.SQUARE_MILE);
-        assertEquals(1.1583064756273378, NumberFieldActions.convertAreaUnit(action, 3000000.0));
+        assertEquals(1.1583064756273378, action.convertAreaUnit(3000000.0));
 
         action.setFromUnit(AreaUnitType.SQUARE_FOOT);
         action.setToUnit(AreaUnitType.SQUARE_METER);
-        assertEquals(3.7161215999999997, NumberFieldActions.convertAreaUnit(action, 40.0));
+        assertEquals(3.7161215999999997, action.convertAreaUnit(40.0));
         action.setToUnit(AreaUnitType.SQUARE_FOOT);
-        assertEquals(5.0, NumberFieldActions.convertAreaUnit(action, 5.0));
+        assertEquals(5.0, action.convertAreaUnit(5.0));
         action.setToUnit(AreaUnitType.SQUARE_MILE);
-        assertEquals(2.1522038567493116, NumberFieldActions.convertAreaUnit(action, 60000000.0));
+        assertEquals(2.1522038567493116, action.convertAreaUnit(60000000.0));
 
         action.setFromUnit(AreaUnitType.SQUARE_MILE);
         action.setToUnit(AreaUnitType.SQUARE_METER);
-        assertEquals(18129916.772352, NumberFieldActions.convertAreaUnit(action, 7.0));
+        assertEquals(18129916.772352, action.convertAreaUnit(7.0));
         action.setToUnit(AreaUnitType.SQUARE_FOOT);
-        assertEquals(223027200.0, NumberFieldActions.convertAreaUnit(action, 8.0));
+        assertEquals(223027200.0, action.convertAreaUnit(8.0));
         action.setToUnit(AreaUnitType.SQUARE_MILE);
-        assertEquals(9.0, NumberFieldActions.convertAreaUnit(action, 9.0));
-        assertNotNull(NumberFieldActions.convertAreaUnit(action, new BigDecimal("9")));
+        assertEquals(9.0, action.convertAreaUnit(9.0));
+        assertNotNull(action.convertAreaUnit(new BigDecimal("9")));
     }
 
     @Test
@@ -148,63 +154,63 @@ public class NumberFieldActionsTest {
         ConvertDistanceUnit action = new ConvertDistanceUnit();
         action.setFromUnit(DistanceUnitType.METER_M);
         action.setToUnit(DistanceUnitType.METER_M);
-        assertEquals(1.0, NumberFieldActions.convertDistanceUnit(action, 1.0));
+        assertEquals(1.0, action.convertDistanceUnit(1.0));
         action.setToUnit(DistanceUnitType.FOOT_FT);
-        assertEquals(6.561679790026247, NumberFieldActions.convertDistanceUnit(action, 2.0));
+        assertEquals(6.561679790026247, action.convertDistanceUnit(2.0));
         action.setToUnit(DistanceUnitType.YARD_YD);
-        assertEquals(3.2808398950131235, NumberFieldActions.convertDistanceUnit(action, 3.0));
+        assertEquals(3.2808398950131235, action.convertDistanceUnit(3.0));
         action.setToUnit(DistanceUnitType.MILE_MI);
-        assertEquals(2.4854847689493362, NumberFieldActions.convertDistanceUnit(action, 4000.0));
+        assertEquals(2.4854847689493362, action.convertDistanceUnit(4000.0));
         action.setToUnit(DistanceUnitType.INCH_IN);
-        assertEquals(196.8503937007874, NumberFieldActions.convertDistanceUnit(action, 5.0));
+        assertEquals(196.8503937007874, action.convertDistanceUnit(5.0));
 
         action.setFromUnit(DistanceUnitType.FOOT_FT);
         action.setToUnit(DistanceUnitType.METER_M);
-        assertEquals(1.8287999999999998, NumberFieldActions.convertDistanceUnit(action, 6.0));
+        assertEquals(1.8287999999999998, action.convertDistanceUnit(6.0));
         action.setToUnit(DistanceUnitType.FOOT_FT);
-        assertEquals(7.0, NumberFieldActions.convertDistanceUnit(action, 7.0));
+        assertEquals(7.0, action.convertDistanceUnit(7.0));
         action.setToUnit(DistanceUnitType.YARD_YD);
-        assertEquals(27.0, NumberFieldActions.convertDistanceUnit(action, 81.0));
+        assertEquals(27.0, action.convertDistanceUnit(81.0));
         action.setToUnit(DistanceUnitType.MILE_MI);
-        assertEquals(1.7045454545454546, NumberFieldActions.convertDistanceUnit(action, 9000.0));
+        assertEquals(1.7045454545454546, action.convertDistanceUnit(9000.0));
         action.setToUnit(DistanceUnitType.INCH_IN);
-        assertEquals(12.0, NumberFieldActions.convertDistanceUnit(action, 1.0));
+        assertEquals(12.0, action.convertDistanceUnit(1.0));
 
         action.setFromUnit(DistanceUnitType.YARD_YD);
         action.setToUnit(DistanceUnitType.METER_M);
-        assertEquals(22.86, NumberFieldActions.convertDistanceUnit(action, 25.0));
+        assertEquals(22.86, action.convertDistanceUnit(25.0));
         action.setToUnit(DistanceUnitType.FOOT_FT);
-        assertEquals(9.0, NumberFieldActions.convertDistanceUnit(action, 3.0));
+        assertEquals(9.0, action.convertDistanceUnit(3.0));
         action.setToUnit(DistanceUnitType.YARD_YD);
-        assertEquals(4.0, NumberFieldActions.convertDistanceUnit(action, 4.0));
+        assertEquals(4.0, action.convertDistanceUnit(4.0));
         action.setToUnit(DistanceUnitType.MILE_MI);
-        assertEquals(2.840909090909091, NumberFieldActions.convertDistanceUnit(action, 5000.0));
+        assertEquals(2.840909090909091, action.convertDistanceUnit(5000.0));
         action.setToUnit(DistanceUnitType.INCH_IN);
-        assertEquals(216.0, NumberFieldActions.convertDistanceUnit(action, 6.0));
+        assertEquals(216.0, action.convertDistanceUnit(6.0));
 
         action.setFromUnit(DistanceUnitType.MILE_MI);
         action.setToUnit(DistanceUnitType.METER_M);
-        assertEquals(11265.408, NumberFieldActions.convertDistanceUnit(action, 7.0));
+        assertEquals(11265.408, action.convertDistanceUnit(7.0));
         action.setToUnit(DistanceUnitType.FOOT_FT);
-        assertEquals(42240.0, NumberFieldActions.convertDistanceUnit(action, 8.0));
+        assertEquals(42240.0, action.convertDistanceUnit(8.0));
         action.setToUnit(DistanceUnitType.YARD_YD);
-        assertEquals(15840.0, NumberFieldActions.convertDistanceUnit(action, 9.0));
+        assertEquals(15840.0, action.convertDistanceUnit(9.0));
         action.setToUnit(DistanceUnitType.MILE_MI);
-        assertEquals(1.0, NumberFieldActions.convertDistanceUnit(action, 1.0));
+        assertEquals(1.0, action.convertDistanceUnit(1.0));
         action.setToUnit(DistanceUnitType.INCH_IN);
-        assertEquals(126720.0, NumberFieldActions.convertDistanceUnit(action, 2.0));
+        assertEquals(126720.0, action.convertDistanceUnit(2.0));
 
         action.setFromUnit(DistanceUnitType.INCH_IN);
         action.setToUnit(DistanceUnitType.METER_M);
-        assertEquals(7.62, NumberFieldActions.convertDistanceUnit(action, 300.0));
+        assertEquals(7.62, action.convertDistanceUnit(300.0));
         action.setToUnit(DistanceUnitType.FOOT_FT);
-        assertEquals(3.5, NumberFieldActions.convertDistanceUnit(action, 42.0));
+        assertEquals(3.5, action.convertDistanceUnit(42.0));
         action.setToUnit(DistanceUnitType.YARD_YD);
-        assertEquals(1.5, NumberFieldActions.convertDistanceUnit(action, 54.0));
+        assertEquals(1.5, action.convertDistanceUnit(54.0));
         action.setToUnit(DistanceUnitType.MILE_MI);
-        assertEquals(9.469696969696969, NumberFieldActions.convertDistanceUnit(action, 600000.0));
+        assertEquals(9.469696969696969, action.convertDistanceUnit(600000.0));
         action.setToUnit(DistanceUnitType.INCH_IN);
-        assertEquals(6.0, NumberFieldActions.convertDistanceUnit(action, 6.0));
+        assertEquals(6.0, action.convertDistanceUnit(6.0));
     }
 
     @Test
@@ -212,31 +218,31 @@ public class NumberFieldActionsTest {
         ConvertMassUnit action = new ConvertMassUnit();
         action.setFromUnit(MassUnitType.KILOGRAM_KG);
         action.setToUnit(MassUnitType.POUND_LB);
-        assertEquals(11, NumberFieldActions.convertMassUnit(action, 5).intValue());
+        assertEquals(11, action.convertMassUnit(5).intValue());
         action.setFromUnit(MassUnitType.POUND_LB);
         action.setToUnit(MassUnitType.KILOGRAM_KG);
-        assertEquals(4.5359235f, NumberFieldActions.convertMassUnit(action, 10.0f).floatValue(), 0);
-        assertEquals(0, NumberFieldActions.convertMassUnit(action, null).intValue());
+        assertEquals(4.5359235f, action.convertMassUnit(10.0f).floatValue(), 0);
+        assertEquals(0, action.convertMassUnit(null).intValue());
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testConvertMassUnitErrorNoFromNorToSpecified() {
         ConvertMassUnit action = new ConvertMassUnit();
-        assertEquals(11, NumberFieldActions.convertMassUnit(action, 5));
+        assertEquals(11, action.convertMassUnit(5));
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testConvertMassUnitErrorNoFromSpecified() {
         ConvertMassUnit action = new ConvertMassUnit();
         action.setToUnit(MassUnitType.POUND_LB);
-        assertEquals(11, NumberFieldActions.convertMassUnit(action, 5));
+        assertEquals(11, action.convertMassUnit(5));
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testConvertMassUnitErrorNoToSpecified() {
         ConvertMassUnit action = new ConvertMassUnit();
         action.setFromUnit(MassUnitType.KILOGRAM_KG);
-        assertEquals(11, NumberFieldActions.convertMassUnit(action, 5));
+        assertEquals(11, action.convertMassUnit(5));
     }
 
     @Test
@@ -244,202 +250,191 @@ public class NumberFieldActionsTest {
         ConvertVolumeUnit action = new ConvertVolumeUnit();
         action.setFromUnit(VolumeUnitType.CUBIC_METER);
         action.setToUnit(VolumeUnitType.CUBIC_METER);
-        assertEquals(1.0, NumberFieldActions.convertVolumeUnit(action, 1.0));
+        assertEquals(1.0, action.convertVolumeUnit(1.0));
         action.setToUnit(VolumeUnitType.LITER);
-        assertEquals(2000.0, NumberFieldActions.convertVolumeUnit(action, 2.0));
+        assertEquals(2000.0, action.convertVolumeUnit(2.0));
         action.setToUnit(VolumeUnitType.CUBIC_FOOT);
-        assertEquals(105.94400016446578, NumberFieldActions.convertVolumeUnit(action, 3.0));
+        assertEquals(105.94400016446578, action.convertVolumeUnit(3.0));
         action.setToUnit(VolumeUnitType.GALLON_US_FLUID);
-        assertEquals(1056.68820944, NumberFieldActions.convertVolumeUnit(action, 4.0));
+        assertEquals(1056.68820944, action.convertVolumeUnit(4.0));
 
         action.setFromUnit(VolumeUnitType.LITER);
         action.setToUnit(VolumeUnitType.CUBIC_METER);
-        assertEquals(5.0, NumberFieldActions.convertVolumeUnit(action, 5000.0));
+        assertEquals(5.0, action.convertVolumeUnit(5000.0));
         action.setToUnit(VolumeUnitType.LITER);
-        assertEquals(6.0, NumberFieldActions.convertVolumeUnit(action, 6.0));
+        assertEquals(6.0, action.convertVolumeUnit(6.0));
         action.setToUnit(VolumeUnitType.CUBIC_FOOT);
-        assertEquals(2.4720266705042016, NumberFieldActions.convertVolumeUnit(action, 70.0));
+        assertEquals(2.4720266705042016, action.convertVolumeUnit(70.0));
         action.setToUnit(VolumeUnitType.GALLON_US_FLUID);
-        assertEquals(2.11337641888, NumberFieldActions.convertVolumeUnit(action, 8.0));
+        assertEquals(2.11337641888, action.convertVolumeUnit(8.0));
 
         action.setFromUnit(VolumeUnitType.CUBIC_FOOT);
         action.setToUnit(VolumeUnitType.CUBIC_METER);
-        assertEquals(2.54851619328, NumberFieldActions.convertVolumeUnit(action, 90.0));
+        assertEquals(2.54851619328, action.convertVolumeUnit(90.0));
         action.setToUnit(VolumeUnitType.LITER);
-        assertEquals(28.316846591999997, NumberFieldActions.convertVolumeUnit(action, 1.0));
+        assertEquals(28.316846591999997, action.convertVolumeUnit(1.0));
         action.setToUnit(VolumeUnitType.CUBIC_FOOT);
-        assertEquals(2.0, NumberFieldActions.convertVolumeUnit(action, 2.0));
+        assertEquals(2.0, action.convertVolumeUnit(2.0));
         action.setToUnit(VolumeUnitType.GALLON_US_FLUID);
-        assertEquals(22.441558441715735, NumberFieldActions.convertVolumeUnit(action, 3.0));
+        assertEquals(22.441558441715735, action.convertVolumeUnit(3.0));
 
         action.setFromUnit(VolumeUnitType.GALLON_US_FLUID);
         action.setToUnit(VolumeUnitType.CUBIC_METER);
-        assertEquals(1.5141647135893872, NumberFieldActions.convertVolumeUnit(action, 400.0));
+        assertEquals(1.5141647135893872, action.convertVolumeUnit(400.0));
         action.setToUnit(VolumeUnitType.LITER);
-        assertEquals(18.92705891986734, NumberFieldActions.convertVolumeUnit(action, 5.0));
+        assertEquals(18.92705891986734, action.convertVolumeUnit(5.0));
         action.setToUnit(VolumeUnitType.CUBIC_FOOT);
-        assertEquals(8.020833333277116, NumberFieldActions.convertVolumeUnit(action, 60.0));
+        assertEquals(8.020833333277116, action.convertVolumeUnit(60.0));
         action.setToUnit(VolumeUnitType.GALLON_US_FLUID);
-        assertEquals(7.0, NumberFieldActions.convertVolumeUnit(action, 7.0));
+        assertEquals(7.0, action.convertVolumeUnit(7.0));
     }
 
     @Test
     public void testDivide() {
-        assertEquals(BigDecimal.valueOf(2), NumberFieldActions.divide(new Divide(), new BigDecimal[] { BigDecimal.valueOf(4), BigDecimal.valueOf(2) }));
-        assertEquals(2.0, NumberFieldActions.divide(new Divide(), new double[] { 4.0, 2.0 }));
-        assertEquals(2.0, NumberFieldActions.divide(new Divide(), new int[] { 4, 2 }));
-        assertEquals(2.0, NumberFieldActions.divide(new Divide(), Arrays.asList(4, 2)));
+        Divide action = new Divide();
+        assertEquals(BigDecimal.valueOf(2), action.divide(new BigDecimal[] { BigDecimal.valueOf(4), BigDecimal.valueOf(2) }));
+        assertEquals(2.0, action.divide(new double[] { 4.0, 2.0 }));
+        assertEquals(2.0, action.divide(new int[] { 4, 2 }));
+        assertEquals(2.0, action.divide(Arrays.asList(4, 2)));
         Map<String, Integer> map = new HashMap<>();
         map.put("4", 1);
         map.put("2", 2);
-        assertEquals(2.0, NumberFieldActions.divide(new Divide(), map));
-        assertEquals(0, NumberFieldActions.divide(new Divide(), null));
+        assertEquals(2.0, action.divide(map));
+        assertEquals(0, action.divide(null));
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testDivideOfNonNumber() {
-        NumberFieldActions.divide(new Divide(), Arrays.asList(new Object[] { "1", "2", "3" }));
+        Divide action = new Divide();
+        action.divide(Arrays.asList(new Object[] { "1", "2", "3" }));
     }
 
     @Test
     public void testFloor() {
-        assertEquals(0L, NumberFieldActions.floor(new Floor(), null));
-        assertEquals(1L, NumberFieldActions.floor(new Floor(), BigDecimal.valueOf(1.5)));
-        assertEquals(1L, NumberFieldActions.floor(new Floor(), 1.5));
-        assertEquals(1L, NumberFieldActions.floor(new Floor(), 1.5F));
-        assertEquals(2L, NumberFieldActions.floor(new Floor(), new AtomicLong(2L)));
-        assertEquals(2L, NumberFieldActions.floor(new Floor(), 2L));
-        assertEquals(2L, NumberFieldActions.floor(new Floor(), new AtomicInteger(2)));
-        assertEquals(2L, NumberFieldActions.floor(new Floor(), 2));
-        assertEquals(2L, NumberFieldActions.floor(new Floor(), (byte) 2));
+        Floor action = new Floor();
+        assertEquals(0L, action.floor(null));
+        assertEquals(1L, action.floor(BigDecimal.valueOf(1.5)));
+        assertEquals(1L, action.floor(1.5));
+        assertEquals(1L, action.floor(1.5F));
+        assertEquals(2L, action.floor(new AtomicLong(2L)));
+        assertEquals(2L, action.floor(2L));
+        assertEquals(2L, action.floor(new AtomicInteger(2)));
+        assertEquals(2L, action.floor(2));
+        assertEquals(2L, action.floor((byte) 2));
     }
 
     @Test
     public void testMaximum() {
-        assertEquals(BigDecimal.valueOf(4), NumberFieldActions.maximum(new Maximum(), new BigDecimal[] { BigDecimal.valueOf(1), BigDecimal.valueOf(2), BigDecimal.valueOf(3), BigDecimal.valueOf(4) }));
-        assertEquals(4.0, NumberFieldActions.maximum(new Maximum(), new double[] { 1.0, 2.0, 3.0, 4.0 }));
-        assertEquals(4, NumberFieldActions.maximum(new Maximum(), new int[] { 1, 2, 3, 4 }));
-        assertEquals(4, NumberFieldActions.maximum(new Maximum(), Arrays.asList(1, 2, 3, 4)));
+        Maximum action = new Maximum();
+        assertEquals(BigDecimal.valueOf(4), action.maximum(new BigDecimal[] { BigDecimal.valueOf(1), BigDecimal.valueOf(2), BigDecimal.valueOf(3), BigDecimal.valueOf(4) }));
+        assertEquals(4.0, action.maximum(new double[] { 1.0, 2.0, 3.0, 4.0 }));
+        assertEquals(4, action.maximum(new int[] { 1, 2, 3, 4 }));
+        assertEquals(4, action.maximum(Arrays.asList(1, 2, 3, 4)));
         Map<String, Integer> map = new HashMap<>();
         map.put("1", 1);
         map.put("2", 2);
         map.put("3", 3);
         map.put("4", 4);
-        assertEquals(4, NumberFieldActions.maximum(new Maximum(), map));
-        assertEquals(BigDecimal.valueOf(4), NumberFieldActions.maximum(new Maximum(), Arrays.asList((byte) 1, 2, 3.0, BigDecimal.valueOf(4))));
-        assertEquals(0, NumberFieldActions.maximum(new Maximum(), null));
+        assertEquals(4, action.maximum(map));
+        assertEquals(BigDecimal.valueOf(4), action.maximum(Arrays.asList((byte) 1, 2, 3.0, BigDecimal.valueOf(4))));
+        assertEquals(0, action.maximum(null));
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testMaximumOfNonNumber() {
-        NumberFieldActions.maximum(new Maximum(), Arrays.asList(new Object[] { "1", "2", "3" }));
+        Maximum action = new Maximum();
+        action.maximum(Arrays.asList(new Object[] { "1", "2", "3" }));
     }
 
     @Test
     public void testMinimum() {
-        assertEquals(BigDecimal.valueOf(1), NumberFieldActions.minimum(new Minimum(), new BigDecimal[] { BigDecimal.valueOf(1), BigDecimal.valueOf(2), BigDecimal.valueOf(3), BigDecimal.valueOf(4) }));
-        assertEquals(1.0, NumberFieldActions.minimum(new Minimum(), new double[] { 1.0, 2.0, 3.0, 4.0 }));
-        assertEquals(1, NumberFieldActions.minimum(new Minimum(), new int[] { 1, 2, 3, 4 }));
-        assertEquals(1, NumberFieldActions.minimum(new Minimum(), Arrays.asList(1, 2, 3, 4)));
+        Minimum action = new Minimum();
+        assertEquals(BigDecimal.valueOf(1), action.minimum(new BigDecimal[] { BigDecimal.valueOf(1), BigDecimal.valueOf(2), BigDecimal.valueOf(3), BigDecimal.valueOf(4) }));
+        assertEquals(1.0, action.minimum(new double[] { 1.0, 2.0, 3.0, 4.0 }));
+        assertEquals(1, action.minimum(new int[] { 1, 2, 3, 4 }));
+        assertEquals(1, action.minimum(Arrays.asList(1, 2, 3, 4)));
         Map<String, Integer> map = new HashMap<>();
         map.put("1", 1);
         map.put("2", 2);
         map.put("3", 3);
         map.put("4", 4);
-        assertEquals(1, NumberFieldActions.minimum(new Minimum(), map));
-        assertEquals((byte) 1, NumberFieldActions.minimum(new Minimum(), Arrays.asList((byte) 1, 2, 3.0, BigDecimal.valueOf(4))));
-        assertEquals(0, NumberFieldActions.minimum(new Minimum(), null));
+        assertEquals(1, action.minimum(map));
+        assertEquals((byte) 1, action.minimum(Arrays.asList((byte) 1, 2, 3.0, BigDecimal.valueOf(4))));
+        assertEquals(0, action.minimum(null));
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testMinimumOfNonNumber() {
-        NumberFieldActions.minimum(new Minimum(), Arrays.asList(new Object[] { "1", "2", "3" }));
+        Minimum action = new Minimum();
+        action.minimum(Arrays.asList(new Object[] { "1", "2", "3" }));
     }
 
     @Test
     public void testRound() {
-        assertEquals(0L, NumberFieldActions.round(new Round(), null));
-        assertEquals(2L, NumberFieldActions.round(new Round(), BigDecimal.valueOf(1.5)));
-        assertEquals(1L, NumberFieldActions.round(new Round(), 1.4));
-        assertEquals(2L, NumberFieldActions.round(new Round(), 1.5F));
-        assertEquals(2L, NumberFieldActions.round(new Round(), new AtomicLong(2L)));
-        assertEquals(2L, NumberFieldActions.round(new Round(), 2L));
-        assertEquals(2L, NumberFieldActions.round(new Round(), new AtomicInteger(2)));
-        assertEquals(2L, NumberFieldActions.round(new Round(), 2));
-        assertEquals(2L, NumberFieldActions.round(new Round(), (byte) 2));
+        Round action = new Round();
+        assertEquals(0L, action.round(null));
+        assertEquals(2L, action.round(BigDecimal.valueOf(1.5)));
+        assertEquals(1L, action.round(1.4));
+        assertEquals(2L, action.round(1.5F));
+        assertEquals(2L, action.round(new AtomicLong(2L)));
+        assertEquals(2L, action.round(2L));
+        assertEquals(2L, action.round(new AtomicInteger(2)));
+        assertEquals(2L, action.round(2));
+        assertEquals(2L, action.round((byte) 2));
     }
 
     @Test
     public void testSubtract() {
-        assertEquals(BigDecimal.valueOf(-8.0), NumberFieldActions.subtract(new Subtract(), new BigDecimal[] { BigDecimal.valueOf(1), BigDecimal.valueOf(2), BigDecimal.valueOf(3), BigDecimal.valueOf(4) }));
-        assertEquals(-8.0, NumberFieldActions.subtract(new Subtract(), new double[] { 1.0, 2.0, 3.0, 4.0 }));
-        assertEquals(-8L, NumberFieldActions.subtract(new Subtract(), new int[] { 1, 2, 3, 4 }));
-        assertEquals(-8L, NumberFieldActions.subtract(new Subtract(), Arrays.asList(1, 2, 3, 4)));
+        Subtract action = new Subtract();
+        assertEquals(BigDecimal.valueOf(-8.0), action.subtract(new BigDecimal[] { BigDecimal.valueOf(1), BigDecimal.valueOf(2), BigDecimal.valueOf(3), BigDecimal.valueOf(4) }));
+        assertEquals(-8.0, action.subtract(new double[] { 1.0, 2.0, 3.0, 4.0 }));
+        assertEquals(-8L, action.subtract(new int[] { 1, 2, 3, 4 }));
+        assertEquals(-8L, action.subtract(Arrays.asList(1, 2, 3, 4)));
         Map<String, Integer> map = new HashMap<>();
         map.put("1", 1);
         map.put("2", 2);
         map.put("3", 3);
         map.put("4", 4);
-        assertEquals(-8L, NumberFieldActions.subtract(new Subtract(), map));
-        assertEquals(0, NumberFieldActions.subtract(new Subtract(), null));
+        assertEquals(-8L, action.subtract(map));
+        assertEquals(0, action.subtract(null));
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testSubtractOfNonNumber() {
-        NumberFieldActions.subtract(new Subtract(), Arrays.asList(new Object[] { "1", "2", "3" }));
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testConvertMassUnitIllegalArgumentException() {
-        assertEquals(11, NumberFieldActions.convertMassUnit(new Add(), 5).intValue());
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testConvertDistanceUnitIllegalArgumentException() {
-        assertEquals(0, NumberFieldActions.convertDistanceUnit(new Add(), null).intValue());
-        NumberFieldActions.convertDistanceUnit(new Add(), 5);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testConvertAreaUnitIllegalArgumentException() {
-        assertEquals(0, NumberFieldActions.convertAreaUnit(new Add(), null).intValue());
-        NumberFieldActions.convertAreaUnit(new Add(), 5);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testConvertVolumeUnitIllegalArgumentException() {
-        assertEquals(0, NumberFieldActions.convertVolumeUnit(new Add(), null).intValue());
-        NumberFieldActions.convertVolumeUnit(new Add(), 5);
+        Subtract action = new Subtract();
+        action.subtract(Arrays.asList(new Object[] { "1", "2", "3" }));
     }
 
     @Test
     public void testMultiply() {
-        assertNotNull(new NumberFieldActions());
-        assertEquals(0, NumberFieldActions.multiply(new Multiply(), null));
+        Multiply action = new Multiply();
+        assertEquals(0, action.multiply(null));
 
-        assertEquals(new BigDecimal("24.0000"), NumberFieldActions.multiply(new Add(), new BigDecimal[] { BigDecimal.valueOf(1), BigDecimal.valueOf(2), BigDecimal.valueOf(3), BigDecimal.valueOf(4) }));
-        assertEquals(24.0, NumberFieldActions.multiply(new Multiply(), new double[] { 1.0, 2.0, 3.0, 4.0 }));
-        assertEquals(24.0, NumberFieldActions.multiply(new Multiply(), new float[] { 1.0f, 2.0f, 3.0f, 4.0f }));
-        assertEquals(24L, NumberFieldActions.multiply(new Multiply(), new int[] { 1, 2, 3, 4 }));
-        assertEquals(24L, NumberFieldActions.multiply(new Multiply(), new byte[] { 1, 2, 3, 4 }));
-        assertEquals(24L, NumberFieldActions.multiply(new Multiply(), new long[] { 1L, 2L, 3L, 4L }));
-        assertEquals(24L, NumberFieldActions.multiply(new Multiply(), Arrays.asList(1, 2, 3, 4)));
+        assertEquals(new BigDecimal("24.0000"), action.multiply(new BigDecimal[] { BigDecimal.valueOf(1), BigDecimal.valueOf(2), BigDecimal.valueOf(3), BigDecimal.valueOf(4) }));
+        assertEquals(24.0, action.multiply(new double[] { 1.0, 2.0, 3.0, 4.0 }));
+        assertEquals(24.0, action.multiply(new float[] { 1.0f, 2.0f, 3.0f, 4.0f }));
+        assertEquals(24L, action.multiply(new int[] { 1, 2, 3, 4 }));
+        assertEquals(24L, action.multiply(new byte[] { 1, 2, 3, 4 }));
+        assertEquals(24L, action.multiply(new long[] { 1L, 2L, 3L, 4L }));
+        assertEquals(24L, action.multiply(Arrays.asList(1, 2, 3, 4)));
         Map<String, Integer> map = new HashMap<>();
         map.put("1", 1);
         map.put("2", 2);
         map.put("3", 3);
         map.put("4", 4);
-        assertEquals(24L, NumberFieldActions.multiply(new Multiply(), map));
+        assertEquals(24L, action.multiply(map));
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testMultiplyIllegalArgumentException() {
-        assertEquals(24L, NumberFieldActions.multiply(new Multiply(), Arrays.asList("a", "b")));
+        Multiply action = new Multiply();
+        assertEquals(24L, action.multiply(Arrays.asList("a", "b")));
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testMultiplyIllegalArgumentExceptionCollection() {
-        assertEquals(24L, NumberFieldActions.multiply(new Multiply(), new Object()));
+        Multiply action = new Multiply();
+        assertEquals(24L, action.multiply(new Object()));
     }
 
 }

@@ -23,11 +23,7 @@
             "inputField" : [ {
               "jsonType" : "io.atlasmap.java.v2.JavaField",
               "actions" : [ {
-                "CustomAction" : {
-                  "name" : "Concat",
-                  "className" : "io.atlasmap.itests.reference.MyCustomFieldActions",
-                  "methodName" : "concat"
-                }
+                "io.atlasmap.itests.reference.MyCustomFieldActions" : null
               } ],
               "docId" : "SourceCollectionsClass",
               "path" : "/linkedList<>",

@@ -58,7 +58,9 @@
         "outputField" : [ {
           "jsonType" : "io.atlasmap.java.v2.JavaField",
           "actions" : [ {
-            "Lowercase" : null
+            "Append" : {
+                "suffix" : "XXX"
+            }
           } ],
           "path" : "/contact/lastName"
         } ]
