@@ -6,13 +6,13 @@
           <i class="fa fa-table"></i>
           <label>Mappings</label>
         </div>
-        <i (click)="toggleSearch()" [attr.class]="getSearchIconCSSClass()"></i>
+        <i (click)="toggleSearch()" [attr.class]="getSearchIconCSSClass()" tooltip="Search mapping fields" placement="left" container="body"></i>
         <div class="clear"></div>
       </h2>
       <div class="searchHeaderWrapper">
         <div *ngIf="searchMode" class="searchBox">
           <input type="text" #searchFilterBox id="search-filter-box" [(ngModel)]="searchFilter" (keyup)="search(searchFilterBox.value)"
-            placeholder="Search" [focus]="true" />
+            placeholder="Search" [focus]="true"/>
           <i class="fa fa-close searchBoxCloseIcon link" (click)="toggleSearch()"></i>
           <div class="clear"></div>
         </div>

@@ -17,7 +17,7 @@
               (change)="processDoc($event)" placement="left">
           </label>
         </div>
-        <i (click)="toggleSearch()" [attr.class]="getSearchIconCSSClass()" tooltip="Toggle search window" placement="left"></i>
+        <i (click)="toggleSearch()" [attr.class]="getSearchIconCSSClass()" tooltip="Toggle field search window" placement="left"></i>
         <div class="clear"></div>
       </h2>
     </div>
@@ -49,7 +49,8 @@
               </div>
             </h4>
             <div style="float:right;" *ngIf="isAddFieldAvailable(docDef)">
-              <i class="fa fa-plus link" (click)="addField(docDef, $event)"></i>
+              <i class="fa fa-plus link" (click)="addField(docDef, $event)"
+                tooltip="Create a {{ docDef.type == 'Property' ? 'property' : 'constant' }}" placement="top" container="body"></i>
             </div>
             <div class="clear"></div>
           </div>
