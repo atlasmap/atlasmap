@@ -57,15 +57,26 @@ export class ToolbarComponent implements OnInit {
    * @param event
    */
   processImportedFile(event) {
-    const userFileComps = event.target.files[0].name.split('.');
-    const userFile = userFileComps[0];
+    const userFile = event.target.files[0];
+    const userFileComps = userFile.name.split('.');
     const userFileSuffix: string = userFileComps[userFileComps.length - 1].toUpperCase();
 
     if (userFileSuffix === 'ADM') {
-      this.processMappingsCatalog(event.target.files[0]);
+
+        // Clear out current user documents from the runtime service before processing the imported ADM.
+        this.cfg.mappingService.resetAll().toPromise().then( async(result: boolean) => {
+          await this.processMappingsCatalog(userFile);
+        }).catch((error: any) => {
+          if (error.status === 0) {
+            this.cfg.errorService.error('Fatal network error: Could not connect to AtlasMap design runtime service.', error);
+          } else {
+            this.cfg.errorService.error('Could not reset document definitions before import.', error);
+          }
+        });
     } else if (userFileSuffix === 'JAR') {
       this.cfg.documentService.processDocument(event.target.files[0], InspectionType.JAVA_CLASS, false);
     }
+
     event.srcElement.value = null;
   }
 
@@ -162,7 +173,7 @@ export class ToolbarComponent implements OnInit {
   }
 
   /**
-   * Establish a modal window popup and if confirmed remove all mapping files and imported JARs from
+   * Establish a modal window popup and if confirmed remove all documents and imported JARs from
    * the server and reinitialize the DM.
    */
   private resetAll(): void {
