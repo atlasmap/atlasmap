@@ -227,6 +227,17 @@ export class ConfigModel {
     return isSource ? [this.propertyDoc, this.constantDoc].concat(docs) : docs;
   }
 
+  /**
+   * Clear source/target/mapping documents from the model.  Reset constant and property document definitions.
+   */
+  clearDocs(): void {
+    this.sourceDocs = [];
+    this.targetDocs = [];
+    this.propertyDoc.clearFields();
+    this.constantDoc.clearFields();
+    this.mappingFiles = [];
+  }
+
   hasJavaDocuments(): boolean {
     for (const doc of this.getAllDocs()) {
       if (doc.type === DocumentType.JAVA) {

@@ -346,6 +346,26 @@ export class DocumentDefinition {
     }
   }
 
+  /**
+   * Clear all fields in this document.
+   */
+  clearFields(): void {
+    this.initialized = false;
+    this.fields = [];
+    this.allFields = [];
+    this.terminalFields = [];
+    this.fieldPaths = [];
+    this.namespaces = [];
+    this.fieldsByPath = {};
+    this.complexFieldsByClassIdentifier = {};
+    this.enumFieldsByClassIdentifier = {};
+  }
+
+  /**
+   * Remove the specified field from this document definition.
+   *
+   * @param field
+   */
   removeField(field: Field): void {
     if (field == null) {
       return;

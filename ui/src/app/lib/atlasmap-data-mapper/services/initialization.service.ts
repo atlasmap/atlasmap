@@ -361,8 +361,7 @@ export class InitializationService {
       }
 
       if (this.cfg.initCfg.discardNonMockSources) {
-        this.cfg.sourceDocs = [];
-        this.cfg.targetDocs = [];
+        this.cfg.clearDocs();
       }
 
       if (this.cfg.initCfg.addMockJSONMappings) {
