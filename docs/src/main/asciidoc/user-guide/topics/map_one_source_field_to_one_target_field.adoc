@@ -13,7 +13,7 @@ provides.
 +
 When there are many source fields, you can search for the
 field of interest by clicking the
-image:images/magnifying-glass.png[Magnifying Glass] and entering
+image:magnifying-glass.png[Magnifying Glass] and entering
 the name of the data field in the search field.
 . In the *Target* panel, click the data field that you want to map to.
 +
@@ -24,7 +24,7 @@ selected.
 you add a transformation to the mapping or when the mapping requires
 a type conversion.
 .. In the upper right of the data mapper, click
-image:images/EditorSettings.png[Editor settings] and select
+image:EditorSettings.png[Editor settings] and select
 *Show Mapping Preview* to display a text input field on the source
 field and a read-only result field on the target field.
 .. In the source field's data input field, enter text. Click somewhere
@@ -38,18 +38,18 @@ image:images/EditorSettings.png[Editor settings] again and selecting
 *Show Mapping Preview*.
 
 . Optionally, to confirm that the mapping is defined, in the upper right, click
-image:images/grid.png[Grid] to display the defined mappings.
+image:grid.png[Grid] to display the defined mappings.
 
 +
 You can also preview data mapping results in this view.
 If preview fields are not visible,
-click image:images/EditorSettings.png[Editor settings] and select
+click image:EditorSettings.png[Editor settings] and select
 *Show Mapping Preview*. Enter data as described in the previous step.
 In the table of defined mappings, preview fields
 appear for only the selected mapping. To see preview fields for another
 mapping, select it.
 +
-Click image:images/grid.png[Grid] again to display the data field
+Click image:grid.png[Grid] again to display the data field
 panels.
 . In the upper right, click *Done* to save the mapping.
 

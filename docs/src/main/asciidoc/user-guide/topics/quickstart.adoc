@@ -1,0 +1,35 @@
+[[quickstart]]
+= Quickstart
+
+== Running AtlasMap Data Mapper UI standalone
+
+Here is the shortest path to run standalone AtlasMap.
+
+1. Download AtlasMap standalone jar
++
+```
+wget http://central.maven.org/maven2/io/atlasmap/atlasmap-standalone/${VERSION}/atlasmap-standalone-${VERSION}.jar
+```
++
+2. Run AtlasMap standalone
++
+```
+$ java -jar atlasmap-standalone-${VERSION}.jar
+```
++
+
+Now AtlasMap Data Mapper UI is available at http://127.0.0.1:8585/
+
+== RUnning AtlasMap data mapping with Apache Camel
+
+NOTE: TODO
+
+camel-atlasmap endpoint use IN body as a default source document of mappings. If IN body is a `java.util.Map`, key is used as a Document ID and corresponding value is used as a Document payload.
+
+```
+...
+from("direct:start")
+   .to("atlas:atlas-mapping.adm")
+   .log("${body}")
+...
+```

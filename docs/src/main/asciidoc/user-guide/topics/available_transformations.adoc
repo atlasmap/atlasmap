@@ -1,6 +1,8 @@
 [id='available-transformations']
 = Descriptions of available transformations
 
+NOTE: TODO Generate this list automatically from annotation - https://github.com/atlasmap/atlasmap/issues/173
+
 The following table describes the available transformations. The date and
 number types refer generically to any of the various forms of these
 concepts. That is, number includes, for example, `integer`, `long`, `double`.

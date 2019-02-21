@@ -1,8 +1,0 @@
-<productname>AtlasMap Data Mapper UI</productname>
-<subtitle>Share 
-data between applications that handle different data types</subtitle>
-<abstract>
- <para>AtlasMap is a data mapper with an interactive web based user interface
-for configuring integrations of Java, XML, JSON, and other data type sources.
-</para>
-</abstract>

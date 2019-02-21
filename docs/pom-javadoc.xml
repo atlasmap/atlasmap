@@ -42,7 +42,7 @@
       <plugin>
         <artifactId>maven-javadoc-plugin</artifactId>
         <configuration>
-          <reportOutputDirectory>${project.build.directory}/generated-docs</reportOutputDirectory>
+          <reportOutputDirectory>${project.build.directory}/generated-docs/html/developer-guide</reportOutputDirectory>
           <destDir>javadoc</destDir>
           <doctitle>AtlasMap Java API Reference (Javadoc)</doctitle>
           <windowtitle>AtlasMap Java API Reference (Javadoc)</windowtitle>

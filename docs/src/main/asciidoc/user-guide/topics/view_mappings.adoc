@@ -10,8 +10,8 @@ The data mapper canvas is visible.
 
 .Procedure
 . In the upper right, click
-image:images/grid.png[title="Grid"] to display a list of the
+image:grid.png[title="Grid"] to display a list of the
 defined mappings.
 
 . To dismiss the list of mappings and redisplay the source and
-target fields, click image:images/grid.png[title="Grid"] again.
+target fields, click image:grid.png[title="Grid"] again.
