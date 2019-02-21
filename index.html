@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.6.1">
 <meta name="author" content="The AtlasMap Team">
-<title>AtlasMap Developer Guide</title>
+<title>AtlasMap User Guide</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
@@ -518,68 +518,33 @@ table.CodeRay td.code>pre{padding:0}
 .CodeRay .head .head{color:#f4f}
 </style>
 </head>
-<body class="book toc2 toc-left">
+<body id="mapping-data" class="book toc2 toc-left">
 <div id="header">
-<h1>AtlasMap Developer Guide</h1>
+<h1>AtlasMap User Guide</h1>
 <div class="details">
 <span id="author" class="author">The AtlasMap Team</span><br>
 <span id="revnumber">version 1.40.0-SNAPSHOT,</span>
 <span id="revdate">2019-02-21</span>
 </div>
 <div id="toc" class="toc2">
-<div id="toctitle">AtlasMap Developer Guide</div>
+<div id="toctitle">AtlasMap User Guide</div>
 <ul class="sectlevel1">
-<li><a href="#introduction">1. Introduction</a></li>
-<li><a href="#quickstart">2. Quickstart</a>
+<li><a href="#quickstart">1. Quickstart</a>
 <ul class="sectlevel2">
-<li><a href="#running-data-mapper-ui-within-syndesis">2.1. Running Data Mapper UI within Syndesis</a></li>
-<li><a href="#running-atlasmap-standalone">2.2. Running AtlasMap standalone</a></li>
-<li><a href="#running-atlasmap-full-build">2.3. Running AtlasMap full build</a></li>
-<li><a href="#tips-for-ui-developer">2.4. Tips for UI developer</a>
-<ul class="sectlevel3">
-<li><a href="#developing-within-syndesis-ui">2.4.1. Developing Within Syndesis UI</a></li>
-<li><a href="#debug-configuration">2.4.2. Debug Configuration</a></li>
+<li><a href="#running-atlasmap-data-mapper-ui-standalone">1.1. Running AtlasMap Data Mapper UI standalone</a></li>
+<li><a href="#running-atlasmap-data-mapping-with-apache-camel">1.2. RUnning AtlasMap data mapping with Apache Camel</a></li>
 </ul>
 </li>
-</ul>
-</li>
-<li><a href="#internal-design">3. Internal Design</a>
+<li><a href="#design-mappings-in-ui">2. Design Mappings in UI</a>
 <ul class="sectlevel2">
-<li><a href="#internal-ui">3.1. UI</a>
-<ul class="sectlevel3">
-<li><a href="#bootstrapping">3.1.1. BOOTSTRAPPING</a></li>
-<li><a href="#model">3.1.2. MODEL</a></li>
-<li><a href="#service">3.1.3. SERVICE</a></li>
-</ul>
-</li>
-<li><a href="#internal-design-time-service">3.2. Design Time Service</a>
-<ul class="sectlevel3">
-<li><a href="#core-service">3.2.1. Core Service</a></li>
-<li><a href="#java-service">3.2.2. Java Service</a></li>
-<li><a href="#json-service">3.2.3. JSON Service</a></li>
-<li><a href="#xml-service">3.2.4. XML Service</a></li>
-</ul>
-</li>
-<li><a href="#internal-runtime-engine">3.3. Runtime Engine</a>
-<ul class="sectlevel3">
-<li><a href="#internal-runtime-atlasmodule">3.3.1. AtlasModule and mapping process</a></li>
-<li><a href="#internal-runtime-typeconverter">3.3.2. TypeConverter</a></li>
-<li><a href="#internal-runtime-fieldaction">3.3.3. FieldAction (Transformation)</a></li>
-<li><a href="#internal-runtime-fieldreader">3.3.4. FieldReader</a></li>
-<li><a href="#internal-runtime-fieldwriter">3.3.5. FieldWriter</a></li>
-<li><a href="#internal-runtime-validation">3.3.6. Validation</a></li>
-<li><a href="#internal-runtime-audit">3.3.7. Audit</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a href="#camel-atlasmap">4. camel-atlasmap component</a></li>
-<li><a href="#Reference">5. Reference</a>
-<ul class="sectlevel2">
-<li><a href="#a-href-inc-swagger-index-html-design-time-service-api-a">5.1. <a href="inc/swagger/index.html">Design Time Service API</a></a></li>
-<li><a href="#fieldAction">5.2. Transformation (FieldAction)</a></li>
-<li><a href="#a-href-javadoc-index-html-java-api-reference-javadoc-a">5.3. <a href="javadoc/index.html">Java API Reference (Javadoc)</a></a></li>
-<li><a href="#terminology">5.4. Terminology</a></li>
+<li><a href="#find-the-field-you-want-to-map">2.1. Find the data field that you want to map</a></li>
+<li><a href="#map-one-source-field-to-one-target-field">2.2. Map one source field to one target field</a></li>
+<li><a href="#example-missing-unwanted-data">2.3. Example of missing or unwanted data when combining or separating fields</a></li>
+<li><a href="#combine-multiple-source-fields-into-one-target-field">2.4. Combine multiple source fields into one target field</a></li>
+<li><a href="#separate-one-source-field-into-multiple-target-fields">2.5. Separate one source field into multiple target fields</a></li>
+<li><a href="#transform-target-data">2.6. Transform source or target data</a></li>
+<li><a href="#view-mappings">2.7. View the mappings</a></li>
+<li><a href="#available-transformations">2.8. Descriptions of available transformations</a></li>
 </ul>
 </li>
 </ul>
@@ -589,47 +554,32 @@ table.CodeRay td.code>pre{padding:0}
 <div id="preamble">
 <div class="sectionbody">
 <!-- toc disabled -->
-</div>
-</div>
-<div class="sect1">
-<h2 id="introduction">1. Introduction</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>This document provides some information for the developers who is willing to contribute to AtlasMap code.</p>
+<div id="introduction" class="paragraph">
+<p>AtlasMap is a data mapping solution with an interactive web based user interface.
+It simplifies configuration of an integration that handles different
+types of data, such as  Java, XML, or JSON data. You design your data
+mapping in the AtlasMap Data Mapper UI canvas, and then run that data mapping
+by means of a runtime engine. We have a camel-atlasmap component which consumes
+AtlasMap mapping definition and process data mapping as a part of Camel route.</p>
 </div>
 <div style="page-break-after: always;"></div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="quickstart">2. Quickstart</h2>
+<h2 id="quickstart">1. Quickstart</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="running-data-mapper-ui-within-syndesis">2.1. Running Data Mapper UI within Syndesis</h3>
-<div class="paragraph">
-<p>The easiest way to install and run Data Mapper UI is to install and run <a href="https://syndesis.io">Syndesis</a>. Simply follow the <a href="https://doc.syndesis.io">Syndesis Developer Handbook</a> to install, and run Syndesis UI. You will find the Data Mapper UI under the integrations panel after selecting or adding an integration with a data mapping step involved in the integration.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="running-atlasmap-standalone">2.2. Running AtlasMap standalone</h3>
+<h3 id="running-atlasmap-data-mapper-ui-standalone">1.1. Running AtlasMap Data Mapper UI standalone</h3>
 <div class="paragraph">
 <p>Here is the shortest path to run standalone AtlasMap.</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Clone AtlasMap repository</p>
+<p>Download AtlasMap standalone jar</p>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code>$ git clone https://github.com/atlasmap/atlasmap ${ATLASMAP}</code></pre>
-</div>
-</div>
-</li>
-<li>
-<p>Build AtlasMap runtime</p>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code>$ cd ${ATLASMAP}
-$ ./mvnw clean install -DskipTests</code></pre>
+<pre class="CodeRay highlight"><code>wget http://central.maven.org/maven2/io/atlasmap/atlasmap-standalone/${VERSION}/atlasmap-standalone-${VERSION}.jar</code></pre>
 </div>
 </div>
 </li>
@@ -637,310 +587,18 @@ $ ./mvnw clean install -DskipTests</code></pre>
 <p>Run AtlasMap standalone</p>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code>$ cd ${ATLASMAP}/standalone
-$ ../mvnw -Pitests spring-boot:run</code></pre>
-</div>
-</div>
-</li>
-<li>
-<p><a href="https://yarnpkg.com/lang/en/docs/install/">Install Yarn</a></p>
-</li>
-<li>
-<p>In another console, install Data Mapper UI&#8217;s dependencies</p>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code>$ cd ${ATLASMAP}/ui
-$ yarn install</code></pre>
-</div>
-</div>
-</li>
-<li>
-<p>Start Data Mapper UI</p>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code>$ yarn start</code></pre>
+<pre class="CodeRay highlight"><code>$ java -jar atlasmap-standalone-${VERSION}.jar</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>The <strong>yarn start</strong> command will attempt to automatically open your browser window, but if it doesn&#8217;t, open it directy with this URL: <a href="http://localhost:3000" class="bare">http://localhost:3000</a>.</p>
+<p>Now AtlasMap Data Mapper UI is available at <a href="http://127.0.0.1:8585/" class="bare">http://127.0.0.1:8585/</a></p>
 </div>
 </li>
 </ol>
 </div>
 </div>
 <div class="sect2">
-<h3 id="running-atlasmap-full-build">2.3. Running AtlasMap full build</h3>
-<div class="ulist">
-<ul>
-<li>
-<p>Building everything for standalone usage</p>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code>$ ./build.sh --skip-image-builds</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>To see all the available options:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code>$ ./build.sh --help</code></pre>
-</div>
-</div>
-</li>
-<li>
-<p>Resume from module</p>
-<div class="paragraph">
-<p>To resume from a particular module:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code>$ ./build.sh --skip-image-builds --resume-from ui</code></pre>
-</div>
-</div>
-</li>
-<li>
-<p>Using the image streams (in case you want to build a docker image for design runtime)</p>
-<div class="paragraph">
-<p>To build everything using image streams (instead of directly talking to docker):</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code>$ ./build.sh --with-image-streams</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Note that this assumes that you are using a template flavor that also supports image streams.</p>
-</div>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect2">
-<h3 id="tips-for-ui-developer">2.4. Tips for UI developer</h3>
-<div class="sect3">
-<h4 id="developing-within-syndesis-ui">2.4.1. Developing Within Syndesis UI</h4>
-<div class="paragraph">
-<p>Data Mapper UI is referenced by Syndesis as a dependency. When Syndesis UI&#8217;s dependencies are installed during <strong>yarn install</strong> step, Data Mapper UI will be cloned from the NPM package repository into <strong>${SYNDESIS}/app/ui/node_modules/@atlasmap/atlasmap-data-mapper</strong> directory.</p>
-</div>
-<div class="paragraph">
-<p>You can point your local Syndesis UI&#8217;s Data Mapper UI reference to your working copy of the Data Mapper by <a href="https://yarnpkg.com/lang/en/docs/cli/link/">yarn link</a>. You&#8217;ll do something like this:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code>$ cd ${ATLASMAP}/ui
-$ yarn build:lib
-$ cd dist/lib
-$ yarn link
-$ cd ${SYNDESIS}/app/ui
-$ yarn link @atlasmap/atlasmap-data-mapper</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Note that running <code>yarn install</code> in the Syndesis UI directory <strong>will remove and redownload the ${SYNDESIS}/app/ui/node_modules/@atlasmap/atlasmap-data-mapper directory</strong>, so you&#8217;d want to avoid doing it while you have <code>yarn link</code>. Instead you&#8217;d change ${ATLASMAP}/ui/src and run <code>yarn build:lib</code> to make a change in AtlasMap UI and consume it within Syndesis UI.</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="debug-configuration">2.4.2. Debug Configuration</h4>
-<div class="paragraph">
-<p>The Data Mapper UI features several developer-friendly debug configuration options. These configuration fields are specified on the <a href="https://github.com/atlasmap/atlasmap/blob/master/ui/src/app/lib/atlasmap-data-mapper/models/config.model.ts">ConfigModel</a> class.</p>
-</div>
-<div class="sect4">
-<h5 id="service-endpoint-configuration">Service Endpoint Configuration</h5>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p><strong>baseJavaInspectionServiceUrl</strong> - URL for the Java Inspection Service provided by the AtlasMap Services.</p>
-</li>
-<li>
-<p><strong>baseXMLInspectionServiceUrl</strong> - URL for the XML Inspection Service provided by the AtlasMap Services.</p>
-</li>
-<li>
-<p><strong>baseJSONInspectionServiceUrl</strong> - URL for the JSON Inspection Service provided by the AtlasMap Services.</p>
-</li>
-<li>
-<p><strong>baseMappingServiceUrl</strong> - URL for the Mapping Service provided by the AtlasMap Services.</p>
-</li>
-</ol>
-</div>
-</div>
-<div class="sect4">
-<h5 id="mock-source-target-document-configuration">Mock Source/Target Document Configuration</h5>
-<div class="paragraph">
-<p>These flags control the UI automatically adding the specified mock documents to the system when the UI initializes.</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p><strong>addMockJavaSingleSource</strong> - Add single Java source document.</p>
-</li>
-<li>
-<p><strong>addMockJavaSources</strong> - Add multiple Java source documents.</p>
-</li>
-<li>
-<p><strong>addMockXMLInstanceSources</strong> - Add multiple XML instance-based source documents.</p>
-</li>
-<li>
-<p><strong>addMockXMLSchemaSources</strong> - Add multiple XML schema-based source documents.</p>
-</li>
-<li>
-<p><strong>addMockJSONSources</strong> - Add multiple JSON source documents.</p>
-</li>
-<li>
-<p><strong>addMockJavaTarget</strong> - Add a Java target document.</p>
-</li>
-<li>
-<p><strong>addMockXMLInstanceTarget</strong> - Add a XML instance target document.</p>
-</li>
-<li>
-<p><strong>addMockXMLSchemaTarget</strong> - Add a XML schema target document.</p>
-</li>
-<li>
-<p><strong>addMockJSONTarget</strong> - Add a JSON target document.</p>
-</li>
-</ol>
-</div>
-<div class="paragraph">
-<p>The code that initializes these mock documents is in the <a href="https://github.com/atlasmap/atlasmap/blob/master/ui/src/app/lib/atlasmap-data-mapper/services/initialization.service.ts">InitializationService</a>.
-That service calls various static methods in the <a href="https://github.com/atlasmap/atlasmap/blob/master/ui/src/app/lib/atlasmap-data-mapper/services/document-management.service.ts">DocumentManagementService</a> to create example XML instance, XML schema, and JSON documents.
-Mock Java documents referenced are from the AtlasMap Services' <a href="https://github.com/atlasmap/atlasmap/tree/master/lib/modules/java/test-model/src/main/java/io/atlasmap/java/test">Atlas Java Test Model Maven Module</a>.</p>
-</div>
-</div>
-<div class="sect4">
-<h5 id="additional-debug-configuration">Additional Debug Configuration</h5>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p><strong>discardNonMockSources</strong> - Automatically discard all user-specified (or Syndesis UI-specified) source/target documents before initializing. This is helpful if you&#8217;re trying to test with mock documents alone.</p>
-</li>
-<li>
-<p><strong>addMockJSONMappings</strong> - This flag bootstraps the UI&#8217;s mappings from the provided JSON mapping definition. Useful for repeatedly debugging a particular scenario.</p>
-</li>
-<li>
-<p><strong>debugClassPathServiceCalls</strong> - Log details about JSON request/responses to/from the class path resolution service.</p>
-</li>
-<li>
-<p><strong>debugDocumentServiceCalls</strong> - Log details about JSON request/responses to/from the Java/XML/JSON inspection services.</p>
-</li>
-<li>
-<p><strong>debugMappingServiceCalls</strong> - Log details about JSON request/responses to/from the mapping service.</p>
-</li>
-<li>
-<p><strong>debugValidationServiceCalls</strong> - Log details about JSON request/responses to/from the mapping validation service.</p>
-</li>
-<li>
-<p><strong>debugFieldActionServiceCalls</strong> - Log details about JSON request/responses to/from the mapping field action configuration service.</p>
-</li>
-<li>
-<p><strong>debugDocumentParsing</strong> - Log details about parsing JSON responses from the inspection services.</p>
-</li>
-</ol>
-</div>
-<div class="paragraph">
-<p>Data Mapper Debug Configuration within the Syndesis UI is defined within your <strong>${SYNDESIS}/ui/src/config.json</strong> file&#8217;s data mapper section:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="json">{
-  <span class="key"><span class="delimiter">&quot;</span><span class="content">apiEndpoint</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">https://syndesis-staging.b6ff.rh-idev.openshiftapps.com/api/v1</span><span class="delimiter">&quot;</span></span>,
-  <span class="key"><span class="delimiter">&quot;</span><span class="content">title</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">Syndesis</span><span class="delimiter">&quot;</span></span>,
-  <span class="key"><span class="delimiter">&quot;</span><span class="content">datamapper</span><span class="delimiter">&quot;</span></span>: {
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">baseJavaInspectionServiceUrl</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">http://localhost:8585/v2/atlas/java/</span><span class="delimiter">&quot;</span></span>,
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">baseXMLInspectionServiceUrl</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">http://localhost:8585/v2/atlas/xml/</span><span class="delimiter">&quot;</span></span>,
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">baseJSONInspectionServiceUrl</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">http://localhost:8585/v2/atlas/json/</span><span class="delimiter">&quot;</span></span>,
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">baseMappingServiceUrl</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">http://localhost:8585/v2/atlas/</span><span class="delimiter">&quot;</span></span>,
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">discardNonMockSources</span><span class="delimiter">&quot;</span></span>: <span class="value">true</span>,
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">addMockJSONMappings</span><span class="delimiter">&quot;</span></span>: <span class="value">false</span>,
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">addMockJavaSingleSource</span><span class="delimiter">&quot;</span></span>: <span class="value">true</span>,
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">addMockJavaSources</span><span class="delimiter">&quot;</span></span>: <span class="value">false</span>,
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">addMockXMLInstanceSources</span><span class="delimiter">&quot;</span></span>: <span class="value">true</span>,
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">addMockXMLSchemaSources</span><span class="delimiter">&quot;</span></span>: <span class="value">true</span>,
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">addMockJSONSources</span><span class="delimiter">&quot;</span></span>: <span class="value">true</span>,
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">addMockJavaTarget</span><span class="delimiter">&quot;</span></span>: <span class="value">false</span>,
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">addMockXMLInstanceTarget</span><span class="delimiter">&quot;</span></span>: <span class="value">false</span>,
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">addMockXMLSchemaTarget</span><span class="delimiter">&quot;</span></span>: <span class="value">false</span>,
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">addMockJSONTarget</span><span class="delimiter">&quot;</span></span>: <span class="value">true</span>,
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">debugDocumentServiceCalls</span><span class="delimiter">&quot;</span></span>: <span class="value">true</span>,
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">debugMappingServiceCalls</span><span class="delimiter">&quot;</span></span>: <span class="value">true</span>,
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">debugClassPathServiceCalls</span><span class="delimiter">&quot;</span></span>: <span class="value">false</span>,
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">debugValidationServiceCalls</span><span class="delimiter">&quot;</span></span>: <span class="value">false</span>,
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">debugFieldActionServiceCalls</span><span class="delimiter">&quot;</span></span>: <span class="value">false</span>,
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">debugDocumentParsing</span><span class="delimiter">&quot;</span></span>: <span class="value">false</span>
-  },
-  <span class="key"><span class="delimiter">&quot;</span><span class="content">oauth</span><span class="delimiter">&quot;</span></span>: {
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">clientId</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">syndesis-ui</span><span class="delimiter">&quot;</span></span>,
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">scopes</span><span class="delimiter">&quot;</span></span>: [<span class="string"><span class="delimiter">&quot;</span><span class="content">openid</span><span class="delimiter">&quot;</span></span>],
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">oidc</span><span class="delimiter">&quot;</span></span>: <span class="value">true</span>,
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">hybrid</span><span class="delimiter">&quot;</span></span>: <span class="value">true</span>,
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">issuer</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">https://syndesis-staging.b6ff.rh-idev.openshiftapps.com/auth/realms/syndesis</span><span class="delimiter">&quot;</span></span>,
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">auto-link-github</span><span class="delimiter">&quot;</span></span>: <span class="value">true</span>
-  }
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>If you&#8217;re running the Data Mapper UI locally outside of the Syndesis UI, the debug configuration is specified within the <a href="https://github.com/atlasmap/atlasmap/blob/master/ui/src/app/lib/atlasmap-data-mapper/components/data-mapper-example-host.component.ts">DataMapperAppExampleHostComponent</a>.</p>
-</div>
-<div style="page-break-after: always;"></div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="internal-design">3. Internal Design</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>AtlasMap consists of following 3 parts:</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p><a href="#internal-ui">Data Mapper UI</a></p>
-</li>
-<li>
-<p><a href="#internal-design-time-service">Design Time Service</a></p>
-</li>
-<li>
-<p><a href="#internal-runtime-engine">Runtime Engine</a></p>
-</li>
-</ol>
-</div>
-<div class="paragraph">
-<p><a href="#internal-ui">Data Mapper UI</a> is an Angular based web browser application. <a href="#internal-design-time-service">Design Time Service</a> is a set of REST API which provide background services to be used by the Data Mapper UI behind the scene. Data Mapper UI eventually produces data mapping definition file in XML or JSON format. Then <a href="#internal-runtime-engine">Runtime Engine</a> consumes that mapping definition as well as actual data payload and perform mapping.</p>
-</div>
-<div class="paragraph">
-<p>When data formats are provided into Data Mapper UI, it requests an inspection to Design Time Service and receives a unified metadata, called Document. For example, if the data format is provided as a JSON schema, Data Mapper UI makes a JSON schema inspection request and receive a Document object. While JSON schema is a JSON specific schema to represent message payload, Document object is an AtlasMap internal, but data format agnostic metadata so that the Data Mapper UI can consume and provide an unified mapping experience.</p>
-</div>
-<div class="paragraph">
-<p>AtlasMap Document object defines a tree of fields. Defining a set of field-to-field mapping is all about the mappings in AtlasMap.</p>
-</div>
-<div class="paragraph">
-<p>Another thing to know for AtlasMap internal is the modules located <a href="https://github.com/atlasmap/atlasmap/tree/master/lib/modules">here</a> in repository. Module in AtlasMap is a facility to plug-in an individual data format support like Java, JSON and XML. Each module implements roughly following 2 parts:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Inspection Design Time Service to convert the format specific metadata into AtlasMap Document object</p>
-</li>
-<li>
-<p>Runtime SPI to achieve actual mappings</p>
-<div class="ulist">
-<ul>
-<li>
-<p><a href="#internal-runtime-atlasmodule">AtlasModule</a>: Several methods to be invoked during processing mappings. We&#8217;ll look into deeper in <a href="#internal-runtime-atlasmodule">AtlasModule</a> section.</p>
-</li>
-<li>
-<p><a href="#internal-runtime-fieldreader">AtlasFieldReader</a>: Read a field value from source payload</p>
-</li>
-<li>
-<p><a href="#internal-runtime-fieldwriter">AtlasFieldWriter</a>: Write a field value into target payload</p>
-</li>
-</ul>
-</div>
-</li>
-</ul>
-</div>
+<h3 id="running-atlasmap-data-mapping-with-apache-camel">1.2. RUnning AtlasMap data mapping with Apache Camel</h3>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -948,959 +606,972 @@ Mock Java documents referenced are from the AtlasMap Services' <a href="https://
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-There is also an overview document for the Data Mapper step in Syndesis, which might help if you look into AtlasMap within Syndesis context.
-<a href="https://github.com/syndesisio/syndesis/blob/master/app/server/docs/design/datamapper.md" class="bare">https://github.com/syndesisio/syndesis/blob/master/app/server/docs/design/datamapper.md</a>
+TODO
 </td>
 </tr>
 </table>
 </div>
-<div class="sect2">
-<h3 id="internal-ui">3.1. UI</h3>
 <div class="paragraph">
-<p>Data Mapper UI is a web based user interface to define a data mapping, built with <a href="https://angular.io/">Angular</a>.</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><a href="https://github.com/atlasmap/atlasmap/blob/master/ui/" class="bare">https://github.com/atlasmap/atlasmap/blob/master/ui/</a></p>
-</li>
-</ul>
-</div>
-<div class="sect3">
-<h4 id="bootstrapping">3.1.1. BOOTSTRAPPING</h4>
-<div class="paragraph">
-<p>Bootstrapping the Data Mapper UI requires a bit of configuration. An example bootstrapping component is provided within the project:</p>
-</div>
-<div class="paragraph">
-<p><a href="https://github.com/atlasmap/atlasmap/blob/master/ui/src/app/lib/atlasmap-data-mapper/components/data-mapper-example-host.component.ts" class="bare">https://github.com/atlasmap/atlasmap/blob/master/ui/src/app/lib/atlasmap-data-mapper/components/data-mapper-example-host.component.ts</a></p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="model">3.1.2. MODEL</h4>
-<div class="paragraph">
-<p>All application data and configuration is stored in a centralized ConfigModel object.</p>
-</div>
-<div class="paragraph">
-<p>The ConfigModel contains:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>initialization data such as service URLs and source/target document information</p>
-</li>
-<li>
-<p>references to our angular2 services that manage retrieving and saving our documents and mapping data</p>
-</li>
-<li>
-<p>document / mapping model objects</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>There are two document models contained within the ConfigModel object, both of type DocumentDefinition. A DocumentDefinition contains information about a source or target document such as the document&#8217;s name, and fields for that document. Fields are represented by our Field model.</p>
-</div>
-<div class="paragraph">
-<p>A single MappingDefinition model in the ConfigModel object stores information about field mappings and related lookup tables. Individual mappings are represented in instances of MappingModel, and lookup tables are represented by the LookupTable model.</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="service">3.1.3. SERVICE</h4>
-<div class="paragraph">
-<p>When the Data Mapper UI Bootstraps, a series of service calls are made to the mapping service (<a href="https://github.com/atlasmap/atlasmap/blob/master/ui/src/app/lib/atlasmap-data-mapper/services/mapping-management.service.ts">MappingManagementService</a>) and document service (<a href="https://github.com/atlasmap/atlasmap/blob/master/ui/src/app/lib/atlasmap-data-mapper/services/document-management.service.ts">DocumentManagementService</a>).</p>
-</div>
-<div class="paragraph">
-<p>The document service is used to fetch our source/target document information (name of doc, fields). After these are parsed from the service, they are stored in the ConfigModel&#8217;s inputDoc and outputDoc DocumentDefinition models.</p>
-</div>
-<div class="paragraph">
-<p>The mapping service is used to fetch our mappings for the fields mapped from the source to the target document. These mappings (and related lookup tables) are parsed by the management service and stored in the ConfigModel&#8217;s mappings MappingDefinition model.</p>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="internal-design-time-service">3.2. Design Time Service</h3>
-<div class="paragraph">
-<p>Design Time Service is a set of REST API which provide background services to be used by the Data Mapper UI behind the scene. There are 4 types of Design Time Service:</p>
-</div>
-<div class="sect3">
-<h4 id="core-service">3.2.1. Core Service</h4>
-<div class="ulist">
-<ul>
-<li>
-<p>Code Location: <a href="https://github.com/atlasmap/atlasmap/blob/master/lib/service" class="bare">https://github.com/atlasmap/atlasmap/blob/master/lib/service</a></p>
-</li>
-<li>
-<p>API Reference: <a href="inc/swagger/index.html#core">Core Service</a></p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>Core Service provides basic operations which is not specific to the individual data formats, Create/Get/Update/Remove mapping definition stored in Design Time Service local storage, validate mapping, retrieve metadata for available field actions and etc.</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="java-service">3.2.2. Java Service</h4>
-<div class="ulist">
-<ul>
-<li>
-<p>Code Location: <a href="https://github.com/atlasmap/atlasmap/blob/master/lib/modules/java/service" class="bare">https://github.com/atlasmap/atlasmap/blob/master/lib/modules/java/service</a></p>
-</li>
-<li>
-<p>API Reference: <a href="inc/swagger/index.html#java">Java Service</a></p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>Java Service provides Java inspection service which generate an AtlasMap Document object from Java class name.</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="json-service">3.2.3. JSON Service</h4>
-<div class="ulist">
-<ul>
-<li>
-<p>Code Location: <a href="https://github.com/atlasmap/atlasmap/blob/master/lib/modules/json/service" class="bare">https://github.com/atlasmap/atlasmap/blob/master/lib/modules/json/service</a></p>
-</li>
-<li>
-<p>API Reference: <a href="inc/swagger/index.html#json">JSON Service</a></p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>JSON Service provides JSON inspection service which generate an AtlasMap Document object from JSON instance or JSON schema.</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="xml-service">3.2.4. XML Service</h4>
-<div class="ulist">
-<ul>
-<li>
-<p>Code Location: <a href="https://github.com/atlasmap/atlasmap/blob/master/lib/modules/xml/service" class="bare">https://github.com/atlasmap/atlasmap/blob/master/lib/modules/xml/service</a></p>
-</li>
-<li>
-<p>API Reference: <a href="inc/swagger/index.html#xml">XML Service</a></p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>XML Service provides XML inspection service which generate an AtlasMap Document object from XML instance or XML schema.</p>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="internal-runtime-engine">3.3. Runtime Engine</h3>
-<div class="ulist">
-<ul>
-<li>
-<p>Code Location: <a href="https://github.com/atlasmap/atlasmap/blob/master/lib/" class="bare">https://github.com/atlasmap/atlasmap/blob/master/lib/</a></p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>AtlasMap runtime engine consumes mapping definition file created via <a href="#internal-ui">Data Mapper UI</a> as well as actual data payload and perform mapping.</p>
-</div>
-<div class="paragraph">
-<p>Here is a shortest code to process a mapping using AtlasMap runtime engine:</p>
+<p>camel-atlasmap endpoint use IN body as a default source document of mappings. If IN body is a <code>java.util.Map</code>, key is used as a Document ID and corresponding value is used as a Document payload.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">AtlasContextFactory factory = atlasContextFactory = DefaultAtlasContextFactory.getInstance(); <i class="conum" data-value="1"></i><b>(1)</b>
-AtlasContext context = factory.createContext(<span class="keyword">new</span> <span class="predefined-type">File</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">./my-mapping.xml</span><span class="delimiter">&quot;</span></span>)); <i class="conum" data-value="2"></i><b>(2)</b>
-AtlasSession session = context.createSession(); <i class="conum" data-value="3"></i><b>(3)</b>
-session.setSourceDocument(<span class="string"><span class="delimiter">&quot;</span><span class="content">myJsonSourceDoc</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">{...}</span><span class="delimiter">&quot;</span></span>); <i class="conum" data-value="4"></i><b>(4)</b>
-context.process(session); <i class="conum" data-value="5"></i><b>(5)</b>
-<span class="predefined-type">Object</span> targetDoc = session.getTargetDocument(<span class="string"><span class="delimiter">&quot;</span><span class="content">myXmlTargetDoc</span><span class="delimiter">&quot;</span></span>); <i class="conum" data-value="6"></i><b>(6)</b></code></pre>
+<pre class="CodeRay highlight"><code>...
+from("direct:start")
+   .to("atlas:atlas-mapping.adm")
+   .log("${body}")
+...</code></pre>
 </div>
 </div>
-<div class="colist arabic">
-<table>
-<tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td><a href="https://github.com/atlasmap/atlasmap/blob/master/lib/api/src/main/java/io/atlasmap/api/AtlasContextFactory.java">AtlasContextFactory</a> is a singleton instance on JVM, which holds global configuration for the AtlasMap.</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="2"></i><b>2</b></td>
-<td><code>AtlasContextFactory#createContext(File)</code> creates <a href="https://github.com/atlasmap/atlasmap/blob/master/lib/api/src/main/java/io/atlasmap/api/AtlasContext.java">AtlasContext</a> which represents an AtlasMap mapping context for each mapping definitions by feeding a mapping definition file.</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="3"></i><b>3</b></td>
-<td><a href="https://github.com/atlasmap/atlasmap/blob/master/lib/api/src/main/java/io/atlasmap/api/AtlasSession.java">AtlasSession</a> represents a mapping processing session. <code>AtlasSession</code> should be created for each execution and should <strong>NOT</strong> be shared among multiple threads.</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="4"></i><b>4</b></td>
-<td>Put a source Document with a corresponding Document ID. Make sure Document ID matches with what is specified in the mapping definition.</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="5"></i><b>5</b></td>
-<td>Process a mapping by <code>AtlasContext#process(AtlasSession)</code>. This invocation also triggers <a href="#internal-runtime-validation">mapping validation</a> prior to actually perform a mapping.</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="6"></i><b>6</b></td>
-<td>Finally take the transformed document out from <code>AtlasSession</code> by specifying target Document ID.</td>
-</tr>
-</table>
+<div style="page-break-after: always;"></div>
 </div>
-<div class="sect3">
-<h4 id="internal-runtime-atlasmodule">3.3.1. AtlasModule and mapping process</h4>
+</div>
+</div>
+<div class="sect1">
+<h2 id="design-mappings-in-ui">2. Design Mappings in UI</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="find-the-field-you-want-to-map">2.1. Find the data field that you want to map</h3>
 <div class="paragraph">
-<p><a href="https://github.com/atlasmap/atlasmap/blob/master/lib/api/src/main/java/io/atlasmap/spi/AtlasModule.java">AtlasModule</a> is a SPI to be implemented by each modules like
-<a href="https://github.com/atlasmap/atlasmap/tree/master/lib/modules/java">Java</a>,
-<a href="https://github.com/atlasmap/atlasmap/tree/master/lib/modules/json">JSON</a> and
-<a href="https://github.com/atlasmap/atlasmap/tree/master/lib/modules/xml">XML</a>. The methods defined in <code>AtlasModule</code> are invoked from <code>AtlasContext</code> while <code>AtlasContext#process(AtlasSession)</code> is in progress.</p>
+<p>In a relatively simple integration, mapping data fields is easy
+and intuitive. In more complex integrations or in integrations that handle
+large sets of data fields, mapping from source to target is easier when
+you have some background about how to use the data mapper.</p>
 </div>
 <div class="paragraph">
-<p><code>AtlasContext#process(AtlasSession)</code> goes on in following order:</p>
+<p>The data mapper displays two columns of data fields:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Sources</strong> is a list of the data fields that you can map to target fields.</p>
+</li>
+<li>
+<p><strong>Target</strong> is a list of the data fields that you can map source fields to.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>To quickly find the data field that you
+want to map, you can do any of the following:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Search for it.</p>
+<div class="paragraph">
+<p>The <strong>Sources</strong> panel and the <strong>Target</strong> panel each have
+a search field at the top. If the search field is not visible, click
+<span class="image"><img src="images/magnifying-glass.png" alt="Magnifying Glass"></span> at the top
+right of the <strong>Sources</strong> or <strong>Target</strong> panel.</p>
+</div>
+</li>
+<li>
+<p>Enter the names of the fields that you want to map.</p>
+<div class="paragraph">
+<p>To do this,
+in the upper right of the <strong>Configure Mapper</strong> page, click the plus sign
+to display the <strong>Mapping Details</strong> panel. In the <strong>Sources</strong> section, enter
+the name of the source field. In the <strong>Action</strong> section, accept the
+default <strong>Map</strong>, which maps one field to one other field. Or, select
+<strong>Combine</strong> or <strong>Separate</strong>. In the <strong>Target</strong> section, enter the name of the
+field that you want to map to.</p>
+</div>
+</li>
+<li>
+<p>Expand and collapse folders to limit the visible fields.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="map-one-source-field-to-one-target-field">2.2. Map one source field to one target field</h3>
+<div class="paragraph">
+<p>The default mapping behavior maps one source field to one target field.
+For example, map the <code>Name</code> field to the <code>CustomerName</code> field.</p>
+</div>
+<div class="olist arabic">
+<div class="title">Procedure</div>
+<ol class="arabic">
+<li>
+<p>In the <strong>Sources</strong> panel, click the data field that you want to map from.</p>
+<div class="paragraph">
+<p>You might need to expand a folder to see the data fields that it
+provides.</p>
+</div>
+<div class="paragraph">
+<p>When there are many source fields, you can search for the
+field of interest by clicking the
+<span class="image"><img src="images/magnifying-glass.png" alt="Magnifying Glass"></span> and entering
+the name of the data field in the search field.</p>
+</div>
+</li>
+<li>
+<p>In the <strong>Target</strong> panel, click the data field that you want to map to.</p>
+<div class="paragraph">
+<p>The data mapper displays a line that connects the two fields that you just
+selected.</p>
+</div>
+</li>
+<li>
+<p>Optionally, preview the data mapping result. This is useful when
+you add a transformation to the mapping or when the mapping requires
+a type conversion.</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>In the upper right of the data mapper, click
+<span class="image"><img src="images/EditorSettings.png" alt="Editor settings"></span> and select
+<strong>Show Mapping Preview</strong> to display a text input field on the source
+field and a read-only result field on the target field.</p>
+</li>
+<li>
+<p>In the source field&#8217;s data input field, enter text. Click somewhere
+outside this text box to display
+the mapping result in the read-only field on the target field.</p>
+</li>
+<li>
+<p>Optionally, to see the result of a transformation, add a transformation
+in the <strong>Mapping Details</strong> panel.</p>
+</li>
+<li>
+<p>Hide the preview fields by clicking
+<span class="image"><img src="images/images/EditorSettings.png" alt="Editor settings"></span> again and selecting
+<strong>Show Mapping Preview</strong>.</p>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>Optionally, to confirm that the mapping is defined, in the upper right, click
+<span class="image"><img src="images/grid.png" alt="Grid"></span> to display the defined mappings.</p>
+<div class="paragraph">
+<p>You can also preview data mapping results in this view.
+If preview fields are not visible,
+click <span class="image"><img src="images/EditorSettings.png" alt="Editor settings"></span> and select
+<strong>Show Mapping Preview</strong>. Enter data as described in the previous step.
+In the table of defined mappings, preview fields
+appear for only the selected mapping. To see preview fields for another
+mapping, select it.</p>
+</div>
+<div class="paragraph">
+<p>Click <span class="image"><img src="images/grid.png" alt="Grid"></span> again to display the data field
+panels.</p>
+</div>
+</li>
+<li>
+<p>In the upper right, click <strong>Done</strong> to save the mapping.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<div class="title">Alternative procedure</div>
+<p>Here is another way to map a single source field to a single target
+field:</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p><code>AtlasContext#processValidation(AtlasSession)</code></p>
-<div class="olist loweralpha">
-<ol class="loweralpha" type="a">
-<li>
-<p><code>AtlasValidationService.validateMapping(AtlasMapping)</code> validates mapping definition</p>
+<p>In the <strong>Configure Mapper</strong> page, in the upper right, click the plus sign
+to display the <strong>Mapping Details</strong> panel.</p>
 </li>
 <li>
-<p><code>AtlasModule#processPreValidation(AtlasSession)</code> for each modules participated in the mapping, validates data format specific things</p>
+<p>In the <strong>Sources</strong> section, enter
+the name of the source field.</p>
+</li>
+<li>
+<p>In the <strong>Action</strong> section, accept the
+default <strong>Map</strong> action.</p>
+</li>
+<li>
+<p>In the <strong>Target</strong> section, enter the name of the
+field that you want to map to and click <strong>Enter</strong>.</p>
 </li>
 </ol>
 </div>
-</li>
-<li>
-<p><code>AtlasModule#processPreSourceExecution(AtlasSession)</code> for each source modules</p>
-</li>
-<li>
-<p><code>AtlasModule#processPreTargetExecution(AtlasSession)</code> for each target modules</p>
-</li>
-<li>
-<p>for each mapping entries:</p>
-<div class="olist loweralpha">
-<ol class="loweralpha" type="a">
-<li>
-<p><code>AtlasModule#processSourceFieldMapping(AtlasSession)</code> for each source fields</p>
-<div class="olist lowerroman">
-<ol class="lowerroman" type="i">
-<li>
-<p>Read source field values from source payload with using <code>FieldReader</code></p>
-</li>
-<li>
-<p>Apply <a href="#internal-runtime-fieldaction">FieldAction</a> if it&#8217;s specified for the source field</p>
-</li>
-</ol>
-</div>
-</li>
-<li>
-<p><code>AtlasModule#processTargetFieldMapping(AtlasSession)</code> for each target fields</p>
-<div class="olist lowerroman">
-<ol class="lowerroman" type="i">
-<li>
-<p>Convert source field values into target field type with using <a href="#internal-runtime-typeconverter">TypeConverter</a> if needed</p>
-</li>
-<li>
-<p>Copy source field values into target fields</p>
-</li>
-<li>
-<p>Apply <a href="#internal-runtime-fieldaction">FieldAction</a> if it&#8217;s specified for the target field</p>
-</li>
-<li>
-<p>Write target field values into target payload with using <code>FieldWriter</code></p>
-</li>
-</ol>
-</div>
-</li>
-</ol>
-</div>
-</li>
-<li>
-<p><code>AtlasModule#processPostValidation(AtlasSession)</code> for each modules</p>
-</li>
-<li>
-<p><code>AtlasModule#processPostSourceExecution(AtlasSession)</code> for each source modules</p>
-</li>
-<li>
-<p><code>AtlasModule#processPostTargetExecution(AtlasSession)</code> for each target modules</p>
-</li>
-</ol>
-</div>
-</div>
-<div class="sect3">
-<h4 id="internal-runtime-typeconverter">3.3.2. TypeConverter</h4>
-<div class="paragraph">
-<p>TypeConverter converts one field value to the expected field type. This is automatically invoked during mapping when the actual value is not in expected type. AtlasMap runtime provides OOTB converters for the AtlasMap primitive types
-<a href="https://github.com/atlasmap/atlasmap/tree/master/lib/core/src/main/java/io/atlasmap/converters">here</a>.</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="internal-runtime-fieldaction">3.3.3. FieldAction (Transformation)</h4>
-<div class="paragraph">
-<p>FieldAction is a function you can apply on a field value as a part of mapping. AtlasMap provides a variety of FieldActions you can apply in the middle of processing mappings
-<a href="https://github.com/atlasmap/atlasmap/tree/master/lib/core/src/main/java/io/atlasmap/actions">here</a>.
-Also There is a <a href="#fieldAction">Reference</a> for all available FieldAction.</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="internal-runtime-fieldreader">3.3.4. FieldReader</h4>
-<div class="paragraph">
-<p>Each module implements its own <a href="#internal-runtime-fieldreader">FieldReader</a> to read a field value from document specific payload.</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="internal-runtime-fieldwriter">3.3.5. FieldWriter</h4>
-<div class="paragraph">
-<p>Each module implements its own <a href="#internal-runtime-fieldwriter">FieldWriter</a> to write a field value into document specific payload.</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="internal-runtime-validation">3.3.6. Validation</h4>
-<div class="paragraph">
-<p><code>AtlasContext#processValidation(AtlasSession)</code> validates a mapping definition associated with this context. After it&#8217;s completed, you can retrieve a collection of <code>Validation</code> object which represents a validation log.</p>
-</div>
-<div class="paragraph">
-<p><code>processValidation(AtlasSession)</code> is also invoked as a part of <code>AtlasContext#process(AtlasSession)</code> prior to actually perform a mapping. In this case, validation results are converted to <a href="#internal-runtime-audit">Audit</a>.</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="internal-runtime-audit">3.3.7. Audit</h4>
-<div class="paragraph">
-<p><code>Audit</code> represents an audit log which is emitted from runtime engine during processing a mapping. After <code>AtlasContext#process(AtlasSession)</code> is completed, you can retrieve a collection of <code>Audit</code> object by invoking <code>AtlasSession.getAudits()</code>.</p>
-</div>
-<div style="page-break-after: always;"></div>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="camel-atlasmap">4. camel-atlasmap component</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>camel-atlasmap is an <a href="http://camel.apache.org/">Apache Camel</a> Component for AtlasMap. This component executes AtlasMap mapping as a part of Camel route processing.</p>
-</div>
-<div class="paragraph">
-<p>Example usage:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;camelContext</span> <span class="attribute-name">xmlns</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">http://camel.apache.org/schema/spring</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
-    <span class="tag">&lt;route&gt;</span>
-        <span class="tag">&lt;from</span> <span class="attribute-name">uri</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">direct:start</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
-        <span class="tag">&lt;to</span> <span class="attribute-name">uri</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">atlas:atlasmapping.xml</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
-        <span class="tag">&lt;to</span> <span class="attribute-name">uri</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">mock:result</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
-    <span class="tag">&lt;/route&gt;</span>
-<span class="tag">&lt;/camelContext&gt;</span></code></pre>
-</div>
-</div>
-<div style="page-break-after: always;"></div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="Reference">5. Reference</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="a-href-inc-swagger-index-html-design-time-service-api-a">5.1. <a href="inc/swagger/index.html">Design Time Service API</a></h3>
-
 </div>
 <div class="sect2">
-<h3 id="fieldAction">5.2. Transformation (FieldAction)</h3>
+<h3 id="example-missing-unwanted-data">2.3. Example of missing or unwanted data when combining or separating fields</h3>
 <div class="paragraph">
-<p>Transformation is a function you can apply on a field value as a part of mapping. There are a variety of transformations you can apply in the middle of processing mappings. This is called FieldAction internally.</p>
+<p>In a data mapping, you might need to identify missing or unwanted data when a source or
+target field contains compound data. For example, consider a
+<code>long_address</code> field that has this format:</p>
 </div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-TODO: Generate this list automatically from annotation - <a href="https://github.com/atlasmap/atlasmap/issues/173" class="bare">https://github.com/atlasmap/atlasmap/issues/173</a>
-</td>
-</tr>
-</table>
+<div class="paragraph">
+<p><em>number street apartment city state zip zip+4 country</em></p>
 </div>
-<table class="tableblock frame-all grid-all" style="width: 84%;">
+<div class="paragraph">
+<p>Suppose that you want to separate the <code>long_address</code> field into discrete
+fields for <code>number</code>, <code>street</code>, <code>city</code>, <code>state</code>, and <code>zip</code>. To do this,
+you select <code>long_address</code> as the source field and then select
+the target fields. You then add padding fields at the locations for the
+parts of the source field that you do not want. In this example, the
+unwanted parts are <em>apartment</em>, <em>zip+4</em>, and <em>country</em>.</p>
+</div>
+<div class="paragraph">
+<p>To identify the unwanted parts, you need to know the order
+of the parts. The order indicates an index for
+each part of the content in the compound field. For example, the <code>long_address</code>
+field has 8 ordered parts. Starting at 1, the index of each part is:</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
 <colgroup>
-<col style="width: 23%;">
-<col style="width: 18%;">
-<col style="width: 19%;">
-<col style="width: 21%;">
-<col style="width: 19%;">
+<col style="width: 16.6666%;">
+<col style="width: 83.3334%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>number</em></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>street</em></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>apartment</em></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">4</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>city</em></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">5</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>state</em></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">6</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>zip</em></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">7</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>zip+4</em></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">8</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>country</em></p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>In the data mapper, to identify <em>apartment</em>, <em>zip+4</em>, and <em>country</em> as missing, you
+add padding fields at indexes 3, 7, and 8. See
+<a href="#separate-one-source-field-into-multiple-target-fields">Separate one source field into multiple target fields</a>.</p>
+</div>
+<div class="paragraph">
+<p>Now suppose that you want to combine source fields for
+<code>number</code>, <code>street</code>, <code>city</code>, <code>state</code>, and <code>zip</code> into a <code>long_address</code>
+target field. Further suppose that there are no source fields to provide content for
+<em>apartment</em>, <em>zip+4</em>, and <em>country</em>. In the data mapper, you need to
+identify these fields as missing. Again, you add padding fields
+at indexes 3, 7, and 8. See <a href="#combine-multiple-source-fields-into-one-target-field">Combine multiple source fields into one target field</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="combine-multiple-source-fields-into-one-target-field">2.4. Combine multiple source fields into one target field</h3>
+<div class="paragraph">
+<p>In a data mapping, you can combine multiple source fields into one
+compound target field. For example, you can map the <code>FirstName</code> and <code>LastName</code>
+fields to the <code>CustomerName</code> field.</p>
+</div>
+<div class="paragraph">
+<div class="title">Prerequisite</div>
+<p>For the target field, you must know what type of content is in each
+part of this compound field, the order and index of each part of the content,
+and the separator between parts, such as a space or comma. See
+<a href="#example-missing-unwanted-data">Example of missing or unwanted data when combining or separating fields</a>.</p>
+</div>
+<div class="olist arabic">
+<div class="title">Procedure</div>
+<ol class="arabic">
+<li>
+<p>In the <strong>Target</strong> panel, click the field into which you want to map more
+than one source field.</p>
+</li>
+<li>
+<p>In the <strong>Sources</strong> panel, if there is a field that contains the fields
+that you want to map to the target field, then click that container field
+to map all contained fields to the target field.</p>
+<div class="paragraph">
+<p>To individually select each source field, click the first field that
+you want to combine into the target field. For each of the other fields
+that you want to combine into the target field, hover over that field, and press
+<strong>CTRL-Mouse1</strong> (<strong>CMD-Mouse1</strong> on MacOS).</p>
+</div>
+<div class="paragraph">
+<p>The data mapper automatically changes the field action from <strong>Map</strong> to <strong>Combine</strong>.</p>
+</div>
+<div class="paragraph">
+<p>When you are done you should see a line from each of the source fields to
+the target field.</p>
+</div>
+</li>
+<li>
+<p>In the <strong>Mapping Details</strong> panel, in the <strong>Separator</strong> field, accept or select the
+character that the data mapper inserts in the target field between the content
+from different source fields. The default is a space.</p>
+</li>
+<li>
+<p>In the <strong>Mapping Details</strong> panel, under <strong>Sources</strong>, ensure that the source
+fields are in the same order as the corresponding content in the
+compound target field.</p>
+<div class="paragraph">
+<p>If necessary, drag and drop source fields to achieve the same order.
+The data mapper automatically updates the index numbers to reflect the
+new order.</p>
+</div>
+</li>
+<li>
+<p>If you mapped a source field to each part of the compound target field,
+then skip to the next step.</p>
+<div class="paragraph">
+<p>If the target field expects data that is not available to be mapped, then in the
+<strong>Mapping Details</strong> panel, edit the index of each
+source field so that it is the same as the index of the corresponding data
+in the compound target field. The data mapper automatically adds
+padding fields as needed to indicate missing data.</p>
+</div>
+<div class="paragraph">
+<p>If you accidentally create too many padding fields, click the trash
+icon on each extra padding field to delete it.</p>
+</div>
+</li>
+<li>
+<p>Optionally, preview the data mapping result:</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>In the upper right of the data mapper, click
+<span class="image"><img src="images/EditorSettings.png" alt="Editor settings"></span> and select
+<strong>Show Mapping Preview</strong> to display a text input field on each source
+field for the currently selected mapping and a read-only result field
+on the target field of the currently selected mapping.</p>
+</li>
+<li>
+<p>In the source data input fields, enter text. Click outside the
+text box to display the mapping result in the read-only field on the target field.</p>
+<div class="paragraph">
+<p>If you reorder the source fields or add a transformation to the mapping
+then the result field on the target field reflects this. If the data mapper
+detects any errors, it displays informative messages at the top of the
+<strong>Mapping Details</strong> panel.</p>
+</div>
+</li>
+<li>
+<p>Hide the preview fields by clicking
+<span class="image"><img src="images/EditorSettings.png" alt="Editor settings"></span> again and selecting
+<strong>Show Mapping Preview</strong>.</p>
+<div class="paragraph">
+<p>If you redisplay the preview fields, any data
+that you entered in them is still there and it
+remains there until you exit the data mapper.</p>
+</div>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>To confirm that the mapping is correctly defined, in the upper right, click
+<span class="image"><img src="images/grid.png" alt="Grid"></span> to display the defined mappings.
+A mapping that combines the values of more than one source field
+into one target field looks like this:
+<span class="image"><img src="images/CombineMapping.png" alt="Combine Fields Mapping"></span>.</p>
+<div class="paragraph">
+<p>You can also preview mapping results in this view. Click
+<span class="image"><img src="images/EditorSettings.png" alt="Editor settings"></span>, select
+<strong>Show Mapping Preview</strong>, and enter text as described in the previous step.
+Preview fields appear for only the selected mapping. Click another
+mapping in the table to view preview fields for it.</p>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="separate-one-source-field-into-multiple-target-fields">2.5. Separate one source field into multiple target fields</h3>
+<div class="paragraph">
+<p>In a data mapping, you can separate a compound source field into multiple
+target fields. For  example, map the <code>Name</code> field to the <code>FirstName</code> and
+ <code>LastName</code> fields.</p>
+</div>
+<div class="paragraph">
+<div class="title">Prerequisite</div>
+<p>For the source field, you must know what type of content is in each
+part of this compound field, the order and index of each part of the content,
+and the separator between parts, such as a space or comma. See
+<a href="#example-missing-unwanted-data">Example of missing or unwanted data when combining or separating fields</a>.</p>
+</div>
+<div class="olist arabic">
+<div class="title">Procedure</div>
+<ol class="arabic">
+<li>
+<p>In the <strong>Sources</strong> panel, click the field whose content you want to separate.</p>
+</li>
+<li>
+<p>In the <strong>Target</strong> panel, click the first field that you want to separate the
+source field data into.</p>
+</li>
+<li>
+<p>In the <strong>Target</strong> panel, for each additional target field that you want
+to contain some of the data from the source field, hover over the field and
+press <strong>CTRL-Mouse1</strong> (<strong>CMD-Mouse1</strong> on MacOS) to select it.</p>
+<div class="paragraph">
+<p>The data mapper automatically changes the field action to <strong>Separate</strong>.</p>
+</div>
+<div class="paragraph">
+<p>When you are done selecting target fields, you should see lines from the
+source field to each of the target fields.</p>
+</div>
+</li>
+<li>
+<p>In the <strong>Mapping Details</strong> panel, in the <strong>Separator</strong> field,
+accept or select the character in the source field that indicates
+where to separate the source field values. The default is a space.</p>
+</li>
+<li>
+<p>In the <strong>Mapping Details</strong> panel, under <strong>Targets</strong>, ensure that the target
+fields are in the same order as the corresponding content in the
+compound source field.</p>
+<div class="paragraph">
+<p>If necessary, drag and drop target fields to achieve the same order.
+The data mapper automatically updates the index numbers to reflect the
+new order.</p>
+</div>
+</li>
+<li>
+<p>If you mapped each part of the compound source field to a target
+field, then skip to the next step.</p>
+<div class="paragraph">
+<p>If the source field contains data that you do not need, then in the
+<strong>Mapping Details</strong> panel, edit the index of each
+target field so that it is the same as the index of the corresponding data
+in the compound source field. The data mapper automatically adds
+padding fields as needed to indicate unwanted data.</p>
+</div>
+</li>
+<li>
+<p>Optionally, preview the data mapping result:</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>In the upper right of the data mapper, click
+<span class="image"><img src="images/EditorSettings.png" alt="Editor settings"></span> and select
+<strong>Show Mapping Preview</strong> to display a text input field on the source
+field and read-only result fields on each target field.</p>
+</li>
+<li>
+<p>In the source field&#8217;s data input field, enter text. Be sure to enter
+the separator character between the parts of the field. Click outside
+the text box to display the mapping result in the read-only fields
+on the target fields.</p>
+<div class="paragraph">
+<p>If you reorder the target fields or add a transformation to a target field
+then the result fields on the target fields reflect this. If the data mapper
+detects any errors, it displays informative messages at the top of the
+<strong>Mapping Details</strong> panel.</p>
+</div>
+</li>
+<li>
+<p>Hide the preview fields by clicking
+<span class="image"><img src="images/EditorSettings.png" alt="Editor settings"></span> again and selecting
+<strong>Show Mapping Preview</strong>.</p>
+<div class="paragraph">
+<p>If you redisplay the preview fields, any data that you entered in them is
+still there and it remains there until you exit the data mapper.</p>
+</div>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>To confirm that the mapping is correctly defined, click
+<span class="image"><img src="images/grid.png" alt="Grid"></span> to display defined mappings.
+A mapping that separates the value of a source field into
+multiple target fields looks like this:
+<span class="image"><img src="images/images/SeparateMapping.png" alt="Separate Fields Mapping"></span>.</p>
+<div class="paragraph">
+<p>You can also preview mapping results in this view. Click
+<span class="image"><img src="images/EditorSettings.png" alt="Editor settings"></span>, select
+<strong>Show Mapping Preview</strong>, and enter text as described in the previous step.
+Preview fields appear for only the selected mapping. Click another
+mapping in the table to view preview fields for it.</p>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="transform-target-data">2.6. Transform source or target data</h3>
+<div class="paragraph">
+<p>In the data mapper, after you define a mapping, you can transform
+any field in the mapping.
+Transforming a data field defines how you want to store the data.
+For example, you could specify the <strong>Capitalize</strong> transformation to ensure that the first
+letter of a data value is uppercase.</p>
+</div>
+<div class="olist arabic">
+<div class="title">Procedure</div>
+<ol class="arabic">
+<li>
+<p>Map the fields. This can be a one-to-one mapping, a combination mapping,
+or a separation mapping.</p>
+</li>
+<li>
+<p>In the <strong>Mapping Details</strong> panel, under <strong>Sources</strong> or under <strong>Targets</strong>,
+in the box for the field that you want to transform, click the arrow that points to the
+trash can. This displays a field where you can select the transformation
+that you want the data mapper to perform.</p>
+</li>
+<li>
+<p>Click in this field to display the list of transformations.</p>
+</li>
+<li>
+<p>Click the transformation that you want to perform.</p>
+</li>
+<li>
+<p>If the transformation requires any input parameters, specify them
+in the appropriate input fields.</p>
+</li>
+<li>
+<p>To add another transformation, click the arrow that points to the
+trash can again.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<div class="title">Additional resource</div>
+<p><a href="#available-transformations">Descriptions of available transformations</a></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="view-mappings">2.7. View the mappings</h3>
+<div class="paragraph">
+<p>While you are using the data mapper UI, you can view the mappings
+that are already defined. This lets you check whether the
+correct mappings are in place.</p>
+</div>
+<div class="paragraph">
+<div class="title">Prerequisites</div>
+<p>The data mapper canvas is visible.</p>
+</div>
+<div class="olist arabic">
+<div class="title">Procedure</div>
+<ol class="arabic">
+<li>
+<p>In the upper right, click
+<span class="image"><img src="images/grid.png" alt="grid" title="Grid"></span> to display a list of the
+defined mappings.</p>
+</li>
+<li>
+<p>To dismiss the list of mappings and redisplay the source and
+target fields, click <span class="image"><img src="images/grid.png" alt="grid" title="Grid"></span> again.</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="available-transformations">2.8. Descriptions of available transformations</h3>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+TODO Generate this list automatically from annotation - <a href="https://github.com/atlasmap/atlasmap/issues/173" class="bare">https://github.com/atlasmap/atlasmap/issues/173</a>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The following table describes the available transformations. The date and
+number types refer generically to any of the various forms of these
+concepts. That is, number includes, for example, <code>integer</code>, <code>long</code>, <code>double</code>.
+Date includes, for example, <code>date</code>, <code>Time</code>, <code>ZonedDateTime</code>.</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
 </colgroup>
 <thead>
 <tr>
-<th class="tableblock halign-left valign-top">Field Action</th>
+<th class="tableblock halign-left valign-top">Transformation</th>
 <th class="tableblock halign-left valign-top">Input Type</th>
 <th class="tableblock halign-left valign-top">Output Type</th>
-<th class="tableblock halign-left valign-top">Parameter(s) (*=required)</th>
+<th class="tableblock halign-left valign-top">Parameter (* = required)</th>
 <th class="tableblock halign-left valign-top">Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">AbsoluteValue</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Number</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Number</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">n/a</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Return the absolute value of a
-number.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>AbsoluteValue</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">number</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">number</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">None</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Return the absolute value of a number.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Add</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Collection/Array/Map</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Number</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">n/a</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Add the numbers in a
-collection, array, or map&#8217;s values.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>AddDays</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">date</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">date</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>days</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Add days to a date. The default is 0 days.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">AddDays</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Date</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Date</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">days</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Add days to a date. The default days is 0.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>AddSeconds</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">date</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">date</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>seconds</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Add seconds to a date. The default is 0 seconds.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">AddSeconds</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Date</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Date</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">seconds</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Add seconds to a date. The default
-seconds is 0.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Append</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Append</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Append a string to the end of a string.
-The default is to append nothing.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Append a string to the end of a string. The default is to append nothing.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Average</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Collection/Array/Map</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Number</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">n/a</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Return the average of
-the numbers in a collection, array, or map&#8217;s values.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Camelize</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">None</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Convert a phrase to a camelized string by removing whitespace, making
+the first word lowercase, and capitalizing the first letter of each
+subsequent word.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Camelize</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">n/a</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Convert a phrase to a camelized string
-by: Removing whitespaceMaking the first word lowercaseCapitalizing the
-first letter of each subsequent word</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Capitalize</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">None</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Capitalize the first character in a string.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Capitalize</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">n/a</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Capitalize the first character of a
-string.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Ceiling</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">number</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">number</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">None</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Return the whole number ceiling of a number.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Ceiling</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Number</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Number</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">n/a</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Return the whole number ceiling of a
-number.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Concatenate</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Collection/Array/Map</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">delimiter</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Concatenate a
-collection, array, or map&#8217;s values, separating each entry by the
-delimiter if supplied.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Contains</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Any</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Contains</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">any</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Boolean</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">value</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Return true if a field contains the
-supplied value.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>value</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Return true if a field contains the specified value.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">ConvertAreaUnit</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Number</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Number</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">fromUnit *toUnit *</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Convert a number
-representing an area to another unit. The fromUnit and toUnit parameters
-can be one of the following: Square FootSquare MeterSquare Mile</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ConvertAreaUnit</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">number</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">number</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>fromUnit</code>*</p>
+<p class="tableblock"><code>toUnit</code> *</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Convert a number that represents an area to another unit. For
+the <code>fromUnit</code> and <code>toUnit</code> parameters, select the appropriate unit
+from the <strong>From Unit</strong> and <strong>To Unit</strong> menus. The choices are:
+<code>Square Foot</code>, <code>Square Meter</code>, or <code>Square Mile</code>.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">ConvertDistanceUnit</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Number</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Number</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">fromUnit *toUnit *</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Convert a
-number representing a distance to another unit. The fromUnit and toUnit
-parameters can be one of the following: FootInchMeterMileYard</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ConvertDistanceUnit</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">number</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">number</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>fromUnit</code> *</p>
+<p class="tableblock"><code>toUnit</code> *</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Convert a number that represents a distance to another unit. For the
+<code>fromUnit</code> and <code>toUnit</code> parameters, select the appropriate unit
+from the <strong>From Unit</strong> and <strong>To Unit</strong> menus. The choices are:
+<code>Foot</code>, <code>Inch</code>, <code>Meter</code>, <code>Mile</code>, or <code>Yard</code>.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">ConvertMassUnit</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Number</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Number</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">fromUnit *toUnit *</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Convert a number
-representing a mass to another unit. The fromUnit and toUnit parameters
-can be one of the following: KilogramPound</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ConvertMassUnit</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">number</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">number</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>fromUnit</code> *</p>
+<p class="tableblock"><code>toUnit</code> *</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Convert a number that represents mass to another unit. For the
+<code>fromUnit</code> and <code>toUnit</code> parameters, select the appropriate unit
+from the <strong>From Unit</strong> and <strong>To Unit</strong> menus. The choices are:
+<code>Kilogram</code> or <code>Pound</code>.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">ConvertVolumeUnit</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Number</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Number</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">fromUnit *toUnit *</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Convert a number
-representing a volume to another unit. The fromUnit and toUnit
-parameters can be one of the following: Cubic footCubic meterGallonLiter</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ConvertVolumeUnit</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">number</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">number</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>fromUnit</code> *</p>
+<p class="tableblock"><code>toUnit</code> *</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Convert a number that represents volume to another unit. For the
+<code>fromUnit</code> and <code>toUnit</code> parameters, select the appropriate unit
+from the <strong>From Unit</strong> and <strong>To Unit</strong> menus. The choices are:
+<code>Cubic Foot</code>, <code>Cubic Meter</code>, <code>Gallon US Fluid</code>, or <code>Liter</code>.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">CurrentDate</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">n/a</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Date</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">n/a</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>CurrentDate</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">None</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">date</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Note</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Return the current date.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">CurrentDateTime</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">n/a</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Date</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">n/a</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Return the current date/time.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>CurrentDateTime</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">None</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">date</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">None</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Return the current date and time.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">CurrentTime</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">n/a</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Date</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">n/a</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>CurrentTime</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">None</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">date</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">None</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Return the current time.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">DayOfWeek</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Date</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Number</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">n/a</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Return the day of the week for a date,
-from 1 (Monday) to 7 (Sunday).</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>DayOfWeek</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">date</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">number</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">None</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Return the day of the week (1 through 7) that corresponds to the date.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">DayOfYear</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Date</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Number</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">n/a</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Return the day of the year for a date,
-from 1 to 365 (or 366 in a leap year).</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>DayOfYear</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">date</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">number</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">None</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Return the day of the year (1 through 366) that corresponds to the date.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Divide</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Collection/Array/Map</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Number</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">n/a</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Divide each entry in a
-collection, array, or map&#8217;s values by its subsequent entry (A "normal"
-division would only involve 2 entries).</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">EndsWith</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Boolean</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>EndsWith</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Return true if a string ends with
-the supplied string (including case).</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Equals</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Any</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Boolean</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">value</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Return true if a field is equal to the
-supplied value (including case).</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>string</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Return true if a string ends with the specified <code>string</code>, including case.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">FileExtension</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">n/a</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Retrieve the extension, without the
-dot ('.'), of a string representing a file name.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Equals</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">any</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Boolean</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>value</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Return true if a field is equal to the specified <code>value</code>, including case.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Floor</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Number</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Number</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">n/a</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>FileExtension</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">None</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">From a string that represents a file name, return the file extension
+without the dot.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Floor</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">number</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">number</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">None</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Return the whole number floor of a number.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Format</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Any</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">template *</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Return a string that is the result of
-substituting a field&#8217;s value within a template containing placeholders
-like %s, %d, etc., similar to mechanisms available in programming
-languages like Java and C.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">GenerateUUID</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">n/a</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">n/a</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Create a string representing a random
-UUID.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">IndexOf</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Number</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Format</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">any</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Return the first index, starting at 0,
-of the supplied string within a string, or -1 if not found.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>template</code> *</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">In <code>template</code>, replace each placeholder (such as <code>%s</code>) with the value of the
+input field and return a string that contains the result. This
+is similar to mechanisms that are available in programming languages such
+as Java and C.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">IsNull</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Any</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>GenerateUUID</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">None</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">None</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Create a string that represents a random UUID.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>IndexOf</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">number</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>string</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">In a string, starting at 0, return the first index of the specified
+<code>string</code>. Return <code>-1</code> if it is not found.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>IsNull</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">any</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Boolean</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">n/a</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">None</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Return true if a field is null.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">LastIndexOf</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Number</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>LastIndexOf</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Return the last index, starting at
-0, of the supplied string within a string, or -1 if not found.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">number</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>string</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">In a string, starting at 0, return the last index of the specified
+<code>string</code>. Return <code>-1</code> if it is not found.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Length</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Any</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Number</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">n/a</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Return the length of the field, or -1 if
-null. For collections, arrays, and maps, this means the number of
-entries.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Length</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">any</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">number</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">None</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Return the length of the field, or <code>-1</code> if the field is null.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Lowercase</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">n/a</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Lowercase</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">None</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Convert a string to lowercase.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Maximum</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Collection/Array/Map</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Number</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">n/a</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Return the maximum
-number from the numbers in a collection, array, or map&#8217;s values.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Minimum</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Collection/Array/Map</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Number</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">n/a</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Return the minimum
-number from the numbers in a collection, array, or map&#8217;s values.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Multiply</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Collection/Array/Map</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Number</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">n/a</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Multiply the numbers
-in a collection, array, or map&#8217;s values.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Normalize</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">n/a</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Replace consecutive whitespace
-characters with a single space and trim leading and trailing whitespace
-from a string.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">PadStringLeft</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">padCharacter *padCount *</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Insert the
-supplied character to the beginning of a string the supplied count
-times.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">PadStringRight</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">padCharacter *padCount *</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Insert the
-supplied character to the end of a string the supplied count times.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Prepend</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Normalize</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Prepend a string to the beginning of a
-string. The default is to prepend nothing.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">None</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Replace consecutive whitespace characters with a single space and trim
+leading and trailing whitespace from a string.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">ReplaceAll</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">match *newString</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Replace all occurrences
-of the supplied matching string in a string with the supplied newString.
-The default newString is an empty string.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>PadStringLeft</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>padCharacter</code> *</p>
+<p class="tableblock"><code>padCount</code> *</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Insert the character supplied in <code>padCharacter</code> at the beginning of a
+string. Do this the number of times specified in <code>padCount</code>.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">ReplaceFirst</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">match *newString</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Replace this first
-occurrence of the supplied matching string in a string with the supplied
-newString. The default newString is an empty string.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>PadStringRight</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>padCharacter</code> *</p>
+<p class="tableblock"><code>padCount</code> *</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Insert the character supplied in <code>padCharacter</code> at the end of a
+string. Do this the number of times specified in <code>padCount</code>.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Round</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Number</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Number</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">n/a</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Return the rounded whole number of a
-number.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Prepend</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>string</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Prefix <code>string</code> to the beginning of a string. the default is to prepend
+nothing.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">SeparateByDash</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">n/a</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Replace all occurrences of
-whitespace, colons (:), underscores (_), plus (+), or equals (=) with a
-dash (-) in a string.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ReplaceAll</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>match</code> *</p>
+<p class="tableblock"><code>newString</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">In a string, replace all occurrences of the supplied matching string with the
+supplied <code>newString</code>. The default <code>newString</code> is an empty string.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">SeparateByUnderscore</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">n/a</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Replace all occurrences of
-whitespace, colon (:), dash (-), plus (+), or equals (=) with an
-underscores (_) in a string.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ReplaceFirst</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>match</code> *</p>
+<p class="tableblock"><code>newString</code> *</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">In a string, replace the first occurrence of the specified <code>match</code> string
+with the specified <code>newString</code>. The default <code>newString</code> is an empty string.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">StartsWith</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Round</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">number</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">number</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">None</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Return the rounded whole number of a number.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>SeparateByDash</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">None</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Replace each occurrence of whitespace, colon (:), underscore (_),
+plus (+), and equals (=) with a hyphen (-).</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>SeparateByUnderscore</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">None</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Replace each occurrence of whitespace, colon (:), hyphen (-), plus (+),
+and equals (=) with an underscore (_).</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>StartsWith</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Boolean</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>string</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Return true if a string starts with the specified string (including case).</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Substring</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Return true if a string starts
-with the supplied string (including case).</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>startIndex</code> *</p>
+<p class="tableblock"><code>endIndex</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Retrieve a segment of a string from the specified inclusive <code>startIndex</code> to the
+specified exclusive <code>endIndex</code>. Both indexes start at zero. <code>startIndex</code> is
+inclusive. <code>endIndex</code> is exclusive. The default value of <code>endIndex</code> is the
+length of the string.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Substring</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">startIndex *endIndex</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Retrieve the segment
-of a string from the supplied inclusive startIndex to the supplied
-exclusive endIndex. Both indexes start at zero. The default endIndex is
-the length of the string.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>SubstringAfter</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>startIndex</code> *</p>
+<p class="tableblock"><code>endIndex</code></p>
+<p class="tableblock"><code>match</code> *</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Retrieve the segment of a string after the specified <code>match</code> string from the
+specified inclusive <code>startIndex</code> to the specified exclusive <code>endIndex</code>.
+Both indexes start at zero. The default value of <code>endIndex</code> is the length of the
+string after the supplied <code>match</code> string.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">SubstringAfter</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">startIndex *endIndexmatch *</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Retrieve
-the segment of a string after the supplied match string from the
-supplied inclusive startIndex to the supplied exclusive endIndex. Both
-indexes start at zero. The default endIndex is the length of the string
-after the supplied match string.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>SubstringBefore</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>startIndex</code> *</p>
+<p class="tableblock"><code>endIndex</code></p>
+<p class="tableblock"><code>match</code> *</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Retrieve a segment of a string before the supplied <code>match</code> string
+from the supplied inclusive <code>startIndex</code> to the supplied exclusive
+<code>endIndex</code>. Both indexes start at zero. The default value of <code>endIndex</code> is the
+length of the string before the supplied <code>match</code> string.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">SubstringBefore</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">startIndex *endIndexmatch *</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Retrieve
-the segment of a string before the supplied match string from the
-supplied inclusive startIndex to the supplied exclusive endIndex. Both
-indexes start at zero. The default endIndex is the length of the string
-before the supplied match string.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Trim</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">None</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Trim leading and trailing whitespace from a string.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Subtract</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Collection/Array/Map</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Number</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">n/a</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Subtract each entry in
-a collection, array, or map&#8217;s values from its previous entry (A "normal"
-subtraction would only involve 2 entries).</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Trim</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">n/a</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Trim leading and trailing whitespace from a
-string.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">TrimLeft</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">n/a</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>TrimLeft</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">None</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Trim leading whitespace from a string.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">TrimRight</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">n/a</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>TrimRight</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">None</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Trim trailing whitespace from a string.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Uppercase</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">n/a</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Uppercase</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">None</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Convert a string to uppercase.</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect2">
-<h3 id="a-href-javadoc-index-html-java-api-reference-javadoc-a">5.3. <a href="javadoc/index.html">Java API Reference (Javadoc)</a></h3>
-
-</div>
-<div class="sect2">
-<h3 id="terminology">5.4. Terminology</h3>
-<div class="paragraph">
-<p>AtlasMap terminology</p>
-</div>
-<table class="tableblock frame-all grid-all spread">
-<colgroup>
-<col style="width: 20%;">
-<col style="width: 40%;">
-<col style="width: 40%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Term</th>
-<th class="tableblock halign-left valign-top">Definition</th>
-<th class="tableblock halign-left valign-top">Example</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">AtlasMapping</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The top-level mapping file containing the mapping instructions to execute at runtime</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">atlasmapping.xml, atlasmapping.json</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Audit</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">An Audit is informational tracing data captured runtime execution in order to provide user feedback</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Useful during testing cycles, or when user does not have direct access to the runtime logs</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Collection</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">A data type used in conversion that repeats 0 or more times</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Used to process Arrays and Lists</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Data Source</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The definition of an input or output data format within an AtlasMapping file</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">atlas:java, atlas:json, atlas:xml, etc</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Field</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The base type used to describe a data value used in a Mapping</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">JavaField, JsonField, XmlField, etc</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Field Action</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">A function to perform on a given value of an input or output field</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">CurrentDate, Trim, SubString, etc</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Field Type</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Normalized convention to describe the type of data expected within the value of a field</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String, Integer, Long, Number, Date Time, etc</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Lookup Table</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">A cross reference table used at runtime to define a data conversion that varies based on the value of the input field</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Used for mapping enumerations</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Mapping</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">A grouping of input Field(s), output Field(s) and optionally Field Action(s) that defines the conversion to be performed at runtime within an AtlasMapping file</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">JavaField &#8594; JsonField, XmlField &#8594; JsonField + Uppercase, etc</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Mapping Type</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The specific type of conversion that should be performed at runtime</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Map, Combine, Separate, Collection or Lookup</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Validation</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">A Validation is a syntax check of a provide mapping file to ensure execution may proceeed</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Useful during testing cycles, and at runtime to avoid complicated and misleading exception stack traces</p></td>
-</tr>
-</tbody>
-</table>
-<div class="paragraph">
-<p>AtlasMap Data Format terminology</p>
-</div>
-<table class="tableblock frame-all grid-all spread">
-<colgroup>
-<col style="width: 20%;">
-<col style="width: 40%;">
-<col style="width: 40%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Term</th>
-<th class="tableblock halign-left valign-top">Definition</th>
-<th class="tableblock halign-left valign-top">Example</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Boxed Primitive</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">A type of primitive that have a 'null' value</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Integer, Long, Boolean, etc</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">(Unboxed) Primitive</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">A type of primitive that cannot be 'null' and generally has a default initialized value</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">int, long, boolean, etc</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Rooted</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">JSON documents that have a parent node identifying to contents of the JSON document</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">{ "Contact": { "firstName": "Yu", "lastName": "Darvish" } }</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Unrooted</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">JSON documents that do not have a parent node identifying the contents of the JSON document</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">{ "firstName": "Yu", "lastName": "Darvish" }</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Qualified</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Xml elements and/or attributes that contain the namespace prefix</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">&lt;ns1:Contact ns1:firstName="Yu" ns1:lastName="Darvish" /&gt;</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Unqualified</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Xml elements and/or attributes that do not contain the namespace prefix</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">&lt;Contact firstName="Yu" lastName="Darvish" /&gt;</p></td>
 </tr>
 </tbody>
 </table>
@@ -1911,7 +1582,7 @@ string.</p></td>
 <div id="footer">
 <div id="footer-text">
 Version 1.40.0-SNAPSHOT<br>
-Last updated 2019-02-21 20:01:58 UTC
+Last updated 2019-02-21 22:06:25 UTC
 </div>
 </div>
 </body>
