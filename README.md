@@ -8,17 +8,33 @@
 
 The AtlasMap is a data mapping solution with interactive web based user interface, that simplifies configuring integrations between Java, XML, and JSON data sources. You can design your data mapping on the AtlasMap Data Mapper UI canvas, and then run that data mapping via runtime engine. AtlasMap Data Mapper UI is primarily designed to work within the [Syndesis UI](https://syndesis.io/).
 
-## [AtlasMap Documentation](http://docs.atlasmap.io/)
-All developer related documentation can be found at [AtlasMap Documentation](http://docs.atlasmap.io/)
+## AtlasMap Documentation
+### [AtlasMap User Guide](http://docs.atlasmap.io/)
+### [AtlasMap Developer Guide](http://docs.atlasmap.io/developer-guide)
 
-## The shortest path to run standalone AtlasMap
+
+## The shortest path to run standalone AtlasMap Data Mapper UI
+
+1. Download AtlasMap standalone jar
+```
+$ wget http://central.maven.org/maven2/io/atlasmap/atlasmap-standalone/${VERSION}/atlasmap-standalone-${VERSION}.jar
+```
+
+2. Run
+```
+$ java -jar atlasmap-standalone-${VERSION}.jar 
+```
+
+Then AtlasMap Data Mapper UI is available at http://127.0.0.1:8585/ by default.
+
+## Build AtlasMap project
 
 1. Checkout AtlasMap repo from GitHub
 ```
 $ git clone https://github.com/atlasmap/atlasmap ${ATLASMAP}
 ```
-
-2. Build AtlasMap runtime
+ 
+2. Build
 ```
 $ cd ${ATLASMAP}
 $ ./mvnw clean install
@@ -27,18 +43,17 @@ or you can skip tests to get the build little bit faster
 ```
 $ ./mvnw clean install -DskipTests
 ```
-
-3. Run AtlasMap standalone
+3. Run AtlasMap standalone jar from springboot maven plugin
 ```
 $ cd ${ATLASMAP}/standalone
 $ ../mvnw -Pitests spring-boot:run
 ```
 
-Then AtlasMap UI is available at http://127.0.0.1:8585/ by default.
+AtlasMap Data Mapper UI is available at http://127.0.0.1:8585/ by default.
 
 ## Live update for UI development
 
-While standalone AtlasMap is running by following above, you can also run an another AtlasMap UI instance at different port by `yarn start`. This enables live update for UI code so you can see the outcome of your UI code change without build&restart manually.
+While standalone AtlasMap design time services are running by following above, you can also run an another AtlasMap Data Mapper UI instance at different port by `yarn start`. This enables live update for UI code so you can see the outcome of your UI code change without build&restart manually.
 
 1. [Install Yarn](https://yarnpkg.com/lang/en/docs/install/)
 
