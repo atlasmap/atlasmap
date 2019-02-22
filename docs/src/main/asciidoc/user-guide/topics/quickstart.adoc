@@ -20,7 +20,7 @@ $ java -jar atlasmap-standalone-${VERSION}.jar
 
 Now AtlasMap Data Mapper UI is available at http://127.0.0.1:8585/
 
-== RUnning AtlasMap data mapping with Apache Camel
+== Running AtlasMap data mapping with Apache Camel
 
 NOTE: TODO
 
