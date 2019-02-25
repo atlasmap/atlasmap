@@ -87,6 +87,7 @@ import io.swagger.annotations.ApiResponses;
 @Path("/")
 public class AtlasService {
 
+    static final String ATLASMAP_ADM_PATH = "atlasmap.adm.path";
     private static final Logger LOG = LoggerFactory.getLogger(AtlasService.class);
 
     private final DefaultAtlasContextFactory atlasContextFactory = DefaultAtlasContextFactory.getInstance();
@@ -94,7 +95,7 @@ public class AtlasService {
 
     private String atlasmapCatalogName = "atlasmap-catalog.adm";
     private String atlasmapCatalogFilesName = "adm-catalog-files.gz";
-    private String atlasmapGenericMappingsName = "atlasmapping.xml";
+    private String atlasmapGenericMappingsName = "atlasmapping-UI";
     private String baseFolder = "target";
     private String mappingFolder = baseFolder + File.separator + "mappings";
     private String libFolder = baseFolder + File.separator + "lib";
@@ -102,7 +103,12 @@ public class AtlasService {
 
     public AtlasService() throws AtlasException {
         this.defaultContext = atlasContextFactory.createContext(new AtlasMapping());
+        String atlasmapAdmPath = System.getProperty(ATLASMAP_ADM_PATH);
+        if (atlasmapAdmPath != null && atlasmapAdmPath.length() > 0) {
+            initializeADMCatalog(atlasmapAdmPath);
+        }
         this.libraryLoader = new AtlasLibraryLoader(libFolder);
+
         // Add atlas-core in case it runs on modular class loader
         this.libraryLoader.addAlternativeLoader(DefaultAtlasFieldActionService.class.getClassLoader());
         this.libraryLoader.addListener(new AtlasLibraryLoaderListener() {
@@ -111,6 +117,42 @@ public class AtlasService {
                 ((DefaultAtlasFieldActionService)atlasContextFactory.getFieldActionService()).init(libraryLoader);
             }
         });
+    }
+
+    /**
+     * The user has specified an ADM file on inception.  Clear current mappings and process
+     * the specified ADM catalog file.
+     *
+     * @param atlasmapAdmPath - user specified ADM catalog file
+     * @throws AtlasException
+     */
+    private void initializeADMCatalog(String atlasmapAdmPath) throws AtlasException {
+        LOG.debug("Initializing with user specified catalog ADM path {}", atlasmapAdmPath);
+        try {
+            java.nio.file.Path admPath = Paths.get(atlasmapAdmPath);
+            java.nio.file.Path mappingFolderPath = Paths.get(mappingFolder);
+            File atlasDir = new File(mappingFolder);
+            if (!atlasDir.exists()) {
+                atlasDir.mkdirs();
+            }
+            atlasDir = new File(libFolder);
+            if (!atlasDir.exists()) {
+                atlasDir.mkdirs();
+            }
+
+            resetMappings();
+
+            AtlasUtil.copyFile(admPath.toAbsolutePath(),
+                Paths.get(mappingFolderPath.toAbsolutePath().toString() + File.separator + atlasmapCatalogName));
+
+            extractCompressedCatalog();
+
+        } catch (Exception e) {
+            LOG.error("Error processing the AtlasMap catalog file " + atlasmapAdmPath + "\n" +
+                e.getMessage(), e);
+            throw new WebApplicationException(e.getMessage(), e, Status.INTERNAL_SERVER_ERROR);
+        }
+        System.setProperty(ATLASMAP_ADM_PATH, "");
     }
 
     @GET
@@ -156,6 +198,10 @@ public class AtlasService {
         try {
             for (File mapping : mappings) {
                 AtlasMapping map = getMappingFromFile(mapping.getAbsolutePath());
+                if (map == null) {
+                    LOG.warn("No mapping detected from file " + mapping.getAbsolutePath());
+                    continue;
+                }
                 StringMapEntry mapEntry = new StringMapEntry();
                 mapEntry.setName(map.getName());
                 UriBuilder builder = uriInfo.getBaseUriBuilder().path("v2").path("atlas").path("mapping")
@@ -214,13 +260,7 @@ public class AtlasService {
         }
 
         try {
-            for (File mappingFile : mappings) {
-                if (mappingFile.exists()) {
-                    if (!mappingFile.delete()) {
-                        LOG.warn("Unable to delete mapping file " + mappingFile.toString());
-                    }
-                }
-            }
+            AtlasUtil.deleteDirectoryContents(mappingFolderPath.toFile());
             java.nio.file.Path libFolderPath = Paths.get(libFolder);
             AtlasUtil.deleteDirectoryContents(libFolderPath.toFile());
         } catch (Exception e) {
@@ -567,26 +607,28 @@ public class AtlasService {
         String compressedCatalogFilesName = mappingFolder + File.separator + atlasmapCatalogFilesName;
 
         try {
-
            // AtlasMap mapping XML + Binary, compressed instance/schema/mappings + java libraries ->
            //   target/mappings/atlasmap-catalog.adm
            LOG.debug("Creating compressed catalog ADM file '{}'", compressedCatalogName);
            ZipOutputStream zipOut = new ZipOutputStream(new FileOutputStream(compressedCatalogName));
 
-           // atlasmapping.xml
-           LOG.debug("  Creating compressed catalog files '{}'", atlasmapGenericMappingsName);
-           ZipEntry catEntry = new ZipEntry(atlasmapGenericMappingsName);
-           zipOut.putNextEntry(catEntry);
+           ZipEntry catEntry = null;
+
+           // atlasmapping-UI.nnnnnn.xml
            File mappingFile = getMappingFile("XML", mappingId);
 
            if (mappingFile != null) {
+               String mappingFileName = mappingFile.getName();
+               LOG.debug("  Creating compressed catalog mapping file '{}'", mappingFileName);
+               catEntry = new ZipEntry(mappingFileName);
+               zipOut.putNextEntry(catEntry);
                String mappingFilePath = mappingFile.getAbsolutePath();
                addFileAsZip(zipOut, mappingFilePath);
                zipOut.closeEntry();
            }
 
            // adm-catalog-files.gz
-           LOG.debug("  Creating compressed catalog files '{}'", compressedCatalogFilesName);
+           LOG.debug("  Creating compressed catalog GZ file '{}'", compressedCatalogFilesName);
            catEntry = new ZipEntry(atlasmapCatalogFilesName);
            zipOut.putNextEntry(catEntry);
            addFileAsZip(zipOut, compressedCatalogFilesName);
@@ -631,6 +673,7 @@ public class AtlasService {
      * Unzip the ADM catalog file into its constituent parts:
      *
      * - target/mappings/adm-catalog-files.gz
+     * - target/mappings/atlasmapping-UI.nnnnnn.xml
      * - target/lib/...jar
      *
      * @throws IOException
@@ -652,6 +695,10 @@ public class AtlasService {
                 }
                 else if (catEntryname.contains(".jar")) {
                     out = new BufferedOutputStream(new FileOutputStream(baseFolder + File.separator + catEntryname));
+                }
+                else if (catEntryname.contains(atlasmapGenericMappingsName)) {
+                    out = new BufferedOutputStream(new FileOutputStream(mappingFolder + File.separator +
+                        catEntryname));
                 }
                 else {
                     continue;
