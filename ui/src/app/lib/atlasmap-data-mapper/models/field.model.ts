@@ -95,16 +95,12 @@ export class Field {
     const fieldsByName: { [key: string]: Field; } = {};
     const fieldNames: string[] = [];
     for (const field of fields) {
-      let name: string = field.name;
-      const firstCharacter: string = name.charAt(0).toUpperCase();
-      name = firstCharacter + name.substring(1);
-      field.displayName = name;
       // if field is a dupe, discard it
-      if (fieldsByName[name] != null) {
+      if (fieldsByName[field.name] != null) {
         continue;
       }
-      fieldsByName[name] = field;
-      fieldNames.push(name);
+      fieldsByName[field.name] = field;
+      fieldNames.push(field.name);
     }
     fieldNames.sort();
     fields.length = 0;
