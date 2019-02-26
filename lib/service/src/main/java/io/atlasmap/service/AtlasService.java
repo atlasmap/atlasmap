@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
@@ -120,7 +121,7 @@ public class AtlasService {
     }
 
     /**
-     * The user has specified an ADM file on inception.  Clear current mappings and process
+     * The user has specified an ADM file on inception. Clear current mappings and process
      * the specified ADM catalog file.
      *
      * @param atlasmapAdmPath - user specified ADM catalog file
@@ -141,9 +142,9 @@ public class AtlasService {
             }
 
             resetMappings();
-
-            AtlasUtil.copyFile(admPath.toAbsolutePath(),
-                Paths.get(mappingFolderPath.toAbsolutePath().toString() + File.separator + atlasmapCatalogName));
+            Files.copy(admPath.toAbsolutePath(),
+                Paths.get(mappingFolderPath.toAbsolutePath().toString() + File.separator + atlasmapCatalogName),
+                StandardCopyOption.REPLACE_EXISTING);
 
             extractCompressedCatalog();
 
