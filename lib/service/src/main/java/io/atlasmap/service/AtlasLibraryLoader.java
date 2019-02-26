@@ -22,6 +22,7 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -30,16 +31,22 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import io.atlasmap.api.AtlasException;
 
 public class AtlasLibraryLoader extends ClassLoader {
+    private static final Logger LOG = LoggerFactory.getLogger(AtlasLibraryLoader.class);
+
     private String saveDir;
     private URLClassLoader urlClassLoader;
     private Set<ClassLoader> alternativeLoaders = new HashSet<>();
     private Set<AtlasLibraryLoaderListener> listeners = new HashSet<>();
 
     public AtlasLibraryLoader(String saveDir) throws AtlasException {
-        super(Thread.currentThread().getContextClassLoader());
+        super(AtlasLibraryLoader.class.getClassLoader());
+        LOG.debug("Using {} as a lib directory", saveDir);
         this.saveDir = saveDir;
         File saveDirRef = new File(saveDir);
         if (!new File(saveDir).exists()) {
@@ -62,7 +69,9 @@ public class AtlasLibraryLoader extends ClassLoader {
         }
 
         if (urls.size() > 0) {
-            this.urlClassLoader = new URLClassLoader(urls.toArray(new URL[0]));
+            // This won't work on hierarchical class loader like JavaEE or OSGi.
+            // We don't have any plan to get design time services working on those though.
+            this.urlClassLoader = new URLClassLoader(urls.toArray(new URL[0]), AtlasLibraryLoader.class.getClassLoader());
         }
     }
 
@@ -79,38 +88,47 @@ public class AtlasLibraryLoader extends ClassLoader {
         }
         buffer.flush();
         buffer.close();
-        URL[] urls;
+        List<URL> urls = new LinkedList<>();
+        urls.add(dest.toURI().toURL());
         if (this.urlClassLoader != null) {
             URL[] origUrls = this.urlClassLoader.getURLs();
-            urls = new URL[origUrls.length + 1];
-            System.arraycopy(origUrls, 0, urls, 0, origUrls.length);
-        } else {
-            urls = new URL[1];
+            urls.addAll(Arrays.asList(origUrls));
         }
-        urls[urls.length-1] = dest.toURI().toURL();
-        this.urlClassLoader = new URLClassLoader(urls);
+        // This won't work on hierarchical class loader like JavaEE or OSGi.
+        // We don't have any plan to get design time services working on those though.
+        this.urlClassLoader = new URLClassLoader(urls.toArray(new URL[0]), AtlasLibraryLoader.class.getClassLoader());
         listeners.forEach(l -> l.onUpdate(this));
     }
 
     @Override
     public Class<?> loadClass(String name) throws ClassNotFoundException {
+        LOG.debug("Loading Class:{}", name);
         if (this.urlClassLoader != null) {
             try {
                 return this.urlClassLoader.loadClass(name);
-            } catch (ClassNotFoundException e) {}
+            } catch (Throwable t) {
+                LOG.debug("Class not found: [ClassLoader:<uploaded jar>, Class name:{}, message:{}]",
+                    name, t.getMessage());
+            }
         }
         if (!this.alternativeLoaders.isEmpty()) {
             for (ClassLoader cl : this.alternativeLoaders) {
                 try {
                     return cl.loadClass(name);
-                } catch (ClassNotFoundException e) {
+                } catch (Throwable t) {
+                    LOG.debug("Class not found: [ClassLoader:{}, Class name:{}, message:{}]",
+                        cl, name, t.getMessage());
                     continue;
                 }
             }
         }
+        ClassLoader tccl = Thread.currentThread().getContextClassLoader();
         try {
-            return Thread.currentThread().getContextClassLoader().loadClass(name);
-        } catch (ClassNotFoundException e) {}
+            return tccl.loadClass(name);
+        } catch (Throwable t) {
+            LOG.debug("Class not found: [ClassLoader:{}, class name:{}, message:{}]",
+                tccl, name, t.getMessage());
+        }
         return super.loadClass(name);
     }
 
@@ -120,6 +138,7 @@ public class AtlasLibraryLoader extends ClassLoader {
         if (this.urlClassLoader != null) {
              answer = this.urlClassLoader.getResource(name);
              if (answer != null) {
+                 LOG.debug("Found resource:[ClassLoader:{}, name:{}]", this.urlClassLoader, name);
                  return answer;
              }
         }
@@ -127,12 +146,15 @@ public class AtlasLibraryLoader extends ClassLoader {
             for (ClassLoader cl : this.alternativeLoaders) {
                 answer = cl.getResource(name);
                 if (answer != null) {
+                    LOG.debug("Found resource:[ClassLoader:{}, name:{}]", cl, name);
                     return answer;
                 }
             }
         }
-        answer = Thread.currentThread().getContextClassLoader().getResource(name);
+        ClassLoader tccl = Thread.currentThread().getContextClassLoader();
+        answer = tccl.getResource(name);
         if (answer != null) {
+            LOG.debug("Found resource:[ClassLoader:{}, name:{}]", tccl, name);
             return answer;
         }
         return super.getResource(name);
@@ -143,20 +165,25 @@ public class AtlasLibraryLoader extends ClassLoader {
         Set<URL> answer = new HashSet<>();
         if (this.urlClassLoader != null) {
             for (Enumeration<URL> e = this.urlClassLoader.getResources(name); e.hasMoreElements();) {
+                LOG.debug("Found resource:[ClassLoader:{}, name:{}]", this.urlClassLoader, name);
                 answer.add(e.nextElement());
             }
         }
         if (!this.alternativeLoaders.isEmpty()) {
             for (ClassLoader cl : this.alternativeLoaders) {
                 for (Enumeration<URL> e = cl.getResources(name); e.hasMoreElements();) {
+                    LOG.debug("Found resource:[ClassLoader:{}, name:{}]", cl, name);
                     answer.add(e.nextElement());
                 }
             }
         }
-        for (Enumeration<URL> e = Thread.currentThread().getContextClassLoader().getResources(name); e.hasMoreElements();) {
+        ClassLoader tccl = Thread.currentThread().getContextClassLoader();
+        for (Enumeration<URL> e = tccl.getResources(name); e.hasMoreElements();) {
+            LOG.debug("Found resource:[ClassLoader:{}, name:{}]", tccl, name);
             answer.add(e.nextElement());
         }
         for (Enumeration<URL> e = super.getResources(name); e.hasMoreElements();) {
+            LOG.debug("Found resource:[ClassLoader:parent, name:{}]", this, name);
             answer.add(e.nextElement());
         }
         return new Enumeration<URL>() {
@@ -177,21 +204,25 @@ public class AtlasLibraryLoader extends ClassLoader {
     public InputStream getResourceAsStream(String name) {
         InputStream answer;
         if (this.urlClassLoader != null) {
-             answer = this.urlClassLoader.getResourceAsStream(name);
-             if (answer != null) {
-                 return answer;
-             }
+            answer = this.urlClassLoader.getResourceAsStream(name);
+            if (answer != null) {
+                LOG.debug("Found resource:[ClassLoader:{}, name:{}]", this.urlClassLoader, name);
+                return answer;
+            }
         }
         if (!this.alternativeLoaders.isEmpty()) {
             for (ClassLoader cl : this.alternativeLoaders) {
                 answer = cl.getResourceAsStream(name);
                 if (answer != null) {
+                    LOG.debug("Found resource:[ClassLoader:{}, name:{}]", cl, name);
                     return answer;
                 }
             }
         }
-        answer = Thread.currentThread().getContextClassLoader().getResourceAsStream(name);
+        ClassLoader tccl = Thread.currentThread().getContextClassLoader();
+        answer = tccl.getResourceAsStream(name);
         if (answer != null) {
+            LOG.debug("Found resource:[ClassLoader:{}, name:{}]", tccl, name);
             return answer;
         }
         return super.getResourceAsStream(name);

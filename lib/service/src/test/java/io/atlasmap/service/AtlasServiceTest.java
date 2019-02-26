@@ -17,31 +17,26 @@ package io.atlasmap.service;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.InputStream;
 import java.net.URI;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarOutputStream;
 
 import javax.tools.JavaCompiler;
 import javax.tools.ToolProvider;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-import org.jboss.resteasy.plugins.providers.multipart.InputPart;
-import org.jboss.resteasy.plugins.providers.multipart.MultipartInput;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -50,12 +45,14 @@ import io.atlasmap.v2.BaseMapping;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.Json;
 import io.atlasmap.v2.Mapping;
-import io.atlasmap.v2.MappingType;
 import io.atlasmap.v2.Mappings;
+import io.atlasmap.v2.MappingType;
 import io.atlasmap.v2.StringMap;
 import io.atlasmap.v2.StringMapEntry;
 
 public class AtlasServiceTest {
+
+    private static final Logger LOG = LoggerFactory.getLogger(AtlasServiceTest.class);
 
     private AtlasService service = null;
     private ObjectMapper mapper = null;
@@ -77,9 +74,9 @@ public class AtlasServiceTest {
         Response resp = service.listMappings(
                 generateTestUriInfo("http://localhost:8686/v2/atlas", "http://localhost:8686/v2/atlas/mappings"), null);
         StringMap sMap = Json.mapper().readValue((byte[])resp.getEntity(), StringMap.class);
-        System.out.println("Found " + sMap.getStringMapEntry().size() + " objects");
+        LOG.info("Found " + sMap.getStringMapEntry().size() + " objects");
         for (StringMapEntry s : sMap.getStringMapEntry()) {
-            System.out.println("\t n: " + s.getName() + " v: " + s.getValue());
+            LOG.info("\t n: " + s.getName() + " v: " + s.getValue());
         }
     }
 
@@ -109,7 +106,7 @@ public class AtlasServiceTest {
                 for (Field f : fields) {
                     if (f.getActions() != null && f.getActions().getActions() != null
                             && !f.getActions().getActions().isEmpty()) {
-                        System.out.println("Found actions: " + f.getActions().getActions().size());
+                        LOG.info("Found actions: " + f.getActions().getActions().size());
                     }
                 }
             }
