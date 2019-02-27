@@ -118,6 +118,7 @@ public class AtlasService {
                 ((DefaultAtlasFieldActionService)atlasContextFactory.getFieldActionService()).init(libraryLoader);
             }
         });
+        ((DefaultAtlasFieldActionService)atlasContextFactory.getFieldActionService()).init(libraryLoader);
     }
 
     /**
