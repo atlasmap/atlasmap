@@ -761,9 +761,13 @@ export class MappingManagementService {
     DataMapperUtil.debugLogJSON(payload, 'Validation Service Request', this.cfg.initCfg.debugValidationServiceCalls, url);
     this.http.put(url, payload, { headers: this.headers }).toPromise().then((body: any) => {
       DataMapperUtil.debugLogJSON(body, 'Validation Service Response', this.cfg.initCfg.debugValidationServiceCalls, url);
-      const mapping: MappingModel = this.cfg.mappings.activeMapping;
+      if (this.cfg.mappings === null) {
+        return;
+      }
       const activeMappingErrors: ErrorInfo[] = [];
       const globalErrors: ErrorInfo[] = [];
+      const mapping = this.cfg.mappings.activeMapping;
+
       // Only update active mapping and global ones, since validateMappings() is always invoked when mapping is updated.
       // This should be eventually turned into mapping entry level validation.
       // https://github.com/atlasmap/atlasmap-ui/issues/116
