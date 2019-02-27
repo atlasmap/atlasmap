@@ -12,10 +12,7 @@
 - [#771](https://github.com/atlasmap/atlasmap/issues/771) CNFE: io.atlasmap.api.AtlasFieldAction when uploading library
 - [#768](https://github.com/atlasmap/atlasmap/issues/768) Reset All is not resetting Constants
 - [#767](https://github.com/atlasmap/atlasmap/issues/767) Wrong name for the constant to remove - first letter uppercased
-- [#761](https://github.com/atlasmap/atlasmap/issues/761) Source panel lines don't align correctly w/ multiple ADM import
-- [#759](https://github.com/atlasmap/atlasmap/issues/759) Topmost collection to collection mapping not working as expected
 - [#755](https://github.com/atlasmap/atlasmap/issues/755) Support specifying ADM file path via Java system property at backend startup
-- [#735](https://github.com/atlasmap/atlasmap/issues/735) Test variation of #729
 
 ---
 
@@ -48,7 +45,6 @@
 
 #### Enhancements
 
-- [#696](https://github.com/atlasmap/atlasmap/issues/696) Long processing of xsds
 - [#690](https://github.com/atlasmap/atlasmap/issues/690) Support multiple source Documents via java.util.Map IN message body
 - [#686](https://github.com/atlasmap/atlasmap/issues/686) Add an upper limit of field search results
 - [#685](https://github.com/atlasmap/atlasmap/issues/685) Add delay on field search
@@ -60,9 +56,7 @@
 - [#557](https://github.com/atlasmap/atlasmap/issues/557) Create all-in-one spring-boot image
 - [#474](https://github.com/atlasmap/atlasmap/issues/474) Support activating mapping by clicking line
 - [#451](https://github.com/atlasmap/atlasmap/issues/451) Support data preview - single mapping entry
-- [#248](https://github.com/atlasmap/atlasmap/issues/248) Add support to enable field actions where appropriate in the UI
 - [#29](https://github.com/atlasmap/atlasmap/issues/29) Update ClassInspection service to consider user-provided jars
-- [#27](https://github.com/atlasmap/atlasmap/issues/27) [Design] AtlasGroupStrategy
 
 #### Bug Fixes
 
@@ -73,16 +67,10 @@
 - [#667](https://github.com/atlasmap/atlasmap/issues/667) 'null' when using "ItemAt" transformation from List<> -> Number 
 - [#663](https://github.com/atlasmap/atlasmap/issues/663) indexOf and lastIndexOf should have INTEGER as a targetType
 - [#662](https://github.com/atlasmap/atlasmap/issues/662) Validation should look at the input/output of transformations
-- [#661](https://github.com/atlasmap/atlasmap/issues/661) IndexOf and LastIndexOf are possible only as target transformation
 
 ---
 
 ## atlasmap-1.38.1 (26/10/2018)
-
-#### Enhancements
-
-- [#85](https://github.com/atlasmap/atlasmap/issues/85) Combine mapped icons with transformation icon
-- [#30](https://github.com/atlasmap/atlasmap/issues/30) Feature: Support indexed source items in mapping definition
 
 #### Bug Fixes
 
@@ -113,14 +101,11 @@
 - [#609](https://github.com/atlasmap/atlasmap/issues/609) Apply transformation for each items in collection if it doesn't consume collection
 - [#556](https://github.com/atlasmap/atlasmap/issues/556) Add `itemAt` Transformation
 - [#550](https://github.com/atlasmap/atlasmap/issues/550) Handle FieldGroup contributed via mapping definition
-- [#292](https://github.com/atlasmap/atlasmap/issues/292) [UI] Support uploading document schema
 - [#77](https://github.com/atlasmap/atlasmap/issues/77) when mapped/unmapped fields are hidden show user a warning when none show
 
 #### Bug Fixes
 
-- [#623](https://github.com/atlasmap/atlasmap/issues/623) Mapping preview is empty for gaps in mapping table
 - [#612](https://github.com/atlasmap/atlasmap/issues/612) CircleCI build fails with VM terminated error
-- [#607](https://github.com/atlasmap/atlasmap/issues/607) Add Transformation link doesn't work if target field is not selected
 - [#606](https://github.com/atlasmap/atlasmap/issues/606) Enable source side transformations before a target is set
 - [#600](https://github.com/atlasmap/atlasmap/issues/600) Increase heap size for DM runtime and extend http timeout
 - [#588](https://github.com/atlasmap/atlasmap/issues/588) Class inspection can't inspect nested class
