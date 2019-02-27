@@ -561,13 +561,17 @@ export class MappingManagementService {
       }
     }
 
-    if (mapping == null) {
+    if ((mapping == null) || (this.cfg.mappings.activeMapping.brandNewMapping)) {
       const mappingsForField: MappingModel[] = this.cfg.mappings.findMappingsForField(field);
-      if (mappingsForField && mappingsForField.length > 1) {
+
+      if (mappingsForField && mappingsForField.length === 1) {
+        mapping = mappingsForField[0];
+        this.cfg.mappings.activeMapping = mapping;
+
+      // Source fields may be part of multiple mappings - trigger mapping required source observable thread.
+      } else if (mappingsForField && mappingsForField.length > 1) {
         this.mappingSelectionRequiredSource.next(field);
         return;
-      } else if (mappingsForField && mappingsForField.length === 1) {
-        mapping = mappingsForField[0];
       }
 
       if (mapping == null) {
