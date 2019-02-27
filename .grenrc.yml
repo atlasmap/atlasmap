@@ -1,0 +1,13 @@
+---
+  dataSource: "issues"
+  prefix: ""
+  ignore-tags-with: "fuse"
+  onlyMilestones: false
+  groupBy: {
+    "Enhancements": ["cat/enhancement", "cat/feature"],
+    "Bug Fixes": ["cat/bug"]
+  }
+  "template": {
+        "issue": "- [{{text}}]({{url}}) {{name}}"
+  }
+  changelogFilename: "CHANGELOG.md"

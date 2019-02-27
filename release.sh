@@ -122,3 +122,10 @@ pushd ui/dist/lib
 npm version ${RELEASE_VERSION}
 npm publish
 popd
+
+echo "=========================================================="
+echo "Publishing Release Notes to GitHub...."
+echo "=========================================================="
+yarn add github-release-notes
+./node_modules/.bin/gren release --override
+./node_modules/.bin/gren changelog --override

@@ -3,6 +3,8 @@ target
 .classpath
 .project
 node_modules
+/yarn.lock
+/package.json
 
 .idea
 *.iml
