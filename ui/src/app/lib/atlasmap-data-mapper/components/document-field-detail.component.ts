@@ -85,7 +85,7 @@ export class DocumentFieldDetailComponent {
     this.isDragDropTarget = true;
   }
 
-  endDrag(event: any): void {
+  endDrag(event: MouseEvent): void {
     this.isDragDropTarget = false;
     if (!this.field.isTerminal() || (this.field.isSource() === this.cfg.currentDraggedField.isSource())) {
       return;
@@ -96,6 +96,9 @@ export class DocumentFieldDetailComponent {
       return;
     }
 
+    if (!this.cfg.currentDraggedField.selected) {
+      this.cfg.mappingService.fieldSelected(this.cfg.currentDraggedField, event.ctrlKey || event.metaKey);
+    }
     this.cfg.mappingService.fieldSelected(this.field, false);
   }
 
