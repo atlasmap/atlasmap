@@ -150,7 +150,7 @@
     text-align:right; margin:0; width:100%; border-top:1px solid #CAC9C9; padding-right:12px;
     border-bottom:0px solid black; }
 .dataMapperItemList .itemCount { float:left; clear:left; }
-.dataMapperItemList .card-pf-title .name { overflow:hidden; display:inline-block; width:calc(100% - 45px); margin-left:3px; float:left; }
+.dataMapperItemList .card-pf-title .name { display:inline-block; width:calc(100% - 45px); margin-left:3px; float:left; }
 .dataMapperItemList .card-pf-title .name I { margin-right:5px; vertical-align:baseline; }
 .dataMapperItemList .card-pf-title .name LABEL { float:none; padding-left:0px; }
 .dataMapperItemList .card-pf-title { border-bottom:1px solid #CAC9C9; margin:0; padding-top:20px; padding-bottom:20px; }
