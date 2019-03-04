@@ -1,7 +1,7 @@
 <div class="DataMapperEditComponent">
   <div class="form-group">
     <label for="name">Name:</label>
-    <input name="name" type="text" [(ngModel)]="field.name" class="form-control" id="name" required/>
+    <input name="name" type="text" [(ngModel)]="field.name" class="form-control" id="name" required #name />
     <small [hidden]="!nameExistsOnCreation()" class="text-danger">
       Property name already exists, please select a unique name.
     </small>

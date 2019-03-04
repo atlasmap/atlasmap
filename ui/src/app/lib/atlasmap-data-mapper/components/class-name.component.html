@@ -4,7 +4,7 @@
     <label>Class package name: </label>
     <input type="text" [(ngModel)]="userClassName" class="form-control"
       tooltip="Enter the class package name you wish to enable.  This class must be part of a JAR file you have already imported."
-        placement="right"/>
+        placement="right" #class />
     <small [hidden]="!valueExistsOnCreation()" class="text-danger">
       Class name has already been established.
     </small>      

@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-import { Component } from '@angular/core';
+import { Component, ViewChild, ElementRef } from '@angular/core';
 
 import { DocumentDefinition, NamespaceModel } from '../models/document-definition.model';
 import { Field } from '../models/field.model';
@@ -42,6 +42,7 @@ export class FieldEditComponent implements ModalWindowValidator {
   docDef: DocumentDefinition = null;
   dataSource: Observable<any>;
   isXML = false;
+  @ViewChild('value') private focusEl: ElementRef;
 
   constructor() {
     this.dataSource = Observable.create((observer: any) => {
@@ -166,4 +167,9 @@ export class FieldEditComponent implements ModalWindowValidator {
   isDataValid(): boolean {
     return ConfigModel.getConfig().isRequiredFieldValid(this.field.name, 'Name');
   }
+
+  getInitialFocusElement(): ElementRef {
+    return this.focusEl;
+  }
+
 }

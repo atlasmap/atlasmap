@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-import { Component } from '@angular/core';
+import { Component, ViewChild, ElementRef } from '@angular/core';
 
 import { ModalWindowValidator } from './modal-window.component';
 
@@ -25,6 +25,14 @@ import { ModalWindowValidator } from './modal-window.component';
 
 export class TemplateEditComponent implements ModalWindowValidator {
   templateText: string = null;
+  @ViewChild('template') private focusEl: ElementRef;
 
-  isDataValid(): boolean { return true; }
+  isDataValid(): boolean {
+    return true;
+  }
+
+  getInitialFocusElement(): ElementRef {
+    return this.focusEl;
+  }
+
 }

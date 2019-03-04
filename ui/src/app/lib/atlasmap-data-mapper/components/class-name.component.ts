@@ -14,13 +14,11 @@
     limitations under the License.
 */
 
-import { Component } from '@angular/core';
+import { Component, ViewChild, ElementRef } from '@angular/core';
 
-import { DocumentDefinition, NamespaceModel } from '../models/document-definition.model';
+import { DocumentDefinition } from '../models/document-definition.model';
 import { Field } from '../models/field.model';
-import { DocumentType } from '../common/config.types';
 import { ConfigModel } from '../models/config.model';
-import { Observable } from 'rxjs';
 import { ModalWindowValidator } from './modal-window.component';
 
 @Component({
@@ -33,6 +31,7 @@ export class ClassNameComponent implements ModalWindowValidator {
   isSource: boolean;
   userClassName: string = null;
   docDef: DocumentDefinition = null;
+  @ViewChild('class') private focusEl: ElementRef;
 
   constructor() {
   }
@@ -47,6 +46,10 @@ export class ClassNameComponent implements ModalWindowValidator {
 
   isDataValid(): boolean {
     return ConfigModel.getConfig().isRequiredFieldValid(this.userClassName, 'Class name');
+  }
+
+  getInitialFocusElement(): ElementRef {
+    return this.focusEl;
   }
 
   valueExistsOnCreation(): boolean {
