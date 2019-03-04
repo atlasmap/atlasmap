@@ -54,9 +54,8 @@
           <div class="pull-left">
             <a class="dropdown-item" href="#">
               <label>
-                <input *ngIf="cfg.showTypes" type="checkbox" (click)="toolbarButtonClicked('showTypes', $event);"
-                  checked="true"/>
-                <input *ngIf="!cfg.showTypes" type="checkbox" (click)="toolbarButtonClicked('showTypes', $event);"/>
+                <input *ngIf="cfg.showTypes" type="checkbox" checked="true"/>
+                <input *ngIf="!cfg.showTypes" type="checkbox"/>
               </label>
               <label>
                 <i class="fa fa-tag"></i>Show Types</label>
@@ -68,9 +67,8 @@
           <div class="pull-left">
             <a class="dropdown-item" href="#">
               <label>
-                <input *ngIf="cfg.showLinesAlways" type="checkbox" (click)="toolbarButtonClicked('showLines', $event);"
-                  checked="true"/>
-                <input *ngIf="!cfg.showLinesAlways" type="checkbox" (click)="toolbarButtonClicked('showLines', $event);"/>
+                <input *ngIf="cfg.showLinesAlways" type="checkbox" checked="true"/>
+                <input *ngIf="!cfg.showLinesAlways" type="checkbox"/>
               </label>
               <label>
                 <i class="fa fa-share-alt"></i>Show Lines</label>
@@ -82,9 +80,8 @@
           <div class="pull-left">
             <a class="dropdown-item" href="#">
               <label>
-                <input *ngIf="cfg.showMappedFields" type="checkbox" (click)="toolbarButtonClicked('showMappedFields', $event);"
-                  checked="true"/>
-                <input *ngIf="!cfg.showMappedFields" type="checkbox" (click)="toolbarButtonClicked('showMappedFields', $event);"/>
+                <input *ngIf="cfg.showMappedFields" type="checkbox" checked="true"/>
+                <input *ngIf="!cfg.showMappedFields" type="checkbox"/>
               </label>
               <label>
                 <i class="fa fa-chain"></i>Show Mapped Fields</label>
@@ -96,9 +93,8 @@
           <div class="pull-left">
             <a class="dropdown-item" href="#">
               <label>
-                <input *ngIf="cfg.showUnmappedFields" type="checkbox" (click)="toolbarButtonClicked('showUnmappedFields', $event);"
-                  checked="true"/>
-                <input *ngIf="!cfg.showUnmappedFields" type="checkbox" (click)="toolbarButtonClicked('showUnmappedFields', $event);"/>
+                <input *ngIf="cfg.showUnmappedFields" type="checkbox" checked="true"/>
+                <input *ngIf="!cfg.showUnmappedFields" type="checkbox"/>
               </label>
               <label>
                 <i class="fa fa-chain-broken"></i>Show Unmapped Fields</label>
@@ -110,9 +106,8 @@
           <div class="pull-left">
             <a class="dropdown-item" href="#">
               <label>
-                <input *ngIf="cfg.showMappingPreview" type="checkbox" (click)="toolbarButtonClicked('showMappingPreview', $event);"
-                  checked="true"/>
-                <input *ngIf="!cfg.showMappingPreview" type="checkbox" (click)="toolbarButtonClicked('showMappingPreview', $event);"/>
+                <input *ngIf="cfg.showMappingPreview" type="checkbox" checked="true"/>
+                <input *ngIf="!cfg.showMappingPreview" type="checkbox"/>
               </label>
               <label>
                 <i class="fa fa-eye"></i>Show Mapping Preview</label>
