@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-import { Component } from '@angular/core';
+import { Component, ViewChild, ElementRef } from '@angular/core';
 
 import { ConfigModel } from '../models/config.model';
 import { NamespaceModel } from '../models/document-definition.model';
@@ -28,6 +28,7 @@ import { ModalWindowValidator } from './modal-window.component';
 export class NamespaceEditComponent implements ModalWindowValidator {
   namespace: NamespaceModel = new NamespaceModel();
   targetEnabled = true;
+  @ViewChild('namespace') private focusEl: ElementRef;
 
   initialize(namespace: NamespaceModel, namespaces: NamespaceModel[]): void {
     this.namespace = (namespace == null) ? new NamespaceModel() : namespace.copy();
@@ -52,4 +53,9 @@ export class NamespaceEditComponent implements ModalWindowValidator {
     dataIsValid = configModel.isRequiredFieldValid(this.namespace.uri, 'URI') && dataIsValid;
     return dataIsValid;
   }
+
+  getInitialFocusElement(): ElementRef {
+    return this.focusEl;
+  }
+
 }

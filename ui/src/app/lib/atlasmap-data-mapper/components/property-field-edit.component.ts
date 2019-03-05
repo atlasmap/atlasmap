@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-import { Component } from '@angular/core';
+import { Component, ViewChild, ElementRef } from '@angular/core';
 
 import { DocumentType, FieldMode } from '../common/config.types';
 
@@ -35,6 +35,7 @@ export class PropertyFieldEditComponent implements ModalWindowValidator {
   docDef: DocumentDefinition;
   modalWindowComponent: ModalWindowComponent;
   isClosing: boolean;
+  @ViewChild('name') private focusEl: ElementRef;
 
   initialize(field: Field, docDef: DocumentDefinition, mwc: ModalWindowComponent): void {
     if (field != null) {
@@ -63,6 +64,10 @@ export class PropertyFieldEditComponent implements ModalWindowValidator {
 
   isDataValid(): boolean {
     return ConfigModel.getConfig().isRequiredFieldValid(this.field.name, 'Name');
+  }
+
+  getInitialFocusElement(): ElementRef {
+    return this.focusEl;
   }
 
   /**

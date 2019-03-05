@@ -12,7 +12,7 @@
   </div>
   <div class="form-group">
     <label>Name</label>
-    <input name="value" type="text" [(ngModel)]="field.name" />
+    <input name="value" type="text" [(ngModel)]="field.name" #value />
   </div>
   <div class="form-group" *ngIf="isXML">
     <label>Namespace</label>

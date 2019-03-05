@@ -14,13 +14,13 @@
     limitations under the License.
 */
 
-import { Component, ViewChildren, QueryList } from '@angular/core';
+import { Component, ViewChildren, QueryList, ElementRef } from '@angular/core';
 
 import { MappingModel } from '../../models/mapping.model';
 import { ConfigModel } from '../../models/config.model';
 import { Field } from '../../models/field.model';
 
-import { ModalWindowComponent } from '../modal-window.component';
+import { ModalWindowComponent, ModalWindowValidator } from '../modal-window.component';
 import { MappingSelectionSectionComponent } from './mapping-selection-section.component';
 
 @Component({
@@ -28,7 +28,7 @@ import { MappingSelectionSectionComponent } from './mapping-selection-section.co
   templateUrl: './mapping-selection.component.html',
 })
 
-export class MappingSelectionComponent {
+export class MappingSelectionComponent implements ModalWindowValidator {
   modalWindow: ModalWindowComponent;
   mappings: MappingModel[];
   selectedField: Field = null;
@@ -37,6 +37,14 @@ export class MappingSelectionComponent {
   @ViewChildren('mappingSection') sectionComponents: QueryList<MappingSelectionSectionComponent>;
 
   private selectedMappingComponent: MappingSelectionSectionComponent = null;
+
+  isDataValid(): boolean {
+    return true;
+  }
+
+  getInitialFocusElement(): ElementRef {
+    return undefined;
+  }
 
   selectionChanged(c: MappingSelectionSectionComponent) {
     const self: MappingSelectionComponent = c.parentComponent as MappingSelectionComponent;

@@ -16,7 +16,7 @@
 
 import {
   Component, Input, ViewChildren, QueryList, OnDestroy,
-  ViewContainerRef, Type, ComponentFactoryResolver, AfterViewInit, ChangeDetectorRef
+  ViewContainerRef, Type, ComponentFactoryResolver, AfterViewInit, ChangeDetectorRef, ElementRef
 } from '@angular/core';
 import { ConfigModel } from '../models/config.model';
 import { Subscription } from 'rxjs';
@@ -25,6 +25,7 @@ import { Subscription } from 'rxjs';
 
 export interface ModalWindowValidator {
   isDataValid(): boolean;
+  getInitialFocusElement(): ElementRef;
 }
 
 @Component({
@@ -48,7 +49,7 @@ export class ModalWindowComponent implements AfterViewInit, OnDestroy {
   @Input() cfg: ConfigModel;
 
   message: string = null;
-  nestedComponent: Component;
+  nestedComponent: ModalWindowValidator;
   confirmButtonDisabled = false;
   confirmButtonText = 'OK';
   visible = false;
@@ -87,9 +88,13 @@ export class ModalWindowComponent implements AfterViewInit, OnDestroy {
     const viewContainerRef: ViewContainerRef = this.myTarget.toArray()[0];
     viewContainerRef.clear();
     const componentFactory = this.componentFactoryResolver.resolveComponentFactory(this.nestedComponentType);
-    this.nestedComponent = viewContainerRef.createComponent(componentFactory).instance;
+    this.nestedComponent = viewContainerRef.createComponent(componentFactory).instance as ModalWindowValidator;
     if (this.nestedComponentInitializedCallback != null) {
       this.nestedComponentInitializedCallback(this);
+    }
+    const initialFocusElement = this.nestedComponent.getInitialFocusElement();
+    if (initialFocusElement) {
+      initialFocusElement.nativeElement.focus();
     }
   }
 
@@ -122,10 +127,9 @@ export class ModalWindowComponent implements AfterViewInit, OnDestroy {
 
   private buttonClicked(okClicked: boolean): void {
     if (okClicked) {
-      const anyComponent: any = this.nestedComponent;
-      if ((anyComponent != null) && (anyComponent.isDataValid)) {
+      if (this.nestedComponent != null) {
         this.cfg.errorService.clearValidationErrors();
-        if (!(anyComponent.isDataValid())) {
+        if (!(this.nestedComponent.isDataValid())) {
           return;
         }
       }

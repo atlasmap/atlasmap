@@ -21,6 +21,7 @@ import { LookupTable, LookupTableEntry } from '../../models/lookup-table.model';
 import { ConfigModel } from '../../models/config.model';
 import { Field } from '../../models/field.model';
 import { FieldMappingPair } from '../../models/mapping.model';
+import { ModalWindowValidator } from '../modal-window.component';
 
 export class LookupTableData {
   sourceEnumValue: string;
@@ -33,7 +34,7 @@ export class LookupTableData {
   templateUrl: './lookup-table.component.html',
 })
 
-export class LookupTableComponent {
+export class LookupTableComponent implements ModalWindowValidator {
   fieldPair: FieldMappingPair;
 
   table: LookupTable;
@@ -67,6 +68,14 @@ export class LookupTableComponent {
       d.push(tableData);
     }
     this.data = d;
+  }
+
+  isDataValid() {
+    return true;
+  }
+
+  getInitialFocusElement(): ElementRef {
+    return undefined;
   }
 
   saveTable(): void {
