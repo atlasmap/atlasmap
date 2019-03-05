@@ -15,8 +15,8 @@
     </small>
   </div>
   <div class="form-group">
-    <label>Value Type</label>
-    <select (change)="valueTypeSelectionChanged($event);" [ngModel]="valueType">
+    <label for="type">Value Type:</label>
+    <select name="type" class="form-control" (change)="valueTypeSelectionChanged($event);" [ngModel]="valueType">
       <option value="ANY">ANY</option>
       <option value="BIG_INTEGER">Big Integer</option>
       <option value="BOOLEAN">Boolean</option>
