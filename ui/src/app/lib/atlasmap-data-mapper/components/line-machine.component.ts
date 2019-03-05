@@ -161,38 +161,8 @@ export class LineMachineComponent implements OnInit, OnDestroy {
   }
 
   mappingChanged(): void {
-    const mappingIsNew = false;
-    if (!mappingIsNew) {
-      this.drawingLine = false;
-      this.setLineBeingFormed(null);
-    } else {
-      /*
-          var mapping: MappingModel = this.cfg.mappings.activeMapping;
-          var inputPaths: string[] = mapping.getMappedFieldPaths(true);
-          var outputPaths: string[] = mapping.getMappedFieldPaths(false);
-          var inputSelected: boolean = (inputPaths.length == 1);
-          var outputSelected: boolean = (outputPaths.length == 1);
-          if ((inputSelected && !outputSelected) || (!inputSelected && outputSelected) ) {
-              //console.log("active line drawing turned on");
-              var l: LineModel = new LineModel();
-              var pos: any = null;
-              if (inputSelected) {
-                  var fieldPathToFind: string = inputPaths[0];
-                  pos = this.docDefInput.getFieldDetailComponentPosition(fieldPathToFind);
-                  l.sourceX = "0";
-              } else {
-                  var fieldPathToFind: string = outputPaths[0];
-                  pos = this.docDefOutput.getFieldDetailComponentPosition(fieldPathToFind);
-                  l.sourceX = "100%";
-              }
-              if (pos != null) {
-                  l.sourceY = (pos.y + this.yOffset).toString();
-                  this.setLineBeingFormed(l);
-                  this.drawingLine = true;
-              }
-          }
-      */
-    }
+    this.drawingLine = false;
+    this.setLineBeingFormed(null);
     this.redrawLinesForMappings();
   }
 
