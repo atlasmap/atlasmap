@@ -279,7 +279,7 @@ export class InitializationService {
    * @param inspectionType
    * @param isSource
    */
-  initializeUserDoc(docBody: any, docName: string, docType: DocumentType, inspectionType: InspectionType, isSource: boolean): void {
+  async initializeUserDoc(docBody: any, docName: string, docType: DocumentType, inspectionType: InspectionType, isSource: boolean) {
     let docdef: DocumentDefinition = null;
     const javaArchive = (docType === DocumentType.JAVA_ARCHIVE);
     if (this.cfg.mappingService == null) {
@@ -307,9 +307,6 @@ export class InitializationService {
       docdef.updateFromMappings(this.cfg.mappings);
     }
 
-    // load field actions
-    this.fetchFieldActions();
-
     this.cfg.documentService.fetchClassPath().toPromise()
       .then((classPath: string) => {
         this.cfg.initCfg.classPath = classPath;
@@ -319,7 +316,7 @@ export class InitializationService {
           this.cfg.documentService.setLibraryToService(docBody);
         } else {
           this.cfg.documentService.fetchDocument(docdef, this.cfg.initCfg.classPath).toPromise()
-          .then((doc: DocumentDefinition) => {
+          .then(async(doc: DocumentDefinition) => {
 
             if (doc.fields.length === 0) {
               if (isSource) {
@@ -327,9 +324,8 @@ export class InitializationService {
               } else {
                 DataMapperUtil.removeItemFromArray(docdef, this.cfg.targetDocs);
               }
-              this.fetchFieldActions();
+              await this.fetchFieldActions();
             }
-
             this.cfg.mappingService.notifyMappingUpdated();
             this.updateStatus();
           })
@@ -352,7 +348,7 @@ export class InitializationService {
   }
 
   async initialize(): Promise<boolean> {
-    return new Promise<boolean>((resolve, reject) => {
+    return new Promise<boolean>(async(resolve, reject) => {
       this.cfg.fieldActionMetadata = null;
       if (this.cfg.mappingService == null) {
         this.cfg.errorService.warn('Mapping service is not configured, validation service will not be used.', null);
@@ -450,7 +446,7 @@ export class InitializationService {
       }
 
       // load field actions
-      this.fetchFieldActions();
+      await this.fetchFieldActions();
 
       // load documents
       if (!this.cfg.isClassPathResolutionNeeded()) {
@@ -481,15 +477,14 @@ export class InitializationService {
           if (this.cfg.mappings === null) {
             this.cfg.mappings = new MappingDefinition();
           }
+          this.updateStatus();
           resolve(true);
           return;
         }
         await this.processMappingsCatalogFiles(value, true);
 
         // load mappings
-        if (this.cfg.mappings != null) {
-          this.updateStatus();
-        } else {
+        if (this.cfg.mappings == null) {
           this.cfg.mappings = new MappingDefinition();
           if (this.cfg.mappingFiles.length > 0) {
             await this.initMappings(this.cfg.mappingFiles);
@@ -509,6 +504,7 @@ export class InitializationService {
             );
           }
         }
+        this.updateStatus();
       });
     });
   }
@@ -521,6 +517,7 @@ export class InitializationService {
   async initMappings(mappingFiles: string[]): Promise<boolean> {
     return new Promise<boolean>( async(resolve, reject) => {
       await this.fetchMappings(mappingFiles);
+      this.cfg.mappingService.notifyMappingUpdated();
       resolve(true);
     });
   }
@@ -553,13 +550,42 @@ export class InitializationService {
   }
 
   /**
+   * Update .../target/mappings/atlasmapping-UI.nnnnnn.xml.
+   *
+   * @param mInfo
+   */
+  async updateMappingsXML(mInfo: any): Promise<boolean> {
+    return new Promise<boolean>((resolve, reject) => {
+      try {
+        this.cfg.mappingService.setMappingToService(mInfo.exportMappings.value).toPromise()
+          .then(async(result: boolean) => {
+            resolve(true);
+        }).catch((error: any) => {
+          if (error.status === 0) {
+            this.cfg.errorService.mappingError(
+              'Fatal network error: Unable to connect to the AtlasMap design runtime service.', error);
+          } else {
+            this.cfg.errorService.mappingError(
+              'Unable to update the mappings file to the AtlasMap design runtime service.  ' +
+                 error.status + ' ' + error.statusText, error);
+          }
+          resolve(false);
+        });
+      } catch (error) {
+        this.cfg.errorService.mappingError('Unable to decompress the aggregate mappings catalog buffer.\n', error);
+        resolve(false);
+      }
+    });
+  }
+
+  /**
    * The compressed binary content (gzip) from either an imported ADM catalog file or from the DM runtime
    * catalog ZIP is presented to update the canvas.
    *
    * @param compressedContent - gzip binary buffer
    */
   async processMappingsCatalogFiles(compressedContent: Uint8Array, useCatalogMappings: boolean): Promise<boolean> {
-    return new Promise<boolean>((resolve, reject) => {
+    return new Promise<boolean>(async(resolve, reject) => {
     try {
 
       // Inflate the compressed content.
@@ -570,21 +596,7 @@ export class InitializationService {
 
       // Reinitialize the model mappings.
       if (mInfo && mInfo.exportMappings && useCatalogMappings) {
-
-        // Update .../target/mappings/atlasmapping-UI.nnnnnn.xml
-        this.cfg.mappingService.setMappingToService(mInfo.exportMappings.value).toPromise()
-          .then(async(result: boolean) => {
-        }).catch((error: any) => {
-            if (error.status === 0) {
-              this.cfg.errorService.mappingError(
-                'Fatal network error: Unable to connect to the AtlasMap design runtime service.', error);
-            } else {
-              this.cfg.errorService.mappingError(
-                'Unable to update the mappings file to the AtlasMap design runtime service.  ' +
-                   error.status + ' ' + error.statusText, error);
-            }
-            resolve(false);
-          });
+        await this.updateMappingsXML(mInfo);
       }
 
       // Update .../target/mappings/adm-catalog-files.gz
@@ -699,43 +711,48 @@ export class InitializationService {
     });
   }
 
- fetchFieldActions(): void {
-    if (this.cfg.fieldActionMetadata) {
-      const actionConfigs: FieldActionConfig[] = [];
-      for (const actionDetail of this.cfg.fieldActionMetadata.ActionDetails.actionDetail) {
-        const fieldActionConfig = MappingManagementService.extractFieldActionConfig(actionDetail);
-        actionConfigs.push(fieldActionConfig);
-      }
-      MappingManagementService.sortFieldActionConfigs(actionConfigs);
-      TransitionModel.actionConfigs = actionConfigs;
-      this.cfg.initCfg.fieldActionsInitialized = true;
-      return;
-    }
-
-    if (this.cfg.mappingService == null) {
-      this.cfg.errorService.warn('Mapping service is not provided. Field Actions will not be used.', null);
-      this.cfg.initCfg.fieldActionsInitialized = true;
-      return;
-    } else if (this.cfg.initCfg.baseMappingServiceUrl == null) {
-      this.cfg.errorService.warn('Mapping service URL is not provided. Field Actions will not be used.', null);
-      this.cfg.initCfg.fieldActionsInitialized = true;
-      return;
-    }
-
-    // Fetch the field actions from the runtime service.
-    this.cfg.mappingService.fetchFieldActions().toPromise()
-      .then((fetchedActionConfigs: FieldActionConfig[]) => {
-        TransitionModel.actionConfigs = fetchedActionConfigs;
-        this.cfg.initCfg.fieldActionsInitialized = true;
-        this.updateStatus();
-      }).catch((error: any) => {
-        if (error.status === 0) {
-          this.handleError('Fatal network error: Could not connect to AtlasMap design runtime service.', error);
-        } else {
-          this.handleError('Could not load field action configs: ' + error.status + ' ' + error.statusText, error);
+  async fetchFieldActions(): Promise<boolean> {
+    return new Promise<boolean>((resolve, reject) => {
+      if (this.cfg.fieldActionMetadata) {
+        const actionConfigs: FieldActionConfig[] = [];
+        for (const actionDetail of this.cfg.fieldActionMetadata.ActionDetails.actionDetail) {
+          const fieldActionConfig = MappingManagementService.extractFieldActionConfig(actionDetail);
+          actionConfigs.push(fieldActionConfig);
         }
-        this.updateStatus();
-      });
+        MappingManagementService.sortFieldActionConfigs(actionConfigs);
+        TransitionModel.actionConfigs = actionConfigs;
+        this.cfg.initCfg.fieldActionsInitialized = true;
+        resolve(true);
+        return;
+      }
+
+      if (this.cfg.mappingService == null) {
+        this.cfg.errorService.warn('Mapping service is not provided. Field Actions will not be used.', null);
+        this.cfg.initCfg.fieldActionsInitialized = true;
+        resolve(true);
+        return;
+      } else if (this.cfg.initCfg.baseMappingServiceUrl == null) {
+        this.cfg.errorService.warn('Mapping service URL is not provided. Field Actions will not be used.', null);
+        this.cfg.initCfg.fieldActionsInitialized = true;
+        resolve(true);
+        return;
+      }
+
+      // Fetch the field actions from the runtime service.
+      this.cfg.mappingService.fetchFieldActions().toPromise()
+        .then((fetchedActionConfigs: FieldActionConfig[]) => {
+          TransitionModel.actionConfigs = fetchedActionConfigs;
+          this.cfg.initCfg.fieldActionsInitialized = true;
+          resolve(true);
+        }).catch((error: any) => {
+          if (error.status === 0) {
+            this.handleError('Fatal network error: Could not connect to AtlasMap design runtime service.', error);
+          } else {
+            this.handleError('Could not load field action configs: ' + error.status + ' ' + error.statusText, error);
+          }
+          resolve(false);
+        });
+    });
   }
 
   private updateStatus(): void {
