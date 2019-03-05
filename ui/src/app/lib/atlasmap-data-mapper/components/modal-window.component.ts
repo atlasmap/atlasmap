@@ -33,7 +33,17 @@ export interface ModalWindowValidator {
   template: '',
 })
 
-export class EmptyModalBodyComponent { }
+export class EmptyModalBodyComponent implements ModalWindowValidator {
+
+  isDataValid(): boolean {
+    return true;
+  }
+
+  getInitialFocusElement(): ElementRef {
+    return undefined;
+  }
+
+}
 
 @Component({
   selector: 'modal-window',
