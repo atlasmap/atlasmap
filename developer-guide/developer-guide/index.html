@@ -524,7 +524,7 @@ table.CodeRay td.code>pre{padding:0}
 <div class="details">
 <span id="author" class="author">The AtlasMap Team</span><br>
 <span id="revnumber">version 1.40.0-SNAPSHOT,</span>
-<span id="revdate">2019-03-05</span>
+<span id="revdate">2019-03-06</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">AtlasMap Developer Guide</div>
@@ -538,7 +538,8 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#tips-for-ui-developer">2.4. Tips for UI developer</a>
 <ul class="sectlevel3">
 <li><a href="#developing-within-syndesis-ui">2.4.1. Developing Within Syndesis UI</a></li>
-<li><a href="#debug-configuration">2.4.2. Debug Configuration</a></li>
+<li><a href="#debug-unit-tests-with-chrome-devtools">2.4.2. Debug unit tests with Chrome DevTools</a></li>
+<li><a href="#debug-configuration">2.4.3. Debug Configuration</a></li>
 </ul>
 </li>
 </ul>
@@ -690,7 +691,31 @@ $ yarn link @atlasmap/atlasmap-data-mapper</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="debug-configuration">2.4.2. Debug Configuration</h4>
+<h4 id="debug-unit-tests-with-chrome-devtools">2.4.2. Debug unit tests with Chrome DevTools</h4>
+<div class="paragraph">
+<p>To debug AtlasMap Data Mapper UI unit tests with using Chrome DevTools:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code>$ cd ${ATLASMAP}/ui
+$ yarn test:debug</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then Chromium window opens up. Push the <code>DEBUG</code> button. New DEBUG tab will open.
+<span class="image"><img src="images/Chromium.png" alt="Chromium"></span></p>
+</div>
+<div class="paragraph">
+<p>Then open Chrome DevTools, open TypeScript source file and put a breakpoint.
+<span class="image"><img src="images/DevTools.png" alt="DevTools"></span></p>
+</div>
+<div class="paragraph">
+<p>Once you reload DEBUG tab, it stops at the breakpoint and you can start step debugging.
+<span class="image"><img src="images/Breakpoint.png" alt="Breakpoint"></span></p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="debug-configuration">2.4.3. Debug Configuration</h4>
 <div class="paragraph">
 <p>The Data Mapper UI features several developer-friendly debug configuration options. These configuration fields are specified on the <a href="https://github.com/atlasmap/atlasmap/blob/master/ui/src/app/lib/atlasmap-data-mapper/models/config.model.ts">ConfigModel</a> class.</p>
 </div>
@@ -1860,7 +1885,7 @@ string.</p></td>
 <div id="footer">
 <div id="footer-text">
 Version 1.40.0-SNAPSHOT<br>
-Last updated 2019-03-05 18:18:04 UTC
+Last updated 2019-03-06 13:31:49 UTC
 </div>
 </div>
 </body>
