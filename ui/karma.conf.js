@@ -41,7 +41,7 @@ module.exports = function (config) {
     colors: true,
     logLevel: config.LOG_INFO,
     autoWatch: true,
-    browsers: ['ChromeHeadlessCustom'],
+    browsers: ['ChromeHeadlessCustom','ChromeDebug'],
     customLaunchers: {
       'ChromeHeadlessCustom': {
         base: 'ChromeHeadless',
@@ -50,7 +50,11 @@ module.exports = function (config) {
           '--disable-setuid-sandbox',
         ],
       },
-    },
+      'ChromeDebug': {
+        base: 'Chrome',
+        flags: ['--remote-debugging-port=9333'],
+      },
+     },
     singleRun: false
   });
 };
