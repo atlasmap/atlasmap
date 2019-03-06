@@ -11,6 +11,7 @@ git config --global user.name "Travis" && \
 cd gh-pages && \
 git rm -r * && \
 cd .. && \
+cp src/main/resources/CNAME gh-pages/ && \
 cp -rv target/generated-docs/html/user-guide/* gh-pages/ && \
 cp -v target/generated-docs/pdf/user-guide/index.pdf gh-pages/user-guide.pdf && \
 mkdir -p gh-pages/developer-guide
