@@ -10,7 +10,8 @@ git config --global user.email "travis@atlasmap.io" && \
 git config --global user.name "Travis" && \
 cp -rv target/generated-docs/html/user-guide/* gh-pages/ && \
 cp -v target/generated-docs/pdf/user-guide/index.pdf gh-pages/user-guide.pdf && \
-cp -rv target/generated-docs/html/developer-guide/ gh-pages/developer-guide && \
+mkdir -p gh-pages/developer-guide
+cp -rv target/generated-docs/html/developer-guide/* gh-pages/developer-guide/ && \
 cp -v target/generated-docs/pdf/developer-guide/index.pdf gh-pages/developer-guide.pdf && \
 cd gh-pages && \
 git add --ignore-errors * && \
