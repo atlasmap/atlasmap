@@ -17,7 +17,6 @@ import { Component, Input, OnInit } from '@angular/core';
 
 import { InspectionType } from '../common/config.types';
 import { ConfigModel } from '../models/config.model';
-import { InitializationService } from '../services/initialization.service';
 import { ModalWindowComponent } from './modal-window.component';
 import { TemplateEditComponent } from './template-edit.component';
 
