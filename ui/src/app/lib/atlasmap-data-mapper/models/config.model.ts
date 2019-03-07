@@ -197,8 +197,16 @@ export class ConfigModel {
     docDef.inspectionSource = docInitModel.inspectionSource;
     docDef.inspectionResult = docInitModel.inspectionResult;
     docDef.selectedRoot = docInitModel.selectedRoot;
-    docDef.uri = 'atlas:' + docDef.type.toLowerCase() + ':' + docDef.id;
-    if (docDef.type === DocumentType.JAVA) {
+
+    if (docDef.type === DocumentType.XSD) {
+      docDef.uri = 'atlas:' + 'xml' + ':' + docDef.id;
+    } else if (docDef.type === DocumentType.JAVA_ARCHIVE) {
+      docDef.uri = 'atlas:' + 'java' + ':' + docDef.id;
+    } else {
+      docDef.uri = 'atlas:' + docDef.type.toLowerCase() + ':' + docDef.id;
+    }
+
+    if (docDef.type === DocumentType.JAVA || docDef.type === DocumentType.JAVA_ARCHIVE) {
       docDef.uri += '?className=' + docDef.inspectionSource;
     }
 

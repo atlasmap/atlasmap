@@ -15,7 +15,7 @@
 */
 
 export enum DocumentType {
-  JAVA = 'Java',
+  JAVA = 'JAVA',
   JAVA_ARCHIVE = 'JAR',
   XML = 'XML',
   XSD = 'XSD',
