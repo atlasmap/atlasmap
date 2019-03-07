@@ -199,10 +199,12 @@ export class ConfigModel {
     docDef.selectedRoot = docInitModel.selectedRoot;
     if (docDef.type === DocumentType.XSD) {
       docDef.uri = 'atlas:' + 'xml' + ':' + docDef.id;
-    } else if (docDef.type === DocumentType.JAVA) {
-      docDef.uri += '?className=' + docDef.inspectionSource;
     } else {
       docDef.uri = 'atlas:' + docDef.type.toLowerCase() + ':' + docDef.id;
+    }
+
+    if (docDef.type === DocumentType.JAVA) {
+      docDef.uri += '?className=' + docDef.inspectionSource;
     }
 
     if (docInitModel.isSource) {
