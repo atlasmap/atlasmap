@@ -56,9 +56,11 @@
 
   <div class="clear"></div>
 
-  <div style="width: 100%;" *ngIf="!mappedField.isPadField()">
-    <input type="text" id="{{inputId}}" [ngModel]="mappedField.field.getFieldLabel(cfg.showTypes, false)"
-      [typeahead]="dataSource" typeaheadWaitMs="200" (typeaheadOnSelect)="selectionChanged($event)"
-      typeaheadOptionField="displayName" [typeaheadItemTemplate]="typeaheadTemplate" placeholder="Search">
+  <div style="width: 100%;" *ngIf="!mappedField.isPadField()" class="searchBox">
+    <input type="text" #searchFilterBox id="{{inputId}}" [ngModel]="mappedField.field.getFieldLabel(cfg.showTypes, false)"
+      (keyup)="updateSearchFilter(searchFilterBox.value)" [typeahead]="dataSource" typeaheadWaitMs="200"
+      typeaheadOptionField="displayName" [typeaheadItemTemplate]="typeaheadTemplate" 
+      (typeaheadOnSelect)="selectionChanged($event)" placeholder="Search">
+      <div class="clear"></div>
   </div>
 </div>
