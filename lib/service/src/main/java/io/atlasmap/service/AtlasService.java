@@ -653,16 +653,18 @@ public class AtlasService {
                 }
            });
 
-           try {
-               for (File jarFile : jars) {
-                   LOG.debug("  Creating zip file entry '{}'", "lib/" + jarFile.getName());
-                   ZipEntry libEntry = new ZipEntry("lib/" + jarFile.getName());
-                   zipOut.putNextEntry(libEntry);
-                   addFileAsZip(zipOut, libFolderPath.toString() + File.separator  + jarFile.getName());
-                   zipOut.closeEntry();
+           if (jars != null) {
+               try {
+                   for (File jarFile : jars) {
+                       LOG.debug("  Creating zip file entry '{}'", "lib/" + jarFile.getName());
+                       ZipEntry libEntry = new ZipEntry("lib/" + jarFile.getName());
+                       zipOut.putNextEntry(libEntry);
+                       addFileAsZip(zipOut, libFolderPath.toString() + File.separator  + jarFile.getName());
+                       zipOut.closeEntry();
+                   }
+               } catch (IOException e) {
+                   throw new IOException(e.getMessage());
                }
-           } catch (IOException e) {
-               throw new IOException(e.getMessage());
            }
 
            zipOut.close();
