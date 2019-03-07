@@ -561,7 +561,7 @@ export class MappingManagementService {
       }
     }
 
-    if ((mapping == null) || (this.cfg.mappings.activeMapping.brandNewMapping)) {
+    if ((mapping == null) || (this.cfg.mappings.activeMapping && this.cfg.mappings.activeMapping.brandNewMapping)) {
       const mappingsForField: MappingModel[] = this.cfg.mappings.findMappingsForField(field);
 
       if (mappingsForField && mappingsForField.length === 1) {

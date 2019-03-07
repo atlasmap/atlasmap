@@ -41,9 +41,11 @@ export class MappingFieldDetailComponent implements OnInit {
   sourceIconCSSClass: string;
   parentObjectName: string;
 
+  private searchFilter = '';
+
   constructor() {
     this.dataSource = Observable.create((observer: any) => {
-      observer.next(this.executeSearch(observer.outerValue));
+      observer.next(this.executeSearch(this.searchFilter));
     });
   }
 
@@ -53,6 +55,10 @@ export class MappingFieldDetailComponent implements OnInit {
 
   isTransformCapable() {
     return (!this.mappedField.isPadField() && this.mappedField.field.name.length > 0);
+  }
+
+  updateSearchFilter(value: string) {
+    this.searchFilter = value;
   }
 
   /**
@@ -128,6 +134,7 @@ export class MappingFieldDetailComponent implements OnInit {
 
   selectionChanged(event: any): void {
     this.mappedField.field = event.item['field'];
+    this.searchFilter = this.mappedField.field.getFieldLabel(this.cfg.showTypes, false);
     this.cfg.mappingService.updateMappedField(this.fieldPair, this.mappedField.field.isSource(), false);
     this.updateTemplateValues();
   }
@@ -152,6 +159,12 @@ export class MappingFieldDetailComponent implements OnInit {
     } else { return false; }
   }
 
+  /**
+   * This search is triggered off of the observer created in the constructor.  Note that we display any
+   * field whose path matches but we capture only the field leaf name for display.
+   *
+   * @param filter
+   */
   executeSearch(filter: string): any[] {
     const formattedFields: any[] = [];
     let fields: Field[] = [DocumentDefinition.getNoneField()];
@@ -160,13 +173,14 @@ export class MappingFieldDetailComponent implements OnInit {
     }
     const activeMapping: MappingModel = this.cfg.mappings.activeMapping;
     for (const field of fields) {
-      const displayName = (field == null) ? '' : field.getFieldLabel(ConfigModel.getConfig().showTypes, true);
-      const formattedField: any = { 'field': field, 'displayName': displayName };
-      if (filter == null || filter === ''
-        || formattedField['displayName'].toLowerCase().indexOf(filter.toLowerCase()) !== -1) {
+      let displayName = (field == null) ? '' : field.getFieldLabel(ConfigModel.getConfig().showTypes, true);
+
+      if (filter == null || filter === '' || displayName.toLowerCase().indexOf(filter.toLowerCase()) !== -1) {
         if (!activeMapping.isFieldSelectable(field)) {
           continue;
         }
+        displayName = field.getFieldLabel(ConfigModel.getConfig().showTypes, false);
+        const formattedField: any = { 'field': field, 'displayName': displayName };
         formattedFields.push(formattedField);
       }
       if (formattedFields.length > 9) {
@@ -197,5 +211,4 @@ export class MappingFieldDetailComponent implements OnInit {
     }
     return this.mappedField.field.docDef.getName(ConfigModel.getConfig().showTypes);
   }
-
 }
