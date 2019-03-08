@@ -358,7 +358,7 @@ export class MappingDefinition {
         mappedField.field = doc.getField(mappedField.parsedData.parsedPath);
       }
       if (mappedField.field == null) {
-        if (mappedField.parsedData.fieldIsConstant) {
+        if (mappedField.parsedData.fieldIsConstant || mappedField.parsedData.fieldIsProperty) {
           const constantField: Field = new Field();
           constantField.value = mappedField.parsedData.parsedValue;
           constantField.type = mappedField.parsedData.parsedValueType;

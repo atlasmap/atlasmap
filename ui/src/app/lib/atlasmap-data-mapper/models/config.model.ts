@@ -120,6 +120,8 @@ export class DocumentInitializationModel {
 export class ConfigModel {
   static mappingServicesPackagePrefix = 'io.atlasmap.v2';
   static javaServicesPackagePrefix = 'io.atlasmap.java.v2';
+  static jsonServicesPackagePrefix = 'io.atlasmap.json.v2';
+  static xmlServicesPackagePrefix = 'io.atlasmap.xml.v2';
   private static cfg: ConfigModel = new ConfigModel();
 
   initCfg: DataMapperInitializationModel = new DataMapperInitializationModel;

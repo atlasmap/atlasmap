@@ -85,14 +85,52 @@ export class InitializationService {
     const json: any = {
       'AtlasMapping': {
         'jsonType': ConfigModel.mappingServicesPackagePrefix + '.AtlasMapping',
-        'fieldMappings': {
-          'fieldMapping': [
+        'dataSource': [
+          {
+            'jsonType': ConfigModel.mappingServicesPackagePrefix + '.DataSource',
+            'id': 'twitter4j.Status',
+            'uri': 'atlas:java?className=twitter4j.Status',
+            'dataSourceType': 'SOURCE'
+          },
+          {
+            'jsonType': ConfigModel.mappingServicesPackagePrefix + '.DataSource',
+            'id': 'SomeJsonSource',
+            'uri': 'atlas:json:SomeJsonSource',
+            'dataSourceType': 'SOURCE'
+          },
+          {
+            'jsonType': ConfigModel.mappingServicesPackagePrefix + '.DataSource',
+            'id': 'SomeXmlSource',
+            'uri': 'atlas:xml:SomeXmlSource',
+            'dataSourceType': 'SOURCE'
+          },
+          {
+            'jsonType': ConfigModel.mappingServicesPackagePrefix + '.DataSource',
+            'id': 'salesforce.Contact',
+            'uri': 'atlas:java?className=org.apache.camel.salesforce.dto.Contact',
+            'dataSourceType': 'TARGET'
+          },
+          {
+            'jsonType': ConfigModel.mappingServicesPackagePrefix + '.DataSource',
+            'id': 'SomeJsonTarget',
+            'uri': 'atlas:json:SomeJsonTarget',
+            'dataSourceType': 'TARGET'
+          },
+          {
+            'jsonType': ConfigModel.mappingServicesPackagePrefix + '.DataSource',
+            'id': 'SomeXmlTarget',
+            'uri': 'atlas:xml:SomeXmlTarget',
+            'dataSourceType': 'TARGET'
+          },
+        ],
+        'mappings': {
+          'mapping': [
             {
-              'jsonType': ConfigModel.mappingServicesPackagePrefix + '.MapFieldMapping',
-              'inputField': {
-                'jsonType': ConfigModel.mappingServicesPackagePrefix + '.MappedField',
-                'field': {
+              'jsonType': ConfigModel.mappingServicesPackagePrefix + '.Mapping',
+              'inputField': [
+                {
                   'jsonType': ConfigModel.javaServicesPackagePrefix + '.JavaField',
+                  'docId': 'twitter4j.Status',
                   'status': 'SUPPORTED',
                   'modifiers': { 'modifier': [] },
                   'name': 'text',
@@ -102,14 +140,14 @@ export class InitializationService {
                   'primitive': true,
                   'array': false,
                   'synthetic': false,
-                  'path': 'Text',
+                  'path': '/Text',
+                  'fieldActions': null,
                 },
-                'fieldActions': null,
-              },
-              'outputField': {
-                'jsonType': ConfigModel.mappingServicesPackagePrefix + '.MappedField',
-                'field': {
+              ],
+              'outputField': [
+                {
                   'jsonType': ConfigModel.javaServicesPackagePrefix + '.JavaField',
+                  'docId': 'salesforce.Contact',
                   'status': 'SUPPORTED',
                   'modifiers': { 'modifier': ['PRIVATE'] },
                   'name': 'Description',
@@ -120,17 +158,18 @@ export class InitializationService {
                   'primitive': true,
                   'array': false,
                   'synthetic': false,
-                  'path': 'Description',
+                  'path': '/Description',
+                  'fieldActions': null,
                 },
-                'fieldActions': null,
-              },
+              ],
             },
             {
-              'jsonType': ConfigModel.mappingServicesPackagePrefix + '.SeparateFieldMapping',
-              'inputField': {
-                'jsonType': ConfigModel.mappingServicesPackagePrefix + '.MappedField',
-                'field': {
+              'jsonType': ConfigModel.mappingServicesPackagePrefix + '.Mapping',
+              'mappingType': 'SEPARATE',
+              'inputField': [
+                {
                   'jsonType': ConfigModel.javaServicesPackagePrefix + '.JavaField',
+                  'docId': 'twitter4j.Status',
                   'status': 'SUPPORTED',
                   'modifiers': { 'modifier': [] },
                   'name': 'name',
@@ -140,70 +179,55 @@ export class InitializationService {
                   'primitive': true,
                   'array': false,
                   'synthetic': false,
-                  'path': 'User.Name',
+                  'path': '/User/Name',
+                  'actions': null,
                 },
-                'fieldActions': null,
-              },
-              'outputFields': {
-                'mappedField': [
-                  {
-                    'jsonType': ConfigModel.mappingServicesPackagePrefix + '.MappedField',
-                    'field': {
-                      'jsonType': ConfigModel.javaServicesPackagePrefix + '.JavaField',
-                      'status': 'SUPPORTED',
-                      'modifiers': { 'modifier': ['PRIVATE'] },
-                      'name': 'FirstName',
-                      'className': 'java.lang.String',
-                      'type': 'STRING',
-                      'getMethod': 'getFirstName',
-                      'setMethod': 'setFirstName',
-                      'primitive': true,
-                      'array': false,
-                      'synthetic': false,
-                      'path': 'FirstName',
-                    },
-                    'fieldActions': {
-                      'fieldAction': [{
-                        'jsonType': ConfigModel.mappingServicesPackagePrefix + '.MapAction',
-                        'index': 0,
-                      }],
-                    },
+              ],
+              'outputField': [
+                {
+                  'jsonType': ConfigModel.javaServicesPackagePrefix + '.JavaField',
+                  'docId': 'salesforce.Contact',
+                  'status': 'SUPPORTED',
+                  'modifiers': { 'modifier': ['PRIVATE'] },
+                  'name': 'FirstName',
+                  'className': 'java.lang.String',
+                  'type': 'STRING',
+                  'getMethod': 'getFirstName',
+                  'setMethod': 'setFirstName',
+                  'primitive': true,
+                  'array': false,
+                  'synthetic': false,
+                  'path': '/FirstName',
+                  'index': 0,
+                  'actions': null,
+                },
+                {
+                  'jsonType': ConfigModel.javaServicesPackagePrefix + '.JavaField',
+                  'docId': 'salesforce.Contact',
+                  'status': 'SUPPORTED',
+                  'modifiers': {
+                    'modifier': ['PRIVATE']
                   },
-                  {
-                    'jsonType': ConfigModel.mappingServicesPackagePrefix + '.MappedField',
-                    'field': {
-                      'jsonType': ConfigModel.javaServicesPackagePrefix + '.JavaField',
-                      'status': 'SUPPORTED',
-                      'modifiers': {
-                        'modifier': ['PRIVATE']
-                      },
-                      'name': 'LastName',
-                      'className': 'java.lang.String',
-                      'type': 'STRING',
-                      'getMethod': 'getLastName',
-                      'setMethod': 'setLastName',
-                      'primitive': true,
-                      'array': false,
-                      'synthetic': false,
-                      'path': 'LastName',
-                    },
-                    'fieldActions': {
-                      'fieldAction': [{
-                        'jsonType': ConfigModel.mappingServicesPackagePrefix + '.MapAction',
-                        'index': 1,
-                      }],
-                    },
-                  },
-                ],
-              },
-              'strategy': 'SPACE',
+                  'name': 'LastName',
+                  'className': 'java.lang.String',
+                  'type': 'STRING',
+                  'getMethod': 'getLastName',
+                  'setMethod': 'setLastName',
+                  'primitive': true,
+                  'array': false,
+                  'synthetic': false,
+                  'path': '/LastName',
+                  'index': 1,
+                  'actions': null,
+                },
+              ],
             },
             {
-              'jsonType': ConfigModel.mappingServicesPackagePrefix + '.MapFieldMapping',
-              'inputField': {
-                'jsonType': ConfigModel.mappingServicesPackagePrefix + '.MappedField',
-                'field': {
+              'jsonType': ConfigModel.mappingServicesPackagePrefix + '.Mapping',
+              'inputField': [
+                {
                   'jsonType': ConfigModel.javaServicesPackagePrefix + '.JavaField',
+                  'docId': 'twitter4j.Status',
                   'status': 'SUPPORTED',
                   'modifiers': { 'modifier': [] },
                   'name': 'screenName',
@@ -213,14 +237,14 @@ export class InitializationService {
                   'primitive': true,
                   'array': false,
                   'synthetic': false,
-                  'path': 'User.ScreenName',
+                  'path': '/User/ScreenName',
+                  'fieldActions': null,
                 },
-                'fieldActions': null,
-              },
-              'outputField': {
-                'jsonType': ConfigModel.mappingServicesPackagePrefix + '.MappedField',
-                'field': {
+              ],
+              'outputField': [
+                {
                   'jsonType': ConfigModel.javaServicesPackagePrefix + '.JavaField',
+                  'docId': 'salesforce.Contact',
                   'status': 'SUPPORTED',
                   'modifiers': {
                     'modifier': ['PRIVATE']
@@ -233,17 +257,171 @@ export class InitializationService {
                   'primitive': true,
                   'array': false,
                   'synthetic': false,
-                  'path': 'Title',
+                  'path': '/Title',
+                  'fieldActions': null,
                 },
-                'fieldActions': null,
-              },
+              ],
+            },
+            {
+              'jsonType': ConfigModel.mappingServicesPackagePrefix + '.Mapping',
+              'mappingType': 'COMBINE',
+              'inputField': [
+                {
+                  'jsonType': ConfigModel.jsonServicesPackagePrefix + '.JsonField',
+                  'docId': 'SomeJsonSource',
+                  'status': 'SUPPORTED',
+                  'name': 'js0',
+                  'type': 'STRING',
+                  'path': '/js0',
+                  'index': 0,
+                  'actions': null,
+                },
+                {
+                  'jsonType': ConfigModel.jsonServicesPackagePrefix + '.JsonField',
+                  'docId': 'SomeJsonSource',
+                  'status': 'SUPPORTED',
+                  'name': 'js1',
+                  'type': 'STRING',
+                  'path': '/js1',
+                  'index': 1,
+                  'actions': null,
+                },
+              ],
+              'outputField': [
+                {
+                  'jsonType': ConfigModel.xmlServicesPackagePrefix + '.XmlField',
+                  'docId': 'SomeXmlTarget',
+                  'status': 'SUPPORTED',
+                  'name': 'xt0',
+                  'type': 'STRING',
+                  'path': '/xt0',
+                  'actions': [
+                    {
+                      'Uppercase': {}
+                    }
+                  ],
+                }
+              ],
+            },
+            {
+              'jsonType': ConfigModel.mappingServicesPackagePrefix + '.Mapping',
+              'mappingType': 'SEPARATE',
+              'inputField': [
+                {
+                  'jsonType': ConfigModel.xmlServicesPackagePrefix + '.XmlField',
+                  'docId': 'SomeXmlSource',
+                  'status': 'SUPPORTED',
+                  'name': 'xs0',
+                  'type': 'STRING',
+                  'path': '/xs0',
+                  'actions': [
+                    {
+                      'Append': {
+                        'string': 'xxx'
+                      }
+                    }
+                  ]
+                },
+              ],
+              'outputField': [
+                {
+                  'jsonType': ConfigModel.jsonServicesPackagePrefix + '.JsonField',
+                  'docId': 'SomeJsonTarget',
+                  'status': 'SUPPORTED',
+                  'name': 'jt0',
+                  'type': 'STRING',
+                  'path': '/jt0',
+                  'index': 0,
+                  'actions': null,
+                },
+                {
+                  'jsonType': ConfigModel.jsonServicesPackagePrefix + '.JsonField',
+                  'docId': 'SomeJsonTarget',
+                  'status': 'SUPPORTED',
+                  'name': 'jt1',
+                  'type': 'STRING',
+                  'path': '/jt1',
+                  'index': 1,
+                  'actions': null,
+                },
+              ],
+            },
+            {
+              'jsonType': ConfigModel.mappingServicesPackagePrefix + '.Mapping',
+              'inputField': [
+                {
+                  'jsonType': ConfigModel.mappingServicesPackagePrefix + '.ConstantField',
+                  'status': 'SUPPORTED',
+                  'name': 'constantName',
+                  'type': 'STRING',
+                  'actions': null,
+                },
+              ],
+              'outputField': [
+                {
+                  'jsonType': ConfigModel.xmlServicesPackagePrefix + '.XmlField',
+                  'docId': 'SomeXmlTarget',
+                  'status': 'SUPPORTED',
+                  'name': 'xt1',
+                  'type': 'STRING',
+                  'path': '/xt1',
+                  'actions': null,
+                }
+              ],
+            },
+            {
+              'jsonType': ConfigModel.mappingServicesPackagePrefix + '.Mapping',
+              'inputField': [
+                {
+                  'jsonType': ConfigModel.mappingServicesPackagePrefix + '.PropertyField',
+                  'status': 'SUPPORTED',
+                  'name': 'propertyName',
+                  'type': 'STRING',
+                  'actions': null,
+                },
+              ],
+              'outputField': [
+                {
+                  'jsonType': ConfigModel.xmlServicesPackagePrefix + '.XmlField',
+                  'docId': 'SomeXmlTarget',
+                  'status': 'SUPPORTED',
+                  'name': 'xt2',
+                  'type': 'STRING',
+                  'path': '/xt2',
+                  'actions': null,
+                }
+              ],
             },
           ],
         },
         'name': 'UI.867332',
-        'sourceUri': 'atlas:java?className=twitter4j.Status',
-        'targetUri': 'atlas:java?className=org.apache.camel.salesforce.dto.Contact',
-        'lookupTables': { 'lookupTable': [] },
+        'lookupTables': { 'lookupTable': [
+          {
+            'name': 'dummyTable',
+            'lookupEntry': [
+              {
+                'sourceValue': 'Arizona',
+                'sourceType': 'String',
+                'targetValue': 'AZ',
+                'targetType': 'String'
+              }
+            ]
+          }
+        ]},
+        'constants': { 'constant': [
+          {
+            'name': 'constantName',
+            'value': 'constantValue',
+            'fieldType': 'String'
+          }
+        ]},
+        'properties': { 'property': [
+          {
+            'name': 'propertyName',
+            'value': 'propertyValue',
+            'fieldType': 'String'
+          }
+        ]},
       },
     };
     return json;
