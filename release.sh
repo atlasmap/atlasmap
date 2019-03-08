@@ -127,5 +127,5 @@ echo "=========================================================="
 echo "Publishing Release Notes to GitHub...."
 echo "=========================================================="
 yarn add github-release-notes
-./node_modules/.bin/gren release --override
-./node_modules/.bin/gren changelog --override
+./node_modules/.bin/gren release --tags atlasmap-${RELEASE_VERSION} --override
+./node_modules/.bin/gren changelog --tags=all --generate --override

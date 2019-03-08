@@ -1,5 +1,21 @@
 # Changelog
 
+## atlasmap-1.39.5 (08/03/2019)
+
+#### Bug Fixes
+
+- [#817](https://github.com/atlasmap/atlasmap/issues/817) Correct AtlasMapping datasource URI for XSD document types
+- [#811](https://github.com/atlasmap/atlasmap/issues/811) Reset all confirmation modal doesn't implement modal validator
+- [#803](https://github.com/atlasmap/atlasmap/issues/803) LineMachine line mappings may get out of sync with mappings events
+- [#798](https://github.com/atlasmap/atlasmap/issues/798) Null ptr ref on mappings validation
+- [#777](https://github.com/atlasmap/atlasmap/issues/777) Update list of proposals when starting to type in Dropdown proposals
+- [#770](https://github.com/atlasmap/atlasmap/issues/770) Missing source when Drag'n'dropping an element not previously selected
+- [#751](https://github.com/atlasmap/atlasmap/issues/751) Cannot change the settings when clicking on the checkbox
+- [#747](https://github.com/atlasmap/atlasmap/issues/747) Multiple mapping targets to the same target field allowed if you enable/disable mapping details
+- [#576](https://github.com/atlasmap/atlasmap/issues/576) Add constant/property dialog need a bit of aligning
+
+---
+
 ## atlasmap-1.39.4 (27/02/2019)
 
 #### Enhancements
