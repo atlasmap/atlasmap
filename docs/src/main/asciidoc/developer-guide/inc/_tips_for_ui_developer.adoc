@@ -25,6 +25,10 @@ To debug AtlasMap Data Mapper UI unit tests with using Chrome DevTools:
 $ cd ${ATLASMAP}/ui
 $ yarn test:debug
 ```
+Or you can specify target test file alone
+```
+$ yarn test:debug --main src/app/lib/atlasmap-data-mapper/services/mapping-serializer.service.spec.ts
+```
 
 Then Chromium window opens up. Push the `DEBUG` button. New DEBUG tab will open.
 image:Chromium.png[]
