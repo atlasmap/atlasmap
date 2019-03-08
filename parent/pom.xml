@@ -20,7 +20,7 @@
   <parent>
     <groupId>io.atlasmap</groupId>
     <artifactId>atlasmapio</artifactId>
-    <version>1.40.0-SNAPSHOT</version>
+    <version>1.39.x</version>
     <relativePath>..</relativePath>
   </parent>
 
