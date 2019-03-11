@@ -524,7 +524,7 @@ table.CodeRay td.code>pre{padding:0}
 <div class="details">
 <span id="author" class="author">The AtlasMap Team</span><br>
 <span id="revnumber">version 1.40.0-SNAPSHOT,</span>
-<span id="revdate">2019-03-08</span>
+<span id="revdate">2019-03-11</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">AtlasMap User Guide</div>
@@ -537,14 +537,15 @@ table.CodeRay td.code>pre{padding:0}
 </li>
 <li><a href="#design-mappings-in-ui">2. Design Mappings in UI</a>
 <ul class="sectlevel2">
-<li><a href="#find-the-field-you-want-to-map">2.1. Find the data field that you want to map</a></li>
-<li><a href="#map-one-source-field-to-one-target-field">2.2. Map one source field to one target field</a></li>
-<li><a href="#example-missing-unwanted-data">2.3. Example of missing or unwanted data when combining or separating fields</a></li>
-<li><a href="#combine-multiple-source-fields-into-one-target-field">2.4. Combine multiple source fields into one target field</a></li>
-<li><a href="#separate-one-source-field-into-multiple-target-fields">2.5. Separate one source field into multiple target fields</a></li>
-<li><a href="#transform-target-data">2.6. Transform source or target data</a></li>
-<li><a href="#view-mappings">2.7. View the mappings</a></li>
-<li><a href="#available-transformations">2.8. Descriptions of available transformations</a></li>
+<li><a href="#import-files-to-panel">2.1. Import XML/JSON schema or instance or Java class files</a></li>
+<li><a href="#find-the-field-you-want-to-map">2.2. Find the data field that you want to map</a></li>
+<li><a href="#map-one-source-field-to-one-target-field">2.3. Map one source field to one target field</a></li>
+<li><a href="#example-missing-unwanted-data">2.4. Example of missing or unwanted data when combining or separating fields</a></li>
+<li><a href="#combine-multiple-source-fields-into-one-target-field">2.5. Combine multiple source fields into one target field</a></li>
+<li><a href="#separate-one-source-field-into-multiple-target-fields">2.6. Separate one source field into multiple target fields</a></li>
+<li><a href="#transform-target-data">2.7. Transform source or target data</a></li>
+<li><a href="#view-mappings">2.8. View the mappings</a></li>
+<li><a href="#available-transformations">2.9. Descriptions of available transformations</a></li>
 </ul>
 </li>
 </ul>
@@ -557,10 +558,11 @@ table.CodeRay td.code>pre{padding:0}
 <div id="introduction" class="paragraph">
 <p>AtlasMap is a data mapping solution with an interactive web based user interface.
 It simplifies configuration of an integration that handles different
-types of data, such as  Java, XML, or JSON data. You design your data
-mapping in the AtlasMap Data Mapper UI canvas, and then run that data mapping
-by means of a runtime engine. We have a camel-atlasmap component which consumes
-AtlasMap mapping definition and process data mapping as a part of Camel route.</p>
+types of data represented by XML schema or instance files, JSON schema or instance files or Java class files.
+You design your data mapping and transformations in the AtlasMap Data Mapper UI canvas, and then execute that mapping
+by means of the AtlasMap runtime engine. We provide standard transformations or we
+support custom, user-defined transformations.  We also have a camel-atlasmap component which consumes an
+AtlasMap mapping definition which can process data mappings as a part of a Camel route.</p>
 </div>
 <div style="page-break-after: always;"></div>
 </div>
@@ -576,7 +578,7 @@ AtlasMap mapping definition and process data mapping as a part of Camel route.</
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Download AtlasMap standalone jar</p>
+<p>Download the AtlasMap standalone jar</p>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code>wget http://central.maven.org/maven2/io/atlasmap/atlasmap-standalone/${VERSION}/atlasmap-standalone-${VERSION}.jar</code></pre>
@@ -587,11 +589,11 @@ AtlasMap mapping definition and process data mapping as a part of Camel route.</
 <p>Run AtlasMap standalone</p>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code>$ java -jar atlasmap-standalone-${VERSION}.jar</code></pre>
+<pre class="CodeRay highlight"><code>$ java [ -Datlasmap.adm.path=/path/to/example.adm ] -jar atlasmap-standalone-${VERSION}.jar</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Now AtlasMap Data Mapper UI is available at <a href="http://127.0.0.1:8585/" class="bare">http://127.0.0.1:8585/</a></p>
+<p>Now AtlasMap Data Mapper UI is available at <a href="http://127.0.0.1:8585/" class="bare">http://127.0.0.1:8585/</a>  The .adm file can be created with the export icon on the main toolbar.</p>
 </div>
 </li>
 </ol>
@@ -631,7 +633,364 @@ from("direct:start")
 <h2 id="design-mappings-in-ui">2. Design Mappings in UI</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="find-the-field-you-want-to-map">2.1. Find the data field that you want to map</h3>
+<h3 id="import-files-to-panel">2.1. Import XML/JSON schema or instance or Java class files</h3>
+<div class="paragraph">
+<p>Data mapping fundamentally involes morphing one data shape into another.  A user
+defines these shapes using XML schemas, JSON notation or by establishing a simple Java
+class.  The following sections examine each file type independently.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>JSON Schema File: <strong>JSONSchema.json</strong></p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code>  {
+    "$schema": "http://json-schema.org/schema#",
+    "description": "Order",
+    "type": "object",
+    "properties": {
+      "order": {
+        "type": "object",
+        "properties": {
+          "address": {
+          "type": "object",
+          "properties": {
+            "street": { "type": "string" },
+            "city": { "type": "string" },
+            "state": { "type": "string" },
+            "zip": { "type": "string" }
+          }
+        },
+        "contact": {
+          "type": "object",
+          "properties": {
+            "firstName": { "type": "string" },
+            "lastName": { "type": "string" },
+            "phone": { "type": "string" }
+          }
+        },
+        "orderId": { "type": "string" }
+      }
+    },
+    "primitives": {
+      "type": "object",
+      "properties": {
+        "stringPrimitive": { "type": "string" },
+        "booleanPrimitive": { "type": "boolean" },
+        "numberPrimitive": { "type": "number" }
+      }
+    },
+    "primitiveArrays": {
+      "type": "object",
+      "properties": {
+        "stringArray": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "booleanArray": {
+          "type": "array",
+          "items": { "type": "boolean" }
+        },
+        "numberArray": {
+          "type": "array",
+          "items": { "type": "number" }
+        }
+      }
+    },
+    "addressList": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "street": { "type": "string" },
+          "city": { "type": "string" },
+          "state": { "type": "string" },
+          "zip": { "type": "string" }
+        }
+      }
+    }
+    }
+  }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To import this file into the AtlasMap Source panel, select the import icon at the top of the panel.</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/ImportJSON1.png" alt="Import a JSON File to Source Panel"></span></p>
+</div>
+<div class="paragraph">
+<p>An <strong>Open File</strong> dialog appears.  Select the location for the JSONSchema.json file.</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/ImportJSON2.png" alt="Import a JSON File to Source Panel - Open File Dialog"></span></p>
+</div>
+<div class="paragraph">
+<p>The fields now appear in the Source panel as you defined them in the imported JSON schema.</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/ImportJSON3.png" alt="Import a JSON File to Source Panel - Import Complete"></span></p>
+</div>
+<div class="paragraph">
+<p>Now consider the import an XML schema into the Target panel.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>XML Schema File: <strong>XMLSchema.xml</strong></p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code>&lt;d:SchemaSet xmlns:d="http://atlasmap.io/xml/schemaset/v2" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+    &lt;xsd:schema targetNamespace="http://syndesis.io/v1/swagger-connector-template/request" elementFormDefault="qualified"&gt;
+      &lt;xsd:element name="request"&gt;
+        &lt;xsd:complexType&gt;
+          &lt;xsd:sequence&gt;
+            &lt;xsd:element name="body"&gt;
+              &lt;xsd:complexType&gt;
+                &lt;xsd:sequence&gt;
+                  &lt;xsd:element ref="Pet" /&gt;
+                &lt;/xsd:sequence&gt;
+              &lt;/xsd:complexType&gt;
+            &lt;/xsd:element&gt;
+          &lt;/xsd:sequence&gt;
+        &lt;/xsd:complexType&gt;
+      &lt;/xsd:element&gt;
+    &lt;/xsd:schema&gt;
+    &lt;d:AdditionalSchemas&gt;
+      &lt;xsd:schema&gt;
+        &lt;xsd:element name="Pet"&gt;
+          &lt;xsd:complexType&gt;
+            &lt;xsd:sequence&gt;
+              &lt;xsd:element name="id" type="xsd:decimal" /&gt;
+              &lt;xsd:element name="Category"&gt;
+                &lt;xsd:complexType&gt;
+                  &lt;xsd:sequence&gt;
+                    &lt;xsd:element name="id" type="xsd:decimal" /&gt;
+                    &lt;xsd:element name="name" type="xsd:string" /&gt;
+                  &lt;/xsd:sequence&gt;
+                &lt;/xsd:complexType&gt;
+              &lt;/xsd:element&gt;
+              &lt;xsd:element name="name" type="xsd:string" /&gt;
+              &lt;xsd:element name="photoUrl"&gt;
+                &lt;xsd:complexType&gt;
+                  &lt;xsd:sequence&gt;
+                    &lt;xsd:element name="photoUrl" type="xsd:string" maxOccurs="unbounded" minOccurs="0" /&gt;
+                  &lt;/xsd:sequence&gt;
+                &lt;/xsd:complexType&gt;
+              &lt;/xsd:element&gt;
+              &lt;xsd:element name="tag"&gt;
+                &lt;xsd:complexType&gt;
+                  &lt;xsd:sequence&gt;
+                    &lt;xsd:element name="Tag" maxOccurs="unbounded" minOccurs="0"&gt;
+                      &lt;xsd:complexType&gt;
+                        &lt;xsd:sequence&gt;
+                          &lt;xsd:element name="id" type="xsd:decimal" /&gt;
+                          &lt;xsd:element name="name" type="xsd:string" /&gt;
+                        &lt;/xsd:sequence&gt;
+                      &lt;/xsd:complexType&gt;
+                    &lt;/xsd:element&gt;
+                  &lt;/xsd:sequence&gt;
+                &lt;/xsd:complexType&gt;
+              &lt;/xsd:element&gt;
+              &lt;xsd:element name="status" type="xsd:string" /&gt;
+            &lt;/xsd:sequence&gt;
+          &lt;/xsd:complexType&gt;
+        &lt;/xsd:element&gt;
+      &lt;/xsd:schema&gt;
+    &lt;/d:AdditionalSchemas&gt;
+  &lt;/d:SchemaSet&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In the data mapper, click the import icon at the top of the Target panel.</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/ImportXML1.png" alt="Import an XML File to Target Panel"></span></p>
+</div>
+<div class="paragraph">
+<p>An <strong>Open File</strong> dialog appears.  Navigate to the XMLSchema.xml file and select it.
+The fields now appear in the Target panel as you defined them in the imported XML schema.  The fields
+are expanded to show more detail.</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/ImportXML2.png" alt="Import of an XML File to Target Panel Complete"></span></p>
+</div>
+<div class="paragraph">
+<p>You import instance files in the same way. Instance files define a separate namespace, which also defines a few
+special attributes. For example:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>JSON Schema Instance File: <strong>JSONSchemaInst.json</strong></p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code>   {
+        "order": {
+            "address": {
+                "street": "123 any st",
+                "city": "Austin",
+                "state": "TX",
+                "zip": "78626"
+            },
+            "contact": {
+                "firstName": "james",
+                "lastName": "smith",
+                "phone": "512-123-1234"
+            },
+            "orderId": "123"
+        },
+        "primitives": {
+            "stringPrimitive": "some value",
+            "booleanPrimitive": true,
+            "numberPrimitive": 24
+        },
+        "addressList": [
+            { "street": "123 any st", "city": "Austin", "state": "TX", "zip": "78626" },
+            { "street": "123 any st", "city": "Austin", "state": "TX", "zip": "78626" },
+            { "street": "123 any st", "city": "Austin", "state": "TX", "zip": "78626" },
+            { "street": "123 any st", "city": "Austin", "state": "TX", "zip": "78626" }
+        ]
+    }</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>XML Schema Instance File: <strong>XMLSchemaInst.xml</strong></p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code> &lt;ns:XmlOE xmlns:ns="http://atlasmap.io/xml/test/v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://atlasmap.io/xml/test/v2 atlas-xml-test-model-v2.xsd "&gt;
+    &lt;ns:orderId&gt;ns:orderId&lt;/ns:orderId&gt;
+    &lt;ns:Address&gt;
+      &lt;ns:addressLine1&gt;ns:addressLine1&lt;/ns:addressLine1&gt;
+      &lt;ns:addressLine2&gt;ns:addressLine2&lt;/ns:addressLine2&gt;
+      &lt;ns:city&gt;ns:city&lt;/ns:city&gt;
+      &lt;ns:state&gt;ns:state&lt;/ns:state&gt;
+      &lt;ns:zipCode&gt;ns:zipCode&lt;/ns:zipCode&gt;
+    &lt;/ns:Address&gt;
+    &lt;ns:Contact&gt;
+      &lt;ns:firstName&gt;ns:firstName&lt;/ns:firstName&gt;
+      &lt;ns:lastName&gt;ns:lastName&lt;/ns:lastName&gt;
+      &lt;ns:phoneNumber&gt;ns:phoneNumber&lt;/ns:phoneNumber&gt;
+      &lt;ns:zipCode&gt;ns:zipCode&lt;/ns:zipCode&gt;
+    &lt;/ns:Contact&gt;
+  &lt;/ns:XmlOE&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Using the same procedure as before, import instance files into either the Source or Target panel.</p>
+</div>
+<div class="paragraph">
+<p>There does exist one other method for establishing mappable fields within the AtlasMap data mapper.
+A Java class can be established where each field is represented as a class-wide public entity.  Arrays
+and data types are more discretely defined.  For example:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Java File: <strong>Bicycle.java</strong></p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code>package io.paul;
+import io.paul.GeoLocation;
+
+public class Bicycle {
+    public int cadence;
+    public int gear;
+    public int speed;
+    public float[] seatHeight;
+    public String[] color;
+    public GeoLocation geoLocation;
+}</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Java File: <strong>GeoLocation.java</strong></p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code>package io.paul;
+
+public class GeoLocation {
+    double lattitude;
+    double longitude;
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Compile the Java files and assemble the results into a Java archive file, for example, <code>Bicycle.jar</code> in the following lines:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code>javac -cp io.paul:. -d . GeoLocation.java Bicycle.java
+jar cvf ../Bicycle.jar *</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now you can import the <code>Bicycle.jar</code> archive into AtlasMap.  The import procedure is slightly different for
+Java class archives.  You must:</p>
+</div>
+<div class="paragraph">
+<p>Import the file into AtlasMap.  Select the import icon <strong>on the main tool bar</strong>, not on
+the panel.</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/ImportJavaClass1.png" alt="Import a Java Class Archive File to Source Panel"></span></p>
+</div>
+<div class="paragraph">
+<p>An <strong>Open File</strong> dialog appears.  Navigate to the <code>Bicycle.jar</code> file and select it.</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/ImportJavaClass2.png" alt="Import a Java Class Archive File to Source Panel - Open Dialog"></span></p>
+</div>
+<div class="paragraph">
+<p>Select the plus icon (+) on the Source or Target panel.</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/ImportJavaClass3.png" alt="Enable a class package in a previously imported JAR"></span></p>
+</div>
+<div class="paragraph">
+<p>A dialog appears "Establish your class in the Sources panel."
+In the <strong>Class package name:</strong> input field, enter the class package name of the Java class you have defined.
+In the <code>Bicycle.jar</code> example, the class package name is <code>io.paul.Bicycle</code>.</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/ImportJavaClass4.png" alt="Enable a class package in a previously imported JAR"></span></p>
+</div>
+<div class="paragraph">
+<p>You will now see the fields you created in your Java class file appear in the selected panel.</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/ImportJavaClass5.png" alt="Class Package Enablement Complete"></span></p>
+</div>
+<div class="paragraph">
+<p>You have now defined the source and target data shapes.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="find-the-field-you-want-to-map">2.2. Find the data field that you want to map</h3>
 <div class="paragraph">
 <p>In a relatively simple integration, mapping data fields is easy
 and intuitive. In more complex integrations or in integrations that handle
@@ -685,7 +1044,7 @@ field that you want to map to.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="map-one-source-field-to-one-target-field">2.2. Map one source field to one target field</h3>
+<h3 id="map-one-source-field-to-one-target-field">2.3. Map one source field to one target field</h3>
 <div class="paragraph">
 <p>The default mapping behavior maps one source field to one target field.
 For example, map the <code>Name</code> field to the <code>CustomerName</code> field.</p>
@@ -791,7 +1150,7 @@ field that you want to map to and click <strong>Enter</strong>.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="example-missing-unwanted-data">2.3. Example of missing or unwanted data when combining or separating fields</h3>
+<h3 id="example-missing-unwanted-data">2.4. Example of missing or unwanted data when combining or separating fields</h3>
 <div class="paragraph">
 <p>In a data mapping, you might need to identify missing or unwanted data when a source or
 target field contains compound data. For example, consider a
@@ -869,7 +1228,7 @@ at indexes 3, 7, and 8. See <a href="#combine-multiple-source-fields-into-one-ta
 </div>
 </div>
 <div class="sect2">
-<h3 id="combine-multiple-source-fields-into-one-target-field">2.4. Combine multiple source fields into one target field</h3>
+<h3 id="combine-multiple-source-fields-into-one-target-field">2.5. Combine multiple source fields into one target field</h3>
 <div class="paragraph">
 <p>In a data mapping, you can combine multiple source fields into one
 compound target field. For example, you can map the <code>FirstName</code> and <code>LastName</code>
@@ -989,7 +1348,7 @@ mapping in the table to view preview fields for it.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="separate-one-source-field-into-multiple-target-fields">2.5. Separate one source field into multiple target fields</h3>
+<h3 id="separate-one-source-field-into-multiple-target-fields">2.6. Separate one source field into multiple target fields</h3>
 <div class="paragraph">
 <p>In a data mapping, you can separate a compound source field into multiple
 target fields. For  example, map the <code>Name</code> field to the <code>FirstName</code> and
@@ -1102,7 +1461,7 @@ mapping in the table to view preview fields for it.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="transform-target-data">2.6. Transform source or target data</h3>
+<h3 id="transform-target-data">2.7. Transform source or target data</h3>
 <div class="paragraph">
 <p>In the data mapper, after you define a mapping, you can transform
 any field in the mapping.
@@ -1145,7 +1504,7 @@ trash can again.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="view-mappings">2.7. View the mappings</h3>
+<h3 id="view-mappings">2.8. View the mappings</h3>
 <div class="paragraph">
 <p>While you are using the data mapper UI, you can view the mappings
 that are already defined. This lets you check whether the
@@ -1171,7 +1530,7 @@ target fields, click <span class="image"><img src="images/grid.png" alt="grid" t
 </div>
 </div>
 <div class="sect2">
-<h3 id="available-transformations">2.8. Descriptions of available transformations</h3>
+<h3 id="available-transformations">2.9. Descriptions of available transformations</h3>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -1582,7 +1941,7 @@ length of the string before the supplied <code>match</code> string.</p></td>
 <div id="footer">
 <div id="footer-text">
 Version 1.40.0-SNAPSHOT<br>
-Last updated 2019-03-08 20:12:32 UTC
+Last updated 2019-03-11 17:12:13 UTC
 </div>
 </div>
 </body>

@@ -538,7 +538,7 @@ table.CodeRay td.code>pre{padding:0}
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Download AtlasMap standalone jar</p>
+<p>Download the AtlasMap standalone jar</p>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code>wget http://central.maven.org/maven2/io/atlasmap/atlasmap-standalone/${VERSION}/atlasmap-standalone-${VERSION}.jar</code></pre>
@@ -549,11 +549,11 @@ table.CodeRay td.code>pre{padding:0}
 <p>Run AtlasMap standalone</p>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code>$ java -jar atlasmap-standalone-${VERSION}.jar</code></pre>
+<pre class="CodeRay highlight"><code>$ java [ -Datlasmap.adm.path=/path/to/example.adm ] -jar atlasmap-standalone-${VERSION}.jar</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Now AtlasMap Data Mapper UI is available at <a href="http://127.0.0.1:8585/" class="bare">http://127.0.0.1:8585/</a></p>
+<p>Now AtlasMap Data Mapper UI is available at <a href="http://127.0.0.1:8585/" class="bare">http://127.0.0.1:8585/</a>  The .adm file can be created with the export icon on the main toolbar.</p>
 </div>
 </li>
 </ol>
@@ -592,7 +592,7 @@ from("direct:start")
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-03-08 20:12:32 UTC
+Last updated 2019-03-11 17:12:13 UTC
 </div>
 </div>
 </body>
