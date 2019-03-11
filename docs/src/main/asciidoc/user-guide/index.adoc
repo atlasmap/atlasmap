@@ -31,10 +31,13 @@ include::topics/quickstart.adoc[]
 
 <<<
 
-[[design-mappings-in-ui]]
-= Design Mappings in UI
+[[import-files-in-ui]]
+= Import Files in UI
 
 include::topics/import_files_to_panel.adoc[leveloffset=+1]
+
+[[design-mappings-in-ui]]
+= Design Mappings in UI
 
 include::topics/find_data_field_you_want_to_map.adoc[leveloffset=+1]
 
@@ -51,3 +54,9 @@ include::topics/transform_target_data.adoc[leveloffset=+1]
 include::topics/view_mappings.adoc[leveloffset=+1]
 
 include::topics/available_transformations.adoc[leveloffset=+1]
+
+[[export-files-in-ui]]
+= Export Files in UI
+
+include::topics/export_files.adoc[leveloffset=+1]
+
