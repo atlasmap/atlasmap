@@ -535,17 +535,26 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#running-atlasmap-data-mapping-with-apache-camel">1.2. Running AtlasMap data mapping with Apache Camel</a></li>
 </ul>
 </li>
-<li><a href="#design-mappings-in-ui">2. Design Mappings in UI</a>
+<li><a href="#import-files-in-ui">2. Import Files in UI</a>
 <ul class="sectlevel2">
 <li><a href="#import-files-to-panel">2.1. Import XML/JSON schema or instance or Java class files</a></li>
-<li><a href="#find-the-field-you-want-to-map">2.2. Find the data field that you want to map</a></li>
-<li><a href="#map-one-source-field-to-one-target-field">2.3. Map one source field to one target field</a></li>
-<li><a href="#example-missing-unwanted-data">2.4. Example of missing or unwanted data when combining or separating fields</a></li>
-<li><a href="#combine-multiple-source-fields-into-one-target-field">2.5. Combine multiple source fields into one target field</a></li>
-<li><a href="#separate-one-source-field-into-multiple-target-fields">2.6. Separate one source field into multiple target fields</a></li>
-<li><a href="#transform-target-data">2.7. Transform source or target data</a></li>
-<li><a href="#view-mappings">2.8. View the mappings</a></li>
-<li><a href="#available-transformations">2.9. Descriptions of available transformations</a></li>
+</ul>
+</li>
+<li><a href="#design-mappings-in-ui">3. Design Mappings in UI</a>
+<ul class="sectlevel2">
+<li><a href="#find-the-field-you-want-to-map">3.1. Find the data field that you want to map</a></li>
+<li><a href="#map-one-source-field-to-one-target-field">3.2. Map one source field to one target field</a></li>
+<li><a href="#example-missing-unwanted-data">3.3. Example of missing or unwanted data when combining or separating fields</a></li>
+<li><a href="#combine-multiple-source-fields-into-one-target-field">3.4. Combine multiple source fields into one target field</a></li>
+<li><a href="#separate-one-source-field-into-multiple-target-fields">3.5. Separate one source field into multiple target fields</a></li>
+<li><a href="#transform-target-data">3.6. Transform source or target data</a></li>
+<li><a href="#view-mappings">3.7. View the mappings</a></li>
+<li><a href="#available-transformations">3.8. Descriptions of available transformations</a></li>
+</ul>
+</li>
+<li><a href="#export-files-in-ui">4. Export Files in UI</a>
+<ul class="sectlevel2">
+<li><a href="#export-files">4.1. Export AtlasMap Data Mapper Catalog File</a></li>
 </ul>
 </li>
 </ul>
@@ -630,7 +639,7 @@ from("direct:start")
 </div>
 </div>
 <div class="sect1">
-<h2 id="design-mappings-in-ui">2. Design Mappings in UI</h2>
+<h2 id="import-files-in-ui">2. Import Files in UI</h2>
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="import-files-to-panel">2.1. Import XML/JSON schema or instance or Java class files</h3>
@@ -989,8 +998,13 @@ In the <code>Bicycle.jar</code> example, the class package name is <code>io.paul
 <p>You have now defined the source and target data shapes.</p>
 </div>
 </div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="design-mappings-in-ui">3. Design Mappings in UI</h2>
+<div class="sectionbody">
 <div class="sect2">
-<h3 id="find-the-field-you-want-to-map">2.2. Find the data field that you want to map</h3>
+<h3 id="find-the-field-you-want-to-map">3.1. Find the data field that you want to map</h3>
 <div class="paragraph">
 <p>In a relatively simple integration, mapping data fields is easy
 and intuitive. In more complex integrations or in integrations that handle
@@ -1044,7 +1058,7 @@ field that you want to map to.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="map-one-source-field-to-one-target-field">2.3. Map one source field to one target field</h3>
+<h3 id="map-one-source-field-to-one-target-field">3.2. Map one source field to one target field</h3>
 <div class="paragraph">
 <p>The default mapping behavior maps one source field to one target field.
 For example, map the <code>Name</code> field to the <code>CustomerName</code> field.</p>
@@ -1150,7 +1164,7 @@ field that you want to map to and click <strong>Enter</strong>.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="example-missing-unwanted-data">2.4. Example of missing or unwanted data when combining or separating fields</h3>
+<h3 id="example-missing-unwanted-data">3.3. Example of missing or unwanted data when combining or separating fields</h3>
 <div class="paragraph">
 <p>In a data mapping, you might need to identify missing or unwanted data when a source or
 target field contains compound data. For example, consider a
@@ -1228,7 +1242,7 @@ at indexes 3, 7, and 8. See <a href="#combine-multiple-source-fields-into-one-ta
 </div>
 </div>
 <div class="sect2">
-<h3 id="combine-multiple-source-fields-into-one-target-field">2.5. Combine multiple source fields into one target field</h3>
+<h3 id="combine-multiple-source-fields-into-one-target-field">3.4. Combine multiple source fields into one target field</h3>
 <div class="paragraph">
 <p>In a data mapping, you can combine multiple source fields into one
 compound target field. For example, you can map the <code>FirstName</code> and <code>LastName</code>
@@ -1348,7 +1362,7 @@ mapping in the table to view preview fields for it.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="separate-one-source-field-into-multiple-target-fields">2.6. Separate one source field into multiple target fields</h3>
+<h3 id="separate-one-source-field-into-multiple-target-fields">3.5. Separate one source field into multiple target fields</h3>
 <div class="paragraph">
 <p>In a data mapping, you can separate a compound source field into multiple
 target fields. For  example, map the <code>Name</code> field to the <code>FirstName</code> and
@@ -1461,7 +1475,7 @@ mapping in the table to view preview fields for it.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="transform-target-data">2.7. Transform source or target data</h3>
+<h3 id="transform-target-data">3.6. Transform source or target data</h3>
 <div class="paragraph">
 <p>In the data mapper, after you define a mapping, you can transform
 any field in the mapping.
@@ -1478,10 +1492,23 @@ or a separation mapping.</p>
 </li>
 <li>
 <p>In the <strong>Mapping Details</strong> panel, under <strong>Sources</strong> or under <strong>Targets</strong>,
-in the box for the field that you want to transform, click the arrow that points to the
-trash can. This displays a field where you can select the transformation
-that you want the data mapper to perform.</p>
+in the box for the field that you want to transform, click the arrow to the left of the
+trash can icon.</p>
 </li>
+</ol>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/Trans1.png" alt="Mapping details transformation button"></span></p>
+</div>
+<div class="paragraph">
+<p>This displays a pull-down where you can select the transformation
+that you want the data mapper to perform.  Note that the set of available transformations is type specific.</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/Trans2.png" alt="Mapping details transformation button - available transformations"></span></p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
 <li>
 <p>Click in this field to display the list of transformations.</p>
 </li>
@@ -1493,8 +1520,8 @@ that you want the data mapper to perform.</p>
 in the appropriate input fields.</p>
 </li>
 <li>
-<p>To add another transformation, click the arrow that points to the
-trash can again.</p>
+<p>To add another compound transformation, click the arrow to the left of the
+trash can icon again.</p>
 </li>
 </ol>
 </div>
@@ -1502,9 +1529,123 @@ trash can again.</p>
 <div class="title">Additional resource</div>
 <p><a href="#available-transformations">Descriptions of available transformations</a></p>
 </div>
+<div class="paragraph">
+<p>In addition to the list of fixed transformations, users may define their own custom field
+action transformations.  These custom field actions are written in Java and are then imported
+into the AtlasMap data mapper.  Once established in a panel the transformation will appear
+in the standard list of transformations.  For example:</p>
+</div>
+<div class="olist arabic">
+<div class="title">Procedure</div>
+<ol class="arabic">
+<li>
+<p>Create a transformation.  For example:</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>This custom transformation is applicable to <code>String</code> arguments.  It takes the argument specified in the Source panel
+transformation and prints it out on the Target side.  Implement the <code>AtlasFieldAction</code> class as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code>package io.atlasmap.service.my;
+
+import io.atlasmap.v2.*;
+import io.atlasmap.api.AtlasFieldAction;
+import io.atlasmap.spi.AtlasFieldActionInfo;
+
+public class PaulsFieldActions implements AtlasFieldAction {
+
+    @AtlasFieldActionInfo(name = "MyCustomFieldActionPaul", sourceType = FieldType.STRING, targetType = FieldType.STRING,
+			  sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
+    public static String myCustomFieldAction(String input) {
+        return "Paul's custom field action: " + input;
+    }
+
+}</code></pre>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Build your java archive file.  The <code>io.atlasmap.v2</code>, <code>io.atlasmap.api</code> and <code>io.atlasmap.spi</code> target dependencies are most easily resolved
+through the use of a maven <code>pom.xml</code> file.  Use the same version number as the AtlasMap standalone JAR that you previously downloaded.</p>
+</li>
+<li>
+<p>Import your java archive via the import icon of the AtlasMap main tool bar.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/Trans3.png" alt="Import custom field action JAR"></span></p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Navigate to the JAR file containing your custom field action and select it.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/Trans4.png" alt="Import custom field action JAR"></span></p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Select the plus icon (+) to enable the class within the field action JAR file.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/Trans5.png" alt="Import custom field action JAR"></span></p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>A dialog appears "Establish your class in the Sources panel."
+In the <strong>Class package name:</strong> input field, enter the class package name of the Java class you have defined for your custom field action.
+In the <code>MyFieldAction.jar</code> example, the class package name is <code>io.atlasmap.service.my.PaulsFieldActions</code>.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/Trans6.png" alt="Import custom field action JAR"></span></p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Select the pull-down menu in the <strong>Targets</strong> window within the <strong>Mapping Details</strong> section.  You will notice that your
+custom field action now appears as a selectable field action transformation.  Select it.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/Trans7.png" alt="Import custom field action JAR"></span></p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Test your custom field action.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Select the <span class="image"><img src="images/EditorSettings.png" alt="Panel settings"></span> icon on the AtlasMap main tool bar.  Check the checkbox for <code>Show Mapping Preview</code></p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/Trans8.png" alt="Import custom field action JAR"></span></p>
+</div>
+<div class="paragraph">
+<p>In the Source panel there will exist and input field.  Type a string into it  (for example <code>test</code>).  Now focus
+your cursor in the <strong>Preview Results</strong> field in the Target panel.  You will see the same string.</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/Trans9.png" alt="Import custom field action JAR"></span></p>
+</div>
 </div>
 <div class="sect2">
-<h3 id="view-mappings">2.8. View the mappings</h3>
+<h3 id="view-mappings">3.7. View the mappings</h3>
 <div class="paragraph">
 <p>While you are using the data mapper UI, you can view the mappings
 that are already defined. This lets you check whether the
@@ -1530,7 +1671,7 @@ target fields, click <span class="image"><img src="images/grid.png" alt="grid" t
 </div>
 </div>
 <div class="sect2">
-<h3 id="available-transformations">2.9. Descriptions of available transformations</h3>
+<h3 id="available-transformations">3.8. Descriptions of available transformations</h3>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -1937,11 +2078,41 @@ length of the string before the supplied <code>match</code> string.</p></td>
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="export-files-in-ui">4. Export Files in UI</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="export-files">4.1. Export AtlasMap Data Mapper Catalog File</h3>
+<div class="paragraph">
+<p>Once all required schema files and JARs have been imported and all mappings
+have been defined you can save your work using the <strong>export</strong> button.  The export
+button captures all of your workspace into an ADM (<code>.adm</code>) catalog file.  This
+file may be used with the <strong>import</strong> button to reinitialize AtlasMap to the state
+at which the export button was clicked.  The export button can be found on the
+main toolbar:</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/Export1.png" alt="Export the current AtlasMap state"></span></p>
+</div>
+<div class="paragraph">
+<p>Once it is clicked, an <strong>Export mappings</strong> dialog appears.  A standard default name for the ADM file appears as a
+placeholder (<code>atlasmap-mapping.adm</code>).  You may override that file name as desired.</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/Export2.png" alt="Export dialog"></span></p>
+</div>
+<div class="paragraph">
+<p>Once you click the <code>OK</code> button the catalog file will be written with the specified name to the
+local <code>Downloads</code> directory.</p>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version 1.40.0-SNAPSHOT<br>
-Last updated 2019-03-11 17:12:13 UTC
+Last updated 2019-03-11 20:58:24 UTC
 </div>
 </div>
 </body>

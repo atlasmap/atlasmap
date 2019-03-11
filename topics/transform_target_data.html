@@ -540,10 +540,23 @@ or a separation mapping.</p>
 </li>
 <li>
 <p>In the <strong>Mapping Details</strong> panel, under <strong>Sources</strong> or under <strong>Targets</strong>,
-in the box for the field that you want to transform, click the arrow that points to the
-trash can. This displays a field where you can select the transformation
-that you want the data mapper to perform.</p>
+in the box for the field that you want to transform, click the arrow to the left of the
+trash can icon.</p>
 </li>
+</ol>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/Trans1.png" alt="Mapping details transformation button"></span></p>
+</div>
+<div class="paragraph">
+<p>This displays a pull-down where you can select the transformation
+that you want the data mapper to perform.  Note that the set of available transformations is type specific.</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/Trans2.png" alt="Mapping details transformation button - available transformations"></span></p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
 <li>
 <p>Click in this field to display the list of transformations.</p>
 </li>
@@ -555,8 +568,8 @@ that you want the data mapper to perform.</p>
 in the appropriate input fields.</p>
 </li>
 <li>
-<p>To add another transformation, click the arrow that points to the
-trash can again.</p>
+<p>To add another compound transformation, click the arrow to the left of the
+trash can icon again.</p>
 </li>
 </ol>
 </div>
@@ -564,12 +577,126 @@ trash can again.</p>
 <div class="title">Additional resource</div>
 <p><a href="#available-transformations">[available-transformations]</a></p>
 </div>
+<div class="paragraph">
+<p>In addition to the list of fixed transformations, users may define their own custom field
+action transformations.  These custom field actions are written in Java and are then imported
+into the AtlasMap data mapper.  Once established in a panel the transformation will appear
+in the standard list of transformations.  For example:</p>
+</div>
+<div class="olist arabic">
+<div class="title">Procedure</div>
+<ol class="arabic">
+<li>
+<p>Create a transformation.  For example:</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>This custom transformation is applicable to <code>String</code> arguments.  It takes the argument specified in the Source panel
+transformation and prints it out on the Target side.  Implement the <code>AtlasFieldAction</code> class as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code>package io.atlasmap.service.my;
+
+import io.atlasmap.v2.*;
+import io.atlasmap.api.AtlasFieldAction;
+import io.atlasmap.spi.AtlasFieldActionInfo;
+
+public class PaulsFieldActions implements AtlasFieldAction {
+
+    @AtlasFieldActionInfo(name = "MyCustomFieldActionPaul", sourceType = FieldType.STRING, targetType = FieldType.STRING,
+			  sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
+    public static String myCustomFieldAction(String input) {
+        return "Paul's custom field action: " + input;
+    }
+
+}</code></pre>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Build your java archive file.  The <code>io.atlasmap.v2</code>, <code>io.atlasmap.api</code> and <code>io.atlasmap.spi</code> target dependencies are most easily resolved
+through the use of a maven <code>pom.xml</code> file.  Use the same version number as the AtlasMap standalone JAR that you previously downloaded.</p>
+</li>
+<li>
+<p>Import your java archive via the import icon of the AtlasMap main tool bar.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/Trans3.png" alt="Import custom field action JAR"></span></p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Navigate to the JAR file containing your custom field action and select it.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/Trans4.png" alt="Import custom field action JAR"></span></p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Select the plus icon (+) to enable the class within the field action JAR file.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/Trans5.png" alt="Import custom field action JAR"></span></p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>A dialog appears "Establish your class in the Sources panel."
+In the <strong>Class package name:</strong> input field, enter the class package name of the Java class you have defined for your custom field action.
+In the <code>MyFieldAction.jar</code> example, the class package name is <code>io.atlasmap.service.my.PaulsFieldActions</code>.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/Trans6.png" alt="Import custom field action JAR"></span></p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Select the pull-down menu in the <strong>Targets</strong> window within the <strong>Mapping Details</strong> section.  You will notice that your
+custom field action now appears as a selectable field action transformation.  Select it.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/Trans7.png" alt="Import custom field action JAR"></span></p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Test your custom field action.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Select the <span class="image"><img src="images/EditorSettings.png" alt="Panel settings"></span> icon on the AtlasMap main tool bar.  Check the checkbox for <code>Show Mapping Preview</code></p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/Trans8.png" alt="Import custom field action JAR"></span></p>
+</div>
+<div class="paragraph">
+<p>In the Source panel there will exist and input field.  Type a string into it  (for example <code>test</code>).  Now focus
+your cursor in the <strong>Preview Results</strong> field in the Target panel.  You will see the same string.</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/Trans9.png" alt="Import custom field action JAR"></span></p>
+</div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-03-11 17:12:13 UTC
+Last updated 2019-03-11 20:58:24 UTC
 </div>
 </div>
 </body>
