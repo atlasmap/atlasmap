@@ -60,3 +60,8 @@ include::topics/available_transformations.adoc[leveloffset=+1]
 
 include::topics/export_files.adoc[leveloffset=+1]
 
+[[reset-files-in-ui]]
+= Reset Files in UI
+
+include::topics/reset_files.adoc[leveloffset=+1]
+
