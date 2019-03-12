@@ -524,7 +524,7 @@ table.CodeRay td.code>pre{padding:0}
 <div class="details">
 <span id="author" class="author">The AtlasMap Team</span><br>
 <span id="revnumber">version 1.40.0-SNAPSHOT,</span>
-<span id="revdate">2019-03-11</span>
+<span id="revdate">2019-03-12</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">AtlasMap User Guide</div>
@@ -555,6 +555,11 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#export-files-in-ui">4. Export Files in UI</a>
 <ul class="sectlevel2">
 <li><a href="#export-files">4.1. Export AtlasMap Data Mapper Catalog File</a></li>
+</ul>
+</li>
+<li><a href="#reset-files-in-ui">5. Reset Files in UI</a>
+<ul class="sectlevel2">
+<li><a href="#reset-files">5.1. Reset the AtlasMap Data Mapper</a></li>
 </ul>
 </li>
 </ul>
@@ -1483,19 +1488,18 @@ Transforming a data field defines how you want to store the data.
 For example, you could specify the <strong>Capitalize</strong> transformation to ensure that the first
 letter of a data value is uppercase.</p>
 </div>
-<div class="olist arabic">
+<div class="paragraph">
 <div class="title">Procedure</div>
+<p>Map the fields.  This can be a one-to-one mapping, a combination mapping, or a separation mapping.</p>
+</div>
+<div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Map the fields. This can be a one-to-one mapping, a combination mapping,
-or a separation mapping.</p>
-</li>
-<li>
+<p><strong>Select the transformation icon.</strong></p>
+<div class="paragraph">
 <p>In the <strong>Mapping Details</strong> panel, under <strong>Sources</strong> or under <strong>Targets</strong>,
 in the box for the field that you want to transform, click the arrow to the left of the
 trash can icon.</p>
-</li>
-</ol>
 </div>
 <div class="paragraph">
 <p><span class="image"><img src="images/Trans1.png" alt="Mapping details transformation button"></span></p>
@@ -1507,21 +1511,26 @@ that you want the data mapper to perform.  Note that the set of available transf
 <div class="paragraph">
 <p><span class="image"><img src="images/Trans2.png" alt="Mapping details transformation button - available transformations"></span></p>
 </div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Click in this field to display the list of transformations.</p>
 </li>
 <li>
+<p><strong>Select the transformation.</strong></p>
+<div class="paragraph">
 <p>Click the transformation that you want to perform.</p>
+</div>
 </li>
 <li>
+<p><strong>Specify arguments.</strong></p>
+<div class="paragraph">
 <p>If the transformation requires any input parameters, specify them
 in the appropriate input fields.</p>
+</div>
 </li>
 <li>
+<p><strong>Repeat.</strong></p>
+<div class="paragraph">
 <p>To add another compound transformation, click the arrow to the left of the
 trash can icon again.</p>
+</div>
 </li>
 </ol>
 </div>
@@ -1539,12 +1548,9 @@ in the standard list of transformations.  For example:</p>
 <div class="title">Procedure</div>
 <ol class="arabic">
 <li>
-<p>Create a transformation.  For example:</p>
-</li>
-</ol>
-</div>
+<p><strong>Create a transformation.</strong></p>
 <div class="paragraph">
-<p>This custom transformation is applicable to <code>String</code> arguments.  It takes the argument specified in the Source panel
+<p>This example custom transformation is applicable to <code>String</code> arguments.  It takes the argument specified in the Source panel
 transformation and prints it out on the Target side.  Implement the <code>AtlasFieldAction</code> class as follows:</p>
 </div>
 <div class="listingblock">
@@ -1557,8 +1563,9 @@ import io.atlasmap.spi.AtlasFieldActionInfo;
 
 public class PaulsFieldActions implements AtlasFieldAction {
 
-    @AtlasFieldActionInfo(name = "MyCustomFieldActionPaul", sourceType = FieldType.STRING, targetType = FieldType.STRING,
-			  sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
+    @AtlasFieldActionInfo(name = "MyCustomFieldActionPaul", sourceType = FieldType.STRING,
+        targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE,
+        targetCollectionType = CollectionType.NONE)
     public static String myCustomFieldAction(String input) {
         return "Paul's custom field action: " + input;
     }
@@ -1566,82 +1573,73 @@ public class PaulsFieldActions implements AtlasFieldAction {
 }</code></pre>
 </div>
 </div>
-<div class="olist arabic">
-<ol class="arabic">
+</li>
 <li>
-<p>Build your java archive file.  The <code>io.atlasmap.v2</code>, <code>io.atlasmap.api</code> and <code>io.atlasmap.spi</code> target dependencies are most easily resolved
+<p><strong>Build your Java archive file.</strong></p>
+<div class="paragraph">
+<p>The <code>io.atlasmap.v2</code>, <code>io.atlasmap.api</code> and <code>io.atlasmap.spi</code> target dependencies are most easily resolved
 through the use of a maven <code>pom.xml</code> file.  Use the same version number as the AtlasMap standalone JAR that you previously downloaded.</p>
+</div>
 </li>
 <li>
-<p>Import your java archive via the import icon of the AtlasMap main tool bar.</p>
-</li>
-</ol>
+<p><strong>Import your Java archive file.</strong></p>
+<div class="paragraph">
+<p>Click the import icon at the top of the AtlasMap main tool bar.</p>
 </div>
 <div class="paragraph">
 <p><span class="image"><img src="images/Trans3.png" alt="Import custom field action JAR"></span></p>
 </div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
+<div class="paragraph">
 <p>Navigate to the JAR file containing your custom field action and select it.</p>
-</li>
-</ol>
 </div>
 <div class="paragraph">
 <p><span class="image"><img src="images/Trans4.png" alt="Import custom field action JAR"></span></p>
 </div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Select the plus icon (+) to enable the class within the field action JAR file.</p>
 </li>
-</ol>
+<li>
+<p><strong>Enable your class</strong></p>
+<div class="paragraph">
+<p>Select the plus icon (+) to enable the class within your field action JAR file.</p>
 </div>
 <div class="paragraph">
 <p><span class="image"><img src="images/Trans5.png" alt="Import custom field action JAR"></span></p>
 </div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
+<div class="paragraph">
 <p>A dialog appears "Establish your class in the Sources panel."
 In the <strong>Class package name:</strong> input field, enter the class package name of the Java class you have defined for your custom field action.
 In the <code>MyFieldAction.jar</code> example, the class package name is <code>io.atlasmap.service.my.PaulsFieldActions</code>.</p>
-</li>
-</ol>
 </div>
 <div class="paragraph">
 <p><span class="image"><img src="images/Trans6.png" alt="Import custom field action JAR"></span></p>
 </div>
-<div class="olist arabic">
-<ol class="arabic">
+</li>
 <li>
+<p><strong>Select your custom transformation.</strong></p>
+<div class="paragraph">
 <p>Select the pull-down menu in the <strong>Targets</strong> window within the <strong>Mapping Details</strong> section.  You will notice that your
 custom field action now appears as a selectable field action transformation.  Select it.</p>
-</li>
-</ol>
 </div>
 <div class="paragraph">
 <p><span class="image"><img src="images/Trans7.png" alt="Import custom field action JAR"></span></p>
 </div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Test your custom field action.</p>
 </li>
-</ol>
-</div>
+<li>
+<p><strong>Test your custom field action.</strong></p>
 <div class="paragraph">
-<p>Select the <span class="image"><img src="images/EditorSettings.png" alt="Panel settings"></span> icon on the AtlasMap main tool bar.  Check the checkbox for <code>Show Mapping Preview</code></p>
+<p>Select the <span class="image"><img src="images/EditorSettings.png" alt="Panel settings"></span> icon on the AtlasMap main tool bar.  Check the checkbox for <code>Show Mapping Preview</code>.</p>
 </div>
 <div class="paragraph">
 <p><span class="image"><img src="images/Trans8.png" alt="Import custom field action JAR"></span></p>
 </div>
 <div class="paragraph">
-<p>In the Source panel there will exist and input field.  Type a string into it  (for example <code>test</code>).  Now focus
+<p>In the Source panel there will exist an input field.  Type a string into it  (for example <code>test</code>).  Now focus
 your cursor in the <strong>Preview Results</strong> field in the Target panel.  You will see the same string.</p>
 </div>
 <div class="paragraph">
 <p><span class="image"><img src="images/Trans9.png" alt="Import custom field action JAR"></span></p>
+</div>
+</li>
+</ol>
 </div>
 </div>
 <div class="sect2">
@@ -2108,11 +2106,48 @@ local <code>Downloads</code> directory.</p>
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="reset-files-in-ui">5. Reset Files in UI</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="reset-files">5.1. Reset the AtlasMap Data Mapper</h3>
+<div class="paragraph">
+<p>Upon initial installation of AtlasMap the user is presented with a blank canvas.
+No mappings are possible until the user imports files into the Source and Target panels.
+Once imported, users may remove imported files using the trash can icon:</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/Reset1.png" alt="Remove the specified file"></span></p>
+</div>
+<div class="paragraph">
+<p>If a user wishes to remove <strong>all</strong> imported files as well as all mappings then select the
+<span class="image"><img src="images/EditorSettings.png" alt="Panel settings"></span> icon on the AtlasMap main tool bar and select <code>Reset All</code>
+from the pull down menu.</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/Reset2.png" alt="Reset All"></span></p>
+</div>
+<div class="paragraph">
+<p>A challenge dialog will appear to verify that the user wants to remove all
+files.</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/Reset3.png" alt="Reset challenge dialog"></span></p>
+</div>
+<div class="paragraph">
+<p>Once the <code>Reset</code> button is clicked AtlasMap is reset and the user is presented with a fresh blank canvas.</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/Reset4.png" alt="Blank canvas"></span></p>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version 1.40.0-SNAPSHOT<br>
-Last updated 2019-03-11 20:58:24 UTC
+Last updated 2019-03-12 15:24:15 UTC
 </div>
 </div>
 </body>
