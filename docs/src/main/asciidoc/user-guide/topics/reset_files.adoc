@@ -1,0 +1,23 @@
+[id='reset-files']
+= Reset the AtlasMap Data Mapper
+
+Upon initial installation of AtlasMap the user is presented with a blank canvas.
+No mappings are possible until the user imports files into the Source and Target panels.
+Once imported, users may remove imported files using the trash can icon:
+
+image:Reset1.png[Remove the specified file]
+
+If a user wishes to remove *all* imported files as well as all mappings then select the
+image:EditorSettings.png[Panel settings] icon on the AtlasMap main tool bar and select `Reset All`
+from the pull down menu.
+
+image:Reset2.png[Reset All]
+
+A challenge dialog will appear to verify that the user wants to remove all
+files.
+
+image:Reset3.png[Reset challenge dialog]
+
+Once the `Reset` button is clicked AtlasMap is reset and the user is presented with a fresh blank canvas.
+
+image:Reset4.png[Blank canvas]

@@ -9,24 +9,33 @@ letter of a data value is uppercase.
 
 .Procedure
 
-. Map the fields. This can be a one-to-one mapping, a combination mapping,
-or a separation mapping.
-. In the *Mapping Details* panel, under *Sources* or under *Targets*,
+Map the fields.  This can be a one-to-one mapping, a combination mapping, or a separation mapping.
+
+. *Select the transformation icon.*
++
+In the *Mapping Details* panel, under *Sources* or under *Targets*,
 in the box for the field that you want to transform, click the arrow to the left of the
 trash can icon.
-
++
 image:Trans1.png[Mapping details transformation button]
-
++
 This displays a pull-down where you can select the transformation
 that you want the data mapper to perform.  Note that the set of available transformations is type specific.
-
++
 image:Trans2.png[Mapping details transformation button - available transformations]
-
-. Click in this field to display the list of transformations.
-. Click the transformation that you want to perform.
-. If the transformation requires any input parameters, specify them
++
+. *Select the transformation.*
++
+Click the transformation that you want to perform.
++
+. *Specify arguments.*
++
+If the transformation requires any input parameters, specify them
 in the appropriate input fields.
-. To add another compound transformation, click the arrow to the left of the
++
+. *Repeat.*
++
+To add another compound transformation, click the arrow to the left of the
 trash can icon again.
 
 .Additional resource
@@ -40,10 +49,11 @@ in the standard list of transformations.  For example:
 
 .Procedure
 
-. Create a transformation.  For example:
-
-This custom transformation is applicable to `String` arguments.  It takes the argument specified in the Source panel
+. *Create a transformation.*
++
+This example custom transformation is applicable to `String` arguments.  It takes the argument specified in the Source panel
 transformation and prints it out on the Target side.  Implement the `AtlasFieldAction` class as follows:
++
 ```
 package io.atlasmap.service.my;
 
@@ -53,48 +63,58 @@ import io.atlasmap.spi.AtlasFieldActionInfo;
 
 public class PaulsFieldActions implements AtlasFieldAction {
 
-    @AtlasFieldActionInfo(name = "MyCustomFieldActionPaul", sourceType = FieldType.STRING, targetType = FieldType.STRING,
-			  sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
+    @AtlasFieldActionInfo(name = "MyCustomFieldActionPaul", sourceType = FieldType.STRING,
+        targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE,
+        targetCollectionType = CollectionType.NONE)
     public static String myCustomFieldAction(String input) {
         return "Paul's custom field action: " + input;
     }
 
 }
 ```
-. Build your java archive file.  The `io.atlasmap.v2`, `io.atlasmap.api` and `io.atlasmap.spi` target dependencies are most easily resolved
++
+. *Build your Java archive file.*
++
+The `io.atlasmap.v2`, `io.atlasmap.api` and `io.atlasmap.spi` target dependencies are most easily resolved
 through the use of a maven `pom.xml` file.  Use the same version number as the AtlasMap standalone JAR that you previously downloaded.
-
-. Import your java archive via the import icon of the AtlasMap main tool bar.
-
++
+. *Import your Java archive file.*
++
+Click the import icon at the top of the AtlasMap main tool bar.
++
 image:Trans3.png[Import custom field action JAR]
-
-. Navigate to the JAR file containing your custom field action and select it.
-
++
+Navigate to the JAR file containing your custom field action and select it.
++
 image:Trans4.png[Import custom field action JAR]
-
-. Select the plus icon (+) to enable the class within the field action JAR file.
-
++
+. *Enable your class*
++
+Select the plus icon (+) to enable the class within your field action JAR file.
++
 image:Trans5.png[Import custom field action JAR]
-
-. A dialog appears "Establish your class in the Sources panel."
++
+A dialog appears "Establish your class in the Sources panel."
 In the *Class package name:* input field, enter the class package name of the Java class you have defined for your custom field action.
 In the `MyFieldAction.jar` example, the class package name is `io.atlasmap.service.my.PaulsFieldActions`.
-
++
 image:Trans6.png[Import custom field action JAR]
-
-. Select the pull-down menu in the *Targets* window within the *Mapping Details* section.  You will notice that your
++
+. *Select your custom transformation.*
++
+Select the pull-down menu in the *Targets* window within the *Mapping Details* section.  You will notice that your
 custom field action now appears as a selectable field action transformation.  Select it.
-
++
 image:Trans7.png[Import custom field action JAR]
-
-. Test your custom field action.
-
-Select the image:EditorSettings.png[Panel settings] icon on the AtlasMap main tool bar.  Check the checkbox for `Show Mapping Preview`
-
++
+. *Test your custom field action.*
++
+Select the image:EditorSettings.png[Panel settings] icon on the AtlasMap main tool bar.  Check the checkbox for `Show Mapping Preview`.
++
 image:Trans8.png[Import custom field action JAR]
-
-In the Source panel there will exist and input field.  Type a string into it  (for example `test`).  Now focus
++
+In the Source panel there will exist an input field.  Type a string into it  (for example `test`).  Now focus
 your cursor in the *Preview Results* field in the Target panel.  You will see the same string.
-
++
 image:Trans9.png[Import custom field action JAR]
 
