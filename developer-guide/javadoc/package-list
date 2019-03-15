@@ -3,6 +3,7 @@ io.atlasmap.actions
 io.atlasmap.api
 io.atlasmap.converters
 io.atlasmap.core
+io.atlasmap.itests.fieldactionoverride
 io.atlasmap.java.core
 io.atlasmap.java.inspect
 io.atlasmap.java.module
