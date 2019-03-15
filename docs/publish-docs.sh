@@ -4,7 +4,7 @@ echo Deploying AtlasMap documentation
 echo ================================
 
 ../mvnw -Phtml,pdf package && \
-../mvnw -f pom-javadoc.xml javadoc:aggregate && \
+../mvnw -f pom-javadoc.xml -pl \!io.atlasmap:atlasmap-lib-all javadoc:aggregate && \
 git clone -b gh-pages https://github.com/atlasmap/atlasmap.git gh-pages && \
 git config --global user.email "travis@atlasmap.io" && \
 git config --global user.name "Travis" && \
