@@ -39,6 +39,7 @@
     <module>modules/json</module>
     <module>modules/xml</module>
     <module>itests</module>
+    <module>dist</module>
   </modules>
 
 </project>

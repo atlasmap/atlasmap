@@ -27,11 +27,16 @@ import org.w3c.dom.NodeList;
 public abstract class XmlFieldTransformer {
 
     protected Map<String, String> namespaces = new HashMap<>();
+    protected ClassLoader classLoader;
+    protected XmlIOHelper xmlHelper;
 
-    public XmlFieldTransformer() {
+    public XmlFieldTransformer(ClassLoader cl) {
+        this(cl, new HashMap<>());
     }
 
-    public XmlFieldTransformer(Map<String, String> namespaces) {
+    public XmlFieldTransformer(ClassLoader cl, Map<String, String> namespaces) {
+        this.classLoader = cl;
+        this.xmlHelper = new XmlIOHelper(cl);
         this.namespaces = namespaces;
     }
 

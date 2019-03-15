@@ -12,6 +12,10 @@
   <packaging>bundle</packaging>
   <name>Atlas :: XML Core</name>
 
+  <properties>
+    <osgi.export.pkg>io.atlasmap.xml.core,io.atlasmap.xml.inspect</osgi.export.pkg>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>io.atlasmap</groupId>

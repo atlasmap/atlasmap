@@ -203,7 +203,7 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
         File file = Paths.get(
                 "src" + File.separator + "test" + File.separator + "resources" + File.separator + "atlasmapping.xml")
                 .toFile();
-        DefaultAtlasContextFactory factory = new DefaultAtlasContextFactory();
+        DefaultAtlasContextFactory factory = DefaultAtlasContextFactory.getInstance();
         factory.init();
 
         DefaultAtlasContext context = new DefaultAtlasContext(factory, file.toURI());
@@ -229,7 +229,7 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
         File file = Paths.get(
                 "src" + File.separator + "test" + File.separator + "resources" + File.separator + "atlasmapping.xml")
                 .toFile();
-        DefaultAtlasContextFactory factory = new DefaultAtlasContextFactory();
+        DefaultAtlasContextFactory factory = DefaultAtlasContextFactory.getInstance();
         factory.init();
 
         DefaultAtlasContext context = new DefaultAtlasContext(factory, file.toURI());
@@ -245,7 +245,7 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
         File file = Paths.get(
                 "src" + File.separator + "test" + File.separator + "resources" + File.separator + "atlasmapping.xml")
                 .toFile();
-        DefaultAtlasContextFactory factory = new DefaultAtlasContextFactory();
+        DefaultAtlasContextFactory factory = DefaultAtlasContextFactory.getInstance();
         factory.init();
 
         DefaultAtlasContext context = new DefaultAtlasContext(factory, file.toURI());

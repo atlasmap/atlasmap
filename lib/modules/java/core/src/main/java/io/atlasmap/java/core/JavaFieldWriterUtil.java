@@ -66,9 +66,12 @@ public class JavaFieldWriterUtil {
     private Map<Class<?>, Class<?>> defaultCollectionImplClasses = new HashMap<>();
 
     public JavaFieldWriterUtil(AtlasConversionService conversionService) {
+        this(Thread.currentThread().getContextClassLoader(), conversionService);
+    }
+
+    public JavaFieldWriterUtil(ClassLoader classLoader, AtlasConversionService conversionService) {
         this.conversionService = conversionService;
-        // TODO support hierarchical class loader
-        this.classLoader = Thread.currentThread().getContextClassLoader();
+        this.classLoader = classLoader;
         defaultCollectionImplClasses.put(BeanContext.class, BeanContextServicesSupport.class);
         defaultCollectionImplClasses.put(BeanContextServices.class, BeanContextServicesSupport.class);
         defaultCollectionImplClasses.put(BlockingDeque.class, LinkedBlockingDeque.class);

@@ -98,7 +98,7 @@ public class XmlModule extends BaseAtlasModule {
                 }
             }
 
-            XmlFieldReader reader = new XmlFieldReader(getConversionService());
+            XmlFieldReader reader = new XmlFieldReader(getClassLoader(), getConversionService());
             reader.setDocument(String.class.cast(sourceDocument), enableNamespaces);
             session.setFieldReader(getDocId(), reader);
         }
@@ -127,7 +127,7 @@ public class XmlModule extends BaseAtlasModule {
             }
         }
 
-        XmlFieldWriter writer = new XmlFieldWriter(nsMap, template);
+        XmlFieldWriter writer = new XmlFieldWriter(getClassLoader(), nsMap, template);
         session.setFieldWriter(getDocId(), writer);
 
         if (LOG.isDebugEnabled()) {

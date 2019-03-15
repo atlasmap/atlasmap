@@ -30,8 +30,6 @@
 
   <properties>
     <osgi.export.pkg>io.atlasmap.java.module</osgi.export.pkg>
-    <osgi.import.pkg>io.atlasmap.v2;version="${atlas.version.range}",io.atlasmap.api;version="${atlas.version.range}",
-      io.atlasmap.java.v2;version="${atlas.version.range}",io.atlasmap.java.inspect;version="${atlas.version.range}"</osgi.import.pkg>
   </properties>
 
   <dependencies>

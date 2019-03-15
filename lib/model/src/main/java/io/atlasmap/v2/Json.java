@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.type.TypeFactory;
 
 public class Json {
 
@@ -22,4 +23,7 @@ public class Json {
         return OBJECT_MAPPER;
     }
 
+    public static ObjectMapper withClassLoader(ClassLoader classLoader) {
+        return OBJECT_MAPPER.setTypeFactory(TypeFactory.defaultInstance().withClassLoader(classLoader));
+    }
 }

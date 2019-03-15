@@ -34,6 +34,18 @@ import io.atlasmap.api.AtlasException;
 
 public final class XmlIOHelper {
 
+    private TransformerFactory transformerFactory;
+
+    public XmlIOHelper(ClassLoader cl) {
+        ClassLoader origTccl = Thread.currentThread().getContextClassLoader();
+        try {
+            Thread.currentThread().setContextClassLoader(cl);
+            this.transformerFactory = TransformerFactory.newInstance();
+        } finally {
+            Thread.currentThread().setContextClassLoader(origTccl);
+        }
+    }
+
     public static List<Element> getChildrenWithName(String name, Element parentNode) {
         List<Element> children = new LinkedList<>();
         if (parentNode == null) {
@@ -69,13 +81,12 @@ public final class XmlIOHelper {
         return children;
     }
 
-    public static String writeDocumentToString(boolean stripSpaces, Node node) throws AtlasException {
+    public String writeDocumentToString(boolean stripSpaces, Node node) throws AtlasException {
         try {
             if (node == null) {
                 return "";
             }
-            TransformerFactory tf = TransformerFactory.newInstance();
-            Transformer transformer = tf.newTransformer();
+            Transformer transformer = transformerFactory.newTransformer();
             transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
             StringWriter writer = new StringWriter();
             transformer.transform(new DOMSource(node), new StreamResult(writer));

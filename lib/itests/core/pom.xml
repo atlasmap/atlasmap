@@ -29,6 +29,7 @@
   <name>Atlas :: iTests Core</name>
 
   <properties>
+    <osgi.export.pkg>io.atlasmap.itests.core</osgi.export.pkg>
   </properties>
 
   <dependencies>

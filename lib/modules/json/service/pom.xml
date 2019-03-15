@@ -31,6 +31,10 @@
   <name>Atlas :: JSON Service</name>
   <packaging>bundle</packaging>
 
+  <properties>
+    <osgi.export.pkg>io.atlasmap.json.service</osgi.export.pkg>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>org.slf4j</groupId>

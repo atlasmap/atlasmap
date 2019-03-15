@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <AtlasMapping xmlns="http://atlasmap.io/v2" xmlns:ns2="http://atlasmap.io/java/v2" xmlns:ns3="http://atlasmap.io/xml/v2" xmlns:ns4="http://atlasmap.io/json/v2" name="UI.639710">
-    <DataSource id="io.atlasmap.core.BaseClass$SomeNestedClass" uri="atlas:java?className=io.atlasmap.core.BaseClass%24SomeInnerClass" dataSourceType="Source"/>
-    <DataSource id="io.atlasmap.core.SourceClass" uri="atlas:java?className=io.atlasmap.core.SourceClass" dataSourceType="Source"/>
-    <DataSource id="io.atlasmap.core.BaseClass$SomeNestedClass" uri="atlas:java?className=io.atlasmap.core.BaseClass%24SomeNestedClass" dataSourceType="Target"/>
-    <DataSource id="io.atlasmap.core.TargetClass" uri="atlas:java?className=io.atlasmap.core.TargetClass" dataSourceType="Target"/>
+    <DataSource id="io.atlasmap.itests.core.BaseClass$SomeNestedClass" uri="atlas:java?className=io.atlasmap.itests.core.BaseClass%24SomeInnerClass" dataSourceType="Source"/>
+    <DataSource id="io.atlasmap.itests.core.SourceClass" uri="atlas:java?className=io.atlasmap.itests.core.SourceClass" dataSourceType="Source"/>
+    <DataSource id="io.atlasmap.itests.core.BaseClass$SomeNestedClass" uri="atlas:java?className=io.atlasmap.itests.core.BaseClass%24SomeNestedClass" dataSourceType="Target"/>
+    <DataSource id="io.atlasmap.itests.core.TargetClass" uri="atlas:java?className=io.atlasmap.itests.core.TargetClass" dataSourceType="Target"/>
     <Mappings>
         <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="Mapping" id="mapping.511929" mappingType="Map">
-            <InputField xsi:type="ns2:JavaField" name="someField" docId="io.atlasmap.core.BaseClass$SomeNestedClass" path="/someField" fieldType="String"/>
-            <OutputField xsi:type="ns2:JavaField" name="someField" docId="io.atlasmap.core.TargetClass" path="/someField" fieldType="String"/>
+            <InputField xsi:type="ns2:JavaField" name="someField" docId="io.atlasmap.itests.core.BaseClass$SomeNestedClass" path="/someField" fieldType="String"/>
+            <OutputField xsi:type="ns2:JavaField" name="someField" docId="io.atlasmap.itests.core.TargetClass" path="/someField" fieldType="String"/>
         </Mapping>
         <Mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="Mapping" id="mapping.37203" mappingType="Map">
-            <InputField xsi:type="ns2:JavaField" name="someField" docId="io.atlasmap.core.SourceClass" path="/someField" fieldType="String"/>
-            <OutputField xsi:type="ns2:JavaField" name="someField" docId="io.atlasmap.core.BaseClass$SomeNestedClass" path="/someField" fieldType="String"/>
+            <InputField xsi:type="ns2:JavaField" name="someField" docId="io.atlasmap.itests.core.SourceClass" path="/someField" fieldType="String"/>
+            <OutputField xsi:type="ns2:JavaField" name="someField" docId="io.atlasmap.itests.core.BaseClass$SomeNestedClass" path="/someField" fieldType="String"/>
         </Mapping>
     </Mappings>
 </AtlasMapping>

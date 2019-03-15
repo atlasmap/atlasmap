@@ -1,0 +1,1 @@
+moduleClass=io.atlasmap.java.module.JavaModule,io.atlasmap.json.module.JsonModule,io.atlasmap.xml.module.XmlModule

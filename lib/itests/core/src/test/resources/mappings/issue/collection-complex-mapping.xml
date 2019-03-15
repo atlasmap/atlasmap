@@ -3,11 +3,11 @@
   xmlns:ns3="http://atlasmap.io/json/v2" xmlns:ns4="http://atlasmap.io/xml/v2"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="core-unit-test">
   <DataSource dataSourceType="Source" id="SourceClass"
-    uri="atlas:java?className=io.atlasmap.core.issue.SourceClass" />
+    uri="atlas:java?className=io.atlasmap.itests.core.issue.SourceClass" />
   <DataSource dataSourceType="Source" id="SourceJson" uri="atlas:json:SourceJson" />
   <DataSource dataSourceType="Source" id="SourceXml" uri="atlas:xml:SourceXml" />
   <DataSource dataSourceType="Target" id="TargetClass"
-    uri="atlas:java?className=io.atlasmap.core.issue.TargetClass" />
+    uri="atlas:java?className=io.atlasmap.itests.core.issue.TargetClass" />
   <DataSource dataSourceType="Target" id="TargetJson" uri="atlas:json:TargetJson" />
   <DataSource dataSourceType="Target" id="TargetXml" uri="atlas:xml:TargetXml" />
 

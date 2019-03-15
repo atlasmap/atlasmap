@@ -12,6 +12,10 @@
   <packaging>bundle</packaging>
   <name>Atlas :: JSON Core</name>
 
+  <properties>
+    <osgi.export.pkg>io.atlasmap.json.core,io.atlasmap.json.inspect</osgi.export.pkg>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>io.atlasmap</groupId>

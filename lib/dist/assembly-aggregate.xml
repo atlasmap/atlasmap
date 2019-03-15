@@ -1,0 +1,34 @@
+<assembly xmlns="http://maven.apache.org/ASSEMBLY/2.0.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/ASSEMBLY/2.0.0 http://maven.apache.org/xsd/assembly-2.0.0.xsd">
+  <id>AtlasMap</id>
+  <includeBaseDirectory>false</includeBaseDirectory>
+  <formats>
+    <format>dir</format>
+  </formats>
+
+  <moduleSets>
+    <moduleSet>
+      <useAllReactorProjects>true</useAllReactorProjects>
+      <includes>
+        <include>io.atlasmap:atlas-api</include>
+        <include>io.atlasmap:atlas-core</include>
+        <include>io.atlasmap:atlas-model</include>
+        <include>io.atlasmap:atlas-java-core</include>
+        <include>io.atlasmap:atlas-java-model</include>
+        <include>io.atlasmap:atlas-java-module</include>
+        <include>io.atlasmap:atlas-json-core</include>
+        <include>io.atlasmap:atlas-json-model</include>
+        <include>io.atlasmap:atlas-json-module</include>
+        <include>io.atlasmap:atlas-xml-core</include>
+        <include>io.atlasmap:atlas-xml-model</include>
+        <include>io.atlasmap:atlas-xml-module</include>
+      </includes>
+      <binaries>
+        <outputDirectory>.</outputDirectory>
+        <unpack>true</unpack>
+      </binaries>
+    </moduleSet>
+  </moduleSets>
+
+</assembly>

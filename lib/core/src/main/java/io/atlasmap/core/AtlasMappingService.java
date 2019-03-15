@@ -86,15 +86,15 @@ public class AtlasMappingService implements Serializable {
     }
 
     protected void initialize(List<String> packages) throws JAXBException {
-
+        ClassLoader classLoader = AtlasMapping.class.getClassLoader();
         if (getJAXBContext() == null) {
-            setJAXBContext(JAXBContext.newInstance(stringListToColonSeparated(packages)));
+            setJAXBContext(JAXBContext.newInstance(stringListToColonSeparated(packages), classLoader));
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Initialized JAXBContext: " + stringListToColonSeparated(packages));
             }
         }
 
-        jsonMapper = Json.mapper();
+        jsonMapper = Json.withClassLoader(classLoader);
     }
 
     public AtlasMapping loadMapping(File file) throws AtlasValidationException {

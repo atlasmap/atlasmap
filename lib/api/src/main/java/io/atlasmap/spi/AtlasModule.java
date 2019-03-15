@@ -30,6 +30,10 @@ public interface AtlasModule {
 
     void destroy();
 
+    void setClassLoader(ClassLoader classLoader);
+
+    ClassLoader getClassLoader();
+
     void processPreValidation(AtlasInternalSession session) throws AtlasException;
 
     void processPreSourceExecution(AtlasInternalSession session) throws AtlasException;

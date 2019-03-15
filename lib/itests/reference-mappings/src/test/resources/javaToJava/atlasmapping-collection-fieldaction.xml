@@ -14,7 +14,7 @@
         <Mapping xsi:type="Mapping" mappingType="Map">
           <InputField xsi:type="ns2:JavaField" docId="SourceCollectionsClass" path="/linkedList&lt;&gt;" fieldType="String">
             <Actions>
-                <CustomAction name="Concat" className="io.atlasmap.reference.MyCustomFieldActions" methodName="concat" inputFieldType="String" outputFieldType="String"/>
+                <CustomAction name="Concat" className="io.atlasmap.itests.reference.MyCustomFieldActions" methodName="concat" inputFieldType="String" outputFieldType="String"/>
             </Actions>
           </InputField>
           <OutputField xsi:type="ns2:JavaField" docId="TargetCollectionsClass" path="/arrayList&lt;&gt;" fieldType="String" />

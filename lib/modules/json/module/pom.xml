@@ -29,7 +29,6 @@
 
   <properties>
     <osgi.export.pkg>io.atlasmap.json.module</osgi.export.pkg>
-    <osgi.import.pkg>io.atlasmap.v2;version="${atlas.version.range}",io.atlasmap.api;version="${atlas.version.range}",io.atlasmap.spi;version="${atlas.version.range}",io.atlasmap.json.v2;version="${atlas.version.range}",</osgi.import.pkg>
   </properties>
 
   <dependencies>

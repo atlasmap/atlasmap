@@ -29,6 +29,7 @@
   <name>Atlas :: iTests Validation Mappings</name>
 
   <properties>
+    <osgi.export.pkg>io.atlasmap.itests.validation</osgi.export.pkg>
   </properties>
 
   <dependencies>

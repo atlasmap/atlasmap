@@ -38,6 +38,7 @@ public class ConstantModule implements AtlasModule {
 
     private AtlasConversionService conversionService;
     private AtlasFieldActionService fieldActionService;
+    private ClassLoader classLoader;
 
     @Override
     public void init() {
@@ -47,6 +48,16 @@ public class ConstantModule implements AtlasModule {
     @Override
     public void destroy() {
         // no-op
+    }
+
+    @Override
+    public void setClassLoader(ClassLoader classLoader) {
+        this.classLoader = classLoader;
+    }
+
+    @Override
+    public ClassLoader getClassLoader() {
+        return classLoader;
     }
 
     @Override

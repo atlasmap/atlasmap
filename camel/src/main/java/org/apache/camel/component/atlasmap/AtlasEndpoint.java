@@ -199,6 +199,7 @@ public class AtlasEndpoint extends ResourceEndpoint {
             ZipEntry catEntry;
             while ((catEntry = zipIn.getNextEntry()) != null) {
                 catEntryname = catEntry.getName();
+                LOG.debug("Found entry: {}", catEntryname);
                 if (catEntryname.contains(atlasmapGenericMappingsName)) {
                     break;
                 }
@@ -316,25 +317,25 @@ public class AtlasEndpoint extends ResourceEndpoint {
     }
 
     private synchronized AtlasContextFactory getOrCreateAtlasContextFactory() throws Exception {
-        if (atlasContextFactory == null) {
+        if (atlasContextFactory != null) {
+            return atlasContextFactory;
+        }
 
+        atlasContextFactory = DefaultAtlasContextFactory.getInstance();
+        ((DefaultAtlasContextFactory)atlasContextFactory).addClassLoader(getCamelContext().getApplicationContextClassLoader());
+        // load the properties from property file which may overrides the default ones
+        if (ObjectHelper.isNotEmpty(getPropertiesFile())) {
             Properties properties = new Properties();
-
-            // load the properties from property file which may overrides the default ones
-            if (ObjectHelper.isNotEmpty(getPropertiesFile())) {
-                InputStream reader = ResourceHelper.resolveMandatoryResourceAsInputStream(getCamelContext(),
-                        getPropertiesFile());
-                try {
-                    properties.load(reader);
-                    log.info("Loaded the Atlas properties file " + getPropertiesFile());
-                } finally {
-                    IOHelper.close(reader, getPropertiesFile(), log);
-                }
-                log.debug("Initializing AtlasContextFactory with properties {}", properties);
-                atlasContextFactory = new DefaultAtlasContextFactory(properties);
-            } else {
-                atlasContextFactory = DefaultAtlasContextFactory.getInstance();
+            InputStream reader = ResourceHelper.resolveMandatoryResourceAsInputStream(getCamelContext(),
+                    getPropertiesFile());
+            try {
+                properties.load(reader);
+                log.info("Loaded the Atlas properties file " + getPropertiesFile());
+            } finally {
+                IOHelper.close(reader, getPropertiesFile(), log);
             }
+            log.debug("Initializing AtlasContextFactory with properties {}", properties);
+            atlasContextFactory.setProperties(properties);
         }
         return atlasContextFactory;
     }
