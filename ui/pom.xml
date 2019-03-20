@@ -71,7 +71,6 @@
           <executions>
             <execution>
               <id>install yarn</id>
-              <phase>compile</phase>
               <goals>
                 <goal>install-node-and-yarn</goal>
               </goals>
