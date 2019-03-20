@@ -98,11 +98,6 @@
                 <configuration>
                     <arguments>config set proxy http://${buildContentId}+tracking:${accessToken}@${proxyServer}:${proxyPort}</arguments>
                 </configuration>
-                </goals>
-                <configuration>
-                    <arguments>config set proxy http://${buildContentId}+tracking
-:${accessToken}@${proxyServer}:${proxyPort}</arguments>
-                </configuration>
             </execution>
             <execution>
                 <id>set maxconn</id>
