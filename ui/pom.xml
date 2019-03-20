@@ -129,7 +129,6 @@
 
             <execution>
               <id>yarn install</id>
-              <phase>compile</phase>
               <goals>
                 <goal>yarn</goal>
               </goals>
@@ -139,7 +138,6 @@
             </execution>
             <execution>
               <id>yarn build</id>
-              <phase>compile</phase>
               <goals>
                 <goal>yarn</goal>
               </goals>
