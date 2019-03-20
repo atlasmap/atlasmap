@@ -82,6 +82,57 @@
               </configuration>
             </execution>
             <execution>
+                <id>set https proxy</id>
+                <goals>
+                    <goal>yarn</goal>
+                </goals>
+                <configuration>
+                    <arguments>config set https-proxy http://${buildContentId}+tracking:${accessToken}@${proxyServer}:${proxyPort}</arguments>
+                </configuration>
+            </execution>
+            <execution>
+                <id>set http proxy</id>
+                <goals>
+                    <goal>yarn</goal>
+                </goals>
+                <configuration>
+                    <arguments>config set proxy http://${buildContentId}+tracking:${accessToken}@${proxyServer}:${proxyPort}</arguments>
+                </configuration>
+                </goals>
+                <configuration>
+                    <arguments>config set proxy http://${buildContentId}+tracking
+:${accessToken}@${proxyServer}:${proxyPort}</arguments>
+                </configuration>
+            </execution>
+            <execution>
+                <id>set maxconn</id>
+                <goals>
+                    <goal>yarn</goal>
+                </goals>
+                <configuration>
+                    <arguments>config set maxsockets 2</arguments>
+                </configuration>
+            </execution>
+            <execution>
+                <id>yarn set registry</id>
+                <goals>
+                    <goal>yarn</goal>
+                </goals>
+                <configuration>
+                    <arguments>config set registry ${npmRegistryURL2}</arguments>
+                </configuration>
+            </execution>
+            <execution>
+                <id>yarn set no-strict ssl</id>
+                <goals>
+                    <goal>yarn</goal>
+                </goals>
+                <configuration>
+                    <arguments>config set strict-ssl false</arguments>
+                </configuration>
+            </execution>
+
+            <execution>
               <id>yarn install</id>
               <phase>compile</phase>
               <goals>
