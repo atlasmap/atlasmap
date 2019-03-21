@@ -135,6 +135,7 @@
                 <arguments>install -s --no-progress</arguments>
               </configuration>
             </execution>
+	<!--
             <execution>
               <id>yarn build</id>
               <goals>
@@ -145,6 +146,7 @@
                 <arguments>build</arguments>
               </configuration>
             </execution>
+	-->
             <execution>
               <id>yarn lint</id>
               <phase>test</phase>
