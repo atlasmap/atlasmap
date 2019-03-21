@@ -409,6 +409,7 @@ export class MappingDefinition {
       }
 
       // Process field actions.
+      mappedField.actions = [];
       if (mappedField.parsedData.parsedActions.length > 0) {
 
         for (const action of mappedField.parsedData.parsedActions) {
