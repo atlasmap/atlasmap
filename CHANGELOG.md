@@ -1,5 +1,13 @@
 # Changelog
 
+## atlasmap-1.39.6 (22/03/2019)
+
+#### Bug Fixes
+
+- [#834](https://github.com/atlasmap/atlasmap/issues/834) Transformation is duplicated in Syndesis
+
+---
+
 ## atlasmap-1.39.5 (08/03/2019)
 
 #### Bug Fixes
@@ -50,6 +58,7 @@
 #### Enhancements
 
 - [#712](https://github.com/atlasmap/atlasmap/issues/712) [camel-atlasmap] support adm file
+- [#701](https://github.com/atlasmap/atlasmap/issues/701) Collection as a Document root - Java
 
 #### Bug Fixes
 
@@ -61,6 +70,8 @@
 
 #### Enhancements
 
+- [#700](https://github.com/atlasmap/atlasmap/issues/700) Collection as a Document root - Json Instance
+- [#699](https://github.com/atlasmap/atlasmap/issues/699) Collection as a Document root - Json Schema
 - [#690](https://github.com/atlasmap/atlasmap/issues/690) Support multiple source Documents via java.util.Map IN message body
 - [#686](https://github.com/atlasmap/atlasmap/issues/686) Add an upper limit of field search results
 - [#685](https://github.com/atlasmap/atlasmap/issues/685) Add delay on field search
