@@ -47,12 +47,6 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
-import javax.xml.transform.stream.StreamSource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -189,7 +183,7 @@ public class AtlasService {
                 if (filter != null && name != null && !name.toLowerCase().contains(filter.toLowerCase())) {
                     return false;
                 }
-                return (name != null ? name.matches("atlasmapping-[a-zA-Z0-9\\.\\-]+.xml") : false);
+                return (name != null ? name.matches("atlasmapping-[a-zA-Z0-9\\.\\-]+.json") : false);
             }
         });
 
@@ -199,7 +193,7 @@ public class AtlasService {
 
         try {
             for (File mapping : mappings) {
-                AtlasMapping map = getMappingFromFile(mapping.getAbsolutePath());
+                AtlasMapping map = Json.mapper().readValue(new File(mapping.getAbsolutePath()), AtlasMapping.class);
                 if (map == null) {
                     LOG.warn("No mapping detected from file " + mapping.getAbsolutePath());
                     continue;
@@ -211,7 +205,7 @@ public class AtlasService {
                 mapEntry.setValue(builder.build().toString());
                 sMap.getStringMapEntry().add(mapEntry);
             }
-        } catch (JAXBException e) {
+        } catch (Exception e) {
             throw new WebApplicationException(e.getMessage(), e, Status.INTERNAL_SERVER_ERROR);
         }
 
@@ -293,19 +287,10 @@ public class AtlasService {
         LOG.debug("getMappingRequest: {} '{}'", mappingFormat, mappingFilePath);
 
         switch (mappingFormat) {
-        case "XML":
-            String data = null;
-            try {
-                data = new String(Files.readAllBytes(mappingFile.toPath()));
-            } catch (Exception e) {
-                LOG.error("Error retrieving XML mapping " + mappingFilePath, e);
-                throw new WebApplicationException(e.getMessage(), e, Status.INTERNAL_SERVER_ERROR);
-            }
-            return Response.ok().entity(data).build();
         case "JSON":
             AtlasMapping atlasMapping = null;
             try {
-                atlasMapping = getMappingFromFile(mappingFilePath);
+                atlasMapping = Json.mapper().readValue(new File(mappingFilePath), AtlasMapping.class);
             } catch (Exception e) {
                 LOG.error("Error retrieving JSON mapping " + mappingFilePath, e);
                 throw new WebApplicationException(e.getMessage(), e, Status.INTERNAL_SERVER_ERROR);
@@ -325,6 +310,8 @@ public class AtlasService {
                 throw new WebApplicationException(e.getMessage(), e, Status.INTERNAL_SERVER_ERROR);
             }
             return Response.ok().entity(binData).build();
+        case "XML":
+            throw new WebApplicationException("XML mapping format is no longer supported. Please use JSON format instead.");
         default:
             throw new WebApplicationException("Unrecognized mapping format: " + mappingFormat, Status.INTERNAL_SERVER_ERROR);
         }
@@ -352,8 +339,6 @@ public class AtlasService {
         }
 
         switch (mappingFormat) {
-        case "XML":
-           return saveMapping(fromXml(mapping, AtlasMapping.class), uriInfo);
         case "JSON":
            return saveMapping(fromJson(mapping, AtlasMapping.class), uriInfo);
         case "GZ":
@@ -378,6 +363,8 @@ public class AtlasService {
             }
             builder.path(atlasmapCatalogName);
             return Response.ok().location(builder.build()).build();
+        case "XML":
+            throw new WebApplicationException("XML mapping format is no longer supported. Please use JSON format instead.");
         default:
             throw new WebApplicationException("Unrecognized mapping format: " + mappingFormat, Status.INTERNAL_SERVER_ERROR);
         }
@@ -506,7 +493,7 @@ public class AtlasService {
 
     protected Response saveMapping(AtlasMapping mapping, UriInfo uriInfo) {
         try {
-            saveMappingToFile(mapping);
+            Json.mapper().writeValue(createMappingFile(mapping.getName()), mapping);
         } catch (Exception e) {
             String msg = "Error saving mapping " + mapping.getName() + " to file: " + e.getMessage();
             LOG.error(msg, e);
@@ -517,52 +504,6 @@ public class AtlasService {
         builder.path(mapping.getName());
 
         return Response.ok().location(builder.build()).build();
-    }
-
-    public AtlasMapping getMappingFromFile(String fileName) throws JAXBException {
-        JAXBContext jaxbContext = JAXBContext
-                .newInstance("io.atlasmap.v2:io.atlasmap.java.v2:io.atlasmap.xml.v2:io.atlasmap.json.v2");
-        Marshaller marshaller = null;
-        Unmarshaller unmarshaller = null;
-
-        marshaller = jaxbContext.createMarshaller();
-        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-        unmarshaller = jaxbContext.createUnmarshaller();
-
-        StreamSource fileSource = new StreamSource(new File(fileName));
-        JAXBElement<AtlasMapping> mappingElem = unmarshaller.unmarshal(fileSource, AtlasMapping.class);
-        if (mappingElem != null) {
-            return mappingElem.getValue();
-        }
-        return null;
-    }
-
-    public AtlasMapping getMappingFromStream(InputStream streamSource) throws JAXBException {
-        JAXBContext jaxbContext = JAXBContext
-                .newInstance("io.atlasmap.v2:io.atlasmap.java.v2:io.atlasmap.xml.v2:io.atlasmap.json.v2");
-        Marshaller marshaller = null;
-        Unmarshaller unmarshaller = null;
-
-        marshaller = jaxbContext.createMarshaller();
-        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-        unmarshaller = jaxbContext.createUnmarshaller();
-
-        JAXBElement<AtlasMapping> mappingElem = (JAXBElement<AtlasMapping>) unmarshaller.unmarshal(streamSource);
-        if (mappingElem != null) {
-            return mappingElem.getValue();
-        }
-        return null;
-    }
-
-    protected void saveMappingToFile(AtlasMapping atlasMapping) throws JAXBException {
-        JAXBContext jaxbContext = JAXBContext
-                .newInstance("io.atlasmap.v2:io.atlasmap.java.v2:io.atlasmap.xml.v2:io.atlasmap.json.v2");
-        Marshaller marshaller = null;
-
-        marshaller = jaxbContext.createMarshaller();
-        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-
-        marshaller.marshal(atlasMapping, createMappingFile(atlasMapping.getName()));
     }
 
     private File createMappingFile(String mappingName) {
@@ -596,9 +537,9 @@ public class AtlasService {
     /**
      * Create a compressed (ZIP) ADM catalog.  The contents are:
      *
-     *   - the user-specified instance/schema files (JSON/XML) and mappings (XML) captured in a JSON
+     *   - the user-specified instance/schema files (JSON/XML) and mappings (JSON) captured in a JSON
      *     document, compressed (GZIP).
-     *   - the atlasmapping.xml file (separate for camel runtime support)
+     *   - the atlasmapping.json file (separate for camel runtime support)
      *   - the user-specified Java archives (JAR).
      *
      * @param mappingId
@@ -616,8 +557,8 @@ public class AtlasService {
 
            ZipEntry catEntry = null;
 
-           // atlasmapping-UI.nnnnnn.xml
-           File mappingFile = getMappingFile("XML", mappingId);
+           // atlasmapping-UI.nnnnnn.json
+           File mappingFile = getMappingFile("JSON", mappingId);
 
            if (mappingFile != null) {
                String mappingFileName = mappingFile.getName();
@@ -677,7 +618,7 @@ public class AtlasService {
      * Unzip the ADM catalog file into its constituent parts:
      *
      * - target/mappings/adm-catalog-files.gz
-     * - target/mappings/atlasmapping-UI.nnnnnn.xml
+     * - target/mappings/atlasmapping-UI.nnnnnn.json
      * - target/lib/...jar
      *
      * @throws IOException
@@ -765,7 +706,7 @@ public class AtlasService {
         File mappingFile = null;
         java.nio.file.Path mappingFilePath = null;
 
-        if (mappingFormat.equals("JSON") || mappingFormat.equals("XML")) {
+        if (mappingFormat.equals("JSON")) {
             mappingFilePath = Paths.get(mappingFolder + File.separator + generateMappingFileName(mappingId));
         }
         else {
@@ -779,11 +720,11 @@ public class AtlasService {
         return mappingFile;
     }
 
-    protected String generateMappingFileName(String mappingName) {
-        return String.format("atlasmapping-%s.xml", mappingName);
+    private String generateMappingFileName(String mappingName) {
+        return String.format("atlasmapping-%s.json", mappingName);
     }
 
-    protected byte[] toJson(Object value) {
+    private byte[] toJson(Object value) {
         try {
             return Json.mapper().writeValueAsBytes(value);
         } catch (JsonProcessingException e) {
@@ -791,7 +732,7 @@ public class AtlasService {
         }
     }
 
-    protected <T> T fromJson(InputStream value, Class<T>clazz) {
+    private <T> T fromJson(InputStream value, Class<T>clazz) {
         try {
             return Json.mapper().readValue(value, clazz);
         } catch (IOException e) {
@@ -799,13 +740,4 @@ public class AtlasService {
         }
     }
 
-    protected <T> T fromXml(InputStream value, Class<T>clazz) {
-        AtlasMapping atlasMapping = null;
-        try {
-            atlasMapping = getMappingFromStream(value);
-        } catch (Exception e) {
-            throw new WebApplicationException("Error retrieving mapping " + e.getMessage(), e);
-        }
-        return (T) atlasMapping;
-    }
 }

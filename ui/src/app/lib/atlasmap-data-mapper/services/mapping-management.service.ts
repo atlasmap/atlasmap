@@ -54,11 +54,11 @@ export class MappingManagementService {
   mappingPreviewError$ = this.mappingPreviewErrorSource.asObservable();
 
   private headers = new HttpHeaders(
-    {'Content-Type': 'application/json; application/xml; application/octet-stream',
-     'Accept':       'application/json; application/xml; application/octet-stream'});
+    {'Content-Type': 'application/json; application/octet-stream',
+     'Accept':       'application/json; application/octet-stream'});
   private mappingPreviewInputSubscription: Subscription;
   private mappingUpdatedSubscription: Subscription;
-  private xmlBuffer: string;
+  private jsonBuffer: string;
 
   constructor(private http: HttpClient) {}
 
@@ -275,23 +275,23 @@ export class MappingManagementService {
   }
 
   /**
-   * Retrieve the current user AtlasMap data mappings from the server as an XML buffer.
+   * Retrieve the current user AtlasMap data mappings from the server as an JSON buffer.
    */
-  getCurrentMappingXML(): Observable<string> {
+  getCurrentMappingJson(): Observable<string> {
     const mappingFileNames: string[] = this.cfg.mappingFiles;
     const mappingDefinition: MappingDefinition = this.cfg.mappings;
     return new Observable<string>((observer: any) => {
-      const baseURL: string = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/XML/';
+      const baseURL: string = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/JSON/';
       const operations: Observable<any>[] = [];
       for (const mappingName of mappingFileNames) {
         const url: string = baseURL + mappingName;
         DataMapperUtil.debugLogJSON(null, 'Mapping Service Request', this.cfg.initCfg.debugMappingServiceCalls, url);
-        const xmlHeaders = new HttpHeaders(
-          { 'Content-Type':  'application/xml',
-            'Accept':        'application/xml',
-            'Response-Type': 'application/xml'
+        const jsonHeaders = new HttpHeaders(
+          { 'Content-Type':  'application/json',
+            'Accept':        'application/json',
+            'Response-Type': 'application/json'
           });
-        const operation = this.http.get(url, { headers: xmlHeaders, responseType: 'text' }).pipe(map((res: any) => res ));
+        const operation = this.http.get(url, { headers: jsonHeaders, responseType: 'text' }).pipe(map((res: any) => res ));
         operations.push(operation);
       }
 
@@ -332,22 +332,22 @@ export class MappingManagementService {
   }
 
  /**
-  * Commit the specified AtlasMapping XML user mapping string to the runtime service.  The mappings
+  * Commit the specified AtlasMapping JSON user mapping string to the runtime service.  The mappings
   * are kept separate so they can be updated with minimal overhead.
   *
-  * @param buffer - XML content
+  * @param buffer - JSON content
   */
-  setMappingToService(XMLbuffer: string): Observable<boolean> {
+  setMappingToService(jsonBuffer: string): Observable<boolean> {
     return new Observable<boolean>((observer: any) => {
-      const url = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/XML/' + this.getMappingId();
+      const url = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/JSON/' + this.getMappingId();
       DataMapperUtil.debugLogJSON(null, 'Mapping Service Request', this.cfg.initCfg.debugMappingServiceCalls, url);
-      this.http.put(url, XMLbuffer, { headers: this.headers }).toPromise().then((res: any) => {
+      this.http.put(url, jsonBuffer, { headers: this.headers }).toPromise().then((res: any) => {
         DataMapperUtil.debugLogJSON(res, 'Mapping Service Response', this.cfg.initCfg.debugMappingServiceCalls, url);
         observer.next(true);
         observer.complete();
       })
       .catch((error: any) => {
-        this.handleError('Error occurred while establishing mappings from an imported XML.', error);
+        this.handleError('Error occurred while establishing mappings from an imported JSON.', error);
         observer.error(error);
         observer.complete();
       });
@@ -880,16 +880,16 @@ export class MappingManagementService {
   }
 
   /**
-   * Asynchronously retrieve the current user-defined AtlasMap mappings from the runtime server as an XML buffer.
+   * Asynchronously retrieve the current user-defined AtlasMap mappings from the runtime server as an JSON buffer.
    */
-  async getXMLbuf(): Promise<boolean> {
+  async getJsonBuf(): Promise<boolean> {
     return new Promise<boolean>((resolve, reject) => {
       if (this.cfg.mappings === null) {
         resolve(false);
       }
       this.cfg.mappingFiles[0] = this.cfg.mappings.name;
-      this.getCurrentMappingXML().toPromise().then((result: string) => {
-        this.xmlBuffer = result;
+      this.getCurrentMappingJson().toPromise().then((result: string) => {
+        this.jsonBuffer = result;
         resolve(true);
       }).catch((error: any) => {
         if (error.status === 0) {
@@ -923,9 +923,9 @@ export class MappingManagementService {
         userExport = false;
       }
 
-      // Retrieve the XML mappings buffer from the server.
-      if (await this.getXMLbuf()) {
-        aggregateBuffer += DocumentManagementService.generateExportMappings(this.xmlBuffer[0]);
+      // Retrieve the JSON mappings buffer from the server.
+      if (await this.getJsonBuf()) {
+        aggregateBuffer += DocumentManagementService.generateExportMappings(this.jsonBuffer[0]);
       }
 
       let exportMeta = '   "exportMeta": [\n';
@@ -1006,7 +1006,7 @@ export class MappingManagementService {
   /**
    * Perform a binary read of the specified catalog (.ADM) file and push it to the runtime.  The ADM file is
    * in (ZIP) file format.  Once pushed, we can retrieve from runtime the extracted compressed (GZIP) mappings
-   * file catalog as well as the mappings XML file.  These files exist separately for performance reasons.
+   * file catalog as well as the mappings JSON file.  These files exist separately for performance reasons.
    *
    * Once the runtime has its ADM catalog, catalog files and mappings file set then restart the DM.
    *

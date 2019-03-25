@@ -29,6 +29,7 @@ import java.util.jar.JarOutputStream;
 
 import javax.tools.JavaCompiler;
 import javax.tools.ToolProvider;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
@@ -84,14 +85,17 @@ public class AtlasServiceTest {
     public void testGetMapping() {
         Response resp = service.getMappingRequest("JSON", "junit3");
         assertEquals(byte[].class, resp.getEntity().getClass());
-        resp = service.getMappingRequest("XML", "junit3");
-        assertEquals(java.lang.String.class, resp.getEntity().getClass());
+    }
+
+    @Test(expected = WebApplicationException.class)
+    public void testGetMappingXmlNoLongerSupported() {
+        service.getMappingRequest("XML", "junit3");
     }
 
     @Test
     public void testFilenameMatch() {
-        String fileName = "atlasmapping-foo.xml";
-        assertTrue(fileName.matches("atlasmapping-[a-zA-Z0-9]+.xml"));
+        String fileName = "atlasmapping-foo.json";
+        assertTrue(fileName.matches("atlasmapping-[a-zA-Z0-9]+.json"));
     }
 
     @Test
