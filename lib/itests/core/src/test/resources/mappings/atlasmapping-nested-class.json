@@ -1,0 +1,66 @@
+{
+  "AtlasMapping" : {
+    "jsonType" : "io.atlasmap.v2.AtlasMapping",
+    "dataSource" : [ {
+      "jsonType" : "io.atlasmap.v2.DataSource",
+      "id" : "io.atlasmap.itests.core.BaseClass$SomeNestedClass",
+      "uri" : "atlas:java?className=io.atlasmap.itests.core.BaseClass%24SomeInnerClass",
+      "dataSourceType" : "SOURCE"
+    }, {
+      "jsonType" : "io.atlasmap.v2.DataSource",
+      "id" : "io.atlasmap.itests.core.SourceClass",
+      "uri" : "atlas:java?className=io.atlasmap.itests.core.SourceClass",
+      "dataSourceType" : "SOURCE"
+    }, {
+      "jsonType" : "io.atlasmap.v2.DataSource",
+      "id" : "io.atlasmap.itests.core.BaseClass$SomeNestedClass",
+      "uri" : "atlas:java?className=io.atlasmap.itests.core.BaseClass%24SomeNestedClass",
+      "dataSourceType" : "TARGET"
+    }, {
+      "jsonType" : "io.atlasmap.v2.DataSource",
+      "id" : "io.atlasmap.itests.core.TargetClass",
+      "uri" : "atlas:java?className=io.atlasmap.itests.core.TargetClass",
+      "dataSourceType" : "TARGET"
+    } ],
+    "mappings" : {
+      "mapping" : [ {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "MAP",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "docId" : "io.atlasmap.itests.core.BaseClass$SomeNestedClass",
+          "path" : "/someField",
+          "fieldType" : "STRING",
+          "name" : "someField"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "docId" : "io.atlasmap.itests.core.TargetClass",
+          "path" : "/someField",
+          "fieldType" : "STRING",
+          "name" : "someField"
+        } ],
+        "id" : "mapping.511929"
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "MAP",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "docId" : "io.atlasmap.itests.core.SourceClass",
+          "path" : "/someField",
+          "fieldType" : "STRING",
+          "name" : "someField"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "docId" : "io.atlasmap.itests.core.BaseClass$SomeNestedClass",
+          "path" : "/someField",
+          "fieldType" : "STRING",
+          "name" : "someField"
+        } ],
+        "id" : "mapping.37203"
+      } ]
+    },
+    "name" : "UI.639710"
+  }
+}

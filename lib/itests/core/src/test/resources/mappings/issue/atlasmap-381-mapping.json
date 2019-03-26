@@ -1,0 +1,43 @@
+{
+  "AtlasMapping" : {
+    "jsonType" : "io.atlasmap.v2.AtlasMapping",
+    "dataSource" : [ {
+      "jsonType" : "io.atlasmap.v2.DataSource",
+      "id" : "io.atlasmap.itests.core.issue.SourceClass",
+      "uri" : "atlas:java?className=io.atlasmap.itests.core.issue.SourceClass",
+      "dataSourceType" : "SOURCE"
+    }, {
+      "jsonType" : "io.atlasmap.v2.DataSource",
+      "id" : "io.atlasmap.itests.core.issue.TargetClass",
+      "uri" : "atlas:java?className=io.atlasmap.itests.core.issue.TargetClass",
+      "dataSourceType" : "TARGET"
+    } ],
+    "mappings" : {
+      "mapping" : [ {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "MAP",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "docId" : "io.atlasmap.itests.core.issue.SourceClass",
+          "path" : "/sourceDate",
+          "fieldType" : "DATE_TIME",
+          "name" : "sourceInteger"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "actions" : [ {
+            "AddDays" : {
+              "days" : 32
+            }
+          } ],
+          "docId" : "io.atlasmap.itests.core.issue.TargetClass",
+          "path" : "/targetDate",
+          "fieldType" : "DATE_TIME",
+          "name" : "targetInteger"
+        } ],
+        "id" : "mapping.990772"
+      } ]
+    },
+    "name" : "core-unit-test"
+  }
+}

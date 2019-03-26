@@ -1,0 +1,65 @@
+{
+  "AtlasMapping" : {
+    "jsonType" : "io.atlasmap.v2.AtlasMapping",
+    "dataSource" : [ {
+      "jsonType" : "io.atlasmap.v2.DataSource",
+      "uri" : "atlas:java?className=io.atlasmap.java.module.MockJavaClass",
+      "dataSourceType" : "SOURCE"
+    }, {
+      "jsonType" : "io.atlasmap.v2.DataSource",
+      "uri" : "atlas:java?className=io.atlasmap.java.module.MockJavaClass",
+      "dataSourceType" : "TARGET"
+    } ],
+    "mappings" : {
+      "mapping" : [ {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "MAP",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "path" : "firstName",
+          "fieldType" : "STRING",
+          "modifiers" : {
+            "modifier" : [ ]
+          }
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "path" : "firstName",
+          "fieldType" : "STRING",
+          "modifiers" : {
+            "modifier" : [ ]
+          }
+        } ],
+        "id" : "map.firstName.firstName"
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "SEPARATE",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "path" : "displayName",
+          "fieldType" : "STRING",
+          "modifiers" : {
+            "modifier" : [ ]
+          }
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "index" : 1,
+          "path" : "lastName",
+          "fieldType" : "STRING",
+          "modifiers" : {
+            "modifier" : [ ]
+          }
+        } ],
+        "id" : "separate.displayName.lastName"
+      } ]
+    },
+    "lookupTables" : {
+      "lookupTable" : [ ]
+    },
+    "properties" : {
+      "property" : [ ]
+    },
+    "name" : "thisis_a_valid.name"
+  }
+}

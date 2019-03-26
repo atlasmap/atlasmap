@@ -1,0 +1,47 @@
+{
+  "AtlasMapping" : {
+    "jsonType" : "io.atlasmap.v2.AtlasMapping",
+    "dataSource" : [ {
+      "jsonType" : "io.atlasmap.v2.DataSource",
+      "id" : "io.atlasmap.itests.core.issue.SourceClass",
+      "uri" : "atlas:java?className=io.atlasmap.itests.core.issue.SourceClass",
+      "dataSourceType" : "SOURCE"
+    }, {
+      "jsonType" : "io.atlasmap.v2.DataSource",
+      "id" : "io.atlasmap.itests.core.issue.TargetClass",
+      "uri" : "atlas:java?className=io.atlasmap.itests.core.issue.TargetClass",
+      "dataSourceType" : "TARGET"
+    } ],
+    "mappings" : {
+      "mapping" : [ {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "MAP",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "docId" : "io.atlasmap.itests.core.issue.SourceClass",
+          "path" : "/sourceString",
+          "fieldType" : "STRING",
+          "name" : "sourceString"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "actions" : [ {
+            "Prepend" : {
+              "string" : "prepend-"
+            }
+          }, {
+            "Append" : {
+              "string" : "-append"
+            }
+          } ],
+          "docId" : "io.atlasmap.itests.core.issue.TargetClass",
+          "path" : "/targetString",
+          "fieldType" : "STRING",
+          "name" : "targetString"
+        } ],
+        "id" : "mapping.990772"
+      } ]
+    },
+    "name" : "core-unit-test"
+  }
+}

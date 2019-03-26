@@ -1,0 +1,148 @@
+{
+  "AtlasMapping" : {
+    "jsonType" : "io.atlasmap.v2.AtlasMapping",
+    "dataSource" : [ {
+      "jsonType" : "io.atlasmap.v2.DataSource",
+      "id" : "SourceClass",
+      "uri" : "atlas:java?className=io.atlasmap.itests.core.issue.SourceClass",
+      "dataSourceType" : "SOURCE"
+    }, {
+      "jsonType" : "io.atlasmap.v2.DataSource",
+      "id" : "SourceJson",
+      "uri" : "atlas:json:SourceJson",
+      "dataSourceType" : "SOURCE"
+    }, {
+      "jsonType" : "io.atlasmap.v2.DataSource",
+      "id" : "SourceXml",
+      "uri" : "atlas:xml:SourceXml",
+      "dataSourceType" : "SOURCE"
+    }, {
+      "jsonType" : "io.atlasmap.v2.DataSource",
+      "id" : "TargetClass",
+      "uri" : "atlas:java?className=io.atlasmap.itests.core.issue.TargetClass",
+      "dataSourceType" : "TARGET"
+    }, {
+      "jsonType" : "io.atlasmap.v2.DataSource",
+      "id" : "TargetJson",
+      "uri" : "atlas:json:TargetJson",
+      "dataSourceType" : "TARGET"
+    }, {
+      "jsonType" : "io.atlasmap.v2.DataSource",
+      "id" : "TargetXml",
+      "uri" : "atlas:xml:TargetXml",
+      "dataSourceType" : "TARGET"
+    } ],
+    "mappings" : {
+      "mapping" : [ {
+        "jsonType" : "io.atlasmap.v2.Collection",
+        "mappingType" : "COLLECTION",
+        "mappings" : {
+          "mapping" : [ {
+            "jsonType" : "io.atlasmap.v2.Mapping",
+            "mappingType" : "MAP",
+            "inputField" : [ {
+              "jsonType" : "io.atlasmap.java.v2.JavaField",
+              "docId" : "SourceClass",
+              "path" : "/sourceList<>/name",
+              "fieldType" : "STRING",
+              "name" : "sourceList"
+            } ],
+            "outputField" : [ {
+              "jsonType" : "io.atlasmap.json.v2.JsonField",
+              "docId" : "TargetJson",
+              "path" : "/javaList<>/name",
+              "fieldType" : "STRING",
+              "name" : "javaList"
+            } ]
+          }, {
+            "jsonType" : "io.atlasmap.v2.Mapping",
+            "mappingType" : "MAP",
+            "inputField" : [ {
+              "jsonType" : "io.atlasmap.java.v2.JavaField",
+              "docId" : "SourceClass",
+              "path" : "/sourceList<>/name",
+              "fieldType" : "STRING",
+              "name" : "sourceList"
+            } ],
+            "outputField" : [ {
+              "jsonType" : "io.atlasmap.xml.v2.XmlField",
+              "docId" : "TargetXml",
+              "path" : "/root/javaList<>/name",
+              "fieldType" : "STRING",
+              "name" : "javaList"
+            } ]
+          }, {
+            "jsonType" : "io.atlasmap.v2.Mapping",
+            "mappingType" : "MAP",
+            "inputField" : [ {
+              "jsonType" : "io.atlasmap.json.v2.JsonField",
+              "docId" : "SourceJson",
+              "path" : "/sourceList<>",
+              "fieldType" : "STRING",
+              "name" : "sourceList"
+            } ],
+            "outputField" : [ {
+              "jsonType" : "io.atlasmap.java.v2.JavaField",
+              "docId" : "TargetClass",
+              "path" : "/targetList<>/name",
+              "fieldType" : "STRING",
+              "name" : "targetList"
+            } ]
+          }, {
+            "jsonType" : "io.atlasmap.v2.Mapping",
+            "mappingType" : "MAP",
+            "inputField" : [ {
+              "jsonType" : "io.atlasmap.json.v2.JsonField",
+              "docId" : "SourceJson",
+              "path" : "/sourceList<>",
+              "fieldType" : "STRING",
+              "name" : "sourceList"
+            } ],
+            "outputField" : [ {
+              "jsonType" : "io.atlasmap.xml.v2.XmlField",
+              "docId" : "TargetXml",
+              "path" : "/root/jsonList<>/name",
+              "fieldType" : "STRING",
+              "name" : "jsonList"
+            } ]
+          }, {
+            "jsonType" : "io.atlasmap.v2.Mapping",
+            "mappingType" : "MAP",
+            "inputField" : [ {
+              "jsonType" : "io.atlasmap.xml.v2.XmlField",
+              "docId" : "SourceXml",
+              "path" : "/root/sourceList<>/name",
+              "fieldType" : "STRING",
+              "name" : "sourceList"
+            } ],
+            "outputField" : [ {
+              "jsonType" : "io.atlasmap.java.v2.JavaField",
+              "docId" : "TargetClass",
+              "path" : "/targetName",
+              "fieldType" : "STRING",
+              "name" : "targetName"
+            } ]
+          }, {
+            "jsonType" : "io.atlasmap.v2.Mapping",
+            "mappingType" : "MAP",
+            "inputField" : [ {
+              "jsonType" : "io.atlasmap.xml.v2.XmlField",
+              "docId" : "SourceXml",
+              "path" : "/root/sourceList<>/name",
+              "fieldType" : "STRING",
+              "name" : "sourceList"
+            } ],
+            "outputField" : [ {
+              "jsonType" : "io.atlasmap.json.v2.JsonField",
+              "docId" : "TargetJson",
+              "path" : "/xmlList<>",
+              "fieldType" : "STRING",
+              "name" : "xmlList"
+            } ]
+          } ]
+        }
+      } ]
+    },
+    "name" : "core-unit-test"
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "AtlasMapping" : {
+    "jsonType" : "io.atlasmap.v2.AtlasMapping",
+    "dataSource" : [ {
+      "jsonType" : "io.atlasmap.v2.DataSource",
+      "id" : "io.atlasmap.java.test.TargetTestClass",
+      "uri" : "atlas:java?className=io.atlasmap.java.test.TargetTestClass",
+      "dataSourceType" : "SOURCE"
+    }, {
+      "jsonType" : "io.atlasmap.v2.DataSource",
+      "id" : "io.atlasmap.java.test.TargetTestClass",
+      "uri" : "atlas:java?className=io.atlasmap.java.test.TargetTestClass",
+      "dataSourceType" : "TARGET"
+    } ],
+    "mappings" : {
+      "mapping" : [ {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "LOOKUP",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaEnumField",
+          "docId" : "io.atlasmap.java.test.TargetTestClass",
+          "path" : "/statesLong",
+          "fieldType" : "COMPLEX",
+          "name" : "statesLong"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaEnumField",
+          "docId" : "io.atlasmap.java.test.TargetTestClass",
+          "path" : "/statesShort",
+          "fieldType" : "COMPLEX",
+          "name" : "statesShort"
+        } ],
+        "lookupTableName" : "1501135445385-589143"
+      } ]
+    },
+    "lookupTables" : {
+      "lookupTable" : [ {
+        "lookupEntry" : [ {
+          "sourceValue" : "Arizona",
+          "sourceType" : "STRING",
+          "targetValue" : "AZ",
+          "targetType" : "STRING"
+        }, {
+          "sourceValue" : "Colorado",
+          "sourceType" : "STRING",
+          "targetValue" : "CO",
+          "targetType" : "STRING"
+        } ],
+        "name" : "1501135445385-589143"
+      } ]
+    },
+    "properties" : {
+      "property" : [ ]
+    },
+    "name" : "UI.456847"
+  }
+}

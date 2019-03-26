@@ -1,0 +1,42 @@
+{
+  "AtlasMapping" : {
+    "jsonType" : "io.atlasmap.v2.AtlasMapping",
+    "dataSource" : [ {
+      "jsonType" : "io.atlasmap.v2.DataSource",
+      "uri" : "atlas:java?className=io.atlasmap.java.test.SourceContact",
+      "dataSourceType" : "SOURCE"
+    }, {
+      "jsonType" : "io.atlasmap.v2.DataSource",
+      "uri" : "atlas:xml",
+      "dataSourceType" : "TARGET"
+    } ],
+    "mappings" : {
+      "mapping" : [ {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "COMBINE",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "index" : 0,
+          "path" : "/firstName"
+        }, {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "index" : 4,
+          "path" : "/lastName"
+        }, {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "index" : 7,
+          "path" : "/phoneNumber"
+        }, {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "index" : 99,
+          "path" : "/zipCode"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "path" : "/Contact/@firstName"
+        } ]
+      } ]
+    },
+    "name" : "JavaXmlCombineMapping"
+  }
+}
