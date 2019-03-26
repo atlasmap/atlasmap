@@ -66,64 +66,6 @@
         </executions>
       </plugin>
       <plugin>
-        <groupId>com.github.eirslett</groupId>
-        <artifactId>frontend-maven-plugin</artifactId>
-          <executions>
-            <execution>
-              <id>install yarn</id>
-              <phase>compile</phase>
-              <goals>
-                <goal>install-node-and-yarn</goal>
-              </goals>
-              <configuration>
-                <nodeVersion>${node.version}</nodeVersion>
-                <npmVersion>${npm.version}</npmVersion>
-                <yarnVersion>${yarn.version}</yarnVersion>
-              </configuration>
-            </execution>
-            <execution>
-              <id>yarn install</id>
-              <phase>compile</phase>
-              <goals>
-                <goal>yarn</goal>
-              </goals>
-              <configuration>
-                <arguments>install -s --no-progress</arguments>
-              </configuration>
-            </execution>
-            <execution>
-              <id>yarn build</id>
-              <phase>compile</phase>
-              <goals>
-                <goal>yarn</goal>
-              </goals>
-              <configuration>
-                <arguments>build:app</arguments>
-              </configuration>
-            </execution>
-            <execution>
-              <id>yarn lint</id>
-              <phase>test</phase>
-              <goals>
-                <goal>yarn</goal>
-              </goals>
-              <configuration>
-                <arguments>lint</arguments>
-              </configuration>
-            </execution>
-            <execution>
-              <id>yarn test</id>
-              <phase>test</phase>
-              <goals>
-                <goal>yarn</goal>
-              </goals>
-              <configuration>
-                <arguments>test</arguments>
-              </configuration>
-            </execution>
-          </executions>
-      </plugin>
-      <plugin>
         <groupId>io.atlasmap</groupId>
         <artifactId>atlasmap-maven-plugin</artifactId>
         <version>${project.version}</version>
@@ -167,6 +109,171 @@
   </build>
 
   <profiles>
+    <profile>
+      <id>noproxy</id>
+      <activation>
+          <property>
+              <name>!productization</name>
+          </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>com.github.eirslett</groupId>
+            <artifactId>frontend-maven-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>install yarn</id>
+                <phase>compile</phase>
+                <goals>
+                  <goal>install-node-and-yarn</goal>
+                </goals>
+                <configuration>
+                  <nodeVersion>${node.version}</nodeVersion>
+                  <npmVersion>${npm.version}</npmVersion>
+                  <yarnVersion>${yarn.version}</yarnVersion>
+                </configuration>
+              </execution>
+              <execution>
+                <id>yarn install</id>
+                <phase>compile</phase>
+                <goals>
+                  <goal>yarn</goal>
+                </goals>
+                <configuration>
+                  <arguments>install -s --no-progress</arguments>
+                </configuration>
+              </execution>
+              <execution>
+                <id>yarn build</id>
+                <phase>compile</phase>
+                <goals>
+                  <goal>yarn</goal>
+                </goals>
+                <configuration>
+                  <arguments>build:app</arguments>
+                </configuration>
+              </execution>
+              <execution>
+                <id>yarn lint</id>
+                <phase>test</phase>
+                <goals>
+                  <goal>yarn</goal>
+                </goals>
+                <configuration>
+                  <arguments>lint</arguments>
+                </configuration>
+              </execution>
+              <execution>
+                <id>yarn test</id>
+                <phase>test</phase>
+                <goals>
+                  <goal>yarn</goal>
+                </goals>
+                <configuration>
+                  <arguments>test</arguments>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>productization</id>
+      <activation>
+        <property>
+          <name>productization</name>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>com.github.eirslett</groupId>
+            <artifactId>frontend-maven-plugin</artifactId>
+            <executions>
+              <!-- Install Node and Yarn -->
+              <execution>
+                <id>install node and yarn</id>
+                <goals>
+                  <goal>install-node-and-yarn</goal>
+                </goals>
+                <configuration>
+                  <nodeVersion>v6.11.2</nodeVersion>
+                  <yarnVersion>v1.3.2</yarnVersion>
+                </configuration>
+              </execution>
+              <execution>
+                <id>set https proxy</id>
+                <goals>
+                  <goal>yarn</goal>
+                </goals>
+                <configuration>
+                  <arguments>config set https-proxy http://${buildContentId}+tracking:${accessToken}@${proxyServer}:${proxyPort}</arguments>
+                </configuration>
+              </execution>
+              <execution>
+                <id>set http proxy</id>
+                <goals>
+                  <goal>yarn</goal>
+                </goals>
+                <configuration>
+                  <arguments>config set proxy http://${buildContentId}+tracking:${accessToken}@${proxyServer}:${proxyPort}</arguments>
+                </configuration>
+              </execution>
+              <execution>
+                <id>set maxconn</id>
+                <goals>
+                  <goal>yarn</goal>
+                </goals>
+                <configuration>
+                  <arguments>config set maxsockets 2</arguments>
+                </configuration>
+              </execution>
+              <execution>
+                <id>yarn set registry</id>
+                <goals>
+                  <goal>yarn</goal>
+                </goals>
+                <configuration>
+                  <arguments>config set registry ${npmRegistryURL2}</arguments>
+                </configuration>
+              </execution>
+              <execution>
+                <id>yarn set no-strict ssl</id>
+                <goals>
+                   <goal>yarn</goal>
+                </goals>
+                <configuration>
+                  <arguments>config set strict-ssl false</arguments>
+                </configuration>
+              </execution>
+              <!-- Install npm/yarn dependencies -->
+              <execution>
+                <id>yarn install</id>
+                <goals>
+                  <goal>yarn</goal>
+                </goals>
+                <configuration>
+                  <arguments>install</arguments>
+                </configuration>
+              </execution>
+              <!-- Build the app -->
+              <execution>
+                <id>ng build</id>
+                <goals>
+                  <goal>yarn</goal>
+                </goals>
+                <phase>generate-resources</phase>
+                <configuration>
+                  <arguments>build</arguments>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
     <profile>
       <id>release</id>
       <build>
