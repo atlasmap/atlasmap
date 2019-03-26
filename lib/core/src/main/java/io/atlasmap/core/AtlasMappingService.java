@@ -30,7 +30,6 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
-import javax.xml.transform.stream.StreamSource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,20 +49,6 @@ public class AtlasMappingService implements Serializable {
     private static final String CONFIG_V2_PACKAGE = "io.atlasmap.v2";
     private transient JAXBContext ctx = null;
     private transient ObjectMapper jsonMapper = null;
-
-    public enum AtlasMappingFormat {
-        XML("xml"), JSON("json");
-
-        private String value;
-
-        AtlasMappingFormat(String value) {
-            this.value = value;
-        }
-
-        public String value() {
-            return value;
-        }
-    }
 
     public AtlasMappingService() {
         try {
@@ -85,7 +70,7 @@ public class AtlasMappingService implements Serializable {
         }
     }
 
-    protected void initialize(List<String> packages) throws JAXBException {
+    private void initialize(List<String> packages) throws JAXBException {
         ClassLoader classLoader = AtlasMapping.class.getClassLoader();
         if (getJAXBContext() == null) {
             setJAXBContext(JAXBContext.newInstance(stringListToColonSeparated(packages), classLoader));
@@ -93,28 +78,12 @@ public class AtlasMappingService implements Serializable {
                 LOG.debug("Initialized JAXBContext: " + stringListToColonSeparated(packages));
             }
         }
-
         jsonMapper = Json.withClassLoader(classLoader);
     }
 
     public AtlasMapping loadMapping(File file) throws AtlasValidationException {
-        return loadMapping(file, AtlasMappingFormat.XML);
-    }
-
-    public AtlasMapping loadMapping(File file, AtlasMappingFormat format) throws AtlasValidationException {
         try {
-            AtlasMapping atlasMapping;
-            switch (format) {
-            case XML:
-                StreamSource streamSource = new StreamSource(file);
-                atlasMapping = createUnmarshaller().unmarshal(streamSource, AtlasMapping.class).getValue();
-                break;
-            case JSON:
-                atlasMapping = jsonMapper.readValue(file, AtlasMapping.class);
-                break;
-            default:
-                throw new AtlasValidationException("Unsupported mapping format: " + format.value);
-            }
+            AtlasMapping atlasMapping = jsonMapper.readValue(file, AtlasMapping.class);
             validate(atlasMapping);
             return atlasMapping;
         } catch (Exception e) {
@@ -123,23 +92,8 @@ public class AtlasMappingService implements Serializable {
     }
 
     public AtlasMapping loadMapping(Reader reader) throws AtlasValidationException {
-        return loadMapping(reader, AtlasMappingFormat.XML);
-    }
-
-    public AtlasMapping loadMapping(Reader reader, AtlasMappingFormat format) throws AtlasValidationException {
         try {
-            AtlasMapping atlasMapping;
-            switch (format) {
-            case XML:
-                StreamSource streamSource = new StreamSource(reader);
-                atlasMapping = createUnmarshaller().unmarshal(streamSource, AtlasMapping.class).getValue();
-                break;
-            case JSON:
-                atlasMapping = jsonMapper.readValue(reader, AtlasMapping.class);
-                break;
-            default:
-                throw new AtlasValidationException("Unsupported mapping format: " + format.value);
-            }
+            AtlasMapping atlasMapping = jsonMapper.readValue(reader, AtlasMapping.class);
             validate(atlasMapping);
             return atlasMapping;
         } catch (Exception e) {
@@ -147,74 +101,30 @@ public class AtlasMappingService implements Serializable {
         }
     }
 
-    public AtlasMapping loadMapping(String fileName, AtlasMappingFormat format) throws AtlasValidationException {
-        return loadMapping(new File(fileName), format);
-    }
-
     public AtlasMapping loadMapping(String fileName) throws AtlasValidationException {
-        return loadMapping(fileName, AtlasMappingFormat.XML);
+        return loadMapping(new File(fileName));
     }
 
     public AtlasMapping loadMapping(InputStream inputStream) throws AtlasValidationException {
-        return loadMapping(inputStream, AtlasMappingFormat.XML);
-    }
-
-    public AtlasMapping loadMapping(InputStream inputStream, AtlasMappingFormat format)
-            throws AtlasValidationException {
-        return loadMapping(new InputStreamReader(inputStream), format);
+        return loadMapping(new InputStreamReader(inputStream));
     }
 
     public AtlasMapping loadMapping(URI uri) throws AtlasValidationException {
-        return loadMapping(uri, AtlasMappingFormat.XML);
-    }
-
-    public AtlasMapping loadMapping(URI uri, AtlasMappingFormat format) throws AtlasValidationException {
-        return loadMapping(new File(uri), format);
+        return loadMapping(new File(uri));
     }
 
     public AtlasMapping loadMapping(URL url) throws AtlasValidationException {
-        return loadMapping(url, AtlasMappingFormat.XML);
-    }
-
-    public AtlasMapping loadMapping(URL url, AtlasMappingFormat format) throws AtlasValidationException {
         try {
-            return loadMapping(new File(url.toURI()), format);
+            return loadMapping(new File(url.toURI()));
         } catch (URISyntaxException e) {
             throw new AtlasValidationException(e.getMessage(), e);
         }
     }
 
     public void saveMappingAsFile(AtlasMapping atlasMapping, File file) throws AtlasException {
-        saveMappingAsFile(atlasMapping, file, AtlasMappingFormat.XML);
-    }
-
-    public void saveMappingAsFile(AtlasMapping atlasMapping, File file, AtlasMappingFormat format)
-            throws AtlasException {
-        switch (format) {
-        case JSON:
-            saveMappingAsJsonFile(atlasMapping, file);
-            break;
-        case XML:
-            saveMappingAsXmlFile(atlasMapping, file);
-            break;
-        default:
-            saveMappingAsXmlFile(atlasMapping, file);
-            break;
-        }
-    }
-
-    protected void saveMappingAsJsonFile(AtlasMapping atlasMapping, File file) throws AtlasException {
         try {
             jsonMapper.writeValue(file, atlasMapping);
         } catch (Exception e) {
-            throw new AtlasValidationException(e.getMessage(), e);
-        }
-    }
-
-    protected void saveMappingAsXmlFile(AtlasMapping atlasMapping, File file) throws AtlasException {
-        try {
-            createMarshaller().marshal(atlasMapping, file);
-        } catch (JAXBException e) {
             throw new AtlasValidationException(e.getMessage(), e);
         }
     }

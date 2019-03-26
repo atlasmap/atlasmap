@@ -32,7 +32,7 @@ public class JsonJsonCollectionConversionTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessCollectionListSimple() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(
-                new File("src/test/resources/jsonToJson/atlasmapping-collection-list-simple.xml").toURI());
+                new File("src/test/resources/jsonToJson/atlasmapping-collection-list-simple.json").toURI());
 
         // contact<>.firstName -> contact<>.name
 
@@ -63,7 +63,7 @@ public class JsonJsonCollectionConversionTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessCollectionArraySimple() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(
-                new File("src/test/resources/jsonToJson/atlasmapping-collection-array-simple.xml").toURI());
+                new File("src/test/resources/jsonToJson/atlasmapping-collection-array-simple.json").toURI());
 
         // contact[].firstName -> contact[].name
 
@@ -94,7 +94,7 @@ public class JsonJsonCollectionConversionTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessCollectionToNonCollection() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(
-                new File("src/test/resources/jsonToJson/atlasmapping-collection-to-noncollection.xml").toURI());
+                new File("src/test/resources/jsonToJson/atlasmapping-collection-to-noncollection.json").toURI());
 
         // contact<>.firstName -> contact.name
 
@@ -120,7 +120,7 @@ public class JsonJsonCollectionConversionTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessCollectionFromNonCollection() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(
-                new File("src/test/resources/jsonToJson/atlasmapping-collection-from-noncollection.xml").toURI());
+                new File("src/test/resources/jsonToJson/atlasmapping-collection-from-noncollection.json").toURI());
 
         // contact.firstName -> contact<>.name
 

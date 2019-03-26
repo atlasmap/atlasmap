@@ -33,7 +33,7 @@ public class JsonJavaComplexTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessJsonJavaComplexOrderAutodetectUnrooted() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(
-                new File("src/test/resources/jsonToJava/atlasmapping-complex-order-autodetect-unrooted.xml").toURI());
+                new File("src/test/resources/jsonToJava/atlasmapping-complex-order-autodetect-unrooted.json").toURI());
 
         AtlasSession session = context.createSession();
         String source = AtlasTestUtil
@@ -50,7 +50,7 @@ public class JsonJavaComplexTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessJsonJavaComplexOrderAutodetectRooted() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(
-                new File("src/test/resources/jsonToJava/atlasmapping-complex-order-autodetect-rooted.xml").toURI());
+                new File("src/test/resources/jsonToJava/atlasmapping-complex-order-autodetect-rooted.json").toURI());
 
         AtlasSession session = context.createSession();
         String source = AtlasTestUtil

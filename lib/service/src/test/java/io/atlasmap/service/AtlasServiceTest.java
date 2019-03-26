@@ -87,11 +87,6 @@ public class AtlasServiceTest {
         assertEquals(byte[].class, resp.getEntity().getClass());
     }
 
-    @Test(expected = WebApplicationException.class)
-    public void testGetMappingXmlNoLongerSupported() {
-        service.getMappingRequest("XML", "junit3");
-    }
-
     @Test
     public void testFilenameMatch() {
         String fileName = "atlasmapping-foo.json";

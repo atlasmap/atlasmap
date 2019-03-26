@@ -37,7 +37,7 @@ public class JavaJavaCombineTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessCombineSimple() throws Exception {
         AtlasSession session = processCombineMapping(
-                "src/test/resources/javaToJava/atlasmapping-combine-simple.xml",
+                "src/test/resources/javaToJava/atlasmapping-combine-simple.json",
                 AtlasTestUtil.generateContact(SourceContact.class));
         TargetContact targetContact = (TargetContact) session.getDefaultTargetDocument();
         assertEquals("Ozzie    Smith   5551212                                                                                            81111", targetContact.getFirstName());
@@ -50,7 +50,7 @@ public class JavaJavaCombineTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessCombineSkip() throws Exception {
         AtlasSession session = processCombineMapping(
-                "src/test/resources/javaToJava/atlasmapping-combine-skip.xml",
+                "src/test/resources/javaToJava/atlasmapping-combine-skip.json",
                 AtlasTestUtil.generateContact(SourceContact.class));
         TargetContact targetContact = (TargetContact) session.getDefaultTargetDocument();
         assertEquals("Ozzie Smith 5551212 81111", targetContact.getFirstName());
@@ -63,7 +63,7 @@ public class JavaJavaCombineTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessCombineOutOfOrder() throws Exception {
         AtlasSession session = processCombineMapping(
-                "src/test/resources/javaToJava/atlasmapping-combine-outoforder.xml",
+                "src/test/resources/javaToJava/atlasmapping-combine-outoforder.json",
                 AtlasTestUtil.generateContact(SourceContact.class));
         TargetContact targetContact = (TargetContact) session.getDefaultTargetDocument();
         assertEquals("Ozzie Smith 5551212 81111", targetContact.getFirstName());
@@ -78,7 +78,7 @@ public class JavaJavaCombineTest extends AtlasMappingBaseTest {
         BaseContact source = AtlasTestUtil.generateContact(SourceContact.class);
         source.setLastName(null);
         AtlasSession session = processCombineMapping(
-                "src/test/resources/javaToJava/atlasmapping-combine-inputnull.xml", source);
+                "src/test/resources/javaToJava/atlasmapping-combine-inputnull.json", source);
         TargetContact targetContact = (TargetContact) session.getDefaultTargetDocument();
         assertNotNull(targetContact);
         assertEquals("Ozzie  5551212 81111", targetContact.getFirstName());

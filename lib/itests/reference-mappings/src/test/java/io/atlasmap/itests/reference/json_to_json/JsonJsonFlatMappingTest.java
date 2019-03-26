@@ -105,7 +105,7 @@ public class JsonJsonFlatMappingTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessJsonJsonFlatPrimitiveUnrooted() throws Exception {
         AtlasContext context = atlasContextFactory
-                .createContext(new File("src/test/resources/jsonToJson/atlasmapping-flatprimitive-unrooted.xml"));
+                .createContext(new File("src/test/resources/jsonToJson/atlasmapping-flatprimitive-unrooted.json"));
 
         AtlasSession session = context.createSession();
         String source = AtlasTestUtil
@@ -124,7 +124,7 @@ public class JsonJsonFlatMappingTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessJsonJsonFlatPrimitiveRooted() throws Exception {
         AtlasContext context = atlasContextFactory
-                .createContext(new File("src/test/resources/jsonToJson/atlasmapping-flatprimitive-rooted.xml"));
+                .createContext(new File("src/test/resources/jsonToJson/atlasmapping-flatprimitive-rooted.json"));
 
         AtlasSession session = context.createSession();
         String source = AtlasTestUtil
@@ -143,7 +143,7 @@ public class JsonJsonFlatMappingTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessJsonJsonBoxedFlatMappingPrimitiveUnrooted() throws Exception {
         AtlasContext context = atlasContextFactory
-                .createContext(new File("src/test/resources/jsonToJson/atlasmapping-boxedflatprimitive-unrooted.xml"));
+                .createContext(new File("src/test/resources/jsonToJson/atlasmapping-boxedflatprimitive-unrooted.json"));
 
         AtlasSession session = context.createSession();
         String source = AtlasTestUtil
@@ -162,7 +162,7 @@ public class JsonJsonFlatMappingTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessJsonJsonBoxedFlatMappingPrimitiveRooted() throws Exception {
         AtlasContext context = atlasContextFactory
-                .createContext(new File("src/test/resources/jsonToJson/atlasmapping-boxedflatprimitive-rooted.xml"));
+                .createContext(new File("src/test/resources/jsonToJson/atlasmapping-boxedflatprimitive-rooted.json"));
 
         AtlasSession session = context.createSession();
         String source = AtlasTestUtil

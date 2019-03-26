@@ -20,7 +20,7 @@ import org.springframework.test.context.ContextConfiguration;
 @RunWith(CamelSpringRunner.class)
 @BootstrapWith(CamelTestContextBootstrapper.class)
 @ContextConfiguration
-public class AtlasMapExtractMappingsXMLTest {
+public class AtlasMapExtractMappingsTest {
 	
     private static final String EXPECTED_BODY = "{\"order\":{\"orderId\":\"A123\"}}";
 

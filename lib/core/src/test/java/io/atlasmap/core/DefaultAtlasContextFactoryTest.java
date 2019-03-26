@@ -28,7 +28,6 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -36,7 +35,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.atlasmap.api.AtlasException;
-import io.atlasmap.core.AtlasMappingService.AtlasMappingFormat;
 import io.atlasmap.spi.AtlasCombineStrategy;
 import io.atlasmap.spi.AtlasConversionService;
 import io.atlasmap.spi.AtlasFieldActionService;
@@ -171,7 +169,7 @@ public class DefaultAtlasContextFactoryTest {
 
     @Test
     public void testCreateContextWithFile() throws AtlasException {
-        File file = Paths.get("src" + File.separator + "test" + File.separator + "resources" + File.separator + "atlasmapping.xml").toFile();
+        File file = Paths.get("src" + File.separator + "test" + File.separator + "resources" + File.separator + "atlasmapping.json").toFile();
         factory = DefaultAtlasContextFactory.getInstance();
         factory.init();
         assertNotNull(factory.createContext(file));
@@ -190,12 +188,12 @@ public class DefaultAtlasContextFactoryTest {
         factory = DefaultAtlasContextFactory.getInstance();
         factory.init();
         File file = null;
-        assertNotNull(factory.createContext(file, AtlasMappingFormat.XML));
+        assertNotNull(factory.createContext(file));
     }
 
     @Test
     public void testCreateContextWithURI() throws AtlasException {
-        File file = Paths.get("src" + File.separator + "test" + File.separator + "resources" + File.separator + "atlasmapping.xml").toFile();
+        File file = Paths.get("src" + File.separator + "test" + File.separator + "resources" + File.separator + "atlasmapping.json").toFile();
         factory = DefaultAtlasContextFactory.getInstance();
         factory.init();
         assertNotNull(factory.createContext(file.toURI()));
@@ -206,7 +204,7 @@ public class DefaultAtlasContextFactoryTest {
         factory = DefaultAtlasContextFactory.getInstance();
         factory.init();
         URI uri = null;
-        assertNotNull(factory.createContext(uri, AtlasMappingFormat.XML));
+        assertNotNull(factory.createContext(uri));
     }
 
     @Test

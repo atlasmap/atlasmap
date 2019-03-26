@@ -37,7 +37,6 @@ import org.junit.Test;
 import io.atlasmap.api.AtlasConstants;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.api.AtlasSession;
-import io.atlasmap.core.AtlasMappingService.AtlasMappingFormat;
 import io.atlasmap.spi.AtlasInternalSession.Head;
 import io.atlasmap.spi.AtlasModule;
 import io.atlasmap.spi.StringDelimiter;
@@ -201,7 +200,7 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
     @Test
     public void testDefaultAtlasContext() throws AtlasException {
         File file = Paths.get(
-                "src" + File.separator + "test" + File.separator + "resources" + File.separator + "atlasmapping.xml")
+                "src" + File.separator + "test" + File.separator + "resources" + File.separator + "atlasmapping.json")
                 .toFile();
         DefaultAtlasContextFactory factory = DefaultAtlasContextFactory.getInstance();
         factory.init();
@@ -227,7 +226,7 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
     @Test(expected = AtlasException.class)
     public void testProcessValidationAtlasException() throws AtlasException {
         File file = Paths.get(
-                "src" + File.separator + "test" + File.separator + "resources" + File.separator + "atlasmapping.xml")
+                "src" + File.separator + "test" + File.separator + "resources" + File.separator + "atlasmapping.json")
                 .toFile();
         DefaultAtlasContextFactory factory = DefaultAtlasContextFactory.getInstance();
         factory.init();
@@ -243,7 +242,7 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
     @Test(expected = AtlasException.class)
     public void testProcessValidationAtlasExceptionOtherContext() throws AtlasException {
         File file = Paths.get(
-                "src" + File.separator + "test" + File.separator + "resources" + File.separator + "atlasmapping.xml")
+                "src" + File.separator + "test" + File.separator + "resources" + File.separator + "atlasmapping.json")
                 .toFile();
         DefaultAtlasContextFactory factory = DefaultAtlasContextFactory.getInstance();
         factory.init();
@@ -259,7 +258,7 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
         assertNotNull(context.createSession(mapping));
 
         File file = Paths.get(
-                "src" + File.separator + "test" + File.separator + "resources" + File.separator + "atlasmapping.xml")
+                "src" + File.separator + "test" + File.separator + "resources" + File.separator + "atlasmapping.json")
                 .toFile();
         DefaultAtlasContext ctx = new DefaultAtlasContext(file.toURI());
         assertNotNull(ctx.createSession());
@@ -270,8 +269,7 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
         File file = Paths.get(
                 "src" + File.separator + "test" + File.separator + "resources" + File.separator + "atlasmapping.json")
                 .toFile();
-        DefaultAtlasContext ctx = new DefaultAtlasContext(DefaultAtlasContextFactory.getInstance(), file.toURI(),
-                AtlasMappingFormat.JSON);
+        DefaultAtlasContext ctx = new DefaultAtlasContext(DefaultAtlasContextFactory.getInstance(), file.toURI());
         ctx.init();
 
         DataSource dataSource = new DataSource();

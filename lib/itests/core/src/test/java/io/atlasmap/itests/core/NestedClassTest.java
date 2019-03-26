@@ -27,7 +27,6 @@ import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasSession;
 import io.atlasmap.core.AtlasMappingService;
 import io.atlasmap.core.DefaultAtlasContextFactory;
-import io.atlasmap.core.AtlasMappingService.AtlasMappingFormat;
 import io.atlasmap.v2.AtlasMapping;
 
 public class NestedClassTest {
@@ -41,8 +40,8 @@ public class NestedClassTest {
 
     @Test
     public void test() throws Exception {
-        URL url = Thread.currentThread().getContextClassLoader().getResource("mappings/atlasmapping-nested-class.xml");
-        AtlasMapping mapping = mappingService.loadMapping(url, AtlasMappingFormat.XML);
+        URL url = Thread.currentThread().getContextClassLoader().getResource("mappings/atlasmapping-nested-class.json");
+        AtlasMapping mapping = mappingService.loadMapping(url);
         AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(mapping);
         AtlasSession session = context.createSession();
         SourceClass sc = new SourceClass();

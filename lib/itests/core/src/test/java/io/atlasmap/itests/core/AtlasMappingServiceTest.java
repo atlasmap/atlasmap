@@ -25,7 +25,6 @@ import org.junit.Test;
 
 import io.atlasmap.core.AtlasMappingService;
 import io.atlasmap.core.DefaultAtlasContextFactory;
-import io.atlasmap.core.AtlasMappingService.AtlasMappingFormat;
 import io.atlasmap.v2.AtlasMapping;
 import io.atlasmap.v2.BaseMapping;
 import io.atlasmap.v2.Field;
@@ -43,52 +42,51 @@ public class AtlasMappingServiceTest {
 
     @Test
     public void testMappingXML() throws Exception {
-        URL url = Thread.currentThread().getContextClassLoader().getResource("mappings/atlasmapping.xml");
+        URL url = Thread.currentThread().getContextClassLoader().getResource("mappings/atlasmapping.json");
         assertAtlasMapping(mappingService.loadMapping(url));
         assertAtlasMapping(mappingService.loadMapping(url.toURI()));
         assertAtlasMapping(mappingService.loadMapping(new File(url.toURI())));
         assertAtlasMapping(mappingService.loadMapping(url.openStream()));
         assertAtlasMapping(mappingService.loadMapping(new InputStreamReader(url.openStream())));
         File outputXml = new File("target/output-atlasmapping.xml");
-        mappingService.saveMappingAsFile(mappingService.loadMapping(url), outputXml, AtlasMappingFormat.XML);
+        mappingService.saveMappingAsFile(mappingService.loadMapping(url), outputXml);
         assertAtlasMapping(mappingService.loadMapping(outputXml));
     }
 
     @Test
     public void testMappingXMLViaContext() throws Exception {
-        URL url = Thread.currentThread().getContextClassLoader().getResource("mappings/atlasmapping.xml");
+        URL url = Thread.currentThread().getContextClassLoader().getResource("mappings/atlasmapping.json");
         assertAtlasMapping(
                 DefaultAtlasContextFactory.getInstance().createContext(url.toURI()).createSession().getMapping());
         assertAtlasMapping(DefaultAtlasContextFactory.getInstance().createContext(new File(url.toURI())).createSession()
                 .getMapping());
-        assertAtlasMapping(DefaultAtlasContextFactory.getInstance().createContext(url.toURI(), AtlasMappingFormat.XML)
+        assertAtlasMapping(DefaultAtlasContextFactory.getInstance().createContext(url.toURI())
                 .createSession().getMapping());
         assertAtlasMapping(DefaultAtlasContextFactory.getInstance()
-                .createContext(new File(url.toURI()), AtlasMappingFormat.XML).createSession().getMapping());
+                .createContext(new File(url.toURI())).createSession().getMapping());
     }
 
     @Test
     public void testMappingJSON() throws Exception {
         URL url = Thread.currentThread().getContextClassLoader().getResource("mappings/atlasmapping.json");
-        assertAtlasMapping(mappingService.loadMapping(url, AtlasMappingFormat.JSON));
-        assertAtlasMapping(mappingService.loadMapping(url.toURI(), AtlasMappingFormat.JSON));
-        assertAtlasMapping(mappingService.loadMapping(new File(url.toURI()), AtlasMappingFormat.JSON));
-        assertAtlasMapping(mappingService.loadMapping(url.openStream(), AtlasMappingFormat.JSON));
+        assertAtlasMapping(mappingService.loadMapping(url));
+        assertAtlasMapping(mappingService.loadMapping(url.toURI()));
+        assertAtlasMapping(mappingService.loadMapping(new File(url.toURI())));
+        assertAtlasMapping(mappingService.loadMapping(url.openStream()));
         assertAtlasMapping(
-                mappingService.loadMapping(new InputStreamReader(url.openStream()), AtlasMappingFormat.JSON));
+                mappingService.loadMapping(new InputStreamReader(url.openStream())));
         File outputJson = new File("target/output-atlasmapping.json");
-        mappingService.saveMappingAsFile(mappingService.loadMapping(url, AtlasMappingFormat.JSON), outputJson,
-                AtlasMappingFormat.JSON);
-        assertAtlasMapping(mappingService.loadMapping(outputJson, AtlasMappingFormat.JSON));
+        mappingService.saveMappingAsFile(mappingService.loadMapping(url), outputJson);
+        assertAtlasMapping(mappingService.loadMapping(outputJson));
     }
 
     @Test
     public void testMappingJSONViaContext() throws Exception {
         URL url = Thread.currentThread().getContextClassLoader().getResource("mappings/atlasmapping.json");
-        assertAtlasMapping(DefaultAtlasContextFactory.getInstance().createContext(url.toURI(), AtlasMappingFormat.JSON)
+        assertAtlasMapping(DefaultAtlasContextFactory.getInstance().createContext(url.toURI())
                 .createSession().getMapping());
         assertAtlasMapping(DefaultAtlasContextFactory.getInstance()
-                .createContext(new File(url.toURI()), AtlasMappingFormat.JSON).createSession().getMapping());
+                .createContext(new File(url.toURI())).createSession().getMapping());
     }
 
     private void assertAtlasMapping(AtlasMapping mapping) {

@@ -50,7 +50,7 @@ public class JavaJavaCollectionTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessCollectionList() throws Exception {
         AtlasContext context = atlasContextFactory
-                .createContext(new File("src/test/resources/javaToJava/atlasmapping-collection-list.xml").toURI());
+                .createContext(new File("src/test/resources/javaToJava/atlasmapping-collection-list.json").toURI());
         AtlasSession session = context.createSession();
         BaseOrder sourceOrder = AtlasTestUtil.generateOrderClass(SourceOrder.class, SourceAddress.class,
                 SourceContact.class);
@@ -74,7 +74,7 @@ public class JavaJavaCollectionTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessCollectionArray() throws Exception {
         AtlasContext context = atlasContextFactory
-                .createContext(new File("src/test/resources/javaToJava/atlasmapping-collection-array.xml").toURI());
+                .createContext(new File("src/test/resources/javaToJava/atlasmapping-collection-array.json").toURI());
         AtlasSession session = context.createSession();
         BaseOrder sourceOrder = AtlasTestUtil.generateOrderClass(SourceOrder.class, SourceAddress.class,
                 SourceContact.class);
@@ -98,7 +98,7 @@ public class JavaJavaCollectionTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessCollectionListSimple() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(
-                new File("src/test/resources/javaToJava/atlasmapping-collection-list-simple.xml").toURI());
+                new File("src/test/resources/javaToJava/atlasmapping-collection-list-simple.json").toURI());
         TargetTestClass input = new TargetTestClass();
         input.setContactList(new LinkedList<>());
         for (int i = 0; i < 5; i++) {
@@ -120,7 +120,7 @@ public class JavaJavaCollectionTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessCollectionArraySimple() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(
-                new File("src/test/resources/javaToJava/atlasmapping-collection-array-simple.xml").toURI());
+                new File("src/test/resources/javaToJava/atlasmapping-collection-array-simple.json").toURI());
         TargetTestClass input = new TargetTestClass();
         input.setContactList(new LinkedList<>());
         for (int i = 0; i < 5; i++) {
@@ -142,7 +142,7 @@ public class JavaJavaCollectionTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessCollectionToNonCollection() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(
-                new File("src/test/resources/javaToJava/atlasmapping-collection-to-noncollection.xml").toURI());
+                new File("src/test/resources/javaToJava/atlasmapping-collection-to-noncollection.json").toURI());
         TargetTestClass input = new TargetTestClass();
         input.setContactList(new LinkedList<>());
         for (int i = 0; i < 5; i++) {
@@ -163,7 +163,7 @@ public class JavaJavaCollectionTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessCollectionFromNonCollection() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(
-                new File("src/test/resources/javaToJava/atlasmapping-collection-from-noncollection.xml").toURI());
+                new File("src/test/resources/javaToJava/atlasmapping-collection-from-noncollection.json").toURI());
         TargetTestClass input = new TargetTestClass();
         input.setContact(new TargetContact());
         input.getContact().setFirstName("first name");
@@ -183,7 +183,7 @@ public class JavaJavaCollectionTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessCollectionPrimitive() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(
-                new File("src/test/resources/javaToJava/atlasmapping-collection-flatprimitive.xml").toURI());
+                new File("src/test/resources/javaToJava/atlasmapping-collection-flatprimitive.json").toURI());
         SourceFlatPrimitiveClass source = new SourceFlatPrimitiveClass();
         source.setBoxedStringField("fuga");
         source.setBoxedStringArrayField(new String[] {"foo", "bar", "hoge", "fuga"});
@@ -201,7 +201,7 @@ public class JavaJavaCollectionTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessCollectionImpls() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(
-                new File("src/test/resources/javaToJava/atlasmapping-collection-impls.xml").toURI());
+                new File("src/test/resources/javaToJava/atlasmapping-collection-impls.json").toURI());
         SourceCollectionsClass source = new SourceCollectionsClass();
         List<String> list = new LinkedList<>();
         list.addAll(Arrays.asList(new String[] {"list0", "list1", "list2"}));
@@ -285,7 +285,7 @@ public class JavaJavaCollectionTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessCollectionFieldAction() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(
-                new File("src/test/resources/javaToJava/atlasmapping-collection-fieldaction.xml").toURI());
+                new File("src/test/resources/javaToJava/atlasmapping-collection-fieldaction.json").toURI());
         SourceCollectionsClass source = new SourceCollectionsClass();
         LinkedList<String> list = new LinkedList<>();
         list.addAll(Arrays.asList(new String[] {"linkedList0", "linkedList1", "linkedList2"}));

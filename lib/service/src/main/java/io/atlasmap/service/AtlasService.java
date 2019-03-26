@@ -310,8 +310,6 @@ public class AtlasService {
                 throw new WebApplicationException(e.getMessage(), e, Status.INTERNAL_SERVER_ERROR);
             }
             return Response.ok().entity(binData).build();
-        case "XML":
-            throw new WebApplicationException("XML mapping format is no longer supported. Please use JSON format instead.");
         default:
             throw new WebApplicationException("Unrecognized mapping format: " + mappingFormat, Status.INTERNAL_SERVER_ERROR);
         }

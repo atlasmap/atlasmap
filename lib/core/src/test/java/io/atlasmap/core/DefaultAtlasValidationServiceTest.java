@@ -183,8 +183,8 @@ public class DefaultAtlasValidationServiceTest extends BaseValidatorTest {
         Files.createDirectories(Paths.get("target/mappings"));
         AtlasMapping mapping = getAtlasMappingFullValid();
         assertNotNull(mapping);
-        AtlasMappingUtil atlasMappingUtil = new AtlasMappingUtil("io.atlasmap.v2");
-        final String fileName = "target/mappings/HappyPathMapping.xml";
+        AtlasMappingUtil atlasMappingUtil = new AtlasMappingUtil();
+        final String fileName = "target/mappings/HappyPathMapping.json";
         atlasMappingUtil.marshallMapping(mapping, fileName);
         assertTrue(Files.exists(Paths.get(fileName)));
         AtlasMapping atlasMapping = atlasMappingUtil.loadMapping(fileName);

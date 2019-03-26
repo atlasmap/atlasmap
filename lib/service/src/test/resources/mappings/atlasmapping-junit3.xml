@@ -16,18 +16,11 @@
     limitations under the License.
 
 -->
-<AtlasMapping xmlns="http://atlasmap.io/v2" name="junit3">
-  <FieldMappings>
-    <FieldMapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:type="MapFieldMapping">
-      <InputField>
-        <Field xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:type="MockField" name="foo" value="bar" />
-      </InputField>
-      <OutputField>
-        <Field xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:type="MockField" name="woot" value="blerg" />
-      </OutputField>
-    </FieldMapping>
-  </FieldMappings>
+<AtlasMapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://atlasmap.io/v2" name="junit3">
+  <Mappings>
+    <Mapping xsi:type="Mapping" mappingType="Map">
+      <InputField xsi:type="MockField" name="foo" path="/foo" />
+      <OutputField xsi:type="MockField" name="woot" value="/woot" />
+    </Mapping>
+  </Mappings>
 </AtlasMapping>

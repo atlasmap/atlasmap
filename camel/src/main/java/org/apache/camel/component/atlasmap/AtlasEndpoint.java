@@ -45,7 +45,6 @@ import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasContextFactory;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.api.AtlasSession;
-import io.atlasmap.core.AtlasMappingService.AtlasMappingFormat;
 import io.atlasmap.core.DefaultAtlasContextFactory;
 import io.atlasmap.v2.AtlasMapping;
 import io.atlasmap.v2.Audit;
@@ -64,7 +63,7 @@ public class AtlasEndpoint extends ResourceEndpoint {
     private static final Logger LOG = LoggerFactory.getLogger(AtlasEndpoint.class);
     private AtlasContextFactory atlasContextFactory;
     private AtlasContext atlasContext;
-    private String atlasmapGenericMappingsName = "atlasmapping.xml";
+    private String atlasmapGenericMappingsName = "atlasmapping.json";
 
     @UriParam(defaultValue = "true")
     private boolean loaderCache = true;
@@ -219,8 +218,7 @@ public class AtlasEndpoint extends ResourceEndpoint {
                     new Object[] { admCatalogPath });
             }
         } catch (IOException e) {
-            throw new IOException("Error extracting mappings file from ADM catalog " + admCatalogPath + ".\n" +
-                e.getMessage());
+            throw new IOException("Error extracting mappings file from ADM catalog " + admCatalogPath, e);
         }
         return extractedMappoings.toString();
     }
@@ -274,8 +272,6 @@ public class AtlasEndpoint extends ResourceEndpoint {
         String path = getResourceUri();
         ObjectHelper.notNull(path, "mappingUri");
         Reader reader = null;
-        AtlasMappingFormat mappingFormat = path.toLowerCase().endsWith("json")
-                ? AtlasMappingFormat.JSON : AtlasMappingFormat.XML;
 
         String content = incomingMessage.getHeader(AtlasConstants.ATLAS_MAPPING, String.class);
         if (content != null) {
@@ -289,7 +285,7 @@ public class AtlasEndpoint extends ResourceEndpoint {
             incomingMessage.removeHeader(AtlasConstants.ATLAS_MAPPING);
             AtlasMapping mapping = ((DefaultAtlasContextFactory) getOrCreateAtlasContextFactory())
                                     .getMappingService()
-                                    .loadMapping(reader, mappingFormat);
+                                    .loadMapping(reader);
             return ((DefaultAtlasContextFactory) getOrCreateAtlasContextFactory()).createContext(mapping);
         } else if (getAtlasContext() != null) {
             // no mapping specified in header, and found an existing context
@@ -302,7 +298,6 @@ public class AtlasEndpoint extends ResourceEndpoint {
                     new Object[] { path, getEndpointUri() });
         }
         if (path.toLowerCase().endsWith("adm")) {
-            mappingFormat = AtlasMappingFormat.XML;
             reader = new StringReader(extractMappingsFromADM(getResourceAsInputStream(), path));
         }
         else {
@@ -311,7 +306,7 @@ public class AtlasEndpoint extends ResourceEndpoint {
         }
         AtlasMapping mapping = ((DefaultAtlasContextFactory) getOrCreateAtlasContextFactory())
                 .getMappingService()
-                .loadMapping(reader, mappingFormat);
+                .loadMapping(reader);
         atlasContext = ((DefaultAtlasContextFactory) getOrCreateAtlasContextFactory()).createContext(mapping);
         return atlasContext;
     }

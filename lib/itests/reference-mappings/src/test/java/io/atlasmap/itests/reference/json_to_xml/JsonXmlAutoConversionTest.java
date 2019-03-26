@@ -38,43 +38,43 @@ public class JsonXmlAutoConversionTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessJsonXmlFlatFieldMappingAutoConversion1() throws Exception {
         processJsonXmlFlatMappingAutoConversion(
-                "src/test/resources/jsonToXml/atlasmapping-flatprimitive-attribute-autoconversion-1.xml", 1);
+                "src/test/resources/jsonToXml/atlasmapping-flatprimitive-attribute-autoconversion-1.json", 1);
     }
 
     @Test
     public void testProcessJsonXmlFlatFieldMappingAutoConversion2() throws Exception {
         processJsonXmlFlatMappingAutoConversion(
-                "src/test/resources/jsonToXml/atlasmapping-flatprimitive-attribute-autoconversion-2.xml", 2);
+                "src/test/resources/jsonToXml/atlasmapping-flatprimitive-attribute-autoconversion-2.json", 2);
     }
 
     @Test
     public void testProcessJsonXmlFlatFieldMappingAutoConversion3() throws Exception {
         processJsonXmlFlatMappingAutoConversion(
-                "src/test/resources/jsonToXml/atlasmapping-flatprimitive-attribute-autoconversion-3.xml", 3);
+                "src/test/resources/jsonToXml/atlasmapping-flatprimitive-attribute-autoconversion-3.json", 3);
     }
 
     @Test
     public void testProcessJsonXmlFlatFieldMappingAutoConversion4() throws Exception {
         processJsonXmlFlatMappingAutoConversion(
-                "src/test/resources/jsonToXml/atlasmapping-flatprimitive-attribute-autoconversion-4.xml", 4);
+                "src/test/resources/jsonToXml/atlasmapping-flatprimitive-attribute-autoconversion-4.json", 4);
     }
 
     @Test
     public void testProcessJsonXmlFlatFieldMappingAutoConversion5() throws Exception {
         processJsonXmlFlatMappingAutoConversion(
-                "src/test/resources/jsonToXml/atlasmapping-flatprimitive-attribute-autoconversion-5.xml", 5);
+                "src/test/resources/jsonToXml/atlasmapping-flatprimitive-attribute-autoconversion-5.json", 5);
     }
 
     @Test
     public void testProcessJsonXmlFlatFieldMappingAutoConversion6() throws Exception {
         processJsonXmlFlatMappingAutoConversion(
-                "src/test/resources/jsonToXml/atlasmapping-flatprimitive-attribute-autoconversion-6.xml", 6);
+                "src/test/resources/jsonToXml/atlasmapping-flatprimitive-attribute-autoconversion-6.json", 6);
     }
 
     @Test
     public void testProcessJsonXmlFlatFieldMappingAutoConversion7() throws Exception {
         processJsonXmlFlatMappingAutoConversion(
-                "src/test/resources/jsonToXml/atlasmapping-flatprimitive-attribute-autoconversion-7.xml", 7);
+                "src/test/resources/jsonToXml/atlasmapping-flatprimitive-attribute-autoconversion-7.json", 7);
     }
 
     protected void processJsonXmlFlatMappingAutoConversion(String mappingFile, int num) throws Exception {

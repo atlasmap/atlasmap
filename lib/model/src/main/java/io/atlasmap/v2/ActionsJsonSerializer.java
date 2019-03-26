@@ -384,7 +384,7 @@ public class ActionsJsonSerializer extends JsonSerializer<Actions> {
         gen.writeStartObject();
         gen.writeFieldName("Split");
         gen.writeStartObject();
-        gen.writeStringField(STRING, action.getDelimiter());
+        gen.writeStringField(DELIMITER, action.getDelimiter());
         gen.writeEndObject();
         gen.writeEndObject();
     }

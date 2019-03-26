@@ -41,7 +41,6 @@ import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasContextFactory;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.api.AtlasValidationService;
-import io.atlasmap.core.AtlasMappingService.AtlasMappingFormat;
 import io.atlasmap.mxbean.AtlasContextFactoryMXBean;
 import io.atlasmap.spi.AtlasCombineStrategy;
 import io.atlasmap.spi.AtlasConversionService;
@@ -144,30 +143,22 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
 
     @Override
     public AtlasContext createContext(File atlasMappingFile) throws AtlasException {
-        return createContext(atlasMappingFile, AtlasMappingFormat.XML);
-    }
-
-    public AtlasContext createContext(File atlasMappingFile, AtlasMappingFormat format) throws AtlasException {
         if (atlasMappingFile == null) {
             throw new AtlasException("AtlasMappingFile must be specified");
         }
 
-        return createContext(atlasMappingFile.toURI(), format);
+        return createContext(atlasMappingFile.toURI());
     }
 
     @Override
     public AtlasContext createContext(URI atlasMappingUri) throws AtlasException {
-        return createContext(atlasMappingUri, AtlasMappingFormat.XML);
-    }
-
-    public AtlasContext createContext(URI atlasMappingUri, AtlasMappingFormat format) throws AtlasException {
         if (atlasMappingUri == null) {
             throw new AtlasException("AtlasMappingUri must be specified");
         }
         if (getMappingService() == null) {
             throw new AtlasException("AtlasMappingService is not set");
         }
-        DefaultAtlasContext context = new DefaultAtlasContext(this, atlasMappingUri, format);
+        DefaultAtlasContext context = new DefaultAtlasContext(this, atlasMappingUri);
         context.init();
         return context;
     }

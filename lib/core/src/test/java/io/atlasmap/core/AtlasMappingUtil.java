@@ -15,46 +15,18 @@
  */
 package io.atlasmap.core;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
+import java.io.File;
 
 import io.atlasmap.v2.AtlasMapping;
+import io.atlasmap.v2.Json;
 
 public class AtlasMappingUtil {
 
-    private static JAXBContext jaxbContext;
-
-    public AtlasMappingUtil(String packages) {
-        try {
-            jaxbContext = JAXBContext.newInstance(packages);
-        } catch (JAXBException e) {
-            System.err.print(e.getMessage());
-        }
-    }
-
     public AtlasMapping loadMapping(String fileName) throws Exception {
-        AtlasMapping mapping = null;
-        if (jaxbContext != null) {
-            Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-            Path newFilePath = Paths.get(fileName);
-            mapping = (AtlasMapping) ((javax.xml.bind.JAXBElement<?>) unmarshaller.unmarshal(newFilePath.toFile()))
-                    .getValue();
-        }
-        return mapping;
+        return Json.mapper().readValue(new File(fileName), AtlasMapping.class);
     }
 
     public void marshallMapping(AtlasMapping mapping, String fileName) throws Exception {
-        Marshaller marshaller = jaxbContext.createMarshaller();
-        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-        Path newFilePath = Paths.get(fileName);
-        Files.deleteIfExists(newFilePath);
-        Path file = Files.createFile(newFilePath);
-        marshaller.marshal(mapping, file.toFile());
+        Json.mapper().writeValue(new File(fileName), mapping);
     }
 }
