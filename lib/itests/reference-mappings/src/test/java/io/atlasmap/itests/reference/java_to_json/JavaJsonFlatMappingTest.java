@@ -157,7 +157,7 @@ public class JavaJsonFlatMappingTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessJavaJsonFlatPrimitiveUnrooted() throws Exception {
         AtlasContext context = atlasContextFactory
-                .createContext(new File("src/test/resources/javaToJson/atlasmapping-flatprimitive-unrooted.xml"));
+                .createContext(new File("src/test/resources/javaToJson/atlasmapping-flatprimitive-unrooted.json"));
 
         AtlasSession session = context.createSession();
         session.setDefaultSourceDocument(generateFlatPrimitiveClass(SourceFlatPrimitiveClass.class));
@@ -174,7 +174,7 @@ public class JavaJsonFlatMappingTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessJavaJsonFlatPrimitiveRooted() throws Exception {
         AtlasContext context = atlasContextFactory
-                .createContext(new File("src/test/resources/javaToJson/atlasmapping-flatprimitive-rooted.xml"));
+                .createContext(new File("src/test/resources/javaToJson/atlasmapping-flatprimitive-rooted.json"));
 
         AtlasSession session = context.createSession();
         session.setDefaultSourceDocument(generateFlatPrimitiveClass(SourceFlatPrimitiveClass.class));
@@ -191,7 +191,7 @@ public class JavaJsonFlatMappingTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessJavaJsonBoxedFlatMappingPrimitiveUnrooted() throws Exception {
         AtlasContext context = atlasContextFactory
-                .createContext(new File("src/test/resources/javaToJson/atlasmapping-boxedflatprimitive-unrooted.xml"));
+                .createContext(new File("src/test/resources/javaToJson/atlasmapping-boxedflatprimitive-unrooted.json"));
 
         AtlasSession session = context.createSession();
         session.setDefaultSourceDocument(generateFlatPrimitiveClassBoxedPrimitiveFieldsBoxedValues(SourceFlatPrimitiveClass.class));
@@ -208,7 +208,7 @@ public class JavaJsonFlatMappingTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessJavaJsonBoxedFlatMappingPrimitiveRooted() throws Exception {
         AtlasContext context = atlasContextFactory
-                .createContext(new File("src/test/resources/javaToJson/atlasmapping-boxedflatprimitive-rooted.xml"));
+                .createContext(new File("src/test/resources/javaToJson/atlasmapping-boxedflatprimitive-rooted.json"));
 
         AtlasSession session = context.createSession();
         session.setDefaultSourceDocument(generateFlatPrimitiveClassBoxedPrimitiveFieldsBoxedValues(SourceFlatPrimitiveClass.class));

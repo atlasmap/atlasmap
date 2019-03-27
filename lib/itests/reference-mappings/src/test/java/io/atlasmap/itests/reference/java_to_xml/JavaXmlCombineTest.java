@@ -41,7 +41,7 @@ public class JavaXmlCombineTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessCombineSimple() throws Exception {
         AtlasContext context = atlasContextFactory
-                .createContext(new File("src/test/resources/javaToXml/atlasmapping-combine-simple.xml").toURI());
+                .createContext(new File("src/test/resources/javaToXml/atlasmapping-combine-simple.json").toURI());
         AtlasSession session = context.createSession();
         BaseContact sourceContact = AtlasTestUtil.generateContact(SourceContact.class);
         session.setDefaultSourceDocument(sourceContact);
@@ -63,7 +63,7 @@ public class JavaXmlCombineTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessCombineSkip() throws Exception {
         AtlasContext context = atlasContextFactory
-                .createContext(new File("src/test/resources/javaToXml/atlasmapping-combine-skip.xml").toURI());
+                .createContext(new File("src/test/resources/javaToXml/atlasmapping-combine-skip.json").toURI());
         AtlasSession session = context.createSession();
         BaseContact sourceContact = AtlasTestUtil.generateContact(SourceContact.class);
         session.setDefaultSourceDocument(sourceContact);
@@ -85,7 +85,7 @@ public class JavaXmlCombineTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessCombineOutOfOrder() throws Exception {
         AtlasContext context = atlasContextFactory
-                .createContext(new File("src/test/resources/javaToXml/atlasmapping-combine-outoforder.xml").toURI());
+                .createContext(new File("src/test/resources/javaToXml/atlasmapping-combine-outoforder.json").toURI());
         AtlasSession session = context.createSession();
         BaseContact sourceContact = AtlasTestUtil.generateContact(SourceContact.class);
         session.setDefaultSourceDocument(sourceContact);
@@ -107,7 +107,7 @@ public class JavaXmlCombineTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessCombineNullInput() throws Exception {
         AtlasContext context = atlasContextFactory
-                .createContext(new File("src/test/resources/javaToXml/atlasmapping-combine-inputnull.xml").toURI());
+                .createContext(new File("src/test/resources/javaToXml/atlasmapping-combine-inputnull.json").toURI());
         AtlasSession session = context.createSession();
         BaseContact sourceContact = AtlasTestUtil.generateContact(SourceContact.class);
         sourceContact.setLastName(null);

@@ -1,0 +1,358 @@
+{
+  "AtlasMapping" : {
+    "jsonType" : "io.atlasmap.v2.AtlasMapping",
+    "dataSource" : [ {
+      "jsonType" : "io.atlasmap.v2.DataSource",
+      "id" : "SourceJava",
+      "uri" : "atlas:java?className=io.atlasmap.java.test.SourceFlatPrimitiveClass",
+      "dataSourceType" : "SOURCE"
+    }, {
+      "jsonType" : "io.atlasmap.v2.DataSource",
+      "id" : "SourceJson",
+      "uri" : "atlas:json:SourceFlatPrimitiveJson",
+      "dataSourceType" : "SOURCE"
+    }, {
+      "jsonType" : "io.atlasmap.v2.DataSource",
+      "id" : "SourceXml",
+      "uri" : "atlas:xml?complexType=ns:XmlFlatPrimitiveAttribute",
+      "dataSourceType" : "SOURCE"
+    }, {
+      "jsonType" : "io.atlasmap.v2.DataSource",
+      "id" : "TargetJava",
+      "uri" : "atlas:java?className=io.atlasmap.java.test.TargetFlatPrimitiveClass",
+      "dataSourceType" : "TARGET"
+    }, {
+      "jsonType" : "io.atlasmap.v2.DataSource",
+      "id" : "TargetJson",
+      "uri" : "atlas:json:TargetFlatPrimitiveJson",
+      "dataSourceType" : "TARGET"
+    }, {
+      "jsonType" : "io.atlasmap.v2.DataSource",
+      "id" : "TargetXml",
+      "uri" : "atlas:xml?complexType=ns:XmlFlatPrimitiveAttribute",
+      "dataSourceType" : "TARGET"
+    } ],
+    "mappings" : {
+      "mapping" : [ {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "MAP",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "docId" : "SourceJava",
+          "path" : "intField"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.json.v2.JsonField",
+          "docId" : "TargetJson",
+          "path" : "intField"
+        } ]
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "MAP",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "docId" : "SourceJava",
+          "path" : "shortField"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.json.v2.JsonField",
+          "docId" : "TargetJson",
+          "path" : "shortField"
+        } ]
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "MAP",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "docId" : "SourceJava",
+          "path" : "longField"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.json.v2.JsonField",
+          "docId" : "TargetJson",
+          "path" : "longField"
+        } ]
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "MAP",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "docId" : "SourceJava",
+          "path" : "doubleField"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.json.v2.JsonField",
+          "docId" : "TargetJson",
+          "path" : "doubleField"
+        } ]
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "MAP",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "docId" : "SourceJava",
+          "path" : "floatField"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.json.v2.JsonField",
+          "docId" : "TargetJson",
+          "path" : "floatField"
+        } ]
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "MAP",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "docId" : "SourceJava",
+          "path" : "booleanField"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.json.v2.JsonField",
+          "docId" : "TargetJson",
+          "path" : "booleanField"
+        } ]
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "MAP",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "docId" : "SourceJava",
+          "path" : "charField"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.json.v2.JsonField",
+          "docId" : "TargetJson",
+          "path" : "charField"
+        } ]
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "MAP",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "docId" : "SourceJava",
+          "path" : "byteField"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.json.v2.JsonField",
+          "docId" : "TargetJson",
+          "path" : "byteField"
+        } ]
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "MAP",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.json.v2.JsonField",
+          "docId" : "SourceJson",
+          "path" : "intField"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "docId" : "TargetXml",
+          "path" : "/XmlFPA/@intField"
+        } ]
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "MAP",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.json.v2.JsonField",
+          "docId" : "SourceJson",
+          "path" : "shortField"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "docId" : "TargetXml",
+          "path" : "/XmlFPA/@shortField"
+        } ]
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "MAP",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.json.v2.JsonField",
+          "docId" : "SourceJson",
+          "path" : "longField"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "docId" : "TargetXml",
+          "path" : "/XmlFPA/@longField"
+        } ]
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "MAP",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.json.v2.JsonField",
+          "docId" : "SourceJson",
+          "path" : "doubleField"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "docId" : "TargetXml",
+          "path" : "/XmlFPA/@doubleField"
+        } ]
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "MAP",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.json.v2.JsonField",
+          "docId" : "SourceJson",
+          "path" : "floatField"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "docId" : "TargetXml",
+          "path" : "/XmlFPA/@floatField"
+        } ]
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "MAP",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.json.v2.JsonField",
+          "docId" : "SourceJson",
+          "path" : "booleanField"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "docId" : "TargetXml",
+          "path" : "/XmlFPA/@booleanField"
+        } ]
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "MAP",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.json.v2.JsonField",
+          "docId" : "SourceJson",
+          "path" : "charField"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "docId" : "TargetXml",
+          "path" : "/XmlFPA/@charField"
+        } ]
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "MAP",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.json.v2.JsonField",
+          "docId" : "SourceJson",
+          "path" : "byteField"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "docId" : "TargetXml",
+          "path" : "/XmlFPA/@byteField"
+        } ]
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "MAP",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "docId" : "SourceXml",
+          "path" : "/XmlFPA/@intField"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "docId" : "TargetJava",
+          "path" : "intField"
+        } ]
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "MAP",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "docId" : "SourceXml",
+          "path" : "/XmlFPA/@shortField"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "docId" : "TargetJava",
+          "path" : "shortField"
+        } ]
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "MAP",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "docId" : "SourceXml",
+          "path" : "/XmlFPA/@longField"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "docId" : "TargetJava",
+          "path" : "longField"
+        } ]
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "MAP",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "docId" : "SourceXml",
+          "path" : "/XmlFPA/@doubleField"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "docId" : "TargetJava",
+          "path" : "doubleField"
+        } ]
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "MAP",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "docId" : "SourceXml",
+          "path" : "/XmlFPA/@floatField"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "docId" : "TargetJava",
+          "path" : "floatField"
+        } ]
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "MAP",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "docId" : "SourceXml",
+          "path" : "/XmlFPA/@booleanField"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "docId" : "TargetJava",
+          "path" : "booleanField"
+        } ]
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "MAP",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "docId" : "SourceXml",
+          "path" : "/XmlFPA/@charField"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "docId" : "TargetJava",
+          "path" : "charField"
+        } ]
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "MAP",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "docId" : "SourceXml",
+          "path" : "/XmlFPA/@byteField"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "docId" : "TargetJava",
+          "path" : "byteField"
+        } ]
+      } ]
+    },
+    "lookupTables" : {
+      "lookupTable" : [ ]
+    },
+    "properties" : {
+      "property" : [ ]
+    },
+    "name" : "JavaJavaFlatMapping"
+  }
+}

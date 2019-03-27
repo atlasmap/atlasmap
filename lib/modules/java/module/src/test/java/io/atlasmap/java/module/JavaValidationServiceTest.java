@@ -68,7 +68,7 @@ public class JavaValidationServiceTest {
     @Before
     public void setUp() {
         javaModelFactory = new io.atlasmap.java.v2.ObjectFactory();
-        mappingUtil = new AtlasMappingUtil("io.atlasmap.v2:io.atlasmap.java.v2");
+        mappingUtil = new AtlasMappingUtil();
         moduleDetail = JavaModule.class.getAnnotation(AtlasModuleDetail.class);
 
         fieldActionService = new DefaultAtlasFieldActionService(DefaultAtlasConversionService.getInstance());
@@ -183,13 +183,13 @@ public class JavaValidationServiceTest {
     //
     // AtlasMapping mapping = getAtlasMappingFullValid();
     // util.marshallMapping(mapping,
-    // "src/test/resources/mappings/HappyPathMapping.xml");
+    // "src/test/resources/mappings/HappyPathMapping.json");
     //
     // mapping = getAtlasMappingFullValid();
     // mapping.getMappings().getMapping().clear();
     // mapping.getMappings().getMapping().add(createMockMapping());
     // mappingUtil.marshallMapping(mapping,
-    // "src/test/resources/mappings/MisMatchedFieldTypes.xml");
+    // "src/test/resources/mappings/MisMatchedFieldTypes.json");
     //
     // }
 
@@ -206,7 +206,7 @@ public class JavaValidationServiceTest {
 
     @Test
     public void testValidateMappingHappyPathFromFile() throws Exception {
-        AtlasMapping mapping = mappingUtil.loadMapping("src/test/resources/mappings/HappyPathMapping.xml");
+        AtlasMapping mapping = mappingUtil.loadMapping("src/test/resources/mappings/HappyPathMapping.json");
         assertNotNull(mapping);
 
         validations.addAll(sourceValidationService.validateMapping(mapping));
@@ -332,7 +332,7 @@ public class JavaValidationServiceTest {
 
     @Test
     public void testValidateMappingSupportedSourceToTargetConversion() throws Exception {
-        AtlasMapping mapping = mappingUtil.loadMapping("src/test/resources/mappings/HappyPathMapping.xml");
+        AtlasMapping mapping = mappingUtil.loadMapping("src/test/resources/mappings/HappyPathMapping.json");
         assertNotNull(mapping);
 
         Mapping fieldMapping = (Mapping) mapping.getMappings().getMapping().get(0);
@@ -353,7 +353,7 @@ public class JavaValidationServiceTest {
 
     @Test
     public void testValidateAtlasMappingFileConversionRequired() throws Exception {
-        AtlasMapping mapping = mappingUtil.loadMapping("src/test/resources/mappings/HappyPathMapping.xml");
+        AtlasMapping mapping = mappingUtil.loadMapping("src/test/resources/mappings/HappyPathMapping.json");
         assertNotNull(mapping);
 
         Mapping fieldMapping = (Mapping) mapping.getMappings().getMapping().get(0);
@@ -380,7 +380,7 @@ public class JavaValidationServiceTest {
 
     @Test
     public void testValidateMappingSourceToTargetCustomUsingClassNames() throws Exception {
-        AtlasMapping mapping = mappingUtil.loadMapping("src/test/resources/mappings/HappyPathMapping.xml");
+        AtlasMapping mapping = mappingUtil.loadMapping("src/test/resources/mappings/HappyPathMapping.json");
         assertNotNull(mapping);
 
         Mapping fieldMapping = (Mapping) mapping.getMappings().getMapping().get(0);
@@ -407,7 +407,7 @@ public class JavaValidationServiceTest {
 
     @Test
     public void testValidateMappingSourceToTargetRangeConcerns() throws Exception {
-        AtlasMapping mapping = mappingUtil.loadMapping("src/test/resources/mappings/HappyPathMapping.xml");
+        AtlasMapping mapping = mappingUtil.loadMapping("src/test/resources/mappings/HappyPathMapping.json");
         assertNotNull(mapping);
 
         Mapping fieldMapping = (Mapping) mapping.getMappings().getMapping().get(0);
@@ -437,7 +437,7 @@ public class JavaValidationServiceTest {
 
     @Test
     public void testValidateMappingSourceToTargetFormatConcerns() throws Exception {
-        AtlasMapping mapping = mappingUtil.loadMapping("src/test/resources/mappings/HappyPathMapping.xml");
+        AtlasMapping mapping = mappingUtil.loadMapping("src/test/resources/mappings/HappyPathMapping.json");
         assertNotNull(mapping);
 
         Mapping fieldMapping = (Mapping) mapping.getMappings().getMapping().get(0);
@@ -471,7 +471,7 @@ public class JavaValidationServiceTest {
 
     @Test
     public void testValidateMappingSourceToTargetUnsupported() throws Exception {
-        AtlasMapping mapping = mappingUtil.loadMapping("src/test/resources/mappings/HappyPathMapping.xml");
+        AtlasMapping mapping = mappingUtil.loadMapping("src/test/resources/mappings/HappyPathMapping.json");
         assertNotNull(mapping);
 
         Mapping fieldMapping = (Mapping) mapping.getMappings().getMapping().get(0);
@@ -501,7 +501,7 @@ public class JavaValidationServiceTest {
 
     @Test
     public void testValidateMappingClassNotFound() throws Exception {
-        AtlasMapping mapping = mappingUtil.loadMapping("src/test/resources/mappings/HappyPathMapping.xml");
+        AtlasMapping mapping = mappingUtil.loadMapping("src/test/resources/mappings/HappyPathMapping.json");
         assertNotNull(mapping);
 
         Mapping fieldMapping = (Mapping) mapping.getMappings().getMapping().get(0);
@@ -525,7 +525,7 @@ public class JavaValidationServiceTest {
 
     @Test
     public void testValidateMappingPathNull() throws Exception {
-        AtlasMapping mapping = mappingUtil.loadMapping("src/test/resources/mappings/HappyPathMapping.xml");
+        AtlasMapping mapping = mappingUtil.loadMapping("src/test/resources/mappings/HappyPathMapping.json");
         assertNotNull(mapping);
 
         Mapping fieldMapping = (Mapping) mapping.getMappings().getMapping().get(0);
@@ -543,7 +543,7 @@ public class JavaValidationServiceTest {
 
     @Test
     public void testValidateMappingTransformation() throws Exception {
-        AtlasMapping mapping = mappingUtil.loadMapping("src/test/resources/mappings/HappyPathMappingTransformation.xml");
+        AtlasMapping mapping = mappingUtil.loadMapping("src/test/resources/mappings/HappyPathMappingTransformation.json");
         assertNotNull(mapping);
 
         validations.addAll(sourceValidationService.validateMapping(mapping));
@@ -556,7 +556,7 @@ public class JavaValidationServiceTest {
 
     @Test
     public void testIssue127() throws Exception {
-        AtlasMapping mapping = mappingUtil.loadMapping("src/test/resources/mappings/Issue127Mapping.xml");
+        AtlasMapping mapping = mappingUtil.loadMapping("src/test/resources/mappings/Issue127Mapping.json");
         assertNotNull(mapping);
 
         validations.addAll(sourceValidationService.validateMapping(mapping));

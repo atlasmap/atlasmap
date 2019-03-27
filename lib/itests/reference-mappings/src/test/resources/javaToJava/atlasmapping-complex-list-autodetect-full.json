@@ -1,0 +1,199 @@
+{
+  "AtlasMapping" : {
+    "jsonType" : "io.atlasmap.v2.AtlasMapping",
+    "dataSource" : [ {
+      "jsonType" : "io.atlasmap.v2.DataSource",
+      "uri" : "atlas:java?className=io.atlasmap.java.test.SourceOrderList",
+      "dataSourceType" : "SOURCE"
+    }, {
+      "jsonType" : "io.atlasmap.v2.DataSource",
+      "uri" : "atlas:java?className=io.atlasmap.java.test.TargetOrderList",
+      "dataSourceType" : "TARGET"
+    } ],
+    "mappings" : {
+      "mapping" : [ {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "MAP",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "path" : "/numberOrders"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "path" : "/numberOrders"
+        } ]
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "MAP",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "path" : "/orderBatchNumber"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "path" : "/orderBatchNumber"
+        } ]
+      }, {
+        "jsonType" : "io.atlasmap.java.v2.JavaCollection",
+        "mappingType" : "COLLECTION",
+        "mappings" : {
+          "mapping" : [ {
+            "jsonType" : "io.atlasmap.v2.Mapping",
+            "mappingType" : "MAP",
+            "inputField" : [ {
+              "jsonType" : "io.atlasmap.java.v2.JavaField",
+              "path" : "/orders<>"
+            } ],
+            "outputField" : [ {
+              "jsonType" : "io.atlasmap.java.v2.JavaField",
+              "path" : "/orders<>",
+              "className" : "io.atlasmap.java.test.TargetOrder"
+            } ]
+          }, {
+            "jsonType" : "io.atlasmap.v2.Mapping",
+            "mappingType" : "MAP",
+            "inputField" : [ {
+              "jsonType" : "io.atlasmap.java.v2.JavaField",
+              "path" : "/orders<>/orderId"
+            } ],
+            "outputField" : [ {
+              "jsonType" : "io.atlasmap.java.v2.JavaField",
+              "path" : "/orders<>/orderId"
+            } ]
+          }, {
+            "jsonType" : "io.atlasmap.v2.Mapping",
+            "mappingType" : "MAP",
+            "inputField" : [ {
+              "jsonType" : "io.atlasmap.java.v2.JavaField",
+              "path" : "/orders<>/contact"
+            } ],
+            "outputField" : [ {
+              "jsonType" : "io.atlasmap.java.v2.JavaField",
+              "path" : "/orders<>/contact",
+              "className" : "io.atlasmap.java.test.TargetContact"
+            } ]
+          }, {
+            "jsonType" : "io.atlasmap.v2.Mapping",
+            "mappingType" : "MAP",
+            "inputField" : [ {
+              "jsonType" : "io.atlasmap.java.v2.JavaField",
+              "path" : "/orders<>/contact/firstName"
+            } ],
+            "outputField" : [ {
+              "jsonType" : "io.atlasmap.java.v2.JavaField",
+              "path" : "/orders<>/contact/firstName"
+            } ]
+          }, {
+            "jsonType" : "io.atlasmap.v2.Mapping",
+            "mappingType" : "MAP",
+            "inputField" : [ {
+              "jsonType" : "io.atlasmap.java.v2.JavaField",
+              "path" : "/orders<>/contact/lastName"
+            } ],
+            "outputField" : [ {
+              "jsonType" : "io.atlasmap.java.v2.JavaField",
+              "path" : "/orders<>/contact/lastName"
+            } ]
+          }, {
+            "jsonType" : "io.atlasmap.v2.Mapping",
+            "mappingType" : "MAP",
+            "inputField" : [ {
+              "jsonType" : "io.atlasmap.java.v2.JavaField",
+              "path" : "/orders<>/contact/phoneNumber"
+            } ],
+            "outputField" : [ {
+              "jsonType" : "io.atlasmap.java.v2.JavaField",
+              "path" : "/orders<>/contact/phoneNumber"
+            } ]
+          }, {
+            "jsonType" : "io.atlasmap.v2.Mapping",
+            "mappingType" : "MAP",
+            "inputField" : [ {
+              "jsonType" : "io.atlasmap.java.v2.JavaField",
+              "path" : "/orders<>/contact/zipCode"
+            } ],
+            "outputField" : [ {
+              "jsonType" : "io.atlasmap.java.v2.JavaField",
+              "path" : "/orders<>/contact/zipCode"
+            } ]
+          }, {
+            "jsonType" : "io.atlasmap.v2.Mapping",
+            "mappingType" : "MAP",
+            "inputField" : [ {
+              "jsonType" : "io.atlasmap.java.v2.JavaField",
+              "path" : "/orders<>/address"
+            } ],
+            "outputField" : [ {
+              "jsonType" : "io.atlasmap.java.v2.JavaField",
+              "path" : "/orders<>/address",
+              "className" : "io.atlasmap.java.test.TargetAddress"
+            } ]
+          }, {
+            "jsonType" : "io.atlasmap.v2.Mapping",
+            "mappingType" : "MAP",
+            "inputField" : [ {
+              "jsonType" : "io.atlasmap.java.v2.JavaField",
+              "path" : "/orders<>/address/addressLine1"
+            } ],
+            "outputField" : [ {
+              "jsonType" : "io.atlasmap.java.v2.JavaField",
+              "path" : "/orders<>/address/addressLine1"
+            } ]
+          }, {
+            "jsonType" : "io.atlasmap.v2.Mapping",
+            "mappingType" : "MAP",
+            "inputField" : [ {
+              "jsonType" : "io.atlasmap.java.v2.JavaField",
+              "path" : "/orders<>/address/addressLine2"
+            } ],
+            "outputField" : [ {
+              "jsonType" : "io.atlasmap.java.v2.JavaField",
+              "path" : "/orders<>/address/addressLine2"
+            } ]
+          }, {
+            "jsonType" : "io.atlasmap.v2.Mapping",
+            "mappingType" : "MAP",
+            "inputField" : [ {
+              "jsonType" : "io.atlasmap.java.v2.JavaField",
+              "path" : "/orders<>/address/city"
+            } ],
+            "outputField" : [ {
+              "jsonType" : "io.atlasmap.java.v2.JavaField",
+              "path" : "/orders<>/address/city"
+            } ]
+          }, {
+            "jsonType" : "io.atlasmap.v2.Mapping",
+            "mappingType" : "MAP",
+            "inputField" : [ {
+              "jsonType" : "io.atlasmap.java.v2.JavaField",
+              "path" : "/orders<>/address/state"
+            } ],
+            "outputField" : [ {
+              "jsonType" : "io.atlasmap.java.v2.JavaField",
+              "path" : "/orders<>/address/state"
+            } ]
+          }, {
+            "jsonType" : "io.atlasmap.v2.Mapping",
+            "mappingType" : "MAP",
+            "inputField" : [ {
+              "jsonType" : "io.atlasmap.java.v2.JavaField",
+              "path" : "/orders<>/address/zipCode"
+            } ],
+            "outputField" : [ {
+              "jsonType" : "io.atlasmap.java.v2.JavaField",
+              "path" : "/orders<>/address/zipCode"
+            } ]
+          } ]
+        },
+        "collectionType" : "LIST"
+      } ]
+    },
+    "lookupTables" : {
+      "lookupTable" : [ ]
+    },
+    "properties" : {
+      "property" : [ ]
+    },
+    "name" : "JavaJavaComplexListBase"
+  }
+}

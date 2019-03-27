@@ -1,0 +1,144 @@
+{
+  "AtlasMapping" : {
+    "jsonType" : "io.atlasmap.v2.AtlasMapping",
+    "dataSource" : [ {
+      "jsonType" : "io.atlasmap.v2.DataSource",
+      "id" : "con",
+      "uri" : "atlas:xml",
+      "dataSourceType" : "SOURCE"
+    }, {
+      "jsonType" : "io.atlasmap.v2.DataSource",
+      "id" : "addr",
+      "uri" : "atlas:xml",
+      "dataSourceType" : "SOURCE"
+    }, {
+      "jsonType" : "io.atlasmap.v2.DataSource",
+      "uri" : "atlas:xml",
+      "dataSourceType" : "TARGET"
+    } ],
+    "mappings" : {
+      "mapping" : [ {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "MAP",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.v2.ConstantField",
+          "value" : 8765309,
+          "fieldType" : "INTEGER"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "path" : "/XOA/@orderId"
+        } ]
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "MAP",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "docId" : "con",
+          "path" : "/Contact/@firstName"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "path" : "/XOA/Contact/@firstName"
+        } ]
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "MAP",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "docId" : "con",
+          "path" : "/Contact/@lastName"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "path" : "/XOA/Contact/@lastName"
+        } ]
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "MAP",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "docId" : "con",
+          "path" : "/Contact/@phoneNumber"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "path" : "/XOA/Contact/@phoneNumber"
+        } ]
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "MAP",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "docId" : "con",
+          "path" : "/Contact/@zipCode"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "path" : "/XOA/Contact/@zipCode"
+        } ]
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "MAP",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "docId" : "addr",
+          "path" : "/Address/@addressLine1"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "path" : "/XOA/Address/@addressLine1"
+        } ]
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "MAP",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "docId" : "addr",
+          "path" : "/Address/@addressLine2"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "path" : "/XOA/Address/@addressLine2"
+        } ]
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "MAP",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "docId" : "addr",
+          "path" : "/Address/@city"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "path" : "/XOA/Address/@city"
+        } ]
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "MAP",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "docId" : "addr",
+          "path" : "/Address/@state"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "path" : "/XOA/Address/@state"
+        } ]
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "MAP",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "docId" : "addr",
+          "path" : "/Address/@zipCode"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "path" : "/XOA/Address/@zipCode"
+        } ]
+      } ]
+    },
+    "name" : "XmlXmlMultiSourceComplex"
+  }
+}

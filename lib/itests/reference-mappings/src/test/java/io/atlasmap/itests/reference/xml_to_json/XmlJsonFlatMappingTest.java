@@ -98,44 +98,44 @@ public class XmlJsonFlatMappingTest extends AtlasMappingBaseTest {
 
     @Test
     public void testProcessXmlJsonFlatPrimitiveAttributeUnrooted() throws Exception {
-        processXmlToJsonUnrooted("src/test/resources/xmlToJson/atlasmapping-flatprimitive-attribute-unrooted.xml",
+        processXmlToJsonUnrooted("src/test/resources/xmlToJson/atlasmapping-flatprimitive-attribute-unrooted.json",
                 "src/test/resources/xmlToJson/atlas-xml-flatprimitive-attribute.xml", false);
     }
 
     @Test
     public void testProcessXmlJsonFlatPrimitiveAttributeRooted() throws Exception {
-        processXmlToJsonRooted("src/test/resources/xmlToJson/atlasmapping-flatprimitive-attribute-rooted.xml",
+        processXmlToJsonRooted("src/test/resources/xmlToJson/atlasmapping-flatprimitive-attribute-rooted.json",
                 "src/test/resources/xmlToJson/atlas-xml-flatprimitive-attribute.xml", false);
     }
 
     @Test
     public void testProcessXmlJsonFlatPrimitiveAttributeNSUnrooted() throws Exception {
-        processXmlToJsonUnrooted("src/test/resources/xmlToJson/atlasmapping-flatprimitive-attribute-ns-unrooted.xml",
+        processXmlToJsonUnrooted("src/test/resources/xmlToJson/atlasmapping-flatprimitive-attribute-ns-unrooted.json",
                 "src/test/resources/xmlToJson/atlas-xml-flatprimitive-attribute-ns.xml", false);
     }
 
     @Test
     public void testProcessXmlJsonFlatPrimitiveAttributeNSRooted() throws Exception {
-        processXmlToJsonRooted("src/test/resources/xmlToJson/atlasmapping-flatprimitive-attribute-ns-rooted.xml",
+        processXmlToJsonRooted("src/test/resources/xmlToJson/atlasmapping-flatprimitive-attribute-ns-rooted.json",
                 "src/test/resources/xmlToJson/atlas-xml-flatprimitive-attribute-ns.xml", false);
     }
 
     @Test
     public void testProcessXmlJsonFlatPrimitiveElementRooted() throws Exception {
-        processXmlToJsonRooted("src/test/resources/xmlToJson/atlasmapping-flatprimitive-element-rooted.xml",
+        processXmlToJsonRooted("src/test/resources/xmlToJson/atlasmapping-flatprimitive-element-rooted.json",
                 "src/test/resources/xmlToJava/atlas-xml-flatprimitive-element.xml", false);
     }
 
     @Test
     public void testProcessXmlJsonFlatPrimitiveElementUnrooted() throws Exception {
-        processXmlToJsonUnrooted("src/test/resources/xmlToJson/atlasmapping-flatprimitive-element-unrooted.xml",
+        processXmlToJsonUnrooted("src/test/resources/xmlToJson/atlasmapping-flatprimitive-element-unrooted.json",
                 "src/test/resources/xmlToJava/atlas-xml-flatprimitive-element.xml", false);
     }
 
     @Test
     public void testProcessXmlJavaFlatPrimitiveElementNS() throws Exception {
         AtlasContext context = atlasContextFactory
-                .createContext(new File("src/test/resources/xmlToJava/atlasmapping-flatprimitive-element-ns.xml"));
+                .createContext(new File("src/test/resources/xmlToJava/atlasmapping-flatprimitive-element-ns.json"));
 
         AtlasSession session = context.createSession();
         String sourceXml = AtlasTestUtil
@@ -150,20 +150,20 @@ public class XmlJsonFlatMappingTest extends AtlasMappingBaseTest {
 
     @Test
     public void testProcessXmlJsonBoxedFlatMappingPrimitiveAttributeRooted() throws Exception {
-        processXmlToJsonRooted("src/test/resources/xmlToJson/atlasmapping-boxedflatprimitive-attribute-rooted.xml",
+        processXmlToJsonRooted("src/test/resources/xmlToJson/atlasmapping-boxedflatprimitive-attribute-rooted.json",
                 "src/test/resources/xmlToJson/atlas-xml-boxedflatprimitive-attribute.xml", true);
     }
 
     @Test
     public void testProcessXmlJsonBoxedFlatMappingPrimitiveAttributeUnrooted() throws Exception {
-        processXmlToJsonUnrooted("src/test/resources/xmlToJson/atlasmapping-boxedflatprimitive-attribute-unrooted.xml",
+        processXmlToJsonUnrooted("src/test/resources/xmlToJson/atlasmapping-boxedflatprimitive-attribute-unrooted.json",
                 "src/test/resources/xmlToJson/atlas-xml-boxedflatprimitive-attribute.xml", true);
     }
 
     @Test
     public void testProcessXmlJavaBoxedFlatMappingPrimitiveAttributeNS() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(
-                new File("src/test/resources/xmlToJava/atlasmapping-boxedflatprimitive-attribute-ns.xml"));
+                new File("src/test/resources/xmlToJava/atlasmapping-boxedflatprimitive-attribute-ns.json"));
 
         AtlasSession session = context.createSession();
         String sourceXml = AtlasTestUtil
@@ -179,7 +179,7 @@ public class XmlJsonFlatMappingTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessXmlJavaBoxedFlatMappingPrimitiveElement() throws Exception {
         AtlasContext context = atlasContextFactory
-                .createContext(new File("src/test/resources/xmlToJava/atlasmapping-boxedflatprimitive-element.xml"));
+                .createContext(new File("src/test/resources/xmlToJava/atlasmapping-boxedflatprimitive-element.json"));
 
         AtlasSession session = context.createSession();
         String sourceXml = AtlasTestUtil
@@ -195,7 +195,7 @@ public class XmlJsonFlatMappingTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessXmlJavaBoxedFlatMappingPrimitiveElementNS() throws Exception {
         AtlasContext context = atlasContextFactory
-                .createContext(new File("src/test/resources/xmlToJava/atlasmapping-boxedflatprimitive-element-ns.xml"));
+                .createContext(new File("src/test/resources/xmlToJava/atlasmapping-boxedflatprimitive-element-ns.json"));
 
         AtlasSession session = context.createSession();
         String sourceXml = AtlasTestUtil

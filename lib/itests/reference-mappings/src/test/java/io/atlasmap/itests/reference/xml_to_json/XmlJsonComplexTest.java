@@ -34,54 +34,54 @@ public class XmlJsonComplexTest extends AtlasMappingBaseTest {
 
     @Test
     public void testProcessXmlJsonComplexOrderAutodetectAttributeRooted() throws Exception {
-        processXmlToJsonOrder("src/test/resources/xmlToJson/atlasmapping-complex-order-autodetect-attribute-rooted.xml",
+        processXmlToJsonOrder("src/test/resources/xmlToJson/atlasmapping-complex-order-autodetect-attribute-rooted.json",
                 "src/test/resources/xmlToJson/atlas-xml-complex-order-autodetect-attribute.xml", true);
     }
 
     @Test
     public void testProcessXmlJsonComplexOrderAutodetectAttributeUnrooted() throws Exception {
         processXmlToJsonOrder(
-                "src/test/resources/xmlToJson/atlasmapping-complex-order-autodetect-attribute-unrooted.xml",
+                "src/test/resources/xmlToJson/atlasmapping-complex-order-autodetect-attribute-unrooted.json",
                 "src/test/resources/xmlToJson/atlas-xml-complex-order-autodetect-attribute.xml", false);
     }
 
     @Test
     public void testProcessXmlJsonComplexOrderAutodetectAttributeNSRooted() throws Exception {
         processXmlToJsonOrder(
-                "src/test/resources/xmlToJson/atlasmapping-complex-order-autodetect-attribute-ns-rooted.xml",
+                "src/test/resources/xmlToJson/atlasmapping-complex-order-autodetect-attribute-ns-rooted.json",
                 "src/test/resources/xmlToJson/atlas-xml-complex-order-autodetect-attribute-ns.xml", true);
     }
 
     @Test
     public void testProcessXmlJsonComplexOrderAutodetectAttributeNSUnrooted() throws Exception {
         processXmlToJsonOrder(
-                "src/test/resources/xmlToJson/atlasmapping-complex-order-autodetect-attribute-ns-unrooted.xml",
+                "src/test/resources/xmlToJson/atlasmapping-complex-order-autodetect-attribute-ns-unrooted.json",
                 "src/test/resources/xmlToJson/atlas-xml-complex-order-autodetect-attribute-ns.xml", false);
     }
 
     @Test
     public void testProcessXmlJsonComplexOrderAutodetectElementRooted() throws Exception {
-        processXmlToJsonOrder("src/test/resources/xmlToJson/atlasmapping-complex-order-autodetect-element-rooted.xml",
+        processXmlToJsonOrder("src/test/resources/xmlToJson/atlasmapping-complex-order-autodetect-element-rooted.json",
                 "src/test/resources/xmlToJson/atlas-xml-complex-order-autodetect-element.xml", true);
     }
 
     @Test
     public void testProcessXmlJsonComplexOrderAutodetectElementUnrooted() throws Exception {
-        processXmlToJsonOrder("src/test/resources/xmlToJson/atlasmapping-complex-order-autodetect-element-unrooted.xml",
+        processXmlToJsonOrder("src/test/resources/xmlToJson/atlasmapping-complex-order-autodetect-element-unrooted.json",
                 "src/test/resources/xmlToJson/atlas-xml-complex-order-autodetect-element.xml", false);
     }
 
     @Test
     public void testProcessXmlJsonComplexOrderAutodetectElementNSRooted() throws Exception {
         processXmlToJsonOrder(
-                "src/test/resources/xmlToJson/atlasmapping-complex-order-autodetect-element-ns-rooted.xml",
+                "src/test/resources/xmlToJson/atlasmapping-complex-order-autodetect-element-ns-rooted.json",
                 "src/test/resources/xmlToJson/atlas-xml-complex-order-autodetect-element-ns.xml", true);
     }
 
     @Test
     public void testProcessXmlJsonComplexOrderAutodetectElementNSUnrooted() throws Exception {
         processXmlToJsonOrder(
-                "src/test/resources/xmlToJson/atlasmapping-complex-order-autodetect-element-ns-unrooted.xml",
+                "src/test/resources/xmlToJson/atlasmapping-complex-order-autodetect-element-ns-unrooted.json",
                 "src/test/resources/xmlToJson/atlas-xml-complex-order-autodetect-element-ns.xml", false);
     }
 

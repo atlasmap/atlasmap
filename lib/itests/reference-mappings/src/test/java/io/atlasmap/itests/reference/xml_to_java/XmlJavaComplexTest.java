@@ -33,7 +33,7 @@ public class XmlJavaComplexTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessXmlJavaComplexOrderAutodetectAttribute() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(
-                new File("src/test/resources/xmlToJava/atlasmapping-complex-order-autodetect-attribute.xml").toURI());
+                new File("src/test/resources/xmlToJava/atlasmapping-complex-order-autodetect-attribute.json").toURI());
 
         AtlasSession session = context.createSession();
         String sourceXml = AtlasTestUtil
@@ -50,7 +50,7 @@ public class XmlJavaComplexTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessXmlJavaComplexOrderAutodetectAttributeNS() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(
-                new File("src/test/resources/xmlToJava/atlasmapping-complex-order-autodetect-attribute-ns.xml")
+                new File("src/test/resources/xmlToJava/atlasmapping-complex-order-autodetect-attribute-ns.json")
                         .toURI());
 
         AtlasSession session = context.createSession();
@@ -68,7 +68,7 @@ public class XmlJavaComplexTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessXmlJavaComplexOrderAutodetectElement() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(
-                new File("src/test/resources/xmlToJava/atlasmapping-complex-order-autodetect-element.xml").toURI());
+                new File("src/test/resources/xmlToJava/atlasmapping-complex-order-autodetect-element.json").toURI());
 
         AtlasSession session = context.createSession();
         String sourceXml = AtlasTestUtil
@@ -85,7 +85,7 @@ public class XmlJavaComplexTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessXmlJavaComplexOrderAutodetectElementNS() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(
-                new File("src/test/resources/xmlToJava/atlasmapping-complex-order-autodetect-element-ns.xml").toURI());
+                new File("src/test/resources/xmlToJava/atlasmapping-complex-order-autodetect-element-ns.json").toURI());
 
         AtlasSession session = context.createSession();
         String sourceXml = AtlasTestUtil

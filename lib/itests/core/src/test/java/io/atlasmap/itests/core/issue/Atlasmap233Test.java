@@ -26,7 +26,6 @@ import org.junit.Test;
 import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasSession;
 import io.atlasmap.core.AtlasMappingService;
-import io.atlasmap.core.AtlasMappingService.AtlasMappingFormat;
 import io.atlasmap.core.DefaultAtlasContextFactory;
 import io.atlasmap.itests.core.TestHelper;
 import io.atlasmap.v2.AtlasMapping;
@@ -45,8 +44,8 @@ public class Atlasmap233Test {
 
     @Test
     public void test() throws Exception {
-        URL url = Thread.currentThread().getContextClassLoader().getResource("mappings/issue/atlasmap-233-mapping.xml");
-        AtlasMapping mapping = mappingService.loadMapping(url, AtlasMappingFormat.XML);
+        URL url = Thread.currentThread().getContextClassLoader().getResource("mappings/issue/atlasmap-233-mapping.json");
+        AtlasMapping mapping = mappingService.loadMapping(url);
         AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(mapping);
         AtlasSession session = context.createSession();
         session.setSourceDocument("io.atlasmap.itests.core.issue.SourceClass", new SourceClass().setSourceInteger(-1));

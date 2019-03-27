@@ -44,7 +44,7 @@ public class MultidocComplexTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessBasic() throws Exception {
         AtlasContext context = atlasContextFactory
-                .createContext(new File("src/test/resources/multidoc/atlasmapping-complex-simple.xml").toURI());
+                .createContext(new File("src/test/resources/multidoc/atlasmapping-complex-simple.json").toURI());
         AtlasSession session = context.createSession();
         BaseOrder javaSourceOrder = AtlasTestUtil.generateOrderClass(SourceOrder.class, SourceAddress.class,
                 SourceContact.class);
@@ -87,7 +87,7 @@ public class MultidocComplexTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessComplexBasicNullContact() throws Exception {
         AtlasContext context = atlasContextFactory
-                .createContext(new File("src/test/resources/multidoc/atlasmapping-complex-simple.xml").toURI());
+                .createContext(new File("src/test/resources/multidoc/atlasmapping-complex-simple.json").toURI());
         AtlasSession session = context.createSession();
         BaseOrder javaSourceOrder = AtlasTestUtil.generateOrderClass(SourceOrder.class, SourceAddress.class,
                 SourceContact.class);

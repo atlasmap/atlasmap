@@ -1,0 +1,79 @@
+{
+  "AtlasMapping" : {
+    "jsonType" : "io.atlasmap.v2.AtlasMapping",
+    "dataSource" : [ {
+      "jsonType" : "io.atlasmap.v2.DataSource",
+      "id" : "io.atlasmap.core.issue.SourceClass",
+      "uri" : "atlas:java?className=io.atlasmap.itests.core.issue.SourceClass",
+      "dataSourceType" : "SOURCE"
+    }, {
+      "jsonType" : "io.atlasmap.v2.DataSource",
+      "id" : "io.atlasmap.itests.core.issue.TargetClass",
+      "uri" : "atlas:java?className=io.atlasmap.itests.core.issue.TargetClass",
+      "dataSourceType" : "TARGET"
+    } ],
+    "mappings" : {
+      "mapping" : [ {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "MAP",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.v2.PropertyField",
+          "path" : "/testProp",
+          "fieldType" : "STRING",
+          "name" : "testProp"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "docId" : "io.atlasmap.itests.core.issue.TargetClass",
+          "path" : "/targetName",
+          "fieldType" : "STRING",
+          "name" : "targetName"
+        } ]
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "MAP",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.v2.PropertyField",
+          "path" : "/PATH",
+          "fieldType" : "STRING",
+          "name" : "PATH"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "docId" : "io.atlasmap.itests.core.issue.TargetClass",
+          "path" : "/targetFirstName",
+          "fieldType" : "STRING",
+          "name" : "targetFirstName"
+        } ]
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "MAP",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.v2.ConstantField",
+          "value" : "777",
+          "path" : "/testConstant",
+          "fieldType" : "INTEGER"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "docId" : "io.atlasmap.itests.core.issue.TargetClass",
+          "path" : "/targetInteger",
+          "fieldType" : "INTEGER",
+          "name" : "targetInteger"
+        } ]
+      } ]
+    },
+    "properties" : {
+      "property" : [ {
+        "name" : "testProp",
+        "value" : "testValue",
+        "fieldType" : "STRING"
+      }, {
+        "name" : "PATH",
+        "value" : "testPath",
+        "fieldType" : "STRING"
+      } ]
+    },
+    "name" : "core-unit-test"
+  }
+}

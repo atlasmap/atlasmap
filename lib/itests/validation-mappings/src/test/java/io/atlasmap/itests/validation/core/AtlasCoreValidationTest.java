@@ -51,7 +51,7 @@ public class AtlasCoreValidationTest extends AtlasMappingBaseTest {
         super.setUp();
         try {
             context = atlasContextFactory.createContext(
-                    new File("src/test/resources/validation/core/atlasmapping-" + name.getMethodName() + ".xml"));
+                    new File("src/test/resources/validation/core/atlasmapping-" + name.getMethodName() + ".json"));
             session = context.createSession();
         } catch (Exception e) {
             e.printStackTrace();

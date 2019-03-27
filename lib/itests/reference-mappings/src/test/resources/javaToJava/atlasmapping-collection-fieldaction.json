@@ -1,0 +1,48 @@
+{
+  "AtlasMapping" : {
+    "jsonType" : "io.atlasmap.v2.AtlasMapping",
+    "dataSource" : [ {
+      "jsonType" : "io.atlasmap.v2.DataSource",
+      "id" : "SourceCollectionsClass",
+      "uri" : "atlas:java?className=io.atlasmap.java.test.SourceCollectionsClass",
+      "dataSourceType" : "SOURCE"
+    }, {
+      "jsonType" : "io.atlasmap.v2.DataSource",
+      "id" : "TargetCollectionsClass",
+      "uri" : "atlas:java?className=io.atlasmap.java.test.TargetCollectionsClass",
+      "dataSourceType" : "TARGET"
+    } ],
+    "mappings" : {
+      "mapping" : [ {
+        "jsonType" : "io.atlasmap.v2.Collection",
+        "mappingType" : "COLLECTION",
+        "mappings" : {
+          "mapping" : [ {
+            "jsonType" : "io.atlasmap.v2.Mapping",
+            "mappingType" : "MAP",
+            "inputField" : [ {
+              "jsonType" : "io.atlasmap.java.v2.JavaField",
+              "actions" : [ {
+                "CustomAction" : {
+                  "name" : "Concat",
+                  "className" : "io.atlasmap.itests.reference.MyCustomFieldActions",
+                  "methodName" : "concat"
+                }
+              } ],
+              "docId" : "SourceCollectionsClass",
+              "path" : "/linkedList<>",
+              "fieldType" : "STRING"
+            } ],
+            "outputField" : [ {
+              "jsonType" : "io.atlasmap.java.v2.JavaField",
+              "docId" : "TargetCollectionsClass",
+              "path" : "/arrayList<>",
+              "fieldType" : "STRING"
+            } ]
+          } ]
+        }
+      } ]
+    },
+    "name" : "JavaJavaFlatMapping"
+  }
+}

@@ -36,49 +36,49 @@ public class XmlJsonAutoConversionTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessXmlJsonFlatFieldMappingAutoConversion1() throws Exception {
         processXmlJsonFlatMappingAutoConversion(
-                "src/test/resources/xmlToJson/atlasmapping-flatprimitive-attribute-autoconversion-1.xml",
+                "src/test/resources/xmlToJson/atlasmapping-flatprimitive-attribute-autoconversion-1.json",
                 "src/test/resources/xmlToJson/atlas-xml-flatprimitive-attribute-autoconversion.xml", 1);
     }
 
     @Test
     public void testProcessXmlJsonFlatFieldMappingAutoConversion2() throws Exception {
         processXmlJsonFlatMappingAutoConversion(
-                "src/test/resources/xmlToJson/atlasmapping-flatprimitive-attribute-autoconversion-2.xml",
+                "src/test/resources/xmlToJson/atlasmapping-flatprimitive-attribute-autoconversion-2.json",
                 "src/test/resources/xmlToJson/atlas-xml-flatprimitive-attribute-autoconversion.xml", 2);
     }
 
     @Test
     public void testProcessXmlJsonFlatFieldMappingAutoConversion3() throws Exception {
         processXmlJsonFlatMappingAutoConversion(
-                "src/test/resources/xmlToJson/atlasmapping-flatprimitive-attribute-autoconversion-3.xml",
+                "src/test/resources/xmlToJson/atlasmapping-flatprimitive-attribute-autoconversion-3.json",
                 "src/test/resources/xmlToJson/atlas-xml-flatprimitive-attribute-autoconversion.xml", 3);
     }
 
     @Test
     public void testProcessXmlJsonFlatFieldMappingAutoConversion4() throws Exception {
         processXmlJsonFlatMappingAutoConversion(
-                "src/test/resources/xmlToJson/atlasmapping-flatprimitive-attribute-autoconversion-4.xml",
+                "src/test/resources/xmlToJson/atlasmapping-flatprimitive-attribute-autoconversion-4.json",
                 "src/test/resources/xmlToJson/atlas-xml-flatprimitive-attribute-autoconversion.xml", 4);
     }
 
     @Test
     public void testProcessXmlJsonFlatFieldMappingAutoConversion5() throws Exception {
         processXmlJsonFlatMappingAutoConversion(
-                "src/test/resources/xmlToJson/atlasmapping-flatprimitive-attribute-autoconversion-5.xml",
+                "src/test/resources/xmlToJson/atlasmapping-flatprimitive-attribute-autoconversion-5.json",
                 "src/test/resources/xmlToJson/atlas-xml-flatprimitive-attribute-autoconversion.xml", 5);
     }
 
     @Test
     public void testProcessXmlJsonFlatFieldMappingAutoConversion6() throws Exception {
         processXmlJsonFlatMappingAutoConversion(
-                "src/test/resources/xmlToJson/atlasmapping-flatprimitive-attribute-autoconversion-6.xml",
+                "src/test/resources/xmlToJson/atlasmapping-flatprimitive-attribute-autoconversion-6.json",
                 "src/test/resources/xmlToJson/atlas-xml-flatprimitive-attribute-autoconversion.xml", 6);
     }
 
     @Test
     public void testProcessXmlJsonFlatFieldMappingAutoConversion7() throws Exception {
         processXmlJsonFlatMappingAutoConversion(
-                "src/test/resources/xmlToJson/atlasmapping-flatprimitive-attribute-autoconversion-7.xml",
+                "src/test/resources/xmlToJson/atlasmapping-flatprimitive-attribute-autoconversion-7.json",
                 "src/test/resources/xmlToJson/atlas-xml-flatprimitive-attribute-autoconversion.xml", 7);
     }
 

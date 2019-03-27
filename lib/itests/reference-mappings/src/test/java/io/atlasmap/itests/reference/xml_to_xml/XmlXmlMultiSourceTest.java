@@ -33,7 +33,7 @@ public class XmlXmlMultiSourceTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessBasic() throws Exception {
         AtlasContext context = atlasContextFactory
-                .createContext(new File("src/test/resources/xmlToXml/atlasmapping-multisource-basic.xml").toURI());
+                .createContext(new File("src/test/resources/xmlToXml/atlasmapping-multisource-basic.json").toURI());
         AtlasSession session = context.createSession();
         String sourceContact = AtlasTestUtil
                 .loadFileAsString("src/test/resources/xmlToXml/atlas-xml-contact-attribute.xml");
@@ -54,7 +54,7 @@ public class XmlXmlMultiSourceTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessComplex() throws Exception {
         AtlasContext context = atlasContextFactory
-                .createContext(new File("src/test/resources/xmlToXml/atlasmapping-multisource-complex.xml").toURI());
+                .createContext(new File("src/test/resources/xmlToXml/atlasmapping-multisource-complex.json").toURI());
         AtlasSession session = context.createSession();
         String sourceContact = AtlasTestUtil
                 .loadFileAsString("src/test/resources/xmlToXml/atlas-xml-contact-attribute.xml");

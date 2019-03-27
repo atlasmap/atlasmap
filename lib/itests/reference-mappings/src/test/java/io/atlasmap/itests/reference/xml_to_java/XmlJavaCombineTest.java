@@ -36,7 +36,7 @@ public class XmlJavaCombineTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessCombineSimple() throws Exception {
         AtlasSession session = processCombineMapping(
-                "src/test/resources/xmlToJava/atlasmapping-combine-simple.xml",
+                "src/test/resources/xmlToJava/atlasmapping-combine-simple.json",
                 new String(Files.readAllBytes(Paths.get("src/test/resources/xmlToJava/atlas-xml-combine.xml"))));
         TargetContact targetContact = (TargetContact) session.getDefaultTargetDocument();
         assertEquals("Ozzie    Smith   5551212                                                                                            81111", targetContact.getFirstName());
@@ -49,7 +49,7 @@ public class XmlJavaCombineTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessCombineSkip() throws Exception {
         AtlasSession session = processCombineMapping(
-                "src/test/resources/xmlToJava/atlasmapping-combine-skip.xml",
+                "src/test/resources/xmlToJava/atlasmapping-combine-skip.json",
                 new String(Files.readAllBytes(Paths.get("src/test/resources/xmlToJava/atlas-xml-combine.xml"))));
         TargetContact targetContact = (TargetContact) session.getDefaultTargetDocument();
         assertEquals("Ozzie Smith 5551212 81111", targetContact.getFirstName());
@@ -62,7 +62,7 @@ public class XmlJavaCombineTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessCombineOutOfOrder() throws Exception {
         AtlasSession session = processCombineMapping(
-                "src/test/resources/xmlToJava/atlasmapping-combine-outoforder.xml",
+                "src/test/resources/xmlToJava/atlasmapping-combine-outoforder.json",
                 new String(Files.readAllBytes(Paths.get("src/test/resources/xmlToJava/atlas-xml-combine.xml"))));
         TargetContact targetContact = (TargetContact) session.getDefaultTargetDocument();
         assertEquals("Ozzie Smith 5551212 81111", targetContact.getFirstName());
@@ -75,7 +75,7 @@ public class XmlJavaCombineTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessCombineNullInput() throws Exception {
         AtlasSession session = processCombineMapping(
-                "src/test/resources/xmlToJava/atlasmapping-combine-inputnull.xml",
+                "src/test/resources/xmlToJava/atlasmapping-combine-inputnull.json",
                 new String(Files.readAllBytes(Paths.get("src/test/resources/xmlToJava/atlas-xml-combine-no-lastName.xml"))));
         TargetContact targetContact = (TargetContact) session.getDefaultTargetDocument();
         assertNotNull(targetContact);

@@ -1,0 +1,23 @@
+{
+  "AtlasMapping" : {
+    "jsonType" : "io.atlasmap.v2.AtlasMapping",
+    "dataSource" : [ ],
+    "mappings" : {
+      "mapping" : [ {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "MAP",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.v2.MockField",
+          "path" : "/foo",
+          "name" : "foo"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.v2.MockField",
+          "path" : "/woot",
+          "name" : "woot"
+        } ]
+      } ]
+    },
+    "name" : "junit4"
+  }
+}

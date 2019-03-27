@@ -1,0 +1,325 @@
+{
+  "AtlasMapping" : {
+    "jsonType" : "io.atlasmap.v2.AtlasMapping",
+    "dataSource" : [ {
+      "jsonType" : "io.atlasmap.v2.DataSource",
+      "id" : "SourceCollectionsClass",
+      "uri" : "atlas:java?className=io.atlasmap.java.test.SourceCollectionsClass",
+      "dataSourceType" : "SOURCE"
+    }, {
+      "jsonType" : "io.atlasmap.v2.DataSource",
+      "id" : "sfpc0",
+      "uri" : "atlas:java?className=io.atlasmap.java.test.SourceFlatPrimitiveClass",
+      "dataSourceType" : "SOURCE"
+    }, {
+      "jsonType" : "io.atlasmap.v2.DataSource",
+      "id" : "sfpc1",
+      "uri" : "atlas:java?className=io.atlasmap.java.test.SourceFlatPrimitiveClass",
+      "dataSourceType" : "SOURCE"
+    }, {
+      "jsonType" : "io.atlasmap.v2.DataSource",
+      "id" : "sfpc2",
+      "uri" : "atlas:java?className=io.atlasmap.java.test.SourceFlatPrimitiveClass",
+      "dataSourceType" : "SOURCE"
+    }, {
+      "jsonType" : "io.atlasmap.v2.DataSource",
+      "id" : "sfpc3",
+      "uri" : "atlas:java?className=io.atlasmap.java.test.SourceFlatPrimitiveClass",
+      "dataSourceType" : "SOURCE"
+    }, {
+      "jsonType" : "io.atlasmap.v2.DataSource",
+      "id" : "sfpc4",
+      "uri" : "atlas:java?className=io.atlasmap.java.test.SourceFlatPrimitiveClass",
+      "dataSourceType" : "SOURCE"
+    }, {
+      "jsonType" : "io.atlasmap.v2.DataSource",
+      "id" : "TargetCollectionsClass",
+      "uri" : "atlas:java?className=io.atlasmap.java.test.TargetCollectionsClass",
+      "dataSourceType" : "TARGET"
+    }, {
+      "jsonType" : "io.atlasmap.v2.DataSource",
+      "id" : "tfpc0",
+      "uri" : "atlas:java?className=io.atlasmap.java.test.TargetFlatPrimitiveClass",
+      "dataSourceType" : "TARGET"
+    }, {
+      "jsonType" : "io.atlasmap.v2.DataSource",
+      "id" : "tfpc1",
+      "uri" : "atlas:java?className=io.atlasmap.java.test.TargetFlatPrimitiveClass",
+      "dataSourceType" : "TARGET"
+    }, {
+      "jsonType" : "io.atlasmap.v2.DataSource",
+      "id" : "tfpc2",
+      "uri" : "atlas:java?className=io.atlasmap.java.test.TargetFlatPrimitiveClass",
+      "dataSourceType" : "TARGET"
+    }, {
+      "jsonType" : "io.atlasmap.v2.DataSource",
+      "id" : "tfpc3",
+      "uri" : "atlas:java?className=io.atlasmap.java.test.TargetFlatPrimitiveClass",
+      "dataSourceType" : "TARGET"
+    }, {
+      "jsonType" : "io.atlasmap.v2.DataSource",
+      "id" : "tfpc4",
+      "uri" : "atlas:java?className=io.atlasmap.java.test.TargetFlatPrimitiveClass",
+      "dataSourceType" : "TARGET"
+    } ],
+    "mappings" : {
+      "mapping" : [ {
+        "jsonType" : "io.atlasmap.v2.Collection",
+        "mappingType" : "COLLECTION",
+        "mappings" : {
+          "mapping" : [ {
+            "jsonType" : "io.atlasmap.v2.Mapping",
+            "mappingType" : "MAP",
+            "inputField" : [ {
+              "jsonType" : "io.atlasmap.java.v2.JavaField",
+              "docId" : "SourceCollectionsClass",
+              "path" : "/list<>",
+              "fieldType" : "STRING"
+            } ],
+            "outputField" : [ {
+              "jsonType" : "io.atlasmap.java.v2.JavaField",
+              "docId" : "TargetCollectionsClass",
+              "path" : "/set<>",
+              "fieldType" : "STRING"
+            } ]
+          } ]
+        }
+      }, {
+        "jsonType" : "io.atlasmap.v2.Collection",
+        "mappingType" : "COLLECTION",
+        "mappings" : {
+          "mapping" : [ {
+            "jsonType" : "io.atlasmap.v2.Mapping",
+            "mappingType" : "MAP",
+            "inputField" : [ {
+              "jsonType" : "io.atlasmap.java.v2.JavaField",
+              "docId" : "SourceCollectionsClass",
+              "path" : "/linkedList<>",
+              "fieldType" : "STRING"
+            } ],
+            "outputField" : [ {
+              "jsonType" : "io.atlasmap.java.v2.JavaField",
+              "docId" : "TargetCollectionsClass",
+              "path" : "/hashSet<>",
+              "fieldType" : "STRING"
+            } ]
+          } ]
+        }
+      }, {
+        "jsonType" : "io.atlasmap.v2.Collection",
+        "mappingType" : "COLLECTION",
+        "mappings" : {
+          "mapping" : [ {
+            "jsonType" : "io.atlasmap.v2.Mapping",
+            "mappingType" : "MAP",
+            "inputField" : [ {
+              "jsonType" : "io.atlasmap.java.v2.JavaField",
+              "docId" : "SourceCollectionsClass",
+              "path" : "/arrayList<>",
+              "fieldType" : "STRING"
+            } ],
+            "outputField" : [ {
+              "jsonType" : "io.atlasmap.java.v2.JavaField",
+              "docId" : "TargetCollectionsClass",
+              "path" : "/list<>",
+              "fieldType" : "STRING"
+            } ]
+          } ]
+        }
+      }, {
+        "jsonType" : "io.atlasmap.v2.Collection",
+        "mappingType" : "COLLECTION",
+        "mappings" : {
+          "mapping" : [ {
+            "jsonType" : "io.atlasmap.v2.Mapping",
+            "mappingType" : "MAP",
+            "inputField" : [ {
+              "jsonType" : "io.atlasmap.java.v2.JavaField",
+              "docId" : "SourceCollectionsClass",
+              "path" : "/set<>",
+              "fieldType" : "STRING"
+            } ],
+            "outputField" : [ {
+              "jsonType" : "io.atlasmap.java.v2.JavaField",
+              "docId" : "TargetCollectionsClass",
+              "path" : "/linkedList<>",
+              "fieldType" : "STRING"
+            } ]
+          } ]
+        }
+      }, {
+        "jsonType" : "io.atlasmap.v2.Collection",
+        "mappingType" : "COLLECTION",
+        "mappings" : {
+          "mapping" : [ {
+            "jsonType" : "io.atlasmap.v2.Mapping",
+            "mappingType" : "MAP",
+            "inputField" : [ {
+              "jsonType" : "io.atlasmap.java.v2.JavaField",
+              "docId" : "SourceCollectionsClass",
+              "path" : "/hashSet<>",
+              "fieldType" : "STRING"
+            } ],
+            "outputField" : [ {
+              "jsonType" : "io.atlasmap.java.v2.JavaField",
+              "docId" : "TargetCollectionsClass",
+              "path" : "/arrayList<>",
+              "fieldType" : "STRING"
+            } ]
+          } ]
+        }
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "MAP",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "docId" : "SourceCollectionsClass",
+          "path" : "/list<0>",
+          "fieldType" : "STRING"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "docId" : "tfpc0",
+          "path" : "/boxedStringField",
+          "fieldType" : "STRING"
+        } ]
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "MAP",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "docId" : "SourceCollectionsClass",
+          "path" : "/linkedList<0>",
+          "fieldType" : "STRING"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "docId" : "tfpc1",
+          "path" : "/boxedStringField",
+          "fieldType" : "STRING"
+        } ]
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "MAP",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "docId" : "SourceCollectionsClass",
+          "path" : "/arrayList<0>",
+          "fieldType" : "STRING"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "docId" : "tfpc2",
+          "path" : "/boxedStringField",
+          "fieldType" : "STRING"
+        } ]
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "MAP",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "docId" : "SourceCollectionsClass",
+          "path" : "/set<0>",
+          "fieldType" : "STRING"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "docId" : "tfpc3",
+          "path" : "/boxedStringField",
+          "fieldType" : "STRING"
+        } ]
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "MAP",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "docId" : "SourceCollectionsClass",
+          "path" : "/hashSet<0>",
+          "fieldType" : "STRING"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "docId" : "tfpc4",
+          "path" : "/boxedStringField",
+          "fieldType" : "STRING"
+        } ]
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "MAP",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "docId" : "sfpc0",
+          "path" : "/boxedStringField",
+          "fieldType" : "STRING"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "docId" : "TargetCollectionsClass",
+          "path" : "/list<3>",
+          "fieldType" : "STRING"
+        } ]
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "MAP",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "docId" : "sfpc1",
+          "path" : "/boxedStringField",
+          "fieldType" : "STRING"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "docId" : "TargetCollectionsClass",
+          "path" : "/linkedList<3>",
+          "fieldType" : "STRING"
+        } ]
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "MAP",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "docId" : "sfpc2",
+          "path" : "/boxedStringField",
+          "fieldType" : "STRING"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "docId" : "TargetCollectionsClass",
+          "path" : "/arrayList<3>",
+          "fieldType" : "STRING"
+        } ]
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "MAP",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "docId" : "sfpc3",
+          "path" : "/boxedStringField",
+          "fieldType" : "STRING"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "docId" : "TargetCollectionsClass",
+          "path" : "/set<3>",
+          "fieldType" : "STRING"
+        } ]
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "MAP",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "docId" : "sfpc4",
+          "path" : "/boxedStringField",
+          "fieldType" : "STRING"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "docId" : "TargetCollectionsClass",
+          "path" : "/hashSet<3>",
+          "fieldType" : "STRING"
+        } ]
+      } ]
+    },
+    "name" : "JavaJavaFlatMapping"
+  }
+}

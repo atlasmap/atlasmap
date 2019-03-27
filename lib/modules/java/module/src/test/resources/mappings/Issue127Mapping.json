@@ -1,0 +1,44 @@
+{
+  "AtlasMapping" : {
+    "jsonType" : "io.atlasmap.v2.AtlasMapping",
+    "dataSource" : [ {
+      "jsonType" : "io.atlasmap.v2.DataSource",
+      "id" : "ATLAS_DEFAULT_SOURCE_DOC",
+      "uri" : "atlas:java?className=io.atlasmap.java.module.MockJavaClass",
+      "dataSourceType" : "SOURCE"
+    }, {
+      "jsonType" : "io.atlasmap.v2.DataSource",
+      "id" : "ATLAS_DEFAULT_SOURCE_DOC",
+      "uri" : "atlas:java?className=io.atlasmap.java.module.MockJavaClass",
+      "dataSourceType" : "TARGET"
+    } ],
+    "mappings" : {
+      "mapping" : [ {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "MAP",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "docId" : "ATLAS_DEFAULT_SOURCE_DOC",
+          "path" : "/firstName",
+          "fieldType" : "STRING",
+          "name" : "firstName"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "docId" : "ATLAS_DEFAULT_TARGET_DOC",
+          "path" : "/id",
+          "fieldType" : "INTEGER",
+          "name" : "id"
+        } ],
+        "id" : "issue127-1"
+      } ]
+    },
+    "lookupTables" : {
+      "lookupTable" : [ ]
+    },
+    "properties" : {
+      "property" : [ ]
+    },
+    "name" : "UI.321383"
+  }
+}

@@ -40,7 +40,6 @@ import io.atlasmap.api.AtlasContextFactory;
 import io.atlasmap.api.AtlasConversionException;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.api.AtlasSession;
-import io.atlasmap.core.AtlasMappingService.AtlasMappingFormat;
 import io.atlasmap.mxbean.AtlasContextMXBean;
 import io.atlasmap.spi.AtlasModule;
 import io.atlasmap.spi.AtlasModuleInfo;
@@ -78,25 +77,19 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
     private final UUID uuid;
     private DefaultAtlasContextFactory factory;
     private AtlasMapping mappingDefinition;
-    private AtlasMappingFormat atlasMappingFormat;
     private URI atlasMappingUri;
     private Map<String, AtlasModule> sourceModules = new HashMap<>();
     private Map<String, AtlasModule> targetModules = new HashMap<>();
     private Map<String, LookupTable> lookupTables = new HashMap<>();
 
     public DefaultAtlasContext(URI atlasMappingUri) {
-        this(DefaultAtlasContextFactory.getInstance(), atlasMappingUri, AtlasMappingFormat.XML);
+        this(DefaultAtlasContextFactory.getInstance(), atlasMappingUri);
     }
 
     public DefaultAtlasContext(DefaultAtlasContextFactory factory, URI atlasMappingUri) {
-        this(factory, atlasMappingUri, AtlasMappingFormat.XML);
-    }
-
-    public DefaultAtlasContext(DefaultAtlasContextFactory factory, URI atlasMappingUri, AtlasMappingFormat format) {
         this.factory = factory;
         this.uuid = UUID.randomUUID();
         this.atlasMappingUri = atlasMappingUri;
-        this.atlasMappingFormat = format;
     }
 
     public DefaultAtlasContext(DefaultAtlasContextFactory factory, AtlasMapping mapping) {
@@ -115,7 +108,7 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
         registerJmx(this);
 
         if (this.atlasMappingUri != null) {
-            this.mappingDefinition = factory.getMappingService().loadMapping(this.atlasMappingUri, atlasMappingFormat);
+            this.mappingDefinition = factory.getMappingService().loadMapping(this.atlasMappingUri);
         }
 
         sourceModules.clear();

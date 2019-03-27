@@ -1,0 +1,66 @@
+{
+  "AtlasMapping" : {
+    "jsonType" : "io.atlasmap.v2.AtlasMapping",
+    "dataSource" : [ {
+      "jsonType" : "io.atlasmap.v2.DataSource",
+      "id" : "io.atlasmap.java.test.TargetTestClass",
+      "uri" : "atlas:java?className=io.atlasmap.java.test.TargetTestClass",
+      "dataSourceType" : "SOURCE"
+    }, {
+      "jsonType" : "io.atlasmap.v2.DataSource",
+      "id" : "io.atlasmap.java.test.TargetTestClass",
+      "uri" : "atlas:java?className=io.atlasmap.java.test.TargetTestClass",
+      "dataSourceType" : "TARGET"
+    } ],
+    "mappings" : {
+      "mapping" : [ {
+        "jsonType" : "io.atlasmap.v2.Collection",
+        "mappingType" : "COLLECTION",
+        "mappings" : {
+          "mapping" : [ {
+            "jsonType" : "io.atlasmap.v2.Mapping",
+            "mappingType" : "MAP",
+            "inputField" : [ {
+              "jsonType" : "io.atlasmap.java.v2.JavaField",
+              "docId" : "io.atlasmap.java.test.TargetTestClass",
+              "path" : "/contact/firstName",
+              "fieldType" : "STRING",
+              "name" : "firstName"
+            } ],
+            "outputField" : [ {
+              "jsonType" : "io.atlasmap.java.v2.JavaField",
+              "docId" : "io.atlasmap.java.test.TargetTestClass",
+              "path" : "/contactList<>/firstName",
+              "fieldType" : "STRING",
+              "name" : "firstName"
+            } ]
+          }, {
+            "jsonType" : "io.atlasmap.v2.Mapping",
+            "mappingType" : "MAP",
+            "inputField" : [ {
+              "jsonType" : "io.atlasmap.java.v2.JavaField",
+              "docId" : "io.atlasmap.java.test.TargetTestClass",
+              "path" : "/contact/lastName",
+              "fieldType" : "STRING",
+              "name" : "lastName"
+            } ],
+            "outputField" : [ {
+              "jsonType" : "io.atlasmap.java.v2.JavaField",
+              "docId" : "io.atlasmap.java.test.TargetTestClass",
+              "path" : "/contactList<>/lastName",
+              "fieldType" : "STRING",
+              "name" : "lastName"
+            } ]
+          } ]
+        }
+      } ]
+    },
+    "lookupTables" : {
+      "lookupTable" : [ ]
+    },
+    "properties" : {
+      "property" : [ ]
+    },
+    "name" : "UI.782860"
+  }
+}

@@ -49,49 +49,49 @@ public class JsonJavaAutoConversionTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessJsonJavaFlatFieldMappingAutoConversion1() throws Exception {
         Object object = executeMapping(
-                "src/test/resources/jsonToJava/atlasmapping-flatprimitive-unrooted-autoconversion-1.xml");
+                "src/test/resources/jsonToJava/atlasmapping-flatprimitive-unrooted-autoconversion-1.json");
         AtlasTestUtil.validateFlatPrimitiveClassPrimitiveFieldAutoConversion1((TargetFlatPrimitiveClass) object);
     }
 
     @Test
     public void testProcessJsonJavaFlatFieldMappingAutoConversion2() throws Exception {
         Object object = executeMapping(
-                "src/test/resources/jsonToJava/atlasmapping-flatprimitive-unrooted-autoconversion-2.xml");
+                "src/test/resources/jsonToJava/atlasmapping-flatprimitive-unrooted-autoconversion-2.json");
         AtlasTestUtil.validateFlatPrimitiveClassPrimitiveFieldAutoConversion2((TargetFlatPrimitiveClass) object);
     }
 
     @Test
     public void testProcessJsonJavaFlatFieldMappingAutoConversion3() throws Exception {
         Object object = executeMapping(
-                "src/test/resources/jsonToJava/atlasmapping-flatprimitive-unrooted-autoconversion-3.xml");
+                "src/test/resources/jsonToJava/atlasmapping-flatprimitive-unrooted-autoconversion-3.json");
         AtlasTestUtil.validateFlatPrimitiveClassPrimitiveFieldAutoConversion3((TargetFlatPrimitiveClass) object);
     }
 
     @Test
     public void testProcessJsonJavaFlatFieldMappingAutoConversion4() throws Exception {
         Object object = executeMapping(
-                "src/test/resources/jsonToJava/atlasmapping-flatprimitive-unrooted-autoconversion-4.xml");
+                "src/test/resources/jsonToJava/atlasmapping-flatprimitive-unrooted-autoconversion-4.json");
         AtlasTestUtil.validateFlatPrimitiveClassPrimitiveFieldAutoConversion4((TargetFlatPrimitiveClass) object);
     }
 
     @Test
     public void testProcessJsonJavaFlatFieldMappingAutoConversion5() throws Exception {
         Object object = executeMapping(
-                "src/test/resources/jsonToJava/atlasmapping-flatprimitive-unrooted-autoconversion-5.xml");
+                "src/test/resources/jsonToJava/atlasmapping-flatprimitive-unrooted-autoconversion-5.json");
         AtlasTestUtil.validateFlatPrimitiveClassPrimitiveFieldAutoConversion5((TargetFlatPrimitiveClass) object);
     }
 
     @Test
     public void testProcessJsonJavaFlatFieldMappingAutoConversion6() throws Exception {
         Object object = executeMapping(
-                "src/test/resources/jsonToJava/atlasmapping-flatprimitive-unrooted-autoconversion-6.xml");
+                "src/test/resources/jsonToJava/atlasmapping-flatprimitive-unrooted-autoconversion-6.json");
         AtlasTestUtil.validateFlatPrimitiveClassPrimitiveFieldAutoConversion6((TargetFlatPrimitiveClass) object);
     }
 
     @Test
     public void testProcessJsonJavaFlatFieldMappingAutoConversion7() throws Exception {
         Object object = executeMapping(
-                "src/test/resources/jsonToJava/atlasmapping-flatprimitive-unrooted-autoconversion-7.xml");
+                "src/test/resources/jsonToJava/atlasmapping-flatprimitive-unrooted-autoconversion-7.json");
         AtlasTestUtil.validateFlatPrimitiveClassPrimitiveFieldAutoConversion7((TargetFlatPrimitiveClass) object);
     }
 

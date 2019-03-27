@@ -110,7 +110,7 @@ public class JavaJavaComplexListTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessJavaJavaComplexAutoDetectBaseNoAbstractTest() throws Exception {
         AtlasContext context = atlasContextFactory
-                .createContext(new File("src/test/resources/javaToJava/atlasmapping-complex-list-autodetect-base-no-abstract.xml"));
+                .createContext(new File("src/test/resources/javaToJava/atlasmapping-complex-list-autodetect-base-no-abstract.json"));
         AtlasSession session = context.createSession();
         BaseOrderList sourceOrderList = AtlasTestUtil.generateOrderListClass(SourceOrderList.class, SourceOrder.class,
                 SourceAddress.class, SourceContact.class);
@@ -127,7 +127,7 @@ public class JavaJavaComplexListTest extends AtlasMappingBaseTest {
     @Ignore("https://github.com/atlasmap/atlasmap/issues/48 - Allow default implementation for abstract target field")
     public void testProcessJavaJavaComplexAutoDetectBaseTest() throws Exception {
         AtlasContext context = atlasContextFactory
-                .createContext(new File("src/test/resources/javaToJava/atlasmapping-complex-list-autodetect-base.xml"));
+                .createContext(new File("src/test/resources/javaToJava/atlasmapping-complex-list-autodetect-base.json"));
         AtlasSession session = context.createSession();
         BaseOrderList sourceOrderList = AtlasTestUtil.generateOrderListClass(SourceOrderList.class, SourceOrder.class,
                 SourceAddress.class, SourceContact.class);
@@ -144,7 +144,7 @@ public class JavaJavaComplexListTest extends AtlasMappingBaseTest {
     @Ignore("https://github.com/atlasmap/atlasmap/issues/48 - Allow default implementation for abstract target field")
     public void testProcessJavaJavaComplexAutoDetectFullTest() throws Exception {
         AtlasContext context = atlasContextFactory
-                .createContext(new File("src/test/resources/javaToJava/atlasmapping-complex-list-autodetect-full.xml"));
+                .createContext(new File("src/test/resources/javaToJava/atlasmapping-complex-list-autodetect-full.json"));
         AtlasSession session = context.createSession();
         BaseOrderList sourceOrderList = AtlasTestUtil.generateOrderListClass(SourceOrderList.class, SourceOrder.class,
                 SourceAddress.class, SourceContact.class);

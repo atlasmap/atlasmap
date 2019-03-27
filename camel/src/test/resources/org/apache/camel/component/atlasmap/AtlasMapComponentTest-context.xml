@@ -8,7 +8,7 @@
     <camelContext xmlns="http://camel.apache.org/schema/spring">
         <route>
             <from uri="direct:start" />
-            <to uri="atlas:atlasmapping.xml" />
+            <to uri="atlas:atlasmapping.json" />
             <to uri="mock:result" />
         </route>
     </camelContext>

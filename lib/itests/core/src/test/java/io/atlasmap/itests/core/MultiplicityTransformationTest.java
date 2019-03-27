@@ -29,7 +29,6 @@ import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasSession;
 import io.atlasmap.core.AtlasMappingService;
 import io.atlasmap.core.DefaultAtlasContextFactory;
-import io.atlasmap.core.AtlasMappingService.AtlasMappingFormat;
 import io.atlasmap.itests.core.issue.SourceClass;
 import io.atlasmap.itests.core.issue.TargetClass;
 import io.atlasmap.v2.AtlasMapping;
@@ -45,8 +44,8 @@ public class MultiplicityTransformationTest {
 
     @Test
     public void testConcatenateSplit() throws Exception {
-        URL url = Thread.currentThread().getContextClassLoader().getResource("mappings/atlasmapping-multiplicity-transformation-concatenate-split.xml");
-        AtlasMapping mapping = mappingService.loadMapping(url, AtlasMappingFormat.XML);
+        URL url = Thread.currentThread().getContextClassLoader().getResource("mappings/atlasmapping-multiplicity-transformation-concatenate-split.json");
+        AtlasMapping mapping = mappingService.loadMapping(url);
         AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(mapping);
         AtlasSession session = context.createSession();
         SourceClass source = new SourceClass()
@@ -75,8 +74,8 @@ public class MultiplicityTransformationTest {
 
     @Test
     public void testItemAt() throws Exception {
-        URL url = Thread.currentThread().getContextClassLoader().getResource("mappings/atlasmapping-multiplicity-transformation-itemAt.xml");
-        AtlasMapping mapping = mappingService.loadMapping(url, AtlasMappingFormat.XML);
+        URL url = Thread.currentThread().getContextClassLoader().getResource("mappings/atlasmapping-multiplicity-transformation-itemAt.json");
+        AtlasMapping mapping = mappingService.loadMapping(url);
         AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(mapping);
         AtlasSession session = context.createSession();
         SourceClass source = new SourceClass().setSourceStringList(Arrays.asList(new String[] {"one", "two", "three"}));

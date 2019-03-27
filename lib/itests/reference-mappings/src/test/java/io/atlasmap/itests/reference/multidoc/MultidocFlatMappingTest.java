@@ -40,7 +40,7 @@ public class MultidocFlatMappingTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessJavaJavaFlatFieldMapping() throws Exception {
         AtlasContext context = atlasContextFactory
-                .createContext(new File("src/test/resources/multidoc/atlasmapping-flatprimitive.xml").toURI());
+                .createContext(new File("src/test/resources/multidoc/atlasmapping-flatprimitive.json").toURI());
         AtlasSession session = context.createSession();
         BaseFlatPrimitiveClass sourceJava = generateFlatPrimitiveClass(SourceFlatPrimitiveClass.class);
         session.setSourceDocument("SourceJava", sourceJava);

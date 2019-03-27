@@ -38,7 +38,7 @@ public class JsonJsonMultiSourceTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessBasic() throws Exception {
         AtlasContext context = atlasContextFactory
-                .createContext(new File("src/test/resources/jsonToJson/atlasmapping-multisource-basic.xml").toURI());
+                .createContext(new File("src/test/resources/jsonToJson/atlasmapping-multisource-basic.json").toURI());
         AtlasSession session = context.createSession();
         String sourceContact = AtlasTestUtil
                 .loadFileAsString("src/test/resources/jsonToJson/atlas-json-contact-unrooted.json");
@@ -62,7 +62,7 @@ public class JsonJsonMultiSourceTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessComplex() throws Exception {
         AtlasContext context = atlasContextFactory
-                .createContext(new File("src/test/resources/jsonToJson/atlasmapping-multisource-complex.xml").toURI());
+                .createContext(new File("src/test/resources/jsonToJson/atlasmapping-multisource-complex.json").toURI());
         AtlasSession session = context.createSession();
         String sourceContact = AtlasTestUtil
                 .loadFileAsString("src/test/resources/jsonToJson/atlas-json-contact-unrooted.json");

@@ -54,49 +54,49 @@ public class XmlXmlAutoConversionTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessXmlXmlFlatFieldMappingAutoConversion1() throws Exception {
         JAXBElement<XmlFlatPrimitiveElement> xmlFPE = executeMapper(
-                "src/test/resources/xmlToXml/atlasmapping-flatprimitive-attribute-autoconversion-1.xml");
+                "src/test/resources/xmlToXml/atlasmapping-flatprimitive-attribute-autoconversion-1.json");
         AtlasTestUtil.validateXmlFlatPrimitivePrimitiveElementAutoConversion1(xmlFPE.getValue());
     }
 
     @Test
     public void testProcessXmlXmlFlatFieldMappingAutoConversion2() throws Exception {
         JAXBElement<XmlFlatPrimitiveElement> xmlFPE = executeMapper(
-                "src/test/resources/xmlToXml/atlasmapping-flatprimitive-attribute-autoconversion-2.xml");
+                "src/test/resources/xmlToXml/atlasmapping-flatprimitive-attribute-autoconversion-2.json");
         AtlasTestUtil.validateXmlFlatPrimitivePrimitiveElementAutoConversion2(xmlFPE.getValue());
     }
 
     @Test
     public void testProcessXmlXmlFlatFieldMappingAutoConversion3() throws Exception {
         JAXBElement<XmlFlatPrimitiveElement> xmlFPE = executeMapper(
-                "src/test/resources/xmlToXml/atlasmapping-flatprimitive-attribute-autoconversion-3.xml");
+                "src/test/resources/xmlToXml/atlasmapping-flatprimitive-attribute-autoconversion-3.json");
         AtlasTestUtil.validateXmlFlatPrimitivePrimitiveElementAutoConversion3(xmlFPE.getValue());
     }
 
     @Test
     public void testProcessXmlXmlFlatFieldMappingAutoConversion4() throws Exception {
         JAXBElement<XmlFlatPrimitiveElement> xmlFPE = executeMapper(
-                "src/test/resources/xmlToXml/atlasmapping-flatprimitive-attribute-autoconversion-4.xml");
+                "src/test/resources/xmlToXml/atlasmapping-flatprimitive-attribute-autoconversion-4.json");
         AtlasTestUtil.validateXmlFlatPrimitivePrimitiveElementAutoConversion4(xmlFPE.getValue());
     }
 
     @Test
     public void testProcessXmlXmlFlatFieldMappingAutoConversion5() throws Exception {
         JAXBElement<XmlFlatPrimitiveElement> xmlFPE = executeMapper(
-                "src/test/resources/xmlToXml/atlasmapping-flatprimitive-attribute-autoconversion-5.xml");
+                "src/test/resources/xmlToXml/atlasmapping-flatprimitive-attribute-autoconversion-5.json");
         AtlasTestUtil.validateXmlFlatPrimitivePrimitiveElementAutoConversion5(xmlFPE.getValue());
     }
 
     @Test
     public void testProcessXmlXmlFlatFieldMappingAutoConversion6() throws Exception {
         JAXBElement<XmlFlatPrimitiveElement> xmlFPE = executeMapper(
-                "src/test/resources/xmlToXml/atlasmapping-flatprimitive-attribute-autoconversion-6.xml");
+                "src/test/resources/xmlToXml/atlasmapping-flatprimitive-attribute-autoconversion-6.json");
         AtlasTestUtil.validateXmlFlatPrimitivePrimitiveElementAutoConversion6(xmlFPE.getValue());
     }
 
     @Test
     public void testProcessXmlXmlFlatFieldMappingAutoConversion7() throws Exception {
         JAXBElement<XmlFlatPrimitiveElement> xmlFPE = executeMapper(
-                "src/test/resources/xmlToXml/atlasmapping-flatprimitive-attribute-autoconversion-7.xml");
+                "src/test/resources/xmlToXml/atlasmapping-flatprimitive-attribute-autoconversion-7.json");
         AtlasTestUtil.validateXmlFlatPrimitivePrimitiveElementAutoConversion7(xmlFPE.getValue());
     }
 

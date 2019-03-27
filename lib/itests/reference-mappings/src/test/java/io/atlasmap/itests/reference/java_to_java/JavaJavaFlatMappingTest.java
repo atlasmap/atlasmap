@@ -200,13 +200,13 @@ public class JavaJavaFlatMappingTest extends AtlasMappingBaseTest {
         File path = new File("target/reference-mappings/javaToJava");
         path.mkdirs();
         atlasMappingService.saveMappingAsFile(atlasMapping,
-                new File(path, "atlasmapping-flatprimitive.xml"));
+                new File(path, "atlasmapping-flatprimitive.json"));
     }
 
     @Test
     public void testProcessJavaJavaFlatFieldMapping() throws Exception {
         AtlasContext context = atlasContextFactory
-                .createContext(new File("src/test/resources/javaToJava/atlasmapping-flatprimitive.xml").toURI());
+                .createContext(new File("src/test/resources/javaToJava/atlasmapping-flatprimitive.json").toURI());
         AtlasSession session = context.createSession();
         BaseFlatPrimitiveClass sourceClass = generateFlatPrimitiveClass(SourceFlatPrimitiveClass.class);
         session.setDefaultSourceDocument(sourceClass);
@@ -221,7 +221,7 @@ public class JavaJavaFlatMappingTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessJavaJavaFlatFieldMappingPrimitivesBoxedValues() throws Exception {
         AtlasContext context = atlasContextFactory
-                .createContext(new File("src/test/resources/javaToJava/atlasmapping-flatprimitive.xml").toURI());
+                .createContext(new File("src/test/resources/javaToJava/atlasmapping-flatprimitive.json").toURI());
         AtlasSession session = context.createSession();
         BaseFlatPrimitiveClass sourceClass = generateFlatPrimitiveClassPrimitiveFieldsBoxedValues(
                 SourceFlatPrimitiveClass.class);
@@ -242,7 +242,7 @@ public class JavaJavaFlatMappingTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessJavaJavaFlatFieldMappingBoxedPrimitives() throws Exception {
         AtlasContext context = atlasContextFactory
-                .createContext(new File("src/test/resources/javaToJava/atlasmapping-flatprimitive-boxed.xml").toURI());
+                .createContext(new File("src/test/resources/javaToJava/atlasmapping-flatprimitive-boxed.json").toURI());
         AtlasSession session = context.createSession();
         BaseFlatPrimitiveClass sourceClass = generateFlatPrimitiveClassBoxedPrimitiveFieldsBoxedValues(
                 SourceFlatPrimitiveClass.class);

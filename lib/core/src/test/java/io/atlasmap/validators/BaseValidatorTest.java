@@ -44,7 +44,7 @@ public abstract class BaseValidatorTest {
 
     // protected io.atlasmap.java.v2.ObjectFactory javaModelFactory = new
     // io.atlasmap.java.v2.ObjectFactory();
-    protected AtlasMappingUtil mappingUtil = new AtlasMappingUtil("io.atlasmap.v2");
+    protected AtlasMappingUtil mappingUtil = new AtlasMappingUtil();
     protected AtlasValidationTestHelper validationHelper = null;
     protected List<Validation> validations = null;
     protected AtlasValidator validator = null;

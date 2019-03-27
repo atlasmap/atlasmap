@@ -40,7 +40,7 @@ public class JavaJavaMultiSourceTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessBasic() throws Exception {
         AtlasContext context = atlasContextFactory
-                .createContext(new File("src/test/resources/javaToJava/atlasmapping-multisource-basic.xml").toURI());
+                .createContext(new File("src/test/resources/javaToJava/atlasmapping-multisource-basic.json").toURI());
         AtlasSession session = context.createSession();
         BaseContact sourceContact = AtlasTestUtil.generateContact(SourceContact.class);
         BaseAddress sourceAddress = AtlasTestUtil.generateAddress(SourceAddress.class);
@@ -62,7 +62,7 @@ public class JavaJavaMultiSourceTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessComplex() throws Exception {
         AtlasContext context = atlasContextFactory
-                .createContext(new File("src/test/resources/javaToJava/atlasmapping-multisource-complex.xml").toURI());
+                .createContext(new File("src/test/resources/javaToJava/atlasmapping-multisource-complex.json").toURI());
         AtlasSession session = context.createSession();
         BaseContact sourceContact = AtlasTestUtil.generateContact(SourceContact.class);
         BaseAddress sourceAddress = AtlasTestUtil.generateAddress(SourceAddress.class);
