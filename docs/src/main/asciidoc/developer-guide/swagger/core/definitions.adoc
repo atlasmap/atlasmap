@@ -97,11 +97,11 @@ __optional__|<<_atlas-service-core-classloader,ClassLoader>>
 |**constants** +
 __optional__|<<_atlas-service-core-constants,Constants>>
 |**dataSource** +
-__required__|< <<_atlas-service-core-datasource,DataSource>> > array
+__optional__|< <<_atlas-service-core-datasource,DataSource>> > array
 |**lookupTables** +
 __optional__|<<_atlas-service-core-lookuptables,LookupTables>>
 |**mappings** +
-__required__|<<_atlas-service-core-mappings,Mappings>>
+__optional__|<<_atlas-service-core-mappings,Mappings>>
 |**name** +
 __optional__|string
 |**properties** +

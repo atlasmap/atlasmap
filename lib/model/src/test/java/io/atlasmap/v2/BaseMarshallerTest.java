@@ -27,17 +27,11 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map.Entry;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.TestName;
-
-import com.sun.xml.xsom.XSElementDecl;
-import com.sun.xml.xsom.XSSchema;
 
 public abstract class BaseMarshallerTest {
 
@@ -600,20 +594,6 @@ public abstract class BaseMarshallerTest {
                 break;
             }
         }
-    }
-
-    protected List<Action> generateReferenceFieldActions() throws Exception {
-        List<Action> actions = new LinkedList<>();
-        XSSchema schema = ModelTestUtil.getCoreSchema();
-        for (Entry<String, XSElementDecl> entry : schema.getElementDecls().entrySet()) {
-            String name = entry.getKey();
-            XSElementDecl element = entry.getValue();
-            if ("Action".equals(element.getType().getBaseType().getName())) {
-                Class<?> clazz = Class.forName("io.atlasmap.v2." + name);
-                actions.add((Action)clazz.newInstance());
-            }
-        }
-        return actions;
     }
 
     protected void addMapSimpleField(AtlasMapping mapping, String key) {

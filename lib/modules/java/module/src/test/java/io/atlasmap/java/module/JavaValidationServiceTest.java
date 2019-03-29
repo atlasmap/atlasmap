@@ -56,7 +56,6 @@ import io.atlasmap.validators.AtlasValidationTestHelper;
 public class JavaValidationServiceTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(JavaValidationServiceTest.class);
-    protected io.atlasmap.java.v2.ObjectFactory javaModelFactory = null;
     protected AtlasMappingUtil mappingUtil = null;
     protected DefaultAtlasFieldActionService fieldActionService;
     protected JavaValidationService sourceValidationService = null;
@@ -67,7 +66,6 @@ public class JavaValidationServiceTest {
 
     @Before
     public void setUp() {
-        javaModelFactory = new io.atlasmap.java.v2.ObjectFactory();
         mappingUtil = new AtlasMappingUtil();
         moduleDetail = JavaModule.class.getAnnotation(AtlasModuleDetail.class);
 
@@ -85,7 +83,6 @@ public class JavaValidationServiceTest {
 
     @After
     public void tearDown() {
-        javaModelFactory = null;
         mappingUtil = null;
         sourceValidationService = null;
         targetValidationService = null;
@@ -241,13 +238,13 @@ public class JavaValidationServiceTest {
         Mapping combineFieldMapping = AtlasModelFactory.createMapping(MappingType.COMBINE);
         combineFieldMapping.setId("combine.firstName.lastName");
 
-        JavaField bIJavaField = javaModelFactory.createJavaField();
+        JavaField bIJavaField = new JavaField();
         bIJavaField.setFieldType(FieldType.STRING);
         bIJavaField.setValue(Boolean.TRUE);
         bIJavaField.setPath("firstName");
         combineFieldMapping.getInputField().add(bIJavaField);
 
-        JavaField sOJavaField = javaModelFactory.createJavaField();
+        JavaField sOJavaField = new JavaField();
         sOJavaField.setFieldType(FieldType.BOOLEAN);
         sOJavaField.setPath("lastName");
         sOJavaField.setIndex(0);
@@ -297,14 +294,14 @@ public class JavaValidationServiceTest {
         Mapping separateFieldMapping = AtlasModelFactory.createMapping(MappingType.SEPARATE);
         separateFieldMapping.setId("separate.firstName.lastName");
 
-        JavaField bIJavaField = javaModelFactory.createJavaField();
+        JavaField bIJavaField = new JavaField();
         bIJavaField.setFieldType(FieldType.BOOLEAN);
         bIJavaField.setValue(Boolean.TRUE);
         bIJavaField.setPath("firstName");
 
         separateFieldMapping.getInputField().add(bIJavaField);
 
-        JavaField sOJavaField = javaModelFactory.createJavaField();
+        JavaField sOJavaField = new JavaField();
         sOJavaField.setFieldType(FieldType.STRING);
         sOJavaField.setPath("lastName");
         sOJavaField.setIndex(0);

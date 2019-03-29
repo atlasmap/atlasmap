@@ -74,39 +74,13 @@ public class JsonMarshallerTest extends BaseMarshallerTest {
         validateReferenceAtlasMapping(uMapping);
     }
 
-    // @Test
-    // public void testLookupTable() throws Exception {
-    // AtlasMapping atlasMapping = generateAtlasMapping();
-    // atlasMapping.getLookupTables().getLookupTable().add(generateLookupTable());
-    // mapper.writeValue(new File("target" + File.separator + "junit" +
-    // File.separator + testName.getMethodName()
-    // + File.separator + "atlasmapping.json"), atlasMapping);
-    // AtlasMapping uMapping = mapper.readValue(new File("target" + File.separator +
-    // "junit" + File.separator + testName.getMethodName() + File.separator +
-    // "atlasmapping.json"), AtlasMapping.class);
-    // //AtlasMapping uMapping = mapper.readValue(new
-    // File("src/test/resources/json/mockfield/atlasmapping-lookup.json"),
-    // // AtlasMapping.class);
-    // assertNotNull(uMapping);
-    // validateAtlasMapping(uMapping);
-    // assertNotNull(uMapping.getLookupTables());
-    // assertNotNull(uMapping.getLookupTables().getLookupTable());
-    // assertEquals(new Integer(1), new
-    // Integer(uMapping.getLookupTables().getLookupTable().size()));
-    // assertNotNull(uMapping.getLookupTables().getLookupTable().get(0).getLookupEntryList());
-    // assertNotNull(uMapping.getLookupTables().getLookupTable().get(0).getLookupEntryList().getLookupEntry());
-    // assertEquals(new Integer(2), new Integer(
-    // uMapping.getLookupTables().getLookupTable().get(0).getLookupEntryList().getLookupEntry().size()));
-    // }
-    //
-
     @Test
     public void testFieldActions() throws Exception {
         AtlasMapping atlasMapping = generateReferenceAtlasMapping();
         BaseMapping fm = atlasMapping.getMappings().getMapping().get(0);
         ((Mapping) fm).getOutputField().get(0).setActions(new Actions());
 
-        List<Action> actionsList = generateReferenceFieldActions();
+        List<Action> actionsList = ModelTestUtil.getAllOOTBActions();
         ((Mapping) fm).getOutputField().get(0).getActions().getActions().addAll(actionsList);
 
         for (Action a : ((Mapping) fm).getOutputField().get(0).getActions().getActions()) {
@@ -177,19 +151,5 @@ public class JsonMarshallerTest extends BaseMarshallerTest {
                     actionsList.get(i).getClass().getName(), generatedActions.get(i).getClass().getName());
         }
     }
-
-    //
-    // @Test
-    // public void testMulitSourceMapping() throws Exception {
-    // AtlasMapping atlasMapping = generateMultiSourceMapping();
-    // Mapping fm = atlasMapping.getMappings().getMapping().get(0);
-    // ((Map) fm).getOutputField().setActions(new Actions());
-    // ((Map) fm).getOutputField().getActions().setUppercase(new Uppercase());
-    //
-    // mapper.writeValue(new File("target/junit/" + testName.getMethodName() + "/" +
-    // "atlasmapping.json"),atlasMapping);
-    // StreamSource fileSource = new StreamSource(new File("target/junit/" +
-    // testName.getMethodName() + "/" + "atlasmapping.json"));
-    // }
 
 }

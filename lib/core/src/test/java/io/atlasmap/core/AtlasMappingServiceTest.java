@@ -60,44 +60,9 @@ public class AtlasMappingServiceTest {
     }
 
     @Test
-    public void testAtlasMappingServiceListOfString() {
-        List<String> modulePackages = new ArrayList<>();
-        modulePackages.add("io.atlasmap.v2");
-
-        atlasMappingService = new AtlasMappingService(modulePackages);
-
-        assertNotNull(atlasMappingService);
-    }
-
-    @Test(expected = Exception.class)
-    public void testAtlasMappingServiceListOfStringException() {
-        List<String> modulePackages = new ArrayList<>();
-        modulePackages.add("xio.atlasmap.v2");
-
-        atlasMappingService = new AtlasMappingService(modulePackages);
-    }
-
-    @Test
     public void testInitialize() {
-        List<String> modulePackages = new ArrayList<>();
-        atlasMappingService = new AtlasMappingService(modulePackages);
-
+        atlasMappingService = new AtlasMappingService();
         assertNotNull(atlasMappingService);
-    }
-
-    @Test(expected = IllegalStateException.class)
-    public void testInitializeIllegalStateException() {
-        List<String> modulePackages = new ArrayList<>();
-
-        modulePackages.add("xio.atlasmap.v2");
-        modulePackages.add("yio.atlasmap.v2");
-        atlasMappingService = new AtlasMappingService(modulePackages);
-    }
-
-    @Test(expected = IllegalStateException.class)
-    public void testInitializeIllegalStateExceptionNull() {
-        List<String> modulePackages = null;
-        new AtlasMappingService(modulePackages);
     }
 
     @Test

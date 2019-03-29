@@ -146,8 +146,7 @@ public class JavaJsonFlatMappingTest extends AtlasMappingBaseTest {
     @Test
     public void testCreateJavaJsonFlatFieldMappings() throws Exception {
         AtlasMapping atlasMapping = generateJsonJavaFlatMapping();
-        AtlasMappingService atlasMappingService = new AtlasMappingService(
-                Arrays.asList("io.atlasmap.v2", "io.atlasmap.java.v2", "io.atlasmap.json.v2"));
+        AtlasMappingService atlasMappingService = new AtlasMappingService();
         File path = new File("target/reference-mappings/javaToJson");
         path.mkdirs();
         atlasMappingService.saveMappingAsFile(atlasMapping,

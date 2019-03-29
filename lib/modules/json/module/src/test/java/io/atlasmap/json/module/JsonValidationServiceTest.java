@@ -55,7 +55,6 @@ import io.atlasmap.validators.AtlasValidationTestHelper;
 public class JsonValidationServiceTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(JsonValidationServiceTest.class);
-    protected io.atlasmap.json.v2.ObjectFactory jsonModelFactory = null;
     protected AtlasMappingUtil mappingUtil = null;
     protected DefaultAtlasFieldActionService fieldActionService;
     protected JsonValidationService sourceValidationService = null;
@@ -66,7 +65,6 @@ public class JsonValidationServiceTest {
 
     @Before
     public void setUp() {
-        jsonModelFactory = new io.atlasmap.json.v2.ObjectFactory();
         mappingUtil = new AtlasMappingUtil();
         moduleDetail = JsonModule.class.getAnnotation(AtlasModuleDetail.class);
 
@@ -82,7 +80,6 @@ public class JsonValidationServiceTest {
 
     @After
     public void tearDown() {
-        jsonModelFactory = null;
         mappingUtil = null;
         sourceValidationService = null;
         targetValidationService = null;
@@ -169,24 +166,6 @@ public class JsonValidationServiceTest {
         }
     }
 
-    // @Test
-    // @Ignore // Note: manual utility to assist in creating files
-    // public void saveSampleFile() throws Exception {
-    // AtlasMappingUtil util = new
-    // AtlasMappingUtil("io.atlasmap.v2:io.atlasmap.java.v2");
-    //
-    // AtlasMapping mapping = getAtlasMappingFullValid();
-    // util.marshallMapping(mapping,
-    // "src/test/resources/mappings/HappyPathMapping.json");
-    //
-    // mapping = getAtlasMappingFullValid();
-    // mapping.getMappings().getMapping().clear();
-    // mapping.getMappings().getMapping().add(createMockMapping());
-    // mappingUtil.marshallMapping(mapping,
-    // "src/test/resources/mappings/MisMatchedFieldTypes.json");
-    //
-    // }
-
     @Test
     public void testValidateMappingHappyPath() {
         AtlasMapping mapping = getAtlasMappingFullValid();
@@ -235,13 +214,13 @@ public class JsonValidationServiceTest {
         Mapping combineFieldMapping = AtlasModelFactory.createMapping(MappingType.COMBINE);
         combineFieldMapping.setId("combine.firstName.lastName");
 
-        JsonField bIJavaField = jsonModelFactory.createJsonField();
+        JsonField bIJavaField = new JsonField();
         bIJavaField.setFieldType(FieldType.STRING);
         bIJavaField.setValue(Boolean.TRUE);
         bIJavaField.setPath("firstName");
         combineFieldMapping.getInputField().add(bIJavaField);
 
-        JsonField sOJavaField = jsonModelFactory.createJsonField();
+        JsonField sOJavaField = new JsonField();
         sOJavaField.setFieldType(FieldType.BOOLEAN);
         sOJavaField.setPath("lastName");
         sOJavaField.setIndex(0);
@@ -289,14 +268,14 @@ public class JsonValidationServiceTest {
         Mapping separateFieldMapping = AtlasModelFactory.createMapping(MappingType.SEPARATE);
         separateFieldMapping.setId("separate.firstName.lastName");
 
-        JsonField bIJavaField = jsonModelFactory.createJsonField();
+        JsonField bIJavaField = new JsonField();
         bIJavaField.setFieldType(FieldType.BOOLEAN);
         bIJavaField.setValue(Boolean.TRUE);
         bIJavaField.setPath("firstName");
 
         separateFieldMapping.getInputField().add(bIJavaField);
 
-        JsonField sOJavaField = jsonModelFactory.createJsonField();
+        JsonField sOJavaField = new JsonField();
         sOJavaField.setFieldType(FieldType.STRING);
         sOJavaField.setPath("lastName");
         sOJavaField.setIndex(0);

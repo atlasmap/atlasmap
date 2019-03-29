@@ -22,12 +22,8 @@ import static org.junit.Assert.assertNull;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map.Entry;
 
 import org.junit.Test;
-
-import com.sun.xml.xsom.XSElementDecl;
-import com.sun.xml.xsom.XSSchema;
 
 public class AtlasModelFactoryTest {
 
@@ -90,19 +86,12 @@ public class AtlasModelFactoryTest {
 
     @Test
     public void testCloneAction() throws Exception {
-        XSSchema schema = ModelTestUtil.getCoreSchema();
-        for (Entry<String, XSElementDecl> entry : schema.getElementDecls().entrySet()) {
-            String name = entry.getKey();
-            XSElementDecl element = entry.getValue();
-            if ("Action".equals(element.getType().getBaseType().getName())) {
-                Class<?> clazz = Class.forName("io.atlasmap.v2." + name);
-                Object a = clazz.newInstance();
-                assertNotNull(a);
-                Action b = AtlasModelFactory.cloneAction((Action)a);
-                assertNotNull(String.format("Add %s to AtlasModelFactory#cloneAction()", a.getClass().getSimpleName()), b);
-                assertNotSame(a, b);
-                assertEquals(a.getClass().getCanonicalName(), b.getClass().getCanonicalName());
-            }
+        for (Action a : ModelTestUtil.getAllOOTBActions()) {
+            assertNotNull(a);
+            Action b = AtlasModelFactory.cloneAction((Action)a);
+            assertNotNull(String.format("Add %s to AtlasModelFactory#cloneAction()", a.getClass().getSimpleName()), b);
+            assertNotSame(a, b);
+            assertEquals(a.getClass().getCanonicalName(), b.getClass().getCanonicalName());
         }
     }
 

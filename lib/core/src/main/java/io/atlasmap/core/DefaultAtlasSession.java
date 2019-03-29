@@ -15,6 +15,8 @@
  */
 package io.atlasmap.core;
 
+import java.io.PipedInputStream;
+import java.io.PipedOutputStream;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -22,10 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.util.JAXBSource;
-import javax.xml.namespace.QName;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.atlasmap.api.AtlasConstants;
 import io.atlasmap.api.AtlasContext;
@@ -62,14 +61,12 @@ public class DefaultAtlasSession implements AtlasInternalSession {
             this.mapping = null;
             return;
         }
-
         try {
-            JAXBContext jaxbContext = ((DefaultAtlasContextFactory)atlasContext.getContextFactory()).getMappingService().getJAXBContext();
-            JAXBElement<AtlasMapping> element = new JAXBElement<>(new QName("http://atlasmap.io/v2", "AtlasMapping"), AtlasMapping.class, context.getMapping());
-            JAXBSource source = new JAXBSource(jaxbContext, element);
-            this.mapping = jaxbContext.createUnmarshaller().unmarshal(source, AtlasMapping.class).getValue();
+            ObjectMapper om = ((DefaultAtlasContextFactory)context.getContextFactory()).getMappingService().getObjectMapper();
+            String serialized = om.writeValueAsString(context.getMapping());
+            this.mapping = om.readValue(serialized, AtlasMapping.class);
         } catch (Exception e) {
-            throw new AtlasException("Failed to create a copy of AtlasMapping object", e);
+            throw new AtlasException("Failed to reload mapping definition", e);
         }
     }
 

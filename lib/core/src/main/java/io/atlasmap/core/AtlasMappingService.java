@@ -23,13 +23,6 @@ import java.io.Serializable;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,38 +39,17 @@ public class AtlasMappingService implements Serializable {
 
     private static final long serialVersionUID = 1668362984516180517L;
     private static final Logger LOG = LoggerFactory.getLogger(AtlasMappingService.class);
-    private static final String CONFIG_V2_PACKAGE = "io.atlasmap.v2";
-    private transient JAXBContext ctx = null;
     private transient ObjectMapper jsonMapper = null;
 
     public AtlasMappingService() {
-        try {
-            List<String> tmp = new ArrayList<>();
-            tmp.add(CONFIG_V2_PACKAGE);
-            initialize(tmp);
-        } catch (Exception e) {
-            LOG.error("Error initializing JAXB: " + e.getMessage(), e);
-            throw new IllegalStateException(e.getMessage(), e);
-        }
+        this(AtlasMapping.class.getClassLoader());
     }
 
-    public AtlasMappingService(List<String> modulePackages) {
-        try {
-            initialize(modulePackages);
-        } catch (Exception e) {
-            LOG.error("Error initializing JAXB: " + e.getMessage(), e);
-            throw new IllegalStateException(e.getMessage(), e);
-        }
+    public AtlasMappingService(ClassLoader classLoader) {
+        initialize(classLoader);
     }
 
-    private void initialize(List<String> packages) throws JAXBException {
-        ClassLoader classLoader = AtlasMapping.class.getClassLoader();
-        if (getJAXBContext() == null) {
-            setJAXBContext(JAXBContext.newInstance(stringListToColonSeparated(packages), classLoader));
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("Initialized JAXBContext: " + stringListToColonSeparated(packages));
-            }
-        }
+    private void initialize(ClassLoader classLoader) {
         jsonMapper = Json.withClassLoader(classLoader);
     }
 
@@ -136,24 +108,6 @@ public class AtlasMappingService implements Serializable {
         // }
     }
 
-    public JAXBContext getJAXBContext() {
-        return ctx;
-    }
-
-    public void setJAXBContext(JAXBContext ctx) {
-        this.ctx = ctx;
-    }
-
-    public Marshaller createMarshaller() throws JAXBException {
-        Marshaller marshaller = getJAXBContext().createMarshaller();
-        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-        return marshaller;
-    }
-
-    public Unmarshaller createUnmarshaller() throws JAXBException {
-        return getJAXBContext().createUnmarshaller();
-    }
-
     public ObjectMapper getObjectMapper() {
         return jsonMapper;
     }
@@ -162,32 +116,4 @@ public class AtlasMappingService implements Serializable {
         this.jsonMapper = mapper;
     }
 
-    private String stringListToColonSeparated(List<String> items) {
-        StringBuilder buffer = new StringBuilder(CONFIG_V2_PACKAGE);
-
-        if (items == null) {
-            return null;
-        }
-
-        if (items.isEmpty()) {
-            return buffer.toString();
-        }
-
-        boolean first = true;
-        for (int i = 0; i < items.size(); i++) {
-            if (!CONFIG_V2_PACKAGE.equals(items.get(i))) {
-                if (first) {
-                    buffer.append(":");
-                    first = false;
-                }
-                buffer.append(items.get(i));
-
-                if (i < items.size() - 1) {
-                    buffer.append(":");
-                }
-            }
-        }
-
-        return buffer.toString();
-    }
 }

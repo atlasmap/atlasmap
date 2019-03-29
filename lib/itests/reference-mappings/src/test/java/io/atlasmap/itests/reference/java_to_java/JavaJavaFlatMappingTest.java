@@ -195,8 +195,7 @@ public class JavaJavaFlatMappingTest extends AtlasMappingBaseTest {
     @Test
     public void testCreateJavaJavaFlatFieldMapping() throws Exception {
         AtlasMapping atlasMapping = generateJavaJavaFlatMapping();
-        AtlasMappingService atlasMappingService = new AtlasMappingService(
-                Arrays.asList("io.atlasmap.v2", "io.atlasmap.java.v2"));
+        AtlasMappingService atlasMappingService = new AtlasMappingService();
         File path = new File("target/reference-mappings/javaToJava");
         path.mkdirs();
         atlasMappingService.saveMappingAsFile(atlasMapping,

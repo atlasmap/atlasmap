@@ -58,9 +58,9 @@ __optional__|< <<_atlas-service-xml-field,Field>> > array
 |===
 |Name|Schema
 |**fields** +
-__required__|<<_atlas-service-xml-fields,Fields>>
+__optional__|<<_atlas-service-xml-fields,Fields>>
 |**xmlNamespaces** +
-__required__|<<_atlas-service-xml-xmlnamespaces,XmlNamespaces>>
+__optional__|<<_atlas-service-xml-xmlnamespaces,XmlNamespaces>>
 |===
 
 

@@ -1,6 +1,7 @@
 package org.apache.camel.component.atlasmap;
 
 import static org.junit.Assert.assertEquals;
+import static org.xmlunit.assertj.XmlAssert.assertThat;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,8 +30,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.atlasmap.java.test.SourceContact;
 import io.atlasmap.java.test.TargetContact;
-import io.atlasmap.xml.test.v2.AtlasXmlTestHelper;
-import io.atlasmap.xml.test.v2.XmlContactAttribute;
 
 @RunWith(CamelSpringRunner.class)
 @BootstrapWith(CamelTestContextBootstrapper.class)
@@ -108,11 +107,11 @@ public class AtlasMapMultiDocsTest {
         assertEquals("XmlPhoneNumber", jsonTargetNode.get("phoneNumber").asText());
 
         String xmlTarget = (String) targetMap.get("DOCID:XML:CONTACT:T");
-        JAXBElement<XmlContactAttribute> xmlTargetJaxb = AtlasXmlTestHelper.unmarshal(xmlTarget, XmlContactAttribute.class);
-        XmlContactAttribute xmlTargetObj = xmlTargetJaxb.getValue();
-        assertEquals("XmlFirstName", xmlTargetObj.getFirstName());
-        assertEquals("JsonLastName", xmlTargetObj.getLastName());
-        assertEquals("JavaPhoneNumber", xmlTargetObj.getPhoneNumber());
+        HashMap<String,String> ns = new HashMap<>();
+        ns.put("ns", "http://atlasmap.io/xml/test/v2");
+        assertThat(xmlTarget).withNamespaceContext(ns).valueByXPath("/Contact/@firstName").isEqualTo("XmlFirstName");
+        assertThat(xmlTarget).withNamespaceContext(ns).valueByXPath("/Contact/@lastName").isEqualTo("JsonLastName");
+        assertThat(xmlTarget).withNamespaceContext(ns).valueByXPath("/Contact/@phoneNumber").isEqualTo("JavaPhoneNumber");
     }
 
     @Test
@@ -149,11 +148,11 @@ public class AtlasMapMultiDocsTest {
         assertEquals("XmlPhoneNumber", jsonTargetNode.get("phoneNumber").asText());
 
         String xmlTarget = (String) targetMap.get("DOCID:XML:CONTACT:T");
-        JAXBElement<XmlContactAttribute> xmlTargetJaxb = AtlasXmlTestHelper.unmarshal(xmlTarget, XmlContactAttribute.class);
-        XmlContactAttribute xmlTargetObj = xmlTargetJaxb.getValue();
-        assertEquals("XmlFirstName", xmlTargetObj.getFirstName());
-        assertEquals("JsonLastName", xmlTargetObj.getLastName());
-        assertEquals("JavaPhoneNumber", xmlTargetObj.getPhoneNumber());
+        HashMap<String,String> ns = new HashMap<>();
+        ns.put("ns", "http://atlasmap.io/xml/test/v2");
+        assertThat(xmlTarget).withNamespaceContext(ns).valueByXPath("/Contact/@firstName").isEqualTo("XmlFirstName");
+        assertThat(xmlTarget).withNamespaceContext(ns).valueByXPath("/Contact/@lastName").isEqualTo("JsonLastName");
+        assertThat(xmlTarget).withNamespaceContext(ns).valueByXPath("/Contact/@phoneNumber").isEqualTo("JavaPhoneNumber");
     }
 
 }

@@ -34,6 +34,8 @@ import java.util.UUID;
 import javax.management.MalformedObjectNameException;
 import javax.management.ObjectName;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -95,7 +97,7 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
         registerFactoryJmx(this);
         this.moduleInfoRegistry = new DefaultAtlasModuleInfoRegistry(this);
         loadModules("moduleClass", AtlasModule.class);
-        setMappingService(new AtlasMappingService(getAllModuleConfigPackages(getModuleInfoRegistry())));
+        setMappingService(new AtlasMappingService(this.classLoader));
     }
 
     @Override
