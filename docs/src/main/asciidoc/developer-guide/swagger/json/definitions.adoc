@@ -58,7 +58,7 @@ __optional__|< <<_atlas-service-json-field,Field>> > array
 |===
 |Name|Schema
 |**fields** +
-__required__|<<_atlas-service-json-fields,Fields>>
+__optional__|<<_atlas-service-json-fields,Fields>>
 |===
 
 

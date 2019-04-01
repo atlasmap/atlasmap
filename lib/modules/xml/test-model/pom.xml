@@ -31,22 +31,10 @@
   <name>Atlas :: XML Test Model</name>
 
   <properties>
-    <xjb.folder>src/main/resources</xjb.folder>
-    <xjb.file>atlas-xml-test-model-v2.xjb</xjb.file>
-    <xsd.folder>src/main/resources</xsd.folder>
-    <xsd.file>atlas-xml-test-model-v2.xsd</xsd.file>
     <osgi.export.pkg>io.atlasmap.xml.test.v2</osgi.export.pkg>
   </properties>
 
   <dependencies>
-    <dependency>
-      <groupId>javax.xml.bind</groupId>
-      <artifactId>jaxb-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>javax.xml</groupId>
-      <artifactId>jaxb-impl</artifactId>
-    </dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
@@ -61,55 +49,5 @@
         <filtering>true</filtering>
       </resource>
     </resources>
-    <plugins>
-      <plugin>
-        <groupId>org.jvnet.jaxb2.maven2</groupId>
-        <artifactId>maven-jaxb2-plugin</artifactId>
-        <executions>
-          <execution>
-            <goals>
-              <goal>generate</goal>
-            </goals>
-            <configuration>
-              <schemaDirectory>${xsd.folder}</schemaDirectory>
-              <bindingDirectory>${xjb.folder}</bindingDirectory>
-              <episodes>
-                <episode>
-                  <groupId>io.atlasmap</groupId>
-                  <artifactId>atlas-model</artifactId>
-                  <version>${project.version}</version>
-                </episode>
-              </episodes>
-              <catalog>src/main/resources/catalog.cat</catalog>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>build-helper-maven-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>attach-artifacts</id>
-            <phase>package</phase>
-            <goals>
-              <goal>attach-artifact</goal>
-            </goals>
-            <configuration>
-              <artifacts>
-                <artifact>
-                  <file>${xsd.folder}/${xsd.file}</file>
-                  <type>xsd</type>
-                </artifact>
-                <artifact>
-                  <file>${xjb.folder}/${xjb.file}</file>
-                  <type>xjb</type>
-                </artifact>
-              </artifacts>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
   </build>
 </project>

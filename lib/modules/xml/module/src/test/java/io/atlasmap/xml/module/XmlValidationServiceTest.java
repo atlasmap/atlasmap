@@ -55,7 +55,6 @@ import io.atlasmap.xml.v2.XmlField;
 public class XmlValidationServiceTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(XmlValidationServiceTest.class);
-    protected io.atlasmap.xml.v2.ObjectFactory xmlModelFactory = null;
     protected AtlasMappingUtil mappingUtil = null;
     protected DefaultAtlasFieldActionService fieldActionService;
     protected XmlValidationService sourceValidationService = null;
@@ -66,7 +65,6 @@ public class XmlValidationServiceTest {
 
     @Before
     public void setUp() {
-        xmlModelFactory = new io.atlasmap.xml.v2.ObjectFactory();
         mappingUtil = new AtlasMappingUtil();
         moduleDetail = XmlModule.class.getAnnotation(AtlasModuleDetail.class);
 
@@ -82,7 +80,6 @@ public class XmlValidationServiceTest {
 
     @After
     public void tearDown() {
-        xmlModelFactory = null;
         mappingUtil = null;
         sourceValidationService = null;
         targetValidationService = null;
@@ -169,24 +166,6 @@ public class XmlValidationServiceTest {
         }
     }
 
-    // @Test
-    // @Ignore // Note: manual utility to assist in creating files
-    // public void saveSampleFile() throws Exception {
-    // AtlasMappingUtil util = new
-    // AtlasMappingUtil("io.atlasmap.v2:io.atlasmap.java.v2");
-    //
-    // AtlasMapping mapping = getAtlasMappingFullValid();
-    // util.marshallMapping(mapping,
-    // "src/test/resources/mappings/HappyPathMapping.json");
-    //
-    // mapping = getAtlasMappingFullValid();
-    // mapping.getMappings().getMapping().clear();
-    // mapping.getMappings().getMapping().add(createMockMapping());
-    // mappingUtil.marshallMapping(mapping,
-    // "src/test/resources/mappings/MisMatchedFieldTypes.json");
-    //
-    // }
-
     @Test
     public void testValidateMappingHappyPath() {
         AtlasMapping mapping = getAtlasMappingFullValid();
@@ -235,13 +214,13 @@ public class XmlValidationServiceTest {
         Mapping combineFieldMapping = AtlasModelFactory.createMapping(MappingType.COMBINE);
         combineFieldMapping.setId("combine.firstName.lastName");
 
-        XmlField bIJavaField = xmlModelFactory.createXmlField();
+        XmlField bIJavaField = new XmlField();
         bIJavaField.setFieldType(FieldType.STRING);
         bIJavaField.setValue(Boolean.TRUE);
         bIJavaField.setPath("firstName");
         combineFieldMapping.getInputField().add(bIJavaField);
 
-        XmlField sOJavaField = xmlModelFactory.createXmlField();
+        XmlField sOJavaField = new XmlField();
         sOJavaField.setFieldType(FieldType.BOOLEAN);
         sOJavaField.setPath("lastName");
         sOJavaField.setIndex(0);
@@ -289,14 +268,14 @@ public class XmlValidationServiceTest {
         Mapping separateFieldMapping = AtlasModelFactory.createMapping(MappingType.SEPARATE);
         separateFieldMapping.setId("separate.firstName.lastName");
 
-        XmlField bIJavaField = xmlModelFactory.createXmlField();
+        XmlField bIJavaField = new XmlField();
         bIJavaField.setFieldType(FieldType.BOOLEAN);
         bIJavaField.setValue(Boolean.TRUE);
         bIJavaField.setPath("firstName");
 
         separateFieldMapping.getInputField().add(bIJavaField);
 
-        XmlField sOJavaField = xmlModelFactory.createXmlField();
+        XmlField sOJavaField = new XmlField();
         sOJavaField.setFieldType(FieldType.STRING);
         sOJavaField.setPath("lastName");
         sOJavaField.setIndex(0);

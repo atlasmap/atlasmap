@@ -77,22 +77,26 @@
         "mappingType" : "MAP",
         "inputField" : [ {
           "jsonType" : "io.atlasmap.xml.v2.XmlField",
-          "path" : "/XmlFBPA/@boxedBooleanField"
+          "path" : "/XmlFBPA/@boxedBooleanField",
+          "fieldType" : "BOOLEAN"
         } ],
         "outputField" : [ {
           "jsonType" : "io.atlasmap.xml.v2.XmlField",
-          "path" : "/ns:XmlFBPE/ns:boxedBooleanField"
+          "path" : "/ns:XmlFBPE/ns:boxedBooleanField",
+          "fieldType" : "BOOLEAN"
         } ]
       }, {
         "jsonType" : "io.atlasmap.v2.Mapping",
         "mappingType" : "MAP",
         "inputField" : [ {
           "jsonType" : "io.atlasmap.xml.v2.XmlField",
-          "path" : "/XmlFBPA/@boxedCharField"
+          "path" : "/XmlFBPA/@boxedCharField",
+          "fieldType" : "CHAR"
         } ],
         "outputField" : [ {
           "jsonType" : "io.atlasmap.xml.v2.XmlField",
-          "path" : "/ns:XmlFBPE/ns:boxedCharField"
+          "path" : "/ns:XmlFBPE/ns:boxedCharField",
+          "fieldType" : "CHAR"
         } ]
       }, {
         "jsonType" : "io.atlasmap.v2.Mapping",

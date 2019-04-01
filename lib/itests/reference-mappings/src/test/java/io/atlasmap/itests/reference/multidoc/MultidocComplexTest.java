@@ -20,8 +20,10 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.xmlunit.assertj.XmlAssert.assertThat;
 
 import java.io.File;
+import java.util.HashMap;
 
 import org.junit.Test;
 
@@ -36,8 +38,6 @@ import io.atlasmap.java.test.TargetTestClass;
 import io.atlasmap.json.test.AtlasJsonTestUnrootedMapper;
 import io.atlasmap.itests.reference.AtlasMappingBaseTest;
 import io.atlasmap.itests.reference.AtlasTestUtil;
-import io.atlasmap.xml.test.v2.AtlasXmlTestHelper;
-import io.atlasmap.xml.test.v2.XmlOrderElement;
 
 public class MultidocComplexTest extends AtlasMappingBaseTest {
 
@@ -77,11 +77,11 @@ public class MultidocComplexTest extends AtlasMappingBaseTest {
         Object xmlOrderElement = session.getTargetDocument("XmlOrderElement");
         assertNotNull(xmlOrderElement);
         assertTrue(xmlOrderElement instanceof String);
-        XmlOrderElement xmlOE = AtlasXmlTestHelper
-                .unmarshal((String) xmlOrderElement, XmlOrderElement.class).getValue();
-        assertEquals("8765309", xmlOE.getOrderId());
-        assertEquals("Ozzie", xmlOE.getContact().getFirstName());
-        assertEquals("Smith", xmlOE.getContact().getLastName());
+        HashMap<String,String> ns = new HashMap<>();
+        ns.put("ns", "http://atlasmap.io/xml/test/v2");
+        assertThat(xmlOrderElement).withNamespaceContext(ns).valueByXPath("/ns:XmlOE/ns:orderId").isEqualTo("8765309");
+        assertThat(xmlOrderElement).withNamespaceContext(ns).valueByXPath("/ns:XmlOE/ns:Contact/ns:firstName").isEqualTo("Ozzie");
+        assertThat(xmlOrderElement).withNamespaceContext(ns).valueByXPath("/ns:XmlOE/ns:Contact/ns:lastName").isEqualTo("Smith");
     }
 
     @Test
@@ -121,10 +121,10 @@ public class MultidocComplexTest extends AtlasMappingBaseTest {
         Object xmlOrderElement = session.getTargetDocument("XmlOrderElement");
         assertNotNull(xmlOrderElement);
         assertTrue(xmlOrderElement instanceof String);
-        XmlOrderElement xmlOE = AtlasXmlTestHelper
-                .unmarshal((String) xmlOrderElement, XmlOrderElement.class).getValue();
-        assertEquals("8765309", xmlOE.getOrderId());
-        assertEquals(null, xmlOE.getContact().getLastName());
+        HashMap<String,String> ns = new HashMap<>();
+        ns.put("ns", "http://atlasmap.io/xml/test/v2");
+        assertThat(xmlOrderElement).withNamespaceContext(ns).valueByXPath("/ns:XmlOE/ns:orderId").isEqualTo("8765309");
+        assertThat(xmlOrderElement).withNamespaceContext(ns).valueByXPath("/ns:XmlOE/ns:Contact/ns:lastName").isNullOrEmpty();
     }
 
 }

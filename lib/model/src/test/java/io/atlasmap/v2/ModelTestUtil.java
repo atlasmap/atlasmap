@@ -1,39 +1,47 @@
 package io.atlasmap.v2;
 
-import java.io.File;
-
-import javax.xml.parsers.SAXParserFactory;
-
-import org.xml.sax.ErrorHandler;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
-
-import com.sun.xml.xsom.XSSchema;
-import com.sun.xml.xsom.parser.XSOMParser;
-import com.sun.xml.xsom.util.DomAnnotationParserFactory;
+import java.net.URL;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
 
 public class ModelTestUtil {
 
-    public static XSSchema getCoreSchema() throws Exception {
-        XSOMParser parser = new XSOMParser(SAXParserFactory.newInstance());
-        parser.setErrorHandler(new ErrorHandler() {
-            @Override
-            public void error(SAXParseException arg0) throws SAXException {
-                throw arg0;
+    public static List<Action> getAllOOTBActions() throws Exception {
+        List<Action> answer = new ArrayList<>();
+        ClassLoader cl = Action.class.getClassLoader();
+        Enumeration<URL> resources = cl.getResources("io/atlasmap/v2");
+        while(resources.hasMoreElements()) {
+            URL resource = resources.nextElement();
+            Path p = Paths.get(resource.toURI());
+            if (!Files.isDirectory(p)) {
+                continue;
             }
-            @Override
-            public void fatalError(SAXParseException arg0) throws SAXException {
-                throw arg0;
-            }
-            @Override
-            public void warning(SAXParseException arg0) throws SAXException {
-                throw arg0;
-            }
-        });
-        parser.setAnnotationParser(new DomAnnotationParserFactory());
-        parser.parse(new File("target/classes/atlas-actions-v2.xsd"));
-        parser.parse(new File("target/classes/atlas-model-v2.xsd"));
-        return parser.getResult().getSchema("http://atlasmap.io/v2");
+            Files.walkFileTree(p, new SimpleFileVisitor<Path>() {
+                @Override
+                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
+                    try {
+                        if (file.getFileName().toString().endsWith(".class")) {
+                            String className = file.getFileName().toString();
+                            className = className.substring(0, className.length() - 6);
+                            Class<?> clazz = Class.forName("io.atlasmap.v2." + className);
+                            if (Action.class.isAssignableFrom(clazz)) {
+                                answer.add((Action)clazz.newInstance());
+                            }
+                        }
+                    } catch (Exception e) {}
+                    return FileVisitResult.CONTINUE;
+                }
+            });
+        }
+
+        return answer;
     }
 
 }

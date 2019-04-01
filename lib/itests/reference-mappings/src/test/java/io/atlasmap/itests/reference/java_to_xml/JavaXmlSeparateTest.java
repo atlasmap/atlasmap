@@ -19,10 +19,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.xmlunit.assertj.XmlAssert.assertThat;
 
 import java.io.File;
-
-import javax.xml.bind.JAXBElement;
 
 import org.junit.Test;
 
@@ -32,8 +31,6 @@ import io.atlasmap.java.test.BaseContact;
 import io.atlasmap.java.test.SourceContact;
 import io.atlasmap.itests.reference.AtlasMappingBaseTest;
 import io.atlasmap.itests.reference.AtlasTestUtil;
-import io.atlasmap.xml.test.v2.AtlasXmlTestHelper;
-import io.atlasmap.xml.test.v2.XmlContactAttribute;
 
 public class JavaXmlSeparateTest extends AtlasMappingBaseTest {
 
@@ -52,9 +49,7 @@ public class JavaXmlSeparateTest extends AtlasMappingBaseTest {
         assertNotNull(object);
 
         assertTrue(object instanceof String);
-        JAXBElement<XmlContactAttribute> targetContact =
-                AtlasXmlTestHelper.unmarshal((String) object, XmlContactAttribute.class);
-        AtlasTestUtil.validateXmlContactAttribute(targetContact.getValue());
+        AtlasTestUtil.validateXmlContactAttributeNoNS(object);
         assertFalse(session.hasErrors());
     }
 
@@ -72,9 +67,7 @@ public class JavaXmlSeparateTest extends AtlasMappingBaseTest {
         Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof String);
-        JAXBElement<XmlContactAttribute> targetContact =
-                AtlasXmlTestHelper.unmarshal((String) object, XmlContactAttribute.class);
-        AtlasTestUtil.validateXmlContactAttribute(targetContact.getValue());
+        AtlasTestUtil.validateXmlContactAttributeNoNS(object);
         assertFalse(session.hasErrors());
     }
 
@@ -92,9 +85,7 @@ public class JavaXmlSeparateTest extends AtlasMappingBaseTest {
         Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof String);
-        JAXBElement<XmlContactAttribute> targetContact =
-                AtlasXmlTestHelper.unmarshal((String) object, XmlContactAttribute.class);
-        AtlasTestUtil.validateXmlContactAttribute(targetContact.getValue());
+        AtlasTestUtil.validateXmlContactAttributeNoNS(object);
         assertFalse(session.hasErrors());
     }
 
@@ -113,11 +104,8 @@ public class JavaXmlSeparateTest extends AtlasMappingBaseTest {
         assertNotNull(object);
 
         assertTrue(object instanceof String);
-        JAXBElement<XmlContactAttribute> targetContact =
-                AtlasXmlTestHelper.unmarshal((String) object, XmlContactAttribute.class);
-        assertNotNull(targetContact.getValue());
-        assertEquals("Ozzie", targetContact.getValue().getFirstName());
-        assertEquals(null, targetContact.getValue().getLastName());
+        assertThat(object).valueByXPath("/Contact/@firstName").isEqualTo("Ozzie");
+        assertThat(object).valueByXPath("/Contact/@lastName").isNullOrEmpty();
         assertTrue(session.hasWarns());
         assertEquals(
                 "Separate returned fewer segments count=3 when targetField.path=/Contact/@lastName requested index=3",
@@ -139,14 +127,13 @@ public class JavaXmlSeparateTest extends AtlasMappingBaseTest {
         assertNotNull(object);
 
         assertTrue(object instanceof String);
-        JAXBElement<XmlContactAttribute> targetContact =
-                AtlasXmlTestHelper.unmarshal((String) object, XmlContactAttribute.class);
         assertFalse(session.hasErrors());
 
-        assertEquals(null, targetContact.getValue().getFirstName());
-        assertEquals(null, targetContact.getValue().getLastName());
-        assertEquals("5551212", targetContact.getValue().getPhoneNumber());
-        assertEquals("81111", targetContact.getValue().getZipCode());
+        assertThat(object).valueByXPath("/Contact/@firstName").isNullOrEmpty();
+        assertThat(object).valueByXPath("/Contact/@lastName").isNullOrEmpty();
+        assertThat(object).valueByXPath("/Contact/@phoneNumber").isEqualTo("5551212");
+        assertThat(object).valueByXPath("/Contact/@zipCode").isEqualTo("81111");
+
         assertFalse(session.hasErrors());
     }
 }

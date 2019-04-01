@@ -20,10 +20,9 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.xmlunit.assertj.XmlAssert.assertThat;
 
 import java.io.File;
-
-import javax.xml.bind.JAXBElement;
 
 import org.junit.Test;
 
@@ -33,8 +32,6 @@ import io.atlasmap.java.test.BaseContact;
 import io.atlasmap.java.test.SourceContact;
 import io.atlasmap.itests.reference.AtlasMappingBaseTest;
 import io.atlasmap.itests.reference.AtlasTestUtil;
-import io.atlasmap.xml.test.v2.AtlasXmlTestHelper;
-import io.atlasmap.xml.test.v2.XmlContactAttribute;
 
 public class JavaXmlCombineTest extends AtlasMappingBaseTest {
 
@@ -51,12 +48,10 @@ public class JavaXmlCombineTest extends AtlasMappingBaseTest {
         Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof String);
-        JAXBElement<XmlContactAttribute> targetContact = AtlasXmlTestHelper
-                .unmarshal((String) object, XmlContactAttribute.class);
-        assertEquals("Ozzie    Smith   5551212                                                                                            81111", targetContact.getValue().getFirstName());
-        assertNull(targetContact.getValue().getLastName());
-        assertNull(targetContact.getValue().getPhoneNumber());
-        assertNull(targetContact.getValue().getZipCode());
+        assertThat(object).valueByXPath("/Contact/@firstName").isEqualTo("Ozzie    Smith   5551212                                                                                            81111");
+        assertThat(object).valueByXPath("/Contact/@lastName").isNullOrEmpty();
+        assertThat(object).valueByXPath("/Contact/@phoneNumber").isNullOrEmpty();
+        assertThat(object).valueByXPath("/Contact/@zipCode").isNullOrEmpty();
         assertFalse(session.hasErrors());
     }
 
@@ -73,12 +68,10 @@ public class JavaXmlCombineTest extends AtlasMappingBaseTest {
         Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof String);
-        JAXBElement<XmlContactAttribute> targetContact = AtlasXmlTestHelper
-                .unmarshal((String) object, XmlContactAttribute.class);
-        assertEquals("Ozzie Smith 5551212 81111", targetContact.getValue().getFirstName());
-        assertNull(targetContact.getValue().getLastName());
-        assertNull(targetContact.getValue().getPhoneNumber());
-        assertNull(targetContact.getValue().getZipCode());
+        assertThat(object).valueByXPath("/Contact/@firstName").isEqualTo("Ozzie Smith 5551212 81111");
+        assertThat(object).valueByXPath("/Contact/@lastName").isNullOrEmpty();
+        assertThat(object).valueByXPath("/Contact/@phoneNumber").isNullOrEmpty();
+        assertThat(object).valueByXPath("/Contact/@zipCode").isNullOrEmpty();
         assertFalse(session.hasErrors());
     }
 
@@ -95,12 +88,10 @@ public class JavaXmlCombineTest extends AtlasMappingBaseTest {
         Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof String);
-        JAXBElement<XmlContactAttribute> targetContact = AtlasXmlTestHelper
-                .unmarshal((String) object, XmlContactAttribute.class);
-        assertEquals("Ozzie Smith 5551212 81111", targetContact.getValue().getFirstName());
-        assertNull(targetContact.getValue().getLastName());
-        assertNull(targetContact.getValue().getPhoneNumber());
-        assertNull(targetContact.getValue().getZipCode());
+        assertThat(object).valueByXPath("/Contact/@firstName").isEqualTo("Ozzie Smith 5551212 81111");
+        assertThat(object).valueByXPath("/Contact/@lastName").isNullOrEmpty();
+        assertThat(object).valueByXPath("/Contact/@phoneNumber").isNullOrEmpty();
+        assertThat(object).valueByXPath("/Contact/@zipCode").isNullOrEmpty();
         assertFalse(session.hasErrors());
     }
 
@@ -118,10 +109,7 @@ public class JavaXmlCombineTest extends AtlasMappingBaseTest {
         Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof String);
-        JAXBElement<XmlContactAttribute> targetContact = AtlasXmlTestHelper
-                .unmarshal((String) object, XmlContactAttribute.class);
-        assertNotNull(targetContact);
-        assertEquals("Ozzie  5551212 81111", targetContact.getValue().getFirstName());
+        assertThat(object).valueByXPath("/Contact/@firstName").isEqualTo("Ozzie  5551212 81111");
         assertFalse(session.hasErrors());
     }
 }

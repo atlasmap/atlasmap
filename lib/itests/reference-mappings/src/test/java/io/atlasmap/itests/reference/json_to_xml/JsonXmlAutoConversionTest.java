@@ -22,16 +22,12 @@ import static org.junit.Assert.fail;
 
 import java.io.File;
 
-import javax.xml.bind.JAXBElement;
-
 import org.junit.Test;
 
 import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasSession;
 import io.atlasmap.itests.reference.AtlasMappingBaseTest;
 import io.atlasmap.itests.reference.AtlasTestUtil;
-import io.atlasmap.xml.test.v2.AtlasXmlTestHelper;
-import io.atlasmap.xml.test.v2.XmlFlatPrimitiveElement;
 
 public class JsonXmlAutoConversionTest extends AtlasMappingBaseTest {
 
@@ -89,30 +85,28 @@ public class JsonXmlAutoConversionTest extends AtlasMappingBaseTest {
         Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof String);
-        JAXBElement<XmlFlatPrimitiveElement> xmlFPE = AtlasXmlTestHelper
-                .unmarshal((String) object, XmlFlatPrimitiveElement.class);
 
         switch (num) {
         case 1:
-            AtlasTestUtil.validateXmlFlatPrimitivePrimitiveElementAutoConversion1(xmlFPE.getValue());
+            AtlasTestUtil.validateXmlFlatPrimitivePrimitiveElementAutoConversion1(object);
             break;
         case 2:
-            AtlasTestUtil.validateXmlFlatPrimitivePrimitiveElementAutoConversion2(xmlFPE.getValue());
+            AtlasTestUtil.validateXmlFlatPrimitivePrimitiveElementAutoConversion2(object);
             break;
         case 3:
-            AtlasTestUtil.validateXmlFlatPrimitivePrimitiveElementAutoConversion3(xmlFPE.getValue());
+            AtlasTestUtil.validateXmlFlatPrimitivePrimitiveElementAutoConversion3(object);
             break;
         case 4:
-            AtlasTestUtil.validateXmlFlatPrimitivePrimitiveElementAutoConversion4(xmlFPE.getValue());
+            AtlasTestUtil.validateXmlFlatPrimitivePrimitiveElementAutoConversion4(object);
             break;
         case 5:
-            AtlasTestUtil.validateXmlFlatPrimitivePrimitiveElementAutoConversion5(xmlFPE.getValue());
+            AtlasTestUtil.validateXmlFlatPrimitivePrimitiveElementAutoConversion5(object);
             break;
         case 6:
-            AtlasTestUtil.validateXmlFlatPrimitivePrimitiveElementAutoConversion6(xmlFPE.getValue());
+            AtlasTestUtil.validateXmlFlatPrimitivePrimitiveElementAutoConversion6(object);
             break;
         case 7:
-            AtlasTestUtil.validateXmlFlatPrimitivePrimitiveElementAutoConversion7(xmlFPE.getValue());
+            AtlasTestUtil.validateXmlFlatPrimitivePrimitiveElementAutoConversion7(object);
             break;
         default:
             fail("Unexpected number: " + num);

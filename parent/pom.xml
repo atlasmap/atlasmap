@@ -45,15 +45,8 @@
     <jackson.version>2.8.11</jackson.version>
     <jackson.databind.version>2.8.11.3</jackson.databind.version>
     <jackson.version.range>[2.6,3)</jackson.version.range>
-    <jackson-module-jaxb-annotations.version>2.8.6</jackson-module-jaxb-annotations.version>
     <jacoco-maven-plugin.version>0.8.2</jacoco-maven-plugin.version>
     <javax.ws.rs.version>2.1</javax.ws.rs.version>
-    <jaxb-api.version>2.2.12</jaxb-api.version>
-    <jaxb-impl.version>2.1</jaxb-impl.version>
-    <jaxb.version.range>[2.2,3)</jaxb.version.range>
-    <jaxb2-basics.version>0.11.1</jaxb2-basics.version>
-    <jaxb2-basics-annotate.version>1.0.2</jaxb2-basics-annotate.version>
-    <jaxb2-basics-namespace-prefix.version>1.2</jaxb2-basics-namespace-prefix.version>
     <!-- Does this fix the NPE problem ?? <jetty-maven-plugin.version>9.4.2.v20170220</jetty-maven-plugin.version> -->
     <jetty-maven-plugin.version>9.4.5.v20170502</jetty-maven-plugin.version>
     <jsonschema2pojo-maven-plugin.version>0.4.37</jsonschema2pojo-maven-plugin.version>
@@ -70,7 +63,6 @@
     <maven-compiler-plugin.version>3.6.1</maven-compiler-plugin.version>
     <maven-dependency-plugin.version>3.0.0</maven-dependency-plugin.version>
     <maven-install-plugin.version>2.5.2</maven-install-plugin.version>
-    <maven-jaxb2-plugin.version>0.13.1</maven-jaxb2-plugin.version>
     <maven-plugin-plugin.version>3.5</maven-plugin-plugin.version>
     <maven-resources-plugin.version>3.0.2</maven-resources-plugin.version>
     <maven-surefire-plugin.version>2.22.1</maven-surefire-plugin.version>
@@ -89,7 +81,7 @@
     <woodstox.version>4.4.1</woodstox.version>
     <xalan-bundle-version>2.7.2_3</xalan-bundle-version>
     <xsom.version>20140925</xsom.version>
-    <xmlunit.version>2.2.1</xmlunit.version>
+    <xmlunit.version>2.6.2</xmlunit.version>
   </properties>
 
   <repositories>
@@ -325,16 +317,6 @@
         <scope>provided</scope>
       </dependency>
       <dependency>
-        <groupId>javax.xml.bind</groupId>
-        <artifactId>jaxb-api</artifactId>
-        <version>${jaxb-api.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>javax.xml</groupId>
-        <artifactId>jaxb-impl</artifactId>
-        <version>${jaxb-impl.version}</version>
-      </dependency>
-      <dependency>
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
         <version>${junit.version}</version>
@@ -454,21 +436,6 @@
         <version>${resteasy.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.jvnet.jaxb2_commons</groupId>
-        <artifactId>jaxb2-basics</artifactId>
-        <version>${jaxb2-basics.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.jvnet.jaxb2_commons</groupId>
-        <artifactId>jaxb2-basics-annotate</artifactId>
-        <version>${jaxb2-basics-annotate.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.jvnet.jaxb2_commons</groupId>
-        <artifactId>jaxb2-namespace-prefix</artifactId>
-        <version>${jaxb2-basics-namespace-prefix.version}</version>
-      </dependency>
-      <dependency>
         <groupId>org.mockito</groupId>
         <artifactId>mockito-core</artifactId>
         <version>${mockito.version}</version>
@@ -491,6 +458,12 @@
         <version>${twitter4j.version}</version>
       </dependency>
       <dependency>
+        <groupId>org.xmlunit</groupId>
+        <artifactId>xmlunit-assertj</artifactId>
+        <version>${xmlunit.version}</version>
+        <scope>test</scope>
+      </dependency>
+       <dependency>
         <groupId>org.xmlunit</groupId>
         <artifactId>xmlunit-matchers</artifactId>
         <version>${xmlunit.version}</version>
@@ -529,11 +502,6 @@
         <plugin>
           <artifactId>maven-surefire-plugin</artifactId>
           <version>${maven-surefire-plugin.version}</version>
-        </plugin>
-        <plugin>
-          <groupId>com.fasterxml.jackson.module</groupId>
-          <artifactId>jackson-module-jaxb-annotations</artifactId>
-          <version>${jackson-module-jaxb-annotations.version}</version>
         </plugin>
         <plugin>
           <groupId>com.github.kongchen</groupId>
@@ -622,55 +590,6 @@
           <groupId>org.jsonschema2pojo</groupId>
           <artifactId>jsonschema2pojo-maven-plugin</artifactId>
           <version>${jsonschema2pojo-maven-plugin.version}</version>
-        </plugin>
-        <plugin>
-          <groupId>org.jvnet.jaxb2.maven2</groupId>
-          <artifactId>maven-jaxb2-plugin</artifactId>
-          <version>${maven-jaxb2-plugin.version}</version>
-          <executions>
-            <execution>
-              <goals>
-                <goal>generate</goal>
-              </goals>
-              <configuration>
-                <episode>true</episode>
-                <verbose>true</verbose>
-                <strict>false</strict>
-                <extension>true</extension>
-                <debugMode>true</debugMode>
-                <args>
-                  <arg>-no-header</arg>
-                  <!-- <arg>-Xxew</arg> <arg>-Xxew:instantiate lazy</arg> -->
-                  <arg>-XsimpleEquals</arg>
-                  <arg>-XsimpleHashCode</arg>
-                  <arg>-Xannotate</arg>
-                  <arg>-Xnamespace-prefix</arg>
-                </args>
-                <plugins>
-                  <plugin>
-                    <groupId>org.jvnet.jaxb2_commons</groupId>
-                    <artifactId>jaxb2-basics</artifactId>
-                    <version>${jaxb2-basics.version}</version>
-                  </plugin>
-                  <plugin>
-                    <groupId>org.jvnet.jaxb2_commons</groupId>
-                    <artifactId>jaxb2-basics-annotate</artifactId>
-                    <version>${jaxb2-basics-annotate.version}</version>
-                  </plugin>
-                  <plugin>
-                    <groupId>org.jvnet.jaxb2_commons</groupId>
-                    <artifactId>jaxb2-namespace-prefix</artifactId>
-                    <version>${jaxb2-namespace-prefix.version}</version>
-                  </plugin>
-                  <plugin>
-                    <groupId>com.fasterxml.jackson.module</groupId>
-                    <artifactId>jackson-module-jaxb-annotations</artifactId>
-                    <version>${jackson-module-jaxb-annotations.version}</version>
-                  </plugin>
-                </plugins>
-              </configuration>
-            </execution>
-          </executions>
         </plugin>
         <plugin>
           <groupId>org.springframework.boot</groupId>

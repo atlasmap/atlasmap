@@ -82,7 +82,8 @@
         } ],
         "outputField" : [ {
           "jsonType" : "io.atlasmap.xml.v2.XmlField",
-          "path" : "/xt1:XmlFPE/xt1:floatField"
+          "path" : "/xt1:XmlFPE/xt1:floatField",
+          "fieldType" : "FLOAT"
         } ]
       }, {
         "jsonType" : "io.atlasmap.v2.Mapping",

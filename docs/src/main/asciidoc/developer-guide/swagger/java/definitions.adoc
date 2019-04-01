@@ -48,15 +48,15 @@ __optional__|integer (int32)
 |**interface** +
 __optional__|boolean
 |**javaEnumFields** +
-__required__|<<_atlas-service-java-javaenumfields,JavaEnumFields>>
+__optional__|<<_atlas-service-java-javaenumfields,JavaEnumFields>>
 |**javaFields** +
-__required__|<<_atlas-service-java-javafields,JavaFields>>
+__optional__|<<_atlas-service-java-javafields,JavaFields>>
 |**localClass** +
 __optional__|boolean
 |**memberClass** +
 __optional__|boolean
 |**modifiers** +
-__required__|<<_atlas-service-java-modifierlist,ModifierList>>
+__optional__|<<_atlas-service-java-modifierlist,ModifierList>>
 |**name** +
 __optional__|string
 |**packageName** +
@@ -165,7 +165,7 @@ __optional__|string
 |**index** +
 __optional__|integer (int32)
 |**modifiers** +
-__required__|<<_atlas-service-java-modifierlist,ModifierList>>
+__optional__|<<_atlas-service-java-modifierlist,ModifierList>>
 |**name** +
 __optional__|string
 |**parameterizedTypes** +

@@ -21,6 +21,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasSession;
@@ -38,6 +39,7 @@ import io.atlasmap.v2.Mapping;
 import io.atlasmap.v2.MappingType;
 import io.atlasmap.v2.Mappings;
 
+@Ignore("This only worked with JAXB model objects. Now that the model objects are handled only via JSON, it has to be added to ActionsJson{Serializer|Deserializer}.")
 public class OverloadedFieldActionsTest {
     
     private static DefaultAtlasContextFactory atlasContextFactory = null;

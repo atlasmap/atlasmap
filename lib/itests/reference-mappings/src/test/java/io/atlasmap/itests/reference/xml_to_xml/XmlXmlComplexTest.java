@@ -29,9 +29,6 @@ import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasSession;
 import io.atlasmap.itests.reference.AtlasMappingBaseTest;
 import io.atlasmap.itests.reference.AtlasTestUtil;
-import io.atlasmap.xml.test.v2.AtlasXmlTestHelper;
-import io.atlasmap.xml.test.v2.XmlOrderAttribute;
-import io.atlasmap.xml.test.v2.XmlOrderElement;
 
 public class XmlXmlComplexTest extends AtlasMappingBaseTest {
 
@@ -90,9 +87,7 @@ public class XmlXmlComplexTest extends AtlasMappingBaseTest {
         Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof String);
-        JAXBElement<XmlOrderElement> xmlOE = AtlasXmlTestHelper
-                .unmarshal((String) object, XmlOrderElement.class);
-        AtlasTestUtil.validateXmlOrderElement(xmlOE.getValue());
+        AtlasTestUtil.validateXmlOrderElement(object);
     }
 
     @Test
@@ -110,8 +105,6 @@ public class XmlXmlComplexTest extends AtlasMappingBaseTest {
         Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof String);
-        JAXBElement<XmlOrderAttribute> xmlOA = AtlasXmlTestHelper
-                .unmarshal((String) object, XmlOrderAttribute.class);
-        AtlasTestUtil.validateXmlOrderAttribute(xmlOA.getValue());
+        AtlasTestUtil.validateXmlOrderAttribute((String)object);
     }
 }
