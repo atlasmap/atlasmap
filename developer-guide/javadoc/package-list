@@ -27,6 +27,5 @@ io.atlasmap.xml.core
 io.atlasmap.xml.inspect
 io.atlasmap.xml.module
 io.atlasmap.xml.service
-io.atlasmap.xml.test.v2
 io.atlasmap.xml.v2
 org.apache.camel.component.atlasmap
