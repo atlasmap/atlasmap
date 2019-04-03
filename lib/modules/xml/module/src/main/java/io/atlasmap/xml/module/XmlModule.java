@@ -66,6 +66,7 @@ public class XmlModule extends BaseAtlasModule {
         }
 
         XmlValidationService xmlValidationService = new XmlValidationService(getConversionService(), getFieldActionService());
+        xmlValidationService.setMode(getMode());
         xmlValidationService.setDocId(getDocId());
         List<Validation> xmlValidations = xmlValidationService.validateMapping(atlasSession.getMapping());
         atlasSession.getValidations().getValidation().addAll(xmlValidations);
