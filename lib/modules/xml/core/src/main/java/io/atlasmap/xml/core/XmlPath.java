@@ -128,7 +128,7 @@ public class XmlPath extends AtlasPath {
             return qname;
         }
 
-        private SegmentContext rebuild() {
+        protected XmlSegmentContext rebuild() {
             StringBuilder buf = new StringBuilder();
             if (isAttribute()) {
                 buf.append(PATH_ATTRIBUTE_PREFIX);
@@ -142,7 +142,7 @@ public class XmlPath extends AtlasPath {
             } else if (getCollectionType() == CollectionType.MAP) {
                 buf.append(PATH_LIST_START).append(getMapKey()).append(PATH_LIST_END);
             }
-            return new SegmentContext(buf.toString());
+            return new XmlSegmentContext(buf.toString());
         }
 
         @Override

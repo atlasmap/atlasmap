@@ -1,0 +1,342 @@
+{
+  "AtlasMapping": {
+    "jsonType": "io.atlasmap.v2.AtlasMapping",
+    "dataSource": [
+      {
+        "jsonType": "io.atlasmap.json.v2.JsonDataSource",
+        "id": "source",
+        "uri": "atlas:json:source",
+        "dataSourceType": "SOURCE"
+      },
+      {
+        "jsonType": "io.atlasmap.json.v2.JsonDataSource",
+        "id": "target-json",
+        "uri": "atlas:json:target-json",
+        "dataSourceType": "TARGET"
+      },
+      {
+        "jsonType": "io.atlasmap.xml.v2.XmlDataSource",
+        "id": "target-xml",
+        "uri": "atlas:xml:target-xml",
+        "dataSourceType": "TARGET"
+      },
+      {
+        "jsonType": "io.atlasmap.v2.DataSource",
+        "id": "target-java",
+        "uri": "atlas:java:target-java?className=io.atlasmap.itests.core.issue.TargetClass",
+        "dataSourceType": "TARGET"
+      }
+    ],
+    "mappings": {
+      "mapping": [
+        {
+          "jsonType": "io.atlasmap.v2.Collection",
+          "mappingType": "COLLECTION",
+          "collectionType": null,
+          "mappings": {
+            "mapping": [
+              {
+                "jsonType": "io.atlasmap.v2.Mapping",
+                "mappingType": "MAP",
+                "id": "mapping.802827",
+                "inputField": [
+                  {
+                    "jsonType": "io.atlasmap.json.v2.JsonField",
+                    "name": "first_name",
+                    "path": "/<>/first_name",
+                    "fieldType": "STRING",
+                    "docId": "source",
+                    "userCreated": false
+                  }
+                ],
+                "outputField": [
+                  {
+                    "jsonType": "io.atlasmap.json.v2.JsonField",
+                    "name": "A",
+                    "path": "/body<>/A",
+                    "fieldType": "STRING",
+                    "docId": "target-json",
+                    "userCreated": false
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "jsonType": "io.atlasmap.v2.Collection",
+          "mappingType": "COLLECTION",
+          "collectionType": null,
+          "mappings": {
+            "mapping": [
+              {
+                "jsonType": "io.atlasmap.v2.Mapping",
+                "mappingType": "MAP",
+                "id": "mapping.898813",
+                "inputField": [
+                  {
+                    "jsonType": "io.atlasmap.json.v2.JsonField",
+                    "name": "last_name",
+                    "path": "/<>/last_name",
+                    "fieldType": "STRING",
+                    "docId": "source",
+                    "userCreated": false
+                  }
+                ],
+                "outputField": [
+                  {
+                    "jsonType": "io.atlasmap.json.v2.JsonField",
+                    "name": "B",
+                    "path": "/body<>/B",
+                    "fieldType": "STRING",
+                    "docId": "target-json",
+                    "userCreated": false
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "jsonType": "io.atlasmap.v2.Collection",
+          "mappingType": "COLLECTION",
+          "collectionType": null,
+          "mappings": {
+            "mapping": [
+              {
+                "jsonType": "io.atlasmap.v2.Mapping",
+                "mappingType": "MAP",
+                "inputField": [
+                  {
+                    "jsonType": "io.atlasmap.json.v2.JsonField",
+                    "name": "three",
+                    "path": "/<>/three",
+                    "fieldType": "STRING",
+                    "docId": "source",
+                    "userCreated": false
+                  }
+                ],
+                "outputField": [
+                  {
+                    "jsonType": "io.atlasmap.json.v2.JsonField",
+                    "name": "three",
+                    "path": "/three<>",
+                    "fieldType": "STRING",
+                    "docId": "target-json",
+                    "userCreated": false
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "jsonType": "io.atlasmap.v2.Collection",
+          "mappingType": "COLLECTION",
+          "collectionType": null,
+          "mappings": {
+            "mapping": [
+              {
+                "jsonType": "io.atlasmap.v2.Mapping",
+                "mappingType": "MAP",
+                "inputField": [
+                  {
+                    "jsonType": "io.atlasmap.json.v2.JsonField",
+                    "name": "first_name",
+                    "path": "/<>/first_name",
+                    "fieldType": "STRING",
+                    "docId": "source",
+                    "userCreated": false
+                  }
+                ],
+                "outputField": [
+                  {
+                    "jsonType": "io.atlasmap.xml.v2.XmlField",
+                    "name": "A",
+                    "path": "/root/body<>/A",
+                    "fieldType": "STRING",
+                    "docId": "target-xml",
+                    "userCreated": false
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "jsonType": "io.atlasmap.v2.Collection",
+          "mappingType": "COLLECTION",
+          "collectionType": null,
+          "mappings": {
+            "mapping": [
+              {
+                "jsonType": "io.atlasmap.v2.Mapping",
+                "mappingType": "MAP",
+                "inputField": [
+                  {
+                    "jsonType": "io.atlasmap.json.v2.JsonField",
+                    "name": "last_name",
+                    "path": "/<>/last_name",
+                    "fieldType": "STRING",
+                    "docId": "source",
+                    "userCreated": false
+                  }
+                ],
+                "outputField": [
+                  {
+                    "jsonType": "io.atlasmap.xml.v2.XmlField",
+                    "name": "B",
+                    "path": "/root/body<>/B",
+                    "fieldType": "STRING",
+                    "docId": "target-xml",
+                    "userCreated": false
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "jsonType": "io.atlasmap.v2.Collection",
+          "mappingType": "COLLECTION",
+          "collectionType": null,
+          "mappings": {
+            "mapping": [
+              {
+                "jsonType": "io.atlasmap.v2.Mapping",
+                "mappingType": "MAP",
+                "inputField": [
+                  {
+                    "jsonType": "io.atlasmap.json.v2.JsonField",
+                    "name": "three",
+                    "path": "/<>/three",
+                    "fieldType": "STRING",
+                    "docId": "source",
+                    "userCreated": false
+                  }
+                ],
+                "outputField": [
+                  {
+                    "jsonType": "io.atlasmap.xml.v2.XmlField",
+                    "name": "three",
+                    "path": "/root/three<>",
+                    "fieldType": "STRING",
+                    "docId": "target-xml",
+                    "userCreated": false
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "jsonType": "io.atlasmap.v2.Collection",
+          "mappingType": "COLLECTION",
+          "collectionType": null,
+          "mappings": {
+            "mapping": [
+              {
+                "jsonType": "io.atlasmap.v2.Mapping",
+                "mappingType": "MAP",
+                "id": "mapping.802827",
+                "inputField": [
+                  {
+                    "jsonType": "io.atlasmap.json.v2.JsonField",
+                    "name": "first_name",
+                    "path": "/<>/first_name",
+                    "fieldType": "STRING",
+                    "docId": "source",
+                    "userCreated": false
+                  }
+                ],
+                "outputField": [
+                  {
+                    "jsonType": "io.atlasmap.java.v2.JavaField",
+                    "name": "name",
+                    "path": "/targetList<>/name",
+                    "fieldType": "STRING",
+                    "docId": "target-java"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "jsonType": "io.atlasmap.v2.Collection",
+          "mappingType": "COLLECTION",
+          "collectionType": null,
+          "mappings": {
+            "mapping": [
+              {
+                "jsonType": "io.atlasmap.v2.Mapping",
+                "mappingType": "MAP",
+                "inputField": [
+                  {
+                    "jsonType": "io.atlasmap.json.v2.JsonField",
+                    "name": "last_name",
+                    "path": "/<>/last_name",
+                    "fieldType": "STRING",
+                    "docId": "source",
+                    "userCreated": false
+                  }
+                ],
+                "outputField": [
+                  {
+                    "jsonType": "io.atlasmap.java.v2.JavaField",
+                    "name": "value",
+                    "path": "/targetList<>/value",
+                    "fieldType": "STRING",
+                    "docId": "target-java"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "jsonType": "io.atlasmap.v2.Collection",
+          "mappingType": "COLLECTION",
+          "collectionType": null,
+          "mappings": {
+            "mapping": [
+              {
+                "jsonType": "io.atlasmap.v2.Mapping",
+                "mappingType": "MAP",
+                "inputField": [
+                  {
+                    "jsonType": "io.atlasmap.json.v2.JsonField",
+                    "name": "three",
+                    "path": "/<>/three",
+                    "fieldType": "STRING",
+                    "docId": "source",
+                    "userCreated": false
+                  }
+                ],
+                "outputField": [
+                  {
+                    "jsonType": "io.atlasmap.java.v2.JavaField",
+                    "name": "targetStringList",
+                    "path": "/targetStringList<>",
+                    "fieldType": "STRING",
+                    "docId": "target-java"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "name": "UI.659774",
+    "lookupTables": {
+      "lookupTable": []
+    },
+    "constants": {
+      "constant": []
+    },
+    "properties": {
+      "property": []
+    }
+  }
+}

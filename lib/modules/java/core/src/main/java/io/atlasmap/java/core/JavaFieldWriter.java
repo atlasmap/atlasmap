@@ -19,6 +19,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.rmi.CORBA.Util;
+
 import org.slf4j.LoggerFactory;
 
 import io.atlasmap.api.AtlasException;
@@ -70,6 +72,10 @@ public class JavaFieldWriter implements AtlasFieldWriter {
                         "Collection item class must be specified to handle topmost collection, path=",
                          path.toString()));
                 }
+                if (rootSegment.getCollectionIndex() == null) {
+                    // Cannot proceed from collection segment without index
+                    return null;
+                }
                 parentObject = writerUtil.getCollectionItem(rootObject, rootSegment);
                 if (parentObject == null) {
                     this.rootObject = writerUtil.adjustCollectionSize(this.rootObject, rootSegment);
@@ -92,6 +98,10 @@ public class JavaFieldWriter implements AtlasFieldWriter {
                     childObject = writerUtil.createComplexChildObject(parentObject, segmentContext);
                 }
                 if (segmentContext.getCollectionType() != CollectionType.NONE) {
+                    if (segmentContext.getCollectionIndex() == null) {
+                        // Cannot proceed from collection segment without index
+                        return null;
+                    }
                     Object item = writerUtil.getCollectionItem(childObject, segmentContext);
                     if (item == null) {
                         Object adjusted = writerUtil.adjustCollectionSize(childObject, segmentContext);
@@ -148,9 +158,12 @@ public class JavaFieldWriter implements AtlasFieldWriter {
                     continue;
                 }
 
-                String targetClassName = targetField instanceof JavaField
-                        ? ((JavaField)targetField).getClassName()
-                        : ((JavaEnumField)targetField).getClassName();
+                String targetClassName = null;
+                if (targetField instanceof JavaField) {
+                    targetClassName = ((JavaField)targetField).getClassName();
+                } else if (targetField instanceof JavaEnumField) {
+                    targetClassName = ((JavaEnumField)targetField).getClassName();
+                }
 
                 if (lastSegment.getCollectionType() == CollectionType.NONE) {
                     if (targetField.getFieldType() == FieldType.COMPLEX && targetField.getValue() == null) {
@@ -166,6 +179,10 @@ public class JavaFieldWriter implements AtlasFieldWriter {
                     Object collection = writerUtil.getChildObject(parentObject, lastSegment);
                     if (collection == null) {
                         collection = writerUtil.createComplexChildObject(parentObject, lastSegment);
+                    }
+                    if (lastSegment.getCollectionIndex() == null) {
+                        // Collection field without index - just create collection object and keep it empty
+                        continue;
                     }
                     Object adjusted = writerUtil.adjustCollectionSize(collection, lastSegment);
                     if (adjusted != collection) {

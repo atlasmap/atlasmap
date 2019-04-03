@@ -107,6 +107,10 @@ public class JsonFieldWriter implements AtlasFieldWriter {
                     childNode = createParentNode(parentNode, parentSegment, segment);
                 } else if (childNode instanceof ArrayNode) {
                     Integer index = segment.getCollectionIndex();
+                    if (index == null) {
+                        return;
+                    }
+
                     ArrayNode arrayChild = (ArrayNode) childNode;
                     if (arrayChild.size() < (index + 1)) {
                         if (LOG.isDebugEnabled()) {
@@ -123,6 +127,9 @@ public class JsonFieldWriter implements AtlasFieldWriter {
                         }
                     }
                     childNode = arrayChild.get(index);
+                }
+                if (childNode == null) {
+                    return;
                 }
                 parentNode = (ObjectNode) childNode;
                 parentSegment = segment;
@@ -186,6 +193,10 @@ public class JsonFieldWriter implements AtlasFieldWriter {
 
             // determine where in the array our value will go
             Integer index = segment.getCollectionIndex();
+            if (index == null) {
+                // No index is specified in the collection path
+                return;
+            }
 
             if (arrayChild.size() < (index + 1)) {
                 if (LOG.isDebugEnabled()) {
@@ -240,7 +251,10 @@ public class JsonFieldWriter implements AtlasFieldWriter {
             }
             Integer index = segment.getCollectionIndex();
 
-            if (arrayChild.size() < (index + 1)) {
+            if (index == null) {
+                // No index is specified in the collection path - create only an array node and leave it empty
+                return null;
+            } else if (arrayChild.size() < (index + 1)) {
                 if (LOG.isDebugEnabled()) {
                     LOG.debug("Object Array is too small, resizing to accomodate index: " + index + ", current array: "
                             + arrayChild);
