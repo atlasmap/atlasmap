@@ -30,6 +30,9 @@ public class AtlasMapExtractMappingsTest {
     @EndpointInject(uri = "mock:result")
     protected MockEndpoint result;
 
+    @EndpointInject(uri = "mock:result-n")
+    protected MockEndpoint result_n;
+
     @Test
     @DirtiesContext
     public void testXMLMappingsExtraction() throws Exception {
@@ -45,4 +48,18 @@ public class AtlasMapExtractMappingsTest {
         assertEquals(EXPECTED_BODY, body);
     }
 
+    @Test
+    @DirtiesContext
+    public void testXMLMappingsExtractionNumberedMappingFile() throws Exception {
+        result_n.setExpectedCount(1);
+
+        ProducerTemplate producerTemplate = camelContext.createProducerTemplate();
+        producerTemplate.sendBody("direct:start-n",
+            new ByteArrayInputStream("{ \"order\": { \"orderId\": \"A123\" }}".getBytes()));
+
+        MockEndpoint.assertIsSatisfied(camelContext);
+
+        final Object body = result_n.getExchanges().get(0).getIn().getBody();
+        assertEquals(EXPECTED_BODY, body);
+    }
 }

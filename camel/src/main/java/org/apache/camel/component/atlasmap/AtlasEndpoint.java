@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -63,7 +64,7 @@ public class AtlasEndpoint extends ResourceEndpoint {
     private static final Logger LOG = LoggerFactory.getLogger(AtlasEndpoint.class);
     private AtlasContextFactory atlasContextFactory;
     private AtlasContext atlasContext;
-    private String atlasmapGenericMappingsName = "atlasmapping.json";
+    private Pattern atlasmapMappingFileNamePattern = Pattern.compile("atlasmapping(-UI\\.[0-9]+)?\\.json");
 
     @UriParam(defaultValue = "true")
     private boolean loaderCache = true;
@@ -199,7 +200,7 @@ public class AtlasEndpoint extends ResourceEndpoint {
             while ((catEntry = zipIn.getNextEntry()) != null) {
                 catEntryname = catEntry.getName();
                 LOG.debug("Found entry: {}", catEntryname);
-                if (catEntryname.contains(atlasmapGenericMappingsName)) {
+                if (atlasmapMappingFileNamePattern.matcher(catEntryname).matches()) {
                     break;
                 }
                 else {

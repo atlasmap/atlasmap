@@ -11,6 +11,11 @@
             <to uri="atlas:atlasmap-mapping.adm" />
             <to uri="mock:result" />
         </route>
+        <route>
+            <from uri="direct:start-n" />
+            <to uri="atlas:atlasmap-mapping-n.adm" />
+            <to uri="mock:result-n" />
+        </route>
     </camelContext>
 
 </beans>
