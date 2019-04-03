@@ -266,7 +266,7 @@ public class AtlasPath {
             return isRoot;
         }
 
-        private SegmentContext rebuild() {
+        protected SegmentContext rebuild() {
             StringBuilder buf = new StringBuilder();
             if (this.isAttribute) {
                 buf.append(PATH_ATTRIBUTE_PREFIX);

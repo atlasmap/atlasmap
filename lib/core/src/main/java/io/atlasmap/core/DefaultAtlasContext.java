@@ -622,13 +622,6 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
                 }
                 session.head().setTargetField(targetField);
                 if (sourceFieldGroup != null) {
-                    if (sourceFieldGroup.getField().size() == 0) {
-                        AtlasUtil.addAudit(session, targetField.getDocId(), String.format(
-                                "The group field '%s:%s' Empty group field is detected, skipping",
-                                sourceField.getDocId(), sourceField.getPath()),
-                                targetField.getPath(), AuditStatus.WARN, null);
-                        continue;
-                    }
                     Integer index = targetField.getIndex();
                     AtlasPath targetPath = new AtlasPath(targetField.getPath());
                     if (targetPath.hasCollection() && !targetPath.isIndexedCollection()) {
@@ -640,7 +633,9 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
                         }
                         session.head().setSourceField(sourceFieldGroup);
                     } else if (index == null) {
-                        session.head().setSourceField(sourceFieldGroup.getField().get(sourceFieldGroup.getField().size()-1));
+                        if (sourceFieldGroup.getField().size() > 0) {
+                            session.head().setSourceField(sourceFieldGroup.getField().get(sourceFieldGroup.getField().size()-1));
+                        }
                     } else {
                         if (sourceFieldGroup.getField().size() > index) {
                             session.head().setSourceField(sourceFieldGroup.getField().get(index));

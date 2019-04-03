@@ -117,6 +117,9 @@ public class XmlFieldWriter extends XmlFieldTransformer implements AtlasFieldWri
                     if (childNode == null) {
                         childNode = createParentNode(parentNode, parentSegment, segment);
                     }
+                    if (childNode == null) {
+                        return;
+                    }
                     parentNode = childNode;
                     parentSegment = segment;
                 }
@@ -225,6 +228,9 @@ public class XmlFieldWriter extends XmlFieldTransformer implements AtlasFieldWri
         String cleanedSegmentName = segment.getName();
         if (segment.getCollectionType() != CollectionType.NONE) {
             Integer index = segment.getCollectionIndex();
+            if (index == null) {
+                return null;
+            }
             String namespaceAlias = segment.getNamespace();
             if (namespaceAlias != null && !"".equals(namespaceAlias)) {
                 cleanedSegmentName = namespaceAlias + ":" + cleanedSegmentName;

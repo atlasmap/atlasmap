@@ -135,6 +135,10 @@
         <!-- Others -->
         <dependency>
           <groupId>io.atlasmap</groupId>
+          <artifactId>atlas-itests-core</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>io.atlasmap</groupId>
           <artifactId>atlasmap-maven-plugin</artifactId>
         </dependency>
         <dependency>

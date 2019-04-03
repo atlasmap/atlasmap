@@ -210,6 +210,13 @@ public class JavaModule extends BaseAtlasModule {
                 writer.enqueueFieldAndParent(targetField, parentObject);
             }
         } else if (sourceField instanceof FieldGroup) {
+            if (((FieldGroup)sourceField).getField().size() == 0) {
+                Object parentObject = writer.prepareParentObject(session);
+                if (parentObject != null) {
+                    writer.enqueueFieldAndParent(targetFieldGroup, parentObject);
+                }
+            }
+
             for (int i=0; i<((FieldGroup)sourceField).getField().size(); i++) {
                 Field sourceSubField = ((FieldGroup)sourceField).getField().get(i);
                 Field targetSubField = targetField instanceof JavaEnumField ? new JavaEnumField() : new JavaField();

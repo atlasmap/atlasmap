@@ -318,7 +318,10 @@ public class JavaFieldWriterUtil {
     }
 
     public Object getCollectionItem(Object collectionObject, SegmentContext segmentContext) throws AtlasException {
-        int index = segmentContext.getCollectionIndex();
+        Integer index = segmentContext.getCollectionIndex();
+        if (index == null) {
+            return new AtlasException("Collection item is requested without an index");
+        }
         if (segmentContext.getCollectionType() == CollectionType.ARRAY) {
             return Array.getLength(collectionObject) > index ? Array.get(collectionObject, index) : null;
         } else if (segmentContext.getCollectionType() == CollectionType.LIST) {

@@ -233,13 +233,15 @@ public class XmlModule extends BaseAtlasModule {
         XmlFieldWriter writer = session.getFieldWriter(getDocId(), XmlFieldWriter.class);
         if (session.head().getTargetField() instanceof FieldGroup) {
             FieldGroup targetFieldGroup = (FieldGroup) session.head().getTargetField();
-            for (Field f : targetFieldGroup.getField()) {
-                session.head().setTargetField(f);
-                writer.write(session);
+            if (targetFieldGroup.getField().size() > 0) {
+                for (Field f : targetFieldGroup.getField()) {
+                    session.head().setTargetField(f);
+                    writer.write(session);
+                }
+                return;
             }
-        } else {
-            writer.write(session);
         }
+        writer.write(session);
     }
 
     @Override

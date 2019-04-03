@@ -16,7 +16,6 @@
 package io.atlasmap.itests.core.issue;
 
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 
 public class TargetClass {
@@ -26,10 +25,10 @@ public class TargetClass {
     private String targetLastName;
     private String targetName;
     private Date targetDate;
-    private List<Item> targetList = new LinkedList<>();
+    private List<Item> targetList;
 
     private String targetString;
-    private List<String> targetStringList = new LinkedList<>();
+    private List<String> targetStringList;
 
     public int getTargetInteger() {
         return targetInteger;
