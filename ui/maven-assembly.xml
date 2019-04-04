@@ -9,7 +9,6 @@
   <fileSets>
     <fileSet>
       <directory>dist/app</directory>
-      <outputDirectory>/</outputDirectory>
     </fileSet>
   </fileSets>
 </assembly>
