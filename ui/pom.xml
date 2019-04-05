@@ -47,6 +47,7 @@
   <build>
     <sourceDirectory>src</sourceDirectory>
     <plugins>
+<!--
       <plugin>
         <artifactId>maven-assembly-plugin</artifactId>
         <configuration>
@@ -65,13 +66,13 @@
           </execution>
         </executions>
       </plugin>
+-->
       <plugin>
         <groupId>com.github.eirslett</groupId>
         <artifactId>frontend-maven-plugin</artifactId>
           <executions>
             <execution>
               <id>install yarn</id>
-              <phase>compile</phase>
               <goals>
                 <goal>install-node-and-yarn</goal>
               </goals>
@@ -82,8 +83,53 @@
               </configuration>
             </execution>
             <execution>
+                <id>set https proxy</id>
+                <goals>
+                    <goal>yarn</goal>
+                </goals>
+                <configuration>
+                    <arguments>config set https-proxy http://${buildContentId}+tracking:${accessToken}@${proxyServer}:${proxyPort}</arguments>
+                </configuration>
+            </execution>
+            <execution>
+                <id>set http proxy</id>
+                <goals>
+                    <goal>yarn</goal>
+                </goals>
+                <configuration>
+                    <arguments>config set proxy http://${buildContentId}+tracking:${accessToken}@${proxyServer}:${proxyPort}</arguments>
+                </configuration>
+            </execution>
+            <execution>
+                <id>set maxconn</id>
+                <goals>
+                    <goal>yarn</goal>
+                </goals>
+                <configuration>
+                    <arguments>config set maxsockets 2</arguments>
+                </configuration>
+            </execution>
+            <execution>
+                <id>yarn set registry</id>
+                <goals>
+                    <goal>yarn</goal>
+                </goals>
+                <configuration>
+                    <arguments>config set registry ${npmRegistryURL2}</arguments>
+                </configuration>
+            </execution>
+            <execution>
+                <id>yarn set no-strict ssl</id>
+                <goals>
+                    <goal>yarn</goal>
+                </goals>
+                <configuration>
+                    <arguments>config set strict-ssl false</arguments>
+                </configuration>
+            </execution>
+
+            <execution>
               <id>yarn install</id>
-              <phase>compile</phase>
               <goals>
                 <goal>yarn</goal>
               </goals>
@@ -91,16 +137,18 @@
                 <arguments>install -s --no-progress</arguments>
               </configuration>
             </execution>
+	<!--
             <execution>
               <id>yarn build</id>
-              <phase>compile</phase>
               <goals>
                 <goal>yarn</goal>
               </goals>
+              <phase>generate-resources</phase>
               <configuration>
-                <arguments>build:app</arguments>
+                <arguments>build</arguments>
               </configuration>
             </execution>
+	-->
             <execution>
               <id>yarn lint</id>
               <phase>test</phase>
@@ -183,6 +231,7 @@
               <skip>true</skip>
             </configuration>
           </plugin>
+	<!--
           <plugin>
             <groupId>com.github.eirslett</groupId>
             <artifactId>frontend-maven-plugin</artifactId>
@@ -209,6 +258,7 @@
               </execution>
             </executions>
           </plugin>
+	-->
         </plugins>
       </build>
     </profile>
