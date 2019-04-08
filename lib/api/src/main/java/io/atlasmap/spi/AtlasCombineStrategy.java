@@ -17,6 +17,10 @@ package io.atlasmap.spi;
 
 import java.util.Map;
 
+/**
+ * @deprecated COMBINE/SEPARATE mode has been deprecated. Use transformations with multiple field selection.
+ */
+@Deprecated
 public interface AtlasCombineStrategy {
 
     default String getName() {

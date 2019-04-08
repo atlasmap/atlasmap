@@ -1,0 +1,128 @@
+{
+  "AtlasMapping" : {
+    "jsonType" : "io.atlasmap.v2.AtlasMapping",
+    "dataSource" : [ {
+      "jsonType" : "io.atlasmap.json.v2.JsonDataSource",
+      "id" : "source",
+      "uri" : "atlas:json:source",
+      "dataSourceType" : "SOURCE"
+    }, {
+      "jsonType" : "io.atlasmap.json.v2.JsonDataSource",
+      "id" : "target",
+      "uri" : "atlas:json:target",
+      "dataSourceType" : "TARGET"
+    } ],
+    "mappings" : {
+      "mapping" : [ {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "id" : "concatenate-from-field-group",
+        "inputFieldGroup" : {
+          "jsonType" : "io.atlasmap.v2.FieldGroup",
+          "actions" : [ {
+            "Concatenate" : {
+              "delimiter" : ","
+            }
+          } ],
+          "field" : [ {
+            "jsonType" : "io.atlasmap.json.v2.JsonField",
+            "docId" : "source",
+            "index" : 0,
+            "path" : "/sourceFirstName",
+            "fieldType" : "STRING",
+            "name" : "sourceFirstName"
+          }, {
+            "jsonType" : "io.atlasmap.json.v2.JsonField",
+            "docId" : "source",
+            "index" : 1,
+            "path" : "/sourceLastName",
+            "fieldType" : "STRING",
+            "name" : "sourceLastName"
+          } ]
+        },
+        "inputField" : [ ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.json.v2.JsonField",
+          "docId" : "target",
+          "path" : "/targetName",
+          "fieldType" : "STRING",
+          "name" : "targetName"
+        } ]
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "id" : "split-into-multiple-fields",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.json.v2.JsonField",
+          "actions" : [ {
+            "Split" : {
+              "delimiter" : ","
+            }
+          } ],
+          "docId" : "source",
+          "path" : "/sourceName",
+          "fieldType" : "STRING",
+          "name" : "sourceName"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.json.v2.JsonField",
+          "docId" : "target",
+          "index" : 0,
+          "path" : "/targetFirstName",
+          "fieldType" : "STRING",
+          "name" : "targetFirstName"
+        }, {
+          "jsonType" : "io.atlasmap.json.v2.JsonField",
+          "docId" : "target",
+          "index" : 1,
+          "path" : "/targetLastName",
+          "fieldType" : "STRING",
+          "name" : "targetLastName"
+        } ]
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "id" : "concatenate-from-collection",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.json.v2.JsonField",
+          "actions" : [ {
+            "Concatenate" : {
+              "delimiter" : ","
+            }
+          } ],
+          "docId" : "source",
+          "path" : "/sourceStringList<>",
+          "fieldType" : "STRING",
+          "name" : "sourceStringList"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.json.v2.JsonField",
+          "docId" : "target",
+          "path" : "/targetString",
+          "fieldType" : "STRING",
+          "name" : "targetString"
+        } ]
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "id" : "split-into-collection",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.json.v2.JsonField",
+          "actions" : [ {
+            "Split" : {
+              "delimiter" : ","
+            }
+          } ],
+          "docId" : "source",
+          "path" : "/sourceString",
+          "fieldType" : "STRING",
+          "name" : "sourceString"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.json.v2.JsonField",
+          "docId" : "target",
+          "path" : "/targetStringList<>",
+          "fieldType" : "STRING",
+          "name" : "targetStringList"
+        } ]
+      } ]
+    },
+    "name" : "core-unit-test"
+  }
+}

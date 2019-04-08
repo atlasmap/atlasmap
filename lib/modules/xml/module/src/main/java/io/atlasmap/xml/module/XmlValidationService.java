@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import io.atlasmap.core.BaseModuleValidationService;
+import io.atlasmap.core.validate.BaseModuleValidationService;
 import io.atlasmap.spi.AtlasConversionService;
 import io.atlasmap.spi.AtlasFieldActionService;
 import io.atlasmap.spi.AtlasModuleDetail;

@@ -172,24 +172,6 @@ public class JavaValidationServiceTest {
         }
     }
 
-    // @Test
-    // @Ignore // Note: manual utility to assist in creating files
-    // public void saveSampleFile() throws Exception {
-    // AtlasMappingUtil util = new
-    // AtlasMappingUtil("io.atlasmap.v2:io.atlasmap.java.v2");
-    //
-    // AtlasMapping mapping = getAtlasMappingFullValid();
-    // util.marshallMapping(mapping,
-    // "src/test/resources/mappings/HappyPathMapping.json");
-    //
-    // mapping = getAtlasMappingFullValid();
-    // mapping.getMappings().getMapping().clear();
-    // mapping.getMappings().getMapping().add(createMockMapping());
-    // mappingUtil.marshallMapping(mapping,
-    // "src/test/resources/mappings/MisMatchedFieldTypes.json");
-    //
-    // }
-
     @Test
     public void testValidateMappingHappyPath() {
         AtlasMapping mapping = getAtlasMappingFullValid();
@@ -365,14 +347,14 @@ public class JavaValidationServiceTest {
         validations.addAll(sourceValidationService.validateMapping(mapping));
         validations.addAll(targetValidationService.validateMapping(mapping));
 
-        assertFalse(validationHelper.hasErrors());
-        assertTrue(validationHelper.hasWarnings());
+        assertTrue(validationHelper.hasErrors());
+        assertFalse(validationHelper.hasWarnings());
         assertFalse(validationHelper.hasInfos());
         assertThat(1, is(validationHelper.getCount()));
         Validation v = validations.get(0);
         assertEquals(ValidationScope.MAPPING, v.getScope());
         assertEquals("map.firstName.firstName", v.getId());
-        assertEquals(ValidationStatus.WARN, v.getStatus());
+        assertEquals(ValidationStatus.ERROR, v.getStatus());
     }
 
     @Test

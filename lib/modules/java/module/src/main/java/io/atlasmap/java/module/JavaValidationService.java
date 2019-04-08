@@ -18,27 +18,21 @@ package io.atlasmap.java.module;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Method;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.atlasmap.api.AtlasConverter;
-import io.atlasmap.core.BaseModuleValidationService;
+import io.atlasmap.core.validate.BaseModuleValidationService;
 import io.atlasmap.java.v2.JavaField;
-import io.atlasmap.spi.AtlasConversionInfo;
 import io.atlasmap.spi.AtlasConversionService;
 import io.atlasmap.spi.AtlasFieldActionService;
 import io.atlasmap.spi.AtlasModuleDetail;
 import io.atlasmap.spi.AtlasValidator;
 import io.atlasmap.spi.FieldDirection;
 import io.atlasmap.v2.Field;
-import io.atlasmap.v2.FieldType;
 import io.atlasmap.v2.Validation;
 import io.atlasmap.v2.ValidationScope;
 import io.atlasmap.v2.ValidationStatus;
@@ -62,6 +56,7 @@ public class JavaValidationService extends BaseModuleValidationService<JavaField
     }
 
     public void init() {
+        setMappingFieldPairValidator(new JavaMappingFieldPairValidator(this, getConversionService()));
         NonNullValidator javaFilePathNonNullValidator = new NonNullValidator(ValidationScope.MAPPING,
                 "Field path must not be null nor empty");
         NonNullValidator inputFieldTypeNonNullValidator = new NonNullValidator(ValidationScope.MAPPING,
@@ -109,56 +104,6 @@ public class JavaValidationService extends BaseModuleValidationService<JavaField
 
     protected void validateSourceAndTargetTypes(String mappingId, Field inputField, Field outField,
             List<Validation> validations) {
-        if ((inputField instanceof JavaField && outField instanceof JavaField) && ((inputField.getFieldType() == null
-                || outField.getFieldType() == null)
-                || (inputField.getFieldType() == FieldType.COMPLEX || outField.getFieldType() == FieldType.COMPLEX))) {
-            // making an assumption that anything marked as COMPLEX would require the use of
-            // the class name to find a validator.
-            validateClassConversion(mappingId, (JavaField) inputField, (JavaField) outField, validations);
-            return;
-        }
-
-        if (inputField.getFieldType() != outField.getFieldType()) {
-            // is this check superseded by the further checks using the AtlasConversionInfo
-            // annotations?
-
-            // errors.getAllErrors().add(new AtlasMappingError("Field.Input/Output",
-            // inputField.getType().value() + " --> " + outField.getType().value(), "Output
-            // field type does not match input field type, may require a converter.",
-            // AtlasMappingError.Level.WARN));
-            validateFieldTypeConversion(mappingId, inputField, outField, validations);
-        }
-    }
-
-    private void validateClassConversion(String mappingId, JavaField inputField, JavaField outField,
-            List<Validation> validations) {
-        Optional<AtlasConverter<?>> atlasConverter = getConversionService()
-                .findMatchingConverter(inputField.getClassName(), outField.getClassName());
-        if (!atlasConverter.isPresent()) {
-            Validation validation = new Validation();
-            validation.setScope(ValidationScope.MAPPING);
-            validation.setId(mappingId);
-            validation
-                    .setMessage(String.format("Conversion from '%s' to '%s' is required but no converter is available",
-                            inputField.getClassName(), outField.getClassName()));
-            validation.setStatus(ValidationStatus.WARN);
-            validations.add(validation);
-        } else {
-            AtlasConversionInfo conversionInfo;
-            // find the method that does the conversion
-            Method[] methods = atlasConverter.get().getClass().getMethods();
-            conversionInfo = Arrays.stream(methods).map(method -> method.getAnnotation(AtlasConversionInfo.class))
-                    .filter(atlasConversionInfo -> atlasConversionInfo != null)
-                    .filter(atlasConversionInfo -> atlasConversionInfo.sourceType()
-                            .compareTo(inputField.getFieldType()) == 0
-                            && atlasConversionInfo.targetType().compareTo(outField.getFieldType()) == 0)
-                    .findFirst().orElse(null);
-
-            if (conversionInfo != null) {
-                populateConversionConcerns(mappingId, conversionInfo, getFieldName(inputField), getFieldName(outField),
-                        validations);
-            }
-        }
     }
 
     @Override
