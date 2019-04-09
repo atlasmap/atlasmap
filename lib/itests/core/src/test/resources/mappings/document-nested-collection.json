@@ -1,0 +1,58 @@
+{
+  "firstArray": [
+    {
+      "value": "firstArrayValue0",
+      "secondArray": [
+        {
+          "value": "secondArrayValue0-0",
+          "thirdArray": [
+            {
+              "value": "thirdArrayValue0-0-0"
+            },
+            {
+              "value": "thirdArrayValue0-0-1"
+            }
+          ]
+        },
+        {
+          "value": "secondArrayValue0-1",
+          "thirdArray": [
+            {
+              "value": "thirdArrayValue0-1-0"
+            },
+            {
+              "value": "thirdArrayValue0-1-1"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "value": "firstArrayValue1",
+      "secondArray": [
+        {
+          "value": "secondArrayValue1-0",
+          "thirdArray": [
+            {
+              "value": "thirdArrayValue1-0-0"
+            },
+            {
+              "value": "thirdArrayValue1-0-1"
+            }
+          ]
+        },
+        {
+          "value": "secondArrayValue1-1",
+          "thirdArray": [
+            {
+              "value": "thirdArrayValue1-1-0"
+            },
+            {
+              "value": "thirdArrayValue1-1-1"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

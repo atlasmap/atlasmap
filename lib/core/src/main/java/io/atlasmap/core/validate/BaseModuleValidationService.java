@@ -22,6 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.atlasmap.api.AtlasValidationService;
+import io.atlasmap.core.AtlasPath;
 import io.atlasmap.core.DefaultAtlasConversionService;
 import io.atlasmap.core.DefaultAtlasFieldActionService;
 import io.atlasmap.spi.AtlasConversionService;
@@ -207,6 +208,18 @@ public abstract class BaseModuleValidationService<T extends Field> implements At
         if (field == null) {
             return;
         }
+        if (direction == FieldDirection.TARGET) {
+            AtlasPath path = new AtlasPath(field.getPath());
+            if (path.getCollectionSegmentCount() > 1) {
+                Validation validation = new Validation();
+                validation.setScope(ValidationScope.MAPPING);
+                validation.setId(mappingId);
+                validation.setMessage(String.format("A Target field in a nested collections is not supported: [%s]",
+                    field.getPath()));
+                validation.setStatus(ValidationStatus.ERROR);
+                validations.add(validation);
+            }
+        }
         if (getFieldType().isAssignableFrom(field.getClass()) && matchDocIdOrNull(field.getDocId())) {
             validateModuleField(mappingId, (T)field, direction, validations);
         }
@@ -286,7 +299,7 @@ public abstract class BaseModuleValidationService<T extends Field> implements At
             }
 
             // check that the output field is of type String else error
-            if (targetField.getFieldType() != FieldType.STRING) {
+            if (targetField.getFieldType() != null && targetField.getFieldType() != FieldType.STRING) {
                 Validation validation = new Validation();
                 validation.setScope(ValidationScope.MAPPING);
                 validation.setId(mappingId);
@@ -322,7 +335,7 @@ public abstract class BaseModuleValidationService<T extends Field> implements At
 
         if (getMode() == AtlasModuleMode.SOURCE && matchDocIdOrNull(sourceField.getDocId())) {
             // check that the source field is of type String else error
-            if (sourceField.getFieldType() != FieldType.STRING) {
+            if (sourceField.getFieldType() != null && sourceField.getFieldType() != FieldType.STRING) {
                 Validation validation = new Validation();
                 validation.setScope(ValidationScope.MAPPING);
                 validation.setId(mapping.getId());

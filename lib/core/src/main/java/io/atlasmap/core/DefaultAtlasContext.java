@@ -425,10 +425,12 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
         session.getAudits().getAudit().clear();
         session.getValidations().getValidation().clear();
 
+        // TODO https://github.com/atlasmap/atlasmap/issues/863 - Add an option to enable/disable runtime validation
         processValidation(session);
         for (Validation v : session.getValidations().getValidation()) {
             AtlasUtil.addAudit(session, v);
         }
+        session.getValidations().getValidation().clear();
         if (session.hasErrors()) {
             if (LOG.isDebugEnabled()) {
                 LOG.error("Aborting due to {} errors in pre-validation", session.errorCount());

@@ -204,6 +204,16 @@ public class AtlasPath {
         return originalPath;
     }
 
+    public int getCollectionSegmentCount() {
+        int answer = 0;
+        for (SegmentContext sc : getSegments(true)) {
+            if (sc.collectionType != null && sc.collectionType != CollectionType.NONE) {
+                answer++;
+            }
+        }
+        return answer;
+    }
+
     public static class SegmentContext {
 
         private String name;

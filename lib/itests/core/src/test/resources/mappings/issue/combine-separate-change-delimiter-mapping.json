@@ -67,6 +67,6 @@
         "delimiter" : "Comma"
       } ]
     },
-    "name" : "core-unit-test"
+    "name" : "core.unit.test"
   }
 }

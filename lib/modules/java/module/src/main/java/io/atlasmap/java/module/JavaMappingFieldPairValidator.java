@@ -50,8 +50,10 @@ public class JavaMappingFieldPairValidator extends MappingFieldPairValidator {
                 || (sourceFieldType == FieldType.COMPLEX || targetField.getFieldType() == FieldType.COMPLEX))) {
             // making an assumption that anything marked as COMPLEX would require the use of
             // the class name to find a validator.
-            validateClassConversion(mappingId, (JavaField) sourceField, (JavaField) targetField, validations);
-            return;
+            if (((JavaField)sourceField).getClassName() != null && ((JavaField)targetField).getClassName() != null) {
+                validateClassConversion(mappingId, (JavaField) sourceField, (JavaField) targetField, validations);
+                return;
+            }
         }
 
         if (sourceField.getFieldType() != targetField.getFieldType()) {

@@ -288,6 +288,7 @@ public class AtlasUtil {
         audit.setDocId(validation.getId());
         audit.setMessage(validation.getMessage());
         audit.setStatus(AtlasUtil.toAuditStatus(validation.getStatus()));
+        session.getAudits().getAudit().add(audit);
     }
 
     public static AuditStatus toAuditStatus(ValidationStatus vstatus) {
