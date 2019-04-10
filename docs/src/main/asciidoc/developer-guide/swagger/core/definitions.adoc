@@ -287,6 +287,17 @@ __optional__|object
 |===
 
 
+[[_atlas-service-core-formulaexpression]]
+=== FormulaExpression
+
+[options="header", cols=".^3a,.^4a"]
+|===
+|Name|Schema
+|**expression** +
+__optional__|string
+|===
+
+
 [[_atlas-service-core-lookupentry]]
 === LookupEntry
 
@@ -344,6 +355,8 @@ __optional__|string
 __optional__|string
 |**description** +
 __optional__|string
+|**formulaExpression** +
+__optional__|<<_atlas-service-core-formulaexpression,FormulaExpression>>
 |**id** +
 __optional__|string
 |**inputField** +
