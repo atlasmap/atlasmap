@@ -1,0 +1,89 @@
+{
+  "AtlasMapping" : {
+    "jsonType" : "io.atlasmap.v2.AtlasMapping",
+    "dataSource" : [ {
+      "jsonType" : "io.atlasmap.json.v2.JsonDataSource",
+      "id" : "JSONInstanceNestedCollection",
+      "uri" : "atlas:json:JSONInstanceNestedCollection",
+      "dataSourceType" : "SOURCE"
+    }, {
+      "jsonType" : "io.atlasmap.json.v2.JsonDataSource",
+      "id" : "JSONInstanceNestedCollection",
+      "uri" : "atlas:json:JSONInstanceNestedCollection",
+      "dataSourceType" : "TARGET"
+    } ],
+    "mappings" : {
+      "mapping" : [ {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "MAP",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.json.v2.JsonField",
+          "docId" : "JSONInstanceNestedCollection",
+          "path" : "/firstArray<>/value",
+          "fieldType" : "STRING",
+          "name" : "value",
+          "userCreated" : false
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.json.v2.JsonField",
+          "docId" : "JSONInstanceNestedCollection",
+          "path" : "/firstArray<>/value",
+          "fieldType" : "STRING",
+          "name" : "value",
+          "userCreated" : false
+        } ],
+        "id" : "1-1"
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "MAP",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.json.v2.JsonField",
+          "docId" : "JSONInstanceNestedCollection",
+          "path" : "/firstArray<>/secondArray<>/value",
+          "fieldType" : "STRING",
+          "name" : "value",
+          "userCreated" : false
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.json.v2.JsonField",
+          "docId" : "JSONInstanceNestedCollection",
+          "path" : "/firstArray<>/secondArray<>/value",
+          "fieldType" : "STRING",
+          "name" : "value",
+          "userCreated" : false
+        } ],
+        "id" : "2-2"
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "MAP",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.json.v2.JsonField",
+          "docId" : "JSONInstanceNestedCollection",
+          "path" : "/firstArray<>/secondArray<>/thirdArray<>/value",
+          "fieldType" : "STRING",
+          "name" : "value",
+          "userCreated" : false
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.json.v2.JsonField",
+          "docId" : "JSONInstanceNestedCollection",
+          "path" : "/firstArray<>/secondArray<>/thirdArray<>/value",
+          "fieldType" : "STRING",
+          "name" : "value",
+          "userCreated" : false
+        } ],
+        "id" : "3-3"
+      } ]
+    },
+    "lookupTables" : {
+      "lookupTable" : [ ]
+    },
+    "constants" : {
+      "constant" : [ ]
+    },
+    "properties" : {
+      "property" : [ ]
+    },
+    "name" : "UI.521702"
+  }
+}

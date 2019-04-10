@@ -44,7 +44,6 @@ public class JavaJavaCombineTest extends AtlasMappingBaseTest {
         assertNull(targetContact.getLastName());
         assertNull(targetContact.getPhoneNumber());
         assertNull(targetContact.getZipCode());
-        assertFalse(session.hasErrors());
     }
 
     @Test
@@ -57,7 +56,6 @@ public class JavaJavaCombineTest extends AtlasMappingBaseTest {
         assertNull(targetContact.getLastName());
         assertNull(targetContact.getPhoneNumber());
         assertNull(targetContact.getZipCode());
-        assertFalse(session.hasErrors());
     }
 
     @Test
@@ -70,7 +68,6 @@ public class JavaJavaCombineTest extends AtlasMappingBaseTest {
         assertNull(targetContact.getLastName());
         assertNull(targetContact.getPhoneNumber());
         assertNull(targetContact.getZipCode());
-        assertFalse(session.hasErrors());
     }
 
     @Test
@@ -82,7 +79,6 @@ public class JavaJavaCombineTest extends AtlasMappingBaseTest {
         TargetContact targetContact = (TargetContact) session.getDefaultTargetDocument();
         assertNotNull(targetContact);
         assertEquals("Ozzie  5551212 81111", targetContact.getFirstName());
-        assertFalse(session.hasErrors());
     }
 
     protected AtlasSession processCombineMapping(String mappingFile, BaseContact sourceContact) throws Exception {
@@ -90,6 +86,7 @@ public class JavaJavaCombineTest extends AtlasMappingBaseTest {
         AtlasSession session = context.createSession();
         session.setDefaultSourceDocument(sourceContact);
         context.process(session);
+        assertFalse(printAudit(session), session.hasErrors());
 
         Object object = session.getDefaultTargetDocument();
         assertNotNull(object);

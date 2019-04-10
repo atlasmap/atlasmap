@@ -1,0 +1,11 @@
+{
+    "firstArray": [{
+        "value": "firstArrayValue",
+        "secondArray": [{
+            "value": "secondArrayValue",
+            "thirdArray": [{
+                "value": "thirdArrayValue"
+            }]
+        }]
+    }]
+}

@@ -2,19 +2,20 @@
   "AtlasMapping" : {
     "jsonType" : "io.atlasmap.v2.AtlasMapping",
     "dataSource" : [ {
-      "jsonType" : "io.atlasmap.v2.DataSource",
-      "id" : "io.atlasmap.itests.core.issue.SourceClass",
-      "uri" : "atlas:java?className=io.atlasmap.itests.core.issue.SourceClass",
+      "jsonType" : "io.atlasmap.json.v2.JsonDataSource",
+      "id" : "source",
+      "uri" : "atlas:json:source",
       "dataSourceType" : "SOURCE"
     }, {
-      "jsonType" : "io.atlasmap.v2.DataSource",
-      "id" : "io.atlasmap.itests.core.issue.TargetClass",
-      "uri" : "atlas:java?className=io.atlasmap.itests.core.issue.TargetClass",
+      "jsonType" : "io.atlasmap.json.v2.JsonDataSource",
+      "id" : "target",
+      "uri" : "atlas:json:target",
       "dataSourceType" : "TARGET"
     } ],
     "mappings" : {
       "mapping" : [ {
         "jsonType" : "io.atlasmap.v2.Mapping",
+        "id" : "concatenate-from-field-group",
         "inputFieldGroup" : {
           "jsonType" : "io.atlasmap.v2.FieldGroup",
           "actions" : [ {
@@ -23,15 +24,15 @@
             }
           } ],
           "field" : [ {
-            "jsonType" : "io.atlasmap.java.v2.JavaField",
-            "docId" : "io.atlasmap.itests.core.issue.SourceClass",
+            "jsonType" : "io.atlasmap.json.v2.JsonField",
+            "docId" : "source",
             "index" : 0,
             "path" : "/sourceFirstName",
             "fieldType" : "STRING",
             "name" : "sourceFirstName"
           }, {
-            "jsonType" : "io.atlasmap.java.v2.JavaField",
-            "docId" : "io.atlasmap.itests.core.issue.SourceClass",
+            "jsonType" : "io.atlasmap.json.v2.JsonField",
+            "docId" : "source",
             "index" : 1,
             "path" : "/sourceLastName",
             "fieldType" : "STRING",
@@ -40,36 +41,37 @@
         },
         "inputField" : [ ],
         "outputField" : [ {
-          "jsonType" : "io.atlasmap.java.v2.JavaField",
-          "docId" : "io.atlasmap.itests.core.issue.TargetClass",
+          "jsonType" : "io.atlasmap.json.v2.JsonField",
+          "docId" : "target",
           "path" : "/targetName",
           "fieldType" : "STRING",
           "name" : "targetName"
         } ]
       }, {
         "jsonType" : "io.atlasmap.v2.Mapping",
+        "id" : "split-into-multiple-fields",
         "inputField" : [ {
-          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "jsonType" : "io.atlasmap.json.v2.JsonField",
           "actions" : [ {
             "Split" : {
               "delimiter" : ","
             }
           } ],
-          "docId" : "io.atlasmap.itests.core.issue.SourceClass",
+          "docId" : "source",
           "path" : "/sourceName",
           "fieldType" : "STRING",
           "name" : "sourceName"
         } ],
         "outputField" : [ {
-          "jsonType" : "io.atlasmap.java.v2.JavaField",
-          "docId" : "io.atlasmap.itests.core.issue.TargetClass",
+          "jsonType" : "io.atlasmap.json.v2.JsonField",
+          "docId" : "target",
           "index" : 0,
           "path" : "/targetFirstName",
           "fieldType" : "STRING",
           "name" : "targetFirstName"
         }, {
-          "jsonType" : "io.atlasmap.java.v2.JavaField",
-          "docId" : "io.atlasmap.itests.core.issue.TargetClass",
+          "jsonType" : "io.atlasmap.json.v2.JsonField",
+          "docId" : "target",
           "index" : 1,
           "path" : "/targetLastName",
           "fieldType" : "STRING",
@@ -77,42 +79,44 @@
         } ]
       }, {
         "jsonType" : "io.atlasmap.v2.Mapping",
+        "id" : "concatenate-from-collection",
         "inputField" : [ {
-          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "jsonType" : "io.atlasmap.json.v2.JsonField",
           "actions" : [ {
             "Concatenate" : {
               "delimiter" : ","
             }
           } ],
-          "docId" : "io.atlasmap.itests.core.issue.SourceClass",
+          "docId" : "source",
           "path" : "/sourceStringList<>",
           "fieldType" : "STRING",
           "name" : "sourceStringList"
         } ],
         "outputField" : [ {
-          "jsonType" : "io.atlasmap.java.v2.JavaField",
-          "docId" : "io.atlasmap.itests.core.issue.TargetClass",
+          "jsonType" : "io.atlasmap.json.v2.JsonField",
+          "docId" : "target",
           "path" : "/targetString",
           "fieldType" : "STRING",
           "name" : "targetString"
         } ]
       }, {
         "jsonType" : "io.atlasmap.v2.Mapping",
+        "id" : "split-into-collection",
         "inputField" : [ {
-          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "jsonType" : "io.atlasmap.json.v2.JsonField",
           "actions" : [ {
             "Split" : {
               "delimiter" : ","
             }
           } ],
-          "docId" : "io.atlasmap.itests.core.issue.SourceClass",
+          "docId" : "source",
           "path" : "/sourceString",
           "fieldType" : "STRING",
           "name" : "sourceString"
         } ],
         "outputField" : [ {
-          "jsonType" : "io.atlasmap.java.v2.JavaField",
-          "docId" : "io.atlasmap.itests.core.issue.TargetClass",
+          "jsonType" : "io.atlasmap.json.v2.JsonField",
+          "docId" : "target",
           "path" : "/targetStringList<>",
           "fieldType" : "STRING",
           "name" : "targetStringList"

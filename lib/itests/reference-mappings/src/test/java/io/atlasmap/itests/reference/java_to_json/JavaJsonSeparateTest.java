@@ -29,6 +29,7 @@ import io.atlasmap.api.AtlasSession;
 import io.atlasmap.java.test.BaseContact;
 import io.atlasmap.java.test.SourceContact;
 import io.atlasmap.json.test.AtlasJsonTestUnrootedMapper;
+import io.atlasmap.v2.Audit;
 import io.atlasmap.itests.reference.AtlasMappingBaseTest;
 import io.atlasmap.itests.reference.AtlasTestUtil;
 
@@ -120,8 +121,14 @@ public class JavaJsonSeparateTest extends AtlasMappingBaseTest {
         assertEquals("Ozzie", targetContact.getFirstName());
         assertEquals(null, targetContact.getLastName());
         assertTrue(session.hasWarns());
-        assertEquals("Separate returned fewer segments count=3 when targetField.path=/lastName requested index=3",
-                session.getAudits().getAudit().get(0).getMessage());
+        assertEquals(printAudit(session), 4, session.getAudits().getAudit().size());
+        boolean found = false;
+        for (Audit a : session.getAudits().getAudit()) {
+            if ("Separate returned fewer segments count=3 when targetField.path=/lastName requested index=3".equals(a.getMessage())) {
+                found = true;
+            }
+        }
+        assertTrue(printAudit(session), found);
     }
 
     @Test

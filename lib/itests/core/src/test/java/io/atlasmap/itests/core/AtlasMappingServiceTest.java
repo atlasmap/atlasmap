@@ -91,7 +91,7 @@ public class AtlasMappingServiceTest {
 
     private void assertAtlasMapping(AtlasMapping mapping) {
         Assert.assertNotNull(mapping);
-        Assert.assertEquals("core-unit-test", mapping.getName());
+        Assert.assertEquals("core.unit.test", mapping.getName());
         Assert.assertNotNull(mapping.getMappings());
         Assert.assertNotNull(mapping.getMappings().getMapping());
         Assert.assertNotNull(mapping.getMappings().getMapping().get(0));

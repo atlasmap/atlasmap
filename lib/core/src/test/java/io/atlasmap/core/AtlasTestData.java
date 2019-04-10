@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import io.atlasmap.v2.AtlasMapping;
 import io.atlasmap.v2.AtlasModelFactory;
@@ -79,6 +80,7 @@ public class AtlasTestData {
 
     public static AtlasMapping generateAtlasMapping() {
         AtlasMapping mapping = AtlasModelFactory.createAtlasMapping();
+        mapping.setName("generated.mapping." + UUID.randomUUID().toString().replace('-', '.'));
         mapping.getProperties().getProperty().addAll(generateAtlasProperties());
         return mapping;
     }

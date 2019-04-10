@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.math.BigInteger;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
+@Deprecated
 @JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = "jsonType")
 public class Collection
     extends BaseMapping

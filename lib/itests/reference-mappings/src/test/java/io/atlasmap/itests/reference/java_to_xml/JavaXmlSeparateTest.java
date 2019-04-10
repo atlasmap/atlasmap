@@ -29,6 +29,7 @@ import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasSession;
 import io.atlasmap.java.test.BaseContact;
 import io.atlasmap.java.test.SourceContact;
+import io.atlasmap.v2.Audit;
 import io.atlasmap.itests.reference.AtlasMappingBaseTest;
 import io.atlasmap.itests.reference.AtlasTestUtil;
 
@@ -107,9 +108,14 @@ public class JavaXmlSeparateTest extends AtlasMappingBaseTest {
         assertThat(object).valueByXPath("/Contact/@firstName").isEqualTo("Ozzie");
         assertThat(object).valueByXPath("/Contact/@lastName").isNullOrEmpty();
         assertTrue(session.hasWarns());
-        assertEquals(
-                "Separate returned fewer segments count=3 when targetField.path=/Contact/@lastName requested index=3",
-                session.getAudits().getAudit().get(0).getMessage());
+        assertEquals(printAudit(session), 8, session.getAudits().getAudit().size());
+        boolean found = false;
+        for (Audit a : session.getAudits().getAudit()) {
+            if ("Separate returned fewer segments count=3 when targetField.path=/Contact/@lastName requested index=3".equals(a.getMessage())) {
+                found = true;
+            }
+        }
+        assertTrue(printAudit(session), found);
     }
 
     @Test

@@ -73,6 +73,12 @@ public class AtlasValidationTestHelper extends Validations {
         return 0;
     }
 
+    public String allValidationsToString() {
+        StringBuilder buf = new StringBuilder("[Validations ");
+        getAllValidations().forEach(v -> buf.append(validationToString(v)));
+        return buf.append("]").toString();
+    }
+
     public static String validationToString(Validation validation) {
         String output = "[Validation ";
 

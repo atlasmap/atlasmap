@@ -60,6 +60,7 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
     private static final Logger LOG = LoggerFactory.getLogger(DefaultAtlasContextFactory.class);
 
     private static DefaultAtlasContextFactory factory = null;
+    private boolean initialized = false;
     private String uuid = null;
     private String threadName = null;
     private ObjectName objectName = null;
@@ -86,7 +87,11 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
     }
 
     @Override
-    public void init() {
+    public synchronized void init() {
+        if (this.initialized) {
+            return;
+        }
+
         this.uuid = UUID.randomUUID().toString();
         this.threadName = Thread.currentThread().getName();
         this.classLoader = new CompoundClassLoader();
@@ -98,6 +103,7 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
         this.moduleInfoRegistry = new DefaultAtlasModuleInfoRegistry(this);
         loadModules("moduleClass", AtlasModule.class);
         setMappingService(new AtlasMappingService(this.classLoader));
+        this.initialized = true;
     }
 
     @Override
@@ -117,7 +123,10 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
     }
 
     @Override
-    public void destroy() {
+    public synchronized void destroy() {
+        if (!this.initialized) {
+            return;
+        }
 
         unloadModules();
 
@@ -140,6 +149,7 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
         this.moduleInfoRegistry = null;
         this.classLoader = null;
         this.threadName = null;
+        this.initialized = false;
         factory = null;
     }
 
@@ -326,6 +336,9 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
     }
 
     protected void unloadModules() {
+        if (getModuleInfoRegistry() == null) {
+            return;
+        }
         int moduleCount = getModuleInfoRegistry().size();
         getModuleInfoRegistry().unregisterAll();
 
