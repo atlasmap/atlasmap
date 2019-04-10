@@ -59,6 +59,7 @@ import io.atlasmap.v2.DataSourceType;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldGroup;
 import io.atlasmap.v2.FieldType;
+import io.atlasmap.v2.FormulaExpression;
 import io.atlasmap.v2.LookupTable;
 import io.atlasmap.v2.Mapping;
 import io.atlasmap.v2.MappingType;
@@ -471,11 +472,12 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
                             mapping.getAlias(), mapping.getDescription()));
                 } else {
                     try {
-                        List<Field> inputFields = mapping.getInputField();
-                        if (mapping.getInputFieldGroup() != null) {
+                        if (mapping.getFormulaExpression() != null) {
+                            processExpression(session, mapping.getFormulaExpression());
+                        } else if (mapping.getInputFieldGroup() != null) {
                             processSourceFieldGroup(session, mapping.getInputFieldGroup());
                         } else {
-                            processSourceFieldMappings(session, inputFields);
+                            processSourceFieldMappings(session, mapping.getInputField());
                         }
                     }catch (Exception t) {
                         Field sourceField = session.head().getSourceField();
@@ -557,6 +559,10 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
                     : AtlasConstants.DEFAULT_TARGET_DOCUMENT_ID;
         }
         return direction == FieldDirection.SOURCE ? sourceModules.get(docId) : targetModules.get(docId);
+    }
+
+    private void processExpression(DefaultAtlasSession session, FormulaExpression expression) throws AtlasException {
+        // TODO formulaExpressionParser.evaluate(session, expression.getExpression());
     }
 
     private void processSourceFieldGroup(DefaultAtlasSession session, FieldGroup sourceFieldGroup) throws AtlasException {
