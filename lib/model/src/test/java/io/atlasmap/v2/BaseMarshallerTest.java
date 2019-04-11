@@ -122,6 +122,11 @@ public abstract class BaseMarshallerTest {
         addMapLookupField(mapping, "lookup");
         addMapSimpleField(mapping, "simple");
         addMapConstantField(mapping, "constant");
+
+        addManyToOneMapping(mapping, "manyToOne");
+        addOneToManyMapping(mapping, "oneToMany");
+        addConditionalMapping(mapping, "conditional");
+
         return mapping;
     }
 
@@ -130,7 +135,7 @@ public abstract class BaseMarshallerTest {
         assertNotNull(mapping.getName());
         assertEquals("junit", mapping.getName());
         assertNotNull(mapping.getMappings());
-        assertEquals(new Integer(8), new Integer(mapping.getMappings().getMapping().size()));
+        assertEquals(new Integer(11), new Integer(mapping.getMappings().getMapping().size()));
         assertNotNull(mapping.getProperties());
 
         Mapping f0 = (Mapping) mapping.getMappings().getMapping().get(0);
@@ -156,6 +161,15 @@ public abstract class BaseMarshallerTest {
 
         Mapping f7 = (Mapping) mapping.getMappings().getMapping().get(7);
         validateMapConstantField(f7, "constant");
+
+        Mapping f8 = (Mapping) mapping.getMappings().getMapping().get(8);
+        validateManyToOneMapping(f8, "manyToOne");
+
+        Mapping f9 = (Mapping) mapping.getMappings().getMapping().get(9);
+        validateOneToManyMapping(f9, "oneToMany");
+
+        Mapping f10 = (Mapping) mapping.getMappings().getMapping().get(10);
+        validateConditionalMapping(f10, "conditional");
 
         validateProperties(mapping.getProperties());
     }
@@ -693,6 +707,154 @@ public abstract class BaseMarshallerTest {
         Field f2 = fm.getOutputField().get(0);
         assertTrue(f2 instanceof ConstantField);
         validateField(key + "-output-value", f2, 3);
+    }
+
+    protected void addManyToOneMapping(AtlasMapping model, String key) {
+        Mapping fm = new Mapping();
+        FieldGroup fg = new FieldGroup();
+        fg.setActions(new Actions());
+        Concatenate c = new Concatenate();
+        c.setDelimiter(",");
+        fg.getActions().getActions().add(new Concatenate());
+        fm.setInputFieldGroup(fg);
+
+        for (int i = 0; i < 3; i++) {
+            MockField sourceMockField = new MockField();
+
+            populateField(key + "-input-" + i + "-value", generateActions(), sourceMockField, i);
+            sourceMockField.setName(key + "-input-" + i);
+            sourceMockField.setCustom("custom");
+            sourceMockField.setCollectionType(CollectionType.values()[i]);
+            sourceMockField.setFieldType(FieldType.values()[i]);
+            sourceMockField.setStatus(FieldStatus.values()[i]);
+
+            fm.getInputFieldGroup().getField().add(sourceMockField);
+        }
+
+        MockField targetMockField = new MockField();
+        targetMockField.setName(key + "-output");
+        targetMockField.setCustom("custom");
+        populateField(key + "-output-value", generateActions(), targetMockField, 0);
+        fm.getOutputField().add(targetMockField);
+
+        populateMapping(fm);
+
+        model.getMappings().getMapping().add(fm);
+    }
+
+    protected void validateManyToOneMapping(Mapping mapping, String key) {
+        assertNotNull(mapping);
+
+        validateMapping(mapping);
+
+        assertNotNull(mapping.getInputFieldGroup());
+        FieldGroup fg = mapping.getInputFieldGroup();
+        assertEquals(3, fg.getField().size());
+        assertNotNull(fg.getActions());
+        assertEquals(1, fg.getActions().getActions().size());
+        assertEquals(Concatenate.class, fg.getActions().getActions().get(0).getClass());
+
+        for (int i = 0; i < 3; i++) {
+            Field sf = mapping.getInputFieldGroup().getField().get(i);
+            assertTrue(sf instanceof MockField);
+            assertEquals(key + "-input-" + i, ((MockField) sf).getName());
+            assertEquals("custom", ((MockField) sf).getCustom());
+            assertEquals(CollectionType.values()[i], sf.getCollectionType());
+            assertEquals(FieldType.values()[i], sf.getFieldType());
+            assertEquals(FieldStatus.values()[i], sf.getStatus());
+            validateCommonFields(key + "-input-" + i + "-value", sf, i);
+        }
+
+        assertNotNull(mapping.getOutputField());
+        Field tf = mapping.getOutputField().get(0);
+        assertNotNull(tf.getActions());
+        assertTrue(tf.getActions().getActions().get(0) instanceof Trim);
+        assertTrue(tf instanceof MockField);
+        assertEquals(key + "-output", ((MockField) tf).getName());
+        validateField(key + "-output-value", tf, 0);
+    }
+
+    protected void addOneToManyMapping(AtlasMapping model, String key) {
+        Mapping fm = new Mapping();
+
+        MockField sourceField = new MockField();
+        populateField(key + "-input-value", generateActions(), sourceField, 3);
+        sourceField.setName(key + "-input");
+        sourceField.setCustom("custom");
+        Split split = new Split();
+        split.setDelimiter(",");
+        sourceField.getActions().getActions().add(split);
+        fm.getInputField().add(sourceField);
+
+        for (int i = 0; i < 3; i++) {
+            MockField targetField = new MockField();
+            populateField(key + "-output-" + i + "-value", generateActions(), targetField, i);
+            targetField.setName(key + "-output-" + i);
+            targetField.setCustom("custom");
+            fm.getOutputField().add(targetField);
+        }
+
+        populateMapping(fm);
+
+        model.getMappings().getMapping().add(fm);
+    }
+
+    protected void validateOneToManyMapping(Mapping mapping, String key) {
+        assertNotNull(mapping);
+        validateMapping(mapping);
+        assertNotNull(mapping.getOutputField());
+        assertEquals(new Integer(3), new Integer(mapping.getOutputField().size()));
+
+        assertNotNull(mapping.getInputField());
+        Field sf = mapping.getInputField().get(0);
+        assertTrue(sf instanceof MockField);
+        assertEquals(key + "-input", ((MockField) sf).getName());
+        validateField(key + "-input-value", sf, 3);
+        assertNotNull(sf.getActions());
+        assertEquals(2, sf.getActions().getActions().size());
+        assertEquals(Split.class, sf.getActions().getActions().get(1).getClass());
+
+        for (int i = 0; i < 3; i++) {
+            Field in = mapping.getOutputField().get(i);
+            assertTrue(in instanceof MockField);
+            assertEquals(key + "-output-" + i, ((MockField) in).getName());
+            validateField(key + "-output-" + i + "-value", in, i);
+        }
+    }
+
+    protected void addConditionalMapping(AtlasMapping model, String key) {
+        Mapping mapping = new Mapping();
+        FormulaExpression fe = new FormulaExpression();
+        fe.setExpression("=if(srcId:/path != \"\", srcId:/path, \":\")");
+        mapping.setFormulaExpression(fe);
+
+        MockField targetMockField = new MockField();
+        targetMockField.setName(key + "-output");
+        targetMockField.setCustom("custom");
+        populateField(key + "-output-value", generateActions(), targetMockField, 0);
+        mapping.getOutputField().add(targetMockField);
+
+        populateMapping(mapping);
+
+        model.getMappings().getMapping().add(mapping);
+    }
+
+    protected void validateConditionalMapping(Mapping mapping, String key) {
+        assertNotNull(mapping);
+
+        validateMapping(mapping);
+
+        assertNotNull(mapping.getFormulaExpression());
+        FormulaExpression fe = mapping.getFormulaExpression();
+        assertEquals("=if(srcId:/path != \"\", srcId:/path, \":\")", fe.getExpression());
+
+        assertNotNull(mapping.getOutputField());
+        Field tf = mapping.getOutputField().get(0);
+        assertNotNull(tf.getActions());
+        assertTrue(tf.getActions().getActions().get(0) instanceof Trim);
+        assertTrue(tf instanceof MockField);
+        assertEquals(key + "-output", ((MockField) tf).getName());
+        validateField(key + "-output-value", tf, 0);
     }
 
 }

@@ -1,3 +1,18 @@
+/**
+ * Copyright (C) 2017 Red Hat, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package io.atlasmap.v2;
 
 import java.io.Serializable;
@@ -9,6 +24,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 public class Mapping extends BaseMapping implements Serializable {
 
     private final static long serialVersionUID = 1L;
+
+    protected FormulaExpression formulaExpression;
 
     protected FieldGroup inputFieldGroup;
 
@@ -27,6 +44,30 @@ public class Mapping extends BaseMapping implements Serializable {
     protected String strategy;
 
     protected String strategyClassName;
+
+    /**
+     * Gets the value of the formulaExpression property.
+     *
+     * @return
+     *     possible object is
+     *     {@link FormulaExpression }
+     *
+     */
+    public FormulaExpression getFormulaExpression() {
+        return formulaExpression;
+    }
+
+    /**
+     * Sets the value of the formulaExpression property.
+     *
+     * @param value
+     *     allowed object is
+     *     {@link FormulaExpression }
+     *
+     */
+    public void setFormulaExpression(FormulaExpression value) {
+        this.formulaExpression = value;
+    }
 
     /**
      * Gets the value of the inputFieldGroup property.
@@ -142,6 +183,7 @@ public class Mapping extends BaseMapping implements Serializable {
      *     {@link String }
      *     
      */
+    @Deprecated
     public String getDelimiter() {
         return delimiter;
     }
@@ -154,6 +196,7 @@ public class Mapping extends BaseMapping implements Serializable {
      *     {@link String }
      *     
      */
+    @Deprecated
     public void setDelimiter(String value) {
         this.delimiter = value;
     }
@@ -166,6 +209,7 @@ public class Mapping extends BaseMapping implements Serializable {
      *     {@link String }
      *     
      */
+    @Deprecated
     public String getDelimiterString() {
         return delimiterString;
     }
@@ -178,6 +222,7 @@ public class Mapping extends BaseMapping implements Serializable {
      *     {@link String }
      *     
      */
+    @Deprecated
     public void setDelimiterString(String value) {
         this.delimiterString = value;
     }
@@ -214,6 +259,7 @@ public class Mapping extends BaseMapping implements Serializable {
      *     {@link String }
      *     
      */
+    @Deprecated
     public String getStrategy() {
         return strategy;
     }
@@ -226,6 +272,7 @@ public class Mapping extends BaseMapping implements Serializable {
      *     {@link String }
      *     
      */
+    @Deprecated
     public void setStrategy(String value) {
         this.strategy = value;
     }
@@ -238,6 +285,7 @@ public class Mapping extends BaseMapping implements Serializable {
      *     {@link String }
      *     
      */
+    @Deprecated
     public String getStrategyClassName() {
         return strategyClassName;
     }
@@ -250,6 +298,7 @@ public class Mapping extends BaseMapping implements Serializable {
      *     {@link String }
      *     
      */
+    @Deprecated
     public void setStrategyClassName(String value) {
         this.strategyClassName = value;
     }
