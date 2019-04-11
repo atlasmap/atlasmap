@@ -240,11 +240,7 @@ public class AtlasEndpoint extends ResourceEndpoint {
 
         AtlasSession atlasSession = getOrCreateAtlasContext(incomingMessage).createSession();
         populateSourceDocuments(exchange, atlasSession);
-        AtlasContext atlasContext = getAtlasContext();
-        if (atlasContext == null) {
-            throw new AtlasException("Error establishing an Atlas context within the Atlas session.");
-        }
-        getAtlasContext().process(atlasSession);
+        atlasSession.getAtlasContext().process(atlasSession);
 
         List<Audit> errors = new ArrayList<>();
         for (Audit audit : atlasSession.getAudits().getAudit()) {
