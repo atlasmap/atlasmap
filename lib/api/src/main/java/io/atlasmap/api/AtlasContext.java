@@ -24,6 +24,11 @@ public interface AtlasContext {
 
     AtlasSession createSession() throws AtlasException;
 
+    /*
+     * https://github.com/atlasmap/atlasmap/issues/872
+     * Consider moving following 3 methods into AtlasSession in V2
+     */
+
     void process(AtlasSession session) throws AtlasException;
 
     void processValidation(AtlasSession session) throws AtlasException;
