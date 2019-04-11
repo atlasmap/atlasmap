@@ -522,7 +522,7 @@ table.CodeRay td.code>pre{padding:0}
 <h1>AtlasMap Design Time Service API Reference</h1>
 <div class="details">
 <span id="revnumber">version 1.40.0-SNAPSHOT,</span>
-<span id="revdate">2019-04-10</span>
+<span id="revdate">2019-04-11</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Design Time Service</div>
@@ -563,19 +563,20 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_atlas-service-core-datasource">1.2.15. DataSource</a></li>
 <li><a href="#_atlas-service-core-field">1.2.16. Field</a></li>
 <li><a href="#_atlas-service-core-fieldgroup">1.2.17. FieldGroup</a></li>
-<li><a href="#_atlas-service-core-lookupentry">1.2.18. LookupEntry</a></li>
-<li><a href="#_atlas-service-core-lookuptable">1.2.19. LookupTable</a></li>
-<li><a href="#_atlas-service-core-lookuptables">1.2.20. LookupTables</a></li>
-<li><a href="#_atlas-service-core-mapping">1.2.21. Mapping</a></li>
-<li><a href="#_atlas-service-core-mappings">1.2.22. Mappings</a></li>
-<li><a href="#_atlas-service-core-processmappingresponse">1.2.23. ProcessMappingResponse</a></li>
-<li><a href="#_atlas-service-core-properties">1.2.24. Properties</a></li>
-<li><a href="#_atlas-service-core-property">1.2.25. Property</a></li>
-<li><a href="#_atlas-service-core-stringmap">1.2.26. StringMap</a></li>
-<li><a href="#_atlas-service-core-stringmapentry">1.2.27. StringMapEntry</a></li>
-<li><a href="#_atlas-service-core-targetdocument">1.2.28. TargetDocument</a></li>
-<li><a href="#_atlas-service-core-validation">1.2.29. Validation</a></li>
-<li><a href="#_atlas-service-core-validations">1.2.30. Validations</a></li>
+<li><a href="#_atlas-service-core-formulaexpression">1.2.18. FormulaExpression</a></li>
+<li><a href="#_atlas-service-core-lookupentry">1.2.19. LookupEntry</a></li>
+<li><a href="#_atlas-service-core-lookuptable">1.2.20. LookupTable</a></li>
+<li><a href="#_atlas-service-core-lookuptables">1.2.21. LookupTables</a></li>
+<li><a href="#_atlas-service-core-mapping">1.2.22. Mapping</a></li>
+<li><a href="#_atlas-service-core-mappings">1.2.23. Mappings</a></li>
+<li><a href="#_atlas-service-core-processmappingresponse">1.2.24. ProcessMappingResponse</a></li>
+<li><a href="#_atlas-service-core-properties">1.2.25. Properties</a></li>
+<li><a href="#_atlas-service-core-property">1.2.26. Property</a></li>
+<li><a href="#_atlas-service-core-stringmap">1.2.27. StringMap</a></li>
+<li><a href="#_atlas-service-core-stringmapentry">1.2.28. StringMapEntry</a></li>
+<li><a href="#_atlas-service-core-targetdocument">1.2.29. TargetDocument</a></li>
+<li><a href="#_atlas-service-core-validation">1.2.30. Validation</a></li>
+<li><a href="#_atlas-service-core-validations">1.2.31. Validations</a></li>
 </ul>
 </li>
 </ul>
@@ -2462,7 +2463,33 @@ table.CodeRay td.code>pre{padding:0}
 </table>
 </div>
 <div class="sect3">
-<h4 id="_atlas-service-core-lookupentry">1.2.18. LookupEntry</h4>
+<h4 id="_atlas-service-core-formulaexpression">1.2.18. FormulaExpression</h4>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 42.8571%;">
+<col style="width: 57.1429%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-middle">Name</th>
+<th class="tableblock halign-left valign-middle">Schema</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p><strong>expression</strong><br>
+<em>optional</em></p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p>string</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_atlas-service-core-lookupentry">1.2.19. LookupEntry</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 42.8571%;">
@@ -2515,7 +2542,7 @@ table.CodeRay td.code>pre{padding:0}
 </table>
 </div>
 <div class="sect3">
-<h4 id="_atlas-service-core-lookuptable">1.2.19. LookupTable</h4>
+<h4 id="_atlas-service-core-lookuptable">1.2.20. LookupTable</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 42.8571%;">
@@ -2559,7 +2586,7 @@ table.CodeRay td.code>pre{padding:0}
 </table>
 </div>
 <div class="sect3">
-<h4 id="_atlas-service-core-lookuptables">1.2.20. LookupTables</h4>
+<h4 id="_atlas-service-core-lookuptables">1.2.21. LookupTables</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 42.8571%;">
@@ -2585,7 +2612,7 @@ table.CodeRay td.code>pre{padding:0}
 </table>
 </div>
 <div class="sect3">
-<h4 id="_atlas-service-core-mapping">1.2.21. Mapping</h4>
+<h4 id="_atlas-service-core-mapping">1.2.22. Mapping</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 42.8571%;">
@@ -2632,6 +2659,15 @@ table.CodeRay td.code>pre{padding:0}
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><div><div class="paragraph">
 <p>string</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p><strong>formulaExpression</strong><br>
+<em>optional</em></p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p><a href="#_atlas-service-core-formulaexpression">FormulaExpression</a></p>
 </div></div></td>
 </tr>
 <tr>
@@ -2710,7 +2746,7 @@ table.CodeRay td.code>pre{padding:0}
 </table>
 </div>
 <div class="sect3">
-<h4 id="_atlas-service-core-mappings">1.2.22. Mappings</h4>
+<h4 id="_atlas-service-core-mappings">1.2.23. Mappings</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 42.8571%;">
@@ -2736,7 +2772,7 @@ table.CodeRay td.code>pre{padding:0}
 </table>
 </div>
 <div class="sect3">
-<h4 id="_atlas-service-core-processmappingresponse">1.2.23. ProcessMappingResponse</h4>
+<h4 id="_atlas-service-core-processmappingresponse">1.2.24. ProcessMappingResponse</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 42.8571%;">
@@ -2780,7 +2816,7 @@ table.CodeRay td.code>pre{padding:0}
 </table>
 </div>
 <div class="sect3">
-<h4 id="_atlas-service-core-properties">1.2.24. Properties</h4>
+<h4 id="_atlas-service-core-properties">1.2.25. Properties</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 42.8571%;">
@@ -2806,7 +2842,7 @@ table.CodeRay td.code>pre{padding:0}
 </table>
 </div>
 <div class="sect3">
-<h4 id="_atlas-service-core-property">1.2.25. Property</h4>
+<h4 id="_atlas-service-core-property">1.2.26. Property</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 42.8571%;">
@@ -2850,7 +2886,7 @@ table.CodeRay td.code>pre{padding:0}
 </table>
 </div>
 <div class="sect3">
-<h4 id="_atlas-service-core-stringmap">1.2.26. StringMap</h4>
+<h4 id="_atlas-service-core-stringmap">1.2.27. StringMap</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 42.8571%;">
@@ -2876,7 +2912,7 @@ table.CodeRay td.code>pre{padding:0}
 </table>
 </div>
 <div class="sect3">
-<h4 id="_atlas-service-core-stringmapentry">1.2.27. StringMapEntry</h4>
+<h4 id="_atlas-service-core-stringmapentry">1.2.28. StringMapEntry</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 42.8571%;">
@@ -2911,7 +2947,7 @@ table.CodeRay td.code>pre{padding:0}
 </table>
 </div>
 <div class="sect3">
-<h4 id="_atlas-service-core-targetdocument">1.2.28. TargetDocument</h4>
+<h4 id="_atlas-service-core-targetdocument">1.2.29. TargetDocument</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 42.8571%;">
@@ -2946,7 +2982,7 @@ table.CodeRay td.code>pre{padding:0}
 </table>
 </div>
 <div class="sect3">
-<h4 id="_atlas-service-core-validation">1.2.29. Validation</h4>
+<h4 id="_atlas-service-core-validation">1.2.30. Validation</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 42.8571%;">
@@ -2999,7 +3035,7 @@ table.CodeRay td.code>pre{padding:0}
 </table>
 </div>
 <div class="sect3">
-<h4 id="_atlas-service-core-validations">1.2.30. Validations</h4>
+<h4 id="_atlas-service-core-validations">1.2.31. Validations</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 42.8571%;">
@@ -5264,7 +5300,7 @@ table.CodeRay td.code>pre{padding:0}
 <div id="footer">
 <div id="footer-text">
 Version 1.40.0-SNAPSHOT<br>
-Last updated 2019-04-10 12:17:21 UTC
+Last updated 2019-04-11 13:35:52 UTC
 </div>
 </div>
 </body>
