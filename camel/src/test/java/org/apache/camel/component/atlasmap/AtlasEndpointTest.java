@@ -110,6 +110,7 @@ public class AtlasEndpointTest {
         final AtlasContext context = spy(AtlasContext.class);
         final AtlasSession session = spy(AtlasSession.class);
         when(context.createSession()).thenReturn(session);
+        when(session.getAtlasContext()).thenReturn(context);
         when(session.getMapping()).thenReturn(mapping);
         when(session.getAudits()).thenReturn(new Audits());
         final AtlasEndpoint endpoint = new AtlasEndpoint("atlas:test.xml", new AtlasComponent(), "test.xml");
