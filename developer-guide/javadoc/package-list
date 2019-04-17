@@ -4,6 +4,9 @@ io.atlasmap.api
 io.atlasmap.converters
 io.atlasmap.core
 io.atlasmap.core.validate
+io.atlasmap.expression
+io.atlasmap.expression.internal
+io.atlasmap.expression.parser
 io.atlasmap.itests.fieldactionoverride
 io.atlasmap.java.core
 io.atlasmap.java.inspect
