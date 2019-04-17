@@ -33,6 +33,7 @@
   <modules>
     <module>model</module>
     <module>api</module>
+    <module>expression</module>
     <module>core</module>
     <module>service</module>
     <module>modules/java</module>
