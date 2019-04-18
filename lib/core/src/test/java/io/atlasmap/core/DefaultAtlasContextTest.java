@@ -40,26 +40,7 @@ import io.atlasmap.api.AtlasSession;
 import io.atlasmap.spi.AtlasInternalSession.Head;
 import io.atlasmap.spi.AtlasModule;
 import io.atlasmap.spi.StringDelimiter;
-import io.atlasmap.v2.Actions;
-import io.atlasmap.v2.AtlasMapping;
-import io.atlasmap.v2.AtlasModelFactory;
-import io.atlasmap.v2.AuditStatus;
-import io.atlasmap.v2.Audits;
-import io.atlasmap.v2.BaseMapping;
-import io.atlasmap.v2.Collection;
-import io.atlasmap.v2.ConstantField;
-import io.atlasmap.v2.DataSource;
-import io.atlasmap.v2.DataSourceType;
-import io.atlasmap.v2.Field;
-import io.atlasmap.v2.FieldType;
-import io.atlasmap.v2.LookupEntry;
-import io.atlasmap.v2.LookupTable;
-import io.atlasmap.v2.Mapping;
-import io.atlasmap.v2.MappingType;
-import io.atlasmap.v2.Mappings;
-import io.atlasmap.v2.SimpleField;
-import io.atlasmap.v2.Uppercase;
-import io.atlasmap.v2.Validations;
+import io.atlasmap.v2.*;
 
 public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
 
@@ -430,8 +411,8 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
         Field source = new SimpleField();
         source.setFieldType(FieldType.STRING);
         source.setValue("abc");
-        Actions actions = new Actions();
-        actions.getActions().add(new Uppercase());
+        ArrayList<Action> actions = new ArrayList<Action>();
+        actions.add(new Uppercase());
         source.setActions(actions);
         Field target = new SimpleField();
         target.setFieldType(FieldType.STRING);
@@ -450,8 +431,8 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
         source.setValue("abc");
         Field target = new SimpleField();
         target.setFieldType(FieldType.STRING);
-        Actions actions = new Actions();
-        actions.getActions().add(new Uppercase());
+        ArrayList<Action> actions = new ArrayList<Action>();
+        actions.add(new Uppercase());
         target.setActions(actions);
         m.getInputField().add(source);
         m.getOutputField().add(target);

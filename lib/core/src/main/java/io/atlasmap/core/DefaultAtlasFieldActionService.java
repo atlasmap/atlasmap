@@ -27,7 +27,6 @@ import io.atlasmap.v2.Action;
 import io.atlasmap.v2.ActionDetail;
 import io.atlasmap.v2.ActionParameter;
 import io.atlasmap.v2.ActionParameters;
-import io.atlasmap.v2.Actions;
 import io.atlasmap.v2.AtlasModelFactory;
 import io.atlasmap.v2.AuditStatus;
 import io.atlasmap.v2.CollectionType;
@@ -262,10 +261,10 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
 
     @Override
     public Field processActions(AtlasInternalSession session, Field field) throws AtlasException {
-        Actions actions = field.getActions();
+        ArrayList<Action> actions = field.getActions();
         FieldType targetType = field.getFieldType();
 
-        if (actions == null || actions.getActions() == null || actions.getActions().isEmpty()) {
+        if (actions == null || actions == null || actions.isEmpty()) {
             return field;
         }
 
@@ -293,7 +292,7 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
         Object tmpSourceObject = sourceObject;
 
         FieldType currentType = sourceType;
-        for (Action action : actions.getActions()) {
+        for (Action action : actions) {
             ActionDetailImpl detail = findActionDetail(action, currentType);
             if (detail == null) {
                 AtlasUtil.addAudit(session, field.getDocId(), String.format(

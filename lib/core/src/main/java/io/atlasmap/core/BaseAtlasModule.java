@@ -134,7 +134,7 @@ public abstract class BaseAtlasModule implements AtlasModule, AtlasModuleMXBean 
     protected Field applyTargetFieldActions(AtlasInternalSession session) throws AtlasException {
         Field field = session.head().getTargetField();
         if (isAutomaticallyProcessOutputFieldActions() && field.getActions() != null
-                && field.getActions().getActions() != null) {
+                && field.getActions() != null) {
             return getFieldActionService().processActions(session, field);
         }
         return field;
@@ -142,7 +142,7 @@ public abstract class BaseAtlasModule implements AtlasModule, AtlasModuleMXBean 
 
     protected Field applySourceFieldActions(AtlasInternalSession session) throws AtlasException {
         Field field = session.head().getSourceField();
-        if (field.getActions() != null && field.getActions().getActions() != null) {
+        if (field.getActions() != null && field.getActions() != null) {
             return getFieldActionService().processActions(session, field);
         }
         return field;

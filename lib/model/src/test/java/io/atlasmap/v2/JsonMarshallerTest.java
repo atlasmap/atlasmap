@@ -1,12 +1,12 @@
 /**
  * Copyright (C) 2017 Red Hat, Inc.
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *         http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -19,6 +19,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.After;
@@ -54,9 +55,9 @@ public class JsonMarshallerTest extends BaseMarshallerTest {
         AtlasMapping atlasMapping = generateReferenceAtlasMapping();
         // Object to JSON in file
         mapper.writerWithDefaultPrettyPrinter().writeValue(new File("target" + File.separator + "junit" + File.separator
-                + testName.getMethodName() + File.separator + "atlasmapping.json"), atlasMapping);
+            + testName.getMethodName() + File.separator + "atlasmapping.json"), atlasMapping);
         AtlasMapping uMapping = mapper.readValue(new File("target" + File.separator + "junit" + File.separator
-                + testName.getMethodName() + File.separator + "atlasmapping.json"), AtlasMapping.class);
+            + testName.getMethodName() + File.separator + "atlasmapping.json"), AtlasMapping.class);
         assertNotNull(uMapping);
         validateReferenceAtlasMapping(uMapping);
     }
@@ -67,9 +68,9 @@ public class JsonMarshallerTest extends BaseMarshallerTest {
         atlasMapping.getLookupTables().getLookupTable().add(generateLookupTable());
         // Object to JSON in file
         mapper.writerWithDefaultPrettyPrinter().writeValue(new File("target" + File.separator + "junit" + File.separator
-                + testName.getMethodName() + File.separator + "atlasmapping.json"), atlasMapping);
+            + testName.getMethodName() + File.separator + "atlasmapping.json"), atlasMapping);
         AtlasMapping uMapping = mapper.readValue(new File("target" + File.separator + "junit" + File.separator
-                + testName.getMethodName() + File.separator + "atlasmapping.json"), AtlasMapping.class);
+            + testName.getMethodName() + File.separator + "atlasmapping.json"), AtlasMapping.class);
         assertNotNull(uMapping);
         validateReferenceAtlasMapping(uMapping);
     }
@@ -78,12 +79,12 @@ public class JsonMarshallerTest extends BaseMarshallerTest {
     public void testFieldActions() throws Exception {
         AtlasMapping atlasMapping = generateReferenceAtlasMapping();
         BaseMapping fm = atlasMapping.getMappings().getMapping().get(0);
-        ((Mapping) fm).getOutputField().get(0).setActions(new Actions());
+        ((Mapping) fm).getOutputField().get(0).setActions(new ArrayList<Action>());
 
         List<Action> actionsList = ModelTestUtil.getAllOOTBActions();
-        ((Mapping) fm).getOutputField().get(0).getActions().getActions().addAll(actionsList);
+        ((Mapping) fm).getOutputField().get(0).getActions().addAll(actionsList);
 
-        for (Action a : ((Mapping) fm).getOutputField().get(0).getActions().getActions()) {
+        for (Action a : ((Mapping) fm).getOutputField().get(0).getActions()) {
             if (a instanceof CustomAction) {
                 CustomAction customAction = (CustomAction) a;
                 customAction.setName("Bar");
@@ -137,19 +138,40 @@ public class JsonMarshallerTest extends BaseMarshallerTest {
         }
 
         mapper.writeValue(new File("target/junit/" + testName.getMethodName() + "/" + "atlasmapping.json"),
-                atlasMapping);
+            atlasMapping);
         AtlasMapping generatedMapping = mapper.readValue(
-                new File("target/junit/" + testName.getMethodName() + "/" + "atlasmapping.json"), AtlasMapping.class);
+            new File("target/junit/" + testName.getMethodName() + "/" + "atlasmapping.json"), AtlasMapping.class);
 
         List<Action> generatedActions = ((Mapping) generatedMapping.getMappings().getMapping().get(0))
-                                            .getOutputField().get(0).getActions().getActions();
+            .getOutputField().get(0).getActions();
         assertEquals(actionsList.size(), generatedActions.size());
-        for (int i=0; i<actionsList.size(); i++) {
+        for (int i = 0; i < actionsList.size(); i++) {
             assertEquals(String.format(
-                    "Did you forget to add '%s' in ActionsJsonDeserializer/ActionsJsonSerializer?",
-                    actionsList.get(i).getClass().getName()),
-                    actionsList.get(i).getClass().getName(), generatedActions.get(i).getClass().getName());
+                "Did you forget to add '%s' in ActionsJsonDeserializer/ActionsJsonSerializer?",
+                actionsList.get(i).getClass().getName()),
+                actionsList.get(i).getClass().getName(), generatedActions.get(i).getClass().getName());
         }
     }
 
+    @Test
+    public void testNullActionDeserialization() throws Exception {
+
+        String content = "{\"io.atlasmap.v2.PropertyField\" : {\"jsonType\" : \"io.atlasmap.v2.PropertyField\",\"actions\" : [ {" +
+            "\"Split\" : { \"delimiter\": \"x\"}" +
+        "}]}}";
+        PropertyField f = mapper.readValue(content, PropertyField.class);
+//        System.out.println(mapper.writeValueAsString(f));
+
+        content = "{\"io.atlasmap.v2.PropertyField\" : {\"jsonType\" : \"io.atlasmap.v2.PropertyField\",\"actions\" : [ {" +
+            "\"Trim\" : null" +
+        "}]}}";
+        f = mapper.readValue(content, PropertyField.class);
+//        System.out.println(mapper.writeValueAsString(f));
+
+        content = "{\"io.atlasmap.v2.PropertyField\" : {\"jsonType\" : \"io.atlasmap.v2.PropertyField\",\"actions\" : [ {" +
+            "\"@type\" : \"Trim\"" +
+        "}]}}";
+        f = mapper.readValue(content, PropertyField.class);
+//        System.out.println(mapper.writeValueAsString(f));
+    }
 }

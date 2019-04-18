@@ -20,6 +20,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertNull;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -77,9 +78,9 @@ public class AtlasModelFactoryTest {
                 new SeparateByDash(), new SeparateByUnderscore(), new Length(), new SubString(),
                 new SubStringAfter(), new SubStringBefore(), new Trim(), new TrimLeft(), new TrimRight(),
                 new Uppercase(), new UppercaseChar());
-        Actions actions = new Actions();
-        actions.getActions().addAll(actionsList);
-        Actions clones = AtlasModelFactory.cloneFieldActions(actions);
+        ArrayList<Action> actions = new ArrayList<Action>();
+        actions.addAll(actionsList);
+        ArrayList<Action> clones = AtlasModelFactory.cloneFieldActions(actions);
         assertNotNull(clones);
         assertNotSame(actions, clones);
     }

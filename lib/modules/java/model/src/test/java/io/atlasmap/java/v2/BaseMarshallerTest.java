@@ -26,7 +26,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.junit.After;
@@ -34,36 +36,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.TestName;
 
-import io.atlasmap.v2.Actions;
-import io.atlasmap.v2.AtlasMapping;
-import io.atlasmap.v2.AtlasModelFactory;
-import io.atlasmap.v2.Camelize;
-import io.atlasmap.v2.Capitalize;
-import io.atlasmap.v2.Collection;
-import io.atlasmap.v2.CollectionType;
-import io.atlasmap.v2.ConstantField;
-import io.atlasmap.v2.DataSource;
-import io.atlasmap.v2.DataSourceType;
-import io.atlasmap.v2.Field;
-import io.atlasmap.v2.FieldStatus;
-import io.atlasmap.v2.FieldType;
-import io.atlasmap.v2.Length;
-import io.atlasmap.v2.LookupEntry;
-import io.atlasmap.v2.LookupTable;
-import io.atlasmap.v2.Lowercase;
-import io.atlasmap.v2.Mapping;
-import io.atlasmap.v2.MappingType;
-import io.atlasmap.v2.Mappings;
-import io.atlasmap.v2.Properties;
-import io.atlasmap.v2.Property;
-import io.atlasmap.v2.PropertyField;
-import io.atlasmap.v2.SeparateByDash;
-import io.atlasmap.v2.SeparateByUnderscore;
-import io.atlasmap.v2.StringList;
-import io.atlasmap.v2.Trim;
-import io.atlasmap.v2.TrimLeft;
-import io.atlasmap.v2.TrimRight;
-import io.atlasmap.v2.Uppercase;
+import io.atlasmap.v2.*;
 
 public abstract class BaseMarshallerTest {
 
@@ -114,7 +87,7 @@ public abstract class BaseMarshallerTest {
 
         generateLookupTables(atlasMapping);
 
-        Actions actions = generateActions();
+        ArrayList<Action> actions = generateActions();
 
         StringList annotations = generateAnnotations();
 
@@ -204,8 +177,8 @@ public abstract class BaseMarshallerTest {
 
         PropertyField inputField = new PropertyField();
         inputField.setName("foo");
-        Actions actions = new Actions();
-        actions.getActions().add(new Trim());
+        ArrayList<Action> actions = new ArrayList<Action>();
+        actions.add(new Trim());
         populateFieldComplexObject(inputField, actions, CollectionType.ARRAY, FieldStatus.SUPPORTED, FieldType.INTEGER);
         populateFieldSimpleObject(inputField, 3, "docid", "/path", false, "bar");
 
@@ -223,8 +196,8 @@ public abstract class BaseMarshallerTest {
         AtlasMapping mapping = generateAtlasMapping();
 
         ConstantField inputField = new ConstantField();
-        Actions actions = new Actions();
-        actions.getActions().add(new Trim());
+        ArrayList<Action> actions = new ArrayList<Action>();
+        actions.add(new Trim());
         populateFieldComplexObject(inputField, actions, CollectionType.ARRAY, FieldStatus.SUPPORTED, FieldType.INTEGER);
         populateFieldSimpleObject(inputField, 3, "docid", "/path", false, "bar");
 
@@ -257,7 +230,7 @@ public abstract class BaseMarshallerTest {
     }
 
     protected AtlasMapping generateCombineMapping() {
-        Actions actions = generateActions();
+        ArrayList<Action> actions = generateActions();
 
         StringList annotations = generateAnnotations();
 
@@ -321,7 +294,7 @@ public abstract class BaseMarshallerTest {
 
     protected AtlasMapping generateSeparateAtlasMapping() {
 
-        Actions actions = generateActions();
+        ArrayList<Action> actions = generateActions();
 
         StringList annotations = generateAnnotations();
 
@@ -370,7 +343,7 @@ public abstract class BaseMarshallerTest {
         return parameterizedTypes;
     }
 
-    private JavaField generateJavaField(Actions actions, StringList annotations, ModifierList modifierList, StringList parameterizedTypes) {
+    private JavaField generateJavaField(ArrayList<Action> actions, StringList annotations, ModifierList modifierList, StringList parameterizedTypes) {
         JavaField outputJavaFieldB = new JavaField();
         populateJavaField(outputJavaFieldB, annotations, modifierList, parameterizedTypes, Boolean.FALSE, Boolean.TRUE);
         populateJavaFieldString(outputJavaFieldB, "JavaField", "ArrayList", "getMethod", "setMethod", "foo");
@@ -395,7 +368,7 @@ public abstract class BaseMarshallerTest {
         javaField.setName(name);
 
     }
-    private void populateFieldComplexObject(Field field, Actions actions, CollectionType collectionType, FieldStatus status, FieldType type) {
+    private void populateFieldComplexObject(Field field, ArrayList<Action> actions, CollectionType collectionType, FieldStatus status, FieldType type) {
         field.setActions(actions);
         field.setCollectionType(collectionType);
         field.setStatus(status);
@@ -412,18 +385,18 @@ public abstract class BaseMarshallerTest {
         field.setRequired(isRequired);
     }
 
-    private Actions generateActions() {
-        Actions actions = new Actions();
-        actions.getActions().add(new Camelize());
-        actions.getActions().add(new Capitalize());
-        actions.getActions().add(new Length());
-        actions.getActions().add(new Lowercase());
-        actions.getActions().add(new SeparateByDash());
-        actions.getActions().add(new SeparateByUnderscore());
-        actions.getActions().add(new Trim());
-        actions.getActions().add(new TrimLeft());
-        actions.getActions().add(new TrimRight());
-        actions.getActions().add(new Uppercase());
+    private ArrayList<Action> generateActions() {
+        ArrayList<Action> actions = new ArrayList<Action>();
+        actions.add(new Camelize());
+        actions.add(new Capitalize());
+        actions.add(new Length());
+        actions.add(new Lowercase());
+        actions.add(new SeparateByDash());
+        actions.add(new SeparateByUnderscore());
+        actions.add(new Trim());
+        actions.add(new TrimLeft());
+        actions.add(new TrimRight());
+        actions.add(new Uppercase());
         return actions;
     }
 
@@ -542,7 +515,7 @@ public abstract class BaseMarshallerTest {
     }
 
     private void validateField(Field field, int actionSize) {
-        assertEquals(actionSize, field.getActions().getActions().size());
+        assertEquals(actionSize, field.getActions().size());
         assertEquals(Integer.valueOf(3), field.getArrayDimensions());
         assertEquals(Integer.valueOf(3), field.getArraySize());
         assertEquals(CollectionType.ARRAY, field.getCollectionType());

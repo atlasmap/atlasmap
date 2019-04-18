@@ -15,6 +15,9 @@
  */
 package io.atlasmap.v2;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @SuppressWarnings("squid:S3776")
 public class AtlasModelFactory {
 
@@ -167,19 +170,19 @@ public class AtlasModelFactory {
         return answer;
     }
 
-    public static Actions cloneFieldActions(Actions actions) {
+    public static ArrayList<Action> cloneFieldActions(ArrayList<Action> actions) {
         if (actions == null) {
             return null;
         }
 
-        Actions n = new Actions();
+        ArrayList<Action> n = new ArrayList<Action>();
 
-        if (actions.getActions() == null || actions.getActions().isEmpty()) {
+        if (actions == null || actions.isEmpty()) {
             return n;
         }
 
-        for (Action a : actions.getActions()) {
-            n.getActions().add(cloneAction(a));
+        for (Action a : actions) {
+            n.add(cloneAction(a));
         }
         return n;
     }
@@ -487,9 +490,9 @@ public class AtlasModelFactory {
         tmp.append(" arraySize=" + f.getArraySize());
         tmp.append(" collectionType=" + (f.getCollectionType() != null ? f.getCollectionType().value() : null));
         tmp.append(" docId=" + f.getDocId());
-        if (f.getActions() != null && f.getActions().getActions() != null) {
-            if (!f.getActions().getActions().isEmpty()) {
-                tmp.append(" fieldActions#=" + f.getActions().getActions().size());
+        if (f.getActions() != null && f.getActions() != null) {
+            if (!f.getActions().isEmpty()) {
+                tmp.append(" fieldActions#=" + f.getActions().size());
             } else {
                 tmp.append(" fieldActions#=0");
             }

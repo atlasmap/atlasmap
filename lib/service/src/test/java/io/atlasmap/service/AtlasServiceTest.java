@@ -29,7 +29,6 @@ import java.util.jar.JarOutputStream;
 
 import javax.tools.JavaCompiler;
 import javax.tools.ToolProvider;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
@@ -41,6 +40,7 @@ import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import io.atlasmap.v2.Action;
 import io.atlasmap.v2.AtlasMapping;
 import io.atlasmap.v2.BaseMapping;
 import io.atlasmap.v2.Field;
@@ -103,9 +103,9 @@ public class AtlasServiceTest {
             if (MappingType.MAP.equals(baseMapping.getMappingType())) {
                 List<Field> fields = ((Mapping) baseMapping).getOutputField();
                 for (Field f : fields) {
-                    if (f.getActions() != null && f.getActions().getActions() != null
-                            && !f.getActions().getActions().isEmpty()) {
-                        LOG.info("Found actions: " + f.getActions().getActions().size());
+                    if (f.getActions() != null && f.getActions() != null
+                            && !f.getActions().isEmpty()) {
+                        LOG.info("Found actions: " + f.getActions().size());
                     }
                 }
             }

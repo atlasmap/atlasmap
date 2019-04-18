@@ -20,6 +20,7 @@ import static org.junit.Assert.assertNotNull;
 // import static org.junit.Assert.assertTrue;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 // import java.util.regex.Pattern;
@@ -31,7 +32,6 @@ import io.atlasmap.api.AtlasSession;
 import io.atlasmap.core.DefaultAtlasContextFactory;
 import io.atlasmap.v2.Action;
 import io.atlasmap.v2.ActionDetail;
-import io.atlasmap.v2.Actions;
 import io.atlasmap.v2.AtlasMapping;
 import io.atlasmap.v2.Capitalize;
 import io.atlasmap.v2.DataSource;
@@ -128,8 +128,8 @@ public abstract class AtlasBaseActionsTest extends AtlasMappingBaseTest {
         m.getInputField().add(this.sourceField);
         m.getOutputField().add(this.targetField);
         if (actions != null) {
-            m.getOutputField().get(0).setActions(new Actions());
-            m.getOutputField().get(0).getActions().getActions().addAll(actions);
+            m.getOutputField().get(0).setActions(new ArrayList<Action>());
+            m.getOutputField().get(0).getActions().addAll(actions);
         }
 
         DataSource src = new DataSource();

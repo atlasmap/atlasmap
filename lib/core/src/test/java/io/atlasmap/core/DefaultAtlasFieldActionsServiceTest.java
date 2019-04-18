@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.After;
@@ -19,7 +20,6 @@ import io.atlasmap.v2.AbsoluteValue;
 import io.atlasmap.v2.Action;
 import io.atlasmap.v2.ActionDetail;
 import io.atlasmap.v2.ActionParameter;
-import io.atlasmap.v2.Actions;
 import io.atlasmap.v2.Add;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldGroup;
@@ -97,8 +97,8 @@ public class DefaultAtlasFieldActionsServiceTest {
         Object value = new Object();
         field.setValue(value);
         field.setFieldType(FieldType.INTEGER);
-        Actions actions = new Actions();
-        actions.getActions().add(new Add());
+        ArrayList<Action> actions = new ArrayList<Action>();
+        actions.add(new Add());
         field.setActions(actions);
         fieldActionsService.processActions(mock(AtlasInternalSession.class), field);
     }
@@ -119,20 +119,13 @@ public class DefaultAtlasFieldActionsServiceTest {
         field.setFieldType(FieldType.INTEGER);
         fieldActionsService.processActions(mock(AtlasInternalSession.class), field);
 
-        @SuppressWarnings("serial")
-        class MockActions extends Actions {
-            @Override
-            public List<Action> getActions() {
-                return null;
-            }
-        }
-        field.setActions(new MockActions());
+        field.setActions(new ArrayList<Action>());
         fieldActionsService.processActions(mock(AtlasInternalSession.class), field);
 
-        field.setActions(new Actions());
+        field.setActions(new ArrayList<Action>());
         fieldActionsService.processActions(mock(AtlasInternalSession.class), field);
 
-        field.getActions().getActions().add(new Trim());
+        field.getActions().add(new Trim());
         field.setValue("testString");
         field.setFieldType(FieldType.STRING);
         fieldActionsService.processActions(mock(AtlasInternalSession.class), field);
@@ -149,8 +142,8 @@ public class DefaultAtlasFieldActionsServiceTest {
         Object value = new Object();
         field.setValue(value);
         field.setFieldType(FieldType.INTEGER);
-        Actions actions = new Actions();
-        actions.getActions().add(new Add());
+        ArrayList<Action> actions = new ArrayList<Action>();
+        actions.add(new Add());
         field.setActions(actions);
         fieldActionsService.processActions(mock(AtlasInternalSession.class), field);
     }
@@ -196,8 +189,8 @@ public class DefaultAtlasFieldActionsServiceTest {
         field3.setValue("three");
         fieldGroup.getField().add(field3);
         Action action = new Uppercase();
-        fieldGroup.setActions(new Actions());
-        fieldGroup.getActions().getActions().add(action);
+        fieldGroup.setActions(new ArrayList<Action>());
+        fieldGroup.getActions().add(action);
         Field answer = fieldActionsService.processActions(session, fieldGroup);
         assertEquals(FieldGroup.class, answer.getClass());
         FieldGroup answerGroup = (FieldGroup)answer;
