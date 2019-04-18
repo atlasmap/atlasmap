@@ -150,22 +150,23 @@ public class DefaultAtlasFieldActionsServiceTest {
 
     @Test
     public void testProcessActionWithActionActionDetailObject() throws AtlasException {
-        DefaultAtlasFieldActionService.ActionDetailImpl actionDetail = null;
+        DefaultAtlasFieldActionService.ActionProcessor processor = null;
         Object sourceObject = "String";
         Action action = new Trim();
-        assertEquals(sourceObject, fieldActionsService.processAction(action, actionDetail, sourceObject));
+        processor = fieldActionsService.findActionProcessor(action, FieldType.STRING);
+        assertEquals(sourceObject, processor.process(action, sourceObject));
 
         action = new GenerateUUID();
-        actionDetail = fieldActionsService.findActionDetail(action, FieldType.NONE);
-        assertNotNull(fieldActionsService.processAction(action, actionDetail, sourceObject));
+        processor = fieldActionsService.findActionProcessor(action, FieldType.NONE);
+        assertNotNull(processor.process(action, sourceObject));
     }
 
     @Test
     public void testProcessActionWithActionActionDetailObjectAssignableType() throws AtlasException {
         Action action = new AbsoluteValue();
         Object sourceObject = new Integer("1");
-        DefaultAtlasFieldActionService.ActionDetailImpl actionDetail = fieldActionsService.findActionDetail(action, FieldType.NUMBER);
-        assertEquals(1L, fieldActionsService.processAction(action, actionDetail, sourceObject));
+        DefaultAtlasFieldActionService.ActionProcessor processor = fieldActionsService.findActionProcessor(action, FieldType.STRING);
+        assertEquals(1L, processor.process(action, sourceObject));
     }
 
     @Test

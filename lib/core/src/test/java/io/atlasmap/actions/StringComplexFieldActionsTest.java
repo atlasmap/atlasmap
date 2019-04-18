@@ -55,14 +55,14 @@ public class StringComplexFieldActionsTest {
         Append action = new Append();
         assertEquals(null, StringComplexFieldActions.append(action, null));
         assertEquals("foo", StringComplexFieldActions.append(action, "foo"));
-        assertEquals("1", StringComplexFieldActions.append(action, 1));
+        assertEquals("1", StringComplexFieldActions.append(action, "1"));
         action.setString("");
         assertEquals("", StringComplexFieldActions.append(action, null));
         assertEquals("foo", StringComplexFieldActions.append(action, "foo"));
         action.setString("bar");
         assertEquals("bar", StringComplexFieldActions.append(action, null));
         assertEquals("foobar", StringComplexFieldActions.append(action, "foo"));
-        assertEquals("1bar", StringComplexFieldActions.append(action, 1));
+        assertEquals("1bar", StringComplexFieldActions.append(action, "1"));
     }
 
     @Test(expected=IllegalArgumentException.class)
@@ -305,17 +305,17 @@ public class StringComplexFieldActionsTest {
         Prepend action = new Prepend();
         assertEquals(null, StringComplexFieldActions.prepend(action, null));
         assertEquals("foo", StringComplexFieldActions.prepend(action, "foo"));
-        assertEquals("1", StringComplexFieldActions.prepend(action, 1));
+        assertEquals("1", StringComplexFieldActions.prepend(action, "1"));
         action.setString("");
         assertEquals("", StringComplexFieldActions.prepend(action, null));
         assertEquals("foo", StringComplexFieldActions.prepend(action, "foo"));
         action.setString("bar");
         assertEquals("bar", StringComplexFieldActions.prepend(action, null));
         assertEquals("barfoo", StringComplexFieldActions.prepend(action, "foo"));
-        assertEquals("bar1", StringComplexFieldActions.prepend(action, 1));
+        assertEquals("bar1", StringComplexFieldActions.prepend(action, "1"));
     }
 
-    @Test(expected=IllegalArgumentException.class)
+    @Test(expected=NullPointerException.class)
     public void testPrependNullAction() {
         StringComplexFieldActions.prepend(null, null);
     }
