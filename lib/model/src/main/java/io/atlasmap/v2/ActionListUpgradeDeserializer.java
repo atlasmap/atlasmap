@@ -15,6 +15,11 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
+/**
+ * @deprecated This was introduced for backward compatibility. Remove this in v2.0.
+ * https://github.com/atlasmap/atlasmap/pull/877
+ */
+@Deprecated
 public class ActionListUpgradeDeserializer extends JsonDeserializer<ArrayList<Action>> {
 
     @Override
