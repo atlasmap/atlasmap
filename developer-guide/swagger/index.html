@@ -522,7 +522,7 @@ table.CodeRay td.code>pre{padding:0}
 <h1>AtlasMap Design Time Service API Reference</h1>
 <div class="details">
 <span id="revnumber">version 1.40.0-SNAPSHOT,</span>
-<span id="revdate">2019-04-17</span>
+<span id="revdate">2019-04-22</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Design Time Service</div>
@@ -546,11 +546,11 @@ table.CodeRay td.code>pre{padding:0}
 </li>
 <li><a href="#_atlas-service-core-definitions">1.2. Definitions</a>
 <ul class="sectlevel3">
-<li><a href="#_atlas-service-core-actiondetail">1.2.1. ActionDetail</a></li>
-<li><a href="#_atlas-service-core-actiondetails">1.2.2. ActionDetails</a></li>
-<li><a href="#_atlas-service-core-actionparameter">1.2.3. ActionParameter</a></li>
-<li><a href="#_atlas-service-core-actionparameters">1.2.4. ActionParameters</a></li>
-<li><a href="#_atlas-service-core-actions">1.2.5. Actions</a></li>
+<li><a href="#_atlas-service-core-action">1.2.1. Action</a></li>
+<li><a href="#_atlas-service-core-actiondetail">1.2.2. ActionDetail</a></li>
+<li><a href="#_atlas-service-core-actiondetails">1.2.3. ActionDetails</a></li>
+<li><a href="#_atlas-service-core-actionparameter">1.2.4. ActionParameter</a></li>
+<li><a href="#_atlas-service-core-actionparameters">1.2.5. ActionParameters</a></li>
 <li><a href="#_atlas-service-core-atlaslibraryloader">1.2.6. AtlasLibraryLoader</a></li>
 <li><a href="#_atlas-service-core-atlasmapping">1.2.7. AtlasMapping</a></li>
 <li><a href="#_atlas-service-core-atlasmappingresult">1.2.8. AtlasMappingResult</a></li>
@@ -564,19 +564,20 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_atlas-service-core-field">1.2.16. Field</a></li>
 <li><a href="#_atlas-service-core-fieldgroup">1.2.17. FieldGroup</a></li>
 <li><a href="#_atlas-service-core-formulaexpression">1.2.18. FormulaExpression</a></li>
-<li><a href="#_atlas-service-core-lookupentry">1.2.19. LookupEntry</a></li>
-<li><a href="#_atlas-service-core-lookuptable">1.2.20. LookupTable</a></li>
-<li><a href="#_atlas-service-core-lookuptables">1.2.21. LookupTables</a></li>
-<li><a href="#_atlas-service-core-mapping">1.2.22. Mapping</a></li>
-<li><a href="#_atlas-service-core-mappings">1.2.23. Mappings</a></li>
-<li><a href="#_atlas-service-core-processmappingresponse">1.2.24. ProcessMappingResponse</a></li>
-<li><a href="#_atlas-service-core-properties">1.2.25. Properties</a></li>
-<li><a href="#_atlas-service-core-property">1.2.26. Property</a></li>
-<li><a href="#_atlas-service-core-stringmap">1.2.27. StringMap</a></li>
-<li><a href="#_atlas-service-core-stringmapentry">1.2.28. StringMapEntry</a></li>
-<li><a href="#_atlas-service-core-targetdocument">1.2.29. TargetDocument</a></li>
-<li><a href="#_atlas-service-core-validation">1.2.30. Validation</a></li>
-<li><a href="#_atlas-service-core-validations">1.2.31. Validations</a></li>
+<li><a href="#_atlas-service-core-jsonschema">1.2.19. JsonSchema</a></li>
+<li><a href="#_atlas-service-core-lookupentry">1.2.20. LookupEntry</a></li>
+<li><a href="#_atlas-service-core-lookuptable">1.2.21. LookupTable</a></li>
+<li><a href="#_atlas-service-core-lookuptables">1.2.22. LookupTables</a></li>
+<li><a href="#_atlas-service-core-mapping">1.2.23. Mapping</a></li>
+<li><a href="#_atlas-service-core-mappings">1.2.24. Mappings</a></li>
+<li><a href="#_atlas-service-core-processmappingresponse">1.2.25. ProcessMappingResponse</a></li>
+<li><a href="#_atlas-service-core-properties">1.2.26. Properties</a></li>
+<li><a href="#_atlas-service-core-property">1.2.27. Property</a></li>
+<li><a href="#_atlas-service-core-stringmap">1.2.28. StringMap</a></li>
+<li><a href="#_atlas-service-core-stringmapentry">1.2.29. StringMapEntry</a></li>
+<li><a href="#_atlas-service-core-targetdocument">1.2.30. TargetDocument</a></li>
+<li><a href="#_atlas-service-core-validation">1.2.31. Validation</a></li>
+<li><a href="#_atlas-service-core-validations">1.2.32. Validations</a></li>
 </ul>
 </li>
 </ul>
@@ -593,7 +594,7 @@ table.CodeRay td.code>pre{padding:0}
 </li>
 <li><a href="#_atlas-service-java-definitions">2.2. Definitions</a>
 <ul class="sectlevel3">
-<li><a href="#_atlas-service-java-actions">2.2.1. Actions</a></li>
+<li><a href="#_atlas-service-java-action">2.2.1. Action</a></li>
 <li><a href="#_atlas-service-java-javaclass">2.2.2. JavaClass</a></li>
 <li><a href="#_atlas-service-java-javaenumfield">2.2.3. JavaEnumField</a></li>
 <li><a href="#_atlas-service-java-javaenumfields">2.2.4. JavaEnumFields</a></li>
@@ -617,7 +618,7 @@ table.CodeRay td.code>pre{padding:0}
 </li>
 <li><a href="#_atlas-service-json-definitions">3.2. Definitions</a>
 <ul class="sectlevel3">
-<li><a href="#_atlas-service-json-actions">3.2.1. Actions</a></li>
+<li><a href="#_atlas-service-json-action">3.2.1. Action</a></li>
 <li><a href="#_atlas-service-json-field">3.2.2. Field</a></li>
 <li><a href="#_atlas-service-json-fields">3.2.3. Fields</a></li>
 <li><a href="#_atlas-service-json-jsondocument">3.2.4. JsonDocument</a></li>
@@ -637,7 +638,7 @@ table.CodeRay td.code>pre{padding:0}
 </li>
 <li><a href="#_atlas-service-xml-definitions">4.2. Definitions</a>
 <ul class="sectlevel3">
-<li><a href="#_atlas-service-xml-actions">4.2.1. Actions</a></li>
+<li><a href="#_atlas-service-xml-action">4.2.1. Action</a></li>
 <li><a href="#_atlas-service-xml-field">4.2.2. Field</a></li>
 <li><a href="#_atlas-service-xml-fields">4.2.3. Fields</a></li>
 <li><a href="#_atlas-service-xml-xmldocument">4.2.4. XmlDocument</a></li>
@@ -1573,7 +1574,7 @@ table.CodeRay td.code>pre{padding:0}
 <div class="sect2">
 <h3 id="_atlas-service-core-definitions">1.2. Definitions</h3>
 <div class="sect3">
-<h4 id="_atlas-service-core-actiondetail">1.2.1. ActionDetail</h4>
+<h4 id="_atlas-service-core-action">1.2.1. Action</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 42.8571%;">
@@ -1586,6 +1587,42 @@ table.CodeRay td.code>pre{padding:0}
 </tr>
 </thead>
 <tbody>
+<tr>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p><strong>@type</strong><br>
+<em>optional</em><br>
+<em>read-only</em></p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p>string</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_atlas-service-core-actiondetail">1.2.2. ActionDetail</h4>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 42.8571%;">
+<col style="width: 57.1429%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-middle">Name</th>
+<th class="tableblock halign-left valign-middle">Schema</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p><strong>actionSchema</strong><br>
+<em>optional</em></p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p><a href="#_atlas-service-core-jsonschema">JsonSchema</a></p>
+</div></div></td>
+</tr>
 <tr>
 <td class="tableblock halign-left valign-middle"><div><div class="paragraph">
 <p><strong>className</strong><br>
@@ -1671,7 +1708,7 @@ table.CodeRay td.code>pre{padding:0}
 </table>
 </div>
 <div class="sect3">
-<h4 id="_atlas-service-core-actiondetails">1.2.2. ActionDetails</h4>
+<h4 id="_atlas-service-core-actiondetails">1.2.3. ActionDetails</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 42.8571%;">
@@ -1697,7 +1734,7 @@ table.CodeRay td.code>pre{padding:0}
 </table>
 </div>
 <div class="sect3">
-<h4 id="_atlas-service-core-actionparameter">1.2.3. ActionParameter</h4>
+<h4 id="_atlas-service-core-actionparameter">1.2.4. ActionParameter</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 42.8571%;">
@@ -1759,7 +1796,7 @@ table.CodeRay td.code>pre{padding:0}
 </table>
 </div>
 <div class="sect3">
-<h4 id="_atlas-service-core-actionparameters">1.2.4. ActionParameters</h4>
+<h4 id="_atlas-service-core-actionparameters">1.2.5. ActionParameters</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 42.8571%;">
@@ -1783,12 +1820,6 @@ table.CodeRay td.code>pre{padding:0}
 </tr>
 </tbody>
 </table>
-</div>
-<div class="sect3">
-<h4 id="_atlas-service-core-actions">1.2.5. Actions</h4>
-<div class="paragraph">
-<p><em>Type</em> : object</p>
-</div>
 </div>
 <div class="sect3">
 <h4 id="_atlas-service-core-atlaslibraryloader">1.2.6. AtlasLibraryLoader</h4>
@@ -2223,7 +2254,7 @@ table.CodeRay td.code>pre{padding:0}
 <em>optional</em></p>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><div><div class="paragraph">
-<p><a href="#_atlas-service-core-actions">Actions</a></p>
+<p>&lt; <a href="#_atlas-service-core-action">Action</a> &gt; array</p>
 </div></div></td>
 </tr>
 <tr>
@@ -2348,7 +2379,7 @@ table.CodeRay td.code>pre{padding:0}
 <em>optional</em></p>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><div><div class="paragraph">
-<p><a href="#_atlas-service-core-actions">Actions</a></p>
+<p>&lt; <a href="#_atlas-service-core-action">Action</a> &gt; array</p>
 </div></div></td>
 </tr>
 <tr>
@@ -2489,7 +2520,96 @@ table.CodeRay td.code>pre{padding:0}
 </table>
 </div>
 <div class="sect3">
-<h4 id="_atlas-service-core-lookupentry">1.2.19. LookupEntry</h4>
+<h4 id="_atlas-service-core-jsonschema">1.2.19. JsonSchema</h4>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 42.8571%;">
+<col style="width: 57.1429%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-middle">Name</th>
+<th class="tableblock halign-left valign-middle">Schema</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p><strong>description</strong><br>
+<em>optional</em></p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p>string</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p><strong>disallow</strong><br>
+<em>optional</em></p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p>&lt; <a href="#_atlas-service-core-jsonschema">JsonSchema</a> &gt; array</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p><strong>extends</strong><br>
+<em>optional</em></p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p>&lt; <a href="#_atlas-service-core-jsonschema">JsonSchema</a> &gt; array</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p><strong>get$ref</strong><br>
+<em>optional</em></p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p>string</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p><strong>get$schema</strong><br>
+<em>optional</em></p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p>string</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p><strong>id</strong><br>
+<em>optional</em></p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p>string</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p><strong>readonly</strong><br>
+<em>optional</em></p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p>boolean</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p><strong>required</strong><br>
+<em>optional</em></p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p>boolean</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_atlas-service-core-lookupentry">1.2.20. LookupEntry</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 42.8571%;">
@@ -2542,7 +2662,7 @@ table.CodeRay td.code>pre{padding:0}
 </table>
 </div>
 <div class="sect3">
-<h4 id="_atlas-service-core-lookuptable">1.2.20. LookupTable</h4>
+<h4 id="_atlas-service-core-lookuptable">1.2.21. LookupTable</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 42.8571%;">
@@ -2586,7 +2706,7 @@ table.CodeRay td.code>pre{padding:0}
 </table>
 </div>
 <div class="sect3">
-<h4 id="_atlas-service-core-lookuptables">1.2.21. LookupTables</h4>
+<h4 id="_atlas-service-core-lookuptables">1.2.22. LookupTables</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 42.8571%;">
@@ -2612,7 +2732,7 @@ table.CodeRay td.code>pre{padding:0}
 </table>
 </div>
 <div class="sect3">
-<h4 id="_atlas-service-core-mapping">1.2.22. Mapping</h4>
+<h4 id="_atlas-service-core-mapping">1.2.23. Mapping</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 42.8571%;">
@@ -2746,7 +2866,7 @@ table.CodeRay td.code>pre{padding:0}
 </table>
 </div>
 <div class="sect3">
-<h4 id="_atlas-service-core-mappings">1.2.23. Mappings</h4>
+<h4 id="_atlas-service-core-mappings">1.2.24. Mappings</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 42.8571%;">
@@ -2772,7 +2892,7 @@ table.CodeRay td.code>pre{padding:0}
 </table>
 </div>
 <div class="sect3">
-<h4 id="_atlas-service-core-processmappingresponse">1.2.24. ProcessMappingResponse</h4>
+<h4 id="_atlas-service-core-processmappingresponse">1.2.25. ProcessMappingResponse</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 42.8571%;">
@@ -2816,7 +2936,7 @@ table.CodeRay td.code>pre{padding:0}
 </table>
 </div>
 <div class="sect3">
-<h4 id="_atlas-service-core-properties">1.2.25. Properties</h4>
+<h4 id="_atlas-service-core-properties">1.2.26. Properties</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 42.8571%;">
@@ -2842,7 +2962,7 @@ table.CodeRay td.code>pre{padding:0}
 </table>
 </div>
 <div class="sect3">
-<h4 id="_atlas-service-core-property">1.2.26. Property</h4>
+<h4 id="_atlas-service-core-property">1.2.27. Property</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 42.8571%;">
@@ -2886,7 +3006,7 @@ table.CodeRay td.code>pre{padding:0}
 </table>
 </div>
 <div class="sect3">
-<h4 id="_atlas-service-core-stringmap">1.2.27. StringMap</h4>
+<h4 id="_atlas-service-core-stringmap">1.2.28. StringMap</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 42.8571%;">
@@ -2912,7 +3032,7 @@ table.CodeRay td.code>pre{padding:0}
 </table>
 </div>
 <div class="sect3">
-<h4 id="_atlas-service-core-stringmapentry">1.2.28. StringMapEntry</h4>
+<h4 id="_atlas-service-core-stringmapentry">1.2.29. StringMapEntry</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 42.8571%;">
@@ -2947,7 +3067,7 @@ table.CodeRay td.code>pre{padding:0}
 </table>
 </div>
 <div class="sect3">
-<h4 id="_atlas-service-core-targetdocument">1.2.29. TargetDocument</h4>
+<h4 id="_atlas-service-core-targetdocument">1.2.30. TargetDocument</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 42.8571%;">
@@ -2982,7 +3102,7 @@ table.CodeRay td.code>pre{padding:0}
 </table>
 </div>
 <div class="sect3">
-<h4 id="_atlas-service-core-validation">1.2.30. Validation</h4>
+<h4 id="_atlas-service-core-validation">1.2.31. Validation</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 42.8571%;">
@@ -3035,7 +3155,7 @@ table.CodeRay td.code>pre{padding:0}
 </table>
 </div>
 <div class="sect3">
-<h4 id="_atlas-service-core-validations">1.2.31. Validations</h4>
+<h4 id="_atlas-service-core-validations">1.2.32. Validations</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 42.8571%;">
@@ -3381,10 +3501,31 @@ table.CodeRay td.code>pre{padding:0}
 <div class="sect2">
 <h3 id="_atlas-service-java-definitions">2.2. Definitions</h3>
 <div class="sect3">
-<h4 id="_atlas-service-java-actions">2.2.1. Actions</h4>
-<div class="paragraph">
-<p><em>Type</em> : object</p>
-</div>
+<h4 id="_atlas-service-java-action">2.2.1. Action</h4>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 42.8571%;">
+<col style="width: 57.1429%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-middle">Name</th>
+<th class="tableblock halign-left valign-middle">Schema</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p><strong>@type</strong><br>
+<em>optional</em><br>
+<em>read-only</em></p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p>string</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="sect3">
 <h4 id="_atlas-service-java-javaclass">2.2.2. JavaClass</h4>
@@ -3406,7 +3547,7 @@ table.CodeRay td.code>pre{padding:0}
 <em>optional</em></p>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><div><div class="paragraph">
-<p><a href="#_atlas-service-java-actions">Actions</a></p>
+<p>&lt; <a href="#_atlas-service-java-action">Action</a> &gt; array</p>
 </div></div></td>
 </tr>
 <tr>
@@ -3720,7 +3861,7 @@ table.CodeRay td.code>pre{padding:0}
 <em>optional</em></p>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><div><div class="paragraph">
-<p><a href="#_atlas-service-java-actions">Actions</a></p>
+<p>&lt; <a href="#_atlas-service-java-action">Action</a> &gt; array</p>
 </div></div></td>
 </tr>
 <tr>
@@ -3898,7 +4039,7 @@ table.CodeRay td.code>pre{padding:0}
 <em>optional</em></p>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><div><div class="paragraph">
-<p><a href="#_atlas-service-java-actions">Actions</a></p>
+<p>&lt; <a href="#_atlas-service-java-action">Action</a> &gt; array</p>
 </div></div></td>
 </tr>
 <tr>
@@ -4494,10 +4635,31 @@ table.CodeRay td.code>pre{padding:0}
 <div class="sect2">
 <h3 id="_atlas-service-json-definitions">3.2. Definitions</h3>
 <div class="sect3">
-<h4 id="_atlas-service-json-actions">3.2.1. Actions</h4>
-<div class="paragraph">
-<p><em>Type</em> : object</p>
-</div>
+<h4 id="_atlas-service-json-action">3.2.1. Action</h4>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 42.8571%;">
+<col style="width: 57.1429%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-middle">Name</th>
+<th class="tableblock halign-left valign-middle">Schema</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p><strong>@type</strong><br>
+<em>optional</em><br>
+<em>read-only</em></p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p>string</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="sect3">
 <h4 id="_atlas-service-json-field">3.2.2. Field</h4>
@@ -4519,7 +4681,7 @@ table.CodeRay td.code>pre{padding:0}
 <em>optional</em></p>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><div><div class="paragraph">
-<p><a href="#_atlas-service-json-actions">Actions</a></p>
+<p>&lt; <a href="#_atlas-service-json-action">Action</a> &gt; array</p>
 </div></div></td>
 </tr>
 <tr>
@@ -4979,10 +5141,31 @@ table.CodeRay td.code>pre{padding:0}
 <div class="sect2">
 <h3 id="_atlas-service-xml-definitions">4.2. Definitions</h3>
 <div class="sect3">
-<h4 id="_atlas-service-xml-actions">4.2.1. Actions</h4>
-<div class="paragraph">
-<p><em>Type</em> : object</p>
-</div>
+<h4 id="_atlas-service-xml-action">4.2.1. Action</h4>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 42.8571%;">
+<col style="width: 57.1429%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-middle">Name</th>
+<th class="tableblock halign-left valign-middle">Schema</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p><strong>@type</strong><br>
+<em>optional</em><br>
+<em>read-only</em></p>
+</div></div></td>
+<td class="tableblock halign-left valign-middle"><div><div class="paragraph">
+<p>string</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="sect3">
 <h4 id="_atlas-service-xml-field">4.2.2. Field</h4>
@@ -5004,7 +5187,7 @@ table.CodeRay td.code>pre{padding:0}
 <em>optional</em></p>
 </div></div></td>
 <td class="tableblock halign-left valign-middle"><div><div class="paragraph">
-<p><a href="#_atlas-service-xml-actions">Actions</a></p>
+<p>&lt; <a href="#_atlas-service-xml-action">Action</a> &gt; array</p>
 </div></div></td>
 </tr>
 <tr>
@@ -5300,7 +5483,7 @@ table.CodeRay td.code>pre{padding:0}
 <div id="footer">
 <div id="footer-text">
 Version 1.40.0-SNAPSHOT<br>
-Last updated 2019-04-17 16:44:42 UTC
+Last updated 2019-04-22 18:16:46 UTC
 </div>
 </div>
 </body>
