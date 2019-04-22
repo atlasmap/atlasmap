@@ -19,6 +19,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.ArrayList;
 import java.util.List;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
@@ -29,8 +30,8 @@ import io.atlasmap.core.DefaultAtlasContextFactory;
 import io.atlasmap.java.test.SourceFlatPrimitiveClass;
 import io.atlasmap.java.test.TargetFlatPrimitiveClass;
 import io.atlasmap.java.v2.JavaField;
+import io.atlasmap.v2.Action;
 import io.atlasmap.v2.ActionDetail;
-import io.atlasmap.v2.Actions;
 import io.atlasmap.v2.AtlasMapping;
 import io.atlasmap.v2.AtlasModelFactory;
 import io.atlasmap.v2.DataSource;
@@ -112,19 +113,19 @@ public class OverloadedFieldActionsTest {
         
         Mapping mfm = AtlasModelFactory.createMapping(MappingType.MAP);
         JavaField srcF = new JavaField();
-        Actions acts = new Actions();
+        ArrayList<Action> acts = new ArrayList<Action>();
         srcF.setActions(acts);
 
         JavaField tgtF = new JavaField();
         
         if(clazz.isAssignableFrom(String.class)) {
             srcF.setPath("boxedStringField");
-            srcF.getActions().getActions().add(new DayOfWeekString());
+            srcF.getActions().add(new DayOfWeekString());
             tgtF.setPath("boxedStringField");
 
         } else if(clazz.isAssignableFrom(Integer.class)){
             srcF.setPath("intField");
-            srcF.getActions().getActions().add(new DayOfWeekInteger());
+            srcF.getActions().add(new DayOfWeekInteger());
             tgtF.setPath("boxedStringField");
         }
         

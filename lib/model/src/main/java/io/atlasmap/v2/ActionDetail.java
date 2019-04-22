@@ -2,6 +2,12 @@ package io.atlasmap.v2;
 
 import java.io.Serializable;
 import com.fasterxml.jackson.annotation.JsonRootName;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
+import com.fasterxml.jackson.module.jsonSchema.JsonSchemaGenerator;
+import com.fasterxml.jackson.module.jsonSchema.types.ObjectSchema;
+import com.fasterxml.jackson.module.jsonSchema.types.StringSchema;
 
 
 @JsonRootName("ActionDetail")
@@ -26,6 +32,8 @@ public class ActionDetail implements Serializable {
     protected CollectionType sourceCollectionType;
 
     protected CollectionType targetCollectionType;
+
+    protected ObjectSchema actionSchema;
 
     /**
      * Gets the value of the parameters property.
@@ -242,5 +250,32 @@ public class ActionDetail implements Serializable {
     public void setTargetCollectionType(CollectionType value) {
         this.targetCollectionType = value;
     }
+
+    public JsonSchema getActionSchema() {
+        return actionSchema;
+    }
+
+    public void setActionSchema(ObjectSchema actionSchema) {
+        this.actionSchema = actionSchema;
+    }
+
+    public void setActionSchema(Class<? extends Action> clazz) throws JsonMappingException {
+        setClassName(clazz.getName());
+        ObjectMapper mapper = new ObjectMapper();
+        JsonSchemaGenerator schemaGen = new JsonSchemaGenerator(mapper);
+        AtlasSchemaFactoryWrapper visitor = new AtlasSchemaFactoryWrapper();
+        mapper.acceptJsonFormatVisitor(clazz, visitor);
+        JsonSchema schema = visitor.finalSchema();
+        ObjectSchema objectSchema = schema.asObjectSchema();
+
+        // see: https://json-schema.org/understanding-json-schema/reference/generic.html#constant-values
+        String id = ActionResolver.toId(clazz);
+        objectSchema.setId(id);
+        AtlasSchemaFactoryWrapper.ExtendedJsonSchema keyField = (AtlasSchemaFactoryWrapper.ExtendedJsonSchema) objectSchema.getProperties().get("@type");
+        keyField.getMetadata().put("const", id);
+        setActionSchema(objectSchema);
+    }
+
+
 
 }

@@ -12,7 +12,5 @@ public class AtlasJsonModule extends SimpleModule {
 
     public AtlasJsonModule() {
         super(NAME, VERSION_UTIL.version());
-        addSerializer(Actions.class, new ActionsJsonSerializer());
-        addDeserializer(Actions.class, new ActionsJsonDeserializer());
     }
 }

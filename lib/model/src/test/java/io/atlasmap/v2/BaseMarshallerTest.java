@@ -27,6 +27,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
@@ -226,7 +228,7 @@ public abstract class BaseMarshallerTest {
             assertNotNull(f2.getActions());
 
             int i = 0;
-            for (Action a : f2.getActions().getActions()) {
+            for (Action a : f2.getActions()) {
                 if (a instanceof Camelize) {
                     i++;
                 }
@@ -278,7 +280,7 @@ public abstract class BaseMarshallerTest {
         table.getLookupEntry().add(l1);
         mapping.getLookupTables().getLookupTable().add(table);
 
-        Actions actions = generateActions();
+        ArrayList<Action> actions = generateActions();
         MockField inputField = generateMockField(key + "-input-value", actions);
         inputField.setName(key + "-input");
         inputField.setCustom("custom");
@@ -316,7 +318,7 @@ public abstract class BaseMarshallerTest {
 
     private void validateMockField(String key, Field f1) {
         assertNotNull(f1.getActions());
-        assertTrue(f1.getActions().getActions().get(0) instanceof Trim);
+        assertTrue(f1.getActions().get(0) instanceof Trim);
         assertTrue(f1 instanceof MockField);
         assertEquals(key, ((MockField) f1).getName());
         assertEquals("custom", ((MockField) f1).getCustom());
@@ -324,9 +326,9 @@ public abstract class BaseMarshallerTest {
     }
 
     protected void addMapPropertyField(AtlasMapping mapping, String key) {
-        Actions actions = new Actions();
+        ArrayList<Action> actions = new ArrayList<Action>();
         Action action = new Trim();
-        actions.getActions().add(action);
+        actions.add(action);
 
         MockField inputField = new MockField();
         inputField.setName(key + "-input");
@@ -433,13 +435,13 @@ public abstract class BaseMarshallerTest {
         assertNotNull(fm.getOutputField());
         Field o1 = fm.getOutputField().get(0);
         assertNotNull(o1.getActions());
-        assertTrue(o1.getActions().getActions().get(0) instanceof Trim);
+        assertTrue(o1.getActions().get(0) instanceof Trim);
         assertTrue(o1 instanceof MockField);
         assertEquals(key + "-output", ((MockField) o1).getName());
         validateField(key + "-output-value", o1, 0);
     }
 
-    private void populateField(String value, Actions actions, Field field, int n) {
+    private void populateField(String value, ArrayList<Action> actions, Field field, int n) {
         field.setValue(value);
         field.setArrayDimensions(n);
         field.setArraySize(n);
@@ -501,7 +503,7 @@ public abstract class BaseMarshallerTest {
 
     private void validateCommonFields(String value, Field f, int n) {
         assertNotNull(f.getActions());
-        assertTrue(f.getActions().getActions().get(0) instanceof Trim);
+        assertTrue(f.getActions().get(0) instanceof Trim);
         assertEquals(value, f.getValue());
         assertEquals("docid", f.getDocId());
         assertEquals(Integer.valueOf(n), f.getIndex());
@@ -611,7 +613,7 @@ public abstract class BaseMarshallerTest {
     }
 
     protected void addMapSimpleField(AtlasMapping mapping, String key) {
-        Actions actions = generateActions();
+        ArrayList<Action> actions = generateActions();
         SimpleField inputField = generateSimpleFidld(key + "-input-value", actions);
         inputField.setName(key + "-input");
         SimpleField outputField = generateSimpleFidld(key + "-output-value", actions);
@@ -625,10 +627,10 @@ public abstract class BaseMarshallerTest {
         mapping.getMappings().getMapping().add(fm);
     }
 
-    private Actions generateActions() {
-        Actions actions = new Actions();
+    private ArrayList<Action> generateActions() {
+        ArrayList<Action> actions = new ArrayList<Action>();
         Action action = new Trim();
-        actions.getActions().add(action);
+        actions.add(action);
         return actions;
     }
 
@@ -663,7 +665,7 @@ public abstract class BaseMarshallerTest {
     }
 
     protected void addMapConstantField(AtlasMapping mapping, String key) {
-        Actions actions = generateActions();
+        ArrayList<Action> actions = generateActions();
         ConstantField inputField = generateConstantField(key + "-input-value", actions);
         ConstantField outputField = generateConstantField(key + "-output-value", actions);
         Mapping fm = AtlasModelFactory.createMapping(MappingType.MAP);
@@ -675,19 +677,19 @@ public abstract class BaseMarshallerTest {
         mapping.getMappings().getMapping().add(fm);
     }
 
-    private ConstantField generateConstantField(String value, Actions actions) {
+    private ConstantField generateConstantField(String value, ArrayList<Action> actions) {
         ConstantField field = new ConstantField();
         populateField(value, actions, field, 3);
         return field;
     }
 
-    private SimpleField generateSimpleFidld(String value, Actions actions) {
+    private SimpleField generateSimpleFidld(String value, ArrayList<Action> actions) {
         SimpleField inputField = new SimpleField();
         populateField(value, actions, inputField, 3);
         return inputField;
     }
 
-    private MockField generateMockField(String value, Actions actions) {
+    private MockField generateMockField(String value, ArrayList<Action> actions) {
         MockField inputField = new MockField();
         populateField(value, actions, inputField, 3);
         return inputField;
@@ -712,10 +714,10 @@ public abstract class BaseMarshallerTest {
     protected void addManyToOneMapping(AtlasMapping model, String key) {
         Mapping fm = new Mapping();
         FieldGroup fg = new FieldGroup();
-        fg.setActions(new Actions());
+        fg.setActions(new ArrayList<Action>());
         Concatenate c = new Concatenate();
         c.setDelimiter(",");
-        fg.getActions().getActions().add(new Concatenate());
+        fg.getActions().add(new Concatenate());
         fm.setInputFieldGroup(fg);
 
         for (int i = 0; i < 3; i++) {
@@ -751,8 +753,8 @@ public abstract class BaseMarshallerTest {
         FieldGroup fg = mapping.getInputFieldGroup();
         assertEquals(3, fg.getField().size());
         assertNotNull(fg.getActions());
-        assertEquals(1, fg.getActions().getActions().size());
-        assertEquals(Concatenate.class, fg.getActions().getActions().get(0).getClass());
+        assertEquals(1, fg.getActions().size());
+        assertEquals(Concatenate.class, fg.getActions().get(0).getClass());
 
         for (int i = 0; i < 3; i++) {
             Field sf = mapping.getInputFieldGroup().getField().get(i);
@@ -768,7 +770,7 @@ public abstract class BaseMarshallerTest {
         assertNotNull(mapping.getOutputField());
         Field tf = mapping.getOutputField().get(0);
         assertNotNull(tf.getActions());
-        assertTrue(tf.getActions().getActions().get(0) instanceof Trim);
+        assertTrue(tf.getActions().get(0) instanceof Trim);
         assertTrue(tf instanceof MockField);
         assertEquals(key + "-output", ((MockField) tf).getName());
         validateField(key + "-output-value", tf, 0);
@@ -783,7 +785,7 @@ public abstract class BaseMarshallerTest {
         sourceField.setCustom("custom");
         Split split = new Split();
         split.setDelimiter(",");
-        sourceField.getActions().getActions().add(split);
+        sourceField.getActions().add(split);
         fm.getInputField().add(sourceField);
 
         for (int i = 0; i < 3; i++) {
@@ -811,8 +813,8 @@ public abstract class BaseMarshallerTest {
         assertEquals(key + "-input", ((MockField) sf).getName());
         validateField(key + "-input-value", sf, 3);
         assertNotNull(sf.getActions());
-        assertEquals(2, sf.getActions().getActions().size());
-        assertEquals(Split.class, sf.getActions().getActions().get(1).getClass());
+        assertEquals(2, sf.getActions().size());
+        assertEquals(Split.class, sf.getActions().get(1).getClass());
 
         for (int i = 0; i < 3; i++) {
             Field in = mapping.getOutputField().get(i);
@@ -851,7 +853,7 @@ public abstract class BaseMarshallerTest {
         assertNotNull(mapping.getOutputField());
         Field tf = mapping.getOutputField().get(0);
         assertNotNull(tf.getActions());
-        assertTrue(tf.getActions().getActions().get(0) instanceof Trim);
+        assertTrue(tf.getActions().get(0) instanceof Trim);
         assertTrue(tf instanceof MockField);
         assertEquals(key + "-output", ((MockField) tf).getName());
         validateField(key + "-output-value", tf, 0);

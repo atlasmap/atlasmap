@@ -25,36 +25,15 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.TestName;
 
-import io.atlasmap.v2.Actions;
-import io.atlasmap.v2.AtlasMapping;
-import io.atlasmap.v2.AtlasModelFactory;
-import io.atlasmap.v2.Camelize;
-import io.atlasmap.v2.Capitalize;
-import io.atlasmap.v2.CollectionType;
-import io.atlasmap.v2.DataSource;
-import io.atlasmap.v2.DataSourceType;
-import io.atlasmap.v2.FieldStatus;
-import io.atlasmap.v2.FieldType;
-import io.atlasmap.v2.Length;
-import io.atlasmap.v2.LookupEntry;
-import io.atlasmap.v2.LookupTable;
-import io.atlasmap.v2.Lowercase;
-import io.atlasmap.v2.Mapping;
-import io.atlasmap.v2.MappingType;
-import io.atlasmap.v2.Properties;
-import io.atlasmap.v2.Property;
-import io.atlasmap.v2.SeparateByDash;
-import io.atlasmap.v2.SeparateByUnderscore;
-import io.atlasmap.v2.Trim;
-import io.atlasmap.v2.TrimLeft;
-import io.atlasmap.v2.TrimRight;
-import io.atlasmap.v2.Uppercase;
+import io.atlasmap.v2.*;
 
 public abstract class BaseMarshallerTest {
 
@@ -176,17 +155,17 @@ public abstract class BaseMarshallerTest {
     }
 
     private void generateActions(JsonField inputField) {
-        Actions actions = new Actions();
-        actions.getActions().add(new Camelize());
-        actions.getActions().add(new Capitalize());
-        actions.getActions().add(new Length());
-        actions.getActions().add(new Lowercase());
-        actions.getActions().add(new SeparateByDash());
-        actions.getActions().add(new SeparateByUnderscore());
-        actions.getActions().add(new Trim());
-        actions.getActions().add(new TrimLeft());
-        actions.getActions().add(new TrimRight());
-        actions.getActions().add(new Uppercase());
+        ArrayList<Action> actions = new ArrayList<Action>();
+        actions.add(new Camelize());
+        actions.add(new Capitalize());
+        actions.add(new Length());
+        actions.add(new Lowercase());
+        actions.add(new SeparateByDash());
+        actions.add(new SeparateByUnderscore());
+        actions.add(new Trim());
+        actions.add(new TrimLeft());
+        actions.add(new TrimRight());
+        actions.add(new Uppercase());
         inputField.setActions(actions);
     }
 
@@ -270,7 +249,7 @@ public abstract class BaseMarshallerTest {
     }
 
     private void validateJsonField(JsonField field) {
-        assertEquals(10, field.getActions().getActions().size());
+        assertEquals(10, field.getActions().size());
         assertEquals(Integer.valueOf(3), field.getArrayDimensions());
         assertEquals(Integer.valueOf(3), field.getArraySize());
         assertEquals(CollectionType.ARRAY, field.getCollectionType());

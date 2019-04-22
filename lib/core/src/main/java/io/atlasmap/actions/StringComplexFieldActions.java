@@ -23,6 +23,7 @@ import java.util.UUID;
 import java.util.regex.Pattern;
 
 import io.atlasmap.api.AtlasFieldAction;
+import io.atlasmap.spi.AtlasActionProcessor;
 import io.atlasmap.spi.AtlasFieldActionInfo;
 import io.atlasmap.v2.Action;
 import io.atlasmap.v2.Append;
@@ -198,19 +199,16 @@ public class StringComplexFieldActions implements AtlasFieldAction {
         return builder.toString();
     }
 
-    @AtlasFieldActionInfo(name = "Prepend", sourceType = FieldType.STRING, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
-    public static String prepend(Action action, Object input) {
-        if (!(action instanceof Prepend)) {
-            throw new IllegalArgumentException("Action must be a Prepend action");
-        }
-        String string = ((Prepend) action).getString();
-        if (input == null && string == null) {
-            return null;
+    @AtlasActionProcessor
+    public static String prepend(Prepend action, String input) {
+        String string = action.getString();
+        if (input == null) {
+            return string;
         }
         if (string == null) {
-            return input.toString();
+            return input;
         }
-        return input == null ? string : string.concat(input.toString());
+        return string.concat(input);
     }
 
     @AtlasFieldActionInfo(name = "ReplaceAll", sourceType = FieldType.STRING, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)

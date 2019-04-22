@@ -138,10 +138,11 @@ public class GenerateFieldActionsMojo extends AbstractAtlasMapMojo {
         ClassLoader origTccl = Thread.currentThread().getContextClassLoader();
         ActionDetails answer = new ActionDetails();
         try (URLClassLoader loader = new URLClassLoader(urls.toArray(new URL[urls.size()]), origTccl)) {
-            answer.getActionDetail().addAll(fieldActionService.loadFieldActions(loader));
+            fieldActionService.init(loader);
         } catch (Exception e) {
             throw new MojoExecutionException("Could not load field actions:", e);
         }
+        answer.getActionDetail().addAll(fieldActionService.listActionDetails());
 
         writeToJsonFile(DEFAULT_OUTPUT_FILE_PREFIX, answer);
     }

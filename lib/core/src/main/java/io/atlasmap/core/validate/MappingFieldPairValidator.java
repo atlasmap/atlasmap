@@ -121,11 +121,11 @@ public class MappingFieldPairValidator {
     }
 
     private FieldType getActionOutputFieldType(List<Validation> validations, String mappingId, Field f) {
-        if (f.getActions() == null || f.getActions().getActions().size() == 0) {
+        if (f.getActions() == null || f.getActions().size() == 0) {
             return null;
         }
 
-        Action lastAction = f.getActions().getActions().get(f.getActions().getActions().size()-1);
+        Action lastAction = f.getActions().get(f.getActions().size()-1);
         ActionDetail detail = null;
         try {
             detail = service.getFieldActionService().findActionDetail(lastAction, f.getFieldType());
