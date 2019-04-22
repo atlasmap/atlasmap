@@ -285,7 +285,7 @@ public class JavaJavaCollectionTest extends AtlasMappingBaseTest {
     @Test
     public void testProcessCollectionFieldAction() throws Exception {
         AtlasContext context = atlasContextFactory.createContext(
-                new File("src/test/resources/javaToJava/atlasmapping-collection-fieldaction.json").toURI());
+                new File("src/test/resources/javaToJava/atlasmapping-collection-fieldaction2.json").toURI());
         SourceCollectionsClass source = new SourceCollectionsClass();
         LinkedList<String> list = new LinkedList<>();
         list.addAll(Arrays.asList(new String[] {"linkedList0", "linkedList1", "linkedList2"}));
@@ -298,6 +298,6 @@ public class JavaJavaCollectionTest extends AtlasMappingBaseTest {
         TargetCollectionsClass targetCollections = (TargetCollectionsClass) session.getTargetDocument("TargetCollectionsClass");
         ArrayList<String> result = targetCollections.getArrayList();
         assertEquals(1, result.size());
-        assertEquals("linkedList0-linkedList1-linkedList2", result.get(0));
+        assertEquals("linkedList0#linkedList1#linkedList2", result.get(0));
     }
 }

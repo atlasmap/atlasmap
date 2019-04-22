@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.ServiceLoader;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.DatabindContext;
@@ -14,7 +12,6 @@ import com.fasterxml.jackson.databind.jsontype.TypeIdResolver;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 
 public class SimpleResolver implements TypeIdResolver {
-
 
     protected final HashMap<Class<?>, String> typeToId = new HashMap<Class<?>, String>();
     protected final HashMap<String, JavaType> idToType = new HashMap<String, JavaType>();
