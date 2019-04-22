@@ -31,20 +31,21 @@ public class SimpleResolver implements TypeIdResolver {
             Class<?> c = o.getClass();
             if (c != baseClass && baseClass.isAssignableFrom(c)) {
                 JsonTypeName jsonAnnoation = c.getAnnotation(JsonTypeName.class);
-                String shortName = null;
-                if (jsonAnnoation != null && jsonAnnoation.value() != null) {
-                    shortName = jsonAnnoation.value();
-                } else {
-                    XmlRootElement xmlAnnoation = c.getAnnotation(XmlRootElement.class);
-                    if (xmlAnnoation != null && xmlAnnoation.name() != null) {
-                        shortName = xmlAnnoation.name();
+
+                // Use short ids for classes in the same package..
+                String id = null;
+                if ( c.getPackage().getName().equals(baseClass.getPackage().getName()) ) {
+                    if (jsonAnnoation != null && jsonAnnoation.value() != null) {
+                        id = jsonAnnoation.value();
                     } else {
-                        shortName = c.getSimpleName();
+                        id = c.getSimpleName();
                     }
+                } else {
+                    // All other extensions need fully qualified names.
+                    id = c.getName();
                 }
-                typeToId.put(c, shortName);
-                idToType.put(shortName, TypeFactory.defaultInstance().constructSpecializedType(baseType, c));
-                idToType.put(c.getName(), TypeFactory.defaultInstance().constructSpecializedType(baseType, c));
+                typeToId.put(c, id);
+                idToType.put(id, TypeFactory.defaultInstance().constructSpecializedType(baseType, c));
             }
         }
     }

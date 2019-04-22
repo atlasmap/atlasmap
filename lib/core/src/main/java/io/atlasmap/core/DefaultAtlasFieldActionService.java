@@ -17,7 +17,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.TypeFactory;
+import com.fasterxml.jackson.module.jsonSchema.JsonSchemaGenerator;
 
 import io.atlasmap.api.AtlasConversionException;
 import io.atlasmap.api.AtlasException;
@@ -31,7 +34,7 @@ import io.atlasmap.v2.Action;
 import io.atlasmap.v2.ActionDetail;
 import io.atlasmap.v2.ActionParameter;
 import io.atlasmap.v2.ActionParameters;
-import io.atlasmap.v2.SimpleResolver;
+import io.atlasmap.v2.ActionResolver;
 import io.atlasmap.v2.AtlasModelFactory;
 import io.atlasmap.v2.AuditStatus;
 import io.atlasmap.v2.CollectionType;
@@ -46,7 +49,6 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
     private static final Logger LOG = LoggerFactory.getLogger(DefaultAtlasFieldActionService.class);
     private List<ActionProcessor> actionProcessors = new ArrayList<>();
     private AtlasConversionService conversionService = null;
-    private SimpleResolver actionResolver = new SimpleResolver();
 
     public DefaultAtlasFieldActionService(AtlasConversionService conversionService) {
         this.conversionService = conversionService;
@@ -63,7 +65,6 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
     }
 
     public void init(ClassLoader classLoader) {
-        actionResolver.init(javaType(Action.class));
         actionProcessors.clear();
         actionProcessors.addAll(loadFieldActions(classLoader));
     }
@@ -222,7 +223,7 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
         final Class<?> sourceClass = method.getParameterCount() >= 2 ? method.getParameterTypes()[1] : null;
         final Class<?> targetClass = method.getReturnType();
 
-        String name = actionResolver.idFromValueAndType(null, actionClazz);
+        String name = ActionResolver.toId(actionClazz);
 
         ActionDetail det = new ActionDetail();
         det.setClassName(clazz.getName());
