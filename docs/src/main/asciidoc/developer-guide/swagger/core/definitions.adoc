@@ -2,12 +2,26 @@
 [[_atlas-service-core-definitions]]
 == Definitions
 
+[[_atlas-service-core-action]]
+=== Action
+
+[options="header", cols=".^3a,.^4a"]
+|===
+|Name|Schema
+|**@type** +
+__optional__ +
+__read-only__|string
+|===
+
+
 [[_atlas-service-core-actiondetail]]
 === ActionDetail
 
 [options="header", cols=".^3a,.^4a"]
 |===
 |Name|Schema
+|**actionSchema** +
+__optional__|<<_atlas-service-core-jsonschema,JsonSchema>>
 |**className** +
 __optional__|string
 |**custom** +
@@ -68,11 +82,6 @@ __optional__|< string > array
 |**parameter** +
 __optional__|< <<_atlas-service-core-actionparameter,ActionParameter>> > array
 |===
-
-
-[[_atlas-service-core-actions]]
-=== Actions
-__Type__ : object
 
 
 [[_atlas-service-core-atlaslibraryloader]]
@@ -226,7 +235,7 @@ __optional__|string
 |===
 |Name|Schema
 |**actions** +
-__optional__|<<_atlas-service-core-actions,Actions>>
+__optional__|< <<_atlas-service-core-action,Action>> > array
 |**arrayDimensions** +
 __optional__|integer (int32)
 |**arraySize** +
@@ -259,7 +268,7 @@ __optional__|object
 |===
 |Name|Schema
 |**actions** +
-__optional__|<<_atlas-service-core-actions,Actions>>
+__optional__|< <<_atlas-service-core-action,Action>> > array
 |**arrayDimensions** +
 __optional__|integer (int32)
 |**arraySize** +
@@ -295,6 +304,31 @@ __optional__|object
 |Name|Schema
 |**expression** +
 __optional__|string
+|===
+
+
+[[_atlas-service-core-jsonschema]]
+=== JsonSchema
+
+[options="header", cols=".^3a,.^4a"]
+|===
+|Name|Schema
+|**description** +
+__optional__|string
+|**disallow** +
+__optional__|< <<_atlas-service-core-jsonschema,JsonSchema>> > array
+|**extends** +
+__optional__|< <<_atlas-service-core-jsonschema,JsonSchema>> > array
+|**get$ref** +
+__optional__|string
+|**get$schema** +
+__optional__|string
+|**id** +
+__optional__|string
+|**readonly** +
+__optional__|boolean
+|**required** +
+__optional__|boolean
 |===
 
 

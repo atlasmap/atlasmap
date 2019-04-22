@@ -2,9 +2,16 @@
 [[_atlas-service-json-definitions]]
 == Definitions
 
-[[_atlas-service-json-actions]]
-=== Actions
-__Type__ : object
+[[_atlas-service-json-action]]
+=== Action
+
+[options="header", cols=".^3a,.^4a"]
+|===
+|Name|Schema
+|**@type** +
+__optional__ +
+__read-only__|string
+|===
 
 
 [[_atlas-service-json-field]]
@@ -14,7 +21,7 @@ __Type__ : object
 |===
 |Name|Schema
 |**actions** +
-__optional__|<<_atlas-service-json-actions,Actions>>
+__optional__|< <<_atlas-service-json-action,Action>> > array
 |**arrayDimensions** +
 __optional__|integer (int32)
 |**arraySize** +

@@ -2,9 +2,16 @@
 [[_atlas-service-java-definitions]]
 == Definitions
 
-[[_atlas-service-java-actions]]
-=== Actions
-__Type__ : object
+[[_atlas-service-java-action]]
+=== Action
+
+[options="header", cols=".^3a,.^4a"]
+|===
+|Name|Schema
+|**@type** +
+__optional__ +
+__read-only__|string
+|===
 
 
 [[_atlas-service-java-javaclass]]
@@ -14,7 +21,7 @@ __Type__ : object
 |===
 |Name|Schema
 |**actions** +
-__optional__|<<_atlas-service-java-actions,Actions>>
+__optional__|< <<_atlas-service-java-action,Action>> > array
 |**annonymous** +
 __optional__|boolean
 |**annotation** +
@@ -89,7 +96,7 @@ __optional__|object
 |===
 |Name|Schema
 |**actions** +
-__optional__|<<_atlas-service-java-actions,Actions>>
+__optional__|< <<_atlas-service-java-action,Action>> > array
 |**arrayDimensions** +
 __optional__|integer (int32)
 |**arraySize** +
@@ -139,7 +146,7 @@ __optional__|< <<_atlas-service-java-javaenumfield,JavaEnumField>> > array
 |===
 |Name|Schema
 |**actions** +
-__optional__|<<_atlas-service-java-actions,Actions>>
+__optional__|< <<_atlas-service-java-action,Action>> > array
 |**annotations** +
 __optional__|<<_atlas-service-java-stringlist,StringList>>
 |**arrayDimensions** +
