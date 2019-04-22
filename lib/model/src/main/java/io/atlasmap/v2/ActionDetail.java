@@ -260,6 +260,12 @@ public class ActionDetail implements Serializable {
     }
 
     public void setActionSchema(Class<? extends Action> clazz) throws JsonMappingException {
+
+        if (clazz == null) {
+            setActionSchema((ObjectSchema)null);
+            return;
+        }
+
         setClassName(clazz.getName());
         ObjectMapper mapper = new ObjectMapper();
         JsonSchemaGenerator schemaGen = new JsonSchemaGenerator(mapper);
