@@ -13,6 +13,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import io.atlasmap.api.AtlasConversionException;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.spi.AtlasInternalSession;
@@ -26,6 +28,7 @@ import io.atlasmap.v2.FieldGroup;
 import io.atlasmap.v2.FieldType;
 import io.atlasmap.v2.GenerateUUID;
 import io.atlasmap.v2.IndexOf;
+import io.atlasmap.v2.Prepend;
 import io.atlasmap.v2.SimpleField;
 import io.atlasmap.v2.Trim;
 import io.atlasmap.v2.Uppercase;
@@ -69,7 +72,12 @@ public class DefaultAtlasFieldActionsServiceTest {
 
     @Test
     public void testFindActionDetail() throws Exception {
-        ActionDetail actionDetail = fieldActionsService.findActionDetail(new IndexOf(), FieldType.STRING);
+
+        ActionDetail actionDetail = fieldActionsService.findActionDetail(new Prepend(), FieldType.STRING);
+        assertNotNull(actionDetail);
+        System.out.println(new ObjectMapper().writeValueAsString(actionDetail.getActionSchema()));
+
+        actionDetail = fieldActionsService.findActionDetail(new IndexOf(), FieldType.STRING);
         assertNotNull(actionDetail);
 
         actionDetail = fieldActionsService.findActionDetail(new Action() {}, FieldType.STRING);

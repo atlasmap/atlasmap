@@ -127,12 +127,18 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
         det.setSourceCollectionType(annotation.sourceCollectionType());
         det.setTargetCollectionType(annotation.targetCollectionType());
 
-        Class<?> actionClazz;
+        Class<? extends Action> actionClazz;
         try {
-            actionClazz = Class.forName("io.atlasmap.v2." + annotation.name());
+            actionClazz = (Class<? extends Action>) Class.forName("io.atlasmap.v2." + annotation.name());
         } catch (Exception e) {
-            actionClazz = clazz;
+            actionClazz = null;
             det.setCustom(true);
+        }
+
+        try {
+            det.setActionSchema(actionClazz);
+        } catch (Exception e) {
+            LOG.error(String.format("Could not get json schema for action=%s msg=%s", annotation.name(), e.getMessage()), e);
         }
 
         try {
@@ -215,10 +221,14 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
         if (method.getParameterCount() >= 1) {
             LOG.debug("Invalid @AtlasActionProcessor method.  Expected at least 1 parameter: " + method);
         }
-        Class<?> actionClazz = method.getParameterTypes()[0];
-        if (actionClazz.isAssignableFrom(Action.class)) {
+
+        Class<? extends Action> actionClazz = null;
+        if (Action.class.isAssignableFrom(method.getParameterTypes()[0])) {
+            actionClazz = (Class<? extends Action>) method.getParameterTypes()[0];
+        } else {
             LOG.debug("Invalid @AtlasActionProcessor method.  1st parameter does not subclass " + Action.class.getName() + ": " + method);
         }
+
 
         final Class<?> sourceClass = method.getParameterCount() >= 2 ? method.getParameterTypes()[1] : null;
         final Class<?> targetClass = method.getReturnType();
@@ -233,6 +243,12 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
         det.setTargetType(toFieldType(targetClass));
         det.setSourceCollectionType(toFieldCollectionType(sourceClass));
         det.setTargetCollectionType(toFieldCollectionType(targetClass));
+
+        try {
+            det.setActionSchema(actionClazz);
+        } catch (Exception e) {
+            LOG.error(String.format("Could not get json schema for action=%s msg=%s", clazz.getName(), e.getMessage()), e);
+        }
 
         try {
             det.setParameters(detectFieldActionParameters(actionClazz));
