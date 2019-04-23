@@ -30,6 +30,6 @@ public interface ExpressionContext {
      * @param name
      * @return
      */
-    Object getVariable(String name);
+    Object getVariable(String name) throws ExpressionException;
 
 }

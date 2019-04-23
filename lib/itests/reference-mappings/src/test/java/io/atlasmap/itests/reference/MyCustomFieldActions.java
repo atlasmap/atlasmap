@@ -18,7 +18,7 @@ package io.atlasmap.itests.reference;
 import java.util.Iterator;
 import java.util.List;
 
-import io.atlasmap.api.AtlasFieldAction;
+import io.atlasmap.spi.AtlasFieldAction;
 import io.atlasmap.spi.AtlasFieldActionInfo;
 import io.atlasmap.v2.CollectionType;
 import io.atlasmap.v2.FieldType;

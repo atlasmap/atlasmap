@@ -15,6 +15,10 @@
  */
 package io.atlasmap.api;
 
-public interface AtlasConverter<T> {
+/**
+ * @deprecated Use <link>io.atlasmap.spi.AtlasConverter</link>
+ */
+@Deprecated
+public interface AtlasConverter<T> extends io.atlasmap.spi.AtlasConverter<T> {
 
 }

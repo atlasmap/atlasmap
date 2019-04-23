@@ -37,7 +37,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.atlasmap.api.AtlasConversionException;
-import io.atlasmap.api.AtlasConverter;
+import io.atlasmap.spi.AtlasConverter;
 import io.atlasmap.spi.AtlasConversionInfo;
 import io.atlasmap.spi.AtlasConversionService;
 import io.atlasmap.v2.FieldType;
@@ -157,69 +157,74 @@ public class DefaultAtlasConversionService implements AtlasConversionService {
         ClassLoader classLoader = this.getClass().getClassLoader();
         final ServiceLoader<AtlasConverter> converterServiceLoader = ServiceLoader.load(AtlasConverter.class,
                 classLoader);
+        final ServiceLoader<io.atlasmap.api.AtlasConverter> compat = ServiceLoader.load(io.atlasmap.api.AtlasConverter.class,
+                classLoader);
 
         // used to load up methods first;
         Map<ConverterKey, ConverterMethodHolder> methodsLoadMap = new LinkedHashMap<>();
         Map<ConverterKey, ConverterMethodHolder> customMethodsLoadMap = new LinkedHashMap<>();
 
-        for (final AtlasConverter<?> atlasConverter : converterServiceLoader) {
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("Loading converter : " + atlasConverter.getClass().getCanonicalName());
-            }
-
-            boolean inbuiltConverter = atlasConverter.getClass().getPackage().getName().startsWith("io.atlasmap");
-
-            Class<?> klass = atlasConverter.getClass();
-            // collect all the specific conversion methods on the class
-            while (klass != Object.class) {
-                final List<Method> allMethods = new ArrayList<>(Arrays.asList(klass.getDeclaredMethods()));
-                for (final Method method : allMethods) {
-                    // we filter out methods which aren't annotated @AtlasconversionInfo and have to
-                    // also filter out methods which are synthetic methods to avoid duplicates
-                    if (method.isAnnotationPresent(AtlasConversionInfo.class) && method.getParameters().length > 0
-                            && !method.isSynthetic()) {
-                        String sourceClassName = method.getParameters()[0].getType().getCanonicalName();
-                        ConverterKey coordinate = new ConverterKey(sourceClassName,
-                                method.getReturnType().getCanonicalName());
-                        // if the method has three arguments and the last two as strings then they used
-                        // as the format attributes
-                        boolean containsFormat = false;
-                        if (method.getParameters().length == 3 && method.getParameters()[1].getType() == String.class
-                                && method.getParameters()[2].getType() == String.class) {
-                            containsFormat = true;
-                        }
-
-                        boolean staticMethod = Modifier.isStatic(method.getModifiers());
-                        ConverterMethodHolder methodHolder = new ConverterMethodHolder(atlasConverter, method,
-                                staticMethod, containsFormat);
-                        if (inbuiltConverter) {
-                            if (!methodsLoadMap.containsKey(coordinate)) {
-                                methodsLoadMap.put(coordinate, methodHolder);
-                            } else {
-                                LOG.warn("Converter between " + sourceClassName + " and "
-                                        + method.getReturnType().getCanonicalName() + " aleady exists.");
-                            }
-                        } else {
-                            if (!customMethodsLoadMap.containsKey(coordinate)) {
-                                customMethodsLoadMap.put(coordinate, methodHolder);
-                            } else {
-                                LOG.warn("Custom converter between " + sourceClassName + " and "
-                                        + method.getReturnType().getCanonicalName() + " aleady exists.");
-                            }
-                        }
-                    }
-                }
-                // move to the upper class in the hierarchy in search for more methods
-                klass = klass.getSuperclass();
-            }
-
-        }
+        converterServiceLoader.forEach(atlasConverter -> loadConverterMethod(atlasConverter, methodsLoadMap, customMethodsLoadMap));
+        compat.forEach(atlasConverter -> loadConverterMethod(atlasConverter, methodsLoadMap, customMethodsLoadMap));
 
         if (!methodsLoadMap.isEmpty()) {
             converterMethods = Collections.unmodifiableMap(methodsLoadMap);
         }
         if (!methodsLoadMap.isEmpty()) {
             customConverterMethods = Collections.unmodifiableMap(customMethodsLoadMap);
+        }
+    }
+
+    private void loadConverterMethod(AtlasConverter<?> atlasConverter,
+        Map<ConverterKey, ConverterMethodHolder> methodsLoadMap, Map<ConverterKey, ConverterMethodHolder> customMethodsLoadMap) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Loading converter : " + atlasConverter.getClass().getCanonicalName());
+        }
+
+        boolean inbuiltConverter = atlasConverter.getClass().getPackage().getName().startsWith("io.atlasmap");
+
+        Class<?> klass = atlasConverter.getClass();
+        // collect all the specific conversion methods on the class
+        while (klass != Object.class) {
+            final List<Method> allMethods = new ArrayList<>(Arrays.asList(klass.getDeclaredMethods()));
+            for (final Method method : allMethods) {
+                // we filter out methods which aren't annotated @AtlasconversionInfo and have to
+                // also filter out methods which are synthetic methods to avoid duplicates
+                if (method.isAnnotationPresent(AtlasConversionInfo.class) && method.getParameters().length > 0
+                        && !method.isSynthetic()) {
+                    String sourceClassName = method.getParameters()[0].getType().getCanonicalName();
+                    ConverterKey coordinate = new ConverterKey(sourceClassName,
+                            method.getReturnType().getCanonicalName());
+                    // if the method has three arguments and the last two as strings then they used
+                    // as the format attributes
+                    boolean containsFormat = false;
+                    if (method.getParameters().length == 3 && method.getParameters()[1].getType() == String.class
+                            && method.getParameters()[2].getType() == String.class) {
+                        containsFormat = true;
+                    }
+
+                    boolean staticMethod = Modifier.isStatic(method.getModifiers());
+                    ConverterMethodHolder methodHolder = new ConverterMethodHolder(atlasConverter, method, staticMethod,
+                            containsFormat);
+                    if (inbuiltConverter) {
+                        if (!methodsLoadMap.containsKey(coordinate)) {
+                            methodsLoadMap.put(coordinate, methodHolder);
+                        } else {
+                            LOG.warn("Converter between " + sourceClassName + " and "
+                                    + method.getReturnType().getCanonicalName() + " aleady exists.");
+                        }
+                    } else {
+                        if (!customMethodsLoadMap.containsKey(coordinate)) {
+                            customMethodsLoadMap.put(coordinate, methodHolder);
+                        } else {
+                            LOG.warn("Custom converter between " + sourceClassName + " and "
+                                    + method.getReturnType().getCanonicalName() + " aleady exists.");
+                        }
+                    }
+                }
+            }
+            // move to the upper class in the hierarchy in search for more methods
+            klass = klass.getSuperclass();
         }
     }
 

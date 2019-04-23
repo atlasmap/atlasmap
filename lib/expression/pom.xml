@@ -31,7 +31,7 @@
   <version>1.40.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
-  <name>${project.artifactId}</name>
+  <name>Atlas :: Expression</name>
 
   <dependencies>
 

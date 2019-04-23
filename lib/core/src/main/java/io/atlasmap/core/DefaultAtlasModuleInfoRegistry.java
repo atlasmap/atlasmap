@@ -77,10 +77,12 @@ public class DefaultAtlasModuleInfoRegistry implements AtlasModuleInfoRegistry {
     private void registerModuleJmx(AtlasModuleInfo module) {
         try {
             String n = jmxObjectNamePrefix + module.getName();
-            ManagementFactory.getPlatformMBeanServer().registerMBean(module, new ObjectName(n));
-
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("Registered AtlasModule '" + module.getName() + "' with JMX");
+            ObjectName on = new ObjectName(n);
+            if (!ManagementFactory.getPlatformMBeanServer().isRegistered(on)) {
+                ManagementFactory.getPlatformMBeanServer().registerMBean(module, on);
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Registered AtlasModule '" + module.getName() + "' with JMX");
+                }
             }
         } catch (Exception e) {
             LOG.warn("Unable to register AtlasModule '" + module.getName() + "' with JMX", e);
@@ -90,7 +92,10 @@ public class DefaultAtlasModuleInfoRegistry implements AtlasModuleInfoRegistry {
     private void unregisterModuleJmx(AtlasModuleInfo module) {
         try {
             String n = jmxObjectNamePrefix + module.getName();
-            ManagementFactory.getPlatformMBeanServer().unregisterMBean(new ObjectName(n));
+            ObjectName on = new ObjectName(n);
+            if (ManagementFactory.getPlatformMBeanServer().isRegistered(on)) {
+                ManagementFactory.getPlatformMBeanServer().unregisterMBean(on);
+            }
         } catch (Exception e) {
             LOG.warn("Unable to unregister module '" + module.getName() + "' from JMX");
         }

@@ -41,6 +41,11 @@
       <artifactId>atlas-api</artifactId>
     </dependency>
     <dependency>
+      <groupId>io.atlasmap</groupId>
+      <artifactId>atlasmap-expression</artifactId>
+    </dependency>
+
+    <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
     </dependency>

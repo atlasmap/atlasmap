@@ -24,7 +24,7 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
-import io.atlasmap.api.AtlasFieldAction;
+import io.atlasmap.spi.AtlasFieldAction;
 import io.atlasmap.spi.AtlasFieldActionInfo;
 import io.atlasmap.v2.Action;
 import io.atlasmap.v2.AreaUnitType;

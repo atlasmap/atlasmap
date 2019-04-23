@@ -144,9 +144,9 @@ public class AtlasServiceTest {
         jarOut.closeEntry();
         jarOut.putNextEntry(new JarEntry("META-INF/services/"));
         jarOut.closeEntry();
-        JarEntry svcEntry = new JarEntry("META-INF/services/io.atlasmap.api.AtlasFieldAction");
+        JarEntry svcEntry = new JarEntry("META-INF/services/io.atlasmap.spi.AtlasFieldAction");
         jarOut.putNextEntry(svcEntry);
-        in = new BufferedInputStream(new FileInputStream("src/test/resources/upload/META-INF/services/io.atlasmap.api.AtlasFieldAction"));
+        in = new BufferedInputStream(new FileInputStream("src/test/resources/upload/META-INF/services/io.atlasmap.spi.AtlasFieldAction"));
         while ((count = in.read(buffer)) != -1) {
             jarOut.write(buffer, 0, count);
         }

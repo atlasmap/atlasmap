@@ -3,3 +3,4 @@ io.atlasmap.actions.StringComplexFieldActions
 io.atlasmap.actions.NumberFieldActions
 io.atlasmap.actions.ObjectFieldActions
 io.atlasmap.actions.DateFieldActions
+io.atlasmap.actions.ExpressionFieldAction
