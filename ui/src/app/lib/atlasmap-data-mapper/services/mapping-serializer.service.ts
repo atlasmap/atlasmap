@@ -89,16 +89,24 @@ export class MappingSerializer {
     const actions = [];
 
     if (fieldMappingPair.transition.isCombineMode()) {
-      let delimiter = fieldMappingPair.transition.getActualDelimiter();
+      if (fieldMappingPair.transition.enableExpression) {
+        actions[0] = {
+          'Expression' : {
+            'expression' : fieldMappingPair.transition.expression
+          }
+        };
+      } else {
+        let delimiter = fieldMappingPair.transition.getActualDelimiter();
 
-      if (fieldMappingPair.transition.delimiter === TransitionDelimiter.USER_DEFINED) {
-        delimiter = fieldMappingPair.transition.userDelimiter;
-      }
-      actions[0] = {
-        'Concatenate' : {
-          'delimiter' : delimiter
+        if (fieldMappingPair.transition.delimiter === TransitionDelimiter.USER_DEFINED) {
+          delimiter = fieldMappingPair.transition.userDelimiter;
         }
-      };
+        actions[0] = {
+          'Concatenate' : {
+            'delimiter' : delimiter
+          }
+        };
+      }
     }
     const inputFieldGroup: any = {
         'jsonType': ConfigModel.mappingServicesPackagePrefix + '.FieldGroup',
@@ -287,13 +295,21 @@ export class MappingSerializer {
         'docId': field.docDef.id,
       };
 
+      if (isSource && fields.length === 1 && fieldPair.transition.enableExpression) {
+        serializedField['actions'] = [ {
+          'Expression' : {
+            'expression' : fieldPair.transition.expression
+          }
+        } ];
+      }
+
       if (fieldPair.transition.isSeparateMode() && field.isSource()) {
         let delimiter = fieldPair.transition.getActualDelimiter();
 
         if (fieldPair.transition.delimiter === TransitionDelimiter.USER_DEFINED) {
           delimiter = fieldPair.transition.userDelimiter;
         }
-        serializedField['actions'] =  [ {
+        serializedField['actions'] = [ {
           'Split' : {
             'delimiter' : delimiter
           }
@@ -492,22 +508,28 @@ export class MappingSerializer {
 
       // Check for an InputFieldGroup containing a concatenate action inferring combine mode.
       if (fieldMapping.inputFieldGroup.actions[0]) {
-        const concatDelimiter = fieldMapping.inputFieldGroup.actions[0].Concatenate.delimiter;
-        if (concatDelimiter) {
+        if (fieldMapping.inputFieldGroup.actions[0].Expression) {
           fieldPair.transition.mode = TransitionMode.COMBINE;
-          fieldPair.transition.delimiter =
-            TransitionModel.getTransitionDelimiterFromActual(concatDelimiter);
+          fieldPair.transition.enableExpression = true;
+          fieldPair.transition.expression = fieldMapping.inputFieldGroup.actions[0].Expression.expression;
+        } else if (fieldMapping.inputFieldGroup.actions[0].Concatenate) {
+          const concatDelimiter = fieldMapping.inputFieldGroup.actions[0].Concatenate.delimiter;
+          if (concatDelimiter) {
+            fieldPair.transition.mode = TransitionMode.COMBINE;
+            fieldPair.transition.delimiter =
+              TransitionModel.getTransitionDelimiterFromActual(concatDelimiter);
 
-          if (fieldPair.transition.delimiter === TransitionDelimiter.USER_DEFINED) {
-            fieldPair.transition.userDelimiter = concatDelimiter;
+            if (fieldPair.transition.delimiter === TransitionDelimiter.USER_DEFINED) {
+              fieldPair.transition.userDelimiter = concatDelimiter;
+            }
           }
         }
       }
     } else {
       inputField = fieldMapping.inputField;
 
-      // Check for an InputField containing a split action inferring separate mode.
       if (inputField[0].actions && inputField[0].actions[0]) {
+        // Check for an InputField containing a split action inferring separate mode.
         if (inputField[0].actions[0].Split) {
           const splitDelimiter = inputField[0].actions[0].Split.delimiter;
           if (splitDelimiter) {
@@ -518,6 +540,9 @@ export class MappingSerializer {
               fieldPair.transition.userDelimiter = splitDelimiter;
             }
           }
+        } else if (inputField[0].actions[0].Expression) {
+          fieldPair.transition.enableExpression = true;
+          fieldPair.transition.expression = fieldMapping.inputFieldGroup.actions[0].Expression.expression;
         }
       }
     }
