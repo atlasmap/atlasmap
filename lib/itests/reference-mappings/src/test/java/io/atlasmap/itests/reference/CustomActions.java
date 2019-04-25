@@ -16,11 +16,10 @@
 package io.atlasmap.itests.reference;
 
 import java.util.Collection;
-import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
-import io.atlasmap.api.AtlasFieldAction;
+import io.atlasmap.spi.AtlasFieldAction;
 import io.atlasmap.spi.AtlasActionProcessor;
 import io.atlasmap.v2.Action;
 import io.atlasmap.v2.AtlasActionProperty;

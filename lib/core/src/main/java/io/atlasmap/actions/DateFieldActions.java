@@ -20,7 +20,7 @@ import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
-import io.atlasmap.api.AtlasFieldAction;
+import io.atlasmap.spi.AtlasFieldAction;
 import io.atlasmap.spi.AtlasFieldActionInfo;
 import io.atlasmap.v2.Action;
 import io.atlasmap.v2.AddDays;

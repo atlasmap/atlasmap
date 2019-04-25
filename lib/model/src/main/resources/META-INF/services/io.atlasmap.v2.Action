@@ -24,6 +24,7 @@ io.atlasmap.v2.DayOfYear
 io.atlasmap.v2.Divide
 io.atlasmap.v2.EndsWith
 io.atlasmap.v2.Equals
+io.atlasmap.v2.Expression
 io.atlasmap.v2.FileExtension
 io.atlasmap.v2.Floor
 io.atlasmap.v2.Format

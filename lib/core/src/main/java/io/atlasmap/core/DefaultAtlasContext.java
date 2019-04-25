@@ -187,9 +187,11 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
         try {
             setJmxObjectName(new ObjectName(
                     getDefaultAtlasContextFactory().getJmxObjectName() + ",context=Contexts,uuid=" + uuid.toString()));
-            ManagementFactory.getPlatformMBeanServer().registerMBean(this, getJmxObjectName());
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("Registered AtlasContext {} with JMX", context.getUuid());
+            if (ManagementFactory.getPlatformMBeanServer().isRegistered(getJmxObjectName())) {
+                ManagementFactory.getPlatformMBeanServer().registerMBean(this, getJmxObjectName());
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Registered AtlasContext {} with JMX", context.getUuid());
+                }
             }
         } catch (Exception t) {
             LOG.warn("Failed to register AtlasContext {} with JMX", context.getUuid());

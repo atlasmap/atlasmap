@@ -26,7 +26,7 @@ import java.time.ZonedDateTime;
 import java.util.Date;
 
 import io.atlasmap.api.AtlasConversionException;
-import io.atlasmap.api.AtlasConverter;
+import io.atlasmap.spi.AtlasConverter;
 import io.atlasmap.api.AtlasUnsupportedException;
 import io.atlasmap.spi.AtlasConversionConcern;
 import io.atlasmap.spi.AtlasConversionInfo;

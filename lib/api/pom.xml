@@ -37,6 +37,10 @@
       <groupId>io.atlasmap</groupId>
       <artifactId>atlas-model</artifactId>
     </dependency>
+    <dependency>
+      <groupId>io.atlasmap</groupId>
+      <artifactId>atlasmap-expression</artifactId>
+    </dependency>
   </dependencies>
 
 </project>

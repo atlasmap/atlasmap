@@ -13,12 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.atlasmap.api;
+package io.atlasmap.spi;
 
-/**
- * @deprecated Use <link>io.atlasmap.spi.AtlasFieldAction</link>
- */
-@Deprecated
-public interface AtlasFieldAction extends io.atlasmap.spi.AtlasFieldAction {
+public interface AtlasConverter<T> {
 
 }

@@ -30,6 +30,7 @@ import io.atlasmap.v2.AtlasMapping;
 import io.atlasmap.v2.BaseMapping;
 import io.atlasmap.v2.DataSource;
 import io.atlasmap.v2.Field;
+import io.atlasmap.v2.FieldGroup;
 import io.atlasmap.v2.LookupTable;
 import io.atlasmap.v2.LookupTables;
 import io.atlasmap.v2.Mapping;
@@ -270,10 +271,12 @@ public class DefaultAtlasValidationService implements AtlasValidationService {
     private void validateMapMapping(List<Mapping> fieldMappings, List<Validation> validations, Set<String> usedIds) {
         for (Mapping fieldMapping : fieldMappings) {
             String mappingId = fieldMapping.getId();
+            FieldGroup sourceFieldGroup = fieldMapping.getInputFieldGroup();
+            List<Field> sourceFields = sourceFieldGroup != null ? sourceFieldGroup.getField() : fieldMapping.getInputField();
             validateMappingId(mappingId, usedIds, validations);
-            Validators.MAP_INPUT_NOT_NULL.get().validate(fieldMapping.getInputField(), validations, mappingId);
+            Validators.MAP_INPUT_NOT_NULL.get().validate(sourceFields, validations, mappingId);
             if (fieldMapping.getInputField() != null) {
-                Validators.MAP_INPUT_FIELD_NOT_EMPTY.get().validate(fieldMapping.getInputField(), validations, mappingId);
+                Validators.MAP_INPUT_FIELD_NOT_EMPTY.get().validate(sourceFields, validations, mappingId);
             }
             Validators.MAP_OUTPUT_NOT_NULL.get().validate(fieldMapping.getOutputField(), validations,
                     mappingId, ValidationStatus.WARN);

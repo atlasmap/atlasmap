@@ -22,7 +22,7 @@ import com.fasterxml.jackson.databind.type.TypeFactory;
 
 import io.atlasmap.api.AtlasConversionException;
 import io.atlasmap.api.AtlasException;
-import io.atlasmap.api.AtlasFieldAction;
+import io.atlasmap.spi.AtlasFieldAction;
 import io.atlasmap.spi.AtlasActionProcessor;
 import io.atlasmap.spi.AtlasConversionService;
 import io.atlasmap.spi.AtlasFieldActionInfo;
@@ -80,34 +80,39 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
     public List<ActionProcessor> loadFieldActions(ClassLoader classLoader) {
         final ServiceLoader<AtlasFieldAction> fieldActionServiceLoader = ServiceLoader.load(AtlasFieldAction.class,
             classLoader);
+        final ServiceLoader<io.atlasmap.api.AtlasFieldAction> compat = ServiceLoader.load(io.atlasmap.api.AtlasFieldAction.class,
+            classLoader);
         List<ActionProcessor> answer = new ArrayList<>();
-        for (final AtlasFieldAction atlasFieldAction : fieldActionServiceLoader) {
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("Loading FieldAction class: " + atlasFieldAction.getClass().getCanonicalName());
-            }
-
-            Class<?> clazz = atlasFieldAction.getClass();
-            Method[] methods = clazz.getMethods();
-            for (Method method : methods) {
-
-                // Continue supporting creating details from @AtlasFieldActionInfo
-                ActionProcessor det = createDetailFromFieldActionInfo(clazz, method);
-                if (det != null) {
-                    answer.add(det);
-                }
-
-                // Also support using new simpler @AtlasActionProcessor
-                det = createDetailFromProcessor(clazz, method);
-                if (det != null) {
-                    answer.add(det);
-                }
-            }
-        }
+        fieldActionServiceLoader.forEach(atlasFieldAction -> createActionProcessor(atlasFieldAction, answer));
+        compat.forEach(atlasFieldAction -> createActionProcessor(atlasFieldAction, answer));
 
         if (LOG.isDebugEnabled()) {
             LOG.debug(String.format("Loaded %s Field Actions", answer.size()));
         }
         return answer;
+    }
+
+    private void createActionProcessor(AtlasFieldAction atlasFieldAction, List<ActionProcessor> answer) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Loading FieldAction class: " + atlasFieldAction.getClass().getCanonicalName());
+        }
+
+        Class<?> clazz = atlasFieldAction.getClass();
+        Method[] methods = clazz.getMethods();
+        for (Method method : methods) {
+
+            // Continue supporting creating details from @AtlasFieldActionInfo
+            ActionProcessor det = createDetailFromFieldActionInfo(clazz, method);
+            if (det != null) {
+                answer.add(det);
+            }
+
+            // Also support using new simpler @AtlasActionProcessor
+            det = createDetailFromProcessor(clazz, method);
+            if (det != null) {
+                answer.add(det);
+            }
+        }
     }
 
     private ActionProcessor createDetailFromFieldActionInfo(final Class<?> clazz, final Method method) {
@@ -250,7 +255,6 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
 
 
         Type[] genericParameterTypes = method.getGenericParameterTypes();
-        System.out.println(Arrays.asList(genericParameterTypes));
         if( genericParameterTypes.length >= 2) {
             Class<?> sourceClass = method.getParameterTypes()[1];
             det.setSourceType(toFieldType(sourceClass, method.getGenericParameterTypes()[1]));

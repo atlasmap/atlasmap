@@ -20,7 +20,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import io.atlasmap.api.AtlasConverter;
+import io.atlasmap.spi.AtlasConverter;
 import io.atlasmap.core.validate.MappingFieldPairValidator;
 import io.atlasmap.java.v2.JavaField;
 import io.atlasmap.spi.AtlasConversionInfo;

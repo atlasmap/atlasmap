@@ -19,7 +19,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
 
-import io.atlasmap.api.AtlasFieldAction;
+import io.atlasmap.spi.AtlasFieldAction;
 import io.atlasmap.spi.AtlasFieldActionInfo;
 import io.atlasmap.v2.Action;
 import io.atlasmap.v2.CollectionSize;

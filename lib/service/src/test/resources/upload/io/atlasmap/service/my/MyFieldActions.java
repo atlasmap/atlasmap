@@ -1,6 +1,6 @@
 package io.atlasmap.service.my;
 
-import io.atlasmap.api.AtlasFieldAction;
+import io.atlasmap.spi.AtlasFieldAction;
 import io.atlasmap.spi.AtlasFieldActionInfo;
 import io.atlasmap.v2.Action;
 import io.atlasmap.v2.CollectionType;

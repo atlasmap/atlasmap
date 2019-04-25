@@ -1,0 +1,48 @@
+{
+  "AtlasMapping" : {
+    "jsonType" : "io.atlasmap.v2.AtlasMapping",
+    "dataSource" : [ {
+      "jsonType" : "io.atlasmap.v2.DataSource",
+      "id" : "con",
+      "uri" : "atlas:java?className=io.atlasmap.java.test.SourceContact",
+      "dataSourceType" : "SOURCE"
+    }, {
+      "jsonType" : "io.atlasmap.v2.DataSource",
+      "id" : "addr",
+      "uri" : "atlas:java?className=io.atlasmap.java.test.SourceAddress",
+      "dataSourceType" : "SOURCE"
+    }, {
+      "jsonType" : "io.atlasmap.v2.DataSource",
+      "uri" : "atlas:java?className=io.atlasmap.java.test.TargetContact",
+      "dataSourceType" : "TARGET"
+    } ],
+    "mappings" : {
+      "mapping" : [ {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "MAP",
+        "inputFieldGroup" : {
+          "jsonType": "io.atlasmap.v2.FieldGroup",
+          "field": [{
+              "jsonType": "io.atlasmap.java.v2.JavaField",
+              "docId": "con",
+              "path": "/firstName"
+            },
+            {
+              "jsonType": "io.atlasmap.java.v2.JavaField",
+              "docId": "addr",
+              "path": "/zipCode"
+            }],
+          "actions": [{
+            "@type": "Expression",
+            "expression": "${0} + ${1}"
+            }]
+          },
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "path" : "/firstName"
+        }]
+      }]
+    },
+    "name" : "JavaJavaMultiSourceBasic"
+  }
+}

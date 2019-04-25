@@ -34,8 +34,6 @@ import java.util.UUID;
 import javax.management.MalformedObjectNameException;
 import javax.management.ObjectName;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -131,9 +129,11 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
         unloadModules();
 
         try {
-            ManagementFactory.getPlatformMBeanServer().unregisterMBean(getJmxObjectName());
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("Unregistered AtlasContextFactory with JMX");
+            if (ManagementFactory.getPlatformMBeanServer().isRegistered(getJmxObjectName())) {
+                ManagementFactory.getPlatformMBeanServer().unregisterMBean(getJmxObjectName());
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Unregistered AtlasContextFactory with JMX");
+                }
             }
         } catch (Exception e) {
             LOG.warn("Unable to unregister with JMX", e);
@@ -461,11 +461,16 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
     }
 
     protected void registerFactoryJmx(DefaultAtlasContextFactory factory) {
+        if (factory == null) {
+            return;
+        }
         try {
-            setObjectName();
-            ManagementFactory.getPlatformMBeanServer().registerMBean(factory, factory.getJmxObjectName());
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("Registered AtlasContextFactory with JMX");
+            factory.setObjectName();
+            if (!ManagementFactory.getPlatformMBeanServer().isRegistered(factory.getJmxObjectName())) {
+                ManagementFactory.getPlatformMBeanServer().registerMBean(factory, factory.getJmxObjectName());
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Registered AtlasContextFactory with JMX");
+                }
             }
         } catch (Exception e) {
             LOG.warn("Unable to resgister DefaultAtlasContextFactory with JMX", e);

@@ -28,7 +28,7 @@ import java.util.Date;
 import java.util.regex.Pattern;
 
 import io.atlasmap.api.AtlasConversionException;
-import io.atlasmap.api.AtlasConverter;
+import io.atlasmap.spi.AtlasConverter;
 import io.atlasmap.spi.AtlasConversionConcern;
 import io.atlasmap.spi.AtlasConversionInfo;
 import io.atlasmap.v2.FieldType;
