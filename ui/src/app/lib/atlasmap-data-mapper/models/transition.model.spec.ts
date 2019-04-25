@@ -30,10 +30,10 @@ describe('FieldActionConfig.appliesToField()', () => {
       pair = new FieldMappingPair();
       pair.sourceFields.splice(0);
       source = new Field();
-      pair.addField(source, true);
+      pair.addField(source, true, false);
       pair.targetFields.splice(0);
       target = new Field();
-      pair.addField(target, false);
+      pair.addField(target, false, false);
     });
 
     it('should return false if FieldMappingPair is null', () => {

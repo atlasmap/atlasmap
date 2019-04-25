@@ -19,6 +19,7 @@ import { Component, Input } from '@angular/core';
 import { ConfigModel } from '../../models/config.model';
 import { FieldMappingPair, MappedField } from '../../models/mapping.model';
 import { DocumentDefinition } from '../../models/document-definition.model';
+import { Field } from '../../models/field.model';
 
 @Component({
   selector: 'simple-mapping',
@@ -127,11 +128,6 @@ export class SimpleMappingComponent {
     return this.isSource ? 'Add Source' : 'Add Target';
   }
 
-  addClicked(): void {
-    this.fieldPair.addField(DocumentDefinition.getNoneField(), this.isSource);
-    this.cfg.mappingService.updateMappedField(this.fieldPair, this.isSource, false);
-  }
-
   removePair(): void {
     this.cfg.mappingService.removeMappedPair(this.fieldPair);
   }
@@ -139,7 +135,7 @@ export class SimpleMappingComponent {
   removeMappedField(mappedField: MappedField): void {
     this.fieldPair.removeMappedField(mappedField, this.isSource);
     if (this.fieldPair.getMappedFields(this.isSource).length === 0) {
-      this.fieldPair.addField(DocumentDefinition.getNoneField(), this.isSource);
+      this.fieldPair.addField(DocumentDefinition.getNoneField(), this.isSource, true);
     }
     this.cfg.mappingService.updateMappedField(this.fieldPair, this.isSource, true);
   }

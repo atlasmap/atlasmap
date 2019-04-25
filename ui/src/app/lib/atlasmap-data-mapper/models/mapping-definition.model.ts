@@ -150,12 +150,12 @@ export class MappingDefinition {
 
   isMappingStale(mapping: MappingModel, sourceFieldPaths: string[], targetSourcePaths: string[]): boolean {
     for (const field of mapping.getFields(true)) {
-      if (sourceFieldPaths.indexOf(field.path) === -1) {
+      if ((field !== DocumentDefinition.getNoneField()) && (sourceFieldPaths.indexOf(field.path) === -1)) {
         return true;
       }
     }
     for (const field of mapping.getFields(false)) {
-      if (targetSourcePaths.indexOf(field.path) === -1) {
+      if ((field !== DocumentDefinition.getNoneField()) && (targetSourcePaths.indexOf(field.path) === -1)) {
         return true;
       }
     }
@@ -333,6 +333,7 @@ export class MappingDefinition {
 
     for (const mappedField of mappedFields) {
       let doc: DocumentDefinition = null;
+
       if (mappedField.parsedData.fieldIsProperty) {
         doc = cfg.propertyDoc;
       } else if (mappedField.parsedData.fieldIsConstant) {

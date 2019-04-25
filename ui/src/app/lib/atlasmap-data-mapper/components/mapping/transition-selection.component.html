@@ -1,27 +1,20 @@
-<div class="mappingFieldContainer TransitionSelection" *ngIf="cfg.mappings.activeMapping">
-  <div class="MappingFieldSection">
-    <div *ngIf="modeIsEnum()" class="enumSection">
-      <label>{{ getMappedValueCount() }} values mapped</label>
-      <i class="fa fa-edit link" (click)="showLookupTable()"></i>
-    </div>
-    <div *ngIf="!modeIsEnum()">
-      <label>Action</label>
-      <form [formGroup]="selectActionForm">
-        <select id="selectAction" formControlName="selectAction" (change)="selectionChanged($event);" selector="mode" [ngModel]="fieldPair.transition.mode">
-          <option value="{{modes.COMBINE}}">Combine</option>
-          <option value="{{modes.MAP}}">Map</option>
-          <option value="{{modes.SEPARATE}}">Separate</option>
-        </select>
-      </form>
-      <div class="clear"></div>
-    </div>
-    <div *ngIf="fieldPair.transition.isSeparateMode() || fieldPair.transition.isCombineMode()" style="margin-top:10px;">
-      <label>Separator</label>
-      <select id="select-separator" (change)="selectionChanged($event);" selector="separator" [ngModel]="fieldPair.transition.delimiter">
-        <ng-container *ngFor="let delimiter of delimiters">
-          <option *ngIf="modeIsSupported(delimiter)" value="{{delimiter.delimiter}}">{{ delimiter.prettyName }}</option>
+<div class="TransitionSelection" *ngIf="cfg.mappings.activeMapping">
+
+  <div *ngIf="modeIsEnum()" class="enumSection">
+    <label>{{ getMappedValueCount() }} values mapped</label>
+    <i class="fa fa-edit link" (click)="showLookupTable()"></i>
+  </div>
+
+  <div *ngIf="fieldPair.transition.isCombineMode() || fieldPair.transition.isSeparateMode()">
+    <label tooltip="Enter a separator delimiter character" >Separator:
+      <select class="combobox" name="separator" id="separator" [ngModel]="fieldPair.transition.delimiter">
+        <ng-container *ngFor="let delimiter of delimiters" id="delimiter">
+          <option *ngIf="modeIsSupported(delimiter)" value="{{ delimiter.delimiter }}">
+            <label *ngIf="isUserDelimiter(delimiter); else standardDelimiter">{{ fieldPair.transition.userDelimiter }}</label>
+            <ng-template #standardDelimiter>{{ delimiter.prettyName }}</ng-template>
+          </option>
         </ng-container>
       </select>
-    </div>
-  </div>
+    </label>
+
 </div>

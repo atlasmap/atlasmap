@@ -1,4 +1,5 @@
 <div class="mappingFieldContainer" *ngIf="fieldPair">
+
   <div *ngFor="let mappedField of fieldPair.getMappedFields(isSource)" class="MappingFieldSection" on-mouseover='handleMouseOver($event)'
     [attr.draggable]="true" (dragstart)="startDrag($event, mappedField)" (drop)="endDrag($event, mappedField)"
     (dragenter)="dragEnterLeave($event, true)" (dragleave)="dragEnterLeave($event, false)" (dragover)="allowDrop($event)">
@@ -7,8 +8,4 @@
     <mapping-field-action [fieldPair]="fieldPair" [cfg]="cfg" [isSource]="isSource" [mappedField]="mappedField"></mapping-field-action>
   </div>
 
-  <!-- 'Add Source/ Add Target' button -->
-  <div class="linkContainer" *ngIf="isAddButtonVisible()">
-    <button type="button" class="btn btn-primary" (click)="addClicked()">{{ getAddButtonLabel() }}</button>
-  </div>
 </div>

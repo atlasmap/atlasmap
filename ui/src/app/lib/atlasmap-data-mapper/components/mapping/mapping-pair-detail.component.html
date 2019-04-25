@@ -1,8 +1,7 @@
 <div>
   <collapsable-header title="Sources" #sourcesHeader class="sources"></collapsable-header>
   <simple-mapping [cfg]="cfg" [isSource]="true" *ngIf="!sourcesHeader.collapsed" [fieldPair]="fieldPair"></simple-mapping>
-  <collapsable-header title="Action" #actionsHeader></collapsable-header>
-  <transition-selection [cfg]="cfg" [modalWindow]="modalWindow" [fieldPair]="fieldPair" *ngIf="!actionsHeader.collapsed"></transition-selection>
+
   <collapsable-header title="Targets" #targetsHeader></collapsable-header>
   <simple-mapping [cfg]="cfg" [isSource]="false" *ngIf="!targetsHeader.collapsed" [fieldPair]="fieldPair"></simple-mapping>
 </div>

@@ -6,7 +6,9 @@
         <i class="fa fa-trash link pull-right" aria-hidden="true" (click)="removeMapping($event)" tooltip="Remove the current mapping" placement="left"></i>
       </h2>
     </div>
+
     <div class="fieldMappingDetail-body">
+
       <div class="alert alert-danger" *ngFor="let error of cfg.mappings.activeMapping.getValidationErrors()">
         <a class="close" (click)="cfg.mappings.activeMapping.removeValidationError(error.identifier)">
           <i class="fa fa-close"></i>
@@ -21,7 +23,6 @@
         <label>{{ warn.message }}</label>
       </alert>
 
-      <!-- TODO reflect UXD outcome -->
       <div class="alert alert-danger" *ngFor="let error of cfg.mappings.activeMapping.getPreviewErrors()">
         <a class="close" (click)="cfg.mappings.activeMapping.removePreviewError(error.identifier)">
           <i class="fa fa-close"></i>
@@ -36,10 +37,61 @@
         <label>{{ warn.message }}</label>
       </alert>
 
-      <!-- <div *ngIf="!isMappingCollection()"> -->
-        <mapping-pair-detail *ngFor="let fieldPair of cfg.mappings.activeMapping.fieldMappings" [cfg]="cfg" [fieldPair]="fieldPair"
-          [modalWindow]="modalWindow"></mapping-pair-detail>
-      <!-- </div> -->
+      <div class="wizard-pf" embed-in-page="true">
+        <div class="wizard-pf-body">
+
+          <!-- Sources row -->
+          <div class="wizard-pf-row">
+            <div class="wizard-pf-sidebar">
+
+              <div class="mapping-detail-icon-container">
+                <span class="fa-stack">
+                  <i class="fa fa-circle-thin fa-stack-2x"></i>
+                  <i class="fa fa-hdd-o fa-stack-1x"></i>
+                </span>
+              </div>
+            </div>
+
+            <div>
+              <collapsable-header title="Sources" #sourcesHeader class="mapping-sources"></collapsable-header>
+              <ng-container *ngIf="!sourcesHeader.collapsed">
+                <div *ngFor="let fieldPair of cfg.mappings.activeMapping.fieldMappings">
+                  <input-mapping [cfg]="cfg" [fieldPair]="fieldPair" [isSource]="true" [modalWindow]="modalWindow">
+                  </input-mapping>
+                  <simple-mapping [cfg]="cfg" [fieldPair]="fieldPair" [isSource]="true" [modalWindow]="modalWindow">
+                  </simple-mapping>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+
+          <!-- Targets row -->
+          <div class="wizard-pf-row">
+            <div class="wizard-pf-sidebar">
+
+              <div class="mapping-detail-icon-container-bottom">
+                <span class="fa-stack">
+                  <i class="fa fa-circle-thin fa-stack-2x"></i>
+                  <i class="fa fa-download fa-stack-1x"></i>
+                </span>
+              </div>
+            </div>
+
+            <div>
+              <collapsable-header title="Targets" #targetsHeader></collapsable-header>
+              <ng-container *ngIf="!targetsHeader.collapsed">
+                <div *ngFor="let fieldPair of cfg.mappings.activeMapping.fieldMappings">
+                  <input-mapping [cfg]="cfg" [fieldPair]="fieldPair" [isSource]="false" [modalWindow]="modalWindow">
+                  </input-mapping>
+                  <simple-mapping [cfg]="cfg" [fieldPair]="fieldPair" [isSource]="false" [modalWindow]="modalWindow">
+                  </simple-mapping>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <collection-mapping [cfg]="cfg" *ngIf="isMappingCollection()"></collection-mapping>
     </div>
   </div>

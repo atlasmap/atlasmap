@@ -189,4 +189,8 @@ export class MappingFieldActionComponent {
       return argConfig.values[argValIndex];
     }
   }
+
+  displayTransformationAction(action): boolean {
+    return (action.name !== 'Split');
+  }
 }

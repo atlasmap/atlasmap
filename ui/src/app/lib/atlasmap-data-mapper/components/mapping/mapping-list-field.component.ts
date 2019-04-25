@@ -18,7 +18,6 @@ import { Component, Input } from '@angular/core';
 
 import { ConfigModel } from '../../models/config.model';
 import { MappedField } from '../../models/mapping.model';
-import { DocumentDefinition } from '../../models/document-definition.model';
 
 @Component({
   selector: 'mapping-list-field',
@@ -37,7 +36,7 @@ export class MappingListFieldComponent {
 
   getFieldPath(): string {
     if (this.mappedField == null || this.mappedField.field == null
-      || (this.mappedField.field === DocumentDefinition.getNoneField())) {
+      || (this.mappedField.isNoneField())) {
       return '[None]';
     }
     return this.mappedField.field.getFieldLabel(ConfigModel.getConfig().showTypes, true);
@@ -46,7 +45,7 @@ export class MappingListFieldComponent {
   displayParentObject(): boolean {
     if (this.mappedField == null || this.mappedField.field == null
       || this.mappedField.field.docDef == null
-      || (this.mappedField.field === DocumentDefinition.getNoneField())) {
+      || (this.mappedField.isNoneField())) {
       return false;
     }
     return true;

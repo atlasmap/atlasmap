@@ -22,6 +22,7 @@ import { Observable, Subscription, Subject, forkJoin } from 'rxjs';
 import { map, timeout } from 'rxjs/operators';
 
 import { ConfigModel } from '../models/config.model';
+import { DocumentDefinition } from '../models/document-definition.model';
 import { DataMapperUtil } from '../common/data-mapper-util';
 import { InspectionType } from '../common/config.types';
 import { Field } from '../models/field.model';
@@ -463,7 +464,7 @@ export class MappingManagementService {
     fieldPair.updateTransition(removeField.isSource(), compoundSelection, true);
 
     // If the removed field was the last field of this pairing then remove the field pair as well.
-    if (fields.length === 0 && compoundSelection) {
+    if (fields.length === 1 && compoundSelection) {
       this.removeMappedPair(fieldPair);
     }
     this.saveCurrentMapping();
@@ -484,7 +485,7 @@ export class MappingManagementService {
    */
   addActiveMappingField(field: Field): void {
     const mappingPair: FieldMappingPair = this.cfg.mappings.activeMapping.getFirstFieldMapping();
-    let suggestedValue = '0';
+    let suggestedValue = '1';
     if (mappingPair.transition == null || field == null) {
       return;
     }
@@ -497,8 +498,9 @@ export class MappingManagementService {
                 ').  Recommend using field action \'Combine\'.', null);
         return;
       }
-      suggestedValue = mappingPair.sourceFields[mappingPair.sourceFields.length - 1].actions[0].argumentValues[0].value;
-
+      if (mappingPair.sourceFields[mappingPair.sourceFields.length - 1].actions.length > 0) {
+        suggestedValue = mappingPair.sourceFields[mappingPair.sourceFields.length - 1].actions[0].argumentValues[0].value;
+      }
     } else if (mappingPair.transition.mode === TransitionMode.SEPARATE) {
       if (field.isSource()) {
 
@@ -508,7 +510,9 @@ export class MappingManagementService {
                 ').  Recommend using field action \'Separate\'.', null);
         return;
       }
-      suggestedValue = mappingPair.targetFields[mappingPair.targetFields.length - 1].actions[0].argumentValues[0].value;
+      if (mappingPair.targetFields[mappingPair.targetFields.length - 1].actions.length > 0) {
+        suggestedValue = mappingPair.targetFields[mappingPair.targetFields.length - 1].actions[0].argumentValues[0].value;
+      }
     }
     const newMField = new MappedField;
     newMField.field = field;
@@ -529,6 +533,33 @@ export class MappingManagementService {
     const activeMapping: MappingModel = this.cfg.mappings.activeMapping;
     const mappingPair: FieldMappingPair = activeMapping.getCurrentFieldMapping();
     this.removeMappedFieldPairField(mappingPair, field, compoundSelection);
+  }
+
+  /**
+   * Auto-transition from MAP mode to either COMBINE or SEPARATE mode.
+   *
+   * @param fieldPair
+   * @param field
+   */
+  transitionMode(fieldPair: FieldMappingPair, field: Field): void {
+    if (fieldPair.transition.mode === TransitionMode.MAP) {
+      const mappedFields: MappedField[] = fieldPair.getMappedFields(field.isSource());
+      if (mappedFields.length > 1) {
+        if (field.isSource()) {
+          fieldPair.transition.mode = TransitionMode.COMBINE;
+          mappedFields[1].updateSeparateOrCombineFieldAction(false, true, '1', true, true, false);
+          this.cfg.errorService.info(
+            'Note: You\'ve selected multiple fields to combine.  ' +
+            'You may want to examine the separator character in the \'Sources\' box of the Mapping Details section.', null);
+        } else {
+          fieldPair.transition.mode = TransitionMode.SEPARATE;
+          mappedFields[1].updateSeparateOrCombineFieldAction(true, false, '1', false, true, false);
+          this.cfg.errorService.info(
+            'Note: You\'ve selected multiple fields to separate into.  ' +
+            'You may want to examine the separator character in the \'Sources\' box of the Mapping Details section.', null);
+        }
+      }
+    }
   }
 
   fieldSelected(field: Field, compoundSelection: boolean): void {
@@ -583,7 +614,7 @@ export class MappingManagementService {
     // Check to see if the field is a valid selection for this mapping
     const exclusionReason: string = mapping.getFieldSelectionExclusionReason(field);
     if (exclusionReason != null) {
-      this.cfg.errorService.mappingError('The field \'' + field.displayName + '\' cannot be selected, ' + exclusionReason + '.', null);
+      this.cfg.errorService.mappingError('The field \'' + field.name + '\' cannot be selected, ' + exclusionReason + '.', null);
       return;
     }
 
@@ -592,37 +623,21 @@ export class MappingManagementService {
     const latestFieldPair: FieldMappingPair = mapping.getCurrentFieldMapping();
     if (latestFieldPair != null) {
       const lastMappedField: MappedField = latestFieldPair.getLastMappedField(field.isSource());
-      if (lastMappedField != null && lastMappedField.field.name.length === 0) {
+      if (lastMappedField != null && lastMappedField.isNoneField()) {
         lastMappedField.field = field;
       }
       if (!fieldRemoved) {
-
-        // Auto-transition from MAP mode to either COMBINE or SEPARATE if the user has
-        // compound-selected another field.
-        if (latestFieldPair.transition.mode === TransitionMode.MAP) {
-          const mappedFields: MappedField[] = latestFieldPair.getMappedFields(field.isSource());
-          if (mappedFields.length > 1) {
-            if (field.isSource()) {
-              latestFieldPair.transition.mode = TransitionMode.COMBINE;
-              mappedFields[0].updateSeparateOrCombineFieldAction(false, true, '1', true, compoundSelection, false);
-              this.cfg.errorService.info(
-                'Note: Auto-transitioning to field action \'Combine\'.  ' +
-                'You may want to examine the separator character in the Action box of the Mapping Details section.', null);
-            } else {
-              latestFieldPair.transition.mode = TransitionMode.SEPARATE;
-              mappedFields[0].updateSeparateOrCombineFieldAction(true, false, '1', false, compoundSelection, false);
-              this.cfg.errorService.info(
-                'Note: Auto-transitioning to field action \'Separate\'.  ' +
-                'You may want to examine the separator character in the Action box of the Mapping Details section.', null);
-            }
-          }
+        if (compoundSelection || this.hasMultipleMappings(latestFieldPair)) {
+          this.transitionMode(latestFieldPair, field);
         }
-
         latestFieldPair.updateTransition(field.isSource(), compoundSelection, fieldRemoved);
         this.selectMapping(mapping);
-        this.saveCurrentMapping();
       }
     }
+  }
+
+  hasMultipleMappings(fieldPair: FieldMappingPair): boolean {
+    return (fieldPair.sourceFields.length > 2 || fieldPair.targetFields.length > 2);
   }
 
   /**
