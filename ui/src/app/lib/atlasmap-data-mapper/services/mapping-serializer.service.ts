@@ -437,10 +437,8 @@ export class MappingSerializer {
   }
 
   /**
-   * Deserialize a field mapping based on its mapping type.  This is deprecated in favor of 
+   * Deserialize a field mapping based on its mapping type.  This is deprecated in favor of
    * concatenate/ split actions.
-   *
-   * @deprecated
    *
    * @param fieldPair
    * @param fieldMapping
@@ -471,7 +469,7 @@ export class MappingSerializer {
       fieldPair.transition.mode = TransitionMode.ENUM;
     } else {
       fieldPair.transition.mode = TransitionMode.MAP;
-    } 
+    }
   }
 
   static deserializeFieldMapping(
