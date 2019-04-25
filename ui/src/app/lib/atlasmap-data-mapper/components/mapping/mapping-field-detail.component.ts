@@ -82,7 +82,7 @@ export class MappingFieldDetailComponent implements OnInit {
 
   getFieldPath(): string {
     if (this.mappedField == null || this.mappedField.field == null
-      || (this.mappedField.field === DocumentDefinition.getNoneField())) {
+      || (this.mappedField.isNoneField())) {
       return '[None]';
     }
     return this.mappedField.field.path;
@@ -96,7 +96,7 @@ export class MappingFieldDetailComponent implements OnInit {
     if (this.mappedField == null || this.mappedField.field == null
       || this.mappedField.field.name.length === 0
       || this.mappedField.field.docDef == null
-      || (this.mappedField.field === DocumentDefinition.getNoneField())) {
+      || (this.mappedField.isNoneField())) {
       return false;
     }
     if (this.parentObjectName == null || this.parentObjectName.length === 0) {
@@ -135,14 +135,16 @@ export class MappingFieldDetailComponent implements OnInit {
   selectionChanged(event: any): void {
     this.mappedField.field = event.item['field'];
     this.searchFilter = this.mappedField.field.getFieldLabel(this.cfg.showTypes, false);
-    this.cfg.mappingService.updateMappedField(this.fieldPair, this.mappedField.field.isSource(), false);
+    this.fieldPair.updateTransition(this.mappedField.field.isSource(), true, false);
+    this.cfg.mappingService.transitionMode(this.fieldPair, this.mappedField.field);
+    this.cfg.mappingService.saveCurrentMapping();
     this.updateTemplateValues();
   }
 
   removeMappedField(mappedField: MappedField): void {
     this.fieldPair.removeMappedField(mappedField, this.isSource);
     if (this.fieldPair.getMappedFields(this.isSource).length === 0) {
-      this.fieldPair.addField(DocumentDefinition.getNoneField(), this.isSource);
+      this.fieldPair.addField(DocumentDefinition.getNoneField(), this.isSource, true);
     }
     this.cfg.mappingService.updateMappedField(this.fieldPair, this.isSource, true);
   }
@@ -152,11 +154,43 @@ export class MappingFieldDetailComponent implements OnInit {
   }
 
   hasActionIndex(mappedField: MappedField): boolean {
-    if (mappedField.field.name.length > 0 && mappedField.actions != null &&
+    if (!mappedField.isNoneField() && mappedField.field.name.length > 0 && mappedField.actions != null &&
         mappedField.actions.length > 0 && mappedField.actions[0].argumentValues != null &&
         mappedField.actions[0].argumentValues.length > 0 && mappedField.actions[0].isSeparateOrCombineMode) {
       return true;
     } else { return false; }
+  }
+
+  getSearchPlaceholder(): string {
+    return 'Begin typing to search for more ' + (this.isSource ? 'sources' : 'targets');
+  }
+
+  displaySeparator(): boolean {
+    return (this.mappedField.isNoneField() && this.isSource &&
+      (this.fieldPair.transition.isSeparateMode() || this.fieldPair.transition.isCombineMode()));
+  }
+
+  displayFieldSearchBox(): boolean {
+
+    if (this.mappedField.isPadField()) {
+      return false;
+    }
+
+    if ((this.fieldPair.transition.mode === TransitionMode.MAP) ||
+        (this.mappedField.field.name.length > 0)) {
+      return true;
+    }
+
+    if (this.isSource) {
+      if (this.fieldPair.transition.mode === TransitionMode.COMBINE) {
+        return true;
+      }
+    } else {
+      if (this.fieldPair.transition.mode === TransitionMode.SEPARATE) {
+        return true;
+      }
+    }
+    return false;
   }
 
   /**

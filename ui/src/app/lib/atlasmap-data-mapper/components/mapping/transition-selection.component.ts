@@ -14,96 +14,95 @@
     limitations under the License.
 */
 
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 
 import { TransitionMode, TransitionDelimiter, TransitionModel, TransitionDelimiterModel } from '../../models/transition.model';
 import { ConfigModel } from '../../models/config.model';
 import { LookupTable } from '../../models/lookup-table.model';
 import { MappingModel, FieldMappingPair } from '../../models/mapping.model';
-
+import { ErrorHandlerService } from '../../services/error-handler.service';
 import { ModalWindowComponent } from '../modal-window.component';
 import { LookupTableComponent } from './lookup-table.component';
 
 @Component({
   selector: 'transition-selection',
-  templateUrl: './transition-selection.component.html',
+  templateUrl: './transition-selection.component.html'
 })
 
-export class TransitionSelectionComponent {
+export class TransitionSelectionComponent implements OnInit {
   @Input() cfg: ConfigModel;
   @Input() modalWindow: ModalWindowComponent;
   @Input() fieldPair: FieldMappingPair;
 
-  selectActionForm: FormGroup;
-  modes = TransitionMode;
   delimiters: TransitionDelimiterModel[];
 
   constructor() {
     TransitionModel.initialize();
     this.delimiters = TransitionModel.delimiterModels;
-    this.selectActionForm = new FormGroup({
-        selectAction: new FormControl(null)
+  }
+
+  ngOnInit(): void {
+    const that = this;
+
+    // $(document).ready( function() {
+    jQuery(function() {
+      // Invoke the combobox so it supersedes the stock select.
+      // $('select#separator').combobox({clearIfNoMatch: false});
+
+      $('select#separator').on('change', function() {
+
+        // Check the combobox select.
+        const optionSelected = $(this).find('option:selected');
+        const selectedValue: any = optionSelected.val();
+
+        if (selectedValue) {
+          that.fieldPair.transition.delimiter = parseInt(selectedValue, 10);
+          that.cfg.mappingService.updateMappedField(that.fieldPair, false, false);
+          return;
+        }
+        const inputValue: any = $(this).val();
+
+        if (inputValue) {
+          that.fieldPair.transition.delimiter = TransitionDelimiter.USER_DEFINED;
+          that.fieldPair.transition.userDelimiter = inputValue;
+          that.cfg.mappingService.updateMappedField(that.fieldPair, false, false);
+          return;
+        }
+      });
+
+      // Replace the user input when focus is lost.
+      $('.combobox').on('blur', function() {
+
+        if (that.fieldPair.transition.delimiter === TransitionDelimiter.USER_DEFINED) {
+          $(this).find('option:selected').val(that.fieldPair.transition.userDelimiter);
+          $(this).val(that.fieldPair.transition.userDelimiter).trigger('input');
+        }
+      });
+
+      // Check the combobox input text field.
+      /* NOTE: re-enable this function for non-standard delimiters with combobox
+      $('.combobox').on('input', function() {
+
+        const inputValue: any = $(this).val();
+
+        if (inputValue) {
+          if (inputValue.length > 1) {
+            that.cfg.errorService.error('The separator delimiter must be one character in length.', null);
+            return;
+          }
+          that.fieldPair.transition.delimiter = TransitionDelimiter.USER_DEFINED;
+          that.fieldPair.transition.userDelimiter = inputValue;
+          that.cfg.mappingService.updateMappedField(that.fieldPair, false, false);
+        }
+      });
+      */
     });
-    this.selectActionForm.controls['selectAction'].setValue('Map', {onlySelf: true});
-  }
 
-  /**
-   * Validate the user selected mode with the user selected field pairs.
-   * @param selectedMode
-   */
-  validModeTransition(selectedMode: TransitionMode): boolean {
-    const mappedSourceFields = this.fieldPair.getMappedFields(true);
-    const mappedTargetFields = this.fieldPair.getMappedFields(false);
-
-    if (mappedSourceFields.length > 1 && selectedMode !== TransitionMode.COMBINE) {
-        this.cfg.errorService.info('The selected mapping details action ' + TransitionModel.getActionName(selectedMode) +
-                                 ' is not applicable from compound source selections.', null);
-      return false;
-    } else if (mappedTargetFields.length > 1 && selectedMode !== TransitionMode.SEPARATE) {
-        this.cfg.errorService.info('The selected mapping details action ' + TransitionModel.getActionName(selectedMode) +
-                                 ' is not applicable to compound target selections.', null);
-      return false;
-    }
-    return true;
-  }
-
-  /**
-   * The user has selected a new mapping details action.  Validate it and update any mapped fields.
-   * @param event - contains the selected value
-   */
-  selectionChanged(event: any): void {
-    const selectorIsMode: boolean = 'mode' === event.target.attributes.getNamedItem('selector').value;
-    const selectedValue: any = event.target.selectedOptions.item(0).attributes.getNamedItem('value').value;
-    if (selectorIsMode) {
-      const selectedMode: TransitionMode = parseInt(selectedValue, 10);
-      if (this.validModeTransition(selectedMode)) {
-        this.fieldPair.transition.mode = selectedMode;
-      } else {
-        // Bad selected mapping details action.  Reset the UI selection to the item before the user changed it.
-        this.selectActionForm.controls['selectAction'].setValue(this.fieldPair.transition.mode.toString(10), {onlySelf: true});
-        return;
-      }
-    } else {
-      this.fieldPair.transition.delimiter = parseInt(selectedValue, 10);
-    }
-    this.cfg.mappingService.updateMappedField(this.fieldPair, false, false);
   }
 
   modeIsEnum(): boolean {
     return this.fieldPair.transition.isEnumerationMode();
-  }
-
-  getMappedValueCount(): number {
-    const tableName: string = this.fieldPair.transition.lookupTableName;
-    if (tableName == null) {
-      return 0;
-    }
-    const table: LookupTable = this.cfg.mappings.getTableByName(tableName);
-    if (!table || !table.entries) {
-      return 0;
-    }
-    return table.entries.length;
   }
 
   showLookupTable(): void {
@@ -137,5 +136,9 @@ export class TransitionSelectionComponent {
       return this.fieldPair.transition.isSeparateMode();
     }
     return true;
+  }
+
+  isUserDelimiter(delimiterModel: TransitionDelimiterModel) {
+    return (delimiterModel.delimiter === TransitionDelimiter.USER_DEFINED);
   }
 }

@@ -14,11 +14,13 @@
     limitations under the License.
 */
 
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, ViewChild } from '@angular/core';
 
 import { ConfigModel } from '../../models/config.model';
 import { Field } from '../../models/field.model';
 import { MappingModel } from '../../models/mapping.model';
+
+import { CollapsableHeaderComponent } from '../collapsable-header.component';
 
 import { ModalWindowComponent } from '../modal-window.component';
 import { MappingSelectionComponent } from './mapping-selection.component';
@@ -32,6 +34,9 @@ import { Subscription } from 'rxjs';
 export class MappingDetailComponent implements OnInit, OnDestroy {
   @Input() cfg: ConfigModel;
   @Input() modalWindow: ModalWindowComponent;
+
+  @ViewChild('sourcesHeader')
+  sourcesHeader: CollapsableHeaderComponent;
 
   private mappingSelectionRequiredSubscription: Subscription;
 

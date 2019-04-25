@@ -13,7 +13,7 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-
+import { DocumentDefinition } from '../models/document-definition.model';
 import { Field } from './field.model';
 import { FieldMappingPair } from './mapping.model';
 
@@ -47,7 +47,7 @@ export class FieldActionConfig {
   private getActualField(fieldPair: FieldMappingPair, isSource: boolean): Field {
     let targetField: Field = null;
     for (targetField of fieldPair.getFields(isSource)) {
-      if (targetField.name !== '<padding field>') {
+      if ((targetField.name !== '<padding field>') && (targetField !== DocumentDefinition.getNoneField())) {
         break;
       }
     }
@@ -125,6 +125,10 @@ export class FieldActionConfig {
       if (!selectedSourceField.isInCollection()) {
         return false;
       }
+    }
+
+    if (this.serviceObject.name === 'Split') {
+      return false;
     }
 
     // Check for matching types - date.
@@ -261,19 +265,21 @@ export class FieldAction {
 export enum TransitionMode { MAP, SEPARATE, ENUM, COMBINE }
 export enum TransitionDelimiter {
   NONE, AMPERSAND, AT_SIGN, BACKSLASH, COLON, COMMA, DASH, EQUAL, HASH,
-  MULTI_SPACE, PERIOD, PIPE, SEMICOLON, SLASH, SPACE, UNDERSCORE
+  MULTI_SPACE, PERIOD, PIPE, SEMICOLON, SLASH, SPACE, UNDERSCORE, USER_DEFINED
 }
 
 export class TransitionDelimiterModel {
   delimiter: TransitionDelimiter = TransitionDelimiter.SPACE;
   serializedValue: string = null;
   prettyName: string = null;
+  actualDelimiter = '';
 
   constructor(
-    delimiter: TransitionDelimiter, serializedValue: string, prettyName: string) {
+    delimiter: TransitionDelimiter, serializedValue: string, prettyName: string, actualDelimiter) {
     this.delimiter = delimiter;
     this.serializedValue = serializedValue;
     this.prettyName = prettyName;
+    this.actualDelimiter = actualDelimiter;
   }
 }
 
@@ -283,6 +289,7 @@ export class TransitionModel {
 
   mode: TransitionMode = TransitionMode.MAP;
   delimiter: TransitionDelimiter = TransitionDelimiter.SPACE;
+  userDelimiter = '';
   lookupTableName: string = null;
 
   constructor() {
@@ -292,22 +299,23 @@ export class TransitionModel {
   static initialize() {
     if (TransitionModel.delimiterModels.length === 0) {
       const models: TransitionDelimiterModel[] = [];
-      models.push(new TransitionDelimiterModel(TransitionDelimiter.NONE, null, '[None]'));
-      models.push(new TransitionDelimiterModel(TransitionDelimiter.AMPERSAND, 'Ampersand', 'Ampersand [&]'));
-      models.push(new TransitionDelimiterModel(TransitionDelimiter.AT_SIGN, 'AtSign', 'At Sign [@]'));
-      models.push(new TransitionDelimiterModel(TransitionDelimiter.BACKSLASH, 'Backslash', 'Backslash [\\]'));
-      models.push(new TransitionDelimiterModel(TransitionDelimiter.COLON, 'Colon', 'Colon [:]'));
-      models.push(new TransitionDelimiterModel(TransitionDelimiter.COMMA, 'Comma', 'Comma [,]'));
-      models.push(new TransitionDelimiterModel(TransitionDelimiter.DASH, 'Dash', 'Dash [-]'));
-      models.push(new TransitionDelimiterModel(TransitionDelimiter.EQUAL, 'Equal', 'Equal [=]'));
-      models.push(new TransitionDelimiterModel(TransitionDelimiter.HASH, 'Hash', 'Hash [#]'));
-      models.push(new TransitionDelimiterModel(TransitionDelimiter.MULTI_SPACE, 'MultiSpace', 'Multi Spaces'));
-      models.push(new TransitionDelimiterModel(TransitionDelimiter.PERIOD, 'Period', 'Period [.]'));
-      models.push(new TransitionDelimiterModel(TransitionDelimiter.PIPE, 'Pipe', 'Pipe [|]'));
-      models.push(new TransitionDelimiterModel(TransitionDelimiter.SEMICOLON, 'Semicolon', 'Semicolon [;]'));
-      models.push(new TransitionDelimiterModel(TransitionDelimiter.SLASH, 'Slash', 'Slash [/]'));
-      models.push(new TransitionDelimiterModel(TransitionDelimiter.SPACE, 'Space', 'Space [ ]'));
-      models.push(new TransitionDelimiterModel(TransitionDelimiter.UNDERSCORE, 'Underscore', 'Underscore [_]'));
+      models.push(new TransitionDelimiterModel(TransitionDelimiter.NONE, null, '[None]', ''));
+      models.push(new TransitionDelimiterModel(TransitionDelimiter.AMPERSAND, 'Ampersand', 'Ampersand [&]', '\&'));
+      models.push(new TransitionDelimiterModel(TransitionDelimiter.AT_SIGN, 'AtSign', 'At Sign [@]', '\@'));
+      models.push(new TransitionDelimiterModel(TransitionDelimiter.BACKSLASH, 'Backslash', 'Backslash [\\]', '\\'));
+      models.push(new TransitionDelimiterModel(TransitionDelimiter.COLON, 'Colon', 'Colon [:]', '\:'));
+      models.push(new TransitionDelimiterModel(TransitionDelimiter.COMMA, 'Comma', 'Comma [,]', '\,'));
+      models.push(new TransitionDelimiterModel(TransitionDelimiter.DASH, 'Dash', 'Dash [-]', '\-'));
+      models.push(new TransitionDelimiterModel(TransitionDelimiter.EQUAL, 'Equal', 'Equal [=]', '\='));
+      models.push(new TransitionDelimiterModel(TransitionDelimiter.HASH, 'Hash', 'Hash [#]', '\#'));
+      models.push(new TransitionDelimiterModel(TransitionDelimiter.MULTI_SPACE, 'MultiSpace', 'Multi Spaces', '  '));
+      models.push(new TransitionDelimiterModel(TransitionDelimiter.PERIOD, 'Period', 'Period [.]', '\.'));
+      models.push(new TransitionDelimiterModel(TransitionDelimiter.PIPE, 'Pipe', 'Pipe [|]', '\|'));
+      models.push(new TransitionDelimiterModel(TransitionDelimiter.SEMICOLON, 'Semicolon', 'Semicolon [;]', '\;'));
+      models.push(new TransitionDelimiterModel(TransitionDelimiter.SLASH, 'Slash', 'Slash [/]', '\/'));
+      models.push(new TransitionDelimiterModel(TransitionDelimiter.SPACE, 'Space', 'Space [ ]', ' '));
+      models.push(new TransitionDelimiterModel(TransitionDelimiter.UNDERSCORE, 'Underscore', 'Underscore [_]', '\_'));
+      models.push(new TransitionDelimiterModel(TransitionDelimiter.USER_DEFINED, 'User defined', 'User defined', ''));
       TransitionModel.delimiterModels = models;
     }
   }
@@ -365,10 +373,34 @@ export class TransitionModel {
     return null;
   }
 
+  static getTransitionDelimiterFromActual(actualDelimiter: string): TransitionDelimiter {
+    for (const m of TransitionModel.delimiterModels) {
+      if (m.actualDelimiter === actualDelimiter) {
+        return m.delimiter;
+      }
+    }
+    return TransitionDelimiter.USER_DEFINED;
+  }
+
   getSerializedDelimeter(): string {
+    if (this.delimiter === TransitionDelimiter.USER_DEFINED) {
+      return this.userDelimiter;
+    }
     for (const m of TransitionModel.delimiterModels) {
       if (m.delimiter === this.delimiter) {
         return m.serializedValue;
+      }
+    }
+    return null;
+  }
+
+  getActualDelimiter(): string {
+    if (this.delimiter === TransitionDelimiter.USER_DEFINED) {
+      return this.userDelimiter;
+    }
+    for (const m of TransitionModel.delimiterModels) {
+      if (m.delimiter === this.delimiter) {
+        return m.actualDelimiter;
       }
     }
     return null;
