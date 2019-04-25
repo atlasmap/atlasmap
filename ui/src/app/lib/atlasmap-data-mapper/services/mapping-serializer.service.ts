@@ -437,7 +437,7 @@ export class MappingSerializer {
   }
 
   /**
-   * Deserialize a field mapping based on its mapping type.  This is deprecated in favor of
+   * @deprecated Deserialize a field mapping based on its mapping type.  This is deprecated in favor of
    * concatenate/ split actions.
    *
    * @param fieldPair
