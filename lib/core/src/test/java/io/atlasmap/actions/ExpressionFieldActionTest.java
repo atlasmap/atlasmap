@@ -25,6 +25,10 @@ import io.atlasmap.v2.Expression;
 
 public class ExpressionFieldActionTest {
 
+    /**
+     * functions
+     */
+
     @Test
     public void testIF() throws Exception {
         Expression action = new Expression();
@@ -58,6 +62,19 @@ public class ExpressionFieldActionTest {
         action.setExpression("TOLOWER(${0})");
         assertEquals("qwerty", ExpressionFieldAction.process(action, Arrays.asList("qWeRtY")));
     }
+
+    @Test
+    public void testISEMPTY() throws Exception {
+        Expression action = new Expression();
+        action.setExpression("IF(ISEMPTY(${0}), 'empty', 'not empty')");
+        assertEquals("empty", ExpressionFieldAction.process(action, Arrays.asList((Object)null)));
+        assertEquals("empty", ExpressionFieldAction.process(action, Arrays.asList("")));
+        assertEquals("not empty", ExpressionFieldAction.process(action, Arrays.asList(" ")));
+    }
+
+    /**
+     * operators
+     */
 
     @Test
     public void testAdd() throws Exception {
@@ -106,6 +123,24 @@ public class ExpressionFieldActionTest {
         assertEquals("some of them are same", ExpressionFieldAction.process(action, Arrays.asList(1, 1, 2)));
         assertEquals("all different", ExpressionFieldAction.process(action, Arrays.asList("foo","foo0", "fo")));
         assertEquals("all different", ExpressionFieldAction.process(action, Arrays.asList(1, 3, 2)));
+    }
+
+    @Test
+    public void testNot() throws Exception {
+        Expression action = new Expression();
+        action.setExpression("IF(!ISEMPTY(${0}), 'not empty', 'empty')");
+        assertEquals("not empty", ExpressionFieldAction.process(action, Arrays.asList("foo")));
+        assertEquals("not empty", ExpressionFieldAction.process(action, Arrays.asList(" ")));
+        assertEquals("empty", ExpressionFieldAction.process(action, Arrays.asList("")));
+        assertEquals("empty", ExpressionFieldAction.process(action, Arrays.asList((Object)null)));
+    }
+
+    @Test
+    public void testNull() throws Exception {
+        Expression action = new Expression();
+        action.setExpression("IF(${0} == null, 'null', 'not null')");
+        assertEquals("null", ExpressionFieldAction.process(action, Arrays.asList((Object)null)));
+        assertEquals("not null", ExpressionFieldAction.process(action, Arrays.asList("")));
     }
 
 }
