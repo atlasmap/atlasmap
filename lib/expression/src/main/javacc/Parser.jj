@@ -120,6 +120,7 @@ TOKEN [IGNORE_CASE] :
 TOKEN [IGNORE_CASE] :
 {
       < ID : ["a"-"z", "_"] (["a"-"z","0"-"9","_"])* >
+      | < VARIABLE : "${" (["0"-"9", "a"-"z", "_"])+ "}" >
 }
 
 // ----------------------------------------------------------------------------
@@ -477,29 +478,6 @@ String stringLiteral() :
     }    
 }
 
-Token varidToken() :
-{
-    Token t;
-}
-{
-    (
-        (
-            t = <ID>
-        )
-        |
-        (
-            t = <ZERO>
-        )
-        |
-        (
-            t = <DECIMAL_LITERAL>
-        )
-    )
-    {
-        return t;
-    }
-}
-
 VariableExpression variable() :
 {
     Token t;
@@ -507,14 +485,9 @@ VariableExpression variable() :
 }
 {
     (
-        "${"
-        
-        t = varidToken()
-        
-        "}"
-
+        t = <VARIABLE>
         {
-            left = new VariableExpression(t.image);
+            left = new VariableExpression(Strings.stripSuffix(Strings.stripPrefix(t.image, "${"), "}"));
         }
     )
     {
