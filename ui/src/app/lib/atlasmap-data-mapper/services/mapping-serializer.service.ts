@@ -507,13 +507,16 @@ export class MappingSerializer {
       inputField = fieldMapping.inputFieldGroup.field;
 
       // Check for an InputFieldGroup containing a concatenate action inferring combine mode.
-      if (fieldMapping.inputFieldGroup.actions[0]) {
-        if (fieldMapping.inputFieldGroup.actions[0].Expression) {
+      const firstAction = fieldMapping.inputFieldGroup.actions[0];
+      if (firstAction) {
+        if (firstAction.Expression || firstAction['@type'] === 'Expression') {
           fieldPair.transition.mode = TransitionMode.COMBINE;
           fieldPair.transition.enableExpression = true;
-          fieldPair.transition.expression = fieldMapping.inputFieldGroup.actions[0].Expression.expression;
-        } else if (fieldMapping.inputFieldGroup.actions[0].Concatenate) {
-          const concatDelimiter = fieldMapping.inputFieldGroup.actions[0].Concatenate.delimiter;
+          fieldPair.transition.expression =
+            firstAction.Expression ? firstAction.Expression.expression : firstAction['expression'];
+        } else if (firstAction.Concatenate || firstAction['@type'] === 'Concatenate') {
+          const concatDelimiter =
+            firstAction.Concatenamte ? firstAction.Concatenate.delimiter : firstAction['delimiter'];
           if (concatDelimiter) {
             fieldPair.transition.mode = TransitionMode.COMBINE;
             fieldPair.transition.delimiter =
@@ -530,8 +533,9 @@ export class MappingSerializer {
 
       if (inputField[0].actions && inputField[0].actions[0]) {
         // Check for an InputField containing a split action inferring separate mode.
-        if (inputField[0].actions[0].Split) {
-          const splitDelimiter = inputField[0].actions[0].Split.delimiter;
+        const firstAction = inputField[0].actions[0];
+        if (firstAction.Split || firstAction['@type'] === 'Split') {
+          const splitDelimiter = firstAction.Split ? firstAction.Split.delimiter : firstAction['delimiter'];
           if (splitDelimiter) {
             fieldPair.transition.mode = TransitionMode.SEPARATE;
             fieldPair.transition.delimiter =
@@ -540,9 +544,9 @@ export class MappingSerializer {
               fieldPair.transition.userDelimiter = splitDelimiter;
             }
           }
-        } else if (inputField[0].actions[0].Expression) {
+        } else if (firstAction.Expression || firstAction['@type'] === 'Expression') {
           fieldPair.transition.enableExpression = true;
-          fieldPair.transition.expression = fieldMapping.inputFieldGroup.actions[0].Expression.expression;
+          fieldPair.transition.expression = firstAction.Expression ? firstAction.Expression.expression : firstAction['expression'];
         }
       }
     }
@@ -679,32 +683,59 @@ export class MappingSerializer {
       }
       if (field.actions) {
         for (const action of field.actions) {
-          for (const actionName in action) {
-            if (!action.hasOwnProperty(actionName)) {
-              continue;
-            }
-            const parsedAction: FieldAction = new FieldAction();
-            parsedAction.name = actionName;
-            const actionParams: any = action[actionName];
-            if (actionParams) {
-              for (const paramName in actionParams) {
-                if (!actionParams.hasOwnProperty(paramName)) {
-                  continue;
-                }
-                const parsedArgumentValue: FieldActionArgumentValue = new FieldActionArgumentValue();
-                parsedArgumentValue.name = paramName;
-                let value = actionParams[paramName];
-                value = value == null ? null : value.toString();
-                parsedArgumentValue.value = value;
-                parsedAction.argumentValues.push(parsedArgumentValue);
-              }
-            }
-            mappedField.parsedData.parsedActions.push(parsedAction);
+          if (action['@type']) {
+            MappingSerializer.parseNewAction(action, mappedField.parsedData.parsedActions);
+          } else {
+            MappingSerializer.parseOldAction(action, mappedField.parsedData.parsedActions);
           }
         }
       }
     }
     fieldPair.addMappedField(mappedField, isSource);
     return mappedField;
+  }
+
+  /**
+   * @deprecated actionName: {param:...} style has been deprecated. Use {`@type`: actionName} style action description.
+   */
+  private static parseOldAction(action: any, parsedActions: FieldAction[]) {
+    for (const actionName of Object.keys(action)) {
+      if (!action.hasOwnProperty(actionName)) {
+        return;
+      }
+      const parsedAction: FieldAction = new FieldAction();
+      parsedAction.name = actionName;
+      const actionParams: any = action[actionName];
+      if (actionParams) {
+        for (const paramName of Object.keys(actionParams)) {
+          if (!actionParams.hasOwnProperty(paramName)) {
+            return;
+          }
+          const parsedArgumentValue: FieldActionArgumentValue = new FieldActionArgumentValue();
+          parsedArgumentValue.name = paramName;
+          let value = actionParams[paramName];
+          value = value == null ? null : value.toString();
+          parsedArgumentValue.value = value;
+          parsedAction.argumentValues.push(parsedArgumentValue);
+        }
+      }
+      parsedActions.push(parsedAction);
+    }
+  }
+
+  private static parseNewAction(action: any, parsedActions: FieldAction[]) {
+    const parsedAction: FieldAction = new FieldAction();
+    parsedAction.name = action['@type'];
+    for (const [key, value] of Object.entries(action)) {
+      if ('@type' === key) {
+        continue;
+      }
+      const parsedArgumentValue: FieldActionArgumentValue = new FieldActionArgumentValue();
+      parsedArgumentValue.name = key;
+      const valueString = value == null ? null : value.toString();
+      parsedArgumentValue.value = valueString;
+      parsedAction.argumentValues.push(parsedArgumentValue);
+    }
+    parsedActions.push(parsedAction);
   }
 }
