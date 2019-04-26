@@ -164,7 +164,11 @@ public class AtlasService {
         }
 
         details.getActionDetail().addAll(atlasContextFactory.getFieldActionService().listActionDetails());
-        return Response.ok().entity(toJson(details)).build();
+        byte[] serialized = toJson(details);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug(new String(serialized));
+        }
+        return Response.ok().entity(serialized).build();
     }
 
     @GET
@@ -209,7 +213,11 @@ public class AtlasService {
             throw new WebApplicationException(e.getMessage(), e, Status.INTERNAL_SERVER_ERROR);
         }
 
-        return Response.ok().entity(toJson(sMap)).build();
+        byte[] serialized = toJson(sMap);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug(new String(serialized));
+        }
+        return Response.ok().entity(serialized).build();
     }
 
     @DELETE
@@ -295,7 +303,11 @@ public class AtlasService {
                 LOG.error("Error retrieving JSON mapping " + mappingFilePath, e);
                 throw new WebApplicationException(e.getMessage(), e, Status.INTERNAL_SERVER_ERROR);
             }
-            return Response.ok().entity(toJson(atlasMapping)).build();
+            byte[] serialized = toJson(atlasMapping);
+            if (LOG.isDebugEnabled()) {
+                LOG.debug(new String(serialized));
+            }
+            return Response.ok().entity(serialized).build();
         case "GZ":
         case "ZIP":
             byte[] binData = null;
