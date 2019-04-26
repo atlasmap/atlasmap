@@ -2,6 +2,16 @@
 
   <div class="toolbar-icons pull-right">
 
+    <!-- TODO Apply UXD outcome https://github.com/atlasmap/atlasmap/issues/852 -->
+    <div *ngIf="cfg.mappings && cfg.mappings.activeMapping && cfg.mappings.activeMapping.getCurrentFieldMapping() && cfg.mappings.activeMapping.getCurrentFieldMapping().transition && cfg.mappings.activeMapping.getCurrentFieldMapping().transition.enableExpression"
+      class="dropdown inline-block pull-left" >
+      <div class="dropdown inline-block pull-left">
+        <textarea rows="1" cols="80" id="expression" class="form-control expressionTextarea" [(ngModel)]='cfg.mappings.activeMapping.getCurrentFieldMapping().transition.expression'
+          (blur)="cfg.mappingService.notifyMappingUpdated()" placeholder="Type mapping expression here"></textarea>
+      </div>
+      <i class="fa dropdown inline-block pull-left" style="font-size:24px; color:gray;">|</i>
+    </div>
+
     <div *ngIf="!cfg.initCfg.disableNavbar" class="dropdown inline-block pull-left">
       <label [attr.class]="getCSSClass('importMappings')" *ngIf="!cfg.initCfg.disableNavbar"
         tooltip="Import an AtlasMap mappings catalog file (.adm) or Java archive (.jar)." placement="bottom"
@@ -29,6 +39,10 @@
     </div>
 
     <i *ngIf="!cfg.initCfg.disableNavbar" class="fa" style="font-size:24px; color:gray;">|</i>
+
+    <!-- TODO Apply UXD outcome https://github.com/atlasmap/atlasmap/issues/852 -->
+    <i [attr.class]="getCSSClass('enableExpression')" (click)="toolbarButtonClicked('enableExpression', $event);"
+      tooltip='Enable/Disable conditional mapping expression' placement="bottom"></i>
 
     <i class="fa fa-plus link" (click)="toolbarButtonClicked('addMapping', $event);"
        tooltip="Add new mapping" placement="bottom"></i>

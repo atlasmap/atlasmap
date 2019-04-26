@@ -113,6 +113,12 @@ export class ToolbarComponent implements OnInit {
       return 'pficon pficon-import link';
     } else if ('exportMappings' === action) {
       return 'pficon pficon-export link';
+    } else if ('enableExpression' === action) {
+      return 'pficon pficon-optimize link'
+        + (this.cfg.mappings && this.cfg.mappings.activeMapping
+          && this.cfg.mappings.activeMapping.getCurrentFieldMapping()
+          && this.cfg.mappings.activeMapping.getCurrentFieldMapping().transition
+          && this.cfg.mappings.activeMapping.getCurrentFieldMapping().transition.enableExpression ? ' selected' : '');
     }
   }
 
@@ -155,6 +161,12 @@ export class ToolbarComponent implements OnInit {
       this.cfg.showMappingPreview = !this.cfg.showMappingPreview;
     } else if ('resetAll' === action) {
       this.resetAll();
+    } else if ('enableExpression') {
+      if (this.cfg.mappings && this.cfg.mappings.activeMapping && this.cfg.mappings.activeMapping.getCurrentFieldMapping()
+        && this.cfg.mappings.activeMapping.getCurrentFieldMapping().transition) {
+        this.cfg.mappings.activeMapping.getCurrentFieldMapping().transition.enableExpression
+          = !this.cfg.mappings.activeMapping.getCurrentFieldMapping().transition.enableExpression;
+      }
     }
     // Use the initialization service to trigger the observable updateFromConfig method
     // in the parent data-mapper-app class.  This avoids materializing the lineMachine object

@@ -291,6 +291,8 @@ export class TransitionModel {
   delimiter: TransitionDelimiter = TransitionDelimiter.SPACE;
   userDelimiter = '';
   lookupTableName: string = null;
+  expression: string;
+  enableExpression = false;
 
   constructor() {
     TransitionModel.initialize();
@@ -441,4 +443,5 @@ export class TransitionModel {
   isEnumerationMode(): boolean {
     return this.mode === TransitionMode.ENUM;
   }
+
 }

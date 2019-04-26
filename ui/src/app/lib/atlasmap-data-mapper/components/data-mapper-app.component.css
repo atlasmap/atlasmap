@@ -467,3 +467,7 @@
    width: calc(100% - 50px);
    text-align: left;
 }
+
+/* conditional mapping */
+.DataMapperUI .expressionTextarea { width:100%; height:29px; }
+
