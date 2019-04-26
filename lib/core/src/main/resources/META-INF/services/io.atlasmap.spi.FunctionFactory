@@ -1,4 +1,5 @@
 io.atlasmap.functions.IF
+io.atlasmap.functions.ISEMPTY
 io.atlasmap.functions.LT
 io.atlasmap.functions.TOLOWER
 
