@@ -219,9 +219,9 @@
 .DataMapperUI .alert { font-size:12px; }
 .DataMapperUI .alert-info { color: green; }
 
-.mappingFieldAction .form-group LABEL { float:left; clear:left; margin-left: 10px; width:20%; }
+.mappingFieldAction .form-group LABEL { float:left; clear:left; margin-left: 10px; width:25%; }
 .mappingFieldAction .form-group SELECT { float:left; clear:left; width:calc(100% - 30px); }
-.mappingFieldAction .form-group INPUT { float:left; width:69%; text-align:right; }
+.mappingFieldAction .form-group INPUT { float:left; width:calc(100% - 80px); text-align:right; }
 .fieldMappingDetail .mappingFieldAction .linkContainer { padding-right:6px; }
 
 .DataMapperUI .CollapsableCardHeader {  border-top:1px solid #d1d1d1; }
