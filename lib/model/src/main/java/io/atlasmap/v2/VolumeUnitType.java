@@ -1,5 +1,8 @@
 package io.atlasmap.v2;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+
 public enum VolumeUnitType {
 
     CUBIC_METER("Cubic Meter"),
@@ -13,10 +16,12 @@ public enum VolumeUnitType {
         value = v;
     }
 
+    @JsonValue
     public String value() {
         return value;
     }
 
+    @JsonCreator
     public static VolumeUnitType fromValue(String v) {
         for (VolumeUnitType c: VolumeUnitType.values()) {
             if (c.value.equals(v)) {
