@@ -1,5 +1,8 @@
 package io.atlasmap.v2;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+
 public enum DistanceUnitType {
 
     METER_M("Meter (m)"),
@@ -14,10 +17,12 @@ public enum DistanceUnitType {
         value = v;
     }
 
+    @JsonValue
     public String value() {
         return value;
     }
 
+    @JsonCreator
     public static DistanceUnitType fromValue(String v) {
         for (DistanceUnitType c: DistanceUnitType.values()) {
             if (c.value.equals(v)) {
