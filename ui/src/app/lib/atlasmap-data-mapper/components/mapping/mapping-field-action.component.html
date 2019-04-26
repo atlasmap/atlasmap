@@ -25,9 +25,15 @@
             </select>
           </div>
           <ng-template #textInput>
-            <label style="">{{ getLabel(argConfig.name) }}</label>
-            <input type="text" class="input-{{argConfig.name}}" [(ngModel)]="action.getArgumentValue(argConfig.name).value"
-              (change)="actionConfigParamSelectionChanged($event)"/>
+            <label>{{ getLabel(argConfig.name) }}</label>
+            <div *ngIf="argConfig.type == 'STRING'; else rightAlign">
+              <input type="text" class="input-{{argConfig.name}}" [(ngModel)]="action.getArgumentValue(argConfig.name).value"
+                (change)="actionConfigParamSelectionChanged($event)" style="text-align:left;"/>
+            </div>
+            <ng-template #rightAlign>
+              <input type="text" class="input-{{argConfig.name}}" [(ngModel)]="action.getArgumentValue(argConfig.name).value"
+                (change)="actionConfigParamSelectionChanged($event)" style="text-align:right;"/>
+            </ng-template>
           </ng-template>
         </div>
         <div class="clear"></div>
