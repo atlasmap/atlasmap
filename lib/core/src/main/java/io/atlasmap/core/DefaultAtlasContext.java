@@ -209,12 +209,16 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
     public Audits processPreview(Mapping mapping) throws AtlasException {
         DefaultAtlasSession session = new DefaultAtlasSession(this);
         MappingType mappingType = mapping.getMappingType();
+        FieldGroup sourceFieldGroup = mapping.getInputFieldGroup();
         List<Field> sourceFields = mapping.getInputField();
         List<Field> targetFields = mapping.getOutputField();
 
         targetFields.forEach(tf -> tf.setValue(null));
-        if (sourceFields.isEmpty() || targetFields.isEmpty()) {
+        if ((sourceFieldGroup == null && sourceFields.isEmpty()) || targetFields.isEmpty()) {
             return session.getAudits();
+        }
+        if (sourceFieldGroup != null) {
+            sourceFields = sourceFieldGroup.getField();
         }
         for (Field sf : sourceFields) {
             if (sf.getFieldType() == null || sf.getValue() == null) {
@@ -231,22 +235,19 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
         Field sourceField;
         Field targetField;
         if (mappingType == null || mappingType == MappingType.MAP) {
-            sourceField = sourceFields.get(0);
-            session.head().setSourceField(sourceField);
-            if (sourceField instanceof FieldGroup) {
-                FieldGroup sourceFieldGroup = (FieldGroup)sourceField;
+            if (sourceFieldGroup != null) {
                 List<Field> processed = new LinkedList<>();
                 for (Field f : sourceFieldGroup.getField()) {
                     processed.add(applyFieldActions(session, f));
                 }
                 sourceFieldGroup.getField().clear();
                 sourceFieldGroup.getField().addAll(processed);
+                sourceField = applyFieldActions(session, sourceFieldGroup);
+            } else {
+                sourceField = sourceFields.get(0);
+                sourceField = applyFieldActions(session, sourceField);
             }
-            sourceField = applyFieldActions(session, sourceField);
-            FieldGroup sourceFieldGroup = null;
-            if (sourceField instanceof FieldGroup) {
-                sourceFieldGroup = (FieldGroup)sourceField;
-            }
+            session.head().setSourceField(sourceField);
             for (Field f : targetFields) {
                 targetField = f;
                 session.head().setTargetField(targetField);

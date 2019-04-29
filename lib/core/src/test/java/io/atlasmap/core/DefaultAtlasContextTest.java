@@ -481,4 +481,30 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
         assertEquals("1", target1.getValue());
         assertEquals("2", target2.getValue());
     }
+
+    @Test
+    public void testProcessPreviewSourceFieldGroup() throws AtlasException {
+        Mapping m = new Mapping();
+        Field source1 = new SimpleField();
+        source1.setFieldType(FieldType.STRING);
+        source1.setIndex(0);
+        source1.setValue("one");
+        Field source2 = new SimpleField();
+        source2.setFieldType(FieldType.STRING);
+        source2.setIndex(1);
+        source2.setValue("two");
+        FieldGroup group = new FieldGroup();
+        group.getField().add(source1);
+        group.getField().add(source2);
+        Expression action = new Expression();
+        action.setExpression("${0} + ' and ' + ${1}");
+        group.setActions(new ArrayList<>());
+        group.getActions().add(action);
+        m.setInputFieldGroup(group);
+        Field target = new SimpleField();
+        target.setFieldType(FieldType.STRING);
+        m.getOutputField().add(target);
+        context.processPreview(m);
+        assertEquals("one and two", target.getValue());
+    }
 }
