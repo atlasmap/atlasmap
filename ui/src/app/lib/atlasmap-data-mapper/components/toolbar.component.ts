@@ -15,6 +15,7 @@ limitations under the License.
 */
 import { Component, Input, OnInit } from '@angular/core';
 
+import { Field } from '../models/field.model';
 import { InspectionType } from '../common/config.types';
 import { ConfigModel } from '../models/config.model';
 import { ModalWindowComponent } from './modal-window.component';
@@ -114,8 +115,7 @@ export class ToolbarComponent implements OnInit {
     } else if ('exportMappings' === action) {
       return 'pficon pficon-export link';
     } else if ('enableExpression' === action) {
-      return 'pficon pficon-optimize link'
-        + (this.cfg.mappings && this.cfg.mappings.activeMapping
+      return (this.cfg.mappings && this.cfg.mappings.activeMapping
           && this.cfg.mappings.activeMapping.getCurrentFieldMapping()
           && this.cfg.mappings.activeMapping.getCurrentFieldMapping().transition
           && this.cfg.mappings.activeMapping.getCurrentFieldMapping().transition.enableExpression ? ' selected' : '');
@@ -281,5 +281,41 @@ export class ToolbarComponent implements OnInit {
    */
   handleExportMappingCancel(): void {
     this.mappingsFileName = '';
+  }
+
+  allowDrop(event: any): void {
+    if (event.preventDefault) {
+      event.preventDefault();
+    }
+    if (event.stopPropagation) {
+      event.stopPropagation();
+    }
+  }
+
+  endDrag(event: MouseEvent): void {
+
+    const droppedField: Field = this.cfg.currentDraggedField;
+    const currentFieldMapping = this.cfg.mappings.activeMapping.getCurrentFieldMapping();
+    if (droppedField === null || currentFieldMapping === null || !droppedField.isSource) {
+      return;
+    }
+
+    if (droppedField.partOfMapping) {
+
+      // The selected field is part of a different mapping.
+      if (!currentFieldMapping.isFieldMapped(droppedField)) {
+        return;
+      }
+
+    // Pulling an unmapped field into a transition expression evaluation implies a compound selection.
+    } else {
+      this.cfg.mappingService.fieldSelected(droppedField, true);
+    }
+    if (this.cfg.mappings.activeMapping.getCurrentFieldMapping().transition.expression) {
+      this.cfg.mappings.activeMapping.getCurrentFieldMapping().transition.expression += ' ' + droppedField.name;
+    } else {
+      this.cfg.mappings.activeMapping.getCurrentFieldMapping().transition.expression = droppedField.name;
+    }
+
   }
 }
