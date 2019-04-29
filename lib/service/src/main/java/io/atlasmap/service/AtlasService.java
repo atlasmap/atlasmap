@@ -441,7 +441,11 @@ public class AtlasService {
         if (audits != null) {
             response.setAudits(audits);
         }
-        return Response.ok().entity(toJson(response)).build();
+        byte[] serialized = toJson(response);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug(new String(serialized));
+        }
+        return Response.ok().entity(serialized).build();
     }
 
     @GET

@@ -715,6 +715,10 @@ export class MappingManagementService {
         DataMapperUtil.debugLogJSON(body, 'Process Mapping Preview  Response', this.cfg.initCfg.debugProcessMappingPreviewCalls, url);
         const answer = MappingSerializer.deserializeFieldMapping(body.ProcessMappingResponse.mapping, docRefs, this.cfg, false);
         for (const toWrite of inputFieldMapping.targetFields) {
+          if (DocumentDefinition.getNoneField().path === toWrite.field.path) {
+            // excluging none field garbage
+            continue;
+          }
           for (const toRead of answer.targetFields) {
             if (toWrite.field.docDef.id === toRead.parsedData.parsedDocID
                 && toWrite.field.path === toRead.parsedData.parsedPath) {
