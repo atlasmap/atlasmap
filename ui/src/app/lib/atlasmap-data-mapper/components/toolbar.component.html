@@ -3,11 +3,15 @@
   <div class="toolbar-icons pull-right">
 
     <!-- TODO Apply UXD outcome https://github.com/atlasmap/atlasmap/issues/852 -->
-    <div *ngIf="cfg.mappings && cfg.mappings.activeMapping && cfg.mappings.activeMapping.getCurrentFieldMapping() && cfg.mappings.activeMapping.getCurrentFieldMapping().transition && cfg.mappings.activeMapping.getCurrentFieldMapping().transition.enableExpression"
-      class="dropdown inline-block pull-left" >
+    <div *ngIf="cfg.mappings && cfg.mappings.activeMapping && cfg.mappings.activeMapping.getCurrentFieldMapping() &&
+      cfg.mappings.activeMapping.getCurrentFieldMapping().transition &&
+      cfg.mappings.activeMapping.getCurrentFieldMapping().transition.enableExpression"
+      class="dropdown inline-block pull-left" (drop)="endDrag($event)" (dragover)="allowDrop($event)" >
       <div class="dropdown inline-block pull-left">
-        <textarea rows="1" cols="80" id="expression" class="form-control expressionTextarea" [(ngModel)]='cfg.mappings.activeMapping.getCurrentFieldMapping().transition.expression'
-          (blur)="cfg.mappingService.notifyMappingUpdated()" placeholder="Type mapping expression here"></textarea>
+        <textarea rows="1" cols="80" id="expression" class="form-control expressionTextarea"
+          [(ngModel)]='cfg.mappings.activeMapping.getCurrentFieldMapping().transition.expression'
+          (blur)="cfg.mappingService.notifyMappingUpdated()" placeholder="Enter mapping expression">
+        </textarea>
       </div>
       <i class="fa dropdown inline-block pull-left" style="font-size:24px; color:gray;">|</i>
     </div>
@@ -15,14 +19,14 @@
     <div *ngIf="!cfg.initCfg.disableNavbar" class="dropdown inline-block pull-left">
       <label [attr.class]="getCSSClass('importMappings')" *ngIf="!cfg.initCfg.disableNavbar"
         tooltip="Import an AtlasMap mappings catalog file (.adm) or Java archive (.jar)." placement="bottom"
-          style="font-size:20px;margin-top:2px;">
+          style="font-size:20px;margin-top:8px;">
         <input type="file" accept="{{ getFileSuffix() }}" name="usermappingsfile" style="display:none"
          id="usermappingsfile" (change)="processImportedFile($event)">
       </label>
     </div>
 
     <div *ngIf="!cfg.initCfg.disableNavbar" dropdown #dropdown="bs-dropdown" class="dropdown inline-block pull-left">
-      <i [attr.class]="getCSSClass('exportMappings')" dropdownToggle (click)="false" style="float:left;color: black;margin-top:2px;"
+      <i [attr.class]="getCSSClass('exportMappings')" dropdownToggle (click)="false" style="float:left;color: black;margin-top:8px;"
         tooltip="Export the current mappings and support files into a catalog (.adm) file." placement="bottom"></i>
       <ul *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu">
         <div style="font-size:14px; width:426px;">
@@ -42,7 +46,8 @@
 
     <!-- TODO Apply UXD outcome https://github.com/atlasmap/atlasmap/issues/852 -->
     <i [attr.class]="getCSSClass('enableExpression')" (click)="toolbarButtonClicked('enableExpression', $event);"
-      tooltip='Enable/Disable conditional mapping expression' placement="bottom"></i>
+      tooltip='Enable/Disable conditional mapping expression' placement="bottom"
+      style="font-weight:bold;">f<sub>(x)</sub></i>
 
     <i class="fa fa-plus link" (click)="toolbarButtonClicked('addMapping', $event);"
        tooltip="Add new mapping" placement="bottom"></i>
@@ -60,7 +65,7 @@
       tooltip="Show/hide mapping details" placement="left"></i>
 
     <div dropdown #dropdown="bs-dropdown" class="dropdown inline-block pull-right">
-      <i [attr.class]="getEditorSettingsCSSClass(dropdown.isOpen)" dropdownToggle (click)="false" style="margin-top:2px;"
+      <i [attr.class]="getEditorSettingsCSSClass(dropdown.isOpen)" dropdownToggle (click)="false" style="margin-top:8px;"
         tooltip="Panel settings" placement="left"></i>
 
       <ul *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu">
