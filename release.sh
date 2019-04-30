@@ -80,7 +80,7 @@ echo "Building artifacts ...."
 echo "=========================================================="
 "${MAVEN_CMD}" $MAVEN_PARAMETERS clean install
 pushd docs
-"${MAVEN_CMD}" $MAVEN_PARAMETERS -f pom-javadoc.xml javadoc:aggregate
+"${MAVEN_CMD}" $MAVEN_PARAMETERS -f pom-javadoc.xml \!io.atlasmap:atlasmap-lib-all javadoc:aggregate
 popd
 
 echo "=========================================================="
