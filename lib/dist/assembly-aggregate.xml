@@ -13,6 +13,7 @@
       <includes>
         <include>io.atlasmap:atlas-api</include>
         <include>io.atlasmap:atlas-core</include>
+        <include>io.atlasmap:atlas-expression</include>
         <include>io.atlasmap:atlas-model</include>
         <include>io.atlasmap:atlas-java-core</include>
         <include>io.atlasmap:atlas-java-model</include>
