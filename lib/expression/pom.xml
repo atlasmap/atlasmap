@@ -27,11 +27,15 @@
   </parent>
 
   <groupId>io.atlasmap</groupId>
-  <artifactId>atlasmap-expression</artifactId>
+  <artifactId>atlas-expression</artifactId>
   <version>1.40.0-SNAPSHOT</version>
-  <packaging>jar</packaging>
+  <packaging>bundle</packaging>
 
   <name>Atlas :: Expression</name>
+
+  <properties>
+    <osgi.export.pkg>io.atlasmap.expression,io.atlasmap.expression.internal</osgi.export.pkg>
+  </properties>
 
   <dependencies>
 
