@@ -143,4 +143,14 @@ public class ExpressionFieldActionTest {
         assertEquals("not null", ExpressionFieldAction.process(action, Arrays.asList("")));
     }
 
+    @Test
+    public void testEmptyExpression() throws Exception {
+        Expression action = new Expression();
+        action.setExpression(null);
+        assertEquals(null, ExpressionFieldAction.process(action, null));
+        action.setExpression("");
+        assertEquals(null, ExpressionFieldAction.process(action, null));
+        action.setExpression("   ");
+        assertEquals(null, ExpressionFieldAction.process(action, null));
+    }
 }
