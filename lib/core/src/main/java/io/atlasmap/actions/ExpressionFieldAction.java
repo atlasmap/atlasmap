@@ -27,6 +27,10 @@ public class ExpressionFieldAction implements AtlasFieldAction {
 
     @AtlasActionProcessor
     public static Object process(io.atlasmap.v2.Expression action, List<Object> args) throws ExpressionException {
+        if (action.getExpression() == null || action.getExpression().trim().isEmpty()) {
+            return null;
+        }
+
         Expression parsedExpression = Expression.parse(action.getExpression(), DefaultAtlasFunctionResolver.getInstance());
         return parsedExpression.evaluate((index) -> {
             try {
