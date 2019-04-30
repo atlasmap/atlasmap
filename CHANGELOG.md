@@ -1,5 +1,45 @@
 # Changelog
 
+## atlasmap-1.40.0-alpha1 (30/04/2019)
+
+#### Enhancements
+
+- [#899](https://github.com/atlasmap/atlasmap/issues/899) Conditional mapping expression - initial UI update (icon update, drag&drop)
+- [#896](https://github.com/atlasmap/atlasmap/issues/896) Add ISEMPTY function
+- [#856](https://github.com/atlasmap/atlasmap/issues/856) Extend mapping model to deliver conditional mapping expression
+- [#855](https://github.com/atlasmap/atlasmap/issues/855) [Runtime] Add conditional mapping support
+- [#828](https://github.com/atlasmap/atlasmap/issues/828) UI changes for Combine/Separate removal
+- [#551](https://github.com/atlasmap/atlasmap/issues/551) Let UI use FieldGroup and combine/separate FieldAction instead of COMBINE/SEPARATE mapping mode
+
+#### Bug Fixes
+
+- [#901](https://github.com/atlasmap/atlasmap/issues/901) processPreview() doesn't handle inputFieldGroup
+- [#898](https://github.com/atlasmap/atlasmap/issues/898) Mapping preview fails with TypeError: Cannot read property 'id' of null
+- [#892](https://github.com/atlasmap/atlasmap/issues/892) Convert Volume Unit transformation fails in AtlasService
+- [#887](https://github.com/atlasmap/atlasmap/issues/887) Transformations actions are broken
+- [#867](https://github.com/atlasmap/atlasmap/issues/867) Cannot execute AtlasSession created by the other AtlasContext
+- [#860](https://github.com/atlasmap/atlasmap/issues/860) Handle FieldGroup in Validation
+- [#847](https://github.com/atlasmap/atlasmap/issues/847) Add validation error for nested collection
+- [#846](https://github.com/atlasmap/atlasmap/issues/846) Create empty collection at target even when there's no data to map
+- [#844](https://github.com/atlasmap/atlasmap/issues/844) Display a validation error when user combine multiple collection fields
+- [#843](https://github.com/atlasmap/atlasmap/issues/843) Mapping validation doesn't work for JSON and XML
+- [#841](https://github.com/atlasmap/atlasmap/issues/841) [camel-atlasmap] Handle atlasmaping-UI.nnnnn.json
+- [#831](https://github.com/atlasmap/atlasmap/issues/831) Transformation text input is right-aligned
+
+---
+
+## atlasmap-1.39.6 (22/03/2019)
+
+#### Enhancements
+
+- [#68](https://github.com/atlasmap/atlasmap/issues/68) Make it OSGi ready, test running on karaf
+
+#### Bug Fixes
+
+- [#834](https://github.com/atlasmap/atlasmap/issues/834) Transformation is duplicated in Syndesis
+
+---
+
 ## atlasmap-1.39.5 (08/03/2019)
 
 #### Bug Fixes
@@ -443,6 +483,12 @@
 #### Enhancements
 
 - [#175](https://github.com/atlasmap/atlasmap/issues/175) Implement Date-related p0 field actions
+- [#157](https://github.com/atlasmap/atlasmap/issues/157) Implement Object-related p0 field actions
+- [#153](https://github.com/atlasmap/atlasmap/issues/153) Implement String-related p0 field actions
+- [#151](https://github.com/atlasmap/atlasmap/issues/151) Implement Number-related p0 field actions
+- [#134](https://github.com/atlasmap/atlasmap/issues/134) Support multiple source/target Document in camel-atlasmap
+- [#133](https://github.com/atlasmap/atlasmap/issues/133) Support multiple target Document in UI
+- [#132](https://github.com/atlasmap/atlasmap/issues/132) Support multiple source/target Document
 - [#55](https://github.com/atlasmap/atlasmap/issues/55) Implement field actions (p0)
 - [#52](https://github.com/atlasmap/atlasmap/issues/52) Support append and prepend of strings
 - [#32](https://github.com/atlasmap/atlasmap/issues/32) [Performance] JSON reader / writer should cache the JSON document (and maybe XML, too)
@@ -451,29 +497,13 @@
 
 - [#207](https://github.com/atlasmap/atlasmap/issues/207) AtlasEndpoint : There's no source document with docId...
 - [#197](https://github.com/atlasmap/atlasmap/issues/197) UX Review - "Add new mapping" workflow
-- [#97](https://github.com/atlasmap/atlasmap/issues/97) datamapper buttons are links
-- [#94](https://github.com/atlasmap/atlasmap/issues/94) Make [None] disappear on focus
-- [#87](https://github.com/atlasmap/atlasmap/issues/87) Error fetching validation data when removing last mapping
-
----
-
-## 1.32.1 (14/12/2017)
-
-#### Enhancements
-
-- [#157](https://github.com/atlasmap/atlasmap/issues/157) Implement Object-related p0 field actions
-- [#153](https://github.com/atlasmap/atlasmap/issues/153) Implement String-related p0 field actions
-- [#151](https://github.com/atlasmap/atlasmap/issues/151) Implement Number-related p0 field actions
-- [#134](https://github.com/atlasmap/atlasmap/issues/134) Support multiple source/target Document in camel-atlasmap
-- [#133](https://github.com/atlasmap/atlasmap/issues/133) Support multiple target Document in UI
-- [#132](https://github.com/atlasmap/atlasmap/issues/132) Support multiple source/target Document
-
-#### Bug Fixes
-
 - [#176](https://github.com/atlasmap/atlasmap/issues/176) ClassInspectionService is returning NOT_FOUND status for the COMPLEX fields of twitter4j.Status
 - [#172](https://github.com/atlasmap/atlasmap/issues/172) atlasmap-maven-plugin: Can't inspect COMPLEX fields
 - [#165](https://github.com/atlasmap/atlasmap/issues/165) UI puts invalid uri for Java DataSource
 - [#129](https://github.com/atlasmap/atlasmap/issues/129) build.sh --skip-image-builds doesn't work
+- [#97](https://github.com/atlasmap/atlasmap/issues/97) datamapper buttons are links
+- [#94](https://github.com/atlasmap/atlasmap/issues/94) Make [None] disappear on focus
+- [#87](https://github.com/atlasmap/atlasmap/issues/87) Error fetching validation data when removing last mapping
 - [#44](https://github.com/atlasmap/atlasmap/issues/44) DefaultAtlasContext.process() should invoke common validation
 - [#8](https://github.com/atlasmap/atlasmap/issues/8) Enable output field action or remove completely
 - [#7](https://github.com/atlasmap/atlasmap/issues/7) Update BYTE conversion behavior
