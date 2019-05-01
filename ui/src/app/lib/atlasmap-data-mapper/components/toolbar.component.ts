@@ -166,6 +166,8 @@ export class ToolbarComponent implements OnInit {
         && this.cfg.mappings.activeMapping.getCurrentFieldMapping().transition) {
         this.cfg.mappings.activeMapping.getCurrentFieldMapping().transition.enableExpression
           = !this.cfg.mappings.activeMapping.getCurrentFieldMapping().transition.enableExpression;
+      } else {
+        this.cfg.errorService.info('Please select a mapping first.', null);
       }
     }
     // Use the initialization service to trigger the observable updateFromConfig method
@@ -318,4 +320,12 @@ export class ToolbarComponent implements OnInit {
     }
 
   }
+
+  conditionalMappingExpressionEnabled(): boolean {
+    return (this.cfg.mappings && this.cfg.mappings.activeMapping &&
+      this.cfg.mappings.activeMapping.getCurrentFieldMapping() &&
+      this.cfg.mappings.activeMapping.getCurrentFieldMapping().transition &&
+      this.cfg.mappings.activeMapping.getCurrentFieldMapping().transition.enableExpression);
+  }
+
 }
