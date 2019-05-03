@@ -83,6 +83,7 @@ import io.swagger.annotations.ApiResponses;
 public class AtlasService {
 
     static final String ATLASMAP_ADM_PATH = "atlasmap.adm.path";
+    static final String ATLASMAP_ADM_WORKSPACE = "atlasmap.adm.workspace";
     private static final Logger LOG = LoggerFactory.getLogger(AtlasService.class);
 
     private final DefaultAtlasContextFactory atlasContextFactory = DefaultAtlasContextFactory.getInstance();
@@ -91,9 +92,9 @@ public class AtlasService {
     private String atlasmapCatalogName = "atlasmap-catalog.adm";
     private String atlasmapCatalogFilesName = "adm-catalog-files.gz";
     private String atlasmapGenericMappingsName = "atlasmapping-UI";
-    private String baseFolder = "target";
-    private String mappingFolder = baseFolder + File.separator + "mappings";
-    private String libFolder = baseFolder + File.separator + "lib";
+    private String baseFolder = "";
+    private String mappingFolder = "";
+    private String libFolder = "";
     private AtlasLibraryLoader libraryLoader;
 
     public AtlasService() throws AtlasException {
@@ -102,6 +103,16 @@ public class AtlasService {
         if (atlasmapAdmPath != null && atlasmapAdmPath.length() > 0) {
             initializeADMCatalog(atlasmapAdmPath);
         }
+        String atlasmapAdmWorkspace = System.getProperty(ATLASMAP_ADM_WORKSPACE);
+        if (atlasmapAdmWorkspace != null && atlasmapAdmWorkspace.length() > 0) {
+            baseFolder = atlasmapAdmWorkspace;
+        }
+        else {
+            baseFolder = "target";
+        }
+        mappingFolder = baseFolder + File.separator + "mappings";
+        libFolder = baseFolder + File.separator + "lib";
+
         this.libraryLoader = new AtlasLibraryLoader(libFolder);
 
         // Add atlas-core in case it runs on modular class loader
