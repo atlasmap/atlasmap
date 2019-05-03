@@ -83,7 +83,7 @@ import io.swagger.annotations.ApiResponses;
 public class AtlasService {
 
     static final String ATLASMAP_ADM_PATH = "atlasmap.adm.path";
-    static final String ATLASMAP_ADM_WORKSPACE = "atlasmap.adm.workspace";
+    static final String ATLASMAP_WORKSPACE = "atlasmap.workspace";
     private static final Logger LOG = LoggerFactory.getLogger(AtlasService.class);
 
     private final DefaultAtlasContextFactory atlasContextFactory = DefaultAtlasContextFactory.getInstance();
@@ -103,9 +103,9 @@ public class AtlasService {
         if (atlasmapAdmPath != null && atlasmapAdmPath.length() > 0) {
             initializeADMCatalog(atlasmapAdmPath);
         }
-        String atlasmapAdmWorkspace = System.getProperty(ATLASMAP_ADM_WORKSPACE);
-        if (atlasmapAdmWorkspace != null && atlasmapAdmWorkspace.length() > 0) {
-            baseFolder = atlasmapAdmWorkspace;
+        String atlasmapWorkspace = System.getProperty(ATLASMAP_WORKSPACE);
+        if (atlasmapWorkspace != null && atlasmapWorkspace.length() > 0) {
+            baseFolder = atlasmapWorkspace;
         }
         else {
             baseFolder = "target";
