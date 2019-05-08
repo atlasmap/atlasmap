@@ -34,7 +34,7 @@
     <failOnMissingWebXml>false</failOnMissingWebXml>
     <maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
     <!-- Controls Docker Image Generation -->
-    <from.image>fabric8/java-centos-openjdk8-jdk</from.image>
+    <from.image>fabric8/java-jboss-openjdk8-jdk</from.image>
     <docker.image>atlasmap/atlasmap:%l</docker.image>
     <from.image.version>1.3</from.image.version>
     <fabric8.mode>kubernetes</fabric8.mode>
