@@ -57,6 +57,7 @@ import { MappingSelectionSectionComponent } from './components/mapping/mapping-s
 import { LookupTableComponent } from './components/mapping/lookup-table.component';
 import { TransitionSelectionComponent } from './components/mapping/transition-selection.component';
 import { FocusDirective } from './common/focus.directive';
+import { ExpressionComponent } from './components/expression.component';
 
 // export services/types for consumers of this module
 export { ApiXsrfInterceptor, ApiHttpXsrfTokenExtractor } from './services/api-xsrf.service';
@@ -126,6 +127,7 @@ export const alertModuleForRoot: ModuleWithProviders = AlertModule.forRoot();
     MappingListFieldComponent,
     NamespaceListComponent,
     TemplateEditComponent,
+    ExpressionComponent,
     FocusDirective,
     ToErrorIconClassPipe
   ],

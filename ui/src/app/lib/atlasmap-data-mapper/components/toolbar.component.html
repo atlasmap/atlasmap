@@ -2,21 +2,15 @@
 
   <div class="toolbar-icons pull-right">
 
-    <!-- TODO Apply UXD outcome https://github.com/atlasmap/atlasmap/issues/852 -->
     <i class="dropdown inline-block" [attr.class]="getCSSClass('enableExpression')" (click)="toolbarButtonClicked('enableExpression', $event);"
       tooltip='Enable/ Disable conditional mapping expression' placement="bottom"
       style="float:left;font-weight:bold;margin-top:-6px;">f<sub>(x)</sub>
     </i>
 
-    <!-- TODO Apply UXD outcome https://github.com/atlasmap/atlasmap/issues/852 -->
     <div *ngIf="conditionalMappingExpressionEnabled()"
       class="dropdown inline-block pull-left" (drop)="endDrag($event)" (dragover)="allowDrop($event)" >
-
       <div class="dropdown inline-block pull-left" style="margin-left:8px;" >
-        <textarea rows="1" cols="80" id="expression" class="form-control expressionTextarea"
-          [(ngModel)]='cfg.mappings.activeMapping.getCurrentFieldMapping().transition.expression'
-          (blur)="cfg.mappingService.notifyMappingUpdated()" placeholder="Enter mapping expression">
-        </textarea>
+        <expression [configModel]="cfg"></expression>
       </div>
     </div>
 
