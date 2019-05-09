@@ -499,7 +499,7 @@ export class MappingManagementService {
         return;
       }
       if (mappingPair.sourceFields[mappingPair.sourceFields.length - 1].actions.length > 0) {
-        suggestedValue = mappingPair.sourceFields[mappingPair.sourceFields.length - 1].actions[0].argumentValues[0].value;
+        suggestedValue = ((+mappingPair.sourceFields[mappingPair.sourceFields.length - 1].getFieldIndex()) + 1).toString();
       }
     } else if (mappingPair.transition.mode === TransitionMode.SEPARATE) {
       if (field.isSource()) {
@@ -511,7 +511,7 @@ export class MappingManagementService {
         return;
       }
       if (mappingPair.targetFields[mappingPair.targetFields.length - 1].actions.length > 0) {
-        suggestedValue = mappingPair.targetFields[mappingPair.targetFields.length - 1].actions[0].argumentValues[0].value;
+        suggestedValue = ((+mappingPair.targetFields[mappingPair.targetFields.length - 1].getFieldIndex()) + 1).toString();
       }
     }
     const newMField = new MappedField;

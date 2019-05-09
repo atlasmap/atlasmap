@@ -15,6 +15,7 @@ limitations under the License.
 */
 import { Component, ViewChild, Input, HostListener, ElementRef } from '@angular/core';
 import { ConfigModel } from '../models/config.model';
+import { MappedField } from '../models/mapping.model';
 
 @Component({
   selector: 'expression',
@@ -42,12 +43,30 @@ export class ExpressionComponent {
   }
 
   generateExpressionMarkup(): string {
-    const expression = this.configModel.mappings.activeMapping.getCurrentFieldMapping().transition.expression;
+    const pair = this.configModel.mappings.activeMapping.getCurrentFieldMapping();
+    const expression = pair.transition.expression;
     if (!expression) {
       return '';
     }
-    // TODO show field name instead and put a full path as a tooltip
-    return expression.replace(/\$\{[0-9]+\}/g, '<span class="inline-block label label-default">$&</span>');
+
+    const mappedSourceFields = pair.getMappedFields(true);
+    return expression.replace(/\$\{[0-9]+\}/g, (match) => {
+      const index = parseInt(match.substring(2, match.length - 1), 10);
+      let field: MappedField;
+      if (mappedSourceFields.length === 1 && index === 0) {
+        field = mappedSourceFields[0];
+      } else if (mappedSourceFields.length > 1) {
+        field = mappedSourceFields.find(f => {
+          return f.getFieldIndex() != null && (index + 1) === +f.getFieldIndex();
+        });
+      }
+      if (field) {
+        return `<span title="${field.field.docDef.name}:${field.field.path}"
+          class="inline-block label label-default">${field.field.name}</span>`;
+      } else {
+        return `<span title="N/A" class="inline-block label label-danger">${match}</span>`;
+      }
+    });
   }
 
 }
