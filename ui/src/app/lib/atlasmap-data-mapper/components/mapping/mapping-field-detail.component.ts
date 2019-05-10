@@ -150,7 +150,7 @@ export class MappingFieldDetailComponent implements OnInit {
   }
 
   getActionIndex(mappedField: MappedField): string {
-    return mappedField.actions[0].argumentValues[0].value;
+    return mappedField.getFieldIndex();
   }
 
   hasActionIndex(mappedField: MappedField): boolean {

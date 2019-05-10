@@ -164,6 +164,9 @@ export class MappedField {
 
   /**
    * Return the field action index value of this mapped field in separate or combine mode.
+   * @deprecated Is there any corner case that it has to check other than argumentValues[0]?
+   * other part in the codebase always uses MappedField.actions[0].argumentValues[0]
+   * If not, just use getFieldIndex() instead
    */
   getSeparateOrCombineIndex(): string {
     const firstFieldAction: FieldAction = (this.actions.length > 0) ? this.actions[0] : null;
@@ -188,6 +191,18 @@ export class MappedField {
   isMapped(): boolean {
     return (this.field != null) && (this.field !== DocumentDefinition.getNoneField());
   }
+
+  getFieldIndex() {
+    if (this.actions && this.actions[0] && this.actions[0].argumentValues && this.actions[0].argumentValues[0]) {
+      return this.actions[0].argumentValues[0].value;
+    }
+    return null;
+  }
+
+  setFieldIndex(index: string) {
+    this.actions[0].argumentValues[0].value = index;
+  }
+
 }
 
 export class FieldMappingPair {
@@ -365,8 +380,8 @@ export class FieldMappingPair {
     let maxIndex = 0;
     for (const mField of mappedFields) {
       if (!mField.isNoneField() && mField.actions != null && mField.actions.length > 0) {
-        if (+mField.actions[0].argumentValues[0].value > maxIndex) {
-          maxIndex = +mField.actions[0].argumentValues[0].value;
+        if (+mField.getFieldIndex() > maxIndex) {
+          maxIndex = +mField.getFieldIndex();
         }
       }
     }
@@ -382,28 +397,35 @@ export class FieldMappingPair {
   resequenceRemovalsAndGaps(mappedFields: MappedField[], fieldRemoved: boolean): number {
       let lastIndex = 0;
       let tempIndex = 0;
+      const fieldIndicesMap: Map<string, string> = new Map();
       for (const mField of mappedFields) {
         if (mField.isNoneField()) {
           continue;
         }
         if (mField.actions != null && mField.actions.length > 0) {
           if (fieldRemoved) {
-            mField.actions[0].argumentValues[0].value = (++lastIndex).toString(10);
+            const oldIndex = mField.getFieldIndex();
+            const newIndex = (++lastIndex).toString(10);
+            mField.setFieldIndex(newIndex);
+            fieldIndicesMap.set(oldIndex, newIndex);
             continue;
           }
-          tempIndex = +mField.actions[0].argumentValues[0].value;
+          tempIndex = +mField.getFieldIndex();
           if (tempIndex > lastIndex + 1) {
             mField.addPlaceholders(++lastIndex, tempIndex, this);
             break;
           } else if (tempIndex === lastIndex) {
-            tempIndex++;
-            mField.actions[0].argumentValues[0].value = tempIndex.toString(10);
+            const oldIndex = mField.getFieldIndex();
+            const newIndex = ++tempIndex;
+            mField.setFieldIndex(newIndex.toString(10));
+            fieldIndicesMap.set(oldIndex, newIndex.toString());
           }
-          lastIndex = +mField.actions[0].argumentValues[0].value;
+          lastIndex = +mField.getFieldIndex();
         } else {
           lastIndex++;
         }
       }
+      this.transition.updateExpressionFieldIndices(fieldIndicesMap);
       this.sortFieldActionFields(mappedFields);
       return lastIndex;
   }
@@ -422,18 +444,23 @@ export class FieldMappingPair {
                                inIndex: string, fieldRemoved: boolean): number {
     let index = 0;
     if (insertedMappedField != null) {
-      let startIndex = +insertedMappedField.actions[0].argumentValues[0].value;
+      let startIndex = +insertedMappedField.getFieldIndex();
       mappedFields.splice(startIndex, 1);
       startIndex = +inIndex;
       mappedFields.splice(startIndex, 0, insertedMappedField);
 
       // Now re-sequence the index on the ordinal position within the mapped fields array.
+      const fieldIndicesMap: Map<string, string> = new Map();
       for (const mField of mappedFields) {
         if (!mField.isNoneField() && mField.actions != null && mField.actions.length > 0) {
-          mField.actions[0].argumentValues[0].value = index.toString(10);  // Field action index is always first
+          const oldIndex = mField.getFieldIndex();
+          const newIndex = index.toString(10);
+          mField.setFieldIndex(newIndex);
+          fieldIndicesMap.set(oldIndex, newIndex);
         }
         index++;
       }
+      this.transition.updateExpressionFieldIndices(fieldIndicesMap);
       return(index - 1);
     }
 
@@ -461,7 +488,6 @@ export class FieldMappingPair {
       let tempField: MappedField = null;
       let lastField: MappedField = null;
       let index = 0;
-      let indexArgValue: FieldActionArgumentValue[];
       done = true;
 
       for (const mField of mappedFields) {
@@ -470,12 +496,11 @@ export class FieldMappingPair {
         }
 
         if (mField.actions != null && mField.actions.length > 0 && lastField != null) {
-          indexArgValue = mField.actions[0].argumentValues;
-          if (indexArgValue == null) {
+          if (mField.getFieldIndex() == null) {
             break;
           }
 
-          if (lastField.actions.length > 0 && +indexArgValue[0].value < +lastField.actions[0].argumentValues[0].value) {
+          if (lastField.actions.length > 0 && +mField.getFieldIndex() < +lastField.getFieldIndex()) {
             tempField = mappedFields[index - 1];
             mappedFields[index - 1] = mField;
             mappedFields[index] = tempField;
