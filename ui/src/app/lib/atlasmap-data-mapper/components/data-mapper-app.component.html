@@ -1,17 +1,27 @@
 <div class="DataMapperUI">
   <!-- <div class="DataMapperUIBackground"></div> -->
   <!-- <div class="DataMapperUIBackgroundCover"></div> -->
+
   <div [attr.class]="getConfig().initCfg.initialized ? 'dataMapperBody' : 'dataMapperBodyHidden'">
-    <div class="row">
-      <data-mapper-error #errorPanel [isValidation]="false" [errorService]="getConfig().errorService"></data-mapper-error>
-    </div>
+
     <div class="row" style="min-height:0px;">
-      <modal-window #modalWindow [cfg]="getConfig()"></modal-window>
+      <modal-error-window #modalErrorWindow></modal-error-window>
     </div>
+
+    <div class="row" style="min-height:0px;">
+      <modal-window #modalWindow [cfg]="getConfig()" [modalErrorWindow]="modalErrorWindow"></modal-window>
+    </div>
+
+    <div class="row">
+      <data-mapper-error #errorPanel [isValidation]="false" [modalErrorWindow]="modalErrorWindow"
+        [errorService]="getConfig().errorService"></data-mapper-error>
+    </div>
+
     <div class="row">
       <toolbar #toolbarComponent [cfg]="getConfig()" [modalWindow]="modalWindow"></toolbar>
     </div>
-    <div class="row" style="height:calc(100% - 32px); position:relative; padding-top:10px;"
+
+    <div class="row" style="height:calc(100% - 10px); position:relative; padding-top:10px;"
       *ngIf="!getConfig().initCfg.initializationErrorOccurred">
       <div style='height:100%; padding:0;' [attr.class]="(getConfig().showMappingTable || getConfig().showNamespaceTable) ? 'col-md-9 hidden' : 'col-md-9'">
         <div style="float:left; width:40%; height:100%;">

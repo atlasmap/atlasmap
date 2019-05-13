@@ -12,7 +12,8 @@
           <h4 class="modal-title">{{ headerText }}</h4>
         </div>
         <div class="modal-error">
-          <data-mapper-error [isValidation]="true" [errorService]="cfg.errorService"></data-mapper-error>
+          <data-mapper-error [isValidation]="true" [modalErrorWindow]="modalErrorWindow"
+            [errorService]="cfg.errorService"></data-mapper-error>
         </div>
         <div class="modal-body">
           <div class="modal-message" *ngIf="message">{{ message }}</div>

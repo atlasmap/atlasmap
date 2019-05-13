@@ -27,8 +27,13 @@ export class ErrorHandlerService {
   info(message: string, error: any) { this.addError(message, ErrorLevel.INFO, error); }
   warn(message: string, error: any) { this.addError(message, ErrorLevel.WARN, error); }
   error(message: string, error: any) { this.addError(message, ErrorLevel.ERROR, error); }
-  validationError(message: string, error: any) { this.addValidationError(message, error); }
+  validationError(message: string, error: any) { this.addError(message, ErrorLevel.VALIDATION_ERROR, error); }
   mappingError(message: string, error: any) { this.addError(message, ErrorLevel.MAPPING_ERROR, error); }
+
+  resetAll(): void {
+    this.cfg.errors = [];
+    this.cfg.validationErrors = [];
+  }
 
   removeError(identifier: string): void {
     this.cfg.errors = this.cfg.errors.filter(e => e.identifier !== identifier);
@@ -49,7 +54,19 @@ export class ErrorHandlerService {
         this.removeError(e.identifier);
       }
     }
-    this.cfg.validationErrors = [];
+  }
+
+  /**
+   * Display a block of error messages (from validation for instance) by feeding them into the main
+   * error array.
+   *
+   * @param errorBlock
+   */
+  displayErrorBlock(errorBlock: ErrorInfo[]): void {
+    if (errorBlock[0] && this.arrayDoesNotContainError(errorBlock[0].message)) {
+      const mergedArray = [ ...this.cfg.errors, ...errorBlock ];
+      this.cfg.errors = mergedArray;
+    }
   }
 
   private addError(message: string, level: ErrorLevel, error: any): void {
@@ -61,11 +78,6 @@ export class ErrorHandlerService {
 
   private arrayDoesNotContainError(message: string) {
     return this.cfg.errors.filter(e => e.message === message).length === 0;
-  }
-
-  private addValidationError(message: string, error: any): void {
-    const e = new ErrorInfo(message, ErrorLevel.VALIDATION_ERROR, error);
-    this.cfg.validationErrors.push(e);
   }
 
 }

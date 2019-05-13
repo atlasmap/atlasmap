@@ -563,8 +563,10 @@ export class MappingManagementService {
   }
 
   fieldSelected(field: Field, compoundSelection: boolean): void {
+
     // Start out with a clean slate.
     this.cfg.errorService.clearMappingErrors();
+    this.cfg.errorService.clearValidationErrors();
 
     if (!field.isTerminal()) {
       field.docDef.populateChildren(field);

@@ -1,4 +1,5 @@
 <div class='fieldMappingDetail' *ngIf="cfg.mappings && cfg.mappings.activeMapping && cfg.showMappingDetailTray">
+
   <div class="card-pf">
     <div class="card-pf-heading">
       <h2 class="card-pf-title clearfix">
@@ -9,33 +10,13 @@
 
     <div class="fieldMappingDetail-body">
 
-      <div class="alert alert-danger" *ngFor="let error of cfg.mappings.activeMapping.getValidationErrors()">
-        <a class="close" (click)="cfg.mappings.activeMapping.removeValidationError(error.identifier)">
-          <i class="fa fa-close"></i>
-        </a>
-        <span class="pficon pficon-error-circle-o"></span>
-        <label>{{ error.message }}</label>
-      </div>
+      {{ cfg.errorService.displayErrorBlock(cfg.mappings.activeMapping.getValidationWarnings()) }}
+      {{ cfg.errorService.displayErrorBlock(cfg.mappings.activeMapping.getValidationErrors()) }}
+      {{ cfg.mappings.activeMapping.clearValidationErrors() }}
 
-      <alert *ngFor="let warn of cfg.mappings.activeMapping.getValidationWarnings()" type="warn" dismissOnTimeout="8000"
-        (onClose)="cfg.mappings.activeMapping.removeValidationError(warn.identifier)">
-        <span class="pficon pficon-warning-triangle-o"></span>
-        <label>{{ warn.message }}</label>
-      </alert>
-
-      <div class="alert alert-danger" *ngFor="let error of cfg.mappings.activeMapping.getPreviewErrors()">
-        <a class="close" (click)="cfg.mappings.activeMapping.removePreviewError(error.identifier)">
-          <i class="fa fa-close"></i>
-        </a>
-        <span class="pficon pficon-error-circle-o"></span>
-        <label>{{ error.message }}</label>
-      </div>
-
-      <alert *ngFor="let warn of cfg.mappings.activeMapping.getPreviewWarnings()" type="warn" dismissOnTimeout="8000"
-        (onClose)="cfg.mappings.activeMapping.removePreviewError(warn.identifier)">
-        <span class="pficon pficon-warning-triangle-o"></span>
-        <label>{{ warn.message }}</label>
-      </alert>
+      {{ cfg.errorService.displayErrorBlock(cfg.mappings.activeMapping.getPreviewWarnings()) }}
+      {{ cfg.errorService.displayErrorBlock(cfg.mappings.activeMapping.getPreviewErrors()) }}
+      {{ cfg.mappings.activeMapping.clearPreviewErrors() }}
 
       <div class="wizard-pf" embed-in-page="true">
         <div class="wizard-pf-body">

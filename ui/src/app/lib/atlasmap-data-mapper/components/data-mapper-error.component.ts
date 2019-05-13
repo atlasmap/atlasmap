@@ -14,7 +14,9 @@
     limitations under the License.
 */
 
-import { Component, Input } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
+
+import { ModalErrorWindowComponent } from './modal-error-window.component';
 
 import { ErrorInfo, ErrorLevel } from '../models/error.model';
 import { ErrorHandlerService } from '../services/error-handler.service';
@@ -28,8 +30,20 @@ import { ConfigModel } from '../models/config.model';
 export class DataMapperErrorComponent {
   @Input() errorService: ErrorHandlerService;
   @Input() isValidation = false;
+  @Input() modalErrorWindow: ModalErrorWindowComponent;
 
+  private elem = null;
+  private mouseEventTimer = null;
   isOpen = true;
+  cfg: ConfigModel = null;
+
+  /**
+   * Return true if an error window is necessary, false otherwise.
+   */
+  errorServiceRequired(): boolean {
+    const cfg = ConfigModel.getConfig();
+    return (this.errorService && (cfg.validationErrors.length > 0 || cfg.errors.length > 0));
+  }
 
   getErrors(): ErrorInfo[] {
     return this.isValidation ? ConfigModel.getConfig().validationErrors.filter(e => e.level >= ErrorLevel.ERROR)
@@ -47,12 +61,71 @@ export class DataMapperErrorComponent {
   }
 
   handleClick(event: any) {
-    const errorIdentifier: string = event.target.attributes.getNamedItem('errorIdentifier').value;
-    this.errorService.removeError(errorIdentifier);
+    const errorIdentifier = event.target.attributes.getNamedItem('errorIdentifier');
+    if (errorIdentifier && errorIdentifier.value) {
+      ConfigModel.getConfig().mappings.activeMapping.removeValidationError(errorIdentifier.value);
+      this.errorService.removeError(errorIdentifier.value);
+    }
   }
 
-  handleAlertClose(info: ErrorInfo): void {
+  handleAlertClose(e: ErrorInfo): void {
     this.isOpen = true;
-    this.errorService.removeError(info.identifier);
+    this.errorService.removeError(e.identifier);
+  }
+
+  /**
+   * Handle the event of a user mousing over the error window.  If they stay within the window
+   * for a half-second then the active errors modal will show all of the errors/ warnings.
+   *
+   * @param evt1
+   */
+  handleMouseEnter(evt1: MouseEvent): void {
+    this.mouseEventTimer =  setTimeout(() => {
+        if (this.elem != null) {
+            evt1.stopPropagation();
+            evt1.preventDefault();
+          }
+      this.showActiveErrors();
+    }, 500);
+  }
+
+  /**
+   * Handle the event of a user mousing out of the error window.  Disarm the event timer if that case.
+   *
+   * @param evt1
+   */
+  handleMouseLeave(evt1: MouseEvent): void {
+    if (this.mouseEventTimer) {
+      clearTimeout(this.mouseEventTimer);
+    }
+    this.mouseEventTimer = null;
+  }
+
+  /**
+   * Show all errors/ warnings in a separate modal window.
+   */
+  private showActiveErrors(): void {
+    this.modalErrorWindow.reset();
+    this.modalErrorWindow.show();
+  }
+
+  getConfig(): ConfigModel {
+    return ConfigModel.getConfig();
+  }
+
+  /**
+   * The fixed error window only needs to show one error.  The full collection of errors is
+   * available from the error modal window.
+   */
+  getFirstError(): ErrorInfo {
+    return this.getErrors()[0];
+  }
+
+  /**
+   * The fixed error window only needs to show one warning.  The full collection of warnings is
+   * available from the error modal window.
+   */
+  getFirstWarning(): ErrorInfo {
+    return this.getWarnings()[0];
   }
 }

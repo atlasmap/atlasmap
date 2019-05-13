@@ -1,23 +1,19 @@
-<div class="DataMapperErrorComponent" *ngIf="errorService">
-  <div class="alert alert-danger" *ngFor="let e of getErrors()">
-    <a class="close" (click)="handleClick($event)">
-      <i class="fa fa-close" attr.errorIdentifier="{{e.identifier}}"></i>
-    </a>
-    <span class="pficon pficon-error-circle-o"></span>
-    {{ e.message }}
-  </div>
-
-  <div class="alert alert-warning" *ngFor="let w of getWarnings()">
-    <a class="close" (click)="handleClick($event)">
-      <i class="fa fa-close" attr.errorIdentifier="{{w.identifier}}"></i>
-    </a>
-    <span class="pficon pficon-warning-triangle-o"></span>
-    {{ w.message }}
-  </div>  
+<div class="DataMapperErrorComponent" *ngIf="errorServiceRequired()" on-mouseenter='handleMouseEnter($event)'
+  on-mouseleave='handleMouseLeave($event)'>
 
   <alert *ngFor="let i of getInfos()" type="info" dismissOnTimeout="8000" (onClose)="handleAlertClose(i)">
     <span class="pficon pficon-info"></span>
     {{ i.message }}
   </alert>
+
+  <div class="alert alert-danger alert-dismissable" *ngIf="getWarnings().length">
+    <span class="pficon pficon-warning-triangle-o"></span>
+    {{ getFirstWarning().message }}
+  </div>
+
+  <div class="alert alert-danger alert-dismissable" *ngIf="getErrors().length">
+    <span class="pficon pficon-error-circle-o"></span>
+    {{ getFirstError().message }}
+  </div>
 
 </div>

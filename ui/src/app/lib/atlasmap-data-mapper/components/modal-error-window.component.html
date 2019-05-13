@@ -1,0 +1,47 @@
+<ng-container>
+  <!-- <div class="modal-backdrop fade" [ngClass]="{'in': fade}"></div> -->
+  <div id="modalErrorWindow" class="modal fade" [ngClass]="{'in': fade, 'show': visible}">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <a (click)="close()">
+            <span class='close'>
+              <span class="pficon pficon-close"></span>
+            </span>
+          </a>
+          <h4 class="modal-title">{{ headerText }}</h4>
+        </div>
+        <div class="modal-error">
+        </div>
+        <div class="modal-body">
+          <div class="modal-message">
+            <div class="alert alert-danger alert-dismissable" *ngFor="let w of getWarnings()">  
+              <a class="close" (click)="handleAlertClick($event)" (onClose)="handleAlertClose(w)" data-dismiss="alert">
+                <i class="pficon pficon-close" attr.errorIdentifier="{{ w.identifier }}"></i>
+              </a>
+              <span class="pficon pficon-warning-triangle-o"></span>
+              {{ w.message }}
+            </div>
+          
+            <div class="alert alert-danger alert-dismissable" *ngFor="let e of getErrors()">
+              <a class="close" (click)="handleAlertClick($event)" data-dismiss="alert">
+                <i class="pficon pficon-close" attr.errorIdentifier="{{ e.identifier }}"></i>
+              </a>
+              <span class="pficon pficon-error-circle-o"></span>
+              {{ e.message }}
+            </div>
+
+          </div>
+          <ng-template #dyn_target></ng-template>
+        </div>
+        <div class="modal-footer">
+          <div class="modal-buttons">
+            <button class="pull-right btn btn-primary" #modalErrorWindowButton id="modalErrorWindowButton"
+              (click)="dismissAll()">{{ buttonText }} </button>
+            <!-- <button class="pull-right btn btn-default" (click)="buttonClicked(false)">Cancel</button> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>

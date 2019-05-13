@@ -20,6 +20,7 @@ import {
 } from '@angular/core';
 import { ConfigModel } from '../models/config.model';
 import { Subscription } from 'rxjs';
+import { ModalErrorWindowComponent } from './modal-error-window.component';
 
 // source: http://www.w3schools.com/howto/howto_css_modals.asp
 
@@ -57,6 +58,7 @@ export class ModalWindowComponent implements AfterViewInit, OnDestroy {
   @Input() okButtonHandler: Function;
   @Input() cancelButtonHandler: Function;
   @Input() cfg: ConfigModel;
+  @Input() modalErrorWindow: ModalErrorWindowComponent;
 
   message: string = null;
   nestedComponent: ModalWindowValidator;
