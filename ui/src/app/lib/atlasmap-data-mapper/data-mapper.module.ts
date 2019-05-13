@@ -20,6 +20,7 @@ import { HttpClientModule, HttpClientXsrfModule, HttpXsrfTokenExtractor, HTTP_IN
 import { HttpXsrfInterceptor } from '@angular/common/http/src/xsrf';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AlertModule, BsDropdownModule, TooltipModule, TypeaheadModule } from 'ngx-bootstrap';
+import { NotificationService } from 'patternfly-ng';
 
 import { environment } from '../../../environments/environment';
 import { DocumentManagementService } from './services/document-management.service';
@@ -31,6 +32,7 @@ import { DataMapperAppExampleHostComponent } from './components/data-mapper-exam
 import { DataMapperAppComponent } from './components/data-mapper-app.component';
 import { DataMapperErrorComponent } from './components/data-mapper-error.component';
 import { ModalWindowComponent, EmptyModalBodyComponent } from './components/modal-window.component';
+import { ModalErrorWindowComponent } from './components/modal-error-window.component';
 import { ToolbarComponent } from './components/toolbar.component';
 import { TemplateEditComponent } from './components/template-edit.component';
 import { LineMachineComponent } from './components/line-machine.component';
@@ -106,6 +108,7 @@ export const alertModuleForRoot: ModuleWithProviders = AlertModule.forRoot();
     CollectionMappingComponent,
     MappingPairDetailComponent,
     ModalWindowComponent,
+    ModalErrorWindowComponent,
     DataMapperAppExampleHostComponent,
     MappingFieldActionComponent,
     MappingFieldDetailComponent,
@@ -134,6 +137,7 @@ export const alertModuleForRoot: ModuleWithProviders = AlertModule.forRoot();
   exports: [
     DataMapperAppExampleHostComponent,
     ModalWindowComponent,
+    ModalErrorWindowComponent,
     DataMapperAppComponent,
     AlertModule
   ],

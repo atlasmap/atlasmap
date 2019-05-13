@@ -661,6 +661,11 @@ export class MappingModel {
     Object.freeze(this.validationErrors);
   }
 
+  clearPreviewErrors(): void {
+    this.previewErrors = [];
+    Object.freeze(this.previewErrors);
+  }
+
   getPreviewErrors(): ErrorInfo[] {
     return this.previewErrors.filter(e => e.level >= ErrorLevel.ERROR);
   }

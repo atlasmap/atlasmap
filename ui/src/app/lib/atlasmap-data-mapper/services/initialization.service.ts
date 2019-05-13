@@ -528,6 +528,9 @@ export class InitializationService {
   async initialize(): Promise<boolean> {
     return new Promise<boolean>(async(resolve, reject) => {
       this.cfg.fieldActionMetadata = null;
+      this.cfg.errorService.clearMappingErrors();
+      this.cfg.errorService.clearValidationErrors();
+
       if (this.cfg.mappingService == null) {
         this.cfg.errorService.warn('Mapping service is not configured, validation service will not be used.', null);
       } else if (this.cfg.initCfg.baseMappingServiceUrl == null) {

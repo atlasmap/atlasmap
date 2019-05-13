@@ -20,6 +20,7 @@ import { ConfigModel } from '../models/config.model';
 import { ToolbarComponent } from './toolbar.component';
 import { DataMapperErrorComponent } from './data-mapper-error.component';
 import { LineMachineComponent } from './line-machine.component';
+import { ModalErrorWindowComponent } from './modal-error-window.component';
 import { ModalWindowComponent } from './modal-window.component';
 
 import { DocumentDefinitionComponent } from './document-definition.component';
@@ -39,6 +40,7 @@ export class DataMapperAppComponent implements OnInit, OnDestroy {
 
   @ViewChild('lineMachine') lineMachine: LineMachineComponent;
   @ViewChild('errorPanel') errorPanel: DataMapperErrorComponent;
+  @ViewChild('modalErrorWindow') modalErrorWindow: ModalErrorWindowComponent;
   @ViewChild('modalWindow') modalWindow: ModalWindowComponent;
   @ViewChild('docDefInput') docDefInput: DocumentDefinitionComponent;
   @ViewChild('docDefOutput') docDefOutput: DocumentDefinitionComponent;

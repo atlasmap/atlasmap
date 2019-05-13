@@ -3,6 +3,7 @@
 import { ChangeDetectorRef, QueryList, ViewContainerRef } from '@angular/core';
 import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { ModalWindowComponent, EmptyModalBodyComponent } from './modal-window.component';
+import { ModalErrorWindowComponent } from './modal-error-window.component';
 import { DataMapperErrorComponent } from './data-mapper-error.component';
 import { AlertModule } from 'ngx-bootstrap';
 import { ConfigModel } from '../models/config.model';
@@ -27,6 +28,7 @@ describe('ModalWindowComponent', () => {
         ConstantFieldEditComponent,
         DataMapperErrorComponent,
         EmptyModalBodyComponent,
+        ModalErrorWindowComponent,
         ModalWindowComponent
       ],
     }).overrideModule(BrowserDynamicTestingModule, {
