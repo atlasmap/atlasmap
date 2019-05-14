@@ -273,6 +273,18 @@ export class FieldMappingPair {
     return null;
   }
 
+  getMappedFieldForIndex(index: string, isSource: boolean): MappedField {
+    if (!index) {
+      return null;
+    }
+    for (const mappedField of this.getMappedFields(isSource)) {
+      if (index === mappedField.getFieldIndex()) {
+        return mappedField;
+      }
+    }
+    return null;
+  }
+
   /**
    * Return an array of user mapped fields for the specified panel in this field pair instance.  No
    * data-mapper generated padding fields will be included.
@@ -397,17 +409,14 @@ export class FieldMappingPair {
   resequenceRemovalsAndGaps(mappedFields: MappedField[], fieldRemoved: boolean): number {
       let lastIndex = 0;
       let tempIndex = 0;
-      const fieldIndicesMap: Map<string, string> = new Map();
       for (const mField of mappedFields) {
         if (mField.isNoneField()) {
           continue;
         }
         if (mField.actions != null && mField.actions.length > 0) {
           if (fieldRemoved) {
-            const oldIndex = mField.getFieldIndex();
             const newIndex = (++lastIndex).toString(10);
             mField.setFieldIndex(newIndex);
-            fieldIndicesMap.set(oldIndex, newIndex);
             continue;
           }
           tempIndex = +mField.getFieldIndex();
@@ -415,17 +424,14 @@ export class FieldMappingPair {
             mField.addPlaceholders(++lastIndex, tempIndex, this);
             break;
           } else if (tempIndex === lastIndex) {
-            const oldIndex = mField.getFieldIndex();
             const newIndex = ++tempIndex;
             mField.setFieldIndex(newIndex.toString(10));
-            fieldIndicesMap.set(oldIndex, newIndex.toString());
           }
           lastIndex = +mField.getFieldIndex();
         } else {
           lastIndex++;
         }
       }
-      this.transition.updateExpressionFieldIndices(fieldIndicesMap);
       this.sortFieldActionFields(mappedFields);
       return lastIndex;
   }
@@ -450,17 +456,14 @@ export class FieldMappingPair {
       mappedFields.splice(startIndex, 0, insertedMappedField);
 
       // Now re-sequence the index on the ordinal position within the mapped fields array.
-      const fieldIndicesMap: Map<string, string> = new Map();
       for (const mField of mappedFields) {
         if (!mField.isNoneField() && mField.actions != null && mField.actions.length > 0) {
           const oldIndex = mField.getFieldIndex();
           const newIndex = index.toString(10);
           mField.setFieldIndex(newIndex);
-          fieldIndicesMap.set(oldIndex, newIndex);
         }
         index++;
       }
-      this.transition.updateExpressionFieldIndices(fieldIndicesMap);
       return(index - 1);
     }
 

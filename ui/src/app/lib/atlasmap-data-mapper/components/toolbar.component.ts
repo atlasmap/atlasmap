@@ -20,6 +20,7 @@ import { InspectionType } from '../common/config.types';
 import { ConfigModel } from '../models/config.model';
 import { ModalWindowComponent } from './modal-window.component';
 import { TemplateEditComponent } from './template-edit.component';
+import { FieldNode, ExpressionModel } from '../models/expression.model';
 
 @Component({
   selector: 'toolbar',
@@ -283,42 +284,6 @@ export class ToolbarComponent implements OnInit {
    */
   handleExportMappingCancel(): void {
     this.mappingsFileName = '';
-  }
-
-  allowDrop(event: any): void {
-    if (event.preventDefault) {
-      event.preventDefault();
-    }
-    if (event.stopPropagation) {
-      event.stopPropagation();
-    }
-  }
-
-  endDrag(event: MouseEvent): void {
-
-    const droppedField: Field = this.cfg.currentDraggedField;
-    const currentFieldMapping = this.cfg.mappings.activeMapping.getCurrentFieldMapping();
-    if (droppedField === null || currentFieldMapping === null || !droppedField.isSource) {
-      return;
-    }
-
-    if (droppedField.partOfMapping) {
-
-      // The selected field is part of a different mapping.
-      if (!currentFieldMapping.isFieldMapped(droppedField)) {
-        return;
-      }
-
-    // Pulling an unmapped field into a transition expression evaluation implies a compound selection.
-    } else {
-      this.cfg.mappingService.fieldSelected(droppedField, true);
-    }
-    if (this.cfg.mappings.activeMapping.getCurrentFieldMapping().transition.expression) {
-      this.cfg.mappings.activeMapping.getCurrentFieldMapping().transition.expression += ' ' + droppedField.name;
-    } else {
-      this.cfg.mappings.activeMapping.getCurrentFieldMapping().transition.expression = droppedField.name;
-    }
-
   }
 
   conditionalMappingExpressionEnabled(): boolean {

@@ -482,14 +482,8 @@
 /* conditional mapping */
 .DataMapperUI .expressionMarkup {
   width:100%;
+  min-width: 400px;
   height:29px;
   display: inline-block;
-  position: absolute;
 }
-.DataMapperUI .expressionTextarea {
-  width:100%;
-  height:29px;
-  display: inline-block;
-  border: none;
-  outline: none;
-}
+
