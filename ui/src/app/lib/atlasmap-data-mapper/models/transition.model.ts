@@ -16,6 +16,7 @@
 import { DocumentDefinition } from '../models/document-definition.model';
 import { Field } from './field.model';
 import { FieldMappingPair } from './mapping.model';
+import { ExpressionModel } from './expression.model';
 
 export class FieldActionArgument {
   name: string = null;
@@ -291,7 +292,7 @@ export class TransitionModel {
   delimiter: TransitionDelimiter = TransitionDelimiter.SPACE;
   userDelimiter = '';
   lookupTableName: string = null;
-  expression: string;
+  expression: ExpressionModel;
   enableExpression = false;
 
   constructor() {
@@ -442,22 +443,6 @@ export class TransitionModel {
 
   isEnumerationMode(): boolean {
     return this.mode === TransitionMode.ENUM;
-  }
-
-  updateExpressionFieldIndices(fieldIndicesMap: Map<string, string>) {
-    if (!this.expression || !fieldIndicesMap || fieldIndicesMap.size === 0) {
-      return;
-    }
-
-    // replacing indices with converting from 1-based to 0-based
-    this.expression = this.expression.replace(/\$\{[0-9]+\}/g, (match) => {
-      const index = parseInt(match.substring(2, match.length - 1), 10);
-      const newIndexPlusOne = fieldIndicesMap.get((index + 1).toString());
-      if (newIndexPlusOne) {
-        return '${' + (parseInt(newIndexPlusOne, 10) - 1) + '}';
-      }
-      return match;
-    });
   }
 
 }

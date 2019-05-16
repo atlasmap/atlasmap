@@ -106,7 +106,7 @@ export class SimpleMappingComponent {
 
     if (insertBeforeMappedField != null && insertBeforeMappedField.actions[0] != null) {
       this.cfg.mappingService.resequenceMappedField(this.fieldPair, droppedMappedField,
-        insertBeforeMappedField.actions[0].argumentValues[0].value);
+        insertBeforeMappedField.getFieldIndex());
     }
     this.cfg.currentDraggedField = null;
   }

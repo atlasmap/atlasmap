@@ -1,6 +1,2 @@
-<div id="expressionMarkup" class="form-control expressionMarkup" [innerHTML]="generateExpressionMarkup()">
+<div id="expressionMarkup" #expressionMarkupRef contenteditable autofocus class="form-control expressionMarkup">
 </div>
-<textarea id="expressionTextarea" cols="80" #expressionTextareaRef autofocus class="expressionTextarea"
-  [(ngModel)]="this.configModel.mappings.activeMapping.getCurrentFieldMapping().transition.expression"
-  tooltip="FIXME: field ref like \${0} shows a label">
-</textarea>

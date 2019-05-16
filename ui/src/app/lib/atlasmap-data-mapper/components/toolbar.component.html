@@ -8,7 +8,7 @@
     </i>
 
     <div *ngIf="conditionalMappingExpressionEnabled()" #conditionalExprBlock
-      class="dropdown inline-block pull-left" style="width:400px;" (drop)="endDrag($event)" (dragover)="allowDrop($event)" >
+      class="dropdown inline-block pull-left" style="width:400px;" >
       <div class="dropdown inline-block pull-left" style="margin-left:8px;" >
         <expression [configModel]="cfg"></expression>
       </div>
