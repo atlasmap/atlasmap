@@ -27,6 +27,7 @@ import { DocumentType } from '../common/config.types';
 import { ConfigModel } from '../models/config.model';
 import { ErrorInfo, ErrorLevel } from '../models/error.model';
 import { TransitionModel, TransitionDelimiter } from '../models/transition.model';
+import { ExpressionModel } from '../models/expression.model';
 
 export class MappingSerializer {
 
@@ -92,7 +93,7 @@ export class MappingSerializer {
       if (fieldMappingPair.transition.enableExpression) {
         actions[0] = {
           'Expression' : {
-            'expression' : fieldMappingPair.transition.expression
+            'expression' : fieldMappingPair.transition.expression.toText()
           }
         };
       } else {
@@ -298,7 +299,7 @@ export class MappingSerializer {
       if (isSource && fields.length === 1 && fieldPair.transition.enableExpression) {
         serializedField['actions'] = [ {
           'Expression' : {
-            'expression' : fieldPair.transition.expression
+            'expression' : fieldPair.transition.expression.toText()
           }
         } ];
       }
@@ -512,8 +513,9 @@ export class MappingSerializer {
         if (firstAction.Expression || firstAction['@type'] === 'Expression') {
           fieldPair.transition.mode = TransitionMode.COMBINE;
           fieldPair.transition.enableExpression = true;
-          fieldPair.transition.expression =
-            firstAction.Expression ? firstAction.Expression.expression : firstAction['expression'];
+          fieldPair.transition.expression = new ExpressionModel(fieldPair);
+          const expr = firstAction.Expression ? firstAction.Expression.expression : firstAction['expression'];
+          fieldPair.transition.expression.addText(expr);
         } else if (firstAction.Concatenate || firstAction['@type'] === 'Concatenate') {
           const concatDelimiter =
             firstAction.Concatenamte ? firstAction.Concatenate.delimiter : firstAction['delimiter'];
@@ -546,7 +548,9 @@ export class MappingSerializer {
           }
         } else if (firstAction.Expression || firstAction['@type'] === 'Expression') {
           fieldPair.transition.enableExpression = true;
-          fieldPair.transition.expression = firstAction.Expression ? firstAction.Expression.expression : firstAction['expression'];
+          fieldPair.transition.expression = new ExpressionModel(fieldPair);
+          const expr = firstAction.Expression ? firstAction.Expression.expression : firstAction['expression'];
+          fieldPair.transition.expression.addText(expr);
         }
       }
     }

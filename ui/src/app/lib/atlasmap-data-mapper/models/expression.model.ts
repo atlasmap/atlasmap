@@ -66,8 +66,8 @@ export class FieldNode implements ExpressionNode {
 export class ExpressionModel {
 
   private _nodes: ExpressionNode[] = [];
-  private textCache: string;
-  private htmlCache: string;
+  private textCache = '';
+  private htmlCache = '';
 
   constructor(private mappingPair: FieldMappingPair) {}
 
@@ -154,9 +154,8 @@ export class ExpressionModel {
       if (position !== 0) {
         answer.push(new TextNode(text.substring(0, position)));
       }
-      const index = text.substring(position + 2, text.indexOf('}'));
-      const field = this.mappingPair.getMappedFieldForIndex((parseInt(index, 10) + 1).toString(), true);
-      answer.push(new FieldNode(field));
+      const index = parseInt(text.substring(position + 2, text.indexOf('}')), 10);
+      answer.push(new FieldNode(null, index, this.mappingPair));
       text = text.substring(text.indexOf('}') + 1);
     }
     if (text.length > 0) {
