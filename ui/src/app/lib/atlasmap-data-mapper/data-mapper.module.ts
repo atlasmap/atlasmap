@@ -74,6 +74,7 @@ export { MappingSerializer } from './utils/mapping-serializer';
 
 import { ToErrorIconClassPipe } from './common/to-error-icon-class.pipe';
 import { ApiXsrfInterceptor, ApiHttpXsrfTokenExtractor } from './services/api-xsrf.service';
+import {AppRoutingModule} from "../../app-routing.module";
 import { FieldActionService } from './services/field-action.service';
 import { FileManagementService } from './services/file-management.service';
 
@@ -98,6 +99,8 @@ export const loggerModuleForRoot: ModuleWithProviders = LoggerModule.forRoot(env
     tooltipModuleForRoot,
     bsDropdownModuleForRoot,
     httpClientXsrfModuleForRoot,
+    alertModuleForRoot,
+    AppRoutingModule
     alertModuleForRoot,
     loggerModuleForRoot,
   ],
