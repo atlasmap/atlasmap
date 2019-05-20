@@ -39,7 +39,8 @@ export class ExpressionComponent implements OnInit {
     if (!this.mapping.transition.expression) {
       this.mapping.transition.expression = new ExpressionModel(this.mapping);
     }
-    this.markup.nativeElement.focus();
+    this.updateExpressionMarkup();
+    this.moveCaretToEnd();
   }
 
   @HostListener('keydown', ['$event'])
