@@ -229,8 +229,15 @@ export class ExpressionComponent implements OnInit {
    */
   selectionChanged(event: any, index: number): void {
     const currentFieldMapping = this.configModel.mappings.activeMapping.getCurrentFieldMapping();
-    const mappedField = currentFieldMapping.getMappedFieldForField(this.mappedFieldCandidates[index].field, true);
+    const selectedField = this.mappedFieldCandidates[index].field;
+    let mappedField = currentFieldMapping.getMappedFieldForField(selectedField, true);
     this.mapping.transition.expression.clearToEnd(this.atIndex);
+
+    // If the selected field was not part of the original mapping then add it now.
+    if (mappedField === null) {
+      mappedField = currentFieldMapping.addField(selectedField, true, false);
+      this.configModel.mappingService.updateMappedField(currentFieldMapping, true, false);
+    }
     this.addConditionExpressionNode(mappedField);
     this.atIndex = 0;
     this.mappedFieldCandidates = [];
