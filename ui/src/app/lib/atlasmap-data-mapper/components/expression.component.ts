@@ -13,19 +13,20 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import { Component, ViewChild, Input, HostListener, ElementRef, OnInit } from '@angular/core';
+import { Component, ViewChild, Input, HostListener, ElementRef, OnInit, OnDestroy } from '@angular/core';
 import { ConfigModel } from '../models/config.model';
 import { DocumentDefinition } from '../models/document-definition.model';
 import { MappingModel, FieldMappingPair, MappedField } from '../models/mapping.model';
 import { ExpressionModel, FieldNode } from '../models/expression.model';
 import { Field } from '../models/field.model';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'expression',
   templateUrl: 'expression.component.html'
 })
 
-export class ExpressionComponent implements OnInit {
+export class ExpressionComponent implements OnInit, OnDestroy {
 
   @Input()
   configModel: ConfigModel;
@@ -42,14 +43,26 @@ export class ExpressionComponent implements OnInit {
   private searchFilter = '';
   private searchMode = false;
   private mapping: FieldMappingPair;
+  private expressionUpdatedSubscription: Subscription;
 
   ngOnInit() {
     this.mapping = this.configModel.mappings.activeMapping.getCurrentFieldMapping();
     if (!this.mapping.transition.expression) {
       this.mapping.transition.expression = new ExpressionModel(this.mapping);
     }
+    this.mapping.transition.expression.updateFieldReference(this.mapping);
+    this.expressionUpdatedSubscription = this.mapping.transition.expression.expressionUpdated$.subscribe(() => {
+      this.updateExpressionMarkup();
+      this.moveCaretToEnd();
+    });
     this.updateExpressionMarkup();
     this.moveCaretToEnd();
+  }
+
+  ngOnDestroy() {
+    if (this.expressionUpdatedSubscription) {
+      this.expressionUpdatedSubscription.unsubscribe();
+    }
   }
 
   @HostListener('keydown', ['$event'])
@@ -60,7 +73,10 @@ export class ExpressionComponent implements OnInit {
     } else if ('Backspace' === event.key) {
       // TODO handle cursor position
       event.preventDefault();
-      expression.removeLastToken();
+      expression.removeLastToken(removedMfield => {
+        this.mapping.removeMappedField(removedMfield, true);
+        this.configModel.mappingService.updateMappedField(this.mapping, true, true);
+      });
       if (this.searchMode) {
         if (this.searchFilter.length === 0) {
           this.mappedFieldCandidates = [];
@@ -71,8 +87,6 @@ export class ExpressionComponent implements OnInit {
     } else if ('Delete' === event.key) {
       // TODO
     }
-    this.updateExpressionMarkup();
-    this.moveCaretToEnd();
   }
 
   @HostListener('keypress', ['$event'])
@@ -106,15 +120,12 @@ export class ExpressionComponent implements OnInit {
     const endOffset = range.endOffset;
     // TODO handle cursor position... for now just append to the end
     this.mapping.transition.expression.addText(event.key);
-    this.updateExpressionMarkup();
-    this.moveCaretToEnd();
   }
 
   @HostListener('cut', ['$event'])
   onCut(event: ClipboardEvent) {
     // TODO remove only selected area
     this.mapping.transition.expression.clear();
-    this.updateExpressionMarkup();
   }
 
   @HostListener('paste', ['$event'])
@@ -124,8 +135,6 @@ export class ExpressionComponent implements OnInit {
       || window['clipboardData'].getData('Text');
     // TODO handle cursor position... for now just append to the end
     this.mapping.transition.expression.addText(pasted);
-    this.updateExpressionMarkup();
-    this.moveCaretToEnd();
   }
 
   @HostListener('dragover', ['$event'])
@@ -165,8 +174,6 @@ export class ExpressionComponent implements OnInit {
 
   private addConditionExpressionNode(mappedField: MappedField): void {
     this.configModel.mappings.activeMapping.getCurrentFieldMapping().transition.expression.addNode(new FieldNode(mappedField));
-    this.updateExpressionMarkup();
-    this.moveCaretToEnd();
   }
 
   private updateExpressionMarkup() {

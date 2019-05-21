@@ -14,6 +14,7 @@
     limitations under the License.
 */
 import { MappedField, FieldMappingPair } from './mapping.model';
+import { Subject } from 'rxjs';
 
 export interface ExpressionNode {
   toText(): string;
@@ -21,12 +22,8 @@ export interface ExpressionNode {
 }
 
 export class TextNode implements ExpressionNode {
-  private str: string;
 
-  constructor(str: string) {
-    this.str = str;
-  }
-
+  constructor(public readonly str: string) {}
 
   toText(): string {
     return this.str;
@@ -40,7 +37,7 @@ export class TextNode implements ExpressionNode {
 
 export class FieldNode implements ExpressionNode {
 
-  constructor(private field?: MappedField, private index?: number, private pair?: FieldMappingPair) {
+  constructor(public readonly field?: MappedField, private index?: number, private pair?: FieldMappingPair) {
     if (!field) {
       this.field = pair.getMappedFieldForIndex((index + 1).toString(), true);
     }
@@ -65,11 +62,16 @@ export class FieldNode implements ExpressionNode {
 
 export class ExpressionModel {
 
+  expressionUpdatedSource = new Subject<void>();
+  expressionUpdated$ = this.expressionUpdatedSource.asObservable();
+
   private _nodes: ExpressionNode[] = [];
   private textCache = '';
   private htmlCache = '';
 
-  constructor(private mappingPair: FieldMappingPair) {}
+  constructor(private mappingPair: FieldMappingPair) {
+    mappingPair.getUserMappedFields(true).forEach(f => this.appendFieldNode(f));
+  }
 
   get nodes(): ReadonlyArray<ExpressionNode> {
     return this._nodes;
@@ -101,18 +103,24 @@ export class ExpressionModel {
     this.updateCache();
   }
 
-  removeNode(index: number) {
-    this._nodes.splice(index, 1);
+  removeNode(pair: FieldMappingPair, index: number) {
+    const removed = this._nodes.splice(index, 1);
+    if (removed[0] instanceof FieldNode) {
+      pair.removeMappedField((removed[0] as FieldNode).field, true);
+    }
     this.updateCache();
   }
 
-  removeLastToken() {
+  removeLastToken(lastFieldRefRemoved: (removed: MappedField) => void) {
     const last = this.getLastNode();
     if (!last) {
       return;
     }
     if (last instanceof FieldNode) {
-      this._nodes.pop();
+      const removed = this._nodes.pop() as FieldNode;
+      if (!this._nodes.find(n => n instanceof FieldNode && n.field === removed.field)) {
+        lastFieldRefRemoved(removed.field);
+      }
     } else if (last instanceof TextNode) {
       const str = (last as TextNode).toText();
       this._nodes.pop();
@@ -140,6 +148,35 @@ export class ExpressionModel {
     this.addNode(new TextNode(last.toText().substring(0, index)));
   }
 
+  updateFieldReference(pair: FieldMappingPair) {
+    const mappedFields = pair.getUserMappedFields(true);
+    const toAdd: MappedField[] = [];
+    const toRemove: MappedField[] = [];
+    let fieldNodes = this._nodes.filter(n => n instanceof FieldNode) as FieldNode[];
+    // Remove removed field from expression
+    for (const node of fieldNodes) {
+      if (mappedFields.includes(node.field)) {
+        continue;
+      }
+      const index = this._nodes.indexOf(node);
+      this._nodes.splice(index, 1);
+      if (this._nodes.length > index && this._nodes[index - 1] instanceof TextNode
+          && this._nodes[index] instanceof TextNode) {
+        const newStr =
+          (this._nodes[index - 1] as TextNode).str + (this._nodes[index] as TextNode).str;
+        this._nodes.splice(index - 1, 2, new TextNode(newStr));
+      }
+    }
+    // Append added field into expression
+    fieldNodes = this._nodes.filter(n => n instanceof FieldNode) as FieldNode[];
+    for (const mfield of mappedFields) {
+      if (!fieldNodes.find(n => n.field === mfield)) {
+        this.appendFieldNode(mfield);
+      }
+    }
+    this.updateCache();
+  }
+
   clear() {
     this._nodes = [];
     this.updateCache();
@@ -160,6 +197,7 @@ export class ExpressionModel {
     answer = '';
     this.nodes.forEach(node => answer += node.toHTML());
     this.htmlCache = answer;
+    this.expressionUpdatedSource.next();
   }
 
   private createNodesFromText(text: string): ExpressionNode[] {
@@ -177,6 +215,16 @@ export class ExpressionModel {
       answer.push(new TextNode(text));
     }
     return answer;
+  }
+
+  private appendFieldNode(mfield: MappedField) {
+    const lastNode = this._nodes.pop();
+    if (lastNode instanceof TextNode) {
+      this._nodes.push(new TextNode(lastNode.str + ' '));
+    } else if (lastNode) {
+        this._nodes.push(lastNode, new TextNode(' '));
+    }
+    this._nodes.push(new FieldNode(mfield));
   }
 
 }

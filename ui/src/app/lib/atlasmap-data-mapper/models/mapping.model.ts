@@ -20,6 +20,7 @@ import { DocumentDefinition } from '../models/document-definition.model';
 import { ErrorInfo, ErrorLevel } from '../models/error.model';
 
 import { DataMapperUtil } from '../common/data-mapper-util';
+import { transition } from 'd3';
 
 export class MappedFieldParsingData {
   parsedName: string = null;
@@ -602,6 +603,9 @@ export class FieldMappingPair {
       }
     } else {
       this.clearAllCombineSeparateActions();
+    }
+    if (this.transition.enableExpression && this.transition.expression) {
+      this.transition.expression.updateFieldReference(this);
     }
   }
 }
