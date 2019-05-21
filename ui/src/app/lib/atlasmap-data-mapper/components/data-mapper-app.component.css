@@ -143,6 +143,10 @@
 .DataMapperUI .DocumentFieldDetailComponent .disableSelection LABEL { text-decoration:line-through; color: rgb(220,220,220); }
 .DataMapperUI .DocumentFieldDetailComponent .propertyFieldIcons I { font-size:12px; vertical-align:middle; text-shadow:none; }
 
+.DataMapperUI .conditional-expr-picker { font-size: 12px; position: absolute; z-index: 5;
+  text-shadow:0 1px 2px rgba(54,54,54,0.24); color: #4d5258; box-shadow: inset 0 2px 2px 0 rgba(0, 0, 0, 0.08);
+  border:solid 1px #bbbbbb; }
+
 .DataMapperEditComponent INPUT, .DataMapperEditComponent .form-group SELECT { width:300px; }
 .DataMapperEditComponent .form-group TEXTAREA { margin:auto; }
 
@@ -487,3 +491,10 @@
   display: inline-block;
 }
 
+.DataMapperUI .expressionSearchResult {
+  cursor: pointer;
+}
+
+.DataMapperUI .expressionSearchResult:hover {
+  background-color: #5CBADF;
+}

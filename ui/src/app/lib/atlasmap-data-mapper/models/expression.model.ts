@@ -125,6 +125,21 @@ export class ExpressionModel {
     this.updateCache();
   }
 
+  /**
+   * Replace the content of the last text node with a substring terminating at the
+   * specified index.
+   *
+   * @param index
+   */
+  clearToEnd(index: number): void {
+    const last = this.getLastNode();
+    if (!(last instanceof TextNode)) {
+      return;
+    }
+    this._nodes.pop();
+    this.addNode(new TextNode(last.toText().substring(0, index)));
+  }
+
   clear() {
     this._nodes = [];
     this.updateCache();

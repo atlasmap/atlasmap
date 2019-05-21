@@ -15,7 +15,8 @@ limitations under the License.
 */
 import { Component, ViewChild, Input, HostListener, ElementRef, OnInit } from '@angular/core';
 import { ConfigModel } from '../models/config.model';
-import { FieldMappingPair } from '../models/mapping.model';
+import { DocumentDefinition } from '../models/document-definition.model';
+import { MappingModel, FieldMappingPair, MappedField } from '../models/mapping.model';
 import { ExpressionModel, FieldNode } from '../models/expression.model';
 import { Field } from '../models/field.model';
 
@@ -32,6 +33,14 @@ export class ExpressionComponent implements OnInit {
   @ViewChild('expressionMarkupRef')
   markup: ElementRef;
 
+  @ViewChild('expressionSearch')
+  expressionSearch: ElementRef;
+
+  mappedFieldCandidates = [];
+
+  private atIndex = 0;
+  private searchFilter = '';
+  private searchMode = false;
   private mapping: FieldMappingPair;
 
   ngOnInit() {
@@ -52,6 +61,13 @@ export class ExpressionComponent implements OnInit {
       // TODO handle cursor position
       event.preventDefault();
       expression.removeLastToken();
+      if (this.searchMode) {
+        if (this.searchFilter.length === 0) {
+          this.mappedFieldCandidates = [];
+        } else {
+          this.searchFilter = this.searchFilter.substr(0, this.searchFilter.length - 1);
+        }
+      }
     } else if ('Delete' === event.key) {
       // TODO
     }
@@ -69,6 +85,20 @@ export class ExpressionComponent implements OnInit {
     }
 
     event.preventDefault();
+
+    if (this.searchMode && event.key.match(/[a-z0-9]/i)) {
+      this.searchFilter += event.key;
+      this.mappedFieldCandidates = this.executeSearch(this.searchFilter);
+    } else {
+      this.searchMode = (event.key === '@') ? true : false;
+      const lastNode = this.mapping.transition.expression.getLastNode();
+      if (lastNode) {
+        this.atIndex = lastNode.toText().length;
+      } else {
+        this.atIndex = 0;
+      }
+    }
+
     const range = window.getSelection().getRangeAt(0);
     const startContainer = range.startContainer;
     const startOffset = range.startOffset;
@@ -130,6 +160,10 @@ export class ExpressionComponent implements OnInit {
     }
     const mappedField = currentFieldMapping.getMappedFieldForField(droppedField, true);
     // TODO handle drop position - for now just append to the end
+    this.addConditionExpressionNode(mappedField);
+  }
+
+  private addConditionExpressionNode(mappedField: MappedField): void {
     this.configModel.mappings.activeMapping.getCurrentFieldMapping().transition.expression.addNode(new FieldNode(mappedField));
     this.updateExpressionMarkup();
     this.moveCaretToEnd();
@@ -155,4 +189,53 @@ export class ExpressionComponent implements OnInit {
     range.selectNode(lastNode);
     range.collapse(false);
   }
+
+  /**
+   * Return an array of strings representing display names of active mapping fields based on the
+   * specified filter.
+   *
+   * @param filter
+   */
+  executeSearch(filter: string): any[] {
+    const currentFieldMapping = this.configModel.mappings.activeMapping.getCurrentFieldMapping();
+    const formattedFields: any[] = [];
+    let fields: Field[] = [DocumentDefinition.getNoneField()];
+    for (const docDef of this.configModel.getDocs(true)) {
+      fields = fields.concat(docDef.getTerminalFields());
+    }
+    const activeMapping: MappingModel = this.configModel.mappings.activeMapping;
+    for (const field of fields) {
+      let displayName = (field == null) ? '' : field.getFieldLabel(ConfigModel.getConfig().showTypes, true);
+
+      if (filter == null || filter === '' || displayName.toLowerCase().indexOf(filter.toLowerCase()) !== -1) {
+        if (!activeMapping.isFieldSelectable(field)) {
+          continue;
+        }
+        displayName = field.path;
+        const formattedField: any = { 'field': field, 'displayName': displayName };
+        formattedFields.push(formattedField);
+      }
+      if (formattedFields.length > 9) {
+        break;
+      }
+    }
+    return formattedFields;
+  }
+
+  /**
+   * The user has selected a field from the type-ahead pull-down.
+   *
+   * @param event
+   */
+  selectionChanged(event: any, index: number): void {
+    const currentFieldMapping = this.configModel.mappings.activeMapping.getCurrentFieldMapping();
+    const mappedField = currentFieldMapping.getMappedFieldForField(this.mappedFieldCandidates[index].field, true);
+    this.mapping.transition.expression.clearToEnd(this.atIndex);
+    this.addConditionExpressionNode(mappedField);
+    this.atIndex = 0;
+    this.mappedFieldCandidates = [];
+    this.searchFilter = '';
+    this.markup.nativeElement.focus();
+  }
+
 }
