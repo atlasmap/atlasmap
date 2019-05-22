@@ -162,14 +162,16 @@ export class ExpressionComponent implements OnInit, OnDestroy {
       if (!currentFieldMapping.isFieldMapped(droppedField)) {
         return;
       }
+      // TODO handle drop position - for now this appends a field ref to the end of expression
+      const mappedField = currentFieldMapping.getMappedFieldForField(droppedField, true);
+      this.addConditionExpressionNode(mappedField);
 
     // Pulling an unmapped field into a transition expression evaluation implies a compound selection.
     } else {
+      // TODO handle drop position - for now this appends a field ref to the
+      // end of expression in FieldMappingPair#updateTransition()
       this.configModel.mappingService.fieldSelected(droppedField, true);
     }
-    const mappedField = currentFieldMapping.getMappedFieldForField(droppedField, true);
-    // TODO handle drop position - for now just append to the end
-    this.addConditionExpressionNode(mappedField);
   }
 
   private addConditionExpressionNode(mappedField: MappedField): void {
