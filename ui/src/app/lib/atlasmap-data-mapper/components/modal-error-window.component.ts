@@ -94,7 +94,9 @@ export class ModalErrorWindowComponent implements OnInit {
   handleAlertClick(event: any) {
     const errorIdentifier = event.target.attributes.getNamedItem('errorIdentifier');
     if (errorIdentifier && errorIdentifier.value) {
-      this.cfg.mappings.activeMapping.removeValidationError(errorIdentifier.value);
+      if (this.cfg.mappings.activeMapping) {
+        this.cfg.mappings.activeMapping.removeValidationError(errorIdentifier.value);
+      }
       this.cfg.errorService.removeError(errorIdentifier.value);
     }
     if (this.getErrors().length === 0 && this.getWarnings().length === 0) {
@@ -104,11 +106,15 @@ export class ModalErrorWindowComponent implements OnInit {
 
   dismissAll(): void {
     for (const e of this.getErrors()) {
-      this.cfg.mappings.activeMapping.removeValidationError(e.identifier);
+      if (this.cfg.mappings.activeMapping) {
+        this.cfg.mappings.activeMapping.removeValidationError(e.identifier);
+      }
       this.cfg.errorService.removeError(e.identifier);
     }
     for (const w of this.getWarnings()) {
-      this.cfg.mappings.activeMapping.removeValidationError(w.identifier);
+      if (this.cfg.mappings.activeMapping) {
+        this.cfg.mappings.activeMapping.removeValidationError(w.identifier);
+      }
       this.cfg.errorService.removeError(w.identifier);
     }
     this.close();

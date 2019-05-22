@@ -239,15 +239,16 @@ export class ExpressionComponent implements OnInit, OnDestroy {
   selectionChanged(event: any, index: number): void {
     const currentFieldMapping = this.configModel.mappings.activeMapping.getCurrentFieldMapping();
     const selectedField = this.mappedFieldCandidates[index].field;
-    let mappedField = currentFieldMapping.getMappedFieldForField(selectedField, true);
+    const mappedField = currentFieldMapping.getMappedFieldForField(selectedField, true);
     this.mapping.transition.expression.clearToEnd(this.atIndex);
 
     // If the selected field was not part of the original mapping then add it now.
     if (mappedField === null) {
-      mappedField = currentFieldMapping.addField(selectedField, true, false);
+      this.configModel.mappingService.fieldSelected(selectedField, true);
       this.configModel.mappingService.updateMappedField(currentFieldMapping, true, false);
+    } else {
+      this.addConditionExpressionNode(mappedField);
     }
-    this.addConditionExpressionNode(mappedField);
     this.atIndex = 0;
     this.mappedFieldCandidates = [];
     this.searchFilter = '';
