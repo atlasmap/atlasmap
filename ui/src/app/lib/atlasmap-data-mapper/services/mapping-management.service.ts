@@ -574,7 +574,7 @@ export class MappingManagementService {
       field.collapsed = !field.collapsed;
       return;
     }
-
+    let fieldAdded = false;
     let mapping: MappingModel = this.cfg.mappings.activeMapping;
     let fieldRemoved = false;
 
@@ -588,6 +588,7 @@ export class MappingManagementService {
             fieldRemoved = true;
           } else {
             this.addActiveMappingField(field);
+            fieldAdded = true;
           }
       } else {
         mapping = null;
@@ -610,7 +611,17 @@ export class MappingManagementService {
       if (mapping == null) {
         this.addNewMapping(field, compoundSelection);
         mapping = this.cfg.mappings.activeMapping;
+        fieldAdded = true;
       }
+    }
+
+    if (this.cfg.mappings.activeMapping && !this.cfg.mappings.activeMapping.hasFullyMappedPair()) {
+      this.addNewMapping(field, compoundSelection);
+      fieldAdded = true;
+    }
+
+    if (!fieldAdded && !fieldRemoved) {
+      return;
     }
 
     // Check to see if the field is a valid selection for this mapping
