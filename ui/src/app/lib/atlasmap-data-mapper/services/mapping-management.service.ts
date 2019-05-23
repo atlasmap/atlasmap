@@ -753,7 +753,8 @@ export class MappingManagementService {
         }
         this.mappingPreviewErrorSource.next(audits);
       }).catch((error: any) => {
-        if (this.cfg.mappings.activeMapping.getCurrentFieldMapping() === inputFieldMapping) {
+        if (this.cfg.mappings && this.cfg.mappings.activeMapping &&
+            this.cfg.mappings.activeMapping.getCurrentFieldMapping() === inputFieldMapping) {
           // TODO let error service subscribe mappingPreviewErrorSource instead of doing this
           this.cfg.mappings.activeMapping.previewErrors = [new ErrorInfo(error, ErrorLevel.ERROR, null)];
         }
