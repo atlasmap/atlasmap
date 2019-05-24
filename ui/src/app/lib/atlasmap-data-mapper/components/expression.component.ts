@@ -84,6 +84,10 @@ export class ExpressionComponent implements OnInit, OnDestroy {
           this.searchFilter = this.searchFilter.substr(0, this.searchFilter.length - 1);
         }
       }
+      const lastNode = this.mapping.transition.expression.getLastNode();
+      if (lastNode && lastNode.toText().length <= this.atIndex) {
+        this.clearSearchMode();
+      }
     } else if ('Delete' === event.key) {
       // TODO
     }
@@ -100,14 +104,16 @@ export class ExpressionComponent implements OnInit, OnDestroy {
 
     event.preventDefault();
 
-    if (this.searchMode && event.key.match(/[a-z0-9]/i)) {
-      this.searchFilter += event.key;
-      this.mappedFieldCandidates = this.executeSearch(this.searchFilter);
+    if (this.searchMode) {
+      if (event.key.match(/[a-z0-9]/i)) {
+        this.searchFilter += event.key;
+        this.mappedFieldCandidates = this.executeSearch(this.searchFilter);
+      }
     } else {
       this.searchMode = (event.key === '@') ? true : false;
       const lastNode = this.mapping.transition.expression.getLastNode();
       if (lastNode) {
-        this.atIndex = lastNode.toText().length;
+        this.atIndex = lastNode.toText().length - 1;
       } else {
         this.atIndex = 0;
       }
@@ -240,7 +246,7 @@ export class ExpressionComponent implements OnInit, OnDestroy {
     const currentFieldMapping = this.configModel.mappings.activeMapping.getCurrentFieldMapping();
     const selectedField = this.mappedFieldCandidates[index].field;
     const mappedField = currentFieldMapping.getMappedFieldForField(selectedField, true);
-    this.mapping.transition.expression.clearToEnd(this.atIndex);
+    this.mapping.transition.expression.clearToEnd(this.atIndex + 1);
 
     // If the selected field was not part of the original mapping then add it now.
     if (mappedField === null) {
@@ -249,10 +255,17 @@ export class ExpressionComponent implements OnInit, OnDestroy {
     } else {
       this.addConditionExpressionNode(mappedField);
     }
-    this.atIndex = 0;
-    this.mappedFieldCandidates = [];
-    this.searchFilter = '';
+    this.clearSearchMode();
     this.markup.nativeElement.focus();
   }
 
+  /**
+   * Clear elements associated with mapped-field searching.
+   */
+  private clearSearchMode(): void {
+    this.atIndex = 0;
+    this.searchMode = false;
+    this.searchFilter = '';
+    this.mappedFieldCandidates = [];
+  }
 }
