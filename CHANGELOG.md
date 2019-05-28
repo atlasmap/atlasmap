@@ -1,5 +1,35 @@
 # Changelog
 
+## atlasmap-1.40.0-alpha2 (28/05/2019)
+
+#### Enhancements
+
+- [#932](https://github.com/atlasmap/atlasmap/issues/932) [UI] Fill with initial expression when enabled first time
+- [#871](https://github.com/atlasmap/atlasmap/issues/871) [UI] Add auto completion support of source field in the conditional mapping formula
+- [#870](https://github.com/atlasmap/atlasmap/issues/870) [UI] Add drag&drop support for adding a source field into conditional mapping formula
+- [#869](https://github.com/atlasmap/atlasmap/issues/869) [UI] Add click&add support for adding a source field into conditional mapping formula
+- [#868](https://github.com/atlasmap/atlasmap/issues/868) [UI] Show short field label in the expression instead of full path
+- [#854](https://github.com/atlasmap/atlasmap/issues/854) [UI] Highlight source fields involved in conditional mapping
+- [#853](https://github.com/atlasmap/atlasmap/issues/853) [UI] Add expression entry widget for conditional mapping
+- [#852](https://github.com/atlasmap/atlasmap/issues/852) UX design for conditional mapping
+- [#775](https://github.com/atlasmap/atlasmap/issues/775) Allow to configure where "target" folder is created
+- [#664](https://github.com/atlasmap/atlasmap/issues/664) Apply design change for #244
+- [#516](https://github.com/atlasmap/atlasmap/issues/516) Add a common area for error message display - follow syndesis model
+- [#63](https://github.com/atlasmap/atlasmap/issues/63) Allow Collection as a document root
+
+#### Bug Fixes
+
+- [#949](https://github.com/atlasmap/atlasmap/issues/949) conf-expr:  Using '@' can backspacing can confuse cond expr search mode
+- [#946](https://github.com/atlasmap/atlasmap/issues/946) Null object reference in preview mode error catch-block
+- [#941](https://github.com/atlasmap/atlasmap/issues/941) Autocompleted field addition adds two in cond mapping
+- [#939](https://github.com/atlasmap/atlasmap/issues/939) Field drop in expression adds two of them
+- [#933](https://github.com/atlasmap/atlasmap/issues/933) expression serialize/deserialize is broken
+- [#931](https://github.com/atlasmap/atlasmap/issues/931) [UI] Remove src field from mapping pair if no ref from expression
+- [#913](https://github.com/atlasmap/atlasmap/issues/913) No CMD or ENTRYPOINT configured for atlasmap docker image
+- [#904](https://github.com/atlasmap/atlasmap/issues/904) Avoid preview error with empty expression
+
+---
+
 ## atlasmap-1.40.0-alpha1 (30/04/2019)
 
 #### Enhancements
