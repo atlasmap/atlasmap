@@ -515,7 +515,7 @@ export class MappingSerializer {
           fieldPair.transition.enableExpression = true;
           fieldPair.transition.expression = new ExpressionModel(fieldPair);
           const expr = firstAction.Expression ? firstAction.Expression.expression : firstAction['expression'];
-          fieldPair.transition.expression.addText(expr);
+          fieldPair.transition.expression.insertText(expr);
         } else if (firstAction.Concatenate || firstAction['@type'] === 'Concatenate') {
           const concatDelimiter =
             firstAction.Concatenamte ? firstAction.Concatenate.delimiter : firstAction['delimiter'];
@@ -550,7 +550,7 @@ export class MappingSerializer {
           fieldPair.transition.enableExpression = true;
           fieldPair.transition.expression = new ExpressionModel(fieldPair);
           const expr = firstAction.Expression ? firstAction.Expression.expression : firstAction['expression'];
-          fieldPair.transition.expression.addText(expr);
+          fieldPair.transition.expression.insertText(expr);
         }
       }
     }

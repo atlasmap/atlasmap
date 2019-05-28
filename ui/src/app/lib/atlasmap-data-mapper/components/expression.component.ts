@@ -17,7 +17,7 @@ import { Component, ViewChild, Input, HostListener, ElementRef, OnInit, OnDestro
 import { ConfigModel } from '../models/config.model';
 import { DocumentDefinition } from '../models/document-definition.model';
 import { MappingModel, FieldMappingPair, MappedField } from '../models/mapping.model';
-import { ExpressionModel, FieldNode } from '../models/expression.model';
+import { ExpressionModel, FieldNode, ExpressionUpdatedEvent } from '../models/expression.model';
 import { Field } from '../models/field.model';
 import { Subscription } from 'rxjs';
 
@@ -27,6 +27,8 @@ import { Subscription } from 'rxjs';
 })
 
 export class ExpressionComponent implements OnInit, OnDestroy {
+
+  static readonly trailerId = 'expression-trailer';
 
   @Input()
   configModel: ConfigModel;
@@ -47,13 +49,14 @@ export class ExpressionComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.mapping = this.configModel.mappings.activeMapping.getCurrentFieldMapping();
-    if (!this.mapping.transition.expression) {
+    if (!this.getExpression()) {
       this.mapping.transition.expression = new ExpressionModel(this.mapping);
+      this.getExpression().generateInitialExpression();
     }
-    this.mapping.transition.expression.updateFieldReference(this.mapping);
-    this.expressionUpdatedSubscription = this.mapping.transition.expression.expressionUpdated$.subscribe(() => {
+    this.getExpression().updateFieldReference(this.mapping);
+    this.expressionUpdatedSubscription = this.getExpression().expressionUpdated$.subscribe((updatedEvent) => {
       this.updateExpressionMarkup();
-      this.moveCaretToEnd();
+      this.restoreCaretPosition(updatedEvent);
     });
     this.updateExpressionMarkup();
     this.moveCaretToEnd();
@@ -67,13 +70,12 @@ export class ExpressionComponent implements OnInit, OnDestroy {
 
   @HostListener('keydown', ['$event'])
   onKeydown(event: KeyboardEvent) {
-    const expression = this.mapping.transition.expression;
     if ('Enter' === event.key) {
       event.preventDefault();
     } else if ('Backspace' === event.key) {
       // TODO handle cursor position
       event.preventDefault();
-      expression.removeLastToken(removedMfield => {
+      this.getExpression().removeLastToken(removedMfield => {
         this.mapping.removeMappedField(removedMfield, true);
         this.configModel.mappingService.updateMappedField(this.mapping, true, true);
       });
@@ -84,7 +86,7 @@ export class ExpressionComponent implements OnInit, OnDestroy {
           this.searchFilter = this.searchFilter.substr(0, this.searchFilter.length - 1);
         }
       }
-      const lastNode = this.mapping.transition.expression.getLastNode();
+      const lastNode = this.getExpression().getLastNode();
       if (lastNode && lastNode.toText().length <= this.atIndex) {
         this.clearSearchMode();
       }
@@ -111,7 +113,7 @@ export class ExpressionComponent implements OnInit, OnDestroy {
       }
     } else {
       this.searchMode = (event.key === '@') ? true : false;
-      const lastNode = this.mapping.transition.expression.getLastNode();
+      const lastNode = this.getExpression().getLastNode();
       if (lastNode) {
         this.atIndex = lastNode.toText().length - 1;
       } else {
@@ -119,19 +121,13 @@ export class ExpressionComponent implements OnInit, OnDestroy {
       }
     }
 
-    const range = window.getSelection().getRangeAt(0);
-    const startContainer = range.startContainer;
-    const startOffset = range.startOffset;
-    const endContainer = range.endContainer;
-    const endOffset = range.endOffset;
-    // TODO handle cursor position... for now just append to the end
-    this.mapping.transition.expression.addText(event.key);
+    this.insertTextAtCaretPosition(event.key);
   }
 
   @HostListener('cut', ['$event'])
   onCut(event: ClipboardEvent) {
     // TODO remove only selected area
-    this.mapping.transition.expression.clear();
+    this.getExpression().clear();
   }
 
   @HostListener('paste', ['$event'])
@@ -140,7 +136,7 @@ export class ExpressionComponent implements OnInit, OnDestroy {
     const pasted = event.clipboardData.getData('text/plain')
       || window['clipboardData'].getData('Text');
     // TODO handle cursor position... for now just append to the end
-    this.mapping.transition.expression.addText(pasted);
+    this.getExpression().insertText(pasted);
   }
 
   @HostListener('dragover', ['$event'])
@@ -178,31 +174,6 @@ export class ExpressionComponent implements OnInit, OnDestroy {
       // end of expression in FieldMappingPair#updateTransition()
       this.configModel.mappingService.fieldSelected(droppedField, true);
     }
-  }
-
-  private addConditionExpressionNode(mappedField: MappedField): void {
-    this.configModel.mappings.activeMapping.getCurrentFieldMapping().transition.expression.addNode(new FieldNode(mappedField));
-  }
-
-  private updateExpressionMarkup() {
-    this.markup.nativeElement.innerHTML = this.mapping.transition.expression.toHTML();
-  }
-
-  private setSelectionRange(startNode: Node, startOffset: number, endNode: Node, endOffset: number) {
-    this.markup.nativeElement.focus();
-    const selection = window.getSelection();
-    const range = selection.getRangeAt(0);
-    range.setStart(startNode, startOffset);
-    range.setEnd(endNode, endOffset);
-  }
-
-  private moveCaretToEnd() {
-    this.markup.nativeElement.focus();
-    const lastNodeIndex = this.markup.nativeElement.childNodes.length - 1;
-    const lastNode = lastNodeIndex > -1 ? this.markup.nativeElement.childNodes[lastNodeIndex] : this.markup.nativeElement;
-    const range = window.getSelection().getRangeAt(0);
-    range.selectNode(lastNode);
-    range.collapse(false);
   }
 
   /**
@@ -246,7 +217,7 @@ export class ExpressionComponent implements OnInit, OnDestroy {
     const currentFieldMapping = this.configModel.mappings.activeMapping.getCurrentFieldMapping();
     const selectedField = this.mappedFieldCandidates[index].field;
     const mappedField = currentFieldMapping.getMappedFieldForField(selectedField, true);
-    this.mapping.transition.expression.clearToEnd(this.atIndex + 1);
+    this.getExpression().clearToEnd(this.atIndex + 1);
 
     // If the selected field was not part of the original mapping then add it now.
     if (mappedField === null) {
@@ -268,4 +239,74 @@ export class ExpressionComponent implements OnInit, OnDestroy {
     this.searchFilter = '';
     this.mappedFieldCandidates = [];
   }
+
+  private addConditionExpressionNode(mappedField: MappedField): void {
+    this.getExpression().addNode(new FieldNode(mappedField));
+  }
+
+  private updateExpressionMarkup() {
+    this.markup.nativeElement.innerHTML = this.getExpression().toHTML()
+      + `<span id="${ExpressionComponent.trailerId}">&nbsp;</span>`;
+  }
+
+  private moveCaretToEnd() {
+    const trailerNode = this.markup.nativeElement.querySelector('#' + ExpressionComponent.trailerId);
+    this.markup.nativeElement.focus();
+    const range = window.getSelection().getRangeAt(0);
+    range.selectNode(trailerNode);
+    range.collapse(false);
+  }
+
+  private nodeIndexOf(list: NodeList, node: any) {
+    for (let i = 0; i < list.length; i++) {
+      if (list[i] === node) {
+        return i;
+      }
+    }
+  }
+
+  private getExpression(): ExpressionModel {
+    return this.mapping.transition.expression;
+  }
+
+  private insertTextAtCaretPosition(key: string) {
+    const range = window.getSelection().getRangeAt(0);
+    const startContainer = range.startContainer;
+    const startOffset = range.startOffset;
+    if (startContainer === this.markup.nativeElement) {
+      if (startOffset === 0) {
+        this.getExpression().insertText(key, this.getExpression().nodes[0].getUuid(), 0);
+      } else {
+        this.getExpression().insertText(key);
+      }
+      return;
+    }
+
+    const nodeId = startContainer.parentElement.getAttribute('id');
+    if (nodeId === ExpressionComponent.trailerId) {
+      this.getExpression().insertText(key);
+    } else {
+      this.getExpression().insertText(key, nodeId, startOffset);
+    }
+  }
+
+  private restoreCaretPosition(event: ExpressionUpdatedEvent) {
+    this.markup.nativeElement.focus();
+    if (!event) {
+      this.moveCaretToEnd();
+      return;
+    }
+    for (let i = 0; i < this.markup.nativeElement.childNodes.length; i++) {
+      const target = this.markup.nativeElement.childNodes[i];
+      if (target.getAttribute('id') === event.node.getUuid()) {
+        const range = window.getSelection().getRangeAt(0);
+        range.selectNode(target.childNodes[0]);
+        range.setStart(target.childNodes[0], event.offset);
+        range.collapse(true);
+        return;
+      }
+    }
+    this.moveCaretToEnd();
+  }
+
 }
