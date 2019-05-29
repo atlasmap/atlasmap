@@ -1,4 +1,4 @@
-<div class="DocumentFieldDetailComponent" [attr.id]="field.name" #fieldDetailElement on-mouseover='handleMouseOver($event)'
+<div class="DocumentFieldDetailComponent" [attr.id]="getFieldId()" #fieldDetailElement on-mouseover='handleMouseOver($event)'
   *ngIf="fieldShouldBeVisible()" [attr.draggable]="field.isTerminal()" (dragstart)="startDrag($event)" (drop)="endDrag($event)"
   (dragenter)="dragEnterLeave($event, true)" (dragleave)="dragEnterLeave($event, false)" (dragover)="allowDrop($event)">
   <div [attr.class]='getCssClass()' (click)="handleMouseClick($event)" *ngIf="field.visibleInCurrentDocumentSearch">

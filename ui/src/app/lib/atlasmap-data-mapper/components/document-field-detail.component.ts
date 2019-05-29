@@ -282,6 +282,10 @@ export class DocumentFieldDetailComponent {
     return this.sanitizer.bypassSecurityTrustStyle('display:inline; margin-left:' + width + 'px');
   }
 
+  getFieldId(): string {
+    return this.field.name && this.field.name.length > 0 ? this.field.name : 'document-root';
+  }
+
   get selected(): boolean {
     if (this.cfg.mappings && this.cfg.mappings.activeMapping) {
       return this.cfg.mappings.activeMapping.getFields(this.field.isSource()).includes(this.field);
