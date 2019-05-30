@@ -54,10 +54,12 @@
   <distributionManagement>
     <snapshotRepository>
       <id>ossrh</id>
+      <name>ossrh</name>
       <url>https://oss.sonatype.org/content/repositories/snapshots</url>
     </snapshotRepository>
     <repository>
       <id>ossrh</id>
+      <name>ossrh</name>
       <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
     </repository>
   </distributionManagement>
@@ -95,6 +97,7 @@
   <repositories>
     <repository>
       <id>jboss-fuse</id>
+      <name>jboss-fuse</name>
       <url>https://repository.jboss.org/nexus/content/groups/ea</url>
     </repository>
   </repositories>
