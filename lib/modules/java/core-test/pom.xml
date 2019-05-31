@@ -67,6 +67,7 @@
   <repositories>
     <repository>
       <id>sonatype</id>
+      <name>sonatype</name>
       <url>https://oss.sonatype.org/content/repositories/releases/</url>
       <releases>
         <enabled>true</enabled>
@@ -74,6 +75,7 @@
     </repository>
     <repository>
       <id>central</id>
+      <name>central</name>
       <url>https://repo1.maven.org/maven2</url>
       <releases>
         <enabled>true</enabled>
