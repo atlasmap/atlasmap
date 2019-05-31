@@ -23,26 +23,26 @@
 
     <div class="row" style="height:calc(100% - 10px); position:relative; padding-top:10px;"
       *ngIf="!getConfig().initCfg.initializationErrorOccurred">
-      <div style='height:100%; padding:0;' [attr.class]="(getConfig().showMappingTable || getConfig().showNamespaceTable) ? 'col-md-9 hidden' : 'col-md-9'">
-        <div style="float:left; width:40%; height:100%;">
+      <div style='height:100%; padding:0; width: 70%' [attr.class]="(getConfig().showMappingTable || getConfig().showNamespaceTable) ? 'col-md-9 hidden' : 'col-md-9'">
+        <div style="float:left; width:45%; height:100%;">
           <document-definition #docDefInput [cfg]="getConfig()" [modalWindow]="modalWindow" [isSource]="true"></document-definition>
         </div>
-        <div style="float:left; width:20%; height:100%; margin-left:-5px; margin-right:-5px;">
+        <div style="float:left; width:10%; height:100%; margin-left:-5px; margin-right:-5px;">
           <line-machine #lineMachine [cfg]="getConfig()" [docDefInput]="docDefInput" [docDefOutput]="docDefOutput"></line-machine>
         </div>
-        <div style="float:left; width:40%; height:100%;">
+        <div style="float:left; width:45%; height:100%;">
           <document-definition #docDefOutput [cfg]="getConfig()" [modalWindow]="modalWindow" [isSource]="false"></document-definition>
         </div>
         <div class="clear"></div>
       </div>
-      <div class="col-md-9" style='height:100%; padding:0;' *ngIf="getConfig().showMappingTable">
+      <div class="col-md-9" style='height:100%; padding:0; width:70%;' *ngIf="getConfig().showMappingTable">
         <mapping-list [cfg]="getConfig()"></mapping-list>
       </div>
-      <div class="col-md-9" style='height:100%; padding:0;' *ngIf="getConfig().showNamespaceTable">
+      <div class="col-md-9" style='height:100%; padding:0; width:70%;' *ngIf="getConfig().showNamespaceTable">
         <namespace-list [cfg]="getConfig()" [modalWindow]="modalWindow"></namespace-list>
       </div>
 
-      <div class="col-md-3" style="padding:0px; height:100%;">
+      <div class="col-md-3" style="padding:0px; height:100%; width:30%">
         <mapping-detail #mappingDetailComponent [cfg]="getConfig()" [modalWindow]="modalWindow"></mapping-detail>
       </div>
     </div>

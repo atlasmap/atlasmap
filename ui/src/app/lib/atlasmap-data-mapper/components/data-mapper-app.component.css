@@ -83,7 +83,7 @@
 
 /* loading screen styles */
 .dataMapperBodyHidden { visibility:hidden; position:relative; height:0px; }
-.dataMapperBody { visibility:visible; height:100%; position:relative; margin-left: 0px; }
+.dataMapperBody { visibility:visible; height:100%; width: 100%; position:relative; margin-left: 0px; }
 .DataMapperLoadingMessage { position:absolute; height:100%; top:0%; left:0%; padding-top:20%; width:100%; text-align:center; }
 .DataMapperLoadingMessage .error { color:crimson; }
 .DataMapperLoadingMessage .spinner { vertical-align:text-bottom; }
@@ -195,8 +195,8 @@
 .DataMapperUI .namespaceList LABEL.locationUri { width:calc(30% - 0px); }
 
 /* mapping detail panel */
-.fieldMappingDetail { border-left:1px solid #d1d1d1; float:left; overflow:auto; height:100%;
-    background-color:#d1d1d1; border:1px solid #CAC9C9; }
+.fieldMappingDetail { border-left:1px solid #d1d1d1; float:left; overflow:auto; height:100%; width: 100%;
+    background-color:#d1d1d1; border:1px solid #CAC9C9; position:relative; }
 .fieldMappingDetail .fieldDetail { }
 .fieldDetailTooltip LABEL { color:white; float:left; clear:left; }
 .fieldDetailTooltip LABEL.parentObjectName { color:white; font-style:italic; }
@@ -245,7 +245,7 @@
 .DataMapperUI .CollapsableCardHeader .card-pf-title { font-size:16px; }
 .DataMapperUI .CollapsableCardHeader I { margin-right:0px; vertical-align:middle; width:24px; font-size:20px; }
 
-.mappingFieldContainer { background-color:#d3d3d3; padding: 10px; width: 314px; }
+.mappingFieldContainer { background-color:#d3d3d3; padding: 10px; width: 100%; }
 .fieldMappingDetail .linkContainer { position: relative; width:100%; text-align:right; }
 
 .MappingFieldSection { background-color:white; padding: 6px 10px 6px 10px; margin: 5px; box-shadow:0 0 1px 1px rgba(51, 51, 51, 0.25); }
@@ -379,12 +379,13 @@
 
 .DataMapperUI .wizard-pf {
   height: 100%;
-  max-width: 380px;
+  width: 100%;
   padding: 0;
   top: 0px;
   bottom: 0px;
   margin: 0;
   margin-left: 0;
+  position: relative;
 }
 
 .DataMapperUI .wizard-pf-body {
@@ -396,7 +397,6 @@
 
 .DataMapperUI .wizard-pf-row {
   height: auto;
-  position: relative;
   overflow: auto;
 }
 
@@ -406,6 +406,13 @@
   display: flex;
   flex: 1 1 inherit;
   flex-direction: column;
+}
+
+.DataMapperUI .mapping-details-panel {
+  height: 100%;
+  width: calc(100% - 50px);
+  margin-right: 10px;
+  position: relative;
 }
 
 .DataMapperUI .mapping-detail-icon-container {

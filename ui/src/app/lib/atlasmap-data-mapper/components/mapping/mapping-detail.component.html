@@ -33,7 +33,7 @@
               </div>
             </div>
 
-            <div>
+            <div class="mapping-details-panel">
               <collapsable-header title="Sources" #sourcesHeader class="mapping-sources"></collapsable-header>
               <ng-container *ngIf="!sourcesHeader.collapsed">
                 <div *ngFor="let fieldPair of cfg.mappings.activeMapping.fieldMappings">
@@ -58,7 +58,7 @@
               </div>
             </div>
 
-            <div>
+            <div class="mapping-details-panel">
               <collapsable-header title="Targets" #targetsHeader></collapsable-header>
               <ng-container *ngIf="!targetsHeader.collapsed">
                 <div *ngFor="let fieldPair of cfg.mappings.activeMapping.fieldMappings">
