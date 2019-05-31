@@ -621,6 +621,7 @@ export class MappingManagementService {
     }
 
     if (!fieldAdded && !fieldRemoved) {
+      this.selectMapping(mapping);
       return;
     }
 
