@@ -21,7 +21,7 @@
   <parent>
     <groupId>io.atlasmap</groupId>
     <artifactId>atlas-parent</artifactId>
-    <version>1.40.0-SNAPSHOT</version>
+    <version>1.40.0.fuse-740006</version>
     <relativePath>../parent</relativePath>
   </parent>
 
