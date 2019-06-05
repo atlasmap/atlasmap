@@ -107,6 +107,12 @@ export class SimpleMappingComponent {
     if (insertBeforeMappedField != null && insertBeforeMappedField.actions[0] != null) {
       this.cfg.mappingService.resequenceMappedField(this.fieldPair, droppedMappedField,
         insertBeforeMappedField.getFieldIndex());
+
+      // Update indexing in any conditional mapping expressions.
+      if (this.fieldPair.transition && this.fieldPair.transition.enableExpression) {
+        this.fieldPair.transition.expression.updateFieldReference(this.fieldPair);
+        this.cfg.mappingService.notifyMappingUpdated();
+      }
     }
     this.cfg.currentDraggedField = null;
   }
