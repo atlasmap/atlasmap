@@ -41,9 +41,6 @@ export class MappingManagementService {
   mappingUpdatedSource = new Subject<void>();
   mappingUpdated$ = this.mappingUpdatedSource.asObservable();
 
-  saveMappingSource = new Subject<Function>();
-  saveMappingOutput$ = this.saveMappingSource.asObservable();
-
   mappingSelectionRequiredSource = new Subject<Field>();
   mappingSelectionRequired$ = this.mappingSelectionRequiredSource.asObservable();
 
@@ -254,20 +251,7 @@ export class MappingManagementService {
         }
       }
       this.cfg.mappings.mappings = newMappings;
-      this.saveMappingToService().toPromise().then(() => {
-        this.saveMappingSource.next(null);
-        this.notifyMappingUpdated();
-        resolve(true);
-      }).catch((error: any) => {
-        if (error.status === 0) {
-          this.cfg.errorService.mappingError(
-            'Fatal network error: Unable to connect to the AtlasMap design runtime service.', error);
-        } else {
-          this.cfg.errorService.mappingError(
-            'Unable to save current mapping definitions: ' + error.status + ' ' + error.statusText, error);
-        }
-        resolve(false);
-      });
+      this.cfg.mappingService.validateMappings();
     });
   }
 
@@ -376,32 +360,6 @@ export class MappingManagementService {
     });
    }
 
-  saveMappingToService(): Observable<boolean> {
-    return new Observable<boolean>((observer: any) => {
-      const payload: any = this.serializeMappingsToJSON();
-      const url = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/JSON/' + this.getMappingId();
-      DataMapperUtil.debugLogJSON(payload, 'Mapping Service Request', this.cfg.initCfg.debugMappingServiceCalls, url);
-      this.http.put(url, JSON.stringify(payload), { headers: this.headers }).toPromise()
-        .then((res: any) => {
-          DataMapperUtil.debugLogJSON(res, 'Mapping Service Response', this.cfg.initCfg.debugMappingServiceCalls, url);
-          observer.next(true);
-          observer.complete();
-        })
-      .catch((error: any) => {
-        this.handleError('Error occurred while saving mapping.', error);
-        observer.error(error);
-        observer.complete();
-      });
-    });
-  }
-
-  handleMappingSaveSuccess(saveHandler: Function): void {
-    if (saveHandler != null) {
-      saveHandler();
-    }
-    this.notifyMappingUpdated();
-  }
-
   /**
    * Remove the specified mapping model from the mappings array and update the runtime.
    *
@@ -415,7 +373,6 @@ export class MappingManagementService {
           this.deselectMapping();
           await this.saveCurrentMapping();
         });
-        this.saveMappingSource.next(saveHandler);
       } else {
         this.deselectMapping();
       }
@@ -567,6 +524,7 @@ export class MappingManagementService {
     // Start out with a clean slate.
     this.cfg.errorService.clearMappingErrors();
     this.cfg.errorService.clearValidationErrors();
+    this.cfg.errorService.clearWarnings();
 
     if (!field.isTerminal()) {
       field.docDef.populateChildren(field);
@@ -646,6 +604,7 @@ export class MappingManagementService {
         }
         latestFieldPair.updateTransition(field.isSource(), compoundSelection, fieldRemoved);
         this.selectMapping(mapping);
+        this.validateMappings();
       }
     }
   }
@@ -682,7 +641,7 @@ export class MappingManagementService {
     this.cfg.mappings.activeMapping = mappingModel;
     this.cfg.showMappingDetailTray = true;
     this.cfg.mappings.initializeMappingLookupTable(mappingModel);
-    this.saveCurrentMapping();
+    this.mappingUpdatedSource.next();
   }
 
   deselectMapping(): void {

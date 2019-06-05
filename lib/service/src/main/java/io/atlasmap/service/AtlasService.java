@@ -416,7 +416,9 @@ public class AtlasService {
     @ApiResponses(@ApiResponse(code = 200, response = Validations.class, message = "Return a validation result"))
     public Response validateMappingRequest(InputStream mapping, @Context UriInfo uriInfo) {
         try {
-            return validateMapping(fromJson(mapping, AtlasMapping.class), uriInfo);
+            AtlasMapping atlasMapping = fromJson(mapping, AtlasMapping.class);
+            LOG.debug("Validate mappings: {}", atlasMapping.getName());
+            return validateMapping(atlasMapping, uriInfo);
         } catch (AtlasException | IOException e) {
             throw new WebApplicationException(e.getMessage(), e, Status.INTERNAL_SERVER_ERROR);
         }
@@ -495,22 +497,22 @@ public class AtlasService {
 
     protected Response validateMapping(AtlasMapping mapping, UriInfo uriInfo) throws IOException, AtlasException {
 
-        File temporaryMappingFile = File.createTempFile("atlas-mapping", "xml");
-        temporaryMappingFile.deleteOnExit();
-        atlasContextFactory.getMappingService().saveMappingAsFile(mapping, temporaryMappingFile);
+        File mappingFile = createMappingFile(mapping.getName());
+        try {
+            Json.mapper().writeValue(mappingFile, mapping);
+        } catch (Exception e) {
+            String msg = "Error saving mapping " + mapping.getName() + " to file: " + e.getMessage();
+            LOG.error(msg, e);
+            throw new WebApplicationException(msg, e, Status.INTERNAL_SERVER_ERROR);
+        }
 
-        AtlasContext context = atlasContextFactory.createContext(temporaryMappingFile.toURI());
+        AtlasContext context = atlasContextFactory.createContext(mappingFile.toURI());
         AtlasSession session = context.createSession();
         context.processValidation(session);
         Validations validations = session.getValidations();
 
         if (session.getValidations() == null) {
             validations = new Validations();
-        }
-
-        if (temporaryMappingFile.exists() && !temporaryMappingFile.delete()) {
-            LOG.warn("Failed to deleting temporary file: "
-                    + (temporaryMappingFile != null ? temporaryMappingFile.toString() : null));
         }
 
         return Response.ok().entity(toJson(validations)).build();

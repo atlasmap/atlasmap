@@ -56,6 +56,14 @@ export class ErrorHandlerService {
     }
   }
 
+  clearWarnings(): void {
+      for (const e of this.cfg.errors) {
+        if (e.level === ErrorLevel.WARN) {
+          this.removeError(e.identifier);
+        }
+      }
+  }
+
   /**
    * Display a block of error messages (from validation for instance) by feeding them into the main
    * error array.

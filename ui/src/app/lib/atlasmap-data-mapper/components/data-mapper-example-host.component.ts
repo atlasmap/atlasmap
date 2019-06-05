@@ -24,7 +24,6 @@ import { InitializationService } from '../services/initialization.service';
 
 import { DataMapperAppComponent } from './data-mapper-app.component';
 import { environment } from '../../../../environments/environment';
-import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'data-mapper-example-host',
@@ -36,8 +35,6 @@ export class DataMapperAppExampleHostComponent implements OnInit, OnDestroy {
 
   @ViewChild('dataMapperComponent')
   dataMapperComponent: DataMapperAppComponent;
-
-  private saveMappingSubscription: Subscription;
 
   constructor(private initializationService: InitializationService) { }
 
@@ -127,22 +124,9 @@ export class DataMapperAppExampleHostComponent implements OnInit, OnDestroy {
 
     // initialize system
     this.initializationService.initialize();
-
-    // save the mappings when the ui calls us back asking for save
-    this.saveMappingSubscription
-       = c.mappingService.saveMappingOutput$.subscribe((saveHandler: Function) => {
-      // NOTE: the mapping definition being saved is currently stored in "this.cfg.mappings" until further notice.
-
-      // This is an example callout to save the mapping to the mock java service
-      c.mappingService.saveMappingToService();
-
-      // After you've sucessfully saved you *MUST* call this (don't call on error)
-      c.mappingService.handleMappingSaveSuccess(saveHandler);
-    });
-
   }
 
   ngOnDestroy() {
-    this.saveMappingSubscription.unsubscribe();
   }
+
 }
