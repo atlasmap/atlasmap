@@ -558,7 +558,12 @@ export class MappingManagementService {
 
       if (mappingsForField && mappingsForField.length === 1) {
         mapping = mappingsForField[0];
-        this.cfg.mappings.activeMapping = mapping;
+
+        // Disable the conditional expression box when selecting a different mapping.
+        if (this.cfg.mappings.activeMapping && this.cfg.mappings.activeMapping !== mapping) {
+          this.cfg.mappings.activeMapping.getCurrentFieldMapping().transition.enableExpression = false;
+          this.cfg.mappings.activeMapping = mapping;
+        }
 
       // Source fields may be part of multiple mappings - trigger mapping required source observable thread.
       } else if (mappingsForField && mappingsForField.length > 1) {
