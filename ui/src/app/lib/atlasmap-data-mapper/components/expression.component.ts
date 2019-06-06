@@ -75,10 +75,7 @@ export class ExpressionComponent implements OnInit, OnDestroy {
     } else if ('Backspace' === event.key) {
       // TODO handle cursor position
       event.preventDefault();
-      this.getExpression().removeLastToken(removedMfield => {
-        this.mapping.removeMappedField(removedMfield, true);
-        this.configModel.mappingService.updateMappedField(this.mapping, true, true);
-      });
+      this.removeTokenAtCaretPosition(true);
       if (this.searchMode) {
         if (this.searchFilter.length === 0) {
           this.mappedFieldCandidates = [];
@@ -91,7 +88,8 @@ export class ExpressionComponent implements OnInit, OnDestroy {
         this.clearSearchMode();
       }
     } else if ('Delete' === event.key) {
-      // TODO
+      event.preventDefault();
+      this.removeTokenAtCaretPosition(false);
     }
   }
 
@@ -241,7 +239,7 @@ export class ExpressionComponent implements OnInit, OnDestroy {
   }
 
   private addConditionExpressionNode(mappedField: MappedField): void {
-    this.getExpression().addNode(new FieldNode(mappedField));
+    this.getExpression().insertNodes([new FieldNode(mappedField)]);
   }
 
   private updateExpressionMarkup() {
@@ -290,6 +288,37 @@ export class ExpressionComponent implements OnInit, OnDestroy {
     }
   }
 
+  private removeTokenAtCaretPosition(before: boolean) {
+    const range = window.getSelection().getRangeAt(0);
+    const startContainer = range.startContainer;
+    const startOffset = range.startOffset;
+    if (startContainer === this.markup.nativeElement) {
+      if (startOffset === 0) {
+        // head of expression
+        if (!before && this.getExpression().nodes.length > 0) {
+          this.getExpression().removeToken(this.reflectRemovedField,
+            this.getExpression().nodes[0].getUuid(), 0);
+        }
+        return;
+      }
+      // end of expression
+      if (before && this.getExpression().nodes.length > 0) {
+        this.getExpression().removeToken(this.reflectRemovedField);
+      }
+      return;
+    }
+    if (startContainer.parentElement.getAttribute('id') === ExpressionComponent.trailerId) {
+      if (before) {
+        this.getExpression().removeToken(this.reflectRemovedField);
+      }
+      return;
+    }
+    this.getExpression().removeToken(
+      this.reflectRemovedField,
+      startContainer.parentElement.getAttribute('id'),
+      before ? startOffset - 1 : startOffset);
+  }
+
   private restoreCaretPosition(event: ExpressionUpdatedEvent) {
     this.markup.nativeElement.focus();
     if (!event) {
@@ -300,8 +329,8 @@ export class ExpressionComponent implements OnInit, OnDestroy {
       const target = this.markup.nativeElement.childNodes[i];
       if (target.getAttribute('id') === event.node.getUuid()) {
         const range = window.getSelection().getRangeAt(0);
-        range.selectNode(target.childNodes[0]);
-        range.setStart(target.childNodes[0], event.offset);
+        range.selectNode(target.childNodes[0] ? target.childNodes[0] : target);
+        range.setStart(target.childNodes[0] ? target.childNodes[0] : target, event.offset);
         range.collapse(true);
         return;
       }
@@ -309,4 +338,8 @@ export class ExpressionComponent implements OnInit, OnDestroy {
     this.moveCaretToEnd();
   }
 
+  private reflectRemovedField = (removed: MappedField) => {
+    this.mapping.removeMappedField(removed, true);
+    this.configModel.mappingService.updateMappedField(this.mapping, true, true);
+  }
 }
