@@ -13,14 +13,14 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 
 import { Field } from '../models/field.model';
 import { InspectionType } from '../common/config.types';
 import { ConfigModel } from '../models/config.model';
 import { ModalWindowComponent } from './modal-window.component';
 import { TemplateEditComponent } from './template-edit.component';
-import { FieldNode, ExpressionModel } from '../models/expression.model';
+import { ExpressionComponent } from './expression.component';
 
 @Component({
   selector: 'toolbar',
@@ -30,6 +30,9 @@ import { FieldNode, ExpressionModel } from '../models/expression.model';
 export class ToolbarComponent implements OnInit {
   @Input() cfg: ConfigModel;
   @Input() modalWindow: ModalWindowComponent;
+
+  @ViewChild('expressionComponent') expressionComponent: ExpressionComponent;
+
   targetSupportsTemplate = false;
 
   private fileData: any;

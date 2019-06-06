@@ -9,7 +9,7 @@
 
     <div *ngIf="conditionalMappingExpressionEnabled()" #conditionalExprBlock
       class="dropdown inline-block pull-left" style="width:400px;" >
-      <expression [configModel]="cfg"></expression>
+      <expression #expressionComponent [configModel]="cfg" [mapping]="cfg.mappings.activeMapping.getCurrentFieldMapping()"></expression>
     </div>
 
     <i class="fa dropdown inline-block pull-left" style="font-size:24px; color:gray;">|</i>

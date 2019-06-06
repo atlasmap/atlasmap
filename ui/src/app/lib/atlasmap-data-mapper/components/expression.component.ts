@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import { Component, ViewChild, Input, HostListener, ElementRef, OnInit, OnDestroy } from '@angular/core';
+import { Component, ViewChild, Input, HostListener, ElementRef, OnInit, OnDestroy, OnChanges } from '@angular/core';
 import { ConfigModel } from '../models/config.model';
 import { DocumentDefinition } from '../models/document-definition.model';
 import { MappingModel, FieldMappingPair, MappedField } from '../models/mapping.model';
@@ -26,12 +26,15 @@ import { Subscription } from 'rxjs';
   templateUrl: 'expression.component.html'
 })
 
-export class ExpressionComponent implements OnInit, OnDestroy {
+export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
 
   static readonly trailerId = 'expression-trailer';
 
   @Input()
   configModel: ConfigModel;
+
+  @Input()
+  mapping: FieldMappingPair;
 
   @ViewChild('expressionMarkupRef')
   markup: ElementRef;
@@ -44,16 +47,27 @@ export class ExpressionComponent implements OnInit, OnDestroy {
   private atIndex = 0;
   private searchFilter = '';
   private searchMode = false;
-  private mapping: FieldMappingPair;
   private expressionUpdatedSubscription: Subscription;
 
   ngOnInit() {
-    this.mapping = this.configModel.mappings.activeMapping.getCurrentFieldMapping();
     if (!this.getExpression()) {
       this.mapping.transition.expression = new ExpressionModel(this.mapping);
       this.getExpression().generateInitialExpression();
     }
     this.getExpression().updateFieldReference(this.mapping);
+    this.expressionUpdatedSubscription = this.getExpression().expressionUpdated$.subscribe((updatedEvent) => {
+      this.updateExpressionMarkup();
+      this.restoreCaretPosition(updatedEvent);
+    });
+    this.updateExpressionMarkup();
+    this.moveCaretToEnd();
+  }
+
+  ngOnChanges() {
+    this.mapping = this.configModel.mappings.activeMapping.getCurrentFieldMapping();
+    if (this.expressionUpdatedSubscription) {
+      this.expressionUpdatedSubscription.unsubscribe();
+    }
     this.expressionUpdatedSubscription = this.getExpression().expressionUpdated$.subscribe((updatedEvent) => {
       this.updateExpressionMarkup();
       this.restoreCaretPosition(updatedEvent);
@@ -250,17 +264,16 @@ export class ExpressionComponent implements OnInit, OnDestroy {
   private moveCaretToEnd() {
     const trailerNode = this.markup.nativeElement.querySelector('#' + ExpressionComponent.trailerId);
     this.markup.nativeElement.focus();
-    const range = window.getSelection().getRangeAt(0);
-    range.selectNode(trailerNode);
-    range.collapse(false);
-  }
-
-  private nodeIndexOf(list: NodeList, node: any) {
-    for (let i = 0; i < list.length; i++) {
-      if (list[i] === node) {
-        return i;
-      }
+    let range;
+    if (window.getSelection().rangeCount > 0) {
+      range = window.getSelection().getRangeAt(0);
+    } else {
+      range = document.createRange();
+      window.getSelection().addRange(range);
     }
+    range.selectNode(trailerNode.childNodes[0]);
+    range.setStart(trailerNode.childNodes[0], 0);
+    range.collapse(true);
   }
 
   private getExpression(): ExpressionModel {
