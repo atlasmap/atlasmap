@@ -66,6 +66,7 @@ export class ToolbarComponent implements OnInit {
 
         // Clear out current user documents from the runtime service before processing the imported ADM.
         this.cfg.mappingService.resetAll().toPromise().then( async(result: boolean) => {
+          this.cfg.mappings = null;
           await this.processMappingsCatalog(userFile);
         }).catch((error: any) => {
           if (error.status === 0) {
