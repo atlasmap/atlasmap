@@ -498,6 +498,10 @@
   display: inline-block;
 }
 
+.DataMapperUI .expressionFieldLabel {
+  display: inline-block;
+}
+
 .DataMapperUI .expressionSearchResult {
   cursor: pointer;
 }
