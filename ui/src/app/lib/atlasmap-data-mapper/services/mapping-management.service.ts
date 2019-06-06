@@ -236,7 +236,7 @@ export class MappingManagementService {
    * to fully mapped pairs (source/target) and source-side mappings with a transformation/ field action.
    */
   async saveCurrentMapping(): Promise<boolean> {
-    return new Promise<boolean>((resolve, reject) => {
+    return new Promise<boolean>( async(resolve, reject) => {
       if (!this.cfg.mappings) {
         resolve(false);
       }
@@ -251,7 +251,8 @@ export class MappingManagementService {
         }
       }
       this.cfg.mappings.mappings = newMappings;
-      this.cfg.mappingService.validateMappings();
+      await this.cfg.mappingService.validateMappings();
+      resolve(true);
     });
   }
 
@@ -744,48 +745,54 @@ export class MappingManagementService {
     }
   }
 
-  validateMappings(): void {
-    if (this.cfg.initCfg.baseMappingServiceUrl === null || this.cfg.mappings === null) {
-      // validation service not configured or required
-      return;
-    }
-    const payload: any = MappingSerializer.serializeMappings(this.cfg);
-    const url: string = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/validate';
-    DataMapperUtil.debugLogJSON(payload, 'Validation Service Request', this.cfg.initCfg.debugValidationServiceCalls, url);
-    this.http.put(url, payload, { headers: this.headers }).toPromise().then((body: any) => {
-      DataMapperUtil.debugLogJSON(body, 'Validation Service Response', this.cfg.initCfg.debugValidationServiceCalls, url);
-      if (this.cfg.mappings === null) {
+  async validateMappings(): Promise<boolean> {
+
+    return new Promise<boolean>((resolve, reject) => {
+      if (this.cfg.initCfg.baseMappingServiceUrl === null || this.cfg.mappings === null) {
+        // validation service not configured or required
+        resolve(false);
         return;
       }
-      const activeMappingErrors: ErrorInfo[] = [];
-      const globalErrors: ErrorInfo[] = [];
-      const mapping = this.cfg.mappings.activeMapping;
+      const payload: any = MappingSerializer.serializeMappings(this.cfg);
+      const url: string = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/validate';
+      DataMapperUtil.debugLogJSON(payload, 'Validation Service Request', this.cfg.initCfg.debugValidationServiceCalls, url);
+      this.http.put(url, payload, { headers: this.headers }).toPromise().then((body: any) => {
+        DataMapperUtil.debugLogJSON(body, 'Validation Service Response', this.cfg.initCfg.debugValidationServiceCalls, url);
+        if (this.cfg.mappings === null) {
+          resolve(false);
+          return;
+        }
+        const activeMappingErrors: ErrorInfo[] = [];
+        const globalErrors: ErrorInfo[] = [];
+        const mapping = this.cfg.mappings.activeMapping;
 
-      // Only update active mapping and global ones, since validateMappings() is always invoked when mapping is updated.
-      // This should be eventually turned into mapping entry level validation.
-      // https://github.com/atlasmap/atlasmap-ui/issues/116
-      if (body && body.Validations && body.Validations.validation) {
-        for (const validation of body.Validations.validation) {
-          let level: ErrorLevel = ErrorLevel.VALIDATION_ERROR;
-          if (validation.status === 'WARN') {
-            level = ErrorLevel.WARN;
-          } else if (validation.status === 'INFO') {
-            level = ErrorLevel.INFO;
-          }
-          const errorInfo = new ErrorInfo(validation.message, level);
-          if (!validation.scope || validation.scope !== 'MAPPING' || !validation.id) {
-            globalErrors.push(errorInfo);
-          } else if (mapping && mapping.uuid && validation.id === mapping.uuid) {
-            activeMappingErrors.push(errorInfo);
+        // Only update active mapping and global ones, since validateMappings() is always invoked when mapping is updated.
+        // This should be eventually turned into mapping entry level validation.
+        // https://github.com/atlasmap/atlasmap-ui/issues/116
+        if (body && body.Validations && body.Validations.validation) {
+          for (const validation of body.Validations.validation) {
+            let level: ErrorLevel = ErrorLevel.VALIDATION_ERROR;
+            if (validation.status === 'WARN') {
+              level = ErrorLevel.WARN;
+            } else if (validation.status === 'INFO') {
+              level = ErrorLevel.INFO;
+            }
+            const errorInfo = new ErrorInfo(validation.message, level);
+            if (!validation.scope || validation.scope !== 'MAPPING' || !validation.id) {
+              globalErrors.push(errorInfo);
+            } else if (mapping && mapping.uuid && validation.id === mapping.uuid) {
+              activeMappingErrors.push(errorInfo);
+            }
           }
         }
-      }
-      this.cfg.validationErrors = globalErrors;
-      if (mapping) {
-        mapping.validationErrors = activeMappingErrors;
-      }
-    }).catch((error: any) => {
-      this.cfg.errorService.error('Error fetching validation data.', { 'error': error, 'url': url, 'request': payload });
+        this.cfg.validationErrors = globalErrors;
+        if (mapping) {
+          mapping.validationErrors = activeMappingErrors;
+        }
+      }).catch((error: any) => {
+        this.cfg.errorService.error('Error fetching validation data.', { 'error': error, 'url': url, 'request': payload });
+      });
+      resolve(true);
     });
   }
 
