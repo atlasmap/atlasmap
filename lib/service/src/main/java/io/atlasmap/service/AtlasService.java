@@ -99,10 +99,7 @@ public class AtlasService {
 
     public AtlasService() throws AtlasException {
         this.defaultContext = atlasContextFactory.createContext(new AtlasMapping());
-        String atlasmapAdmPath = System.getProperty(ATLASMAP_ADM_PATH);
-        if (atlasmapAdmPath != null && atlasmapAdmPath.length() > 0) {
-            initializeADMCatalog(atlasmapAdmPath);
-        }
+
         String atlasmapWorkspace = System.getProperty(ATLASMAP_WORKSPACE);
         if (atlasmapWorkspace != null && atlasmapWorkspace.length() > 0) {
             baseFolder = atlasmapWorkspace;
@@ -110,8 +107,14 @@ public class AtlasService {
         else {
             baseFolder = "target";
         }
+
         mappingFolder = baseFolder + File.separator + "mappings";
         libFolder = baseFolder + File.separator + "lib";
+
+        String atlasmapAdmPath = System.getProperty(ATLASMAP_ADM_PATH);
+        if (atlasmapAdmPath != null && atlasmapAdmPath.length() > 0) {
+            initializeADMCatalog(atlasmapAdmPath);
+        }
 
         this.libraryLoader = new AtlasLibraryLoader(libFolder);
 
