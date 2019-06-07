@@ -859,7 +859,8 @@ export class InitializationService {
           if (error.status === 0) {
             this.handleError('Fatal network error: Could not connect to AtlasMap design runtime service.', error);
           } else {
-            this.handleError('Could not load document \'' + docDef.id + '\': ' + error.status + ' ' + error.statusText, error);
+            const errDetail = error.status ? error.status + ':' + error.statusText : error.toString();
+            this.handleError(`Could not load Document \'${docDef.name}\'(${docDef.id}): ${errDetail}`, error);
           }
         });
     }
