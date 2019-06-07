@@ -65,6 +65,10 @@ export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
 
   ngOnChanges() {
     this.mapping = this.configModel.mappings.activeMapping.getCurrentFieldMapping();
+    if (!this.getExpression()) {
+      this.mapping.transition.expression = new ExpressionModel(this.mapping);
+      this.getExpression().generateInitialExpression();
+    }
     if (this.expressionUpdatedSubscription) {
       this.expressionUpdatedSubscription.unsubscribe();
     }
