@@ -1,5 +1,23 @@
 # Changelog
 
+## atlasmap-1.40.0-beta1 (10/06/2019)
+
+#### Bug Fixes
+
+- [#973](https://github.com/atlasmap/atlasmap/issues/973) cond-expr: null expressionUpdated$ in ngOnChanges
+- [#971](https://github.com/atlasmap/atlasmap/issues/971) Provide more info when Java document resolution fails
+- [#965](https://github.com/atlasmap/atlasmap/issues/965) Specifying a catalog file from the command line is broken
+- [#963](https://github.com/atlasmap/atlasmap/issues/963) Could not find document for mapped field- timing issue
+- [#961](https://github.com/atlasmap/atlasmap/issues/961) cond-expr: Selecting a new mapping with cond expr enabled show old
+- [#957](https://github.com/atlasmap/atlasmap/issues/957) Selecting a mapping no longer triggers a Mapping Details panel
+- [#951](https://github.com/atlasmap/atlasmap/issues/951) [UI] topmost collection: id is empty on div right under document-field-detail
+- [#948](https://github.com/atlasmap/atlasmap/issues/948) cond-expr: Moving index order with drag/drop or index edit is not correctly reflected in cond expr
+- [#944](https://github.com/atlasmap/atlasmap/issues/944) cond expr: UI generates bad mappings XML for IF
+- [#928](https://github.com/atlasmap/atlasmap/issues/928) [UI] Insert/Delete text into/from where the caret is
+- [#921](https://github.com/atlasmap/atlasmap/issues/921) VSCode support - modify AtlasMap geometry to scale correctly to VSCode 
+
+---
+
 ## atlasmap-1.40.0-alpha2 (28/05/2019)
 
 #### Enhancements
