@@ -17,6 +17,7 @@ package io.atlasmap.itests.core;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.net.URL;
 import java.util.Arrays;
@@ -32,6 +33,7 @@ import io.atlasmap.core.DefaultAtlasContextFactory;
 import io.atlasmap.itests.core.issue.SourceClass;
 import io.atlasmap.itests.core.issue.TargetClass;
 import io.atlasmap.v2.AtlasMapping;
+import io.atlasmap.v2.AuditStatus;
 
 public class MultiplicityTransformationTest {
 
@@ -53,11 +55,13 @@ public class MultiplicityTransformationTest {
                 .setSourceLastName("Nakahama")
                 .setSourceName("Manjiro,Nakahama")
                 .setSourceString("one,two,three")
-                .setSourceStringList(Arrays.asList(new String[] {"one", "two", "three"}));
+                .setSourceStringList(Arrays.asList(new String[] {"one", "two", "three"}))
+                .setSourceHiphenatedInteger("1-20-300-4000");
         session.setSourceDocument("io.atlasmap.itests.core.issue.SourceClass", source);
         context.process(session);
         assertFalse(TestHelper.printAudit(session), session.hasErrors());
-        assertFalse(TestHelper.printAudit(session), session.hasWarns());
+        assertTrue("split(STRING) => INTEGER mapping should get 3 warnings", session.hasWarns());
+        assertEquals(3, session.getAudits().getAudit().stream().filter(a -> a.getStatus() == AuditStatus.WARN).count());
         Object output = session.getTargetDocument("io.atlasmap.itests.core.issue.TargetClass");
         assertEquals(TargetClass.class, output.getClass());
         TargetClass target = TargetClass.class.cast(output);
@@ -70,6 +74,12 @@ public class MultiplicityTransformationTest {
         assertEquals("one", list.get(0));
         assertEquals("two", list.get(1));
         assertEquals("three", list.get(2));
+        List<Integer> intList = target.getTargetIntegerList();  
+        assertEquals(4, intList.size());
+        assertEquals(new Integer(1), intList.get(0));
+        assertEquals(new Integer(20), intList.get(1));
+        assertEquals(new Integer(300), intList.get(2));
+        assertEquals(new Integer(4000), intList.get(3));
     }
 
     @Test

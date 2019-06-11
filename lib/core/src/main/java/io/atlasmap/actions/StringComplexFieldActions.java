@@ -243,7 +243,7 @@ public class StringComplexFieldActions implements AtlasFieldAction {
         return input == null ? null : input.replaceFirst(match, newString == null ? "" : newString);
     }
 
-    @AtlasFieldActionInfo(name = "Split", sourceType = FieldType.STRING, targetType = FieldType.ANY, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.ALL)
+    @AtlasFieldActionInfo(name = "Split", sourceType = FieldType.STRING, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.ALL)
     public static String[] split(Action action, String input) {
         if (!(action instanceof Split)) {
             throw new IllegalArgumentException("Action must be an Split action");
