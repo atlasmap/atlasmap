@@ -98,4 +98,33 @@ public class MultiplicityTransformationTest {
         TargetClass target = TargetClass.class.cast(output);
         assertEquals("two", target.getTargetString());
     }
+
+    @Test
+    public void testExpression() throws Exception {
+        URL url = Thread.currentThread().getContextClassLoader().getResource("mappings/atlasmapping-multiplicity-transformation-expression.json");
+        AtlasMapping mapping = mappingService.loadMapping(url);
+        AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(mapping);
+        AtlasSession session = context.createSession();
+        SourceClass source = new SourceClass().setSourceString("").setSourceInteger(123);
+        session.setSourceDocument("io.atlasmap.itests.core.issue.SourceClass", source);
+        context.process(session);
+        assertFalse(TestHelper.printAudit(session), session.hasErrors());
+        assertFalse(TestHelper.printAudit(session), session.hasWarns());
+        Object output = session.getTargetDocument("io.atlasmap.itests.core.issue.TargetClass");
+        assertEquals(TargetClass.class, output.getClass());
+        TargetClass target = TargetClass.class.cast(output);
+        assertEquals("one-two-three", target.getTargetString());
+        assertEquals(123, target.getTargetInteger());
+        session = context.createSession();
+        source = new SourceClass().setSourceString("not empty").setSourceInteger(789);
+        session.setSourceDocument("io.atlasmap.itests.core.issue.SourceClass", source);
+        context.process(session);
+        assertFalse(TestHelper.printAudit(session), session.hasErrors());
+        assertFalse(TestHelper.printAudit(session), session.hasWarns());
+        output = session.getTargetDocument("io.atlasmap.itests.core.issue.TargetClass");
+        assertEquals(TargetClass.class, output.getClass());
+        target = TargetClass.class.cast(output);
+        assertEquals("not one-two-three", target.getTargetString());
+        assertEquals(456, target.getTargetInteger());
+    }
 }
