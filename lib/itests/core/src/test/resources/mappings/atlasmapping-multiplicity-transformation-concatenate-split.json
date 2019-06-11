@@ -117,6 +117,28 @@
           "fieldType" : "STRING",
           "name" : "targetStringList"
         } ]
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "actions" : [ {
+            "Split" : {
+              "delimiter" : "-"
+            }
+          } ],
+          "docId" : "io.atlasmap.itests.core.issue.SourceClass",
+          "path" : "/sourceHiphenatedInteger",
+          "fieldType" : "STRING",
+          "name" : "sourceHiphenatedInteger"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "docId" : "io.atlasmap.itests.core.issue.TargetClass",
+          "index" : 0,
+          "path" : "/targetIntegerList<>",
+          "fieldType" : "INTEGER",
+          "name" : "targetIntegerList"
+        } ]
       } ]
     },
     "name" : "core.unit.test"

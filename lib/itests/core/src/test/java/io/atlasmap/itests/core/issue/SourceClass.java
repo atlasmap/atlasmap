@@ -31,6 +31,8 @@ public class SourceClass {
     private String sourceString;
     private List<String> sourceStringList = new LinkedList<>();
 
+    private String sourceHiphenatedInteger;
+
     public int getSourceInteger() {
         return sourceInteger;
     }
@@ -100,6 +102,15 @@ public class SourceClass {
 
     public SourceClass setSourceStringList(List<String> sourceStringList) {
         this.sourceStringList = sourceStringList;
+        return this;
+    }
+
+    public String getSourceHiphenatedInteger() {
+        return sourceHiphenatedInteger;
+    }
+
+    public SourceClass setSourceHiphenatedInteger(String sourceHiphenatedInteger) {
+        this.sourceHiphenatedInteger = sourceHiphenatedInteger;
         return this;
     }
 

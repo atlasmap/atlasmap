@@ -30,6 +30,8 @@ public class TargetClass {
     private String targetString;
     private List<String> targetStringList;
 
+    private List<Integer> targetIntegerList;
+
     public int getTargetInteger() {
         return targetInteger;
     }
@@ -99,6 +101,14 @@ public class TargetClass {
 
     public void setTargetStringList(List<String> targetStringList) {
         this.targetStringList = targetStringList;
+    }
+
+    public List<Integer> getTargetIntegerList() {
+        return targetIntegerList;
+    }
+
+    public void setTargetIntegerList(List<Integer> targetIntegerList) {
+        this.targetIntegerList = targetIntegerList;
     }
 
 }
