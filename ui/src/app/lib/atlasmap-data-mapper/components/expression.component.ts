@@ -17,7 +17,7 @@ import { Component, ViewChild, Input, HostListener, ElementRef, OnInit, OnDestro
 import { ConfigModel } from '../models/config.model';
 import { DocumentDefinition } from '../models/document-definition.model';
 import { MappingModel, FieldMappingPair, MappedField } from '../models/mapping.model';
-import { ExpressionModel, FieldNode, ExpressionUpdatedEvent } from '../models/expression.model';
+import { ExpressionModel, FieldNode, ExpressionUpdatedEvent, TextNode } from '../models/expression.model';
 import { Field } from '../models/field.model';
 import { Subscription } from 'rxjs';
 
@@ -44,7 +44,10 @@ export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
 
   mappedFieldCandidates = [];
 
+  // Need both the range object of the user text input and the index at the time the user typed '@'.
   private atIndex = 0;
+  private atRange = null;
+
   private searchFilter = '';
   private searchMode = false;
   private expressionUpdatedSubscription: Subscription;
@@ -95,19 +98,15 @@ export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
       event.preventDefault();
       this.removeTokenAtCaretPosition(true);
       if (this.searchMode) {
-        if (this.searchFilter.length === 0) {
-          this.mappedFieldCandidates = [];
-        } else {
-          this.searchFilter = this.searchFilter.substr(0, this.searchFilter.length - 1);
-        }
+        this.updateSearchMode();
       }
-      const lastNode = this.getExpression().getLastNode();
-      if (lastNode && lastNode.toText().length <= this.atIndex) {
-        this.clearSearchMode();
-      }
+
     } else if ('Delete' === event.key) {
       event.preventDefault();
       this.removeTokenAtCaretPosition(false);
+      if (this.searchMode) {
+        this.updateSearchMode();
+      }
     }
   }
 
@@ -129,11 +128,9 @@ export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
       }
     } else {
       this.searchMode = (event.key === '@') ? true : false;
-      const lastNode = this.getExpression().getLastNode();
-      if (lastNode) {
-        this.atIndex = lastNode.toText().length - 1;
-      } else {
-        this.atIndex = 0;
+      if (this.searchMode) {
+        this.atRange = window.getSelection().getRangeAt(0);
+        this.atIndex = window.getSelection().getRangeAt(0).startOffset;
       }
     }
 
@@ -182,7 +179,7 @@ export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
       }
       // TODO handle drop position - for now this appends a field ref to the end of expression
       const mappedField = currentFieldMapping.getMappedFieldForField(droppedField, true);
-      this.addConditionExpressionNode(mappedField);
+      this.addConditionalExpressionNode(mappedField, null, 0);
 
     // Pulling an unmapped field into a transition expression evaluation implies a compound selection.
     } else {
@@ -233,17 +230,51 @@ export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
     const currentFieldMapping = this.configModel.mappings.activeMapping.getCurrentFieldMapping();
     const selectedField = this.mappedFieldCandidates[index].field;
     const mappedField = currentFieldMapping.getMappedFieldForField(selectedField, true);
-    this.getExpression().clearToEnd(this.atIndex + 1);
 
     // If the selected field was not part of the original mapping then add it now.
     if (mappedField === null) {
-      this.configModel.mappingService.fieldSelected(selectedField, true);
-      this.configModel.mappingService.updateMappedField(currentFieldMapping, true, false);
-    } else {
-      this.addConditionExpressionNode(mappedField);
+      const newTextNode = this.clearAtText(this.getCaretPosition(this.atRange));
+      if (newTextNode === null) {
+        return;
+      }
+      this.configModel.mappingService.fieldSelected(selectedField, true, newTextNode.getUuid(),
+        newTextNode.toText().length);
     }
     this.clearSearchMode();
     this.markup.nativeElement.focus();
+  }
+
+  /**
+   * Clear user input from the selected range offset within the TextNode at the specified
+   * node ID.  The input will become a FieldNode so we don't need the text.  Return the new
+   * UUID position indicator.
+   */
+  private clearAtText(nodeId: string): TextNode {
+    const startOffset = this.atIndex;
+    const endOffset = this.atRange.endOffset;
+    let updatedTextNode = null;
+
+    if (nodeId === ExpressionComponent.trailerId) {
+      updatedTextNode = this.getExpression().clearText();
+    } else {
+      updatedTextNode = this.getExpression().clearText(nodeId, startOffset, endOffset);
+    }
+    return updatedTextNode;
+  }
+
+  /**
+   * Return the UUID string representing the caret position as defined by the
+   * user-specified range.  If no range is specified then return the current
+   * caret position.
+   *
+   * @param range
+   */
+  private getCaretPosition(range?: Range): string {
+    if (!range) {
+      range = window.getSelection().getRangeAt(0);
+    }
+    const startContainer = range.startContainer;
+    return startContainer.parentElement.getAttribute('id');
   }
 
   /**
@@ -251,13 +282,14 @@ export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
    */
   private clearSearchMode(): void {
     this.atIndex = 0;
+    this.atRange = null;
     this.searchMode = false;
     this.searchFilter = '';
     this.mappedFieldCandidates = [];
   }
 
-  private addConditionExpressionNode(mappedField: MappedField): void {
-    this.getExpression().insertNodes([new FieldNode(mappedField)]);
+  private addConditionalExpressionNode(mappedField: MappedField, nodeId: string, offset: number): void {
+    this.getExpression().insertNodes([new FieldNode(mappedField)], nodeId, offset);
   }
 
   private updateExpressionMarkup() {
@@ -297,7 +329,7 @@ export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
       return;
     }
 
-    const nodeId = startContainer.parentElement.getAttribute('id');
+    const nodeId = this.getCaretPosition();
     if (nodeId === ExpressionComponent.trailerId) {
       this.getExpression().insertText(key);
     } else {
@@ -324,21 +356,20 @@ export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
       }
       return;
     }
-    if (startContainer.parentElement.getAttribute('id') === ExpressionComponent.trailerId) {
+    if (this.getCaretPosition() === ExpressionComponent.trailerId) {
       if (before) {
         this.getExpression().removeToken(this.reflectRemovedField);
       }
       return;
     }
     this.getExpression().removeToken(
-      this.reflectRemovedField,
-      startContainer.parentElement.getAttribute('id'),
+      this.reflectRemovedField, this.getCaretPosition(),
       before ? startOffset - 1 : startOffset);
   }
 
   private restoreCaretPosition(event: ExpressionUpdatedEvent) {
     this.markup.nativeElement.focus();
-    if (!event) {
+    if (!event || !event.node) {
       this.moveCaretToEnd();
       return;
     }
@@ -358,5 +389,18 @@ export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
   private reflectRemovedField = (removed: MappedField) => {
     this.mapping.removeMappedField(removed, true);
     this.configModel.mappingService.updateMappedField(this.mapping, true, true);
+  }
+
+  private updateSearchMode(): void {
+    const selectionRange = window.getSelection().getRangeAt(0);
+    if (selectionRange.startContainer.nodeValue.indexOf('@') === -1) {
+      this.clearSearchMode();
+      return;
+    }
+    if (this.searchFilter.length === 0) {
+      this.mappedFieldCandidates = [];
+    } else {
+      this.searchFilter = this.searchFilter.substr(0, this.searchFilter.length - 1);
+    }
   }
 }

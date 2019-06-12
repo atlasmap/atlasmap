@@ -543,7 +543,7 @@ export class FieldMappingPair {
     }
   }
 
-  updateTransition(isSource: boolean, compoundSelection: boolean, fieldRemoved: boolean): void {
+  updateTransition(isSource: boolean, compoundSelection: boolean, fieldRemoved: boolean, position?: string, offset?: number): void {
     for (const field of this.getAllFields()) {
       if (field.enumeration) {
         this.transition.mode = TransitionMode.ENUM;
@@ -604,8 +604,10 @@ export class FieldMappingPair {
     } else {
       this.clearAllCombineSeparateActions();
     }
+
+    // Update conditional expression field references if enabled.
     if (this.transition.enableExpression && this.transition.expression) {
-      this.transition.expression.updateFieldReference(this);
+      this.transition.expression.updateFieldReference(this, position, offset);
     }
   }
 }

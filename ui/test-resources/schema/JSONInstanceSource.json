@@ -11,7 +11,8 @@
                 "lastName": "smith",
                 "phone": "512-123-1234"
             },
-            "orderId": "123"
+            "orderId": "123",
+            "customerName": ""
         },
         "primitives": {
             "stringPrimitive": "some value",

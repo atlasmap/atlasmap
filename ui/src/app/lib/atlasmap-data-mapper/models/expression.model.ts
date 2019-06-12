@@ -110,6 +110,42 @@ export class ExpressionModel {
   }
 
   /**
+   * Clear all text from the specified TextNode offset range or from the '@' to the end
+   * of the text node if no node ID is specified.
+   *
+   * Return the new UUID position indicator string or null.
+   *
+   * @param nodeId
+   * @param startOffset
+   * @param endOffset
+   */
+  clearText(nodeId?: string, startOffset?: number, endOffset?: number): TextNode {
+    let newTextNode = null;
+    let targetNodeIndex = 0;
+    if (!nodeId) {
+      const lastNode = this.getLastNode();
+      if (!(lastNode instanceof TextNode)) {
+        return null;
+      }
+      const keyPos = lastNode.toText().indexOf('@');
+      targetNodeIndex = this._nodes.indexOf(lastNode);
+      newTextNode = new TextNode(lastNode.toText().substring(0, keyPos));
+    } else {
+      const targetNode = this._nodes.find(n => n.getUuid() === nodeId);
+      targetNodeIndex = this._nodes.indexOf(targetNode);
+      if (!(targetNode instanceof TextNode) || !endOffset) {
+        return null;
+      }
+      const cleanStr = targetNode.str.replace(targetNode.str.substring(startOffset, endOffset), '');
+      newTextNode = new TextNode(cleanStr);
+    }
+    this._nodes[targetNodeIndex] = newTextNode;
+    this.updateCache();
+    this.expressionUpdatedSource.next();
+    return newTextNode;
+  }
+
+  /**
    * Insert text into expression at specified position. If nodeId is not specified,
    * it will be added to the end of expression. It parses the string
    * and insert a set of TextNode & FieldNode if it contains field reference like ${0},
@@ -127,19 +163,21 @@ export class ExpressionModel {
   }
 
   /**
-   * Insert an array of ExpressionNode at specified position. If nodeId is not specified,
-   * it will be added to the end of expression.
-   * This emits ExpressionUpdatedEvent which contains the latest node and offset it
+   * Insert an array of ExpressionNodes at the specified position. If insertPosition is
+   * not specified the nodes will be appended to the end of the expression.
+   * This emits an ExpressionUpdatedEvent which contains the latest node and offset it
    * worked on, so that the subscriber can determine where to put the caret in
    * the expression input widget. If ExpressionUpdatedEvent is undefined, it means that
    * it worked on the end of the expression.
+   *
    * @param newNodes an array of ExpressionNode to add
-   * @param nodeId target node to insert the string
+   * @param insertPosition target node to insert the string
    * @param offset position offset in the target node to insert the string
    */
-  insertNodes(newNodes: ExpressionNode[], nodeId?: string, offset?: number) {
+  insertNodes(newNodes: ExpressionNode[], insertPosition?: string, offset?: number) {
+
     // No position was specified - append to the end
-    if (!nodeId) {
+    if (!insertPosition) {
       const last = this.getLastNode();
       if (!last || last instanceof FieldNode) {
         this._nodes.push(...newNodes);
@@ -156,8 +194,9 @@ export class ExpressionModel {
 
     // Requires position handling
     const updatedEvent = new ExpressionUpdatedEvent();
-    const targetNode = this._nodes.find(n => n.getUuid() === nodeId);
+    const targetNode = this._nodes.find(n => n.getUuid() === insertPosition);
     const targetNodeIndex = this._nodes.indexOf(targetNode);
+
     if (targetNode instanceof TextNode) {
       if (offset === undefined || offset === null || offset < 0) {
         offset = targetNode.str.length;
@@ -232,9 +271,10 @@ export class ExpressionModel {
     this.expressionUpdatedSource.next(updatedEvent);
   }
 
-  removeToken(lastFieldRefRemoved: (removed: MappedField) => void, nodeId?: string, offset?: number) {
+  removeToken(lastFieldRefRemoved: (removed: MappedField) => void, tokenPosition?: string, offset?: number) {
+
     // No position was specified - append to the end
-    if (!nodeId) {
+    if (!tokenPosition) {
       const last = this.getLastNode();
       if (!last) {
         return;
@@ -258,7 +298,7 @@ export class ExpressionModel {
 
     // Requires position handling
     let updatedEvent = new ExpressionUpdatedEvent();
-    let targetNode = this._nodes.find(n => n.getUuid() === nodeId);
+    let targetNode = this._nodes.find(n => n.getUuid() === tokenPosition);
     let targetNodeIndex = this._nodes.indexOf(targetNode);
     if (offset === -1) {
       if (targetNodeIndex < 1) {
@@ -327,17 +367,18 @@ export class ExpressionModel {
 
   /**
    * Reflect mapped source fields to the field references in the expression.
-   * Selected source fields are appended to the expression,
+   * Selected source fields are inserted into or appended to the expression,
    * and unselected source fields are removed from expression.
    *
    * @param pair Corresponding FieldMappingPair object
    */
-  updateFieldReference(pair: FieldMappingPair) {
+  updateFieldReference(pair: FieldMappingPair, insertPosition?: string, offset?: number) {
     const mappedFields = pair.getUserMappedFields(true);
     const toAdd: MappedField[] = [];
     const toRemove: MappedField[] = [];
     let fieldNodes = this._nodes.filter(n => n instanceof FieldNode) as FieldNode[];
-    // Remove removed field from expression
+
+    // Remove the field from the expression if unmapped.
     for (const node of fieldNodes) {
       if (mappedFields.includes(node.field)) {
         continue;
@@ -351,11 +392,16 @@ export class ExpressionModel {
         this._nodes.splice(index - 1, 2, new TextNode(newStr));
       }
     }
-    // Append added field into expression
+
+    // Add the specified field into the expression - append if no insert position is specified.
     fieldNodes = this._nodes.filter(n => n instanceof FieldNode) as FieldNode[];
     for (const mfield of mappedFields) {
       if (!fieldNodes.find(n => n.field === mfield)) {
-        this.appendFieldNode(mfield);
+        if (insertPosition) {
+          this.insertNodes([new FieldNode(mfield)], insertPosition, offset);
+        } else {
+          this.appendFieldNode(mfield);
+        }
       }
     }
     this.updateCache();
