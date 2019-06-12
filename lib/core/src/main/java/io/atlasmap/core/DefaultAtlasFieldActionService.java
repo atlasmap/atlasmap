@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.ServiceLoader;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -492,10 +493,12 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
                 values.add(subField.getValue());
             }
             sourceObject = values;
+            sourceType = FieldType.NONE;
             if (values.size() > 0) {
-                sourceType = getConversionService().fieldTypeFromClass(values.get(0).getClass());
-            } else {
-                sourceType = FieldType.NONE;
+                Optional<Object> o = values.stream().filter(v -> v != null).findFirst();
+                if (o.isPresent()) {
+                    sourceType = getConversionService().fieldTypeFromClass(o.get().getClass());
+                }
             }
         }
 

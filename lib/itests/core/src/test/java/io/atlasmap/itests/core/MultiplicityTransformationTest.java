@@ -105,7 +105,11 @@ public class MultiplicityTransformationTest {
         AtlasMapping mapping = mappingService.loadMapping(url);
         AtlasContext context = DefaultAtlasContextFactory.getInstance().createContext(mapping);
         AtlasSession session = context.createSession();
-        SourceClass source = new SourceClass().setSourceString("").setSourceInteger(123);
+        SourceClass source = new SourceClass()
+                                .setSourceString("")
+                                .setSourceInteger(123)
+                                .setSourceFirstName(null)
+                                .setSourceLastName("");
         session.setSourceDocument("io.atlasmap.itests.core.issue.SourceClass", source);
         context.process(session);
         assertFalse(TestHelper.printAudit(session), session.hasErrors());
@@ -115,8 +119,13 @@ public class MultiplicityTransformationTest {
         TargetClass target = TargetClass.class.cast(output);
         assertEquals("one-two-three", target.getTargetString());
         assertEquals(123, target.getTargetInteger());
+        assertEquals("last name is empty", target.getTargetName());
         session = context.createSession();
-        source = new SourceClass().setSourceString("not empty").setSourceInteger(789);
+        source = new SourceClass()
+                    .setSourceString("not empty")
+                    .setSourceInteger(789)
+                    .setSourceFirstName(null)
+                    .setSourceLastName("lastname");
         session.setSourceDocument("io.atlasmap.itests.core.issue.SourceClass", source);
         context.process(session);
         assertFalse(TestHelper.printAudit(session), session.hasErrors());
@@ -126,5 +135,6 @@ public class MultiplicityTransformationTest {
         target = TargetClass.class.cast(output);
         assertEquals("not one-two-three", target.getTargetString());
         assertEquals(456, target.getTargetInteger());
+        assertEquals("last name is not empty", target.getTargetName());
     }
 }
