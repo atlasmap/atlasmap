@@ -1,0 +1,72 @@
+{
+  "AtlasMapping" : {
+    "jsonType" : "io.atlasmap.v2.AtlasMapping",
+    "dataSource" : [ {
+      "jsonType" : "io.atlasmap.v2.DataSource",
+      "id" : "io.atlasmap.itests.core.issue.SourceClass",
+      "uri" : "atlas:java?className=io.atlasmap.itests.core.issue.SourceClass",
+      "dataSourceType" : "SOURCE"
+    }, {
+      "jsonType" : "io.atlasmap.v2.DataSource",
+      "id" : "io.atlasmap.itests.core.issue.TargetClass",
+      "uri" : "atlas:java?className=io.atlasmap.itests.core.issue.TargetClass",
+      "dataSourceType" : "TARGET"
+    } ],
+    "mappings" : {
+      "mapping" : [ {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "inputFieldGroup" : {
+          "jsonType" : "io.atlasmap.v2.FieldGroup",
+          "actions" : [ {
+            "Expression" : {
+              "expression" : "if(isempty(${0}), 123, 456)"
+            }
+          } ],
+          "field" : [ {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "docId" : "io.atlasmap.itests.core.issue.SourceClass",
+            "index" : 0,
+            "path" : "/sourceString",
+            "fieldType" : "STRING",
+            "name" : "sourceString"
+          } ]
+        },
+        "inputField" : [ ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "docId" : "io.atlasmap.itests.core.issue.TargetClass",
+          "path" : "/targetInteger",
+          "fieldType" : "INTEGER",
+          "name" : "targetInteger"
+        } ]
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "inputFieldGroup" : {
+          "jsonType" : "io.atlasmap.v2.FieldGroup",
+          "actions" : [ {
+            "Expression" : {
+              "expression" : "if(${0} == 123, 'one-two-three', 'not one-two-three')"
+            }
+          } ],
+          "field" : [ {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "docId" : "io.atlasmap.itests.core.issue.SourceClass",
+            "index" : 0,
+            "path" : "/sourceInteger",
+            "fieldType" : "INTEGER",
+            "name" : "sourceInteger"
+          } ]
+        },
+        "inputField" : [ ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "docId" : "io.atlasmap.itests.core.issue.TargetClass",
+          "path" : "/targetString",
+          "fieldType" : "STRING",
+          "name" : "targetString"
+        } ]
+      } ]
+    },
+    "name" : "core.unit.test"
+  }
+}

@@ -21,6 +21,7 @@ import java.util.Arrays;
 
 import org.junit.Test;
 
+import io.atlasmap.expression.ExpressionException;
 import io.atlasmap.v2.Expression;
 
 public class ExpressionFieldActionTest {
@@ -35,6 +36,23 @@ public class ExpressionFieldActionTest {
         action.setExpression("IF(${0} == ${1}, 'same', 'not same')");
         assertEquals("same", ExpressionFieldAction.process(action, Arrays.asList(10, 10)));
         assertEquals("not same", ExpressionFieldAction.process(action, Arrays.asList(100, 10)));
+    }
+
+    @Test
+    public void testIFInteger() throws Exception {
+        Expression action = new Expression();
+        action.setExpression("IF(${0} == 123, 123, 456)");
+        assertEquals(123, ExpressionFieldAction.process(action, Arrays.asList(123)));
+        assertEquals(456, ExpressionFieldAction.process(action, Arrays.asList(789)));
+    }
+
+    // https://github.com/atlasmap/atlasmap/issues/986
+    @Test(expected = ExpressionException.class)
+    public void testIFIntegerZero() throws Exception {
+        Expression action = new Expression();
+        action.setExpression("IF(${0} == 0, 0, 1)");
+        assertEquals(0, ExpressionFieldAction.process(action, Arrays.asList(0)));
+        assertEquals(1, ExpressionFieldAction.process(action, Arrays.asList(10)));
     }
 
     @Test

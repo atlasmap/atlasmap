@@ -93,6 +93,9 @@ public class MappingFieldPairValidator {
         if (sourceFieldType == null || targetFieldType == null) {
             return;
         }
+        if (sourceFieldType == FieldType.ANY || targetFieldType == FieldType.ANY) {
+            return;
+        }
 
         Optional<AtlasConverter<?>> atlasConverter = service.getConversionService().findMatchingConverter(sourceFieldType, targetFieldType);
         if (!atlasConverter.isPresent()) {
