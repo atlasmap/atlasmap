@@ -13,6 +13,7 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
+import { ErrorHandlerService } from '../services/error-handler.service';
 import { MappedField, FieldMappingPair } from './mapping.model';
 import { Subject } from 'rxjs';
 
@@ -83,7 +84,7 @@ export class FieldNode extends ExpressionNode {
 }
 
 export class ExpressionModel {
-
+  errorService: ErrorHandlerService;
   expressionUpdatedSource = new Subject<ExpressionUpdatedEvent>();
   expressionUpdated$ = this.expressionUpdatedSource.asObservable();
 
@@ -434,12 +435,19 @@ export class ExpressionModel {
   private createNodesFromText(text: string): ExpressionNode[] {
     const answer = [];
     let position = -1;
+    let fn = null;
+
     while ((position = text.search(/\$\{[0-9]+\}/)) !== -1 ) {
       if (position !== 0) {
         answer.push(new TextNode(text.substring(0, position)));
       }
       const index = parseInt(text.substring(position + 2, text.indexOf('}')), 10);
-      answer.push(new FieldNode(null, index, this.mappingPair));
+      fn = new FieldNode(null, index, this.mappingPair);
+      if (fn.field === null) {
+        this.errorService.error('Unable to map expression index to field node.', index);
+      } else {
+        answer.push(fn);
+      }
       text = text.substring(text.indexOf('}') + 1);
     }
     if (text.length > 0) {

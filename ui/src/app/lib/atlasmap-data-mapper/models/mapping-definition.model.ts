@@ -196,15 +196,24 @@ export class MappingDefinition {
     }
   }
 
+  /**
+   * Return a document map for either the sources or targets panel contents.
+   *
+   * @param cfg
+   * @param isSource
+   */
+  private getDocMap(cfg: ConfigModel, isSource: boolean): any {
+    const docMap: any = {};
+    for (const doc of cfg.getDocs(isSource)) {
+      docMap[doc.uri] = doc;
+    }
+    return docMap;
+  }
+
   updateMappingsFromDocuments(cfg: ConfigModel): void {
-    const sourceDocMap: any = {};
-    for (const doc of cfg.getDocs(true)) {
-      sourceDocMap[doc.uri] = doc;
-    }
-    const targetDocMap: any = {};
-    for (const doc of cfg.getDocs(false)) {
-      targetDocMap[doc.uri] = doc;
-    }
+    const sourceDocMap: any = this.getDocMap(cfg, true);
+    const targetDocMap: any = this.getDocMap(cfg, false);
+
     for (const mapping of this.mappings) {
       for (const fieldPair of mapping.fieldMappings) {
         this.updateMappedFieldsFromDocuments(fieldPair, cfg, sourceDocMap, true);
@@ -320,7 +329,7 @@ export class MappingDefinition {
     mappedField.incTransformationCount();
   }
 
-  private updateMappedFieldsFromDocuments(fieldPair: FieldMappingPair, cfg: ConfigModel, docMap: any, isSource: boolean): void {
+  updateMappedFieldsFromDocuments(fieldPair: FieldMappingPair, cfg: ConfigModel, docMap: any, isSource: boolean): void {
     const mappedFields: MappedField[] = fieldPair.getMappedFields(isSource);
 
     if (mappedFields.length === 0) {
@@ -339,6 +348,9 @@ export class MappingDefinition {
       } else if (mappedField.parsedData.fieldIsConstant) {
         doc = cfg.constantDoc;
       } else {
+        if (docMap === null) {
+          docMap = this.getDocMap(cfg, isSource);
+        }
         doc = docMap[mappedField.parsedData.parsedDocURI] as DocumentDefinition;
         if (doc == null) {
           if (mappedField.parsedData.parsedName != null) {
