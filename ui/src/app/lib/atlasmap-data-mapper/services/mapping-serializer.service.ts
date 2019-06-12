@@ -507,11 +507,16 @@ export class MappingSerializer {
     if (fieldMapping.inputFieldGroup) {
       inputField = fieldMapping.inputFieldGroup.field;
 
+      for (const field of inputField) {
+        MappingSerializer.addFieldIfDoesntExist(fieldPair, field, true, docRefs, cfg, ignoreValue);
+      }
+      fieldPair.transition.mode = TransitionMode.COMBINE;
+      cfg.mappings.updateMappedFieldsFromDocuments(fieldPair, cfg, null, true);
+
       // Check for an InputFieldGroup containing a concatenate action inferring combine mode.
       const firstAction = fieldMapping.inputFieldGroup.actions[0];
       if (firstAction) {
         if (firstAction.Expression || firstAction['@type'] === 'Expression') {
-          fieldPair.transition.mode = TransitionMode.COMBINE;
           fieldPair.transition.enableExpression = true;
           fieldPair.transition.expression = new ExpressionModel(fieldPair);
           const expr = firstAction.Expression ? firstAction.Expression.expression : firstAction['expression'];
@@ -533,6 +538,10 @@ export class MappingSerializer {
     } else {
       inputField = fieldMapping.inputField;
 
+      for (const field of inputField) {
+        MappingSerializer.addFieldIfDoesntExist(fieldPair, field, true, docRefs, cfg, ignoreValue);
+      }
+
       if (inputField[0].actions && inputField[0].actions[0]) {
         // Check for an InputField containing a split action inferring separate mode.
         const firstAction = inputField[0].actions[0];
@@ -553,10 +562,6 @@ export class MappingSerializer {
           fieldPair.transition.expression.insertText(expr);
         }
       }
-    }
-
-    for (const field of inputField) {
-      MappingSerializer.addFieldIfDoesntExist(fieldPair, field, true, docRefs, cfg, ignoreValue);
     }
 
     for (const field of fieldMapping.outputField) {
