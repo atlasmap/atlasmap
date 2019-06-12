@@ -240,18 +240,23 @@ export class MappingManagementService {
       if (!this.cfg.mappings) {
         resolve(false);
       }
+      let validate = false;
       const activeMapping: MappingModel = this.cfg.mappings.activeMapping;
       if ((activeMapping != null) && (this.cfg.mappings.mappings.indexOf(activeMapping) === -1)) {
         this.cfg.mappings.mappings.push(activeMapping);
+        validate = true;
       }
       const newMappings: MappingModel[] = [];
       for (const mapping of this.cfg.mappings.mappings) {
         if (mapping.hasFullyMappedPair() || mapping.hasFieldAction()) {
           newMappings.push(mapping);
+          validate = true;
         }
       }
-      this.cfg.mappings.mappings = newMappings;
-      await this.cfg.mappingService.validateMappings();
+      if (validate) {
+        this.cfg.mappings.mappings = newMappings;
+        await this.cfg.mappingService.validateMappings();
+      }
       resolve(true);
     });
   }
@@ -520,7 +525,7 @@ export class MappingManagementService {
     }
   }
 
-  fieldSelected(field: Field, compoundSelection: boolean): void {
+  fieldSelected(field: Field, compoundSelection: boolean, position?: string, offset?: number): void {
 
     // Start out with a clean slate.
     this.cfg.errorService.clearMappingErrors();
@@ -603,7 +608,13 @@ export class MappingManagementService {
         if (compoundSelection || this.hasMultipleMappings(latestFieldPair)) {
           this.transitionMode(latestFieldPair, field);
         }
-        latestFieldPair.updateTransition(field.isSource(), compoundSelection, fieldRemoved);
+        latestFieldPair.updateTransition(field.isSource(), compoundSelection, fieldRemoved, position, offset);
+/*
+        if (latestFieldPair.transition.enableExpression && latestFieldPair.transition.expression) {
+          latestFieldPair.transition.expression.updateFieldReference(latestFieldPair, position, offset);
+          this.updateMappedField(latestFieldPair, true, false);
+        }
+*/
         this.selectMapping(mapping);
         this.validateMappings();
       }
