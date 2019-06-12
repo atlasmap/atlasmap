@@ -609,12 +609,6 @@ export class MappingManagementService {
           this.transitionMode(latestFieldPair, field);
         }
         latestFieldPair.updateTransition(field.isSource(), compoundSelection, fieldRemoved, position, offset);
-/*
-        if (latestFieldPair.transition.enableExpression && latestFieldPair.transition.expression) {
-          latestFieldPair.transition.expression.updateFieldReference(latestFieldPair, position, offset);
-          this.updateMappedField(latestFieldPair, true, false);
-        }
-*/
         this.selectMapping(mapping);
         this.validateMappings();
       }
