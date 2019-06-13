@@ -36,10 +36,12 @@ import { MappingSerializer } from './mapping-serializer.service';
 
 @Injectable()
 export class MappingManagementService {
-  cfg: ConfigModel;
+  _cfg: ConfigModel;
 
   mappingUpdatedSource = new Subject<void>();
   mappingUpdated$ = this.mappingUpdatedSource.asObservable();
+
+  debugMappingUpdatedSubscription: Subscription;
 
   mappingSelectionRequiredSource = new Subject<Field>();
   mappingSelectionRequired$ = this.mappingSelectionRequiredSource.asObservable();
@@ -59,6 +61,19 @@ export class MappingManagementService {
   private jsonBuffer: string;
 
   constructor(private http: HttpClient) {}
+
+  get cfg() {
+    return this._cfg;
+  }
+
+  set cfg(cfg: ConfigModel) {
+    this._cfg = cfg;
+    if (cfg.initCfg.debugMappingUpdated) {
+      this.mappingUpdated$.subscribe(() => {
+        console.log('mapping updated: ' + JSON.stringify(this.serializeMappingsToJSON()));
+      });
+    }
+  }
 
   // TODO consider extracting these utilities into separated class...
   // put these model parser kind of guys together
@@ -257,6 +272,7 @@ export class MappingManagementService {
         this.cfg.mappings.mappings = newMappings;
         await this.cfg.mappingService.validateMappings();
       }
+      this.mappingUpdatedSource.next();
       resolve(true);
     });
   }

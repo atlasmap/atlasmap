@@ -90,6 +90,7 @@ export class DataMapperInitializationModel {
   debugValidationServiceCalls = false;
   debugFieldActionServiceCalls = false;
   debugProcessMappingPreviewCalls = false;
+  debugMappingUpdated = false;
 
   mappingInitialized = false;
   fieldActionsInitialized = false;
