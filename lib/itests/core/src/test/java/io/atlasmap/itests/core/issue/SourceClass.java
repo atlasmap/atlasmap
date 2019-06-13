@@ -22,6 +22,7 @@ import java.util.List;
 public class SourceClass {
 
     private int sourceInteger;
+    private int sourceInteger2;
     private String sourceFirstName;
     private String sourceLastName;
     private String sourceName;
@@ -39,6 +40,15 @@ public class SourceClass {
 
     public SourceClass setSourceInteger(int sourceInteger) {
         this.sourceInteger = sourceInteger;
+        return this;
+    }
+
+    public int getSourceInteger2() {
+        return sourceInteger2;
+    }
+
+    public SourceClass setSourceInteger2(int sourceInteger2) {
+        this.sourceInteger2 = sourceInteger2;
         return this;
     }
 

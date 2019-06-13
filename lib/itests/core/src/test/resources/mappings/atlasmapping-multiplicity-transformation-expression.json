@@ -98,6 +98,39 @@
           "fieldType" : "STRING",
           "name" : "targetString"
         } ]
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "inputFieldGroup" : {
+          "jsonType" : "io.atlasmap.v2.FieldGroup",
+          "actions" : [ {
+            "Expression" : {
+              "expression" : "if(${0} > ${1}, true, false)"
+            }
+          } ],
+          "field" : [ {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "docId" : "io.atlasmap.itests.core.issue.SourceClass",
+            "index" : 0,
+            "path" : "/sourceInteger",
+            "fieldType" : "INTEGER",
+            "name" : "sourceInteger"
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "docId" : "io.atlasmap.itests.core.issue.SourceClass",
+            "index" : 1,
+            "path" : "/sourceInteger2",
+            "fieldType" : "INTEGER",
+            "name" : "sourceInteger2"
+          } ]
+        },
+        "inputField" : [ ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "docId" : "io.atlasmap.itests.core.issue.TargetClass",
+          "path" : "/targetFirstName",
+          "fieldType" : "STRING",
+          "name" : "targetFirstName"
+        } ]
       } ]
     },
     "name" : "core.unit.test"
