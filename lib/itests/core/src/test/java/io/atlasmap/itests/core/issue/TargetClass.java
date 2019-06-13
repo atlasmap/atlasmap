@@ -20,7 +20,9 @@ import java.util.List;
 
 public class TargetClass {
 
+    private boolean targetBoolean;
     private int targetInteger;
+    private int targetInteger2;
     private String targetFirstName;
     private String targetLastName;
     private String targetName;
@@ -38,6 +40,15 @@ public class TargetClass {
 
     public TargetClass setTargetInteger(int targetInteger) {
         this.targetInteger = targetInteger;
+        return this;
+    }
+
+    public int getTargetInteger2() {
+        return targetInteger2;
+    }
+
+    public TargetClass setTargetInteger2(int targetInteger2) {
+        this.targetInteger2 = targetInteger2;
         return this;
     }
 
@@ -109,6 +120,14 @@ public class TargetClass {
 
     public void setTargetIntegerList(List<Integer> targetIntegerList) {
         this.targetIntegerList = targetIntegerList;
+    }
+
+    public boolean isTargetBoolean() {
+        return targetBoolean;
+    }
+
+    public void setTargetBoolean(boolean targetBoolean) {
+        this.targetBoolean = targetBoolean;
     }
 
 }

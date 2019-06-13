@@ -61,6 +61,7 @@ public class ExpressionFieldActionTest {
         action.setExpression("IF(${0} > ${1}, ${0}, ${1})");
         assertEquals(1000, ExpressionFieldAction.process(action, Arrays.asList(1000, 100)));
         assertEquals(10000, ExpressionFieldAction.process(action, Arrays.asList(1000, 10000)));
+        assertEquals(10, ExpressionFieldAction.process(action, Arrays.asList(10, -10)));
     }
 
     @Test
@@ -69,9 +70,11 @@ public class ExpressionFieldActionTest {
         action.setExpression("IF(LT(${0}, ${1}), ${0}, ${1})");
         assertEquals(10, ExpressionFieldAction.process(action, Arrays.asList(10, 100)));
         assertEquals(100, ExpressionFieldAction.process(action, Arrays.asList(1000, 100)));
+        assertEquals(-10, ExpressionFieldAction.process(action, Arrays.asList(10, -10)));
         action.setExpression("IF(${0} < ${1}, ${0}, ${1})");
         assertEquals(10, ExpressionFieldAction.process(action, Arrays.asList(10, 100)));
         assertEquals(100, ExpressionFieldAction.process(action, Arrays.asList(1000, 100)));
+        assertEquals(-10, ExpressionFieldAction.process(action, Arrays.asList(10, -10)));
     }
 
     @Test
