@@ -109,7 +109,8 @@ public class MultiplicityTransformationTest {
                                 .setSourceString("")
                                 .setSourceInteger(123)
                                 .setSourceFirstName(null)
-                                .setSourceLastName("");
+                                .setSourceLastName("")
+                                .setSourceInteger2(-123);
         session.setSourceDocument("io.atlasmap.itests.core.issue.SourceClass", source);
         context.process(session);
         assertFalse(TestHelper.printAudit(session), session.hasErrors());
@@ -120,12 +121,14 @@ public class MultiplicityTransformationTest {
         assertEquals("one-two-three", target.getTargetString());
         assertEquals(123, target.getTargetInteger());
         assertEquals("last name is empty", target.getTargetName());
+        assertEquals(1, target.getTargetInteger2());
         session = context.createSession();
         source = new SourceClass()
                     .setSourceString("not empty")
                     .setSourceInteger(789)
                     .setSourceFirstName(null)
-                    .setSourceLastName("lastname");
+                    .setSourceLastName("lastname")
+                    .setSourceInteger2(790);
         session.setSourceDocument("io.atlasmap.itests.core.issue.SourceClass", source);
         context.process(session);
         assertFalse(TestHelper.printAudit(session), session.hasErrors());
@@ -136,5 +139,6 @@ public class MultiplicityTransformationTest {
         assertEquals("not one-two-three", target.getTargetString());
         assertEquals(456, target.getTargetInteger());
         assertEquals("last name is not empty", target.getTargetName());
+        assertEquals(0, target.getTargetInteger2());
     }
 }
