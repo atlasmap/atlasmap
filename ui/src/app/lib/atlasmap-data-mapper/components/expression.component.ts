@@ -177,12 +177,8 @@ export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
       return;
     }
 
-    if (droppedField.partOfMapping) {
+    if (droppedField.partOfMapping && currentFieldMapping.isFieldMapped(droppedField)) {
 
-      // The selected field is part of a different mapping.
-      if (!currentFieldMapping.isFieldMapped(droppedField)) {
-        return;
-      }
       // TODO handle drop position - for now this appends a field ref to the end of expression
       const mappedField = currentFieldMapping.getMappedFieldForField(droppedField, true);
       this.addConditionalExpressionNode(mappedField, null, 0);
