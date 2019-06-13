@@ -78,6 +78,12 @@ export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
     this.expressionUpdatedSubscription = this.getExpression().expressionUpdated$.subscribe((updatedEvent) => {
       this.updateExpressionMarkup();
       this.restoreCaretPosition(updatedEvent);
+
+      // Only validate for inserted or appended text nodes.
+      if ((!updatedEvent && this.getExpression().getLastNode() instanceof TextNode) ||
+          (updatedEvent && updatedEvent.node instanceof TextNode)) {
+        this.configModel.mappingService.validateMappings();
+      }
     });
     this.updateExpressionMarkup();
     this.moveCaretToEnd();
