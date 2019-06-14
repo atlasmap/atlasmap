@@ -1,5 +1,25 @@
 # Changelog
 
+## atlasmap-1.40.0 (14/06/2019)
+
+#### Bug Fixes
+
+- [#1003](https://github.com/atlasmap/atlasmap/issues/1003) Allow multiple mappings for source elements
+- [#997](https://github.com/atlasmap/atlasmap/issues/997) [Conditional mapping] Numbers are treated as strings when target is string
+- [#994](https://github.com/atlasmap/atlasmap/issues/994) cond-expr: trailer text missing from conditional expression generated in mappings
+- [#992](https://github.com/atlasmap/atlasmap/issues/992) mappingUpdated event is not triggered when mapping is established
+- [#990](https://github.com/atlasmap/atlasmap/issues/990) cond-expr: field nodes do not appear in correct pos at reload/ import
+- [#988](https://github.com/atlasmap/atlasmap/issues/988) [Conditional mapping] Unable to specify one field twice
+- [#985](https://github.com/atlasmap/atlasmap/issues/985) Conditional Mapping: no converter is available validation error
+- [#983](https://github.com/atlasmap/atlasmap/issues/983) [Conditional mapping] NPE from backend when filling mapping preview
+- [#977](https://github.com/atlasmap/atlasmap/issues/977) [Regression] [Separate] Conversion from 'STRING' to 'DOUBLE' is required but no converter is available 
+- [#969](https://github.com/atlasmap/atlasmap/issues/969) cond-expr: autocomplete needs to honor the caret position
+- [#943](https://github.com/atlasmap/atlasmap/issues/943) cond expr: can't use boolean in IF expression when targeting string target type
+- [#942](https://github.com/atlasmap/atlasmap/issues/942) Cond expr - labels embedded in cond expr appear at the end on restart
+- [#935](https://github.com/atlasmap/atlasmap/issues/935) expression is lost after reload
+
+---
+
 ## atlasmap-1.40.0-beta1 (10/06/2019)
 
 #### Bug Fixes
