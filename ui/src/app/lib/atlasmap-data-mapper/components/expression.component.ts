@@ -46,7 +46,7 @@ export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
 
   // Need both the range object of the user text input and the index at the time the user typed '@'.
   private atIndex = 0;
-  private atRange = null;
+  private atContainer = null;
 
   private searchFilter = '';
   private searchMode = false;
@@ -135,7 +135,7 @@ export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
     } else {
       this.searchMode = (event.key === '@') ? true : false;
       if (this.searchMode) {
-        this.atRange = window.getSelection().getRangeAt(0);
+        this.atContainer = window.getSelection().getRangeAt(0).startContainer;
         this.atIndex = window.getSelection().getRangeAt(0).startOffset;
       }
     }
@@ -233,14 +233,18 @@ export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
     const selectedField = this.mappedFieldCandidates[index].field;
     const mappedField = currentFieldMapping.getMappedFieldForField(selectedField, true);
 
+    const newTextNode = this.clearAtText(this.getCaretPositionNodeId(this.atContainer));
+    if (newTextNode === null) {
+      return;
+    }
     // If the selected field was not part of the original mapping then add it now.
+    const isTrailer = this.getCaretPositionNodeId(this.atContainer) === ExpressionComponent.trailerId;
     if (mappedField === null) {
-      const newTextNode = this.clearAtText(this.getCaretPosition(this.atRange));
-      if (newTextNode === null) {
-        return;
-      }
       this.configModel.mappingService.fieldSelected(selectedField, true, newTextNode.getUuid(),
-        newTextNode.toText().length);
+        isTrailer ? newTextNode.toText().length : this.atIndex);
+    } else {
+      this.addConditionalExpressionNode(mappedField, newTextNode.getUuid(),
+        isTrailer ? newTextNode.str.length : this.atIndex);
     }
     this.clearSearchMode();
     this.markup.nativeElement.focus();
@@ -253,7 +257,7 @@ export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
    */
   private clearAtText(nodeId: string): TextNode {
     const startOffset = this.atIndex;
-    const endOffset = this.atRange.endOffset;
+    const endOffset = startOffset + this.searchFilter.length + 1;
     let updatedTextNode = null;
 
     if (nodeId === ExpressionComponent.trailerId) {
@@ -271,11 +275,10 @@ export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
    *
    * @param range
    */
-  private getCaretPosition(range?: Range): string {
-    if (!range) {
-      range = window.getSelection().getRangeAt(0);
+  private getCaretPositionNodeId(startContainer?: Node): string {
+    if (!startContainer) {
+      startContainer = window.getSelection().getRangeAt(0).startContainer;
     }
-    const startContainer = range.startContainer;
     return startContainer.parentElement.getAttribute('id');
   }
 
@@ -284,7 +287,7 @@ export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
    */
   private clearSearchMode(): void {
     this.atIndex = 0;
-    this.atRange = null;
+    this.atContainer = null;
     this.searchMode = false;
     this.searchFilter = '';
     this.mappedFieldCandidates = [];
@@ -331,7 +334,7 @@ export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
       return;
     }
 
-    const nodeId = this.getCaretPosition();
+    const nodeId = this.getCaretPositionNodeId();
     if (nodeId === ExpressionComponent.trailerId) {
       this.getExpression().insertText(key);
     } else {
@@ -358,14 +361,14 @@ export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
       }
       return;
     }
-    if (this.getCaretPosition() === ExpressionComponent.trailerId) {
+    if (this.getCaretPositionNodeId() === ExpressionComponent.trailerId) {
       if (before) {
         this.getExpression().removeToken(this.reflectRemovedField);
       }
       return;
     }
     this.getExpression().removeToken(
-      this.reflectRemovedField, this.getCaretPosition(),
+      this.reflectRemovedField, this.getCaretPositionNodeId(),
       before ? startOffset - 1 : startOffset);
   }
 
