@@ -3,7 +3,7 @@
 
   <groupId>io.atlasmap</groupId>
   <artifactId>atlasmap-maven-plugin-example</artifactId>
-  <version>1.40.0-SNAPSHOT</version>
+  <version>1.40.x-SNAPSHOT</version>
   <name>Atlas :: Maven Plugin :: Example</name>
   <packaging>jar</packaging>
 
