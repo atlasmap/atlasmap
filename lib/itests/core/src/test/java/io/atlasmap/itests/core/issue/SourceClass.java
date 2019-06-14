@@ -26,6 +26,7 @@ public class SourceClass {
     private String sourceFirstName;
     private String sourceLastName;
     private String sourceName;
+    private String sourceStreet;
     private Date sourceDate;
     private List<Item> sourceList = new LinkedList<>();
 
@@ -33,6 +34,7 @@ public class SourceClass {
     private List<String> sourceStringList = new LinkedList<>();
 
     private String sourceHiphenatedInteger;
+    private String sourceWeight;
 
     public int getSourceInteger() {
         return sourceInteger;
@@ -79,6 +81,15 @@ public class SourceClass {
         return this;
     }
 
+    public String getSourceStreet() {
+        return sourceStreet;
+    }
+
+    public SourceClass setSourceStreet(String sourceStreet) {
+        this.sourceStreet = sourceStreet;
+        return this;
+    }
+
     public Date getSourceDate() {
         return sourceDate;
     }
@@ -121,6 +132,15 @@ public class SourceClass {
 
     public SourceClass setSourceHiphenatedInteger(String sourceHiphenatedInteger) {
         this.sourceHiphenatedInteger = sourceHiphenatedInteger;
+        return this;
+    }
+
+    public String getSourceWeight() {
+        return sourceWeight;
+    }
+
+    public SourceClass setSourceWeight(String sourceWeight) {
+        this.sourceWeight = sourceWeight;
         return this;
     }
 

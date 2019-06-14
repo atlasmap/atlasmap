@@ -26,6 +26,9 @@ public class TargetClass {
     private String targetFirstName;
     private String targetLastName;
     private String targetName;
+    private Integer targetStreetNumber;
+    private String targetStreetName1;
+    private String targetStreetName2;
     private Date targetDate;
     private List<Item> targetList;
 
@@ -33,6 +36,8 @@ public class TargetClass {
     private List<String> targetStringList;
 
     private List<Integer> targetIntegerList;
+    private Double targetWeightDouble;
+    private String targetWeightUnit;
 
     public int getTargetInteger() {
         return targetInteger;
@@ -77,6 +82,30 @@ public class TargetClass {
     public TargetClass setTargetName(String targetName) {
         this.targetName = targetName;
         return this;
+    }
+
+    public Integer getTargetStreetNumber() {
+        return targetStreetNumber;
+    }
+
+    public void setTargetStreetNumber(Integer targetStreetNumber) {
+        this.targetStreetNumber = targetStreetNumber;
+    }
+
+    public String getTargetStreetName1() {
+        return targetStreetName1;
+    }
+
+    public void setTargetStreetName1(String targetStreetName1) {
+        this.targetStreetName1 = targetStreetName1;
+    }
+
+    public String getTargetStreetName2() {
+        return targetStreetName2;
+    }
+
+    public void setTargetStreetName2(String targetStreetName2) {
+        this.targetStreetName2 = targetStreetName2;
     }
 
     public Date getTargetDate() {
@@ -128,6 +157,22 @@ public class TargetClass {
 
     public void setTargetBoolean(boolean targetBoolean) {
         this.targetBoolean = targetBoolean;
+    }
+
+    public Double getTargetWeightDouble() {
+        return targetWeightDouble;
+    }
+
+    public void setTargetWeightDouble(Double targetWeightDouble) {
+        this.targetWeightDouble = targetWeightDouble;
+    }
+
+    public String getTargetWeightUnit() {
+        return targetWeightUnit;
+    }
+
+    public void setTargetWeightUnit(String targetWeightUnit) {
+        this.targetWeightUnit = targetWeightUnit;
     }
 
 }

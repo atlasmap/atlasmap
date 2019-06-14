@@ -80,6 +80,71 @@
         "inputField" : [ {
           "jsonType" : "io.atlasmap.java.v2.JavaField",
           "actions" : [ {
+            "Split" : {
+              "delimiter" : " "
+            }
+          } ],
+          "docId" : "io.atlasmap.itests.core.issue.SourceClass",
+          "path" : "/sourceStreet",
+          "fieldType" : "STRING",
+          "name" : "sourceStreet"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "docId" : "io.atlasmap.itests.core.issue.TargetClass",
+          "index" : 0,
+          "path" : "/targetStreetNumber",
+          "fieldType" : "INTEGER",
+          "name" : "targetFirstName"
+        }, {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "docId" : "io.atlasmap.itests.core.issue.TargetClass",
+          "index" : 1,
+          "path" : "/targetStreetName1",
+          "fieldType" : "STRING",
+          "name" : "targetStreetName1"
+        }, {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "docId" : "io.atlasmap.itests.core.issue.TargetClass",
+          "index" : 2,
+          "path" : "/targetStreetName2",
+          "fieldType" : "STRING",
+          "name" : "targetStreetName2"
+        } ]
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "actions" : [ {
+            "Split" : {
+              "delimiter" : " "
+            }
+          } ],
+          "docId" : "io.atlasmap.itests.core.issue.SourceClass",
+          "path" : "/sourceWeight",
+          "fieldType" : "STRING",
+          "name" : "sourceWeight"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "docId" : "io.atlasmap.itests.core.issue.TargetClass",
+          "index" : 0,
+          "path" : "/targetWeightDouble",
+          "fieldType" : "DOUBLE",
+          "name" : "targetWeightDouble"
+        }, {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "docId" : "io.atlasmap.itests.core.issue.TargetClass",
+          "index" : 1,
+          "path" : "/targetWeightUnit",
+          "fieldType" : "STRING",
+          "name" : "targetWeightUnit"
+        } ]
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "actions" : [ {
             "Concatenate" : {
               "delimiter" : ","
             }
