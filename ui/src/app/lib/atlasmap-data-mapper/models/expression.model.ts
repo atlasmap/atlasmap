@@ -41,7 +41,7 @@ export class TextNode extends ExpressionNode {
 
   static readonly PREFIX = 'expression-text-';
 
-  constructor(public readonly str: string) {
+  constructor(public str: string) {
     super(TextNode.PREFIX);
   }
 
@@ -59,7 +59,7 @@ export class FieldNode extends ExpressionNode {
 
   static readonly PREFIX = 'expression-field-';
 
-  constructor(public readonly field?: MappedField, private index?: number, private pair?: FieldMappingPair) {
+  constructor(public field?: MappedField, private index?: number, private pair?: FieldMappingPair) {
     super(FieldNode.PREFIX);
     if (!field) {
       this.field = pair.getMappedFieldForIndex((index + 1).toString(), true);
@@ -121,29 +121,30 @@ export class ExpressionModel {
    * @param endOffset
    */
   clearText(nodeId?: string, startOffset?: number, endOffset?: number): TextNode {
-    let newTextNode = null;
+    let targetNode: TextNode;
     let targetNodeIndex = 0;
     if (!nodeId) {
       const lastNode = this.getLastNode();
       if (!(lastNode instanceof TextNode)) {
         return null;
       }
-      const keyPos = lastNode.toText().indexOf('@');
+      const keyPos = lastNode.str.indexOf('@');
       targetNodeIndex = this._nodes.indexOf(lastNode);
-      newTextNode = new TextNode(lastNode.toText().substring(0, keyPos));
+      targetNode = lastNode;
+      targetNode.str = targetNode.str.substring(0, keyPos);
     } else {
-      const targetNode = this._nodes.find(n => n.getUuid() === nodeId);
-      targetNodeIndex = this._nodes.indexOf(targetNode);
-      if (!(targetNode instanceof TextNode) || !endOffset) {
+      const node = this._nodes.find(n => n.getUuid() === nodeId);
+      if (!(node instanceof TextNode) || !endOffset) {
         return null;
       }
+      targetNode = node;
+      targetNodeIndex = this._nodes.indexOf(targetNode);
       const cleanStr = targetNode.str.replace(targetNode.str.substring(startOffset, endOffset), '');
-      newTextNode = new TextNode(cleanStr);
+      targetNode.str = cleanStr;
     }
-    this._nodes[targetNodeIndex] = newTextNode;
     this.updateCache();
     this.expressionUpdatedSource.next();
-    return newTextNode;
+    return targetNode;
   }
 
   /**
@@ -180,13 +181,17 @@ export class ExpressionModel {
     // No position was specified - append to the end
     if (!insertPosition) {
       const last = this.getLastNode();
-      if (!last || last instanceof FieldNode) {
+      if (!last) {
         this._nodes.push(...newNodes);
       } else if (last instanceof TextNode && newNodes[0] instanceof TextNode) {
-        newNodes.splice(0, 1, new TextNode((last as TextNode).str + (newNodes[0] as TextNode).str));
+        const lastTextNode = last as TextNode;
+        (last as TextNode).str += (newNodes[0] as TextNode).str;
+        newNodes.splice(0, 1, last);
         this._nodes.splice(this.getLastNodeIndex(), 1, ...newNodes);
       } else if (last instanceof FieldNode && newNodes[0] instanceof FieldNode) {
         this._nodes.splice(this.getLastNodeIndex(), 0, new TextNode(' + '), ...newNodes);
+      } else {
+        this._nodes.push(...newNodes);
       }
       this.updateCache();
       this.expressionUpdatedSource.next();
@@ -206,17 +211,32 @@ export class ExpressionModel {
       const post = targetNode.str.substring(offset);
       if (pre.length > 0) {
         if (newNodes[0] instanceof TextNode) {
-          newNodes.splice(0, 1, new TextNode(pre + (newNodes[0] as TextNode).str));
+          targetNode.str = pre + (newNodes[0] as TextNode).str;
+          newNodes.splice(0, 1, targetNode);
         } else {
-          newNodes.splice(0, 0, new TextNode(pre));
+          targetNode.str = pre;
+          newNodes.splice(0, 0, targetNode);
         }
       }
       if (post.length > 0) {
         const lastNewNodeIndex = newNodes.length - 1;
         if (newNodes[lastNewNodeIndex] instanceof TextNode) {
-          newNodes.splice(lastNewNodeIndex, 1, new TextNode((newNodes[lastNewNodeIndex] as TextNode).str + post));
+          let mergedTextNode: TextNode;
+          if (pre.length > 0) {
+            mergedTextNode = newNodes[lastNewNodeIndex] as TextNode;
+            mergedTextNode.str += post;
+          } else {
+            mergedTextNode = targetNode;
+            mergedTextNode.str = (newNodes[lastNewNodeIndex]as TextNode).str + post;
+          }
+          newNodes.splice(lastNewNodeIndex, 1, mergedTextNode);
         } else {
-          newNodes.push(new TextNode(post));
+          if (pre.length > 0) {
+            newNodes.push(new TextNode(post));
+          } else {
+            targetNode.str = post;
+            newNodes.push(targetNode);
+          }
         }
       }
       this._nodes.splice(targetNodeIndex, 1, ...newNodes);
@@ -248,10 +268,11 @@ export class ExpressionModel {
     const nextNodeIndex = offset === 0 ? targetNodeIndex : targetNodeIndex + 1;
     const nextNode = this._nodes[nextNodeIndex];
     if (nextNode instanceof TextNode && newNodes[newNodes.length - 1] instanceof TextNode) {
-      const concat = new TextNode((newNodes[newNodes.length - 1] as TextNode).str + (nextNode as TextNode).str);
-      this._nodes.splice(nextNodeIndex, 1, ...newNodes, concat);
-      updatedEvent.node = concat;
-      updatedEvent.offset = concat.str.length - (nextNode as TextNode).str.length;
+      updatedEvent.offset = (newNodes[newNodes.length - 1] as TextNode).str.length;
+      nextNode.str = (newNodes[newNodes.length - 1] as TextNode).str + (nextNode as TextNode).str;
+      newNodes.pop();
+      this._nodes.splice(nextNodeIndex, 1, ...newNodes);
+      updatedEvent.node = nextNode;
     } else if (nextNode instanceof FieldNode && newNodes[newNodes.length - 1] instanceof FieldNode) {
       // insert a glue in between FieldNodes so that it won't break syntax and caret can go into
       const space = new TextNode(' + ');
@@ -286,10 +307,10 @@ export class ExpressionModel {
           lastFieldRefRemoved(removed.field);
         }
       } else if (last instanceof TextNode) {
-        const str = (last as TextNode).toText();
-        this._nodes.pop();
-        if (str.length > 0) {
-          this._nodes.push(new TextNode(str.substring(0, str.length - 1)));
+        if (last.str.length > 0) {
+          last.str = last.str.substring(0, last.str.length - 1);
+        } else {
+          this._nodes.pop();
         }
       }
       this.updateCache();
@@ -317,9 +338,9 @@ export class ExpressionModel {
         if (this._nodes[targetNodeIndex - 1] instanceof TextNode
             && this._nodes[targetNodeIndex] instanceof TextNode) {
           const newOffset = (this._nodes[targetNodeIndex - 1] as TextNode).str.length;
-          const newString = (this._nodes[targetNodeIndex - 1] as TextNode).str
-              + (this._nodes[targetNodeIndex] as TextNode).str;
-          this._nodes.splice(targetNodeIndex - 1, 2, new TextNode(newString));
+          (this._nodes[targetNodeIndex - 1] as TextNode).str
+              += (this._nodes[targetNodeIndex] as TextNode).str;
+          this._nodes.splice(targetNodeIndex, 1);
           updatedEvent.node = this._nodes[targetNodeIndex - 1];
           updatedEvent.offset = newOffset;
         } else if (this._nodes[targetNodeIndex - 1] instanceof FieldNode
@@ -341,10 +362,9 @@ export class ExpressionModel {
       }
     } else {
       const targetString = (targetNode as TextNode).str;
-      const newString = offset === 0 ? targetString.substr(1)
+      (targetNode as TextNode).str = offset === 0 ? targetString.substr(1)
         : targetString.substring(0, offset) + targetString.substring(offset + 1);
-      this._nodes.splice(targetNodeIndex, 1, new TextNode(newString));
-      updatedEvent.node = this._nodes[targetNodeIndex];
+      updatedEvent.node = targetNode;
       updatedEvent.offset = offset;
     }
     this.updateCache();
@@ -362,8 +382,7 @@ export class ExpressionModel {
     if (!(last instanceof TextNode)) {
       return;
     }
-    this._nodes.pop();
-    this._nodes.push(new TextNode(last.toText().substring(0, index)));
+    last.str = last.str.substring(0, index);
   }
 
   /**
@@ -388,9 +407,8 @@ export class ExpressionModel {
       this._nodes.splice(index, 1);
       if (this._nodes.length > index && this._nodes[index - 1] instanceof TextNode
           && this._nodes[index] instanceof TextNode) {
-        const newStr =
-          (this._nodes[index - 1] as TextNode).str + (this._nodes[index] as TextNode).str;
-        this._nodes.splice(index - 1, 2, new TextNode(newStr));
+        (this._nodes[index - 1] as TextNode).str += (this._nodes[index] as TextNode).str;
+        this._nodes.splice(index, 1);
       }
     }
 
