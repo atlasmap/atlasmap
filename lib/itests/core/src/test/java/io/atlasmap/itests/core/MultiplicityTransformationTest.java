@@ -56,12 +56,14 @@ public class MultiplicityTransformationTest {
                 .setSourceName("Manjiro,Nakahama")
                 .setSourceString("one,two,three")
                 .setSourceStringList(Arrays.asList(new String[] {"one", "two", "three"}))
-                .setSourceHiphenatedInteger("1-20-300-4000");
+                .setSourceHiphenatedInteger("1-20-300-4000")
+                .setSourceStreet("314 Littleton Rd")
+                .setSourceWeight("128.965 kg");
         session.setSourceDocument("io.atlasmap.itests.core.issue.SourceClass", source);
         context.process(session);
         assertFalse(TestHelper.printAudit(session), session.hasErrors());
-        assertTrue("split(STRING) => INTEGER mapping should get 3 warnings", session.hasWarns());
-        assertEquals(3, session.getAudits().getAudit().stream().filter(a -> a.getStatus() == AuditStatus.WARN).count());
+        assertTrue("split(STRING) => INTEGER/DOUBLE mapping should get warnings", session.hasWarns());
+        assertEquals(8, session.getAudits().getAudit().stream().filter(a -> a.getStatus() == AuditStatus.WARN).count());
         Object output = session.getTargetDocument("io.atlasmap.itests.core.issue.TargetClass");
         assertEquals(TargetClass.class, output.getClass());
         TargetClass target = TargetClass.class.cast(output);
@@ -69,6 +71,9 @@ public class MultiplicityTransformationTest {
         assertEquals("Nakahama", target.getTargetLastName());
         assertEquals("Manjiro,Nakahama", target.getTargetName());
         assertEquals("one,two,three", target.getTargetString());
+        assertEquals(new Integer(314), target.getTargetStreetNumber());
+        assertEquals("Littleton", target.getTargetStreetName1());
+        assertEquals("Rd", target.getTargetStreetName2());
         List<String> list = target.getTargetStringList();
         assertEquals(3, list.size());
         assertEquals("one", list.get(0));
@@ -80,6 +85,8 @@ public class MultiplicityTransformationTest {
         assertEquals(new Integer(20), intList.get(1));
         assertEquals(new Integer(300), intList.get(2));
         assertEquals(new Integer(4000), intList.get(3));
+        assertEquals(Double.valueOf(128.965), target.getTargetWeightDouble());
+        assertEquals("kg", target.getTargetWeightUnit());
     }
 
     @Test
