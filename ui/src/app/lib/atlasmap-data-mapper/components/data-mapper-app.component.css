@@ -397,7 +397,8 @@
 
 .DataMapperUI .wizard-pf-row {
   height: auto;
-  overflow: auto;
+  overflow: visible;
+  z-index: 99;
 }
 
 .DataMapperUI .wizard-pf-sidebar {
