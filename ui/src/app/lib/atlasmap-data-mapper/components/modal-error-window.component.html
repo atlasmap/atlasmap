@@ -1,6 +1,6 @@
 <ng-container>
   <!-- <div class="modal-backdrop fade" [ngClass]="{'in': fade}"></div> -->
-  <div id="modalErrorWindow" class="modal fade" [ngClass]="{'in': fade, 'show': visible}">
+  <div id="modalErrorWindow" class="modal fade" *ngIf="somethingToShow()" [ngClass]="{'in': fade, 'show': visible}">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
