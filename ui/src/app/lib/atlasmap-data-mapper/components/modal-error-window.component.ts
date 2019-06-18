@@ -66,6 +66,10 @@ export class ModalErrorWindowComponent implements OnInit {
     }, 300);
   }
 
+  somethingToShow(): boolean {
+    return (this.cfg.errors.length > 0);
+  }
+
   show(): void {
     this.headerText = 'Errors and Warnings - Current Active Mapping';
     this.message = '';
