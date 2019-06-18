@@ -448,6 +448,9 @@ public class AtlasService {
         }
         Audits audits = null;
         try {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Preview request: {}", new String(toJson(mapping)));
+            }
             audits = defaultContext.processPreview(mapping);
         } catch (AtlasException e) {
             throw new WebApplicationException("Unable to process mapping preview", e);
@@ -459,7 +462,7 @@ public class AtlasService {
         }
         byte[] serialized = toJson(response);
         if (LOG.isDebugEnabled()) {
-            LOG.debug(new String(serialized));
+            LOG.debug("Preview outcome: {}", new String(serialized));
         }
         return Response.ok().entity(serialized).build();
     }
