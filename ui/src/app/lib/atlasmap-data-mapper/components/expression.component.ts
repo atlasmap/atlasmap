@@ -43,11 +43,13 @@ export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
   expressionSearch: ElementRef;
 
   mappedFieldCandidates = [];
+  tooltiptext = '';
 
   // Need both the range object of the user text input and the index at the time the user typed '@'.
   private atIndex = 0;
   private atContainer = null;
 
+  private mouseOverTimeOut = null;
   private searchFilter = '';
   private searchMode = false;
   private expressionUpdatedSubscription: Subscription;
@@ -92,6 +94,37 @@ export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
   ngOnDestroy() {
     if (this.expressionUpdatedSubscription) {
       this.expressionUpdatedSubscription.unsubscribe();
+    }
+  }
+
+  @HostListener ('click', ['$event'])
+  onClick($event) {
+    if ($event.target.className.includes('expressionMarkup') && this.mouseOverTimeOut) {
+      this.tooltiptext = '';
+      clearTimeout(this.mouseOverTimeOut);
+      this.mouseOverTimeOut = null;
+    }
+  }
+
+  @HostListener ('mouseover', ['$event'])
+  onMouseOver($event) {
+    if ($event.target.className.includes('expressionMarkup')) {
+      this.tooltiptext = 'Enter source fields for expr: e.g. IF (ISEMPTY(fieldA), fieldB, fieldC)';
+      const self = this;
+
+      this.mouseOverTimeOut = setTimeout(function() {
+        self.tooltiptext = '';
+        this.mouseOverTimeOut = null;
+      }, 8000);
+    }
+  }
+
+  @HostListener ('mouseleave', ['$event'])
+  onMouseLeave($event) {
+    if ($event.target.className.includes('expressionMarkup') && this.mouseOverTimeOut) {
+        console.log('clearing to');
+      clearTimeout(this.mouseOverTimeOut);
+      this.mouseOverTimeOut = null;
     }
   }
 
