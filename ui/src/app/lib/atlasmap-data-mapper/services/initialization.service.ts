@@ -16,6 +16,7 @@
 import { Injectable } from '@angular/core';
 import { inflate } from 'pako';
 import { Subject, Observable } from 'rxjs';
+import { NGXLogger } from 'ngx-logger';
 
 import { DocumentType, InspectionType } from '../common/config.types';
 import { DataMapperUtil } from '../common/data-mapper-util';
@@ -430,7 +431,8 @@ export class InitializationService {
   constructor(
     private documentService: DocumentManagementService,
     private mappingService: MappingManagementService,
-    private errorService: ErrorHandlerService) {
+    private errorService: ErrorHandlerService,
+    private logger: NGXLogger) {
     this.resetConfig();
 
     this.cfg.documentService.initialize();
@@ -445,6 +447,7 @@ export class InitializationService {
     this.cfg.errorService = this.errorService;
     this.cfg.errorService.cfg = this.cfg;
     this.cfg.initializationService = this;
+    this.cfg.logger = this.logger;
     ConfigModel.setConfig(this.cfg);
   }
 

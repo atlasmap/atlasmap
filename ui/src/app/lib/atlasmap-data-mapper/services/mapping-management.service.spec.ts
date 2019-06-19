@@ -3,15 +3,17 @@
 import { TestBed, async, inject } from '@angular/core/testing';
 import { HttpClientModule } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { LoggerModule, NGXLogger, NgxLoggerLevel } from 'ngx-logger';
 import { MappingManagementService } from './mapping-management.service';
 import { FieldActionConfig } from '../models/transition.model';
 
 describe('MappingManagementService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [ HttpClientModule, HttpClientTestingModule ],
+      imports: [ HttpClientModule, HttpClientTestingModule, LoggerModule.forRoot({level: NgxLoggerLevel.DEBUG}) ],
       providers: [
         MappingManagementService,
+        NGXLogger,
       ],
     });
   });

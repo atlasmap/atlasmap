@@ -17,6 +17,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { deflate } from 'pako';
+import { NGXLogger } from 'ngx-logger';
 
 import { Observable, Subscription, Subject, forkJoin } from 'rxjs';
 import { map, timeout } from 'rxjs/operators';
@@ -33,6 +34,7 @@ import { MappingDefinition } from '../models/mapping-definition.model';
 import { ErrorInfo, ErrorLevel } from '../models/error.model';
 
 import { MappingSerializer } from './mapping-serializer.service';
+import { NgxLoggerLevel } from 'ngx-logger';
 
 @Injectable()
 export class MappingManagementService {
@@ -60,7 +62,7 @@ export class MappingManagementService {
   private mappingUpdatedSubscription: Subscription;
   private jsonBuffer: string;
 
-  constructor(private http: HttpClient) {}
+  constructor(private logger: NGXLogger, private http: HttpClient) {}
 
   get cfg() {
     return this._cfg;
@@ -68,9 +70,12 @@ export class MappingManagementService {
 
   set cfg(cfg: ConfigModel) {
     this._cfg = cfg;
-    if (cfg.initCfg.debugMappingUpdated) {
+    if (!this._cfg.logger) {
+      this._cfg.logger = this.logger;
+    }
+    if ([NgxLoggerLevel.DEBUG, NgxLoggerLevel.TRACE].includes(this._cfg.logger.getConfigSnapshot().level)) {
       this.mappingUpdated$.subscribe(() => {
-        console.log('mapping updated: ' + JSON.stringify(this.serializeMappingsToJSON()));
+        this.cfg.logger.debug('mapping updated: ' + JSON.stringify(this.serializeMappingsToJSON()));
       });
     }
   }

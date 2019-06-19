@@ -14,6 +14,7 @@
     limitations under the License.
 */
 
+import { NGXLogger } from 'ngx-logger';
 import { environment } from '../../../../environments/environment';
 import { MappingDefinition } from './mapping-definition.model';
 import { DocumentDefinition } from './document-definition.model';
@@ -90,7 +91,6 @@ export class DataMapperInitializationModel {
   debugValidationServiceCalls = false;
   debugFieldActionServiceCalls = false;
   debugProcessMappingPreviewCalls = false;
-  debugMappingUpdated = false;
 
   mappingInitialized = false;
   fieldActionsInitialized = false;
@@ -155,6 +155,8 @@ export class ConfigModel {
 
   errors: ErrorInfo[] = [];
   validationErrors: ErrorInfo[] = [];
+
+  logger: NGXLogger;
 
   constructor() {
     this.propertyDoc.type = DocumentType.PROPERTY;

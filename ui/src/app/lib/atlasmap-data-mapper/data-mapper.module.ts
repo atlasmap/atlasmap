@@ -17,11 +17,9 @@
 import { NgModule, ModuleWithProviders, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule, HttpClientXsrfModule, HttpXsrfTokenExtractor, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { HttpXsrfInterceptor } from '@angular/common/http/src/xsrf';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AlertModule, BsDropdownModule, TooltipModule, TypeaheadModule } from 'ngx-bootstrap';
-import { NotificationService } from 'patternfly-ng';
-
+import { LoggerModule, NGXLogger } from 'ngx-logger';
 import { environment } from '../../../environments/environment';
 import { DocumentManagementService } from './services/document-management.service';
 import { MappingManagementService } from './services/mapping-management.service';
@@ -84,6 +82,7 @@ export const tooltipModuleForRoot: ModuleWithProviders = TooltipModule.forRoot()
 export const bsDropdownModuleForRoot: ModuleWithProviders = BsDropdownModule.forRoot();
 export const httpClientXsrfModuleForRoot: ModuleWithProviders = HttpClientXsrfModule.withOptions(environment.xsrf);
 export const alertModuleForRoot: ModuleWithProviders = AlertModule.forRoot();
+export const loggerModuleForRoot: ModuleWithProviders = LoggerModule.forRoot(environment.ngxLoggerConfig);
 
 // @dynamic
 @NgModule({
@@ -96,7 +95,8 @@ export const alertModuleForRoot: ModuleWithProviders = AlertModule.forRoot();
     tooltipModuleForRoot,
     bsDropdownModuleForRoot,
     httpClientXsrfModuleForRoot,
-    alertModuleForRoot
+    alertModuleForRoot,
+    loggerModuleForRoot,
   ],
   declarations: [
     DataMapperAppComponent,
@@ -146,6 +146,7 @@ export const alertModuleForRoot: ModuleWithProviders = AlertModule.forRoot();
     MappingManagementService,
     ErrorHandlerService,
     InitializationService,
+    NGXLogger,
   ],
   entryComponents: [
     MappingSelectionComponent,
