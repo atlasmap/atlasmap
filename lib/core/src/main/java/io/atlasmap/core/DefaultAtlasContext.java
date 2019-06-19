@@ -248,6 +248,7 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
                 sourceField = applyFieldActions(session, sourceField);
             }
             session.head().setSourceField(sourceField);
+            sourceFieldGroup = sourceField instanceof FieldGroup ? (FieldGroup) sourceField : null;
             for (Field f : targetFields) {
                 targetField = f;
                 session.head().setTargetField(targetField);
@@ -286,7 +287,7 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
                 if (session.hasErrors()) {
                     return session.getAudits();
                 }
-                if (!convertSourceToTarget(session, sourceField, targetField)) {
+                if (!convertSourceToTarget(session, session.head().getSourceField(), targetField)) {
                     return session.getAudits();
                 }
                 Field processed = applyFieldActions(session, targetField);

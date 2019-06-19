@@ -507,4 +507,29 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
         context.processPreview(m);
         assertEquals("one and two", target.getValue());
     }
+
+    @Test
+    public void testProcessPreviewSplit() throws AtlasException {
+        Mapping m = new Mapping();
+        Field source = new SimpleField();
+        source.setFieldType(FieldType.STRING);
+        source.setValue("one two");
+        source.setActions(new ArrayList<>());
+        Split action = new Split();
+        action.setDelimiter(" ");
+        source.getActions().add(action);
+        m.getInputField().add(source);
+        Field target1 = new SimpleField();
+        target1.setIndex(0);
+        target1.setFieldType(FieldType.STRING);
+        m.getOutputField().add(target1);
+        Field target2 = new SimpleField();
+        target2.setIndex(1);
+        target2.setFieldType(FieldType.STRING);
+        m.getOutputField().add(target2);
+        Audits audits = context.processPreview(m);
+        assertEquals(audits.toString(), 0, audits.getAudit().size());
+        assertEquals("one", target1.getValue());
+        assertEquals("two", target2.getValue());
+    }
 }
