@@ -523,7 +523,7 @@ export class MappingManagementService {
   transitionMode(fieldPair: FieldMappingPair, field: Field): void {
     if (fieldPair.transition.mode === TransitionMode.MAP) {
       const mappedFields: MappedField[] = fieldPair.getMappedFields(field.isSource());
-      if (mappedFields.length > 1) {
+      if (mappedFields.length > 2) {
         if (field.isSource()) {
           fieldPair.transition.mode = TransitionMode.COMBINE;
           mappedFields[1].updateSeparateOrCombineFieldAction(false, true, '1', true, true, false);
