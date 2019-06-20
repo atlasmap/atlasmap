@@ -28,7 +28,7 @@ import { DataMapperUtil } from '../common/data-mapper-util';
 import { InspectionType } from '../common/config.types';
 import { Field } from '../models/field.model';
 import { DocumentManagementService } from '../services/document-management.service';
-import { MappingModel, FieldMappingPair, MappedField } from '../models/mapping.model';
+import { MappingModel, MappedField } from '../models/mapping.model';
 import { FieldActionConfig, FieldActionArgument, TransitionMode, TransitionModel } from '../models/transition.model';
 import { MappingDefinition } from '../models/mapping-definition.model';
 import { ErrorInfo, ErrorLevel } from '../models/error.model';
@@ -48,9 +48,9 @@ export class MappingManagementService {
   mappingSelectionRequiredSource = new Subject<Field>();
   mappingSelectionRequired$ = this.mappingSelectionRequiredSource.asObservable();
 
-  mappingPreviewInputSource = new Subject<FieldMappingPair>();
+  mappingPreviewInputSource = new Subject<MappingModel>();
   mappingPreviewInput$ = this.mappingPreviewInputSource.asObservable();
-  mappingPreviewOutputSource = new Subject<FieldMappingPair>();
+  mappingPreviewOutputSource = new Subject<MappingModel>();
   mappingPreviewOutput$ = this.mappingPreviewOutputSource.asObservable();
   mappingPreviewErrorSource = new Subject<ErrorInfo[]>();
   mappingPreviewError$ = this.mappingPreviewErrorSource.asObservable();
@@ -271,7 +271,7 @@ export class MappingManagementService {
       }
       const newMappings: MappingModel[] = [];
       for (const mapping of this.cfg.mappings.mappings) {
-        if (mapping.hasFullyMappedPair() || mapping.hasFieldAction()) {
+        if (mapping.isFullyMapped() || mapping.hasFieldActions()) {
           newMappings.push(mapping);
           validate = true;
         }
@@ -410,37 +410,22 @@ export class MappingManagementService {
     });
   }
 
-  removeMappedPair(fieldPair: FieldMappingPair): void {
-    this.cfg.mappings.activeMapping.removeMappedPair(fieldPair);
-    if (this.cfg.mappings.activeMapping.fieldMappings.length === 0) {
-      this.deselectMapping();
-    }
-    this.saveCurrentMapping();
-  }
-
-  addMappedPair(): FieldMappingPair {
-    const fieldPair: FieldMappingPair = new FieldMappingPair();
-    this.cfg.mappings.activeMapping.fieldMappings.push(fieldPair);
-    this.saveCurrentMapping();
-    return fieldPair;
-  }
-
-  updateMappedField(fieldPair: FieldMappingPair, isSource: boolean, fieldRemoved: boolean): void {
-    fieldPair.updateTransition(isSource, false, fieldRemoved);
+  updateMappedField(mapping: MappingModel, isSource: boolean, fieldRemoved: boolean): void {
+    mapping.updateTransition(isSource, false, fieldRemoved);
     this.saveCurrentMapping();
   }
 
   /**
    * Remove the specified field from a previously established and mapped field pair.
-   * @param fieldPair
+   * @param mapping
    * @param removeField
    */
-  removeMappedFieldPairField(fieldPair: FieldMappingPair, removeField: Field, compoundSelection: boolean): void {
+  removeMappedFieldPairField(mapping: MappingModel, removeField: Field, compoundSelection: boolean): void {
     let fields: MappedField[] = null;
     if (removeField.isSource()) {
-      fields = fieldPair.sourceFields;
+      fields = mapping.sourceFields;
     } else {
-      fields = fieldPair.targetFields;
+      fields = mapping.targetFields;
     }
     for (const mfield of fields) {
       if (mfield.field.name === removeField.name) {
@@ -448,19 +433,15 @@ export class MappingManagementService {
         break;
       }
     }
-    fieldPair.updateTransition(removeField.isSource(), compoundSelection, true);
+    mapping.updateTransition(removeField.isSource(), compoundSelection, true);
 
-    // If the removed field was the last field of this pairing then remove the field pair as well.
-    if (fields.length === 1 && compoundSelection) {
-      this.removeMappedPair(fieldPair);
-    }
     this.saveCurrentMapping();
   }
 
-  resequenceMappedField(fieldPair: FieldMappingPair, insertedMappedField: MappedField, targetIndex: string): void {
-    if (fieldPair != null) {
-      const mappedFields = fieldPair.getMappedFields(insertedMappedField.isSource());
-      fieldPair.resequenceFieldActionIndices(mappedFields, insertedMappedField, targetIndex, false);
+  resequenceMappedField(mapping: MappingModel, insertedMappedField: MappedField, targetIndex: string): void {
+    if (mapping != null) {
+      const mappedFields = mapping.getMappedFields(insertedMappedField.isSource());
+      mapping.resequenceFieldActionIndices(mappedFields, insertedMappedField, targetIndex, false);
       this.saveCurrentMapping();
     }
   }
@@ -471,44 +452,44 @@ export class MappingManagementService {
    * @param field
    */
   addActiveMappingField(field: Field): void {
-    const mappingPair: FieldMappingPair = this.cfg.mappings.activeMapping.getFirstFieldMapping();
+    const mapping = this.cfg.mappings.activeMapping;
     let suggestedValue = '1';
-    if (mappingPair.transition == null || field == null) {
+    if (mapping.transition == null || field == null) {
       return;
     }
-    if (mappingPair.transition.mode === TransitionMode.COMBINE) {
+    if (mapping.transition.mode === TransitionMode.COMBINE) {
 
       // Compound source mapping when not in Combine mode
       if (!field.isSource()) {
-        this.cfg.errorService.info('The selected mapping details action ' + TransitionModel.getActionName(mappingPair.transition.mode) +
+        this.cfg.errorService.info('The selected mapping details action ' + TransitionModel.getActionName(mapping.transition.mode) +
                 ' is not applicable from compound source selections (' + field.name +
                 ').  Recommend using field action \'Combine\'.', null);
         return;
       }
-      if (mappingPair.sourceFields[mappingPair.sourceFields.length - 1].actions.length > 0) {
-        suggestedValue = ((+mappingPair.sourceFields[mappingPair.sourceFields.length - 1].getFieldIndex()) + 1).toString();
+      if (mapping.sourceFields[mapping.sourceFields.length - 1].actions.length > 0) {
+        suggestedValue = ((+mapping.sourceFields[mapping.sourceFields.length - 1].getFieldIndex()) + 1).toString();
       }
-    } else if (mappingPair.transition.mode === TransitionMode.SEPARATE) {
+    } else if (mapping.transition.mode === TransitionMode.SEPARATE) {
       if (field.isSource()) {
 
         // Compound target mapping when not in Separate mode.
-        this.cfg.errorService.info('The selected mapping details action ' + TransitionModel.getActionName(mappingPair.transition.mode) +
+        this.cfg.errorService.info('The selected mapping details action ' + TransitionModel.getActionName(mapping.transition.mode) +
                 ' is not applicable to compound target selections (' + field.name +
                 ').  Recommend using field action \'Separate\'.', null);
         return;
       }
-      if (mappingPair.targetFields[mappingPair.targetFields.length - 1].actions.length > 0) {
-        suggestedValue = ((+mappingPair.targetFields[mappingPair.targetFields.length - 1].getFieldIndex()) + 1).toString();
+      if (mapping.targetFields[mapping.targetFields.length - 1].actions.length > 0) {
+        suggestedValue = ((+mapping.targetFields[mapping.targetFields.length - 1].getFieldIndex()) + 1).toString();
       }
     }
     const newMField = new MappedField;
     newMField.field = field;
-    newMField.updateSeparateOrCombineFieldAction(mappingPair.transition.mode === TransitionMode.SEPARATE,
-      mappingPair.transition.mode === TransitionMode.COMBINE, suggestedValue, field.isSource(), true, false);
+    newMField.updateSeparateOrCombineFieldAction(mapping.transition.mode === TransitionMode.SEPARATE,
+      mapping.transition.mode === TransitionMode.COMBINE, suggestedValue, field.isSource(), true, false);
     if (field.isSource()) {
-      mappingPair.sourceFields.push(newMField);
+      mapping.sourceFields.push(newMField);
     } else {
-      mappingPair.targetFields.push(newMField);
+      mapping.targetFields.push(newMField);
     }
   }
 
@@ -517,29 +498,27 @@ export class MappingManagementService {
    * @param field
    */
   removeActiveMappingField(field: Field, compoundSelection: boolean): void {
-    const activeMapping: MappingModel = this.cfg.mappings.activeMapping;
-    const mappingPair: FieldMappingPair = activeMapping.getCurrentFieldMapping();
-    this.removeMappedFieldPairField(mappingPair, field, compoundSelection);
+    this.removeMappedFieldPairField(this.cfg.mappings.activeMapping, field, compoundSelection);
   }
 
   /**
    * Auto-transition from MAP mode to either COMBINE or SEPARATE mode.
    *
-   * @param fieldPair
+   * @param mapping
    * @param field
    */
-  transitionMode(fieldPair: FieldMappingPair, field: Field): void {
-    if (fieldPair.transition.mode === TransitionMode.MAP) {
-      const mappedFields: MappedField[] = fieldPair.getMappedFields(field.isSource());
+  transitionMode(mapping: MappingModel, field: Field): void {
+    if (mapping.transition.mode === TransitionMode.MAP) {
+      const mappedFields: MappedField[] = mapping.getMappedFields(field.isSource());
       if (mappedFields.length > 2) {
         if (field.isSource()) {
-          fieldPair.transition.mode = TransitionMode.COMBINE;
+          mapping.transition.mode = TransitionMode.COMBINE;
           mappedFields[1].updateSeparateOrCombineFieldAction(false, true, '1', true, true, false);
           this.cfg.errorService.info(
             'Note: You\'ve selected multiple fields to combine.  ' +
             'You may want to examine the separator character in the \'Sources\' box of the Mapping Details section.', null);
         } else {
-          fieldPair.transition.mode = TransitionMode.SEPARATE;
+          mapping.transition.mode = TransitionMode.SEPARATE;
           mappedFields[1].updateSeparateOrCombineFieldAction(true, false, '1', false, true, false);
           this.cfg.errorService.info(
             'Note: You\'ve selected multiple fields to separate into.  ' +
@@ -571,7 +550,7 @@ export class MappingManagementService {
       // If the user has performed a compound selection (ctrl/cmd-m1) of a previously unselected field
       // then add it to the active mapping; otherwise remove it.
       if (compoundSelection) {
-          if (mapping.isFieldMapped(field, field.isSource())) {
+          if (mapping.isFieldMapped(field)) {
             this.removeActiveMappingField(field, compoundSelection);
             fieldRemoved = true;
           } else {
@@ -603,7 +582,7 @@ export class MappingManagementService {
       }
     }
 
-    if (this.cfg.mappings.activeMapping && !this.cfg.mappings.activeMapping.hasFullyMappedPair()) {
+    if (this.cfg.mappings.activeMapping && !this.cfg.mappings.activeMapping.isFullyMapped()) {
       this.addNewMapping(field, compoundSelection);
       fieldAdded = true;
     }
@@ -622,25 +601,22 @@ export class MappingManagementService {
 
     mapping.brandNewMapping = false;
 
-    const latestFieldPair: FieldMappingPair = mapping.getCurrentFieldMapping();
-    if (latestFieldPair != null) {
-      const lastMappedField: MappedField = latestFieldPair.getLastMappedField(field.isSource());
-      if (lastMappedField != null && lastMappedField.isNoneField()) {
-        lastMappedField.field = field;
+    const lastMappedField: MappedField = mapping.getLastMappedField(field.isSource());
+    if (lastMappedField != null && lastMappedField.isNoneField()) {
+      lastMappedField.field = field;
+    }
+    if (!fieldRemoved) {
+      if (compoundSelection || this.hasMultipleMappings(mapping)) {
+        this.transitionMode(mapping, field);
       }
-      if (!fieldRemoved) {
-        if (compoundSelection || this.hasMultipleMappings(latestFieldPair)) {
-          this.transitionMode(latestFieldPair, field);
-        }
-        latestFieldPair.updateTransition(field.isSource(), compoundSelection, fieldRemoved, position, offset);
-        this.selectMapping(mapping);
-        this.validateMappings();
-      }
+      mapping.updateTransition(field.isSource(), compoundSelection, fieldRemoved, position, offset);
+      this.selectMapping(mapping);
+      this.validateMappings();
     }
   }
 
-  hasMultipleMappings(fieldPair: FieldMappingPair): boolean {
-    return (fieldPair.sourceFields.length > 2 || fieldPair.targetFields.length > 2);
+  hasMultipleMappings(mapping: MappingModel): boolean {
+    return (mapping.sourceFields.length > 2 || mapping.targetFields.length > 2);
   }
 
   /**
@@ -655,9 +631,8 @@ export class MappingManagementService {
     const mapping: MappingModel = new MappingModel();
     mapping.brandNewMapping = false;
     if (selectedField != null) {
-      const fieldPair: FieldMappingPair = mapping.getFirstFieldMapping();
-      fieldPair.getMappedFields(selectedField.isSource())[0].field = selectedField;
-      fieldPair.updateTransition(selectedField.isSource(), false, false);
+      mapping.getMappedFields(selectedField.isSource())[0].field = selectedField;
+      mapping.updateTransition(selectedField.isSource(), false, false);
       this.saveCurrentMapping();
     }
     this.selectMapping(mapping);
@@ -737,14 +712,14 @@ export class MappingManagementService {
         }
         this.mappingPreviewOutputSource.next(answer);
         const audits = MappingSerializer.deserializeAudits(body.ProcessMappingResponse.audits);
-        if (this.cfg.mappings.activeMapping.getCurrentFieldMapping() === inputFieldMapping) {
+        if (this.cfg.mappings.activeMapping === inputFieldMapping) {
           // TODO let error service subscribe mappingPreviewErrorSource instead of doing this
           this.cfg.mappings.activeMapping.previewErrors = audits;
         }
         this.mappingPreviewErrorSource.next(audits);
       }).catch((error: any) => {
         if (this.cfg.mappings && this.cfg.mappings.activeMapping &&
-            this.cfg.mappings.activeMapping.getCurrentFieldMapping() === inputFieldMapping) {
+            this.cfg.mappings.activeMapping === inputFieldMapping) {
           // TODO let error service subscribe mappingPreviewErrorSource instead of doing this
           this.cfg.mappings.activeMapping.previewErrors = [new ErrorInfo(error, ErrorLevel.ERROR, null)];
         }
@@ -756,9 +731,8 @@ export class MappingManagementService {
       if (!this.cfg || !this.cfg.mappings || !this.cfg.mappings.activeMapping) {
         return;
       }
-      const activePair = this.cfg.mappings.activeMapping.getCurrentFieldMapping();
-      if (activePair && activePair.isFullyMapped()) {
-        this.mappingPreviewInputSource.next(activePair);
+      if (this.cfg.mappings.activeMapping.isFullyMapped()) {
+        this.mappingPreviewInputSource.next(this.cfg.mappings.activeMapping);
       }
     });
   }
@@ -853,7 +827,7 @@ export class MappingManagementService {
 
   notifyMappingUpdated(): void {
     if (this.cfg.mappings != null && this.cfg.mappings.activeMapping != null &&
-      this.cfg.mappings.activeMapping.hasFullyMappedPair()) {
+      this.cfg.mappings.activeMapping.isFullyMapped()) {
       this.validateMappings();
     }
     this.mappingUpdatedSource.next();

@@ -17,7 +17,7 @@
 import { Component, Input, ViewChild } from '@angular/core';
 
 import { ConfigModel } from '../../models/config.model';
-import { FieldMappingPair } from '../../models/mapping.model';
+import { MappingModel } from '../../models/mapping.model';
 
 import { CollapsableHeaderComponent } from '../collapsable-header.component';
 import { ModalWindowComponent } from '../modal-window.component';
@@ -29,7 +29,7 @@ import { ModalWindowComponent } from '../modal-window.component';
 
 export class MappingPairDetailComponent {
   @Input() cfg: ConfigModel;
-  @Input() fieldPair: FieldMappingPair;
+  @Input() mapping: MappingModel;
   @Input() modalWindow: ModalWindowComponent;
 
   @ViewChild('sourcesHeader')

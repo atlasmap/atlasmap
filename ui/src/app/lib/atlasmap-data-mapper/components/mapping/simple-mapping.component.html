@@ -1,11 +1,11 @@
-<div class="mappingFieldContainer" *ngIf="fieldPair">
+<div class="mappingFieldContainer" *ngIf="mapping">
 
-  <div *ngFor="let mappedField of fieldPair.getMappedFields(isSource)" class="MappingFieldSection" on-mouseover='handleMouseOver($event)'
+  <div *ngFor="let mappedField of mapping.getMappedFields(isSource)" class="MappingFieldSection" on-mouseover='handleMouseOver($event)'
     [attr.draggable]="true" (dragstart)="startDrag($event, mappedField)" (drop)="endDrag($event, mappedField)"
     (dragenter)="dragEnterLeave($event, true)" (dragleave)="dragEnterLeave($event, false)" (dragover)="allowDrop($event)">
 
-    <mapping-field-detail [fieldPair]="fieldPair" [cfg]="cfg" [isSource]="isSource" [mappedField]="mappedField"></mapping-field-detail>
-    <mapping-field-action [fieldPair]="fieldPair" [cfg]="cfg" [isSource]="isSource" [mappedField]="mappedField"></mapping-field-action>
+    <mapping-field-detail [mapping]="mapping" [cfg]="cfg" [isSource]="isSource" [mappedField]="mappedField"></mapping-field-detail>
+    <mapping-field-action [mapping]="mapping" [cfg]="cfg" [isSource]="isSource" [mappedField]="mappedField"></mapping-field-action>
   </div>
 
 </div>

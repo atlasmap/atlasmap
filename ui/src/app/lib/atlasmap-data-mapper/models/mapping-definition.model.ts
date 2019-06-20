@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-import { MappingModel, MappedField, FieldMappingPair } from './mapping.model';
+import { MappingModel, MappedField } from './mapping.model';
 import { LookupTable } from '../models/lookup-table.model';
 import { ConfigModel } from '../models/config.model';
 import { Field } from '../models/field.model';
@@ -60,24 +60,19 @@ export class MappingDefinition {
       }
       let tableChanged = false;
       const m: MappingModel = this.getFirstMappingForLookupTable(t.name);
-      if (m != null) {
-        for (const fieldPair of m.fieldMappings) {
-          if (fieldPair.transition.lookupTableName == null) {
-            continue;
+      if (m != null && m.transition.lookupTableName != null) {
+        if (!t.sourceIdentifier) {
+          const inputField: Field = m.getFields(true)[0];
+          if (inputField) {
+            t.sourceIdentifier = inputField.classIdentifier;
+            tableChanged = true;
           }
-          if (!t.sourceIdentifier) {
-            const inputField: Field = fieldPair.getFields(true)[0];
-            if (inputField) {
-              t.sourceIdentifier = inputField.classIdentifier;
-              tableChanged = true;
-            }
-          }
-          if (!t.targetIdentifier) {
-            const outputField: Field = fieldPair.getFields(false)[0];
-            if (outputField) {
-              t.targetIdentifier = outputField.classIdentifier;
-              tableChanged = true;
-            }
+        }
+        if (!t.targetIdentifier) {
+          const outputField: Field = m.getFields(false)[0];
+          if (outputField) {
+            t.targetIdentifier = outputField.classIdentifier;
+            tableChanged = true;
           }
         }
       }
@@ -118,10 +113,8 @@ export class MappingDefinition {
 
   getFirstMappingForLookupTable(lookupTableName: string): MappingModel {
     for (const m of this.mappings) {
-      for (const fieldPair of m.fieldMappings) {
-        if (fieldPair.transition.lookupTableName === lookupTableName) {
-          return m;
-        }
+      if (m.transition.lookupTableName === lookupTableName) {
+        return m;
       }
     }
     return null;
@@ -163,35 +156,33 @@ export class MappingDefinition {
   }
 
   initializeMappingLookupTable(m: MappingModel): void {
-    for (const fieldPair of m.fieldMappings) {
-      if (!(fieldPair.transition.mode === TransitionMode.ENUM
-        && fieldPair.transition.lookupTableName == null
-        && fieldPair.getFields(true).length === 1
-        && fieldPair.getFields(false).length === 1)) {
-        return;
-      }
-      let inputClassIdentifier: string = null;
-      let outputClassIdentifier: string = null;
+    if (!(m.transition.mode === TransitionMode.ENUM
+      && m.transition.lookupTableName == null
+      && m.getFields(true).length === 1
+      && m.getFields(false).length === 1)) {
+      return;
+    }
+    let inputClassIdentifier: string = null;
+    let outputClassIdentifier: string = null;
 
-      const inputField: Field = fieldPair.getFields(true)[0];
-      if (inputField) {
-        inputClassIdentifier = inputField.classIdentifier;
-      }
-      const outputField: Field = fieldPair.getFields(true)[0];
-      if (outputField) {
-        outputClassIdentifier = outputField.classIdentifier;
-      }
-      if (inputClassIdentifier && outputClassIdentifier) {
-        let table: LookupTable = this.getTableBySourceTarget(inputClassIdentifier, outputClassIdentifier);
-        if (table == null) {
-          table = new LookupTable();
-          table.sourceIdentifier = inputClassIdentifier;
-          table.targetIdentifier = outputClassIdentifier;
-          this.addTable(table);
-          fieldPair.transition.lookupTableName = table.name;
-        } else {
-          fieldPair.transition.lookupTableName = table.name;
-        }
+    const inputField: Field = m.getFields(true)[0];
+    if (inputField) {
+      inputClassIdentifier = inputField.classIdentifier;
+    }
+    const outputField: Field = m.getFields(true)[0];
+    if (outputField) {
+      outputClassIdentifier = outputField.classIdentifier;
+    }
+    if (inputClassIdentifier && outputClassIdentifier) {
+      let table: LookupTable = this.getTableBySourceTarget(inputClassIdentifier, outputClassIdentifier);
+      if (table == null) {
+        table = new LookupTable();
+        table.sourceIdentifier = inputClassIdentifier;
+        table.targetIdentifier = outputClassIdentifier;
+        this.addTable(table);
+        m.transition.lookupTableName = table.name;
+      } else {
+        m.transition.lookupTableName = table.name;
       }
     }
   }
@@ -215,10 +206,8 @@ export class MappingDefinition {
     const targetDocMap: any = this.getDocMap(cfg, false);
 
     for (const mapping of this.mappings) {
-      for (const fieldPair of mapping.fieldMappings) {
-        this.updateMappedFieldsFromDocuments(fieldPair, cfg, sourceDocMap, true);
-        this.updateMappedFieldsFromDocuments(fieldPair, cfg, targetDocMap, false);
-      }
+      this.updateMappedFieldsFromDocuments(mapping, cfg, sourceDocMap, true);
+      this.updateMappedFieldsFromDocuments(mapping, cfg, targetDocMap, false);
     }
     for (const doc of cfg.getAllDocs()) {
       if (doc.id == null) {
@@ -268,7 +257,7 @@ export class MappingDefinition {
   findMappingsForField(field: Field): MappingModel[] {
     const mappingsForField: MappingModel[] = [];
     for (const m of this.mappings) {
-      if (m.isFieldMapped(field, field.isSource())) {
+      if (m.isFieldMapped(field)) {
         mappingsForField.push(m);
       }
     }
@@ -281,11 +270,9 @@ export class MappingDefinition {
 
   removeFieldFromAllMappings(field: Field): void {
     for (const mapping of this.getAllMappings(true)) {
-      for (const fieldPair of mapping.fieldMappings) {
-        const mappedField: MappedField = fieldPair.getMappedFieldForField(field, field.isSource());
-        if (mappedField != null) {
-          mappedField.field = DocumentDefinition.getNoneField();
-        }
+      const mappedField: MappedField = mapping.getMappedFieldForField(field);
+      if (mappedField != null) {
+        mappedField.field = DocumentDefinition.getNoneField();
       }
     }
   }
@@ -297,12 +284,10 @@ export class MappingDefinition {
    */
   removeDocumentReferenceFromAllMappings(docId: string) {
     for (const mapping of this.getAllMappings(true)) {
-      for (const fieldPair of mapping.fieldMappings) {
-        for (const mappedField of fieldPair.getAllFields()) {
-          if (mappedField.docDef.id === docId) {
-            this.removeFieldFromAllMappings(mappedField);
-            this.removeMapping(mapping);
-          }
+      for (const mappedField of mapping.getAllFields()) {
+        if (mappedField.docDef.id === docId) {
+          this.removeFieldFromAllMappings(mappedField);
+          this.removeMapping(mapping);
         }
       }
     }
@@ -329,14 +314,14 @@ export class MappingDefinition {
     mappedField.incTransformationCount();
   }
 
-  updateMappedFieldsFromDocuments(fieldPair: FieldMappingPair, cfg: ConfigModel, docMap: any, isSource: boolean): void {
-    const mappedFields: MappedField[] = fieldPair.getMappedFields(isSource);
+  updateMappedFieldsFromDocuments(mapping: MappingModel, cfg: ConfigModel, docMap: any, isSource: boolean): void {
+    const mappedFields: MappedField[] = mapping.getMappedFields(isSource);
 
     if (mappedFields.length === 0) {
       const mappedField: MappedField = new MappedField();
       mappedField.field = DocumentDefinition.getNoneField();
       mappedFields.push(mappedField);
-      fieldPair.addMappedField(mappedField, isSource);
+      mapping.addMappedField(mappedField, isSource);
       return;
     }
 
@@ -442,8 +427,8 @@ export class MappingDefinition {
         }
       }
 
-      const isSeparate: boolean = fieldPair.transition.isSeparateMode();
-      const isCombine: boolean = fieldPair.transition.isCombineMode();
+      const isSeparate: boolean = mapping.transition.isSeparateMode();
+      const isCombine: boolean = mapping.transition.isCombineMode();
       const index: string = mappedField.parsedData.parsedIndex;
       mappedField.updateSeparateOrCombineFieldAction(isSeparate, isCombine, index, isSource, false, false);
     }

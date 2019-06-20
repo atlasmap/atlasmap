@@ -397,11 +397,9 @@ export class DocumentDefinition {
       const mappingIsActive: boolean = (mapping === mappingDefinition.activeMapping);
 
       let partOfTransformation = false;
-      for (const fieldPair of mapping.fieldMappings) {
-        if (fieldPair.hasTransition()) {
-          partOfTransformation = true;
-          break;
-        }
+      if (mapping.hasTransition()) {
+        partOfTransformation = true;
+        break;
       }
       for (const field of mapping.getAllFields()) {
         let parentField: Field = field;

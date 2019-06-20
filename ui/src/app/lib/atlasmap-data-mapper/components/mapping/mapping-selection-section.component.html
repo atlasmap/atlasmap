@@ -3,10 +3,10 @@
     <div class="number">{{ outputNumber + 1 }}</div>
   </div>
   <div class="pathContainer">
-    <div class="fieldPair" *ngFor="let fieldPair of mapping.fieldMappings">
+    <div class="fieldPair" *ngIf="mapping">
       <div class="sourceTargetSection sourcePaths">
         <label>{{ getSourceTargetLabelText(true, fieldPair) }}</label>
-        <div class="paths" *ngFor="let sourceField of fieldPair.sourceFields">
+        <div class="paths" *ngFor="let sourceField of mapping.sourceFields">
           <div class="path">
             <div class="pathName">
               <i class="fa fa-hdd-o" aria-hidden="true"></i>
@@ -18,8 +18,8 @@
         </div>
       </div>
       <div class="sourceTargetSection targetPaths">
-        <label>{{ getSourceTargetLabelText(false, fieldPair) }}</label>
-        <div class="paths" *ngFor="let targetField of fieldPair.targetFields">
+        <label>{{ getSourceTargetLabelText(false, mapping) }}</label>
+        <div class="paths" *ngIf="mapping">
           <div class="path">
             <div class="pathName">
               <i class="fa fa-download" aria-hidden="true"></i>

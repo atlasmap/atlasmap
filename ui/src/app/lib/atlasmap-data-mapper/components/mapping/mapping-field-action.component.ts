@@ -15,7 +15,7 @@
 */
 
 import { Component, Input } from '@angular/core';
-import { FieldMappingPair, MappedField } from '../../models/mapping.model';
+import { MappingModel, MappedField } from '../../models/mapping.model';
 import { ConfigModel } from '../../models/config.model';
 import { TransitionModel, FieldAction, FieldActionArgument, FieldActionArgumentValue,
          FieldActionConfig } from '../../models/transition.model';
@@ -29,20 +29,20 @@ export class MappingFieldActionComponent {
   @Input() cfg: ConfigModel;
   @Input() mappedField: MappedField;
   @Input() isSource: boolean;
-  @Input() fieldPair: FieldMappingPair;
+  @Input() mapping: MappingModel;
 
   /**
    * Return the field actions applicable to the specified field mapping pair.
-   * @param fieldPair
+   * @param mapping
    */
-  static getFieldActions(fieldPair: FieldMappingPair, isSource: boolean): FieldActionConfig[] {
+  static getFieldActions(mapping: MappingModel, isSource: boolean): FieldActionConfig[] {
     const configs: FieldActionConfig[] = [];
 
     // Start with the complete list of field actions.
     for (const config of TransitionModel.actionConfigs) {
 
       // Filter down to those field actions that apply to the selected field pair.
-      if (config.appliesToField(fieldPair, isSource)) {
+      if (config.appliesToField(mapping, isSource)) {
         configs.push(config);
       }
     }
@@ -58,11 +58,11 @@ export class MappingFieldActionComponent {
   }
 
   actionsExistForField(): boolean {
-    return (MappingFieldActionComponent.getFieldActions(this.fieldPair, this.isSource).length > 0);
+    return (MappingFieldActionComponent.getFieldActions(this.mapping, this.isSource).length > 0);
   }
 
   getActionConfigs(): FieldActionConfig[] {
-    return MappingFieldActionComponent.getFieldActions(this.fieldPair, this.isSource);
+    return MappingFieldActionComponent.getFieldActions(this.mapping, this.isSource);
   }
 
   /**

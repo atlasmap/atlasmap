@@ -204,45 +204,43 @@ export class LineMachineComponent implements OnInit, OnDestroy {
 
     const isSelectedMapping: boolean = (this.cfg.mappings.activeMapping === m);
     const stroke: string = 'url(#line-gradient-' + (isSelectedMapping ? 'active' : 'dormant') + ')';
-    for (const fieldPair of m.fieldMappings) {
-      if (!fieldPair.sourceFields.length || !fieldPair.targetFields.length) {
-        return;
+    if (!m.sourceFields.length || !m.targetFields.length) {
+      return;
+    }
+
+    for (const mappedInputField of m.sourceFields) {
+      const inputField: Field = mappedInputField.field;
+      if (!this.checkFieldEligibiltyForLineDrawing(inputField, 'input', m)) {
+        continue;
       }
 
-      for (const mappedInputField of fieldPair.sourceFields) {
-        const inputField: Field = mappedInputField.field;
-        if (!this.checkFieldEligibiltyForLineDrawing(inputField, 'input', m)) {
+      const inputFieldPos: any = this.getScreenPosForField(inputField, this.docDefInput);
+      if (inputFieldPos == null) {
+        continue;
+      }
+
+      let sourceY: number = inputFieldPos.y;
+      sourceY = (sourceY < 55) ? 55 : sourceY;
+      sourceY = (sourceY > (lineMachineHeight - 27)) ? (lineMachineHeight - 27) : sourceY;
+
+      for (const mappedOutputField of m.targetFields) {
+        const outputField: Field = mappedOutputField.field;
+        if (!this.checkFieldEligibiltyForLineDrawing(outputField, 'output', m)) {
           continue;
         }
 
-        const inputFieldPos: any = this.getScreenPosForField(inputField, this.docDefInput);
-        if (inputFieldPos == null) {
+        const outputFieldPos: any = this.getScreenPosForField(outputField, this.docDefOutput);
+        if (outputFieldPos == null) {
           continue;
         }
 
-        let sourceY: number = inputFieldPos.y;
-        sourceY = (sourceY < 55) ? 55 : sourceY;
-        sourceY = (sourceY > (lineMachineHeight - 27)) ? (lineMachineHeight - 27) : sourceY;
+        let targetY: number = outputFieldPos.y;
+        targetY = (targetY < 55) ? 55 : targetY;
+        targetY = (targetY > (lineMachineHeight - 27)) ? (lineMachineHeight - 27) : targetY;
 
-        for (const mappedOutputField of fieldPair.targetFields) {
-          const outputField: Field = mappedOutputField.field;
-          if (!this.checkFieldEligibiltyForLineDrawing(outputField, 'output', m)) {
-            continue;
-          }
-
-          const outputFieldPos: any = this.getScreenPosForField(outputField, this.docDefOutput);
-          if (outputFieldPos == null) {
-            continue;
-          }
-
-          let targetY: number = outputFieldPos.y;
-          targetY = (targetY < 55) ? 55 : targetY;
-          targetY = (targetY > (lineMachineHeight - 27)) ? (lineMachineHeight - 27) : targetY;
-
-          if (isSelectedMapping || (this.cfg.showLinesAlways)) {
-            this.addLineFromParams('0', (sourceY + this.yOffset).toString(),
-              '100%', (targetY + this.yOffset).toString(), stroke, outputField);
-          }
+        if (isSelectedMapping || (this.cfg.showLinesAlways)) {
+          this.addLineFromParams('0', (sourceY + this.yOffset).toString(),
+            '100%', (targetY + this.yOffset).toString(), stroke, outputField);
         }
       }
     }

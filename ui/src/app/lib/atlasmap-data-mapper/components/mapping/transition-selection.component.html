@@ -5,12 +5,12 @@
     <i class="fa fa-edit link" (click)="showLookupTable()"></i>
   </div>
 
-  <div *ngIf="fieldPair.transition.isCombineMode() || fieldPair.transition.isSeparateMode()">
+  <div *ngIf="mapping.transition.isCombineMode() || mapping.transition.isSeparateMode()">
     <label tooltip="Enter a separator delimiter character" >Separator:
-      <select class="combobox" name="separator" id="separator" [ngModel]="fieldPair.transition.delimiter">
+      <select class="combobox" name="separator" id="separator" [ngModel]="mapping.transition.delimiter">
         <ng-container *ngFor="let delimiter of delimiters" id="delimiter">
           <option *ngIf="modeIsSupported(delimiter)" value="{{ delimiter.delimiter }}">
-            <label *ngIf="isUserDelimiter(delimiter); else standardDelimiter">{{ fieldPair.transition.userDelimiter }}</label>
+            <label *ngIf="isUserDelimiter(delimiter); else standardDelimiter">{{ mapping.transition.userDelimiter }}</label>
             <ng-template #standardDelimiter>{{ delimiter.prettyName }}</ng-template>
           </option>
         </ng-container>
