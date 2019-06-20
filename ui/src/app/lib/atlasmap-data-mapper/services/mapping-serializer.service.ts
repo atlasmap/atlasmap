@@ -36,28 +36,10 @@ export class MappingSerializer {
     let jsonMappings: any[] = [];
     for (const mapping of mappingDefinition.mappings) {
       try {
-        let fieldMappingsForThisMapping: any[] = [];
-        let jsonMapping: any;
+        const fieldMappingsForThisMapping: any[] = [];
 
         for (const fieldMappingPair of mapping.fieldMappings) {
           fieldMappingsForThisMapping.push(MappingSerializer.serializeFieldMapping(cfg, fieldMappingPair, mapping.uuid));
-        }
-
-        if (mapping.isCollectionMode()) {
-          let collectionType: string = null;
-          for (const field of mapping.getAllFields()) {
-            collectionType = field.getCollectionType();
-            if (collectionType != null) {
-              break;
-            }
-          }
-          jsonMapping = {
-            'jsonType': ConfigModel.mappingServicesPackagePrefix + '.Collection',
-            'mappingType': 'COLLECTION',  /* @deprecated */
-            'collectionType': collectionType,
-            'mappings': { 'mapping': fieldMappingsForThisMapping },
-          };
-          fieldMappingsForThisMapping = [jsonMapping];
         }
 
         jsonMappings = jsonMappings.concat(fieldMappingsForThisMapping);
@@ -439,6 +421,7 @@ export class MappingSerializer {
       }
       mappingModel.fieldMappings = [];
 
+      // for backward compatibility
       const isCollectionMapping = (fieldMapping.jsonType === ConfigModel.mappingServicesPackagePrefix + '.Collection');
       if (isCollectionMapping) {
         for (const innerFieldMapping of fieldMapping.mappings.mapping) {

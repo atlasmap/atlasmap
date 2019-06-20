@@ -46,7 +46,6 @@ import { MappingListComponent } from './components/mapping/mapping-list.componen
 import { MappingListFieldComponent } from './components/mapping/mapping-list-field.component';
 import { NamespaceListComponent } from './components/namespace-list.component';
 import { MappingDetailComponent } from './components/mapping/mapping-detail.component';
-import { CollectionMappingComponent } from './components/mapping/collection-mapping.component';
 import { InputMappingComponent } from './components/mapping/input-mapping.component';
 import { SimpleMappingComponent } from './components/mapping/simple-mapping.component';
 import { MappingPairDetailComponent } from './components/mapping/mapping-pair-detail.component';
@@ -105,7 +104,6 @@ export const loggerModuleForRoot: ModuleWithProviders = LoggerModule.forRoot(env
     MappingDetailComponent,
     InputMappingComponent,
     SimpleMappingComponent,
-    CollectionMappingComponent,
     MappingPairDetailComponent,
     ModalWindowComponent,
     ModalErrorWindowComponent,
