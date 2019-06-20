@@ -69,12 +69,16 @@ export class MappingManagementService {
   }
 
   set cfg(cfg: ConfigModel) {
+
     this._cfg = cfg;
     if (!this._cfg.logger) {
       this._cfg.logger = this.logger;
     }
     if ([NgxLoggerLevel.DEBUG, NgxLoggerLevel.TRACE].includes(this._cfg.logger.getConfigSnapshot().level)) {
       this.mappingUpdated$.subscribe(() => {
+        if (!this.cfg.mappings) {
+          return;
+        }
         this.cfg.logger.debug('mapping updated: ' + JSON.stringify(this.serializeMappingsToJSON()));
       });
     }
