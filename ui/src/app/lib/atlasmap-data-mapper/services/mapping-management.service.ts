@@ -69,7 +69,6 @@ export class MappingManagementService {
   }
 
   set cfg(cfg: ConfigModel) {
-
     this._cfg = cfg;
     if (!this._cfg.logger) {
       this._cfg.logger = this.logger;
