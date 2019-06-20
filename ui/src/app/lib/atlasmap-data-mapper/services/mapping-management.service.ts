@@ -75,6 +75,9 @@ export class MappingManagementService {
     }
     if ([NgxLoggerLevel.DEBUG, NgxLoggerLevel.TRACE].includes(this._cfg.logger.getConfigSnapshot().level)) {
       this.mappingUpdated$.subscribe(() => {
+        if (!this.cfg.mappings) {
+          return;
+        }
         this.cfg.logger.debug('mapping updated: ' + JSON.stringify(this.serializeMappingsToJSON()));
       });
     }

@@ -134,9 +134,20 @@ export class MappingFieldDetailComponent implements OnInit {
 
   selectionChanged(event: any): void {
     this.mappedField.field = event.item['field'];
+
+    if (this.fieldPair.hasMappedField(this.isSource) && !this.fieldPair.hasNoneField(this.isSource)) {
+      this.fieldPair.addField(DocumentDefinition.getNoneField(), this.isSource, true);
+      this.cfg.mappingService.updateMappedField(this.fieldPair, this.isSource, false);
+    }
     this.searchFilter = this.mappedField.field.getFieldLabel(this.cfg.showTypes, false);
-    this.fieldPair.updateTransition(this.mappedField.field.isSource(), true, false);
     this.cfg.mappingService.transitionMode(this.fieldPair, this.mappedField.field);
+
+    if (this.fieldPair.transition.mode !== TransitionMode.MAP) {
+      this.fieldPair.updateTransition(this.mappedField.field.isSource(), true, false);
+
+      this.cfg.mappingService.resequenceMappedField(this.fieldPair, this.mappedField,
+        this.fieldPair.getLastMappedField(this.isSource).getFieldIndex());
+    }
     this.cfg.mappingService.saveCurrentMapping();
     this.updateTemplateValues();
   }
