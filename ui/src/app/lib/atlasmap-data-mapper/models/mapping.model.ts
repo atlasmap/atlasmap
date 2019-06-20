@@ -697,11 +697,6 @@ export class MappingModel {
     return null;
   }
 
-  isCollectionMode(): boolean {
-    return (this.getFirstCollectionField(true) != null)
-      || (this.getFirstCollectionField(false) != null);
-  }
-
   isLookupMode(): boolean {
     for (const f of this.getAllFields()) {
       if (f.enumeration) {
@@ -774,13 +769,12 @@ export class MappingModel {
         'Use ' + (macPlatform ? 'CMD' : 'CTRL') + '-M1 to select multiple elements for \'Combine\' or \'Separate\' actions.';
     }
 
-    const repeatedMode: boolean = this.isCollectionMode();
     const lookupMode: boolean = this.isLookupMode();
     let mapMode = false;
     let separateMode = false;
     let combineMode = false;
 
-    if (!repeatedMode && !lookupMode) {
+    if (!lookupMode) {
       for (const fieldPair of this.fieldMappings) {
         mapMode = mapMode || fieldPair.transition.isMapMode();
         separateMode = separateMode || fieldPair.transition.isSeparateMode();
@@ -800,36 +794,6 @@ export class MappingModel {
     } else if (lookupMode) {
       if (!field.enumeration) {
         return 'only Enumeration fields are valid for this mapping';
-      }
-    } else if (repeatedMode) {
-      // enumeration fields are not allowed in repeated mappings
-      if (field.enumeration) {
-        return 'Enumeration fields are not valid for this mapping';
-      }
-
-      // if no fields for this isSource has been selected yet, everything is open to selection
-      if (!this.hasMappedFields(field.isSource())) {
-        return null;
-      }
-
-      const collectionField: Field = this.getFirstCollectionField(field.isSource());
-      if (collectionField == null) {
-        // only primitive fields (not in collections) are selectable
-        if (field.isInCollection()) {
-          const fieldTypeDesc: string = field.isSource ? 'source' : 'target';
-          return fieldTypeDesc + ' fields cannot be repeated fields for this mapping.';
-        }
-      } else { // collection field exists in this mapping for isSource
-        const parentCollectionField: Field = collectionField.getCollectionParentField();
-        // primitive fields are not selectable when collection field is already selected
-        if (!field.isInCollection()) {
-          return 'field is not selectable, it is not a child of ' + parentCollectionField.name;
-        }
-
-        // children of collections are only selectable if this field is in the same collection
-        if (field.getCollectionParentField() !== parentCollectionField) {
-          return 'field is not selectable, it is not a child of ' + parentCollectionField.displayName;
-        }
       }
     }
     return null;

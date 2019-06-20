@@ -50,15 +50,8 @@ export class MappingDetailComponent implements OnInit, OnDestroy {
     this.mappingSelectionRequiredSubscription.unsubscribe();
   }
 
-  isMappingCollection(): boolean {
-    return this.cfg.mappings.activeMapping.isCollectionMode();
-  }
-
   getTitle(): string {
-    if (this.cfg.mappings.activeMapping.isLookupMode()) {
-      return 'Lookup Mapping';
-    }
-    return this.isMappingCollection() ? 'Repeating Mapping' : 'Mapping Details';
+    return this.cfg.mappings.activeMapping.isLookupMode() ? 'Lookup Mapping' : 'Mapping Details';
   }
 
   removeMapping(event: MouseEvent): void {
