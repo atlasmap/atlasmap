@@ -1,7 +1,7 @@
 <div>
   <collapsable-header title="Sources" #sourcesHeader class="sources"></collapsable-header>
-  <simple-mapping [cfg]="cfg" [isSource]="true" *ngIf="!sourcesHeader.collapsed" [fieldPair]="fieldPair"></simple-mapping>
+  <simple-mapping [cfg]="cfg" [isSource]="true" *ngIf="!sourcesHeader.collapsed" [mapping]="mapping"></simple-mapping>
 
   <collapsable-header title="Targets" #targetsHeader></collapsable-header>
-  <simple-mapping [cfg]="cfg" [isSource]="false" *ngIf="!targetsHeader.collapsed" [fieldPair]="fieldPair"></simple-mapping>
+  <simple-mapping [cfg]="cfg" [isSource]="false" *ngIf="!targetsHeader.collapsed" [mapping]="mapping"></simple-mapping>
 </div>

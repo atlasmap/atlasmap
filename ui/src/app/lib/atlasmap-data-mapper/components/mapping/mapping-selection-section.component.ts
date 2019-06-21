@@ -16,7 +16,7 @@
 
 import { Component, Input } from '@angular/core';
 
-import { MappingModel, FieldMappingPair } from '../../models/mapping.model';
+import { MappingModel } from '../../models/mapping.model';
 
 @Component({
   selector: 'mapping-selection-section',
@@ -43,11 +43,11 @@ export class MappingSelectionSectionComponent {
     return cssClass;
   }
 
-  getSourceTargetLabelText(isSource: boolean, fieldPair: FieldMappingPair): string {
+  getSourceTargetLabelText(isSource: boolean, mapping: MappingModel): string {
     if (isSource) {
-      return (fieldPair.sourceFields.length > 0) ? 'Sources' : 'Source';
+      return (mapping.sourceFields.length > 0) ? 'Sources' : 'Source';
     }
-    return (fieldPair.targetFields.length > 0) ? 'Targets' : 'Target';
+    return (mapping.targetFields.length > 0) ? 'Targets' : 'Target';
   }
 
   getFormattedOutputPath(path: string, nameOnly: boolean) {

@@ -61,7 +61,7 @@
   </div>
 
   <div *ngIf="displaySeparator()" style="margin-top:10px;">
-    <transition-selection [cfg]="cfg" [fieldPair]="fieldPair" [modalWindow]="modalWindow"></transition-selection>
+    <transition-selection [cfg]="cfg" [mapping]="mapping" [modalWindow]="modalWindow"></transition-selection>
   </div>
 
   <div style="width: 100%;" *ngIf="!mappedField.isPadField()">

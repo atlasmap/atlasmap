@@ -20,7 +20,7 @@ import { Observable } from 'rxjs';
 import { ConfigModel } from '../../models/config.model';
 import { Field } from '../../models/field.model';
 import { DocumentDefinition } from '../../models/document-definition.model';
-import { MappingModel, FieldMappingPair, MappedField } from '../../models/mapping.model';
+import { MappingModel, MappedField } from '../../models/mapping.model';
 import { FieldAction, FieldActionConfig, TransitionMode, TransitionModel } from '../../models/transition.model';
 import { MappingFieldActionComponent } from './mapping-field-action.component';
 
@@ -32,7 +32,7 @@ import { MappingFieldActionComponent } from './mapping-field-action.component';
 export class MappingFieldDetailComponent implements OnInit {
 
   @Input() cfg: ConfigModel;
-  @Input() fieldPair: FieldMappingPair;
+  @Input() mapping: MappingModel;
   @Input() isSource: boolean;
   @Input() mappedField: MappedField;
 
@@ -67,7 +67,7 @@ export class MappingFieldDetailComponent implements OnInit {
    */
   addTransformation(): void {
     const actionConfig: FieldActionConfig =
-      MappingFieldActionComponent.getFieldActions(this.fieldPair, this.isSource)[0];
+      MappingFieldActionComponent.getFieldActions(this.mapping, this.isSource)[0];
     if (actionConfig == null) {
       this.cfg.errorService.info('The selected field has no applicable transformation actions.', null);
       return;
@@ -118,46 +118,46 @@ export class MappingFieldDetailComponent implements OnInit {
     if (insertionIndex === 0) {
       return;
     }
-    const mappedFields = this.fieldPair.getMappedFields(mappedField.isSource());
-    const maxIndex = this.fieldPair.getMaxIndex(mappedFields);
+    const mappedFields = this.mapping.getMappedFields(mappedField.isSource());
+    const maxIndex = this.mapping.getMaxIndex(mappedFields);
 
     if (insertionIndex > maxIndex) {
       // Add place-holders for each index value between the previous max index and the insertion index.
-      mappedField.addPlaceholders(maxIndex, insertionIndex, this.fieldPair);
+      mappedField.addPlaceholders(maxIndex, insertionIndex, this.mapping);
     }
-    this.fieldPair.resequenceFieldActionIndices(mappedFields, mappedField, insertionIndex.toString(10), false);
+    this.mapping.resequenceFieldActionIndices(mappedFields, mappedField, insertionIndex.toString(10), false);
 
     // Sort the mapped fields array to get then back into numerical order.
-    this.fieldPair.sortFieldActionFields(mappedFields);
+    this.mapping.sortFieldActionFields(mappedFields);
     this.cfg.mappingService.saveCurrentMapping();
   }
 
   selectionChanged(event: any): void {
     this.mappedField.field = event.item['field'];
 
-    if (this.fieldPair.hasMappedField(this.isSource) && !this.fieldPair.hasNoneField(this.isSource)) {
-      this.fieldPair.addField(DocumentDefinition.getNoneField(), this.isSource, true);
-      this.cfg.mappingService.updateMappedField(this.fieldPair, this.isSource, false);
+    if (this.mapping.hasMappedField(this.isSource) && !this.mapping.hasNoneField(this.isSource)) {
+      this.mapping.addField(DocumentDefinition.getNoneField(), this.isSource, true);
+      this.cfg.mappingService.updateMappedField(this.mapping, this.isSource, false);
     }
     this.searchFilter = this.mappedField.field.getFieldLabel(this.cfg.showTypes, false);
-    this.cfg.mappingService.transitionMode(this.fieldPair, this.mappedField.field);
+    this.cfg.mappingService.transitionMode(this.mapping, this.mappedField.field);
 
-    if (this.fieldPair.transition.mode !== TransitionMode.MAP) {
-      this.fieldPair.updateTransition(this.mappedField.field.isSource(), true, false);
+    if (this.mapping.transition.mode !== TransitionMode.MAP) {
+      this.mapping.updateTransition(this.mappedField.field.isSource(), true, false);
 
-      this.cfg.mappingService.resequenceMappedField(this.fieldPair, this.mappedField,
-        this.fieldPair.getLastMappedField(this.isSource).getFieldIndex());
+      this.cfg.mappingService.resequenceMappedField(this.mapping, this.mappedField,
+        this.mapping.getLastMappedField(this.isSource).getFieldIndex());
     }
     this.cfg.mappingService.saveCurrentMapping();
     this.updateTemplateValues();
   }
 
   removeMappedField(mappedField: MappedField): void {
-    this.fieldPair.removeMappedField(mappedField, this.isSource);
-    if (this.fieldPair.getMappedFields(this.isSource).length === 0) {
-      this.fieldPair.addField(DocumentDefinition.getNoneField(), this.isSource, true);
+    this.mapping.removeMappedField(mappedField, this.isSource);
+    if (this.mapping.getMappedFields(this.isSource).length === 0) {
+      this.mapping.addField(DocumentDefinition.getNoneField(), this.isSource, true);
     }
-    this.cfg.mappingService.updateMappedField(this.fieldPair, this.isSource, true);
+    this.cfg.mappingService.updateMappedField(this.mapping, this.isSource, true);
   }
 
   getActionIndex(mappedField: MappedField): string {
@@ -178,7 +178,7 @@ export class MappingFieldDetailComponent implements OnInit {
 
   displaySeparator(): boolean {
     return (this.mappedField.isNoneField() && this.isSource &&
-      (this.fieldPair.transition.isSeparateMode() || this.fieldPair.transition.isCombineMode()));
+      (this.mapping.transition.isSeparateMode() || this.mapping.transition.isCombineMode()));
   }
 
   displayFieldSearchBox(): boolean {
@@ -187,17 +187,17 @@ export class MappingFieldDetailComponent implements OnInit {
       return false;
     }
 
-    if ((this.fieldPair.transition.mode === TransitionMode.MAP) ||
+    if ((this.mapping.transition.mode === TransitionMode.MAP) ||
         (this.mappedField.field.name.length > 0)) {
       return true;
     }
 
     if (this.isSource) {
-      if (this.fieldPair.transition.mode === TransitionMode.COMBINE) {
+      if (this.mapping.transition.mode === TransitionMode.COMBINE) {
         return true;
       }
     } else {
-      if (this.fieldPair.transition.mode === TransitionMode.SEPARATE) {
+      if (this.mapping.transition.mode === TransitionMode.SEPARATE) {
         return true;
       }
     }

@@ -18,7 +18,7 @@ import {
   TransitionMode, FieldActionArgument,
   FieldAction, FieldActionArgumentValue
 } from '../models/transition.model';
-import { MappingModel, FieldMappingPair, MappedField } from '../models/mapping.model';
+import { MappingModel, MappedField } from '../models/mapping.model';
 import { Field } from '../models/field.model';
 import { MappingDefinition } from '../models/mapping-definition.model';
 import { DocumentDefinition, NamespaceModel } from '../models/document-definition.model';
@@ -36,13 +36,7 @@ export class MappingSerializer {
     let jsonMappings: any[] = [];
     for (const mapping of mappingDefinition.mappings) {
       try {
-        const fieldMappingsForThisMapping: any[] = [];
-
-        for (const fieldMappingPair of mapping.fieldMappings) {
-          fieldMappingsForThisMapping.push(MappingSerializer.serializeFieldMapping(cfg, fieldMappingPair, mapping.uuid));
-        }
-
-        jsonMappings = jsonMappings.concat(fieldMappingsForThisMapping);
+        jsonMappings = jsonMappings.concat(MappingSerializer.serializeFieldMapping(cfg, mapping, mapping.uuid));
       } catch (e) {
         const input: any = { 'mapping': mapping, 'mapping def': mappingDefinition };
         cfg.errorService.error('Caught exception while attempting to serialize mapping, skipping. ', { 'input': input, 'error': e });
@@ -68,21 +62,21 @@ export class MappingSerializer {
     return payload;
   }
 
-  private static createInputFieldGroup(fieldMappingPair: FieldMappingPair, field: any[]): any {
+  private static createInputFieldGroup(mapping: MappingModel, field: any[]): any {
     const actions = [];
 
-    if (fieldMappingPair.transition.isCombineMode()) {
-      if (fieldMappingPair.transition.enableExpression) {
+    if (mapping.transition.isCombineMode()) {
+      if (mapping.transition.enableExpression) {
         actions[0] = {
           'Expression' : {
-            'expression' : fieldMappingPair.transition.expression.toText()
+            'expression' : mapping.transition.expression.toText()
           }
         };
       } else {
-        let delimiter = fieldMappingPair.transition.getActualDelimiter();
+        let delimiter = mapping.transition.getActualDelimiter();
 
-        if (fieldMappingPair.transition.delimiter === TransitionDelimiter.USER_DEFINED) {
-          delimiter = fieldMappingPair.transition.userDelimiter;
+        if (mapping.transition.delimiter === TransitionDelimiter.USER_DEFINED) {
+          delimiter = mapping.transition.userDelimiter;
         }
         actions[0] = {
           'Concatenate' : {
@@ -100,17 +94,16 @@ export class MappingSerializer {
   }
 
   static serializeFieldMapping(
-    cfg: ConfigModel, fieldMappingPair: FieldMappingPair,
+    cfg: ConfigModel, mapping: MappingModel,
     id: string, ignoreValue: boolean = true): any {
     let inputFieldGroup = {};
-    const outputFields = {};
     const jsonMappingType = ConfigModel.mappingServicesPackagePrefix + '.Mapping';
-    const serializedInputFields: any[] = MappingSerializer.serializeFields(fieldMappingPair, true, cfg, ignoreValue);
-    const serializedOutputFields: any[] = MappingSerializer.serializeFields(fieldMappingPair, false, cfg, ignoreValue);
+    const serializedInputFields: any[] = MappingSerializer.serializeFields(mapping, true, cfg, ignoreValue);
+    const serializedOutputFields: any[] = MappingSerializer.serializeFields(mapping, false, cfg, ignoreValue);
     let jsonMapping = {};
 
-    if (fieldMappingPair.transition.isCombineMode()) {
-      inputFieldGroup = MappingSerializer.createInputFieldGroup(fieldMappingPair, serializedInputFields);
+    if (mapping.transition.isCombineMode()) {
+      inputFieldGroup = MappingSerializer.createInputFieldGroup(mapping, serializedInputFields);
 
       jsonMapping = {
        'jsonType': jsonMappingType,
@@ -118,7 +111,7 @@ export class MappingSerializer {
        inputFieldGroup,
        'outputField': serializedOutputFields,
       };
-    } else if (fieldMappingPair.transition.isSeparateMode()) {
+    } else if (mapping.transition.isSeparateMode()) {
         jsonMapping = {
          'jsonType': jsonMappingType,
          'id': id,
@@ -134,9 +127,9 @@ export class MappingSerializer {
      };
     }
 
-    if (fieldMappingPair.transition.isEnumerationMode()) {
+    if (mapping.transition.isEnumerationMode()) {
       jsonMapping['mappingType'] = 'LOOKUP';  /* @deprecated */
-      jsonMapping['lookupTableName'] = fieldMappingPair.transition.lookupTableName;
+      jsonMapping['lookupTableName'] = mapping.transition.lookupTableName;
     }
     return jsonMapping;
   }
@@ -259,9 +252,9 @@ export class MappingSerializer {
   }
 
   private static serializeFields(
-    fieldPair: FieldMappingPair, isSource: boolean,
+    mapping: MappingModel, isSource: boolean,
     cfg: ConfigModel, ignoreValue: boolean = false): any[] {
-    const fields: MappedField[] = fieldPair.getMappedFields(isSource);
+    const fields: MappedField[] = mapping.getMappedFields(isSource);
     const fieldsJson: any[] = [];
     for (const mappedField of fields) {
       const field: Field = mappedField.field;
@@ -278,19 +271,19 @@ export class MappingSerializer {
         'docId': field.docDef.id,
       };
 
-      if (isSource && fields.length === 1 && fieldPair.transition.enableExpression) {
+      if (isSource && fields.length === 1 && mapping.transition.enableExpression) {
         serializedField['actions'] = [ {
           'Expression' : {
-            'expression' : fieldPair.transition.expression.toText()
+            'expression' : mapping.transition.expression.toText()
           }
         } ];
       }
 
-      if (fieldPair.transition.isSeparateMode() && field.isSource()) {
-        let delimiter = fieldPair.transition.getActualDelimiter();
+      if (mapping.transition.isSeparateMode() && field.isSource()) {
+        let delimiter = mapping.transition.getActualDelimiter();
 
-        if (fieldPair.transition.delimiter === TransitionDelimiter.USER_DEFINED) {
-          delimiter = fieldPair.transition.userDelimiter;
+        if (mapping.transition.delimiter === TransitionDelimiter.USER_DEFINED) {
+          delimiter = mapping.transition.userDelimiter;
         }
         serializedField['actions'] = [ {
           'Split' : {
@@ -317,8 +310,8 @@ export class MappingSerializer {
         serializedField['jsonType'] = 'io.atlasmap.java.v2.JavaEnumField';
       }
 
-      let includeIndexes: boolean = fieldPair.transition.isSeparateMode() && !isSource;
-      includeIndexes = includeIndexes || (fieldPair.transition.isCombineMode() && isSource);
+      let includeIndexes: boolean = mapping.transition.isSeparateMode() && !isSource;
+      includeIndexes = includeIndexes || (mapping.transition.isCombineMode() && isSource);
       if (includeIndexes) {
         let index: string = mappedField.getSeparateOrCombineIndex();
         index = (index == null) ? '1' : index;
@@ -415,23 +408,15 @@ export class MappingSerializer {
       docRefs[docRef.id] = docRef.uri;
     }
     for (const fieldMapping of json.AtlasMapping.mappings.mapping) {
-      const mappingModel: MappingModel = new MappingModel();
-      if (fieldMapping.id) {
-        mappingModel.uuid = fieldMapping.id;
-      }
-      mappingModel.fieldMappings = [];
-
       // for backward compatibility
       const isCollectionMapping = (fieldMapping.jsonType === ConfigModel.mappingServicesPackagePrefix + '.Collection');
       if (isCollectionMapping) {
         for (const innerFieldMapping of fieldMapping.mappings.mapping) {
-          mappingModel.fieldMappings.push(MappingSerializer.deserializeFieldMapping(innerFieldMapping, docRefs, cfg));
+          mappings.push(MappingSerializer.deserializeFieldMapping(innerFieldMapping, docRefs, cfg));
         }
       } else {
-        mappingModel.fieldMappings.push(MappingSerializer.deserializeFieldMapping(fieldMapping, docRefs, cfg));
+        mappings.push(MappingSerializer.deserializeFieldMapping(fieldMapping, docRefs, cfg));
       }
-
-      mappings.push(mappingModel);
     }
     return mappings;
   }
@@ -440,89 +425,90 @@ export class MappingSerializer {
    * @deprecated Deserialize a field mapping based on its mapping type.  This is deprecated in favor of
    * concatenate/ split actions.
    *
-   * @param fieldPair
+   * @param mapping
    * @param fieldMapping
    * @param docRefs
    * @param cfg
    * @param ignoreValue
    */
-  static deserializeFieldMappingFromType(fieldPair: FieldMappingPair,
+  static deserializeFieldMappingFromType(mapping: MappingModel,
           fieldMapping: any, docRefs: any, cfg: ConfigModel, ignoreValue: boolean): void {
     const isSeparateMapping = (fieldMapping.mappingType === 'SEPARATE');
     const isLookupMapping = (fieldMapping.mappingType === 'LOOKUP');
     const isCombineMapping = (fieldMapping.mappingType === 'COMBINE');
 
     for (const field of fieldMapping.inputField) {
-       MappingSerializer.addFieldIfDoesntExist(fieldPair, field, true, docRefs, cfg, ignoreValue);
+       MappingSerializer.addFieldIfDoesntExist(mapping, field, true, docRefs, cfg, ignoreValue);
     }
     for (const field of fieldMapping.outputField) {
-       MappingSerializer.addFieldIfDoesntExist(fieldPair, field, false, docRefs, cfg, ignoreValue);
+       MappingSerializer.addFieldIfDoesntExist(mapping, field, false, docRefs, cfg, ignoreValue);
     }
     if (isSeparateMapping) {
-      fieldPair.transition.mode = TransitionMode.SEPARATE;
-      fieldPair.transition.setSerializedDelimeterFromSerializedValue(fieldMapping.delimiter);
+      mapping.transition.mode = TransitionMode.SEPARATE;
+      mapping.transition.setSerializedDelimeterFromSerializedValue(fieldMapping.delimiter);
     } else if (isCombineMapping) {
-      fieldPair.transition.mode = TransitionMode.COMBINE;
-      fieldPair.transition.setSerializedDelimeterFromSerializedValue(fieldMapping.delimiter);
+      mapping.transition.mode = TransitionMode.COMBINE;
+      mapping.transition.setSerializedDelimeterFromSerializedValue(fieldMapping.delimiter);
     } else if (isLookupMapping) {
-      fieldPair.transition.lookupTableName = fieldMapping.lookupTableName;
-      fieldPair.transition.mode = TransitionMode.ENUM;
+      mapping.transition.lookupTableName = fieldMapping.lookupTableName;
+      mapping.transition.mode = TransitionMode.ENUM;
     } else {
-      fieldPair.transition.mode = TransitionMode.MAP;
+      mapping.transition.mode = TransitionMode.MAP;
     }
   }
 
   static deserializeFieldMapping(
-    fieldMapping: any, docRefs: any, cfg: ConfigModel, ignoreValue: boolean = true): FieldMappingPair {
-    const fieldPair: FieldMappingPair = new FieldMappingPair();
-    fieldPair.sourceFields = [];
-    fieldPair.targetFields = [];
-    fieldPair.transition.mode = TransitionMode.MAP;
-    const isLookupMapping = (fieldMapping.mappingType === 'LOOKUP');
+    mappingJson: any, docRefs: any, cfg: ConfigModel, ignoreValue: boolean = true): MappingModel {
+    const mapping = new MappingModel();
+    mapping.uuid = mappingJson.id;
+    mapping.sourceFields = [];
+    mapping.targetFields = [];
+    mapping.transition.mode = TransitionMode.MAP;
+    const isLookupMapping = (mappingJson.mappingType === 'LOOKUP');
 
-    if (fieldMapping.mappingType && fieldMapping.mappingType !== '') {
-      this.deserializeFieldMappingFromType(fieldPair, fieldMapping, docRefs, cfg, ignoreValue);
-      return fieldPair;
+    if (mappingJson.mappingType && mappingJson.mappingType !== '') {
+      this.deserializeFieldMappingFromType(mapping, mappingJson, docRefs, cfg, ignoreValue);
+      return mapping;
     }
 
     let inputField = [];
 
-    if (fieldMapping.inputFieldGroup) {
-      inputField = fieldMapping.inputFieldGroup.field;
+    if (mappingJson.inputFieldGroup) {
+      inputField = mappingJson.inputFieldGroup.field;
 
       for (const field of inputField) {
-        MappingSerializer.addFieldIfDoesntExist(fieldPair, field, true, docRefs, cfg, ignoreValue);
+        MappingSerializer.addFieldIfDoesntExist(mapping, field, true, docRefs, cfg, ignoreValue);
       }
-      fieldPair.transition.mode = TransitionMode.COMBINE;
-      cfg.mappings.updateMappedFieldsFromDocuments(fieldPair, cfg, null, true);
+      mapping.transition.mode = TransitionMode.COMBINE;
+      cfg.mappings.updateMappedFieldsFromDocuments(mapping, cfg, null, true);
 
       // Check for an InputFieldGroup containing a concatenate action inferring combine mode.
-      const firstAction = fieldMapping.inputFieldGroup.actions[0];
+      const firstAction = mappingJson.inputFieldGroup.actions[0];
       if (firstAction) {
         if (firstAction.Expression || firstAction['@type'] === 'Expression') {
-          fieldPair.transition.enableExpression = true;
-          fieldPair.transition.expression = new ExpressionModel(fieldPair);
+          mapping.transition.enableExpression = true;
+          mapping.transition.expression = new ExpressionModel(mapping);
           const expr = firstAction.Expression ? firstAction.Expression.expression : firstAction['expression'];
-          fieldPair.transition.expression.insertText(expr);
+          mapping.transition.expression.insertText(expr);
         } else if (firstAction.Concatenate || firstAction['@type'] === 'Concatenate') {
           const concatDelimiter =
             firstAction.Concatenamte ? firstAction.Concatenate.delimiter : firstAction['delimiter'];
           if (concatDelimiter) {
-            fieldPair.transition.mode = TransitionMode.COMBINE;
-            fieldPair.transition.delimiter =
+            mapping.transition.mode = TransitionMode.COMBINE;
+            mapping.transition.delimiter =
               TransitionModel.getTransitionDelimiterFromActual(concatDelimiter);
 
-            if (fieldPair.transition.delimiter === TransitionDelimiter.USER_DEFINED) {
-              fieldPair.transition.userDelimiter = concatDelimiter;
+            if (mapping.transition.delimiter === TransitionDelimiter.USER_DEFINED) {
+              mapping.transition.userDelimiter = concatDelimiter;
             }
           }
         }
       }
     } else {
-      inputField = fieldMapping.inputField;
+      inputField = mappingJson.inputField;
 
       for (const field of inputField) {
-        MappingSerializer.addFieldIfDoesntExist(fieldPair, field, true, docRefs, cfg, ignoreValue);
+        MappingSerializer.addFieldIfDoesntExist(mapping, field, true, docRefs, cfg, ignoreValue);
       }
 
       if (inputField[0].actions && inputField[0].actions[0]) {
@@ -531,32 +517,32 @@ export class MappingSerializer {
         if (firstAction.Split || firstAction['@type'] === 'Split') {
           const splitDelimiter = firstAction.Split ? firstAction.Split.delimiter : firstAction['delimiter'];
           if (splitDelimiter) {
-            fieldPair.transition.mode = TransitionMode.SEPARATE;
-            fieldPair.transition.delimiter =
+            mapping.transition.mode = TransitionMode.SEPARATE;
+            mapping.transition.delimiter =
               TransitionModel.getTransitionDelimiterFromActual(splitDelimiter);
-            if (fieldPair.transition.delimiter === TransitionDelimiter.USER_DEFINED) {
-              fieldPair.transition.userDelimiter = splitDelimiter;
+            if (mapping.transition.delimiter === TransitionDelimiter.USER_DEFINED) {
+              mapping.transition.userDelimiter = splitDelimiter;
             }
           }
         } else if (firstAction.Expression || firstAction['@type'] === 'Expression') {
-          fieldPair.transition.enableExpression = true;
-          fieldPair.transition.expression = new ExpressionModel(fieldPair);
+          mapping.transition.enableExpression = true;
+          mapping.transition.expression = new ExpressionModel(mapping);
           const expr = firstAction.Expression ? firstAction.Expression.expression : firstAction['expression'];
-          fieldPair.transition.expression.insertText(expr);
+          mapping.transition.expression.insertText(expr);
         }
       }
     }
 
-    for (const field of fieldMapping.outputField) {
-      MappingSerializer.addFieldIfDoesntExist(fieldPair, field, false, docRefs, cfg, ignoreValue);
+    for (const field of mappingJson.outputField) {
+      MappingSerializer.addFieldIfDoesntExist(mapping, field, false, docRefs, cfg, ignoreValue);
     }
 
     if (isLookupMapping) {
-      fieldPair.transition.lookupTableName = fieldMapping.lookupTableName;
-      fieldPair.transition.mode = TransitionMode.ENUM;
+      mapping.transition.lookupTableName = mappingJson.lookupTableName;
+      mapping.transition.mode = TransitionMode.ENUM;
     }
 
-    return fieldPair;
+    return mapping;
   }
 
   static deserializeConstants(jsonMapping: any): Field[] {
@@ -636,7 +622,7 @@ export class MappingSerializer {
   }
 
   private static addFieldIfDoesntExist(
-    fieldPair: FieldMappingPair, field: any, isSource: boolean,
+    mapping: MappingModel, field: any, isSource: boolean,
     docRefs: any, cfg: ConfigModel, ignoreValue: boolean = true): MappedField {
     const mappedField: MappedField = new MappedField();
 
@@ -683,7 +669,7 @@ export class MappingSerializer {
         }
       }
     }
-    fieldPair.addMappedField(mappedField, isSource);
+    mapping.addMappedField(mappedField, isSource);
     return mappedField;
   }
 

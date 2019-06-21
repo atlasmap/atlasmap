@@ -1,12 +1,11 @@
 /* tslint:disable:no-unused-variable */
 
-import { TestBed, async, inject } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { MappingSerializer } from './mapping-serializer.service';
-import { ConfigModel, DocumentInitializationModel } from '../models/config.model';
+import { ConfigModel } from '../models/config.model';
 import { ErrorHandlerService } from './error-handler.service';
 import { InitializationService } from './initialization.service';
 import { MappingDefinition } from '../models/mapping-definition.model';
-import { DocumentManagementService } from './document-management.service';
 import { DocumentType } from '../common/config.types';
 import { DocumentDefinition } from '../models/document-definition.model';
 import { Field } from '../models/field.model';

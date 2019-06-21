@@ -18,7 +18,7 @@ import { Component, Input } from '@angular/core';
 
 import { ConfigModel } from '../../models/config.model';
 import { Field } from '../../models/field.model';
-import { MappingModel, FieldMappingPair, MappedField } from '../../models/mapping.model';
+import { MappingModel, MappedField } from '../../models/mapping.model';
 import { DocumentDefinition } from '../../models/document-definition.model';
 
 @Component({
@@ -69,8 +69,8 @@ export class MappingListComponent {
     return this.searchMode ? this.searchResults : [].concat(this.cfg.mappings.getAllMappings(true));
   }
 
-  getMappedFields(fieldPair: FieldMappingPair, isSource: boolean): MappedField[] {
-    const fields: MappedField[] = fieldPair.getUserMappedFields(isSource);
+  getMappedFields(mapping: MappingModel, isSource: boolean): MappedField[] {
+    const fields: MappedField[] = mapping.getUserMappedFields(isSource);
     if (fields.length === 0) {
       const mappedField: MappedField = new MappedField();
       mappedField.field = DocumentDefinition.getNoneField();
@@ -89,16 +89,16 @@ export class MappingListComponent {
     return this.searchMode ? (cssClass + ' selectedIcon') : cssClass;
   }
 
-  fieldPairMatchesSearch(fieldPair: FieldMappingPair): boolean {
+  fieldPairMatchesSearch(mapping: MappingModel): boolean {
     if (!this.searchMode || this.searchFilter == null || this.searchFilter === '') {
       return true;
     }
     const filter: string = this.searchFilter.toLowerCase();
-    const transitionName: string = fieldPair.transition.getPrettyName();
+    const transitionName: string = mapping.transition.getPrettyName();
     if (transitionName != null && transitionName.toLowerCase().includes(filter)) {
       return true;
     }
-    for (const mappedField of fieldPair.getAllMappedFields()) {
+    for (const mappedField of mapping.getAllMappedFields()) {
       const field: Field = mappedField.field;
       if (field == null || field.path == null) {
         continue;
@@ -124,11 +124,9 @@ export class MappingListComponent {
 
     this.searchResults = [];
     for (const mapping of this.cfg.mappings.getAllMappings(true)) {
-      for (const fieldPair of mapping.fieldMappings) {
-        if (this.fieldPairMatchesSearch(fieldPair)) {
-          this.searchResults.push(mapping);
-          break;
-        }
+      if (this.fieldPairMatchesSearch(mapping)) {
+        this.searchResults.push(mapping);
+        break;
       }
     }
   }

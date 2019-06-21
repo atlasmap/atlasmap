@@ -17,7 +17,7 @@
 import { Component, Input } from '@angular/core';
 
 import { ConfigModel } from '../../models/config.model';
-import { FieldMappingPair, MappedField } from '../../models/mapping.model';
+import { MappingModel, MappedField } from '../../models/mapping.model';
 import { DocumentDefinition } from '../../models/document-definition.model';
 import { Field } from '../../models/field.model';
 
@@ -29,7 +29,7 @@ import { Field } from '../../models/field.model';
 export class SimpleMappingComponent {
   @Input() cfg: ConfigModel;
   @Input() isSource = false;
-  @Input() fieldPair: FieldMappingPair;
+  @Input() mapping: MappingModel;
 
   private isDragDropTarget = false;
   private elem = null;
@@ -105,12 +105,12 @@ export class SimpleMappingComponent {
     }
 
     if (insertBeforeMappedField != null && insertBeforeMappedField.actions[0] != null) {
-      this.cfg.mappingService.resequenceMappedField(this.fieldPair, droppedMappedField,
+      this.cfg.mappingService.resequenceMappedField(this.mapping, droppedMappedField,
         insertBeforeMappedField.getFieldIndex());
 
       // Update indexing in any conditional mapping expressions.
-      if (this.fieldPair.transition && this.fieldPair.transition.enableExpression) {
-        this.fieldPair.transition.expression.updateFieldReference(this.fieldPair);
+      if (this.mapping.transition && this.mapping.transition.enableExpression) {
+        this.mapping.transition.expression.updateFieldReference(this.mapping);
         this.cfg.mappingService.notifyMappingUpdated();
       }
     }
@@ -118,9 +118,9 @@ export class SimpleMappingComponent {
   }
 
   isAddButtonVisible(): boolean {
-    if (this.isSource && this.fieldPair.transition.isCombineMode()) {
+    if (this.isSource && this.mapping.transition.isCombineMode()) {
       return true;
-    } else if (!this.isSource && this.fieldPair.transition.isSeparateMode()) {
+    } else if (!this.isSource && this.mapping.transition.isSeparateMode()) {
       return true;
     }
     return false;
@@ -134,15 +134,11 @@ export class SimpleMappingComponent {
     return this.isSource ? 'Add Source' : 'Add Target';
   }
 
-  removePair(): void {
-    this.cfg.mappingService.removeMappedPair(this.fieldPair);
-  }
-
   removeMappedField(mappedField: MappedField): void {
-    this.fieldPair.removeMappedField(mappedField, this.isSource);
-    if (this.fieldPair.getMappedFields(this.isSource).length === 0) {
-      this.fieldPair.addField(DocumentDefinition.getNoneField(), this.isSource, true);
+    this.mapping.removeMappedField(mappedField, this.isSource);
+    if (this.mapping.getMappedFields(this.isSource).length === 0) {
+      this.mapping.addField(DocumentDefinition.getNoneField(), this.isSource, true);
     }
-    this.cfg.mappingService.updateMappedField(this.fieldPair, this.isSource, true);
+    this.cfg.mappingService.updateMappedField(this.mapping, this.isSource, true);
   }
 }

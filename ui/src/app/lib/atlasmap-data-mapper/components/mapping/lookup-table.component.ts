@@ -20,7 +20,7 @@ import { Component, ViewChildren, ElementRef, QueryList } from '@angular/core';
 import { LookupTable, LookupTableEntry } from '../../models/lookup-table.model';
 import { ConfigModel } from '../../models/config.model';
 import { Field } from '../../models/field.model';
-import { FieldMappingPair } from '../../models/mapping.model';
+import { MappingModel } from '../../models/mapping.model';
 import { ModalWindowValidator } from '../modal-window.component';
 
 export class LookupTableData {
@@ -35,30 +35,30 @@ export class LookupTableData {
 })
 
 export class LookupTableComponent implements ModalWindowValidator {
-  fieldPair: FieldMappingPair;
+  mapping: MappingModel;
 
   table: LookupTable;
   data: LookupTableData[];
 
   @ViewChildren('outputSelect') outputSelects: QueryList<ElementRef>;
 
-  initialize(cfg: ConfigModel, fieldPair: FieldMappingPair): void {
-    this.fieldPair = fieldPair;
+  initialize(cfg: ConfigModel, mapping: MappingModel): void {
+    this.mapping = mapping;
 
-    const targetField: Field = fieldPair.getFields(false)[0];
+    const targetField: Field = mapping.getFields(false)[0];
     const targetValues: string[] = [];
     targetValues.push('[ None ]');
     for (const e of targetField.enumValues) {
       targetValues.push(e.name);
     }
 
-    this.table = cfg.mappings.getTableByName(fieldPair.transition.lookupTableName);
+    this.table = cfg.mappings.getTableByName(mapping.transition.lookupTableName);
     if (this.table == null) {
-      cfg.errorService.error('Could not find enum lookup table for mapping.', fieldPair);
+      cfg.errorService.error('Could not find enum lookup table for mapping.', mapping);
     }
 
     const d: LookupTableData[] = [];
-    const sourceField: Field = fieldPair.getFields(true)[0];
+    const sourceField: Field = mapping.getFields(true)[0];
     for (const e of sourceField.enumValues) {
       const tableData: LookupTableData = new LookupTableData();
       tableData.sourceEnumValue = e.name;

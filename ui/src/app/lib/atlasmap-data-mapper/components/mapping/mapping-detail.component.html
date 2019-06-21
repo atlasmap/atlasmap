@@ -36,10 +36,10 @@
             <div class="mapping-details-panel">
               <collapsable-header title="Sources" #sourcesHeader class="mapping-sources"></collapsable-header>
               <ng-container *ngIf="!sourcesHeader.collapsed">
-                <div *ngFor="let fieldPair of cfg.mappings.activeMapping.fieldMappings">
-                  <input-mapping [cfg]="cfg" [fieldPair]="fieldPair" [isSource]="true" [modalWindow]="modalWindow">
+                <div *ngIf="cfg.mappings.activeMapping">
+                  <input-mapping [cfg]="cfg" [mapping]="cfg.mappings.activeMapping" [isSource]="true" [modalWindow]="modalWindow">
                   </input-mapping>
-                  <simple-mapping [cfg]="cfg" [fieldPair]="fieldPair" [isSource]="true" [modalWindow]="modalWindow">
+                  <simple-mapping [cfg]="cfg" [mapping]="cfg.mappings.activeMapping" [isSource]="true" [modalWindow]="modalWindow">
                   </simple-mapping>
                 </div>
               </ng-container>
@@ -61,10 +61,10 @@
             <div class="mapping-details-panel">
               <collapsable-header title="Targets" #targetsHeader></collapsable-header>
               <ng-container *ngIf="!targetsHeader.collapsed">
-                <div *ngFor="let fieldPair of cfg.mappings.activeMapping.fieldMappings">
-                  <input-mapping [cfg]="cfg" [fieldPair]="fieldPair" [isSource]="false" [modalWindow]="modalWindow">
+                <div *ngIf="cfg.mappings.activeMapping">
+                  <input-mapping [cfg]="cfg" [mapping]="cfg.mappings.activeMapping" [isSource]="false" [modalWindow]="modalWindow">
                   </input-mapping>
-                  <simple-mapping [cfg]="cfg" [fieldPair]="fieldPair" [isSource]="false" [modalWindow]="modalWindow">
+                  <simple-mapping [cfg]="cfg" [mapping]="cfg.mappings.activeMapping" [isSource]="false" [modalWindow]="modalWindow">
                   </simple-mapping>
                 </div>
               </ng-container>

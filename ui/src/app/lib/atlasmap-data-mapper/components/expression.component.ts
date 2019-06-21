@@ -16,7 +16,7 @@ limitations under the License.
 import { Component, ViewChild, Input, HostListener, ElementRef, OnInit, OnDestroy, OnChanges } from '@angular/core';
 import { ConfigModel } from '../models/config.model';
 import { DocumentDefinition } from '../models/document-definition.model';
-import { MappingModel, FieldMappingPair, MappedField } from '../models/mapping.model';
+import { MappingModel, MappedField } from '../models/mapping.model';
 import { ExpressionModel, FieldNode, ExpressionUpdatedEvent, TextNode } from '../models/expression.model';
 import { Field } from '../models/field.model';
 import { Subscription } from 'rxjs';
@@ -34,7 +34,7 @@ export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
   configModel: ConfigModel;
 
   @Input()
-  mapping: FieldMappingPair;
+  mapping: MappingModel;
 
   @ViewChild('expressionMarkupRef')
   markup: ElementRef;
@@ -69,7 +69,7 @@ export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnChanges() {
-    this.mapping = this.configModel.mappings.activeMapping.getCurrentFieldMapping();
+    this.mapping = this.configModel.mappings.activeMapping;
     if (!this.getExpression()) {
       this.mapping.transition.expression = new ExpressionModel(this.mapping);
       this.getExpression().generateInitialExpression();
@@ -205,15 +205,15 @@ export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
   endDrag(event: MouseEvent): void {
 
     const droppedField: Field = this.configModel.currentDraggedField;
-    const currentFieldMapping = this.configModel.mappings.activeMapping.getCurrentFieldMapping();
-    if (droppedField === null || currentFieldMapping === null || !droppedField.isSource) {
+    const activeMapping = this.configModel.mappings.activeMapping;
+    if (droppedField === null || activeMapping === null || !droppedField.isSource) {
       return;
     }
 
-    if (droppedField.partOfMapping && currentFieldMapping.isFieldMapped(droppedField)) {
+    if (droppedField.partOfMapping && activeMapping.isFieldMapped(droppedField)) {
 
       // TODO handle drop position - for now this appends a field ref to the end of expression
-      const mappedField = currentFieldMapping.getMappedFieldForField(droppedField, true);
+      const mappedField = activeMapping.getMappedFieldForField(droppedField);
       this.addConditionalExpressionNode(mappedField, null, 0);
 
     // Pulling an unmapped field into a transition expression evaluation implies a compound selection.
@@ -231,13 +231,12 @@ export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
    * @param filter
    */
   executeSearch(filter: string): any[] {
-    const currentFieldMapping = this.configModel.mappings.activeMapping.getCurrentFieldMapping();
+    const activeMapping = this.configModel.mappings.activeMapping;
     const formattedFields: any[] = [];
     let fields: Field[] = [DocumentDefinition.getNoneField()];
     for (const docDef of this.configModel.getDocs(true)) {
       fields = fields.concat(docDef.getTerminalFields());
     }
-    const activeMapping: MappingModel = this.configModel.mappings.activeMapping;
     for (const field of fields) {
       let displayName = (field == null) ? '' : field.getFieldLabel(ConfigModel.getConfig().showTypes, true);
 
@@ -262,9 +261,9 @@ export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
    * @param event
    */
   selectionChanged(event: any, index: number): void {
-    const currentFieldMapping = this.configModel.mappings.activeMapping.getCurrentFieldMapping();
+    const activeMapping = this.configModel.mappings.activeMapping;
     const selectedField = this.mappedFieldCandidates[index].field;
-    const mappedField = currentFieldMapping.getMappedFieldForField(selectedField, true);
+    const mappedField = activeMapping.getMappedFieldForField(selectedField);
 
     const newTextNode = this.clearAtText(this.getCaretPositionNodeId(this.atContainer));
     if (newTextNode === null) {

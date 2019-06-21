@@ -15,12 +15,11 @@
 */
 import { ConfigModel } from '../models/config.model';
 import { Field } from './field.model';
-import { TransitionModel, TransitionMode, FieldAction, FieldActionConfig, FieldActionArgumentValue } from './transition.model';
+import { TransitionModel, TransitionMode, FieldAction, FieldActionConfig } from './transition.model';
 import { DocumentDefinition } from '../models/document-definition.model';
 import { ErrorInfo, ErrorLevel } from '../models/error.model';
 
 import { DataMapperUtil } from '../common/data-mapper-util';
-import { transition } from 'd3';
 
 export class MappedFieldParsingData {
   parsedName: string = null;
@@ -100,19 +99,19 @@ export class MappedField {
    * @param highIndex
    * @param fieldPair
    */
-  addPlaceholders(lowIndex: number, highIndex: number, fieldPair: FieldMappingPair) {
+  addPlaceholders(lowIndex: number, highIndex: number, mapping: MappingModel) {
     let padField = null;
     for (let i = lowIndex; i < highIndex; i++) {
       padField = new MappedField;
       padField.field = DocumentDefinition.getPadField();
       padField.field.docDef = this.field.docDef;
       padField.setIsPadField();
-      padField.updateSeparateOrCombineFieldAction(fieldPair.transition.mode === TransitionMode.SEPARATE,
-        fieldPair.transition.mode === TransitionMode.COMBINE, i.toString(10), this.isSource(), true, false);
+      padField.updateSeparateOrCombineFieldAction(mapping.transition.mode === TransitionMode.SEPARATE,
+        mapping.transition.mode === TransitionMode.COMBINE, i.toString(10), this.isSource(), true, false);
       if (this.isSource()) {
-          fieldPair.sourceFields.push(padField);
+          mapping.sourceFields.push(padField);
       } else {
-          fieldPair.targetFields.push(padField);
+          mapping.targetFields.push(padField);
       }
     }
   }
@@ -206,13 +205,140 @@ export class MappedField {
 
 }
 
-export class FieldMappingPair {
+export class MappingModel {
+  cfg: ConfigModel;
+  uuid: string;
+
   sourceFields: MappedField[] = [new MappedField()];
   targetFields: MappedField[] = [new MappedField()];
   transition: TransitionModel = new TransitionModel();
 
+  validationErrors: ErrorInfo[] = []; // must be immutable
+  previewErrors: ErrorInfo[] = []; // must be immutable
+  brandNewMapping = true;
+
   constructor() {
-    return;
+    this.uuid = 'mapping.' + Math.floor((Math.random() * 1000000) + 1).toString();
+    this.cfg = ConfigModel.getConfig();
+    Object.freeze(this.validationErrors);
+  }
+
+  addValidationError(message: string) {
+    const e = new ErrorInfo(message, ErrorLevel.VALIDATION_ERROR);
+    this.validationErrors = [...this.validationErrors, e];
+    Object.freeze(this.validationErrors);
+  }
+
+  clearValidationErrors(): void {
+    this.validationErrors = [];
+    Object.freeze(this.validationErrors);
+  }
+
+  getValidationErrors(): ErrorInfo[] {
+    return this.validationErrors.filter(e => e.level >= ErrorLevel.ERROR);
+  }
+
+  getValidationWarnings(): ErrorInfo[] {
+    return this.validationErrors.filter(e => e.level === ErrorLevel.WARN);
+  }
+
+  removeValidationError(identifier: string) {
+    this.validationErrors = this.validationErrors.filter(e => e.identifier !== identifier);
+    Object.freeze(this.validationErrors);
+  }
+
+  clearPreviewErrors(): void {
+    this.previewErrors = [];
+    Object.freeze(this.previewErrors);
+  }
+
+  getPreviewErrors(): ErrorInfo[] {
+    return this.previewErrors.filter(e => e.level >= ErrorLevel.ERROR);
+  }
+
+  getPreviewWarnings(): ErrorInfo[] {
+    return this.previewErrors.filter(e => e.level === ErrorLevel.WARN);
+  }
+
+  removePreviewError(identifier: string) {
+    this.previewErrors = this.previewErrors.filter(e => e.identifier !== identifier);
+    Object.freeze(this.previewErrors);
+  }
+
+  getFirstCollectionField(isSource: boolean): Field {
+    for (const f of isSource ? this.sourceFields : this.targetFields) {
+      if (f.field.isInCollection()) {
+        return f.field;
+      }
+    }
+    return null;
+  }
+
+  isLookupMode(): boolean {
+    for (const f of this.sourceFields.concat(this.targetFields)) {
+      if (f.field.enumeration) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  isFieldSelectable(field: Field): boolean {
+    return this.getFieldSelectionExclusionReason(field) == null;
+  }
+
+  getFieldSelectionExclusionReason(field: Field ): string {
+    if (this.brandNewMapping) { // if mapping hasn't had a field selected yet, allow it
+      return null;
+    }
+
+    if (!field.isTerminal()) {
+      return 'field is a parent field';
+    }
+
+    // Target fields may only be mapped once.
+    const existingMappedField = this.getMappedTarget(field);
+    if (existingMappedField != null) {
+      const macPlatform: boolean = /(MacPPC|MacIntel|Mac_PowerPC|Macintosh|Mac OS X)/.test(navigator.userAgent);
+      return 'it is already the target of another mapping (' + existingMappedField + '). ' +
+        'Use ' + (macPlatform ? 'CMD' : 'CTRL') + '-M1 to select multiple elements for \'Combine\' or \'Separate\' actions.';
+    }
+
+    const lookupMode: boolean = this.isLookupMode();
+    let mapMode = false;
+    let separateMode = false;
+    let combineMode = false;
+
+    if (!lookupMode) {
+      mapMode = mapMode || this.transition.isMapMode();
+      separateMode = separateMode || this.transition.isSeparateMode();
+      combineMode = combineMode || this.transition.isCombineMode();
+    }
+    if (mapMode || separateMode || combineMode) {
+      // enums are not selectable in these modes
+      if (field.enumeration) {
+        return 'Enumeration fields are not valid for this mapping';
+      }
+
+      // separate mode sources must be string
+      if (separateMode && !field.isStringField() && field.isSource()) {
+        return 'source fields for this mapping must be type String';
+      }
+    } else if (lookupMode) {
+      if (!field.enumeration) {
+        return 'only Enumeration fields are valid for this mapping';
+      }
+    }
+    return null;
+  }
+
+  hasMappedFields(isSource: boolean): boolean {
+    for (const mappedField of this.getMappedFields(isSource)) {
+      if (mappedField.isMapped()) {
+        return true;
+      }
+    }
+    return false;
   }
 
   /**
@@ -265,8 +391,8 @@ export class FieldMappingPair {
     DataMapperUtil.removeItemFromArray(mappedField, this.getMappedFields(isSource));
   }
 
-  getMappedFieldForField(field: Field, isSource: boolean): MappedField {
-    for (const mappedField of this.getMappedFields(isSource)) {
+  getMappedFieldForField(field: Field): MappedField {
+    for (const mappedField of this.getMappedFields(field.isSource())) {
       if (mappedField.field === field) {
         return mappedField;
       }
@@ -371,7 +497,7 @@ export class FieldMappingPair {
   }
 
   isFieldMapped(field: Field): boolean {
-    return this.getMappedFieldForField(field, field.isSource()) != null;
+    return this.getMappedFieldForField(field) != null;
   }
 
   hasTransition(): boolean {
@@ -610,243 +736,32 @@ export class FieldMappingPair {
       this.transition.expression.updateFieldReference(this, position, offset);
     }
   }
-}
-
-export class MappingModel {
-  cfg: ConfigModel;
-  uuid: string;
-  fieldMappings: FieldMappingPair[] = [];
-  currentFieldMapping: FieldMappingPair = null;
-  validationErrors: ErrorInfo[] = []; // must be immutable
-  previewErrors: ErrorInfo[] = []; // must be immutable
-  brandNewMapping = true;
-
-  constructor() {
-    this.uuid = 'mapping.' + Math.floor((Math.random() * 1000000) + 1).toString();
-    this.fieldMappings.push(new FieldMappingPair());
-    this.cfg = ConfigModel.getConfig();
-    Object.freeze(this.validationErrors);
-  }
-
-  getFirstFieldMapping(): FieldMappingPair {
-    if (this.fieldMappings == null || (this.fieldMappings.length === 0)) {
-      return null;
-    }
-    return this.fieldMappings[0];
-  }
-
-  getLastFieldMapping(): FieldMappingPair {
-    if (this.fieldMappings == null || (this.fieldMappings.length === 0)) {
-      return null;
-    }
-    return this.fieldMappings[this.fieldMappings.length - 1];
-  }
-
-  getCurrentFieldMapping(): FieldMappingPair {
-    return (this.currentFieldMapping == null) ? this.getLastFieldMapping() : this.currentFieldMapping;
-  }
-
-  addValidationError(message: string) {
-    const e = new ErrorInfo(message, ErrorLevel.VALIDATION_ERROR);
-    this.validationErrors = [...this.validationErrors, e];
-    Object.freeze(this.validationErrors);
-  }
-
-  clearValidationErrors(): void {
-    this.validationErrors = [];
-    Object.freeze(this.validationErrors);
-  }
-
-  getValidationErrors(): ErrorInfo[] {
-    return this.validationErrors.filter(e => e.level >= ErrorLevel.ERROR);
-  }
-
-  getValidationWarnings(): ErrorInfo[] {
-    return this.validationErrors.filter(e => e.level === ErrorLevel.WARN);
-  }
-
-  removeValidationError(identifier: string) {
-    this.validationErrors = this.validationErrors.filter(e => e.identifier !== identifier);
-    Object.freeze(this.validationErrors);
-  }
-
-  clearPreviewErrors(): void {
-    this.previewErrors = [];
-    Object.freeze(this.previewErrors);
-  }
-
-  getPreviewErrors(): ErrorInfo[] {
-    return this.previewErrors.filter(e => e.level >= ErrorLevel.ERROR);
-  }
-
-  getPreviewWarnings(): ErrorInfo[] {
-    return this.previewErrors.filter(e => e.level === ErrorLevel.WARN);
-  }
-
-  removePreviewError(identifier: string) {
-    this.previewErrors = this.previewErrors.filter(e => e.identifier !== identifier);
-    Object.freeze(this.previewErrors);
-  }
-
-  getFirstCollectionField(isSource: boolean): Field {
-    for (const f of this.getFields(isSource)) {
-      if (f.isInCollection()) {
-        return f;
-      }
-    }
-    return null;
-  }
-
-  isLookupMode(): boolean {
-    for (const f of this.getAllFields()) {
-      if (f.enumeration) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  removeMappedPair(fieldPair: FieldMappingPair): void {
-    DataMapperUtil.removeItemFromArray(fieldPair, this.fieldMappings);
-  }
-
-  getMappedFields(isSource: boolean): MappedField[] {
-    let fields: MappedField[] = [];
-    for (const fieldPair of this.fieldMappings) {
-      fields = fields.concat(fieldPair.getMappedFields(isSource));
-    }
-    return fields;
-  }
-
-  isFieldSelectable(field: Field): boolean {
-    return this.getFieldSelectionExclusionReason(field) == null;
-  }
 
   /**
-   * Walk all target field mappings and return true if the specified field is already the target
-   * of a previous mapping, false otherwise.
+   * Walk all target field mappings and return one of corresponding source field name
+   * if the specified field is already the target of a previous mapping, null otherwise.
    *
    * @param field
    */
-  getMappedTarget(field: Field): string {
+  private getMappedTarget(field: Field): string {
     const mappings: MappingModel[] = this.cfg.mappings.mappings;
 
-    if (!field.isSource()) {
-      for (const m of mappings) {
-        for (const fieldPair of m.fieldMappings) {
-          if (fieldPair.targetFields.length === 0) {
-            continue;
-          }
+    if (field.isSource()) {
+      return null;
+    }
+    for (const m of mappings) {
+      if (m.targetFields.length === 0) {
+        continue;
+      }
 
-          for (const mappedOutputField of fieldPair.targetFields) {
-             if (mappedOutputField.field.name === field.name) {
-               const currentFieldMapping = this.getCurrentFieldMapping();
-               if (currentFieldMapping != null && !currentFieldMapping.isFieldMapped(field) && field.partOfMapping) {
-                 return fieldPair.sourceFields[0].field.name;
-               }
-             }
+      for (const mappedOutputField of m.targetFields) {
+        if (mappedOutputField.field.name === field.name) {
+          if (!m.isFieldMapped(field) && field.partOfMapping) {
+            return m.sourceFields[0].field.name;
           }
         }
       }
     }
-    return null;
-  }
-
-  getFieldSelectionExclusionReason(field: Field ): string {
-    if (this.brandNewMapping) { // if mapping hasn't had a field selected yet, allow it
-      return null;
-    }
-
-    if (!field.isTerminal()) {
-      return 'field is a parent field';
-    }
-
-    // Target fields may only be mapped once.
-    const existingMappedField = this.getMappedTarget(field);
-    if (existingMappedField != null) {
-      const macPlatform: boolean = /(MacPPC|MacIntel|Mac_PowerPC|Macintosh|Mac OS X)/.test(navigator.userAgent);
-      return 'it is already the target of another mapping (' + existingMappedField + '). ' +
-        'Use ' + (macPlatform ? 'CMD' : 'CTRL') + '-M1 to select multiple elements for \'Combine\' or \'Separate\' actions.';
-    }
-
-    const lookupMode: boolean = this.isLookupMode();
-    let mapMode = false;
-    let separateMode = false;
-    let combineMode = false;
-
-    if (!lookupMode) {
-      for (const fieldPair of this.fieldMappings) {
-        mapMode = mapMode || fieldPair.transition.isMapMode();
-        separateMode = separateMode || fieldPair.transition.isSeparateMode();
-        combineMode = combineMode || fieldPair.transition.isCombineMode();
-      }
-    }
-    if (mapMode || separateMode || combineMode) {
-      // enums are not selectable in these modes
-      if (field.enumeration) {
-        return 'Enumeration fields are not valid for this mapping';
-      }
-
-      // separate mode sources must be string
-      if (separateMode && !field.isStringField() && field.isSource()) {
-        return 'source fields for this mapping must be type String';
-      }
-    } else if (lookupMode) {
-      if (!field.enumeration) {
-        return 'only Enumeration fields are valid for this mapping';
-      }
-    }
-    return null;
-  }
-
-  isFieldMapped(field: Field, isSource: boolean): boolean {
-    return this.getFields(isSource).indexOf(field) !== -1;
-  }
-
-  getAllMappedFields(): MappedField[] {
-    return this.getMappedFields(true).concat(this.getMappedFields(false));
-  }
-
-  getAllFields(): Field[] {
-    return this.getFields(true).concat(this.getFields(false));
-  }
-
-  getFields(isSource: boolean): Field[] {
-    let fields: Field[] = [];
-    for (const fieldPair of this.fieldMappings) {
-      fields = fields.concat(fieldPair.getFields(isSource));
-    }
-    return fields;
-  }
-
-  hasMappedFields(isSource: boolean): boolean {
-    for (const mappedField of this.getMappedFields(isSource)) {
-      if (mappedField.isMapped()) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  hasFullyMappedPair(): boolean {
-    for (const pair of this.fieldMappings) {
-      if (pair.isFullyMapped()) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  /**
-   * Return true if the current mapping instance has any field action/transformation, false otherwise.
-   */
-  hasFieldAction(): boolean {
-    for (const pair of this.fieldMappings) {
-      if (pair.hasFieldActions()) {
-        return true;
-      }
-    }
-    return false;
   }
 
 }

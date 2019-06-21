@@ -15,8 +15,8 @@
 */
 import { DocumentDefinition } from '../models/document-definition.model';
 import { Field } from './field.model';
-import { FieldMappingPair } from './mapping.model';
 import { ExpressionModel } from './expression.model';
+import { MappingModel } from './mapping.model';
 
 export class FieldActionArgument {
   name: string = null;
@@ -42,12 +42,12 @@ export class FieldActionConfig {
   /**
    * Return the first non-padding field in either the source or target mappings.
    *
-   * @param fieldPair
+   * @param mapping
    * @param isSource
    */
-  private getActualField(fieldPair: FieldMappingPair, isSource: boolean): Field {
+  private getActualField(mapping: MappingModel, isSource: boolean): Field {
     let targetField: Field = null;
-    for (targetField of fieldPair.getFields(isSource)) {
+    for (targetField of mapping.getFields(isSource)) {
       if ((targetField.name !== '<padding field>') && (targetField !== DocumentDefinition.getNoneField())) {
         break;
       }
@@ -58,10 +58,10 @@ export class FieldActionConfig {
   /**
    * Return true if the specified field mapping pair has multiple transformations specified, false otherwise.
    *
-   * @param fieldPair
+   * @param mapping
    */
-  private multipleTransformations(fieldPair: FieldMappingPair): boolean {
-    return fieldPair.sourceFields[0].actions.length > 1;
+  private multipleTransformations(mapping: MappingModel): boolean {
+    return mapping.sourceFields[0].actions.length > 1;
   }
 
   /**
@@ -95,30 +95,30 @@ export class FieldActionConfig {
    *
    * Note - source-side only transformations are permitted so the target field may be undefined.
    *
-   * @param fieldPair
+   * @param mapping
    */
-  appliesToField(fieldPair: FieldMappingPair, isSource: boolean): boolean {
+  appliesToField(mapping: MappingModel, isSource: boolean): boolean {
 
-    if (fieldPair == null) {
+    if (mapping == null) {
       return false;
     }
-    const selectedSourceField: Field = this.getActualField(fieldPair, true);
-    const selectedTargetField: Field = this.getActualField(fieldPair, false);
+    const selectedSourceField: Field = this.getActualField(mapping, true);
+    const selectedTargetField: Field = this.getActualField(mapping, false);
 
     if (selectedSourceField == null) {
       return false;
     }
 
-    return isSource ? this.appliesToSourceField(fieldPair, selectedSourceField)
-     : this.appliesToTargetField(fieldPair, selectedTargetField);
+    return isSource ? this.appliesToSourceField(mapping, selectedSourceField)
+     : this.appliesToTargetField(mapping, selectedTargetField);
   }
 
   /**
    * Check if it could be applied to source field.
-   * @param fieldPair FieldMappingPair
+   * @param mapping FieldMappingPair
    * @param selectedSourceField selected source field
    */
-  private appliesToSourceField(fieldPair: FieldMappingPair, selectedSourceField: Field): boolean {
+  private appliesToSourceField(mapping: MappingModel, selectedSourceField: Field): boolean {
 
     // Collection field action only applies to collection field or FieldGroup
     if (this.serviceObject.sourceCollectionType && this.serviceObject.sourceCollectionType !== 'NONE') {
@@ -152,10 +152,10 @@ export class FieldActionConfig {
 
   /**
    * Check if it could be applied for target field. Target type may not change.
-   * @param fieldPair FieldMappingPair
+   * @param mapping FieldMappingPair
    * @param selectedTargetField selected target field
    */
-  private appliesToTargetField(fieldPair: FieldMappingPair, selectedTargetField: Field): boolean {
+  private appliesToTargetField(mapping: MappingModel, selectedTargetField: Field): boolean {
     if (selectedTargetField == null) {
       return false;
     }

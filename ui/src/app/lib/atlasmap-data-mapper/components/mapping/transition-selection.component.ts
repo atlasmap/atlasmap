@@ -15,13 +15,10 @@
 */
 
 import { Component, Input, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
 
-import { TransitionMode, TransitionDelimiter, TransitionModel, TransitionDelimiterModel } from '../../models/transition.model';
+import { TransitionDelimiter, TransitionModel, TransitionDelimiterModel } from '../../models/transition.model';
 import { ConfigModel } from '../../models/config.model';
-import { LookupTable } from '../../models/lookup-table.model';
-import { MappingModel, FieldMappingPair } from '../../models/mapping.model';
-import { ErrorHandlerService } from '../../services/error-handler.service';
+import { MappingModel } from '../../models/mapping.model';
 import { ModalWindowComponent } from '../modal-window.component';
 import { LookupTableComponent } from './lookup-table.component';
 
@@ -33,7 +30,7 @@ import { LookupTableComponent } from './lookup-table.component';
 export class TransitionSelectionComponent implements OnInit {
   @Input() cfg: ConfigModel;
   @Input() modalWindow: ModalWindowComponent;
-  @Input() fieldPair: FieldMappingPair;
+  @Input() mapping: MappingModel;
 
   delimiters: TransitionDelimiterModel[];
 
@@ -57,16 +54,16 @@ export class TransitionSelectionComponent implements OnInit {
         const selectedValue: any = optionSelected.val();
 
         if (selectedValue) {
-          that.fieldPair.transition.delimiter = parseInt(selectedValue, 10);
-          that.cfg.mappingService.updateMappedField(that.fieldPair, false, false);
+          that.mapping.transition.delimiter = parseInt(selectedValue, 10);
+          that.cfg.mappingService.updateMappedField(that.mapping, false, false);
           return;
         }
         const inputValue: any = $(this).val();
 
         if (inputValue) {
-          that.fieldPair.transition.delimiter = TransitionDelimiter.USER_DEFINED;
-          that.fieldPair.transition.userDelimiter = inputValue;
-          that.cfg.mappingService.updateMappedField(that.fieldPair, false, false);
+          that.mapping.transition.delimiter = TransitionDelimiter.USER_DEFINED;
+          that.mapping.transition.userDelimiter = inputValue;
+          that.cfg.mappingService.updateMappedField(that.mapping, false, false);
           return;
         }
       });
@@ -74,9 +71,9 @@ export class TransitionSelectionComponent implements OnInit {
       // Replace the user input when focus is lost.
       $('.combobox').on('blur', function() {
 
-        if (that.fieldPair.transition.delimiter === TransitionDelimiter.USER_DEFINED) {
-          $(this).find('option:selected').val(that.fieldPair.transition.userDelimiter);
-          $(this).val(that.fieldPair.transition.userDelimiter).trigger('input');
+        if (that.mapping.transition.delimiter === TransitionDelimiter.USER_DEFINED) {
+          $(this).find('option:selected').val(that.mapping.transition.userDelimiter);
+          $(this).val(that.mapping.transition.userDelimiter).trigger('input');
         }
       });
 
@@ -102,7 +99,7 @@ export class TransitionSelectionComponent implements OnInit {
   }
 
   modeIsEnum(): boolean {
-    return this.fieldPair.transition.isEnumerationMode();
+    return this.mapping.transition.isEnumerationMode();
   }
 
   showLookupTable(): void {
@@ -118,7 +115,7 @@ export class TransitionSelectionComponent implements OnInit {
     this.modalWindow.headerText = 'Map Enumeration Values';
     this.modalWindow.nestedComponentInitializedCallback = (mw: ModalWindowComponent) => {
       const c: LookupTableComponent = mw.nestedComponent as LookupTableComponent;
-      c.initialize(this.cfg, this.fieldPair);
+      c.initialize(this.cfg, this.mapping);
     };
     this.modalWindow.nestedComponentType = LookupTableComponent;
     this.modalWindow.okButtonHandler = (mw: ModalWindowComponent) => {
@@ -133,7 +130,7 @@ export class TransitionSelectionComponent implements OnInit {
     if (delimiterModel.delimiter === TransitionDelimiter.NONE) {
       return false;
     } else if (delimiterModel.delimiter === TransitionDelimiter.MULTI_SPACE) {
-      return this.fieldPair.transition.isSeparateMode();
+      return this.mapping.transition.isSeparateMode();
     }
     return true;
   }

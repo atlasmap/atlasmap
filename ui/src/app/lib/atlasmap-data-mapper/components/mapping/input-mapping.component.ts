@@ -17,9 +17,8 @@
 import { Component, Input } from '@angular/core';
 
 import { ConfigModel } from '../../models/config.model';
-import { FieldMappingPair, MappedField } from '../../models/mapping.model';
+import { MappingModel } from '../../models/mapping.model';
 import { DocumentDefinition } from '../../models/document-definition.model';
-import { Field } from '../../models/field.model';
 
 @Component({
   selector: 'input-mapping',
@@ -29,13 +28,13 @@ import { Field } from '../../models/field.model';
 export class InputMappingComponent {
   @Input() cfg: ConfigModel;
   @Input() isSource = false;
-  @Input() fieldPair: FieldMappingPair;
+  @Input() mapping: MappingModel;
 
 
   createInputMappedField(): void {
-    if (!this.fieldPair.hasNoneField(this.isSource)) {
-      this.fieldPair.addField(DocumentDefinition.getNoneField(), this.isSource, true);
-      this.cfg.mappingService.updateMappedField(this.fieldPair, this.isSource, false);
+    if (!this.mapping.hasNoneField(this.isSource)) {
+      this.mapping.addField(DocumentDefinition.getNoneField(), this.isSource, true);
+      this.cfg.mappingService.updateMappedField(this.mapping, this.isSource, false);
     }
   }
 

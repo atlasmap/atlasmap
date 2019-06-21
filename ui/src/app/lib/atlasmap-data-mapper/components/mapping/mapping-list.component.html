@@ -31,19 +31,19 @@
     <div [attr.class]="getItemsCSSClass()">
       <div [attr.class]="getMappingRowsCSSClass()">
         <div *ngFor="let mapping of getMappings(); let index=index;" [attr.class]="getMappingCSSClass(mapping, index)" (click)="selectMapping(mapping)">
-          <div *ngFor="let fieldPair of mapping.fieldMappings" class="itemRow">
+          <div class="itemRow">
             <div class="sourceFieldNames fieldNames">
-              <mapping-list-field *ngFor="let mappedField of getMappedFields(fieldPair, true)" [mappedField]="mappedField" [isSource]="true"
+              <mapping-list-field *ngFor="let mappedField of getMappedFields(mapping, true)" [mappedField]="mappedField" [isSource]="true"
                 [isActive]="isActiveMapping(mapping)" [cfg]="cfg"></mapping-list-field>
               <div class="clear"></div>
             </div>
             <div class="targetFieldNames fieldNames">
-              <mapping-list-field *ngFor="let mappedField of getMappedFields(fieldPair, false)" [mappedField]="mappedField" [isSource]="false"
+              <mapping-list-field *ngFor="let mappedField of getMappedFields(mapping, false)" [mappedField]="mappedField" [isSource]="false"
                 [isActive]="isActiveMapping(mapping)" [cfg]="cfg"></mapping-list-field>
               <div class="clear"></div>
             </div>
             <div class="transition">
-              <label>{{ fieldPair.transition.getPrettyName() }}</label>
+              <label>{{ mapping.transition.getPrettyName() }}</label>
               <div class="clear"></div>
             </div>
             <div class="error">

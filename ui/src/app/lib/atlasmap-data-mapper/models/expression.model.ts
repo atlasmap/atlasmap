@@ -14,7 +14,7 @@
     limitations under the License.
 */
 import { ErrorHandlerService } from '../services/error-handler.service';
-import { MappedField, FieldMappingPair } from './mapping.model';
+import { MappedField, MappingModel } from './mapping.model';
 import { Subject } from 'rxjs';
 
 export class ExpressionUpdatedEvent {
@@ -59,10 +59,10 @@ export class FieldNode extends ExpressionNode {
 
   static readonly PREFIX = 'expression-field-';
 
-  constructor(public field?: MappedField, private index?: number, private pair?: FieldMappingPair) {
+  constructor(public field?: MappedField, private index?: number, private mapping?: MappingModel) {
     super(FieldNode.PREFIX);
     if (!field) {
-      this.field = pair.getMappedFieldForIndex((index + 1).toString(), true);
+      this.field = mapping.getMappedFieldForIndex((index + 1).toString(), true);
     }
   }
 
@@ -92,10 +92,10 @@ export class ExpressionModel {
   private textCache = '';
   private htmlCache = '';
 
-  constructor(private mappingPair: FieldMappingPair) {}
+  constructor(private mapping: MappingModel) {}
 
   generateInitialExpression() {
-    this.mappingPair.getUserMappedFields(true).forEach(f => this.appendFieldNode(f));
+    this.mapping.getUserMappedFields(true).forEach(f => this.appendFieldNode(f));
   }
 
   get nodes(): ReadonlyArray<ExpressionNode> {
@@ -390,10 +390,10 @@ export class ExpressionModel {
    * Selected source fields are inserted into or appended to the expression,
    * and unselected source fields are removed from expression.
    *
-   * @param pair Corresponding FieldMappingPair object
+   * @param mapping Corresponding MappingModel object
    */
-  updateFieldReference(pair: FieldMappingPair, insertPosition?: string, offset?: number) {
-    const mappedFields = pair.getUserMappedFields(true);
+  updateFieldReference(mapping: MappingModel, insertPosition?: string, offset?: number) {
+    const mappedFields = mapping.getUserMappedFields(true);
     const toAdd: MappedField[] = [];
     const toRemove: MappedField[] = [];
     let fieldNodes = this._nodes.filter(n => n instanceof FieldNode) as FieldNode[];
@@ -460,7 +460,7 @@ export class ExpressionModel {
         answer.push(new TextNode(text.substring(0, position)));
       }
       const index = parseInt(text.substring(position + 2, text.indexOf('}')), 10);
-      fn = new FieldNode(null, index, this.mappingPair);
+      fn = new FieldNode(null, index, this.mapping);
       if (fn.field === null) {
         this.errorService.error('Unable to map expression index to field node.', index);
       } else {

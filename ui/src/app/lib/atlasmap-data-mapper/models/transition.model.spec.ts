@@ -2,7 +2,7 @@
 
 import { TestBed, async, inject } from '@angular/core/testing';
 import { FieldActionConfig, TransitionModel } from './transition.model';
-import { FieldMappingPair } from './mapping.model';
+import { MappingModel } from './mapping.model';
 import { Field } from './field.model';
 
 describe('TransitionModel', () => {
@@ -22,18 +22,18 @@ describe('TransitionModel', () => {
 
 describe('FieldActionConfig.appliesToField()', () => {
     let action: FieldActionConfig;
-    let pair: FieldMappingPair;
+    let mapping: MappingModel;
     let source: Field;
     let target: Field;
     beforeEach(() => {
       action = new FieldActionConfig();
-      pair = new FieldMappingPair();
-      pair.sourceFields.splice(0);
+      mapping = new MappingModel();
+      mapping.sourceFields.splice(0);
       source = new Field();
-      pair.addField(source, true, false);
-      pair.targetFields.splice(0);
+      mapping.addField(source, true, false);
+      mapping.targetFields.splice(0);
       target = new Field();
-      pair.addField(target, false, false);
+      mapping.addField(target, false, false);
     });
 
     it('should return false if FieldMappingPair is null', () => {
@@ -41,48 +41,48 @@ describe('FieldActionConfig.appliesToField()', () => {
     });
 
     it('should return false if source or target is null', () => {
-      pair.targetFields.splice(0);
-      expect(action.appliesToField(pair, false)).toBe(false);
+      mapping.targetFields.splice(0);
+      expect(action.appliesToField(mapping, false)).toBe(false);
     });
 
     it('should return false if action collection type is ALL, target collection type is not ARRAY or LIST, and type type is not \
        STRING', () => {
       action.serviceObject.sourceCollectionType = 'ALL';
-      expect(action.appliesToField(pair, false)).toBe(false);
+      expect(action.appliesToField(mapping, false)).toBe(false);
     });
 
     it('should return false if action collection type is NONE and target field collection type is not null', () => {
       action.serviceObject.sourceCollectionType = 'NONE';
       target.isCollection = true;
-      expect(action.appliesToField(pair, false)).toBe(false);
+      expect(action.appliesToField(mapping, false)).toBe(false);
     });
 
     it('should return false if action source collection type does not match target collection type', () => {
       action.serviceObject.sourceCollectionType = 'LIST';
       action.serviceObject.targetCollectionType = 'NONE';
-      expect(action.appliesToField(pair, false)).toBe(false);
+      expect(action.appliesToField(mapping, false)).toBe(false);
     });
 
     it('should return if action target type is NUMBER and target field type is numeric', () => {
       action.sourceType = 'NUMBER';
       action.targetType = 'NUMBER';
       target.type = 'SHORT';
-      expect(action.appliesToField(pair, false)).toBe(true);
+      expect(action.appliesToField(mapping, false)).toBe(true);
       target.type = 'NUMBER';
-      expect(action.appliesToField(pair, false)).toBe(true);
+      expect(action.appliesToField(mapping, false)).toBe(true);
       target.type = 'STRING';
-      expect(action.appliesToField(pair, false)).toBe(false);
+      expect(action.appliesToField(mapping, false)).toBe(false);
     });
 
     it('should return if action target type is ANY_DATE and target field type is a date/time', () => {
       action.sourceType = 'ANY_DATE';
       action.targetType = 'ANY_DATE';
       target.type = 'DATE';
-      expect(action.appliesToField(pair, false)).toBe(true);
+      expect(action.appliesToField(mapping, false)).toBe(true);
       target.type = 'DATE_TIME_TZ';
-      expect(action.appliesToField(pair, false)).toBe(true);
+      expect(action.appliesToField(mapping, false)).toBe(true);
       target.type = 'STRING';
-      expect(action.appliesToField(pair, false)).toBe(false);
+      expect(action.appliesToField(mapping, false)).toBe(false);
     });
 
     it('should return true if action source type STRING matches target field type STRING, and action target type matches target type',
@@ -91,7 +91,7 @@ describe('FieldActionConfig.appliesToField()', () => {
       target.type = 'STRING';
       action.targetType = 'STRING';
       action.sourceType = 'STRING';
-      expect(action.appliesToField(pair, false)).toBe(true);
+      expect(action.appliesToField(mapping, false)).toBe(true);
     });
 
     it('should return false if action source type CHAR matches target field type STRING, and action target type matches target type',
@@ -99,7 +99,7 @@ describe('FieldActionConfig.appliesToField()', () => {
        target.type = 'STRING';
        action.targetType = 'STRING';
        action.sourceType = 'CHAR';
-       expect(action.appliesToField(pair, false)).toBe(false);
+       expect(action.appliesToField(mapping, false)).toBe(false);
     });
 
     it('should return false if action source type STRING matches target field type CHAR, and action target type does not match target type',
@@ -107,6 +107,6 @@ describe('FieldActionConfig.appliesToField()', () => {
        target.type = 'CHAR';
        action.targetType = 'STRING';
        action.sourceType = 'STRING';
-       expect(action.appliesToField(pair, false)).toBe(false);
+       expect(action.appliesToField(mapping, false)).toBe(false);
     });
 });

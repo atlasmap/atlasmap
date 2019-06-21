@@ -15,7 +15,6 @@ limitations under the License.
 */
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 
-import { Field } from '../models/field.model';
 import { InspectionType } from '../common/config.types';
 import { ConfigModel } from '../models/config.model';
 import { ModalWindowComponent } from './modal-window.component';
@@ -121,9 +120,8 @@ export class ToolbarComponent implements OnInit {
       return 'pficon pficon-export link';
     } else if ('enableExpression' === action) {
       return (this.cfg.mappings && this.cfg.mappings.activeMapping
-          && this.cfg.mappings.activeMapping.getCurrentFieldMapping()
-          && this.cfg.mappings.activeMapping.getCurrentFieldMapping().transition
-          && this.cfg.mappings.activeMapping.getCurrentFieldMapping().transition.enableExpression ? ' selected' : '');
+          && this.cfg.mappings.activeMapping.transition
+          && this.cfg.mappings.activeMapping.transition.enableExpression ? ' selected' : '');
     }
   }
 
@@ -167,10 +165,10 @@ export class ToolbarComponent implements OnInit {
     } else if ('resetAll' === action) {
       this.resetAll();
     } else if ('enableExpression') {
-      if (this.cfg.mappings && this.cfg.mappings.activeMapping && this.cfg.mappings.activeMapping.getCurrentFieldMapping()
-        && this.cfg.mappings.activeMapping.getCurrentFieldMapping().transition) {
-        this.cfg.mappings.activeMapping.getCurrentFieldMapping().transition.enableExpression
-          = !this.cfg.mappings.activeMapping.getCurrentFieldMapping().transition.enableExpression;
+      if (this.cfg.mappings && this.cfg.mappings.activeMapping && this.cfg.mappings.activeMapping
+        && this.cfg.mappings.activeMapping.transition) {
+        this.cfg.mappings.activeMapping.transition.enableExpression
+          = !this.cfg.mappings.activeMapping.transition.enableExpression;
       } else {
         this.cfg.errorService.info('Please select a mapping first.', null);
       }
@@ -292,9 +290,8 @@ export class ToolbarComponent implements OnInit {
 
   conditionalMappingExpressionEnabled(): boolean {
     return (this.cfg.mappings && this.cfg.mappings.activeMapping &&
-      this.cfg.mappings.activeMapping.getCurrentFieldMapping() &&
-      this.cfg.mappings.activeMapping.getCurrentFieldMapping().transition &&
-      this.cfg.mappings.activeMapping.getCurrentFieldMapping().transition.enableExpression);
+      this.cfg.mappings.activeMapping.transition &&
+      this.cfg.mappings.activeMapping.transition.enableExpression);
   }
 
 }
