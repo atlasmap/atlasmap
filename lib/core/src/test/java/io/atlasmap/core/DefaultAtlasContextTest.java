@@ -509,11 +509,42 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
     }
 
     @Test
+    public void testProcessPreviewConcatenate() throws AtlasException {
+        Mapping m = new Mapping();
+        Field source1 = new SimpleField();
+        source1.setFieldType(FieldType.STRING);
+        source1.setIndex(0);
+        source1.setValue("one");
+        Field source2 = new SimpleField();
+        source2.setFieldType(FieldType.STRING);
+        source2.setIndex(1);
+        source2.setValue("two");
+        Field source3 = new SimpleField();
+        source3.setFieldType(FieldType.STRING);
+        source3.setIndex(5);
+        source3.setValue("six");
+        FieldGroup group = new FieldGroup();
+        group.getField().add(source1);
+        group.getField().add(source2);
+        group.getField().add(source3);
+        Concatenate action = new Concatenate();
+        action.setDelimiter("-");
+        group.setActions(new ArrayList<>());
+        group.getActions().add(action);
+        m.setInputFieldGroup(group);
+        Field target = new SimpleField();
+        target.setFieldType(FieldType.STRING);
+        m.getOutputField().add(target);
+        context.processPreview(m);
+        assertEquals("one-two----six", target.getValue());
+    }
+
+    @Test
     public void testProcessPreviewSplit() throws AtlasException {
         Mapping m = new Mapping();
         Field source = new SimpleField();
         source.setFieldType(FieldType.STRING);
-        source.setValue("one two");
+        source.setValue("one two three four");
         source.setActions(new ArrayList<>());
         Split action = new Split();
         action.setDelimiter(" ");
@@ -527,9 +558,14 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
         target2.setIndex(1);
         target2.setFieldType(FieldType.STRING);
         m.getOutputField().add(target2);
+        Field target3 = new SimpleField();
+        target3.setIndex(3);
+        target3.setFieldType(FieldType.STRING);
+        m.getOutputField().add(target3);
         Audits audits = context.processPreview(m);
         assertEquals(audits.toString(), 0, audits.getAudit().size());
         assertEquals("one", target1.getValue());
         assertEquals("two", target2.getValue());
+        assertEquals("four", target3.getValue());
     }
 }
