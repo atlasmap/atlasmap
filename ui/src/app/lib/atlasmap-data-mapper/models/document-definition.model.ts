@@ -247,9 +247,9 @@ export class DocumentDefinition {
     return [].concat(this.terminalFields);
   }
 
-  initializeFromFields(debugDocumentParsing: boolean): void {
+  initializeFromFields(): void {
     if (this.type === DocumentType.JAVA) {
-      this.prepareComplexFields(debugDocumentParsing);
+      this.prepareComplexFields();
     }
 
     Field.alphabetizeFields(this.fields);
@@ -260,16 +260,6 @@ export class DocumentDefinition {
     }
 
     this.fieldPaths.sort();
-
-    if (debugDocumentParsing) {
-      let enumFields = 'Enum fields:\n';
-      for (const field of this.allFields) {
-        if (field.enumeration) {
-          enumFields += '\t' + field.path + ' (' + field.classIdentifier + ')\n';
-        }
-      }
-    }
-
     this.initialized = true;
   }
 
@@ -454,7 +444,7 @@ export class DocumentDefinition {
     }
   }
 
-  private prepareComplexFields(debugDocumentParsing: boolean): void {
+  private prepareComplexFields(): void {
     const fields: Field[] = this.fields;
 
     // build complex field cache
@@ -472,19 +462,6 @@ export class DocumentDefinition {
       // alphebatize complex field's childrein
       Field.alphabetizeFields(cachedField.children);
     }
-
-    // print cached complex fields
-    if (debugDocumentParsing) {
-      let result = 'Cached Fields: ';
-      for (const key in this.complexFieldsByClassIdentifier) {
-        if (!this.complexFieldsByClassIdentifier.hasOwnProperty(key)) {
-          continue;
-        }
-        const cachedField: Field = this.complexFieldsByClassIdentifier[key];
-        result += cachedField.name + ' ' + cachedField.type + ' ' + cachedField.serviceObject.status
-          + ' (' + cachedField.classIdentifier + ') children:' + cachedField.children.length + '\n';
-      }
-    }
   }
 
   private discoverComplexFields(fields: Field[]): void {
@@ -499,24 +476,6 @@ export class DocumentDefinition {
         this.discoverComplexFields(field.children);
       }
     }
-  }
-
-  private printDocumentFields(fields: Field[], indent: number): string {
-    let result = '';
-    for (const f of fields) {
-      if (f.type !== 'COMPLEX') {
-        continue;
-      }
-      for (let i = 0; i < indent; i++) {
-        result += '\t';
-      }
-      result += f.name + ' ' + f.type + ' ' + f.serviceObject.status + ' (' + f.classIdentifier + ') children:' + f.children.length;
-      result += '\n';
-      if (f.children) {
-        result += this.printDocumentFields(f.children, indent + 1);
-      }
-    }
-    return result;
   }
 
 }

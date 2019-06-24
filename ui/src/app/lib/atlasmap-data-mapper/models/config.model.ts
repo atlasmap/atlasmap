@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-import { NGXLogger } from 'ngx-logger';
+import { NGXLogger, NgxLoggerLevel } from 'ngx-logger';
 import { environment } from '../../../../environments/environment';
 import { MappingDefinition } from './mapping-definition.model';
 import { DocumentDefinition } from './document-definition.model';
@@ -62,35 +62,6 @@ export class DataMapperInitializationModel {
 
   /* enable the navigation bar and import/export */
   disableNavbar = true;
-
-  /* mock data configuration */
-  discardNonMockSources = false;
-  addMockJSONMappings = false;
-  addMockJavaSingleSource = false;
-  addMockJavaSources = false;
-  addMockJavaCachedSource = false;
-  addMockXMLInstanceSources = false;
-  addMockXMLSchemaSources = false;
-  addMockJSONSources = false;
-  addMockJSONInstanceSources = false;
-  addMockJSONSchemaSources = false;
-
-  addMockJavaTarget = false;
-  addMockJavaCachedTarget = false;
-  addMockXMLInstanceTarget = false;
-  addMockXMLSchemaTarget = false;
-  addMockJSONTarget = false;
-  addMockJSONInstanceTarget = false;
-  addMockJSONSchemaTarget = false;
-
-  /* debug logging toggles */
-  debugDocumentServiceCalls = false;
-  debugDocumentParsing = false;
-  debugMappingServiceCalls = false;
-  debugClassPathServiceCalls = false;
-  debugValidationServiceCalls = false;
-  debugFieldActionServiceCalls = false;
-  debugProcessMappingPreviewCalls = false;
 
   mappingInitialized = false;
   fieldActionsInitialized = false;
@@ -188,6 +159,14 @@ export class ConfigModel {
 
   get showMappingPreview(): boolean {
     return this._showMappingPreview;
+  }
+
+  isDebugEnabled(): boolean {
+    return [NgxLoggerLevel.DEBUG, NgxLoggerLevel.TRACE].includes(this.logger.getConfigSnapshot().level);
+  }
+
+  isTraceEnabled(): boolean {
+    return this.logger.getConfigSnapshot().level === NgxLoggerLevel.TRACE;
   }
 
   addDocument(docInitModel: DocumentInitializationModel): DocumentDefinition {

@@ -146,7 +146,20 @@
               <className>twitter4j.Status</className>
             </inspection>
             <inspection>
-                <fileName>${project.basedir}/test-resources/schema</fileName>
+                <fileName>${project.basedir}/test-resources/json/schema</fileName>
+                <inspectionType>SCHEMA</inspectionType>
+            </inspection>
+            <inspection>
+                <fileName>${project.basedir}/test-resources/json/instance</fileName>
+                <inspectionType>INSTANCE</inspectionType>
+            </inspection>
+            <inspection>
+                <fileName>${project.basedir}/test-resources/xml/schema</fileName>
+                <inspectionType>SCHEMA</inspectionType>
+            </inspection>
+            <inspection>
+                <fileName>${project.basedir}/test-resources/xml/instance</fileName>
+                <inspectionType>INSTANCE</inspectionType>
             </inspection>
           </inspections>
         </configuration>

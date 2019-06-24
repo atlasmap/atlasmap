@@ -203,7 +203,6 @@ export class ToolbarComponent implements OnInit {
         this.cfg.initCfg.initialized = false;
         this.cfg.initCfg.mappingInitialized = false;
         this.cfg.mappings = null;
-        this.cfg.initCfg.discardNonMockSources = true;
         await this.cfg.initializationService.initialize();
       }).catch((error: any) => {
         if (error.status === 0) {

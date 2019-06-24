@@ -9,6 +9,7 @@ module.exports = function (config) {
     basePath: '',
     files: [
       {pattern: 'test-resources/inspected/*', watched: true, served: true, included: false},
+      {pattern: 'test-resources/mapping/*', watched: true, served: true, included: false},
       {pattern: 'test-resources/fieldActions/*', watched: true, served: true, included: false}
     ],
     frameworks: ['jasmine-jquery', 'jasmine', '@angular-devkit/build-angular'],

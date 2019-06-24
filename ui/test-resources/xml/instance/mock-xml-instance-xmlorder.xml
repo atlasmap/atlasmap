@@ -1,0 +1,16 @@
+<XMLOrder>
+  <orderId>orderId</orderId>
+  <Address>
+    <addressLine1>addressLine1</addressLine1>
+    <addressLine2>addressLine2</addressLine2>
+    <city>city</city>
+    <state>state</state>
+    <zipCode>zipCode</zipCode>
+  </Address>
+  <Contact>
+    <firstName>firstName</firstName>
+    <lastName>lastName</lastName>
+    <phoneNumber>phoneNumber</phoneNumber>
+    <zipCode>zipCode</zipCode>
+  </Contact>
+</XMLOrder>

@@ -1,0 +1,15 @@
+<data>
+  <intField a="1">32000</intField>
+  <longField>12421</longField>
+  <stringField>abc</stringField>
+  <booleanField>true</booleanField>
+  <doubleField b="2">12.0</doubleField>
+  <shortField>1000</shortField>
+  <floatField>234.5f</floatField>
+  <charField>A</charField>
+  <outer>
+    <inner>
+      <value>val</value>
+    </inner>
+  </outer>
+</data>

@@ -1,0 +1,15 @@
+<orders totalCost="12525.00" xmlns="http://www.example.com/x/" xmlns:y="http://www.example.com/y/" xmlns:q="http://www.example.com/q/">
+  <order>
+    <id y:custId="a">12312</id>
+    <id y:custId="b">4423423</id>
+  </order>
+  <q:order>
+    <id y:custId="x">12312</id>
+  </q:order>
+  <order>
+    <id y:custId="c">54554555</id>
+  </order>
+  <q:order>
+    <id y:custId="a">12312</id>
+  </q:order>
+</orders>
