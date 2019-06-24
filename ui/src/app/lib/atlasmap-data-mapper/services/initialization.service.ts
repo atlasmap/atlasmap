@@ -654,10 +654,11 @@ export class InitializationService {
           });
       }
 
-      this.cfg.mappingService.getCurrentMappingCatalog().subscribe( async(value: Uint8Array) => {
+      // Fetch adm-catalog-files.gz if it exists.
+      this.cfg.mappingService.getCurrentMappingCatalog().subscribe( async(catalog: Uint8Array) => {
 
-        // If value is null then no compressed mappings catalog is available on the server.
-        if (value === null) {
+        // If catalog is null then no compressed mappings catalog is available on the server.
+        if (catalog === null) {
           if (this.cfg.mappings === null) {
             this.cfg.mappings = new MappingDefinition();
           }
@@ -665,19 +666,18 @@ export class InitializationService {
           resolve(true);
           return;
         }
-        await this.processMappingsCatalogFiles(value, true);
+
+        await this.processMappingsCatalogFiles(catalog);
 
         // load mappings
         if (this.cfg.mappings == null) {
           this.cfg.mappings = new MappingDefinition();
           if (this.cfg.mappingFiles.length > 0) {
             await this.initMappings(this.cfg.mappingFiles);
-            resolve(true);
           } else {
             this.cfg.mappingService.findMappingFiles('UI').toPromise()
               .then(async(files: string[]) => {
                 await this.initMappings(files);
-                resolve(true);
               },
               (error: any) => {
                 if (error.status === 0) {
@@ -689,7 +689,9 @@ export class InitializationService {
           }
         }
         this.updateStatus();
+        resolve(true);
       });
+      resolve(true);
     });
   }
 
@@ -734,11 +736,11 @@ export class InitializationService {
   }
 
   /**
-   * Update .../target/mappings/atlasmapping-UI.nnnnnn.xml.
+   * Update .../target/mappings/atlasmapping-UI.nnnnnn.json in the runtime service.
    *
    * @param mInfo
    */
-  async updateMappingsXML(mInfo: any): Promise<boolean> {
+  async updateMappings(mInfo: any): Promise<boolean> {
     return new Promise<boolean>((resolve, reject) => {
       try {
         this.cfg.mappingService.setMappingToService(mInfo.exportMappings.value).toPromise()
@@ -763,45 +765,77 @@ export class InitializationService {
   }
 
   /**
-   * The compressed binary content (gzip) from either an imported ADM catalog file or from the DM runtime
-   * catalog ZIP is presented to update the canvas.
+   * Update the GZIP catalog file in the runtime service.
    *
-   * @param compressedContent - gzip binary buffer
+   * @param compressedCatalog
    */
-  async processMappingsCatalogFiles(compressedContent: Uint8Array, useCatalogMappings: boolean): Promise<boolean> {
+  async updateCatalog(compressedCatalog: Uint8Array): Promise<boolean> {
+    return new Promise<boolean>((resolve, reject) => {
+        // Update .../target/mappings/adm-catalog-files.gz
+        const fileContent: Blob = new Blob([compressedCatalog], {type: 'application/octet-stream'});
+        this.cfg.mappingService.setBinaryFileToService(fileContent, this.cfg.initCfg.baseMappingServiceUrl + 'mapping/GZ/0').toPromise()
+          .then(async(result: boolean) => {
+          resolve(true);
+        }).catch((error: any) => {
+          if (error.status === 0) {
+            this.cfg.errorService.mappingError(
+              'Fatal network error: Unable to connect to the AtlasMap design runtime service.', error);
+          } else {
+            this.cfg.errorService.mappingError(
+              'Unable to update the catalog mappings file to the AtlasMap design runtime service.  ' +
+                error.status + ' ' + error.statusText, error);
+            resolve(false);
+          }
+        });
+    });
+  }
+
+  /**
+   * The compressed binary content (gzip) from either an imported ADM catalog file or from
+   * the DM runtime catalog is presented to update the canvas.
+   *
+   * @param compressedCatalog - gzip binary buffer
+   */
+  async processMappingsCatalogFiles(compressedCatalog: Uint8Array): Promise<boolean> {
     return new Promise<boolean>(async(resolve, reject) => {
-    try {
+      try {
 
-      // Inflate the compressed content.
-      const decompress = inflate(compressedContent);
-      const mappingsDocuments =
-        new Uint8Array(decompress).reduce((data, byte) => data + String.fromCharCode(byte), '');
-      const mInfo = this.processMappingsDocuments(mappingsDocuments);
+        // Inflate the compressed content.
+        const decompress = inflate(compressedCatalog);
+        const mappingsDocuments =
+          new Uint8Array(decompress).reduce((data, byte) => data + String.fromCharCode(byte), '');
+        const mInfo = this.processMappingsDocuments(mappingsDocuments);
 
-      // Reinitialize the model mappings.
-      if (mInfo && mInfo.exportMappings && useCatalogMappings) {
-        await this.updateMappingsXML(mInfo);
-      }
+        // Reinitialize the model mappings.
+        if (mInfo && mInfo.exportMappings) {
+          const catalogMappingsName = MappingSerializer.deserializeAtlasMappingName(
+            DocumentManagementService.getMappingsInfo(mInfo.exportMappings.value));
 
-      // Update .../target/mappings/adm-catalog-files.gz
-      const fileContent: Blob = new Blob([compressedContent], {type: 'application/octet-stream'});
-      this.cfg.mappingService.setBinaryFileToService(fileContent, this.cfg.initCfg.baseMappingServiceUrl + 'mapping/GZ/0').toPromise()
-        .then(async(result: boolean) => {
-        resolve(true);
-      }).catch((error: any) => {
-        if (error.status === 0) {
-          this.cfg.errorService.mappingError(
-            'Fatal network error: Unable to connect to the AtlasMap design runtime service.', error);
-        } else {
-          this.cfg.errorService.mappingError(
-            'Unable to update the catalog mappings file to the AtlasMap design runtime service.  ' +
-              error.status + ' ' + error.statusText, error);
+            // If the live UI mappings name does not match the UI mappings name extracted from the
+            // catalog file then use the mappings from the catalog file.  Otherwise use the live
+            // UI file.
+            this.cfg.mappingService.findMappingFiles('UI').toPromise()
+              .then( async(files: string[]) => {
+              if (catalogMappingsName !== files[0]) {
+                await this.updateMappings(mInfo);
+              }
+              await this.updateCatalog(compressedCatalog);
+              resolve(true);
+            },
+            (error: any) => {
+              if (error.status === 0) {
+                this.handleError('Fatal network error: Could not connect to AtlasMap design runtime service.', error);
+              }
+              resolve(false);
+            }
+          );
         }
-      });
-    } catch (error) {
-      this.cfg.errorService.mappingError('Unable to decompress the aggregate mappings catalog buffer.\n', error);
-      resolve(false);
-    }
+        await this.updateCatalog(compressedCatalog);
+        resolve(true);
+      } catch (error) {
+        this.cfg.errorService.mappingError('Unable to decompress the aggregate mappings catalog buffer.\n', error);
+        resolve(false);
+      }
     });
   }
 
