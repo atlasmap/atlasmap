@@ -490,7 +490,15 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
             fieldGroup = (FieldGroup) field;
             List<Object> values = new ArrayList<>();
             for (Field subField : fieldGroup.getField()) {
-                values.add(subField.getValue());
+                Integer index = subField.getIndex();
+                if (index != null) {
+                    while (index >= values.size()) {
+                        values.add(null);
+                    }
+                    values.set(index, subField.getValue());
+                } else {
+                    values.add(subField.getValue());
+                }
             }
             sourceObject = values;
             sourceType = FieldType.NONE;
