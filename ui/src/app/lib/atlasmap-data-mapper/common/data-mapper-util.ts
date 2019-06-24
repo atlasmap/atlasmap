@@ -37,14 +37,6 @@ export class DataMapperUtil {
     return itemWasRemoved;
   }
 
-  static debugLogJSON(object: any, description: string, loggingEnabled: boolean, url: string): void {
-    if (!loggingEnabled) {
-      return;
-    }
-    object = (object == null) ? '[none]' : object;
-    url = (url == null) ? '[none]' : url;
-  }
-
   /**
    * Split a source string by the specified substring into a string array.
    *

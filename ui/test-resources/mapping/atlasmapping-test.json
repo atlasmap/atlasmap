@@ -1,0 +1,366 @@
+{
+  "AtlasMapping": {
+    "jsonType": "io.atlasmap.v2.AtlasMapping",
+    "dataSource": [
+      {
+        "jsonType": "io.atlasmap.v2.DataSource",
+        "id": "twitter4j.Status",
+        "uri": "atlas:java?className=twitter4j.Status",
+        "dataSourceType": "SOURCE"
+      },
+      {
+        "jsonType": "io.atlasmap.v2.DataSource",
+        "id": "SomeJsonSource",
+        "uri": "atlas:json:SomeJsonSource",
+        "dataSourceType": "SOURCE"
+      },
+      {
+        "jsonType": "io.atlasmap.v2.DataSource",
+        "id": "SomeXmlSource",
+        "uri": "atlas:xml:SomeXmlSource",
+        "dataSourceType": "SOURCE"
+      },
+      {
+        "jsonType": "io.atlasmap.v2.DataSource",
+        "id": "salesforce.Contact",
+        "uri": "atlas:java?className=org.apache.camel.salesforce.dto.Contact",
+        "dataSourceType": "TARGET"
+      },
+      {
+        "jsonType": "io.atlasmap.v2.DataSource",
+        "id": "SomeJsonTarget",
+        "uri": "atlas:json:SomeJsonTarget",
+        "dataSourceType": "TARGET"
+      },
+      {
+        "jsonType": "io.atlasmap.v2.DataSource",
+        "id": "SomeXmlTarget",
+        "uri": "atlas:xml:SomeXmlTarget",
+        "dataSourceType": "TARGET"
+      }
+    ],
+    "mappings": {
+      "mapping": [
+        {
+          "jsonType": "io.atlasmap.v2.Mapping",
+          "inputField": [
+            {
+              "jsonType": "io.atlasmap.java.v2.JavaField",
+              "docId": "twitter4j.Status",
+              "status": "SUPPORTED",
+              "modifiers": {
+                "modifier": []
+              },
+              "name": "text",
+              "className": "java.lang.String",
+              "type": "STRING",
+              "getMethod": "getText",
+              "primitive": true,
+              "array": false,
+              "synthetic": false,
+              "path": "/Text",
+              "fieldActions": null
+            }
+          ],
+          "outputField": [
+            {
+              "jsonType": "io.atlasmap.java.v2.JavaField",
+              "docId": "salesforce.Contact",
+              "status": "SUPPORTED",
+              "modifiers": {
+                "modifier": [
+                  "PRIVATE"
+                ]
+              },
+              "name": "Description",
+              "className": "java.lang.String",
+              "type": "STRING",
+              "getMethod": "getDescription",
+              "setMethod": "setDescription",
+              "primitive": true,
+              "array": false,
+              "synthetic": false,
+              "path": "/Description",
+              "fieldActions": null
+            }
+          ]
+        },
+        {
+          "jsonType": "io.atlasmap.v2.Mapping",
+          "mappingType": "SEPARATE",
+          "inputField": [
+            {
+              "jsonType": "io.atlasmap.java.v2.JavaField",
+              "docId": "twitter4j.Status",
+              "status": "SUPPORTED",
+              "modifiers": {
+                "modifier": []
+              },
+              "name": "name",
+              "className": "java.lang.String",
+              "type": "STRING",
+              "getMethod": "getName",
+              "primitive": true,
+              "array": false,
+              "synthetic": false,
+              "path": "/User/Name",
+              "actions": null
+            }
+          ],
+          "outputField": [
+            {
+              "jsonType": "io.atlasmap.java.v2.JavaField",
+              "docId": "salesforce.Contact",
+              "status": "SUPPORTED",
+              "modifiers": {
+                "modifier": [
+                  "PRIVATE"
+                ]
+              },
+              "name": "FirstName",
+              "className": "java.lang.String",
+              "type": "STRING",
+              "getMethod": "getFirstName",
+              "setMethod": "setFirstName",
+              "primitive": true,
+              "array": false,
+              "synthetic": false,
+              "path": "/FirstName",
+              "index": 0,
+              "actions": null
+            },
+            {
+              "jsonType": "io.atlasmap.java.v2.JavaField",
+              "docId": "salesforce.Contact",
+              "status": "SUPPORTED",
+              "modifiers": {
+                "modifier": [
+                  "PRIVATE"
+                ]
+              },
+              "name": "LastName",
+              "className": "java.lang.String",
+              "type": "STRING",
+              "getMethod": "getLastName",
+              "setMethod": "setLastName",
+              "primitive": true,
+              "array": false,
+              "synthetic": false,
+              "path": "/LastName",
+              "index": 1,
+              "actions": null
+            }
+          ]
+        },
+        {
+          "jsonType": "io.atlasmap.v2.Mapping",
+          "inputField": [
+            {
+              "jsonType": "io.atlasmap.java.v2.JavaField",
+              "docId": "twitter4j.Status",
+              "status": "SUPPORTED",
+              "modifiers": {
+                "modifier": []
+              },
+              "name": "screenName",
+              "className": "java.lang.String",
+              "type": "STRING",
+              "getMethod": "getScreenName",
+              "primitive": true,
+              "array": false,
+              "synthetic": false,
+              "path": "/User/ScreenName",
+              "fieldActions": null
+            }
+          ],
+          "outputField": [
+            {
+              "jsonType": "io.atlasmap.java.v2.JavaField",
+              "docId": "salesforce.Contact",
+              "status": "SUPPORTED",
+              "modifiers": {
+                "modifier": [
+                  "PRIVATE"
+                ]
+              },
+              "name": "Title",
+              "className": "java.lang.String",
+              "type": "STRING",
+              "getMethod": "getTitle",
+              "setMethod": "setTitle",
+              "primitive": true,
+              "array": false,
+              "synthetic": false,
+              "path": "/Title",
+              "fieldActions": null
+            }
+          ]
+        },
+        {
+          "jsonType": "io.atlasmap.v2.Mapping",
+          "mappingType": "COMBINE",
+          "inputField": [
+            {
+              "jsonType": "io.atlasmap.json.v2.JsonField",
+              "docId": "SomeJsonSource",
+              "status": "SUPPORTED",
+              "name": "js0",
+              "type": "STRING",
+              "path": "/js0",
+              "index": 0,
+              "actions": null
+            },
+            {
+              "jsonType": "io.atlasmap.json.v2.JsonField",
+              "docId": "SomeJsonSource",
+              "status": "SUPPORTED",
+              "name": "js1",
+              "type": "STRING",
+              "path": "/js1",
+              "index": 1,
+              "actions": null
+            }
+          ],
+          "outputField": [
+            {
+              "jsonType": "io.atlasmap.xml.v2.XmlField",
+              "docId": "SomeXmlTarget",
+              "status": "SUPPORTED",
+              "name": "xt0",
+              "type": "STRING",
+              "path": "/xt0",
+              "actions": [
+                {
+                  "Uppercase": {}
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "jsonType": "io.atlasmap.v2.Mapping",
+          "mappingType": "SEPARATE",
+          "inputField": [
+            {
+              "jsonType": "io.atlasmap.xml.v2.XmlField",
+              "docId": "SomeXmlSource",
+              "status": "SUPPORTED",
+              "name": "xs0",
+              "type": "STRING",
+              "path": "/xs0",
+              "actions": [
+                {
+                  "Append": {
+                    "string": "xxx"
+                  }
+                }
+              ]
+            }
+          ],
+          "outputField": [
+            {
+              "jsonType": "io.atlasmap.json.v2.JsonField",
+              "docId": "SomeJsonTarget",
+              "status": "SUPPORTED",
+              "name": "jt0",
+              "type": "STRING",
+              "path": "/jt0",
+              "index": 0,
+              "actions": null
+            },
+            {
+              "jsonType": "io.atlasmap.json.v2.JsonField",
+              "docId": "SomeJsonTarget",
+              "status": "SUPPORTED",
+              "name": "jt1",
+              "type": "STRING",
+              "path": "/jt1",
+              "index": 1,
+              "actions": null
+            }
+          ]
+        },
+        {
+          "jsonType": "io.atlasmap.v2.Mapping",
+          "inputField": [
+            {
+              "jsonType": "io.atlasmap.v2.ConstantField",
+              "status": "SUPPORTED",
+              "name": "constantName",
+              "type": "STRING",
+              "actions": null
+            }
+          ],
+          "outputField": [
+            {
+              "jsonType": "io.atlasmap.xml.v2.XmlField",
+              "docId": "SomeXmlTarget",
+              "status": "SUPPORTED",
+              "name": "xt1",
+              "type": "STRING",
+              "path": "/xt1",
+              "actions": null
+            }
+          ]
+        },
+        {
+          "jsonType": "io.atlasmap.v2.Mapping",
+          "inputField": [
+            {
+              "jsonType": "io.atlasmap.v2.PropertyField",
+              "status": "SUPPORTED",
+              "name": "propertyName",
+              "type": "STRING",
+              "actions": null
+            }
+          ],
+          "outputField": [
+            {
+              "jsonType": "io.atlasmap.xml.v2.XmlField",
+              "docId": "SomeXmlTarget",
+              "status": "SUPPORTED",
+              "name": "xt2",
+              "type": "STRING",
+              "path": "/xt2",
+              "actions": null
+            }
+          ]
+        }
+      ]
+    },
+    "name": "UI.867332",
+    "lookupTables": {
+      "lookupTable": [
+        {
+          "name": "dummyTable",
+          "lookupEntry": [
+            {
+              "sourceValue": "Arizona",
+              "sourceType": "String",
+              "targetValue": "AZ",
+              "targetType": "String"
+            }
+          ]
+        }
+      ]
+    },
+    "constants": {
+      "constant": [
+        {
+          "name": "constantName",
+          "value": "constantValue",
+          "fieldType": "String"
+        }
+      ]
+    },
+    "properties": {
+      "property": [
+        {
+          "name": "propertyName",
+          "value": "propertyValue",
+          "fieldType": "String"
+        }
+      ]
+    }
+  }
+}

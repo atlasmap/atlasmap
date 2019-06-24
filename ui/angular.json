@@ -52,6 +52,14 @@
                 }
               ]
             },
+            "trace": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.trace.ts"
+                }
+              ]
+            },
             "production": {
               "optimization": true,
               "outputHashing": "all",
@@ -79,6 +87,9 @@
           "configurations": {
             "dev": {
               "browserTarget": "@atlasmap/atlasmap-data-mapper:build:dev"
+            },
+            "trace": {
+              "browserTarget": "@atlasmap/atlasmap-data-mapper:build:trace"
             },
             "production": {
               "browserTarget": "@atlasmap/atlasmap-data-mapper:build:production"

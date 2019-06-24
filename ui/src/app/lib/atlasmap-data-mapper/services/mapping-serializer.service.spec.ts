@@ -4,7 +4,6 @@ import { TestBed } from '@angular/core/testing';
 import { MappingSerializer } from './mapping-serializer.service';
 import { ConfigModel } from '../models/config.model';
 import { ErrorHandlerService } from './error-handler.service';
-import { InitializationService } from './initialization.service';
 import { MappingDefinition } from '../models/mapping-definition.model';
 import { DocumentType } from '../common/config.types';
 import { DocumentDefinition } from '../models/document-definition.model';
@@ -17,6 +16,7 @@ describe('MappingSerializer', () => {
     cfg = new ConfigModel();
     cfg.errorService = new ErrorHandlerService();
     cfg.errorService.cfg = cfg;
+    jasmine.getFixtures().fixturesPath = 'base/test-resources/mapping';
 
     const twitter = new DocumentDefinition();
     twitter.type = DocumentType.JAVA;
@@ -46,7 +46,7 @@ describe('MappingSerializer', () => {
     text.path = '/Text';
     text.type = 'STRING';
     twitter.addField(text);
-    twitter.initializeFromFields(false);
+    twitter.initializeFromFields();
     cfg.sourceDocs.push(twitter);
     const jsonSource = new DocumentDefinition();
     jsonSource.type = DocumentType.JSON;
@@ -64,7 +64,7 @@ describe('MappingSerializer', () => {
     js1.path = '/js1';
     js1.type = 'STRING';
     jsonSource.addField(js1);
-    jsonSource.initializeFromFields(false);
+    jsonSource.initializeFromFields();
     cfg.sourceDocs.push(jsonSource);
     const xmlSource = new DocumentDefinition();
     xmlSource.type = DocumentType.XML;
@@ -82,7 +82,7 @@ describe('MappingSerializer', () => {
     xs1.path = '/xs1';
     xs1.type = 'STRING';
     xmlSource.addField(xs1);
-    xmlSource.initializeFromFields(false);
+    xmlSource.initializeFromFields();
     cfg.sourceDocs.push(xmlSource);
     const contact = new DocumentDefinition();
     contact.type = DocumentType.JAVA;
@@ -110,7 +110,7 @@ describe('MappingSerializer', () => {
     lastName.path = '/LastName';
     lastName.type = 'STRING';
     contact.addField(lastName);
-    contact.initializeFromFields(false);
+    contact.initializeFromFields();
     cfg.targetDocs.push(contact);
     const jsonTarget = new DocumentDefinition();
     jsonTarget.type = DocumentType.JSON;
@@ -128,7 +128,7 @@ describe('MappingSerializer', () => {
     jt1.path = '/jt1';
     jt1.type = 'STRING';
     jsonTarget.addField(jt1);
-    jsonTarget.initializeFromFields(false);
+    jsonTarget.initializeFromFields();
     cfg.targetDocs.push(jsonTarget);
     const xmlTarget = new DocumentDefinition();
     xmlTarget.type = DocumentType.XML;
@@ -151,12 +151,12 @@ describe('MappingSerializer', () => {
     xt2.path = '/xt2';
     xt2.type = 'STRING';
     xmlTarget.addField(xt2);
-    xmlTarget.initializeFromFields(false);
+    xmlTarget.initializeFromFields();
     cfg.targetDocs.push(xmlTarget);
   });
 
   it('should deserialize & serialize mapping definition', () => {
-      const mappingJson = InitializationService.createExampleMappingsJSON();
+      const mappingJson = JSON.parse(jasmine.getFixtures().read('atlasmapping-test.json'));
       const mappingDefinition = new MappingDefinition();
       MappingSerializer.deserializeMappingServiceJSON(mappingJson, mappingDefinition, cfg);
       cfg.mappings = mappingDefinition;

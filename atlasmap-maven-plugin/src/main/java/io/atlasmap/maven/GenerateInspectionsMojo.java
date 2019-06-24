@@ -94,6 +94,7 @@ public class GenerateInspectionsMojo extends AbstractAtlasMapMojo {
      *             </inspection>
      *             <inspection>
      *                 <fileName>src/test/resources</fileName>
+     *                 <inspectionType>SCHEMA</inspectionType>
      *             </inspection>
      *         </inspections>
      *     </configuration>
@@ -103,6 +104,10 @@ public class GenerateInspectionsMojo extends AbstractAtlasMapMojo {
     @Parameter()
     private List<Inspection> inspections;
 
+    public enum InspectionType {
+        SCHEMA, INSTANCE
+    }
+
     public static class Inspection {
         private List<String> artifacts;
         private String className;
@@ -110,6 +115,7 @@ public class GenerateInspectionsMojo extends AbstractAtlasMapMojo {
         private String collectionClassName;
         private List<String> classNames;
         private String fileName;
+        private InspectionType inspectionType;
 
         public String getClassName() {
             return className;
@@ -157,6 +163,14 @@ public class GenerateInspectionsMojo extends AbstractAtlasMapMojo {
 
         public void setFileName(String fileName) {
             this.fileName = fileName;
+        }
+
+        public InspectionType getInspectionType() {
+            return this.inspectionType;
+        }
+
+        public void setInspectionType(InspectionType inspectionType) {
+            this.inspectionType = inspectionType;
         }
     }
 
@@ -227,9 +241,21 @@ public class GenerateInspectionsMojo extends AbstractAtlasMapMojo {
                     continue;
                 }
                 if (child.getName().toLowerCase().endsWith(".json")) {
-                    generateJsonSchemaInspection(child.getAbsolutePath());
+                    if (inspection.inspectionType == InspectionType.INSTANCE) {
+                        generateJsonInstanceInspection(child.getAbsolutePath());
+                    } else {
+                        // schema inspection by default
+                        generateJsonSchemaInspection(child.getAbsolutePath());
+                    }
                 } else if (child.getName().toLowerCase().endsWith(".xsd")) {
                     generateXmlSchemaInspection(child.getAbsolutePath());
+                } else if (child.getName().toLowerCase().endsWith(".xml")) {
+                    if (inspection.inspectionType == InspectionType.SCHEMA) {
+                        // In case it's SchemaSet - XML contains XSDs. InspectionType.SCHEMA have to be specified.
+                        generateXmlSchemaInspection(child.getAbsolutePath());
+                    } else {
+                        generateXmlInstanceInspection(child.getAbsolutePath());
+                    }
                 } else {
                     getLog().warn(String.format("Ignoring unsupported file type '%s'", child.getAbsolutePath()));
                     continue;
@@ -239,9 +265,21 @@ public class GenerateInspectionsMojo extends AbstractAtlasMapMojo {
         }
 
         if (file.getName().toLowerCase().endsWith(".json")) {
-            generateJsonSchemaInspection(file.getAbsolutePath());
+            if (inspection.inspectionType == InspectionType.INSTANCE) {
+                generateJsonInstanceInspection(file.getAbsolutePath());
+            } else {
+                // schema inspection by default
+                generateJsonSchemaInspection(file.getAbsolutePath());
+            }
         } else if (file.getName().toLowerCase().endsWith(".xsd")) {
             generateXmlSchemaInspection(file.getAbsolutePath());
+        } else if (file.getName().toLowerCase().endsWith(".xml")) {
+            if (inspection.inspectionType == InspectionType.SCHEMA) {
+                // In case it's SchemaSet - XML contains XSDs. InspectionType.SCHEMA have to be specified.
+                generateXmlSchemaInspection(file.getAbsolutePath());
+            } else {
+                generateXmlInstanceInspection(file.getAbsolutePath());
+            }
         } else {
             throw new MojoFailureException(String.format("Inspection type '%s' is not supported", inspection.getClass().getName()));
         }
@@ -260,10 +298,34 @@ public class GenerateInspectionsMojo extends AbstractAtlasMapMojo {
         }
     }
 
+    private void generateJsonInstanceInspection(String fileName) throws MojoFailureException {
+        try {
+            Path path = Paths.get(fileName);
+            String schema = new String(Files.readAllBytes(path));
+            JsonDocument d = new JsonInspectionService().inspectJsonDocument(schema);
+            String name = path.getFileName().toString();
+            String outputName = name.substring(0, name.length() - 5);
+            writeToJsonFile(DEFAULT_OUTPUT_FILE_PREFIX + "-" + outputName, d);
+        } catch (Exception e) {
+            throw new MojoFailureException(e.getMessage(), e);
+        }
+    }
+
     private void generateXmlSchemaInspection(String fileName) throws MojoFailureException {
         try {
             File f = new File(fileName);
             XmlDocument d = new XmlInspectionService().inspectSchema(f);
+            String outputName = f.getName().substring(0, f.getName().length() - 4);
+            writeToJsonFile(DEFAULT_OUTPUT_FILE_PREFIX + "-" + outputName, d);
+        } catch (Exception e) {
+            throw new MojoFailureException(e.getMessage(), e);
+        }
+    }
+
+    private void generateXmlInstanceInspection(String fileName) throws MojoFailureException {
+        try {
+            File f = new File(fileName);
+            XmlDocument d = new XmlInspectionService().inspectXmlDocument(f);
             String outputName = f.getName().substring(0, f.getName().length() - 4);
             writeToJsonFile(DEFAULT_OUTPUT_FILE_PREFIX + "-" + outputName, d);
         } catch (Exception e) {

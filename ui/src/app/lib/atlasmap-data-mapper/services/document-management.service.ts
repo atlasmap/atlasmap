@@ -33,250 +33,6 @@ export class DocumentManagementService implements OnDestroy {
   private headers = new HttpHeaders({'Content-Type': 'application/json'});
   private mappingUpdatedSubscription: Subscription;
 
-  static generateMockInstanceXMLDoc(): string {
-    // here we have a bunch of examples we can use.
-    let mockDoc = `<data>
-                <intField a='1'>32000</intField><longField>12421</longField>
-                <stringField>abc</stringField><booleanField>true</booleanField>
-                <doubleField b='2'>12.0</doubleField><shortField>1000</shortField>
-                <floatField>234.5f</floatField><charField>A</charField>
-                <outer><inner><value>val</value></inner></outer>
-            </data>
-        `;
-
-    mockDoc = `<?xml version="1.0" encoding="UTF-8" ?>
-            <foo>bar</foo>
-        `;
-
-    mockDoc = '<foo>bar</foo>';
-
-    mockDoc = `
-            <XMLOrder>
-            <orderId>orderId</orderId>
-            <Address>
-                <addressLine1>addressLine1</addressLine1>
-                <addressLine2>addressLine2</addressLine2>
-                <city>city</city>
-                <state>state</state>
-                <zipCode>zipCode</zipCode>
-            </Address>
-            <Contact>
-                <firstName>firstName</firstName>
-                <lastName>lastName</lastName>
-                <phoneNumber>phoneNumber</phoneNumber>
-                <zipCode>zipCode</zipCode>
-            </Contact>
-            </XMLOrder>
-        `;
-
-    mockDoc = `
-            <foo><bar><jason>somevalue</jason></bar></foo>
-        `;
-
-    mockDoc = `
-            <orders totalCost="12525.00" xmlns="http://www.example.com/x/"
-                xmlns:y="http://www.example.com/y/"
-                xmlns:q="http://www.example.com/q/">
-                <order>
-                <id y:custId="a">12312</id>
-                    <id y:custId="b">4423423</id>
-                    </order>
-                <q:order><id y:custId="x">12312</id></q:order>
-                <order><id y:custId="c">54554555</id></order>
-                <q:order><id y:custId="a">12312</id></q:order>
-            </orders>
-        `;
-
-    mockDoc = `
-            <ns:XmlFPE targetNamespace="http://atlasmap.io/xml/test/v2"
-                xmlns:ns="http://atlasmap.io/xml/test/v2"
-                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                xsi:schemaLocation="http://atlasmap.io/xml/test/v2 atlas-xml-test-model-v2.xsd ">
-                <booleanField>false</booleanField>
-                <byteField>99</byteField>
-                <charField>a</charField>
-                <doubleField>50000000.0</doubleField>
-                <floatField>40000000.0</floatField>
-                <intField>2</intField>
-                <longField>30000</longField>
-                <shortField>1</shortField>
-            </ns:XmlFPE>
-        `;
-
-    mockDoc = `
-            <ns:XmlOE xmlns:ns="http://atlasmap.io/xml/test/v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-             xsi:schemaLocation="http://atlasmap.io/xml/test/v2 atlas-xml-test-model-v2.xsd ">
-            <ns:orderId>ns:orderId</ns:orderId>
-            <ns:Address>
-                <ns:addressLine1>ns:addressLine1</ns:addressLine1>
-                <ns:addressLine2>ns:addressLine2</ns:addressLine2>
-                <ns:city>ns:city</ns:city>
-                <ns:state>ns:state</ns:state>
-                <ns:zipCode>ns:zipCode</ns:zipCode>
-            </ns:Address>
-            <ns:Contact>
-                <ns:firstName>ns:firstName</ns:firstName>
-                <ns:lastName>ns:lastName</ns:lastName>
-                <ns:phoneNumber>ns:phoneNumber</ns:phoneNumber>
-                <ns:zipCode>ns:zipCode</ns:zipCode>
-            </ns:Contact>
-            </ns:XmlOE>
-        `;
-    return mockDoc;
-  }
-
-  static generateMockSchemaXMLDoc(): string {
-    let mockDoc = `
-            <xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified"
-                     xmlns:xs="http://www.w3.org/2001/XMLSchema">
-                <xs:element name="data">
-                    <xs:complexType>
-                        <xs:sequence>
-                            <xs:element type="xs:short" name="intField"/>
-                            <xs:element type="xs:short" name="longField"/>
-                            <xs:element type="xs:string" name="stringField"/>
-                            <xs:element type="xs:string" name="booleanField"/>
-                            <xs:element type="xs:float" name="doubleField"/>
-                            <xs:element type="xs:short" name="shortField"/>
-                            <xs:element type="xs:string" name="floatField"/>
-                            <xs:element type="xs:string" name="charField"/>
-                        </xs:sequence>
-                        <xs:attribute name="intAttr" type="xs:int" use="optional" default="1"/>
-                    </xs:complexType>
-                </xs:element>
-            </xs:schema>
-        `;
-
-    mockDoc = `
-            <schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://example.com/"
-                xmlns:tns="http://example.com/">
-                <element name="aGlobalElement" type="tns:aGlobalType"/>
-                <simpleType name="aGlobalType"><restriction base="string"/></simpleType>
-            </schema>
-        `;
-
-    mockDoc = `
-            <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
-                <xs:element name="shiporder">
-                    <xs:complexType>
-                        <xs:sequence>
-                            <xs:element name="orderperson" type="xs:string"/>
-                            <xs:element name="shipto">
-                                <xs:complexType>
-                                    <xs:sequence>
-                                        <xs:element name="name" type="xs:string"/>
-                                        <xs:element name="address" type="xs:string"/>
-                                        <xs:element name="city" type="xs:string"/>
-                                        <xs:element name="country" type="xs:string"/>
-                                    </xs:sequence>
-                                </xs:complexType>
-                            </xs:element>
-                            <xs:element name="item" maxOccurs="unbounded">
-                                <xs:complexType>
-                                    <xs:sequence>
-                                        <xs:element name="title" type="xs:string"/>
-                                        <xs:element name="note" type="xs:string" minOccurs="0"/>
-                                        <xs:element name="quantity" type="xs:positiveInteger"/>
-                                        <xs:element name="price" type="xs:decimal"/>
-                                    </xs:sequence>
-                                </xs:complexType>
-                            </xs:element>
-                        </xs:sequence>
-                        <xs:attribute name="orderid" type="xs:string" use="required" fixed="2"/>
-                    </xs:complexType>
-                </xs:element>
-            </xs:schema>
-        `;
-
-    mockDoc = `
-            <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
-                <xs:element name="shiporder">
-                    <xs:complexType>
-                        <xs:sequence>
-                            <xs:element name="shipto">
-                                <xs:complexType>
-                                    <xs:sequence>
-                                        <xs:element name="name" type="xs:string"/>
-                                    </xs:sequence>
-                                </xs:complexType>
-                            </xs:element>
-                            <xs:element name="item" maxOccurs="unbounded">
-                                <xs:complexType>
-                                    <xs:sequence>
-                                        <xs:element name="title" type="xs:string"/>
-                                    </xs:sequence>
-                                </xs:complexType>
-                            </xs:element>
-                        </xs:sequence>
-                    </xs:complexType>
-                </xs:element>
-            </xs:schema>
-        `;
-
-    mockDoc = `
-        <d:SchemaSet xmlns:d="http://atlasmap.io/xml/schemaset/v2" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-          <xsd:schema targetNamespace="http://syndesis.io/v1/swagger-connector-template/request" elementFormDefault="qualified">
-            <xsd:element name="request">
-              <xsd:complexType>
-                <xsd:sequence>
-                  <xsd:element name="body">
-                    <xsd:complexType>
-                      <xsd:sequence>
-                        <xsd:element ref="Pet" />
-                      </xsd:sequence>
-                    </xsd:complexType>
-                  </xsd:element>
-                </xsd:sequence>
-              </xsd:complexType>
-            </xsd:element>
-          </xsd:schema>
-          <d:AdditionalSchemas>
-            <xsd:schema>
-              <xsd:element name="Pet">
-                <xsd:complexType>
-                  <xsd:sequence>
-                    <xsd:element name="id" type="xsd:decimal" />
-                    <xsd:element name="Category">
-                      <xsd:complexType>
-                        <xsd:sequence>
-                          <xsd:element name="id" type="xsd:decimal" />
-                          <xsd:element name="name" type="xsd:string" />
-                        </xsd:sequence>
-                      </xsd:complexType>
-                    </xsd:element>
-                    <xsd:element name="name" type="xsd:string" />
-                    <xsd:element name="photoUrl">
-                      <xsd:complexType>
-                        <xsd:sequence>
-                          <xsd:element name="photoUrl" type="xsd:string" maxOccurs="unbounded" minOccurs="0" />
-                        </xsd:sequence>
-                      </xsd:complexType>
-                    </xsd:element>
-                    <xsd:element name="tag">
-                      <xsd:complexType>
-                        <xsd:sequence>
-                          <xsd:element name="Tag" maxOccurs="unbounded" minOccurs="0">
-                            <xsd:complexType>
-                              <xsd:sequence>
-                                <xsd:element name="id" type="xsd:decimal" />
-                                <xsd:element name="name" type="xsd:string" />
-                              </xsd:sequence>
-                            </xsd:complexType>
-                          </xsd:element>
-                        </xsd:sequence>
-                      </xsd:complexType>
-                    </xsd:element>
-                    <xsd:element name="status" type="xsd:string" />
-                  </xsd:sequence>
-                </xsd:complexType>
-              </xsd:element>
-            </xsd:schema>
-          </d:AdditionalSchemas>
-        </d:SchemaSet>
-        `;
-    return mockDoc;
-  }
-
   /**
    * Use the JSON utility to translate the specified buffer into a JSON buffer - then replace any
    * non-ascii character encodings with unicode escape sequences.
@@ -350,169 +106,6 @@ export class DocumentManagementService implements OnDestroy {
     return metaStr;
   }
 
-  static generateMockJSONDoc(): string {
-    return DocumentManagementService.generateMockJSONInstanceDoc();
-  }
-
-  static generateMockJSONInstanceDoc(): string {
-    const mockDoc = `   {
-                "order": {
-                    "address": {
-                        "street": "123 any st",
-                        "city": "Austin",
-                        "state": "TX",
-                        "zip": "78626"
-                    },
-                    "contact": {
-                        "firstName": "james",
-                        "lastName": "smith",
-                        "phone": "512-123-1234"
-                    },
-                    "orderId": "123"
-                },
-                "primitives": {
-                    "stringPrimitive": "some value",
-                    "booleanPrimitive": true,
-                    "numberPrimitive": 24
-                },
-                "addressList": [
-                    { "street": "123 any st", "city": "Austin", "state": "TX", "zip": "78626" },
-                    { "street": "123 any st", "city": "Austin", "state": "TX", "zip": "78626" },
-                    { "street": "123 any st", "city": "Austin", "state": "TX", "zip": "78626" },
-                    { "street": "123 any st", "city": "Austin", "state": "TX", "zip": "78626" }
-                ]
-            }
-        `;
-    return mockDoc;
-  }
-
-  static generateMockJSONSchemaDoc(): string {
-    const mockDoc = `
-            {
-                "$schema": "http://json-schema.org/schema#",
-                "description": "Order",
-                "type": "object",
-                "properties": {
-                    "order": {
-                        "type": "object",
-                        "properties": {
-                            "address": {
-                                "type": "object",
-                                "properties": {
-                                    "street": { "type": "string" },
-                                    "city": { "type": "string" },
-                                    "state": { "type": "string" },
-                                    "zip": { "type": "string" }
-                                }
-                            },
-                            "contact": {
-                                "type": "object",
-                                "properties": {
-                                    "firstName": { "type": "string" },
-                                    "lastName": { "type": "string" },
-                                    "phone": { "type": "string" }
-                                }
-                            },
-                            "orderId": { "type": "string" }
-                        }
-                    },
-                    "primitives": {
-                        "type": "object",
-                        "properties": {
-                            "stringPrimitive": { "type": "string" },
-                            "booleanPrimitive": { "type": "boolean" },
-                            "numberPrimitive": { "type": "number" }
-                        }
-                    },
-                    "primitiveArrays": {
-                        "type": "object",
-                        "properties": {
-                            "stringArray": {
-                                "type": "array",
-                                "items": { "type": "string" }
-                            },
-                            "booleanArray": {
-                                "type": "array",
-                                "items": { "type": "boolean" }
-                            },
-                            "numberArray": {
-                                "type": "array",
-                                "items": { "type": "number" }
-                            }
-                        }
-                    },
-                    "addressList": {
-                        "type": "array",
-                        "items": {
-                            "type": "object",
-                            "properties": {
-                                "street": { "type": "string" },
-                                "city": { "type": "string" },
-                                "state": { "type": "string" },
-                                "zip": { "type": "string" }
-                            }
-                        }
-                    }
-                }
-            }
-        `;
-    return mockDoc;
-  }
-
-  static generateMockJavaDoc(): string {
-    const mockDoc = `
-            {
-              "JavaClass": {
-                "jsonType": "io.atlasmap.java.v2.JavaClass",
-                "modifiers": { "modifier": [ "PUBLIC" ] },
-                "className": "io.atlasmap.java.test.Name",
-                "primitive": false,
-                "synthetic": false,
-                "javaEnumFields": { "javaEnumField": [] },
-                "javaFields": {
-                  "javaField": [
-                    {
-                      "jsonType": "io.atlasmap.java.v2.JavaField",
-                      "path": "firstName",
-                      "status": "SUPPORTED",
-                      "fieldType": "STRING",
-                      "modifiers": { "modifier": [ "PRIVATE" ] },
-                      "name": "firstName",
-                      "className": "java.lang.String",
-                      "getMethod": "getFirstName",
-                      "setMethod": "setFirstName",
-                      "primitive": true,
-                      "synthetic": false
-                    },
-                    {
-                      "jsonType": "io.atlasmap.java.v2.JavaField",
-                      "path": "lastName",
-                      "status": "SUPPORTED",
-                      "fieldType": "STRING",
-                      "modifiers": { "modifier": [ "PRIVATE" ] },
-                      "name": "lastName",
-                      "className": "java.lang.String",
-                      "getMethod": "getLastName",
-                      "setMethod": "setLastName",
-                      "primitive": true,
-                      "synthetic": false
-                    }
-                  ]
-                },
-                "packageName": "io.atlasmap.java.test",
-                "annotation": false,
-                "annonymous": false,
-                "enumeration": false,
-                "localClass": false,
-                "memberClass": false,
-                "uri": "atlas:java?className=io.atlasmap.java.test.Name",
-                "interface": false
-              }
-            }
-        `;
-    return mockDoc;
-  }
-
   constructor(private http: HttpClient) {}
 
   initialize(): void {
@@ -540,10 +133,14 @@ export class DocumentManagementService implements OnDestroy {
         },
       };
       const url: string = this.cfg.initCfg.baseJavaInspectionServiceUrl + 'mavenclasspath';
-      DataMapperUtil.debugLogJSON(requestBody, 'Classpath Service Request', this.cfg.initCfg.debugClassPathServiceCalls, url);
+      if (this.cfg.isTraceEnabled()) {
+        this.cfg.logger.trace(`Classpath Service Request: ${JSON.stringify(requestBody)}`);
+      }
       this.http.post(url, requestBody, { headers: this.headers }).toPromise()
         .then((body: any) => {
-          DataMapperUtil.debugLogJSON(body, 'Classpath Service Response', this.cfg.initCfg.debugClassPathServiceCalls, url);
+          if (this.cfg.isTraceEnabled()) {
+            this.cfg.logger.trace(`Classpath Service Response: ${JSON.stringify(body)}`);
+          }
           const classPath: string = body.MavenClasspathResponse.classpath;
           observer.next(classPath);
           observer.complete();
@@ -573,10 +170,14 @@ export class DocumentManagementService implements OnDestroy {
       } else if (docDef.type === DocumentType.JSON) {
         url = this.cfg.initCfg.baseJSONInspectionServiceUrl + 'inspect';
       }
-      DataMapperUtil.debugLogJSON(payload, 'Document Service Request', this.cfg.initCfg.debugDocumentServiceCalls, url);
+      if (this.cfg.isTraceEnabled()) {
+        this.cfg.logger.trace(`Document Service Request: ${JSON.stringify(payload)}`);
+      }
       this.http.post(url, payload, { headers: this.headers }).toPromise()
         .then((responseJson: any) => {
-          DataMapperUtil.debugLogJSON(responseJson, 'Document Service Response', this.cfg.initCfg.debugDocumentServiceCalls, url);
+          if (this.cfg.isTraceEnabled()) {
+            this.cfg.logger.trace(`Document Service Response: ${JSON.stringify(responseJson)}`);
+          }
           this.parseDocumentResponse(responseJson, docDef);
           observer.next(docDef);
           observer.complete();
@@ -596,29 +197,31 @@ export class DocumentManagementService implements OnDestroy {
    *
    * @param binaryBuffer
    */
-   setLibraryToService(binaryBuffer: any): void {
-     const serviceHeaders = new HttpHeaders(
+  setLibraryToService(binaryBuffer: any): void {
+    const serviceHeaders = new HttpHeaders(
        {'Content-Type': 'application/octet-stream'});
-     const url = this.cfg.initCfg.baseMappingServiceUrl + 'library';
-     DataMapperUtil.debugLogJSON(null, 'Set Library Service Request', this.cfg.initCfg.debugMappingServiceCalls, url);
-     const fileContent: Blob = new Blob([binaryBuffer], {type: 'application/octet-stream'});
-     this.http.put(url, fileContent, { headers: serviceHeaders }).toPromise().then((res: any) => {
-         DataMapperUtil.debugLogJSON(res, 'Set Library Service Response', this.cfg.initCfg.debugMappingServiceCalls, url);
-       })
-       .catch((error: any) => {
-         this.handleError('Error occurred while uploading a JAR file to the server.', error); },
-     );
-   }
+    const url = this.cfg.initCfg.baseMappingServiceUrl + 'library';
+    this.cfg.logger.trace('Set Library Service Request');
+    const fileContent: Blob = new Blob([binaryBuffer], {type: 'application/octet-stream'});
+    this.http.put(url, fileContent, { headers: serviceHeaders }).toPromise().then((res: any) => {
+         if (this.cfg.isTraceEnabled()) {
+           this.cfg.logger.trace(`Set Library Service Response: ${JSON.stringify(res)}`);
+         }
+      })
+      .catch((error: any) => {
+        this.handleError('Error occurred while uploading a JAR file to the server.', error); },
+    );
+  }
 
-/**
- * Read the selected file and parse it with the format defined by the specified inspection type.  Call the
- * initialization service to update the sources/ targets in both the runtime and the UI.  The runtime will
- * parse/ validate the file.
- *
- * @param selectedFile
- * @param inspectionType
- * @param isSource
- */
+  /**
+   * Read the selected file and parse it with the format defined by the specified inspection type.  Call the
+   * initialization service to update the sources/ targets in both the runtime and the UI.  The runtime will
+   * parse/ validate the file.
+   *
+   * @param selectedFile
+   * @param inspectionType
+   * @param isSource
+   */
   async processDocument(selectedFile: any, inspectionType: InspectionType, isSource: boolean) {
       let fileBin = null;
       let fileText = '';
@@ -765,7 +368,7 @@ export class DocumentManagementService implements OnDestroy {
         this.handleError('Unknown XML inspection result format', responseJson);
       }
     }
-    docDef.initializeFromFields(ConfigModel.getConfig().initCfg.debugDocumentParsing);
+    docDef.initializeFromFields();
   }
 
   private extractJSONDocumentDefinitionFromInspectionResponse(responseJson: any, docDef: DocumentDefinition): void {

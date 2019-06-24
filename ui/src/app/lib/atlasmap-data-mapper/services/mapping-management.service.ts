@@ -73,7 +73,7 @@ export class MappingManagementService {
     if (!this._cfg.logger) {
       this._cfg.logger = this.logger;
     }
-    if ([NgxLoggerLevel.DEBUG, NgxLoggerLevel.TRACE].includes(this._cfg.logger.getConfigSnapshot().level)) {
+    if (this._cfg.isDebugEnabled()) {
       this.mappingUpdated$.subscribe(() => {
         if (!this.cfg.mappings) {
           return;
@@ -141,9 +141,11 @@ export class MappingManagementService {
   findMappingFiles(filter: string): Observable<string[]> {
     return new Observable<string[]>((observer: any) => {
       const url = this.cfg.initCfg.baseMappingServiceUrl + 'mappings' + (filter == null ? '' : '?filter=' + filter);
-      DataMapperUtil.debugLogJSON(null, 'Mapping List Response', this.cfg.initCfg.debugMappingServiceCalls, url);
+      this.cfg.logger.trace('Mapping List Request');
       this.http.get(url, { headers: this.headers }).toPromise().then((body: any) => {
-        DataMapperUtil.debugLogJSON(body, 'Mapping List Response', this.cfg.initCfg.debugMappingServiceCalls, url);
+        if (this.cfg.isTraceEnabled()) {
+          this.cfg.logger.trace(`Mapping List Response: ${JSON.stringify(body)}`);
+        }
         const entries: any[] = body.StringMap.stringMapEntry;
         const mappingFileNames: string[] = [];
         for (const entry of entries) {
@@ -173,14 +175,16 @@ export class MappingManagementService {
     return new Observable<Uint8Array>((observer: any) => {
       const baseURL: string = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/GZ/';
       const url: string = baseURL + catalogName;
-      DataMapperUtil.debugLogJSON(null, 'Mapping Catalog Response', this.cfg.initCfg.debugMappingServiceCalls, url);
+      this.cfg.logger.trace('Mapping Catalog Request');
       const catHeaders = new HttpHeaders(
         { 'Content-Type':  'application/octet-stream',
           'Accept':        'application/octet-stream',
           'Response-Type': 'application/octet-stream'
         });
       this.http.get(url, { headers: catHeaders, responseType: 'arraybuffer' }).toPromise().then((body: any) => {
-        DataMapperUtil.debugLogJSON(body, 'Mapping Catalog Response', this.cfg.initCfg.debugMappingServiceCalls, url);
+        if (this.cfg.isTraceEnabled()) {
+          this.cfg.logger.trace(`Mapping Catalog Response: ${JSON.stringify(body)}`);
+        }
         observer.next(body);
         observer.complete();
       }).catch((error: any) => {
@@ -198,14 +202,16 @@ export class MappingManagementService {
     return new Observable<Uint8Array>((observer: any) => {
       const baseURL: string = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/ZIP/';
       const url: string = baseURL + atlasmapCatalogName;
-      DataMapperUtil.debugLogJSON(null, 'Mapping Catalog Response', this.cfg.initCfg.debugMappingServiceCalls, url);
+      this.cfg.logger.trace('Mapping Catalog Request');
       const catHeaders = new HttpHeaders(
         { 'Content-Type':  'application/octet-stream',
           'Accept':        'application/octet-stream',
           'Response-Type': 'application/octet-stream'
         });
       this.http.get(url, { headers: catHeaders, responseType: 'arraybuffer' }).toPromise().then((body: any) => {
-        DataMapperUtil.debugLogJSON(body, 'Mapping Catalog Response', this.cfg.initCfg.debugMappingServiceCalls, url);
+        if (this.cfg.isTraceEnabled()) {
+          this.cfg.logger.trace(`Mapping Catalog Response: ${JSON.stringify(body)}`);
+        }
         observer.next(body);
         observer.complete();
       }).catch((error: any) => {
@@ -228,7 +234,7 @@ export class MappingManagementService {
       const operations: Observable<any>[] = [];
       for (const mappingName of mappingFileNames) {
         const url: string = baseURL + mappingName;
-        DataMapperUtil.debugLogJSON(null, 'Mapping Service Request', this.cfg.initCfg.debugMappingServiceCalls, url);
+        this.cfg.logger.trace('Mapping Service Request');
         const operation = this.http.get(url).pipe(map((res: any) => res));
         operations.push(operation);
       }
@@ -240,7 +246,9 @@ export class MappingManagementService {
           return;
         }
         for (const d of data) {
-          DataMapperUtil.debugLogJSON(d, 'Mapping Service Response', this.cfg.initCfg.debugMappingServiceCalls, null);
+          if (this.cfg.isTraceEnabled()) {
+            this.cfg.logger.trace(`Mapping Service Response: ${JSON.stringify(d)}`);
+          }
           MappingSerializer.deserializeMappingServiceJSON(d, mappingDefinition, this.cfg);
         }
 
@@ -300,7 +308,7 @@ export class MappingManagementService {
       const operations: Observable<any>[] = [];
       for (const mappingName of mappingFileNames) {
         const url: string = baseURL + mappingName;
-        DataMapperUtil.debugLogJSON(null, 'Mapping Service Request', this.cfg.initCfg.debugMappingServiceCalls, url);
+        this.cfg.logger.trace('Mapping Service Request');
         const jsonHeaders = new HttpHeaders(
           { 'Content-Type':  'application/json',
             'Accept':        'application/json',
@@ -316,7 +324,9 @@ export class MappingManagementService {
           observer.complete();
           return;
         }
-        DataMapperUtil.debugLogJSON(data, 'Mapping Service Response', this.cfg.initCfg.debugMappingServiceCalls, null);
+        if (this.cfg.isTraceEnabled()) {
+          this.cfg.logger.trace(`Mapping Service Response: ${JSON.stringify(data)}`);
+        }
         this.notifyMappingUpdated();
         observer.next(data);
         observer.complete();
@@ -333,9 +343,11 @@ export class MappingManagementService {
   resetAll(): Observable<boolean> {
     return new Observable<boolean>((observer: any) => {
       const url = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/RESET';
-      DataMapperUtil.debugLogJSON(null, 'Mapping Service Request - Reset', this.cfg.initCfg.debugMappingServiceCalls, url);
+      this.cfg.logger.trace('Mapping Service Request - Reset');
       this.http.delete(url, { headers: this.headers }).toPromise().then((res: any) => {
-          DataMapperUtil.debugLogJSON(res, 'Mapping Service Response - Reset', this.cfg.initCfg.debugMappingServiceCalls, url);
+          if (this.cfg.isTraceEnabled()) {
+            this.cfg.logger.trace(`Mapping Service Response - Reset: ${JSON.stringify(res)}`);
+          }
           observer.next(true);
           observer.complete();
           return res;
@@ -355,9 +367,11 @@ export class MappingManagementService {
   setMappingToService(jsonBuffer: string): Observable<boolean> {
     return new Observable<boolean>((observer: any) => {
       const url = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/JSON/' + this.getMappingId();
-      DataMapperUtil.debugLogJSON(null, 'Mapping Service Request', this.cfg.initCfg.debugMappingServiceCalls, url);
+      this.cfg.logger.trace('Mapping Service Request');
       this.http.put(url, jsonBuffer, { headers: this.headers }).toPromise().then((res: any) => {
-        DataMapperUtil.debugLogJSON(res, 'Mapping Service Response', this.cfg.initCfg.debugMappingServiceCalls, url);
+        if (this.cfg.isTraceEnabled()) {
+          this.cfg.logger.trace(`Mapping Service Response: ${JSON.stringify(res)}`);
+        }
         observer.next(true);
         observer.complete();
       })
@@ -376,9 +390,11 @@ export class MappingManagementService {
    */
    setBinaryFileToService(compressedBuffer: any, url: string): Observable<boolean> {
      return new Observable<boolean>((observer: any) => {
-       DataMapperUtil.debugLogJSON(null, 'Set Compressed Mapping Service Request', this.cfg.initCfg.debugMappingServiceCalls, url);
+       this.cfg.logger.trace('Set Compressed Mapping Service Request');
        this.http.put(url, compressedBuffer, { headers: this.headers }).toPromise().then((res: any) => {
-          DataMapperUtil.debugLogJSON(res, 'Set Compressed Mapping Service Response', this.cfg.initCfg.debugMappingServiceCalls, url);
+          if (this.cfg.isTraceEnabled()) {
+            this.cfg.logger.trace(`Set Compressed Mapping Service Response: ${JSON.stringify(res)}`);
+          }
           observer.next(true);
           observer.complete();
        })
@@ -688,9 +704,13 @@ export class MappingManagementService {
       }
 
       const url: string = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/process';
-      DataMapperUtil.debugLogJSON(payload, 'Process Mapping Preview Request', this.cfg.initCfg.debugProcessMappingPreviewCalls, url);
+      if (this.cfg.isTraceEnabled()) {
+        this.cfg.logger.trace(`Process Mapping Preview Request: ${JSON.stringify(payload)}`);
+      }
       this.http.put(url, payload, { headers: this.headers }).toPromise().then((body: any) => {
-        DataMapperUtil.debugLogJSON(body, 'Process Mapping Preview  Response', this.cfg.initCfg.debugProcessMappingPreviewCalls, url);
+        if (this.cfg.isTraceEnabled()) {
+          this.cfg.logger.trace(`Process Mapping Preview  Response: ${JSON.stringify(body)}`);
+        }
         const answer = MappingSerializer.deserializeFieldMapping(body.ProcessMappingResponse.mapping, docRefs, this.cfg, false);
         for (const toWrite of inputFieldMapping.targetFields) {
           if (DocumentDefinition.getNoneField().path === toWrite.field.path) {
@@ -758,9 +778,13 @@ export class MappingManagementService {
       }
       const payload: any = MappingSerializer.serializeMappings(this.cfg);
       const url: string = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/validate';
-      DataMapperUtil.debugLogJSON(payload, 'Validation Service Request', this.cfg.initCfg.debugValidationServiceCalls, url);
+      if (this.cfg.isTraceEnabled()) {
+        this.cfg.logger.trace(`Validation Service Request: ${JSON.stringify(payload)}`);
+      }
       this.http.put(url, payload, { headers: this.headers }).toPromise().then((body: any) => {
-        DataMapperUtil.debugLogJSON(body, 'Validation Service Response', this.cfg.initCfg.debugValidationServiceCalls, url);
+        if (this.cfg.isTraceEnabled()) {
+          this.cfg.logger.trace(`Validation Service Response: ${JSON.stringify(body)}`);
+        }
         if (this.cfg.mappings === null) {
           resolve(false);
           return;
@@ -803,9 +827,11 @@ export class MappingManagementService {
     return new Observable<FieldActionConfig[]>((observer: any) => {
       let actionConfigs: FieldActionConfig[] = [];
       const url: string = this.cfg.initCfg.baseMappingServiceUrl + 'fieldActions';
-      DataMapperUtil.debugLogJSON(null, 'Field Action Config Request', this.cfg.initCfg.debugFieldActionServiceCalls, url);
+      this.cfg.logger.trace('Field Action Config Request');
       this.http.get(url, { headers: this.headers }).toPromise().then((body: any) => {
-        DataMapperUtil.debugLogJSON(body, 'Field Action Config Response', this.cfg.initCfg.debugFieldActionServiceCalls, url);
+        if (this.cfg.isTraceEnabled()) {
+          this.cfg.logger.trace(`Field Action Config Response: ${JSON.stringify(body)}`);
+        }
         if (body && body.ActionDetails
           && body.ActionDetails.actionDetail
           && body.ActionDetails.actionDetail.length) {
@@ -843,9 +869,13 @@ export class MappingManagementService {
     }
     const payload: any = MappingSerializer.serializeMappings(this.cfg);
     const url: string = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/setinstance';
-    DataMapperUtil.debugLogJSON(payload, 'Validation Service Request', this.cfg.initCfg.debugValidationServiceCalls, url);
+    if (this.cfg.isTraceEnabled()) {
+      this.cfg.logger.trace(`Validation Service Request: ${JSON.stringify(payload)}`);
+    }
     this.http.put(url, payload, { headers: this.headers }).toPromise().then((body: any) => {
-      DataMapperUtil.debugLogJSON(body, 'Validation Service Response', this.cfg.initCfg.debugValidationServiceCalls, url);
+      if (this.cfg.isTraceEnabled()) {
+        this.cfg.logger.trace(`Validation Service Response: ${JSON.stringify(body)}`);
+      }
       const mapping: MappingModel = this.cfg.mappings.activeMapping;
       const activeMappingErrors: ErrorInfo[] = [];
       const globalErrors: ErrorInfo[] = [];
@@ -1046,7 +1076,6 @@ export class MappingManagementService {
             this.cfg.initCfg.initialized = false;
             this.cfg.initCfg.mappingInitialized = false;
             this.cfg.mappings = null;
-            this.cfg.initCfg.discardNonMockSources = true;
             await this.cfg.initializationService.initialize();
           } catch (error) {
             this.cfg.errorService.mappingError('Unable to import the catalog file: \n' + mappingsFileName +

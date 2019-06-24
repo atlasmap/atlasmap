@@ -22,6 +22,7 @@
     "pretest": "rm -rf coverage junit",
     "pretest:coverage": "yarn pretest",
     "start": "ng serve -c dev --port 3000 --open",
+    "start:trace": "ng serve -c trace --port 3000 --open",
     "start:prod": "ng serve -c production --port 3000 --open",
     "test": "ng test --browsers ChromeHeadlessCustom --watch=false @atlasmap/atlasmap-data-mapper",
     "test:debug": "ng test --browsers ChromeDebug @atlasmap/atlasmap-data-mapper",

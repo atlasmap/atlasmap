@@ -24,6 +24,7 @@ import { InitializationService } from '../services/initialization.service';
 
 import { DataMapperAppComponent } from './data-mapper-app.component';
 import { environment } from '../../../../environments/environment';
+import { Examples } from '../models/examples';
 
 @Component({
   selector: 'data-mapper-example-host',
@@ -31,7 +32,7 @@ import { environment } from '../../../../environments/environment';
   providers: [MappingManagementService, ErrorHandlerService, DocumentManagementService],
 })
 
-export class DataMapperAppExampleHostComponent implements OnInit, OnDestroy {
+export class DataMapperAppExampleHostComponent implements OnInit {
 
   @ViewChild('dataMapperComponent')
   dataMapperComponent: DataMapperAppComponent;
@@ -58,7 +59,7 @@ export class DataMapperAppExampleHostComponent implements OnInit, OnDestroy {
 
     // initialize data for our class path service call
     // note that quotes, newlines, and tabs are escaped
-    c.initCfg.pomPayload = InitializationService.createExamplePom();
+    c.initCfg.pomPayload = Examples.pom;
     c.initCfg.classPathFetchTimeoutInMilliseconds = 30000;
     // if classPath is specified, maven call to resolve pom will be skipped
     c.initCfg.classPath = null;
@@ -69,64 +70,8 @@ export class DataMapperAppExampleHostComponent implements OnInit, OnDestroy {
     // enable the navigation bar and import/export for stand-alone
     c.initCfg.disableNavbar = false;
 
-    /*
-     * The following examples demonstrate adding source/target documents to the Data Mapper's configuration.
-     * Note - use the import button in the Sources/ Targets panel to import XML or JSON instance/ schema
-     * documents or the toolbar import button for ADM files and java archives.
-     *
-     * example java source document configuration:
-     *
-     * var documentIsSourceDocument: boolean = true;
-     * c.addJavaDocument("io.atlasmap.java.test.SourceOrder", documentIsSourceDocument);
-     *
-     * example xml instance document:
-     *
-     * c.addXMLInstanceDocument("XMLInstanceSource", DocumentManagementService.generateMockInstanceXML(), documentIsSourceDocument);
-     *
-     * example xml schema document:
-     *
-     * c.addXMLSchemaDocument("XMLSchemaSource", DocumentManagementService.generateMockSchemaXML(), documentIsSourceDocument);
-     *
-     * example json document:
-     *
-     * c.addJSONDocument("JSONTarget", DocumentManagementService.generateMockJSON(), documentIsSourceDocument);
-     *
-     */
-
-    // enable debug logging options as needed
-    c.initCfg.debugDocumentServiceCalls = true;
-    c.initCfg.debugDocumentParsing = false;
-    c.initCfg.debugMappingServiceCalls = false;
-    c.initCfg.debugClassPathServiceCalls = false;
-    c.initCfg.debugValidationServiceCalls = false;
-    c.initCfg.debugFieldActionServiceCalls = false;
-
-    // enable mock mappings loading, example code is shown in the InitializationService for this
-    c.initCfg.addMockJSONMappings = false;
-
-    // enable mock source/target documents as needed
-    c.initCfg.addMockJavaSingleSource = false;
-    c.initCfg.addMockJavaSources = false;
-    c.initCfg.addMockJavaCachedSource = false;
-    c.initCfg.addMockXMLInstanceSources = false;
-    c.initCfg.addMockXMLSchemaSources = false;
-    c.initCfg.addMockJSONSources = false;
-    c.initCfg.addMockJSONInstanceSources = false;
-    c.initCfg.addMockJSONSchemaSources = false;
-
-    c.initCfg.addMockJavaTarget = false;
-    c.initCfg.addMockJavaCachedTarget = false;
-    c.initCfg.addMockXMLInstanceTarget = false;
-    c.initCfg.addMockXMLSchemaTarget = false;
-    c.initCfg.addMockJSONTarget = false;
-    c.initCfg.addMockJSONInstanceTarget = false;
-    c.initCfg.addMockJSONSchemaTarget = false;
-
     // initialize system
     this.initializationService.initialize();
-  }
-
-  ngOnDestroy() {
   }
 
 }
