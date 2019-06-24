@@ -1040,7 +1040,7 @@ export class MappingManagementService {
             return;
           }
 
-          await this.cfg.initializationService.processMappingsCatalogFiles(value, true);
+          await this.cfg.initializationService.processMappingsCatalogFiles(value);
 
           try {
             this.cfg.initCfg.initialized = false;

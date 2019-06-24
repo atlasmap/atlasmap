@@ -358,10 +358,21 @@ export class MappingSerializer {
     return fieldsJson;
   }
 
-  static deserializeMappingServiceJSON(json: any, mappingDefinition: MappingDefinition, cfg: ConfigModel): void {
+  /**
+   * Return the AtlasMap mappings file name from the specified JSON buffer or an empty string.
+   *
+   * @param json
+   */
+  static deserializeAtlasMappingName(json: any): string {
     if (json && json.AtlasMapping && json.AtlasMapping.name) {
-      mappingDefinition.name = json.AtlasMapping.name;
+      return json.AtlasMapping.name;
+    } else {
+      return '';
     }
+  }
+
+  static deserializeMappingServiceJSON(json: any, mappingDefinition: MappingDefinition, cfg: ConfigModel): void {
+    mappingDefinition.name = this.deserializeAtlasMappingName(json);
     mappingDefinition.parsedDocs = mappingDefinition.parsedDocs.concat(MappingSerializer.deserializeDocs(json, mappingDefinition));
     mappingDefinition.mappings = mappingDefinition.mappings.concat(MappingSerializer.deserializeMappings(json, cfg));
     for (const lookupTable of MappingSerializer.deserializeLookupTables(json)) {
