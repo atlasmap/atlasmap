@@ -128,11 +128,11 @@ jobs:
           name: Install dependencies 
           command: |
             apt-get update
-            apt-get install -y libgconf2-4 libxss1 patch libpangocairo-1.0-0 libx11-xcb1 libxcomposite1 libxcursor1 libxdamage1 libxi6 libxtst6 libnss3 libcups2 libxrandr2 libasound2 libatk1.0-0 libgtk-3-0
+            apt-get install -y libgconf2-4 libxss1 patch libpangocairo-1.0-0 libx11-xcb1 libxcomposite1 libxcursor1 libxdamage1 libxi6 libxtst6 libnss3 libcups2 libxrandr2 libasound2 libatk1.0-0 libgtk-3-0 chromedriver
       - run:
           name: Build AtlasMap
           command: |
-            ./mvnw --batch-mode -Pcoverage,fabric8 -Dfabric8.mode=kubernetes clean install | tee -a build_log.txt
+            ./mvnw --batch-mode -Pcoverage,fabric8 -Dfabric8.mode=kubernetes -Dwebdriver.chrome.driver=/usr/bin/chromedriver clean install | tee -a build_log.txt
       - store_artifacts:
           path: build_log.txt
       - <<: *save_junit
