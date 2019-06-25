@@ -52,12 +52,12 @@ export class FieldActionService {
 
       if (this.cfg.mappingService == null) {
         this.cfg.errorService.warn('Mapping service is not provided. Field Actions will not be used.', null);
-        this.cfg.initCfg.fieldActionsInitialized = true;
+        this.isInitialized = true;
         resolve(true);
         return;
       } else if (this.cfg.initCfg.baseMappingServiceUrl == null) {
         this.cfg.errorService.warn('Mapping service URL is not provided. Field Actions will not be used.', null);
-        this.cfg.initCfg.fieldActionsInitialized = true;
+        this.isInitialized = true;
         resolve(true);
         return;
       }

@@ -65,7 +65,6 @@ export class DataMapperInitializationModel {
   disableNavbar = true;
 
   mappingInitialized = false;
-  fieldActionsInitialized = false;
 
   constructor() {
     if (environment.xsrf) {

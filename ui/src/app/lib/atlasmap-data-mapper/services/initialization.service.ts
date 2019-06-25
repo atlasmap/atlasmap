@@ -29,8 +29,7 @@ import { DocumentManagementService } from '../services/document-management.servi
 import { MappingManagementService } from '../services/mapping-management.service';
 import { MappingSerializer } from '../services/mapping-serializer.service';
 
-import { TransitionModel } from '../models/transition.model';
-import { FieldActionDefinition } from '../models/field-action.model';
+import { FieldActionService } from './field-action.service';
 
 @Injectable()
 export class InitializationService {
@@ -46,6 +45,7 @@ export class InitializationService {
     private documentService: DocumentManagementService,
     private mappingService: MappingManagementService,
     private errorService: ErrorHandlerService,
+    private fieldActionService: FieldActionService,
     private logger: NGXLogger) {
     this.resetConfig();
 
@@ -59,6 +59,8 @@ export class InitializationService {
     this.cfg.mappingService = this.mappingService;
     this.cfg.mappingService.cfg = this.cfg;
     this.cfg.errorService = this.errorService;
+    this.cfg.fieldActionService = this.fieldActionService;
+    this.cfg.fieldActionService.cfg = this.cfg;
     this.cfg.errorService.cfg = this.cfg;
     this.cfg.initializationService = this;
     this.cfg.logger = this.logger;
@@ -158,9 +160,14 @@ export class InitializationService {
       }
 
       // load field actions
+      if (!this.cfg.fieldActionService) {
+        this.handleError('FieldActionService is not configured', null);
+        return;
+      }
       await this.cfg.fieldActionService.fetchFieldActions()
       .catch((error: any) => {
         this.handleError(error, null);
+        return;
       });
 
       // load documents
@@ -470,7 +477,7 @@ export class InitializationService {
       }
     }
 
-    if ((documentCount === finishedDocCount) && this.cfg.initCfg.fieldActionsInitialized) {
+    if ((documentCount === finishedDocCount) && this.cfg.fieldActionService.isInitialized) {
       if (this.cfg.mappings) {
         this.cfg.mappings.detectTableIdentifiers();
         this.cfg.mappings.updateDocumentNamespacesFromMappings(this.cfg);
