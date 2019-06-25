@@ -52,10 +52,6 @@
       <artifactId>atlas-xml-service</artifactId>
     </dependency>
     <dependency>
-      <groupId>io.atlasmap</groupId>
-      <artifactId>atlasmap-standalone</artifactId>
-    </dependency>
-    <dependency>
       <groupId>io.github.swagger2markup</groupId>
       <artifactId>swagger2markup</artifactId>
     </dependency>
