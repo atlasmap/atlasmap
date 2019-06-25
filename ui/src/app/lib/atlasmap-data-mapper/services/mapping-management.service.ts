@@ -412,13 +412,11 @@ export class MappingManagementService {
    * @param mappingModel
    */
   removeMapping(mappingModel: MappingModel): Promise<boolean> {
-    return new Promise<boolean>((resolve) => {
+    return new Promise<boolean>( async(resolve) => {
       const mappingWasRemoved: boolean = this.cfg.mappings.removeMapping(mappingModel);
       if (mappingWasRemoved) {
-        const saveHandler: Function = (async() => {
-          this.deselectMapping();
-          await this.saveCurrentMapping();
-        });
+        this.deselectMapping();
+        await this.saveCurrentMapping();
       } else {
         this.deselectMapping();
       }
@@ -433,25 +431,36 @@ export class MappingManagementService {
 
   /**
    * Remove the specified field from a previously established and mapped field pair.
+   *
    * @param mapping
    * @param removeField
    */
-  removeMappedFieldPairField(mapping: MappingModel, removeField: Field, compoundSelection: boolean): void {
-    let fields: MappedField[] = null;
-    if (removeField.isSource()) {
-      fields = mapping.sourceFields;
-    } else {
-      fields = mapping.targetFields;
-    }
-    for (const mfield of fields) {
-      if (mfield.field.name === removeField.name) {
-        DataMapperUtil.removeItemFromArray(mfield, fields);
-        break;
-      }
-    }
-    mapping.updateTransition(removeField.isSource(), compoundSelection, true);
+  async removeMappedFieldPairField(mapping: MappingModel, removeField: Field, compoundSelection: boolean): Promise<boolean> {
+    return new Promise<boolean>( async(resolve) => {
+      let fields: MappedField[] = null;
 
-    this.saveCurrentMapping();
+      if (removeField.isSource()) {
+        fields = mapping.sourceFields;
+      } else {
+        fields = mapping.targetFields;
+      }
+      for (const mfield of fields) {
+        if (mfield.field.name === removeField.name) {
+          DataMapperUtil.removeItemFromArray(mfield, fields);
+
+          // If all that is left is the 'None' field after removing the user field then remove
+          // the mapping completely.
+          if ((fields.length === 1) && (fields[0].isNoneField())) {
+            await this.cfg.mappingService.removeMapping(mapping);
+            this.cfg.mappings.activeMapping = null;
+          }
+          break;
+        }
+      }
+      mapping.updateTransition(removeField.isSource(), compoundSelection, true);
+      await this.saveCurrentMapping();
+      resolve(true);
+    });
   }
 
   resequenceMappedField(mapping: MappingModel, insertedMappedField: MappedField, targetIndex: string): void {
