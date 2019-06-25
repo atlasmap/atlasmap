@@ -165,7 +165,12 @@ describe('MappingSerializer', () => {
   });
 
   it('should deserialize & serialize mapping definition',
-    inject([FieldActionService], (fieldActionService: FieldActionService) => {
+    inject(
+      [ErrorHandlerService, FieldActionService],
+      (errorService: ErrorHandlerService, fieldActionService: FieldActionService) => {
+      errorService.cfg = cfg;
+      cfg.errorService = errorService;
+      fieldActionService.cfg = cfg;
       cfg.fieldActionService = fieldActionService;
       const mappingJson = JSON.parse(jasmine.getFixtures().read('atlasmapping-test.json'));
       const mappingDefinition = new MappingDefinition();
