@@ -17,8 +17,8 @@
 import { Component, Input } from '@angular/core';
 import { MappingModel, MappedField } from '../../models/mapping.model';
 import { ConfigModel } from '../../models/config.model';
-import { TransitionModel, FieldAction, FieldActionArgument, FieldActionArgumentValue,
-         FieldActionConfig } from '../../models/transition.model';
+import { FieldAction, FieldActionArgument, FieldActionArgumentValue,
+         FieldActionDefinition } from '../../models/field-action.model';
 
 @Component({
   selector: 'mapping-field-action',
@@ -31,24 +31,6 @@ export class MappingFieldActionComponent {
   @Input() isSource: boolean;
   @Input() mapping: MappingModel;
 
-  /**
-   * Return the field actions applicable to the specified field mapping pair.
-   * @param mapping
-   */
-  static getFieldActions(mapping: MappingModel, isSource: boolean): FieldActionConfig[] {
-    const configs: FieldActionConfig[] = [];
-
-    // Start with the complete list of field actions.
-    for (const config of TransitionModel.actionConfigs) {
-
-      // Filter down to those field actions that apply to the selected field pair.
-      if (config.appliesToField(mapping, isSource)) {
-        configs.push(config);
-      }
-    }
-    return configs;
-  }
-
   getMappedFieldActions(): FieldAction[] {
     return this.mappedField.actions;
   }
@@ -58,11 +40,11 @@ export class MappingFieldActionComponent {
   }
 
   actionsExistForField(): boolean {
-    return (MappingFieldActionComponent.getFieldActions(this.mapping, this.isSource).length > 0);
+    return (this.cfg.fieldActionService.getActionsAppliesToField(this.mapping, this.isSource).length > 0);
   }
 
-  getActionConfigs(): FieldActionConfig[] {
-    return MappingFieldActionComponent.getFieldActions(this.mapping, this.isSource);
+  getActionConfigs(): FieldActionDefinition[] {
+    return this.cfg.fieldActionService.getActionsAppliesToField(this.mapping, this.isSource);
   }
 
   /**
@@ -135,7 +117,7 @@ export class MappingFieldActionComponent {
     const action: FieldAction = this.getMappedFieldActions()[selectedActionIndex];
     if (action.name !== selectedActionName) {
       action.argumentValues = [];  // Invalidate the previously selected field action arguments.
-      const fieldActionConfig: FieldActionConfig = TransitionModel.getActionConfigForName(selectedActionName);
+      const fieldActionConfig = this.cfg.fieldActionService.getActionDefinitionForName(selectedActionName);
       fieldActionConfig.populateFieldAction(action);
 
       // If the field action configuration predefines argument values then populate the fields with

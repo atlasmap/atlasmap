@@ -15,11 +15,12 @@
 */
 import { ConfigModel } from '../models/config.model';
 import { Field } from './field.model';
-import { TransitionModel, TransitionMode, FieldAction, FieldActionConfig } from './transition.model';
+import { TransitionModel, TransitionMode } from './transition.model';
 import { DocumentDefinition } from '../models/document-definition.model';
 import { ErrorInfo, ErrorLevel } from '../models/error.model';
 
 import { DataMapperUtil } from '../common/data-mapper-util';
+import { FieldAction } from './field-action.model';
 
 export class MappedFieldParsingData {
   parsedName: string = null;
@@ -684,7 +685,7 @@ export class MappingModel {
       }
       const actionsToRemove: FieldAction[] = [];
       for (const action of mappedField.actions) {
-        const actionConfig: FieldActionConfig = TransitionModel.getActionConfigForName(action.name);
+        const actionConfig = this.cfg.fieldActionService.getActionDefinitionForName(action.name);
         if (actionConfig != null && !actionConfig.appliesToField(this, false)) {
           actionsToRemove.push(action);
         }

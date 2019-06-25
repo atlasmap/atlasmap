@@ -29,7 +29,7 @@ import { InspectionType } from '../common/config.types';
 import { Field } from '../models/field.model';
 import { DocumentManagementService } from '../services/document-management.service';
 import { MappingModel, MappedField } from '../models/mapping.model';
-import { FieldActionConfig, FieldActionArgument, TransitionMode, TransitionModel } from '../models/transition.model';
+import { TransitionMode, TransitionModel } from '../models/transition.model';
 import { MappingDefinition } from '../models/mapping-definition.model';
 import { ErrorInfo, ErrorLevel } from '../models/error.model';
 
@@ -81,61 +81,6 @@ export class MappingManagementService {
         this.cfg.logger.debug('mapping updated: ' + JSON.stringify(this.serializeMappingsToJSON()));
       });
     }
-  }
-
-  // TODO consider extracting these utilities into separated class...
-  // put these model parser kind of guys together
-  static extractFieldActionConfig(actionDetail: any): FieldActionConfig {
-    const fieldActionConfig: FieldActionConfig = new FieldActionConfig();
-    fieldActionConfig.name = actionDetail.name;
-    fieldActionConfig.isCustom = actionDetail.custom;
-    fieldActionConfig.sourceType = actionDetail.sourceType;
-    fieldActionConfig.targetType = actionDetail.targetType;
-    fieldActionConfig.method = actionDetail.method;
-    fieldActionConfig.serviceObject = actionDetail;
-
-    if (actionDetail.parameters && actionDetail.parameters.parameter
-      && actionDetail.parameters.parameter.length) {
-      for (const actionParameter of actionDetail.parameters.parameter) {
-        const argumentConfig: FieldActionArgument = new FieldActionArgument();
-        argumentConfig.name = actionParameter.name;
-        argumentConfig.type = actionParameter.fieldType;
-        argumentConfig.values = actionParameter.values;
-        argumentConfig.serviceObject = actionParameter;
-        fieldActionConfig.arguments.push(argumentConfig);
-      }
-    }
-    return fieldActionConfig;
-  }
-
-  static sortFieldActionConfigs(configs: FieldActionConfig[]): FieldActionConfig[] {
-    const sortedActionConfigs: FieldActionConfig[] = [];
-    if (configs == null || configs.length === 0) {
-      return sortedActionConfigs;
-    }
-
-    const configsByName: { [key: string]: FieldActionConfig[]; } = {};
-    const configNames: string[] = [];
-    for (const fieldActionConfig of configs) {
-      const name: string = fieldActionConfig.name;
-      let sameNamedConfigs: FieldActionConfig[] = configsByName[name];
-      if (!sameNamedConfigs) {
-        sameNamedConfigs = [];
-        configNames.push(name);
-      }
-      sameNamedConfigs.push(fieldActionConfig);
-      configsByName[name] = sameNamedConfigs;
-    }
-
-    configNames.sort();
-
-    for (const name of configNames) {
-      const sameNamedConfigs: FieldActionConfig[] = configsByName[name];
-      for (const fieldActionConfig of sameNamedConfigs) {
-        sortedActionConfigs.push(fieldActionConfig);
-      }
-    }
-    return sortedActionConfigs;
   }
 
   findMappingFiles(filter: string): Observable<string[]> {
@@ -829,34 +774,6 @@ export class MappingManagementService {
         this.cfg.errorService.error('Error fetching validation data.', { 'error': error, 'url': url, 'request': payload });
       });
       resolve(true);
-    });
-  }
-
-  fetchFieldActions(): Observable<FieldActionConfig[]> {
-    return new Observable<FieldActionConfig[]>((observer: any) => {
-      let actionConfigs: FieldActionConfig[] = [];
-      const url: string = this.cfg.initCfg.baseMappingServiceUrl + 'fieldActions';
-      this.cfg.logger.trace('Field Action Config Request');
-      this.http.get(url, { headers: this.headers }).toPromise().then((body: any) => {
-        if (this.cfg.isTraceEnabled()) {
-          this.cfg.logger.trace(`Field Action Config Response: ${JSON.stringify(body)}`);
-        }
-        if (body && body.ActionDetails
-          && body.ActionDetails.actionDetail
-          && body.ActionDetails.actionDetail.length) {
-          for (const actionDetail of body.ActionDetails.actionDetail) {
-            const fieldActionConfig = MappingManagementService.extractFieldActionConfig(actionDetail);
-            actionConfigs.push(fieldActionConfig);
-          }
-        }
-        actionConfigs = MappingManagementService.sortFieldActionConfigs(actionConfigs);
-        observer.next(actionConfigs);
-        observer.complete();
-      }).catch((error: any) => {
-        observer.error(error);
-        observer.next(actionConfigs);
-        observer.complete();
-      });
     });
   }
 

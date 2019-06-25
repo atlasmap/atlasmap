@@ -29,7 +29,8 @@ import { DocumentManagementService } from '../services/document-management.servi
 import { MappingManagementService } from '../services/mapping-management.service';
 import { MappingSerializer } from '../services/mapping-serializer.service';
 
-import { TransitionModel, FieldActionConfig } from '../models/transition.model';
+import { TransitionModel } from '../models/transition.model';
+import { FieldActionDefinition } from '../models/field-action.model';
 
 @Injectable()
 export class InitializationService {
@@ -118,7 +119,10 @@ export class InitializationService {
               } else {
                 DataMapperUtil.removeItemFromArray(docdef, this.cfg.targetDocs);
               }
-              await this.fetchFieldActions();
+              await this.cfg.fieldActionService.fetchFieldActions()
+              .catch((error: any) => {
+                this.handleError(error, null);
+              });
             }
             this.cfg.mappingService.notifyMappingUpdated();
             this.updateStatus();
@@ -143,7 +147,7 @@ export class InitializationService {
 
   async initialize(): Promise<boolean> {
     return new Promise<boolean>(async(resolve, reject) => {
-      this.cfg.fieldActionMetadata = null;
+      this.cfg.preloadedFieldActionMetadata = null;
       this.cfg.errorService.clearMappingErrors();
       this.cfg.errorService.clearValidationErrors();
 
@@ -154,7 +158,10 @@ export class InitializationService {
       }
 
       // load field actions
-      await this.fetchFieldActions();
+      await this.cfg.fieldActionService.fetchFieldActions()
+      .catch((error: any) => {
+        this.handleError(error, null);
+      });
 
       // load documents
       if (!this.cfg.isClassPathResolutionNeeded()) {
@@ -451,50 +458,6 @@ export class InitializationService {
         }
         resolve(false);
       });
-    });
-  }
-
-  async fetchFieldActions(): Promise<boolean> {
-    return new Promise<boolean>((resolve, reject) => {
-      if (this.cfg.fieldActionMetadata) {
-        const actionConfigs: FieldActionConfig[] = [];
-        for (const actionDetail of this.cfg.fieldActionMetadata.ActionDetails.actionDetail) {
-          const fieldActionConfig = MappingManagementService.extractFieldActionConfig(actionDetail);
-          actionConfigs.push(fieldActionConfig);
-        }
-        MappingManagementService.sortFieldActionConfigs(actionConfigs);
-        TransitionModel.actionConfigs = actionConfigs;
-        this.cfg.initCfg.fieldActionsInitialized = true;
-        resolve(true);
-        return;
-      }
-
-      if (this.cfg.mappingService == null) {
-        this.cfg.errorService.warn('Mapping service is not provided. Field Actions will not be used.', null);
-        this.cfg.initCfg.fieldActionsInitialized = true;
-        resolve(true);
-        return;
-      } else if (this.cfg.initCfg.baseMappingServiceUrl == null) {
-        this.cfg.errorService.warn('Mapping service URL is not provided. Field Actions will not be used.', null);
-        this.cfg.initCfg.fieldActionsInitialized = true;
-        resolve(true);
-        return;
-      }
-
-      // Fetch the field actions from the runtime service.
-      this.cfg.mappingService.fetchFieldActions().toPromise()
-        .then((fetchedActionConfigs: FieldActionConfig[]) => {
-          TransitionModel.actionConfigs = fetchedActionConfigs;
-          this.cfg.initCfg.fieldActionsInitialized = true;
-          resolve(true);
-        }).catch((error: any) => {
-          if (error.status === 0) {
-            this.handleError('Fatal network error: Could not connect to AtlasMap design runtime service.', error);
-          } else {
-            this.handleError('Could not load field action configs: ' + error.status + ' ' + error.statusText, error);
-          }
-          resolve(false);
-        });
     });
   }
 

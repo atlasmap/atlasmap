@@ -14,10 +14,8 @@
     limitations under the License.
 */
 
-import {
-  TransitionMode, FieldActionArgument,
-  FieldAction, FieldActionArgumentValue
-} from '../models/transition.model';
+import { TransitionMode } from '../models/transition.model';
+import { FieldActionArgument, FieldAction, FieldActionArgumentValue } from '../models/field-action.model';
 import { MappingModel, MappedField } from '../models/mapping.model';
 import { Field } from '../models/field.model';
 import { MappingDefinition } from '../models/mapping-definition.model';
