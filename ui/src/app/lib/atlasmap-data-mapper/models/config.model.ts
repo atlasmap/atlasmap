@@ -26,6 +26,7 @@ import { InitializationService } from '../services/initialization.service';
 import { ErrorInfo } from '../models/error.model';
 
 import { DocumentType, InspectionType } from '../common/config.types';
+import { FieldActionService } from '../services/field-action.service';
 
 export class DataMapperInitializationModel {
   dataMapperVersion = '0.9.2017.07.28';
@@ -113,6 +114,7 @@ export class ConfigModel {
   mappingService: MappingManagementService;
   errorService: ErrorHandlerService;
   initializationService: InitializationService;
+  fieldActionService: FieldActionService;
 
   sourceDocs: DocumentDefinition[] = [];
   targetDocs: DocumentDefinition[] = [];
@@ -122,7 +124,7 @@ export class ConfigModel {
 
   mappings: MappingDefinition = null;
 
-  fieldActionMetadata: any;
+  preloadedFieldActionMetadata: any;
 
   errors: ErrorInfo[] = [];
   validationErrors: ErrorInfo[] = [];

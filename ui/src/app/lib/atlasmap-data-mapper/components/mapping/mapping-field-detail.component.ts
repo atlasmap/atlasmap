@@ -21,8 +21,8 @@ import { ConfigModel } from '../../models/config.model';
 import { Field } from '../../models/field.model';
 import { DocumentDefinition } from '../../models/document-definition.model';
 import { MappingModel, MappedField } from '../../models/mapping.model';
-import { FieldAction, FieldActionConfig, TransitionMode, TransitionModel } from '../../models/transition.model';
-import { MappingFieldActionComponent } from './mapping-field-action.component';
+import { FieldAction } from '../../models/field-action.model';
+import { TransitionMode } from '../../models/transition.model';
 
 @Component({
   selector: 'mapping-field-detail',
@@ -66,14 +66,13 @@ export class MappingFieldDetailComponent implements OnInit {
    * mapped field.
    */
   addTransformation(): void {
-    const actionConfig: FieldActionConfig =
-      MappingFieldActionComponent.getFieldActions(this.mapping, this.isSource)[0];
-    if (actionConfig == null) {
+    const actionDefinition = this.cfg.fieldActionService.getActionsAppliesToField(this.mapping, this.isSource)[0];
+    if (actionDefinition == null) {
       this.cfg.errorService.info('The selected field has no applicable transformation actions.', null);
       return;
     }
     const action: FieldAction = new FieldAction();
-    actionConfig.populateFieldAction(action);
+    actionDefinition.populateFieldAction(action);
     this.mappedField.actions.push(action);
     this.cfg.mappingService.saveCurrentMapping();
     this.mappedField.incTransformationCount();

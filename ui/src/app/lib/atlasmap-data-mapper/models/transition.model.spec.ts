@@ -1,7 +1,8 @@
 /* tslint:disable:no-unused-variable */
 
 import { TestBed, async, inject } from '@angular/core/testing';
-import { FieldActionConfig, TransitionModel } from './transition.model';
+import { TransitionModel } from './transition.model';
+import { FieldActionDefinition } from './field-action.model';
 import { MappingModel } from './mapping.model';
 import { Field } from './field.model';
 
@@ -20,13 +21,13 @@ describe('TransitionModel', () => {
   );
 });
 
-describe('FieldActionConfig.appliesToField()', () => {
-    let action: FieldActionConfig;
+describe('FieldActionDefinition.appliesToField()', () => {
+    let action: FieldActionDefinition;
     let mapping: MappingModel;
     let source: Field;
     let target: Field;
     beforeEach(() => {
-      action = new FieldActionConfig();
+      action = new FieldActionDefinition();
       mapping = new MappingModel();
       mapping.sourceFields.splice(0);
       source = new Field();

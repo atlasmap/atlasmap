@@ -18,8 +18,8 @@ import { MappingModel, MappedField } from './mapping.model';
 import { LookupTable } from '../models/lookup-table.model';
 import { ConfigModel } from '../models/config.model';
 import { Field } from '../models/field.model';
-import { TransitionModel, TransitionMode, FieldAction, FieldActionConfig,  FieldActionArgument,
-         FieldActionArgumentValue } from './transition.model';
+import { FieldAction, FieldActionArgumentValue, FieldActionDefinition } from './field-action.model';
+import { TransitionMode } from './transition.model';
 import { DocumentDefinition } from '../models/document-definition.model';
 
 import { DataMapperUtil } from '../common/data-mapper-util';
@@ -301,13 +301,13 @@ export class MappingDefinition {
    */
   private processCustomFieldAction(mappedField: MappedField, action: FieldAction) {
     const customBody: FieldActionArgumentValue[] = action.argumentValues;
-    const customActionConfig: FieldActionConfig = new FieldActionConfig();
-    customActionConfig.name = customBody[0].value;
-    customActionConfig.isCustom = true;
-    customActionConfig.serviceObject.name = customBody[0].value;
-    customActionConfig.serviceObject.className = customBody[1].value;
-    customActionConfig.serviceObject.method = customBody[2].value;
-    action.config = customActionConfig;
+    const customActionDefinition = new FieldActionDefinition();
+    customActionDefinition.name = customBody[0].value;
+    customActionDefinition.isCustom = true;
+    customActionDefinition.serviceObject.name = customBody[0].value;
+    customActionDefinition.serviceObject.className = customBody[1].value;
+    customActionDefinition.serviceObject.method = customBody[2].value;
+    action.config = customActionDefinition;
     action.argumentValues = [];
     action.name = customBody[0].value;
     mappedField.actions.push(action);
@@ -416,7 +416,7 @@ export class MappingDefinition {
             this.processCustomFieldAction(mappedField, action);
             continue;
           }
-          const actionConfig: FieldActionConfig = TransitionModel.getActionConfigForName(action.name);
+          const actionConfig = cfg.fieldActionService.getActionDefinitionForName(action.name);
           if (actionConfig == null) {
             cfg.errorService.error('Could not find field action configuration for action \'' + action.name + '\'', null);
             continue;

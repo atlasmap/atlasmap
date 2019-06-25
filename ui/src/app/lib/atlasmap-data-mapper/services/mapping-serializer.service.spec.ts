@@ -1,6 +1,6 @@
 /* tslint:disable:no-unused-variable */
 
-import { TestBed } from '@angular/core/testing';
+import { TestBed, inject } from '@angular/core/testing';
 import { MappingSerializer } from './mapping-serializer.service';
 import { ConfigModel } from '../models/config.model';
 import { ErrorHandlerService } from './error-handler.service';
@@ -8,14 +8,23 @@ import { MappingDefinition } from '../models/mapping-definition.model';
 import { DocumentType } from '../common/config.types';
 import { DocumentDefinition } from '../models/document-definition.model';
 import { Field } from '../models/field.model';
+import { LoggerModule, NgxLoggerLevel, NGXLogger } from 'ngx-logger';
+import { MappingManagementService } from './mapping-management.service';
+import { FieldActionService } from './field-action.service';
 
 describe('MappingSerializer', () => {
   let cfg: ConfigModel;
   beforeEach(() => {
-    TestBed.configureTestingModule({});
-    cfg = new ConfigModel();
-    cfg.errorService = new ErrorHandlerService();
-    cfg.errorService.cfg = cfg;
+    TestBed.configureTestingModule({
+      imports: [ LoggerModule.forRoot({level: NgxLoggerLevel.DEBUG}) ],
+      providers: [
+        ErrorHandlerService,
+        FieldActionService,
+        MappingManagementService,
+        NGXLogger,
+      ],
+    });
+    cfg = ConfigModel.getConfig();
     jasmine.getFixtures().fixturesPath = 'base/test-resources/mapping';
 
     const twitter = new DocumentDefinition();
@@ -155,7 +164,9 @@ describe('MappingSerializer', () => {
     cfg.targetDocs.push(xmlTarget);
   });
 
-  it('should deserialize & serialize mapping definition', () => {
+  it('should deserialize & serialize mapping definition',
+    inject([FieldActionService], (fieldActionService: FieldActionService) => {
+      cfg.fieldActionService = fieldActionService;
       const mappingJson = JSON.parse(jasmine.getFixtures().read('atlasmapping-test.json'));
       const mappingDefinition = new MappingDefinition();
       MappingSerializer.deserializeMappingServiceJSON(mappingJson, mappingDefinition, cfg);
@@ -167,5 +178,5 @@ describe('MappingSerializer', () => {
       // TODO constants, properties and field actions are not restored properly... need to investigate
       console.log(JSON.stringify(serialized, null, 2));
       expect(Object.keys(serialized.AtlasMapping.mappings.mapping).length).toEqual(mappingDefinition.mappings.length);
-    });
+    }));
 });

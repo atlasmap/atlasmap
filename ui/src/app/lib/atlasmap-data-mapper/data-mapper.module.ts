@@ -73,6 +73,7 @@ export { MappingSerializer } from './services/mapping-serializer.service';
 
 import { ToErrorIconClassPipe } from './common/to-error-icon-class.pipe';
 import { ApiXsrfInterceptor, ApiHttpXsrfTokenExtractor } from './services/api-xsrf.service';
+import { FieldActionService } from './services/field-action.service';
 
 export { DataMapperAppComponent } from './components/data-mapper-app.component';
 
@@ -144,6 +145,7 @@ export const loggerModuleForRoot: ModuleWithProviders = LoggerModule.forRoot(env
     MappingManagementService,
     ErrorHandlerService,
     InitializationService,
+    FieldActionService,
     NGXLogger,
   ],
   entryComponents: [
@@ -169,6 +171,7 @@ export class DataMapperModule {
           DocumentManagementService,
           MappingManagementService,
           ErrorHandlerService,
+          FieldActionService,
           InitializationService,
           {
             provide: HTTP_INTERCEPTORS,
@@ -182,6 +185,7 @@ export class DataMapperModule {
           DocumentManagementService,
           MappingManagementService,
           ErrorHandlerService,
+          FieldActionService,
           InitializationService,
           {
             provide: HttpXsrfTokenExtractor,

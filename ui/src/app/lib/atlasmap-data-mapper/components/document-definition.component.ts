@@ -253,7 +253,10 @@ export class DocumentDefinitionComponent implements OnInit {
               if (doc.fields.length === 0) {
 
                 // Make any custom field actions active.
-                await self.cfg.initializationService.fetchFieldActions();
+                await self.cfg.fieldActionService.fetchFieldActions()
+                .catch((error: any) => {
+                  self.cfg.errorService.error(error, null);
+                });
 
                 if (doc.isSource) {
                   DataMapperUtil.removeItemFromArray(doc, this.cfg.sourceDocs);
