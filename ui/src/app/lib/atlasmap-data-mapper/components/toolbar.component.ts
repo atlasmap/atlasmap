@@ -203,6 +203,8 @@ export class ToolbarComponent implements OnInit {
         this.cfg.initCfg.initialized = false;
         this.cfg.initCfg.mappingInitialized = false;
         this.cfg.mappings = null;
+        this.cfg.sourceDocs = [];
+        this.cfg.targetDocs = [];
         await this.cfg.initializationService.initialize();
       }).catch((error: any) => {
         if (error.status === 0) {
