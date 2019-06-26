@@ -118,9 +118,9 @@ export class SimpleMappingComponent {
   }
 
   isAddButtonVisible(): boolean {
-    if (this.isSource && this.mapping.transition.isCombineMode()) {
+    if (this.isSource && this.mapping.transition.isManyToOneMode()) {
       return true;
-    } else if (!this.isSource && this.mapping.transition.isSeparateMode()) {
+    } else if (!this.isSource && this.mapping.transition.isOneToManyMode()) {
       return true;
     }
     return false;

@@ -109,8 +109,8 @@ export class MappedField {
       padField.field = DocumentDefinition.getPadField();
       padField.field.docDef = this.field.docDef;
       padField.setIsPadField();
-      padField.updateSeparateOrCombineFieldAction(mapping.transition.mode === TransitionMode.SEPARATE,
-        mapping.transition.mode === TransitionMode.COMBINE, i.toString(10), this.isSource(), true, false);
+      padField.updateSeparateOrCombineFieldAction(mapping.transition.mode === TransitionMode.ONE_TO_MANY,
+        mapping.transition.mode === TransitionMode.MANY_TO_ONE, i.toString(10), this.isSource(), true, false);
       if (this.isSource()) {
           mapping.sourceFields.push(padField);
       } else {
@@ -306,9 +306,9 @@ export class MappingModel {
     let combineMode = false;
 
     if (!lookupMode) {
-      mapMode = mapMode || this.transition.isMapMode();
-      separateMode = separateMode || this.transition.isSeparateMode();
-      combineMode = combineMode || this.transition.isCombineMode();
+      mapMode = mapMode || this.transition.isOneToOneMode();
+      separateMode = separateMode || this.transition.isOneToManyMode();
+      combineMode = combineMode || this.transition.isManyToOneMode();
     }
     if (mapMode || separateMode || combineMode) {
       // enums are not selectable in these modes
@@ -687,8 +687,8 @@ export class MappingModel {
       }
     }
 
-    let separateMode: boolean = (this.transition.mode === TransitionMode.SEPARATE);
-    let combineMode: boolean = (this.transition.mode === TransitionMode.COMBINE);
+    let separateMode: boolean = (this.transition.mode === TransitionMode.ONE_TO_MANY);
+    let combineMode: boolean = (this.transition.mode === TransitionMode.MANY_TO_ONE);
     let maxIndex = 0;
 
     if (combineMode || separateMode) {
@@ -701,7 +701,7 @@ export class MappingModel {
       maxIndex = this.processIndices(combineMode, fieldRemoved);
 
       if (maxIndex <= 1 && fieldRemoved) {
-        this.transition.mode = TransitionMode.MAP;
+        this.transition.mode = TransitionMode.ONE_TO_ONE;
         combineMode = false;
         separateMode = false;
         this.clearAllCombineSeparateActions();

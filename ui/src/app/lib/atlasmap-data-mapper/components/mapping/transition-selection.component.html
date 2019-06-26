@@ -5,7 +5,7 @@
     <i class="fa fa-edit link" (click)="showLookupTable()"></i>
   </div>
 
-  <div *ngIf="mapping.transition.isCombineMode() || mapping.transition.isSeparateMode()">
+  <div *ngIf="mapping.transition.isManyToOneMode() || mapping.transition.isOneToManyMode()">
     <label tooltip="Enter a separator delimiter character" >Separator:
       <select class="combobox" name="separator" id="separator" [ngModel]="mapping.transition.delimiter">
         <ng-container *ngFor="let delimiter of delimiters" id="delimiter">
