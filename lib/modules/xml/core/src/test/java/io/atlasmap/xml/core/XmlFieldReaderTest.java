@@ -333,13 +333,30 @@ public class XmlFieldReaderTest {
         assertThat(xmlField.getValue(), is("12312"));
     }
 
-    @Test(expected = AtlasException.class)
-    public void testThrowExceptionOnNullDocument() throws Exception {
+    @Test
+    public void testNullDocument() throws Exception {
         reader.setDocument(null, false);
         AtlasInternalSession session = mock(AtlasInternalSession.class);
         when(session.head()).thenReturn(mock(Head.class));
         when(session.head().getSourceField()).thenReturn(new XmlField());
+        Audits audits = new Audits();
+        when(session.getAudits()).thenReturn(audits);
         reader.read(session);
+        assertEquals(1, audits.getAudit().size());
+        assertEquals(AuditStatus.ERROR, audits.getAudit().get(0).getStatus());
+    }
+
+    @Test
+    public void testEmptyDocument() throws Exception {
+        reader.setDocument("", false);
+        AtlasInternalSession session = mock(AtlasInternalSession.class);
+        when(session.head()).thenReturn(mock(Head.class));
+        when(session.head().getSourceField()).thenReturn(new XmlField());
+        Audits audits = new Audits();
+        when(session.getAudits()).thenReturn(audits);
+        reader.read(session);
+        assertEquals(1, audits.getAudit().size());
+        assertEquals(AuditStatus.ERROR, audits.getAudit().get(0).getStatus());
     }
 
     public void testThrowExceptionOnNullAmlFeilds() throws Exception {

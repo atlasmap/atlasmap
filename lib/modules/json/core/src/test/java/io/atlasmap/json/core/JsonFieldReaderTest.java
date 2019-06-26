@@ -19,6 +19,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assume.assumeNoException;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -30,6 +32,7 @@ import org.hamcrest.core.Is;
 import org.junit.Test;
 
 import io.atlasmap.api.AtlasException;
+import io.atlasmap.core.AtlasUtil;
 import io.atlasmap.core.DefaultAtlasConversionService;
 import io.atlasmap.json.v2.AtlasJsonModelFactory;
 import io.atlasmap.json.v2.JsonField;
@@ -45,20 +48,30 @@ public class JsonFieldReaderTest {
 
     private static JsonFieldReader reader = new JsonFieldReader(DefaultAtlasConversionService.getInstance());
 
-    @Test(expected = AtlasException.class)
+    @Test
     public void testWithNullDocument() throws Exception {
         reader.setDocument(null);
         AtlasInternalSession session = mock(AtlasInternalSession.class);
+        when(session.head()).thenReturn(mock(Head.class));
         when(session.head().getSourceField()).thenReturn(AtlasJsonModelFactory.createJsonField());
+        Audits audits = new Audits();
+        when(session.getAudits()).thenReturn(audits);
         reader.read(session);
+        assertEquals(1, audits.getAudit().size());
+        assertEquals(AuditStatus.ERROR, audits.getAudit().get(0).getStatus());
     }
 
-    @Test(expected = AtlasException.class)
+    @Test
     public void testWithEmptyDocument() throws Exception {
         reader.setDocument("");
         AtlasInternalSession session = mock(AtlasInternalSession.class);
+        when(session.head()).thenReturn(mock(Head.class));
         when(session.head().getSourceField()).thenReturn(AtlasJsonModelFactory.createJsonField());
+        Audits audits = new Audits();
+        when(session.getAudits()).thenReturn(audits);
         reader.read(session);
+        assertEquals(1, audits.getAudit().size());
+        assertEquals(AuditStatus.ERROR, audits.getAudit().get(0).getStatus());
     }
 
     @Test(expected = AtlasException.class)
