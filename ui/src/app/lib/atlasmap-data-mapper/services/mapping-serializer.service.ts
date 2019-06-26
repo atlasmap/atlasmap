@@ -311,9 +311,11 @@ export class MappingSerializer {
       let includeIndexes: boolean = mapping.transition.isSeparateMode() && !isSource;
       includeIndexes = includeIndexes || (mapping.transition.isCombineMode() && isSource);
       if (includeIndexes) {
-        let index: string = mappedField.getSeparateOrCombineIndex();
-        index = (index == null) ? '1' : index;
-        serializedField['index'] = (parseInt(index, 10) - 1);
+        if (mappedField.hasIndex()) {
+          serializedField['index'] = mappedField.index - 1;
+        } else {
+          cfg.errorService.warn(`No index was specified for field '${mappedField.field.path}'`, mappedField);
+        }
       }
 
       if (mappedField.actions.length) {

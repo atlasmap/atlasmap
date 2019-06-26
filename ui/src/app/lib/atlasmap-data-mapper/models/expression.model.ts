@@ -67,7 +67,7 @@ export class FieldNode extends ExpressionNode {
   }
 
   toText(): string {
-    const index = this.field ? parseInt(this.field.getFieldIndex(), 10) - 1 : this.index;
+    const index = this.field ? this.field.index - 1 : this.index;
     return '${' + index + '}';
   }
 

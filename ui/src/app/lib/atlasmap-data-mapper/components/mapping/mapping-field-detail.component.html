@@ -27,19 +27,19 @@
   <!-- Index: -->
   <label style="float: left; padding-left: 10px; font-style: italic;"
     tooltip="To change the index ordinal value, drag and drop to the desired position."
-    *ngIf="hasActionIndex(mappedField)">Index: </label>
+    *ngIf="mappedField.hasIndex()">Index: </label>
 
   <div style="float: left; font-size: 100%; padding-left: 5px; font-weight: bold; color: green; width: 35px;"
-	*ngIf="hasActionIndex(mappedField)">
+	*ngIf="mappedField.hasIndex()">
     <div *ngIf="mappedField.isPadField(); else textInput">
       <label style="font-size: 110%; color: dark-gray;
         text-align: right;"
-        tooltip="This pad field has been automatically created to represent indexing gaps.">{{ getActionIndex(mappedField) }}</label>
+        tooltip="This pad field has been automatically created to represent indexing gaps.">{{ mappedField.index }}</label>
     </div>
     <ng-template #textInput>
       <input type="text" id="{{inputId}}" placement="top"
 	    style="font-size: 110%; font-weight: bold; color: green; text-align: right; height: 20px"
-        [ngModel]="getActionIndex(mappedField)" typeaheadWaitMs="400"
+        [ngModel]="mappedField.index" typeaheadWaitMs="400"
         (change)="indexSelectionChanged($event, mappedField)"
         tooltip="You may edit the index for this element directly.  Placeholders may be automatically inserted to account for any gaps in the indexing.">
     </ng-template>

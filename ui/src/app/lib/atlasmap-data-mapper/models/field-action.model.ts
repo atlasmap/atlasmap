@@ -211,17 +211,12 @@ export class FieldAction {
   config: FieldActionDefinition = null;
   argumentValues: FieldActionArgumentValue[] = [];
 
-  static createSeparateCombineFieldAction(separateMode: boolean, value: string) {
+  static createSeparateCombineFieldAction(separateMode: boolean) {
     if (FieldAction.combineActionConfig == null) {
-      const argument: FieldActionArgument = new FieldActionArgument();
-      argument.name = 'Index';
-      argument.type = 'NUMBER';
       FieldAction.combineActionConfig = new FieldActionDefinition();
       FieldAction.combineActionConfig.name = 'Combine';
-      FieldAction.combineActionConfig.arguments.push(argument);
       FieldAction.separateActionConfig = new FieldActionDefinition();
       FieldAction.separateActionConfig.name = 'Separate';
-      FieldAction.separateActionConfig.arguments.push(argument);
     }
 
     const fieldAction: FieldAction = new FieldAction();
@@ -231,7 +226,6 @@ export class FieldAction {
     }
     fieldAction.isSeparateOrCombineMode = true;
 
-    fieldAction.setArgumentValue('Index', (value == null) ? '1' : value);
     return fieldAction;
   }
 

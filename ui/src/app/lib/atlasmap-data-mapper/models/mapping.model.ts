@@ -39,9 +39,11 @@ export class MappedFieldParsingData {
 export class MappedField {
   parsedData: MappedFieldParsingData = new MappedFieldParsingData();
   field: Field = DocumentDefinition.getNoneField();
+  index = -1;
   actions: FieldAction[] = [];
   private padField = false;
   private transformationCount = 0;
+
   static sortMappedFieldsByPath(mappedFields: MappedField[], allowNone: boolean): MappedField[] {
     if (mappedFields == null || mappedFields.length === 0) {
       return [];
@@ -131,7 +133,7 @@ export class MappedField {
    * @param compoundSelection
    * @param fieldRemoved
    */
-  updateSeparateOrCombineFieldAction(separateMode: boolean, combineMode: boolean, suggestedValue: string,
+  updateSeparateOrCombineFieldAction(separateMode: boolean, combineMode: boolean,
                                isSource: boolean, compoundSelection: boolean, fieldRemoved: boolean): void {
 
     // Remove field actions where appropriate.
@@ -144,14 +146,14 @@ export class MappedField {
     if (firstFieldAction == null || !firstFieldAction.isSeparateOrCombineMode) {
 
       // Create a new separate/combine field action if there isn't one.
-      firstFieldAction = FieldAction.createSeparateCombineFieldAction(separateMode, suggestedValue);
+      firstFieldAction = FieldAction.createSeparateCombineFieldAction(separateMode);
       this.actions = [firstFieldAction].concat(this.actions);
       return;
     }
 
     // Given a compound selection (ctrl/cmd-M1) create a new field action based on the suggested value.
     if (compoundSelection && !fieldRemoved) {
-      const currentFieldAction: FieldAction = FieldAction.createSeparateCombineFieldAction(separateMode, suggestedValue);
+      const currentFieldAction: FieldAction = FieldAction.createSeparateCombineFieldAction(separateMode);
       this.actions = [currentFieldAction];
     }
   }
@@ -174,7 +176,7 @@ export class MappedField {
     if (firstFieldAction != null && firstFieldAction.isSeparateOrCombineMode) {
       let maxIndex = 0;
       for (const indexValue of firstFieldAction.argumentValues) {
-        const indexAsNumber = (indexValue.value == null) ? 0 : parseInt(indexValue.value, 10);
+        const indexAsNumber = (indexValue.value == null) ? 0 : +indexValue.value;
         if (indexAsNumber > maxIndex) {
           maxIndex = indexAsNumber;
           break;
@@ -193,15 +195,8 @@ export class MappedField {
     return (this.field != null) && (this.field !== DocumentDefinition.getNoneField());
   }
 
-  getFieldIndex() {
-    if (this.actions && this.actions[0] && this.actions[0].argumentValues && this.actions[0].argumentValues[0]) {
-      return this.actions[0].argumentValues[0].value;
-    }
-    return null;
-  }
-
-  setFieldIndex(index: string) {
-    this.actions[0].argumentValues[0].value = index;
+  hasIndex() {
+    return this.index != null && this.index >= 0;
   }
 
 }
@@ -406,7 +401,7 @@ export class MappingModel {
       return null;
     }
     for (const mappedField of this.getMappedFields(isSource)) {
-      if (index === mappedField.getFieldIndex()) {
+      if (+index === mappedField.index) {
         return mappedField;
       }
     }
@@ -520,8 +515,8 @@ export class MappingModel {
     let maxIndex = 0;
     for (const mField of mappedFields) {
       if (!mField.isNoneField() && mField.actions != null && mField.actions.length > 0) {
-        if (+mField.getFieldIndex() > maxIndex) {
-          maxIndex = +mField.getFieldIndex();
+        if (+mField.index > maxIndex) {
+          maxIndex = +mField.index;
         }
       }
     }
@@ -543,19 +538,18 @@ export class MappingModel {
         }
         if (mField.actions != null && mField.actions.length > 0) {
           if (fieldRemoved) {
-            const newIndex = (++lastIndex).toString(10);
-            mField.setFieldIndex(newIndex);
+            mField.index = ++lastIndex;
             continue;
           }
-          tempIndex = +mField.getFieldIndex();
+          tempIndex = mField.index;
           if (tempIndex > lastIndex + 1) {
             mField.addPlaceholders(++lastIndex, tempIndex, this);
             break;
           } else if (tempIndex === lastIndex) {
             const newIndex = ++tempIndex;
-            mField.setFieldIndex(newIndex.toString(10));
+            mField.index = newIndex;
           }
-          lastIndex = +mField.getFieldIndex();
+          lastIndex = mField.index;
         } else {
           lastIndex++;
         }
@@ -575,20 +569,18 @@ export class MappingModel {
    * @param fieldRemoved
    */
   resequenceFieldActionIndices(mappedFields: MappedField[], insertedMappedField: MappedField,
-                               inIndex: string, fieldRemoved: boolean): number {
+                               inIndex: number, fieldRemoved: boolean): number {
     let index = 0;
     if (insertedMappedField != null) {
-      let startIndex = +insertedMappedField.getFieldIndex();
+      let startIndex = insertedMappedField.index;
       mappedFields.splice(startIndex, 1);
-      startIndex = +inIndex;
+      startIndex = inIndex;
       mappedFields.splice(startIndex, 0, insertedMappedField);
 
       // Now re-sequence the index on the ordinal position within the mapped fields array.
       for (const mField of mappedFields) {
-        if (!mField.isNoneField() && mField.actions != null && mField.actions.length > 0) {
-          const oldIndex = mField.getFieldIndex();
-          const newIndex = index.toString(10);
-          mField.setFieldIndex(newIndex);
+        if (!mField.isNoneField()) {
+          mField.index = index;
         }
         index++;
       }
@@ -626,12 +618,12 @@ export class MappingModel {
           continue;
         }
 
-        if (mField.actions != null && mField.actions.length > 0 && lastField != null) {
-          if (mField.getFieldIndex() == null) {
+        if (lastField != null) {
+          if (!mField.hasIndex()) {
             break;
           }
 
-          if (lastField.actions.length > 0 && +mField.getFieldIndex() < +lastField.getFieldIndex()) {
+          if (mField.index < lastField.index) {
             tempField = mappedFields[index - 1];
             mappedFields[index - 1] = mField;
             mappedFields[index] = tempField;
@@ -661,7 +653,7 @@ export class MappingModel {
 
     // Gather mapped fields.
     const mappedFields = this.getMappedFields(combineMode);
-    return this.resequenceFieldActionIndices(mappedFields, null, '', fieldRemoved);
+    return this.resequenceFieldActionIndices(mappedFields, null, -1, fieldRemoved);
   }
 
   clearAllCombineSeparateActions(): void {
@@ -720,11 +712,13 @@ export class MappingModel {
 
           // In case the user made a compound mapping, then reverted back to single mapping, then back to compound.
           if (mappedField.actions.length === 0) {
-            mappedField.updateSeparateOrCombineFieldAction(separateMode, combineMode, '1', isSource,
+            mappedField.index = 1;
+            mappedField.updateSeparateOrCombineFieldAction(separateMode, combineMode, isSource,
               compoundSelection, fieldRemoved);
           }
           mappedField = mappedFields[mappedFields.length - 1];
-          mappedField.updateSeparateOrCombineFieldAction(separateMode, combineMode, maxIndex.toString(), isSource,
+          mappedField.index = maxIndex;
+          mappedField.updateSeparateOrCombineFieldAction(separateMode, combineMode, isSource,
             compoundSelection, fieldRemoved);
         }
       }
