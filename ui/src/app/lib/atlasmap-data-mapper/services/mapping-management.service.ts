@@ -216,23 +216,18 @@ export class MappingManagementService {
       if (!this.cfg.mappings) {
         resolve(false);
       }
-      let validate = false;
       const activeMapping: MappingModel = this.cfg.mappings.activeMapping;
       if ((activeMapping != null) && (this.cfg.mappings.mappings.indexOf(activeMapping) === -1)) {
         this.cfg.mappings.mappings.push(activeMapping);
-        validate = true;
       }
       const newMappings: MappingModel[] = [];
       for (const mapping of this.cfg.mappings.mappings) {
         if (mapping.isFullyMapped() || mapping.hasFieldActions()) {
           newMappings.push(mapping);
-          validate = true;
         }
       }
-      if (validate) {
-        this.cfg.mappings.mappings = newMappings;
-        await this.cfg.mappingService.validateMappings();
-      }
+      this.cfg.mappings.mappings = newMappings;
+      await this.cfg.mappingService.validateMappings();
       this.mappingUpdatedSource.next();
       resolve(true);
     });
@@ -356,7 +351,7 @@ export class MappingManagementService {
    *
    * @param mappingModel
    */
-  removeMapping(mappingModel: MappingModel): Promise<boolean> {
+  async removeMapping(mappingModel: MappingModel): Promise<boolean> {
     return new Promise<boolean>( async(resolve) => {
       const mappingWasRemoved: boolean = this.cfg.mappings.removeMapping(mappingModel);
       if (mappingWasRemoved) {
@@ -369,9 +364,12 @@ export class MappingManagementService {
     });
   }
 
-  updateMappedField(mapping: MappingModel, isSource: boolean, fieldRemoved: boolean): void {
-    mapping.updateTransition(isSource, false, fieldRemoved);
-    this.saveCurrentMapping();
+  async updateMappedField(mapping: MappingModel, isSource: boolean, fieldRemoved: boolean): Promise<boolean> {
+    return new Promise<boolean>( async(resolve) => {
+      mapping.updateTransition(isSource, false, fieldRemoved);
+      await this.saveCurrentMapping();
+      resolve(true);
+    });
   }
 
   /**
@@ -528,7 +526,9 @@ export class MappingManagementService {
             fieldAdded = true;
           }
       } else {
-        mapping = null;
+        if (!mapping.isFieldMapped(field)) {
+          mapping = null;
+        }
       }
     }
 
@@ -559,6 +559,7 @@ export class MappingManagementService {
 
     if (!fieldAdded && !fieldRemoved) {
       this.selectMapping(mapping);
+      this.validateMappings();
       return;
     }
 
@@ -733,11 +734,11 @@ export class MappingManagementService {
       const payload: any = MappingSerializer.serializeMappings(this.cfg);
       const url: string = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/validate';
       if (this.cfg.isTraceEnabled()) {
-        this.cfg.logger.trace(`Validation Service Request: ${JSON.stringify(payload)}`);
+        this.cfg.logger.trace(`Validation Service Request: ${JSON.stringify(payload)}\n`);
       }
       this.http.put(url, payload, { headers: this.headers }).toPromise().then((body: any) => {
         if (this.cfg.isTraceEnabled()) {
-          this.cfg.logger.trace(`Validation Service Response: ${JSON.stringify(body)}`);
+          this.cfg.logger.trace(`Validation Service Response: ${JSON.stringify(body)}\n`);
         }
         if (this.cfg.mappings === null) {
           resolve(false);
@@ -770,19 +771,22 @@ export class MappingManagementService {
         if (mapping) {
           mapping.validationErrors = activeMappingErrors;
         }
+        resolve(true);
       }).catch((error: any) => {
-        this.cfg.errorService.error('Error fetching validation data.', { 'error': error, 'url': url, 'request': payload });
+        this.cfg.logger.warn('Unable to fetch validation data.');
       });
-      resolve(true);
     });
   }
 
-  notifyMappingUpdated(): void {
-    if (this.cfg.mappings != null && this.cfg.mappings.activeMapping != null &&
-      this.cfg.mappings.activeMapping.isFullyMapped()) {
-      this.validateMappings();
-    }
-    this.mappingUpdatedSource.next();
+  async notifyMappingUpdated(): Promise<boolean> {
+    return new Promise<boolean>( async(resolve, reject) => {
+      if (this.cfg.mappings != null && this.cfg.mappings.activeMapping != null &&
+        this.cfg.mappings.activeMapping.isFullyMapped()) {
+        await this.validateMappings();
+      }
+      this.mappingUpdatedSource.next();
+      resolve(true);
+    });
   }
 
   /**
