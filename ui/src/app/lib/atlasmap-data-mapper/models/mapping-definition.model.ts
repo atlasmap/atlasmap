@@ -429,8 +429,8 @@ export class MappingDefinition {
 
       const isSeparate: boolean = mapping.transition.isSeparateMode();
       const isCombine: boolean = mapping.transition.isCombineMode();
-      const index: string = mappedField.parsedData.parsedIndex;
-      mappedField.updateSeparateOrCombineFieldAction(isSeparate, isCombine, index, isSource, false, false);
+      mappedField.index = +mappedField.parsedData.parsedIndex;
+      mappedField.updateSeparateOrCombineFieldAction(isSeparate, isCombine, isSource, false, false);
     }
   }
 

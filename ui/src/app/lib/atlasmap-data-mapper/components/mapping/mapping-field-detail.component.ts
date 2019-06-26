@@ -124,7 +124,7 @@ export class MappingFieldDetailComponent implements OnInit {
       // Add place-holders for each index value between the previous max index and the insertion index.
       mappedField.addPlaceholders(maxIndex, insertionIndex, this.mapping);
     }
-    this.mapping.resequenceFieldActionIndices(mappedFields, mappedField, insertionIndex.toString(10), false);
+    this.mapping.resequenceFieldActionIndices(mappedFields, mappedField, insertionIndex, false);
 
     // Sort the mapped fields array to get then back into numerical order.
     this.mapping.sortFieldActionFields(mappedFields);
@@ -145,7 +145,7 @@ export class MappingFieldDetailComponent implements OnInit {
       this.mapping.updateTransition(this.mappedField.field.isSource(), true, false);
 
       this.cfg.mappingService.resequenceMappedField(this.mapping, this.mappedField,
-        this.mapping.getLastMappedField(this.isSource).getFieldIndex());
+        this.mapping.getLastMappedField(this.isSource).index);
     }
     this.cfg.mappingService.saveCurrentMapping();
     this.updateTemplateValues();
@@ -157,18 +157,6 @@ export class MappingFieldDetailComponent implements OnInit {
       this.mapping.addField(DocumentDefinition.getNoneField(), this.isSource, true);
     }
     this.cfg.mappingService.updateMappedField(this.mapping, this.isSource, true);
-  }
-
-  getActionIndex(mappedField: MappedField): string {
-    return mappedField.getFieldIndex();
-  }
-
-  hasActionIndex(mappedField: MappedField): boolean {
-    if (!mappedField.isNoneField() && mappedField.field.name.length > 0 && mappedField.actions != null &&
-        mappedField.actions.length > 0 && mappedField.actions[0].argumentValues != null &&
-        mappedField.actions[0].argumentValues.length > 0 && mappedField.actions[0].isSeparateOrCombineMode) {
-      return true;
-    } else { return false; }
   }
 
   getSearchPlaceholder(): string {

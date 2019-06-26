@@ -408,7 +408,7 @@ export class MappingManagementService {
     });
   }
 
-  resequenceMappedField(mapping: MappingModel, insertedMappedField: MappedField, targetIndex: string): void {
+  resequenceMappedField(mapping: MappingModel, insertedMappedField: MappedField, targetIndex: number): void {
     if (mapping != null) {
       const mappedFields = mapping.getMappedFields(insertedMappedField.isSource());
       mapping.resequenceFieldActionIndices(mappedFields, insertedMappedField, targetIndex, false);
@@ -423,7 +423,7 @@ export class MappingManagementService {
    */
   addActiveMappingField(field: Field): void {
     const mapping = this.cfg.mappings.activeMapping;
-    let suggestedValue = '1';
+    let suggestedValue = 1;
     if (mapping.transition == null || field == null) {
       return;
     }
@@ -437,7 +437,7 @@ export class MappingManagementService {
         return;
       }
       if (mapping.sourceFields[mapping.sourceFields.length - 1].actions.length > 0) {
-        suggestedValue = ((+mapping.sourceFields[mapping.sourceFields.length - 1].getFieldIndex()) + 1).toString();
+        suggestedValue = mapping.sourceFields[mapping.sourceFields.length - 1].index + 1;
       }
     } else if (mapping.transition.mode === TransitionMode.SEPARATE) {
       if (field.isSource()) {
@@ -449,13 +449,14 @@ export class MappingManagementService {
         return;
       }
       if (mapping.targetFields[mapping.targetFields.length - 1].actions.length > 0) {
-        suggestedValue = ((+mapping.targetFields[mapping.targetFields.length - 1].getFieldIndex()) + 1).toString();
+        suggestedValue = mapping.targetFields[mapping.targetFields.length - 1].index + 1;
       }
     }
     const newMField = new MappedField;
     newMField.field = field;
+    newMField.index = suggestedValue;
     newMField.updateSeparateOrCombineFieldAction(mapping.transition.mode === TransitionMode.SEPARATE,
-      mapping.transition.mode === TransitionMode.COMBINE, suggestedValue, field.isSource(), true, false);
+      mapping.transition.mode === TransitionMode.COMBINE, field.isSource(), true, false);
     if (field.isSource()) {
       mapping.sourceFields.push(newMField);
     } else {
@@ -483,13 +484,15 @@ export class MappingManagementService {
       if (mappedFields.length > 2) {
         if (field.isSource()) {
           mapping.transition.mode = TransitionMode.COMBINE;
-          mappedFields[1].updateSeparateOrCombineFieldAction(false, true, '1', true, true, false);
+          mappedFields[1].index = 1;
+          mappedFields[1].updateSeparateOrCombineFieldAction(false, true, true, true, false);
           this.cfg.errorService.info(
             'Note: You\'ve selected multiple fields to combine.  ' +
             'You may want to examine the separator character in the \'Sources\' box of the Mapping Details section.', null);
         } else {
           mapping.transition.mode = TransitionMode.SEPARATE;
-          mappedFields[1].updateSeparateOrCombineFieldAction(true, false, '1', false, true, false);
+          mappedFields[1].index = 1;
+          mappedFields[1].updateSeparateOrCombineFieldAction(true, false, false, true, false);
           this.cfg.errorService.info(
             'Note: You\'ve selected multiple fields to separate into.  ' +
             'You may want to examine the separator character in the \'Sources\' box of the Mapping Details section.', null);

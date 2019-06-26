@@ -106,7 +106,7 @@ export class SimpleMappingComponent {
 
     if (insertBeforeMappedField != null && insertBeforeMappedField.actions[0] != null) {
       this.cfg.mappingService.resequenceMappedField(this.mapping, droppedMappedField,
-        insertBeforeMappedField.getFieldIndex());
+        insertBeforeMappedField.index);
 
       // Update indexing in any conditional mapping expressions.
       if (this.mapping.transition && this.mapping.transition.enableExpression) {
