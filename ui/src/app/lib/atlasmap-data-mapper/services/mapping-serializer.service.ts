@@ -63,7 +63,7 @@ export class MappingSerializer {
   private static createInputFieldGroup(mapping: MappingModel, field: any[]): any {
     const actions = [];
 
-    if (mapping.transition.isCombineMode()) {
+    if (mapping.transition.isManyToOneMode()) {
       if (mapping.transition.enableExpression) {
         actions[0] = {
           'Expression' : {
@@ -100,7 +100,7 @@ export class MappingSerializer {
     const serializedOutputFields: any[] = MappingSerializer.serializeFields(mapping, false, cfg, ignoreValue);
     let jsonMapping = {};
 
-    if (mapping.transition.isCombineMode()) {
+    if (mapping.transition.isManyToOneMode()) {
       inputFieldGroup = MappingSerializer.createInputFieldGroup(mapping, serializedInputFields);
 
       jsonMapping = {
@@ -109,7 +109,7 @@ export class MappingSerializer {
        inputFieldGroup,
        'outputField': serializedOutputFields,
       };
-    } else if (mapping.transition.isSeparateMode()) {
+    } else if (mapping.transition.isOneToManyMode()) {
         jsonMapping = {
          'jsonType': jsonMappingType,
          'id': id,
@@ -277,7 +277,7 @@ export class MappingSerializer {
         } ];
       }
 
-      if (mapping.transition.isSeparateMode() && field.isSource()) {
+      if (mapping.transition.isOneToManyMode() && field.isSource()) {
         let delimiter = mapping.transition.getActualDelimiter();
 
         if (mapping.transition.delimiter === TransitionDelimiter.USER_DEFINED) {
@@ -308,8 +308,8 @@ export class MappingSerializer {
         serializedField['jsonType'] = 'io.atlasmap.java.v2.JavaEnumField';
       }
 
-      let includeIndexes: boolean = mapping.transition.isSeparateMode() && !isSource;
-      includeIndexes = includeIndexes || (mapping.transition.isCombineMode() && isSource);
+      let includeIndexes: boolean = mapping.transition.isOneToManyMode() && !isSource;
+      includeIndexes = includeIndexes || (mapping.transition.isManyToOneMode() && isSource);
       if (includeIndexes) {
         if (mappedField.hasIndex()) {
           serializedField['index'] = mappedField.index - 1;
@@ -455,16 +455,16 @@ export class MappingSerializer {
        MappingSerializer.addFieldIfDoesntExist(mapping, field, false, docRefs, cfg, ignoreValue);
     }
     if (isSeparateMapping) {
-      mapping.transition.mode = TransitionMode.SEPARATE;
+      mapping.transition.mode = TransitionMode.ONE_TO_MANY;
       mapping.transition.setSerializedDelimeterFromSerializedValue(fieldMapping.delimiter);
     } else if (isCombineMapping) {
-      mapping.transition.mode = TransitionMode.COMBINE;
+      mapping.transition.mode = TransitionMode.MANY_TO_ONE;
       mapping.transition.setSerializedDelimeterFromSerializedValue(fieldMapping.delimiter);
     } else if (isLookupMapping) {
       mapping.transition.lookupTableName = fieldMapping.lookupTableName;
       mapping.transition.mode = TransitionMode.ENUM;
     } else {
-      mapping.transition.mode = TransitionMode.MAP;
+      mapping.transition.mode = TransitionMode.ONE_TO_ONE;
     }
   }
 
@@ -474,7 +474,7 @@ export class MappingSerializer {
     mapping.uuid = mappingJson.id;
     mapping.sourceFields = [];
     mapping.targetFields = [];
-    mapping.transition.mode = TransitionMode.MAP;
+    mapping.transition.mode = TransitionMode.ONE_TO_ONE;
     const isLookupMapping = (mappingJson.mappingType === 'LOOKUP');
 
     if (mappingJson.mappingType && mappingJson.mappingType !== '') {
@@ -490,7 +490,7 @@ export class MappingSerializer {
       for (const field of inputField) {
         MappingSerializer.addFieldIfDoesntExist(mapping, field, true, docRefs, cfg, ignoreValue);
       }
-      mapping.transition.mode = TransitionMode.COMBINE;
+      mapping.transition.mode = TransitionMode.MANY_TO_ONE;
       cfg.mappings.updateMappedFieldsFromDocuments(mapping, cfg, null, true);
 
       // Check for an InputFieldGroup containing a concatenate action inferring combine mode.
@@ -505,7 +505,7 @@ export class MappingSerializer {
           const concatDelimiter =
             firstAction.Concatenamte ? firstAction.Concatenate.delimiter : firstAction['delimiter'];
           if (concatDelimiter) {
-            mapping.transition.mode = TransitionMode.COMBINE;
+            mapping.transition.mode = TransitionMode.MANY_TO_ONE;
             mapping.transition.delimiter =
               TransitionModel.getTransitionDelimiterFromActual(concatDelimiter);
 
@@ -528,7 +528,7 @@ export class MappingSerializer {
         if (firstAction.Split || firstAction['@type'] === 'Split') {
           const splitDelimiter = firstAction.Split ? firstAction.Split.delimiter : firstAction['delimiter'];
           if (splitDelimiter) {
-            mapping.transition.mode = TransitionMode.SEPARATE;
+            mapping.transition.mode = TransitionMode.ONE_TO_MANY;
             mapping.transition.delimiter =
               TransitionModel.getTransitionDelimiterFromActual(splitDelimiter);
             if (mapping.transition.delimiter === TransitionDelimiter.USER_DEFINED) {

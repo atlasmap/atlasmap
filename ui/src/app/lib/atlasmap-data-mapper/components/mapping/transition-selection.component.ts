@@ -130,7 +130,7 @@ export class TransitionSelectionComponent implements OnInit {
     if (delimiterModel.delimiter === TransitionDelimiter.NONE) {
       return false;
     } else if (delimiterModel.delimiter === TransitionDelimiter.MULTI_SPACE) {
-      return this.mapping.transition.isSeparateMode();
+      return this.mapping.transition.isOneToManyMode();
     }
     return true;
   }

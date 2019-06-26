@@ -14,9 +14,8 @@
     limitations under the License.
 */
 import { ExpressionModel } from './expression.model';
-import { FieldActionDefinition } from './field-action.model';
 
-export enum TransitionMode { MAP, SEPARATE, ENUM, COMBINE }
+export enum TransitionMode { ONE_TO_ONE, ONE_TO_MANY, ENUM, MANY_TO_ONE, FOR_EACH }
 export enum TransitionDelimiter {
   NONE, AMPERSAND, AT_SIGN, BACKSLASH, COLON, COMMA, DASH, EQUAL, HASH,
   MULTI_SPACE, PERIOD, PIPE, SEMICOLON, SLASH, SPACE, UNDERSCORE, USER_DEFINED
@@ -40,7 +39,7 @@ export class TransitionDelimiterModel {
 export class TransitionModel {
   static delimiterModels: TransitionDelimiterModel[] = [];
 
-  mode: TransitionMode = TransitionMode.MAP;
+  mode: TransitionMode = TransitionMode.ONE_TO_ONE;
   delimiter: TransitionDelimiter = TransitionDelimiter.SPACE;
   userDelimiter = '';
   lookupTableName: string = null;
@@ -76,28 +75,32 @@ export class TransitionModel {
   }
 
   /**
-   * Translate an action mode number into a string.
+   * Translate a mapping mode number into a string.
    * @param mode
    */
-  static getActionName(mode: TransitionMode): string {
+  static getMappingModeName(mode: TransitionMode): string {
     let actionName: string;
 
     switch (mode) {
-      case TransitionMode.MAP: {
-         actionName = 'MAP';
-         break;
+      case TransitionMode.ONE_TO_ONE: {
+        actionName = 'One to One';
+        break;
       }
-      case TransitionMode.COMBINE: {
-         actionName = 'COMBINE';
-         break;
+      case TransitionMode.MANY_TO_ONE: {
+        actionName = 'Many to One';
+        break;
       }
-      case TransitionMode.SEPARATE: {
-          actionName = 'SEPARATE';
-          break;
+      case TransitionMode.ONE_TO_MANY: {
+        actionName = 'One to Many';
+        break;
       }
       case TransitionMode.ENUM: {
-          actionName = 'ENUM';
-          break;
+        actionName = 'ENUM';
+        break;
+      }
+      case TransitionMode.FOR_EACH: {
+        actionName = 'For Each';
+        break;
       }
       default: {
          actionName = '';
@@ -159,26 +162,30 @@ export class TransitionModel {
 
   getPrettyName() {
     const delimiterDesc: string = TransitionModel.getTransitionDelimiterPrettyName(this.delimiter);
-    if (this.mode === TransitionMode.SEPARATE) {
-      return 'Separate (' + delimiterDesc + ')';
-    } else if (this.mode === TransitionMode.COMBINE) {
-      return 'Combine (' + delimiterDesc + ')';
+    if (this.mode === TransitionMode.ONE_TO_MANY) {
+      return TransitionModel.getMappingModeName(this.mode) + ' (' + delimiterDesc + ')';
+    } else if (this.mode === TransitionMode.MANY_TO_ONE) {
+      return TransitionModel.getMappingModeName(this.mode) + ' (' + delimiterDesc + ')';
     } else if (this.mode === TransitionMode.ENUM) {
       return 'Enum (table: ' + this.lookupTableName + ')';
     }
-    return 'Map';
+    return TransitionModel.getMappingModeName(this.mode);
   }
 
-  isSeparateMode(): boolean {
-    return this.mode === TransitionMode.SEPARATE;
+  isOneToManyMode(): boolean {
+    return this.mode === TransitionMode.ONE_TO_MANY;
   }
 
-  isMapMode(): boolean {
-    return this.mode === TransitionMode.MAP;
+  isOneToOneMode(): boolean {
+    return this.mode === TransitionMode.ONE_TO_ONE;
   }
 
-  isCombineMode(): boolean {
-    return this.mode === TransitionMode.COMBINE;
+  isManyToOneMode(): boolean {
+    return this.mode === TransitionMode.MANY_TO_ONE;
+  }
+
+  isForEachMode(): boolean {
+    return this.mode === TransitionMode.FOR_EACH;
   }
 
   isEnumerationMode(): boolean {

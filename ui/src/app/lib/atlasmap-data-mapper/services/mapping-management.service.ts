@@ -425,25 +425,27 @@ export class MappingManagementService {
     if (mapping.transition == null || field == null) {
       return;
     }
-    if (mapping.transition.mode === TransitionMode.COMBINE) {
+    if (mapping.transition.mode === TransitionMode.MANY_TO_ONE) {
 
-      // Compound source mapping when not in Combine mode
+      // Compound target mapping when not in ONE_TO_MANY mode
       if (!field.isSource()) {
-        this.cfg.errorService.info('The selected mapping details action ' + TransitionModel.getActionName(mapping.transition.mode) +
-                ' is not applicable from compound source selections (' + field.name +
-                ').  Recommend using field action \'Combine\'.', null);
+        this.cfg.errorService.info(`Cannot add target field '${field.name}' into mapping:
+        Multiple target fields cannot be added into
+          ${TransitionModel.getMappingModeName(mapping.transition.mode)}
+          mapping. Only one of Source field or Target field could be multiple.`, null);
         return;
       }
       if (mapping.sourceFields[mapping.sourceFields.length - 1].actions.length > 0) {
         suggestedValue = mapping.sourceFields[mapping.sourceFields.length - 1].index + 1;
       }
-    } else if (mapping.transition.mode === TransitionMode.SEPARATE) {
+    } else if (mapping.transition.mode === TransitionMode.ONE_TO_MANY) {
       if (field.isSource()) {
 
-        // Compound target mapping when not in Separate mode.
-        this.cfg.errorService.info('The selected mapping details action ' + TransitionModel.getActionName(mapping.transition.mode) +
-                ' is not applicable to compound target selections (' + field.name +
-                ').  Recommend using field action \'Separate\'.', null);
+        // Compound source mapping when not in MANY_TO_ONE mode.
+        this.cfg.errorService.info(`Cannot add source field '${field.name}' into mapping:
+          Multiple source fields cannot be added into
+          ${TransitionModel.getMappingModeName(mapping.transition.mode)}
+          mapping. Only one of Source field or Target field could be multiple.`, null);
         return;
       }
       if (mapping.targetFields[mapping.targetFields.length - 1].actions.length > 0) {
@@ -453,8 +455,8 @@ export class MappingManagementService {
     const newMField = new MappedField;
     newMField.field = field;
     newMField.index = suggestedValue;
-    newMField.updateSeparateOrCombineFieldAction(mapping.transition.mode === TransitionMode.SEPARATE,
-      mapping.transition.mode === TransitionMode.COMBINE, field.isSource(), true, false);
+    newMField.updateSeparateOrCombineFieldAction(mapping.transition.mode === TransitionMode.ONE_TO_MANY,
+      mapping.transition.mode === TransitionMode.MANY_TO_ONE, field.isSource(), true, false);
     if (field.isSource()) {
       mapping.sourceFields.push(newMField);
     } else {
@@ -477,18 +479,18 @@ export class MappingManagementService {
    * @param field
    */
   transitionMode(mapping: MappingModel, field: Field): void {
-    if (mapping.transition.mode === TransitionMode.MAP) {
+    if (mapping.transition.mode === TransitionMode.ONE_TO_ONE) {
       const mappedFields: MappedField[] = mapping.getMappedFields(field.isSource());
       if (mappedFields.length > 2) {
         if (field.isSource()) {
-          mapping.transition.mode = TransitionMode.COMBINE;
+          mapping.transition.mode = TransitionMode.MANY_TO_ONE;
           mappedFields[1].index = 1;
           mappedFields[1].updateSeparateOrCombineFieldAction(false, true, true, true, false);
           this.cfg.errorService.info(
             'Note: You\'ve selected multiple fields to combine.  ' +
             'You may want to examine the separator character in the \'Sources\' box of the Mapping Details section.', null);
         } else {
-          mapping.transition.mode = TransitionMode.SEPARATE;
+          mapping.transition.mode = TransitionMode.ONE_TO_MANY;
           mappedFields[1].index = 1;
           mappedFields[1].updateSeparateOrCombineFieldAction(true, false, false, true, false);
           this.cfg.errorService.info(

@@ -427,8 +427,8 @@ export class MappingDefinition {
         }
       }
 
-      const isSeparate: boolean = mapping.transition.isSeparateMode();
-      const isCombine: boolean = mapping.transition.isCombineMode();
+      const isSeparate: boolean = mapping.transition.isOneToManyMode();
+      const isCombine: boolean = mapping.transition.isManyToOneMode();
       mappedField.index = +mappedField.parsedData.parsedIndex;
       mappedField.updateSeparateOrCombineFieldAction(isSeparate, isCombine, isSource, false, false);
     }

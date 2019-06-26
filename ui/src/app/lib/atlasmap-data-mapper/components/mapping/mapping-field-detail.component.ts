@@ -141,7 +141,7 @@ export class MappingFieldDetailComponent implements OnInit {
     this.searchFilter = this.mappedField.field.getFieldLabel(this.cfg.showTypes, false);
     this.cfg.mappingService.transitionMode(this.mapping, this.mappedField.field);
 
-    if (this.mapping.transition.mode !== TransitionMode.MAP) {
+    if (this.mapping.transition.mode !== TransitionMode.ONE_TO_ONE) {
       this.mapping.updateTransition(this.mappedField.field.isSource(), true, false);
 
       this.cfg.mappingService.resequenceMappedField(this.mapping, this.mappedField,
@@ -165,7 +165,7 @@ export class MappingFieldDetailComponent implements OnInit {
 
   displaySeparator(): boolean {
     return (this.mappedField.isNoneField() && this.isSource &&
-      (this.mapping.transition.isSeparateMode() || this.mapping.transition.isCombineMode()));
+      (this.mapping.transition.isOneToManyMode() || this.mapping.transition.isManyToOneMode()));
   }
 
   displayFieldSearchBox(): boolean {
@@ -174,17 +174,17 @@ export class MappingFieldDetailComponent implements OnInit {
       return false;
     }
 
-    if ((this.mapping.transition.mode === TransitionMode.MAP) ||
+    if ((this.mapping.transition.mode === TransitionMode.ONE_TO_ONE) ||
         (this.mappedField.field.name.length > 0)) {
       return true;
     }
 
     if (this.isSource) {
-      if (this.mapping.transition.mode === TransitionMode.COMBINE) {
+      if (this.mapping.transition.mode === TransitionMode.MANY_TO_ONE) {
         return true;
       }
     } else {
-      if (this.mapping.transition.mode === TransitionMode.SEPARATE) {
+      if (this.mapping.transition.mode === TransitionMode.ONE_TO_MANY) {
         return true;
       }
     }
