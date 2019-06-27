@@ -52,7 +52,7 @@
   display: block;
   box-sizing: border-box;
   border: 1px;
-  top: 44px;
+  margin-top: 8px;
   height: 54px;
   position: fixed;
   margin-bottom: 8px;
