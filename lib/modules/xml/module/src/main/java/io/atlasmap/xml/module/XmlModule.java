@@ -83,13 +83,15 @@ public class XmlModule extends BaseAtlasModule {
     @Override
     public void processPreSourceExecution(AtlasInternalSession session) throws AtlasException {
         Object sourceDocument = session.getSourceDocument(getDocId());
+        String sourceDocumentString = null;
+        boolean enableNamespaces = false;
         if (sourceDocument == null || !(sourceDocument instanceof String)) {
             AtlasUtil.addAudit(session, getDocId(), String.format(
                     "Null or non-String source document: docId='%s'", getDocId()),
                     null, AuditStatus.WARN, null);
         } else {
             Map<String, String> sourceUriParams = AtlasUtil.getUriParameters(getUri());
-            boolean enableNamespaces = true;
+            enableNamespaces = true;
             for (String key : sourceUriParams.keySet()) {
                 if ("disableNamespaces".equals(key) && ("true".equals(sourceUriParams.get("disableNamespaces")))) {
                     if (LOG.isDebugEnabled()) {
@@ -98,11 +100,11 @@ public class XmlModule extends BaseAtlasModule {
                     enableNamespaces = false;
                 }
             }
-
-            XmlFieldReader reader = new XmlFieldReader(getClassLoader(), getConversionService());
-            reader.setDocument(String.class.cast(sourceDocument), enableNamespaces);
-            session.setFieldReader(getDocId(), reader);
+            sourceDocumentString = String.class.cast(sourceDocument);
         }
+        XmlFieldReader reader = new XmlFieldReader(getClassLoader(), getConversionService());
+        reader.setDocument(sourceDocumentString, enableNamespaces);
+        session.setFieldReader(getDocId(), reader);
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("{}: processPreSourceExecution completed", getDocId());

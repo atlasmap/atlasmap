@@ -70,16 +70,17 @@ public class JsonModule extends BaseAtlasModule {
     @Override
     public void processPreSourceExecution(AtlasInternalSession session) throws AtlasException {
         Object sourceDocument = session.getSourceDocument(getDocId());
+        String sourceDocumentString = null;
         if (sourceDocument == null || !(sourceDocument instanceof String)) {
             AtlasUtil.addAudit(session, getDocId(), String.format(
                     "Null or non-String source document: docId='%s'", getDocId()),
                     null, AuditStatus.WARN, null);
         } else {
-            String document = String.class.cast(sourceDocument);
-            JsonFieldReader fieldReader = new JsonFieldReader(getConversionService());
-            fieldReader.setDocument(document);
-            session.setFieldReader(getDocId(), fieldReader);
+            sourceDocumentString = String.class.cast(sourceDocument);
         }
+        JsonFieldReader fieldReader = new JsonFieldReader(getConversionService());
+        fieldReader.setDocument(sourceDocumentString);
+        session.setFieldReader(getDocId(), fieldReader);
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("{} processPreSourceExcution completed", getDocId());

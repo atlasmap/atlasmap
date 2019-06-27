@@ -69,10 +69,14 @@ public class XmlFieldReader extends XmlFieldTransformer implements AtlasFieldRea
     }
 
     public Field read(AtlasInternalSession session) throws AtlasException {
-        if (document == null) {
-            throw new AtlasException(new IllegalArgumentException("'document' cannot be null"));
-        }
         Field field = session.head().getSourceField();
+        if (document == null) {
+            AtlasUtil.addAudit(session, field.getDocId(),
+                    String.format("Cannot read field '%s' of document '%s', document is null",
+                            field.getPath(), field.getDocId()),
+                    field.getPath(), AuditStatus.ERROR, null);
+            return field;
+        }
         if (field == null) {
             throw new AtlasException(new IllegalArgumentException("Argument 'field' cannot be null"));
         }
@@ -208,13 +212,17 @@ public class XmlFieldReader extends XmlFieldTransformer implements AtlasFieldRea
     }
 
     public void setDocument(String docString, boolean namespaced) throws AtlasException {
+        if (docString == null || docString.isEmpty()) {
+            return;
+        }
+
         try {
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             dbf.setNamespaceAware(namespaced); // this must be done to use namespaces
             DocumentBuilder b = dbf.newDocumentBuilder();
             this.document = b.parse(new ByteArrayInputStream(docString.getBytes("UTF-8")));
         } catch (Exception e) {
-            throw new AtlasException(e);
+            LOG.warn("Failed to parse XML document", e);
         }
     }
 

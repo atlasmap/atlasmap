@@ -35,6 +35,12 @@ public class JavaFieldReader implements AtlasFieldReader {
     public Field read(AtlasInternalSession session) throws AtlasException {
         try {
             Field sourceField = session.head().getSourceField();
+            if (sourceDocument == null) {
+                AtlasUtil.addAudit(session, sourceField.getDocId(), String.format(
+                    "Unable to read sourceField (path=%s),  document (docId=%s) is null",
+                    sourceField.getPath(), sourceField.getDocId()),
+                    sourceField.getPath(), AuditStatus.ERROR, null);
+            }
             Method getter = null;
             if (sourceField.getFieldType() == null
                     && (sourceField instanceof JavaField || sourceField instanceof JavaEnumField)) {

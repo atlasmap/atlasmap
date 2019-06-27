@@ -59,11 +59,15 @@ public class JsonFieldReader implements AtlasFieldReader {
 
     @Override
     public Field read(AtlasInternalSession session) throws AtlasException {
+        Field field = session.head().getSourceField();
         if (rootNode == null) {
-            throw new AtlasException("document is not set");
+            AtlasUtil.addAudit(session, field.getDocId(), 
+                String.format("Cannot read a field '%s' of JSON document '%s', document is null",
+                    field.getPath(), field.getDocId()),
+                field.getPath(), AuditStatus.ERROR, null);
+            return field;
         }
 
-        Field field = session.head().getSourceField();
         AtlasPath path = new AtlasPath(field.getPath());
         FieldGroup fieldGroup = null;
         if (path.hasCollection() && !path.isIndexedCollection()) {
@@ -140,7 +144,6 @@ public class JsonFieldReader implements AtlasFieldReader {
                     } else {
                         String formatted = String.format("Detected out of range index for field p=%s, ignoring...", segmentContext.getExpression());
                         AtlasUtil.addAudit(session, field.getDocId(), formatted, field.getPath(), AuditStatus.WARN, parent.asText());
-                        LOG.warn(formatted);
                     }
                 }
                 return answer;
@@ -300,7 +303,8 @@ public class JsonFieldReader implements AtlasFieldReader {
 
     public void setDocument(String document) throws AtlasException {
         if (document == null || document.isEmpty()) {
-            throw new AtlasException(new IllegalArgumentException("document cannot be null nor empty"));
+            this.rootNode = null;
+            return;
         }
 
         try {
