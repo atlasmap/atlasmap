@@ -397,6 +397,7 @@
 
 .DataMapperUI .wizard-pf-row {
   height: auto;
+  min-height: 50%;
   position: relative;
   overflow: auto;
   z-index: 99;
