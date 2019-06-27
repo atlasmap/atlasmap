@@ -5,7 +5,7 @@
   <div class="pathContainer">
     <div class="fieldPair" *ngIf="mapping">
       <div class="sourceTargetSection sourcePaths">
-        <label>{{ getSourceTargetLabelText(true, fieldPair) }}</label>
+        <label>{{ getSourceTargetLabelText(true, mapping) }}</label>
         <div class="paths" *ngFor="let sourceField of mapping.sourceFields">
           <div class="path">
             <div class="pathName">
@@ -19,7 +19,7 @@
       </div>
       <div class="sourceTargetSection targetPaths">
         <label>{{ getSourceTargetLabelText(false, mapping) }}</label>
-        <div class="paths" *ngIf="mapping">
+        <div class="paths" *ngFor="let targetField of mapping.targetFields">
           <div class="path">
             <div class="pathName">
               <i class="fa fa-download" aria-hidden="true"></i>
