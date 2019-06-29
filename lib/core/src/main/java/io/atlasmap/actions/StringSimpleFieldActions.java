@@ -17,11 +17,24 @@ package io.atlasmap.actions;
 
 import java.util.regex.Pattern;
 
+import io.atlasmap.spi.AtlasActionProcessor;
 import io.atlasmap.spi.AtlasFieldAction;
-import io.atlasmap.spi.AtlasFieldActionInfo;
 import io.atlasmap.v2.Action;
+import io.atlasmap.v2.Capitalize;
 import io.atlasmap.v2.CollectionType;
 import io.atlasmap.v2.FieldType;
+import io.atlasmap.v2.FileExtension;
+import io.atlasmap.v2.Lowercase;
+import io.atlasmap.v2.LowercaseChar;
+import io.atlasmap.v2.Normalize;
+import io.atlasmap.v2.RemoveFileExtension;
+import io.atlasmap.v2.SeparateByDash;
+import io.atlasmap.v2.SeparateByUnderscore;
+import io.atlasmap.v2.Trim;
+import io.atlasmap.v2.TrimLeft;
+import io.atlasmap.v2.TrimRight;
+import io.atlasmap.v2.Uppercase;
+import io.atlasmap.v2.UppercaseChar;
 
 @SuppressWarnings("squid:S1118")
 public class StringSimpleFieldActions implements AtlasFieldAction {
@@ -29,8 +42,8 @@ public class StringSimpleFieldActions implements AtlasFieldAction {
     public static final String STRING_SEPARATOR_REGEX = "[\\s+\\:\\_\\+\\=\\-]+";
     public static final Pattern STRING_SEPARATOR_PATTERN = Pattern.compile(STRING_SEPARATOR_REGEX);
 
-    @AtlasFieldActionInfo(name = "Capitalize", sourceType = FieldType.STRING, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
-    public static String capitalize(Action action, String input) {
+    @AtlasActionProcessor
+    public static String capitalize(Capitalize action, String input) {
         if (input == null || input.length() == 0) {
             return input;
         }
@@ -40,8 +53,8 @@ public class StringSimpleFieldActions implements AtlasFieldAction {
         return String.valueOf(input.charAt(0)).toUpperCase() + input.substring(1);
     }
 
-    @AtlasFieldActionInfo(name = "FileExtension", sourceType = FieldType.STRING, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
-    public static String fileExtension(Action action, String input) {
+    @AtlasActionProcessor
+    public static String fileExtension(FileExtension action, String input) {
         if (input == null) {
             return null;
         }
@@ -50,8 +63,8 @@ public class StringSimpleFieldActions implements AtlasFieldAction {
         return ndx < 0 ? null : input.substring(ndx + 1);
     }
 
-    @AtlasFieldActionInfo(name = "Lowercase", sourceType = FieldType.STRING, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
-    public static String lowercase(Action action, String input) {
+    @AtlasActionProcessor
+    public static String lowercase(Lowercase action, String input) {
         if (input == null) {
             return null;
         }
@@ -59,8 +72,8 @@ public class StringSimpleFieldActions implements AtlasFieldAction {
         return input.toLowerCase();
     }
 
-    @AtlasFieldActionInfo(name = "Lowercase", sourceType = FieldType.CHAR, targetType = FieldType.CHAR, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
-    public static Character lowercaseChar(Action action, Character input) {
+    @AtlasActionProcessor
+    public static Character lowercaseChar(LowercaseChar action, Character input) {
         if (input == null) {
             return null;
         }
@@ -68,13 +81,13 @@ public class StringSimpleFieldActions implements AtlasFieldAction {
         return String.valueOf(input).toLowerCase().charAt(0);
     }
 
-    @AtlasFieldActionInfo(name = "Normalize", sourceType = FieldType.STRING, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
-    public static String normalize(Action action, String input) {
+    @AtlasActionProcessor
+    public static String normalize(Normalize action, String input) {
         return input == null ? null : input.replaceAll("\\s+", " ").trim();
     }
 
-    @AtlasFieldActionInfo(name = "RemoveFileExtension", sourceType = FieldType.STRING, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
-    public static String removeFileExtension(Action action, String input) {
+    @AtlasActionProcessor
+    public static String removeFileExtension(RemoveFileExtension action, String input) {
         if (input == null) {
             return null;
         }
@@ -83,24 +96,24 @@ public class StringSimpleFieldActions implements AtlasFieldAction {
         return ndx < 0 ? input : input.substring(0, ndx);
     }
 
-    @AtlasFieldActionInfo(name = "SeparateByDash", sourceType = FieldType.STRING, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
-    public static String separateByDash(Action action, String input) {
+    @AtlasActionProcessor
+    public static String separateByDash(SeparateByDash action, String input) {
         if (input == null || input.length() == 0) {
             return input;
         }
         return STRING_SEPARATOR_PATTERN.matcher(input).replaceAll("-");
     }
 
-    @AtlasFieldActionInfo(name = "SeparateByUnderscore", sourceType = FieldType.STRING, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
-    public static String separateByUnderscore(Action action, String input) {
+    @AtlasActionProcessor
+    public static String separateByUnderscore(SeparateByUnderscore action, String input) {
         if (input == null || input.length() == 0) {
             return input;
         }
         return STRING_SEPARATOR_PATTERN.matcher(input).replaceAll("_");
     }
 
-    @AtlasFieldActionInfo(name = "Trim", sourceType = FieldType.STRING, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
-    public static String trim(Action action, String input) {
+    @AtlasActionProcessor
+    public static String trim(Trim action, String input) {
         if (input == null || input.length() == 0) {
             return input;
         }
@@ -108,8 +121,8 @@ public class StringSimpleFieldActions implements AtlasFieldAction {
         return input.trim();
     }
 
-    @AtlasFieldActionInfo(name = "TrimLeft", sourceType = FieldType.STRING, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
-    public static String trimLeft(Action action, String input) {
+    @AtlasActionProcessor
+    public static String trimLeft(TrimLeft action, String input) {
         if (input == null || input.length() == 0) {
             return input;
         }
@@ -121,8 +134,8 @@ public class StringSimpleFieldActions implements AtlasFieldAction {
         return input.substring(i);
     }
 
-    @AtlasFieldActionInfo(name = "TrimRight", sourceType = FieldType.STRING, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
-    public static String trimRight(Action action, String input) {
+    @AtlasActionProcessor
+    public static String trimRight(TrimRight action, String input) {
         if (input == null || input.length() == 0) {
             return input;
         }
@@ -134,8 +147,8 @@ public class StringSimpleFieldActions implements AtlasFieldAction {
         return input.substring(0, i + 1);
     }
 
-    @AtlasFieldActionInfo(name = "Uppercase", sourceType = FieldType.STRING, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
-    public static String uppercase(Action action, String input) {
+    @AtlasActionProcessor
+    public static String uppercase(Uppercase action, String input) {
         if (input == null) {
             return null;
         }
@@ -143,8 +156,8 @@ public class StringSimpleFieldActions implements AtlasFieldAction {
         return input.toUpperCase();
     }
 
-    @AtlasFieldActionInfo(name = "Uppercase", sourceType = FieldType.CHAR, targetType = FieldType.CHAR, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
-    public static Character uppercaseChar(Action action, Character input) {
+    @AtlasActionProcessor
+    public static Character uppercaseChar(UppercaseChar action, Character input) {
         if (input == null) {
             return null;
         }

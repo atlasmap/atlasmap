@@ -18,7 +18,7 @@ public abstract class Action implements Serializable, FieldAction {
 
     @JsonProperty("@type")
     public String getType() {
-        return ActionResolver.toId(getClass());
+        return ActionResolver.getInstance().toId(getClass());
     }
 
 }

@@ -16,26 +16,32 @@
 package io.atlasmap.actions;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
+import io.atlasmap.spi.AtlasActionProcessor;
 import io.atlasmap.spi.AtlasFieldAction;
-import io.atlasmap.spi.AtlasFieldActionInfo;
-import io.atlasmap.v2.Action;
+import io.atlasmap.v2.AbsoluteValue;
+import io.atlasmap.v2.Add;
 import io.atlasmap.v2.AreaUnitType;
-import io.atlasmap.v2.CollectionType;
+import io.atlasmap.v2.Average;
+import io.atlasmap.v2.Ceiling;
 import io.atlasmap.v2.ConvertAreaUnit;
 import io.atlasmap.v2.ConvertDistanceUnit;
 import io.atlasmap.v2.ConvertMassUnit;
 import io.atlasmap.v2.ConvertVolumeUnit;
 import io.atlasmap.v2.DistanceUnitType;
-import io.atlasmap.v2.FieldType;
+import io.atlasmap.v2.Divide;
+import io.atlasmap.v2.Floor;
 import io.atlasmap.v2.MassUnitType;
+import io.atlasmap.v2.Maximum;
+import io.atlasmap.v2.Minimum;
+import io.atlasmap.v2.Multiplicity;
+import io.atlasmap.v2.Multiply;
+import io.atlasmap.v2.Round;
+import io.atlasmap.v2.Subtract;
 import io.atlasmap.v2.VolumeUnitType;
 
 public class NumberFieldActions implements AtlasFieldAction {
@@ -167,8 +173,8 @@ public class NumberFieldActions implements AtlasFieldAction {
         volumeConvertionTable = Collections.unmodifiableMap(rootTable);
     }
 
-    @AtlasFieldActionInfo(name = "AbsoluteValue", sourceType = FieldType.NUMBER, targetType = FieldType.NUMBER, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
-    public static Number absoluteValue(Action action, Number input) {
+    @AtlasActionProcessor
+    public static Number absoluteValue(AbsoluteValue action, Number input) {
         if (input == null) {
             return 0;
         }
@@ -181,13 +187,11 @@ public class NumberFieldActions implements AtlasFieldAction {
         return Math.abs(input.longValue());
     }
 
-    @AtlasFieldActionInfo(name = "Add", sourceType = FieldType.NUMBER, targetType = FieldType.NUMBER, sourceCollectionType = CollectionType.ALL, targetCollectionType = CollectionType.NONE)
-    public static Number add(Action action, Object input) {
-        if (input == null) {
+    @AtlasActionProcessor
+    public static Number add(Add action, List<Number> inputs) {
+        if (inputs == null) {
             return 0;
         }
-
-        Collection<?> inputs = collection(input);
 
         Number sum = 0L;
         for (Object entry : inputs) {
@@ -209,97 +213,92 @@ public class NumberFieldActions implements AtlasFieldAction {
         return sum;
     }
 
-    @AtlasFieldActionInfo(name = "Average", sourceType = FieldType.NUMBER, targetType = FieldType.NUMBER, sourceCollectionType = CollectionType.ALL, targetCollectionType = CollectionType.NONE)
-    public static Number average(Action action, Object input) {
-        if (input == null) {
+    @AtlasActionProcessor
+    public static Number average(Average action, List<Number> inputs) {
+        if (inputs == null) {
             return 0;
         }
-        Collection<?> inputs = collection(input);
-        return add(null, input).doubleValue() / inputs.size();
+        return add(null, inputs).doubleValue() / inputs.size();
     }
 
-    @AtlasFieldActionInfo(name = "Ceiling", sourceType = FieldType.NUMBER, targetType = FieldType.NUMBER, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
-    public static Number ceiling(Action action, Number input) {
+    @AtlasActionProcessor
+    public static Number ceiling(Ceiling action, Number input) {
         return input == null ? 0L : (long)Math.ceil(input.doubleValue());
     }
 
-    @AtlasFieldActionInfo(name = "ConvertMassUnit", sourceType = FieldType.NUMBER, targetType = FieldType.NUMBER, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
-    public static Number convertMassUnit(Action action, Number input) {
+    @AtlasActionProcessor
+    public static Number convertMassUnit(ConvertMassUnit convertMassUnit, Number input) {
         if (input == null) {
             return 0;
         }
 
-        if (action == null || !(action instanceof ConvertMassUnit) || ((ConvertMassUnit) action).getFromUnit() == null
-                || ((ConvertMassUnit) action).getToUnit() == null) {
+        if (convertMassUnit == null || convertMassUnit.getFromUnit() == null
+                || convertMassUnit.getToUnit() == null) {
             throw new IllegalArgumentException("ConvertMassUnit must be specified  with fromUnit and toUnit");
         }
 
-        MassUnitType fromUnit = ((ConvertMassUnit) action).getFromUnit();
-        MassUnitType toUnit = ((ConvertMassUnit) action).getToUnit();
+        MassUnitType fromUnit = convertMassUnit.getFromUnit();
+        MassUnitType toUnit = convertMassUnit.getToUnit();
         double rate = massConvertionTable.get(fromUnit).get(toUnit);
         return doMultiply(input, rate);
     }
 
-    @AtlasFieldActionInfo(name = "ConvertDistanceUnit", sourceType = FieldType.NUMBER, targetType = FieldType.NUMBER, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
-    public static Number convertDistanceUnit(Action action, Number input) {
+    @AtlasActionProcessor
+    public static Number convertDistanceUnit(ConvertDistanceUnit convertDistanceUnit, Number input) {
         if (input == null) {
             return 0;
         }
 
-        if (action == null || !(action instanceof ConvertDistanceUnit)
-                || ((ConvertDistanceUnit) action).getFromUnit() == null
-                || ((ConvertDistanceUnit) action).getToUnit() == null) {
+        if (convertDistanceUnit == null || convertDistanceUnit.getFromUnit() == null
+                || convertDistanceUnit.getToUnit() == null) {
             throw new IllegalArgumentException("ConvertDistanceUnit must be specified  with fromUnit and toUnit");
         }
 
-        DistanceUnitType fromUnit = ((ConvertDistanceUnit) action).getFromUnit();
-        DistanceUnitType toUnit = ((ConvertDistanceUnit) action).getToUnit();
+        DistanceUnitType fromUnit = convertDistanceUnit.getFromUnit();
+        DistanceUnitType toUnit = convertDistanceUnit.getToUnit();
         double rate = distanceConvertionTable.get(fromUnit).get(toUnit);
         return doMultiply(input, rate);
     }
 
-    @AtlasFieldActionInfo(name = "ConvertAreaUnit", sourceType = FieldType.NUMBER, targetType = FieldType.NUMBER, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
-    public static Number convertAreaUnit(Action action, Number input) {
+    @AtlasActionProcessor
+    public static Number convertAreaUnit(ConvertAreaUnit convertAreaUnit, Number input) {
         if (input == null) {
             return 0;
         }
 
-        if (action == null || !(action instanceof ConvertAreaUnit) || ((ConvertAreaUnit) action).getFromUnit() == null
-                || ((ConvertAreaUnit) action).getToUnit() == null) {
+        if (convertAreaUnit == null || convertAreaUnit.getFromUnit() == null
+                || convertAreaUnit.getToUnit() == null) {
             throw new IllegalArgumentException("ConvertAreaUnit must be specified  with fromUnit and toUnit");
         }
 
-        AreaUnitType fromUnit = ((ConvertAreaUnit) action).getFromUnit();
-        AreaUnitType toUnit = ((ConvertAreaUnit) action).getToUnit();
+        AreaUnitType fromUnit = convertAreaUnit.getFromUnit();
+        AreaUnitType toUnit = convertAreaUnit.getToUnit();
         double rate = areaConvertionTable.get(fromUnit).get(toUnit);
         return doMultiply(input, rate);
     }
 
-    @AtlasFieldActionInfo(name = "ConvertVolumeUnit", sourceType = FieldType.NUMBER, targetType = FieldType.NUMBER, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
-    public static Number convertVolumeUnit(Action action, Number input) {
+    @AtlasActionProcessor
+    public static Number convertVolumeUnit(ConvertVolumeUnit convertVolumeUnit, Number input) {
         if (input == null) {
             return 0;
         }
 
-        if (action == null || !(action instanceof ConvertVolumeUnit)
-                || ((ConvertVolumeUnit) action).getFromUnit() == null
-                || ((ConvertVolumeUnit) action).getToUnit() == null) {
+        if (convertVolumeUnit == null || convertVolumeUnit.getFromUnit() == null
+                || convertVolumeUnit.getToUnit() == null) {
             throw new IllegalArgumentException("ConvertVolumeUnit must be specified  with fromUnit and toUnit");
         }
 
-        VolumeUnitType fromUnit = ((ConvertVolumeUnit) action).getFromUnit();
-        VolumeUnitType toUnit = ((ConvertVolumeUnit) action).getToUnit();
+        VolumeUnitType fromUnit = convertVolumeUnit.getFromUnit();
+        VolumeUnitType toUnit = convertVolumeUnit.getToUnit();
         double rate = volumeConvertionTable.get(fromUnit).get(toUnit);
         return doMultiply(input, rate);
     }
 
-    @AtlasFieldActionInfo(name = "Divide", sourceType = FieldType.NUMBER, targetType = FieldType.NUMBER, sourceCollectionType = CollectionType.ALL, targetCollectionType = CollectionType.NONE)
-    public static Number divide(Action action, Object input) {
-        if (input == null) {
+    @AtlasActionProcessor
+    public static Number divide(Divide divide, List<Number> inputs) {
+        if (inputs == null) {
             return 0;
         }
-
-        Collection<?> inputs = collection(input);
 
         Number quotient = null;
         for (Object entry : inputs) {
@@ -321,18 +320,16 @@ public class NumberFieldActions implements AtlasFieldAction {
         return quotient;
     }
 
-    @AtlasFieldActionInfo(name = "Floor", sourceType = FieldType.NUMBER, targetType = FieldType.NUMBER, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
-    public static Number floor(Action action, Number input) {
+    @AtlasActionProcessor
+    public static Number floor(Floor floor, Number input) {
         return input == null ? 0L : (long)Math.floor(input.doubleValue());
     }
 
-    @AtlasFieldActionInfo(name = "Maximum", sourceType = FieldType.NUMBER, targetType = FieldType.NUMBER, sourceCollectionType = CollectionType.ALL, targetCollectionType = CollectionType.NONE)
-    public static Number maximum(Action action, Object input) {
-        if (input == null) {
+    @AtlasActionProcessor
+    public static Number maximum(Maximum maximum, List<Number> inputs) {
+        if (inputs == null) {
             return 0;
         }
-
-        Collection<?> inputs = collection(input);
 
         Number max = null;
         for (Object entry : inputs) {
@@ -350,13 +347,11 @@ public class NumberFieldActions implements AtlasFieldAction {
         return max;
     }
 
-    @AtlasFieldActionInfo(name = "Minimum", sourceType = FieldType.NUMBER, targetType = FieldType.NUMBER, sourceCollectionType = CollectionType.ALL, targetCollectionType = CollectionType.NONE)
-    public static Number minimum(Action action, Object input) {
-        if (input == null) {
+    @AtlasActionProcessor
+    public static Number minimum(Minimum minimum, List<Number> inputs) {
+        if (inputs == null) {
             return 0;
         }
-
-        Collection<?> inputs = collection(input);
 
         Number min = null;
         for (Object entry : inputs) {
@@ -374,13 +369,11 @@ public class NumberFieldActions implements AtlasFieldAction {
         return min;
     }
 
-    @AtlasFieldActionInfo(name = "Multiply", sourceType = FieldType.NUMBER, targetType = FieldType.NUMBER, sourceCollectionType = CollectionType.ALL, targetCollectionType = CollectionType.NONE)
-    public static Number multiply(Action action, Object input) {
-        if (input == null) {
+    @AtlasActionProcessor
+    public static Number multiply(Multiply multiply, List<Number> inputs) {
+        if (inputs == null) {
             return 0;
         }
-
-        Collection<?> inputs = collection(input);
 
         Number product = 1L;
         for (Object entry : inputs) {
@@ -402,18 +395,16 @@ public class NumberFieldActions implements AtlasFieldAction {
         return product;
     }
 
-    @AtlasFieldActionInfo(name = "Round", sourceType = FieldType.NUMBER, targetType = FieldType.NUMBER, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
-    public static Number round(Action action, Number input) {
+    @AtlasActionProcessor
+    public static Number round(Round action, Number input) {
         return input == null ? 0L : Math.round(input.doubleValue());
     }
 
-    @AtlasFieldActionInfo(name = "Subtract", sourceType = FieldType.NUMBER, targetType = FieldType.NUMBER, sourceCollectionType = CollectionType.ALL, targetCollectionType = CollectionType.NONE)
-    public static Number subtract(Action action, Object input) {
-        if (input == null) {
+    @AtlasActionProcessor
+    public static Number subtract(Subtract subtract, List<Number> inputs) {
+        if (inputs == null) {
             return 0;
         }
-
-        Collection<?> inputs = collection(input);
 
         Number difference = null;
         for (Object entry : inputs) {
@@ -435,60 +426,6 @@ public class NumberFieldActions implements AtlasFieldAction {
         }
 
         return difference;
-    }
-
-    private static Collection<?> collection(Object input) {
-        if (input instanceof Collection) {
-            return (Collection<?>) input;
-        }
-        if (input instanceof Map) {
-            return ((Map<?, ?>) input).values();
-        }
-        if (input instanceof Number[]) {
-            return Arrays.asList((Object[]) input);
-        }
-        if (input instanceof double[]) {
-            double[] din = (double[]) input;
-            List<Double> dinList = new ArrayList<>(din.length);
-            for (double e : din) {
-                dinList.add(e);
-            }
-            return dinList;
-        }
-        if (input instanceof float[]) {
-            float[] fin = (float[]) input;
-            List<Float> finList = new ArrayList<>(fin.length);
-            for (float e : fin) {
-                finList.add(e);
-            }
-            return finList;
-        }
-        if (input instanceof long[]) {
-            long[] lin = (long[]) input;
-            List<Long> linList = new ArrayList<>(lin.length);
-            for (long e : lin) {
-                linList.add(e);
-            }
-            return linList;
-        }
-        if (input instanceof int[]) {
-            int[] iin = (int[]) input;
-            List<Integer> iinList = new ArrayList<>(iin.length);
-            for (int e : iin) {
-                iinList.add(e);
-            }
-            return iinList;
-        }
-        if (input instanceof byte[]) {
-            byte[] bin = (byte[]) input;
-            List<Byte> binList = new ArrayList<>(bin.length);
-            for (byte e : bin) {
-                binList.add(e);
-            }
-            return binList;
-        }
-        throw new IllegalArgumentException(
-                "Illegal input[" + input + "]. Input must be a Collection, Map or array of numbers");
     }
 
     private static Number doMultiply(Number input, double rate) {

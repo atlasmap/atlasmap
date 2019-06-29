@@ -41,6 +41,7 @@ import io.atlasmap.v2.CustomAction;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldGroup;
 import io.atlasmap.v2.FieldType;
+import io.atlasmap.v2.Multiplicity;
 import io.atlasmap.v2.SimpleField;
 
 public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
@@ -48,6 +49,7 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
     private static final Logger LOG = LoggerFactory.getLogger(DefaultAtlasFieldActionService.class);
     private List<ActionProcessor> actionProcessors = new ArrayList<>();
     private AtlasConversionService conversionService = null;
+    private ActionResolver actionResolver = null;
 
     public DefaultAtlasFieldActionService(AtlasConversionService conversionService) {
         this.conversionService = conversionService;
@@ -65,6 +67,7 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
 
     public void init(ClassLoader classLoader) {
         actionProcessors.clear();
+        this.actionResolver = ActionResolver.getInstance(classLoader);
         actionProcessors.addAll(loadFieldActions(classLoader));
     }
 
@@ -128,8 +131,15 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
         det.setName(annotation.name());
         det.setSourceType(annotation.sourceType());
         det.setTargetType(annotation.targetType());
-        det.setSourceCollectionType(annotation.sourceCollectionType());
-        det.setTargetCollectionType(annotation.targetCollectionType());
+        CollectionType sourceCollection = annotation.sourceCollectionType();
+        CollectionType targetCollection = annotation.sourceCollectionType();
+        if (sourceCollection != null && sourceCollection != CollectionType.NONE) {
+            det.setMultiplicity(Multiplicity.MANY_TO_ONE);
+        } else if (targetCollection != null && targetCollection != CollectionType.NONE) {
+            det.setMultiplicity(Multiplicity.ONE_TO_MANY);
+        } else {
+            det.setMultiplicity(Multiplicity.ONE_TO_ONE);
+        }
 
         Class<? extends Action> actionClazz;
         try {
@@ -186,16 +196,20 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
                         // we can use annotation also for the parameters instead
                         // cf. https://github.com/atlasmap/atlasmap/issues/536
                         if (det.isCustom() != null && det.isCustom()) {
-                            targetObject = method.invoke(null, convertedSourceObject);
+                            targetObject = det.getMultiplicity() == Multiplicity.ZERO_TO_ONE
+                                ? method.invoke(null) : method.invoke(null, convertedSourceObject);
                         } else {
-                            targetObject = method.invoke(null, action, convertedSourceObject);
+                            targetObject = det.getMultiplicity() == Multiplicity.ZERO_TO_ONE
+                                ? method.invoke(null, action) : method.invoke(null, action, convertedSourceObject);
                         }
                     } else {
                         Object object = clazz.newInstance();
                         if (det.isCustom() != null && det.isCustom()) {
-                            targetObject = method.invoke(object, convertedSourceObject);
+                            targetObject = det.getMultiplicity() == Multiplicity.ZERO_TO_ONE
+                                ? method.invoke(object) : method.invoke(object, convertedSourceObject);
                         } else {
-                            targetObject = method.invoke(object, action, convertedSourceObject);
+                            targetObject = det.getMultiplicity() == Multiplicity.ZERO_TO_ONE
+                                ? method.invoke(object, action) : method.invoke(object, action, convertedSourceObject);
                         }
                     }
                 } catch (Throwable e) {
@@ -206,14 +220,11 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
 
             private Object convertSourceObject(Object sourceObject) throws AtlasConversionException {
                 Class<?> paramType;
-                // TODO eliminate Action parameter even for OOTB
-                // we can use annotation also for the parameters instead
-                // cf. https://github.com/atlasmap/atlasmap/issues/536
-                if (det.isCustom() != null && det.isCustom()) {
-                    paramType = method.getParameterTypes()[0];
-                } else {
-                    paramType = method.getParameterTypes()[1];
+                int paramCount = method.getParameterCount();
+                if (paramCount < 2) {
+                    return null;
                 }
+                paramType = method.getParameterTypes()[1];
                 if (paramType.isInstance(sourceObject)) {
                     return sourceObject;
                 }
@@ -228,7 +239,7 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
             return null;
         }
 
-        if (method.getParameterCount() >= 1) {
+        if (method.getParameterCount() < 1) {
             LOG.debug("Invalid @AtlasActionProcessor method.  Expected at least 1 parameter: " + method);
         }
 
@@ -241,25 +252,32 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
 
 
         final Class<?> targetClass = method.getReturnType();
-
-
-
-        String name = ActionResolver.toId(actionClazz);
+        String name = actionResolver.toId(actionClazz);
 
         ActionDetail det = new ActionDetail();
         det.setClassName(clazz.getName());
         det.setMethod(method.getName());
         det.setName(name);
         det.setTargetType(toFieldType(targetClass, method.getGenericReturnType()));
-        det.setTargetCollectionType(toFieldCollectionType(targetClass));
-
-
+        if (!clazz.getPackage().getName().equals("io.atlasmap.actions")) {
+            det.setCustom(true);
+        }
 
         Type[] genericParameterTypes = method.getGenericParameterTypes();
-        if( genericParameterTypes.length >= 2) {
+        if (genericParameterTypes.length >= 2) {
             Class<?> sourceClass = method.getParameterTypes()[1];
             det.setSourceType(toFieldType(sourceClass, method.getGenericParameterTypes()[1]));
-            det.setSourceCollectionType(toFieldCollectionType(sourceClass));
+            CollectionType sourceCollection = toFieldCollectionType(sourceClass);
+            CollectionType targetCollection = toFieldCollectionType(targetClass);
+            if (sourceCollection != CollectionType.NONE) {
+                det.setMultiplicity(Multiplicity.MANY_TO_ONE);
+            } else if (targetCollection != CollectionType.NONE) {
+                det.setMultiplicity(Multiplicity.ONE_TO_MANY);
+            } else {
+                det.setMultiplicity(Multiplicity.ONE_TO_ONE);
+            }
+        } else if (genericParameterTypes.length == 1) {
+            det.setMultiplicity(Multiplicity.ZERO_TO_ONE);
         }
 
         try {
@@ -297,15 +315,24 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
             @Override
             public Object process(Action action, Object sourceObject) throws AtlasException {
                 try {
-                    if( det.getSourceType() == null ) {
+                    if( det.getMultiplicity() == Multiplicity.ZERO_TO_ONE ) {
                         return method.invoke(object, action);
                     } else {
-                        sourceObject = conversionService.convertType(sourceObject, det.getSourceType(), det.getTargetType());
+                        sourceObject = convertSourceObject(sourceObject);
                         return method.invoke(object, action, sourceObject);
                     }
                 } catch (Throwable e) {
                     throw new AtlasException(String.format("Error processing action %s", det.getName()), e);
                 }
+            }
+
+            private Object convertSourceObject(Object sourceObject) throws AtlasConversionException {
+                Class<?> paramType;
+                paramType = method.getParameterTypes()[1];
+                if (paramType.isInstance(sourceObject)) {
+                    return sourceObject;
+                }
+                return conversionService.convertType(sourceObject, null, paramType, null);
             }
         };
     }
@@ -523,7 +550,7 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
                 continue;
             }
 
-            CollectionType sourceCollectionType = detail.getSourceCollectionType() != null ? detail.getSourceCollectionType() : CollectionType.NONE;
+            Multiplicity multiplicity = detail.getMultiplicity()!= null ? detail.getMultiplicity() : Multiplicity.ONE_TO_ONE;
             if (tmpSourceObject instanceof List) {
                 List<Object> tmpSourceList = (List<Object>) tmpSourceObject;
                 for (int i = 0; i < tmpSourceList.size(); i++) {
@@ -533,7 +560,7 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
                         subValue = getConversionService().convertType(subValue, subType, detail.getSourceType());
                         tmpSourceList.set(i, subValue);
                     }
-                    if (sourceCollectionType == CollectionType.NONE) {
+                    if (multiplicity != Multiplicity.MANY_TO_ONE) {
                         subValue = processor.process(action, subValue);
                         tmpSourceList.set(i, subValue);
                     }
@@ -541,7 +568,7 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
             } else if (!isAssignableFieldType(detail.getSourceType(), currentType)) {
                 tmpSourceObject = getConversionService().convertType(sourceObject, currentType, detail.getSourceType());
             }
-            if (!(tmpSourceObject instanceof List) || sourceCollectionType != CollectionType.NONE) {
+            if (!(tmpSourceObject instanceof List) || multiplicity == Multiplicity.MANY_TO_ONE) {
                 tmpSourceObject = processor.process(action, tmpSourceObject);
             }
 

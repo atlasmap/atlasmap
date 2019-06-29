@@ -20,13 +20,18 @@ import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
+import io.atlasmap.spi.AtlasActionProcessor;
 import io.atlasmap.spi.AtlasFieldAction;
-import io.atlasmap.spi.AtlasFieldActionInfo;
 import io.atlasmap.v2.Action;
 import io.atlasmap.v2.AddDays;
 import io.atlasmap.v2.AddSeconds;
-import io.atlasmap.v2.CollectionType;
-import io.atlasmap.v2.FieldType;
+import io.atlasmap.v2.CurrentDate;
+import io.atlasmap.v2.CurrentDateTime;
+import io.atlasmap.v2.CurrentTime;
+import io.atlasmap.v2.DayOfMonth;
+import io.atlasmap.v2.DayOfWeek;
+import io.atlasmap.v2.DayOfYear;
+import io.atlasmap.v2.Multiplicity;
 
 @SuppressWarnings({"squid:S3776",     // Cognitive complexity of method
     "squid:S1118",     // Add private constructor
@@ -34,61 +39,57 @@ import io.atlasmap.v2.FieldType;
     "squid:S3358" })   // Extract nested ternary
 public class DateFieldActions implements AtlasFieldAction {
 
-    @AtlasFieldActionInfo(name = "AddDays", sourceType = FieldType.ANY_DATE, targetType = FieldType.ANY_DATE, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
-    public static ZonedDateTime addDays(Action action, ZonedDateTime input) {
-        if (action == null || !(action instanceof AddDays)) {
-            throw new IllegalArgumentException("Action must be an AddDays action");
+    @AtlasActionProcessor
+    public static ZonedDateTime addDays(AddDays addDays, ZonedDateTime input) {
+        if (addDays == null) {
+            throw new IllegalArgumentException("AddDays action must be specified");
         }
-
         if (input == null) {
             return null;
         }
 
-        AddDays addDays = (AddDays) action;
         return input.plusDays(addDays.getDays() == null ? 0L : addDays.getDays());
     }
 
-    @AtlasFieldActionInfo(name = "AddSeconds", sourceType = FieldType.ANY_DATE, targetType = FieldType.ANY_DATE, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
-    public static ZonedDateTime addSeconds(Action action, ZonedDateTime input) {
-        if (action == null || !(action instanceof AddSeconds)) {
-            throw new IllegalArgumentException("Action must be an AddSeconds action");
+    @AtlasActionProcessor
+    public static ZonedDateTime addSeconds(AddSeconds addSeconds, ZonedDateTime input) {
+        if (addSeconds == null) {
+            throw new IllegalArgumentException("AddSeconds action must be specified");
         }
-
         if (input == null) {
             return null;
         }
 
-        AddSeconds addSeconds = (AddSeconds) action;
         return input.plusSeconds(addSeconds.getSeconds() == null ? 0L : addSeconds.getSeconds());
     }
 
-    @AtlasFieldActionInfo(name = "CurrentDate", sourceType = FieldType.NONE, targetType = FieldType.ANY_DATE, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
-    public static ZonedDateTime currentDate(Action action, Object input) {
+    @AtlasActionProcessor
+    public static ZonedDateTime currentDate(CurrentDate action) {
         return LocalDate.now().atStartOfDay(ZoneId.systemDefault());
     }
 
-    @AtlasFieldActionInfo(name = "CurrentDateTime", sourceType = FieldType.NONE, targetType = FieldType.ANY_DATE, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
-    public static ZonedDateTime currentDateTime(Action action, Object input) {
+    @AtlasActionProcessor
+    public static ZonedDateTime currentDateTime(CurrentDateTime action) {
         return LocalDate.now().atStartOfDay(ZoneId.systemDefault());
     }
 
-    @AtlasFieldActionInfo(name = "CurrentTime", sourceType = FieldType.NONE, targetType = FieldType.DATE_TIME, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
-    public static ZonedDateTime currentTime(Action action, Object input) {
+    @AtlasActionProcessor
+    public static ZonedDateTime currentTime(CurrentTime action) {
         return LocalTime.now().atDate(LocalDate.now()).atZone(ZoneId.systemDefault());
     }
 
-    @AtlasFieldActionInfo(name = "DayOfMonth", sourceType = FieldType.ANY_DATE, targetType = FieldType.INTEGER, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
-    public static Integer dayOfMonth(Action action, ZonedDateTime input) {
+    @AtlasActionProcessor
+    public static Integer dayOfMonth(DayOfMonth action, ZonedDateTime input) {
         return input == null ? null : input.getDayOfMonth();
     }
 
-    @AtlasFieldActionInfo(name = "DayOfWeek", sourceType = FieldType.ANY_DATE, targetType = FieldType.INTEGER, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
-    public static Integer dayOfWeek(Action action, ZonedDateTime input) {
+    @AtlasActionProcessor
+    public static Integer dayOfWeek(DayOfWeek action, ZonedDateTime input) {
         return input == null ? null : input.getDayOfWeek().getValue();
     }
 
-    @AtlasFieldActionInfo(name = "DayOfYear", sourceType = FieldType.ANY_DATE, targetType = FieldType.INTEGER, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
-    public static Integer dayOfYear(Action action, ZonedDateTime input) {
+    @AtlasActionProcessor
+    public static Integer dayOfYear(DayOfYear action, ZonedDateTime input) {
         return input == null ? null : input.getDayOfYear();
     }
 }

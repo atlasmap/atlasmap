@@ -21,6 +21,10 @@ import java.lang.annotation.RetentionPolicy;
 import io.atlasmap.v2.CollectionType;
 import io.atlasmap.v2.FieldType;
 
+/**
+ * @deprecated Use <link>io.atlasmap.spi.AtlasActionProcessor</link> instead
+ */
+@Deprecated
 @Retention(RetentionPolicy.RUNTIME)
 public @interface AtlasFieldActionInfo {
 

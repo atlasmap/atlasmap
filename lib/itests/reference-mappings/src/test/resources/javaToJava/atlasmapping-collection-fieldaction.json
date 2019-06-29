@@ -25,7 +25,7 @@
               "actions" : [ {
                 "CustomAction" : {
                   "name" : "Concat",
-                  "className" : "io.atlasmap.itests.reference.MyCustomFieldActions",
+                  "className" : "io.atlasmap.itests.reference.CustomActions",
                   "methodName" : "concat"
                 }
               } ],

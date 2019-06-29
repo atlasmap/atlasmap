@@ -1,6 +1,8 @@
 package io.atlasmap.v2;
 
 import java.io.Serializable;
+
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 public class ReplaceAll extends Action implements Serializable {
 
     private final static long serialVersionUID = 1L;
@@ -29,6 +31,8 @@ public class ReplaceAll extends Action implements Serializable {
      *     {@link String }
      *     
      */
+    @JsonPropertyDescription("The string to match")
+    @AtlasActionProperty(title = "Match", type = FieldType.STRING)
     public void setMatch(String value) {
         this.match = value;
     }
@@ -53,6 +57,8 @@ public class ReplaceAll extends Action implements Serializable {
      *     {@link String }
      *     
      */
+    @JsonPropertyDescription("The string to replace with")
+    @AtlasActionProperty(title = "New string", type = FieldType.STRING)
     public void setNewString(String value) {
         this.newString = value;
     }

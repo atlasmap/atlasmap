@@ -1,6 +1,8 @@
 package io.atlasmap.v2;
 
 import java.io.Serializable;
+
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 public class PadStringRight extends Action implements Serializable {
 
     private final static long serialVersionUID = 1L;
@@ -29,6 +31,8 @@ public class PadStringRight extends Action implements Serializable {
      *     {@link String }
      *     
      */
+    @JsonPropertyDescription("The character to fill padding")
+    @AtlasActionProperty(title = "Padding character", type = FieldType.STRING)
     public void setPadCharacter(String value) {
         this.padCharacter = value;
     }
@@ -53,6 +57,8 @@ public class PadStringRight extends Action implements Serializable {
      *     {@link Integer }
      *     
      */
+    @JsonPropertyDescription("The number of padding character to fill")
+    @AtlasActionProperty(title = "Padding count", type = FieldType.STRING)
     public void setPadCount(Integer value) {
         this.padCount = value;
     }

@@ -29,6 +29,13 @@ export class FieldActionArgumentValue {
   value: string = null;
 }
 
+export enum Multiplicity {
+  ONE_TO_ONE = 'ONE_TO_ONE',
+  ONE_TO_MANY = 'ONE_TO_MANY',
+  MANY_TO_ONE = 'MANY_TO_ONE',
+  ZERO_TO_ONE = 'ZERO_TO_ONE'
+}
+
 export class FieldActionDefinition {
   name: string;
   isCustom: boolean;
@@ -36,6 +43,7 @@ export class FieldActionDefinition {
   method: string;
   sourceType = 'undefined';
   targetType = 'undefined';
+  multiplicity = Multiplicity.ONE_TO_ONE;
   serviceObject: any = new Object();
 
   /**
@@ -138,16 +146,13 @@ export class FieldActionDefinition {
    */
   private appliesToSourceField(mapping: MappingModel, selectedSourceField: Field): boolean {
 
-    // Collection field action only applies to collection field or FieldGroup
-    if (this.serviceObject.sourceCollectionType && this.serviceObject.sourceCollectionType !== 'NONE') {
-      // TODO: handle FieldGroup - https://github.com/atlasmap/atlasmap/issues/551
+    if ([Multiplicity.ONE_TO_MANY, Multiplicity.ZERO_TO_ONE].includes(this.multiplicity)) {
+      return false;
+    } else if (this.multiplicity === Multiplicity.MANY_TO_ONE) {
+      // MANY_TO_ONE field action only applies to collection field or FieldGroup
       if (!selectedSourceField.isInCollection()) {
         return false;
       }
-    }
-
-    if (this.serviceObject.name === 'Split') {
-      return false;
     }
 
     // Check for matching types - date.
@@ -178,7 +183,7 @@ export class FieldActionDefinition {
       return false;
     }
 
-    if (this.serviceObject.sourceCollectionType !== this.serviceObject.targetCollectionType) {
+    if (this.multiplicity !== Multiplicity.ONE_TO_ONE) {
       return false;
     }
 

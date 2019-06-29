@@ -2,6 +2,8 @@ package io.atlasmap.v2;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+
 public class AddSeconds extends Action implements Serializable {
 
     private final static long serialVersionUID = 1L;
@@ -28,6 +30,8 @@ public class AddSeconds extends Action implements Serializable {
      *     {@link Integer }
      *     
      */
+    @JsonPropertyDescription("The number of seconds to add")
+    @AtlasActionProperty(title = "Seconds", type = FieldType.STRING)
     public void setSeconds(Integer value) {
         this.seconds = value;
     }

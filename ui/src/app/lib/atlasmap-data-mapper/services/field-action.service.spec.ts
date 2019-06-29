@@ -28,9 +28,20 @@ describe('MappingManagementService', () => {
     inject([FieldActionService], (service: FieldActionService) => {
       service.cfg.preloadedFieldActionMetadata = JSON.parse(jasmine.getFixtures().read('atlasmap-field-action.json'));
       service.fetchFieldActions();
-      const dummy = service.actionDefinitions[service.actionDefinitions.length - 1];
-      expect(dummy.name).toBe('DummyFieldAction');
-      expect(dummy.isCustom).toBe(true);
+      let concatenateFound = false;
+      let dummyFound = false;
+      for (const action of service.actionDefinitions) {
+        if (action.name === 'io.atlasmap.maven.test.Dummy') {
+          expect(action.isCustom).toBeTruthy();
+          dummyFound = true;
+        } else if (action.name === 'Concatenate') {
+          expect(action.isCustom).toBeFalsy();
+          action.arguments[0].name = 'delimiter';
+          concatenateFound = true;
+        }
+      }
+      expect(concatenateFound).toBeTruthy();
+      expect(dummyFound).toBeTruthy();
     },
   ));
 

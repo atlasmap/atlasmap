@@ -2,6 +2,8 @@ package io.atlasmap.v2;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+
 public class Concatenate extends Action implements Serializable {
 
     private final static long serialVersionUID = 1L;
@@ -28,6 +30,8 @@ public class Concatenate extends Action implements Serializable {
      *     {@link String }
      *     
      */
+    @JsonPropertyDescription("The delimiter string to concatenate input strings with")
+    @AtlasActionProperty(title = "Delimiter", type = FieldType.STRING)
     public void setDelimiter(String value) {
         this.delimiter = value;
     }

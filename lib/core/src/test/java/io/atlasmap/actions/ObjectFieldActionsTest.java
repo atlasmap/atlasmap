@@ -36,57 +36,30 @@ public class ObjectFieldActionsTest {
 
     @Test
     public void testCollectionSize() {
-        assertEquals(new Integer(0), ObjectFieldActions.collectionSize(new CollectionSize(), new Boolean[0]));
         assertEquals(new Integer(0), ObjectFieldActions.collectionSize(new CollectionSize(), new ArrayList<>()));
-        assertEquals(new Integer(0), ObjectFieldActions.collectionSize(new CollectionSize(), new HashMap<>()));
         Object[] array = new Object[] {false, "foo", 2};
-        assertEquals(new Integer(3), ObjectFieldActions.collectionSize(new CollectionSize(), array));
         assertEquals(new Integer(3), ObjectFieldActions.collectionSize(new CollectionSize(), Arrays.asList(array)));
-        Map<Object, Object> map = new HashMap<>();
-        for (Object obj : array) {
-            map.put(obj, obj);
-        }
-        assertEquals(new Integer(3), ObjectFieldActions.collectionSize(new CollectionSize(), map));
     }
 
     @Test
     public void testContains() {
         Contains action = new Contains();
         assertTrue(ObjectFieldActions.contains(action, null));
-        assertFalse(ObjectFieldActions.contains(action, ""));
+        assertFalse(ObjectFieldActions.contains(action, Arrays.asList(new Object[] {""})));
         Object[] array = new Object[] {false, "foo", 2};
         Object[] arrayWithNull = new Object[] {false, null, "foo", 2};
-        assertFalse(ObjectFieldActions.contains(action, array));
-        assertTrue(ObjectFieldActions.contains(action, arrayWithNull));
         assertFalse(ObjectFieldActions.contains(action, Arrays.asList(array)));
         assertTrue(ObjectFieldActions.contains(action, Arrays.asList(arrayWithNull)));
-        Map<Object, Object> map = new HashMap<>();
-        for (Object obj : array) {
-            map.put("key-" + obj, obj);
-        }
-        assertFalse(ObjectFieldActions.contains(action, map));
-        for (Object obj : arrayWithNull) {
-            map.put("key-" + obj, obj);
-        }
-        assertTrue(ObjectFieldActions.contains(action, map));
         action.setValue("foo");
         assertFalse(ObjectFieldActions.contains(action, null));
-        assertFalse(ObjectFieldActions.contains(action, ""));
-        assertTrue(ObjectFieldActions.contains(action, "foobar"));
-        assertTrue(ObjectFieldActions.contains(action, array));
+        assertFalse(ObjectFieldActions.contains(action, Arrays.asList(new Object[] {""})));
+        assertFalse(ObjectFieldActions.contains(action, Arrays.asList(new Object[] {"foobar"})));
         assertTrue(ObjectFieldActions.contains(action, Arrays.asList(array)));
-        assertTrue(ObjectFieldActions.contains(action, map));
-        action.setValue("key-foo");
-        assertTrue(ObjectFieldActions.contains(action, map));
-        action.setValue("6");
-        assertTrue(ObjectFieldActions.contains(action, 169));
-        action.setValue("ru");
-        assertTrue(ObjectFieldActions.contains(action, true));
     }
 
     @Test(expected=IllegalArgumentException.class)
     public void testContainsWithNullAction() {
-        ObjectFieldActions.contains(null, "");
+        ObjectFieldActions.contains(null, Arrays.asList(new Object[] {""}));
     }
 
     @Test
@@ -123,16 +96,16 @@ public class ObjectFieldActionsTest {
     public void testItemAt() {
         ItemAt action = new ItemAt();
         action.setIndex(0);
-        assertEquals("one", ObjectFieldActions.itemAt(action, new String[] {"one", "two"}));
+        assertEquals("one", ObjectFieldActions.itemAt(action, Arrays.asList(new Object[] {"one", "two"})));
         action.setIndex(1);
-        assertEquals("two", ObjectFieldActions.itemAt(action, new String[] {"one", "two"}));
+        assertEquals("two", ObjectFieldActions.itemAt(action, Arrays.asList(new Object[] {"one", "two"})));
     }
 
     @Test(expected = ArrayIndexOutOfBoundsException.class)
     public void testItemAtOutOfBounds() {
         ItemAt action = new ItemAt();
         action.setIndex(2);
-        ObjectFieldActions.itemAt(action, new String[] {"one", "two"});
+        ObjectFieldActions.itemAt(action, Arrays.asList(new Object[] {"one", "two"}));
     }
 
     @Test

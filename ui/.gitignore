@@ -6,6 +6,7 @@
 /out-tsc
 /junit/*
 test-resources/inspected
+test-resources/fieldActions
 dist.tgz
 package-lock.json
 

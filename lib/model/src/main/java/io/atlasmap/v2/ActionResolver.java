@@ -10,20 +10,37 @@ import com.fasterxml.jackson.databind.type.TypeFactory;
 
 public class ActionResolver implements TypeIdResolver {
 
-    private static SimpleResolver INSTANCE = new SimpleResolver();
-    static {
-        INSTANCE.init(TypeFactory.defaultInstance().constructType(Action.class));
-    }
+    private static ActionResolver instance;
+    private SimpleResolver delegate;
 
     private ActionResolver() {
+        this(null);
     }
 
-    public static String toId(Class<?> aClass) {
-        return INSTANCE.idFromValueAndType(null, aClass);
+    private ActionResolver(ClassLoader classLoader) {
+        delegate = new SimpleResolver();
+        delegate.setClassLoader(classLoader);
+        delegate.init(TypeFactory.defaultInstance().constructType(Action.class));
     }
 
-    public static Class<? extends Action> fromId(String id) throws IOException {
-        return (Class<? extends Action>) INSTANCE.typeFromId(null, id).getRawClass();
+    public static ActionResolver getInstance(ClassLoader classLoader) {
+        instance = new ActionResolver(classLoader);
+        return instance;
+    }
+
+    public static ActionResolver getInstance() {
+        if (instance == null) {
+            instance = new ActionResolver();
+        }
+        return instance;
+    }
+
+    public String toId(Class<?> aClass) {
+        return delegate.idFromValueAndType(null, aClass);
+    }
+
+    public Class<? extends Action> fromId(String id) throws IOException {
+        return (Class<? extends Action>) delegate.typeFromId(null, id).getRawClass();
     }
 
     @Override
@@ -32,31 +49,31 @@ public class ActionResolver implements TypeIdResolver {
 
     @Override
     public JsonTypeInfo.Id getMechanism() {
-        return INSTANCE.getMechanism();
+        return delegate.getMechanism();
     }
 
     @Override
     public String idFromValue(Object value) {
-        return INSTANCE.idFromValue(value);
+        return delegate.idFromValue(value);
     }
 
     @Override
     public String idFromValueAndType(Object value, Class<?> aClass) {
-        return INSTANCE.idFromValueAndType(value, aClass);
+        return delegate.idFromValueAndType(value, aClass);
     }
 
     @Override
     public String idFromBaseType() {
-        return INSTANCE.idFromBaseType();
+        return delegate.idFromBaseType();
     }
 
     @Override
     public JavaType typeFromId(DatabindContext databindContext, String id) throws IOException {
-        return INSTANCE.typeFromId(databindContext, id);
+        return delegate.typeFromId(databindContext, id);
     }
 
     @Override
     public String getDescForKnownTypeIds() {
-        return INSTANCE.getDescForKnownTypeIds();
+        return delegate.getDescForKnownTypeIds();
     }
 }

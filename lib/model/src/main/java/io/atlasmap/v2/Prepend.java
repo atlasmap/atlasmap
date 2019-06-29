@@ -31,7 +31,7 @@ public class Prepend extends Action implements Serializable {
      *     
      */
     @JsonPropertyDescription("The prefix string to add to the front of the value")
-    @AtlasActionProperty(title = "Value", type = FieldType.STRING)
+    @AtlasActionProperty(title = "String", type = FieldType.STRING)
     public void setString(String value) {
         this.string = value;
     }

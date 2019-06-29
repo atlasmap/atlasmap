@@ -2,6 +2,8 @@ package io.atlasmap.v2;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+
 public class AddDays extends Action implements Serializable {
 
     private final static long serialVersionUID = 1L;
@@ -28,6 +30,8 @@ public class AddDays extends Action implements Serializable {
      *     {@link Integer }
      *     
      */
+    @JsonPropertyDescription("The number of days to add")
+    @AtlasActionProperty(title = "Days", type = FieldType.STRING)
     public void setDays(Integer value) {
         this.days = value;
     }
