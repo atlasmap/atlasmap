@@ -19,6 +19,7 @@
         <div *ngIf="!isIndexArg(argConfig.name, argValIndex)">
           <label style=""></label>
           <div *ngIf="argConfig.values != null && argConfig.values.length > 0; else textInput">
+            <label>{{ getLabel(argConfig.name) }}</label>
             <select (change)="actionConfigParamSelectionChanged($event);" [ngModel]="getActionConfigParamVDefault(argConfig, actionIndex, argValIndex)">
               <option *ngFor="let actionConfigParamVal of getActionConfigParamValues(argConfig)" [attr.argValIndex]="argValIndex"
                              [attr.actionIndex]="actionIndex" [attr.value]="actionConfigParamVal">{{ actionConfigParamVal }}</option>
