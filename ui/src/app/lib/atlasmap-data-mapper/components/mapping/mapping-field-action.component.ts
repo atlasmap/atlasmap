@@ -117,14 +117,16 @@ export class MappingFieldActionComponent {
     const action: FieldAction = this.getMappedFieldActions()[selectedActionIndex];
     if (action.name !== selectedActionName) {
       action.argumentValues = [];  // Invalidate the previously selected field action arguments.
-      const fieldActionConfig = this.cfg.fieldActionService.getActionDefinitionForName(selectedActionName);
-      fieldActionConfig.populateFieldAction(action);
+      const fieldActionDefinition = this.cfg.fieldActionService.getActionDefinitionForName(selectedActionName);
+      fieldActionDefinition.populateFieldAction(action);
 
       // If the field action configuration predefines argument values then populate the fields with
       // default values.  Needed to support pull-down menus in action argument definitions.
-      if (action.argumentValues.length > 0 && fieldActionConfig.arguments[0].values.length > 0) {
+      if (action.argumentValues.values && action.argumentValues.length > 0
+        && fieldActionDefinition.arguments[0] && fieldActionDefinition.arguments[0].values
+        && fieldActionDefinition.arguments[0].values.length > 0) {
         for (let i = 0; i < action.argumentValues.length; i++) {
-          action.argumentValues[i].value = fieldActionConfig.arguments[i].values[i];
+          action.argumentValues[i].value = fieldActionDefinition.arguments[i].values[i];
         }
       }
     }

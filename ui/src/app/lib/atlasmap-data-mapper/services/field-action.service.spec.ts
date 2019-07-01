@@ -31,7 +31,7 @@ describe('MappingManagementService', () => {
       let concatenateFound = false;
       let dummyFound = false;
       for (const action of service.actionDefinitions) {
-        if (action.name === 'io.atlasmap.maven.test.Dummy') {
+        if (action.name === 'io.atlasmap.maven.test.DummyOneToOne') {
           expect(action.isCustom).toBeTruthy();
           dummyFound = true;
         } else if (action.name === 'Concatenate') {

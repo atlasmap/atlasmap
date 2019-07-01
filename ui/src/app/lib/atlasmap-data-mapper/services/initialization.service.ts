@@ -110,7 +110,14 @@ export class InitializationService {
 
         // Push the user-defined java archive file to the runtime service.
         if (javaArchive) {
-          this.cfg.documentService.setLibraryToService(docBody);
+          this.cfg.documentService.setLibraryToService(docBody, (success, res) => {
+            if (success) {
+              this.cfg.fieldActionService.fetchFieldActions()
+              .catch((error: any) => {
+                this.handleError(error, null);
+              });
+            }
+          });
         } else {
           this.cfg.documentService.fetchDocument(docdef, this.cfg.initCfg.classPath).toPromise()
           .then(async(doc: DocumentDefinition) => {

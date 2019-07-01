@@ -197,19 +197,21 @@ export class DocumentManagementService implements OnDestroy {
    *
    * @param binaryBuffer
    */
-  setLibraryToService(binaryBuffer: any): void {
+  setLibraryToService(binaryBuffer: any, callback: (success: boolean, res: any) => void): void {
     const serviceHeaders = new HttpHeaders(
        {'Content-Type': 'application/octet-stream'});
     const url = this.cfg.initCfg.baseMappingServiceUrl + 'library';
     this.cfg.logger.trace('Set Library Service Request');
     const fileContent: Blob = new Blob([binaryBuffer], {type: 'application/octet-stream'});
     this.http.put(url, fileContent, { headers: serviceHeaders }).toPromise().then((res: any) => {
-         if (this.cfg.isTraceEnabled()) {
-           this.cfg.logger.trace(`Set Library Service Response: ${JSON.stringify(res)}`);
-         }
-      })
-      .catch((error: any) => {
-        this.handleError('Error occurred while uploading a JAR file to the server.', error); },
+      callback(true, res);
+      if (this.cfg.isTraceEnabled()) {
+        this.cfg.logger.trace(`Set Library Service Response: ${JSON.stringify(res)}`);
+        }
+    })
+    .catch((error: any) => {
+      callback(false, error);
+      this.handleError('Error occurred while uploading a JAR file to the server.', error); },
     );
   }
 

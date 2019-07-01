@@ -73,7 +73,7 @@ export class FieldActionDefinition {
 
   populateFieldAction(action: FieldAction): void {
     action.name = this.name;
-    action.config = this;
+    action.definition = this;
 
     // Use the parsed values if present, otherwise set to '0'.
     if (action.argumentValues == null || action.argumentValues.length === 0) {
@@ -213,7 +213,7 @@ export class FieldAction {
 
   isSeparateOrCombineMode = false;
   name: string;
-  config: FieldActionDefinition = null;
+  definition: FieldActionDefinition = null;
   argumentValues: FieldActionArgumentValue[] = [];
 
   static createSeparateCombineFieldAction(separateMode: boolean) {
