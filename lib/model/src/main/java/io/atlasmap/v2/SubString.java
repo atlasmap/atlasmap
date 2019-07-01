@@ -2,6 +2,8 @@ package io.atlasmap.v2;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+
 public class SubString extends Action implements Serializable {
 
     private final static long serialVersionUID = 1L;
@@ -30,6 +32,8 @@ public class SubString extends Action implements Serializable {
      *     {@link Integer }
      *     
      */
+    @JsonPropertyDescription("The start index to substring")
+    @AtlasActionProperty(title = "Start index", type = FieldType.STRING)
     public void setStartIndex(Integer value) {
         this.startIndex = value;
     }
@@ -54,6 +58,8 @@ public class SubString extends Action implements Serializable {
      *     {@link Integer }
      *     
      */
+    @JsonPropertyDescription("The end index to substring")
+    @AtlasActionProperty(title = "End index", type = FieldType.STRING)
     public void setEndIndex(Integer value) {
         this.endIndex = value;
     }

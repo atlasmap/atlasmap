@@ -1,6 +1,8 @@
 package io.atlasmap.v2;
 
 import java.io.Serializable;
+
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 public class Format extends Action implements Serializable {
 
     private final static long serialVersionUID = 1L;
@@ -27,6 +29,8 @@ public class Format extends Action implements Serializable {
      *     {@link String }
      *     
      */
+    @JsonPropertyDescription("The template string")
+    @AtlasActionProperty(title = "Template", type = FieldType.STRING)
     public void setTemplate(String value) {
         this.template = value;
     }

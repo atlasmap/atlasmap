@@ -34,6 +34,13 @@ public class GenerateFieldActionsMojo extends AbstractAtlasMapMojo {
     private List<String> jars;
 
     /**
+     * The directory where field action metadata get generated to.
+     * Use this property when you want to output to different directory than inspection outputDir.
+     */
+    @Parameter
+    private File fieldActionOutputDir;
+
+    /**
      * Allows you to configure the plugin with: <code>
      *
      *     <configuration>
@@ -84,7 +91,10 @@ public class GenerateFieldActionsMojo extends AbstractAtlasMapMojo {
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
-        if (getOutputDir() != null) {
+        if (getFieldActionOutputDir() != null) {
+            getFieldActionOutputDir().mkdirs();
+            this.setOutputDir(getFieldActionOutputDir());
+        } else if (getOutputDir() != null) {
             getOutputDir().mkdirs();
         }
         List<URL> urls = new ArrayList<>();
@@ -161,6 +171,14 @@ public class GenerateFieldActionsMojo extends AbstractAtlasMapMojo {
 
     public void setFieldActions(List<FieldAction> fieldActions) {
         this.fieldActions = fieldActions;
+    }
+
+    public File getFieldActionOutputDir() {
+        return fieldActionOutputDir;
+    }
+
+    public void setFieldActionOutputDir(File outputDir) {
+        this.fieldActionOutputDir = outputDir;
     }
 
 }

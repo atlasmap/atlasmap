@@ -75,23 +75,12 @@ public class StringComplexFieldActionsTest {
         Concatenate action = new Concatenate();
 
         assertEquals(null, StringComplexFieldActions.concatenate(action, null));
-        assertEquals("1true2.0", StringComplexFieldActions.concatenate(action, new Object[] {1, true, 2.0}));
-        assertEquals("1true2.0", StringComplexFieldActions.concatenate(action, Arrays.asList(1, true, 2.0)));
-        Map<Object, Object> map = new LinkedHashMap<>();
-        map.put(1, 1);
-        map.put(true, true);
-        map.put(2.0, 2.0);
-        assertEquals("1true2.0", StringComplexFieldActions.concatenate(action, map));
+        assertEquals("1true2.0", StringComplexFieldActions.concatenate(action, Arrays.asList(new String[] {"1", "true", "2.0"})));
+        assertEquals("1true2.0", StringComplexFieldActions.concatenate(action, Arrays.asList("1", "true", "2.0")));
         action.setDelimiter("-");
         assertEquals(null, StringComplexFieldActions.concatenate(action, null));
-        assertEquals("1-true-2.0", StringComplexFieldActions.concatenate(action, new Object[] {1, true, 2.0}));
-        assertEquals("1-true-2.0", StringComplexFieldActions.concatenate(action, Arrays.asList(1, true, 2.0)));
-        assertEquals("1-true-2.0", StringComplexFieldActions.concatenate(action, map));
-    }
-
-    @Test(expected=IllegalArgumentException.class)
-    public void testConcatenateNonCollection() {
-        StringComplexFieldActions.concatenate(new Concatenate(), "");
+        assertEquals("1-true-2.0", StringComplexFieldActions.concatenate(action, Arrays.asList(new String[] {"1", "true", "2.0"})));
+        assertEquals("1-true-2.0", StringComplexFieldActions.concatenate(action, Arrays.asList("1", "true", "2.0")));
     }
 
     @Test(expected=IllegalArgumentException.class)
@@ -129,17 +118,14 @@ public class StringComplexFieldActionsTest {
         Format action = new Format();
         action.setTemplate("foofoo");
         assertEquals("foofoo", StringComplexFieldActions.format(action, null));
-        assertEquals("foofoo", StringComplexFieldActions.format(action, ""));
-        assertEquals("foofoo", StringComplexFieldActions.format(action, "bar"));
+        assertEquals("foofoo", StringComplexFieldActions.format(action, Arrays.asList("")));
+        assertEquals("foofoo", StringComplexFieldActions.format(action, Arrays.asList("bar")));
         action.setTemplate("foo%sfoo");
         assertEquals("foonullfoo", StringComplexFieldActions.format(action, null));
-        assertEquals("foofoo", StringComplexFieldActions.format(action, ""));
-        assertEquals("foobarfoo", StringComplexFieldActions.format(action, "bar"));
+        assertEquals("foofoo", StringComplexFieldActions.format(action, Arrays.asList("")));
+        assertEquals("foobarfoo", StringComplexFieldActions.format(action, Arrays.asList("bar")));
         action.setTemplate("foo%1$sfoo%1$s");
-        assertEquals("foobarfoobar", StringComplexFieldActions.format(action, "bar"));
-        action.setTemplate("%,.2f");
-        assertEquals("1,234.00", StringComplexFieldActions.format(action, 1234f));
-        assertEquals("0.05", StringComplexFieldActions.format(action, .05));
+        assertEquals("foobarfoobar", StringComplexFieldActions.format(action, Arrays.asList("bar")));
     }
 
     @Test(expected=IllegalArgumentException.class)
@@ -154,16 +140,7 @@ public class StringComplexFieldActionsTest {
 
     @Test
     public void testGenareteUUID() {
-        validateGeneratedUUID(StringComplexFieldActions.genareteUUID(new GenerateUUID(), null));
-        validateGeneratedUUID(
-                StringComplexFieldActions.genareteUUID(new GenerateUUID(), new Byte(Byte.parseByte("0"))));
-        validateGeneratedUUID(StringComplexFieldActions.genareteUUID(new GenerateUUID(), new Character('a')));
-        validateGeneratedUUID(StringComplexFieldActions.genareteUUID(new GenerateUUID(), new Double(14324d)));
-        validateGeneratedUUID(StringComplexFieldActions.genareteUUID(new GenerateUUID(), new Float(234235235325f)));
-        validateGeneratedUUID(StringComplexFieldActions.genareteUUID(new GenerateUUID(), new Integer(32523)));
-        validateGeneratedUUID(StringComplexFieldActions.genareteUUID(new GenerateUUID(), new Long(235325L)));
-        validateGeneratedUUID(StringComplexFieldActions.genareteUUID(new GenerateUUID(), new Short((short) 4323)));
-        validateGeneratedUUID(StringComplexFieldActions.genareteUUID(new GenerateUUID(), ""));
+        validateGeneratedUUID(StringComplexFieldActions.genareteUUID(new GenerateUUID()));
     }
 
     @Test

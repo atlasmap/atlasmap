@@ -135,9 +135,17 @@
               <goal>generate-inspections</goal>
             </goals>
           </execution>
+          <execution>
+            <id>generate-field-actions</id>
+            <phase>test-compile</phase>
+            <goals>
+              <goal>generate-field-actions</goal>
+            </goals>
+          </execution>
         </executions>
         <configuration>
           <outputDir>${project.basedir}/test-resources/inspected</outputDir>
+          <fieldActionOutputDir>${project.basedir}/test-resources/fieldActions</fieldActionOutputDir>
           <inspections>
             <inspection>
               <artifacts>
@@ -162,6 +170,13 @@
                 <inspectionType>INSTANCE</inspectionType>
             </inspection>
           </inspections>
+          <fieldActions>
+            <fieldAction>
+              <artifacts>
+                <artifact>io.atlasmap:atlasmap-maven-plugin:jar:tests:${project.version}</artifact>
+              </artifacts>
+            </fieldAction>
+          </fieldActions>
         </configuration>
         <dependencies>
           <dependency>

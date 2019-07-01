@@ -62,17 +62,17 @@ public class DateFieldActionsTest {
 
     @Test
     public void testCurrentDate() {
-        assertNotNull(DateFieldActions.currentDate(null, null));
+        assertNotNull(DateFieldActions.currentDate(null));
     }
 
     @Test
     public void testCurrentDateTime() {
-        assertNotNull(DateFieldActions.currentDateTime(null, null));
+        assertNotNull(DateFieldActions.currentDateTime(null));
     }
 
     @Test
     public void testCurrentTime() {
-        assertNotNull(DateFieldActions.currentTime(null, null));
+        assertNotNull(DateFieldActions.currentTime(null));
     }
 
     @Test

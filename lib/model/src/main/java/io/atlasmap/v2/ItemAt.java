@@ -2,6 +2,8 @@ package io.atlasmap.v2;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+
 public class ItemAt extends Action implements Serializable {
 
     private final static long serialVersionUID = 1L;
@@ -28,6 +30,8 @@ public class ItemAt extends Action implements Serializable {
      *     {@link Integer }
      *     
      */
+    @JsonPropertyDescription("The collection index to pick an item from")
+    @AtlasActionProperty(title = "Index", type = FieldType.STRING)
     public void setIndex(Integer value) {
         this.index = value;
     }

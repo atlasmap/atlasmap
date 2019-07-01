@@ -17,13 +17,14 @@ public class SimpleResolver implements TypeIdResolver {
     protected final HashMap<String, JavaType> idToType = new HashMap<String, JavaType>();
 
     private JavaType baseType;
+    private ClassLoader classLoader;
 
     @Override
     public void init(JavaType baseType) {
         this.baseType = baseType;
         Class<?> baseClass = baseType.getRawClass();
 
-        ServiceLoader<?> implementations = ServiceLoader.load(baseClass, baseClass.getClassLoader());
+        ServiceLoader<?> implementations = ServiceLoader.load(baseClass, this.classLoader != null ? this.classLoader : baseClass.getClassLoader());
         for (Object o : implementations) {
             Class<?> c = o.getClass();
             if (c != baseClass && baseClass.isAssignableFrom(c)) {
@@ -85,5 +86,7 @@ public class SimpleResolver implements TypeIdResolver {
         return "valid values: " + idToType.keySet();
     }
 
-
+    public void setClassLoader(ClassLoader classLoader) {
+        this.classLoader = classLoader;
+    }
 }

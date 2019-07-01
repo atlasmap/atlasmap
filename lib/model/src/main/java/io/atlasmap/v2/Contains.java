@@ -2,6 +2,8 @@ package io.atlasmap.v2;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+
 public class Contains extends Action implements Serializable {
 
     private final static long serialVersionUID = 1L;
@@ -28,6 +30,8 @@ public class Contains extends Action implements Serializable {
      *     {@link String }
      *     
      */
+    @JsonPropertyDescription("The string to compare with")
+    @AtlasActionProperty(title = "value", type = FieldType.STRING)
     public void setValue(String value) {
         this.value = value;
     }

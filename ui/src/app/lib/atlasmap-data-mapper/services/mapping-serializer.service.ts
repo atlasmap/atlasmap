@@ -232,11 +232,11 @@ export class MappingSerializer {
    * @param action
    * @param cfg
    */
-  private static processActionArguments(action: any, cfg: ConfigModel): any {
+  private static processActionArguments(action: FieldAction, cfg: ConfigModel): any {
     let actionArguments: any = {};
     for (const argValue of action.argumentValues) {
       actionArguments[argValue.name] = argValue.value;
-      const argumentConfig: FieldActionArgument = action.config.getArgumentForName(argValue.name);
+      const argumentConfig: FieldActionArgument = action.definition.getArgumentForName(argValue.name);
       if (argumentConfig == null) {
         cfg.errorService.error('Cannot find action argument with name: ' + argValue.name, action);
          continue;
@@ -323,18 +323,18 @@ export class MappingSerializer {
         let updatedActions = 0;
 
         for (const action of mappedField.actions) {
-          if (action.isSeparateOrCombineMode || action.config.serviceObject.name === 'Split') {
+          if (action.isSeparateOrCombineMode || action.definition.serviceObject.name === 'Split') {
             continue;
           }
           updatedActions++;
 
           // Serialize custom field actions.
-          if (action.config.isCustom) {
+          if (action.definition.isCustom) {
               const customActionJson: any = {};
               let customActionBody = {};
-              customActionBody['name'] = action.config.serviceObject.name;
-              customActionBody['className'] = action.config.serviceObject.className;
-              customActionBody['methodName'] = action.config.serviceObject.method;
+              customActionBody['name'] = action.definition.serviceObject.name;
+              customActionBody['className'] = action.definition.serviceObject.className;
+              customActionBody['methodName'] = action.definition.serviceObject.method;
               customActionBody = (Object.keys(customActionBody).length === 0) ? null : customActionBody;
               customActionJson['CustomAction'] = customActionBody;
               actions.push(customActionJson);
@@ -344,7 +344,7 @@ export class MappingSerializer {
           let actionArguments: any = {};
           actionArguments = MappingSerializer.processActionArguments(action, cfg);
           const actionJson: any = {};
-          actionJson[action.config.name] = actionArguments;
+          actionJson[action.definition.name] = actionArguments;
           actions.push(actionJson);
         }
         if (updatedActions > 0) {

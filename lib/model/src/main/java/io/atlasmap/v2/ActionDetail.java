@@ -7,8 +7,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchemaGenerator;
 import com.fasterxml.jackson.module.jsonSchema.types.ObjectSchema;
-import com.fasterxml.jackson.module.jsonSchema.types.StringSchema;
-
 
 @JsonRootName("ActionDetail")
 public class ActionDetail implements Serializable {
@@ -29,9 +27,7 @@ public class ActionDetail implements Serializable {
 
     protected FieldType targetType;
 
-    protected CollectionType sourceCollectionType;
-
-    protected CollectionType targetCollectionType;
+    protected Multiplicity multiplicity;
 
     protected ObjectSchema actionSchema;
 
@@ -204,51 +200,27 @@ public class ActionDetail implements Serializable {
     }
 
     /**
-     * Gets the value of the sourceCollectionType property.
+     * Gets the value of the multiplicity property.
      * 
      * @return
      *     possible object is
-     *     {@link CollectionType }
+     *     {@link Multiplicity }
      *     
      */
-    public CollectionType getSourceCollectionType() {
-        return sourceCollectionType;
+    public Multiplicity getMultiplicity() {
+        return multiplicity;
     }
 
     /**
-     * Sets the value of the sourceCollectionType property.
+     * Sets the value of the multiplicity property.
      * 
      * @param value
      *     allowed object is
-     *     {@link CollectionType }
+     *     {@link Multiplicity }
      *     
      */
-    public void setSourceCollectionType(CollectionType value) {
-        this.sourceCollectionType = value;
-    }
-
-    /**
-     * Gets the value of the targetCollectionType property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link CollectionType }
-     *     
-     */
-    public CollectionType getTargetCollectionType() {
-        return targetCollectionType;
-    }
-
-    /**
-     * Sets the value of the targetCollectionType property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link CollectionType }
-     *     
-     */
-    public void setTargetCollectionType(CollectionType value) {
-        this.targetCollectionType = value;
+    public void setMultiplicity(Multiplicity value) {
+        this.multiplicity = value;
     }
 
     public JsonSchema getActionSchema() {
@@ -275,7 +247,7 @@ public class ActionDetail implements Serializable {
         ObjectSchema objectSchema = schema.asObjectSchema();
 
         // see: https://json-schema.org/understanding-json-schema/reference/generic.html#constant-values
-        String id = ActionResolver.toId(clazz);
+        String id = ActionResolver.getInstance().toId(clazz);
         objectSchema.setId(id);
         AtlasSchemaFactoryWrapper.ExtendedJsonSchema keyField = (AtlasSchemaFactoryWrapper.ExtendedJsonSchema) objectSchema.getProperties().get("@type");
         keyField.getMetadata().put("const", id);

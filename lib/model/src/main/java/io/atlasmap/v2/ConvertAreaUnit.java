@@ -2,6 +2,8 @@ package io.atlasmap.v2;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+
 public class ConvertAreaUnit extends Action implements Serializable {
 
     private final static long serialVersionUID = 1L;
@@ -30,6 +32,8 @@ public class ConvertAreaUnit extends Action implements Serializable {
      *     {@link AreaUnitType }
      *     
      */
+    @JsonPropertyDescription("The area unit to convert from")
+    @AtlasActionProperty(title = "From", type = FieldType.STRING)
     public void setFromUnit(AreaUnitType value) {
         this.fromUnit = value;
     }
@@ -54,6 +58,8 @@ public class ConvertAreaUnit extends Action implements Serializable {
      *     {@link AreaUnitType }
      *     
      */
+    @JsonPropertyDescription("The area unit to convert to")
+    @AtlasActionProperty(title = "To", type = FieldType.STRING)
     public void setToUnit(AreaUnitType value) {
         this.toUnit = value;
     }

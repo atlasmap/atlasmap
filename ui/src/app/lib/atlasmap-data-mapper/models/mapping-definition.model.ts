@@ -293,27 +293,6 @@ export class MappingDefinition {
     }
   }
 
-  /**
-   * Process a user-defined custom field action.
-   *
-   * @param mappedField
-   * @param action
-   */
-  private processCustomFieldAction(mappedField: MappedField, action: FieldAction) {
-    const customBody: FieldActionArgumentValue[] = action.argumentValues;
-    const customActionDefinition = new FieldActionDefinition();
-    customActionDefinition.name = customBody[0].value;
-    customActionDefinition.isCustom = true;
-    customActionDefinition.serviceObject.name = customBody[0].value;
-    customActionDefinition.serviceObject.className = customBody[1].value;
-    customActionDefinition.serviceObject.method = customBody[2].value;
-    action.config = customActionDefinition;
-    action.argumentValues = [];
-    action.name = customBody[0].value;
-    mappedField.actions.push(action);
-    mappedField.incTransformationCount();
-  }
-
   updateMappedFieldsFromDocuments(mapping: MappingModel, cfg: ConfigModel, docMap: any, isSource: boolean): void {
     const mappedFields: MappedField[] = mapping.getMappedFields(isSource);
 
@@ -412,16 +391,12 @@ export class MappingDefinition {
 
         for (const action of mappedField.parsedData.parsedActions) {
 
-          if (action.name === 'CustomAction') {
-            this.processCustomFieldAction(mappedField, action);
+          const actionDefinition = cfg.fieldActionService.getActionDefinitionForName(action.name);
+          if (actionDefinition == null) {
+            cfg.errorService.error('Could not find field action definition for action \'' + action.name + '\'', null);
             continue;
           }
-          const actionConfig = cfg.fieldActionService.getActionDefinitionForName(action.name);
-          if (actionConfig == null) {
-            cfg.errorService.error('Could not find field action configuration for action \'' + action.name + '\'', null);
-            continue;
-          }
-          actionConfig.populateFieldAction(action);
+          actionDefinition.populateFieldAction(action);
           mappedField.actions.push(action);
           mappedField.incTransformationCount();
         }

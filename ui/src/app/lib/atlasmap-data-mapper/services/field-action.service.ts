@@ -131,25 +131,33 @@ export class FieldActionService {
   }
 
   private extractFieldActionDefinition(actionDetail: any): FieldActionDefinition {
+    if (this.cfg.isDebugEnabled()) {
+      this.cfg.logger.debug(`Deserializing field action definition: ${JSON.stringify(actionDetail)}`);
+    }
+
     const fieldActionDefinition = new FieldActionDefinition();
     fieldActionDefinition.name = actionDetail.name;
     fieldActionDefinition.isCustom = actionDetail.custom;
     fieldActionDefinition.sourceType = actionDetail.sourceType;
     fieldActionDefinition.targetType = actionDetail.targetType;
     fieldActionDefinition.method = actionDetail.method;
+    fieldActionDefinition.multiplicity = actionDetail.multiplicity;
     fieldActionDefinition.serviceObject = actionDetail;
 
-    if (actionDetail.parameters && actionDetail.parameters.parameter
-      && actionDetail.parameters.parameter.length) {
-      for (const actionParameter of actionDetail.parameters.parameter) {
-        const argumentDefinition = new FieldActionArgument();
-        argumentDefinition.name = actionParameter.name;
-        argumentDefinition.type = actionParameter.fieldType;
-        argumentDefinition.values = actionParameter.values;
-        argumentDefinition.serviceObject = actionParameter;
-        fieldActionDefinition.arguments.push(argumentDefinition);
+    for (const key of Object.keys(actionDetail.actionSchema.properties)) {
+      const propertyObject = actionDetail.actionSchema.properties[key];
+      if (key === '@type') {
+        fieldActionDefinition.name = propertyObject.const;
+        continue;
       }
+      const argumentDefinition = new FieldActionArgument();
+      argumentDefinition.name = key;
+      argumentDefinition.type = propertyObject.type;
+      argumentDefinition.values = propertyObject.enum;
+      argumentDefinition.serviceObject = propertyObject;
+      fieldActionDefinition.arguments.push(argumentDefinition);
     }
+
     return fieldActionDefinition;
   }
 

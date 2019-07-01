@@ -15,25 +15,21 @@
  */
 package io.atlasmap.actions;
 
-import java.util.Arrays;
-import java.util.Collection;
+import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
 import io.atlasmap.spi.AtlasFieldAction;
 import io.atlasmap.spi.AtlasActionProcessor;
-import io.atlasmap.spi.AtlasFieldActionInfo;
-import io.atlasmap.v2.Action;
 import io.atlasmap.v2.Append;
-import io.atlasmap.v2.CollectionType;
 import io.atlasmap.v2.Concatenate;
 import io.atlasmap.v2.EndsWith;
-import io.atlasmap.v2.FieldType;
 import io.atlasmap.v2.Format;
+import io.atlasmap.v2.GenerateUUID;
 import io.atlasmap.v2.IndexOf;
 import io.atlasmap.v2.LastIndexOf;
+import io.atlasmap.v2.Multiplicity;
 import io.atlasmap.v2.PadStringLeft;
 import io.atlasmap.v2.PadStringRight;
 import io.atlasmap.v2.Prepend;
@@ -50,12 +46,11 @@ public class StringComplexFieldActions implements AtlasFieldAction {
     public static final String STRING_SEPARATOR_REGEX = "^\\s+:_+=";
     public static final Pattern STRING_SEPARATOR_PATTERN = Pattern.compile(STRING_SEPARATOR_REGEX);
 
-    @AtlasFieldActionInfo(name = "Append", sourceType = FieldType.STRING, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
-    public static String append(Action action, Object input) {
-        if (!(action instanceof Append)) {
-            throw new IllegalArgumentException("Action must be an Append action");
+    @AtlasActionProcessor
+    public static String append(Append append, String input) {
+        if (append == null) {
+            throw new IllegalArgumentException("Append must be specified with a string");
         }
-        Append append = (Append) action;
         String string = append.getString();
         if (input == null && string == null) {
             return null;
@@ -66,20 +61,16 @@ public class StringComplexFieldActions implements AtlasFieldAction {
         return input == null ? string : input.toString().concat(string);
     }
 
-    @AtlasFieldActionInfo(name = "Concatenate", sourceType = FieldType.STRING, targetType = FieldType.STRING, sourceCollectionType = CollectionType.ALL, targetCollectionType = CollectionType.NONE)
-    public static String concatenate(Action action, Object input) {
-        if (!(action instanceof Concatenate)) {
-            throw new IllegalArgumentException("Action must be a Concatenate action");
+    @AtlasActionProcessor
+    public static String concatenate(Concatenate concat, List<String> inputs) {
+        if (concat == null) {
+            throw new IllegalArgumentException("Concatenate must be specified with a delimiter");
         }
-
-        if (input == null) {
+        if (inputs == null) {
             return null;
         }
 
-        Concatenate concat = (Concatenate) action;
         String delim = concat.getDelimiter() == null ? "" : concat.getDelimiter();
-
-        Collection<?> inputs = collection(input);
 
         StringBuilder builder = new StringBuilder();
         for (Object entry : inputs) {
@@ -94,79 +85,53 @@ public class StringComplexFieldActions implements AtlasFieldAction {
         return builder.toString();
     }
 
-    @AtlasFieldActionInfo(name = "EndsWith", sourceType = FieldType.STRING, targetType = FieldType.BOOLEAN, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
-    public static Boolean endsWith(Action action, String input) {
-        if (!(action instanceof EndsWith)) {
-            throw new IllegalArgumentException("Action must be an EndsWith action");
-        }
-
-        EndsWith endsWith = (EndsWith) action;
-
-        if (endsWith.getString() == null) {
+    @AtlasActionProcessor
+    public static Boolean endsWith(EndsWith endsWith, String input) {
+        if (endsWith == null || endsWith.getString() == null) {
             throw new IllegalArgumentException("EndsWith must be specified with a string");
         }
 
         return input == null ? false : input.endsWith(endsWith.getString());
     }
 
-    @AtlasFieldActionInfo(name = "Format", sourceType = FieldType.STRING, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
-    public static String format(Action action, Object input) {
-        if (!(action instanceof Format)) {
-            throw new IllegalArgumentException("Action must be an Format action");
-        }
-
-        Format format = (Format) action;
-
-        if (format.getTemplate() == null) {
+    @AtlasActionProcessor
+    public static String format(Format format, List<String> input) {
+        if (format == null || format.getTemplate() == null) {
             throw new IllegalArgumentException("Format must be specified with a template");
         }
 
-        return String.format(Locale.ROOT, format.getTemplate(), input);
+        return String.format(Locale.ROOT, format.getTemplate(), input == null ? null : input.toArray(new Object[0]));
     }
 
-    @AtlasFieldActionInfo(name = "GenerateUUID", sourceType = FieldType.NONE, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
-    public static String genareteUUID(Action action, Object input) {
+    @AtlasActionProcessor
+    public static String genareteUUID(GenerateUUID action) {
         return UUID.randomUUID().toString();
     }
 
-    @AtlasFieldActionInfo(name = "IndexOf", sourceType = FieldType.STRING, targetType = FieldType.INTEGER, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
-    public static Number indexOf(Action action, String input) {
-        if (!(action instanceof IndexOf)) {
-            throw new IllegalArgumentException("Action must be an IndexOf action");
-        }
-
-        IndexOf indexOf = (IndexOf) action;
-
-        if (indexOf.getString() == null) {
+    @AtlasActionProcessor
+    public static Number indexOf(IndexOf indexOf, String input) {
+        if (indexOf == null || indexOf.getString() == null) {
             throw new IllegalArgumentException("IndexOf must be specified with a string");
         }
 
         return input == null ? -1 : input.indexOf(indexOf.getString());
     }
 
-    @AtlasFieldActionInfo(name = "LastIndexOf", sourceType = FieldType.STRING, targetType = FieldType.INTEGER, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
-    public static Number lastIndexOf(Action action, String input) {
-        if (!(action instanceof LastIndexOf)) {
-            throw new IllegalArgumentException("Action must be a LastIndexOf action");
-        }
-
-        LastIndexOf lastIndexOf = (LastIndexOf) action;
-
-        if (lastIndexOf.getString() == null) {
+    @AtlasActionProcessor
+    public static Number lastIndexOf(LastIndexOf lastIndexOf, String input) {
+        if (lastIndexOf == null || lastIndexOf.getString() == null) {
             throw new IllegalArgumentException("LastIndexOf must be specified with a string");
         }
 
         return input == null ? -1 : input.lastIndexOf(lastIndexOf.getString());
     }
 
-    @AtlasFieldActionInfo(name = "PadStringRight", sourceType = FieldType.STRING, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
-    public static String padStringRight(Action action, String input) {
-        if (!(action instanceof PadStringRight) || ((PadStringRight) action).getPadCharacter() == null
-                || ((PadStringRight) action).getPadCount() == null) {
+    @AtlasActionProcessor
+    public static String padStringRight(PadStringRight padStringRight, String input) {
+        if (padStringRight == null || padStringRight.getPadCharacter() == null
+                || padStringRight.getPadCount() == null) {
             throw new IllegalArgumentException("PadStringRight must be specified with padCharacter and padCount");
         }
-
-        PadStringRight padStringRight = (PadStringRight) action;
 
         StringBuilder builder = new StringBuilder();
         if (input != null) {
@@ -179,14 +144,12 @@ public class StringComplexFieldActions implements AtlasFieldAction {
         return builder.toString();
     }
 
-    @AtlasFieldActionInfo(name = "PadStringLeft", sourceType = FieldType.STRING, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
-    public static String padStringLeft(Action action, String input) {
-        if (!(action instanceof PadStringLeft) || ((PadStringLeft) action).getPadCharacter() == null
-                || ((PadStringLeft) action).getPadCount() == null) {
+    @AtlasActionProcessor
+    public static String padStringLeft(PadStringLeft padStringLeft, String input) {
+        if (padStringLeft == null || padStringLeft.getPadCharacter() == null
+                || padStringLeft.getPadCount() == null) {
             throw new IllegalArgumentException("PadStringLeft must be specified with padCharacter and padCount");
         }
-
-        PadStringLeft padStringLeft = (PadStringLeft) action;
 
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < padStringLeft.getPadCount(); i++) {
@@ -211,98 +174,70 @@ public class StringComplexFieldActions implements AtlasFieldAction {
         return string.concat(input);
     }
 
-    @AtlasFieldActionInfo(name = "ReplaceAll", sourceType = FieldType.STRING, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
-    public static String replaceAll(Action action, String input) {
-        if (!(action instanceof ReplaceAll)) {
-            throw new IllegalArgumentException("Action must be a ReplaceAll action");
-        }
-
-        ReplaceAll replaceAll = (ReplaceAll) action;
-        String match = replaceAll.getMatch();
-        if (match == null || match.length() == 0) {
+    @AtlasActionProcessor
+    public static String replaceAll(ReplaceAll replaceAll, String input) {
+        if (replaceAll == null || replaceAll.getMatch() == null || replaceAll.getMatch().isEmpty()) {
             throw new IllegalArgumentException("ReplaceAll action must be specified with a non-empty old string");
         }
-
+        String match = replaceAll.getMatch();
         String newString = replaceAll.getNewString();
         return input == null ? null : input.replaceAll(match, newString == null ? "" : newString);
     }
 
-    @AtlasFieldActionInfo(name = "ReplaceFirst", sourceType = FieldType.STRING, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
-    public static String replaceFirst(Action action, String input) {
-        if (!(action instanceof ReplaceFirst)) {
-            throw new IllegalArgumentException("Action must be a ReplaceFirst action");
-        }
-
-        ReplaceFirst replaceFirst = (ReplaceFirst) action;
-        String match = replaceFirst.getMatch();
-        if (match == null || match.length() == 0) {
+    @AtlasActionProcessor
+    public static String replaceFirst(ReplaceFirst replaceFirst, String input) {
+        if (replaceFirst == null || replaceFirst.getMatch() == null || replaceFirst.getMatch().isEmpty()) {
             throw new IllegalArgumentException("ReplaceFirst action must be specified with a non-empty old string");
         }
-
+        String match = replaceFirst.getMatch();
         String newString = replaceFirst.getNewString();
         return input == null ? null : input.replaceFirst(match, newString == null ? "" : newString);
     }
 
-    @AtlasFieldActionInfo(name = "Split", sourceType = FieldType.STRING, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.ALL)
-    public static String[] split(Action action, String input) {
-        if (!(action instanceof Split)) {
-            throw new IllegalArgumentException("Action must be an Split action");
-        }
-
-        Split split = (Split) action;
-
-        if (split.getDelimiter() == null) {
+    @AtlasActionProcessor
+    public static String[] split(Split split, String input) {
+        if (split == null || split.getDelimiter() == null) {
             throw new IllegalArgumentException("Split must be specified with a delimiter");
         }
 
         return input == null ? null : input.split(split.getDelimiter());
     }
 
-    @AtlasFieldActionInfo(name = "StartsWith", sourceType = FieldType.STRING, targetType = FieldType.BOOLEAN, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
-    public static Boolean startsWith(Action action, String input) {
-        if (!(action instanceof StartsWith)) {
-            throw new IllegalArgumentException("Action must be an StartsWith action");
-        }
-
-        StartsWith startsWith = (StartsWith) action;
-
-        if (startsWith.getString() == null) {
+    @AtlasActionProcessor
+    public static Boolean startsWith(StartsWith startsWith, String input) {
+        if (startsWith == null || startsWith.getString() == null) {
             throw new IllegalArgumentException("StartsWith must be specified with a string");
         }
 
         return input == null ? false : input.startsWith(startsWith.getString());
     }
 
-    @AtlasFieldActionInfo(name = "SubString", sourceType = FieldType.STRING, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
-    public static String subString(Action action, String input) {
+    @AtlasActionProcessor
+    public static String subString(SubString subString, String input) {
         if (input == null || input.length() == 0) {
             return input;
         }
 
-        if (!(action instanceof SubString) || ((SubString) action).getStartIndex() == null
-                || ((SubString) action).getStartIndex() < 0) {
+        if (subString == null || subString.getStartIndex() == null || subString.getStartIndex() < 0) {
             throw new IllegalArgumentException("SubString action must be specified with a positive startIndex");
         }
 
-        SubString subString = (SubString) action;
         return doSubString(input, subString.getStartIndex(), subString.getEndIndex());
     }
 
-    @AtlasFieldActionInfo(name = "SubStringAfter", sourceType = FieldType.STRING, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
-    public static String subStringAfter(Action action, String input) {
+    @AtlasActionProcessor
+    public static String subStringAfter(SubStringAfter subStringAfter, String input) {
         if (input == null || input.length() == 0) {
             return input;
         }
 
-        if (!(action instanceof SubStringAfter) || ((SubStringAfter) action).getStartIndex() == null
-                || ((SubStringAfter) action).getStartIndex() < 0 || ((SubStringAfter) action).getMatch() == null
-                || (((SubStringAfter) action).getEndIndex() != null
-                        && ((SubStringAfter) action).getEndIndex() < ((SubStringAfter) action).getStartIndex())) {
+        if (subStringAfter == null || subStringAfter.getStartIndex() == null
+                || subStringAfter.getStartIndex() < 0 || subStringAfter.getMatch() == null
+                || (subStringAfter.getEndIndex() != null
+                        && subStringAfter.getEndIndex() < subStringAfter.getStartIndex())) {
             throw new IllegalArgumentException(
                     "SubStringAfter action must be specified with a positive startIndex and a string to match");
         }
-
-        SubStringAfter subStringAfter = (SubStringAfter) action;
 
         int idx = input.indexOf(subStringAfter.getMatch());
         if (idx < 0) {
@@ -312,21 +247,19 @@ public class StringComplexFieldActions implements AtlasFieldAction {
         return doSubString(input.substring(idx), subStringAfter.getStartIndex(), subStringAfter.getEndIndex());
     }
 
-    @AtlasFieldActionInfo(name = "SubStringBefore", sourceType = FieldType.STRING, targetType = FieldType.STRING, sourceCollectionType = CollectionType.NONE, targetCollectionType = CollectionType.NONE)
-    public static String subStringBefore(Action action, String input) {
+    @AtlasActionProcessor
+    public static String subStringBefore(SubStringBefore subStringBefore, String input) {
         if (input == null || input.length() == 0) {
             return input;
         }
 
-        if (!(action instanceof SubStringBefore) || ((SubStringBefore) action).getStartIndex() == null
-                || ((SubStringBefore) action).getStartIndex() < 0 || ((SubStringBefore) action).getMatch() == null
-                || (((SubStringBefore) action).getEndIndex() != null
-                        && ((SubStringBefore) action).getEndIndex() < ((SubStringBefore) action).getStartIndex())) {
+        if (subStringBefore == null || subStringBefore.getStartIndex() == null
+                || subStringBefore.getStartIndex() < 0 || subStringBefore.getMatch() == null
+                || (subStringBefore.getEndIndex() != null
+                        && subStringBefore.getEndIndex() < subStringBefore.getStartIndex())) {
             throw new IllegalArgumentException(
                     "SubStringBefore action must be specified with a positive startIndex and a string to match");
         }
-
-        SubStringBefore subStringBefore = (SubStringBefore) action;
 
         int idx = input.indexOf(subStringBefore.getMatch());
         if (idx < 0) {
@@ -334,20 +267,6 @@ public class StringComplexFieldActions implements AtlasFieldAction {
         }
 
         return doSubString(input.substring(0, idx), subStringBefore.getStartIndex(), subStringBefore.getEndIndex());
-    }
-
-    private static Collection<?> collection(Object input) {
-        if (input instanceof Collection) {
-            return (Collection<?>) input;
-        }
-        if (input instanceof Map) {
-            return ((Map<?, ?>) input).values();
-        }
-        if (input.getClass().isArray()) {
-            return Arrays.asList((Object[]) input);
-        }
-        throw new IllegalArgumentException(
-                "Illegal input[" + input + "]. Input must be a Collection, Map or array");
     }
 
     private static String doSubString(String input, Integer startIndex, Integer endIndex) {

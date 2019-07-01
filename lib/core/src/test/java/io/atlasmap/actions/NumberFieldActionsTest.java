@@ -64,41 +64,17 @@ public class NumberFieldActionsTest {
 
     @Test
     public void testAdd() {
-        assertEquals(BigDecimal.valueOf(10.0), NumberFieldActions.add(new Add(), new BigDecimal[] { BigDecimal.valueOf(1), BigDecimal.valueOf(2), BigDecimal.valueOf(3), BigDecimal.valueOf(4) }));
-        assertEquals(10.0, NumberFieldActions.add(new Add(), new double[] { 1.0, 2.0, 3.0, 4.0 }));
-        assertEquals(10L, NumberFieldActions.add(new Add(), new int[] { 1, 2, 3, 4 }));
+        assertEquals(BigDecimal.valueOf(10.0), NumberFieldActions.add(new Add(), Arrays.asList(new BigDecimal[] { BigDecimal.valueOf(1), BigDecimal.valueOf(2), BigDecimal.valueOf(3), BigDecimal.valueOf(4) })));
+        assertEquals(10.0, NumberFieldActions.add(new Add(), Arrays.asList(1.0, 2.0, 3.0, 4.0)));
         assertEquals(10L, NumberFieldActions.add(new Add(), Arrays.asList(1, 2, 3, 4)));
-        Map<String, Integer> map = new HashMap<>();
-        map.put("1", 1);
-        map.put("2", 2);
-        map.put("3", 3);
-        map.put("4", 4);
-        assertEquals(10L, NumberFieldActions.add(new Add(), map));
         assertEquals(0, NumberFieldActions.add(new Add(), null));
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testAddOfNonNumber() {
-        NumberFieldActions.add(new Add(), Arrays.asList(new Object[] { "1", "2", "3" }));
     }
 
     @Test
     public void testAverage() {
-        assertEquals(2.5, NumberFieldActions.average(new Average(), new double[] { 1.0, 2.0, 3.0, 4.0 }));
-        assertEquals(2.5, NumberFieldActions.average(new Average(), new int[] { 1, 2, 3, 4 }));
+        assertEquals(2.5, NumberFieldActions.average(new Average(), Arrays.asList(1.0, 2.0, 3.0, 4.0)));
         assertEquals(2.5, NumberFieldActions.average(new Average(), Arrays.asList(1, 2, 3, 4)));
-        Map<String, Integer> map = new HashMap<>();
-        map.put("1", 1);
-        map.put("2", 2);
-        map.put("3", 3);
-        map.put("4", 4);
-        assertEquals(2.5, NumberFieldActions.average(new Average(), map));
         assertEquals(0, NumberFieldActions.average(new Average(), null));
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testAverageOfNonNumber() {
-        NumberFieldActions.average(new AbsoluteValue(), Arrays.asList(new Object[] { "1", "2", "3" }));
     }
 
     @Test
@@ -285,20 +261,10 @@ public class NumberFieldActionsTest {
 
     @Test
     public void testDivide() {
-        assertEquals(BigDecimal.valueOf(2), NumberFieldActions.divide(new Divide(), new BigDecimal[] { BigDecimal.valueOf(4), BigDecimal.valueOf(2) }));
-        assertEquals(2.0, NumberFieldActions.divide(new Divide(), new double[] { 4.0, 2.0 }));
-        assertEquals(2.0, NumberFieldActions.divide(new Divide(), new int[] { 4, 2 }));
+        assertEquals(BigDecimal.valueOf(2), NumberFieldActions.divide(new Divide(), Arrays.asList(new BigDecimal[] { BigDecimal.valueOf(4), BigDecimal.valueOf(2) })));
+        assertEquals(2.0, NumberFieldActions.divide(new Divide(), Arrays.asList(4.0, 2.0)));
         assertEquals(2.0, NumberFieldActions.divide(new Divide(), Arrays.asList(4, 2)));
-        Map<String, Integer> map = new HashMap<>();
-        map.put("4", 1);
-        map.put("2", 2);
-        assertEquals(2.0, NumberFieldActions.divide(new Divide(), map));
         assertEquals(0, NumberFieldActions.divide(new Divide(), null));
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testDivideOfNonNumber() {
-        NumberFieldActions.divide(new Divide(), Arrays.asList(new Object[] { "1", "2", "3" }));
     }
 
     @Test
@@ -316,44 +282,20 @@ public class NumberFieldActionsTest {
 
     @Test
     public void testMaximum() {
-        assertEquals(BigDecimal.valueOf(4), NumberFieldActions.maximum(new Maximum(), new BigDecimal[] { BigDecimal.valueOf(1), BigDecimal.valueOf(2), BigDecimal.valueOf(3), BigDecimal.valueOf(4) }));
-        assertEquals(4.0, NumberFieldActions.maximum(new Maximum(), new double[] { 1.0, 2.0, 3.0, 4.0 }));
-        assertEquals(4, NumberFieldActions.maximum(new Maximum(), new int[] { 1, 2, 3, 4 }));
+        assertEquals(BigDecimal.valueOf(4), NumberFieldActions.maximum(new Maximum(), Arrays.asList(new BigDecimal[] { BigDecimal.valueOf(1), BigDecimal.valueOf(2), BigDecimal.valueOf(3), BigDecimal.valueOf(4) })));
+        assertEquals(4.0, NumberFieldActions.maximum(new Maximum(), Arrays.asList(1.0, 2.0, 3.0, 4.0)));
         assertEquals(4, NumberFieldActions.maximum(new Maximum(), Arrays.asList(1, 2, 3, 4)));
-        Map<String, Integer> map = new HashMap<>();
-        map.put("1", 1);
-        map.put("2", 2);
-        map.put("3", 3);
-        map.put("4", 4);
-        assertEquals(4, NumberFieldActions.maximum(new Maximum(), map));
         assertEquals(BigDecimal.valueOf(4), NumberFieldActions.maximum(new Maximum(), Arrays.asList((byte) 1, 2, 3.0, BigDecimal.valueOf(4))));
         assertEquals(0, NumberFieldActions.maximum(new Maximum(), null));
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testMaximumOfNonNumber() {
-        NumberFieldActions.maximum(new Maximum(), Arrays.asList(new Object[] { "1", "2", "3" }));
-    }
-
     @Test
     public void testMinimum() {
-        assertEquals(BigDecimal.valueOf(1), NumberFieldActions.minimum(new Minimum(), new BigDecimal[] { BigDecimal.valueOf(1), BigDecimal.valueOf(2), BigDecimal.valueOf(3), BigDecimal.valueOf(4) }));
-        assertEquals(1.0, NumberFieldActions.minimum(new Minimum(), new double[] { 1.0, 2.0, 3.0, 4.0 }));
-        assertEquals(1, NumberFieldActions.minimum(new Minimum(), new int[] { 1, 2, 3, 4 }));
+        assertEquals(BigDecimal.valueOf(1), NumberFieldActions.minimum(new Minimum(), Arrays.asList(new BigDecimal[] { BigDecimal.valueOf(1), BigDecimal.valueOf(2), BigDecimal.valueOf(3), BigDecimal.valueOf(4) })));
+        assertEquals(1.0, NumberFieldActions.minimum(new Minimum(), Arrays.asList(1.0, 2.0, 3.0, 4.0)));
         assertEquals(1, NumberFieldActions.minimum(new Minimum(), Arrays.asList(1, 2, 3, 4)));
-        Map<String, Integer> map = new HashMap<>();
-        map.put("1", 1);
-        map.put("2", 2);
-        map.put("3", 3);
-        map.put("4", 4);
-        assertEquals(1, NumberFieldActions.minimum(new Minimum(), map));
         assertEquals((byte) 1, NumberFieldActions.minimum(new Minimum(), Arrays.asList((byte) 1, 2, 3.0, BigDecimal.valueOf(4))));
         assertEquals(0, NumberFieldActions.minimum(new Minimum(), null));
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testMinimumOfNonNumber() {
-        NumberFieldActions.minimum(new Minimum(), Arrays.asList(new Object[] { "1", "2", "3" }));
     }
 
     @Test
@@ -371,45 +313,33 @@ public class NumberFieldActionsTest {
 
     @Test
     public void testSubtract() {
-        assertEquals(BigDecimal.valueOf(-8.0), NumberFieldActions.subtract(new Subtract(), new BigDecimal[] { BigDecimal.valueOf(1), BigDecimal.valueOf(2), BigDecimal.valueOf(3), BigDecimal.valueOf(4) }));
-        assertEquals(-8.0, NumberFieldActions.subtract(new Subtract(), new double[] { 1.0, 2.0, 3.0, 4.0 }));
-        assertEquals(-8L, NumberFieldActions.subtract(new Subtract(), new int[] { 1, 2, 3, 4 }));
+        assertEquals(BigDecimal.valueOf(-8.0), NumberFieldActions.subtract(new Subtract(), Arrays.asList(new BigDecimal[] { BigDecimal.valueOf(1), BigDecimal.valueOf(2), BigDecimal.valueOf(3), BigDecimal.valueOf(4) })));
+        assertEquals(-8.0, NumberFieldActions.subtract(new Subtract(), Arrays.asList(1.0, 2.0, 3.0, 4.0)));
         assertEquals(-8L, NumberFieldActions.subtract(new Subtract(), Arrays.asList(1, 2, 3, 4)));
-        Map<String, Integer> map = new HashMap<>();
-        map.put("1", 1);
-        map.put("2", 2);
-        map.put("3", 3);
-        map.put("4", 4);
-        assertEquals(-8L, NumberFieldActions.subtract(new Subtract(), map));
         assertEquals(0, NumberFieldActions.subtract(new Subtract(), null));
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testSubtractOfNonNumber() {
-        NumberFieldActions.subtract(new Subtract(), Arrays.asList(new Object[] { "1", "2", "3" }));
-    }
-
-    @Test(expected = IllegalArgumentException.class)
     public void testConvertMassUnitIllegalArgumentException() {
-        assertEquals(11, NumberFieldActions.convertMassUnit(new Add(), 5).intValue());
+        assertEquals(11, NumberFieldActions.convertMassUnit(new ConvertMassUnit(), 5).intValue());
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testConvertDistanceUnitIllegalArgumentException() {
-        assertEquals(0, NumberFieldActions.convertDistanceUnit(new Add(), null).intValue());
-        NumberFieldActions.convertDistanceUnit(new Add(), 5);
+        assertEquals(0, NumberFieldActions.convertDistanceUnit(new ConvertDistanceUnit(), null).intValue());
+        NumberFieldActions.convertDistanceUnit(new ConvertDistanceUnit(), 5);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testConvertAreaUnitIllegalArgumentException() {
-        assertEquals(0, NumberFieldActions.convertAreaUnit(new Add(), null).intValue());
-        NumberFieldActions.convertAreaUnit(new Add(), 5);
+        assertEquals(0, NumberFieldActions.convertAreaUnit(new ConvertAreaUnit(), null).intValue());
+        NumberFieldActions.convertAreaUnit(new ConvertAreaUnit(), 5);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testConvertVolumeUnitIllegalArgumentException() {
-        assertEquals(0, NumberFieldActions.convertVolumeUnit(new Add(), null).intValue());
-        NumberFieldActions.convertVolumeUnit(new Add(), 5);
+        assertEquals(0, NumberFieldActions.convertVolumeUnit(new ConvertVolumeUnit(), null).intValue());
+        NumberFieldActions.convertVolumeUnit(new ConvertVolumeUnit(), 5);
     }
 
     @Test
@@ -417,29 +347,11 @@ public class NumberFieldActionsTest {
         assertNotNull(new NumberFieldActions());
         assertEquals(0, NumberFieldActions.multiply(new Multiply(), null));
 
-        assertEquals(new BigDecimal("24.0000"), NumberFieldActions.multiply(new Add(), new BigDecimal[] { BigDecimal.valueOf(1), BigDecimal.valueOf(2), BigDecimal.valueOf(3), BigDecimal.valueOf(4) }));
-        assertEquals(24.0, NumberFieldActions.multiply(new Multiply(), new double[] { 1.0, 2.0, 3.0, 4.0 }));
-        assertEquals(24.0, NumberFieldActions.multiply(new Multiply(), new float[] { 1.0f, 2.0f, 3.0f, 4.0f }));
-        assertEquals(24L, NumberFieldActions.multiply(new Multiply(), new int[] { 1, 2, 3, 4 }));
-        assertEquals(24L, NumberFieldActions.multiply(new Multiply(), new byte[] { 1, 2, 3, 4 }));
-        assertEquals(24L, NumberFieldActions.multiply(new Multiply(), new long[] { 1L, 2L, 3L, 4L }));
+        assertEquals(new BigDecimal("24.0000"), NumberFieldActions.multiply(new Multiply(), Arrays.asList(new BigDecimal[] { BigDecimal.valueOf(1), BigDecimal.valueOf(2), BigDecimal.valueOf(3), BigDecimal.valueOf(4) })));
+        assertEquals(24.0, NumberFieldActions.multiply(new Multiply(), Arrays.asList(1.0, 2.0, 3.0, 4.0 )));
+        assertEquals(24.0, NumberFieldActions.multiply(new Multiply(), Arrays.asList(1.0f, 2.0f, 3.0f, 4.0f)));
+        assertEquals(24L, NumberFieldActions.multiply(new Multiply(), Arrays.asList(1L, 2L, 3L, 4L)));
         assertEquals(24L, NumberFieldActions.multiply(new Multiply(), Arrays.asList(1, 2, 3, 4)));
-        Map<String, Integer> map = new HashMap<>();
-        map.put("1", 1);
-        map.put("2", 2);
-        map.put("3", 3);
-        map.put("4", 4);
-        assertEquals(24L, NumberFieldActions.multiply(new Multiply(), map));
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testMultiplyIllegalArgumentException() {
-        assertEquals(24L, NumberFieldActions.multiply(new Multiply(), Arrays.asList("a", "b")));
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testMultiplyIllegalArgumentExceptionCollection() {
-        assertEquals(24L, NumberFieldActions.multiply(new Multiply(), new Object()));
     }
 
 }

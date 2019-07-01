@@ -28,16 +28,14 @@ __optional__|string
 __optional__|boolean
 |**method** +
 __optional__|string
+|**multiplicity** +
+__optional__|enum (ONE_TO_ONE, ONE_TO_MANY, MANY_TO_ONE, ZERO_TO_ONE)
 |**name** +
 __optional__|string
 |**parameters** +
 __optional__|<<_atlas-service-core-actionparameters,ActionParameters>>
-|**sourceCollectionType** +
-__optional__|enum (ALL, ARRAY, LIST, MAP, NONE)
 |**sourceType** +
 __optional__|enum (ANY, ANY_DATE, BIG_INTEGER, BOOLEAN, BYTE, BYTE_ARRAY, CHAR, COMPLEX, DATE, DATE_TIME, DATE_TIME_TZ, DATE_TZ, DECIMAL, DOUBLE, FLOAT, INTEGER, LONG, NONE, NUMBER, SHORT, STRING, TIME, TIME_TZ, UNSIGNED_BYTE, UNSIGNED_INTEGER, UNSIGNED_LONG, UNSIGNED_SHORT, UNSUPPORTED)
-|**targetCollectionType** +
-__optional__|enum (ALL, ARRAY, LIST, MAP, NONE)
 |**targetType** +
 __optional__|enum (ANY, ANY_DATE, BIG_INTEGER, BOOLEAN, BYTE, BYTE_ARRAY, CHAR, COMPLEX, DATE, DATE_TIME, DATE_TIME_TZ, DATE_TZ, DECIMAL, DOUBLE, FLOAT, INTEGER, LONG, NONE, NUMBER, SHORT, STRING, TIME, TIME_TZ, UNSIGNED_BYTE, UNSIGNED_INTEGER, UNSIGNED_LONG, UNSIGNED_SHORT, UNSUPPORTED)
 |===
