@@ -2,3 +2,4 @@ io.atlasmap.maven.test.DummyManyToOne
 io.atlasmap.maven.test.DummyOneToMany
 io.atlasmap.maven.test.DummyOneToOne
 io.atlasmap.maven.test.DummyZeroToOne
+io.atlasmap.maven.test.PaulsFieldActionsModel
