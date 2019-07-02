@@ -56,9 +56,12 @@ export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
 
   ngOnInit() {
     if (!this.getExpression()) {
-      this.mapping.transition.expression = new ExpressionModel(this.mapping);
+      this.mapping.transition.expression = new ExpressionModel(this.mapping, this.configModel);
       this.getExpression().generateInitialExpression();
+    } else {
+      this.getExpression().setConfigModel(this.configModel);
     }
+
     this.getExpression().updateFieldReference(this.mapping);
     this.expressionUpdatedSubscription = this.getExpression().expressionUpdated$.subscribe((updatedEvent) => {
       this.updateExpressionMarkup();
@@ -71,7 +74,7 @@ export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
   ngOnChanges() {
     this.mapping = this.configModel.mappings.activeMapping;
     if (!this.getExpression()) {
-      this.mapping.transition.expression = new ExpressionModel(this.mapping);
+      this.mapping.transition.expression = new ExpressionModel(this.mapping, this.configModel);
       this.getExpression().generateInitialExpression();
     }
     if (this.expressionUpdatedSubscription) {
@@ -122,7 +125,6 @@ export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
   @HostListener ('mouseleave', ['$event'])
   onMouseLeave($event) {
     if ($event.target.className.includes('expressionMarkup') && this.mouseOverTimeOut) {
-        console.log('clearing to');
       clearTimeout(this.mouseOverTimeOut);
       this.mouseOverTimeOut = null;
     }
@@ -209,19 +211,31 @@ export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
     if (droppedField === null || activeMapping === null || !droppedField.isSource) {
       return;
     }
+    const caretPositionNodeId = event.target['id'];
+    const textNode = this.getExpression().getNode(caretPositionNodeId);
 
     if (droppedField.partOfMapping && activeMapping.isFieldMapped(droppedField)) {
 
-      // TODO handle drop position - for now this appends a field ref to the end of expression
+      // Since the dropped field is already part of the mapping, just add a new node.
       const mappedField = activeMapping.getMappedFieldForField(droppedField);
-      this.addConditionalExpressionNode(mappedField, null, 0);
+      if (textNode) {
+        this.addConditionalExpressionNode(mappedField, textNode.getUuid(), 0);
+      } else {
+        this.addConditionalExpressionNode(mappedField, null, 0);
+      }
 
     // Pulling an unmapped field into a transition expression evaluation implies a compound selection.
     } else {
-      // TODO handle drop position - for now this appends a field ref to the
-      // end of expression in FieldMappingPair#updateTransition()
-      this.configModel.mappingService.fieldSelected(droppedField, true);
+
+      if (textNode) {
+
+        // If the selected field was not part of the original mapping then add it now.
+        this.configModel.mappingService.fieldSelected(droppedField, true, textNode.getUuid(), 0);
+      } else {
+        this.configModel.mappingService.fieldSelected(droppedField, true);
+      }
     }
+    this.markup.nativeElement.focus();
   }
 
   /**
@@ -309,7 +323,11 @@ export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
    */
   private getCaretPositionNodeId(startContainer?: Node): string {
     if (!startContainer) {
-      startContainer = window.getSelection().getRangeAt(0).startContainer;
+      const selection = window.getSelection();
+      if (selection.rangeCount === 0) {
+          return ExpressionComponent.trailerId;
+      }
+      startContainer = selection.getRangeAt(0).startContainer;
     }
     return startContainer.parentElement.getAttribute('id');
   }
@@ -375,7 +393,16 @@ export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   private removeTokenAtCaretPosition(before: boolean) {
-    const range = window.getSelection().getRangeAt(0);
+    const selection = window.getSelection();
+    if (!selection.rangeCount) {
+      if (this.getCaretPositionNodeId() === ExpressionComponent.trailerId) {
+        if (before) {
+          this.getExpression().removeToken(this.reflectRemovedField);
+        }
+      }
+      return;
+    }
+    const range = selection.getRangeAt(0);
     const startContainer = range.startContainer;
     const startOffset = range.startOffset;
     if (startContainer === this.markup.nativeElement) {
@@ -393,14 +420,14 @@ export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
       }
       return;
     }
-    if (this.getCaretPositionNodeId() === ExpressionComponent.trailerId) {
+
+    if (this.getCaretPositionNodeId(startContainer) === ExpressionComponent.trailerId) {
       if (before) {
         this.getExpression().removeToken(this.reflectRemovedField);
       }
       return;
     }
-    this.getExpression().removeToken(
-      this.reflectRemovedField, this.getCaretPositionNodeId(),
+    this.getExpression().removeToken(this.reflectRemovedField, this.getCaretPositionNodeId(),
       before ? startOffset - 1 : startOffset);
   }
 
@@ -413,10 +440,13 @@ export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
     for (let i = 0; i < this.markup.nativeElement.childNodes.length; i++) {
       const target = this.markup.nativeElement.childNodes[i];
       if (target.getAttribute('id') === event.node.getUuid()) {
-        const range = window.getSelection().getRangeAt(0);
-        range.selectNode(target.childNodes[0] ? target.childNodes[0] : target);
-        range.setStart(target.childNodes[0] ? target.childNodes[0] : target, event.offset);
-        range.collapse(true);
+        const selection = window.getSelection();
+        if (selection.rangeCount) {
+          const range = selection.getRangeAt(0);
+          range.selectNode(target.childNodes[0] ? target.childNodes[0] : target);
+          range.setStart(target.childNodes[0] ? target.childNodes[0] : target, event.offset);
+          range.collapse(true);
+        }
         return;
       }
     }

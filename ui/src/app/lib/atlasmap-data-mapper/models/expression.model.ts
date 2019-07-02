@@ -13,6 +13,7 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
+import { ConfigModel } from '../models/config.model';
 import { ErrorHandlerService } from '../services/error-handler.service';
 import { MappedField, MappingModel } from './mapping.model';
 import { Subject } from 'rxjs';
@@ -84,7 +85,6 @@ export class FieldNode extends ExpressionNode {
 }
 
 export class ExpressionModel {
-  errorService: ErrorHandlerService;
   expressionUpdatedSource = new Subject<ExpressionUpdatedEvent>();
   expressionUpdated$ = this.expressionUpdatedSource.asObservable();
 
@@ -92,7 +92,7 @@ export class ExpressionModel {
   private textCache = '';
   private htmlCache = '';
 
-  constructor(private mapping: MappingModel) {}
+  constructor(private mapping: MappingModel, private cfg: ConfigModel) {}
 
   generateInitialExpression() {
     this.mapping.getUserMappedFields(true).forEach(f => this.appendFieldNode(f));
@@ -108,6 +108,17 @@ export class ExpressionModel {
 
   getLastNode() {
     return this._nodes[this.getLastNodeIndex()];
+  }
+
+  getNode(nodeId?: string): any {
+    if (!nodeId) {
+      return this.getLastNode();
+    }
+    return this._nodes.find(n => n.getUuid() === nodeId);
+  }
+
+  setConfigModel(cfg: ConfigModel) {
+    this.cfg = cfg;
   }
 
   /**
@@ -322,7 +333,7 @@ export class ExpressionModel {
     let updatedEvent = new ExpressionUpdatedEvent();
     let targetNode = this._nodes.find(n => n.getUuid() === tokenPosition);
     let targetNodeIndex = this._nodes.indexOf(targetNode);
-    if (offset === -1) {
+    if (!targetNode || offset === -1) {
       if (targetNodeIndex < 1) {
         return;
       }
@@ -364,6 +375,10 @@ export class ExpressionModel {
       const targetString = (targetNode as TextNode).str;
       (targetNode as TextNode).str = offset === 0 ? targetString.substr(1)
         : targetString.substring(0, offset) + targetString.substring(offset + 1);
+      if ((targetNode as TextNode).str.length === 0) {
+        this.cfg.errorService.info('At least one space is required between field references.', null);
+        return;
+      }
       updatedEvent.node = targetNode;
       updatedEvent.offset = offset;
     }
@@ -462,7 +477,7 @@ export class ExpressionModel {
       const index = parseInt(text.substring(position + 2, text.indexOf('}')), 10);
       fn = new FieldNode(null, index, this.mapping);
       if (fn.field === null) {
-        this.errorService.error('Unable to map expression index to field node.', index);
+        this.cfg.errorService.error('Unable to map expression index to field node.', index);
       } else {
         answer.push(fn);
       }
