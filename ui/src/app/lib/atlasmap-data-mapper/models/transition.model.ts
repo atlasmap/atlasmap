@@ -14,6 +14,7 @@
     limitations under the License.
 */
 import { ExpressionModel } from './expression.model';
+import { FieldAction } from './field-action.model';
 
 export enum TransitionMode { ONE_TO_ONE, ONE_TO_MANY, ENUM, MANY_TO_ONE, FOR_EACH }
 export enum TransitionDelimiter {
@@ -45,6 +46,7 @@ export class TransitionModel {
   lookupTableName: string = null;
   expression: ExpressionModel;
   enableExpression = false;
+  transitionFieldAction: FieldAction;
 
   constructor() {
     TransitionModel.initialize();

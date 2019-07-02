@@ -16,7 +16,6 @@
 
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { deflate } from 'pako';
 import { NGXLogger } from 'ngx-logger';
 
 import { Observable, Subscription, Subject, forkJoin } from 'rxjs';
@@ -25,17 +24,18 @@ import { map, timeout } from 'rxjs/operators';
 import { ConfigModel } from '../models/config.model';
 import { DocumentDefinition } from '../models/document-definition.model';
 import { DataMapperUtil } from '../common/data-mapper-util';
-import { InspectionType } from '../common/config.types';
 import { Field } from '../models/field.model';
-import { DocumentManagementService } from '../services/document-management.service';
 import { MappingModel, MappedField } from '../models/mapping.model';
 import { TransitionMode, TransitionModel } from '../models/transition.model';
 import { MappingDefinition } from '../models/mapping-definition.model';
 import { ErrorInfo, ErrorLevel } from '../models/error.model';
 
 import { MappingSerializer } from './mapping-serializer.service';
-import { NgxLoggerLevel } from 'ngx-logger';
 
+/**
+ * Handles mapping updates. It restores mapping status from backend and reflect in UI,
+ * and/or reflect mapping changes caused by the user action made in UI to the backend.
+ */
 @Injectable()
 export class MappingManagementService {
   _cfg: ConfigModel;
@@ -60,7 +60,6 @@ export class MappingManagementService {
      'Accept':       'application/json; application/octet-stream'});
   private mappingPreviewInputSubscription: Subscription;
   private mappingUpdatedSubscription: Subscription;
-  private jsonBuffer: string;
 
   constructor(private logger: NGXLogger, private http: HttpClient) {}
 
@@ -78,95 +77,9 @@ export class MappingManagementService {
         if (!this.cfg.mappings) {
           return;
         }
-        this.cfg.logger.debug('mapping updated: ' + JSON.stringify(this.serializeMappingsToJSON()));
+        this.cfg.logger.debug('mapping updated: ' + JSON.stringify(MappingSerializer.serializeMappings(this.cfg)));
       });
     }
-  }
-
-  findMappingFiles(filter: string): Observable<string[]> {
-    return new Observable<string[]>((observer: any) => {
-      const url = this.cfg.initCfg.baseMappingServiceUrl + 'mappings' + (filter == null ? '' : '?filter=' + filter);
-      this.cfg.logger.trace('Mapping List Request');
-      this.http.get(url, { headers: this.headers }).toPromise().then((body: any) => {
-        if (this.cfg.isTraceEnabled()) {
-          this.cfg.logger.trace(`Mapping List Response: ${JSON.stringify(body)}`);
-        }
-        const entries: any[] = body.StringMap.stringMapEntry;
-        const mappingFileNames: string[] = [];
-        for (const entry of entries) {
-          mappingFileNames.push(entry.name);
-        }
-        observer.next(mappingFileNames);
-        observer.complete();
-      }).catch((error: any) => {
-        if (error.status !== DataMapperUtil.HTTP_STATUS_NO_CONTENT) {
-          this.handleError('Error occurred while accessing the current mapping files from the runtime service.', error);
-          observer.error(error);
-        }
-        observer.complete();
-      });
-    }).pipe(timeout(this.cfg.initCfg.admHttpTimeout));
-  }
-
-  getMappingId(): string {
-    return (this.cfg.mappingFiles.length > 0) ? this.cfg.mappingFiles[0] : '0';
-  }
-
-  /**
-   * Retrieve the current user data mappings catalog from the server as a GZIP compressed byte array buffer.
-   */
-  getCurrentMappingCatalog(): Observable<Uint8Array> {
-    const catalogName = 'adm-catalog-files.gz';
-    return new Observable<Uint8Array>((observer: any) => {
-      const baseURL: string = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/GZ/';
-      const url: string = baseURL + catalogName;
-      this.cfg.logger.trace('Mapping Catalog Request');
-      const catHeaders = new HttpHeaders(
-        { 'Content-Type':  'application/octet-stream',
-          'Accept':        'application/octet-stream',
-          'Response-Type': 'application/octet-stream'
-        });
-      this.http.get(url, { headers: catHeaders, responseType: 'arraybuffer' }).toPromise().then((body: any) => {
-        if (this.cfg.isTraceEnabled()) {
-          this.cfg.logger.trace(`Mapping Catalog Response: ${JSON.stringify(body)}`);
-        }
-        observer.next(body);
-        observer.complete();
-      }).catch((error: any) => {
-        if (error.status !== DataMapperUtil.HTTP_STATUS_NO_CONTENT) {
-          this.handleError('Error occurred while accessing the current mappings catalog from the runtime service.', error);
-          observer.error(error);
-        }
-        observer.complete();
-      });
-    }).pipe(timeout(this.cfg.initCfg.admHttpTimeout));
-  }
-
-  getCurrentADMCatalog(): Observable<Uint8Array> {
-    const atlasmapCatalogName = 'atlasmap-catalog.adm';
-    return new Observable<Uint8Array>((observer: any) => {
-      const baseURL: string = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/ZIP/';
-      const url: string = baseURL + atlasmapCatalogName;
-      this.cfg.logger.trace('Mapping Catalog Request');
-      const catHeaders = new HttpHeaders(
-        { 'Content-Type':  'application/octet-stream',
-          'Accept':        'application/octet-stream',
-          'Response-Type': 'application/octet-stream'
-        });
-      this.http.get(url, { headers: catHeaders, responseType: 'arraybuffer' }).toPromise().then((body: any) => {
-        if (this.cfg.isTraceEnabled()) {
-          this.cfg.logger.trace(`Mapping Catalog Response: ${JSON.stringify(body)}`);
-        }
-        observer.next(body);
-        observer.complete();
-      }).catch((error: any) => {
-        if (error.status !== DataMapperUtil.HTTP_STATUS_NO_CONTENT) {
-          this.handleError('Error occurred while accessing the ADM catalog from the runtime service.', error);
-          observer.error(error);
-        }
-        observer.complete();
-      });
-    }).pipe(timeout(this.cfg.initCfg.admHttpTimeout));
   }
 
   fetchMappings(mappingFileNames: string[], mappingDefinition: MappingDefinition): Observable<boolean> {
@@ -233,119 +146,6 @@ export class MappingManagementService {
     });
   }
 
-  serializeMappingsToJSON(): any {
-    return MappingSerializer.serializeMappings(this.cfg);
-  }
-
-  /**
-   * Retrieve the current user AtlasMap data mappings from the server as an JSON buffer.
-   */
-  getCurrentMappingJson(): Observable<string> {
-    const mappingFileNames: string[] = this.cfg.mappingFiles;
-    const mappingDefinition: MappingDefinition = this.cfg.mappings;
-    return new Observable<string>((observer: any) => {
-      const baseURL: string = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/JSON/';
-      const operations: Observable<any>[] = [];
-      for (const mappingName of mappingFileNames) {
-        const url: string = baseURL + mappingName;
-        this.cfg.logger.trace('Mapping Service Request');
-        const jsonHeaders = new HttpHeaders(
-          { 'Content-Type':  'application/json',
-            'Accept':        'application/json',
-            'Response-Type': 'application/json'
-          });
-        const operation = this.http.get(url, { headers: jsonHeaders, responseType: 'text' }).pipe(map((res: any) => res ));
-        operations.push(operation);
-      }
-
-      forkJoin(operations).toPromise().then((data: string[]) => {
-        if (!data) {
-          observer.next('no data');
-          observer.complete();
-          return;
-        }
-        if (this.cfg.isTraceEnabled()) {
-          this.cfg.logger.trace(`Mapping Service Response: ${JSON.stringify(data)}`);
-        }
-        this.notifyMappingUpdated();
-        observer.next(data);
-        observer.complete();
-      }).catch((error: any) => {
-        observer.error(error);
-        observer.complete();
-      });
-    });
-  }
-
-  /**
-   * Establish an observable function to delete mapping files on the runtime.
-   */
-  resetAll(): Observable<boolean> {
-    return new Observable<boolean>((observer: any) => {
-      const url = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/RESET';
-      this.cfg.logger.trace('Mapping Service Request - Reset');
-      this.http.delete(url, { headers: this.headers }).toPromise().then((res: any) => {
-          if (this.cfg.isTraceEnabled()) {
-            this.cfg.logger.trace(`Mapping Service Response - Reset: ${JSON.stringify(res)}`);
-          }
-          observer.next(true);
-          observer.complete();
-          return res;
-        })
-        .catch((error: any) => {
-          this.handleError('Error occurred while resetting mappings.', error); },
-      );
-    }).pipe(timeout(this.cfg.initCfg.admHttpTimeout));
-  }
-
- /**
-  * Commit the specified AtlasMapping JSON user mapping string to the runtime service.  The mappings
-  * are kept separate so they can be updated with minimal overhead.
-  *
-  * @param buffer - JSON content
-  */
-  setMappingToService(jsonBuffer: string): Observable<boolean> {
-    return new Observable<boolean>((observer: any) => {
-      const url = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/JSON/' + this.getMappingId();
-      this.cfg.logger.trace('Mapping Service Request');
-      this.http.put(url, jsonBuffer, { headers: this.headers }).toPromise().then((res: any) => {
-        if (this.cfg.isTraceEnabled()) {
-          this.cfg.logger.trace(`Mapping Service Response: ${JSON.stringify(res)}`);
-        }
-        observer.next(true);
-        observer.complete();
-      })
-      .catch((error: any) => {
-        this.handleError('Error occurred while establishing mappings from an imported JSON.', error);
-        observer.error(error);
-        observer.complete();
-      });
-    });
-  }
-
-  /**
-   * The user has either exported their mappings or imported new mappings.  Either way we're saving them on the server.
-   *
-   * @param compressedBuffer
-   */
-   setBinaryFileToService(compressedBuffer: any, url: string): Observable<boolean> {
-     return new Observable<boolean>((observer: any) => {
-       this.cfg.logger.trace('Set Compressed Mapping Service Request');
-       this.http.put(url, compressedBuffer, { headers: this.headers }).toPromise().then((res: any) => {
-          if (this.cfg.isTraceEnabled()) {
-            this.cfg.logger.trace(`Set Compressed Mapping Service Response: ${JSON.stringify(res)}`);
-          }
-          observer.next(true);
-          observer.complete();
-       })
-      .catch((error: any) => {
-        this.handleError('Error occurred while saving mapping.', error);
-        observer.error(error);
-        observer.complete();
-      });
-    });
-   }
-
   /**
    * Remove the specified mapping model from the mappings array and update the runtime.
    *
@@ -372,104 +172,12 @@ export class MappingManagementService {
     });
   }
 
-  /**
-   * Remove the specified field from a previously established and mapped field pair.
-   *
-   * @param mapping
-   * @param removeField
-   */
-  async removeMappedFieldPairField(mapping: MappingModel, removeField: Field, compoundSelection: boolean): Promise<boolean> {
-    return new Promise<boolean>( async(resolve) => {
-      let fields: MappedField[] = null;
-
-      if (removeField.isSource()) {
-        fields = mapping.sourceFields;
-      } else {
-        fields = mapping.targetFields;
-      }
-      for (const mfield of fields) {
-        if (mfield.field.name === removeField.name) {
-          DataMapperUtil.removeItemFromArray(mfield, fields);
-
-          // If all that is left is the 'None' field after removing the user field then remove
-          // the mapping completely.
-          if ((fields.length === 1) && (fields[0].isNoneField())) {
-            await this.cfg.mappingService.removeMapping(mapping);
-            this.cfg.mappings.activeMapping = null;
-          }
-          break;
-        }
-      }
-      mapping.updateTransition(removeField.isSource(), compoundSelection, true);
-      await this.saveCurrentMapping();
-      resolve(true);
-    });
-  }
-
   resequenceMappedField(mapping: MappingModel, insertedMappedField: MappedField, targetIndex: number): void {
     if (mapping != null) {
       const mappedFields = mapping.getMappedFields(insertedMappedField.isSource());
-      mapping.resequenceFieldActionIndices(mappedFields, insertedMappedField, targetIndex, false);
+      mapping.resequenceFieldIndices(mappedFields, insertedMappedField, targetIndex, false);
       this.saveCurrentMapping();
     }
-  }
-
-  /**
-   * Add a compound-selected field to an existing mapping.  Needed for combine/ separate modes.
-   * A compound source selection in separate mode or a compound target selection in combine mode is an error.
-   * @param field
-   */
-  addActiveMappingField(field: Field): void {
-    const mapping = this.cfg.mappings.activeMapping;
-    let suggestedValue = 1;
-    if (mapping.transition == null || field == null) {
-      return;
-    }
-    if (mapping.transition.mode === TransitionMode.MANY_TO_ONE) {
-
-      // Compound target mapping when not in ONE_TO_MANY mode
-      if (!field.isSource()) {
-        this.cfg.errorService.info(`Cannot add target field '${field.name}' into mapping:
-        Multiple target fields cannot be added into
-          ${TransitionModel.getMappingModeName(mapping.transition.mode)}
-          mapping. Only one of Source field or Target field could be multiple.`, null);
-        return;
-      }
-      if (mapping.sourceFields[mapping.sourceFields.length - 1].actions.length > 0) {
-        suggestedValue = mapping.sourceFields[mapping.sourceFields.length - 1].index + 1;
-      }
-    } else if (mapping.transition.mode === TransitionMode.ONE_TO_MANY) {
-      if (field.isSource()) {
-
-        // Compound source mapping when not in MANY_TO_ONE mode.
-        this.cfg.errorService.info(`Cannot add source field '${field.name}' into mapping:
-          Multiple source fields cannot be added into
-          ${TransitionModel.getMappingModeName(mapping.transition.mode)}
-          mapping. Only one of Source field or Target field could be multiple.`, null);
-        return;
-      }
-      if (mapping.targetFields[mapping.targetFields.length - 1].actions.length > 0) {
-        suggestedValue = mapping.targetFields[mapping.targetFields.length - 1].index + 1;
-      }
-    }
-    const newMField = new MappedField;
-    newMField.field = field;
-    newMField.index = suggestedValue;
-    newMField.updateSeparateOrCombineFieldAction(mapping.transition.mode === TransitionMode.ONE_TO_MANY,
-      mapping.transition.mode === TransitionMode.MANY_TO_ONE, field.isSource(), true, false);
-    if (field.isSource()) {
-      mapping.sourceFields.push(newMField);
-    } else {
-      mapping.targetFields.push(newMField);
-    }
-  }
-
-  /**
-   * Remove the specified field from the active mapping field pair.
-   * @param field
-   */
-  removeActiveMappingField(field: Field, compoundSelection: boolean): void {
-    this.removeMappedFieldPairField(this.cfg.mappings.activeMapping, field, compoundSelection);
   }
 
   /**
@@ -524,7 +232,7 @@ export class MappingManagementService {
       // then add it to the active mapping; otherwise remove it.
       if (compoundSelection) {
           if (mapping.isFieldMapped(field)) {
-            this.removeActiveMappingField(field, compoundSelection);
+            this.removeMappedField(this.cfg.mappings.activeMapping, field, compoundSelection);
             fieldRemoved = true;
           } else {
             this.addActiveMappingField(field);
@@ -589,10 +297,6 @@ export class MappingManagementService {
       this.selectMapping(mapping);
       this.validateMappings();
     }
-  }
-
-  hasMultipleMappings(mapping: MappingModel): boolean {
-    return (mapping.sourceFields.length > 2 || mapping.targetFields.length > 2);
   }
 
   /**
@@ -795,237 +499,91 @@ export class MappingManagementService {
   }
 
   /**
-   * Validate and push the active mapping to the server.
+   * Add a compound-selected field to an existing mapping.  Needed for combine/ separate modes.
+   * A compound source selection in separate mode or a compound target selection in combine mode is an error.
+   * @param field
    */
-  setMappingInstance(): void {
-    if (this.cfg.initCfg.baseMappingServiceUrl == null) {
-      // validation service not configured.
+  private addActiveMappingField(field: Field): void {
+    const mapping = this.cfg.mappings.activeMapping;
+    let suggestedValue = 1;
+    if (mapping.transition == null || field == null) {
       return;
     }
-    const payload: any = MappingSerializer.serializeMappings(this.cfg);
-    const url: string = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/setinstance';
-    if (this.cfg.isTraceEnabled()) {
-      this.cfg.logger.trace(`Validation Service Request: ${JSON.stringify(payload)}`);
-    }
-    this.http.put(url, payload, { headers: this.headers }).toPromise().then((body: any) => {
-      if (this.cfg.isTraceEnabled()) {
-        this.cfg.logger.trace(`Validation Service Response: ${JSON.stringify(body)}`);
-      }
-      const mapping: MappingModel = this.cfg.mappings.activeMapping;
-      const activeMappingErrors: ErrorInfo[] = [];
-      const globalErrors: ErrorInfo[] = [];
-      // Only update active mapping and global ones, since validateMappings() is always invoked when mapping is updated.
-      // This should be eventually turned into mapping entry level validation.
-      // https://github.com/atlasmap/atlasmap-ui/issues/116
-      if (body && body.Validations && body.Validations.validation) {
-        for (const validation of body.Validations.validation) {
-          let level: ErrorLevel = ErrorLevel.VALIDATION_ERROR;
-          if (validation.status === 'WARN') {
-            level = ErrorLevel.WARN;
-          } else if (validation.status === 'INFO') {
-            level = ErrorLevel.INFO;
-          }
-          const errorInfo = new ErrorInfo(validation.message, level);
-          if (!validation.scope || validation.scope !== 'MAPPING' || !validation.id) {
-            globalErrors.push(errorInfo);
-          } else if (mapping && mapping.uuid && validation.id === mapping.uuid) {
-            activeMappingErrors.push(errorInfo);
-          }
-        }
-      }
-      this.cfg.validationErrors = globalErrors;
-      if (mapping) {
-        mapping.validationErrors = activeMappingErrors;
-      }
-    }).catch((error: any) => {
-      this.cfg.errorService.error('Error fetching validation data.', { 'error': error, 'url': url, 'request': payload });
-    });
-  }
+    if (mapping.transition.mode === TransitionMode.MANY_TO_ONE) {
 
-  private handleError(message: string, error: any): void {
-    this.cfg.errorService.mappingError(message, error);
-    this.cfg.initCfg.initialized = true;
-  }
-
-  /**
-   * Asynchronously retrieve the current user-defined AtlasMap mappings from the runtime server as an JSON buffer.
-   */
-  async getJsonBuf(): Promise<boolean> {
-    return new Promise<boolean>((resolve, reject) => {
-      if (this.cfg.mappings === null) {
-        resolve(false);
-      }
-      this.cfg.mappingFiles[0] = this.cfg.mappings.name;
-      this.getCurrentMappingJson().toPromise().then((result: string) => {
-        this.jsonBuffer = result;
-        resolve(true);
-      }).catch((error: any) => {
-        if (error.status === 0) {
-          this.cfg.errorService.mappingError(
-            'Fatal network error: Unable to connect to the AtlasMap design runtime service.', error);
-        } else {
-          this.cfg.errorService.mappingError(
-            'Unable to access current mapping definitions: ' + error.status + ' ' + error.statusText, error);
-        }
-        resolve(false);
-      });
-    });
-  }
-
-  /**
-   * Update the current mapping files and export the current mappings catalog (ADM).
-   *
-   * Establish the file content in JSON format (mappings + schema + instance-schema), compress
-   * it (GZIP), update the runtime, then fetch the full ADM catalog ZIP file from the runtime
-   * and export it.
-   *
-   * @param event
-   */
-  async exportMappingsCatalog(mappingsFileName: string) {
-    let aggregateBuffer = '   {\n';
-    let userExport = true;
-
-    try {
-      if (mappingsFileName === null || mappingsFileName.length === 0) {
-        mappingsFileName = 'atlasmap-mapping.adm';
-        userExport = false;
-      }
-
-      // Retrieve the JSON mappings buffer from the server.
-      if (await this.getJsonBuf()) {
-        aggregateBuffer += DocumentManagementService.generateExportMappings(this.jsonBuffer[0]);
-      }
-
-      let exportMeta = '   "exportMeta": [\n';
-      let exportBlockData = '      "exportBlockData": [\n';
-      let docCount = 0;
-
-      // Establish two string arrays:
-      //   exportMeta - meta-data describing the instance or schema documents.
-      //   exportBlockData - the actual source of the instance/schema/mappings documents or the Java class name.
-      for (const doc of this.cfg.getAllDocs()) {
-        if (doc.inspectionSource !== null &&
-             (doc.inspectionType === InspectionType.INSTANCE) || (doc.inspectionType === InspectionType.SCHEMA) ||
-               (doc.inspectionType === InspectionType.JAVA_CLASS) ) {
-          if (docCount > 0) {
-            exportMeta += ',\n';
-            exportBlockData += ',\n';
-          }
-          exportMeta += DocumentManagementService.generateExportMetaStr(doc);
-          exportBlockData += DocumentManagementService.generateExportBlockData(doc.inspectionSource);
-          docCount++;
-        }
-      }
-      exportMeta += '   ],\n';
-      exportBlockData += '   ]\n';
-      aggregateBuffer += exportMeta;
-      aggregateBuffer += exportBlockData;
-      aggregateBuffer += '   }\n';
-
-      // Compress the JSON buffer - write out as binary.
-      const binBuffer = DataMapperUtil.str2bytes(aggregateBuffer);
-      try {
-        const compress = deflate(binBuffer, {gzip: true});
-        let fileContent: Blob = new Blob([compress], {type: 'application/octet-stream'});
-
-        // Save the model mappings to the runtime.
-        this.setBinaryFileToService(fileContent,
-          this.cfg.initCfg.baseMappingServiceUrl + 'mapping/GZ/' + this.getMappingId()).toPromise()
-          .then(async(result: boolean) => {
-
-
-          // Fetch the full ADM catalog file from the runtime (ZIP) and export it to to the local
-          // downloads area.
-          if (userExport) {
-
-            this.getCurrentADMCatalog().subscribe( async(value: Uint8Array) => {
-
-              // If value is null then no compressed mappings catalog is available on the server.
-              if (value === null) {
-                return;
-              }
-
-              fileContent = new Blob([value], {type: 'application/octet-stream'});
-              if (!await DataMapperUtil.writeFile(fileContent, mappingsFileName)) {
-                this.cfg.errorService.mappingError('Unable to save the current data mappings.', null);
-              }
-            });
-          }
-        }).catch((error: any) => {
-          if (error.status === 0) {
-            this.cfg.errorService.mappingError(
-              'Fatal network error: Unable to connect to the AtlasMap design runtime service.', error);
-          } else {
-            this.cfg.errorService.mappingError(
-              'Unable to update the catalog mappings file to the AtlasMap design runtime service.  ' +
-                error.status + ' ' + error.statusText, error);
-          }
-        });
-      } catch (error1) {
-        this.cfg.errorService.mappingError('Unable to compress the current data mappings.\n', error1);
+      // Compound target mapping when not in ONE_TO_MANY mode
+      if (!field.isSource()) {
+        this.cfg.errorService.info(`Cannot add target field '${field.name}' into mapping:
+        Multiple target fields cannot be added into
+          ${TransitionModel.getMappingModeName(mapping.transition.mode)}
+          mapping. Only one of Source field or Target field could be multiple.`, null);
         return;
       }
-    } catch (error) {
-      this.cfg.errorService.mappingError('Unable to export the current data mappings.', error);
-      return;
+      if (mapping.sourceFields[mapping.sourceFields.length - 1].actions.length > 0) {
+        suggestedValue = mapping.sourceFields[mapping.sourceFields.length - 1].index + 1;
+      }
+    } else if (mapping.transition.mode === TransitionMode.ONE_TO_MANY) {
+      if (field.isSource()) {
+
+        // Compound source mapping when not in MANY_TO_ONE mode.
+        this.cfg.errorService.info(`Cannot add source field '${field.name}' into mapping:
+          Multiple source fields cannot be added into
+          ${TransitionModel.getMappingModeName(mapping.transition.mode)}
+          mapping. Only one of Source field or Target field could be multiple.`, null);
+        return;
+      }
+      if (mapping.targetFields[mapping.targetFields.length - 1].actions.length > 0) {
+        suggestedValue = mapping.targetFields[mapping.targetFields.length - 1].index + 1;
+      }
     }
+    const newMField = new MappedField;
+    newMField.field = field;
+    newMField.index = suggestedValue;
+    newMField.updateSeparateOrCombineFieldAction(mapping.transition.mode === TransitionMode.ONE_TO_MANY,
+      mapping.transition.mode === TransitionMode.MANY_TO_ONE, field.isSource(), true, false);
+    if (field.isSource()) {
+      mapping.sourceFields.push(newMField);
+    } else {
+      mapping.targetFields.push(newMField);
+    }
+  }
+
+  private hasMultipleMappings(mapping: MappingModel): boolean {
+    return (mapping.sourceFields.length > 2 || mapping.targetFields.length > 2);
   }
 
   /**
-   * Perform a binary read of the specified catalog (.ADM) file and push it to the runtime.  The ADM file is
-   * in (ZIP) file format.  Once pushed, we can retrieve from runtime the extracted compressed (GZIP) mappings
-   * file catalog as well as the mappings JSON file.  These files exist separately for performance reasons.
+   * Remove the specified field from mapping.
    *
-   * Once the runtime has its ADM catalog, catalog files and mappings file set then restart the DM.
-   *
-   * @param mappingsFileName - ADM master ZIP catalog
+   * @param mapping
+   * @param removeField
    */
-  async importADMCatalog(mappingsFileName: string) {
-    let fileBin = null;
-    const reader = new FileReader();
+  private async removeMappedField(mapping: MappingModel, removeField: Field, compoundSelection: boolean): Promise<boolean> {
+    return new Promise<boolean>( async(resolve) => {
+      let fields: MappedField[] = null;
 
-    // Turn the imported ADM file into a binary octet stream.
-    try {
-      fileBin = await DataMapperUtil.readBinaryFile(mappingsFileName, reader);
-    } catch (error) {
-      this.cfg.errorService.mappingError('Unable to import the specified catalog file \'' + mappingsFileName + '\'', error);
-      return;
-    }
-    const fileContent: Blob = new Blob([fileBin], {type: 'application/octet-stream'});
+      if (removeField.isSource()) {
+        fields = mapping.sourceFields;
+      } else {
+        fields = mapping.targetFields;
+      }
+      for (const mfield of fields) {
+        if (mfield.field.name === removeField.name) {
+          DataMapperUtil.removeItemFromArray(mfield, fields);
 
-    // Push the binary stream to the runtime.
-    this.setBinaryFileToService(fileContent, this.cfg.initCfg.baseMappingServiceUrl +
-      'mapping/ZIP/' + this.getMappingId()).toPromise().then((result: boolean) => {
-
-        // Retrieve the extracted mappings file catalog (GZIP).
-        this.getCurrentMappingCatalog().subscribe(async(value: Uint8Array) => {
-
-          // If value is null then the imported ADM didn't contain a mappings catalog.
-          if (value === null) {
-            return;
+          // If all that is left is the 'None' field after removing the user field then remove
+          // the mapping completely.
+          if ((fields.length === 1) && (fields[0].isNoneField())) {
+            await this.cfg.mappingService.removeMapping(mapping);
+            this.cfg.mappings.activeMapping = null;
           }
-
-          await this.cfg.initializationService.processMappingsCatalogFiles(value);
-
-          try {
-            this.cfg.initCfg.initialized = false;
-            this.cfg.initCfg.mappingInitialized = false;
-            this.cfg.mappings = null;
-            await this.cfg.initializationService.initialize();
-          } catch (error) {
-            this.cfg.errorService.mappingError('Unable to import the catalog file: \n' + mappingsFileName +
-              '\n' + error.message, error);
-            return;
-          }
-        });
-      }).catch((error: any) => {
-        if (error.status === 0) {
-          this.cfg.errorService.mappingError(
-            'Fatal network error: Unable to connect to the AtlasMap design runtime service.', error);
-        } else {
-          this.cfg.errorService.mappingError(
-            'Unable to send the ADM file to the runtime service.  ' + error.status + ' ' + error.statusText, error);
+          break;
         }
-      });
+      }
+      mapping.updateTransition(removeField.isSource(), compoundSelection, true);
+      await this.saveCurrentMapping();
+      resolve(true);
+    });
   }
+
 }

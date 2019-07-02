@@ -125,7 +125,7 @@ export class AtlasmapNavbarComponent implements OnInit {
    * @param event
    */
   handleExportMapping(event) {
-    this.cfg.mappingService.exportMappingsCatalog(this.mappingsFileName);
+    this.cfg.fileService.exportMappingsCatalog(this.mappingsFileName);
   }
 
   /**

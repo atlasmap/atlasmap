@@ -387,7 +387,7 @@ export class DocumentDefinition {
       const mappingIsActive: boolean = (mapping === mappingDefinition.activeMapping);
 
       let partOfTransformation = false;
-      if (mapping.hasTransition()) {
+      if (mapping.hasTransformation()) {
         partOfTransformation = true;
         break;
       }

@@ -10,6 +10,7 @@ import { ErrorHandlerService } from '../services/error-handler.service';
 import { InitializationService } from '../services/initialization.service';
 import { MappingManagementService } from '../services/mapping-management.service';
 import { FieldActionService } from '../services/field-action.service';
+import { FileManagementService } from '../services/file-management.service';
 
 describe('DataMapperAppExampleHostComponent', () => {
 
@@ -21,6 +22,7 @@ describe('DataMapperAppExampleHostComponent', () => {
         DocumentManagementService,
         ErrorHandlerService,
         FieldActionService,
+        FileManagementService,
         InitializationService,
         MappingManagementService,
         NGXLogger,

@@ -67,7 +67,7 @@ export class ToolbarComponent implements OnInit {
     if (userFileSuffix === 'ADM') {
 
         // Clear out current user documents from the runtime service before processing the imported ADM.
-        this.cfg.mappingService.resetAll().toPromise().then( async(result: boolean) => {
+        this.cfg.fileService.resetAll().toPromise().then( async(result: boolean) => {
           this.cfg.mappings = null;
           await this.processMappingsCatalog(userFile);
         }).catch((error: any) => {
@@ -92,7 +92,7 @@ export class ToolbarComponent implements OnInit {
   async processMappingsCatalog(selectedFile: any) {
     this.cfg.initCfg.initialized = false;
     this.cfg.initializationService.updateLoadingStatus('Importing AtlasMap Catalog');
-    await this.cfg.mappingService.importADMCatalog(selectedFile);
+    await this.cfg.fileService.importADMCatalog(selectedFile);
 
   }
 
@@ -199,7 +199,7 @@ export class ToolbarComponent implements OnInit {
     this.modalWindow.message = 'Are you sure you want to reset all mappings and clear all imported documents?';
     this.modalWindow.okButtonHandler = (mw: ModalWindowComponent) => {
 
-      this.cfg.mappingService.resetAll().toPromise().then( async(result: boolean) => {
+      this.cfg.fileService.resetAll().toPromise().then( async(result: boolean) => {
         this.cfg.initCfg.initialized = false;
         this.cfg.initCfg.mappingInitialized = false;
         this.cfg.mappings = null;
@@ -278,7 +278,7 @@ export class ToolbarComponent implements OnInit {
     if (this.mappingsFileName.length === 0) {
         fileName = 'atlasmap-mapping.adm';
     }
-    this.cfg.mappingService.exportMappingsCatalog(fileName);
+    this.cfg.fileService.exportMappingsCatalog(fileName);
     this.mappingsFileName = '';
   }
 

@@ -30,6 +30,7 @@ import { MappingManagementService } from '../services/mapping-management.service
 import { MappingSerializer } from '../services/mapping-serializer.service';
 
 import { FieldActionService } from './field-action.service';
+import { FileManagementService } from './file-management.service';
 
 @Injectable()
 export class InitializationService {
@@ -46,6 +47,7 @@ export class InitializationService {
     private mappingService: MappingManagementService,
     private errorService: ErrorHandlerService,
     private fieldActionService: FieldActionService,
+    private fileService: FileManagementService,
     private logger: NGXLogger) {
     this.resetConfig();
 
@@ -61,6 +63,8 @@ export class InitializationService {
     this.cfg.errorService = this.errorService;
     this.cfg.fieldActionService = this.fieldActionService;
     this.cfg.fieldActionService.cfg = this.cfg;
+    this.cfg.fileService = this.fileService;
+    this.cfg.fileService.cfg = this.cfg;
     this.cfg.errorService.cfg = this.cfg;
     this.cfg.initializationService = this;
     this.cfg.logger = this.logger;
@@ -200,7 +204,7 @@ export class InitializationService {
       }
 
       // Fetch adm-catalog-files.gz if it exists.
-      this.cfg.mappingService.getCurrentMappingCatalog().subscribe( async(catalog: Uint8Array) => {
+      this.cfg.fileService.getCurrentMappingCatalog().subscribe( async(catalog: Uint8Array) => {
 
         // If catalog is null then no compressed mappings catalog is available on the server.
         if (catalog === null) {
@@ -220,7 +224,7 @@ export class InitializationService {
           if (this.cfg.mappingFiles.length > 0) {
             await this.initMappings(this.cfg.mappingFiles);
           } else {
-            this.cfg.mappingService.findMappingFiles('UI').toPromise()
+            this.cfg.fileService.findMappingFiles('UI').toPromise()
               .then(async(files: string[]) => {
                 await this.initMappings(files);
               },
@@ -288,7 +292,7 @@ export class InitializationService {
   async updateMappings(mInfo: any): Promise<boolean> {
     return new Promise<boolean>((resolve, reject) => {
       try {
-        this.cfg.mappingService.setMappingToService(mInfo.exportMappings.value).toPromise()
+        this.cfg.fileService.setMappingToService(mInfo.exportMappings.value).toPromise()
           .then(async(result: boolean) => {
             resolve(true);
         }).catch((error: any) => {
@@ -318,7 +322,7 @@ export class InitializationService {
     return new Promise<boolean>((resolve, reject) => {
         // Update .../target/mappings/adm-catalog-files.gz
         const fileContent: Blob = new Blob([compressedCatalog], {type: 'application/octet-stream'});
-        this.cfg.mappingService.setBinaryFileToService(fileContent, this.cfg.initCfg.baseMappingServiceUrl + 'mapping/GZ/0').toPromise()
+        this.cfg.fileService.setBinaryFileToService(fileContent, this.cfg.initCfg.baseMappingServiceUrl + 'mapping/GZ/0').toPromise()
           .then(async(result: boolean) => {
           resolve(true);
         }).catch((error: any) => {
@@ -359,7 +363,7 @@ export class InitializationService {
             // If the live UI mappings name does not match the UI mappings name extracted from the
             // catalog file then use the mappings from the catalog file.  Otherwise use the live
             // UI file.
-            this.cfg.mappingService.findMappingFiles('UI').toPromise()
+            this.cfg.fileService.findMappingFiles('UI').toPromise()
               .then( async(files: string[]) => {
               if (catalogMappingsName !== files[0]) {
                 await this.updateMappings(mInfo);

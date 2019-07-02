@@ -170,7 +170,7 @@ export class DocumentDefinitionComponent implements OnInit {
     this.cfg.initializationService.updateLoadingStatus('Importing Document ' + selectedFile.name);
     this.cfg.documentService.processDocument(selectedFile, InspectionType.UNKNOWN, this.isSource);
 
-    this.cfg.mappingService.exportMappingsCatalog(null);
+    this.cfg.fileService.exportMappingsCatalog(null);
   }
 
   getFileSuffix() {
@@ -265,7 +265,7 @@ export class DocumentDefinitionComponent implements OnInit {
                 }
               }
               await self.cfg.mappingService.saveCurrentMapping();
-              self.cfg.mappingService.exportMappingsCatalog(null);
+              self.cfg.fileService.exportMappingsCatalog(null);
             })
             .catch((error: any) => {
               if (error.status === 0) {
@@ -309,7 +309,7 @@ export class DocumentDefinitionComponent implements OnInit {
         DataMapperUtil.removeItemFromArray(docDef, this.cfg.targetDocs);
       }
       await this.cfg.mappingService.saveCurrentMapping();
-      this.cfg.mappingService.exportMappingsCatalog(null);
+      this.cfg.fileService.exportMappingsCatalog(null);
     };
     this.modalWindow.show();
   }

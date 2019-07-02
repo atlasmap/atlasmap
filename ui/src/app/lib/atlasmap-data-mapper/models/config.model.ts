@@ -27,6 +27,7 @@ import { ErrorInfo } from '../models/error.model';
 
 import { DocumentType, InspectionType } from '../common/config.types';
 import { FieldActionService } from '../services/field-action.service';
+import { FileManagementService } from '../services/file-management.service';
 
 export class DataMapperInitializationModel {
   dataMapperVersion = '0.9.2017.07.28';
@@ -114,6 +115,7 @@ export class ConfigModel {
   errorService: ErrorHandlerService;
   initializationService: InitializationService;
   fieldActionService: FieldActionService;
+  fileService: FileManagementService;
 
   sourceDocs: DocumentDefinition[] = [];
   targetDocs: DocumentDefinition[] = [];
