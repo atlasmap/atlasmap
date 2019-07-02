@@ -124,10 +124,10 @@ export class MappingFieldDetailComponent implements OnInit {
       // Add place-holders for each index value between the previous max index and the insertion index.
       mappedField.addPlaceholders(maxIndex, insertionIndex, this.mapping);
     }
-    this.mapping.resequenceFieldActionIndices(mappedFields, mappedField, insertionIndex, false);
+    this.mapping.resequenceFieldIndices(mappedFields, mappedField, insertionIndex, false);
 
     // Sort the mapped fields array to get then back into numerical order.
-    this.mapping.sortFieldActionFields(mappedFields);
+    this.mapping.sortFieldsByIndex(mappedFields);
     this.cfg.mappingService.saveCurrentMapping();
   }
 

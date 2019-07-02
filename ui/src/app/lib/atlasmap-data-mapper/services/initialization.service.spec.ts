@@ -9,6 +9,7 @@ import { ErrorHandlerService } from './error-handler.service';
 import { InitializationService } from './initialization.service';
 import { MappingManagementService } from './mapping-management.service';
 import { FieldActionService } from './field-action.service';
+import { FileManagementService } from './file-management.service';
 
 describe('InitializationService', () => {
   beforeEach(() => {
@@ -18,6 +19,7 @@ describe('InitializationService', () => {
         DocumentManagementService,
         ErrorHandlerService,
         FieldActionService,
+        FileManagementService,
         InitializationService,
         MappingManagementService,
         NGXLogger,

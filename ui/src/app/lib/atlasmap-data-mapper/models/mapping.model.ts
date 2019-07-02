@@ -165,28 +165,6 @@ export class MappedField {
     }
   }
 
-  /**
-   * Return the field action index value of this mapped field in separate or combine mode.
-   * @deprecated Is there any corner case that it has to check other than argumentValues[0]?
-   * other part in the codebase always uses MappedField.actions[0].argumentValues[0]
-   * If not, just use getFieldIndex() instead
-   */
-  getSeparateOrCombineIndex(): string {
-    const firstFieldAction: FieldAction = (this.actions.length > 0) ? this.actions[0] : null;
-    if (firstFieldAction != null && firstFieldAction.isSeparateOrCombineMode) {
-      let maxIndex = 0;
-      for (const indexValue of firstFieldAction.argumentValues) {
-        const indexAsNumber = (indexValue.value == null) ? 0 : +indexValue.value;
-        if (indexAsNumber > maxIndex) {
-          maxIndex = indexAsNumber;
-          break;
-        }
-      }
-      return maxIndex.toString();
-    }
-    return null;
-  }
-
   removeAction(action: FieldAction): void {
     DataMapperUtil.removeItemFromArray(action, this.actions);
   }
@@ -496,7 +474,7 @@ export class MappingModel {
     return this.getMappedFieldForField(field) != null;
   }
 
-  hasTransition(): boolean {
+  hasTransformation(): boolean {
     const mappedFields: MappedField[] = this.getAllMappedFields();
     for (const mappedField of mappedFields) {
       if (mappedField.getTransformationCount() > 0) {
@@ -524,42 +502,7 @@ export class MappingModel {
   }
 
   /**
-   * Given an array of mapped fields, fill the gaps in the action indices by adding place-holders.
-   * If a field was removed just re-sequence the indices based on their existing position.
-   * @param mappedFields
-   * @param fieldRemoved
-   */
-  resequenceRemovalsAndGaps(mappedFields: MappedField[], fieldRemoved: boolean): number {
-      let lastIndex = 0;
-      let tempIndex = 0;
-      for (const mField of mappedFields) {
-        if (mField.isNoneField()) {
-          continue;
-        }
-        if (mField.actions != null && mField.actions.length > 0) {
-          if (fieldRemoved) {
-            mField.index = ++lastIndex;
-            continue;
-          }
-          tempIndex = mField.index;
-          if (tempIndex > lastIndex + 1) {
-            mField.addPlaceholders(++lastIndex, tempIndex, this);
-            break;
-          } else if (tempIndex === lastIndex) {
-            const newIndex = ++tempIndex;
-            mField.index = newIndex;
-          }
-          lastIndex = mField.index;
-        } else {
-          lastIndex++;
-        }
-      }
-      this.sortFieldActionFields(mappedFields);
-      return lastIndex;
-  }
-
-  /**
-   * Given an array of mapped fields, re-sequence the field action indices accounting for any gaps
+   * Given an array of mapped fields, re-sequence the field indices accounting for any gaps
    * due to user index editing or element removal.  An optional mapped field may be specified to be
    * inserted at a designated index.
    *
@@ -568,7 +511,7 @@ export class MappingModel {
    * @param inIndex - drop index location
    * @param fieldRemoved
    */
-  resequenceFieldActionIndices(mappedFields: MappedField[], insertedMappedField: MappedField,
+  resequenceFieldIndices(mappedFields: MappedField[], insertedMappedField: MappedField,
                                inIndex: number, fieldRemoved: boolean): number {
     let index = 0;
     if (insertedMappedField != null) {
@@ -600,11 +543,11 @@ export class MappingModel {
   }
 
   /**
-   * Given an array of mapped fields, sort the field action fields themselves. based on their index.
+   * Given an array of mapped fields, sort the fields themselves. based on their index.
    *
    * @param mappedFields
    */
-  sortFieldActionFields(mappedFields: MappedField[]): void {
+  sortFieldsByIndex(mappedFields: MappedField[]): void {
     let done = false;
 
     while (!done) {
@@ -633,32 +576,6 @@ export class MappingModel {
         index++;
         lastField = mField;
       }
-    }
-  }
-
-  /**
-   * Normalize index fields for combine/ separate modes.
-   * @param combineMode
-   */
-  processIndices(combineMode: boolean, fieldRemoved: boolean): number {
-
-    // Remove indices from target fields in combine-mode if they exist or remove indices from
-    // source fields in separate-mode if they exist.
-    for (const mField of this.getMappedFields(!combineMode)) {
-      if (mField.isNoneField()) {
-        continue;
-      }
-      mField.removeSeparateOrCombineAction();
-    }
-
-    // Gather mapped fields.
-    const mappedFields = this.getMappedFields(combineMode);
-    return this.resequenceFieldActionIndices(mappedFields, null, -1, fieldRemoved);
-  }
-
-  clearAllCombineSeparateActions(): void {
-    for (const mappedField of this.getAllMappedFields()) {
-      mappedField.removeSeparateOrCombineAction();
     }
   }
 
@@ -757,6 +674,67 @@ export class MappingModel {
         }
       }
     }
+  }
+
+  /**
+   * Normalize index fields for combine/ separate modes.
+   * @param combineMode
+   */
+  private processIndices(combineMode: boolean, fieldRemoved: boolean): number {
+
+    // Remove indices from target fields in combine-mode if they exist or remove indices from
+    // source fields in separate-mode if they exist.
+    for (const mField of this.getMappedFields(!combineMode)) {
+      if (mField.isNoneField()) {
+        continue;
+      }
+      mField.removeSeparateOrCombineAction();
+    }
+
+    // Gather mapped fields.
+    const mappedFields = this.getMappedFields(combineMode);
+    return this.resequenceFieldIndices(mappedFields, null, -1, fieldRemoved);
+  }
+
+  private clearAllCombineSeparateActions(): void {
+    for (const mappedField of this.getAllMappedFields()) {
+      mappedField.removeSeparateOrCombineAction();
+    }
+  }
+
+  /**
+   * Given an array of mapped fields, fill the gaps in the action indices by adding place-holders.
+   * If a field was removed just re-sequence the indices based on their existing position.
+   * @param mappedFields
+   * @param fieldRemoved
+   */
+  private resequenceRemovalsAndGaps(mappedFields: MappedField[], fieldRemoved: boolean): number {
+      let lastIndex = 0;
+      let tempIndex = 0;
+      for (const mField of mappedFields) {
+        if (mField.isNoneField()) {
+          continue;
+        }
+        if (mField.actions != null && mField.actions.length > 0) {
+          if (fieldRemoved) {
+            mField.index = ++lastIndex;
+            continue;
+          }
+          tempIndex = mField.index;
+          if (tempIndex > lastIndex + 1) {
+            mField.addPlaceholders(++lastIndex, tempIndex, this);
+            break;
+          } else if (tempIndex === lastIndex) {
+            const newIndex = ++tempIndex;
+            mField.index = newIndex;
+          }
+          lastIndex = mField.index;
+        } else {
+          lastIndex++;
+        }
+      }
+      this.sortFieldsByIndex(mappedFields);
+      return lastIndex;
   }
 
 }
