@@ -23,7 +23,7 @@
   <parent>
     <groupId>io.atlasmap</groupId>
     <artifactId>atlas-java-parent</artifactId>
-    <version>1.40.1</version>
+    <version>1.40.1.fuse-740014</version>
     <relativePath>..</relativePath>
   </parent>
 
