@@ -21,15 +21,22 @@
 
   <label class="parentObjectName" style="float: left;" *ngIf="displayParentObject()">
     <i [ngClass]="sourceIconCSSClass"></i> {{ parentObjectName }} <span
-	  class="pficon pficon-info" [tooltip]="tolTemplate" placement="left" style=" padding-left: 5px;"></span>
+      class="pficon pficon-info" [tooltip]="tolTemplate" placement="left" style=" padding-left: 5px;"></span>
+  </label>
+
+  <div class="clear"></div>
+
+  <div>
+  <label class="label" style="float: left; text-align: left; width: 50%;">
+    {{ mappedField.field.name }}
   </label>
 
   <!-- Index: -->
-  <label style="float: left; padding-left: 10px; font-style: italic;"
+  <label style="display: inline-block; text-align: right; margin-right: 10px; font-style: italic;"
     tooltip="To change the index ordinal value, drag and drop to the desired position."
     *ngIf="mappedField.hasIndex()">Index: </label>
 
-  <div style="float: left; font-size: 100%; padding-left: 5px; font-weight: bold; color: green; width: 35px;"
+  <div style="display: inline-block; text-align: right; font-size: 100%; margin-right: 5px; font-weight: bold; color: green; width: 35px;"
 	*ngIf="mappedField.hasIndex()">
     <div *ngIf="mappedField.isPadField(); else textInput">
       <label style="font-size: 110%; color: dark-gray;
@@ -45,24 +52,13 @@
     </ng-template>
   </div>
 
-  <div class="pull-right" *ngIf="!mappedField.isNoneField()" style="margin-right: 5px;">
+  <div class="pull-right" style="margin-right: 5px;">
     <i class="pficon pficon-delete link" aria-hidden="true" (click)="removeMappedField(mappedField)"
       tooltip="Remove mapping element" placement="left"></i>
   </div>
+  </div>
 
   <div class="clear"></div>
-
-  <div *ngIf="displayFieldSearchBox()" class="searchBox">
-    <input type="text" #searchFilterBox id="{{inputId}}" [ngModel]="mappedField.field.getFieldLabel(cfg.showTypes, false)"
-      (keyup)="updateSearchFilter(searchFilterBox.value)" [typeahead]="dataSource" typeaheadWaitMs="200"
-      typeaheadOptionField="displayName" [typeaheadItemTemplate]="typeaheadTemplate" 
-      (typeaheadOnSelect)="selectionChanged($event)" [placeholder]="getSearchPlaceholder()">
-    <div class="clear"></div>
-  </div>
-
-  <div *ngIf="displaySeparator()" style="margin-top:10px;">
-    <transition-selection [cfg]="cfg" [mapping]="mapping" [modalWindow]="modalWindow"></transition-selection>
-  </div>
 
   <div style="width: 100%;" *ngIf="!mappedField.isPadField()">
     <div style="float: left; padding-right: 5px; padding-top: 10px" *ngIf="isTransformCapable()">

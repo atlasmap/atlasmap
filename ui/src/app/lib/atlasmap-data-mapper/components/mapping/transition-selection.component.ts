@@ -106,7 +106,7 @@ export class TransitionSelectionComponent implements OnInit {
     const mapping: MappingModel = this.cfg.mappings.activeMapping;
     this.cfg.errorService.clearMappingErrors();
 
-    if (!mapping.hasMappedFields(true) || !mapping.hasMappedFields(false)) {
+    if (!mapping.isFullyMapped()) {
       this.cfg.errorService.mappingError('Please select source and target fields before mapping values.', null);
       return;
     }

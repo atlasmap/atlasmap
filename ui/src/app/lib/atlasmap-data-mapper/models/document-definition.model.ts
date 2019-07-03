@@ -57,7 +57,6 @@ export class NamespaceModel {
 }
 
 export class DocumentDefinition {
-  private static noneField: Field = null;
   private static padField: Field = null;
 
   LEFT_BRACKET = '\x5b';
@@ -91,17 +90,6 @@ export class DocumentDefinition {
   namespaces: NamespaceModel[] = [];
   characterEncoding: string = null;
   locale: string = null;
-
-  static getNoneField(): Field {
-    if (DocumentDefinition.noneField == null) {
-      DocumentDefinition.noneField = new Field();
-      DocumentDefinition.noneField.name = '';
-      DocumentDefinition.noneField.type = '';
-      DocumentDefinition.noneField.displayName = '';
-      DocumentDefinition.noneField.path = '';
-    }
-    return DocumentDefinition.noneField;
-  }
 
   /**
    * Return a generic padding field for use in combine/separate modes.
@@ -209,10 +197,7 @@ export class DocumentDefinition {
   }
 
   getField(fieldPath: string): Field {
-    if (fieldPath === DocumentDefinition.getNoneField().path) {
-      return DocumentDefinition.getNoneField();
-    }
-    if (fieldPath == null) {
+    if (!fieldPath) {
       return null;
     }
     let field: Field = this.fieldsByPath[fieldPath];
@@ -265,9 +250,7 @@ export class DocumentDefinition {
 
   updateField(field: Field, oldPath: string): void {
     Field.alphabetizeFields(this.fields);
-    if (field.parentField == null
-      || field.parentField === DocumentDefinition.getNoneField()
-      || this.isPropertyOrConstant) {
+    if (!field.parentField || this.isPropertyOrConstant) {
       this.populateFieldParentPaths(field, null, 0);
     } else {
       const pathSeparator: string = this.pathSeparator;
@@ -283,9 +266,7 @@ export class DocumentDefinition {
   }
 
   addField(field: Field): void {
-    if (field.parentField == null
-      || field.parentField === DocumentDefinition.getNoneField()
-      || this.isPropertyOrConstant) {
+    if (!field.parentField || this.isPropertyOrConstant) {
       this.fields.push(field);
       Field.alphabetizeFields(this.fields);
       this.populateFieldParentPaths(field, null, 0);

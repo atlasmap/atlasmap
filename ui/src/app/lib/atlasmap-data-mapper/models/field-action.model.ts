@@ -63,7 +63,7 @@ export class FieldActionDefinition {
     const selectedSourceField: Field = this.getActualField(mapping, true);
     const selectedTargetField: Field = this.getActualField(mapping, false);
 
-    if (selectedSourceField == null) {
+    if ((isSource && selectedSourceField == null) || (!isSource) && selectedTargetField == null) {
       return false;
     }
 
@@ -108,7 +108,7 @@ export class FieldActionDefinition {
   private getActualField(mapping: MappingModel, isSource: boolean): Field {
     let targetField: Field = null;
     for (targetField of mapping.getFields(isSource)) {
-      if ((targetField.name !== '<padding field>') && (targetField !== DocumentDefinition.getNoneField())) {
+      if ((targetField.name !== '<padding field>')) {
         break;
       }
     }

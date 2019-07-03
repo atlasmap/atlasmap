@@ -12,10 +12,10 @@ describe('FieldActionDefinition.appliesToField()', () => {
       mapping = new MappingModel();
       mapping.sourceFields.splice(0);
       source = new Field();
-      mapping.addField(source, true, false);
+      mapping.addField(source, false);
       mapping.targetFields.splice(0);
       target = new Field();
-      mapping.addField(target, false, false);
+      mapping.addField(target, false);
     });
 
     it('should return false if FieldMappingPair is null', () => {

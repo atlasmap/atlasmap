@@ -38,13 +38,13 @@ export class MappedFieldParsingData {
 
 export class MappedField {
   parsedData: MappedFieldParsingData = new MappedFieldParsingData();
-  field: Field = DocumentDefinition.getNoneField();
+  field: Field;
   index = -1;
   actions: FieldAction[] = [];
   private padField = false;
   private transformationCount = 0;
 
-  static sortMappedFieldsByPath(mappedFields: MappedField[], allowNone: boolean): MappedField[] {
+  static sortMappedFieldsByPath(mappedFields: MappedField[]): MappedField[] {
     if (mappedFields == null || mappedFields.length === 0) {
       return [];
     }
@@ -52,9 +52,6 @@ export class MappedField {
     const fieldPaths: string[] = [];
     for (const mappedField of mappedFields) {
       if (mappedField == null || mappedField.field == null) {
-        continue;
-      }
-      if (!allowNone && mappedField.isNoneField()) {
         continue;
       }
       const path: string = mappedField.field.path;
@@ -67,10 +64,6 @@ export class MappedField {
       result.push(fieldsByPath[name]);
     }
     return result;
-  }
-
-  isNoneField(): boolean {
-    return this.field === DocumentDefinition.getNoneField();
   }
 
   isPadField(): boolean {
@@ -169,10 +162,6 @@ export class MappedField {
     DataMapperUtil.removeItemFromArray(action, this.actions);
   }
 
-  isMapped(): boolean {
-    return (this.field != null) && (this.field !== DocumentDefinition.getNoneField());
-  }
-
   hasIndex() {
     return this.index != null && this.index >= 0;
   }
@@ -183,13 +172,12 @@ export class MappingModel {
   cfg: ConfigModel;
   uuid: string;
 
-  sourceFields: MappedField[] = [new MappedField()];
-  targetFields: MappedField[] = [new MappedField()];
+  sourceFields: MappedField[] = [];
+  targetFields: MappedField[] = [];
   transition: TransitionModel = new TransitionModel();
 
   validationErrors: ErrorInfo[] = []; // must be immutable
   previewErrors: ErrorInfo[] = []; // must be immutable
-  brandNewMapping = true;
 
   constructor() {
     this.uuid = 'mapping.' + Math.floor((Math.random() * 1000000) + 1).toString();
@@ -257,104 +245,38 @@ export class MappingModel {
     return false;
   }
 
-  isFieldSelectable(field: Field): boolean {
-    return this.getFieldSelectionExclusionReason(field) == null;
-  }
-
-  getFieldSelectionExclusionReason(field: Field ): string {
-    if (this.brandNewMapping) { // if mapping hasn't had a field selected yet, allow it
-      return null;
-    }
-
-    if (!field.isTerminal()) {
-      return 'field is a parent field';
-    }
-
-    // Target fields may only be mapped once.
-    const existingMappedField = this.getMappedTarget(field);
-    if (existingMappedField != null) {
-      const macPlatform: boolean = /(MacPPC|MacIntel|Mac_PowerPC|Macintosh|Mac OS X)/.test(navigator.userAgent);
-      return 'it is already the target of another mapping (' + existingMappedField + '). ' +
-        'Use ' + (macPlatform ? 'CMD' : 'CTRL') + '-M1 to select multiple elements for \'Combine\' or \'Separate\' actions.';
-    }
-
-    const lookupMode: boolean = this.isLookupMode();
-    let mapMode = false;
-    let separateMode = false;
-    let combineMode = false;
-
-    if (!lookupMode) {
-      mapMode = mapMode || this.transition.isOneToOneMode();
-      separateMode = separateMode || this.transition.isOneToManyMode();
-      combineMode = combineMode || this.transition.isManyToOneMode();
-    }
-    if (mapMode || separateMode || combineMode) {
-      // enums are not selectable in these modes
-      if (field.enumeration) {
-        return 'Enumeration fields are not valid for this mapping';
-      }
-
-      // separate mode sources must be string
-      if (separateMode && !field.isStringField() && field.isSource()) {
-        return 'source fields for this mapping must be type String';
-      }
-    } else if (lookupMode) {
-      if (!field.enumeration) {
-        return 'only Enumeration fields are valid for this mapping';
-      }
-    }
-    return null;
-  }
-
-  hasMappedFields(isSource: boolean): boolean {
-    for (const mappedField of this.getMappedFields(isSource)) {
-      if (mappedField.isMapped()) {
-        return true;
-      }
-    }
-    return false;
-  }
-
   /**
    * Add a field to this field mapping pair.
    *
    * @param field - field to add to the mapping
-   * @param isSource - if true sources panel field, target panels field otherwise.
    * @param first - if true add the field to the beginning of the array, last otherwise.
    */
-  addField(field: Field, isSource: boolean, first: boolean): MappedField {
+  addField(field: Field, first: boolean): MappedField {
     const mappedField: MappedField = new MappedField();
     mappedField.field = field;
     if (first) {
-      this.getMappedFields(isSource).unshift(mappedField);
+      this.getMappedFields(field.isSource()).unshift(mappedField);
     } else {
-      this.getMappedFields(isSource).push(mappedField);
+      this.getMappedFields(field.isSource()).push(mappedField);
     }
     return mappedField;
   }
 
-  hasMappedField(isSource: boolean) {
-    const mappedFields: MappedField[] = isSource ? this.sourceFields : this.targetFields;
-    for (const mappedField of mappedFields) {
-      if (mappedField.isMapped()) {
-        return true;
-      }
-    }
-    return false;
+  removeField(field: Field) {
+    const mappedFields = this.getMappedFields(field.isSource());
+    DataMapperUtil.removeItemFromArray(mappedFields.find(mf => mf.field === field), mappedFields);
   }
 
-  hasNoneField(isSource: boolean) {
-    const mappedFields: MappedField[] = isSource ? this.sourceFields : this.targetFields;
-    for (const mappedField of mappedFields) {
-      if (mappedField.isNoneField()) {
-        return true;
-      }
-    }
-    return false;
+  hasMappedField(isSource: boolean) {
+    return isSource ? this.sourceFields.length > 0 : this.targetFields.length > 0;
+  }
+
+  isEmpty() {
+    return this.sourceFields.length === 0 && this.targetFields.length === 0;
   }
 
   isFullyMapped(): boolean {
-    return this.hasMappedField(true) && this.hasMappedField(false);
+    return this.sourceFields.length > 0 && this.targetFields.length > 0;
   }
 
   addMappedField(mappedField: MappedField, isSource: boolean): void {
@@ -397,7 +319,7 @@ export class MappingModel {
     const resultFields: MappedField[] = [new MappedField()];
 
     for (const mappedField of workingFields) {
-      if (!mappedField.isPadField() && !mappedField.isNoneField()) {
+      if (!mappedField.isPadField()) {
         resultFields.push(mappedField);
       }
     }
@@ -432,9 +354,6 @@ export class MappingModel {
     Field.alphabetizeFields(fields);
     const names: string[] = [];
     for (const field of fields) {
-      if (field === DocumentDefinition.getNoneField()) {
-        continue;
-      }
       names.push(field.name);
     }
     return names;
@@ -445,9 +364,6 @@ export class MappingModel {
     Field.alphabetizeFields(fields);
     const paths: string[] = [];
     for (const field of fields) {
-      if (field === DocumentDefinition.getNoneField()) {
-        continue;
-      }
       paths.push(field.path);
     }
     return paths;
@@ -492,7 +408,7 @@ export class MappingModel {
   getMaxIndex(mappedFields: MappedField[]): number {
     let maxIndex = 0;
     for (const mField of mappedFields) {
-      if (!mField.isNoneField() && mField.actions != null && mField.actions.length > 0) {
+      if (mField.actions != null && mField.actions.length > 0) {
         if (+mField.index > maxIndex) {
           maxIndex = +mField.index;
         }
@@ -513,18 +429,16 @@ export class MappingModel {
    */
   resequenceFieldIndices(mappedFields: MappedField[], insertedMappedField: MappedField,
                                inIndex: number, fieldRemoved: boolean): number {
-    let index = 0;
     if (insertedMappedField != null) {
       let startIndex = insertedMappedField.index;
-      mappedFields.splice(startIndex, 1);
+      mappedFields.splice(startIndex - 1, 1);
       startIndex = inIndex;
-      mappedFields.splice(startIndex, 0, insertedMappedField);
+      mappedFields.splice(startIndex - 1, 0, insertedMappedField);
 
       // Now re-sequence the index on the ordinal position within the mapped fields array.
+      let index = 1;
       for (const mField of mappedFields) {
-        if (!mField.isNoneField()) {
-          mField.index = index;
-        }
+        mField.index = index;
         index++;
       }
       return(index - 1);
@@ -557,10 +471,6 @@ export class MappingModel {
       done = true;
 
       for (const mField of mappedFields) {
-        if (mField.isNoneField()) {
-          continue;
-        }
-
         if (lastField != null) {
           if (!mField.hasIndex()) {
             break;
@@ -589,9 +499,6 @@ export class MappingModel {
 
     let mappedFields: MappedField[] = this.getMappedFields(false);
     for (const mappedField of mappedFields) {
-      if (mappedField.isNoneField()) {
-        continue;
-      }
       const actionsToRemove: FieldAction[] = [];
       for (const action of mappedField.actions) {
         const actionConfig = this.cfg.fieldActionService.getActionDefinitionForName(action.name);
@@ -610,11 +517,6 @@ export class MappingModel {
 
     if (combineMode || separateMode) {
 
-      // Set a none field as the base of a compound mapping.
-      if (!this.hasNoneField(isSource)) {
-        this.addField(DocumentDefinition.getNoneField(), isSource, true);
-      }
-
       maxIndex = this.processIndices(combineMode, fieldRemoved);
 
       if (maxIndex <= 1 && fieldRemoved) {
@@ -622,6 +524,7 @@ export class MappingModel {
         combineMode = false;
         separateMode = false;
         this.clearAllCombineSeparateActions();
+        this.getMappedFields(isSource).forEach(mf => mf.index = null);
       } else {
         mappedFields = this.getMappedFields(combineMode);
         if (mappedFields != null && mappedFields.length > 1) {
@@ -655,7 +558,7 @@ export class MappingModel {
    *
    * @param field
    */
-  private getMappedTarget(field: Field): string {
+  public getMappedTarget(field: Field): string {
     const mappings: MappingModel[] = this.cfg.mappings.mappings;
 
     if (field.isSource()) {
@@ -686,9 +589,6 @@ export class MappingModel {
     // Remove indices from target fields in combine-mode if they exist or remove indices from
     // source fields in separate-mode if they exist.
     for (const mField of this.getMappedFields(!combineMode)) {
-      if (mField.isNoneField()) {
-        continue;
-      }
       mField.removeSeparateOrCombineAction();
     }
 
@@ -713,9 +613,6 @@ export class MappingModel {
       let lastIndex = 0;
       let tempIndex = 0;
       for (const mField of mappedFields) {
-        if (mField.isNoneField()) {
-          continue;
-        }
         if (mField.actions != null && mField.actions.length > 0) {
           if (fieldRemoved) {
             mField.index = ++lastIndex;

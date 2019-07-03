@@ -1,0 +1,27 @@
+<div class="mappingFieldContainer" *ngIf="mapping">
+
+  <div class="MappingFieldSection" *ngIf="displayFieldSearchBox() || displaySeparator()" on-mouseover='handleMouseOver($event)'
+    [attr.draggable]="true" (dragstart)="startDrag($event, mappedField)" (drop)="endDrag($event, mappedField)"
+    (dragenter)="dragEnterLeave($event, true)" (dragleave)="dragEnterLeave($event, false)" (dragover)="allowDrop($event)">
+
+    <div class="searchBox" *ngIf="displayFieldSearchBox()" >
+      <input type="text" #searchFilterBox id="{{inputId}}" style="border-color: #4d5258;"
+        (keyup)="updateSearchFilter(searchFilterBox.value)" [typeahead]="dataSource" typeaheadWaitMs="200"
+        typeaheadOptionField="displayName" [typeaheadItemTemplate]="typeaheadTemplate" [ngModel]="searchFilter"
+        (typeaheadOnSelect)="selectionChanged($event)" [placeholder]="getSearchPlaceholder()">
+      <div class="clear"></div>
+    </div>
+    <div *ngIf="displaySeparator()" style="margin-top:10px;">
+      <transition-selection [cfg]="cfg" [mapping]="mapping" [modalWindow]="modalWindow"></transition-selection>
+    </div>
+  </div>
+
+  <div *ngFor="let mappedField of mapping.getMappedFields(isSource)" class="MappingFieldSection" on-mouseover='handleMouseOver($event)'
+    [attr.draggable]="true" (dragstart)="startDrag($event, mappedField)" (drop)="endDrag($event, mappedField)"
+    (dragenter)="dragEnterLeave($event, true)" (dragleave)="dragEnterLeave($event, false)" (dragover)="allowDrop($event)">
+
+    <mapping-field-detail [mapping]="mapping" [cfg]="cfg" [isSource]="isSource" [mappedField]="mappedField"></mapping-field-detail>
+    <mapping-field-action [mapping]="mapping" [cfg]="cfg" [isSource]="isSource" [mappedField]="mappedField"></mapping-field-action>
+  </div>
+
+</div>

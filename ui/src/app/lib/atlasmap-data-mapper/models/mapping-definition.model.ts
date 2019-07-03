@@ -143,12 +143,12 @@ export class MappingDefinition {
 
   isMappingStale(mapping: MappingModel, sourceFieldPaths: string[], targetSourcePaths: string[]): boolean {
     for (const field of mapping.getFields(true)) {
-      if ((field !== DocumentDefinition.getNoneField()) && (sourceFieldPaths.indexOf(field.path) === -1)) {
+      if (sourceFieldPaths.indexOf(field.path) === -1) {
         return true;
       }
     }
     for (const field of mapping.getFields(false)) {
-      if ((field !== DocumentDefinition.getNoneField()) && (targetSourcePaths.indexOf(field.path) === -1)) {
+      if (targetSourcePaths.indexOf(field.path) === -1) {
         return true;
       }
     }
@@ -272,7 +272,7 @@ export class MappingDefinition {
     for (const mapping of this.getAllMappings(true)) {
       const mappedField: MappedField = mapping.getMappedFieldForField(field);
       if (mappedField != null) {
-        mappedField.field = DocumentDefinition.getNoneField();
+        mapping.removeMappedField(mappedField, field.isSource());
       }
     }
   }
@@ -295,14 +295,6 @@ export class MappingDefinition {
 
   updateMappedFieldsFromDocuments(mapping: MappingModel, cfg: ConfigModel, docMap: any, isSource: boolean): void {
     const mappedFields: MappedField[] = mapping.getMappedFields(isSource);
-
-    if (mappedFields.length === 0) {
-      const mappedField: MappedField = new MappedField();
-      mappedField.field = DocumentDefinition.getNoneField();
-      mappedFields.push(mappedField);
-      mapping.addMappedField(mappedField, isSource);
-      return;
-    }
 
     for (const mappedField of mappedFields) {
       let doc: DocumentDefinition = null;
@@ -372,15 +364,11 @@ export class MappingDefinition {
           if (parentPath != null) {
             mappedField.field.parentField = doc.getField(parentPath);
           }
-          if (mappedField.field.parentField == null) {
-            mappedField.field.parentField = DocumentDefinition.getNoneField();
-          }
 
           doc.addField(mappedField.field);
         } else {
           cfg.errorService.error('Could not find field from document for mapped field \'' + mappedField.parsedData.parsedName + '\'',
             { 'mappedField': mappedField, 'doc': doc });
-          mappedField.field = DocumentDefinition.getNoneField();
           return;
         }
       }
