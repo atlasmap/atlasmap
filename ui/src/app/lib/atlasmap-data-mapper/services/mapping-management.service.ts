@@ -189,18 +189,18 @@ export class MappingManagementService {
   transitionMode(mapping: MappingModel, field: Field): void {
     if (mapping.transition.mode === TransitionMode.ONE_TO_ONE) {
       const mappedFields: MappedField[] = mapping.getMappedFields(field.isSource());
-      if (mappedFields.length > 2) {
+      if (mappedFields.length > 1) {
         if (field.isSource()) {
           mapping.transition.mode = TransitionMode.MANY_TO_ONE;
-          mappedFields[1].index = 1;
-          mappedFields[1].updateSeparateOrCombineFieldAction(false, true, true, true, false);
+          mappedFields[0].index = 1;
+          mappedFields[0].updateSeparateOrCombineFieldAction(false, true, true, true, false);
           this.cfg.errorService.info(
             'Note: You\'ve selected multiple fields to combine.  ' +
             'You may want to examine the separator character in the \'Sources\' box of the Mapping Details section.', null);
         } else {
           mapping.transition.mode = TransitionMode.ONE_TO_MANY;
-          mappedFields[1].index = 1;
-          mappedFields[1].updateSeparateOrCombineFieldAction(true, false, false, true, false);
+          mappedFields[0].index = 1;
+          mappedFields[0].updateSeparateOrCombineFieldAction(true, false, false, true, false);
           this.cfg.errorService.info(
             'Note: You\'ve selected multiple fields to separate into.  ' +
             'You may want to examine the separator character in the \'Sources\' box of the Mapping Details section.', null);
@@ -222,30 +222,34 @@ export class MappingManagementService {
       field.collapsed = !field.collapsed;
       return;
     }
-    let fieldAdded = false;
+    let addField = false;
+    let removeField = false;
     let mapping: MappingModel = this.cfg.mappings.activeMapping;
-    let fieldRemoved = false;
 
-    if (mapping != null && mapping.hasMappedFields(field.isSource())) {
+    // Check compound selection and active mapping status to determine the action
+    if (mapping != null) {
+      if (mapping.hasMappedField(field.isSource())) {
 
-      // If the user has performed a compound selection (ctrl/cmd-m1) of a previously unselected field
-      // then add it to the active mapping; otherwise remove it.
-      if (compoundSelection) {
-          if (mapping.isFieldMapped(field)) {
-            this.removeMappedField(this.cfg.mappings.activeMapping, field, compoundSelection);
-            fieldRemoved = true;
-          } else {
-            this.addActiveMappingField(field);
-            fieldAdded = true;
+        // If the user has performed a compound selection (ctrl/cmd-m1) of a previously unselected field
+        // then add it to the active mapping; otherwise remove it.
+        if (compoundSelection) {
+            if (mapping.isFieldMapped(field)) {
+              removeField = true;
+            } else {
+              addField = true;
+            }
+        } else {
+          if (!mapping.isFieldMapped(field)) {
+            mapping = null;
           }
-      } else {
-        if (!mapping.isFieldMapped(field)) {
-          mapping = null;
         }
+      } else {
+        addField = true;
       }
     }
 
-    if ((mapping == null) || (this.cfg.mappings.activeMapping && this.cfg.mappings.activeMapping.brandNewMapping)) {
+    // Select other existing mapping if selected field participates, or create a new one
+    if (mapping == null) {
       const mappingsForField: MappingModel[] = this.cfg.mappings.findMappingsForField(field);
 
       if (mappingsForField && mappingsForField.length === 1) {
@@ -256,47 +260,84 @@ export class MappingManagementService {
       } else if (mappingsForField && mappingsForField.length > 1) {
         this.mappingSelectionRequiredSource.next(field);
         return;
-      }
-
-      if (mapping == null) {
-        this.addNewMapping(field, compoundSelection);
-        mapping = this.cfg.mappings.activeMapping;
-        fieldAdded = true;
+      } else {
+        mapping = new MappingModel();
+        this.cfg.mappings.activeMapping = mapping;
+        addField = true;
       }
     }
 
-    if (this.cfg.mappings.activeMapping && !this.cfg.mappings.activeMapping.isFullyMapped()) {
-      this.addNewMapping(field, compoundSelection);
-      fieldAdded = true;
-    }
-
-    if (!fieldAdded && !fieldRemoved) {
+    if (!addField && !removeField) {
       this.selectMapping(mapping);
       this.validateMappings();
       return;
     }
 
-    // Check to see if the field is a valid selection for this mapping
-    const exclusionReason: string = mapping.getFieldSelectionExclusionReason(field);
-    if (exclusionReason != null) {
-      this.cfg.errorService.mappingError('The field \'' + field.name + '\' cannot be selected, ' + exclusionReason + '.', null);
-      return;
-    }
+    if (addField) {
+      // Check to see if the field is a valid selection for this mapping
+      const exclusionReason: string = this.getFieldSelectionExclusionReason(mapping, field);
+      if (exclusionReason != null) {
+        this.cfg.errorService.mappingError('The field \'' + field.name + '\' cannot be selected, ' + exclusionReason + '.', null);
+        return;
+      }
 
-    mapping.brandNewMapping = false;
-
-    const lastMappedField: MappedField = mapping.getLastMappedField(field.isSource());
-    if (lastMappedField != null && lastMappedField.isNoneField()) {
-      lastMappedField.field = field;
-    }
-    if (!fieldRemoved) {
+      this.addActiveMappingField(field);
       if (compoundSelection || this.hasMultipleMappings(mapping)) {
         this.transitionMode(mapping, field);
       }
-      mapping.updateTransition(field.isSource(), compoundSelection, fieldRemoved, position, offset);
+      mapping.updateTransition(field.isSource(), compoundSelection, removeField, position, offset);
       this.selectMapping(mapping);
-      this.validateMappings();
+      this.saveCurrentMapping();
+      return;
     }
+
+    if (removeField) {
+      mapping.removeField(field);
+      mapping.updateTransition(field.isSource(), compoundSelection, true);
+      this.saveCurrentMapping();
+    }
+  }
+
+  getFieldSelectionExclusionReason(mapping: MappingModel, field: Field): string {
+    if (mapping.getAllMappedFields().length === 0) { // if mapping hasn't had a field selected yet, allow it
+      return null;
+    }
+
+    if (!field.isTerminal()) {
+      return 'field is a parent field';
+    }
+
+    // Target fields may only be mapped once.
+    const existingMappedField = mapping.getMappedTarget(field);
+    if (existingMappedField != null) {
+      const macPlatform: boolean = /(MacPPC|MacIntel|Mac_PowerPC|Macintosh|Mac OS X)/.test(navigator.userAgent);
+      return 'it is already the target of another mapping (' + existingMappedField + '). ' +
+        'Use ' + (macPlatform ? 'CMD' : 'CTRL') + '-M1 to select multiple elements for \'Combine\' or \'Separate\' actions.';
+    }
+
+    const lookupMode: boolean = mapping.isLookupMode();
+
+    if (lookupMode) {
+      if (!field.enumeration) {
+        return 'only Enumeration fields are valid for this mapping';
+      }
+    } else {
+      // enums are not selectable in these modes
+      if (field.enumeration) {
+        return 'Enumeration fields are not valid for this mapping';
+      }
+      if (mapping.getMappedFields(field.isSource()).length > 0
+      && mapping.getMappedFields(!field.isSource()).length > 1) {
+        const direction = field.isSource() ? 'source' : 'target';
+        return `Multiple ${direction} fields cannot be added into
+          mapping. Only one of Source field or Target field could be multiple.`;
+      }
+    }
+    return null;
+  }
+
+  isFieldSelectable(mapping: MappingModel, field: Field): boolean {
+    return this.getFieldSelectionExclusionReason(mapping, field) == null;
   }
 
   /**
@@ -309,9 +350,8 @@ export class MappingManagementService {
       this.deselectMapping();
     }
     const mapping: MappingModel = new MappingModel();
-    mapping.brandNewMapping = false;
     if (selectedField != null) {
-      mapping.getMappedFields(selectedField.isSource())[0].field = selectedField;
+      mapping.addField(selectedField, false);
       mapping.updateTransition(selectedField.isSource(), false, false);
       this.saveCurrentMapping();
     }
@@ -377,10 +417,6 @@ export class MappingManagementService {
         }
         const answer = MappingSerializer.deserializeFieldMapping(body.ProcessMappingResponse.mapping, docRefs, this.cfg, false);
         for (const toWrite of inputFieldMapping.targetFields) {
-          if (DocumentDefinition.getNoneField().path === toWrite.field.path) {
-            // excluging none field garbage
-            continue;
-          }
           for (const toRead of answer.targetFields) {
             if (toWrite.field.docDef.id === toRead.parsedData.parsedDocID
                 && toWrite.field.path === toRead.parsedData.parsedPath) {
@@ -503,87 +539,29 @@ export class MappingManagementService {
    * A compound source selection in separate mode or a compound target selection in combine mode is an error.
    * @param field
    */
-  private addActiveMappingField(field: Field): void {
+  private addActiveMappingField(field: Field): boolean {
     const mapping = this.cfg.mappings.activeMapping;
-    let suggestedValue = 1;
+    const exclusionReason: string = this.getFieldSelectionExclusionReason(mapping, field);
+    if (exclusionReason != null) {
+      this.cfg.errorService.mappingError('The field \'' + field.name + '\' cannot be selected, ' + exclusionReason + '.', null);
+      return false;
+    }
+
     if (mapping.transition == null || field == null) {
-      return;
+      return false;
     }
-    if (mapping.transition.mode === TransitionMode.MANY_TO_ONE) {
 
-      // Compound target mapping when not in ONE_TO_MANY mode
-      if (!field.isSource()) {
-        this.cfg.errorService.info(`Cannot add target field '${field.name}' into mapping:
-        Multiple target fields cannot be added into
-          ${TransitionModel.getMappingModeName(mapping.transition.mode)}
-          mapping. Only one of Source field or Target field could be multiple.`, null);
-        return;
-      }
-      if (mapping.sourceFields[mapping.sourceFields.length - 1].actions.length > 0) {
-        suggestedValue = mapping.sourceFields[mapping.sourceFields.length - 1].index + 1;
-      }
-    } else if (mapping.transition.mode === TransitionMode.ONE_TO_MANY) {
-      if (field.isSource()) {
-
-        // Compound source mapping when not in MANY_TO_ONE mode.
-        this.cfg.errorService.info(`Cannot add source field '${field.name}' into mapping:
-          Multiple source fields cannot be added into
-          ${TransitionModel.getMappingModeName(mapping.transition.mode)}
-          mapping. Only one of Source field or Target field could be multiple.`, null);
-        return;
-      }
-      if (mapping.targetFields[mapping.targetFields.length - 1].actions.length > 0) {
-        suggestedValue = mapping.targetFields[mapping.targetFields.length - 1].index + 1;
-      }
+    const newMField = mapping.addField(field, false);
+    if (mapping.getMappedFields(field.isSource()).length > 1) {
+      newMField.index = mapping.getMaxIndex(mapping.getMappedFields(field.isSource())) + 1;
     }
-    const newMField = new MappedField;
-    newMField.field = field;
-    newMField.index = suggestedValue;
     newMField.updateSeparateOrCombineFieldAction(mapping.transition.mode === TransitionMode.ONE_TO_MANY,
       mapping.transition.mode === TransitionMode.MANY_TO_ONE, field.isSource(), true, false);
-    if (field.isSource()) {
-      mapping.sourceFields.push(newMField);
-    } else {
-      mapping.targetFields.push(newMField);
-    }
+    return true;
   }
 
   private hasMultipleMappings(mapping: MappingModel): boolean {
-    return (mapping.sourceFields.length > 2 || mapping.targetFields.length > 2);
-  }
-
-  /**
-   * Remove the specified field from mapping.
-   *
-   * @param mapping
-   * @param removeField
-   */
-  private async removeMappedField(mapping: MappingModel, removeField: Field, compoundSelection: boolean): Promise<boolean> {
-    return new Promise<boolean>( async(resolve) => {
-      let fields: MappedField[] = null;
-
-      if (removeField.isSource()) {
-        fields = mapping.sourceFields;
-      } else {
-        fields = mapping.targetFields;
-      }
-      for (const mfield of fields) {
-        if (mfield.field.name === removeField.name) {
-          DataMapperUtil.removeItemFromArray(mfield, fields);
-
-          // If all that is left is the 'None' field after removing the user field then remove
-          // the mapping completely.
-          if ((fields.length === 1) && (fields[0].isNoneField())) {
-            await this.cfg.mappingService.removeMapping(mapping);
-            this.cfg.mappings.activeMapping = null;
-          }
-          break;
-        }
-      }
-      mapping.updateTransition(removeField.isSource(), compoundSelection, true);
-      await this.saveCurrentMapping();
-      resolve(true);
-    });
+    return (mapping.sourceFields.length > 1 || mapping.targetFields.length > 1);
   }
 
 }

@@ -35,8 +35,7 @@ export class MappingListFieldComponent {
   }
 
   getFieldPath(): string {
-    if (this.mappedField == null || this.mappedField.field == null
-      || (this.mappedField.isNoneField())) {
+    if (this.mappedField == null || this.mappedField.field == null) {
       return '[None]';
     }
     return this.mappedField.field.getFieldLabel(ConfigModel.getConfig().showTypes, true);
@@ -44,8 +43,7 @@ export class MappingListFieldComponent {
 
   displayParentObject(): boolean {
     if (this.mappedField == null || this.mappedField.field == null
-      || this.mappedField.field.docDef == null
-      || (this.mappedField.isNoneField())) {
+      || this.mappedField.field.docDef == null) {
       return false;
     }
     return true;

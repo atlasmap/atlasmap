@@ -14,27 +14,43 @@
     limitations under the License.
 */
 
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 import { ConfigModel } from '../../models/config.model';
 import { MappingModel, MappedField } from '../../models/mapping.model';
 import { DocumentDefinition } from '../../models/document-definition.model';
+import { TransitionMode } from '../../models/transition.model';
+import { Observable } from 'rxjs';
 import { Field } from '../../models/field.model';
 
 @Component({
-  selector: 'simple-mapping',
-  templateUrl: './simple-mapping.component.html',
+  selector: 'mapping-field-container',
+  templateUrl: './mapping-field-container.component.html',
 })
 
-export class SimpleMappingComponent {
+export class MappingFieldContainerComponent implements OnInit {
   @Input() cfg: ConfigModel;
   @Input() isSource = false;
   @Input() mapping: MappingModel;
+
+  inputId: String;
 
   private isDragDropTarget = false;
   private elem = null;
   private start = 0;
   private diff = 0;
+  private searchFilter = '';
+  dataSource: Observable<any>;
+
+  constructor() {
+    this.dataSource = Observable.create((observer: any) => {
+      observer.next(this.executeSearch(this.searchFilter));
+    });
+  }
+
+  ngOnInit() {
+    this.inputId = 'input-' + this.isSource ? 'source' : 'target';
+  }
 
   isPartialComponent(): boolean {
     return true;
@@ -117,6 +133,77 @@ export class SimpleMappingComponent {
     this.cfg.currentDraggedField = null;
   }
 
+  displaySeparator(): boolean {
+    return (this.isSource &&
+      (this.mapping.transition.isOneToManyMode() || this.mapping.transition.isManyToOneMode()));
+  }
+
+  displayFieldSearchBox(): boolean {
+
+    if ((this.mapping.transition.mode === TransitionMode.ONE_TO_ONE)) {
+      return true;
+    }
+
+    if (this.mapping.getMappedFields(this.isSource).length === 0) {
+      return true;
+    }
+
+    if (this.isSource) {
+      if (this.mapping.transition.mode === TransitionMode.MANY_TO_ONE) {
+        return true;
+      }
+    } else {
+      if (this.mapping.transition.mode === TransitionMode.ONE_TO_MANY) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  updateSearchFilter(value: string) {
+    this.searchFilter = value;
+  }
+
+  getSearchPlaceholder(): string {
+    return 'Begin typing to search for more ' + (this.isSource ? 'sources' : 'targets');
+  }
+
+  /**
+   * This search is triggered off of the observer created in the constructor.  Note that we display any
+   * field whose path matches but we capture only the field leaf name for display.
+   *
+   * @param filter
+   */
+  executeSearch(filter: string): any[] {
+    const formattedFields: any[] = [];
+    let fields: Field[] = [];
+    for (const docDef of this.cfg.getDocs(this.isSource)) {
+      fields = fields.concat(docDef.getTerminalFields());
+    }
+    const activeMapping: MappingModel = this.cfg.mappings.activeMapping;
+    for (const field of fields) {
+      let displayName = (field == null) ? '' : field.getFieldLabel(ConfigModel.getConfig().showTypes, true);
+
+      if (filter == null || filter === '' || displayName.toLowerCase().indexOf(filter.toLowerCase()) !== -1) {
+        if (!this.cfg.mappingService.isFieldSelectable(activeMapping, field)) {
+          continue;
+        }
+        displayName = field.getFieldLabel(ConfigModel.getConfig().showTypes, false);
+        const formattedField: any = { 'field': field, 'displayName': displayName };
+        formattedFields.push(formattedField);
+      }
+      if (formattedFields.length > 9) {
+        break;
+      }
+    }
+    return formattedFields;
+  }
+
+  selectionChanged(event: any): void {
+    this.cfg.mappingService.fieldSelected(event.item['field'], true);
+    this.searchFilter = '';
+  }
+
   isAddButtonVisible(): boolean {
     if (this.isSource && this.mapping.transition.isManyToOneMode()) {
       return true;
@@ -136,9 +223,6 @@ export class SimpleMappingComponent {
 
   removeMappedField(mappedField: MappedField): void {
     this.mapping.removeMappedField(mappedField, this.isSource);
-    if (this.mapping.getMappedFields(this.isSource).length === 0) {
-      this.mapping.addField(DocumentDefinition.getNoneField(), this.isSource, true);
-    }
     this.cfg.mappingService.updateMappedField(this.mapping, this.isSource, true);
   }
 }

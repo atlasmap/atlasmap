@@ -31,7 +31,7 @@ import { ModalWindowValidator } from './modal-window.component';
 export class FieldEditComponent implements ModalWindowValidator {
   cfg: ConfigModel = ConfigModel.getConfig();
   field: Field = new Field();
-  parentField: Field = DocumentDefinition.getNoneField();
+  parentField: Field;
   parentFieldName: String = null;
   isSource = false;
   fieldType: any = 'element';
@@ -55,7 +55,7 @@ export class FieldEditComponent implements ModalWindowValidator {
     this.editMode = !isAdd;
     this.field = field == null ? new Field() : field.copy();
     this.valueType = (this.field.type == null) ? 'STRING' : this.field.type;
-    this.parentField = (this.field.parentField == null) ? DocumentDefinition.getNoneField() : this.field.parentField;
+    this.parentField = this.field.parentField;
 
     if (this.docDef.type === DocumentType.XML) {
       this.isXML = true;
@@ -119,15 +119,6 @@ export class FieldEditComponent implements ModalWindowValidator {
 
   executeSearch(filter: string): any[] {
     const formattedFields: any[] = [];
-
-    if (this.docDef.type === DocumentType.JSON) {
-      const noneField: Field = DocumentDefinition.getNoneField();
-      formattedFields.push({
-        'field': noneField,
-        'displayName': noneField.getFieldLabel(ConfigModel.getConfig().showTypes,
-          true)
-      });
-    }
 
     for (const field of this.docDef.getAllFields()) {
       if (!field.isParentField()) {

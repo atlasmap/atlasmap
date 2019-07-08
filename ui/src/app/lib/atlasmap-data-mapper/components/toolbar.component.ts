@@ -134,7 +134,6 @@ export class ToolbarComponent implements OnInit {
     if ('showDetails' === action) {
       if (this.cfg.mappings.activeMapping == null) {
         this.cfg.mappingService.addNewMapping(null, false);
-        this.cfg.mappings.activeMapping.brandNewMapping = true;
       } else {
         this.cfg.mappingService.deselectMapping();
       }

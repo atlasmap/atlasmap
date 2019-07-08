@@ -37,10 +37,8 @@
               <collapsable-header title="Sources" #sourcesHeader class="mapping-sources"></collapsable-header>
               <ng-container *ngIf="!sourcesHeader.collapsed">
                 <div *ngIf="cfg.mappings.activeMapping">
-                  <input-mapping [cfg]="cfg" [mapping]="cfg.mappings.activeMapping" [isSource]="true" [modalWindow]="modalWindow">
-                  </input-mapping>
-                  <simple-mapping [cfg]="cfg" [mapping]="cfg.mappings.activeMapping" [isSource]="true" [modalWindow]="modalWindow">
-                  </simple-mapping>
+                  <mapping-field-container [cfg]="cfg" [mapping]="cfg.mappings.activeMapping" [isSource]="true" [modalWindow]="modalWindow">
+                  </mapping-field-container>
                 </div>
               </ng-container>
             </div>
@@ -62,10 +60,8 @@
               <collapsable-header title="Targets" #targetsHeader></collapsable-header>
               <ng-container *ngIf="!targetsHeader.collapsed">
                 <div *ngIf="cfg.mappings.activeMapping">
-                  <input-mapping [cfg]="cfg" [mapping]="cfg.mappings.activeMapping" [isSource]="false" [modalWindow]="modalWindow">
-                  </input-mapping>
-                  <simple-mapping [cfg]="cfg" [mapping]="cfg.mappings.activeMapping" [isSource]="false" [modalWindow]="modalWindow">
-                  </simple-mapping>
+                  <mapping-field-container [cfg]="cfg" [mapping]="cfg.mappings.activeMapping" [isSource]="false" [modalWindow]="modalWindow">
+                  </mapping-field-container>
                 </div>
               </ng-container>
             </div>

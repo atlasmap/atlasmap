@@ -32,7 +32,7 @@ export class MappingSerializer {
   static serializeMappings(cfg: ConfigModel): any {
     const mappingDefinition: MappingDefinition = cfg.mappings;
     let jsonMappings: any[] = [];
-    for (const mapping of mappingDefinition.mappings) {
+    for (const mapping of mappingDefinition.mappings.filter(m => m.isFullyMapped())) {
       try {
         jsonMappings = jsonMappings.concat(MappingSerializer.serializeFieldMapping(cfg, mapping, mapping.uuid));
       } catch (e) {
@@ -255,12 +255,11 @@ export class MappingSerializer {
     const fields: MappedField[] = mapping.getMappedFields(isSource);
     const fieldsJson: any[] = [];
     for (const mappedField of fields) {
-      const field: Field = mappedField.field;
-      if (DocumentDefinition.getNoneField().path === field.path) {
-        // do not include "none" options from drop downs in mapping
+      if (mappedField.isPadField()) {
         continue;
       }
 
+      const field: Field = mappedField.field;
       const serializedField: any = {
         'jsonType': field.serviceObject.jsonType,
         'name': field.name,

@@ -247,7 +247,7 @@ export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
   executeSearch(filter: string): any[] {
     const activeMapping = this.configModel.mappings.activeMapping;
     const formattedFields: any[] = [];
-    let fields: Field[] = [DocumentDefinition.getNoneField()];
+    let fields: Field[] = [];
     for (const docDef of this.configModel.getDocs(true)) {
       fields = fields.concat(docDef.getTerminalFields());
     }
@@ -255,7 +255,7 @@ export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
       let displayName = (field == null) ? '' : field.getFieldLabel(ConfigModel.getConfig().showTypes, true);
 
       if (filter == null || filter === '' || displayName.toLowerCase().indexOf(filter.toLowerCase()) !== -1) {
-        if (!activeMapping.isFieldSelectable(field)) {
+        if (!this.configModel.mappingService.isFieldSelectable(activeMapping, field)) {
           continue;
         }
         displayName = field.path;

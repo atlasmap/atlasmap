@@ -70,13 +70,7 @@ export class MappingListComponent {
   }
 
   getMappedFields(mapping: MappingModel, isSource: boolean): MappedField[] {
-    const fields: MappedField[] = mapping.getUserMappedFields(isSource);
-    if (fields.length === 0) {
-      const mappedField: MappedField = new MappedField();
-      mappedField.field = DocumentDefinition.getNoneField();
-      fields.push(mappedField);
-    }
-    return fields;
+    return mapping.getUserMappedFields(isSource);
   }
 
   toggleSearch(): void {
