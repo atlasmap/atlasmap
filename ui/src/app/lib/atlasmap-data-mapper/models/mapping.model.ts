@@ -572,7 +572,7 @@ export class MappingModel {
       for (const mappedOutputField of m.targetFields) {
         if (mappedOutputField.field.docDef === field.docDef
           && mappedOutputField.field.path === field.path) {
-          if (!m.isFieldMapped(field) && field.partOfMapping) {
+          if (m.isFieldMapped(field)) {
             return m.sourceFields[0].field.name;
           }
         }
