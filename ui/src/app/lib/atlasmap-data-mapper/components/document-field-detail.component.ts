@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-import { Component, Input, ElementRef, ViewChild, ViewChildren, QueryList } from '@angular/core';
+import { Component, Input, ElementRef, ViewChild, ViewChildren, QueryList, OnInit } from '@angular/core';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 
 import { DocumentType } from '../common/config.types';
@@ -33,7 +33,7 @@ import { FieldEditComponent } from './field-edit.component';
   templateUrl: './document-field-detail.component.html',
 })
 
-export class DocumentFieldDetailComponent {
+export class DocumentFieldDetailComponent implements OnInit {
   @Input() cfg: ConfigModel;
   @Input() field: Field;
   @Input() lineMachine: LineMachineComponent;
@@ -42,9 +42,18 @@ export class DocumentFieldDetailComponent {
   @ViewChild('fieldDetailElement') fieldDetailElement: ElementRef;
   @ViewChildren('fieldDetail') fieldComponents: QueryList<DocumentFieldDetailComponent>;
 
+  fieldLabel;
+
   private isDragDropTarget = false;
 
   constructor(private sanitizer: DomSanitizer) { }
+
+  ngOnInit() {
+    this.fieldLabel = this.field.getFieldLabel(this.cfg.showTypes, false);
+    if (!this.field.parentField && !this.fieldLabel) {
+      this.fieldLabel = '< Document Root >';
+    }
+  }
 
   startDrag(event: any): void {
 
