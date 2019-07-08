@@ -188,7 +188,7 @@ export class MappingFieldContainerComponent implements OnInit {
         if (!this.cfg.mappingService.isFieldSelectable(activeMapping, field)) {
           continue;
         }
-        displayName = field.getFieldLabel(ConfigModel.getConfig().showTypes, false);
+        displayName = field.getFieldLabel(ConfigModel.getConfig().showTypes, true);
         const formattedField: any = { 'field': field, 'displayName': displayName };
         formattedFields.push(formattedField);
       }
