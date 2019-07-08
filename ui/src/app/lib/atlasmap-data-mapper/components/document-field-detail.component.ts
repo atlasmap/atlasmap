@@ -125,23 +125,26 @@ export class DocumentFieldDetailComponent implements OnInit {
   }
 
   fieldShouldBeVisible(): boolean {
-    const partOfMapping: boolean = this.field.partOfMapping;
+    const partOfMapping: boolean = this.cfg.mappingService.fieldIsPartOfMapping(this.field);
     return partOfMapping ? this.cfg.showMappedFields : this.cfg.showUnmappedFields;
   }
 
   getTransformationClass(): string {
-    if (!this.field.partOfMapping || !this.field.partOfTransformation) {
-      return 'partOfMappingIcon partOfMappingIconHidden';
+    for (const m of this.cfg.mappings.getAllMappings(true)) {
+      const mf = m.getMappedFieldForField(this.field);
+      if (mf && mf.getTransformationCount() > 0) {
+        return 'partOfMappingIcon fa fa-bolt';
+      }
     }
-    return 'partOfMappingIcon fa fa-bolt';
+    return 'partOfMappingIcon partOfMappingIconHidden';
   }
 
   getMappingClass(): string {
-    if (!this.field.partOfMapping) {
+    if (!this.cfg.mappingService.fieldIsPartOfMapping(this.field)) {
       return 'partOfMappingIcon partOfMappingIconHidden';
     }
     let clz = 'fa fa-circle';
-    if (!this.field.isTerminal() && this.field.hasUnmappedChildren) {
+    if (!this.field.isTerminal() && this.cfg.mappingService.fieldHasUnmappedChild(this.field)) {
       clz = 'fa fa-adjust';
     }
     return 'partOfMappingIcon ' + clz;

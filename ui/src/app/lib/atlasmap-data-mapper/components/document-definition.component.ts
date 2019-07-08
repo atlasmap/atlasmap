@@ -240,7 +240,6 @@ export class DocumentDefinitionComponent implements OnInit {
       const docdef = self.cfg.initializationService.addJavaDocument(classNameComponent.userClassName, self.isSource);
       docdef.name = classNameComponent.userClassName;
       docdef.isSource = self.isSource;
-      docdef.updateFromMappings(this.cfg.mappings);
 
       this.cfg.documentService.fetchClassPath().toPromise()
         .then((classPath: string) => {

@@ -214,7 +214,8 @@ export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
     const caretPositionNodeId = event.target['id'];
     const textNode = this.getExpression().getNode(caretPositionNodeId);
 
-    if (droppedField.partOfMapping && activeMapping.isFieldMapped(droppedField)) {
+    if (this.configModel.mappingService.fieldIsPartOfMapping(droppedField)
+      && activeMapping.isFieldMapped(droppedField)) {
 
       // Since the dropped field is already part of the mapping, just add a new node.
       const mappedField = activeMapping.getMappedFieldForField(droppedField);

@@ -50,8 +50,6 @@ export class InitializationService {
     private fileService: FileManagementService,
     private logger: NGXLogger) {
     this.resetConfig();
-
-    this.cfg.documentService.initialize();
   }
 
   resetConfig(): void {
@@ -105,7 +103,6 @@ export class InitializationService {
         docdef = this.addNonJavaDocument(docName, docType, inspectionType, docBody, isSource);
       }
       docdef.name = docName;
-      docdef.updateFromMappings(this.cfg.mappings);
     }
 
     this.cfg.documentService.fetchClassPath().toPromise()
@@ -493,9 +490,6 @@ export class InitializationService {
         this.cfg.mappings.detectTableIdentifiers();
         this.cfg.mappings.updateDocumentNamespacesFromMappings(this.cfg);
         this.cfg.mappings.updateMappingsFromDocuments(this.cfg);
-        for (const d of this.cfg.getAllDocs()) {
-          d.updateFromMappings(this.cfg.mappings);
-        }
         this.cfg.mappings.removeStaleMappings(this.cfg);
       }
       this.updateLoadingStatus('Initialization complete.');

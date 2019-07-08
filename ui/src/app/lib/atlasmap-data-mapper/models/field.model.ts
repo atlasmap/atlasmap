@@ -33,8 +33,6 @@ export class Field {
   value: string = null;
   serviceObject: any = new Object();
   parentField: Field;
-  partOfMapping = false;
-  partOfTransformation = false;
   visibleInCurrentDocumentSearch = true;
   enumeration = false;
   enumValues: EnumValue[] = [];
@@ -42,7 +40,6 @@ export class Field {
   fieldDepth = 0;
   uuid: string = null;
   collapsed = true;
-  hasUnmappedChildren = false;
   isCollection = false;
   isArray = false;
   isAttribute = false;
@@ -50,21 +47,6 @@ export class Field {
   userCreated = false;
   docDef: DocumentDefinition = null;
   namespaceAlias: string = null;
-
-  static fieldHasUnmappedChild(field: Field): boolean {
-    if (field == null) {
-      return false;
-    }
-    if (field.isTerminal()) {
-      return (field.partOfMapping === false);
-    }
-    for (const childField of field.children) {
-      if (childField.hasUnmappedChildren || Field.fieldHasUnmappedChild(childField)) {
-        return true;
-      }
-    }
-    return false;
-  }
 
   static getFieldPaths(fields: Field[]): string[] {
     const paths: string[] = [];

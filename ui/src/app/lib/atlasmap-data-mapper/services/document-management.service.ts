@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-import { Injectable, OnDestroy } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
@@ -27,11 +27,10 @@ import { DataMapperUtil } from '../common/data-mapper-util';
 import { Subscription } from 'rxjs';
 
 @Injectable()
-export class DocumentManagementService implements OnDestroy {
+export class DocumentManagementService {
   cfg: ConfigModel;
 
   private headers = new HttpHeaders({'Content-Type': 'application/json'});
-  private mappingUpdatedSubscription: Subscription;
 
   /**
    * Use the JSON utility to translate the specified buffer into a JSON buffer - then replace any
@@ -107,21 +106,6 @@ export class DocumentManagementService implements OnDestroy {
   }
 
   constructor(private http: HttpClient) {}
-
-  initialize(): void {
-    this.mappingUpdatedSubscription
-      = this.cfg.mappingService.mappingUpdated$.subscribe(mappingDefinition => {
-      for (const d of this.cfg.getAllDocs()) {
-        if (d.initialized) {
-          d.updateFromMappings(this.cfg.mappings);
-        }
-      }
-    });
-  }
-
-  ngOnDestroy() {
-    this.mappingUpdatedSubscription.unsubscribe();
-  }
 
   fetchClassPath(): Observable<string> {
     return new Observable<string>((observer: any) => {

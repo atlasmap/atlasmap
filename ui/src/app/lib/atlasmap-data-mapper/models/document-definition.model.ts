@@ -351,41 +351,6 @@ export class DocumentDefinition {
     }
   }
 
-  updateFromMappings(mappingDefinition: MappingDefinition): void {
-
-    if (mappingDefinition === null) {
-      return;
-    }
-
-    for (const field of this.allFields) {
-      field.partOfMapping = false;
-      field.hasUnmappedChildren = false;
-      field.partOfTransformation = false;
-    }
-
-    // FIXME: some of this work is happening N times for N source/target docs, should only happen once.
-    for (const mapping of mappingDefinition.getAllMappings(true)) {
-      const mappingIsActive: boolean = (mapping === mappingDefinition.activeMapping);
-
-      let partOfTransformation = false;
-      if (mapping.hasTransformation()) {
-        partOfTransformation = true;
-        break;
-      }
-      for (const field of mapping.getAllFields()) {
-        let parentField: Field = field;
-        while (parentField != null) {
-          parentField.partOfMapping = true;
-          parentField.partOfTransformation = parentField.partOfTransformation || partOfTransformation;
-          parentField = parentField.parentField;
-        }
-      }
-    }
-    for (const field of this.allFields) {
-      field.hasUnmappedChildren = Field.fieldHasUnmappedChild(field);
-    }
-  }
-
   private populateFieldParentPaths(field: Field, parentPath: string, depth: number): void {
     if (parentPath == null) {
       parentPath = this.pathSeparator;

@@ -22,11 +22,9 @@ import { Observable, Subscription, Subject, forkJoin } from 'rxjs';
 import { map, timeout } from 'rxjs/operators';
 
 import { ConfigModel } from '../models/config.model';
-import { DocumentDefinition } from '../models/document-definition.model';
-import { DataMapperUtil } from '../common/data-mapper-util';
 import { Field } from '../models/field.model';
 import { MappingModel, MappedField } from '../models/mapping.model';
-import { TransitionMode, TransitionModel } from '../models/transition.model';
+import { TransitionMode } from '../models/transition.model';
 import { MappingDefinition } from '../models/mapping-definition.model';
 import { ErrorInfo, ErrorLevel } from '../models/error.model';
 
@@ -218,7 +216,6 @@ export class MappingManagementService {
 
     if (!field.isTerminal()) {
       field.docDef.populateChildren(field);
-      field.docDef.updateFromMappings(this.cfg.mappings);
       field.collapsed = !field.collapsed;
       return;
     }
@@ -532,6 +529,35 @@ export class MappingManagementService {
       this.mappingUpdatedSource.next();
       resolve(true);
     });
+  }
+
+  fieldIsPartOfMapping(field: Field): boolean {
+    if (!field) {
+      return false;
+    }
+    for (const m of this.cfg.mappings.getAllMappings(true)) {
+      for (const f of m.getFields(field.isSource())) {
+        if (f === field) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  fieldHasUnmappedChild(field: Field): boolean {
+    if (!field) {
+      return false;
+    }
+    if (field.isTerminal()) {
+      return this.fieldIsPartOfMapping(field);
+    }
+    for (const childField of field.children) {
+      if (this.fieldHasUnmappedChild(childField)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   /**
