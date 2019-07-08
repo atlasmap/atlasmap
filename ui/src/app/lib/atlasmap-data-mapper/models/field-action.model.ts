@@ -150,9 +150,7 @@ export class FieldActionDefinition {
       return false;
     } else if (this.multiplicity === Multiplicity.MANY_TO_ONE) {
       // MANY_TO_ONE field action only applies to collection field or FieldGroup
-      if (!selectedSourceField.isInCollection()) {
-        return false;
-      }
+      return false;
     }
 
     // Check for matching types - date.
