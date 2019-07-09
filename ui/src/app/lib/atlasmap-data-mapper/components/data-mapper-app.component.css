@@ -234,9 +234,11 @@
 .DataMapperUI .alert { font-size:12px; border: 0px transparent;}
 .DataMapperUI .alert-info { color: green; }
 
-.mappingFieldAction .form-group LABEL { float:left; clear:left; margin-left: 10px; width:25%; }
-.mappingFieldAction .form-group SELECT { float:left; clear:left; width:calc(100% - 30px); }
-.mappingFieldAction .form-group INPUT { float:left; width:calc(100% - 80px); text-align:right; }
+.DataMapperUI .mappingFieldAction .form-group LABEL { float:left; clear:left; margin-right: 10px; width:20%; text-align:right; }
+.DataMapperUI .mappingFieldAction .form-group SELECT { float:left; clear:left; width:calc(100% - 30px); }
+.DataMapperUI .mappingFieldAction .form-group INPUT { float:left; width:50%; text-align:right; }
+.DataMapperUI .mappingFieldAction .check-icon-disabled { font-size:14px; color: lightgray }
+.DataMapperUI .mappingFieldAction .check-icon-enabled { font-size:14px; color: green }
 .fieldMappingDetail .mappingFieldAction .linkContainer { padding-right:6px; }
 
 .DataMapperUI .CollapsableCardHeader {  border-top:1px solid #d1d1d1; }

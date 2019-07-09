@@ -17,27 +17,12 @@
 
       <div class="form-group argument" *ngFor="let argConfig of action.definition.arguments; let argValIndex = index">
         <div *ngIf="!isIndexArg(argConfig.name, argValIndex)">
-          <label style=""></label>
-          <div *ngIf="argConfig.values != null && argConfig.values.length > 0; else textInput">
-            <label>{{ getLabel(argConfig.name) }}</label>
-            <select (change)="actionConfigParamSelectionChanged($event);" [ngModel]="getActionConfigParamVDefault(argConfig, actionIndex, argValIndex)">
-              <option *ngFor="let actionConfigParamVal of getActionConfigParamValues(argConfig)" [attr.argValIndex]="argValIndex"
-                             [attr.actionIndex]="actionIndex" [attr.value]="actionConfigParamVal">{{ actionConfigParamVal }}</option>
-            </select>
-          </div>
-          <ng-template #textInput>
-            <label>{{ getLabel(argConfig.name) }}</label>
-            <div *ngIf="argConfig.type == 'STRING'; else rightAlign">
-              <input type="text" class="input-{{argConfig.name}}" [(ngModel)]="action.getArgumentValue(argConfig.name).value"
-                (change)="actionConfigParamSelectionChanged($event)" style="text-align:left;"/>
-            </div>
-            <ng-template #rightAlign>
-              <input type="text" class="input-{{argConfig.name}}" [(ngModel)]="action.getArgumentValue(argConfig.name).value"
-                (change)="actionConfigParamSelectionChanged($event)" style="text-align:right;"/>
-            </ng-template>
-          </ng-template>
+
+          <mapping-field-action-argument [action]="action" [argConfig]="argConfig" [actionIndex]="actionIndex"
+            [argValIndex]="argValIndex" [cfg]="cfg" [mappedField]="mappedField">
+          </mapping-field-action-argument>
+
         </div>
-        <div class="clear"></div>
       </div>
     </div>
   </div>
