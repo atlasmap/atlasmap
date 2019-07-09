@@ -60,37 +60,6 @@ export class MappingSerializer {
     return payload;
   }
 
-  private static createInputFieldGroup(mapping: MappingModel, field: any[]): any {
-    const actions = [];
-
-    if (mapping.transition.isManyToOneMode()) {
-      if (mapping.transition.enableExpression) {
-        actions[0] = {
-          'Expression' : {
-            'expression' : mapping.transition.expression.toText()
-          }
-        };
-      } else {
-        let delimiter = mapping.transition.getActualDelimiter();
-
-        if (mapping.transition.delimiter === TransitionDelimiter.USER_DEFINED) {
-          delimiter = mapping.transition.userDelimiter;
-        }
-        actions[0] = {
-          'Concatenate' : {
-            'delimiter' : delimiter
-          }
-        };
-      }
-    }
-    const inputFieldGroup: any = {
-        'jsonType': ConfigModel.mappingServicesPackagePrefix + '.FieldGroup',
-        actions,
-        field
-    };
-    return inputFieldGroup;
-  }
-
   static serializeFieldMapping(
     cfg: ConfigModel, mapping: MappingModel,
     id: string, ignoreValue: boolean = true): any {
@@ -130,6 +99,173 @@ export class MappingSerializer {
       jsonMapping['lookupTableName'] = mapping.transition.lookupTableName;
     }
     return jsonMapping;
+  }
+
+  static deserializeMappingServiceJSON(json: any, mappingDefinition: MappingDefinition, cfg: ConfigModel): void {
+    mappingDefinition.name = this.deserializeAtlasMappingName(json);
+    mappingDefinition.parsedDocs = mappingDefinition.parsedDocs.concat(MappingSerializer.deserializeDocs(json, mappingDefinition));
+    mappingDefinition.mappings = mappingDefinition.mappings.concat(MappingSerializer.deserializeMappings(json, cfg));
+    for (const lookupTable of MappingSerializer.deserializeLookupTables(json)) {
+      mappingDefinition.addTable(lookupTable);
+    }
+    for (const field of MappingSerializer.deserializeConstants(json)) {
+      cfg.constantDoc.addField(field);
+    }
+    for (const field of MappingSerializer.deserializeProperties(json)) {
+      cfg.propertyDoc.addField(field);
+    }
+  }
+
+  /**
+   * Return the AtlasMap mappings file name from the specified JSON buffer or an empty string.
+   *
+   * @param json
+   */
+  static deserializeAtlasMappingName(json: any): string {
+    if (json && json.AtlasMapping && json.AtlasMapping.name) {
+      return json.AtlasMapping.name;
+    } else {
+      return '';
+    }
+  }
+
+  static deserializeFieldMapping(
+    mappingJson: any, docRefs: any, cfg: ConfigModel, ignoreValue: boolean = true): MappingModel {
+    const mapping = new MappingModel();
+    mapping.uuid = mappingJson.id;
+    mapping.sourceFields = [];
+    mapping.targetFields = [];
+    mapping.transition.mode = TransitionMode.ONE_TO_ONE;
+    const isLookupMapping = (mappingJson.mappingType === 'LOOKUP');
+
+    if (mappingJson.mappingType && mappingJson.mappingType !== '') {
+      this.deserializeFieldMappingFromType(mapping, mappingJson, docRefs, cfg, ignoreValue);
+      return mapping;
+    }
+
+    let inputField = [];
+
+    if (mappingJson.inputFieldGroup) {
+      inputField = mappingJson.inputFieldGroup.field;
+
+      for (const field of inputField) {
+        MappingSerializer.addFieldIfDoesntExist(mapping, field, true, docRefs, cfg, ignoreValue);
+      }
+      mapping.transition.mode = TransitionMode.MANY_TO_ONE;
+      cfg.mappings.updateMappedFieldsFromDocuments(mapping, cfg, null, true);
+
+      // Check for an InputFieldGroup containing a concatenate action inferring combine mode.
+      const firstAction = mappingJson.inputFieldGroup.actions[0];
+      if (firstAction) {
+        if (firstAction.Expression || firstAction['@type'] === 'Expression') {
+          mapping.transition.enableExpression = true;
+          mapping.transition.expression = new ExpressionModel(mapping, cfg);
+          const expr = firstAction.Expression ? firstAction.Expression.expression : firstAction['expression'];
+          mapping.transition.expression.insertText(expr);
+        } else if (firstAction.Concatenate || firstAction['@type'] === 'Concatenate') {
+          const concatDelimiter =
+            firstAction.Concatenamte ? firstAction.Concatenate.delimiter : firstAction['delimiter'];
+          if (concatDelimiter) {
+            mapping.transition.mode = TransitionMode.MANY_TO_ONE;
+            mapping.transition.delimiter =
+              TransitionModel.getTransitionDelimiterFromActual(concatDelimiter);
+
+            if (mapping.transition.delimiter === TransitionDelimiter.USER_DEFINED) {
+              mapping.transition.userDelimiter = concatDelimiter;
+            }
+          }
+        }
+      }
+    } else {
+      inputField = mappingJson.inputField;
+
+      for (const field of inputField) {
+        MappingSerializer.addFieldIfDoesntExist(mapping, field, true, docRefs, cfg, ignoreValue);
+      }
+
+      if (inputField[0].actions && inputField[0].actions[0]) {
+        // Check for an InputField containing a split action inferring separate mode.
+        const firstAction = inputField[0].actions[0];
+        if (firstAction.Split || firstAction['@type'] === 'Split') {
+          const splitDelimiter = firstAction.Split ? firstAction.Split.delimiter : firstAction['delimiter'];
+          if (splitDelimiter) {
+            mapping.transition.mode = TransitionMode.ONE_TO_MANY;
+            mapping.transition.delimiter =
+              TransitionModel.getTransitionDelimiterFromActual(splitDelimiter);
+            if (mapping.transition.delimiter === TransitionDelimiter.USER_DEFINED) {
+              mapping.transition.userDelimiter = splitDelimiter;
+            }
+          }
+        } else if (firstAction.Expression || firstAction['@type'] === 'Expression') {
+          mapping.transition.enableExpression = true;
+          mapping.transition.expression = new ExpressionModel(mapping, cfg);
+          const expr = firstAction.Expression ? firstAction.Expression.expression : firstAction['expression'];
+          mapping.transition.expression.insertText(expr);
+        }
+      }
+    }
+
+    for (const field of mappingJson.outputField) {
+      MappingSerializer.addFieldIfDoesntExist(mapping, field, false, docRefs, cfg, ignoreValue);
+    }
+
+    if (isLookupMapping) {
+      mapping.transition.lookupTableName = mappingJson.lookupTableName;
+      mapping.transition.mode = TransitionMode.ENUM;
+    }
+
+    return mapping;
+  }
+
+  static deserializeAudits(audits: any): ErrorInfo[] {
+    const errors: ErrorInfo[] = [];
+    if (!audits) {
+      return errors;
+    }
+    for (const audit of audits.audit) {
+      let errorLevel: ErrorLevel;
+      if (audit.status === 'ERROR') {
+        errorLevel = ErrorLevel.ERROR;
+      } else if (audit.status === 'WARN') {
+        errorLevel = ErrorLevel.WARN;
+      }
+      if (errorLevel) {
+        const msg = audit.status + '[' + audit.path + ']: ' + audit.message;
+        errors.push(new ErrorInfo(msg, errorLevel, audit.value));
+      }
+    }
+    return errors;
+  }
+
+  private static createInputFieldGroup(mapping: MappingModel, field: any[]): any {
+    const actions = [];
+
+    if (mapping.transition.isManyToOneMode()) {
+      if (mapping.transition.enableExpression) {
+        actions[0] = {
+          'Expression' : {
+            'expression' : mapping.transition.expression.toText()
+          }
+        };
+      } else {
+        let delimiter = mapping.transition.getActualDelimiter();
+
+        if (mapping.transition.delimiter === TransitionDelimiter.USER_DEFINED) {
+          delimiter = mapping.transition.userDelimiter;
+        }
+        actions[0] = {
+          'Concatenate' : {
+            'delimiter' : delimiter
+          }
+        };
+      }
+    }
+    const inputFieldGroup: any = {
+        'jsonType': ConfigModel.mappingServicesPackagePrefix + '.FieldGroup',
+        actions,
+        field
+    };
+    return inputFieldGroup;
   }
 
   private static serializeDocuments(docs: DocumentDefinition[], mappingDefinition: MappingDefinition): any[] {
@@ -310,11 +446,7 @@ export class MappingSerializer {
       let includeIndexes: boolean = mapping.transition.isOneToManyMode() && !isSource;
       includeIndexes = includeIndexes || (mapping.transition.isManyToOneMode() && isSource);
       if (includeIndexes) {
-        if (mappedField.hasIndex()) {
-          serializedField['index'] = mappedField.index - 1;
-        } else {
-          cfg.errorService.warn(`No index was specified for field '${mappedField.field.path}'`, mappedField);
-        }
+        serializedField['index'] = mapping.getIndexForMappedField(mappedField) - 1;
       }
 
       if (mappedField.actions.length) {
@@ -357,35 +489,7 @@ export class MappingSerializer {
     return fieldsJson;
   }
 
-  /**
-   * Return the AtlasMap mappings file name from the specified JSON buffer or an empty string.
-   *
-   * @param json
-   */
-  static deserializeAtlasMappingName(json: any): string {
-    if (json && json.AtlasMapping && json.AtlasMapping.name) {
-      return json.AtlasMapping.name;
-    } else {
-      return '';
-    }
-  }
-
-  static deserializeMappingServiceJSON(json: any, mappingDefinition: MappingDefinition, cfg: ConfigModel): void {
-    mappingDefinition.name = this.deserializeAtlasMappingName(json);
-    mappingDefinition.parsedDocs = mappingDefinition.parsedDocs.concat(MappingSerializer.deserializeDocs(json, mappingDefinition));
-    mappingDefinition.mappings = mappingDefinition.mappings.concat(MappingSerializer.deserializeMappings(json, cfg));
-    for (const lookupTable of MappingSerializer.deserializeLookupTables(json)) {
-      mappingDefinition.addTable(lookupTable);
-    }
-    for (const field of MappingSerializer.deserializeConstants(json)) {
-      cfg.constantDoc.addField(field);
-    }
-    for (const field of MappingSerializer.deserializeProperties(json)) {
-      cfg.propertyDoc.addField(field);
-    }
-  }
-
-  static deserializeDocs(json: any, mappingDefinition: MappingDefinition): DocumentDefinition[] {
+  private static deserializeDocs(json: any, mappingDefinition: MappingDefinition): DocumentDefinition[] {
     const docs: DocumentDefinition[] = [];
     for (const docRef of json.AtlasMapping.dataSource) {
       const doc: DocumentDefinition = new DocumentDefinition();
@@ -411,7 +515,7 @@ export class MappingSerializer {
     return docs;
   }
 
-  static deserializeMappings(json: any, cfg: ConfigModel): MappingModel[] {
+  private static deserializeMappings(json: any, cfg: ConfigModel): MappingModel[] {
     const mappings: MappingModel[] = [];
     const docRefs: any = {};
     for (const docRef of json.AtlasMapping.dataSource) {
@@ -441,7 +545,7 @@ export class MappingSerializer {
    * @param cfg
    * @param ignoreValue
    */
-  static deserializeFieldMappingFromType(mapping: MappingModel,
+  private static deserializeFieldMappingFromType(mapping: MappingModel,
           fieldMapping: any, docRefs: any, cfg: ConfigModel, ignoreValue: boolean): void {
     const isSeparateMapping = (fieldMapping.mappingType === 'SEPARATE');
     const isLookupMapping = (fieldMapping.mappingType === 'LOOKUP');
@@ -467,95 +571,7 @@ export class MappingSerializer {
     }
   }
 
-  static deserializeFieldMapping(
-    mappingJson: any, docRefs: any, cfg: ConfigModel, ignoreValue: boolean = true): MappingModel {
-    const mapping = new MappingModel();
-    mapping.uuid = mappingJson.id;
-    mapping.sourceFields = [];
-    mapping.targetFields = [];
-    mapping.transition.mode = TransitionMode.ONE_TO_ONE;
-    const isLookupMapping = (mappingJson.mappingType === 'LOOKUP');
-
-    if (mappingJson.mappingType && mappingJson.mappingType !== '') {
-      this.deserializeFieldMappingFromType(mapping, mappingJson, docRefs, cfg, ignoreValue);
-      return mapping;
-    }
-
-    let inputField = [];
-
-    if (mappingJson.inputFieldGroup) {
-      inputField = mappingJson.inputFieldGroup.field;
-
-      for (const field of inputField) {
-        MappingSerializer.addFieldIfDoesntExist(mapping, field, true, docRefs, cfg, ignoreValue);
-      }
-      mapping.transition.mode = TransitionMode.MANY_TO_ONE;
-      cfg.mappings.updateMappedFieldsFromDocuments(mapping, cfg, null, true);
-
-      // Check for an InputFieldGroup containing a concatenate action inferring combine mode.
-      const firstAction = mappingJson.inputFieldGroup.actions[0];
-      if (firstAction) {
-        if (firstAction.Expression || firstAction['@type'] === 'Expression') {
-          mapping.transition.enableExpression = true;
-          mapping.transition.expression = new ExpressionModel(mapping, cfg);
-          const expr = firstAction.Expression ? firstAction.Expression.expression : firstAction['expression'];
-          mapping.transition.expression.insertText(expr);
-        } else if (firstAction.Concatenate || firstAction['@type'] === 'Concatenate') {
-          const concatDelimiter =
-            firstAction.Concatenamte ? firstAction.Concatenate.delimiter : firstAction['delimiter'];
-          if (concatDelimiter) {
-            mapping.transition.mode = TransitionMode.MANY_TO_ONE;
-            mapping.transition.delimiter =
-              TransitionModel.getTransitionDelimiterFromActual(concatDelimiter);
-
-            if (mapping.transition.delimiter === TransitionDelimiter.USER_DEFINED) {
-              mapping.transition.userDelimiter = concatDelimiter;
-            }
-          }
-        }
-      }
-    } else {
-      inputField = mappingJson.inputField;
-
-      for (const field of inputField) {
-        MappingSerializer.addFieldIfDoesntExist(mapping, field, true, docRefs, cfg, ignoreValue);
-      }
-
-      if (inputField[0].actions && inputField[0].actions[0]) {
-        // Check for an InputField containing a split action inferring separate mode.
-        const firstAction = inputField[0].actions[0];
-        if (firstAction.Split || firstAction['@type'] === 'Split') {
-          const splitDelimiter = firstAction.Split ? firstAction.Split.delimiter : firstAction['delimiter'];
-          if (splitDelimiter) {
-            mapping.transition.mode = TransitionMode.ONE_TO_MANY;
-            mapping.transition.delimiter =
-              TransitionModel.getTransitionDelimiterFromActual(splitDelimiter);
-            if (mapping.transition.delimiter === TransitionDelimiter.USER_DEFINED) {
-              mapping.transition.userDelimiter = splitDelimiter;
-            }
-          }
-        } else if (firstAction.Expression || firstAction['@type'] === 'Expression') {
-          mapping.transition.enableExpression = true;
-          mapping.transition.expression = new ExpressionModel(mapping, cfg);
-          const expr = firstAction.Expression ? firstAction.Expression.expression : firstAction['expression'];
-          mapping.transition.expression.insertText(expr);
-        }
-      }
-    }
-
-    for (const field of mappingJson.outputField) {
-      MappingSerializer.addFieldIfDoesntExist(mapping, field, false, docRefs, cfg, ignoreValue);
-    }
-
-    if (isLookupMapping) {
-      mapping.transition.lookupTableName = mappingJson.lookupTableName;
-      mapping.transition.mode = TransitionMode.ENUM;
-    }
-
-    return mapping;
-  }
-
-  static deserializeConstants(jsonMapping: any): Field[] {
+  private static deserializeConstants(jsonMapping: any): Field[] {
     const fields: Field[] = [];
     if (!jsonMapping.AtlasMapping || !jsonMapping.AtlasMapping.constants
       || !jsonMapping.AtlasMapping.constants.constant) {
@@ -572,7 +588,7 @@ export class MappingSerializer {
     return fields;
   }
 
-  static deserializeProperties(jsonMapping: any): Field[] {
+  private static deserializeProperties(jsonMapping: any): Field[] {
     const fields: Field[] = [];
     if (!jsonMapping.AtlasMapping || !jsonMapping.AtlasMapping.properties
       || !jsonMapping.AtlasMapping.properties.property) {
@@ -589,7 +605,7 @@ export class MappingSerializer {
     return fields;
   }
 
-  static deserializeLookupTables(jsonMapping: any): LookupTable[] {
+  private static deserializeLookupTables(jsonMapping: any): LookupTable[] {
     const tables: LookupTable[] = [];
     if (!jsonMapping.AtlasMapping || !jsonMapping.AtlasMapping.lookupTables
       || !jsonMapping.AtlasMapping.lookupTables.lookupTable) {
@@ -609,26 +625,6 @@ export class MappingSerializer {
       tables.push(parsedTable);
     }
     return tables;
-  }
-
-  static deserializeAudits(audits: any): ErrorInfo[] {
-    const errors: ErrorInfo[] = [];
-    if (!audits) {
-      return errors;
-    }
-    for (const audit of audits.audit) {
-      let errorLevel: ErrorLevel;
-      if (audit.status === 'ERROR') {
-        errorLevel = ErrorLevel.ERROR;
-      } else if (audit.status === 'WARN') {
-        errorLevel = ErrorLevel.WARN;
-      }
-      if (errorLevel) {
-        const msg = audit.status + '[' + audit.path + ']: ' + audit.message;
-        errors.push(new ErrorInfo(msg, errorLevel, audit.value));
-      }
-    }
-    return errors;
   }
 
   private static addFieldIfDoesntExist(

@@ -15,7 +15,6 @@ limitations under the License.
 */
 import { Component, ViewChild, Input, HostListener, ElementRef, OnInit, OnDestroy, OnChanges } from '@angular/core';
 import { ConfigModel } from '../models/config.model';
-import { DocumentDefinition } from '../models/document-definition.model';
 import { MappingModel, MappedField } from '../models/mapping.model';
 import { ExpressionModel, FieldNode, ExpressionUpdatedEvent, TextNode } from '../models/expression.model';
 import { Field } from '../models/field.model';
@@ -55,6 +54,8 @@ export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
   private expressionUpdatedSubscription: Subscription;
 
   ngOnInit() {
+    // Padding fields don't make sense for expression mapping
+    this.mapping.getMappedFields(true).filter(mf => mf.isPadField()).forEach(mf => this.mapping.removeMappedField(mf));
     if (!this.getExpression()) {
       this.mapping.transition.expression = new ExpressionModel(this.mapping, this.configModel);
       this.getExpression().generateInitialExpression();
@@ -344,7 +345,7 @@ export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   private addConditionalExpressionNode(mappedField: MappedField, nodeId: string, offset: number): void {
-    this.getExpression().insertNodes([new FieldNode(mappedField)], nodeId, offset);
+    this.getExpression().insertNodes([new FieldNode(this.mapping, mappedField)], nodeId, offset);
   }
 
   private updateExpressionMarkup() {
@@ -454,8 +455,8 @@ export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   private reflectRemovedField = (removed: MappedField) => {
-    this.mapping.removeMappedField(removed, true);
-    this.configModel.mappingService.updateMappedField(this.mapping, true, true);
+    this.mapping.removeMappedField(removed);
+    this.configModel.mappingService.updateMappedField(this.mapping);
   }
 
   private updateSearchMode(): void {

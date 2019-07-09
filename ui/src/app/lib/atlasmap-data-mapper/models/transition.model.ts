@@ -46,6 +46,8 @@ export class TransitionModel {
   lookupTableName: string = null;
   expression: ExpressionModel;
   enableExpression = false;
+  // TODO Support multiplicity transformations other than Concatenate and Split
+  // https://github.com/atlasmap/atlasmap/issues/912
   transitionFieldAction: FieldAction;
 
   constructor() {

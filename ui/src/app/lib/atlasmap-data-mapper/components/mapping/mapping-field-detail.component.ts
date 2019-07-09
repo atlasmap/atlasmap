@@ -17,7 +17,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 
 import { ConfigModel } from '../../models/config.model';
-import { DocumentDefinition } from '../../models/document-definition.model';
 import { MappingModel, MappedField } from '../../models/mapping.model';
 import { FieldAction } from '../../models/field-action.model';
 
@@ -84,6 +83,10 @@ export class MappingFieldDetailComponent implements OnInit {
     return true;
   }
 
+  displayIndex(): boolean {
+    return this.mapping.getMappedFields(this.isSource).length > 1 && !this.mapping.transition.enableExpression;
+  }
+
   /**
    * The user has hand-edited the index value of a mapped field.  Perform the following:
    *   - Add place-holders for each index value between the updated value and its previous value.
@@ -98,22 +101,17 @@ export class MappingFieldDetailComponent implements OnInit {
       return;
     }
     const mappedFields = this.mapping.getMappedFields(mappedField.isSource());
-    const maxIndex = this.mapping.getMaxIndex(mappedFields);
-
-    if (insertionIndex > maxIndex) {
+    if (insertionIndex > mappedFields.length - 2) {
       // Add place-holders for each index value between the previous max index and the insertion index.
-      mappedField.addPlaceholders(maxIndex, insertionIndex, this.mapping);
+      this.cfg.mappingService.addPlaceholders(insertionIndex - mappedFields.length + 2, this.mapping, mappedField.field.isSource());
     }
-    this.mapping.resequenceFieldIndices(mappedFields, mappedField, insertionIndex, false);
-
-    // Sort the mapped fields array to get then back into numerical order.
-    this.mapping.sortFieldsByIndex(mappedFields);
+    this.cfg.mappingService.moveMappedFieldTo(this.mapping, mappedField, insertionIndex);
     this.cfg.mappingService.saveCurrentMapping();
   }
 
   removeMappedField(mappedField: MappedField): void {
-    this.mapping.removeMappedField(mappedField, this.isSource);
-    this.cfg.mappingService.updateMappedField(this.mapping, this.isSource, true);
+    this.mapping.removeMappedField(mappedField);
+    this.cfg.mappingService.updateMappedField(this.mapping);
   }
 
   private updateTemplateValues(): void {

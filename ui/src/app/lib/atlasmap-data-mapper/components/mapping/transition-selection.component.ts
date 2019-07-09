@@ -55,7 +55,7 @@ export class TransitionSelectionComponent implements OnInit {
 
         if (selectedValue) {
           that.mapping.transition.delimiter = parseInt(selectedValue, 10);
-          that.cfg.mappingService.updateMappedField(that.mapping, false, false);
+          that.cfg.mappingService.notifyMappingUpdated();
           return;
         }
         const inputValue: any = $(this).val();
@@ -63,7 +63,7 @@ export class TransitionSelectionComponent implements OnInit {
         if (inputValue) {
           that.mapping.transition.delimiter = TransitionDelimiter.USER_DEFINED;
           that.mapping.transition.userDelimiter = inputValue;
-          that.cfg.mappingService.updateMappedField(that.mapping, false, false);
+          that.cfg.mappingService.notifyMappingUpdated();
           return;
         }
       });

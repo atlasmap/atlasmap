@@ -57,6 +57,22 @@ export class NamespaceModel {
   }
 }
 
+export class PaddingField extends Field {
+  constructor(private _isSource: boolean) {
+    super();
+    this.name = '<padding field>';
+    this.classIdentifier = '<padding field>';
+    this.type = '';
+    this.displayName = '<padding field>';
+    this.path = '';
+  }
+
+  isSource(): boolean {
+    return this._isSource;
+  }
+
+}
+
 export class DocumentDefinition {
   private static padField: Field = null;
 
@@ -92,21 +108,6 @@ export class DocumentDefinition {
   namespaces: NamespaceModel[] = [];
   characterEncoding: string = null;
   locale: string = null;
-
-  /**
-   * Return a generic padding field for use in combine/separate modes.
-   */
-  static getPadField(): Field {
-    if (DocumentDefinition.padField == null) {
-      DocumentDefinition.padField = new Field();
-      DocumentDefinition.padField.name = '<padding field>';
-      DocumentDefinition.padField.classIdentifier = '<padding field>';
-      DocumentDefinition.padField.type = '';
-      DocumentDefinition.padField.displayName = '<padding field>';
-      DocumentDefinition.padField.path = '';
-    }
-    return DocumentDefinition.padField;
-  }
 
   static getDocumentByIdentifier(documentId: string, docs: DocumentDefinition[]): DocumentDefinition {
     if (documentId == null || docs == null || !docs.length) {
@@ -369,13 +370,13 @@ export class DocumentDefinition {
     for (const mapping of mappingDefinition.getAllMappings(true)) {
       const mappingIsActive: boolean = (mapping === mappingDefinition.activeMapping);
 
-      for (const field of mapping.getAllMappedFields()) {
+      for (const field of mapping.getAllFields()) {
         let parentField = field;
-        const partOfTransformation = parentField.actions.length > 0;
+        const partOfTransformation = mapping.getMappedFieldForField(field).actions.length > 0;
         while (parentField != null) {
-          parentField.field.partOfMapping = true;
-          parentField.field.partOfTransformation = parentField.field.partOfTransformation || partOfTransformation;
-          parentField = mapping.getMappedFieldForField(parentField.field.parentField);
+          parentField.partOfMapping = true;
+          parentField.partOfTransformation = parentField.partOfTransformation || partOfTransformation;
+          parentField = parentField.parentField;
         }
       }
     }
