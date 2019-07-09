@@ -74,20 +74,6 @@ export class MappedField {
     this.padField = true;
   }
 
-  incTransformationCount(): void {
-    this.transformationCount++;
-  }
-
-  reduceTransformationCount(): void {
-    if (this.transformationCount > 0) {
-      this.transformationCount--;
-    }
-  }
-
-  getTransformationCount(): number {
-    return this.transformationCount;
-  }
-
   /**
    * Given an index range, fill in the field-pair mappings gap with place-holder fields.
    *
@@ -393,7 +379,7 @@ export class MappingModel {
   hasTransformation(): boolean {
     const mappedFields: MappedField[] = this.getAllMappedFields();
     for (const mappedField of mappedFields) {
-      if (mappedField.getTransformationCount() > 0) {
+      if (mappedField.actions.length > 0) {
         return true;
       }
     }

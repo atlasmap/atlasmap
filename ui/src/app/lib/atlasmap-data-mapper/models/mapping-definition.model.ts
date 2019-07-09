@@ -386,7 +386,6 @@ export class MappingDefinition {
           }
           actionDefinition.populateFieldAction(action);
           mappedField.actions.push(action);
-          mappedField.incTransformationCount();
         }
       }
 
