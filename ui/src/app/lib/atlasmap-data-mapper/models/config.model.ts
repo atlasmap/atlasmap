@@ -25,7 +25,7 @@ import { MappingManagementService } from '../services/mapping-management.service
 import { InitializationService } from '../services/initialization.service';
 import { ErrorInfo } from '../models/error.model';
 
-import { DocumentType, InspectionType } from '../common/config.types';
+import { DocumentType, InspectionType, CollectionType } from '../common/config.types';
 import { FieldActionService } from '../services/field-action.service';
 import { FileManagementService } from '../services/file-management.service';
 
@@ -88,6 +88,8 @@ export class DocumentInitializationModel {
   inspectionSource: string;
   inspectionResult: string;
   selectedRoot: string;
+  collectionType: CollectionType;
+  collectionClassName: string;
 }
 
 export class ConfigModel {
@@ -174,6 +176,7 @@ export class ConfigModel {
 
   addDocument(docInitModel: DocumentInitializationModel): DocumentDefinition {
     const docDef: DocumentDefinition = new DocumentDefinition();
+    docDef.initModel = docInitModel;
     docDef.id = docInitModel.id;
     docDef.type = docInitModel.type;
     docDef.name = docInitModel.name;
@@ -195,6 +198,12 @@ export class ConfigModel {
 
     if (docDef.type === DocumentType.JAVA || docDef.type === DocumentType.JAVA_ARCHIVE) {
       docDef.uri += '?className=' + docDef.inspectionSource;
+      if (docInitModel.collectionType && docInitModel.collectionType !== CollectionType.NONE) {
+        docDef.uri += '&collectionType=' + docInitModel.collectionType;
+        if (docInitModel.collectionClassName) {
+          docDef.uri += '&collectionClassName=' + docInitModel.collectionClassName;
+        }
+      }
     }
 
     if (docInitModel.isSource) {

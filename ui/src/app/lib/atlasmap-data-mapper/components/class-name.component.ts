@@ -20,6 +20,7 @@ import { DocumentDefinition } from '../models/document-definition.model';
 import { Field } from '../models/field.model';
 import { ConfigModel } from '../models/config.model';
 import { ModalWindowValidator } from './modal-window.component';
+import { CollectionType } from '../common/config.types';
 
 @Component({
   selector: 'class-name',
@@ -30,6 +31,8 @@ export class ClassNameComponent implements ModalWindowValidator {
   cfg: ConfigModel = ConfigModel.getConfig();
   isSource: boolean;
   userClassName: string = null;
+  userCollectionType = CollectionType.NONE;
+  userCollectionClassName = null;
   docDef: DocumentDefinition = null;
   @ViewChild('class') private focusEl: ElementRef;
 
@@ -54,5 +57,9 @@ export class ClassNameComponent implements ModalWindowValidator {
 
   valueExistsOnCreation(): boolean {
     return false;
+  }
+
+  collectionTypeSelectionChanged(event: any) {
+      this.userCollectionType = event.target.selectedOptions.item(0).attributes.getNamedItem('value').value;
   }
 }

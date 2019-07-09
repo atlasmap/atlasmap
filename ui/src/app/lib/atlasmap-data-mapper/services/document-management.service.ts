@@ -18,7 +18,7 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-import { DocumentType, InspectionType } from '../common/config.types';
+import { DocumentType, InspectionType, CollectionType } from '../common/config.types';
 import { ConfigModel } from '../models/config.model';
 import { Field, EnumValue } from '../models/field.model';
 import { DocumentDefinition, NamespaceModel } from '../models/document-definition.model';
@@ -332,6 +332,12 @@ export class DocumentManagementService implements OnDestroy {
         'disablePublicGetterSetterFields': this.cfg.initCfg.disablePublicGetterSetterFields,
       },
     };
+    if (docDef.initModel.collectionType && docDef.initModel.collectionType as CollectionType !== CollectionType.NONE) {
+      payload['ClassInspectionRequest']['collectionType'] = docDef.initModel.collectionType;
+      if (docDef.initModel.collectionClassName) {
+        payload['ClassInspectionRequest']['collectionClassName'] = docDef.initModel.collectionClassName;
+      }
+    }
     if (this.cfg.initCfg.fieldNameBlacklist && this.cfg.initCfg.fieldNameBlacklist.length) {
       payload['ClassInspectionRequest']['fieldNameBlacklist'] = { 'string': this.cfg.initCfg.fieldNameBlacklist };
     }
@@ -498,8 +504,13 @@ export class DocumentManagementService implements OnDestroy {
     docDef.characterEncoding = javaClass.characterEncoding;
     docDef.locale = javaClass.locale;
 
+    let rootField = null;
+    if (javaClass.collectionType && javaClass.collectionType !== CollectionType.NONE.valueOf()) {
+      this.parseJavaFieldFromDocument(javaClass, null, docDef);
+      rootField = docDef.fields[0];
+    }
     for (const field of javaClass.javaFields.javaField) {
-      this.parseJavaFieldFromDocument(field, null, docDef);
+      this.parseJavaFieldFromDocument(field, rootField, docDef);
     }
   }
 
