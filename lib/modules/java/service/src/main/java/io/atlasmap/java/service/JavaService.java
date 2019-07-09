@@ -151,6 +151,10 @@ public class JavaService {
 
         configureInspectionService(classInspectionService, request);
 
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Class inspection request: {}", new String(toJson(request)));
+        }
+
         long startTime = System.currentTimeMillis();
         try {
             JavaClass c = null;
@@ -172,6 +176,9 @@ public class JavaService {
             response.setExecutionTime(System.currentTimeMillis() - startTime);
         }
 
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Class inspection response: {}", new String(toJson(response)));
+        }
         return Response.ok().entity(toJson(response)).build();
     }
 

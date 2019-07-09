@@ -18,6 +18,7 @@ import { Field } from './field.model';
 import { DocumentType, InspectionType } from '../common/config.types';
 import { MappingDefinition } from '../models/mapping-definition.model';
 import { DataMapperUtil } from '../common/data-mapper-util';
+import { DocumentInitializationModel } from '../models/config.model';
 
 export class NamespaceModel {
   private static unqualifiedNamespace: NamespaceModel = null;
@@ -62,6 +63,7 @@ export class DocumentDefinition {
   LEFT_BRACKET = '\x5b';
   RIGHT_BRACKET = '\x5d';
 
+  initModel: DocumentInitializationModel;
   id: string;
   _type: DocumentType;
   name: string;

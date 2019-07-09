@@ -18,7 +18,7 @@ import { inflate } from 'pako';
 import { Subject, Observable } from 'rxjs';
 import { NGXLogger } from 'ngx-logger';
 
-import { DocumentType, InspectionType } from '../common/config.types';
+import { DocumentType, InspectionType, CollectionType } from '../common/config.types';
 import { DataMapperUtil } from '../common/data-mapper-util';
 import { DocumentInitializationModel, ConfigModel } from '../models/config.model';
 import { DocumentDefinition } from '../models/document-definition.model';
@@ -388,13 +388,16 @@ export class InitializationService {
     });
   }
 
-  addJavaDocument(className: string, isSource: boolean): DocumentDefinition {
+  addJavaDocument(className: string, isSource: boolean,
+    collectionType?: CollectionType, collectionClassName?: string): DocumentDefinition {
     const model: DocumentInitializationModel = new DocumentInitializationModel();
     model.id = className;
     model.type = DocumentType.JAVA;
     model.inspectionType = InspectionType.JAVA_CLASS;
     model.inspectionSource = className;
     model.isSource = isSource;
+    model.collectionType = collectionType;
+    model.collectionClassName = collectionClassName;
     return this.cfg.addDocument(model);
   }
 

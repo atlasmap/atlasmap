@@ -37,3 +37,10 @@ export const enum FieldMode {
   CREATE,
   EDIT
 }
+
+export enum CollectionType {
+  ARRAY = 'ARRAY',
+  LIST = 'LIST',
+  MAP = 'MAP',
+  NONE = 'NONE'
+}

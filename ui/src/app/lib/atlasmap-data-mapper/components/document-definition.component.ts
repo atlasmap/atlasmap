@@ -237,7 +237,9 @@ export class DocumentDefinitionComponent implements OnInit {
 
     this.modalWindow.okButtonHandler = (mw: ModalWindowComponent) => {
       const classNameComponent = mw.nestedComponent as ClassNameComponent;
-      const docdef = self.cfg.initializationService.addJavaDocument(classNameComponent.userClassName, self.isSource);
+      const docdef = self.cfg.initializationService.addJavaDocument(
+        classNameComponent.userClassName, self.isSource,
+        classNameComponent.userCollectionType, classNameComponent.userCollectionClassName);
       docdef.name = classNameComponent.userClassName;
       docdef.isSource = self.isSource;
       docdef.updateFromMappings(this.cfg.mappings);
