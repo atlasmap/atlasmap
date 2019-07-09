@@ -369,17 +369,13 @@ export class DocumentDefinition {
     for (const mapping of mappingDefinition.getAllMappings(true)) {
       const mappingIsActive: boolean = (mapping === mappingDefinition.activeMapping);
 
-      let partOfTransformation = false;
-      if (mapping.hasTransformation()) {
-        partOfTransformation = true;
-        break;
-      }
-      for (const field of mapping.getAllFields()) {
-        let parentField: Field = field;
+      for (const field of mapping.getAllMappedFields()) {
+        let parentField = field;
+        const partOfTransformation = parentField.actions.length > 0;
         while (parentField != null) {
-          parentField.partOfMapping = true;
-          parentField.partOfTransformation = parentField.partOfTransformation || partOfTransformation;
-          parentField = parentField.parentField;
+          parentField.field.partOfMapping = true;
+          parentField.field.partOfTransformation = parentField.field.partOfTransformation || partOfTransformation;
+          parentField = mapping.getMappedFieldForField(parentField.field.parentField);
         }
       }
     }

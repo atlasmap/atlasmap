@@ -58,7 +58,6 @@ export class MappingFieldDetailComponent implements OnInit {
     actionDefinition.populateFieldAction(action);
     this.mappedField.actions.push(action);
     this.cfg.mappingService.saveCurrentMapping();
-    this.mappedField.incTransformationCount();
     this.cfg.mappingService.notifyMappingUpdated();
   }
 
