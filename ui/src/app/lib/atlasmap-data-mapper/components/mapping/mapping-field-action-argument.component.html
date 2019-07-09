@@ -1,0 +1,38 @@
+<div class="mappingFieldActionArgument">
+  <label style=""></label>
+
+  <div *ngIf="argConfig.values != null && argConfig.values.length > 0; else textInput">
+    <label>{{ getLabel(argConfig.name) }}</label>
+    <select (change)="actionConfigParamSelectionChanged($event)" [ngModel]="getActionConfigParamVDefault(argConfig, actionIndex, argValIndex)">
+      <option *ngFor="let actionConfigParamVal of getActionConfigParamValues(argConfig)" [attr.argValIndex]="argValIndex"
+              [attr.actionIndex]="actionIndex" [attr.value]="actionConfigParamVal">{{ actionConfigParamVal }}
+      </option>
+    </select>
+  </div>
+
+  <ng-template #textInput>
+    <label>{{ getLabel(argConfig.name) }}: </label>
+    <div *ngIf="argConfig.type == 'string'; else rightAlign">
+      <input type="text" class="input-{{argConfig.name}}" [(ngModel)]="action.getArgumentValue(argConfig.name).value"
+        (ngModelChange)="enableCheck()" (change)="actionConfigParamSelectionChanged($event)" style="text-align:left;"/>
+    </div>
+    <ng-template #rightAlign>
+      <input type="text" class="input-{{argConfig.name}}" [(ngModel)]="action.getArgumentValue(argConfig.name).value"
+        (ngModelChange)="enableCheck()" (change)="actionConfigParamSelectionChanged($event)" style="text-align:right;"/>
+    </ng-template>
+
+    <div style="float:left; margin-left: 5px;">
+      <div class="check-icon-enabled" *ngIf="checkIconEnabled; else disableCheckIcon">
+        <i class="glyphicon glyphicon-ok" aria-hidden="true" (click)="acceptInput($event)"
+          tooltip="Accept input" placement="left"></i>
+      </div>
+      <ng-template #disableCheckIcon>
+        <i class="glyphicon glyphicon-ok check-icon-disabled" aria-hidden="true"
+          tooltip="Edit input to enable" placement="left"></i>
+      </ng-template>
+    </div>              
+  </ng-template>
+
+  <div class="clear"></div>
+
+</div>

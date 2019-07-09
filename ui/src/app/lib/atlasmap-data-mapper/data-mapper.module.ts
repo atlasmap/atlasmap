@@ -49,6 +49,7 @@ import { MappingDetailComponent } from './components/mapping/mapping-detail.comp
 import { MappingFieldContainerComponent } from './components/mapping/mapping-field-container.component';
 import { MappingFieldDetailComponent } from './components/mapping/mapping-field-detail.component';
 import { MappingFieldActionComponent } from './components/mapping/mapping-field-action.component';
+import { MappingFieldActionArgumentComponent } from './components/mapping/mapping-field-action-argument.component';
 import { MappingSelectionComponent } from './components/mapping/mapping-selection.component';
 import { MappingSelectionSectionComponent } from './components/mapping/mapping-selection-section.component';
 import { LookupTableComponent } from './components/mapping/lookup-table.component';
@@ -107,6 +108,7 @@ export const loggerModuleForRoot: ModuleWithProviders = LoggerModule.forRoot(env
     ModalErrorWindowComponent,
     DataMapperAppExampleHostComponent,
     MappingFieldActionComponent,
+    MappingFieldActionArgumentComponent,
     MappingFieldDetailComponent,
     DocumentFieldDetailComponent,
     DataMapperErrorComponent,
