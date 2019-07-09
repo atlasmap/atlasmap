@@ -14,7 +14,7 @@
         <!-- not yet supported <option value="Map">Map</option> -->
       </select>
     </label>
-    <label *ngIf="userCollectionType !== 'None'">Collection class name: 
+    <label *ngIf="userCollectionType !== 'NONE'">Collection class name:
       <input type="text" [(ngModel)]="userCollectionClassName" class="form-control"
         tooltip="Enter the collection class package name you wish to enable.  This class must be part of a JAR file you have already imported."
         placement="right" #collectionClass />
