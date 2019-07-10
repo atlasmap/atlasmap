@@ -429,6 +429,8 @@ export class MappingModel {
    */
   resequenceFieldIndices(mappedFields: MappedField[], insertedMappedField: MappedField,
                                inIndex: number, fieldRemoved: boolean): number {
+    let returnIndex = 0;
+
     if (insertedMappedField != null) {
       let startIndex = insertedMappedField.index;
       mappedFields.splice(startIndex - 1, 1);
@@ -441,19 +443,43 @@ export class MappingModel {
         mField.index = index;
         index++;
       }
-      return(index - 1);
-    }
-
-    const maxIndex = this.getMaxIndex(mappedFields);
-    let lastIndex = 0;
-    while (lastIndex < maxIndex) {
-      lastIndex = this.resequenceRemovalsAndGaps(mappedFields, fieldRemoved);
-      if (fieldRemoved) {
-        break;
+      returnIndex = index - 1;
+    } else {
+      const maxIndex = this.getMaxIndex(mappedFields);
+      let lastIndex = 0;
+      while (lastIndex < maxIndex) {
+        lastIndex = this.resequenceRemovalsAndGaps(mappedFields, fieldRemoved);
+        if (fieldRemoved) {
+          break;
+        }
       }
+      returnIndex = lastIndex;
     }
 
-    return(lastIndex);
+    // Clear any trailing padding fields.
+    this.clearTrailingPaddingFields(mappedFields);
+
+    return returnIndex;
+  }
+
+  /**
+   * Remove any trailing padding fields for the mapped field array.  This occurs when a user moves
+   * a mapped element above the last padding field.
+   *
+   * @param mappedFields
+   */
+  clearTrailingPaddingFields(mappedFields: MappedField[]): void {
+    let index = 0;
+    let mField = null;
+
+    for (index = mappedFields.length - 1; index >= 0; index--) {
+      mField = mappedFields[index];
+      if (mField.isPadField()) {
+        DataMapperUtil.removeItemFromArray(mField, mappedFields);
+        continue;
+      }
+      break;
+    }
   }
 
   /**
