@@ -14,13 +14,14 @@
     <label>{{ getLabel(argConfig.name) }}: </label>
     <div *ngIf="argConfig.type == 'string'; else rightAlign">
       <input type="text" class="input-{{argConfig.name}}" [(ngModel)]="action.getArgumentValue(argConfig.name).value"
-        (ngModelChange)="enableCheck()" (change)="actionConfigParamSelectionChanged($event)" style="text-align:left;"/>
+        (ngModelChange)="contentChanged()" (change)="actionConfigParamSelectionChanged($event)" style="text-align:left;"/>
     </div>
     <ng-template #rightAlign>
       <input type="text" class="input-{{argConfig.name}}" [(ngModel)]="action.getArgumentValue(argConfig.name).value"
-        (ngModelChange)="enableCheck()" (change)="actionConfigParamSelectionChanged($event)" style="text-align:right;"/>
+        (ngModelChange)="contentChanged()" (change)="actionConfigParamSelectionChanged($event)" style="text-align:right;"/>
     </ng-template>
 
+    <!-- Enable if performance of per-char validation becomes an issue.
     <div style="float:left; margin-left: 5px;">
       <div class="check-icon-enabled" *ngIf="checkIconEnabled; else disableCheckIcon">
         <i class="glyphicon glyphicon-ok" aria-hidden="true" (click)="acceptInput($event)"
@@ -30,7 +31,8 @@
         <i class="glyphicon glyphicon-ok check-icon-disabled" aria-hidden="true"
           tooltip="Edit input to enable" placement="left"></i>
       </ng-template>
-    </div>              
+    </div>
+    -->
   </ng-template>
 
   <div class="clear"></div>
