@@ -39,8 +39,12 @@ export class MappingFieldActionArgumentComponent {
     return this.mappedField.actions;
   }
 
-  enableCheck(): void {
+  /**
+   * The input text widget content has changed.
+   */
+  contentChanged(): void {
     this.checkIconEnabled = true;
+    this.cfg.mappingService.validateMappings();
   }
 
   /**
@@ -50,7 +54,6 @@ export class MappingFieldActionArgumentComponent {
    */
   acceptInput(event: any): void {
     this.actionConfigParamSelectionChanged(event);
-
   }
 
   /**
