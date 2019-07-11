@@ -125,7 +125,6 @@ export class ModalWindowComponent implements AfterViewInit, OnDestroy {
   }
 
   reset(): void {
-    this.cfg.errorService.clearValidationErrors();
     this.nestedComponentInitializedCallback = null;
     this.confirmButtonDisabled = false;
     this.confirmButtonText = 'OK';
