@@ -197,7 +197,7 @@ export class ToolbarComponent implements OnInit {
     this.modalWindow.headerText = 'Reset All Mappings and Imports?';
     this.modalWindow.message = 'Are you sure you want to reset all mappings and clear all imported documents?';
     this.modalWindow.okButtonHandler = (mw: ModalWindowComponent) => {
-
+      this.cfg.errorService.clearValidationErrors();
       this.cfg.fileService.resetAll().toPromise().then( async(result: boolean) => {
         this.cfg.initCfg.initialized = false;
         this.cfg.initCfg.mappingInitialized = false;

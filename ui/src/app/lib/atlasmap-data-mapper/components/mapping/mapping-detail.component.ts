@@ -85,6 +85,7 @@ export class MappingDetailComponent implements OnInit, OnDestroy {
     };
     this.modalWindow.nestedComponentType = MappingSelectionComponent;
     this.modalWindow.okButtonHandler = (mw: ModalWindowComponent) => {
+      this.cfg.errorService.clearValidationErrors();
       const c: MappingSelectionComponent = mw.nestedComponent as MappingSelectionComponent;
       const mapping: MappingModel = c.getSelectedMapping();
       self.cfg.mappingService.selectMapping(mapping);
