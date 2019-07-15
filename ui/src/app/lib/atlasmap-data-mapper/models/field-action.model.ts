@@ -217,9 +217,9 @@ export class FieldAction {
   static createSeparateCombineFieldAction(separateMode: boolean) {
     if (FieldAction.combineActionConfig == null) {
       FieldAction.combineActionConfig = new FieldActionDefinition();
-      FieldAction.combineActionConfig.name = 'Combine';
+      FieldAction.combineActionConfig.name = 'Concatenate';
       FieldAction.separateActionConfig = new FieldActionDefinition();
-      FieldAction.separateActionConfig.name = 'Separate';
+      FieldAction.separateActionConfig.name = 'Split';
     }
 
     const fieldAction: FieldAction = new FieldAction();

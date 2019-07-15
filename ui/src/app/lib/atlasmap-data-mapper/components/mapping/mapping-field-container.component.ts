@@ -120,9 +120,9 @@ export class MappingFieldContainerComponent implements OnInit {
       return;
     }
 
-    if (insertBeforeMappedField != null && insertBeforeMappedField.actions[0] != null) {
-      this.cfg.mappingService.resequenceMappedField(this.mapping, droppedMappedField,
-        insertBeforeMappedField.index);
+    if (insertBeforeMappedField != null) {
+      this.cfg.mappingService.moveMappedFieldTo(this.mapping, droppedMappedField,
+        this.mapping.getIndexForMappedField(insertBeforeMappedField));
 
       // Update indexing in any conditional mapping expressions.
       if (this.mapping.transition && this.mapping.transition.enableExpression) {
@@ -134,7 +134,7 @@ export class MappingFieldContainerComponent implements OnInit {
   }
 
   displaySeparator(): boolean {
-    return (this.isSource &&
+    return (this.isSource && !this.mapping.transition.enableExpression &&
       (this.mapping.transition.isOneToManyMode() || this.mapping.transition.isManyToOneMode()));
   }
 
@@ -222,7 +222,7 @@ export class MappingFieldContainerComponent implements OnInit {
   }
 
   removeMappedField(mappedField: MappedField): void {
-    this.mapping.removeMappedField(mappedField, this.isSource);
-    this.cfg.mappingService.updateMappedField(this.mapping, this.isSource, true);
+    this.mapping.removeMappedField(mappedField);
+    this.cfg.mappingService.updateMappedField(this.mapping);
   }
 }

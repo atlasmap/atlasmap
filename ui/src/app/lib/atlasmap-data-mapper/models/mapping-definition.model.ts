@@ -272,7 +272,10 @@ export class MappingDefinition {
     for (const mapping of this.getAllMappings(true)) {
       const mappedField: MappedField = mapping.getMappedFieldForField(field);
       if (mappedField != null) {
-        mapping.removeMappedField(mappedField, field.isSource());
+        mapping.removeMappedField(mappedField);
+        if (mapping.isEmpty()) {
+          this.removeMapping(mapping);
+        }
       }
     }
   }
@@ -294,7 +297,7 @@ export class MappingDefinition {
   }
 
   updateMappedFieldsFromDocuments(mapping: MappingModel, cfg: ConfigModel, docMap: any, isSource: boolean): void {
-    const mappedFields: MappedField[] = mapping.getMappedFields(isSource);
+    let mappedFields: MappedField[] = mapping.getMappedFields(isSource);
 
     for (const mappedField of mappedFields) {
       let doc: DocumentDefinition = null;
@@ -386,14 +389,17 @@ export class MappingDefinition {
           }
           actionDefinition.populateFieldAction(action);
           mappedField.actions.push(action);
-          mappedField.incTransformationCount();
         }
       }
 
-      const isSeparate: boolean = mapping.transition.isOneToManyMode();
-      const isCombine: boolean = mapping.transition.isManyToOneMode();
-      mappedField.index = +mappedField.parsedData.parsedIndex;
-      mappedField.updateSeparateOrCombineFieldAction(isSeparate, isCombine, isSource, false, false);
+      const zeroBasedIndex = +mappedField.parsedData.parsedIndex - 1;
+      mappedFields = mapping.getMappedFields(isSource);
+      if (zeroBasedIndex <   mappedFields.length) {
+        mappedFields[zeroBasedIndex] = mappedField;
+      } else {
+        cfg.mappingService.addPlaceholders(zeroBasedIndex - mappedFields.length, mapping, isSource);
+        mappedFields.push(mappedField);
+      }
     }
   }
 

@@ -20,6 +20,7 @@ import { ConfigModel } from '../models/config.model';
 import { ModalWindowComponent } from './modal-window.component';
 import { TemplateEditComponent } from './template-edit.component';
 import { ExpressionComponent } from './expression.component';
+import { TransitionMode } from '../models/transition.model';
 
 @Component({
   selector: 'toolbar',
@@ -165,9 +166,15 @@ export class ToolbarComponent implements OnInit {
       this.resetAll();
     } else if ('enableExpression') {
       if (this.cfg.mappings && this.cfg.mappings.activeMapping && this.cfg.mappings.activeMapping
-        && this.cfg.mappings.activeMapping.transition) {
-        this.cfg.mappings.activeMapping.transition.enableExpression
-          = !this.cfg.mappings.activeMapping.transition.enableExpression;
+          && this.cfg.mappings.activeMapping.transition) {
+        if (this.cfg.mappings.activeMapping.transition.mode === TransitionMode.ONE_TO_MANY) {
+          this.cfg.errorService.warn(
+            `Cannot enable conditional mapping when multiple target fields are selected.
+             Please select only one target field and try again.`, null);
+        } else {
+          this.cfg.mappings.activeMapping.transition.enableExpression
+            = !this.cfg.mappings.activeMapping.transition.enableExpression;
+        }
       } else {
         this.cfg.errorService.info('Please select a mapping first.', null);
       }

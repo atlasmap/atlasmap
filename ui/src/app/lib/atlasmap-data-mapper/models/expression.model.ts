@@ -60,16 +60,18 @@ export class FieldNode extends ExpressionNode {
 
   static readonly PREFIX = 'expression-field-';
 
-  constructor(public field?: MappedField, private index?: number, private mapping?: MappingModel) {
+  constructor(private mapping: MappingModel, public field?: MappedField, private index?: number) {
     super(FieldNode.PREFIX);
     if (!field) {
       this.field = mapping.getMappedFieldForIndex((index + 1).toString(), true);
     }
+    if (!index) {
+      this.index = this.mapping.getIndexForMappedField(this.field) - 1;
+    }
   }
 
   toText(): string {
-    const index = this.field ? this.field.index - 1 : this.index;
-    return '${' + index + '}';
+    return '${' + this.index + '}';
   }
 
   toHTML(): string {
@@ -432,7 +434,7 @@ export class ExpressionModel {
     for (const mfield of mappedFields) {
       if (!fieldNodes.find(n => n.field === mfield)) {
         if (insertPosition) {
-          this.insertNodes([new FieldNode(mfield)], insertPosition, offset);
+          this.insertNodes([new FieldNode(this.mapping, mfield)], insertPosition, offset);
         } else {
           this.appendFieldNode(mfield);
         }
@@ -475,7 +477,7 @@ export class ExpressionModel {
         answer.push(new TextNode(text.substring(0, position)));
       }
       const index = parseInt(text.substring(position + 2, text.indexOf('}')), 10);
-      fn = new FieldNode(null, index, this.mapping);
+      fn = new FieldNode(this.mapping, null, index);
       if (fn.field === null) {
         this.cfg.errorService.error('Unable to map expression index to field node.', index);
       } else {
@@ -500,7 +502,7 @@ export class ExpressionModel {
         this._nodes.push(lastNode);
       }
     }
-    this._nodes.push(new FieldNode(mfield));
+    this._nodes.push(new FieldNode(this.mapping, mfield));
   }
 
 }

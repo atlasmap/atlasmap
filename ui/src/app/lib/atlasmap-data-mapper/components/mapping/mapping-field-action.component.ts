@@ -56,7 +56,6 @@ export class MappingFieldActionComponent {
   removeAction(action: FieldAction): void {
     this.mappedField.removeAction(action);
     this.cfg.mappingService.saveCurrentMapping();
-    this.mappedField.reduceTransformationCount();
     this.cfg.mappingService.notifyMappingUpdated();
   }
 
