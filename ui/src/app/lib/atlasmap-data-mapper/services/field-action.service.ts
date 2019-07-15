@@ -72,7 +72,7 @@ export class FieldActionService {
           if (error.status === 0) {
             reject(`Fatal network error: Could not connect to AtlasMap design runtime service. (${error})`);
           } else {
-            reject(`Could not load field action configs: ${error.status} ${error.statusText}`);
+            reject(`Could not load field action configs: (${error.message})`);
           }
           resolve(false);
         });
