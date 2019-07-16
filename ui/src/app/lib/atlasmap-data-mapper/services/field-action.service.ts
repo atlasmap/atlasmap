@@ -144,20 +144,22 @@ export class FieldActionService {
     fieldActionDefinition.multiplicity = actionDetail.multiplicity;
     fieldActionDefinition.serviceObject = actionDetail;
 
-    for (const key of Object.keys(actionDetail.actionSchema.properties)) {
-      const propertyObject = actionDetail.actionSchema.properties[key];
-      if (key === '@type') {
-        fieldActionDefinition.name = propertyObject.const;
-        continue;
-      }
-      const argumentDefinition = new FieldActionArgument();
-      argumentDefinition.name = key;
-      argumentDefinition.type = propertyObject.type;
-      argumentDefinition.values = propertyObject.enum;
-      argumentDefinition.serviceObject = propertyObject;
-      fieldActionDefinition.arguments.push(argumentDefinition);
-    }
+    if (actionDetail.actionSchema) {
 
+      for (const key of Object.keys(actionDetail.actionSchema.properties)) {
+        const propertyObject = actionDetail.actionSchema.properties[key];
+        if (key === '@type') {
+          fieldActionDefinition.name = propertyObject.const;
+          continue;
+        }
+        const argumentDefinition = new FieldActionArgument();
+        argumentDefinition.name = key;
+        argumentDefinition.type = propertyObject.type;
+        argumentDefinition.values = propertyObject.enum;
+        argumentDefinition.serviceObject = propertyObject;
+        fieldActionDefinition.arguments.push(argumentDefinition);
+      }
+    }
     return fieldActionDefinition;
   }
 

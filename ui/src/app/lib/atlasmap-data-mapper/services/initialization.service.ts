@@ -175,6 +175,13 @@ export class InitializationService {
         return;
       }
 
+      // load field actions - do this even with no documents so the default field actions are loaded.
+      await this.cfg.fieldActionService.fetchFieldActions()
+      .catch((error: any) => {
+        this.handleError(error, null);
+        return;
+      });
+
       // load documents
       if (!this.cfg.isClassPathResolutionNeeded()) {
         this.fetchDocuments();
@@ -205,18 +212,10 @@ export class InitializationService {
           if (this.cfg.mappings === null) {
             this.cfg.mappings = new MappingDefinition();
           }
-          this.cfg.fieldActionService.isInitialized = true;
           this.updateStatus();
           resolve(true);
           return;
         }
-
-        // load field actions
-        await this.cfg.fieldActionService.fetchFieldActions()
-        .catch((error: any) => {
-          this.handleError(error, null);
-          return;
-        });
 
         await this.processMappingsCatalogFiles(catalog);
 
