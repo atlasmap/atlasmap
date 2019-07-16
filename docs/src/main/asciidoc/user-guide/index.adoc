@@ -51,6 +51,8 @@ include::topics/separate_one_source_field_into_multiple_target_fields.adoc[level
 
 include::topics/transform_target_data.adoc[leveloffset=+1]
 
+include::topics/applying_conditions_to_mappings.adoc[leveloffset=+1]
+
 include::topics/view_mappings.adoc[leveloffset=+1]
 
 include::topics/available_transformations.adoc[leveloffset=+1]
@@ -64,4 +66,3 @@ include::topics/export_files.adoc[leveloffset=+1]
 = Reset Files in UI
 
 include::topics/reset_files.adoc[leveloffset=+1]
-

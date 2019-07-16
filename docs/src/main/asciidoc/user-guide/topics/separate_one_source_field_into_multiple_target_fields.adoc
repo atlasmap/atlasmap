@@ -72,7 +72,7 @@ still there and it remains there until you exit the data mapper.
 image:grid.png[Grid] to display defined mappings.
 A mapping that separates the value of a source field into
 multiple target fields looks like this:
-image:images/SeparateMapping.png[Separate Fields Mapping].
+image:SeparateMapping.png[Separate Fields Mapping].
 +
 You can also preview mapping results in this view. Click
 image:EditorSettings.png[Editor settings], select
