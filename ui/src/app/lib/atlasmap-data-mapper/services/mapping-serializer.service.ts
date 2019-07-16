@@ -188,6 +188,10 @@ export class MappingSerializer {
         MappingSerializer.addFieldIfDoesntExist(mapping, field, true, docRefs, cfg, ignoreValue);
       }
 
+      if (cfg.mappings) {
+        cfg.mappings.updateMappedFieldsFromDocuments(mapping, cfg, null, true);
+      }
+
       if (inputField[0].actions && inputField[0].actions[0]) {
         // Check for an InputField containing a split action inferring separate mode.
         const firstAction = inputField[0].actions[0];
@@ -396,7 +400,7 @@ export class MappingSerializer {
     const fields: MappedField[] = mapping.getMappedFields(isSource);
     const fieldsJson: any[] = [];
     for (const mappedField of fields) {
-      if (mappedField.isPadField()) {
+      if (!mappedField.field || mappedField.isPadField()) {
         continue;
       }
 
@@ -471,6 +475,7 @@ export class MappingSerializer {
               customActionBody['name'] = action.definition.serviceObject.name;
               customActionBody['className'] = action.definition.serviceObject.className;
               customActionBody['methodName'] = action.definition.serviceObject.method;
+              // customActionBody['arguments'] = MappingSerializer.processActionArguments(action, cfg);
               customActionBody = (Object.keys(customActionBody).length === 0) ? null : customActionBody;
               customActionJson['CustomAction'] = customActionBody;
               actions.push(customActionJson);

@@ -381,8 +381,12 @@ export class MappingDefinition {
       if (mappedField.parsedData.parsedActions.length > 0) {
 
         for (const action of mappedField.parsedData.parsedActions) {
-
-          const actionDefinition = cfg.fieldActionService.getActionDefinitionForName(action.name);
+          let actionDefinition = null;
+          if (action.name === 'CustomAction') {
+            actionDefinition = cfg.fieldActionService.getActionDefinitionForName(action.argumentValues[0].value);
+          } else {
+            actionDefinition = cfg.fieldActionService.getActionDefinitionForName(action.name);
+          }
           if (actionDefinition == null) {
             cfg.errorService.error('Could not find field action definition for action \'' + action.name + '\'', null);
             continue;
