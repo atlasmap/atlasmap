@@ -78,7 +78,9 @@ export class MappingManagementService {
         if (!this.cfg.mappings) {
           return;
         }
-        this.cfg.logger.debug('mapping updated: ' + JSON.stringify(MappingSerializer.serializeMappings(this.cfg)));
+        if (this.cfg.mappings && this.cfg.mappings.activeMapping) {
+          this.cfg.logger.debug('mapping updated: ' + JSON.stringify(MappingSerializer.serializeMappings(this.cfg)));
+        }
       });
     }
   }
@@ -571,15 +573,15 @@ export class MappingManagementService {
     }
 
     const sourceMappedFields = mapping.getMappedFields(true);
+    const sourceMappedCollection = (mapping.isFullyMapped() && sourceMappedFields[0].field && sourceMappedFields[0].field.isInCollection());
     const targetMappedFields = mapping.getMappedFields(false);
-    if (mapping.isFullyMapped() && sourceMappedFields[0].field.isInCollection()
-        && targetMappedFields[0].field.isInCollection()) {
+    const targetMappedCollection = (targetMappedFields[0].field && targetMappedFields[0].field.isInCollection());
+
+    if (sourceMappedCollection && targetMappedCollection) {
       mapping.transition.mode = TransitionMode.FOR_EACH;
-    } else if (sourceMappedFields.length > 1
-        || (mapping.isFullyMapped() && sourceMappedFields[0].field.isInCollection())) {
+    } else if (sourceMappedFields.length > 1 || sourceMappedCollection) {
       mapping.transition.mode = TransitionMode.MANY_TO_ONE;
-    } else if (targetMappedFields.length > 1
-        || (mapping.isFullyMapped() && targetMappedFields[0].field.isInCollection())) {
+    } else if (targetMappedFields.length > 1 || targetMappedCollection) {
       mapping.transition.mode = TransitionMode.ONE_TO_MANY;
     } else {
       mapping.transition.mode = TransitionMode.ONE_TO_ONE;
