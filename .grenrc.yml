@@ -5,7 +5,8 @@
   onlyMilestones: false
   groupBy: {
     "Enhancements": ["cat/enhancement", "cat/feature"],
-    "Bug Fixes": ["cat/bug"]
+    "Bug Fixes": ["cat/bug"],
+    "Misc": ["cat/build", "cat/process", "cat/techdebt", "cat/techdoc"]
   }
   ignore-issues-with: [
     "wontfix"
