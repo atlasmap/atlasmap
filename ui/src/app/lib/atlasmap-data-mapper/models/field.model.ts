@@ -212,6 +212,9 @@ export class Field {
         fieldPath += ' (' + this.type + ')';
       }
     }
+    if (!fieldPath && !this.parentField) {
+      fieldPath = '< Document Root >';
+    }
     return fieldPath;
   }
 

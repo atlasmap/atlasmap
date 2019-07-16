@@ -19,11 +19,11 @@
     </div>
     <div style="display:inline-block; width:5px">&nbsp;</div>
     <div *ngIf="!field.docDef.populateChildren(field); else selectable" style="display:inline-block; color: gray;">
-      <label>{{ fieldLabel }}</label>
+      <label>{{ field.getFieldLabel(cfg.showTypes, false) }}</label>
     </div>
 
     <ng-template #selectable>
-      <label>{{ fieldLabel }}</label>
+      <label>{{ field.getFieldLabel(cfg.showTypes, false) }}</label>
     </ng-template>
 
     <div style="float:right; width:24px; text-align:right;" *ngIf="field.isSource()">
