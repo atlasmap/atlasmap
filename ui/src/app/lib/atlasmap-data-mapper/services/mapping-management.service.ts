@@ -331,21 +331,36 @@ export class MappingManagementService {
       if (!field.enumeration) {
         return 'only Enumeration fields are valid for this mapping';
       }
-    } else {
-      // enums are not selectable in these modes
-      if (field.enumeration) {
-        return 'Enumeration fields are not valid for this mapping';
-      }
-      if (mapping.transition.enableExpression && !field.isSource() && mapping.getMappedFields(false).length > 0) {
-        return 'Cannot add multiple target fields when conditional mapping is enabled.';
-      }
-      if (mapping.getMappedFields(field.isSource()).length > 0
-      && mapping.getMappedFields(!field.isSource()).length > 1) {
-        const direction = field.isSource() ? 'source' : 'target';
+      return null;
+    }
+    // enums are not selectable in these modes
+    if (field.enumeration) {
+      return 'Enumeration fields are not valid for this mapping';
+    }
+    // Expression mapping
+    if (mapping.transition.enableExpression && !field.isSource() && mapping.getMappedFields(false).length > 0) {
+      return 'Cannot add multiple target fields when conditional mapping is enabled.';
+    }
+
+    // Check multiplicity restrictions
+    const mappedFields = mapping.getMappedFields(field.isSource());
+    const otherSideMappedFields = mapping.getMappedFields(!field.isSource());
+    const direction = field.isSource() ? 'source' : 'target';
+    const otherDirection = !field.isSource() ? 'source' : 'target';
+    if (mappedFields.length > 0) {
+      if (field.isInCollection() || mappedFields[0].field.isInCollection()) {
+        return 'Collection field cannot be a part of compound selection.';
+      } else if (otherSideMappedFields.length > 1) {
         return `Multiple ${direction} fields cannot be added into
           mapping. Only one of Source field or Target field could be multiple.`;
       }
+    } else {
+      if (otherSideMappedFields.length > 1 && field.isInCollection()) {
+        return `Collection field cannot be selected for ${direction} field
+         when multiple ${otherDirection} fields are selected.`;
+      }
     }
+
     return null;
   }
 
@@ -555,9 +570,16 @@ export class MappingManagementService {
       }
     }
 
-    if (mapping.getMappedFields(true).length > 1) {
+    const sourceMappedFields = mapping.getMappedFields(true);
+    const targetMappedFields = mapping.getMappedFields(false);
+    if (mapping.isFullyMapped() && sourceMappedFields[0].field.isInCollection()
+        && targetMappedFields[0].field.isInCollection()) {
+      mapping.transition.mode = TransitionMode.FOR_EACH;
+    } else if (sourceMappedFields.length > 1
+        || (mapping.isFullyMapped() && sourceMappedFields[0].field.isInCollection())) {
       mapping.transition.mode = TransitionMode.MANY_TO_ONE;
-    } else if (mapping.getMappedFields(false).length > 1) {
+    } else if (targetMappedFields.length > 1
+        || (mapping.isFullyMapped() && targetMappedFields[0].field.isInCollection())) {
       mapping.transition.mode = TransitionMode.ONE_TO_MANY;
     } else {
       mapping.transition.mode = TransitionMode.ONE_TO_ONE;
