@@ -140,21 +140,23 @@ export class MappingFieldContainerComponent implements OnInit {
 
   displayFieldSearchBox(): boolean {
 
-    if ((this.mapping.transition.mode === TransitionMode.ONE_TO_ONE)) {
+    const mappedFields = this.mapping.getMappedFields(this.isSource);
+    if (mappedFields.length === 0) {
       return true;
+    } else if (mappedFields[0].field.isInCollection()) {
+      return false;
     }
 
-    if (this.mapping.getMappedFields(this.isSource).length === 0) {
+    if (this.mapping.transition.mode === TransitionMode.ONE_TO_ONE) {
       return true;
     }
-
     if (this.isSource) {
       if (this.mapping.transition.mode === TransitionMode.MANY_TO_ONE) {
-        return true;
+        return !mappedFields[0].field.isInCollection();
       }
     } else {
       if (this.mapping.transition.mode === TransitionMode.ONE_TO_MANY) {
-        return true;
+        return !mappedFields[0].field.isInCollection();
       }
     }
     return false;
