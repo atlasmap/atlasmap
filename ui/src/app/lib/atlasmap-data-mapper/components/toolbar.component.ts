@@ -263,7 +263,7 @@ export class ToolbarComponent implements OnInit {
    */
   handleMappingsInstanceName(event) {
       let filename = event.target.value;
-      if (filename !== null || filename.length > 0) {
+      if (filename !== null && filename.length > 0) {
 
         // Tack on a .adm suffix if one wasn't already specified.
         if (filename.split('.').pop() !== 'adm') {
@@ -285,7 +285,6 @@ export class ToolbarComponent implements OnInit {
         fileName = 'atlasmap-mapping.adm';
     }
     this.cfg.fileService.exportMappingsCatalog(fileName);
-    this.mappingsFileName = '';
   }
 
   /**
