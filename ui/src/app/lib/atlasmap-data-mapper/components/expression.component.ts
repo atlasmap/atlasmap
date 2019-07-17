@@ -19,6 +19,7 @@ import { MappingModel, MappedField } from '../models/mapping.model';
 import { ExpressionModel, FieldNode, ExpressionUpdatedEvent, TextNode } from '../models/expression.model';
 import { Field } from '../models/field.model';
 import { Subscription } from 'rxjs';
+import { ModalWindowComponent } from './modal-window.component';
 
 @Component({
   selector: 'expression',
@@ -34,6 +35,9 @@ export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
 
   @Input()
   mapping: MappingModel;
+
+  @Input()
+  modalWindow: ModalWindowComponent;
 
   @ViewChild('expressionMarkupRef')
   markup: ElementRef;
@@ -70,6 +74,29 @@ export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
     });
     this.updateExpressionMarkup();
     this.moveCaretToEnd();
+
+    this.modalWindow.reset();
+    this.modalWindow.confirmButtonText = 'OK';
+    this.modalWindow.headerText = 'Build Expression';
+    this.modalWindow.message = 'Testing...';
+//     this.modalWindow.okButtonHandler = (mw: ModalWindowComponent) => {
+//       this.cfg.errorService.resetAll();
+//       this.cfg.fileService.resetAll().toPromise().then( async(result: boolean) => {
+//         this.cfg.initCfg.initialized = false;
+//         this.cfg.initCfg.mappingInitialized = false;
+//         this.cfg.mappings = null;
+//         this.cfg.sourceDocs = [];
+//         this.cfg.targetDocs = [];
+//         await this.cfg.initializationService.initialize();
+//       }).catch((error: any) => {
+//         if (error.status === 0) {
+//           this.cfg.errorService.error('Fatal network error: Could not connect to AtlasMap design runtime service.', error);
+//         } else {
+//           this.cfg.errorService.error('Could not reset mapping definitions.', error);
+//         }
+//       });
+//     };
+    this.modalWindow.show();
   }
 
   ngOnChanges() {
