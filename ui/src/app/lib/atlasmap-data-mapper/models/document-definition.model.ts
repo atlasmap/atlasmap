@@ -218,8 +218,15 @@ export class DocumentDefinition {
         currentParentPath += pathSeparator + currentPathSection;
         const parentField: Field = this.fieldsByPath[currentParentPath];
         if (parentField == null) {
-          throw new Error('Could not populate parent field with path \''
-            + currentParentPath + '\' (for: ' + fieldPath + ')');
+          if (originalPath.indexOf(pathSeparator) !== -1) {
+            originalPath = originalPath.substr(originalPath.indexOf(pathSeparator) + 1);
+            continue;
+          } else {
+            break;
+          }
+          // https://github.com/atlasmap/atlasmap/issues/1128
+          // throw new Error('Could not populate parent field with path \''
+          //  + currentParentPath + '\' (for: ' + fieldPath + ')');
         }
         this.populateChildren(parentField);
         if (originalPath.indexOf(pathSeparator) !== -1) {

@@ -267,7 +267,7 @@ export class DocumentDefinitionComponent implements OnInit {
                 }
               }
               await self.cfg.mappingService.saveCurrentMapping();
-              self.cfg.fileService.exportMappingsCatalog(null);
+              await self.cfg.fileService.exportMappingsCatalog(null);
             })
             .catch((error: any) => {
               if (error.status === 0) {
@@ -311,7 +311,7 @@ export class DocumentDefinitionComponent implements OnInit {
         DataMapperUtil.removeItemFromArray(docDef, this.cfg.targetDocs);
       }
       await this.cfg.mappingService.saveCurrentMapping();
-      this.cfg.fileService.exportMappingsCatalog(null);
+      await this.cfg.fileService.exportMappingsCatalog(null);
     };
     this.modalWindow.show();
   }
