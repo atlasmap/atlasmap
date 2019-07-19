@@ -114,9 +114,9 @@ export class InitializationService {
 
         // Push the user-defined java archive file to the runtime service.
         if (javaArchive) {
-          this.cfg.documentService.setLibraryToService(docBody, (success, res) => {
+          this.cfg.documentService.setLibraryToService(docBody, async(success, res) => {
             if (success) {
-              this.cfg.fieldActionService.fetchFieldActions()
+              await this.cfg.fieldActionService.fetchFieldActions()
               .catch((error: any) => {
                 this.handleError(error, null);
               });
@@ -132,10 +132,6 @@ export class InitializationService {
               } else {
                 DataMapperUtil.removeItemFromArray(docdef, this.cfg.targetDocs);
               }
-              await this.cfg.fieldActionService.fetchFieldActions()
-              .catch((error: any) => {
-                this.handleError(error, null);
-              });
             }
             this.cfg.mappingService.notifyMappingUpdated();
             this.updateStatus();
@@ -163,6 +159,12 @@ export class InitializationService {
       this.cfg.preloadedFieldActionMetadata = null;
       this.cfg.errorService.clearMappingErrors();
       this.cfg.errorService.clearValidationErrors();
+      this.cfg.fieldActionService.isInitialized = false;
+      this.cfg.initCfg.initialized = false;
+      this.cfg.initCfg.mappingInitialized = false;
+      this.cfg.mappings = null;
+      this.cfg.sourceDocs = [];
+      this.cfg.targetDocs = [];
 
       if (this.cfg.mappingService == null) {
         this.cfg.errorService.warn('Mapping service is not configured, validation service will not be used.', null);
@@ -253,7 +255,6 @@ export class InitializationService {
   async initMappings(mappingFiles: string[]): Promise<boolean> {
     return new Promise<boolean>( async(resolve, reject) => {
       await this.fetchMappings(mappingFiles);
-      this.cfg.mappingService.notifyMappingUpdated();
       resolve(true);
     });
   }
@@ -380,8 +381,6 @@ export class InitializationService {
             }
           );
         }
-        await this.updateCatalog(compressedCatalog);
-        resolve(true);
       } catch (error) {
         this.cfg.errorService.mappingError('Unable to decompress the aggregate mappings catalog buffer.\n', error);
         resolve(false);

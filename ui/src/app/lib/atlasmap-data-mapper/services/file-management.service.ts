@@ -210,94 +210,94 @@ export class FileManagementService {
    *
    * @param event
    */
-  async exportMappingsCatalog(mappingsFileName: string) {
-    let aggregateBuffer = '   {\n';
-    let userExport = true;
+  async exportMappingsCatalog(mappingsFileName: string): Promise<boolean> {
+    return new Promise<boolean>(async(resolve, reject) => {
+      let aggregateBuffer = '   {\n';
+      let userExport = true;
 
-    try {
-      if (mappingsFileName === null || mappingsFileName.length === 0) {
-        mappingsFileName = 'atlasmap-mapping.adm';
-        userExport = false;
-      }
-
-      // Retrieve the JSON mappings buffer from the server.
-      if (await this.getJsonBuf()) {
-        aggregateBuffer += DocumentManagementService.generateExportMappings(this.jsonBuffer[0]);
-      }
-
-      let exportMeta = '   "exportMeta": [\n';
-      let exportBlockData = '      "exportBlockData": [\n';
-      let docCount = 0;
-
-      // Establish two string arrays:
-      //   exportMeta - meta-data describing the instance or schema documents.
-      //   exportBlockData - the actual source of the instance/schema/mappings documents or the Java class name.
-      for (const doc of this.cfg.getAllDocs()) {
-        if (doc.inspectionSource !== null &&
-             (doc.inspectionType === InspectionType.INSTANCE) || (doc.inspectionType === InspectionType.SCHEMA) ||
-               (doc.inspectionType === InspectionType.JAVA_CLASS) ) {
-          if (docCount > 0) {
-            exportMeta += ',\n';
-            exportBlockData += ',\n';
-          }
-          exportMeta += DocumentManagementService.generateExportMetaStr(doc);
-          exportBlockData += DocumentManagementService.generateExportBlockData(doc.inspectionSource);
-          docCount++;
-        }
-      }
-      exportMeta += '   ],\n';
-      exportBlockData += '   ]\n';
-      aggregateBuffer += exportMeta;
-      aggregateBuffer += exportBlockData;
-      aggregateBuffer += '   }\n';
-
-      // Compress the JSON buffer - write out as binary.
-      const binBuffer = DataMapperUtil.str2bytes(aggregateBuffer);
       try {
-        const compress = deflate(binBuffer, {gzip: true});
-        let fileContent: Blob = new Blob([compress], {type: 'application/octet-stream'});
+        if (mappingsFileName === null || mappingsFileName.length === 0) {
+          mappingsFileName = 'atlasmap-mapping.adm';
+          userExport = false;
+        }
 
-        // Save the model mappings to the runtime.
-        this.setBinaryFileToService(fileContent,
-          this.cfg.initCfg.baseMappingServiceUrl + 'mapping/GZ/' + this.getMappingId()).toPromise()
-          .then(async(result: boolean) => {
+        // Retrieve the JSON mappings buffer from the server.
+        if (await this.getJsonBuf()) {
+          aggregateBuffer += DocumentManagementService.generateExportMappings(this.jsonBuffer[0]);
+        }
 
+        let exportMeta = '   "exportMeta": [\n';
+        let exportBlockData = '      "exportBlockData": [\n';
+        let docCount = 0;
 
-          // Fetch the full ADM catalog file from the runtime (ZIP) and export it to to the local
-          // downloads area.
-          if (userExport) {
-
-            this.getCurrentADMCatalog().subscribe( async(value: Uint8Array) => {
-
-              // If value is null then no compressed mappings catalog is available on the server.
-              if (value === null) {
-                return;
-              }
-
-              fileContent = new Blob([value], {type: 'application/octet-stream'});
-              if (!await DataMapperUtil.writeFile(fileContent, mappingsFileName)) {
-                this.cfg.errorService.mappingError('Unable to save the current data mappings.', null);
-              }
-            });
+        // Establish two string arrays:
+        //   exportMeta - meta-data describing the instance or schema documents.
+        //   exportBlockData - the actual source of the instance/schema/mappings documents or the Java class name.
+        for (const doc of this.cfg.getAllDocs()) {
+          if (doc.inspectionSource !== null &&
+               (doc.inspectionType === InspectionType.INSTANCE) || (doc.inspectionType === InspectionType.SCHEMA) ||
+                 (doc.inspectionType === InspectionType.JAVA_CLASS) ) {
+            if (docCount > 0) {
+              exportMeta += ',\n';
+              exportBlockData += ',\n';
+            }
+            exportMeta += DocumentManagementService.generateExportMetaStr(doc);
+            exportBlockData += DocumentManagementService.generateExportBlockData(doc.inspectionSource);
+            docCount++;
           }
-        }).catch((error: any) => {
-          if (error.status === 0) {
-            this.cfg.errorService.mappingError(
-              'Fatal network error: Unable to connect to the AtlasMap design runtime service.', error);
-          } else {
-            this.cfg.errorService.mappingError(
-              'Unable to update the catalog mappings file to the AtlasMap design runtime service.  ' +
-                error.status + ' ' + error.statusText, error);
-          }
-        });
-      } catch (error1) {
-        this.cfg.errorService.mappingError('Unable to compress the current data mappings.\n', error1);
+        }
+        exportMeta += '   ],\n';
+        exportBlockData += '   ]\n';
+        aggregateBuffer += exportMeta;
+        aggregateBuffer += exportBlockData;
+        aggregateBuffer += '   }\n';
+
+        // Compress the JSON buffer - write out as binary.
+        const binBuffer = DataMapperUtil.str2bytes(aggregateBuffer);
+        try {
+          const compress = deflate(binBuffer, {gzip: true});
+          let fileContent: Blob = new Blob([compress], {type: 'application/octet-stream'});
+
+          // Save the model mappings to the runtime.
+          this.setBinaryFileToService(fileContent,
+            this.cfg.initCfg.baseMappingServiceUrl + 'mapping/GZ/' + this.getMappingId()).toPromise()
+            .then(async(result: boolean) => {
+
+            // Fetch the full ADM catalog file from the runtime (ZIP) and export it to to the local
+            // downloads area.
+            if (userExport) {
+
+              this.getCurrentADMCatalog().subscribe( async(value: Uint8Array) => {
+
+                // If value is null then no compressed mappings catalog is available on the server.
+                if (value !== null) {
+                  fileContent = new Blob([value], {type: 'application/octet-stream'});
+                  if (!await DataMapperUtil.writeFile(fileContent, mappingsFileName)) {
+                    this.cfg.errorService.mappingError('Unable to save the current data mappings.', null);
+                  }
+                }
+                resolve(true);
+              });
+            }
+          }).catch((error: any) => {
+            if (error.status === 0) {
+              this.cfg.errorService.mappingError(
+                'Fatal network error: Unable to connect to the AtlasMap design runtime service.', error);
+            } else {
+              this.cfg.errorService.mappingError(
+                'Unable to update the catalog mappings file to the AtlasMap design runtime service.  ' +
+                  error.status + ' ' + error.statusText, error);
+            }
+          });
+        } catch (error1) {
+          this.cfg.errorService.mappingError('Unable to compress the current data mappings.\n', error1);
+          return;
+        }
+      } catch (error) {
+        this.cfg.errorService.mappingError('Unable to export the current data mappings.', error);
         return;
       }
-    } catch (error) {
-      this.cfg.errorService.mappingError('Unable to export the current data mappings.', error);
-      return;
-    }
+    });
   }
 
   /**
@@ -309,44 +309,31 @@ export class FileManagementService {
    *
    * @param mappingsFileName - ADM master ZIP catalog
    */
-  async importADMCatalog(mappingsFileName: string) {
-    let fileBin = null;
-    const reader = new FileReader();
+  async importADMCatalog(mappingsFileName: string): Promise<boolean> {
+    return new Promise<boolean>(async(resolve, reject) => {
+      let fileBin = null;
+      const reader = new FileReader();
 
-    // Turn the imported ADM file into a binary octet stream.
-    try {
-      fileBin = await DataMapperUtil.readBinaryFile(mappingsFileName, reader);
-    } catch (error) {
-      this.cfg.errorService.mappingError('Unable to import the specified catalog file \'' + mappingsFileName + '\'', error);
-      return;
-    }
-    const fileContent: Blob = new Blob([fileBin], {type: 'application/octet-stream'});
+      // Turn the imported ADM file into a binary octet stream.
+      try {
+        fileBin = await DataMapperUtil.readBinaryFile(mappingsFileName, reader);
+      } catch (error) {
+        this.cfg.errorService.mappingError('Unable to import the specified catalog file \'' + mappingsFileName + '\'', error);
+        return;
+      }
+      const fileContent: Blob = new Blob([fileBin], {type: 'application/octet-stream'});
 
-    // Push the binary stream to the runtime.
-    this.setBinaryFileToService(fileContent, this.cfg.initCfg.baseMappingServiceUrl +
-      'mapping/ZIP/' + this.getMappingId()).toPromise().then((result: boolean) => {
+      // Push the binary stream to the runtime.
+      this.setBinaryFileToService(fileContent, this.cfg.initCfg.baseMappingServiceUrl +
+        'mapping/ZIP/' + this.getMappingId()).toPromise().then( async(result: boolean) => {
 
-        // Retrieve the extracted mappings file catalog (GZIP).
-        this.getCurrentMappingCatalog().subscribe(async(value: Uint8Array) => {
-
-          // If value is null then the imported ADM didn't contain a mappings catalog.
-          if (value === null) {
-            return;
-          }
-
-          await this.cfg.initializationService.processMappingsCatalogFiles(value);
-
-          try {
-            this.cfg.initCfg.initialized = false;
-            this.cfg.initCfg.mappingInitialized = false;
-            this.cfg.mappings = null;
-            await this.cfg.initializationService.initialize();
-          } catch (error) {
-            this.cfg.errorService.mappingError('Unable to import the catalog file: \n' + mappingsFileName +
-              '\n' + error.message, error);
-            return;
-          }
-        });
+        try {
+          await this.cfg.initializationService.initialize();
+        } catch (error) {
+          this.cfg.errorService.mappingError('Unable to import the catalog file: \n' + mappingsFileName +
+            '\n' + error.message, error);
+          return;
+        }
       }).catch((error: any) => {
         if (error.status === 0) {
           this.cfg.errorService.mappingError(
@@ -356,6 +343,8 @@ export class FileManagementService {
             'Unable to send the ADM file to the runtime service.  ' + error.status + ' ' + error.statusText, error);
         }
       });
+      resolve(true);
+    });
   }
 
   /**

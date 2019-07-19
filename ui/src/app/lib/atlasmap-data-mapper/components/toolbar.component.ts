@@ -66,10 +66,10 @@ export class ToolbarComponent implements OnInit {
     const userFileSuffix: string = userFileComps[userFileComps.length - 1].toUpperCase();
 
     if (userFileSuffix === 'ADM') {
+        this.cfg.errorService.resetAll();
 
         // Clear out current user documents from the runtime service before processing the imported ADM.
         this.cfg.fileService.resetAll().toPromise().then( async(result: boolean) => {
-          this.cfg.mappings = null;
           await this.processMappingsCatalog(userFile);
         }).catch((error: any) => {
           if (error.status === 0) {
@@ -91,10 +91,8 @@ export class ToolbarComponent implements OnInit {
    * @param selectedFile
    */
   async processMappingsCatalog(selectedFile: any) {
-    this.cfg.initCfg.initialized = false;
     this.cfg.initializationService.updateLoadingStatus('Importing AtlasMap Catalog');
     await this.cfg.fileService.importADMCatalog(selectedFile);
-
   }
 
   getFileSuffix() {
@@ -206,11 +204,6 @@ export class ToolbarComponent implements OnInit {
     this.modalWindow.okButtonHandler = (mw: ModalWindowComponent) => {
       this.cfg.errorService.resetAll();
       this.cfg.fileService.resetAll().toPromise().then( async(result: boolean) => {
-        this.cfg.initCfg.initialized = false;
-        this.cfg.initCfg.mappingInitialized = false;
-        this.cfg.mappings = null;
-        this.cfg.sourceDocs = [];
-        this.cfg.targetDocs = [];
         await this.cfg.initializationService.initialize();
       }).catch((error: any) => {
         if (error.status === 0) {
