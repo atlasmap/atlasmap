@@ -643,9 +643,9 @@ export class MappingSerializer {
     const mappedField: MappedField = new MappedField();
 
     mappedField.parsedData.parsedValueType = field.fieldType;
-    mappedField.parsedData.parsedIndex = '1';
+    mappedField.parsedData.parsedIndex = '0';
     if (field.index != null) {
-      mappedField.parsedData.parsedIndex = (field.index + 1).toString();
+      mappedField.parsedData.parsedIndex = (field.index).toString();
     }
     if (field.jsonType === (ConfigModel.mappingServicesPackagePrefix + '.PropertyField')) {
       mappedField.parsedData.parsedName = field.name;

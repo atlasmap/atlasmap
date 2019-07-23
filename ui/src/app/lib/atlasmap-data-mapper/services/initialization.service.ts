@@ -133,7 +133,6 @@ export class InitializationService {
                 DataMapperUtil.removeItemFromArray(docdef, this.cfg.targetDocs);
               }
             }
-            this.cfg.mappingService.notifyMappingUpdated();
             this.updateStatus();
           })
           .catch((error: any) => {

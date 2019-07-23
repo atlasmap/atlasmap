@@ -20,7 +20,7 @@ import { ConfigModel } from '../models/config.model';
 import { Field } from '../models/field.model';
 import { FieldAction, FieldActionArgumentValue, FieldActionDefinition } from './field-action.model';
 import { TransitionMode } from './transition.model';
-import { DocumentDefinition } from '../models/document-definition.model';
+import { DocumentDefinition, PaddingField } from '../models/document-definition.model';
 
 import { DataMapperUtil } from '../common/data-mapper-util';
 
@@ -142,16 +142,18 @@ export class MappingDefinition {
   }
 
   isMappingStale(mapping: MappingModel, sourceFieldPaths: string[], targetSourcePaths: string[]): boolean {
+
     for (const field of mapping.getFields(true)) {
-      if (sourceFieldPaths.indexOf(field.path) === -1) {
+      if (!(field instanceof PaddingField) && sourceFieldPaths.indexOf(field.path) === -1) {
         return true;
       }
     }
     for (const field of mapping.getFields(false)) {
-      if (targetSourcePaths.indexOf(field.path) === -1) {
+      if (!(field instanceof PaddingField) && targetSourcePaths.indexOf(field.path) === -1) {
         return true;
       }
     }
+
     return false;
   }
 
@@ -298,9 +300,11 @@ export class MappingDefinition {
 
   updateMappedFieldsFromDocuments(mapping: MappingModel, cfg: ConfigModel, docMap: any, isSource: boolean): void {
     let mappedFields: MappedField[] = mapping.getMappedFields(isSource);
+    let mappedFieldIndex = -1;
 
     for (const mappedField of mappedFields) {
       let doc: DocumentDefinition = null;
+      mappedFieldIndex += 1;
 
       if (mappedField.parsedData.fieldIsProperty) {
         doc = cfg.propertyDoc;
@@ -396,15 +400,13 @@ export class MappingDefinition {
         }
       }
 
-      const zeroBasedIndex = +mappedField.parsedData.parsedIndex - 1;
+      const zeroBasedIndex = +mappedField.parsedData.parsedIndex;
       mappedFields = mapping.getMappedFields(isSource);
-      if (zeroBasedIndex <   mappedFields.length) {
+      if (zeroBasedIndex <= mappedFieldIndex) {
         mappedFields[zeroBasedIndex] = mappedField;
       } else {
-        cfg.mappingService.addPlaceholders(zeroBasedIndex - mappedFields.length, mapping, isSource);
-        mappedFields.push(mappedField);
+        cfg.mappingService.addPlaceholders(zeroBasedIndex - mappedFieldIndex, mapping, mappedFieldIndex, isSource);
       }
     }
   }
-
 }

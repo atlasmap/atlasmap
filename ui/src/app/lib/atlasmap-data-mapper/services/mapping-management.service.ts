@@ -100,7 +100,7 @@ export class MappingManagementService {
         operations.push(operation);
       }
 
-      forkJoin(operations).toPromise().then((data: any[]) => {
+      forkJoin(operations).toPromise().then( async(data: any[]) => {
         if (!data) {
           observer.next(false);
           observer.complete();
@@ -113,7 +113,7 @@ export class MappingManagementService {
           MappingSerializer.deserializeMappingServiceJSON(d, mappingDefinition, this.cfg);
         }
         this.cfg.mappings.getAllMappings(true).forEach(m => this.updateTransition(m));
-        this.notifyMappingUpdated();
+        await this.notifyMappingUpdated();
         observer.next(true);
         observer.complete();
       }).catch((error: any) => {
@@ -190,6 +190,7 @@ export class MappingManagementService {
     if (mapping == null) {
       return;
     }
+    insertedMappedField.parsedData.parsedIndex = targetIndex.toString();
     const mappedFields = mapping.getMappedFields(insertedMappedField.isSource());
     mappedFields.splice(mapping.getIndexForMappedField(insertedMappedField) - 1, 1);
     mappedFields.splice(targetIndex - 1, 0, insertedMappedField);
@@ -198,21 +199,23 @@ export class MappingManagementService {
   }
 
   /**
-   * Given an index range, fill in the field-pair mappings gap with place-holder fields.
+   * Given an index range, fill in the mappings gap with place-holder fields.
    *
-   * @param lowIndex
-   * @param highIndex
-   * @param fieldPair
+   * @param count - number of padding fields to add
+   * @param mapping - mapping to modify
+   * @param basePadIndex - 0 based
+   * @param isSource
    */
-  addPlaceholders(count: number, mapping: MappingModel, isSource: boolean) {
+  addPlaceholders(count: number, mapping: MappingModel, basePadIndex: number, isSource: boolean) {
     let padField = null;
     for (let i = 0; i < count; i++) {
       padField = new MappedField;
       padField.field = new PaddingField(isSource);
+      padField.parsedData.parsedIndex = String(basePadIndex + i);
       if (isSource) {
-          mapping.sourceFields.push(padField);
+        mapping.sourceFields.splice(basePadIndex + i, 0, padField);
       } else {
-          mapping.targetFields.push(padField);
+        mapping.targetFields.splice(basePadIndex + i, 0, padField);
       }
     }
   }
