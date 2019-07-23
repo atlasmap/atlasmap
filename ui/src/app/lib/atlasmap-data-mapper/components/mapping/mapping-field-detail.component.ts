@@ -101,9 +101,12 @@ export class MappingFieldDetailComponent implements OnInit {
       return;
     }
     const mappedFields = this.mapping.getMappedFields(mappedField.isSource());
-    if (insertionIndex > mappedFields.length - 2) {
+    const targetIndex = mappedFields.length;
+    if (insertionIndex > targetIndex) {
+
       // Add place-holders for each index value between the previous max index and the insertion index.
-      this.cfg.mappingService.addPlaceholders(insertionIndex - mappedFields.length + 2, this.mapping, mappedField.field.isSource());
+      this.cfg.mappingService.addPlaceholders(insertionIndex - mappedFields.length,
+        this.mapping, targetIndex, mappedField.field.isSource());
     }
     this.cfg.mappingService.moveMappedFieldTo(this.mapping, mappedField, insertionIndex);
     this.cfg.mappingService.saveCurrentMapping();
