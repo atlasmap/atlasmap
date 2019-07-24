@@ -286,13 +286,17 @@ export class MappingDefinition {
    * Remove any mappings referencing the specified document ID.
    *
    * @param docId - Specified document ID
+   * @param cfg
    */
-  removeDocumentReferenceFromAllMappings(docId: string) {
+  removeDocumentReferenceFromAllMappings(docId: string, cfg: ConfigModel) {
     for (const mapping of this.getAllMappings(true)) {
       for (const mappedField of mapping.getAllFields()) {
-        if (mappedField.docDef.id === docId) {
+        if (!(mappedField instanceof PaddingField) && (mappedField.docDef.id === docId)) {
           this.removeFieldFromAllMappings(mappedField);
           this.removeMapping(mapping);
+          if (mapping === cfg.mappings.activeMapping) {
+            cfg.mappingService.deselectMapping();
+          }
         }
       }
     }

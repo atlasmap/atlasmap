@@ -304,7 +304,7 @@ export class DocumentDefinitionComponent implements OnInit {
     this.modalWindow.headerText = 'Remove selected document?';
     this.modalWindow.message = 'Are you sure you want to remove the selected document and any associated mappings?';
     this.modalWindow.okButtonHandler = async() => {
-      this.cfg.mappings.removeDocumentReferenceFromAllMappings(docDef.id);
+      this.cfg.mappings.removeDocumentReferenceFromAllMappings(docDef.id, this.cfg);
       if (docDef.isSource) {
         DataMapperUtil.removeItemFromArray(docDef, this.cfg.sourceDocs);
       } else {
