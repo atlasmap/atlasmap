@@ -384,6 +384,7 @@ export class InitializationService {
         this.cfg.errorService.mappingError('Unable to decompress the aggregate mappings catalog buffer.\n', error);
         resolve(false);
       }
+      resolve(true);
     });
   }
 

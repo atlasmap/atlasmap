@@ -344,7 +344,7 @@ export class MappingDefinition {
           constantField.userCreated = true;
           mappedField.field = constantField;
           doc.addField(constantField);
-        } else if (mappedField.parsedData.userCreated) {
+        } else if (mappedField.parsedData.userCreated || mappedField.parsedData.parsedPath) {
           const path: string = mappedField.parsedData.parsedPath;
 
           mappedField.field = new Field();
