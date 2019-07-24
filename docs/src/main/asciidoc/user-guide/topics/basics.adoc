@@ -1,0 +1,57 @@
+[[basics]]
+= How to define an AtlasMap data mapping?
+
+AtlasMap focuses more on field-by-field mapping than whole document transformation. It allows users to choose individual fields from incoming documents, and map them to fields of the outgoing document footnote:[It doesn't mean we won't address whole document mapping at all. For example we have a plan to support bulk mapping by detecting the same object structure at both sides of documents (https://github.com/atlasmap/atlasmap/issues/86[#86]).].
+So then, what is `field` in AtlasMap? Let's see an example with XML:
+[source,xml]
+<order>
+  <orderId value="O123">
+  <items>
+    <item>
+      <itemId>Orange</itemId>
+      <quantity value="1"/>
+    </item>
+    <item>
+      <itemId>Apple</itemId>
+      <quantity value="2"/>
+    </item> 
+  <items>
+</order>
+
+In this XML instance document, `/order/items/item[0]/itemId` and `/order/orderId/@value` are terminal fields. In AtlasMap, only terminal fields can be selected to be added into a mapping. Other parent elements like `/order`, `/order/orderId`, `/order/items/item[0]` are not selectable. Instead it can be expanded to see descendant fields.
+
+== Field Types
+
+There are roughly 3 types of fields that differentiate behavior.
+
+=== Terminal field
+Terminal field is selectable in AtlasMap Data Mapper UI and can participate in mapping directly. Its path identifies the value in the document payload.
+
+=== Parent field
+Also called as Complex field. Parent field cannot participate in mapping directly, but it's expandable in UI so user can see descendant fields.
+
+=== Collection field
+Collection field is a kind of terminal field. It's selectable and mappable. The difference is that either the collection field itself or any of its parent fields is a collection. In an example XML above, `item` is a collection which could be multiple. Therefore `/order/items/item[]/itemId` is a collection field. In a programming term, it's just array, List, etc. One thing to keep in mind is that, "how many items are going to be delivered?" is not decided at design time. Each transaction should be able to deliver a different number of items with same mapping definition.
+
+== Mapping Types
+
+Looking from field multiplicity aspects, there are 4 types of mapping in AtlasMap.
+
+=== One to One
+Map from one source field to one target field.
+
+=== Many to One
+Map from multiple source fields to one target field. Many-to-One mapping requires one Many-to-One transformation to map multiple values into one. At this moment, we only support separating values with a delimiter. Other Many-to-One transformation will be added once (https://github.com/atlasmap/atlasmap/issues/912[#912]).] is fixed.
+
+=== One to Many
+Map from one source field to multiple target fields. One-to-Many mapping requires one One-to-Many transformation to map one value into mutiple values. At this moment, we only support combining values with a delimiter. Other One-to-Many transformation will be added once (https://github.com/atlasmap/atlasmap/issues/912[#912]).] is fixed.
+
+=== For Each
+Map from one source collection field to one target collection field. It iterates One-to-One mapping for each element in the collection field.
+
+== Transformation
+In addition to simply mapping the source field value to target field value, AtlasMap supports transformations that apply to both source and/or target field in the mapping. Transformation is a single function to be applied to a field value, such as `Uppercase` which changes all characters of the string field value to uppercase. You can add any number of transformations to the mapped field from `Mapping Detail` pane at right side in the UI.
+
+Allowing transformations to be added for both source and target field might not immediately make sense. But let's think about Many-to-One case, to combine `Street`, `City`, `State` into comma separated single string. If you want to uppercase only `State`, then you need to add on `State` source field. If you want to uppercase everything, then it's easier to add just one `Uppercase` transformation on the target field as opposed to add it for each source fields. In other words we can call source field transformation as Pre-mapping, and the target field transformation as Post-mapping.
+
+Multiplicity transformations described above are special type of transformations which changes multiplicity. Multiplicity transformations can be added only when it's One-to-Many or Many-to-One mapping.
