@@ -20,6 +20,7 @@ import { ExpressionModel, FieldNode, ExpressionUpdatedEvent, TextNode } from '..
 import { Field } from '../models/field.model';
 import { Subscription } from 'rxjs';
 import { ModalWindowComponent } from './modal-window.component';
+import { ExpressionDetail } from './expression.detail';
 
 @Component({
   selector: 'expression',
@@ -78,7 +79,7 @@ export class ExpressionComponent implements OnInit, OnDestroy, OnChanges {
     this.modalWindow.reset();
     this.modalWindow.confirmButtonText = 'OK';
     this.modalWindow.headerText = 'Build Expression';
-    this.modalWindow.message = 'Testing...';
+    this.modalWindow.nestedComponentType = ExpressionDetail;
 //     this.modalWindow.okButtonHandler = (mw: ModalWindowComponent) => {
 //       this.cfg.errorService.resetAll();
 //       this.cfg.fileService.resetAll().toPromise().then( async(result: boolean) => {
