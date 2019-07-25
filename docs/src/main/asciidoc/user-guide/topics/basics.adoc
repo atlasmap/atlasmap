@@ -41,10 +41,10 @@ Looking from field multiplicity aspects, there are 4 types of mapping in AtlasMa
 Map from one source field to one target field.
 
 === Many to One
-Map from multiple source fields to one target field. Many-to-One mapping requires one Many-to-One transformation to map multiple values into one. At this moment, we only support separating values with a delimiter. Other Many-to-One transformation will be added once (https://github.com/atlasmap/atlasmap/issues/912[#912]).] is fixed.
+Map from multiple source fields to one target field. Many-to-One mapping requires one Many-to-One transformation to map multiple values into one. At this moment, we only support combining values with a delimiter. Other Many-to-One transformation will be added once (https://github.com/atlasmap/atlasmap/issues/912[#912]) is fixed.
 
 === One to Many
-Map from one source field to multiple target fields. One-to-Many mapping requires one One-to-Many transformation to map one value into mutiple values. At this moment, we only support combining values with a delimiter. Other One-to-Many transformation will be added once (https://github.com/atlasmap/atlasmap/issues/912[#912]).] is fixed.
+Map from one source field to multiple target fields. One-to-Many mapping requires one One-to-Many transformation to map one value into mutiple values. At this moment, we only support separating a value with a delimiter. Other One-to-Many transformation will be added once (https://github.com/atlasmap/atlasmap/issues/912[#912]) is fixed.
 
 === For Each
 Map from one source collection field to one target collection field. It iterates One-to-One mapping for each element in the collection field.
